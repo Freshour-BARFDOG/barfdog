@@ -2,7 +2,7 @@ import React from 'react'
 
 function TestComponent() {
   return (
-    <div>TestComponent</div>
+    <div>컴포넌트</div>
   )
 }
 
