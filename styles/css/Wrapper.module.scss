@@ -1,0 +1,60 @@
+$browser-context:16; // html font-size:
+@function rem($px, $context: $browser-context){
+  @return #{$px / $context}rem;
+}
+
+
+.container__outer{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  .container{
+    width: 1200px;
+    .row{
+      padding: 0 rem(20);
+    }
+  }
+}
+
+
+
+
+/* RESPONSIVE */
+@media (max-width:1200px){
+    
+  .container__outer{
+    .container{
+      width: auto;
+      .row{
+        padding: 0 rem(20);
+      }
+    }
+  }
+
+}
+@media (max-width:1080px){
+
+}
+
+@media (max-width:768px){
+
+}
+
+@media (max-width:600px){
+    .container__outer{
+    .container{
+      .row{
+        padding: 0 rem(20);
+      }
+    }
+  }
+
+
+}
+
+
+
+@media (max-width:320px){
+
+}
+
