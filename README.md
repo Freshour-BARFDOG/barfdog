@@ -119,6 +119,39 @@ react | lastest | npx | -
 ```
 
 
+
+<br/><br/><br/>
+
+
+
+ ##  Component 폴더 설명
+
+ <br/>
+
+
+### /src/components
+```bash
+- 재사용이 가능한 컴포넌트
+- 다양한 곳에 사용 가능한 범용컴포넌트
+```
+
+<br/>
+
+### /src/components/atoms
+```bash
+- 더 이상 쪼갤 수 없는 가장 작은 단위의 컴포넌트
+```
+<br/>
+
+### /src/components/common
+```bash
+- 페이지별 공통적으로 사용하는 컴포넌트
+```
+
+
+
+
+
 <br/><br/><br/><br/><br/>
 
 # 파일구조

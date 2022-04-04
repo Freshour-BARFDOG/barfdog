@@ -1,6 +1,6 @@
 {
+  "baseUrl": ".",
   "compilerOptions": {
-    "baseUrl": ".",
     "target": "es5",
     "lib": [
       "dom",
@@ -24,7 +24,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "src/pages/index.jsx", "src/pages/_document.jsx"  ],
   "exclude": [
     "node_modules"
   ]
