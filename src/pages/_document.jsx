@@ -14,7 +14,6 @@ import Document, {
 export default class CustomDocument extends Document {
   static getInitialProps({ renderPage }) {
     const { html, head } = renderPage();
-    console.log(html, head);
 
     return { html, head };
   }

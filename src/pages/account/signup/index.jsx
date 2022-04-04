@@ -1,5 +1,6 @@
-import React from 'react'
-import '../../styles/css/SignUpPage.scss';
+import React from 'react';
+import "/styles/css/SignUpPage.module.scss";
+
 
 function SignUp(props) {
   return (
@@ -139,9 +140,9 @@ function SignUp(props) {
 
               {/* 동의 체크박스  */}
               <div className='checkbox'>            
-                <label for="agree_all" class="chk_box">
+                <label htmlFor="agree_all" className="chk_box">
                   <input type="checkbox" id="agree_all" />
-                  <span class="on" /> 
+                  <span className="on" /> 
                   <div className=''>전체 동의합니다.</div>
                 </label>
                 <div>선택항목에 동의하지 않은 경우도 회원가입 및 일반적인 서비스를 이용할 수 있습니다.</div>
@@ -149,33 +150,33 @@ function SignUp(props) {
               
               {/* 이용약관 동의 */}
               <div className='checkbox'>            
-                <label for="agree" class="chk_box">
+                <label htmlFor="agree" className="chk_box">
                   <input type="checkbox" id="agree" />
-                  <span class="on" /> 
+                  <span className="on" /> 
                   <div className=''>이용약관 동의 (필수)</div>
                 </label>
               </div>
               {/* 개인정보 수집 이용동의  */}
               <div className='checkbox'>            
-                <label for="agree" class="chk_box">
+                <label htmlFor="agree" className="chk_box">
                   <input type="checkbox" id="agree" />
-                  <span class="on" /> 
+                  <span className="on" /> 
                   <div className=''>개인정보 수집 이용 동의 (필수)</div>
                 </label>
               </div>
               {/* 무료배송, 할인쿠폰 등 혜택 / 정보 수신 동의 */}
               <div className='checkbox'>            
-                <label for="agree" class="chk_box">
+                <label htmlFor="agree" className="chk_box">
                   <input type="checkbox" id="agree" />
-                  <span class="on" /> 
+                  <span className="on" /> 
                   <div className=''>무료배송, 할인쿠폰 등 혜택/정보 수신 동의 (선택)</div>
                 </label>
               </div>
               {/* SMS */}
               <div className='checkboxleft'>            
-                <label for="agree" class="chk_box">
+                <label htmlFor="agree" className="chk_box">
                   <input type="checkbox" id="agree" />
-                  <span class="on" /> 
+                  <span className="on" /> 
                   <div className=''>SMS</div>
                 </label>
               </div>
@@ -186,9 +187,9 @@ function SignUp(props) {
 
               {/* 본인은 만 14세 이상입니다*/}
               <div className='checkbox'>            
-                <label for="agree" class="chk_box">
+                <label htmlFor="agree" className="chk_box">
                   <input type="checkbox" id="agree" />
-                  <span class="on" /> 
+                  <span className="on" /> 
                   <div className=''>본인은 만 14세 이상입니다.</div>
                 </label>
               </div>
