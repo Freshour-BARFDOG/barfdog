@@ -12,7 +12,7 @@ function home() {
   return (
     <Layout>
       <Wrapper>
-        dd
+        INDEX PAGE입니다.
       </Wrapper>
     </Layout>
   );

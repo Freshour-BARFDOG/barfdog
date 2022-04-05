@@ -1,6 +1,5 @@
-
-
 /* Using CSS custom  */
+
 :root{
     --header-color-bk:#000;
     --header-color-bk-off:#6B6B6B;
@@ -11,6 +10,7 @@
     --font-color-2:#303030;
     --font-color-3:#707070;
     --font-color-4:#b7b7b7;
+    --ani-default: 0.3s ease;
 }
 
 
@@ -136,7 +136,7 @@ select {
 select:focus, textarea:focus, input:focus{
     outline: 0;
     box-shadow: none;
-    border:1px solid var(--color--main);
+    border:1px solid var(--color-main);
 }
 
 

@@ -1,3 +1,10 @@
 @charset "utf-8";
 @import './reset.scss';
+@import './common.scss';
 @import './font.scss';
+
+
+$browser-context:16; // html font-size:
+@function rem($px, $context: $browser-context){
+  @return #{$px / $context}rem;
+}
