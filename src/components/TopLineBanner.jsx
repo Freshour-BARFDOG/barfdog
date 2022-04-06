@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Wrapper from "/src/components/common/Wrapper";
 import Link from "next/link";
+import rem from './atoms/rem';
+
 
 const TopLineBanner = () => {
   const [text, setText] = useState(
@@ -13,10 +15,11 @@ const TopLineBanner = () => {
     display: flex;
     justify-Content: center;
     align-items: center;
-    font-size: 18px;
+    font-size: ${rem(18)};
     color: #fff;
-    padding: 6px 0;
-    max-height: 40px;
+    padding: ${rem(6)} 0;
+    height: ${rem(40)};
+    white-space: nowrap;
     box-sizing: border-box;
   `;
 
