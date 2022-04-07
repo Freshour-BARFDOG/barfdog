@@ -1,5 +1,5 @@
 import React from 'react';
-import MenuLayout, { SubmenuList } from "../MenuLayout";
+import MenuLayout, { SubmenuList } from "/src/components/header/MenuLayout";
 
 
 function ServiceCenter() {

@@ -1,5 +1,5 @@
 import React from 'react'
-import s from "/styles/scss/FindMyId.module.scss";
+import s from "/styles/css/FindMyId.module.scss";
 
 function FindMyIdPage() {
   return (

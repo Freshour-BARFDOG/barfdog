@@ -9,9 +9,9 @@ $browser-context:16; // html font-size:
   justify-content: center;
   align-items: center;
   .container{
-    width: 1200px;
+    width: rem(1200);
     .row{
-      padding: 0 rem(20);
+      padding: 0 rem(0);
     }
   }
 }

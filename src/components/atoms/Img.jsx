@@ -10,6 +10,7 @@ function ImageWrapper(props) {
       src={props.src ? props.src : ""}
       srcSet={props.srcSet ? props.srcSet : ""}
       layout={props.layout ? props.layout : ""}
+      className="img_wrap"
     ></Image>
   );
 }

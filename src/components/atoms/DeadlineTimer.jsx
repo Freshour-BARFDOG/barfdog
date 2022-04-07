@@ -4,11 +4,13 @@ import rem from './rem';
 
 
 const bgColor = '#FFCEBA';
-const move_X = rem(36);
+const move_X = rem(40);
+
+
 
 const Rect = styled.i`
     position: absolute;
-    right: ${move_X};
+    right: calc(${move_X} + 5px);
     bottom: 3px;
     transform: translate(0,100%);
     border-top: 14px solid ${bgColor};
@@ -31,13 +33,28 @@ const NormalText = styled.span`
 `;
 
 const Timer = styled.span`
-  margin: 0 ${rem(6)};
+  margin: 0 ${rem(8)};
   white-space:nowrap;
   font-weight:400;
-  width: ${rem(94)};
+  width: ${rem(88)};
   text-align:left;
 `;
 
+
+const Wrap = styled.div`
+  position:absolute;
+  z-index:999;
+  right: 0px;
+  top:0;
+  transform:translate( ${move_X} , calc(-100% - ${rem(34)}));
+  text-align:center;
+  color:#000;
+  font-size:${rem(16)};
+  padding: ${rem(10)} ${rem(20)} ${rem(8)};
+  box-sizing:border-box;
+  background-color:${bgColor};
+  border-radius:${rem(8)};
+`;
 
 
 
@@ -100,27 +117,13 @@ Date.prototype.deliveryDeadline = function () {
 const Dealine_timer = () => {
   const [message, setMessage] = useState('');
 
-  const Wrap = styled.div`
-    position:absolute;
-    z-index:999;
-    right: 6px;
-    top:0;
-    transform:translate( ${move_X} , calc(-100% - ${rem(34)}));
-    text-align:center;
-    color:#000;
-    font-size:${rem(16)};
-    padding: ${rem(10)} ${rem(20)};
-    box-sizing:border-box;
-    background-color:${bgColor};
-    border-radius:${rem(8)};
-  `;
+
 
   
   useEffect(() => {
-    let timer;
-     timer = setTimeout(() => {
-        setMessage(new Date().deliveryDeadline());
-      }, 1000)
+    setTimeout(() => {
+      setMessage(new Date().deliveryDeadline());
+    }, 1000)
   })
 
 
