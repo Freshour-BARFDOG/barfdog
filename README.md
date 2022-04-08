@@ -2,18 +2,39 @@
 <br />
 
 
+ ##  <span style="color:#ca0101">추의 주의사항</span>
+
+ <br/>
+
+
+### Bable-plugin-macro
+1. font-awesome 아이콘 사용을 위하여 위 플러그인을 DevDependency로 설치했다.
+2. font-awesome 문제가 발생할 경우, Dependency가 문제일 수 있다.
+
+```powerShell
+$ npm i -D babel-plugin-macros
+$ npm i babel-plugin-macros
+```
+
+
+
+<br/><br/><br/><br/>
+
+
+
+
 ### Install
 <br/>
 
 > Next JS Package
-```bash
+```powerShell
 $ npx create-next-app .
 ```
 
 <br/>
 
 > Global Install
-```bash
+```powerShell
 $ npm i -g nodemon
 ```
 
