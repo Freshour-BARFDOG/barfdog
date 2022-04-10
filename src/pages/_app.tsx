@@ -3,13 +3,6 @@ import "/styles/global/global.scss";
 // Next JS : 최초실행
 
 
-import { config } from "@fortawesome/fontawesome-svg-core";
-config.autoAddCss = false; // Tell Font Awesome to skip adding the CSS automatically since it's being imported above
-
-
-
-
-
 
 //👉 공통된 Data Fetching이 필요하다면 _app.js에 getInitialProps를 붙이면 된다.
 
@@ -21,7 +14,7 @@ config.autoAddCss = false; // Tell Font Awesome to skip adding the CSS automatic
 // };
 
 // Page.getInitialProps = async (ctx) => {
-//   // 해당 페이지에 getInitialProps를 사용해서 data를 받아온다
+// 해당 페이지에 getInitialProps를 사용해서 data를 받아온다
 //   const { data } = await axios.get("...url");
 
 //   return { stars: data };

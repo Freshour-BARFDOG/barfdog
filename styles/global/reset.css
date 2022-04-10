@@ -1,15 +1,18 @@
 /* ! Using CSS custom  */
 
 :root{
-    --header-color-bk:#000;
-    --header-color-bk-off:#6B6B6B;
     --color-main: #ca0101;
-    --color-line:#DDDDDD;
-    --color-bg :#FAFAFC;
-    --font-color-1:#000;
-    --font-color-2:#303030;
-    --font-color-3:#707070;
-    --font-color-4:#b7b7b7;
+    --color-checked: #50A057;
+    --color-warning: #FF4444;
+    --color-line:#D3D4DE;
+    --color-line2:#E6E6EB;
+    --color-bg :#F8F8FF;
+    --color-bg-footer :#F8F8FF;
+    --color-bg-admin :#F8F8FF;
+    --color-font-default:#000;
+    --color-font-strong:#000;
+    --color-font-medium:#717171;
+    --color-font-light:#B7B7B7;
     --ani-default: 0.3s ease;
 }
 

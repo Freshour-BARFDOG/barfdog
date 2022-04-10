@@ -1,0 +1,14 @@
+$browser-context:16; // html font-size:
+@function rem($px, $context: $browser-context){
+  @return #{$px / $context}rem;
+}
+
+.btn {
+  border-radius:rem(4);
+  min-width:rem(120);
+  background-color: var(--color-main);
+  color:#fff;
+  font-size:rem(17);
+  font-weight:400;
+  padding:rem(10) rem(30);
+}

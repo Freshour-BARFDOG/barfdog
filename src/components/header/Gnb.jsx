@@ -2,10 +2,10 @@ import React from 'react';
 import MenuLayout, { SubmenuList } from "/src/components/header/MenuLayout";
 import s from '/styles/css/Header.module.scss';
 import Link from 'next/link';
-import IMG from '/src/components/atoms/IMG';
 import Icon_mypage from '/public/img/icon/mypage.svg';
 import Icon_cart from '/public/img/icon/cart.svg';
 import DeadlineTimer from '../atoms/DeadlineTimer';
+import SVG_subscribe from '/public/img/icon/subscribe.svg';
 
 
 
@@ -49,10 +49,10 @@ function Gnb_survey (){
   return (
     <li>
       <Link href="/survey" passHref>
-        <a><IMG src="/img/icon/subscribe.svg" alt="정기구독" width="132" height="40"/></a>
+        <a><SVG_subscribe/></a>
       </Link>
     </li>
-  )
+  );
 }
 
 function Gnb() {

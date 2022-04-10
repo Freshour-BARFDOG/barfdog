@@ -1,7 +1,9 @@
 import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
+// import s from './Btn_moveToPage.module.scss';
 import rem from './rem';
+
 
 const Button = styled.button`
   border-radius:${rem(4)};
@@ -11,18 +13,20 @@ const Button = styled.button`
   font-size:${rem(17)};
   font-weight:400;
   padding: ${rem(10)} ${rem(30)};
-
-
-`
+`;
 
 
 
-function button_moveToPage({text, path}) {
+function Button_moveToPage({text, path}) {
   const Name = text ? text : "홈으로 돌아가기";
   const Path = path ? path : '/';
   return (
-    <Button className='btn_moveToPage'><Link href={Path} passHref><a>{Name}</a></Link></Button>
-  )
+    <Button type='button'>
+      <Link href={Path} passHref>
+        <a>{Name}</a>
+      </Link>
+    </Button>
+  );
 }
 
-export default button_moveToPage
+export default Button_moveToPage; 

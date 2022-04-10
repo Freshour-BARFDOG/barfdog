@@ -141,5 +141,5 @@ const Dealine_timer = () => {
 
 
 
-export default Dealine_timer
+export default Dealine_timer;
 

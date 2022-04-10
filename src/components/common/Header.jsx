@@ -2,10 +2,12 @@ import React, { useState } from 'react'
 import s from '/styles/css/Header.module.scss';
 import Link from 'next/link';
 import Wrapper from "/src/components/common/Wrapper";
-import IMG from '/src/components/atoms/IMG';
 import Gnb, { Gnb_my} from '/src/components/header/Gnb';
 import ServiceCenter from '/src/components/header/ServiceCenter';
 import User_class_box from '../atoms/User_class_box';
+import Image from 'next/image';
+import Logo from '/public/img/logo.png';
+import Logo_2x from '/public/img/logo@2x.png';
 
 
 
@@ -57,31 +59,30 @@ function Header(props) {
       <Wrapper>
         <div className={s.inner}>
           <div id="account" className={`${s.account_area} clearfix`}>
-            <ul className='clearfix'>
-              <HeaderTopMenu loginState={loginState}/>
+            <ul className="clearfix">
+              <HeaderTopMenu loginState={loginState} />
             </ul>
-          </div>{/* account */}
+          </div>
+          {/* account */}
           <div className={s.logo_area}>
             <Link href="/" passHref>
-              <a><IMG
-                src="/img/logo.png"
-                srcSet="/img/logo@2x.png"
-                alt="사이트 로고"
-                width='278'
-                height="48"
-              /></a>
+              <a>
+                <Image src={Logo} srcSet={Logo_2x} alt="사이트 로고" priority />
+              </a>
             </Link>
-            
-          </div>{/* logo_area */}
+          </div>
+          {/* logo_area */}
           <div className={`${s.gnb_area} clearfix`}>
             <nav id="gnb" className={`${s.gnb_nav} clearfix`}>
-              <ul className='clearfix'>
+              <ul className="clearfix">
                 <Gnb />
               </ul>
             </nav>
             <Gnb_my />
-          </div>{/* gnb_area */}
-        </div>{/* inner */}
+          </div>
+          {/* gnb_area */}
+        </div>
+        {/* inner */}
       </Wrapper>
     </header>
   );
