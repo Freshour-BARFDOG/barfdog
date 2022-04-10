@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
-// import s from './Btn_moveToPage.module.scss';
 import rem from './rem';
 
 
