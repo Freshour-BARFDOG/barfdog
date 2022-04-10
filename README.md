@@ -2,25 +2,6 @@
 <br />
 
 
- ##  <span style="color:#ca0101">추의 주의사항</span>
-
- <br/>
-
-
-### Bable-plugin-macro
-1. font-awesome 아이콘 사용을 위하여 위 플러그인을 DevDependency로 설치했다.
-2. font-awesome 문제가 발생할 경우, Dependency가 문제일 수 있다.
-
-```powerShell
-$ npm i -D babel-plugin-macros
-$ npm i babel-plugin-macros
-```
-
-
-
-<br/><br/><br/><br/>
-
-
 
 
 ### Install
@@ -48,10 +29,12 @@ $ npm i -g nodemon
 <br/>
 
 Library | Version | Category | Note
---|:--:|:--:|--:|
+:--:|:--:|:--:|:--:|
 Node | 14.17.4 | npm | -
-next.js | 12.1.4(lastest) | npx | -
-react | lastest | npx | -
+next.js | 12.1.4(lastest) | npx | 
+react | lastest<br/>18.0.0 (22.04.11기준) | npx | crete-next-app 생성 시 자동 설치
+react-dom | lastest<br/>18.0.0 (22.04.11기준) | npx | crete-next-app 생성 시 자동 설치
+typescript | ^4.6.3 | npm | 주요 API통신 시 사용(예정)
 
 <br/>
 <br/>
@@ -60,14 +43,51 @@ react | lastest | npx | -
 ### COMMON Setting in Style
 <br/>
 
-### Prettier 
+### VSCODE Extension 
+1. Better Comments 설치
+<div style="background-color:rgba(0,0,0,.25); padding: 10px;">
+      <p style="color:red; text-decoration:none">// ! :  주석색깔 붉은색표기됨(주의사항 표기)</p>
+      <p style="color:green; text-decoration:none">// * 주석색깔 초록색: 참고사항 표기</p>
+</div>
+
+<br/>
+
+2. Fast Arrow
+```js
+- JS arrow 함수 사용 시, snipet제공
+```
+
+
+<br/>
+
+4. ES7+ React/Redux/React-Native
+```js
+- React Snippet 제공
+- ex. rfce 입력 시 기본 component형식 자동완성
+
+import React from 'react'
+
+function index() {
+  return (
+    <div>index</div>
+  )
+}
+export default index
+```
+
+<br/>
+
+### Prettier
+
 ```bash
--
--
+- 기본 설정 그대로 사용
+- 사용에 불필요할 경우 disabled
+- 공통된 코드 구성 Format 생겼을 경우 추가
 ```
 <br/>
 
 ### ESslint
+
 ```plaintext
 -
 - 
