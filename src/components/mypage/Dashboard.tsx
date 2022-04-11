@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import s from "/styles/css/mypage/Dashboard.module.scss";
 import User_counter_viewer from "./User_counter_viewer";
 import Image from "next/image";
@@ -10,6 +10,8 @@ import { IoMdLink } from "react-icons/io";
 
 
 function Dashboard({ className, ...props }) {
+
+  
 
   const dogName:string = '바둑이'; 
   const userName:string = '김바프'; 

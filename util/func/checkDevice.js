@@ -1,15 +1,9 @@
 // 디바이스 체크 - Mobile / Web
 
-const isMobileDevice = (function () {
+const IsMobileDevice = () => {
   const filter = "win16|win32|win64|mac|macintel";
 
-  // console.log(navigator.platform);
-  // console.log(navigator.maxTouchPoints);
-  // alert(navigator.maxTouchPoints)
-  // alert(navigator.platform)
-
-  
-  if (window && window.innerWidth < 600) {
+  if (window.innerWidth < 600) {
     // alert('Width < 600');
     return true;
   } else if (navigator.maxTouchPoints >= 5) {
@@ -22,7 +16,7 @@ const isMobileDevice = (function () {
     // alert('PC');
     return false;
   }
-})();
+};
 
 
-export default isMobileDevice;
+export default IsMobileDevice;

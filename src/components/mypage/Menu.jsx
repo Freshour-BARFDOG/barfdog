@@ -80,8 +80,8 @@ function Menu({...props }) {
         <List title="배송 현황" link="/mypage/delivery" />
         <List title="반려견 정보" link="/mypage/dogs" />
         <List title="견주 계정 정보" link="">
-          <SubmenuList title="회원정보 변경" link="mypage/edit/user-info" />
-          <SubmenuList title="비밀번호 변경" link="mypage/edit/user-pw" />
+          <SubmenuList title="회원정보 변경" link="/mypage/edit/user-info" />
+          <SubmenuList title="비밀번호 변경" link="/mypage/edit/user-pw" />
           <SubmenuList title="SNS 연동" link="/mypage/edit/sns-connect" />
         </List>
         <List title="상품 후기" link="/mypage/review" />
