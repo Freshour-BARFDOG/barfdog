@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+
 };
 
 // module.exports = nextConfig
@@ -18,5 +19,8 @@ module.exports = {
     });
 
     return config;
+  },
+  images: {
+    domains: ["images.unsplash.com"],
   },
 };

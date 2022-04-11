@@ -12,10 +12,17 @@ $browser-context:16;
   @return #{$px / $context}rem;
 }
 
+html, body{width:100vw; overflow-x:hidden;}
 
-/* TEST Allow To Force push into Main Branch */
-/* TEST2 disAllow To Force push into Main Branch */
 
+
+.img-wrap{
+  position:relative;
+  display:inline-block;
+  overflow:hidden;
+  min-width: 1px;
+  min-height:1px;
+}
 
 
 

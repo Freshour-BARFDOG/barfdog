@@ -5,15 +5,16 @@
     --color-checked: #50A057;
     --color-warning: #FF4444;
     --color-line:#D3D4DE;
-    --color-line2:#E6E6EB;
+    --color-line-light:#E6E6EB;
     --color-bg :#F8F8FF;
     --color-bg-footer :#F8F8FF;
     --color-bg-admin :#F8F8FF;
-    --color-font-default:#000;
+    --color-font-default:#202020;
     --color-font-strong:#000;
     --color-font-medium:#717171;
     --color-font-light:#B7B7B7;
     --ani-default: 0.3s ease;
+    --ani-short: 0.15s ease-out;
 }
 
 

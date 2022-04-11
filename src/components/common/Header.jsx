@@ -30,14 +30,20 @@ function Header(props) {
     }
 
     const Non_Member = () => {
-      return <>
-        <li>
-          <Link href="/account/signup" as="/signup">회원가입</Link>
-        </li>
-        <li>
-          <Link href="/account/login">로그인</Link>
-        </li>
-      </>
+      return (
+        <>
+          <li>
+            <Link href="/account/signup" as="/signup">
+              회원가입
+            </Link>
+          </li>
+          <li>
+            <Link href="/account/LoginPage" as="/account/login">
+              로그인
+            </Link>
+          </li>
+        </>
+      );
     }
 
     const MenuList = loginState ? <Member /> : <Non_Member />;
@@ -88,4 +94,4 @@ function Header(props) {
   );
 }
 
-export default Header
+export default Header;

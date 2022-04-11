@@ -21,9 +21,11 @@ $browser-context:16; // html font-size:
       float:left;
       font-size:rem(16);
       color:#000;
-      margin-right:rem(23);
-      padding-right:rem(23);
       position: relative;
+      &:not(:last-child){
+        margin-right:rem(23);
+        padding-right:rem(23);
+      }
 
       &:not(:last-child):after{
         content:"";
@@ -43,7 +45,7 @@ $browser-context:16; // html font-size:
         font-size: inherit;
         font-weight: 400;
       }
-      &:last-child > *{ padding-right:0;}
+      &:last-child > *{ padding-right:rem(6);}
     }
   }
 }

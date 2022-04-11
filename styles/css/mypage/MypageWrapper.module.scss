@@ -1,0 +1,26 @@
+$browser-context:16;
+// convert px to rem
+@function rem($px, $context: $browser-context){
+  @return #{$px / $context}rem;
+}
+
+
+
+
+.mypageWrapper {
+  // background-color: rgb(190, 224, 190);
+  padding-top:rem(70);
+  padding-bottom:rem(21);
+  .dashboard {
+    margin-bottom: rem(20);
+  }
+  .contents_wrap{
+    padding: rem(53) 0 10vh;
+
+    .menu {float:left; width:remR(200);}
+    .contents {float:left; width:calc(100% - rem(200));padding-left: rem(40); box-sizing:border-box;}
+
+  }
+
+}
+
