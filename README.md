@@ -168,8 +168,9 @@ export default index
 
 잘못된 예 | 올바른 예
 |:--:|:--:|
-| error-Mesage |  error-mesage
-| control_center |  control-center
+| Mypage.jsx |  mypage.jsx
+| edit_my_password.jsx |  editMyPassword(edit-my-password).jsx
+| loginSectionToSocial.jsx |  loginWithSNS.jsx
 
 
 ```js
