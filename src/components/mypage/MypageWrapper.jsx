@@ -1,15 +1,21 @@
 import React, { useEffect } from "react";
+import dynamic from "next/dynamic";
 import s from "/styles/css/mypage/MypageWrapper.module.scss";
-import Menu from "./Menu";
 import Dashboard from './Dashboard.tsx';
 import Banner_event from '../atoms/Banner_event';
-import IsMobileDevice from '/util/func/checkDevice';
+
+
+// import Menu from "./Menu";
+const Menu = dynamic(() => {
+  // SSR 랜더링 사용없이 랜더링함
+  // menu 내부에 window객체의 undefined 오류를 방지하기 위함
+  return import('./Menu');
+}, { ssr: false})
+
+
 
 function MypageWapper({children}) {
-  useEffect(() => {
-    console.log(window)
-    console.log(IsMobileDevice());
-  })
+
   return (
     <div className={s.mypageWrapper}>
       <Dashboard className={s.dashboard} />

@@ -1,5 +1,5 @@
 import React from 'react';
-import Button_moveToPage from '../components/atoms/Button_moveToPage';
+import Button_moveToPage from '../components/atoms/Button_moveToPage';
 import Wrapper from '/src/components/common/Wrapper';
 
 
