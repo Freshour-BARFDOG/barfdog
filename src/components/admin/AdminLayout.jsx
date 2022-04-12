@@ -1,9 +1,18 @@
 import React from 'react'
+import AdminHeader from "./AdminHeader";
+import AdminGnb from "./AdminGnb";
+import { AdminBodyWrapper } from './AdminWrapper';
 
-function AdminLayout() {
+function AdminLayout({children}) {
   return (
-    <div>AdminLayout</div>
-  )
+    <main>
+      <AdminHeader />
+      <AdminBodyWrapper>
+        <AdminGnb />
+        {children} {/* 콘텐츠 영역 */}
+      </AdminBodyWrapper>
+    </main>
+  );
 }
 
 export default AdminLayout

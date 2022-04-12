@@ -1,9 +1,39 @@
 import React from 'react'
+import AdminWrapper from '/src/components/admin/AdminWrapper';
+import Image from 'next/image';
+import s from "/styles/admin/adminHeader.module.scss";
 
 function AdminHeader() {
+
+  const adminName = '관리자';
+
   return (
-    <div>AdminHeader</div>
-  )
+    <header id={s.admin_header} className={`${s.inner} flex-wrap`}>
+      <AdminWrapper>
+        <div className={`${s.inner} clearfix`}>
+          <div className={s.logo}>
+            <Image
+              src={require("/public/img/logo(admin).png")}
+              srcSet={require("/public/img/logo(admin)@2x.png")}
+              alt="어드민 로고"
+              layout="responsive"
+              ObjectFit="contains"
+            ></Image>
+          </div>
+          <ul className={s.header_menus}>
+            <li className={s.admin_info}>
+              <b className={s.admin_name}>{adminName}</b>님 반갑습니다.
+            </li>
+            <li>
+              <button type="button" id="logout" className={s.btn_logout}>
+                로그아웃
+              </button>
+            </li>
+          </ul>
+        </div>
+      </AdminWrapper>
+    </header>
+  );
 }
 
 export default AdminHeader

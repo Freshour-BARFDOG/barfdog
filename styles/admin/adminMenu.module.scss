@@ -1,0 +1,104 @@
+@import './adminCommon.module.scss';
+$browser-context:16;
+// convert px to rem
+@function rem($px, $context: $browser-context){
+  @return #{$px / $context}rem;
+}
+
+$menu-Padding: 20;
+$list-height: rem(58);
+/* admin_nav */
+
+.admin_nav{
+  position: relative;
+  float:left;
+  padding:rem(20) 0;
+  height: calc(100vh - $header-height);
+  box-sizing: border-box;
+  border: 1px solid var(--color-line-light);
+  border-top: 0;
+  max-width: $nav-width;
+  width: $nav-width;
+  
+
+  .menu {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    border: 0;
+    box-sizing:border-box;
+
+    li{
+      color:var(--color-font-medium);
+      position: relative;
+      &:not(:last-child) a, &:not(:last-child) p{border-bottom: 0}
+      
+      > a, > p {
+        padding: rem(17) rem($menu-Padding + 10);
+        font-size: rem(18);
+        color:#4d4d4d;
+        max-height: $list-height;
+        box-sizing: border-box;
+   
+
+        &:after{
+          content:"";
+          position:absolute;
+          left:0;
+          top:0%;
+          width:6px;
+          height:100%;
+          max-height: $list-height;
+          background-color:var(--color-main);
+          transition: background-color, opacity 0.2s ease;
+          opacity:0;
+        }
+        &:hover:after{
+          opacity: 1;
+        }
+      }
+      
+      a svg{display: none;}
+
+      ul{
+        a, p{padding-left:rem($menu-Padding + 20)
+        }
+      }
+    }
+  }
+
+  .site_settings{
+    background-color: #fff;
+    z-index: 1;
+    position:absolute;
+    bottom:0;
+    left:0;
+    width: 100%;
+    border-top: 1px solid var(--color-line-light);
+    a, p{
+      max-height: $list-height;
+      padding: rem(17) rem($menu-Padding + 10);width:100%; display:flex;
+      align-items:center;
+      box-sizing:border-box;
+      width:100%;
+      color:#636363;
+      font-size: rem(18);
+      transition: color var(--ani-short);
+      svg{
+        margin-right:rem(5);
+        fill: #636363;
+        transition-duration: .3s;
+        transition-timing-function: ease-out;
+        transition-property: fill, transform;
+        transform:rotate(0);
+        path{transition:inherit}
+      }
+      &:hover{
+        color: var(--color-main);
+        svg {transform:rotate(180deg)} 
+        path{fill:var(--color-main)}
+      }
+    }
+  }
+
+}

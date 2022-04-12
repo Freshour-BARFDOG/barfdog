@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
-import s from "/styles/css/mypage/Menu.module.scss";
+import s from "/styles/css/mypage/menu.module.scss";
 import { IoIosArrowForward  } from "react-icons/io";
 import slideToggle from "/util/func/slideToggle";
 import Link from "next/link";
 
 
 
-
-
-const SubmenuList = ({ link, title }) => {
+export const SubmenuList = ({ link, title }) => {
   return (
     <li>
       <Link href={link} passHref>
@@ -19,7 +17,7 @@ const SubmenuList = ({ link, title }) => {
 };
 
 
-const List = ({link, title, children}) => {
+export const List = ({link, title, children}) => {
   const [isOpen, setIsOpen] = useState(false);
 
 
@@ -29,10 +27,11 @@ const List = ({link, title, children}) => {
     slideToggle(submenu);
     isOpen ? setIsOpen(false) : setIsOpen(true);
   };
-
+  console.log(isOpen);
+  console.log(children);
 
   const Submenu = children ? (
-    <ul className={`${s.submenu} isOpen ? ${s.open} : ""}`}>{children}</ul>
+    <ul className={s.submenu + (isOpen ? s.open : "")}>{children}</ul>
   ) : (
     ""
   );
