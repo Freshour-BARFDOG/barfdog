@@ -5,9 +5,9 @@ import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
 
 function index() {
   return (
-    <AdminLayout>
+    <AdminLayout >
       <AdminContentWrapper>
-          어드민 인덱스 페이지내용넣기
+          DashBoard 페이지
       </AdminContentWrapper>
     </AdminLayout>
   )

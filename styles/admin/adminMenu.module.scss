@@ -39,30 +39,39 @@ $list-height: rem(58);
         color:#4d4d4d;
         max-height: $list-height;
         box-sizing: border-box;
-   
-
+      }
+      
+      .submenu_list{
+        position: relative;
         &:after{
-          content:"";
-          position:absolute;
-          left:0;
-          top:0%;
-          width:6px;
-          height:100%;
-          max-height: $list-height;
-          background-color:var(--color-main);
-          transition: background-color, opacity 0.2s ease;
-          opacity:0;
+            content:"";
+            position:absolute;
+            left:0;
+            top:0%;
+            width:6px;
+            height:100%;
+            max-height: $list-height;
+            background-color:var(--color-main);
+            transition: background-color, opacity 0.2s ease;
+            opacity:0;
+  
+      
         }
         &:hover:after{
           opacity: 1;
         }
       }
+
+
       
       a svg{display: none;}
 
       ul{
-        a, p{padding-left:rem($menu-Padding + 20)
+        a, p{
+          padding-left:rem($menu-Padding + 20);
+          font-size:rem(16);
         }
+        
       }
     }
   }

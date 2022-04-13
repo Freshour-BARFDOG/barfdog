@@ -1,5 +1,7 @@
 /* FUCTION - toggle */
 let slideUp, slideDown, slideToggle;
+
+
 if (typeof window !== "undefined") {
   slideUp = (target, duration = 500) => {
     target.style.transitionProperty = "height, margin, padding";
