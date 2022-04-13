@@ -32,7 +32,22 @@ $list-height: rem(58);
       color:var(--color-font-medium);
       position: relative;
       &:not(:last-child) a, &:not(:last-child) p{border-bottom: 0}
-      
+      &:not(.submenu_title):after{
+        content:"";
+        position:absolute;
+        left:0;
+        top:0%;
+        width:6px;
+        height:100%;
+        max-height: $list-height;
+        background-color:var(--color-main);
+        transition: background-color, opacity 0.2s ease;
+        opacity:0;
+      }
+        &:hover:after{
+          opacity: 1;
+      }
+
       > a, > p {
         padding: rem(17) rem($menu-Padding + 10);
         font-size: rem(18);
@@ -43,23 +58,7 @@ $list-height: rem(58);
       
       .submenu_list{
         position: relative;
-        &:after{
-            content:"";
-            position:absolute;
-            left:0;
-            top:0%;
-            width:6px;
-            height:100%;
-            max-height: $list-height;
-            background-color:var(--color-main);
-            transition: background-color, opacity 0.2s ease;
-            opacity:0;
-  
-      
-        }
-        &:hover:after{
-          opacity: 1;
-        }
+        
       }
 
 
