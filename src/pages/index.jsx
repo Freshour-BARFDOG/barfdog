@@ -5,8 +5,20 @@ import Wrapper from "/src/components/common/Wrapper";
 function Home() {
   return (
     <Layout>
-      <Wrapper>
-        INDEX PAGE입니다.
+      <Wrapper bgColor="#333">
+        INDEX PAGE입니다.INDEX PAGE입니다.INDEX PAGE입니다.INDEX PAGE입니다.
+        INDEX PAGE입니다. INDEX PAGE입니다. INDEX PAGE입니다. INDEX
+        PAGE입니다.INDEX PAGE입니다.INDEX PAGE입니다.INDEX PAGE입니다. INDEX
+        PAGE입니다. INDEX PAGE입니다. INDEX PAGE입니다.INDEX PAGE입니다.INDEX
+        PAGE입니다.INDEX PAGE입니다.INDEX PAGE입니다. INDEX PAGE입니다. INDEX
+        PAGE입니다. INDEX PAGE입니다.INDEX PAGE입니다.INDEX PAGE입니다.INDEX
+        PAGE입니다.INDEX PAGE입니다. INDEX PAGE입니다. INDEX PAGE입니다. INDEX
+        PAGE입니다.INDEX PAGE입니다.INDEX PAGE입니다.INDEX PAGE입니다.INDEX
+        PAGE입니다. INDEX PAGE입니다. INDEX PAGE입니다. INDEX PAGE입니다.INDEX
+        PAGE입니다.INDEX PAGE입니다.INDEX PAGE입니다.INDEX PAGE입니다. INDEX
+        PAGE입니다. INDEX PAGE입니다. INDEX PAGE입니다. INDEX PAGE입니다.INDEX
+        PAGE입니다.INDEX PAGE입니다.INDEX PAGE입니다. INDEX PAGE입니다. INDEX
+        
       </Wrapper>
     </Layout>
   );
