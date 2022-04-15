@@ -6,7 +6,7 @@ function AdminBanner() {
   return (
     <AdminLayout>
       <AdminContentWrapper>
-        banner 페이지
+        메인배너 페이지 
 
       </AdminContentWrapper>
     </AdminLayout>
