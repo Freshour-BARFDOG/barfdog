@@ -1,23 +1,57 @@
-import React from 'react';
-// import s from "/styles/admin/adminMenu.module.scss";
+import React, { useRef, useEffect, useState } from "react";
 import s from "/styles/css/mypage/menu.module.scss";
 import { SubmenuList, List, SubmenuTitle } from "/src/components/mypage/Menu";
 import Link from 'next/link';
 import Icon_setting from "/public/img/icon/setting.svg";
+import { useRouter } from "next/router";
+
 
 
 function AdminGnb() {
+
+  const router = useRouter();
+  const [curPath, setCurPath] = useState(router.pathname);
+  const curMenuRef = useRef(null);
+
+  
+  useEffect(() => {
+
+    // const adminRootPath = '/bf-admin';
+    // const redirPath = adminRootPath; + '/dashboard';
+    // if (curPath === adminRootPath) {
+    //   router.push(redirPath);
+    //   // setCurPath(redirPath);
+    //   return;
+    // }
+
+
+
+    const allMenus = curMenuRef.current.querySelectorAll('a');
+
+    allMenus.forEach((menu) => {
+      const thisMenuLink = menu.href;
+      const pathStartOrder = thisMenuLink.indexOf(curPath);
+      const menuPath = thisMenuLink.slice(pathStartOrder, -1);
+      const isCurPath = thisMenuLink.indexOf(menuPath) > 0 ? true : false;
+      if(isCurPath){
+        const activeMenu = menu.closest('.' + `${s.menu_title}`);
+        activeMenu.classList.add(`${s.active}`);
+      }
+    });
+
+  }, [curPath]);
+
   return (
-    <nav className={s.admin_nav}>
+    <nav ref={curMenuRef} className={s.admin_nav}>
       <ul className={s.menu}>
-        <List title="대시보드" link="/bf-admin" as="/bf-admin/dashboard"/>
+        <List title="대시보드" link="/bf-admin/dashboard" />
         <List title="회원관리" link="/bf-admin/manage-user" />
         <List title="혜택관리">
-          <SubmenuTitle title="쿠폰 관리" noLink/>
-          <SubmenuList title="쿠폰 조회" link="/bf-admin/" />
+          <SubmenuTitle title="쿠폰 관리" noLink />
+          <SubmenuList title="쿠폰 조회" link="/bf-admin/coupon" />
           <SubmenuList title="쿠폰 발행" link="/" />
           <SubmenuList title="쿠폰 생성" link="/" />
-          <SubmenuTitle title="적립금 관리" noLink/>
+          <SubmenuTitle title="적립금 관리" noLink />
           <SubmenuList title="적립금 조회" link="/" />
           <SubmenuList title="적립금 발행" link="/" />
         </List>
@@ -37,10 +71,16 @@ function AdminGnb() {
           <SubmenuList title="레시피 등록" link="/" />
         </List>
         <List title="배너관리">
-          <SubmenuList title="메인 배너" link="/bf-admin/main-banner" />
-          <SubmenuList title="마이페이지 배너" link="/bf-admin/mypage-banner" />
-          <SubmenuList title="최상단 띠 배너" link="/bf-admin/line-banner" />
-          <SubmenuList title="팝업" link="/bf-admin/popup" />
+          <SubmenuList title="메인 배너" link="/bf-admin/banner/main-banner" />
+          <SubmenuList
+            title="마이페이지 배너"
+            link="/bf-admin/banner/mypage-banner"
+          />
+          <SubmenuList
+            title="최상단 띠 배너"
+            link="/bf-admin/banner/line-banner"
+          />
+          <SubmenuList title="팝업" link="/bf-admin/banner/popup" />
         </List>
         <List title="게시판관리">
           <SubmenuList title="공지사항" link="/bf-admin/notice" />

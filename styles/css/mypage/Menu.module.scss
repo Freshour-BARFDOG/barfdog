@@ -19,8 +19,11 @@ $menuPadding: 20;
   border: 1px solid var(--color-line-light);
   box-sizing:border-box;
   width: rem(200);
-
-  > li{
+  
+  .menu_title{
+    &.active{
+      a{color:var(--color-main)}
+    }
     
     color:var(--color-font-medium);
     
@@ -75,13 +78,13 @@ $menuPadding: 20;
     font-size: rem(16);
     font-weight: 500;
     & ~ li:not(.submenu_title){
-      padding-left:rem(14);
+      // padding-left:rem(14);
       > * {
         position: relative;
         &:before{
           content: "";
           position: absolute;
-          left: 26px;
+          left: rem($menuPadding + 30);
           top: calc(50% - 2px);
           width: 5px;
           height: 5px;

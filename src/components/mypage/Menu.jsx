@@ -91,7 +91,7 @@ export const List = ({ link, title, children }) => {
     <li
       ref={menuListRef}
       onClick={onClickHandler}
-      className={isOpen ? s.open : null}
+      className={`${s.menu_title} ${isOpen ? s.open : ''}`}
     >
       {menuTitle}
       {Submenu}

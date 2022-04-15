@@ -73,7 +73,8 @@ $contents-maxWidth: rem(1620);
 @media (max-width: $container-maxWidth){
 
   .body_container{width:100%;}
-  .row{padding: 0 rem(20);}
+  .row{padding: 0 rem(30);}
+
 } 
 
 @media (max-width: $contents-maxWidth){

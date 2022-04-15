@@ -32,7 +32,7 @@ $list-height: rem(58);
       color:var(--color-font-medium);
       position: relative;
       &:not(:last-child) a, &:not(:last-child) p{border-bottom: 0}
-      &:not(.submenu_title):after{
+      &:not(.submenu_title, .submenu_list):after{
         content:"";
         position:absolute;
         left:0;
@@ -44,12 +44,21 @@ $list-height: rem(58);
         transition: background-color, opacity 0.2s ease;
         opacity:0;
       }
-        &:hover:after{
+      &:hover:after{
           opacity: 1;
       }
+      // &.active:after{
+      //     opacity: 1;
+      // }
 
       > a, > p {
-        padding: rem(17) rem($menu-Padding + 10);
+        padding: {
+          top:rem(17);
+          right:rem(30);
+          bottom:rem(17);
+          left:rem(40);
+
+        }
         font-size: rem(18);
         color:#4d4d4d;
         max-height: $list-height;
@@ -66,11 +75,13 @@ $list-height: rem(58);
       a svg{display: none;}
 
       ul{
+        font-size:rem(16);
         a, p{
-          padding-left:rem($menu-Padding + 20);
-          font-size:rem(16);
+          font-size:inherit;
+          padding-left: rem($menu-Padding + 30);
         }
-        
+        .submenu_title > *{padding-left:rem($menu-Padding + 30);}
+        .submenu_title ~ .submenu_list>*{padding-left:rem($menu-Padding + 45)}
       }
     }
   }
