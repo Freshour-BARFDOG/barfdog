@@ -1,0 +1,443 @@
+$browser-context:16; // html font-size
+@function rem($px, $context: $browser-context){
+  @return #{$px / $context}rem;
+}
+
+
+.flex_container {
+  
+}
+.inner {
+  margin : 0 auto;//왜 가운데로 안가는가?
+  position: relative;
+}
+.title {
+  font-weight:bold;
+  font-size: rem(32);
+  color: #000;
+}
+
+.subtitle{
+  font-size:rem(16);
+  color: #717171;
+}
+
+.btn {
+  padding: 5px;
+  border-radius: 32px;
+  color: #333;
+  font-size: 16px;
+  font-weight: 700;
+  text-align: center;
+  cursor:pointer;
+  box-sizing: border-box;
+  display: block;
+  transform: .4s;
+  background-color: rosybrown;//색변경
+}
+//최상위 그림배너
+.banner {
+  .inner {
+    height: 534px;
+    display: flex;
+    position: relative;
+    a {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      // display: flex;
+      // left:50%  ;
+      // transform:translateX(-50%) ;
+    }
+  }
+}
+
+
+
+//레시피 설명 4가지 사진
+.recipe_info {
+  .inner {
+    padding-top :120px;
+    box-sizing: border-box;
+    height: 1004px;
+
+    .text {
+      text-align: center;
+      font-size: 32px;
+      font-weight: bold;
+    }
+    
+    .starter_banner {
+      margin-top: 70px;
+      .box {
+        padding: 10px;
+        background-color: rgba(235, 240, 255, 0.804);
+        position: relative;
+        width: 260px;
+        height: 456px;
+        box-sizing: border-box;
+    
+        .firstbox {
+          width: 240px;
+          height: 240px;
+          position: relative;
+        }
+        .secondbox {
+          margin-top: 10px;
+          font-size: 24px;
+          font-weight: bold;
+          text-align: center;
+        }
+        .pbox{
+          margin-top: 15px;
+          p {
+            text-align: center;
+          }
+        }
+        .btnbox{
+          margin-top: 20px;
+          display: flex;
+          justify-content: center;
+        }
+      }
+    }
+    .box22 {
+      display: flex;
+      justify-content: center;
+      margin-top: 100px;
+      
+      .btnbox {
+        position: relative;
+        width: 240px;
+        height: 60px;
+ 
+        a {
+
+        }
+      }
+    }
+  }
+}
+
+
+//바프생식이란?
+//가운데 이쁘게 안오는데 어떻게 하는가?
+.barfraw {
+  .inner {
+    height: 600px;
+    // background-color: #f9f2ec;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    .leftbox {
+      position: relative;
+      width: 360px;
+      height: 360px;
+    }
+    .rightbox {
+      height: 100%;
+      width  : 359px;
+      position: relative;
+      margin-left: 40px;
+      p {
+        position: absolute;
+        top: 120px;
+        color: var(--color-main);
+        font-size: 15px;
+        font-weight: bold;
+      }
+      h1 {
+        position: absolute;
+        top: 150px;
+        left: 0;
+        font-size: 28px;
+        font-weight: bold;
+      }
+      h3 {
+        position: absolute;
+        top: 200px;
+        font-size: 16px;
+      }
+    }
+  }
+}
+
+.barfgood {
+  .inner {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    height: 705px;
+    .leftbox {
+      position: relative;
+      height:100%;
+      width: 360px;
+      margin-right: 140px;
+      h1{
+        position: absolute;
+        top: 165px;
+      } 
+      p{
+        position: absolute;
+        top: 290px;
+      }     
+    }
+    
+    .rightbox {
+      display: flex;
+      align-items: center;
+      div {
+        width: 560px;
+        height: 456px;
+      }
+    }
+  }
+}
+
+
+.difference {
+  .inner {
+    height: 928px;
+    font-size: 15px;
+    text-align: center;
+    
+    p {
+      color : var(--color-main);
+    }
+    h1 {
+      font-size: 32px;
+      font-weight: bold;
+    }
+  }
+  
+}
+
+.difference2 {
+  $marginRight: 90px; 
+  ul{
+    width: 960px;
+    height: 682px;
+    margin:0 auto;
+    overflow:hidden;
+    display: flex;
+    align-items: center;
+    .title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    li{
+      float:left;
+      margin-right: 90px;
+      // width:calc(33.3333% - $marginRight);
+      width:calc(33.333% - 60px);
+      text-align: center;
+      &:last-child{margin-right:0;}
+      // &:not(:last-child){margin-right:$marginRight}
+    }
+    .text {
+      padding-top: 40px;
+      font-size: 16px;
+      height :80px;
+    }
+  }
+}
+
+.difference3 {
+  position: relative;
+  height: 824px;
+  .title {
+    padding-top: 150px;
+    display: block;
+    font-size: 32px;
+  }
+  .image {
+    display: flex;
+    position:absolute;
+    top: 250px;
+    left: 220px;
+  }
+
+
+
+
+  .textbox {
+    position: absolute;
+    top: 280px;
+    right: 150px;
+    .text {
+      li {
+        color: var(--color-main);
+        font-size: 18px;
+        display: block;
+        position: relative;
+      }
+      li::before {
+        content: "";
+        width: 120px;
+        height: 1px;
+        background-color: var(--color-main);
+        position: absolute;
+        top : 0px;
+        bottom: 0px;
+        left:-130px;
+        margin: auto;
+
+        // width:10px;
+        // height: 10px;
+        // border-radius: 50%;
+        // position: absolute;
+        // top : 0px;
+        // bottom: 0px;
+        // left:-130px;
+        // margin: auto;
+      }
+      li::after {
+        content: "";
+        width:10px;
+        height: 10px;
+        background-color: var(--color-main);
+        border-radius: 50%;
+        position: absolute;
+        top : 0px;
+        bottom: 0px;
+        left:-130px;
+        margin: auto;
+      }
+    }
+  }
+  
+
+
+  
+
+}
+
+
+
+
+@media (max-width:600px){
+
+  .difference2 {
+    ul{
+      width: 100%;
+      li{
+        width:100%;
+      
+      }
+    }
+  }
+}
+
+
+////////////////////////////////////////////////////
+////////////////////////////////////////////////////
+////////////////////////////////////////////////////
+
+
+
+section.recipe_info{padding: rem(120) 0 rem(120)}
+section.barfraw{padding: rem(120) 0 rem(120)}
+section.barfgood{padding: rem(150) 0 rem(135)}
+section.difference{padding: rem(150) 0 rem(100)}
+section.difference2{padding: rem(100) 0 rem(100)}
+section.difference3{padding: rem(120) 0 rem(150)}
+section.clientWorry{padding: rem(120) 0 rem(120)}
+section.difference5{padding: rem(150) 0 rem(200)}
+section.difference6{padding: rem(120) 0 rem(120)}
+section.difference7{padding: rem(150) 0 rem(250)}
+
+
+.btn_main{
+  display:inline-block;
+  padding: rem(14) rem(52);
+  color:#fff;
+  font-size: rem(16);
+  border-radius: rem(12);
+  background-color: var(--color-main);
+  width: rem(220);
+  box-sizing: border-box;
+}
+
+
+
+
+///@at-root
+
+.clientWorry{
+  .title_section{
+    .title{margin-bottom: rem(30)}
+    .subtitle{margin-bottom: rem(27)}
+  }
+  .cont-left{
+    width:37%;
+    margin-right:rem(40);
+  }
+
+  .cont-right{
+    width:calc(63% - rem(40));
+  }
+
+
+  .cont_section{
+    > ul{
+      > li{
+        width:calc(50% - rem(20));
+        float: left;
+        &:not(:last-child){
+          margin-right:rem(40);
+        }
+      }
+    }
+  }
+
+  .card{
+    text-align: center;
+    padding: rem(40) rem(30) ;
+    box-sizing:border-box;
+    background-color: #fff;;
+    border-radius: rem(16);
+    box-shadow: rem(20) rem(20) rem(20) rgba(0, 0, 0, .1);
+    max-width: rem(360);
+
+    .img-wrap{
+      margin-bottom: rem(20);
+      width:rem(100);
+      height:rem(100);
+    }
+
+    .card_title{
+      margin-bottom: rem(30);
+      font-size:rem(18);
+      color:#000;
+      text-align: center;
+    }
+    
+    .details{
+      ul{
+        li{
+          font-size:rem(16);
+          color:#717171;
+          padding-left:rem(16);
+          margin-bottom: rem(20);
+          text-align: left;
+          position: relative;
+          &:before{
+            content:"";
+            position:absolute;
+            left: rem(0);
+            top:rem(8);
+            width: rem(8);
+            height: rem(8);
+            background-color: #F2994C;
+            transform:rotate(45deg);
+          }
+          &:last-child{margin-bottom: 0;}
+          
+        }
+      }
+    }
+  }
+
+}

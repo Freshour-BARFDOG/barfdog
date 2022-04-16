@@ -1,9 +1,6 @@
-import React from 'react';
-import Styles from '/styles/css/FindMyId.module.scss';
-import Layout from '../../components/common/Layout';
-import Wrapper from '/src/components/common/Wrapper';
-import MypageWrapper from "/src/components/mypage/MypageWrapper";
-import Checkbox from '../../components/atoms/checkbox';
+import React from 'react'
+import Styles from '../../../styles/css/FindMyId.module.scss';
+import Wrapper from '../../../components/common/Wrapper';
 
 function Title (props) {
   return (
@@ -38,8 +35,7 @@ function Btn (props) {
 
 export default function FindMyPassword() {
   return (
-    <Layout>
-      <Wrapper>
+    <Wrapper>
       <div className={Styles.flex__container}>
 
         {/* 비밀번호 찾기 타이틀 */}
@@ -56,7 +52,6 @@ export default function FindMyPassword() {
         <Btn name='임시비밀번호 받기'></Btn>
 
       </div>
-      </Wrapper>
-    </Layout>
-  );
+    </Wrapper>
+  )
 }

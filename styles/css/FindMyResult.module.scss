@@ -1,0 +1,52 @@
+.flex_container {
+  margin: 50px auto 241px;
+  width: 415px;
+}
+
+
+.box {
+  display: flex;
+  justify-content: center;
+  margin: 47px 0px 40px;
+}
+
+.linebox {
+  padding:40px;
+  padding-top: 50px;
+  width: 100%;
+  height: 183px;
+  border-color: black;
+  border: 1px solid black;
+  box-sizing: border-box;  
+
+  .frontline {
+    display: flex;
+    width:100%;
+    margin-bottom: 28px;
+    &.pwline{
+      display: flex;
+      justify-content: center;
+      width:100%;
+      margin:10px 0 5px;
+    }
+    p {
+      margin-left: 20px;
+    }
+  }
+  .secondline {
+    display: flex;
+    width: 100%;
+    &.pwline{
+      display: flex;
+      justify-content: center;
+      width:100%;
+      margin-bottom: 5px;
+    }
+    p {
+      margin-left: 30px;
+    }
+  }
+}
+.btnbox {
+  margin-bottom: 10px;
+}

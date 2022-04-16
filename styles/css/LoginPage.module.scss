@@ -1,225 +1,190 @@
-#login {
-  input::placeholder{ color: #b7b7b7; font-size: 15px;}
-}
-.row {
+.btn__group {
   width: 100%;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  }
-
-
-#login{
-  .flex-container {
-    margin: 77px auto 0px;
-    width: 360px;
-    height: 700px;
-    justify-content: center;
+  flex-wrap: wrap;
+  .btn {
+    width: 100%;
+    height: 50px;
+    border: 1px solid var(--color-main);
+    border-radius: 3px;
+    font-size: 15px;
+    font-weight: 400;
     align-items: center;
-    flex-direction: column;
-    h2{          
-      font-size: 24px;
-      font-weight: 500;
-      text-align: center;
-      
-    }
-  .login_id{
-      margin-top: 28px;
-      height: 77px;
-      width: 100%;
-      .input_title{
-        font-size: 16px;
-        color:#202020;
-        margin-bottom:4px;                                                    
-        font-weight: 500;
-      }
-      
-      h4{
-        font-size: 16px;
-        margin: 0 0 4px 3px;
-      }
-      
-      input{
-        padding:0 20px;
-        box-sizing: border-box;
-        display:block;
-        width: 100%;
-        height: 50px;
-        // border-radius: 1px;
-        border: 1px solid #ddd;
-        outline: none;
-        font-size: 20px;
-      }
-    }
+    justify-content: center;
+    cursor:pointer;
+    display: flex;
+    box-sizing: border-box;
+  }
+  .btn.id__search {
+    background-color: var(--color-main);
+    color: #fff;
+  }
+}
+
+.flex__container {
+  margin: 77px auto 81px;
+  width: 360px;
+  height: 700px;
+  .title{
+    font-weight: 500;
+    text-align: center;
+  }
+}
+//각 박스마자 사이즈조절
+.titlebox{
+  margin-bottom: 28px;
+}
+//인풋박스로 할지 안에서 컨트롤 할 수있는 방안 확인
+.inputbox{
+  margin-bottom: 16px;
+}
+.btnbox{
+  margin-bottom: 10px;
+}
+
+.input__box {
+  .input__title{
+    padding-left: 2px;
+    margin-bottom: 5px;
+  }
+  input {
+    display: block;
+    padding: 0 20px;
+    width: 100%;
+    height: 50px;
+    border:1px solid #ddd;
+    outline:none;
+    margin-bottom: 16px;
+  }
+}
 
 
-    .login_pw{
-      margin-top: 20px;
-      width: 100%;
-      h4 {
-        font-size: 16px;
-        margin: 0 0 4px 3px;
-      }
-      input {
-        padding:0 20px;
-        box-sizing: border-box;
-        display:block;
-        width: 100%;
-        height: 50px;
-        border-radius: 10px;
-        border: 1px solid #ddd;
-        outline: none;
-        font-size: 20px;
-      }
-    }
+.auto__login__check {
+  margin-top: 10px;
+  margin-bottom: 25px;
+  .chk__box {
+    display: inline-flex; 
+    cursor: pointer; 
+    font-size: 14px; 
+    -webkit-user-select: none; 
+    -moz-user-select: none; 
+    -ms-user-select: none; 
+    user-select: none; 
+  } /* 기본 체크박스 숨기기 */ 
+  .chk__box input[type='checkbox'] { 
+    display: none; 
+  } /* 선택되지 않은 체크박스 스타일 꾸미기 */ 
+  .chk__box .on {
+    width: 20px; 
+    height: 20px;
+    margin-right: 8px; 
+    background: #ddd; 
+    position: relative;
+    display: block;
+    top: 0; 
+    left: 0; 
+  } /* 선택된 체크박스 스타일 꾸미기 */ 
+  .chk__box input[type="checkbox"]:checked + .on {
+    background:var(--color-main); 
+  } 
+  .on:after { 
+    content: ""; 
+    position: absolute; 
+    display: none; 
+  } 
+  .chk__box input[type="checkbox"]:checked + .on:after {
+    display: block; 
+  } 
+  .on:after {
+    width: 6px; 
+    height: 10px; 
+    border: solid #fff; 
+    border-width: 0 2px 2px 0; 
+    -webkit-transform: rotate(45deg); 
+    -ms-transform: rotate(45deg); 
+    transform: rotate(45deg); 
+    position: absolute; 
+    left: 6px; 
+    top: 2px; 
+  }
+  .autologin {
+    display: block;
+    letter-spacing: -.8px;
+  }
+}
 
+.login_id{
+  margin-top: 28px;
+  height: 77px;
+  width: 100%;
+}
 
-    .auto_login_check {
-      margin-top: 10px;
-      margin-bottom: 25px;
-    
-      .chk_box {
+.login_pw{
+  margin-top: 20px;
+  width: 100%;
+  h4 {
+    font-size: 16px;
+    margin: 0 0 4px 3px;
+  }
+  input {
+    padding:0 20px;
+    box-sizing: border-box;
+    display:block;
+    width: 100%;
+    height: 50px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    outline: none;
+    font-size: 20px;
+  }
+}
 
-        display: inline-flex; 
-        cursor: pointer; 
-        font-size: 14px; 
-        -webkit-user-select: none; 
-        -moz-user-select: none; 
-        -ms-user-select: none; 
-        user-select: none; 
-      } /* 기본 체크박스 숨기기 */ 
-      .chk_box input[type='checkbox'] { 
-        display: none; 
-      } /* 선택되지 않은 체크박스 스타일 꾸미기 */ 
-      .chk_box .on {
-        width: 20px; 
-        height: 20px;
-        margin-right: 8px; 
-        background: #ddd; 
-        position: relative;
-        display: block;
-        top: 0; 
-        left: 0; 
-      } /* 선택된 체크박스 스타일 꾸미기 */ 
-      .chk_box input[type="checkbox"]:checked + .on {
-        background:var(--color--main); 
-      } 
-      .on:after { 
-        content: ""; 
-        position: absolute; 
-        display: none; 
-      } 
-      .chk_box input[type="checkbox"]:checked + .on:after {
-        display: block; 
-      } 
-      .on:after {
-        width: 6px; 
-        height: 10px; 
-        border: solid #fff; 
-        border-width: 0 2px 2px 0; 
-        -webkit-transform: rotate(45deg); 
-        -ms-transform: rotate(45deg); 
-        transform: rotate(45deg); 
-        position: absolute; 
-        left: 6px; 
-        top: 2px; 
-      }
-      .autologin {
-        display: block;
-        letter-spacing: -.8px;
-      }
-    }
-    
-    .btn-group {
-      width: 100%;
-      // position: relative;
-      display: flex;
-      flex-wrap: wrap;
-      .btn {
-        width: 100%;
-        height: 50px;
-        border: 1px solid var(--color--main);
-        border-radius: 3px;
-        color: var(--color--main);
+// 아이디 찾기 사이선 비밀번호 찾기
+.id__pw__search {
+  margin: 40px 0 47px ;
+  display: flex;
+  justify-content: center;
+  
+  ul.list {
+    display: flex;
+    li {
+      position: relative;
+      a {
         font-size: 15px;
-        font-weight: 400;
-        align-items: center;
-        // flex-wrap: wrap;
-        justify-content: center;
-        cursor:pointer;
-        box-sizing: border-box;
-        display: flex;
-      }
-      .btn.login {
-        background-color: var(--color--main);
-        color: #fff;
-        margin-bottom: 10px;
-      }
-      .btn:hover{
-        
+        display: block;
+        padding : 0 10px;
       }
     }
-
-    .id-pw-search {
-      margin: 40px 0 47px ;
-      display: flex;
-      justify-content: center;
-      
-      ul.list {
-        display: flex;
-        li {
-          position: relative;
-          a {
-            font-size: 15px;
-            display: block;
-            padding : 0 10px;
-          }
-        }
-        li:last-child::before {
-          content:"";
-          width:1px;
-          height: 14px;
-          background-color: #000;
-          position: absolute;
-          top:0;
-          bottom: 0;
-          margin: auto;
-
-          // top :50%;
-          // transform:translateY(-50%);
-        }
-      }
+    li:last-child::before {
+      content:"";
+      width:1px;
+      height: 14px;
+      background-color: #000;
+      position: absolute;
+      top:0;
+      bottom: 0;
+      margin: auto;
     }
+  }
+}
 
-    .line {
-      border: 0;
-      height: 1px;
-      background-color: var(--color-line);
-      width: 360px;
-      margin-bottom: 29px;
-    }
-    h5.easylogin {
-      text-align: center;
-    }
+.line {
+  border: 0;
+  height: 1px;
+  background-color: var(--color-line);
+  width: 360px;
+  margin-bottom: 29px;
+}
 
-    .login_sns {
-      display: flex;
-      justify-content: center;
-      margin: 22px auto 81px;
+.easylogin {
+  text-align: center;
+}
 
-      .akakao {
-        margin-right: 20px;
-
-        .pic-kakao {
-          
-
-        }
-      }
-
-      .anaver {
-        .pic-naver {
-        }
-      }
-    }
+.login_sns {
+  display: flex;
+  justify-content: center;
+  margin: 22px auto;
+  .akakao {
+    margin-right: 20px;
   }
 }

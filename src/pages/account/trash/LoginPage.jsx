@@ -57,7 +57,7 @@ function login() {
               <hr className='line' />
               
               {/* 간편로그인 */}
-              <h5 className='easylogin'>간편 로그인</h5>
+              
 
               <div className='login_sns'>
                 <a href="javascript:void(0)" className='akakao'>

@@ -1,9 +1,9 @@
 import React from 'react';
+import Layout from '../../../components/common/Layout';
 import Styles from '/styles/css/FindMyId.module.scss';
-import Layout from '../../components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from "/src/components/mypage/MypageWrapper";
-import Checkbox from '../../components/atoms/checkbox';
+
 
 function Title (props) {
   return (
@@ -36,26 +36,25 @@ function Btn (props) {
   )
 }
 
-export default function FindMyPassword() {
+
+export default function Mypage() {
   return (
     <Layout>
       <Wrapper>
+        
       <div className={Styles.flex__container}>
 
-        {/* 비밀번호 찾기 타이틀 */}
-        <Title name='비밀번호 찾기'></Title>
+        <Title name='아이디 찾기'></Title>
 
-        {/* 아이디(이메일주소) 입력 */}
         <div className={Styles.input__field}>
-          <InputBox name='아이디(이메일주소)'></InputBox>
-          <InputBox name='이름' mode ='을'></InputBox>
-          <InputBox name='휴대폰 번호'></InputBox>
+          <InputBox name ='이름' mode = '을' ></InputBox>
+          <InputBox name ='휴대폰 번호'></InputBox>
         </div>
 
-        {/* 임시비밀번호 받기 버튼 */}
-        <Btn name='임시비밀번호 받기'></Btn>
+        <Btn name ='아이디 찾기'></Btn>
 
-      </div>
+        </div>
+
       </Wrapper>
     </Layout>
   );

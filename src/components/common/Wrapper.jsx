@@ -3,7 +3,7 @@ import s from '/styles/css/Wrapper.module.scss';
 
 function Wrapper(props) {
   return (
-    <div className={s.container__outer}>
+    <div className={`${s.container__outer}`} style={{backgroundColor:props.bgColor}}>
       <div className={s.container}>
         <div className={s.row}>
           {props.children}

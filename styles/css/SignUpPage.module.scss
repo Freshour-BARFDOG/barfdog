@@ -1,161 +1,225 @@
 
-#SignUp {
-
-  .btn
-   {
-    width: 100%;
-    height: 50px;
-    border: 1px solid var(--color--main);
-    border-radius: 3px;
-    color: var(--color--main);
-    font-size: 14px;
-    font-weight: 400;
-    align-items: center;
-    justify-content: center;
-    cursor:pointer;
-    box-sizing: border-box;
-    display: flex;
-  }
-
-  .chk_box {
-    display: inline-flex; 
-    cursor: pointer; 
-    font-size: 14px; 
-    -webkit-user-select: none; 
-    -moz-user-select: none; 
-    -ms-user-select: none; 
-    user-select: none; 
-  } /* 기본 체크박스 숨기기 */ 
-  .chk_box input[type='checkbox'] { 
-    display: none; 
-  } /* 선택되지 않은 체크박스 스타일 꾸미기 */ 
-  .chk_box .on {
-    width: 20px; 
-    height: 20px;
-    margin-right: 8px; 
-    background: #ddd; 
-    position: relative;
-    display: block;
-    top: 0; 
-    left: 0; 
-  } /* 선택된 체크박스 스타일 꾸미기 */ 
-  .chk_box input[type="checkbox"]:checked + .on {
-    background:var(--color--main); 
-  } 
-  .on:after { 
-    content: ""; 
-    position: absolute; 
-    display: none; 
-  } 
-  .chk_box input[type="checkbox"]:checked + .on:after {
-    display: block; 
-  } 
-  .on:after {
-    width: 6px; 
-    height: 10px; 
-    border: solid #fff; 
-    border-width: 0 2px 2px 0; 
-    -webkit-transform: rotate(45deg); 
-    -ms-transform: rotate(45deg); 
-    transform: rotate(45deg); 
-    position: absolute; 
-    left: 6px; 
-    top: 2px; 
-  }
-  .autologin {
-    display: block;
-    letter-spacing: -.8px;
-  }
-
-  
-  .flex-container {
-    margin-top: 50px;
-    width: 490px;
-    .title {
-      margin-bottom: 57px;
-      h2 {
-        font-weight: 500;
-        text-align: center; 
-      }
-    }
-    .join_wrap {
-      width: 490px;
-      height: 44px;
-      margin-bottom: 20px;
-      &:after{
-        content: "";
-        display: block;
-        clear: both;
-      }
-      &:last-child {
-        margin-bottom : 0px;
-      }
-      .join_left {
-        float: left;
-        label {
-          display: flex;
-          width: 150px;
-          height: 44px;
-          align-items: center;
-          span {
-            font-size: 14px;
-          }
-        }
-      }
-      .join_right {
-        width: 340px;
-        height: 44px;
-        float : right;
-        input {
-          width: 340px;
-          height: 44px;
-        }
-        .btn.bigbtn {
-          float : right;
-          width: 340px;
-          height: 44px;
-        }
-      }
-      //3구역
-      .join_middle {
-        float : left;
-        input {
-          width: 230px;
-          height: 44px;
-          margin-right: 9px;
-        }
-        .btn.smallbtn {
-          float: right;
-          width: 100px;
-          height: 44px;
-          border-radius: 5px; 
-        }
-      }
-    }//join_wrap
-
-    //마지막 바텀
-    .join_inp {
-     margin-bottom: 30px;
-    }
-    
-    .line {
-      margin-bottom: 19px;
-    }
-
-    .terms_accept {
-      .agree_text {
-        text-align: center;
-      }
-    }
-
-
-    //체크박스
-    .checkbox {
-      margin-top: 10px;
-      margin-bottom: 25px;
-    }
-
-
-  
-  }//flex-container
+.btn
+{
+width: 100%;
+height: 50px;
+border: 1px solid var(--color-main);
+border-radius: 3px;
+color: var(--color-main);
+font-size: 14px;
+font-weight: 400;
+align-items: center;
+justify-content: center;
+cursor:pointer;
+box-sizing: border-box;
+display: flex;
 }
+
+.chk__box {
+display: inline-flex; 
+cursor: pointer; 
+font-size: 14px; 
+-webkit-user-select: none; 
+-moz-user-select: none; 
+-ms-user-select: none; 
+user-select: none; 
+} /* 기본 체크박스 숨기기 */ 
+.chk__box input[type='checkbox'] { 
+display: none; 
+} /* 선택되지 않은 체크박스 스타일 꾸미기 */ 
+.chk__box .on {
+width: 20px; 
+height: 20px;
+margin-right: 8px; 
+background: #ddd; 
+position: relative;
+display: block;
+top: 0; 
+left: 0; 
+} /* 선택된 체크박스 스타일 꾸미기 */ 
+.chk__box input[type="checkbox"]:checked + .on {
+background:var(--color-main); 
+} 
+.on:after { 
+content: ""; 
+position: absolute; 
+display: none; 
+} 
+.chk__box input[type="checkbox"]:checked + .on:after {
+display: block; 
+} 
+.on:after {
+width: 6px; 
+height: 10px; 
+border: solid #fff; 
+border-width: 0 2px 2px 0; 
+-webkit-transform: rotate(45deg); 
+-ms-transform: rotate(45deg); 
+transform: rotate(45deg); 
+position: absolute; 
+left: 6px; 
+top: 2px; 
+}
+.autologin {
+display: block;
+letter-spacing: -.8px;
+}
+
+
+.flex__container {
+width: 490px;//크기를 변경시 무너짐
+margin: 50px auto 111px;
+.title {
+  margin-bottom: 57px;
+  h2 {
+    font-weight: 500;
+    text-align: center; 
+  }
+}
+.join__wrap {
+  width: 100%;
+  height: 44px;
+  margin-bottom: 20px;
+  &:after{
+    content: "";
+    display: block;
+    clear: both;
+  }
+  &:last-child {
+    margin-bottom : 0px;
+  }
+  .join__left {
+    float: left;
+    label {
+      display: flex;
+      width: 150px;//퍼센트불가 형태뒤틀림
+      height: 44px;
+      align-items: center;
+      span {
+        font-size: 14px;
+      }
+    }
+  }
+  .join__right {
+    width: 340px;
+    height: 44px;
+    float : right;
+    input {
+      width: 100%;
+      height: 44px;
+    }
+    .btn.bigbtn {
+      float : right;
+      width: 100%;
+      height: 44px;
+    }
+  }
+  //3구역
+  .join__middle {
+    float : left;
+    input {
+      width: 230px;
+      height: 44px;
+      margin-right: 9px;
+    }
+    .btn.smallbtn {
+      float: right;
+      width: 100px;
+      height: 44px;
+      border-radius: 5px; 
+    }
+  }
+}//join_wrap
+
+//마지막 바텀
+.join__inp {
+  margin-bottom: 30px;
+}
+
+.line {
+  margin-bottom: 19px;
+}
+
+.terms__accept {
+  .agree__text {
+    text-align: center;
+  }
+}
+
+.checkbox {
+  margin-bottom: 13px;
+  &::after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+  .chk_box {
+    .text2 {
+      font-weight: 700;
+      letter-spacing: 1.1px;
+    }
+  }
+  .text1 {
+    margin-top: -1px;
+    box-sizing: border-box;
+    padding-left : 32px;
+    padding-bottom: 3px;
+  }
+  .chk_box.left {
+    float: left;
+  }
+  .terms__view {
+    float : right;
+    display: flex;
+    align-items: center;
+    color: var(--color-main);
+    font-size: 14px;
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+}
+
+.checkbox1 {
+  position:relative;
+  width: 100%;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  .checkboxleft {
+    position: absolute;
+    left : 28px;
+    top : -3px;
+  }
+  .checkboxright {
+    position: absolute;
+    left : 170px;
+    top : -3px;
+  }
+  .guidetext {
+    position: absolute;
+    height: 50px;
+    left : 63px;
+    top : 25px;
+    color: var(--color-main);
+    .icon {
+      margin-right: 15px;
+    }
+  }
+}
+
+.join {
+  display: flex;
+  justify-content: center;
+  margin-top: 56px;
+  .btn.joinbtn{
+    width: 360px;
+    height: 50px;
+    background-color: var(--color-main);
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+  }
+}
+}//flex-container

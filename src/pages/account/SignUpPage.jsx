@@ -1,8 +1,6 @@
-import React from 'react';
-import Layout from '../../../components/common/Layout';
-import Wrapper from '/src/components/common/Wrapper';
-import MypageWrapper from "/src/components/mypage/MypageWrapper";
-import Styles from '/styles/css/SignUpPage.module.scss';
+import React from 'react'
+import Styles from '../../../styles/css/SignUpPage.module.scss';
+import Wrapper from '../../components/common/Wrapper';
 import {IoChevronForwardOutline} from "react-icons/io5"
 
 
@@ -14,10 +12,9 @@ function Title (props) {
   )
 }
 
-export default function signup() {
+export default function SignUp(props) {
   return (
-    <Layout>
-      <Wrapper>
+    <Wrapper>
       <div className={Styles.flex__container}>
         
         {/* 회원가입 타이틀 */}
@@ -167,10 +164,11 @@ export default function signup() {
             <div className=''>이용약관 동의 (필수)</div>
           </label>
 
-
           {/* 약관보기 부분 */}
-          <div className={Styles.terms__view}>약관보기
-              <IoChevronForwardOutline />              
+          <div className={Styles.terms_view}>약관보기1111
+            <i className={Styles.icon}>
+              <IoChevronForwardOutline />
+            </i>                    
            </div>
         </div>
 
@@ -181,14 +179,13 @@ export default function signup() {
             <span className={Styles.on} /> 
             <div className=''>개인정보 수집 이용 동의 (필수)</div>
           </label>
-
           {/* 약관보기 부분 */}
-          <div className={Styles.terms__view}>약관보기
-            <IoChevronForwardOutline /> 
+          <div className={Styles.terms_view}>약관보기
+            <i className={Styles.icon}>
+              {/* <img clssName = 'term_arrow'src = {term_arrow} /> */}
+            </i>                    
           </div>
         </div>
-
-
         {/* 무료배송, 할인쿠폰 등 혜택 / 정보 수신 동의 */}
         <div className={Styles.checkbox}>
           <label for="agree_coupon" className={Styles.chk__box}>
@@ -197,8 +194,6 @@ export default function signup() {
             <div className=''>무료배송, 할인쿠폰 등 혜택/정보 수신 동의 (선택)</div>
           </label>
         </div>
-
-
         {/* SMS */}
         <div className={Styles.checkbox1}>
           <div className={Styles.checkboxleft}>
@@ -241,7 +236,7 @@ export default function signup() {
         </div>
       
       </div>{/* flex__container */}
-      </Wrapper>
-    </Layout>
-  );
+    </Wrapper>
+  )
 }
+
