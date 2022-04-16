@@ -10,6 +10,9 @@
 # testing
 /coverage
 
+# trash Files
+/trash/
+
 # next.js
 /.next/
 /out/

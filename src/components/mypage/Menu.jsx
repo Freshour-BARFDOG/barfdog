@@ -16,9 +16,9 @@ export const SubmenuTitle = ({ title, className }) => {
 };
 
 
-export const SubmenuList = ({ link, title, className }) => {
+export const SubmenuList = ({ link, title}) => {
   return (
-    <li className={`${s.submenu_list} ${s[className]}`}>
+    <li className={`${s.submenu_list}`}>
       <Link href={link} passHref>
         {title}
       </Link>
@@ -34,6 +34,7 @@ export const SubmenuList = ({ link, title, className }) => {
 
 
 export const List = ({ link, title, children }) => {
+
   const [isOpen, setIsOpen] = useState(false);
 
   const dropdownRef = useRef(null);
@@ -44,6 +45,8 @@ export const List = ({ link, title, children }) => {
   };
 
   useEffect((e) => {
+    // 어떤 조건이 있다면,.....걔한테,  ,,,,active를 준다
+    //zz
     if (!dropdownRef.current) return;
     isOpen ? slideDown(dropdownRef.current) : slideUp(dropdownRef.current);
 

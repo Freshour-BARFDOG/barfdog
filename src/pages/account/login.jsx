@@ -58,64 +58,67 @@ export default function login() {
     <Layout>
       <Wrapper>
         <div className={Styles.flex__container}>
-          
           {/* 로그인타이틀 */}
           <div className={Styles.titlebox}>
-            <Title name='로그인'></Title>
+            <Title name="로그인"></Title>
           </div>
 
           {/* 아이디 비밀번호 인풋박스 */}
           <div className={Styles.inputbox}>
-            <InputBox name='아이디'></InputBox>
-            <InputBox name='비밀번호'></InputBox>
+            <InputBox name="아이디"></InputBox>
+            <InputBox name="비밀번호"></InputBox>
           </div>
 
           {/* 체크박스 자식가능한지? */}
-          <div className={Styles.auto__login__check}>            
-            <label htmlFor='agree' className={Styles.chk__box}>
-              <input type="checkbox" id='agree' />
-              <span className={Styles.on} /> 
+          <div className={Styles.auto__login__check}>
+            <label htmlFor="agree" className={Styles.chk__box}>
+              <input type="checkbox" id="agree" />
+              <span className={Styles.on} />
               <div className={Styles.autologin}>자동 로그인</div>
             </label>
           </div>
 
           {/* 로그인 회원가입 버튼 */}
           <div className={Styles.btnbox}>
-            <Btn name='로그인'></Btn>
+            <Btn name="로그인"></Btn>
           </div>
-          
-          <Btn name='회원가입'></Btn>
+
+          <Btn name="회원가입"></Btn>
 
           {/* 아이디 선 비밀번호 찾기 */}
           <div className={Styles.id__pw__search}>
             <ul className={Styles.list}>
-              <List name='아이디 찾기'></List>
-              <List name='비밀번호 찾기'></List>
+              <List name="아이디 찾기"></List>
+              <List name="비밀번호 찾기"></List>
             </ul>
           </div>
 
           {/* 선 */}
           <hr className={Styles.line} />
 
-          <H5 name='간편 로그인'></H5>
+          <H5 name="간편 로그인"></H5>
 
           <div className={Styles.login_sns}>
-            <Link href={"/"}  passHref>
+            <Link href={"/"} passHref>
               <a>
-                <Image src ={Kakao}
+                <Image
+                  src={Kakao}
                   width={72}
-                  height={72} />
+                  height={72}
+                  alt="카카오톡 아이콘"
+                />
               </a>
             </Link>
-            
+
             <Link href={"/"} className={Styles.anaver} passHref>
               <a>
                 <Image
-                    src= {Naver}
-                    width='72'
-                    height='72'
-                  />     
-              </a>      
+                  src={Naver}
+                  width="72"
+                  height="72"
+                  alt="네이버 아이콘"
+                />
+              </a>
             </Link>
           </div>
         </div>

@@ -171,14 +171,17 @@ export default index
 | Mypage.jsx |  mypage.jsx
 | edit_my_password.jsx |  editMyPassword(edit-my-password).jsx
 | loginSectionToSocial.jsx |  loginWithSNS.jsx
+| barfWorry.png |  home_barfWorry_01.png
 
 
 ```js
 1. 보통 directory 파일명은 소문자로 한다.
 2. CamelCase또는 하이픈을 사용한다.
-3. Directory 자체가 React 컴포넌트가 바로 들어있는 폴더라면, 폴더 이름을 대문자로 시작한다.
-4. Directory 자체가 React 컴포넌트가 들어있지 않고, 포함돼있다면, 소문자 단수로 표기한다.
-5. 불분명한 이름은 짓지않는다(ex. loginSection2). 어쩔 수 없이 이름이 길어지더라도 명확한 이름을 사용한다.
+3. 불분명한 이름은 짓지않는다(ex. loginSection2). 어쩔 수 없이 이름이 길어지더라도 명확한 이름을 사용한다.
+4. 이미지 파일명은 페이지 이름\/이미지네이밍\/순서를 확인할 수 있도록 명명한다.(ex. "home_barfWorry_01.png")
+5. 이미지 파일명 중 순서는 하나의 섹션 내에서 동일한 카테고리가 없을 경우 생략할 수 있다. "home_barfWorry.png"를 사용하여 명명한다.
+6. Directory 자체가 React 컴포넌트가 바로 들어있는 폴더라면, 폴더 이름을 대문자로 시작한다.
+7. Directory 자체가 React 컴포넌트가 들어있지 않고, 포함돼있다면, 소문자 단수로 표기한다.
 ```
 
 

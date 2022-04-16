@@ -8,38 +8,37 @@ import { useRouter } from "next/router";
 
 
 function AdminGnb() {
+  
 
   const router = useRouter();
-  const [curPath, setCurPath] = useState(router.pathname);
   const curMenuRef = useRef(null);
-
-  
+  const [curPath, setCurPath] = useState(router.pathname);
   useEffect(() => {
-
-    // const adminRootPath = '/bf-admin';
-    // const redirPath = adminRootPath; + '/dashboard';
-    // if (curPath === adminRootPath) {
-    //   router.push(redirPath);
-    //   // setCurPath(redirPath);
-    //   return;
-    // }
+    const adminRootPath = "/bf-admin";
+    const redirPath = adminRootPath + "/dashboard";
+    if (curPath === adminRootPath) {
+      router.push(redirPath);
+      return;
+    }
 
 
-
-    const allMenus = curMenuRef.current.querySelectorAll('a');
+    const allMenus = curMenuRef.current.querySelectorAll("a");
 
     allMenus.forEach((menu) => {
       const thisMenuLink = menu.href;
       const pathStartOrder = thisMenuLink.indexOf(curPath);
-      const menuPath = thisMenuLink.slice(pathStartOrder, -1);
-      const isCurPath = thisMenuLink.indexOf(menuPath) > 0 ? true : false;
-      if(isCurPath){
-        const activeMenu = menu.closest('.' + `${s.menu_title}`);
-        activeMenu.classList.add(`${s.active}`);
+      const menuPath = thisMenuLink.slice(pathStartOrder);
+      // const isCurPath = thisMenuLink.indexOf(menuPath) > 0 ? true : false;
+      const isCurPath = curPath === menuPath ? true : false;
+      console.log(isCurPath);
+      if (isCurPath) {
+        const activeMenu = menu.closest("." + `${s.menu_title}`);
+        // activeMenu.classList.add(`${s.active}`);
+        activeMenu.dataset.currentPage = true;
+        menu.dataset.currentPage = true;
       }
     });
-
-  }, [curPath]);
+  }, [curPath, router]);
 
   return (
     <nav ref={curMenuRef} className={s.admin_nav}>

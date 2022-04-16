@@ -27,7 +27,7 @@ export default function SignUp(props) {
           {/* 이름견주 2구역*/}
           <div className={Styles.join__wrap}>
             <div className={Styles.join__left}>
-              <label For="input_name">
+              <label htmlFor="input_name">
                 <span>이름(견주님)</span>
               </label>
             </div>
@@ -39,7 +39,7 @@ export default function SignUp(props) {
           {/* 이메일주소 3구역 */}
           <div className={Styles.join__wrap}>
             <div className={Styles.join__left}>
-              <label For="input_email">
+              <label htmlFor="input_email">
                 <span>이메일주소(아이디)</span>
               </label>
             </div>
@@ -53,7 +53,7 @@ export default function SignUp(props) {
             {/* 비밀번호 2구역 */}
           <div className={Styles.join__wrap}>
             <div className={Styles.join__left}>
-              <label For="input_password">
+              <label htmlFor="input_password">
                 <span>비밀번호</span>
               </label>
             </div>
@@ -65,7 +65,7 @@ export default function SignUp(props) {
           {/* 비밀번호확인 2구역 */}
           <div className={Styles.join__wrap}>
             <div className={Styles.join__left}>
-              <label For="input_password_chk">
+              <label htmlFor="input_password_chk">
                 <span>비밀번호 확인</span>
               </label>
             </div>
@@ -77,7 +77,7 @@ export default function SignUp(props) {
           {/* 휴대폰 번호 3구역 */}
           <div className={Styles.join__wrap}>
             <div className={Styles.join__left}>
-              <label For="input_phone">
+              <label htmlFor="input_phone">
                 <span>휴대폰 번호</span>
               </label>
             </div>
@@ -102,7 +102,7 @@ export default function SignUp(props) {
           {/* 생년월일(견주) 2구역 */}
           <div className={Styles.join__wrap}>
             <div className={Styles.join__left}>
-              <label For="input_brith">
+              <label htmlFor="input_brith">
                 <span>생년월일(견주님)</span>
               </label>
             </div>
@@ -127,7 +127,7 @@ export default function SignUp(props) {
           {/* 추천코드 2구역 */}
           <div className={Styles.join__wrap}>
             <div className={Styles.join__left}>
-              <label For="input_referralcode">
+              <label htmlFor="input_referralcode">
                 <span>추천코드</span>
               </label>
             </div>
@@ -148,7 +148,7 @@ export default function SignUp(props) {
 
         {/* 동의 체크박스  */}
         <div className={Styles.checkbox}>
-          <label for="agree_all" className={Styles.chk__box}>
+          <label htmlFor="agree_all" className={Styles.chk__box}>
             <input type="checkbox" id="agree_all" />
             <span className={Styles.on} /> 
             <div className=''>전체 동의합니다.</div>
@@ -158,7 +158,7 @@ export default function SignUp(props) {
         
         {/* 이용약관 동의 */}
         <div className={Styles.checkbox}>
-          <label for="agree" className={Styles.chk__box}>
+          <label htmlFor="agree" className={Styles.chk__box}>
             <input type="checkbox" id="agree" />
             <span className={Styles.on} /> 
             <div className=''>이용약관 동의 (필수)</div>
@@ -174,7 +174,7 @@ export default function SignUp(props) {
 
         {/* 개인정보 수집 이용동의  */}
         <div className={Styles.checkbox}>            
-          <label for="agree_info" className={Styles.chk__box}>
+          <label htmlFor="agree_info" className={Styles.chk__box}>
             <input type="checkbox" id="agree_info" />
             <span className={Styles.on} /> 
             <div className=''>개인정보 수집 이용 동의 (필수)</div>
@@ -188,7 +188,7 @@ export default function SignUp(props) {
         </div>
         {/* 무료배송, 할인쿠폰 등 혜택 / 정보 수신 동의 */}
         <div className={Styles.checkbox}>
-          <label for="agree_coupon" className={Styles.chk__box}>
+          <label htmlFor="agree_coupon" className={Styles.chk__box}>
             <input type="checkbox" id="agree_coupon" />
             <span className={Styles.on} /> 
             <div className=''>무료배송, 할인쿠폰 등 혜택/정보 수신 동의 (선택)</div>
@@ -197,7 +197,7 @@ export default function SignUp(props) {
         {/* SMS */}
         <div className={Styles.checkbox1}>
           <div className={Styles.checkboxleft}>
-            <label for="agree_sms" className={Styles.chk__box}>
+            <label htmlFor="agree_sms" className={Styles.chk__box}>
               <input type="checkbox" id="agree_sms" />
               <span className={Styles.on} /> 
               <div className=''>SMS</div>
@@ -205,7 +205,7 @@ export default function SignUp(props) {
           </div>
 
           <div className={Styles.checkboxright}>
-            <label for="agree_email" className={Styles.chk__box}>
+            <label htmlFor="agree_email" className={Styles.chk__box}>
               <input type="checkbox" id="agree_email" />
               <span className={Styles.on} /> 
               <div className=''>이메일</div>
@@ -223,7 +223,7 @@ export default function SignUp(props) {
 
         {/* 본인은 만 14세 이상입니다*/}
         <div className={Styles.checkbox}>
-          <label for="agree_age" className={Styles.chk__box}>
+          <label htmlFor="agree_age" className={Styles.chk__box}>
             <input type="checkbox" id="agree_age" />
             <span className={Styles.on} /> 
             <div className=''>본인은 만 14세 이상입니다.</div>

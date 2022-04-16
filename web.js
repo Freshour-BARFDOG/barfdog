@@ -30,6 +30,7 @@ app
 
 
     server.listen(port, (err) => {
+      console.log(port);
       if (err) throw err;
       console.log("> Ready on http://localhost:" + port);
     });

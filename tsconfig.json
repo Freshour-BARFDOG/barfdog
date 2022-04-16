@@ -26,6 +26,6 @@
     "**/*.tsx"
 , "src/pages/index.jsx", "src/pages/_document.jsx", "src/components/admin/AdminHeader.jsx", "src/components/admin/AdminHeader.jsx"  ],
   "exclude": [
-    "node_modules"
+    "node_modules", "trash"
   ]
 }

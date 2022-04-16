@@ -12,33 +12,6 @@ import Image from 'next/image';
 
 import FooterLogo from "/public/img/logo_footer.png";
 import FooterLogo_2x from "/public/img/logo_footer@2x.png";
-// import styled from 'styled-components';
-// const Button = styled.button`
-//   font-size: 20px;
-//   color: #fff;
-//   background-color: #333;
-//   border-radius: 4px;
-//   & a {
-//     font-size: 10px;
-//     color: blue;
-//   }
-//   & .test {
-//     background-color: green;
-//   }
-//   &.test {
-//     background-color: blue;
-//   }
-//   @media (max-width: 600px) {
-//     & .test {
-//       background-color: transparent;
-//       color:#222;
-//     }
-//     &.test {
-//       background-color: transparent;
-//       color:green
-//     }
-//   }
-// `;
 
 
 function Footer() {
