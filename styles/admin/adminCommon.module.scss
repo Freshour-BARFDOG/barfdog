@@ -1,0 +1,50 @@
+$browser-context:16;
+// convert px to rem
+@function rem($px, $context: $browser-context){
+  @return #{$px / $context}rem;
+}
+
+
+$header-height: rem(80);
+$nav-width: rem(300);
+
+
+
+.cont_header{
+  overflow:hidden;
+  > * {float:left;}
+  > *:first-child {float:left;}
+  > *:last-child {float:left;}
+  .title {
+      font-family: "Noto Sans KR";
+      font-size:rem(20);
+      font-weight:400;
+  }
+  .btn {}
+
+}
+
+.cont_body{
+
+}
+
+
+.title_main {
+  font-family: "Noto Sans KR";
+  font-size:rem(20);
+  font-weight:400;
+
+}
+
+
+.title_section{
+  margin-top: rem(10);
+  margin-bottom:rem(20);
+  padding-bottom: rem(20);
+  border-bottom: 1px solid var(--color-line)
+}
+
+
+
+.btn{}
+.cont_header_btn{}

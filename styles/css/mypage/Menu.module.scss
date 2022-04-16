@@ -1,12 +1,12 @@
+@import '/styles/admin/adminMenu.module.scss';
+
 $browser-context:16;
 // convert px to rem
 @function rem($px, $context: $browser-context){
   @return #{$px / $context}rem;
 }
 
-
 $menuPadding: 20;
-
 
 .title{
   color:var(--color-font-strong);
@@ -19,54 +19,88 @@ $menuPadding: 20;
   border: 1px solid var(--color-line-light);
   box-sizing:border-box;
   width: rem(200);
-
-   li{
+  
+  .menu_title{
+    &.active{
+      a{color:var(--color-main)}
+    }
     
     color:var(--color-font-medium);
     
-    &:not(:last-child) a, &:not(:last-child) p{border-bottom: 1px solid var(--color-line-light)}
+    &:not(:last-child) a, &:not(:last-child) 
+    p{border-bottom: 1px solid var(--color-line-light);}
 
-      a, p{
-        cursor:pointer;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: rem(12) rem(20);
-        font-size: rem(15);
-        color:inherit;
-        transition: color var(--ani-short);
-        svg{
-          float:right; fill:#ababab; width:rem(17); height:rem(17);
-          transition-duration: .3s;
-          transition-timing-function: ease-out;
-          transition-property: fill, transform;
-          transform:rotate(0)
-        }
+    > ul{
+      background-color:#f4f4f4;
+      a {padding: rem(12) rem($menuPadding + 10);}
+    }
 
-        &:hover{
-          color: var(--color-main);
-          svg{fill:var(--color-main)}
-        }
+    .submenu_title > *{ cursor: default;}
+
+    a, p{
+      cursor:pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: rem(12) rem(20);
+      font-size: rem(15);
+      color:inherit;
+      transition: color var(--ani-short);
+      svg{
+        float:right; fill:#ababab; width:rem(17); height:rem(17);
+        transition-duration: .3s;
+        transition-timing-function: ease-out;
+        transition-property: fill, transform;
+        transform:rotate(0)
       }
 
-      .open{
-        svg{transform:rotate(90deg)}
+      &:not(.submenu_title > *):hover{
+        color: var(--color-main) !important;
+        svg{fill:var(--color-main)}
       }
+
+
+    }
+
+    &.open{
+      svg{transform:rotate(90deg)}
+    }
 
   }
+
+
+
   .submenu{
     display:none;
-    
-    li{
-      background-color:#f4f4f4;
-      a{
-        padding: rem(12) rem($menuPadding + 10);
+  }
+  // .submenu.open{display:block;}
+  .submenu_title{
+    font-size: rem(16);
+    font-weight: 500;
+    & ~ li:not(.submenu_title){
+      // padding-left:rem(14);
+      > * {
+        position: relative;
+        &:before{
+          content: "";
+          position: absolute;
+          left: rem($menuPadding + 30);
+          top: calc(50% - 2px);
+          width: 5px;
+          height: 5px;
+          transform: translateY(-50%);
+          border-left: 2px solid #333;
+          border-bottom: 2px solid #333;
+          transition: border-color var(--ani-short);
+        }
 
       }
+      & > *:hover:before{
+        border-color: var(--color-main);
+      }
+      
     }
-    
   }
 
 }
-
 

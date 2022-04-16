@@ -1,7 +1,7 @@
 # Barfdog Web Shopping Mall
 <br />
 
-
+TEST
 
 
 ### Install
@@ -136,9 +136,7 @@ export default index
 4. 앵커로서 사용되는 엘리먼트는 id 지정이 가능하다.
 ```
 
-<br/>
-<br/>
-<br/>
+<br/><br/><br/>
 
 
 
@@ -157,6 +155,30 @@ export default index
 4. 하이픈(-)을 이용하여 3단계를 초과하여 사용하는 방법은 지양한다.
 5. 숫가자 없으면 '01'이라는 숫자가 생략된 것으로 간주한다.
 6. 다중의 클래시 지정을 허용하며 최대 3개 이상 사용하지 않도록 주의한다.
+```
+
+
+
+<br/><br/><br/>
+
+
+
+
+ > 파일명 (filename)
+
+잘못된 예 | 올바른 예
+|:--:|:--:|
+| Mypage.jsx |  mypage.jsx
+| edit_my_password.jsx |  editMyPassword(edit-my-password).jsx
+| loginSectionToSocial.jsx |  loginWithSNS.jsx
+
+
+```js
+1. 보통 directory 파일명은 소문자로 한다.
+2. CamelCase또는 하이픈을 사용한다.
+3. Directory 자체가 React 컴포넌트가 바로 들어있는 폴더라면, 폴더 이름을 대문자로 시작한다.
+4. Directory 자체가 React 컴포넌트가 들어있지 않고, 포함돼있다면, 소문자 단수로 표기한다.
+5. 불분명한 이름은 짓지않는다(ex. loginSection2). 어쩔 수 없이 이름이 길어지더라도 명확한 이름을 사용한다.
 ```
 
 
@@ -188,6 +210,12 @@ export default index
 ```bash
 - 페이지별 공통적으로 사용하는 컴포넌트
 ```
+### /src/containers
+```bash
+- 재사용이 불가능한 컴포넌트
+- ex. 약관, 회사 소개 등의 정적 페이지
+```
+
 
 
 
