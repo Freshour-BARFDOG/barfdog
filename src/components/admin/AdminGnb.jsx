@@ -30,7 +30,7 @@ function AdminGnb() {
       const menuPath = thisMenuLink.slice(pathStartOrder);
       // const isCurPath = thisMenuLink.indexOf(menuPath) > 0 ? true : false;
       const isCurPath = curPath === menuPath ? true : false;
-      console.log(isCurPath);
+      // console.log(isCurPath);
       if (isCurPath) {
         const activeMenu = menu.closest("." + `${s.menu_title}`);
         // activeMenu.classList.add(`${s.active}`);

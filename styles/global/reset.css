@@ -4,8 +4,17 @@
     --color-main: #ca0101;
     --color-checked: #50A057;
     --color-warning: #FF4444;
+    --color-primary01: #CA1011;
+    --color-primary02: #F11A39;
+    --color-primary03: #FF5959;
+    --color-primary04: #ED3333;
+    --color-disabled: #ABABAB;
+    --color-point-disabled: #F69999;
+    --color-point-hover: #E02D2D;
+
     --color-line:#D3D4DE;
     --color-line-light:#E6E6EB;
+
     --color-bg :#F8F8FF;
     --color-bg-footer :#F8F8FF;
     --color-bg-admin :#F8F8FF;
