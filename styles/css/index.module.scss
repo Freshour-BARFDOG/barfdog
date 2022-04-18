@@ -50,6 +50,7 @@ $browser-context:16; // html font-size
       // transform:translateX(-50%) ;
     }
   }
+  .img-wrap{width: 100%;}
 }
 
 
@@ -439,5 +440,17 @@ section.difference7{padding: rem(150) 0 rem(250)}
       }
     }
   }
+
+}
+
+
+////////////@at-root
+
+.swiper_review{
+  background-color: green;
+  .swiper-button-next{
+    content:">";
+  }
+
 
 }

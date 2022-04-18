@@ -1,8 +1,17 @@
-import React from "react";
+import React, { useEffect, useState} from "react";
 import Styles from '/styles/css/index.module.scss'
 import Layout from '/src/components/common/Layout'
 import Wrapper from "/src/components/common/Wrapper";
 import Link from 'next/link';
+//////////////////////////////////////////////////
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, Navigation } from "swiper";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+//////////////////////////////////////////////////
+
+/* Images */
 import Image from "next/image";
 import Mainbanner from '/public/img/testBanner.png';
 import StartBanner from '/public/img/starterBanner.png';
@@ -14,7 +23,7 @@ import LeftPic from '/public/img/LeftPic.png'
 import midPic from '/public/img/midPic.png'
 import rightPic from '/public/img/rightPic.png'
 import barfPack from '/public/img/barfPack.png'
-import { Swiper, SwiperSlide } from 'swiper/react';
+
 
 /* 
 
@@ -32,47 +41,94 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 
 function Home() {
+
+  //////////////////////////////////////////////////
+  const [isMobile, setIsMobile] = useState(false);
+
+  const swiperSettings_main = {
+    className: `${Styles.swiper_main}`,
+    spaceBetween: 0,
+    loop: true,
+    centeredSlides: true,
+    autoplay: { delay: 2500, disableOnInteraction: false },
+    slidesPerView: 1,
+    pagination: { clickable: true },
+    modules: [Pagination]
+  };
+
+  const swiperSettings_review = {
+    className: `${Styles.swiper_review}`,
+    spaceBetween: 40,
+    loop: true,
+    centeredSlides: true,
+    slidesPerView: isMobile ? 1 : 3,
+    pagination: { clickable: true },
+    navigation: {className:'sw'},
+    modules: [Pagination, Navigation]
+  };
+
+
+  useEffect(() => {
+    window.innerWidth <= 600 ? setIsMobile(true) : setIsMobile(false);
+  }, [isMobile]);
+  //////////////////////////////////////////////////
+
   return (
     <Layout>
-      {/* <Wrapper>
-        <Swiper spaceBetween={0} slidesPerView={1}>
-          <SwiperSlide>
-            <Link href="/" passHref>
-              <a>
-                <figure className="img-wrap">
-                  <Image
-                    src={Mainbanner}
-                    objectFit="cover"
-                    layout="fill"
-                    alt=""
-                  ></Image>
-                </figure>
-              </a>
-            </Link>
-          </SwiperSlide>
-        </Swiper>
-      </Wrapper> */}
-      
       <Wrapper>
-        <Swiper spaceBetween={0} slidesPerView={1}>
+        <Swiper {...swiperSettings_main}>
           <SwiperSlide>
             <section className={Styles.banner}>
               <div className={Styles.inner}>
-                <div className="img-wrap">
+                <div className={`${Styles["img-wrap"]} img-wrap clearfix`}>
                   <Link href="/" passHref>
                     <a>
                       <Image
                         src={Mainbanner}
                         objectFit="cover"
                         layout="fill"
-                        alt=""
-                        height="500"
-                        width="200"
+                        alt="메인배너 이미지"
                       ></Image>
                     </a>
                   </Link>
                 </div>
-              </div>{" "}
+              </div>
+            </section>
+          </SwiperSlide>
+          <SwiperSlide>
+            <section className={Styles.banner}>
+              <div className={Styles.inner}>
+                <div className={`${Styles["img-wrap"]} img-wrap`}>
+                  <Link href="/" passHref>
+                    <a>
+                      <Image
+                        src={Mainbanner}
+                        objectFit="cover"
+                        layout="fill"
+                        alt="메인배너 이미지2"
+                      ></Image>
+                    </a>
+                  </Link>
+                </div>
+              </div>
+            </section>
+          </SwiperSlide>
+          <SwiperSlide>
+            <section className={Styles.banner}>
+              <div className={Styles.inner}>
+                <div className={`${Styles["img-wrap"]} img-wrap`}>
+                  <Link href="/" passHref>
+                    <a>
+                      <Image
+                        src={Mainbanner}
+                        objectFit="cover"
+                        layout="fill"
+                        alt="메인배너 이미지3"
+                      ></Image>
+                    </a>
+                  </Link>
+                </div>
+              </div>
             </section>
           </SwiperSlide>
         </Swiper>
@@ -360,6 +416,19 @@ function Home() {
           <div className={Styles.inner}>
             <h2 className={Styles.title}>수많은 후기가 증명하는 BARFDOG</h2>
             <div className={Styles.cont_body}>콘텐츠 영역</div>
+            <Swiper
+              {...swiperSettings_review}
+            >
+              <SwiperSlide style={{height:"300px",backgroundColor:'var(--color-bg)'}}>Slide 1</SwiperSlide>
+              <SwiperSlide style={{height:"300px",backgroundColor:'var(--color-bg)'}}>Slide 2</SwiperSlide>
+              <SwiperSlide style={{height:"300px",backgroundColor:'var(--color-bg)'}}>Slide 3</SwiperSlide>
+              <SwiperSlide style={{height:"300px",backgroundColor:'var(--color-bg)'}}>Slide 4</SwiperSlide>
+              <SwiperSlide style={{height:"300px",backgroundColor:'var(--color-bg)'}}>Slide 5</SwiperSlide>
+              <SwiperSlide style={{height:"300px",backgroundColor:'var(--color-bg)'}}>Slide 6</SwiperSlide>
+              <SwiperSlide style={{height:"300px",backgroundColor:'var(--color-bg)'}}>Slide 7</SwiperSlide>
+              <SwiperSlide style={{height:"300px",backgroundColor:'var(--color-bg)'}}>Slide 8</SwiperSlide>
+              <SwiperSlide style={{height:"300px",backgroundColor:'var(--color-bg)'}}>Slide 9</SwiperSlide>
+            </Swiper>
           </div>
         </section>
       </Wrapper>
