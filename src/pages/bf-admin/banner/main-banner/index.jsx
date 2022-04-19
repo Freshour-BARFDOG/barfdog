@@ -56,13 +56,13 @@ export const Btn_ToPage = ({ href, as, name }) => {
 
 
 
-interface BannerList {
-  order: number,
-  name: string,
-  link: string,
-  exp_target: string,
-  reg_date: string
-}
+// interface BannerList {
+//   order: number,
+//   name: string,
+//   link: string,
+//   exp_target: string,
+//   reg_date: string
+// }
 
 
 
@@ -70,7 +70,7 @@ function MainBannerIndexPage() {
 
   // const exampleData: BannerList[] = [];
 
-  const AllData: BannerList[] = [
+  const AllData= [
     {
       order: 1,
       name: "메인배너",
@@ -129,15 +129,6 @@ function MainBannerIndexPage() {
                 <th>삭제</th>
               </tr>
               <MainBannerList items={AllData} />
-              {/* {AllData.map((thisData) => {
-                <MainBannerList
-                  order={thisData.order}
-                  name={thisData.name}
-                  link={thisData.link}
-                  exp_target={thisData.exp_target}
-                  reg_date={thisData.reg_date}
-                />;
-              })} */}
             </table>
           </div>
         </div>

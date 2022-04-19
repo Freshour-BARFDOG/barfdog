@@ -6,6 +6,7 @@ import React from 'react';
 
 export default function MainBannerList({items}) {
 
+  if(!items)return;
 
 
   return (
