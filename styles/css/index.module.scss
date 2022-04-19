@@ -4,9 +4,6 @@ $browser-context:16; // html font-size
 }
 
 
-.flex_container {
-  
-}
 .inner {
   margin : 0 auto;//왜 가운데로 안가는가?
   position: relative;
@@ -53,68 +50,66 @@ $browser-context:16; // html font-size
   .img-wrap{width: 100%;}
 }
 
-
-
 //레시피 설명 4가지 사진
 .recipe_info {
   .inner {
-    padding-top :120px;
     box-sizing: border-box;
-    height: 1004px;
-
     .text {
       text-align: center;
       font-size: 32px;
       font-weight: bold;
+      line-height: 120%;
     }
-    
-    .starter_banner {
-      margin-top: 70px;
-      .box {
-        padding: 10px;
-        background-color: rgba(235, 240, 255, 0.804);
-        position: relative;
-        width: 260px;
-        height: 456px;
-        box-sizing: border-box;
-    
-        .firstbox {
-          width: 240px;
-          height: 240px;
-          position: relative;
-        }
-        .secondbox {
-          margin-top: 10px;
-          font-size: 24px;
-          font-weight: bold;
-          text-align: center;
-        }
-        .pbox{
-          margin-top: 15px;
-          p {
-            text-align: center;
+
+    ul{
+      li{
+        float :left;
+        .starter_banner {
+          margin-top: 70px;
+          .box {
+            padding: 10px;
+            background-color: #fff;
+            box-shadow: rem(10) rem(10) rem(30) rgba(0, 0, 0, .1);
+            position: relative;
+            width: 260px;
+            height: 456px;
+            box-sizing: border-box;
+            margin-right: rem(40);
+            .firstbox {
+              width: 240px;
+              height: 240px;
+              position: relative;
+            }
+            .secondbox {
+              margin-top: 10px;
+              font-size: 24px;
+              font-weight: bold;
+              text-align: center;
+            }
+            .pbox{
+              margin-top: 15px;
+              p {
+                text-align: center;
+              }
+            }
+            .btnbox{
+              margin-top: 20px;
+              display: flex;
+              justify-content: center;
+            }
           }
-        }
-        .btnbox{
-          margin-top: 20px;
-          display: flex;
-          justify-content: center;
         }
       }
     }
+    
     .box22 {
       display: flex;
       justify-content: center;
       margin-top: 100px;
-      
-      .btnbox {
+     .btnbox {
         position: relative;
         width: 240px;
         height: 60px;
- 
-        a {
-
-        }
       }
     }
   }
@@ -125,8 +120,7 @@ $browser-context:16; // html font-size
 //가운데 이쁘게 안오는데 어떻게 하는가?
 .barfraw {
   .inner {
-    height: 600px;
-    // background-color: #f9f2ec;
+
     display: flex;
     justify-content: center;
     align-items: center;
@@ -143,21 +137,21 @@ $browser-context:16; // html font-size
       margin-left: 40px;
       p {
         position: absolute;
-        top: 120px;
+        top: -180px;
         color: var(--color-main);
         font-size: 15px;
         font-weight: bold;
       }
       h1 {
         position: absolute;
-        top: 150px;
+        top: -150px;
         left: 0;
         font-size: 28px;
         font-weight: bold;
       }
       h3 {
         position: absolute;
-        top: 200px;
+        top: -100px;
         font-size: 16px;
       }
     }
@@ -169,7 +163,6 @@ $browser-context:16; // html font-size
     display: flex;
     justify-content: center;
     position: relative;
-    height: 705px;
     .leftbox {
       position: relative;
       height:100%;
@@ -177,11 +170,11 @@ $browser-context:16; // html font-size
       margin-right: 140px;
       h1{
         position: absolute;
-        top: 165px;
+        top: rem(45);
       } 
       p{
         position: absolute;
-        top: 290px;
+        top: rem(165);
       }     
     }
     
@@ -199,7 +192,6 @@ $browser-context:16; // html font-size
 
 .difference {
   .inner {
-    height: 928px;
     font-size: 15px;
     text-align: center;
     
@@ -218,7 +210,6 @@ $browser-context:16; // html font-size
   $marginRight: 90px; 
   ul{
     width: 960px;
-    height: 682px;
     margin:0 auto;
     overflow:hidden;
     display: flex;
@@ -248,10 +239,11 @@ $browser-context:16; // html font-size
 .difference3 {
   position: relative;
   height: 824px;
+  box-sizing: border-box;
   .title {
-    padding-top: 150px;
     display: block;
     font-size: 32px;
+    text-align: center;
   }
   .image {
     display: flex;
@@ -260,19 +252,19 @@ $browser-context:16; // html font-size
     left: 220px;
   }
 
-
-
-
   .textbox {
     position: absolute;
     top: 280px;
     right: 150px;
     .text {
       li {
+        left : rem(-135);
+        top : rem(55);
         color: var(--color-main);
         font-size: 18px;
         display: block;
         position: relative;
+        margin-bottom: rem(50);
       }
       li::before {
         content: "";
@@ -281,18 +273,9 @@ $browser-context:16; // html font-size
         background-color: var(--color-main);
         position: absolute;
         top : 0px;
+        left:rem(-130);
         bottom: 0px;
-        left:-130px;
         margin: auto;
-
-        // width:10px;
-        // height: 10px;
-        // border-radius: 50%;
-        // position: absolute;
-        // top : 0px;
-        // bottom: 0px;
-        // left:-130px;
-        // margin: auto;
       }
       li::after {
         content: "";
@@ -308,18 +291,10 @@ $browser-context:16; // html font-size
       }
     }
   }
-  
-
-
-  
-
 }
 
 
-
-
 @media (max-width:600px){
-
   .difference2 {
     ul{
       width: 100%;
@@ -345,9 +320,9 @@ section.difference{padding: rem(150) 0 rem(100)}
 section.difference2{padding: rem(100) 0 rem(100)}
 section.difference3{padding: rem(120) 0 rem(150)}
 section.clientWorry{padding: rem(120) 0 rem(120)}
-section.difference5{padding: rem(150) 0 rem(200)}
-section.difference6{padding: rem(120) 0 rem(120)}
-section.difference7{padding: rem(150) 0 rem(250)}
+section.review{padding: rem(150) 0 rem(200)}
+section.Howtouse{padding: rem(120) 0 rem(120)}
+section.sns{padding: rem(114) 0 rem(190)}
 
 
 .btn_main{
@@ -360,9 +335,6 @@ section.difference7{padding: rem(150) 0 rem(250)}
   width: rem(220);
   box-sizing: border-box;
 }
-
-
-
 
 ///@at-root
 
@@ -417,6 +389,7 @@ section.difference7{padding: rem(150) 0 rem(250)}
     
     .details{
       ul{
+        height: rem(360);
         li{
           font-size:rem(16);
           color:#717171;
@@ -434,8 +407,9 @@ section.difference7{padding: rem(150) 0 rem(250)}
             background-color: #F2994C;
             transform:rotate(45deg);
           }
-          &:last-child{margin-bottom: 0;}
-          
+          &:last-child{
+            margin-bottom: 0;
+          }
         }
       }
     }
@@ -447,10 +421,153 @@ section.difference7{padding: rem(150) 0 rem(250)}
 ////////////@at-root
 
 .swiper_review{
-  background-color: green;
+  //background-color: red;
+  .swiper-button-next{
+  content:">";
+  }
+}
+
+.review {
+  position: relative;
+  .inner {
+    .cont_body {
+      padding:rem(60) rem(50) rem(0); 
+    }
+    .title {
+      text-align: center;
+    }
+  }
+  
+  .slide {
+    text-align: center;   
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    height: rem(462);
+    background-color: #fff;
+    border-radius: rem(8);
+    box-shadow: rem(5) rem(5) rem(20) rgba(0, 0, 0, .1);
+    
+    .img-wrap {
+      margin-top: rem(40);
+      width: rem(240);
+      height: rem(240);
+    }
+    .img-wrap2 {
+      margin-top: rem(20);
+      width: rem(18);
+      height: rem(20);
+    }
+    p {
+      // padding: rem(1);
+      margin-top: rem(20);
+      text-align: center;
+      width : rem(280);
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 4;
+      overflow: hidden;
+
+    }
+  }
+  .redbox {
+    position: absolute;
+    background-color: #CA1010;
+    left : rem(-39);
+    top : rem(324);
+    border-radius: rem(28) rem(0) rem(0) rem(28);
+    width: rem(1649);
+    height: rem(380);
+  }
+}
+
+
+
+.Howtouse {
+  .inner {
+    .title{
+      text-align: center;
+      margin-bottom: rem(20);
+    }
+    p{
+      text-align: center;
+    }
+  }
+
+  .cont_body {
+    > ul{
+      > li {
+        float:left;
+        width:calc(33.3% - rem(26.6));
+        &:not(:last-child){
+          margin-right:rem(40);
+        }
+        &:nth-child(2){
+          margin-top: rem(100);
+        }
+      }
+    }
+  }
+
+  .cont_body {
+    ul{
+      margin-top: rem(70);
+      .card {
+        text-align: center;
+        .img-wrap{
+          width:rem(360);
+          height:rem(360);
+        }
+
+        .details { 
+          .title_1 {
+            color: #D81D1D;
+            font-size: rem(14);
+            font-weight: bold;
+            text-align: left;
+          }
+          .title_2 {
+            padding: rem(5) 0 rem(10);
+            text-align: left;
+            font-size: rem(18);
+          }
+          .main_text {
+            font-size: rem(16);
+            color: #717171;
+            text-align: left;
+          }
+        }
+      }
+    }
+    .btn_box{
+      display: flex;
+      justify-content: center;
+      margin-top: rem(90);
+      .btn_main {
+        width: rem(246);
+        padding: rem(20) rem(50);
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+
+.swiper_sns{
   .swiper-button-next{
     content:">";
   }
+}
 
-
+.sns {
+  .inner {
+    text-align: center;
+    > p {
+      padding: rem(12) 0 rem(77);
+    }
+  }
+  .img-wrap {
+   width: rem(244);
+   height: rem(244);
+  }
 }
