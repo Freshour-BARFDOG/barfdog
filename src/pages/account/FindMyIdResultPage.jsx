@@ -1,9 +1,9 @@
 import React from 'react';
-import Layout from '../../components/common/Layout';
+import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import Styles from '/styles/css/FindMyResult.module.scss'
 import MypageWrapper from "/src/components/mypage/MypageWrapper";
-import Checkbox, { Btn, Title } from '../../components/atoms/checkbox';
+import Checkbox, { Btn, Title } from '/src/components/atoms/checkbox';
 
 export default function FindMyIdResultPage() {
   return (
