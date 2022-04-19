@@ -12,7 +12,6 @@ function privacy() {
         <h1 className="">개인정보처리방침</h1>
       </Wrapper>
     </Layout>
-     
   )
 }
 

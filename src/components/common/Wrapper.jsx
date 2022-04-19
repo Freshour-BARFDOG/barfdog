@@ -1,15 +1,22 @@
 import React from 'react';
 import s from '/styles/css/Wrapper.module.scss';
 
-function Wrapper(props) {
+
+
+function Wrapper({ children, bgColor , fullWidth}) {
   return (
-    <div className={`${s.container_outer}`} style={{backgroundColor:props.bgColor}}>
-      <div className={s.container}>
-        <div className={s.row}>
-          {props.children}
-        </div>
+    <div
+      className={`${s.container_outer}`}
+      style={{ backgroundColor: bgColor }}
+    >
+      <div
+        className={`${s.container} ${fullWidth ? s["fullWidth"] : ""}`}
+        // style={{ width: props.fullWidth ? "100%" : "" }}
+        // style={{ width: "100%" }}
+      >
+        <div className={s.row}>{children}</div>
       </div>
-    </div> 
+    </div>
   );
 }
 

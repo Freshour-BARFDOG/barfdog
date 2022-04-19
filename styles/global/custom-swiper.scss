@@ -1,0 +1,11 @@
+/*  */
+
+
+.swiper-pagination{
+  .swiper-pagination-bullet{background-color:#fff; opacity:0.3;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3)
+  }
+  .swiper-pagination-bullet-active{
+    opacity:1;
+  }
+}

@@ -3,6 +3,7 @@
 @charset "utf-8";
 @import './reset.css';
 @import './font.css';
+@import './custom-swiper.scss';
 @import './admin.scss';
 
 
@@ -14,7 +15,6 @@ $browser-context:16;
 }
 
 html, body{width:100vw; overflow-x:hidden;}
-
 
 .img-wrap, .img_wrap{
   position:relative;

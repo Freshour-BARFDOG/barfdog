@@ -21,6 +21,6 @@ module.exports = {
     return config;
   },
   images: {
-    domains: ["images.unsplash.com", "211.219.225.118"],
+    domains: ["images.unsplash.com", "211.219.225.118", 'shop-phinf.pstatic.net'],
   },
 };

@@ -1,0 +1,14 @@
+// {
+//     "compilerOptions": {
+//       "baseUrl":".",
+//       "paths":{
+//         "public/*":["public/*"],
+//         "src/*":["src/*"],
+//         "pages/*":["pages/*"],
+//         "styles/*":["styles/*"],
+//         "util/*":["util/*"]
+//       }
+//     },
+//     "exclude": ["node_modules"],
+//     "include": ["**/*.ts", "**/*.tsx"]
+//   }

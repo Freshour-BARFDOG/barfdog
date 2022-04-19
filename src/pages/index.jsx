@@ -1,15 +1,26 @@
-import React, { useEffect, useState} from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Styles from '/styles/css/index.module.scss'
 import Layout from '/src/components/common/Layout'
 import Wrapper from "/src/components/common/Wrapper";
 import Link from 'next/link';
+import { useRouter } from "next/router";
+
 //////////////////////////////////////////////////
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Navigation } from "swiper";
+import { EffectFade, Pagination, Navigation } from "swiper";
 //필요한것만 두개중 가져가면됨
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import "swiper/css/effect-fade";
+
+
+import ArrowLeft from '/public/img/icon/swiper-arrow-large-l.svg';
+import ArrowRight from "/public/img/icon/swiper-arrow-large-r.svg";
+import ArrowLeft_m from "/public/img/icon/swiper-arrow-medium.svg";
+import ArrowRight_m from "/public/img/icon/swiper-arrow-medium-style2.svg";
+import ArrowLeft_s from "/public/img/icon/swiper-arrow-small-l.svg";
+import ArrowRight_s from "/public/img/icon/swiper-arrow-small-r.svg";
 //////////////////////////////////////////////////
 
 /* Images */
@@ -25,87 +36,89 @@ import midPic from '/public/img/midPic.png'
 import rightPic from '/public/img/rightPic.png'
 import barfPack from '/public/img/barfPack.png'
 
-function Home() {
 
-  //////////////////////////////////////////////////
-  const [isMobile, setIsMobile] = useState(false);
-//첫번쨰스와이프 옵션
+
+
+
+function Swiper_main() {
+  const navPrev_mainRef = useRef(null);
+  const navNext_mainRef = useRef(null);
+
+  const AllImageData = [
+    {
+      imgPath:
+        "https://shop-phinf.pstatic.net/20210930_23/16329707437275Bauq_PNG/pc.png",
+    },
+    {
+      imgPath:
+        "https://shop-phinf.pstatic.net/20220218_290/1645167736891rKnQ7_PNG/B4EBC1F6_1_BBE7BABB_5150x.png",
+    },
+    {
+      imgPath:
+        "https://shop-phinf.pstatic.net/20220126_205/1643164587468rOJb1_PNG/B4EBC1F6_1_BBE7BABB_4.png",
+    },
+    {
+      imgPath:
+        "https://shop-phinf.pstatic.net/20211019_115/16346276123656K9V0_PNG/PC.png",
+    },
+  ];
+
+
   const swiperSettings_main = {
     className: `${Styles.swiper_main}`,
     spaceBetween: 0,
     loop: true,
+    effect: "fade",
     centeredSlides: true,
-    autoplay: { delay: 2500, disableOnInteraction: false },
+    autoplay: { delay: 500, disableOnInteraction: false },
     slidesPerView: 1,
-    pagination: { clickable: true },
-    modules: [Pagination]
+    navigation: {
+      prevEl: navPrev_mainRef.current,
+      nextEl: navNext_mainRef.current,
+    },
+    modules: [Navigation, EffectFade],
   };
-
-  const swiperSettings_review = {
-    className: `${Styles.swiper_review}`,
-    spaceBetween: 40,
-    loop: true,
-    centeredSlides: false,
-    slidesPerView: isMobile ? 1 : 3,
-    //모바일 에서는 1개 pc에서는 3개
-    pagination: { clickable: true },
-    navigation: {className:'sw'},
-    modules: [Pagination, Navigation]
-    //존재하면 쓸수있음
-  };
-
-  const swiperSettings_sns = {
-    className: `${Styles.swiper_sns}`,
-    spaceBetween: 60,
-    loop: true,
-    centeredSlides: false,// 가운데 갈지 말지 고민
-    slidesPerView: isMobile ? 2 : 4,//모바일 에서는 1개 pc에서는 2개
-    // pagination: { clickable: true },
-    navigation: {className:'sw'},
-    modules: [ Navigation]//존재하면 쓸수있음
-  };
-
-
-  useEffect(() => {
-    window.innerWidth <= 600 ? setIsMobile(true) : setIsMobile(false);
-  }, [isMobile]);
-  //////////////////////////////////////////////////
-
-
 
 
   return (
-    <Layout>
-      <Wrapper>
-        {/* 스와이프주석 */}
-        <Swiper {...swiperSettings_main}>
-          <SwiperSlide>
+    <div className={Styles.swiper_main_outerWrap}>
+      <div className={Styles.swiper_navigation_container}>
+        <i className={Styles["swiper-button-prev"]} ref={navPrev_mainRef}>
+          <ArrowLeft />
+        </i>
+
+        <i
+          className={Styles["swiper-button-next"]}
+          ref={navNext_mainRef}
+        >
+          <ArrowRight />
+        </i>
+      </div>
+
+      <Swiper
+        {...swiperSettings_main}
+        onInit={(swiper) => {
+          swiper.params.navigation.prevEl = navPrev_mainRef.current;
+          swiper.params.navigation.nextEl = navNext_mainRef.current;
+          swiper.navigation.destroy();
+          swiper.navigation.init();
+          swiper.navigation.update();
+        }}
+        // onRealIndexChange={() => {
+        //   console.log("change!");
+        // }}
+      >
+        {AllImageData.map((data, index) => (
+          <SwiperSlide key={index}>
             <section className={Styles.banner}>
               <div className={Styles.inner}>
                 <div className={`${Styles["img-wrap"]} img-wrap clearfix`}>
                   <Link href="/" passHref>
                     <a>
                       <Image
-                        src={Mainbanner}
+                        src={data.imgPath}
                         objectFit="cover"
-                        layout="fill"
-                        alt="메인배너 이미지"
-                      ></Image>
-                    </a>
-                  </Link>
-                </div>
-              </div>
-            </section>
-          </SwiperSlide>
-          <SwiperSlide>
-            <section className={Styles.banner}>
-              <div className={Styles.inner}>
-                <div className={`${Styles["img-wrap"]} img-wrap`}>
-                  <Link href="/" passHref>
-                    <a>
-                      <Image
-                        src={Mainbanner}
-                        objectFit="cover"
+                        objectPosition="50% 50%"
                         layout="fill"
                         alt="메인배너 이미지2"
                       ></Image>
@@ -115,28 +128,361 @@ function Home() {
               </div>
             </section>
           </SwiperSlide>
-          <SwiperSlide>
-            <section className={Styles.banner}>
-              <div className={Styles.inner}>
-                <div className={`${Styles["img-wrap"]} img-wrap`}>
-                  <Link href="/" passHref>
-                    <a>
-                      <Image
-                        src={Mainbanner}
-                        objectFit="cover"
-                        layout="fill"
-                        alt="메인배너 이미지3"
-                      ></Image>
-                    </a>
-                  </Link>
-                </div>
+        ))}
+      </Swiper>
+    </div>
+  );
+}
+
+
+
+
+
+
+
+
+function Swiper_review() {
+
+  const navPrevRef = useRef(null);
+  const navNextRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isReachedEnd, setIsReachedEnd] = useState(false);
+  const router = useRouter();
+
+    useEffect(() => {
+      window.innerWidth <= 600 ? setIsMobile(true) : setIsMobile(false);
+    }, [isMobile, isReachedEnd]);
+
+
+
+  const swiperSettings_review = {
+    className: `${Styles.swiper_review}`,
+    spaceBetween: 40,
+    // loop: true,
+    centeredSlides: false,
+    slidesPerView: isMobile ? 1 : 3,
+    //모바일 에서는 1개 pc에서는 3개
+    pagination: {
+      clickable: true,
+    },
+    navigation: {
+      prevEl: navPrevRef.current,
+      nextEl: navNextRef.current,
+    },
+    modules: [Pagination, Navigation],
+    //존재하면 쓸수있음
+  };
+
+
+  const ArrowRight_withLink = () => {
+    return (
+      <>
+        <ArrowRight_m />
+        <Link href="/community/review" passHref>
+          <a onClick={() => {
+              router.push("/community/review");
+            }}
+          >
+            더보기
+          </a>
+        </Link>
+      </>
+    );
+  };
+
+
+  function hideMoreView (e) {
+    const slideLength = e.slides.length;
+    if (slideLength && e.realIndex !== slideLength) {
+      setIsReachedEnd(false);
+    }
+  }
+
+
+  function showMoreView () {
+    setIsReachedEnd(true);
+  }
+
+
+  return (
+    <div className={Styles.swiper_review_outerWrap}>
+      <i className={Styles["swiper-button-prev"]} ref={navPrevRef}>
+        <ArrowLeft_m />
+      </i>
+      <i className={Styles["swiper-button-next"]} ref={navNextRef}>
+        <ArrowRight_withLink />
+      </i>
+      <Swiper
+        {...swiperSettings_review}
+        onInit={(swiper) => {
+          swiper.params.navigation.prevEl = navPrevRef.current;
+          swiper.params.navigation.nextEl = navNextRef.current;
+          swiper.params.pagination.el;
+          swiper.params.pagination.el.classList.add(
+            "swiper-pagination__reviewSection"
+          );
+          swiper.params.pagination.el.classList.add(
+            Styles["swiper-pagination__reviewSection"]
+          );
+          swiper.navigation.destroy();
+          swiper.navigation.init();
+          swiper.navigation.update();
+          swiper.pagination.destroy();
+          swiper.pagination.init();
+          swiper.pagination.update();
+        }}
+        onActiveIndexChange={hideMoreView}
+        onReachEnd={showMoreView}
+      >
+        <SwiperSlide className={Styles.slide}>
+          <div className={`${Styles["img-wrap"]} img-wrap`}>
+            <Image
+              src={require("/public/img/pages/home/home_review_1.png")}
+              objectFit="cover"
+              layout="fill"
+              alt="카드 이미지"
+            />
+          </div>
+          <div className={`${Styles["img-wrap2"]} img-wrap`}>
+            <Image
+              src={require("/public/img/pages/home/home_review_quotation.png")}
+              objectFit="contain"
+              layout="fill"
+              alt="카드 이미지"
+            />
+          </div>
+          <p>11저희강아지 밥 다먹고 빈그릇 핥는거 7년 키우면서 첨봄.. 굿굿</p>
+        </SwiperSlide>
+        <SwiperSlide className={Styles.slide}>
+          <div className={`${Styles["img-wrap"]} img-wrap`}>
+            <Image
+              src={require("/public/img/pages/home/home_review_2.png")}
+              objectFit="cover"
+              layout="fill"
+              alt="카드 이미지"
+            />
+          </div>
+          <div className={`${Styles["img-wrap2"]} img-wrap`}>
+            <Image
+              src={require("/public/img/pages/home/home_review_quotation.png")}
+              objectFit="contain"
+              layout="fill"
+              alt="카드 이미지"
+            />
+          </div>
+          <p>
+            22진짜 잘먹어요 ;; 생식은 다 잘먹는다고해서 타업체샀다가 안먹어서
+            포기했는데ㅠㅠ사료는 눈물터져서 다시 막 찾다가 바프독차? 집...
+          </p>
+        </SwiperSlide>
+        <SwiperSlide className={Styles.slide}>
+          <div className={`${Styles["img-wrap"]} img-wrap`}>
+            <Image
+              src={require("/public/img/pages/home/home_review_3.png")}
+              objectFit="cover"
+              layout="fill"
+              alt="카드 이미지"
+            />
+          </div>
+          <div className={`${Styles["img-wrap2"]} img-wrap`}>
+            <Image
+              src={require("/public/img/pages/home/home_review_quotation.png")}
+              objectFit="contain"
+              layout="fill"
+              alt="카드 이미지"
+            />
+          </div>
+          <p>
+            33친구네 시바에게 선물했는데 생식 처음 도전이었는데도 아주 잘
+            먹었다고 합니다. 친구가 마진도 생각 안 하시는 거 같다고 아가는 잘...
+          </p>
+        </SwiperSlide>
+        <SwiperSlide className={Styles.slide}>
+          <div className={`${Styles["img-wrap"]} img-wrap`}>
+            <Image
+              src={require("/public/img/pages/home/home_review_1.png")}
+              objectFit="cover"
+              layout="fill"
+              alt="카드 이미지"
+            />
+          </div>
+          <div className={`${Styles["img-wrap2"]} img-wrap`}>
+            <Image
+              src={require("/public/img/pages/home/home_review_quotation.png")}
+              objectFit="contain"
+              layout="fill"
+              alt="카드 이미지"
+            />
+          </div>
+          <p>44저희강아지 밥 다먹고 빈그릇 핥는거 7년 키우면서 첨봄..</p>
+        </SwiperSlide>
+        <SwiperSlide className={Styles.slide}>
+          <div className={`${Styles["img-wrap"]} img-wrap`}>
+            <Image
+              src={require("/public/img/pages/home/home_review_2.png")}
+              objectFit="cover"
+              layout="fill"
+              alt="카드 이미지"
+            />
+          </div>
+          <div className={`${Styles["img-wrap2"]} img-wrap`}>
+            <Image
+              src={require("/public/img/pages/home/home_review_quotation.png")}
+              objectFit="contain"
+              layout="fill"
+              alt="카드 이미지"
+            />
+          </div>
+          <p>
+            55진짜 잘먹어요 ;; 생식은 다 잘먹는다고해서 타업체샀다가 안먹어서
+            포기했는데ㅠㅠ사료는 눈물터져서 다시 막 찾다가 바프독차? 집...
+          </p>
+        </SwiperSlide>
+      </Swiper>
+    </div>
+  );
+}
+
+
+
+
+
+function Swiper_sns() {
+  const navPrevRef = useRef(null);
+  const navNextRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(false);
+  
+
+  const swiperSettings_sns = {
+    className: `${Styles.swiper_sns}`,
+    spaceBetween: 60,
+    loop: true,
+    centeredSlides: false, // 가운데 갈지 말지 고민
+    slidesPerView: isMobile ? 2 : 4, //모바일 에서는 1개 pc에서는 2개
+    navigation: {
+      prevEl: navPrevRef.current,
+      nextEl: navNextRef.current,
+    },
+    modules: [Navigation], //존재하면 쓸수있음
+  };
+
+
+
+  return (
+    <div className={Styles.swiper_sns_outerWrap}>
+      <i className={Styles["swiper-button-prev"]} ref={navPrevRef}>
+        <ArrowLeft_s />
+      </i>
+      <i className={Styles["swiper-button-next"]} ref={navNextRef}>
+        <ArrowRight_s />
+      </i>
+      <Swiper {...swiperSettings_sns}>
+        <SwiperSlide
+          style={{
+            height: "244px",
+            backgroundColor: "var(--color-bg)",
+          }}
+        >
+          <Link href="/" passHref>
+            <a>
+              <div className={`${Styles["img-wrap"]} img-wrap`}>
+                <Image
+                  src={require("/public/img/pages/home/home_sns_1.png")}
+                  objectFit="cover"
+                  layout="fill"
+                  alt="카드 이미지"
+                />
               </div>
-            </section>
-          </SwiperSlide>
-        </Swiper>
+            </a>
+          </Link>
+        </SwiperSlide>
+        <SwiperSlide
+          style={{
+            height: "244px",
+            backgroundColor: "var(--color-bg)",
+          }}
+        >
+          <Link href="/" passHref>
+            <a>
+              <div className={`${Styles["img-wrap"]} img-wrap`}>
+                <Image
+                  src={require("/public/img/pages/home/home_sns_2.png")}
+                  objectFit="cover"
+                  layout="fill"
+                  alt="카드 이미지"
+                />
+              </div>
+            </a>
+          </Link>
+        </SwiperSlide>
+        <SwiperSlide
+          style={{
+            height: "244px",
+            backgroundColor: "var(--color-bg)",
+          }}
+        >
+          <Link href="/" passHref>
+            <a>
+              <div className={`${Styles["img-wrap"]} img-wrap`}>
+                <Image
+                  src={require("/public/img/pages/home/home_sns_3.png")}
+                  objectFit="cover"
+                  layout="fill"
+                  alt="카드 이미지"
+                />
+              </div>
+            </a>
+          </Link>
+        </SwiperSlide>
+        <SwiperSlide
+          style={{
+            height: "244px",
+            backgroundColor: "var(--color-bg)",
+          }}
+        >
+          <Link href="/" passHref>
+            <a>
+              <div className={`${Styles["img-wrap"]} img-wrap`}>
+                <Image
+                  src={require("/public/img/pages/home/home_sns_4.png")}
+                  objectFit="cover"
+                  layout="fill"
+                  alt="카드 이미지"
+                />
+              </div>
+            </a>
+          </Link>
+        </SwiperSlide>
+        {/* <SwiperSlide style={{height:"244px",backgroundColor:'var(--color-bg)'}}>Slide 5</SwiperSlide> */}
+        {/* <SwiperSlide style={{height:"244px",backgroundColor:'var(--color-bg)'}}>Slide 6</SwiperSlide> */}
+      </Swiper>
+    </div>
+  );
+}
+
+
+
+
+
+function Home() {
+
+  const [isMobile, setIsMobile] = useState(false);
+
+
+  useEffect(() => {
+    window.innerWidth <= 600 ? setIsMobile(true) : setIsMobile(false);
+  }, [isMobile]);
+
+
+
+
+  return (
+    <Layout>
+      {/* <Wrapper bgColor="#fbf7f6" fullWidth={true}> */}
+      <Wrapper fullWidth={true}>
+        {/* 스와이프주석 */}
+        <Swiper_main />
       </Wrapper>
-
-
 
       {/* 섹션1 레시피 4가지 소개*/}
       <Wrapper>
@@ -171,7 +517,7 @@ function Home() {
                     </div>
                   </div>
                 </li>
-              
+
                 <li>
                   <div className={Styles.starter_banner}>
                     <div className={Styles.box}>
@@ -253,11 +599,11 @@ function Home() {
                   </div>
                 </li>
               </ul>
-            </div> {/* 바프독의 4가지 레시피 소개 끝 */}
-          
+            </div>{" "}
+            {/* 바프독의 4가지 레시피 소개 끝 */}
             <div className={Styles.box22}>
               <div className={Styles.btnbox}>
-                <Link href="/" passHref>
+                <Link href="/survey" passHref>
                   <a>
                     <Image
                       src={SubscribeBtn}
@@ -269,8 +615,8 @@ function Home() {
                 </Link>
               </div>
             </div>
-
-          </div> {/* inner end */}
+          </div>{" "}
+          {/* inner end */}
         </section>
       </Wrapper>
 
@@ -384,7 +730,6 @@ function Home() {
         </section>
       </Wrapper>
 
-
       {/* 프리미엄바프 사진 설명 */}
       <Wrapper>
         <section className={Styles.difference3}>
@@ -404,8 +749,6 @@ function Home() {
           </div>
         </section>
       </Wrapper>
-
-
 
       {/* 고민 */}
       <Wrapper bgColor="#F9F2EC">
@@ -476,24 +819,12 @@ function Home() {
                       <p className={Styles.card_title}>견주님의 고민</p>
                       <div className={Styles.details}>
                         <ul>
-                          <li>
-                            눈물과 눈곱이 많고 눈물자국이 짙어져요                          
-                          </li>
-                          <li>
-                            활동량이 줄고 잠이 많아졌어요
-                          </li>
-                          <li>
-                            양치를 해도 입냄새가 심해요
-                          </li>
-                          <li>
-                            입맛이 까다로워서 편식을 많이해요
-                          </li>
-                          <li>
-                            모발이 푸석푸석해요
-                          </li>
-                          <li>
-                            귀를 자주 긁어요. 가려운 곳이 많아요
-                          </li>
+                          <li>눈물과 눈곱이 많고 눈물자국이 짙어져요</li>
+                          <li>활동량이 줄고 잠이 많아졌어요</li>
+                          <li>양치를 해도 입냄새가 심해요</li>
+                          <li>입맛이 까다로워서 편식을 많이해요</li>
+                          <li>모발이 푸석푸석해요</li>
+                          <li>귀를 자주 긁어요. 가려운 곳이 많아요</li>
                         </ul>
                       </div>
                     </div>
@@ -505,121 +836,93 @@ function Home() {
         </section>
       </Wrapper>
 
-
       <Wrapper>
         <section className={Styles.review}>
           <div className={Styles.inner}>
-            <h2 className={Styles.title}>수많은 후기가 증명하는 <br /> BARFDOG</h2>
-            <div className={Styles.cont_body}>  
-                <Swiper {...swiperSettings_review} className={Styles.swipe}>
-                  {/* <SwiperSlide style={{height:"340px",backgroundColor:'var(--color-bg)'}}> */}
-                  <SwiperSlide className = {Styles.slide}>
-                    <div className={`${Styles['img-wrap']} img-wrap`}>
-                      <Image src = {require('/public/img/pages/home/home_review_1.png')} objectFit='cover' layout="fill" alt='카드 이미지' />
-                    </div>
-                    <div className={`${Styles['img-wrap2']} img-wrap`}>
-                      <Image src = {require('/public/img/pages/home/home_review_quotation.png')} objectFit='contain' layout="fill" alt='카드 이미지' />
-                    </div>
-                    <p>저희강아지 밥 다먹고 빈그릇 핥는거 7년 키우면서 첨봄.. 굿굿</p>
-                  </SwiperSlide>
-                  <SwiperSlide className = {Styles.slide}>
-                    <div className={`${Styles['img-wrap']} img-wrap`}>
-                      <Image src = {require('/public/img/pages/home/home_review_2.png')} objectFit='cover' layout="fill" alt='카드 이미지' />
-                    </div>
-                    <div className={`${Styles['img-wrap2']} img-wrap`}>
-                      <Image src = {require('/public/img/pages/home/home_review_quotation.png')} objectFit='contain' layout="fill" alt='카드 이미지' />
-                    </div>
-                    <p>
-                      진짜 잘먹어요 ;; 생식은 다 잘먹는다고해서 타업체샀다가 안먹어서 포기했는데ㅠㅠ사료는 눈물터져서 다시 막 찾다가 바프독차? 집...
-                      
-                    </p>
-                  </SwiperSlide>
-                  <SwiperSlide className = {Styles.slide}>
-                    <div className={`${Styles['img-wrap']} img-wrap`}>
-                      <Image src = {require('/public/img/pages/home/home_review_3.png')} objectFit='cover' layout="fill" alt='카드 이미지' />
-                    </div>
-                    <div className={`${Styles['img-wrap2']} img-wrap`}>
-                      <Image src = {require('/public/img/pages/home/home_review_quotation.png')} objectFit='contain' layout="fill" alt='카드 이미지' />
-                    </div>
-                    <p>
-                    친구네 시바에게 선물했는데 생식 처음 도전이었는데도 아주 잘 먹었다고 합니다. 친구가 마진도 생각 안 하시는 거 같다고 아가는 잘...
-                    </p>
-                  </SwiperSlide>
-                  <SwiperSlide className = {Styles.slide}>
-                    <div className={`${Styles['img-wrap']} img-wrap`}>
-                      <Image src = {require('/public/img/pages/home/home_review_1.png')} objectFit='cover' layout="fill" alt='카드 이미지' />
-                    </div>
-                    <div className={`${Styles['img-wrap2']} img-wrap`}>
-                      <Image src = {require('/public/img/pages/home/home_review_quotation.png')} objectFit='contain' layout="fill" alt='카드 이미지' />
-                    </div>
-                    <p>저희강아지 밥 다먹고 빈그릇 핥는거 7년 키우면서 첨봄.. 굿굿</p>
-
-                  </SwiperSlide>
-                  <SwiperSlide className = {Styles.slide}>
-                    <div className={`${Styles['img-wrap']} img-wrap`}>
-                      <Image src = {require('/public/img/pages/home/home_review_2.png')} objectFit='cover' layout="fill" alt='카드 이미지' />
-                    </div>
-                    <div className={`${Styles['img-wrap2']} img-wrap`}>
-                      <Image src = {require('/public/img/pages/home/home_review_quotation.png')} objectFit='contain' layout="fill" alt='카드 이미지' />
-                    </div>
-                    <p>
-                      진짜 잘먹어요 ;; 생식은 다 잘먹는다고해서 타업체샀다가 안먹어서 포기했는데ㅠㅠ사료는 눈물터져서 다시 막 찾다가 바프독차? 집...
-                    </p>
-                  </SwiperSlide>
-                </Swiper>
-                <div className={Styles.redbox}>
-                  <div className={Styles.red}>
-
-                  </div>
-                </div>
+            <h2 className={Styles.title}>
+              수많은 후기가 증명하는 <br /> BARFDOG
+            </h2>
+            <div className={Styles.cont_body}>
+              <Swiper_review />
+              <div className={Styles.redbox}>
+                <div className={Styles.red}></div>
               </div>
+            </div>
           </div>
         </section>
       </Wrapper>
 
-
-
-    <Wrapper bgColor='#F9F2EC'>
-      <section className={Styles.Howtouse}>
-        <div className={Styles.inner}>
-          <h2 className={Styles.title}>바프독 이용방법</h2>
-          <p>Start now 버튼을 통해 간편하게 반려동물 정보를 입력하고 계정에서 최신상태로 업데이트 할 수 있습니다
-            <br />간편하지만 완벽한 식단을 매달 원하는 날짜에 맞춰 받아보세요</p>
+      <Wrapper bgColor="#F9F2EC">
+        <section className={Styles.Howtouse}>
+          <div className={Styles.inner}>
+            <h2 className={Styles.title}>바프독 이용방법</h2>
+            <p>
+              Start now 버튼을 통해 간편하게 반려동물 정보를 입력하고 계정에서
+              최신상태로 업데이트 할 수 있습니다
+              <br />
+              간편하지만 완벽한 식단을 매달 원하는 날짜에 맞춰 받아보세요
+            </p>
             <div className={Styles.cont_body}>
               <ul className="clearfix">
                 <li>
                   <figure className={Styles.card}>
-                    <div className={`${Styles['img-wrap']} img-wrap`}>
-                      <Image src = {require('/public/img/pages/home/home_howtouse_1.png')} objectFit='cover' layout="fill" alt='카드 이미지' />
+                    <div className={`${Styles["img-wrap"]} img-wrap`}>
+                      <Image
+                        src={require("/public/img/pages/home/home_howtouse_1.png")}
+                        objectFit="cover"
+                        layout="fill"
+                        alt="카드 이미지"
+                      />
                     </div>
                     <div className={Styles.details}>
                       <p className={Styles.title_1}>STEP 01</p>
                       <p className={Styles.title_2}>반려동물 정보 입력</p>
-                      <p className={Styles.main_text}>정확한 레시피를 위해 반려동물의 정보를 입력해주세요. 프레시아워는 신선하고 엄선된 재료를 바탕으로 반려동물의 맞춤형 신선사료를 추천 및 선택</p>
-                      </div>
+                      <p className={Styles.main_text}>
+                        정확한 레시피를 위해 반려동물의 정보를 입력해주세요.
+                        프레시아워는 신선하고 엄선된 재료를 바탕으로 반려동물의
+                        맞춤형 신선사료를 추천 및 선택
+                      </p>
+                    </div>
                   </figure>
                 </li>
                 <li>
                   <figure className={Styles.card}>
-                    <div className={`${Styles['img-wrap']} img-wrap`}>
-                      <Image src = {require('/public/img/pages/home/home_howtouse_2.png')} objectFit='cover' layout="fill" alt='카드 이미지' />
+                    <div className={`${Styles["img-wrap"]} img-wrap`}>
+                      <Image
+                        src={require("/public/img/pages/home/home_howtouse_2.png")}
+                        objectFit="cover"
+                        layout="fill"
+                        alt="카드 이미지"
+                      />
                     </div>
                     <div className={Styles.details}>
                       <p className={Styles.title_1}>STEP 02</p>
                       <p className={Styles.title_2}>맞춤형 신선사료 제작</p>
-                      <p className={Styles.main_text}>내 반려동물에 딱 맞는 레시피로 신선한 맞춤형 자연식(생식/화식)을 제작합니다. 내 반려동물에 맞는 한끼 정량으로 끼니별 급여가 가능하도록 포장합니다.</p>
+                      <p className={Styles.main_text}>
+                        내 반려동물에 딱 맞는 레시피로 신선한 맞춤형
+                        자연식(생식/화식)을 제작합니다. 내 반려동물에 맞는 한끼
+                        정량으로 끼니별 급여가 가능하도록 포장합니다.
+                      </p>
                     </div>
                   </figure>
                 </li>
                 <li>
                   <figure className={Styles.card}>
-                    <div className={`${Styles['img-wrap']} img-wrap`}>
-                      <Image src = {require('/public/img/pages/home/home_howtouse_3.png')} objectFit='cover' layout="fill" alt='카드 이미지' />
+                    <div className={`${Styles["img-wrap"]} img-wrap`}>
+                      <Image
+                        src={require("/public/img/pages/home/home_howtouse_3.png")}
+                        objectFit="cover"
+                        layout="fill"
+                        alt="카드 이미지"
+                      />
                     </div>
                     <div className={Styles.details}>
                       <p className={Styles.title_1}>STEP 03</p>
                       <p className={Styles.title_2}>정기구독 배송</p>
-                      <p className={Styles.main_text}>급속냉동한 제품을 꼼꼼하게 포장해 고객님의 문앞까지 배송합니다. 원하는 날짜에 맞춰 정기 배송 서비스</p>
+                      <p className={Styles.main_text}>
+                        급속냉동한 제품을 꼼꼼하게 포장해 고객님의 문앞까지
+                        배송합니다. 원하는 날짜에 맞춰 정기 배송 서비스
+                      </p>
                     </div>
                   </figure>
                 </li>
@@ -629,12 +932,11 @@ function Home() {
                   정기구독 신청하러 가기
                 </button>
               </div>
-
             </div>
           </div>
         </section>
       </Wrapper>
-      
+
       <Wrapper>
         <section className={Styles.sns}>
           <div className={Styles.inner}>
@@ -642,46 +944,7 @@ function Home() {
             <p>인스타그램에서 바프독의 최신 소식을 확인해보세요</p>
             <div className={Styles.cont_body}>
               {/* 텍스트 4줄이상일경우 말줄임표 처리 */}
-              <Swiper {...swiperSettings_sns}>
-                <SwiperSlide style={{height:"244px",backgroundColor:'var(--color-bg)'}}>
-                  <Link href ='/' passHref>
-                    <a>
-                      <div className={`${Styles['img-wrap']} img-wrap`}>
-                        <Image src = {require('/public/img/pages/home/home_sns_1.png')} objectFit='cover' layout="fill" alt='카드 이미지' />
-                      </div>
-                    </a>
-                  </Link>
-                </SwiperSlide>
-                <SwiperSlide style={{height:"244px",backgroundColor:'var(--color-bg)'}}>
-                <Link href ='/' passHref>
-                    <a>
-                      <div className={`${Styles['img-wrap']} img-wrap`}>
-                        <Image src = {require('/public/img/pages/home/home_sns_2.png')} objectFit='cover' layout="fill" alt='카드 이미지' />
-                      </div>
-                    </a>
-                  </Link>
-                </SwiperSlide>
-                <SwiperSlide style={{height:"244px",backgroundColor:'var(--color-bg)'}}>
-                <Link href ='/' passHref>
-                    <a>
-                      <div className={`${Styles['img-wrap']} img-wrap`}>
-                        <Image src = {require('/public/img/pages/home/home_sns_3.png')} objectFit='cover' layout="fill" alt='카드 이미지' />
-                      </div>
-                    </a>
-                  </Link>
-                </SwiperSlide>
-                <SwiperSlide style={{height:"244px",backgroundColor:'var(--color-bg)'}}>
-                <Link href ='/' passHref>
-                    <a>
-                      <div className={`${Styles['img-wrap']} img-wrap`}>
-                        <Image src = {require('/public/img/pages/home/home_sns_4.png')} objectFit='cover' layout="fill" alt='카드 이미지' />
-                      </div>
-                    </a>
-                  </Link>
-                </SwiperSlide>
-                {/* <SwiperSlide style={{height:"244px",backgroundColor:'var(--color-bg)'}}>Slide 5</SwiperSlide> */}
-                {/* <SwiperSlide style={{height:"244px",backgroundColor:'var(--color-bg)'}}>Slide 6</SwiperSlide> */}
-              </Swiper>
+              <Swiper_sns />
             </div>
           </div>
         </section>

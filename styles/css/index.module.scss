@@ -45,7 +45,7 @@ section.sns{padding: rem(114) 0 rem(190)}
 //최상위 그림배너
 .banner {
   .inner {
-    height: 534px;
+    height: rem(450);
     display: flex;
     position: relative;
     a {
@@ -94,10 +94,9 @@ section.sns{padding: rem(114) 0 rem(190)}
               text-align: center;
             }
             .pbox{
-              margin-top: 15px;
-              p {
-                text-align: center;
-              }
+              margin-top: rem(12);
+              text-align: center;
+              line-height: 1.35;
             }
             .btnbox{
               margin-top: 20px;
@@ -420,20 +419,11 @@ section.sns{padding: rem(114) 0 rem(190)}
 
 
 
-////////////@at-root
-
-.swiper_review{
-  //background-color: red;
-  .swiper-button-next{
-  content:">";
-  }
-}
-
 .review {
   position: relative;
   .inner {
     .cont_body {
-      padding:rem(60) rem(50) rem(0); 
+      // padding:rem(60) rem(40) rem(80); 
     }
     .title {
       text-align: center;
@@ -474,7 +464,7 @@ section.sns{padding: rem(114) 0 rem(190)}
   }
   .redbox {
     position: absolute;
-    background-color: #CA1010;
+    background-color: var(--color-main);
     left : rem(-39);
     top : rem(324);
     border-radius: rem(28) rem(0) rem(0) rem(28);
@@ -568,9 +558,131 @@ section.sns{padding: rem(114) 0 rem(190)}
       padding: rem(12) 0 rem(77);
     }
   }
+  a{width:100%; height:100%;}
   .img-wrap {
-   width: rem(244);
-   height: rem(244);
+  //  width: rem(244);
+  //  height: rem(244);
+   width: 100%;
+   height: 100%;
   }
 }
 
+
+
+
+
+
+////////////////////////////////////
+////////////////////////////////////
+////////////////////////////////////
+
+
+/* // * SWIPER - Main */
+
+ .swiper-button-next, .swiper-button-prev{
+  cursor: pointer;
+  position: absolute;
+  border-radius: 50%;
+  width: rem(50);
+  height: rem(50);
+  transform:translateY(-50%);
+  top: 50%;
+  z-index: 2;
+  transition-property: opacity, transform;
+  transition-timing-function: ease;
+  transition-duration: .3s;
+  opacity:0.2;
+
+  &:hover{
+    opacity: 0.9;
+  }
+}
+
+.swiper-button-next{
+  right:0;
+}
+.swiper-button-prev{
+  left:0;
+}
+
+
+
+
+
+.swiper_main_outerWrap{
+    position: relative;
+
+  .swiper_navigation_container{
+      width: 75rem;
+    position: absolute;
+    height: 100%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    top: 50%;
+    z-index: 3;
+  }
+
+  .swiper-button-next{
+    right:rem(-80);
+  }
+  .swiper-button-prev{
+    left:rem(-80);
+  }
+
+}
+
+
+
+
+
+.swiper_review_outerWrap{
+  padding:0 rem(50) 0; 
+  position:relative;
+
+  .swiper_review{
+    padding:rem(60) 0 rem(80); 
+  }
+
+  .swiper-button-prev,
+  .swiper-button-next{
+    opacity: 0.6;
+    width: rem(38); height: rem(38);
+    box-shadow: rem(1) rem(1) rem(10) rgba(0,0,0,0.15);
+    &:hover{opacity: 0.9;}
+  }
+
+  .swiper-button-prev{left:rem(-8);}
+  .swiper-button-next{right:rem(-8);}
+
+  a{
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    bottom: calc(-100% + rem(8));
+    content:"더보기";
+    color:#fff;
+    font-size: rem(14);
+    width: 100%;
+    white-space: nowrap;
+  }
+  .swiper-pagination__reviewSection{
+    bottom:rem(22) !important;
+    span{width: rem(10); height: rem(10);}
+  }
+
+}
+
+
+
+
+
+.swiper_sns_outerWrap{
+  position:relative;
+  .swiper-button-prev,
+  .swiper-button-next{
+    width: rem(28); height: rem(28);
+  }
+
+  .swiper-button-prev{left:rem(-14)}
+  .swiper-button-next{right:rem(-14)}
+}
