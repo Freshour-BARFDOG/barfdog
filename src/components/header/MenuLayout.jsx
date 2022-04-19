@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import React, { useState } from 'react';
 import s from '/styles/css/Submenu.module.scss';
-import IMG from '/src/components/atoms/IMG';
+import Image from 'next/image';
+
 
 
 
@@ -56,15 +57,22 @@ function MenuLayout({title, className, link, addedIcon,  children}) {
 
 
   return (
-      <li
+    <li
       className={s.menu_wrapper}
       onMouseEnter={mouseEnterEvent}
       // onMouseLeave={mouseLeaveEvent}
-      >
-        <Title link={link}>{title}</Title>
-        {addedIcon ? <IMG src={addedIcon.src} alt="아이콘" width={addedIcon.width} height={addedIcon.height}/> : null}
-        {children ? <Submenu/> : ''}
-    </li> 
+    >
+      <Title link={link}>{title}</Title>
+      {addedIcon ? (
+        <Image
+          src={addedIcon.src}
+          alt="아이콘"
+          width={addedIcon.width}
+          height={addedIcon.height}
+        />
+      ) : null}
+      {children ? <Submenu /> : ""}
+    </li>
   );
 }
 
