@@ -25,18 +25,6 @@ import midPic from '/public/img/midPic.png'
 import rightPic from '/public/img/rightPic.png'
 import barfPack from '/public/img/barfPack.png'
 
-
-/* 
-
-1.퍼블리싱
-- Swiper
-- Layout (모바일 고려) /////
-- Dummy 사용법 /////
-- Entity code //
-
-2. 깃 -> 업데이트 * Pull 
- */
-
 function Home() {
 
   //////////////////////////////////////////////////
@@ -82,6 +70,9 @@ function Home() {
     window.innerWidth <= 600 ? setIsMobile(true) : setIsMobile(false);
   }, [isMobile]);
   //////////////////////////////////////////////////
+
+
+
 
   return (
     <Layout>
@@ -145,6 +136,8 @@ function Home() {
         </Swiper>
       </Wrapper>
 
+
+
       {/* 섹션1 레시피 4가지 소개*/}
       <Wrapper>
         <section className={Styles.recipe_info}>
@@ -154,7 +147,8 @@ function Home() {
 
             {/* 바프독의 4가지 레시피 소개 */}
             <div className={Styles.ulbox}>
-             <ul className="clearfix">                <li>
+              <ul className="clearfix">
+                <li>
                   <div className={Styles.starter_banner}>
                     <div className={Styles.box}>
                       <div className={Styles.firstbox}>
@@ -172,12 +166,12 @@ function Home() {
                         <p>#건강한 성장, 건강한 영양</p>
                       </div>
                       <div className={Styles.btnbox}>
-                        <div className={Styles.btn}>플러스 추가 더보기</div>
+                        <div className={Styles.btn}>+ 더보기</div>
                       </div>
                     </div>
                   </div>
                 </li>
-                
+              
                 <li>
                   <div className={Styles.starter_banner}>
                     <div className={Styles.box}>
@@ -199,34 +193,7 @@ function Home() {
                       </div>
 
                       <div className={Styles.btnbox}>
-                        <div className={Styles.btn}>플러스 추가 더보기</div>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-
-                <li>
-                  <div className={Styles.starter_banner}>
-                    <div className={Styles.box}>
-                      <div className={Styles.firstbox}>
-                        <Image
-                          src={StartBanner}
-                          objectFit="cover"
-                          layout="fill"
-                          alt=""
-                        ></Image>
-                      </div>
-
-                      <div className={Styles.secondbox}>스타터 프리미엄</div>
-
-                      <div className={Styles.pbox}>
-                        <p>#까다로운 식습관 개선</p>
-                        <p>#기관지 염증 완화</p>
-                        <p>#건강한 성장, 건강한 영양</p>
-                      </div>
-
-                      <div className={Styles.btnbox}>
-                        <div className={Styles.btn}>플러스 추가 더보기</div>
+                        <div className={Styles.btn}>+ 더보기</div>
                       </div>
                     </div>
                   </div>
@@ -253,15 +220,41 @@ function Home() {
                       </div>
 
                       <div className={Styles.btnbox}>
-                        <div className={Styles.btn}>플러스 추가 더보기</div>
+                        <div className={Styles.btn}>+ 더보기</div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+
+                <li>
+                  <div className={Styles.starter_banner}>
+                    <div className={Styles.box}>
+                      <div className={Styles.firstbox}>
+                        <Image
+                          src={StartBanner}
+                          objectFit="cover"
+                          layout="fill"
+                          alt=""
+                        ></Image>
+                      </div>
+
+                      <div className={Styles.secondbox}>스타터 프리미엄</div>
+
+                      <div className={Styles.pbox}>
+                        <p>#까다로운 식습관 개선</p>
+                        <p>#기관지 염증 완화</p>
+                        <p>#건강한 성장, 건강한 영양</p>
+                      </div>
+
+                      <div className={Styles.btnbox}>
+                        <div className={Styles.btn}>+ 더보기</div>
                       </div>
                     </div>
                   </div>
                 </li>
               </ul>
-            </div> 
-            {/* 바프독의 4가지 레시피 소개 끝 */}
-
+            </div> {/* 바프독의 4가지 레시피 소개 끝 */}
+          
             <div className={Styles.box22}>
               <div className={Styles.btnbox}>
                 <Link href="/" passHref>
@@ -277,8 +270,7 @@ function Home() {
               </div>
             </div>
 
-          </div>
-          {/* inner end */}
+          </div> {/* inner end */}
         </section>
       </Wrapper>
 
@@ -391,6 +383,8 @@ function Home() {
           </ul>
         </section>
       </Wrapper>
+
+
       {/* 프리미엄바프 사진 설명 */}
       <Wrapper>
         <section className={Styles.difference3}>
@@ -410,6 +404,8 @@ function Home() {
           </div>
         </section>
       </Wrapper>
+
+
 
       {/* 고민 */}
       <Wrapper bgColor="#F9F2EC">
