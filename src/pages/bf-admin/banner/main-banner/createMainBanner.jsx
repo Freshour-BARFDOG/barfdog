@@ -7,7 +7,8 @@ function createMainBannerPage() {
  return (
    <AdminLayout>
      <AdminContentWrapper>
-배너 생성 페이지 
+       <div className="admin_title_main">배너등록</div>ddd
+
      </AdminContentWrapper>
    </AdminLayout>
  );

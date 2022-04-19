@@ -5,7 +5,7 @@ import { AdminBodyWrapper } from './AdminWrapper';
 
 function AdminLayout({children}) {
   return (
-    <main>
+    <main id="admin_page">
       <AdminHeader />
       <AdminBodyWrapper>
         <AdminGnb />

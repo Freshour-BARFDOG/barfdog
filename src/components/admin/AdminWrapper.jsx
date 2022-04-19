@@ -2,13 +2,13 @@ import React from "react";
 import s from "/styles/admin/adminWrapper.module.scss";
 
 
-export const AdminContentWrapper = ({ children }) => {
+export const AdminContentWrapper = ({ children, className }) => {
   return (
     <div
       className={`${s.container_outer} ${s.contents_container_outer}`}
     >
       <div className={s.contents_container}>
-        <div className={s.contents_row}>{children}</div>
+        <div className={`${s.contents_row} ${className}`}>{children}</div>
       </div>
     </div>
   );
