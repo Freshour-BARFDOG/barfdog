@@ -6,6 +6,7 @@ import Link from 'next/link';
 //////////////////////////////////////////////////
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper";
+//필요한것만 두개중 가져가면됨
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
@@ -36,15 +37,11 @@ import barfPack from '/public/img/barfPack.png'
 2. 깃 -> 업데이트 * Pull 
  */
 
-
-
-
-
 function Home() {
 
   //////////////////////////////////////////////////
   const [isMobile, setIsMobile] = useState(false);
-
+//첫번쨰스와이프 옵션
   const swiperSettings_main = {
     className: `${Styles.swiper_main}`,
     spaceBetween: 0,
@@ -60,11 +57,24 @@ function Home() {
     className: `${Styles.swiper_review}`,
     spaceBetween: 40,
     loop: true,
-    centeredSlides: true,
+    centeredSlides: false,
     slidesPerView: isMobile ? 1 : 3,
+    //모바일 에서는 1개 pc에서는 3개
     pagination: { clickable: true },
     navigation: {className:'sw'},
     modules: [Pagination, Navigation]
+    //존재하면 쓸수있음
+  };
+
+  const swiperSettings_sns = {
+    className: `${Styles.swiper_sns}`,
+    spaceBetween: 60,
+    loop: true,
+    centeredSlides: false,// 가운데 갈지 말지 고민
+    slidesPerView: isMobile ? 2 : 4,//모바일 에서는 1개 pc에서는 2개
+    // pagination: { clickable: true },
+    navigation: {className:'sw'},
+    modules: [ Navigation]//존재하면 쓸수있음
   };
 
 
@@ -76,6 +86,7 @@ function Home() {
   return (
     <Layout>
       <Wrapper>
+        {/* 스와이프주석 */}
         <Swiper {...swiperSettings_main}>
           <SwiperSlide>
             <section className={Styles.banner}>
@@ -139,34 +150,117 @@ function Home() {
         <section className={Styles.recipe_info}>
           <div className={Styles.inner}>
             <p className={Styles.text}>&quot;진짜 생식&#34;</p>
-            <p className={Styles.text}>바프독의 4가지 레시피zz</p>
+            <p className={Styles.text}>바프독의 4가지 레시피</p>
 
             {/* 바프독의 4가지 레시피 소개 */}
-            <div className={Styles.starter_banner}>
-              <div className={Styles.box}>
-                <div className={Styles.firstbox}>
-                  <Image
-                    src={StartBanner}
-                    objectFit="cover"
-                    layout="fill"
-                    alt=""
-                  ></Image>
-                </div>
+            <div className={Styles.ulbox}>
+             <ul className="clearfix">                <li>
+                  <div className={Styles.starter_banner}>
+                    <div className={Styles.box}>
+                      <div className={Styles.firstbox}>
+                        <Image
+                          src={StartBanner}
+                          objectFit="cover"
+                          layout="fill"
+                          alt=""
+                        ></Image>
+                      </div>
+                      <div className={Styles.secondbox}>스타터 프리미엄</div>
+                      <div className={Styles.pbox}>
+                        <p>#까다로운 식습관 개선</p>
+                        <p>#기관지 염증 완화</p>
+                        <p>#건강한 성장, 건강한 영양</p>
+                      </div>
+                      <div className={Styles.btnbox}>
+                        <div className={Styles.btn}>플러스 추가 더보기</div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                
+                <li>
+                  <div className={Styles.starter_banner}>
+                    <div className={Styles.box}>
+                      <div className={Styles.firstbox}>
+                        <Image
+                          src={StartBanner}
+                          objectFit="cover"
+                          layout="fill"
+                          alt=""
+                        ></Image>
+                      </div>
 
-                <div className={Styles.secondbox}>스타터 프리미엄</div>
+                      <div className={Styles.secondbox}>스타터 프리미엄</div>
 
-                <div className={Styles.pbox}>
-                  <p>#까다로운 식습관 개선</p>
-                  <p>#기관지 염증 완화</p>
-                  <p>#건강한 성장, 건강한 영양</p>
-                </div>
+                      <div className={Styles.pbox}>
+                        <p>#까다로운 식습관 개선</p>
+                        <p>#기관지 염증 완화</p>
+                        <p>#건강한 성장, 건강한 영양</p>
+                      </div>
 
-                <div className={Styles.btnbox}>
-                  <div className={Styles.btn}>플러스 추가 더보기</div>
-                </div>
-              </div>
-            </div>
-            {/* 바프독의 4가지 레시피 소개 끝*/}
+                      <div className={Styles.btnbox}>
+                        <div className={Styles.btn}>플러스 추가 더보기</div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+
+                <li>
+                  <div className={Styles.starter_banner}>
+                    <div className={Styles.box}>
+                      <div className={Styles.firstbox}>
+                        <Image
+                          src={StartBanner}
+                          objectFit="cover"
+                          layout="fill"
+                          alt=""
+                        ></Image>
+                      </div>
+
+                      <div className={Styles.secondbox}>스타터 프리미엄</div>
+
+                      <div className={Styles.pbox}>
+                        <p>#까다로운 식습관 개선</p>
+                        <p>#기관지 염증 완화</p>
+                        <p>#건강한 성장, 건강한 영양</p>
+                      </div>
+
+                      <div className={Styles.btnbox}>
+                        <div className={Styles.btn}>플러스 추가 더보기</div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+
+                <li>
+                  <div className={Styles.starter_banner}>
+                    <div className={Styles.box}>
+                      <div className={Styles.firstbox}>
+                        <Image
+                          src={StartBanner}
+                          objectFit="cover"
+                          layout="fill"
+                          alt=""
+                        ></Image>
+                      </div>
+
+                      <div className={Styles.secondbox}>스타터 프리미엄</div>
+
+                      <div className={Styles.pbox}>
+                        <p>#까다로운 식습관 개선</p>
+                        <p>#기관지 염증 완화</p>
+                        <p>#건강한 성장, 건강한 영양</p>
+                      </div>
+
+                      <div className={Styles.btnbox}>
+                        <div className={Styles.btn}>플러스 추가 더보기</div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div> 
+            {/* 바프독의 4가지 레시피 소개 끝 */}
 
             <div className={Styles.box22}>
               <div className={Styles.btnbox}>
@@ -182,7 +276,8 @@ function Home() {
                 </Link>
               </div>
             </div>
-          </div>{" "}
+
+          </div>
           {/* inner end */}
         </section>
       </Wrapper>
@@ -386,20 +481,22 @@ function Home() {
                       <div className={Styles.details}>
                         <ul>
                           <li>
-                            생식을 시도하고 싶지만 공부해야할 것이 많아 확신이
-                            서지 않고, 반려견의 적응이 두려워요
+                            눈물과 눈곱이 많고 눈물자국이 짙어져요                          
                           </li>
                           <li>
-                            기존 화식이나 건식사료를 급여 중 건강이 나빠진
-                            반려견을 위해서 생식을 시도해보고싶어요
+                            활동량이 줄고 잠이 많아졌어요
                           </li>
                           <li>
-                            생식을 시도하고 싶지만 공부해야할 것이 많아 확신이
-                            서지 않고, 반려견의 적응이 두려워요
+                            양치를 해도 입냄새가 심해요
                           </li>
                           <li>
-                            생식을 시도하고 싶지만 공부해야할 것이 많아 확신이
-                            서지 않고, 반려견의 적응이 두려워요
+                            입맛이 까다로워서 편식을 많이해요
+                          </li>
+                          <li>
+                            모발이 푸석푸석해요
+                          </li>
+                          <li>
+                            귀를 자주 긁어요. 가려운 곳이 많아요
                           </li>
                         </ul>
                       </div>
@@ -411,40 +508,185 @@ function Home() {
           </div>
         </section>
       </Wrapper>
-      <Wrapper bgColor="#F9F2EC">
-        <section className={Styles.difference5}>
+
+
+      <Wrapper>
+        <section className={Styles.review}>
           <div className={Styles.inner}>
-            <h2 className={Styles.title}>수많은 후기가 증명하는 BARFDOG</h2>
-            <div className={Styles.cont_body}>콘텐츠 영역</div>
-            <Swiper
-              {...swiperSettings_review}
-            >
-              <SwiperSlide style={{height:"300px",backgroundColor:'var(--color-bg)'}}>Slide 1</SwiperSlide>
-              <SwiperSlide style={{height:"300px",backgroundColor:'var(--color-bg)'}}>Slide 2</SwiperSlide>
-              <SwiperSlide style={{height:"300px",backgroundColor:'var(--color-bg)'}}>Slide 3</SwiperSlide>
-              <SwiperSlide style={{height:"300px",backgroundColor:'var(--color-bg)'}}>Slide 4</SwiperSlide>
-              <SwiperSlide style={{height:"300px",backgroundColor:'var(--color-bg)'}}>Slide 5</SwiperSlide>
-              <SwiperSlide style={{height:"300px",backgroundColor:'var(--color-bg)'}}>Slide 6</SwiperSlide>
-              <SwiperSlide style={{height:"300px",backgroundColor:'var(--color-bg)'}}>Slide 7</SwiperSlide>
-              <SwiperSlide style={{height:"300px",backgroundColor:'var(--color-bg)'}}>Slide 8</SwiperSlide>
-              <SwiperSlide style={{height:"300px",backgroundColor:'var(--color-bg)'}}>Slide 9</SwiperSlide>
-            </Swiper>
+            <h2 className={Styles.title}>수많은 후기가 증명하는 <br /> BARFDOG</h2>
+            <div className={Styles.cont_body}>  
+                <Swiper {...swiperSettings_review} className={Styles.swipe}>
+                  {/* <SwiperSlide style={{height:"340px",backgroundColor:'var(--color-bg)'}}> */}
+                  <SwiperSlide className = {Styles.slide}>
+                    <div className={`${Styles['img-wrap']} img-wrap`}>
+                      <Image src = {require('/public/img/pages/home/home_review_1.png')} objectFit='cover' layout="fill" alt='카드 이미지' />
+                    </div>
+                    <div className={`${Styles['img-wrap2']} img-wrap`}>
+                      <Image src = {require('/public/img/pages/home/home_review_quotation.png')} objectFit='contain' layout="fill" alt='카드 이미지' />
+                    </div>
+                    <p>저희강아지 밥 다먹고 빈그릇 핥는거 7년 키우면서 첨봄.. 굿굿</p>
+                  </SwiperSlide>
+                  <SwiperSlide className = {Styles.slide}>
+                    <div className={`${Styles['img-wrap']} img-wrap`}>
+                      <Image src = {require('/public/img/pages/home/home_review_2.png')} objectFit='cover' layout="fill" alt='카드 이미지' />
+                    </div>
+                    <div className={`${Styles['img-wrap2']} img-wrap`}>
+                      <Image src = {require('/public/img/pages/home/home_review_quotation.png')} objectFit='contain' layout="fill" alt='카드 이미지' />
+                    </div>
+                    <p>
+                      진짜 잘먹어요 ;; 생식은 다 잘먹는다고해서 타업체샀다가 안먹어서 포기했는데ㅠㅠ사료는 눈물터져서 다시 막 찾다가 바프독차? 집...
+                      
+                    </p>
+                  </SwiperSlide>
+                  <SwiperSlide className = {Styles.slide}>
+                    <div className={`${Styles['img-wrap']} img-wrap`}>
+                      <Image src = {require('/public/img/pages/home/home_review_3.png')} objectFit='cover' layout="fill" alt='카드 이미지' />
+                    </div>
+                    <div className={`${Styles['img-wrap2']} img-wrap`}>
+                      <Image src = {require('/public/img/pages/home/home_review_quotation.png')} objectFit='contain' layout="fill" alt='카드 이미지' />
+                    </div>
+                    <p>
+                    친구네 시바에게 선물했는데 생식 처음 도전이었는데도 아주 잘 먹었다고 합니다. 친구가 마진도 생각 안 하시는 거 같다고 아가는 잘...
+                    </p>
+                  </SwiperSlide>
+                  <SwiperSlide className = {Styles.slide}>
+                    <div className={`${Styles['img-wrap']} img-wrap`}>
+                      <Image src = {require('/public/img/pages/home/home_review_1.png')} objectFit='cover' layout="fill" alt='카드 이미지' />
+                    </div>
+                    <div className={`${Styles['img-wrap2']} img-wrap`}>
+                      <Image src = {require('/public/img/pages/home/home_review_quotation.png')} objectFit='contain' layout="fill" alt='카드 이미지' />
+                    </div>
+                    <p>저희강아지 밥 다먹고 빈그릇 핥는거 7년 키우면서 첨봄.. 굿굿</p>
+
+                  </SwiperSlide>
+                  <SwiperSlide className = {Styles.slide}>
+                    <div className={`${Styles['img-wrap']} img-wrap`}>
+                      <Image src = {require('/public/img/pages/home/home_review_2.png')} objectFit='cover' layout="fill" alt='카드 이미지' />
+                    </div>
+                    <div className={`${Styles['img-wrap2']} img-wrap`}>
+                      <Image src = {require('/public/img/pages/home/home_review_quotation.png')} objectFit='contain' layout="fill" alt='카드 이미지' />
+                    </div>
+                    <p>
+                      진짜 잘먹어요 ;; 생식은 다 잘먹는다고해서 타업체샀다가 안먹어서 포기했는데ㅠㅠ사료는 눈물터져서 다시 막 찾다가 바프독차? 집...
+                    </p>
+                  </SwiperSlide>
+                </Swiper>
+                <div className={Styles.redbox}>
+                  <div className={Styles.red}>
+
+                  </div>
+                </div>
+              </div>
           </div>
         </section>
       </Wrapper>
-      <Wrapper bgColor="#F9F2EC">
-        <section className={Styles.difference6}>
-          <div className={Styles.inner}>
-            <h2 className={Styles.title}>타이틀영역</h2>
-            <div className={Styles.cont_body}>콘텐츠 영역</div>
+
+
+
+    <Wrapper bgColor='#F9F2EC'>
+      <section className={Styles.Howtouse}>
+        <div className={Styles.inner}>
+          <h2 className={Styles.title}>바프독 이용방법</h2>
+          <p>Start now 버튼을 통해 간편하게 반려동물 정보를 입력하고 계정에서 최신상태로 업데이트 할 수 있습니다
+            <br />간편하지만 완벽한 식단을 매달 원하는 날짜에 맞춰 받아보세요</p>
+            <div className={Styles.cont_body}>
+              <ul className="clearfix">
+                <li>
+                  <figure className={Styles.card}>
+                    <div className={`${Styles['img-wrap']} img-wrap`}>
+                      <Image src = {require('/public/img/pages/home/home_howtouse_1.png')} objectFit='cover' layout="fill" alt='카드 이미지' />
+                    </div>
+                    <div className={Styles.details}>
+                      <p className={Styles.title_1}>STEP 01</p>
+                      <p className={Styles.title_2}>반려동물 정보 입력</p>
+                      <p className={Styles.main_text}>정확한 레시피를 위해 반려동물의 정보를 입력해주세요. 프레시아워는 신선하고 엄선된 재료를 바탕으로 반려동물의 맞춤형 신선사료를 추천 및 선택</p>
+                      </div>
+                  </figure>
+                </li>
+                <li>
+                  <figure className={Styles.card}>
+                    <div className={`${Styles['img-wrap']} img-wrap`}>
+                      <Image src = {require('/public/img/pages/home/home_howtouse_2.png')} objectFit='cover' layout="fill" alt='카드 이미지' />
+                    </div>
+                    <div className={Styles.details}>
+                      <p className={Styles.title_1}>STEP 02</p>
+                      <p className={Styles.title_2}>맞춤형 신선사료 제작</p>
+                      <p className={Styles.main_text}>내 반려동물에 딱 맞는 레시피로 신선한 맞춤형 자연식(생식/화식)을 제작합니다. 내 반려동물에 맞는 한끼 정량으로 끼니별 급여가 가능하도록 포장합니다.</p>
+                    </div>
+                  </figure>
+                </li>
+                <li>
+                  <figure className={Styles.card}>
+                    <div className={`${Styles['img-wrap']} img-wrap`}>
+                      <Image src = {require('/public/img/pages/home/home_howtouse_3.png')} objectFit='cover' layout="fill" alt='카드 이미지' />
+                    </div>
+                    <div className={Styles.details}>
+                      <p className={Styles.title_1}>STEP 03</p>
+                      <p className={Styles.title_2}>정기구독 배송</p>
+                      <p className={Styles.main_text}>급속냉동한 제품을 꼼꼼하게 포장해 고객님의 문앞까지 배송합니다. 원하는 날짜에 맞춰 정기 배송 서비스</p>
+                    </div>
+                  </figure>
+                </li>
+              </ul>
+              <div className={Styles.btn_box}>
+                <button type="button" className={Styles.btn_main}>
+                  정기구독 신청하러 가기
+                </button>
+              </div>
+
+            </div>
           </div>
         </section>
       </Wrapper>
-      <Wrapper bgColor="#F9F2EC">
-        <section className={Styles.difference7}>
+      
+      <Wrapper>
+        <section className={Styles.sns}>
           <div className={Styles.inner}>
-            <h2 className={Styles.title}>타이틀영역</h2>
-            <div className={Styles.cont_body}>콘텐츠 영역</div>
+            <h2 className={Styles.title}>INSTAGRAM</h2>
+            <p>인스타그램에서 바프독의 최신 소식을 확인해보세요</p>
+            <div className={Styles.cont_body}>
+              {/* 텍스트 4줄이상일경우 말줄임표 처리 */}
+              <Swiper {...swiperSettings_sns}>
+                <SwiperSlide style={{height:"244px",backgroundColor:'var(--color-bg)'}}>
+                  <Link href ='/' passHref>
+                    <a>
+                      <div className={`${Styles['img-wrap']} img-wrap`}>
+                        <Image src = {require('/public/img/pages/home/home_sns_1.png')} objectFit='cover' layout="fill" alt='카드 이미지' />
+                      </div>
+                    </a>
+                  </Link>
+                </SwiperSlide>
+                <SwiperSlide style={{height:"244px",backgroundColor:'var(--color-bg)'}}>
+                <Link href ='/' passHref>
+                    <a>
+                      <div className={`${Styles['img-wrap']} img-wrap`}>
+                        <Image src = {require('/public/img/pages/home/home_sns_2.png')} objectFit='cover' layout="fill" alt='카드 이미지' />
+                      </div>
+                    </a>
+                  </Link>
+                </SwiperSlide>
+                <SwiperSlide style={{height:"244px",backgroundColor:'var(--color-bg)'}}>
+                <Link href ='/' passHref>
+                    <a>
+                      <div className={`${Styles['img-wrap']} img-wrap`}>
+                        <Image src = {require('/public/img/pages/home/home_sns_3.png')} objectFit='cover' layout="fill" alt='카드 이미지' />
+                      </div>
+                    </a>
+                  </Link>
+                </SwiperSlide>
+                <SwiperSlide style={{height:"244px",backgroundColor:'var(--color-bg)'}}>
+                <Link href ='/' passHref>
+                    <a>
+                      <div className={`${Styles['img-wrap']} img-wrap`}>
+                        <Image src = {require('/public/img/pages/home/home_sns_4.png')} objectFit='cover' layout="fill" alt='카드 이미지' />
+                      </div>
+                    </a>
+                  </Link>
+                </SwiperSlide>
+                {/* <SwiperSlide style={{height:"244px",backgroundColor:'var(--color-bg)'}}>Slide 5</SwiperSlide> */}
+                {/* <SwiperSlide style={{height:"244px",backgroundColor:'var(--color-bg)'}}>Slide 6</SwiperSlide> */}
+              </Swiper>
+            </div>
           </div>
         </section>
       </Wrapper>
