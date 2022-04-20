@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import dynamic from "next/dynamic";
-import s from "/styles/css/mypage/MypageWrapper.module.scss";
+import s from "../../../styles/css/mypage/MypageWrapper.module.scss";
 import Dashboard from './Dashboard.tsx';
 import Banner_event from '../atoms/Banner_event';
 

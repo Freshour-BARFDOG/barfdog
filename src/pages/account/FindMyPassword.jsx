@@ -2,8 +2,8 @@ import React from 'react';
 import Styles from "/styles/css/FindMyId.module.scss";
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
-import MypageWrapper from "/src/components/mypage/MypageWrapper";
-import Checkbox from '../../components/atoms/checkbox';
+// import MypageWrapper from "/src/components/mypage/MypageWrapper";
+// import Checkbox from '../../components/atoms/checkbox';
 
 function Title (props) {
   return (

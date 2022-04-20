@@ -1,5 +1,5 @@
 import React from 'react';
-import Styles from '/styles/atoms/checkbox.module.scss';
+import Styles from '../../../styles/atoms/checkbox.module.scss';
 
 export function Title (props) {
   return (

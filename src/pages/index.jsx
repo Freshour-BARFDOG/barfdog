@@ -25,13 +25,13 @@ import ArrowRight_s from "/public/img/icon/swiper-arrow-small-r.svg";
 
 /* Images */
 import Image from "next/image";
-import Mainbanner from '/public/img/testBanner.png';
+// import Mainbanner from '/public/img/testBanner.png';
 import StartBanner from '/public/img/starterBanner.png';
 import SubscribeBtn from '/public/img/subscribeBtn.png'
 import Barfraw from '/public/img/barfraw.png'
 import Barfgood1 from '/public/img/barfgood1.png'
-import Halftest from '/public/img/Halftest.png'
-import LeftPic from '/public/img/LeftPic.png'
+import Halftest from '/public/img/halftest.png'
+import LeftPic from '/public/img/leftPic.png'
 import midPic from '/public/img/midPic.png'
 import rightPic from '/public/img/rightPic.png'
 import barfPack from '/public/img/barfPack.png'
