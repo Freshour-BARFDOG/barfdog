@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import Head from "next/head";
+import MetaTitle from "../components/atoms/MetaTitle";
 import Styles from '/styles/css/index.module.scss'
 import Layout from '/src/components/common/Layout'
 import Wrapper from "/src/components/common/Wrapper";
@@ -480,9 +480,7 @@ function Home() {
 
   return (
     <>
-      <Head>
-        <title>바프독 | Barf Dog</title>
-      </Head>
+      <MetaTitle title="바프독"/>
       <Layout>
         {/* <Wrapper bgColor="#fbf7f6" fullWidth={true}> */}
         <Wrapper fullWidth={true}>

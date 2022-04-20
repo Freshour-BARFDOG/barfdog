@@ -1,5 +1,5 @@
 import React from 'react';
-import Head from 'next/head';
+import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
 import Image from "next/image";
@@ -7,9 +7,7 @@ import Image from "next/image";
 function Dashboard() {
   return (
     <>
-      <Head>
-        <title>관리자 페이지 | 바프독</title>
-      </Head>
+      <MetaTitle title="관리자 페이지" />
       <AdminLayout>
         <AdminContentWrapper>
           DashBoard 페이지 DASHBARD PAGE DASHBARD PAGE DASHBARD PAGE DASHBARD
