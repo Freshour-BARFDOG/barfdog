@@ -17,10 +17,6 @@ module.exports = {
       test: /\.svg$/,
       use: ["@svgr/webpack"],
     });
-    // config.node = {
-    //   fs: 'empty'
-    // };
-    // console.log(config);
 
     return config;
   },

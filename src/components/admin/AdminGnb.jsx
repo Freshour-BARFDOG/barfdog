@@ -39,6 +39,7 @@ function AdminGnb() {
       }
     });
   }, [curPath, router]);
+  
 
   return (
     <nav ref={curMenuRef} className={s.admin_nav}>
