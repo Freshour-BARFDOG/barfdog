@@ -6,7 +6,7 @@ function MetaTitle(props) {
   return (
     <Head>
       <title>
-        {props.title ? props.title + " | Barf Dog" : "바프독 | Barf Dog"}
+        {`${props.title ? props.title : "바프독"} | Barf Dog`}
       </title>
     </Head>
   );
