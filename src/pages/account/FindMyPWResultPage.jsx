@@ -1,7 +1,7 @@
 import React from 'react';
 import Layout from "/src/components/common/Layout";
 import Wrapper from '/src/components/common/Wrapper';
-import { Btn, Title } from "/src/components/atoms/checkbox";
+import { Btn, Title } from "/src/components/atoms/Checkbox";
 import Styles from '../../../styles/css/FindMyResult.module.scss';
 
 export default function FindMyPWResultPage() {
