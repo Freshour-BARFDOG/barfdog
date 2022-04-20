@@ -1,7 +1,5 @@
 import React from 'react'
-import s from '/styles/css/footer.module.scss';
 import Wrapper from '/src/components/common/Wrapper';
-import Link from 'next/link';
 import Layout from '/src/components/common/Layout';
 
 

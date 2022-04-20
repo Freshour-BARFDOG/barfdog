@@ -3,7 +3,7 @@ import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import Styles from '/styles/css/FindMyResult.module.scss'
 // import MypageWrapper from "/src/components/mypage/MypageWrapper";
-import { Btn, Title } from '../../../src/components/atoms/checkbox';
+import { Btn, Title } from '../../src/components/atoms/checkbox';
 
 export default function FindMyIdResultPage() {
   return (
