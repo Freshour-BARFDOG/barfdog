@@ -1,8 +1,8 @@
 import React from 'react';
-import Layout from '../../../components/common/Layout';
 import Styles from '/styles/css/FindMyId.module.scss';
+import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
-import MypageWrapper from "/src/components/mypage/MypageWrapper";
+// import MypageWrapper from "/src/components/mypage/MypageWrapper";
 
 
 function Title (props) {

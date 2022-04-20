@@ -2,7 +2,6 @@ import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
 import rem from './rem';
-import isMobile from '/util/func/checkDevice.js';
 
 // * 입력받을 내용: 배너이름 / 노출여부 / 배경색/ 글자색 / 링크주소 PC / 링크주소 Mobile
 

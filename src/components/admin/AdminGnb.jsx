@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
-import s from "/styles/css/mypage/Menu.module.scss";
+import s from "/styles/css/mypage/menu.module.scss";
 import { SubmenuList, List, SubmenuTitle } from "/src/components/mypage/Menu";
 import Link from 'next/link';
 import Icon_setting from "/public/img/icon/setting.svg";
@@ -39,7 +39,7 @@ function AdminGnb() {
       }
     });
   }, [curPath, router]);
-  
+
 
   return (
     <nav ref={curMenuRef} className={s.admin_nav}>

@@ -4,15 +4,24 @@ const nextConfig = {
 
 };
 
-// module.exports = nextConfig
 
 module.exports = {
   nextConfig,
+  entry: "./web.js",
+  output: {
+    filename: "compiled.js",
+  },
+  resolve: {
+    extensions: ['js','jsx'],
+    fallback: {
+      fs: require.resolve("fs"),
+    },
+  },
   trailingSlash: false,
   env: {
     SANITY_PROJECT_ID: "",
   },
-  webpack: (config)=> {
+  webpack: (config) => {
     config.module.rules.push({
       test: /\.svg$/,
       use: ["@svgr/webpack"],
@@ -21,6 +30,10 @@ module.exports = {
     return config;
   },
   images: {
-    domains: ["images.unsplash.com", "211.219.225.118", 'shop-phinf.pstatic.net'],
-  },
+    domains: [
+      "images.unsplash.com",
+      "211.219.225.118",
+      "shop-phinf.pstatic.net",
+    ],
+  }
 };
