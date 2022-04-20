@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import React from 'react';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
@@ -12,12 +13,15 @@ Index.getInitialProps = async (ctx) => {
 
 function Index() {
   return (
-    <AdminLayout >
-      <AdminContentWrapper>
-          DashBoard 페이지
-      </AdminContentWrapper>
-    </AdminLayout>
-  )
+    <>
+      <Head>
+        <title>관리자 페이지 | 바프독</title>
+      </Head>
+      <AdminLayout>
+        <AdminContentWrapper>DashBoard 페이지</AdminContentWrapper>
+      </AdminLayout>
+    </>
+  );
 }
 
 export default Index
