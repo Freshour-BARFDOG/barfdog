@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Wrapper from "/src/components/common/Wrapper";
 import Gnb, { Gnb_my} from '/src/components/header/Gnb';
 import ServiceCenter from '/src/components/header/ServiceCenter';
-import User_class_box from '../atoms/User_class_box';
+import User_class_box from '/src/components/atoms/User_class_box';
 import Image from 'next/image';
 import Logo from '/public/img/logo.png';
 import Logo_2x from '/public/img/logo@2x.png';

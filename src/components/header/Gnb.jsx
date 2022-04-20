@@ -4,7 +4,7 @@ import s from '/styles/css/Header.module.scss';
 import Link from 'next/link';
 import Icon_mypage from '/public/img/icon/mypage.svg';
 import Icon_cart from '/public/img/icon/cart.svg';
-import DeadlineTimer from '../atoms/DeadlineTimer';
+import DeadlineTimer from '/src/components/atoms/DeadlineTimer';
 import SVG_subscribe from '/public/img/icon/subscribe.svg';
 
 

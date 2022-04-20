@@ -12,11 +12,15 @@ module.exports = {
   env: {
     SANITY_PROJECT_ID: "",
   },
-  webpack(config) {
+  webpack: (config)=> {
     config.module.rules.push({
       test: /\.svg$/,
       use: ["@svgr/webpack"],
     });
+    // config.node = {
+    //   fs: 'empty'
+    // };
+    // console.log(config);
 
     return config;
   },
