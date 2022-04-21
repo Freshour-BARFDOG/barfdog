@@ -45,7 +45,7 @@ input[type=radio]{
   &:checked{
     border-color: transparent;
     background-color: var(--color-main);
-    &:before, &:before{
+    &:before, &:after{
       opacity: 1;
     }
   }
