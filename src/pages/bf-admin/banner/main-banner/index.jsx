@@ -92,7 +92,7 @@ function MainBannerIndexPage() {
     <AdminLayout>
       <AdminContentWrapper>
         <h1 className="title_main">메인배너</h1>
-        <div className="inner">
+        <div className="cont">
           <div className="cont_header clearfix">
             <p className="cont_title cont-left" style={{ height: rem(44) }}>
               목록

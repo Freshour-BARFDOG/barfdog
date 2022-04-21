@@ -1,0 +1,44 @@
+
+$browser-context:16;
+@function rem($px, $context: $browser-context){
+  @return #{$px / $context}rem;
+}
+
+
+input[type=radio]{
+  appearance: initial;
+  border: rem(1) solid var(--color-line);
+  border-radius:50% !important;
+  width: rem(20);
+  height: rem(20);
+  display: inline-block;
+  background-color:transparent;
+  transition-property: border, background-color;
+  transition-timing-function:  ease-out;
+  transition-duration: .1s;
+  position: relative;
+  &:before{
+    content:"";
+    position: absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    width: 50%;
+    height:50%;
+    background-color:#fff;
+    opacity:0;
+    transition: inherit;
+    border-radius:50%;
+  }
+
+}
+
+
+
+input[type="radio"]:checked{
+  border-color: transparent;
+  background-color: var(--color-main);
+  &:before{
+    opacity: 1;
+  }
+}
