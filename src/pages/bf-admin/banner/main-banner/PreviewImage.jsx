@@ -5,21 +5,27 @@ import rem from '@src/components/atoms/rem';
 
 const Frame = styled.div`
   cursor: pointer;
-  width:100%;
+  width: 100%;
   min-width: ${rem(200)};
   max-width: ${rem(960)};
   height: ${rem(200)};
   display: block;
   background-color: #e1e2e3;
+  border: 1px solid var(--color-line);
+  box-sizing: border-box;
   margin-bottom: ${rem(10)};
   position: relative;
   aspect-ratio: 1920/450;
-  overflow:hidden;
+  overflow: hidden;
 
-  img{transition: transform 0.3s ease;}
+  img {
+    transition: transform 0.3s ease;
+  }
 
-  &:hover{
-    img{transform:scale(1.03)}
+  &:hover {
+    img {
+      transform: scale(1.03);
+    }
   }
 `;
 
