@@ -24,10 +24,6 @@ export default class CustomDocument extends Document {
         <Head>
           {/* <title>바프독 | Barf Dog</title> // * Page Level에서 title태그 사용할 것*/}
           <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, maximum-scale=1"
-          />
-          <meta
             name="description"
             content="내 반려동물에게 꼭 맞는 1:1 맞춤 플랜, 나이, 품종, 체중, 활동량, 알러지 등을 고려한 완벽한 식단을 간편하게 정기배송 받을 수 있습니다. 바프독 시작하기."
           />

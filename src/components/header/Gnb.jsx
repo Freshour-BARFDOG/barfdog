@@ -73,14 +73,14 @@ function Gnb() {
         <SubmenuList title="램&amp;비프" link="/recipe/labmAndBeef" />
       </MenuLayout>
       <MenuLayout title="커뮤니티">
-        <SubmenuList title="공지사항" link="/shop/goods" />
-        <SubmenuList title="이벤트" link="/event" />
-        <SubmenuList title="블로그" link="/blog" />
-        <SubmenuList title="어바웃" link="/shop/topping" />
+        <SubmenuList title="공지사항" link="/community/goods" />
+        <SubmenuList title="이벤트" link="/community/event" />
+        <SubmenuList title="블로그" link="/community/blog" />
+        <SubmenuList title="어바웃" link="/community/about" />
       </MenuLayout>
-      <MenuLayout title="리뷰" link="/community/review"/>
+      <MenuLayout title="리뷰" link="/review" />
     </>
-  )
+  );
 }
 
 export default Gnb;
