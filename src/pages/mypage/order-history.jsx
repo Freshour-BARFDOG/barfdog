@@ -9,7 +9,7 @@ function orderHistory() {
   return (
     <Layout>
       <Wrapper>
-        <MypageWrapper>마이페이지 __ 주문내역 인덱스 내용물자리</MypageWrapper>
+        <MypageWrapper>마이페이지 __ 주문내역 인덱스 내용물자리1111</MypageWrapper>
       </Wrapper>
     </Layout>
   );
