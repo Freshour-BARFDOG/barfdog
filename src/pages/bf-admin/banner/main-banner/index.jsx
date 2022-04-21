@@ -11,7 +11,7 @@ import rem from '@src/components/atoms/rem';
 
 export const Btn_LinkToPage = ({ href, name }) => {
   const Button = Styled.button`
-    background-color: var(--color-primary01);
+    background-color: var(--color-primary04);
     padding: ${rem(11)} 0;
     text-align: center;
     color: #fff;
@@ -91,7 +91,7 @@ function MainBannerIndexPage() {
   return (
     <AdminLayout>
       <AdminContentWrapper>
-        <h1 className="admin_title_main">메인배너</h1>
+        <h1 className="title_main">메인배너</h1>
         <div className="inner">
           <div className="cont_header clearfix">
             <p className="cont_title cont-left" style={{ height: rem(44) }}>
@@ -109,7 +109,7 @@ function MainBannerIndexPage() {
                   <button
                     type="button"
                     id="set_order"
-                    className="admin_btn line basic_l"
+                    className="admin_btn line basic_m"
                   >
                     순서편집
                   </button>

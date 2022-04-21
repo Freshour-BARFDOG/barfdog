@@ -12,7 +12,7 @@ module.exports = {
     filename: "compiled.js",
   },
   resolve: {
-    extensions: ['js','jsx'],
+    extensions: ['js','jsx', 'ts', 'tsx'],
     fallback: {
       fs: require.resolve("fs"),
     },

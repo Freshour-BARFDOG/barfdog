@@ -7,8 +7,23 @@ function createMainBannerPage() {
  return (
    <AdminLayout>
      <AdminContentWrapper>
-       <div className="admin_title_main">배너등록</div>ddd
-
+       <div className="title_main">
+         <h1>배너등록</h1>
+       </div>
+       <div className="inner">
+         <div className="inp_wrap">
+           <label htmlFor="bannerName">배너이름</label>
+           <div className="inp_box" id="bannerName">
+             <input type="text" placeholder="" />
+           </div>
+         </div>
+         <div className="inp_wrap">
+           <label htmlFor="">노출대상</label>
+           <div className="inp_box">
+             <input type="Radio" placeholder="" />
+           </div>
+         </div>
+       </div>
      </AdminContentWrapper>
    </AdminLayout>
  );
