@@ -29,7 +29,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "src/pages/index.jsx", "src/pages/_document.jsx", "src/components/admin/AdminHeader.jsx", "src/components/admin/AdminHeader.jsx", "src/components/admin/AdminWrapper.jsx", "src/pages/bf-admin/banner/main-banner/index.jsx"  ],
+, "src/pages/index.jsx", "src/pages/_document.jsx", "src/components/admin/AdminHeader.jsx", "src/components/admin/AdminHeader.jsx", "src/components/admin/AdminWrapper.tsx", "src/pages/bf-admin/banner/main-banner/index.jsx", "src/pages/bf-admin/banner/main-banner/createMainBanner.jsx"  ],
   "exclude": [
     "node_modules", "trash"
   ]
