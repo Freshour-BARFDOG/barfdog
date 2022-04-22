@@ -1,5 +1,6 @@
-/* ADMIN COMMON STYLE */
+@import '/styles/atoms/input-radio.module.scss';
 
+/* ADMIN COMMON STYLE */
 $browser-context:16;
 @function rem($px, $context: $browser-context){
   @return #{$px / $context}rem;
@@ -7,28 +8,133 @@ $browser-context:16;
 
 
 
-.title_main{
-  font-size: rem(24);
-  color:#000;
-  line-height: 1.4;
-  margin-bottom: rem(10);
-  *{ font-size:inherit}
+/* 
+  *  Admin Button EXAMPLE
+  *  <button className="admin_btn line basic_s">버튼</button>
+  *  <button className="admin_btn line basic_m">버튼</button>
+  *  <button className="admin_btn line basic_l">버튼</button>
+  *  <button className="admin_btn line confirm_m">버튼</button>
+  *  <button className="admin_btn line confirm_l">버튼</button>
+  *  <button className="admin_btn point popup">버튼</button>
+  *  <button className="admin_btn solid popup">버튼</button>
+*/
+
+
+.admin_btn{
+  display:inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border-radius: rem(2);
+  font-size:rem(14);
+  transition-property: background-color, border-color, color;
+  transition-duration: 0.15s;
+  transition-timing-function: ease;
+  pointer-events: all;
+  background-color: #fff;
+  cursor: pointer;
+
+  &.disabled{pointer-events: none;}
+
+  &.line{
+    border:1px solid var(--color-line);
+    color:#202020;
+    &.disabled{
+      border-color: var(--color-disabled);
+      color: var(--color-disabled);
+    }
+    &:hover{ 
+      border-color: #ababab;
+    }
+
+    
+  }
+
+
+  &.point{
+    border:1px solid var(--color-primary04);
+    color: var(--color-primary04);
+    &.disabled{
+      border-color: var(--color-point-disabled);
+      color: var(--color-point-disabled);
+    }
+    &:hover{ 
+      border-color: var(--color-primary01);
+      color: var(--color-primary01);
+    }
+  }
+
+
+  &.solid{
+    background-color: var(--color-primary04);
+    color:#fff;  
+    &.disabled{
+      background-color: var(--color-disabled);
+    }
+
+    &:hover{ 
+      background-color: var(--color-point-hover);
+    }
+  }
+
+  
+
+  /* non-fixed size */
+  &.basic_s{height:rem(26); padding: 0 rem(12);}
+  &.basic_m{height:rem(30); padding: 0 rem(12);}
+  &.basic_l{height:rem(38); padding: 0 rem(30); font-size:rem(15);}
+
+  /* fixed-size: 160 x 38 */
+  &.confirm_m{height:rem(38); width: rem(160); font-size:rem(15);}
+  /* fixed-size: 180 x 44 */
+  &.confirm_l{height:rem(44); width: rem(180); font-size:rem(15);}
+
+
+  /* fixed-size: 120 x 38 */
+  &.popup{height:rem(44); width: rem(120); font-size:rem(15);}
+
+
+  
 }
 
 
-#admin_page{
-
-  .inner{
-    background-color:#fff;
-    border: 1px solid var(--color-line);
-    padding: rem(30) rem(40);
-    
-    // .cont_header{
-    //   // border-bottom: 1px solid var(--color-line);
-    // }
 
 
+
+
+
+
+
+#admin_page {
+
+  $titleSectionWidth: rem(150);
+  $inputDefaultHeight: rem(38);
+  .errorMSG{padding-top:rem(4)}
+  .desc{font-size:rem(12); color:var(--color-font-medium); padding-top: rem(4)}
+  input::placeholder{font-size:rem(13); color: var(--color-font-light);}
+
+  .title_main {
+    font-size: rem(24);
+    color:#000;
+    line-height: 1.4;
+    margin-bottom: rem(10);
+    *{ font-size:inherit}
   }
+
+  .cont{
+    background-color:#fff;
+    border: 1px solid var(--color-line-light);
+    padding: rem(30) rem(40);
+    .cont_divider{
+      padding: rem(15) 0;
+      .cont_divider_title{margin-bottom:rem(20);}
+    }
+    .cont_divider:first-child{padding-top:0;}
+    .cont_divider:not(:last-child){border-bottom: rem(1) solid var(--color-line);}
+
+    
+  }
+
 
   .cont_header{
     padding-bottom: rem(15);
@@ -55,7 +161,10 @@ $browser-context:16;
     }
   }
 
-  .cont_viewer{
+
+
+
+  .cont_viewer {
     table{
       width: 100%;
       font-size: rem(15);
@@ -100,105 +209,72 @@ $browser-context:16;
     }
   }
 
-  .inp_wrap{
-    padding: rem(15) 0;
-    &:first-child{padding-top:0;}
-    .inp_box{
-      input{border-radius:0; min-width: rem(100);}
-      input.fullWidth{display:block;}
-      input.halfWidth{width:50%;}
+
+  .input_row{
+    display: flex;
+    align-items: flex-start;
+    &:not(:last-child){margin-bottom:rem(15);}
+    .title_section{
+      width:$titleSectionWidth;
+      font-size:rem(15);
+      
+      &.fixedHeight{
+        height: $inputDefaultHeight;
+        display: flex;
+        align-items: center;
+      }
+      .title{font-size:inherit; cursor: default;}
     }
-  }
-  .inp_wrap:not(:last-child){
-    border-bottom: rem(1) solid var(--color-line);
 
+    .inp_section {
+      width: calc(100% - rem(150));
+      .inp_wrap.file{display: block;}
+      .inp_wrap.radio{
+        display: flex;
+        align-items: center;
+        
+        .inp_box{
+          display: inline-flex;
+          justify-content: center;
+          align-items: center;
+           cursor: pointer;
+          .innerText{position: relative; top:rem(1); cursor: pointer;}
+        }
+      }
 
+      .inp_box{
+        color:#4d4d4d;
+        font-size: rem(14);
+        &.radio{
+          margin-right:rem(24);
+        }
+   
 
-  }
+        
+        input[type=radio]{margin-right:rem(6) !important;}
+        input:not([type="radio"], [type="checkbox"]){border-radius:0; min-width: rem(100);
+        height: $inputDefaultHeight}
 
-}
-
-
-
-/* 
-  *  Admin Button EXAMPLE
-  *  <button className="admin_btn line basic_s">버튼</button>
-  *  <button className="admin_btn line basic_m">버튼</button>
-  *  <button className="admin_btn line basic_l">버튼</button>
-  *  <button className="admin_btn line confirm_m">버튼</button>
-  *  <button className="admin_btn line confirm_l">버튼</button>
-  *  <button className="admin_btn point popup">버튼</button>
-  *  <button className="admin_btn solid popup">버튼</button>
-*/
-
-
-.admin_btn{
-  display:flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  border-radius: rem(2);
-  font-size:rem(14);
-  transition-property: background-color, border-color, color;
-  transition-duration: 0.15s;
-  transition-timing-function: ease;
-  pointer-events: all;
-
-  &.disabled{pointer-events: none;}
-
-  &.line{
-    border:1px solid var(--color-line);
-    color:#202020;
-    &.disabled{
-      border-color: var(--color-disabled);
-      color: var(--color-disabled);
-    }
-    &:hover{ 
-      border-color: #ababab;
+      }
     }
   }
 
 
-  &.point{
-    border:1px solid var(--color-primary04);
-    color: var(--color-primary04);
-    &.disabled{
-      border-color: var(--color-point-disabled);
-      color: var(--color-point-disabled);
-    }
-    &:hover{ 
-      border-color: var(--color-primary01);
-      color: var(--color-primary01);
-    }
-  }
+  input.fullWidth{width:100%;}
+  input.halfWidth{width:50%;}
 
-
-  &.solid{
-    background-color: var(--color-primary04);
-    color:#fff;
-    &.disabled{
-      background-color: var(--color-disabled);
-    }
-
-    &:hover{ 
-      background-color: var(--color-point-hover);
+  .cont-bottom{
+    padding-top: rem(20);
+    text-align:center;
+    .btn_section{
+      display:inline-block;
+      overflow: hidden;
+      > *{float:left;}
+      > *:not(:last-child){
+        margin-right:rem(10);
+      }
     }
   }
 
-  /* non-fixed size */
-  &.basic_s{height:rem(26); padding: 0 rem(12);}
-  &.basic_m{height:rem(30); padding: 0 rem(12);}
-  &.basic_l{height:rem(38); padding: 0 rem(30); font-size:rem(15);}
 
-  /* fixed-size: 160 x 38 */
-  &.confirm_m{height:rem(38); width: rem(160); font-size:rem(15);}
-  /* fixed-size: 180 x 44 */
-  &.confirm_l{height:rem(44); width: rem(180); font-size:rem(15);}
-
-
-  /* fixed-size: 120 x 38 */
-  &.popup{height:rem(44); width: rem(120); font-size:rem(15);}
-
-
-  
 }

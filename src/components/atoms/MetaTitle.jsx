@@ -2,12 +2,10 @@ import React from 'react';
 import Head from 'next/head';
 
 
-function MetaTitle(props) {
+function MetaTitle({title}) {
   return (
     <Head>
-      <title>
-        {`${props.title ? props.title : "바프독"} | Barf Dog`}
-      </title>
+      <title>{`${title ? title : "바프독"} | Barf Dog`}</title>
     </Head>
   );
 }

@@ -10,7 +10,9 @@ $list-height: rem(58);
 /* admin_nav */
 
 .admin_nav{
-  position: relative;
+  position: fixed;
+  top: $header-height;
+  left:0;
   float:left;
   padding:rem(20) 0;
   height: calc(100vh - $header-height);

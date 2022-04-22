@@ -45,8 +45,6 @@ export const List = ({ link, title, children }) => {
   };
 
   useEffect((e) => {
-    // 어떤 조건이 있다면,.....걔한테,  ,,,,active를 준다
-    //zz
     if (!dropdownRef.current) return;
     isOpen ? slideDown(dropdownRef.current) : slideUp(dropdownRef.current);
 
