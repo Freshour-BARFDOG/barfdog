@@ -26,6 +26,7 @@ $browser-context:16;
     }
     .bold {
       margin-bottom: rem(20);
+      b{display: block;}
 
       p{
         line-height: 120%;

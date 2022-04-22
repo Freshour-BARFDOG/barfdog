@@ -44,9 +44,8 @@ export const List = ({ link, title, children }) => {
     isOpen ? setIsOpen(false) : setIsOpen(true);
   };
 
-  useEffect((e) => {
+  useEffect(() => {
     if (!dropdownRef.current) return;
-    isOpen ? slideDown(dropdownRef.current) : slideUp(dropdownRef.current);
 
     // * 메뉴 열었을 경우, 다른 메뉴는 닫히게 하는 기능 => 추후 업데이트
     // if(isOpen){
