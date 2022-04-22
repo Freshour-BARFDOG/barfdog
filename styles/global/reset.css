@@ -187,8 +187,9 @@ select:-webkit-autofill:hover,
 select:-webkit-autofill:focus {
     transition: background-color 5000s ease-in-out 0s;
     -webkit-transition: background-color 9999s ease-out;
+    box-shadow: 0 0 0px 1000px white inset !important;
     -webkit-box-shadow: 0 0 0px 1000px white inset !important;
-    -webkit-text-fill-color: #fff !important;
+    -webkit-text-fill-color: #000 !important;
 }
 
 /* 폼 초기화 */

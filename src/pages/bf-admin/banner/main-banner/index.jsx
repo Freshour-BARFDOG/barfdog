@@ -20,6 +20,7 @@ export const Btn_LinkToPage = ({ href, name }) => {
     min-width: ${rem(160)};
     border-radius: ${rem(2)};
     height: ${rem(44)};
+    cursor:pointer;
   `;
   return (
     <Link href={href} passHref>
@@ -44,6 +45,8 @@ export const Btn_ToPage = ({ href, as, name }) => {
     border-radius: ${rem(2)};
     height: ${rem(44)};
   `;
+
+  
   return (
     <Link href={href} as={as ? as : ""} passHref>
       <a>

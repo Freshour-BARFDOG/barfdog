@@ -105,8 +105,13 @@ $browser-context:16;
 
 
 
-
 #admin_page {
+
+  $titleSectionWidth: rem(150);
+  $inputDefaultHeight: rem(38);
+  .errorMSG{padding-top:rem(4)}
+  .desc{font-size:rem(12); color:var(--color-font-medium); padding-top: rem(4)}
+  input::placeholder{font-size:rem(13); color: var(--color-font-light);}
 
   .title_main {
     font-size: rem(24);
@@ -207,11 +212,17 @@ $browser-context:16;
 
   .input_row{
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     &:not(:last-child){margin-bottom:rem(15);}
     .title_section{
-      width:rem(150);
+      width:$titleSectionWidth;
       font-size:rem(15);
+      
+      &.fixedHeight{
+        height: $inputDefaultHeight;
+        display: flex;
+        align-items: center;
+      }
       .title{font-size:inherit; cursor: default;}
     }
 
@@ -230,17 +241,19 @@ $browser-context:16;
           .innerText{position: relative; top:rem(1); cursor: pointer;}
         }
       }
+
       .inp_box{
         color:#4d4d4d;
         font-size: rem(14);
         &.radio{
           margin-right:rem(24);
         }
- 
+   
 
         
         input[type=radio]{margin-right:rem(6) !important;}
-        input:not([type="radio"], [type="checkbox"]){border-radius:0; min-width: rem(100);}
+        input:not([type="radio"], [type="checkbox"]){border-radius:0; min-width: rem(100);
+        height: $inputDefaultHeight}
 
       }
     }
@@ -253,17 +266,15 @@ $browser-context:16;
   .cont-bottom{
     padding-top: rem(20);
     text-align:center;
-  .btn_section{
-    display:inline-block;
-    overflow: hidden;
-    > *{float:left;}
-    > *:not(:last-child){
-      margin-right:rem(10);
+    .btn_section{
+      display:inline-block;
+      overflow: hidden;
+      > *{float:left;}
+      > *:not(:last-child){
+        margin-right:rem(10);
+      }
     }
   }
-  }
-
-
 
 
 }

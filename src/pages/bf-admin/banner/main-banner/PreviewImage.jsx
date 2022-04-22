@@ -17,16 +17,6 @@ const Frame = styled.div`
   position: relative;
   aspect-ratio: 1920/450;
   overflow: hidden;
-
-  img {
-    transition: transform 0.3s ease;
-  }
-
-  &:hover {
-    img {
-      transform: scale(1.03);
-    }
-  }
 `;
 
 const Img = styled.img`
