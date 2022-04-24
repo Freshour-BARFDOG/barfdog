@@ -3,10 +3,17 @@ import React from 'react';
 import AdminLayout from "@src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "@src/components/admin/AdminWrapper";
 import MainBannerList from './MainBannerList';
+// import { arrayMove, SortableContainer, SortableElement } from "react-sortable-hoc";
 
-
+// console.log(arrayMove)
 import Styled from 'styled-components';
 import rem from '@src/components/atoms/rem';
+
+
+
+// * 순서편집 클릭 -> 1. 저장버튼 2. 순서 변경 아이콘 등장
+
+// * 순서편집 에로우 클릭 -> 전체 순서 중에서, 클릭한 아이의 위치를 한 칸 올린다 & 내린다.
 
 
 export const Btn_LinkToPage = ({ href, name }) => {
@@ -32,29 +39,33 @@ export const Btn_LinkToPage = ({ href, name }) => {
 };
 
 
+const Btn_editOrder = () => {
+  return ;
+}
 
-export const Btn_ToPage = ({ href, as, name }) => {
-  const Button = Styled.button`
-    background-color: var(--color-primary01);
-    padding: ${rem(11)} 0;
-    text-align: center;
-    color: #fff;
-    font-size: ${rem(15)};
-    display:inline-block;
-    min-width: ${rem(160)};
-    border-radius: ${rem(2)};
-    height: ${rem(44)};
-  `;
+
+// export const Btn_ToPage = ({ href, as, name }) => {
+//   const Button = Styled.button`
+//     background-color: var(--color-primary01);
+//     padding: ${rem(11)} 0;
+//     text-align: center;
+//     color: #fff;
+//     font-size: ${rem(15)};
+//     display:inline-block;
+//     min-width: ${rem(160)};
+//     border-radius: ${rem(2)};
+//     height: ${rem(44)};
+//   `;
 
   
-  return (
-    <Link href={href} as={as ? as : ""} passHref>
-      <a>
-        <Button type="button">{name}</Button>
-      </a>
-    </Link>
-  );
-};
+//   return (
+//     <Link href={href} as={as ? as : ""} passHref>
+//       <a>
+//         <Button type="button">{name}</Button>
+//       </a>
+//     </Link>
+//   );
+// };
 
 
 
@@ -107,32 +118,35 @@ function MainBannerIndexPage() {
               />
             </div>
             <div className="controls cont-left">
-              <ul>
-                <li>
-                  <button
-                    type="button"
-                    id="set_order"
-                    className="admin_btn line basic_m"
-                  >
-                    순서편집
-                  </button>
-                </li>
-              </ul>
+              <button
+                type="button"
+                id="edit_order"
+                className="admin_btn line basic_m"
+              >
+                순서편집
+              </button>
+              <button
+                type="button"
+                id="set_order"
+                className="admin_btn line basic_m point"
+              >
+                저장
+              </button>
             </div>
           </div>
           <div className="cont_viewer">
-            <table>
-              <tr>
-                <th>순서</th>
-                <th>배너이름</th>
-                <th>이미지</th>
-                <th>노출대상</th>
-                <th>등록일</th>
-                <th>수정</th>
-                <th>삭제</th>
-              </tr>
+            <div className='table'>
+              <ul>
+                <li className='table_th'>순서</li>
+                <li className='table_th'>배너이름</li>
+                <li className='table_th'>이미지</li>
+                <li className='table_th'>노출대상</li>
+                <li className='table_th'>등록일</li>
+                <li className='table_th'>수정</li>
+                <li className='table_th'>삭제</li>
+              </ul>
               <MainBannerList items={AllData} />
-            </table>
+            </div>
           </div>
         </div>
         {/* inner */}

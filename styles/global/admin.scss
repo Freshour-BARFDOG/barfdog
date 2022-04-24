@@ -80,9 +80,9 @@ $browser-context:16;
   
 
   /* non-fixed size */
-  &.basic_s{height:rem(26); padding: 0 rem(12);}
-  &.basic_m{height:rem(30); padding: 0 rem(12);}
-  &.basic_l{height:rem(38); padding: 0 rem(30); font-size:rem(15);}
+  &.basic_s{white-space: nowrap; height:rem(26); padding: 0 rem(12);}
+  &.basic_m{white-space: nowrap; height:rem(30); padding: 0 rem(12);}
+  &.basic_l{white-space: nowrap; height:rem(38); padding: 0 rem(30); font-size:rem(15);}
 
   /* fixed-size: 160 x 38 */
   &.confirm_m{height:rem(38); width: rem(160); font-size:rem(15);}
@@ -153,53 +153,53 @@ $browser-context:16;
     padding-top: rem(15);
     margin-top: rem(15);
     border-top: rem(1) solid var(--color-line);
-    ul{
-      overflow:hidden;
-      li{
-        &:not(:last-child){margin-right:rem(5);}
-      }
-    }
+    overflow:hidden;
+
+    button:not(:last-child){margin-right:rem(5);}
   }
 
 
 
 
   .cont_viewer {
-    table{
+    .table{
       width: 100%;
       font-size: rem(15);
 
       /* border line */
       border: 1px solid var(--color-line);
-      th,td:not(:last-child){border-right: rem(1) solid var(--color-line);}
-      tr:not(:last-child){border-bottom: rem(1) solid var(--color-line);}
+      .table_th,span:not(:last-child){border-right: rem(1) solid var(--color-line);}
+      .item:not(:last-child){border-bottom: rem(1) solid var(--color-line);}
       .img-wrap{width:100%;height: 100%;}
       .cont_list{
-        li:not(:last-child){border-bottom: rem(1) solid var(--color-line);}
+        .item:not(:last-child){border-bottom: rem(1) solid var(--color-line);}
       }
-      tr{
+      
+      .item{
         display:grid;
         grid-gap:0;
         grid-template-rows: minmax(rem(60), auto);
         grid-template-columns:
-        rem(60)
-        minmax(rem(30), 1.4fr)
-        minmax(rem(30), 2.3fr)
-        minmax(rem(30), 1fr)
-        minmax(rem(30), 1fr)
-        minmax(rem(100), 1fr)
-        minmax(rem(100), 1fr);
+          rem(60)
+          minmax(rem(30), 1.4fr)
+          minmax(rem(30), 2.3fr)
+          minmax(rem(30), 1fr)
+          minmax(rem(30), 1fr)
+          rem(70)
+          rem(70);
+          // minmax(rem(100), 1fr)
+          // minmax(rem(100), 1fr);
 
 
-        th, td{
+        .table_th, span{
           display: flex;
           align-items: center;
           justify-content: center;
         }
-        td{padding: rem(5) rem(20);
+        span{padding: rem(5) rem(20);
           box-sizing: border-box;
         }
-        th{
+        .table_th{
           font-weight: 600;
           background-color:#f1f1f4;
           height: 100%;
