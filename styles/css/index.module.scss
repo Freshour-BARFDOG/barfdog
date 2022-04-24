@@ -247,24 +247,6 @@ section.sns{padding: rem(114) 0 rem(190)}
 }
 
 
-@media (max-width:600px){
-  .difference2 {
-    ul{
-      width: 100%;
-      li{
-        width:100%;
-      }
-      .text {
-        padding-top: 40px;
-        font-size: 4px;
-        height :80px;
-      }
-    }
-  }
-}
-
-
-
 
 .difference3 {
   position: relative;
@@ -280,21 +262,24 @@ section.sns{padding: rem(114) 0 rem(190)}
     position:absolute;
     top: 250px;
     left: 220px;
+    min-width: rem(200);
   }
 
   .textbox {
     position: absolute;
-    top: 280px;
-    right: 150px;
+    top: 0;
+    right:0;
+    transform:translate(calc(100% - rem(33)) , 30%);
     .text {
       li {
-        left : rem(-135);
-        top : rem(55);
+        left : 0;
+        top : 0;
         color: var(--color-main);
         font-size: 18px;
         display: block;
         position: relative;
         margin-bottom: rem(50);
+        padding-left: rem(130);
       }
       li::before {
         content: "";
@@ -303,7 +288,7 @@ section.sns{padding: rem(114) 0 rem(190)}
         background-color: var(--color-main);
         position: absolute;
         top : 0px;
-        left:rem(-130);
+        left:0;
         bottom: 0px;
         margin: auto;
       }
@@ -316,7 +301,7 @@ section.sns{padding: rem(114) 0 rem(190)}
         position: absolute;
         top : 0px;
         bottom: 0px;
-        left:-130px;
+        left: 0;
         margin: auto;
       }
     }
@@ -686,3 +671,149 @@ section.sns{padding: rem(114) 0 rem(190)}
   .swiper-button-prev{left:rem(-14)}
   .swiper-button-next{right:rem(-14)}
 }
+
+
+
+
+
+/* RESPONSIVE */
+@media (max-width:1200px){
+
+}
+
+/* @media (max-width:1080px){
+
+}
+
+@media (max-width:768px){
+
+} */
+
+@media (max-width:600px){
+  section.recipe_info{padding: rem(60) 0 rem(50)}
+  section.barfraw{padding: rem(40) 0 rem(80)}
+  section.barfgood{padding: rem(120) 0 rem(132)}
+  section.difference{padding: rem(60) 0 rem(50)}
+  section.difference2{padding: rem(40) 0 rem(50)}
+  // section.difference3{padding: rem(120) 0 rem(150)}
+  // section.clientWorry{padding: rem(120) 0 rem(120)}
+  // section.review{padding: rem(150) 0 rem(200)}
+  // section.Howtouse{padding: rem(120) 0 rem(120)}
+  
+  // section.sns{padding: rem(114) 0 rem(190)}
+  .barfraw {
+    .inner {
+      display: block;
+      .leftbox {
+        position: relative;
+        width: 100%;
+        height: rem(335);
+      }
+      .rightbox {
+        margin-top: rem(40);
+        width  : 100%;
+        margin-left:0;
+        p,h1,h3 {position: relative; top:initial;}
+        P{display: none;}
+      }
+    }
+  }
+
+
+
+
+  .difference2 {
+    ul{
+      display: block;
+      width: 100%;
+      li{
+        margin:0;
+        width:100%;
+      }
+      .text {
+        padding-top: rem(30);
+        font-size: rem(16);
+        height :rem(80);
+      }
+    }
+  }
+
+.difference3 {
+  .title{
+    width:rem(148);
+    margin: 0 auto;
+    font-size:rem(38);
+    font-size: 7.4vw;
+    letter-spacing: rem(1);
+  }
+  .image {
+    margin-left: rem(10);
+    margin-right: rem(125);
+    min-width: rem(200);
+    display: block;
+    position:relative;
+    top: 0;
+    left: 0;
+  }
+}
+
+
+.clientWorry{
+  .cont-left{
+    width:100%;
+    margin-right:0;
+  }
+
+  .cont-right{
+    width:100%;
+  }
+
+
+  .cont_section{
+    > ul{
+      > li{
+        width:100%;
+        float: none;
+        &:not(:last-child){
+        margin-right:rem(0);
+        }
+      }
+    }
+  }
+
+  .card{
+    width: 100%;
+    padding: rem(40) rem(30) ;
+    max-width: auto;
+
+    .img-wrap{
+      margin-bottom: rem(20);
+      width:rem(100);
+      height:rem(100);
+    }
+
+    
+    .details{
+      ul{
+        // height: rem(360);
+        li{
+          &:last-child{
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+}
+
+
+
+
+
+@media (max-width:320px){
+
+}
+

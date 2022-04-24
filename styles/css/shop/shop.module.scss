@@ -1,0 +1,193 @@
+$browser-context:16;
+// convert px to rem
+@function rem($px, $context: $browser-context){
+  @return #{$px / $context}rem;
+}
+
+section.top{padding : rem(40) 0 rem(27)}
+section.mid{padding : 0 0 rem(37) 0}
+section.bot{padding : 0 0 rem(451) 0 }
+
+.top {
+  .inner{
+    .title{      
+      font-family: 'Noto Sans';
+      font-style: normal;
+      font-weight: 700;
+      font-size: rem(32);
+      line-height: 120%;
+    }
+  }
+}
+.mid {
+  .inner {
+    .menu_box {
+      .menu{
+        display: flex;
+        li{
+          position: relative;
+          &::before {
+            content: "";
+            width: rem(1);
+            height: rem(16);
+            background-color: #ddd;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+            
+             
+          }
+          &:first-child::before {
+            display: none;
+          } 
+
+          
+          &:not(:first-child){
+            a {
+            padding-left: rem(30);
+            }
+          }
+          
+          a {
+            font-family: 'Pretendard Variable';
+            font-weight: 600;
+            font-size: rem(16);
+            line-height: rem(19);
+            padding-right: rem(30);
+            // padding-left: rem(30);
+            
+            display: block;
+            color: #4D4D4D;
+            
+          }
+          
+
+
+        }
+      }
+    }
+  }
+}
+
+
+.bot {
+  .inner {
+    .shop_list {
+      width: rem(360);
+      .img-wrap{
+        width: rem(360);
+        height: rem(360);
+      }
+      .text_box{
+        .title{
+          width: 100%;
+          padding-top: rem(4);
+          font-family: 'Pretendard Variable';
+          font-size: 18px;
+          line-height: 140%;
+          color: #202020;
+          
+        }
+        .price_box {
+          display: flex;
+          padding-top: rem(6);
+          align-items: center;
+          
+          .price {
+            display: inline-block;
+            padding-right : rem(3);
+            font-family: 'Pretendard Variable';
+            font-weight: 600;
+            font-size: rem(24);
+            line-height: 120%;
+            color: #202020;
+            letter-spacing: rem(1.5);
+          }
+          .won {
+            position: relative;
+            top: rem(4);
+            margin-right: rem(10);
+            display: inline-block;
+            padding-bottom: rem(2);
+            font-family: 'Pretendard Variable';
+            font-size: rem(16);
+            line-height: 140%;
+            color:#636363;
+          }
+          .position_mid{
+            display: flex;
+            // height: 40px;
+            // display: ;
+            // display: block;
+            // height: 20px;
+            // position:absolute;
+            // top: 0;
+            // bottom: 0;
+            // margin-top: auto;
+
+
+            
+            .out_of_stock{
+              display: inline-block;
+              width: 22px;
+              width: 100%;
+              text-align: center;
+              position: relative;
+              top:rem(-2);
+              letter-spacing: 2px;
+              // padding-top: 4px;
+              padding:rem(5) rem(10) 0 ;
+              
+              font-family: 'Pretendard Variable';
+              font-weight: 00;
+              font-size: rem(14);
+              line-height: 140%;
+              color:#fff;
+              // background-color: var(--color-main);
+              background-color: #909090
+              ;
+            }
+          }
+        }
+      }
+
+      .grade_box {
+        display: flex;
+        padding-top: rem(4);
+
+        .star_box {
+          display : flex;
+          align-items: center;
+          margin-right: rem(1);
+
+          .yellow_star {
+            width: rem(14);
+            height: rem(14);
+            // display: none;
+            margin-right: rem(5);
+          }
+
+          .dark_star {
+            width: rem(10);
+            height: rem(10);
+            margin-right: rem(5);
+            display : none;
+          }
+        }
+        .avg_score {
+          color: #CA1010;
+          margin-right: rem(7);
+          font-size: rem(14);
+          font-weight: 500;
+        }
+        .nuber_comment {
+          color: #636363;
+          font-size: rem(14);
+          font-weight: 500;
+
+        }
+      }
+    }
+  }
+}

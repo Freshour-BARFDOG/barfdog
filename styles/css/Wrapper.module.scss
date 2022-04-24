@@ -26,7 +26,7 @@ $browser-context:16; // html font-size:
 /* RESPONSIVE */
 @media (max-width:1200px){
     
-  .container__outer{
+  .container_outer{
     .container{
       width: 100%;
       &.fullWidth{
@@ -48,12 +48,12 @@ $browser-context:16; // html font-size:
 }
 
 @media (max-width:600px){
-    .container__outer{
+  .container_outer{
     .container{
       .row{
         padding: 0 rem(20);
       }
-    }
+    }                                                               
   }
 
 

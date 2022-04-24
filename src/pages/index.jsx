@@ -368,7 +368,9 @@ function Swiper_sns() {
     modules: [Navigation], //존재하면 쓸수있음
   };
 
-
+  useEffect(() => {
+    window.innerWidth <= 600 ? setIsMobile(true) : setIsMobile(false);
+  }, [isMobile]);
 
   return (
     <div className={Styles.swiper_sns_outerWrap}>
@@ -740,23 +742,23 @@ function Home() {
             {/* <div className={Styles.} */}
             <h2 className={Styles.title}>PREMIUM REAL BARF</h2>
             <div className={Styles.image}>
-              <Image src={barfPack} alt="" />
+              <Image src={barfPack} alt="인공 조미료" />
+              <div className={Styles.textbox}>
+                <ul className={Styles.text}>
+                  <li>영양보존 100%</li>
+                  <li>100% 휴먼그레이드</li>
+                  <li>인공화학물 FREE</li>
+                  <li>인공감미료 FREE</li>
+                </ul>
+              </div>
             </div>
 
-            <div className={Styles.textbox}>
-              <ul className={Styles.text}>
-                <li>영양보존 100%</li>
-                <li>100% 휴먼그레이드</li>
-                <li>인공화학물 FREE</li>
-                <li>인공감미료 FREE</li>
-              </ul>
-            </div>
           </section>
         </Wrapper>
 
         {/* 고민 */}
         <Wrapper bgColor="#F9F2EC">
-          <section className={Styles.clientWorry}>
+          <section className={Styles.clientWorry} style={{backgroundColor:'#F9F2EC'}}>
             <div className={`${Styles.inner} clearfix`}>
               <div className={`${Styles["cont-left"]} cont-left`}>
                 <div className={Styles.title_section}>
@@ -769,7 +771,7 @@ function Home() {
                     있습니다.완벽한 비율으로 구성해 반려견이 필요한 영양분을
                     골고루섭취할 수 있습니다.완벽한 비율으로
                   </p>
-                  <button type="button" className={`${Styles.btn_main}`}>
+                  <button type="button" className={`${Styles.btn_main} web`}>
                     바프생식 둘러보기
                   </button>
                 </div>

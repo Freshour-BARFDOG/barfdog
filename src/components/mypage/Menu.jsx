@@ -48,18 +48,18 @@ export const List = ({ link, title, children }) => {
     if (!dropdownRef.current) return;
 
     // * 메뉴 열었을 경우, 다른 메뉴는 닫히게 하는 기능 => 추후 업데이트
-    // if(isOpen){
-    //   slideDown(dropdownRef.current);
-    //   const siblingsParent = siblings(menuListRef.current);
-    //   siblingsParent.forEach((parent) => {
-    //     const sibMenu = parent.querySelector("ul");
-    //     if (sibMenu) {
-    //       slideUp(sibMenu);
-    //     }
-    //   });
-    // }else{
-    //   slideUp(dropdownRef.current);
-    // }
+    if(isOpen){
+      slideDown(dropdownRef.current);
+      const siblingsParent = siblings(menuListRef.current);
+      siblingsParent.forEach((parent) => {
+        const sibMenu = parent.querySelector("ul");
+        if (sibMenu) {
+          slideUp(sibMenu);
+        }
+      });
+    }else{
+      slideUp(dropdownRef.current);
+    }
   }, [isOpen]);
 
 
