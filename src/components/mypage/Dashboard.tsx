@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import s from "@styles/css/mypage/menu_dashboard.module.scss";
+import s from "/styles/css/mypage/menu_dashboard.module.scss";
 import User_counter_viewer from "./User_counter_viewer";
 import Image from "next/image";
 import { IoMdMail } from "react-icons/io";
