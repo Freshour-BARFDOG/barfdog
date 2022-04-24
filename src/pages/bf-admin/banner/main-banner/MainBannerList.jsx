@@ -9,10 +9,10 @@ export default function MainBannerList({items}) {
   if(!items)return;
 
   return (
-    <div className="cont_list">
+    <ul className="table_body">
       {items.map((data, index) => {
         return (
-          <div key={index} className="item">
+          <li key={index} className="item">
             <span>{data.order}</span>
             <span>{data.name}</span>
             <span>
@@ -33,11 +33,9 @@ export default function MainBannerList({items}) {
             <span>
               <button className="admin_btn basic_s solid">삭제</button>
             </span>
-          </div>
+          </li>
         );
-        
       })}
-     
-    </div>
+    </ul>
   );
 }

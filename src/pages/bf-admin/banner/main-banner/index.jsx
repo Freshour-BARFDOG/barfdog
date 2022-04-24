@@ -44,45 +44,11 @@ const Btn_editOrder = () => {
 }
 
 
-// export const Btn_ToPage = ({ href, as, name }) => {
-//   const Button = Styled.button`
-//     background-color: var(--color-primary01);
-//     padding: ${rem(11)} 0;
-//     text-align: center;
-//     color: #fff;
-//     font-size: ${rem(15)};
-//     display:inline-block;
-//     min-width: ${rem(160)};
-//     border-radius: ${rem(2)};
-//     height: ${rem(44)};
-//   `;
-
-  
-//   return (
-//     <Link href={href} as={as ? as : ""} passHref>
-//       <a>
-//         <Button type="button">{name}</Button>
-//       </a>
-//     </Link>
-//   );
-// };
-
-
-
-
-// interface BannerList {
-//   order: number,
-//   name: string,
-//   link: string,
-//   exp_target: string,
-//   reg_date: string
-// }
 
 
 
 function MainBannerIndexPage() {
 
-  // const exampleData: BannerList[] = [];
 
   const AllData= [
     {
@@ -136,7 +102,7 @@ function MainBannerIndexPage() {
           </div>
           <div className="cont_viewer">
             <div className='table'>
-              <ul>
+              <ul className='table_header'>
                 <li className='table_th'>순서</li>
                 <li className='table_th'>배너이름</li>
                 <li className='table_th'>이미지</li>

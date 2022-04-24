@@ -47,7 +47,8 @@ export const List = ({ link, title, children }) => {
   useEffect(() => {
     if (!dropdownRef.current) return;
 
-    if (isOpen) {
+    // * 메뉴 열었을 경우, 다른 메뉴는 닫히게 하는 기능 => 추후 업데이트
+    if(isOpen){
       slideDown(dropdownRef.current);
       const siblingsParent = siblings(menuListRef.current);
       siblingsParent.forEach((parent) => {
@@ -56,11 +57,9 @@ export const List = ({ link, title, children }) => {
           slideUp(sibMenu);
         }
       });
-    } else {
+    }else{
       slideUp(dropdownRef.current);
     }
-
-    // * 메뉴 열었을 경우, 다른 메뉴는 닫히게 하는 기능 -> 필요 유무?
   }, [isOpen]);
 
 
