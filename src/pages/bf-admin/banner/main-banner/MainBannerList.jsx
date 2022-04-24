@@ -65,8 +65,8 @@ export default function MainBannerList({items}) {
       disableAutoscroll
       className="table_body"
     >
-      {itemList.map((item, index) => <SortableItem key={`item-${index}`} index={index} item={item} />
-      )}
+      {/* {itemList.map((item, index) => <SortableItem key={`item-${index}`} index={index} item={item} />
+      )} */}
     </SortableContainer>
   );
 }
