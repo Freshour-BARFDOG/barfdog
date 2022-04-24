@@ -1,34 +1,31 @@
 import Link from 'next/link';
-import React from 'react';
+import React, { useState } from "react";
 import AdminLayout from "@src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "@src/components/admin/AdminWrapper";
 import MainBannerList from './MainBannerList';
-// import { arrayMove, SortableContainer, SortableElement } from "react-sortable-hoc";
 
-// console.log(arrayMove)
 import Styled from 'styled-components';
 import rem from '@src/components/atoms/rem';
 
 
-
 // * 순서편집 클릭 -> 1. 저장버튼 2. 순서 변경 아이콘 등장
-
 // * 순서편집 에로우 클릭 -> 전체 순서 중에서, 클릭한 아이의 위치를 한 칸 올린다 & 내린다.
 
+const Button = Styled.button`
+  background-color: var(--color-primary04);
+  padding: ${rem(11)} 0;
+  text-align: center;
+  color: #fff;
+  font-size: ${rem(15)};
+  display:inline-block;
+  min-width: ${rem(160)};
+  border-radius: ${rem(2)};
+  height: ${rem(44)};
+  cursor:pointer;
+`;
 
 export const Btn_LinkToPage = ({ href, name }) => {
-  const Button = Styled.button`
-    background-color: var(--color-primary04);
-    padding: ${rem(11)} 0;
-    text-align: center;
-    color: #fff;
-    font-size: ${rem(15)};
-    display:inline-block;
-    min-width: ${rem(160)};
-    border-radius: ${rem(2)};
-    height: ${rem(44)};
-    cursor:pointer;
-  `;
+
   return (
     <Link href={href} passHref>
       <a>
@@ -48,9 +45,7 @@ const Btn_editOrder = () => {
 
 
 function MainBannerIndexPage() {
-
-
-  const AllData= [
+  const items = [
     {
       order: 1,
       name: "메인배너",
@@ -65,7 +60,17 @@ function MainBannerIndexPage() {
       exp_target: "회원",
       reg_date: "22/04/19",
     },
+    {
+      order: 3,
+      name: "메인배너3",
+      link: "https://images.unsplash.com/photo-1650210923764-ca790a46e632?ixlib=rb-1.2.1",
+      exp_target: "전체",
+      reg_date: "22/05/19",
+    },
   ];
+
+
+
 
 
   return (
@@ -101,17 +106,17 @@ function MainBannerIndexPage() {
             </div>
           </div>
           <div className="cont_viewer">
-            <div className='table'>
-              <ul className='table_header'>
-                <li className='table_th'>순서</li>
-                <li className='table_th'>배너이름</li>
-                <li className='table_th'>이미지</li>
-                <li className='table_th'>노출대상</li>
-                <li className='table_th'>등록일</li>
-                <li className='table_th'>수정</li>
-                <li className='table_th'>삭제</li>
+            <div className="table">
+              <ul className="table_header">
+                <li className="table_th">순서</li>
+                <li className="table_th">배너이름</li>
+                <li className="table_th">이미지</li>
+                <li className="table_th">노출대상</li>
+                <li className="table_th">등록일</li>
+                <li className="table_th">수정</li>
+                <li className="table_th">삭제</li>
               </ul>
-              <MainBannerList items={AllData} />
+              <MainBannerList items={items} />
             </div>
           </div>
         </div>

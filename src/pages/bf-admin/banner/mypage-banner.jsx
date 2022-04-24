@@ -6,7 +6,7 @@ function MypageBanner() {
   return (
     <AdminLayout>
       <AdminContentWrapper>
-        메인배너 페이지 
+        마이페이지 배너 페이지 
 
       </AdminContentWrapper>
     </AdminLayout>
