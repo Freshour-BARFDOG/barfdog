@@ -45,8 +45,6 @@ module.exports = {
     ],
   },
   async rewrites() {
-    console.log(process.env.NEXT_PUBLIC_TEST);
-    // console.log(process.env.SOURCE_PATH);
     if (process.env.NODE_ENV !== "production") {
       return [
         {
