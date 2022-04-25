@@ -11,7 +11,6 @@ import getElemIdx from "@util/func/getElemIdx.js";
 const changeArrayOrder = function (list, targetIdx, moveValue) {
   // 배열값이 없는 경우 나가기
   if (list.length < 0) return;
-
   // 이동할 index 값을 변수에 선언
   const newPosition = targetIdx + moveValue;
 
@@ -32,15 +31,10 @@ const changeArrayOrder = function (list, targetIdx, moveValue) {
 
 
 const removeArray = function (list, targetIdx) {
-  // 배열값이 없는 경우 나가기
   if (list.length < 0) return;
-
-  // 임의의 변수를 하나 만들고 배열 값 저장
-
-  // 옮길 대상을 기존 배열에서 분리 및 target 변수에 저장
   const target = list.splice(targetIdx, 1)[0]; // splice (n번 째배열, n개 삭제
-  // console.log(tempList.splice(targetIdx, 1)[0]);
   console.log(target);;
+  console.log(list);
 
   return list;
 };
@@ -51,28 +45,29 @@ const removeArray = function (list, targetIdx) {
 
 export default function MainBannerList({ items, setItemList, editListOrder }) {
 
-
   useEffect(() => {
     setItemList(items);
   }, [items, setItemList]);
 
-  if (!items.length) return;
-
 
 
   const onAscendingHandler = (e) => {
+    // const target = e.currentTarget.closest("li");
+    // const children = [...target.parentNode.children];
+    // const targetIdx = children.indexOf(target);
     const target = e.currentTarget.closest("li");
-    const children = [...target.parentNode.children];
-    const targetIdx = children.indexOf(target);
+    const targetIdx = getElemIdx(target);
     const newItemList = changeArrayOrder(items, targetIdx, -1);
     if (newItemList) setItemList(newItemList);
   };
 
 
   const onDescendingHandler = (e) => {
+    // const target = e.currentTarget.closest("li");
+    // const children = [...target.parentNode.children];
+    // const targetIdx = children.indexOf(target);
     const target = e.currentTarget.closest("li");
-    const children = [...target.parentNode.children];
-    const targetIdx = children.indexOf(target);
+    const targetIdx = getElemIdx(target);
     const newItemList = changeArrayOrder(items, targetIdx, 1);
     if (newItemList) setItemList(newItemList);
   };
@@ -92,13 +87,13 @@ export default function MainBannerList({ items, setItemList, editListOrder }) {
 
   const onDeleteItemHandler = (e) => {
      const target = e.currentTarget.closest("li");
-     const children = [...target.parentNode.children];
-     const targetIdx = children.indexOf(target);
+     const targetIdx = getElemIdx(target);
+     //  const children = [...target.parentNode.children];
+      // const targetIdx = children.indexOf(target);
 
-     console.log('delete');
-     console.log(getElemIdx(target));
+     removeArray(items, targetIdx);
+    //  console.log('delete');
     //  target.remove(); // view에서 안보이게 만듦
-    //  removeArray(items);
   }
 
 

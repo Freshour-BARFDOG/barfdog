@@ -60,7 +60,6 @@ function MainBannerIndexPage() {
         setItemList(originItemList); // 원래 아이템리스트로 초기화한다.
         setConfirmListOrder(false);
       }
-
     } else {
       console.log("에딧: 비활성 -> 활성");
       setEditListOrder(true);
