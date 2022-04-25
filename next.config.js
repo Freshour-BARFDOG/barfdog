@@ -58,8 +58,8 @@ module.exports = {
     }else {
        return [
          {
-           destination: process.env.DESTINATION_URL,
-           source: process.env.SOURCE_PATH,
+           source: "/:path*",
+           destination: "http://211.219.225.118:9999/:path*", // Proxy to Backend
          },
        ];
     }
