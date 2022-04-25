@@ -24,6 +24,7 @@ import ArrowLeft_s from "/public/img/icon/swiper-arrow-small-l.svg";
 import ArrowRight_s from "/public/img/icon/swiper-arrow-small-r.svg";
 //////////////////////////////////////////////////
 
+console.log(process.env.NEXTPUBLIC_TEST);
 /* Images */
 import Image from "next/image";
 // import Mainbanner from '/public/img/testBanner.png';

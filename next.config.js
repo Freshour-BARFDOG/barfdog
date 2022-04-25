@@ -27,9 +27,9 @@ module.exports = {
       ...config,
       mode: prod ? "production" : "development",
     };
-    // if (prod) {
-    //   newConfig.devtool = "hidden-source-map";
-    // }
+    if (prod) {
+      newConfig.devtool = "hidden-source-map";
+    }
     config.module.rules.push({
       test: /\.svg$/,
       use: ["@svgr/webpack"],
@@ -45,13 +45,8 @@ module.exports = {
     ],
   },
   async rewrites() {
-    console.log("Rewrites called");
-    return [
-      {
-        destination: process.env.DESTINATION_URL,
-        source: process.env.SOURCE_PATH,
-      },
-    ];
+    console.log(process.env.NEXT_PUBLIC_TEST);
+    // console.log(process.env.SOURCE_PATH);
     if (process.env.NODE_ENV !== "production") {
       return [
         {

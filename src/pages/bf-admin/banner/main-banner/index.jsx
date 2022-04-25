@@ -10,9 +10,17 @@ import MetaTitle from "@src/components/atoms/MetaTitle";
 
 
 import test from '@core/api/test';
-
 test();
 
+// SAMPLE 환경변수 사용하기
+// export async function getStaticProps() {
+//   const db = await myDB.connect({
+//     host: process.env.DB_HOST,
+//     username: process.env.DB_USER,
+//     password: process.env.DB_PASS,
+//   })
+//   // ...
+// }
 
 function MainBannerIndexPage() {
 

@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "nodemon --watch src/ web.js",
     "nextDev": "next dev -p 4000",
-    "build": "next build",
+    "build:dev": "env-cmd -f ./env/.env.development next build",
     "start": "next start",
     "lint": "next lint"
   },
