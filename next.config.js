@@ -46,19 +46,19 @@ module.exports = {
   },
   async rewrites() {
     console.log("Rewrites called");
-    console.log(process.env.NODE_ENV);
-    return process.env.NODE_ENV !== "production"
-      ? [
-          {
-            destination: process.env.DESTINATION_URL,
-            source: process.env.SOURCE_PATH,
-          },
-        ]
-      : [
-          {
-            destination: process.env.DESTINATION_URL,
-            source: process.env.SOURCE_PATH,
-          },
-        ];
+    return [
+      {
+        destination: process.env.DESTINATION_URL,
+        source: process.env.SOURCE_PATH,
+      },
+    ];
+    if (process.env.NODE_ENV !== "production") {
+      return [
+        {
+          destination: process.env.DESTINATION_URL,
+          source: process.env.SOURCE_PATH,
+        },
+      ];
+    }
   },
 };
