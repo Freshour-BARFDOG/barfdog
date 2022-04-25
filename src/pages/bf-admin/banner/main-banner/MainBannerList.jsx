@@ -44,10 +44,13 @@ const removeArray = function (list, targetIdx) {
 
 
 export default function MainBannerList({ items, setItemList, editListOrder }) {
+  console.log(items);
 
   useEffect(() => {
     setItemList(items);
   }, [items, setItemList]);
+  
+  if(!items) return;
 
 
 
