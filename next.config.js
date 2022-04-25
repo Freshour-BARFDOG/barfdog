@@ -45,6 +45,9 @@ module.exports = {
     ],
   },
   async rewrites() {
+    console.log(process.env.NODE_ENV !== "production");
+    console.log(process.env.DESTINATION_URL);
+    console.log(process.env.SOURCE_PATH);
     if (process.env.NODE_ENV !== "production") {
       return [
         {
@@ -52,6 +55,13 @@ module.exports = {
           source: process.env.SOURCE_PATH,
         },
       ];
+    }else {
+       return [
+         {
+           destination: process.env.DESTINATION_URL,
+           source: process.env.SOURCE_PATH,
+         },
+       ];
     }
   },
 };
