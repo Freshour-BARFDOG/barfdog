@@ -45,12 +45,13 @@ module.exports = {
     ],
   },
   async rewrites() {
-    return [
-      {
-        source: "/:path*",
-        // destination: "http://211.219.225.118:9999/:path*", // Proxy to Backend
-        destination: "http://localhost:4000/:path*", // Proxy to Backend
-      },
-    ];
+        if (process.env.NODE_ENV !== "production") {
+          return [
+            {
+              destination: process.env.DESTINATION_URL,
+              source: process.env.SOURCE_PATH,
+            },
+          ];
+        }
   },
 };

@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import React, { useState, useEffect } from "react";
 import s from "./mainBanner.module.scss";
+import Link from 'next/link';
 import Ascend from '/public/img/icon/btn_ascend.svg';
 import Descend from '/public/img/icon/btn_descend.svg';
 import getElemIdx from "@util/func/getElemIdx.js";
@@ -44,7 +45,6 @@ const removeArray = function (list, targetIdx) {
 
 
 export default function MainBannerList({ items, setItemList, editListOrder }) {
-  console.log(items);
 
   useEffect(() => {
     setItemList(items);
@@ -91,12 +91,14 @@ export default function MainBannerList({ items, setItemList, editListOrder }) {
   const onDeleteItemHandler = (e) => {
      const target = e.currentTarget.closest("li");
      const targetIdx = getElemIdx(target);
-     //  const children = [...target.parentNode.children];
-      // const targetIdx = children.indexOf(target);
 
-     removeArray(items, targetIdx);
-    //  console.log('delete');
-    //  target.remove(); // view에서 안보이게 만듦
+    //  console.log(items[targetIdx].name);
+     const bannerName = items[targetIdx].name;;
+      if (confirm(`선택된 배너(${bannerName})를 정말 삭제하시겠습니까?`)) {
+        removeArray(items, targetIdx);
+        target.remove(); // view에서 안보이게 만듦;
+        //// * 삭제하고나서 ............ 순서....를 업데이트 해줘야한다.
+      }
   }
 
 
@@ -112,18 +114,22 @@ export default function MainBannerList({ items, setItemList, editListOrder }) {
             objectFit="contain"
             layout="fill"
           ></Image>
-          <Image
+          {/* <Image
             src={require("/public/img/icon/Subscription.png")}
             alt="메인배너 이미지"
             objectFit="contain"
             layout="fill"
-          ></Image>
+          ></Image> */}
         </figure>
       </span>
       <span>{item.exp_target}</span>
       <span>{item.reg_date}</span>
       <span>
-        <button className="admin_btn basic_s solid">수정</button>
+        <Link href="/bf-admin/banner/main-banner/editMainBanner" passHref>
+          <a>
+            <button className="admin_btn basic_s solid">수정</button>
+          </a>
+        </Link>
       </span>
       <span>
         <button

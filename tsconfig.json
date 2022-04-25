@@ -6,6 +6,7 @@
       "@public/*": ["public/*"],
       "@styles/*": ["styles/*"],
       "@util/*": ["util/*"],
+      "@core/*": ["core/*"],
     },
     "target": "es5",
     "lib": [

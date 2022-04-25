@@ -9,8 +9,9 @@ import MetaTitle from "@src/components/atoms/MetaTitle";
 
 
 
+import test from '@core/api/test';
 
-
+test();
 
 
 function MainBannerIndexPage() {
@@ -50,18 +51,19 @@ function MainBannerIndexPage() {
   const onEditHandler = () => {
 
     if (editListOrder) {
-      console.log("에딧: 활성 -> 비활성");
+      // console.log("에딧: 활성 -> 비활성");
       setEditListOrder(false);
       if(confirmListOrder){
-        console.log('변경된 아이템리스트 저장');
+        // console.log('변경된 아이템리스트 저장');
         setItemList(itemList); // 현재 변경된 아이템리스트를 넣어야한다.
+        setOriginItemList(itemList);
       }else{
-        console.log('아이템리스트 초기화');
+        // console.log('아이템리스트 초기화');
         setItemList(originItemList); // 원래 아이템리스트로 초기화한다.
         setConfirmListOrder(false);
       }
     } else {
-      console.log("에딧: 비활성 -> 활성");
+      // console.log("에딧: 비활성 -> 활성");
       setEditListOrder(true);
       setConfirmListOrder(false);
     }; 

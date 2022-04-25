@@ -1,27 +1,19 @@
-import React, {
-  useState,
-  useEffect,
-} from "react";
-import { useRouter } from "next/router";
+import React, { useState, useRef, useEffect, useCallback } from "react";
+
 import MetaTitle from "@src/components/atoms/MetaTitle";
 import AdminLayout from "@src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "@src/components/admin/AdminWrapper";
 import InputRadio from "./InputRadio";
 import Fake_input from "./fake_input";
-import PreviewImage from './PreviewImage';
-import ErrorMessage from '/src/components/atoms/ErrorMessage';
+import PreviewImage from "./PreviewImage";
+import ErrorMessage from "/src/components/atoms/ErrorMessage";
+import axios from "axios";
+import { useRouter } from "next/router";
 
 
+/// 기존에 갖고있던 정보 모두 가져오기
 
-
-
-
-function CreateMainBannerPage() {
-
-
-
-       
-
+function EditMainBannerPage() {
   const router = useRouter();
   const [formErrors, setFormErrors] = useState({});
 
@@ -39,19 +31,11 @@ function CreateMainBannerPage() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-
-
-
-
   const returnToPrevPage = () => {
     if (confirm("저장하지않고 돌아가시겠습니까?")) {
       router.back();
     }
   };
-
-
-
-
 
   const getNameHandler = (e) => {
     const inp = e.currentTarget;
@@ -62,8 +46,6 @@ function CreateMainBannerPage() {
   const getExposedTargetHandler = (data) => {
     setExposedTarget(data);
   };
-
-
 
   const imageFileChangeHandler = (e) => {
     const thisInput = e.currentTarget;
@@ -76,10 +58,7 @@ function CreateMainBannerPage() {
     }
   };
 
-
-
   const getLinkHandler = (e) => {
-    
     const thisInput = e.currentTarget;
     const link = thisInput.value;
 
@@ -90,22 +69,18 @@ function CreateMainBannerPage() {
     }
   };
 
-  
-
   const valid_isEmpty = (value) => {
     let errors;
 
     console.log(value);
     if (!value) {
-     errors = "항목이 비어있습니다.";
-    }else{
-      errors = '';
+      errors = "항목이 비어있습니다.";
+    } else {
+      errors = "";
     }
 
     return errors;
   };
-
-
 
   const valid_link = (value) => {
     let errors;
@@ -122,20 +97,16 @@ function CreateMainBannerPage() {
 
     const RESULT = regexURL.test(value);
 
-
     if (!value) {
       // 존재하지만, 유효하지 않을 경우
       errors = "";
     } else if (value && !RESULT) {
       errors = "유효하지 않은 링크입니다.";
-    }else{
-      errors = '';
+    } else {
+      errors = "";
     }
     return errors;
   };
-
-
-
 
   const submitTotalData = (e) => {
     e.preventDefault();
@@ -151,6 +122,7 @@ function CreateMainBannerPage() {
 
     setIsSubmitting(true);
 
+    console.log(formErrors);
 
     const body = {
       bannerName: name,
@@ -178,22 +150,24 @@ function CreateMainBannerPage() {
     //     console.log(res);
     //   });
 
-  
+
+    axios
+      .post("http://localhost:4000/a", {
+        username: "admin@gmail.com",
+        password: "admin",
+      })
+      .then((res) => {
+        console.log(res);
+      });
   };
-
-
-
-
-
 
   useEffect(() => {
     if (Object.keys(formErrors).length === 0 && isSubmitting) {
       console.log("데이터 전송");
-    }else{
-      console.error(formErrors);;
+    } else {
+      console.error(formErrors);
     }
   }, [formErrors, isSubmitting]);
-  
 
   return (
     <>
@@ -201,9 +175,9 @@ function CreateMainBannerPage() {
       <AdminLayout>
         <AdminContentWrapper>
           <div className="title_main">
-            <h1>배너등록</h1>
+            <h1>배너 수정</h1>
           </div>
-          <form action="/a" className="cont" encType="multipart/form-data" method="post">
+          <form className="cont">
             <div className="cont_divider">
               <div className="input_row">
                 <div className="title_section fixedHeight">
@@ -373,7 +347,7 @@ function CreateMainBannerPage() {
                 취소
               </button>
               <button
-                type="submit"
+                type="button"
                 id="btn-create"
                 className="admin_btn confirm_l solid"
                 onClick={submitTotalData}
@@ -391,4 +365,4 @@ function CreateMainBannerPage() {
   );
 }
 
-export default CreateMainBannerPage;
+export default EditMainBannerPage;
