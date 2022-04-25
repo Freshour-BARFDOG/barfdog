@@ -1,35 +1,121 @@
 import Image from 'next/image';
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import s from "./mainBanner.module.scss";
-import {
-  sortableHandle,
-  sortableContainer,
-  sortableElement,
-  arrayMove,
-} from "react-sortable-hoc";
+import Ascend from '/public/img/icon/btn_ascend.svg';
+import Descend from '/public/img/icon/btn_descend.svg';
+import getElemIdx from "@util/func/getElemIdx.js";
 
 
-//  DOWN : 내가 지금 클릭한 애의 인덱스
-//    인덱스 +1 // 마지막 인덱스일 경우, 변함없음
-//    그 다음 List: 인덱스 -1
 
 
-export default function MainBannerList({items}) {
+const changeArrayOrder = function (list, targetIdx, moveValue) {
+  // 배열값이 없는 경우 나가기
+  if (list.length < 0) return;
 
-  const [itemList, setItemList] = useState(items);
-  const [editOrder, setEditOrder] = useState(false);
+  // 이동할 index 값을 변수에 선언
+  const newPosition = targetIdx + moveValue;
+
+  // 이동할 값이 0보다 작거나 최대값을 벗어나는 경우 종료
+  if (newPosition < 0 || newPosition >= list.length) return;
+
+  // 임의의 변수를 하나 만들고 배열 값 저장
+  const tempList = JSON.parse(JSON.stringify(list));
+
+  // 옮길 대상을 기존 배열에서 분리 및 target 변수에 저장
+  const target = tempList.splice(targetIdx, 1)[0]; // splice (n번 째배열, n개 삭제
+  // console.log(tempList.splice(targetIdx, 1)[0]);
+
+  // 새로운 위치에 옮길 대상을 추가하기
+  tempList.splice(newPosition, 0, target);
+  return tempList;
+};
 
 
-  const DragHandle = sortableHandle(() => <span>::::::::</span>);
+const removeArray = function (list, targetIdx) {
+  // 배열값이 없는 경우 나가기
+  if (list.length < 0) return;
 
-  const SortableItem = sortableElement(({ item }) => (
-    <li className={s.item} key={`item-${item.id}`}>
-      {editOrder ? <DragHandle /> : <span>{item.order}</span>}
+  // 임의의 변수를 하나 만들고 배열 값 저장
+
+  // 옮길 대상을 기존 배열에서 분리 및 target 변수에 저장
+  const target = list.splice(targetIdx, 1)[0]; // splice (n번 째배열, n개 삭제
+  // console.log(tempList.splice(targetIdx, 1)[0]);
+  console.log(target);;
+
+  return list;
+};
+
+
+
+
+
+export default function MainBannerList({ items, setItemList, editListOrder }) {
+
+
+  useEffect(() => {
+    setItemList(items);
+  }, [items, setItemList]);
+
+  if (!items.length) return;
+
+
+
+  const onAscendingHandler = (e) => {
+    const target = e.currentTarget.closest("li");
+    const children = [...target.parentNode.children];
+    const targetIdx = children.indexOf(target);
+    const newItemList = changeArrayOrder(items, targetIdx, -1);
+    if (newItemList) setItemList(newItemList);
+  };
+
+
+  const onDescendingHandler = (e) => {
+    const target = e.currentTarget.closest("li");
+    const children = [...target.parentNode.children];
+    const targetIdx = children.indexOf(target);
+    const newItemList = changeArrayOrder(items, targetIdx, 1);
+    if (newItemList) setItemList(newItemList);
+  };
+
+
+  const SortHandle = () => (
+    <span className={`${s.sortHandle}`}>
+      <i className="admin_btn" animation="show" onClick={onAscendingHandler}>
+        <Ascend />
+      </i>
+      <i className="admin_btn" animation="show" onClick={onDescendingHandler}>
+        <Descend />
+      </i>
+    </span>
+  );
+
+
+  const onDeleteItemHandler = (e) => {
+     const target = e.currentTarget.closest("li");
+     const children = [...target.parentNode.children];
+     const targetIdx = children.indexOf(target);
+
+     console.log('delete');
+     console.log(getElemIdx(target));
+    //  target.remove(); // view에서 안보이게 만듦
+    //  removeArray(items);
+  }
+
+
+  const SortableItem = ({ item, sortableItemRef }) => (
+    <li className={s.item} key={`item-${item.id}`} ref={sortableItemRef}>
+      {editListOrder ? <SortHandle /> : <span>{item.order}</span>}
       <span>{item.name}</span>
       <span>
-        <figure className={s['img-wrap']}>
+        <figure className={s["img-wrap"]}>
           <Image
             src="https://images.unsplash.com/photo-1650210923764-ca790a46e632?ixlib=rb-1.2.1"
+            alt="메인배너 이미지"
+            objectFit="contain"
+            layout="fill"
+          ></Image>
+          <Image
+            src={require("/public/img/icon/Subscription.png")}
             alt="메인배너 이미지"
             objectFit="contain"
             layout="fill"
@@ -42,31 +128,22 @@ export default function MainBannerList({items}) {
         <button className="admin_btn basic_s solid">수정</button>
       </span>
       <span>
-        <button className="admin_btn basic_s solid">삭제</button>
+        <button
+          className="admin_btn basic_s solid"
+          onClick={onDeleteItemHandler}
+        >
+          삭제
+        </button>
       </span>
     </li>
-  ));
-
-  const SortableContainer = sortableContainer(({ children }) => {
-    return <ul className="table_body">{children}</ul>;
-  });
-
-
-
-  const onSortEnd = ({ oldIndex, newIndex }) => {
-    setItemList(arrayMove(itemList, oldIndex, newIndex));
-  };
+  );
 
 
   return (
-    <SortableContainer
-      onSortEnd={onSortEnd}
-      useDragHandle
-      disableAutoscroll
-      className="table_body"
-    >
-      {/* {itemList.map((item, index) => <SortableItem key={`item-${index}`} index={index} item={item} />
-      )} */}
-    </SortableContainer>
+    <ul className="table_body">
+      {items.map((item, index) => (
+        <SortableItem key={`item-${index}`} index={index} item={item} />
+      ))}
+    </ul>
   );
 }

@@ -5,6 +5,7 @@
       "@src/*": ["src/*"],
       "@public/*": ["public/*"],
       "@styles/*": ["styles/*"],
+      "@util/*": ["util/*"],
     },
     "target": "es5",
     "lib": [

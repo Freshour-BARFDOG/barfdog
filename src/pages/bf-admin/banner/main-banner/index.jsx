@@ -1,50 +1,20 @@
-import Link from 'next/link';
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import s from "./mainBanner.module.scss";
 import AdminLayout from "@src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "@src/components/admin/AdminWrapper";
 import MainBannerList from './MainBannerList';
-
-import Styled from 'styled-components';
+import AdminBtn_moveToPage from "@src/components/atoms/AdminBtn_moveToPage";
 import rem from '@src/components/atoms/rem';
+import MetaTitle from "@src/components/atoms/MetaTitle";
 
 
-// * 순서편집 클릭 -> 1. 저장버튼 2. 순서 변경 아이콘 등장
-// * 순서편집 에로우 클릭 -> 전체 순서 중에서, 클릭한 아이의 위치를 한 칸 올린다 & 내린다.
-
-const Button = Styled.button`
-  background-color: var(--color-primary04);
-  padding: ${rem(11)} 0;
-  text-align: center;
-  color: #fff;
-  font-size: ${rem(15)};
-  display:inline-block;
-  min-width: ${rem(160)};
-  border-radius: ${rem(2)};
-  height: ${rem(44)};
-  cursor:pointer;
-`;
-
-export const Btn_LinkToPage = ({ href, name }) => {
-
-  return (
-    <Link href={href} passHref>
-      <a>
-        <Button type="button">{name}</Button>
-      </a>
-    </Link>
-  );
-};
-
-
-const Btn_editOrder = () => {
-  return ;
-}
 
 
 
 
 
 function MainBannerIndexPage() {
+
   const items = [
     {
       order: 1,
@@ -72,57 +42,113 @@ function MainBannerIndexPage() {
 
 
 
+  const [itemList, setItemList] = useState(items);
+  const [originItemList, setOriginItemList] = useState(items);
+  const [editListOrder, setEditListOrder] = useState(false);
+  const [confirmListOrder, setConfirmListOrder] = useState(false);
+
+  const onEditHandler = () => {
+
+    if (editListOrder) {
+      console.log("에딧: 활성 -> 비활성");
+      setEditListOrder(false);
+      if(confirmListOrder){
+        console.log('변경된 아이템리스트 저장');
+        setItemList(itemList); // 현재 변경된 아이템리스트를 넣어야한다.
+      }else{
+        console.log('아이템리스트 초기화');
+        setItemList(originItemList); // 원래 아이템리스트로 초기화한다.
+        setConfirmListOrder(false);
+      }
+
+    } else {
+      console.log("에딧: 비활성 -> 활성");
+      setEditListOrder(true);
+      setConfirmListOrder(false);
+    }; 
+  }
+
+
+  const onSaveItemListOrderHandler = () => {
+    setConfirmListOrder(true);
+  }
+
+  const onDeleteItemList = () => {
+    // setConfirmListOrder(true);
+  };
+
+
+  const BtnEditListOrder = () => (
+    <button
+      type="button"
+      id="edit_order"
+      className="admin_btn line basic_m"
+      onClick={onEditHandler}
+    >
+      순서편집
+    </button>
+  );
+
+  const BtnSave = () => (
+    <button
+      type="button"
+      id="set_order"
+      className="admin_btn line basic_m point"
+      animation="show"
+      onClick={onSaveItemListOrderHandler}
+    >
+      저장
+    </button>
+  );
+
 
   return (
-    <AdminLayout>
-      <AdminContentWrapper>
-        <h1 className="title_main">메인배너</h1>
-        <div className="cont">
-          <div className="cont_header clearfix">
-            <p className="cont_title cont-left" style={{ height: rem(44) }}>
-              목록
-            </p>
-            <div className="cont-right">
-              <Btn_LinkToPage
-                href="/bf-admin/banner/main-banner/createMainBanner"
-                name="배너등록"
-              />
+    <>
+      <MetaTitle title="메인 배너" />
+      <AdminLayout>
+        <AdminContentWrapper>
+          <h1 className="title_main">메인배너</h1>
+          <div className="cont">
+            <div className="cont_header clearfix">
+              <p className="cont_title cont-left" style={{ height: rem(44) }}>
+                목록
+              </p>
+              <div className="cont-right">
+                <AdminBtn_moveToPage
+                  text="배너등록"
+                  href="/bf-admin/banner/main-banner/createMainBanner"
+                  className="admin_btn confirm_m solid"
+                  animation="show"
+                />
+              </div>
+              <div className="controls cont-left">
+                <BtnEditListOrder />
+                {editListOrder && <BtnSave />}
+              </div>
             </div>
-            <div className="controls cont-left">
-              <button
-                type="button"
-                id="edit_order"
-                className="admin_btn line basic_m"
-              >
-                순서편집
-              </button>
-              <button
-                type="button"
-                id="set_order"
-                className="admin_btn line basic_m point"
-              >
-                저장
-              </button>
-            </div>
-          </div>
-          <div className="cont_viewer">
-            <div className="table">
-              <ul className="table_header">
-                <li className="table_th">순서</li>
-                <li className="table_th">배너이름</li>
-                <li className="table_th">이미지</li>
-                <li className="table_th">노출대상</li>
-                <li className="table_th">등록일</li>
-                <li className="table_th">수정</li>
-                <li className="table_th">삭제</li>
-              </ul>
-              <MainBannerList items={items} />
+            <div className={s.cont_viewer}>
+              <div className={s.table}>
+                <ul className={s.table_header}>
+                  <li className={s.table_th}>순서</li>
+                  <li className={s.table_th}>배너이름</li>
+                  <li className={s.table_th}>이미지</li>
+                  <li className={s.table_th}>노출대상</li>
+                  <li className={s.table_th}>등록일</li>
+                  <li className={s.table_th}>수정</li>
+                  <li className={s.table_th}>삭제</li>
+                </ul>
+                <MainBannerList
+                  items={itemList}
+                  setItemList={setItemList}
+                  editListOrder={editListOrder}
+                />
+              </div>
             </div>
           </div>
-        </div>
-        {/* inner */}
-      </AdminContentWrapper>
-    </AdminLayout>
+          {/* inner */}
+        </AdminContentWrapper>
+      </AdminLayout>
+    </>
   );
 }
 

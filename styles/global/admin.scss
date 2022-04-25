@@ -6,6 +6,10 @@ $browser-context:16;
   @return #{$px / $context}rem;
 }
 
+$aniDefault : 0.15s ease ;
+$aniType_Show : 0.3s ease-in ;
+
+
 
 
 /* 
@@ -27,17 +31,20 @@ $browser-context:16;
   box-sizing: border-box;
   border-radius: rem(2);
   font-size:rem(14);
-  transition-property: background-color, border-color, color;
-  transition-duration: 0.15s;
-  transition-timing-function: ease;
+  transition: background-color, border-color, color $aniDefault;
+  // transition-duration: 0.15s;
+  // transition-timing-function: ease;
   pointer-events: all;
   background-color: #fff;
   cursor: pointer;
+  &[animation="show"]{
+    animation: show $aniType_Show forwards;
+  }
 
   &.disabled{pointer-events: none;}
 
   &.line{
-    border:1px solid var(--color-line);
+    border: rem(1) solid var(--color-line);
     color:#202020;
     &.disabled{
       border-color: var(--color-disabled);
@@ -52,7 +59,7 @@ $browser-context:16;
 
 
   &.point{
-    border:1px solid var(--color-primary04);
+    border: rem(1) solid var(--color-primary04);
     color: var(--color-primary04);
     &.disabled{
       border-color: var(--color-point-disabled);
@@ -123,7 +130,7 @@ $browser-context:16;
 
   .cont{
     background-color:#fff;
-    border: 1px solid var(--color-line-light);
+    border: rem(1) solid var(--color-line-light);
     padding: rem(30) rem(40);
     .cont_divider{
       padding: rem(15) 0;
@@ -158,51 +165,7 @@ $browser-context:16;
     button:not(:last-child){margin-right:rem(5);}
   }
 
-
-
-
-  .cont_viewer {
-    .table{
-      font-size: rem(15);
-
-      
-      /* border line */
-
-      .table_header{border: rem(1) solid var(--color-line);}
-      .table_th{border-right: rem(1) solid var(--color-line);}
-      .table_th:last-child{border-right:0;}
-
-      // .item:not(:last-child){border-bottom: rem(1) solid var(--color-line);}
-      // .img-wrap{width:100%;height: 100%;}
-      // .table_body{margin-top:rem(-1);}
-
-      
-      .table_header, .item{
-        display:grid;
-        grid-gap:0;
-        grid-template-rows: minmax(rem(60), auto);
-        grid-template-columns:
-          rem(60)
-          minmax(rem(30), 1.4fr)
-          minmax(rem(30), 2.3fr)
-          minmax(rem(30), 1fr)
-          minmax(rem(30), 1fr)
-          rem(70)
-          rem(70);
-
-        .table_th, span{
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        .table_th{
-          font-weight: 600;
-          background-color:#f1f1f4;
-          height: 100%;
-        }
-      }
-    }
-  }
+ 
 
 
   .input_row{
