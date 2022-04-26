@@ -45,23 +45,16 @@ module.exports = {
     ],
   },
   async rewrites() {
-    console.log(process.env.NODE_ENV !== "production");
-    console.log(process.env.DESTINATION_URL);
-    console.log(process.env.SOURCE_PATH);
+    // console.log('Delopy Type is Dev ?',process.env.NODE_ENV !== "production");
+    // console.log(process.env.DESTINATION_URL);
+    // console.log(process.env.SOURCE_PATH);
     if (process.env.NODE_ENV !== "production") {
       return [
         {
-          destination: process.env.DESTINATION_URL,
           source: process.env.SOURCE_PATH,
+          destination: process.env.DESTINATION_URL,
         },
       ];
-    }else {
-       return [
-         {
-           source: "/:path*",
-           destination: "http://211.219.225.118:9999/:path*", // Proxy to Backend
-         },
-       ];
     }
   },
 };
