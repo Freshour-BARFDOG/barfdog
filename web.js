@@ -2,11 +2,10 @@ const dev = process.env.NODE_ENV !== "production";
 const express = require("express");
 const server = express();
 const port = parseInt(process.env.PORT, 10) || 4000;
-
 const next = require("next");
 const nextApp = next({ dev });
 const handle = nextApp.getRequestHandler();
-
+const proxy = require('http-proxy-middleware')
 
 
 // nextApp.prepare().then(() => {

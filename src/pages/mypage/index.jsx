@@ -3,8 +3,7 @@ import Layout from '../../components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from "/src/components/mypage/MypageWrapper";
 import MetaTitle from "/src/components/atoms/MetaTitle";
-import test from "/api/test";
-test();
+
 
 function Mypage() {
   return (

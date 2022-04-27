@@ -45,8 +45,8 @@ module.exports = {
     ],
   },
   async rewrites() {
-    // console.log('Delopy Type is Dev ?',process.env.NODE_ENV !== "production");
-    // console.log(process.env.DESTINATION_URL);
+    console.log('Delopy Type is Dev ?',process.env.NODE_ENV !== "production");
+    console.log(process.env.DESTINATION_URL);
     // console.log(process.env.SOURCE_PATH);
     if (process.env.NODE_ENV !== "production") {
       return [

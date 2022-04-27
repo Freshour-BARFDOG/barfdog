@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const Test = (req, res) => {
+const getAdminToken = async (req, res) => {
+  // 토큰받아온다
+
   const headers = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Expose-Headers": "*",
@@ -13,29 +15,31 @@ const Test = (req, res) => {
     processData: false,
   };
 
-  const data = {
+  const adminAccount = {
     email: "admin@gmail.com",
     password: "admin",
   };
 
 
 
-  let token;
-  axios
-    .post("/api/login", JSON.stringify(data), {
+  let token = await axios
+    .post("/api/login", JSON.stringify(adminAccount), {
       headers,
     })
     .then((res) => {
-      console.log(res);
-      token = res.headers.authorization;
-      console.log("token : ", token);
+      // console.log(res);
+      // console.log("token : ", res.headers.authorization);
+      return token = res.headers.authorization;
     })
     .catch((err) => {
       console.log(err);
+      return null;
     });
-  
-  return token;
+
+
+    // console.log("> ADMIN TOKEN : ", token);
+    return token;
 };
 
 
-export default Test;
+export default getAdminToken;

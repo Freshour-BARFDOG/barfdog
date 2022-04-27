@@ -1,20 +1,23 @@
 import React, { useState } from 'react';
 
-const InputRadio = ({ exposedTarget, onExposedTargetHandler }) => {
+export const InputRadio_exposedTarget = ({
+  exposedTarget,
+  onRadioButtonHandler,
+  name}) => {
   const [selectedOption, setSelectedOption] = useState(exposedTarget);
 
   const onChangeHandler = (e) => {
     setSelectedOption(e.currentTarget.id);
-    onExposedTargetHandler(e.currentTarget.id);
+    onRadioButtonHandler(e.currentTarget.id);
   };
 
   return (
-    <div className="inp_wrap radio">
+    <div className="inp_wrap radio" name={name}>
       <label className="inp_box radio" htmlFor="all">
         <input
           type="radio"
           id="all"
-          name="exposedTarget"
+          name={name}
           checked={selectedOption === "all"}
           onChange={onChangeHandler}
         />
@@ -24,7 +27,7 @@ const InputRadio = ({ exposedTarget, onExposedTargetHandler }) => {
         <input
           type="radio"
           id="non-member"
-          name="exposedTarget"
+          name={name}
           checked={selectedOption === "non-member"}
           onChange={onChangeHandler}
         />
@@ -34,7 +37,7 @@ const InputRadio = ({ exposedTarget, onExposedTargetHandler }) => {
         <input
           type="radio"
           id="member"
-          name="exposedTarget"
+          name={name}
           checked={selectedOption === "member"}
           onChange={onChangeHandler}
         />
@@ -44,7 +47,7 @@ const InputRadio = ({ exposedTarget, onExposedTargetHandler }) => {
         <input
           type="radio"
           id="subscriber"
-          name="exposedTarget"
+          name={name}
           checked={selectedOption === "subscriber"}
           onChange={onChangeHandler}
         />
@@ -55,4 +58,40 @@ const InputRadio = ({ exposedTarget, onExposedTargetHandler }) => {
 };
 
 
-export default InputRadio;
+
+
+export const InputRadio_status = ({ exposedStatus, onRadioButtonHandler, name }) => {
+  const [selectedOption, setSelectedOption] = useState(exposedStatus);
+  const onChangeHandler = (e) => {
+    setSelectedOption(e.currentTarget.dataset.status);
+    onRadioButtonHandler(e.currentTarget.dataset.status);
+  };
+
+  return (
+    <div className="inp_wrap radio" name={name}>
+      <label className="inp_box radio" htmlFor="status_active">
+        <input
+          type="radio"
+          data-status="active"
+          id="status_active"
+          name={name}
+          checked={selectedOption === "active"}
+          onChange={onChangeHandler}
+        />
+        <span className="innerText">노출</span>
+      </label>
+      <label className="inp_box radio" htmlFor="status_inactive">
+        <input
+          type="radio"
+          data-status="inactive"
+          id="status_inactive"
+          name={name}
+          checked={selectedOption === "inactive"}
+          onChange={onChangeHandler}
+        />
+        <span className="innerText">숨김</span>
+      </label>
+    </div>
+  );
+};
+
