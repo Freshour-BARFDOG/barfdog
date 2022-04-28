@@ -23,7 +23,7 @@ $menuPadding: 20;
   .menu_title{
     color:var(--color-font-medium);
     
-    &[data-current-page] p, * [data-current-page]{
+    &, * [data-current-page]{
       color:var(--color-main);
     }
 

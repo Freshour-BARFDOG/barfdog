@@ -6,13 +6,13 @@ import Icon_setting from "/public/img/icon/setting.svg";
 import { useRouter } from "next/router";
 
 
-
 function AdminGnb() {
   
 
   const router = useRouter();
   const curMenuRef = useRef(null);
   const [curPath, setCurPath] = useState(router.pathname);
+
   useEffect(() => {
     const adminRootPath = "/bf-admin";
     const redirPath = adminRootPath + "/dashboard";
@@ -30,7 +30,7 @@ function AdminGnb() {
       const menuPath = thisMenuLink.slice(pathStartOrder);
       // const isCurPath = thisMenuLink.indexOf(menuPath) > 0 ? true : false;
       const isCurPath = curPath === menuPath ? true : false;
-      // console.log(isCurPath);
+      console.log(isCurPath);
       if (isCurPath) {
         const activeMenu = menu.closest("." + `${s.menu_title}`);
         // activeMenu.classList.add(`${s.active}`);

@@ -30,9 +30,10 @@ $list-height: rem(58);
     border: 0;
     box-sizing:border-box;
 
-    li{
+    .menu_title{
       color:var(--color-font-medium);
       position: relative;
+ 
       &:not(:last-child) a, &:not(:last-child) p{border-bottom: 0}
       &:not(.submenu_title, .submenu_list):after{
         content:"";
@@ -46,12 +47,23 @@ $list-height: rem(58);
         transition: background-color, opacity 0.2s ease;
         opacity:0;
       }
-      &:hover:after{
-          opacity: 1;
-      }
-      // &.active:after{
+      // &:hover:after{
       //     opacity: 1;
       // }
+      &.menu_open:after{
+          opacity: 1;
+      }
+      &[data-current-page]{
+        > p{font-weight: bold;}
+        font-size: rem(18);
+        
+        &:after{opacity: 1;}
+        & [data-current-page]{
+          color:var(--color-main);
+        }
+
+      }
+
 
       > a, > p {
         padding: {

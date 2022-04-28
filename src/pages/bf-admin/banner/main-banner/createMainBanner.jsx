@@ -21,7 +21,7 @@ function CreateMainBannerPage() {
   const router = useRouter();
 
   const [exposedTarget, setExposedTarget] = useState("all");
-  const [exposedStatus, setExposedStatus] = useState("active");
+  const [exposedStatus, setExposedStatus] = useState("leaked");
   const [file_pc, setFile_pc] = useState({
     file: "",
     filename: "",
@@ -41,10 +41,7 @@ function CreateMainBannerPage() {
   };
   const [formValues, setFormValues] = useState(initialValues);
   const [formErrors, setFormErrors] = useState({});
-
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  ////////////////////// * 오후에할것 -> // / 2. error체크 / 3. API 전송
 
   const handleChange = (e) => {
     const { name, value } = e.currentTarget;
@@ -94,7 +91,6 @@ function CreateMainBannerPage() {
   };
 
   const imageFileChangeHandler = (e) => {
-    
     const thisInput = e.currentTarget;
     const file = thisInput.files[0];
     const filename = file ? file.name : "";
@@ -105,18 +101,6 @@ function CreateMainBannerPage() {
     }
   };
 
-  // const getLinkHandler = (e) => {
-
-  //   const thisInput = e.currentTarget;
-  //   console.log(thisInput.name);
-  //   const link = thisInput.value;
-
-  //   if (thisInput.dataset.device === "pc") {
-  //     setFile_pc({ ...file_pc, link });
-  //   } else {
-  //     setFile_mobile({ ...file_mobile, link });
-  //   }
-  // };
 
   const valid_isEmpty = (value) => {
     let errors;
@@ -130,11 +114,8 @@ function CreateMainBannerPage() {
     return errors;
   };
 
-
-
   const valid_link = (value) => {
     let errorsMessage;
-   
 
     const regexURL = new RegExp(
       "^(https?:\\/\\/)?" + // protocol
@@ -147,10 +128,9 @@ function CreateMainBannerPage() {
     ); // fragment locator
 
     const RESULT = regexURL.test(value);
- 
 
     if (value && !RESULT) {
-      console.log('실패')
+      // console.log("실패");
       errorsMessage = "유효하지 않은 링크입니다.";
     } else {
       errorsMessage = "";
@@ -162,10 +142,6 @@ function CreateMainBannerPage() {
 
     return errorsMessage;
   };
-
-
-
-
 
   const validate = (obj) => {
     let errors = {};
@@ -181,11 +157,11 @@ function CreateMainBannerPage() {
         case "name":
           errors[key] = valid_isEmpty(val) ? "필수항목입니다." : "";
           break;
-        case "pcLinkUrl" :
+        case "pcLinkUrl":
           // console.log(errors[key], valid_link(val));
           errors[key] = valid_link(val);
           break;
-        case "mobileLinkUrl" :
+        case "mobileLinkUrl":
           // console.log(errors[key], valid_link(val));
           errors[key] = valid_link(val);
           break;
@@ -195,14 +171,15 @@ function CreateMainBannerPage() {
       }
     });
 
-    errors["file_pc"] = valid_isEmpty(file_pc.file) ? '필수항목입니다.' : "";
-    errors["file_mobile"] = valid_isEmpty(file_mobile.file) ? '필수항목입니다.' : '';
+    errors["file_pc"] = valid_isEmpty(file_pc.file) ? "필수항목입니다." : "";
+    errors["file_mobile"] = valid_isEmpty(file_mobile.file)
+      ? "필수항목입니다."
+      : "";
 
-    console.log("에러내용: ", errors);
+    console.log("Validation Result: ", errors);
 
     return errors;
   };
-
 
 
   const onSubmitHandler = async (e) => {
@@ -210,53 +187,60 @@ function CreateMainBannerPage() {
     setIsSubmitting(true);
     setFormErrors(validate(formValues));
 
-    const isError = Object.keys(formErrors).length !== 0 ? true : false;
+    let isError = false;
+    Object.keys(formErrors).forEach((key) => {
+      if (formErrors[key]) {
+        isError = true;
+        return;
+      }
+    });
+
     console.log(isError);
     if (isError) return;
 
-
-    // ! 0427수 저녁 ---->  집에서 할것 : 이미지파일 전송하는 로직 짜기
-    // ! 0427수 저녁 ---->  집에서 할것 : 이미지파일 전송하는 로직 짜기
-    // ! 0427수 저녁 ---->  집에서 할것 : 이미지파일 전송하는 로직 짜기
-    // ! 0427수 저녁 ---->  집에서 할것 : 이미지파일 전송하는 로직 짜기
-    // ! 0427수 저녁 ---->  집에서 할것 : 이미지파일 전송하는 로직 짜기
-    // ! 0427수 저녁 ---->  집에서 할것 : 이미지파일 전송하는 로직 짜기
-    // ! 0427수 저녁 ---->  집에서 할것 : 이미지파일 전송하는 로직 짜기
-    // ! 0427수 저녁 ---->  집에서 할것 : 이미지파일 전송하는 로직 짜기
-
-    // 보낼값: 파일 1.JSON 2.파일(이미지) 3. 파일(이미지 모바일)
-    const allDatas = {
-      formValues,
-    };
-
-
+    
+    
+    return;
+    
     const token = await getAdminToken();
-    console.log(token);
+    // console.log(token);
+    // 보낼값: 파일 1.JSON 2.파일(이미지) 3. 파일(이미지 모바일) 
+    // * 파일 변환방법
+    const formData = new FormData();
+    formData.append("pcFile", file_pc.file);
+    formData.append("mobileFile", file_mobile.file);
+    const jsonData = JSON.stringify(formValues);
+    const blob = new Blob([jsonData], { type: "application/json" });
+    formData.append("requestDto", blob);
 
+    const axiosConfig = {
+      headers: {
+        authorization: token,
+        "Content-Type": "multipart/form-data",
+      },
+    };
+  
 
     axios
-      .post("/api/banners/main", {
-        headers: {
-          Authorization: token,
-        },
-        body: {
-          allDatas
-        },
-      })
+      .post("/api/banners/main", formData, axiosConfig)
       .then((res) => {
         console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
       });
-  };
+  }; // * onSubmitHandler
 
 
   useEffect(() => {
+    console.log('실행');
     if (Object.keys(formErrors).length === 0) {
       console.log("데이터 전송");
     } else {
       console.error(formErrors);
     }
-  }, [formErrors]);
 
+  }, [formErrors]);
 
 
   return (

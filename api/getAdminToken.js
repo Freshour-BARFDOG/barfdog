@@ -1,7 +1,6 @@
 import axios from "axios";
 
 const getAdminToken = async (req, res) => {
-  // 토큰받아온다
 
   const headers = {
     "Access-Control-Allow-Origin": "*",
@@ -28,7 +27,7 @@ const getAdminToken = async (req, res) => {
     })
     .then((res) => {
       // console.log(res);
-      // console.log("token : ", res.headers.authorization);
+      console.log("token : ", res.headers.authorization);
       return token = res.headers.authorization;
     })
     .catch((err) => {
@@ -37,7 +36,6 @@ const getAdminToken = async (req, res) => {
     });
 
 
-    // console.log("> ADMIN TOKEN : ", token);
     return token;
 };
 

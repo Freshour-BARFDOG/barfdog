@@ -218,13 +218,11 @@ $aniType_Show : 0.3s ease-in ;
       .inp_box{
         color:#4d4d4d;
         font-size: rem(14);
-        &.radio{
-          margin-right:rem(24);
-        }
+        &.radio:not(:last-child){margin-right:rem(24);}
    
 
         
-        input[type=radio]{margin-right:rem(6) !important;}
+        input[type=radio]{margin-right:rem(6) !important; min-width: rem(20);}
         input:not([type="radio"], [type="checkbox"]){border-radius:0; min-width: rem(100);
         height: $inputDefaultHeight}
 

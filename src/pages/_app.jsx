@@ -1,6 +1,6 @@
 import "/styles/global/global.scss";
 import axios from 'axios';
-axios.defaults.baseURL = process.env.NEXT_PUBLIC_SERVER_BASE_URL;
+axios.defaults.baseURL = process.env.DESTINATION_URL;
 // axios.defaults.headers.common["Authorization"] = 'AUTH_TOKEN';
 axios.defaults.headers.post["Content-Type"] =
 axios.defaults.headers.post["Content-Type"] =

@@ -23,22 +23,22 @@ export const InputRadio_exposedTarget = ({
         />
         <span className="innerText">전체</span>
       </label>
-      <label className="inp_box radio" htmlFor="non-member">
+      <label className="inp_box radio" htmlFor="guest">
         <input
           type="radio"
-          id="non-member"
+          id="guest"
           name={name}
-          checked={selectedOption === "non-member"}
+          checked={selectedOption === "guest"}
           onChange={onChangeHandler}
         />
         <span className="innerText">비회원</span>
       </label>
-      <label className="inp_box radio" htmlFor="member">
+      <label className="inp_box radio" htmlFor="user">
         <input
           type="radio"
-          id="member"
+          id="user"
           name={name}
-          checked={selectedOption === "member"}
+          checked={selectedOption === "user"}
           onChange={onChangeHandler}
         />
         <span className="innerText">회원</span>
@@ -69,24 +69,24 @@ export const InputRadio_status = ({ exposedStatus, onRadioButtonHandler, name })
 
   return (
     <div className="inp_wrap radio" name={name}>
-      <label className="inp_box radio" htmlFor="status_active">
+      <label className="inp_box radio" htmlFor="status_leaked">
         <input
           type="radio"
-          data-status="active"
-          id="status_active"
+          data-status="leaked"
+          id="status_leaked"
           name={name}
-          checked={selectedOption === "active"}
+          checked={selectedOption === "leaked"}
           onChange={onChangeHandler}
         />
         <span className="innerText">노출</span>
       </label>
-      <label className="inp_box radio" htmlFor="status_inactive">
+      <label className="inp_box radio" htmlFor="status_hidden">
         <input
           type="radio"
-          data-status="inactive"
-          id="status_inactive"
+          data-status="hidden"
+          id="status_hidden"
           name={name}
-          checked={selectedOption === "inactive"}
+          checked={selectedOption === "hidden"}
           onChange={onChangeHandler}
         />
         <span className="innerText">숨김</span>
