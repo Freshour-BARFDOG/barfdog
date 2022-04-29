@@ -15,12 +15,6 @@ $browser-context:16;
 }
 
 
-@mixin d-l {
-  font-size: rem(32);
-  line-height: 1.8;
-  background-color: red;
-}
-
 
 
 html, body{width:100vw; overflow-x:hidden;}
@@ -62,6 +56,10 @@ html, body{width:100vw; overflow-x:hidden;}
 
 // 폰트 설정~~
  
+/* ! 부모의 너비에 영향을 끼치지 않ㅇ */
+@mixin aspectImage{
+
+}
 
 
 
@@ -71,12 +69,12 @@ html, body{width:100vw; overflow-x:hidden;}
 .mobile{display:none !important;}
 .web{display:block !important;}
 
-@media (max-width:1200px){
+@media (max-width:rem(1200)){
   
 }
 
 
-@media (max-width:600px){
+@media (max-width:rem(600)){
   .mobile{display:block !important;}
   .web{display:none !important;}
 }

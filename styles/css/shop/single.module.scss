@@ -24,19 +24,12 @@ section.barf_subscription{padding:rem(100) 0 rem(140)}
       grid-template-columns: repeat(2, minmax(rem(375), 1fr));
       gap: rem(40);
       .left_box {
-        // padding-right: rem(40);
-        overflow: hidden;;
-        position: relative;
-        width: 100%;
-        height: 100%;
-        box-sizing: border-box;
         .image {
-          position: absolute;
-          left:50%;
-          top:50%;
-          transform:translate(-50%,-50% );
           width: 100%;
-          aspect-ratio: 1/1;
+          height: 100%;
+          span{
+            aspect-ratio: 1/1;
+          }
         }
       }
       .right_box {
