@@ -14,6 +14,15 @@ $browser-context:16;
   @return #{$px / $context}rem;
 }
 
+
+@mixin d-l {
+  font-size: rem(32);
+  line-height: 1.8;
+  background-color: red;
+}
+
+
+
 html, body{width:100vw; overflow-x:hidden;}
 
 .img-wrap, .img_wrap{

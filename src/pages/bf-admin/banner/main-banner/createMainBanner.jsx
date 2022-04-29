@@ -200,11 +200,11 @@ function CreateMainBannerPage() {
 
     
     
-    return;
     
     const token = await getAdminToken();
     // console.log(token);
     // 보낼값: 파일 1.JSON 2.파일(이미지) 3. 파일(이미지 모바일) 
+    
     // * 파일 변환방법
     const formData = new FormData();
     formData.append("pcFile", file_pc.file);

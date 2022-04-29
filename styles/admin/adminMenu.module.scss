@@ -1,4 +1,6 @@
 @import './adminCommon.module.scss';
+
+
 $browser-context:16;
 // convert px to rem
 @function rem($px, $context: $browser-context){

@@ -1,0 +1,22 @@
+
+
+@mixin dis-l {
+  font-size: rem(32);
+  line-height: 1.8;
+  background-color:  yellow;
+}
+
+
+@mixin dis-s {
+  font-size: rem(32);
+  line-height: 1.8;
+  background-color:  green;
+}
+
+
+@mixin title-l {
+  font-size: rem(32);
+  line-height: 1.8;
+  background-color:  green;
+}
+
