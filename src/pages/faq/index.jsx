@@ -38,18 +38,10 @@ function BotBox ({title, children}) {
 }
 
 
-
-
-
-
-
-
 function FAQindexPage() {
 
   const [activeIndex, setActiveIndex] = useState(0);
-
-
-
+  
   const navClickHandler = (e) => {
 
     const thisMenu = e.target;

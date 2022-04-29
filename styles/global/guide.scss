@@ -1,0 +1,107 @@
+//mixin playpark test
+
+@mixin char ($name) {
+  @if ($name == d32) {
+    font: {
+      weight: 700;
+      size: rem(32);
+    }
+    line-height: 140%;
+    letter-spacing: -0.02em;
+  } 
+  @if ($name == d28) {
+    font: {
+      weight: 700;
+      size: rem(28);
+    }
+    line-height: 140%;
+    letter-spacing: -0.02em;
+  }
+  @if ($name == t28 ) {
+    font: {
+      weight: 500;
+      size: rem(28);
+    }
+    line-height: 140%;
+    letter-spacing: -0.02em;
+  }
+  @if ($name == t24) {
+    font: {
+      weight: 500;
+      size: rem(24);
+    }
+    line-height: 140%;
+    letter-spacing: -0.02em;
+  }
+  @if ($name == t20) {
+    font: {
+      weight: 500;
+      size: rem(20);
+    }
+    line-height: 140%;
+    letter-spacing: -0.02em;
+  }
+  @if ($name == l20) {
+    font: {
+      size: rem(20);
+    }
+    line-height: 100%;
+    letter-spacing: -0.01em;
+  }
+  @if ($name == l18) {
+    font: {
+      size: rem(18);
+    }
+    line-height: 100%;
+    letter-spacing: -0.01em;
+  }
+  @if ($name == l16) {
+    font: {
+      size: rem(16);
+    }
+    line-height: 100%;
+    letter-spacing: -0.01em;
+  }
+  @if ($name == l15) {
+    font: {
+      size: rem(15);
+    }
+    line-height: 100%;
+    letter-spacing: -0.01em;
+  }
+  @if ($name == l14) {
+    font: {
+      size: rem(14);
+    }
+    line-height: 100%;
+    letter-spacing: -0.01em;
+  }
+  @if ($name == b16) {
+    font: {
+      size: rem(16);
+    }
+    line-height: 160%;
+    letter-spacing: -0.01em;
+  }
+  @if ($name == b15) {
+    font: {
+      size: rem(15);
+    }
+    line-height: 160%;
+    letter-spacing: -0.01em;
+  }
+  @if ($name == b14) {
+    font: {
+      size: rem(14);
+    }
+    line-height: 160%;
+    letter-spacing: -0.01em;
+  }
+  @if ($name == c12) {
+    font: {
+      size: rem(12);
+    }
+    line-height: 100%;
+  }
+  // mobile 차후추가
+}

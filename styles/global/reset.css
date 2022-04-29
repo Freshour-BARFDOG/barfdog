@@ -60,7 +60,7 @@ select, textarea, button, input, form, figure, figcaption{
 
 /*폰트 초기화*/
 body,form, select, textarea, select, button, table, input {
-    font-family: Pretendard, 'Noto Sans KR', Roboto, -apple-system, BlinkMacSystemFont, system-ui, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+    font-family: Pretendard Variable , 'Noto Sans KR', Roboto, -apple-system, BlinkMacSystemFont, system-ui, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
     color: #202020;
     font-style:normal;
     font-weight: 400;
