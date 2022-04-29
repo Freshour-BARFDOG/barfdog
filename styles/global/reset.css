@@ -1,27 +1,44 @@
 /* ! Using CSS custom  */
 
 :root{
-    --color-main: #ca0101;
-    --color-checked: #50A057;
-    --color-warning: #FF4444;
+
+    --color-main: #CA1011;
+    
+
+    --color-font-def:#202020; /* * 기본폰트: 따로 지정하지 않아도, 기본값으로 지정돼있음 */
+    --color-font-sub:#636363; /* * 부연설명 */
+    --color-disabled: #ABABAB; /* *  1. input: Disabled / 2. placeholder */
+
+    
+    --color-point-disabled: #F69999; /* *  포인트색상 Disabled */
+    --color-point-hover: #E02D2D; /* * 포인트색상 Hover */
+   
+
     --color-primary01: #CA1011;
     --color-primary02: #F11A39;
     --color-primary03: #FF5959;
     --color-primary04: #ED3333;
-    --color-disabled: #ABABAB;
-    --color-point-disabled: #F69999;
-    --color-point-hover: #E02D2D;
+    
 
-    --color-line:#D3D4DE;
+    --color-checked: #50A057;
+    --color-warning: #FF4444;
+    
+
+    --color-line:#DDD;
     --color-line-light:#E6E6EB;
+
+    
+    --color-line-01: #5E5E5E;
+    --color-line-02: #ABABAB;
+    --color-line-03: #DDDDDD;
+    --color-line-04: #EFEFEF;
+
+     
 
     --color-bg :#F8F8FF;
     --color-bg-footer :#F8F8FF;
     --color-bg-admin :#F8F8FF;
-    --color-font-default:#202020;
-    --color-font-strong:#000;
-    --color-font-medium:#717171;
-    --color-font-light:#B7B7B7;
+
     --ani-default: 0.3s ease;
     --ani-short: 0.15s ease-out;
 }
