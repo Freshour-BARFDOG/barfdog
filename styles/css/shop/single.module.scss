@@ -1,0 +1,762 @@
+$browser-context:16;
+// convert px to rem
+
+
+@import 'styles/global/guide.scss';
+
+@function rem($px, $context: $browser-context){
+  @return #{$px / $context}rem;
+}
+
+section.top{padding-top: rem(40); padding-bottom: rem(60);}
+section.tab_menu{padding-top: 0; padding-bottom: rem(120);}
+section.body_top_content{padding-bottom: rem(100);}
+section.body_image{padding-bottom:rem(140);}
+section.why_barf{padding-bottom: rem(116);}
+section.barf_note{padding-bottom: rem(199);}
+section.barf_guide{padding-bottom: rem(180);}
+section.barf_tip{padding-bottom: rem(180);}
+section.barf_subscription{padding:rem(100) 0 rem(140)}
+.top {
+  .inner {
+    .top_box {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(rem(375), 1fr));
+      gap: rem(40);
+      .left_box {
+        // padding-right: rem(40);
+        overflow: hidden;;
+        position: relative;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+        .image {
+          position: absolute;
+          left:50%;
+          top:50%;
+          transform:translate(-50%,-50% );
+          width: 100%;
+          aspect-ratio: 1/1;
+        }
+      }
+      .right_box {
+        // width: 100%;
+        .content_title {
+          @include char(t24);
+          font-weight: 700;
+        }
+        .price_box {
+          padding: rem(25) 0 rem(15); 
+          .price {
+            @include char(t28);
+          }
+          .won {
+            padding-left: rem(4);
+            @include char(l18);
+            font-weight: 500;
+          }
+        }
+        .mid_box {
+          border-top: rem(1) solid #EFEFEF;
+          border-bottom: rem(1) solid #EFEFEF;
+          display: grid;
+          grid-template-columns: minmax(rem(40),rem(100)) minmax(rem(250),auto);
+          row-gap: rem(28);
+          width: 100%;
+          padding-top : rem(20);
+          padding-bottom: rem(28);
+          
+          //팁
+          >div:nth-child(1){
+            @include char(l16);
+            padding-top: rem(3);
+            font-weight: 700;
+            color: #CA1010; 
+          }
+          //생식을 처음
+          >div:nth-child(2){
+            @include char(b16);
+          }
+          //배송 정보
+          >div{
+            @include char(l16);
+            .text {
+              @include char(b14);
+              color :#636363;
+              padding-top: rem(8);
+            }
+          }
+          div:nth-child(5) {
+            height: rem(40);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+          }
+          //6번째 박스 숫자버튼
+          .count_box {
+            display: flex;
+            justify-content: space-between;
+            border : rem(1) solid #909090;
+            border-radius: rem(4);
+            
+
+            >div:nth-child(1){
+              display: flex;
+              justify-content: left;
+              align-items: center;
+              width: 45%;
+              padding-left: rem(30);
+              flex-grow: 0;
+              background-color: rosybrown;
+              color: #636363;
+              font-size: rem(30);
+            }
+            >div:nth-child(2){
+              display: flex;
+              justify-content: center;
+              width: 10%;
+              flex-grow: 2;
+              input {
+                z-index: -3;
+                text-align: center;
+                align-items: center;
+              }
+            }
+            >div:nth-child(3){
+              display: flex;
+              justify-content: right;
+              align-items: center;
+              padding-right: rem(30);
+              width: 45%;
+              flex-grow: 0;
+              background-color: rosybrown;
+              color: #636363;
+              font-size: rem(20);
+            }
+          }
+        }
+      }
+
+      //총 상품 금액
+      .total_price {
+        padding: rem(12) 0 rem(20);
+        overflow: hidden;
+        > div{
+          float: right;
+        }
+        //총 상품 금액
+        .left_text{
+          padding-right: rem(10);
+          @include char(l16);
+          color: #636363;
+        }
+        //가격
+        .mid_text {
+          @include char(d32);
+          padding-right: rem(5);
+          letter-spacing: 0.02em;
+        }
+        //원
+        .last_text {
+          @include char(t20);
+        }
+      }
+      .shop_button_box{
+        display: flex;
+        .basket_button{
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 50%;
+          height: rem(50);
+          background: #FFFFFF;
+          border: rem(1) solid #CA1010;
+          box-sizing: border-box;
+          border-radius: rem(4); 
+          font-size: rem(16);
+        }
+        .buy_button{
+          margin-left: rem(10) ;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 50%;
+          background: #CA1010;
+          border-radius: rem(4);
+          @include char(l16);
+          color: #fff;
+        }
+      }
+    }
+  }
+}
+
+//******************텝메뉴********
+.tab_menu{
+  .tab_menu_box {
+    display: flex;
+    justify-content: center;
+
+    //상세정보
+    .left_box{
+      width:100%;
+      .no1 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: rem(60);
+        border: rem(1) solid #F0F2F5;
+        
+        &:hover{
+          border: rem(1) solid #F0F2F5;
+          background: #F1F1F4;
+        }
+      }
+    }
+
+    //반품 교환정보
+    .mid_box {
+      width: 100%;
+      .no2 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: rem(60);
+        background: #F1F1F4;
+        border : rem(1) solid #F0F2F5;
+        &:hover {
+          border: rem(1) solid #F0F2F5;
+          background: #fff;
+        }
+      }
+    }
+    
+    //리뷰
+    .right_box {
+      width: 100%;
+      .no3{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: rem(60);
+        background: #F1F1F4;
+        border : rem(1) solid #F0F2F5;
+        &:hover {
+          border: rem(1) solid #F0F2F5;
+          background: #fff;
+        }
+      }
+    }
+  }
+}
+
+//***********바디**************
+.body_top_content {
+  text-align: center;
+  .top_content {
+    color: #636363;
+    @include char(b16);
+    padding-bottom: rem(116);
+  }
+  .line {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding-bottom: rem(117);
+    >hr {
+      min-width: rem(80);
+      border-top: rem(1) solid #ABABAB;
+    }
+  }
+
+  .red_title {
+    
+    @include char(t20);
+    color: #CA1010;
+    font-weight: 700;
+  }
+  .title_box {
+    padding-top: rem(10);
+    font-family: 'Gmarket Sans';
+    font-weight: 700;
+    font-size: rem(50);
+    line-height: rem(50);
+    color: #202020;
+  }
+  .title_contnet {
+    font-family: 'Pretendard Variable';
+    font-size: rem(16);
+    line-height: 170%;
+    text-align: center;
+    color: #717171;
+  }
+}
+.body_image{
+  .image_box {
+    text-align: center;
+    .image {
+      width: rem(760);
+      height: rem(2864); 
+    }
+    .image2{
+      width: rem(1000);
+      height: rem(625);
+    }
+    p {
+      padding-top: rem(100);
+      padding-bottom: rem(60);
+
+      font-family: 'Pretendard Variable';
+      font-weight: 700;
+      font-size: rem(32);
+      line-height: 100%;
+      color: #000000;
+    }
+  }
+}
+
+///*************왜 바프독 일까요************
+.why_barf {
+  >p{
+    font-family: 'Pretendard Variable';
+    font-weight: 700;
+    font-size: rem(32);
+    line-height: rem(38);
+    text-align: center;
+    color: #000000;
+    padding-bottom: rem(96);
+  }
+
+  .why_content_box{
+
+    margin: 0 rem(100) 0;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+
+
+    //왜 바프독일까요? 3가지박스 글자들 속성
+    
+    .title_num{
+      font-family: 'Pretendard Variable';
+      font-weight: 700;
+      font-size: rem(28);
+      line-height: 160%;
+      color: #CA1010;
+      padding-bottom: rem(10);
+    }
+    div {
+      font-family: 'Pretendard Variable';
+      font-weight: 700;
+      font-size: rem(28);
+      line-height: 160%;
+      color: #000000;
+      padding-bottom: rem(5);
+    }
+    p {
+      font-family: 'Pretendard Variable';
+      font-weight: 400;
+      font-size: rem(15);
+      line-height: 160%;
+      color: #636363;
+      padding-bottom: rem(30);
+    }
+    .title_content{
+      font-family: 'Pretendard Variable';
+      font-style: normal;
+      font-weight: 700;
+      font-size: rem(20);
+      line-height: 160%;
+      text-align: center;
+      color:#202020;
+      padding: 0 rem(10) rem(30);
+    }
+    .left_box_content{
+      display: grid;
+      grid-template-rows: 1fr ;
+      grid-template-columns: 20% 80%;
+      padding: 0 rem(20);
+      text-align: start;
+      >div{
+        font-family: 'Pretendard Variable';
+        font-weight: 700;
+        font-size: 18px;
+        line-height: 170%;
+        color: #4D4D4D;
+      }
+      >div:nth-child(2n){
+        font-weight: 500;
+      }
+    }
+
+    .last_contain {
+      padding:rem(20) 0 0;
+      width: 100%;
+
+      font-family: 'Pretendard Variable';
+      font-weight: 400;
+      font-size: rem(16);
+      line-height: 170%;
+      color: #4D4D4D;
+    }
+    .last_contain {
+      box-sizing: border-box;
+    }
+    
+    //3박스 크기조절
+    .left{
+      width: 100%;
+      padding: rem(17) rem(30) rem(36) rem(30);
+      border-right: rem(1) solid #DDDDDD;
+    }
+    .mid{
+      width: 100%;
+      padding: rem(17) rem(30) rem(36) rem(30);
+      border-right: rem(1) solid #DDDDDD;
+    }
+    .right{
+      width: 100%;
+      padding: rem(17) rem(30) rem(36) rem(30);
+    }
+  }
+}
+
+.barf_note {
+  text-align: center;
+  .title {
+    padding-top: rem(100);
+    font-family: 'Gmarket Sans';
+    font-weight: 700;
+    font-size: rem(32);
+    line-height: rem(32);
+    color: #000000;
+  }
+  >p {
+    padding-top: rem(40);
+    font-family: 'Pretendard Variable';
+    font-size: rem(18);
+    line-height: rem(22);
+    text-align: center;
+    color: #717171;
+    padding-bottom: rem(125);
+  }
+
+  .content_box {
+    border: rem(1) solid #C4C4C4;
+    box-sizing: border-box;
+    position: relative;
+    width: 100%;
+    margin-bottom: rem(108);
+    &:last-child{
+      margin-bottom: 0;
+    }
+    
+    .box_title {
+      width: rem(410);//퍼센트로 하니 같이 일그러짐 아래침범
+      left: 50%;
+      transform: translateX(-50%);
+      top:rem(-15);
+
+      position: absolute;
+      font-family: 'Noto Sans KR';
+      font-weight: 700;
+      font-size: rem(24);
+      line-height: 100%;
+      color: #000000;
+      background-color: #fff;
+    }
+
+    .image_box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: rem(40);
+      gap: rem(40);
+      .image {  
+        width: 100%;
+        aspect-ratio: 1.49/1;
+      }
+    }
+    .image2_box {
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: center;
+      align-items: center;
+      padding: rem(80) rem(70);
+      gap : rem(46);
+      
+      .image {
+        width: 100%;
+        aspect-ratio: 0.75/1;
+      }
+    }
+  }
+}
+
+//////바프가이드/////
+.barf_guide {
+  text-align: center;
+
+  
+  .title {
+    font-family: 'Gmarket Sans';
+    font-weight: 700;
+    font-size: rem(32);
+    line-height: rem(32);
+    color: #000000;
+    padding-bottom: rem(60);
+    letter-spacing: rem(1);
+  }
+  >p {
+    font-family: 'Pretendard Variable';
+    font-weight: 500;
+    font-size: rem(18);
+    line-height: 150%;
+    color: #717171;
+
+  }
+  .red_word {
+    font-family: 'Pretendard Variable';
+    font-weight: 700;
+    font-size: rem(20);
+    line-height: 150%;
+    text-align: center;
+    color: #CA1010;
+    padding: rem(80) 0 rem(45);
+  }
+
+
+  .mid_box{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    .guide_box{
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      max-width: rem(560);
+      .guide{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: rem(76);
+        border-top: rem(1) solid #ABABAB;
+        .box_text {
+          width: 85%;
+          text-align: start;
+          font-family: 'Pretendard Variable';
+          font-weight: 700;
+          font-size: rem(20);
+          line-height: 150%;
+
+          color: #202020;
+        }
+        .image {
+          width: rem(38);
+          aspect-ratio: 1/1;
+        }
+        &:last-child {
+          border-bottom: rem(1) solid #ABABAB;
+        }
+      }
+    }
+  }
+}
+
+.barf_tip {
+  text-align: center;
+  margin:0 rem(200) 0;
+  .title{
+    font-family: 'Gmarket Sans';
+    font-weight: 700;
+    font-size: rem(32);
+    line-height: rem(32);
+    color: #000000;
+  }
+  .content_box {
+    display: flex;
+    justify-content: center;
+    padding-top: rem(80);
+    gap: rem(40);
+    .left_box {
+      width: 100%;
+      .text_box{
+        font-family: 'Pretendard Variable';
+        font-weight: 700;
+        font-size: rem(20);
+        line-height: 140%;
+        letter-spacing: -0.02em;
+        color: #202020;
+        padding-bottom: rem(34);
+        >span {
+          color: #CA1010;
+        }
+      }
+      .image {
+        width: 100%;
+        aspect-ratio: 4.5/1;
+      }
+      .last_contain{
+        padding-top: rem(40);
+        font-family: 'Pretendard Variable';
+        font-size: rem(16);
+        line-height: 160%;
+        letter-spacing: -0.01em;
+        color: #4D4D4D;
+        text-align: start;
+      }
+    }
+    .right_box{
+      width: 100%;
+      .image {
+        width: 100%;
+        aspect-ratio: 0.75/1 ;
+      }
+    }
+  }
+}
+
+
+.hihi {
+  .test {
+    @include char(b14);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// // // // // // // // // // // // // // // // 
+// // // // // // // // // // // // // // // // 
+// // // // // // // // // // // // // // // // 
+@media (max-width:rem(600)){
+
+  .top {
+    .inner {
+      .top_box {
+        display: grid;
+        grid-template-columns: repeat(auto-fill,minmax(100%,1fr));
+        
+        .left_box {
+          width: 100%;
+          
+          .image {
+            width: 100%;
+            aspect-ratio: 1/1;
+          }
+        }
+        .right_box{
+          width: 100%;
+          padding-left: rem(0);
+        }
+      }
+    }
+  }
+
+  .tab_menu {
+    .tab_menu_box{
+      display: flex;
+      justify-content: space-around;
+      .left_box {
+        width: 34%;
+      }
+      .mid_box {
+        width: 34%;
+      }
+      .right_box {
+        width: 34%;
+      }
+    }
+  }
+
+  .why_barf {
+    .why_content_box {
+      display: grid;
+      grid-template-columns: repeat(auto-fill,minmax(100%,1fr));
+    }
+    .left, .mid {
+      border-right:0 !important;       
+      ////////////////// ! 원인: 선택자 우선순위에서 밀려서 안 먹혔음
+    }
+  }
+
+  .barf_note {
+    .content_box{
+      .image_box{
+        display: grid;
+        grid-template-columns: repeat(auto-fill,minmax(100%,1fr));
+
+        .image{
+          width: 100%;
+        }
+      }
+      .image2_box{
+        display: grid;
+        grid-template-columns: repeat(3,minmax(33%,1fr));
+        gap:rem(20);
+        padding: rem(40) rem(35);
+        .image{
+          width: 100%;
+        }
+      }
+    }
+    
+  }
+}
+
+.line {
+  width: 82%;
+}
+
+
+.barf_subscription {
+  text-align: center;
+  .title {
+    font-family: 'Pretendard Variable';
+    font-weight: 500;
+    font-size: rem(24);
+    line-height: rem(29);
+    color: #878787;
+  }
+  .title2 {
+    padding: rem(25) 0 rem(140);
+
+    font-family: 'Gmarket Sans';
+    font-weight: 700;
+    font-size: rem(50);
+    line-height: rem(50);
+    color: #202020;
+  }
+  .image {
+    width: rem(320);
+    aspect-ratio: 5.3/1;
+
+  }
+}
+
+
+
+
+
