@@ -19,7 +19,7 @@ $list-height: rem(58);
   padding:rem(20) 0;
   height: calc(100vh - $header-height);
   box-sizing: border-box;
-  border: 1px solid var(--color-line-light);
+  border: 1px solid var(--color-line-04);
   border-top: 0;
   max-width: $nav-width;
   width: $nav-width;
@@ -109,7 +109,7 @@ $list-height: rem(58);
     bottom:0;
     left:0;
     width: 100%;
-    border-top: 1px solid var(--color-line-light);
+    border-top: 1px solid var(--color-line-04);
     a, p{
       max-height: $list-height;
       padding: rem(17) rem($menu-Padding + 10);width:100%; display:flex;

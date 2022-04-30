@@ -2,12 +2,17 @@
 
 :root{
 
-    --color-main: #CA1011;
+    --color-main: #CA1011; /* * Site Main Color */
     
+    --color-font-strong:#000;
+    --color-font-medium:#717171;
+    --color-font-light:#B7B7B7;
 
-    --color-font-def:#202020; /* * 기본폰트: 따로 지정하지 않아도, 기본값으로 지정돼있음 */
+
+    --color-font-def:#202020; /* * 기본폰트: 따로 지정하지 않아도 됨 (기본값) */
     --color-font-sub:#636363; /* * 부연설명 */
-    --color-disabled: #ABABAB; /* *  1. input: Disabled / 2. placeholder */
+    --color-disabled: #ABABAB; /* * input: Disabled */
+    --color-placeholder: #ABABAB; /* * input: placeholder */
 
     
     --color-point-disabled: #F69999; /* *  포인트색상 Disabled */
@@ -24,34 +29,19 @@
     --color-warning: #FF4444;
     
 
-    --color-line:#DDD;
-    --color-line-light:#E6E6EB;
-
-    
     --color-line-01: #5E5E5E;
     --color-line-02: #ABABAB;
     --color-line-03: #DDDDDD;
     --color-line-04: #EFEFEF;
 
      
-
-    --color-bg :#F8F8FF;
-    --color-bg-footer :#F8F8FF;
-    --color-bg-admin :#F8F8FF;
+    --color-bg-ghostWhite :#F8F8FF;
 
     --ani-default: 0.3s ease;
     --ani-short: 0.15s ease-out;
 }
 
 
-/* 유니코드 범위
-영문 (대문자) : U+0041-005A
-영문 (소문자) : U+0061-007A
-숫자 : U+0030-0039
-한글 : U+AC00-U+D7A3
-
- 폰트 
- */
 
  /* 여백 초기화 */
  *{margin:0; padding:0;}
@@ -77,23 +67,27 @@ select, textarea, button, input, form, figure, figcaption{
 
 /*폰트 초기화*/
 body,form, select, textarea, select, button, table, input {
-    font-family: "Pretendard Variable", 'Noto Sans KR', Roboto, -apple-system, BlinkMacSystemFont, system-ui, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+    font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont, system-ui, helvetica,'Helvetica Neue', 'Apple SD Gothic Neo', 'Malgun Gothic', "맑은 고딕", sans-serif;
     font-style:normal;
     font-weight: 400;
     font-size: 16px;
     line-height: 1.6;
     letter-spacing: 0rem;
-    /* -webkit-font-smoothing: antialiased; */
-    /*해당 옵션 사용시, 글자가 얇아진다 (얇고 명료하게 표현됨)*/
-     
+    /* -webkit-font-smoothing: antialiased; */ /*해당 옵션 사용시, 글자가 얇아진다 (얇고 명료하게 표현됨)*/
 }
-.font-roboto{font-family: "Roboto", sans-serif;}
+
 /* 
 **** 영어와 한글 글꼴을 다르게 하기
 복수의 글꼴 일시, 첫번째 글꼴로 표현할 수 없는 것만 다음 글꼴을 사용.
 따라서 한글이 없는 글꼴을 앞에 두고, 한글 글꼴을 뒤에 둔다.
 */
 
+/* 유니코드 범위
+영문 (대문자) : U+0041-005A
+영문 (소문자) : U+0061-007A
+숫자 : U+0030-0039
+한글 : U+AC00-U+D7A3
+ */
 
 
 
@@ -175,7 +169,7 @@ select:focus, textarea:focus, input:not([type="checkbox"],[type="file"],[type="r
 input, select, button{border:0; display:inline-block; background:none; color:inherit;}
 
 input:placeholder{
-    color:#b7b7b7;
+    color: var(--color-placeholder);
 }
 input:not([type="checkbox"]){
     -webkit-appearance: none;

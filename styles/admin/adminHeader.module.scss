@@ -9,7 +9,7 @@ $admin-headerHeight:rem(80);
 #admin_header{
   font-size:rem(15); color:#4d4d4d;
   height: $admin-headerHeight;
-  border-bottom: rem(1) solid var(--color-line);
+  border-bottom: rem(1) solid var(--color-line-03);
   box-sizing: border-box;
   position:fixed;
   z-index: 1000;
@@ -39,7 +39,7 @@ $admin-headerHeight:rem(80);
         right:0;
         top:50%;
         transform:translateY(-50%);
-        background-color: var(--color-line);
+        background-color: var(--color-line-03);
         width:1px;
         height: rem(18);
       }

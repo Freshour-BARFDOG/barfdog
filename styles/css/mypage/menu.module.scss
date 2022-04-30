@@ -9,19 +9,19 @@ $browser-context:16;
 $menuPadding: 20;
 
 .title{
-  color:var(--color-font-strong);
+  color: #000;
   font-size: rem(28);
   font-weight: 400;
   margin-bottom: rem(15);
 }
 
 .menu {
-  border: 1px solid var(--color-line-light);
+  border: rem(1) solid var(--color-line-04);
   box-sizing:border-box;
   width: rem(200);
   
   .menu_title{
-    color:var(--color-font-medium);
+    color: #717171;
     
     &, * [data-current-page]{
       color:var(--color-main);
@@ -30,7 +30,7 @@ $menuPadding: 20;
 
     
     &:not(:last-child) a, &:not(:last-child) 
-    p{border-bottom: 1px solid var(--color-line-light);}
+    p{border-bottom: 1px solid var(--color-line-04);}
 
     > ul{
       background-color:#f4f4f4;

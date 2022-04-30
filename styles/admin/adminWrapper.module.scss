@@ -40,7 +40,7 @@ $contents-maxWidth: rem(1620);
 .contents_container_outer{
   float:right;
   width: calc(100% - $nav-width);
-  background-color: var(--color-bg);
+  background-color: var(--color-bg-ghostWhite);
 }
 .contents_container{
   float:right;

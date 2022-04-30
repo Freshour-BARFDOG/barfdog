@@ -7,9 +7,9 @@ $browser-context:16;
   .table{
     font-size: rem(15);
     /* border line */
-    .table_header{border: rem(1) solid var(--color-line);}
-    .table_th:not(:last-child), span:not(:last-child){border-right: rem(1) solid var(--color-line);}
-    .item:not(:last-child){border-bottom: rem(1) solid var(--color-line);}
+    .table_header{border: rem(1) solid var(--color-line-03);}
+    .table_th:not(:last-child), span:not(:last-child){border-right: rem(1) solid var(--color-line-03);}
+    .item:not(:last-child){border-bottom: rem(1) solid var(--color-line-03);}
 
     .table_header, .item{
       display:grid;
@@ -41,7 +41,7 @@ $browser-context:16;
 
     .item{
       background-color: #fff;
-      border: rem(1) solid var(--color-line);
+      border: rem(1) solid var(--color-line-03);
       margin-top:rem(-1);
     }
 
