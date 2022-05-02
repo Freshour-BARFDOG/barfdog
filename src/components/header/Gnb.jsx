@@ -73,7 +73,7 @@ function Gnb() {
         <SubmenuList title="램&amp;비프" link="/recipe/labmAndBeef" />
       </MenuLayout>
       <MenuLayout title="커뮤니티">
-        <SubmenuList title="공지사항" link="/community/goods" />
+        <SubmenuList title="공지사항" link="/community/notice" />
         <SubmenuList title="이벤트" link="/community/event" />
         <SubmenuList title="블로그" link="/community/blog" />
         <SubmenuList title="어바웃" link="/community/about" />

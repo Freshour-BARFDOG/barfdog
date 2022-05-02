@@ -47,8 +47,8 @@ module.exports = {
   async rewrites() {
     console.log('Delopy Type is Dev ?',process.env.NODE_ENV !== "production");
     // console.log(process.env.DESTINATION_URL);
-    // console.log(process.env.DESTINATION_URL_DEV);
-    // console.log(process.env.SOURCE_PATH);
+    console.log(process.env.DESTINATION_URL_DEV);
+    // console.log(process.env.SOURCE_PATH <--- URL  /api/이하 요청되었을 때  실행됨);
     if (process.env.NODE_ENV === "development") {
       return [
         {
