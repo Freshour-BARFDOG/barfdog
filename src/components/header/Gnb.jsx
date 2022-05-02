@@ -61,10 +61,10 @@ function Gnb() {
     <>
       <Gnb_survey />
       <MenuLayout title="샵">
-        <SubmenuList title="ALL" link="/shop" />
-        <SubmenuList title="생식" link="/shop/raw" />
-        <SubmenuList title="토핑" link="/shop/topping" />
-        <SubmenuList title="굿즈" link="/shop/goods" />
+        <SubmenuList title="ALL" link="/shop?category=all" />
+        <SubmenuList title="생식" link="/shop?category=raw" />
+        <SubmenuList title="토핑" link="/shop?category=topping" />
+        <SubmenuList title="굿즈" link="/shop?category=goods" />
       </MenuLayout>
       <MenuLayout title="레시피">
         <SubmenuList title="스타터프리미엄" link="/recipe/starter" />

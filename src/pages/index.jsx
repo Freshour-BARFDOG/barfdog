@@ -117,11 +117,12 @@ function Swiper_main() {
                   <Link href="/" passHref>
                     <a>
                       <Image
+                        priority
                         src={data.imgPath}
                         objectFit="cover"
                         objectPosition="50% 50%"
                         layout="fill"
-                        alt="메인배너 이미지2"
+                        alt="메인배너 이미지"
                       ></Image>
                     </a>
                   </Link>
