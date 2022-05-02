@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import Image from 'next/image';
 import rem from '@src/components/atoms/rem';
 
 const Frame = styled.div`

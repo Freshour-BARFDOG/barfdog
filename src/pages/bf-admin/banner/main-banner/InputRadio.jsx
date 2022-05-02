@@ -60,7 +60,7 @@ export const InputRadio_exposedTarget = ({
 
 
 
-export const InputRadio_status = ({ exposedStatus, onRadioButtonHandler, name }) => {
+const InputRadio_status = ({ exposedStatus, onRadioButtonHandler, name }) => {
   const [selectedOption, setSelectedOption] = useState(exposedStatus);
   const onChangeHandler = (e) => {
     setSelectedOption(e.currentTarget.dataset.status);
@@ -95,3 +95,4 @@ export const InputRadio_status = ({ exposedStatus, onRadioButtonHandler, name })
   );
 };
 
+export default InputRadio_status;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import s from "./mainBanner.module.scss";
+import s from "/styles/admin/mainBanner.module.scss";
 import AdminLayout from "@src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "@src/components/admin/AdminWrapper";
 import MainBannerList from './MainBannerList';

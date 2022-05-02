@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import MetaTitle from "@src/components/atoms/MetaTitle";
 import AdminLayout from "@src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "@src/components/admin/AdminWrapper";
-import { InputRadio_exposedTarget, InputRadio_status } from "./InputRadio";
+import InputRadio_status,{ InputRadio_exposedTarget } from "./InputRadio";
 import Fake_input from "./fake_input";
 import PreviewImage from "./PreviewImage";
 import ErrorMessage from "/src/components/atoms/ErrorMessage";
