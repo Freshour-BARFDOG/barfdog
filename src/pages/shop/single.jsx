@@ -18,13 +18,13 @@ function BotBox ({title, children}) {
   }
 
   useEffect(() => {
+    console.log(visible);
     const selectedElem = boxRef.current;
     if (!selectedElem) return;
     visible ? slideDown(selectedElem) : slideUp(selectedElem);
   }, [visible]);
-
   return (
-    <li className={Styles.box_wrap}>
+    <li className={`${Styles.box_wrap} ${visible && Styles.active}`}>
       <div className={`${Styles.guide} clearfix`} onClick={onClickHandler}>
         <h2 className={Styles.box_text}>{title}</h2>
         <span className={`${Styles.image} img-wrap`}>
@@ -322,20 +322,6 @@ const ReviewBox = () => {
 
 
 const ItemInfoBox = () => {
-
-  // const [visible, setVisible] = useState(false);
-  // const boxRef = useRef(null);
-
-  // const onClickHandler = (e) => {
-  //   visible ? setVisible(false) : setVisible(true);
-  // };
-
-  // useEffect(() => {
-  //   const selectedElem = boxRef.current;
-  //   if (!selectedElem) return;
-  //   visible ? slideDown(selectedElem) : slideUp(selectedElem);
-  // }, [visible]);
-
 
   return (
     <>

@@ -750,30 +750,34 @@ section.tab_slide_box2{padding: 0 0 rem(130)}
       border-top: rem(1) solid var(--color-line-02);
       .box_wrap{
         border-bottom: rem(1) solid var(--color-line-02);
-        .guide{
-        cursor:pointer;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: rem(76);
-        
-        padding: rem(20) 0;
-        box-sizing: border-box;
-  
-        .box_text {
-          width: 85%;
-          text-align: start;
-          font-weight: 700;
-          @include char(l20);
-        }
-        .image {
-          width: rem(38);
-          aspect-ratio: 1/1;
-        }
-      
-      }
 
-      .box_cont{padding: rem(20) 0;}
+        .guide{
+          cursor:pointer;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: rem(76);
+          
+          padding: rem(20) 0;
+          box-sizing: border-box;
+    
+          .box_text {
+            width: 85%;
+            text-align: start;
+            font-weight: 700;
+            @include char(l20);
+          }
+          .image {
+            width: rem(38);
+            aspect-ratio: 1/1;
+          }
+        
+        }
+        &.active .image{
+          transform:rotate(90deg);
+        }
+
+        .box_cont{padding: rem(20) 0;}
       }
       
     }
