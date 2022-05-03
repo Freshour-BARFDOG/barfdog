@@ -1,0 +1,17 @@
+$browser-context:16;
+// convert px to rem
+@function rem($px, $context: $browser-context){
+  @return #{$px / $context}rem;
+}
+
+
+#cont{
+  .inp_box{
+    overflow:hidden;
+    display:flex;
+    justify-content:flex-start;
+    align-items:center;
+    gap: rem(10);
+    .desc{font-size:rem(14); color: #909090;}
+  }
+}

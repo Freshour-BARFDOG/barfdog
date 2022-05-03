@@ -1,23 +1,19 @@
-import React, {
-  useState,
-  useEffect,
-} from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import AdminLayout from "/src/components/admin/AdminLayout";
+import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
 import MetaTitle from "@src/components/atoms/MetaTitle";
-import AdminLayout from "@src/components/admin/AdminLayout";
-import { AdminContentWrapper } from "@src/components/admin/AdminWrapper";
-import InputRadio_status, { InputRadio_exposedTarget } from "@src/components/atoms/InputRadio";
+import PreviewImage from "@src/components/atoms/PreviewImage";
+import ErrorMessage from "@src/components/atoms/ErrorMessage";
 import Fake_input from "@src/components/atoms/fake_input";
-import PreviewImage from '@src/components/atoms/PreviewImage';
-import ErrorMessage from '/src/components/atoms/ErrorMessage';
-import axios from "axios";
-import getAdminToken from "@api/getAdminToken";
+import InputRadio_status, {
+  InputRadio_exposedTarget,
+} from "@src/components/atoms/InputRadio";
+import s from "@styles/admin/banner/adminMypageBanner.module.scss";
 
 
 
-
-
-function CreateMainBannerPage() {
+function MypageBanner() {
   const router = useRouter();
 
   const [exposedTarget, setExposedTarget] = useState("all");
@@ -40,10 +36,12 @@ function CreateMainBannerPage() {
     mobileLinkUrl: file_mobile.link,
   };
 
-  
+
   const [formValues, setFormValues] = useState(initialValues);
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+
 
   const handleChange = (e) => {
     const { name, value } = e.currentTarget;
@@ -63,12 +61,15 @@ function CreateMainBannerPage() {
       });
     }
   };
+  
+
 
   const returnToPrevPage = () => {
     if (confirm("이전 페이지로 돌아가시겠습니까?")) {
       router.back();
     }
   };
+
 
 
   const onRadioButtonHandler = (data) => {
@@ -99,171 +100,21 @@ function CreateMainBannerPage() {
   };
 
 
-  const valid_isEmpty = (value) => {
-    let errors;
-
-    if (!value) {
-      errors = "항목이 비어있습니다.";
-    } else {
-      errors = "";
-    }
-
-    return errors;
-  };
-
-  const valid_link = (value) => {
-    let errorsMessage;
-
-    const regexURL = new RegExp(
-      "^(https?:\\/\\/)?" + // protocol
-        "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|" + // domain name
-        "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
-        "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
-        "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
-        "(\\#[-a-z\\d_]*)?$",
-      "gi"
-    ); // fragment locator
-
-    const RESULT = regexURL.test(value);
-
-    if (value && !RESULT) {
-      // console.log("실패");
-      errorsMessage = "유효하지 않은 링크입니다.";
-    } else {
-      errorsMessage = "";
-    }
-
-    // console.log(value);
-    // console.log(RESULT);
-    // console.log(errorsMessage);
-
-    return errorsMessage;
-  };
-
-  const validate = (obj) => {
-    let errors = {};
-    const keys = Object.keys(obj);
-
-    keys.forEach((key) => {
-      const val = obj[key];
-
-      // console.log(val);
-      // console.log(key);
-
-      switch (key) {
-        case "name":
-          errors[key] = valid_isEmpty(val) ? "필수항목입니다." : "";
-          break;
-        case "pcLinkUrl":
-          // console.log(errors[key], valid_link(val));
-          errors[key] = valid_link(val);
-          break;
-        case "mobileLinkUrl":
-          // console.log(errors[key], valid_link(val));
-          errors[key] = valid_link(val);
-          break;
-
-        default:
-          break;
-      }
-    });
-
-    errors["file_pc"] = valid_isEmpty(file_pc.file) ? "필수항목입니다." : "";
-    errors["file_mobile"] = valid_isEmpty(file_mobile.file)
-      ? "필수항목입니다."
-      : "";
-
-    console.log("Validation Result: ", errors);
-
-    return errors;
-  };
-
-
-
-
-  const onSubmitHandler = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setFormErrors(validate(formValues));
-
-    let isError = false;
-    Object.keys(formErrors).forEach((key) => {
-      if (formErrors[key]) {
-        isError = true;
-        return;
-      }
-    });
-
-
-    if (isError) return;
-
-    
-    
-    const token = await getAdminToken();
-    console.log(token);
-    // 보낼값: 파일 1.JSON 2.파일(이미지) 3. 파일(이미지 모바일) 
-    
-    // * 파일 변환방법
-    const formData = new FormData();
-    formData.append("pcFile", file_pc.file);
-    formData.append("mobileFile", file_mobile.file);
-    const jsonData = JSON.stringify(formValues);
-    const blob = new Blob([jsonData], { type: "application/json" });
-    formData.append("requestDto", blob);
-
-    const axiosConfig = {
-      headers: {
-        authorization: token,
-        "Content-Type": "multipart/form-data",
-      },
-    };
-  
-
-    axios
-      .post("/api/banners/main", formData, axiosConfig)
-      .then((res) => {
-        console.log(res);
-        console.log(window)
-        alert('배너등록이 완료되었습니다.');
-        if(window ){
-          location.reload();
-        }
-        
-      })
-      .catch((err) => {
-        console.log(err);
-        console.log(err.response)
-        console.log(err.request)
-        alert("등록에 실패하였습니다.");
-      });
-  }; // * onSubmitHandler
-
-
-  useEffect(() => {
-
-    if (Object.keys(formErrors).length === 0) {
-      console.log("데이터 전송");
-    } else {
-      console.error(formErrors);
-    }
-
-  }, [formErrors]);
-
 
   return (
     <>
-      <MetaTitle title="메인배너 생성" admin={true}/>
+      <MetaTitle title="마이페이지 배너 관리" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
           <div className="title_main">
-            <h1>메인배너 등록</h1>
+            <h1>마이페이지 배너</h1>
           </div>
           <form
             action="/a"
             className="cont"
             encType="multipart/form-data"
             method="post"
-            onSubmit={onSubmitHandler}
+            // onSubmit={onSubmitHandler}
           >
             <div className="cont_body">
               <div className="cont_divider">
@@ -329,7 +180,10 @@ function CreateMainBannerPage() {
                   </div>
                   <div className="inp_section">
                     <label className="inp_wrap file" htmlFor="upload-image-pc">
-                      <PreviewImage file={file_pc.file} />
+                      <PreviewImage
+                        file={file_pc.file}
+                        className={s["upload-image"]}
+                      />
                       <span className="inp_box">
                         <input
                           type="file"
@@ -339,7 +193,6 @@ function CreateMainBannerPage() {
                           accept="image/*"
                           className="hide"
                           data-device="pc"
-                          // multiple={false}
                           onChange={imageFileChangeHandler}
                         />
                         <Fake_input filename={file_pc.filename} />
@@ -393,7 +246,10 @@ function CreateMainBannerPage() {
                       className="inp_wrap file"
                       htmlFor="upload-image-mobile"
                     >
-                      <PreviewImage file={file_mobile.file} />
+                      <PreviewImage
+                        file={file_mobile.file}
+                        className={`${s["upload-image"]} ${s["mobile"]} `}
+                      />
                       <div className="inp_box">
                         <input
                           type="file"
@@ -442,7 +298,6 @@ function CreateMainBannerPage() {
                 </div>
               </div>
             </div>
-            {/* cont_divider */}
             <div className="cont_bottom">
               <div className="btn_section">
                 <button
@@ -466,11 +321,10 @@ function CreateMainBannerPage() {
               </div>
             </div>
           </form>
-          {/* cont */}
         </AdminContentWrapper>
       </AdminLayout>
     </>
   );
 }
 
-export default CreateMainBannerPage;
+export default MypageBanner;

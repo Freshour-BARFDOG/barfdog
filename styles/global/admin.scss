@@ -117,7 +117,12 @@ $aniType_Show : 0.3s ease-in ;
   $titleSectionWidth: rem(150);
   $inputDefaultHeight: rem(38);
   .errorMSG{padding-top:rem(4)}
-  .desc{font-size:rem(12); color:var(--color-font-medium); padding-top: rem(4)}
+  .desc{
+    font-size:rem(12);
+    color:var(--color-font-medium);
+    padding-top: rem(4);
+    cursor:default;
+  }
   input::placeholder{font-size:rem(13); color: var(--color-font-light);}
 
   .title_main {
@@ -125,7 +130,7 @@ $aniType_Show : 0.3s ease-in ;
     color:#000;
     line-height: 1.4;
     margin-bottom: rem(10);
-    *{ font-size:inherit}
+    *{ font-size:inherit; cursor:default;}
   }
 
   .cont{
@@ -139,21 +144,22 @@ $aniType_Show : 0.3s ease-in ;
       }
       .cont_divider:first-child{padding-top:0;}
       .cont_divider:not(:last-child){border-bottom: rem(1) solid var(--color-line-03);}
+      b, i {cursor:default;}
 
       
     }
     .cont_bottom{
-        padding-top: rem(20);
-        text-align:center;
-        .btn_section{
-          display:inline-block;
-          overflow: hidden;
-          > *{float:left;}
-          > *:not(:last-child){
-            margin-right:rem(10);
-          }
+      padding-top: rem(20);
+      text-align:center;
+      .btn_section{
+        display:inline-block;
+        overflow: hidden;
+        > *{float:left;}
+        > *:not(:last-child){
+          margin-right:rem(10);
         }
       }
+    }
     
   }
 

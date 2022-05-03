@@ -26,7 +26,7 @@ const Img = styled.img`
 `;
 
 
-function PreviewImage({file}) {
+function PreviewImage({file, className}) {
   const [SRC, setSRC] = useState(null);
 
   const IMAGE = () => {
@@ -46,43 +46,8 @@ function PreviewImage({file}) {
     })(file);
   }, [file]);
 
-  // (async (blob) => {
-  //   const url = URL.createObjectURL(blob);
-  //   const arrayBuffer = await blob.arrayBuffer();
-  //   console.log(arrayBuffer);
-  //   // const blob = new Blob([], { type: "image/png" });
-  //   const preview = await blob.text();
-  //   console.log(preview);
-  //   const img = document.createElement('img');
-  //   img.src = url;
-  //   document.querySelector(".preview_img").appendChild(img);
-  // })(file);
-
-  // (async (e) => {
-  //   try {
-  //     let contentBuffer = await readFileAsync(file);
-  //     console.log(contentBuffer);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // })();
-
-  // function readFileAsync(file) {
-  //   return new Promise((resolve, reject) => {
-  //     let reader = new FileReader();
-
-  //     reader.onload = () => {
-  //       resolve(reader.result);
-  //     };
-
-  //     reader.onerror = reject;
-
-  //     reader.readAsArrayBuffer(file);
-  //   });
-  // }
-
   return (
-    <Frame className="preview_img">
+    <Frame className={`preview_img ${className}`}>
       <IMAGE />
     </Frame>
   );

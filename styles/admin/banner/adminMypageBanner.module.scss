@@ -1,0 +1,13 @@
+$browser-context:16;
+// convert px to rem
+@function rem($px, $context: $browser-context){
+  @return #{$px / $context}rem;
+}
+
+
+
+.upload-image{
+  height: rem(36) !important;
+}
+
+.upload-image.mobile {max-width: rem(375);}
