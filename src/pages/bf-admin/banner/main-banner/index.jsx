@@ -6,9 +6,43 @@ import MainBannerList from './MainBannerList';
 import AdminBtn_moveToPage from "@src/components/atoms/AdminBtn_moveToPage";
 import rem from '@src/components/atoms/rem';
 import MetaTitle from "@src/components/atoms/MetaTitle";
+import getAdminToken from "@api/getAdminToken";
+import axios from "axios";
+
+
+// - [ ]  메인배너 리스트 > GET
+// - [ ]  메인배너 리스트 > 순서 편집
+// - [ ]  메인배너리스트 > 수정
+// - [ ]  메인배너리스트 > 삭제
+
+const getItems = async() => {
+  const token = await getAdminToken();
+  const axiosConfig = {
+    headers: {
+      authorization: token,
+      "Content-Type": "application/json",
+    },
+  };
+  axios
+    .get("/api/banners/main", axiosConfig)
+    .then((res) => {
+      console.log(res.data._embedded.mainBannerListResponseDtoList);
+    })
+    .catch((err) => {
+      // console.log(err);
+      console.log(err.response);
+      console.log(err.request);
+    });
+  
+}
+
 
 
 function MainBannerIndexPage() {
+  useEffect(() => {
+    getItems();
+    
+  },[])
 
   const items = [
     {
@@ -92,7 +126,7 @@ function MainBannerIndexPage() {
       animation="show"
       onClick={onSaveItemListOrderHandler}
     >
-      저장
+      닫기
     </button>
   );
 

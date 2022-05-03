@@ -1,7 +1,6 @@
 import axios from "axios";
 
 const getAdminToken = async (req, res) => {
-
   const headers = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Expose-Headers": "*",
@@ -27,7 +26,7 @@ const getAdminToken = async (req, res) => {
     })
     .then((res) => {
       // console.log(res);
-      console.log("token : ", res.headers.authorization);
+      // console.log("token : ", res.headers.authorization);
       return token = res.headers.authorization;
     })
     .catch((err) => {

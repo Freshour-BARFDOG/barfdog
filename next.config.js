@@ -53,7 +53,7 @@ module.exports = {
       return [
         {
           source: process.env.SOURCE_PATH,
-          destination: process.env.DESTINATION_URL_DEV,
+          destination: process.env.NEXT_PUBLIC_API_URL_DEV,
         },
       ];
     } else {

@@ -39,6 +39,8 @@ function CreateMainBannerPage() {
     pcLinkUrl: file_pc.link,
     mobileLinkUrl: file_mobile.link,
   };
+
+  
   const [formValues, setFormValues] = useState(initialValues);
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -63,16 +65,11 @@ function CreateMainBannerPage() {
   };
 
   const returnToPrevPage = () => {
-    if (confirm("저장하지 않고 돌아가시겠습니까?")) {
+    if (confirm("이전 페이지로 돌아가시겠습니까?")) {
       router.back();
     }
   };
 
-  // const getNameHandler = (e) => {
-  //   const inp = e.currentTarget;
-  //   const val = inp.value;
-  //   setName(val);
-  // };
 
   const onRadioButtonHandler = (data) => {
     if (data.target) {
@@ -182,6 +179,8 @@ function CreateMainBannerPage() {
   };
 
 
+
+
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -195,13 +194,13 @@ function CreateMainBannerPage() {
       }
     });
 
-    console.log(isError);
+
     if (isError) return;
 
     
     
     const token = await getAdminToken();
-    // console.log(token);
+    console.log(token);
     // 보낼값: 파일 1.JSON 2.파일(이미지) 3. 파일(이미지 모바일) 
     
     // * 파일 변환방법
@@ -224,15 +223,24 @@ function CreateMainBannerPage() {
       .post("/api/banners/main", formData, axiosConfig)
       .then((res) => {
         console.log(res);
+        console.log(window)
+        alert('배너등록이 완료되었습니다.');
+        if(window ){
+          location.reload();
+        }
+        
       })
       .catch((err) => {
         console.log(err);
+        console.log(err.response)
+        console.log(err.request)
+        alert("등록에 실패하였습니다.");
       });
   }; // * onSubmitHandler
 
 
   useEffect(() => {
-    console.log('실행');
+
     if (Object.keys(formErrors).length === 0) {
       console.log("데이터 전송");
     } else {

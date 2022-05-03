@@ -180,9 +180,9 @@ function Swiper_review() {
     return (
       <>
         <ArrowRight_m />
-        <Link href="/community/review" passHref>
+        <Link href="/review" passHref>
           <a onClick={() => {
-              router.push("/community/review");
+              router.push("/review");
             }}
           >
             더보기
