@@ -229,7 +229,7 @@ function EditMainBannerPage() {
 
   return (
     <>
-      <MetaTitle title="메인배너 > Create" />
+      <MetaTitle title="메인배너 수정" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
           <div className="title_main">

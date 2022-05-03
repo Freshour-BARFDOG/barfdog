@@ -8,7 +8,7 @@ import {
 
 import AdminLayout from "/src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
-
+import MetaTitle from "@src/components/atoms/MetaTitle";
 
 
 
@@ -56,11 +56,12 @@ class App extends Component {
 
 function Popup() {
   return (
-    <AdminLayout>
-      <AdminContentWrapper>팝업 페이지
-        <App />
-      </AdminContentWrapper>
-    </AdminLayout>
+    <>
+      <MetaTitle title="팝업 관리" admin={true} />
+      <AdminLayout>
+        <AdminContentWrapper>팝업 리스트 페이지</AdminContentWrapper>
+      </AdminLayout>
+    </>
   );
 }
 

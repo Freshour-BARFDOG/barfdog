@@ -3,15 +3,15 @@ import MetaTitle from "/src/components/atoms/MetaTitle";
 import AdminLayout from "/src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
 
-function ManageUserPage() {
+function ReleaseRewardPage() {
   return (
     <>
-      <MetaTitle title="회원 관리" admin={true}/>
+      <MetaTitle title="적립금 발행" />
       <AdminLayout>
-        <AdminContentWrapper>ManageUserPage</AdminContentWrapper>
+        <AdminContentWrapper>ReleaseRewardPage</AdminContentWrapper>
       </AdminLayout>
     </>
   );
 }
 
-export default ManageUserPage;
+export default ReleaseRewardPage;

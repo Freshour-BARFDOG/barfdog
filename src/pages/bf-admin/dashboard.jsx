@@ -7,7 +7,7 @@ import Image from "next/image";
 function Dashboard() {
   return (
     <>
-      <MetaTitle title="관리자 페이지" />
+      <MetaTitle title="대시보드" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
           DashBoard 페이지 DASHBARD PAGE DASHBARD PAGE DASHBARD PAGE DASHBARD

@@ -110,11 +110,23 @@ $list-height: rem(58);
     left:0;
     width: 100%;
     border-top: 1px solid var(--color-line-04);
+    &[data-current-page="true"]{
+      a,p{
+        font-weight:500;
+        color: var(--color-main);
+      }
+      
+      svg{
+        animation: rotate 2s infinite linear;
+        fill:var(--color-main);
+      }
+    }
     a, p{
       max-height: $list-height;
       padding: rem(17) rem($menu-Padding + 10);width:100%; display:flex;
       align-items:center;
       box-sizing:border-box;
+      position: relative;
       width:100%;
       color:#636363;
       font-size: rem(18);
@@ -126,14 +138,20 @@ $list-height: rem(58);
         transition-timing-function: ease-out;
         transition-property: fill, transform;
         transform:rotate(0);
-        path{transition:inherit}
+        path{transition:inherit; fill:inherit}
       }
       &:hover{
         color: var(--color-main);
-        svg {transform:rotate(180deg)} 
-        path{fill:var(--color-main)}
+        svg {transform:rotate(180deg); animation-play-state:paused;fill:var(--color-main);} 
       }
     }
   }
 
+}
+
+
+
+@keyframes rotate {
+  from {transform:rotate(0deg)}
+  to {transform:rotate(180deg)}
 }

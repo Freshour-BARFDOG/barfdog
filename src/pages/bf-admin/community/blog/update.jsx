@@ -3,15 +3,15 @@ import MetaTitle from "/src/components/atoms/MetaTitle";
 import AdminLayout from "/src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
 
-function ManageUserPage() {
+function UpdateBlogPage() {
   return (
     <>
-      <MetaTitle title="회원 관리" admin={true}/>
+      <MetaTitle title="블로그 수정" admin={true} />
       <AdminLayout>
-        <AdminContentWrapper>ManageUserPage</AdminContentWrapper>
+        <AdminContentWrapper>UpdateBlogPage</AdminContentWrapper>
       </AdminLayout>
     </>
   );
 }
 
-export default ManageUserPage;
+export default UpdateBlogPage;

@@ -252,7 +252,7 @@ function CreateMainBannerPage() {
 
   return (
     <>
-      <MetaTitle title="메인배너 > Create" />
+      <MetaTitle title="메인배너 생성" admin={true}/>
       <AdminLayout>
         <AdminContentWrapper>
           <div className="title_main">

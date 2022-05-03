@@ -1,17 +1,18 @@
-import React from "react";
+import React from 'react';
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import AdminLayout from "/src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
 
-function ManageUserPage() {
+
+function CouponListPage() {
   return (
     <>
-      <MetaTitle title="회원 관리" admin={true}/>
+      <MetaTitle title="쿠폰 조회" admin={true} />
       <AdminLayout>
-        <AdminContentWrapper>ManageUserPage</AdminContentWrapper>
+        <AdminContentWrapper>CouponListPage</AdminContentWrapper>
       </AdminLayout>
     </>
   );
 }
 
-export default ManageUserPage;
+export default CouponListPage;

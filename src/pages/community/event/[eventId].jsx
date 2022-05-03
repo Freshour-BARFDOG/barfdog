@@ -22,4 +22,4 @@ function EventPostPage() {
   );
 }
 
-export default EventPostPage
+export default EventPostPage;

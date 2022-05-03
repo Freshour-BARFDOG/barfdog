@@ -3,15 +3,15 @@ import MetaTitle from "/src/components/atoms/MetaTitle";
 import AdminLayout from "/src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
 
-function ManageUserPage() {
+function CreateEventPage() {
   return (
     <>
-      <MetaTitle title="회원 관리" admin={true}/>
+      <MetaTitle title="이벤트 작성" admin={true} />
       <AdminLayout>
-        <AdminContentWrapper>ManageUserPage</AdminContentWrapper>
+        <AdminContentWrapper>CreateEventPage</AdminContentWrapper>
       </AdminLayout>
     </>
   );
 }
 
-export default ManageUserPage;
+export default CreateEventPage;

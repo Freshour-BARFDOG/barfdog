@@ -8,7 +8,9 @@ import rem from '@src/components/atoms/rem';
 import MetaTitle from "@src/components/atoms/MetaTitle";
 import getAdminToken from "@api/getAdminToken";
 import axios from "axios";
-
+/* 
+<MetaTitle title="메인 배너" admin={true} />
+*/
 
 // - [ ]  메인배너 리스트 > GET
 // - [ ]  메인배너 리스트 > 순서 편집
@@ -133,7 +135,7 @@ function MainBannerIndexPage() {
 
   return (
     <>
-      <MetaTitle title="메인 배너" />
+      <MetaTitle title="메인 배너 관리" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
           <h1 className="title_main">메인배너</h1>

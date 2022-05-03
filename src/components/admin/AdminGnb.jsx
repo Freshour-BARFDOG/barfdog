@@ -33,7 +33,8 @@ function AdminGnb() {
       // console.log(isCurPath);
       if (isCurPath) {
         const activeMenu = menu.closest("." + `${s.menu_title}`);
-        // activeMenu.classList.add(`${s.active}`);
+        // console.log(menu);
+        // console.log(activeMenu);
         activeMenu.dataset.currentPage = true;
         menu.dataset.currentPage = true;
       }
@@ -49,26 +50,26 @@ function AdminGnb() {
         <List title="혜택관리">
           <SubmenuTitle title="쿠폰 관리" noLink />
           <SubmenuList title="쿠폰 조회" link="/bf-admin/coupon" />
-          <SubmenuList title="쿠폰 발행" link="/" />
-          <SubmenuList title="쿠폰 생성" link="/" />
+          <SubmenuList title="쿠폰 발행" link="/bf-admin/coupon/release" />
+          <SubmenuList title="쿠폰 생성" link="/bf-admin/coupon/create" />
           <SubmenuTitle title="적립금 관리" noLink />
-          <SubmenuList title="적립금 조회" link="/" />
-          <SubmenuList title="적립금 발행" link="/" />
+          <SubmenuList title="적립금 조회" link="/bf-admin/reward" />
+          <SubmenuList title="적립금 발행" link="/bf-admin/reward/release" />
         </List>
         <List title="판매관리">
-          <SubmenuList title="통합 검색" link="/" />
-          <SubmenuList title="주문 관리" link="/" />
-          <SubmenuList title="취소 관리" link="/" />
-          <SubmenuList title="반품 관리" link="/" />
-          <SubmenuList title="교환 관리" link="/" />
-          <SubmenuList title="배송현황" link="/" />
-          <SubmenuList title="구매확정" link="/" />
+          <SubmenuList title="통합 검색" link="/bf-admin/sell/search" />
+          <SubmenuList title="주문 관리" link="/bf-admin/sell/order" />
+          <SubmenuList title="취소 관리" link="/bf-admin/sell/cancel" />
+          <SubmenuList title="반품 관리" link="/bf-admin/sell/return" />
+          <SubmenuList title="교환 관리" link="/bf-admin/sell/exchange" />
+          <SubmenuList title="배송 현황" link="/bf-admin/sell/delivery" />
+          <SubmenuList title="구매 확정" link="/bf-admin/sell/confirm" />
         </List>
         <List title="상품관리">
-          <SubmenuList title="단품 관리" link="/" />
-          <SubmenuList title="단품 등록" link="/" />
-          <SubmenuList title="레시피 관리" link="/" />
-          <SubmenuList title="레시피 등록" link="/" />
+          <SubmenuList title="단품 관리" link="/bf-admin/product/single" />
+          <SubmenuList title="단품 등록" link="/bf-admin/product/single/create" />
+          <SubmenuList title="레시피 관리" link="/bf-admin/product/recipe" />
+          <SubmenuList title="레시피 등록" link="/bf-admin/product/recipe/create" />
         </List>
         <List title="배너관리">
           <SubmenuList title="메인 배너" link="/bf-admin/banner/main-banner" />
@@ -83,18 +84,18 @@ function AdminGnb() {
           <SubmenuList title="팝업" link="/bf-admin/banner/popup" />
         </List>
         <List title="게시판관리">
-          <SubmenuList title="공지사항" link="/bf-admin/notice" />
-          <SubmenuList title="이벤트" link="/bf-admin/event" />
-          <SubmenuList title="블로그" link="/bf-admin/blog" />
+          <SubmenuList title="공지사항" link="/bf-admin/community/notice" />
+          <SubmenuList title="이벤트" link="/bf-admin/community/event" />
+          <SubmenuList title="블로그" link="/bf-admin/community/blog" />
         </List>
         <List title="리뷰관리">
           <SubmenuList title="리뷰" link="/bf-admin/review" />
-          <SubmenuList title="베스트 리뷰" link="/bf-admin/best-review" />
+          <SubmenuList title="베스트 리뷰" link="/bf-admin/review/bestReview" />
         </List>
-        <List title="등급정책" link="/class-policy" />
-        <List title="메신저" link="/bf-admin/messanger" />
+        {/* <List title="등급정책" link="/class-policy" /> */}
+        <List title="메신저" link="/bf-admin/messenger" />
       </ul>
-      <div className={s.site_settings}>
+      <div className={`${s.site_settings} ${s.menu_title}`}>
         <Link href="/bf-admin/settings" passHref>
           <a>
             <Icon_setting />

@@ -1,5 +1,5 @@
 import React from 'react';
-import MetaTitle from "../../components/atoms/MetaTitle";
+import MetaTitle from "/src/components/atoms/MetaTitle";
 import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
 
@@ -14,7 +14,7 @@ Index.getInitialProps = async (ctx) => {
 function Index() {
   return (
     <>
-      <MetaTitle title='관리자 Index' />
+      <MetaTitle title="관리자 Index" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>DashBoard 페이지</AdminContentWrapper>
       </AdminLayout>
