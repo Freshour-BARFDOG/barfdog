@@ -33,14 +33,14 @@ export const Gnb_my = () => {
   return (
     <div className={s.gnb_my}>
       <ul className='clearfix'>
-        <List id="gnb_cart" href="/shop">
+        <List id="gnb_cart" href="/cart">
           <div className={s.shop_wrap}>
             <Icon_cart />
             <Cart_counter id='gnb_shop_count' className={s.gnb_shop_count}/>
             <DeadlineTimer />
           </div>
         </List>
-        <List href="/mypage"><Icon_mypage /></List>
+        <List href="/mypage/order-history"><Icon_mypage /></List>
       </ul>
     </div>
   )
@@ -67,10 +67,10 @@ function Gnb() {
         <SubmenuList title="굿즈" link="/shop?category=goods" />
       </MenuLayout>
       <MenuLayout title="레시피">
-        <SubmenuList title="스타터프리미엄" link="/recipe/starter" />
-        <SubmenuList title="터키&amp;비프" link="/recipe/turkeyAndBeef" />
-        <SubmenuList title="덕&amp;램" link="/recipe/duckAndLamb" />
-        <SubmenuList title="램&amp;비프" link="/recipe/labmAndBeef" />
+        <SubmenuList title="스타터프리미엄" link="/recipes/starter" />
+        <SubmenuList title="터키&amp;비프" link="/recipes/turkeyAndBeef" />
+        <SubmenuList title="덕&amp;램" link="/recipes/duckAndLamb" />
+        <SubmenuList title="램&amp;비프" link="/recipes/lambAndBeef" />
       </MenuLayout>
       <MenuLayout title="커뮤니티">
         <SubmenuList title="공지사항" link="/community/notice" />

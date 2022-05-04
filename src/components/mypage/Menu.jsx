@@ -115,9 +115,7 @@ function Menu({...props }) {
 
   return (
     <nav {...props}>
-      <h2 className={s.title}>
-        마이페이지
-      </h2>
+      <h2 className={s.title}>마이페이지</h2>
       <ul className={s.menu}>
         <List title="주문 내역" link="/mypage/order-history" />
         <List title="카드 관리" link="/mypage/card" />
@@ -125,13 +123,14 @@ function Menu({...props }) {
         <List title="배송 현황" link="/mypage/delivery" />
         <List title="반려견 정보" link="/mypage/dogs" />
         <List title="견주 계정 정보" link="">
-          <SubmenuList title="회원정보 변경" link="/mypage/edit/user-info" />
-          <SubmenuList title="비밀번호 변경" link="/mypage/edit/user-pw" />
-          <SubmenuList title="SNS 연동" link="/mypage/edit/sns-connect" />
+          <SubmenuList title="회원정보 변경" link="/mypage/user/info" />
+          <SubmenuList title="비밀번호 변경" link="/mypage/user/changePassword" />
+          <SubmenuList title="SNS 연동" link="/mypage/user/sns" />
         </List>
         <List title="상품 후기" link="/mypage/review" />
         <List title="친구 초대" link="/mypage/invite" />
-        <List title="적립금 조회" link="/mypage/point" />
+        <List title="적립금 조회" link="/mypage/reward" />
+        <List title="쿠폰함" link="/mypage/coupon" />
         <List title="로그아웃" link="/logout" />
       </ul>
     </nav>
