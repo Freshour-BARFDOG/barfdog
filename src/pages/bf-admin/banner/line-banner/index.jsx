@@ -90,11 +90,11 @@ function LineBanner() {
 
   return (
     <>
-      <MetaTitle title="최상단 띠 배너 관리" admin={true} />
+      <MetaTitle title="상단 띠배너 관리" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
           <div className="title_main">
-            <h1>최상단 띠 배너</h1>
+            <h1>상단 띠 배너</h1>
           </div>
           <form
             action="/"

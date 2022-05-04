@@ -34,8 +34,8 @@ const changeArrayOrder = function (list, targetIdx, moveValue) {
 const removeArray = function (list, targetIdx) {
   if (list.length < 0) return;
   const target = list.splice(targetIdx, 1)[0]; // splice (n번 째배열, n개 삭제
-  console.log(target);;
-  console.log(list);
+  // console.log(target);;
+  // console.log(list);
 
   return list;
 };
@@ -44,109 +44,135 @@ const removeArray = function (list, targetIdx) {
 
 
 
-export default function MainBannerList({ items, setItemList, editListOrder }) {
-
+export default function MainBannerList({
+  items,
+  setItemList,
+  editListOrder,
+  onLeakedOrderUp,
+  onLeakedOrderDown,
+  onDeleteItem,
+}) {
   useEffect(() => {
     setItemList(items);
   }, [items, setItemList]);
-  
-  if(!items) return;
 
+  if (!items) return;
 
-
-  const onAscendingHandler = (e) => {
+  const onOrderUpHandler = (e) => {
     // const target = e.currentTarget.closest("li");
     // const children = [...target.parentNode.children];
     // const targetIdx = children.indexOf(target);
     const target = e.currentTarget.closest("li");
-    const targetIdx = getElemIdx(target);
-    const newItemList = changeArrayOrder(items, targetIdx, -1);
-    if (newItemList) setItemList(newItemList);
+    const targetViewIdx = getElemIdx(target);
+    const newItemList = changeArrayOrder(items, targetViewIdx, -1);
+    const targetId = target.dataset.idx;
+    if (newItemList) {
+      setItemList(newItemList);
+      onLeakedOrderUp(targetId);
+    }
   };
 
-
-  const onDescendingHandler = (e) => {
+  const onOrderDownHandler = (e) => {
     // const target = e.currentTarget.closest("li");
     // const children = [...target.parentNode.children];
     // const targetIdx = children.indexOf(target);
     const target = e.currentTarget.closest("li");
-    const targetIdx = getElemIdx(target);
-    const newItemList = changeArrayOrder(items, targetIdx, 1);
-    if (newItemList) setItemList(newItemList);
+    const targetViewIdx = getElemIdx(target);
+    const newItemList = changeArrayOrder(items, targetViewIdx, +1);
+    const targetId = target.dataset.idx;
+    if (newItemList) {
+      setItemList(newItemList);
+      onLeakedOrderDown(targetId);
+    }
   };
-
 
   const SortHandle = () => (
     <span className={`${s.sortHandle}`}>
-      <i className="admin_btn" animation="show" onClick={onAscendingHandler}>
+      <i className="admin_btn" animation="show" onClick={onOrderUpHandler}>
         <Ascend />
       </i>
-      <i className="admin_btn" animation="show" onClick={onDescendingHandler}>
+      <i className="admin_btn" animation="show" onClick={onOrderDownHandler}>
         <Descend />
       </i>
     </span>
   );
 
-
   const onDeleteItemHandler = (e) => {
-     const target = e.currentTarget.closest("li");
-     const targetIdx = getElemIdx(target);
+    const target = e.currentTarget.closest("li");
+    const targetViewIdx = getElemIdx(target);
+    const targetId = target.dataset.idx;
 
-    //  console.log(items[targetIdx].name);
-     const bannerName = items[targetIdx].name;;
-      if (confirm(`선택된 배너(${bannerName})를 정말 삭제하시겠습니까?`)) {
-        removeArray(items, targetIdx);
-        target.remove(); // view에서 안보이게 만듦;
-        //// * 삭제하고나서 ............ 순서....를 업데이트 해줘야한다.
-      }
-  }
+    const bannerName = items[targetViewIdx].name;
+    if (confirm(`선택된 배너(${bannerName})를 정말 삭제하시겠습니까?`)) {
+      removeArray(items, targetViewIdx);
+      onDeleteItem(targetId);
+      target.remove(); // view에서 안보이게 만듦;
+    }
+  };
 
+  const transformDate = (d) => {
+    const yy = d.split("-")[0];
+    const mm = d.split("-")[1];
+    const dd = d.split("-")[2].split("T")[0];
+    return `${yy}-${mm}-${dd}`;
+  };
 
-  const SortableItem = ({ item, sortableItemRef }) => (
-    <li className={s.item} key={`item-${item.id}`} ref={sortableItemRef}>
-      {editListOrder ? <SortHandle /> : <span>{item.order}</span>}
-      <span>{item.name}</span>
-      <span>
-        <figure className={s["img-wrap"]}>
-          <Image
-            src="https://images.unsplash.com/photo-1650210923764-ca790a46e632?ixlib=rb-1.2.1"
-            alt="메인배너 이미지"
-            objectFit="contain"
-            layout="fill"
-          ></Image>
-          {/* <Image
-            src={require("/public/img/icon/Subscription.png")}
-            alt="메인배너 이미지"
-            objectFit="contain"
-            layout="fill"
-          ></Image> */}
-        </figure>
-      </span>
-      <span>{item.exp_target}</span>
-      <span>{item.reg_date}</span>
-      <span>
-        <Link href="/bf-admin/banner/main-banner/editMainBanner" passHref>
-          <a>
-            <button className="admin_btn basic_s solid">수정</button>
-          </a>
-        </Link>
-      </span>
-      <span>
-        <button
-          className="admin_btn basic_s solid"
-          onClick={onDeleteItemHandler}
-        >
-          삭제
-        </button>
-      </span>
-    </li>
-  );
+  const SortableItem = ({ item, sortableItemRef }) => {
+    const DATA = {
+      id: item.id,
+      order: item.leakedOrder,
+      name: item.name,
+      exp_target: item.targets,
+      reg_date: transformDate(
+        item.createdDate ? item.createdDate : item.modifiedDate
+      ),
+      url: item._links.thumbnail_pc.href,
+    };
 
+    return (
+      <li
+        className={s.item}
+        key={`item-${DATA.id}`}
+        ref={sortableItemRef}
+        data-idx={DATA.id}
+      >
+        {editListOrder ? <SortHandle /> : <span>{DATA.order}</span>}
+        <span>{DATA.name}</span>
+        <span>
+          <figure className={s["img-wrap"]}>
+            <Image
+              src={DATA.url}
+              alt={`메인배너 썸네일 ${DATA.id}`}
+              objectFit="contain"
+              layout="fill"
+            ></Image>
+          </figure>
+        </span>
+        <span>{DATA.exp_target}</span>
+        <span>{DATA.reg_date}</span>
+        <span>
+          <Link href="/bf-admin/banner/main-banner/editMainBanner" passHref>
+            <a>
+              <button className="admin_btn basic_s solid">수정</button>
+            </a>
+          </Link>
+        </span>
+        <span>
+          <button
+            className="admin_btn basic_s solid"
+            onClick={onDeleteItemHandler}
+          >
+            삭제
+          </button>
+        </span>
+      </li>
+    );
+  };
 
   return (
     <ul className="table_body">
       {items.map((item, index) => (
-        <SortableItem key={`item-${index}`} index={index} item={item} />
+        <SortableItem key={`item-${item.id}`} index={item.id} item={item} />
       ))}
     </ul>
   );

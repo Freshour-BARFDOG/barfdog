@@ -6,108 +6,60 @@ import MainBannerList from './MainBannerList';
 import AdminBtn_moveToPage from "@src/components/atoms/AdminBtn_moveToPage";
 import rem from '@src/components/atoms/rem';
 import MetaTitle from "@src/components/atoms/MetaTitle";
-import getAdminToken from "@api/getAdminToken";
-import axios from "axios";
-/* 
-<MetaTitle title="메인 배너" admin={true} />
-*/
+import { getData, putData, deleteData } from "/api/reqData";
 
-// - [ ]  메인배너 리스트 > GET
 // - [ ]  메인배너 리스트 > 순서 편집
 // - [ ]  메인배너리스트 > 수정
 // - [ ]  메인배너리스트 > 삭제
 
-const getItems = async() => {
-  const token = await getAdminToken();
-  const axiosConfig = {
-    headers: {
-      authorization: token,
-      "Content-Type": "application/json",
-    },
-  };
-  axios
-    .get("/api/banners/main", axiosConfig)
-    .then((res) => {
-      console.log(res.data._embedded.mainBannerListResponseDtoList);
-    })
-    .catch((err) => {
-      // console.log(err);
-      console.log(err.response);
-      console.log(err.request);
-    });
-  
-}
-
 
 
 function MainBannerIndexPage() {
-  useEffect(() => {
-    getItems();
-    
-  },[])
-
-  const items = [
-    {
-      order: 1,
-      name: "메인배너",
-      link: "https://images.unsplash.com/photo-1650210923764-ca790a46e632?ixlib=rb-1.2.1",
-      exp_target: "비회원",
-      reg_date: "22/01/14",
-    },
-    {
-      order: 2,
-      name: "메인배너2",
-      link: "https://images.unsplash.com/photo-1650210923764-ca790a46e632?ixlib=rb-1.2.1",
-      exp_target: "회원",
-      reg_date: "22/04/19",
-    },
-    {
-      order: 3,
-      name: "메인배너3",
-      link: "https://images.unsplash.com/photo-1650210923764-ca790a46e632?ixlib=rb-1.2.1",
-      exp_target: "전체",
-      reg_date: "22/05/19",
-    },
-  ];
-
-
-
-
-  const [itemList, setItemList] = useState(items);
-  const [originItemList, setOriginItemList] = useState(items);
+  const [itemList, setItemList] = useState([]);
   const [editListOrder, setEditListOrder] = useState(false);
-  const [confirmListOrder, setConfirmListOrder] = useState(false);
+
+  useEffect(() => {
+    const getDataFromAPI = (res) => {
+      const data = res.data._embedded.mainBannerListResponseDtoList;
+      setItemList(data);
+    };
+    getData("/api/banners/main", getDataFromAPI);
+  }, []);
 
   const onEditHandler = () => {
-
-    if (editListOrder) {
-      // console.log("에딧: 활성 -> 비활성");
-      setEditListOrder(false);
-      if(confirmListOrder){
-        // console.log('변경된 아이템리스트 저장');
-        setItemList(itemList); // 현재 변경된 아이템리스트를 넣어야한다.
-        setOriginItemList(itemList);
-      }else{
-        // console.log('아이템리스트 초기화');
-        setItemList(originItemList); // 원래 아이템리스트로 초기화한다.
-        setConfirmListOrder(false);
-      }
-    } else {
-      // console.log("에딧: 비활성 -> 활성");
-      setEditListOrder(true);
-      setConfirmListOrder(false);
-    }; 
-  }
-
-
-  const onSaveItemListOrderHandler = () => {
-    setConfirmListOrder(true);
-  }
-
-  const onDeleteItemList = () => {
-    // setConfirmListOrder(true);
+    setEditListOrder(true);
   };
 
+  const onExitEditListOrderHandler = () => {
+    setEditListOrder(false);
+  };
+
+  /* // ! ----- 순서변경기능 : CORS POLICY에 걸림 ---- ! */
+  /* // ! ----- 순서변경기능 : CORS POLICY에 걸림 ---- ! */
+  /* // ! ----- 순서변경기능 : CORS POLICY에 걸림 ---- ! */
+  /* // ! ----- 순서변경기능 : CORS POLICY에 걸림 ---- ! */
+  /* // ! ----- 순서변경기능 : CORS POLICY에 걸림 ---- ! */
+  /* // ! ----- 순서변경기능 : CORS POLICY에 걸림 ---- ! */
+  /* // ! ----- 순서변경기능 : CORS POLICY에 걸림 ---- ! */
+  
+  const onLeakedOrderUp = (id) => {
+    putData(`api/banners/main/${id}/up`);
+  };
+  const onLeakedOrderDown = (id) => {
+    putData(`api/banners/main/${id}/down`);
+  };
+
+  /* // ! ----- 순서변경기능 : CORS POLICY에 걸림 ---- ! */
+  /* // ! ----- 순서변경기능 : CORS POLICY에 걸림 ---- ! */
+  /* // ! ----- 순서변경기능 : CORS POLICY에 걸림 ---- ! */
+  /* // ! ----- 순서변경기능 : CORS POLICY에 걸림 ---- ! */
+  /* // ! ----- 순서변경기능 : CORS POLICY에 걸림 ---- ! */
+  /* // ! ----- 순서변경기능 : CORS POLICY에 걸림 ---- ! */
+  /* // ! ----- 순서변경기능 : CORS POLICY에 걸림 ---- ! */
+
+  const onDeleteItem = (id) => {
+    deleteData(`api/banners/main/${id}`);
+  };
 
   const BtnEditListOrder = () => (
     <button
@@ -125,13 +77,11 @@ function MainBannerIndexPage() {
       type="button"
       id="set_order"
       className="admin_btn line basic_m point"
-      animation="show"
-      onClick={onSaveItemListOrderHandler}
+      onClick={onExitEditListOrderHandler}
     >
       닫기
     </button>
   );
-
 
   return (
     <>
@@ -171,7 +121,11 @@ function MainBannerIndexPage() {
                 <MainBannerList
                   items={itemList}
                   setItemList={setItemList}
+                  setEditListOrder={setEditListOrder}
                   editListOrder={editListOrder}
+                  onLeakedOrderUp={onLeakedOrderUp}
+                  onLeakedOrderDown={onLeakedOrderDown}
+                  onDeleteItem={onDeleteItem}
                 />
               </div>
             </div>
