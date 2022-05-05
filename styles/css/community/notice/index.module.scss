@@ -1,0 +1,61 @@
+$browser-context:16; // html font-size
+@function rem($px, $context: $browser-context){
+  @return #{$px / $context}rem;
+}
+@import 'styles/global/guide.scss';
+
+section.title{padding : rem(40) 0 rem(30);}
+section.notice_board_box {padding : 0 0 rem(40);}
+section.page_no {padding: 0 0 rem(128)}
+.title {
+  .text {
+    @include char(t24);
+  }
+}
+
+.notice_board_box {
+  text-align: center;
+  align-items: center;
+
+
+  .grid_box {
+    display: grid;
+    grid-template-columns: 13.7% 68.9% 17.2%; 
+    border-bottom: 1px solid var(--color-line-01);
+    > * {
+      @include char(l18);
+      padding : rem(18) 0 rem(18);
+    }
+    >p {
+      padding-left: rem(20);
+      text-align: start;
+    }
+  }
+
+  .content_box {
+    display: grid;
+    grid-template-columns: 13.7% 68.9% 17.2%; 
+    border-bottom: 1px solid var(--color-line-02);
+    > * {
+      @include char(l15);
+      padding : rem(18) 0 rem(18);
+      color: var(--color-font-medium);
+    }
+    >p {
+      padding-left: rem(20);
+      text-align: start;
+    }
+  }
+}
+
+.pagination_box {
+  display: flex;
+  justify-content: center;
+  .content {
+    width: 23%;
+    display: flex;
+    justify-content: space-between;
+    @include char(l16);
+    color: var(--color-font-sub);
+  }
+}

@@ -17,6 +17,8 @@ function BotBox ({title, children}) {
     visible ? setVisible(false) : setVisible(true);
   }
 
+
+
   useEffect(() => {
     console.log(visible);
     const selectedElem = boxRef.current;
@@ -42,9 +44,6 @@ function BotBox ({title, children}) {
     </li>
   );
 }
-
-
-
 
 
 
@@ -245,14 +244,14 @@ const ReviewBox = () => {
       <li>
         <figure className={Styles.grid_box} onClick={onClickHandler}>
           {/* 그리드 1 시작지점 */}
-          <span>98</span>
+          <span>48</span>
           <i className={Styles.star_box}>
-            <RatingStars count={4} margin={0} />
+            <RatingStars count={3} margin={0} />
           </i>
           <p className={Styles.content}>
             <i className={`${Styles.image} img-wrap`}>
               <Image
-                src={require("/public/img/shop/single/shop_main_slide_picture.png")}
+                src={require("public/img/pages/review/review_slide_sample.png")}
                 objectFit="contain"
                 layout="fill"
                 alt="카드 이미지"
@@ -318,7 +317,7 @@ const ReviewBox = () => {
     </section>
   );
 };
-
+//////////////////////////////////
 
 
 const ItemInfoBox = () => {
@@ -545,6 +544,8 @@ const ItemInfoBox = () => {
           </div>
         </div>
       </section>
+
+
       <section className={Styles.barf_guide}>
         <div className={Styles.title}>BARFDOG’s Guide</div>
         <p>
@@ -559,32 +560,24 @@ const ItemInfoBox = () => {
           <ul className={Styles.guide_box}>
             {/* ////// */}
             <BotBox title="급여가이드 보러가기">
-              ----------- 컨텐츠 영역 -----------
-              <br />
-              ----------- 컨텐츠 영역 -----------
-              <br />
-              ----------- 컨텐츠 영역 -----------
-              <br />
-              ----------- 컨텐츠 영역 -----------
-              <br />
-              ----------- 컨텐츠 영역 -----------
-              <br />
-              ----------- 컨텐츠 영역 -----------
-              <br />
+              <div className={`${Styles.image_slide} img-wrap`}>
+                <Image
+                  src={require("/public/img/shop/single/shop_main_guide_slide_1.png")}
+                  objectFit="cover"
+                  layout="fill"
+                  alt="카드 이미지"
+                />
+              </div>
             </BotBox>
             <BotBox title="생식 적응기간을 위한 가이드라인 보러가기">
-              ----------- 컨텐츠 영역 -----------
-              <br />
-              ----------- 컨텐츠 영역 -----------
-              <br />
-              ----------- 컨텐츠 영역 -----------
-              <br />
-              ----------- 컨텐츠 영역 -----------
-              <br />
-              ----------- 컨텐츠 영역 -----------
-              <br />
-              ----------- 컨텐츠 영역 -----------
-              <br />
+              <div className={`${Styles.image_slide2} img-wrap`}>
+                <Image
+                  src={require("/public/img/shop/single/shop_main_guide_slide_2.png")}
+                  objectFit="cover"
+                  layout="fill"
+                  alt="카드 이미지"
+                />
+              </div>
             </BotBox>
 
             {/* 

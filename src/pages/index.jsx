@@ -253,7 +253,7 @@ function Swiper_review() {
               alt="카드 이미지"
             />
           </div>
-          <p>11저희강아지 밥 다먹고 빈그릇 핥는거 7년 키우면서 첨봄.. 굿굿</p>
+          <p>저희강아지 밥 다먹고 빈그릇 핥는거 7년 키우면서 첨봄.. 굿굿</p>
         </SwiperSlide>
         <SwiperSlide className={Styles.slide}>
           <div className={`${Styles["img-wrap"]} img-wrap`}>
@@ -273,7 +273,7 @@ function Swiper_review() {
             />
           </div>
           <p>
-            22진짜 잘먹어요 ;; 생식은 다 잘먹는다고해서 타업체샀다가 안먹어서
+            진짜 잘먹어요 ;; 생식은 다 잘먹는다고해서 타업체샀다가 안먹어서
             포기했는데ㅠㅠ사료는 눈물터져서 다시 막 찾다가 바프독차? 집...
           </p>
         </SwiperSlide>
@@ -295,7 +295,7 @@ function Swiper_review() {
             />
           </div>
           <p>
-            33친구네 시바에게 선물했는데 생식 처음 도전이었는데도 아주 잘
+            친구네 시바에게 선물했는데 생식 처음 도전이었는데도 아주 잘
             먹었다고 합니다. 친구가 마진도 생각 안 하시는 거 같다고 아가는 잘...
           </p>
         </SwiperSlide>
@@ -316,7 +316,7 @@ function Swiper_review() {
               alt="카드 이미지"
             />
           </div>
-          <p>44저희강아지 밥 다먹고 빈그릇 핥는거 7년 키우면서 첨봄..</p>
+          <p>저희강아지 밥 다먹고 빈그릇 핥는거 7년 키우면서 첨봄..</p>
         </SwiperSlide>
         <SwiperSlide className={Styles.slide}>
           <div className={`${Styles["img-wrap"]} img-wrap`}>
@@ -336,7 +336,7 @@ function Swiper_review() {
             />
           </div>
           <p>
-            55진짜 잘먹어요 ;; 생식은 다 잘먹는다고해서 타업체샀다가 안먹어서
+            진짜 잘먹어요 ;; 생식은 다 잘먹는다고해서 타업체샀다가 안먹어서
             포기했는데ㅠㅠ사료는 눈물터져서 다시 막 찾다가 바프독차? 집...
           </p>
         </SwiperSlide>

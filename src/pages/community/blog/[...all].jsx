@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import Wrapper from "/src/components/common/Wrapper";
 import Layout from "/src/components/common/Layout";
 import { useRouter } from "next/router";
+import Styles from "/styles/css/community/blog/[...all].module.scss"
+
 
 
 
@@ -17,6 +19,30 @@ function BlogPostPage() {
   return (
     <Layout>
       <Wrapper>
+        <section className={Styles.title_box}>
+          반려동물 사료를 바꿔야 하는 7가지 이유
+        </section>
+
+        <section className={Styles.line_box}>
+          <hr className={Styles.line} />
+        </section>
+
+
+        <section className={Styles.content_box}>
+          <div className={Styles.picture}>
+
+          </div>
+        </section>
+
+        <section className={Styles.line_box2}>
+          <hr className={Styles.line} />
+        </section>
+
+        <section className= {Styles.btn_box}>
+          <div className={Styles.btn}>목록 보기</div>
+        </section>
+
+
         <div>
           BlogPostPage
           <p>event Type: {type}</p>

@@ -10,7 +10,7 @@
 
 
     --color-font-def:#202020; /* * 기본폰트: 따로 지정하지 않아도 됨 (기본값) */
-    --color-font-sub:#636363; /* * 부연설명 */
+    --color-font-sub:#636363; /* * 부연설명 4d4d4d비슷 */
     --color-font-sub2:#909090;
     --color-disabled: #ABABAB; /* * input: Disabled */
     --color-placeholder: #ABABAB; /* * input: placeholder */
