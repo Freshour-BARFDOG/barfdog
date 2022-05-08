@@ -1,10 +1,13 @@
-import "/styles/global/global.scss";
+import { Provider } from "react-redux";
+import store from "@store/index";
 import axios from 'axios';
+import "/styles/global/global.scss";
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_URL_DEV;
 axios.defaults.headers.post["Content-Type"] =
 axios.defaults.headers.post["Content-Type"] =
 "application/x-www-form-urlencoded";
 axios.defaults.withCredentials = true;
+
 
 
 
@@ -34,7 +37,11 @@ axios.defaults.withCredentials = true;
 
 
 function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+  return (
+    <Provider store={store}>
+      <Component {...pageProps} />
+    </Provider>
+  );
 }
 
 export default MyApp;

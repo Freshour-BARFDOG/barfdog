@@ -7,6 +7,7 @@
       "@styles/*": ["styles/*"],
       "@util/*": ["util/*"],
       "@api/*": ["api/*"],
+      "@store/*": ["store/*"],
     },
     "target": "es5",
     "lib": [

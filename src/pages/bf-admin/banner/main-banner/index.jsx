@@ -3,6 +3,7 @@ import AdminLayout from "@src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "@src/components/admin/AdminWrapper";
 import MetaTitle from "@src/components/atoms/MetaTitle";
 import s from "/styles/admin/mainBanner.module.scss";
+import { useSelector } from "react-redux";
 
 
 import MainBannerList from './MainBannerList';
@@ -23,6 +24,8 @@ const getDataFromAPI = (callback) => {
 
 
 function MainBannerIndexPage() {
+  const test = useSelector(state=> state);
+  console.log(test);
   const [itemList, setItemList] = useState([]);
   const [editListOrder, setEditListOrder] = useState(false);
 
