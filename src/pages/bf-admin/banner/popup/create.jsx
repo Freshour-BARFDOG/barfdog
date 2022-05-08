@@ -15,4 +15,4 @@ function createPopup() {
  );
 }
 
-export default createPopup
+export default createPopup;

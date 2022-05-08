@@ -1,13 +1,11 @@
-import Image from 'next/image';
+import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import s from "/styles/admin/mainBanner.module.scss";
-import Link from 'next/link';
-import Ascend from '/public/img/icon/btn_ascend.svg';
-import Descend from '/public/img/icon/btn_descend.svg';
+import Link from "next/link";
+import Ascend from "/public/img/icon/btn_ascend.svg";
+import Descend from "/public/img/icon/btn_descend.svg";
 import getElemIdx from "@util/func/getElemIdx.js";
-import changeArrayOrder from '@util/func/changeArrayOrder'
-
-
+import changeArrayOrder from "@util/func/changeArrayOrder";
 
 function sorting(arr, key) {
   // 내림차순 : b - a
@@ -21,17 +19,11 @@ function sorting(arr, key) {
   return newArr;
 }
 
-
-
 const removeArray = function (list, targetIdx) {
   if (list.length < 0) return;
   const target = list.splice(targetIdx, 1)[0]; // splice (n번 째배열, n개 삭제
   return list;
 };
-
-
-
-
 
 export default function MainBannerList({
   items_og,
@@ -41,17 +33,14 @@ export default function MainBannerList({
   onLeakedOrderDown,
   onDeleteItem,
 }) {
-
   if (!items_og.length) return;
 
-  const items = sorting(items_og, 'leakedOrder' );
-
- 
+  const items = sorting(items_og, "leakedOrder");
 
   const onOrderUpHandler = (e) => {
     const target = e.currentTarget.closest("li");
     // const targetLeakedOrder = Number(target.dataset.order);
-    // const calcedIndex = targetLeakedOrder -1; 
+    // const calcedIndex = targetLeakedOrder -1;
     const targetViewIdx = getElemIdx(target);
     const apiURL = e.currentTarget.dataset.apiurl;
     const newItemList = changeArrayOrder(items, targetViewIdx, -1);
@@ -64,7 +53,7 @@ export default function MainBannerList({
   const onOrderDownHandler = (e) => {
     const target = e.currentTarget.closest("li");
     // const targetLeakedOrder = Number(target.dataset.order);
-    // const calcedIndex = targetLeakedOrder -1; 
+    // const calcedIndex = targetLeakedOrder -1;
     const targetViewIdx = getElemIdx(target);
     const apiURL = e.currentTarget.dataset.apiurl;
     const newItemList = changeArrayOrder(items, targetViewIdx, +1);
@@ -159,7 +148,7 @@ export default function MainBannerList({
         <span>{DATA.exp_target}</span>
         <span>{DATA.reg_date}</span>
         <span>
-          <Link href={`/bf-admin/banner/main-banner/update/${DATA.id}`} passHref>
+          <Link href={DATA.apiurl.self} passHref>
             <a>
               <button className="admin_btn basic_s solid">수정</button>
             </a>

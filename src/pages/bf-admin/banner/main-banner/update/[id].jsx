@@ -8,35 +8,107 @@ import InputRadio_status, {
 } from "@src/components/atoms/InputRadio";
 import Fake_input from "@src/components/atoms/fake_input";
 import PreviewImage from "@src/components/atoms/PreviewImage";
+import { getData, putData, deleteData } from "/api/reqData"; 
 import ErrorMessage from "/src/components/atoms/ErrorMessage";
-import axios from "axios";
 import getAdminToken from "@api/getAdminToken";
 
-function EditMainBannerPage() {
-  const router = useRouter();
 
-  const [exposedTarget, setExposedTarget] = useState("all");
-  const [exposedStatus, setExposedStatus] = useState("leaked");
+
+// const getDataFromAPI = (callback) => {
+//   const callbackWrapper = (res) => {
+//     const data = res.data._embedded.mainBannerListResponseDtoList;
+//     callback(data);
+//   };
+//   ;
+// };
+
+
+// export async function getStaticPaths({ id }) {
+
+//   const callback = (res) => {
+//     const list = res.data._embedded.mainBannerListResponseDtoList;
+//   };
+//   getData("/api/banners/main", callback);
+
+//   const paths = list.map(({ id }) => {
+//     console.log({ id });
+//     return { params: { id: `${id}` } };
+//   });
+//   // params: {id : '1'},{id : '2'}...
+//   return {
+//     paths,
+//     fallback: false,
+//   };
+// }
+
+// ! DATA를 ...... state로 넣기 전에,,,,, 미리 받아서 ...................UpdateMainBannerPage의 props로 넣어보자
+// ! DATA를 ...... state로 넣기 전에,,,,, 미리 받아서 ...................UpdateMainBannerPage의 props로 넣어보자
+// ! DATA를 ...... state로 넣기 전에,,,,, 미리 받아서 ...................UpdateMainBannerPage의 props로 넣어보자
+// ! DATA를 ...... state로 넣기 전에,,,,, 미리 받아서 ...................UpdateMainBannerPage의 props로 넣어보자
+// ! DATA를 ...... state로 넣기 전에,,,,, 미리 받아서 ...................UpdateMainBannerPage의 props로 넣어보자
+// ! DATA를 ...... state로 넣기 전에,,,,, 미리 받아서 ...................UpdateMainBannerPage의 props로 넣어보자
+// ! DATA를 ...... state로 넣기 전에,,,,, 미리 받아서 ...................UpdateMainBannerPage의 props로 넣어보자
+// ! DATA를 ...... state로 넣기 전에,,,,, 미리 받아서 ...................UpdateMainBannerPage의 props로 넣어보자   22.05.06 금 오후 11:55 
+// export async function getStaticProps() {
+//   const res = await axios.get(`https://localholst:3065/user`);
+//   const data = res.data;
+
+//   return { props: { data } };
+// }
+
+
+
+
+function UpdateMainBannerPage() {
+
+  const router = useRouter();
+  const { id } = router.query;
+
+  useEffect(() => {
+    if (id) {
+      const callback = (res) => {
+        const data = res.data;
+        setInitialValues(data);
+      };
+      getData(`/api/banners/main/${id}`, callback);
+    }
+  }, [id]);
+
+  const [initialValues, setInitialValues] = useState({});
+  // console.log(initialValues);
+  // console.log(initialValues._links.thumbnail_pc.href);
+
+
+  const [exposedTarget, setExposedTarget] = useState(initialValues.targets);
+  const [exposedStatus, setExposedStatus] = useState(initialValues.status);
+  
   const [file_pc, setFile_pc] = useState({
-    file: "",
-    filename: "",
-    link: "",
+    // file: initialValues._links.thumbnail_pc.href,
+    filename: initialValues.name,
+    link: initialValues.pcLinkUrl,
   });
   const [file_mobile, setFile_mobile] = useState({
-    file: "",
-    filename: "",
-    link: "",
+    // file: initialValues._links.thumbnail_mobile.href,
+    filename: initialValues.name,
+    link: initialValues.mobileLinkUrl,
   });
-  const initialValues = {
-    name: "",
-    targets: exposedTarget,
-    status: exposedStatus,
-    pcLinkUrl: file_pc.link,
-    mobileLinkUrl: file_mobile.link,
-  };
+  console.log(file_pc);
+
+
+
   const [formValues, setFormValues] = useState(initialValues);
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+
+  useEffect(() => {
+    if (isSubmitting && !Object.keys(formErrors).length) {
+      postDataToServer();
+    } else {
+      console.error(formErrors);
+    }
+  }, [formErrors, isSubmitting]);
+
 
   const handleChange = (e) => {
     const { name, value } = e.currentTarget;
@@ -57,17 +129,13 @@ function EditMainBannerPage() {
     }
   };
 
+
   const returnToPrevPage = () => {
-    if (confirm("저장하지 않고 돌아가시겠습니까?")) {
+    if (confirm("이전 페이지로 돌아가시겠습니까?")) {
       router.back();
     }
   };
 
-  // const getNameHandler = (e) => {
-  //   const inp = e.currentTarget;
-  //   const val = inp.value;
-  //   setName(val);
-  // };
 
   const onRadioButtonHandler = (data) => {
     if (data.target) {
@@ -96,6 +164,7 @@ function EditMainBannerPage() {
     }
   };
 
+
   const valid_isEmpty = (value) => {
     let errors;
 
@@ -107,6 +176,7 @@ function EditMainBannerPage() {
 
     return errors;
   };
+
 
   const valid_link = (value) => {
     let errorsMessage;
@@ -124,40 +194,33 @@ function EditMainBannerPage() {
     const RESULT = regexURL.test(value);
 
     if (value && !RESULT) {
-      // console.log("실패");
       errorsMessage = "유효하지 않은 링크입니다.";
     } else {
       errorsMessage = "";
     }
 
-    // console.log(value);
-    // console.log(RESULT);
-    // console.log(errorsMessage);
-
     return errorsMessage;
   };
 
-  const validate = (obj) => {
+
+   const validate = (obj) => {
     let errors = {};
     const keys = Object.keys(obj);
 
     keys.forEach((key) => {
       const val = obj[key];
 
-      // console.log(val);
-      // console.log(key);
-
       switch (key) {
         case "name":
-          errors[key] = valid_isEmpty(val) ? "필수항목입니다." : "";
+          valid_isEmpty(val) ? (errors[key] = "필수항목입니다.") : "";
           break;
         case "pcLinkUrl":
-          // console.log(errors[key], valid_link(val));
-          errors[key] = valid_link(val);
+          // console.log(val);
+          valid_link(val) ? (errors[key] = valid_link(val)) : "";
           break;
         case "mobileLinkUrl":
           // console.log(errors[key], valid_link(val));
-          errors[key] = valid_link(val);
+          valid_link(val) ? (errors[key] = valid_link(val)) : '';
           break;
 
         default:
@@ -165,9 +228,10 @@ function EditMainBannerPage() {
       }
     });
 
-    errors["file_pc"] = valid_isEmpty(file_pc.file) ? "필수항목입니다." : "";
-    errors["file_mobile"] = valid_isEmpty(file_mobile.file)
-      ? "필수항목입니다."
+    valid_isEmpty(file_pc.file)
+      ? (errors["file_pc"] = valid_isEmpty(file_pc.file))
+      : "";
+    valid_isEmpty(file_mobile.file) ? (errors["file_mobile"] = valid_isEmpty(file_mobile.file))
       : "";
 
     console.log("Validation Result: ", errors);
@@ -175,11 +239,12 @@ function EditMainBannerPage() {
     return errors;
   };
 
-  const onSubmitHandler = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setFormErrors(validate(formValues));
 
+
+
+  const onSubmitHandler = (e) => {
+    e.preventDefault();
+    setFormErrors(validate(formValues));
     let isError = false;
     Object.keys(formErrors).forEach((key) => {
       if (formErrors[key]) {
@@ -187,14 +252,14 @@ function EditMainBannerPage() {
         return;
       }
     });
-
-    console.log(isError);
     if (isError) return;
+    setIsSubmitting(true);
+  
+  }; // * onSubmitHandler
 
-    const token = await getAdminToken();
-    // console.log(token);
+
+  const postDataToServer = async () => {
     // 보낼값: 파일 1.JSON 2.파일(이미지) 3. 파일(이미지 모바일)
-
     // * 파일 변환방법
     const formData = new FormData();
     formData.append("pcFile", file_pc.file);
@@ -203,6 +268,7 @@ function EditMainBannerPage() {
     const blob = new Blob([jsonData], { type: "application/json" });
     formData.append("requestDto", blob);
 
+    const token = await getAdminToken();
     const axiosConfig = {
       headers: {
         authorization: token,
@@ -210,24 +276,16 @@ function EditMainBannerPage() {
       },
     };
 
-    axios
-      .post("/api/banners/main", formData, axiosConfig)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }; // * onSubmitHandler
+    const postCallback = () => {
+      alert("배너등록이 완료되었습니다.");
+      if (window) {
+        location.reload();
+      }
+    };
 
-  useEffect(() => {
-    console.log("실행");
-    if (Object.keys(formErrors).length === 0) {
-      console.log("데이터 전송");
-    } else {
-      console.error(formErrors);
-    }
-  }, [formErrors]);
+    postData("/api/banners/main", formData, axiosConfig, postCallback);
+  };
+
 
   return (
     <>
@@ -235,7 +293,7 @@ function EditMainBannerPage() {
       <AdminLayout>
         <AdminContentWrapper>
           <div className="title_main">
-            <h1>배너등록</h1>
+            <h1>메인배너 수정</h1>
           </div>
           <form
             action="/a"
@@ -436,12 +494,9 @@ function EditMainBannerPage() {
                 </button>
                 <button
                   type="submit"
-                  id="btn-create"
+                  id="btn-update"
                   className="admin_btn confirm_l solid"
                 >
-                  등록
-                </button>
-                <button type="button" id="btn-update" className="hide">
                   수정
                 </button>
               </div>
@@ -454,4 +509,4 @@ function EditMainBannerPage() {
   );
 }
 
-export default EditMainBannerPage;
+export default UpdateMainBannerPage;
