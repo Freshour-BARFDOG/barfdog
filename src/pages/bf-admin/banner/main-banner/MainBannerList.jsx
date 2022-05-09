@@ -41,6 +41,8 @@ export default function MainBannerList({
   onLeakedOrderDown,
   onDeleteItem,
 }) {
+  console.log(items_og);
+  console.log(items_og.length);
 
   if (!items_og.length) return;
 

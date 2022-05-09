@@ -9,8 +9,7 @@ import s from "/styles/admin/mainBanner.module.scss";
 import MainBannerList from './MainBannerList';
 import AdminBtn_moveToPage from "@src/components/atoms/AdminBtn_moveToPage";
 
-// import { getData, putData, deleteData } from "/api/reqData"; 
-import { GetData, PutData, DeleteData } from "/api/reqData"; 
+import { getData, putData, deleteData } from "/api/reqData"; 
 import AmdinErrorMessage from '@src/components/atoms/AmdinErrorMessage'
 
 
@@ -30,7 +29,7 @@ function MainBannerIndexPage(props) {
         const data = res.data._embedded.mainBannerListResponseDtoList;
         callback(data);
       };
-      GetData(url, callbackWrapper);
+      getData(url, callbackWrapper);
     }
 
     getDataWithSettingState("/api/banners/main", setItemList);
