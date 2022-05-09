@@ -45,7 +45,7 @@ const authSlice = createSlice({
       Router.push("/bf-admin/login");
     },
     adminRestoreAuthState(state) {
-      const token = JSON.parse(localStorage.getItem("admin")).token;
+      const token = JSON.parse(localStorage.getItem("admin"))?.token;
       // * 서버측 refresh token 없이 임시로 만듦
       if (token) {
          state.isAdmin = true;

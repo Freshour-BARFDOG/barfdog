@@ -17,8 +17,9 @@ import { authAction } from '@store/auth-slice';
    const isAdminPath = router.asPath.split("/")[1] === ADMIN_BASE_PATH_KEY;
 
    useEffect(() => {
+
      if (isAdminPath) {
-       const adminAuth = localStorage.getItem("admin");
+       const adminAuth = localStorage?.getItem("admin");
        dispatch(authAction.adminRestoreAuthState());
        const ADMIN_PUBLIC_PATH_KEY = "/login";
        const isPublicPath =

@@ -14,13 +14,6 @@ function AdminGnb() {
   const [curPath, setCurPath] = useState(router.pathname);
 
   useEffect(() => {
-    const adminRootPath = "/bf-admin";
-    const redirPath = adminRootPath + "/dashboard";
-    if (curPath === adminRootPath) {
-      router.push(redirPath);
-      return;
-    }
-
 
     const allMenus = curMenuRef.current.querySelectorAll("a");
 
