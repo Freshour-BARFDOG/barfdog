@@ -1,5 +1,5 @@
-import React from 'react';
-import Styles from '../../../styles/atoms/checkbox.module.scss';
+import React, { useState } from 'react';
+import Styles from '@styles/atoms/checkbox.module.scss';
 
 export function Title (props) {
   return (
@@ -22,11 +22,32 @@ export function Btn (props) {
   )
 }
 
-export default function Checkbox(props) {
+
+
+export default function Checkbox({ id, label, callback, onClick }) {
+
+  const onChangeHandler = (e) => {
+    const input = e.currentTarget;
+    if (typeof callback === "function") callback(input.checked);
+  };
+
+  const onClickHandler = (e) => {
+    const isChecked = e.currentTarget.checked;
+    onClick(isChecked);
+  }
+
+
   return (
-      <label htmlFor='agree' className={Styles.chk_box}>
-        <input type="checkbox" id='agree' />
-        <span className={Styles.on} />
-      </label>
+    <label htmlFor={id} className={Styles.chk_box}>
+      <input
+        type="checkbox"
+        id={id}
+        onChange={onChangeHandler}
+        onClick={onClickHandler}
+        // value={isChecked}
+      />
+      <span className={Styles.on} />
+      <span className={Styles.label}>{label}</span>
+    </label>
   );
 }

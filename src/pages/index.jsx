@@ -483,7 +483,7 @@ function Home() {
 
   return (
     <>
-      <MetaTitle title="바프독"/>
+      <MetaTitle title="바프독" />
       <Layout>
         {/* <Wrapper bgColor="#fbf7f6" fullWidth={true}> */}
         <Wrapper fullWidth={true}>
@@ -752,13 +752,15 @@ function Home() {
                 </ul>
               </div>
             </div>
-
           </section>
         </Wrapper>
 
         {/* 고민 */}
         <Wrapper bgColor="#F9F2EC">
-          <section className={Styles.clientWorry} style={{backgroundColor:'#F9F2EC'}}>
+          <section
+            className={Styles.clientWorry}
+            style={{ backgroundColor: "#F9F2EC" }}
+          >
             <div className={`${Styles.inner} clearfix`}>
               <div className={`${Styles["cont-left"]} cont-left`}>
                 <div className={Styles.title_section}>

@@ -1,4 +1,4 @@
-@import '/styles/atoms/input-radio.module.scss';
+@import '/styles/atoms/input-radio.scss';
 
 /* ADMIN COMMON STYLE */
 $browser-context:16;
@@ -250,4 +250,11 @@ $aniType_Show : 0.3s ease-in ;
 
 
 
+}
+
+
+
+.errorMSG{
+  font-size:rem(13);
+  color:var(--color-main);
 }

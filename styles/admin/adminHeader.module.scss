@@ -27,6 +27,7 @@ $admin-headerHeight:rem(80);
   
   .logo{width:rem(200); float:left;}
   .header_menus{
+    font-size: rem(15);
     float:right; overflow:hidden;
     & > * {float:left;cursor: default;}
     & > *:not(:last-child) {
@@ -40,12 +41,13 @@ $admin-headerHeight:rem(80);
         top:50%;
         transform:translateY(-50%);
         background-color: var(--color-line-03);
-        width:1px;
+        width:rem(1);
         height: rem(18);
       }
     }
 
-    .admin_name{margin-right:rem(2)}
+    .admin_name{margin-right:rem(2); font-sieze:inherit;}
+    .btn_logout{cursor: pointer; font-size:inherit;}
 
   }
 }

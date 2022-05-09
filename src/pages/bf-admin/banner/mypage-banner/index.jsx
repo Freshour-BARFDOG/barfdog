@@ -8,7 +8,7 @@ import ErrorMessage from "@src/components/atoms/ErrorMessage";
 import Fake_input from "@src/components/atoms/fake_input";
 import InputRadio_status, {
   InputRadio_exposedTarget,
-} from "@src/components/atoms/InputRadio";
+} from "@src/components/admin/form/InputRadioPackage";
 import s from "@styles/admin/banner/adminMypageBanner.module.scss";
 
 

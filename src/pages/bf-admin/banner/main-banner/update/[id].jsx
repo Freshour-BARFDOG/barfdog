@@ -5,7 +5,7 @@ import AdminLayout from "@src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "@src/components/admin/AdminWrapper";
 import InputRadio_status, {
   InputRadio_exposedTarget,
-} from "@src/components/atoms/InputRadio";
+} from "@src/components/admin/form/InputRadioPackage";
 import Fake_input from "@src/components/atoms/fake_input";
 import PreviewImage from "@src/components/atoms/PreviewImage";
 import { getData, putData, deleteData } from "/api/reqData"; 

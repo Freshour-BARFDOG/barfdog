@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const getAdminToken = async (req, res) => {
+
+const getAdminToken = async (payload) => {
   const headers = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Expose-Headers": "*",
@@ -13,29 +14,31 @@ const getAdminToken = async (req, res) => {
     processData: false,
   };
 
+  // const adminAccount = {
+  //   email: "admin@gmail.com",
+  //   password: "admin",
+  // };
+
   const adminAccount = {
-    email: "admin@gmail.com",
-    password: "admin",
+    email: payload.email,
+    password: payload.password,
   };
 
-
-
-  let token = await axios
+  let token;
+  await axios
     .post("/api/login", JSON.stringify(adminAccount), {
       headers,
     })
     .then((res) => {
-      // console.log(res);
       // console.log("token : ", res.headers.authorization);
-      return token = res.headers.authorization;
+      return (token = res.headers.authorization);
     })
     .catch((err) => {
       console.log(err);
       return null;
     });
 
-
-    return token;
+  return token;
 };
 
 

@@ -1,48 +1,84 @@
+$browser-context:16;
+@function rem($px, $context: $browser-context){
+  @return #{$px / $context}rem;
+}
+
 .chk_box {
   display: inline-flex; 
   cursor: pointer; 
-  font-size: 14px; 
+  font-size: rem(14); 
   -webkit-user-select: none; 
   -moz-user-select: none; 
   -ms-user-select: none; 
   user-select: none; 
-} /* 기본 체크박스 숨기기 */ 
-.chk_box input[type='checkbox'] { 
-  display: none; 
-} /* 선택되지 않은 체크박스 스타일 꾸미기 */ 
-.chk_box .on {
-  width: 20px; 
-  height: 20px;
-  margin-right: 8px; 
-  background: #ddd; 
-  position: relative;
-  display: block;
-  top: 0; 
-  left: 0; 
-} /* 선택된 체크박스 스타일 꾸미기 */ 
+
+  .label{position:relative; top:rem(-2);} /* TEXT */
+
+  input[type='checkbox']{
+    display:none;
+    
+  } /* 기본 체크박스 숨기기 */ 
+
+  .on{ /* 선택된 체크박스 스타일 꾸미기 */ 
+    width: rem(20); 
+    height: rem(20);
+    margin-right: rem(8); 
+    background: #ddd; 
+    border-radius: rem(2);
+    position: relative;
+    display: block;
+    top: 0; 
+    left: 0; 
+  }
+}
+
+// .chk_box input[type='checkbox'] { 
+//   display: none; 
+// } /* 선택되지 않은 체크박스 스타일 꾸미기 */ 
+
+// .chk_box .on {
+//   width: rem(20); 
+//   height: rem(20);
+//   margin-right: rem(8); 
+//   background: #ddd; 
+//   border-radius: rem(2);
+//   position: relative;
+//   display: block;
+//   top: 0; 
+//   left: 0; 
+// } /* 선택된 체크박스 스타일 꾸미기 */ 
+
 .chk_box input[type="checkbox"]:checked + .on {
   background:var(--color-main); 
+  &:after{display: block;}
 } 
-.on:after { 
+
+.on:after {
   content: ""; 
   position: absolute; 
-  display: none; 
-} 
-.chk_box input[type="checkbox"]:checked + .on:after {
-  display: block; 
-}
-.on:after {
-  width: 6px; 
-  height: 10px; 
+  width: rem(6); 
+  height: rem(10); 
   border: solid #fff; 
-  border-width: 0 2px 2px 0; 
+  border-width: 0 rem(2) rem(2) 0; 
   -webkit-transform: rotate(45deg); 
   -ms-transform: rotate(45deg); 
   transform: rotate(45deg); 
-  position: absolute; 
-  left: 6px; 
-  top: 2px; 
+  left: rem(6); 
+  top: rem(2); 
 }
+
+
+// .chk_box input[type="checkbox"]:checked + .on:after {
+//   display: block; 
+// }
+
+
+// * -------------------------------------------- * //
+// * -------------------------------------------- * //
+// * -------------------------------------------- * //
+
+
+
 
 //타이틀
 .title{

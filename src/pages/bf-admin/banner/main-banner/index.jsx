@@ -2,35 +2,38 @@ import React, { useState, useEffect } from "react";
 import AdminLayout from "@src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "@src/components/admin/AdminWrapper";
 import MetaTitle from "@src/components/atoms/MetaTitle";
-import s from "/styles/admin/mainBanner.module.scss";
-import { useSelector } from "react-redux";
 
+import axios from "axios";
+import s from "/styles/admin/mainBanner.module.scss";
 
 import MainBannerList from './MainBannerList';
 import AdminBtn_moveToPage from "@src/components/atoms/AdminBtn_moveToPage";
 
-import { getData, putData, deleteData } from "/api/reqData"; 
+// import { getData, putData, deleteData } from "/api/reqData"; 
+import { GetData, PutData, DeleteData } from "/api/reqData"; 
 import AmdinErrorMessage from '@src/components/atoms/AmdinErrorMessage'
 
 
-const getDataFromAPI = (callback) => {
-  const callbackWrapper = (res) => {
-    const data = res.data._embedded.mainBannerListResponseDtoList;
-    callback(data);
-  };
-  getData("/api/banners/main", callbackWrapper);
-}
 
 
 
-function MainBannerIndexPage() {
-  const test = useSelector(state=> state);
-  console.log(test);
+function MainBannerIndexPage(props) {
+
+
+
   const [itemList, setItemList] = useState([]);
   const [editListOrder, setEditListOrder] = useState(false);
 
   useEffect(() => {
-    getDataFromAPI(setItemList);
+    const getDataWithSettingState = (url, callback) => {
+      const callbackWrapper = (res) => {
+        const data = res.data._embedded.mainBannerListResponseDtoList;
+        callback(data);
+      };
+      GetData(url, callbackWrapper);
+    }
+
+    getDataWithSettingState("/api/banners/main", setItemList);
   }, []);
 
   const onEditHandler = () => {
@@ -42,19 +45,19 @@ function MainBannerIndexPage() {
   };
 
   const onLeakedOrderUp = (apiURL) => {
-    const data = ""; // ! putData : 빈값 보내기
-    putData(apiURL, data);
-    getDataFromAPI(setItemList);
+    const data = ""; // ! PutData : 빈값 보내기
+    PutData(apiURL, data);
+    getDataWithSettingState("/api/banners/main", setItemList);
   };
 
   const onLeakedOrderDown = (apiURL) => {
-    const data = ""; // ! putData : 빈값 보내기
-    putData(apiURL, data);
-    getDataFromAPI(setItemList);
+    const data = ""; // ! PutData : 빈값 보내기
+    PutData(apiURL, data);
+    getDataWithSettingState("/api/banners/main", setItemList);
   };
 
   const onDeleteItem = (apiURL) => {
-    deleteData(apiURL);
+    DeleteData(apiURL);
   };
 
   const BtnEditListOrder = () => (
@@ -78,8 +81,6 @@ function MainBannerIndexPage() {
       닫기
     </button>
   );
-
-
 
   return (
     <>
@@ -138,3 +139,25 @@ function MainBannerIndexPage() {
 }
 
 export default MainBannerIndexPage;
+
+
+
+MainBannerIndexPage.getInitialProps = async (ctx) => {
+  console.log(ctx);
+  // const token = localStorage.getItem('admin');
+  // console.log(token);
+  // const res = await axios
+  //     .get("/api/banners/main", axiosConfig)
+  //     .then((res) => {
+  //       callback(res);
+  //       return res;
+  //     })
+  //     .catch((err) => {
+  //       console.log(err.response);
+  //       console.log(err.request);
+  //     });;
+  // const json = await res.json();
+  // console.log('SSR -> getInitialProps 테스트')
+  // console.log(json)
+  return { bannerlist: 'zzz' };
+};

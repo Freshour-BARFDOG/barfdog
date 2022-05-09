@@ -6,7 +6,7 @@ import MetaTitle from "@src/components/atoms/MetaTitle";
 import ErrorMessage from "@src/components/atoms/ErrorMessage";
 import InputRadio_status, {
   InputRadio_exposedTarget,
-} from "@src/components/atoms/InputRadio";
+} from "@src/components/admin/form/InputRadioPackage";
 import s from "@styles/admin/banner/adminLineBanner.module.scss";
 
 

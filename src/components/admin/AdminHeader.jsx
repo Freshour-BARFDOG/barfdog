@@ -1,10 +1,17 @@
-import React from 'react'
+import React from 'react';
+import { useDispatch } from "react-redux";
+import { authAction } from "@store/auth-slice";
 import AdminWrapper from '/src/components/admin/AdminWrapper';
 import Image from 'next/image';
 import s from "/styles/admin/adminHeader.module.scss";
 import Link from 'next/link';
 
 function AdminHeader() {
+  const dispatch = useDispatch();
+  const onLogoutHandler = () => {
+    dispatch(authAction.adminLogout());
+  }
+
 
   const adminName = '관리자'; // * 정적인 이름 필요할 경우 변경
   return (
@@ -30,7 +37,12 @@ function AdminHeader() {
               <b className={s.admin_name}>{adminName}</b>님 반갑습니다.
             </li>
             <li>
-              <button type="button" id="logout" className={s.btn_logout}>
+              <button
+                type="button"
+                id="logout"
+                className={s.btn_logout}
+                onClick={onLogoutHandler}
+              >
                 로그아웃
               </button>
             </li>

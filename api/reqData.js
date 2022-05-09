@@ -1,6 +1,4 @@
-import getAdminToken from "@api/getAdminToken";
 import axios from "axios";
-
 
 
 // * ----------------------------------- * //
@@ -13,27 +11,26 @@ import axios from "axios";
 // * delete(url, config)
 // ! delete() :  data param값 제외 (data param존재할 경우, 서버에서 token 에러발생)
 
-
 // * ----------------------------------- * //
 
 
+// const token = JSON.parse(localStorage.getItem("admin")).token;
+const axiosConfig = (contType = "application/json") => ({
+  headers: {
+    authorization: JSON.parse(localStorage.getItem("admin")).token,
+    "Content-Type": contType,
+  },
+});
 
 
-let token ; 
+export const GetData = async (url, callback) => {
 
-export const getData = async (url, callback) => {
-  token = token ? token : await getAdminToken();
-  const axiosConfig = {
-    headers: {
-      authorization: token,
-      "Content-Type": "application/json",
-    },
-  };
   axios
-    .get(url, axiosConfig)
+    .get(url, axiosConfig())
     .then((res) => {
+      console.log(res);
       callback(res);
-      return res
+      return res;
     })
     .catch((err) => {
       console.log(err.response);
@@ -42,15 +39,11 @@ export const getData = async (url, callback) => {
 };
 
 
-export const putData = async (url, data) => {
-  token = token ? token : await getAdminToken();
-  const axiosConfig = {
-    headers: {
-      authorization: token,
-    },
-  };
+
+export const PutData = async (url, data) => {
+
   axios
-    .put(url, data, axiosConfig)
+    .put(url, data, axiosConfig())
     .then((res) => {
       console.log(res);
     })
@@ -62,18 +55,11 @@ export const putData = async (url, data) => {
 
 
 
-export const postData = async (url, data, config, callback) => {
-  token = token ? token : await getAdminToken();
 
-  const axiosConfig = config && {
-    headers: {
-      authorization: token,
-      "Content-Type": "application/json",
-    },
-  };
-  console.log(axiosConfig);
+export const PostData = async (url, data, config, callback) => {
+
   axios
-    .post(url, data, axiosConfig)
+    .post(url, data, axiosConfig())
     .then((res) => {
       console.log(res);
       callback();
@@ -86,19 +72,10 @@ export const postData = async (url, data, config, callback) => {
     });
 };
 
+export const DeleteData = async (url) => {
 
-
-
-export const deleteData = async (url) => {
-  token = token ? token : await getAdminToken();
-  const axiosConfig = {
-    headers: {
-      authorization: token,
-      "Content-Type": "application/json",
-    },
-  };
   axios
-    .delete(url, axiosConfig)
+    .delete(url, axiosConfig())
     .then((res) => {
       console.log(res);
     })
@@ -108,3 +85,65 @@ export const deleteData = async (url) => {
     });
 };
 
+
+
+// export const putData = async (url, data) => {
+//   // token = token ? token : await getAdminToken();
+//   const axiosConfig = {
+//     headers: {
+//       authorization: token,
+//     },
+//   };
+//   axios
+//     .put(url, data, axiosConfig)
+//     .then((res) => {
+//       console.log(res);
+//     })
+//     .catch((err) => {
+//       console.log(err.response);
+//       console.log(err.request);
+//     });
+// };
+
+// export const postData = async (url, data, config, callback) => {
+//   // token = token ? token : await getAdminToken();
+
+//   const axiosConfig = config && {
+//     headers: {
+//       authorization: token,
+//       "Content-Type": "application/json",
+//     },
+//   };
+//   console.log(axiosConfig);
+//   axios
+//     .post(url, data, axiosConfig)
+//     .then((res) => {
+//       console.log(res);
+//       callback();
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//       console.log(err.response);
+//       console.log(err.request);
+//       alert("데이터 전송에 실패하였습니다.");
+//     });
+// };
+
+// export const deleteData = async (url) => {
+//   // token = token ? token : await getAdminToken();
+//   const axiosConfig = {
+//     headers: {
+//       authorization: token,
+//       "Content-Type": "application/json",
+//     },
+//   };
+//   axios
+//     .delete(url, axiosConfig)
+//     .then((res) => {
+//       console.log(res);
+//     })
+//     .catch((err) => {
+//       console.log(err.response);
+//       console.log(err.request);
+//     });
+// };

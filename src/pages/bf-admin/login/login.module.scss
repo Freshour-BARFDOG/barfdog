@@ -1,0 +1,52 @@
+$browser-context:16;
+@function rem($px, $context: $browser-context){
+  @return #{$px / $context}rem;
+}
+
+#loginPage{
+  width: 100vw; height: 100vh; background-color:var(--color-bg) ;
+  section{width:100%; height:100%;}
+}
+
+
+.frame{
+  border-radius:rem(8);
+  background-color:#fff;
+  padding: rem(30) 0 rem(54);
+  box-shadow: 0 0 rem(30) rgba(0,0,0,0.04);
+
+  .container{width:rem(447);}
+  .row{padding: 0 rem(43);}
+
+  .login-header{
+    text-align: center;
+    margin-bottom:rem(15);
+    .logo{width:rem(68);}
+    .title{font-size:rem(24); font-weight: 500;}
+  }
+
+  .form-row{
+
+    p{margin-bottom:rem(4); font-weight: 300;}
+    p, em{padding-left:rem(6)}
+    input:not([type='checkbox']){display: block;width: 100%; padding:rem(10) rem(20); box-sizing: border-box;}
+
+    ::placeholder{font-size:rem(15); color:var(--color-placeholder); font-weight: 200;}
+
+    &:not(:last-child){margin-bottom:rem(17);}
+    &.options{
+      display:flex;
+      justify-content: space-between;
+      span{font-size: rem(15); font-weight:300;}
+    }
+  }
+  .btn-section button{
+    width:auto; width:100%; background-color:var(--color-main); border-radius: rem(4); font-weight: 400; font-size: rem(16);
+    &:not(:last-child){margin-bottom:rem(8)}
+  }
+
+  .reset-pw{
+    button{cursor: pointer;}
+  }
+  
+}
