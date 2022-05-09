@@ -36,6 +36,7 @@ function MainBannerIndexPage(props) {
     getDataWithSettingState("/api/banners/main", setItemList);
   }, []);
 
+
   const onEditHandler = () => {
     setEditListOrder(true);
   };
@@ -81,6 +82,8 @@ function MainBannerIndexPage(props) {
       닫기
     </button>
   );
+
+
 
   return (
     <>
@@ -142,8 +145,13 @@ export default MainBannerIndexPage;
 
 
 
+
+
+
+
+
 MainBannerIndexPage.getInitialProps = async (ctx) => {
-  console.log(ctx);
+  // console.log(ctx);
   // const token = localStorage.getItem('admin');
   // console.log(token);
   // const res = await axios
@@ -159,5 +167,5 @@ MainBannerIndexPage.getInitialProps = async (ctx) => {
   // const json = await res.json();
   // console.log('SSR -> getInitialProps 테스트')
   // console.log(json)
-  return { bannerlist: 'zzz' };
+  return { bannerlist: 'test' };
 };

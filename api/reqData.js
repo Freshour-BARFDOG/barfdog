@@ -1,6 +1,3 @@
-import axios from "axios";
-
-
 // * ----------------------------------- * //
 // *  < AXIOS PARAM for Server API>
 
@@ -14,7 +11,9 @@ import axios from "axios";
 // * ----------------------------------- * //
 
 
-// const token = JSON.parse(localStorage.getItem("admin")).token;
+
+import axios from "axios";
+
 const axiosConfig = (contType = "application/json") => ({
   headers: {
     authorization: JSON.parse(localStorage.getItem("admin")).token,
@@ -22,14 +21,15 @@ const axiosConfig = (contType = "application/json") => ({
   },
 });
 
-
 export const GetData = async (url, callback) => {
+
 
   axios
     .get(url, axiosConfig())
     .then((res) => {
       console.log(res);
       callback(res);
+      console.log(axios.defaults)
       return res;
     })
     .catch((err) => {
@@ -38,10 +38,7 @@ export const GetData = async (url, callback) => {
     });
 };
 
-
-
 export const PutData = async (url, data) => {
-
   axios
     .put(url, data, axiosConfig())
     .then((res) => {
@@ -53,11 +50,7 @@ export const PutData = async (url, data) => {
     });
 };
 
-
-
-
 export const PostData = async (url, data, config, callback) => {
-
   axios
     .post(url, data, axiosConfig())
     .then((res) => {
@@ -73,7 +66,6 @@ export const PostData = async (url, data, config, callback) => {
 };
 
 export const DeleteData = async (url) => {
-
   axios
     .delete(url, axiosConfig())
     .then((res) => {
@@ -84,8 +76,6 @@ export const DeleteData = async (url) => {
       console.log(err.request);
     });
 };
-
-
 
 // export const putData = async (url, data) => {
 //   // token = token ? token : await getAdminToken();

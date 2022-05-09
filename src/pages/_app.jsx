@@ -2,8 +2,7 @@ import { Provider } from "react-redux";
 import store from "@store/index";
 import "@styles/global/global.scss";
 import AuthInterceptor from "@util/hook/auth-interceptor";
-import apiSet from '@api/axios.config'
-
+import '@api/axios.config';
 
 // Server Only File (client에서 사용하는 로직 사용불가)
 // Next JS : 최초실행

@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import getAdminToken from "@api/getAdminToken";
 import Router from "next/router";
 
 const initialAuthState = {
@@ -46,7 +45,7 @@ const authSlice = createSlice({
       Router.push("/bf-admin/login");
     },
     adminRestoreAuthState(state) {
-      const token = localStorage.getItem("admin"); 
+      const token = JSON.parse(localStorage.getItem("admin")).token;
       // * 서버측 refresh token 없이 임시로 만듦
       if (token) {
          state.isAdmin = true;
