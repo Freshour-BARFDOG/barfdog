@@ -10,8 +10,8 @@ import InputRadio_status, { InputRadio_exposedTarget } from "@src/components/ato
 import Fake_input from "@src/components/atoms/fake_input";
 import PreviewImage from '@src/components/atoms/PreviewImage';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
-import axios from "axios";
 import getAdminToken from "@api/getAdminToken";
+import { postData } from '@api/reqData';
 
 
 
@@ -45,6 +45,19 @@ function CreateMainBannerPage() {
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+
+
+  useEffect(() => {
+    if (isSubmitting && !Object.keys(formErrors).length) {
+      console.log("데이터 생성");
+      postDataToServer();
+    } else {
+      console.error(formErrors);
+    }
+  }, [formErrors, isSubmitting]);
+
+
+
   const handleChange = (e) => {
     const { name, value } = e.currentTarget;
     const input = e.currentTarget;
@@ -63,6 +76,7 @@ function CreateMainBannerPage() {
       });
     }
   };
+
 
   const returnToPrevPage = () => {
     if (confirm("이전 페이지로 돌아가시겠습니까?")) {
@@ -127,15 +141,10 @@ function CreateMainBannerPage() {
     const RESULT = regexURL.test(value);
 
     if (value && !RESULT) {
-      // console.log("실패");
       errorsMessage = "유효하지 않은 링크입니다.";
     } else {
       errorsMessage = "";
     }
-
-    // console.log(value);
-    // console.log(RESULT);
-    // console.log(errorsMessage);
 
     return errorsMessage;
   };
@@ -147,20 +156,17 @@ function CreateMainBannerPage() {
     keys.forEach((key) => {
       const val = obj[key];
 
-      // console.log(val);
-      // console.log(key);
-
       switch (key) {
         case "name":
-          errors[key] = valid_isEmpty(val) ? "필수항목입니다." : "";
+          valid_isEmpty(val) ? (errors[key] = "필수항목입니다.") : "";
           break;
         case "pcLinkUrl":
-          // console.log(errors[key], valid_link(val));
-          errors[key] = valid_link(val);
+          // console.log(val);
+          valid_link(val) ? (errors[key] = valid_link(val)) : "";
           break;
         case "mobileLinkUrl":
           // console.log(errors[key], valid_link(val));
-          errors[key] = valid_link(val);
+          valid_link(val) ? (errors[key] = valid_link(val)) : '';
           break;
 
         default:
@@ -168,9 +174,10 @@ function CreateMainBannerPage() {
       }
     });
 
-    errors["file_pc"] = valid_isEmpty(file_pc.file) ? "필수항목입니다." : "";
-    errors["file_mobile"] = valid_isEmpty(file_mobile.file)
-      ? "필수항목입니다."
+    valid_isEmpty(file_pc.file)
+      ? (errors["file_pc"] = valid_isEmpty(file_pc.file))
+      : "";
+    valid_isEmpty(file_mobile.file) ? (errors["file_mobile"] = valid_isEmpty(file_mobile.file))
       : "";
 
     console.log("Validation Result: ", errors);
@@ -181,11 +188,9 @@ function CreateMainBannerPage() {
 
 
 
-  const onSubmitHandler = async (e) => {
+  const onSubmitHandler = (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
     setFormErrors(validate(formValues));
-
     let isError = false;
     Object.keys(formErrors).forEach((key) => {
       if (formErrors[key]) {
@@ -193,16 +198,17 @@ function CreateMainBannerPage() {
         return;
       }
     });
-
-
     if (isError) return;
+    setIsSubmitting(true);
+  
+  }; // * onSubmitHandler
 
-    
-    
-    const token = await getAdminToken();
-    console.log(token);
+
+
+
+  const postDataToServer = async () => {
+
     // 보낼값: 파일 1.JSON 2.파일(이미지) 3. 파일(이미지 모바일) 
-    
     // * 파일 변환방법
     const formData = new FormData();
     formData.append("pcFile", file_pc.file);
@@ -211,43 +217,25 @@ function CreateMainBannerPage() {
     const blob = new Blob([jsonData], { type: "application/json" });
     formData.append("requestDto", blob);
 
+    const token = await getAdminToken();
     const axiosConfig = {
       headers: {
         authorization: token,
         "Content-Type": "multipart/form-data",
       },
     };
-  
 
-    axios
-      .post("/api/banners/main", formData, axiosConfig)
-      .then((res) => {
-        console.log(res);
-        console.log(window)
-        alert('배너등록이 완료되었습니다.');
-        if(window ){
-          location.reload();
-        }
-        
-      })
-      .catch((err) => {
-        console.log(err);
-        console.log(err.response)
-        console.log(err.request)
-        alert("등록에 실패하였습니다.");
-      });
-  }; // * onSubmitHandler
-
-
-  useEffect(() => {
-
-    if (Object.keys(formErrors).length === 0) {
-      console.log("데이터 전송");
-    } else {
-      console.error(formErrors);
+    const postCallback = () => {
+      alert("배너등록이 완료되었습니다.");
+      if (window) {
+        location.reload();
+      }
     }
+  
+    postData("/api/banners/main", formData, axiosConfig, postCallback);
 
-  }, [formErrors]);
+  }
+
 
 
   return (

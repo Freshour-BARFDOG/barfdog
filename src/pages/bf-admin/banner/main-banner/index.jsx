@@ -1,29 +1,36 @@
 import React, { useState, useEffect } from "react";
-import s from "/styles/admin/mainBanner.module.scss";
 import AdminLayout from "@src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "@src/components/admin/AdminWrapper";
+import MetaTitle from "@src/components/atoms/MetaTitle";
+import s from "/styles/admin/mainBanner.module.scss";
+import { useSelector } from "react-redux";
+
+
 import MainBannerList from './MainBannerList';
 import AdminBtn_moveToPage from "@src/components/atoms/AdminBtn_moveToPage";
-import rem from '@src/components/atoms/rem';
-import MetaTitle from "@src/components/atoms/MetaTitle";
-import { getData, putData, deleteData } from "/api/reqData";
 
-// - [ ]  메인배너 리스트 > 순서 편집
-// - [ ]  메인배너리스트 > 수정
-// - [ ]  메인배너리스트 > 삭제
+import { getData, putData, deleteData } from "/api/reqData"; 
+import AmdinErrorMessage from '@src/components/atoms/AmdinErrorMessage'
+
+
+const getDataFromAPI = (callback) => {
+  const callbackWrapper = (res) => {
+    const data = res.data._embedded.mainBannerListResponseDtoList;
+    callback(data);
+  };
+  getData("/api/banners/main", callbackWrapper);
+}
 
 
 
 function MainBannerIndexPage() {
+  const test = useSelector(state=> state);
+  console.log(test);
   const [itemList, setItemList] = useState([]);
   const [editListOrder, setEditListOrder] = useState(false);
 
   useEffect(() => {
-    const getDataFromAPI = (res) => {
-      const data = res.data._embedded.mainBannerListResponseDtoList;
-      setItemList(data);
-    };
-    getData("/api/banners/main", getDataFromAPI);
+    getDataFromAPI(setItemList);
   }, []);
 
   const onEditHandler = () => {
@@ -34,31 +41,20 @@ function MainBannerIndexPage() {
     setEditListOrder(false);
   };
 
-  /* // ! ----- 순서변경기능 : CORS POLICY에 걸림 ---- ! */
-  /* // ! ----- 순서변경기능 : CORS POLICY에 걸림 ---- ! */
-  /* // ! ----- 순서변경기능 : CORS POLICY에 걸림 ---- ! */
-  /* // ! ----- 순서변경기능 : CORS POLICY에 걸림 ---- ! */
-  /* // ! ----- 순서변경기능 : CORS POLICY에 걸림 ---- ! */
-  /* // ! ----- 순서변경기능 : CORS POLICY에 걸림 ---- ! */
-  /* // ! ----- 순서변경기능 : CORS POLICY에 걸림 ---- ! */
-  
-  const onLeakedOrderUp = (id) => {
-    putData(`api/banners/main/${id}/up`);
-  };
-  const onLeakedOrderDown = (id) => {
-    putData(`api/banners/main/${id}/down`);
+  const onLeakedOrderUp = (apiURL) => {
+    const data = ""; // ! putData : 빈값 보내기
+    putData(apiURL, data);
+    getDataFromAPI(setItemList);
   };
 
-  /* // ! ----- 순서변경기능 : CORS POLICY에 걸림 ---- ! */
-  /* // ! ----- 순서변경기능 : CORS POLICY에 걸림 ---- ! */
-  /* // ! ----- 순서변경기능 : CORS POLICY에 걸림 ---- ! */
-  /* // ! ----- 순서변경기능 : CORS POLICY에 걸림 ---- ! */
-  /* // ! ----- 순서변경기능 : CORS POLICY에 걸림 ---- ! */
-  /* // ! ----- 순서변경기능 : CORS POLICY에 걸림 ---- ! */
-  /* // ! ----- 순서변경기능 : CORS POLICY에 걸림 ---- ! */
+  const onLeakedOrderDown = (apiURL) => {
+    const data = ""; // ! putData : 빈값 보내기
+    putData(apiURL, data);
+    getDataFromAPI(setItemList);
+  };
 
-  const onDeleteItem = (id) => {
-    deleteData(`api/banners/main/${id}`);
+  const onDeleteItem = (apiURL) => {
+    deleteData(apiURL);
   };
 
   const BtnEditListOrder = () => (
@@ -83,6 +79,8 @@ function MainBannerIndexPage() {
     </button>
   );
 
+
+
   return (
     <>
       <MetaTitle title="메인 배너 관리" admin={true} />
@@ -91,13 +89,11 @@ function MainBannerIndexPage() {
           <h1 className="title_main">메인배너</h1>
           <div className="cont">
             <div className="cont_header clearfix">
-              <p className="cont_title cont-left" style={{ height: rem(44) }}>
-                목록
-              </p>
+              <p className="cont_title cont-left">목록</p>
               <div className="cont-right">
                 <AdminBtn_moveToPage
                   text="배너등록"
-                  href="/bf-admin/banner/main-banner/createMainBanner"
+                  href="/bf-admin/banner/main-banner/create"
                   className="admin_btn confirm_m solid"
                   animation="show"
                 />
@@ -107,7 +103,7 @@ function MainBannerIndexPage() {
                 {editListOrder && <BtnSave />}
               </div>
             </div>
-            <div className={s.cont_viewer}>
+            <div className={`${s.cont_viewer}`}>
               <div className={s.table}>
                 <ul className={s.table_header}>
                   <li className={s.table_th}>순서</li>
@@ -118,15 +114,19 @@ function MainBannerIndexPage() {
                   <li className={s.table_th}>수정</li>
                   <li className={s.table_th}>삭제</li>
                 </ul>
-                <MainBannerList
-                  items={itemList}
-                  setItemList={setItemList}
-                  setEditListOrder={setEditListOrder}
-                  editListOrder={editListOrder}
-                  onLeakedOrderUp={onLeakedOrderUp}
-                  onLeakedOrderDown={onLeakedOrderDown}
-                  onDeleteItem={onDeleteItem}
-                />
+                {itemList.length ? (
+                  <MainBannerList
+                    items_og={itemList}
+                    setItemList={setItemList}
+                    setEditListOrder={setEditListOrder}
+                    editListOrder={editListOrder}
+                    onLeakedOrderUp={onLeakedOrderUp}
+                    onLeakedOrderDown={onLeakedOrderDown}
+                    onDeleteItem={onDeleteItem}
+                  />
+                ) : (
+                  <AmdinErrorMessage text="조회된 데이터가 없습니다." />
+                )}
               </div>
             </div>
           </div>
