@@ -33,7 +33,8 @@ export default function MainBannerList({
   onLeakedOrderDown,
   onDeleteItem,
 }) {
-  if (!items_og.length) return;
+  
+  if (!items_og || !items_og.length) return;
 
   const items = sorting(items_og, "leakedOrder");
 
