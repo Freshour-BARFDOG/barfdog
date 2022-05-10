@@ -286,6 +286,9 @@ function CartPage() {
             </div>
           </section>
         </Wrapper>
+
+
+        
       </Layout>
     </>
   );
