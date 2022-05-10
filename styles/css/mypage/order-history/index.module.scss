@@ -1,0 +1,76 @@
+$browser-context:16; // html font-size
+@function rem($px, $context: $browser-context){
+  @return #{$px / $context}rem;
+}
+@import 'styles/global/guide.scss';
+
+
+
+section.title{ padding : rem(8) 0 rem(30);}
+section.content_title { padding :0 0 rem(105) }
+
+
+.title {
+  @include char(t24);
+}
+
+.content_title {
+  .flex_box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    border-bottom: 1px solid var(--color-line-03);
+    text-align: center;
+    @include char(l16);
+    .left_box {
+      width: 50%;
+      
+      display: flex;
+      justify-content: center;
+      div {
+        width: 25%;
+        min-width: rem(100);
+        padding-bottom: rem(10);
+        border-bottom: 2px solid var(--color-main);
+      }
+    }
+    .right_box {
+      width: 50%;
+      padding-bottom: rem(10);
+    }
+  }
+}
+
+
+.content {
+
+  >p {
+    @include char(l16);
+    
+    color : var(--color-font-sub);
+    text-align: center;
+    padding-bottom: rem(30);
+  }
+  
+  
+  .btn_box {
+    display: flex;
+    justify-content: center;
+    .btn {
+      width: 17%;
+      background-color: var(--color-main);
+      color: #fff;
+
+      text-align: center;
+
+      @include char(l15);
+      padding : rem(14) 0 rem(14);
+      border-radius: rem(4);
+  
+    }
+
+  }
+
+
+}
