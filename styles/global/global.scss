@@ -48,8 +48,8 @@ html, body{width:100vw; overflow-x:hidden;}
 
 
 @keyframes hide {
-  from{opacity:1;;}
-  to{opacity:0;;}
+  from{opacity:1;pointer-events: all;}
+  to{opacity:0;pointer-events: none;}
 }
 
 

@@ -6,6 +6,8 @@ import Image from 'next/image';
 import Checkbox from '@src/components/atoms/Checkbox';
 import getAdminToken from "@api/getAdminToken";
 
+import Modal from '@src/components/modal/Modal'
+
 // * 1. 로그인 클릭했을 때, 어드민 계정에 맞는지 안맞는지만 확인한다.
 // * 2. 자동로그인 체크이벤트
 
@@ -19,7 +21,15 @@ function LoginIndexPage() {
   const [formErrors, setFormErrors] = useState({});
   const [formValues, setFormValues] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   
+  const onModalShow = () => {
+    setIsModalVisible(true);
+  }
+
+  const onModalHide = () => {
+    setIsModalVisible(false);
+  };
 
   useEffect(() => {
     let isError = false;
@@ -163,13 +173,20 @@ function LoginIndexPage() {
                       />
                     </span>
                     <span className={s["reset-pw"]}>
-                      <button type="button">비밀번호 재설정</button>
+                      <button type="button" onClick={onModalShow}>
+                        비밀번호 재설정
+                      </button>
                     </span>
                   </div>
-                  <div className={`${s["form-row"]} ${s["btn-section"]}`}>
-                    <button type="submit" className="admin_btn solid confirm_l">
-                      로그인
-                    </button>
+                  <div className={s["form-row"]}>
+                    <div className={s["btn-section"]}>
+                      <button
+                        type="submit"
+                        className="admin_btn solid confirm_l"
+                      >
+                        로그인
+                      </button>
+                    </div>
                   </div>
                 </form>
               </div>
@@ -177,8 +194,16 @@ function LoginIndexPage() {
           </div>
         </section>
       </main>
+      {isModalVisible && (
+        <Modal onClick={onModalHide}>
+          CONTENTS.CONTENTS.CONTENTS.CONTENTS. CONTENTS. CONTENTS. CONTENTS.
+          CONTENTS. CONTENTS. CONTENTS. CONTENTS. CONTENTS. CONTENTS. CONTENTS.
+          CONTENTS. CONTENTS. CONTENTS. CONTENTS. CONTENTS. CONTENTS. CONTENTS.
+          CONTENTS. CONTENTS. CONTENTS.
+        </Modal>
+      )}
     </>
   );
 }
 
-export default LoginIndexPage
+export default LoginIndexPage;
