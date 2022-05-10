@@ -3,7 +3,8 @@ import s from "./Modal_AdminResetPassword.module.scss";
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { authAction } from '@store/auth-slice';
-import { getData } from "/api/reqData";
+import { postData } from "/api/reqData";
+import axios from "axios";
 
 
 import timer from "@util/func/timer";
@@ -32,16 +33,16 @@ const AuthNumberComponent = ({ displayedTime, authNum }) => {
   const onModalHandler = (isConfirm) => {
     console.log(isConfirm);
     if (isConfirm) setModalMessage("");
-    if(isAuth) router.push(`/bf-admin/login/reset-password?authnum=${authNum}`);
+    if(isAuth) router.push(`/bf-admin/login/password?authnum=${authNum}`);
   };
 
   const onAuthNumberHandler = (e) => {
     e.preventDefault();
-    console.log(authNum);
+    console.log('인증코드 확인용 console: ',authNum); // ! -------> 테스트용: 개발기간 끝난 후 삭제할 것
     if (authNum === numberBeforeAuth) {
       
       setModalMessage(
-        "인증에 성공하였습니다.\n페이지 새로고침 전까지 비밀번호를 변경할 수 있습니다."
+        `인증에 성공하였습니다. 페이지 새로고침 전까지 비밀번호를 변경할 수 있습니다.`
       )
       dispatch(authAction.adminResetPassword());
       setAuth(true);
@@ -64,7 +65,7 @@ const AuthNumberComponent = ({ displayedTime, authNum }) => {
       {modalMessage && (
         <Modal_alert text={modalMessage} isConfirm={onModalHandler} />
       )}
-      <form action="javascript:void()" onSubmit={onAuthNumberHandler}>
+      <form action="/bf-admin/login" onSubmit={onAuthNumberHandler}>
         <div className={s["form-row"]}>
           <label htmlFor={s["modal-email"]}>
             <input
@@ -104,6 +105,7 @@ function AdminResetPassword() {
   const [email, setEmail] = useState();
   const [modalMessage, setModalMessage] = useState('');
 
+
   useEffect(() => {
     if (time !== 0 && startTimer)
       timer(time, [setTime, setDisplayedTime], setStartTimer);
@@ -116,16 +118,43 @@ function AdminResetPassword() {
 
   const onSendEmailHandler = (e) => {
     e.preventDefault();
-    const val = email?.trim();
+    const val = email?.trim(); // test account: 'develope07@binter.co.kr'
 
     if (!val) {
-      setModalMessage('이메일을 입력해주세요.');
+      setModalMessage("이메일을 입력해주세요.");
       return;
     }
-    setIsSendNumber(true);
-    setStartTimer(true);
-    setTime(initialTime);
-    setAuthNum(randomNumbers(6));
+
+    const body = {
+      email: val,
+    };
+    
+    const postDataToServer = (async(res) => {
+      const response = await axios
+        .post("/api/adminPasswordEmailAuth", body, {
+          "Content-Type": "application/json",
+        })
+        .then((res) => {
+          console.log(res);
+          return res;
+
+        })
+        .catch((err) => {
+          console.log(err.response);
+          console.log(err.request);
+        });
+        if (response?.status === 200){
+          setIsSendNumber(true);
+          setStartTimer(true);
+          setTime(initialTime);
+          setAuthNum(randomNumbers(6));
+        } else{
+          setModalMessage("관리자 이메일이 아닌 경우 발송되지 않습니다. 지속적으로 에러가 발생할 경우 서버 관리자에게 문의하세요.");
+        }
+    })();
+
+
+
   }
 
   const onEmailChangeHandler = (e) => {
@@ -143,7 +172,7 @@ function AdminResetPassword() {
           <CloseButton />
         </i>
         <h3 className={s.title}>비밀번호 재설정</h3>
-        <form action="javascript:void()" onSubmit={onSendEmailHandler}>
+        <form action="/bf-admin/login" onSubmit={onSendEmailHandler}>
           <div className={s["form-row"]}>
             <label htmlFor={s["modal-email"]}>
               <input

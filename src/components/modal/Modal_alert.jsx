@@ -3,6 +3,7 @@ import ModalWrapper from './ModalWrapper'
 import s from "./modal.module.scss";
 
 
+
 function Modal_alert({text, isConfirm}) {
 
 

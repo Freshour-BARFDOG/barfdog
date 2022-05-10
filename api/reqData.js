@@ -16,7 +16,7 @@ import axios from "axios";
 
 const axiosConfig = (contType = "application/json") => ({
   headers: {
-    authorization: JSON.parse(localStorage.getItem("admin")).token,
+    authorization: JSON.parse(localStorage.getItem("admin"))?.token,
     "Content-Type": contType,
   },
 });
@@ -42,18 +42,17 @@ export const getData = async (url, callback) => {
 
 
 
-export const postData = async (url, data, config, callback) => {
+export const postData = async (url, data, callback) => {
 
   axios
     .post(url, data, axiosConfig())
     .then((res) => {
       console.log(res);
-      callback();
+      if (callback && typeof callback === 'function') callback(res);
     })
     .catch((err) => {
       console.log(err);
-      console.log(err.response);
-      console.log(err.request);
+      if (callback && typeof callback === "function") callback(err);
       alert("데이터 전송에 실패하였습니다.");
     });
 };
