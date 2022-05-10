@@ -43,6 +43,8 @@ $aniType_Show : 0.3s ease-in ;
 
   &.disabled{pointer-events: none;}
 
+
+  /* Type:line */
   &.line{
     border: rem(1) solid var(--color-line-03);
     color:#202020;
@@ -53,11 +55,11 @@ $aniType_Show : 0.3s ease-in ;
     &:hover{ 
       border-color: #ababab;
     }
-
-    
   }
 
 
+
+  /* Type:point */
   &.point{
     border: rem(1) solid var(--color-primary04);
     color: var(--color-primary04);
@@ -71,7 +73,7 @@ $aniType_Show : 0.3s ease-in ;
     }
   }
 
-
+  /* Type:solid */
   &.solid{
     background-color: var(--color-primary04);
     color:#fff;  
@@ -99,6 +101,10 @@ $aniType_Show : 0.3s ease-in ;
 
   /* fixed-size: 120 x 38 */
   &.popup{height:rem(44); width: rem(120); font-size:rem(15);}
+
+  &.fullWidth{
+    width:100%;
+  }
 
 
   

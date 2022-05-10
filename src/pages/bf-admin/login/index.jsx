@@ -7,6 +7,7 @@ import Checkbox from '@src/components/atoms/Checkbox';
 import getAdminToken from "@api/getAdminToken";
 
 import Modal from '@src/components/modal/Modal'
+import Modal_AdminResetPassword from "@src/components/modal/Modal_AdminResetPassword";
 
 // * 1. 로그인 클릭했을 때, 어드민 계정에 맞는지 안맞는지만 확인한다.
 // * 2. 자동로그인 체크이벤트
@@ -195,11 +196,8 @@ function LoginIndexPage() {
         </section>
       </main>
       {isModalVisible && (
-        <Modal onClick={onModalHide}>
-          CONTENTS.CONTENTS.CONTENTS.CONTENTS. CONTENTS. CONTENTS. CONTENTS.
-          CONTENTS. CONTENTS. CONTENTS. CONTENTS. CONTENTS. CONTENTS. CONTENTS.
-          CONTENTS. CONTENTS. CONTENTS. CONTENTS. CONTENTS. CONTENTS. CONTENTS.
-          CONTENTS. CONTENTS. CONTENTS.
+        <Modal onClick={onModalHide} title="비밀번호 재설정">
+          <Modal_AdminResetPassword />
         </Modal>
       )}
     </>

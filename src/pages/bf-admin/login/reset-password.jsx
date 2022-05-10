@@ -1,23 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
 
 import s from "./login.module.scss";
 import Image from "next/image";
 import Link from "next/link";
 
+
+
 function ResetPasswordPage() {
+  const router = useRouter();
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const token = useSelector(state=>state.auth.token);
-  console.log(token);
- 
+  const isAdmin = useSelector((state) => state.auth.isAdmin);
+
+
   useEffect(() => {
+    if (!isAdmin) router.push("/bf-admin/login"); // Redirection : 인증되지 않고, 해당 페이지 접근한 경우
+
     if (isSubmitting && !Object.keys(formErrors).length) {
       console.log("데이터 전송");
     } else {
       console.error(formErrors);
     }
   }, [formErrors, isSubmitting]);
+
   const valid_isEmpty = (value) => {
     let errors;
 
@@ -29,7 +36,6 @@ function ResetPasswordPage() {
 
     return errors;
   };
-
 
   const valid_password = (value) => {
     let errorsMessage;
@@ -105,7 +111,10 @@ function ResetPasswordPage() {
                     </label>
                   </div>
                   <div className={`${s["form-row"]} ${s["btn-section"]}`}>
-                    <button type="button" className="admin_btn solid confirm_l">
+                    <button
+                      type="button"
+                      className="admin_btn solid confirm_l fullWidth"
+                    >
                       비밀번호 재설정
                     </button>
                   </div>

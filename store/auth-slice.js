@@ -60,6 +60,9 @@ const authSlice = createSlice({
       //   alert("권한이 없습니다. 로그인 후 다시 시도해주세요.");
       // }
     },
+    adminResetPassword (state) {
+      state.isAdmin = true;
+    }
   },
 });
 
