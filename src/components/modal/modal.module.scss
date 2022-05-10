@@ -1,0 +1,56 @@
+$browser-context: 16;
+@function rem($px, $context: $browser-context) {
+  @return #{$px / $context}rem;
+}
+
+.modal_wrap {
+  animation: show var(--ani-default) forwards;
+  .btn_close_modal {
+    position: absolute;
+    right: rem(10);
+    top: rem(10);
+    display: flex;
+  }
+
+  .title_section {
+    text-align: center;
+    margin-bottom: rem(30);
+    * {cursor:default}
+    .title {
+      font-size: rem(20);
+      margin-bottom: rem(16);
+    }
+    .text {
+      font-size: rem(16);
+      text-align: center;
+      height: rem(34);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      &.only{
+        margin-top:rem(8);
+        height: rem(50);
+      }
+      &:not(:last-child) {
+        margin-bottom: rem(43);
+      }
+    }
+
+  }
+
+  .btn_section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    button {
+      &:not(:last-child) {
+        margin-right: rem(10);
+      }
+    }
+  }
+}
+
+@keyframes show {
+  from{opacity:0; pointer-events: none;}
+  to{opacity:1; pointer-events: all;}
+}
