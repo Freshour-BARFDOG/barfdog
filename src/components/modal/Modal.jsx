@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import s from './modal.module.scss';
 
 const ModalBackground = styled.div`
   position: absolute;
