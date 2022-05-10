@@ -49,15 +49,16 @@ $list-height: rem(58);
         transition: background-color, opacity 0.2s ease;
         opacity:0;
       }
-      // &:hover:after{
-      //     opacity: 1;
-      // }
+ 
+      
       &.menu_open:after{
           opacity: 1;
       }
+
       &[data-current-page]{
-        > p{font-weight: bold;}
+        > p,> a{font-weight: bold; color:#4d4d4d !important;}
         font-size: rem(18);
+        svg{fill: #ababab;}
         
         &:after{opacity: 1;}
         & [data-current-page]{

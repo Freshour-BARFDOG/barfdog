@@ -22,10 +22,11 @@ $menuPadding: 20;
   
   .menu_title{
     color: #717171;
-    
-    & * [data-current-page]{
-      color:var(--color-main);
+    &[data-current-page]{
+      > p ,> a, a[data-current-page] {color:var(--color-main);}
+      svg{fill: var(--color-main)}
     }
+    
 
 
     

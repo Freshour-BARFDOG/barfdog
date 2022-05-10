@@ -21,7 +21,6 @@ function AdminGnb() {
       const thisMenuLink = menu.href;
       const pathStartOrder = thisMenuLink.indexOf(curPath);
       const menuPath = thisMenuLink.slice(pathStartOrder);
-      // const isCurPath = thisMenuLink.indexOf(menuPath) > 0 ? true : false;
       const isCurPath = curPath === menuPath ? true : false;
       // console.log(isCurPath);
       if (isCurPath) {

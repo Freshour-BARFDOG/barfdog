@@ -31,7 +31,6 @@ const AuthNumberComponent = ({ displayedTime, authNum }) => {
   const dispatch = useDispatch();
 
   const onModalHandler = (isConfirm) => {
-    console.log(isConfirm);
     if (isConfirm) setModalMessage("");
     if(isAuth) router.push(`/bf-admin/login/password?authnum=${authNum}`);
   };
@@ -42,7 +41,7 @@ const AuthNumberComponent = ({ displayedTime, authNum }) => {
     if (authNum === numberBeforeAuth) {
       
       setModalMessage(
-        `인증에 성공하였습니다. 페이지 새로고침 전까지 비밀번호를 변경할 수 있습니다.`
+        `인증 완료: 페이지 새로고침 전까지 비밀번호를 변경할 수 있습니다.`
       )
       dispatch(authAction.adminResetPassword());
       setAuth(true);
@@ -135,7 +134,7 @@ function AdminResetPassword() {
           "Content-Type": "application/json",
         })
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           return res;
 
         })
