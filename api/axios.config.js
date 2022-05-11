@@ -5,3 +5,15 @@ axios.defaults.headers.post["Content-Type"] = axios.defaults.headers.post[
   "Content-Type"
 ] = "application/x-www-form-urlencoded";
 axios.defaults.withCredentials = true;
+
+
+
+const axiosConfig = (contType = "application/json") => ({
+  headers: {
+    authorization: JSON.parse(localStorage.getItem("admin"))?.token,
+    "Content-Type": contType,
+  },
+});
+
+
+export default axiosConfig;

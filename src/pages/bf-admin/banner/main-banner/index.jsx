@@ -1,16 +1,33 @@
+import s from "/styles/admin/mainBanner.module.scss";
 import React, { useState, useEffect } from "react";
 import AdminLayout from "@src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "@src/components/admin/AdminWrapper";
 import MetaTitle from "@src/components/atoms/MetaTitle";
 
-import axios from "axios";
-import s from "/styles/admin/mainBanner.module.scss";
-
+import Modal from "@src/components/modal/Modal";
+import ModalAlert from "@src/components/modal/Modal_alert";
 import MainBannerList from './MainBannerList';
 import AdminBtn_moveToPage from "@src/components/atoms/AdminBtn_moveToPage";
+import axios from "axios";
+import axiosConfig from "/api/axios.config"; 
+import AmdinErrorMessage from '@src/components/atoms/AmdinErrorMessage';
+import sorting from '@util/func/sorting';
 
-import { getData, putData, deleteData } from "/api/reqData"; 
-import AmdinErrorMessage from '@src/components/atoms/AmdinErrorMessage'
+
+
+
+const getDataWithSettingState = (url, callback) => {
+  axios
+    .get(url, axiosConfig())
+    .then((res) => {
+      const allData = res.data._embedded.mainBannerListResponseDtoList;
+      const arrangedItems = sorting(allData, "leakedOrder");
+      if (arrangedItems) callback(arrangedItems);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+}
 
 
 
@@ -18,47 +35,75 @@ import AmdinErrorMessage from '@src/components/atoms/AmdinErrorMessage'
 
 function MainBannerIndexPage(props) {
 
-
-
+  const [modalMessage, setModalMessage] = useState('');
   const [itemList, setItemList] = useState([]);
   const [editListOrder, setEditListOrder] = useState(false);
 
   useEffect(() => {
-    const getDataWithSettingState = (url, callback) => {
-      const callbackWrapper = (res) => {
-        const data = res.data._embedded.mainBannerListResponseDtoList;
-        callback(data);
-      };
-      getData(url, callbackWrapper);
-    }
-
     getDataWithSettingState("/api/banners/main", setItemList);
   }, []);
 
 
+
+
+
   const onEditHandler = () => {
+    if (!itemList.length) return;
     setEditListOrder(true);
   };
+
+
 
   const onExitEditListOrderHandler = () => {
     setEditListOrder(false);
   };
 
-  const onLeakedOrderUp = (apiURL) => {
+
+
+
+  const onLeakedOrderUp = (url) => {
     const data = ""; // ! PutData : 빈값 보내기
-    PutData(apiURL, data);
-    getDataWithSettingState("/api/banners/main", setItemList);
+    axios
+      .put(url, data, axiosConfig())
+      .then(() => {
+        getDataWithSettingState("/api/banners/main", setItemList);
+      })
+      .catch((err) => {
+        alert('전송실패: ',err)
+      });
   };
 
-  const onLeakedOrderDown = (apiURL) => {
+
+
+
+  const onLeakedOrderDown = (url) => {
     const data = ""; // ! PutData : 빈값 보내기
-    PutData(apiURL, data);
-    getDataWithSettingState("/api/banners/main", setItemList);
+    axios
+      .put(url, data, axiosConfig())
+      .then(() => {
+        getDataWithSettingState("/api/banners/main", setItemList);
+      })
+      .catch((err) => {
+        alert("전송실패: ", err);
+      });
   };
 
-  const onDeleteItem = (apiURL) => {
-    DeleteData(apiURL);
+
+
+  const onDeleteItem = (url) => {
+    axios
+      .delete(url, axiosConfig())
+      .then((res) => {
+        console.log(res);
+        getDataWithSettingState("/api/banners/main", setItemList);
+        setModalMessage("배너가 삭제되었습니다.");
+      })
+      .catch((err) => {
+        setModalMessage("삭제 실패: ", err);
+      });
   };
+
+
 
   const BtnEditListOrder = () => (
     <button
@@ -81,6 +126,11 @@ function MainBannerIndexPage(props) {
       닫기
     </button>
   );
+  
+  const onHideModalHandler = (isConfirm) => {
+    setModalMessage(false);
+  }
+
 
 
 
@@ -119,13 +169,14 @@ function MainBannerIndexPage(props) {
                 </ul>
                 {itemList.length ? (
                   <MainBannerList
-                    items_og={itemList}
+                    items={itemList}
                     setItemList={setItemList}
                     setEditListOrder={setEditListOrder}
                     editListOrder={editListOrder}
                     onLeakedOrderUp={onLeakedOrderUp}
                     onLeakedOrderDown={onLeakedOrderDown}
                     onDeleteItem={onDeleteItem}
+                    getDataWithSettingState={getDataWithSettingState}
                   />
                 ) : (
                   <AmdinErrorMessage text="조회된 데이터가 없습니다." />
@@ -136,6 +187,11 @@ function MainBannerIndexPage(props) {
           {/* inner */}
         </AdminContentWrapper>
       </AdminLayout>
+      {modalMessage && (
+        <Modal onClick="" title="비밀번호 재설정">
+          <ModalAlert text={modalMessage} isConfirm={onHideModalHandler} />
+        </Modal>
+      )}
     </>
   );
 }

@@ -26,25 +26,30 @@ const Img = styled.img`
 `;
 
 
-function PreviewImage({file, className}) {
+function PreviewImage({file, className, thumbLink}) {
   const [SRC, setSRC] = useState(null);
+  
 
   const IMAGE = () => {
     return SRC ? <Img src={SRC} alt="미리보기 이미지"></Img> : null;
   };
 
   useEffect(() => {
-    (async (blob) => {
-      if (!blob) {
-        return setSRC(false);
-      }
-
-      const url = URL.createObjectURL(blob);
-      setSRC(url);
-      const arrayBuffer = await blob.arrayBuffer(); // 서버저장에 사용되는지?
-      // console.log(arrayBuffer);
-    })(file);
-  }, [file]);
+    console.log(file);
+    console.log(thumbLink);
+    if (file) {
+      (async (blob) => {
+        if (!blob) {
+          return setSRC(false);
+        }
+        const url = URL.createObjectURL(blob);
+        setSRC(url);
+      })(file);
+    } else if (thumbLink) {
+      // console.log(SRC);
+      setSRC(thumbLink);
+    }
+  }, [file, thumbLink]);
 
   return (
     <Frame className={`preview_img ${className}`}>

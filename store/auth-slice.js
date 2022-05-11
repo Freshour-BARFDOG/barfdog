@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import Router from "next/router";
 
+
 const initialAuthState = {
   token: null,
   isAuth: false,

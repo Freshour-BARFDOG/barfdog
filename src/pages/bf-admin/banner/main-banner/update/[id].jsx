@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import axios from "axios";
+import axiosConfig from "/api/axios.config"; 
+
 import MetaTitle from "@src/components/atoms/MetaTitle";
 import AdminLayout from "@src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "@src/components/admin/AdminWrapper";
@@ -8,123 +11,144 @@ import InputRadio_status, {
 } from "@src/components/admin/form/InputRadioPackage";
 import Fake_input from "@src/components/atoms/fake_input";
 import PreviewImage from "@src/components/atoms/PreviewImage";
-import { getData, putData, deleteData } from "/api/reqData"; 
 import ErrorMessage from "/src/components/atoms/ErrorMessage";
 import getAdminToken from "@api/getAdminToken";
 
 
 
-// const getDataFromAPI = (callback) => {
-//   const callbackWrapper = (res) => {
-//     const data = res.data._embedded.mainBannerListResponseDtoList;
-//     callback(data);
-//   };
-//   ;
-// };
-
-
-// export async function getStaticPaths({ id }) {
-
-//   const callback = (res) => {
-//     const list = res.data._embedded.mainBannerListResponseDtoList;
-//   };
-//   getData("/api/banners/main", callback);
-
-//   const paths = list.map(({ id }) => {
-//     console.log({ id });
-//     return { params: { id: `${id}` } };
-//   });
-//   // params: {id : '1'},{id : '2'}...
-//   return {
-//     paths,
-//     fallback: false,
-//   };
-// }
-
-// ! DATA를 ...... state로 넣기 전에,,,,, 미리 받아서 ...................UpdateMainBannerPage의 props로 넣어보자
-// ! DATA를 ...... state로 넣기 전에,,,,, 미리 받아서 ...................UpdateMainBannerPage의 props로 넣어보자
-// ! DATA를 ...... state로 넣기 전에,,,,, 미리 받아서 ...................UpdateMainBannerPage의 props로 넣어보자
-// ! DATA를 ...... state로 넣기 전에,,,,, 미리 받아서 ...................UpdateMainBannerPage의 props로 넣어보자
-// ! DATA를 ...... state로 넣기 전에,,,,, 미리 받아서 ...................UpdateMainBannerPage의 props로 넣어보자
-// ! DATA를 ...... state로 넣기 전에,,,,, 미리 받아서 ...................UpdateMainBannerPage의 props로 넣어보자
-// ! DATA를 ...... state로 넣기 전에,,,,, 미리 받아서 ...................UpdateMainBannerPage의 props로 넣어보자
-// ! DATA를 ...... state로 넣기 전에,,,,, 미리 받아서 ...................UpdateMainBannerPage의 props로 넣어보자   22.05.06 금 오후 11:55 
-// export async function getStaticProps() {
-//   const res = await axios.get(`https://localholst:3065/user`);
-//   const data = res.data;
-
-//   return { props: { data } };
-// }
-
-
-
+  const InputName = ({value, onChange}) => {
+    return (
+      <>
+        <div className="title_section fixedHeight">
+          <label className="title" htmlFor="banner-name">
+            배너이름
+          </label>
+        </div>
+        <div className="inp_section">
+          <div className="inp_box">
+            <input
+              type="text"
+              name="name"
+              className="fullWidth"
+              onChange={onChange}
+              value={value}
+            />
+            {/* {formErrors.name && <ErrorMessage>{formErrors.name}</ErrorMessage>} */}
+          </div>
+        </div>
+      </>
+    );
+  };
 
 function UpdateMainBannerPage() {
 
   const router = useRouter();
   const { id } = router.query;
 
-  useEffect(() => {
-    if (id) {
-      const callback = (res) => {
-        const data = res.data;
-        setInitialValues(data);
-      };
-      getData(`/api/banners/main/${id}`, callback);
-    }
-  }, [id]);
-
+  const [modalMessage, setModalMessage] = useState('');
   const [initialValues, setInitialValues] = useState({});
-  // console.log(initialValues);
-  // console.log(initialValues._links.thumbnail_pc.href);
+  const [formValues, setFormValues] = useState({});
+  const [pcImage, setPcImage] = useState({});
+  const [mobileImage, setMobileImage] = useState({});
+  const [formErrors, setFormErrors] = useState({});
+  // const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (!id) return;
+    (async () => {
+        const response = await axios
+          .get(`/api/banners/main/${id}`, axiosConfig())
+          .then((res) => {
+            console.log(res.data)
+            return res.data;
+          })
+          .catch((err) => {
+            console.error(err);
+            alert("데이터를 불러올 수 없습니다.");
+            router.back();
+            // setModalMessage("데이터를 불러올 수 없습니다.");
+          });
+        const DATA = {
+          id: response.id,
+          name: response.name,
+          exposedTarget: response.targets,
+          exposedStatus: response.status,
+          pc: {
+            file: "",
+            filename: response.filenamePc,
+            link: response.pcLinkUrl,
+            thumbLink: response._links?.thumbnail_pc.href,
+          },
+          mobile: {
+            file: "",
+            filename: response.filenameMobile,
+            link: response.mobileLinkUrl,
+            thumbLink: response._links?.thumbnail_mobile.href,
+          },
+        };
+        console.log(DATA)
+        setInitialValues(DATA);
+        setFormValues(DATA);
+        setPcImage(DATA.pc?.thumbLink);
+        setMobileImage(DATA.mobile?.thumbLink);
+    })(); 
+  }, [id, router]);
+
+  
 
 
-  const [exposedTarget, setExposedTarget] = useState(initialValues.targets);
-  const [exposedStatus, setExposedStatus] = useState(initialValues.status);
+
+  const [exposedTarget, setExposedTarget] = useState(
+    initialValues.exposedTarget
+  );
+  const [exposedStatus, setExposedStatus] = useState(
+    initialValues.exposedStatus
+  );
   
   const [file_pc, setFile_pc] = useState({
-    // file: initialValues._links.thumbnail_pc.href,
-    filename: initialValues.name,
-    link: initialValues.pcLinkUrl,
+    file: "",
+    filename: formValues.pc?.name,
+    link: formValues.pc?.link,
+    thumbLink: formValues.pc?.thumb,
   });
   const [file_mobile, setFile_mobile] = useState({
-    // file: initialValues._links.thumbnail_mobile.href,
-    filename: initialValues.name,
-    link: initialValues.mobileLinkUrl,
+    file: "",
+    filename: formValues.mobile?.name,
+    link: formValues.mobile?.link,
+    thumbLink: formValues.mobile?.thumb,
   });
-  console.log(file_pc);
 
 
 
-  const [formValues, setFormValues] = useState(initialValues);
-  const [formErrors, setFormErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  console.log(formValues);
+
+  const onInputChangeHandler = (e) => {
+    const input = e.currentTarget;
+    const val = input.value;
+    setFormValues({
+      ...formValues,
+      name: val
+    });
+  }
 
 
-  useEffect(() => {
-    if (isSubmitting && !Object.keys(formErrors).length) {
-      postDataToServer();
-    } else {
-      console.error(formErrors);
-    }
-  }, [formErrors, isSubmitting]);
-
-
-  const handleChange = (e) => {
+  const onLinkChangehandle = (e) => {
     const { name, value } = e.currentTarget;
     const input = e.currentTarget;
     const type = input.type && input.dataset.type;
+    const device = input.dataset.device;
+    // console.log(device);;
 
     if (type === "link") {
       const device = input.dataset.device === "pc" ? "pc" : "mobile";
       setFormValues({
         ...formValues,
-        [`${device}LinkUrl`]: value,
-      });
-    } else {
-      setFormValues({
-        ...formValues,
-        [name]: value,
+        [device]: {
+          file: "",
+          link: value,
+          filename: formValues[device].filename,
+          thumbLink: formValues[device].thumbLink,
+        },
       });
     }
   };
@@ -253,8 +277,12 @@ function UpdateMainBannerPage() {
       }
     });
     if (isError) return;
-    setIsSubmitting(true);
-  
+    // setIsSubmitting(true);
+    if (!Object.keys(formErrors).length) {
+      postDataToServer();
+    } else {
+      console.error(formErrors);
+    }
   }; // * onSubmitHandler
 
 
@@ -267,8 +295,8 @@ function UpdateMainBannerPage() {
     const jsonData = JSON.stringify(formValues);
     const blob = new Blob([jsonData], { type: "application/json" });
     formData.append("requestDto", blob);
-
-    const token = await getAdminToken();
+    
+    return;
     const axiosConfig = {
       headers: {
         authorization: token,
@@ -285,6 +313,7 @@ function UpdateMainBannerPage() {
 
     postData("/api/banners/main", formData, axiosConfig, postCallback);
   };
+
 
 
   return (
@@ -305,25 +334,10 @@ function UpdateMainBannerPage() {
             <div className="cont_body">
               <div className="cont_divider">
                 <div className="input_row">
-                  <div className="title_section fixedHeight">
-                    <label className="title" htmlFor="banner-name">
-                      배너이름
-                    </label>
-                  </div>
-                  <div className="inp_section">
-                    <div className="inp_box">
-                      <input
-                        type="text"
-                        name="name"
-                        className="fullWidth"
-                        // onChange={getNameHandler}
-                        onChange={handleChange}
-                      />
-                      {formErrors.name && (
-                        <ErrorMessage>{formErrors.name}</ErrorMessage>
-                      )}
-                    </div>
-                  </div>
+                  <InputName
+                    onChange={onInputChangeHandler}
+                    value={formValues.name}
+                  />
                 </div>
               </div>
               {/* cont_divider */}
@@ -335,7 +349,7 @@ function UpdateMainBannerPage() {
                   <div className="inp_section">
                     <InputRadio_exposedTarget
                       name="exposedTarget"
-                      exposedTarget={exposedTarget}
+                      exposedTarget={formValues.exposedTarget}
                       onRadioButtonHandler={onRadioButtonHandler}
                     />
                   </div>
@@ -350,7 +364,7 @@ function UpdateMainBannerPage() {
                   <div className="inp_section">
                     <InputRadio_status
                       name="exposedStatus"
-                      exposedStatus={exposedStatus}
+                      exposedStatus={formValues.exposedStatus}
                       onRadioButtonHandler={onRadioButtonHandler}
                     />
                   </div>
@@ -367,7 +381,10 @@ function UpdateMainBannerPage() {
                   </div>
                   <div className="inp_section">
                     <label className="inp_wrap file" htmlFor="upload-image-pc">
-                      <PreviewImage file={file_pc.file} />
+                      <PreviewImage
+                        file={formValues.pc?.file}
+                        thumbLink={pcImage}
+                      />
                       <span className="inp_box">
                         <input
                           type="file"
@@ -377,10 +394,9 @@ function UpdateMainBannerPage() {
                           accept="image/*"
                           className="hide"
                           data-device="pc"
-                          // multiple={false}
                           onChange={imageFileChangeHandler}
                         />
-                        <Fake_input filename={file_pc.filename} />
+                        <Fake_input filename={formValues.pc?.filename} />
                         {formErrors.file_pc && (
                           <ErrorMessage>{formErrors.file_pc}</ErrorMessage>
                         )}
@@ -402,8 +418,9 @@ function UpdateMainBannerPage() {
                         data-type="link"
                         className="halfWidth"
                         data-device="pc"
+                        value={formValues.pc?.link}
                         placeholder="ex. https://barfdog.co.kr/event/1"
-                        onChange={handleChange}
+                        onChange={onLinkChangehandle}
                       />
                     </div>
                     <div className="desc">
@@ -431,7 +448,10 @@ function UpdateMainBannerPage() {
                       className="inp_wrap file"
                       htmlFor="upload-image-mobile"
                     >
-                      <PreviewImage file={file_mobile.file} />
+                      <PreviewImage
+                        file={formValues.mobile?.file}
+                        thumbLink={mobileImage}
+                      />
                       <div className="inp_box">
                         <input
                           type="file"
@@ -443,9 +463,8 @@ function UpdateMainBannerPage() {
                           data-device="mobile"
                           multiple={false}
                           onChange={imageFileChangeHandler}
-                          // onChange={handleChange}
                         />
-                        <Fake_input filename={file_mobile.filename} />
+                        <Fake_input filename={formValues.mobile?.filename} />
                         {formErrors.file_mobile && (
                           <ErrorMessage>{formErrors.file_mobile}</ErrorMessage>
                         )}
@@ -467,7 +486,8 @@ function UpdateMainBannerPage() {
                         name="mobileLinkUrl"
                         className="halfWidth"
                         data-device="mobile"
-                        onChange={handleChange}
+                        onChange={onLinkChangehandle}
+                        value={formValues.mobile?.link}
                         placeholder="ex. https://barfdog.co.kr/event/2"
                       />
                     </div>

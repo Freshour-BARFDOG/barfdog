@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 
-export const InputRadio_exposedTarget = ({
-  exposedTarget,
-  onRadioButtonHandler,
-  name}) => {
-  const [selectedOption, setSelectedOption] = useState(exposedTarget);
+export const InputRadio_exposedTarget = ({ exposedTarget, onRadioButtonHandler, name }) => {
+  const transformedExposedTarget = exposedTarget?.toLowerCase();
+
+  const [selectedOption, setSelectedOption] = useState(
+    transformedExposedTarget || "all"
+  );
 
   const onChangeHandler = (e) => {
     setSelectedOption(e.currentTarget.id);
@@ -55,13 +56,17 @@ export const InputRadio_exposedTarget = ({
       </label>
     </div>
   );
-};
+};;
 
 
 
 
 const InputRadio_status = ({ exposedStatus, onRadioButtonHandler, name }) => {
-  const [selectedOption, setSelectedOption] = useState(exposedStatus);
+  const transformedExposedStatus = exposedStatus?.toLowerCase();;
+  
+  const [selectedOption, setSelectedOption] = useState(
+    transformedExposedStatus || "leaked"
+  );
   const onChangeHandler = (e) => {
     setSelectedOption(e.currentTarget.dataset.status);
     onRadioButtonHandler(e.currentTarget.dataset.status);
