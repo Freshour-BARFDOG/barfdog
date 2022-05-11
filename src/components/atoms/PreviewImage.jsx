@@ -35,8 +35,8 @@ function PreviewImage({file, className, thumbLink}) {
   };
 
   useEffect(() => {
-    console.log(file);
-    console.log(thumbLink);
+    // console.log(file);
+    // console.log(thumbLink);
     if (file) {
       (async (blob) => {
         if (!blob) {

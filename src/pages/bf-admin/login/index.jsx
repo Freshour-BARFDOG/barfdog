@@ -6,8 +6,11 @@ import Image from 'next/image';
 import Checkbox from '@src/components/atoms/Checkbox';
 import getAdminToken from "@api/getAdminToken";
 
-import Modal from '@src/components/modal/Modal'
+import Modal from '@src/components/modal/Modal';
+import Modal_alert from "@src/components/modal/Modal_alert";
 import Modal_AdminResetPassword from "@src/components/modal/Modal_AdminResetPassword";
+import { useModalContext } from "@store/modal-context";
+
 
 // * 1. 로그인 클릭했을 때, 어드민 계정에 맞는지 안맞는지만 확인한다.
 // * 2. 자동로그인 체크이벤트
@@ -16,42 +19,43 @@ import Modal_AdminResetPassword from "@src/components/modal/Modal_AdminResetPass
 
 function LoginIndexPage() {
 
+
+  
   const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [pw, setPw] = useState('');
   const [formErrors, setFormErrors] = useState({});
   const [formValues, setFormValues] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  
-  const onModalShow = () => {
-    setIsModalVisible(true);
-  }
 
+  const [modalMessage, setModalMessage] = useState("");
+  const mcx = useModalContext();
+
+  const onModalShow = () => {
+    setModalMessage("");
+    mcx.onShow();
+  }
+  
   const onModalHide = () => {
-    setIsModalVisible(false);
+    setModalMessage("");
+    mcx.onHide();
   };
 
   useEffect(() => {
-    let isError = false;
-    Object.keys(formErrors).forEach((key) => {
-      if (formErrors[key]) {
-        isError = true;
-        return;
-      }
-    });
-    // console.log(formErrors);
-    if (isError) return;
-
 
     if (isSubmitting && !Object.keys(formErrors).length) {
       (async () => {
+
+
         const token = await getAdminToken(formValues);
         if (token) {
           dispatch(authAction.adminLogin({ token: token }));
         } else {
+          onModalShow();
           setIsSubmitting(false);
-          alert("로그인 실패: 아이디, 비밀번호를 확인해주세요.");
+          setModalMessage(
+            "로그인 실패: 아이디, 비밀번호를 확인해주세요. 지속적으로 문제발생 시, 서버장애일 수 있습니다."
+          );
         }
       })();
     }
@@ -85,9 +89,8 @@ function LoginIndexPage() {
     const keys = Object.keys(obj);
     keys.forEach((key) => {
       const val = obj[key];
-      valid_isEmpty(val) ? (errors[key] = valid_isEmpty(val)) : ""; 
+      valid_isEmpty(val) && (errors[key] = valid_isEmpty(val)); 
     })
-    // console.log("Validation Result: ", errors);
     return errors;
   }
   
@@ -104,11 +107,12 @@ function LoginIndexPage() {
   }
 
   const onAutoLoginHandler =(checked) => {
-    // console.log(checked);
+    console.log(checked)
     if (checked){
-       console.log("로그인 유지기능 활성");
-      }else{
-      console.log("로그인 유지기능 비활성화");
+      setModalMessage("개인 정보 보호를 위해 본인 기기에서만 이용해 주세요.");
+      mcx.onShow();
+    }else{
+      // 자동로그인 해제 로직
     }
   }
 
@@ -195,11 +199,16 @@ function LoginIndexPage() {
           </div>
         </section>
       </main>
-      {isModalVisible && (
-        <Modal onClick={onModalHide} title="비밀번호 재설정">
-          <Modal_AdminResetPassword />
+      {(modalMessage && (
+        <Modal title="모달 메시지" instance={<Modal_alert />}>
+          <Modal_alert text={modalMessage} isConfirm={onModalHide} />
         </Modal>
-      )}
+      )) ||
+        (mcx.isActive && (
+          <Modal onClick={onModalHide} background title="비밀번호 재설정">
+            <Modal_AdminResetPassword />
+          </Modal>
+        ))}
     </>
   );
 }

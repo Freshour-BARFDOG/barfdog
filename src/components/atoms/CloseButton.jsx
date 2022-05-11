@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import rem from "@src/components/atoms/rem";
+import { useModalContext } from "@store/modal-context";
 
 
 const Button = styled.button`
@@ -32,7 +33,11 @@ const Button = styled.button`
 
 
 function CloseButton({className}) {
-  return <Button type="button" className={className} />;
+
+  const mct = useModalContext();
+  const onClickHandler = () => mct.onHide();
+
+  return <Button type="button" className={className} onClick={onClickHandler} />;
 }
 
-export default CloseButton
+export default CloseButton;

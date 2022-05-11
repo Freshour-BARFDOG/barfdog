@@ -3,8 +3,8 @@ import s from "./Modal_AdminResetPassword.module.scss";
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { authAction } from '@store/auth-slice';
-import { postData } from "/api/reqData";
 import axios from "axios";
+
 
 
 import timer from "@util/func/timer";
@@ -16,10 +16,6 @@ import Modal_alert from "./Modal_alert";
 
 
 
-// 1. 관리자 계정 확인 (get)
-// 2. 다이렉트 샌드 이메일 사용 /// 클라이언트에서 인증번호 생성
-// 3. 입력번호 확인 후 / 변경된 비밀번호 전송
-//
 
 
 const AuthNumberComponent = ({ displayedTime, authNum }) => {
@@ -50,6 +46,7 @@ const AuthNumberComponent = ({ displayedTime, authNum }) => {
       setAuth(false);
     }
   };
+
 
   const onChangeHandler = (e) => {
     const val = e.currentTarget.value;
@@ -93,7 +90,13 @@ const AuthNumberComponent = ({ displayedTime, authNum }) => {
 
 
 
-function AdminResetPassword() {
+
+
+
+
+
+
+function AdminResetPassword(props) {
 
   const initialTime = 181;
   const [isSendNumber, setIsSendNumber] = useState(false);
@@ -128,7 +131,7 @@ function AdminResetPassword() {
       email: val,
     };
     
-    const postDataToServer = (async(res) => {
+    (async(res) => {
       const response = await axios
         .post("/api/adminPasswordEmailAuth", body, {
           "Content-Type": "application/json",
@@ -160,6 +163,7 @@ function AdminResetPassword() {
     const val = e.currentTarget.value;
     setEmail(val);
   }
+
 
   return (
     <>

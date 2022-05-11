@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-
+import { useModalContext } from "@store/modal-context";
 
 
 const ModalWrapper = styled.div`
-  position: absolute;
+  position: fixed;
   z-index: 1000;
   left: 0;
   right: 0;
@@ -34,14 +34,21 @@ const ModalBody = styled.div`
   animation: show var(--ani-default) forwards;
 `;
 
-function Modal({ children, title, onClick }) {
-  const onClickHandler = () => {
-  };
+
+function Modal({ children, title, onClick, background }) {
+
+  const mcx = useModalContext();
+  const MODAL_ACTIVE_STATE = mcx.isActive;
+
   return (
-    <ModalWrapper title={title}>
-      <ModalBackground onClick={onClick || onClickHandler}></ModalBackground>
-      <ModalBody>{children}</ModalBody>
-    </ModalWrapper>
+    <>
+      {MODAL_ACTIVE_STATE && (
+        <ModalWrapper title={title}>
+          {background && <ModalBackground onClick={onClick}></ModalBackground>}
+          <ModalBody>{children}</ModalBody>
+        </ModalWrapper>
+      )}
+    </>
   );
 }
 

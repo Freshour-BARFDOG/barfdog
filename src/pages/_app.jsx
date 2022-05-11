@@ -3,6 +3,8 @@ import store from "@store/index";
 import "@styles/global/global.scss";
 import AuthInterceptor from "@util/hook/auth-interceptor";
 import '@api/axios.config';
+import { ModalContextProvider } from '@store/modal-context';
+
 
 // Server Only File (client에서 사용하는 로직 사용불가)
 // Next JS : 최초실행
@@ -14,7 +16,9 @@ function MyApp({ Component, pageProps }) {
   return (
     <Provider store={store}>
       <AuthInterceptor>
-        <Component {...pageProps} />
+        <ModalContextProvider>
+          <Component {...pageProps} />
+        </ModalContextProvider>
       </AuthInterceptor>
     </Provider>
   );
