@@ -123,19 +123,23 @@ export const List = ({ link, title, children }) => {
     if (!curMenuRef.current) return;
     const thisMenu = curMenuRef.current;
     const menuPath = thisMenu.pathname;
-    const curPathDepth1 = menuPath === curPath && thisMenu;
+    const curPathDepth1 = curPath.indexOf(menuPath) >= 0 && thisMenu;
+
+
     const submenuList = Array.from(
       thisMenu
         .closest(`li.${[s.menu_title]}`)
         .querySelectorAll(`ul.${[s.submenu]} a`)
     );
+   
     const curPathInSubmenu =
       submenuList.length &&
       submenuList.filter((thisSubmenu) => {
-        return thisSubmenu.pathname === curPath;
+        return curPath.indexOf(thisSubmenu.pathname) >= 0;
       });
-    const curPathDepth2 = curPathInSubmenu[0];
 
+      
+    const curPathDepth2 = curPathInSubmenu[0];
 
 
     if (curPathDepth1) {
