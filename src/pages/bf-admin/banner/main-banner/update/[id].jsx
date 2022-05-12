@@ -250,7 +250,7 @@ function UpdateMainBannerPage() {
             <h1>메인배너 수정</h1>
           </div>
           <form
-            action="/a"
+            action="/"
             className="cont"
             encType="multipart/form-data"
             method="post"

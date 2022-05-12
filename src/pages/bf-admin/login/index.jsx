@@ -30,7 +30,10 @@ function LoginIndexPage() {
 
   const [modalMessage, setModalMessage] = useState("");
   const mcx = useModalContext();
+  // 여기서 Context값을 변화시킨다.
 
+  mcx.alertShow();// 보이기
+  // mcx.alertHide();// 보이기
   const onModalShow = () => {
     setModalMessage("");
     mcx.onShow();

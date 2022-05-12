@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import axios from "axios";
+import axiosConfig from "/api/axios.config"; 
+import { useModalContext } from "@store/modal-context";
+
+
+import MetaTitle from "@src/components/atoms/MetaTitle";
 import AdminLayout from "/src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
-import MetaTitle from "@src/components/atoms/MetaTitle";
 import PreviewImage from "@src/components/atoms/PreviewImage";
 import ErrorMessage from "@src/components/atoms/ErrorMessage";
 import Fake_input from "@src/components/atoms/fake_input";
@@ -10,11 +15,80 @@ import InputRadio_status, {
   InputRadio_exposedTarget,
 } from "@src/components/admin/form/InputRadioPackage";
 import s from "@styles/admin/banner/adminMypageBanner.module.scss";
+import Modal from "@src/components/modal/Modal";
+import Modal_alert from "@src/components/modal/Modal_alert";
 
+import Modal_global_alert from "@src/components/modal/Modal_global_alert";
 
+/*
+
+-- 만료된 쿠폰
+Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLthqDtgbAg7J2066aEIiwiaWQiOjUsImV4cCI6MTY1MTg5MjU3NiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20ifQ.Wycm9ZmiiK-GwtsUkvMCHHeExDBtkveDbhKRealjmd8C4OZMp3SFqGFcFWudXMiL5Mxdj6FcTAV9OVsOYsn_Mw
+
+*/
 
 function MypageBanner() {
   const router = useRouter();
+
+  const REQUEST_URL = `/api/banners/myPage`;
+  const [modalMessage, setModalMessage] = useState("");
+  const [initialValues, setInitialValues] = useState({});
+  const [formValues, setFormValues] = useState({});
+  const [imageFile, setImageFile] = useState({});
+  const [formErrors, setFormErrors] = useState({});
+
+  const mct = useModalContext();
+
+
+  useEffect(() => {
+    (async () => {
+      const token = axiosConfig();
+      console.log(token.headers.authorization);
+      const response = await axios
+        .get(REQUEST_URL, {
+          headers: {
+            authorization:
+              "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLthqDtgbAg7J2066aEIiwiaWQiOjUsImV4cCI6MTY1MTg5MjU3NiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20ifQ.Wycm9ZmiiK-GwtsUkvMCHHeExDBtkveDbhKRealjmd8C4OZMp3SFqGFcFWudXMiL5Mxdj6FcTAV9OVsOYsn_Mw",
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+          return res.data;
+        })
+        .catch((err) => {
+          console.error(err.request.response); //////*******중요
+          const errorObj = JSON.parse(err.request.response);
+          const EXPIRED_TOKEN = errorObj.message === "EXPIRED_TOKEN";
+          const UNAUTHORIZED = errorObj.message === "UNAUTHORIZED";
+          console.error("errorType > EXPIRED_TOKEN : ", EXPIRED_TOKEN);
+          console.error("errorType > UNAUTHORIZED : ", UNAUTHORIZED);
+        });
+      // const formData = {
+      //   name: response.name,
+      //   targets: response.targets,
+      //   status: response.status,
+      //   pcLinkUrl: response.pcLinkUrl,
+      //   mobileLinkUrl: response.mobileLinkUrl,
+      // };
+      // const fileData = {
+      //   pc: {
+      //     file: "",
+      //     filename: response.filenamePc,
+      //     thumbLink: response._links?.thumbnail_pc.href,
+      //   },
+      //   mobile: {
+      //     file: "",
+      //     filename: response.filenameMobile,
+      //     thumbLink: response._links?.thumbnail_mobile.href,
+      //   },
+      // };
+      // setInitialValues({ ...formData, ...fileData });
+      // setFormValues(formData);
+      // setImageFile(fileData);
+    })();
+  }, [router, REQUEST_URL]);
+
 
   const [exposedTarget, setExposedTarget] = useState("all");
   const [exposedStatus, setExposedStatus] = useState("leaked");
@@ -28,17 +102,8 @@ function MypageBanner() {
     filename: "",
     link: "",
   });
-  const initialValues = {
-    name: "",
-    targets: exposedTarget,
-    status: exposedStatus,
-    pcLinkUrl: file_pc.link,
-    mobileLinkUrl: file_mobile.link,
-  };
 
 
-  const [formValues, setFormValues] = useState(initialValues);
-  const [formErrors, setFormErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
 
@@ -101,6 +166,18 @@ function MypageBanner() {
 
 
 
+  const onSubmitHandler = (e) => {
+    e.preventDefault();
+    setFormErrors(validate(formValues));
+    if (Object.keys(formErrors).length) return console.error(formErrors);
+    postDataToServer();
+  };
+
+
+  const onModalHide = () => {
+    setModalMessage(false);
+  };
+
   return (
     <>
       <MetaTitle title="마이페이지 배너 관리" admin={true} />
@@ -114,7 +191,7 @@ function MypageBanner() {
             className="cont"
             encType="multipart/form-data"
             method="post"
-            // onSubmit={onSubmitHandler}
+            onSubmit={onSubmitHandler}
           >
             <div className="cont_body">
               <div className="cont_divider">
@@ -323,6 +400,16 @@ function MypageBanner() {
           </form>
         </AdminContentWrapper>
       </AdminLayout>
+      {modalMessage && (
+        <Modal title="모달 메시지">
+          <Modal_alert text={modalMessage} isConfirm={onModalHide} />
+        </Modal>
+      )}
+      {
+        <Modal_global_alert>
+         전역 모달 에러 메시지 Component
+        </Modal_global_alert>
+      }
     </>
   );
 }
