@@ -7,32 +7,8 @@ import { useRouter } from "next/router";
 
 
 function AdminGnb() {
-  
 
-  const router = useRouter();
   const curMenuRef = useRef(null);
-  const [curPath, setCurPath] = useState(router.pathname);
-
-  useEffect(() => {
-
-    const allMenus = curMenuRef.current.querySelectorAll("a");
-
-    allMenus.forEach((menu) => {
-      const thisMenuLink = menu.href;
-      const pathStartOrder = thisMenuLink.indexOf(curPath);
-      const menuPath = thisMenuLink.slice(pathStartOrder);
-      const isCurPath = curPath === menuPath ? true : false;
-      // console.log(isCurPath);
-      if (isCurPath) {
-        const activeMenu = menu.closest("." + `${s.menu_title}`);
-        // console.log(menu);
-        // console.log(activeMenu);
-        activeMenu.dataset.currentPage = true;
-        menu.dataset.currentPage = true;
-      }
-    });
-  }, [curPath, router]);
-
 
   return (
     <nav ref={curMenuRef} className={s.admin_nav}>

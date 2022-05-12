@@ -3,9 +3,7 @@ import s from "../../../styles/css/mypage/menu.module.scss";
 import { IoIosArrowForward  } from "react-icons/io";
 import { slideUp , slideDown } from "/util/func/slideToggle";
 import Link from "next/link";
-import siblings from "/util/func/siblings";
 import { useRouter } from "next/router";
-
 
 
 
@@ -121,39 +119,8 @@ export const List = ({ link, title, children }) => {
 
   useEffect(() => {
     if (!curMenuRef.current) return;
-    const thisMenu = curMenuRef.current;
-    const menuPath = thisMenu.pathname;
-    const curPathDepth1 = curPath.indexOf(menuPath) >= 0 && thisMenu;
-
-
-    const submenuList = Array.from(
-      thisMenu
-        .closest(`li.${[s.menu_title]}`)
-        .querySelectorAll(`ul.${[s.submenu]} a`)
-    );
-   
-    const curPathInSubmenu =
-      submenuList.length &&
-      submenuList.filter((thisSubmenu) => {
-        return curPath.indexOf(thisSubmenu.pathname) >= 0;
-      });
-
-      
-    const curPathDepth2 = curPathInSubmenu[0];
-
-
-    if (curPathDepth1) {
-      const activeMenu = thisMenu.closest("." + `${s.menu_title}`);
-      activeMenu.dataset.currentPage = true;
-    } else if (curPathDepth2) {
-      const activeMenu = curPathDepth2.closest("." + `${s.menu_title}`);
-      activeMenu.dataset.currentPage = true;
-      curPathDepth2.dataset.currentPage = true;
-      setIsOpen(true);
-    }
-
+    currentPageIndicator(curMenuRef.current, curPath, setIsOpen);
     setFirstRender(false);
-
   }, [curPath]);
 
 
@@ -188,5 +155,44 @@ export const List = ({ link, title, children }) => {
 };
 
 
+
+
+
+const currentPageIndicator = (ref, curPath, setThisMenuIsOpenWithDropdown) => {
+  if (!ref) return;
+  const thisMenu = ref;
+  const menuPath = thisMenu.pathname;
+  const curPathDepth1 = curPath.indexOf(menuPath) >= 0 && thisMenu;
+
+  const submenuList = Array.from(
+    thisMenu
+      .closest(`li.${[s.menu_title]}`)
+      .querySelectorAll(`ul.${[s.submenu]} a`)
+  );
+
+  const curPathInSubmenu =
+    submenuList.length &&
+    submenuList.filter((thisSubmenu) => {
+      return curPath.indexOf(thisSubmenu.pathname) >= 0;
+    });
+
+  const curPathDepth2 = curPathInSubmenu[0];
+
+  if (curPathDepth1) {
+    const activeMenu = thisMenu.closest("." + `${s.menu_title}`);
+    activeMenu.dataset.currentPage = true;
+  } else if (curPathDepth2) {
+    const activeMenu = curPathDepth2.closest("." + `${s.menu_title}`);
+    activeMenu.dataset.currentPage = true;
+    curPathDepth2.dataset.currentPage = true;
+
+    if (
+      setThisMenuIsOpenWithDropdown &&
+      typeof setThisMenuIsOpenWithDropdown === "function"
+    ) {
+      setThisMenuIsOpenWithDropdown(true);
+    }
+  }
+};
 
 
