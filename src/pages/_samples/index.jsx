@@ -7,16 +7,15 @@ import { IoIosArrowForward } from "react-icons/io";
 import Icon_Checked from "@public/img/icon/icon_checked.svg";
 import rem from '@src/components/atoms/rem';
 import Icon_Itemlabel from "@src/components/atoms/Icon_Itemlabel";
-
-
+import Pagination from "@src/components/atoms/Pagination";
+import data_ForPagination from "./TEST_data_pagination.json";
 
 /* -------------------- 토글박스 ------------------ */
 // * SCSS 파일 코드
 
 function ToggleBox({ title, children }) {
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(false); // ! 또는 useState(false) --> 토글박스 초기상태 설정
   const boxRef = useRef(null);
-
 
   const onClickHandler = (e) => {
     visible ? setVisible(false) : setVisible(true);
@@ -27,7 +26,6 @@ function ToggleBox({ title, children }) {
     if (!selectedElem) return;
     visible ? slideDown(selectedElem) : slideUp(selectedElem);
   }, [visible]);
-
 
   return (
     <div className={`${s.toggleBox} ${visible && s.active}`}>
@@ -76,7 +74,7 @@ const CustomInput = ({
   };
 
   const onRadioInputHandler = (e) => {
-    const { value , id } = e.currentTarget;
+    const { id } = e.currentTarget;
     setSelectedRadio(id);
   };
 
@@ -138,6 +136,13 @@ const CustomInput = ({
 };
 
 // * -------------------- 커스텀 인풋: 공통  ------------------ */
+
+
+
+
+
+
+
 
 
 
@@ -255,23 +260,26 @@ const CustomInputRadio = ({name}) => {
 
 
 
-/* -------------------- UI 확인용 레이아웃  ------------------ */
+// * -------------------- UI 확인용 레이아웃  ------------------ */
 
 
 function SamplePageForPublishing() {
+  // * ------- Pagination ------- * //
+  const [curPage, setCurPage] = useState(1);
+  // * ------- Pagination ------- * //
 
   return (
     <Layout>
       <Wrapper>
         <ul className={s.sample_wrapper}>
-          <li description="토글박스: 타이틀 클릭 시, 세부 내용이 나타나고 숨겨진다.">
-            <ToggleBox title="토글박스 샘플">
+          <li>
+            <ToggleBox title="샘플: Toggle Box">
               세부내용 및 HTML태그 작성
             </ToggleBox>
           </li>
 
-          <li description="Input Custom">
-            <ToggleBox title="인풋 커스컴 샘플: TYPE - CHECKBOX ">
+          <li>
+            <ToggleBox title="샘플:  Custom CHECKBOX Input">
               <CustomInput id="checkboxId-01" type="checkbox">
                 <Icon_Itemlabel
                   label="BEST"
@@ -291,9 +299,18 @@ function SamplePageForPublishing() {
               </CustomInput>
             </ToggleBox>
           </li>
-          <li description="Input Custom" className={s['custom-input-radio-wrapper']}>
-            <ToggleBox title="인풋 커스컴 샘플: TYPE - RADIO">
-              <CustomInputRadio name="recipe"/>
+          <li className={s["custom-input-radio-wrapper"]}>
+            <ToggleBox title="샘플: Custom RADIO Input">
+              <CustomInputRadio name="recipe" />
+            </ToggleBox>
+          </li>
+
+          <li className={s["pagination"]}>
+            <ToggleBox title="샘플: PAGINATION">
+              <Pagination
+                itemCountPerGroup={7}
+                itemTotalCount={100}
+              />
             </ToggleBox>
           </li>
         </ul>
@@ -305,7 +322,7 @@ function SamplePageForPublishing() {
 export default SamplePageForPublishing;
 
 
-/* -------------------- UI 확인용 레이아웃  ------------------ */
+/* 
 
-/// 나중에 import해서 쓰면 되도록
-// 
+*/
+
