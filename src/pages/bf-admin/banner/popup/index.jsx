@@ -1,8 +1,8 @@
+import s from "./mainBanner.module.scss";
 import React, { useState, useEffect } from "react";
 import AdminLayout from "/src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
 import MetaTitle from "@src/components/atoms/MetaTitle";
-import s from "/styles/admin/mainBanner.module.scss";
 
 import PopupList from "./PopupList";
 import AdminBtn_moveToPage from "@src/components/atoms/AdminBtn_moveToPage";
