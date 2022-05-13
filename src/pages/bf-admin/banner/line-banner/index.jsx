@@ -7,7 +7,7 @@ import ErrorMessage from "@src/components/atoms/ErrorMessage";
 import InputRadio_status, {
   InputRadio_exposedTarget,
 } from "@src/components/admin/form/InputRadioPackage";
-import s from "@styles/admin/banner/adminLineBanner.module.scss";
+import s from "./admin-line-banner.module.scss";
 
 
 

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import Styles from '@styles/atoms/checkbox.module.scss';
+import React from 'react';
+import Styles from './checkbox.module.scss';
 
 export function Title (props) {
   return (

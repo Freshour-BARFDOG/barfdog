@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import s from "@styles/admin/banner/adminMypageBanner.module.scss";
+import s from "./admin-mypage-banner.module.scss";
 import { useRouter } from "next/router";
 import { useModalContext } from "@store/modal-context";
 import Modal_global_alert from "@src/components/modal/Modal_global_alert";

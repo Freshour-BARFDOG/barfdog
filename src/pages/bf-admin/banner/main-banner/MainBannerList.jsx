@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import s from "/styles/admin/mainBanner.module.scss";
+import s from "./mainBanner.module.scss";
 import Link from 'next/link';
 import Ascend from '/public/img/icon/btn_ascend.svg';
 import Descend from '/public/img/icon/btn_descend.svg';
