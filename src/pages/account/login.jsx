@@ -2,7 +2,6 @@ import React from 'react';
 import Layout from '../../components/common/Layout';
 import Styles from '/styles/css/LoginPage.module.scss';
 import Wrapper from '/src/components/common/Wrapper';
-import MypageWrapper from "/src/components/mypage/MypageWrapper";
 import Kakao from '/public/img/icon/kakao.png';
 import Naver from '/public/img/icon/naver.png';
 import Image from 'next/image';

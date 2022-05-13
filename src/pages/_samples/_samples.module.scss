@@ -1,0 +1,133 @@
+$browser-context: 16;
+@function rem($px, $context: $browser-context) {
+  @return #{$px / $context}rem;
+}
+
+.sample_wrapper {
+  padding: 10vh 0;
+  > li {
+    padding: rem(30) rem(10);
+  }
+  > li:not(:last-child) {
+    margin-bottom: rem(20);
+  }
+}
+.custom-input-radio-wrapper{
+  label{margin-bottom: rem(30)}
+}
+
+
+
+
+
+
+
+
+// * ------ SAMPLE ------ *
+
+.toggleBox {
+  border: rem(1) solid var(--color-line-04);
+  padding: rem(16) rem(40) rem(16);
+  border-radius: rem(12);
+  &.active .clickTrigger .title i {
+    transform: translateY(-50%) rotate(90deg);
+  }
+  .clickTrigger {
+    padding: rem(16) 0;
+    cursor: pointer;
+    .title {
+      cursor: inherit;
+      position: relative;
+      font-size: rem(20);
+      font-weight: 600;
+      i {
+        position: absolute;
+        display: flex;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        transition: transform var(--ani-default);
+      }
+    }
+  }
+
+  .cont {
+    padding: rem(30) 0 rem(16);
+    border-top: rem(1) solid var(--color-line-04);
+  }
+}
+
+
+
+
+
+
+
+
+// * ------ SAMPLE ------ *
+
+.custom_input_wrapper {
+
+  position: relative;
+
+  $transitionValues : 0.15s ease;
+  
+  display: block;
+  overflow: hidden;
+  border-radius: rem(12);
+  border: rem(1) solid var(--color-line-04);
+  padding: rem(15) rem(25);
+  transition: border-color $transitionValues;
+
+  .custom_input_cont{
+    // * CONTENTS CSS
+    margin-bottom: rem(20);
+  }
+
+  .fake_checkbox {
+    border-radius: rem(4);
+    overflow:hidden;
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-size: rem(18);
+    padding: rem(13);
+    box-sizing: border-box;
+    font-weight: 500;
+    background-color: var(--color-bg);
+    color: #4d4d4d;
+    position: relative;
+    transition: background-color $transitionValues;
+  }
+
+  .icon_checked {
+    position: absolute;
+    left: rem(15);
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    opacity: 0;
+    transition: opacity $transitionValues;
+  }
+
+  &.checked{
+    border-color: var(--color-main);
+     .fake_checkbox{
+        background-color: var(--color-main);
+        color: #fff;
+     }
+     .icon_checked{opacity: 1;}
+  }
+
+  
+  input{ 
+    position: absolute;
+    overflow: hidden;
+    width: 0;
+    height: 0;
+    line-height: 0;
+    opacity: 0;
+    text-indent: rem(-9999);
+  }
+}
