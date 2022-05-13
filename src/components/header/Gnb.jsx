@@ -28,11 +28,14 @@ const Gnb_survey = () => {
     mcx.event.setScrollY();
   };
   return (
-    <li className={s.subscribe} onClick={onClickHandler}>
-      <span>
-        <SVG_subscribe />
-      </span>
-    </li>
+    <>
+      <li className={s.subscribe} onClick={onClickHandler}>
+        <span>
+          <SVG_subscribe />
+        </span>
+      </li>
+      <Modal_subscribeWidhSSR />
+    </>
   );
 };
 
@@ -64,7 +67,6 @@ const Gnb = () => {
         <SubmenuList title="어바웃" link="/community/about" />
       </MenuLayout>
       <MenuLayout title="리뷰" link="/review" />
-      <Modal_subscribeWidhSSR/ >
     </>
   );
 };
