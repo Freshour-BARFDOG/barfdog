@@ -324,6 +324,7 @@ function UpdateMainBannerPage() {
                       <PreviewImage
                         file={imageFile.pc?.file}
                         thumbLink={imageFile.pc?.thumbLink}
+                        ratio={1920 / 450}
                       />
                       <span className="inp_box">
                         <input
@@ -391,6 +392,7 @@ function UpdateMainBannerPage() {
                       <PreviewImage
                         file={imageFile.mobile?.file}
                         thumbLink={imageFile.mobile?.thumbLink}
+                        ratio={1920 / 450}
                       />
                       <div className="inp_box">
                         <input

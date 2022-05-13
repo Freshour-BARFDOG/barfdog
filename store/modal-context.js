@@ -58,7 +58,6 @@ const ModalContextProvider = ({children}) => {
      setAlertMessage('');
   };
 
-  console.log(isActive)
 
   return (
     <ModalContext.Provider

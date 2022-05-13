@@ -4,17 +4,12 @@ import rem from '@src/components/atoms/rem';
 
 const Frame = styled.div`
   cursor: pointer;
-  width: 100%;
-  min-width: ${rem(200)};
-  max-width: ${rem(960)};
-  height: ${rem(200)};
-  display: block;
   background-color: #e1e2e3;
   border: 1px solid var(--color-line);
   box-sizing: border-box;
   margin-bottom: ${rem(10)};
   position: relative;
-  aspect-ratio: 1920/450;
+  aspect-ratio: ${props=>props.ratio};
   overflow: hidden;
 `;
 
@@ -26,7 +21,7 @@ const Img = styled.img`
 `;
 
 
-function PreviewImage({file, className, thumbLink}) {
+function PreviewImage({file, className, thumbLink, ratio}) {
   const [SRC, setSRC] = useState(null);
   
 
@@ -52,7 +47,7 @@ function PreviewImage({file, className, thumbLink}) {
   }, [file, thumbLink]);
 
   return (
-    <Frame className={`preview_img ${className}`}>
+    <Frame className={`preview_img ${className}`} ratio={ratio}>
       <IMAGE />
     </Frame>
   );

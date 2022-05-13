@@ -8,6 +8,11 @@ import Icon_Checked from "@public/img/icon/icon_checked.svg";
 import rem from '@src/components/atoms/rem';
 import Icon_Itemlabel from "@src/components/atoms/Icon_Itemlabel";
 
+
+
+/* -------------------- 토글박스 ------------------ */
+// * SCSS 파일 코드
+
 function ToggleBox({ title, children }) {
   const [visible, setVisible] = useState(false);
   const boxRef = useRef(null);
@@ -41,6 +46,7 @@ function ToggleBox({ title, children }) {
   );
 }
 
+/* -------------------- 토글박스 ------------------ */
 
 
 
@@ -50,16 +56,7 @@ function ToggleBox({ title, children }) {
 
 
 
-
-
-
-
-
-
-
-
-// ! 라디오버튼은 , 패키지 전체를 상태관리 해줘야하는 것같다
-// ! 각각.....상태관리를 하면 , 특정이벤트 발생시 , 라디오 각각에 대해서만 상태가 변경되어서, 전체 라디오에 대한 UI변화가 안되고,,,, 랜더링이 안되는 것 같다.
+// * -------------------- 커스텀 인풋: 공통  ------------------ */
 
 const CustomInput = ({
   children,
@@ -140,14 +137,18 @@ const CustomInput = ({
   );
 };
 
+// * -------------------- 커스텀 인풋: 공통  ------------------ */
 
 
+
+
+
+// * -------------------- 커스텀 인풋 : INPUT RADIO ------------------ */
 
 
 const CustomInputRadio = ({name}) => {
 
   const [selectedRadio , setSelectedRadio] = useState(null);
-  console.log('선택된 라디오: ',selectedRadio);
 
   return (
     <div data-input-title={name}>
@@ -182,9 +183,9 @@ const CustomInputRadio = ({name}) => {
         setSelectedRadio={setSelectedRadio}
       >
         <Icon_Itemlabel
-          label="NEW"
+          label="BEST"
           style={{
-            backgroundColor: "#FF8C16",
+            backgroundColor: "var(--color-main)",
             height: rem(34),
             left: rem(34),
             top: rem(14),
@@ -225,7 +226,36 @@ const CustomInputRadio = ({name}) => {
   
 }
 
+// * -------------------- 커스텀 인풋 : INPUT RADIO ------------------ */
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* -------------------- UI 확인용 레이아웃  ------------------ */
 
 
 function SamplePageForPublishing() {
@@ -261,7 +291,6 @@ function SamplePageForPublishing() {
               </CustomInput>
             </ToggleBox>
           </li>
-
           <li description="Input Custom" className={s['custom-input-radio-wrapper']}>
             <ToggleBox title="인풋 커스컴 샘플: TYPE - RADIO">
               <CustomInputRadio name="recipe"/>
@@ -274,3 +303,9 @@ function SamplePageForPublishing() {
 }
 
 export default SamplePageForPublishing;
+
+
+/* -------------------- UI 확인용 레이아웃  ------------------ */
+
+/// 나중에 import해서 쓰면 되도록
+// 

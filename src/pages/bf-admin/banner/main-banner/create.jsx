@@ -238,7 +238,7 @@ function CreateMainBannerPage() {
 
   return (
     <>
-      <MetaTitle title="메인배너 생성" admin={true}/>
+      <MetaTitle title="메인배너 생성" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
           <div className="title_main">
@@ -315,7 +315,7 @@ function CreateMainBannerPage() {
                   </div>
                   <div className="inp_section">
                     <label className="inp_wrap file" htmlFor="upload-image-pc">
-                      <PreviewImage file={file_pc.file} />
+                      <PreviewImage file={file_pc.file} ratio={1920 / 450} />
                       <span className="inp_box">
                         <input
                           type="file"
@@ -334,6 +334,7 @@ function CreateMainBannerPage() {
                         )}
                       </span>
                     </label>
+                    <div className="desc">* 권장사이즈: 1920 x 450</div>
                   </div>
                 </div>
                 <div className="input_row upload_image">
@@ -355,7 +356,7 @@ function CreateMainBannerPage() {
                       />
                     </div>
                     <div className="desc">
-                      *링크가 없을 경우, 배너 클릭 이벤트가 발생하지 않습니다.
+                      * 링크가 없을 경우, 배너 클릭 이벤트가 발생하지 않습니다.
                     </div>
                     {formErrors.pcLinkUrl && (
                       <ErrorMessage>{formErrors.pcLinkUrl}</ErrorMessage>
@@ -379,7 +380,10 @@ function CreateMainBannerPage() {
                       className="inp_wrap file"
                       htmlFor="upload-image-mobile"
                     >
-                      <PreviewImage file={file_mobile.file} />
+                      <PreviewImage
+                        file={file_mobile.file}
+                        ratio={1920 / 450}
+                      />
                       <div className="inp_box">
                         <input
                           type="file"
@@ -398,6 +402,7 @@ function CreateMainBannerPage() {
                         )}
                       </div>
                     </label>
+                    <div className="desc">* 권장사이즈: 1920 x 450</div>
                   </div>
                 </div>
                 <div className="input_row upload_image">
@@ -419,7 +424,7 @@ function CreateMainBannerPage() {
                       />
                     </div>
                     <div className="desc">
-                      *링크가 없을 경우, 배너 클릭 이벤트가 발생하지 않습니다.
+                      * 링크가 없을 경우, 배너 클릭 이벤트가 발생하지 않습니다.
                     </div>
                     {formErrors.mobileLinkUrl && (
                       <ErrorMessage>{formErrors.mobileLinkUrl}</ErrorMessage>
