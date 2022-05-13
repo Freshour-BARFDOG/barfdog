@@ -1,60 +1,31 @@
-import React from 'react';
-import s from '/styles/css/Header.module.scss';
+import React, { useEffect } from "react";
+import ReactDOM from 'react-dom'
+import s from "/styles/css/Header.module.scss";
+import dynamic from "next/dynamic";
+import Link from "next/link";
 import { useModalContext } from "@store/modal-context";
 
 import MenuLayout, { SubmenuList } from "/src/components/header/MenuLayout";
-import Link from 'next/link';
-import DeadlineTimer from '/src/components/atoms/DeadlineTimer';
-
-import Icon_mypage from '/public/img/icon/mypage.svg';
-import Icon_cart from '/public/img/icon/cart.svg';
-import SVG_subscribe from '/public/img/icon/subscribe.svg';
+import DeadlineTimer from "/src/components/atoms/DeadlineTimer";
+import Icon_mypage from "/public/img/icon/mypage.svg";
+import Icon_cart from "/public/img/icon/cart.svg";
+import SVG_subscribe from "/public/img/icon/subscribe.svg";
 
 
 
-export const Gnb_my = () => {
 
-  const List = ( {id, href, children} ) => {
-    return (
-      <li>
-        <Link href={href} passHref><a id={id}>{children}</a></Link>
-      </li>
-    )
-  };
-
-  const Cart_counter = ({className}) => {
-    const user_shop_count = 10;
-
-    return (
-      <>
-      <span className={className}>{user_shop_count}</span>
-      </>
-    )
-  }
-
-  return (
-    <div className={s.gnb_my}>
-      <ul className='clearfix'>
-        <List id="gnb_cart" href="/cart">
-          <div className={s.shop_wrap}>
-            <Icon_cart />
-            <Cart_counter id='gnb_shop_count' className={s.gnb_shop_count}/>
-            <DeadlineTimer />
-          </div>
-        </List>
-        <List href="/mypage/order-history"><Icon_mypage /></List>
-      </ul>
-    </div>
-  )
-}
+const Modal_subscribeWidhSSR = dynamic(() =>
+  import("/src/components/modal/Modal_subscribe")
+);
 
 
 
 
 const Gnb_survey = () => {
-  const mct = useModalContext();
+  const mcx = useModalContext();
   const onClickHandler = () => {
-    mct.subscribe.onShow();
+    mcx.subscribe.onShow();
+    mcx.event.setScrollY();
   };
   return (
     <li className={s.subscribe} onClick={onClickHandler}>
@@ -63,12 +34,14 @@ const Gnb_survey = () => {
       </span>
     </li>
   );
-}
+};
 
 
 
 
 const Gnb = () => {
+
+
   return (
     <>
       <Gnb_survey />
@@ -91,8 +64,55 @@ const Gnb = () => {
         <SubmenuList title="어바웃" link="/community/about" />
       </MenuLayout>
       <MenuLayout title="리뷰" link="/review" />
+      <Modal_subscribeWidhSSR/ >
     </>
   );
-}
+};
 
 export default Gnb;
+
+
+
+
+
+
+
+
+export const Gnb_my = () => {
+  const List = ({ id, href, children }) => {
+    return (
+      <li>
+        <Link href={href} passHref>
+          <a id={id}>{children}</a>
+        </Link>
+      </li>
+    );
+  };
+
+  const Cart_counter = ({ className }) => {
+    const user_shop_count = 10;
+
+    return (
+      <>
+        <span className={className}>{user_shop_count}</span>
+      </>
+    );
+  };
+
+  return (
+    <div className={s.gnb_my}>
+      <ul className="clearfix">
+        <List id="gnb_cart" href="/cart">
+          <div className={s.shop_wrap}>
+            <Icon_cart />
+            <Cart_counter id="gnb_shop_count" className={s.gnb_shop_count} />
+            <DeadlineTimer />
+          </div>
+        </List>
+        <List href="/mypage/order-history">
+          <Icon_mypage />
+        </List>
+      </ul>
+    </div>
+  );
+};

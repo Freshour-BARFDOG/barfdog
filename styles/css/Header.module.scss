@@ -70,12 +70,12 @@ $browser-context:16; // html font-size:
   .gnb_nav{
     float:left;
     > ul{
-        display:flex;
+        display:inline-flex;
+        flex-wrap: wrap;
         align-items: center;
         justify-content: center;
       > li{
-        float:left;
-        margin-right: rem(58);
+        &:not(:last-child){margin-right: rem(58);}
         &.subscribe{cursor:pointer;}
         &:last-child{margin-right:0;}
       }
@@ -130,3 +130,6 @@ $browser-context:16; // html font-size:
 }
 
 
+@media (max-width: rem(800)){
+  .gnb_area .gnb_nav > ul > li:not(:last-child){margin-right: rem(10);}
+}

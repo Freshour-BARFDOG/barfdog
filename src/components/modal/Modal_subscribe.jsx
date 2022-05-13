@@ -1,60 +1,44 @@
 import s from "./modal_subscribe.module.scss";
-import React from "react";
-import styled from "styled-components";
+import React, {useEffect} from "react";
 import { useModalContext } from "@store/modal-context";
 import rem from "@src/components/atoms/rem";
-
-const Modal = styled.div`
-  position: fixed;
-  // z-index: ${modal_zindex};
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  animation: show var(--ani-default) forwards;
-  &.on {
-    pointer-events: all;
-  }
-  &.off {
-    animation: hide var(--ani-default) forwards;
-    pointer-events: all;
-  }
-`;
+import zIndex from "@styles/global/zIndex.module.scss";
 
 
-const ModalBackground = styled.div`
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.3);
-`;
 
-const ModalBody = styled.div`
-  background-color:#fff;
-  box-shadow: 0 0 30px rgba(0,0,0,0.15);
-  border-radius: ${rem(8)};
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  animation: show var(--ani-default) forwards;
-`;
 
 
 function Modal_subscribe() {
-  const mct = useModalContext();
-  const MODAL_ACTIVE_STATE = mct.subscribe?.isActive;
+  const mcx = useModalContext();
+  const MODAL_ACTIVE_STATE = mcx.subscribe?.isActive;
 
-  console.log(MODAL_ACTIVE_STATE);
+  useEffect(() => {
+    if (MODAL_ACTIVE_STATE) {
+      const scrollYPos = mcx.event.scrollY;
+      document.body.style.cssText = `
+        overflow-y:scroll;
+        position:fixed;
+        width:100%;
+        top : -${scrollYPos}px;
+      `;
+    }
+    return () => {
+      document.body.style.cssText = ``;
+      window.scrollTo(0, parseInt(-mcx.event.scrollY || 10) * -1);
+    };
+
+  }, [MODAL_ACTIVE_STATE, mcx.event.scrollY]);
+
   const onClickHandler = () => {
-    mct.subscribe.onHide();
+    mcx.subscribe.onHide();
   };
 
   return (
     <>
       {MODAL_ACTIVE_STATE && (
-        <Modal className={s.ModalWrapper}>
-          <ModalBackground onClick={onClickHandler} />
-          <ModalBody>
+        <section className={`${s['modal-subscribe']} ${zIndex["modal-subscribe"]}`}>
+          <div className={s.background}onClick={onClickHandler}></div>
+          <div className={s.body}>
             <div className={s.container}>
               <div className={s.cont}>
                 <ul>
@@ -62,8 +46,8 @@ function Modal_subscribe() {
                 </ul>
               </div>
             </div>
-          </ModalBody>
-        </Modal>
+          </div>
+        </section>
       )}
     </>
   );

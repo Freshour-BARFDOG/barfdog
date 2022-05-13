@@ -86,9 +86,7 @@ function Header(props) {
             </nav>
             <Gnb_my />
           </div>
-          {/* gnb_area */}
         </div>
-        {/* inner */}
       </Wrapper>
     </header>
   );

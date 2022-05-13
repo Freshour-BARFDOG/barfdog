@@ -1,0 +1,13 @@
+// *  ------- Global - Z-INDEX 관리
+
+
+
+// * 사용법
+// * scss변수: module.scss파일에서 import
+// * 클래스명: js 파일에서 import
+
+.modal-wrapper{z-index:1001 !important;} // * 종류: Global Alert
+.modal-withBackground{z-index:1000 !important;} // * 종류: Modal Component
+
+.modal-subscribe{z-index : 999 !important;}
+.gnb-subscribe-timer{z-index:100 !important;}

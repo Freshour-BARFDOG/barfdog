@@ -6,15 +6,8 @@ import Document, {
   DocumentContext,
   DocumentInitialProps,
 } from "next/document";
-import dynamic from "next/dynamic";
 import MetaTags from './_metaTags';
 
-
-// import Modal_subscribe from "@src/components/modal/Modal_subscribe";
-
-const Modal_subscribe = dynamic(() =>
-  import("@src/components/modal/Modal_subscribe")
-);
 
 // Server Only File (client에서 사용하는 로직 사용불가)
 // Next JS : _app.js 파일 이후 2번 째 실행
@@ -41,7 +34,7 @@ const CustomDocument = ()=> {
       <body>
         <Main />
       </body>
-      <div id="__modal-root">{/* <Modal_subscribe/> */}</div>
+      <div id="__modal-root"></div>
       <NextScript />
     </Html>
   );

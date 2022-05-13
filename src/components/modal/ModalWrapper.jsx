@@ -1,11 +1,14 @@
 import React from 'react';
 import styled from "styled-components";
 import rem from "@src/components/atoms/rem";
+import zIndex from "/styles/global/zIndex.module.scss";
 
 
-const ModalWrap = styled.div`
+
+
+const Wrap = styled.div`
   position: fixed;
-  z-index: 1001;
+  // ! z-index: 1001; // global zindex에서 관리
   left: 50%;
   top:0;
   transform: translate(-50%, 0%);
@@ -47,9 +50,13 @@ function ModalWrapper({children, className, style, label}) {
 
 
   return (
-    <ModalWrap className={className} style={style} modal-label={label}>
+    <Wrap
+      className={`${zIndex["modal-wrapper"]} ${className}`}
+      style={style}
+      modal-label={label}
+    >
       {children}
-    </ModalWrap>
+    </Wrap>
   );
 }
 

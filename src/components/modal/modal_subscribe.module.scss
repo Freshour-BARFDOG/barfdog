@@ -1,13 +1,13 @@
+
 $browser-context: 16;
 @function rem($px, $context: $browser-context) {
   @return #{$px / $context}rem;
 }
 
-$modal_zindex : 999;
 
-.ModalWrapper{
+.modal-subscribe{
   position: fixed;
-  z-index: $modal_zindex;
+  // ! z-index: 1000 // global zindex에서 관리
   left: 0;
   right: 0;
   top: 0;
@@ -21,7 +21,21 @@ $modal_zindex : 999;
     pointer-events: all;
   }
 }
-
+.background{
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+.body{
+  background-color:#fff;
+  box-shadow: 0 0 30px rgba(0,0,0,0.15);
+  border-radius: rem(8);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  animation: show var(--ani-default) forwards;
+}
 .container{width: rem(800);}
 .cont{
   padding:rem(57) rem(70);

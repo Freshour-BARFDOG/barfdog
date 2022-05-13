@@ -26,77 +26,77 @@ function NoticeIndexPage() {
             <div className={Styles.content_box}>
               <span>50</span>
               <p>설날 배송 안내</p>
-              <sapn>2022.01.20</sapn>
+              <span>2022.01.20</span>
             </div>
             <div className={Styles.content_box}>
               <span>49</span>
               <p>설날 배송 안내</p>
-              <sapn>2022.01.20</sapn>
+              <span>2022.01.20</span>
             </div>
             <div className={Styles.content_box}>
               <span>48</span>
               <p>설날 배송 안내</p>
-              <sapn>2022.01.20</sapn>
+              <span>2022.01.20</span>
             </div>
             <div className={Styles.content_box}>
               <span>47</span>
               <p>설날 배송 안내</p>
-              <sapn>2022.01.20</sapn>
+              <span>2022.01.20</span>
             </div>
             <div className={Styles.content_box}>
               <span>46</span>
               <p>설날 배송 안내</p>
-              <sapn>2022.01.20</sapn>
+              <span>2022.01.20</span>
             </div>
             <div className={Styles.content_box}>
               <span>45</span>
               <p>설날 배송 안내</p>
-              <sapn>2022.01.20</sapn>
+              <span>2022.01.20</span>
             </div>
             <div className={Styles.content_box}>
               <span>44</span>
               <p>설날 배송 안내</p>
-              <sapn>2022.01.20</sapn>
+              <span>2022.01.20</span>
             </div>
             <div className={Styles.content_box}>
               <span>43</span>
               <p>설날 배송 안내</p>
-              <sapn>2022.01.20</sapn>
+              <span>2022.01.20</span>
             </div>
             <div className={Styles.content_box}>
               <span>42</span>
               <p>설날 배송 안내</p>
-              <sapn>2022.01.20</sapn>
+              <span>2022.01.20</span>
             </div>
             <div className={Styles.content_box}>
               <span>41</span>
               <p>설날 배송 안내</p>
-              <sapn>2022.01.20</sapn>
+              <span>2022.01.20</span>
             </div>
             <div className={Styles.content_box}>
               <span>40</span>
               <p>설날 배송 안내</p>
-              <sapn>2022.01.20</sapn>
+              <span>2022.01.20</span>
             </div>
             <div className={Styles.content_box}>
               <span>39</span>
               <p>설날 배송 안내</p>
-              <sapn>2022.01.20</sapn>
+              <span>2022.01.20</span>
             </div>
             <div className={Styles.content_box}>
               <span>38</span>
               <p>설날 배송 안내</p>
-              <sapn>2022.01.20</sapn>
+              <span>2022.01.20</span>
             </div>
             <div className={Styles.content_box}>
               <span>37</span>
               <p>설날 배송 안내</p>
-              <sapn>2022.01.20</sapn>
+              <span>2022.01.20</span>
             </div>
             <div className={Styles.content_box}>
               <span>36</span>
               <p>설날 배송 안내</p>
-              <sapn>2022.01.20</sapn>
+              <span>2022.01.20</span>
             </div>
           </section>
 
