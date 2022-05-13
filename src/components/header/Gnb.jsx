@@ -1,6 +1,8 @@
 import React from 'react';
-import MenuLayout, { SubmenuList } from "/src/components/header/MenuLayout";
 import s from '/styles/css/Header.module.scss';
+import { useModalContext } from "@store/modal-context";
+
+import MenuLayout, { SubmenuList } from "/src/components/header/MenuLayout";
 import Link from 'next/link';
 import DeadlineTimer from '/src/components/atoms/DeadlineTimer';
 
@@ -46,17 +48,27 @@ export const Gnb_my = () => {
   )
 }
 
-function Gnb_survey (){
+
+
+
+const Gnb_survey = () => {
+  const mct = useModalContext();
+  const onClickHandler = () => {
+    mct.subscribe.onShow();
+  };
   return (
-    <li>
-      <Link href="/survey" passHref>
-        <a><SVG_subscribe/></a>
-      </Link>
+    <li className={s.subscribe} onClick={onClickHandler}>
+      <span>
+        <SVG_subscribe />
+      </span>
     </li>
   );
 }
 
-function Gnb() {
+
+
+
+const Gnb = () => {
   return (
     <>
       <Gnb_survey />
@@ -66,11 +78,11 @@ function Gnb() {
         <SubmenuList title="토핑" link="/shop?category=topping" />
         <SubmenuList title="굿즈" link="/shop?category=goods" />
       </MenuLayout>
-      <MenuLayout title="레시피">
-        <SubmenuList title="스타터프리미엄" link="/recipes/starter" />
+      <MenuLayout title="레시피" link="/recipes">
+        {/* <SubmenuList title="스타터프리미엄" link="/recipes/starter" />
         <SubmenuList title="터키&amp;비프" link="/recipes/turkeyAndBeef" />
         <SubmenuList title="덕&amp;램" link="/recipes/duckAndLamb" />
-        <SubmenuList title="램&amp;비프" link="/recipes/lambAndBeef" />
+        <SubmenuList title="램&amp;비프" link="/recipes/lambAndBeef" /> */}
       </MenuLayout>
       <MenuLayout title="커뮤니티">
         <SubmenuList title="공지사항" link="/community/notice" />

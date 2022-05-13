@@ -76,6 +76,7 @@ $browser-context:16; // html font-size:
       > li{
         float:left;
         margin-right: rem(58);
+        &.subscribe{cursor:pointer;}
         &:last-child{margin-right:0;}
       }
     }
@@ -99,6 +100,7 @@ $browser-context:16; // html font-size:
           display:inline-block;
           svg{width: 100%; height:100%;}
         }
+        
       }
     }
     

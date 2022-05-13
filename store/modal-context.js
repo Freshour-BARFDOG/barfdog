@@ -37,9 +37,10 @@ const useAlertModalContext = () => useContext(AlertModalContext);
 const ModalContextProvider = ({children}) => {
 
 
-  const [isActive, setIsActive] = useState(true);
+  const [isActive, setIsActive] = useState(false);
   const [hasAlert, setHasAlert] = useState(false);
   const [message, setAlertMessage] = useState('');
+  const [isActiveSubscribeModal, setIsActiveSubscribeModal] = useState(false);
 
   const onShowHandler = () => {
     setIsActive(true);
@@ -59,6 +60,16 @@ const ModalContextProvider = ({children}) => {
   };
 
 
+  const onSubScribeModalShowHandler = () => {
+    console.log('모달키자')
+    setIsActiveSubscribeModal(true);
+  };
+
+  const onSubScribeModalHideHandler = () => {
+    setIsActiveSubscribeModal(false);
+  };
+
+
   return (
     <ModalContext.Provider
       value={{
@@ -69,6 +80,11 @@ const ModalContextProvider = ({children}) => {
         alertShow: onAlertShowHandler,
         alertHide: onAlertHideHandler,
         message: message,
+        subscribe: {
+          isActive: isActiveSubscribeModal,
+          onShow: onSubScribeModalShowHandler,
+          onHide: onSubScribeModalHideHandler,
+        },
       }}
     >
       {children}

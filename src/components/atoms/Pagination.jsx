@@ -11,11 +11,10 @@ import s from "./pagination.module.scss";
 
   const [curPage, setCurPage] = useState(1);
   const numberOfPages = Math.ceil(itemTotalCount / itemCountPerGroup);
-  console.log(curPage);
+  // console.log(curPage);
 
   const onChangeCurPage = (e) => {
     const targetPage = Number(e.currentTarget.dataset.page);
-    console.log(targetPage);
     setCurPage(targetPage);
   };
 

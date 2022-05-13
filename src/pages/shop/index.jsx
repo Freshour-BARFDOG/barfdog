@@ -13,7 +13,7 @@ import RatingStars from "/src/components/atoms/RatingStars";
 function ShopPage() {
   return (
     <>
-      <MetaTitle title="Shop" />
+      <MetaTitle title="샵" />
       <Layout>
         <Wrapper>
           <section className={Styles.top}>

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import MetaTitle from "@src/components/atoms/MetaTitle";
 import Layout from "/src/components/common/Layout";
 import Wrapper from "/src/components/common/Wrapper";
 
@@ -1006,25 +1007,28 @@ export default function SingleItemPage() {
 
 
   return (
-    <Layout>
-      <Wrapper>
-        <ShopBoard />
-        <ShopTabMenus
-          activeIndex={activeIndex}
-          setActiveIndex={setActiveIndex}
-        />
-        <ul id={Styles.content} ref={contentRef}>
-          <li className={Styles.cont_list}>
-            <ItemInfoBox />
-          </li>
-          <li className={Styles.cont_list}>
-            <ReturnExchageGuideBox />
-          </li>
-          <li className={Styles.cont_list}>
-            <ReviewBox />
-          </li>
-        </ul>
-      </Wrapper>
-    </Layout>
+    <>
+      <MetaTitle title="샵" />
+      <Layout>
+        <Wrapper>
+          <ShopBoard />
+          <ShopTabMenus
+            activeIndex={activeIndex}
+            setActiveIndex={setActiveIndex}
+          />
+          <ul id={Styles.content} ref={contentRef}>
+            <li className={Styles.cont_list}>
+              <ItemInfoBox />
+            </li>
+            <li className={Styles.cont_list}>
+              <ReturnExchageGuideBox />
+            </li>
+            <li className={Styles.cont_list}>
+              <ReviewBox />
+            </li>
+          </ul>
+        </Wrapper>
+      </Layout>
+    </>
   );
 }

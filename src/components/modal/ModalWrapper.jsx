@@ -43,7 +43,7 @@ const ModalWrap = styled.div`
   } ;
 `;
 
-function ModalWrapComponent({children, className, style, label}) {
+function ModalWrapper({children, className, style, label}) {
 
 
   return (
@@ -53,4 +53,4 @@ function ModalWrapComponent({children, className, style, label}) {
   );
 }
 
-export default ModalWrapComponent;
+export default ModalWrapper;

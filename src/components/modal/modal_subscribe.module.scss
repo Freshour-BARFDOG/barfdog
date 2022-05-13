@@ -1,0 +1,30 @@
+$browser-context: 16;
+@function rem($px, $context: $browser-context) {
+  @return #{$px / $context}rem;
+}
+
+$modal_zindex : 999;
+
+.ModalWrapper{
+  position: fixed;
+  z-index: $modal_zindex;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  animation: show var(--ani-default) forwards;
+  &.on {
+    pointer-events: all;
+  }
+  &.off {
+    animation: hide var(--ani-default) forwards;
+    pointer-events: all;
+  }
+}
+
+.container{width: rem(800);}
+.cont{
+  padding:rem(57) rem(70);
+  width: 100%;
+  box-sizing: border-box;
+}

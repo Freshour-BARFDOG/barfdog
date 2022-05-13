@@ -1,32 +1,22 @@
 import React, { useEffect, useState, useRef } from "react";
+import MetaTitle from "/src/components/atoms/MetaTitle";
 import Layout from "/src/components/common/Layout";
 import Wrapper from "/src/components/common/Wrapper";
 import Styles from "/styles/css/review/index.module.scss";
-import { slideUp , slideDown } from "/util/func/slideToggle";
-
-
+import ReviewItem_Pagination from "@src/components/atoms/Pagination";
+import Image from "next/image";
 import RatingStars from "/src/components/atoms/RatingStars";
+import ArrowLeft_m from "/public/img/icon/swiper-arrow-medium.svg";
+import ArrowRight_m from "/public/img/icon/swiper-arrow-medium-style2.svg";
 
-import Link from 'next/link';
-import { useRouter } from "next/router";
-
-
-//////////////////////////////////////////////////
+import { slideUp, slideDown } from "/util/func/slideToggle";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { EffectFade, Pagination, Navigation } from "swiper";
+import { Navigation } from "swiper";
 //필요한것만 두개중 가져가면됨
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css/effect-fade";
-
-import ArrowLeft_m from "/public/img/icon/swiper-arrow-medium.svg";
-import ArrowRight_m from "/public/img/icon/swiper-arrow-medium-style2.svg";
-
-//////////////////////////////////////////////////
-
-/* Images */
-import Image from "next/image";
 
 
 function Swiper_review() {
@@ -35,7 +25,6 @@ function Swiper_review() {
   const navNextRef = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
   const [isReachedEnd, setIsReachedEnd] = useState(false);
-  const router = useRouter();
 
     useEffect(() => {
       window.innerWidth <= 600 ? setIsMobile(true) : setIsMobile(false);
@@ -46,37 +35,21 @@ function Swiper_review() {
   const swiperSettings_review = {
     className: `${Styles.swiper_review}`,
     spaceBetween: 40,
-    // loop: true,
+    loop: true,
     centeredSlides: false,
     slidesPerView: isMobile ? 1 : 3,
     //모바일 에서는 1개 pc에서는 3개
-    // pagination: {
-    //   clickable: true,
-    // },
+    pagination: {
+      clickable: true,
+    },
     navigation: {
       prevEl: navPrevRef.current,
       nextEl: navNextRef.current,
     },
-    modules: [Pagination, Navigation],
+    modules: [Navigation],
     //존재하면 쓸수있음
   };
 
-
-  const ArrowRight_withLink = () => {
-    return (
-      <>
-        <ArrowRight_m />
-        <Link href="/community/review" passHref>
-          <a onClick={() => {
-              router.push("/community/review");
-            }}
-          >
-            더보기
-          </a>
-        </Link>
-      </>
-    );
-  };
 
 
   function hideMoreView (e) {
@@ -98,31 +71,20 @@ function Swiper_review() {
         <ArrowLeft_m />
       </i>
       <i className={Styles["swiper-button-next"]} ref={navNextRef}>
-        <ArrowRight_withLink />
+        <ArrowRight_m />
       </i>
       <Swiper
         {...swiperSettings_review}
         onInit={(swiper) => {
           swiper.params.navigation.prevEl = navPrevRef.current;
           swiper.params.navigation.nextEl = navNextRef.current;
-          // swiper.params.pagination.el;
-          // swiper.params.pagination.el.classList.add(
-            // "swiper-pagination__reviewSection"
-          // );
-          // swiper.params.pagination.el.classList.add(
-          //   Styles["swiper-pagination__reviewSection"]
-          // );
           swiper.navigation.destroy();
           swiper.navigation.init();
           swiper.navigation.update();
-          swiper.pagination.destroy();
-          swiper.pagination.init();
-          swiper.pagination.update();
         }}
         onActiveIndexChange={hideMoreView}
         onReachEnd={showMoreView}
       >
-
         <SwiperSlide className={Styles.slide}>
           <div className={Styles.mid_box}>
             <div className={`${Styles.image} img-wrap`}>
@@ -133,11 +95,10 @@ function Swiper_review() {
                 alt="카드 이미지"
               />
             </div>
-            
           </div>
-           <p className={Styles.content_title}>굿굿 너무 좋아요 </p>
+          <p className={Styles.content_title}>굿굿 너무 좋아요 </p>
 
-            <p>저희강아지 밥 다먹고 빈그릇 핥는거 7년 키우면서 첨봄.. 굿굿</p>
+          <p>저희강아지 밥 다먹고 빈그릇 핥는거 7년 키우면서 첨봄.. 굿굿</p>
         </SwiperSlide>
 
         <SwiperSlide className={Styles.slide}>
@@ -153,7 +114,7 @@ function Swiper_review() {
           </div>
 
           <p className={Styles.content_title}>굿굿 너무 좋아요 </p>
-          
+
           <p>
             진짜 잘먹어요 ;; 생식은 다 잘먹는다고해서 타업체샀다가 안먹어서
             포기했는데ㅠㅠ사료는 눈물터져서 다시 막 찾다가 바프독차? 집...
@@ -172,12 +133,12 @@ function Swiper_review() {
             </div>
           </div>
 
-            <p className={Styles.content_title}>굿굿 너무 좋아요 </p>
+          <p className={Styles.content_title}>굿굿 너무 좋아요 </p>
 
-            <p>
-              친구네 시바에게 선물했는데 생식 처음 도전이었는데도 아주 잘
-              먹었다고 합니다. 친구가 마진도 생각 안 하시는 거 같다고 아가는 잘...
-            </p>
+          <p>
+            친구네 시바에게 선물했는데 생식 처음 도전이었는데도 아주 잘 먹었다고
+            합니다. 친구가 마진도 생각 안 하시는 거 같다고 아가는 잘...
+          </p>
         </SwiperSlide>
         <SwiperSlide className={Styles.slide}>
           <div className={Styles.mid_box}>
@@ -191,11 +152,9 @@ function Swiper_review() {
             </div>
           </div>
 
-            <p className={Styles.content_title}>굿굿 너무 좋아요 </p>
+          <p className={Styles.content_title}>굿굿 너무 좋아요 </p>
 
-            <p>저희강아지 밥 다먹고 빈그릇 핥는거 7년 키우면서 첨봄..</p>
-          
-          
+          <p>저희강아지 밥 다먹고 빈그릇 핥는거 7년 키우면서 첨봄..</p>
         </SwiperSlide>
         <SwiperSlide className={Styles.slide}>
           <div className={Styles.mid_box}>
@@ -209,12 +168,12 @@ function Swiper_review() {
             </div>
           </div>
 
-            <p className={Styles.content_title}>굿굿 너무 좋아요 </p>
+          <p className={Styles.content_title}>굿굿 너무 좋아요 </p>
 
-            <p>
-              진짜 잘먹어요 ;; 생식은 다 잘먹는다고해서 타업체샀다가 안먹어서
-              포기했는데ㅠㅠ사료는 눈물터져서 다시 막 찾다가 바프독차? 집...
-            </p>
+          <p>
+            진짜 잘먹어요 ;; 생식은 다 잘먹는다고해서 타업체샀다가 안먹어서
+            포기했는데ㅠㅠ사료는 눈물터져서 다시 막 찾다가 바프독차? 집...
+          </p>
         </SwiperSlide>
       </Swiper>
     </div>
@@ -313,20 +272,9 @@ const ReviewBox = () => {
         </ul>
       </div>
 
-
       {/* // * B! Ventures > News Page > Pagination 사용예정  */}
       <div className={Styles.pagination_box}>
-        <div className={Styles.content}>
-          <div> &#60;</div>
-          <div>1</div>
-          <div>2</div>
-          <div>3</div>
-          <div>4</div>
-          <div>5</div>
-          <div>...</div>
-          <div>11</div>
-          <div> &#62;</div>
-        </div>
+        <ReviewItem_Pagination itemCountPerGroup={5} itemTotalCount={100} />
       </div>
     </section>
   );
@@ -338,71 +286,66 @@ const ReviewBox = () => {
 
 function ReviewPage() {
   return (
-    <Layout>
-      <Wrapper>
-        <section className={Styles.review_title}>
-          <div>바프독 견주님들의 생생한 후기를 확인하세요</div>
-        </section>
+    <>
+      <MetaTitle title="리뷰" />
+      <Layout>
+        <Wrapper>
+          <section className={Styles.review_title}>
+            <div>바프독 견주님들의 생생한 후기를 확인하세요</div>
+          </section>
 
-        <section className={Styles.swiper_box}>
-          <Swiper_review />
-        </section>
+          <section className={Styles.swiper_box}>
+            <Swiper_review />
+          </section>
 
+          <section className={Styles.review_write_ad}>
+            <div className={Styles.red_box}>
+              <div className={Styles.content_box}>
+                <div className={`${Styles.image_left} img-wrap`}>
+                  <Image
+                    src={require("/public/img/pages/review/review_redbox_left.png")}
+                    objectFit="cover"
+                    layout="fill"
+                    alt="카드 이미지"
+                  />
+                </div>
 
-
-        <section className={Styles.review_write_ad}>
-          <div className={Styles.red_box}>
-            <div className={Styles.content_box}>
-              <div className={`${Styles.image_left} img-wrap`}>
-                <Image
-                  src={require("/public/img/pages/review/review_redbox_left.png")}
-                  objectFit="cover"
-                  layout="fill"
-                  alt="카드 이미지"
-                />
+                <div className={Styles.text_box}>
+                  <p className={Styles.top_text}>
+                    리뷰 작성하고 BEST 리뷰가 되어보세요!
+                  </p>
+                  <p className={Styles.bot_text}>
+                    지금 리뷰 작성하고 적립금 받기!
+                  </p>
+                </div>
+                <div className={`${Styles.image_right} img-wrap`}>
+                  <Image
+                    src={require("/public/img/pages/review/review_redbox_right.png")}
+                    objectFit="contain"
+                    layout="fill"
+                    alt="카드 이미지"
+                  />
+                </div>
               </div>
-              
-              <div className={Styles.text_box}>
-                <p className={Styles.top_text}>
-                  리뷰 작성하고 BEST 리뷰가 되어보세요!
-                </p>
-                <p className={Styles.bot_text}>
-                  지금 리뷰 작성하고 적립금 받기!
-                </p>
-              </div>
-              <div className={`${Styles.image_right} img-wrap`}>
-              <Image
-                src={require("/public/img/pages/review/review_redbox_right.png")}
-                objectFit="contain"
-                layout="fill"
-                alt="카드 이미지"
-              />
-              </div>
-
             </div>
-          </div>
-        </section>
+          </section>
 
+          <section className={Styles.notice_text}>
+            <div className={Styles.notice}>
+              상품에 대한 후기를 남기는 공간입니다. 해당 게시판의 성격과 다른
+              글은 사전동의 없이 담당 게시판으로 이동될 수 있습니다.
+              <br />
+              배송관련, 주문(취소/교환/환불)관련 문의 및 요청사항은 마이페이지
+              내 1:1 문의에 남겨주시면 빠른 상담이 가능합니다.
+            </div>
+          </section>
 
-
-        <section className={Styles.notice_text}>
-          <div className={Styles.notice}>
-            상품에 대한 후기를 남기는 공간입니다. 해당 게시판의 성격과 다른 글은 사전동의 없이 담당 게시판으로 이동될 수 있습니다.<br/>
-            배송관련, 주문(취소/교환/환불)관련 문의 및 요청사항은 마이페이지 내 1:1 문의에 남겨주시면 빠른 상담이 가능합니다.
-          </div>
-        </section>
-
-
-
-        <section className={Styles.review_box}>
-
-          <ReviewBox />
-
-        </section>
-
-
-      </Wrapper>
-    </Layout>
+          <section className={Styles.review_box}>
+            <ReviewBox />
+          </section>
+        </Wrapper>
+      </Layout>
+    </>
   );
 }
 
