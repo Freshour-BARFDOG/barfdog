@@ -27,7 +27,7 @@ const useAlertModalContext = () => useContext(AlertModalContext);
 
 
 
-
+ 
 
 
 
@@ -36,9 +36,10 @@ const useAlertModalContext = () => useContext(AlertModalContext);
 
 const ModalContextProvider = ({children}) => {
 
-  const [isActive, setIsActive] = useState(false);
-  const [hasAlert, setHasAlert] = useState(true);
 
+  const [isActive, setIsActive] = useState(true);
+  const [hasAlert, setHasAlert] = useState(false);
+  const [message, setAlertMessage] = useState('');
 
   const onShowHandler = () => {
     setIsActive(true);
@@ -47,15 +48,17 @@ const ModalContextProvider = ({children}) => {
     setIsActive(false);
   };
 
-  const onAlertShowHandler = () => {
+  const onAlertShowHandler = (message) => {
      setHasAlert(true);
+     setAlertMessage(message);
   }
 
   const onAlertHideHandler = () => {
-    console.log('숨키기')
     setHasAlert(false);
+     setAlertMessage('');
   };
 
+  console.log(isActive)
 
   return (
     <ModalContext.Provider
@@ -66,6 +69,7 @@ const ModalContextProvider = ({children}) => {
         onHide: onHideHandler,
         alertShow: onAlertShowHandler,
         alertHide: onAlertHideHandler,
+        message: message,
       }}
     >
       {children}

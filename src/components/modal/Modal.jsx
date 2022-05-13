@@ -37,14 +37,22 @@ const ModalBody = styled.div`
 
 function Modal({ children, title, onClick, background }) {
 
-  const mcx = useModalContext();
-  const MODAL_ACTIVE_STATE = mcx.isActive;
+  const mct = useModalContext();
+  const MODAL_ACTIVE_STATE = mct.isActive;
+  const onClickHandler = () => {
+    mct.onHide();
+    
+  }
 
   return (
     <>
       {MODAL_ACTIVE_STATE && (
         <ModalWrapper title={title}>
-          {background && <ModalBackground onClick={onClick}></ModalBackground>}
+          {background && (
+            <ModalBackground
+              onClick={onClick || onClickHandler}
+            ></ModalBackground>
+          )}
           <ModalBody>{children}</ModalBody>
         </ModalWrapper>
       )}

@@ -7,28 +7,11 @@ $browser-context: 16;
 
 .modal_wrap {
 
-  animation: show var(--ani-default) forwards;
-
-  &.global{
-    z-index:9999;
-    position: fixed;
-    left:50%;
-    top:0;
-    width: rem(360);
-    transform:translate(-50%, -50%);
-    background-color: #fff;
-    padding: rem(32);
-    box-sizing: border-box;
-    border-radius: rem(6);
-    box-shadow: 0 0 rem(30) rgba(0,0,0,0.15);
-    animation: slideDown var(--ani-default) forwards;
-
-    .title_section .text{
+  &.global .title_section .text{
       height: auto !important;
       display:block !important;
       font-size: rem(18);
       word-break: break-all;
-    }
   }
 
   .btn_close_modal {
@@ -74,21 +57,9 @@ $browser-context: 16;
       }
     }
   }
+
 }
 
 
 
 
-
-
-@keyframes show {
-  from{opacity:0; pointer-events: none;}
-  to{opacity:1; pointer-events: all;}
-}
-
-
-
-@keyframes slideDown {
-  from{opacity:0; pointer-events: none; top:0}
-  to{opacity:1; pointer-events: all; top:20vh}
-}

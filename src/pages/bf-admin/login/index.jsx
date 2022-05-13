@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { authAction } from "@store/auth-slice";
+import { useModalContext } from "@store/modal-context";
+
 import s from './login.module.scss'
 import Image from 'next/image';
 import Checkbox from '@src/components/atoms/Checkbox';
 import getAdminToken from "@api/getAdminToken";
 
 import Modal from '@src/components/modal/Modal';
-import Modal_alert from "@src/components/modal/Modal_alert";
 import Modal_AdminResetPassword from "@src/components/modal/Modal_AdminResetPassword";
-import { useModalContext } from "@store/modal-context";
-
+import Modal_global_alert from "@src/components/modal/Modal_global_alert";
 
 // * 1. 로그인 클릭했을 때, 어드민 계정에 맞는지 안맞는지만 확인한다.
 // * 2. 자동로그인 체크이벤트
@@ -22,26 +22,21 @@ function LoginIndexPage() {
 
   
   const dispatch = useDispatch();
+  const mct = useModalContext();
+
   const [email, setEmail] = useState('');
   const [pw, setPw] = useState('');
   const [formErrors, setFormErrors] = useState({});
   const [formValues, setFormValues] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const [modalMessage, setModalMessage] = useState("");
-  const mcx = useModalContext();
+  
   // 여기서 Context값을 변화시킨다.
-
-  mcx.alertShow();// 보이기
-  // mcx.alertHide();// 보이기
   const onModalShow = () => {
-    setModalMessage("");
-    mcx.onShow();
+    mct.onShow();
   }
   
   const onModalHide = () => {
-    setModalMessage("");
-    mcx.onHide();
+    mct.onHide();
   };
 
   useEffect(() => {
@@ -113,7 +108,7 @@ function LoginIndexPage() {
     console.log(checked)
     if (checked){
       setModalMessage("개인 정보 보호를 위해 본인 기기에서만 이용해 주세요.");
-      mcx.onShow();
+      mct.onShow();
     }else{
       // 자동로그인 해제 로직
     }
@@ -202,16 +197,22 @@ function LoginIndexPage() {
           </div>
         </section>
       </main>
-      {(modalMessage && (
+      <Modal_global_alert message={mct.message} />
+      {mct.isActive && (
+        <Modal onClick={onModalHide} background title="비밀번호 재설정">
+          <Modal_AdminResetPassword />
+        </Modal>
+      )}
+      {/* {(modalMessage && (
         <Modal title="모달 메시지" instance={<Modal_alert />}>
           <Modal_alert text={modalMessage} isConfirm={onModalHide} />
         </Modal>
       )) ||
-        (mcx.isActive && (
+        (mct.isActive && (
           <Modal onClick={onModalHide} background title="비밀번호 재설정">
             <Modal_AdminResetPassword />
           </Modal>
-        ))}
+        ))} */}
     </>
   );
 }

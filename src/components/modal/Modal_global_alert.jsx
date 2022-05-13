@@ -5,25 +5,38 @@ import ModalWrapper from './ModalWrapper';
 
 
 
-function Modal_global_alert({children}) {
 
+function Modal_global_alert({ message }) {
   const mct = useModalContext();
-  const visibility = mct.isAlert;
+  const modalState = mct.hasAlert;
+  const [style, setStyle] = useState({});
 
-  console.log(mct);
+  useEffect(() => {
+    callbackAfterAnimation(modalState);
+  }, [modalState]);
+
+  const callbackAfterAnimation = (modalState) => {
+    const delay = modalState ? 0 : 500;
+    setTimeout(() => {
+      setStyle({ display: modalState ? "block" : "none" });
+    }, delay);
+  };
 
   const onHideModalHandler = () => {
     mct.alertHide();
   };
-  
-    return (
-      <>
-        <ModalWrapper
-          data-modal-title="Modal Global Alert"
-          className={`${s["global"]} ${s["modal_wrap"]} ${visibility ? s.active : s.inactive}`}
-        >
+
+  return (
+    <>
+      <ModalWrapper
+        className={`${s["modal_wrap"]} ${s["global"]} ${
+          modalState ? "active" : "inactive"
+        }`}
+        label="Modal Global Alert"
+      >
+        <div style={modalState ? { display: "block" } : style}>
           <header className={s.title_section}>
-            <div className={`${s.text} ${s.only}`}>{children}</div>
+            <div className={`${s.text} ${s.only}`}>{message}</div>
           </header>
           <div className={s.btn_section}>
             <button
@@ -33,9 +46,10 @@ function Modal_global_alert({children}) {
               확인
             </button>
           </div>
-        </ModalWrapper>
-      </>
-    );
+        </div>
+      </ModalWrapper>
+    </>
+  );
 }
 
 export default Modal_global_alert;

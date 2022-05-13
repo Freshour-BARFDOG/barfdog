@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
+import s from "@styles/admin/banner/adminMypageBanner.module.scss";
 import { useRouter } from "next/router";
-import axios from "axios";
-import axiosConfig from "/api/axios.config"; 
 import { useModalContext } from "@store/modal-context";
+import Modal_global_alert from "@src/components/modal/Modal_global_alert";
+import Modal from "@src/components/modal/Modal";
 
+import axios from "axios";
+import axiosConfig from "/api/axios.config";
 
 import MetaTitle from "@src/components/atoms/MetaTitle";
 import AdminLayout from "/src/components/admin/AdminLayout";
@@ -14,11 +17,7 @@ import Fake_input from "@src/components/atoms/fake_input";
 import InputRadio_status, {
   InputRadio_exposedTarget,
 } from "@src/components/admin/form/InputRadioPackage";
-import s from "@styles/admin/banner/adminMypageBanner.module.scss";
-import Modal from "@src/components/modal/Modal";
-import Modal_alert from "@src/components/modal/Modal_alert";
 
-import Modal_global_alert from "@src/components/modal/Modal_global_alert";
 
 /*
 
@@ -29,36 +28,38 @@ Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLthqDtgbAg7J2066aEIiwiaWQi
 
 function MypageBanner() {
   const router = useRouter();
-
+  const mct = useModalContext();
   const REQUEST_URL = `/api/banners/myPage`;
-  const [modalMessage, setModalMessage] = useState("");
   const [initialValues, setInitialValues] = useState({});
   const [formValues, setFormValues] = useState({});
   const [imageFile, setImageFile] = useState({});
   const [formErrors, setFormErrors] = useState({});
 
-  const mct = useModalContext();
 
 
   useEffect(() => {
     (async () => {
       const token = axiosConfig();
-      console.log(token.headers.authorization);
+      // console.log(token.headers.authorization);
       const response = await axios
-        .get(REQUEST_URL, {
+        .get(
+          REQUEST_URL,
+          {
           headers: {
             authorization:
               "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLthqDtgbAg7J2066aEIiwiaWQiOjUsImV4cCI6MTY1MTg5MjU3NiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20ifQ.Wycm9ZmiiK-GwtsUkvMCHHeExDBtkveDbhKRealjmd8C4OZMp3SFqGFcFWudXMiL5Mxdj6FcTAV9OVsOYsn_Mw",
             "Content-Type": "application/json",
           },
-        })
+          },
+          axiosConfig()
+        )
         .then((res) => {
           console.log(res.data);
           return res.data;
         })
         .catch((err) => {
           console.error(err.request.response); //////*******중요
-          const errorObj = JSON.parse(err.request.response);
+          const errorObj = JSON.parse(err.request?.response);
           const EXPIRED_TOKEN = errorObj.message === "EXPIRED_TOKEN";
           const UNAUTHORIZED = errorObj.message === "UNAUTHORIZED";
           console.error("errorType > EXPIRED_TOKEN : ", EXPIRED_TOKEN);
@@ -87,8 +88,7 @@ function MypageBanner() {
       // setFormValues(formData);
       // setImageFile(fileData);
     })();
-  }, [router, REQUEST_URL]);
-
+  }, [REQUEST_URL]);
 
   const [exposedTarget, setExposedTarget] = useState("all");
   const [exposedStatus, setExposedStatus] = useState("leaked");
@@ -102,11 +102,6 @@ function MypageBanner() {
     filename: "",
     link: "",
   });
-
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-
 
   const handleChange = (e) => {
     const { name, value } = e.currentTarget;
@@ -126,16 +121,12 @@ function MypageBanner() {
       });
     }
   };
-  
-
 
   const returnToPrevPage = () => {
     if (confirm("이전 페이지로 돌아가시겠습니까?")) {
       router.back();
     }
   };
-
-
 
   const onRadioButtonHandler = (data) => {
     if (data.target) {
@@ -164,18 +155,11 @@ function MypageBanner() {
     }
   };
 
-
-
   const onSubmitHandler = (e) => {
     e.preventDefault();
     setFormErrors(validate(formValues));
     if (Object.keys(formErrors).length) return console.error(formErrors);
     postDataToServer();
-  };
-
-
-  const onModalHide = () => {
-    setModalMessage(false);
   };
 
   return (
@@ -184,7 +168,9 @@ function MypageBanner() {
       <AdminLayout>
         <AdminContentWrapper>
           <div className="title_main">
-            <h1>마이페이지 배너</h1>
+            <h1 onClick={()=>{
+              mct.onShow();
+            }}>마이페이지 배너 ---- 모달 테스트중 --클릭시 모달나타남</h1>
           </div>
           <form
             action="/a"
@@ -400,16 +386,10 @@ function MypageBanner() {
           </form>
         </AdminContentWrapper>
       </AdminLayout>
-      {modalMessage && (
-        <Modal title="모달 메시지">
-          <Modal_alert text={modalMessage} isConfirm={onModalHide} />
-        </Modal>
-      )}
-      {
-        <Modal_global_alert>
-         전역 모달 에러 메시지 Component
-        </Modal_global_alert>
-      }
+      <Modal_global_alert message={mct.message} />
+      <Modal background title="비밀번호 재설정">
+        내용전달내용전달내용전달내용전달내용전달
+      </Modal>
     </>
   );
 }
