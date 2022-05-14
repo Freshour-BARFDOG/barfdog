@@ -79,55 +79,47 @@ $topLinkBannerHeight : rem(38);
 
 
 .card {
-  padding: rem(35) rem(50) rem(42);
+  padding: rem(27) rem(50) rem(42);
   box-sizing:border-box;
   text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+  align-content: stretch;
+  height: 100%;
   .img-main {
     position: relative;
-    width: rem(180);
-    aspect-ratio: 180/150;
+    width: rem(240);
+    aspect-ratio: 240/200;
     overflow: initial;
-    margin-bottom: rem(15);
+    margin-bottom: rem(23);
     z-index: 0;
-    .img-sale {
-      position: absolute;
-      right: rem(-61);
-      top: rem(-25);
-      width: rem(90);
-      height: rem(90);
-      z-index: 1;
-      border-radius: 50%;
-      overflow: hidden;
-    }
   }
 
-  .title-section{
-    margin-bottom:rem(26);
-    .title {
-      font-family: GmarketSansBold;
-      font-size: rem(32);
-      letter-spacing: rem(0.2);
-      text-align: center;
-      margin-bottom:rem(0);
-      cursor:default;
-    }
-    .subtitle {
-      font-weight: 500;
-      margin-bottom:rem(21);
-      letter-spacing: -0.02em;
-      cursor:default;
-       b{color: var(--color-primary04);}
-    }
-    .desc {
-      font-weight: 400;
-      color: var(--color-font-sub);
-      cursor:default;
-    }
+
+  .title {
+    width: 100%;
+    font-size: rem(24);
+    letter-spacing: rem(-0.2);
+    font-weight:500;
+    text-align: center;
+    margin-bottom:rem(17);
+    cursor:default;
+  }
+
+  .desc {
+    font-weight: 400;
+    letter-spacing: rem(-0.4);
+    color: var(--color-font-def);
+    cursor:default;
+    margin-bottom: rem(33);
   }
   
   .btn-section {
+    width: 100%;
     a {
-      background-color: var(--color-main);
+      background-color: var(--color-font-strong);
       color: #fff;
       height: rem(50);
       font-size: rem(16);
@@ -203,10 +195,7 @@ $topLinkBannerHeight : rem(38);
         font-size: rem(28);
         margin-bottom:rem(0);
       }
-      .subtitle {
-        font-size: rem(18);
-        margin-bottom:rem(9);
-      }
+
     }
   }
 
