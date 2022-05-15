@@ -44,7 +44,7 @@ function SubScribe_OrderHistoryPage() {
                     <div className={`${Styles.image} img-wrap`}>
                       <Image
                         priority
-                        src={require("public/img/mypage/order_history/subscribe/subscribe_sample_1.png")}
+                        src={require("public/img/mypage/order_history/subscribe_order_detail_1.png")}
                         objectFit="cover"
                         layout="fill"
                         alt="카드 이미지"
@@ -96,7 +96,7 @@ function SubScribe_OrderHistoryPage() {
                     <div className={`${Styles.image} img-wrap`}>
                       <Image
                         priority
-                        src={require("public/img/mypage/order_history/subscribe/subscribe_sample_1.png")}
+                        src={require("public/img/mypage/order_history/subscribe_sample_1.png")}
                         objectFit="cover"
                         layout="fill"
                         alt="카드 이미지"
@@ -148,7 +148,7 @@ function SubScribe_OrderHistoryPage() {
                     <div className={`${Styles.image} img-wrap`}>
                       <Image
                         priority
-                        src={require("public/img/mypage/order_history/subscribe/subscribe_sample_1.png")}
+                        src={require("public/img/mypage/order_history/subscribe_sample_1.png")}
                         objectFit="cover"
                         layout="fill"
                         alt="카드 이미지"
@@ -227,7 +227,7 @@ function SubScribe_OrderHistoryPage() {
                     <div className={`${Styles.image} img-wrap`}>
                       <Image
                         priority
-                        src={require("public/img/mypage/order_history/subscribe/subscribe_order_detail_1.png")}
+                        src={require("public/img/mypage/order_history/subscribe_sample_1.png")}
                         objectFit="cover"
                         layout="fill"
                         alt="카드 이미지"

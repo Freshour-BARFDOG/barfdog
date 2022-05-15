@@ -10,6 +10,9 @@ function Mypage() {
   if (!router.isReady) return;
   const { dogIdx } = router.query;
 
+
+
+  // 이페이지는 설문결과 구독중회원 
   return (
     <>
       <MetaTitle title={`설문결과: ${dogIdx}`} />
