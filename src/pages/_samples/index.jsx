@@ -8,8 +8,7 @@ import Icon_Checked from "@public/img/icon/icon_checked.svg";
 import rem from '@src/components/atoms/rem';
 import Icon_Itemlabel from "@src/components/atoms/Icon_Itemlabel";
 import Pagination from "@src/components/atoms/Pagination";
-import data_ForPagination from "./TEST_data_pagination.json";
-
+import ScrollContainer from "@src/components/atoms/ScrollContainer";
 /* -------------------- 토글박스 ------------------ */
 // * SCSS 파일 코드
 
@@ -307,10 +306,21 @@ function SamplePageForPublishing() {
 
           <li className={s["pagination"]}>
             <ToggleBox title="샘플: PAGINATION">
-              <Pagination
-                itemCountPerGroup={7}
-                itemTotalCount={100}
-              />
+              <Pagination itemCountPerGroup={7} itemTotalCount={100} />
+            </ToggleBox>
+          </li>
+
+          <li className={s["pagination"]}>
+            <ToggleBox title="샘플: Scroll Container ">
+              <ScrollContainer height={100} scrollBarWidth={12}>
+                <p>지정한 높이를 벗어날 경우, 스크롤로 브라우징 가능</p>
+                <p>지정한 높이를 벗어날 경우, 스크롤로 브라우징 가능</p>
+                <p>지정한 높이를 벗어날 경우, 스크롤로 브라우징 가능</p>
+                <p>지정한 높이를 벗어날 경우, 스크롤로 브라우징 가능</p>
+                <p>지정한 높이를 벗어날 경우, 스크롤로 브라우징 가능</p>
+                <p>지정한 높이를 벗어날 경우, 스크롤로 브라우징 가능</p>
+                <p>지정한 높이를 벗어날 경우, 스크롤로 브라우징 가능</p>
+              </ScrollContainer>
             </ToggleBox>
           </li>
         </ul>

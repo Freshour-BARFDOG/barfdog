@@ -8,6 +8,8 @@ import Image from "next/image";
 import RatingStars from "/src/components/atoms/RatingStars";
 import ArrowLeft_m from "/public/img/icon/swiper-arrow-medium.svg";
 import ArrowRight_m from "/public/img/icon/swiper-arrow-medium-style2.svg";
+import Modal_bestReview from "@src/components/modal/Modal_bestReview";
+
 
 import { slideUp, slideDown } from "/util/func/slideToggle";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -19,18 +21,41 @@ import "swiper/css/navigation";
 import "swiper/css/effect-fade";
 
 
-function Swiper_review() {
 
+const TEST_DATA = [
+  {
+    id: 1,
+    title: "굿굿 너무 좋아요",
+    detail: "저희강아지 밥 다먹고 빈그릇 핥는거 7년 키우면서 첨봄.. 굿굿",
+    src: require("/public/img/pages/review/review_slide_1.png"),
+  },
+  {
+    id: 2,
+    title: "굿굿 너무 좋아요",
+    detail:
+      "진짜 잘먹어요 ;; 생식은 다 잘먹는다고해서 타업체샀다가 안먹어서 포기했는데ㅠㅠ사료는 눈물터져서 다시 막 찾다가 바프독차? 집...",
+    src: require("/public/img/pages/review/review_slide_2.png"),
+  },
+  {
+    id: 3,
+    title: "굿굿 너무 좋아요",
+    detail:
+      "친구네 시바에게 선물했는데 생식 처음 도전이었는데도 아주 잘 먹었다고 합니다. 친구가 마진도 생각 안 하시는 거 같다고 아가는 잘...",
+    src: require("/public/img/pages/review/review_slide_3.png"),
+  },
+];
+
+
+
+
+function Swiper_review({ onShowBestReviewModalHandler }) {
   const navPrevRef = useRef(null);
   const navNextRef = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
-  const [isReachedEnd, setIsReachedEnd] = useState(false);
 
-    useEffect(() => {
-      window.innerWidth <= 600 ? setIsMobile(true) : setIsMobile(false);
-    }, [isMobile, isReachedEnd]);
-
-
+  useEffect(() => {
+    window.innerWidth <= 600 ? setIsMobile(true) : setIsMobile(false);
+  }, [isMobile]);
 
   const swiperSettings_review = {
     className: `${Styles.swiper_review}`,
@@ -51,19 +76,10 @@ function Swiper_review() {
   };
 
 
-
-  function hideMoreView (e) {
-    const slideLength = e.slides.length;
-    if (slideLength && e.realIndex !== slideLength) {
-      setIsReachedEnd(false);
-    }
+  const onClickReviewItemHandler = () => {
+    onShowBestReviewModalHandler(true);
+    
   }
-
-
-  function showMoreView () {
-    setIsReachedEnd(true);
-  }
-
 
   return (
     <div className={Styles.swiper_review_outerWrap}>
@@ -82,103 +98,36 @@ function Swiper_review() {
           swiper.navigation.init();
           swiper.navigation.update();
         }}
-        onActiveIndexChange={hideMoreView}
-        onReachEnd={showMoreView}
+        // onActiveIndexChange={hideMoreView}
+        // onReachEnd={showMoreView}
+        onClick={onClickReviewItemHandler}
       >
-        <SwiperSlide className={Styles.slide}>
-          <div className={Styles.mid_box}>
-            <div className={`${Styles.image} img-wrap`}>
-              <Image
-                src={require("/public/img/pages/review/review_slide_1.png")}
-                objectFit="cover"
-                layout="fill"
-                alt="카드 이미지"
-              />
+        {TEST_DATA.map((item) => (
+          <SwiperSlide className={Styles.slide} key={item.id}>
+            <div className={Styles.mid_box}>
+              <div className={`${Styles.image} img-wrap`}>
+                <Image
+                  src={item.src}
+                  objectFit="cover"
+                  layout="fill"
+                  alt="카드 이미지"
+                />
+              </div>
             </div>
-          </div>
-          <p className={Styles.content_title}>굿굿 너무 좋아요 </p>
-
-          <p>저희강아지 밥 다먹고 빈그릇 핥는거 7년 키우면서 첨봄.. 굿굿</p>
-        </SwiperSlide>
-
-        <SwiperSlide className={Styles.slide}>
-          <div className={Styles.mid_box}>
-            <div className={`${Styles.image} img-wrap`}>
-              <Image
-                src={require("/public/img/pages/review/review_slide_2.png")}
-                objectFit="cover"
-                layout="fill"
-                alt="카드 이미지"
-              />
-            </div>
-          </div>
-
-          <p className={Styles.content_title}>굿굿 너무 좋아요 </p>
-
-          <p>
-            진짜 잘먹어요 ;; 생식은 다 잘먹는다고해서 타업체샀다가 안먹어서
-            포기했는데ㅠㅠ사료는 눈물터져서 다시 막 찾다가 바프독차? 집...
-          </p>
-        </SwiperSlide>
-
-        <SwiperSlide className={Styles.slide}>
-          <div className={Styles.mid_box}>
-            <div className={`${Styles.image} img-wrap`}>
-              <Image
-                src={require("/public/img/pages/review/review_slide_3.png")}
-                objectFit="cover"
-                layout="fill"
-                alt="카드 이미지"
-              />
-            </div>
-          </div>
-
-          <p className={Styles.content_title}>굿굿 너무 좋아요 </p>
-
-          <p>
-            친구네 시바에게 선물했는데 생식 처음 도전이었는데도 아주 잘 먹었다고
-            합니다. 친구가 마진도 생각 안 하시는 거 같다고 아가는 잘...
-          </p>
-        </SwiperSlide>
-        <SwiperSlide className={Styles.slide}>
-          <div className={Styles.mid_box}>
-            <div className={`${Styles.image} img-wrap`}>
-              <Image
-                src={require("/public/img/pages/review/review_slide_1.png")}
-                objectFit="cover"
-                layout="fill"
-                alt="카드 이미지"
-              />
-            </div>
-          </div>
-
-          <p className={Styles.content_title}>굿굿 너무 좋아요 </p>
-
-          <p>저희강아지 밥 다먹고 빈그릇 핥는거 7년 키우면서 첨봄..</p>
-        </SwiperSlide>
-        <SwiperSlide className={Styles.slide}>
-          <div className={Styles.mid_box}>
-            <div className={`${Styles.image} img-wrap`}>
-              <Image
-                src={require("/public/img/pages/review/review_slide_2.png")}
-                objectFit="cover"
-                layout="fill"
-                alt="카드 이미지"
-              />
-            </div>
-          </div>
-
-          <p className={Styles.content_title}>굿굿 너무 좋아요 </p>
-
-          <p>
-            진짜 잘먹어요 ;; 생식은 다 잘먹는다고해서 타업체샀다가 안먹어서
-            포기했는데ㅠㅠ사료는 눈물터져서 다시 막 찾다가 바프독차? 집...
-          </p>
-        </SwiperSlide>
+            <p className={Styles.content_title}>{item.title}</p>
+            <p>{item.detail}</p>
+          </SwiperSlide>
+        ))}
       </Swiper>
     </div>
   );
 }
+
+
+
+
+
+
 
 
 
@@ -246,7 +195,7 @@ const ReviewBox = () => {
           <span> 바&#42;독</span>
           <span> 2022.01.20</span>
         </figure>
-        <div className={Styles.review_box} ref={boxRef}>
+        <div className={Styles.text_box} ref={boxRef}>
           <p className={Styles.text}>
             너무 잘먹고요. 모질이 좋아지는게 눈에 보여요.
           </p>
@@ -257,7 +206,7 @@ const ReviewBox = () => {
 
 
   return (
-    <section className={Styles.tab_slide_box2}>
+    <div className={Styles.tab_slide_box}>
       <div className={Styles.notice_board}>
         <div className={Styles.flex_title}>
           <div>No</div>
@@ -276,7 +225,7 @@ const ReviewBox = () => {
       <div className={Styles.pagination_box}>
         <ReviewItem_Pagination itemCountPerGroup={5} itemTotalCount={100} />
       </div>
-    </section>
+    </div>
   );
 };
 
@@ -284,7 +233,26 @@ const ReviewBox = () => {
 
 
 
+
+
+
+
+
+
+
+
+
+
 function ReviewPage() {
+
+  const [isActiveModal, setIsActiveModal] = useState(false);
+
+  const onShowBestReviewModalHandler = () => {
+    setIsActiveModal(true);
+  }
+
+
+
   return (
     <>
       <MetaTitle title="리뷰" />
@@ -295,7 +263,9 @@ function ReviewPage() {
           </section>
 
           <section className={Styles.swiper_box}>
-            <Swiper_review />
+            <Swiper_review
+              onShowBestReviewModalHandler={onShowBestReviewModalHandler}
+            />
           </section>
 
           <section className={Styles.review_write_ad}>
@@ -345,6 +315,12 @@ function ReviewPage() {
           </section>
         </Wrapper>
       </Layout>
+      {isActiveModal && (
+        <Modal_bestReview
+          isActiveModal={isActiveModal}
+          setIsActiveModal={setIsActiveModal}
+        />
+      )}
     </>
   );
 }

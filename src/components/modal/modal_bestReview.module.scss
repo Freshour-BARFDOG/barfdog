@@ -1,0 +1,231 @@
+$browser-context: 16;
+@function rem($px, $context: $browser-context) {
+  @return #{$px / $context}rem;
+}
+
+$containerSize: rem(800);
+$topLinkBannerHeight: rem(38);
+
+.modal-bestReview {
+  position: fixed;
+  // ! z-index: 1000 // global zindex에서 관리
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  animation: show var(--ani-default) forwards;
+  &.on {
+    pointer-events: all;
+  }
+  &.off {
+    animation: hide var(--ani-default) forwards;
+    pointer-events: all;
+  }
+}
+
+.background {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.body {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  animation: show var(--ani-default) forwards;
+}
+
+.btn_close_modal {
+  position: fixed;
+  right: rem(20);
+  top: rem(20);
+  display: flex;
+  z-index: 1;
+}
+
+.container {
+  width: $containerSize;
+}
+
+// * --------- cont --------- * //
+
+.card {
+  position: relative;
+  background-color: #fff;
+  box-shadow: 0 0 rem(30) rgba(0, 0, 0, 0.15);
+  border-radius: rem(8);
+  padding: rem(80) rem(40);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.cont {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  .details {
+    padding-left:rem(20);
+    .row1 {
+      display: flex;
+      margin-bottom: rem(9);
+    }
+    .row2 {
+      margin-bottom: rem(4);
+    }
+    .row3 {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: rem(11);
+      padding-bottom: rem(11);
+      border-bottom: rem(1) solid var(--color-line-04);
+    }
+
+    .date {
+      font-size: rem(13);
+      color: var(--color-font-sub);
+    }
+    .title {
+      font-size: rem(18);
+      color: var(--color-font-def);
+    }
+    .rating {}
+    .name {
+      color: #4d4d4d;
+      font-size: rem(15);
+    }
+  }
+}
+
+// * --------- swiper --------- * //
+
+.swiper_bestReview_outerWrap {
+  position: relative;
+  .img-wrap {
+    width: 100%;
+    aspect-ratio: 360/320;
+  }
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  cursor: pointer;
+  position: absolute;
+  display: flex;
+  border-radius: 50%;
+  transform: translateY(-50%);
+  top: 50%;
+  z-index: 2;
+  transition-property: opacity, transform;
+  transition-timing-function: ease;
+  transition-duration: 0.3s;
+  pointer-events: all;
+  opacity: 0.8;
+  &.invisible{opacity:0; pointer-events: none;}
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+
+.swiper-button-prev {
+
+  left: rem(8);
+}
+
+.swiper-button-next {
+  right: rem(8);
+  transform: translateY(-50%)rotate(180deg);
+}
+
+
+
+
+
+
+// @media (max-width: $containerSize) {
+
+//   .container {
+//     width: calc(100vw - rem(40))
+//   }
+// }
+
+// @media (max-width: rem(600)) {
+
+//   $marginForBackgroundTouch: rem(26);
+
+//   .body{
+//     margin-top: calc($topLinkBannerHeight + $marginForBackgroundTouch);
+//     margin-bottom: $marginForBackgroundTouch;
+//     box-sizing: border-box;
+//     height: calc(100vh - $topLinkBannerHeight);
+//     top:0;
+//     transform:translate(-50%,0)
+//   }
+//   .container {max-width: rem(335);}
+//   .cont {
+//     max-height: calc(100vh - rem(83));
+//     ul {
+//       grid-template-columns: 1fr ;
+//       li:not(:last-child) {
+//         border-right: 0;
+//         border-bottom: rem(1) solid var(--color-line-04);
+//       }
+//     }
+//   }
+
+//   .card {
+//     padding: rem(15) rem(8) rem(15);
+
+//     .img-main {
+//       width: rem(150);
+//       margin-bottom: rem(-4);
+//       .img-sale {
+//         right: rem(-55);
+//         top: rem(-19);
+//         width: rem(80);
+//         height: rem(80);
+//       }
+//     }
+
+//     .title-section{
+//       margin-bottom:rem(12);
+//       .title {
+//         font-size: rem(28);
+//         margin-bottom:rem(0);
+//       }
+
+//     }
+//   }
+
+// }
+
+// @media (max-width: rem(320)) {
+
+//   .container {width: calc(100vw - rem(16));}
+//   .cont {
+//     overflow-y:scroll;
+//     &::-webkit-scrollbar {display:none;} //  스크롤바 숨김
+//   }
+
+//   .card {
+//     padding-right: 0;
+//     padding-left: 0;
+
+//     .img-main {
+//       width: rem(150);
+//       margin-bottom: rem(-4);
+//       .img-sale {
+//         right: rem(-36);
+//         top: rem(0);
+//         width: rem(60);
+//         height: rem(60);
+//       }
+//     }
+//   }
+//   .btn_close_modal {
+//     right: rem(16);
+//     top: rem(16);
+//   }
+// }

@@ -8,14 +8,6 @@ import CloseButton from "@src/components/atoms/CloseButton";
 
 
 
-// ! 전역이 아니라, 해당 페이지내에서만 작동하게 한다.
-// ! 전역이 아니라, 해당 페이지내에서만 작동하게 한다.
-// ! 전역이 아니라, 해당 페이지내에서만 작동하게 한다.
-// ! 전역이 아니라, 해당 페이지내에서만 작동하게 한다.
-// ! 전역이 아니라, 해당 페이지내에서만 작동하게 한다.
-// ! 전역이 아니라, 해당 페이지내에서만 작동하게 한다.
-
-
 function Modal_useCoupon({ isActiveModal, setIsActiveModal }) {
 
 
