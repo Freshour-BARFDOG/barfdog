@@ -88,7 +88,7 @@ const ModalCont = ({onCloseModalHandler}) => {
 
   useEffect(() => {
     setBtnStyleObj(closeButtonStyles(window.innerWidth));
-  }, [btnStylesObj]);
+  }, []);
 
 
   return (
