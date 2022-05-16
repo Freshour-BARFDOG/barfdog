@@ -9,7 +9,17 @@ $aniDefault : 0.15s ease ;
 $aniType_Show : 0.3s ease-in ;
 
 
+// * ---------- COMMON ---------- */
 
+.admin_select{width:rem(200)}
+
+
+
+
+
+
+
+// * ---------- BUTTON ---------- */
 
 /* 
   *  Admin Button EXAMPLE
@@ -21,6 +31,9 @@ $aniType_Show : 0.3s ease-in ;
   *  <button className="admin_btn point popup">버튼</button>
   *  <button className="admin_btn solid popup">버튼</button>
 */
+
+
+
 
 
 .admin_btn{
@@ -114,6 +127,8 @@ $aniType_Show : 0.3s ease-in ;
 
 
 
+
+// * ---------- LAYOUT ---------- */
 
 
 

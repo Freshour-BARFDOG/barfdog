@@ -1,0 +1,29 @@
+$browser-context:16;
+// convert px to rem
+@function rem($px, $context: $browser-context){
+  @return #{$px / $context}rem;
+}
+
+
+
+
+
+.ck-editor {
+  ul, ul li{list-style-type: circle; list-style-position: inside;}
+  ol, ol li{
+    list-style-type: decimal;
+    list-style-position: inside;
+  }
+  ul, li{
+    text-indent: 5rem each-line;
+    text-indent: 5rem hanging;
+    text-indent: 5rem hanging each-line;
+  }
+}
+
+
+
+.ck-editor__main {
+  max-height: rem(680);
+  overflow-y:scroll;
+}

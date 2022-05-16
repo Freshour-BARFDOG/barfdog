@@ -21,9 +21,8 @@ const Img = styled.img`
 `;
 
 
-function PreviewImage({file, className, thumbLink, ratio}) {
+function PreviewImage({ file, className, thumbLink, ratio, style }) {
   const [SRC, setSRC] = useState(null);
-  
 
   const IMAGE = () => {
     return SRC ? <Img src={SRC} alt="미리보기 이미지"></Img> : null;
@@ -47,7 +46,7 @@ function PreviewImage({file, className, thumbLink, ratio}) {
   }, [file, thumbLink]);
 
   return (
-    <Frame className={`preview_img ${className}`} ratio={ratio}>
+    <Frame className={`preview_img ${className}`} ratio={ratio} style={style}>
       <IMAGE />
     </Frame>
   );
