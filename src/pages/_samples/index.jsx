@@ -109,7 +109,7 @@ const CustomInput = ({
         {type === "radio" && <InputRadio />}
         {type === "checkbox" && <InputCheckbox />}
         <span className={s.fake_checkbox}>
-          {isChecked ? "선택됨" : "플랜선택"}
+          {isChecked || selectedRadio === id ? "선택됨" : "플랜선택"}
           <i className={s.icon_checked}>
             <Icon_Checked />
           </i>
@@ -122,10 +122,7 @@ const CustomInput = ({
     <>
       <label
         htmlFor={id}
-        data-id={id}
-        className={`${s.custom_input_wrapper} ${isChecked && s.checked} ${
-          selectedRadio === id && s.checked
-        }`}
+        className={`${s.custom_input_wrapper} ${(isChecked || selectedRadio === id) && s.checked}`}
       >
         <div className={s.custom_input_cont}>{children}</div>
         <CustomInputByType />
@@ -153,7 +150,7 @@ const CustomInput = ({
 const CustomInputRadio = ({name}) => {
 
   const [selectedRadio , setSelectedRadio] = useState(null);
-
+console.log(selectedRadio);
   return (
     <div data-input-title={name}>
       <CustomInput
