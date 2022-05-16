@@ -6,7 +6,6 @@ import MetaTitle from "/src/components/atoms/MetaTitle";
 import Styles from 'styles/css/mypage/delivery/index.module.scss';
 import Image from 'next/image';
 
-
 function Mypage() {
   return (
     <>

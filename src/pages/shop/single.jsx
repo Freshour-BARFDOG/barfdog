@@ -10,6 +10,7 @@ import RatingStars from "/src/components/atoms/RatingStars";
 import { slideUp , slideDown } from "/util/func/slideToggle";
 
 
+
 function BotBox ({title, children}) {
   const [visible, setVisible] = useState(false);
   const boxRef = useRef(null);

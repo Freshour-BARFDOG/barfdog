@@ -34,9 +34,7 @@ function BotBox ({title, children}) {
       </div>
     </li>
   );
-  
 }
-
 
 function FAQindexPage() {
 
@@ -58,8 +56,6 @@ function FAQindexPage() {
       }
     });
   }
-
-
 
   return (
     <>
