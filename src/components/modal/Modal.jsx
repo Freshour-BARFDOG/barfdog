@@ -1,11 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useModalContext } from "@store/modal-context";
+import zIndex from "/styles/global/zIndex.module.scss";
 
 
 
-const ModalWrapper = styled.div`
-  position: absolute;
-  z-index: 1000;
+
+
+const ModalContainer = styled.div`
+  position: fixed;
+  // ! z-index: 1000; // global zindex에서 관리
   left: 0;
   right: 0;
   top: 0;
@@ -34,15 +38,33 @@ const ModalBody = styled.div`
   animation: show var(--ani-default) forwards;
 `;
 
-function Modal({ children, title, onClick }) {
+
+function ModalWithBackground({ children, title, onClick, background }) {
+
+  const mct = useModalContext();
+  const MODAL_ACTIVE_STATE = mct.isActive;
   const onClickHandler = () => {
-  };
+    mct.onHide();
+    
+  }
+
   return (
-    <ModalWrapper title={title}>
-      <ModalBackground onClick={onClick || onClickHandler}></ModalBackground>
-      <ModalBody>{children}</ModalBody>
-    </ModalWrapper>
+    <>
+      {MODAL_ACTIVE_STATE && (
+        <ModalContainer
+          title={title}
+          className={`${zIndex["modal-withBackground"]}`}
+        >
+          {background && (
+            <ModalBackground
+              onClick={onClick || onClickHandler}
+            ></ModalBackground>
+          )}
+          <ModalBody>{children}</ModalBody>
+        </ModalContainer>
+      )}
+    </>
   );
 }
 
-export default Modal;
+export default ModalWithBackground;

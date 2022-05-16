@@ -1,20 +1,104 @@
 import React, { useState, useEffect } from "react";
+import s from "./admin-mypage-banner.module.scss";
 import { useRouter } from "next/router";
+import { useModalContext } from "@store/modal-context";
+import Modal_global_alert from "@src/components/modal/Modal_global_alert";
+import Modal from "@src/components/modal/Modal";
+
+import axios from "axios";
+import axiosConfig from "/api/axios.config";
+
+import MetaTitle from "@src/components/atoms/MetaTitle";
 import AdminLayout from "/src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
-import MetaTitle from "@src/components/atoms/MetaTitle";
 import PreviewImage from "@src/components/atoms/PreviewImage";
 import ErrorMessage from "@src/components/atoms/ErrorMessage";
 import Fake_input from "@src/components/atoms/fake_input";
 import InputRadio_status, {
   InputRadio_exposedTarget,
 } from "@src/components/admin/form/InputRadioPackage";
-import s from "@styles/admin/banner/adminMypageBanner.module.scss";
 
 
+/*
+
+-- 만료된 쿠폰
+Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLthqDtgbAg7J2066aEIiwiaWQiOjUsImV4cCI6MTY1MTg5MjU3NiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20ifQ.Wycm9ZmiiK-GwtsUkvMCHHeExDBtkveDbhKRealjmd8C4OZMp3SFqGFcFWudXMiL5Mxdj6FcTAV9OVsOYsn_Mw
+
+*/
 
 function MypageBanner() {
   const router = useRouter();
+  const mct = useModalContext();
+  const REQUEST_URL = `/api/banners/myPage`;
+  const [initialValues, setInitialValues] = useState({});
+  const [formValues, setFormValues] = useState({});
+  const [imageFile, setImageFile] = useState({});
+  const [formErrors, setFormErrors] = useState({});
+
+
+
+  useEffect(() => {
+    (async () => {
+      const token = axiosConfig();
+      // console.log(token.headers.authorization);
+      const response = await axios
+        .get(
+          REQUEST_URL,
+          {
+            headers: {
+              authorization:
+                "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLthqDtgbAg7J2066aEIiwiaWQiOjUsImV4cCI6MTY1MTg5MjU3NiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20ifQ.Wycm9ZmiiK-GwtsUkvMCHHeExDBtkveDbhKRealjmd8C4OZMp3SFqGFcFWudXMiL5Mxdj6FcTAV9OVsOYsn_Mw",
+              "Content-Type": "application/json",
+            },
+          },
+          axiosConfig()
+        )
+        .then((res) => {
+          console.log(res.data);
+          return res.data;
+        })
+        .catch((err) => {
+          console.error(err.request.response); //////*******중요
+          const errorObj = JSON.parse(err.request?.response);
+          const status = errorObj.status;
+          console.log(status);
+          if(status === 401){
+            const EXPIRED_TOKEN = errorObj.reason === "EXPIRED_TOKEN";
+            const UNAUTHORIZED = errorObj.reason === "UNAUTHORIZED";
+            console.error("errorType > EXPIRED_TOKEN : ", EXPIRED_TOKEN);
+            console.error("errorType > UNAUTHORIZED : ", UNAUTHORIZED);
+            
+          }else if (status === 403) {
+            const FORBIDDEN = errorObj.reason === "FORBIDDEN";
+            console.error("errorType > FORBIDDEN : ", FORBIDDEN);
+          }
+          
+          
+        });
+      // const formData = {
+      //   name: response.name,
+      //   targets: response.targets,
+      //   status: response.status,
+      //   pcLinkUrl: response.pcLinkUrl,
+      //   mobileLinkUrl: response.mobileLinkUrl,
+      // };
+      // const fileData = {
+      //   pc: {
+      //     file: "",
+      //     filename: response.filenamePc,
+      //     thumbLink: response._links?.thumbnail_pc.href,
+      //   },
+      //   mobile: {
+      //     file: "",
+      //     filename: response.filenameMobile,
+      //     thumbLink: response._links?.thumbnail_mobile.href,
+      //   },
+      // };
+      // setInitialValues({ ...formData, ...fileData });
+      // setFormValues(formData);
+      // setImageFile(fileData);
+    })();
+  }, [REQUEST_URL]);
 
   const [exposedTarget, setExposedTarget] = useState("all");
   const [exposedStatus, setExposedStatus] = useState("leaked");
@@ -28,20 +112,6 @@ function MypageBanner() {
     filename: "",
     link: "",
   });
-  const initialValues = {
-    name: "",
-    targets: exposedTarget,
-    status: exposedStatus,
-    pcLinkUrl: file_pc.link,
-    mobileLinkUrl: file_mobile.link,
-  };
-
-
-  const [formValues, setFormValues] = useState(initialValues);
-  const [formErrors, setFormErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-
 
   const handleChange = (e) => {
     const { name, value } = e.currentTarget;
@@ -61,16 +131,12 @@ function MypageBanner() {
       });
     }
   };
-  
-
 
   const returnToPrevPage = () => {
     if (confirm("이전 페이지로 돌아가시겠습니까?")) {
       router.back();
     }
   };
-
-
 
   const onRadioButtonHandler = (data) => {
     if (data.target) {
@@ -99,7 +165,12 @@ function MypageBanner() {
     }
   };
 
-
+  const onSubmitHandler = (e) => {
+    e.preventDefault();
+    setFormErrors(validate(formValues));
+    if (Object.keys(formErrors).length) return console.error(formErrors);
+    postDataToServer();
+  };
 
   return (
     <>
@@ -107,14 +178,16 @@ function MypageBanner() {
       <AdminLayout>
         <AdminContentWrapper>
           <div className="title_main">
-            <h1>마이페이지 배너</h1>
+            <h1 onClick={()=>{
+              mct.onShow();
+            }}>마이페이지 배너 ---- 모달 테스트중 --클릭시 모달나타남</h1>
           </div>
           <form
             action="/a"
             className="cont"
             encType="multipart/form-data"
             method="post"
-            // onSubmit={onSubmitHandler}
+            onSubmit={onSubmitHandler}
           >
             <div className="cont_body">
               <div className="cont_divider">
@@ -323,6 +396,10 @@ function MypageBanner() {
           </form>
         </AdminContentWrapper>
       </AdminLayout>
+      <Modal_global_alert message={mct.message} />
+      <Modal background title="비밀번호 재설정">
+        내용전달내용전달내용전달내용전달내용전달
+      </Modal>
     </>
   );
 }

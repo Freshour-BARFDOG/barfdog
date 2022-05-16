@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import axios from "axios";
+import axiosConfig from "/api/axios.config"; 
+
 import MetaTitle from "@src/components/atoms/MetaTitle";
 import AdminLayout from "@src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "@src/components/admin/AdminWrapper";
@@ -8,123 +11,84 @@ import InputRadio_status, {
 } from "@src/components/admin/form/InputRadioPackage";
 import Fake_input from "@src/components/atoms/fake_input";
 import PreviewImage from "@src/components/atoms/PreviewImage";
-import { getData, putData, deleteData } from "/api/reqData"; 
 import ErrorMessage from "/src/components/atoms/ErrorMessage";
-import getAdminToken from "@api/getAdminToken";
-
-
-
-// const getDataFromAPI = (callback) => {
-//   const callbackWrapper = (res) => {
-//     const data = res.data._embedded.mainBannerListResponseDtoList;
-//     callback(data);
-//   };
-//   ;
-// };
-
-
-// export async function getStaticPaths({ id }) {
-
-//   const callback = (res) => {
-//     const list = res.data._embedded.mainBannerListResponseDtoList;
-//   };
-//   getData("/api/banners/main", callback);
-
-//   const paths = list.map(({ id }) => {
-//     console.log({ id });
-//     return { params: { id: `${id}` } };
-//   });
-//   // params: {id : '1'},{id : '2'}...
-//   return {
-//     paths,
-//     fallback: false,
-//   };
-// }
-
-// ! DATA를 ...... state로 넣기 전에,,,,, 미리 받아서 ...................UpdateMainBannerPage의 props로 넣어보자
-// ! DATA를 ...... state로 넣기 전에,,,,, 미리 받아서 ...................UpdateMainBannerPage의 props로 넣어보자
-// ! DATA를 ...... state로 넣기 전에,,,,, 미리 받아서 ...................UpdateMainBannerPage의 props로 넣어보자
-// ! DATA를 ...... state로 넣기 전에,,,,, 미리 받아서 ...................UpdateMainBannerPage의 props로 넣어보자
-// ! DATA를 ...... state로 넣기 전에,,,,, 미리 받아서 ...................UpdateMainBannerPage의 props로 넣어보자
-// ! DATA를 ...... state로 넣기 전에,,,,, 미리 받아서 ...................UpdateMainBannerPage의 props로 넣어보자
-// ! DATA를 ...... state로 넣기 전에,,,,, 미리 받아서 ...................UpdateMainBannerPage의 props로 넣어보자
-// ! DATA를 ...... state로 넣기 전에,,,,, 미리 받아서 ...................UpdateMainBannerPage의 props로 넣어보자   22.05.06 금 오후 11:55 
-// export async function getStaticProps() {
-//   const res = await axios.get(`https://localholst:3065/user`);
-//   const data = res.data;
-
-//   return { props: { data } };
-// }
-
-
+import Modal from "@src/components/modal/Modal";
+import Modal_alert from "@src/components/modal/Modal_alert";
 
 
 function UpdateMainBannerPage() {
 
   const router = useRouter();
   const { id } = router.query;
+  const REQUEST_URL = `/api/banners/main/${id}`;
 
-  useEffect(() => {
-    if (id) {
-      const callback = (res) => {
-        const data = res.data;
-        setInitialValues(data);
-      };
-      getData(`/api/banners/main/${id}`, callback);
-    }
-  }, [id]);
-
+  const [modalMessage, setModalMessage] = useState('');
   const [initialValues, setInitialValues] = useState({});
-  // console.log(initialValues);
-  // console.log(initialValues._links.thumbnail_pc.href);
-
-
-  const [exposedTarget, setExposedTarget] = useState(initialValues.targets);
-  const [exposedStatus, setExposedStatus] = useState(initialValues.status);
-  
-  const [file_pc, setFile_pc] = useState({
-    // file: initialValues._links.thumbnail_pc.href,
-    filename: initialValues.name,
-    link: initialValues.pcLinkUrl,
-  });
-  const [file_mobile, setFile_mobile] = useState({
-    // file: initialValues._links.thumbnail_mobile.href,
-    filename: initialValues.name,
-    link: initialValues.mobileLinkUrl,
-  });
-  console.log(file_pc);
-
-
-
-  const [formValues, setFormValues] = useState(initialValues);
+  const [formValues, setFormValues] = useState({});
+  const [imageFile, setImageFile] = useState({});
   const [formErrors, setFormErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
+  // const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    if (isSubmitting && !Object.keys(formErrors).length) {
-      postDataToServer();
-    } else {
-      console.error(formErrors);
-    }
-  }, [formErrors, isSubmitting]);
+    if (!id) return;
+    (async () => {
+      const response = await axios
+        .get(REQUEST_URL, axiosConfig())
+        .then((res) => {
+          console.log(res.data);
+          return res.data;
+        })
+        .catch((err) => {
+          console.error(err);
+          alert("데이터를 불러올 수 없습니다.");
+          router.back();
+          // setModalMessage("데이터를 불러올 수 없습니다.");
+        });
+      const formData = {
+        name: response.name,
+        targets: response.targets,
+        status: response.status,
+        pcLinkUrl: response.pcLinkUrl,
+        mobileLinkUrl: response.mobileLinkUrl,
+      };
+      const fileData = {
+        pc: {
+          file: "",
+          filename: response.filenamePc,
+          thumbLink: response._links?.thumbnail_pc.href,
+        },
+        mobile: {
+          file: "",
+          filename: response.filenameMobile,
+          thumbLink: response._links?.thumbnail_mobile.href,
+        },
+      };
+      setInitialValues({ ...formData, ...fileData });
+      setFormValues(formData);
+      setImageFile(fileData);
+    })();
+  }, [id, router, REQUEST_URL]);
 
 
-  const handleChange = (e) => {
-    const { name, value } = e.currentTarget;
+  
+
+
+  const onInputChangeHandler = (e) => {
     const input = e.currentTarget;
+    const value = input.value;
     const type = input.type && input.dataset.type;
-
+    const name = input.name;
     if (type === "link") {
       const device = input.dataset.device === "pc" ? "pc" : "mobile";
+      const query = `${device}LinkUrl`;
       setFormValues({
         ...formValues,
-        [`${device}LinkUrl`]: value,
+        [query]: value,
       });
-    } else {
+    } else if (name === "name") {
       setFormValues({
         ...formValues,
-        [name]: value,
+        name: value,
       });
     }
   };
@@ -138,31 +102,33 @@ function UpdateMainBannerPage() {
 
 
   const onRadioButtonHandler = (data) => {
-    if (data.target) {
-      setExposedTarget(data);
-      setFormValues({
-        ...formValues,
-        targets: data,
-      });
-    } else {
-      setExposedStatus(data);
-      setFormValues({
-        ...formValues,
-        status: data,
-      });
-    }
+    const { key, value }= data;
+    setFormValues({
+      ...formValues,
+      [key]:value
+    });
   };
+
+
 
   const imageFileChangeHandler = (e) => {
     const thisInput = e.currentTarget;
     const file = thisInput.files[0];
     const filename = file ? file.name : "";
-    if (thisInput.dataset.device === "pc") {
-      setFile_pc({ ...file_pc, file: file, filename });
-    } else {
-      setFile_mobile({ ...file_mobile, file: file, filename });
-    }
+    const device = thisInput.dataset.device === "pc" ? 'pc' : "mobile";
+    setImageFile({
+      ...imageFile,
+      [device]: {
+        file,
+        filename: file ? filename : initialValues[device].filename,
+        thumbLink: file ? "" : initialValues[device].thumbLink,//파일이 없을 경우 : 기존파일 링크 유지
+      },
+    });
   };
+
+
+
+
 
 
   const valid_isEmpty = (value) => {
@@ -204,86 +170,74 @@ function UpdateMainBannerPage() {
 
 
    const validate = (obj) => {
-    let errors = {};
-    const keys = Object.keys(obj);
+     let errors = {};
+     const keys = Object.keys(obj);
 
-    keys.forEach((key) => {
-      const val = obj[key];
+     keys.forEach((key) => {
+       const val = obj[key];
 
-      switch (key) {
-        case "name":
-          valid_isEmpty(val) ? (errors[key] = "필수항목입니다.") : "";
-          break;
-        case "pcLinkUrl":
-          // console.log(val);
-          valid_link(val) ? (errors[key] = valid_link(val)) : "";
-          break;
-        case "mobileLinkUrl":
-          // console.log(errors[key], valid_link(val));
-          valid_link(val) ? (errors[key] = valid_link(val)) : '';
-          break;
+       switch (key) {
+         case "name":
+           valid_isEmpty(val) && (errors[key] = "필수항목입니다.");
+           break;
+         case "pcLinkUrl":
+           valid_link(val) && (errors[key] = valid_link(val));
+           break;
+         case "mobileLinkUrl":
+           valid_link(val) && (errors[key] = valid_link(val));
+           break;
 
-        default:
-          break;
-      }
-    });
+         default:
+           break;
+       }
+     });
 
-    valid_isEmpty(file_pc.file)
-      ? (errors["file_pc"] = valid_isEmpty(file_pc.file))
-      : "";
-    valid_isEmpty(file_mobile.file) ? (errors["file_mobile"] = valid_isEmpty(file_mobile.file))
-      : "";
+     // * 파일 유효성검사 불필요
+     // * 파일 empty: 기존 파일 유지 (파일 전송 X)
+     // * 파일 exist: 파일 전송
+     console.log("Validation Result: ", errors);
 
-    console.log("Validation Result: ", errors);
-
-    return errors;
-  };
-
+     return errors;
+   };
 
 
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
     setFormErrors(validate(formValues));
-    let isError = false;
-    Object.keys(formErrors).forEach((key) => {
-      if (formErrors[key]) {
-        isError = true;
-        return;
-      }
-    });
-    if (isError) return;
-    setIsSubmitting(true);
-  
-  }; // * onSubmitHandler
+    if (Object.keys(formErrors).length) return console.error(formErrors);
+    postDataToServer();
+  };
+
 
 
   const postDataToServer = async () => {
-    // 보낼값: 파일 1.JSON 2.파일(이미지) 3. 파일(이미지 모바일)
-    // * 파일 변환방법
-    const formData = new FormData();
-    formData.append("pcFile", file_pc.file);
-    formData.append("mobileFile", file_mobile.file);
+    // * POST LIST:  1.JSON  2.파일(이미지) 3. 파일(이미지 모바일)
+    // * 파일이 없을경우 , 기존 파일 그대로 유지 처리 요청
     const jsonData = JSON.stringify(formValues);
     const blob = new Blob([jsonData], { type: "application/json" });
+    const formData = new FormData();
     formData.append("requestDto", blob);
+    formData.append("pcFile", imageFile.pc?.file);
+    formData.append("mobileFile", imageFile.mobile?.file);
 
-    const token = await getAdminToken();
-    const axiosConfig = {
-      headers: {
-        authorization: token,
-        "Content-Type": "multipart/form-data",
-      },
-    };
-
-    const postCallback = () => {
-      alert("배너등록이 완료되었습니다.");
-      if (window) {
-        location.reload();
-      }
-    };
-
-    postData("/api/banners/main", formData, axiosConfig, postCallback);
+    
+    axios
+      .post(REQUEST_URL, formData, axiosConfig("multipart/form-data"))
+      .then((res) => {
+        console.log(res);
+        setModalMessage("배너등록이 완료되었습니다.");
+        setTimeout(() => {
+          router.back();
+        }, 2000);
+      })
+      .catch((err) => {
+        console.log(err);
+        setModalMessage("데이터 전송에 실패하였습니다.");
+      });
+  };
+  const onModalHide = () => {
+    setModalMessage(false);
   };
 
 
@@ -296,7 +250,7 @@ function UpdateMainBannerPage() {
             <h1>메인배너 수정</h1>
           </div>
           <form
-            action="/a"
+            action="/"
             className="cont"
             encType="multipart/form-data"
             method="post"
@@ -316,8 +270,8 @@ function UpdateMainBannerPage() {
                         type="text"
                         name="name"
                         className="fullWidth"
-                        // onChange={getNameHandler}
-                        onChange={handleChange}
+                        onChange={onInputChangeHandler}
+                        value={formValues.name || ""}
                       />
                       {formErrors.name && (
                         <ErrorMessage>{formErrors.name}</ErrorMessage>
@@ -335,7 +289,7 @@ function UpdateMainBannerPage() {
                   <div className="inp_section">
                     <InputRadio_exposedTarget
                       name="exposedTarget"
-                      exposedTarget={exposedTarget}
+                      exposedTarget={formValues.targets}
                       onRadioButtonHandler={onRadioButtonHandler}
                     />
                   </div>
@@ -350,7 +304,7 @@ function UpdateMainBannerPage() {
                   <div className="inp_section">
                     <InputRadio_status
                       name="exposedStatus"
-                      exposedStatus={exposedStatus}
+                      exposedStatus={formValues.status}
                       onRadioButtonHandler={onRadioButtonHandler}
                     />
                   </div>
@@ -367,7 +321,11 @@ function UpdateMainBannerPage() {
                   </div>
                   <div className="inp_section">
                     <label className="inp_wrap file" htmlFor="upload-image-pc">
-                      <PreviewImage file={file_pc.file} />
+                      <PreviewImage
+                        file={imageFile.pc?.file}
+                        thumbLink={imageFile.pc?.thumbLink}
+                        ratio={1920 / 450}
+                      />
                       <span className="inp_box">
                         <input
                           type="file"
@@ -377,10 +335,9 @@ function UpdateMainBannerPage() {
                           accept="image/*"
                           className="hide"
                           data-device="pc"
-                          // multiple={false}
                           onChange={imageFileChangeHandler}
                         />
-                        <Fake_input filename={file_pc.filename} />
+                        <Fake_input filename={imageFile.pc?.filename} />
                         {formErrors.file_pc && (
                           <ErrorMessage>{formErrors.file_pc}</ErrorMessage>
                         )}
@@ -402,8 +359,9 @@ function UpdateMainBannerPage() {
                         data-type="link"
                         className="halfWidth"
                         data-device="pc"
+                        value={formValues.pcLinkUrl || ""}
                         placeholder="ex. https://barfdog.co.kr/event/1"
-                        onChange={handleChange}
+                        onChange={onInputChangeHandler}
                       />
                     </div>
                     <div className="desc">
@@ -431,21 +389,24 @@ function UpdateMainBannerPage() {
                       className="inp_wrap file"
                       htmlFor="upload-image-mobile"
                     >
-                      <PreviewImage file={file_mobile.file} />
+                      <PreviewImage
+                        file={imageFile.mobile?.file}
+                        thumbLink={imageFile.mobile?.thumbLink}
+                        ratio={1920 / 450}
+                      />
                       <div className="inp_box">
                         <input
                           type="file"
                           data-type="file"
                           id="upload-image-mobile"
-                          name="mobileImage"
+                          name="imageFile"
                           accept="image/*"
                           className="hide"
                           data-device="mobile"
                           multiple={false}
                           onChange={imageFileChangeHandler}
-                          // onChange={handleChange}
                         />
-                        <Fake_input filename={file_mobile.filename} />
+                        <Fake_input filename={imageFile.mobile?.filename} />
                         {formErrors.file_mobile && (
                           <ErrorMessage>{formErrors.file_mobile}</ErrorMessage>
                         )}
@@ -467,7 +428,8 @@ function UpdateMainBannerPage() {
                         name="mobileLinkUrl"
                         className="halfWidth"
                         data-device="mobile"
-                        onChange={handleChange}
+                        onChange={onInputChangeHandler}
+                        value={formValues.mobileLinkUrl || ""}
                         placeholder="ex. https://barfdog.co.kr/event/2"
                       />
                     </div>
@@ -505,6 +467,11 @@ function UpdateMainBannerPage() {
           {/* cont */}
         </AdminContentWrapper>
       </AdminLayout>
+      {modalMessage && (
+        <Modal title="모달 메시지">
+          <Modal_alert text={modalMessage} isConfirm={onModalHide} />
+        </Modal>
+      )}
     </>
   );
 }

@@ -1,14 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 import rem from "@src/components/atoms/rem";
+import { useModalContext } from "@store/modal-context";
 
 
 const Button = styled.button`
-  width: ${rem(16)};
-  height: ${rem(16)};
+  width: ${(props) => props.style?.width || rem(16)};
+  height: ${(props) => props.style?.height || rem(16)};
   display: inline-block;
   position: relative;
-  cursor:pointer;
+  cursor: pointer;
 
   &:before,
   &:after {
@@ -31,8 +32,19 @@ const Button = styled.button`
 
 
 
-function CloseButton({className}) {
-  return <Button type="button" className={className} />;
+function CloseButton({className, style}) {
+
+  const mct = useModalContext();
+  const onClickHandler = () => mct.onHide();
+
+  return (
+    <Button
+      type="button"
+      style={style}
+      className={className}
+      onClick={onClickHandler}
+    />
+  );
 }
 
-export default CloseButton
+export default CloseButton;

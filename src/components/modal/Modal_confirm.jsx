@@ -1,5 +1,5 @@
 import React from "react";
-import ModalWrap from "./ModalWrap";
+import ModalWrapper from "./ModalWrapper";
 import s from "./modal.module.scss";
 import CloseButton from "@src/components/atoms/CloseButton";
 
@@ -18,7 +18,7 @@ function Modal_confirm({ title, text, isConfirm }) {
   };
 
   return (
-    <ModalWrap className={`${s.modal_wrap}`}>
+    <ModalWrapper className={`${s.modal_wrap}`}>
       <div className={s.btn_close_modal} onClick={onCancleHandler}>
         <CloseButton />
       </div>
@@ -40,7 +40,7 @@ function Modal_confirm({ title, text, isConfirm }) {
           확인
         </button>
       </div>
-    </ModalWrap>
+    </ModalWrapper>
   );
 }
 

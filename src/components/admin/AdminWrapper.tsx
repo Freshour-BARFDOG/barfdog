@@ -1,5 +1,5 @@
 import React from "react";
-import s from "/styles/admin/adminWrapper.module.scss";
+import s from "./adminWrapper.module.scss";
 
 
 export const AdminContentWrapper = (props) => {

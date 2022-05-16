@@ -1,6 +1,5 @@
 import Image from 'next/image';
-import React, { useState, useEffect } from "react";
-import s from "/styles/admin/mainBanner.module.scss";
+import s from "./mainBanner.module.scss";
 import Link from 'next/link';
 import Ascend from '/public/img/icon/btn_ascend.svg';
 import Descend from '/public/img/icon/btn_descend.svg';
@@ -9,81 +8,48 @@ import changeArrayOrder from '@util/func/changeArrayOrder'
 
 
 
-function sorting(arr, key) {
-  // 내림차순 : b - a
-  // 오름차순 : a - b
-  const newArr = arr.sort((a, b) => {
-    if (a[key] - b[key]) {
-      return a[key] - b[key];
-    }
-  });
-
-  return newArr;
-}
-
-
-
-const removeArray = function (list, targetIdx) {
-  if (list.length < 0) return;
-  const target = list.splice(targetIdx, 1)[0]; // splice (n번 째배열, n개 삭제
-  return list;
-};
 
 
 
 
 
 export default function MainBannerList({
-  items_og,
-  setItemList,
+  items,
   editListOrder,
   onLeakedOrderUp,
   onLeakedOrderDown,
   onDeleteItem,
 }) {
-  // console.log(items_og);
-  // console.log(items_og.length);
-
-  if (!items_og || !items_og.length) return;
-
-  const items = sorting(items_og, 'leakedOrder' );
-
- 
+  if (!items || !items.length) return;
 
   const onOrderUpHandler = (e) => {
     const target = e.currentTarget.closest("li");
-    // const targetLeakedOrder = Number(target.dataset.order);
-    // const calcedIndex = targetLeakedOrder -1; 
     const targetViewIdx = getElemIdx(target);
     const apiURL = e.currentTarget.dataset.apiurl;
     const newItemList = changeArrayOrder(items, targetViewIdx, -1);
     if (newItemList) {
-      // setItemList(newItemList);
       onLeakedOrderUp(apiURL);
     }
   };
 
   const onOrderDownHandler = (e) => {
     const target = e.currentTarget.closest("li");
-    // const targetLeakedOrder = Number(target.dataset.order);
-    // const calcedIndex = targetLeakedOrder -1; 
     const targetViewIdx = getElemIdx(target);
     const apiURL = e.currentTarget.dataset.apiurl;
     const newItemList = changeArrayOrder(items, targetViewIdx, +1);
     if (newItemList) {
-      // setItemList(newItemList);
       onLeakedOrderDown(apiURL);
     }
   };
 
   const onDeleteItemHandler = (e) => {
     const target = e.currentTarget.closest("li");
-    const targetLeakedOrder = Number(target.dataset.order);
+    const targetViewIdx = getElemIdx(target);
     const apiURL = e.currentTarget.dataset.apiurl;
-    const bannerName = items[targetLeakedOrder].name;
+    const bannerName = items[targetViewIdx]?.name;
     if (confirm(`선택된 배너(${bannerName})를 정말 삭제하시겠습니까?`)) {
-      removeArray(items, targetViewIdx);
       onDeleteItem(apiURL);
+      // removeArray(items, targetViewIdx);
       // target.remove();
     }
   };
@@ -140,7 +106,7 @@ export default function MainBannerList({
         key={`item-${DATA.id}`}
         ref={sortableItemRef}
         data-idx={DATA.id}
-        data-order={DATA.leakedOrder}
+        data-leaked-order={DATA.leakedOrder}
       >
         {editListOrder ? (
           <SortHandle apiurl={DATA.apiurl} />
@@ -161,7 +127,10 @@ export default function MainBannerList({
         <span>{DATA.exp_target}</span>
         <span>{DATA.reg_date}</span>
         <span>
-          <Link href={`/bf-admin/banner/main-banner/update/${DATA.id}`} passHref>
+          <Link
+            href={`/bf-admin/banner/main-banner/update/${DATA.id}`}
+            passHref
+          >
             <a>
               <button className="admin_btn basic_s solid">수정</button>
             </a>
@@ -171,7 +140,7 @@ export default function MainBannerList({
           <button
             className="admin_btn basic_s solid"
             onClick={onDeleteItemHandler}
-            apiurl={DATA.apiurl.delete}
+            data-apiurl={DATA.apiurl.delete}
           >
             삭제
           </button>

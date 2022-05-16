@@ -20,8 +20,8 @@ import { postData } from '@api/reqData';
 function CreateMainBannerPage() {
   const router = useRouter();
 
-  const [exposedTarget, setExposedTarget] = useState("all");
-  const [exposedStatus, setExposedStatus] = useState("leaked");
+  const [exposedTarget, setExposedTarget] = useState("ALL");
+  const [exposedStatus, setExposedStatus] = useState("LEAKED");
   const [file_pc, setFile_pc] = useState({
     file: "",
     filename: "",
@@ -49,16 +49,16 @@ function CreateMainBannerPage() {
 
   useEffect(() => {
     if (isSubmitting && !Object.keys(formErrors).length) {
-      console.log("데이터 생성");
+      console.log("데이터 전송");
       postDataToServer();
     } else {
-      console.error(formErrors);
+      console.log(formErrors);
     }
   }, [formErrors, isSubmitting]);
 
 
 
-  const handleChange = (e) => {
+  const onInputChangeHandler = (e) => {
     const { name, value } = e.currentTarget;
     const input = e.currentTarget;
     const type = input.type && input.dataset.type;
@@ -86,17 +86,19 @@ function CreateMainBannerPage() {
 
 
   const onRadioButtonHandler = (data) => {
-    if (data.target) {
-      setExposedTarget(data);
+    const { key, value }= data;
+    console.log(key, value);
+    if (key === "targets") {
+      setExposedTarget(value);
       setFormValues({
         ...formValues,
-        targets: data,
+        [key]: value,
       });
-    } else {
-      setExposedStatus(data);
+    } else if(key === "status") {
+      setExposedStatus(value);
       setFormValues({
         ...formValues,
-        status: data,
+        [key]: value,
       });
     }
   };
@@ -158,15 +160,13 @@ function CreateMainBannerPage() {
 
       switch (key) {
         case "name":
-          valid_isEmpty(val) ? (errors[key] = "필수항목입니다.") : "";
+          valid_isEmpty(val) && (errors[key] = "필수항목입니다.");
           break;
         case "pcLinkUrl":
-          // console.log(val);
-          valid_link(val) ? (errors[key] = valid_link(val)) : "";
+          valid_link(val) && (errors[key] = valid_link(val));
           break;
         case "mobileLinkUrl":
-          // console.log(errors[key], valid_link(val));
-          valid_link(val) ? (errors[key] = valid_link(val)) : '';
+          valid_link(val) && (errors[key] = valid_link(val));
           break;
 
         default:
@@ -174,12 +174,16 @@ function CreateMainBannerPage() {
       }
     });
 
-    valid_isEmpty(file_pc.file)
-      ? (errors["file_pc"] = valid_isEmpty(file_pc.file))
-      : "";
-    valid_isEmpty(file_mobile.file) ? (errors["file_mobile"] = valid_isEmpty(file_mobile.file))
-      : "";
-
+    // valid_isEmpty(file_pc.file)
+    //   ? (errors["file_pc"] = valid_isEmpty(file_pc.file))
+    //   : "";
+    // valid_isEmpty(file_mobile.file)
+    //   ? (errors["file_mobile"] = valid_isEmpty(file_mobile.file))
+    //   : "";
+     valid_isEmpty(file_pc.file) &&
+       (errors["file_pc"] = valid_isEmpty(file_pc.file));
+     valid_isEmpty(file_mobile.file) &&
+       (errors["file_mobile"] = valid_isEmpty(file_mobile.file));
     console.log("Validation Result: ", errors);
 
     return errors;
@@ -191,14 +195,7 @@ function CreateMainBannerPage() {
   const onSubmitHandler = (e) => {
     e.preventDefault();
     setFormErrors(validate(formValues));
-    let isError = false;
-    Object.keys(formErrors).forEach((key) => {
-      if (formErrors[key]) {
-        isError = true;
-        return;
-      }
-    });
-    if (isError) return;
+    if (Object.keys(formErrors).length) return console.error(formErrors);
     setIsSubmitting(true);
   
   }; // * onSubmitHandler
@@ -208,14 +205,15 @@ function CreateMainBannerPage() {
 
   const postDataToServer = async () => {
 
-    // 보낼값: 파일 1.JSON 2.파일(이미지) 3. 파일(이미지 모바일) 
-    // * 파일 변환방법
-    const formData = new FormData();
-    formData.append("pcFile", file_pc.file);
-    formData.append("mobileFile", file_mobile.file);
+    // * POST LIST:  1.JSON  2.파일(이미지) 3. 파일(이미지 모바일)
     const jsonData = JSON.stringify(formValues);
     const blob = new Blob([jsonData], { type: "application/json" });
+
+    const formData = new FormData();
     formData.append("requestDto", blob);
+    formData.append("pcFile", file_pc.file);
+    formData.append("mobileFile", file_mobile.file);
+
 
     const token = await getAdminToken();
     const axiosConfig = {
@@ -240,7 +238,7 @@ function CreateMainBannerPage() {
 
   return (
     <>
-      <MetaTitle title="메인배너 생성" admin={true}/>
+      <MetaTitle title="메인배너 생성" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
           <div className="title_main">
@@ -267,7 +265,7 @@ function CreateMainBannerPage() {
                         type="text"
                         name="name"
                         className="fullWidth"
-                        onChange={handleChange}
+                        onChange={onInputChangeHandler}
                       />
                       {formErrors.name && (
                         <ErrorMessage>{formErrors.name}</ErrorMessage>
@@ -317,7 +315,7 @@ function CreateMainBannerPage() {
                   </div>
                   <div className="inp_section">
                     <label className="inp_wrap file" htmlFor="upload-image-pc">
-                      <PreviewImage file={file_pc.file} />
+                      <PreviewImage file={file_pc.file} ratio={1920 / 450} />
                       <span className="inp_box">
                         <input
                           type="file"
@@ -336,6 +334,7 @@ function CreateMainBannerPage() {
                         )}
                       </span>
                     </label>
+                    <div className="desc">* 권장사이즈: 1920 x 450</div>
                   </div>
                 </div>
                 <div className="input_row upload_image">
@@ -353,11 +352,11 @@ function CreateMainBannerPage() {
                         className="halfWidth"
                         data-device="pc"
                         placeholder="ex. https://barfdog.co.kr/event/1"
-                        onChange={handleChange}
+                        onChange={onInputChangeHandler}
                       />
                     </div>
                     <div className="desc">
-                      *링크가 없을 경우, 배너 클릭 이벤트가 발생하지 않습니다.
+                      * 링크가 없을 경우, 배너 클릭 이벤트가 발생하지 않습니다.
                     </div>
                     {formErrors.pcLinkUrl && (
                       <ErrorMessage>{formErrors.pcLinkUrl}</ErrorMessage>
@@ -381,7 +380,10 @@ function CreateMainBannerPage() {
                       className="inp_wrap file"
                       htmlFor="upload-image-mobile"
                     >
-                      <PreviewImage file={file_mobile.file} />
+                      <PreviewImage
+                        file={file_mobile.file}
+                        ratio={1920 / 450}
+                      />
                       <div className="inp_box">
                         <input
                           type="file"
@@ -400,6 +402,7 @@ function CreateMainBannerPage() {
                         )}
                       </div>
                     </label>
+                    <div className="desc">* 권장사이즈: 1920 x 450</div>
                   </div>
                 </div>
                 <div className="input_row upload_image">
@@ -416,12 +419,12 @@ function CreateMainBannerPage() {
                         name="mobileLinkUrl"
                         className="halfWidth"
                         data-device="mobile"
-                        onChange={handleChange}
+                        onChange={onInputChangeHandler}
                         placeholder="ex. https://barfdog.co.kr/event/2"
                       />
                     </div>
                     <div className="desc">
-                      *링크가 없을 경우, 배너 클릭 이벤트가 발생하지 않습니다.
+                      * 링크가 없을 경우, 배너 클릭 이벤트가 발생하지 않습니다.
                     </div>
                     {formErrors.mobileLinkUrl && (
                       <ErrorMessage>{formErrors.mobileLinkUrl}</ErrorMessage>

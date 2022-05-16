@@ -23,7 +23,7 @@ function ResetPasswordPage() {
     } else {
       console.error(formErrors);
     }
-  }, [formErrors, isSubmitting]);
+  }, [formErrors, isSubmitting, isAdmin, router]);
 
   const valid_isEmpty = (value) => {
     let errors;

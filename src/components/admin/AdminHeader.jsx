@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { authAction } from "@store/auth-slice";
 import AdminWrapper from '/src/components/admin/AdminWrapper';
 import Image from 'next/image';
-import s from "/styles/admin/adminHeader.module.scss";
+import s from "./adminHeader.module.scss";
 import Link from 'next/link';
 
 function AdminHeader() {

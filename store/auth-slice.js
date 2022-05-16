@@ -1,6 +1,52 @@
 import { createSlice } from '@reduxjs/toolkit';
 import Router from "next/router";
 
+
+
+
+// ! API SERVER > 에러처리 기능 추가예정 (0513금 )
+
+/* 
+*  (async () => {
+*  const token = axiosConfig();
+*  // console.log(token.headers.authorization);
+*  const response = await axios
+*    .get(
+*      REQUEST_URL,
+*      {
+*        headers: {
+*          authorization:
+*            "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLthqDtgbAg7J2066aEIiwiaWQiOjUsImV4cCI6MTY1MTg5MjU3NiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20ifQ.Wycm9ZmiiK-GwtsUkvMCHHeExDBtkveDbhKRealjmd8C4OZMp3SFqGFcFWudXMiL5Mxdj6FcTAV9OVsOYsn_Mw",  
+// 만료된 쿠폰을 넣은 경우
+*          "Content-Type": "application/json",
+*        },
+*      },
+*      axiosConfig()
+*    )
+*    .then((res) => {
+*      console.log(res.data);
+*      return res.data;
+*    })
+*    .catch((err) => {
+*      console.error(err.request.response); //////*******중요
+*      const errorObj = JSON.parse(err.request?.response);
+*      const status = errorObj.status;
+*      console.log(status);
+*      if(status === 401){
+*        const EXPIRED_TOKEN = errorObj.reason === "EXPIRED_TOKEN";
+*        const UNAUTHORIZED = errorObj.reason === "UNAUTHORIZED";
+*        console.error("errorType > EXPIRED_TOKEN : ", EXPIRED_TOKEN);
+*        console.error("errorType > UNAUTHORIZED : ", UNAUTHORIZED);
+*        
+*      }else if (status === 403) {
+*        const FORBIDDEN = errorObj.reason === "FORBIDDEN";
+*        console.error("errorType > FORBIDDEN : ", FORBIDDEN);
+*      }
+*      
+*      
+*    });
+*/
+
 const initialAuthState = {
   token: null,
   isAuth: false,

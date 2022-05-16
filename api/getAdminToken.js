@@ -1,7 +1,7 @@
 import axios from "axios";
 
 
-const getAdminToken = async (payload) => {
+const getAdminToken = async (payload, callback) => {
   const headers = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Expose-Headers": "*",
@@ -31,10 +31,13 @@ const getAdminToken = async (payload) => {
     })
     .then((res) => {
       // console.log("token : ", res.headers.authorization);
+      if (callback && typeof callback === 'function ') callback(res);
       return (token = res.headers.authorization);
     })
     .catch((err) => {
       console.log(err);
+      if (callback && typeof callback === "function" ) callback(err);
+      
       return null;
     });
 

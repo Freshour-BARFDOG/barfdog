@@ -14,7 +14,7 @@
 
 import axios from "axios";
 
-const axiosConfig = (contType = "application/json") => ({
+export const axiosConfig = (contType = "application/json") => ({
   headers: {
     authorization: JSON.parse(localStorage.getItem("admin"))?.token,
     "Content-Type": contType,

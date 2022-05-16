@@ -1,0 +1,14 @@
+// *  ------- Global - Z-INDEX 관리
+
+
+
+
+.modal-wrapper{z-index:1001 !important;} // * 사용처: Global Alert 
+.modal-wrapper-background{z-index:1001 !important;} // * 사용처: Modal 공통 Component, recipe페이지 Modal
+
+
+.modal-withBackground{z-index:1000 !important;} // * 사용처: Modal Component
+
+.modal-subscribe{z-index : 999 !important;}
+.modal-bestReview{z-index : 999 !important;}
+.gnb-subscribe-timer{z-index:100 !important;}

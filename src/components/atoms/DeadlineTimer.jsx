@@ -1,7 +1,7 @@
 import React, { useState, useEffect }from 'react'
 import styled from 'styled-components';
 import rem from './rem';
-
+import zIndex from '@styles/global/zIndex.module.scss';
 
 const bgColor = '#FFCEBA';
 const move_X = rem(40);
@@ -9,27 +9,27 @@ const move_X = rem(40);
 
 
 const Rect = styled.i`
-    position: absolute;
-    right: calc(${move_X} + 5px);
-    bottom: 3px;
-    transform: translate(0,100%);
-    border-top: 14px solid ${bgColor};
-    border-left: 9px solid transparent;
-    border-right: 9px solid transparent;
+  position: absolute;
+  right: calc(${move_X} + ${rem(5)});
+  bottom: ${rem(3)};
+  transform: translate(0, 100%);
+  border-top: ${rem(15)} solid ${bgColor};
+  border-left: ${rem(9)} solid transparent;
+  border-right: ${rem(9)} solid transparent;
 `;
 
 
 const Text = styled.b`
-  font-size: 16px;
+  font-size: ${rem(16)};
   color: var(--color-main);
-  letter-spacing: 0.8px;
-  white-space:nowrap;
+  letter-spacing: ${rem(0.8)};
+  white-space: nowrap;
 `;
 
 const NormalText = styled.span`
-  font-size: 16px;
-  color:#000;;
-  white-space:nowrap;
+  font-size: ${rem(16)};
+  color: #000;
+  white-space: nowrap;
 `;
 
 const Timer = styled.span`
@@ -42,18 +42,18 @@ const Timer = styled.span`
 
 
 const Wrap = styled.div`
-  position:absolute;
-  z-index:999;
-  right: 0px;
-  top:0;
-  transform:translate( ${move_X} , calc(-100% - ${rem(34)}));
-  text-align:center;
-  color:#000;
-  font-size:${rem(16)};
+  position: absolute;
+  // ! z-index: 100;
+  right: 0;
+  top: 0;
+  transform: translate(${move_X}, calc(-100% - ${rem(34)}));
+  text-align: center;
+  color: #000;
+  font-size: ${rem(16)};
   padding: ${rem(10)} ${rem(20)} ${rem(8)};
-  box-sizing:border-box;
-  background-color:${bgColor};
-  border-radius:${rem(8)};
+  box-sizing: border-box;
+  background-color: ${bgColor};
+  border-radius: ${rem(8)};
 `;
 
 
@@ -128,13 +128,16 @@ const Dealine_timer = () => {
 
 
   return (
-    <Wrap id='deadline_timer' className="flex-wrap">
+    <Wrap
+      id="deadline_timer"
+      className={`${zIndex["gnb-subscribe-timer"]} flex-wrap`}
+    >
       <Text>정기구독배송</Text>
-      <Timer id='deadline'>{message}</Timer>
+      <Timer id="deadline">{message}</Timer>
       <NormalText> 이후 주문 마감!</NormalText>
-      <Rect className='rect'/>
+      <Rect className="rect" />
     </Wrap>
-  )
+  );
   
 }
 

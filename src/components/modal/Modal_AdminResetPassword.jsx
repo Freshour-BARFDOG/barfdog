@@ -3,8 +3,10 @@ import s from "./Modal_AdminResetPassword.module.scss";
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { authAction } from '@store/auth-slice';
-import { postData } from "/api/reqData";
+import { useModalContext } from "@store/modal-context";
+import Modal_global_alert from "@src/components/modal/Modal_global_alert";
 import axios from "axios";
+
 
 
 import timer from "@util/func/timer";
@@ -16,10 +18,6 @@ import Modal_alert from "./Modal_alert";
 
 
 
-// 1. 관리자 계정 확인 (get)
-// 2. 다이렉트 샌드 이메일 사용 /// 클라이언트에서 인증번호 생성
-// 3. 입력번호 확인 후 / 변경된 비밀번호 전송
-//
 
 
 const AuthNumberComponent = ({ displayedTime, authNum }) => {
@@ -29,6 +27,7 @@ const AuthNumberComponent = ({ displayedTime, authNum }) => {
   const [isAuth, setAuth]= useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
+  const mct = useModalContext();
 
   const onModalHandler = (isConfirm) => {
     if (isConfirm) setModalMessage("");
@@ -43,6 +42,7 @@ const AuthNumberComponent = ({ displayedTime, authNum }) => {
       setModalMessage(
         `인증 완료: 페이지 새로고침 전까지 비밀번호를 변경할 수 있습니다.`
       )
+      mct.onHide();
       dispatch(authAction.adminResetPassword());
       setAuth(true);
     }else{
@@ -50,6 +50,7 @@ const AuthNumberComponent = ({ displayedTime, authNum }) => {
       setAuth(false);
     }
   };
+
 
   const onChangeHandler = (e) => {
     const val = e.currentTarget.value;
@@ -61,9 +62,9 @@ const AuthNumberComponent = ({ displayedTime, authNum }) => {
 
   return (
     <>
-      {modalMessage && (
+      {/* {modalMessage && (
         <Modal_alert text={modalMessage} isConfirm={onModalHandler} />
-      )}
+      )} */}
       <form action="/bf-admin/login" onSubmit={onAuthNumberHandler}>
         <div className={s["form-row"]}>
           <label htmlFor={s["modal-email"]}>
@@ -93,8 +94,15 @@ const AuthNumberComponent = ({ displayedTime, authNum }) => {
 
 
 
-function AdminResetPassword() {
 
+
+
+
+
+
+function AdminResetPassword(props) {
+
+  const mct = useModalContext();
   const initialTime = 181;
   const [isSendNumber, setIsSendNumber] = useState(false);
   const [startTimer, setStartTimer] = useState(false);
@@ -108,7 +116,7 @@ function AdminResetPassword() {
   useEffect(() => {
     if (time !== 0 && startTimer)
       timer(time, [setTime, setDisplayedTime], setStartTimer);
-  }, [time, startTimer, modalMessage]);
+  }, [time, startTimer]);
 
 
   const onModalHandler = (isConfirm) => {
@@ -120,7 +128,7 @@ function AdminResetPassword() {
     const val = email?.trim(); // test account: 'develope07@binter.co.kr'
 
     if (!val) {
-      setModalMessage("이메일을 입력해주세요.");
+      mct.alertShow("이메일을 입력해주세요.");
       return;
     }
 
@@ -128,7 +136,7 @@ function AdminResetPassword() {
       email: val,
     };
     
-    const postDataToServer = (async(res) => {
+    (async(res) => {
       const response = await axios
         .post("/api/adminPasswordEmailAuth", body, {
           "Content-Type": "application/json",
@@ -148,7 +156,9 @@ function AdminResetPassword() {
           setTime(initialTime);
           setAuthNum(randomNumbers(6));
         } else{
-          setModalMessage("관리자 이메일이 아닌 경우 발송되지 않습니다. 지속적으로 에러가 발생할 경우 서버 관리자에게 문의하세요.");
+          mct.alertShow(
+            "관리자 이메일이 아닌 경우 발송되지 않습니다. 지속적으로 에러가 발생할 경우 서버 관리자에게 문의하세요."
+          );
         }
     })();
 
@@ -161,11 +171,12 @@ function AdminResetPassword() {
     setEmail(val);
   }
 
+
   return (
     <>
-      {modalMessage && (
+      {/* {modalMessage && (
         <Modal_alert text={modalMessage} isConfirm={onModalHandler} />
-      )}
+      )} */}
       <div className={s["modal-wrap"]}>
         <i className={s["btn-close"]}>
           <CloseButton />

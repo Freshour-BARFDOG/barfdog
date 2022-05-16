@@ -1,0 +1,62 @@
+
+
+$browser-context:16;
+@function rem($px, $context: $browser-context){
+  @return #{$px / $context}rem;
+}
+
+
+$PaginationMaxWidth : rem(250);
+$defaultColor : var(--color-font-sub);
+
+
+.pagination {
+  // 더블클릭 시, 파란색배경표시 
+  -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+  -moz-user-select: none; /* mozilla browsers */
+  -khtml-user-select: none; /* webkit (konqueror) browsers */
+  -ms-user-select: none; /* IE10+ */
+  // 더블클릭 시, 파란색배경표시 
+  
+  display:grid;
+  justify-content: center;
+  align-items: center;
+  grid-template-columns: rem(20) minmax(rem(20), $PaginationMaxWidth) rem(20);
+
+  .pages{
+    display: inline-flex;
+    justify-content:center;
+    align-items: center;
+    max-width: $PaginationMaxWidth;
+
+    li{margin: 0;}
+
+    .btn-page{
+      cursor: pointer;
+      display:flex;
+      align-items: center;
+      justify-content: center;
+      width:rem(30);
+      height:rem(24);
+      color:$defaultColor;
+      font-size:rem(16);
+      transform:translateY(rem(0));
+      transition-property: color, transform;
+      transition-timing-function: ease;
+      transition-duration: .2s;
+
+      &.dots{cursor: default;}
+      &:not(.dots):hover{color:var(--color-font-sub); transform:translateY(rem(-2))}
+      &[data-cur-page=true]{color:var(--color-font-strong);}
+
+    }
+  }
+
+  .arrow{display: flex; align-items: center;
+    svg{cursor: pointer; }
+    path{stroke:$defaultColor}
+ 
+  }
+  .arrow.prev-page{transform:rotate(0);}
+  .arrow.next-page{transform:rotate(180deg);}
+}
