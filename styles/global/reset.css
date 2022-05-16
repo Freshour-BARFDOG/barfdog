@@ -1,7 +1,14 @@
 /* ! Using CSS custom  */
+/* 
+.font-Ink{font-family: 'InkLipquid'}
+.font-NotoSans{font-family: 'NotoSans KR'}
+.font-Gmarket{font-family:'GmarketSansMedium'}
+.font-Gmarket-bold{font-family: 'GmarketSansBold'}
+.font-robotofont-family: "Roboto"}
 
+
+*/
 :root{
-
     --color-main: #CA1011; /* * Site Main Color */
     
     --color-font-strong:#000;
@@ -46,6 +53,15 @@
 
     --ani-default: 0.3s ease;
     --ani-short: 0.15s ease-out;
+
+
+    
+    /* FONT-FAMILY */
+    --font-NotoSans: 'NotoSans KR';
+    --font-Gmarket: 'GmarketSansMedium';
+    --font-Gmarket-bold: 'GmarketSansBold';
+    --font-ink: 'InkLipquid';
+
 }
 
 

@@ -6,7 +6,6 @@ import CloseButton from "@src/components/atoms/CloseButton";
 import ScrollContainer from "@src/components/atoms/ScrollContainer";
 
 
-
 import Image from "next/image";
 import ArrowLeft from "/public/img/icon/swiper-arrow-medium.svg";
 import ArrowRight from "/public/img/icon/swiper-arrow-medium.svg";
@@ -28,9 +27,7 @@ function Modal_bestReview({ isActiveModal, setIsActiveModal, data }) {
     const scrollYPos = window.scrollY;
     if (isActiveModal) {
       document.body.style.cssText = `
-        overflow-y:scroll;
         position:fixed;
-        width:100%;
         top : -${scrollYPos}px;
       `;
     }

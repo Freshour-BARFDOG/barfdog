@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from "styled-components";
 import rem from "@src/components/atoms/rem";
 import zIndex from "/styles/global/zIndex.module.scss";
@@ -8,7 +8,7 @@ import zIndex from "/styles/global/zIndex.module.scss";
 
 const Wrap = styled.div`
   position: fixed;
-  // ! z-index: 1001; // global zindex에서 관리
+  // ! z-index: ''; // global zindex에서 관리
   left: 50%;
   top:0;
   transform: translate(-50%, 0%);
@@ -43,20 +43,54 @@ const Wrap = styled.div`
 
   @media (max-width: ${rem(600)}) {
     width: auto;
-  } ;
+  };
+
 `;
 
-function ModalWrapper({children, className, style, label}) {
+
+const ModalBackground = styled.div`
+  position:fixed;
+  left:0;
+  top:0;
+  right:0;
+  bottom:0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+`;
 
 
+
+
+function ModalWrapper({
+  children,
+  id,
+  className,
+  style,
+  label,
+  background,
+  onBackgroundClick,
+}) {
   return (
-    <Wrap
-      className={`${zIndex["modal-wrapper"]} ${className}`}
-      style={style}
-      modal-label={label}
-    >
-      {children}
-    </Wrap>
+    <>
+      {background && (
+        <ModalBackground
+          className={`${zIndex["modal-wrapper-background"]}`}
+          onClick={onBackgroundClick}
+        />
+      )}
+      {
+        <Wrap
+          className={`${zIndex["modal-wrapper"]} ${className || ""}`}
+          style={style}
+          label={label}
+          id={id}
+        >
+          {children}
+        </Wrap>
+      }
+    </>
   );
 }
 

@@ -2,12 +2,12 @@
 
 
 
-// * 사용법
-// * scss변수: module.scss파일에서 import
-// * 클래스명: js 파일에서 import
 
-.modal-wrapper{z-index:1001 !important;} // * 종류: Global Alert
-.modal-withBackground{z-index:1000 !important;} // * 종류: Modal Component
+.modal-wrapper{z-index:1001 !important;} // * 사용처: Global Alert 
+.modal-wrapper-background{z-index:1001 !important;} // * 사용처: Modal 공통 Component, recipe페이지 Modal
+
+
+.modal-withBackground{z-index:1000 !important;} // * 사용처: Modal Component
 
 .modal-subscribe{z-index : 999 !important;}
 .modal-bestReview{z-index : 999 !important;}
