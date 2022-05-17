@@ -1,14 +1,18 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import "react-quill/dist/quill.snow.css";
+
+
+
 
 
 /*  
-* Quill editor formats
-* See https://quilljs.com/docs/formats/
-
+* Officaial Doc : https://quilljs.com/docs/api
  */
 
-const formats = [
+
+
+const quillFormats = [
   "header",
   "font",
   "size",
@@ -30,6 +34,7 @@ const formats = [
 ];
 
 
+
 const toolbarOptions = [
   [{ font: [] }],
   [{ header: [false, 6, 5, 4, 3, 2, 1] }],
@@ -45,143 +50,137 @@ const toolbarOptions = [
   ],
   ["link", "image"],
   ["clean"],
-  // ["link", "image", "video"],
 ];
 
 
-const imageHandler = (e) => {
-  console.log(e)
-  
-}
 
 
-const modules = {
-  toolbar: toolbarOptions,
-  history: {
-    delay: 2000,
-    maxStack: 500,
-    userOnly: true,
+
+
+const QuillNoSSRWrapper = dynamic(
+  async () => {
+    const { default: RQ} = await import("react-quill");
+    return function comp({ forwardedRef, ...props }) {
+      return <RQ ref={forwardedRef} {...props} />;
+    };
   },
-  clipboard: {
-    // toggle to add extra line breaks when pasting HTML:
-    matchVisual: false,
-  },
-  // handles : {
-  //   // image: imageHandler
-  // }
+  { ssr: false }
+);
+
+
+
+
+
+
+const QuillEditor = ({ handleQuillChange }) => {
+  const [enableEditor, setEnableEditor] = useState(false);
+
+  const quillRef = useRef();
+  // const [isError, setIsError] = useState(false);
+  // const [isLoaded, setIsLoaded] = useState(false);
+
+  const loadQuill = async () => {
+    return new Promise(async (resolve, reject) => {
+      const Quill = await require("react-quill").Quill;
+      const ImageResize = (await require("quill-image-resize")).default;
+      resolve({ Quill, ImageResize });
+    })
+      .then(({ Quill, ImageResize }) => {
+        Quill.register("modules/ImageResize", ImageResize);
+        console.log(Quill);
+        return;
+      })
+      .then((value) => {
+        setEnableEditor(true);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    setEnableEditor(true);
+    loadQuill();
+  }, [setEnableEditor]);
+
+  const onBlurhandler = (e) => {
+    console.log("blur:", e);
+  };
+
+  const onChangehandler = (innerHTML) => {};
+
+  const imageHandler = (e) => {
+    const input = document.createElement("input");
+
+    input.setAttribute("type", "file");
+    input.setAttribute("accept", "image/*");
+    document.body.appendChild(input);
+
+    input.click();
+
+    input.onchange = async () => {
+      const [file] = input.files;
+      // * -------- 업로드하고 image url 받아오기
+      // ! 주소 받아오기
+      // const { preSignedPutUrl: presignedURL, readObjectUrl: imageURL } = (
+      //   await getS3PresignedURL(file.name)
+      // ).data;
+      // await uploadImage(presignedURL, file);
+
+      console.log(file);
+      const range = quillRef.current.getEditorSelection();
+      console.log(range);
+      quillRef.current.getEditor();
+      console.log(quillRef.current);
+      quillRef.current
+        .getEditor()
+        .insertEmbed(
+          range.index,
+          "image",
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTp9eL42GbYri0fLCk2Eszu0YtdjYyVdq3jtpGvSEQzj4L2sIf7c3To1GqPP86JVmIDnx4&usqp=CAU"
+        );
+      quillRef.current.getEditor().setSelection(range.index + 1);
+      document.body.querySelector(":scope > input").remove();
+    };
+  };
+
+  const quillModules = {
+    toolbar: {
+      container: toolbarOptions,
+      handlers: { image: imageHandler },
+    },
+    history: {
+      delay: 2000,
+      maxStack: 500,
+      userOnly: true,
+    },
+    clipboard: {
+      matchVisual: false, // toggle to add extra line breaks when pasting HTML:
+    },
+    // imageResize: {
+    //   // quillModules: ["Resize"],
+    // },
+  };
+
+  return (
+    <>
+      {enableEditor && (
+        <QuillNoSSRWrapper
+          id={"quill-editor"}
+          theme="snow"
+          modules={quillModules}
+          formats={quillFormats}
+          placeholder={"내용을 입력하세요."}
+          forwardedRef={quillRef} // dynamic import > forwardedRef props 필수
+          preserveWhitespace // 띄어쓰기 보존
+          onBlur={onBlurhandler}
+          onChange={onChangehandler}
+          value={""}
+        />
+      )}
+    </>
+  );
 };
 
 
-// const QuillNoSSRWrapper = dynamic(import("react-quill"), {
-//   ssr: false,
-//   loading: () => <p>Loading ...</p>,
-// });
-
-
-
-
-const QuillNoSSRWrapper = dynamic(async() => {
-  const { default: ReactQuill} = await import('react-quill');
-  return function comp ({forwardedRef, ...props}) {
-    return <ReactQuill ref={forwardedRef} {...props} />
-  };
-}, { ssr: false })
-
-
-
- export { modules, formats };
- export default QuillNoSSRWrapper;
-
-
-
-
-
-
-
-
-
-// let firstRender = true;
-
-// export default function QuillEditor({ body, handleQuillChange, mountBody }) {
-//   const quillElement = useRef();
-//   const quillInstance = useRef();
-
-//   const [isError, setIsError] = useState(false);
-//   const [isLoaded, setIsLoaded] = useState(false);
-
-//   useEffect(() => {
-//     console.log("Render");
-//     if (!firstRender) return;
-//     console.log(quillElement.current);
-//     console.log(quillElement.current.innerHTML);
-//     if (isLoaded) {
-//       /* isLoaded가 true인 상태에서 rerenderBody를 통해 body 적용시 Quill 초기화 없이
-//                innerHTML만 body로 바꿉니다. 이 조건이 없을 시 툴바가 중복되어 여러 개 나타나게
-//                됩니다. */
-//       const quill = quillInstance.current;
-//       console.log(quill);
-//       quill.root.innerHTML = body;
-//       return;
-//     }
-
-//     if (quillElement.current && window.Quill) {
-//       /* isLoaded가 false일 때는 Quill을 초기화합니다. */
-
-//       /* Quill 옵션을 원하는 대로 수정하세요. */
-//       const toolbarOptions = {
-//         container: [
-//           [{ size: ["small", false, "large", "huge"] }], // custom dropdown
-//           [{ header: [1, 2, 3, 4, 5, 6, false] }],
-//           [{ align: [] }],
-//           ["bold", "italic", "underline", "strike"], // toggled buttons
-//           [{ color: [] }, { background: [] }], // dropdown with defaults from theme
-//           [{ header: 1 }, { header: 2 }], // custom button values
-//           [{ list: "ordered" }, { list: "bullet" }],
-//           [{ script: "sub" }, { script: "super" }], // superscript/subscript
-//           [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
-//           [{ direction: "rtl" }], // text direction
-//           ["clean"], // remove formatting button
-//           ["blockquote", "link", "code-block", "formula", "image", "video"], // media
-//         ],
-//       };
-
-//       quillInstance.current = new window.Quill(quillElement.current, {
-//         modules: {
-//           history: {
-//             delay: 2000,
-//             maxStack: 500,
-//             userOnly: true,
-//           },
-//           syntax: true,
-//           toolbar: toolbarOptions,
-//         },
-//         placeholder: "본문 입력",
-//         theme: "snow",
-//       });
-
-//       const quill = quillInstance.current;
-
-//       quill.root.setAttribute("spellcheck", "false");
-
-//       // 초기 body state 적용
-//       quill.root.innerHTML = body;
-
-//       /* quill에서 text-change 이벤트 발생시에 setBody(innerHTML)을 통해 body를 업데이트합니다.
-//                body가 업데이트되어도 useEffect 발생 조건 인자([isError, mountBody])에 body가 없으므로
-//                QuillEditor 컴포넌트는 다시 렌더링되지 않습니다. 이는 입력 중 커서가 맨 앞으로 이동하는
-//                문제를 방지합니다. 대신 외부에서 body가 수정되어도 rerenderBody가 호출되지 않으면 변경된
-//                body가 적용되지 않습니다. */
-//       quill.on("text-change", () => {
-//         handleQuillChange(quill.root.innerHTML);
-//       });
-//       setIsLoaded(true);
-//     } else {
-//       /* quill.min.js가 로드되어 있지 않아 window.Quill이 undefined이면 isError가
-//                계속 변경되면서 재시도합니다. */
-//       setIsError((prevIsError) => !prevIsError);
-//     }
-//     firstRender = false;
-//   }, [firstRender, body, isError]);
-
-//   return <div ref={quillElement}></div>;
-// }
+ export default QuillEditor;

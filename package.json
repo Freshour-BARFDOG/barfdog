@@ -10,10 +10,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@ckeditor/ckeditor5-alignment": "^34.0.0",
-    "@ckeditor/ckeditor5-build-balloon": "^34.0.0",
-    "@ckeditor/ckeditor5-build-classic": "^34.0.0",
-    "@ckeditor/ckeditor5-react": "^5.0.0",
     "@reduxjs/toolkit": "^1.8.1",
     "axios": "^0.26.1",
     "express": "^4.17.3",

@@ -4,7 +4,8 @@ import "react-quill/dist/quill.snow.css";
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import AdminLayout from "/src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
-import QuillNoSSRWrapper, { formats, modules } from "@src/components/admin/form/QuillEditor";
+// import QuillEditor, { formats, modules } from "@src/components/admin/form/QuillEditor";
+import QuillEditor from "@src/components/admin/form/QuillEditor";
 import InputRadio_status from "@src/components/admin/form/InputRadioPackage";
 import Fake_input from "@src/components/atoms/fake_input";
 import PreviewImage from "@src/components/atoms/PreviewImage";
@@ -16,38 +17,16 @@ import rem from '@src/components/atoms/rem';
 
 
 
-const CreateBlogPage = () => {
-  const [body, setBody] = useState("내용을 담는다"); // Quill 에디터의 innerHTML을 담는 state
-  const [mountBody, setMountBody] = useState(false); // 리렌더링 용도 state
+const CreateBlogPage = (props) => {
+  const [body, setBody] = useState(""); // Quill 에디터의 innerHTML을 담는 state
 
-
-  function rerenderBody() {
-    setMountBody((mb) => !mb);
-  }
-
-  const quillRef = useRef(null);
-  useEffect(() => {
-
-    const handleImage = (e) => {console.log(e)};
-    if (quillRef.current) {
-      const { getEditor } = quillRef.current;
-
-      // console.log(quillRef.current.retry);
-      // console.log(getEditor);
-      // const toolbar = quillRef.current.getEditor().getModule("toolbar");
-      // toolbar.addHandler("image", handleImage);
-    }
-  }, [quillRef]);
-
-  const onChangeHandler = (innerValues) => {
-    console.log(innerValues);
-  };
 
   const returnToPrevPage = () => {
     if (confirm("이전 페이지로 돌아가시겠습니까?")) {
       router.back();
     }
   };
+
 
   return (
     <>
@@ -79,7 +58,7 @@ const CreateBlogPage = () => {
                         id={"category"}
                         onChange={"onCategoryHandler"}
                         options={[
-                          { label: "전체", value: "전체" },
+                          { label: "- 선택 -", value: null },
                           { label: "영양", value: "영양" },
                           { label: "건강", value: "건강" },
                           { label: "생애", value: "생애" },
@@ -99,7 +78,11 @@ const CreateBlogPage = () => {
                     <p className="title">썸네일</p>
                   </div>
                   <div className="inp_section">
-                    <label className="inp_wrap file" htmlFor="upload-image-pc">
+                    <label
+                      className="inp_wrap file"
+                      htmlFor="upload-image-pc"
+                      style={{ display: "inline-block" }}
+                    >
                       <PreviewImage
                         file={""}
                         ratio={1 / 1}
@@ -133,25 +116,11 @@ const CreateBlogPage = () => {
                     <p className="title">상세설명</p>
                   </div>
                   <div className="inp_section">
-                    <QuillNoSSRWrapper
-                      id={"quill-editor"}
-                      theme="snow"
-                      modules={modules}
-                      formats={formats}
-                      placeholder={""}
-                      ref={quillRef}
-                      value={""}
-                      preserveWhitespace
-                      onChange={onChangeHandler}
-                      body={body}
-                      onBlur={(e) => {
-                        console.log('blur:' , e)
-                      }}
+                    {/* // * --- QUILL EDITOR --- * // */}
+                    <QuillEditor
                       handleQuillChange={setBody}
-                      onUpdate={(e) => {
-                        console.log(e);
-                      }}
                     />
+                    {/* // * --- QUILL EDITOR --- * // */}
                   </div>
                 </div>
               </div>
@@ -199,7 +168,5 @@ const CreateBlogPage = () => {
 };;
 
 export default CreateBlogPage;
-
-
 
 

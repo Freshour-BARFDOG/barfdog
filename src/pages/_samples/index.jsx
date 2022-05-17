@@ -150,7 +150,7 @@ const CustomInput = ({
 const CustomInputRadio = ({name}) => {
 
   const [selectedRadio , setSelectedRadio] = useState(null);
-console.log(selectedRadio);
+  console.log(selectedRadio)
   return (
     <div data-input-title={name}>
       <CustomInput
@@ -320,6 +320,7 @@ function SamplePageForPublishing() {
               </ScrollContainer>
             </ToggleBox>
           </li>
+          <CustomInputRadio name="coffe" />
         </ul>
       </Wrapper>
     </Layout>

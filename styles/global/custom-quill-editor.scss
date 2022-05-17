@@ -14,9 +14,13 @@ $browser-context:16;
   $toolbarHeight: rem(45);
   background-color: #fff;
   
-  .ql-toolbar{background-color: #fafafa; height: $toolbarHeight}
+  .ql-toolbar{background-color: #fafafa; min-height: $toolbarHeight}
   .ql-container{height: calc($editorHeight - $toolbarHeight) ;}
 
-  img{width:initial;}
-
+  img{width:initial; display:initial;}
+  .ql-editor.ql-blank::before {
+    font-size: rem(16);
+    font-style:normal;
+    color: #b5b5b5;
+  }
 }
