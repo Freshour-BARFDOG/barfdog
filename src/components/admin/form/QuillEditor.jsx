@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
-
-
+import { postData } from "@api/reqData";
 
 
 
@@ -79,28 +78,29 @@ const QuillEditor = ({ handleQuillChange }) => {
   // const [isError, setIsError] = useState(false);
   // const [isLoaded, setIsLoaded] = useState(false);
 
-  const loadQuill = async () => {
-    return new Promise(async (resolve, reject) => {
-      const Quill = await require("react-quill").Quill;
-      const ImageResize = (await require("quill-image-resize")).default;
-      resolve({ Quill, ImageResize });
-    })
-      .then(({ Quill, ImageResize }) => {
-        Quill.register("modules/ImageResize", ImageResize);
-        console.log(Quill);
-        return;
-      })
-      .then((value) => {
-        setEnableEditor(true);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  // * Quill > 사진사이즈 조절 모듈 추가 > 추후 업데이트 반영
+  // const loadQuill = async () => {
+  //   return new Promise(async (resolve, reject) => {
+  //     const Quill = await require("react-quill").Quill;
+  //     const ImageResize = (await require("quill-image-resize")).default;
+  //     resolve({ Quill, ImageResize });
+  //   })
+  //     .then(({ Quill, ImageResize }) => {
+  //       Quill.register("modules/ImageResize", ImageResize);
+  //       console.log(Quill);
+  //       return;
+  //     })
+  //     .then((value) => {
+  //       setEnableEditor(true);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
 
   useEffect(() => {
     setEnableEditor(true);
-    loadQuill();
+    // loadQuill();
   }, [setEnableEditor]);
 
   const onBlurhandler = (e) => {
@@ -120,18 +120,26 @@ const QuillEditor = ({ handleQuillChange }) => {
 
     input.onchange = async () => {
       const [file] = input.files;
-      // * -------- 업로드하고 image url 받아오기
-      // ! 주소 받아오기
-      // const { preSignedPutUrl: presignedURL, readObjectUrl: imageURL } = (
-      //   await getS3PresignedURL(file.name)
-      // ).data;
+      const URL = `/api/admin/blogImage/upload`;
+      const data = {
+        file: file,
+      };
+      const reponse = await postData(URL, file, null, "multipart/form-data");
+      console.log(reponse);
+      // ! ------- 업로드...........여기서 에러난다.
+      // ! ------- 업로드...........여기서 에러난다.
+      // ! ------- 업로드...........여기서 에러난다.
+      // ! ------- 업로드...........여기서 에러난다.
+      // ! ------- 업로드...........여기서 에러난다.
+      // ! ------- 업로드...........여기서 에러난다.
+      // ! ------- 업로드...........여기서 에러난다.
+
       // await uploadImage(presignedURL, file);
 
-      console.log(file);
+
+
       const range = quillRef.current.getEditorSelection();
-      console.log(range);
       quillRef.current.getEditor();
-      console.log(quillRef.current);
       quillRef.current
         .getEditor()
         .insertEmbed(
@@ -172,7 +180,7 @@ const QuillEditor = ({ handleQuillChange }) => {
           formats={quillFormats}
           placeholder={"내용을 입력하세요."}
           forwardedRef={quillRef} // dynamic import > forwardedRef props 필수
-          preserveWhitespace // 띄어쓰기 보존
+          preserveWhitespace // 띄어쓰기 보존import { postData } from '@api/reqData';
           onBlur={onBlurhandler}
           onChange={onChangehandler}
           value={""}

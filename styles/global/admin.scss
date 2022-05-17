@@ -144,7 +144,8 @@ $aniType_Show : 0.3s ease-in ;
     cursor:default;
   }
   input::placeholder{font-size:rem(13); color: var(--color-font-light);}
-
+  select{font-size:rem(14);}
+  
   .title_main {
     font-size: rem(24);
     color:#000;
@@ -249,6 +250,7 @@ $aniType_Show : 0.3s ease-in ;
         }
       }
 
+
       .inp_box{
         color:#4d4d4d;
         font-size: rem(14);
@@ -261,6 +263,7 @@ $aniType_Show : 0.3s ease-in ;
         height: $inputDefaultHeight}
 
       }
+      
     }
   }
 

@@ -11,15 +11,16 @@
 // * ----------------------------------- * //
 
 
-
 import axios from "axios";
+import axiosConfig from './axios.config';
 
-export const axiosConfig = (contType = "application/json") => ({
-  headers: {
-    authorization: JSON.parse(localStorage.getItem("admin"))?.token,
-    "Content-Type": contType,
-  },
-});
+
+// export const axiosConfig = (contType = "application/json") => ({
+//   headers: {
+//     authorization: JSON.parse(localStorage.getItem("admin"))?.token,
+//     "Content-Type": contType,
+//   },
+// });
 
 
 
@@ -42,13 +43,13 @@ export const getData = async (url, callback) => {
 
 
 
-export const postData = async (url, data, callback) => {
+export const postData = async (url, data, callback, contentType) => {
 
   axios
-    .post(url, data, axiosConfig())
+    .post(url, data, axiosConfig(contentType))
     .then((res) => {
       console.log(res);
-      if (callback && typeof callback === 'function') callback(res);
+      if (callback && typeof callback === "function") callback(res);
     })
     .catch((err) => {
       console.log(err);
