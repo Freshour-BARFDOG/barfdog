@@ -8,6 +8,40 @@ $browser-context:16; // html font-size
 section.title{ padding : rem(8) 0 rem(17);}
 
 
+.toggleBox {
+  margin-top: rem(20);
+  border: rem(1) solid var(--color-line-03);
+  padding: rem(16) rem(40);
+  border-radius: rem(12);
+
+  &.active .clickTrigger .title i {
+    transform: translateY(-50%) rotate(-90deg);
+  }
+  .clickTrigger {
+    padding: rem(16) 0;
+    cursor: pointer;
+    .title {
+      cursor: inherit;
+      position: relative;
+      font-size: rem(20);
+      font-weight: 600;
+      i {
+        position: absolute;
+        display: flex;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%) rotate(90deg);
+        
+        transition: transform var(--ani-default); 
+      }
+    }
+  }
+  .cont {
+    padding: rem(27) 0 rem(16);
+    border-top: rem(1) solid var(--color-line-04);
+  }
+}
+
 
 .title {
   display: flex;
@@ -225,274 +259,566 @@ section.title{ padding : rem(8) 0 rem(17);}
   .content_box {
     border-top: rem(1) solid var(--color-line-04);
     margin : 0 rem(40) 0;       
-    .content_inner_box {
-      padding: rem(30) 0 rem(16);
-      
+    
+  }
+}
+
+
+
+
+
+.custom_input_wrapper {
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+  $transitionValues : 0.15s ease;
+  display: block;
+  overflow: hidden;
+  border-radius: rem(12);
+  border: rem(1) solid var(--color-line-04);
+  padding: rem(15) rem(25);
+  transition: border-color $transitionValues;
+
+  .custom_input_cont{
+    // * CONTENTS CSS
+    margin-bottom: rem(20);
+  }
+
+  .fake_checkbox {
+    border-radius: rem(4);
+    overflow:hidden;
+    display: block;
+    width: 100%;
+    // height: 100%;
+    text-align: center;
+    font-size: rem(18);
+    padding: rem(13);
+    box-sizing: border-box;
+    font-weight: 500;
+    background-color: var(--color-bg);
+    color: #4d4d4d;
+    position: relative;
+    transition: background-color $transitionValues;
+  }
+
+  .icon_checked {
+    position: absolute;
+    left: rem(15);
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    opacity: 0;
+    transition: opacity $transitionValues;
+  }
+
+  &.checked{
+
+    border-color: var(--color-main);
+     .fake_checkbox{
+        background-color: var(--color-main);
+        color: #fff;
+     }
+     .icon_checked{opacity: 1;}
+  }
+
+  input{ 
+    position: absolute;
+    overflow: hidden;
+    width: 0;
+    height: 0;
+    line-height: 0;
+    opacity: 0;
+    text-indent: rem(-9999);
+  }
+}
+
+
+
+
+//구독 그람수 변경
+.content_inner_box {
+  padding: 0 0 rem(16);
+  
+  .flex_box {
+    display: flex;
+    @include char(l14);
+    column-gap: rem(0);
+    .content_left_box {
+      padding-right: rem(6);
+    }
+    .content_right_box {
+      width: 100%;
+      padding-top: rem(3);
       .flex_box {
         display: flex;
-        @include char(l14);
-        column-gap: rem(0);
-        .content_left_box {
+        align-items: center;
+        .text1 {
+          @include char(l18);
+          font-weight: 600;
           padding-right: rem(6);
         }
-        .content_right_box {
-          width: 100%;
-          padding-top: rem(3);
-          .flex_box {
-            display: flex;
-            align-items: center;
-            .text1 {
-              @include char(l18);
-              font-weight: 600;
-              padding-right: rem(6);
-            }
-            .text2 {
-              font-weight: 600;
-              @include char(l16);
-              color: var(--color-font-sub);
-              padding-top: rem(2);
-            }
-          }
-          
-          .text3 {
-            @include char(l15);
-            padding-top: rem(10);
-          }
+        .text2 {
+          font-weight: 600;
+          @include char(l16);
+          color: var(--color-font-sub);
+          padding-top: rem(2);
+        }
+      }
+      
+      .text3 {
+        @include char(l15);
+        padding-top: rem(10);
+      }
 
-          .grid_box {
-            width: 80%;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            padding-top: rem(30);
-            padding-bottom: rem(43);
-            
-            span {
-              padding-left: rem(16);
-              color: var(--color-main);
-              @include char(l14);
-            }
-
-            row-gap: rem(32);
-            column-gap: rem(40);
-            .top_text {
-              @include char(l15);
-              color: var(--color-font-sub);
-              padding-bottom: rem(8);
-            }
-
-            .bot_1 {
-              display: flex;
-              align-items: center;
-              @include char(l18);
-              background-color: var(--color-bg-02);
-              padding: rem(14) 0 rem(14) rem(20);
-            }
-            .bot_2 {
-              display: flex;
-              justify-content: center;
-              border: rem(1) solid var(--color-main);
-              border-radius: rem(8);
-              @include char(l18);
-              padding: rem(14) 0;
-
-              .image2 {
-                position: relative;
-                left: rem(32);
-                width: rem(16);
-                aspect-ratio: 1/1;
-
-              }
-            }
-          }
+      .grid_box {
+        width: 80%;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        padding-top: rem(30);
+        padding-bottom: rem(43);
         
-          .red_btn_box {
-            width: 40.7%;
-            padding-bottom: rem(30);
-            .red_btn {
-              width: 100%;
-              max-width: rem(300);
-              background-color: var(--color-main);
-              border-radius: rem(4);
-              color: #fff;
-              padding: rem(14) 0;
-              text-align: center;
-              @include char(l15);
-              font-weight: 400;
-            }
-          }
-        }
-        .btn {
-          display: flex;
-          justify-content: center;
-
-          width: rem(56);
-          padding: rem(5) 0;
-          
-          background: #219F94;
-          border-radius: rem(30);
-          color: #fff;
-          font-weight: 700;
-        }
-      }
-
-      // B유형 css
-      .flex_box.second {
-        border-top: rem(1) solid var(--color-line-04);
-
-        .content_left_box {
-          margin-top: rem(31);
+        span {
+          padding-left: rem(16);
+          color: var(--color-main);
+          @include char(l14);
         }
 
-        .content_right_box {
-          margin-top: rem(31);
-
-          .red_btn_box2 {
-            width: 40.7%;
-            padding-top: rem(21);
-            padding-left: rem(1);
-
-            .red_btn2 {
-              width: 100%;
-              max-width: rem(300);
-              background-color: #F9EDEC;
-              border-radius: rem(4);
-              color: var(--color-main);
-              padding: rem(14) 0;
-              text-align: center;
-              @include char(l15);
-              font-weight: 400;
-            }
-          }
+        row-gap: rem(32);
+        column-gap: rem(40);
+        .top_text {
+          @include char(l15);
+          color: var(--color-font-sub);
+          padding-bottom: rem(8);
         }
-      }
-    }
 
-    .content_inner_box4 {
-      text-align: center;
-      .text {
-        padding : rem(30) 0;
-        @include char(l18);
-        line-height: 140%;
-      }
-      .radio_box {
-        display: flex;
-        justify-content: center;
-        column-gap: rem(60);
-        padding-bottom: rem(45);
-        
-        @include char(l16);
-        font-weight: 600;
-        label {
+        .bot_1 {
           display: flex;
           align-items: center;
-          column-gap: rem(10);
+          @include char(l18);
+          background-color: var(--color-bg-02);
+          padding: rem(14) 0 rem(14) rem(20);
+        }
+        .bot_2 {
+          display: flex;
+          justify-content: center;
+          border: rem(1) solid var(--color-main);
+          border-radius: rem(8);
+          @include char(l18);
+          padding: rem(14) 0;
 
-          &:nth-child(2) {
-            color : var(--color-font-sub);
+          .image2 {
+            position: relative;
+            left: rem(32);
+            width: rem(16);
+            aspect-ratio: 1/1;
+
           }
         }
       }
-      .d_day_text {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        @include char(l18);
-        padding-bottom: rem(10);
-        >span {
-          @include char(t28);
-          color: var(--color-font-sub);
-          padding: 0 rem(10);
-        }
-      }
-      .d_day_text2 {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        @include char(l18);
-        >span {
-          @include char(t28);
-          color: var(--color-main);
-          padding: 0 rem(10);
-        }
-      }
-
-      .picture_box {
-        padding-top: rem(24);
-        .image {
-          width: 100%;
-          max-width: rem(520);
-          aspect-ratio: 1.3/1;
-        }
-      }
-
-      .btn_box {
-        display: flex;
-        justify-content: center;
-        padding-top: rem(23);
-        .btn {
-  
+    
+      .red_btn_box {
+        width: 40.7%;
+        padding-bottom: rem(30);
+        .red_btn {
           width: 100%;
           max-width: rem(300);
           background-color: var(--color-main);
           border-radius: rem(4);
           color: #fff;
-
-          @include char(l15);
           padding: rem(14) 0;
-  
+          text-align: center;
+          @include char(l15);
+          font-weight: 400;
         }
       }
     }
-
-    .content_inner_box5 {
+    .btn {
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
+      justify-content: center;
 
-      .title_text {
-        padding: rem(40) 0 rem(27);
-        @include char(l20);
-        font-weight :500;
-      }
-      .text {
-        padding-bottom: rem(60);
-        @include char(b16);
-        text-align: center;
-        line-height: rem(22.4);
-        color: var(--color-font-sub);
-      }
-
-      .check_grid_box {
-        width: 40%;
-        display: grid;
-        grid-template-columns: 10% 90%;
-        row-gap: rem(24);
-
-        @include char(l16);
-        padding-bottom: rem(10);
-      }
+      width: rem(56);
+      padding: rem(5) 0;
       
-      .input_box {
-        border: rem(1) solid var(--color-line-03);
-        color: var(--color-font-sub2);
-        width: rem(300);
-        padding: rem(13) 0 rem(13) rem(20);
-        border-radius: rem(5);
+      background: #219F94;
+      border-radius: rem(30);
+      color: #fff;
+      font-weight: 700;
+    }
+  }
 
+  // B유형 css
+  .flex_box.second {
+    border-top: rem(1) solid var(--color-line-04);
 
+    .content_left_box {
+      margin-top: rem(31);
+    }
+
+    .content_right_box {
+      margin-top: rem(31);
+
+      .red_btn_box2 {
+        width: 40.7%;
+        padding-top: rem(21);
+        padding-left: rem(1);
+
+        .red_btn2 {
+          width: 100%;
+          max-width: rem(300);
+          background-color: #F9EDEC;
+          border-radius: rem(4);
+          color: var(--color-main);
+          padding: rem(14) 0;
+          text-align: center;
+          @include char(l15);
+          font-weight: 400;
+        }
       }
-      .btn {
-        width: 100%;
-        max-width: rem(300);
-        border: rem(1) solid var(--color-line-03);
-        text-align: center;
-        @include char(l15);
-        padding: rem(14) 0;
-        margin-top : rem(80);
+    }
+  }
+}
+
+// 구독팩수 변경
+//라디오 박스 마진 값
+.flex_box {
+  display: flex;
+  column-gap: rem(15);
+  justify-content: center;
+}
+
+
+.plan_box {
+  max-width: rem(220);
+  box-sizing: border-box;
+  width: 100%;
+  .img_box {
+    display: flex;
+    justify-content: center;
+    padding-top: rem(4);
+    .image {
+      width: 100%;
+      max-width: rem(80);
+      aspect-ratio: 1/1;
+    }
+  }
+  h2 {
+    padding-top: rem(10);
+    @include char(d28);
+    text-align: right;
+    font-weight: 500;
+    text-align: center;
+  }
+  p {
+    padding: rem(9) 0 rem(13);
+    @include char(l16);
+    text-align: center;
+    letter-spacing: -0.06em;
+
+  }
+  .grid_box {
+    display: grid;
+    grid-template-rows: repeat(4, 1fr);
+  
+    background-color: #f9f9f9;
+    border-top: rem(1) solid var(--color-disabled);
+    border-bottom: rem(1) solid var(--color-disabled);
+
+    div {
+   
+      border-bottom: rem(1) dashed var(--color-line-03);
+      padding: rem(12) 0;
+      text-align: center;
+      &:last-child {
+        border-bottom: rem(0);
       }
 
+    }
+    .row{
+      color: var(--color-font-sub);
+    }
+    
+    * {
+      @include char(l16);      
+
+    }
+    span {
+      font-weight: 700;
+    }
+    .row_3 {
+      @include char(l14);
+      span {
+        @include char(l16);
+      }
+    }
+  }
+  .text1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    @include char(t24);
+    font-weight: 600;
+    color: var(--color-main);
+
+    padding: rem(9) 0 0 0;
+    span {
+      @include char(l18);
+      color: var(--color-font-sub2);
+      text-decoration: line-through;
 
     }
   }
+  .text2 {
+    @include char(d32);
+    text-align: center;
+    line-height: 100%;
+    padding-top: rem(1);
+
+  }
+}
+.recipe_btn_box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: rem(40);
+ 
+  .btn {
+    width: 40%;
+    max-width: rem(300);
+    @include char(l15);
+    padding : rem(15) 0; 
+    text-align: center;
+    background-color: var(--color-main);
+    border-radius: rem(4);
+    color : #fff;
+    
+  }
+}
+
+
+//구독 레시피 종류 변경
+
+
+.notice {
+  text-align: center;
+  .notice_row_1 {
+    @include char(l18);
+    padding-bottom: rem(9);
+  }
+  .notice_row_2 {
+    @include char(l16);
+    color: var(--color-font-sub);
+    padding-bottom: rem(29);
+  }
+  .notice_row_3 {
+    display: flex;
+    justify-content: center;
+    .color_box {
+      width: 80%;
+      max-width: rem(560);
+      background-color: #F9EDEC;
+      border-radius: rem(8);
+      padding-bottom: rem(19);
+      .color_box_row_1 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: var(--color-main);
+        @include char(l18);
+        padding: rem(16) 0 rem(13);
+        font-weight: 700;
+        .picture_box {
+          display: flex;
+          justify-content: center;
+          .image {
+            width: rem(20);
+            aspect-ratio: 1/1;
+          }
+        }
+      }
+
+      .color_box_row_2 {
+        @include char(b16);
+        color: var(--color-font-sub);
+      }
+    }
+  }
+}
+
+
+.flex_box2{
+  margin-top: rem(30);
+  display: flex;
+  // max-width: rem(200) ;
+  .recipe_choice_box {
+    // max-width: rem(200) ;
+    .img_box {
+      .image {
+        width: 100% ;
+        max-width: rem(170);
+        aspect-ratio: 0.91/1;
+      }
+    }
+  }
+  .row_1 {
+    padding-top: rem(9);
+    @include char(l18);
+    font-weight: 500;
+    font-family: var(--font-Gmarket-bold);
+
+  }
+  .row_2 {
+    padding-top: rem(7);
+    @include char(l18);
+    font-weight: 500;
+    font-family: var(--font-Gmarket-bold);
+  }
+  .row_3 {
+    padding-top: rem(10);
+    @include char(l16);
+    line-height: 120%;
+  }
+  .row_4 {
+    padding-top: rem(15);
+    @include char(l15);
+    color: var(--color-main);
+    font-weight: 600;
+    text-decoration-line: underline;
+  }
+
+}
+
+
+
+
+// 구독건너뛰기 css
+.content_inner_box4 {
+  text-align: center;
+  .text {
+    padding-bottom : rem(30);
+    @include char(l18);
+    line-height: 140%;
+  }
+  .radio_box {
+    display: flex;
+    justify-content: center;
+    column-gap: rem(60);
+    padding-bottom: rem(45);
+    
+    @include char(l16);
+    font-weight: 600;
+    label {
+      display: flex;
+      align-items: center;
+      column-gap: rem(10);
+
+      &:nth-child(2) {
+        color : var(--color-font-sub);
+      }
+    }
+  }
+  .d_day_text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @include char(l18);
+    padding-bottom: rem(10);
+    >span {
+      @include char(t28);
+      color: var(--color-font-sub);
+      padding: 0 rem(10);
+    }
+  }
+  .d_day_text2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @include char(l18);
+    >span {
+      @include char(t28);
+      color: var(--color-main);
+      padding: 0 rem(10);
+    }
+  }
+
+  .picture_box {
+    padding-top: rem(24);
+    .image {
+      width: 100%;
+      max-width: rem(520);
+      aspect-ratio: 1.3/1;
+    }
+  }
+
+  .btn_box {
+    display: flex;
+    justify-content: center;
+    padding-top: rem(23);
+    .btn {
+
+      width: 100%;
+      max-width: rem(300);
+      background-color: var(--color-main);
+      border-radius: rem(4);
+      color: #fff;
+
+      @include char(l15);
+      padding: rem(14) 0;
+
+    }
+  }
+}
+
+
+
+
+// 구독취소
+.content_inner_box5 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+
+  .title_text {
+    padding: rem(40) 0 rem(27);
+    @include char(l20);
+    font-weight :500;
+  }
+  .text {
+    padding-bottom: rem(60);
+    @include char(b16);
+    text-align: center;
+    line-height: rem(22.4);
+    color: var(--color-font-sub);
+  }
+
+  .check_grid_box {
+    width: 40%;
+    display: grid;
+    grid-template-columns: 10% 90%;
+    row-gap: rem(24);
+
+    @include char(l16);
+    padding-bottom: rem(10);
+  }
+  
+  .input_box {
+    border: rem(1) solid var(--color-line-03);
+    color: var(--color-font-sub2);
+    width: rem(300);
+    padding: rem(13) 0 rem(13) rem(20);
+    border-radius: rem(5);
+
+
+  }
+  .btn {
+    width: 100%;
+    max-width: rem(300);
+    border: rem(1) solid var(--color-line-03);
+    text-align: center;
+    @include char(l15);
+    padding: rem(14) 0;
+    margin-top : rem(80);
+  }
+
+
 }
