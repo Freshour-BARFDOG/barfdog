@@ -8,27 +8,21 @@ import Image from 'next/image';
 
 
 
+const EmptyContent = () => {
+  return (
+    <section className={Styles.body}>
+      <div className={Styles.inner_body}>구독중인 카드가 없습니다.</div>
+    </section>
+  );
+  
+}
+
+
 function Mypage() {
   return (
     <>
       <MetaTitle title="마이페이지 카드관리"/>
       <Layout>
-        <Wrapper>
-          <MypageWrapper>
-
-            <section className={Styles.title}>
-              카드관리
-            </section>
-
-            <section className={Styles.body}>
-              <div className={Styles.inner_body}>
-                구독중인 카드가 없습니다.
-              </div>
-            </section>
-            
-          </MypageWrapper>
-        </Wrapper>
-
         <Wrapper>
           <MypageWrapper>
 

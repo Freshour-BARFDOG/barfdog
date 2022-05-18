@@ -4,8 +4,15 @@ import Wrapper from "/src/components/common/Wrapper";
 import Layout from "/src/components/common/Layout";
 import Styles from '/styles/css/community/notice/index.module.scss'
 import Pagination from "@src/components/atoms/Pagination";
+import Link from 'next/link';
 
 function NoticeIndexPage() {
+  const data = []
+
+  for(let i =0; i < 50; i++ ){
+    data.push(i+1)
+  }
+  data.reverse();
 
   return (
     <>
@@ -23,85 +30,27 @@ function NoticeIndexPage() {
               <span>등록일</span>
             </div>
 
-            <div className={Styles.content_box}>
-              <span>50</span>
-              <p>설날 배송 안내</p>
-              <span>2022.01.20</span>
-            </div>
-            <div className={Styles.content_box}>
-              <span>49</span>
-              <p>설날 배송 안내</p>
-              <span>2022.01.20</span>
-            </div>
-            <div className={Styles.content_box}>
-              <span>48</span>
-              <p>설날 배송 안내</p>
-              <span>2022.01.20</span>
-            </div>
-            <div className={Styles.content_box}>
-              <span>47</span>
-              <p>설날 배송 안내</p>
-              <span>2022.01.20</span>
-            </div>
-            <div className={Styles.content_box}>
-              <span>46</span>
-              <p>설날 배송 안내</p>
-              <span>2022.01.20</span>
-            </div>
-            <div className={Styles.content_box}>
-              <span>45</span>
-              <p>설날 배송 안내</p>
-              <span>2022.01.20</span>
-            </div>
-            <div className={Styles.content_box}>
-              <span>44</span>
-              <p>설날 배송 안내</p>
-              <span>2022.01.20</span>
-            </div>
-            <div className={Styles.content_box}>
-              <span>43</span>
-              <p>설날 배송 안내</p>
-              <span>2022.01.20</span>
-            </div>
-            <div className={Styles.content_box}>
-              <span>42</span>
-              <p>설날 배송 안내</p>
-              <span>2022.01.20</span>
-            </div>
-            <div className={Styles.content_box}>
-              <span>41</span>
-              <p>설날 배송 안내</p>
-              <span>2022.01.20</span>
-            </div>
-            <div className={Styles.content_box}>
-              <span>40</span>
-              <p>설날 배송 안내</p>
-              <span>2022.01.20</span>
-            </div>
-            <div className={Styles.content_box}>
-              <span>39</span>
-              <p>설날 배송 안내</p>
-              <span>2022.01.20</span>
-            </div>
-            <div className={Styles.content_box}>
-              <span>38</span>
-              <p>설날 배송 안내</p>
-              <span>2022.01.20</span>
-            </div>
-            <div className={Styles.content_box}>
-              <span>37</span>
-              <p>설날 배송 안내</p>
-              <span>2022.01.20</span>
-            </div>
-            <div className={Styles.content_box}>
-              <span>36</span>
-              <p>설날 배송 안내</p>
-              <span>2022.01.20</span>
-            </div>
+            <ul className="cont_list">
+              {data.map((item, index) => {
+                return (
+                  <li key={index}>
+                    <Link href="/community/notice/1" passHref>
+                      <a>
+                        <div className={Styles.content_box}>
+                          <span>{item}</span>
+                          <p>설날 배송 안내</p>
+                          <span>2022.01.20</span>
+                        </div>
+                      </a>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
           </section>
 
           <section className={Styles.page_no}>
-            <Pagination itemCountPerGroup={5} itemTotalCount={100} />
+            <Pagination itemCountPerGroup={10} itemTotalCount={100} />
           </section>
         </Wrapper>
       </Layout>

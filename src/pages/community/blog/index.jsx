@@ -1,14 +1,19 @@
-import React from 'react';
+import React from "react";
 import Wrapper from "/src/components/common/Wrapper";
 import Layout from "/src/components/common/Layout";
-import Styles from "/styles/css/community/blog/index.module.scss"
-import Image from 'next/image';
-import Link from 'next/link';
+import Styles from "/styles/css/community/blog/index.module.scss";
+import Image from "next/image";
+import Link from "next/link";
 import MetaTitle from "@src/components/atoms/MetaTitle";
 import Pagination from "@src/components/atoms/Pagination";
 
-
 function BlogIndexPage() {
+  const data = [];
+
+  for (let i = 0; i < 4; i++) {
+    data.push(i + 1);
+  }
+  data.reverse();
   return (
     <>
       <MetaTitle title="블로그" />
@@ -90,127 +95,50 @@ function BlogIndexPage() {
           </section>
 
           <section className={Styles.content_box}>
-            <div className={Styles.line}>
-              <div className={Styles.flex_box}>
-                <div className={Styles.left_box}>
-                  <p>영양</p>
-                  <div className={Styles.article_title}>
-                    반려동물 사료를 바꿔야 하는 7가지 이유
-                  </div>
-                  <div className={Styles.text}>
-                    텍스트 영역입니다. Lorem ipsum dolor sit amet, consectetur
-                    adipiscing elit. Ultrices eu ullamcorper at ut aliquam nulla
-                    non nec. Massa arcu, non commodo lectus suspendisse. At
-                    amet, est malesuada laoreet. Integer feugiat nibh mattis
-                    neque tincidunt. Mattis ut ac imperdiet n...
-                  </div>
-                  <div className={Styles.day}>2022.02.08</div>
-                </div>
-                <div className={Styles.right_box}>
-                  <div className={`${Styles.image} img-wrap`}>
-                    <Image
-                      priority="false"
-                      src={require("public/img/pages/community/right_pic.png")}
-                      objectFit="cover"
-                      layout="fill"
-                      alt="카드 이미지"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className={Styles.line}>
-              <div className={Styles.flex_box}>
-                <div className={Styles.left_box}>
-                  <p>영양</p>
-                  <div className={Styles.article_title}>
-                    반려동물 사료를 바꿔야 하는 7가지 이유
-                  </div>
-                  <div className={Styles.text}>
-                    텍스트 영역입니다. Lorem ipsum dolor sit amet, consectetur
-                    adipiscing elit. Ultrices eu ullamcorper at ut aliquam nulla
-                    non nec. Massa arcu, non commodo lectus suspendisse. At
-                    amet, est malesuada laoreet. Integer feugiat nibh mattis
-                    neque tincidunt. Mattis ut ac imperdiet n...
-                  </div>
-                  <div className={Styles.day}>2022.02.08</div>
-                </div>
-                <div className={Styles.right_box}>
-                  <div className={`${Styles.image} img-wrap`}>
-                    <Image
-                      priority="false"
-                      src={require("public/img/pages/community/right_pic.png")}
-                      objectFit="cover"
-                      layout="fill"
-                      alt="카드 이미지"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className={Styles.line}>
-              <div className={Styles.flex_box}>
-                <div className={Styles.left_box}>
-                  <p>영양</p>
-                  <div className={Styles.article_title}>
-                    반려동물 사료를 바꿔야 하는 7가지 이유
-                  </div>
-                  <div className={Styles.text}>
-                    텍스트 영역입니다. Lorem ipsum dolor sit amet, consectetur
-                    adipiscing elit. Ultrices eu ullamcorper at ut aliquam nulla
-                    non nec. Massa arcu, non commodo lectus suspendisse. At
-                    amet, est malesuada laoreet. Integer feugiat nibh mattis
-                    neque tincidunt. Mattis ut ac imperdiet n...
-                  </div>
-                  <div className={Styles.day}>2022.02.08</div>
-                </div>
-                <div className={Styles.right_box}>
-                  <div className={`${Styles.image} img-wrap`}>
-                    <Image
-                      priority="false"
-                      src={require("public/img/pages/community/right_pic.png")}
-                      objectFit="cover"
-                      layout="fill"
-                      alt="카드 이미지"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className={Styles.line}>
-              <div className={Styles.flex_box}>
-                <div className={Styles.left_box}>
-                  <p>영양</p>
-                  <div className={Styles.article_title}>
-                    반려동물 사료를 바꿔야 하는 7가지 이유
-                  </div>
-                  <div className={Styles.text}>
-                    텍스트 영역입니다. Lorem ipsum dolor sit amet, consectetur
-                    adipiscing elit. Ultrices eu ullamcorper at ut aliquam nulla
-                    non nec. Massa arcu, non commodo lectus suspendisse. At
-                    amet, est malesuada laoreet. Integer feugiat nibh mattis
-                    neque tincidunt. Mattis ut ac imperdiet n...
-                  </div>
-                  <div className={Styles.day}>2022.02.08</div>
-                </div>
-                <div className={Styles.right_box}>
-                  <div className={`${Styles.image} img-wrap`}>
-                    <Image
-                      priority="false"
-                      src={require("public/img/pages/community/right_pic.png")}
-                      objectFit="cover"
-                      layout="fill"
-                      alt="카드 이미지"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
+            <ul className="cont_list">
+              {data.map((item, index) => {
+                return (
+                  <li key={index}>
+                    <Link href="/community/blog/1" passHref>
+                      <a>
+                        <div className={Styles.line}>
+                          <div className={Styles.flex_box}>
+                            <div className={Styles.left_box}>
+                              <p>영양</p>
+                              <div className={Styles.article_title}>
+                                반려동물 사료를 바꿔야 하는 7가지 이유
+                              </div>
+                              <div className={Styles.text}>
+                                텍스트 영역입니다. Lorem ipsum dolor sit amet,
+                                consectetur adipiscing elit. Ultrices eu
+                                ullamcorper at ut aliquam nulla non nec. Massa
+                                arcu, non commodo lectus suspendisse. At amet,
+                                est malesuada laoreet. Integer feugiat nibh
+                                mattis neque tincidunt. Mattis ut ac imperdiet
+                                n...
+                              </div>
+                              <div className={Styles.day}>2022.02.08</div>
+                            </div>
+                            <div className={Styles.right_box}>
+                              <div className={`${Styles.image} img-wrap`}>
+                                <Image
+                                  priority="false"
+                                  src={require("public/img/pages/community/right_pic.png")}
+                                  objectFit="cover"
+                                  layout="fill"
+                                  alt="카드 이미지"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </a>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
           </section>
-
           <div className={Styles.pagination_box}>
             <Pagination itemCountPerGroup={5} itemTotalCount={100} />
           </div>
