@@ -43,19 +43,20 @@ export const getData = async (url, callback) => {
 
 
 
-export const postData = async (url, data, callback, contentType) => {
+export const postData = async (url, data, callback, contType) => {
 
   axios
-    .post(url, data, axiosConfig(contentType))
+    .post(url, data, axiosConfig(contType))
     .then((res) => {
       console.log(res);
-      if (callback && typeof callback === "function") callback(res);
+      if (callback && typeof callback === 'function') callback(res);
     })
     .catch((err) => {
       console.log(err);
       if (callback && typeof callback === "function") callback(err);
       alert("데이터 전송에 실패하였습니다.");
     });
+
 };
 
 
@@ -88,6 +89,27 @@ export const deleteData = async (url) => {
       console.log(err.request);
     });
 };
+
+
+
+
+
+
+
+export const postFileUpload = async (url, formData) => {
+  const response = await axios
+    .post(url, formData, axiosConfig("multipart/fomdata"))
+    .then((res) => {
+      // console.log(res);
+      return res;
+    })
+    .catch((err) => {
+      console.log(err.response);
+      console.log(err.request);
+    });
+
+    return response;
+}
 
 // export const putData = async (url, data) => {
 //   // token = token ? token : await getAdminToken();

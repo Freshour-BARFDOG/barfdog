@@ -9,11 +9,11 @@ axios.defaults.withCredentials = true;
 
 
 const axiosConfig = (contType = "application/json") => {
-  console.log(contType);
+  // console.log(contType);
   return {
     headers: {
       authorization: JSON.parse(localStorage.getItem("admin"))?.token,
-      "Content-Type": contType,
+      "content-Type": contType,
     }
   }
 };

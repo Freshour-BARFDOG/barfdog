@@ -15,17 +15,23 @@ const Frame = styled.div`
 
 const Img = styled.img`
   object-fit: contain;
+  object-fit: ${props => {
+    console.log(props);
+    props.objectFit;
+  }};
   width: 100%;
   height: 100%;
   display: ${(props) => props.isDisplayed};
 `;
 
 
-function PreviewImage({ file, className, thumbLink, ratio, style }) {
+function PreviewImage({ file, className, thumbLink, ratio, style, objectFit }) {
   const [SRC, setSRC] = useState(null);
 
   const IMAGE = () => {
-    return SRC ? <Img src={SRC} alt="미리보기 이미지"></Img> : null;
+    return SRC ? (
+      <Img src={SRC} alt="미리보기 이미지" style={{objectFit:objectFit}}></Img>
+    ) : null;
   };
 
   useEffect(() => {
@@ -47,7 +53,7 @@ function PreviewImage({ file, className, thumbLink, ratio, style }) {
 
   return (
     <Frame className={`preview_img ${className}`} ratio={ratio} style={style}>
-      <IMAGE />
+      <IMAGE/>
     </Frame>
   );
 }

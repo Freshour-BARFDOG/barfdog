@@ -1,24 +1,158 @@
 import React, { useEffect, useRef, useState } from "react";
 import "react-quill/dist/quill.snow.css";
+import dynamic from "next/dynamic";
 
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import AdminLayout from "/src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
-// import QuillEditor, { formats, modules } from "@src/components/admin/form/QuillEditor";
-import QuillEditor from "@src/components/admin/form/QuillEditor";
 import InputRadio_status from "@src/components/admin/form/InputRadioPackage";
 import Fake_input from "@src/components/atoms/fake_input";
 import PreviewImage from "@src/components/atoms/PreviewImage";
 import SelectTag from "@src/components/atoms/SelectTag";
 import ErrorMessage from "/src/components/atoms/ErrorMessage";
 import rem from '@src/components/atoms/rem';
+// import QuillEditor from "@src/components/admin/form/QuillEditor";
 
 
 
-
+// * 이미지: 업로드하는 순간 , Server 저장
+// * Submin : JSON 객체만 전달
+// * 유효성검사시, Image파일의 존재유무 검사
 
 const CreateBlogPage = (props) => {
+
+  
+  const originImageList = ['1','197','200']; // 서버로부터 받은 이미지리스트
+  const [tempImageIdList, setTempImageIdList] = useState(originImageList || []);
+
   const [body, setBody] = useState(""); // Quill 에디터의 innerHTML을 담는 state
+  const [isLoadedEditor, setIsLoadedEditor] = useState(false);
+  const [QuillEditor, setQuillEditor] = useState('');
+
+  useEffect(() => {
+    if (document) {
+      const QuillEditor = dynamic(() =>
+        import("@src/components/admin/form/QuillEditor")
+      );
+      setIsLoadedEditor(true);
+      setQuillEditor(QuillEditor);
+    }
+  }, []);
+  
+  // console.log(body);
+
+
+
+
+  
+  const REQUEST_URL = `/api/admin/blog`;
+  const [formValues, setFormValues] = useState({
+    category: "ALL",
+    hasThumb: false,
+    innerHTML: "",
+    status: 'LEAKED',
+  });
+  const [imageFile, setImageFile] = useState({});
+  const [formErrors, setFormErrors] = useState({});
+
+
+  const onCategoryHandler = (value) => {
+    setFormValues({
+      ...formValues,
+      category: value,
+    });
+
+  };
+
+
+  const onRadioButtonHandler = (data) => {
+    const { key, value } = data;
+    setFormValues({
+      ...formValues,
+      [key]: value,
+    });
+  };
+
+  const imageFileChangeHandler = (e) => {
+    const thisInput = e.currentTarget;
+    const file = thisInput.files[0];
+    console.log(file);
+    const filename = file ? file.name : "";
+    setImageFile({
+      ...imageFile,
+      file,
+      filename: filename,
+      // link:'' , //파일이 없을 경우 : 기존파일 링크 유지
+    });
+  };
+
+
+
+  const onSubmitHandler = (e) => {
+    e.preventDefault();
+
+
+    const curImageIdList = filterImageId(body);
+    const imageDatas = compareImageList(tempImageIdList, curImageIdList);
+
+    console.log(imageDatas);
+    // ************** 유효성검사 -> JSON데이터 보내기 
+    // 현재 body 속에 저장된 이미 지리스트를 비교한다..
+    return 
+    setFormErrors(validate(formValues));
+    if (Object.keys(formErrors).length) return console.error(formErrors);
+    postDataToServer();
+  };
+  // 삭제될 이미지 리스트를 만들어보자
+
+
+
+
+
+  const filterImageId = (html) => {
+    let curimageIdList = [];
+    console.log(html);
+    const imageQuery = /`#__id=12938__`/;
+    // 시작문자열 // 끝나는 문자열
+    
+    const queryImageTag = html.split("<img");
+    const curImageList = 
+    queryImageTag.filter((str) => {
+      if (str.indexOf("src") < 0) return;
+      const imgTag = str.split(">")[0];
+      const queryId = "#__id=";
+      const imageId = imgTag.split(queryId)[1].split('"')[0]
+      curimageIdList.push(imageId);
+    });
+    return curimageIdList;
+  }
+
+
+
+  const compareImageList = (tempArr, curArr) => {
+    let result = {
+      // origin: originImageList,
+      temp: [...tempArr],
+      cur: [...curArr],
+      del: [],
+      added: [],
+    };
+
+    // console.log(tempArr);
+    // console.log(curArr);
+
+    tempArr.map((id) => {
+      const isCurArr = curArr.indexOf(id) > 0;
+      const isOriginArr = originImageList.indexOf(id) >= 0;
+      ( isCurArr && !isOriginArr ) && result.added.push(id);
+
+      const toBeDeleted = curArr.indexOf(id) < 0;
+      // * 추가 : origin에 존재하지 않는 경우
+      toBeDeleted && result.del.push(id);
+    });
+    return result;
+
+  };
 
 
   const returnToPrevPage = () => {
@@ -26,6 +160,8 @@ const CreateBlogPage = (props) => {
       router.back();
     }
   };
+
+
 
 
   return (
@@ -37,11 +173,11 @@ const CreateBlogPage = (props) => {
             <h1>블로그 작성</h1>
           </div>
           <form
-            action="/a"
+            action="/"
             className="cont"
             encType="multipart/form-data"
             method="post"
-            // onSubmit={onSubmitHandler}
+            onSubmit={onSubmitHandler}
           >
             <div className="cont_body">
               <div className="cont_divider">
@@ -56,9 +192,9 @@ const CreateBlogPage = (props) => {
                       <SelectTag
                         name={"category"}
                         id={"category"}
-                        onChange={"onCategoryHandler"}
+                        onChange={onCategoryHandler}
                         options={[
-                          { label: "- 선택 -", value: null },
+                          { label: "전체", value: "전체" },
                           { label: "영양", value: "영양" },
                           { label: "건강", value: "건강" },
                           { label: "생애", value: "생애" },
@@ -80,27 +216,27 @@ const CreateBlogPage = (props) => {
                   <div className="inp_section">
                     <label
                       className="inp_wrap file"
-                      htmlFor="upload-image-pc"
+                      htmlFor="upload-image"
                       style={{ display: "inline-block" }}
                     >
                       <PreviewImage
-                        file={""}
+                        file={imageFile.file}
                         ratio={1 / 1}
+                        objectFit={"cover"}
                         style={{ width: `${rem(200)}` }}
                       />
                       <span className="inp_box">
                         <input
                           type="file"
                           data-type="file"
-                          id="upload-image-pc"
-                          name="imageFilePc"
+                          id="upload-image"
+                          name="imageFile"
                           accept="image/*"
                           className="hide"
-                          data-device="pc"
-                          multiple={true}
-                          // onChange={imageFileChangeHandler}
+                          multiple={false}
+                          onChange={imageFileChangeHandler}
                         />
-                        <Fake_input filename={"파일이름을 입력하세요"} />
+                        <Fake_input filename={imageFile.filename} />
                         {/* {formErrors.file_pc && (
                           <ErrorMessage>{formErrors.file_pc}</ErrorMessage>
                         )} */}
@@ -116,11 +252,15 @@ const CreateBlogPage = (props) => {
                     <p className="title">상세설명</p>
                   </div>
                   <div className="inp_section">
-                    {/* // * --- QUILL EDITOR --- * // */}
-                    <QuillEditor
-                      handleQuillChange={setBody}
-                    />
-                    {/* // * --- QUILL EDITOR --- * // */}
+                    {/* // * --------- QUILL EDITOR --------- * // */}
+                    {isLoadedEditor && (
+                      <QuillEditor
+                        body={body}
+                        handleQuillChange={setBody}
+                        setTempImageIdList={setTempImageIdList}
+                      />
+                    )}
+                    {/* // * --------- QUILL EDITOR --------- * // */}
                   </div>
                 </div>
               </div>
@@ -132,9 +272,9 @@ const CreateBlogPage = (props) => {
                   </div>
                   <div className="inp_section">
                     <InputRadio_status
-                      name="exposedStatus"
-                      exposedStatus={"exposedStatus"}
-                      onRadioButtonHandler={"onRadioButtonHandler"}
+                      name="status"
+                      exposedStatus={formValues.status}
+                      onRadioButtonHandler={onRadioButtonHandler}
                     />
                   </div>
                 </div>
