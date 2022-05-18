@@ -236,26 +236,6 @@ const CustomInputRadio = ({name}) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // * -------------------- UI 확인용 레이아웃  ------------------ */
 
 
@@ -295,6 +275,7 @@ function SamplePageForPublishing() {
               </CustomInput>
             </ToggleBox>
           </li>
+          
           <li className={s["custom-input-radio-wrapper"]}>
             <ToggleBox title="샘플: Custom RADIO Input">
               <CustomInputRadio name="recipe" />

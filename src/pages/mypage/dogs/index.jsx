@@ -233,6 +233,7 @@ function Mypage() {
                 </div>
               </div>
             </section>
+            
 
           </MypageWrapper>
         </Wrapper>
