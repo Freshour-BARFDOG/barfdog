@@ -14,7 +14,6 @@ function UserInfoPage() {
         <Wrapper>
           <MypageWrapper>
 
-
             <section className={s.title}>
               <div>
                 회원 정보 변경
@@ -184,6 +183,49 @@ function UserInfoPage() {
                 </div>
                 <div className={s.right_box}>
                   저장
+                </div>
+              </div>
+            </section>
+
+            <section className={s.add_page}>
+              <div className={s.amend}>
+                <div className={s.text}>
+                  회원정보가 수정되었습니다.
+                </div>
+                <div className={s.btn_box}>
+                  <div className={s.red_btn}>
+                    확인
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <br/>
+
+            <section className={s.add_page}>
+              <div className={s.amend}>
+                <div className={s.text}>
+                  비밀번호가 일치하지 않습니다
+                </div>
+                <div className={s.btn_box}>
+                  <div className={s.red_btn}>
+                    확인
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <br/>
+
+            <section className={s.add_page}>
+              <div className={s.amend}>
+                <div className={s.text}>
+                  탈퇴되었습니다. 이용해 주셔서 감사합니다.
+                </div>
+                <div className={s.btn_box}>
+                  <div className={s.red_btn}>
+                    확인
+                  </div>
                 </div>
               </div>
             </section>
