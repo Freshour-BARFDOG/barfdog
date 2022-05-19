@@ -44,7 +44,7 @@ function BlogPage() {
           {activeModal && (
             <Modal_AdminRecommendArticle setActiveModal={setActiveModal} />
           )}
-          <h1 className="title_main">블로그 생성</h1>
+          <h1 className="title_main">블로그 관리</h1>
           <div className="cont">
             <div className="cont_header clearfix">
               <p className="cont_title cont-left">목록</p>
