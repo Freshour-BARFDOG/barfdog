@@ -1,0 +1,50 @@
+$browser-context: 16;
+@function rem($px, $context: $browser-context) {
+  @return #{$px / $context}rem;
+}
+
+.title-section {
+  margin-bottom: rem(20);
+  background-color: #23242e;
+  padding: rem(14) rem(20);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #fff;
+  font-size: rem(24);
+  font-weight: 400;
+}
+.body-section {
+  padding: rem(20) rem(20) rem(30);
+  .input-section {
+    margin-bottom: rem(80);
+  }
+}
+
+.input-row {
+  display: block;
+  margin-bottom:rem(40);
+  &:last-child{margin-bottom:0;}
+  .input-title {
+    font-size: rem(16);
+    margin-bottom: rem(10);
+  }
+  select {
+    display: block;
+    width: 100%;
+    padding-left: rem(10);
+    padding-right: rem(33);
+    color:var(--color-font-sub);
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    overflow:hidden;
+  }
+}
+
+.btn-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  button:not(:last-child){margin-right: rem(10);}
+}

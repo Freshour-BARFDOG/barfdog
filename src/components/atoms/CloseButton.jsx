@@ -20,7 +20,7 @@ const Button = styled.button`
     transform: translate(-50%, -50%);
     width: 100%;
     height: ${rem(1)};
-    background-color: var(--color-line-01);
+    background-color: ${(props) => props.lineColor || `var(--color-line-01)`};
   }
   &:before {
     transform: translate(-50%, -50%) rotate(45deg);
@@ -32,8 +32,7 @@ const Button = styled.button`
 
 
 
-function CloseButton({className, style}) {
-
+function CloseButton({ className, style, onClick, lineColor }) {
   const mct = useModalContext();
   const onClickHandler = () => mct.onHide();
 
@@ -42,7 +41,8 @@ function CloseButton({className, style}) {
       type="button"
       style={style}
       className={className}
-      onClick={onClickHandler}
+      onClick={onClick || onClickHandler}
+      lineColor={lineColor}
     />
   );
 }

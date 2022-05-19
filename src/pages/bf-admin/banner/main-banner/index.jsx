@@ -12,6 +12,10 @@ import axios from "axios";
 import axiosConfig from "/api/axios.config"; 
 import AmdinErrorMessage from '@src/components/atoms/AmdinErrorMessage';
 import sorting from '@util/func/sorting';
+import {
+  Button_EditListOrder,
+  Button_InactiveEditListOrder,
+} from "@src/components/atoms/Button_EditListOrder";
 
 
 
@@ -42,22 +46,6 @@ function MainBannerIndexPage(props) {
   useEffect(() => {
     getDataWithSettingState("/api/banners/main", setItemList);
   }, []);
-
-
-
-
-
-  const onEditHandler = () => {
-    if (!itemList.length) return;
-    setEditListOrder(true);
-  };
-
-
-
-  const onExitEditListOrderHandler = () => {
-    setEditListOrder(false);
-  };
-
 
 
 
@@ -105,28 +93,6 @@ function MainBannerIndexPage(props) {
 
 
 
-  const BtnEditListOrder = () => (
-    <button
-      type="button"
-      id="edit_order"
-      className="admin_btn line basic_m"
-      onClick={onEditHandler}
-    >
-      순서편집
-    </button>
-  );
-
-  const BtnSave = () => (
-    <button
-      type="button"
-      id="set_order"
-      className="admin_btn line basic_m point"
-      onClick={onExitEditListOrderHandler}
-    >
-      닫기
-    </button>
-  );
-  
   const onHideModalHandler = (isConfirm) => {
     setModalMessage(false);
   }
@@ -152,8 +118,16 @@ function MainBannerIndexPage(props) {
                 />
               </div>
               <div className="controls cont-left">
-                <BtnEditListOrder />
-                {editListOrder && <BtnSave />}
+                <Button_EditListOrder
+                  itemList={itemList}
+                  setEditListOrder={setEditListOrder}
+                />
+                {editListOrder && (
+                  <Button_InactiveEditListOrder
+                    itemList={itemList}
+                    setEditListOrder={setEditListOrder}
+                  />
+                )}
               </div>
             </div>
             <div className={`${s.cont_viewer}`}>

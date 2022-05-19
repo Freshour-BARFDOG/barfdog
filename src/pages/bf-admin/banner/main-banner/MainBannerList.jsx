@@ -49,8 +49,6 @@ export default function MainBannerList({
     const bannerName = items[targetViewIdx]?.name;
     if (confirm(`선택된 배너(${bannerName})를 정말 삭제하시겠습니까?`)) {
       onDeleteItem(apiURL);
-      // removeArray(items, targetViewIdx);
-      // target.remove();
     }
   };
 
