@@ -253,3 +253,36 @@ section.btn_section { padding : rem(70) 0 }
     }
   }
 }
+
+.amend {
+  width: 100%;
+  max-width: rem(420);
+  background-color: rosybrown;
+  
+  .text {
+    padding : rem(80) 0 rem(69);
+    text-align: center;
+    @include char(l16);
+  }
+
+  .btn_box {
+    display: flex;
+    justify-content: center;
+    padding-bottom: rem(20);
+
+    .red_btn {
+      background-color: var(--color-main);
+      border-radius: rem(4);;
+
+      width: 45%;
+      max-width: rem(160);
+
+      @include char(l15);
+      text-align: center;
+      padding: rem(14) 0 ;
+      color: #fff; 
+      
+
+   }
+ }
+}

@@ -4,6 +4,7 @@ import Wrapper from "/src/components/common/Wrapper";
 import MypageWrapper from "/src/components/mypage/MypageWrapper";
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import { useRouter } from "next/router";
+import s from 'styles/css/mypage/dogs/[dogIdx]/statistic.module.scss';
 
 function Mypage() {
   const router = useRouter();
@@ -18,7 +19,16 @@ function Mypage() {
       <MetaTitle title={`설문결과: ${dogIdx}`} />
       <Layout>
         <Wrapper>
-          <MypageWrapper>{`설문결과(통계): ${dogIdx}`}</MypageWrapper>
+          <MypageWrapper>
+            
+
+            <section className={s.title}>
+              시호의 맞춤 레포트 
+              <span>2022-02-24</span>
+            </section>
+          
+          
+          </MypageWrapper>
         </Wrapper>
       </Layout>
     </>

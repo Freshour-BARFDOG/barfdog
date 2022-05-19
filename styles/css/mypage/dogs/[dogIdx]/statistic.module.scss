@@ -1,0 +1,21 @@
+$browser-context:16; // html font-size
+@function rem($px, $context: $browser-context){
+  @return #{$px / $context}rem;
+}
+@import 'styles/global/guide.scss';
+
+
+
+section.title { padding : rem(8) 0 rem(18) }
+
+
+.title {
+  @include char(t24);
+  span {
+    @include char(l15);
+    padding-left: rem(8);
+    color: vaR(--color-font-sub);
+  }
+}
+
+

@@ -532,19 +532,19 @@ function SubscribeInfoPage() {
             </section>
 
             <section className={Styles.content_box}>
-              <div className={Styles.flex_box}>
-                <div className={Styles.left_box}>
-                  <div className={`${Styles.flex_box2} ${Styles.first}`}>
+              <div className={Styles.top_flex_box}>
+                <div className={Styles.top_left_box}>
+                  <div className={`${Styles.top_flex_box2} ${Styles.first}`}>
                       <div className={Styles.left}>플랜</div>
                       <div className={Styles.right}>풀플랜</div>
                   </div>
 
-                  <div className={`${Styles.flex_box2} ${Styles.second}`}>
+                  <div className={`${Styles.top_flex_box2} ${Styles.second}`}>
                       <div className={Styles.left}>레시피</div>
                       <div className={Styles.right}>스타터프리미엄<br />덕&amp;램</div>
                   </div>
 
-                  <div className={`${Styles.flex_box2} ${Styles.third}`}>
+                  <div className={`${Styles.top_flex_box2} ${Styles.third}`}>
                     <div className={Styles.left}>급여량</div>
                     <div className={Styles.right}>272g</div>
                   </div>
@@ -849,10 +849,129 @@ function SubscribeInfoPage() {
               </div>
 
             </ToggleBox>
+
+            <section className={Styles.add_page}>
+              <div className={Styles.page_box}>
+                <div className={Styles.title}>
+                  사용가능한 쿠폰
+                </div>
+
+                <div className={Styles.grid_box}>
+
+                  <div className={Styles.row_flex}>
+                    <div>
+                      쿠폰명
+                    </div>
+                    <div>
+                      적용가능수량
+                    </div>
+                    <div>
+                      유효기간
+                    </div>
+                    <div>
+                      할인금액
+                    </div>
+                  </div>
+
+                  <div className={Styles.row_flex2}>
+                    <div>
+                      <label>
+                        <input type="radio" namne='13' id="12" /> 
+                        <div>
+                          정기구독 10%할인
+                        </div>
+                      </label>
+                    </div>
+                    <div>
+                      1개
+                    </div>
+                    <div>
+                      2022.12.31
+                    </div>
+                    <div>
+                      9,400원
+                    </div>
+                  </div>
+
+                  <div className={Styles.row_flex2}>
+                    <div>
+                      <label>
+                        <input type="radio" name='13'id="12" /> 
+                        <div>
+                          등급구독 10%할인
+                        </div>
+                      </label>
+                    </div>
+                    <div>
+                      1개
+                    </div>
+                    <div>
+                      2022.12.31
+                    </div>
+                    <div>
+                      9,400원
+                    </div>
+                  </div>
+                </div>
+
+                <div className={Styles.price}>
+                  <div className={Styles.price_flex_box}>
+                    <div className={Styles.col_1}>
+                      <p>상품금액</p>
+                      <div className={Styles.text_price}>94,000원</div>
+                    </div>
+                    
+                    <div className={Styles.line}>
+                      <hr />
+                    </div>
+
+                    <div className={Styles.col_2}>
+                      <p>할인금액</p>
+                      <div className={Styles.text_price}>9,400원</div>
+                    </div>
+                    
+                    <div className={Styles.vertical_line}>
+                      <hr />
+                    </div>
+
+                    <div className={Styles.col_3}>
+                      할인 후 금액
+                      <span>84,600원</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className={Styles.coupon_btn_box}>
+                  <div className={Styles.btn}>
+                    취소
+                  </div>
+                  <div className={Styles.red_btn}>
+                    쿠폰선택
+                  </div>
+
+                  
+                </div>
+
+
+              </div>
+            </section>
+
+            <section className={Styles.add_page2}>
+              <div className={Styles.page_box}>
+                <div className={Styles.text}>
+                  쿠폰 할인이 적용되었습니다
+                </div>
+                <div className={Styles.red_btn}>
+                  확인
+                </div>
+              </div>
+            </section>
             
             </MypageWrapper>
         </Wrapper>
       </Layout>
+
+
     </>
   );
 }
