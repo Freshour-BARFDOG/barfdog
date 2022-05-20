@@ -1,0 +1,29 @@
+$browser-context:16;
+@function rem($px, $context: $browser-context){
+  @return #{$px / $context}rem;
+}
+
+
+$windowWidthForRightSideBorder: rem(1770);
+
+
+.cont_viewer {
+  .table{
+    .table_header, .item{
+      grid-template-rows: minmax(rem(60), auto);
+      grid-template-columns:
+        rem(80)
+        rem(120)
+        minmax(rem(80), rem(180))
+        minmax(rem(120), rem(400))
+        minmax(rem(40), rem(80))
+        rem(120)
+        rem(120)
+        minmax(rem(80), rem(160))
+        rem(70);
+    }
+  }
+}
+
+
+

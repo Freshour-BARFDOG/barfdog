@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "react-quill/dist/quill.snow.css";
 import dynamic from "next/dynamic";
-
+import { useRouter } from "next/router";
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import AdminLayout from "/src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
@@ -20,7 +20,7 @@ import rem from '@src/components/atoms/rem';
 // * 유효성검사시, Image파일의 존재유무 검사
 
 const CreateBlogPage = (props) => {
-
+  const router = useRouter();
   
   const originImageList = ['1','197','200']; // 서버로부터 받은 이미지리스트
   const [tempImageIdList, setTempImageIdList] = useState(originImageList || []);
@@ -106,7 +106,6 @@ const CreateBlogPage = (props) => {
     if (Object.keys(formErrors).length) return console.error(formErrors);
     postDataToServer();
   };
-  // 삭제될 이미지 리스트를 만들어보자
 
 
 

@@ -57,8 +57,9 @@ function AdminGnb() {
           <SubmenuList title="블로그" link="/bf-admin/community/blog" />
         </List>
         <List title="리뷰관리">
-          <SubmenuList title="리뷰" link="/bf-admin/review" />
           <SubmenuList title="베스트 리뷰" link="/bf-admin/review/bestReview" />
+          <SubmenuList title="리뷰" link="/bf-admin/review/normal" />
+          <SubmenuList title="리뷰 생성" link="/bf-admin/review/create" />
         </List>
         {/* <List title="등급정책" link="/class-policy" /> */}
         <List title="메신저" link="/bf-admin/messenger" />

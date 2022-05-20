@@ -3,9 +3,7 @@ $browser-context:16;
   @return #{$px / $context}rem;
 }
 
-
 $windowWidthForRightSideBorder: rem(1520);
-
 
 
 .cont_viewer {
@@ -36,7 +34,7 @@ $windowWidthForRightSideBorder: rem(1520);
       }
       .table_th{
         font-weight: 600;
-        background-color:#f1f1f4;
+  
         height: 100%;
       }
       span{
@@ -65,8 +63,6 @@ $windowWidthForRightSideBorder: rem(1520);
   margin-top: rem(20);
 
 }
-
-
 
 
 @media (max-width: ($windowWidthForRightSideBorder)) {

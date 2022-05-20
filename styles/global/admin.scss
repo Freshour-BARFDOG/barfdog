@@ -13,11 +13,14 @@ $aniType_Show : 0.3s ease-in ;
 
 .admin_select{width:rem(200)}
 
+.text-transform-ellipsis{
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow:hidden;
+  justify-content:flex-start !important;
 
-
-
-
-
+}
+.btn_link{cursor:pointer; color: var(--color-link);}
 
 // * ---------- BUTTON ---------- */
 
@@ -31,9 +34,6 @@ $aniType_Show : 0.3s ease-in ;
   *  <button className="admin_btn point popup">버튼</button>
   *  <button className="admin_btn solid popup">버튼</button>
 */
-
-
-
 
 
 .admin_btn{
@@ -133,6 +133,7 @@ $aniType_Show : 0.3s ease-in ;
 
 
 #admin_page {
+  background-color: var(--color-bg);
 
   $titleSectionWidth: rem(150);
   $inputDefaultHeight: rem(38);
@@ -155,6 +156,7 @@ $aniType_Show : 0.3s ease-in ;
   }
 
   .cont{
+    &:not(:last-child){margin-bottom:rem(10)}
     background-color:#fff;
     padding: rem(30) rem(40);
     border: rem(1) solid var(--color-line-04);
@@ -271,9 +273,10 @@ $aniType_Show : 0.3s ease-in ;
   input.fullWidth{width:100%;}
   input.halfWidth{width:50%;}
 
-
-
 }
+
+
+
 
 
 

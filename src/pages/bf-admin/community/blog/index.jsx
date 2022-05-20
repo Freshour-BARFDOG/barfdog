@@ -1,8 +1,8 @@
 import React, {useState} from "react";
+import s from './blog.module.scss';
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import AdminLayout from "/src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
-import s from './blog.module.scss';
 import Link from "next/link";
 import axios from "axios";
 import axiosConfig from "/api/axios.config";
