@@ -11,7 +11,7 @@ import PreviewImage from "@src/components/atoms/PreviewImage";
 import SelectTag from "@src/components/atoms/SelectTag";
 import ErrorMessage from "/src/components/atoms/ErrorMessage";
 import rem from '@src/components/atoms/rem';
-// import QuillEditor from "@src/components/admin/form/QuillEditor";
+
 
 
 
@@ -24,7 +24,6 @@ const CreateBlogPage = (props) => {
   
   const originImageList = ['1','197','200']; // 서버로부터 받은 이미지리스트
   const [tempImageIdList, setTempImageIdList] = useState(originImageList || []);
-
   const [body, setBody] = useState(""); // Quill 에디터의 innerHTML을 담는 state
   const [isLoadedEditor, setIsLoadedEditor] = useState(false);
   const [QuillEditor, setQuillEditor] = useState('');
@@ -44,7 +43,7 @@ const CreateBlogPage = (props) => {
 
 
 
-  
+
   const REQUEST_URL = `/api/admin/blog`;
   const [formValues, setFormValues] = useState({
     category: "ALL",
@@ -54,6 +53,8 @@ const CreateBlogPage = (props) => {
   });
   const [imageFile, setImageFile] = useState({});
   const [formErrors, setFormErrors] = useState({});
+
+
 
 
   const onCategoryHandler = (value) => {
@@ -93,8 +94,10 @@ const CreateBlogPage = (props) => {
 
 
     const curImageIdList = filterImageId(body);
-    const imageDatas = compareImageList(tempImageIdList, curImageIdList);
+    // const imageDatas = compareImageList(tempImageIdList, curImageIdList);
+    const imageDatas = compareImageList();
 
+    console.log(curImageIdList)
     console.log(imageDatas);
     // ************** 유효성검사 -> JSON데이터 보내기 
     // 현재 body 속에 저장된 이미 지리스트를 비교한다..
@@ -111,12 +114,9 @@ const CreateBlogPage = (props) => {
 
   const filterImageId = (html) => {
     let curimageIdList = [];
-    console.log(html);
-    const imageQuery = /`#__id=12938__`/;
-    // 시작문자열 // 끝나는 문자열
+    // console.log(html);
     
     const queryImageTag = html.split("<img");
-    const curImageList = 
     queryImageTag.filter((str) => {
       if (str.indexOf("src") < 0) return;
       const imgTag = str.split(">")[0];
@@ -124,32 +124,38 @@ const CreateBlogPage = (props) => {
       const imageId = imgTag.split(queryId)[1].split('"')[0]
       curimageIdList.push(imageId);
     });
+    // console.log(curimageIdList);
     return curimageIdList;
   }
 
 
+  
 
   const compareImageList = (tempArr, curArr) => {
+    if(!tempArr || !tempArr.length) return console.error('There is no Image File.');
+
     let result = {
-      // origin: originImageList,
+      origin: originImageList,
       temp: [...tempArr],
       cur: [...curArr],
       del: [],
       added: [],
     };
 
-    // console.log(tempArr);
-    // console.log(curArr);
+    console.log(result);
 
-    tempArr.map((id) => {
-      const isCurArr = curArr.indexOf(id) > 0;
-      const isOriginArr = originImageList.indexOf(id) >= 0;
-      ( isCurArr && !isOriginArr ) && result.added.push(id);
+      tempArr.map((id) => {
+        const isCurArr = curArr.indexOf(id) > 0;
+        const isOriginArr = originImageList.indexOf(id) >= 0;
+        console.log(id, "curArr: ", isCurArr);
+        console.log(id, "isOriginArr: ", isOriginArr);
 
-      const toBeDeleted = curArr.indexOf(id) < 0;
-      // * 추가 : origin에 존재하지 않는 경우
-      toBeDeleted && result.del.push(id);
-    });
+        isCurArr && !isOriginArr && result.added.push(id);
+
+        const toBeDeleted = curArr.indexOf(id) < 0;
+        // * 추가 : origin에 존재하지 않는 경우
+        toBeDeleted && result.del.push(id);
+      });
     return result;
 
   };
@@ -166,11 +172,11 @@ const CreateBlogPage = (props) => {
 
   return (
     <>
-      <MetaTitle title="블로그 작성" admin={true} />
+      <MetaTitle title="블로그 생성" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
           <div className="title_main">
-            <h1>블로그 작성</h1>
+            <h1>블로그 생성</h1>
           </div>
           <form
             action="/"

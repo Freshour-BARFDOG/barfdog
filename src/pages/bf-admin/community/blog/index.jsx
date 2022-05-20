@@ -28,7 +28,7 @@ import Button_acceptClickEvent from '@src/components/atoms/Button_acceptClickEve
 const TEST_ITEM = [1,2,3];
 
 
-function BlogPage() {
+function BlogIndexPage() {
 
   const [itemList, setItemList] = useState(TEST_ITEM);
   const [activeModal, setActiveModal] = useState(true);
@@ -94,4 +94,4 @@ function BlogPage() {
   );
 }
 
-export default BlogPage;
+export default BlogIndexPage;
