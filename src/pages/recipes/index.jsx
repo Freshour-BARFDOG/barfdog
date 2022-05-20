@@ -229,7 +229,7 @@ export default function RecipePage() {
         <Wrapper>
           <div className="recipes-container">
             <ul>
-              {/* <li style={{ margin: "30px 0" }}>
+              <li style={{ margin: "30px 0" }}>
                 <TEST_ModalTrigger onClick={onShowModal} data-selected-idx={0}>
                   스타터 프리미엄 더보기
                 </TEST_ModalTrigger>
@@ -248,7 +248,7 @@ export default function RecipePage() {
                 <TEST_ModalTrigger onClick={onShowModal} data-selected-idx={3}>
                   램앤비프 더보기
                 </TEST_ModalTrigger>
-              </li> */}
+              </li>
             </ul>
           </div>
         </Wrapper>

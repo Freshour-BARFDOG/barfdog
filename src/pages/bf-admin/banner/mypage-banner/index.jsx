@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import s from "./admin-mypage-banner.module.scss";
+import s from "./mypageBanner.module.scss";
 import { useRouter } from "next/router";
 import { useModalContext } from "@store/modal-context";
 import Modal_global_alert from "@src/components/modal/Modal_global_alert";
@@ -19,12 +19,6 @@ import InputRadio_status, {
 } from "@src/components/admin/form/InputRadioPackage";
 
 
-/*
-
--- 만료된 쿠폰
-Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLthqDtgbAg7J2066aEIiwiaWQiOjUsImV4cCI6MTY1MTg5MjU3NiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20ifQ.Wycm9ZmiiK-GwtsUkvMCHHeExDBtkveDbhKRealjmd8C4OZMp3SFqGFcFWudXMiL5Mxdj6FcTAV9OVsOYsn_Mw
-
-*/
 
 function MypageBanner() {
   const router = useRouter();

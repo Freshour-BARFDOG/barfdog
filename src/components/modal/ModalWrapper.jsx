@@ -10,8 +10,8 @@ const Wrap = styled.div`
   position: fixed;
   // ! z-index: ''; // global zindex에서 관리
   left: 50%;
-  top:0;
-  transform: translate(-50%, 0%);
+  top: ${(props) => (props.positionCenter ? "50%" : 0)};
+  transform: translate(-50%, ${(props) => (props.positionCenter ? "-50%" : 0)});
   padding: ${rem(32)};
   width: ${rem(360)};
   background-color: #fff;
@@ -19,45 +19,44 @@ const Wrap = styled.div`
   border-radius: ${rem(6)};
   box-shadow: 0 0 ${rem(30)} rgba(0, 0, 0, 0.15);
 
-  overflow:hidden;
+  overflow: hidden;
   transition-property: top, opacity, height;
   transition-duration: 0.3s;
   transition-timing-function: ease-out;
 
   &.active {
     top: 10vh;
-    height:auto;
+    height: auto;
     opacity: 1;
     pointer-events: all;
-    margin:auto;
-    padding:
+    margin: auto;
+    padding: ;
   }
   &.inactive {
     top: 0;
-    height:0;
+    height: 0;
     opacity: 0;
-    margin:0;
-    padding:0;
+    margin: 0;
+    padding: 0;
     pointer-events: none;
   }
 
   @media (max-width: ${rem(600)}) {
     width: auto;
-  };
-
+  } ;
 `;
 
 
 const ModalBackground = styled.div`
-  position:fixed;
-  left:0;
-  top:0;
-  right:0;
-  bottom:0;
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.3);
-  cursor: pointer;
+  cursor: ${(props) => (props.onClick && "pointer")};
 `;
 
 
@@ -71,6 +70,7 @@ function ModalWrapper({
   label,
   background,
   onBackgroundClick,
+  positionCenter
 }) {
   return (
     <>
@@ -86,6 +86,7 @@ function ModalWrapper({
           style={style}
           label={label}
           id={id}
+          positionCenter
         >
           {children}
         </Wrap>

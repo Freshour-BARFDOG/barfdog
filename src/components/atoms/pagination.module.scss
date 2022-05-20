@@ -30,6 +30,18 @@ $defaultColor : var(--color-font-sub);
     max-width: $PaginationMaxWidth;
 
     li{margin: 0;}
+    
+    .square{
+      .btn-page{
+        color:var(--color-font-sub2);
+        &[data-cur-page=true]{
+          border: rem(1) solid var(--color-main);
+          box-sizing: border-box;
+          color: var(--color-main);
+        }
+        &[data-cur-page=true]:hover{color:var(--color-main);}
+      }
+    }
 
     .btn-page{
       cursor: pointer;
@@ -60,3 +72,4 @@ $defaultColor : var(--color-font-sub);
   .arrow.prev-page{transform:rotate(0);}
   .arrow.next-page{transform:rotate(180deg);}
 }
+
