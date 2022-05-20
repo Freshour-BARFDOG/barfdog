@@ -12,7 +12,8 @@ import Checkbox from "@src/components/atoms/Checkbox";
 import sorting from "@util/func/sorting";
 import Pagination from "@src/components/atoms/Pagination";
 import SearchBar from "@src/components/admin/form/searchBar";
-
+import SearchTerm from '@src/components/admin/form/searchBar/SearchTerm';
+import SearchRadio from "@src/components/admin/form/searchBar/SearchRadio";
 
 
 
@@ -40,9 +41,13 @@ const getDataWithSettingState = (url, callback) => {
 function ReviewPage(props) {
   const [modalMessage, setModalMessage] = useState("");
   const [itemList, setItemList] = useState(TEST_ITEM);
+  const [searchValue, setSearchValue] = useState({});
+
+
+  console.log(searchValue);
 
   useEffect(() => {
-    getDataWithSettingState("/api/banners/main", setItemList);
+    getDataWithSettingState("/api/review", setItemList);
   }, []);
 
 
@@ -51,14 +56,23 @@ function ReviewPage(props) {
       .delete(url, axiosConfig())
       .then((res) => {
         console.log(res);
-        getDataWithSettingState("/api/banners/main", setItemList);
-        setModalMessage("배너가 삭제되었습니다.");
+        getDataWithSettingState("/api/review", setItemList);
+        setModalMessage("리뷰가 삭제되었습니다.");
       })
       .catch((err) => {
         setModalMessage("삭제 실패: ", err);
       });
   };
+  const onResetSearchValues = (e) => {
+    setSearchValue('');
+    console.log('초기화 실행')
+    
+  }
 
+  const onSearchHandler = (e) => {
+      console.log('검색 실행')
+      
+  }
   return (
     <>
       <MetaTitle title="리뷰 관리" admin={true} />
@@ -66,8 +80,30 @@ function ReviewPage(props) {
         <AdminContentWrapper>
           <h1 className="title_main">리뷰 관리</h1>
           <section className="cont">
-            <SearchBar/>
-            </section>
+            <SearchBar onReset={onResetSearchValues} onSearch={onSearchHandler}>
+              <SearchTerm
+                title={"조회기간"}
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
+              />
+              <SearchRadio
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
+                title="처리상태"
+                name="review-status"
+                idList={["ALL", "REQUEST", "CONFIRM", "REJECT"]}
+                labelList={["전체", "요청", "승인", "반려"]}
+              />
+              {/* <SearchRadio
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
+                title="TEST"
+                name="review-test"
+                idList={["aa", "bb", "cc"]}
+                labelList={["aa", "bb", "cc"]}
+              /> */}
+            </SearchBar>
+          </section>
           <section className="cont">
             <div className="cont_header clearfix">
               <p className="cont_title cont-left">목록</p>
@@ -100,10 +136,11 @@ function ReviewPage(props) {
                   <li className={s.table_th}>삭제</li>
                 </ul>
                 {itemList.length ? (
-                  <BestReviewList
-                    items={itemList}
-                    onDeleteItem={onDeleteItem}
-                  />
+                  // <BestReviewList
+                  //   items={itemList}
+                  //   onDeleteItem={onDeleteItem}
+                  // />
+                  "데이터 자리"
                 ) : (
                   <AmdinErrorMessage text="조회된 데이터가 없습니다." />
                 )}

@@ -1,68 +1,113 @@
-
 /* ADMIN COMMON STYLE */
-$browser-context:16;
-@function rem($px, $context: $browser-context){
+$browser-context: 16;
+@function rem($px, $context: $browser-context) {
   @return #{$px / $context}rem;
 }
 
-
-
 #searchBar {
-  color:var(--color-font-def);
+  color: var(--color-font-def);
 
-  .search-section{margin-bottom:rem(10);}
+  .search-section {
+    margin-bottom: rem(20);
+  }
 
-  .search-row{
-    display:grid;
+  .search-row {
+    display: grid;
     grid-template-columns: rem(160) calc(100% - rem(160));
     justify-content: flex-start;
-    .title{font-size: rem(15);;}
-  }
-  .btn-section{
-    display: flex; align-items: center; justify-content: center;
-    button{
-      &:not(:last-child){margin-right:rem(10);}
+    border-bottom: rem(1) solid var(--color-line-04);
+    padding-bottom: rem(15);
+    &:not(:first-child) {
+      padding-top: rem(15);
+    }
+
+    .title {
+      font-size: rem(15);
     }
   }
-}
-
-
-
-/* 공통 */
-.inp-wrap{}
-
-
-/* 조회간 */
-.inp-wrap.term{
-  display: grid;
-  gap: rem(10);
-  grid-template-rows: repeat(1, 1fr);
-  .inner-row{
-    div[data-type]:not(:last-child){margin-bottom:rem(10);}
-    button{
-      width: rem(80);
-      margin-left:rem(-1);
-      &.active{
-        color: var(--color-primary04);
-        position: relative;
-        z-index: 1;
-        border-color:var(--color-primary04)
+  .btn-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    button {
+      &:not(:last-child) {
+        margin-right: rem(10);
       }
     }
-   
-  }
-
-  input[type="date"]{
-    width: rem(160); height: rem(38); color: #4d4d4d;
-    &::-webkit-datetime-edit { display: flex; align-items: center; justify-content: flex-start; font-size: rem(14); cursor: pointer;}
-    &::-webkit-datetime-edit-fields-wrapper { background: transparent; }
-    &::-webkit-datetime-edit-text {color: inherit;}
-    &::-webkit-datetime-edit-month-field { color: inherit; }
-    &::-webkit-datetime-edit-day-field { color: inherit; }
-    &::-webkit-datetime-edit-year-field { color: inherit; }
-    &::-webkit-inner-spin-button { display: none; }
-    &::-webkit-calendar-picker-indicator { opacity: 1; cursor: pointer;}
   }
 }
 
+/* 공통 */
 
+/* 조회기간 */
+.inp-wrap.term {
+  display: grid;
+  grid-template-rows: repeat(1, 1fr);
+  div[data-category]:not(:last-child) {
+    margin-bottom: rem(10);
+  }
+  button {
+    width: rem(80);
+    margin-left: rem(-1);
+    &.active {
+      color: var(--color-primary04);
+      position: relative;
+      z-index: 1;
+      border-color: var(--color-primary04);
+    }
+  }
+
+  input[type="date"] {
+    width: rem(160);
+    height: rem(38);
+    color: #4d4d4d;
+    &::-webkit-datetime-edit {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      font-size: rem(14);
+      cursor: pointer;
+    }
+    &::-webkit-datetime-edit-fields-wrapper {
+      background: transparent;
+    }
+    &::-webkit-datetime-edit-text {
+      color: inherit;
+    }
+    &::-webkit-datetime-edit-month-field {
+      color: inherit;
+    }
+    &::-webkit-datetime-edit-day-field {
+      color: inherit;
+    }
+    &::-webkit-datetime-edit-year-field {
+      color: inherit;
+    }
+    &::-webkit-inner-spin-button {
+      display: none;
+    }
+    &::-webkit-calendar-picker-indicator {
+      opacity: 1;
+      cursor: pointer;
+    }
+  }
+}
+
+// * 라디오버튼
+.inp-wrap.radio {
+  display: flex;
+  align-items: center;
+
+
+  color: var(--color-font-def);
+  label {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: rem(14);
+    &:not(:last-child){margin-right: rem(24);}
+    input{margin-right:rem(6)}
+    
+  }
+
+}
