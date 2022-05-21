@@ -11,11 +11,11 @@ import Checkbox from "@src/components/atoms/Checkbox";
 
 import sorting from "@util/func/sorting";
 import Pagination from "@src/components/atoms/Pagination";
-import SearchBar from "@src/components/admin/form/searchBar";
-import SearchTerm from '@src/components/admin/form/searchBar/SearchTerm';
-import SearchRadio from "@src/components/admin/form/searchBar/SearchRadio";
+import SearchBar from "@src/components/admin/form/SearchBar";
+import SearchTerm from '@src/components/admin/form/SearchBar/SearchTerm';
+import SearchRadio from "@src/components/admin/form/SearchBar/SearchRadio";
 
-
+ 
 
 const TEST_ITEM = [1,2,3,4,5]
 
@@ -63,6 +63,7 @@ function ReviewPage(props) {
         setModalMessage("삭제 실패: ", err);
       });
   };
+  
   const onResetSearchValues = (e) => {
     setSearchValue('');
     console.log('초기화 실행')
@@ -73,6 +74,8 @@ function ReviewPage(props) {
       console.log('검색 실행')
       
   }
+
+
   return (
     <>
       <MetaTitle title="리뷰 관리" admin={true} />
@@ -94,14 +97,6 @@ function ReviewPage(props) {
                 idList={["ALL", "REQUEST", "CONFIRM", "REJECT"]}
                 labelList={["전체", "요청", "승인", "반려"]}
               />
-              {/* <SearchRadio
-                searchValue={searchValue}
-                setSearchValue={setSearchValue}
-                title="TEST"
-                name="review-test"
-                idList={["aa", "bb", "cc"]}
-                labelList={["aa", "bb", "cc"]}
-              /> */}
             </SearchBar>
           </section>
           <section className="cont">
@@ -136,11 +131,10 @@ function ReviewPage(props) {
                   <li className={s.table_th}>삭제</li>
                 </ul>
                 {itemList.length ? (
-                  // <BestReviewList
-                  //   items={itemList}
-                  //   onDeleteItem={onDeleteItem}
-                  // />
-                  "데이터 자리"
+                  <BestReviewList
+                    items={itemList}
+                    onDeleteItem={onDeleteItem}
+                  />
                 ) : (
                   <AmdinErrorMessage text="조회된 데이터가 없습니다." />
                 )}

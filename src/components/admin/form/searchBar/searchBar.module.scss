@@ -17,12 +17,29 @@ $browser-context: 16;
     justify-content: flex-start;
     border-bottom: rem(1) solid var(--color-line-04);
     padding-bottom: rem(15);
-    &:not(:first-child) {
-      padding-top: rem(15);
+    gap:rem(10) 0;
+
+    > *:nth-child(1){
+      grid-column: 1 / 2;
+      grid-row:1 / 2;
+
+      display: flex;
+      align-items: center;
+    }
+    > *:nth-child(2){
+      grid-column: 2 / auto;
+      grid-row:1 /2;
+    }
+    > *:nth-child(3){
+      grid-column: 2 / auto;
+      grid-row:2 /3;
     }
 
     .title {
       font-size: rem(15);
+    }
+    &:not(:first-child) {
+      padding-top: rem(15);
     }
   }
   .btn-section {
@@ -41,11 +58,6 @@ $browser-context: 16;
 
 /* 조회기간 */
 .inp-wrap.term {
-  display: grid;
-  grid-template-rows: repeat(1, 1fr);
-  div[data-category]:not(:last-child) {
-    margin-bottom: rem(10);
-  }
   button {
     width: rem(80);
     margin-left: rem(-1);
@@ -93,6 +105,11 @@ $browser-context: 16;
   }
 }
 
+
+
+
+
+
 // * 라디오버튼
 .inp-wrap.radio {
   display: flex;
@@ -110,4 +127,20 @@ $browser-context: 16;
     
   }
 
+}
+
+
+// * 기본 Input
+.inp-wrap.plainText{
+  input{width: rem(200); border-radius:0;}
+}
+
+
+
+
+// * 기본 Input
+.inp-wrap.textWidhCategory{
+  input{width: rem(200); border-radius:0; height: rem(38);}
+  select{width: rem(120) !important; min-width: auto; border-radius:0; height: rem(38);}
+  & *:not(:last-child){margin-right:rem(5);}
 }

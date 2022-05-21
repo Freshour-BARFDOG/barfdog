@@ -2,8 +2,13 @@ import React, { useEffect, useRef } from "react";
 import s from "./searchBar.module.scss";
 import siblings from "@util/func/siblings";
 
+
+
+
+
 const SearchTerm = ({ searchValue, setSearchValue, title }) => {
   const optionalRef = useRef();
+
 
 
   useEffect(() => {
@@ -12,11 +17,14 @@ const SearchTerm = ({ searchValue, setSearchValue, title }) => {
      }
   }, [searchValue]);
 
-  
+
+
   const initializeOptionalButtons = () => {
     const optionalButtons = Array.from(optionalRef.current.children);
     optionalButtons.map((t) => t.classList.remove(s.active));
   }
+
+
 
 
   const onOptionalTermHandler = (e) => {
@@ -35,6 +43,8 @@ const SearchTerm = ({ searchValue, setSearchValue, title }) => {
     siblings(target).forEach((t) => t.classList.remove(s.active));
   };
 
+
+
   const onDriectTermHandler = (e) => {
     const target = e.currentTarget;
     const value = target.value;
@@ -48,10 +58,11 @@ const SearchTerm = ({ searchValue, setSearchValue, title }) => {
       },
     }));
 
-    const optionalCategory = siblings(target.parentNode)[0];
-    const optionalCategoryList = Array.from(optionalCategory.children);
+    const optionalCategoryList = Array.from(optionalRef.current.children);
     optionalCategoryList.forEach((t) => t.classList.remove(s.active));
   };
+
+
 
   return (
     <>
@@ -109,7 +120,8 @@ const SearchTerm = ({ searchValue, setSearchValue, title }) => {
               전체
             </button>
           </div>
-
+        </div>
+        <div className={`${s["inp-wrap"]} ${s["term"]}`}>
           <div data-category={"direct"}>
             <input
               type="date"
