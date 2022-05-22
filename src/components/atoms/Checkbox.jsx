@@ -1,9 +1,9 @@
 import React from 'react';
-import Styles from './checkbox.module.scss';
+import s from './checkbox.module.scss';
 
 export function Title (props) {
   return (
-    <header className={Styles.title}>
+    <header className={s.title}>
       <h2>{props.name}</h2>
     </header>
   )
@@ -14,8 +14,8 @@ export function Btn (props) {
   const test = props.style === 'white' ? 'white' : "red" ;
   
   return(
-    <div className={Styles.btn_group}>
-      <div className={`${Styles.btn} ${Styles[test]}`}>
+    <div className={s.btn_group}>
+      <div className={`${s.btn} ${s[test]}`}>
         {props.name}
       </div>
     </div>
@@ -38,7 +38,7 @@ export default function Checkbox({ id, label, callback, onClick }) {
 
 
   return (
-    <label htmlFor={id} className={Styles.chk_box}>
+    <label htmlFor={id} className={s.chk_box}>
       <input
         type="checkbox"
         id={id}
@@ -46,8 +46,8 @@ export default function Checkbox({ id, label, callback, onClick }) {
         onClick={onClickHandler}
         // value={isChecked}
       />
-      <span className={Styles.on} />
-      <span className={Styles.label}>{label}</span>
+      <span className={`${s.on} ${!label ? s.noLabel : ''}`} />
+      <span className={s.label}>{label}</span>
     </label>
   );
 }

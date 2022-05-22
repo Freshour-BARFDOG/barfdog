@@ -9,11 +9,11 @@ $browser-context:16;
 
 $menu-Padding: 20;
 $list-height: rem(58);
-/* admin_nav */
 
 .admin_nav{
   position: fixed;
   top: $header-height;
+  background-color: #fff;
   left:0;
   float:left;
   padding:rem(20) 0;

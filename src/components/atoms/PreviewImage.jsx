@@ -16,7 +16,6 @@ const Frame = styled.div`
 const Img = styled.img`
   object-fit: contain;
   object-fit: ${props => {
-    console.log(props);
     props.objectFit;
   }};
   width: 100%;

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/router";
 import "react-quill/dist/quill.snow.css";
 import dynamic from "next/dynamic";
-import { useRouter } from "next/router";
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import AdminLayout from "/src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
@@ -10,19 +10,75 @@ import Fake_input from "@src/components/atoms/fake_input";
 import PreviewImage from "@src/components/atoms/PreviewImage";
 import SelectTag from "@src/components/atoms/SelectTag";
 import ErrorMessage from "/src/components/atoms/ErrorMessage";
-import rem from "@src/components/atoms/rem";
+import rem from '@src/components/atoms/rem';
+
+// import QuillEditor from "@src/components/admin/form/QuillEditor";
 
 
-// * 할것 
-// * 미리보기 이미지 > previewImage는 , 파일 첨부되는 개수에 따라서 동적생성 되게 만든다.
 
-const CreateEventPage = (props) => {
+// * 이미지: 업로드하는 순간 , Server 저장
+// * Submin : JSON 객체만 전달
+// * 유효성검사시, Image파일의 존재유무 검사
+
+const UpdateEventPage = (props) => {
+
+
   const router = useRouter();
-  const originImageList = ["1", "197", "200"]; // 서버로부터 받은 이미지리스트
+  const { id } = router.query;
+  const REQUEST_URL = `/api/event/${id}`;
+
+  const originImageList = ['1','197','200']; // 서버로부터 받은 이미지리스트
   const [tempImageIdList, setTempImageIdList] = useState(originImageList || []);
+
   const [body, setBody] = useState(""); // Quill 에디터의 innerHTML을 담는 state
   const [isLoadedEditor, setIsLoadedEditor] = useState(false);
-  const [QuillEditor, setQuillEditor] = useState("");
+  const [QuillEditor, setQuillEditor] = useState('');
+
+
+
+
+
+  useEffect(() => {
+    // if (!id) return;
+    // (async () => {
+    //   const response = await axios
+    //     .get(REQUEST_URL, axiosConfig())
+    //     .then((res) => {
+    //       console.log(res.data);
+    //       return res.data;
+    //     })
+    //     .catch((err) => {
+    //       console.error(err);
+    //       alert("데이터를 불러올 수 없습니다.");
+    //       router.back();
+    //       // setModalMessage("데이터를 불러올 수 없습니다.");
+    //     });
+    //   const formData = {
+    //     name: response.name,
+    //     targets: response.targets,
+    //     status: response.status,
+    //     pcLinkUrl: response.pcLinkUrl,
+    //     mobileLinkUrl: response.mobileLinkUrl,
+    //   };
+    //   const fileData = {
+    //     pc: {
+    //       file: "",
+    //       filename: response.filenamePc,
+    //       thumbLink: response._links?.thumbnail_pc.href,
+    //     },
+    //     mobile: {
+    //       file: "",
+    //       filename: response.filenameMobile,
+    //       thumbLink: response._links?.thumbnail_mobile.href,
+    //     },
+    //   };
+    //   setInitialValues({ ...formData, ...fileData });
+    //   setFormValues(formData);
+    //   setImageFile(fileData);
+    // })();
+  }, [id, router, REQUEST_URL]);
+
+
 
   useEffect(() => {
     if (document) {
@@ -33,19 +89,20 @@ const CreateEventPage = (props) => {
       setQuillEditor(QuillEditor);
     }
   }, []);
-
+  
   // console.log(body);
 
-  const REQUEST_URL = `/api/admin/event`;
 
+  
   const [formValues, setFormValues] = useState({
     category: "ALL",
     hasThumb: false,
     innerHTML: "",
-    status: "LEAKED",
+    status: 'LEAKED',
   });
   const [imageFile, setImageFile] = useState({});
   const [formErrors, setFormErrors] = useState({});
+
 
 
   const onRadioButtonHandler = (data) => {
@@ -69,11 +126,12 @@ const CreateEventPage = (props) => {
     });
   };
 
+
+
   const multipleImageFileChangeHandler = (e) => {
     // ! 유효성 검사필요 : 이미지파일 10 개 이상일 경우  (220520)
     // ! 유효성 검사필요 : 이미지 용량 5MB 이상일 경우  (220520)
 
-    
     const thisInput = e.currentTarget;
     const file = thisInput.files[0];
     console.log(file);
@@ -86,25 +144,25 @@ const CreateEventPage = (props) => {
     // });
   };
 
+
   const onSubmitHandler = (e) => {
     e.preventDefault();
 
-    const curImageIdList = filterImageId(body);
-    // const imageDatas = compareImageList(tempImageIdList, curImageIdList);
-    const imageDatas = compareImageList();
 
-    console.log(curImageIdList);
+    const curImageIdList = filterImageId(body);
+    const imageDatas = compareImageList(tempImageIdList, curImageIdList);
+
     console.log(imageDatas);
-    // ************** 유효성검사 -> JSON데이터 보내기
+    // ************** 유효성검사 -> JSON데이터 보내기 
     // 현재 body 속에 저장된 이미 지리스트를 비교한다..
-    return;
+    return 
     setFormErrors(validate(formValues));
     if (Object.keys(formErrors).length) return console.error(formErrors);
     postDataToServer();
   };
   // 삭제될 이미지 리스트를 만들어보자
 
- 
+
 
   const returnToPrevPage = () => {
     if (confirm("이전 페이지로 돌아가시겠습니까?")) {
@@ -112,13 +170,16 @@ const CreateEventPage = (props) => {
     }
   };
 
+
+
+
   return (
     <>
-      <MetaTitle title="블로그 생성" admin={true} />
+      <MetaTitle title="이벤트 수정" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
           <div className="title_main">
-            <h1>이벤트 생성</h1>
+            <h1>이벤트 수정</h1>
           </div>
           <form
             action="/"
@@ -215,7 +276,7 @@ const CreateEventPage = (props) => {
                           multiple={true}
                           onChange={multipleImageFileChangeHandler}
                         />
-                        <Fake_input filename={''} />
+                        <Fake_input filename={""} />
                         {/* {formErrors.file_pc && (
                           <ErrorMessage>{formErrors.file_pc}</ErrorMessage>
                         )} */}
@@ -265,6 +326,8 @@ const CreateEventPage = (props) => {
       </AdminLayout>
     </>
   );
-};
+};;
 
-export default CreateEventPage;
+export default UpdateEventPage;
+
+

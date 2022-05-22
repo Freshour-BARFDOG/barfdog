@@ -1,8 +1,8 @@
 import React, {useState} from "react";
+import s from './blog.module.scss';
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import AdminLayout from "/src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
-import s from './blog.module.scss';
 import Link from "next/link";
 import axios from "axios";
 import axiosConfig from "/api/axios.config";
@@ -28,7 +28,7 @@ import Button_acceptClickEvent from '@src/components/atoms/Button_acceptClickEve
 const TEST_ITEM = [1,2,3];
 
 
-function BlogPage() {
+function BlogIndexPage() {
 
   const [itemList, setItemList] = useState(TEST_ITEM);
   const [activeModal, setActiveModal] = useState(true);
@@ -94,4 +94,4 @@ function BlogPage() {
   );
 }
 
-export default BlogPage;
+export default BlogIndexPage;

@@ -69,7 +69,10 @@ export default function QuillEditor({ body, handleQuillChange, setTempImageIdLis
 
   const ReactQuill =
     typeof window == "object" ? require("react-quill") : () => false;
+
+  // * ----- 추후에 모듈 추가할 때 필요 ----- * //
   const Quill = typeof window == "object" ? require("quill") : () => false;
+  // * ----- 추후에 모듈 추가할 때 필요 ----- * //
 
   const quillRef = useRef();
 

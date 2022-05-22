@@ -1,44 +1,87 @@
-import s from "./manage-user.module.scss";
+import s from "../adminReview.module.scss";
 import React, { useState, useEffect } from "react";
+import AdminLayout from "@src/components/admin/AdminLayout";
+import { AdminContentWrapper } from "@src/components/admin/AdminWrapper";
+import MetaTitle from "@src/components/atoms/MetaTitle";
+import BestReviewList from "./ReviewList";
 import axios from "axios";
 import axiosConfig from "/api/axios.config";
-import MetaTitle from "/src/components/atoms/MetaTitle";
-import AdminLayout from "/src/components/admin/AdminLayout";
-import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
 import AmdinErrorMessage from "@src/components/atoms/AmdinErrorMessage";
+import Checkbox from "@src/components/atoms/Checkbox";
+
+import sorting from "@util/func/sorting";
 import Pagination from "@src/components/atoms/Pagination";
 import SearchBar from "@src/components/admin/form/SearchBar";
-import SearchTerm from "@src/components/admin/form/SearchBar/SearchTerm";
-import SearchTextWithCategory from "@src/components/admin/form/SearchBar/SearchTextWithCategory";
+import SearchTerm from '@src/components/admin/form/SearchBar/SearchTerm';
+import SearchRadio from "@src/components/admin/form/SearchBar/SearchRadio";
+
+ 
+
+const TEST_ITEM = [1,2,3,4,5]
 
 
 
-const TEST_ITEM = [1,2,3,4,5];
+
+const getDataWithSettingState = (url, callback) => {
+  axios
+    .get(url, axiosConfig())
+    .then((res) => {
+      const allData = res.data._embedded.mainBannerListResponseDtoList;
+      const arrangedItems = sorting(allData, "leakedOrder");
+      if (arrangedItems) callback(arrangedItems);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+};
 
 
-function ManageUserPage() {
+
+
+function ReviewPage(props) {
   const [modalMessage, setModalMessage] = useState("");
   const [itemList, setItemList] = useState(TEST_ITEM);
   const [searchValue, setSearchValue] = useState({});
 
+
   console.log(searchValue);
 
-  const onResetSearchValues = (e) => {
-    setSearchValue("");
-    console.log("초기화 실행");
+  useEffect(() => {
+    getDataWithSettingState("/api/review", setItemList);
+  }, []);
+
+
+  const onDeleteItem = (url) => {
+    axios
+      .delete(url, axiosConfig())
+      .then((res) => {
+        console.log(res);
+        getDataWithSettingState("/api/review", setItemList);
+        setModalMessage("리뷰가 삭제되었습니다.");
+      })
+      .catch((err) => {
+        setModalMessage("삭제 실패: ", err);
+      });
   };
+  
+  const onResetSearchValues = (e) => {
+    setSearchValue('');
+    console.log('초기화 실행')
+    
+  }
 
   const onSearchHandler = (e) => {
-    console.log("검색 실행");
-  };
+      console.log('검색 실행')
+      
+  }
 
 
   return (
     <>
-      <MetaTitle title="회원 관리" admin={true} />
+      <MetaTitle title="리뷰 관리" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
-          <h1 className="title_main">회원 관리</h1>
+          <h1 className="title_main">리뷰 관리</h1>
           <section className="cont">
             <SearchBar onReset={onResetSearchValues} onSearch={onSearchHandler}>
               <SearchTerm
@@ -46,16 +89,13 @@ function ManageUserPage() {
                 searchValue={searchValue}
                 setSearchValue={setSearchValue}
               />
-              <SearchTextWithCategory
+              <SearchRadio
                 searchValue={searchValue}
                 setSearchValue={setSearchValue}
-                title="회원검색"
-                name="search-category"
-                id="search-category"
-                options={[
-                  { label: "아이디", value: "id" },
-                  { label: "이름", value: "name" },
-                ]}
+                title="처리상태"
+                name="review-status"
+                idList={["ALL", "REQUEST", "CONFIRM", "REJECT"]}
+                labelList={["전체", "요청", "승인", "반려"]}
               />
             </SearchBar>
           </section>
@@ -72,7 +112,14 @@ function ManageUserPage() {
             <div className={`${s.cont_viewer}`}>
               <div className={s.table}>
                 <ul className={s.table_header}>
-                  <li className={s.table_th}></li>
+                  <li className={s.table_th}>
+                    <Checkbox
+                      id="checkAll"
+                      onClick={(e) => {
+                        console.log(e);
+                      }}
+                    />
+                  </li>
                   <li className={s.table_th}>고유번호</li>
                   <li className={s.table_th}>처리상태</li>
                   <li className={s.table_th}>상품명</li>
@@ -84,11 +131,10 @@ function ManageUserPage() {
                   <li className={s.table_th}>삭제</li>
                 </ul>
                 {itemList.length ? (
-                  // <BestReviewList
-                  //   items={itemList}
-                  //   onDeleteItem={onDeleteItem}
-                  // />
-                  <>회원리스트,</>
+                  <BestReviewList
+                    items={itemList}
+                    onDeleteItem={onDeleteItem}
+                  />
                 ) : (
                   <AmdinErrorMessage text="조회된 데이터가 없습니다." />
                 )}
@@ -109,4 +155,4 @@ function ManageUserPage() {
   );
 }
 
-export default ManageUserPage;
+export default ReviewPage;
