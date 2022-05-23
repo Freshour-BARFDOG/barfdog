@@ -17,6 +17,7 @@ $windowWidthForRightSideBorder: rem(1860);
     .item:not(:last-child){border-bottom: rem(1) solid var(--color-line-03);}
 
     .table_header, .item{
+      overflow:hidden;
       display:grid;
       grid-gap:0;
       grid-template-rows: minmax(rem(60), auto);
@@ -31,7 +32,7 @@ $windowWidthForRightSideBorder: rem(1860);
         minmax(rem(80), rem(160))
         minmax(rem(80), rem(160))
         rem(70);
-      overflow:hidden;
+      
 
       .table_th, > span{
         display: flex;

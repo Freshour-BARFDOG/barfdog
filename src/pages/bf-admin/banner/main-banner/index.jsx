@@ -106,7 +106,7 @@ function MainBannerIndexPage(props) {
       <AdminLayout>
         <AdminContentWrapper>
           <h1 className="title_main">메인배너</h1>
-          <div className="cont">
+          <section className="cont">
             <div className="cont_header clearfix">
               <p className="cont_title cont-left">목록</p>
               <div className="cont-right">
@@ -157,7 +157,7 @@ function MainBannerIndexPage(props) {
                 )}
               </div>
             </div>
-          </div>
+          </section>
           {/* inner */}
         </AdminContentWrapper>
       </AdminLayout>

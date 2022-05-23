@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import AdminLayout from "/src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
@@ -19,7 +19,12 @@ import SelectTag from "@src/components/atoms/SelectTag";
 
 
 function CreateRewardPage() {
-
+  const [isCategorySubscribe, setIsCategorySubscribe] = useState(false);
+  // onProductCategoryHandler
+  const onProductCategorySelectHandler = (e) => {
+    const category = e.currentTarget;
+    console.log(category);
+  };
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
@@ -38,7 +43,6 @@ function CreateRewardPage() {
     postDataToServer();
   };
 
-
   return (
     <>
       <MetaTitle title="리뷰 생성" admin={true} />
@@ -53,71 +57,103 @@ function CreateRewardPage() {
             onSubmit={onSubmitHandler}
           >
             <div className={`${s.formGuide}`}>
-              <section className={s.content_title}>
-                <div className={s.title_flex_box}>
-                  <div className={s.left_box}>
-                    <div className={`${s.image} img-wrap`}>
-                      <Image
-                        priority
-                        src={require("public/img/mypage/review_create.png")}
-                        objectFit="cover"
-                        layout="fill"
-                        alt="카드 이미지"
-                      />
-                    </div>
+              <div className="cont_divider">
+                <div className="input_row">
+                  <div className="title_section fixedHeight">
+                    <label className="title" htmlFor="banner-name">
+                      상품카테고리
+                    </label>
                   </div>
-
-                  <div className={s.mid_box}>
-                    <SelectTag
-                      name={"category"}
-                      id={"category"}
-                      // onChange={onCategoryHandler}
-                      options={[
-                        { label: "상품 선택", value: "" },
-                        { label: "상품명1", value: "상품명1" },
-                        { label: "상품명2", value: "상품명2" },
-                        { label: "상품명3", value: "상품명3" },
-                        { label: "상품명4", value: "상품명4" },
-                      ]}
-                    />
-                    {/* {formErrors.name && (
+                  <div className="inp_section">
+                    <div className="inp_box">
+                      <SelectTag
+                        name={"category"}
+                        id={"category"}
+                        onChange={onProductCategorySelectHandler}
+                        options={[
+                          { label: "선택", value: "" },
+                          { label: "정기구독", value: "SUBSCRIBE" },
+                          { label: "일반상품", value: "NORMAL" },
+                        ]}
+                      />
+                      {true && (
+                        <label
+                          htmlFor="addedCategory-normalProduct"
+                          className={s["addedCategory"]}
+                        >
+                          <SelectTag
+                            name={"category"}
+                            id={"category"}
+                            // onChange={onCategoryHandler}
+                            options={[
+                              { label: "일반상품 카테고리 선택", value: "" },
+                              { label: "생식", value: "RAW" },
+                              { label: "토핑", value: "TOPPING" },
+                              { label: "굿즈", value: "GOODS" },
+                            ]}
+                          />
+                        </label>
+                      )}
+                      {/* {formErrors.name && (
                         <ErrorMessage>{formErrors.name}</ErrorMessage>
                       )} */}
-                    <div className={s.top_box}>
-                      <div className={s.inp_box}>
-                        <SelectTag
-                          name={"category"}
-                          id={"category"}
-                          // onChange={onCategoryHandler}
-                          options={[
-                            { label: "상품카테고리 선택", value: "" },
-                            { label: "카테고리1", value: "상품명1" },
-                            { label: "카테고리2", value: "상품명2" },
-                            { label: "카테고리3", value: "상품명3" },
-                            { label: "카테고리4", value: "상품명4" },
-                          ]}
-                        />
-                      </div>
-
-                      {/* 카테고리가 정기구독일경우 나타남 */}
-                      <div className={s.inp_box}>
-                        <input type="number" />
-                        <span className={s.inp_unit}>회차</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className={s.right_box}>
-                    <div>
-                      <div className={`${s.inp_box} ${s.date}`}>
-                        <input type="date" />
-                        주문
-                      </div>
                     </div>
                   </div>
                 </div>
-              </section>
-
+              </div>
+              <div className="cont_divider">
+                <div className="input_row">
+                  <div className="title_section fixedHeight">
+                    <label className="title" htmlFor="banner-name">
+                      상품명
+                    </label>
+                  </div>
+                  <div className="inp_section">
+                    <div className="inp_box">
+                      <SelectTag
+                        name={"category"}
+                        id={"category"}
+                        // onChange={onCategoryHandler}
+                        options={[
+                          { label: "상품 선택", value: "" },
+                          { label: "상품1", value: "product1" },
+                          { label: "상품2", value: "product2" },
+                          { label: "상품3", value: "product3" },
+                        ]}
+                      />
+                      {/* {formErrors.name && (
+                        <ErrorMessage>{formErrors.name}</ErrorMessage>
+                      )} */}
+                      {isCategorySubscribe && (
+                        <label
+                          htmlFor="subscribe-count"
+                          className={s["subscribe-count"]}
+                        >
+                          <input type="number" id="subscribe-count" />
+                          <i>회차</i>
+                        </label>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="cont_divider">
+                <div className="input_row">
+                  <div className="title_section fixedHeight">
+                    <label className="title" htmlFor="banner-name">
+                      주문일자
+                    </label>
+                  </div>
+                  <div className="inp_section">
+                    <div className={`${s.inp_box} ${s.date} inp_box`}>
+                      <input type="date" />
+                      {/* {formErrors.name && (
+                        <ErrorMessage>{formErrors.name}</ErrorMessage>
+                      )} */}
+                    </div>
+                  </div>
+                </div>
+              </div>
               <section className={s.how_was}>
                 <div className={s.text}>상품은 어떠셨나요?</div>
                 <div>
@@ -135,16 +171,8 @@ function CreateRewardPage() {
                     <div className={s.text2}>상세리뷰</div>
                   </div>
                   <div className={s.right_side}>
-                    <div className={s.box}>
-                      <div className={s.text_color_sub}>
-                        <div className={s.dd}>
-                          50자 이상 작성시 300원이 적립됩니다.
-                          <br />
-                          상품에 대한 견주님의 의견을 남겨주시면 큰 힘이 됩니다.
-                          <div className={s.right_bot}>0/1000</div>
-                        </div>
-                      </div>
-                    </div>
+                    <textarea placeholder="50자 이상 작성시 300원이 적립됩니다.&#13;상품에 대한 견주님의 의견을 남겨주시면 큰 힘이 됩니다."></textarea>
+                    <span className={s["textLength-indicator"]}>0/1000</span>
                   </div>
                 </div>
               </section>

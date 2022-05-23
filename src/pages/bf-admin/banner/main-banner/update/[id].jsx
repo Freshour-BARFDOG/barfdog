@@ -94,11 +94,6 @@ function UpdateMainBannerPage() {
   };
 
 
-  const returnToPrevPage = () => {
-    if (confirm("이전 페이지로 돌아가시겠습니까?")) {
-      router.back();
-    }
-  };
 
 
   const onRadioButtonHandler = (data) => {
@@ -240,6 +235,14 @@ function UpdateMainBannerPage() {
     setModalMessage(false);
   };
 
+
+  const returnToPrevPage = () => {
+    if (confirm("이전 페이지로 돌아가시겠습니까?")) {
+      router.back();
+    }
+  };
+
+  
 
   return (
     <>

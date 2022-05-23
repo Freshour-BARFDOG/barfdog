@@ -1,11 +1,14 @@
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
-import s from "./mainBanner.module.scss";
+import s from "./popup.module.scss";
 import Link from "next/link";
 import Ascend from "/public/img/icon/btn_ascend.svg";
 import Descend from "/public/img/icon/btn_descend.svg";
 import getElemIdx from "@util/func/getElemIdx.js";
 import changeArrayOrder from "@util/func/changeArrayOrder";
+import transformDate from "@util/func/transformDate";
+
+
 
 function sorting(arr, key) {
   // 내림차순 : b - a
@@ -26,17 +29,18 @@ const removeArray = function (list, targetIdx) {
 };
 
 export default function MainBannerList({
-  items_og,
+  items,
   setItemList,
   editListOrder,
   onLeakedOrderUp,
   onLeakedOrderDown,
   onDeleteItem,
 }) {
-  
-  if (!items_og || !items_og.length) return;
+  console.log();
 
-  const items = sorting(items_og, "leakedOrder");
+  if (!items || !items.length) return;
+
+  const items_sorted = sorting(items, "leakedOrder");
 
   const onOrderUpHandler = (e) => {
     const target = e.currentTarget.closest("li");
@@ -44,7 +48,7 @@ export default function MainBannerList({
     // const calcedIndex = targetLeakedOrder -1;
     const targetViewIdx = getElemIdx(target);
     const apiURL = e.currentTarget.dataset.apiurl;
-    const newItemList = changeArrayOrder(items, targetViewIdx, -1);
+    const newItemList = changeArrayOrder(items_sorted, targetViewIdx, -1);
     if (newItemList) {
       // setItemList(newItemList);
       onLeakedOrderUp(apiURL);
@@ -57,7 +61,7 @@ export default function MainBannerList({
     // const calcedIndex = targetLeakedOrder -1;
     const targetViewIdx = getElemIdx(target);
     const apiURL = e.currentTarget.dataset.apiurl;
-    const newItemList = changeArrayOrder(items, targetViewIdx, +1);
+    const newItemList = changeArrayOrder(items_sorted, targetViewIdx, +1);
     if (newItemList) {
       // setItemList(newItemList);
       onLeakedOrderDown(apiURL);
@@ -68,19 +72,12 @@ export default function MainBannerList({
     const target = e.currentTarget.closest("li");
     const targetLeakedOrder = Number(target.dataset.order);
     const apiURL = e.currentTarget.dataset.apiurl;
-    const bannerName = items[targetLeakedOrder].name;
+    const bannerName = items_sorted[targetLeakedOrder].name;
     if (confirm(`선택된 배너(${bannerName})를 정말 삭제하시겠습니까?`)) {
-      removeArray(items, targetViewIdx);
+      removeArray(items_sorted, targetViewIdx);
       onDeleteItem(apiURL);
       // target.remove();
     }
-  };
-
-  const transformDate = (d) => {
-    const yy = d.split("-")[0];
-    const mm = d.split("-")[1];
-    const dd = d.split("-")[2].split("T")[0];
-    return `${yy}-${mm}-${dd}`;
   };
 
   const SortHandle = ({ apiurl }) => (
@@ -106,21 +103,23 @@ export default function MainBannerList({
 
   const SortableItem = ({ item, sortableItemRef }) => {
     const DATA = {
-      id: item.id,
-      leakedOrder: item.leakedOrder,
-      name: item.name,
-      exp_target: item.targets,
-      reg_date: transformDate(
-        item.createdDate ? item.createdDate : item.modifiedDate
-      ),
-      url: item._links.thumbnail_pc.href,
+      id: item.id || 0,
+      leakedOrder: item.leakedOrder || 0,
+      name: item.name || "팝업이름",
+      reg_date:
+        "22-02-22" ||
+        transformDate(item.createdDate ? item.createdDate : item.modifiedDate),
+      url:
+        item._links?.thumbnail_pc.href ||
+        "https://images.unsplash.com/photo-1638913970675-b5ec36292665?crop=entropy&cs=tinysrgb&fm=jpg&ixlib=rb-1.2.1&q=80&raw_url=true&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1932",
       apiurl: {
-        self: item._links.query_banner.href,
-        orderUp: item._links.mainBanner_leakedOrder_up.href,
-        orderDown: item._links.mainBanner_leakedOrder_down.href,
-        delete: item._links.delete_banner.href,
+        // self: item._links.query_banner.href,
+        // orderUp: item._links.mainBanner_leakedOrder_up.href,
+        // orderDown: item._links.mainBanner_leakedOrder_down.href,
+        // delete: item._links.delete_banner.href,
       },
     };
+
 
     return (
       <li
@@ -146,10 +145,12 @@ export default function MainBannerList({
             ></Image>
           </figure>
         </span>
-        <span>{DATA.exp_target}</span>
         <span>{DATA.reg_date}</span>
         <span>
-          <Link href={DATA.apiurl.self} passHref>
+          <Link
+            href={`/bf-admin/banner/popup/update/${DATA.id}`}
+            passHref
+          >
             <a>
               <button className="admin_btn basic_s solid">수정</button>
             </a>

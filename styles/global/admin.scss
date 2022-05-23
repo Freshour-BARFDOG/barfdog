@@ -156,10 +156,11 @@ $aniType_Show : 0.3s ease-in ;
   }
 
   .cont{
-    &:not(:last-child){margin-bottom:rem(10)}
+    overflow:hidden;
     background-color:#fff;
     padding: rem(30) rem(40);
     border: rem(1) solid var(--color-line-04);
+    &:not(:last-child){margin-bottom:rem(10)}
 
     .cont_header{
       padding-bottom: rem(15);

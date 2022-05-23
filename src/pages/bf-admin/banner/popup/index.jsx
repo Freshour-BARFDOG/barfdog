@@ -1,9 +1,10 @@
-import s from "./mainBanner.module.scss";
+import s from "./popup.module.scss";
 import React, { useState, useEffect } from "react";
 import AdminLayout from "/src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
 import MetaTitle from "@src/components/atoms/MetaTitle";
-
+import axios from "axios";
+import axiosConfig from "/api/axios.config";
 import PopupList from "./PopupList";
 import AdminBtn_moveToPage from "@src/components/atoms/AdminBtn_moveToPage";
 import { getData, putData, deleteData } from "/api/reqData";
@@ -12,8 +13,13 @@ import AmdinErrorMessage from "@src/components/atoms/AmdinErrorMessage";
 
 
 
+
+const TEST_ITEM = [1, 2, 3, 4, 5];
+
+
 function PopupIndexPage() {
-  const [itemList, setItemList] = useState([]);
+
+  const [itemList, setItemList] = useState(TEST_ITEM);
   const [editListOrder, setEditListOrder] = useState(false);
 
   useEffect(() => {
@@ -44,9 +50,21 @@ function PopupIndexPage() {
     putData(`api/banners/main/${id}/down`, data);
   };
 
-  const onDeleteItem = (id) => {
-    deleteData(`api/banners/main/${id}`);
+
+
+  const onDeleteItem = (url) => {
+    axios
+      .delete(url, axiosConfig())
+      .then((res) => {
+        console.log(res);
+        getDataWithSettingState("/api/review", setItemList);
+        setModalMessage("리뷰가 삭제되었습니다.");
+      })
+      .catch((err) => {
+        setModalMessage("삭제 실패: ", err);
+      });
   };
+
 
   const BtnEditListOrder = () => (
     <button
@@ -72,13 +90,14 @@ function PopupIndexPage() {
 
 
 
+  
   return (
     <>
       <MetaTitle title="팝업 관리" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
           <h1 className="title_main">팝업 관리</h1>
-          <div className="cont">
+          <section className="cont">
             <div className="cont_header clearfix">
               <p className="cont_title cont-left">목록</p>
               <div className="cont-right">
@@ -100,7 +119,6 @@ function PopupIndexPage() {
                   <li className={s.table_th}>순서</li>
                   <li className={s.table_th}>팝업이름</li>
                   <li className={s.table_th}>이미지</li>
-                  <li className={s.table_th}>노출대상</li>
                   <li className={s.table_th}>등록일</li>
                   <li className={s.table_th}>수정</li>
                   <li className={s.table_th}>삭제</li>
@@ -120,7 +138,7 @@ function PopupIndexPage() {
                 )}
               </div>
             </div>
-          </div>
+          </section>
           {/* inner */}
         </AdminContentWrapper>
       </AdminLayout>
