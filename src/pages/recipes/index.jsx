@@ -38,6 +38,9 @@ const Modal_cont_point_01 = () => {
   return (
     <div data-modal-type="starter premium">
       <p>첫생식에 완벽한 레시피1</p>
+      <p>첫생식에 완벽한 레시피1</p>
+      <p>첫생식에 완벽한 레시피1</p>
+      <p>첫생식에 완벽한 레시피1</p>
     </div>
   );
 };
