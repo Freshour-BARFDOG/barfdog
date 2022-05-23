@@ -34,7 +34,7 @@ function SearchOnSellPage() {
       <MetaTitle title="주문 통합검색" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
-          <h1 className="title_main">회원 관리</h1>
+          <h1 className="title_main">통합 관리</h1>
           <section className="cont">
             <SearchBar onReset={onResetSearchValues} onSearch={onSearchHandler}>
               <SearchTerm
