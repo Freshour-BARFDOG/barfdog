@@ -14,7 +14,7 @@ function AdminGnb() {
     <nav ref={curMenuRef} className={s.admin_nav}>
       <ul className={s.menu}>
         <List title="대시보드" link="/bf-admin/dashboard" />
-        <List title="회원관리" link="/bf-admin/manage-user" />
+        <List title="회원관리" link="/bf-admin/members" />
         <List title="혜택관리">
           <SubmenuTitle title="쿠폰 관리" noLink />
           <SubmenuList title="쿠폰 조회" link="/bf-admin/coupon" />
