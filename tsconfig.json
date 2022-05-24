@@ -7,14 +7,10 @@
       "@styles/*": ["styles/*"],
       "@util/*": ["util/*"],
       "@api/*": ["api/*"],
-      "@store/*": ["store/*"],
+      "@store/*": ["store/*"]
     },
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
@@ -31,9 +27,16 @@
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx"
-, "src/pages/index.jsx", "src/pages/_document.jsx", "src/components/admin/AdminHeader.jsx", "src/components/admin/AdminHeader.jsx", "src/components/admin/AdminWrapper.tsx", "src/pages/bf-admin/banner/main-banner/index.jsx", "src/pages/bf-admin/banner/main-banner/create.jsx", "src/pages/_app.ㅓsx"  ],
-  "exclude": [
-    "node_modules", "trash"
-  ]
+    "**/*.tsx",
+    "src/pages/index.jsx",
+    "src/pages/_document.jsx",
+    "src/components/admin/AdminHeader.jsx",
+    "src/components/admin/AdminHeader.jsx",
+    "src/components/admin/AdminWrapper.tsx",
+    "src/pages/bf-admin/banner/main-banner/index.jsx",
+    "src/pages/bf-admin/banner/main-banner/create.jsx",
+    "src/pages/_app.jsx",
+    "src/components/mypage/Dashboard.jsx"
+  ],
+  "exclude": ["node_modules", "trash"]
 }
