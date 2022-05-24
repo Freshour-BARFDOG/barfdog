@@ -33,7 +33,7 @@ function Header(props) {
       return (
         <>
           <li>
-            <Link href="/account/signup" as="/signup">
+            <Link href="/account/signup" as="/account/signup">
               회원가입
             </Link>
           </li>
