@@ -1,4 +1,4 @@
-import s from "../adminReview.module.scss";
+import s from "./bestReview.module.scss";
 import React, { useState, useEffect } from "react";
 import AdminLayout from "@src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "@src/components/admin/AdminWrapper";
@@ -29,8 +29,7 @@ const getDataWithSettingState = (url, callback) => {
 };
 
 
-const TEST_ITEM = [1,2,3,4,5]
-
+const TEST_ITEM = [1,2,3,4,5];
 
 
 function BestReviewPage(props) {
@@ -129,51 +128,6 @@ function BestReviewPage(props) {
                 ) : (
                   <AmdinErrorMessage text="조회된 데이터가 없습니다." />
                 )}
-
-                {/* // * ---------------- 임시 ---------------- */}
-                <ul className={s.table_body}>
-                  <li
-                    className={s.item}
-                    key={`item-${"DATA.id"}`}
-                    data-leaked-order={""}
-                  >
-                    {/* <SortHandle apiurl={'DATA.apiurl'} /> */}
-                    <span>{"DATA.leakedOrder"}</span>
-
-                    {/* // ! 베스트 리뷰 내용에 맞게 바꿔야함 */}
-                    <span>{"DATA.reviewId"}</span>
-                    <span>
-                      <em className={`text-transform-ellipsis`}>
-                        {
-                          "상품명상품명상품명상품명상품명상품명상품명상품명상품명"
-                        }
-                      </em>
-                    </span>
-                    <span>
-                      <button
-                        data-review-id="리뷰고유값넣기"
-                        className={"text-transform-ellipsis btn_link"}
-                      >
-                        {
-                          "리뷰내용리뷰내용리뷰내용리뷰내용리뷰내용리뷰내용리뷰내용리뷰내용리뷰내용리뷰내용"
-                        }
-                      </button>
-                    </span>
-                    <span>{"DATA.rating"}</span>
-                    <span>{"DATA.userName"}</span>
-                    <span>{"DATA.userId"}</span>
-                    <span>{"DATA.reg_date"}</span>
-                    <span>
-                      <button
-                        className="admin_btn basic_s solid"
-                        // onClick={onDeleteItemHandler}
-                        // data-apiurl={'DATA.apiurl'.delete}
-                      >
-                        삭제
-                      </button>
-                    </span>
-                  </li>
-                </ul>
               </div>
             </div>
             <div className={s["pagination-section"]}>

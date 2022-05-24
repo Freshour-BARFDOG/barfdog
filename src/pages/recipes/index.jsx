@@ -212,7 +212,7 @@ const DATA_toBeSentModal = {
 
 
 export default function RecipePage() {
-  const [isActiveModal, setIsActiveModal] = useState(true);
+  const [isActiveModal, setIsActiveModal] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState();
 
   const onShowModal = (e) => {

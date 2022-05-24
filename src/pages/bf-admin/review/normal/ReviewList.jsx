@@ -1,4 +1,4 @@
-import s from "../adminReview.module.scss";
+import s from "./review.module.scss";
 import getElemIdx from "@util/func/getElemIdx";
 import Checkbox from "@src/components/atoms/Checkbox";
 import transformDate from "@util/func/transformDate";

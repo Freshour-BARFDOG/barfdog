@@ -1,4 +1,4 @@
-import s from "../adminReview.module.scss";
+import s from "./review.module.scss";
 import React, { useState, useEffect } from "react";
 import AdminLayout from "@src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "@src/components/admin/AdminWrapper";

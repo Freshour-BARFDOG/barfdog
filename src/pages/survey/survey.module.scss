@@ -1,0 +1,155 @@
+$browser-context: 16;
+@function rem($px, $context: $browser-context) {
+  @return #{$px / $context}rem;
+}
+
+.step1Page {
+  padding: 20vh;
+  margin-bottom: 20vh;
+}
+
+// * ------- 활동량  ------- * //
+.activity {
+  max-width: rem(400);
+  li {
+    display: inline-flex;
+    flex-direction: row;
+    justify-content:center;
+    width: 20%;
+  }
+  label {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    input{ margin-bottom:rem(16);}
+  }
+  // display:inline-flex;
+  // flex-direction: row;
+  // gap: rem(14);
+}
+
+// * ------- 건강상태  ------- * //
+
+.healthStatus {
+  display: inline-flex;
+  flex-direction: column;
+  gap: rem(14);
+  span {
+    display: flex;
+  }
+}
+
+.numberOfSnacks{
+  display: inline-flex;
+  flex-direction: row;
+  gap: rem(14);
+  label{position:relative;}
+
+  .desc{
+    position:absolute;
+    width: 100%;
+    bottom:rem(-10);
+    transform:translateY(100%);
+    color: #878787;
+    font-size: rem(14);
+  }
+
+}
+
+
+
+
+
+
+
+// * ------- Custom Input 공통 ------ *
+.inputRadio-wrap {
+  text-align: center;
+}
+.inputRadio {
+  cursor: pointer;
+  border-radius: rem(50);
+  background-color: #fff;
+  height: rem(42);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: rem(12) rem(25);
+  box-sizing: border-box;
+  border: rem(2) solid var(--color-line-03);
+  transition: border-color 0.1s ease;
+
+  &.checked {
+    border-color: var(--color-main);
+  }
+  input {
+    position: absolute;
+    display: none;
+    overflow: hidden;
+    width: 0;
+    height: 0;
+    line-height: 0;
+    opacity: 0;
+    text-indent: -9999px;
+  }
+}
+
+// * ------- 견종선택 Selct Tag  ------- * //
+
+.selectDogBreed {
+  position: relative;
+  z-index: 1;
+  max-width: rem(360);
+  .viewer {
+    cursor: pointer;
+    background-color: #f1f1f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-font-def);
+    border-radius: rem(16);
+    height: rem(50);
+    max-width: rem(360);
+  }
+}
+.modal-selectDogBreed {
+  border-radius: rem(8);
+  box-shadow: 0 0 rem(25) rgba(0, 0, 0, 0.1);
+  padding: rem(5);
+  border: rem(1) solid var(--color-line-04);
+  width: 100%;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  transform: translateY(100%);
+  font-size: rem(18);
+
+  .search {
+    display: flex;
+    height: rem(44);
+    width: 100%;
+  }
+  p {
+    transition-timing-function: ease;
+    transition-duration: 0.1s;
+    transition-property: color background-color;
+    padding-left: rem(10);
+    font-size: inherit;
+    height: rem(38);
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    &:hover {
+      background-color: var(--color-main) !important;
+      color: #fff !important;
+    }
+    &.searchResult:first-child {
+      background-color: #ddd;
+    }
+  }
+  .scrollContainer {
+    background-color: #fff;
+  }
+}
+

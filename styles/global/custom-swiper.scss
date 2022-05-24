@@ -1,4 +1,16 @@
-/*  */
+
+$browser-context:16;
+// convert px to rem
+@function rem($px, $context: $browser-context){
+  @return #{$px / $context}rem;
+}
+
+
+// $imageURL: url('public/img/logo.jpg');
+$imageURL: url('./logo.png');
+
+
+
 
 
 .swiper-pagination{
