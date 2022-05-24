@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import s from "/styles/css/Header.module.scss";
+import s from "@src/components/common/header.module.scss";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useModalContext } from "@store/modal-context";

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import React, { useState } from 'react';
-import s from '/styles/css/Submenu.module.scss';
+import s from './submenu.module.scss';
 import Image from 'next/image';
 
 
