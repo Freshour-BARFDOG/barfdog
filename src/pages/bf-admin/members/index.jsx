@@ -11,6 +11,11 @@ import SearchBar from "@src/components/admin/form/SearchBar";
 import SearchTerm from "@src/components/admin/form/SearchBar/SearchTerm";
 import SearchTextWithCategory from "@src/components/admin/form/SearchBar/SearchTextWithCategory";
 import MemberList from './MemberList'
+import ToolTip from '@src/components/atoms/Tooltip'
+
+
+
+
 
 
 const TEST_ITEM = [1,2,3,4,5];
@@ -21,7 +26,7 @@ function ManageUserPage() {
   const [itemList, setItemList] = useState(TEST_ITEM);
   const [searchValue, setSearchValue] = useState({});
 
-  console.log(searchValue);
+  // console.log(searchValue);
 
   const onResetSearchValues = (e) => {
     setSearchValue("");
@@ -45,6 +50,7 @@ function ManageUserPage() {
                 title={"조회기간"}
                 searchValue={searchValue}
                 setSearchValue={setSearchValue}
+                tooltip={<ToolTip message={"회원가입 시점"} />}
               />
               <SearchTextWithCategory
                 searchValue={searchValue}
@@ -77,7 +83,7 @@ function ManageUserPage() {
                   <li className={s.table_th}>장기미접속</li>
                 </ul>
                 {itemList.length ? (
-                  <MemberList items={itemList}/>
+                  <MemberList items={itemList} />
                 ) : (
                   <AmdinErrorMessage text="조회된 데이터가 없습니다." />
                 )}

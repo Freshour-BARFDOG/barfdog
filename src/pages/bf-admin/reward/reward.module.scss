@@ -4,7 +4,7 @@ $browser-context:16;
 }
 
 
-$windowWidthForRightSideBorder: rem(1755);
+$windowWidthForRightSideBorder: rem(1420);
 
 
 .cont_viewer {
@@ -22,16 +22,11 @@ $windowWidthForRightSideBorder: rem(1755);
       grid-gap:0;
       grid-template-rows: minmax(rem(60), auto);
       grid-template-columns:
-        rem(95)
-        minmax(rem(80), rem(160))
-        minmax(rem(80), rem(160))
-        minmax(rem(80), rem(160))
-        minmax(rem(80), rem(180))
-        minmax(rem(80), rem(160))
-        minmax(rem(80), rem(120))
-        minmax(rem(80), rem(200))
-        minmax(rem(80), rem(100));
-      
+        minmax(rem(70), rem(180))
+        minmax(rem(70), rem(300))
+        minmax(rem(70), rem(180))
+        minmax(rem(70), rem(60))
+        minmax(rem(70), rem(80));
 
       .table_th, > span{
         display: flex;

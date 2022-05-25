@@ -12,6 +12,7 @@ const SearchRadio = ({
   name,
   idList,
   labelList,
+  tooltip
 }) => {
 
   const initialValue = idList[0];
@@ -38,7 +39,10 @@ const SearchRadio = ({
   return (
     <>
       <div className={s["search-row"]}>
-        <h4 className={s["title"]}>{title}</h4>
+        <h4 className={s["title"]}>
+          {title}
+          {tooltip && <span className={s["tooltip-wrap"]}>{tooltip}</span>}
+        </h4>
         <div className={`${s["inp-wrap"]} ${s["radio"]}`}>
           {idList.map((id, index) => {
             return (

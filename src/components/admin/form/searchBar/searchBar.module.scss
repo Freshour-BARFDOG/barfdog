@@ -37,6 +37,7 @@ $browser-context: 16;
 
     .title {
       font-size: rem(15);
+      cursor: default;
     }
     &:not(:first-child) {
       padding-top: rem(15);
@@ -144,3 +145,8 @@ $browser-context: 16;
   select{width: rem(120) !important; min-width: auto; border-radius:0; height: rem(38);}
   & *:not(:last-child){margin-right:rem(5);}
 }
+
+
+
+// * Tooltip-wrap
+.tooltip-wrap{display: flex; align-items: center; justify-content: center; margin-left:rem(4);}
