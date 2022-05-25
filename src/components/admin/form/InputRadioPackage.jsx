@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export const InputRadio_exposedTarget = ({
   exposedTarget,
@@ -99,3 +99,66 @@ const InputRadio_status = ({ exposedStatus, onRadioButtonHandler, name }) => {
 };
 
 export default InputRadio_status;
+
+
+
+
+
+
+
+
+export const CustomRadio = ({
+  formValue,
+  setFormValues,
+  title,
+  name,
+  idList,
+  labelList,
+}) => {
+  const initialValue = idList[0];
+  const [selectedRadio, setSelectedRadio] = useState(initialValue); // * component 내부 value
+
+  useEffect(() => {
+    if (!formValue) {
+      setSelectedRadio(initialValue);
+    }
+  }, [formValue]);
+
+  const onChangeHandler = (e) => {
+    const { id } = e.currentTarget;
+    setSelectedRadio(id);
+
+    setFormValues((prevState) => ({
+      ...prevState,
+      [name]: id,
+    }));
+  };
+
+  if (!idList.length || !idList) return;
+
+  return (
+    <>
+      <div className="inp_wrap radio">
+        {idList.map((id, index) => {
+          return (
+            <label
+              key={`radio-${name}-${index}`}
+              htmlFor={id}
+              className="inp_box radio"
+            >
+              <input
+                id={id}
+                name={name}
+                type="radio"
+                value={id}
+                checked={selectedRadio === id} // * important
+                onChange={onChangeHandler}
+              />
+              {labelList[index]}
+            </label>
+          );
+        })}
+      </div>
+    </>
+  );
+};

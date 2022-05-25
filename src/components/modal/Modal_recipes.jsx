@@ -22,15 +22,6 @@ const Indicator = styled.i`
 `;
 
 
-// ! scroll container 높이 설정하기
-// ! scroll container 높이 설정하기
-// ! scroll container 높이 설정하기
-// ! scroll container 높이 설정하기
-// ! scroll container 높이 설정하기
-// ! scroll container 높이 설정하기
-// ! scroll container 높이 설정하기
-// ! scroll container 높이 설정하기
-
 const Modal_recipes = ({ data, selectedIndex, onHideModal, isActiveModal }) => {
 
 

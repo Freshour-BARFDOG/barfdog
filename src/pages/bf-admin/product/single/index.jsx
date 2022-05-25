@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import s from './single.module.scss';
 import AdminLayout from "@src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "@src/components/admin/AdminWrapper";
 import MetaTitle from "@src/components/atoms/MetaTitle";

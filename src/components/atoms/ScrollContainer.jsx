@@ -11,6 +11,7 @@ const Container = styled.div`
   &::-webkit-scrollbar {
     width: ${(props) =>
       props.scrollBarWidth ? rem(props.scrollBarWidth) : rem(12)};
+  
   }
   &::-webkit-scrollbar-thumb {
     background-color: #fff;

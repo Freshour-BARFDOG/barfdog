@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import s from "/styles/css/mypage/menu_dashboard.module.scss";
+import s from "./dashboard.module.scss";
 import User_counter_viewer from "./User_counter_viewer";
 import Image from "next/image";
 import { IoMdMail } from "react-icons/io";
@@ -9,17 +9,43 @@ import { IoMdLink } from "react-icons/io";
 
 
 
+
 function Dashboard({ className, ...props }) {
 
-  
+  const dogName = '바둑이'; 
+  const userName = '김바프'; 
+  const userClass = '웰컴';
+  const userRecommandCode = "6SE7855FA";
+  const numberOfdeliveries = 7;
+  const earnPoint = 3200;
+  const numberOfCoupons = 1;
 
-  const dogName:string = '바둑이'; 
-  const userName:string = '김바프'; 
-  const userClass:string = '웰컴';
-  const userRecommandCode: string = "6SE7855FA";
-  const numberOfdeliveries: number = 7;
-  const earnPoint: number = 3200;
-  const numberOfCoupons: number = 1;
+
+
+  const onCopyToClipboard = () => {
+    let hostname;
+    if (typeof window !== "undefined") {
+      hostname = window.location.hostname;
+    }
+    const copiedValue = hostname;
+    const tempElem = document.createElement('textarea');
+    tempElem.value = copiedValue;
+    tempElem.setAttribute("readonly", "");
+    tempElem.style.position = "absolute";
+    tempElem.style.left = "-9999px";
+    // tempElem.style.opacity = '0';
+    document.body.append(tempElem);
+    tempElem.select();
+    const returnValue = document.execCommand("copy");
+    if (!returnValue) {
+      throw new Error("copied nothing");
+    }
+    document.body.removeChild(tempElem);
+    alert(`클립보드에 링크가 복사되었습니다. \n링크: ${copiedValue}`);
+    
+
+    
+  }
 
 
   return (
@@ -59,14 +85,14 @@ function Dashboard({ className, ...props }) {
             <span>추천코드</span>
             <span className={s.code}>{userRecommandCode}</span>
           </div>
-          <div className={`${s.send_sms} ${s.info_col} flex-wrap`}>
+          <div className={`${s.sendMessage} ${s.info_col} flex-wrap`}>
             <button type="button">
               <IoMdMail />
               문자보내기
             </button>
           </div>
-          <div className={`${s.copy_site_link} ${s.info_col} flex-wrap`}>
-            <button type="button">
+          <div className={`${s.copyLink} ${s.info_col} flex-wrap`}>
+            <button type="button" onClick={onCopyToClipboard}>
               <IoMdLink />
               링크복사
             </button>

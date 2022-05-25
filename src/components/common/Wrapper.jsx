@@ -1,5 +1,5 @@
 import React from 'react';
-import s from '/styles/css/Wrapper.module.scss';
+import s from './wrapper.module.scss';
 
 
 

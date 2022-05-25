@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import s from '/styles/css/Header.module.scss';
+import s from './header.module.scss';
 import Link from 'next/link';
 import Wrapper from "/src/components/common/Wrapper";
 import Gnb, { Gnb_my} from '/src/components/header/Gnb';
@@ -33,7 +33,7 @@ function Header(props) {
       return (
         <>
           <li>
-            <Link href="/account/signup" as="/signup">
+            <Link href="/account/signup" as="/account/signup">
               회원가입
             </Link>
           </li>

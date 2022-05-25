@@ -1,4 +1,4 @@
-import s from "./BestReviewList.module.scss";
+import s from "./bestReview.module.scss";
 import Ascend from '/public/img/icon/btn_ascend.svg';
 import Descend from '/public/img/icon/btn_descend.svg';
 import getElemIdx from "@util/func/getElemIdx.js";
@@ -21,7 +21,6 @@ export default function BestReviewList({
   if (!items || !items.length) return;
 
 
-  return 
   const onOrderUpHandler = (e) => {
     const target = e.currentTarget.closest("li");
     const targetViewIdx = getElemIdx(target);
@@ -80,25 +79,31 @@ export default function BestReviewList({
     </span>
   );
 
+
+
   const SortableItem = ({ item, sortableItemRef }) => {
     const DATA = {
-      // id: item.id,
-      // leakedOrder: item.leakedOrder,
-      // name: item.name,
-      // exp_target: item.targets,
-      // reg_date: transformDate(
-      //   item.createdDate ? item.createdDate : item.modifiedDate
-      // ),
+      id: item.id || "0 이거때문에 console에서 key오류나는거다.", // ! -----
+      leakedOrder: item.leakedOrder || "0",
+      reviewId: item.id || "15401234",
+      itemName: item.itemName || "상품명",
+      innerText: item.innerText || "텍스트내용텍스트내용텍스트내용텍스트내용",
+      rating: item.rating || "3",
+      userName: item.userName || "김바프",
+      userId: item.userId || "barf",
+      exp_target: item.targets,
+      reg_date:
+        "22-02-22" ||
+        transformDate(item.createdDate ? item.createdDate : item.modifiedDate),
       // url: item._links.thumbnail_pc.href,
-      // apiurl: {
-      //   self: item._links.query_banner.href,
-      //   orderUp: item._links.mainBanner_leakedOrder_up.href,
-      //   orderDown: item._links.mainBanner_leakedOrder_down.href,
-      //   delete: item._links.delete_banner.href,
-      // },
+      apiurl: {
+        // self: item._links.query_banner.href,
+        // orderUp: item._links.mainBanner_leakedOrder_up.href,
+        // orderDown: item._links.mainBanner_leakedOrder_down.href,
+        // delete: item._links.delete_banner.href,
+      },
     };
-
-
+   
 
     return (
       <li
@@ -113,12 +118,10 @@ export default function BestReviewList({
         ) : (
           <span>{DATA.leakedOrder}</span>
         )}
-
-        {/* // ! 베스트 리뷰 내용에 맞게 바꿔야함 */}
         <span>{DATA.reviewId}</span>
         <span>{DATA.itemName}</span>
-        <span className={` ${s["text-transform-ellipsis"]}`}>
-          {DATA.reviewContent}
+        <span>
+          <p className={"text-transform-ellipsis"}>{DATA.innerText}</p>
         </span>
         <span>{DATA.rating}</span>
         <span>{DATA.userName}</span>
@@ -128,7 +131,7 @@ export default function BestReviewList({
           <button
             className="admin_btn basic_s solid"
             onClick={onDeleteItemHandler}
-            data-apiurl={DATA.apiurl.delete}
+            // data-apiurl={DATA.apiurl.delete}
           >
             삭제
           </button>

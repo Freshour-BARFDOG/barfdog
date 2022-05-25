@@ -1,4 +1,4 @@
-import s from "./manage-user.module.scss";
+import s from "./members.module.scss";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import axiosConfig from "/api/axios.config";
@@ -10,7 +10,7 @@ import Pagination from "@src/components/atoms/Pagination";
 import SearchBar from "@src/components/admin/form/SearchBar";
 import SearchTerm from "@src/components/admin/form/SearchBar/SearchTerm";
 import SearchTextWithCategory from "@src/components/admin/form/SearchBar/SearchTextWithCategory";
-
+import MemberList from './MemberList'
 
 
 const TEST_ITEM = [1,2,3,4,5];
@@ -61,34 +61,23 @@ function ManageUserPage() {
           </section>
           <section className="cont">
             <div className="cont_header clearfix">
-              <p className="cont_title cont-left">목록</p>
-              <div className="controls cont-left">
-                <button className="admin_btn line basic_m">리뷰 승인</button>
-                <button className="admin_btn line basic_m">
-                  베스트 리뷰 선정
-                </button>
-              </div>
+              <p className="cont_title cont-left">회원목록</p>
             </div>
             <div className={`${s.cont_viewer}`}>
               <div className={s.table}>
                 <ul className={s.table_header}>
-                  <li className={s.table_th}></li>
-                  <li className={s.table_th}>고유번호</li>
-                  <li className={s.table_th}>처리상태</li>
-                  <li className={s.table_th}>상품명</li>
-                  <li className={`${s.table_th}`}>리뷰내용</li>
-                  <li className={s.table_th}>평점</li>
-                  <li className={s.table_th}>사용자 이름</li>
-                  <li className={s.table_th}>사용자 ID</li>
-                  <li className={s.table_th}>작성일</li>
-                  <li className={s.table_th}>삭제</li>
+                  <li className={s.table_th}>상세보기</li>
+                  <li className={s.table_th}>등급</li>
+                  <li className={s.table_th}>이름</li>
+                  <li className={s.table_th}>아이디</li>
+                  <li className={`${s.table_th}`}>연락처</li>
+                  <li className={s.table_th}>대표견명</li>
+                  <li className={s.table_th}>정기구독여부</li>
+                  <li className={s.table_th}>누적구매금액</li>
+                  <li className={s.table_th}>장기미접속</li>
                 </ul>
                 {itemList.length ? (
-                  // <BestReviewList
-                  //   items={itemList}
-                  //   onDeleteItem={onDeleteItem}
-                  // />
-                  <>회원리스트,</>
+                  <MemberList items={itemList}/>
                 ) : (
                   <AmdinErrorMessage text="조회된 데이터가 없습니다." />
                 )}

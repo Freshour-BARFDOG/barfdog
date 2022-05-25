@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import dynamic from "next/dynamic";
-import s from "../../../styles/css/mypage/MypageWrapper.module.scss";
-import Dashboard from './Dashboard.tsx';
-import Banner_event from '../atoms/Banner_event';
+import s from "./mypageWrapper.module.scss";
+import Dashboard from './Dashboard';
+import Banner_event from '@src/components/atoms/Banner_event';
 
 
 // import Menu from "./Menu";

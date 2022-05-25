@@ -219,7 +219,6 @@ function Swiper_review() {
         onInit={(swiper) => {
           swiper.params.navigation.prevEl = navPrevRef.current;
           swiper.params.navigation.nextEl = navNextRef.current;
-          swiper.params.pagination.el;
           swiper.params.pagination.el.classList.add(
             "swiper-pagination__reviewSection"
           );

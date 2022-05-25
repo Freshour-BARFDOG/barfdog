@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
-import s from "/styles/css/mypage/menu.module.scss";
+import s from "@src/components/common/menu.module.scss";
 import { SubmenuList, List, SubmenuTitle } from "/src/components/mypage/Menu";
 import Link from 'next/link';
 import Icon_setting from "/public/img/icon/setting.svg";
@@ -14,7 +14,7 @@ function AdminGnb() {
     <nav ref={curMenuRef} className={s.admin_nav}>
       <ul className={s.menu}>
         <List title="대시보드" link="/bf-admin/dashboard" />
-        <List title="회원관리" link="/bf-admin/manage-user" />
+        <List title="회원관리" link="/bf-admin/members" />
         <List title="혜택관리">
           <SubmenuTitle title="쿠폰 관리" noLink />
           <SubmenuList title="쿠폰 조회" link="/bf-admin/coupon" />
