@@ -3,10 +3,10 @@ import s from "./reward.module.scss";
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import AdminLayout from "/src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
-import SearchBar from "@src/components/admin/form/SearchBar";
 import Pagination from "@src/components/atoms/Pagination";
-import SearchPlainInput from "@src/components/admin/form/SearchBar/SearchPlainInput";
-import SearchRadio from "@src/components/admin/form/SearchBar/SearchRadio";
+import SearchBar from "@src/components/admin/form/SearchBar";
+import SearchTerm from "@src/components/admin/form/SearchBar/SearchTerm";
+import SearchTextWithCategory from "@src/components/admin/form/SearchBar/SearchTextWithCategory";
 import AmdinErrorMessage from "@src/components/atoms/AmdinErrorMessage";
 import RewardList from "./RewardList";
 
@@ -38,29 +38,28 @@ function RewardListPage() {
           <h1 className="title_main">적립금 조회</h1>
           <section className="cont">
             <SearchBar onReset={onResetSearchValues} onSearch={onSearchHandler}>
-              <SearchPlainInput
-                title="쿠폰이름"
-                name={"coupon-name"}
-                onChange={setSearchValue}
-                searchValue={searchValue}
-              />
-              <SearchRadio
+              <SearchTerm
+                title={"조회기간"}
                 searchValue={searchValue}
                 setSearchValue={setSearchValue}
-                title="종류"
-                name="coupon-type"
-                idList={["ALL", "AUTO", "MANUAL"]}
-                labelList={["전체", "자동발행", "직접발행"]}
+              />
+              <SearchTextWithCategory
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
+                title="조건검색"
+                name="content"
+                id="content"
+                options={[
+                  { label: "아이디", value: "userId" },
+                  { label: "이름", value: "useName" },
+                ]}
               />
             </SearchBar>
           </section>
           <section className="cont">
             <div className="cont_header clearfix">
-              <p className="cont_title cont-left">
-                적립금 목록
-              </p>
-              <div className="controls cont-left">
-              </div>
+              <p className="cont_title cont-left">적립금 목록</p>
+              <div className="controls cont-left"></div>
             </div>
             <div className={`${s.cont_viewer}`}>
               <div className={s.table}>
