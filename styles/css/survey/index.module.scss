@@ -1,0 +1,20 @@
+$browser-context:16; // html font-size
+@function rem($px, $context: $browser-context){
+  @return #{$px / $context}rem;
+}
+
+
+
+.banner {
+  .inner {
+    height: rem(400);
+    display: flex;
+    position: relative;
+    a {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+  }
+  .img-wrap{width: 100%;}
+}

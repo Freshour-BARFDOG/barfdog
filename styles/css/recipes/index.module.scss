@@ -1,0 +1,420 @@
+$browser-context:16; // html font-size
+@function rem($px, $context: $browser-context){
+  @return #{$px / $context}rem;
+}
+@import 'styles/global/guide.scss';
+
+section.top { padding : 0;}
+section.recipe_introduce { padding : rem(80) 0 rem(90) 0; }
+section.ingredients { margin-bottom :rem(20); }
+section.health_care { margin-bottom : rem(20);}
+section.subscribe_discount { margin-bottom: rem(80);}
+
+.top {
+  background: #FFF7F3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .top_title {
+    font-family: 'Gmarket Sans';
+    font-weight: 700;
+    font-size: rem(32);
+    line-height: rem(32);
+    color: var(--color-main);
+    padding: rem(40) 0 rem(24);
+  }
+  .top_text {
+    @include char(l16);
+    padding-bottom: rem(8);
+  }
+  .top_text2 {
+    @include char(l20);
+    span {
+      font-weight: 700;
+    } 
+  }
+  .btn {
+    color: var(--color-main);
+    border: rem(1) solid var(--color-main);
+    border-radius: rem(100);
+    padding : rem(8) rem(26) rem(8) rem(26);
+    @include char(l15);
+    margin-top: rem(20);
+  }
+  .image_box {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin : rem(24) 0 rem(40);
+    .image {
+    width: 100%;
+    max-width: rem(591);
+    aspect-ratio: 1.5/1;
+    }
+  }
+}
+
+.recipe_title {
+  @include char(d32);
+  font-family: 'Gmarketsansbold';
+  // font-weight: 700;
+  font-size: 32px;
+  line-height: 140%;
+  width: rem(600);
+  text-align: center;
+
+}
+.line {
+  padding: rem(6) 0 rem(22);
+
+  hr {
+    width: rem(600);
+    border-top: rem(1) solid var(--color-line-01);
+  }
+}
+
+.recipe_title2 {
+  @include char(l18);
+}
+
+
+.recipe_introduce {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+ 
+
+  .recipe_grid_box {
+    width: 100%;
+    max-width: rem(1160);
+    display: grid;
+    grid-template-columns: 48.5% 48.5%;
+    row-gap: rem(60);
+    column-gap: rem(40);
+    padding: rem(60) 0 rem(90);
+
+    p {
+      @include char(t28);
+      font-family: 'GmarketSansbold';
+      padding: rem(17) 0 rem(8);
+    }
+    .recipe_text {
+      @include char(l20);
+      padding-bottom: rem(15);
+    }
+
+    .left_top {
+      max-width: rem(560);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      p {
+        color: var(--color-main);
+      }
+    }
+
+    .right_top {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      p {
+        color: #FF3232;
+      }
+    }
+
+    .left_bot {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      p {
+        color: #FF4921;
+      }
+    }
+
+    .right_bot {
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      p {
+        color: #FF8C16;
+      }
+    }
+
+    .image_box {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+
+      .image {
+        width: 100%;
+        max-width: rem(560);
+        aspect-ratio: 1.333/1;
+      }
+    }
+  }
+}
+
+
+.note {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: rem(1160);
+
+  .recipe_title2 {
+    margin-bottom: rem(124);
+  }
+
+  .note_content_box {
+    width: 100%;
+    max-width: rem(1160);
+    position: relative;
+  
+    .box_title {
+      text-align: center;
+      width: 50%;
+      left: 50%;
+      transform: translateX(-50%);
+      top:rem(-15);
+      font-weight: 700;
+      position: absolute;
+      @include char(t24);
+      background-color: #fff;
+      margin-bottom: rem(20);
+    }
+
+    .pic_box {
+      border: rem(1) solid #c4c4c4;
+      display: grid;
+      grid-template-columns: 1fr 1fr ;
+      width: 100%;
+      max-width: rem(1160);
+      padding: rem(40);
+      column-gap: rem(40);
+      box-sizing: border-box;
+
+      .image_box {
+        width: 100%;
+        max-width: rem(520);
+        display: flex;
+
+        .image {
+          width: 100%;
+          max-width: rem(520);
+          aspect-ratio: 1.498/1;
+        }
+      } 
+    }
+  }
+
+  .note_content_box2 {
+    margin-top: rem(108);
+    width: 100%;
+    max-width: rem(1160);
+    position: relative;
+
+    .box_title2 {
+      text-align: center;
+      width: 40%;
+      left: 50%;
+      transform: translateX(-50%);
+      top : rem(-15);
+      font-weight: 700;
+      position: absolute;
+      @include char(t24);
+      background-color: #fff;
+    }
+
+    .pic_box2 {
+      border: rem(1) solid #c4c4c4;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(rem(120), 1fr));
+      width: 100%;
+      max-width: rem(1160);
+      padding: rem(80) rem(70);
+      column-gap: rem(35);
+      box-sizing: border-box;
+
+      .image_box {
+        width: 100%;
+        max-width: rem(140);
+        display: flex;
+        padding-bottom: rem(20);
+        justify-content: center;
+
+        .image {
+          width: 100%;
+          max-width: rem(120);
+
+          aspect-ratio: 1/1;
+
+        }
+      }
+    }
+  }
+}
+
+.text_box {
+  text-align: center;
+  @include char(l18);
+  font-family: 'Gmarket Sans';
+font-style: normal;
+}
+
+.btn_box {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: rem(65) 0 rem(103);
+
+  .image_box {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    
+    .image {
+      width: rem(238);
+      aspect-ratio: 5.95/1;
+    }
+  }
+}
+
+.ingredients {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(230, 230, 230, 0.29);
+  padding: rem(80) 0 rem(100) ;
+  
+  .recipe_title2 {
+    @include char(b16);
+    text-align: center;
+    margin-bottom: rem(50);
+  }
+  .image_box {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    
+    .image {
+      width: 100%;
+      max-width: rem(760);
+      aspect-ratio: 1.538/1;
+    }
+  }
+}
+
+
+.health_care {
+  width: 100%;
+  background: #FFF7F3;
+  display: flex;
+  justify-content: center;
+
+  .health_grid_box {
+    width: 87%;
+    display: grid;
+    grid-template-columns: 48% 52%;
+    justify-content: center;
+    padding-top: rem(80);
+    padding-bottom:  rem(75);
+    .left_side {
+      .health_row_1 {
+        @include char(t28);
+        font-weight: 600;
+
+      }
+      .health_row_2 {
+        padding-top: rem(8);
+        font-family: 'Pretendard Variable';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 40px;
+        line-height: 140%;
+        letter-spacing: -0.02em;
+      }
+
+      .health_btn_box {
+        padding-top: rem(30);
+        .health_btn {
+          background-color: var(--color-main);
+          width: rem(160);
+          border-radius: rem(4);
+          color: #fff;
+          text-align: center;
+          padding : rem(14) 0;
+          @include char(l16);
+          font-weight: 700;
+
+        }
+      }
+    }
+
+    .right_side {
+      width: 100%;
+
+      .image_box {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+
+        .image {
+          width: 100%;
+          max-width: rem(520);
+          aspect-ratio: 1.04/1;
+        }
+      }
+    }
+  } 
+}
+
+.subscribe_discount {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(230, 230, 230, 0.29);
+
+  .sub_row_1 {
+    padding-top: rem(70);
+    padding-bottom: rem(4);
+    @include char(d28);
+    font-weight: 500;
+    
+  }
+  .sub_row_2 {
+    @include char(d32);
+    position: relative;
+    &::before{
+      content: "";
+      width: rem(316);
+      height: rem(8);
+      background-color: #FF8C16;
+      position: absolute;
+      top : 31px;
+      z-index: -10;
+    }
+  }
+
+  .image_box {
+    padding: rem(32) 0 rem(60);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    .image {
+      width: rem(300);
+      aspect-ratio: 4.225/1;
+    }
+  }
+
+  
+
+  
+}
