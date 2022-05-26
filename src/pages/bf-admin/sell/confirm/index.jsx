@@ -35,10 +35,10 @@ function ConfirmOnSellPage() {
 
   return (
     <>
-      <MetaTitle title="배송 관리" admin={true} />
+      <MetaTitle title="구매확정 내역" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
-          <h1 className="title_main">배송 관리</h1>
+          <h1 className="title_main">구매확정 내역</h1>
           <section className="cont">
             <SearchBar onReset={onResetSearchValues} onSearch={onSearchHandler}>
               <SearchTerm
