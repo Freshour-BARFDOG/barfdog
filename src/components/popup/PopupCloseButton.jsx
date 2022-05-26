@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import rem from "@src/components/atoms/rem";
-import { useModalContext } from "@store/modal-context";
 
 const Button = styled.button`
   width: ${(props) => props.style?.width || rem(32)};
@@ -29,8 +28,16 @@ const Button = styled.button`
   }
 `;
 
-function CloseButton({ className, style, lineColor }) {
-  const onClickHandler = () => window.close();
+
+
+export const PopupCloseButton_typeX = ({ className, style, lineColor, onClick }) => {
+  const onClickHandler = () => {
+    if (onClick && typeof onClick === 'function'){
+      onClick();
+    }else{
+       window.close();
+    }
+  };
 
   return (
     <Button
@@ -43,4 +50,26 @@ function CloseButton({ className, style, lineColor }) {
   );
 }
 
-export default CloseButton;
+
+
+
+export const PopupCloseButton = ({ className,onClick, ...props }) => {
+   const onClickHandler = () => {
+     if (onClick && typeof onClick === "function") {
+       onClick();
+     } else {
+       window.close();
+     }
+   };
+
+  return (
+    <button
+      type="button"
+      className={`${className} admin_btn line confirm_m`}
+      onClick={onClickHandler}
+      {...props}
+    >
+      닫기
+    </button>
+  );
+};

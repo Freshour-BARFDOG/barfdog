@@ -1,4 +1,4 @@
-import s from "./members.module.scss";
+import s from "./member.module.scss";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import axiosConfig from "/api/axios.config";

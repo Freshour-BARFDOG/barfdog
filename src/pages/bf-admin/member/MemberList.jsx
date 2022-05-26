@@ -1,6 +1,6 @@
 import Link from "next/link";
-import s from "./members.module.scss";
-
+import s from "./member.module.scss";
+import popupWindow from "@util/func/popupWindow";
 
 
 
@@ -27,36 +27,17 @@ import s from "./members.module.scss";
     };
 
 
-    const popupWindow = (href, width, height) => {
-      if (typeof window === "undefined") return;
-      window.open(
-        href,
-        "popupWindow",
-        `toolbar=no,
-        location=no,
-        width=${width},
-        height=${height},
-        left=150,
-        top=250,
-        status=no,
-        menubar=no,
-        scrollbars=yes,
-        resizable=yes`
-      );
-      return false;
-    };
-
     const onPopupHandler = (e) => {
       if(typeof window === 'undefined') return;
       const href = e.currentTarget.href;
-      popupWindow(href, 1000, 668);
+      popupWindow(href, {width:1000, height:716});
     }
 
 
     return (
       <li className={s.item} key={`item-${DATA.id}`}>
         <span>
-          <Link href={`/bf-admin/members/popup/${DATA.id}`} passHref>
+          <Link href={`/bf-admin/member/popup/${DATA.id}`} passHref>
             <a target="_blank" onClick={onPopupHandler}>
               <button className="admin_btn basic_s solid">상세보기</button>
             </a>
