@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import s from "./searchBar.module.scss";
 import siblings from "@util/func/siblings";
+import ToolTip from "@src/components/atoms/Tooltip";
 
 
 
@@ -38,7 +39,6 @@ const SearchTerm = ({ searchValue, setSearchValue, title, tooltip }) => {
         [category]: value,
       },
     }));
-
     target.classList.add(s.active);
     siblings(target).forEach((t) => t.classList.remove(s.active));
   };
@@ -50,7 +50,7 @@ const SearchTerm = ({ searchValue, setSearchValue, title, tooltip }) => {
     const value = target.value;
     const role = target.dataset.termRole;
     const category = target.parentNode.dataset.category;
-
+  
     setSearchValue((prevState) => ({
       ...prevState,
       term: {
@@ -130,21 +130,24 @@ const SearchTerm = ({ searchValue, setSearchValue, title, tooltip }) => {
               type="date"
               name="directTerm"
               id="startDate"
-              data-term-role="start"
+              data-term-role="from"
               onChange={onDriectTermHandler}
               onKeyUp={onDriectTermHandler}
-              value={searchValue.term?.direct?.start || ""}
+              value={searchValue.term?.direct?.from || ""}
             />
             <i> ~ </i>
             <input
               type="date"
               name="directTerm"
               id="endDate"
-              data-term-role="end"
+              data-term-role="to"
               onChange={onDriectTermHandler}
               onKeyUp={onDriectTermHandler}
-              value={searchValue.term?.direct?.end || ""}
+              value={searchValue.term?.direct?.to || ""}
             />
+            <i className={s["icon-wrap"]}>
+              <ToolTip message="조회 시작일과 마침일은 선택된 기간을 자동으로 비교하여 반영됩니다." />
+            </i>
           </div>
         </div>
       </div>
@@ -153,3 +156,119 @@ const SearchTerm = ({ searchValue, setSearchValue, title, tooltip }) => {
 };
 
 export default SearchTerm;
+
+
+
+
+
+
+
+
+
+const sortingDateOrder = (obj, secondDate) => {
+  let sortingDate;
+  const keys = Object.keys(obj);
+  let tempValueArr = [];
+
+
+  const convertingDate = (date) => {
+    let convertedDate;
+    const val = new String(date);
+    return (convertedDate = Number(val.replace(/-/g, "")));
+  };
+
+  if (keys.length > 1){
+    // * 검색하는 순간에 Sorting 적용
+    // keys.forEach((key) => {
+    //   const tempDate = convertingDate(obj[key]);
+    //   tempValueArr.push(tempDate);
+    // });
+    const tempDate1 = convertingDate(obj[keys[0]]);
+    const tempDate2 = convertingDate(secondDate);
+    tempValueArr.push(tempDate1, tempDate2);
+  }
+  
+
+
+  tempValueArr.sort((a, b) => {
+    return a - b; // 오름차순 정렬
+  });
+
+  const convertDateArr = tempValueArr.map((val) => {
+    const date = String(val);
+    const yyyy = date.slice(0, 4);
+    const mm = date.slice(4, 6);
+    const dd = date.slice(6, 8);
+    return `${yyyy}-${mm}-${dd}`;
+  });
+
+  sortingDate = {
+    from: convertDateArr[0],
+    to: convertDateArr[1],
+  };
+
+  return sortingDate
+};
+
+
+
+
+
+
+
+
+// const valiDateBothDateKey = (obj, role) => {
+//   let validate = false;
+//   if (obj) {
+//     const keys = Object.keys(obj);
+//     keys.forEach((key) => {
+//       if (key !== role) validate = true;
+//     });
+//   }
+//   return validate;
+// };
+
+
+
+// * 1. from, to 값이 2가지 인지 확인
+// * 2. 데이터 정렬
+
+
+
+// const sortingDateOrder = (obj, secondDate) => {
+//   let sortingDate;
+//   const keys = Object.keys(obj);
+//   let tempValueArr = [];
+
+//   const convertingDate = (date) => {
+//     let convertedDate;
+//     const val = new String(date);
+//     return (convertedDate = Number(val.replace(/-/g, "")));
+//   };
+
+//   console.log(keys.length);
+//   console.log(obj);
+//   keys.forEach((key) => {
+//     const tempDate = convertingDate(obj[key]);
+//     tempValueArr.push(tempDate);
+//   });
+ 
+//   tempValueArr.sort((a, b) => {
+//     return a - b; // 오름차순 정렬
+//   });
+
+//   const convertDateArr = tempValueArr.map((val) => {
+//     const date = String(val);
+//     const yyyy = date.slice(0, 4);
+//     const mm = date.slice(4, 6);
+//     const dd = date.slice(6, 8);
+//     return `${yyyy}-${mm}-${dd}`;
+//   });
+
+//   sortingDate = {
+//     from: convertDateArr[0],
+//     to: convertDateArr[1],
+//   };
+
+//   return sortingDate;
+// };
