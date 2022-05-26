@@ -1,103 +1,3 @@
-<<<<<<< HEAD
-
-import React, { useEffect, useState, useRef } from "react";
-
-import Layout from '/src/components/common/Layout'
-import Wrapper from "/src/components/common/Wrapper";
-import s from 'styles/css/survey/index.module.scss';
-import { EffectFade, Pagination, Navigation } from "swiper";
-import { Swiper, SwiperSlide } from "swiper/react";
-import Link from 'next/link';
-import Image from "next/image";
-
-import ArrowLeft from '/public/img/icon/swiper-arrow-large-l.svg';
-import ArrowRight from "/public/img/icon/swiper-arrow-large-r.svg";
-
-
-
-
-
-
-function Swiper_main() {
-  const navPrev_mainRef = useRef(null);
-  const navNext_mainRef = useRef(null);
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(()=>{
-    if(window){
-      setIsLoaded(true)
-    }
-
-  },[isLoaded])
-
-
-  const swiperSettings_main = {
-    className: `${s.swiper_main}`,
-    spaceBetween: 0,
-    loop: true,
-    effect: "fade",
-    centeredSlides: true,
-    autoplay: { delay: 500, disableOnInteraction: false },
-    slidesPerView: 1,
-    navigation: {
-      prevEl: navPrev_mainRef.current,
-      nextEl: navNext_mainRef.current,
-    },
-    modules: [Navigation, EffectFade],
-  };
-
-
-  return (
-    <div className={s.swiper_main_outerWrap}>
-      <div className={s.swiper_navigation_container}>
-        <i className={s["swiper-button-prev"]} ref={navPrev_mainRef}>
-          <ArrowLeft />
-        </i>
-
-        <i
-          className={s["swiper-button-next"]}
-          ref={navNext_mainRef}
-        >
-          <ArrowRight />
-        </i>
-        <queto></queto>
-      </div>
-
-      {true &&  (<Swiper
-        {...swiperSettings_main}
-        onInit={(swiper) => {
-          swiper.params.navigation.prevEl = navPrev_mainRef.current;
-          swiper.params.navigation.nextEl = navNext_mainRef.current;
-          swiper.navigation.destroy();
-          swiper.navigation.init();
-          swiper.navigation.update();
-        }}
-        // onRealIndexChange={() => {
-        //   console.log("change!");
-        // }}
-      >
-
-
-          <SwiperSlide>
-           11
-          </SwiperSlide>
-          <SwiperSlide>
-           22
-          </SwiperSlide>
-          <SwiperSlide>
-           33
-          </SwiperSlide>
-          
-      </Swiper>)}
-
-     
-    </div>
-  );
-}
-
-
-
-=======
 import React, { useEffect, useState, useRef } from "react";
 import ReactDOM from 'react-dom/client';
 import s from "./survey.module.scss";
@@ -114,31 +14,14 @@ import "swiper/css/effect-fade";
 import ScrollContainer from "@src/components/atoms/ScrollContainer";
 import SurveyInputRadio from './SurveyInputRadio'
 import siblings from "@util/func/siblings";
->>>>>>> main
-
+import Image from 'next/image';
 
 
 
 function Survey() {
-<<<<<<< HEAD
-
-
-  return (
-    <Layout>
-      <Wrapper>
-
-      <Swiper_main />
-
-    
-      </Wrapper>
-    </Layout>
-  );
-} 
-=======
   const [surveyValues, setSurveyValues] = useState({
     healthStatus: "",
   });
->>>>>>> main
 
   return (
     <>
@@ -155,10 +38,6 @@ function Survey() {
 export default Survey;
 
 
-
-
-
-
 const SurveyStep1 = ({surveyValues, setSurveyValues}) => {
   const [activeDogBreedSelect, setActiveDogBreedSelect] = useState(false);
   const [selectedDogBreed, setSelectedDogBreed] = useState(false);
@@ -169,36 +48,76 @@ const SurveyStep1 = ({surveyValues, setSurveyValues}) => {
 
   return (
     <section className={s.step1Page}>
-      <h1>스탭1 페이지</h1>
-      <div className="input-row">
-        반려견이름
-        <input type="text" name="survey" />
-      </div>
 
-      <div className="input-row">
-        반려견 성별
-        <input type="text" name="survey" />
-      </div>
-
-      <div className="input-row">
-        반려견 출생연월
-        <div className="inner">
-          <input type="text" name="survey" />년
-        </div>
-        <div className="inner">
-          <input type="text" name="survey" />월
-        </div>
-        <label className="radio">
-          <input type="checkbox" name="" id="" />
-          노령견입니다.
+      <div className={s.item_box}>
+        <label>
+          <div className="input-row">
+            <div className={s.input_title}>
+              반려견 이름
+            </div>
+            <input className={s.input_box_1} type="text" name="survey" placeholder="이름을 입력해주세요" />
+          </div>
         </label>
       </div>
-      <div className="input-row">
-        반려견 출생연월
-        <input type="text" name="survey" />
+      
+
+      <div className={s.item_box}>
+        <label>
+          <div className="input-row">
+            <div className={s.input_title}>
+              반려견 성별
+            </div>
+            <SurveyInputRadio
+              surveyValues={surveyValues.size}
+              setSurveyValues={setSurveyValues}
+              title="반려견 성별"
+              className={s.radio_gender}
+              name="healthStatus"
+              idList={[
+                "male",
+                "female"
+              ]}
+              labelList={[
+                "수컷",
+                "암컷"
+              ]}
+            />
+          </div>
+        </label>
       </div>
+
       <div className="input-row">
-        견종선택
+        <label>
+          <div className={s.input_title}>
+            반려견 출생년월
+          </div>
+          <div className={s.flex_box}>
+            <div className={s.inner}>
+              <input type="text" name="survey" />년
+            </div>
+            <div className={s.inner}>
+              <input type="text" name="survey" />월
+            </div>
+          </div>
+        </label>
+
+        <div className={s.radio_check}>
+          <label className={s.radio}>
+            <input type="checkbox" name="" id="" />
+            <div className={s.text}>
+              노령견입니다.
+            </div>
+          </label>
+        </div>
+
+      </div>
+
+     
+      <div className="input-row">
+        <div className={s.input_title}>
+          견종선택
+        </div>
+        
         <div className={s.selectDogBreed}>
           <div className={s.viewer} onClick={onClickDogBreedSelectHandler}>
             {selectedDogBreed || "견종을 선택해주세요."}
@@ -222,12 +141,13 @@ const SurveyStep1 = ({surveyValues, setSurveyValues}) => {
           )}
         </div>
       </div>
+
       <div className="input-row">
         <SurveyInputRadio
           surveyValues={surveyValues.size}
           setSurveyValues={setSurveyValues}
           title="강아지 체급"
-          className={s.size}
+          className={s.dog_choice}
           name="healthStatus"
           idList={[
             "size-SMALL",
@@ -241,12 +161,43 @@ const SurveyStep1 = ({surveyValues, setSurveyValues}) => {
           ]}
         />
       </div>
+      
+
+      <label>
+        <div className={s.input_title}>
+          반려견 몸무게
+        </div>
+        <div className={s.flex_box}>
+          <div className={s.inner_kg}>
+            <input type="text" name="survey" placeholder="몸무게를 입력해주세요"/>kg
+          </div>
+        </div>
+      </label>
+
+      <div className="input-row">
+        <div className={s.input_title}>
+          중성화 여부
+        </div>
+        <SurveyInputRadio
+          surveyValues={surveyValues.size}
+          setSurveyValues={setSurveyValues}
+          title="중성화 여부"
+          className={s.radio_gender}
+          name="healthStatus"
+          idList={[
+            "yes",
+            "no"
+          ]}
+          labelList={[
+            "했습니다",
+            "안했습니다"
+          ]}
+        />
+      </div>
+
     </section>
   );
 };
-
-
-
 
 
 
@@ -339,7 +290,13 @@ const SurveyStep1_SelectOptions = ({
 const SurveyStep2 = ({ surveyValues, setSurveyValues }) => {
 
   return (
-    <section>
+    <section className={s.step2page}>
+
+      <div className={s.input_title}>
+        반려견의 활동량은
+      </div>
+
+
       <div className="input-row">
         <SurveyInputRadio
           surveyValues={surveyValues.healthStatus}
@@ -355,7 +312,7 @@ const SurveyStep2 = ({ surveyValues, setSurveyValues }) => {
             "healthStatus-TOO MUCH",
           ]}
           labelList={[
-            "매우적어요",
+            "매우 적어요",
             "",
             "보통",
             "",
@@ -364,6 +321,32 @@ const SurveyStep2 = ({ surveyValues, setSurveyValues }) => {
           defaultStyle
         />
       </div>
+
+
+      <div className={s.input_title}>
+        일주일 산책 횟수
+      </div>
+
+      <div className={s.flex_box2}>
+        <div className={s.inner_flex_box}>
+          평균
+          <div className={s.inner}>
+            <input className={s.input_1} type="text" name="survey" />회
+          </div>
+        </div>
+        <div className={s.inner_flex_box}>
+          1회당
+          <div className={s.inner}>
+            <input type="text" name="survey" />시간
+          </div>
+        </div>
+      </div>
+
+      
+      <div className={s.input_title}>
+        현재 상태는
+      </div>
+
       <div className="input-row">
         <SurveyInputRadio
           surveyValues={surveyValues.healthStatus}
@@ -396,7 +379,14 @@ const SurveyStep2 = ({ surveyValues, setSurveyValues }) => {
 
 const SurveyStep3 = ({ surveyValues, setSurveyValues }) => {
   return (
-    <section>
+    <section className={s.step3page}>
+      <div className="input-row">
+        <div className={s.input_title}>
+          간식 급여 횟수는
+        </div>
+      </div>
+
+
       <div className="input-row">
         <SurveyInputRadio
           surveyValues={surveyValues.numberOfSnacks}
@@ -425,6 +415,135 @@ const SurveyStep3 = ({ surveyValues, setSurveyValues }) => {
           ]}
         />
       </div>
+
+
+        <div className="input-row">
+
+          <div className={s.input_title}>
+            반려견은 못먹는 음식이
+          </div>
+          <SurveyInputRadio
+            surveyValues={surveyValues.size}
+            setSurveyValues={setSurveyValues}
+            title="못먹는음식"
+            className={s.food_check}
+            name="foodcheck"
+            idList={[
+              "food_yes",
+              "food_no",
+              "chicken",
+              "turkey",
+              "cow",
+              "sheep",
+              "duck",
+              "etc"
+            ]}
+            labelList={[
+              "있어요",
+              "없어요",
+              "닭",
+              "칠면조",
+              "소",
+              "양",
+              "오리",
+              "기타"
+            ]}
+          />
+        </div>
+
+
+        <div className="input-row">
+          <div className={s.item_box}>
+            <label>
+              <div className="input-row">
+                <div className={s.input_title}>
+                  반려견 이름
+                </div>
+                <input className={s.input_box_1} type="text" name="survey" placeholder="직접 입력해주세요" />
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div className="input-row">
+          <div className={s.red_text}>
+            ※ 바프독의 모든 생식 레시피에는<br />
+            영양분이 가득한 육고기, 뼈, 내장, 채소 등이 들어갑니다. <br />
+            육고기와 뼈의 경우 알러지 분류에 들어가지만<br />
+            내장의 경우 알러지 분류에 들어가지 않으니 참고해주세요.<br />
+          </div>
+        </div>
+
+        <div className="input-row">
+
+          <div className={s.input_title}>
+            특별히 챙겨주고 싶은 부분은
+          </div>
+          <SurveyInputRadio
+            surveyValues={surveyValues.size}
+            setSurveyValues={setSurveyValues}
+            title="넣어둬넣어둬"
+            className={s.take_care}
+            name="take_care"
+            idList={[
+              "생식스타트",
+              "피로회복",
+              "피부강화",
+              "영양보충"
+            ]}
+            labelList={[
+              "안정적인 첫 생식 적응",
+              "피로회복 & 면역력 향상",
+              "피부와 모질 강화 필요",
+              "건강한 성장과 영양보충"
+            ]}
+          />
+        </div>
+
+        <div className="input-row">
+
+          <div className={s.input_title}>
+            기타 특이사항(질병 등)이
+          </div>
+          <SurveyInputRadio
+            surveyValues={surveyValues.size}
+            setSurveyValues={setSurveyValues}
+            title="질병유무"
+            className={s.disease_check}
+            name="take_care"
+            idList={[
+              "disease_yes",
+              "disease_no"
+            ]}
+            labelList={[
+              "있어요",
+              "없어요"
+            ]}
+          />
+        </div>
+        
+        <div className="input-row">
+          <div className={s.item_box}>
+            <label>
+              <div className="input-row">
+                <input className={s.input_box_1} type="text" name="disease" placeholder="직접 입력해주세요" />
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div className="input-row">
+          <div className={s.red_text}>
+          ※ 질병여부 필수 작성해주세요 <br/>
+          ( 질병에 따라 급여가 불가 할 수 있습니다.) <br/>
+          ex. 췌장염, 쿠싱, 심장병, 만성췌장, 고지혈 등 <br/>
+          </div>
+        </div>
+
+
+
+
+
     </section>
   );
 };
@@ -492,15 +611,7 @@ function SurveySwiper({surveyValues, setSurveyValues}) {
 
   return (
     <div className={s.swiper_main_outerWrap}>
-      <div className={s.swiper_navigation_container}>
-        <i className={s["swiper-button-prev"]} ref={navPrev_mainRef}>
-          __[왼쪽페이지 버튼]__
-        </i>
 
-        <i className={s["swiper-button-next"]} ref={navNext_mainRef}>
-          ___[다음페이지 버튼]___
-        </i>
-      </div>
 
       <Swiper
         {...swiperSettings}
@@ -529,6 +640,49 @@ function SurveySwiper({surveyValues, setSurveyValues}) {
           <SurveyStep3 surveyValues={surveyValues} setSurveyValues={setSurveyValues}/>
         </SwiperSlide>
       </Swiper>
+      <div className={s.swiper_navigation_container}>
+        <i className={s["swiper-button-prev"]} ref={navPrev_mainRef}>
+          <div className={s.left_side_btn}>
+            <div className={s.left_btn}>
+              <div className={s.image_box}>
+                <div className={`${s.image} img-wrap`}>
+                  <Image
+                    priority
+                    src={require("public/img/survey_left_arrow.png")}
+                    objectFit="cover"
+                    layout="fill"
+                    alt="이전 화살표"
+                  />
+                </div>
+
+              </div>
+              이전
+            </div>
+          </div>
+          
+        </i>
+
+        <i className={s["swiper-button-next"]} ref={navNext_mainRef}>
+        <div className={s.right_side_btn}>
+            <div className={s.right_btn}>
+              다음
+              <div className={s.image_box}>
+                <div className={`${s.image} img-wrap`}>
+                  <Image
+                    priority
+                    src={require("public/img/survey_right_arrow.png")}
+                    objectFit="cover"
+                    layout="fill"
+                    alt="이전 화살표"
+                  />
+                </div>
+
+              </div>
+              
+            </div>
+          </div>
+        </i>
+      </div>
     </div>
   );
 }
