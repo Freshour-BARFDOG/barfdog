@@ -1,0 +1,46 @@
+import React from "react";
+import styled from "styled-components";
+import rem from "@src/components/atoms/rem";
+import { useModalContext } from "@store/modal-context";
+
+const Button = styled.button`
+  width: ${(props) => props.style?.width || rem(32)};
+  height: ${(props) => props.style?.height || rem(32)};
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+
+  &:before,
+  &:after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: ${rem(1)};
+    background-color: ${(props) => props.lineColor || `#fff`};
+  }
+  &:before {
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+  &:after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
+`;
+
+function CloseButton({ className, style, lineColor }) {
+  const onClickHandler = () => window.close();
+
+  return (
+    <Button
+      type="button"
+      style={style}
+      className={className}
+      onClick={onClickHandler}
+      lineColor={lineColor}
+    />
+  );
+}
+
+export default CloseButton;
