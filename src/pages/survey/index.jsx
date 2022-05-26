@@ -663,7 +663,7 @@ function SurveySwiper({surveyValues, setSurveyValues}) {
         </i>
 
         <i className={s["swiper-button-next"]} ref={navNext_mainRef}>
-        <div className={s.right_side_btn}>
+          <div className={s.right_side_btn}>
             <div className={s.right_btn}>
               다음
               <div className={s.image_box}>

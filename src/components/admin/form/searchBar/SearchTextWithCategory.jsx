@@ -8,6 +8,7 @@ const SearchTextWithCategory = ({
   title,
   name,
   id,
+  tooltip,
   options = [],
 }) => {
   // const optionalRef = useRef();
@@ -56,7 +57,10 @@ const SearchTextWithCategory = ({
   return (
     <>
       <div className={s["search-row"]}>
-        <h4 className={s["title"]}>{title}</h4>
+        <h4 className={s["title"]}>
+          {title}
+          {tooltip && <span className={s["tooltip-wrap"]}>{tooltip}</span>}
+        </h4>
         <div className={`${s["inp-wrap"]} ${s["textWidhCategory"]}`}>
           <select
             className="admin_select"

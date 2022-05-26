@@ -8,6 +8,7 @@ const SearchSelect = ({
   onChange,
   searchValue,
   options = [],
+  tooltip,
   ...props
 }) => {
 
@@ -36,7 +37,10 @@ const SearchSelect = ({
   return (
     <>
       <div className={s["search-row"]}>
-        <h4 className={s["title"]}>{title}</h4>
+        <h4 className={s["title"]}>
+          {title}
+          {tooltip && <span className={s["tooltip-wrap"]}>{tooltip}</span>}
+        </h4>
         <div className={`${s["inp-wrap"]} ${s["term"]}`}>
           <select
             className="admin_select"

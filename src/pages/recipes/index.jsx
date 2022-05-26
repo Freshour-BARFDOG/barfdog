@@ -32,7 +32,7 @@ const TEST_ModalTrigger = styled.button`
 // * INNER CONTENT IN MODAL * //
 const Modal_cont_point_01 = () => {
   return (
-    <div data-modal-type="starter premium">
+    <div data-modal-type="starterPremium">
       <p>첫생식에 완벽한 레시피1</p>
       <p>첫생식에 완벽한 레시피1</p>
       <p>첫생식에 완벽한 레시피1</p>
@@ -42,52 +42,55 @@ const Modal_cont_point_01 = () => {
 };
 const Modal_cont_point_02 = () => {
   return (
-    <div data-modal-type="starter premium">
+    <div data-modal-type="turkeyAndBeef">
       <p>첫생식에 완벽한 레시피2</p>
     </div>
   );
 };
 const Modal_cont_point_03 = () => {
   return (
-    <div data-modal-type="starter premium">
+    <div data-modal-type="duckAndLamb">
       <p>첫생식에 완벽한 레시피3</p>
     </div>
   );
 };
 const Modal_cont_point_04 = () => {
   return (
-    <div data-modal-type="starter premium">
+    <div data-modal-type="lambAndBeef">
       <p>첫생식에 완벽한 레시피4</p>
     </div>
   );
 };
 
+
+
+
 // * INNER CONTENT IN MODAL * //
 
 const Modal_cont_ingredient_01 = () => {
   return (
-    <div data-modal-type="starter premium">
+    <div data-modal-type="starterPremium">
       <p>영양성분1</p>
     </div>
   );
 };
 const Modal_cont_ingredient_02 = () => {
   return (
-    <div data-modal-type="starter premium">
+    <div data-modal-type="turkeyAndBeef">
       <p>영양성분2</p>
     </div>
   );
 };
 const Modal_cont_ingredient_03 = () => {
   return (
-    <div data-modal-type="starter premium">
+    <div data-modal-type="duckAndLamb">
       <p>영양성분3</p>
     </div>
   );
 };
 const Modal_cont_ingredient_04 = () => {
   return (
-    <div data-modal-type="starter premium">
+    <div data-modal-type="lambAndBeef">
       <p>영양성분4</p>
     </div>
   );
@@ -97,28 +100,28 @@ const Modal_cont_ingredient_04 = () => {
 
 const Modal_cont_ingredient_main_01 = () => {
   return (
-    <div data-modal-type="starter premium">
+    <div data-modal-type="starterPremium">
       <p>주성분1</p>
     </div>
   );
 };
 const Modal_cont_ingredient_main_02 = () => {
   return (
-    <div data-modal-type="starter premium">
+    <div data-modal-type="turkeyAndBeef">
       <p>주성분2</p>
     </div>
   );
 };
 const Modal_cont_ingredient_main_03 = () => {
   return (
-    <div data-modal-type="starter premium">
+    <div data-modal-type="duckAndLamb">
       <p>주성분3</p>
     </div>
   );
 };
 const Modal_cont_ingredient_main_04 = () => {
   return (
-    <div data-modal-type="starter premium">
+    <div data-modal-type="lambAndBeef">
       <p>주성분4</p>
     </div>
   );
@@ -131,28 +134,28 @@ const Modal_cont_ingredient_main_04 = () => {
 
 const Modal_cont_ingredient_total_01 = () => {
   return (
-    <div data-modal-type="starter premium">
+    <div data-modal-type="starterPremium">
       <p>__전__성분1</p>
     </div>
   );
 };
 const Modal_cont_ingredient_total_02 = () => {
   return (
-    <div data-modal-type="starter premium">
+    <div data-modal-type="turkeyAndBeef">
       <p>__전__성분2</p>
     </div>
   );
 };
 const Modal_cont_ingredient_total_03 = () => {
   return (
-    <div data-modal-type="starter premium">
+    <div data-modal-type="duckAndLamb">
       <p>__전__성분3</p>
     </div>
   );
 };
 const Modal_cont_ingredient_total_04 = () => {
   return (
-    <div data-modal-type="starter premium">
+    <div data-modal-type="lambAndBeef">
       <p>__전__성분4</p>
     </div>
   );
@@ -176,33 +179,30 @@ const DATA_toBeSentModal = {
   component: {
     tab1: [
       <Modal_cont_point_01 key="modal" />,
-      <Modal_cont_ingredient_01 key="modal" />,
-      <Modal_cont_ingredient_main_01 key="modal" />,
-      <Modal_cont_ingredient_total_01 key="modal" />,
+      <Modal_cont_point_02 key="modal" />,
+      <Modal_cont_point_03 key="modal" />,
+      <Modal_cont_point_04 key="modal" />,
     ],
     tab2: [
-      <Modal_cont_point_02 key="modal" />,
+      <Modal_cont_ingredient_01 key="modal" />,
       <Modal_cont_ingredient_02 key="modal" />,
-      <Modal_cont_ingredient_main_02 key="modal" />,
-      <Modal_cont_ingredient_total_02 key="modal" />,
+      <Modal_cont_ingredient_03 key="modal" />,
+      <Modal_cont_ingredient_04 key="modal" />,
     ],
     tab3: [
-      <Modal_cont_point_03 key="modal" />,
-      <Modal_cont_ingredient_03 key="modal" />,
+      <Modal_cont_ingredient_main_01 key="modal" />,
+      <Modal_cont_ingredient_main_02 key="modal" />,
       <Modal_cont_ingredient_main_03 key="modal" />,
-      <Modal_cont_ingredient_total_03 key="modal" />,
+      <Modal_cont_ingredient_main_04 key="modal" />,
     ],
     tab4: [
-      <Modal_cont_point_04 key="modal" />,
-      <Modal_cont_ingredient_04 key="modal" />,
-      <Modal_cont_ingredient_main_04 key="modal" />,
+      <Modal_cont_ingredient_total_01 key="modal" />,
+      <Modal_cont_ingredient_total_02 key="modal" />,
+      <Modal_cont_ingredient_total_03 key="modal" />,
       <Modal_cont_ingredient_total_04 key="modal" />,
     ],
   },
 };
-
-
-
 
 
 

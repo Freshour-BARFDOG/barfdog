@@ -53,7 +53,7 @@ function MypageBanner() {
         })
         .catch((err) => {
           console.error(err.request.response); //////*******중요
-          const errorObj = JSON.parse(err.request?.response);
+          const errorObj = JSON.parse(err.request.response);
           const status = errorObj.status;
           console.log(status);
           if(status === 401){

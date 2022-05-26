@@ -4,33 +4,50 @@ $browser-context:16;
 }
 
 
-$windowWidthForRightSideBorder: rem(1755);
+$windowWidthForRightSideBorder: rem(1805);
 
 
 .cont_viewer {
   .table{
+    overflow-x:scroll;
     font-size: rem(15);
     /* border line */
-    .table_header{border: rem(1) solid var(--color-line-03); background-color:#f1f1f4;}
+    .table_header{
+      border: rem(1) solid var(--color-line-03);
+      background-color:#f1f1f4;
+      border: rem(1) solid var(--color-line-03);
+      width: fit-content;
+    }
     .table_body > li > span, 
-    .table_th, .item > span{border-right: rem(1) solid var(--color-line-03); overflow: hidden;}
-    .item:not(:last-child){border-bottom: rem(1) solid var(--color-line-03);}
-
-    .table_header, .item{
+    .table_th, .item > span{
+      border-right: rem(1) solid var(--color-line-03);
       overflow:hidden;
+      text-align: center;
+      // background-color: #fff;
+    }
+    .table_body > li > span:last-child, 
+    .table_th:last-child, 
+    .item > span:last-child{border-right: 0}
+    .item:not(:last-child){border-bottom: rem(1) solid var(--color-line-03);}
+ 
+    .table_header, .item{
+      width: fit-content;
+      box-sizing: border-box;
+      position: relative;
+      z-index: 1;
       display:grid;
       grid-gap:0;
       grid-template-rows: minmax(rem(60), auto);
       grid-template-columns:
-        rem(95)
-        minmax(rem(80), rem(160))
-        minmax(rem(80), rem(160))
-        minmax(rem(80), rem(160))
+        rem(60)
         minmax(rem(80), rem(180))
-        minmax(rem(80), rem(160))
-        minmax(rem(80), rem(120))
-        minmax(rem(80), rem(200))
-        minmax(rem(80), rem(100));
+        minmax(rem(80), rem(180))
+        minmax(rem(80), rem(180))
+        minmax(rem(120), rem(200))
+        minmax(rem(120), rem(160))
+        minmax(rem(120), rem(200))
+        minmax(rem(120), rem(200))
+        minmax(rem(80), rem(120));
       
 
       .table_th, > span{
@@ -53,6 +70,7 @@ $windowWidthForRightSideBorder: rem(1755);
     .item{
       background-color: #fff;
       border: rem(1) solid var(--color-line-03);
+      width: fit-content;
       margin-top:rem(-1);
     }
 
@@ -75,10 +93,12 @@ $windowWidthForRightSideBorder: rem(1755);
 
 
 @media (max-width: ($windowWidthForRightSideBorder)) {
-  .cont_viewer{
-    .table {
-      .table_th:last-child, .table_body > li > span:last-child, .item > span:last-child{border-right: 0}
-    }
-  }
+  // .cont_viewer{
+  //   .table {
+  //     .table_body > li > span, 
+  //     .table_th:last-child, 
+  //     .item > span:last-child{border-right: 0}
+  //   }
+  // }
 
 }
