@@ -6,12 +6,12 @@ import MetaTitle from "@src/components/atoms/MetaTitle";
 import axios from "axios";
 import axiosConfig from "/api/axios.config";
 import AmdinErrorMessage from "@src/components/atoms/AmdinErrorMessage";
-import Checkbox from "@src/components/atoms/Checkbox";
 import sorting from "@util/func/sorting";
 import Pagination from "@src/components/atoms/Pagination";
 import SearchBar from "@src/components/admin/form/SearchBar";
 import SearchSelect from "@src/components/admin/form/SearchBar/SearchSelect";
 import SearchPlainInput from "@src/components/admin/form/SearchBar/SearchPlainInput";
+import SingleList from "./SingleList";
 
 
 
@@ -68,43 +68,29 @@ function SingleItemPage() {
           <section className="cont">
             <div className="cont_header clearfix">
               <p className="cont_title cont-left">
-                상품목록 &#40;총{" "}
-                <em style={{ color: "var(--color-main)" }}>16</em>개&#41;
+                상품목록 &#40;총<em className={s["product-count"]}>16</em>
+                개&#41;
               </p>
-              <div className="controls cont-left">
-                <button className="admin_btn line basic_m">리뷰 승인</button>
-                <button className="admin_btn line basic_m">
-                  베스트 리뷰 선정
-                </button>
-              </div>
+              <div className="controls cont-left"></div>
             </div>
             <div className={`${s.cont_viewer}`}>
               <div className={s.table}>
                 <ul className={s.table_header}>
-                  <li className={s.table_th}>
-                    <Checkbox
-                      id="checkAll"
-                      onClick={(e) => {
-                        console.log(e);
-                      }}
-                    />
-                  </li>
-                  <li className={s.table_th}>고유번호</li>
-                  <li className={s.table_th}>처리상태</li>
+                  <li className={s.table_th}>레시피명</li>
+                  <li className={s.table_th}>카테고리</li>
                   <li className={s.table_th}>상품명</li>
-                  <li className={`${s.table_th}`}>리뷰내용</li>
-                  <li className={s.table_th}>평점</li>
-                  <li className={s.table_th}>사용자 이름</li>
-                  <li className={s.table_th}>사용자 ID</li>
-                  <li className={s.table_th}>작성일</li>
+                  <li className={s.table_th}>판매가</li>
+                  <li className={s.table_th}>재고수량</li>
+                  <li className={s.table_th}>할인률</li>
+                  <li className={s.table_th}>노출여부</li>
+                  <li className={s.table_th}>수정</li>
                   <li className={s.table_th}>삭제</li>
                 </ul>
                 {itemList.length ? (
-                  // <BestReviewList
-                  //   items={itemList}
-                  //   onDeleteItem={onDeleteItem}
-                  // />
-                  "아이템목록위치"
+                  <SingleList
+                    items={itemList}
+                    // onDeleteItem={onDeleteItem}
+                  />
                 ) : (
                   <AmdinErrorMessage text="조회된 데이터가 없습니다." />
                 )}
