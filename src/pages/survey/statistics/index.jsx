@@ -9,7 +9,10 @@ function LoadingPage() {
     <>
       <MetaTitle title="설문조사 통계" />
       <Layout>
-        <Wrapper>설문조사 통계 페이지</Wrapper>
+        <Wrapper>설문조사 통계 페이지
+
+          시호의 맞춤 레포트
+        </Wrapper>
       </Layout>
     </>
   );
