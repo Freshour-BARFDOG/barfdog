@@ -1,12 +1,7 @@
 $browser-context:16;
-@function rem($px, $context: $browser-context){
+@function rem($px, $context: $browser-context) {
   @return #{$px / $context}rem;
 }
-
-
-
-.product-count{color: var(--color-primary04); margin-left:rem(4)}
-
 
 
 
@@ -42,15 +37,16 @@ $browser-context:16;
       grid-gap:0;
       grid-template-rows: minmax(rem(60), auto);
       grid-template-columns:
-        minmax(rem(100), rem(160))
-        minmax(rem(100), rem(120))
-        minmax(rem(200), rem(400))
-        minmax(rem(80), rem(160))
-        minmax(rem(90), rem(160))
-        minmax(rem(80), rem(120))
-        minmax(rem(80), rem(120))
-        rem(70)
-        rem(70);
+        rem(60)
+        minmax(rem(90), rem(180))
+        minmax(rem(90), rem(180))
+        minmax(rem(80), rem(180))
+        minmax(rem(120), rem(200))
+        minmax(rem(120), rem(200))
+        minmax(rem(120), rem(160))
+        minmax(rem(120), rem(200))
+        minmax(rem(120), rem(200))
+        minmax(rem(80), rem(120));
       
 
       .table_th, > span{

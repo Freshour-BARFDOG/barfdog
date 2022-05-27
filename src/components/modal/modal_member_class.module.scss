@@ -1,0 +1,26 @@
+$browser-context: 16;
+@function rem($px, $context: $browser-context) {
+  @return #{$px / $context}rem;
+}
+
+
+.title-section{
+  text-align:center;
+  margin-bottom:rem(12);
+  .title{font-size:rem(20); margin-bottom:rem(16); font-weight:400;}
+  .subtitle{font-size:rem(16);}
+}
+.cont-section{
+  margin-bottom: rem(30);
+  select{display: block; width: 100%;}
+}
+
+.btn-section{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: rem(10);
+  justify-content: center;
+  
+  button{width:auto;}
+}

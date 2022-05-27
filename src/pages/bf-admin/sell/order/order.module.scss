@@ -4,7 +4,6 @@ $browser-context:16;
 }
 
 
-$windowWidthForRightSideBorder: rem(1805);
 
 
 .cont_viewer {
@@ -40,8 +39,8 @@ $windowWidthForRightSideBorder: rem(1805);
       grid-template-rows: minmax(rem(60), auto);
       grid-template-columns:
         rem(60)
-        minmax(rem(80), rem(180))
-        minmax(rem(80), rem(180))
+        minmax(rem(90), rem(180))
+        minmax(rem(90), rem(180))
         minmax(rem(80), rem(180))
         minmax(rem(120), rem(200))
         minmax(rem(120), rem(160))
@@ -90,15 +89,3 @@ $windowWidthForRightSideBorder: rem(1805);
 }
 
 
-
-
-@media (max-width: ($windowWidthForRightSideBorder)) {
-  // .cont_viewer{
-  //   .table {
-  //     .table_body > li > span, 
-  //     .table_th:last-child, 
-  //     .item > span:last-child{border-right: 0}
-  //   }
-  // }
-
-}

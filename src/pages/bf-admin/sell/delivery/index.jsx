@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import s from "./delivery.module.scss";
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import AdminLayout from "/src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
@@ -6,13 +7,19 @@ import SearchBar from "@src/components/admin/form/SearchBar";
 import SearchTerm from "@src/components/admin/form/SearchBar/SearchTerm";
 import SearchTextWithCategory from "@src/components/admin/form/SearchBar/SearchTextWithCategory";
 import SearchRadio from "@src/components/admin/form/SearchBar/SearchRadio";
+import AmdinErrorMessage from "@src/components/atoms/AmdinErrorMessage";
+import DeliveryList from "./DeliveryList";
+import Pagination from "@src/components/atoms/Pagination";
 
+
+
+const TEST_ITEM = [1, 2, 3, 4, 5];
 
 
 function DeliveryOnSellPage() {
 
   const [modalMessage, setModalMessage] = useState("");
-  const [itemList, setItemList] = useState("");
+  const [itemList, setItemList] = useState(TEST_ITEM);
   const [searchValue, setSearchValue] = useState({});
 
   const onResetSearchValues = (e) => {
@@ -57,11 +64,50 @@ function DeliveryOnSellPage() {
                 setSearchValue={setSearchValue}
                 title="종류"
                 name="status"
-                idList={["ALL", "DELIVERY", "DELIVERY DONE"]}
-                labelList={["전체", "배송 중", "배송완료"]}
+                idList={["ALL", "DELIVERY_START", "DELIVERY_DONE"]}
+                labelList={["배송전체", "배송시작", "배송완료"]}
               />
             </SearchBar>
           </section>
+          <section className="cont">
+            <div className="cont_header clearfix">
+              <p className="cont_title cont-left">목록</p>
+              <div className="controls cont-left">
+              </div>
+            </div>
+            <div className={`${s.cont_viewer}`}>
+              <div className={s.table}>
+                <ul className={s.table_header}>
+                  <li className={s.table_th}>상세보기</li>
+                  <li className={s.table_th}>주문번호</li>
+                  <li className={s.table_th}>상품주문번호</li>
+                  <li className={s.table_th}>주문상태</li>
+                  <li className={s.table_th}>배송상태</li>
+                  <li className={s.table_th}>운송장번호</li>
+                  <li className={s.table_th}>구매자 ID</li>
+                  <li className={s.table_th}>구매자</li>
+                  <li className={s.table_th}>수령자</li>
+                  <li className={s.table_th}>묶음배송 여부</li>
+                </ul>
+                {itemList.length ? (
+                  <DeliveryList
+                    items={itemList}
+                    // onDeleteItem={onDeleteItem}
+                  />
+                ) : (
+                  <AmdinErrorMessage text="조회된 데이터가 없습니다." />
+                )}
+              </div>
+            </div>
+            <div className={s["pagination-section"]}>
+              <Pagination
+                itemCountPerGroup={10}
+                itemTotalCount={100}
+                className={"square"}
+              />
+            </div>
+          </section>
+          {/* inner */}
         </AdminContentWrapper>
       </AdminLayout>
     </>

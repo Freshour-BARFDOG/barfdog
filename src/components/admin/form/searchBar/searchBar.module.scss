@@ -74,6 +74,7 @@ $browser-context: 16;
     width: rem(160);
     height: rem(38);
     color: #4d4d4d;
+    border-radius:0;
     &::-webkit-datetime-edit {
       display: flex;
       align-items: center;
@@ -104,6 +105,7 @@ $browser-context: 16;
       cursor: pointer;
     }
   }
+  .icon-wrap {margin-left: rem(10);}
 }
 
 

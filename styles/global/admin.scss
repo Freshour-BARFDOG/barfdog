@@ -1,5 +1,23 @@
 
 /* ADMIN COMMON STYLE */
+
+
+:root {
+  --gray0 : #202020;
+  --gray10: #4D4D4D; 
+  --gray20: #7A7A7A; 
+  --gray30: #ABABAB; 
+  --gray40: #DEDEDE; 
+  --gray50: #EFEFEF; 
+  --gray-v0: #23242E; 
+  --gray-v10: #F1F1F4; 
+  --gray-v20: #F8F8FF; 
+  --gray-v30: #F8F8F9; 
+  --highlight: #ED3333; 
+
+}
+
+
 $browser-context:16;
 @function rem($px, $context: $browser-context){
   @return #{$px / $context}rem;
@@ -7,7 +25,6 @@ $browser-context:16;
 
 $aniDefault : 0.15s ease ;
 $aniType_Show : 0.3s ease-in ;
-
 
 // * ---------- COMMON ---------- */
 

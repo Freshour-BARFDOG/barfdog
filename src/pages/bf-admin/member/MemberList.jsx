@@ -1,5 +1,6 @@
-import s from "./members.module.scss";
-
+import Link from "next/link";
+import s from "./member.module.scss";
+import popupWindow from "@util/func/popupWindow";
 
 
 
@@ -26,10 +27,21 @@ import s from "./members.module.scss";
     };
 
 
+    const onPopupHandler = (e) => {
+      if(typeof window === 'undefined') return;
+      const href = e.currentTarget.href;
+      popupWindow(href, {width:1000, height:716});
+    }
+
+
     return (
       <li className={s.item} key={`item-${DATA.id}`}>
         <span>
-          <button className="admin_btn basic_s solid">상세보기</button>
+          <Link href={`/bf-admin/member/popup/${DATA.id}`} passHref>
+            <a target="_blank" onClick={onPopupHandler}>
+              <button className="admin_btn basic_s solid">상세보기</button>
+            </a>
+          </Link>
         </span>
         <span>{DATA.grade}</span>
         <span>{DATA.name}</span>
