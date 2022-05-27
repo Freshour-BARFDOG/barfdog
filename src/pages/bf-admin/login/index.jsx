@@ -23,7 +23,7 @@ function LoginIndexPage() {
   
   const dispatch = useDispatch();
   const mct = useModalContext();
-
+  const [modalMessage, setModalMessage] = useState("");
   const [email, setEmail] = useState('');
   const [pw, setPw] = useState('');
   const [formErrors, setFormErrors] = useState({});
@@ -40,11 +40,14 @@ function LoginIndexPage() {
   };
 
   useEffect(() => {
+    // console.log(isSubmitting);
+    // console.log(formErrors);
+
 
     if (isSubmitting && !Object.keys(formErrors).length) {
       (async () => {
-
-
+        
+        
         const token = await getAdminToken(formValues);
         if (token) {
           dispatch(authAction.adminLogin({ token: token }));

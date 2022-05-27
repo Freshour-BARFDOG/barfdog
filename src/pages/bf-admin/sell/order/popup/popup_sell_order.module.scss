@@ -7,9 +7,13 @@ $browser-context: 16;
 // *  ------- COMMON ------- * //
 $backgroundColorDef: #f8f8ff;
 
+#popup {
+  background-color: $backgroundColorDef;
+}
 
 .header {
-  border-bottom: rem(1) solid var(--color-line-03);
+  background-color: #23242e;
+  color: #fff;
   .cont {
     height: rem(66);
     display: flex;
@@ -29,12 +33,7 @@ $backgroundColorDef: #f8f8ff;
 
 .body {
   padding: rem(20) 0 rem(30);
-  max-height: rem(494);
 }
-
-
-
-
 
 // * ------- TABLE ------- * //
 .table {
@@ -50,7 +49,6 @@ $backgroundColorDef: #f8f8ff;
     color: var(--color-font-def);
     font-weight: 500;
     cursor: default;
-    > * {margin-left:rem(4);}
   }
   .t-body {
     // display: grid;
@@ -135,5 +133,3 @@ $backgroundColorDef: #f8f8ff;
   align-items: center;
   justify-content: center;
 }
-
-.subscribe-count{color:var(--highlight);}

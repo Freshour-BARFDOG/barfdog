@@ -28,6 +28,7 @@ import popupWindow from "@util/func/popupWindow";
 
 
     const onPopupHandler = (e) => {
+      e.preventDefault();
       if(typeof window === 'undefined') return;
       const href = e.currentTarget.href;
       popupWindow(href, {width:1000, height:716});
@@ -38,8 +39,12 @@ import popupWindow from "@util/func/popupWindow";
       <li className={s.item} key={`item-${DATA.id}`}>
         <span>
           <Link href={`/bf-admin/member/popup/${DATA.id}`} passHref>
-            <a target="_blank" onClick={onPopupHandler}>
-              <button className="admin_btn basic_s solid">상세보기</button>
+            <a
+              target="_blank"
+              className="admin_btn basic_s solid"
+              onClick={onPopupHandler}
+            >
+              상세보기
             </a>
           </Link>
         </span>

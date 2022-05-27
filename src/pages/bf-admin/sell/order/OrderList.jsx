@@ -1,6 +1,7 @@
 import s from './order.module.scss';
-import getElemIdx from "@util/func/getElemIdx";
+import Link from "next/link";
 import Checkbox from "@src/components/atoms/Checkbox";
+import popupWindow from "@util/func/popupWindow";
 import transformDate from "@util/func/transformDate";
 
 
@@ -42,15 +43,14 @@ const ItemList = ({ item, sortableItemRef }) => {
     },
   };
 
-  const onDeleteItemHandler = (e) => {
-    const target = e.currentTarget.closest("li");
-    const targetViewIdx = getElemIdx(target);
-    const apiURL = e.currentTarget.dataset.apiurl;
-    const reviewName = items[targetViewIdx]?.name;
-    if (confirm(`선택된 리뷰(${reviewName})를 정말 삭제하시겠습니까?`)) {
-      onDeleteItem(apiURL);
-    }
-  };
+
+    const onPopupHandler = (e) => {
+      e.preventDefault();
+      if (typeof window === "undefined") return;
+      const href = e.currentTarget.href;
+      popupWindow(href, { width: 1000, height: 716 });
+    };
+
 
   return (
     <li
@@ -68,13 +68,9 @@ const ItemList = ({ item, sortableItemRef }) => {
         />
       </span>
       <span>
-        <button
-          className="admin_btn basic_s solid"
-          // onClick={onDeleteItemHandler}
-          // data-apiurl={DATA.apiurl.delete}
-        >
-          상세보기
-        </button>
+        <Link href={`/bf-admin/sell/order/popup/${DATA.id}`} passHref>
+          <a onClick={onPopupHandler} className="admin_btn basic_s solid">상세보기</a>
+        </Link>
       </span>
       <span>
         <em className={"text-transform-ellipsis"}>{DATA.orderId}</em>

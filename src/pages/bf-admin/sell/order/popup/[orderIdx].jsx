@@ -1,52 +1,19 @@
-import React , { useState, useEffect }from 'react'
-import { useRouter } from 'next/router';
-import s from './popup.module.scss';
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import s from "./popup_sell_order.module.scss";
 import PopupWrapper from "@src/components/popup/PopupWrapper";
-import { PopupCloseButton, PopupCloseButton_typeX } from "@src/components/popup/PopupCloseButton";
-import Modal_member_class from '@src/components/modal/Modal_member_class';
-import Modal_member_subscribe from "@src/components/modal/Modal_member_subscribe";
+import {
+  PopupCloseButton,
+  PopupCloseButton_typeX,
+} from "@src/components/popup/PopupCloseButton";
+
 
 
 
 
 function Popup_MemeberDetailPage() {
   const router = useRouter();
-  const initialValues = {
-    birthday: '1992-02-15',
-    class:'BRONZE'
-  }
-  const [formValue, setFormValue] = useState(initialValues);
-  const [disabledBirthDayInput, setDisabledBirthDayInput] = useState(true);
-  const [isActiveClassModal,setIsActiveClassModal] = useState(false);
-  const [isActiveSubscribeModal,setIsActiveSubscribeModal] = useState(false);
 
-  console.log(formValue);
-
-
-
-  const onChangeBirthdayHandler = (e) => {
-    const {value} = e.currentTarget;
-    setFormValue({
-      ...formValue,
-      birthday: value,
-    });
-    
-  }
-
-  const onActiveBirthdayHandler =() => {
-    setDisabledBirthDayInput(prevState=>!prevState);
-  }
-
-  // console.log(formValue)
-  const onClassModalHandler = () => {
-    setIsActiveClassModal(prevState=> !prevState);
-  }
-
-  const onSubscribeModalHandler = () => {
-    setIsActiveSubscribeModal((prevState) => !prevState);
-  }
-
-  
 
 
   return (
@@ -56,7 +23,7 @@ function Popup_MemeberDetailPage() {
           <header className={s.header}>
             <div className={s.row}>
               <div className={s.cont}>
-                <h1 className={s["popup-title"]}>회원정보 조회</h1>
+                <h1 className={s["popup-title"]}>주문상세정보</h1>
                 <PopupCloseButton_typeX />
               </div>
             </div>
@@ -85,20 +52,10 @@ function Popup_MemeberDetailPage() {
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
                             <span>
-                              <input
-                                type="date"
-                                disabled={disabledBirthDayInput}
-                                className={
-                                  disabledBirthDayInput ? s.disabled : ""
-                                }
-                                value={formValue.birthday}
-                                onChange={onChangeBirthdayHandler}
-                              />
                             </span>
                             <span>
                               <button
                                 className="admin_btn line point basic_s"
-                                onClick={onActiveBirthdayHandler}
                               >
                                 변경
                               </button>
@@ -159,7 +116,6 @@ function Popup_MemeberDetailPage() {
                             <span>
                               <button
                                 className="admin_btn line point basic_s"
-                                onClick={onClassModalHandler}
                               >
                                 변경
                               </button>
@@ -177,7 +133,6 @@ function Popup_MemeberDetailPage() {
                             <span>
                               <button
                                 className="admin_btn line point basic_s"
-                                onClick={onSubscribeModalHandler}
                               >
                                 구독정보보기
                               </button>
@@ -249,18 +204,8 @@ function Popup_MemeberDetailPage() {
           </main>
         </PopupWrapper>
       </div>
-      {isActiveClassModal && (
-        <Modal_member_class
-          onClick={setIsActiveClassModal}
-          formValue={formValue}
-          setFormValue={setFormValue}
-        />
-      )}
-      {isActiveSubscribeModal && (
-        <Modal_member_subscribe onClick={setIsActiveSubscribeModal} />
-      )}
     </>
   );
 }
 
-export default Popup_MemeberDetailPage
+export default Popup_MemeberDetailPage;
