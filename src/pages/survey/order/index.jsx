@@ -8,7 +8,7 @@ function SelectPlanPage() {
     <>
       <MetaTitle title="플랜 레시피 선택" />
       <Layout>
-        <Wrapper>플랜 래시피 선택 페이지 </Wrapper>
+        <Wrapper>플랜 래시피 선택 페이지 설문조사 라고 적혀있음 </Wrapper>
       </Layout>
     </>
   );

@@ -8,7 +8,7 @@ function OrderCompletedPage() {
     <>
       <MetaTitle title="주문완료" />
       <Layout>
-        <Wrapper>주문완료 페이지 </Wrapper>
+        <Wrapper>주문완료 페이지 견주님 바프독 </Wrapper>
       </Layout>
     </>
   );
