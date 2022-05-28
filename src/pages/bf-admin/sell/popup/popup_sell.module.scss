@@ -81,16 +81,18 @@ $popupMainHeaderHeight:rem(66);
       align-items: center;
       overflow: hidden;
 
+
       &:nth-child(2n) {
         margin-left: rem(-1);
       }
       .innerBox {
         border: rem(1) solid var(--color-line-03);
         height: rem(48);
-        display: flex;
+        display: grid;
         align-items: center;
-        padding: 0 rem(20);
+        padding: rem(12) rem(20);
         box-sizing: border-box;
+  
         span {
           display: -webkit-box;
           -webkit-box-orient: vertical;
@@ -99,6 +101,11 @@ $popupMainHeaderHeight:rem(66);
           &:not(:first-child) {
             margin-left: rem(10);
           }
+        }
+        &.auto-height{
+          height: 100%;
+          span{margin-left:0;}
+          span:not(:first-child){margin-top:rem(10);}
         }
       }
       .innerBox:nth-child(2) {

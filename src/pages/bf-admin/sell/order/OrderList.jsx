@@ -22,7 +22,6 @@ export default function SearchResultList({ items, onDeleteItem }) {
 
 
 const ItemList = ({ item, sortableItemRef }) => {
-console.log(item);
   const DATA = {
     id: item.id || "0",
     orderId: item.orderId || "56841568",

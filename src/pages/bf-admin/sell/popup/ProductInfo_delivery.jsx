@@ -53,7 +53,7 @@ const ProductInfo_delivery = () => {
               <span>발송처리일</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
-              <span></span>
+              <span>2022/02/16 16:31:28</span>
             </div>
           </div>
           <div className={s["t-box"]}>
@@ -62,26 +62,34 @@ const ProductInfo_delivery = () => {
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
               <span>
-                <span></span>
+                <span>2022/02/18 16:31:28</span>
               </span>
             </div>
           </div>
         </li>
         <li className={`${s["t-row"]}`}>
           <div className={s["t-box"]}>
-            <div className={`${s.innerBox} ${s.label}`}>
+            <div className={`${s.innerBox} ${s.label}  ${s["auto-height"]}`}>
               <span>송장번호</span>
             </div>
-            <div className={`${s.innerBox} ${s.cont}`}>
-              <span></span>
+            <div className={`${s.innerBox} ${s.cont} ${s["auto-height"]}`}>
+              <span>cj대한통운 26542106385426</span>
+              <span>
+                <button
+                  id={"inquire-delivery"}
+                  className="admin_btn line basic_s"
+                >
+                  배송조회
+                </button>
+              </span>
             </div>
           </div>
           <div className={s["t-box"]}>
-            <div className={`${s.innerBox} ${s.label}`}>
+            <div className={`${s.innerBox} ${s.label}  ${s["auto-height"]}`}>
               <span>구매확정일</span>
             </div>
-            <div className={`${s.innerBox} ${s.cont}`}>
-              <span></span>
+            <div className={`${s.innerBox} ${s.cont}  ${s["auto-height"]}`}>
+              <span>20/02/15 16:23:48</span>
             </div>
           </div>
         </li>

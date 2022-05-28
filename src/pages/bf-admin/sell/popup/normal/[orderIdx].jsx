@@ -32,7 +32,7 @@ import ProductInfo_delivery from "../ProductInfo_delivery";
 
 */
 
-const TEST_DATA = { orderStatus: "CANCEL_DONE", itemList: [1, 2, 3] };
+const TEST_DATA = { orderStatus: "EXCHANGE_REQUEST", itemList: [1, 2, 3] };
 
 function Popup_MemeberDetailPage() {
   const router = useRouter();
