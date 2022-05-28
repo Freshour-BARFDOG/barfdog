@@ -654,7 +654,6 @@ function SurveySwiper({surveyValues, setSurveyValues}) {
                     alt="이전 화살표"
                   />
                 </div>
-
               </div>
               이전
             </div>
