@@ -13,8 +13,13 @@ import OrderList from "./OrderList";
 import Pagination from "@src/components/atoms/Pagination";
 
 
-
-const TEST_ITEM = [1, 2, 3, 4, 5];
+const TEST_ITEM = [
+  { id: "0", paymentType: "subscribe" },
+  { id: "1", paymentType: "normal" },
+  { id: "2", paymentType: "subscribe" },
+  { id: "3", paymentType: "normal" },
+  { id: "4", paymentType: "normal" },
+];
 
 
 function OrderOnSellPage() {

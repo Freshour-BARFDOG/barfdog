@@ -22,10 +22,11 @@ export default function SearchResultList({ items, onDeleteItem }) {
 
 
 const ItemList = ({ item, sortableItemRef }) => {
-
+console.log(item);
   const DATA = {
     id: item.id || "0",
     orderId: item.orderId || "56841568",
+    paymentType: item.paymentType || "subscribe",
     pruductId: item.pruductId || "20220256841568",
     orderStatus: item.orderStatus || "결제완료",
     orderDate: item.date || "05/25 15:34",
@@ -68,8 +69,13 @@ const ItemList = ({ item, sortableItemRef }) => {
         />
       </span>
       <span>
-        <Link href={`/bf-admin/sell/order/popup/${DATA.id}`} passHref>
-          <a onClick={onPopupHandler} className="admin_btn basic_s solid">상세보기</a>
+        <Link
+          href={`/bf-admin/sell/popup/${DATA.paymentType}/${DATA.id}`}
+          passHref
+        >
+          <a onClick={onPopupHandler} className="admin_btn basic_s solid">
+            상세보기
+          </a>
         </Link>
       </span>
       <span>
