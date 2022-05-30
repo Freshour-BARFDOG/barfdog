@@ -691,6 +691,48 @@ function SurveySwiper({surveyValues, setSurveyValues}) {
           />
         </SwiperSlide>
       </Swiper>
+      <div className={s.swiper_navigation_container}>
+        <i className={s["swiper-button-prev"]} ref={navPrev_mainRef}>
+          <div className={s.left_side_btn}>
+            <div className={s.left_btn}>
+              <div className={s.image_box}>
+                <div className={`${s.image} img-wrap`}>
+                  <Image
+                    priority
+                    src={require("public/img/survey_left_arrow.png")}
+                    objectFit="cover"
+                    layout="fill"
+                    alt="이전 화살표"
+                  />
+                </div>
+              </div>
+              이전
+            </div>
+          </div>
+          
+        </i>
+
+        <i className={s["swiper-button-next"]} ref={navNext_mainRef}>
+          <div className={s.right_side_btn}>
+            <div className={s.right_btn}>
+              다음
+              <div className={s.image_box}>
+                <div className={`${s.image} img-wrap`}>
+                  <Image
+                    priority
+                    src={require("public/img/survey_right_arrow.png")}
+                    objectFit="cover"
+                    layout="fill"
+                    alt="이전 화살표"
+                  />
+                </div>
+
+              </div>
+              
+            </div>
+          </div>
+        </i>
+      </div>
     </div>
   );
 }
