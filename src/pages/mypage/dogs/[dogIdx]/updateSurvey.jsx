@@ -16,7 +16,14 @@ function Mypage() {
       <MetaTitle title={`설문수정: ${dogIdx}`} />
       <Layout>
         <Wrapper>
-          <MypageWrapper>{`반려견 설문수정: ${dogIdx}`}</MypageWrapper>
+          <MypageWrapper>
+            {/* {`반려견 설문수정: ${dogIdx}`} */}
+            <br />
+            <h2>결과지를 종합해본 결과</h2>
+            <br />
+            시호에게는 안정적인 첫 생식 적응이 필요한 스타터프리미엄 레시피를
+            추천합니다.
+          </MypageWrapper>
         </Wrapper>
       </Layout>
     </>

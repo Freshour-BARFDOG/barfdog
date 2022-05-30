@@ -10,7 +10,7 @@ function Mypage() {
       <MetaTitle title={`정기구독 배송안내`} />
       <Layout>
         <Wrapper>
-          정기구독 배송안내
+          <h2>정기구독 배송안내</h2>
         </Wrapper>
       </Layout>
     </>
