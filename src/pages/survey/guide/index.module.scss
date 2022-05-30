@@ -39,3 +39,8 @@ $browser-context:16; // html font-size
   justify-content: center;
   padding-bottom: rem(362);
 }
+
+.image {
+  width: rem(32);
+  aspect-ratio: 1/1;
+}
