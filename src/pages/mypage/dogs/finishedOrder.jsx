@@ -10,7 +10,9 @@ function Mypage() {
       <MetaTitle title={`정기구독 주문완료`} />
       <Layout>
         <Wrapper>
-          주문완료
+          구독해주셔서 감사합니다.
+          <br />
+          바프독은 배송 전 제조한 제품을 가장 신선한 상태로 배송해드립니다
         </Wrapper>
       </Layout>
     </>

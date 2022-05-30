@@ -14,10 +14,13 @@ function Mypage() {
     
   return (
     <>
-      <MetaTitle title={`설문수정 확인: ${dogIdx}`} />
+      <MetaTitle title={`설문수정내역 확인: ${dogIdx}`} />
       <Layout>
         <Wrapper>
-          <MypageWrapper>반려견 설문수정확인: {dogIdx}</MypageWrapper>
+          <MypageWrapper>반려견 설문수정확인: {dogIdx}
+          <br />
+          구독정보 변경 확인하기
+          </MypageWrapper>
         </Wrapper>
       </Layout>
     </>
