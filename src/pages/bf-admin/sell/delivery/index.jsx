@@ -62,18 +62,25 @@ function DeliveryOnSellPage() {
               <SearchRadio
                 searchValue={searchValue}
                 setSearchValue={setSearchValue}
-                title="종류"
+                title="처리상태"
                 name="status"
                 idList={["ALL", "DELIVERY_START", "DELIVERY_DONE"]}
                 labelList={["배송전체", "배송시작", "배송완료"]}
+              />
+              <SearchRadio
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
+                title="주문유형"
+                name="orderType"
+                idList={["ALL", "SINGLE", "SUBSCRIBE"]}
+                labelList={["전체", "일반주문", "정기구독주문"]}
               />
             </SearchBar>
           </section>
           <section className="cont">
             <div className="cont_header clearfix">
               <p className="cont_title cont-left">목록</p>
-              <div className="controls cont-left">
-              </div>
+              <div className="controls cont-left"></div>
             </div>
             <div className={`${s.cont_viewer}`}>
               <div className={s.table}>

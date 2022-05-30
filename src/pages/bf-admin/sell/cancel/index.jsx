@@ -63,10 +63,18 @@ function CancelOnSellPage() {
               <SearchRadio
                 searchValue={searchValue}
                 setSearchValue={setSearchValue}
-                title="종류"
+                title="처리상태"
                 name="status"
                 idList={["CANCEL ALL", "CANCEL REQUEST", "CANCEL DONE "]}
                 labelList={["취소전체", "취소요청", "취소완료"]}
+              />
+              <SearchRadio
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
+                title="주문유형"
+                name="orderType"
+                idList={["ALL", "SINGLE", "SUBSCRIBE"]}
+                labelList={["전체", "일반주문", "정기구독주문"]}
               />
             </SearchBar>
           </section>

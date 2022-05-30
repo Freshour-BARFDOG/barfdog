@@ -62,7 +62,7 @@ function ExchangeOnSellPage() {
               <SearchRadio
                 searchValue={searchValue}
                 setSearchValue={setSearchValue}
-                title="반품"
+                title="처리상태"
                 name="status"
                 idList={["EXCHANGE ALL", "EXCHANGE REQUEST", "EXCHANGE DONE"]}
                 labelList={["교환전체", "교환요청", "교환완료"]}
@@ -86,10 +86,7 @@ function ExchangeOnSellPage() {
               <div className={s.table}>
                 <ul className={s.table_header}>
                   <li className={s.table_th}>
-                    <Checkbox
-                      id="checkAll"
-                      onClick={''}
-                    />
+                    <Checkbox id="checkAll" onClick={""} />
                   </li>
                   <li className={s.table_th}>상세보기</li>
                   <li className={s.table_th}>주문번호</li>

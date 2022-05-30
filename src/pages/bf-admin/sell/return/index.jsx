@@ -63,7 +63,7 @@ function ReturnOnSellPage() {
               <SearchRadio
                 searchValue={searchValue}
                 setSearchValue={setSearchValue}
-                title="반품"
+                title="처리상태"
                 name="status"
                 idList={["RETURN ALL", "RETURN REQUEST", "RETURN DONE "]}
                 labelList={["반품전체", "반품요청", "반품완료"]}
@@ -80,19 +80,14 @@ function ReturnOnSellPage() {
                 <button className="admin_btn line basic_m">
                   반품승인&#40;판매자&#41;
                 </button>
-                <button className="admin_btn line basic_m">
-                  반품불가
-                </button>
+                <button className="admin_btn line basic_m">반품불가</button>
               </div>
             </div>
             <div className={`${s.cont_viewer}`}>
               <div className={s.table}>
                 <ul className={s.table_header}>
                   <li className={s.table_th}>
-                    <Checkbox
-                      id="checkAll"
-                      onClick={''}
-                    />
+                    <Checkbox id="checkAll" onClick={""} />
                   </li>
                   <li className={s.table_th}>상세보기</li>
                   <li className={s.table_th}>주문번호</li>

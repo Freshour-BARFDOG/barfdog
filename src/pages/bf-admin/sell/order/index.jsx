@@ -68,10 +68,18 @@ function OrderOnSellPage() {
               <SearchRadio
                 searchValue={searchValue}
                 setSearchValue={setSearchValue}
-                title="종류"
+                title="처리상태"
                 name="status"
                 idList={["PAYMENT DONE", "DELIVERY", "FAIL TO PAYMENT"]}
                 labelList={["결제완료", "배송 준비/생산 중", "결제실패"]}
+              />
+              <SearchRadio
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
+                title="주문유형"
+                name="orderType"
+                idList={["ALL", "SINGLE", "SUBSCRIBE"]}
+                labelList={["전체", "일반주문", "정기구독주문"]}
               />
             </SearchBar>
           </section>
