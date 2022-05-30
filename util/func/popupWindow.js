@@ -4,7 +4,7 @@ const popupWindow = (href, options={width:1000, height:400}) => {
   if (typeof window === "undefined") return;
   window.open(
     href,
-    "popupWindow",
+    "_blank",
     `toolbar=no,
     location=no,
     width=${options.width},

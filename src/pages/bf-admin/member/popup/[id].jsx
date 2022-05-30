@@ -16,7 +16,7 @@ function Popup_MemeberDetailPage() {
     class:'BRONZE'
   }
   const [formValue, setFormValue] = useState(initialValues);
-  const [activeBirthDayInput, setActiveBirthDayInput] = useState(false);
+  const [disabledBirthDayInput, setDisabledBirthDayInput] = useState(true);
   const [isActiveClassModal,setIsActiveClassModal] = useState(false);
   const [isActiveSubscribeModal,setIsActiveSubscribeModal] = useState(false);
 
@@ -26,15 +26,15 @@ function Popup_MemeberDetailPage() {
 
   const onChangeBirthdayHandler = (e) => {
     const {value} = e.currentTarget;
-    setActiveBirthDayInput({
+    setFormValue({
       ...formValue,
-      birthday: value
+      birthday: value,
     });
     
   }
 
   const onActiveBirthdayHandler =() => {
-    setActiveBirthDayInput(prevState=>!prevState);
+    setDisabledBirthDayInput(prevState=>!prevState);
   }
 
   // console.log(formValue)
@@ -87,9 +87,9 @@ function Popup_MemeberDetailPage() {
                             <span>
                               <input
                                 type="date"
-                                disabled={activeBirthDayInput}
+                                disabled={disabledBirthDayInput}
                                 className={
-                                  activeBirthDayInput ? s.disabled : ""
+                                  disabledBirthDayInput ? s.disabled : ""
                                 }
                                 value={formValue.birthday}
                                 onChange={onChangeBirthdayHandler}

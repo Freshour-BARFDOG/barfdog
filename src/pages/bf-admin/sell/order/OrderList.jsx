@@ -1,6 +1,7 @@
 import s from './order.module.scss';
-import getElemIdx from "@util/func/getElemIdx";
+import Link from "next/link";
 import Checkbox from "@src/components/atoms/Checkbox";
+import popupWindow from "@util/func/popupWindow";
 import transformDate from "@util/func/transformDate";
 
 
@@ -21,10 +22,10 @@ export default function SearchResultList({ items, onDeleteItem }) {
 
 
 const ItemList = ({ item, sortableItemRef }) => {
-
   const DATA = {
     id: item.id || "0",
     orderId: item.orderId || "56841568",
+    paymentType: item.paymentType || "subscribe",
     pruductId: item.pruductId || "20220256841568",
     orderStatus: item.orderStatus || "결제완료",
     orderDate: item.date || "05/25 15:34",
@@ -42,15 +43,14 @@ const ItemList = ({ item, sortableItemRef }) => {
     },
   };
 
-  const onDeleteItemHandler = (e) => {
-    const target = e.currentTarget.closest("li");
-    const targetViewIdx = getElemIdx(target);
-    const apiURL = e.currentTarget.dataset.apiurl;
-    const reviewName = items[targetViewIdx]?.name;
-    if (confirm(`선택된 리뷰(${reviewName})를 정말 삭제하시겠습니까?`)) {
-      onDeleteItem(apiURL);
-    }
-  };
+
+    const onPopupHandler = (e) => {
+      e.preventDefault();
+      if (typeof window === "undefined") return;
+      const href = e.currentTarget.href;
+      popupWindow(href, { width: 1000, height: 716 });
+    };
+
 
   return (
     <li
@@ -68,13 +68,14 @@ const ItemList = ({ item, sortableItemRef }) => {
         />
       </span>
       <span>
-        <button
-          className="admin_btn basic_s solid"
-          // onClick={onDeleteItemHandler}
-          // data-apiurl={DATA.apiurl.delete}
+        <Link
+          href={`/bf-admin/sell/popup/${DATA.paymentType}/${DATA.id}`}
+          passHref
         >
-          상세보기
-        </button>
+          <a onClick={onPopupHandler} className="admin_btn basic_s solid">
+            상세보기
+          </a>
+        </Link>
       </span>
       <span>
         <em className={"text-transform-ellipsis"}>{DATA.orderId}</em>

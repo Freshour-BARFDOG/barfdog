@@ -6,12 +6,18 @@ $browser-context: 16;
 
 // *  ------- COMMON ------- * //
 $backgroundColorDef: #f8f8ff;
+$popupMainHeaderHeight:rem(66);
 
+#popup {
+  background-color: $backgroundColorDef;
+  position: relative;
+}
 
 .header {
-  border-bottom: rem(1) solid var(--color-line-03);
+  background-color: #23242e;
+  color: #fff;
   .cont {
-    height: rem(66);
+    height: $popupMainHeaderHeight;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -29,11 +35,7 @@ $backgroundColorDef: #f8f8ff;
 
 .body {
   padding: rem(20) 0 rem(30);
-  max-height: rem(494);
 }
-
-
-
 
 
 // * ------- TABLE ------- * //
@@ -50,11 +52,18 @@ $backgroundColorDef: #f8f8ff;
     color: var(--color-font-def);
     font-weight: 500;
     cursor: default;
-    > * {margin-left:rem(4);}
   }
   .t-body {
     // display: grid;
     // grid-template-columns: 1fr 1fr;
+
+    &.product-item-info:not(:first-child){margin-bottom:rem(15);}
+    .t-top-row {
+      margin-bottom:rem(10);
+      .product-title{margin-right:rem(10); color:var(--gray20);}
+      .product-idx{color:var(--gray10); font-size:rem(15);}
+    }
+
     .t-row {
       display: grid;
       grid-template-columns: 50% 50%;
@@ -72,16 +81,18 @@ $backgroundColorDef: #f8f8ff;
       align-items: center;
       overflow: hidden;
 
+
       &:nth-child(2n) {
         margin-left: rem(-1);
       }
       .innerBox {
         border: rem(1) solid var(--color-line-03);
         height: rem(48);
-        display: flex;
+        display: grid;
         align-items: center;
-        padding: 0 rem(20);
+        padding: rem(12) rem(20);
         box-sizing: border-box;
+  
         span {
           display: -webkit-box;
           -webkit-box-orient: vertical;
@@ -90,6 +101,11 @@ $backgroundColorDef: #f8f8ff;
           &:not(:first-child) {
             margin-left: rem(10);
           }
+        }
+        &.auto-height{
+          height: 100%;
+          span{margin-left:0;}
+          span:not(:first-child){margin-top:rem(10);}
         }
       }
       .innerBox:nth-child(2) {
@@ -136,4 +152,5 @@ $backgroundColorDef: #f8f8ff;
   justify-content: center;
 }
 
-.subscribe-count{color:var(--highlight);}
+
+.notice-message{color:var(--color-primary04); font-size:rem(14);margin:rem(4) 0 rem(15);}
