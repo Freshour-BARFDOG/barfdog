@@ -691,7 +691,6 @@ function SurveySwiper({surveyValues, setSurveyValues}) {
           />
         </SwiperSlide>
       </Swiper>
-<<<<<<< HEAD
       <div className={s.swiper_navigation_container}>
         <i className={s["swiper-button-prev"]} ref={navPrev_mainRef}>
           <div className={s.left_side_btn}>
@@ -734,8 +733,6 @@ function SurveySwiper({surveyValues, setSurveyValues}) {
           </div>
         </i>
       </div>
-=======
->>>>>>> main
     </div>
   );
 }

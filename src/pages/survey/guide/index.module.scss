@@ -1,0 +1,41 @@
+$browser-context:16; // html font-size
+@function rem($px, $context: $browser-context){
+  @return #{$px / $context}rem;
+}
+@import 'styles/global/guide.scss';
+
+
+.title_box {
+  display: flex;
+  justify-content: center;
+  padding: rem(100) 0 rem(40) 0;
+  .inner_box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    .image {
+      width: rem(150);
+      aspect-ratio: 1/1;
+    }
+
+    width: rem(560);
+    height: rem(276);
+    background: #F5F5F5;
+    border-radius: rem(12);
+    
+    .text {
+      padding-top: rem(10);
+      @include char(l20);
+      font-weight: 500;
+      text-align: center;
+      line-height: 150%;
+    }
+  }
+}
+
+.btn_box {
+  display: flex;
+  justify-content: center;
+  padding-bottom: rem(362);
+}
