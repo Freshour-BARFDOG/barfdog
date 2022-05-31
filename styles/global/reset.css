@@ -193,6 +193,7 @@ textarea:focus, input:not([type="checkbox"],[type="file"],[type="radio"]):focus{
 
 
 /* 버튼 초기화 */
+button {cursor:pointer; display:inline-block;}
 input, button{border:0; display:inline-block; background:none; color:inherit;}
 
 input:placeholder{

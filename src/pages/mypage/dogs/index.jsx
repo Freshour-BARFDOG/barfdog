@@ -3,8 +3,9 @@ import Layout from "/src/components/common/Layout";
 import Wrapper from "/src/components/common/Wrapper";
 import MypageWrapper from "/src/components/mypage/MypageWrapper";
 import MetaTitle from "/src/components/atoms/MetaTitle";
-import Styles from "styles/css/mypage/dogs/index.module.scss";
+import Styles from "./dogs.module.scss";
 import Image from "next/image";
+import Link from "next/link";
 
 
 const EmptyCont = () => {
@@ -26,9 +27,66 @@ const EmptyCont = () => {
   );
 }
 
+const ItemList = ()=>{
+
+  return (<>
+    <div className={Styles['dogInfo-wrap']}>
+      <div className={Styles.left_box}>
+        <div className={`${Styles.image} img-wrap`}>
+          <Image
+              priority
+              src={require("/public/img/mypage/dogs_info3.png")}
+              objectFit="cover"
+              layout="fill"
+              alt="카드 이미지"
+          />
+        </div>
+      </div>
+      <div className={Styles.right_box}>
+        <div className={Styles['dog-info']}>
+          <div className={Styles.inner_flex}>
+            <h5 className={Styles.dog_name}>
+              바둑이 ( 3세 / 암컷 )
+            </h5>
+            <div className={Styles.tags}>
+              <i className={Styles.before_pay}>결제전</i>
+              <i className={Styles.subscribe}>구독중</i>
+              <i className={Styles.representative}>대표견</i>
+            </div>
+          </div>
+          <div className={`${Styles.image} img-wrap`}>
+            <Image
+                priority
+                src={require("/public/img/mypage/dog_info_delete.png")}
+                objectFit="cover"
+                layout="fill"
+                alt="삭제 아이콘"
+            />
+          </div>
+        </div>
+
+        <div className={Styles.controls}>
+          <button>프로필사진 편집</button>
+          <button>대표견 설정</button>
+        </div>
+
+        {/* 설문결과 설문수정 결제하기 버튼3개 */}
+        <div className={Styles['btn-section']}>
+          <Link href={"/mypage/dogs/[id]/statistic"} passHref>
+            <a>설문결과</a>
+          </Link>
+          <Link href={"/mypage/dogs/[id]/updateSurvey"} passHref>
+            <a>설문수정</a>
+          </Link>
+          <button className={Styles.payment}>결제하기</button>
+        </div>
+      </div>
+    </div>
+  </>)
+}
+
 
 function MypageDogInfoPage() {
-  const [activeMenu, setActiveMenu] = useState("left");
   return (
     <>
       <MetaTitle title="마이페이지 반려견정보" />
@@ -37,151 +95,8 @@ function MypageDogInfoPage() {
           <MypageWrapper>
             <section className={Styles.title}>반려견정보</section>
 
-            <section className={Styles.body2}>
-              <div className={Styles.flex_box2}>
-                <div className={Styles.left_box}>
-                  <div className={`${Styles.image} img-wrap`}>
-                    <Image
-                      priority
-                      src={require("/public/img/mypage/dogs_info.png")}
-                      objectFit="cover"
-                      layout="fill"
-                      alt="카드 이미지"
-                    />
-                  </div>
-                </div>
-
-                <div className={Styles.right_box}>
-                  <div className={Styles.flex_box3}>
-                    <div className={Styles.inner_flex}>
-                      <div className={Styles.dog_name}>시호 ( 1세 / 수컷 )</div>
-                      <div className={Styles.representative}>대표견</div>
-                      <div className={Styles.subscribe}>구독중</div>
-                    </div>
-
-                    <div className={`${Styles.image} img-wrap`}>
-                      <Image
-                        priority
-                        src={require("/public/img/mypage/dog_info_delete.png")}
-                        objectFit="cover"
-                        layout="fill"
-                        alt="카드 이미지"
-                      />
-                    </div>
-                  </div>
-
-                  <div className={Styles.flex_box4}>
-                    <div>프로필사진 편집</div>
-                    <div className={Styles.line}></div>
-                    <div>대표견 설정</div>
-                  </div>
-
-                  <div className={Styles.flex_box5}>
-                    <div className={Styles.left_btn}>설문결과</div>
-                    <div className={Styles.right_btn}>설문수정</div>
-                  </div>
-                </div>
-              </div>
-
-              <div className={Styles.flex_box2}>
-                <div className={Styles.left_box}>
-                  <div className={`${Styles.image} img-wrap`}>
-                    <Image
-                      priority
-                      src={require("/public/img/mypage/dogs_info2.png")}
-                      objectFit="cover"
-                      layout="fill"
-                      alt="카드 이미지"
-                    />
-                  </div>
-                </div>
-
-                <div className={Styles.right_box}>
-                  <div className={Styles.flex_box3}>
-                    <div className={Styles.inner_flex}>
-                      <div className={Styles.dog_name}>
-                        불독이 ( 1세 / 수컷 )
-                      </div>
-                      {/* <div className={Styles.representative}>
-                        대표견
-                      </div> */}
-                      <div className={Styles.subscribe}>구독중</div>
-                    </div>
-
-                    <div className={`${Styles.image} img-wrap`}>
-                      <Image
-                        priority
-                        src={require("/public/img/mypage/dog_info_delete.png")}
-                        objectFit="cover"
-                        layout="fill"
-                        alt="카드 이미지"
-                      />
-                    </div>
-                  </div>
-
-                  <div className={Styles.flex_box4}>
-                    <div>프로필사진 편집</div>
-                    <div className={Styles.line}></div>
-                    <div>대표견 설정</div>
-                  </div>
-
-                  <div className={Styles.flex_box5}>
-                    <div className={Styles.left_btn}>설문결과</div>
-                    <div className={Styles.right_btn}>설문수정</div>
-                  </div>
-                </div>
-              </div>
-
-              <div className={Styles.flex_box2}>
-                <div className={Styles.left_box}>
-                  <div className={`${Styles.image} img-wrap`}>
-                    <Image
-                      priority
-                      src={require("/public/img/mypage/dogs_info3.png")}
-                      objectFit="cover"
-                      layout="fill"
-                      alt="카드 이미지"
-                    />
-                  </div>
-                </div>
-
-                <div className={Styles.right_box}>
-                  <div className={Styles.flex_box3}>
-                    <div className={Styles.inner_flex}>
-                      <div className={Styles.dog_name}>
-                        바둑이 ( 3세 / 암컷 )
-                      </div>
-                      {/* <div className={Styles.representative}>
-                        대표견
-                      </div> */}
-                      <div className={Styles.before_pay}>결제전</div>
-                    </div>
-
-                    <div className={`${Styles.image} img-wrap`}>
-                      <Image
-                        priority
-                        src={require("/public/img/mypage/dog_info_delete.png")}
-                        objectFit="cover"
-                        layout="fill"
-                        alt="카드 이미지"
-                      />
-                    </div>
-                  </div>
-
-                  <div className={Styles.flex_box4}>
-                    <div>프로필사진 편집</div>
-                    <div className={Styles.line}></div>
-                    <div>대표견 설정</div>
-                  </div>
-
-                  {/* 설문결과 설문수정 결제하기 버튼3개 */}
-                  <div className={Styles.flex_box6}>
-                    <div className={Styles.left_btn}>설문결과</div>
-                    <div className={Styles.right_btn}>설문수정</div>
-                    <div className={Styles.btn}>결제하기</div>
-                  </div>
-                </div>
-              </div>
+            <section>
+              {[1,2,3].map((item, index)=><ItemList key={index} data={{item}}/>)}
             </section>
           </MypageWrapper>
         </Wrapper>

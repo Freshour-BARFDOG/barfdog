@@ -185,7 +185,6 @@ $aniType_Show : 0.3s ease-in ;
         color: #202020;
         display:flex;
         align-items: center;
-        height: 100%;
         height:rem(44);
       }
     }
@@ -203,7 +202,7 @@ $aniType_Show : 0.3s ease-in ;
       
     }
 
-    .table_body{min-height: calc($inputDefaultHeight * 3); background-color: #fff;}
+    .table_body{min-height: calc(rem(38) * 3); background-color: #fff;}
 
     .cont_bottom{
       padding-top: rem(20);

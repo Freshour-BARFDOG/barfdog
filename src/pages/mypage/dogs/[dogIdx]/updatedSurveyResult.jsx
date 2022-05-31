@@ -3,12 +3,12 @@ import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import { useRouter } from "next/router";
-import s from "./updatedSurveyInfo.module.scss";
+import s from "./updatedSurveyResult.module.scss";
 import Image from "next/image";
 
 function Mypage() {
     const router = useRouter();
-    if(!router.isReady) return;
+    // if(!router.isReady) return;
     const { dogIdx } = router.query;
     
   return (

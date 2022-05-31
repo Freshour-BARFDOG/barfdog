@@ -1,21 +1,28 @@
-import React from "react";
+import React, {useState} from "react";
 import Layout from "/src/components/common/Layout";
 import Wrapper from "/src/components/common/Wrapper";
 import MypageWrapper from "/src/components/mypage/MypageWrapper";
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import { useRouter } from "next/router";
-import s from 'styles/css/mypage/dogs/[dogIdx]/statistic.module.scss';
+import s from './statistic.module.scss';
+import Link from "next/link";
+
 
 import Image from 'next/image';
 
 function MypageSubscribe_statisticPage() {
+  const isThisDogSubscribedState = false;
+  const hasSurveyDataChangedEnoughtToRecommend = true;
   const router = useRouter();
   if (!router.isReady) return;
   const { dogIdx } = router.query;
+  const onPrevPage = () => {
+    router.back();
+  }
 
 
 
-  // 이페이지는 설문결과 구독중회원 
+
   return (
     <>
       <MetaTitle title={`설문결과: ${dogIdx}`} />
@@ -330,19 +337,25 @@ function MypageSubscribe_statisticPage() {
             </section>
 
             <section className={s.last_text}>
-              <div>
+              <p className={s['ref-message']}>
                 ※ 해당 결과지는 바프독 고객을 대상으로한 참고용 결과이니, <br/>
-              </div>
-              
-              <div>
                 자세한 반려견의 건강상태는 수의사와 상담해 주세요.
-              </div>
+              </p>
+              {hasSurveyDataChangedEnoughtToRecommend && (<p className={s['notice-message']}>
+                *반려견 정보가 수정되어 권장 식사량이 변경되었습니다.<br/>
+                변경된 정보로 플랜을 재설정 하시겠습니까?
+              </p>)}
             </section>
 
             <section className={s.btn_box}>
-              <div className={s.btn}>
-                맞춤 플랜 확인하기
-              </div>
+              {isThisDogSubscribedState === false &&(<Link href={'/mypage/dogs/[id]/updateOrder'} passHref>
+                <a>맞춤 플랜 확인하기</a>
+              </Link>)}
+
+              <button className={s.link} onClick={onPrevPage}>
+                목록으로 돌아가기
+              </button>
+
             </section>
           
           </MypageWrapper>
