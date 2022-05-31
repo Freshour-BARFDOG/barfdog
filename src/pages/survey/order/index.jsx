@@ -1,12 +1,12 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "/src/components/common/Layout";
 import Wrapper from "/src/components/common/Wrapper";
-import MetaTitle from "@src/components/atoms/MetaTitle";
+import MetaTitle from "/src/components/atoms/MetaTitle";
 import s from "src/pages/survey/order/index.module.scss"
 import Image from 'next/image';
-import Icon_Itemlabel from "@src/components/atoms/Icon_Itemlabel";
-import rem from '@src/components/atoms/rem';
-import CustomInput from "@src/components/atoms/CustomInput";
+import Icon_Itemlabel from "/src/components/atoms/Icon_Itemlabel";
+import rem from '/src/components/atoms/rem';
+import CustomInput from "/src/components/atoms/CustomInput";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
@@ -407,12 +407,7 @@ function SelectPlanPage() {
   const [selectedRecipe, setSelectedRecipe] = useState(0);
   const router = useRouter();
 
-  // console.log(selectedRecipe);;
-  // 풀플랜이면 2개까지 선택할 수 있다.
-
-  // count를 가져와야한다.
-  // 선택된 체크박스.........
-  const onRecipeInputClickHandler = (e) => {
+  const onRecipeInputClickHandler = () => {
     if (!selectedPlan) alert('플랜을 먼저 선택해주세요.');
   }
 
@@ -518,7 +513,7 @@ function SelectPlanPage() {
             >
               <CustomInputCheckbox_recipe
                 name="recipe"
-                disabled={selectedPlan ? false : true}
+                disabled={!selectedPlan}
                 dependency={selectedPlan}
                 onSelected={setSelectedRecipe}
               />
