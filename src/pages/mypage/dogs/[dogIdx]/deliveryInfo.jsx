@@ -6,7 +6,7 @@ import s from "src/pages/mypage/dogs/[dogIdx]/deliveryInfo.module.scss";
 import Image from "next/image";
 
 
-function Mypage() {
+function MypageSubscribe_DeliveryInfoPage() {
 
   return (
     <>
@@ -170,6 +170,6 @@ function Mypage() {
   );
 }
 
-export default Mypage;
+export default MypageSubscribe_DeliveryInfoPage;
 
 

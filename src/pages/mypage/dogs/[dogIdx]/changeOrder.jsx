@@ -6,14 +6,14 @@ import MypageWrapper from "/src/components/mypage/MypageWrapper";
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import { useRouter } from "next/router";
 
-function Mypage() {
+function MypageSubscribeProductPage() {
   const router = useRouter();
   if (!router.isReady) return;
   const { dogIdx } = router.query;
 
   return (
     <>
-      <MetaTitle title={`설문수정: ${dogIdx}`} />
+      <MetaTitle title={`구독 상품 변경: ${dogIdx}`} />
       <Layout>
         <Wrapper>
           <MypageWrapper>
@@ -30,4 +30,4 @@ function Mypage() {
   );
 }
 
-export default Mypage;
+export default MypageSubscribeProductPage;

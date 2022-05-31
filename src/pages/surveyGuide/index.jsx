@@ -3,7 +3,7 @@ import Link from "next/link";
 import Layout from "/src/components/common/Layout";
 import Wrapper from "/src/components/common/Wrapper";
 import MetaTitle from "/src/components/atoms/MetaTitle";
-import s from "src/pages/survey/guide/index.module.scss";
+import s from "./surveyGuide.module.scss";
 import Image from "next/image";
 
 function SurveyGuidePage() {

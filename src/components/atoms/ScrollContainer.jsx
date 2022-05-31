@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {forwardRef} from 'react'
 import styled from 'styled-components'
 import rem from '@src/components/atoms/rem';
 
@@ -30,17 +30,23 @@ function ScrollContainer({
   className,
   children,
   scrollBarWidth,
-}) {
+  ...props
+}, ref) {
+  
+  // * forwardRef((props,ref)=> {return <Conponent/>})
+
   return (
     <Container
       height={height}
       scrollBarWidth={scrollBarWidth}
       style={style}
       className={className}
+      ref={ref}
+      {...props}
     >
       {children}
     </Container>
   );
 }
 
-export default ScrollContainer
+export default forwardRef(ScrollContainer);

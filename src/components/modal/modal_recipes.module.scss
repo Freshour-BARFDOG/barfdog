@@ -54,10 +54,7 @@ $topLinkBannerHeight: rem(38);
       grid-template-columns: repeat(4, $tabmenuListWidth);
       align-items: center;
       justify-content: flex-end;
-    
-
-
-
+  
       li{
         padding:rem(2) 0 ;
         cursor: pointer;
@@ -84,8 +81,9 @@ $topLinkBannerHeight: rem(38);
   
   .img-wrap{aspect-ratio: 320/300;}
   .details {
-    padding-top:rem(17);
     padding-left:rem(32);
+    height: rem(300);
+    box-sizing: border-box;
     ul{
       li{
         display:none;

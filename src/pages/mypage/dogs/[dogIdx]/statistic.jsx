@@ -8,7 +8,7 @@ import s from 'styles/css/mypage/dogs/[dogIdx]/statistic.module.scss';
 
 import Image from 'next/image';
 
-function Mypage() {
+function MypageSubscribe_statisticPage() {
   const router = useRouter();
   if (!router.isReady) return;
   const { dogIdx } = router.query;
@@ -352,4 +352,4 @@ function Mypage() {
   );
 }
 
-export default Mypage;
+export default MypageSubscribe_statisticPage;

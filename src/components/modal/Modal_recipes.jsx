@@ -8,7 +8,6 @@ import rem from "/src/components/atoms/rem";
 import styled from "styled-components";
 
 
-
 const indicatorAniDirection = "left"; // 이동 기준
 const initialActiveMenuIdx = 0; // 최초 활성화 탭
 const Indicator = styled.i`
@@ -28,9 +27,11 @@ const Modal_recipes = ({ data, selectedIndex, onHideModal, isActiveModal }) => {
   const detailsRef = useRef();
   const indicatorRef = useRef();
   const menuRef = useRef();
+  const scrollContainerRef = useRef();
+  const [contHeightInScrollContainer, setContHeightInScrollContainer] =useState();
+  const scrollContainer_defaultHeight = 300;
 
 
-      
   useEffect(() => {
     const scrollYPos = window.scrollY;
     if (isActiveModal) {
@@ -53,7 +54,6 @@ const Modal_recipes = ({ data, selectedIndex, onHideModal, isActiveModal }) => {
       indicatorMove(initialActiveMenuIdx);
       activeMenu(initialActiveMenuIdx);
     }
-    
   }, [])
 
 
@@ -78,7 +78,19 @@ const Modal_recipes = ({ data, selectedIndex, onHideModal, isActiveModal }) => {
         menu.className = menu === target ? s.active : "";
       });
     });
-  };
+    // * scroll-container Height
+    onScrollContainerHeightHandler();
+
+  };;
+
+  const onScrollContainerHeightHandler = () => {
+    const ScrollContainerRef = scrollContainerRef.current;
+    const contHeight = ScrollContainerRef.children[0].offsetHeight;
+    setContHeightInScrollContainer(contHeight);
+    // console.log(scrollContainer_defaultHeight)
+    // console.log(contHeight);
+    // setContHeightInScrollContainer(contHeight);
+  }
 
 
 
@@ -118,6 +130,7 @@ const Modal_recipes = ({ data, selectedIndex, onHideModal, isActiveModal }) => {
   const Tab2Component = data.component.tab2[selectedIndex];
   const Tab3Component = data.component.tab3[selectedIndex];
   const Tab4Component = data.component.tab4[selectedIndex];
+
 
   return (
     <>
@@ -160,8 +173,16 @@ const Modal_recipes = ({ data, selectedIndex, onHideModal, isActiveModal }) => {
                   <li className={s.active}>{Tab1Component}</li>
                   <li>{Tab2Component}</li>
                   <li>{Tab3Component}</li>
-                  <li className={s["scroll-container"]}>
-                    <ScrollContainer height={280} scrollBarWidth={12}>
+                  <li>
+                    <ScrollContainer
+                      height={scrollContainer_defaultHeight}
+                      scrollBarWidth={
+                        contHeightInScrollContainer >
+                        scrollContainer_defaultHeight
+                       ? '10' : '0'}
+                      className="scroll-container"
+                      ref={scrollContainerRef}
+                    >
                       {Tab4Component}
                     </ScrollContainer>
                   </li>

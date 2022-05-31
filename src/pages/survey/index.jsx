@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
-import ReactDOM from 'react-dom/client';
 import s from "./survey.module.scss";
-import StyleSwiper from "./surveySwiper.module.scss";
+import StyleSwiper from "./asset/surveySwiper.module.scss";
 import Layout from "/src/components/common/Layout";
 import Wrapper from "/src/components/common/Wrapper";
 import MetaTitle from "@src/components/atoms/MetaTitle";
@@ -12,16 +11,22 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css/effect-fade";
 import ScrollContainer from "@src/components/atoms/ScrollContainer";
-import SurveyInputRadio from './SurveyInputRadio'
+import SurveyInputRadio from './asset/SurveyInputRadio'
 import siblings from "@util/func/siblings";
 import Image from 'next/image';
-
 
 
 function Survey() {
   const [surveyValues, setSurveyValues] = useState({
     healthStatus: "",
   });
+
+  useEffect(() => {
+    if(window) alert("로그인하지 않았을 경우 Redir");
+     
+
+  },[])
+
 
   return (
     <>

@@ -125,7 +125,7 @@ const ModalCont = ({onCloseModalHandler}) => {
             </div>
           </figcaption>
           <div className={s["btn-section"]}>
-            <Link href="/survey" passHref>
+            <Link href="/surveyGuide" passHref>
               <a className="flex-wrap" onClick={onCloseModalHandler}>
                 정기구독 시작하기
               </a>

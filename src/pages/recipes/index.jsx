@@ -9,7 +9,7 @@ import Image from 'next/image';
 import styled from "styled-components";
 
 
-const TEST_ModalTrigger = styled.button`
+const Button_ModalTrigger = styled.button`
   cursor: pointer;
   display: flex;
   justify-content: center;
@@ -88,7 +88,7 @@ const Modal_cont_point_01 = () => {
               />
             </div>
           </div>
-          <p>높은 흡스율과 소화</p>
+          <p>높은 흡수율과 소화</p>
         </div>
         <div className={s.modal_content_text}>
           부드러운 생고기와 우수한 흡수력을 집중하여 설계된 레시피 입니다
@@ -1372,9 +1372,9 @@ export default function RecipePage() {
                   스타터 프리미엄
                 </div>
 
-                <TEST_ModalTrigger onClick={onShowModal} data-selected-idx={0}>
+                <Button_ModalTrigger onClick={onShowModal} data-selected-idx={0}>
                   스타터 프리미엄 더보기
-                </TEST_ModalTrigger>
+                </Button_ModalTrigger>
               </div>
 
 
@@ -1400,9 +1400,9 @@ export default function RecipePage() {
                   터키앤비프  
                 </div>
 
-                <TEST_ModalTrigger onClick={onShowModal} data-selected-idx={1}>
+                <Button_ModalTrigger onClick={onShowModal} data-selected-idx={1}>
                   터키앤 비프 더보기
-                </TEST_ModalTrigger>
+                </Button_ModalTrigger>
               </div>
 
               <div className={s.left_bot}>
@@ -1427,9 +1427,9 @@ export default function RecipePage() {
                   덕앤램
                 </div>
 
-                <TEST_ModalTrigger onClick={onShowModal} data-selected-idx={2}>
+                <Button_ModalTrigger onClick={onShowModal} data-selected-idx={2}>
                   덕앤램 더보기
-                </TEST_ModalTrigger>
+                </Button_ModalTrigger>
               </div>
 
               <div className={s.right_bot}>
@@ -1454,9 +1454,9 @@ export default function RecipePage() {
                   램앤비프
                 </div>
 
-                <TEST_ModalTrigger onClick={onShowModal} data-selected-idx={3}>
+                <Button_ModalTrigger onClick={onShowModal} data-selected-idx={3}>
                   램앤비프 더보기
-                </TEST_ModalTrigger>
+                </Button_ModalTrigger>
               </div>
             </div>
 

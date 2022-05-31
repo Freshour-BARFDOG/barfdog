@@ -161,7 +161,7 @@ section.subscribe_discount { margin-bottom: rem(80);}
 
 // ------------------- 모달 레시피 내용
 // ------------------- 영양포인트111111
-.modal_text_box {
+.modal_text_box:not(:last-child) {
   padding-bottom: rem(24);
 }
 .modal_recipe_text {

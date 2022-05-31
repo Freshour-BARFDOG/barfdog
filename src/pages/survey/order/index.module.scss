@@ -1,12 +1,15 @@
-$browser-context:16; // html font-size
-@function rem($px, $context: $browser-context){
+$browser-context: 16; // html font-size
+@function rem($px, $context: $browser-context) {
   @return #{$px / $context}rem;
 }
-@import 'styles/global/guide.scss';
+@import "styles/global/guide.scss";
 
-
-section.order_title{ padding : rem(80) 0 rem(150) 0}
-section.regular_delivery { padding : 0 0 rem(180) 0}
+section.order_title {
+  padding: rem(80) 0 rem(150) 0;
+}
+section.regular_delivery {
+  padding: 0 0 rem(180) 0;
+}
 
 .order_title {
   .text {
@@ -18,104 +21,99 @@ section.regular_delivery { padding : 0 0 rem(180) 0}
     display: flex;
     justify-content: center;
     .title_grid_box {
-      width: 56.9%;
-      max-width: rem(660);
       display: grid;
       grid-template-columns: rem(260) rem(360);
       justify-content: space-between;
       column-gap: rem(40);
-      
+
       .grid_left {
         display: flex;
         flex-direction: column;
         align-items: center;
-        box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 0 rem(25) rgba(0, 0, 0, 0.15);
         .image {
           width: rem(260);
           aspect-ratio: 0.928/1;
         }
-        .title_grid_left_row_1 {
-          @include char(l20);
-          font-family: 'GmarketSansbold';
-          padding: rem(20) 0 ;
-        }
-        .image2 {
-          width: rem(123);
-          aspect-ratio: 6.15/1;
-          margin-bottom: rem(20);
+        .recipe_title {
+          text-align: center;
+          .title_en {
+            font-family: var(--font-ink);
+            font-size: rem(27);
+          }
+          .title_ko {
+            @include char(l20);
+            font-family: "GmarketSansbold";
+            padding:rem(20) 0 rem(10);
+          }
         }
       }
 
       .grid_right {
-        .grid_right_title {
+        .result_title {
           @include char(t24);
           line-height: 120%;
           padding-bottom: rem(40);
-          span {
-            font-weight: 700;
-          }
+          font-weight:300;
         }
-        .grid_right_mid_box {
+        .recommend_data_wrap {
           display: grid;
           grid-template-columns: 7fr 3fr;
           justify-content: space-between;
-          border-top : rem(2) solid var(--color-font-def);
+          border-top: rem(2) solid var(--color-font-def);
           border-bottom: rem(2) solid var(--color-font-def);
           row-gap: rem(8);
           padding: rem(16) 0;
 
-          .grid_right_mid_box_left { 
+          .title {
             display: flex;
             flex-direction: column;
             justify-content: center;
             text-align: left;
             @include char(l20);
-            font-weight: 500;
-            span{
+            font-weight: 400;
+            span {
               margin-top: rem(2);
               @include char(l14);
               color: var(--color-font-sub2);
             }
           }
-          .grid_right_mid_box_right {
+          .data {
             @include char(t28);
             text-align: right;
-            color:vaR(--color-main);
-            font-weight: 600;
+            color: vaR(--color-main);
+            font-weight: 500;
           }
         }
-        .grid_right_bot_text {
+        .desc {
           text-align: right;
           padding-top: rem(5);
         }
-
       }
-
     }
-
   }
-
 }
 
 .regular_delivery {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  // display: flex;
+  // flex-direction: column;
+  // align-items: center;
   .regular_delivery_title {
     @include char(t24);
     font-weight: 600;
     padding-bottom: rem(60);
-    
+    text-align: center;
   }
 }
 
 .flex_box {
-  display: flex;
+  display: grid;
   column-gap: rem(20);
+  grid-template-columns: repeat(3, 1fr);
   justify-content: center;
+  max-width: rem(1000);
+  margin: 0 auto;
 }
-
-
 
 .notice {
   text-align: center;
@@ -141,7 +139,7 @@ section.regular_delivery { padding : 0 0 rem(180) 0}
     .color_box {
       width: 80%;
       max-width: rem(560);
-      background-color: #F9EDEC;
+      background-color: #f9edec;
       border-radius: rem(8);
       padding-bottom: rem(19);
       .color_box_row_1 {
@@ -170,7 +168,7 @@ section.regular_delivery { padding : 0 0 rem(180) 0}
   }
 }
 
-.flex_box2{
+.flex_box2 {
   margin-top: rem(60);
   display: flex;
   // justify-content: center;
@@ -178,10 +176,9 @@ section.regular_delivery { padding : 0 0 rem(180) 0}
   width: 100%;
   max-width: rem(1100);
   .recipe_choice_box {
-    // max-width: rem(200) ;
     .img_box {
       .image {
-        width: 100% ;
+        width: 100%;
         max-width: rem(170);
         aspect-ratio: 0.91/1;
       }
@@ -192,7 +189,6 @@ section.regular_delivery { padding : 0 0 rem(180) 0}
     @include char(l18);
     font-weight: 500;
     font-family: var(--font-Gmarket-bold);
-
   }
   .row_2 {
     padding-top: rem(7);
@@ -212,18 +208,9 @@ section.regular_delivery { padding : 0 0 rem(180) 0}
     font-weight: 600;
     text-decoration-line: underline;
   }
-
 }
 
-
-
-
-
-
 .plan_box {
-  // max-width: rem(220);
-  // box-sizing: border-box;
-  // width: 100%;
   .img_box {
     display: flex;
     justify-content: center;
@@ -235,44 +222,40 @@ section.regular_delivery { padding : 0 0 rem(180) 0}
     }
   }
   h2 {
+    font-family: var(--font-Gmarket-bold);
     padding-top: rem(10);
     @include char(d28);
-    text-align: right;
-    font-weight: 500;
     text-align: center;
+    -webkit-font-smoothing: antialiased;
   }
   p {
     padding: rem(9) 0 rem(13);
     @include char(l16);
     text-align: center;
     letter-spacing: -0.06em;
-
   }
   .grid_box {
     display: grid;
     grid-template-rows: repeat(4, 1fr);
-  
+
     background-color: #f9f9f9;
     border-top: rem(1) solid var(--color-disabled);
     border-bottom: rem(1) solid var(--color-disabled);
 
     div {
-   
       border-bottom: rem(1) dashed var(--color-line-03);
       padding: rem(12) 0;
       text-align: center;
       &:last-child {
         border-bottom: rem(0);
       }
-
     }
-    .row{
+    .row {
       color: var(--color-font-sub);
     }
-    
-    * {
-      @include char(l16);      
 
+    * {
+      @include char(l16);
     }
     span {
       font-weight: 700;
@@ -297,15 +280,14 @@ section.regular_delivery { padding : 0 0 rem(180) 0}
       @include char(l18);
       color: var(--color-font-sub2);
       text-decoration: line-through;
-
     }
   }
   .text2 {
     @include char(d32);
+    font-weight: 500;
     text-align: center;
     line-height: 100%;
     padding-top: rem(1);
-
   }
 }
 
@@ -321,23 +303,18 @@ section.regular_delivery { padding : 0 0 rem(180) 0}
   text-align: center;
   padding: rem(100) 0 rem(250);
   @include char(l16);
-
-  .left_btn {
-    border: 1px solid #DDDDDD;
+  button{
+    border: rem(1) solid #dddddd;
     border-radius: rem(4);
-    padding : rem(17) 0 ;
-    width: 100%;
+    padding: rem(11) 0;
     box-sizing: border-box;
+    cursor:pointer;
+    width: 100%;
   }
-  .right_btn {
+
+  .nextPage {
     background-color: var(--color-main);
-    border-radius: rem(4);
-    color: #fff;
-    padding : rem(17) 0 ;
-    width: 100%;
-    box-sizing: border-box;
-
-
+    color:#fff;
   }
 }
 
@@ -350,16 +327,11 @@ section.regular_delivery { padding : 0 0 rem(180) 0}
     margin-bottom: rem(20);
   }
 }
-.custom-input-radio-wrapper{
-  label{margin-bottom: rem(30)}
+.custom-input-radio-wrapper {
+  label {
+    margin-bottom: rem(30);
+  }
 }
-
-
-
-
-
-
-
 
 // * ------ SAMPLE ------ *
 
@@ -395,28 +367,20 @@ section.regular_delivery { padding : 0 0 rem(180) 0}
   }
 }
 
-
-
-
-
-
-
-
 // * ------ SAMPLE ------ *
 
 .custom_input_wrapper {
-
   position: relative;
 
-  $transitionValues : 0.15s ease;
-  
+  $transitionValues: 0.15s ease;
+
   display: block;
   overflow: hidden;
   border-radius: rem(12);
   border: rem(1) solid var(--color-line-04);
   padding: rem(15) rem(25);
   transition: border-color $transitionValues;
-  input{ 
+  input {
     position: absolute;
     overflow: hidden;
     width: 0;
@@ -425,14 +389,14 @@ section.regular_delivery { padding : 0 0 rem(180) 0}
     opacity: 0;
     text-indent: rem(-9999);
   }
-  .custom_input_cont{
+  .custom_input_cont {
     // * CONTENTS CSS
     margin-bottom: rem(20);
   }
 
   .fake_checkbox {
     border-radius: rem(4);
-    overflow:hidden;
+    overflow: hidden;
     display: block;
     width: 100%;
     height: rem(50);
@@ -457,12 +421,14 @@ section.regular_delivery { padding : 0 0 rem(180) 0}
     transition: opacity $transitionValues;
   }
 
-  &.checked{
+  &.checked {
     border-color: var(--color-main);
-     .fake_checkbox{
-        background-color: var(--color-main);
-        color: #fff;
-     }
-     .icon_checked{opacity: 1;}
+    .fake_checkbox {
+      background-color: var(--color-main);
+      color: #fff;
+    }
+    .icon_checked {
+      opacity: 1;
+    }
   }
 }

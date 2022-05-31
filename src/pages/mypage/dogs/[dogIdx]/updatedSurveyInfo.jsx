@@ -1,10 +1,9 @@
 import React from 'react';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
-import MypageWrapper from "/src/components/mypage/MypageWrapper";
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import { useRouter } from "next/router";
-import s from "src/pages/mypage/dogs/[dogIdx]/updateSurveyResult.module.scss";
+import s from "./updatedSurveyInfo.module.scss";
 import Image from "next/image";
 
 function Mypage() {
