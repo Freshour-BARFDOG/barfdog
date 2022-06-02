@@ -42,6 +42,9 @@ html, body{width:100vw; overflow-x:hidden;}
 .cont-right{float:right;}
 
 
+.animation-show{
+  animation: show var(--ani-default) forwards;
+}
 
 @keyframes show {
   from{opacity:0; pointer-events: none;}

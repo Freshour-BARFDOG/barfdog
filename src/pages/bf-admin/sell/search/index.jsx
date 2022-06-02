@@ -3,15 +3,15 @@ import s from './search.module.scss';
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import AdminLayout from "/src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
-import SearchBar from "@src/components/admin/form/SearchBar";
-import SearchTerm from "@src/components/admin/form/SearchBar/SearchTerm";
-import SearchTextWithCategory from "@src/components/admin/form/SearchBar/SearchTextWithCategory";
-import SearchSelect from "@src/components/admin/form/SearchBar/SearchSelect";
-import SearchRadio from "@src/components/admin/form/SearchBar/SearchRadio";
-import AmdinErrorMessage from "@src/components/atoms/AmdinErrorMessage";
-import Checkbox from "@src/components/atoms/Checkbox";
+import SearchBar from "/src/components/admin/form/SearchBar";
+import SearchTerm from "/src/components/admin/form/SearchBar/SearchTerm";
+import SearchTextWithCategory from "/src/components/admin/form/SearchBar/SearchTextWithCategory";
+import SearchSelect from "/src/components/admin/form/SearchBar/SearchSelect";
+import SearchRadio from "/src/components/admin/form/SearchBar/SearchRadio";
+import AmdinErrorMessage from "/src/components/atoms/AmdinErrorMessage";
+import Checkbox from "/src/components/atoms/Checkbox";
 import SearchResultList from "./SearchResultList";
-import Pagination from "@src/components/atoms/Pagination";
+import Pagination from "/src/components/atoms/Pagination";
 
 const TEST_ITEM = [1, 2, 3, 4, 5];
 

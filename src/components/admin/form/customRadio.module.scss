@@ -1,0 +1,27 @@
+/* ADMIN COMMON STYLE */
+$browser-context: 16;
+@function rem($px, $context: $browser-context) {
+  @return #{$px / $context}rem;
+}
+
+
+// * 라디오버튼
+.inp-wrap.radio {
+  display: flex;
+  align-items: center;
+
+
+  color: var(--color-font-def);
+  label {
+    padding: rem(4) 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: rem(14);
+    &:not(:last-child){margin-right: rem(24);}
+    input{margin-right:rem(6)}
+    
+  }
+
+}
+

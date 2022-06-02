@@ -13,12 +13,6 @@ const SurveyInputRadio = ({
 }) => {
   const [selectedRadio, setSelectedRadio] = useState(surveyValues); // * component 내부 value
 
-  // useEffect(() => {
-  //   if (!surveyValues) {
-  //     setSelectedRadio('');
-  //   }
-  // }, [surveyValues]);
-
   const onChangeHandler = (e) => {
     const { id } = e.currentTarget;
     setSelectedRadio(id);

@@ -1,9 +1,10 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, {useRef} from "react";
 import s from "@src/components/common/menu.module.scss";
-import { SubmenuList, List, SubmenuTitle } from "/src/components/mypage/Menu";
+import {List, SubmenuList, SubmenuTitle} from "/src/components/mypage/Menu";
 import Link from 'next/link';
 import Icon_setting from "/public/img/icon/setting.svg";
-import { useRouter } from "next/router";
+
+
 
 
 function AdminGnb() {
@@ -61,8 +62,12 @@ function AdminGnb() {
           <SubmenuList title="리뷰" link="/bf-admin/review/normal" />
           <SubmenuList title="리뷰 생성" link="/bf-admin/review/create" />
         </List>
+        <List title="메신저">
+          <SubmenuList title="친구톡" link="/bf-admin/messenger/friendTalk" />
+          <SubmenuList title="채널톡" link="/bf-admin/messenger/channelTalk" />
+        </List>
         {/* <List title="등급정책" link="/class-policy" /> */}
-        <List title="메신저" link="/bf-admin/messenger" />
+        {/*<List title="메신저" link="/bf-admin/messenger" />*/}
       </ul>
       <div className={`${s.site_settings} ${s.menu_title}`}>
         <Link href="/bf-admin/settings" passHref>

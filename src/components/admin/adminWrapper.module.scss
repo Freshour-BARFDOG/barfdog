@@ -5,6 +5,8 @@ $browser-context:16; // html font-size:
   @return #{$px / $context}rem;
 }
 
+$header-height: rem(80);
+$nav-width: rem(300);
 
 
 $container-maxWidth: rem(1920);
@@ -39,12 +41,12 @@ $contents-maxWidth: rem(1620);
 
 .contents_container_outer{
   float:right;
-  width: calc(100% - $nav-width);
+  width: calc(100% - #{$nav-width});
   background-color: var(--color-bg-ghostWhite);
 }
 .contents_container{
   float:right;
-  min-height: calc(100vh - $header-height);
+  min-height: calc(100vh - #{$header-height});
   max-width: $contents-container-maxWidth;
   width:100%;
   padding: {
