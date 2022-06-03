@@ -13,7 +13,10 @@ $browser-context:16; // html font-size
   border-radius: rem(12);
   border: rem(1) solid var(--color-line-04);
   padding: rem(15) rem(25);
-  transition: border-color $transitionValues;
+  transition: border-color , box-shadow $transitionValues;
+  &:hover{
+    box-shadow: 0 0 rem(30) rgba(0,0,0,0.1);
+  }
   input{ 
     position: absolute;
     overflow: hidden;

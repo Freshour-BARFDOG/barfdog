@@ -13,7 +13,7 @@ import Styles from "/styles/css/mypage/subscribe/[dogIdx].module.scss";
 
 import { slideUp , slideDown } from "/util/func/slideToggle";
 
-import Icon_Itemlabel from "@src/components/atoms/Icon_Itemlabel";
+import Icon_Itemlabel from "@src/components/atoms/ItemLabel";
 import Icon_Checked from "@public/img/icon/icon_checked.svg";
 import rem from '@src/components/atoms/rem';
 

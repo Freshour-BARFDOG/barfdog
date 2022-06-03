@@ -4,7 +4,7 @@ import Wrapper from "/src/components/common/Wrapper";
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import s from "src/pages/survey/order/index.module.scss"
 import Image from 'next/image';
-import Icon_Itemlabel from "/src/components/atoms/Icon_Itemlabel";
+import ItemLabel, { ItemRecommendlabel } from "/src/components/atoms/ItemLabel";
 import rem from '/src/components/atoms/rem';
 import CustomInput from "/src/components/atoms/CustomInput";
 import { useRouter } from "next/router";
@@ -34,15 +34,10 @@ const CustomInputRadio_plan = ({name, handler}) => {
         setSelectedRadio={setSelectedRadio}
       >
 
-        <Icon_Itemlabel
+        <ItemLabel
           label="BEST"
           style={{
             backgroundColor: "var(--color-main)",
-            height: rem(34),
-            left: rem(34),
-            top: rem(14),
-            width: rem(300),
-            transform: "translate(-50%, 0)rotate(-45deg)",
           }}
         />
 
@@ -145,15 +140,10 @@ const CustomInputRadio_plan = ({name, handler}) => {
         selectedRadio={selectedRadio}
         setSelectedRadio={setSelectedRadio}
       >
-        <Icon_Itemlabel
+        <ItemLabel
           label="NEW"
           style={{
-            backgroundColor: "#FF8C16",
-            height: rem(34),
-            left: rem(34),
-            top: rem(14),
-            width: rem(300),
-            transform: "translate(-50%, 0)rotate(-45deg)",
+            backgroundColor: "#FF8C16"
           }}
         />
 
@@ -265,6 +255,12 @@ const CustomInputCheckbox_recipe = ({
         selectedRadio={selectedRadio}
         setSelectedRadio={setSelectedRadio}
       >
+        <ItemRecommendlabel
+          label="추천!"
+          style={{
+            backgroundColor: "#000",
+          }}
+        />
         <div className={s.recipe_choice_box}>
           <div className={s.img_box}>
             <div className={`${s.image} img-wrap`}>

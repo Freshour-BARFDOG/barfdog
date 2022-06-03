@@ -1,5 +1,5 @@
 import React , { useState, useEffect } from 'react';
-import Icon_Checked from "@public/img/icon/icon_checked.svg";
+import Icon_Checked from "/public/img/icon/icon_checked.svg";
 import s from "./customInput.module.scss";
 
 
