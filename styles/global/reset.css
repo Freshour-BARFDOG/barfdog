@@ -61,7 +61,7 @@ font-family: 'GmarketSansBold'
     --font-Gmarket: 'GmarketSansMedium';
     --font-Gmarket-bold: 'GmarketSansBold';
     --font-ink: 'InkLipquid';
-
+    -webkit-font-smooting: antialiased;
 }
 
 
@@ -97,7 +97,8 @@ body,form, select, textarea, select, button, table, input {
     font-size: 16px;
     line-height: 1.6;
     letter-spacing: 0rem;
-    /* -webkit-font-smoothing: antialiased; */ /*해당 옵션 사용시, 글자가 얇아진다 (얇고 명료하게 표현됨)*/
+    /* -webkit-font-smoothing: antialiased; */
+    /*font-smoothing: 글자를 얇고 명료하게 처리*/
 }
 
 /* 
@@ -121,9 +122,9 @@ a > span {display:block !important;}
 
 /* 테이블 설정 */
 table {
-	border-collapse: collapse;
-	border-spacing: 0;
-	table-layout: fixed;
+    border-collapse: collapse;
+    border-spacing: 0;
+    table-layout: fixed;
 }
 
 

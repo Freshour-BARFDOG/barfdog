@@ -3,7 +3,7 @@ import rem from "/src/components/atoms/rem";
 
 const PopupWrapper = styledComponents.div`
   max-width: ${(props) => {
-    rem(props.style.width) || "100%";
+    rem(props.style.width) ? rem(props.style.width) : "100%";
   }};
   background-color:#fff;
   margin:0 auto;

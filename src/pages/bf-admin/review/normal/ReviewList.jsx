@@ -1,7 +1,9 @@
 import s from "./review.module.scss";
-import getElemIdx from "@util/func/getElemIdx";
-import Checkbox from "@src/components/atoms/Checkbox";
-import transformDate from "@util/func/transformDate";
+import getElemIdx from "/util/func/getElemIdx";
+import Checkbox from "/src/components/atoms/Checkbox";
+import transformDate from "/util/func/transformDate";
+import popupWindow from "/util/func/popupWindow";
+import Link from "next/link";
 
 
 
@@ -59,6 +61,14 @@ export default function BestReviewList({
       }
     };
 
+    const onPopupHandler = (e) => {
+      e.preventDefault();
+      if (typeof window === "undefined") return;
+      const href = e.currentTarget.href;
+      popupWindow(href, { width: 640, height: 810 });
+    };
+
+
     return (
       <li
         className={s.item}
@@ -81,12 +91,13 @@ export default function BestReviewList({
           <em className={"text-transform-ellipsis"}>{DATA.itemName}</em>
         </span>
         <span>
-          <button
-            data-review-id={DATA.id}
-            className={"text-transform-ellipsis btn_link"}
-          >
+          <Link href={`/bf-admin/review/popup/${DATA.id}`} passHref>
+            <a
+              className={"text-transform-ellipsis btn_link"}onClick={onPopupHandler}
+            >
             {DATA.innerText}
-          </button>
+          </a>
+          </Link>
         </span>
         <span>{DATA.rating}</span>
         <span>{DATA.userName}</span>

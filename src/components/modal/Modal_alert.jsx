@@ -1,10 +1,28 @@
-import React from 'react';
+import React, {useState} from 'react';
 import ModalWrapper from './ModalWrapper'
 import s from "./modal.module.scss";
 
 
+export const Modal_innerForm = (props) => {
+  return (
+    <>
+      <section className={s['form-section']}>
+        {props.children}
+      </section>
+      <div className={s['btn-section']}>
+        <button className="admin_btn popup line" onClick={props.onCancle}>
+          취소
+        </button>
+        <button className="admin_btn popup solid" onClick={props.onConfirm}>
+          확인
+        </button>
+      </div>
+    </>
+  )
+}
 
-function Modal_alert({text, isConfirm}) {
+
+function Modal_alert({text, isConfirm, onClick, children}) {
 
 
   const onClickHandler = () => {
@@ -12,18 +30,22 @@ function Modal_alert({text, isConfirm}) {
       const value = true;
       isConfirm(value);
     }
+    if (onClick && typeof onClick === "function") {
+      const value = true;
+      onClick(value);
+    }
   };
 
   return (
-    <ModalWrapper className={`${s.modal_wrap}`}>
-      <header className={s.title_section}>
-        {text && <p className={`${s.text} ${s.only}`}>{text}</p>}
+    <ModalWrapper className={`${s['modal-wrap']}`} data-modal-status={children ? 'hasChildren' : 'alert'}>
+      <header className={s['title-section']}>
+        {text && <pre className={`${s.text} ${s.only}`}>{text}</pre>}
       </header>
-      <div className={s.btn_section}>
+      {children || <div className={s['btn-section']}>
         <button className="admin_btn popup solid" onClick={onClickHandler}>
           확인
         </button>
-      </div>
+      </div>}
     </ModalWrapper>
   );
 }

@@ -5,7 +5,7 @@ $browser-context: 16;
 
 
 
-.modal_wrap {
+.modal-wrap {
 
   &.global .title_section .text{
       height: auto !important;
@@ -20,10 +20,15 @@ $browser-context: 16;
     top: rem(10);
     display: flex;
   }
-
-  .title_section {
-    text-align: center;
+  &[data-modal-status="hasChildren"] .title-section{
+    margin-bottom: rem(8);
+  }
+  &:not([data-modal-status="hasChildren"]) .title-section{
     margin-bottom: rem(30);
+  }
+
+  .title-section {
+    text-align: center;
     * {cursor:default}
     .title {
       font-size: rem(20);
@@ -47,7 +52,25 @@ $browser-context: 16;
 
   }
 
-  .btn_section {
+  .form-section{
+    margin-bottom: rem(30);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    label, input{width:100%; text-align: center;}
+    input{
+      padding: rem(6) 0;
+      border : {
+        radius: 0;
+        top:0;
+        left:0;
+        right:0;
+      }
+    }
+
+  }
+
+  .btn-section {
     display: flex;
     justify-content: center;
     align-items: center;

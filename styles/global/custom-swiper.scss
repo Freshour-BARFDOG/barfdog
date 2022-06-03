@@ -16,4 +16,13 @@ $browser-context:16;
   .swiper-pagination-bullet-active{
     opacity:1;
   }
+
+}
+
+
+
+.swiper-button-prev, .swiper-button-next{
+  opacity: 0;
+  pointer-events: none;
+
 }

@@ -77,7 +77,7 @@ $popupMainHeaderHeight:rem(66);
 
     .t-box {
       display: grid;
-      grid-template-columns: rem(180) calc(100% - rem(180));
+      grid-template-columns: rem(180) calc(100% - #{rem(180)});
       align-items: center;
       overflow: hidden;
 
@@ -85,6 +85,7 @@ $popupMainHeaderHeight:rem(66);
       &:nth-child(2n) {
         margin-left: rem(-1);
       }
+
       .innerBox {
         border: rem(1) solid var(--color-line-03);
         height: rem(48);

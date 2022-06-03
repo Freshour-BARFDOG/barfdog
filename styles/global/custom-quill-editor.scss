@@ -15,7 +15,7 @@ $browser-context:16;
   background-color: #fff;
   
   .ql-toolbar{background-color: #fafafa; min-height: $toolbarHeight}
-  .ql-container{height: calc($editorHeight - $toolbarHeight) ;}
+  .ql-container{height: calc(#{$editorHeight} - #{$toolbarHeight});}
 
   img{width:initial; display:initial;}
   .ql-editor.ql-blank::before {

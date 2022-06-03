@@ -93,7 +93,6 @@ function Swiper_main() {
         >
           <ArrowRight />
         </i>
-        <queto></queto>
       </div>
 
       <Swiper

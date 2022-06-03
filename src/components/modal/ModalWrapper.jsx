@@ -70,7 +70,8 @@ function ModalWrapper({
   label,
   background,
   onBackgroundClick,
-  positionCenter
+  positionCenter,
+  ...props
 }) {
   return (
     <>
@@ -87,6 +88,7 @@ function ModalWrapper({
           label={label}
           id={id}
           positionCenter
+          {...props}
         >
           {children}
         </Wrap>

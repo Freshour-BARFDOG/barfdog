@@ -2,9 +2,7 @@ import styled from "styled-components";
 import rem from "/src/components/atoms/rem";
 import { HiStar } from 'react-icons/hi'
 
-
-const ItemLabel = ({ label, className, style }) => {
-  const Icon = styled.i`
+const Icon = styled.i`
     color: #fff;
     display: flex;
     align-items: center;
@@ -22,21 +20,9 @@ const ItemLabel = ({ label, className, style }) => {
     top: ${rem(14)};
     width: ${rem(300)};
   `;
-  return (
-    <>
-      <Icon className={className} style={style}>
-        {label}
-      </Icon>
-    </>
-  );
-};
-
-export default ItemLabel;
 
 
-
-export const ItemRecommendlabel = ({ label, className, style }) => {
-  const Icon = styled.i`
+const Icon_Recommend = styled.i`
     color: #fff;
     display: flex;
     flex-direction: column;
@@ -57,23 +43,45 @@ export const ItemRecommendlabel = ({ label, className, style }) => {
     width: ${rem(120)};
   `;
 
-  const InnerIconWrap = styled.span`
+const InnerIconWrap = styled.span`
     display: flex;
     transform:scale(.65);
     margin-bottom: ${rem(-4)};
   `
-  const TextWrap = styled.span`
+const TextWrap = styled.span`
     display: flex;
     margin-bottom: ${rem(-2)};
   `
+
+
+
+
+
+
+const ItemLabel = ({ label, className, style }) => {
   return (
     <>
       <Icon className={className} style={style}>
+        {label}
+      </Icon>
+    </>
+  );
+};
+
+export default ItemLabel;
+
+
+
+
+export const ItemRecommendlabel = ({ label, className, style }) => {
+  return (
+    <>
+      <Icon_Recommend className={className} style={style}>
         <InnerIconWrap>
           <HiStar /><HiStar /><HiStar />
         </InnerIconWrap>
         <TextWrap>{label}</TextWrap>
-      </Icon>
+      </Icon_Recommend>
     </>
   );
 };

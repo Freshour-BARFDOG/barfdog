@@ -74,11 +74,12 @@ $aniType_Show : 0.3s ease-in ;
 
   /* Type:line */
   &.line{
-    border: rem(1) solid var(--color-line-03);
+    border: rem(1) solid var(--gray40);
     color:#202020;
     &.disabled{
-      border-color: var(--color-disabled);
+      border-color: var(--gray50);
       color: var(--color-disabled);
+      font-weight: 300;
     }
     &:hover{ 
       border-color: #ababab;
@@ -293,7 +294,7 @@ $aniType_Show : 0.3s ease-in ;
 }
 
 
-
+.pointColor{color:var(--color-primary04)}
 
 
 
