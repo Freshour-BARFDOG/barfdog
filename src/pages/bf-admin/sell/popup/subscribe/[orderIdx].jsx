@@ -1,26 +1,62 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import s from "../popup_sell.module.scss";
-import PopupWrapper from "@src/components/popup/PopupWrapper";
+import PopupWrapper from "/src/components/popup/PopupWrapper";
 import {
   PopupCloseButton,
   PopupCloseButton_typeX,
-} from "@src/components/popup/PopupCloseButton";
+} from "/src/components/popup/PopupCloseButton";
 import ProductInfo_basicOrderInfo from "../ProductInfo_basicOrderInfo";
 import ProductInfo_dog from "../ProductInfo_dog";
 import ProductInfo_subscribe from "../ProductInfo_subscribe";
 import ProductInfo_payment from "../ProductInfo_payment";
 import ProductInfo_delivery from "../ProductInfo_delivery";
+import ProductInfo_orderStatusInfo from "../ProductInfo_orderStatusInfo";
+
+
+/*
+  // MEMO : 전체 주문 Status (단품 / 정기구독상품 포함)
+  { label: "전체", value: "ALL" },
+  { label: "구독보류", value: "HOLD" }, // MEMO 구독상품
+  { label: "결제완료", value: "PAYMENT_DONE" },
+  { label: "생산 중", value: "PRUDUCING" }, // MEMO 구독상품
+  { label: "배송준비 중", value: "DELIVERY_READY" }, // MEMO 단품
+  { label: "배송시작", value: "DELIVERY_START" },
+  { label: "배송완료", value: "DELIVERY_DONE" },
+  { label: "판매취소", value: "SELLING_CANCLE" },
+  { label: "취소요청", value: "CANCEL_REQUEST " },
+  { label: "취소완료", value: "CANCEL_DONE" },
+  { label: "반품요청", value: "RETURN_REQUEST" }, // MEMO 생식상품 제외하고 가능
+  { label: "반품완료", value: "RETURN_DONE" }, // MEMO 생식상품 제외하고 가능
+  { label: "교환요청", value: "EXCHANGE_REQUEST" }, // MEMO 생식상품 제외하고 가능
+  { label: "교환완료", value: "EXCHANGE_DONE" }, // MEMO 생식상품 제외하고 가능
+  { label: "실패함", value: "FAILED" },
+  { label: "구매확정", value: "CONFIRM" }, // MEMO 구독상품: 배송완료후 / 단품: 사용자 구매확정 또는 배송완료 후 7일 경과후
+*/
 
 
 
-
-
+const TEST_DATA = { orderStatus: "CANCEL_REQUEST", itemList: [1, 2, 3] };
 
 
 
 
 function Popup_MemeberDetailPage() {
+
+
+  const allData = TEST_DATA;
+  const canceldOrderStatusList = [
+    { boxLabel: "취소", value: "CANCEL_REQUEST" },
+    { boxLabel: "취소", value: "CANCEL_DONE" },
+  ];
+  let isCanceledOrderStatus = false;
+  let canceledOrderStatusLabel = "취소";
+  for (let i = 0; i < canceldOrderStatusList.length; i++) {
+    if (allData.orderStatus === canceldOrderStatusList[i].value) {
+      isCanceledOrderStatus = true;
+      break
+    }
+  }
 
 
   return (
@@ -42,6 +78,14 @@ function Popup_MemeberDetailPage() {
                   <li className={s["table-list"]}>
                     <ProductInfo_basicOrderInfo data={{paymentType:'정기구독'}}/>
                   </li>
+                  {isCanceledOrderStatus && (
+                    <li className={s["table-list"]}>
+                      <ProductInfo_orderStatusInfo
+                        data={allData}
+                        boxLabel={canceledOrderStatusLabel}
+                      />
+                    </li>
+                  )}
                   <li className={s["table-list"]}>
                     <ProductInfo_dog />
                   </li>

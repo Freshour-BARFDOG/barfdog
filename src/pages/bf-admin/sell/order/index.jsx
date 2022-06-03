@@ -3,22 +3,22 @@ import s from "./order.module.scss";
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import AdminLayout from "/src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
-import SearchBar from "@src/components/admin/form/SearchBar";
-import SearchTerm from "@src/components/admin/form/SearchBar/SearchTerm";
-import SearchTextWithCategory from "@src/components/admin/form/SearchBar/SearchTextWithCategory";
-import SearchRadio from "@src/components/admin/form/SearchBar/SearchRadio";
-import AmdinErrorMessage from "@src/components/atoms/AmdinErrorMessage";
-import Checkbox from "@src/components/atoms/Checkbox";
+import SearchBar from "/src/components/admin/form/SearchBar";
+import SearchTerm from "/src/components/admin/form/SearchBar/SearchTerm";
+import SearchTextWithCategory from "/src/components/admin/form/SearchBar/SearchTextWithCategory";
+import SearchRadio from "/src/components/admin/form/SearchBar/SearchRadio";
+import AmdinErrorMessage from "/src/components/atoms/AmdinErrorMessage";
+import Checkbox from "/src/components/atoms/Checkbox";
 import OrderList from "./OrderList";
-import Pagination from "@src/components/atoms/Pagination";
+import Pagination from "/src/components/atoms/Pagination";
 
 
 const TEST_ITEM = [
   { id: "0", paymentType: "subscribe" },
-  { id: "1", paymentType: "normal" },
+  { id: "1", paymentType: "single" },
   { id: "2", paymentType: "subscribe" },
-  { id: "3", paymentType: "normal" },
-  { id: "4", paymentType: "normal" },
+  { id: "3", paymentType: "single" },
+  { id: "4", paymentType: "single" },
 ];
 
 

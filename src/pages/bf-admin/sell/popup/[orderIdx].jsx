@@ -1,19 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import s from "../popup_sell.module.scss";
-import PopupWrapper from "@src/components/popup/PopupWrapper";
+import PopupWrapper from "/src/components/popup/PopupWrapper";
 import {
   PopupCloseButton,
   PopupCloseButton_typeX,
-} from "@src/components/popup/PopupCloseButton";
+} from "/src/components/popup/PopupCloseButton";
 
 
-
-// * 테스트 후에, Component > 파일단위로 쪼개기
-// * 테스트 후에, Component > 파일단위로 쪼개기
-// * 테스트 후에, Component > 파일단위로 쪼개기
-// * 테스트 후에, Component > 파일단위로 쪼개기
-// * 테스트 후에, Component > 파일단위로 쪼개기
 
 
 const ProductInfo_basicOrderInfo = () => {

@@ -8,28 +8,28 @@ import {
 } from "@src/components/popup/PopupCloseButton";
 import ProductInfo_basicOrderInfo from "../ProductInfo_basicOrderInfo";
 import ProductInfo_orderStatusInfo from "../ProductInfo_orderStatusInfo";
-import ProductInfo_normItem from "../ProductInfo_normItem";
+import ProductInfo_normItem from "../ProductInfo_normalItem";
 import ProductInfo_payment from "../ProductInfo_payment";
 import ProductInfo_delivery from "../ProductInfo_delivery";
 
 /*
+  // MEMO : 전체 주문 Status (단품 / 정기구독상품 포함)
   { label: "전체", value: "ALL" },
-  { label: "구독보류", value: "HOLD" },
+  { label: "구독보류", value: "HOLD" }, // MEMO 구독상품
   { label: "결제완료", value: "PAYMENT_DONE" },
-  { label: "생산 중", value: "PRUDUCING" },
-  { label: "배송준비 중", value: "DELIVERY_READY" },
+  { label: "생산 중", value: "PRUDUCING" }, // MEMO 구독상품
+  { label: "배송준비 중", value: "DELIVERY_READY" }, // MEMO 단품
   { label: "배송시작", value: "DELIVERY_START" },
   { label: "배송완료", value: "DELIVERY_DONE" },
   { label: "판매취소", value: "SELLING_CANCLE" },
   { label: "취소요청", value: "CANCEL_REQUEST " },
   { label: "취소완료", value: "CANCEL_DONE" },
-  { label: "반품요청", value: "RETURN_REQUEST" },
-  { label: "반품완료", value: "RETURN_DONE" },
-  { label: "교환요청", value: "EXCHANGE_REQUEST" },
-  { label: "교환완료", value: "EXCHANGE_DONE" },
+  { label: "반품요청", value: "RETURN_REQUEST" }, // MEMO 생식상품 제외하고 가능
+  { label: "반품완료", value: "RETURN_DONE" }, // MEMO 생식상품 제외하고 가능
+  { label: "교환요청", value: "EXCHANGE_REQUEST" }, // MEMO 생식상품 제외하고 가능
+  { label: "교환완료", value: "EXCHANGE_DONE" }, // MEMO 생식상품 제외하고 가능
   { label: "실패함", value: "FAILED" },
-  { label: "구매확정", value: "CONFIRM" },
-
+  { label: "구매확정", value: "CONFIRM" }, // MEMO 구독상품: 배송완료후 / 단품: 사용자 구매확정 또는 배송완료 후 7일 경과후
 */
 
 const TEST_DATA = { orderStatus: "EXCHANGE_REQUEST", itemList: [1, 2, 3] };
@@ -87,7 +87,6 @@ function Popup_MemeberDetailPage() {
                       />
                     </li>
                   )}
-
                   <li className={s["table-list"]}>
                     <div className={s["t-header"]}>
                       <h4 className={s.title}>

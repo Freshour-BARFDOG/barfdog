@@ -1,8 +1,8 @@
 import s from './order.module.scss';
 import Link from "next/link";
-import Checkbox from "@src/components/atoms/Checkbox";
-import popupWindow from "@util/func/popupWindow";
-import transformDate from "@util/func/transformDate";
+import Checkbox from "/src/components/atoms/Checkbox";
+import popupWindow from "/util/func/popupWindow";
+import transformDate from "/util/func/transformDate";
 
 
 
