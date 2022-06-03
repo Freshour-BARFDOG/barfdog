@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Wrapper from "/src/components/common/Wrapper";
 import Link from "next/link";
-import rem from './atoms/rem';
+import rem from './rem';
 
 
 const Atag = styled.a`

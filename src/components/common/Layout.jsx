@@ -1,7 +1,7 @@
 import React from 'react';
 import Header from './Header';
 import Footer from './Footer';
-import TopLineBanner from '../TopLineBanner';
+import TopLineBanner from '/src/components/atoms/TopLineBanner';
 
 
 const Layout = (props)=> {
