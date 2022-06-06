@@ -35,6 +35,10 @@ const CustomDocument = ()=> {
         <Main />
       </body>
       <div id="__modal-root"></div>
+      {/*<Script*/}
+      {/*  data-script-title={"ChannelTalk-init"}*/}
+      {/*  // eslint-disable-next-line react/no-danger*/}
+      {/*  dangerouslySetInnerHTML={{__html:ChannelTalkSDK}} />*/}
       <NextScript />
     </Html>
   );
