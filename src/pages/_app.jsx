@@ -4,7 +4,7 @@ import "@styles/global/global.scss";
 import AuthInterceptor from "@util/hook/auth-interceptor";
 import '@api/axios.config';
 import {ModalContextProvider} from '@store/modal-context';
-import ChannelTalkProvider from "@util/hook/ChannelTalkProvider";
+import ChannelTalkProvider from "@util/hook/channelTalk/ChannelTalkProvider";
 
 
 // Server Only File (client에서 사용하는 로직 사용불가)
