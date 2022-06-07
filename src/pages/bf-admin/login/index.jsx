@@ -125,7 +125,7 @@ function LoginIndexPage() {
           <div className={s.frame}>
             <div className={s.container}>
               <div className={s.row}>
-                <header className={s["index-header"]}>
+                <header className={s["header"]}>
                   <div className={`${s.logo} img-wrap`}>
                     <Image
                       src={require("@public/img/logo(favicon).png")}
@@ -135,7 +135,6 @@ function LoginIndexPage() {
                   <h1 className={s.title}>관리자 로그인</h1>
                 </header>
                 <form
-                  className={s["index-body"]}
                   action="/api/login"
                   method="post"
                   onSubmit={onSubmitHandler}
