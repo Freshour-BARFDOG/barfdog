@@ -10,7 +10,8 @@ function GAProvider({children}) {
   useEffect(() => {
     const handleRouteChange = (url) => {
       gtag.pageview(url)
-      console.log(url)
+      console.log(url);
+
     }
     router.events.on('routeChangeComplete', handleRouteChange)
     return () => {

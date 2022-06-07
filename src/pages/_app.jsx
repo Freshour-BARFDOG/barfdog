@@ -12,7 +12,6 @@ import GAProvider from "/api/googleAnalytics/GAProvider";
 // Next JS : 최초실행
 //👉 공통된 Data Fetching이 필요하다면 _app.js에 getInitialProps를 붙이면 된다.
 
-
 function MyApp({Component, pageProps}) {
 
   return (
