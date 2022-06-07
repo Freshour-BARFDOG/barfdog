@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import s from "../popup_sell.module.scss";
+import s from "./popup_sell.module.scss";
 import PopupWrapper from "/src/components/popup/PopupWrapper";
 import {
   PopupCloseButton,
