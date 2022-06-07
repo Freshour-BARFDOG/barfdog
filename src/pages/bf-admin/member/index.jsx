@@ -7,9 +7,9 @@ import AdminLayout from "/src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
 import AmdinErrorMessage from "@src/components/atoms/AmdinErrorMessage";
 import Pagination from "@src/components/atoms/Pagination";
-import SearchBar from "@src/components/admin/form/SearchBar";
-import SearchTerm from "@src/components/admin/form/SearchBar/SearchTerm";
-import SearchTextWithCategory from "@src/components/admin/form/SearchBar/SearchTextWithCategory";
+import SearchBar from "@src/components/admin/form/searchBar";
+import SearchTerm from "@src/components/admin/form/searchBar/SearchTerm";
+import SearchTextWithCategory from "@src/components/admin/form/searchBar/SearchTextWithCategory";
 import MemberList from './MemberList'
 import ToolTip from '@src/components/atoms/Tooltip'
 
