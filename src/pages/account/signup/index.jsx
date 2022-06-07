@@ -1,240 +1,185 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
-import Styles from './signup.module.scss';
+import s from './signup.module.scss';
 import {IoChevronForwardOutline} from "react-icons/io5"
+import PureCheckbox from "../../../components/atoms/PureCheckbox";
+import CustomRadio from "/src/components/atoms/CustomRadio";
+import SignupInput from "./SignupInput";
+
+/*
+* MEMO 유효성검사
+*
+* MEMO 비밀번호 추가 내용 덧붙이기
+기  MEMO : 유효성 검사 추가하기
+*
+* */
+
+const valid_isEmpty = (value) => {
+  const errors = value ? '' : '항목이 비어있습니다.';
+  return errors;
+};
 
 
+const validate = (obj) => {
+  let errors = {};
+  const keys = Object.keys(obj);
 
-export default function signup() {
+  keys.forEach((key) => {
+    const val = obj[key];
+
+    switch (key) {
+      case "name":
+        valid_isEmpty(val) && (errors[key] = "필수항목입니다.");
+        break;
+
+      default:
+        break;
+    }
+  });
+
+  // valid_isEmpty(file_pc.file) &&
+  // (errors["file_pc"] = valid_isEmpty(file_pc.file));
+  // valid_isEmpty(file_mobile.file) &&
+  // (errors["file_mobile"] = valid_isEmpty(file_mobile.file));
+
+  console.log("Validation Result: ", errors);
+  return errors;
+};
+
+function SignupPage() {
+
+  const [formValues, setFormValues] = useState({});
+  const [formErrors, setFormErrors] = useState({});
+  console.log(formValues);
+
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    console.log(formValues);
+    setFormErrors(validate(formValues));
+    // if (Object.keys(formErrors).length) return console.error(formErrors);
+  }
+
+
   return (
     <Layout>
       <Wrapper>
-      <div className={Styles.flex__container}>
-        {/* 회원가입 타이틀 */}
-        <div className={Styles.title}>
-        <header className={Styles.title}>
-          <h2>회원가입</h2>
-        </header>
-        </div>
-
-        {/* 인풋 구역 */}
-        <div className={Styles.join__inp}>
-          {/* 이름견주 2구역*/}
-          <div className={Styles.join__wrap}>
-            <div className={Styles.join__left}>
-              <label htmlFor="input_name">
-                <span>이름(견주님)</span>
-              </label>
-            </div>
-            <div className={Styles.join__right}>
-              <input type="text" id='input_name' />
-            </div>
+        <div className={s.main}>
+          <div className={s['main-title']}>
+            <h2>회원가입</h2>
           </div>
 
-          {/* 이메일주소 3구역 */}
-          <div className={Styles.join__wrap}>
-            <div className={Styles.join__left}>
-              <label htmlFor="input_email">
-                <span>이메일주소(아이디)</span>
-              </label>
-            </div>
-                            
-            <div className={Styles.join__middle}>
-                <input type="text" id='input_email' />
-                <div className={`${Styles.btn} ${Styles.smallbtn}`}>중복확인</div>
-            </div>
-          </div>
-          
-            {/* 비밀번호 2구역 */}
-          <div className={Styles.join__wrap}>
-            <div className={Styles.join__left}>
-              <label htmlFor="input_password">
-                <span>비밀번호</span>
-              </label>
-            </div>
-            <div className={Styles.join__right}>
-              <input type="password" id='input_password' />
-            </div>
-          </div>
+          <div className={s['join-form']} method={'post'} encType={"application/x-www-form-urlencoded"}
+               onSubmit={onSubmit}
+          >
+            <section className={s['input-section']}>
+              <SignupInput type={"text"} required={true} id={"name"} title={"이름(견주님)"} setFormValues={setFormValues}/>
+              <SignupInput type={"text"} required={true} id={"email"} title={"이메일주소(아이디)"}
+                           addedClassName={'add-btn-section'}
+                           setFormValues={setFormValues}
+              >
+                <div className={`${s.btn} ${s.smallbtn}`}>중복확인</div>
+              </SignupInput>
+              <SignupInput type={"password"} required={true} id={"pw"} title={"비밀번호"} setFormValues={setFormValues}/>
+              <SignupInput type={"password"} required={true} id={"pw-confirm"} title={"비밀번호 확인"} setFormValues={setFormValues}/>
+              <SignupInput type={"text"} required={true} id={"phone"} title={"휴대폰 번호"} addedClassName={'add-btn-section'} setFormValues={setFormValues}>
+                <div className={`${s.btn} ${s.smallbtn}`}>인증번호 받기</div>
+              </SignupInput>
+              <SignupInput type={"text"} required={true} id={"address"} title={"주소 검색"} addedClassName={'add-btn-section'}
+                           disabled
+                           setFormValues={setFormValues}
+              >
+                <div className={`${s.btn} ${s.bigbtn}`}>주소 검색</div>
+              </SignupInput>
+              <SignupInput type={"text"} required={true} id={"birthday"} title={"생년월일(견주님)"} placeholder={'YYYY      /      MM      /      DD'}/>
+              <div className={s['join__wrap']}>
+                <div className={s['input-title-wrap']}>
+                  <label htmlFor={'radios-gender'}>
+                    <span className={`${s['inp-title']} ${s['required']}`}>{'성별(견주님)'}</span>
+                  </label>
+                </div>
+                <div className={`${s['input-wrap']}`}>
+                  <CustomRadio className={s['gender']}
+                               name={"gender"}
+                               labelList={[
+                                 {label: '남자', value: 'man'},
+                                 {label: '여자', value: 'woman'},
+                                 {
+                                   label: '선택안함', value: 'non-selected'
+                                 }]} type={'radio'} setValue={setFormValues}/>
+                </div>
+              </div>
+              <SignupInput type={"text"} required={false} id={"recommend-code"} title={"추천코드"} placeholder={'추천코드는 계정 당 한 번만 입력 가능합니다.'}/>
+            </section>
+            <section className={s['terms-section']}>
+              <h4 className={`${s['main-title']}`}>이용약관 동의</h4>
+              {/* 이용약관 동의 */}
+              <div className={`${s['checkbox-wrap']} ${s['select-all']}`}>
+                <PureCheckbox id={'agree-all'} className={s['agree-all']}>
+                  <div className={s['desc-section']}>
+                    <p className={s['title']}>전체 동의합니다.</p>
+                    <p className={s['desc']}>선택항목에 동의하지 않은 경우도 회원가입 및 일반적인 서비스를 이용할 수 있습니다.</p>
+                  </div>
+                </PureCheckbox>
+              </div>
 
-          {/* 비밀번호확인 2구역 */}
-          <div className={Styles.join__wrap}>
-            <div className={Styles.join__left}>
-              <label htmlFor="input_password_chk">
-                <span>비밀번호 확인</span>
-              </label>
-            </div>
-            <div className={Styles.join__right}>
-              <input type="password" id='input_password_chk' />
-            </div>
-          </div>
+              <div className={`${s['checkbox-wrap']} ${s['space-between']}`}>
+                <PureCheckbox id={'agree-service'}>
+                  <p className={s['title']}>이용약관 동의 (필수)</p>
+                </PureCheckbox>
+                <div className={s.terms__view}>약관보기
+                  <IoChevronForwardOutline/>
+                </div>
+              </div>
 
-          {/* 휴대폰 번호 3구역 */}
-          <div className={Styles.join__wrap}>
-            <div className={Styles.join__left}>
-              <label htmlFor="input_phone">
-                <span>휴대폰 번호</span>
-              </label>
-            </div>
-            <div className={Styles.join__middle}>
-                <input type="text" id='input_phone' />
-                <div className={`${Styles.btn} ${Styles.smallbtn}`}>인증번호 받기</div>
-            </div>
-          </div>
-
-          {/* 주소 2구역 버튼 */}
-          <div className={Styles.join__wrap}>
-            <div className={Styles.join__left}>
-              <label>
-                <span>주소</span>
-              </label>
-            </div>
-            <div className={Styles.join__right}>
-              <div className={`${Styles.btn} ${Styles.bigbtn}`}>주소 검색</div>
-            </div>
-          </div>
-
-          {/* 생년월일(견주) 2구역 */}
-          <div className={Styles.join__wrap}>
-            <div className={Styles.join__left}>
-              <label htmlFor="input_brith">
-                <span>생년월일(견주님)</span>
-              </label>
-            </div>
-            <div className={Styles.join__right}>
-              <input type="password" id='input_brith' />
-            </div>
-          </div>
-
-          {/* 성별(견주) 2구역 */}
-          <div className={Styles.join__wrap}>
-            <div className={Styles.join__left}>
-              <label>
-                <span>성별(견주님)</span>
-              </label>
-            </div>
-            <div className={Styles.join__right}>
-              여기에 라디오박스 3개 남자 여자 선택안함
-            </div>
-          </div>
-
-
-          {/* 추천코드 2구역 */}
-          <div className={Styles.join__wrap}>
-            <div className={Styles.join__left}>
-              <label htmlFor="input_referralcode">
-                <span>추천코드</span>
-              </label>
-            </div>
-            <div className={Styles.join__right}>
-              <input type="password" id='input_referralcode' />
-            </div>
-          </div>
-        </div> {/* join_inp */}
-
-        {/* 선 width값에 따라 변함*/}
-        <hr className={Styles.line} />
-        
-        {/* 이용약관 동의 */}
-        <div className={Styles.terms__accept}>
-          <h4 className={Styles.agree__text}>이용약관 동의</h4>
-        </div>
-
-
-        {/* 동의 체크박스  */}
-        <div className={Styles.checkbox}>
-          <label htmlFor="agree_all" className={Styles.chk__box}>
-            <input type="checkbox" id="agree_all" />
-            <span className={Styles.on} /> 
-            <div className=''>전체 동의합니다.</div>
-          </label>
-          <div>선택항목에 동의하지 않은 경우도 회원가입 및 일반적인 서비스를 이용할 수 있습니다.</div>
-        </div>
-        
-        {/* 이용약관 동의 */}
-        <div className={Styles.checkbox}>
-          <label htmlFor="agree" className={Styles.chk__box}>
-            <input type="checkbox" id="agree" />
-            <span className={Styles.on} /> 
-            <div className=''>이용약관 동의 (필수)</div>
-          </label>
-
-
-          {/* 약관보기 부분 */}
-          <div className={Styles.terms__view}>약관보기
-              <IoChevronForwardOutline />              
-           </div>
-        </div>
-
-        {/* 개인정보 수집 이용동의  */}
-        <div className={Styles.checkbox}>            
-          <label htmlFor="agree_info" className={Styles.chk__box}>
-            <input type="checkbox" id="agree_info" />
-            <span className={Styles.on} /> 
-            <div className=''>개인정보 수집 이용 동의 (필수)</div>
-          </label>
-
-          {/* 약관보기 부분 */}
-          <div className={Styles.terms__view}>약관보기
-            <IoChevronForwardOutline /> 
+              {/* 개인정보 수집 이용동의  */}
+              <div className={`${s['checkbox-wrap']} ${s['space-between']}`}>
+                <PureCheckbox id={'agree-privacy'}>
+                  <p className={s.title}>개인정보 수집 이용 동의 (필수)</p>
+                </PureCheckbox>
+                <div className={s.terms__view}>약관보기
+                  <IoChevronForwardOutline/>
+                </div>
+              </div>
+              {/* 무료배송, 할인쿠폰 등 혜택 / 정보 수신 동의 */}
+              <div className={`${s['checkbox-wrap']} ${s['receive-event']}`}>
+                <PureCheckbox id={'agree-event-channel-all'}>
+                  <p className=''>무료배송, 할인쿠폰 등 혜택/정보 수신 동의 (선택)</p>
+                </PureCheckbox>
+                <div className={s['select-channel']}>
+                  <div className={s['flex-wrap']}>
+                    <PureCheckbox id={'agree-sms'} onChange={(val) => {
+                      console.log(val)
+                    }}>
+                      <p>SMS</p>
+                    </PureCheckbox>
+                    <PureCheckbox id={'agree-email'}>
+                      <p>이메일</p>
+                    </PureCheckbox>
+                  </div>
+                  <p className={s.guidetext}>
+                    <i className={s.icon}/>
+                    모두 동의 시 적립금 1,000원 적립 (첫 주문 후 적용)
+                  </p>
+                </div>
+              </div>
+              <div className={s['checkbox-wrap']}>
+                <PureCheckbox id={'agree-age'}>
+                  <div>본인은 만 14세 이상입니다. (필수)</div>
+                </PureCheckbox>
+              </div>
+            </section>
+            <section className={s['btn-section']}>
+              <button type={'submit'} className={`${s.btn} ${s.join}`} onClick={onSubmit}>회원가입</button>
+            </section>
           </div>
         </div>
-
-
-        {/* 무료배송, 할인쿠폰 등 혜택 / 정보 수신 동의 */}
-        <div className={Styles.checkbox}>
-          <label htmlFor="agree_coupon" className={Styles.chk__box}>
-            <input type="checkbox" id="agree_coupon" />
-            <span className={Styles.on} /> 
-            <div className=''>무료배송, 할인쿠폰 등 혜택/정보 수신 동의 (선택)</div>
-          </label>
-        </div>
-
-
-        {/* SMS */}
-        <div className={Styles.checkbox1}>
-          <div className={Styles.checkboxleft}>
-            <label htmlFor="agree_sms" className={Styles.chk__box}>
-              <input type="checkbox" id="agree_sms" />
-              <span className={Styles.on} /> 
-              <div className=''>SMS</div>
-            </label>
-          </div>
-
-          <div className={Styles.checkboxright}>
-            <label htmlFor="agree_email" className={Styles.chk__box}>
-              <input type="checkbox" id="agree_email" />
-              <span className={Styles.on} /> 
-              <div className=''>이메일</div>
-            </label>
-          </div>
-
-          <div className={Styles.guidetext}>
-            <i className={`${Styles.icon} ${Styles.recycle}`}>
-              {/* <img clssName = 'guide' src = {guide} /> */}
-            </i>   
-            모두 동의 시 적립금 1,000원 적립 (첫 주문 후 적용)
-          </div>
-        </div>
-
-
-        {/* 본인은 만 14세 이상입니다*/}
-        <div className={Styles.checkbox}>
-          <label htmlFor="agree_age" className={Styles.chk__box}>
-            <input type="checkbox" id="agree_age" />
-            <span className={Styles.on} /> 
-            <div className=''>본인은 만 14세 이상입니다.</div>
-          </label>
-        </div>
-
-        {/* 회원가입버튼 */}
-        <div className={Styles.join}>
-          <div className={`${Styles.btn} ${Styles.joinbtn}`}>회원가입</div>
-        </div>
-      
-      </div>{/* flex__container */}
       </Wrapper>
     </Layout>
   );
 }
+
+
+export default SignupPage;
+

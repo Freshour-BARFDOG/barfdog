@@ -38,7 +38,7 @@ function Header(props) {
             </Link>
           </li>
           <li>
-            <Link href="/account/LoginPage" as="/account/index">
+            <Link href="/account/LoginPage" as="/account/login">
               로그인
             </Link>
           </li>

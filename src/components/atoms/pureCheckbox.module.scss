@@ -1,0 +1,66 @@
+
+$browser-context: 16;
+@function rem($px, $context: $browser-context) {
+  @return #{$px / $context}rem;
+}
+
+
+
+
+.checkbox {
+  display: inline-flex;
+  cursor: pointer;
+  font-size: rem(14);
+
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+
+
+/* 기본 체크박스 숨기기 */
+.checkbox input[type='checkbox'] {
+  display: none;
+}
+
+/* 선택되지 않은 체크박스 스타일 꾸미기 */
+.checkbox .fakeCheckBox {
+  width: rem(20);
+  height: rem(20);
+  margin-right: rem(11);
+  border-radius: rem(2);
+  background: #ddd;
+  position: relative;
+  display: block;
+  top: 0;
+  left: 0;
+}
+
+.fakeCheckBox:after {
+  content: "";
+  position: absolute;
+  width: rem(6);
+  height: rem(10);
+  border: solid #fff;
+  border-width: 0 rem(2) rem(2) 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+  position: absolute;
+  left: rem(6);
+  top: rem(2);
+}
+
+
+
+/* 선택된 체크박스 스타일 꾸미기 */
+.checkbox input[type="checkbox"]:checked + .fakeCheckBox {
+  background: var(--color-main);
+}
+
+.checkbox input[type="checkbox"]:checked + .fakeCheckBox:after {
+  display: block;
+}
+

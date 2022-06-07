@@ -7,7 +7,7 @@ import Naver from '/public/img/icon/naver.png';
 import Image from 'next/image';
 import Link from 'next/link';
 
-function Title (props) {
+function Title(props) {
   return (
     <header className={Styles.title}>
       <h2>{props.name}</h2>
@@ -15,30 +15,30 @@ function Title (props) {
   )
 }
 
-function InputBox (props){
+function InputBox(props) {
   let content = null;
-  if(props.mode==='을'){
-    content= <input type="text" placeholder = {props.name + '을 입력해주세요.'} />
+  if (props.mode === '을') {
+    content = <input type="text" placeholder={props.name + '을 입력해주세요.'}/>
   } else {
-    content =<input type="text" placeholder = {props.name + '를 입력해주세요.'} />
+    content = <input type="text" placeholder={props.name + '를 입력해주세요.'}/>
   }
   return (
-      <div className={Styles.input__box}>
-        <h4 className={Styles.input__title}>{props.name}</h4>
-        {content}
-      </div>
-  )
-}
-
-function Btn (props) {
-  return(
-    <div className={Styles.btn__group}>
-      <div className={`${Styles.btn} ${Styles.id__search}`}>{props.name}</div>
+    <div className={Styles.input__box}>
+      <h4 className={Styles.input__title}>{props.name}</h4>
+      {content}
     </div>
   )
 }
 
-function List (props) {
+function Btn(props) {
+  return (
+    <div className={Styles.btn__group}>
+      <button type={'button'} className={`${Styles.btn} ${Styles.id__search}`}>{props.name}</button>
+    </div>
+  )
+}
+
+function List(props) {
   return (
     <li>
       <Link href={props.href} passHref>
@@ -48,11 +48,6 @@ function List (props) {
   )
 }
 
-function H5 (props) {
-  return (
-    <h5 className={Styles.easylogin}>{props.name}</h5>
-  )
-}
 
 export default function index() {
   return (
@@ -70,22 +65,22 @@ export default function index() {
             <InputBox name="비밀번호"></InputBox>
           </div>
 
-          {/* 체크박스 자식가능한지? */}
           <div className={Styles.auto__login__check}>
             <label htmlFor="agree" className={Styles.chk__box}>
-              <input type="checkbox" id="agree" />
-              <span className={Styles.on} />
+              <input type="checkbox" id="agree"/>
+              <span className={Styles.on}/>
               <div className={Styles.autologin}>자동 로그인</div>
             </label>
           </div>
 
-          {/* 로그인 회원가입 버튼 */}
           <div className={Styles.btnbox}>
-            <Btn name="로그인"></Btn>
+            <button type={'button'} className={`${Styles.btn} ${Styles.btn_login}`}>로그인</button>
+            <Link href={"/account/signup"} passHref>
+              <a>
+                <button type={'button'} className={`${Styles.btn} ${Styles.btn_signup}`}>회원가입</button>
+              </a>
+            </Link>
           </div>
-
-          <Btn name="회원가입"></Btn>
-
           {/* 아이디 선 비밀번호 찾기 */}
           <div className={Styles.id__pw__search}>
             <ul className={Styles.list}>
@@ -93,34 +88,24 @@ export default function index() {
               <List name="비밀번호 찾기" href={"/account/findMyPw"}/>
             </ul>
           </div>
-
-          {/* 선 */}
-          <hr className={Styles.line} />
-
-          <H5 name="간편 로그인"></H5>
-
+          <h5 className={Styles.easylogin}>간편로그인</h5>
           <div className={Styles.login_sns}>
-            <Link href={"/"} passHref>
-              <a>
-                <Image
-                  src={Kakao}
-                  width={72}
-                  height={72}
-                  alt="카카오톡 아이콘"
-                />
-              </a>
-            </Link>
-
-            <Link href={"/"} className={Styles.anaver} passHref>
-              <a>
-                <Image
-                  src={Naver}
-                  width="72"
-                  height="72"
-                  alt="네이버 아이콘"
-                />
-              </a>
-            </Link>
+            <button type={"button"} className={Styles.kakao}>
+              <Image
+                src={Kakao}
+                width={72}
+                height={72}
+                alt="카카오톡 아이콘"
+              />
+            </button>
+            <button className={Styles.naver} type={"button"}>
+              <Image
+                src={Naver}
+                width="72"
+                height="72"
+                alt="네이버 아이콘"
+              />
+            </button>
           </div>
         </div>
       </Wrapper>

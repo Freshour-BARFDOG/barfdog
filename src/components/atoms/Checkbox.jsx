@@ -24,7 +24,7 @@ export function Btn (props) {
 
 
 
-export default function Checkbox({ id, label, callback, onClick }) {
+export default function Checkbox({ id, label, callback, onClick , ...props}) {
 
   const onChangeHandler = (e) => {
     const input = e.currentTarget;
@@ -38,7 +38,7 @@ export default function Checkbox({ id, label, callback, onClick }) {
 
 
   return (
-    <label htmlFor={id} className={s.chk_box}>
+    <label htmlFor={id} className={s.chk_box} {...props}>
       <input
         type="checkbox"
         id={id}
