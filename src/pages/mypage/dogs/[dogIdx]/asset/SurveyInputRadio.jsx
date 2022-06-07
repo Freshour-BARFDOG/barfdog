@@ -29,7 +29,7 @@ const SurveyInputRadio = ({
     }));
   };
 
-  if (!idList.length || !idList) return;
+  if (!idList || !idList.length) return;
 
   return (
     <>

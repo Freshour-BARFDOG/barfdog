@@ -16,7 +16,7 @@ const TemplateContents = ({templateData}) => {
 
 
 const Modal_alimTalk_Preview = ({onModalActive, data}) => {
-  const templateData = data.value; // _ 임시 데이터
+  const templateData = data.value || '임시데이터'; // _ 임시 데이터
   const onHideModal = () => {
     onModalActive(false);
   }

@@ -4,10 +4,12 @@ import CustomSelect from "/src/components/admin/form/CustomSelect";
 
 const CustomSelectGroup = ({setFormValues, groupOptions}) => {
 
-  const startName = groupOptions.startName;
-  const endName = groupOptions.endName;
 
-  const options = groupOptions.options;
+
+  const startName = groupOptions?.startName;
+  const endName = groupOptions?.endName;
+
+  const options = groupOptions?.options;
   const [selectedGrade, setSelectedGrade] = useState();
   const [gradeEndList, setGradeEndList] = useState(options);
 
@@ -21,6 +23,7 @@ const CustomSelectGroup = ({setFormValues, groupOptions}) => {
     }));
   }, [selectedGrade]);
 
+  if(!groupOptions) return;
 
   return (<>
     <CustomSelect

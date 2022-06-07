@@ -36,7 +36,7 @@ import ProductInfo_orderStatusInfo from "../ProductInfo_orderStatusInfo";
 
 
 
-const TEST_DATA = { orderStatus: "CANCEL_REQUEST", itemList: [1, 2, 3] };
+const TEST_DATA = { orderStatus: "CANCEL_REQUEST", itemList: [1, 2, 3] , paymentType: '정기구독'};
 
 
 
@@ -76,7 +76,7 @@ function Popup_MemeberDetailPage() {
               <section className={s.table}>
                 <ul>
                   <li className={s["table-list"]}>
-                    <ProductInfo_basicOrderInfo data={{paymentType:'정기구독'}}/>
+                    <ProductInfo_basicOrderInfo data={allData.paymentType}/>
                   </li>
                   {isCanceledOrderStatus && (
                     <li className={s["table-list"]}>

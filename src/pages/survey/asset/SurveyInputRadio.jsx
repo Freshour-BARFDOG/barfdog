@@ -23,7 +23,6 @@ const SurveyInputRadio = ({
     }));
   };
 
-  if (!idList.length || !idList) return;
 
   return (
     <>

@@ -32,7 +32,7 @@ import ProductInfo_delivery from "../ProductInfo_delivery";
   { label: "구매확정", value: "CONFIRM" }, // MEMO 구독상품: 배송완료후 / 단품: 사용자 구매확정 또는 배송완료 후 7일 경과후
 */
 
-const TEST_DATA = { orderStatus: "EXCHANGE_REQUEST", itemList: [1, 2, 3] };
+const TEST_DATA = { orderStatus: "EXCHANGE_REQUEST", itemList: [1, 2, 3] , paymentType:"일반주문"};
 
 function Popup_MemeberDetailPage() {
   const router = useRouter();
@@ -47,6 +47,7 @@ function Popup_MemeberDetailPage() {
     { boxLabel: "교환", value: "EXCHANGE_REQUEST" },
     { boxLabel: "교환", value: "EXCHANGE_DONE" },
   ];
+
   let isCanceledOrderStatus = false;
   let canceledOrderStatusLabel = "주문";
   for (let i = 0; i < canceldOrderStatusList.length; i++) {
@@ -56,6 +57,7 @@ function Popup_MemeberDetailPage() {
       break
     }
   }
+
 
 
   return (
@@ -76,7 +78,7 @@ function Popup_MemeberDetailPage() {
                 <ul>
                   <li className={s["table-list"]}>
                     <ProductInfo_basicOrderInfo
-                      data={{ paymentType: "일반주문" }}
+                      data={allData.paymentType}
                     />
                   </li>
                   {isCanceledOrderStatus && (

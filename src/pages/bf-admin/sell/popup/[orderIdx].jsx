@@ -475,7 +475,6 @@ const ProductInfo_delivery = () => {
 function Popup_MemeberDetailPage() {
 
   const test_itemList = [1,2,3];
-  const [orderType, setfirst] = useState(second)
 
 
   return (

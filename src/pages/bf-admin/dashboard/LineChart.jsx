@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import { Line } from '@nivo/line';
+
 import s from './chart.module.scss'
 import { Defs, linearGradientDef } from '@nivo/core'
 
@@ -8,6 +9,7 @@ import { Defs, linearGradientDef } from '@nivo/core'
 // no chart will be rendered.
 // website examples showcase many properties,
 // you'll often use just a few of them.
+
 
 
 export const data = [
@@ -88,12 +90,12 @@ export const data = [
 
 
 
-function LineChart ( {data } ) {
+function LineChart ( { chartData } ) {
   return (
     <>
         <div className={s['chart-container']}>
           <Line
-          data={data}
+          data={chartData}
           width={700}
           height={800}
           margin={{ top: 50, right: 0, bottom: 100, left: 60 }}
