@@ -1,15 +1,16 @@
+import React, {useMemo} from "react";
 import calcedAgeList from "./calcedAgeList";
 import CustomSelectGroup from "./CustomSelectGroup";
 import CustomRadio from "/src/components/admin/form/CustomRadio";
 import ToolTip from "/src/components/atoms/Tooltip";
-import React from "react";
 
 
 
 const FormOfGroupType = ({setFormValues}) => {
 
 
-  const ageList = calcedAgeList();
+
+
   return (
     <>
       <div className="cont_divider">
@@ -71,7 +72,7 @@ const FormOfGroupType = ({setFormValues}) => {
                 <CustomSelectGroup setFormValues={setFormValues} groupOptions={{
                   startName: 'age-start',
                   endName: 'age-end',
-                  options: ageList
+                  options: calcedAgeList()
                 }}/>
               </div>
             </div>

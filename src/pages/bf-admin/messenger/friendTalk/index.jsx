@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-import dynamic from "next/dynamic";
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import AdminLayout from "/src/components/admin/AdminLayout";
 import {AdminContentWrapper} from "/src/components/admin/AdminWrapper";
@@ -7,17 +6,14 @@ import {AdminContentWrapper} from "/src/components/admin/AdminWrapper";
 import CustomRadio from "/src/components/admin/form/CustomRadio";
 import CustomSelect from "/src/components/admin/form/CustomSelect";
 import Modal_alimTalk_Preview from "./Modal_alimTalk_Preview";
-// import FormOfGroupType from './FormOfGroupType';
+import FormOfGroupType from './FormOfGroupType';
 
 
-
-
-const FormOfGroupType = dynamic(import('./FormOfGroupType'), {ssr:false});
 
 
 
 function FriendTalkPage() {
-  const [isModalActive, setIsModalActive] = useState(true);
+  const [isModalActive, setIsModalActive] = useState(false);
 
 
 
@@ -26,7 +22,7 @@ function FriendTalkPage() {
     exposedTarget: 'ALL'
   }
   const [formValues, setFormValues] = useState(initialValues);
-  console.log(formValues);
+  // console.log(formValues);
 
   const onShowModal = () => {
     setIsModalActive(true);
