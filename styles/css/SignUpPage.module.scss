@@ -223,3 +223,13 @@ margin: 50px auto 111px;
   }
 }
 }//flex-container
+
+.addresspopup{
+  display: block;
+  position: absolute;
+  top: 60%;
+  max-width: 509px;
+  height: 447px;
+  padding: 7px;
+  z-index: 100;
+}
