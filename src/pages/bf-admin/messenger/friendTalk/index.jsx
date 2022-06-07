@@ -5,8 +5,8 @@ import {AdminContentWrapper} from "/src/components/admin/AdminWrapper";
 
 import CustomRadio from "/src/components/admin/form/CustomRadio";
 import CustomSelect from "/src/components/admin/form/CustomSelect";
-import Modal_alimTalk_Preview from "./Modal_alimTalk_Preview";
-import FormOfGroupType from './FormOfGroupType';
+import Modal_alimTalk_Preview from "../../../../components/admin/messenger/friendTalk/Modal_alimTalk_Preview";
+import FormOfGroupType from '../../../../components/admin/messenger/friendTalk/FormOfGroupType';
 
 
 
@@ -35,7 +35,7 @@ function FriendTalkPage() {
         <AdminContentWrapper>
           <h1 className="title_main">친구톡</h1>
           <form
-            action="/a"
+            action="/"
             className="cont"
             encType="multipart/form-data"
             method="post"

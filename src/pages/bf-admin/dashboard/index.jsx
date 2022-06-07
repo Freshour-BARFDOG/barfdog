@@ -3,7 +3,7 @@ import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
 import dynamic from "next/dynamic";
-import LineChart , {data} from "./LineChart";
+import LineChart , {data} from "../../../components/admin/dashboard/LineChart";
 
 
 
