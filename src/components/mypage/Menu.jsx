@@ -13,7 +13,7 @@ export default function Menu({ ...props }) {
     <nav {...props}>
       <h2 className={s.title}>마이페이지</h2>
       <ul className={s.menu}>
-        <List title="주문 내역" link="/mypage/order-history" />
+        <List title="주문 내역" link="/mypage/orderHistory" />
         <List title="카드 관리" link="/mypage/card" />
         <List title="구독 관리" link="/mypage/subscribe" />
         <List title="배송 현황" link="/mypage/delivery" />

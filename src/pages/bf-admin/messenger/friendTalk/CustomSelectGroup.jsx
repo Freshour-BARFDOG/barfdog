@@ -26,7 +26,7 @@ const CustomSelectGroup = ({setFormValues, groupOptions}) => {
   }, [selectedGrade]);
 
   if(!groupOptions ||!gradeEndList.length) return;
-  console.log(options)
+  // console.log(options)
 
   return (<>
     <CustomSelect

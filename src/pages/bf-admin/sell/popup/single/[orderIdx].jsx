@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import s from "../popup_sell.module.scss";
+import s from "/src/components/popup/admin_ProductInfo/popup_sell.module.scss";
 import PopupWrapper from "@src/components/popup/PopupWrapper";
 import {
   PopupCloseButton,
   PopupCloseButton_typeX,
 } from "@src/components/popup/PopupCloseButton";
-import ProductInfo_basicOrderInfo from "../ProductInfo_basicOrderInfo";
-import ProductInfo_orderStatusInfo from "../ProductInfo_orderStatusInfo";
-import ProductInfo_normItem from "../ProductInfo_normalItem";
-import ProductInfo_payment from "../ProductInfo_payment";
-import ProductInfo_delivery from "../ProductInfo_delivery";
+import ProductInfo_basicOrderInfo from "/src/components/popup/admin_ProductInfo/ProductInfo_basicOrderInfo";
+import ProductInfo_orderStatusInfo from "/src/components/popup/admin_ProductInfo/ProductInfo_orderStatusInfo";
+import ProductInfo_normItem from "/src/components/popup/admin_ProductInfo/ProductInfo_normalItem";
+import ProductInfo_payment from "/src/components/popup/admin_ProductInfo/ProductInfo_payment";
+import ProductInfo_delivery from "/src/components/popup/admin_ProductInfo/ProductInfo_delivery";
 
 /*
   // MEMO : 전체 주문 Status (단품 / 정기구독상품 포함)
@@ -78,7 +78,7 @@ function Popup_MemeberDetailPage() {
                 <ul>
                   <li className={s["table-list"]}>
                     <ProductInfo_basicOrderInfo
-                      data={allData.paymentType}
+                      data={allData}
                     />
                   </li>
                   {isCanceledOrderStatus && (

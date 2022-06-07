@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import s from "../popup_sell.module.scss";
+import s from "/src/components/popup/admin_ProductInfo/popup_sell.module.scss";
 import PopupWrapper from "/src/components/popup/PopupWrapper";
 import {
   PopupCloseButton,
   PopupCloseButton_typeX,
 } from "/src/components/popup/PopupCloseButton";
-import ProductInfo_basicOrderInfo from "../ProductInfo_basicOrderInfo";
-import ProductInfo_dog from "../ProductInfo_dog";
-import ProductInfo_subscribe from "../ProductInfo_subscribe";
-import ProductInfo_payment from "../ProductInfo_payment";
-import ProductInfo_delivery from "../ProductInfo_delivery";
-import ProductInfo_orderStatusInfo from "../ProductInfo_orderStatusInfo";
+import ProductInfo_basicOrderInfo from "/src/components/popup/admin_ProductInfo/ProductInfo_basicOrderInfo";
+import ProductInfo_dog from "/src/components/popup/admin_ProductInfo/ProductInfo_dog";
+import ProductInfo_subscribe from "/src/components/popup/admin_ProductInfo/ProductInfo_subscribe";
+import ProductInfo_payment from "/src/components/popup/admin_ProductInfo/ProductInfo_payment";
+import ProductInfo_delivery from "/src/components/popup/admin_ProductInfo/ProductInfo_delivery";
+import ProductInfo_orderStatusInfo from "/src/components/popup/admin_ProductInfo/ProductInfo_orderStatusInfo";
 
 
 /*
@@ -76,7 +76,7 @@ function Popup_MemeberDetailPage() {
               <section className={s.table}>
                 <ul>
                   <li className={s["table-list"]}>
-                    <ProductInfo_basicOrderInfo data={allData.paymentType}/>
+                    <ProductInfo_basicOrderInfo data={allData}/>
                   </li>
                   {isCanceledOrderStatus && (
                     <li className={s["table-list"]}>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import s from "../survey.module.scss";
+import s from "../../pages/survey/survey.module.scss";
 
 const SurveyInputRadio = ({
   surveyValues,

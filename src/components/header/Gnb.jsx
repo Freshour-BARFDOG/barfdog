@@ -110,7 +110,7 @@ export const Gnb_my = () => {
             <DeadlineTimer />
           </div>
         </List>
-        <List href="/mypage/order-history">
+        <List href="/mypage/orderHistory">
           <Icon_mypage />
         </List>
       </ul>
