@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import Layout from "/src/components/common/Layout";
 import Wrapper from "/src/components/common/Wrapper";
-import Styles from "/styles/css/shop/shop.module.scss"
+import Styles from "./shop.module.scss"
 import Link from 'next/link';
 /* Images */
 import Image from "next/image";

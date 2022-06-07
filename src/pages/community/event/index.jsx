@@ -3,7 +3,7 @@ import MetaTitle from "@src/components/atoms/MetaTitle";
 import Pagination from "@src/components/atoms/Pagination";
 import Wrapper from "/src/components/common/Wrapper";
 import Layout from "/src/components/common/Layout";
-import Styles from '/styles/css/community/event/index.module.scss'
+import Styles from './event.module.scss'
 import Image from 'next/image';
 import Link from 'next/link';
 

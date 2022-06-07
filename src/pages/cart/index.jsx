@@ -2,7 +2,7 @@ import React from 'react';
 import Layout from "/src/components/common/Layout";
 import Wrapper from "/src/components/common/Wrapper";
 import MetaTitle from "/src/components/atoms/MetaTitle";
-import Styles from "styles/css/cart/index.module.scss";
+import Styles from "./cart.module.scss";
 import Image from 'next/image';
 import Link from 'next/link';
 

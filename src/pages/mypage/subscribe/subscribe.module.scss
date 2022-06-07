@@ -1,0 +1,90 @@
+@import '/styles/global/guide';
+$browser-context:16; // html font-size
+@function rem($px, $context: $browser-context){
+  @return #{$px / $context}rem;
+}
+
+
+section.title{ padding : rem(8) 0 rem(19);}
+
+
+.title {
+  @include char(t24);
+}
+
+
+
+
+.content {
+  @include char(l16);
+  max-width: rem(920);
+  border-bottom: rem(1) solid var(--color-line-03);
+    &:last-child {
+      border-bottom: rem(0);
+    }
+
+  .flex_box {
+    display: flex;
+    align-items: center;
+    padding: rem(30) 0;
+    .text2 {
+      color: var(--color-font-sub);
+    }
+    .text3{
+      padding-top: rem(10);
+    }
+
+    .col_1 {
+      display: flex;
+      width: 47.8%;
+      max-width: rem(440);
+      align-items: center;
+      padding-left : rem(20);
+
+      .image {
+        width: 100%;
+        max-width: rem(80);
+        aspect-ratio: 1/1;
+      }
+      .text {
+        .red_box_text{
+          background-color : var(--color-main);
+          text-align: center;
+          color: #fff;
+          width: rem(94);
+          border-radius: rem(4);
+          padding: rem(5) 0 rem(5);
+          @include char(l15);
+          font-weight: 600;
+          margin-bottom: rem(9);
+        }
+        padding-left: rem(30);
+        > p {
+          font-weight: 500;
+          padding-bottom: rem(10);
+        }
+      }
+    }
+
+    .col_2 {
+      width: 19.5%;
+      text-align: center;
+    }
+    .col_3 {
+      width: 19.5%;
+      text-align: center;
+    }
+    .col_4 {
+      width: 13.04%;
+      .btn {
+        width: 100%;
+        background-color: var(--color-main);
+        color: #fff;
+        text-align: center;
+        @include char(l15);
+        padding: rem(14) 0;
+        border-radius: rem(4);
+      }
+    }
+  }
+}

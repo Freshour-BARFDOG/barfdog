@@ -1,0 +1,78 @@
+@import '/styles/global/guide';
+$browser-context:16; // html font-size
+@function rem($px, $context: $browser-context){
+  @return #{$px / $context}rem;
+}
+
+section.title { padding: rem(60) 0 rem(26);} 
+section.btn { padding : rem(77) 0 rem(80)}
+
+
+.text {
+  @include char(t24);
+  font-weight: 600;
+  text-align: center;
+}
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  .content_text {
+    max-width: rem(400);
+    @include char(b15);
+    color: var(--color-font-sub);
+    text-align: center;
+    padding-bottom: rem(46);
+  }
+
+  .labe_box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    .label_text {
+      @include char(l14);
+      padding: rem(12) rem(20) rem(12) 0;
+    }
+    .input_box {
+      width: 100%;
+      max-width: rem(260);
+      padding: rem(13) 0 rem(13) rem(16);
+      @include char(l15);
+    }
+  }
+}
+
+
+.btn {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  .btn_box {
+    width: 40%;
+    max-width: rem(290);
+    display: flex;
+    // justify-content: center;
+    column-gap: rem(10) ;
+    @include char(l16);
+    .btn_cancel {
+      display: flex;
+      justify-content: center;
+      width: 50%;
+      padding: rem(17) 0;
+      border: rem(1) solid var(--color-main);
+      border-radius: rem(4);
+    }
+    .btn_withdraw {
+      width: 50%;
+      display: flex;
+      justify-content: center;
+      padding: rem(17) 0;
+      border: rem(1) solid var(--color-main);
+      background-color: var(--color-main);
+      color: #fff;
+      border-radius: rem(4);
+    }
+  }
+}

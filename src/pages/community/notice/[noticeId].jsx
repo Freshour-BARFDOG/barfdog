@@ -3,7 +3,7 @@ import MetaTitle from "@src/components/atoms/MetaTitle";
 import Wrapper from "/src/components/common/Wrapper";
 import Layout from "/src/components/common/Layout";
 import { useRouter } from "next/router";
-import Styles from '/styles/css/community/notice/[noticeId].module.scss';
+import Styles from './[noticeId].module.scss';
 import Image from "next/image";
 
 function NoticePostPage() {

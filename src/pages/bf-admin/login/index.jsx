@@ -125,7 +125,7 @@ function LoginIndexPage() {
           <div className={s.frame}>
             <div className={s.container}>
               <div className={s.row}>
-                <header className={s["login-header"]}>
+                <header className={s["index-header"]}>
                   <div className={`${s.logo} img-wrap`}>
                     <Image
                       src={require("@public/img/logo(favicon).png")}
@@ -135,7 +135,7 @@ function LoginIndexPage() {
                   <h1 className={s.title}>관리자 로그인</h1>
                 </header>
                 <form
-                  className={s["login-body"]}
+                  className={s["index-body"]}
                   action="/api/login"
                   method="post"
                   onSubmit={onSubmitHandler}
@@ -171,7 +171,7 @@ function LoginIndexPage() {
                     </label>
                   </div>
                   <div className={`${s["form-row"]} ${s.options}`}>
-                    <span className={s["auto-login"]}>
+                    <span className={s["auto-index"]}>
                       <Checkbox
                         id="autoLogin"
                         label="자동로그인"

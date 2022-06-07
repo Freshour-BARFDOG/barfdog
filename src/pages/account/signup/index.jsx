@@ -1,28 +1,21 @@
 import React from 'react';
-import Layout from '../../../components/common/Layout';
+import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
-import MypageWrapper from "/src/components/mypage/MypageWrapper";
-import Styles from '/styles/css/SignUpPage.module.scss';
+import Styles from './signup.module.scss';
 import {IoChevronForwardOutline} from "react-icons/io5"
 
 
-function Title (props) {
-  return (
-    <header className={Styles.title}>
-      <h2>{props.name}</h2>
-    </header>
-  )
-}
 
 export default function signup() {
   return (
     <Layout>
       <Wrapper>
       <div className={Styles.flex__container}>
-        
         {/* 회원가입 타이틀 */}
         <div className={Styles.title}>
-          <Title name='회원가입'></Title>
+        <header className={Styles.title}>
+          <h2>회원가입</h2>
+        </header>
         </div>
 
         {/* 인풋 구역 */}

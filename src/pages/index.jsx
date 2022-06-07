@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import MetaTitle from "../components/atoms/MetaTitle";
-import Styles from '/styles/css/index.module.scss'
+import Styles from './mainPage.module.scss'
 import Layout from '/src/components/common/Layout'
 import Wrapper from "/src/components/common/Wrapper";
 import Link from 'next/link';

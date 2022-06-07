@@ -5,7 +5,7 @@ import MypageWrapper from "/src/components/mypage/MypageWrapper";
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import styled from "styled-components";
 import Modal_useCoupon from "@src/components/modal/modal_mypage_coupon";
-import s from "styles/css/mypage/coupon/index.module.scss";
+import s from "./coupon.module.scss";
 import Pagination from "@src/components/atoms/Pagination";
 
 

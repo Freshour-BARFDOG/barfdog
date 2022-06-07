@@ -1,5 +1,5 @@
 import React from 'react';
-import Styles from '/styles/css/community/event/[eventId].module.scss'
+import Styles from './[eventId].module.scss'
 import MetaTitle from "@src/components/atoms/MetaTitle";
 import Wrapper from "/src/components/common/Wrapper";
 import Layout from "/src/components/common/Layout";

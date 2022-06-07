@@ -3,7 +3,7 @@ import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from "/src/components/mypage/MypageWrapper";
 import MetaTitle from "/src/components/atoms/MetaTitle";
-import Styles from "/styles/css/mypage/subscribe/index.module.scss";
+import Styles from "./subscribe.module.scss";
 import Image from 'next/image';
 
 
