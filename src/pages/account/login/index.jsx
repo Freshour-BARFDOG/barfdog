@@ -6,6 +6,7 @@ import Kakao from '/public/img/icon/kakao.png';
 import Naver from '/public/img/icon/naver.png';
 import Image from 'next/image';
 import Link from 'next/link';
+import {useRouter} from 'next/router';
 
 function Title(props) {
   return (
@@ -48,8 +49,15 @@ function List(props) {
   )
 }
 
-
 export default function index() {
+
+  const router = useRouter();
+
+  function kakaoLoginFunc() {
+    const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}&response_type=code`;
+    router.push(KAKAO_AUTH_URL)
+  }
+
   return (
     <Layout>
       <Wrapper>
@@ -90,7 +98,9 @@ export default function index() {
           </div>
           <h5 className={Styles.easylogin}>간편로그인</h5>
           <div className={Styles.login_sns}>
-            <button type={"button"} className={Styles.kakao}>
+            <button type={"button"} className={Styles.kakao}
+                    onClick={kakaoLoginFunc}
+            >
               <Image
                 src={Kakao}
                 width={72}
