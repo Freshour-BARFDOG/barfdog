@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import s from "./signup.module.scss";
 
-const SingupInput = ({type, required, id, name, title, children, addedClassName, disabled, placeholder, setFormValues}) => {
+const SingupInput = ({type, required, id, name, title, children, addedClassName, disabled, placeholder, setFormValues, errorMessage}) => {
   const [value, setValue] = useState('');
   const onChangeHandler = (e)=>{
     const {name, value} = e.currentTarget;
@@ -26,6 +26,7 @@ const SingupInput = ({type, required, id, name, title, children, addedClassName,
       <div className={`${s['input-wrap']} ${s[addedClassName]}`}>
         <div className={s['inp-wrap']}>
           <input type={type} id={id} name={id} disabled={disabled} placeholder={placeholder} onChange={onChangeHandler}/>
+          {errorMessage}
         </div>
         {children}
       </div>
