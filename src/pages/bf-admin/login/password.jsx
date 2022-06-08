@@ -16,7 +16,7 @@ function ResetPasswordPage() {
 
 
   useEffect(() => {
-    if (!isAdmin) router.push("/bf-admin/login"); // Redirection : 인증되지 않고, 해당 페이지 접근한 경우
+    if (!isAdmin) router.push("/bf-admin/index"); // Redirection : 인증되지 않고, 해당 페이지 접근한 경우
 
     if (isSubmitting && !Object.keys(formErrors).length) {
       console.log("데이터 전송");
@@ -72,7 +72,7 @@ function ResetPasswordPage() {
           <div className={s.frame}>
             <div className={s.container}>
               <div className={s.row}>
-                <header className={s["login-header"]}>
+                <header className={s["index-header"]}>
                   <div className={`${s.logo} img-wrap`}>
                     <Link href="/bf-admin/login">
                       <a>
@@ -86,7 +86,7 @@ function ResetPasswordPage() {
                   <h1 className={s.title}>관리자 비밀번호 재설정</h1>
                 </header>
                 <form
-                  className={s["login-body"]}
+                  className={s["index-body"]}
                   action="/api/login"
                   method="post"
                 >

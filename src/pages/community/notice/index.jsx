@@ -2,7 +2,7 @@ import React from 'react';
 import MetaTitle from "@src/components/atoms/MetaTitle";
 import Wrapper from "/src/components/common/Wrapper";
 import Layout from "/src/components/common/Layout";
-import Styles from '/styles/css/community/notice/index.module.scss'
+import Styles from './notice.module.scss'
 import Pagination from "@src/components/atoms/Pagination";
 import Link from 'next/link';
 

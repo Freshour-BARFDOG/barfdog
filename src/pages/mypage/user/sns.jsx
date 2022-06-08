@@ -3,7 +3,7 @@ import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from "/src/components/mypage/MypageWrapper";
 import MetaTitle from "/src/components/atoms/MetaTitle";
-import s from 'styles/css/mypage/user/sns.module.scss';
+import s from './sns.module.scss';
 
 function SNSManagementPage() {
   return (

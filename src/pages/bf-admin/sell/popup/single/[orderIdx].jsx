@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import s from "../popup_sell.module.scss";
+import s from "/src/components/popup/admin_ProductInfo/popup_sell.module.scss";
 import PopupWrapper from "@src/components/popup/PopupWrapper";
 import {
   PopupCloseButton,
   PopupCloseButton_typeX,
 } from "@src/components/popup/PopupCloseButton";
-import ProductInfo_basicOrderInfo from "../ProductInfo_basicOrderInfo";
-import ProductInfo_orderStatusInfo from "../ProductInfo_orderStatusInfo";
-import ProductInfo_normItem from "../ProductInfo_normalItem";
-import ProductInfo_payment from "../ProductInfo_payment";
-import ProductInfo_delivery from "../ProductInfo_delivery";
+import ProductInfo_basicOrderInfo from "/src/components/popup/admin_ProductInfo/ProductInfo_basicOrderInfo";
+import ProductInfo_orderStatusInfo from "/src/components/popup/admin_ProductInfo/ProductInfo_orderStatusInfo";
+import ProductInfo_normItem from "/src/components/popup/admin_ProductInfo/ProductInfo_normalItem";
+import ProductInfo_payment from "/src/components/popup/admin_ProductInfo/ProductInfo_payment";
+import ProductInfo_delivery from "/src/components/popup/admin_ProductInfo/ProductInfo_delivery";
 
 /*
   // MEMO : 전체 주문 Status (단품 / 정기구독상품 포함)
@@ -32,7 +32,7 @@ import ProductInfo_delivery from "../ProductInfo_delivery";
   { label: "구매확정", value: "CONFIRM" }, // MEMO 구독상품: 배송완료후 / 단품: 사용자 구매확정 또는 배송완료 후 7일 경과후
 */
 
-const TEST_DATA = { orderStatus: "EXCHANGE_REQUEST", itemList: [1, 2, 3] };
+const TEST_DATA = { orderStatus: "EXCHANGE_REQUEST", itemList: [1, 2, 3] , paymentType:"일반주문"};
 
 function Popup_MemeberDetailPage() {
   const router = useRouter();
@@ -47,6 +47,7 @@ function Popup_MemeberDetailPage() {
     { boxLabel: "교환", value: "EXCHANGE_REQUEST" },
     { boxLabel: "교환", value: "EXCHANGE_DONE" },
   ];
+
   let isCanceledOrderStatus = false;
   let canceledOrderStatusLabel = "주문";
   for (let i = 0; i < canceldOrderStatusList.length; i++) {
@@ -56,6 +57,7 @@ function Popup_MemeberDetailPage() {
       break
     }
   }
+
 
 
   return (
@@ -76,7 +78,7 @@ function Popup_MemeberDetailPage() {
                 <ul>
                   <li className={s["table-list"]}>
                     <ProductInfo_basicOrderInfo
-                      data={{ paymentType: "일반주문" }}
+                      data={allData}
                     />
                   </li>
                   {isCanceledOrderStatus && (

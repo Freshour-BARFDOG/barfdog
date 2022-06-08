@@ -70,7 +70,7 @@ axios({
   withCredentials: false, // 기본 값
 
   // `adapter`는 테스트를 보다 쉽게 해주는 커스텀 핸들링 요청을 허용합니다.
-  // 유효한 응답(Promise)을 반환해야 합니다. (lib/adapters/README.md 참고).
+  // 유효한 응답(Promise)을 반환해야 합니다. (googleAnalytics/adapters/README.md 참고).
   adapter: function (config) {
     // ...
   },

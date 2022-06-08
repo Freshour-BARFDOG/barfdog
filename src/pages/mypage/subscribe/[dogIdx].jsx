@@ -9,7 +9,7 @@ import Image from 'next/image';
 import { IoIosArrowForward } from "react-icons/io";
 
 // import s from "src/pages/_samples/_samples.module.scss";
-import Styles from "/styles/css/mypage/subscribe/[dogIdx].module.scss";
+import Styles from "./[dogIdx].module.scss";
 
 import { slideUp , slideDown } from "/util/func/slideToggle";
 

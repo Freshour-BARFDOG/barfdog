@@ -1,0 +1,288 @@
+@import '/styles/global/guide';
+$browser-context:16; // html font-size
+@function rem($px, $context: $browser-context){
+  @return #{$px / $context}rem;
+}
+
+
+
+.chk_box {
+display: inline-flex; 
+cursor: pointer; 
+font-size: 14px; 
+-webkit-user-select: none; 
+-moz-user-select: none; 
+-ms-user-select: none; 
+user-select: none; 
+} /* 기본 체크박스 숨기기 */ 
+.chk_box input[type='checkbox'] { 
+display: none; 
+} /* 선택되지 않은 체크박스 스타일 꾸미기 */ 
+.chk_box .on {
+width: 20px; 
+height: 20px;
+margin-right: 8px; 
+background: #ddd; 
+position: relative;
+display: block;
+top: 0; 
+left: 0; 
+} /* 선택된 체크박스 스타일 꾸미기 */ 
+.chk_box input[type="checkbox"]:checked + .on {
+background:var(--color-main); 
+} 
+.on:after { 
+content: ""; 
+position: absolute; 
+display: none; 
+} 
+.chk_box input[type="checkbox"]:checked + .on:after {
+display: block; 
+} 
+.on:after {
+width: 6px; 
+height: 10px; 
+border: solid #fff; 
+border-width: 0 2px 2px 0; 
+-webkit-transform: rotate(45deg); 
+-ms-transform: rotate(45deg); 
+transform: rotate(45deg); 
+position: absolute; 
+left: 6px; 
+top: 2px; 
+}
+.autologin {
+display: block;
+letter-spacing: -.8px;
+}
+
+
+
+
+
+
+section.title { padding : rem(4) 0 rem(17) }
+section.content { padding : rem(30) 0 rem(20)}
+section.btn_section { padding : rem(70) 0 }
+
+.title {
+  @include char(t28);
+  font-weight: 400;
+  border-bottom: rem(1) solid #5E5E5E;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: rem(20);
+  
+  .flex_box {
+    width: 54%;
+
+    &:last-child {
+      padding-bottom: rem(30);
+      padding-top: rem(10);
+      border-bottom: rem(1) solid var(--color-line-03);
+    }
+    
+    .label_box {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      column-gap: rem(10);
+      .left_box {
+        width: 100%;
+        max-width: rem(140);
+        @include char(l14);
+
+        > span {
+          color: var(--color-main);
+        }
+      }
+
+      .left_top_box {
+        width: 100%;
+        max-width: rem(140);
+        @include char(l14);
+        padding-bottom: rem(53);
+        > span {
+          color: var(--color-main);
+        }
+      }
+
+      .right_box {
+        width: 100%;
+        .input_box {
+          width: 100%;
+          max-width: rem(340);
+          padding: rem(13) 0 rem(13) rem(16);
+          @include char(l15);
+        }
+      }
+
+      .right_double_box {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        row-gap: rem(10);
+        position: relative;
+        .image {
+          width: rem(24);
+          aspect-ratio: 1/1;
+          position: absolute;
+          right: rem(20);
+          top: rem(10);
+        }
+
+        .input_box {
+          width: 100%;
+          max-width: rem(340);
+          padding: rem(13) 0 rem(13) rem(16);
+          @include char(l15);
+        }
+      }
+
+      .right_box_gray {
+        width: 100%;
+        max-width: rem(340);
+       
+        .input_box {
+          width: 100%;
+          padding: rem(13) 0 rem(13) rem(16);
+          background-color: var( --color-bg-02);
+          @include char(l15);
+        }
+      }
+      
+      .mid_box {
+        width: 100%;
+        .input_box {
+          width: 100%;
+          max-width: rem(230);
+          padding: rem(13) 0 rem(13) rem(16);
+          @include char(l15);
+        }
+      }
+
+      .right_box_red{
+        width: 100%;
+        max-width : rem(100);
+        padding : rem(13) 0;
+        border: rem(1) solid var(--color-main);
+        border-radius: rem(5);
+        color: var(--color-main);
+        @include char(l14);
+        text-align: center;
+      }
+
+      .radio_box {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        @include char(l14);
+
+        div {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+          column-gap: rem(10);
+        }
+      }
+    }
+  }
+}
+
+.content2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .flex_box {
+    display: flex;
+    align-items: center;
+    width: 54%;
+
+    .left_box {
+      width: 100%;
+      max-width: rem(140);
+      @include char(l16);
+    }
+    .right_box {
+      display: flex;
+      align-items: center;
+    }
+
+    .right_box2 {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      padding-top: rem(20);
+      justify-content: center;
+      column-gap: rem(50);
+
+    }
+  }
+}
+.btn_section {
+  .btn_box {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    column-gap: rem(10);
+    @include char(l16);
+    .left_box {
+      border : rem(1) solid var(--color-line-02);
+      border-radius: rem(4);
+      color : var(--color-font-sub);
+      width: 100%;
+      max-width: rem(160);
+      text-align: center;
+      padding: rem(17) 0;
+    }
+
+    .right_box {
+      border : rem(1) solid var(--color-main);
+      border-radius: rem(4);
+      background-color: var(--color-main);
+      color: #fff;
+      width: 100%;
+      max-width: rem(240);
+      text-align: center;
+      padding: rem(17) 0;
+    }
+  }
+}
+
+.amend {
+  width: 100%;
+  max-width: rem(420);
+  background-color: rosybrown;
+  
+  .text {
+    padding : rem(80) 0 rem(69);
+    text-align: center;
+    @include char(l16);
+  }
+
+  .btn_box {
+    display: flex;
+    justify-content: center;
+    padding-bottom: rem(20);
+
+    .red_btn {
+      background-color: var(--color-main);
+      border-radius: rem(4);;
+
+      width: 45%;
+      max-width: rem(160);
+
+      @include char(l15);
+      text-align: center;
+      padding: rem(14) 0 ;
+      color: #fff; 
+      
+
+   }
+ }
+}

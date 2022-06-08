@@ -3,7 +3,7 @@ import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from "/src/components/mypage/MypageWrapper";
 import MetaTitle from "/src/components/atoms/MetaTitle";
-import Styles from "styles/css/mypage/card/index.module.scss";
+import Styles from "./card.module.scss";
 import Image from 'next/image';
 
 

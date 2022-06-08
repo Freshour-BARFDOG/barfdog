@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import Wrapper from "/src/components/common/Wrapper";
 import Layout from "/src/components/common/Layout";
 import { useRouter } from "next/router";
-import Styles from "/styles/css/community/blog/[...all].module.scss";
+import Styles from "./[...all].module.scss";
 import MetaTitle from "@src/components/atoms/MetaTitle";
 
 

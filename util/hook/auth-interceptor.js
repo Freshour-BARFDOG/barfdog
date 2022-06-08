@@ -15,7 +15,7 @@ import { authAction } from '@store/auth-slice';
    const curPath = router.route;
 
    const ADMIN_BASE_PATH_KEY = "bf-admin";
-   const ADMIN_PUBLIC_PATH_KEY = "/login";
+   const ADMIN_PUBLIC_PATH_KEY = "/index";
    const isAdminPath = router.asPath.split("/")[1] === ADMIN_BASE_PATH_KEY;
 
    useEffect(() => {

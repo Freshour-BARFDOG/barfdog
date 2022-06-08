@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
-import Styles from '../../../styles/css/faq/faq.module.scss'
+import Styles from './faq.module.scss'
 import { IoIosArrowForward  } from "react-icons/io";
 import { slideUp , slideDown } from "/util/func/slideToggle";
 

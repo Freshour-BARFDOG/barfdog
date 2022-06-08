@@ -1,7 +1,7 @@
 import React from 'react'
 import Wrapper from '/src/components/common/Wrapper';
 import Layout from '/src/components/common/Layout';
-import Styles from '../../../styles/css/policy/policy.module.scss'
+import Styles from './policy.module.scss'
 
 function privacy() {
   return (

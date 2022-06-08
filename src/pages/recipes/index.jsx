@@ -4,7 +4,7 @@ import Layout from "/src/components/common/Layout";
 import Wrapper from "/src/components/common/Wrapper";
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import Modal_recipes from "@src/components/modal/Modal_recipes";
-import s from 'styles/css/recipes/index.module.scss';
+import s from './recipes.module.scss';
 import Image from 'next/image';
 import styled from "styled-components";
 

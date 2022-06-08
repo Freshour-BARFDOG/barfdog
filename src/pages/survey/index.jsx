@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import s from "./survey.module.scss";
-import StyleSwiper from "./asset/surveySwiper.module.scss";
+import StyleSwiper from "/src/components/surveyAsset/surveySwiper.module.scss";
 import Layout from "/src/components/common/Layout";
 import Wrapper from "/src/components/common/Wrapper";
 import MetaTitle from "@src/components/atoms/MetaTitle";
@@ -11,7 +11,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css/effect-fade";
 import ScrollContainer from "@src/components/atoms/ScrollContainer";
-import SurveyInputRadio from './asset/SurveyInputRadio'
+import SurveyInputRadio from '/src/components/surveyAsset/SurveyInputRadio'
 import siblings from "@util/func/siblings";
 import Image from 'next/image';
 

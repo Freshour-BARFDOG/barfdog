@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import Layout from "/src/components/common/Layout";
 import Wrapper from "/src/components/common/Wrapper";
-import Styles from "/styles/css/review/index.module.scss";
+import Styles from "/src/pages/review/review.module.scss";
 import ReviewItem_Pagination from "@src/components/atoms/Pagination";
 import Image from "next/image";
 import RatingStars from "/src/components/atoms/RatingStars";

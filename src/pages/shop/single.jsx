@@ -5,7 +5,7 @@ import Wrapper from "/src/components/common/Wrapper";
 
 import Image from "next/image";
 import Link from 'next/link';
-import Styles from "/styles/css/shop/single.module.scss";
+import Styles from "./single.module.scss";
 import RatingStars from "/src/components/atoms/RatingStars";
 import { slideUp , slideDown } from "/util/func/slideToggle";
 

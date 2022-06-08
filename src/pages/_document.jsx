@@ -7,6 +7,9 @@ import Document, {
   DocumentInitialProps,
 } from "next/document";
 import MetaTags from './_metaTags';
+// eslint-disable-next-line @next/next/no-script-in-document
+import {GA_TRACKING_ID} from "@util/../../api/googleAnalytics/gtag";
+
 
 
 // Server Only File (client에서 사용하는 로직 사용불가)
@@ -30,15 +33,29 @@ const CustomDocument = ()=> {
     <Html lang="ko">
       <Head>
         <MetaTags />
+        <script
+          script-title={'google-analytics'}
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', '${GA_TRACKING_ID}', {
+              page_path: window.location.pathname,
+            });
+          `,
+          }}
+        />
       </Head>
       <body>
         <Main />
       </body>
       <div id="__modal-root"></div>
-      {/*<Script*/}
-      {/*  data-script-title={"ChannelTalk-init"}*/}
-      {/*  // eslint-disable-next-line react/no-danger*/}
-      {/*  dangerouslySetInnerHTML={{__html:ChannelTalkSDK}} />*/}
       <NextScript />
     </Html>
   );

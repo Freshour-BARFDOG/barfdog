@@ -31,7 +31,7 @@ const AuthNumberComponent = ({ displayedTime, authNum }) => {
 
   const onModalHandler = (isConfirm) => {
     if (isConfirm) setModalMessage("");
-    if(isAuth) router.push(`/bf-admin/login/password?authnum=${authNum}`);
+    if(isAuth) router.push(`/bf-admin/index/password?authnum=${authNum}`);
   };
 
   const onAuthNumberHandler = (e) => {
