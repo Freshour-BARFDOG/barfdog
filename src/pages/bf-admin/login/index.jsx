@@ -40,15 +40,14 @@ function LoginIndexPage() {
   };
 
   useEffect(() => {
-    // console.log(isSubmitting);
+    console.log(isSubmitting);
     // console.log(formErrors);
 
 
     if (isSubmitting && !Object.keys(formErrors).length) {
       (async () => {
-        
-        
         const token = await getAdminToken(formValues);
+        console.log(token);
         if (token) {
           dispatch(authAction.adminLogin({ token: token }));
         } else {
@@ -205,16 +204,16 @@ function LoginIndexPage() {
           <Modal_AdminResetPassword />
         </Modal>
       )}
-      {/* {(modalMessage && (
-        <Modal title="모달 메시지" instance={<Modal_alert />}>
-          <Modal_alert text={modalMessage} isConfirm={onModalHide} />
-        </Modal>
-      )) ||
-        (mct.isActive && (
-          <Modal onClick={onModalHide} background title="비밀번호 재설정">
-            <Modal_AdminResetPassword />
-          </Modal>
-        ))} */}
+      {/*{(modalMessage && (*/}
+      {/*  <Modal title="모달 메시지" instance={<Modal_alert />}>*/}
+      {/*    <Modal_alert text={modalMessage} isConfirm={onModalHide} />*/}
+      {/*  </Modal>*/}
+      {/*)) ||*/}
+      {/*  (mct.isActive && (*/}
+      {/*    <Modal onClick={onModalHide} background title="비밀번호 재설정">*/}
+      {/*      <Modal_AdminResetPassword />*/}
+      {/*    </Modal>*/}
+      {/*  ))}*/}
     </>
   );
 }

@@ -5,35 +5,95 @@ import s from './signup.module.scss';
 import { IoChevronForwardOutline } from 'react-icons/io5';
 import PureCheckbox from '/src/components/atoms/PureCheckbox';
 import CustomRadio from '/src/components/atoms/CustomRadio';
-import SignupInput from './SignupInput';
+import SignupInput from '../../../components/user_signup/SignupInput';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
+import axios from "axios";
+import axiosConfig from "/api/axios.config";
 
 /*
 * MEMO 유효성검사
-*
-* MEMO 비밀번호 추가 내용 덧붙이기
-기  MEMO : 유효성 검사 추가하기
-*
+*  (완) 이름: 비어있냐
+*  이메일: 회원 중에 존재하는가
+*  비밀번호: 까다롭
+*  비밀번호 확인: 비밀번호와 일치하는가 /
+*  휴대폰번호: 비어있느가 & 인증번호가 유효한가
+*  주소검색: API사용 -> 비어있는가
+*  생년월일: 형식에 맞는가
 * */
+const valid_emailDuplication = async (value)=>{
+  // 중복 검사 통과했냐 //
+  let result = false;
+  const API_URL = '/api/email/duplication';
+  const response = await axios
+    .get(API_URL, {
+      headers: {
+        "Content-Type": 'application/json;charset=UTF-8'
+      },
+      body:{
+        email:value,
+      }
+    })
+    .then((res) => {
+      console.log(res.data);
+      return res.data;
+    })
+    .catch((err) => {
+      console.error(err);
+    });
 
-const valid_isEmpty = (value) => {
-  const errors = value ? '' : '항목이 비어있습니다.';
-  return errors;
+  return result;
+}
+
+
+const valid_isEmpty =  (value) => {
+  const message = value ? '' : '항목이 비어있습니다.';
+  return message;
 };
+
+const valid_email = (value) => {
+  const email = value;
+  let message = '';
+  const RegExp = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
+
+  const isDuplicatedMemeber = valid_emailDuplication(email);
+  if(!RegExp.test(email)){
+    message = '이메일 형식이 올바르지 않습니다.'
+  } else if (isDuplicatedMemeber) {
+    message = '이미 존재하는 회원입니다.'
+  }
+
+  return message;
+}
+
+const valid_password = (value)=> {
+  const pw = value;
+  const RegExp = '';
+  // 7자리 이상인가
+  // 영문숫자 특수문자 2개 이상 조합인가
+  // 동일한 숫자 3개 이상 연속으로 사용했는가.
+
+
+}
+
 
 const validate = (obj) => {
   let errors = {};
   const keys = Object.keys(obj);
-
-  // console.log(keys);
 
   keys.forEach((key) => {
     const val = obj[key];
 
     switch (key) {
       case 'name':
-        valid_isEmpty(val) && (errors[key] = '필수항목입니다.');
+        errors[key]= valid_isEmpty(val);
         break;
+      case 'email':
+        errors[key] = valid_isEmpty(val) || valid_email(val);
+        break;
+      case 'password':
+        errors[key] = valid_password(val);
+        break;
+
 
       default:
         break;
@@ -44,13 +104,36 @@ const validate = (obj) => {
   // (errors["file_pc"] = valid_isEmpty(file_pc.file));
   // valid_isEmpty(file_mobile.file) &&
   // (errors["file_mobile"] = valid_isEmpty(file_mobile.file));
-
   console.log('Validation Result: ', errors);
   return errors;
 };
 
-function SignupPage() {
-  const [formValues, setFormValues] = useState({});
+
+
+
+
+const SignupPage = () => {
+  const initialFormValues = {
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    phoneNumber: '',
+    address: '',
+    birthday: '',
+    gender: '',
+    recommendCode:''
+  }
+
+  const initialPolicyValues = {
+    servicePolicy: false,
+    privacyPolicy: false,
+    receiveSms: false,
+    receiveEmail: false,
+    over14YearsOld: false,
+  }
+  const [formValues, setFormValues] = useState(initialFormValues);
+  const [policyValues, setPolicyValues] = useState();
   const [formErrors, setFormErrors] = useState({});
   console.log(formValues);
 
@@ -60,6 +143,7 @@ function SignupPage() {
     setFormErrors(validate(formValues));
     // if (Object.keys(formErrors).length) return console.error(formErrors);
   };
+
 
   return (
     <Layout>
@@ -92,34 +176,34 @@ function SignupPage() {
                 title={'이메일주소(아이디)'}
                 addedClassName={'add-btn-section'}
                 setFormValues={setFormValues}
-                errorMessage={formErrors.name && <ErrorMessage>{formErrors.name}</ErrorMessage>}
+                errorMessage={formErrors.email && <ErrorMessage>{formErrors.email}</ErrorMessage>}
               >
                 <div className={`${s.btn} ${s.smallbtn}`}>중복확인</div>
               </SignupInput>
               <SignupInput
                 type={'password'}
                 required={true}
-                id={'pw'}
+                id={'password'}
                 title={'비밀번호'}
                 setFormValues={setFormValues}
-                errorMessage={formErrors.name && <ErrorMessage>{formErrors.name}</ErrorMessage>}
+                errorMessage={formErrors.password && <ErrorMessage>{formErrors.password}</ErrorMessage>}
               />
               <SignupInput
                 type={'password'}
                 required={true}
-                id={'pw-confirm'}
+                id={'confirmPassword'}
                 title={'비밀번호 확인'}
                 setFormValues={setFormValues}
-                errorMessage={formErrors.name && <ErrorMessage>{formErrors.name}</ErrorMessage>}
+                errorMessage={formErrors.confirmPassword && <ErrorMessage>{formErrors.confirmPassword}</ErrorMessage>}
               />
               <SignupInput
                 type={'text'}
                 required={true}
-                id={'phone'}
+                id={'phoneNumber'}
                 title={'휴대폰 번호'}
                 addedClassName={'add-btn-section'}
                 setFormValues={setFormValues}
-                errorMessage={formErrors.name && <ErrorMessage>{formErrors.name}</ErrorMessage>}
+                errorMessage={formErrors.phoneNumber && <ErrorMessage>{formErrors.phoneNumber}</ErrorMessage>}
               >
                 <div className={`${s.btn} ${s.smallbtn}`}>인증번호 받기</div>
               </SignupInput>
@@ -131,7 +215,7 @@ function SignupPage() {
                 addedClassName={'add-btn-section'}
                 disabled
                 setFormValues={setFormValues}
-                errorMessage={formErrors.name && <ErrorMessage>{formErrors.name}</ErrorMessage>}
+                errorMessage={formErrors.address && <ErrorMessage>{formErrors.address}</ErrorMessage>}
               >
                 <div className={`${s.btn} ${s.bigbtn}`}>주소 검색</div>
               </SignupInput>
@@ -141,7 +225,7 @@ function SignupPage() {
                 id={'birthday'}
                 title={'생년월일(견주님)'}
                 placeholder={'YYYY      /      MM      /      DD'}
-                errorMessage={formErrors.name && <ErrorMessage>{formErrors.name}</ErrorMessage>}
+                errorMessage={formErrors.birthday && <ErrorMessage>{formErrors.birthday}</ErrorMessage>}
               />
               <div className={s['join__wrap']}>
                 <div className={s['input-title-wrap']}>

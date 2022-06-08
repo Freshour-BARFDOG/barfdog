@@ -16,6 +16,7 @@ import { authAction } from '@store/auth-slice';
 
    const ADMIN_BASE_PATH_KEY = "bf-admin";
    const ADMIN_PUBLIC_PATH_KEY = "/index";
+   const ADMIN_PUBLIC_PATH = ['/index', '/login', '/dashboard'];
    const isAdminPath = router.asPath.split("/")[1] === ADMIN_BASE_PATH_KEY;
 
    useEffect(() => {
@@ -27,14 +28,22 @@ import { authAction } from '@store/auth-slice';
     }
 
 
+
+
+
+
+
     if (isAdminPath){
       dispatch(authAction.adminRestoreAuthState()); // 토큰 다시 발급
-      const isPublicAdminPath =
-        curPath.indexOf(`/${ADMIN_BASE_PATH_KEY}${ADMIN_PUBLIC_PATH_KEY}`) >=
-        0;
+
+      let isPublicAdminPath;
+      ADMIN_PUBLIC_PATH.map(path=>{
+        if(curPath.indexOf(`/${ADMIN_BASE_PATH_KEY}${path}`) >= 0) return isPublicAdminPath = true;
+      })
+
       const adminAuth = localStorage?.getItem("admin");
-      // 특정한 페이지면 무조건 redirection
       if (!adminAuth && !isPublicAdminPath) {
+        console.error('Redir');
         router.push(`/${ADMIN_BASE_PATH_KEY}/login`);
       }
     }
