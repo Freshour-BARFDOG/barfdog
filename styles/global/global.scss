@@ -58,6 +58,11 @@ html, body{width:100vw; overflow-x:hidden;}
 }
 
 
+@keyframes rotate {
+  from{transform:rotate(0);}
+  to{transform:rotate(360deg);}
+}
+
 
 // 폰트 설정~~
  

@@ -6,99 +6,154 @@ font-family:'GmarketSansMedium'
 font-family: 'GmarketSansBold'
 */
 
+:root {
+  --color-main: #ca1011; /* * Site Main Color */
 
-:root{
-    --color-main: #CA1011; /* * Site Main Color */
-    
-    --color-font-strong:#000;
-    --color-font-medium:#717171;
-    --color-font-light:#B7B7B7;
+  --color-font-strong: #000;
+  --color-font-medium: #717171;
+  --color-font-light: #b7b7b7;
 
+  --color-font-def: #202020; /* * 기본폰트: 따로 지정하지 않아도 됨 (기본값) */
+  --color-font-sub: #636363; /* * 부연설명 4d4d4d비슷 */
+  --color-font-sub2: #909090;
+  --color-disabled: #ababab; /* * input: Disabled */
+  --color-placeholder: #ababab; /* * input: placeholder */
 
-    --color-font-def:#202020; /* * 기본폰트: 따로 지정하지 않아도 됨 (기본값) */
-    --color-font-sub:#636363; /* * 부연설명 4d4d4d비슷 */
-    --color-font-sub2:#909090;
-    --color-disabled: #ABABAB; /* * input: Disabled */
-    --color-placeholder: #ABABAB; /* * input: placeholder */
-    
+  --color-point-disabled: #f69999; /* *  포인트색상 Disabled */
+  --color-point-hover: #e02d2d; /* * 포인트색상 Hover */
 
-    
-    --color-point-disabled: #F69999; /* *  포인트색상 Disabled */
-    --color-point-hover: #E02D2D; /* * 포인트색상 Hover */
-   
+  --color-primary01: #ca1011;
+  --color-primary02: #f11a39;
+  --color-primary03: #ff5959;
+  --color-primary04: #ed3333;
 
-    --color-primary01: #CA1011;
-    --color-primary02: #F11A39;
-    --color-primary03: #FF5959;
-    --color-primary04: #ED3333;
-    
+  --color-checked: #50a057;
+  --color-warning: #ff4444;
 
-    --color-checked: #50A057;
-    --color-warning: #FF4444;
-    
+  --color-line-01: #5e5e5e;
+  --color-line-02: #ababab;
+  --color-line-03: #dddddd;
+  --color-line-04: #efefef;
 
-    --color-line-01: #5E5E5E;
-    --color-line-02: #ABABAB;
-    --color-line-03: #DDDDDD;
-    --color-line-04: #EFEFEF;
-    
-    
-    --color-link: #007AFF;
-    --color-bg-ghostWhite :#F8F8FF;
+  --color-link: #007aff;
+  --color-bg-ghostWhite: #f8f8ff;
 
-    --color-bg :#F8F8FF;
-    --color-bg-02 : #F5F5F5;    /* 컬러 비지 02 추가 */
-    --color-bg-footer :#F8F8FF;
-    --color-bg-admin :#F8F8FF;
+  --color-bg: #f8f8ff;
+  --color-bg-02: #f5f5f5; /* 컬러 비지 02 추가 */
+  --color-bg-footer: #f8f8ff;
+  --color-bg-admin: #f8f8ff;
 
-    --ani-default: 0.3s ease;
-    --ani-short: 0.15s ease-out;
+  --ani-default: 0.3s ease;
+  --ani-short: 0.15s ease-out;
 
-
-    
-    /* FONT-FAMILY */
-    --font-NotoSans: 'NotoSans KR';
-    --font-Gmarket: 'GmarketSansMedium';
-    --font-Gmarket-bold: 'GmarketSansBold';
-    --font-ink: 'InkLipquid';
-    -webkit-font-smooting: antialiased;
+  --reset-font-size: 16px;
+  /* FONT-FAMILY */
+  --font-NotoSans: 'NotoSans KR';
+  --font-Gmarket: 'GmarketSansMedium';
+  --font-Gmarket-bold: 'GmarketSansBold';
+  --font-ink: 'InkLipquid';
+  -webkit-font-smooting: antialiased;
 }
 
-
-
- /* 여백 초기화 */
- *{margin:0; padding:0;}
-
+/* 여백 초기화 */
+* {
+  margin: 0;
+  padding: 0;
+}
 
 /* 모든 요소 공간 0, 서체 크기 100%, 세로정렬 baseline, 배경색 투명 */
-html, body, div,span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p,
-blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, font, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td
-select, textarea, button, input, form, figure, figcaption{
-	outline: 0;
-	border: 0;
-	background: transparent;
-    font-family: 'Pretendard Variable';
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+font,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td select,
+textarea,
+button,
+input,
+form,
+figure,
+figcaption {
+  outline: 0;
+  border: 0;
+  background: transparent;
+  font-family: 'Pretendard Variable';
 }
 
-
 /*폰트 초기화*/
-body,form, select, textarea, select, button, table, input {
-    font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont, system-ui, helvetica,'Helvetica Neue', 'Apple SD Gothic Neo', 'Malgun Gothic', "맑은 고딕", sans-serif;
-    font-style:normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 1.6;
-    letter-spacing: 0rem;
-    /* -webkit-font-smoothing: antialiased; */
-    /*font-smoothing: 글자를 얇고 명료하게 처리*/
+body,
+form,
+select,
+textarea,
+select,
+button,
+table,
+input {
+  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, system-ui, helvetica,
+    'Helvetica Neue', 'Apple SD Gothic Neo', 'Malgun Gothic', '맑은 고딕', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: var(--reset-font-size);
+  line-height: 1.6;
+  letter-spacing: 0rem;
+  /* -webkit-font-smoothing: antialiased; */
+  /*font-smoothing: 글자를 얇고 명료하게 처리*/
 }
 
 /* 
@@ -114,109 +169,169 @@ body,form, select, textarea, select, button, table, input {
 한글 : U+AC00-U+D7A3
  */
 
-
-
 /*a링크 초기화*/
-a{color: inherit; text-decoration: none; display:block;}
-a > span {display:block !important;}
+a {
+  color: inherit;
+  text-decoration: none;
+  display: block;
+}
+a > span {
+  display: block !important;
+}
 
 /* 테이블 설정 */
 table {
-    border-collapse: collapse;
-    border-spacing: 0;
-    table-layout: fixed;
+  border-collapse: collapse;
+  border-spacing: 0;
+  table-layout: fixed;
 }
-
 
 /* 텍스트박스 초기화 */
-textarea{
-    display: inline-block;
-    overflow: hidden;
-    -webkit-appearance: none;
-    resize: none;
-    -webkit-box-sizing: border-box;
+textarea {
+  display: inline-block;
+  overflow: hidden;
+  -webkit-appearance: none;
+  resize: none;
+  -webkit-box-sizing: border-box;
 }
-
-
 
 /* insert, delete */
-ins { text-decoration: none; }
-del { text-decoration: line-through; }
-
-
+ins {
+  text-decoration: none;
+}
+del {
+  text-decoration: line-through;
+}
 
 /*폰트 스타일 초기화*/
-em, address, i{font-style: normal;}
-
+em,
+address,
+i {
+  font-style: normal;
+}
 
 /* 제목 글꼴 크기 설정 */
-h1, h2, h3, h4, h5, h6 {
-    font-weight: normal;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: normal;
 }
-h1 { font-size: 28px;}
-h2 { font-size: 24px;}
-h3 { font-size: 18px;}
-h4 { font-size: 16px;}
-h5 { font-size: 15px;}
-h6 { font-size: 14px;}
-
+h1 {
+  font-size: 28px;
+}
+h2 {
+  font-size: 24px;
+}
+h3 {
+  font-size: 18px;
+}
+h4 {
+  font-size: 16px;
+}
+h5 {
+  font-size: 15px;
+}
+h6 {
+  font-size: 14px;
+}
 
 /*블릿기호 초기화*/
-ul,li,ol{list-style: none;}
-blockquote, q { quotes: none; }
-
- 
-
-
-
+ul,
+li,
+ol {
+  list-style: none;
+}
+blockquote,
+q {
+  quotes: none;
+}
 
 /* select 박스 초기화 */
 
 select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
-    background-repeat: no-repeat;
-    background-position-x: calc(100% - 8px);
-    background-position-y: 4px;
-    min-width: 200px; height:38px; padding: 0 10px; border: 1px solid #ddd;
-    color:#4d4d4d;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+  background-repeat: no-repeat;
+  background-position-x: calc(100% - 8px);
+  background-position-y: 4px;
+  min-width: 200px;
+  height: 38px;
+  padding: 0 10px;
+  border: 1px solid #ddd;
+  color: #4d4d4d;
 }
-
-
-/* input박스 초기화 */
-textarea:focus, input:not([type="checkbox"],[type="file"],[type="radio"]):focus{
-    outline: 0;
-    box-shadow: none;
-    border:1px solid var(--color-main);
-}
-
-
 
 /* 버튼 초기화 */
-button {cursor:pointer; display:inline-block;}
-input, button{border:0; display:inline-block; background:none; color:inherit;}
-
-input:placeholder{
-    color: var(--color-placeholder);
+button {
+    cursor: pointer;
+    display: inline-block;
 }
-input:not([type="checkbox"]){
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-}
-input:not([type="checkbox"],[type="file"],[type="radio"]){
-    border:1px solid #ddd;
-    border-radius:5px;
-    padding:4px 8px;
-    box-sizing: border-box;
-    transition: border-color 0.3s ease;
+button {
+    border: 0;
+    display: inline-block;
+    background: none;
+    color: inherit;
 }
 
+/* input박스 초기화 */
+input{
+    border: 0;
+    display: inline-block;
+    background: none;
+    color: inherit;
+}
+textarea:focus,
+input:not([type='checkbox'], [type='file'], [type='radio']):focus {
+  outline: 0;
+  box-shadow: none;
+  border: 1px solid var(--color-main);
+}
+
+input[type='date'] {
+  color: var(--color-font-def);
+  font-size: 14px;
+  cursor: pointer;
+}
+input[type='date']::-webkit-datetime-edit {
+  color: var(--color-font-def);
+  font-size: 14px;
+  cursor: pointer;
+}
+input[type='date']::-webkit-datetime-edit-fields-wrapper {}
+input[type='date']::-webkit-datetime-edit-text {}
+input[type='date']::-webkit-datetime-edit-month-field {}
+input[type='date']::-webkit-datetime-edit-day-field {}
+input[type='date']::-webkit-datetime-edit-year-field {}
+input[type='date']::-webkit-inner-spin-button {}
+
+input[type='date']::-webkit-calendar-picker-indicator {
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+input::placeholder {
+  color: var(--color-placeholder);
+}
+input:not([type='checkbox']) {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+input:not([type='checkbox'], [type='file'], [type='radio']) {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 4px 8px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
 
 /* input, select, textarea 자동완성css - 초기화 */
 input:-webkit-autofill,
-input:-webkit-autofill:hover, 
+input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 textarea:-webkit-autofill,
 textarea:-webkit-autofill:hover,
@@ -224,45 +339,81 @@ textarea:-webkit-autofill:focus,
 select:-webkit-autofill,
 select:-webkit-autofill:hover,
 select:-webkit-autofill:focus {
-    transition: background-color 5000s ease-in-out 0s;
-    -webkit-transition: background-color 9999s ease-out;
-    box-shadow: 0 0 0px 1000px white inset !important;
-    -webkit-box-shadow: 0 0 0px 1000px white inset !important;
-    -webkit-text-fill-color: #000 !important;
+  transition: background-color 5000s ease-in-out 0s;
+  -webkit-transition: background-color 9999s ease-out;
+  box-shadow: 0 0 0px 1000px white inset !important;
+  -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+  -webkit-text-fill-color: #000 !important;
 }
 
 /* 폼 초기화 */
-fieldset{border:0;}
-input[type="radio"]{outline:0}
-form{outline:0; border:0; box-sizing:border-box;}
+fieldset {
+  border: 0;
+}
+input[type='radio'] {
+  outline: 0;
+}
+form {
+  outline: 0;
+  border: 0;
+  box-sizing: border-box;
+}
 
 /*반응형*/
-img{width: 100%; display:block;}
-
-
+img {
+  width: 100%;
+  display: block;
+}
 
 /* C L E A R - F I X */
-.clearfix:before,.clearfix:after{content:""; clear:both; display:block;}
+.clearfix:before,
+.clearfix:after {
+  content: '';
+  clear: both;
+  display: block;
+}
 
 /* 숨기기 */
-.hide{position:absolute; 
-    display:none; overflow:hidden; width:0; height:0; line-height: 0; opacity: 0; text-indent:-9999px;}
+.hide {
+  position: absolute;
+  display: none;
+  overflow: hidden;
+  width: 0;
+  height: 0;
+  line-height: 0;
+  opacity: 0;
+  text-indent: -9999px;
+}
 
 /*IR효과*/
-.ir_pm{
-    display: block; overflow: hidden; font-size: 0; line-height: 0; text-indent: -9999px;}/*의미있는 이미지의 대체 텍스트를 제공하는경우*/
-.ir_wa{display: block; overflow: hidden; position: relative; z-index: -1; width: 100%; height: 100%;}/*의미있는 이미지의 대체 텍스트로 이미지가 없어도 텍스트를 보여주고자 할때*/
-.ir_su{overflow: hidden; position: absolute; width: 0; height: 0; line-height: 0; text-indent: -9999px;}/*대체 텍스트가 아닌 접근성을 위한 숨김 텍스트를제공할때*/
-
-
-
+.ir_pm {
+  display: block;
+  overflow: hidden;
+  font-size: 0;
+  line-height: 0;
+  text-indent: -9999px;
+} /*의미있는 이미지의 대체 텍스트를 제공하는경우*/
+.ir_wa {
+  display: block;
+  overflow: hidden;
+  position: relative;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+} /*의미있는 이미지의 대체 텍스트로 이미지가 없어도 텍스트를 보여주고자 할때*/
+.ir_su {
+  overflow: hidden;
+  position: absolute;
+  width: 0;
+  height: 0;
+  line-height: 0;
+  text-indent: -9999px;
+} /*대체 텍스트가 아닌 접근성을 위한 숨김 텍스트를제공할때*/
 
 /* Color */
 
-
 /* RESPONSIVE */
-@media (max-width:1200px){
-
+@media (max-width: 1200px) {
 }
 
 /* @media (max-width:1080px){
@@ -273,11 +424,8 @@ img{width: 100%; display:block;}
 
 } */
 
-@media (max-width:600px){
-
+@media (max-width: 600px) {
 }
 
-@media (max-width:320px){
-
+@media (max-width: 320px) {
 }
-

@@ -71,13 +71,22 @@ $input-height: rem(44);
   .input-wrap {
     display: flex;
     align-items: center;
-    .inp-wrap{
+    //&.birthday ::placeholder{
+    //  text-align: center;
+    //}
+    .inp-wrap {
       width: 100%;
+
       input:not([type="radio"]) {
         width: 100%;
         height: $input-height;
         padding: rem(8) rem(16);
-        &::placeholder{font-size: rem(15) !important; color: var(--color-font-light); text-align: center; font-weight: 300;}
+
+        &::placeholder {
+          font-size: rem(15) !important;
+          color: var(--color-font-light);
+          font-weight: 300;
+        }
       }
     }
 
@@ -93,6 +102,8 @@ $input-height: rem(44);
     .btn.bigbtn {
       height: $input-height;
     }
+
+
   }
 
   //3구역
@@ -245,66 +256,35 @@ $input-height: rem(44);
 
 
 
-
-
-
-
-
-
-.chk__box {
-  display: inline-flex;
-  cursor: pointer;
-  font-size: rem(14);
-
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-
-
-/* 기본 체크박스 숨기기 */
-.chk__box input[type='checkbox'] {
-  display: none;
-}
-
-/* 선택되지 않은 체크박스 스타일 꾸미기 */
-.chk__box .fakeCheckBox {
-  width: rem(20);
-  height: rem(20);
-  margin-right: rem(11);
-  border-radius: rem(2);
-  background: #ddd;
+.msg{
+  display: block !important;
   position: relative;
-  display: block;
-  top: 0;
-  left: 0;
+  color: var(--color-main);
+  margin-top:rem(8);
+
+  &.loading{
+    color: var(--color-checked);
+  }
+
+  &.siblings{
+    margin-top: 0;
+  }
+
+  &:not(.loading) {
+    padding-left: rem(14);
+    &:before{
+      content: "✕";
+      color: inherit;
+      position: absolute;
+      left: 0;
+    }
+
+  }
+  &.valid {
+    color: var(--color-checked);
+    &:before{
+      content:"✓";
+    }
+
+  }
 }
-
-.fakeCheckBox:after {
-  content: "";
-  position: absolute;
-  width: rem(6);
-  height: rem(10);
-  border: solid #fff;
-  border-width: 0 rem(2) rem(2) 0;
-  -webkit-transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
-  transform: rotate(45deg);
-  position: absolute;
-  left: rem(6);
-  top: rem(2);
-}
-
-
-
-/* 선택된 체크박스 스타일 꾸미기 */
-.chk__box input[type="checkbox"]:checked + .fakeCheckBox {
-  background: var(--color-main);
-}
-
-.chk__box input[type="checkbox"]:checked + .fakeCheckBox:after {
-  display: block;
-}
-

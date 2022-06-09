@@ -19,8 +19,6 @@ import Modal_global_alert from "@src/components/modal/Modal_global_alert";
 
 function LoginIndexPage() {
 
-
-  
   const dispatch = useDispatch();
   const mct = useModalContext();
   const [modalMessage, setModalMessage] = useState("");
@@ -40,18 +38,15 @@ function LoginIndexPage() {
   };
 
   useEffect(() => {
-    console.log(isSubmitting);
-    // console.log(formErrors);
-
 
     if (isSubmitting && !Object.keys(formErrors).length) {
       (async () => {
         const token = await getAdminToken(formValues);
-        console.log(token);
+        // console.log(token);
         if (token) {
           dispatch(authAction.adminLogin({ token: token }));
         } else {
-          onModalShow();
+          // onModalShow();
           setIsSubmitting(false);
           setModalMessage(
             "로그인 실패: 아이디, 비밀번호를 확인해주세요. 지속적으로 문제발생 시, 서버장애일 수 있습니다."

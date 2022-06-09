@@ -6,10 +6,11 @@ const CustomRadio = ({
                        setValue,
                        name,
                        labelList,
-                       className
+                       className,
+                       initialValueIndex
                      }) => {
 
-  const initialValue = labelList[0].value;
+  const initialValue = labelList[initialValueIndex || 0].value;
   const [selectedRadio, setSelectedRadio] = useState(initialValue);
 
   const onChangeHandler = (e) => {

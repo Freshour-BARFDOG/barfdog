@@ -1,45 +1,68 @@
-import React, {useState} from 'react';
-import s from "/src/pages/account/signup/signup.module.scss";
-
-const SingupInput = ({type, required, id, title, children, addedClassName, disabled, placeholder, setFormValues, errorMessage}) => {
+import React, { useState } from 'react';
+import s from '/src/pages/account/signup/signup.module.scss';
+import filter_onlyNumber from '/util/func/filter_onlyNumber';
+import filter_emptyValue from '/util/func/filter_emptyValue';
+const SingupInput = ({
+  type,
+  required,
+  id,
+  title,
+  children,
+  addedClassName,
+  disabled,
+  placeholder,
+  setFormValues,
+  errorMessage,
+  filteredType,
+}) => {
   const [value, setValue] = useState('');
-  const onChangeHandler = (e)=>{
-    const {id, value} = e.currentTarget;
-    if(setFormValues && typeof setFormValues === 'function'){
-      setFormValues((prevState)=>{
+
+  const onChangeHandler = (e) => {
+    const { id, value } = e.currentTarget;
+    let filteredValue = filter_emptyValue(value);
+    if (filteredType === 'number') {
+      filteredValue = filter_onlyNumber(filteredValue);
+    }
+    // console.log('id:',id,' val:',filteredValue);
+    setValue(filteredValue);
+    if (setFormValues && typeof setFormValues === 'function') {
+      setFormValues((prevState) => {
         return {
           ...prevState,
-          [id]: value
-        }
-      })
+          [id]: filteredValue,
+        };
+      });
     }
+  };
 
-  }
-
-  return (<>
-    <div className={s['join__wrap']}>
-      <div className={s['input-title-wrap']}>
-        <label htmlFor={id}>
-          <span className={`${s['inp-title']} ${required && s['required']}`}>{title}</span>
-        </label>
-      </div>
-      <div className={`${s['input-wrap']} ${s[addedClassName]}`}>
-        <div className={s['inp-wrap']}>
-          <input type={type} id={id} disabled={disabled} placeholder={placeholder} onChange={onChangeHandler}/>
-          {errorMessage}
+  return (
+    <>
+      <div className={s['join__wrap']}>
+        <div className={s['input-title-wrap']}>
+          <label htmlFor={id}>
+            <span className={`${s['inp-title']} ${required && s['required']}`}>{title}</span>
+          </label>
         </div>
-        {children}
+        <div className={`${s['input-wrap']} ${s[addedClassName]}`}>
+          <div className={s['inp-wrap']}>
+            <input
+              type={type}
+              id={id}
+              disabled={disabled}
+              placeholder={placeholder}
+              onChange={onChangeHandler}
+              value={value}
+            />
+            {errorMessage}
+          </div>
+          {children}
+        </div>
       </div>
-    </div>
-
-  </>)
-}
-
+    </>
+  );
+};
 
 export default SingupInput;
-
-
-
 
 /*
 *

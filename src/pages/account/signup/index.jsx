@@ -1,116 +1,30 @@
-import React, { useState } from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import s from './signup.module.scss';
 import { IoChevronForwardOutline } from 'react-icons/io5';
 import PureCheckbox from '/src/components/atoms/PureCheckbox';
 import CustomRadio from '/src/components/atoms/CustomRadio';
-import SignupInput from '../../../components/user_signup/SignupInput';
+import SignupInput from '/src/components/user_signup/SignupInput';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
-import axios from "axios";
-import axiosConfig from "/api/axios.config";
+import {
+  valid_confirmPassword,
+  valid_email,
+  valid_password,
+  validate,
+} from '/util/func/signup_validation';
+import Spinner from '/src/components/atoms/Spinner';
 
 /*
-* MEMO 유효성검사
-*  (완) 이름: 비어있냐
-*  이메일: 회원 중에 존재하는가
-*  비밀번호: 까다롭
-*  비밀번호 확인: 비밀번호와 일치하는가 /
-*  휴대폰번호: 비어있느가 & 인증번호가 유효한가
-*  주소검색: API사용 -> 비어있는가
-*  생년월일: 형식에 맞는가
-* */
-const valid_emailDuplication = async (value)=>{
-  // 중복 검사 통과했냐 //
-  let result = false;
-  const API_URL = '/api/email/duplication';
-  const response = await axios
-    .get(API_URL, {
-      headers: {
-        "Content-Type": 'application/json;charset=UTF-8'
-      },
-      body:{
-        email:value,
-      }
-    })
-    .then((res) => {
-      console.log(res.data);
-      return res.data;
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+ * MEMO 유효성검사
+ *  1--------  휴대폰번호: 인증번호 ==> 서버에 통신 후 , 휴대폰인증절차 진행
+ *  2-------- 주소검색: API사용
+ *  PART2
+ *   __퍼블리싱 > 약관보기
+ *
+ * */
 
-  return result;
-}
-
-
-const valid_isEmpty =  (value) => {
-  const message = value ? '' : '항목이 비어있습니다.';
-  return message;
-};
-
-const valid_email = (value) => {
-  const email = value;
-  let message = '';
-  const RegExp = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
-
-  const isDuplicatedMemeber = valid_emailDuplication(email);
-  if(!RegExp.test(email)){
-    message = '이메일 형식이 올바르지 않습니다.'
-  } else if (isDuplicatedMemeber) {
-    message = '이미 존재하는 회원입니다.'
-  }
-
-  return message;
-}
-
-const valid_password = (value)=> {
-  const pw = value;
-  const RegExp = '';
-  // 7자리 이상인가
-  // 영문숫자 특수문자 2개 이상 조합인가
-  // 동일한 숫자 3개 이상 연속으로 사용했는가.
-
-
-}
-
-
-const validate = (obj) => {
-  let errors = {};
-  const keys = Object.keys(obj);
-
-  keys.forEach((key) => {
-    const val = obj[key];
-
-    switch (key) {
-      case 'name':
-        errors[key]= valid_isEmpty(val);
-        break;
-      case 'email':
-        errors[key] = valid_isEmpty(val) || valid_email(val);
-        break;
-      case 'password':
-        errors[key] = valid_password(val);
-        break;
-
-
-      default:
-        break;
-    }
-  });
-
-  // valid_isEmpty(file_pc.file) &&
-  // (errors["file_pc"] = valid_isEmpty(file_pc.file));
-  // valid_isEmpty(file_mobile.file) &&
-  // (errors["file_mobile"] = valid_isEmpty(file_mobile.file));
-  console.log('Validation Result: ', errors);
-  return errors;
-};
-
-
-
-
+let isFirstRendering = true;
 
 const SignupPage = () => {
   const initialFormValues = {
@@ -122,28 +36,154 @@ const SignupPage = () => {
     address: '',
     birthday: '',
     gender: '',
-    recommendCode:''
-  }
+    recommendCode: '',
+  };
 
+  const policy_KEYS = ['servicePolicy', 'privacyPolicy', 'receiveSms','receiveEmail', 'over14YearsOld' ];
   const initialPolicyValues = {
-    servicePolicy: false,
-    privacyPolicy: false,
-    receiveSms: false,
-    receiveEmail: false,
-    over14YearsOld: false,
-  }
-  const [formValues, setFormValues] = useState(initialFormValues);
-  const [policyValues, setPolicyValues] = useState();
-  const [formErrors, setFormErrors] = useState({});
-  console.log(formValues);
+    [policy_KEYS[0]]: false,
+    [policy_KEYS[1]]: false,
+    [policy_KEYS[2]]: false,
+    [policy_KEYS[3]]: false,
+    [policy_KEYS[4]]: false,
+    _selectAllInReceiveChannel: false,
+    _selectAllPolicies: false,
+  };
 
-  const onSubmit = (e) => {
+
+  const [formValues, setFormValues] = useState(initialFormValues);
+  const [policyValues, setPolicyValues] = useState(initialPolicyValues);
+  const [formErrors, setFormErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+
+  // console.log(formValues);
+  // console.log(isLoading);
+  // console.log(formErrors);
+  // console.log(policyValues);
+
+  useEffect(() => {
+    if (!isFirstRendering) {
+      const validPassword = valid_password(formValues.password);
+      const validConfirmPassword = valid_confirmPassword(
+        formValues.password,
+        formValues.confirmPassword,
+      );
+      setFormErrors((prevState) => {
+        return {
+          ...prevState,
+          password: validPassword,
+          confirmPassword: validConfirmPassword?.error,
+          passwordMatch: validConfirmPassword?.isMatched,
+        };
+      });
+    }
+    isFirstRendering = false;
+  }, [formValues.password, formValues.confirmPassword]);
+
+
+
+  // MEMO: 기능 > 무료배송, 할인쿠폰 등 혜택/정보 수신 동의 (선택)
+  useEffect(() => {
+    const triggerCheckbox1 = 'receiveSms';
+    const triggerCheckbox2 = 'receiveEmail';
+    const targetKey = '_selectAllInReceiveChannel';
+    setPolicyValues(prevState=> {
+      let counter = 0;
+      const allCheckedCounter = 2;
+      for (const prevStateKey in prevState) {
+        const val = prevState[prevStateKey];
+        if(prevStateKey === triggerCheckbox1 || prevStateKey === triggerCheckbox2){
+          val && counter++;
+        }
+      }
+      return {
+        ...prevState,
+        [targetKey]: counter === allCheckedCounter
+      }
+    })
+  }, [policyValues.receiveSms, policyValues.receiveEmail]);
+
+
+
+
+  useEffect(() => {
+    setPolicyValues(prevState=> {
+      const targetKey = '_selectAllPolicies';
+      let isAllCheckboxChecked;
+      for (const prevStateKey in prevState) {
+        const targetCheckbox = policy_KEYS.indexOf(prevStateKey) >= 0
+        if(targetCheckbox){
+          const val = prevState[prevStateKey];
+          isAllCheckboxChecked = val;
+          if(!val) break;
+        }
+      }
+      return {
+        ...prevState,
+        [targetKey]: isAllCheckboxChecked
+      }
+    })
+
+  },  [policyValues.privacyPolicy, policyValues.servicePolicy,policyValues.receiveSms,policyValues.receiveEmail, policyValues.over14YearsOld ]);
+
+
+
+  const onCheckEmailDuplication = async () => {
+    setIsLoading(true);
+    setFormErrors((prevState) => {
+      return {
+        ...prevState,
+        email: '중복 확인 중입니다.',
+      };
+    });
+    try {
+      const result = await valid_email(formValues.email);
+      setFormErrors((prevState) => {
+        return {
+          ...prevState,
+          email: result.message,
+          isEmailDuplicated: result.isEmailDuplicated,
+        };
+      });
+    } catch (err) {
+      alert('서버 통신오류: 관리자에게 문의하세요.');
+      console.error('에러발생: ', err);
+    }
+    setIsLoading(false);
+  };
+
+  const onSubmit = async (e) => {
     e.preventDefault();
     console.log(formValues);
-    setFormErrors(validate(formValues));
+    const result = await validate(formValues);
+    setFormErrors(result);
     // if (Object.keys(formErrors).length) return console.error(formErrors);
   };
 
+
+  const onSelectAllRecieveChannel = (checked) => {
+    const targetValue1 = 'receiveSms';
+    const targetValue2 = 'receiveEmail';
+    setPolicyValues((prevState) => {
+      return {
+        ...prevState,
+        [targetValue1]: checked,
+        [targetValue2]: checked,
+      };
+    });
+  };
+
+
+  const onSelectAllPolicies = (checked) => {
+    setPolicyValues((prevState) => {
+      let tempObj = {}
+      for (const prevStateKey in prevState) {
+        const val = prevState[prevStateKey];
+        tempObj[prevStateKey] = checked;
+      }
+      return tempObj
+    });
+  };
 
   return (
     <Layout>
@@ -153,12 +193,7 @@ const SignupPage = () => {
             <h2>회원가입</h2>
           </div>
 
-          <div
-            className={s['join-form']}
-            method={'post'}
-            encType={'application/x-www-form-urlencoded'}
-            onSubmit={onSubmit}
-          >
+          <div className={s['join-form']} method={'post'} onSubmit={onSubmit}>
             <section className={s['input-section']}>
               <SignupInput
                 type={'text'}
@@ -166,9 +201,12 @@ const SignupPage = () => {
                 id={'name'}
                 title={'이름(견주님)'}
                 setFormValues={setFormValues}
-                errorMessage={formErrors.name && <ErrorMessage>{formErrors.name}</ErrorMessage>}
+                errorMessage={
+                  formErrors.name && (
+                    <ErrorMessage className={`${s.msg}`}>{formErrors.name}</ErrorMessage>
+                  )
+                }
               />
-
               <SignupInput
                 type={'text'}
                 required={true}
@@ -176,9 +214,28 @@ const SignupPage = () => {
                 title={'이메일주소(아이디)'}
                 addedClassName={'add-btn-section'}
                 setFormValues={setFormValues}
-                errorMessage={formErrors.email && <ErrorMessage>{formErrors.email}</ErrorMessage>}
+                errorMessage={
+                  formErrors.email && (
+                    <ErrorMessage
+                      className={`${s.msg} ${isLoading ? s.loading : ''} ${
+                        formErrors.isEmailDuplicated === false && s.valid
+                      }`}
+                    >
+                      {formErrors.email}
+                    </ErrorMessage>
+                  )
+                }
               >
-                <div className={`${s.btn} ${s.smallbtn}`}>중복확인</div>
+                <div className={`${s.btn} ${s.smallbtn}`} onClick={onCheckEmailDuplication}>
+                  {isLoading ? (
+                    <Spinner
+                      style={{ color: 'var(--color-main)', width: '15', height: '15' }}
+                      speed={0.6}
+                    />
+                  ) : (
+                    '중복확인'
+                  )}
+                </div>
               </SignupInput>
               <SignupInput
                 type={'password'}
@@ -186,7 +243,22 @@ const SignupPage = () => {
                 id={'password'}
                 title={'비밀번호'}
                 setFormValues={setFormValues}
-                errorMessage={formErrors.password && <ErrorMessage>{formErrors.password}</ErrorMessage>}
+                errorMessage={
+                  formErrors.password && (
+                    <>
+                      {valid_password(formValues.password).message.map((msg, index) => (
+                        <ErrorMessage
+                          key={`pw-msg-${index}`}
+                          className={`${s.msg} ${msg.valid ? s.valid : ''} ${
+                            index !== 0 && s.siblings
+                          }`}
+                        >
+                          {msg.label}
+                        </ErrorMessage>
+                      ))}
+                    </>
+                  )
+                }
               />
               <SignupInput
                 type={'password'}
@@ -194,16 +266,26 @@ const SignupPage = () => {
                 id={'confirmPassword'}
                 title={'비밀번호 확인'}
                 setFormValues={setFormValues}
-                errorMessage={formErrors.confirmPassword && <ErrorMessage>{formErrors.confirmPassword}</ErrorMessage>}
+                errorMessage={
+                  (formErrors.passwordMatch || formErrors.confirmPassword) && (
+                    <ErrorMessage className={`${s.msg} ${formErrors.passwordMatch && s.valid}`}>
+                      {formErrors.passwordMatch || formErrors.confirmPassword}
+                    </ErrorMessage>
+                  )
+                }
               />
               <SignupInput
                 type={'text'}
+                filteredType={'number'}
                 required={true}
                 id={'phoneNumber'}
                 title={'휴대폰 번호'}
                 addedClassName={'add-btn-section'}
+                폰
                 setFormValues={setFormValues}
-                errorMessage={formErrors.phoneNumber && <ErrorMessage>{formErrors.phoneNumber}</ErrorMessage>}
+                errorMessage={
+                  formErrors.phoneNumber && <ErrorMessage>{formErrors.phoneNumber}</ErrorMessage>
+                }
               >
                 <div className={`${s.btn} ${s.smallbtn}`}>인증번호 받기</div>
               </SignupInput>
@@ -212,20 +294,25 @@ const SignupPage = () => {
                 required={true}
                 id={'address'}
                 title={'주소 검색'}
+                placeholder={'기본주소'}
                 addedClassName={'add-btn-section'}
                 disabled
                 setFormValues={setFormValues}
-                errorMessage={formErrors.address && <ErrorMessage>{formErrors.address}</ErrorMessage>}
+                errorMessage={
+                  formErrors.address && <ErrorMessage>{formErrors.address}</ErrorMessage>
+                }
               >
                 <div className={`${s.btn} ${s.bigbtn}`}>주소 검색</div>
               </SignupInput>
               <SignupInput
-                type={'text'}
+                type={'date'}
                 required={true}
                 id={'birthday'}
                 title={'생년월일(견주님)'}
-                placeholder={'YYYY      /      MM      /      DD'}
-                errorMessage={formErrors.birthday && <ErrorMessage>{formErrors.birthday}</ErrorMessage>}
+                setFormValues={setFormValues}
+                errorMessage={
+                  formErrors.birthday && <ErrorMessage>{formErrors.birthday}</ErrorMessage>
+                }
               />
               <div className={s['join__wrap']}>
                 <div className={s['input-title-wrap']}>
@@ -246,6 +333,7 @@ const SignupPage = () => {
                       },
                     ]}
                     type={'radio'}
+                    initialValueIndex={2}
                     setValue={setFormValues}
                   />
                 </div>
@@ -258,11 +346,17 @@ const SignupPage = () => {
                 placeholder={'추천코드는 계정 당 한 번만 입력 가능합니다.'}
               />
             </section>
+
             <section className={s['terms-section']}>
               <h4 className={`${s['main-title']}`}>이용약관 동의</h4>
               {/* 이용약관 동의 */}
               <div className={`${s['checkbox-wrap']} ${s['select-all']}`}>
-                <PureCheckbox id={'agree-all'} className={s['agree-all']}>
+                <PureCheckbox
+                  id={'agree-all'}
+                  className={s['agree-all']}
+                  value={policyValues._selectAllPolicies}
+                  eventHandler={onSelectAllPolicies}
+                >
                   <div className={s['desc-section']}>
                     <p className={s['title']}>전체 동의합니다.</p>
                     <p className={s['desc']}>
@@ -274,7 +368,11 @@ const SignupPage = () => {
               </div>
 
               <div className={`${s['checkbox-wrap']} ${s['space-between']}`}>
-                <PureCheckbox id={'agree-service'}>
+                <PureCheckbox
+                  id={'servicePolicy'}
+                  value={policyValues.servicePolicy}
+                  setValue={setPolicyValues}
+                >
                   <p className={s['title']}>이용약관 동의 (필수)</p>
                 </PureCheckbox>
                 <button className={s.terms__view}>
@@ -285,7 +383,11 @@ const SignupPage = () => {
 
               {/* 개인정보 수집 이용동의  */}
               <div className={`${s['checkbox-wrap']} ${s['space-between']}`}>
-                <PureCheckbox id={'agree-privacy'}>
+                <PureCheckbox
+                  id={'privacyPolicy'}
+                  value={policyValues.privacyPolicy}
+                  setValue={setPolicyValues}
+                >
                   <p className={s.title}>개인정보 수집 이용 동의 (필수)</p>
                 </PureCheckbox>
                 <button className={s.terms__view}>
@@ -295,20 +397,27 @@ const SignupPage = () => {
               </div>
               {/* 무료배송, 할인쿠폰 등 혜택 / 정보 수신 동의 */}
               <div className={`${s['checkbox-wrap']} ${s['receive-event']}`}>
-                <PureCheckbox id={'agree-event-channel-all'}>
+                <PureCheckbox
+                  id={'agree-event-channel-all'}
+                  value={policyValues._selectAllInReceiveChannel}
+                  eventHandler={onSelectAllRecieveChannel}
+                >
                   <p className="">무료배송, 할인쿠폰 등 혜택/정보 수신 동의 (선택)</p>
                 </PureCheckbox>
                 <div className={s['select-channel']}>
                   <div className={s['flex-wrap']}>
                     <PureCheckbox
-                      id={'agree-sms'}
-                      onChange={(val) => {
-                        console.log(val);
-                      }}
+                      id={'receiveSms'}
+                      value={policyValues.receiveSms}
+                      setValue={setPolicyValues}
                     >
                       <p>SMS</p>
                     </PureCheckbox>
-                    <PureCheckbox id={'agree-email'}>
+                    <PureCheckbox
+                      id={'receiveEmail'}
+                      value={policyValues.receiveEmail}
+                      setValue={setPolicyValues}
+                    >
                       <p>이메일</p>
                     </PureCheckbox>
                   </div>
@@ -319,7 +428,11 @@ const SignupPage = () => {
                 </div>
               </div>
               <div className={s['checkbox-wrap']}>
-                <PureCheckbox id={'agree-age'}>
+                <PureCheckbox
+                  id={'over14YearsOld'}
+                  value={policyValues.over14YearsOld}
+                  setValue={setPolicyValues}
+                >
                   <div>본인은 만 14세 이상입니다. (필수)</div>
                 </PureCheckbox>
               </div>
@@ -334,6 +447,6 @@ const SignupPage = () => {
       </Wrapper>
     </Layout>
   );
-}
+};
 
 export default SignupPage;
