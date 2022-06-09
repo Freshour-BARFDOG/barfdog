@@ -2,7 +2,9 @@
 
 // googleAnalytics/gtag.js
 
-export const GA_TRACKING_ID = "G-RNQ6DSVHHQ";
+// export const GA_TRACKING_ID = "G-RNQ6DSVHHQ";
+export const GA_TRACKING_ID = "G-KSDQQJ3C0H";
+
 // https://developers.google.com/analytics/devguides/collection/gtagjs/pages
 export const pageview = (url) => {
   window.gtag("config", GA_TRACKING_ID, {
