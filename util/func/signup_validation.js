@@ -1,6 +1,5 @@
 import axios from 'axios';
 import checkCharactorSamenessAndContinuity from './checkCharactorSamenessAndContinuity';
-import password from "../../src/pages/bf-admin/login/password";
 
 
 export const valid_isEmpty = (value) => {
@@ -139,8 +138,17 @@ export const valid_phoneNumber = (value) => {
   const phone = value;
   const RegExp = /^01([0|1|6|7|8|9])([0-9]{3,4})([0-9]{4})$/;
   error = RegExp.test(phone) ? "" : '휴대폰번호를 확인해주세요.'
-  console.log(RegExp.test(phone))
   return error;
+}
+
+
+
+
+
+export  const valid_authNumber = (num1, num2)=>{
+  const error = num1 !== num2 && '인증번호를 확인해주세요.'
+  const isMatched = num1 === num2 && '인증되었습니다.'
+  return {error, isMatched}
 }
 
 

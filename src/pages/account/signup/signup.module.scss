@@ -68,13 +68,10 @@ $input-height: rem(44);
     }
   }
 
-  .input-wrap {
+  .input-cont-wrap {
     display: flex;
     align-items: center;
-    //&.birthday ::placeholder{
-    //  text-align: center;
-    //}
-    .inp-wrap {
+    .input-wrap {
       width: 100%;
 
       input:not([type="radio"]) {
@@ -83,7 +80,7 @@ $input-height: rem(44);
         padding: rem(8) rem(16);
 
         &::placeholder {
-          font-size: rem(15) !important;
+          font-size: rem(14) !important;
           color: var(--color-font-light);
           font-weight: 300;
         }
@@ -106,24 +103,24 @@ $input-height: rem(44);
 
   }
 
-  //3구역
-  .join__middle {
-    float: left;
-
-    input {
-      width: 230px;
-      height: 44px;
-      margin-right: 9px;
-    }
-
-    .btn.smallbtn {
-      float: right;
-      width: 100px;
-      height: 44px;
-      border-radius: 5px;
-    }
-  }
-  .btn{max-height: $input-height;}
+  ////3구역
+  //.join__middle {
+  //  float: left;
+  //
+  //  input {
+  //    width: 230px;
+  //    height: 44px;
+  //    margin-right: 9px;
+  //  }
+  //
+  //  .btn.smallbtn {
+  //    float: right;
+  //    width: 100px;
+  //    height: 44px;
+  //    border-radius: 5px;
+  //  }
+  //}
+  //.btn{max-height: $input-height;}
 }
 
 
@@ -131,6 +128,7 @@ $input-height: rem(44);
 
 .btn {
   height: 100%;
+  max-height: $input-height;
   border: rem(1) solid var(--color-main);
   border-radius: rem(4);
   color: var(--color-main);
@@ -147,7 +145,7 @@ $input-height: rem(44);
 
 
 
-.terms-section {
+.policy-section {
   .main-title{text-align: center;
     margin-bottom: rem(34);}
   .title{

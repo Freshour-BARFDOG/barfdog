@@ -43,8 +43,8 @@ const SingupInput = ({
             <span className={`${s['inp-title']} ${required && s['required']}`}>{title}</span>
           </label>
         </div>
-        <div className={`${s['input-wrap']} ${s[addedClassName]}`}>
-          <div className={s['inp-wrap']}>
+        <div className={`${s['input-cont-wrap']} ${s[addedClassName]}`}>
+          <div className={s['input-wrap']}>
             <input
               type={type}
               id={id}
