@@ -49,7 +49,7 @@ function List(props) {
   )
 }
 
-export default function index() {
+export default function LoginPage() {
 
   const router = useRouter();
 
