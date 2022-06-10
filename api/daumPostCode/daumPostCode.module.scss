@@ -1,0 +1,19 @@
+$browser-context: 16;
+@function rem($px, $context: $browser-context) {
+  @return #{$px / $context}rem;
+}
+
+
+.popup{
+  position: relative;
+  margin:0 auto;
+  top:0 !important;
+  max-width: rem(500);
+  min-height: rem(480);
+  padding: rem(8);
+  box-sizing: border-box;
+  background-color: #fff;
+  box-shadow: 0 0 rem(30) 0 rgba(0,0,0,0.1);
+  z-index: 100;
+  border: rem(1) solid var(--color-line-03);
+}

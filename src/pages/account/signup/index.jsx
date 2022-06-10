@@ -15,10 +15,16 @@ import {
   validate,
 } from '/util/func/signup_validation';
 import Spinner from '/src/components/atoms/Spinner';
+import Tooltip from "/src/components/atoms/Tooltip";
+import Link from "next/link";
+import PostCode from "/api/daumPostCode";
+import popupWindow from "/util/func/popupWindow";
+
 import getAuthNumberForPhoneNumber from "/util/func/getAuthNumberForPhoneNumber";
 import ModalWrapper from "/src/components/modal/ModalWrapper";
-import CloseButton from "../../../components/atoms/CloseButton";
-
+import CloseButton from "/src/components/atoms/CloseButton";
+import {useRouter} from "next/router";
+import axios from "axios";
 /*
  * MEMO 유효성검사
  *  1-------- 주소검색: API사용
@@ -39,9 +45,24 @@ const Modal_policy = () => {
 
 
 
+
+
+
+
+
 let isFirstRendering = true;
 
 const SignupPage = () => {
+
+  const router = useRouter();
+  const curPath = router.asPath;
+
+  const searchAddress = (e)=> {
+    e.preventDefault();
+    const href = e.currentTarget.href;
+    popupWindow(href, {width: 460, height: 490});
+  }
+
   const initialFormValues = {
     name: '',
     email: '',
@@ -288,6 +309,8 @@ const SignupPage = () => {
   }
 
 
+  const [popup, setPopup] = useState(false);
+
   return (
     <>
       <Layout>
@@ -316,7 +339,8 @@ const SignupPage = () => {
                   required={true}
                   id={'email'}
                   title={'이메일주소(아이디)'}
-                  addedClassName={'add-btn-section'}
+                  // addedClassName={'add-btn-section'}
+                  addedClassName={['add-btn-section']}
                   setFormValues={setFormValues}
                   errorMessage={
                     formErrors.email && (
@@ -330,7 +354,7 @@ const SignupPage = () => {
                     )
                   }
                 >
-                  <button className={`${s.btn} ${s.smallbtn}`} onClick={onCheckEmailDuplication}>
+                  <button className={`${s.btn}`} onClick={onCheckEmailDuplication}>
                     {isLoading.email ? (
                       <Spinner
                         style={{ color: 'var(--color-main)', width: '15', height: '15' }}
@@ -384,11 +408,19 @@ const SignupPage = () => {
                   required={true}
                   id={'phoneNumber'}
                   title={'휴대폰 번호'}
-                  addedClassName={'add-btn-section'}
-                  폰
+                  // addedClassName={'add-btn-section'}
+                  addedClassName={['add-btn-section']}
                   setFormValues={setFormValues}
                   errorMessage={
-                    (formErrors.phoneNumber || authPhoneNumber.authNumber) && <ErrorMessage className={`${s.msg} ${!formErrors.phoneNumber && authPhoneNumber.authNumber &&s.loading}`}>{formErrors.phoneNumber || authPhoneNumber.messageOnPhoneNumber }</ErrorMessage>
+                    (formErrors.phoneNumber || authPhoneNumber.authNumber) && (
+                      <ErrorMessage
+                        className={`${s.msg} ${
+                          !formErrors.phoneNumber && authPhoneNumber.authNumber && s.loading
+                        }`}
+                      >
+                        {formErrors.phoneNumber || authPhoneNumber.messageOnPhoneNumber}
+                      </ErrorMessage>
+                    )
                   }
                 >
                   <button type={'button'} className={`${s.btn}`} onClick={onGetAuthNumberHandler}>
@@ -409,33 +441,84 @@ const SignupPage = () => {
                     required={true}
                     id={'phoneAuthNumber'}
                     title={'인증 번호'}
-                    addedClassName={'add-btn-section'}
+                    addedClassName={['add-btn-section']}
+                    // addedClassName={'add-btn-section'}
                     폰
                     setFormValues={setFormValues}
                     errorMessage={
-                      (formErrors.phoneAuthNumber || authPhoneNumber.authenticated) && <ErrorMessage className={`${s.msg} ${!formErrors.authNumber && authPhoneNumber.authenticated && s.valid}`}>{formErrors.phoneAuthNumber || authPhoneNumber.messageOnAuthNumber}</ErrorMessage>
+                      (formErrors.phoneAuthNumber || authPhoneNumber.authenticated) && (
+                        <ErrorMessage
+                          className={`${s.msg} ${
+                            !formErrors.authNumber && authPhoneNumber.authenticated && s.valid
+                          }`}
+                        >
+                          {formErrors.phoneAuthNumber || authPhoneNumber.messageOnAuthNumber}
+                        </ErrorMessage>
+                      )
                     }
                   >
-                    <button type={'button'} className={`${s.btn}`} onClick={onCheckAuthNumberHandler}>
+                    <button
+                      type={'button'}
+                      className={`${s.btn}`}
+                      onClick={onCheckAuthNumberHandler}
+                    >
                       확인
                     </button>
                   </SignupInput>
                 )}
+
                 <SignupInput
                   type={'text'}
                   required={true}
                   id={'address'}
                   title={'주소 검색'}
                   placeholder={'기본주소'}
-                  addedClassName={'add-btn-section'}
+                  addedClassName={[
+                    'add-btn-section',
+                    `${formValues.address ? 'active-address' : 'hide-input'}`,
+                  ]}
                   disabled
+                  value={formValues.address}
                   setFormValues={setFormValues}
-                  errorMessage={
-                    formErrors.address && <ErrorMessage>{formErrors.address}</ErrorMessage>
+                  // errorMessage={
+                  //   formErrors.address && <ErrorMessage>{formErrors.address}</ErrorMessage>
+                  // }
+                  icon={
+                    formValues.address && (
+                      <Tooltip
+                        className={s.addressToolTip}
+                        message={formValues.address}
+                        messagePosition={'right'}
+                        device={'mobile'}
+                      />
+                    )
                   }
                 >
-                  <button type={'button'} className={`${s.btn} ${s.bigbtn}`}>주소 검색</button>
+                  <button
+                    type={'button'}
+                    className={`${s.btn} ${s.bigbtn}`}
+                    onClick={() => {
+                      setPopup(!popup);
+                    }}
+                  >
+                    {formValues.address ? '재검색' : '주소검색'}
+                  </button>
+                  {formErrors.address && <ErrorMessage>{formErrors.address}</ErrorMessage>}
+                  {/*<Link href={`/account/signup/popup?reqPath="${curPath}"`} passHref>*/}
+                  {/*  <a onClick={searchAddress}>주소검색 팝업</a>*/}
+                  {/*</Link>*/}
+                  <a
+                    href={`/account/signup/popup?reqPath="${curPath}"`}
+                    target="_blank"
+                    onClick={searchAddress}
+                    rel={'noreferrer'}
+                  >
+                    주소검색 팝업
+                  </a>
+                  {formValues.address && <input type="text" placeholder={'상세주소'} />}
+                  {/*<PostCode />*/}
                 </SignupInput>
+
                 <SignupInput
                   type={'date'}
                   required={true}
@@ -578,10 +661,15 @@ const SignupPage = () => {
           </div>
         </Wrapper>
       </Layout>
+      {/*{popup && (*/}
+      {/*  <section>*/}
+      {/*    <PostCode/>*/}
+      {/*  </section>*/}
+      {/*)}*/}
       {/*{isModalActive && <Modal_policy />}*/}
     </>
-
   );
 };
 
 export default SignupPage;
+

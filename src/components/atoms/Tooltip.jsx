@@ -7,6 +7,7 @@ import rem from "@src/components/atoms/rem";
 
 const Wrap = styled.div`
   position: relative;
+  z-index: 10;
   display: inline-flex;
   align-items: center;
 `;
@@ -29,15 +30,28 @@ const MessageBody = styled.div`
   bottom: -${rem(10)};
   transform: translate(-50%, 100%);
   border-radius: ${rem(4)};
+  box-sizing: border-box;
   background-color: #000;
   color: #fff;
   font-size: ${rem(13)} !important;
   padding: ${rem(12)} ${rem(16)};
   white-space: nowrap;
   animation: show var(--ani-default);
+  &[data-align="right"]{
+    left:auto;
+    right:0;
+    transform:translate(0,100%);
+  }
+  &[data-device="pc"]{
+    width: initial;
+  }
+  &[data-device="mobile"]{
+    width: ${rem(200)};
+    white-space: initial;
+  }
 `;
 
-const ToolTip = ({ message, style }) => {
+const ToolTip = ({ message, style, messagePosition,device ,...props }) => {
   const [isActive, setIsActive] = useState(false);
 
   const onMouseEnterHandler = () => {
@@ -51,14 +65,11 @@ const ToolTip = ({ message, style }) => {
 
   return (
     <>
-      <Wrap>
-        <Icon
-          onMouseEnter={onMouseEnterHandler}
-          onMouseLeave={onMouseLeaveHandler}
-        >
+      <Wrap {...props}>
+        <Icon onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler}>
           i
         </Icon>
-        {isActive && <MessageBody style={style}>{message}</MessageBody>}
+        {isActive && <MessageBody style={style} data-align={messagePosition} data-device={device}>{message}</MessageBody>}
       </Wrap>
     </>
   );

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import s from '/src/pages/account/signup/signup.module.scss';
 import filter_onlyNumber from '/util/func/filter_onlyNumber';
 import filter_emptyValue from '/util/func/filter_emptyValue';
+
 const SingupInput = ({
   type,
   required,
@@ -14,6 +15,8 @@ const SingupInput = ({
   setFormValues,
   errorMessage,
   filteredType,
+  icon,
+  ...props
 }) => {
   const [value, setValue] = useState('');
 
@@ -35,6 +38,21 @@ const SingupInput = ({
     }
   };
 
+
+
+  const addedClassNameList = ()=>{
+    let classNameList='';
+    if(!addedClassName?.length ) return;
+
+    addedClassName?.forEach(list=>{
+      // console.log('className: ',list)
+      if(!list) return;
+      return (classNameList += ` ${s[list]} `);
+    });
+    return classNameList;
+  }
+
+
   return (
     <>
       <div className={s['join__wrap']}>
@@ -43,7 +61,8 @@ const SingupInput = ({
             <span className={`${s['inp-title']} ${required && s['required']}`}>{title}</span>
           </label>
         </div>
-        <div className={`${s['input-cont-wrap']} ${s[addedClassName]}`}>
+        <div className={`${s['input-cont-wrap']} ${addedClassNameList()}`}>
+        {/*<div className={`${s['input-cont-wrap']} ${s[addedClassName]}`}>*/}
           <div className={s['input-wrap']}>
             <input
               type={type}
@@ -52,7 +71,9 @@ const SingupInput = ({
               placeholder={placeholder}
               onChange={onChangeHandler}
               value={value}
+              {...props}
             />
+            {icon && icon}
             {errorMessage}
           </div>
           {children}
