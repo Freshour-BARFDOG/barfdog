@@ -85,15 +85,7 @@ function CreateRewardPage() {
                         options={[
                           { label: "선택", value: "" },
                           { label: "정기구독", value: "SUBSCRIBE" },
-                          { label: "일반상품", value: "NORMAL" },
-                        ]}
-                      />
-                      {productCategory === ProductCategory_NORMAL && (
-                        <label
-                          htmlFor="addedCategory-normalProduct"
-                          className={s["addedCategory"]}
-                        >
-                          <SelectTag
+                          { label: "일반상품",<SelectTag
                             name={"category-step2-normal"}
                             id={"category-step2-normal"}
                             // onChange={onCategoryHandler}
@@ -103,7 +95,15 @@ function CreateRewardPage() {
                               { label: "토핑", value: "TOPPING" },
                               { label: "굿즈", value: "GOODS" },
                             ]}
-                          />
+                          /> value: "NORMAL" },
+                        ]}
+                      />
+                      {productCategory === ProductCategory_NORMAL && (
+                        <label
+                          htmlFor="addedCategory-normalProduct"
+                          className={s["addedCategory"]}
+                        >
+
                         </label>
                       )}
                       {/* {formErrors.name && (

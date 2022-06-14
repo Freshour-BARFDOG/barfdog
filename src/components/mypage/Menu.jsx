@@ -4,11 +4,21 @@ import { IoIosArrowForward  } from "react-icons/io";
 import { slideUp , slideDown } from "/util/func/slideToggle";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import {useDispatch, useSelector} from "react-redux";
+import {authAction} from "/store/auth-slice";
 
 
 
 
 export default function Menu({ ...props }) {
+  const dispatch = useDispatch();
+  const auth = useSelector(state=> state.auth);
+  const onLogout = ()=>{
+    console.log('유저 로그아웃');
+    dispatch(authAction.logout());
+
+  }
+
   return (
     <nav {...props}>
       <h2 className={s.title}>마이페이지</h2>
@@ -30,7 +40,7 @@ export default function Menu({ ...props }) {
         <List title="친구 초대" link="/mypage/invite" />
         <List title="적립금 조회" link="/mypage/reward" />
         <List title="쿠폰함" link="/mypage/coupon" />
-        <List title="로그아웃" />
+        <List title="로그아웃" onFirstDepthClick={onLogout} />
       </ul>
     </nav>
   );
@@ -94,7 +104,7 @@ const MenuTitle = ({ link, title, curMenuRef, onClick }) => {
 
 
 
-export const List = ({ link, title, children }) => {
+export const List = ({ link, title, children, onFirstDepthClick }) => {
 
   const router = useRouter();
   const [curPath, setCurPath] = useState(router.pathname);
@@ -144,7 +154,7 @@ export const List = ({ link, title, children }) => {
     <li
       className={`${s.menu_title} ${isOpen ? s.open : ""}`}
     >
-      <MenuTitle link={link} title={title} curMenuRef={curMenuRef} onClick={onClickHandler}/>
+      <MenuTitle link={link} title={title} curMenuRef={curMenuRef} onClick={onFirstDepthClick || onClickHandler}/>
       {children && (
         <Submenu dropdownRef={dropdownRef} isOpen={isOpen}>
           {children}

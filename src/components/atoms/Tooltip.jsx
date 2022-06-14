@@ -12,6 +12,8 @@ const Wrap = styled.div`
   align-items: center;
 `;
 const Icon = styled.i`
+  position: relative;
+  z-index: 1;
   border-radius: 50%;
   border: ${rem(1)} solid #ababab;
   color: #ababab;
@@ -30,6 +32,7 @@ const MessageBody = styled.pre`
   box-shadow: ${props=>props.theme === 'white' ? `0 0 ${rem(10)} 0 rgba(0,0,0,0.15)` : 'none'};
   border: ${props=>props.theme === 'white' ? `${rem(1)} solid var(--color-line-04)` : 'none'};
   position: absolute;
+  z-index: 2;
   left: 50%;
   bottom: -${rem(10)};
   transform: translate(-50%, 100%);
@@ -43,6 +46,11 @@ const MessageBody = styled.pre`
   &[data-align="right"]{
     left:auto;
     right:0;
+    transform:translate(0,100%);
+  }
+  &[data-align="left"]{
+    left:0;
+    right:auto;
     transform:translate(0,100%);
   }
   &[data-device="pc"]{
