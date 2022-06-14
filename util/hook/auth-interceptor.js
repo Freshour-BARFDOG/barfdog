@@ -8,7 +8,7 @@ import useUserData from "@util/hook/useUserData";
 
 
  const AuthInterceptor = ({children}) => {
-   // const [loading, setLoading] = useState(false);
+   const [loading, setLoading] = useState(false);
    const [isAuth, setIsAuth] = useState(false);
 
    const userData = useUserData();
