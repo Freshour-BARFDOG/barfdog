@@ -8,7 +8,7 @@ import useUserData from "@util/hook/useUserData";
 
 
  const AuthInterceptor = ({children}) => {
-   const [loading, setLoading] = useState(false);
+   // const [loading, setLoading] = useState(false);
    const [isAuth, setIsAuth] = useState(false);
 
    const userData = useUserData();
@@ -17,25 +17,26 @@ import useUserData from "@util/hook/useUserData";
    const curPath = router.route;
 
 
-   // ADMIN PATH
-   const ADMIN_BASE_PATH_KEY = "bf-admin";
-   const ADMIN_PUBLIC_PATH = ['/index', '/login', '/dashboard'];
-   const isAdminPath = router.asPath.split("/")[1] === ADMIN_BASE_PATH_KEY;
-
-
-   // USER PATH
-   const USER_FOBBIDEN_PATH = ['cart', 'mypage','bf-admin','survey'];
-   let nonMemberPath;
-   router.asPath.split("/").map((path)=>{
-     if(USER_FOBBIDEN_PATH.indexOf(path) >= 0){
-        return nonMemberPath = true
-     }
-   });
-
-
 
 
    useEffect(() => {
+
+
+     // ADMIN PATH
+     const ADMIN_BASE_PATH_KEY = "bf-admin";
+     const ADMIN_PUBLIC_PATH = ['/index', '/login', '/dashboard'];
+     const isAdminPath = router.asPath.split("/")[1] === ADMIN_BASE_PATH_KEY;
+
+
+     // USER PATH
+     const USER_FOBBIDEN_PATH = ['cart', 'mypage','survey'];
+     let nonMemberPath;
+     router.asPath.split("/").map((path)=>{
+       if(USER_FOBBIDEN_PATH.indexOf(path) >= 0){
+         return nonMemberPath = true
+       }
+     });
+
      setIsAuth(!!userData)
 
     if (!isAuth && nonMemberPath ) {
@@ -47,7 +48,8 @@ import useUserData from "@util/hook/useUserData";
       // 안내문을 띄우고, 로그인페이지로 이동시킨다.
     }
 
-    if (isAdminPath){
+
+    if (isAdminPath){ // TEST
       dispatch(authAction.adminRestoreAuthState()); // 토큰 다시 발급
 
       let isPublicAdminPath;
@@ -61,7 +63,7 @@ import useUserData from "@util/hook/useUserData";
         router.push(`/${ADMIN_BASE_PATH_KEY}/login`);
       }
     }
-   }, [curPath, isAdminPath, dispatch, router, userData]);
+   }, [curPath, dispatch, router, userData, isAuth]);
 
 
    const FullScreenLoading = () => {

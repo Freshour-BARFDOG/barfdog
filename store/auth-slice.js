@@ -80,7 +80,7 @@ const authSlice = createSlice({
       state.isAuth = false;
       state.token = null;
       localStorage.removeItem("user");
-      alert("로그아웃 처리되었습니다.");
+      alert("로그아웃");
       Router.push("/");
     },
     adminLogin(state, action) {
@@ -97,7 +97,7 @@ const authSlice = createSlice({
       state.token = null;
       localStorage.removeItem("admin");
       alert("로그아웃 처리되었습니다.");
-      Router.push("/bf-admin/index");
+      Router.push("/bf-admin");
     },
     adminRestoreAuthState(state) {
       const token = JSON.parse(localStorage.getItem("admin"))?.token;
