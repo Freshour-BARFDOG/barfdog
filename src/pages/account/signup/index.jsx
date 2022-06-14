@@ -19,11 +19,6 @@ import DaumPostcode from "react-daum-postcode";
 import { useRouter } from 'next/router';
 import MetaTitle from "/src/components/atoms/MetaTitle";
 
-// MEMO 이메일 중복확인안했을 경우에 에러메시지 > 중복확인하세요
-
-// WARN 인증번호 중복검사 했냐
-// WARN 인증번호 초기화
-
 
 
 
@@ -122,7 +117,7 @@ const SignupPage = () => {
 
   };
 
-  console.log(formValues)
+  // console.log(formValues)
 
   const sendSignupData = (data) => {
     // console.log(data);
@@ -136,15 +131,10 @@ const SignupPage = () => {
         }
       })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         // console.log(res.data);
         if(res.status === 201){
-          // alert('회원가입이 완료되었습니다.');
           router.push(`/account/signup/success?username=${data.name}`);
-          setTimeout(()=>{
-            // setFormValues(''); // 초기화
-          },1000)
-
         }
       })
       .catch((err) => {
@@ -209,7 +199,6 @@ const SignupPage = () => {
         <Modal_privacy modalState={isModalActive.privacy} setModalState={setIsModalActive} />
       )}
       <Modal_global_alert message={alertModalMessage} />
-      {/*<PostCode/>*/}
     </>
   );
 };

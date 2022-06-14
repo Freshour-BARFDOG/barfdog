@@ -59,9 +59,18 @@ const authSlice = createSlice({
   reducers: {
     login(state, action) {
       state.isAuth = true;
+      state.isAdmin = false;
+      state.token = action.payload.token;
+      if (state.isAdmin) {
+        return alert("관리자는 중복 로그인할 수 없습니다.");
+      }
+      Router.push("/");
+    },
+    autoLogin(state, action) {
+      state.isAuth = true;
+      state.isAdmin = false;
       state.token = action.payload.token;
       localStorage.setItem("user", JSON.stringify({ token: state.token }));
-      alert("로그인 성공");
       if (state.isAdmin) {
         return alert("관리자는 중복 로그인할 수 없습니다.");
       }

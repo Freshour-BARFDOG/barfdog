@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { authAction } from "@store/auth-slice";
-import { useModalContext } from "@store/modal-context";
+import { authAction } from "/store/auth-slice";
+import { useModalContext } from "/store/modal-context";
 
 import s from './login.module.scss'
 import Image from 'next/image';
-import Checkbox from '@src/components/atoms/Checkbox';
-import getAdminToken from "@api/getAdminToken";
+import Checkbox from '/src/components/atoms/Checkbox';
+import getAdminToken from "/api/getAdminToken";
 
-import Modal from '@src/components/modal/Modal';
-import Modal_AdminResetPassword from "@src/components/modal/Modal_AdminResetPassword";
-import Modal_global_alert from "@src/components/modal/Modal_global_alert";
+import Modal from '/src/components/modal/Modal';
+import Modal_AdminResetPassword from "/src/components/modal/Modal_AdminResetPassword";
+import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 
 // * 1. 로그인 클릭했을 때, 어드민 계정에 맞는지 안맞는지만 확인한다.
 // * 2. 자동로그인 체크이벤트
@@ -122,7 +122,7 @@ function LoginIndexPage() {
                 <header className={s["header"]}>
                   <div className={`${s.logo} img-wrap`}>
                     <Image
-                      src={require("@public/img/logo(favicon).png")}
+                      src={require("/public/img/logo(favicon).png")}
                       alt="로고"
                     ></Image>
                   </div>
