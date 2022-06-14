@@ -22,19 +22,10 @@ import PureCheckbox from "/src/components/atoms/PureCheckbox";
 
 
 /*
-*  MEMO 1. 로그인했을 떄, HEADER
-*  MEMO 2. 자동로그인 햇을 떄에만........localStorage에 저장한다
-*  MEMO 3. 자동로그인 체크아닐 경우, ........localStorage에 저장 안한다.
 *  MEMO 4. 그리고, 로그인 토큰이 존재한다면,,,, 로그인 / 회원가입 페이지에 접근할 경우 . Redir
 *
 * */
 
-
-
-const TEST_ACCOUNT = {
-  email: 'user@gmail.com',
-  password: 'user',
-};
 
 const initialValues = {
   email: '',

@@ -1,4 +1,4 @@
-$browser-context:16; // html font-size:
+$browser-context:16;
 @function rem($px, $context: $browser-context){
   @return #{$px / $context}rem;
 }
@@ -13,15 +13,19 @@ $browser-context:16; // html font-size:
 
 
 .account_area {
-  padding: rem(10) 0;
-
+  padding: rem(10) rem(22) rem(10) 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
   > ul{
-    float:right;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
     > li{
-      float:left;
       font-size:rem(16);
-      color:#000;
       position: relative;
+      display: flex;
+      align-items: center;
       &:not(:last-child){
         margin-right:rem(23);
         padding-right:rem(23);
@@ -33,22 +37,48 @@ $browser-context:16; // html font-size:
         right:0;
         top:50%;
         transform:translateY(-50%);
-        width:1px;
+        width: rem(1);
         height:rem(26);
         background-color:var(--color-line-03);
       }
-      
+
       > *:first-child{
         display:inline-block;
         padding: rem(8) rem(15);
         height:auto;
         font-size: inherit;
         font-weight: 400;
+        //margin-right:rem(31);
       }
       &:last-child > *{ padding-right:rem(6);}
+
+      .userClass{
+        font-size:rem(16);
+        color: var(--color-font-sub);
+        padding:rem(4) rem(21);
+        line-height: 1.5;
+        box-sizing: border-box;
+        border-radius: rem(30);
+        border: rem(1) solid var(--color-line-02);
+        cursor:default;
+        height: rem(32);
+        margin-right: rem(30);
+        overflow: hidden;
+      }
+      .username{
+        cursor: default;
+        em{font-weight: 500;margin-right:rem(3);}
+      }
+
     }
   }
+
 }
+
+.service-center{
+  cursor: pointer !important;
+}
+
 
 
 

@@ -20,3 +20,17 @@ const axiosConfig = (contType = "application/json") => {
 
 
 export default axiosConfig;
+
+
+
+
+
+
+export const axiosUserConfig = (contType = "application/json") => {
+  return {
+    headers: {
+      authorization: JSON.parse(localStorage.getItem("user"))?.token,
+      "content-Type": contType,
+    }
+  }
+};
