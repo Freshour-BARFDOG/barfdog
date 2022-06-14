@@ -1,0 +1,107 @@
+
+$browser-context:16;
+@function rem($px, $context: $browser-context){
+  @return #{$px / $context}rem;
+}
+
+
+.modal-wrap{
+  padding: rem(36) rem(40) rem(24) !important;
+  box-sizing: border-box;
+  box-shadow: 0 0 rem(30) rgba(0, 0, 0, 0.15);
+  border-radius: rem(8) !important;
+  max-width: rem(500);
+  max-height: rem(600);
+  height: 100% !important;
+  width: 100% !important;
+  position: relative;
+  .x-button{
+    position: absolute;
+    right:rem(10);
+    top:rem(10);
+    width: rem(20);
+    height: rem(20);
+    &:before, &:after{
+      background-color: var(--gray30);
+    }
+  }
+}
+
+.title-section{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: rem(19);
+  position: relative;
+  .title{font-size: rem(20); font-weight: 400;}
+}
+
+.btn-section{
+  margin-top: rem(30);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  button{
+    max-width: rem(200);
+    width: 100%;
+    height: rem(44);
+    border: rem(1) solid var(--color-main);
+    border-radius: rem(2);
+    color:var(--color-main);
+  }
+}
+
+
+
+.scrollContainer{
+  padding: rem(10) rem(12);
+  background-color: #f5f5f5;
+  box-sizing: border-box;
+  border: rem(1) solid var(--color-line-03);
+  border-radius: rem(4);
+  font-size: rem(14);
+  color: var(--color-font-sub);
+  h6{font-weight: 600;}
+}
+
+
+.indent-1{
+  margin-left:rem(8);
+  display: inline-block;
+}
+.indent-2{
+  margin-left:rem(16);
+  display: inline-block;
+}
+
+.deco-square{
+  position: relative;
+  height: rem(10);
+  margin-right: rem(10);
+  &::before{
+    content: "";
+    position: absolute;
+    width:rem(3);
+    height:rem(3);
+    background-color: #444;
+    top:50%;
+    transform:translateY(-50%);
+  }
+}
+
+
+.deco-triangle{
+  position: relative;
+  height: rem(10);
+  margin-right: rem(10);
+  &::before{
+    content: "";
+    position: absolute;
+    border-top:rem(6) solid #444;
+    border-bottom:rem(4) solid transparent;
+    border-right:rem(4) solid transparent;
+    border-left:rem(4) solid transparent;
+    top:50%;
+    transform:translateY(-50%)rotate(-450deg);
+  }
+}

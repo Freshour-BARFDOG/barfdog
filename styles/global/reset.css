@@ -298,7 +298,7 @@ input[type='date'] {
 }
 input[type='date']::-webkit-datetime-edit {
   color: var(--color-font-def);
-  font-size: 14px;
+  font-size: var(--reset-font-size);
   cursor: pointer;
 }
 input[type='date']::-webkit-datetime-edit-fields-wrapper {}

@@ -7,12 +7,7 @@ $browser-context: 16;
 
 .modal-wrap {
 
-  &.global .title_section .text{
-      height: auto !important;
-      display:block !important;
-      font-size: rem(18);
-      word-break: break-all;
-  }
+
 
   .btn_close_modal {
     position: absolute;
@@ -83,6 +78,44 @@ $browser-context: 16;
 
 }
 
+.modal_wrap.global{
+  padding: 0;
+  width: 100%;
+  max-width: rem(420);
 
-
-
+  .body{
+    padding: rem(60) rem(40) rem(20);
+    box-sizing: border-box;
+    min-height: rem(240);
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+  }
+  .title-section{
+    margin-bottom: rem(20);
+    .text{
+      white-space: break-spaces;
+      text-align: center;
+      height: auto !important;
+      display:block !important;
+      font-size: rem(16);
+      word-break: break-all;
+    }
+  }
+  .btn-section{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    button{
+      background-color: var(--color-main);
+      color: #fff;
+      width: auto;
+      width: 100%;
+      max-width: rem(160);
+      border-radius: rem(4);
+      font-size: rem(16);
+      height: rem(44);
+    }
+  }
+}

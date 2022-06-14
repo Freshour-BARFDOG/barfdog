@@ -1,6 +1,6 @@
 import React, {useEffect, useState } from 'react';
 import s from "./modal.module.scss";
-import { useModalContext } from "@store/modal-context";
+import { useModalContext } from "/store/modal-context";
 import ModalWrapper from './ModalWrapper';
 
 
@@ -34,13 +34,12 @@ function Modal_global_alert({ message }) {
         }`}
         label="Modal Global Alert"
       >
-        <div style={modalState ? { display: "block" } : style}>
-          <header className={s.title_section}>
-            <div className={`${s.text} ${s.only}`}>{message}</div>
+        <div className={s['body']} style={modalState ? { display: "flex" } : style}>
+          <header className={s['title-section']}>
+            <pre className={`${s.text} ${s.only}`}>{message}</pre>
           </header>
-          <div className={s.btn_section}>
+          <div className={s['btn-section']}>
             <button
-              className="admin_btn popup solid"
               onClick={onHideModalHandler}
             >
               확인

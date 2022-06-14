@@ -2,7 +2,6 @@ import React from 'react'
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import Layout from "/src/components/common/Layout";
 import Wrapper from "/src/components/common/Wrapper";
-import { Btn, Title } from "/src/components/atoms/Checkbox";
 import s from "src/pages/account/valid-sns/index.module.scss";
 
 function ValidSnsPage() {

@@ -1,11 +1,11 @@
 import React from 'react';
-import PostCode from "/api/daumPostCode";
+import DaumPostCode from "/api/daumPostCode";
 
 
 function Popup_daumPostCodePage() {
   return (
     <>
-      <PostCode/>
+      <DaumPostCode/>
     </>
   )
 }

@@ -11,7 +11,7 @@ const popupSlice = createSlice({
   initialState:initialState,
   reducers: {
     setData(state, action) {
-      alert(action.payload.address);
+      // alert(action.payload.address);
       state.data = action.payload;
     }
   }

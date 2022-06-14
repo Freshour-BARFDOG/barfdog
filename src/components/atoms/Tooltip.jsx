@@ -24,15 +24,18 @@ const Icon = styled.i`
   justify-content: center;
   cursor:pointer;
 `;
-const MessageBody = styled.div`
+const MessageBody = styled.pre`
+  background-color: ${props=>props.theme === 'white' ? '#fff' : '#111'};
+  color: ${props=>props.theme === 'white' ? '#000' : '#fff'};
+  box-shadow: ${props=>props.theme === 'white' ? `0 0 ${rem(10)} 0 rgba(0,0,0,0.15)` : 'none'};
+  border: ${props=>props.theme === 'white' ? `${rem(1)} solid var(--color-line-04)` : 'none'};
   position: absolute;
   left: 50%;
   bottom: -${rem(10)};
   transform: translate(-50%, 100%);
   border-radius: ${rem(4)};
   box-sizing: border-box;
-  background-color: #000;
-  color: #fff;
+
   font-size: ${rem(13)} !important;
   padding: ${rem(12)} ${rem(16)};
   white-space: nowrap;
@@ -51,7 +54,7 @@ const MessageBody = styled.div`
   }
 `;
 
-const ToolTip = ({ message, style, messagePosition,device ,...props }) => {
+const ToolTip = ({ message, style, messagePosition,device , theme,...props }) => {
   const [isActive, setIsActive] = useState(false);
 
   const onMouseEnterHandler = () => {
@@ -69,7 +72,7 @@ const ToolTip = ({ message, style, messagePosition,device ,...props }) => {
         <Icon onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler}>
           i
         </Icon>
-        {isActive && <MessageBody style={style} data-align={messagePosition} data-device={device}>{message}</MessageBody>}
+        {isActive && <MessageBody style={style} data-align={messagePosition} data-device={device} theme={theme}>{message}</MessageBody>}
       </Wrap>
     </>
   );

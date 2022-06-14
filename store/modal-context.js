@@ -13,24 +13,8 @@ const ModalContext = createContext({
   },
 });
 
-const AlertModalContext = createContext({
-  // 컴포넌트를 포함한 객체가 될 예정이기 때문에, 첫 단어를 대문자로 지정
-  onShow: () => {
-  },
-  onHide: () => {
-  },
-});
-
 
 const useModalContext = () => useContext(ModalContext);
-const useAlertModalContext = () => useContext(AlertModalContext);
-
-
-
- 
-
-
-
 
 
 

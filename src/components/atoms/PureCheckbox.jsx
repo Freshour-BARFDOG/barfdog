@@ -1,7 +1,7 @@
 import React, {useRef} from 'react';
 import s from "./pureCheckbox.module.scss";
 
-const PureCheckbox = ({id, children, className, value,  setValue, eventHandler, ...props}) => {
+const PureCheckbox = ({id, children, className, value,  setValue, eventHandler, errorMessage,...props}) => {
 
   const inputRef = useRef();
 
@@ -23,11 +23,18 @@ const PureCheckbox = ({id, children, className, value,  setValue, eventHandler, 
   }
 
   return (
-    <label htmlFor={id} className={`${s.checkbox} ${className || ''}`} {...props} >
-      <input ref={inputRef} onChange={onChangeHandler}  type="checkbox" id={id} checked={value}/>
-      <span className={s.fakeCheckBox}/>
-      {children}
-    </label>)
+    <>
+      <div className={s['checkbox-wrap']}>
+        <label htmlFor={id} className={`${s.checkbox} ${className || ''}`} {...props}>
+          <input ref={inputRef} onChange={onChangeHandler} type="checkbox" id={id} checked={value} />
+          <span className={s.fakeCheckBox} />
+          {children}
+        </label>
+        {errorMessage}
+      </div>
+
+    </>
+  );
 }
 
 export default PureCheckbox;

@@ -4,6 +4,9 @@ import axios from "axios";
 const getAuthNumberForPhoneNumber = async (phoneNumber) => {
   if(!phoneNumber) return;
   let authNumber;
+  let message;
+  let error;
+
 
   const API_URL = '/api/join/phoneAuth';
   const body = {
@@ -15,31 +18,29 @@ const getAuthNumberForPhoneNumber = async (phoneNumber) => {
     }
   }
 
-  try {
-    authNumber = await axios
-      .post(API_URL, body, config)
-      .then(res=> {
-        // console.log(res);
-        if(res.data.responseCode !== 200) return console.error('__외부API서버 에러__');
+  authNumber = await axios
+    .post(API_URL, body, config)
+    .then(res=> {
+      // MEMO res.data.responseCode : 다이렉트샌드 상태메시지
+      if(res.data.responseCode !== 200) return console.error('::: 외부API서버 에러');
+      message = '인증번호가 발송되었습니다.'
+      return res.data.authNumber;
+    })
+    .catch((err)=>{
+      console.error(err);
+      // console.log(err.request);
+      // console.log(err.response);
+      if(err.response.status === 409){
+        const serverMessage = err.response.data.errors[0].defaultMessage;
+        // console.error(serverMessage)
+        error = '이미 등록된 휴대전화입니다.';
 
-        return res.data.authNumber;
-        // return {
-        //   authNumber:res.data.authNumber, // 응답코드 (200 이외의 값이면 다이렉트센드 내부 에러)
-        //   responseCode : res.data.responseCode, // 다이렉트 센드 상태 코드
-        //   status: res.data.status, // MEMO 다이렉트샌드 상태메시지 //
-        //   msg: res.data.msg
-        // };
-      })
-      .catch((err)=>{
-        console.log(err);
-        return err
-      });
-  } catch (err) {
-    console.error(err.response);
-    console.error(err.request);
-  }
+      } else if(err) {
+        error = '서버와 통신할 수 없습니다. 관리자에게 문의하세요.'
+      }
+    });
 
-  return authNumber;
+  return { authNumber, message, error };
 
 }
 
