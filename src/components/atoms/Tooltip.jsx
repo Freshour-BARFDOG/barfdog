@@ -18,6 +18,7 @@ const Icon = styled.i`
   border: ${rem(1)} solid #ababab;
   color: #ababab;
   font-size: ${rem(13)} !important;
+  margin-left: ${rem(4)};
   line-height: 2;
   width: ${rem(16)};
   height: ${rem(16)};

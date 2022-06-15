@@ -25,7 +25,8 @@ $browser-context:16;
 
 $aniDefault : 0.15s ease ;
 $aniType_Show : 0.3s ease-in ;
-
+$titleSectionWidth: rem(150);
+$inputDefaultHeight: rem(38);
 // * ---------- COMMON ---------- */
 
 .admin_select{width:rem(200)}
@@ -152,8 +153,7 @@ $aniType_Show : 0.3s ease-in ;
 #admin_page {
   background-color: var(--color-bg);
 
-  $titleSectionWidth: rem(150);
-  $inputDefaultHeight: rem(38);
+
   .errorMSG{padding-top:rem(4)}
   .desc{
     font-size:rem(12);
@@ -191,6 +191,7 @@ $aniType_Show : 0.3s ease-in ;
     }
 
     .cont_body{
+      background-color: #fff;
       .cont_divider{
       padding: rem(15) 0;
       .cont_divider_title{margin-bottom:rem(20);}
@@ -200,29 +201,25 @@ $aniType_Show : 0.3s ease-in ;
       .cont_divider:not(:last-child){border-bottom: rem(1) solid var(--color-line-03);}
       b, i {cursor:default;}
       .table_body{min-height: $inputDefaultHeight;}
-
-      
     }
 
     .table_body{min-height: calc(#{$inputDefaultHeight} * 3); background-color: #fff;}
 
-    .cont_bottom{
+    .cont_bottom {
       padding-top: rem(20);
-      text-align:center;
-      .btn_section{
-        display:inline-block;
-        overflow: hidden;
-        > *{float:left;}
-        > *:not(:last-child){
-          margin-right:rem(10);
-        }
-      }
     }
     
   }
 
-
-
+  .btn_section{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    &.outer{margin-top:rem(20);}
+    > *:not(:last-child){
+      margin-right:rem(10);
+    }
+  }
 
 
   .controls{
@@ -235,12 +232,14 @@ $aniType_Show : 0.3s ease-in ;
     button:not(:last-child){margin-right:rem(5);}
   }
 
- 
 
 
   .input_row{
     display: flex;
     align-items: center;
+    &.multipleLines{
+      align-items: flex-start;
+    }
     &:not(:last-child){margin-bottom:rem(15);}
     .title_section{
       width:$titleSectionWidth;
@@ -272,8 +271,12 @@ $aniType_Show : 0.3s ease-in ;
 
 
       .inp_box{
+        display: flex;
+        align-items: center;
         color:#4d4d4d;
+        gap:rem(10);
         font-size: rem(14);
+        .checkbox-wrap:not(:first-child){margin-left:rem(30);}
         &.radio:not(:last-child){margin-right:rem(24);}
    
 
@@ -290,8 +293,44 @@ $aniType_Show : 0.3s ease-in ;
 
   input.fullWidth{width:100%;}
   input.halfWidth{width:50%;}
+  input.text-align-right{
+    text-align: right;
+  }
+  input.text-align-center{
+    text-align: center;
+  }
+
+
+  .unit-box-wrap{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .box{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      aspect-ratio: 50 / 38;
+      height:$inputDefaultHeight;
+      box-sizing: border-box;
+      border: rem(1) solid var(--color-line-03);
+      margin-left:rem(-1);
+      position: relative;
+      font-size: rem(14);
+      cursor: pointer;
+      transition: border-color var(--ani-default);
+      input[type='radio']{display: none}
+      &.active{
+        z-index: 1;
+        border-color: var(--color-main);
+        color: var(--color-main);
+      }
+    }
+  }
+
 
 }
+
+
 
 
 .pointColor{color:var(--color-primary04)}

@@ -318,7 +318,7 @@ function UpdateMainBannerPage() {
                 <h5 className="cont_divider_title">
                   <b>PC</b>
                 </h5>
-                <div className="input_row upload_image">
+                <div className="input_row multipleLines">
                   <div className="title_section">
                     <p className="title">이미지</p>
                   </div>
@@ -348,7 +348,7 @@ function UpdateMainBannerPage() {
                     </label>
                   </div>
                 </div>
-                <div className="input_row upload_image">
+                <div className="input_row multipleLines">
                   <div className="title_section fixedHeight">
                     <label className="title" htmlFor="link-image-pc">
                       연결링크
@@ -381,7 +381,7 @@ function UpdateMainBannerPage() {
                 <h5 className="cont_divider_title">
                   <b>Mobile</b>
                 </h5>
-                <div className="input_row upload_image">
+                <div className="input_row multipleLines">
                   <div className="title_section">
                     <p className="title" htmlFor="upload-image-mobile">
                       이미지
@@ -417,7 +417,7 @@ function UpdateMainBannerPage() {
                     </label>
                   </div>
                 </div>
-                <div className="input_row upload_image">
+                <div className="input_row multipleLines">
                   <div className="title_section fixedHeight">
                     <label className="title" htmlFor="link-image-mobile">
                       연결링크
