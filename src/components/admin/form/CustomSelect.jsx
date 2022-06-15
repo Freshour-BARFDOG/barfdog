@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import getElemIdx from "/util/func/getElemIdx";
 
-const CustomSelect = ({name, id, onChange, options = [], ...props}) => {
+const CustomSelect = ({name, id, onChange, options = [], style, ...props}) => {
 
-  const initialValue = options[0].value;
+  const initialValue = options[0].value || '';
   const [selectedValue, setSelectedValue] = useState(initialValue);
 
   const onChangeHandler = (e) => {
@@ -35,6 +35,7 @@ const CustomSelect = ({name, id, onChange, options = [], ...props}) => {
       id={id || name}
       onChange={onChangeHandler}
       value={selectedValue}
+      style={style}
       {...props}
     >
       {options.map((option, i) => {

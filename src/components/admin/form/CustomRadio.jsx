@@ -35,7 +35,7 @@ const CustomRadio = ({
                   id={id}
                   name={name}
                   type="radio"
-                  value={id}
+                  // value={id}
                   checked={selectedRadio === id} // _ important
                   onChange={onChangeHandler}
                 />

@@ -5,15 +5,19 @@ import rem from "@src/components/atoms/rem";
 
 
 
+
+
 const Wrap = styled.div`
   position: relative;
-  z-index: 10;
   display: inline-flex;
   align-items: center;
 `;
+
+
 const Icon = styled.i`
   position: relative;
-  z-index: 1;
+  background: #fff;
+  z-index: 9;
   border-radius: 50%;
   border: ${rem(1)} solid #ababab;
   color: #ababab;
@@ -27,23 +31,29 @@ const Icon = styled.i`
   justify-content: center;
   cursor:pointer;
 `;
+
 const MessageBody = styled.pre`
   background-color: ${props=>props.theme === 'white' ? '#fff' : '#111'};
   color: ${props=>props.theme === 'white' ? '#000' : '#fff'};
   box-shadow: ${props=>props.theme === 'white' ? `0 0 ${rem(10)} 0 rgba(0,0,0,0.15)` : 'none'};
   border: ${props=>props.theme === 'white' ? `${rem(1)} solid var(--color-line-04)` : 'none'};
   position: absolute;
-  z-index: 2;
+  z-index: 10;
   left: 50%;
   bottom: -${rem(10)};
   transform: translate(-50%, 100%);
   border-radius: ${rem(4)};
   box-sizing: border-box;
+  //min-width: ${rem(200)};
 
   font-size: ${rem(13)} !important;
   padding: ${rem(12)} ${rem(16)};
   white-space: nowrap;
   animation: show var(--ani-default);
+  
+  &[data-wordBreaking]{
+    white-space: pre-wrap;
+  }
   &[data-align="right"]{
     left:auto;
     right:0;
@@ -63,7 +73,8 @@ const MessageBody = styled.pre`
   }
 `;
 
-const ToolTip = ({ message, style, messagePosition,device , theme,...props }) => {
+const ToolTip = ({ message, style, messagePosition,device , theme, wordBreaking, ...props }) => {
+  console.log(wordBreaking)
   const [isActive, setIsActive] = useState(false);
 
   const onMouseEnterHandler = () => {
@@ -81,7 +92,7 @@ const ToolTip = ({ message, style, messagePosition,device , theme,...props }) =>
         <Icon onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler}>
           i
         </Icon>
-        {isActive && <MessageBody style={style} data-align={messagePosition} data-device={device} theme={theme}>{message}</MessageBody>}
+        {isActive && <MessageBody style={style} data-align={messagePosition} data-device={device} theme={theme} data-wordBreaking={wordBreaking}>{message}</MessageBody>}
       </Wrap>
     </>
   );
