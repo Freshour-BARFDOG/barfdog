@@ -1,5 +1,6 @@
 import React, {useRef} from "react";
 import s from "@src/components/common/menu.module.scss";
+import style2 from "/src/components/common/menu.module.scss";
 import {List, SubmenuList, SubmenuTitle} from "/src/components/mypage/Menu";
 import Link from 'next/link';
 import Icon_setting from "/public/img/icon/setting.svg";
@@ -69,13 +70,12 @@ function AdminGnb() {
         {/* <List title="등급정책" link="/class-policy" /> */}
         {/*<List title="메신저" link="/bf-admin/messenger" />*/}
       </ul>
-      <div className={`${s.site_settings} ${s.menu_title}`}>
-        <Link href="/bf-admin/settings" passHref>
-          <a>
-            <Icon_setting />
-            설정
-          </a>
-        </Link>
+      <div className={`${s.site_settings} ${s.menu_title} ${style2['admin-site-setting']}`}>
+        <List title="설정" iconOnLeftSide={<Icon_setting />}>
+          <SubmenuList title="알고리즘" link="/bf-admin/settings/friendTalk" />
+          <SubmenuList title="등급정책" link="/bf-admin/settings/channelTalk" />
+          <SubmenuList title="배송비" link="/bf-admin/settings/channelTalk" />
+        </List>
       </div>
     </nav>
   );

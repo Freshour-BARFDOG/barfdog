@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import s from "@src/components/common/menu.module.scss";
+import s from "/src/components/common/menu.module.scss";
 import { IoIosArrowForward  } from "react-icons/io";
 import { slideUp , slideDown } from "/util/func/slideToggle";
 import Link from "next/link";
@@ -12,11 +12,8 @@ import {authAction} from "/store/auth-slice";
 
 export default function Menu({ ...props }) {
   const dispatch = useDispatch();
-  const auth = useSelector(state=> state.auth);
   const onLogout = ()=>{
-    console.log('유저 로그아웃');
     dispatch(authAction.logout());
-
   }
 
   return (
@@ -85,18 +82,20 @@ const Submenu = ({ children, dropdownRef, isOpen }) => {
 
 
 
-const MenuTitle = ({ link, title, curMenuRef, onClick }) => {
+const MenuTitle = ({ link, title, curMenuRef, onClick, iconOnLeftSide, iconOnRightSide }) => {
   return link ? (
     <Link href={link} passHref>
       <a ref={curMenuRef} onClick={onClick}>
-        {title}
-        <IoIosArrowForward />
+        <span>{iconOnLeftSide}
+          {title}</span>
+        {iconOnRightSide || <IoIosArrowForward />}
       </a>
     </Link>
   ) : (
     <p ref={curMenuRef} onClick={onClick}>
-      {title}
-      <IoIosArrowForward />
+      <span>{iconOnLeftSide}
+        {title}</span>
+      {iconOnRightSide || <IoIosArrowForward />}
     </p>
   );
 };
@@ -104,28 +103,20 @@ const MenuTitle = ({ link, title, curMenuRef, onClick }) => {
 
 
 
-export const List = ({ link, title, children, onFirstDepthClick }) => {
 
+export const List = ({ link, title, children, onFirstDepthClick, iconOnLeftSide, iconOnRightSide }) => {
   const router = useRouter();
   const [curPath, setCurPath] = useState(router.pathname);
   const curMenuRef = useRef();
-
-
 
   const [isOpen, setIsOpen] = useState(false);
   const [firstRender, setFirstRender] = useState(true);
   const dropdownRef = useRef();
 
-
-
-
   useEffect(() => {
     if (!dropdownRef.current || firstRender) return;
     slideUpAndDown(isOpen, dropdownRef.current);
   }, [isOpen, firstRender]);
-
-
-
 
   useEffect(() => {
     if (!curMenuRef.current) return;
@@ -133,28 +124,26 @@ export const List = ({ link, title, children, onFirstDepthClick }) => {
     setFirstRender(false);
   }, [curPath]);
 
-
-
-
-  const slideUpAndDown = (isSubmenuOpen , targetRef) => {
+  const slideUpAndDown = (isSubmenuOpen, targetRef) => {
     isSubmenuOpen ? slideDown(targetRef) : slideUp(targetRef);
-  }
-
-
-
+  };
 
   const onClickHandler = (e) => {
     if (dropdownRef.current) {
       setIsOpen(!isOpen);
     }
   };
- 
 
   return (
-    <li
-      className={`${s.menu_title} ${isOpen ? s.open : ""}`}
-    >
-      <MenuTitle link={link} title={title} curMenuRef={curMenuRef} onClick={onFirstDepthClick || onClickHandler}/>
+    <li className={`${s.menu_title} ${isOpen ? s.open : ''}`}>
+      <MenuTitle
+        link={link}
+        title={title}
+        curMenuRef={curMenuRef}
+        onClick={onFirstDepthClick || onClickHandler}
+        iconOnLeftSide={iconOnLeftSide}
+        iconOnRightSide={iconOnRightSide}
+      />
       {children && (
         <Submenu dropdownRef={dropdownRef} isOpen={isOpen}>
           {children}
