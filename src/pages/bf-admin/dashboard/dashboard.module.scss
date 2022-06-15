@@ -1,7 +1,9 @@
+
 $browser-context: 16;
 @function rem($px, $context: $browser-context) {
   @return #{$px / $context}rem;
 }
+
 
 .wrapper{
   display: grid;
@@ -11,7 +13,6 @@ $browser-context: 16;
           "m m m m m m"
           "t t t t t t"
           "l l r r r r";
-
 
   .title {
     grid-area: m;
