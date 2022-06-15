@@ -7,9 +7,9 @@ import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
 function AlgorithmPage() {
   return (
     <>
-      <MetaTitle title="등급정책 설정" admin={true} />
+      <MetaTitle title="쿠폰 설정" admin={true} />
       <AdminLayout>
-        <AdminContentWrapper>등급정책 설정</AdminContentWrapper>
+        <AdminContentWrapper>쿠폰 설정</AdminContentWrapper>
       </AdminLayout>
     </>
   );
