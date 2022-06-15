@@ -4,15 +4,15 @@ import AdminLayout from "/src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
 
 
-function Settings() {
+function AlgorithmPage() {
   return (
     <>
-      <MetaTitle title="사이트 설정" admin={true} />
+      <MetaTitle title="알고리즘 설정" admin={true} />
       <AdminLayout>
-        <AdminContentWrapper>Settings</AdminContentWrapper>
+        <AdminContentWrapper>알고리즘 설정</AdminContentWrapper>
       </AdminLayout>
     </>
   );
 }
 
-export default Settings;
+export default AlgorithmPage;

@@ -1,4 +1,4 @@
-import s from "./reward.module.scss";
+import s from "../reward.module.scss";
 
 
 

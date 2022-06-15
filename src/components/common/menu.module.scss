@@ -109,11 +109,15 @@ $menuPadding: 20;
 
 
 
+
+
+/* ADMIN */
 .admin-site-setting{
   .menu_title{
-    a svg, p  svg{fill: #ababab;}
+    a svg, p svg{fill: #ababab;}
+    a[data-current-page] {color:var(--color-main);}
   }
   .open{
-    svg{transform:rotate(90deg) !important}
+    p svg{transform:rotate(90deg) !important}
   }
 }
