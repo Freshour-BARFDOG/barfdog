@@ -1,18 +1,12 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import rem from "@src/components/atoms/rem";
-
-
-
-
-
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import rem from '@src/components/atoms/rem';
 
 const Wrap = styled.div`
   position: relative;
   display: inline-flex;
   align-items: center;
 `;
-
 
 const Icon = styled.i`
   position: relative;
@@ -29,14 +23,15 @@ const Icon = styled.i`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  cursor:pointer;
+  cursor: ${props=> props.onClick ? 'pointer' : 'default'} !important;
 `;
 
 const MessageBody = styled.pre`
-  background-color: ${props=>props.theme === 'white' ? '#fff' : '#111'};
-  color: ${props=>props.theme === 'white' ? '#000' : '#fff'};
-  box-shadow: ${props=>props.theme === 'white' ? `0 0 ${rem(10)} 0 rgba(0,0,0,0.15)` : 'none'};
-  border: ${props=>props.theme === 'white' ? `${rem(1)} solid var(--color-line-04)` : 'none'};
+  background-color: ${(props) => (props.theme === 'white' ? '#fff' : '#111')};
+  color: ${(props) => (props.theme === 'white' ? '#000' : '#fff')};
+  box-shadow: ${(props) =>
+    props.theme === 'white' ? `0 0 ${rem(10)} 0 rgba(0,0,0,0.15)` : 'none'};
+  border: ${(props) => (props.theme === 'white' ? `${rem(1)} solid var(--color-line-04)` : 'none')};
   position: absolute;
   z-index: 10;
   left: 50%;
@@ -50,49 +45,79 @@ const MessageBody = styled.pre`
   padding: ${rem(12)} ${rem(16)};
   white-space: nowrap;
   animation: show var(--ani-default);
-  
-  &[data-wordBreaking]{
+
+  &[data-wordbreaking] {
     white-space: pre-wrap;
+    min-width: ${rem(200)};
   }
-  &[data-align="right"]{
-    left:auto;
-    right:0;
-    transform:translate(0,100%);
+  &[data-align='right'] {
+    left: auto;
+    right: 0;
+    transform: translate(0, 100%);
   }
-  &[data-align="left"]{
-    left:0;
-    right:auto;
-    transform:translate(0,100%);
+  &[data-align='left'] {
+    left: 0;
+    right: auto;
+    transform: translate(0, 100%);
   }
-  &[data-device="pc"]{
+  &[data-device='pc'] {
     width: initial;
   }
-  &[data-device="mobile"]{
+  &[data-device='mobile'] {
     width: ${rem(200)};
     white-space: initial;
   }
 `;
 
-const ToolTip = ({ message, style, messagePosition,device , theme, wordBreaking, ...props }) => {
-  console.log(wordBreaking)
+const ToolTip = ({
+  message,
+  style,
+ iconStyle,
+  messagePosition,
+  device,
+  theme,
+  wordBreaking,
+  onClick,
+  ...props
+}) => {
   const [isActive, setIsActive] = useState(false);
 
   const onMouseEnterHandler = () => {
     setIsActive(true);
-  }
+  };
 
-   const onMouseLeaveHandler = () => {
+  const onMouseLeaveHandler = () => {
     setIsActive(false);
-  }
+  };
 
+  const onClickHandler = () => {
+    if (onClick && typeof onClick === 'function') {
+      onClick();
+    }
+  };
 
   return (
     <>
       <Wrap {...props}>
-        <Icon onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler}>
-          i
+        <Icon
+          style={iconStyle}
+          onMouseEnter={onMouseEnterHandler}
+          onMouseLeave={onMouseLeaveHandler}
+          onClick={onClick && onClickHandler}
+        >
+          {typeof onClick === 'function' ? '?' : 'i'}
         </Icon>
-        {isActive && <MessageBody style={style} data-align={messagePosition} data-device={device} theme={theme} data-wordBreaking={wordBreaking}>{message}</MessageBody>}
+        {isActive && (
+          <MessageBody
+            style={style}
+            data-align={messagePosition}
+            data-device={device}
+            theme={theme}
+            data-wordbreaking={wordBreaking}
+          >
+            {message}
+          </MessageBody>
+        )}
       </Wrap>
     </>
   );

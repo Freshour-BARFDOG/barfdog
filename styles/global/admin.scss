@@ -318,6 +318,8 @@ $inputDefaultHeight: rem(38);
         align-items: center;
       }
       .title {
+        display: flex;
+        align-items: center;
         font-size: inherit;
         cursor: default;
       }
@@ -374,6 +376,12 @@ $inputDefaultHeight: rem(38);
   input.fullWidth {
     width: 100%;
   }
+  textarea.fullWidth {
+    width: 100%;
+    border: rem(1) solid var(--color-line-03);
+    padding: rem(10) rem(8);
+    min-height: rem(100);
+  }
   input.halfWidth {
     width: 50%;
   }
@@ -409,6 +417,19 @@ $inputDefaultHeight: rem(38);
         border-color: var(--color-main);
         color: var(--color-main);
       }
+    }
+  }
+
+  .grid-checkbox-wrap{
+    margin: rem(17) 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    row-gap: rem(20);
+    li{
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: rem(10);
     }
   }
 }
