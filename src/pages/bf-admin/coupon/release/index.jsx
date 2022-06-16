@@ -7,8 +7,8 @@ import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
 import CustomRadio from '/src/components/admin/form/CustomRadio';
 import CustomSelect from '/src/components/admin/form/CustomSelect';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
-import SearchGroupForm from "../../../../components/admin/form/SearchGroupForm";
-import SearchPersonalForm from "../../../../components/admin/form/SearchPersonalForm";
+import SearchGroupForm from "/src/components/admin/form/SearchGroupForm";
+import SearchPersonalForm from "/src/components/admin/form/SearchPersonalForm";
 
 
 const initValOfAll = {
