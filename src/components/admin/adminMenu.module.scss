@@ -1,159 +1,208 @@
 @import './adminCommon.module.scss';
 
-
-$browser-context:16;
+$browser-context: 16;
 // convert px to rem
-@function rem($px, $context: $browser-context){
+@function rem($px, $context: $browser-context) {
   @return #{$px / $context}rem;
 }
 
 $menu-Padding: 20;
 $list-height: rem(58);
 
-.admin_nav{
+.admin_nav {
   position: fixed;
   top: $header-height;
   background-color: #fff;
-  left:0;
-  float:left;
-  padding:rem(20) 0 0;
-  height: calc(100vh - $header-height);
+  left: 0;
+  float: left;
+  padding: rem(20) 0 0;
+  height: calc(100vh - #{$header-height});
   box-sizing: border-box;
   border: 1px solid var(--color-line-04);
   border-top: 0;
   max-width: $nav-width;
   width: $nav-width;
-  
 
   .menu {
     width: 100%;
     height: 100%;
     overflow-y: auto;
     border: 0;
-    box-sizing:border-box;
+    box-sizing: border-box;
     padding-bottom: $list-height;
 
-    .menu_title{
-      color:var(--color-font-medium);
+    .menu_title {
+      color: var(--color-font-medium);
       position: relative;
- 
-      &:not(:last-child) a, &:not(:last-child) p{border-bottom: 0}
-      &:not(.submenu_title, .submenu_list):after{
-        content:"";
-        position:absolute;
-        left:0;
-        top:0%;
-        width:6px;
-        height:100%;
+
+      &:not(:last-child) a,
+      &:not(:last-child) p {
+        border-bottom: 0;
+        cursor: pointer;
+      }
+      &:not(.submenu_title, .submenu_list):after {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0%;
+        width: 6px;
+        height: 100%;
         max-height: $list-height;
-        background-color:var(--color-main);
+        background-color: var(--color-main);
         transition: background-color, opacity 0.2s ease;
-        opacity:0;
+        opacity: 0;
       }
- 
-      
-      &.menu_open:after{
+
+      &.menu_open:after {
+        opacity: 1;
+      }
+
+      &[data-current-page] {
+        > p,
+        > a {
+          font-weight: bold;
+          color: #4d4d4d !important;
+        }
+        font-size: rem(18);
+        svg {
+          fill: #ababab;
+        }
+
+        &:after {
           opacity: 1;
-      }
-
-      &[data-current-page]{
-        > p,> a{font-weight: bold; color:#4d4d4d !important;}
-        font-size: rem(18);
-        svg{fill: #ababab;}
-        
-        &:after{opacity: 1;}
-        & [data-current-page]{
-          color:var(--color-main);
         }
-
+        & [data-current-page] {
+          color: var(--color-main);
+        }
       }
 
-
-      > a, > p {
+      > a,
+      > p {
         padding: {
-          top:rem(17);
-          right:rem(30);
-          bottom:rem(17);
-          left:rem(40);
-
+          top: rem(17);
+          right: rem(30);
+          bottom: rem(17);
+          left: rem(40);
         }
         font-size: rem(18);
-        color:#4d4d4d;
+        color: #4d4d4d;
         max-height: $list-height;
         box-sizing: border-box;
       }
-      
-      .submenu_list{
+
+      .submenu_list {
         position: relative;
-        
       }
 
+      a svg {
+        display: none;
+      }
 
-      
-      a svg{display: none;}
-
-      ul{
-        font-size:rem(16);
-        a, p{
-          font-size:inherit;
+      ul {
+        font-size: rem(16);
+        a,
+        p {
+          font-size: inherit;
           padding-left: rem($menu-Padding + 30);
         }
-        .submenu_title > *{padding-left:rem($menu-Padding + 30);}
-        .submenu_title ~ .submenu_list>*{padding-left:rem($menu-Padding + 45)}
+        .submenu_title > * {
+          padding-left: rem($menu-Padding + 30);
+        }
+        .submenu_title ~ .submenu_list > * {
+          padding-left: rem($menu-Padding + 45);
+        }
       }
     }
   }
 
-  .site_settings{
+  .site_settings {
     background-color: #fff;
     z-index: 1;
-    position:absolute;
-    bottom:0;
-    left:0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
     width: 100%;
     border-top: 1px solid var(--color-line-04);
-    &[data-current-page="true"]{
-      a,p{
-        font-weight:500;
+    &[data-current-page='true'] {
+      a,
+      p {
+        font-weight: 500;
         color: var(--color-main);
       }
-      
-      svg{
+
+      svg {
         animation: rotate 2s infinite linear;
-        fill:var(--color-main);
+        fill: var(--color-main);
       }
     }
-    a, p{
+    a,
+    p {
       max-height: $list-height;
-      padding: rem(17) rem($menu-Padding + 10);width:100%; display:flex;
-      align-items:center;
-      box-sizing:border-box;
+      padding:{
+        top: rem(17);
+        bottom: rem(17);
+        left: rem($menu-Padding + 10);
+        right: rem(25);
+      }
+      width: 100%;
+      display: flex;
+      align-items: center;
+      box-sizing: border-box;
       position: relative;
-      width:100%;
-      color:#636363;
+      width: 100%;
+      color: #636363;
       font-size: rem(18);
       transition: color var(--ani-short);
-      svg{
-        margin-right:rem(5);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      span {
+        display: flex;
+        align-items: center;
+      }
+      svg {
+        margin-right: rem(5);
         fill: #636363;
-        transition-duration: .3s;
+        transition-duration: 0.3s;
         transition-timing-function: ease-out;
         transition-property: fill, transform;
-        transform:rotate(0);
-        path{transition:inherit; fill:inherit}
+        transform: rotate(0);
+        path {
+          transition: inherit;
+        }
       }
-      &:hover{
+      &:hover {
         color: var(--color-main);
-        svg {transform:rotate(180deg); animation-play-state:paused;fill:var(--color-main);} 
+        svg {
+          fill: var(--color-main);
+        }
+        span {
+          svg {
+            transform: rotate(180deg);
+            animation-play-state: paused;
+          }
+          path {
+            fill: var(--color-main);
+          }
+        }
+      }
+    }
+
+    ul {
+      background-color: #f4f4f4;
+      a {
+        padding-left: rem($menu-Padding + 30);
       }
     }
   }
-
 }
 
-
-
 @keyframes rotate {
-  from {transform:rotate(0deg)}
-  to {transform:rotate(180deg)}
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(180deg);
+  }
 }

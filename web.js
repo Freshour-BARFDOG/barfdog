@@ -1,3 +1,4 @@
+
 const dev = process.env.NODE_ENV !== "production";
 const express = require("express");
 const server = express();
@@ -5,6 +6,40 @@ const port = parseInt(process.env.PORT, 10) || 4000;
 const next = require("next");
 const nextApp = next({ dev });
 const handle = nextApp.getRequestHandler();
+// const useDispatch = require('react-redux');
+// const popupAction = require("./store/popup-slice");
+
+
+
+
+
+nextApp.prepare().then(() => {
+
+  //
+  // server.get('/selfApi/*', (req, res) => {
+  //   console.log("Hello, World~~!!!");
+  //   // res.send("Hello, World!");
+  // });
+  //
+
+  server.all("*", (req, res) => {
+    return handle(req, res);
+  });
+
+  server.listen(port, (err) => {
+    if (err) throw err;
+    console.log(`> Server Running on http://localhost:${port}`);
+  });
+
+})
+  .catch((err) => {
+    console.error('ERROR::::::' , err.stack);
+    process.exit(1);
+  });
+
+
+
+
 // const proxy = require('http-proxy-middleware')
 
 
@@ -50,21 +85,3 @@ const handle = nextApp.getRequestHandler();
 
 
 
-
-
-nextApp.prepare().then(() => {
-
-  server.all("*", (req, res) => {
-    return handle(req, res);
-  });
-
-  server.listen(port, (err) => {
-    if (err) throw err;
-    console.log(`> Server Running on http://localhost:${port}`);
-  });
-
-})
-.catch((err) => {
-  console.error('ERROR::::::' , err.stack);
-  process.exit(1);
-});

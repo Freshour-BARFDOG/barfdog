@@ -5,16 +5,24 @@ import rem from "@src/components/atoms/rem";
 
 
 
+
+
 const Wrap = styled.div`
   position: relative;
   display: inline-flex;
   align-items: center;
 `;
+
+
 const Icon = styled.i`
+  position: relative;
+  background: #fff;
+  z-index: 9;
   border-radius: 50%;
   border: ${rem(1)} solid #ababab;
   color: #ababab;
   font-size: ${rem(13)} !important;
+  margin-left: ${rem(4)};
   line-height: 2;
   width: ${rem(16)};
   height: ${rem(16)};
@@ -23,21 +31,50 @@ const Icon = styled.i`
   justify-content: center;
   cursor:pointer;
 `;
-const MessageBody = styled.div`
+
+const MessageBody = styled.pre`
+  background-color: ${props=>props.theme === 'white' ? '#fff' : '#111'};
+  color: ${props=>props.theme === 'white' ? '#000' : '#fff'};
+  box-shadow: ${props=>props.theme === 'white' ? `0 0 ${rem(10)} 0 rgba(0,0,0,0.15)` : 'none'};
+  border: ${props=>props.theme === 'white' ? `${rem(1)} solid var(--color-line-04)` : 'none'};
   position: absolute;
+  z-index: 10;
   left: 50%;
   bottom: -${rem(10)};
   transform: translate(-50%, 100%);
   border-radius: ${rem(4)};
-  background-color: #000;
-  color: #fff;
+  box-sizing: border-box;
+  //min-width: ${rem(200)};
+
   font-size: ${rem(13)} !important;
   padding: ${rem(12)} ${rem(16)};
   white-space: nowrap;
   animation: show var(--ani-default);
+  
+  &[data-wordBreaking]{
+    white-space: pre-wrap;
+  }
+  &[data-align="right"]{
+    left:auto;
+    right:0;
+    transform:translate(0,100%);
+  }
+  &[data-align="left"]{
+    left:0;
+    right:auto;
+    transform:translate(0,100%);
+  }
+  &[data-device="pc"]{
+    width: initial;
+  }
+  &[data-device="mobile"]{
+    width: ${rem(200)};
+    white-space: initial;
+  }
 `;
 
-const ToolTip = ({ message, style }) => {
+const ToolTip = ({ message, style, messagePosition,device , theme, wordBreaking, ...props }) => {
+  console.log(wordBreaking)
   const [isActive, setIsActive] = useState(false);
 
   const onMouseEnterHandler = () => {
@@ -51,14 +88,11 @@ const ToolTip = ({ message, style }) => {
 
   return (
     <>
-      <Wrap>
-        <Icon
-          onMouseEnter={onMouseEnterHandler}
-          onMouseLeave={onMouseLeaveHandler}
-        >
+      <Wrap {...props}>
+        <Icon onMouseEnter={onMouseEnterHandler} onMouseLeave={onMouseLeaveHandler}>
           i
         </Icon>
-        {isActive && <MessageBody style={style}>{message}</MessageBody>}
+        {isActive && <MessageBody style={style} data-align={messagePosition} data-device={device} theme={theme} data-wordBreaking={wordBreaking}>{message}</MessageBody>}
       </Wrap>
     </>
   );

@@ -12,15 +12,21 @@ const ChannelTalkProvider = ({children}) => {
   const dispatch = useDispatch();
 
   const ADMIN_BASE_PATH_KEY = "bf-admin";
-  const user = {isLoggedIn:false } // WARN ______FOR TEST Info
+  const DISABLED_PATH = ['/popup'];
+  const user = {isLoggedIn:false } // MEMO ______FOR TEST Info
   const {isLoggedIn} = user;
 
 
   useEffect(() => {
     const isAdminPath = router.asPath.split("/")[1] === ADMIN_BASE_PATH_KEY;
+    let isDisabledPath;
+    DISABLED_PATH.map(path=>{
+      if(router.asPath.indexOf(path) >= 0 ) return isDisabledPath = true;
+      // isDisabledPath = router.asPath.indexOf(path) >= 0 ;
+    })
 
     // MEMO ChannelTalk: 사용자 Path에 설치  (Admin페이지: 적용 안 함)
-    if (isAdminPath) return;
+    if (isAdminPath || isDisabledPath) return;
     const channelTalk = new ChannelTalkService();
 
 

@@ -5,7 +5,14 @@ $browser-context: 16;
 }
 
 
-
+.checkbox-wrap{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  pre{margin:0 !important; padding-left: rem(10) !important;
+    &:before{display: none;}
+  }
+}
 
 .checkbox {
   display: inline-flex;

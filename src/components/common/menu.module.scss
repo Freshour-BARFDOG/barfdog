@@ -64,10 +64,11 @@ $menuPadding: 20;
 
 
     }
-
     &.open{
-      svg{transform:rotate(90deg)}
+      svg{transform:rotate(90deg) !important}
     }
+
+
 
   }
 
@@ -81,7 +82,6 @@ $menuPadding: 20;
     font-size: rem(16);
     font-weight: 500;
     & ~ li:not(.submenu_title){
-      // padding-left:rem(14);
       > * {
         position: relative;
         &:before{
@@ -107,3 +107,17 @@ $menuPadding: 20;
 
 }
 
+
+
+
+
+/* ADMIN */
+.admin-site-setting{
+  .menu_title{
+    a svg, p svg{fill: #ababab;}
+    a[data-current-page] {color:var(--color-main);}
+  }
+  .open{
+    p svg{transform:rotate(90deg) !important}
+  }
+}

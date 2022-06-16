@@ -1,10 +1,9 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Layout from "/src/components/common/Layout";
 import Wrapper from "/src/components/common/Wrapper";
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import Styles from "./ordersheet.module.scss"
 import Image from 'next/image';
-
 
 
 const Modal_coupon = () => {
@@ -28,7 +27,7 @@ const Modal_coupon = () => {
         <div className={Styles.content_box}>
           <div className={Styles.flex_box2}>
             <div className={Styles.check_box}>
-              <input type="radio" name="" id="" />
+              <input type="radio" name="" id=""/>
               등급쿠폰 10%할인
             </div>
             <div>1개</div>
@@ -40,7 +39,7 @@ const Modal_coupon = () => {
         <div className={Styles.content_box}>
           <div className={Styles.flex_box2}>
             <div className={Styles.check_box}>
-              <input type="radio" name="" id="" />
+              <input type="radio" name="" id=""/>
               등급쿠폰 10%할인
             </div>
             <div>1개</div>
@@ -58,19 +57,77 @@ const Modal_coupon = () => {
   );
 }
 
+function Payment() {
+  useEffect(() => {
+    const jquery = document.createElement('script');
+    jquery.src = 'https://code.jquery.com/jquery-1.12.4.min.js';
 
+    const iamport = document.createElement('script');
+    iamport.src = 'https://cdn.iamport.kr/js/iamport.payment-1.2.0.js';
 
+    document.head.appendChild(jquery);
+    document.head.appendChild(iamport);
+    return () => {
+      document.head.removeChild(jquery);
+      document.head.removeChild(iamport);
+    }
+  }, []);
 
+  function onClickPayment() {
+    /* 1. 가맹점 식별하기 */
+    const IMP = window.IMP;
+    IMP.init(process.env.NEXT_PUBLIC_IAMPORT_CODE);
 
+    /* 2. 결제 데이터 정의하기 */
+    const data = {
+      pg: 'kcp',                 // PG사
+      pay_method: 'card',                           // 결제수단
+      merchant_uid: `mid_${new Date().getTime()}`,   // 주문번호
+      amount: 1,                                 // 결제금액
+      name: '바프독 아임포트 결제 테스트',                  // 주문명
+      buyer_name: 'username',                           // 구매자 이름
+      buyer_tel: '01000000000',                     // 구매자 전화번호
+      buyer_email: 'a@gmail',               // 구매자 이메일
+      buyer_addr: '센텀2로',                    // 구매자 주소
+      buyer_postcode: '00000',                      // 구매자 우편번호
 
+    };
+
+    /* 4. 결제 창 호출하기 */
+    IMP.request_pay(data, callback);
+  }
+
+  /* 3. 콜백 함수 정의하기 */
+  function callback(response) {
+    const {
+      success,
+      merchant_uid,
+      error_msg,
+    } = response;
+
+    if (success) {
+      // 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우
+      // TODO: 결제 정보 전달
+      alert('결제 성공');
+    } else {
+      alert(`결제 실패: ${error_msg}`);
+    }
+  }
+
+  return (
+    <div onClick={onClickPayment} className={Styles.btn_box}>결제하기</div>
+  );
+}
 
 function OrderSheetPage() {
+
+
   return (
     <>
-      <MetaTitle title="주문서" />
+      <MetaTitle title="주문서"/>
       <Layout>
         <Wrapper>
-          {false && <Modal_coupon />}
+          {false && <Modal_coupon/>}
           <section className={Styles.title_box}>
             <div className={Styles.title}>주문서</div>
           </section>
@@ -109,14 +166,14 @@ function OrderSheetPage() {
             <div className={Styles.flex_box}>
               <div className={Styles.info_col}>바프레드</div>
 
-              <div className={Styles.count_col}> </div>
+              <div className={Styles.count_col}></div>
 
               <div className={Styles.price_col}>
                 <div className={Styles.price_inner}>7,000원</div>
                 108,000원
               </div>
 
-              <div className={Styles.coupon_col}> </div>
+              <div className={Styles.coupon_col}></div>
 
               <div className={Styles.apply_coupon_col}>
                 <div className={Styles.btn}>쿠폰 선택</div>
@@ -137,7 +194,7 @@ function OrderSheetPage() {
           </section>
 
           <section className={Styles.line}>
-            <hr />
+            <hr/>
           </section>
 
           <section className={Styles.reciever}>
@@ -146,8 +203,8 @@ function OrderSheetPage() {
             <div className={Styles.check_box}>
               <div className={Styles.auto__login__check}>
                 <label htmlFor="agree" className={Styles.chk__box}>
-                  <input type="checkbox" id="agree" />
-                  <span className={Styles.on} />
+                  <input type="checkbox" id="agree"/>
+                  <span className={Styles.on}/>
                   <div className={Styles.text}>주문자 정보와 같습니다.</div>
                 </label>
               </div>
@@ -198,7 +255,7 @@ function OrderSheetPage() {
           </section>
 
           <section className={Styles.line}>
-            <hr />
+            <hr/>
           </section>
 
           <section className={Styles.shipping}>
@@ -210,7 +267,7 @@ function OrderSheetPage() {
                   <p>바프레드</p>
                 </div>
 
-                <div />
+                <div/>
 
                 <div className={Styles.mid_box}>
                   <span>배송방법</span>
@@ -262,7 +319,7 @@ function OrderSheetPage() {
           </section>
 
           <section className={Styles.line}>
-            <hr />
+            <hr/>
           </section>
 
           <section className={Styles.reserves}>
@@ -279,14 +336,14 @@ function OrderSheetPage() {
           </section>
 
           <section className={Styles.line}>
-            <hr />
+            <hr/>
           </section>
 
           <section className={Styles.method}>
             <div className={Styles.title}>결제수단</div>
 
             <div className={Styles.grid_box}>
-              <div className={Styles.inner_box}>
+              <div className={Styles.inner_box} onClick={Payment}>
                 <div className={`${Styles.image} img-wrap`}>
                   <Image
                     priority
@@ -326,7 +383,7 @@ function OrderSheetPage() {
           </section>
 
           <section className={Styles.line}>
-            <hr />
+            <hr/>
           </section>
 
           <section className={Styles.payment}>
@@ -347,7 +404,7 @@ function OrderSheetPage() {
               <div>- 98,000원</div>
             </div>
 
-            <hr />
+            <hr/>
 
             <div className={Styles.flex_box4}>
               <div>쿠폰할인금액</div>
@@ -364,7 +421,7 @@ function OrderSheetPage() {
               <div>5,000원</div>
             </div>
 
-            <hr />
+            <hr/>
 
             <div className={Styles.last_flex_box}>
               <div>최종결제금액</div>
@@ -374,8 +431,8 @@ function OrderSheetPage() {
             <div className={Styles.check_box}>
               <div className={Styles.auto__login__check}>
                 <label htmlFor="first_purchase" className={Styles.chk__box}>
-                  <input type="checkbox" id="first_purchase" />
-                  <span className={Styles.on} />
+                  <input type="checkbox" id="first_purchase"/>
+                  <span className={Styles.on}/>
                   <div className={Styles.text}>
                     첫 구매 바프독 설명이 포함된 브로슈어를 받겠습니다.{" "}
                   </div>
@@ -386,8 +443,8 @@ function OrderSheetPage() {
             <div className={Styles.check_box}>
               <div className={Styles.auto__login__check}>
                 <label htmlFor="personal_info" className={Styles.chk__box}>
-                  <input type="checkbox" id="personal_info" />
-                  <span className={Styles.on} />
+                  <input type="checkbox" id="personal_info"/>
+                  <span className={Styles.on}/>
                   <div className={Styles.text}>
                     개인 정보 수집 이용 동의 <span>내용보기</span>
                   </div>
@@ -397,12 +454,13 @@ function OrderSheetPage() {
           </section>
 
           <section className={Styles.line}>
-            <hr />
+            <hr/>
           </section>
 
           <section className={Styles.final_btn}>
             <p>위 주문 내용을 확인 하였으며, 회원 본인은 결제에 동의합니다.</p>
-            <div className={Styles.btn_box}>결제하기</div>
+            {/* 결제버튼 */}
+            <Payment/>
           </section>
         </Wrapper>
       </Layout>

@@ -2,38 +2,56 @@ import { useRouter } from 'next/router';
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { authAction } from '@store/auth-slice';
+import useUserData from "@util/hook/useUserData";
+
 
 
 
 
  const AuthInterceptor = ({children}) => {
+
    const [loading, setLoading] = useState(false);
+   const [isAuth, setIsAuth] = useState(false);
 
-
+   const userData = useUserData();
    const router = useRouter();
    const dispatch = useDispatch();
    const curPath = router.route;
 
-   const ADMIN_BASE_PATH_KEY = "bf-admin";
-   const ADMIN_PUBLIC_PATH_KEY = "/index";
-   const ADMIN_PUBLIC_PATH = ['/index', '/login', '/dashboard'];
-   const isAdminPath = router.asPath.split("/")[1] === ADMIN_BASE_PATH_KEY;
+
+
 
    useEffect(() => {
-    
-    const isUserAuth = localStorage.getItem("user");
-    if (!isUserAuth) {
-      // 로그인해야만 접근할 수 있는 페이지
-      // 해당 페이지 접근 시, login하세요 && 페이지 이동 막음
+
+
+     // ADMIN PATH
+     const ADMIN_BASE_PATH_KEY = "bf-admin";
+     const ADMIN_PUBLIC_PATH = ['/index', '/login', '/dashboard'];
+     const isAdminPath = router.asPath.split("/")[1] === ADMIN_BASE_PATH_KEY;
+
+
+     // USER PATH
+     const USER_FOBBIDEN_PATH = ['cart', 'mypage','survey'];
+     let nonMemberPath;
+     router.asPath.split("/").map((path)=>{
+       if(USER_FOBBIDEN_PATH.indexOf(path) >= 0){
+         return nonMemberPath = true
+       }
+     });
+
+     setIsAuth(!!userData)
+
+    if (!isAuth && nonMemberPath ) {
+      alert('로그인이 필요한 서비스입니다.')
+      console.error('Redir: User FOBBIDEN PAGE');
+      router.push('/account/login')
+      // 로그인상태확인
+      // 포비든 페이지확인
+      // 안내문을 띄우고, 로그인페이지로 이동시킨다.
     }
 
 
-
-
-
-
-
-    if (isAdminPath){
+    if (isAdminPath){ // TEST
       dispatch(authAction.adminRestoreAuthState()); // 토큰 다시 발급
 
       let isPublicAdminPath;
@@ -47,8 +65,7 @@ import { authAction } from '@store/auth-slice';
         router.push(`/${ADMIN_BASE_PATH_KEY}/login`);
       }
     }
-
-   }, [curPath, isAdminPath, dispatch, router]);
+   }, [curPath, dispatch, router, userData, isAuth]);
 
 
    const FullScreenLoading = () => {
@@ -63,16 +80,3 @@ import { authAction } from '@store/auth-slice';
  };
 
 export default AuthInterceptor;
-
-
-
-
-AuthInterceptor.getInitialProps = async (ctx) => {
-  // ! 2번째 이상 페이지일 경우 작동 (로그인을 먼저하고 접속해야 여기가 작동함);
-
-  // const res = await fetch("https://api.github.com/repos/vercel/next.js");
-  // const json = await res.json();
-  // console.log('SSR -> getInitialProps 테스트')
-  // console.log(json)
-  return { data: 'SSR로 받아올 데이터가 있다면 출력한다.' };
-};

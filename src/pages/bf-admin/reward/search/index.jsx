@@ -1,20 +1,20 @@
 import React, { useState } from "react";
-import s from "./coupon.module.scss";
+import s from "../reward.module.scss";
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import AdminLayout from "/src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
-import SearchBar from "@src/components/admin/form/searchBar";
 import Pagination from "@src/components/atoms/Pagination";
-import SearchPlainInput from "@src/components/admin/form/searchBar/SearchPlainInput";
-import SearchRadio from "@src/components/admin/form/searchBar/SearchRadio";
+import SearchBar from "@src/components/admin/form/searchBar";
+import SearchTerm from "@src/components/admin/form/searchBar/SearchTerm";
+import SearchTextWithCategory from "@src/components/admin/form/searchBar/SearchTextWithCategory";
 import AmdinErrorMessage from "@src/components/atoms/AmdinErrorMessage";
-import CouponList from "./CouponList";
+import RewardList from "./RewardList";
 
 
 const TEST_ITEM = [1, 2, 3, 4, 5];
 
 
-function CouponListPage() {
+function RewardListPage() {
   const [modalMessage, setModalMessage] = useState("");
   const [itemList, setItemList] = useState(TEST_ITEM);
   const [searchValue, setSearchValue] = useState({});
@@ -32,50 +32,46 @@ function CouponListPage() {
 
   return (
     <>
-      <MetaTitle title="쿠폰 조회" admin={true} />
+      <MetaTitle title="적립금 조회" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
-          <h1 className="title_main">쿠폰 조회</h1>
+          <h1 className="title_main">적립금 조회</h1>
           <section className="cont">
             <SearchBar onReset={onResetSearchValues} onSearch={onSearchHandler}>
-              <SearchPlainInput
-                title="쿠폰이름"
-                name={"coupon-name"}
-                onChange={setSearchValue}
-                searchValue={searchValue}
-              />
-              <SearchRadio
+              <SearchTerm
+                title={"조회기간"}
                 searchValue={searchValue}
                 setSearchValue={setSearchValue}
-                title="종류"
-                name="coupon-type"
-                idList={["ALL", "AUTO", "MANUAL"]}
-                labelList={["전체", "자동발행", "직접발행"]}
+              />
+              <SearchTextWithCategory
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
+                title="조건검색"
+                name="content"
+                id="content"
+                options={[
+                  { label: "아이디", value: "userId" },
+                  { label: "이름", value: "useName" },
+                ]}
               />
             </SearchBar>
           </section>
           <section className="cont">
             <div className="cont_header clearfix">
-              <p className="cont_title cont-left">
-                쿠폰목록
-              </p>
-              <div className="controls cont-left">
-              </div>
+              <p className="cont_title cont-left">적립금 목록</p>
+              <div className="controls cont-left"></div>
             </div>
             <div className={`${s.cont_viewer}`}>
               <div className={s.table}>
                 <ul className={s.table_header}>
-                  <li className={s.table_th}>쿠폰코드</li>
-                  <li className={s.table_th}>쿠폰종류</li>
-                  <li className={s.table_th}>쿠폰이름</li>
-                  <li className={s.table_th}>쿠폰설명</li>
-                  <li className={s.table_th}>할인금액</li>
-                  <li className={s.table_th}>사용처</li>
-                  <li className={s.table_th}>사용한도</li>
-                  <li className={s.table_th}>삭제</li>
+                  <li className={s.table_th}>적립일자</li>
+                  <li className={s.table_th}>적립급명칭</li>
+                  <li className={s.table_th}>금액</li>
+                  <li className={s.table_th}>회원이름</li>
+                  <li className={s.table_th}>아이디</li>
                 </ul>
                 {itemList.length ? (
-                  <CouponList
+                  <RewardList
                     items={itemList}
                     // onDeleteItem={onDeleteItem}
                   />
@@ -98,4 +94,4 @@ function CouponListPage() {
   );
 }
 
-export default CouponListPage;
+export default RewardListPage;

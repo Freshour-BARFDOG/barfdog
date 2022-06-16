@@ -12,8 +12,8 @@ const ErrorMessageWrap = styled.pre`
 
 
 
-function ErrorMessage({ children, fontSize, style, ...props }) {
-  return <ErrorMessageWrap className='errorMSG' fontSize={fontSize} style={style} {...props}>{children}</ErrorMessageWrap>;
+function ErrorMessage({ children, fontSize, ...props }) {
+  return <ErrorMessageWrap className='errorMSG' fontSize={fontSize} {...props}>{children}</ErrorMessageWrap>;
 }
 
 export default ErrorMessage;

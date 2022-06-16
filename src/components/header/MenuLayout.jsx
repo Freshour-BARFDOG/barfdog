@@ -9,9 +9,9 @@ import Image from 'next/image';
 
 
 
-export const Title = ( {children, link} ) => {
+export const Title = ( {children, link, className} ) => {
 
-  return link ? <Link href={link}><a className={`${s.submenu_title} flex-box`}>{children}</a></Link> : <p className={`${s.submenu_title} flex-box`}>{children}</p>;
+  return link ? <Link href={link}><a className={`${s.submenu_title} flex-box ${className}`}>{children}</a></Link> : <p className={`${s.submenu_title} flex-box ${className}`}>{children}</p>;
 }
 
 
@@ -34,7 +34,7 @@ export const SubmenuList = ( {link, title}) => {
 
 
 
-function MenuLayout({title, className, link, addedIcon,  children}) { 
+function MenuLayout({title, titleClassName ,className, link, icon,  children}) {
   const [submenuOpen, setSubmenuOpen] = useState(false);
 
   const mouseEnterEvent = (e) => {
@@ -48,7 +48,7 @@ function MenuLayout({title, className, link, addedIcon,  children}) {
  
   const Submenu = () => {
     return (
-      <ul className={`${s.submenu} ${submenuOpen ? s.open : ""} ${className}`}
+      <ul className={`${s.submenu} ${submenuOpen ? s.open : ''} ${className || ''}`}
       onMouseLeave={mouseLeaveEvent}>
         {children}
       </ul>
@@ -62,16 +62,15 @@ function MenuLayout({title, className, link, addedIcon,  children}) {
       onMouseEnter={mouseEnterEvent}
       // onMouseLeave={mouseLeaveEvent}
     >
-      <Title link={link}>{title}</Title>
-      {addedIcon ? (
+      <Title link={link} className={titleClassName}>{title}</Title>
+      {icon &&
         <Image
-          src={addedIcon.src}
+          src={icon.src}
           alt="아이콘"
-          width={addedIcon.width}
-          height={addedIcon.height}
-        />
-      ) : null}
-      {children ? <Submenu /> : ""}
+          width={icon.width}
+          height={icon.height}
+        />}
+      {children && <Submenu />}
     </li>
   );
 }

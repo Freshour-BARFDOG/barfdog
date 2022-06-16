@@ -6,7 +6,6 @@ import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
 import s from "./create.module.scss";
 import Image from "next/image";
 import RatingStars from "/src/components/atoms/RatingStars";
-import User_class_box from '/src/components/atoms/User_class_box';
 import SelectTag from "@src/components/atoms/SelectTag";
 
 

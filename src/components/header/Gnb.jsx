@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import s from "@src/components/common/header.module.scss";
+import s from "./header.module.scss";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useModalContext } from "@store/modal-context";
@@ -54,10 +54,6 @@ const Gnb = () => {
         <SubmenuList title="굿즈" link="/shop?category=goods" />
       </MenuLayout>
       <MenuLayout title="레시피" link="/recipes">
-        {/* <SubmenuList title="스타터프리미엄" link="/recipes/starter" />
-        <SubmenuList title="터키&amp;비프" link="/recipes/turkeyAndBeef" />
-        <SubmenuList title="덕&amp;램" link="/recipes/duckAndLamb" />
-        <SubmenuList title="램&amp;비프" link="/recipes/lambAndBeef" /> */}
       </MenuLayout>
       <MenuLayout title="커뮤니티">
         <SubmenuList title="공지사항" link="/community/notice" />

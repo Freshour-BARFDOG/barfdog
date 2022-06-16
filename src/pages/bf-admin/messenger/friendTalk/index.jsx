@@ -55,7 +55,7 @@ function FriendTalkPage() {
                         name="template"
                         id="template"
                         options={[
-                          {label: "-선택-", value: ""},
+                          {label: "선택", value: ""},
                           {label: "template-1", value: "template-1 정보"},
                           {label: "template-2", value: "template-2 정보"},
                           {label: "template-3", value: "template-3 정보"},

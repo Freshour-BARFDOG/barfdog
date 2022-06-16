@@ -9,43 +9,29 @@ export const valid_isEmpty = (value) => {
 
 
 
-export const valid_email = async (value) => {
+export const valid_email = (value) => {
+  let error='';
+
   const email = value;
-  let message;
-  let isEmailDuplicated = false;
   const RegExp = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
 
-  if(!email){
-    return { message: '항목이 비어있습니다.'};
+  if(!email ){
+    error = '항목이 비었습니다.'
   } else if (!RegExp.test(email)) {
-    return { message: '이메일 형식이 올바르지 않습니다.'};
+    error = '이메일 형식이 올바르지 않습니다.'
   }
 
-
-  const response = await valid_email_duplication(email);
-  if( response.hasServerError) {
-    message = '서버와 통신할 수 없습니다. \n관리자에게 문의하세요.';
-    isEmailDuplicated = undefined;
-  } else if (response.isDuplicated) {
-    message = '이미 존재하는 회원입니다.';
-    isEmailDuplicated = true;
-  } else if (!response.isDuplicated) {
-    message = '사용 가능한 아이디 입니다.';
-    isEmailDuplicated = false;
-  }
-  
-  return { message, isEmailDuplicated };
+  return error;
 };
 
 
 
 export const valid_email_duplication = async (value) => {
+  let error;
+  let message;
 
-  // MEMO : 이메일 중복일 경우 -> BACKEND SERVER 409
-  const result = { isDuplicated: undefined, hasServerError: false }
-  const API_URL = '/api/email/duplication';
   await axios
-    .get(API_URL, {
+    .get('/api/email/duplication', {
       params: {
         email :value,
       },
@@ -54,17 +40,21 @@ export const valid_email_duplication = async (value) => {
       }
     })
     .then((res) => {
-      return result.isDuplicated = res.data && false;
+      error = '';
+      message = res.data && '사용가능한 계정입니다.';
+      // console.log('계정 중복검사: ',res.data && '사용가능한 계정입니다.')
+
     })
     .catch((err) => {
-      console.error('_______중복 검사결과: ',err.request.status);
       if(err.request.status === 409 ){
-        return result.isDuplicated = true;
+        console.log('계정 중복검사')
+        error = '이미 존재하는 계정입니다.'
       } else {
-        return result.hasServerError = true;
+        error = '서버와 통신할 수 없습니다. \n관리자에게 문의하세요.';
       }
     });
-  return result;
+  // console.log('err:', error, '& msg:', message)
+  return {error, message};
 };
 
 
@@ -74,11 +64,11 @@ export const valid_email_duplication = async (value) => {
 
 export const valid_password = (value) => {
 
-  let error;
+  let error = '';
   let message = [
     {label:'최소 7자리 이상', valid: false},
     {label:'영문/숫자/특수문자 조합', valid: false},
-    {label:'3개 이상 동일하거나 연속성있는 문자 사용불가', valid: false}
+    {label:'3회 이상 동일하거나 연속성이 없는 문자', valid: false}
   ];
 
   const pw = value;
@@ -86,9 +76,7 @@ export const valid_password = (value) => {
   const pattern_en = /[a-zA-Z]/;
   const pattern_spChar = /[~!@#$%^&*()<>+-]/;
 
-  if(!value){
-    error = true;
-  }
+  if(!value) error = '항목이 비었습니다.';
 
 
 
@@ -110,10 +98,8 @@ export const valid_password = (value) => {
 
   // PART 3
   const continuityObj = checkCharactorSamenessAndContinuity(pw);
-  const pattren_continuity = Object.keys(continuityObj).length ? false : true;
-  if(!pattren_continuity){
-    error = '연속성 초과';
-  }
+  const pattren_continuity = !Object.keys(continuityObj).length;
+  !pattren_continuity && (error = '연속성 초과');
 
   message[0].valid = pattern_minLength;
   message[1].valid = pettern_mixedChar;
@@ -123,13 +109,31 @@ export const valid_password = (value) => {
 };
 
 
+
+
+
 export const valid_confirmPassword = (pw, pw2) => {
-  let error ;
-  let isMatched = false;
-  if(!pw) return;
-  error = pw !== pw2 ? "비밀번호가 일치하지 않습니다." : '';
-  isMatched = pw === pw2 && '비밀번호가 일치합니다.';
-  return {error, isMatched};
+  let error;
+  let message = {
+    label: '',
+    valid: pw === pw2
+  }
+
+  if(!pw) {
+    message.valid = false;
+  }
+
+  if(!pw2){
+    error = '항목이 비어있습니다.'
+  } else if (pw !== pw2) {
+    error = "비밀번호가 일치하지 않습니다.";
+    message.label = "비밀번호가 일치하지 않습니다.";
+  } else if(pw === pw2) {
+    error = "";
+    message.label = "비밀번호가 일치합니다.";
+  }
+
+  return {error, message};
 }
 
 
@@ -155,21 +159,42 @@ export  const valid_authNumber = (num1, num2)=>{
 
 
 
-// ------------------  VALIDATE ------------------ //
-export const validate = async (obj) => {
+
+export const valid_policyCheckbox = (obj, standardObjList = [])=>{
   let errors = {};
-  
+  const requiredKeyList = [];
+  standardObjList.forEach((list)=> (list.required && requiredKeyList.push(list.label)));
+
+  for (const key in obj) {
+    const isRequired = requiredKeyList.indexOf(key) >= 0;
+    if(isRequired){
+      const checked = obj[key];
+      errors[key] = !checked ? '필수 항목입니다.' : '';
+    }
+  }
+  return errors;
+}
+
+
+
+
+
+export const validate = async (obj, formErrors) => {
+  let errors = {};
+
+
   const keys = Object.keys(obj);
 
   for (const key of keys) {
     const val = obj[key];
+
 
     switch (key) {
       case 'name':
         errors[key] = valid_isEmpty(val);
         break;
       case 'email':
-        errors[key] = valid_isEmpty(val) || (await valid_email(val)).message;
+        errors[key] = valid_isEmpty(val) || valid_email(val);
         break;
       case 'password':
         errors[key] = valid_password(val).error;
@@ -177,13 +202,18 @@ export const validate = async (obj) => {
       case 'confirmPassword':
         const pw1 = obj['password'];
         const pw2 = val;
-        errors[key] = valid_isEmpty(val) || valid_confirmPassword(pw1, pw2)?.error;
-        errors['passwordMatch'] = valid_confirmPassword(pw1, pw2)?.isMatched;
+        errors[key] = valid_confirmPassword(pw1, pw2).error;
         break;
       case 'phoneNumber':
         errors[key] = valid_isEmpty(val) || valid_phoneNumber(val);
         break;
       case 'address':
+        const addrObj = val;
+        const targetKey = Object.keys(addrObj)[0];
+        const thisVal = addrObj[targetKey];
+        errors[key] = valid_isEmpty(thisVal);
+        break;
+      case 'detailAddress':
         errors[key] = valid_isEmpty(val);
         break;
       case 'birthday':
@@ -192,11 +222,12 @@ export const validate = async (obj) => {
       default:
         break;
     }
-
   };
 
+  errors.isEmailDuplicated = formErrors.isEmailDuplicated;
+  errors.isValidPhoneNumber=formErrors.isValidPhoneNumber;
 
-  console.log('Validation Result: ', errors);
+  console.log('Valid Result (formValues) : ', errors);
   return errors;
 };
 

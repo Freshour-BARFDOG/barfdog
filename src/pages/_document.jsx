@@ -8,9 +8,7 @@ import Document, {
 } from "next/document";
 import MetaTags from './_metaTags';
 // eslint-disable-next-line @next/next/no-script-in-document
-import {GA_TRACKING_ID} from "@util/../../api/googleAnalytics/gtag";
-
-
+import {GA_TRACKING_ID, UA_TRACKING_ID} from "/api/googleAnalytics/gtag";
 
 // Server Only File (client에서 사용하는 로직 사용불가)
 // Next JS : _app.js 파일 이후 2번 째 실행
@@ -46,6 +44,9 @@ const CustomDocument = ()=> {
             gtag('js', new Date());
 
             gtag('config', '${GA_TRACKING_ID}', {
+              page_path: window.location.pathname,
+            });          
+            gtag('config', '${UA_TRACKING_ID}', {
               page_path: window.location.pathname,
             });
           `,

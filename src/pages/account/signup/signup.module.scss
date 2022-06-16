@@ -12,10 +12,9 @@ $input-height: rem(44);
   max-width: rem(490); //크기를 변경시 무너짐
   margin: rem(50) auto rem(111);
 
-  .main-title {
+  .title-wrap{
     margin-bottom: rem(57);
-
-    h2 {
+    .main-title {
       font-weight: 500;
       text-align: center;
     }
@@ -73,19 +72,22 @@ $input-height: rem(44);
     align-items: center;
     .input-wrap {
       width: 100%;
-
-      input:not([type="radio"]) {
-        width: 100%;
-        height: $input-height;
-        padding: rem(8) rem(16);
-
-        &::placeholder {
-          font-size: rem(14) !important;
-          color: var(--color-font-light);
-          font-weight: 300;
-        }
-      }
+      position: relative;
     }
+
+    input:not([type="radio"]) {
+      width: 100%;
+      height: $input-height;
+      padding: rem(8) rem(16);
+    }
+    ::placeholder {
+      font-size: rem(14) !important;
+      color: var(--color-font-light);
+      font-weight: 300;
+    }
+
+
+
 
 
     &.add-btn-section {
@@ -93,34 +95,36 @@ $input-height: rem(44);
       grid-template-columns: 2.3fr 1fr;
       column-gap: rem(10);
       align-items: flex-start;
+      button{width: 100%;}
+    }
 
+    &.hide-input{
+      grid-template-columns: 1fr;
+      input{display: none}
+    }
+
+    &.active-address{
+      row-gap: rem(10);
+      input{padding-right: rem(30);}
+
+      > *:nth-child(1){
+        grid-column: 1 / 2;
+      }
+      > *:nth-child(2){
+        grid-column: 2 / 3;
+      }
+      > *:nth-child(3){
+        grid-column : 1 / 3;
+      }
+      > *:nth-child(4){
+        grid-column : 1 / 3;
+      }
     }
 
     .btn.bigbtn {
       height: $input-height;
     }
-
-
   }
-
-  ////3구역
-  //.join__middle {
-  //  float: left;
-  //
-  //  input {
-  //    width: 230px;
-  //    height: 44px;
-  //    margin-right: 9px;
-  //  }
-  //
-  //  .btn.smallbtn {
-  //    float: right;
-  //    width: 100px;
-  //    height: 44px;
-  //    border-radius: 5px;
-  //  }
-  //}
-  //.btn{max-height: $input-height;}
 }
 
 
@@ -146,8 +150,15 @@ $input-height: rem(44);
 
 
 .policy-section {
-  .main-title{text-align: center;
-    margin-bottom: rem(34);}
+  .title-wrap {
+    margin-bottom: 0;
+    .main-title{
+      text-align: center;
+      margin-bottom: rem(34);
+      font-size: rem(16);
+    }
+  }
+
   .title{
     font-size: rem(15);
     color:var(--color-font-def);
@@ -262,6 +273,10 @@ $input-height: rem(44);
 
   &.loading{
     color: var(--color-checked);
+    &:before{
+      content: "";
+      color: inherit;
+    }
   }
 
   &.siblings{
@@ -286,3 +301,19 @@ $input-height: rem(44);
 
   }
 }
+
+
+
+.addressToolTip{
+  position: absolute !important;
+  right: rem(10);
+  top:50%;
+  transform:translateY(-50%);
+  border-radius: rem(4);
+  background-color: #fff;
+  color: #fff;
+  font-size: rem(13);
+  padding: 0;
+  animation: show var(--ani-default);
+}
+

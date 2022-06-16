@@ -23,6 +23,7 @@ const Wrap = styled.div`
   transition-property: top, opacity, height;
   transition-duration: 0.3s;
   transition-timing-function: ease-out;
+  animation: show var(--ani-default) forwards;
 
   &.active {
     top: 10vh;
@@ -30,7 +31,7 @@ const Wrap = styled.div`
     opacity: 1;
     pointer-events: all;
     margin: auto;
-    padding: ;
+    //padding: ;
   }
   &.inactive {
     top: 0;
@@ -71,6 +72,7 @@ function ModalWrapper({
   background,
   onBackgroundClick,
   positionCenter,
+  animation,
   ...props
 }) {
   return (
@@ -87,7 +89,8 @@ function ModalWrapper({
           style={style}
           label={label}
           id={id}
-          positionCenter
+          animation={animation}
+          positionCenter={positionCenter}
           {...props}
         >
           {children}

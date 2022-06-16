@@ -1,5 +1,6 @@
 import React, {useRef} from "react";
 import s from "@src/components/common/menu.module.scss";
+import style2 from "/src/components/common/menu.module.scss";
 import {List, SubmenuList, SubmenuTitle} from "/src/components/mypage/Menu";
 import Link from 'next/link';
 import Icon_setting from "/public/img/icon/setting.svg";
@@ -18,11 +19,11 @@ function AdminGnb() {
         <List title="회원관리" link="/bf-admin/member" />
         <List title="혜택관리">
           <SubmenuTitle title="쿠폰 관리" noLink />
-          <SubmenuList title="쿠폰 조회" link="/bf-admin/coupon" />
+          <SubmenuList title="쿠폰 조회" link="/bf-admin/coupon/search" />
           <SubmenuList title="쿠폰 발행" link="/bf-admin/coupon/release" />
           <SubmenuList title="쿠폰 생성" link="/bf-admin/coupon/create" />
           <SubmenuTitle title="적립금 관리" noLink />
-          <SubmenuList title="적립금 조회" link="/bf-admin/reward" />
+          <SubmenuList title="적립금 조회" link="/bf-admin/reward/search" />
           <SubmenuList title="적립금 발행" link="/bf-admin/reward/release" />
         </List>
         <List title="판매관리">
@@ -36,9 +37,9 @@ function AdminGnb() {
         </List>
         <List title="상품관리">
           <SubmenuList title="단품 관리" link="/bf-admin/product/single" />
-          <SubmenuList title="단품 등록" link="/bf-admin/product/single/create" />
+          <SubmenuList title="단품 등록" link="/bf-admin/product/createSingle" />
           <SubmenuList title="레시피 관리" link="/bf-admin/product/recipe" />
-          <SubmenuList title="레시피 등록" link="/bf-admin/product/recipe/create" />
+          <SubmenuList title="레시피 등록" link="/bf-admin/product/createRecipe" />
         </List>
         <List title="배너관리">
           <SubmenuList title="메인 배너" link="/bf-admin/banner/main-banner" />
@@ -66,16 +67,13 @@ function AdminGnb() {
           <SubmenuList title="친구톡" link="/bf-admin/messenger/friendTalk" />
           <SubmenuList title="채널톡" link="/bf-admin/messenger/channelTalk" />
         </List>
-        {/* <List title="등급정책" link="/class-policy" /> */}
-        {/*<List title="메신저" link="/bf-admin/messenger" />*/}
       </ul>
-      <div className={`${s.site_settings} ${s.menu_title}`}>
-        <Link href="/bf-admin/settings" passHref>
-          <a>
-            <Icon_setting />
-            설정
-          </a>
-        </Link>
+      <div className={`${s.site_settings} ${s.menu_title} ${style2['admin-site-setting']}`}>
+        <List title="설정" iconOnLeftSide={<Icon_setting />}>
+          <SubmenuList title="알고리즘" link="/bf-admin/settings/algorithm" />
+          <SubmenuList title="배송비" link="/bf-admin/settings/delivery" />
+          <SubmenuList title="쿠폰" link="/bf-admin/settings/coupon" />
+        </List>
       </div>
     </nav>
   );

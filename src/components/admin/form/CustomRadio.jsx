@@ -9,6 +9,7 @@ const CustomRadio = ({
                        labelList,
                      }) => {
 
+
   const initialValue = idList[0];
   const [selectedRadio, setSelectedRadio] = useState(initialValue);
 
@@ -34,7 +35,7 @@ const CustomRadio = ({
                   id={id}
                   name={name}
                   type="radio"
-                  value={id}
+                  // value={id}
                   checked={selectedRadio === id} // _ important
                   onChange={onChangeHandler}
                 />

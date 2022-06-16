@@ -1,17 +1,18 @@
-import React from "react";
+import React from 'react';
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import AdminLayout from "/src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
 
-function CreateCouponPage() {
+
+function AlgorithmPage() {
   return (
     <>
-      <MetaTitle title="쿠폰 생성" admin={true} />
+      <MetaTitle title="알고리즘 설정" admin={true} />
       <AdminLayout>
-        <AdminContentWrapper>CreateCouponPage</AdminContentWrapper>
+        <AdminContentWrapper>알고리즘 설정</AdminContentWrapper>
       </AdminLayout>
     </>
   );
 }
 
-export default CreateCouponPage;
+export default AlgorithmPage;

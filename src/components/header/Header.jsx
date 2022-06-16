@@ -1,64 +1,69 @@
-import React, { useState } from 'react'
+import React from 'react'
 import s from './header.module.scss';
 import Link from 'next/link';
 import Wrapper from "/src/components/common/Wrapper";
 import Gnb, { Gnb_my} from '/src/components/header/Gnb';
 import ServiceCenter from '/src/components/header/ServiceCenter';
-import User_class_box from '/src/components/atoms/User_class_box';
 import Image from 'next/image';
 import Logo from '/public/img/logo.png';
 import Logo_2x from '/public/img/logo@2x.png';
+import useUserData from "/util/hook/useUserData";
 
 
 
 
-function Header(props) {
-
-  const [userClass, setUserClass] = useState('웰컴');
-  const [loginState, setLoginState] = useState(false);
 
 
-  const HeaderTopMenu = ( {loginState} ) => {
-    
-    const Member = () => {
-      return <>
-        <li>
-          <User_class_box user_class={userClass}/>
-          <span className='user_name'>바프독님</span>
-        </li>
-      </>
-    }
-
-    const Non_Member = () => {
-      return (
-        <>
-          <li>
-            <Link href="/account/signup" as="/account/signup">
-              회원가입
-            </Link>
-          </li>
-          <li>
-            <Link href="/account/LoginPage" as="/account/login">
-              로그인
-            </Link>
-          </li>
-        </>
-      );
-    }
-
-    const MenuList = loginState ? <Member /> : <Non_Member />;
-    return (
-      <>
-        {MenuList}
-        <ServiceCenter />
-      </>
-    )
-  }
-  
+const MemberMemu = ({data}) => {
+  const isAdmin = data.name === '관리자';
+  return (
+    <li>
+      {!isAdmin && <span className={s.userClass}>{data.grade}</span>}
+      <span className={s.username}>
+        <em>{data.name}</em>님
+      </span>
+    </li>
+  );
+}
 
 
 
+const Non_MemberMenu = () => {
+  return (
+    <>
+      <li>
+        <Link href="/account/signup" as="/account/signup">
+          회원가입
+        </Link>
+      </li>
+      <li>
+        <Link href="/account/login" as="/account/login">
+          로그인
+        </Link>
+      </li>
+    </>
+  );
+}
 
+
+
+const HeaderTopMenu = ( {loginState, data} ) => {
+
+
+  const MenuList = loginState ? <MemberMemu data={data}  /> : <Non_MemberMenu />;
+  return (
+    <>
+      {MenuList}
+      <ServiceCenter />
+    </>
+  )
+}
+
+
+
+const Header = () => {
+  const userData = useUserData();
+  const isLogin = !!userData;
 
   return (
     <header id={s.site_header}>
@@ -66,10 +71,9 @@ function Header(props) {
         <div className={s.inner}>
           <div id="account" className={`${s.account_area} clearfix`}>
             <ul className="clearfix">
-              <HeaderTopMenu loginState={loginState} />
+              <HeaderTopMenu loginState={isLogin} data={userData}/>
             </ul>
           </div>
-          {/* account */}
           <div className={s.logo_area}>
             <Link href="/" passHref>
               <a>
@@ -77,7 +81,6 @@ function Header(props) {
               </a>
             </Link>
           </div>
-          {/* logo_area */}
           <div className={`${s.gnb_area} clearfix`}>
             <nav id="gnb" className={`${s.gnb_nav} clearfix`}>
               <ul className="clearfix">
@@ -93,3 +96,7 @@ function Header(props) {
 }
 
 export default Header;
+
+
+
+

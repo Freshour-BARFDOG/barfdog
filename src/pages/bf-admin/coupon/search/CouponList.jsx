@@ -1,4 +1,4 @@
-import s from "./coupon.module.scss";
+import s from "../coupon.module.scss";
 
 
 
