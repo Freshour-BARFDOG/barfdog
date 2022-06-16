@@ -38,7 +38,6 @@ $list-height: rem(58);
       &:not(:last-child) a,
       &:not(:last-child) p {
         border-bottom: 0;
-        cursor: pointer;
       }
       &:not(.submenu_title, .submenu_list):after {
         content: '';
