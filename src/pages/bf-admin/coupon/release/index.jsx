@@ -7,8 +7,8 @@ import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
 import CustomRadio from '/src/components/admin/form/CustomRadio';
 import CustomSelect from '/src/components/admin/form/CustomSelect';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
-import CouponReleaseGroupForm from "./Coupon-release-GroupForm";
-import CouponReleasePersonalForm from "./Coupon-release-PersonalForm";
+import SearchGroupForm from "../../../../components/admin/form/SearchGroupForm";
+import SearchPersonalForm from "../../../../components/admin/form/SearchPersonalForm";
 
 
 const initValOfAll = {
@@ -110,8 +110,8 @@ function ReleaseCouponPage() {
                   </div>
                 </div>
               </div>
-              {issuedTarget.issuedTarget === 'GROUP' && (<CouponReleaseGroupForm setFormValues={setFormValues} />)}
-              {issuedTarget.issuedTarget === 'PERSONAL' && (<CouponReleasePersonalForm setFormValues={setFormValues} />)}
+              {issuedTarget.issuedTarget === 'GROUP' && (<SearchGroupForm setFormValues={setFormValues} />)}
+              {issuedTarget.issuedTarget === 'PERSONAL' && (<SearchPersonalForm setFormValues={setFormValues} />)}
               <div className="cont_divider">
                 <div className="input_row">
                   <div className="title_section fixedHeight">

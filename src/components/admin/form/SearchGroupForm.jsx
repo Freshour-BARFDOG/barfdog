@@ -4,7 +4,7 @@ import calcedAgeList from '/util/func/calcedAgeList';
 import CustomRadio from '/src/components/admin/form/CustomRadio';
 
 
-export default function CouponReleaseGroupForm (props)  {
+export default function SearchGroupForm (props)  {
   const {setFormValues} = props;
 
 

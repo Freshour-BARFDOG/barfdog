@@ -3,15 +3,15 @@ import React, {useState} from 'react';
 import Checkbox from "/src/components/atoms/Checkbox";
 import AmdinErrorMessage from "/src/components/atoms/AmdinErrorMessage";
 import dynamic from "next/dynamic";
-import UserList from "../../../popup/searchUser/UserList";
-import s from "../../../popup/searchUser/searchUser.module.scss";
+import UserList from "../../../pages/popup/searchUser/UserList";
+import s from "../../../pages/popup/searchUser/searchUser.module.scss";
 const WindowOpener = dynamic(() => import('/util/func/window-opener'), { ssr: false });
 
 
 
 const TEST_ITEM = [1,2,3,4,5];
 
-export default function CouponReleasePersonalForm (props)  {
+export default function SearchPersonalForm (props)  {
   const {setFormValues} = props;
 
   const [selectedUser, setSelectedUser] = useState([]);
