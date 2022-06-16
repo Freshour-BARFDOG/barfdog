@@ -12,10 +12,10 @@ $browser-context:16; // html font-size:
     max-width: rem(1900);
     width: rem(1200);
     &.fullWidth{
-      width:100%;
+      width:100vw; //width: 100%; 을 수정
     }
     .row{
-      padding: 0 rem(0);
+      padding: 0; //padding: 0 rem(0); 을 수정
     }
   }
 }
@@ -30,7 +30,7 @@ $browser-context:16; // html font-size:
     .container{
       width: 100%;
       &.fullWidth{
-        width: auto;
+        width: 100vw;
       }
       .row{
         padding: 0 rem(20);
