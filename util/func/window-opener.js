@@ -97,9 +97,9 @@ export default class WindowOpener extends React.Component {
     const { children } = this.props;
     return (
       <>
-        <div onClick={this.onClickHandler}>
+        <button type={'button'} autoFocus={false} onClick={this.onClickHandler}>
           {children}
-        </div>
+        </button>
       </>
 
     );

@@ -2,7 +2,7 @@ import React from 'react';
 import DaumPostCode from "/api/daumPostCode";
 
 
-function Popup_daumPostCodePage() {
+function SearchAddressPopup() {
   return (
     <>
       <DaumPostCode/>
@@ -10,4 +10,4 @@ function Popup_daumPostCodePage() {
   )
 }
 
-export default Popup_daumPostCodePage;
+export default SearchAddressPopup;

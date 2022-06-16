@@ -61,6 +61,7 @@ $inputDefaultHeight: rem(38);
   border-radius: rem(2);
   font-size: rem(14);
   transition: background-color, border-color, color $aniDefault;
+  border: rem(1) solid transparent;
   // transition-duration: 0.15s;
   // transition-timing-function: ease;
   pointer-events: all;
@@ -199,7 +200,7 @@ $inputDefaultHeight: rem(38);
     &.withMultipleBackgound{
       padding: rem(30) 0 ;
       .cont_divider{
-        padding: {
+        margin: {
           left: rem(40) !important;
           right: rem(40) !important;
         };
@@ -229,17 +230,29 @@ $inputDefaultHeight: rem(38);
         }
       }
       .optional-section{
+        margin-top: rem(-1); // for hide upperside border-bottom;
         padding: 0;
         background-color: #f1f2f3;
         .cont_divider:first-child {
           padding: rem(15) 0;
         }
+        .search-box{
+          padding: rem(15) rem(40);
+          .controls{
+            margin: 0 0 rem(15);
+          }
+
+        }
       }
       .cont_divider:first-child {
         padding-top: 0;
       }
+      .optional-section .cont_divider:not(:last-child) {
+        border-color: var(--color-line-03);
+
+      }
       .cont_divider:not(:last-child) {
-        border-bottom: rem(1) solid var(--color-line-03);
+        border-bottom: rem(1) solid var(--color-line-04);
       }
       b,
       i {
