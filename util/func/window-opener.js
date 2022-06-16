@@ -20,7 +20,7 @@ function watcher () {
     clearInterval(timer);
     // if popup is closed, then let's clean errthing.
   } else if (popup !== null && popup.closed) {
-    console.log('브라우저 ㅍ커스')
+    console.log('브라우저 포커스')
     clearInterval(timer);
     browser.focus();
     // the onCloseEventHandler it notifies that the child has been closed.
@@ -67,7 +67,8 @@ export default class WindowOpener extends React.Component {
   // opens a child
   onClickHandler (evt) {
     // console.log("onClickHandler", this.props)
-    const { url, name, opts } = this.props;
+    const { url, name, opts, optionsDefaultObj, options } = this.props;
+
     // if there is  already a child open, let's set focus on it
     if (popup && !popup.closed) {
 
@@ -76,7 +77,17 @@ export default class WindowOpener extends React.Component {
       return ;
     }
     // we open a new window.
-    popup = browser.open(url, name, opts);
+    let convertedOpts='';
+    if(options){
+      Object.keys(optionsDefaultObj).forEach((key)=>{
+        const val = optionsDefaultObj[key];
+        const newVal = options[key];
+        convertedOpts += `${key}=${newVal || val},`
+      })
+    }
+    // console.log(convertedOpts)
+
+    popup = browser.open(url, name, convertedOpts || opts);
 
     setTimeout(() => {
       // The opener object is created once and only if a window has a parent
@@ -110,9 +121,19 @@ WindowOpener.propTypes = {
   url: PropTypes.string.isRequired,
   bridge: PropTypes.func.isRequired,
   name: PropTypes.string,
-  opts: PropTypes.string
+  opts: PropTypes.string,
+  optionsDefaultObj: PropTypes.object,
+  options: PropTypes.object,
 }
 WindowOpener.defaultProps = {
-  name: "custom popup",
-  opts: `dependent=${1}, alwaysOnTop=${1}, alwaysRaised=${1}, alwaysRaised=${1}, width=${400}, height=${500}`
+  name: "popup",
+  opts: `dependent=${1}, alwaysOnTop=${1}, alwaysRaised=${1}, alwaysRaised=${1}, width=${400}, height=${500}`,
+  optionsDefaultObj: {
+    dependent: 1,
+    alwaysOnTop: 1,
+    alwaysRaised: 1,
+    width: 400,
+    height: 500
+  },
+  options: {}
 }

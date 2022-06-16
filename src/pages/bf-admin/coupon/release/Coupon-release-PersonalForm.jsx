@@ -44,7 +44,7 @@ export default function CouponReleasePersonalForm (props)  {
       <div className="optional-section">
         <div className="search-box">
           <div className="controls">
-            <WindowOpener url={'/popup/searchUser'} bridge={onReceivePopupData}>
+            <WindowOpener url={'/popup/searchUser'} bridge={onReceivePopupData} options={{width:525,height:642}}>
               <span className={'admin_btn solid basic_m'} type={'button'}>회원검색</span>
             </WindowOpener>
             <button className={'admin_btn line basic_m'} type={'button'}>선택삭제</button>
