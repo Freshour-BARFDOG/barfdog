@@ -1,0 +1,176 @@
+$browser-context: 16;
+// convert px to rem
+@function rem($px, $context: $browser-context) {
+  @return #{$px / $context}rem;
+}
+
+// *  ------- COMMON ------- * //
+$backgroundColorDef: #f8f8ff;
+$popupMainHeaderHeight: rem(66);
+$popupCloseButtonSectionHeight: rem(88);
+
+$windowWidthForRightSideBorder: rem(850);
+
+#popup {
+  background-color: $backgroundColorDef;
+  position: relative;
+}
+
+.header {
+  background-color: #23242e;
+  color: #fff;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 10;
+
+  .cont {
+    height: $popupMainHeaderHeight;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .popup-title {
+    font-size: rem(24);
+    cursor: default;
+  }
+}
+
+.row {
+  padding: 0 rem(20);
+}
+
+// -- LAYOUT --
+.body {
+  padding-top: $popupMainHeaderHeight;
+  padding-bottom: $popupCloseButtonSectionHeight;
+  position: relative;
+  overflow: hidden;
+
+  .row > *:nth-child(1) {
+    margin-top: rem(20);
+    margin-bottom: rem(10);
+  }
+
+  .row > *:nth-child(2) {
+    margin-bottom: rem(20);
+  }
+
+  .row > *:nth-child(3) {
+    margin-bottom: rem(12);
+  }
+}
+
+.search-wrap {
+  .searchBar {
+    display: flex;
+    column-gap: rem(34);
+    > * {
+      display: flex;
+      align-items: center;
+    }
+  }
+}
+
+.cont_viewer {
+  border: rem(1) solid var(--color-line-03);
+  box-sizing: border-box;
+  height: rem(380);
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: scroll;
+  .table {
+    position: relative;
+    z-index: 0;
+    font-size: rem(15);
+
+    /* border line */
+    .table_header {
+      border-bottom: rem(1) solid var(--color-line-03);
+    }
+    .table_th:not(:last-child),
+    .item > span:not(:last-child) {
+      border-right: rem(1) solid var(--color-line-03);
+    }
+    .table_th,
+    .item:not(:last-child) > span {
+      border-bottom: rem(1) solid var(--color-line-03);
+    }
+    .item:not(:last-child) {
+      border-bottom: rem(1) solid var(--color-line-03);
+    }
+    /* border line */
+
+    .table_header {
+      z-index: 1;
+      position: relative;
+    }
+    .table_header,
+    .item {
+      display: grid;
+      grid-gap: 0;
+      grid-template-rows: minmax(rem(60), auto);
+      grid-template-columns:
+        rem(50)
+        rem(95)
+        rem(100)
+        rem(100)
+        rem(160)
+        rem(140)
+        rem(140)
+        rem(160)
+        rem(80)
+        rem(80);
+
+      .table_th,
+      span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .table_th {
+        font-weight: 600;
+        background-color: #f1f1f4;
+        height: 100%;
+      }
+      input[type='checkbox'] ~ span {
+        padding: 0;
+      }
+      span {
+        padding: rem(5) rem(10);
+        overflow-y: scroll;
+
+        &.scrollBox {
+          display: flex;
+          justify-content: flex-start;
+          white-space: nowrap;
+        }
+      }
+    }
+
+    .item {
+      > span {background-color: #fff;}
+      margin-top: rem(-1);
+    }
+  }
+}
+
+.btn-section {
+  position: fixed;
+  z-index: 10;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  height: $popupCloseButtonSectionHeight;
+  box-sizing: border-box;
+  background-color: #fff;
+  padding: rem(20) 0 rem(30);
+  width: 100%;
+  margin-top: rem(20);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 rem(10) rem(30) 0 rgba(0, 0, 0, 0.1);
+}

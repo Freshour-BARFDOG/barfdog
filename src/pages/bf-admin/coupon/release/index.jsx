@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import s from './coupon-release.module.scss';
+
+
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
@@ -70,7 +71,13 @@ function ReleaseCouponPage() {
 
 
 
-  // console.log(formValues);
+
+  const onSubmitHandler = (e) => {
+    e.preventDefault();
+    console.log('onSubmit!');
+    // MEMO : 서버에 전송할 때, 가격은........ transformClearLocalCurrency() 적용해야함
+    // transformClearLocalCurrency();
+  };
 
   return (
     <>
@@ -103,7 +110,6 @@ function ReleaseCouponPage() {
                   </div>
                 </div>
               </div>
-
               {issuedTarget.issuedTarget === 'GROUP' && (<CouponReleaseGroupForm setFormValues={setFormValues} />)}
               {issuedTarget.issuedTarget === 'PERSONAL' && (<CouponReleasePersonalForm setFormValues={setFormValues} />)}
               <div className="cont_divider">
@@ -173,6 +179,16 @@ function ReleaseCouponPage() {
                 </div>
               </div>
             </div>
+          </div>
+          <div className="btn_section outer">
+            <button
+              type="button"
+              id="release-coupon"
+              className="admin_btn confirm_l solid"
+              onClick={onSubmitHandler}
+            >
+              쿠폰발행
+            </button>
           </div>
         </AdminContentWrapper>
       </AdminLayout>

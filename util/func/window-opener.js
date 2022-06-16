@@ -20,7 +20,7 @@ function watcher () {
     clearInterval(timer);
     // if popup is closed, then let's clean errthing.
   } else if (popup !== null && popup.closed) {
-    console.log('브라우저 포커스')
+    // console.log('브라우저 포커스')
     clearInterval(timer);
     browser.focus();
     // the onCloseEventHandler it notifies that the child has been closed.

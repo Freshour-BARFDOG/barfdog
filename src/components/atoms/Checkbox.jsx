@@ -46,7 +46,7 @@ export default function Checkbox({ id, label, callback, onClick , ...props}) {
         onClick={onClickHandler}
         // value={isChecked}
       />
-      <span className={`${s.on} ${!label ? s.noLabel : ''}`} />
+      <i className={`${s.on} ${!label ? s.noLabel : ''}`} />
       <span className={s.label}>{label}</span>
     </label>
   );
