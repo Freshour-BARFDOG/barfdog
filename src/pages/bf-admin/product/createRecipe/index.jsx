@@ -10,6 +10,12 @@ import Fake_input from '/src/components/atoms/fake_input';
 import Modal_previewRecipeThumb from '/src/components/modal/Modal_previewRecipeThumb';
 import IngredientsItemList from './ingredientsItemList';
 import enterKey from '/util/func/enterKey';
+import PreviewImage from "/src/components/atoms/PreviewImage";
+
+
+
+
+
 
 const initialFormValues = {
   name: '',
@@ -73,9 +79,13 @@ function CreateRecipePage() {
 
   const onAddIngredients = () => {
     const id = formValues.ingredients;
-    if(!id){
-      return alert('값이 없습니다.');
-    }
+    setFormErrors(prevState=>({
+      ...prevState,
+      ingredients: id ? '' : '입력된 값이 없습니다.'
+    }))
+
+    if(!id)return;
+
     setCreatedItem(prevState => ({
       ...prevState,
       id
@@ -91,6 +101,9 @@ function CreateRecipePage() {
       [id]: value,
     }));
   };
+
+
+
 
   const imageFileChangeHandler = (e) => {
     const { id, files } = e.currentTarget;
@@ -342,14 +355,14 @@ function CreateRecipePage() {
                           <ErrorMessage>{formErrors.ingredients}</ErrorMessage>
                         )}
                       </div>
-                      <IngredientsItemList newItemObj={createdItem}/>
+                      <IngredientsItemList newItemObj={createdItem} />
                     </div>
                   </div>
                 </div>
                 {/* cont_divider */}
 
                 <div className="cont_divider">
-                  <div className="input_row">
+                  <div className="input_row multipleLines">
                     <div className="title_section">
                       <label className="title">
                         썸네일 (설문결과)
@@ -361,6 +374,13 @@ function CreateRecipePage() {
                     </div>
                     <div className="inp_section">
                       <label className="inp_wrap file" htmlFor="surveyResult">
+                        {
+                          file.surveyResult.file && <PreviewImage
+                            file={file.surveyResult.file}
+                            backgroundColor={'transparent'}
+                            style={{ margin: '0', maxWidth: '200px', marginBottom: '10px' }}
+                          />
+                        }
                         <div className="inp_box">
                           <input
                             id={'surveyResult'}
@@ -382,7 +402,7 @@ function CreateRecipePage() {
                 {/* cont_divider */}
 
                 <div className="cont_divider">
-                  <div className="input_row">
+                  <div className="input_row multipleLines">
                     <div className="title_section">
                       <label className="title">
                         썸네일 (레시피)
@@ -397,6 +417,11 @@ function CreateRecipePage() {
                     </div>
                     <div className="inp_section">
                       <label className="inp_wrap file" htmlFor="recipeThumb">
+                        { file.recipeThumb.file && <PreviewImage
+                          file={file.recipeThumb.file}
+                          backgroundColor={'transparent'}
+                          style={{ margin: '0', maxWidth: '200px', marginBottom: '10px' }}
+                        />}
                         <div className="inp_box">
                           <input
                             id={'recipeThumb'}

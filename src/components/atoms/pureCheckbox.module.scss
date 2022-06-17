@@ -15,7 +15,9 @@ $browser-context: 16;
 }
 
 .checkbox {
-  display: inline-flex;
+  display: grid;
+  grid-template-columns: rem(20) 1fr;
+  column-gap: rem(10);
   cursor: pointer;
   font-size: rem(14);
 

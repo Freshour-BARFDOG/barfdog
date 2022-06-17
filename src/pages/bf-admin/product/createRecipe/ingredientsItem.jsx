@@ -16,7 +16,7 @@ export default  function IngredientsItem({data, index, itemList, setSelectedValu
         <span style={{fontSize: `${rem(16)}`}}>{data.id}</span>
       </PureCheckbox>
       {data.isNewItem && (
-        <span className={'circle-btn-wrap'}>
+        <span className={'btn-wrap'}>
           <CloseButton
             data-id={data.id}
             onClick={onDeleteHandler}
