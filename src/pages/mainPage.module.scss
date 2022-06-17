@@ -43,6 +43,8 @@ section.sns {
   padding: rem(114) 0 rem(190)
 }
 
+
+
 .inner {
   margin: 0 auto; //왜 가운데로 안가는가?
   position: relative;
@@ -60,10 +62,10 @@ section.sns {
 }
 
 .btn {
-  padding: 5px;
-  border-radius: 32px;
+  padding: rem(5);
+  border-radius: rem(32);
   color: #333;
-  font-size: 16px;
+  font-size: rem(16);
   font-weight: 700;
   text-align: center;
   cursor: pointer;
@@ -71,6 +73,8 @@ section.sns {
   display: block;
   background-color: rosybrown; //색변경
 }
+
+
 
 //최상위 그림배너
 .banner {
@@ -91,116 +95,111 @@ section.sns {
   }
 }
 
-//레시피 설명 4가지 사진
-.recipe_info {
-  .inner {
-    box-sizing: border-box;
 
-    .text {
-      text-align: center;
-      font-size: 32px;
-      font-weight: bold;
-      line-height: 120%;
-    }
 
-    ul {
-      li {
-        float: left;
-
-        .starter_banner {
-          margin-top: 70px;
-
-          .box {
-            padding: 10px;
-            background-color: #fff;
-            box-shadow: rem(10) rem(10) rem(30) rgba(0, 0, 0, .1);
-            position: relative;
-            width: 260px;
-            height: 456px;
-            box-sizing: border-box;
-            margin-right: rem(40);
-
-            .firstbox {
-              width: 240px;
-              height: 240px;
-              position: relative;
-            }
-
-            .secondbox {
-              margin-top: 10px;
-              font-size: 24px;
-              font-weight: bold;
-              text-align: center;
-            }
-
-            .pbox {
-              margin-top: rem(12);
-              text-align: center;
-              line-height: 1.35;
-            }
-
-            .btnbox {
-              margin-top: 20px;
-              display: flex;
-              justify-content: center;
-
-              .btn {
-                width: rem(97);
-                background-color: #F9EDEC;
-                color: #CA1010;
-              }
-            }
-          }
-        }
-      }
-    }
-
-    .box22 {
-      display: flex;
-      justify-content: center;
-      margin-top: 100px;
-
-      .btnbox {
-        position: relative;
-        width: 240px;
-        height: 60px;
-
-        a {
-          position: relative;
-        }
-
-      }
-    }
-  }
+//최상위 그림배너 모바일 이미지 테스트
+.main_img{
+  display: none;
 }
 
 
+
+//레시피
+.swiper_recipe_outerWrap {
+  position: relative;
+  height: rem(600);
+  margin-top: rem(70);
+
+  .swiper_recipe{
+    height: 100%;
+    padding: rem(20) rem(20) 0;
+  }
+}
+
+.recipe_a{
+  height: rem(456);
+  width: rem(240);
+  position: relative;
+
+  .recipe_box{
+    position: relative;
+    width: rem(260);
+    height: rem(456);
+    background-color: #fff;
+    box-shadow: rem(10) rem(10) rem(30) rgba(0, 0, 0, .1);
+  }
+
+  .img_wrap{
+    position: absolute;
+    top: rem(10);
+    left: rem(10);
+    height: rem(240);
+    width: rem(240);
+  }
+
+  .secondbox {
+    margin-top: rem(5);
+    font-size: rem(24);
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .pbox {
+    margin-top: rem(12);
+    text-align: center;
+    line-height: 1.35;
+  }
+    
+  .recipe_btn{
+    color: #ca1010;
+    font-weight: bold;
+    text-align: center;
+    line-height: rem(35);
+    position: absolute;
+    bottom: rem(20);
+    left: 50%;
+    transform: translateX(-50%);
+    width: rem(95);
+    height: rem(35);
+    border-radius: rem(32);
+    background-color: #f9edec;
+    cursor: pointer;
+  }
+}
+
+.recipe_title{
+  text-align: center;
+  font-weight: bold;
+  font-size: rem(32);
+  line-height: 120%;
+}
+
+
+
 //바프생식이란?
-//가운데 이쁘게 안오는데 어떻게 하는가?
 .barfraw {
   .inner {
-
     display: flex;
     justify-content: center;
     align-items: center;
 
     .leftbox {
       position: relative;
-      width: 360px;
-      height: 360px;
+      width: rem(360);
+      height: rem(360);
     }
 
     .rightbox {
       height: 100%;
       width: rem(359);
       position: relative;
-      margin-left: 40px;
+      margin-left: rem(40);
 
       p {
         position: absolute;
         top: rem(-180);
         color: var(--color-main);
-        font-size: 15px;
+        font-size: rem(15);
         font-weight: bold;
       }
 
@@ -208,55 +207,75 @@ section.sns {
         position: absolute;
         top: rem(-150);
         left: 0;
-        font-size: 28px;
+        font-size: rem(28);
         font-weight: bold;
       }
 
       h3 {
         position: absolute;
-        top: -100px;
-        font-size: 16px;
+        top: rem(-100);
+        font-size: rem(16);
       }
     }
   }
 }
 
+
+
+//바프생식 바뀌는 점
 .barfgood {
+  height: rem(500);
+
   .inner {
-    display: flex;
-    justify-content: center;
-    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: rem(20);
 
     .leftbox {
-      position: relative;
-      height: 100%;
-      width: rem(360);
-      margin-right: 140px;
+      display: inline-block;
+
+    .barfgood_textbox{
+      margin-top: rem(40);
+      width: 100%;
+    }
 
       h1 {
-        position: absolute;
         top: rem(45);
+        font-weight: bold;
       }
 
       p {
-        position: absolute;
+        margin-top: rem(40);
         top: rem(165);
+        width: rem(350);
       }
     }
 
     .rightbox {
-      display: flex;
-      align-items: center;
+      display: inline-block;
+    }
 
-      div {
-        width: 560px;
-        height: 456px;
+    .barfgood_imgbox{
+      width: 100%;
+
+      .barfood1 {
+        width: rem(560);
+        height: rem(456);
+        display: block;
+      }
+      .barfood2 {
+        width: rem(335);
+        height: rem(635);
+        display: none;
+        margin-top: rem(-50);
       }
     }
   }
 }
 
 
+
+//바프독 선택
 .difference {
   .inner {
     font-size: rem(15);
@@ -264,6 +283,7 @@ section.sns {
 
     p {
       color: var(--color-main);
+      font-weight: bold;
     }
 
     h1 {
@@ -273,6 +293,9 @@ section.sns {
   }
 }
 
+
+
+//차별점 그림 3개
 .difference2 {
   $marginRight: rem(90);
 
@@ -291,44 +314,51 @@ section.sns {
 
     li {
       float: left;
-      margin-right: 90px;
-      // width:calc(33.3333% - $marginRight);
+      margin-right: rem(90);
       width: calc(33.333% - #{rem(60)});
       text-align: center;
 
       &:last-child {
         margin-right: 0;
       }
-
-      // &:not(:last-child){margin-right:$marginRight}
     }
 
     .text {
-      padding-top: 40px;
-      font-size: 16px;
-      height: 80px;
+      padding: rem(40) 0;
+      font-size: rem(16);
+      height: rem(80);
     }
   }
 }
 
 
+
+//프리미엄바프
 .difference3 {
   position: relative;
-  height: 824px;
+  height: rem(824);
+  width: 100%;
   box-sizing: border-box;
 
   .title {
     display: block;
-    font-size: 32px;
+    font-size: rem(32);
     text-align: center;
+    width: 100%;
+  }
+
+  br{
+    display: none;
   }
 
   .image {
-    display: flex;
     position: absolute;
-    top: 250px;
-    left: 220px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) translate(rem(-120), rem(45));
     min-width: rem(200);
+    width: rem(460);
+    height: rem(420);
   }
 
   .textbox {
@@ -342,7 +372,7 @@ section.sns {
         left: 0;
         top: 0;
         color: var(--color-main);
-        font-size: 18px;
+        font-size: rem(18);
         display: block;
         position: relative;
         margin-bottom: rem(50);
@@ -351,25 +381,25 @@ section.sns {
 
       li::before {
         content: "";
-        width: 120px;
-        height: 1px;
+        width: rem(120);
+        height: rem(1);
         background-color: var(--color-main);
         position: absolute;
-        top: 0px;
+        top: 0;
         left: 0;
-        bottom: 0px;
+        bottom: 0;
         margin: auto;
       }
 
       li::after {
         content: "";
-        width: 10px;
-        height: 10px;
+        width: rem(10);
+        height: rem(10);
         background-color: var(--color-main);
         border-radius: 50%;
         position: absolute;
-        top: 0px;
-        bottom: 0px;
+        top: 0;
+        bottom: 0;
         left: 0;
         margin: auto;
       }
@@ -378,39 +408,26 @@ section.sns {
 }
 
 
-.btn_main {
-  display: inline-block;
-  padding: rem(14) rem(52);
-  color: #fff;
-  font-size: rem(16);
-  border-radius: rem(12);
-  background-color: var(--color-main);
-  width: rem(220);
-  box-sizing: border-box;
-}
 
 ///@at-root
-
+//고민
 .clientWorry {
   .title_section {
     .title {
-      margin-bottom: rem(30)
+      margin-bottom: rem(30);
     }
 
     .subtitle {
-      margin-bottom: rem(27)
+      margin-bottom: rem(27);
+      width: rem(350);
     }
   }
 
   .cont-left {
-    width: 37%;
-    margin-right: rem(40);
   }
 
   .cont-right {
-    width: calc(63% - #{rem(40)});
   }
-
 
   .cont_section {
     > ul {
@@ -479,7 +496,20 @@ section.sns {
   }
 }
 
+.btn_main {
+  display: inline-block;
+  padding: rem(14) rem(52);
+  color: #fff;
+  font-size: rem(16);
+  border-radius: rem(12);
+  background-color: var(--color-main);
+  width: rem(220);
+  box-sizing: border-box;
+}
 
+
+
+//리뷰 후기
 .review {
   position: relative;
 
@@ -516,7 +546,6 @@ section.sns {
     }
 
     p {
-      // padding: rem(1);
       margin-top: rem(20);
       text-align: center;
       width: rem(280);
@@ -524,7 +553,6 @@ section.sns {
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 4;
       overflow: hidden;
-
     }
   }
 
@@ -540,6 +568,8 @@ section.sns {
 }
 
 
+
+//이용방법
 .Howtouse {
   .inner {
     .title {
@@ -554,13 +584,14 @@ section.sns {
 
   .cont_body {
     > ul {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(3, rem(380));
+      grid-gap: rem(30);
+      
       > li {
-        float: left;
-        width: calc(33.3% - #{rem(26.6)});
-
-        &:not(:last-child) {
-          margin-right: rem(40);
-        }
+        width: 100%;
+        margin: 0 auto;
 
         &:nth-child(2) {
           margin-top: rem(100);
@@ -593,6 +624,7 @@ section.sns {
             padding: rem(5) 0 rem(10);
             text-align: left;
             font-size: rem(18);
+            font-weight: bold;
           }
 
           .main_text {
@@ -619,7 +651,10 @@ section.sns {
 }
 
 
+
+//SNS
 .swiper_sns {
+  width: 100%;
   .swiper-button-next {
     content: ">";
   }
@@ -631,6 +666,7 @@ section.sns {
 
     > p {
       padding: rem(12) 0 rem(77);
+      color: #636363;
     }
   }
 
@@ -640,20 +676,10 @@ section.sns {
   }
 
   .img-wrap {
-    //  width: rem(244);
-    //  height: rem(244);
-    width: 100%;
-    height: 100%;
+    width: rem(244);
+    height: rem(244);
   }
 }
-
-
-
-
-
-
-
-
 
 
 
@@ -662,7 +688,7 @@ section.sns {
 .swiper-button-next, .swiper-button-prev {
   cursor: pointer;
   position: absolute;
-  border-radius: 50%;
+  border-radius: 100%;
   width: rem(50);
   height: rem(50);
   transform: translateY(-50%);
@@ -677,7 +703,6 @@ section.sns {
     opacity: 0.9;
     box-shadow: 0 0 rem(20) 0 rgba(0,0,0,0.2);
   }
-
 }
 
 .swiper-button-next {
@@ -688,37 +713,75 @@ section.sns {
   left: 0;
 }
 
-
 .swiper_main_outerWrap {
   position: relative;
+  width: 100%;
 
   .swiper_navigation_container {
-    width: 75rem;
+    width: 0%;
     position: absolute;
-    height: 100%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    top: 50%;
-    z-index: 3;
+    z-index: 2;
   }
 
   .swiper-button-next {
-    right: rem(-80);
+    transform: translateX(rem(680));
   }
 
   .swiper-button-prev {
-    left: rem(-80);
+    transform: translateX(rem(-680));
   }
 
+  .swiper-pagination__mainSection{
+    display: none;
+  }
 }
 
 
+
+//리뷰 후기 swiper
 .swiper_review_outerWrap {
   padding: 0 rem(50) 0;
   position: relative;
 
   .swiper_review {
     padding: rem(60) 0 rem(80);
+    position: relative;
+  }
+  
+  .swiper_review_bg{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: rem(340);
+    height: rem(460);
+    border-radius: rem(8);
+    background-color: #fff;
+    box-shadow: 0.3125rem 0.3125rem 1.25rem rgb(0 0 0 / 10%);
+  }
+
+  .swiper_review_box{
+    width: rem(240);
+    height: rem(500);
+  }
+
+  .swiper_review_img{
+    margin: rem(40) auto 0;
+    width: rem(240);
+    height: rem(240);
+  }
+
+  .swiper_review_txt{
+    margin: rem(20) auto;
+    text-align: center;
+  }
+
+  p{
+    margin: rem(20) auto;
+    text-align: center;
+    width: 85%;
   }
 
   .swiper-button-prev,
@@ -730,7 +793,6 @@ section.sns {
     &:hover {
       opacity: 0.9;
     }
-
   }
 
   .swiper-button-prev {
@@ -754,71 +816,298 @@ section.sns {
   }
 
   .swiper-pagination__reviewSection {
-    bottom: rem(22) !important;
+    bottom: rem(70) !important;
 
     span {
-      width: rem(10);
-      height: rem(10);
+      width: rem(25);
+      height: rem(3);
+      margin: 0 !important;
+      border-radius: 0;
     }
   }
-
 }
 
 
+
+//SNS swiper
+.swiper_button_prev_sns, .swiper_button_next_sns {
+  cursor: pointer;
+  position: absolute;
+  border-radius: 100%;
+  width: rem(28);
+  height: rem(28);
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  box-shadow: none;
+  transition-property: box-shadow, opacity;
+  transition-timing-function: ease;
+  transition-duration: 0.2s;
+  opacity: 0.2;
+  &:hover{
+    opacity: 0.9;
+    box-shadow: 0 0 rem(20) 0 rgba(0,0,0,0.2);
+  }
+}
+  
 .swiper_sns_outerWrap {
   position: relative;
 
-  .swiper-button-prev,
-  .swiper-button-next {
-    width: rem(28);
-    height: rem(28);
+  .swiper_button_prev_sns {
+    transform: translate(-50%, -50%) translateX(rem(-600));
   }
 
-  .swiper-button-prev {
-    left: rem(-14)
+  .swiper_button_next_sns {
+    transform: translate(-50%, -50%) translateX(rem(588));
   }
 
-  .swiper-button-next {
-    right: rem(-14)
+  .swiper_sns_box{
+  }
+
+  .swiper_sns_img{
+    width: rem(244);
+    height: rem(244);
   }
 }
+
 
 
 /* RESPONSIVE */
-@media (max-width: 1200px) {
+@media only screen and (min-width:rem(100)) and (max-width: rem(1200)) {
+  
+//최상단 그림배너
+  .banner {
+    .inner {
+      height: rem(300);
+    }
+  }
 
+
+  
+  //최상단 swiper pagination
+  .swiper_main_outerWrap {
+    .swiper-pagination__mainSection{
+      display: block;
+      color: white;
+      font-weight: 300;
+      transform: translateX(rem(-30));
+      text-align: right;
+    }
+    
+    .swiper-pagination__mainSection::before{
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: rem(-34);
+      transform: translate(-50%, -50%);
+      width: rem(50);
+      height: rem(25);
+      border-radius: rem(30);
+      background-color: black;
+      opacity: .2;
+      z-index: -1;
+    }
+  }
+
+  .swiper_recipe_outerWrap {
+    .swiper_recipe{
+      left: rem(20);
+    }
+  }
+
+
+    
+//고민
+  .subtitle {
+    display: none;
+  }
+
+  .clientWorry {
+    height: rem(1500);
+    .title_section {
+      .btn_main {
+        display: none;
+      }
+    }
+
+    .cont_section {
+      ul{
+        li{
+          float: none;
+        }
+      }
+    }
+    
+    .card {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      margin-top: rem(30);
+      padding: rem(40) rem(30);
+      width: rem(500);
+      max-width: rem(500);
+    }
+    li:nth-child(2) .card{
+      left: 50%;
+      transform: translateX(-50%) translateY(100%) translateY(rem(40));
+    }
+  }
+    
+  .cont-right {
+    float: none;
+  }
+
+    
+
+//리뷰 후기
+  .swiper_review_outerWrap {
+    
+    padding: 0 rem(50) 0;
+    position: relative;
+
+    .swiper_review {
+      padding: rem(60) 0 rem(80);
+      position: relative;
+      width: rem(720);
+    }
+    
+    .swiper_review_bg{
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: rem(340);
+      height: rem(460);
+      border-radius: rem(8);
+      background-color: #fff;
+      box-shadow: 0.3125rem 0.3125rem 1.25rem rgb(0 0 0 / 10%);
+    }
+    .swiper_review_box{
+      width: rem(240);
+      height: rem(500);
+    }
+  }  
+
+
+
+//이용방법
+  .Howtouse{
+    .cont_body {
+
+      > ul {
+        grid-template-columns: repeat(1, 100%);
+        
+        > li {
+          margin-top: rem(50);
+
+
+          &:nth-child(2) {
+            margin-top: rem(50);
+          }
+
+          .card{
+            .details {
+              margin: rem(50) auto 0;
+              width: 50%;
+              .title_1 {
+                text-align: center;
+              }
+    
+              .title_2 {
+                text-align: center;
+              }
+    
+              .main_text {
+                text-align: center;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+
+
+//SNS
+  .swiper_sns {
+    width: rem(500);
+  }
+
+  .swiper_sns_outerWrap {
+    .swiper_button_prev_sns {
+      transform: translate(-50%, -50%) translateX(rem(-250));
+
+    }
+
+    .swiper_button_next_sns {
+      transform: translate(-50%, -50%) translateX(rem(250));
+    }
+  }
 }
 
-/* @media (max-width:1080px){
 
+
+@media only screen and (min-width:rem(100)) and (max-width: rem(900)) {
+  
+//최상단 그림배너
+  .banner {
+    .inner {
+      height: rem(200);
+    }
+  }
+  
+
+
+//레시피 설명 4가지 사진
+  .swiper_recipe_outerWrap {
+    .swiper_recipe{
+      left: rem(60);
+    }
+  }
+
+
+
+//리뷰 후기
+  .swiper_review_outerWrap {
+    .swiper_review {
+      width: rem(340);
+    }
+  }
 }
 
-@media (max-width:768px){
 
-} */
 
-@media (max-width: 600px) {
-  section.recipe_info {
-    padding: rem(60) 0 rem(50)
+@media only screen and (min-width:rem(100)) and (max-width: rem(600)) {
+  
+//최상단 그림배너
+  .banner {
+    .inner {
+      height: rem(400);
+    }
   }
-  section.barfraw {
-    padding: rem(40) 0 rem(80)
-  }
-  section.barfgood {
-    padding: rem(120) 0 rem(132)
-  }
-  section.difference {
-    padding: rem(60) 0 rem(50)
-  }
-  section.difference2 {
-    padding: rem(40) 0 rem(50)
-  }
-  // section.difference3{padding: rem(120) 0 rem(150)}
-  // section.clientWorry{padding: rem(120) 0 rem(120)}
-  // section.review{padding: rem(150) 0 rem(200)}
-  // section.Howtouse{padding: rem(120) 0 rem(120)}
 
-  // section.sns{padding: rem(114) 0 rem(190)}
+
+
+//최상위 그림배너 모바일 이미지 테스트
+  .main_img{
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  
+
+
+//레시피 설명 4가지 사진
+  .swiper_recipe_outerWrap {
+    .swiper_recipe{
+      width: rem(300);
+      left: rem(20);
+    }
+  }
+
+
+
+//바프생식이란?
   .barfraw {
     .inner {
       display: block;
@@ -837,6 +1126,8 @@ section.sns {
         p, h1, h3 {
           position: relative;
           top: initial;
+          text-align: center;
+          padding: rem(10);
         }
 
         P {
@@ -845,12 +1136,51 @@ section.sns {
       }
     }
   }
+  
 
 
+//바프생식 바뀌는 점
+  .barfgood {
+    height: rem(700); 
+
+    .inner {
+      grid-template-columns: 1fr;
+      grid-gap: rem(100);
+
+      .barfgood_imgbox{
+        .barfood1 {
+          display: none;
+        }
+        .barfood2 {
+          display: block;
+        }
+      }
+
+      .leftbox {
+        margin: 0 auto;
+        width: 100%;
+        .barfgood_textbox{
+          margin-top: 0;
+        }
+      }
+      
+      .rightbox {
+        margin: 0 auto;
+      }
+    }
+  }
+  
+
+
+//차별점 그림 3개
   .difference2 {
     ul {
       display: block;
       width: 100%;
+
+      .title {
+        margin-top: rem(20);
+      }
 
       li {
         margin: 0;
@@ -858,34 +1188,82 @@ section.sns {
       }
 
       .text {
-        padding-top: rem(30);
+        padding-top: rem(40);
         font-size: rem(16);
         height: rem(80);
+        padding-left: rem(50);
+        padding-right: rem(50);
       }
     }
   }
 
+
+
+//프리미엄바프
   .difference3 {
     .title {
-      width: rem(148);
       margin: 0 auto;
-      font-size: rem(38);
-      font-size: 7.4vw;
       letter-spacing: rem(1);
     }
 
+    br{
+      display: inline-block;
+    }
+
     .image {
-      margin-left: rem(10);
-      margin-right: rem(125);
-      min-width: rem(200);
-      display: block;
-      position: relative;
+      transform: translate(rem(-180), rem(-45));
+      width: 50%;
+    }
+
+    .textbox {
+      position: absolute;
       top: 0;
-      left: 0;
+      right: 0;
+      transform: translate(calc(100% - #{rem(33)}), 30%);
+
+      .text {
+        li {
+          left: rem(-70);
+          top: rem(-10);
+          color: var(--color-main);
+          font-size: rem(14);
+          display: block;
+          position: relative;
+          margin-bottom: rem(20);
+          padding-left: rem(130);
+          width: 100%;
+        }
+
+        li::before {
+          content: "";
+          width: rem(40);
+          height: rem(1);
+          background-color: var(--color-main);
+          position: absolute;
+          top: 0;
+          left: rem(80);
+          bottom: 0;
+          margin: auto;
+        }
+
+        li::after {
+          content: "";
+          width: rem(8);
+          height: rem(8);
+          background-color: var(--color-main);
+          border-radius: 100%;
+          position: absolute;
+          top: rem(1);
+          left: rem(78);
+          margin: auto;
+        }
+      }
     }
   }
 
 
+
+//고민
   .clientWorry {
     .cont-left {
       width: 100%;
@@ -895,7 +1273,6 @@ section.sns {
     .cont-right {
       width: 100%;
     }
-
 
     .cont_section {
       > ul {
@@ -921,7 +1298,6 @@ section.sns {
         height: rem(100);
       }
 
-
       .details {
         ul {
           // height: rem(360);
@@ -936,10 +1312,134 @@ section.sns {
   }
 
 
+
+//리뷰 후기
+  .swiper_review_outerWrap {
+    height: rem(600);
+
+    a {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: calc(-100% + #{rem(8)});
+      content: "더보기";
+      color: #fff;
+      font-size: rem(14);
+      width: 100%;
+      white-space: nowrap;
+    }
+
+    .swiper_review_bg{
+      width: rem(280);
+      height: rem(430);
+      border-radius: rem(8);
+    }
+
+    .swiper_review{
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: rem(280);
+    }
+    
+    .swiper_box{
+      width: 100%;
+    }
+
+    .swiper_review_img{
+      margin: rem(40) auto 0;
+      width: rem(180);
+      height: rem(180);
+    }
+  }
+
+
+
+//이용방법
+  .Howtouse{
+    .cont_body{
+      > ul {
+        grid-template-columns: repeat(1, 100%);
+        
+        > li {
+          margin-top: rem(50);
+          .card{
+            .details {
+              width: 70%;
+            }
+
+            .img-wrap {
+              width: rem(280);
+              height: rem(280);
+            }
+          }
+        }
+      }
+    }
+  }
+
+
+
+//SNS
+  .swiper_sns_outerWrap {
+    .swiper_button_prev_sns {
+      transform: translate(-50%, -50%) translateX(rem(-170));
+
+    }
+
+    .swiper_button_next_sns {
+      transform: translate(-50%, -50%) translateX(rem(170));
+    }
+    .swiper_sns{
+      width: rem(340);
+    }
+    .swiper_sns_img{
+      width: rem(160);
+      height: rem(160);
+    }
+  }
+
+
+
+  section.recipe_info {
+    padding: rem(60) 0 rem(50)
+  }
+
+  section.barfraw {
+    padding: rem(40) 0 rem(80)
+  }
+
+  section.barfgood {
+    padding: rem(120) 0 rem(315)
+  }
+
+  // section.difference {
+  //   padding: rem(60) 0 rem(50)
+  // }
+
+  section.difference2 {
+    padding: rem(40) 0 rem(50)
+  }
+
+  // section.difference3{padding: rem(120) 0 rem(150)}
+  // section.clientWorry{padding: rem(120) 0 rem(120)}
+  // section.review{padding: rem(150) 0 rem(200)}
+  // section.Howtouse{padding: rem(120) 0 rem(120)}
+  // section.sns{padding: rem(114) 0 rem(190)}
 }
 
 
-@media (max-width: 320px) {
 
+@media (max-width: rem(400)) {
+  // .swiper_review_outerWrap {
+
+  //   .swiper-button-prev {
+  //     display: none;
+  //   }
+  
+  //   .swiper-button-next {
+  //     display: none;
+  //   }
+  // }
 }
 

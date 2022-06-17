@@ -1,0 +1,68 @@
+$browser-context: 16; // html font-size
+@function rem($px, $context: $browser-context) {
+  @return #{$px / $context}rem;
+}
+
+
+
+@media (max-width: 1200px) {
+  
+  .recipe_info {
+    ul {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }  
+}
+
+
+@media (max-width: 600px) {
+  .recipe_info {
+    
+    .starter_banner_test{
+      margin-top: 0px;
+    }
+  }  
+}
+
+
+
+
+// .btn{
+//   background-color: red;
+//   section{font-size: 50px;}
+//   .test{
+//     background-color: green;
+//     position: relative;
+//     &.test2{background-color: blue;}
+//     &::after{
+//       content: "";
+//       position: absolute;
+//       background-color: yellow;
+//       width: rem(20);
+//       height: 20px;
+
+//     }
+//   }
+  
+// }
+
+
+// .test{
+//   &::after{
+//     content: "";
+//     position: absolute;
+//     background-color: yellow;
+//     width: 20px;
+//     height: 20px;
+//   }
+// }
+
+// .test::after{
+//   content: "";
+//   position: absolute;
+//   background-color: yellow;
+//   width: 20px;
+//   height: 20px;
+// }
+
+// .mySection {background-color: #f1f2f3;}

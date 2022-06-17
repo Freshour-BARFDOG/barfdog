@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import MetaTitle from "../components/atoms/MetaTitle";
 import Styles from './mainPage.module.scss'
+import s from './mainPage_mobile.module.scss'
 import Layout from '/src/components/common/Layout'
 import Wrapper from "/src/components/common/Wrapper";
 import Link from 'next/link';
@@ -31,6 +32,7 @@ import StartBanner from '/public/img/starterBanner.png';
 import SubscribeBtn from '/public/img/subscribeBtn.png'
 import Barfraw from '/public/img/barfraw.png'
 import Barfgood1 from '/public/img/barfgood1.png'
+import Barfgood2 from '/public/img/barfgood2.png'
 import Halftest from '/public/img/halftest.png'
 import LeftPic from '/public/img/leftPic.png'
 import midPic from '/public/img/midPic.png'
@@ -39,10 +41,11 @@ import barfPack from '/public/img/barfPack.png'
 
 
 
-
+// 메인 Swiper
 function Swiper_main() {
   const navPrev_mainRef = useRef(null);
   const navNext_mainRef = useRef(null);
+  //const [isMobile, setIsMobile] = useState(false);
 
   const AllImageData = [
     {
@@ -63,7 +66,6 @@ function Swiper_main() {
     },
   ];
 
-
   const swiperSettings_main = {
     className: `${Styles.swiper_main}`,
     spaceBetween: 0,
@@ -76,9 +78,11 @@ function Swiper_main() {
       prevEl: navPrev_mainRef.current,
       nextEl: navNext_mainRef.current,
     },
-    modules: [Navigation, EffectFade],
+    modules: [Pagination, Navigation, EffectFade],
+    pagination: {
+      type: "fraction",
+    },
   };
-
 
   return (
     <div className={Styles.swiper_main_outerWrap}>
@@ -100,9 +104,18 @@ function Swiper_main() {
         onInit={(swiper) => {
           swiper.params.navigation.prevEl = navPrev_mainRef.current;
           swiper.params.navigation.nextEl = navNext_mainRef.current;
+          swiper.params.pagination.el.classList.add(
+            "swiper-pagination__mainSection"
+          );
+          swiper.params.pagination.el.classList.add(
+            Styles["swiper-pagination__mainSection"]
+          );
           swiper.navigation.destroy();
           swiper.navigation.init();
           swiper.navigation.update();
+          swiper.pagination.destroy();
+          swiper.pagination.init();
+          swiper.pagination.update();
         }}
         // onRealIndexChange={() => {
         //   console.log("change!");
@@ -123,6 +136,15 @@ function Swiper_main() {
                         layout="fill"
                         alt="메인배너 이미지"
                       ></Image>
+                      <div className={Styles.main_img}>
+                        <Image
+                          src={require("/public/img/pages/home/home_main_test.png")}
+                          objectFit="cover"
+                          objectPosition="50% 50%"
+                          layout="fill"
+                          alt="카드 이미지"
+                        />
+                      </div>
                     </a>
                   </Link>
                 </div>
@@ -137,11 +159,163 @@ function Swiper_main() {
 
 
 
+// 레시피 Swiper
+function Swiper_recipe() {
+  const [isMobile, setIsMobile] = useState(false);
+  
+  const swiperSettings_recipe = {
+    className: `${Styles.swiper_recipe}`,
+    slidesPerView: 1,
+    centeredSlides: false, // 가운데 갈지 말지 고민
+    modules: [Navigation], //존재하면 쓸수있음
+    breakpoints: { //반응형 조건 속성
+      300: {
+        slidesPerView: 1,
+        spaceBetween: 0,
+      },
+      601: { //601 이상일 경우
+        slidesPerView: 2, //레이아웃 2열
+        spaceBetween: -80,
+      },
+      901: {
+        slidesPerView: 3,
+        spaceBetween: -40,
+      },
+      1201: {
+        slidesPerView: 4,
+        spaceBetween: 20,
+      },
+    }
+  };
+
+  useEffect(() => {
+    window.innerWidth <= 600 ? setIsMobile(true) : setIsMobile(false);
+  }, [isMobile]);
+
+  return (
+    <div className={Styles.swiper_recipe_outerWrap}>
+      
+      <Swiper {...swiperSettings_recipe}>
+        <SwiperSlide
+          style={{
+            width: "260px",
+            height: "inherit",
+          }}
+        >
+            <div className={Styles.recipe_a}>
+              <div className={Styles.recipe_box}>
+                <div className={Styles.img_wrap}>
+                  <Image
+                    src={StartBanner}
+                    objectFit=""
+                    layout=""
+                    alt=""
+                  />
+                  <div className={Styles.secondbox}>스타터 프리미엄</div>
+                        <div className={Styles.pbox}>
+                          <p>#까다로운 식습관 개선</p>
+                          <p>#기관지 염증 완화</p>
+                          <p>#건강한 성장, 건강한 영양</p>
+                        </div>
+                  </div>
+                  <div className={Styles.recipe_btn}>
+                    + 더보기
+                  </div>
+              </div>
+            </div>
+        </SwiperSlide>
+        <SwiperSlide
+          style={{
+            height: "inherit",
+          }}
+        >
+            <div className={Styles.recipe_a}>
+              <div className={Styles.recipe_box}>
+                <div className={Styles.img_wrap}>
+                  <Image
+                    src={StartBanner}
+                    objectFit=""
+                    layout=""
+                    alt=""
+                  />
+                  <div className={Styles.secondbox}>스타터 프리미엄</div>
+                        <div className={Styles.pbox}>
+                          <p>#까다로운 식습관 개선</p>
+                          <p>#기관지 염증 완화</p>
+                          <p>#건강한 성장, 건강한 영양</p>
+                        </div>
+                  </div>
+                  <div className={Styles.recipe_btn}>
+                    + 더보기
+                  </div>
+              </div>
+            </div>
+        </SwiperSlide>
+        <SwiperSlide
+          style={{
+            height: "inherit",
+          }}
+        >
+            <div className={Styles.recipe_a}>
+              <div className={Styles.recipe_box}>
+                <div className={Styles.img_wrap}>
+                  <Image
+                    src={StartBanner}
+                    objectFit=""
+                    layout=""
+                    alt=""
+                  />
+                  <div className={Styles.secondbox}>스타터 프리미엄</div>
+                        <div className={Styles.pbox}>
+                          <p>#까다로운 식습관 개선</p>
+                          <p>#기관지 염증 완화</p>
+                          <p>#건강한 성장, 건강한 영양</p>
+                        </div>
+                  </div>
+                  <div className={Styles.recipe_btn}>
+                    + 더보기
+                  </div>
+              </div>
+            </div>
+        </SwiperSlide>
+        <SwiperSlide
+          style={{
+            height: "inherit",
+          }}
+        >
+            <div className={Styles.recipe_a}>
+              <div className={Styles.recipe_box}>
+                <div className={Styles.img_wrap}>
+                  <Image
+                    src={StartBanner}
+                    objectFit=""
+                    layout=""
+                    alt=""
+                  />
+                  <div className={Styles.secondbox}>스타터 프리미엄</div>
+                        <div className={Styles.pbox}>
+                          <p>#까다로운 식습관 개선</p>
+                          <p>#기관지 염증 완화</p>
+                          <p>#건강한 성장, 건강한 영양</p>
+                        </div>
+                  </div>
+                  <div className={Styles.recipe_btn}>
+                    + 더보기
+                  </div>
+              </div>
+            </div>
+        </SwiperSlide>
+        
+        {/* <SwiperSlide style={{height:"244px",backgroundColor:'var(--color-bg)'}}>Slide 5</SwiperSlide> */}
+        {/* <SwiperSlide style={{height:"244px",backgroundColor:'var(--color-bg)'}}>Slide 6</SwiperSlide> */}
+      </Swiper>
+    </div>
+  );
+}
 
 
 
-
-
+// 리뷰 Swiper
 function Swiper_review() {
 
   const navPrevRef = useRef(null);
@@ -154,15 +328,12 @@ function Swiper_review() {
       window.innerWidth <= 600 ? setIsMobile(true) : setIsMobile(false);
     }, [isMobile, isReachedEnd]);
 
-
-
   const swiperSettings_review = {
     className: `${Styles.swiper_review}`,
-    spaceBetween: 40,
+    spaceBetween: 0,
+    slidesPerView: 1,
     // loop: true,
     centeredSlides: false,
-    slidesPerView: isMobile ? 1 : 3,
-    //모바일 에서는 1개 pc에서는 3개
     pagination: {
       clickable: true,
     },
@@ -171,9 +342,26 @@ function Swiper_review() {
       nextEl: navNextRef.current,
     },
     modules: [Pagination, Navigation],
-    //존재하면 쓸수있음
+    breakpoints: { //반응형 조건 속성
+      
+      100: {
+        slidesPerView: 1, 
+        spaceBetween: 40,
+      },
+      601: { 
+        slidesPerView: 1, 
+        spaceBetween: 40,
+      },
+      901: {
+        slidesPerView: 2,
+        spaceBetween: 40,
+      },
+      1201: {
+        slidesPerView: 3,
+        spaceBetween: 40,
+      },
+    }
   };
-
 
   const ArrowRight_withLink = () => {
     return (
@@ -204,7 +392,6 @@ function Swiper_review() {
     setIsReachedEnd(true);
   }
 
-
   return (
     <div className={Styles.swiper_review_outerWrap}>
       <i className={Styles["swiper-button-prev"]} ref={navPrevRef}>
@@ -234,109 +421,135 @@ function Swiper_review() {
         onActiveIndexChange={hideMoreView}
         onReachEnd={showMoreView}
       >
-        <SwiperSlide className={Styles.slide}>
-          <div className={`${Styles["img-wrap"]} img-wrap`}>
-            <Image
-              src={require("/public/img/pages/home/home_review_1.png")}
-              objectFit="cover"
-              layout="fill"
-              alt="카드 이미지"
-            />
+        <SwiperSlide className={Styles.swiper_review_box}>
+          <div className={Styles.swiper_review_bg}>
+            <div className={Styles.swiper_review_img}>
+              <Image
+                src={require("/public/img/pages/home/home_review_1.png")}
+                objectFit=""
+                layout=""
+                alt="카드 이미지"
+              />
+            </div>
+            <div className={Styles.swiper_review_txt}>
+              <Image
+                src={require("/public/img/pages/home/home_review_quotation.png")}
+                objectFit=""
+                layout=""
+                alt="카드 이미지"
+              />
+            </div>
+            <p>저희강아지 밥 다먹고 빈그릇 핥는거 7년 키우면서 첨봄.. 굿굿</p>
           </div>
-          <div className={`${Styles["img-wrap2"]} img-wrap`}>
-            <Image
-              src={require("/public/img/pages/home/home_review_quotation.png")}
-              objectFit="contain"
-              layout="fill"
-              alt="카드 이미지"
-            />
-          </div>
-          <p>저희강아지 밥 다먹고 빈그릇 핥는거 7년 키우면서 첨봄.. 굿굿</p>
         </SwiperSlide>
-        <SwiperSlide className={Styles.slide}>
-          <div className={`${Styles["img-wrap"]} img-wrap`}>
-            <Image
-              src={require("/public/img/pages/home/home_review_2.png")}
-              objectFit="cover"
-              layout="fill"
-              alt="카드 이미지"
-            />
+        <SwiperSlide className={Styles.swiper_review_box}>
+          <div className={Styles.swiper_review_bg}>
+            <div className={Styles.swiper_review_img}>
+              <Image
+                src={require("/public/img/pages/home/home_review_2.png")}
+                objectFit=""
+                layout=""
+                alt="카드 이미지"
+              />
+            </div>
+            <div className={Styles.swiper_review_txt}>
+              <Image
+                src={require("/public/img/pages/home/home_review_quotation.png")}
+                objectFit=""
+                layout=""
+                alt="카드 이미지"
+              />
+            </div>
+            <p>진짜 잘먹어요 ;; 생식은 다 잘먹는다고해서 타업체샀다가 안먹어서
+            포기했는데ㅠㅠ사료는 눈물터져서 다시 막 찾다가 바프독차? 집...</p>
           </div>
-          <div className={`${Styles["img-wrap2"]} img-wrap`}>
-            <Image
-              src={require("/public/img/pages/home/home_review_quotation.png")}
-              objectFit="contain"
-              layout="fill"
-              alt="카드 이미지"
-            />
-          </div>
-          <p>
-            진짜 잘먹어요 ;; 생식은 다 잘먹는다고해서 타업체샀다가 안먹어서
-            포기했는데ㅠㅠ사료는 눈물터져서 다시 막 찾다가 바프독차? 집...
-          </p>
         </SwiperSlide>
-        <SwiperSlide className={Styles.slide}>
-          <div className={`${Styles["img-wrap"]} img-wrap`}>
-            <Image
-              src={require("/public/img/pages/home/home_review_3.png")}
-              objectFit="cover"
-              layout="fill"
-              alt="카드 이미지"
-            />
+        <SwiperSlide className={Styles.swiper_review_box}>
+          <div className={Styles.swiper_review_bg}>
+            <div className={Styles.swiper_review_img}>
+              <Image
+                src={require("/public/img/pages/home/home_review_3.png")}
+                objectFit=""
+                layout=""
+                alt="카드 이미지"
+              />
+            </div>
+            <div className={Styles.swiper_review_txt}>
+              <Image
+                src={require("/public/img/pages/home/home_review_quotation.png")}
+                objectFit=""
+                layout=""
+                alt="카드 이미지"
+              />
+            </div>
+            <p>친구네 시바에게 선물했는데 생식 처음 도전이었는데도 아주 잘
+            먹었다고 합니다. 친구가 마진도 생각 안 하시는 거 같다고 아가는 잘...</p>
           </div>
-          <div className={`${Styles["img-wrap2"]} img-wrap`}>
-            <Image
-              src={require("/public/img/pages/home/home_review_quotation.png")}
-              objectFit="contain"
-              layout="fill"
-              alt="카드 이미지"
-            />
-          </div>
-          <p>
-            친구네 시바에게 선물했는데 생식 처음 도전이었는데도 아주 잘
-            먹었다고 합니다. 친구가 마진도 생각 안 하시는 거 같다고 아가는 잘...
-          </p>
         </SwiperSlide>
-        <SwiperSlide className={Styles.slide}>
-          <div className={`${Styles["img-wrap"]} img-wrap`}>
-            <Image
-              src={require("/public/img/pages/home/home_review_1.png")}
-              objectFit="cover"
-              layout="fill"
-              alt="카드 이미지"
-            />
+        <SwiperSlide className={Styles.swiper_review_box}>
+          <div className={Styles.swiper_review_bg}>
+            <div className={Styles.swiper_review_img}>
+              <Image
+                src={require("/public/img/pages/home/home_review_1.png")}
+                objectFit=""
+                layout=""
+                alt="카드 이미지"
+              />
+            </div>
+            <div className={Styles.swiper_review_txt}>
+              <Image
+                src={require("/public/img/pages/home/home_review_quotation.png")}
+                objectFit=""
+                layout=""
+                alt="카드 이미지"
+              />
+            </div>
+            <p>저희강아지 밥 다먹고 빈그릇 핥는거 7년 키우면서 첨봄.. 굿굿</p>
           </div>
-          <div className={`${Styles["img-wrap2"]} img-wrap`}>
-            <Image
-              src={require("/public/img/pages/home/home_review_quotation.png")}
-              objectFit="contain"
-              layout="fill"
-              alt="카드 이미지"
-            />
-          </div>
-          <p>저희강아지 밥 다먹고 빈그릇 핥는거 7년 키우면서 첨봄..</p>
         </SwiperSlide>
-        <SwiperSlide className={Styles.slide}>
-          <div className={`${Styles["img-wrap"]} img-wrap`}>
-            <Image
-              src={require("/public/img/pages/home/home_review_2.png")}
-              objectFit="cover"
-              layout="fill"
-              alt="카드 이미지"
-            />
+        <SwiperSlide className={Styles.swiper_review_box}>
+          <div className={Styles.swiper_review_bg}>
+            <div className={Styles.swiper_review_img}>
+              <Image
+                src={require("/public/img/pages/home/home_review_2.png")}
+                objectFit=""
+                layout=""
+                alt="카드 이미지"
+              />
+            </div>
+            <div className={Styles.swiper_review_txt}>
+              <Image
+                src={require("/public/img/pages/home/home_review_quotation.png")}
+                objectFit=""
+                layout=""
+                alt="카드 이미지"
+              />
+            </div>
+            <p>진짜 잘먹어요 ;; 생식은 다 잘먹는다고해서 타업체샀다가 안먹어서
+            포기했는데ㅠㅠ사료는 눈물터져서 다시 막 찾다가 바프독차? 집...</p>
           </div>
-          <div className={`${Styles["img-wrap2"]} img-wrap`}>
-            <Image
-              src={require("/public/img/pages/home/home_review_quotation.png")}
-              objectFit="contain"
-              layout="fill"
-              alt="카드 이미지"
-            />
+        </SwiperSlide>
+        <SwiperSlide className={Styles.swiper_review_box}>
+          <div className={Styles.swiper_review_bg}>
+            <div className={Styles.swiper_review_img}>
+              <Image
+                src={require("/public/img/pages/home/home_review_3.png")}
+                objectFit=""
+                layout=""
+                alt="카드 이미지"
+              />
+            </div>
+            <div className={Styles.swiper_review_txt}>
+              <Image
+                src={require("/public/img/pages/home/home_review_quotation.png")}
+                objectFit=""
+                layout=""
+                alt="카드 이미지"
+              />
+            </div>
+            <p>친구네 시바에게 선물했는데 생식 처음 도전이었는데도 아주 잘
+            먹었다고 합니다. 친구가 마진도 생각 안 하시는 거 같다고 아가는 잘...</p>
           </div>
-          <p>
-            진짜 잘먹어요 ;; 생식은 다 잘먹는다고해서 타업체샀다가 안먹어서
-            포기했는데ㅠㅠ사료는 눈물터져서 다시 막 찾다가 바프독차? 집...
-          </p>
         </SwiperSlide>
       </Swiper>
     </div>
@@ -345,25 +558,40 @@ function Swiper_review() {
 
 
 
-
-
+// SNS Swiper
 function Swiper_sns() {
   const navPrevRef = useRef(null);
   const navNextRef = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
   
-
   const swiperSettings_sns = {
     className: `${Styles.swiper_sns}`,
-    spaceBetween: 60,
     loop: true,
+    spaceBetween: 0,
     centeredSlides: false, // 가운데 갈지 말지 고민
-    slidesPerView: isMobile ? 2 : 4, //모바일 에서는 1개 pc에서는 2개
+    slidesPerView: 2,
     navigation: {
       prevEl: navPrevRef.current,
       nextEl: navNextRef.current,
     },
-    modules: [Navigation], //존재하면 쓸수있음
+    modules: [Navigation], 
+    breakpoints: {
+        
+      100: {
+        slidesPerView: 2, 
+        spaceBetween: 20,
+      },
+      601: {
+        slidesPerView: 2, 
+        spaceBetween: 20,
+      },
+      1201: {
+        slidesPerView: 4,  
+        spaceBetween: 60,
+      },
+    },
+    observer: true,
+    observeParents: true,
   };
 
   useEffect(() => {
@@ -372,83 +600,67 @@ function Swiper_sns() {
 
   return (
     <div className={Styles.swiper_sns_outerWrap}>
-      <i className={Styles["swiper-button-prev"]} ref={navPrevRef}>
+      <i className={Styles.swiper_button_prev_sns} ref={navPrevRef}>
         <ArrowLeft_s />
       </i>
-      <i className={Styles["swiper-button-next"]} ref={navNextRef}>
+      <i className={Styles.swiper_button_next_sns} ref={navNextRef}>
         <ArrowRight_s />
       </i>
       <Swiper {...swiperSettings_sns}>
-        <SwiperSlide
-          style={{
-            height: "244px",
-            backgroundColor: "var(--color-bg)",
-          }}
+        <SwiperSlide className={Styles.swiper_sns_box}
         >
           <Link href="/" passHref>
             <a>
-              <div className={`${Styles["img-wrap"]} img-wrap`}>
+              <div className={Styles.swiper_sns_img}>
                 <Image
                   src={require("/public/img/pages/home/home_sns_1.png")}
-                  objectFit="cover"
-                  layout="fill"
+                  objectFit=""
+                  layout=""
                   alt="카드 이미지"
                 />
               </div>
             </a>
           </Link>
         </SwiperSlide>
-        <SwiperSlide
-          style={{
-            height: "244px",
-            backgroundColor: "var(--color-bg)",
-          }}
+        <SwiperSlide className={Styles.swiper_sns_box}
         >
           <Link href="/" passHref>
             <a>
-              <div className={`${Styles["img-wrap"]} img-wrap`}>
+               <div className={Styles.swiper_sns_img}>
                 <Image
                   src={require("/public/img/pages/home/home_sns_2.png")}
-                  objectFit="cover"
-                  layout="fill"
+                  objectFit=""
+                  layout=""
                   alt="카드 이미지"
                 />
               </div>
             </a>
           </Link>
         </SwiperSlide>
-        <SwiperSlide
-          style={{
-            height: "244px",
-            backgroundColor: "var(--color-bg)",
-          }}
+        <SwiperSlide className={Styles.swiper_sns_box}
         >
           <Link href="/" passHref>
             <a>
-              <div className={`${Styles["img-wrap"]} img-wrap`}>
+              <div className={Styles.swiper_sns_img}>
                 <Image
                   src={require("/public/img/pages/home/home_sns_3.png")}
-                  objectFit="cover"
-                  layout="fill"
+                  objectFit=""
+                  layout=""
                   alt="카드 이미지"
                 />
               </div>
             </a>
           </Link>
         </SwiperSlide>
-        <SwiperSlide
-          style={{
-            height: "244px",
-            backgroundColor: "var(--color-bg)",
-          }}
+        <SwiperSlide className={Styles.swiper_sns_box}
         >
           <Link href="/" passHref>
             <a>
-              <div className={`${Styles["img-wrap"]} img-wrap`}>
+              <div className={Styles.swiper_sns_img}>
                 <Image
                   src={require("/public/img/pages/home/home_sns_4.png")}
-                  objectFit="cover"
-                  layout="fill"
+                  objectFit=""
+                  layout=""
                   alt="카드 이미지"
                 />
               </div>
@@ -464,20 +676,13 @@ function Swiper_sns() {
 
 
 
-
-
-
 function Home() {
 
   const [isMobile, setIsMobile] = useState(false);
 
-
   useEffect(() => {
     window.innerWidth <= 600 ? setIsMobile(true) : setIsMobile(false);
   }, [isMobile]);
-
-
-
 
   return (
     <>
@@ -489,140 +694,20 @@ function Home() {
           <Swiper_main />
         </Wrapper>
 
+
         {/* 섹션1 레시피 4가지 소개*/}
         <Wrapper>
-          <section className={Styles.recipe_info}>
+          <section className={`${Styles.recipe_info} $`}>
             <div className={Styles.inner}>
-              <p className={Styles.text}>&quot;진짜 생식&#34;</p>
-              <p className={Styles.text}>바프독의 4가지 레시피</p>
-              {/* 바프독의 4가지 레시피 소개 */}
-              <div className={Styles.ulbox}>
-                <ul className="clearfix">
-                  <li>
-                    <div className={Styles.starter_banner}>
-                      <div className={Styles.box}>
-                        <div className={Styles.firstbox}>
-                          <Image
-                            src={StartBanner}
-                            objectFit="cover"
-                            layout="fill"
-                            alt=""
-                          ></Image>
-                        </div>
-                        <div className={Styles.secondbox}>스타터 프리미엄</div>
-                        <div className={Styles.pbox}>
-                          <p>#까다로운 식습관 개선</p>
-                          <p>#기관지 염증 완화</p>
-                          <p>#건강한 성장, 건강한 영양</p>
-                        </div>
-                        <div className={Styles.btnbox}>
-                          <div className={Styles.btn}>+ 더보기</div>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-
-                  <li>
-                    <div className={Styles.starter_banner}>
-                      <div className={Styles.box}>
-                        <div className={Styles.firstbox}>
-                          <Image
-                            src={StartBanner}
-                            objectFit="cover"
-                            layout="fill"
-                            alt=""
-                          ></Image>
-                        </div>
-
-                        <div className={Styles.secondbox}>스타터 프리미엄</div>
-
-                        <div className={Styles.pbox}>
-                          <p>#까다로운 식습관 개선</p>
-                          <p>#기관지 염증 완화</p>
-                          <p>#건강한 성장, 건강한 영양</p>
-                        </div>
-
-                        <div className={Styles.btnbox}>
-                          <div className={Styles.btn}>+ 더보기</div>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-
-                  <li>
-                    <div className={Styles.starter_banner}>
-                      <div className={Styles.box}>
-                        <div className={Styles.firstbox}>
-                          <Image
-                            src={StartBanner}
-                            objectFit="cover"
-                            layout="fill"
-                            alt=""
-                          ></Image>
-                        </div>
-
-                        <div className={Styles.secondbox}>스타터 프리미엄</div>
-
-                        <div className={Styles.pbox}>
-                          <p>#까다로운 식습관 개선</p>
-                          <p>#기관지 염증 완화</p>
-                          <p>#건강한 성장, 건강한 영양</p>
-                        </div>
-
-                        <div className={Styles.btnbox}>
-                          <div className={Styles.btn}>+ 더보기</div>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-
-                  <li>
-                    <div className={Styles.starter_banner}>
-                      <div className={Styles.box}>
-                        <div className={Styles.firstbox}>
-                          <Image
-                            src={StartBanner}
-                            objectFit="cover"
-                            layout="fill"
-                            alt=""
-                          ></Image>
-                        </div>
-
-                        <div className={Styles.secondbox}>스타터 프리미엄</div>
-
-                        <div className={Styles.pbox}>
-                          <p>#까다로운 식습관 개선</p>
-                          <p>#기관지 염증 완화</p>
-                          <p>#건강한 성장, 건강한 영양</p>
-                        </div>
-
-                        <div className={Styles.btnbox}>
-                          <div className={Styles.btn}>+ 더보기</div>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>{" "}
-              {/* 바프독의 4가지 레시피 소개 끝 */}
-              <div className={Styles.box22}>
-                <div className={Styles.btnbox}>
-                  <Link href="/survey" passHref>
-                    <a>
-                      <Image
-                        src={SubscribeBtn}
-                        objectFit="cover"
-                        layout="fill"
-                        alt=""
-                      />{" "}
-                    </a>
-                  </Link>
-                </div>
-              </div>
+                <h2 className={Styles.recipe_title}>
+                &quot;진짜 생식&#34; <br /> 바프독의 4가지 레시피
+                </h2>
+                  <Swiper_recipe />
             </div>{" "}
             {/* inner end */}
           </section>
         </Wrapper>
+
 
         {/* 바프생식이란? */}
         <Wrapper bgColor="#F9F2EC">
@@ -636,7 +721,7 @@ function Home() {
                 <h1>바프생식이란?</h1>
                 <h3 className="font-NotoSans">
                   {" "}
-                  BARF(Biologi cally Appropriate Raw Food)는 생물학적으로 적절한
+                  &nbsp;BARF(Biologi cally Appropriate Raw Food)는 생물학적으로 적절한
                   생식이라는 뜻으로, 생고기와 뼈, 야채를 적절히 배합하여
                   반려동물에게 단백질과 지방을 신선한 상태에서 섭취할 수 있도록
                   돕습니다. 바프독은 70%의 두 종류 고기와 칼슘이 풍부한 뼈,
@@ -648,45 +733,55 @@ function Home() {
           </section>
         </Wrapper>
 
+
         {/* 바프생식 바뀌는 점 */}
         <Wrapper>
           <section className={Styles.barfgood}>
-            <div className={Styles.inner}>
-              <div className={Styles.leftbox}>
-                <h1>
-                  생식을 하면
-                  <br />
-                  어떤점이 바뀔까요?
-                </h1>
-                <p>
-                  BARF(Biologi cally Appropriate Raw Food)는 생물학적으로 적절한
-                  생식이라는 뜻으로, 생고기와 뼈, 야채를 적절히 배합하여
-                  반려동물에게 단백질과 지방을 신선한 상태에서 섭취할 수 있도록
-                  돕습니다. 바프독은 70%의 두 종류 고기와 칼슘이 풍부한 뼈,
-                  내장, 신선한 야채를 배합해 완벽한 비율의 영양을 공급합니다.
-                </p>
-              </div>
-              <div className={Styles.rightbox}>
-                <div>
-                  <Image src={Barfgood1} alt="" />
+            <ul className={Styles.inner}>
+              <li className={Styles.leftbox}>
+                <div className={Styles.barfgood_textbox}>
+                  <h1>
+                    생식을 하면
+                    <br />
+                    어떤점이 바뀔까요?
+                  </h1>
+                  <p>
+                  &nbsp;BARF(Biologi cally Appropriate Raw Food)는 생물학적으로 
+                    적절한 생식이라는 뜻으로, 생고기와 뼈, 야채를 적절히 배합하여
+                    반려동물에게 단백질과 지방을 신선한 상태에서 섭취할 수 있도록
+                    돕습니다. 바프독은 70%의 두 종류 고기와 칼슘이 풍부한 뼈,
+                    내장, 신선한 야채를 배합해 완벽한 비율의 영양을 공급합니다.
+                  </p>
                 </div>
-              </div>
-            </div>
+              </li>
+              <li className={Styles.rightbox}>
+                <div className={Styles.barfgood_imgbox}>
+                  <div className={Styles.barfood1}>
+                    <Image src={Barfgood1} alt="" />
+                  </div>
+                  <div className={Styles.barfood2}>
+                    <Image src={Barfgood2} alt="" />
+                  </div>
+                </div>
+              </li>
+            </ul>
           </section>
         </Wrapper>
 
-        {/* 차별점 그림 아직 구현안됨 */}
+
+        {/* 바프독 선택해야하는 이유, 차별점 그림 아직 구현안됨 */}
         <Wrapper>
           <section className={Styles.difference}>
             <div className={Styles.inner}>
-              <p>check point</p>
+              <p>CEHCK POINT</p>
               <h1>바프독을 선택해야 하는 이유</h1>
               <Image src={Halftest} alt=""></Image>
             </div>
           </section>
         </Wrapper>
 
-        {/* 차별점 그림3개  */}
+
+        {/* 차별점 그림 3개  */}
         <Wrapper bgColor="#F9F2EC">
           <section className={Styles.difference2}>
             {/* <ul className={Styles.inner}> */}
@@ -734,11 +829,12 @@ function Home() {
           </section>
         </Wrapper>
 
+
         {/* 프리미엄바프 사진 설명 */}
         <Wrapper>
           <section className={Styles.difference3}>
             {/* <div className={Styles.} */}
-            <h2 className={Styles.title}>PREMIUM REAL BARF</h2>
+            <h2 className={Styles.title}>PREMIUM <br />REAL BARF</h2>
             <div className={Styles.image}>
               <Image src={barfPack} alt="인공 조미료" />
               <div className={Styles.textbox}>
@@ -753,6 +849,7 @@ function Home() {
           </section>
         </Wrapper>
 
+
         {/* 고민 */}
         <Wrapper bgColor="#F9F2EC">
           <section
@@ -763,15 +860,17 @@ function Home() {
               <div className={`${Styles["cont-left"]} cont-left`}>
                 <div className={Styles.title_section}>
                   <h2 className={Styles.title}>
-                    혹시 이런 고민 해본적 있으신가요?
+                    혹시 이런 고민 
+                    <br />
+                    해본적 있으신가요?
                   </h2>
                   <p className={Styles.subtitle}>
                     생고기, 칼슘이 풍부한 뼈, 신선한 야채를 완벽한 비율으로
                     구성해 반려견이 필요한 영양분을 골고루 섭취할 수
                     있습니다.완벽한 비율으로 구성해 반려견이 필요한 영양분을
-                    골고루섭취할 수 있습니다.완벽한 비율으로
+                    골고루섭취할 수 있습니다. 완벽한 비율으로
                   </p>
-                  <button type="button" className={`${Styles.btn_main} web`}>
+                  <button type="button" className={`${Styles.btn_main}`}>
                     바프생식 둘러보기
                   </button>
                 </div>
@@ -842,6 +941,8 @@ function Home() {
           </section>
         </Wrapper>
 
+
+        {/* 리뷰 후기 */}
         <Wrapper>
           <section className={Styles.review}>
             <div className={Styles.inner}>
@@ -858,6 +959,8 @@ function Home() {
           </section>
         </Wrapper>
 
+
+        {/* 이용방법 */}
         <Wrapper bgColor="#F9F2EC">
           <section className={Styles.Howtouse}>
             <div className={Styles.inner}>
@@ -869,7 +972,7 @@ function Home() {
                 간편하지만 완벽한 식단을 매달 원하는 날짜에 맞춰 받아보세요
               </p>
               <div className={Styles.cont_body}>
-                <ul className="clearfix">
+                <ul className={Styles.howtouse_box}>
                   <li>
                     <figure className={Styles.card}>
                       <div className={`${Styles["img-wrap"]} img-wrap`}>
@@ -943,6 +1046,8 @@ function Home() {
           </section>
         </Wrapper>
 
+
+        {/* SNS */}
         <Wrapper>
           <section className={Styles.sns}>
             <div className={Styles.inner}>
