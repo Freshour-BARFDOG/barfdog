@@ -431,6 +431,21 @@ $inputDefaultHeight: rem(38);
       justify-content: flex-start;
       gap: rem(10);
     }
+    .circle-btn-wrap{
+      cursor:pointer;
+      border-radius:50%;
+      border: rem(1) solid transparent;
+      width:rem(20);
+      height: rem(20);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform .3s ease-out;
+      &:hover{
+        transform:scale(1.2);
+      }
+
+    }
   }
 }
 

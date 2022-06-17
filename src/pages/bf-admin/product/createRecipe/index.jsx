@@ -6,12 +6,10 @@ import { useRouter } from 'next/router';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import Tooltip from '/src/components/atoms/Tooltip';
 import Checkbox from '/src/components/atoms/Checkbox';
-import CustomRadio from "/src/components/admin/form/CustomRadio";
-import Fake_input from "/src/components/atoms/fake_input";
-import PreviewImage from "../../../../components/atoms/PreviewImage";
-import CloseButton from "../../../../components/atoms/CloseButton";
-
-
+import CustomRadio from '/src/components/admin/form/CustomRadio';
+import Fake_input from '/src/components/atoms/fake_input';
+import PreviewImage from '../../../../components/atoms/PreviewImage';
+import CloseButton from '../../../../components/atoms/CloseButton';
 
 const initialFormValues = {};
 const initialFormErrors = {};
@@ -22,13 +20,13 @@ function CreateRecipePage() {
   const [formErrors, setFormErrors] = useState(initialFormErrors);
   const [file, setFile] = useState({
     surveyResult: {
-      file:'',
-      filename: ''
+      file: '',
+      filename: '',
     },
     recipeThumb: {
-      file:'',
-      filename: ''
-    }
+      file: '',
+      filename: '',
+    },
   });
 
   console.log(formValues);
@@ -42,9 +40,8 @@ function CreateRecipePage() {
     }));
   };
 
-
   const imageFileChangeHandler = (e) => {
-    const { id , files} = e.currentTarget;
+    const { id, files } = e.currentTarget;
     const file = files[0];
     const filename = file && file.name;
     setFile((prevState) => ({
@@ -52,7 +49,6 @@ function CreateRecipePage() {
       [id]: { file, filename },
     }));
   };
-
 
   const returnToPrevPage = () => {
     if (confirm('이전 페이지로 돌아가시겠습니까?')) {
@@ -239,7 +235,7 @@ function CreateRecipePage() {
                           type="text"
                           name="descriptionForSurvey"
                           onChange={onInputChangeHandler}
-                          style={{width:'286px'}}
+                          style={{ width: '286px' }}
                         />
                         {formErrors.uiNameEnglish && (
                           <ErrorMessage>{formErrors.uiNameEnglish}</ErrorMessage>
@@ -248,10 +244,6 @@ function CreateRecipePage() {
                     </div>
                   </div>
                 </div>
-
-
-
-
 
                 <div className="cont_divider">
                   <div className="input_row multipleLines">
@@ -277,33 +269,62 @@ function CreateRecipePage() {
                           <ErrorMessage>{formErrors.ingredients}</ErrorMessage>
                         )}
                       </div>
-                      <ul className={'grid-checkbox-wrap'} style={{maxWidth:'400px'}}>
+                      <ul className={'grid-checkbox-wrap'} style={{ maxWidth: '400px' }}>
                         <li>
                           <Checkbox id="ox" onClick={''} />
                           <span>소</span>
-                          <CloseButton onClick={()=>{console.log('해당 재료 삭제하기')}}/>
+                          <span className={'circle-btn-wrap'}>
+                            <CloseButton
+                              onClick={() => {
+                                console.log('해당 재료 삭제하기');
+                              }}
+                              lineColor={'var(--color-line-02)'}
+                              style={{ width: '14px', height: '14px' }}
+                            />
+                          </span>
                         </li>
                         <li>
-                          <Checkbox id="duck" onClick={''} />
+                          <Checkbox id="duck" />
                           <span>오리</span>
-                          <CloseButton onClick={()=>{console.log('해당 재료 삭제하기')}}/>
+                          <span className={'circle-btn-wrap'}>
+                            <CloseButton
+                              onClick={() => {
+                                console.log('해당 재료 삭제하기');
+                              }}
+                              lineColor={'var(--color-line-02)'}
+                              style={{ width: '14px', height: '14px' }}
+                            />
+                          </span>
                         </li>
                         <li>
-                          <Checkbox id="lamb" onClick={''} />
+                          <Checkbox id="lamb" />
                           <span>양</span>
-                          <CloseButton onClick={()=>{console.log('해당 재료 삭제하기')}}/>
+                          <span className={'circle-btn-wrap'}>
+                            <CloseButton
+                              onClick={() => {
+                                console.log('해당 재료 삭제하기');
+                              }}
+                              lineColor={'var(--color-line-02)'}
+                              style={{ width: '14px', height: '14px' }}
+                            />
+                          </span>
                         </li>
                         <li>
                           <Checkbox id="turkey" onClick={''} />
                           <span>칠면조</span>
-                          <CloseButton onClick={()=>{console.log('해당 재료 삭제하기')}}/>
+                          <CloseButton
+                            onClick={() => {
+                              console.log('해당 재료 삭제하기');
+                            }}
+                            lineColor={'var(--color-line-02)'}
+                            style={{ width: '14px', height: '14px' }}
+                          />
                         </li>
                       </ul>
                     </div>
                   </div>
                 </div>
                 {/* cont_divider */}
-
 
                 <div className="cont_divider">
                   <div className="input_row">
@@ -312,8 +333,13 @@ function CreateRecipePage() {
                         썸네일 (설문결과)
                         <Tooltip
                           message={'클릭 시, 미리보기'}
-                          iconStyle={{color:'var(--color-primary04)', borderColor:'var(--color-primary04)'}}
-                          onClick={()=>{console.log('썸네일 보여주는 모달')}}
+                          iconStyle={{
+                            color: 'var(--color-primary04)',
+                            borderColor: 'var(--color-primary04)',
+                          }}
+                          onClick={() => {
+                            console.log('썸네일 보여주는 모달');
+                          }}
                         />
                       </label>
                     </div>
@@ -347,8 +373,13 @@ function CreateRecipePage() {
                         썸네일 (레시피)
                         <Tooltip
                           message={'클릭 시, 미리보기'}
-                          iconStyle={{color:'var(--color-primary04)', borderColor:'var(--color-primary04)'}}
-                          onClick={()=>{console.log('썸네일 보여주는 모달')}}
+                          iconStyle={{
+                            color: 'var(--color-primary04)',
+                            borderColor: 'var(--color-primary04)',
+                          }}
+                          onClick={() => {
+                            console.log('썸네일 보여주는 모달');
+                          }}
                         />
                       </label>
                     </div>
@@ -375,17 +406,18 @@ function CreateRecipePage() {
                 </div>
                 {/* cont_divider */}
 
-
                 <div className="cont_divider">
                   <div className="input_row">
                     <div className="title_section fixedHeight">
                       <label className="title" htmlFor="inStock">
                         품절 여부
                         <Tooltip
-                          message={'1. 품절된 레시피는 신규설문조사에서 구입 불가능합니다.\n2. 품절된 레시피를 구독 중인 고객은 결제 중지됩니다. \n3. 알림톡으로 품절안내 메시지가 전송됩니다. \n4. 유저는 사이트 접속 시, 안내창을 통해 품절상태를 확인하게 됩니다.'}
+                          message={
+                            '1. 품절된 레시피는 신규설문조사에서 구입 불가능합니다.\n2. 품절된 레시피를 구독 중인 고객은 결제 중지됩니다. \n3. 알림톡으로 품절안내 메시지가 전송됩니다. \n4. 유저는 사이트 접속 시, 안내창을 통해 품절상태를 확인하게 됩니다.'
+                          }
                           wordBreaking={true}
                           messagePosition={'left'}
-                          style={{width:'400px'}}
+                          style={{ width: '400px' }}
                         />
                       </label>
                     </div>
@@ -397,7 +429,7 @@ function CreateRecipePage() {
                           idList={['TRUE', 'FALSE']}
                           labelList={['Y', 'N']}
                         />
-                      <em className={'errorMSG'}>* 품절처리 시, 상품이 삭제됩니다.</em>
+                        <em className={'errorMSG'}>( *품절처리 시, 상품이 삭제됩니다. )</em>
                       </div>
                     </div>
                   </div>
@@ -406,7 +438,7 @@ function CreateRecipePage() {
                 <div className="cont_divider">
                   <div className="input_row">
                     <div className="title_section fixedHeight">
-                      <label className="title" htmlFor="inStock">
+                      <label className="title" htmlFor="leaked">
                         노출 여부
                         <Tooltip
                           message={'미노출 상품은 사용자의 레시피에 목록에서 제외됩니다.'}
@@ -418,7 +450,7 @@ function CreateRecipePage() {
                       <div className="inp_box">
                         <CustomRadio
                           setValue={setFormValues}
-                          name="inStock"
+                          name="leaked"
                           idList={['TRUE', 'FALSE']}
                           labelList={['Y', 'N']}
                         />
