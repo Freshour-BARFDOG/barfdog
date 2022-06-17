@@ -1,8 +1,6 @@
-import React , { useState, useEffect } from 'react';
-import Icon_Checked from "/public/img/icon/icon_checked.svg";
-import s from "./customInput.module.scss";
-
-
+import React, { useState, useEffect } from 'react';
+import Icon_Checked from '/public/img/icon/icon_checked.svg';
+import s from './customInput.module.scss';
 
 const CustomInput = ({
   children,
@@ -16,6 +14,7 @@ const CustomInput = ({
   disabled,
   initialize,
   dependency,
+  backgroundColor,
   ...props
 }) => {
   const [isChecked, setIsChecked] = useState(false);
@@ -24,13 +23,12 @@ const CustomInput = ({
     // console.log("초기화 실행");
     setIsChecked(false);
     setSelectedRadio(false);
-    if (setSelectedCheckbox && typeof setSelectedCheckbox === "function")
-      setSelectedCheckbox([]);
+    if (setSelectedCheckbox && typeof setSelectedCheckbox === 'function') setSelectedCheckbox([]);
   }, [dependency, setSelectedRadio, setSelectedCheckbox, initialize]);
 
   const onCheckboxInputHandler = (e) => {
     setIsChecked(!isChecked);
-    if (setSelectedCheckbox && typeof setSelectedCheckbox === "function") {
+    if (setSelectedCheckbox && typeof setSelectedCheckbox === 'function') {
       const { id } = e.currentTarget;
       const curState = { label: id, value: !isChecked };
 
@@ -77,10 +75,10 @@ const CustomInput = ({
   const CustomInputByType = () => {
     return (
       <>
-        {type === "radio" && <InputRadio />}
-        {type === "checkbox" && <InputCheckbox />}
+        {type === 'radio' && <InputRadio />}
+        {type === 'checkbox' && <InputCheckbox />}
         <span className={s.fake_checkbox}>
-          {isChecked || selectedRadio === id ? "선택됨" : "플랜선택"}
+          {isChecked || selectedRadio === id ? '선택됨' : '플랜선택'}
           <i className={s.icon_checked}>
             <Icon_Checked />
           </i>
@@ -97,6 +95,7 @@ const CustomInput = ({
         className={`${s.custom_input_wrapper} ${isChecked && s.checked} ${
           selectedRadio === id && s.checked
         }`}
+        style={{backgroundColor:backgroundColor}}
         {...props}
       >
         <div className={s.custom_input_cont}>{children}</div>
@@ -106,5 +105,4 @@ const CustomInput = ({
   );
 };
 
-
-export default CustomInput
+export default CustomInput;

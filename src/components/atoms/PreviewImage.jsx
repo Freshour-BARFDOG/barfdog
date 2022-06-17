@@ -4,7 +4,7 @@ import rem from '@src/components/atoms/rem';
 
 const Frame = styled.div`
   cursor: pointer;
-  background-color: #e1e2e3;
+  background-color: ${props=>props.backgroundColor ||'#e1e2e3' }; ;
   border: 1px solid var(--color-line);
   box-sizing: border-box;
   margin-bottom: ${rem(10)};
@@ -24,7 +24,7 @@ const Img = styled.img`
 `;
 
 
-function PreviewImage({ file, className, thumbLink, ratio, style, objectFit }) {
+function PreviewImage({ file, className, thumbLink, ratio, style, backgroundColor , objectFit }) {
   const [SRC, setSRC] = useState(null);
 
   const IMAGE = () => {
@@ -51,7 +51,7 @@ function PreviewImage({ file, className, thumbLink, ratio, style, objectFit }) {
   }, [file, thumbLink]);
 
   return (
-    <Frame className={`preview_img ${className}`} ratio={ratio} style={style}>
+    <Frame className={`preview_img ${className || ''}`} ratio={ratio} style={style} backgroundColor={backgroundColor}>
       <IMAGE/>
     </Frame>
   );

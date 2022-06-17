@@ -1,21 +1,37 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
 import { useRouter } from 'next/router';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import Tooltip from '/src/components/atoms/Tooltip';
-import Checkbox from '/src/components/atoms/Checkbox';
 import CustomRadio from '/src/components/admin/form/CustomRadio';
 import Fake_input from '/src/components/atoms/fake_input';
-import PreviewImage from '../../../../components/atoms/PreviewImage';
-import CloseButton from '../../../../components/atoms/CloseButton';
+import Modal_previewRecipeThumb from '/src/components/modal/Modal_previewRecipeThumb';
+import IngredientsItemList from './ingredientsItemList';
+import enterKey from '/util/func/enterKey';
 
-const initialFormValues = {};
+const initialFormValues = {
+  name: '',
+  description: '',
+  uiNameKorean: '',
+  uiNameEnglish: '',
+  pricePerGram: '',
+  gramPerKcal: '',
+  ingredients: '',
+  descriptionForSurvey: '',
+  leaked: 'LEAKED',
+  inStock: true,
+};
+
 const initialFormErrors = {};
 
 function CreateRecipePage() {
+
+
   const router = useRouter();
+  const [createdItem, setCreatedItem] = useState({});
+  const [isActiveModal, setIsActiveModal] = useState(false);
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState(initialFormErrors);
   const [file, setFile] = useState({
@@ -29,10 +45,46 @@ function CreateRecipePage() {
     },
   });
 
-  console.log(formValues);
 
-  const onInputChangeHandler = (e) => {
-    const { id, value } = e.currentTarget;
+  // console.log(formValues);
+
+
+
+
+  useEffect(() => {
+    // MEMO 재료 등록 후 , 초기화시킴
+    setFormValues(prevState=>({
+      ...prevState,
+      ingredients: ''
+    }))
+  }, [createdItem]);
+
+
+
+  const onShowModalHandler = () => {
+    setIsActiveModal(true);
+  };
+  const onHideModalHandler = () => {
+    setIsActiveModal(false);
+  };
+
+
+
+
+  const onAddIngredients = () => {
+    const id = formValues.ingredients;
+    if(!id){
+      return alert('값이 없습니다.');
+    }
+    setCreatedItem(prevState => ({
+      ...prevState,
+      id
+    }))
+
+  };
+
+  const onInputChangeHandler = (event) => {
+    const { id, value } = event.currentTarget;
 
     setFormValues((prevState) => ({
       ...prevState,
@@ -49,6 +101,14 @@ function CreateRecipePage() {
       [id]: { file, filename },
     }));
   };
+
+  
+
+
+
+  const onKeyboardHandler = (event) => {
+    enterKey(event, onAddIngredients)
+  }
 
   const returnToPrevPage = () => {
     if (confirm('이전 페이지로 돌아가시겠습니까?')) {
@@ -110,7 +170,6 @@ function CreateRecipePage() {
                       <div className="inp_box">
                         <textarea
                           id={'description'}
-                          type="text"
                           name="description"
                           className="fullWidth"
                           onChange={onInputChangeHandler}
@@ -125,7 +184,7 @@ function CreateRecipePage() {
                   <div className="input_row">
                     <div className="title_section fixedHeight">
                       <label className="title" htmlFor="uiNameKorean">
-                        레시피 이름(한글)
+                        한글 노출명
                       </label>
                     </div>
                     <div className="inp_section">
@@ -149,7 +208,7 @@ function CreateRecipePage() {
                   <div className="input_row">
                     <div className="title_section fixedHeight">
                       <label className="title" htmlFor="uiNameEnglish">
-                        레시피 이름(영어)
+                        영어 노출명
                       </label>
                     </div>
                     <div className="inp_section">
@@ -221,10 +280,12 @@ function CreateRecipePage() {
                   <div className="input_row">
                     <div className="title_section fixedHeight">
                       <label className="title" htmlFor="descriptionForSurvey">
-                        추천 설명
+                        추천 문구
                         <Tooltip
-                          message={'설문조사 중 ‘특별히 못 먹는 음식’에 추가됩니다.'}
+                          message={`- 노출 위치\n1. 설문조사 ‘특별히 챙겨주고 싶은 부분’ \n2. 플랜, 레시피 선택페이지의 설문결과 설명란`}
                           messagePosition={'left'}
+                          wordBreaking={true}
+                          style={{ width: '270px' }}
                         />
                       </label>
                     </div>
@@ -251,8 +312,12 @@ function CreateRecipePage() {
                       <label className="title" htmlFor="ingredients">
                         재료
                         <Tooltip
-                          message={'설문조사 중 ‘못 먹는 음식’에 추가됩니다.'}
+                          message={
+                            '1. 설문조사 ‘못 먹는 음식’에 추가됩니다.\n2. 레시피에 등록된 모든 재료리스트가 노출되며, 새로 추가된 레시피재료만 삭제가능합니다.'
+                          }
                           messagePosition={'left'}
+                          wordBreaking
+                          style={{ width: '280px' }}
                         />
                       </label>
                     </div>
@@ -263,64 +328,21 @@ function CreateRecipePage() {
                           type="text"
                           name="ingredients"
                           onChange={onInputChangeHandler}
+                          value={formValues.ingredients}
+                          onKeyDown={onKeyboardHandler}
                         />
-                        <button className={'admin_btn solid basic_l'}>추가</button>
+                        <button
+                          type={'button'}
+                          className={'admin_btn solid basic_l'}
+                          onClick={onAddIngredients}
+                        >
+                          추가
+                        </button>
                         {formErrors.ingredients && (
                           <ErrorMessage>{formErrors.ingredients}</ErrorMessage>
                         )}
                       </div>
-                      <ul className={'grid-checkbox-wrap'} style={{ maxWidth: '400px' }}>
-                        <li>
-                          <Checkbox id="ox" onClick={''} />
-                          <span>소</span>
-                          <span className={'circle-btn-wrap'}>
-                            <CloseButton
-                              onClick={() => {
-                                console.log('해당 재료 삭제하기');
-                              }}
-                              lineColor={'var(--color-line-02)'}
-                              style={{ width: '14px', height: '14px' }}
-                            />
-                          </span>
-                        </li>
-                        <li>
-                          <Checkbox id="duck" />
-                          <span>오리</span>
-                          <span className={'circle-btn-wrap'}>
-                            <CloseButton
-                              onClick={() => {
-                                console.log('해당 재료 삭제하기');
-                              }}
-                              lineColor={'var(--color-line-02)'}
-                              style={{ width: '14px', height: '14px' }}
-                            />
-                          </span>
-                        </li>
-                        <li>
-                          <Checkbox id="lamb" />
-                          <span>양</span>
-                          <span className={'circle-btn-wrap'}>
-                            <CloseButton
-                              onClick={() => {
-                                console.log('해당 재료 삭제하기');
-                              }}
-                              lineColor={'var(--color-line-02)'}
-                              style={{ width: '14px', height: '14px' }}
-                            />
-                          </span>
-                        </li>
-                        <li>
-                          <Checkbox id="turkey" onClick={''} />
-                          <span>칠면조</span>
-                          <CloseButton
-                            onClick={() => {
-                              console.log('해당 재료 삭제하기');
-                            }}
-                            lineColor={'var(--color-line-02)'}
-                            style={{ width: '14px', height: '14px' }}
-                          />
-                        </li>
-                      </ul>
+                      <IngredientsItemList newItemObj={createdItem}/>
                     </div>
                   </div>
                 </div>
@@ -332,20 +354,13 @@ function CreateRecipePage() {
                       <label className="title">
                         썸네일 (설문결과)
                         <Tooltip
-                          message={'클릭 시, 미리보기'}
-                          iconStyle={{
-                            color: 'var(--color-primary04)',
-                            borderColor: 'var(--color-primary04)',
-                          }}
-                          onClick={() => {
-                            console.log('썸네일 보여주는 모달');
-                          }}
+                          message={'플랜, 레시피 페이지의 설문결과에 노출'}
+                          messagePosition={'left'}
                         />
                       </label>
                     </div>
                     <div className="inp_section">
                       <label className="inp_wrap file" htmlFor="surveyResult">
-                        {/*<PreviewImage file={file.surveyResult} ratio={1/1} />*/}
                         <div className="inp_box">
                           <input
                             id={'surveyResult'}
@@ -372,20 +387,16 @@ function CreateRecipePage() {
                       <label className="title">
                         썸네일 (레시피)
                         <Tooltip
-                          message={'클릭 시, 미리보기'}
-                          iconStyle={{
-                            color: 'var(--color-primary04)',
-                            borderColor: 'var(--color-primary04)',
-                          }}
-                          onClick={() => {
-                            console.log('썸네일 보여주는 모달');
-                          }}
+                          message={
+                            '1. 썸네일 상단의 글자는 이미지로 삽입해야합니다.\n2. 플랜, 레시피 페이지의 레시피 썸네일에 노출 '
+                          }
+                          wordBreaking
+                          messagePosition={'left'}
                         />
                       </label>
                     </div>
                     <div className="inp_section">
                       <label className="inp_wrap file" htmlFor="recipeThumb">
-                        {/*<PreviewImage file={file.surveyResult} ratio={1/1} />*/}
                         <div className="inp_box">
                           <input
                             id={'recipeThumb'}
@@ -467,6 +478,13 @@ function CreateRecipePage() {
             <div className="btn_section">
               <button
                 type="button"
+                className="admin_btn confirm_l line"
+                onClick={onShowModalHandler}
+              >
+                미리보기
+              </button>
+              <button
+                type="button"
                 id="btn-cancle"
                 className="admin_btn confirm_l line"
                 onClick={returnToPrevPage}
@@ -480,6 +498,9 @@ function CreateRecipePage() {
           </div>
         </AdminContentWrapper>
       </AdminLayout>
+      {isActiveModal && (
+        <Modal_previewRecipeThumb data={formValues} file={file} onModalHide={onHideModalHandler} />
+      )}
     </>
   );
 }

@@ -32,7 +32,7 @@ const Button = styled.button`
 
 
 
-function CloseButton({ className, style, onClick, lineColor }) {
+function CloseButton({ className, style, onClick, lineColor, ...props }) {
   const mct = useModalContext();
   const onClickHandler = () => mct.onHide();
 
@@ -43,6 +43,7 @@ function CloseButton({ className, style, onClick, lineColor }) {
       className={className}
       onClick={onClick || onClickHandler}
       lineColor={lineColor}
+      {...props}
     />
   );
 }

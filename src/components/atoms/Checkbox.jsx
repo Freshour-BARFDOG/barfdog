@@ -24,16 +24,18 @@ export function Btn (props) {
 
 
 
-export default function Checkbox({ id, label, callback, onClick , ...props}) {
+export default function Checkbox({ id, label, callback, onClick ,labelStyle, checked,  ...props}) {
+
 
   const onChangeHandler = (e) => {
-    const input = e.currentTarget;
-    if (typeof callback === "function") callback(input.checked);
+    const { checked, id } = e.currentTarget;
+    if (callback && typeof callback === "function") callback(checked, id);
   };
 
   const onClickHandler = (e) => {
-    const isChecked = e.currentTarget.checked;
-    onClick(isChecked);
+    const { checked, id } = e.currentTarget;
+    if (onClick && typeof onClick === "function") onClick(checked, id);
+
   }
 
 
@@ -44,10 +46,9 @@ export default function Checkbox({ id, label, callback, onClick , ...props}) {
         id={id}
         onChange={onChangeHandler}
         onClick={onClickHandler}
-        // value={isChecked}
       />
       <i className={`${s.on} ${!label ? s.noLabel : ''}`} />
-      <span className={s.label}>{label}</span>
+      <span className={s.label} style={labelStyle}>{label}</span>
     </label>
   );
 }
