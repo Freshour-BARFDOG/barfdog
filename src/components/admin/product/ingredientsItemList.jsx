@@ -16,7 +16,7 @@ export default function IngredientsItemList({newItemObj}) {
   const [selectedValues, setSelectedValues] = useState({});
 
   // console.log(selectedValues);
-  console.log(itemList);
+  // console.log(itemList);
 
   useEffect(() => {
     if (!Object.keys(newItemObj).length) return;

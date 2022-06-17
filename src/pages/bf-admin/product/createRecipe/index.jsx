@@ -8,7 +8,7 @@ import Tooltip from '/src/components/atoms/Tooltip';
 import CustomRadio from '/src/components/admin/form/CustomRadio';
 import Fake_input from '/src/components/atoms/fake_input';
 import Modal_previewRecipeThumb from '/src/components/modal/Modal_previewRecipeThumb';
-import IngredientsItemList from './ingredientsItemList';
+import IngredientsItemList from '/src/components/admin/product/ingredientsItemList';
 import enterKey from '/util/func/enterKey';
 import PreviewImage from "/src/components/atoms/PreviewImage";
 
@@ -445,7 +445,7 @@ function CreateRecipePage() {
                 <div className="cont_divider">
                   <div className="input_row">
                     <div className="title_section fixedHeight">
-                      <label className="title" htmlFor="inStock">
+                      <div className="title">
                         품절 여부
                         <Tooltip
                           message={
@@ -455,15 +455,15 @@ function CreateRecipePage() {
                           messagePosition={'left'}
                           style={{ width: '400px' }}
                         />
-                      </label>
+                      </div>
                     </div>
                     <div className="inp_section">
                       <div className="inp_box">
                         <CustomRadio
                           setValue={setFormValues}
                           name="inStock"
-                          idList={['TRUE', 'FALSE']}
-                          labelList={['Y', 'N']}
+                          idList={['inStock-FALSE', 'inStock-TRUE']}
+                          labelList={['아니오', '품절']}
                         />
                         <em className={'errorMSG'}>( *품절처리 시, 상품이 삭제됩니다. )</em>
                       </div>
@@ -474,21 +474,21 @@ function CreateRecipePage() {
                 <div className="cont_divider">
                   <div className="input_row">
                     <div className="title_section fixedHeight">
-                      <label className="title" htmlFor="leaked">
+                      <div className="title">
                         노출 여부
                         <Tooltip
-                          message={'미노출 상품은 사용자의 레시피에 목록에서 제외됩니다.'}
+                          message={'플랜,레시피 페이지의 목록에 노출합니다.'}
                           messagePosition={'left'}
                         />
-                      </label>
+                      </div>
                     </div>
                     <div className="inp_section">
                       <div className="inp_box">
                         <CustomRadio
                           setValue={setFormValues}
                           name="leaked"
-                          idList={['TRUE', 'FALSE']}
-                          labelList={['Y', 'N']}
+                          idList={['leaked-FALSE', 'leaked-TRUE']}
+                          labelList={['아니오', '노출']}
                         />
                       </div>
                     </div>
