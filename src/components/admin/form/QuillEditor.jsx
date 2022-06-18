@@ -57,7 +57,8 @@ const toolbarOptions = [
 
 
 
-export default function QuillEditor({ body, handleQuillChange, setTempImageIdList }) {
+export default function QuillEditor({ body, handleQuillChange, setTempImageIdList, apiImageUploadURL }) {
+  console.log(apiImageUploadURL)
   // const originImageList = []; // 서버로부터 받은 이미지리스트
 
   // const [imageIdList, setImageIdList] = useState({
@@ -81,17 +82,19 @@ export default function QuillEditor({ body, handleQuillChange, setTempImageIdLis
   };
 
   const imageHandler = () => {
+
     const input = document.createElement("input");
 
+    if(apiImageUploadURL === 'BLOCK') return;
     input.setAttribute("type", "file");
     input.setAttribute("accept", "image/*");
     document.body.appendChild(input);
-
     input.click();
 
     input.onchange = async () => {
       const [file] = input.files;
-      const apiURL = `/api/admin/blogImage/upload`;
+
+      const apiURL = apiImageUploadURL || `/api/admin/blogImage/upload`;
 
       const formData = new FormData();
       formData.append("file", file);

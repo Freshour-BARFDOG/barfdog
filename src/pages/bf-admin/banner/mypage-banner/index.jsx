@@ -172,9 +172,7 @@ function MypageBanner() {
       <AdminLayout>
         <AdminContentWrapper>
           <div className="title_main">
-            <h1 onClick={()=>{
-              mct.onShow();
-            }}>마이페이지 배너 ---- 모달 테스트중 --클릭시 모달나타남</h1>
+            <h1>마이페이지 배너</h1>
           </div>
           <form
             action="/a"
@@ -218,7 +216,7 @@ function MypageBanner() {
                       exposedTarget={exposedTarget}
                       onRadioButtonHandler={onRadioButtonHandler}
                     />
-                  </div>처
+                  </div>
                 </div>
               </div>
               {/* cont_divider */}
@@ -391,9 +389,6 @@ function MypageBanner() {
         </AdminContentWrapper>
       </AdminLayout>
       <Modal_global_alert message={mct.message} />
-      <Modal background title="비밀번호 재설정">
-        내용전달내용전달내용전달내용전달내용전달
-      </Modal>
     </>
   );
 }

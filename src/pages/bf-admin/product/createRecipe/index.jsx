@@ -14,23 +14,36 @@ import PreviewImage from "/src/components/atoms/PreviewImage";
 
 
 
+// MEMO > 썸네일 : 업로드와 동시에 API를 통하여 저장한다.
+
 
 
 
 const initialFormValues = {
-  name: '',
-  description: '',
-  uiNameKorean: '',
-  uiNameEnglish: '',
-  pricePerGram: '',
-  gramPerKcal: '',
-  ingredients: '',
-  descriptionForSurvey: '',
-  leaked: 'LEAKED',
-  inStock: true,
+  // name: '',
+  // description: '',
+  // uiNameKorean: '',
+  // uiNameEnglish: '',
+  // pricePerGram: '',
+  // gramPerKcal: '',
+  // ingredients: '',
+  // descriptionForSurvey: '',
+  // leaked: 'LEAKED',
+  // inStock: true,
 };
 
 const initialFormErrors = {};
+
+const initialFileValues ={
+  surveyResult: {
+    file: '',
+    filename: '',
+  },
+  recipeThumb: {
+    file: '',
+    filename: '',
+  },
+}
 
 function CreateRecipePage() {
 
@@ -40,20 +53,10 @@ function CreateRecipePage() {
   const [isActiveModal, setIsActiveModal] = useState(false);
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState(initialFormErrors);
-  const [file, setFile] = useState({
-    surveyResult: {
-      file: '',
-      filename: '',
-    },
-    recipeThumb: {
-      file: '',
-      filename: '',
-    },
-  });
+  const [file, setFile] = useState(initialFileValues);
 
 
   // console.log(formValues);
-
 
 
 
@@ -486,9 +489,9 @@ function CreateRecipePage() {
                       <div className="inp_box">
                         <CustomRadio
                           setValue={setFormValues}
-                          name="leaked"
-                          idList={['leaked-FALSE', 'leaked-TRUE']}
-                          labelList={['아니오', '노출']}
+                          name="itemStatus"
+                          idList={['itemStatus-TRUE', 'itemStatus-FALSE']}
+                          labelList={['노출', '숨김']}
                         />
                       </div>
                     </div>

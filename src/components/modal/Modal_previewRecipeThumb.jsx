@@ -11,8 +11,8 @@ import checkStringUnderConsonant from '/util/func/CheckStringUnderConsonant';
 
 
 export default function Modal_previewRecipeThumb({ data, file, onModalHide }) {
-  console.log(file);
-  console.log(data);
+  // console.log(file);
+  // console.log(data);
   const hasRecipeNameUnderConsonant = checkStringUnderConsonant(data.descriptionForSurvey);
 
   return (
