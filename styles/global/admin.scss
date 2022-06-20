@@ -395,6 +395,9 @@ $inputDefaultHeight: rem(38);
   input.text-align-center {
     text-align: center;
   }
+  input[data-align='right']{
+    text-align: right;
+  }
 
   .unit-box-wrap {
     display: flex;
@@ -497,3 +500,4 @@ $inputDefaultHeight: rem(38);
   font-size: rem(13);
   color: var(--color-main);
 }
+
