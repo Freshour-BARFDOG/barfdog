@@ -5,7 +5,6 @@ import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
 import { useRouter } from 'next/router';
 import CustomSelect from '/src/components/admin/form/CustomSelect';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
-import Tooltip from '/src/components/atoms/Tooltip';
 import CustomRadio from '/src/components/admin/form/CustomRadio';
 import filter_emptyValue from '/util/func/filter_emptyValue';
 import filter_onlyNumber from '/util/func/filter_onlyNumber';
@@ -14,7 +13,7 @@ import QuillEditor from './QuillEditor';
 import SingleItemThumbnail from "./SingleItemThumnail";
 import SingleItemOptions from "./SingleItemOptions";
 import SingleItemDiscountOptions from "./SingleItemDiscountOptions";
-import transformClearLocalCurrency from "../../../../../util/func/transformClearLocalCurrency";
+import transformClearLocalCurrency from "/util/func/transformClearLocalCurrency";
 
 /* TODO - 다중  이미지 처리 -> Preview && 업로드 즉시 API 통신
  */
