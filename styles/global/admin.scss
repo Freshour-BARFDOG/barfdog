@@ -351,6 +351,7 @@ $inputDefaultHeight: rem(38);
       }
 
       .inp_box {
+        position: relative;
         display: flex;
         align-items: center;
         color: #4d4d4d;
