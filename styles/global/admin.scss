@@ -279,6 +279,7 @@ $inputDefaultHeight: rem(38);
     display: flex;
     justify-content: center;
     align-items: center;
+
     &.outer {
       margin-top: rem(20);
     }
@@ -489,8 +490,25 @@ $inputDefaultHeight: rem(38);
     z-index: 99;
   }
 
+
+
 }
 
+
+@for $i from 1 through 20 {
+  .mt-#{5*$i} {
+    margin-top: rem(5*$i);
+  }
+  .mb-#{5*$i} {
+    margin-bottom: rem(5*$i);
+  }
+  .ml-#{5*$i} {
+    margin-left: rem(5*$i);
+  }
+  .mr-#{5*$i} {
+    margin-right: rem(5*$i);
+  }
+}
 
 .pointColor {
   color: var(--color-primary04);

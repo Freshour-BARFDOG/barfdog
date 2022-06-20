@@ -27,7 +27,7 @@ function DeliverySettingPage() {
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState(initialFormErrors);
 
-  console.log(formValues);
+  // console.log(formValues);
 
 
 
