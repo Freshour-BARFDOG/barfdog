@@ -4,31 +4,44 @@ $browser-context:16;
 }
 
 
-$windowWidthForRightSideBorder: rem(1420);
+$windowWidthForRightSideBorder: rem(1344);
 
 
 .cont_viewer {
+  overflow-x: auto; //
+  overflow-y: scroll; //
+  border: rem(1) solid var(--color-line-03); //
+  width: 100%;
   .table{
     font-size: rem(15);
     /* border line */
-    .table_header{border: rem(1) solid var(--color-line-03); background-color:#f1f1f4;}
-    .table_body > li > span, 
-    .table_th, .item > span{border-right: rem(1) solid var(--color-line-03); overflow: hidden;}
-    .item:not(:last-child){border-bottom: rem(1) solid var(--color-line-03);}
-
+    .table_header {
+      border-bottom: rem(1) solid var(--color-line-03);
+    }
+    .table_th:not(:last-child),
+    .item > span:not(:last-child) {
+      border-right: rem(1) solid var(--color-line-03);
+    }
+    .table_th,
+    .item:not(:last-child) > span {
+      border-bottom: rem(1) solid var(--color-line-03);
+    }
+    .item:not(:last-child) {
+      border-bottom: rem(1) solid var(--color-line-03);
+    }
+    /* border line */
     .table_header, .item{
-      overflow:hidden;
       display:grid;
       grid-gap:0;
       grid-template-rows: minmax(rem(60), auto);
       grid-template-columns:
-        minmax(rem(70), rem(180))
+        minmax(rem(70), rem(140))
         minmax(rem(70), rem(300))
         minmax(rem(70), rem(180))
-        minmax(rem(70), rem(60))
-        minmax(rem(70), rem(80));
+        rem(120)
+        rem(180);
 
-      .table_th, > span{
+      .table_th, span{
         display: flex;
         align-items: center;
         justify-content: center;
@@ -47,7 +60,7 @@ $windowWidthForRightSideBorder: rem(1420);
 
     .item{
       background-color: #fff;
-      border: rem(1) solid var(--color-line-03);
+      //border: rem(1) solid var(--color-line-03);
       margin-top:rem(-1);
     }
 

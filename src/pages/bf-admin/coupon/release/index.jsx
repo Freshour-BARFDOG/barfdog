@@ -1,13 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import s from './coupon-release.module.scss';
+
+
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
 import CustomRadio from '/src/components/admin/form/CustomRadio';
 import CustomSelect from '/src/components/admin/form/CustomSelect';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
-import CouponReleaseGroupForm from "./Coupon-release-GroupForm";
-import CouponReleasePersonalForm from "./Coupon-release-PersonalForm";
+import SearchGroupForm from "/src/components/admin/form/SearchGroupForm";
+import SearchPersonalForm from "/src/components/admin/form/SearchPersonalForm";
 
 
 const initValOfAll = {
@@ -70,7 +71,13 @@ function ReleaseCouponPage() {
 
 
 
-  // console.log(formValues);
+
+  const onSubmitHandler = (e) => {
+    e.preventDefault();
+    console.log('onSubmit!');
+    // MEMO : 서버에 전송할 때, 가격은........ transformClearLocalCurrency() 적용해야함
+    // transformClearLocalCurrency();
+  };
 
   return (
     <>
@@ -103,9 +110,8 @@ function ReleaseCouponPage() {
                   </div>
                 </div>
               </div>
-
-              {issuedTarget.issuedTarget === 'GROUP' && (<CouponReleaseGroupForm setFormValues={setFormValues} />)}
-              {issuedTarget.issuedTarget === 'PERSONAL' && (<CouponReleasePersonalForm setFormValues={setFormValues} />)}
+              {issuedTarget.issuedTarget === 'GROUP' && (<SearchGroupForm setFormValues={setFormValues} />)}
+              {issuedTarget.issuedTarget === 'PERSONAL' && (<SearchPersonalForm setFormValues={setFormValues} />)}
               <div className="cont_divider">
                 <div className="input_row">
                   <div className="title_section fixedHeight">
@@ -173,6 +179,16 @@ function ReleaseCouponPage() {
                 </div>
               </div>
             </div>
+          </div>
+          <div className="btn_section outer">
+            <button
+              type="button"
+              id="release-coupon"
+              className="admin_btn confirm_l solid"
+              onClick={onSubmitHandler}
+            >
+              쿠폰발행
+            </button>
           </div>
         </AdminContentWrapper>
       </AdminLayout>

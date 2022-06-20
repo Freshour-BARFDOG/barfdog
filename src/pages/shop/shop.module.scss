@@ -6,7 +6,7 @@ $browser-context:16;
 
 section.top{padding : rem(40) 0 rem(27)}
 section.mid{padding : 0 0 rem(37) 0}
-section.bot{padding : 0 0 rem(451) 0 }
+section.btn-section{padding : rem(80) 0 rem(451) 0 }
 
 .top {
   .inner{
@@ -22,6 +22,9 @@ section.bot{padding : 0 0 rem(451) 0 }
 .mid {
   .inner {
     .menu_box {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       .menu{
         display: flex;
         li{
@@ -65,6 +68,13 @@ section.bot{padding : 0 0 rem(451) 0 }
 
 
         }
+      }
+    }
+    .select-box{
+      select{
+        width:rem(120);
+        min-width: auto;
+
       }
     }
   }
@@ -175,3 +185,5 @@ section.bot{padding : 0 0 rem(451) 0 }
     }
   }
 }
+
+

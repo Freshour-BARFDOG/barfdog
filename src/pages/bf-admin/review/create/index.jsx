@@ -155,7 +155,7 @@ function CreateRewardPage() {
                     <div className="input_row">
                       <div className="title_section fixedHeight">
                         <label className="title" htmlFor="banner-name">
-                          주문일자
+                          작성일자
                         </label>
                       </div>
                       <div className="inp_section">

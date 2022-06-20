@@ -66,7 +66,7 @@ const ItemList = ({ item, sortableItemRef }) => {
       <span>{DATA.createdDate}</span>
       <span>{DATA.modifiedDate}</span>
       <span>
-        <Link href={`/bf-admin/product/single/update/${DATA.id}`} passHref>
+        <Link href={`/bf-admin/product/recipe/update/${DATA.id}`} passHref>
           <a>
             <button className="admin_btn basic_s solid">수정</button>
           </a>

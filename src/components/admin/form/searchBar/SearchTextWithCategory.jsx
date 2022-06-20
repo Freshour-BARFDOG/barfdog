@@ -9,12 +9,14 @@ const SearchTextWithCategory = ({
   name,
   id,
   tooltip,
+  className,
   options = [],
+  searchButton,
 }) => {
   // const optionalRef = useRef();
 
-  const initialValue = options[0].value;
-  const [selectedValue, setSelectedValue] = useState(initialValue); // * SearchSelect 컴포넌트 내부 State. 다른 input에서는 사용하지 않음
+  const initialValue = options[0].value || '';
+  const [selectedValue, setSelectedValue] = useState(initialValue);
 
   const userInfoQuery = "query";
 
@@ -56,7 +58,7 @@ const SearchTextWithCategory = ({
 
   return (
     <>
-      <div className={s["search-row"]}>
+      <div className={`${s["search-row"]} ${className}`}>
         <h4 className={s["title"]}>
           {title}
           {tooltip && <span className={s["tooltip-wrap"]}>{tooltip}</span>}
@@ -88,8 +90,9 @@ const SearchTextWithCategory = ({
           <input
             type="text"
             onChange={onTextChangeHandler}
-            value={searchValue[userInfoQuery]}
+            value={searchValue[userInfoQuery] || ''}
           />
+          {searchButton}
         </div>
       </div>
     </>

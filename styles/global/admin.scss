@@ -224,7 +224,7 @@ $inputDefaultHeight: rem(38);
     .cont_body {
       background-color: #fff;
       .cont_divider {
-        padding: rem(15) 0;령
+        padding: rem(15) 0;
         .cont_divider_title {
           margin-bottom: rem(20);
         }
@@ -239,6 +239,8 @@ $inputDefaultHeight: rem(38);
         .search-box{
           padding: rem(15) rem(40);
           .controls{
+            border:0;
+            padding: 0;
             margin: 0 0 rem(15);
           }
 
@@ -316,6 +318,8 @@ $inputDefaultHeight: rem(38);
         align-items: center;
       }
       .title {
+        display: flex;
+        align-items: center;
         font-size: inherit;
         cursor: default;
       }
@@ -323,6 +327,9 @@ $inputDefaultHeight: rem(38);
 
     .inp_section {
       width: calc(100% - #{$titleSectionWidth});
+      display: flex;
+      flex-direction: column;
+      gap: rem(10);
       .inp_wrap.file {
         display: block;
       }
@@ -372,6 +379,12 @@ $inputDefaultHeight: rem(38);
   input.fullWidth {
     width: 100%;
   }
+  textarea.fullWidth {
+    width: 100%;
+    border: rem(1) solid var(--color-line-03);
+    padding: rem(10) rem(8);
+    min-height: rem(100);
+  }
   input.halfWidth {
     width: 50%;
   }
@@ -409,8 +422,48 @@ $inputDefaultHeight: rem(38);
       }
     }
   }
+
+  .grid-checkbox-wrap{
+    margin: rem(17) 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    row-gap: rem(20);
+    li{
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      gap: rem(10);
+      animation: show var(--ani-default);
+    }
+    .btn-wrap{
+      cursor:pointer;
+      border: rem(1) solid var(--color-line-03);
+      border-radius: 50% ;
+      width:rem(20);
+      height: rem(20);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition-timing-function: ease;
+      transition-duration: .3s;
+      transition-property: transform;
+
+      &:hover{
+        transform:rotate(90deg);
+      }
+
+    }
+  }
 }
 
+
+.grid-box {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr);
+  align-items: center;
+  gap: rem(10);
+  justify-content: center;
+}
 .pointColor {
   color: var(--color-primary04);
 }
