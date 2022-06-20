@@ -6,7 +6,8 @@ import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
 import s from "./create.module.scss";
 import Image from "next/image";
 import RatingStars from "/src/components/atoms/RatingStars";
-import SelectTag from "@src/components/atoms/SelectTag";
+import SelectTag from "/src/components/atoms/SelectTag";
+import ToolTip from "/src/components/atoms/Tooltip";
 
 
 
@@ -74,6 +75,7 @@ function CreateRewardPage() {
                     <label className="title" htmlFor="banner-name">
                       상품카테고리
                     </label>
+                    <ToolTip message={'카테고리 선택 후 생성이 시작됩니다.'} messagePosition={'center'}/>
                   </div>
                   <div className="inp_section">
                     <div className="inp_box">
@@ -138,15 +140,15 @@ function CreateRewardPage() {
                           {/* {formErrors.name && (
                         <ErrorMessage>{formErrors.name}</ErrorMessage>
                       )} */}
-                          {productCategory === ProductCategory_SUBSCRIBE && (
-                            <label
-                              htmlFor="subscribe-count"
-                              className={`${s["subscribe-count"]} ${s.addedCategory}`}
-                            >
-                              <input type="number" id="subscribe-count" />
-                              <i>회차</i>
-                            </label>
-                          )}
+                          {/*{productCategory === ProductCategory_SUBSCRIBE && (*/}
+                          {/*  <label*/}
+                          {/*    htmlFor="subscribe-count"*/}
+                          {/*    className={`${s["subscribe-count"]} ${s.addedCategory}`}*/}
+                          {/*  >*/}
+                          {/*    <input type="number" id="subscribe-count" />*/}
+                          {/*    <i>회차</i>*/}
+                          {/*  </label>*/}
+                          {/*)}*/}
                         </div>
                       </div>
                     </div>

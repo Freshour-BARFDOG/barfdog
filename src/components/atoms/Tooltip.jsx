@@ -60,6 +60,13 @@ const MessageBody = styled.pre`
     right: auto;
     transform: translate(0, 100%);
   }
+  &[data-align='center'] {
+    left: ${rem(24)};
+    right: auto;
+    top:50%;
+    bottom:auto;
+    transform: translate(0%, -50%);
+  }
   &[data-device='pc'] {
     width: initial;
   }
