@@ -10,9 +10,9 @@ $browser-context:16; // html font-size
     //our story 이미지
     .img_wrap {
       position: absolute;
-      width: rem(1200);
+      width: 100%;
       height: rem(400);
-      border-radius: 0px 0px rem(300) 0px;
+      border-radius: 0 0 rem(300) 0;
 
       z-index: -3;
     }
@@ -41,12 +41,13 @@ $browser-context:16; // html font-size
       display: inline-block;
       padding : rem(60) rem(120) rem(35) rem(80);
       background: #FFFFFF;
-      box-shadow: 0px 0px rem(40) rgba(30, 31, 35, 0.1);
-      border-radius: rem(120) 0px 0px 0px;
+      box-shadow: 0 0 rem(40) rgba(30, 31, 35, 0.1);
+      border-radius: rem(120) 0 0 0;
       .content1 {
         color: #109D3C;
         font-size: rem(18);
         margin: rem(7) 0 rem(17);
+        font-weight: bold;
       }
 
       .content2 {
@@ -58,7 +59,7 @@ $browser-context:16; // html font-size
       }
       .sign {
         display: flex;
-        float:right;
+        float: right;
         position: relative;
         width: rem(234);
         height: rem(106);
@@ -88,8 +89,8 @@ $browser-context:16; // html font-size
   margin-left: rem(285);
   width: rem(770);
   background: #FFFFFF;
-  box-shadow: 0px 0px rem(40) rgba(30, 31, 35, 0.1);
-  border-radius: 0px rem(160) 0px 0px;
+  box-shadow: 0 0 rem(40) rgba(30, 31, 35, 0.1);
+  border-radius: 0 rem(160) 0 0;
 
   .inner2 {
     padding: rem(60) rem(165) rem(69) rem(80);
@@ -117,7 +118,7 @@ $browser-context:16; // html font-size
             font-family: 'Pretendard Variable';
             font-style: normal;
             font-weight: 400;
-            font-size: 16px;
+            font-size: 16;
             line-height: 140%;
             letter-spacing: -0.02em;
           }
@@ -161,8 +162,8 @@ $browser-context:16; // html font-size
       font-family: 'NEXON Lv2 Gothic';
       font-style: normal;
       font-weight: 700;
-      font-size: 33.7766px;
-      line-height: 38px;
+      font-size: rem(33.7766);
+      line-height: rem(38);
       color: #262626;
     }
     .text {
@@ -170,8 +171,8 @@ $browser-context:16; // html font-size
       font-family: 'Pretendard Variable';
       font-style: normal;
       font-weight: 400;
-      font-size: 18px;
-      line-height: 22px;
+      font-size: rem(18);
+      line-height: rem(22);
       text-align: center;
       letter-spacing: -0.02em;
       color: #4D4D4D;
@@ -195,7 +196,7 @@ $browser-context:16; // html font-size
         font-family: 'Pretendard Variable';
         font-style: normal;
         font-weight: 700;
-        font-size: 32px;
+        font-size: rem(32);
         line-height: 120%;
         text-transform: uppercase;
         color: #000000;
@@ -205,7 +206,7 @@ $browser-context:16; // html font-size
         font-family: 'Pretendard Variable';
         font-style: normal;
         font-weight: 500;
-        font-size: 16px;
+        font-size: rem(16);
         line-height: 140%;
         text-align: center;
         text-transform: uppercase;
@@ -213,12 +214,12 @@ $browser-context:16; // html font-size
       }
     }
     .right {
-
       margin-top: rem(7);
       margin-left:rem(84);
       display: flex;
       justify-items: center;
       float: right;
+
       .button {
         display: flex;
         align-items: center;
@@ -226,7 +227,7 @@ $browser-context:16; // html font-size
         width: rem(315);
         height: rem(50);
         background: #CA1010;
-        border-radius: 4px;
+        border-radius: rem(4);
         &:hover {
           cursor: pointer;
         }
@@ -234,8 +235,8 @@ $browser-context:16; // html font-size
           font-family: 'Pretendard Variable';
           font-style: normal;
           font-weight: 400;
-          font-size: 15px;
-          line-height: 18px;
+          font-size: rem(15);
+          line-height: rem(18);
           display: flex;
           align-items: center;
           text-align: center;
@@ -243,6 +244,188 @@ $browser-context:16; // html font-size
           color: #FFFFFF;
         }
         
+      }
+    }
+  }
+}
+
+
+
+/* RESPONSIVE */
+@media only screen and (min-width:rem(100)) and (max-width: rem(1200)) {
+
+  .letter_box2{
+    margin-left: 0;
+  }
+}
+
+
+
+@media only screen and (min-width:rem(100)) and (max-width: rem(900)) {
+
+  .top {
+    .back_image {
+      .img_wrap {
+        border-radius: 0;
+      }
+    }
+
+    .inner {
+      padding:rem(227) 0 0 0;
+
+      .letter_box{
+        width: calc(100% - rem(80));
+        padding : rem(60) rem(0) rem(45) rem(80);
+        position: relative;
+        
+        .content2 {
+          margin-right: rem(50);
+        }
+
+        .sign {
+          transform: translateX(rem(-110));
+        }
+      }
+
+      .letter_box2{
+        width: 100%;
+
+        .inner2 {
+          padding: rem(60) rem(50) rem(69) rem(80);
+        }
+      }
+    }
+  }
+
+
+  
+  .bottom {
+    .inner {
+      .left{
+        float: none;
+        text-align: center;
+      }
+
+      .right {
+        margin-top: rem(30);
+        margin-left:rem(0);
+        float: none;
+      }
+    }
+  }
+}
+
+
+
+@media only screen and (min-width:rem(100)) and (max-width: rem(600)) {
+
+  .top {
+    .back_image {
+      .img_wrap {
+        //사용 이미지가 우측하단 둥글게 편집, 정상이미지 사용 후 rem(230) 적용
+        height: rem(270);
+      }
+
+      .img_wrap2 {
+        display: none;
+        position: absolute;
+        width: 100%;
+        height: rem(350);
+        left : 0;
+        top: rem(1392);
+      }
+    } 
+
+    .inner {
+      .letter_box{
+        border-radius: 0;
+        width: calc(100% - rem(20));
+        padding : rem(60) rem(0) rem(35) rem(20);
+
+        .title{
+          left: 50%;
+          transform: translateX(-50%);
+        }
+        
+        .content1 {
+          text-align: center;
+        }
+        
+        .content2 {
+          margin-right: rem(20);
+        }
+      }
+
+      .letter_box::before{
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        background-image: url(https://barf-draft.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fcommunity_2.da2c81b3.png&w=1200&q=75);
+        background-repeat: no-repeat;
+        background-size: rem(660) rem(778);
+        background-position: rem(-40) rem(-180);
+        width: 100%;
+        height: rem(300);
+        transform: translateY(rem(300));
+      }
+
+      .letter_box2{
+        margin-top: rem(250);
+        border-radius: 0;
+        .inner2 {
+          padding: rem(100) rem(20) rem(69) rem(20);
+          .title{
+            left: 50%;
+            transform: translateX(-50%);
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
+@media only screen and (min-width:rem(100)) and (max-width: rem(400)) {
+
+  .top {
+    .inner {
+      .letter_box{
+        .sign {
+          float: none;
+          transform: translateX(rem(-50));
+        }
+      }
+    }
+  }
+
+
+
+  .mid {
+    .inner {
+      .img_quotation {
+        width: rem(250);
+        left : rem(0);
+      }
+      .title {
+        font-size: rem(25);
+        margin-left: rem(27);
+      }
+      .text {
+        font-size: rem(16);
+      }
+    }
+  }
+
+
+
+  .bottom {
+    .inner {
+      .left{
+        p{
+          font-size: rem(14);
+        }
       }
     }
   }

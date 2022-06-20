@@ -58,12 +58,15 @@ section.subscribe_discount { margin-bottom: rem(80);}
   @include char(d32);
   font-family: 'Gmarketsansbold';
   // font-weight: 700;
-  font-size: 32px;
+  font-size: rem(32);
   line-height: 140%;
   width: rem(600);
   text-align: center;
 
-}
+    br{
+      display: none;
+    }
+  } 
 .line {
   padding: rem(6) 0 rem(22);
 
@@ -75,6 +78,7 @@ section.subscribe_discount { margin-bottom: rem(80);}
 
 .recipe_title2 {
   @include char(l18);
+  text-align: center;
 }
 
 
@@ -82,16 +86,20 @@ section.subscribe_discount { margin-bottom: rem(80);}
   display: flex;
   flex-direction: column;
   align-items: center;
- 
+
+    br{
+      display: none;
+    }
 
   .recipe_grid_box {
     width: 100%;
     max-width: rem(1160);
     display: grid;
-    grid-template-columns: 48.5% 48.5%;
+    grid-template-columns: 1fr 1fr;
     row-gap: rem(60);
     column-gap: rem(40);
     padding: rem(60) 0 rem(90);
+    text-align: center;
 
     p {
       @include char(t28);
@@ -241,10 +249,10 @@ section.subscribe_discount { margin-bottom: rem(80);}
           position: absolute;
           top : rem(10);
           left : 0;
-          bottom: 0px;
+          bottom: 0;
           margin: auto;
           z-index: 10;
-          border-top: 0.25px dashed #202020;
+          border-top: rem(0.25) dashed #202020;
         }
       } 
     }
@@ -284,10 +292,10 @@ section.subscribe_discount { margin-bottom: rem(80);}
           position: absolute;
           top : rem(10);
           left : 0;
-          bottom: 0px;
+          bottom: 0;
           margin: auto;
           z-index: 10;
-          border-top: 0.25px dashed #202020;
+          border-top: rem(0.25) dashed #202020;
         }
       }
     }
@@ -345,7 +353,7 @@ section.subscribe_discount { margin-bottom: rem(80);}
     font-family: 'Pretendard Variable';
     font-style: normal;
     font-weight: 400;
-    font-size: 12px;
+    font-size: rem(12);
     line-height: 100%;
     color: #919191;
     padding-top: rem(16);
@@ -354,7 +362,7 @@ section.subscribe_discount { margin-bottom: rem(80);}
     font-family: 'Pretendard Variable';
     font-style: normal;
     font-weight: 400;
-    font-size: 12px;
+    font-size: rem(12);
     line-height: 100%;
     color: #919191;
     padding-top: rem(4);
@@ -398,10 +406,14 @@ section.subscribe_discount { margin-bottom: rem(80);}
     width: 100%;
     max-width: rem(1160);
     position: relative;
+
+    br{
+      display: none;
+    }
   
     .box_title {
       text-align: center;
-      width: 50%;
+      width: rem(550);
       left: 50%;
       transform: translateX(-50%);
       top:rem(-15);
@@ -444,7 +456,7 @@ section.subscribe_discount { margin-bottom: rem(80);}
 
     .box_title2 {
       text-align: center;
-      width: 40%;
+      width: rem(460);
       left: 50%;
       transform: translateX(-50%);
       top : rem(-15);
@@ -452,21 +464,27 @@ section.subscribe_discount { margin-bottom: rem(80);}
       position: absolute;
       @include char(t24);
       background-color: #fff;
+
+      br{
+        display: none;
+      }
     }
 
     .pic_box2 {
       border: rem(1) solid #c4c4c4;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(rem(120), 1fr));
+      //grid-template-columns: repeat(auto-fill, minmax(rem(120), 1fr));
+      grid-template-columns: repeat(6, 1fr);
       width: 100%;
       max-width: rem(1160);
       padding: rem(80) rem(70);
       column-gap: rem(35);
       box-sizing: border-box;
+      justify-content: center;
 
       .image_box {
         width: 100%;
-        max-width: rem(140);
+        //max-width: rem(140);
         display: flex;
         padding-bottom: rem(20);
         justify-content: center;
@@ -559,7 +577,7 @@ font-style: normal;
         font-family: 'Pretendard Variable';
         font-style: normal;
         font-weight: 700;
-        font-size: 40px;
+        font-size: rem(40);
         line-height: 140%;
         letter-spacing: -0.02em;
       }
@@ -604,13 +622,15 @@ font-style: normal;
   align-items: center;
   background: rgba(230, 230, 230, 0.29);
 
+  
+
   .sub_row_1 {
     padding-top: rem(70);
     padding-bottom: rem(4);
     @include char(d28);
     font-weight: 500;
-    
   }
+
   .sub_row_2 {
     @include char(d32);
     position: relative;
@@ -620,8 +640,12 @@ font-style: normal;
       height: rem(8);
       background-color: #FF8C16;
       position: absolute;
-      top : 31px;
+      top : rem(31);
       z-index: -10;
+    }
+
+    br{
+      display: none;
     }
   }
 
@@ -639,5 +663,255 @@ font-style: normal;
 
   
 
+  
+}
+
+@media only screen and (min-width:rem(100)) and (max-width: rem(1200)) {
+  
+  .note {
+    .note_content_box {
+      br{
+        display: inline-block;
+      }
+
+      .box_title {
+        width: rem(320);
+        top:rem(-30);
+      }
+
+      .pic_box {
+        padding-top: rem(60);
+      }
+    }
+
+    .note_content_box2 {
+
+      .box_title2 {
+        width: rem(270);
+        top: rem(-30);
+
+        br{
+          display: inline-block;
+        }
+      }
+
+      .pic_box2 {
+        grid-template-columns: repeat(3, rem(180));
+        grid-gap: rem(30);
+      }
+    }
+  }
+
+}
+
+
+
+@media only screen and (min-width:rem(100)) and (max-width: rem(900)) {
+
+  .recipe_introduce {
+    br{
+      display: inline-block;
+    }
+  }
+
+  .note {
+    .note_content_box {
+      .box_title {
+        width: rem(300);
+      }
+
+      .pic_box {
+        grid-template-columns: 1fr;
+        grid-gap: rem(40);
+
+        .image_box {
+          max-width: none;
+  
+          .image {
+            max-width: none;
+          }
+        } 
+      }
+    }
+
+    .note_content_box2 {
+      .box_title2 {
+        width: rem(250);
+        top:rem(-30);
+      }
+
+      .pic_box2 {
+        grid-template-columns: repeat(2, rem(180));
+        grid-gap: rem(30);
+      }
+    }
+  }
+
+  .health_care {
+    .health_grid_box {
+      grid-template-columns: 1fr;
+      grid-gap: rem(30);
+    }
+  }
+  
+
+  .subscribe_discount {
+    .sub_row_1 {
+      font-size: rem(20);
+      margin-bottom: rem(20);
+    }
+    .sub_row_2 {
+      margin-bottom: rem(20);
+      &::before{
+        width: rem(200);
+      }
+
+      br{
+        display: inline-block;
+      }
+    }
+  }
+
+
+ //모달 
+  .modal_text_box:not(:last-child) {
+    padding-bottom: rem(16);
+  }
+
+  .modal_image_box3 {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .modal_text_box4 {
+    .text_row_1 {
+      @include char(b14);
+    }
+
+    .text_row_2_1 {
+      padding-bottom: rem(20);
+    }
+
+    .text_row_3 {
+      .inner_text_row_1  {
+        padding-bottom: 0;
+      }
+      .inner_text_row_2 {
+        display: none;
+      }
+    }
+  }
+
+}
+
+
+
+@media only screen and (min-width:rem(100)) and (max-width: rem(600)) {
+
+  .recipe_title {
+      br{
+        display: inline-block;
+      }
+    } 
+    
+  .line{
+    margin: 0 auto;
+    hr {
+      width: rem(315);
+    }
+  }
+
+  .recipe_introduce {
+    .recipe_grid_box {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .note {
+    .note_content_box {
+      .box_title {
+        width: rem(320);
+      }
+
+      .pic_box {
+        grid-template-columns: 1fr;
+        grid-gap: rem(40);
+        padding: rem(60) rem(10) rem(10);
+
+        .image_box {
+          max-width: none;
+  
+          .image {
+            max-width: none;
+          }
+        } 
+      }
+    }
+  }
+
+  .health_care {
+    .health_grid_box {
+      .left_side {
+        .health_row_1 {
+          @include char(t24);
+  
+        }
+        .health_row_2 {
+          font-size: rem(35);
+        }
+      }
+    }
+  }
+
+  
+}
+
+@media only screen and (min-width:rem(100)) and (max-width: rem(400)) {
+
+  .note {
+    .note_content_box {
+
+      .box_title {
+        width: rem(300);
+      }
+    }
+
+    .note_content_box2 {
+      .pic_box2 {
+        grid-template-columns: repeat(2, rem(120));
+        .image_box {
+          .image {
+            width: 80%;
+          }
+        }
+      }
+    }
+  }
+
+  .health_care {
+    .health_grid_box {
+      .left_side {
+        .health_row_1 {
+          @include char(t20);
+  
+        }
+        .health_row_2 {
+          font-size: rem(26);
+        }
+      }
+    }
+  }
+
+
+  
+  .subscribe_discount {
+    .sub_row_2 {
+      font-size: rem(24);
+      
+      &::before{
+        width: rem(150);
+        top: rem(20);
+      }
+    }
+  }
   
 }

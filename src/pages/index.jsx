@@ -142,7 +142,7 @@ function Swiper_main() {
                           objectFit="cover"
                           objectPosition="50% 50%"
                           layout="fill"
-                          alt="카드 이미지"
+                          alt="모바일 메인배너 이미지"
                         />
                       </div>
                     </a>
@@ -198,7 +198,7 @@ function Swiper_recipe() {
       <Swiper {...swiperSettings_recipe}>
         <SwiperSlide
           style={{
-            width: "260px",
+            width: "260",
             height: "inherit",
           }}
         >
@@ -207,9 +207,9 @@ function Swiper_recipe() {
                 <div className={Styles.img_wrap}>
                   <Image
                     src={StartBanner}
-                    objectFit=""
-                    layout=""
-                    alt=""
+                    objectFit="fit"
+                    layout="fill"
+                    alt="레시피 이미지"
                   />
                   <div className={Styles.secondbox}>스타터 프리미엄</div>
                         <div className={Styles.pbox}>
@@ -234,9 +234,9 @@ function Swiper_recipe() {
                 <div className={Styles.img_wrap}>
                   <Image
                     src={StartBanner}
-                    objectFit=""
-                    layout=""
-                    alt=""
+                    objectFit="fit"
+                    layout="fill"
+                    alt="레시피 이미지"
                   />
                   <div className={Styles.secondbox}>스타터 프리미엄</div>
                         <div className={Styles.pbox}>
@@ -261,9 +261,9 @@ function Swiper_recipe() {
                 <div className={Styles.img_wrap}>
                   <Image
                     src={StartBanner}
-                    objectFit=""
-                    layout=""
-                    alt=""
+                    objectFit="fit"
+                    layout="fill"
+                    alt="레시피 이미지"
                   />
                   <div className={Styles.secondbox}>스타터 프리미엄</div>
                         <div className={Styles.pbox}>
@@ -288,9 +288,9 @@ function Swiper_recipe() {
                 <div className={Styles.img_wrap}>
                   <Image
                     src={StartBanner}
-                    objectFit=""
-                    layout=""
-                    alt=""
+                    objectFit="fit"
+                    layout="fill"
+                    alt="레시피 이미지"
                   />
                   <div className={Styles.secondbox}>스타터 프리미엄</div>
                         <div className={Styles.pbox}>
@@ -426,16 +426,18 @@ function Swiper_review() {
             <div className={Styles.swiper_review_img}>
               <Image
                 src={require("/public/img/pages/home/home_review_1.png")}
-                objectFit=""
-                layout=""
+                objectFit="fit"
+                width={240}
+                height={240}
                 alt="카드 이미지"
               />
             </div>
             <div className={Styles.swiper_review_txt}>
               <Image
                 src={require("/public/img/pages/home/home_review_quotation.png")}
-                objectFit=""
-                layout=""
+                objectFit="fit"
+                width={14}
+                height={13}
                 alt="카드 이미지"
               />
             </div>
@@ -447,16 +449,18 @@ function Swiper_review() {
             <div className={Styles.swiper_review_img}>
               <Image
                 src={require("/public/img/pages/home/home_review_2.png")}
-                objectFit=""
-                layout=""
+                objectFit="fit"
+                width={240}
+                height={240}
                 alt="카드 이미지"
               />
             </div>
             <div className={Styles.swiper_review_txt}>
               <Image
                 src={require("/public/img/pages/home/home_review_quotation.png")}
-                objectFit=""
-                layout=""
+                objectFit="fit"
+                width={14}
+                height={13}
                 alt="카드 이미지"
               />
             </div>
@@ -469,16 +473,18 @@ function Swiper_review() {
             <div className={Styles.swiper_review_img}>
               <Image
                 src={require("/public/img/pages/home/home_review_3.png")}
-                objectFit=""
-                layout=""
+                objectFit="fit"
+                width={240}
+                height={240}
                 alt="카드 이미지"
               />
             </div>
             <div className={Styles.swiper_review_txt}>
               <Image
                 src={require("/public/img/pages/home/home_review_quotation.png")}
-                objectFit=""
-                layout=""
+                objectFit="fit"
+                width={14}
+                height={13}
                 alt="카드 이미지"
               />
             </div>
@@ -491,16 +497,18 @@ function Swiper_review() {
             <div className={Styles.swiper_review_img}>
               <Image
                 src={require("/public/img/pages/home/home_review_1.png")}
-                objectFit=""
-                layout=""
+                objectFit="fit"
+                width={240}
+                height={240}
                 alt="카드 이미지"
               />
             </div>
             <div className={Styles.swiper_review_txt}>
               <Image
                 src={require("/public/img/pages/home/home_review_quotation.png")}
-                objectFit=""
-                layout=""
+                objectFit="fit"
+                width={14}
+                height={13}
                 alt="카드 이미지"
               />
             </div>
@@ -512,16 +520,18 @@ function Swiper_review() {
             <div className={Styles.swiper_review_img}>
               <Image
                 src={require("/public/img/pages/home/home_review_2.png")}
-                objectFit=""
-                layout=""
+                objectFit="fit"
+                width={240}
+                height={240}
                 alt="카드 이미지"
               />
             </div>
             <div className={Styles.swiper_review_txt}>
               <Image
                 src={require("/public/img/pages/home/home_review_quotation.png")}
-                objectFit=""
-                layout=""
+                objectFit="fit"
+                width={14}
+                height={13}
                 alt="카드 이미지"
               />
             </div>
@@ -534,16 +544,18 @@ function Swiper_review() {
             <div className={Styles.swiper_review_img}>
               <Image
                 src={require("/public/img/pages/home/home_review_3.png")}
-                objectFit=""
-                layout=""
+                objectFit="fit"
+                width={240}
+                height={240}
                 alt="카드 이미지"
               />
             </div>
             <div className={Styles.swiper_review_txt}>
               <Image
                 src={require("/public/img/pages/home/home_review_quotation.png")}
-                objectFit=""
-                layout=""
+                objectFit="fit"
+                width={14}
+                height={13}
                 alt="카드 이미지"
               />
             </div>
@@ -566,7 +578,7 @@ function Swiper_sns() {
   
   const swiperSettings_sns = {
     className: `${Styles.swiper_sns}`,
-    loop: true,
+    // loop: true,
     spaceBetween: 0,
     centeredSlides: false, // 가운데 갈지 말지 고민
     slidesPerView: 2,
@@ -590,8 +602,6 @@ function Swiper_sns() {
         spaceBetween: 60,
       },
     },
-    observer: true,
-    observeParents: true,
   };
 
   useEffect(() => {
@@ -614,8 +624,9 @@ function Swiper_sns() {
               <div className={Styles.swiper_sns_img}>
                 <Image
                   src={require("/public/img/pages/home/home_sns_1.png")}
-                  objectFit=""
-                  layout=""
+                  objectFit="fit"
+                  width={244}
+                  height={244}
                   alt="카드 이미지"
                 />
               </div>
@@ -629,8 +640,9 @@ function Swiper_sns() {
                <div className={Styles.swiper_sns_img}>
                 <Image
                   src={require("/public/img/pages/home/home_sns_2.png")}
-                  objectFit=""
-                  layout=""
+                  objectFit="fit"
+                  width={244}
+                  height={244}
                   alt="카드 이미지"
                 />
               </div>
@@ -644,8 +656,9 @@ function Swiper_sns() {
               <div className={Styles.swiper_sns_img}>
                 <Image
                   src={require("/public/img/pages/home/home_sns_3.png")}
-                  objectFit=""
-                  layout=""
+                  objectFit="fit"
+                  width={244}
+                  height={244}
                   alt="카드 이미지"
                 />
               </div>
@@ -659,8 +672,9 @@ function Swiper_sns() {
               <div className={Styles.swiper_sns_img}>
                 <Image
                   src={require("/public/img/pages/home/home_sns_4.png")}
-                  objectFit=""
-                  layout=""
+                  objectFit="fit"
+                  width={244}
+                  height={244}
                   alt="카드 이미지"
                 />
               </div>
@@ -687,9 +701,10 @@ function Home() {
   return (
     <>
       <MetaTitle title="바프독" />
+      {/* <Layout id="mainpage"> */}
       <Layout>
         {/* <Wrapper bgColor="#fbf7f6" fullWidth={true}> */}
-        <Wrapper fullWidth={true}>
+        <Wrapper fullWidth={true} rowStyle={{padding: 0}}>
           {/* 스와이프주석 */}
           <Swiper_main />
         </Wrapper>
@@ -714,7 +729,7 @@ function Home() {
           <section className={Styles.barfraw}>
             <div className={Styles.inner}>
               <div className={Styles.leftbox}>
-                <Image src={Barfraw} objectFit="cover" layout="fill" alt="" />
+                <Image src={Barfraw} objectFit="cover" layout="fill" alt="바프 생식 이미지" />
               </div>
               <div className={Styles.rightbox}>
                 <p>ABOUT BARF</p>
@@ -757,10 +772,20 @@ function Home() {
               <li className={Styles.rightbox}>
                 <div className={Styles.barfgood_imgbox}>
                   <div className={Styles.barfood1}>
-                    <Image src={Barfgood1} alt="" />
+                    <Image src={Barfgood1} 
+                      objectFit="fit"
+                      width={560}
+                      height={456}
+                      alt="카드 이미지"  
+                      />
                   </div>
                   <div className={Styles.barfood2}>
-                    <Image src={Barfgood2} alt="" />
+                    <Image src={Barfgood2} 
+                      objectFit="fit"
+                      width={335}
+                      height={635}
+                      alt="카드 이미지" 
+                    />
                   </div>
                 </div>
               </li>
@@ -775,7 +800,12 @@ function Home() {
             <div className={Styles.inner}>
               <p>CEHCK POINT</p>
               <h1>바프독을 선택해야 하는 이유</h1>
-              <Image src={Halftest} alt=""></Image>
+              <Image src={Halftest} 
+                objectFit="fit"
+                width={560}
+                height={560}
+                alt="카드 이미지" 
+              ></Image>
             </div>
           </section>
         </Wrapper>
@@ -792,7 +822,12 @@ function Home() {
                   <br />
                   real BARF
                 </p>
-                <Image src={LeftPic} alt="" />
+                <Image src={LeftPic} 
+                  objectFit="fit"
+                  width={260}
+                  height={260}
+                  alt="카드 이미지"  
+                />
                 <p className={Styles.text}>
                   생고기, 칼슘이 풍부한 뼈, 신선한 야채를 완벽한 비율로 구성해
                   반려견이 필요한 영양분을 골고루 섭취 할 수 있습니다.
@@ -805,7 +840,12 @@ function Home() {
                   <br />
                   double meats
                 </p>
-                <Image src={midPic} alt="" />
+                <Image src={midPic}
+                  objectFit="fit"
+                  width={260}
+                  height={260}
+                  alt="카드 이미지"   
+                />
                 <p className={Styles.text}>
                   전문가들은 균형잡힌 식사를 위해 한끼에 두가지 이상의 고기를
                   섭취하도록 권장합니다. 바프독은 모든 레시피에 두가지 고기를
@@ -819,7 +859,12 @@ function Home() {
                   <br />
                   AAFCO
                 </p>
-                <Image src={rightPic} alt="" />
+                <Image src={rightPic} 
+                  objectFit="fit"
+                  width={260}
+                  height={260}
+                  alt="카드 이미지"   
+                />
                 <p className={Styles.text}>
                   미국 사료협회 AAFCO에서 제시한 펫푸드 영양성분 가이드라인을
                   충족하며 고단백, 고영양의 프리미엄 맞춤형 생식을 제공합니다.

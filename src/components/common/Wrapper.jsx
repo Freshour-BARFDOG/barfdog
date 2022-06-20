@@ -3,7 +3,8 @@ import s from './wrapper.module.scss';
 
 
 
-function Wrapper({ children, bgColor , fullWidth}) {
+// function Wrapper({ children, bgColor , fullWidth, rowStyle, ...props}) {
+function Wrapper({ children, bgColor , fullWidth, rowStyle}) {
   return (
     <div
       className={`${s.container_outer}`}
@@ -14,7 +15,8 @@ function Wrapper({ children, bgColor , fullWidth}) {
         // style={{ width: props.fullWidth ? "100%" : "" }}
         // style={{ width: "100%" }}
       >
-        <div className={s.row}>{children}</div>
+        {/* <div id={props.id} className={`${s.row}`} style={rowStyle}>{children}</div> */}
+        <div className={`${s.row}`} style={rowStyle}>{children}</div>
       </div>
     </div>
   );
