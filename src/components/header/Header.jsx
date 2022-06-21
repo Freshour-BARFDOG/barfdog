@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import s from './header.module.scss';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -12,6 +12,7 @@ import { MemberMemu, Non_MemberMenu } from './memberStateMenu';
 import ServiceCenter from '/src/components/header/ServiceCenter';
 import PcGnb from '/src/components/header/PcGnb';
 import MobileGnb from './MobileGnb';
+import MobileSidr from "./MobileSidr";
 import DeadlineTimer from '/src/components/atoms/DeadlineTimer';
 
 import Icon_cart from '/public/img/icon/cart.svg';
@@ -27,6 +28,8 @@ const Header = () => {
   const isLogin = !!userData;
   const deviceState = useDeviceState();
   const isMobile = deviceState.isMobile;
+  const [isSidrOpen, setIsSidrOpen] = useState(false);
+
 
   return (
     <>
@@ -56,12 +59,13 @@ const Header = () => {
                   <PcGnb />
                 </ul>
               </nav>
-              <Gnb_my isMobile={isMobile} />
+              <Gnb_my isMobile={isMobile} setSidrOpen={setIsSidrOpen} />
             </section>
           </div>
         </Wrapper>
       </header>
       {isMobile && <MobileGnb />}
+      {isMobile && <MobileSidr isOpen={isSidrOpen} setSidrOpen={setIsSidrOpen}/>}
       <Modal_subscribeWidhSSR />
     </>
   );
@@ -69,9 +73,9 @@ const Header = () => {
 
 export default Header;
 
-export const Gnb_my = ({ isMobile }) => {
+export const Gnb_my = ({ isMobile, setSidrOpen }) => {
   const onShowMobileSideMenu = () => {
-    console.log('sidemenu 나타나랏');
+    setSidrOpen(true);
   };
   return (
     <>

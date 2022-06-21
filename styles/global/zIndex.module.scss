@@ -1,7 +1,8 @@
 // *  ------- Global - Z-INDEX 관리
 
 
-
+$mobileSidr: 10000001 !important; // ChannelTalk보다 위에 나타남( 채널톡 Z-index: 10000000)
+$mobileSidrBackground: 1999;
 
 .modal-wrapper{z-index:1001 !important;} // * 사용처: Global Alert 
 .modal-wrapper-background{z-index:1001 !important;} // * 사용처: Modal 공통 Component, recipe페이지 Modal
