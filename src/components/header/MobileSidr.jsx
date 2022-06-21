@@ -26,7 +26,7 @@ function kakaoLoginFunc() {
 export default function MobileSidr({ isOpen, setSidrOpen }) {
   const dispatch = useDispatch();
   const userData = useUserData();
-  const isLogin = !!userData ;
+  const isLogin = true || !!userData;
 
   const onCloseSidr = () => {
     setSidrOpen(false);
@@ -52,49 +52,54 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
 
   return (
     <>
-      <div id={s.sidr} className={`${isOpen ? s.open : ''} ${isLogin ? s.member : s['non-member'] }`}>
+      <div
+        id={s.sidr}
+        className={`${isOpen ? s.open : ''} ${isLogin ? s.member : s['non-member']}`}
+      >
         <main className={s.main}>
-          <div className={s.row}>
-            <div className={s['close-btn-section']}>
+          <section className={s['close-btn-section']}>
+            <div className={s.row}>
               <CloseButton lineColor={'#333'} onClick={onCloseSidr} />
             </div>
-          </div>
+          </section>
           <ScrollContainer className={s['scroll-container']} scrollBarWidth={'0'}>
-            {!isLogin && <div className={s.row}>
+            {!isLogin && (
               <section className={s['login-section']}>
-                <MenuList
-                  contClassName={`${s.btn} ${s.solid}`}
-                  title={'로그인'}
-                  link={'/account/login'}
-                  removeIcon={true}
-                />
-                <MenuList
-                  contClassName={`${s.btn} ${s.line}`}
-                  title={'회원가입'}
-                  link={'/account/signup'}
-                  removeIcon={true}
-                />
-                <div className={s.divider}>
-                  <i />
-                  <span className={s.text}>간편 로그인</span>
-                  <i />
-                </div>
-                <div className={s['sns']}>
-                  <button type={'button'} className={s.kakao} onClick={kakaoLoginFunc}>
-                    <Image src={Kakao} width={72} height={72} alt="카카오톡 아이콘" />
-                    <em className={s.desc}>
-                      카카오로 <b> 3초만에 시작</b>하기
-                    </em>
-                  </button>
-                  <button className={s.naver} type={'submit'}>
-                    <Image src={Naver} width="72" height="72" alt="네이버 아이콘" />
-                  </button>
+                <div className={s.row}>
+                  <MenuList
+                    contClassName={`${s.btn} ${s.solid}`}
+                    title={'로그인'}
+                    link={'/account/login'}
+                    removeIcon={true}
+                  />
+                  <MenuList
+                    contClassName={`${s.btn} ${s.line}`}
+                    title={'회원가입'}
+                    link={'/account/signup'}
+                    removeIcon={true}
+                  />
+                  <div className={s.divider}>
+                    <i />
+                    <span className={s.text}>간편 로그인</span>
+                    <i />
+                  </div>
+                  <div className={s['sns']}>
+                    <button type={'button'} className={s.kakao} onClick={kakaoLoginFunc}>
+                      <Image src={Kakao} width={72} height={72} alt="카카오톡 아이콘" />
+                      <em className={s.desc}>
+                        카카오로 <b> 3초만에 시작</b>하기
+                      </em>
+                    </button>
+                    <button className={s.naver} type={'submit'}>
+                      <Image src={Naver} width="72" height="72" alt="네이버 아이콘" />
+                    </button>
+                  </div>
                 </div>
               </section>
-            </div>}
+            )}
             {isLogin && (
-              <div className={s.row}>
-                <section className={s['dashboard-section']}>
+              <section className={s['dashboard-section']}>
+                <div className={s.row}>
                   <div className={s.userInfo}>
                     <figure className={`${s['cont-left']} ${s.image}`}>
                       <Image
@@ -106,10 +111,14 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                     </figure>
                     <figcaption className={s['cont-right']}>
                       <p className={s.innerRow}>
-                        <span className={s.dogName}>바둑이<em className={s.unit}>견주</em></span>
+                        <span className={s.dogName}>
+                          바둑이<em className={s.unit}>견주</em>
+                        </span>
                       </p>
                       <p className={s.innerRow}>
-                        <span className={s.userName}>홍길동<em className={s.unit}>님</em></span>
+                        <span className={s.userName}>
+                          홍길동<em className={s.unit}>님</em>
+                        </span>
                         <i className={s.grade}>더바프</i>
                       </p>
                       <p className={s.innerRow}>
@@ -133,8 +142,8 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                       </li>
                     </ul>
                   </div>
-                </section>
-              </div>
+                </div>
+              </section>
             )}
 
             {isLogin && (
@@ -190,14 +199,16 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
               </section>
             )}
             <section className={s['bottom-menu-section']}>
-              <ul>
-                {isLogin && <MenuList title={'장바구니'} link={'/cart'} />}
-                <MenuList title={'공지사항'} link={'/community/notice'} />
-                <MenuList title={'이벤트'} link={'/community/event'} />
-                <MenuList title={'자주묻는 질문'} link={'/faq'} />
-                <MenuList title={'1:1 문의'} />
-                {isLogin && <MenuList title={'로그아웃'} onClick={onLogout} />}
-              </ul>
+              <div className={s.row}>
+                <ul>
+                  {isLogin && <MenuList title={'장바구니'} link={'/cart'} />}
+                  <MenuList title={'공지사항'} link={'/community/notice'} />
+                  <MenuList title={'이벤트'} link={'/community/event'} />
+                  <MenuList title={'자주묻는 질문'} link={'/faq'} />
+                  <MenuList title={'1:1 문의'} />
+                  {isLogin && <MenuList title={'로그아웃'} onClick={onLogout} />}
+                </ul>
+              </div>
             </section>
           </ScrollContainer>
         </main>

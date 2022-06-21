@@ -3,6 +3,9 @@
 
 $rowPadding: rem(20);
 $bottom-menu-list-height: rem(50);
+$main-padding: rem(20);
+$closeButtonSectionHeight: rem(16);
+
 
 #sidr {
   z-index: $mobileSidr;
@@ -30,12 +33,10 @@ $bottom-menu-list-height: rem(50);
 
 // background-color
 #sidr{
-  background-color: #fff;
-  .main {
-    background-color: #fff;
-    .row{background-color: #fff}
-    section {background-color: #fff;}
-  }
+  background-color:#fff;
+
+  .main .row{ background-color: #fff}
+  .main section {background-color: #fff;}
   .scroll-container {
     background-color: var(--color-bg-ghostWhite);
   }
@@ -43,6 +44,14 @@ $bottom-menu-list-height: rem(50);
 
 // layout
 #sidr{
+  .close-btn-section {
+    padding-top: $main-padding;
+  }
+  .scroll-container{
+    height: calc(100vh - #{$main-padding}* 1 - #{$closeButtonSectionHeight});
+    box-sizing: border-box;
+    padding-bottom: $bottom-menu-list-height;
+  }
   .login-section{
     padding-top: rem(44);
     padding-bottom: rem(60);
@@ -64,23 +73,20 @@ $bottom-menu-list-height: rem(50);
 }
 
 .main {
-  $main-padding: rem(20);
-  $closeButtonSectionHeight: rem(16);
-  margin: $main-padding 0;
   height: 100%;
   box-sizing: border-box;
   .row {
     padding: 0 $rowPadding;
   }
-  .close-btn-section {
-    height: $closeButtonSectionHeight;
+}
+
+.close-btn-section {
+  .row{
     display: flex;
     align-items: center;
     justify-content: flex-end;
   }
-  .scroll-container {
-    height: calc(100vh - #{$main-padding}* 2 - #{$closeButtonSectionHeight});
-  }
+
 }
 
 
@@ -297,8 +303,11 @@ $bottom-menu-list-height: rem(50);
       box-sizing: border-box;
       color: var(--color-font-sub);
       max-height: rem(50);
-      padding: 0 $rowPadding;
+      //padding: 0 $rowPadding;
       * {
+        height: 100%;
+        display: flex;
+        align-items: center;
         text-align: left;
       }
       &:not(:last-child) {
