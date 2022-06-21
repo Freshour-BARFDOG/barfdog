@@ -1,0 +1,62 @@
+@import './rem';
+
+
+
+
+
+
+#modal {
+  width: rem(420);
+  padding: rem(24) rem(40) rem(30) !important;
+
+
+  .top-close-button{
+    position:absolute;
+    right:rem(14);
+    top:rem(10);
+    width: rem(20);
+    height: rem(20);
+  }
+  .title-section {
+    text-align: center;
+    margin-bottom:rem(19);
+    * {font-size: rem(20);
+    font-weight: 500}
+  }
+  .cont-section {
+    border: rem(1) solid var(--color-line-03);
+    border-radius: rem(4);
+    background-color: var(--color-bg-02);
+    margin-bottom:rem(30);
+    font-size:rem(15);
+    color: var(--color-font-sub);
+    > * {padding: rem(10) rem(14);
+    box-sizing: border-box;}
+  }
+  .btn-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 rem(16);
+    display: grid;
+    grid-template-columns:  1fr 1fr;
+    gap: rem(10);
+  }
+
+
+  .btn{
+    display: flex;align-items: center;justify-content: center;
+    border: rem(1) solid transparent;
+    height: rem(44);
+    min-width: rem(100);
+    &.line{
+      background-color: #fff;
+      border-color: var(--color-line-03);
+    }
+    &.solid{
+      background-color: var(--color-main);
+      color: #fff;
+    }
+  }
+
+}

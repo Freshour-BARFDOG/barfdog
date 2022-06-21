@@ -5,6 +5,12 @@ import { authAction } from '@store/auth-slice';
 import useUserData from "@util/hook/useUserData";
 
 
+const FullScreenLoading = () => {
+  return <p>풀스크린 로딩컴포넌트: 추후 추가예정</p>
+}
+
+
+
 
 
 
@@ -42,12 +48,12 @@ import useUserData from "@util/hook/useUserData";
      setIsAuth(!!userData)
 
     if (!isAuth && nonMemberPath ) {
-      alert('로그인이 필요한 서비스입니다.')
+      // alert('로그인이 필요한 서비스입니다.')
       console.error('Redir: User FOBBIDEN PAGE');
-      router.push('/account/login')
-      // 로그인상태확인
-      // 포비든 페이지확인
-      // 안내문을 띄우고, 로그인페이지로 이동시킨다.
+      // router.push('/account/login');
+      // ! 로그인상태확인
+      // ! 포비든 페이지확인
+      // ! 안내문을 띄우고, 로그인페이지로 이동시킨다.
     }
 
 
@@ -68,9 +74,7 @@ import useUserData from "@util/hook/useUserData";
    }, [curPath, dispatch, router, userData, isAuth]);
 
 
-   const FullScreenLoading = () => {
-     return <p>풀스크린 로딩컴포넌트: 추후 추가예정</p>
-   }
+
 
    return (
      <>
