@@ -78,7 +78,7 @@ html, body{width:100vw; overflow-x:hidden;}
 // *  MOBILE , WEB > Show & Hide
 
 .mobile{display:none !important;}
-.web{display:block !important;}
+.pc{display:block !important;}
 
 @media (max-width:rem(1200)){
   
@@ -87,7 +87,7 @@ html, body{width:100vw; overflow-x:hidden;}
 
 @media (max-width:rem(600)){
   .mobile{display:block !important;}
-  .web{display:none !important;}
+  .pc{display:none !important;}
 }
 
 ////////////////////////////////////////////////////

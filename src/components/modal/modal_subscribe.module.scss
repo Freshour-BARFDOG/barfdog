@@ -151,7 +151,8 @@ $topLinkBannerHeight : rem(38);
 @media (max-width: $containerSize) {
 
   .container {
-    width: calc(100vw - rem(40))
+    width: calc(100vw - #{rem(40)
+  })
   }
 }
 
@@ -164,16 +165,20 @@ $topLinkBannerHeight : rem(38);
 
   
   .body{
-    margin-top: calc($topLinkBannerHeight + $marginForBackgroundTouch);
+    margin-top: calc(#{ $topLinkBannerHeight
+  } + #{$marginForBackgroundTouch
+  });
     margin-bottom: $marginForBackgroundTouch;
     box-sizing: border-box;
-    height: calc(100vh - $topLinkBannerHeight);
+    height: calc(100vh - #{$topLinkBannerHeight
+  });
     top:0;
     transform:translate(-50%,0)
   }
   .container {max-width: rem(335);} 
   .cont {
-    max-height: calc(100vh - rem(83));
+    max-height: calc(100vh - #{rem(83)
+  });
     ul {
       grid-template-columns: 1fr ;
       li:not(:last-child) {
@@ -216,7 +221,8 @@ $topLinkBannerHeight : rem(38);
 
 @media (max-width: rem(320)) {
 
-  .container {width: calc(100vw - rem(16));} 
+  .container {width: calc(100vw - #{rem(16)
+  });}
   .cont {
     overflow-y:scroll;
     &::-webkit-scrollbar {display:none;} //  스크롤바 숨김
