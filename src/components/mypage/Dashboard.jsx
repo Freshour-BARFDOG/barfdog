@@ -17,7 +17,7 @@ function Dashboard({ className, ...props }) {
   const earnPoint = 3200;
   const numberOfCoupons = 1;
 
-  const [isModalActive, setIsModalActive] = useState(true);
+  const [isModalActive, setIsModalActive] = useState(false);
 
   const onCopyToClipboard = () => {
     let hostname;
