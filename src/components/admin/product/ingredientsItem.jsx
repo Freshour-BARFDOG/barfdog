@@ -1,7 +1,7 @@
 import React from 'react';
 import PureCheckbox from '/src/components/atoms/PureCheckbox';
 import CloseButton from '/src/components/atoms/CloseButton';
-import rem from '/src/components/atoms/rem';
+import rem from '/util/func/rem';
 
 export default  function IngredientsItem({data, index, itemList, setSelectedValues, onDelete}) {
   const key = Object.keys(itemList)[index].id;

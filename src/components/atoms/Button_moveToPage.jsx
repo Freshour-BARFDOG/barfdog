@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import styled from "styled-components";
-import rem from "./rem";
+import rem from "../../../util/func/rem";
 
 const Button = styled.button`
   border-radius: ${rem(4)};

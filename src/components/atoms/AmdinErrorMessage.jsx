@@ -1,5 +1,5 @@
 import Styled from "styled-components";
-import rem from "./rem";
+import rem from "@util/func/rem";
 
 
 const Wrap = Styled.div`
@@ -24,4 +24,4 @@ const EmptyMessage = ({ text }) => {
 };
 
 
-export default EmptyMessage;;
+export default EmptyMessage;

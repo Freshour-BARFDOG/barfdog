@@ -1,6 +1,6 @@
 import React, { useState, useEffect }from 'react'
 import styled from 'styled-components';
-import rem from './rem';
+import rem from '../../../util/func/rem';
 import zIndex from '@styles/global/zIndex.module.scss';
 
 const bgColor = '#FFCEBA';
@@ -106,11 +106,13 @@ Date.prototype.deliveryDeadline = function () {
   const sec = Math.floor(gap % 60);
 
   function convertNum (num) {
-    return num = num < 10 ? '0' + num.toString() : num.toString();
+    let convertedNum = num < 10 ? '0' + num.toString() : num.toString();
+    return convertedNum;
   }
 
   
-  return DEADLINE = `${day}일 ${convertNum(hour)}:${convertNum(min)}:${convertNum(sec)}`;
+  DEADLINE = `${day}일 ${convertNum(hour)}:${convertNum(min)}:${convertNum(sec)}`;
+  return DEADLINE;
 }   
            
 

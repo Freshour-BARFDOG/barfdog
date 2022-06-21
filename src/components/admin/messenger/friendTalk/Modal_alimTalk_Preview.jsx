@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
+import React from 'react';
 import ModalWrapper from "/src/components/modal/ModalWrapper";
 import PreviewFrame from "/public/img/preview-alimTalk.svg";
 import s from './modal_alimTalk_preview.module.scss';
 import CloseButton from "/src/components/atoms/CloseButton";
-import rem from "/src/components/atoms/rem";
+import rem from "/util/func/rem";
 
 
 

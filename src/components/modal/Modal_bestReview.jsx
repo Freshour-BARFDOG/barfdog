@@ -1,7 +1,7 @@
 import s from "./modal_bestReview.module.scss";
 import React, {useEffect, useState, useRef} from "react";
 import zIndex from "/styles/global/zIndex.module.scss";
-import rem from "/src/components/atoms/rem";
+import rem from "/util/func/rem";
 import CloseButton from "/src/components/atoms/CloseButton";
 import ScrollContainer from "/src/components/atoms/ScrollContainer";
 

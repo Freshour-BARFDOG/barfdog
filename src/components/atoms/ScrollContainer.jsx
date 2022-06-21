@@ -1,6 +1,6 @@
 import React, {forwardRef} from 'react'
 import styled from 'styled-components'
-import rem from '@src/components/atoms/rem';
+import rem from '@util/func/rem';
 
 
 

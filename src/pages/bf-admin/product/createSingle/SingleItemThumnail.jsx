@@ -3,8 +3,8 @@ import PreviewImage from "/src/components/atoms/PreviewImage";
 import CloseButton from "/src/components/atoms/CloseButton";
 import Fake_input from "/src/components/atoms/fake_input";
 import ErrorMessage from "/src/components/atoms/ErrorMessage";
-import ItemLabel, {ItemRecommendlabel} from "../../../../components/atoms/ItemLabel";
-import rem from "../../../../components/atoms/rem";
+import ItemLabel from "/src/components/atoms/ItemLabel";
+import rem from "/util/func/rem";
 
 export default function SingleItemThumbnail({fileList, setFileList, formErrors }) {
 

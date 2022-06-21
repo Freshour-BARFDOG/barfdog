@@ -45,8 +45,8 @@ const FullScreenLoading = () => {
     if ( nonMemberPath ) {
       dispatch(authAction.userRestoreAuthState());
       if(!isAuth ){
-        alert('로그인이 필요한 서비스입니다.');
-        router.push('/account/login');
+        // alert('로그인이 필요한 서비스입니다.');
+        // router.push('/account/login');
         console.error('Redir: User FOBBIDEN PAGE');
         return;
       }

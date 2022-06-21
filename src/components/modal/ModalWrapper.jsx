@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styled from "styled-components";
-import rem from "@src/components/atoms/rem";
+import rem from "@util/func/rem";
 import zIndex from "/styles/global/zIndex.module.scss";
 
 

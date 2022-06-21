@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import rem from '@src/components/atoms/rem';
-import CloseButton from "@src/components/atoms/CloseButton";
+import rem from '/util/func/rem';
 
 const Frame = styled.div`
   cursor: pointer;

@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import getElemIdx from "@util/func/getElemIdx";
-import rem from "/src/components/atoms/rem";
+import rem from "/util/func/rem";
 import styled from "styled-components";
 
 // * 최초 위치를 위해, parent Component에서 menu를 전달시켜서, 1회 실행 필요
