@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router';
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { authAction } from '@store/auth-slice';
-import useUserData from "@util/hook/useUserData";
+import { authAction } from '/store/auth-slice';
+import useUserData from "/util/hook/useUserData";
 
 
 const FullScreenLoading = () => {
@@ -45,7 +45,7 @@ const FullScreenLoading = () => {
     if ( nonMemberPath ) {
       dispatch(authAction.userRestoreAuthState());
       if(!isAuth ){
-        alert('로그인이 필요한 서비스입니다.')
+        alert('로그인이 필요한 서비스입니다.');
         router.push('/account/login');
         console.error('Redir: User FOBBIDEN PAGE');
         return;
