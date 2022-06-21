@@ -148,56 +148,62 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
 
             {isLogin && (
               <section className={s['mypage-section']}>
-                <ul>
-                  <MypageMenuList
-                    title={'주문내역'}
-                    link={'/mypage/orderHistory'}
-                    icon={<IconMypageOrderHIstory />}
-                  />
-                  <MypageMenuList
-                    title={'카드관리'}
-                    link={'/mypage/card'}
-                    icon={<IconMypageCard />}
-                  />
-                  <MypageMenuList
-                    title={'구독관리'}
-                    link={'/mypage/subscribe'}
-                    icon={<IconMypageSubscribe />}
-                  />
-                  <MypageMenuList
-                    title={'친구초대'}
-                    link={'/mypage/invite'}
-                    icon={<IconMypageInvite />}
-                  />
-                  <MypageMenuList
-                    title={'반려견정보'}
-                    link={'/mypage/dogs'}
-                    icon={<IconMypageDogs />}
-                  />
-                  <MypageMenuList
-                    title={'계정정보'}
-                    link={'/mypage/user/info'}
-                    icon={<IconMypageUser />}
-                  />
-                  <MypageMenuList
-                    title={'후기'}
-                    link={'/mypage/review'}
-                    icon={<IconMypageReview />}
-                  />
-                </ul>
+                <div className={s.row}>
+                  <ul>
+                    <MypageMenuList
+                      title={'주문내역'}
+                      link={'/mypage/orderHistory'}
+                      icon={<IconMypageOrderHIstory />}
+                    />
+                    <MypageMenuList
+                      title={'카드관리'}
+                      link={'/mypage/card'}
+                      icon={<IconMypageCard />}
+                    />
+                    <MypageMenuList
+                      title={'구독관리'}
+                      link={'/mypage/subscribe'}
+                      icon={<IconMypageSubscribe />}
+                    />
+                    <MypageMenuList
+                      title={'친구초대'}
+                      link={'/mypage/invite'}
+                      icon={<IconMypageInvite />}
+                    />
+                    <MypageMenuList
+                      title={'반려견정보'}
+                      link={'/mypage/dogs'}
+                      icon={<IconMypageDogs />}
+                    />
+                    <MypageMenuList
+                      title={'계정정보'}
+                      link={'/mypage/user/info'}
+                      icon={<IconMypageUser />}
+                    />
+                    <MypageMenuList
+                      title={'후기'}
+                      link={'/mypage/review'}
+                      icon={<IconMypageReview />}
+                    />
+                  </ul>
+                </div>
               </section>
             )}
 
-            {isLogin && (
+            {(
               <section className={s['banner-section']}>
-                <span>
+                {/*/ ! 어드민에서 생성한 이미지 사용될 예정 /*/}
+                <div className={s.row}>
+                  <span>
                   친구초대할 때마다 <b> 5천원 무한적립!</b>
                 </span>
-                <span>
+                  <span>
                   <IoIosArrowForward />
                 </span>
+                </div>
+
               </section>
-            )}
+            ) && isLogin}
             <section className={s['bottom-menu-section']}>
               <div className={s.row}>
                 <ul>

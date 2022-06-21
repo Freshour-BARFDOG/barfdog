@@ -1,11 +1,10 @@
 @import '/styles/global/rem';
 @import '/styles/global/zIndex.module';
 
-$rowPadding: rem(20);
-$bottom-menu-list-height: rem(50);
+
 $main-padding: rem(20);
 $closeButtonSectionHeight: rem(16);
-
+$bottom-menu-list-height: rem(50);
 
 #sidr {
   z-index: $mobileSidr;
@@ -57,7 +56,7 @@ $closeButtonSectionHeight: rem(16);
     padding-bottom: rem(60);
   }
   .mypage-section{
-    padding: rem(16) $rowPadding;
+    padding: rem(16) 0;
     margin-top: rem(16);
   }
 }
@@ -76,7 +75,7 @@ $closeButtonSectionHeight: rem(16);
   height: 100%;
   box-sizing: border-box;
   .row {
-    padding: 0 $rowPadding;
+    padding: 0 rem(20);
   }
 }
 
@@ -285,7 +284,6 @@ $closeButtonSectionHeight: rem(16);
   height: $bottom-menu-list-height;
   display: flex;
   align-items: center;
-  padding: 0 $rowPadding;
   justify-content: space-between;
   b {
     margin-left: rem(8);
@@ -303,7 +301,6 @@ $closeButtonSectionHeight: rem(16);
       box-sizing: border-box;
       color: var(--color-font-sub);
       max-height: rem(50);
-      //padding: 0 $rowPadding;
       * {
         height: 100%;
         display: flex;
