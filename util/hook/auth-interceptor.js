@@ -48,12 +48,9 @@ const FullScreenLoading = () => {
      setIsAuth(!!userData)
 
     if (!isAuth && nonMemberPath ) {
-      // alert('로그인이 필요한 서비스입니다.')
+      alert('로그인이 필요한 서비스입니다.')
       console.error('Redir: User FOBBIDEN PAGE');
-      // router.push('/account/login');
-      // ! 로그인상태확인
-      // ! 포비든 페이지확인
-      // ! 안내문을 띄우고, 로그인페이지로 이동시킨다.
+      router.push('/account/login');
     }
 
 
