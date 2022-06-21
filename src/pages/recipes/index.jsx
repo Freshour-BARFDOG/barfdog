@@ -1337,7 +1337,8 @@ export default function RecipePage() {
 
           <section className={s.recipe_introduce}>
             <div className={s.recipe_title}>
-              BARFDOG’s Premium Recipes
+              BARFDOG’s <br />
+              Premium Recipes
             </div>
 
             <div className={s.line}>
@@ -1365,7 +1366,7 @@ export default function RecipePage() {
                 </div>
 
                 <p>
-                  STARTER PREMIUM
+                  STARTER <br />PREMIUM
                 </p>
 
                 <div className={s.recipe_text}>
@@ -1393,7 +1394,7 @@ export default function RecipePage() {
                 </div>
 
                 <p>
-                  TURKEY &amp; BEEF
+                  TURKEY &amp; <br />BEEF
                 </p>
 
                 <div className={s.recipe_text}>
@@ -1420,7 +1421,7 @@ export default function RecipePage() {
                 </div>
 
                 <p>
-                  DUCK &amp; LAMB
+                  DUCK &amp; <br />LAMB
                 </p>
 
                 <div className={s.recipe_text}>
@@ -1447,7 +1448,7 @@ export default function RecipePage() {
                 </div>
 
                 <p>
-                  LAMB &amp; BEEF
+                  LAMB &amp; <br />BEEF
                 </p>
 
                 <div className={s.recipe_text}>
@@ -1478,7 +1479,7 @@ export default function RecipePage() {
 
             <div className={s.note_content_box}>
               <div className={s.box_title}>
-                반려견의 건강과 영양을 생각해 좋은 식재료를 고집합니다
+                반려견의 건강과 영양을 생각해 <br />좋은 식재료를 고집합니다
               </div>
               <div className={s.pic_box}>
                
@@ -1509,7 +1510,7 @@ export default function RecipePage() {
 
             <div className={s.note_content_box2}>
               <div className={s.box_title2}>
-                100% 고품질의 식재료만 사용한 프리미엄 생식
+                100% 고품질의 식재료만 <br />사용한 프리미엄 생식
               </div>
               
               <div className={s.pic_box2}>
@@ -1526,7 +1527,7 @@ export default function RecipePage() {
                       />
                     </div>
                   </div>
-                  100% HUMAN GRADE
+                  100% HUMAN <br />GRADE
                 </div>
                
                 <div className={s.text_box}>
@@ -1696,7 +1697,7 @@ export default function RecipePage() {
               BARFDOG 구독이 처음이신가요?
             </div>
             <div className={s.sub_row_2}>
-              첫 구매 시 50% 할인 혜택을 받을 수 있습니다!
+              첫 구매 시 50% 할인 혜택을 <br />받을 수 있습니다!
             </div>
 
             <div className={s.image_box}>

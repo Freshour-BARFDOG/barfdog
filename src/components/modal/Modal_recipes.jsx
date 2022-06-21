@@ -7,7 +7,6 @@ import getElemIdx from "@util/func/getElemIdx.js";
 import rem from "/src/components/atoms/rem";
 import styled from "styled-components";
 
-
 const indicatorAniDirection = "left"; // 이동 기준
 const initialActiveMenuIdx = 0; // 최초 활성화 탭
 const Indicator = styled.i`

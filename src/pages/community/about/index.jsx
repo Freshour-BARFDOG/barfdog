@@ -22,6 +22,7 @@ function Index() {
                   objectFit="cover"
                   layout="fill"
                   alt="카드 이미지"
+                  priority
                 />
               </div>
 
@@ -31,6 +32,7 @@ function Index() {
                   objectFit="cover"
                   layout="fill"
                   alt="카드 이미지"
+                  priority
                 />
               </div>
             </div>

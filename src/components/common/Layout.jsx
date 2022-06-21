@@ -15,4 +15,15 @@ const Layout = (props)=> {
   );
 }
 
+// const Layout = ({ children, ...props})=> {
+//   return (
+//     <main id={props.id} className={props.className}>
+//       <TopLineBanner />
+//       <Header />
+//       {children}
+//       <Footer />
+//     </main>
+//   );
+// }
+
 export default Layout;

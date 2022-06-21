@@ -5,11 +5,12 @@ $browser-context: 16;
 
 
 $containerSize: rem(860);
+$mobile_containerSize: rem(355);
 $topLinkBannerHeight: rem(38);
 
 
 #modal_recipe{
-  top:50%;
+  top: 50%;
   transform:translate(-50%,-50%);
   width: initial;
   padding:0;
@@ -20,7 +21,9 @@ $topLinkBannerHeight: rem(38);
 .container {
   width: $containerSize;
 }
-.inner{padding: rem(30) rem(40) rem(45);}
+.inner{
+  padding: rem(30) rem(40) rem(45);
+}
 
 
 
@@ -49,6 +52,7 @@ $topLinkBannerHeight: rem(38);
     $tabmenuListWidth: rem(107);
     position: relative;
     overflow: hidden;
+    
     ul{
       display: inline-grid;
       grid-template-columns: repeat(4, $tabmenuListWidth);
@@ -56,7 +60,7 @@ $topLinkBannerHeight: rem(38);
       justify-content: flex-end;
   
       li{
-        padding:rem(2) 0 ;
+        padding: rem(2) 0 ;
         cursor: pointer;
         display: flex;
         justify-content:center;
@@ -86,9 +90,11 @@ $topLinkBannerHeight: rem(38);
     box-sizing: border-box;
     ul{
       li{
-        display:none;
+        display: none;
       }
-      li.active{display:block;}
+      li.active{
+        display: block;
+      }
     }
   }
 
@@ -97,3 +103,73 @@ $topLinkBannerHeight: rem(38);
 
 
 
+@media only screen and (min-width:rem(100)) and (max-width: rem(900)) {
+
+  #modal_recipe{
+    height: 80%;
+    overflow-y: scroll;
+    &::-webkit-scrollbar {display:none;}
+  }
+
+
+  .container {
+    width: $mobile_containerSize;
+  }
+  
+  .inner{
+    padding: rem(20) rem(20) rem(80);
+  }
+
+  
+  .title-section{
+    margin-bottom: rem(20);
+
+    .title-ko{
+      font-size: rem(20);
+    }
+
+    .title-en{
+      font-size: rem(18);
+    }
+  }
+
+
+  .tabmenu-section{
+    .tabmenu {
+      $mobile_tabmenuListWidth: rem(80);
+
+      //스크린 크기 변경되도 위치는 그대로인점 문제
+      i{
+        width: rem(80);
+        overflow-y:scroll;
+       &::-webkit-scrollbar {display:none;}
+      }
+
+      ul{
+        grid-template-columns: repeat(4, $mobile_tabmenuListWidth);
+      }
+    }
+  }
+
+
+
+  
+
+
+  .cont-section {
+    grid-template-columns: 1fr;
+
+    
+    .img-wrap{
+      width: 315px;
+      height: 295px;
+    }
+
+    .details {
+      padding-left: rem(0);
+      height: rem(240);
+      margin-top: 20px;
+    }
+  }
+
+}

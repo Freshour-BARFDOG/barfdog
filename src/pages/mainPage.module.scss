@@ -44,7 +44,6 @@ section.sns {
 }
 
 
-
 .inner {
   margin: 0 auto; //왜 가운데로 안가는가?
   position: relative;
@@ -138,14 +137,22 @@ section.sns {
   }
 
   .secondbox {
-    margin-top: rem(5);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    bottom: rem(-50);
     font-size: rem(24);
     font-weight: bold;
     text-align: center;
   }
 
   .pbox {
-    margin-top: rem(12);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    bottom: rem(-125);
     text-align: center;
     line-height: 1.35;
   }
@@ -535,14 +542,10 @@ section.sns {
 
     .img-wrap {
       margin-top: rem(40);
-      width: rem(240);
-      height: rem(240);
     }
 
     .img-wrap2 {
       margin-top: rem(20);
-      width: rem(18);
-      height: rem(20);
     }
 
     p {
@@ -676,8 +679,6 @@ section.sns {
   }
 
   .img-wrap {
-    width: rem(244);
-    height: rem(244);
   }
 }
 
@@ -858,15 +859,13 @@ section.sns {
   }
 
   .swiper_button_next_sns {
-    transform: translate(-50%, -50%) translateX(rem(588));
+    transform: translate(-50%, -50%) translateX(rem(600));
   }
 
   .swiper_sns_box{
   }
 
   .swiper_sns_img{
-    width: rem(244);
-    height: rem(244);
   }
 }
 
@@ -1067,11 +1066,50 @@ section.sns {
 
 
 
+//바프생식 바뀌는 점
+  .barfgood {
+    height: rem(700); 
+
+    .inner {
+      grid-template-columns: 1fr;
+      grid-gap: rem(100);
+
+      .barfgood_imgbox{
+        .barfood1 {
+          display: none;
+        }
+        .barfood2 {
+          display: block;
+        }
+      }
+
+      .leftbox {
+        margin: 0 auto;
+        width: 100%;
+        .barfgood_textbox{
+          margin-top: 0;
+        }
+      }
+      
+      .rightbox {
+        margin: 0 auto;
+      }
+    }
+  }
+
+
+
 //리뷰 후기
   .swiper_review_outerWrap {
     .swiper_review {
       width: rem(340);
     }
+  }
+
+
+
+  section.barfgood {
+    padding: rem(120) 0 rem(315)
   }
 }
 
@@ -1136,40 +1174,7 @@ section.sns {
       }
     }
   }
-  
 
-
-//바프생식 바뀌는 점
-  .barfgood {
-    height: rem(700); 
-
-    .inner {
-      grid-template-columns: 1fr;
-      grid-gap: rem(100);
-
-      .barfgood_imgbox{
-        .barfood1 {
-          display: none;
-        }
-        .barfood2 {
-          display: block;
-        }
-      }
-
-      .leftbox {
-        margin: 0 auto;
-        width: 100%;
-        .barfgood_textbox{
-          margin-top: 0;
-        }
-      }
-      
-      .rightbox {
-        margin: 0 auto;
-      }
-    }
-  }
-  
 
 
 //차별점 그림 3개
@@ -1212,7 +1217,7 @@ section.sns {
 
     .image {
       transform: translate(rem(-180), rem(-45));
-      width: 50%;
+      width: rem(220);
     }
 
     .textbox {
@@ -1224,12 +1229,12 @@ section.sns {
       .text {
         li {
           left: rem(-70);
-          top: rem(-10);
+          top: rem(10);
           color: var(--color-main);
           font-size: rem(14);
           display: block;
           position: relative;
-          margin-bottom: rem(20);
+          margin-bottom: rem(10);
           padding-left: rem(130);
           width: 100%;
         }
@@ -1409,9 +1414,6 @@ section.sns {
     padding: rem(40) 0 rem(80)
   }
 
-  section.barfgood {
-    padding: rem(120) 0 rem(315)
-  }
 
   // section.difference {
   //   padding: rem(60) 0 rem(50)
