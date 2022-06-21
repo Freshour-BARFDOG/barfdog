@@ -30,10 +30,6 @@ const FullScreenLoading = () => {
    useEffect(() => {
 
 
-     // ADMIN PATH
-     const ADMIN_BASE_PATH_KEY = "bf-admin";
-     const ADMIN_PUBLIC_PATH = ['/index', '/login', '/dashboard'];
-     const isAdminPath = router.asPath.split("/")[1] === ADMIN_BASE_PATH_KEY;
 
 
      // USER PATH
@@ -44,18 +40,27 @@ const FullScreenLoading = () => {
          return nonMemberPath = true
        }
      });
+     setIsAuth(!!userData);
 
-     setIsAuth(!!userData)
-
-    if (!isAuth && nonMemberPath ) {
-      alert('로그인이 필요한 서비스입니다.')
-      console.error('Redir: User FOBBIDEN PAGE');
-      router.push('/account/login');
+    if ( nonMemberPath ) {
+      dispatch(authAction.userRestoreAuthState());
+      if(!isAuth ){
+        alert('로그인이 필요한 서비스입니다.')
+        router.push('/account/login');
+        console.error('Redir: User FOBBIDEN PAGE');
+        return;
+      }
     }
 
 
-    if (isAdminPath){ // TEST
-      dispatch(authAction.adminRestoreAuthState()); // 토큰 다시 발급
+
+
+     // ADMIN PATH
+     const ADMIN_BASE_PATH_KEY = "bf-admin";
+     const ADMIN_PUBLIC_PATH = ['/index', '/login', '/dashboard'];
+     const isAdminPath = router.asPath.split("/")[1] === ADMIN_BASE_PATH_KEY;
+     if (isAdminPath){ // TEST
+      dispatch(authAction.adminRestoreAuthState());
 
       let isPublicAdminPath;
       ADMIN_PUBLIC_PATH.map(path=>{
