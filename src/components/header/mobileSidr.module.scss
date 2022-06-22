@@ -213,6 +213,7 @@ $bottom-menu-list-height: rem(50);
     .email{
       color:var(--color-font-medium);
       font-size: rem(12);
+      word-break: break-all;
     }
   }
 
@@ -285,7 +286,8 @@ $bottom-menu-list-height: rem(50);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  .row{background-color: transparent !important}
+  .row{background-color: transparent !important;width: 100%; display:flex;align-items: center; justify-content: space-between;}
+  span{display: inline-flex;align-items: center; justify-content: flex-end}
   b {
     margin-left: rem(8);
   }
