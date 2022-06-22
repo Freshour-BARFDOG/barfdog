@@ -73,7 +73,7 @@ function DeliverySettingPage() {
           <div className="title_main">
             <h1>배송정책 설정</h1>
           </div>
-          <form action="/" method="post" onSubmit={onSubmitHandler}>
+          <form action="/src/pages" method="post" onSubmit={onSubmitHandler}>
             <div className="cont">
               <div className="cont_body">
                 <div className="cont_divider">

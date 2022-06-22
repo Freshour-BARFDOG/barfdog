@@ -31,7 +31,7 @@ const TEST_ITEM = [1,2,3];
 function BlogIndexPage() {
 
   const [itemList, setItemList] = useState(TEST_ITEM);
-  const [activeModal, setActiveModal] = useState(true);
+  const [activeModal, setActiveModal] = useState(false);
   const onShowRecommendArticleModal = (returnVal) => {
     setActiveModal(returnVal);
   };
