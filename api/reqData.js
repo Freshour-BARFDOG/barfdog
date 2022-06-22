@@ -104,6 +104,7 @@ export const postFileUpload = async (url, formData) => {
       return res;
     })
     .catch((err) => {
+      return err.response;
       console.log(err.response);
       console.log(err.request);
     });

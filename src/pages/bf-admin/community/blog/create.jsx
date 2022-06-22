@@ -1,70 +1,72 @@
-import React, { useEffect, useRef, useState } from "react";
-import "react-quill/dist/quill.snow.css";
-import dynamic from "next/dynamic";
-import { useRouter } from "next/router";
-import MetaTitle from "/src/components/atoms/MetaTitle";
-import AdminLayout from "/src/components/admin/AdminLayout";
-import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
-import InputRadio_status from "/src/components/admin/form/InputRadioPackage";
-import Fake_input from "/src/components/atoms/fake_input";
-import PreviewImage from "/src/components/atoms/PreviewImage";
-import SelectTag from "/src/components/atoms/SelectTag";
-import ErrorMessage from "/src/components/atoms/ErrorMessage";
+import React, { useEffect, useRef, useState } from 'react';
+import 'react-quill/dist/quill.snow.css';
+import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
+import MetaTitle from '/src/components/atoms/MetaTitle';
+import AdminLayout from '/src/components/admin/AdminLayout';
+import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
+import InputRadio_status from '/src/components/admin/form/InputRadioPackage';
+import Fake_input from '/src/components/atoms/fake_input';
+import PreviewImage from '/src/components/atoms/PreviewImage';
+import SelectTag from '/src/components/atoms/SelectTag';
+import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import rem from '/util/func/rem';
 
-
-
-
-// * 이미지: 업로드하는 순간 , Server 저장
-// * Submin : JSON 객체만 전달
+// * Submib : JSON 객체만 전달
 // * 유효성검사시, Image파일의 존재유무 검사
 
-const CreateBlogPage = (props) => {
-  const router = useRouter();
-  
-  const originImageList = ['1','197','200']; // 서버로부터 받은 이미지리스트
-  const [tempImageIdList, setTempImageIdList] = useState(originImageList || []);
-  const [body, setBody] = useState(""); // Quill 에디터의 innerHTML을 담는 state
-  const [isLoadedEditor, setIsLoadedEditor] = useState(false);
-  const [QuillEditor, setQuillEditor] = useState('');
+const initialFormValues = {
+  title: '',
+  category: '',
+  contents: '', // 블로그 컨텐츠 HTML string
+  blogThumbnailId: null, // number
+  blogImageIdList: [],
+  status: 'LEAKED',
+};
 
+
+const CreateBlogPage = () => {
+
+  const blogDetailImageUploadApiURL = '/api/admin/blogs/image/upload';
+  const originImageList = ['1', '10', '100']; // 서버로부터 받은 이미지리스트
+
+
+  const router = useRouter();
+  const [QuillEditor, setQuillEditor] = useState(null);
+
+  const [tempImageIdList, setTempImageIdList] = useState(originImageList || []);
+  const [formValues, setFormValues] = useState(initialFormValues);
+  const [formErrors, setFormErrors] = useState({});
+  const [thumbFile, setThumbFile] = useState({});
+
+  //  INIT QUILL EDITOR
   useEffect(() => {
     if (document) {
-      const QuillEditor = dynamic(() =>
-        import("/src/components/admin/form/QuillEditor")
-      );
-      setIsLoadedEditor(true);
+      const QuillEditor = dynamic(() => import('/src/components/admin/form/QuillEditor'));
       setQuillEditor(QuillEditor);
+      console.log('설치됨');
     }
   }, []);
-  
-  // console.log(body);
 
+  console.log(formValues);
+  // console.log(tempImageIdList);
 
-
-
-
-  const REQUEST_URL = `/api/admin/blog`;
-  const [formValues, setFormValues] = useState({
-    category: "ALL",
-    hasThumb: false,
-    innerHTML: "",
-    status: 'LEAKED',
-  });
-  const [imageFile, setImageFile] = useState({});
-  const [formErrors, setFormErrors] = useState({});
-
-
-
-
-  const onCategoryHandler = (value) => {
-    setFormValues({
-      ...formValues,
-      category: value,
-    });
-
+  const onInputChangeHandler = (e) => {
+    const isCategory = typeof e !== 'object';
+    if (isCategory) {
+      const value = e;
+      setFormValues({
+        ...formValues,
+        category: value,
+      });
+    } else {
+      const { id, value } = e.currentTarget;
+      setFormValues({
+        ...formValues,
+        [id]: value,
+      });
+    }
   };
-
 
   const onRadioButtonHandler = (data) => {
     const { key, value } = data;
@@ -74,37 +76,35 @@ const CreateBlogPage = (props) => {
     });
   };
 
+
+
   const imageFileChangeHandler = (e) => {
     const thisInput = e.currentTarget;
     const file = thisInput.files[0];
     console.log(file);
-    const filename = file ? file.name : "";
-    setImageFile({
-      ...imageFile,
+    const filename = file ? file.name : '';
+    setThumbFile({
+      ...thumbFile,
       file,
       filename: filename,
       // link:'' , //파일이 없을 경우 : 기존파일 링크 유지
     });
+    // Image 업로드 API
+    // admin/blogs/thumbnail/upload
   };
-
-
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
-
-
-    const curImageIdList = filterImageId(body);
-    // const imageDatas = compareImageList(tempImageIdList, curImageIdList);
-    const imageDatas = compareImageList();
-
-    console.log(curImageIdList)
+    const REQUEST_URL = `/api/admin/blog`;
+    const curImageIdList = filterImageId(formValues.contents);
+    const imageDatas = compareImageList(tempImageIdList, curImageIdList);
+    console.log(curImageIdList);
     console.log(imageDatas);
-    // ************** 유효성검사 -> JSON데이터 보내기 
-    // 현재 body 속에 저장된 이미 지리스트를 비교한다..
-    return 
+    return;
+    // VALIDATION 해야한다.
+
     setFormErrors(validate(formValues));
     if (Object.keys(formErrors).length) return console.error(formErrors);
-    postDataToServer();
   };
 
 
@@ -113,25 +113,23 @@ const CreateBlogPage = (props) => {
 
   const filterImageId = (html) => {
     let curimageIdList = [];
-    // console.log(html);
-    
-    const queryImageTag = html.split("<img");
+
+    const queryImageTag = html.split('<img');
     queryImageTag.filter((str) => {
-      if (str.indexOf("src") < 0) return;
-      const imgTag = str.split(">")[0];
-      const queryId = "#__id=";
-      const imageId = imgTag.split(queryId)[1].split('"')[0]
-      curimageIdList.push(imageId);
+      if (str.indexOf('src') < 0) return;
+      const imgTag = str.split('>')[0];
+      const queryFileData = imgTag.split('?')[1];
+      const queryImageData = queryFileData.split('#')[1];
+      const id = queryImageData.split('=')[1];
+      // console.log('ID: ',id);
+      if(id)curimageIdList.push(id);
     });
-    // console.log(curimageIdList);
     return curimageIdList;
-  }
-
-
-  
+  };
 
   const compareImageList = (tempArr, curArr) => {
-    if(!tempArr || !tempArr.length) return console.error('There is no Image File.');
+    if (!tempArr || !tempArr.length) return console.error('There is no Image File.');
+
 
     let result = {
       origin: originImageList,
@@ -141,33 +139,36 @@ const CreateBlogPage = (props) => {
       added: [],
     };
 
-    console.log(result);
+    // console.log(result);
 
-      tempArr.map((id) => {
-        const isCurArr = curArr.indexOf(id) > 0;
-        const isOriginArr = originImageList.indexOf(id) >= 0;
-        console.log(id, "curArr: ", isCurArr);
-        console.log(id, "isOriginArr: ", isOriginArr);
+    tempArr.map((id) => {
+      const isCurArr = curArr.indexOf(id) >= 0;
+      const isOriginArr = originImageList.indexOf(id) >= 0;
+      // console.log(id, 'curArr: ', isCurArr);
+      // console.log(id, 'isOriginArr: ', isOriginArr);
 
-        isCurArr && !isOriginArr && result.added.push(id);
+      const isNew = isCurArr && !isOriginArr
+      isNew && result.added.push(id);
 
-        const toBeDeleted = curArr.indexOf(id) < 0;
-        // * 추가 : origin에 존재하지 않는 경우
-        toBeDeleted && result.del.push(id);
-      });
+      const isToBeDeleted = curArr.indexOf(id) < 0;
+      // * 추가 : origin에 존재하지 않는 경우
+      isToBeDeleted && result.del.push(id);
+    });
     return result;
-
   };
 
 
+
+
+
+
   const returnToPrevPage = () => {
-    if (confirm("이전 페이지로 돌아가시겠습니까?")) {
+    if (confirm('이전 페이지로 돌아가시겠습니까?')) {
       router.back();
     }
   };
 
-
-
+  // if(QuillEditor === null) return;
 
   return (
     <>
@@ -195,18 +196,18 @@ const CreateBlogPage = (props) => {
                   <div className="inp_section">
                     <div className="inp_box">
                       <SelectTag
-                        name={"category"}
-                        id={"category"}
-                        onChange={onCategoryHandler}
+                        name={'category'}
+                        id={'category'}
+                        onChange={onInputChangeHandler}
                         options={[
-                          { label: "전체", value: "전체" },
-                          { label: "영양", value: "영양" },
-                          { label: "건강", value: "건강" },
-                          { label: "생애", value: "생애" },
+                          { label: '카테고리 선택', value: '' },
+                          { label: '영양', value: 'NUTRITION' },
+                          { label: '건강', value: 'HEALTH' },
+                          { label: '생애', value: 'LIFE' },
                         ]}
                       />
-                      {/* {formErrors.name && (
-                        <ErrorMessage>{formErrors.name}</ErrorMessage>
+                      {/* {formErrors.category && (
+                        <ErrorMessage>{formErrors.category}</ErrorMessage>
                       )} */}
                     </div>
                   </div>
@@ -214,7 +215,29 @@ const CreateBlogPage = (props) => {
               </div>
               {/* cont_divider */}
               <div className="cont_divider">
-                <div className="input_row upload_image">
+                <div className="input_row">
+                  <div className="title_section fixedHeight">
+                    <label className="title" htmlFor={`title`}>
+                      제목
+                    </label>
+                  </div>
+                  <div className="inp_section">
+                    <div className={`inp_box`}>
+                      <input
+                        id={`title`}
+                        type="text"
+                        className={'fullWidth'}
+                        value={formValues.title || ''}
+                        onChange={onInputChangeHandler}
+                      />
+                      {formErrors.title && <ErrorMessage>{formErrors.title}</ErrorMessage>}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/* cont_divider */}
+              <div className="cont_divider">
+                <div className="input_row upload_image multipleLines">
                   <div className="title_section">
                     <p className="title">썸네일</p>
                   </div>
@@ -222,14 +245,17 @@ const CreateBlogPage = (props) => {
                     <label
                       className="inp_wrap file"
                       htmlFor="upload-image"
-                      style={{ display: "inline-block" }}
+                      style={{ display: 'inline-block' }}
                     >
-                      <PreviewImage
-                        file={imageFile.file}
-                        ratio={1 / 1}
-                        objectFit={"cover"}
-                        style={{ width: `${rem(200)}` }}
-                      />
+                      {thumbFile.file && (
+                        <PreviewImage
+                          file={thumbFile.file}
+                          ratio={1 / 1}
+                          objectFit={'cover'}
+                          style={{ width: `${rem(200)}` }}
+                        />
+                      )}
+
                       <span className="inp_box">
                         <input
                           type="file"
@@ -241,7 +267,7 @@ const CreateBlogPage = (props) => {
                           multiple={false}
                           onChange={imageFileChangeHandler}
                         />
-                        <Fake_input filename={imageFile.filename} />
+                        <Fake_input filename={thumbFile.filename} />
                         {/* {formErrors.file_pc && (
                           <ErrorMessage>{formErrors.file_pc}</ErrorMessage>
                         )} */}
@@ -252,17 +278,19 @@ const CreateBlogPage = (props) => {
               </div>
               {/* cont_divider */}
               <div className="cont_divider">
-                <div className="input_row">
+                <div className="input_row multipleLines">
                   <div className="title_section">
                     <p className="title">상세설명</p>
                   </div>
                   <div className="inp_section">
                     {/* // * --------- QUILL EDITOR --------- * // */}
-                    {isLoadedEditor && (
+                    {QuillEditor && (
                       <QuillEditor
-                        body={body}
-                        handleQuillChange={setBody}
-                        setTempImageIdList={setTempImageIdList}
+                        id={'contents'}
+                        imageId={'blogImageIdList'}
+                        setFormValues={setFormValues}
+                        setImageList={setTempImageIdList}
+                        imageUploadApiURL={blogDetailImageUploadApiURL}
                       />
                     )}
                     {/* // * --------- QUILL EDITOR --------- * // */}
@@ -296,11 +324,7 @@ const CreateBlogPage = (props) => {
                 >
                   취소
                 </button>
-                <button
-                  type="submit"
-                  id="btn-create"
-                  className="admin_btn confirm_l solid"
-                >
+                <button type="submit" id="btn-create" className="admin_btn confirm_l solid">
                   등록
                 </button>
               </div>
@@ -310,8 +334,6 @@ const CreateBlogPage = (props) => {
       </AdminLayout>
     </>
   );
-};;
+};
 
 export default CreateBlogPage;
-
-
