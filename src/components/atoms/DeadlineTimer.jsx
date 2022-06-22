@@ -12,7 +12,7 @@ import Favicon from '/public/img/icon/favicon.svg'
 const Rect = styled.i`
   position: absolute;
   right: calc(${rem(40)} + ${rem(5)});
-  bottom: ${rem(3)};
+  bottom: ${rem(4)};
   transform: translate(0, 100%);
   border-top: ${rem(15)} solid #FFCEBA;
   border-left: ${rem(9)} solid transparent;
@@ -59,7 +59,7 @@ const Wrap = styled.div`
   // ! z-index: 100;
   right: 0;
   top: 0;
-  transform: translate(${rem(40)}, calc(-100% - ${rem(34)}));
+  transform: translate(${rem(40)}, calc(-100% - ${rem(24)}));
   text-align: center;
   color: #000;
   font-size: ${rem(16)};
