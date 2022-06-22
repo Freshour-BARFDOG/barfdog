@@ -2,7 +2,9 @@ import React, {useEffect, useState} from 'react';
 
 export default function useDeviceState() {
 
-  const [isMobile, setIsMobile] = useState(false);
+  const initialStateForCheckingDevice = null;
+
+  const [isMobile, setIsMobile] = useState(initialStateForCheckingDevice);
   const [deviceWidth, setDeviceWidth] = useState(null);
 
   useEffect(() => {

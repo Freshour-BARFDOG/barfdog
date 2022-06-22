@@ -26,8 +26,7 @@ const Modal_subscribeWidhSSR = dynamic(() => import('/src/components/modal/Modal
 const Header = () => {
   const userData = useUserData();
   const isLogin = !!userData;
-  const deviceState = useDeviceState();
-  const isMobile = deviceState.isMobile;
+  const isMobile = useDeviceState().isMobile;
   const [isSidrOpen, setIsSidrOpen] = useState(false);
 
 

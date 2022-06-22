@@ -26,7 +26,7 @@ function kakaoLoginFunc() {
 export default function MobileSidr({ isOpen, setSidrOpen }) {
   const dispatch = useDispatch();
   const userData = useUserData();
-  const isLogin = !!userData;
+  const isLogin = true || !!userData;
 
 
 
@@ -179,7 +179,7 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                     />
                     <MypageMenuList
                       title={'계정정보'}
-                      link={'/mypage/user/info'}
+                      link={'/mypage/user'}
                       icon={<IconMypageUser />}
                     />
                     <MypageMenuList
@@ -192,7 +192,7 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
               </section>
             )}
 
-            {(
+            {isLogin && (
               <section className={s['banner-section']}>
                 {/*/ ! 어드민에서 생성한 이미지 사용될 예정 /*/}
                 <div className={s.row}>
@@ -205,7 +205,7 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                 </div>
 
               </section>
-            ) && isLogin}
+            )}
             <section className={s['bottom-menu-section']}>
               <div className={s.row}>
                 <ul>

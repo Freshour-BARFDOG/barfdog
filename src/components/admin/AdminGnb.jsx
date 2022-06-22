@@ -1,7 +1,7 @@
 import React, {useRef} from "react";
 import s from "@src/components/common/menu.module.scss";
 import style2 from "/src/components/common/menu.module.scss";
-import {List, SubmenuList, SubmenuTitle} from "/src/components/mypage/Menu";
+import {List, SubmenuList, SubmenuTitle} from "/src/components/mypage/MypageMenu";
 import Link from 'next/link';
 import Icon_setting from "/public/img/icon/setting.svg";
 
