@@ -26,7 +26,9 @@ function kakaoLoginFunc() {
 export default function MobileSidr({ isOpen, setSidrOpen }) {
   const dispatch = useDispatch();
   const userData = useUserData();
-  const isLogin = true || !!userData;
+  const isLogin = !!userData;
+
+
 
   const onCloseSidr = () => {
     setSidrOpen(false);
