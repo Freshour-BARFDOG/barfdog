@@ -7,7 +7,6 @@ import s from './mobileUserInfoIndex.module.scss';
 
 
 
-
 export default function MobileUserInfoIndexPage() {
   const router = useRouter();
   const isMobile = useDeviceState().isMobile;
