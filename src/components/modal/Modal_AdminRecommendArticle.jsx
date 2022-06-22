@@ -1,8 +1,8 @@
 import React from "react";
-import ModalWrapper from "@src/components/modal/ModalWrapper";
+import ModalWrapper from "/src/components/modal/ModalWrapper";
 import s from "./Modal_AdminRecommendArticle.module.scss";
-import rem from "@src/components/atoms/rem";
-import CloseButton from "@src/components/atoms/CloseButton";
+import rem from '/util/func/rem';
+import CloseButton from "/src/components/atoms/CloseButton";
 
 
 

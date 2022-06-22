@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import s from "./modal_member_class.module.scss";
-import ModalWrapper from "@src/components/modal/ModalWrapper";
-import SelectTag from "@src/components/atoms/SelectTag";
-import rem from "@src/components/atoms/rem";
+import ModalWrapper from "/src/components/modal/ModalWrapper";
+import SelectTag from "/src/components/atoms/SelectTag";
+import rem from '/util/func/rem';
 
 function Modal_member_class({ onClick, formValue, setFormValue }) {
   const thisKey = "class";

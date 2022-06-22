@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import s from "./modal_member_subscribe.module.scss";
-import ModalWrapper from "@src/components/modal/ModalWrapper";
-import rem from "@src/components/atoms/rem";
+import ModalWrapper from "/src/components/modal/ModalWrapper";
+import rem from '/util/func/rem';
 import {
   PopupCloseButton,
-} from "@src/components/popup/PopupCloseButton";
-import ScrollContainer from "@src/components/atoms/ScrollContainer";
+} from "/src/components/popup/PopupCloseButton";
+import ScrollContainer from "/src/components/atoms/ScrollContainer";
 
 
 

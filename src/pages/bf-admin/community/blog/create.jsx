@@ -5,12 +5,12 @@ import { useRouter } from "next/router";
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import AdminLayout from "/src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
-import InputRadio_status from "@src/components/admin/form/InputRadioPackage";
-import Fake_input from "@src/components/atoms/fake_input";
-import PreviewImage from "@src/components/atoms/PreviewImage";
-import SelectTag from "@src/components/atoms/SelectTag";
+import InputRadio_status from "/src/components/admin/form/InputRadioPackage";
+import Fake_input from "/src/components/atoms/fake_input";
+import PreviewImage from "/src/components/atoms/PreviewImage";
+import SelectTag from "/src/components/atoms/SelectTag";
 import ErrorMessage from "/src/components/atoms/ErrorMessage";
-import rem from '@src/components/atoms/rem';
+import rem from '/util/func/rem';
 
 
 
@@ -31,7 +31,7 @@ const CreateBlogPage = (props) => {
   useEffect(() => {
     if (document) {
       const QuillEditor = dynamic(() =>
-        import("@src/components/admin/form/QuillEditor")
+        import("/src/components/admin/form/QuillEditor")
       );
       setIsLoadedEditor(true);
       setQuillEditor(QuillEditor);
