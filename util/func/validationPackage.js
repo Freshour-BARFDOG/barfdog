@@ -9,6 +9,13 @@ export const valid_isEmpty = (value) => {
 
 
 
+export const valid_isEmptyArray = (arr) =>{
+  if(typeof arr === 'object') return console.error('ERROR: Parameter type must be array');
+  const message = arr.length ? '' : '항목이 비어있습니다.';
+  return message;
+}
+
+
 export const valid_email = (value) => {
   let error='';
 
