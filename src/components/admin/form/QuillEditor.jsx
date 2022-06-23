@@ -19,9 +19,11 @@ export default function QuillEditor({
   imageUploadApiURL,
   originImageList=[],
 }) {
+
   /* - 모듈 추가 시, 필요
    * const Quill = typeof window == 'object' ? require('quill') : () => false;
    */
+
   const ReactQuill = typeof window == 'object' ? require('react-quill') : () => false;
   const quillRef = useRef();
 
@@ -33,9 +35,10 @@ export default function QuillEditor({
   useEffect(() => {
     const result = analyze_ImageListCRUD(fullImageIdList, body, originImageList);
     const toBeUploadedImageIdList = result.add;
+    const isBodyEmty = body === '<p><br></p>';
     setFormValues((prevState) => ({
       ...prevState,
-      [id]: body,
+      [id]: isBodyEmty ? '' : body,
       [imageId]: toBeUploadedImageIdList,
     }));
   }, [body, fullImageIdList]);
@@ -47,7 +50,6 @@ export default function QuillEditor({
     input.setAttribute('accept', 'image/*');
     document.body.appendChild(input);
     input.click();
-
     input.onchange = async () => {
       const [file] = input.files;
       const formData = new FormData();
@@ -57,6 +59,7 @@ export default function QuillEditor({
         const response = await postFileUpload(imageUploadApiURL, formData);
         if (response.status !== 200 && response.status !== 201) return;
         const imageData = response.data;
+
         // const imageData = {id:Math.floor(Math.random()*100),url: 'http://localhost:8080/api/blog?filename=createadFileName.jpg'}; //
         // console.log(imageData);
 

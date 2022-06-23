@@ -10,8 +10,12 @@ export const valid_isEmpty = (value) => {
 
 
 export const valid_isEmptyArray = (arr) =>{
-  if(typeof arr === 'object') return console.error('ERROR: Parameter type must be array');
-  const message = arr.length ? '' : '항목이 비어있습니다.';
+  let message;
+  if(typeof arr !== 'object'){
+    alert('데이터 처리 중 에러가 발생했습니다. 개발사에게 문의하세요.')
+    return console.error('ERROR: Parameter type must be array');
+  }
+  message = arr.length ? '' : '항목이 비어있습니다.';
   return message;
 }
 
@@ -182,6 +186,20 @@ export const valid_policyCheckbox = (obj, standardObjList = [])=>{
   return errors;
 }
 
+
+
+
+export const valid_hasFormErrors = (errorObj) => {
+  let isPassed = true;
+  for ( const key in errorObj ) {
+    const val = errorObj[key];
+    if(val){
+      isPassed = false;
+      break
+    }
+  }
+  return isPassed;
+}
 
 
 
