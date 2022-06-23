@@ -1,49 +1,53 @@
-import React, {useState} from "react";
+import React, { useEffect, useState } from 'react';
 import s from './blog.module.scss';
-import MetaTitle from "/src/components/atoms/MetaTitle";
-import AdminLayout from "/src/components/admin/AdminLayout";
-import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
-import Link from "next/link";
-import axios from "axios";
-import axiosConfig from "/api/axios.config";
-import BannerList from './BlogList'
-import AmdinErrorMessage from "@src/components/atoms/AmdinErrorMessage";
-import AdminBtn_moveToPage from "@src/components/atoms/AdminBtn_moveToPage";
-import Pagination from "@src/components/atoms/Pagination";
-import Modal_AdminRecommendArticle from "@src/components/modal/Modal_AdminRecommendArticle";
+import MetaTitle from '/src/components/atoms/MetaTitle';
+import AdminLayout from '/src/components/admin/AdminLayout';
+import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
+import BannerList from './BlogList';
+import AmdinErrorMessage from '@src/components/atoms/AmdinErrorMessage';
+import AdminBtn_moveToPage from '@src/components/atoms/AdminBtn_moveToPage';
+import Pagination from '@src/components/atoms/Pagination';
+import Modal_AdminRecommendArticle from '@src/components/modal/Modal_AdminRecommendArticle';
 import Button_acceptClickEvent from '@src/components/atoms/Button_acceptClickEvent';
+import { getData } from '/api/reqData';
 
-
-
-
-
-
-
-
-
-
-
-
-
-const TEST_ITEM = [1,2,3];
-
+const TEST_ITEM = [
+  {
+    id: 1,
+    title: 'zz',
+    createdDate: '22-05-02',
+    status:'LEAKED'
+  },
+  {
+    id: 2,
+    title: 'zz',
+    createdDate: '22-05-02',
+    status:'HIDDEN'
+  },
+];
 
 function BlogIndexPage() {
-
   const [itemList, setItemList] = useState(TEST_ITEM);
   const [activeModal, setActiveModal] = useState(false);
   const onShowRecommendArticleModal = (returnVal) => {
     setActiveModal(returnVal);
   };
 
+  console.log(itemList);
+  useEffect(()=>{
+    (async () => {
+      const res = await getData('/api/admin/blogs?page=1&size=5');
+      console.log(res);
+      // setItemList()
+    })();
+  }, []);
+
   return (
     <>
       <MetaTitle title="블로그 관리" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
-          {activeModal && (
-            <Modal_AdminRecommendArticle setActiveModal={setActiveModal} />
-          )}
+          {activeModal && <Modal_AdminRecommendArticle setActiveModal={setActiveModal} />}
           <h1 className="title_main">블로그 관리</h1>
           <div className="cont">
             <div className="cont_header clearfix">
@@ -58,7 +62,7 @@ function BlogIndexPage() {
               </div>
               <div className="controls cont-left">
                 <Button_acceptClickEvent
-                  title={"추천 아티클"}
+                  title={'추천 아티클'}
                   onClick={onShowRecommendArticleModal}
                 />
               </div>
@@ -80,12 +84,8 @@ function BlogIndexPage() {
                 )}
               </div>
             </div>
-            <div className={s["pagination-section"]}>
-              <Pagination
-                itemCountPerGroup={10}
-                itemTotalCount={100}
-                className={"square"}
-              />
+            <div className={s['pagination-section']}>
+              <Pagination itemCountPerGroup={10} itemTotalCount={100} className={'square'} />
             </div>
           </div>
         </AdminContentWrapper>

@@ -1,5 +1,6 @@
 import s from "./blog.module.scss";
 import Link from 'next/link';
+import getElemIdx from "../../../../../util/func/getElemIdx";
 
 
 export default function BlogList({ items, onDeleteItem }) {
@@ -31,15 +32,25 @@ const transformDate = (d) => {
 
 const SingleItems = ({ item }) => {
   const DATA = {
-    id: item.id || 0,
+    id: item.id || Math.random(),
     title: item.title || '제목이 없습니다.',
     createdDate: transformDate(item.createdDate || '22-05-11'),
-    status: item.status || '-',
+    status: item.status === 'LEAKED' ? 'Y' : 'N' ,
     apiurl: {
       // query_blog: item.query_blog.href,
       // update: item.update_blog.href,
       // delete: item._links.delete_blog.href,
     },
+  };
+
+  const onDeleteItemHandler = (e) => {
+    const target = e.currentTarget.closest("li");
+    const targetViewIdx = getElemIdx(target);
+    const apiURL = e.currentTarget.dataset.apiurl;
+    const bannerName = items[targetViewIdx]?.name;
+    if (confirm(`선택된 배너(${bannerName})를 정말 삭제하시겠습니까?`)) {
+      onDeleteItem(apiURL);
+    }
   };
 
   return (
@@ -58,7 +69,7 @@ const SingleItems = ({ item }) => {
       <span>
         <button
           className="admin_btn basic_s solid"
-          onClick={""}
+          onClick={onDeleteItemHandler}
           data-apiurl={DATA.apiurl.delete}
         >
           삭제
