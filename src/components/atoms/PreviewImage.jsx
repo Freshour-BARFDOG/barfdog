@@ -14,15 +14,11 @@ const Frame = styled.div`
 `;
 
 const Img = styled.img`
-  object-fit: contain;
-  object-fit: ${props => {
-    props.objectFit;
-  }};
+  object-fit: ${props => props.objectFit || 'contain'};
   width: 100%;
   height: 100%;
   display: ${(props) => props.isDisplayed};
 `;
-
 
 
 
