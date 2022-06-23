@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'react-quill/dist/quill.snow.css';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
@@ -11,16 +11,24 @@ import PreviewImage from '/src/components/atoms/PreviewImage';
 import SelectTag from '/src/components/atoms/SelectTag';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import rem from '/util/func/rem';
+import {postFileUpload} from "/api/reqData";
+import Spinner from "/src/components/atoms/Spinner";
 
-// * Submib : JSON 객체만 전달
-// * 유효성검사시, Image파일의 존재유무 검사
+
+/*
+* - 유효성검사 (이제 form 업로드는 끝났다)
+*/
+
+
+
+const imageListFromServer = ['1', '10', '100']; // 서버로부터 받은 이미지리스트
 
 const initialFormValues = {
   title: '',
   category: '',
   contents: '', // 블로그 컨텐츠 HTML string
   blogThumbnailId: null, // number
-  blogImageIdList: [],
+  blogImageIdList: imageListFromServer.length ? imageListFromServer : [] , // 서버에서 받은 기존 이미지 리스트
   status: 'LEAKED',
 };
 
@@ -28,28 +36,28 @@ const initialFormValues = {
 const CreateBlogPage = () => {
 
   const blogDetailImageUploadApiURL = '/api/admin/blogs/image/upload';
-  const originImageList = ['1', '10', '100']; // 서버로부터 받은 이미지리스트
-
-
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState({});
   const [QuillEditor, setQuillEditor] = useState(null);
-
-  const [tempImageIdList, setTempImageIdList] = useState(originImageList || []);
+  const originImageList = initialFormValues.blogImageIdList;
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState({});
   const [thumbFile, setThumbFile] = useState({});
+
+
+
 
   //  INIT QUILL EDITOR
   useEffect(() => {
     if (document) {
       const QuillEditor = dynamic(() => import('/src/components/admin/form/QuillEditor'));
       setQuillEditor(QuillEditor);
-      console.log('설치됨');
+      console.log('Editor init is complete.');
     }
   }, []);
 
-  console.log(formValues);
-  // console.log(tempImageIdList);
+
+
 
   const onInputChangeHandler = (e) => {
     const isCategory = typeof e !== 'object';
@@ -68,6 +76,8 @@ const CreateBlogPage = () => {
     }
   };
 
+
+
   const onRadioButtonHandler = (data) => {
     const { key, value } = data;
     setFormValues({
@@ -78,85 +88,87 @@ const CreateBlogPage = () => {
 
 
 
-  const imageFileChangeHandler = (e) => {
+  const imageFileChangeHandler = async (e) => {
+    // - 파일이 존재하지 않는 경우 -> 삭제 API는 따로 없음
+    // - server에서 일정시간마다 찌꺼기 file을 삭제하는 처리하는 방식으로 구현됨
     const thisInput = e.currentTarget;
     const file = thisInput.files[0];
-    console.log(file);
     const filename = file ? file.name : '';
-    setThumbFile({
-      ...thumbFile,
-      file,
-      filename: filename,
-      // link:'' , //파일이 없을 경우 : 기존파일 링크 유지
-    });
-    // Image 업로드 API
-    // admin/blogs/thumbnail/upload
+
+    if(!file){
+
+      setFormValues(prevState => ({
+        ...prevState,
+        blogThumbnailId: ''
+      }));
+      setFormErrors(prevState => ({
+        ...prevState,
+        thumb: '필수항목입니다.'
+      }));
+      setThumbFile({
+        ...thumbFile,
+        file: '',
+        filename: '',
+      });
+
+      return;
+    }
+
+    try {
+      setIsLoading(prevState => ({
+        ...prevState,
+        thumb: '업로드 중'
+      }));
+      const formData = new FormData();
+      formData.append('file', file);
+      const thumbApiURL = '/api/admin/blogs/thumbnail/upload';
+      const response = await postFileUpload(thumbApiURL, formData);
+      console.log(response);
+      const thumbId = response.data.id;
+      const isFaild = response.status !== 200 && response.status !== 201;
+      setFormValues(prevState => ({
+        ...prevState,
+        blogThumbnailId: thumbId
+      }));
+      setFormErrors(prevState => ({
+        ...prevState,
+        thumb: isFaild && '업로드에 실패했습니다. 파일형식을 확인하세요.'
+      }));
+      setThumbFile({
+        ...thumbFile,
+        file: !isFaild && file,
+        filename: !isFaild && filename,
+      });
+    } catch (err) {
+        alert(`에러가 발생했습니다.\n${err}`);
+    }
+
+    setIsLoading(prevState => ({
+      ...prevState,
+      thumb: false
+    }))
   };
+
+
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
-    const REQUEST_URL = `/api/admin/blog`;
-    const curImageIdList = filterImageId(formValues.contents);
-    const imageDatas = compareImageList(tempImageIdList, curImageIdList);
-    console.log(curImageIdList);
-    console.log(imageDatas);
-    return;
-    // VALIDATION 해야한다.
+    // const curImageIdList = filterImageId(formValues.contents);
+    // // const imageDatas = compareImageList(tempImageIdList, curImageIdList);
+    // const imageDatas = compareImageList(formValues.blogImageIdList, curImageIdList);
 
+
+    // console.log(curImageIdList);
+    // console.log(imageDatas);
+
+    console.log(formValues);
+
+    return;
+    // -  VALIDATION 해야한다. (22.06.22 저녁)
+    const REQUEST_URL = `/api/admin/blog`;
     setFormErrors(validate(formValues));
     if (Object.keys(formErrors).length) return console.error(formErrors);
   };
-
-
-
-
-
-  const filterImageId = (html) => {
-    let curimageIdList = [];
-
-    const queryImageTag = html.split('<img');
-    queryImageTag.filter((str) => {
-      if (str.indexOf('src') < 0) return;
-      const imgTag = str.split('>')[0];
-      const queryFileData = imgTag.split('?')[1];
-      const queryImageData = queryFileData.split('#')[1];
-      const id = queryImageData.split('=')[1];
-      // console.log('ID: ',id);
-      if(id)curimageIdList.push(id);
-    });
-    return curimageIdList;
-  };
-
-  const compareImageList = (tempArr, curArr) => {
-    if (!tempArr || !tempArr.length) return console.error('There is no Image File.');
-
-
-    let result = {
-      origin: originImageList,
-      temp: [...tempArr],
-      cur: [...curArr],
-      del: [],
-      added: [],
-    };
-
-    // console.log(result);
-
-    tempArr.map((id) => {
-      const isCurArr = curArr.indexOf(id) >= 0;
-      const isOriginArr = originImageList.indexOf(id) >= 0;
-      // console.log(id, 'curArr: ', isCurArr);
-      // console.log(id, 'isOriginArr: ', isOriginArr);
-
-      const isNew = isCurArr && !isOriginArr
-      isNew && result.added.push(id);
-
-      const isToBeDeleted = curArr.indexOf(id) < 0;
-      // * 추가 : origin에 존재하지 않는 경우
-      isToBeDeleted && result.del.push(id);
-    });
-    return result;
-  };
-
 
 
 
@@ -168,7 +180,6 @@ const CreateBlogPage = () => {
     }
   };
 
-  // if(QuillEditor === null) return;
 
   return (
     <>
@@ -239,7 +250,14 @@ const CreateBlogPage = () => {
               <div className="cont_divider">
                 <div className="input_row upload_image multipleLines">
                   <div className="title_section">
-                    <p className="title">썸네일</p>
+                    <p className="title">
+                      <em style={{marginRight:'8px'}}>썸네일</em>
+                      {isLoading.thumb &&
+                      <Spinner
+                        style={{ color: 'var(--color-main)', width: '15', height: '15' }}
+                        speed={0.6}
+                      />}</p>
+
                   </div>
                   <div className="inp_section">
                     <label
@@ -251,7 +269,7 @@ const CreateBlogPage = () => {
                         <PreviewImage
                           file={thumbFile.file}
                           ratio={1 / 1}
-                          objectFit={'cover'}
+                          objectFit={'contain'}
                           style={{ width: `${rem(200)}` }}
                         />
                       )}
@@ -259,18 +277,16 @@ const CreateBlogPage = () => {
                       <span className="inp_box">
                         <input
                           type="file"
-                          data-type="file"
                           id="upload-image"
-                          name="imageFile"
                           accept="image/*"
                           className="hide"
                           multiple={false}
                           onChange={imageFileChangeHandler}
                         />
                         <Fake_input filename={thumbFile.filename} />
-                        {/* {formErrors.file_pc && (
-                          <ErrorMessage>{formErrors.file_pc}</ErrorMessage>
-                        )} */}
+                        {formErrors.thumb && (
+                          <ErrorMessage>{formErrors.thumb}</ErrorMessage>
+                        )}
                       </span>
                     </label>
                   </div>
@@ -288,8 +304,8 @@ const CreateBlogPage = () => {
                       <QuillEditor
                         id={'contents'}
                         imageId={'blogImageIdList'}
+                        originImageList={originImageList}
                         setFormValues={setFormValues}
-                        setImageList={setTempImageIdList}
                         imageUploadApiURL={blogDetailImageUploadApiURL}
                       />
                     )}
@@ -337,3 +353,10 @@ const CreateBlogPage = () => {
 };
 
 export default CreateBlogPage;
+
+
+//
+//
+// const validate =  ()=>{
+//
+// }
