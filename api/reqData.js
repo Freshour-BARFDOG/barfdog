@@ -63,6 +63,7 @@ export const postData = async (url, data, callback, contType) => {
 
 
 export const putData = async (url, data) => {
+
   axios
     .put(url, data, axiosConfig())
     .then((res) => {
@@ -103,6 +104,32 @@ export const postObjData = async (url, data, contType) => {
   }
   const response = await axios
     .post(url, data, axiosConfig(contType))
+    .then((res) => {
+      console.log(res);
+      return res.status === 200 || res.status === 201;
+    })
+    .catch((err) => {
+      console.log(err.response);
+      const errStatus = err.response.status >= 400;
+      const errorMessage = err.response.data.error;
+      result.error = errorMessage
+      return !errStatus;
+    });
+
+  result.isDone = response;
+  return result;
+}
+
+
+
+
+export const putObjData = async (url, data, contType) => {
+  const result = {
+    isDone: false,
+    error: ''
+  }
+  const response = await axios
+    .put(url, data, axiosConfig(contType))
     .then((res) => {
       console.log(res);
       return res.status === 200 || res.status === 201;
