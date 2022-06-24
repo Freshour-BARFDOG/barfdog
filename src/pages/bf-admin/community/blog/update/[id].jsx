@@ -1,116 +1,105 @@
-
-import React, { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/router";
-import "react-quill/dist/quill.snow.css";
-import dynamic from "next/dynamic";
-import MetaTitle from "/src/components/atoms/MetaTitle";
-import AdminLayout from "/src/components/admin/AdminLayout";
-import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
-import InputRadio_status from "/src/components/admin/form/InputRadioPackage";
-import Fake_input from "/src/components/atoms/fake_input";
-import PreviewImage from "/src/components/atoms/PreviewImage";
-import SelectTag from "/src/components/atoms/SelectTag";
-import ErrorMessage from "/src/components/atoms/ErrorMessage";
+import React, { useEffect, useState } from 'react';
+import 'react-quill/dist/quill.snow.css';
+import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
+import MetaTitle from '/src/components/atoms/MetaTitle';
+import AdminLayout from '/src/components/admin/AdminLayout';
+import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
+import InputRadio_status from '/src/components/admin/form/InputRadioPackage';
+import Fake_input from '/src/components/atoms/fake_input';
+import PreviewImage from '/src/components/atoms/PreviewImage';
+import SelectTag from '/src/components/atoms/SelectTag';
+import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import rem from '/util/func/rem';
-
-// import QuillEditor from "/src/components/admin/form/QuillEditor";
-
-
-
-// * 이미지: 업로드하는 순간 , Server 저장
-// * Submin : JSON 객체만 전달
-// * 유효성검사시, Image파일의 존재유무 검사
-
-const UpdateBlogPage = (props) => {
+import {getData, postFileUpload, putObjData} from '/api/reqData';
+import Spinner from '/src/components/atoms/Spinner';
+import { validate } from '/util/func/validation_blog';
+import { valid_hasFormErrors } from '/util/func/validationPackage';
+import Modal_global_alert from "/src/components/modal/Modal_global_alert";
+import { useModalContext } from "/store/modal-context";
 
 
+
+
+
+
+export default function UpdateBlogPage () {
   const router = useRouter();
-  const { id } = router.query;
-  const REQUEST_URL = `/api/blog/${id}`;
+  const {id} = router.query;
+  const apiUrl = `/api/admin/blogs/${id}`;
+  const imageUploadApiURL = '/api/admin/blogs/image/upload';
 
-  const originImageList = ['1','197','200']; // 서버로부터 받은 이미지리스트
-  const [tempImageIdList, setTempImageIdList] = useState(originImageList || []);
-
-  const [body, setBody] = useState(""); // Quill 에디터의 innerHTML을 담는 state
-  const [isLoadedEditor, setIsLoadedEditor] = useState(false);
-  const [QuillEditor, setQuillEditor] = useState('');
-
-
-
-
-
-  useEffect(() => {
-    // if (!id) return;
-    // (async () => {
-    //   const response = await axios
-    //     .get(REQUEST_URL, axiosConfig())
-    //     .then((res) => {
-    //       console.log(res.data);
-    //       return res.data;
-    //     })
-    //     .catch((err) => {
-    //       console.error(err);
-    //       alert("데이터를 불러올 수 없습니다.");
-    //       router.back();
-    //       // setModalMessage("데이터를 불러올 수 없습니다.");
-    //     });
-    //   const formData = {
-    //     name: response.name,
-    //     targets: response.targets,
-    //     status: response.status,
-    //     pcLinkUrl: response.pcLinkUrl,
-    //     mobileLinkUrl: response.mobileLinkUrl,
-    //   };
-    //   const fileData = {
-    //     pc: {
-    //       file: "",
-    //       filename: response.filenamePc,
-    //       thumbLink: response._links?.thumbnail_pc.href,
-    //     },
-    //     mobile: {
-    //       file: "",
-    //       filename: response.filenameMobile,
-    //       thumbLink: response._links?.thumbnail_mobile.href,
-    //     },
-    //   };
-    //   setInitialValues({ ...formData, ...fileData });
-    //   setFormValues(formData);
-    //   setImageFile(fileData);
-    // })();
-  }, [id, router, REQUEST_URL]);
-
-
-
-  useEffect(() => {
-    if (document) {
-      const QuillEditor = dynamic(() =>
-        import("/src/components/admin/form/QuillEditor")
-      );
-      setIsLoadedEditor(true);
-      setQuillEditor(QuillEditor);
-    }
-  }, []);
-  
-  // console.log(body);
-
-
-  
-  const [formValues, setFormValues] = useState({
-    category: "ALL",
-    hasThumb: false,
-    innerHTML: "",
-    status: 'LEAKED',
-  });
-  const [imageFile, setImageFile] = useState({});
+  const mct = useModalContext();
+  const [modalMessage, setModalMessage] = useState('');
+  const [isLoading, setIsLoading] = useState({});
+  const [QuillEditor, setQuillEditor] = useState(null);
+  const [originImageIdList, setOriginImageIdList] = useState([]);
+  const [formValues, setFormValues] = useState({});
   const [formErrors, setFormErrors] = useState({});
+  const [thumbFile, setThumbFile] = useState({});
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
 
-  const onCategoryHandler = (value) => {
-    setFormValues({
-      ...formValues,
-      category: value,
-    });
+  // console.log(formValues)
 
+  //  INIT QUILL EDITOR
+  useEffect(() => {
+    if(!id)return;
+    (async ()=>{
+      const res = await getData(apiUrl);
+      const DATA = res.data.blogAdminDto;
+      const initialFormValues = {
+        title: DATA.title,
+        category: DATA.category,
+        contents: DATA.contents,
+        thumbnailId: DATA.thumbnailId,
+        status: DATA.status,
+        addImageIdList:[],
+        deleteImageIdList: []
+      };
+      setFormValues(initialFormValues);
+
+
+      const editorImageDATA = res.data.adminBlogImageDtos;
+      const originInnerHTMLImageIdList = editorImageDATA.map((list)=>list.blogImageId)
+      console.log(res)
+      setOriginImageIdList(originInnerHTMLImageIdList);
+
+      setThumbFile({
+        file: '',
+        filename: DATA.filename,
+        preview: DATA.thumbnailUrl,
+        id: DATA.thumbnailId,
+      })
+
+
+      if (document) {
+        const QuillEditor = dynamic(() => import('/src/components/admin/form/QuillEditor'));
+        setQuillEditor(QuillEditor);
+        console.log('Editor init is complete.');
+      }
+
+    })();
+
+  }, [id]);
+
+
+
+  const onInputChangeHandler = (e) => {
+    const isCategory = typeof e !== 'object';
+    if (isCategory) {
+      const value = e;
+      setFormValues({
+        ...formValues,
+        category: value,
+      });
+    } else {
+      const { id, value } = e.currentTarget;
+      setFormValues({
+        ...formValues,
+        [id]: value,
+      });
+    }
   };
 
 
@@ -122,95 +111,124 @@ const UpdateBlogPage = (props) => {
     });
   };
 
-  const imageFileChangeHandler = (e) => {
+
+
+  const imageFileChangeHandler = async (e) => {
+    // - 파일이 존재하지 않는 경우 -> 삭제 API는 따로 없음
+    // - server에서 일정시간마다 찌꺼기 file을 삭제하는 처리하는 방식으로 구현됨
     const thisInput = e.currentTarget;
     const file = thisInput.files[0];
-    console.log(file);
-    const filename = file ? file.name : "";
-    setImageFile({
-      ...imageFile,
-      file,
-      filename: filename,
-      // link:'' , //파일이 없을 경우 : 기존파일 링크 유지
-    });
+    const filename = file ? file.name : '';
+
+
+    if (!file) {
+      setFormValues((prevState) => ({
+        ...prevState,
+        thumbnailId: '',
+      }));
+      setFormErrors((prevState) => ({
+        ...prevState,
+        thumbnailId: '필수항목입니다.',
+      }));
+      setThumbFile({
+        ...thumbFile,
+        file: '',
+        filename: '',
+      });
+      return;
+    }
+
+
+
+    try {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        thumb: '업로드 중',
+      }));
+      const formData = new FormData();
+      formData.append('file', file);
+      const thumbApiURL = '/api/admin/blogs/thumbnail/upload';
+      const response = await postFileUpload(thumbApiURL, formData);
+      const thumbId = response.data.id;
+      const isFaild = response.status !== 200 && response.status !== 201;
+      setFormValues((prevState) => ({
+        ...prevState,
+        thumbnailId: thumbId,
+      }));
+      setFormErrors((prevState) => ({
+        ...prevState,
+        thumbnailId: isFaild && '업로드에 실패했습니다. 파일형식을 확인하세요.',
+      }));
+      setThumbFile({
+        ...thumbFile,
+        file: !isFaild && file,
+        filename: !isFaild && filename,
+      });
+    } catch (err) {
+      alert(`에러가 발생했습니다.\n${err}`);
+    }
+
+    setIsLoading((prevState) => ({
+      ...prevState,
+      thumb: false,
+    }));
   };
 
 
 
-  const onSubmitHandler = (e) => {
+
+  const onSubmit = async (e) => {
     e.preventDefault();
 
+    // ! IMPORTANT : create Event후, 사용자가 enter를 쳤을 경우, 똑같은 요청이 전송되지 않게 하기 위해서 필요함.
+    if(isSubmitted)return;
+    const errObj = validate(formValues);
+    setFormErrors(errObj);
+    const isPassed = valid_hasFormErrors(errObj);
 
-    const curImageIdList = filterImageId(body);
-    const imageDatas = compareImageList(tempImageIdList, curImageIdList);
-
-    console.log(imageDatas);
-    // ************** 유효성검사 -> JSON데이터 보내기 
-    // 현재 body 속에 저장된 이미 지리스트를 비교한다..
-    return 
-    setFormErrors(validate(formValues));
-    if (Object.keys(formErrors).length) return console.error(formErrors);
-    postDataToServer();
+    try {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        submit: true,
+      }));
+      if (isPassed) {
+        const objData = formValues;
+        const res = await putObjData(apiUrl, objData);
+        if(res.isDone){
+          onShowModalHandler('블로그가 수정되었습니다.');
+          setIsSubmitted(true);
+        }else {
+          alert(res.error, '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.');
+        }
+      }
+    } catch (err) {
+      console.log('API통신 오류 : ', err);
+    }
+    setIsLoading((prevState) => ({
+      ...prevState,
+      submit: false,
+    }));
   };
-  // 삭제될 이미지 리스트를 만들어보자
-
-
-
-
-
-  const filterImageId = (html) => {
-    let curimageIdList = [];
-    console.log(html);
-    const imageQuery = /`#__id=12938__`/;
-    // 시작문자열 // 끝나는 문자열
-    
-    const queryImageTag = html.split("<img");
-    const curImageList = 
-    queryImageTag.filter((str) => {
-      if (str.indexOf("src") < 0) return;
-      const imgTag = str.split(">")[0];
-      const queryId = "#__id=";
-      const imageId = imgTag.split(queryId)[1].split('"')[0]
-      curimageIdList.push(imageId);
-    });
-    return curimageIdList;
-  }
-
-
-
-  const compareImageList = (tempArr, curArr) => {
-    let result = {
-      // origin: originImageList,
-      temp: [...tempArr],
-      cur: [...curArr],
-      del: [],
-      added: [],
-    };
-
-    // console.log(tempArr);
-    // console.log(curArr);
-
-    tempArr.map((id) => {
-      const isCurArr = curArr.indexOf(id) > 0;
-      const isOriginArr = originImageList.indexOf(id) >= 0;
-      ( isCurArr && !isOriginArr ) && result.added.push(id);
-
-      const toBeDeleted = curArr.indexOf(id) < 0;
-      // * 추가 : origin에 존재하지 않는 경우
-      toBeDeleted && result.del.push(id);
-    });
-    return result;
-
-  };
-
 
   const returnToPrevPage = () => {
-    if (confirm("이전 페이지로 돌아가시겠습니까?")) {
+    if (confirm('이전 페이지로 돌아가시겠습니까?')) {
       router.back();
     }
   };
 
+  const moveToPage = (url)=>{
+    router.push(url);
+  }
 
+  const onShowModalHandler = (message)=>{
+    mct.alertShow();
+    setModalMessage(message);
+
+  }
+  const onGlobalModalCallback = ()=>{
+    mct.alertHide();
+    moveToPage('/bf-admin/community/blog');
+  }
 
 
   return (
@@ -226,7 +244,7 @@ const UpdateBlogPage = (props) => {
             className="cont"
             encType="multipart/form-data"
             method="post"
-            onSubmit={onSubmitHandler}
+
           >
             <div className="cont_body">
               <div className="cont_divider">
@@ -239,74 +257,110 @@ const UpdateBlogPage = (props) => {
                   <div className="inp_section">
                     <div className="inp_box">
                       <SelectTag
-                        name={"category"}
-                        id={"category"}
-                        onChange={onCategoryHandler}
+                        name={'category'}
+                        id={'category'}
+                        onChange={onInputChangeHandler}
                         options={[
-                          { label: "전체", value: "전체" },
-                          { label: "영양", value: "영양" },
-                          { label: "건강", value: "건강" },
-                          { label: "생애", value: "생애" },
+                          { label: '카테고리 선택', value: '' },
+                          { label: '영양', value: 'NUTRITION' },
+                          { label: '건강', value: 'HEALTH' },
+                          { label: '생애', value: 'LIFE' },
                         ]}
+                        initialValue={formValues.category}
                       />
-                      {/* {formErrors.name && (
-                        <ErrorMessage>{formErrors.name}</ErrorMessage>
-                      )} */}
+                      {formErrors.category && <ErrorMessage>{formErrors.category}</ErrorMessage>}
                     </div>
                   </div>
                 </div>
               </div>
               {/* cont_divider */}
               <div className="cont_divider">
-                <div className="input_row upload_image">
+                <div className="input_row">
+                  <div className="title_section fixedHeight">
+                    <label className="title" htmlFor={`title`}>
+                      제목
+                    </label>
+                  </div>
+                  <div className="inp_section">
+                    <div className={`inp_box`}>
+                      <input
+                        id={`title`}
+                        type="text"
+                        className={'fullWidth'}
+                        value={formValues.title || ''}
+                        onChange={onInputChangeHandler}
+                      />
+                      {formErrors.title && <ErrorMessage>{formErrors.title}</ErrorMessage>}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/* cont_divider */}
+              <div className="cont_divider">
+                <div className="input_row upload_image multipleLines">
                   <div className="title_section">
                     <p className="title">썸네일</p>
                   </div>
                   <div className="inp_section">
                     <label
                       className="inp_wrap file"
-                      htmlFor="upload-image"
-                      style={{ display: "inline-block" }}
+                      htmlFor="blogThumbnailId"
+                      style={{ display: 'inline-block' }}
                     >
-                      <PreviewImage
-                        file={imageFile.file}
-                        ratio={1 / 1}
-                        objectFit={"cover"}
-                        style={{ width: `${rem(200)}` }}
-                      />
+                      {thumbFile.file && (
+                        <PreviewImage
+                          file={thumbFile.file}
+                          ratio={1}
+                          objectFit={'contain'}
+                          style={{ width: `${rem(200)}` }}
+                        />
+                      )}
                       <span className="inp_box">
                         <input
                           type="file"
-                          data-type="file"
-                          id="upload-image"
-                          name="imageFile"
+                          id="blogThumbnailId"
                           accept="image/*"
                           className="hide"
                           multiple={false}
                           onChange={imageFileChangeHandler}
                         />
-                        <Fake_input filename={imageFile.filename} />
-                        {/* {formErrors.file_pc && (
-                          <ErrorMessage>{formErrors.file_pc}</ErrorMessage>
-                        )} */}
+                        <Fake_input
+                          loadingIcon={
+                            isLoading.thumb && (
+                              <Spinner
+                                style={{ color: 'var(--color-main)', width: '15', height: '15' }}
+                                speed={0.6}
+                              />
+                            )
+                          }
+                          filename={thumbFile.filename}
+                        />
                       </span>
+                      {formErrors.blogThumbnailId && (
+                        <ErrorMessage>{formErrors.blogThumbnailId}</ErrorMessage>
+                      )}
                     </label>
                   </div>
                 </div>
               </div>
               {/* cont_divider */}
               <div className="cont_divider">
-                <div className="input_row">
+                <div className="input_row multipleLines">
                   <div className="title_section">
                     <p className="title">상세설명</p>
                   </div>
                   <div className="inp_section">
+                    {formErrors.contents && <ErrorMessage>{formErrors.contents}</ErrorMessage>}
                     {/* // * --------- QUILL EDITOR --------- * // */}
-                    {isLoadedEditor && (
+                    {QuillEditor && (
                       <QuillEditor
-                        body={body}
-                        handleQuillChange={setBody}
-                        setTempImageIdList={setTempImageIdList}
+                        id={'contents'}
+                        mode={'update'}
+                        imageId={'blogImageIdList'}
+                        originImageIdList={originImageIdList}
+                        setFormValues={setFormValues}
+                        imageUploadApiURL={imageUploadApiURL}
+                        initialValue={formValues.contents}
                       />
                     )}
                     {/* // * --------- QUILL EDITOR --------- * // */}
@@ -340,22 +394,21 @@ const UpdateBlogPage = (props) => {
                 >
                   취소
                 </button>
-                <button
-                  type="submit"
-                  id="btn-create"
-                  className="admin_btn confirm_l solid"
-                >
-                  등록
+                <button type="button" id="btn-create" className="admin_btn confirm_l solid"            onClick={onSubmit}>
+                  {isLoading.submit ? (
+                    <Spinner
+                      style={{ color: '#fff', width: '15', height: '15' }}
+                      speed={0.6}
+                    />
+                  ) : '등록'}
                 </button>
               </div>
             </div>
           </form>
         </AdminContentWrapper>
       </AdminLayout>
+      <Modal_global_alert message={modalMessage} onClick={onGlobalModalCallback} background/>
     </>
   );
-};;
-
-export default UpdateBlogPage;
-
+};
 
