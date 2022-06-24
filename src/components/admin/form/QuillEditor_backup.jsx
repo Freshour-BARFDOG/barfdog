@@ -17,10 +17,9 @@ export default function QuillEditor({
   imageId,
   setFormValues,
   imageUploadApiURL,
-  originImageIdList = [],
-  initialValue,
-  mode = 'create',
+  originImageList=[],
 }) {
+
   /* - 모듈 추가 시, 필요
    * const Quill = typeof window == 'object' ? require('quill') : () => false;
    */
@@ -30,26 +29,18 @@ export default function QuillEditor({
 
   if (!setFormValues || typeof setFormValues !== 'function') return;
   const [isLoading, setIsLoading] = useState(false);
-  const [body, setBody] = useState(initialValue);
-  const [fullImageIdList, setFullImageIdList] = useState(originImageIdList);
+  const [body, setBody] = useState('');
+  const [fullImageIdList, setFullImageIdList] = useState(originImageList);
 
   useEffect(() => {
-    const imageIdList = analyze_ImageIdListCRUD(fullImageIdList, body, originImageIdList);
+    const result = analyze_ImageListCRUD(fullImageIdList, body, originImageList);
+    const toBeUploadedImageIdList = result?.add;
     const isBodyEmty = body === '<p><br></p>';
-    if (mode === 'create') {
-      setFormValues((prevState) => ({
-        ...prevState,
-        [id]: isBodyEmty ? '' : body,
-        [imageId]: imageIdList?.add,
-      }));
-    } else if ('update') {
-      setFormValues((prevState) => ({
-        ...prevState,
-        [id]: isBodyEmty ? '' : body,
-        addImageIdList: imageIdList?.add,
-        deleteImageIdList: imageIdList?.del,
-      }));
-    }
+    setFormValues((prevState) => ({
+      ...prevState,
+      [id]: isBodyEmty ? '' : body,
+      [imageId]: toBeUploadedImageIdList,
+    }));
   }, [body, fullImageIdList]);
 
   const imageHandler = () => {
@@ -68,6 +59,9 @@ export default function QuillEditor({
         const response = await postFileUpload(imageUploadApiURL, formData);
         if (response.status !== 200 && response.status !== 201) return;
         const imageData = response.data;
+
+        // const imageData = {id:Math.floor(Math.random()*100),url: 'http://localhost:8080/api/blog?filename=createadFileName.jpg'}; //
+        // console.log(imageData);
 
         const id = imageData.id.toString();
         const url = imageData.url;
@@ -125,7 +119,7 @@ export default function QuillEditor({
         placeholder={'내용을 입력하세요.'}
         preserveWhitespace // 띄어쓰기 보존
         onChange={onContentChangeHandler}
-        defaultValue={initialValue}
+        // onBlur={onBlurhandler}
         ref={quillRef}
       />
       {isLoading && (
@@ -139,7 +133,7 @@ export default function QuillEditor({
   );
 }
 
-const analyze_ImageIdListCRUD = (standardImageIdList, innerHTML = '', originImageIdList = []) => {
+const analyze_ImageListCRUD = (standardImageIdList, innerHTML = '', originImageIdList = []) => {
   let result;
   if (!standardImageIdList.length) return;
   const currentImageIdList = extractImageIdList(innerHTML);
@@ -157,21 +151,14 @@ const extractImageIdList = (html) => {
     const queryFileData = imgTag.split('?')[1];
     const queryImageData = queryFileData.split('#')[1];
     const id = queryImageData.split('=')[1];
-    if (id) {
-      curimageIdList.push(id);
-    }
+    // console.log('ID: ',id);
+    if (id) curimageIdList.push(id);
   });
   return curimageIdList;
 };
 
-const compareImageList = (allArrBefore, curArrBefore, originArrBefore) => {
-
-
-  if (!allArrBefore.length) return console.error('There is no Image File.');
-
-  const originArr = originArrBefore.map(a=>Number(a));
-  const allArr = allArrBefore.map(a=>Number(a));
-  const curArr = curArrBefore.map(a=>Number(a));
+const compareImageList = (allArr, curArr, originArr) => {
+  if (!allArr || !allArr.length) return console.error('There is no Image File.');
 
   let result = {
     origin: originArr, // very First image List
@@ -181,11 +168,7 @@ const compareImageList = (allArrBefore, curArrBefore, originArrBefore) => {
     del: [], // the image List to be deleted
   };
 
-  for (const key in result) {
-    let arr = result[key];
-    result[key] = arr.map(a=>Number(a));
-  }
-
+  // console.log(result);
 
   allArr.map((id) => {
     const isCurArr = curArr.indexOf(id) >= 0;
@@ -196,8 +179,6 @@ const compareImageList = (allArrBefore, curArrBefore, originArrBefore) => {
     isNew && result.add.push(id);
     isToBeDeleted && result.del.push(id);
   });
-
-
   return result;
 };
 
