@@ -6,7 +6,7 @@ import SignupInput from "./SignupInput";
 import SignInput_address from "./SignInput_address";
 import CustomRadio from "/src/components/atoms/CustomRadio";
 import getAuthNumberForPhoneNumber from "/util/func/getAuthNumberForPhoneNumber";
-import {valid_authNumber, valid_confirmPassword, valid_email, valid_email_duplication, valid_password, valid_phoneNumber} from "/util/func/signup_validation";
+import {valid_authNumber, valid_confirmPassword, valid_email, valid_email_duplication, valid_password, valid_phoneNumber} from "/util/func/validationPackage";
 import rem from "/util/func/rem";
 
 
