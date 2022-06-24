@@ -272,12 +272,13 @@ const CreateBlogPage = () => {
                       htmlFor="thumbnailId"
                       style={{ display: 'inline-block' }}
                     >
-                      {thumbFile.file && (
+                      {(thumbFile.file || thumbFile.thumbnailUrl) && (
                         <PreviewImage
                           file={thumbFile.file}
                           ratio={1}
                           objectFit={'contain'}
                           style={{ width: `${rem(200)}` }}
+                          thumbLink={thumbFile.thumbnailUrl}
                         />
                       )}
                       <span className="inp_box">

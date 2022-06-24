@@ -22,7 +22,6 @@ import { useModalContext } from "/store/modal-context";
 
 
 
-
 export default function UpdateBlogPage () {
   const router = useRouter();
   const {id} = router.query;
@@ -68,7 +67,7 @@ export default function UpdateBlogPage () {
       setThumbFile({
         file: '',
         filename: DATA.filename,
-        preview: DATA.thumbnailUrl,
+        thumbnailUrl: DATA.thumbnailUrl,
         id: DATA.thumbnailId,
       })
 
@@ -307,9 +306,10 @@ export default function UpdateBlogPage () {
                       htmlFor="blogThumbnailId"
                       style={{ display: 'inline-block' }}
                     >
-                      {thumbFile.file && (
+                      {(thumbFile.file || thumbFile.thumbnailUrl) && (
                         <PreviewImage
                           file={thumbFile.file}
+                          thumbLink={thumbFile.thumbnailUrl}
                           ratio={1}
                           objectFit={'contain'}
                           style={{ width: `${rem(200)}` }}
