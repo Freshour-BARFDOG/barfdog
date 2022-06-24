@@ -1,47 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import s from './blog.module.scss';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
 import BannerList from './BlogList';
-import AmdinErrorMessage from '@src/components/atoms/AmdinErrorMessage';
-import AdminBtn_moveToPage from '@src/components/atoms/AdminBtn_moveToPage';
-import Pagination from '@src/components/atoms/Pagination';
-import Modal_AdminRecommendArticle from '@src/components/modal/Modal_AdminRecommendArticle';
-import Button_acceptClickEvent from '@src/components/atoms/Button_acceptClickEvent';
-import { getData } from '/api/reqData';
+import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
+import AdminBtn_moveToPage from '/src/components/atoms/AdminBtn_moveToPage';
+import Modal_AdminRecommendArticle from '/src/components/modal/Modal_AdminRecommendArticle';
+import Button_acceptClickEvent from '/src/components/atoms/Button_acceptClickEvent';
+import PaginationWithAPI from "/src/components/atoms/PaginationWithAPI";
 
-const TEST_ITEM = [
-  {
-    id: 1,
-    title: 'zz',
-    createdDate: '22-05-02',
-    status:'LEAKED'
-  },
-  {
-    id: 2,
-    title: 'zz',
-    createdDate: '22-05-02',
-    status:'HIDDEN'
-  },
-];
+
 
 function BlogIndexPage() {
-  const [itemList, setItemList] = useState(TEST_ITEM);
+
+  const [itemList, setItemList] = useState([]);
   const [activeModal, setActiveModal] = useState(false);
   const onShowRecommendArticleModal = (returnVal) => {
     setActiveModal(returnVal);
   };
 
   console.log(itemList);
-  useEffect(()=>{
-    (async () => {
-      const res = await getData('/api/admin/blogs?page=1&size=5');
-      console.log(res);
-      // setItemList()
-    })();
-  }, []);
-
   return (
     <>
       <MetaTitle title="블로그 관리" admin={true} />
@@ -85,7 +64,7 @@ function BlogIndexPage() {
               </div>
             </div>
             <div className={s['pagination-section']}>
-              <Pagination itemCountPerGroup={10} itemTotalCount={100} className={'square'} />
+              <PaginationWithAPI apiURL={'/api/admin/blogs'} size={2} theme={'square'} setItemList={setItemList}/>
             </div>
           </div>
         </AdminContentWrapper>

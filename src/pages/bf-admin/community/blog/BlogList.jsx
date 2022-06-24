@@ -1,21 +1,20 @@
 import s from "./blog.module.scss";
 import Link from 'next/link';
 import getElemIdx from "../../../../../util/func/getElemIdx";
+import {deleteData} from "../../../../../api/reqData";
 
 
-export default function BlogList({ items, onDeleteItem }) {
+export default function BlogList({ items, setItemList }) {
   if (!items || !items.length) return;
 
   return (
     <ul className="table_body">
       {items.map((item) => (
-        <SingleItems key={`item-${item.id}`} index={item.id} item={item} />
+        <SingleItems key={`item-${item.id}`} index={item.id} item={item} setItemList={setItemList} />
       ))}
     </ul>
   );
 }
-
-
 
 
 const transformDate = (d) => {
@@ -28,30 +27,31 @@ const transformDate = (d) => {
 
 
 
-
-
 const SingleItems = ({ item }) => {
   const DATA = {
-    id: item.id || Math.random(),
+    id: item.id,
     title: item.title || '제목이 없습니다.',
-    createdDate: transformDate(item.createdDate || '22-05-11'),
+    createdDate: transformDate(item.createdDate),
     status: item.status === 'LEAKED' ? 'Y' : 'N' ,
     apiurl: {
-      // query_blog: item.query_blog.href,
-      // update: item.update_blog.href,
-      // delete: item._links.delete_blog.href,
+      query_blog: item._links?.query_blog.href,
+      update: item._links?.update_blog.href,
+      delete: item._links.delete_blog?.href,
     },
   };
 
-  const onDeleteItemHandler = (e) => {
-    const target = e.currentTarget.closest("li");
-    const targetViewIdx = getElemIdx(target);
+  const onDeleteItemHandler = async (e) => {
     const apiURL = e.currentTarget.dataset.apiurl;
-    const bannerName = items[targetViewIdx]?.name;
-    if (confirm(`선택된 배너(${bannerName})를 정말 삭제하시겠습니까?`)) {
-      onDeleteItem(apiURL);
+    if (confirm(`${DATA.id}번 글을 정말 삭제하시겠습니까?`)) {
+      const res = await deleteData(apiURL);
+      if(res.status === 200 || res.status === 201 ){
+        window.location.reload();
+      } else {
+        alert('삭제할 수 없습니다. 새로고침 후 , 다시 시도해보세요.')
+      }
     }
   };
+
 
   return (
     <li className={s.item} key={`item-${DATA.id}`} data-idx={DATA.id}>

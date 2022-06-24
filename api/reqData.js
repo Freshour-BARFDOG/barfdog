@@ -32,7 +32,8 @@ export const getData = async (url, callback) => {
     })
     .catch((err) => {
       console.error('ERROR: ', err.response);
-      alert(err.response.data.error);
+      const errorMessage =  err.response?.data.error || '데이터를 불러오는데 실패했습니다.'
+      alert(errorMessage);
       return err;
     });
 
@@ -43,8 +44,6 @@ export const getData = async (url, callback) => {
 
 
 export const postData = async (url, data, callback, contType) => {
-
-
   axios
     .post(url, data, axiosConfig(contType))
     .then((res) => {
@@ -79,18 +78,20 @@ export const putData = async (url, data) => {
 
 
 export const deleteData = async (url) => {
-  axios
+  const response = axios
     .delete(url, axiosConfig())
     .then((res) => {
       console.log(res);
+      return res;
     })
     .catch((err) => {
-      console.log(err.response);
-      console.log(err.request);
+      return err.response;
     });
+
+  return response;
 };
 
-
+// 비아이벤처스로 리다이렉ㅇ트된 비언ㅌ--> 다시 분리시키기
 
 
 

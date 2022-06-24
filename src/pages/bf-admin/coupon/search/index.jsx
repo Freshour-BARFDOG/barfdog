@@ -88,7 +88,7 @@ function CouponListPage() {
               <Pagination
                 itemCountPerGroup={10}
                 itemTotalCount={100}
-                className={"square"}
+                theme={"square"}
               />
             </div>
           </section>

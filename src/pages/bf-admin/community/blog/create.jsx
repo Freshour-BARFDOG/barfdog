@@ -15,6 +15,8 @@ import {postFileUpload, postObjData} from '/api/reqData';
 import Spinner from '/src/components/atoms/Spinner';
 import { validate } from '/util/func/validation_blog';
 import { valid_hasFormErrors } from '/util/func/validationPackage';
+import Modal_global_alert from "/src/components/modal/Modal_global_alert";
+import {useModalContext} from "/store/modal-context";
 
 /*
  * - 유효성검사 (이제 form 업로드는 끝났다)
@@ -33,12 +35,17 @@ const initialFormValues = {
 const CreateBlogPage = () => {
   const blogDetailImageUploadApiURL = '/api/admin/blogs/image/upload';
   const router = useRouter();
+  const mct = useModalContext();
+  const [modalMessage, setModalMessage] = useState('');
   const [isLoading, setIsLoading] = useState({});
   const [QuillEditor, setQuillEditor] = useState(null);
   const originImageList = initialFormValues.blogImageIdList;
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState({});
   const [thumbFile, setThumbFile] = useState({});
+
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
 
   //  INIT QUILL EDITOR
   useEffect(() => {
@@ -141,8 +148,9 @@ const CreateBlogPage = () => {
 
 
   const onSubmit = async (e) => {
-    e.preventDefault();
+    if(isSubmitted)return; // ! IMPORTANT : create Event후, 사용자가 enter를 쳤을 경우, 똑같은 요청이 전송되지 않게 하기 위해서 필요함.
 
+    e.preventDefault();
     const errObj = validate(formValues);
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
@@ -155,7 +163,8 @@ const CreateBlogPage = () => {
         const objData = formValues;
         const res = await postObjData('api/admin/blogs', objData);
         if(res.isDone){
-          router.push('/bf-admin/community/blog');
+          onShowModalHandler('블로그가 생성되었습니다.');
+          setIsSubmitted(true);
         }else {
           alert(res.error, '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.');
         }
@@ -175,6 +184,21 @@ const CreateBlogPage = () => {
     }
   };
 
+  const moveToPage = (url)=>{
+    router.push(url);
+  }
+
+  const onShowModalHandler = (message)=>{
+    mct.alertShow();
+    setModalMessage(message);
+
+  }
+  const onGlobalModalCallback = ()=>{
+    mct.alertHide();
+    moveToPage('/bf-admin/community/blog');
+  }
+
+
   return (
     <>
       <MetaTitle title="블로그 생성" admin={true} />
@@ -188,7 +212,7 @@ const CreateBlogPage = () => {
             className="cont"
             encType="multipart/form-data"
             method="post"
-            onSubmit={onSubmit}
+
           >
             <div className="cont_body">
               <div className="cont_divider">
@@ -335,7 +359,7 @@ const CreateBlogPage = () => {
                 >
                   취소
                 </button>
-                <button type="submit" id="btn-create" className="admin_btn confirm_l solid">
+                <button type="button" id="btn-create" className="admin_btn confirm_l solid"            onClick={onSubmit}>
                   {isLoading.submit ? (
                     <Spinner
                       style={{ color: '#fff', width: '15', height: '15' }}
@@ -348,6 +372,7 @@ const CreateBlogPage = () => {
           </form>
         </AdminContentWrapper>
       </AdminLayout>
+      <Modal_global_alert message={modalMessage} onClick={onGlobalModalCallback} background/>
     </>
   );
 };
