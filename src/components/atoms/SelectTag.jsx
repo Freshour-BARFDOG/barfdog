@@ -9,8 +9,9 @@ const SelectTag = ({ name, id, onChange, options = [], initialValue, style, ...p
   const onChangeHandler = (e) => {
     const thisSelect = e.currentTarget;
     const val = thisSelect.value;
+    const thisId = thisSelect.id;
     // setSelectedValue(val);
-    if (onChange && typeof onChange === 'function') onChange(val);
+    if (onChange && typeof onChange === 'function') onChange(val, thisId);
   };
 
   return (
@@ -21,7 +22,7 @@ const SelectTag = ({ name, id, onChange, options = [], initialValue, style, ...p
         id={id || name}
         onChange={onChangeHandler}
         style={style}
-        value={initialValue} /* to Set Initial Value*/
+        value={initialValue} /* IMPORTANT: to set Initial Value */
         {...props}
       >
         {options.map((option, i) => {

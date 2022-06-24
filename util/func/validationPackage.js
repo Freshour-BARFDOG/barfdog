@@ -20,6 +20,26 @@ export const valid_isEmptyArray = (arr) =>{
 }
 
 
+
+
+export const valid_isEmptyObject = (obj) => {
+  let message;
+  for ( const key in obj ) {
+    const val = obj[key];
+    console.log(val)
+    if(!val){
+      message = `빈 항목이 있습니다.`;
+      break
+    }
+  }
+
+  return message;
+}
+
+
+
+
+
 export const valid_email = (value) => {
   let error='';
 
@@ -185,6 +205,13 @@ export const valid_policyCheckbox = (obj, standardObjList = [])=>{
   }
   return errors;
 }
+
+
+
+
+
+
+
 
 
 

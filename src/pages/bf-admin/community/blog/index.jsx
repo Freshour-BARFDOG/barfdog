@@ -11,22 +11,26 @@ import Button_acceptClickEvent from '/src/components/atoms/Button_acceptClickEve
 import PaginationWithAPI from "/src/components/atoms/PaginationWithAPI";
 
 
-
 function BlogIndexPage() {
 
   const [itemList, setItemList] = useState([]);
   const [activeModal, setActiveModal] = useState(false);
-  const onShowRecommendArticleModal = (returnVal) => {
+
+  const onShowRecommendArticleModal = async (returnVal) => {
+    // 추천아티클 정보 가져온다
+
     setActiveModal(returnVal);
   };
 
-  console.log(itemList);
+
+
+  // console.log(itemList);
   return (
     <>
       <MetaTitle title="블로그 관리" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
-          {activeModal && <Modal_AdminRecommendArticle setActiveModal={setActiveModal} />}
+          {activeModal && <Modal_AdminRecommendArticle setActiveModal={setActiveModal}/>}
           <h1 className="title_main">블로그 관리</h1>
           <div className="cont">
             <div className="cont_header clearfix">
@@ -64,7 +68,7 @@ function BlogIndexPage() {
               </div>
             </div>
             <div className={s['pagination-section']}>
-              <PaginationWithAPI apiURL={'/api/admin/blogs'} size={2} theme={'square'} setItemList={setItemList}/>
+              <PaginationWithAPI apiURL={'/api/admin/blogs'} size={1} theme={'square'} setItemList={setItemList}/>
             </div>
           </div>
         </AdminContentWrapper>
