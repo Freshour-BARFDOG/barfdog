@@ -9,6 +9,7 @@ const FakeInput = styled.div`
   justify-content: flex-start;
   align-items: center;
   cursor:pointer;
+  width: 100%;
 `;
 
 const FakeInputBody = styled.span`
