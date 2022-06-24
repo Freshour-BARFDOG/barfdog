@@ -22,13 +22,12 @@ import {useModalContext} from "/store/modal-context";
  * - 유효성검사 (이제 form 업로드는 끝났다)
  */
 
-const imageListFromServer = ['1', '10', '100']; // 서버로부터 받은 이미지리스트 FOR TEST
 const initialFormValues = {
   title: '',
   category: '',
   contents: '',
-  blogThumbnailId: null, // number
-  blogImageIdList: imageListFromServer.length ? imageListFromServer : [],
+  thumbnailId: null, // number
+  blogImageIdList: [],
   status: 'LEAKED',
 };
 
@@ -39,11 +38,10 @@ const CreateBlogPage = () => {
   const [modalMessage, setModalMessage] = useState('');
   const [isLoading, setIsLoading] = useState({});
   const [QuillEditor, setQuillEditor] = useState(null);
-  const originImageList = initialFormValues.blogImageIdList;
+  const [originImageIdList, setOriginImageIdList] = useState([]);
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState({});
   const [thumbFile, setThumbFile] = useState({});
-
   const [isSubmitted, setIsSubmitted] = useState(false);
 
 
@@ -94,11 +92,11 @@ const CreateBlogPage = () => {
     if (!file) {
       setFormValues((prevState) => ({
         ...prevState,
-        blogThumbnailId: '',
+        thumbnailId: '',
       }));
       setFormErrors((prevState) => ({
         ...prevState,
-        blogThumbnailId: '필수항목입니다.',
+        thumbnailId: '필수항목입니다.',
       }));
       setThumbFile({
         ...thumbFile,
@@ -123,11 +121,11 @@ const CreateBlogPage = () => {
       const isFaild = response.status !== 200 && response.status !== 201;
       setFormValues((prevState) => ({
         ...prevState,
-        blogThumbnailId: thumbId,
+        thumbnailId: thumbId,
       }));
       setFormErrors((prevState) => ({
         ...prevState,
-        blogThumbnailId: isFaild && '업로드에 실패했습니다. 파일형식을 확인하세요.',
+        thumbnailId: isFaild && '업로드에 실패했습니다. 파일형식을 확인하세요.',
       }));
       setThumbFile({
         ...thumbFile,
@@ -148,9 +146,9 @@ const CreateBlogPage = () => {
 
 
   const onSubmit = async (e) => {
+    e.preventDefault();
     if(isSubmitted)return; // ! IMPORTANT : create Event후, 사용자가 enter를 쳤을 경우, 똑같은 요청이 전송되지 않게 하기 위해서 필요함.
 
-    e.preventDefault();
     const errObj = validate(formValues);
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
@@ -271,7 +269,7 @@ const CreateBlogPage = () => {
                   <div className="inp_section">
                     <label
                       className="inp_wrap file"
-                      htmlFor="blogThumbnailId"
+                      htmlFor="thumbnailId"
                       style={{ display: 'inline-block' }}
                     >
                       {thumbFile.file && (
@@ -285,7 +283,7 @@ const CreateBlogPage = () => {
                       <span className="inp_box">
                         <input
                           type="file"
-                          id="blogThumbnailId"
+                          id="thumbnailId"
                           accept="image/*"
                           className="hide"
                           multiple={false}
@@ -303,8 +301,8 @@ const CreateBlogPage = () => {
                           filename={thumbFile.filename}
                         />
                       </span>
-                      {formErrors.blogThumbnailId && (
-                        <ErrorMessage>{formErrors.blogThumbnailId}</ErrorMessage>
+                      {formErrors.thumbnailId && (
+                        <ErrorMessage>{formErrors.thumbnailId}</ErrorMessage>
                       )}
                     </label>
                   </div>
@@ -322,8 +320,9 @@ const CreateBlogPage = () => {
                     {QuillEditor && (
                       <QuillEditor
                         id={'contents'}
+                        mode={'create'}
                         imageId={'blogImageIdList'}
-                        originImageList={originImageList}
+                        originImageIdList={originImageIdList}
                         setFormValues={setFormValues}
                         imageUploadApiURL={blogDetailImageUploadApiURL}
                       />
