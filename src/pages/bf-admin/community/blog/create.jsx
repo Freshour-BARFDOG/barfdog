@@ -378,9 +378,3 @@ const CreateBlogPage = () => {
 };
 
 export default CreateBlogPage;
-
-//
-//
-// const validate =  ()=>{
-//
-// }
