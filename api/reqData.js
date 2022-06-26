@@ -109,10 +109,10 @@ export const postObjData = async (url, data, contType) => {
       return res.status === 200 || res.status === 201;
     })
     .catch((err) => {
-      console.log(err.response);
-      const errStatus = err.response.status >= 400;
-      const errorMessage = err.response.data.error;
-      result.error = errorMessage
+      console.log('ERROR내용: ',err);
+      const errStatus = err.response?.status >= 400;
+      const errorMessage = err.response?.data.error;
+      result.error = errorMessage || '서버와 통신오류가 발생했습니다.'
       return !errStatus;
     });
 
