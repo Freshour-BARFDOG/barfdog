@@ -17,10 +17,8 @@ import { validate } from '/util/func/validation_blog';
 import { valid_hasFormErrors } from '/util/func/validationPackage';
 import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 import {useModalContext} from "/store/modal-context";
+import CustomRadio from "../../../../components/admin/form/CustomRadio";
 
-/*
- * - 유효성검사 (이제 form 업로드는 끝났다)
- */
 
 const initialFormValues = {
   title: '',
@@ -30,6 +28,7 @@ const initialFormValues = {
   blogImageIdList: [],
   status: 'LEAKED',
 };
+
 
 const CreateBlogPage = () => {
   const blogDetailImageUploadApiURL = '/api/admin/blogs/image/upload';
@@ -45,6 +44,7 @@ const CreateBlogPage = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
 
+  console.log(formValues)
   //  INIT QUILL EDITOR
   useEffect(() => {
     if (document) {
@@ -339,10 +339,11 @@ const CreateBlogPage = () => {
                     <p className="title">노출여부</p>
                   </div>
                   <div className="inp_section">
-                    <InputRadio_status
+                    <CustomRadio
+                      setValue={setFormValues}
                       name="status"
-                      exposedStatus={formValues.status}
-                      onRadioButtonHandler={onRadioButtonHandler}
+                      idList={['LEAKED!!', 'HIDDEN']}
+                      labelList={['노출', '숨김']}
                     />
                   </div>
                 </div>
