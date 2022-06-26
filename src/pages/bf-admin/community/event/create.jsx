@@ -1,149 +1,201 @@
-import React, { useEffect, useRef, useState } from "react";
-import "react-quill/dist/quill.snow.css";
-import dynamic from "next/dynamic";
-import { useRouter } from "next/router";
-import MetaTitle from "/src/components/atoms/MetaTitle";
-import AdminLayout from "/src/components/admin/AdminLayout";
-import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
-import InputRadio_status from "/src/components/admin/form/InputRadioPackage";
-import Fake_input from "/src/components/atoms/fake_input";
-import PreviewImage from "/src/components/atoms/PreviewImage";
-import SelectTag from "/src/components/atoms/SelectTag";
-import ErrorMessage from "/src/components/atoms/ErrorMessage";
+import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import {useModalContext} from "/store/modal-context";
+import MetaTitle from '/src/components/atoms/MetaTitle';
+import AdminLayout from '/src/components/admin/AdminLayout';
+import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
+import Fake_input from '/src/components/atoms/fake_input';
+import PreviewImage from '/src/components/atoms/PreviewImage';
+import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import rem from '/util/func/rem';
+import { validate } from '/util/func/validation_event';
+import { valid_hasFormErrors } from '/util/func/validationPackage';
+import CustomRadio from '/src/components/admin/form/CustomRadio';
+import Spinner from '/src/components/atoms/Spinner';
+import EventDetailImage from './EventDetailImage';
+import Modal_global_alert from "/src/components/modal/Modal_global_alert";
+import { postFileUpload, postObjData } from '/api/reqData';
 
 
-// * 할것 
-// * 미리보기 이미지 > previewImage는 , 파일 첨부되는 개수에 따라서 동적생성 되게 만든다.
 
-const CreateEventPage = (props) => {
+
+
+const initialFormValues = {
+  status: 'LEAKED',
+  title: '',
+  thumbnailId: null,
+  eventImageRequestDtoList: [],
+};
+
+const CreateEventPage = () => {
+
   const router = useRouter();
-  const originImageList = ["1", "197", "200"]; // 서버로부터 받은 이미지리스트
-  const [tempImageIdList, setTempImageIdList] = useState(originImageList || []);
-  const [body, setBody] = useState(""); // Quill 에디터의 innerHTML을 담는 state
-  const [isLoadedEditor, setIsLoadedEditor] = useState(false);
-  const [QuillEditor, setQuillEditor] = useState("");
-
-  useEffect(() => {
-    if (document) {
-      const QuillEditor = dynamic(() =>
-        import("/src/components/admin/form/QuillEditor")
-      );
-      setIsLoadedEditor(true);
-      setQuillEditor(QuillEditor);
-    }
-  }, []);
-
-  // console.log(body);
-
-  const REQUEST_URL = `/api/admin/event`;
-
-  const [formValues, setFormValues] = useState({
-    category: "ALL",
-    hasThumb: false,
-    innerHTML: "",
-    status: "LEAKED",
-  });
-  const [imageFile, setImageFile] = useState({});
+  const mct = useModalContext();
+  const [modalMessage, setModalMessage] = useState('');
+  const [isLoading, setIsLoading] = useState({});
+  const [thumbFile, setThumbFile] = useState({});
+  const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState({});
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
 
-  const onRadioButtonHandler = (data) => {
-    const { key, value } = data;
+  const onInputChangeHandler = (e) => {
+    const { id, value } = e.currentTarget;
     setFormValues({
       ...formValues,
-      [key]: value,
+      [id]: value,
     });
   };
 
-  const imageFileChangeHandler = (e) => {
+  const thumbFileChangeHandler = async (e) => {
+    const postApiUrl = 'api/admin/events/thumbnail';
+    // - 파일이 존재하지 않는 경우 -> 삭제 API는 따로 없음
+    // - server에서 일정시간마다 찌꺼기 file을 삭제하는 처리하는 방식으로 구현됨
     const thisInput = e.currentTarget;
     const file = thisInput.files[0];
-    console.log(file);
-    const filename = file ? file.name : "";
-    setImageFile({
-      ...imageFile,
-      file,
-      filename: filename,
-      // link:'' , //파일이 없을 경우 : 기존파일 링크 유지
-    });
-  };
+    const filename = file ? file.name : '';
 
-  const multipleImageFileChangeHandler = (e) => {
-    // ! 유효성 검사필요 : 이미지파일 10 개 이상일 경우  (220520)
-    // ! 유효성 검사필요 : 이미지 용량 5MB 이상일 경우  (220520)
+    if (!file) {
+      setFormValues((prevState) => ({
+        ...prevState,
+        thumbnailId: '',
+      }));
+      setFormErrors((prevState) => ({
+        ...prevState,
+        thumbnailId: '필수항목입니다.',
+      }));
+      setThumbFile({
+        ...thumbFile,
+        file: '',
+        filename: '',
+      });
+      return;
+    }
 
-    
-    const thisInput = e.currentTarget;
-    const file = thisInput.files[0];
-    console.log(file);
-    const filename = file ? file.name : "";
-    // setImageFile({
-    //   ...imageFile,
-    //   file,
-    //   filename: filename,
-    //   // link:'' , //파일이 없을 경우 : 기존파일 링크 유지
-    // });
-  };
+    try {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        thumb: '업로드 중',
+      }));
+      const formData = new FormData();
+      formData.append('file', file);
+      // const response = await postFileUpload(postApiUrl, formData);
+      const response = {
+        // ! TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST
+        data: { id: Math.floor(Math.random() * 100)},
+        status: 200,
+      }; // ! TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST
 
-  const onSubmitHandler = (e) => {
+      const imageId = response.data.id;
+      const isFailed = response.status !== 200 && response.status !== 201;
+      setFormValues((prevState) => ({
+        ...prevState,
+        thumbnailId: imageId,
+      }));
+      setFormErrors((prevState) => ({
+        ...prevState,
+        thumbnailId: isFailed && '업로드에 실패했습니다. 파일형식을 확인하세요.',
+      }));
+      setThumbFile({
+        ...thumbFile,
+        file: !isFailed && file,
+        filename: !isFailed && filename,
+      });
+    } catch (err) {
+      alert(`에러가 발생했습니다.\n${err}`);
+    }
+
+    setIsLoading((prevState) => ({
+      ...prevState,
+      thumb: false,
+    }));
+  };;
+
+
+
+  const onSubmit = async (e) => {
     e.preventDefault();
+    const PostFormValuesApiURL = `/api/admin/event`;
+    console.log(formValues);
 
-    const curImageIdList = filterImageId(body);
-    // const imageDatas = compareImageList(tempImageIdList, curImageIdList);
-    const imageDatas = compareImageList();
+    // ! IMPORTANT : create Event후, 사용자가 enter를 쳤을 경우, 똑같은 요청이 전송되지 않게 하기 위해서 필요함.
+    if (isSubmitted) return;
 
-    console.log(curImageIdList);
-    console.log(imageDatas);
-    // ************** 유효성검사 -> JSON데이터 보내기
-    // 현재 body 속에 저장된 이미 지리스트를 비교한다..
-    return;
-    setFormErrors(validate(formValues));
-    if (Object.keys(formErrors).length) return console.error(formErrors);
-    postDataToServer();
+    const errObj = validate(formValues);
+    setFormErrors(errObj);
+    const isPassed = valid_hasFormErrors(errObj);
+    try {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        submit: true,
+      }));
+      if (isPassed) {
+        const objData = formValues;
+        // const res = await postObjData(PostFormValuesApiURL, objData);
+        const res = { // ! TEST
+          isDone : true,
+          error: ''
+        }
+        if (res.isDone) {
+          onShowModalHandler('블로그가 생성되었습니다.');
+          setIsSubmitted(true);
+        } else {
+          alert(res.error, '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.');
+        }
+      }
+    } catch (err) {
+      alert('API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.');
+      console.error('API통신 오류 : ', err);
+    }
+    setIsLoading((prevState) => ({
+      ...prevState,
+      submit: false,
+    }));
   };
-  // 삭제될 이미지 리스트를 만들어보자
-
- 
 
   const returnToPrevPage = () => {
-    if (confirm("이전 페이지로 돌아가시겠습니까?")) {
+    if (confirm('이전 페이지로 돌아가시겠습니까?')) {
       router.back();
     }
   };
 
+
+  const onShowModalHandler = (message)=>{
+    mct.alertShow();
+    setModalMessage(message);
+
+  }
+  const onGlobalModalCallback = ()=>{
+    mct.alertHide();
+    router.push('/bf-admin/community/event');
+  }
   return (
     <>
-      <MetaTitle title="블로그 생성" admin={true} />
+      <MetaTitle title="이벤트 생성" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
           <div className="title_main">
             <h1>이벤트 생성</h1>
           </div>
-          <form
-            action="/"
-            className="cont"
-            encType="multipart/form-data"
-            method="post"
-            onSubmit={onSubmitHandler}
-          >
+          <form action="/" className="cont" encType="multipart/form-data" method="post">
             <div className="cont_body">
               <div className="cont_divider">
                 <div className="input_row">
                   <div className="title_section fixedHeight">
-                    <label className="title">제목</label>
+                    <label className="title" htmlFor={'title'}>
+                      제목
+                    </label>
                   </div>
                   <div className="inp_section">
                     <div className="inp_box">
                       <input
+                        id={'title'}
                         type="text"
-                        name="name"
+                        name="title"
                         className="fullWidth"
-                        // onChange={onInputChangeHandler}
+                        onChange={onInputChangeHandler}
                       />
-                      {/* {formErrors.name && (
-                        <ErrorMessage>{formErrors.name}</ErrorMessage>
-                      )} */}
+                      {formErrors.title && <ErrorMessage>{formErrors.title}</ErrorMessage>}
                     </div>
                   </div>
                 </div>
@@ -154,74 +206,57 @@ const CreateEventPage = (props) => {
                   <div className="title_section">
                     <p className="title">썸네일</p>
                   </div>
+
                   <div className="inp_section">
                     <label
                       className="inp_wrap file"
-                      htmlFor="upload-image"
-                      style={{ display: "inline-block" }}
+                      htmlFor="thumbnailId"
+                      style={{ display: 'inline-block' }}
                     >
-                      <PreviewImage
-                        file={imageFile.file}
-                        ratio={1 / 1}
-                        objectFit={"cover"}
-                        style={{ width: `${rem(200)}` }}
-                      />
+                      {(thumbFile.file || thumbFile.thumbnailUrl) && (
+                        <PreviewImage
+                          file={thumbFile.file}
+                          ratio={1}
+                          objectFit={'contain'}
+                          style={{ width: `${rem(200)}` }}
+                          thumbLink={thumbFile.thumbnailUrl}
+                        />
+                      )}
                       <span className="inp_box">
                         <input
                           type="file"
-                          data-type="file"
-                          id="upload-image"
-                          name="imageFile"
+                          id="thumbnailId"
                           accept="image/*"
                           className="hide"
                           multiple={false}
-                          onChange={imageFileChangeHandler}
+                          onChange={thumbFileChangeHandler}
                         />
-                        <Fake_input filename={imageFile.filename} />
-                        {/* {formErrors.file_pc && (
-                          <ErrorMessage>{formErrors.file_pc}</ErrorMessage>
-                        )} */}
+                        <Fake_input
+                          filename={thumbFile.filename}
+                          loadingIcon={
+                            isLoading.thumb && (
+                              <Spinner
+                                style={{ color: 'var(--color-main)', width: '15', height: '15' }}
+                                speed={0.6}
+                              />
+                            )
+                          }
+                        />
                       </span>
+                      {formErrors.thumbnailId && (
+                        <ErrorMessage>{formErrors.thumbnailId}</ErrorMessage>
+                      )}
                     </label>
                   </div>
                 </div>
               </div>
               {/* cont_divider */}
               <div className="cont_divider">
-                <div className="input_row">
+                <div className="input_row multipleLines">
                   <div className="title_section">
                     <p className="title">상세설명</p>
                   </div>
-                  <div className="inp_section">
-                    <label
-                      className="inp_wrap file"
-                      htmlFor="upload-detailContents"
-                      style={{ display: "inline-block" }}
-                    >
-                      {/* <PreviewImage
-                        file={imageFile.file}
-                        ratio={1 / 1}
-                        objectFit={"cover"}
-                        style={{ width: `${rem(200)}` }}
-                      /> */}
-                      <span className="inp_box">
-                        <input
-                          type="file"
-                          data-type="file"
-                          id="upload-detailContents"
-                          name="imageFile"
-                          accept="image/*"
-                          className="hide"
-                          multiple={true}
-                          onChange={multipleImageFileChangeHandler}
-                        />
-                        <Fake_input filename={''} />
-                        {/* {formErrors.file_pc && (
-                          <ErrorMessage>{formErrors.file_pc}</ErrorMessage>
-                        )} */}
-                      </span>
-                    </label>
-                  </div>
+                  <EventDetailImage id={'eventImageRequestDtoList'} setFormValues={setFormValues} formErrors={formErrors} setFormErrors={setFormErrors}/>
                 </div>
               </div>
               {/* cont_divider */}
@@ -231,11 +266,11 @@ const CreateEventPage = (props) => {
                     <p className="title">노출여부</p>
                   </div>
                   <div className="inp_section">
-                    <InputRadio_status
+                    <CustomRadio
+                      setValue={setFormValues}
                       name="status"
-                      exposedStatus={formValues.status}
-                      onRadioButtonHandler={onRadioButtonHandler}
-                    />
+                      idList={['LEAKED', 'HIDDEN']}
+                      labelList={['노출', '숨김']} initIndex={0}/>
                   </div>
                 </div>
               </div>
@@ -252,17 +287,24 @@ const CreateEventPage = (props) => {
                   취소
                 </button>
                 <button
-                  type="submit"
+                  type="button"
                   id="btn-create"
                   className="admin_btn confirm_l solid"
+                  onClick={onSubmit}
                 >
-                  등록
+                  {isLoading.submit ? (
+                    <Spinner
+                      style={{ color: '#fff', width: '15', height: '15' }}
+                      speed={0.6}
+                    />
+                  ) : '등록'}
                 </button>
               </div>
             </div>
           </form>
         </AdminContentWrapper>
       </AdminLayout>
+      <Modal_global_alert message={modalMessage} onClick={onGlobalModalCallback} background/>
     </>
   );
 };
