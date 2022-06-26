@@ -5,7 +5,6 @@ import { useRouter } from 'next/router';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
-import InputRadio_status from '/src/components/admin/form/InputRadioPackage';
 import Fake_input from '/src/components/atoms/fake_input';
 import PreviewImage from '/src/components/atoms/PreviewImage';
 import SelectTag from '/src/components/atoms/SelectTag';
@@ -17,7 +16,7 @@ import { validate } from '/util/func/validation_blog';
 import { valid_hasFormErrors } from '/util/func/validationPackage';
 import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 import {useModalContext} from "/store/modal-context";
-import CustomRadio from "../../../../components/admin/form/CustomRadio";
+import CustomRadio from "/src/components/admin/form/CustomRadio";
 
 
 const initialFormValues = {
@@ -69,14 +68,6 @@ const CreateBlogPage = () => {
         [id]: value,
       });
     }
-  };
-
-  const onRadioButtonHandler = (data) => {
-    const { key, value } = data;
-    setFormValues({
-      ...formValues,
-      [key]: value,
-    });
   };
 
 
@@ -182,9 +173,6 @@ const CreateBlogPage = () => {
     }
   };
 
-  const moveToPage = (url)=>{
-    router.push(url);
-  }
 
   const onShowModalHandler = (message)=>{
     mct.alertShow();
@@ -193,7 +181,7 @@ const CreateBlogPage = () => {
   }
   const onGlobalModalCallback = ()=>{
     mct.alertHide();
-    moveToPage('/bf-admin/community/blog');
+    router.push('/bf-admin/community/blog');
   }
 
 
