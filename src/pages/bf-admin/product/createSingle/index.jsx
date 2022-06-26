@@ -106,7 +106,7 @@ function CreateSingleItemPage() {
     <>
       <MetaTitle title="단품 생성" admin={true} />
       <AdminLayout>
-        <AdminContentWrapper id={'createSinglePage'}>
+        <AdminContentWrapper>
           <div className="title_main">
             <h1>단품 등록</h1>
           </div>
