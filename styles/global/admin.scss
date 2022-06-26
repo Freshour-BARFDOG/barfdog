@@ -463,14 +463,19 @@ $inputDefaultHeight: rem(38);
 
 
 
-#createSinglePage{
+.multiImageBox{
+
   .grid-box {
     display: grid;
-    grid-template-columns: repeat(1, 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr);
     align-items: flex-start;
     gap: rem(10);
     justify-content: center;
     margin-bottom:rem(10);
+    @for $i from 1 through 20 {
+      &.col-#{$i}{
+        grid-template-columns: repeat($i, 1fr);
+      }
+    }
     > * {
       margin:0;
       max-width: rem(120) !important;

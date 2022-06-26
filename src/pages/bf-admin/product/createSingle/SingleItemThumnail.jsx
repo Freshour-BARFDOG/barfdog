@@ -55,9 +55,9 @@ export default function SingleItemThumbnail({fileList, setFileList, formErrors }
 
   return (
     <>
-      <div className="inp_section">
+      <div className="inp_section multiImageBox">
         {fileList.length > 0 && (
-          <div className="grid-box grid-column">
+          <div className="grid-box grid-column col-10">
             {fileList.map((file, index) => {
               return (
                 <PreviewImage
