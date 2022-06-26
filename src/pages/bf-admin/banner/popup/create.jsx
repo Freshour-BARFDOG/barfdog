@@ -6,7 +6,7 @@ import MetaTitle from "@src/components/atoms/MetaTitle";
 
 import InputRadio_status, {
   CustomRadio,
-} from "@src/components/admin/form/InputRadioPackage";
+} from "/src/components/admin/form/InputRadioPackage";
 import Fake_input from "@src/components/atoms/fake_input";
 import PreviewImage from "@src/components/atoms/PreviewImage";
 import ErrorMessage from "/src/components/atoms/ErrorMessage";
