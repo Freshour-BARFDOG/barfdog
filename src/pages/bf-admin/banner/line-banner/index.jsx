@@ -55,23 +55,25 @@ function LineBanner() {
           fetching: true,
         }));
         const res = await getData(getFormValuesApiUrl);
-        const DATA = res.data;
-        const thisItemId = DATA.id;
-        if (thisItemId) {
-          await router.push(`/bf-admin/banner/line-banner?id=${thisItemId}`);
-          const initialFormValues = {
-            name: DATA.name,
-            status: DATA.status,
-            backgroundColor: DATA.backgroundColor,
-            fontColor: DATA.fontColor,
-            pcLinkUrl: DATA.pcLinkUrl,
-            mobileLinkUrl: DATA.mobileLinkUrl,
-          };
-          setFormValues(initialFormValues);
-          textField.document.querySelector('body').innerHTML = DATA.name;
-        }
+        console.log(res);
+        // const DATA = res?.data;
+        // const thisItemId = DATA.id;
+        // if (thisItemId) {
+        //   await router.push(`/bf-admin/banner/line-banner?id=${thisItemId}`);
+        //   const initialFormValues = {
+        //     name: DATA.name,
+        //     status: DATA.status,
+        //     backgroundColor: DATA.backgroundColor,
+        //     fontColor: DATA.fontColor,
+        //     pcLinkUrl: DATA.pcLinkUrl,
+        //     mobileLinkUrl: DATA.mobileLinkUrl,
+        //   };
+        //   setFormValues(initialFormValues);
+        //   textField.document.querySelector('body').innerHTML = DATA.name;
+        // }
       } catch (err) {
-        console.error(err);
+        console.error('Failed Get Data:',err);
+        alert(err);
       }
       setIsLoading((prevState) => ({
         ...prevState,
