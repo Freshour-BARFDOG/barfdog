@@ -26,7 +26,6 @@ function BlogIndexPage() {
       <MetaTitle title="블로그 관리" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
-          {activeModal && <Modal_AdminRecommendArticle setActiveModal={setActiveModal}/>}
           <h1 className="title_main">블로그 관리</h1>
           <div className="cont">
             <div className="cont_header clearfix">
@@ -69,6 +68,7 @@ function BlogIndexPage() {
           </div>
         </AdminContentWrapper>
       </AdminLayout>
+      {activeModal && <Modal_AdminRecommendArticle setActiveModal={setActiveModal}/>}
     </>
   );
 }
