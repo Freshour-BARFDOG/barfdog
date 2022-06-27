@@ -33,7 +33,7 @@ export const getData = async (url, callback) => {
     })
     .catch((err) => {
       console.error('ERROR: ', err.response);
-      const errorObj = JSON.parse(err.request.response);
+      const errorObj = err.response;
       const status = errorObj.status;
       if(status === 401){
         const EXPIRED_TOKEN = errorObj.reason === "EXPIRED_TOKEN";
@@ -116,13 +116,15 @@ export const deleteData = async (url) => {
 export const postObjData = async (url, data, contType) => {
   const result = {
     isDone: false,
-    error: ''
+    error: '',
+    data: null,
   }
 
   const response = await axios
     .post(url, data, axiosConfig(contType))
     .then((res) => {
       console.log(res);
+      result.data = res;
       return res.status === 200 || res.status === 201;
     })
     .catch((err) => {
@@ -144,14 +146,14 @@ export const postObjData = async (url, data, contType) => {
 export const putObjData = async (url, data, contType) => {
   const result = {
     isDone: false,
-    error: ''
+    error: '',
+    data: null,
   }
-   console.log(axiosConfig(contType))
-
   const response = await axios
     .put(url, data, axiosConfig(contType))
     .then((res) => {
       console.log(res);
+      result.data = res;
       return res.status === 200 || res.status === 201;
     })
     .catch((err) => {
