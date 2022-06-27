@@ -2,143 +2,115 @@ import React, { useEffect, useRef, useState } from "react";
 import "react-quill/dist/quill.snow.css";
 import dynamic from "next/dynamic";
 import {useRouter} from "next/router";
-
-
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import AdminLayout from "/src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
-import InputRadio_status from "/src/components/admin/form/InputRadioPackage";
-import Fake_input from "/src/components/atoms/fake_input";
-import PreviewImage from "/src/components/atoms/PreviewImage";
-import SelectTag from "/src/components/atoms/SelectTag";
 import ErrorMessage from "/src/components/atoms/ErrorMessage";
-import rem from '/util/func/rem';
+import {useModalContext} from "/store/modal-context";
+import {validate} from "/util/func/validation_notice";
+import {valid_hasFormErrors} from "/util/func/validationPackage";
+import {postObjData} from "/api/reqData";
+import CustomRadio from "/src/components/admin/form/CustomRadio";
+import Spinner from "/src/components/atoms/Spinner";
+import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 
+
+
+const initialFormValues = {
+  title: '',
+  contents: '',
+  noticeImageIdList: [],
+  status: 'LEAKED',
+};
 
 
 function CreateNoticePage() {
+  const noticeImageUploadApiURL = '/api/admin/blogs/image/upload'; // ! 공지사항과 블로그 Editor내부의 이미지 업로드 API 동일
   const router = useRouter();
-   const originImageList = ["1", "197", "200"]; // 서버로부터 받은 이미지리스트
-   const [tempImageIdList, setTempImageIdList] = useState(
-     originImageList || []
-   );
-   const [body, setBody] = useState(""); // Quill 에디터의 innerHTML을 담는 state
-   const [isLoadedEditor, setIsLoadedEditor] = useState(false);
-   const [QuillEditor, setQuillEditor] = useState("");
+  const mct = useModalContext();
+  const [modalMessage, setModalMessage] = useState('');
+  const [isLoading, setIsLoading] = useState({});
+  const [QuillEditor, setQuillEditor] = useState(null);
+  const [originImageIdList, setOriginImageIdList] = useState([]);
+  const [formValues, setFormValues] = useState(initialFormValues);
+  const [formErrors, setFormErrors] = useState({});
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
     if (document) {
-      const QuillEditor = dynamic(() =>
-        import("/src/components/admin/form/QuillEditor")
-      );
-      setIsLoadedEditor(true);
+      const QuillEditor = dynamic(() => import('/src/components/admin/form/QuillEditor'));
       setQuillEditor(QuillEditor);
+      console.log('Editor init is complete.');
     }
   }, []);
 
-  // console.log(body);
 
-  const REQUEST_URL = `/api/admin/event`;
 
-  const [formValues, setFormValues] = useState({
-    category: "ALL",
-    hasThumb: false,
-    innerHTML: "",
-    status: "LEAKED",
-  });
-  const [imageFile, setImageFile] = useState({});
-  const [formErrors, setFormErrors] = useState({});
 
-  const onRadioButtonHandler = (data) => {
-    const { key, value } = data;
+  const onInputChangeHandler = (e) => {
+    const { id, value } = e.currentTarget;
     setFormValues({
       ...formValues,
-      [key]: value,
+      [id]: value,
     });
   };
 
-  const imageFileChangeHandler = (e) => {
-    const thisInput = e.currentTarget;
-    const file = thisInput.files[0];
-    console.log(file);
-    const filename = file ? file.name : "";
-    setImageFile({
-      ...imageFile,
-      file,
-      filename: filename,
-      // link:'' , //파일이 없을 경우 : 기존파일 링크 유지
-    });
-  };
 
-  const onSubmitHandler = (e) => {
+
+
+  const onSubmit = async (e) => {
+  const postURL = `/api/admin/notices`;
+  console.log(formValues)
     e.preventDefault();
+    if(isSubmitted)return; // ! IMPORTANT : create Event후, 사용자가 enter를 쳤을 경우, 똑같은 요청이 전송되지 않게 하기 위해서 필요함.
 
-    const curImageIdList = filterImageId(body);
-    // const imageDatas = compareImageList(tempImageIdList, curImageIdList);
-    const imageDatas = compareImageList();
+    const errObj = validate(formValues);
 
-    console.log(curImageIdList);
-    console.log(imageDatas);
-    // ************** 유효성검사 -> JSON데이터 보내기
-    // 현재 body 속에 저장된 이미 지리스트를 비교한다..
-    return;
-    setFormErrors(validate(formValues));
-    if (Object.keys(formErrors).length) return console.error(formErrors);
-    postDataToServer();
+    setFormErrors(errObj);
+    const isPassed = valid_hasFormErrors(errObj);
+    if(!isPassed) return;
+    try {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        submit: true,
+      }));
+      const objData = formValues;
+      const res = await postObjData(postURL, objData);
+
+      if(res.isDone){
+        onShowModalHandler('공지사항이 생성되었습니다.');
+        setIsSubmitted(true);
+      }else {
+        alert(`${res.error}`);
+      }
+    } catch (err) {
+      console.log('API통신 오류 : ', err);
+    }
+
+    setIsLoading((prevState) => ({
+      ...prevState,
+      submit: false,
+    }));
   };
-  // 삭제될 이미지 리스트를 만들어보자
 
-  const filterImageId = (html) => {
-    let curimageIdList = [];
-    // console.log(html);
-
-    const queryImageTag = html.split("<img");
-    queryImageTag.filter((str) => {
-      if (str.indexOf("src") < 0) return;
-      const imgTag = str.split(">")[0];
-      const queryId = "#__id=";
-      const imageId = imgTag.split(queryId)[1].split('"')[0];
-      curimageIdList.push(imageId);
-    });
-    // console.log(curimageIdList);
-    return curimageIdList;
-  };
-
-  const compareImageList = (tempArr, curArr) => {
-    if (!tempArr || !tempArr.length)
-      return console.error("There is no Image File.");
-
-    let result = {
-      origin: originImageList,
-      temp: [...tempArr],
-      cur: [...curArr],
-      del: [],
-      added: [],
-    };
-
-    console.log(result);
-
-    tempArr.map((id) => {
-      const isCurArr = curArr.indexOf(id) > 0;
-      const isOriginArr = originImageList.indexOf(id) >= 0;
-      console.log(id, "curArr: ", isCurArr);
-      console.log(id, "isOriginArr: ", isOriginArr);
-
-      isCurArr && !isOriginArr && result.added.push(id);
-
-      const toBeDeleted = curArr.indexOf(id) < 0;
-      // * 추가 : origin에 존재하지 않는 경우
-      toBeDeleted && result.del.push(id);
-    });
-    return result;
-  };
 
   const returnToPrevPage = () => {
-    if (confirm("이전 페이지로 돌아가시겠습니까?")) {
+    if (confirm('이전 페이지로 돌아가시겠습니까?')) {
       router.back();
     }
   };
 
+
+  const onShowModalHandler = (message)=>{
+    mct.alertShow();
+    setModalMessage(message);
+  }
+
+
+  const onGlobalModalCallback = ()=>{
+    mct.alertHide();
+    router.push('/bf-admin/community/notice');
+  }
 
 
 
@@ -155,7 +127,6 @@ function CreateNoticePage() {
             className="cont"
             encType="multipart/form-data"
             method="post"
-            onSubmit={onSubmitHandler}
           >
             <div className="cont_body">
               <div className="cont_divider">
@@ -166,31 +137,35 @@ function CreateNoticePage() {
                   <div className="inp_section">
                     <div className="inp_box">
                       <input
+                        id={'title'}
                         type="text"
-                        name="name"
+                        name="title"
                         className="fullWidth"
-                        // onChange={onInputChangeHandler}
+                        onChange={onInputChangeHandler}
                       />
-                      {/* {formErrors.name && (
-                        <ErrorMessage>{formErrors.name}</ErrorMessage>
-                      )} */}
+                      {formErrors.title && (
+                      <ErrorMessage>{formErrors.title}</ErrorMessage>)}
                     </div>
                   </div>
                 </div>
               </div>
               {/* cont_divider */}
               <div className="cont_divider">
-                <div className="input_row">
+                <div className="input_row multipleLines">
                   <div className="title_section">
                     <p className="title">내용</p>
                   </div>
                   <div className="inp_section">
+                    {formErrors.contents && <ErrorMessage>{formErrors.contents}</ErrorMessage>}
                     {/* // * --------- QUILL EDITOR --------- * // */}
-                    {isLoadedEditor && (
+                    {QuillEditor && (
                       <QuillEditor
-                        body={body}
-                        handleQuillChange={setBody}
-                        setTempImageIdList={setTempImageIdList}
+                        id={'contents'}
+                        mode={'create'}
+                        imageId={'noticeImageIdList'}
+                        originImageIdList={originImageIdList}
+                        setFormValues={setFormValues}
+                        imageUploadApiURL={noticeImageUploadApiURL}
                       />
                     )}
                     {/* // * --------- QUILL EDITOR --------- * // */}
@@ -204,10 +179,11 @@ function CreateNoticePage() {
                     <p className="title">노출여부</p>
                   </div>
                   <div className="inp_section">
-                    <InputRadio_status
+                    <CustomRadio
+                      setValue={setFormValues}
                       name="status"
-                      exposedStatus={formValues.status}
-                      onRadioButtonHandler={onRadioButtonHandler}
+                      idList={['LEAKED', 'HIDDEN']}
+                      labelList={['노출', '숨김']}
                     />
                   </div>
                 </div>
@@ -228,14 +204,20 @@ function CreateNoticePage() {
                   type="submit"
                   id="btn-create"
                   className="admin_btn confirm_l solid"
+                  onClick={onSubmit}
                 >
-                  등록
+                  {isLoading.submit ? (
+                    <Spinner style={{ color: '#fff', width: '15', height: '15' }} speed={0.6} />
+                  ) : (
+                    '등록'
+                  )}
                 </button>
               </div>
             </div>
           </form>
         </AdminContentWrapper>
       </AdminLayout>
+      <Modal_global_alert message={modalMessage} onClick={onGlobalModalCallback} background />
     </>
   );
 }

@@ -5,15 +5,15 @@ import AdminLayout from "/src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
 import AdminBtn_moveToPage from "@src/components/atoms/AdminBtn_moveToPage";
 import AmdinErrorMessage from "@src/components/atoms/AmdinErrorMessage";
-import Pagination from "@src/components/atoms/Pagination";
 import NoticeList from "./NoticeList";
+import PaginationWithAPI from "/src/components/atoms/PaginationWithAPI";
 
 
 
-const TEST_ITEM = [1, 2, 3];
 
-function NoticeIndexPage() {
-  const [itemList, setItemList] = useState(TEST_ITEM);
+function NoticeIndexPage(props) {
+  const [itemList, setItemList] = useState([]);
+  console.log(itemList);
   return (
     <>
       <MetaTitle title="공지사항 관리" admin={true} />
@@ -49,12 +49,8 @@ function NoticeIndexPage() {
                 )}
               </div>
             </div>
-            <div className={s["pagination-section"]}>
-              <Pagination
-                itemCountPerGroup={10}
-                itemTotalCount={100}
-                className={"square"}
-              />
+            <div className={s['pagination-section']}>
+              <PaginationWithAPI apiURL={'/api/admin/notices'} size={1} theme={'square'} setItemList={setItemList}/>
             </div>
           </div>
         </AdminContentWrapper>
@@ -64,3 +60,4 @@ function NoticeIndexPage() {
 }
 
 export default NoticeIndexPage;
+

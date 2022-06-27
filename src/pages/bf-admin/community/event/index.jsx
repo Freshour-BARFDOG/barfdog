@@ -7,15 +7,15 @@ import AdminBtn_moveToPage from "@src/components/atoms/AdminBtn_moveToPage";
 import AmdinErrorMessage from "@src/components/atoms/AmdinErrorMessage";
 import Pagination from "@src/components/atoms/Pagination";
 import EventList from "./EventList";
+import PaginationWithAPI from "/src/components/atoms/PaginationWithAPI";
 
 
 
 
 
-const TEST_ITEM = [1, 2, 3];
 
 function EventNoticePage() {
-  const [itemList, setItemList] = useState(TEST_ITEM);
+  const [itemList, setItemList] = useState([]);
   return (
     <>
       <MetaTitle title="이벤트 관리" admin={true} />
@@ -44,7 +44,7 @@ function EventNoticePage() {
                   <li className={s.table_th}>수정</li>
                   <li className={s.table_th}>삭제</li>
                 </ul>
-                {itemList.length ? (
+                {[1,2,3].length ? (
                   <EventList items={itemList} setItemList={setItemList} />
                 ) : (
                   <AmdinErrorMessage text="조회된 데이터가 없습니다." />
@@ -52,11 +52,7 @@ function EventNoticePage() {
               </div>
             </div>
             <div className={s["pagination-section"]}>
-              <Pagination
-                itemCountPerGroup={10}
-                itemTotalCount={100}
-                className={"square"} 
-              />
+              <PaginationWithAPI apiURL={'/api/admin/events'} size={4} theme={'square'} setItemList={setItemList}/>
             </div>
           </div>
         </AdminContentWrapper>
