@@ -13,6 +13,7 @@
 
 import axios from "axios";
 import axiosConfig from './axios.config';
+import {useRouter} from "next/router";
 
 
 
@@ -32,6 +33,21 @@ export const getData = async (url, callback) => {
     })
     .catch((err) => {
       console.error('ERROR: ', err.response);
+      const errorObj = JSON.parse(err.request.response);
+      const status = errorObj.status;
+      if(status === 401){
+        const EXPIRED_TOKEN = errorObj.reason === "EXPIRED_TOKEN";
+        const UNAUTHORIZED = errorObj.reason === "UNAUTHORIZED";
+        console.log(EXPIRED_TOKEN)
+        if(EXPIRED_TOKEN){
+          alert('로그인 토큰이 만료되었습니다. 다시 로그인해주세요.');
+        }
+        console.error("errorType > EXPIRED_TOKEN : ", EXPIRED_TOKEN);
+        console.error("errorType > UNAUTHORIZED : ", UNAUTHORIZED);
+      }else if (status === 403) {
+        const FORBIDDEN = errorObj.reason === "FORBIDDEN";
+        console.error("errorType > FORBIDDEN : ", FORBIDDEN);
+      }
       const errorMessage =  err.response?.data.error || '데이터를 불러오는데 실패했습니다.'
       alert(errorMessage);
       return err;
