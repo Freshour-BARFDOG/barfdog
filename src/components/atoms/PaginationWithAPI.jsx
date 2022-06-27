@@ -3,23 +3,36 @@ import DoubleArrow from '@public/img/icon/pagination-double-arrow.svg';
 import {useEffect, useState} from 'react';
 import s from './pagination.module.scss';
 import {useRouter} from "next/router";
-import {getNewPageInfo} from "/util/func/getNewPageInfo";
+import {getData} from "/api/reqData";
 
 
 
 
-const Pagination = ({ apiURL, size=10, theme = 'square', setItemList }) => {
+const Pagination = ({ apiURL, size=10, theme = 'square', setItemList, queryItemList }) => {
   const router = useRouter();
   const query = router.query;
   const pageFromQuery = Number(query?.page) || 1;
-  const ButtonCounts = 5; // UI상으로 노출시킬 연속된 페이지네이션 수
+  const ButtonCounts = 5; // UI상으로 노출시킬 연속된 페이지네이션 수;
   const [pageInfo, setPageInfo] = useState({});
   const [curPage, setCurPage] = useState(pageFromQuery);
 
 
   useEffect(()=>{
     (async ()=>{
-      const newPageInfo = await getNewPageInfo(apiURL, curPage, size);
+      const calcedPageIndex = (curPage - 1).toString();
+      const res = await getData(`${apiURL}?page=${calcedPageIndex}&size=${size}`);
+      const pageData = res.data?.page;
+      console.log(res);
+      const noItems = pageData.totalElements === 0;
+      if(noItems) return;
+      const newPageInfo = {
+        totalPages: pageData.totalPages,
+        size: pageData.size,
+        totalItems: pageData.totalElements,
+        currentPageIndex: pageData.number,
+        newItemList: res.data._embedded[queryItemList] || {},
+        newPageNumber: pageData.number + 1,
+      };
       setPageInfo(newPageInfo);
       setItemList(newPageInfo.newItemList);
       await router.push({
@@ -137,7 +150,6 @@ const Pagination = ({ apiURL, size=10, theme = 'square', setItemList }) => {
 
   const hasMultiPages = pageInfo.totalPages > 1;
 
-  console.log(pageInfo)
   return (
     <>
       {pageInfo.totalItems > 0 && <div

@@ -15,7 +15,9 @@ import PaginationWithAPI from "/src/components/atoms/PaginationWithAPI";
 
 
 function EventNoticePage() {
+  const getListApiUrl = '/api/admin/events';
   const [itemList, setItemList] = useState([]);
+  console.log(itemList);
   return (
     <>
       <MetaTitle title="이벤트 관리" admin={true} />
@@ -44,7 +46,7 @@ function EventNoticePage() {
                   <li className={s.table_th}>수정</li>
                   <li className={s.table_th}>삭제</li>
                 </ul>
-                {[1,2,3].length ? (
+                {itemList.length ? (
                   <EventList items={itemList} setItemList={setItemList} />
                 ) : (
                   <AmdinErrorMessage text="조회된 데이터가 없습니다." />
@@ -52,7 +54,7 @@ function EventNoticePage() {
               </div>
             </div>
             <div className={s["pagination-section"]}>
-              <PaginationWithAPI apiURL={'/api/admin/events'} size={4} theme={'square'} setItemList={setItemList}/>
+              <PaginationWithAPI apiURL={getListApiUrl} size={10} theme={'square'} setItemList={setItemList} queryItemList={'queryEventsAdminDtoList'}/>
             </div>
           </div>
         </AdminContentWrapper>

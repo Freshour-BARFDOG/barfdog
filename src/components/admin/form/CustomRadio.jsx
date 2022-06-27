@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import s from './customRadio.module.scss';
 
-const CustomRadio = ({ setValue, name, idList, labelList, initIndex }) => {
-  const initialValue = idList[initIndex || 0];
+const CustomRadio = ({ setValue, name, idList, labelList, initIndex, value }) => {
+  const initialValue = value || idList[initIndex || 0];
   const [selectedRadio, setSelectedRadio] = useState(initialValue);
+
+  useEffect(() => {
+    setSelectedRadio(initialValue);
+  }, [initialValue]);
+
 
   const onChangeHandler = (e) => {
     const { id } = e.currentTarget;
@@ -14,6 +19,7 @@ const CustomRadio = ({ setValue, name, idList, labelList, initIndex }) => {
       [name]: id,
     }));
   };
+
 
   if (!idList.length || !idList) return;
 

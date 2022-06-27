@@ -152,6 +152,7 @@ export const putObjData = async (url, data, contType) => {
 
 
 export const postFileUpload = async (url, formData) => {
+  console.log(url, formData)
   const response = await axios
     .post(url, formData, axiosConfig("multipart/fomdata"))
     .then((res) => {
