@@ -232,11 +232,12 @@ export const valid_policyCheckbox = (obj, standardObjList = [])=>{
 
 
 export const valid_URL = (value)=>{
-  let error;
+  let error='';
 
   const url = value;
-  const RegExp = /(http|https):\/\/((\w+)[.])+(asia|biz|cc|cn|com|de|eu|in|info|jobs|jp|kr|mobi|mx|name|net|nz|org|travel|tv|tw|uk|us)(\/(\w*))*$/i;
-  const result = RegExp.test(url);
+  const regExp = /(http|https):\/\/((\w+)[.])+(asia|biz|cc|cn|com|de|eu|in|info|jobs|jp|kr|mobi|mx|name|net|nz|org|travel|tv|tw|uk|us)(\/(\w*))*$/i;
+
+  const result = regExp.test(url);
 
   if(!url){
     error = ''; // 필수항목아니므로 비어있어도 됨

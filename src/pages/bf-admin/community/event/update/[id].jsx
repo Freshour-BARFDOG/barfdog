@@ -26,7 +26,7 @@ const initialFormValues = {
 };
 
 
-const CreateEventPage = () => {
+const UpdateEventPage = () => {
   const router = useRouter();
   const { id } = router.query;
   const getFormValuesApiUrl = `/api/admin/events/${id}`;
@@ -44,7 +44,6 @@ const CreateEventPage = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   console.log(formValues);
-  //  INIT QUILL EDITOR
   useEffect(() => {
     if (!id) return;
     (async () => {
@@ -177,20 +176,7 @@ const CreateEventPage = () => {
         }
       }
     } catch (err) {
-      alert('API통신 오류  const returnToPrevPage = () => {\n' +
-        '    if (confirm(\'이전 페이지로 돌아가시겠습니까?\')) {\n' +
-        '      router.back();\n' +
-        '    }\n' +
-        '  };\n' +
-        '\n' +
-        '  const onShowModalHandler = (message) => {\n' +
-        '    mct.alertShow();\n' +
-        '    setModalMessage(message);\n' +
-        '  };\n' +
-        '  const onGlobalModalCallback = () => {\n' +
-        '    mct.alertHide();\n' +
-        '    router.push(\'/bf-admin/community/event\');\n' +
-        '  };가 발생했습니다. 서버관리자에게 문의하세요.');
+      alert('API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.');
       console.error('API통신 오류 : ', err);
     }
     setIsLoading((prevState) => ({
@@ -364,4 +350,4 @@ const CreateEventPage = () => {
   );
 };
 
-export default CreateEventPage;
+export default UpdateEventPage;
