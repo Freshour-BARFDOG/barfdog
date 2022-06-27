@@ -192,7 +192,7 @@ const CreateEventPage = () => {
               </div>
               {/* cont_divider */}
               <div className="cont_divider">
-                <div className="input_row upload_image">
+                <div className="input_row upload_image multipleLines">
                   <div className="title_section">
                     <p className="title">썸네일</p>
                   </div>

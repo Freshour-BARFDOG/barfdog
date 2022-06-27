@@ -175,7 +175,7 @@ const UpdateNoticePage = () => {
               </div>
               {/* cont_divider */}
               <div className="cont_divider">
-                <div className="input_row">
+                <div className="input_row multipleLines">
                   <div className="title_section">
                     <p className="title">내용</p>
                   </div>

@@ -146,6 +146,7 @@ const CreateEventPage = () => {
     }));
   };
 
+
   const onSubmit = async (e) => {
     e.preventDefault();
     console.log(formValues);
@@ -176,7 +177,20 @@ const CreateEventPage = () => {
         }
       }
     } catch (err) {
-      alert('API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.');
+      alert('API통신 오류  const returnToPrevPage = () => {\n' +
+        '    if (confirm(\'이전 페이지로 돌아가시겠습니까?\')) {\n' +
+        '      router.back();\n' +
+        '    }\n' +
+        '  };\n' +
+        '\n' +
+        '  const onShowModalHandler = (message) => {\n' +
+        '    mct.alertShow();\n' +
+        '    setModalMessage(message);\n' +
+        '  };\n' +
+        '  const onGlobalModalCallback = () => {\n' +
+        '    mct.alertHide();\n' +
+        '    router.push(\'/bf-admin/community/event\');\n' +
+        '  };가 발생했습니다. 서버관리자에게 문의하세요.');
       console.error('API통신 오류 : ', err);
     }
     setIsLoading((prevState) => ({
@@ -184,6 +198,7 @@ const CreateEventPage = () => {
       submit: false,
     }));
   };
+
 
   const returnToPrevPage = () => {
     if (confirm('이전 페이지로 돌아가시겠습니까?')) {
@@ -199,6 +214,7 @@ const CreateEventPage = () => {
     mct.alertHide();
     router.push('/bf-admin/community/event');
   };
+
   return (
     <>
       <MetaTitle title="이벤트 수정" admin={true} />
@@ -233,7 +249,7 @@ const CreateEventPage = () => {
               </div>
               {/* cont_divider */}
               <div className="cont_divider">
-                <div className="input_row upload_image">
+                <div className="input_row upload_image multipleLines">
                   <div className="title_section">
                     <p className="title">썸네일</p>
                   </div>
