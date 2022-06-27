@@ -6,10 +6,12 @@ $browser-context:16;
 @import 'styles/global/guide.scss';
 
 .box {
+  max-width: rem(360);
+  margin:0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: rem(80) 0 rem(606);
+  padding: rem(80) 0 rem(240);
 
   .text {
    @include char(l16);
@@ -18,12 +20,26 @@ $browser-context:16;
    line-height: 170%;
 
   }
-  .btn {
-    
 
-    background-color: var(--color-main);
-    color: #fff;    
-    border-radius: rem(4);
-    padding: rem(11) rem(105) rem(11) rem(105);
-  } 
+  .container{
+    width: rem(240);
+    .btn {
+      background-color: var(--color-main);
+      color: #fff;
+      border-radius: rem(4);
+      height: rem(50);
+      width:100%;
+    }
+    .input-wrap{
+      width: 100%;
+      margin-bottom:rem(20);
+      input{
+        width: 100%;
+        height: rem(44);
+        &::placeholder{font-size:rem(14);}
+      }
+    }
+  }
+
+
 }
