@@ -22,7 +22,7 @@ const Pagination = ({ apiURL, size=10, theme = 'square', setItemList, queryItemL
       const calcedPageIndex = (curPage - 1).toString();
       const res = await getData(`${apiURL}?page=${calcedPageIndex}&size=${size}`);
       const pageData = res.data?.page;
-      console.log(res);
+      // console.log(res);
       const noItems = pageData.totalElements === 0;
       if(noItems) return;
       const newPageInfo = {

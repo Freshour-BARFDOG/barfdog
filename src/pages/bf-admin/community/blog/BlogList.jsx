@@ -28,7 +28,6 @@ const transformDate = (d) => {
 
 
 const SingleItems = ({ item }) => {
-  console.log(item)
   const DATA = {
     id: item.id,
     title: item.title || '제목이 없습니다.',
