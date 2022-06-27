@@ -50,7 +50,7 @@ function NoticeIndexPage(props) {
               </div>
             </div>
             <div className={s['pagination-section']}>
-              <PaginationWithAPI apiURL={'/api/admin/notices'} size={1} theme={'square'} setItemList={setItemList}/>
+              <PaginationWithAPI apiURL={'/api/admin/notices'} size={1} theme={'square'} setItemList={setItemList} queryItemList={'queryBlogsAdminDtoList'} />
             </div>
           </div>
         </AdminContentWrapper>

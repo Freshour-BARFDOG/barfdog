@@ -47,7 +47,7 @@ const initialFormValues = {
 
 const initialFormErrors = {};
 
-function CreateSingleItemPage() {
+function UpdateSingleItemPage() {
   const router = useRouter();
 
   const [fileList, setFileList] = useState([]);
@@ -326,4 +326,4 @@ function CreateSingleItemPage() {
   );
 }
 
-export default CreateSingleItemPage;
+export default UpdateSingleItemPage;

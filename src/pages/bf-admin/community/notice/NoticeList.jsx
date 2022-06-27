@@ -51,8 +51,6 @@ const SingleItems = ({ item }) => {
   };
 
 
-  console.log(item)
-
   return (
     <li className={s.item} key={`item-${DATA.id}`} data-idx={DATA.id}>
       <span>{DATA.id}</span>
