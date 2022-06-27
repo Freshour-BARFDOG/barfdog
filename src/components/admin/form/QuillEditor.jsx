@@ -35,17 +35,17 @@ export default function QuillEditor({
 
   useEffect(() => {
     const imageIdList = analyze_ImageIdListCRUD(fullImageIdList, body, originImageIdList);
-    const isBodyEmty = body === '<p><br></p>';
+    const isBodyEmpty = body === '<p><br></p>';
     if (mode === 'create') {
       setFormValues((prevState) => ({
         ...prevState,
-        [id]: isBodyEmty ? '' : body,
-        [imageId]: imageIdList?.add,
+        [id]: isBodyEmpty ? '' : body,
+        [imageId]: imageIdList?.add || [],
       }));
     } else if ('update') {
       setFormValues((prevState) => ({
         ...prevState,
-        [id]: isBodyEmty ? '' : body,
+        [id]: isBodyEmpty ? '' : body,
         addImageIdList: imageIdList?.add,
         deleteImageIdList: imageIdList?.del,
       }));

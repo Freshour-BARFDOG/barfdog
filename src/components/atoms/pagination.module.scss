@@ -17,8 +17,14 @@ $defaultColor: var(--color-font-sub);
   display: grid;
   justify-content: center;
   align-items: center;
-  &.hasMultiPages{
+  grid-template-columns: rem(20) rem(20) minmax(rem(20), $PaginationMaxWidth) rem(20) rem(20);
+
+  &.multiPages{
     grid-template-columns: rem(20) rem(20) minmax(rem(20), $PaginationMaxWidth) rem(20) rem(20);
+  }
+
+  &.singlePage{
+    grid-template-columns: auto;
   }
 
 

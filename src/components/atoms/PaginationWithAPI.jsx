@@ -137,10 +137,11 @@ const Pagination = ({ apiURL, size=10, theme = 'square', setItemList }) => {
 
   const hasMultiPages = pageInfo.totalPages > 1;
 
+  console.log(pageInfo)
   return (
     <>
       {pageInfo.totalItems > 0 && <div
-        className={`${s['pagination']} ${hasMultiPages ? s.hasMultiPages : ''}`}
+        className={`${s['pagination']} ${hasMultiPages ? s.multiPages : s.singlePage}`}
         page-counter-per-gourp={size}
         data-cur-page={curPage}
       >
