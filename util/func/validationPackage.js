@@ -20,6 +20,27 @@ export const valid_isEmptyArray = (arr) =>{
 }
 
 
+export const valid_isEmptyFile = (obj, substituteKey ) => {
+  let error = '';
+
+  if(!Object.keys(obj).length){
+    error = '항목이 비었습니다.'
+  }
+
+  for (const key in obj) {
+    const val = obj[key];
+
+    if(key === substituteKey && val){
+      return error = '';
+    } else if(key === 'file' && !val){
+      error = '항목이 비었습니다.';
+    }
+
+  }
+
+  return error;
+}
+
 
 
 export const valid_isEmptyObject = (obj) => {
@@ -210,6 +231,21 @@ export const valid_policyCheckbox = (obj, standardObjList = [])=>{
 
 
 
+export const valid_URL = (value)=>{
+  let error;
+
+  const url = value;
+  const RegExp = /(http|https):\/\/((\w+)[.])+(asia|biz|cc|cn|com|de|eu|in|info|jobs|jp|kr|mobi|mx|name|net|nz|org|travel|tv|tw|uk|us)(\/(\w*))*$/i;
+  const result = RegExp.test(url);
+
+  if(!url){
+    error = ''; // 필수항목아니므로 비어있어도 됨
+  } else if (!result) {
+    error = '링크 형식이 올바르지 않습니다.';
+  }
+
+  return error;
+}
 
 
 

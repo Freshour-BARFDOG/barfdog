@@ -5,7 +5,6 @@ export const validate = (obj) => {
   let errors = {};
 
   const keys = Object.keys(obj);
-
   for (const key of keys) {
     const val = obj[key];
 
@@ -18,7 +17,10 @@ export const validate = (obj) => {
         break;
     }
   }
+
+
   console.log('Valid Result (formValues) : ', errors);
   return errors;
 };
+
 

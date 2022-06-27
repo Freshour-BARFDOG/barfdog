@@ -118,6 +118,7 @@ export const postObjData = async (url, data, contType) => {
     isDone: false,
     error: ''
   }
+
   const response = await axios
     .post(url, data, axiosConfig(contType))
     .then((res) => {
@@ -145,6 +146,8 @@ export const putObjData = async (url, data, contType) => {
     isDone: false,
     error: ''
   }
+   console.log(axiosConfig(contType))
+
   const response = await axios
     .put(url, data, axiosConfig(contType))
     .then((res) => {
