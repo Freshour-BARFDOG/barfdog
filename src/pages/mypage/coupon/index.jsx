@@ -191,7 +191,7 @@ function CouponPage() {
 
 
             <section className={s.pageline}>
-              <Pagination itemCountPerGroup={1} itemTotalCount={1} />
+              <Pagination itemCountPerGroup={1} itemTotalCount={1}  />
             </section>
 
 

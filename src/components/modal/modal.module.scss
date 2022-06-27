@@ -1,7 +1,5 @@
-$browser-context: 16;
-@function rem($px, $context: $browser-context) {
-  @return #{$px / $context}rem;
-}
+@import '/styles/global/rem';
+@import '/styles/global/zIndex.module';
 
 
 
@@ -82,7 +80,6 @@ $browser-context: 16;
   padding: 0;
   width: 100%;
   max-width: rem(420);
-
   .body{
     padding: rem(60) rem(40) rem(20);
     box-sizing: border-box;
@@ -118,4 +115,15 @@ $browser-context: 16;
       height: rem(44);
     }
   }
+}
+
+.background{
+  position: fixed;
+  width: 100vw;
+  left: 0;
+  right: 0;
+  top:0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.6);
+  z-index: $globalModal-background;
 }

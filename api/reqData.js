@@ -15,48 +15,47 @@ import axios from "axios";
 import axiosConfig from './axios.config';
 
 
-// export const axiosConfig = (contType = "application/json") => ({
-//   headers: {
-//     authorization: JSON.parse(localStorage.getItem("admin"))?.token,
-//     "Content-Type": contType,
-//   },
-// });
 
 
-
-
+/* - async / await 사용법
+     아래 async await을 사용한 함수를 호출하는 함수도
+     동일하게 async await을 사용해서 response를 받아야 정상적으로 값을 받을 수 있다.
+     ! 그렇지 않을경우 <promise>를 return값으로 받는다 (타이밍 문제로 인함)
+* */
 export const getData = async (url, callback) => {
-
-  axios
+  const response = await axios
     .get(url, axiosConfig())
     .then((res) => {
-      console.log(res);
-      callback(res);
+      // console.log(res);
+      if(callback && typeof callback === 'function') callback(res);
       return res;
     })
     .catch((err) => {
-      console.log(err.response);
-      console.log(err.request);
+      console.error('ERROR: ', err.response);
+      const errorMessage =  err.response?.data.error || '데이터를 불러오는데 실패했습니다.'
+      alert(errorMessage);
+      return err;
     });
+
+  return response;
 };
 
 
 
 
 export const postData = async (url, data, callback, contType) => {
-
   axios
     .post(url, data, axiosConfig(contType))
     .then((res) => {
       console.log(res);
       if (callback && typeof callback === 'function') callback(res);
+      return res;
     })
     .catch((err) => {
       console.log(err);
       if (callback && typeof callback === "function") callback(err);
       alert("데이터 전송에 실패하였습니다.");
     });
-
 };
 
 
@@ -64,6 +63,7 @@ export const postData = async (url, data, callback, contType) => {
 
 
 export const putData = async (url, data) => {
+
   axios
     .put(url, data, axiosConfig())
     .then((res) => {
@@ -79,18 +79,72 @@ export const putData = async (url, data) => {
 
 
 export const deleteData = async (url) => {
-  axios
+  const response = axios
     .delete(url, axiosConfig())
     .then((res) => {
       console.log(res);
+      return res;
+    })
+    .catch((err) => {
+      return err.response;
+    });
+
+  return response;
+};
+
+// 비아이벤처스로 리다이렉ㅇ트된 비언ㅌ--> 다시 분리시키기
+
+
+
+
+export const postObjData = async (url, data, contType) => {
+  const result = {
+    isDone: false,
+    error: ''
+  }
+  const response = await axios
+    .post(url, data, axiosConfig(contType))
+    .then((res) => {
+      console.log(res);
+      return res.status === 200 || res.status === 201;
+    })
+    .catch((err) => {
+      console.log('ERROR내용: ',err);
+      const errStatus = err.response?.status >= 400;
+      const errorMessage = err.response?.data.error;
+      result.error = errorMessage || '서버와 통신오류가 발생했습니다.'
+      return !errStatus;
+    });
+
+  result.isDone = response;
+  return result;
+}
+
+
+
+
+export const putObjData = async (url, data, contType) => {
+  const result = {
+    isDone: false,
+    error: ''
+  }
+  const response = await axios
+    .put(url, data, axiosConfig(contType))
+    .then((res) => {
+      console.log(res);
+      return res.status === 200 || res.status === 201;
     })
     .catch((err) => {
       console.log(err.response);
-      console.log(err.request);
+      const errStatus = err.response.status >= 400;
+      const errorMessage = err.response.data.error;
+      result.error = errorMessage
+      return !errStatus;
     });
-};
 
-
+  result.isDone = response;
+  return result;
+}
 
 
 
@@ -112,63 +166,5 @@ export const postFileUpload = async (url, formData) => {
     return response;
 }
 
-// export const putData = async (url, data) => {
-//   // token = token ? token : await getAdminToken();
-//   const axiosConfig = {
-//     headers: {
-//       authorization: token,
-//     },
-//   };
-//   axios
-//     .put(url, data, axiosConfig)
-//     .then((res) => {
-//       console.log(res);
-//     })
-//     .catch((err) => {
-//       console.log(err.response);
-//       console.log(err.request);
-//     });
-// };
 
-// export const postData = async (url, data, config, callback) => {
-//   // token = token ? token : await getAdminToken();
 
-//   const axiosConfig = config && {
-//     headers: {
-//       authorization: token,
-//       "Content-Type": "application/json",
-//     },
-//   };
-//   console.log(axiosConfig);
-//   axios
-//     .post(url, data, axiosConfig)
-//     .then((res) => {
-//       console.log(res);
-//       callback();
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//       console.log(err.response);
-//       console.log(err.request);
-//       alert("데이터 전송에 실패하였습니다.");
-//     });
-// };
-
-// export const deleteData = async (url) => {
-//   // token = token ? token : await getAdminToken();
-//   const axiosConfig = {
-//     headers: {
-//       authorization: token,
-//       "Content-Type": "application/json",
-//     },
-//   };
-//   axios
-//     .delete(url, axiosConfig)
-//     .then((res) => {
-//       console.log(res);
-//     })
-//     .catch((err) => {
-//       console.log(err.response);
-//       console.log(err.request);
-//     });
-// };
