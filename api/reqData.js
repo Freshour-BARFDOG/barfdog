@@ -33,6 +33,7 @@ export const getData = async (url, callback) => {
     })
     .catch((err) => {
       console.log(err);
+      console.log(err.response);
       let errorMessage;
       const errorObj = err.response;
       const status = errorObj?.status;
@@ -49,7 +50,7 @@ export const getData = async (url, callback) => {
         console.error("errorType > FORBIDDEN : ", FORBIDDEN);
       } else if(errorObj?.data?.error) {
         console.error('errorObj.data.error: ',errorObj?.data?.error);
-        errorMessage =  errorObj?.data?.error;
+        errorMessage =  errorObj?.data?.error + '\n\n불러올 데이터가 존재하지 않거나, 서버 내부 에러입니다.';
       } else {
         errorMessage =  'Failed Fetching Data: 데이터를 불러오는데 실패했습니다.';
       }

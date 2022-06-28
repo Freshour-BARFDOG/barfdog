@@ -17,6 +17,7 @@ import { valid_hasFormErrors } from '/util/func/validationPackage';
 import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 import { useModalContext } from "/store/modal-context";
 import CustomRadio from "/src/components/admin/form/CustomRadio";
+import Tooltip from "/src/components/atoms/Tooltip";
 
 
 
@@ -67,6 +68,7 @@ export default function UpdateBlogPage () {
       setThumbFile({
         file: '',
         filename: DATA.filename,
+        originFilename: DATA.filename,
         thumbnailUrl: DATA.thumbnailUrl,
         id: DATA.thumbnailId,
       })
@@ -129,11 +131,11 @@ export default function UpdateBlogPage () {
         ...prevState,
         thumbnailId: '필수항목입니다.',
       }));
-      setThumbFile({
-        ...thumbFile,
+      setThumbFile(prevState => ({
+        ...prevState,
         file: '',
-        filename: '',
-      });
+        filename: prevState['originFilename'],
+      }));
       return;
     }
 
@@ -158,11 +160,11 @@ export default function UpdateBlogPage () {
         ...prevState,
         thumbnailId: isFaild && '업로드에 실패했습니다. 파일형식을 확인하세요.',
       }));
-      setThumbFile({
-        ...thumbFile,
+      setThumbFile(prevState => ({
+        ...prevState,
         file: !isFaild && file,
         filename: !isFaild && filename,
-      });
+      }));
     } catch (err) {
       alert(`에러가 발생했습니다.\n${err}`);
     }
@@ -181,7 +183,7 @@ export default function UpdateBlogPage () {
 
     // ! IMPORTANT : create Event후, 사용자가 enter를 쳤을 경우, 똑같은 요청이 전송되지 않게 하기 위해서 필요함.
     if(isSubmitted)return;
-    const errObj = validate(formValues);
+    const errObj = validate(formValues, thumbFile);
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
 
@@ -298,7 +300,9 @@ export default function UpdateBlogPage () {
               <div className="cont_divider">
                 <div className="input_row upload_image multipleLines">
                   <div className="title_section">
-                    <p className="title">썸네일</p>
+                    <div className="title">썸네일
+                      <Tooltip message={'새로운 썸네일 파일을 첨부한 이력이 있다면, 반드시 기존 썸네일 외에 새로운 파일을 첨부해야합니다. 기존 파일을 사용하고자 할 경우에는 새로고침 후 다시 시도하시기 바랍니다.'} messagePosition={'left'} wordBreaking={true} />
+                    </div>
                   </div>
                   <div className="inp_section">
                     <label

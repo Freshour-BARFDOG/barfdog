@@ -19,6 +19,8 @@ import Tooltip from "/src/components/atoms/Tooltip";
 
 
 
+
+
 const initialFormValues = {
   name : "",
   status: 'LEAKED',
@@ -43,11 +45,18 @@ const initialImageFiles = {
 }
 
 
+
+
 function UpdateMypageBanner() {
-  const postFormValuesApiUrl = `/api/banners/myPage`;
-  const getFormValuesApiUrl = `/api/banners/myPage`;
 
   const router = useRouter();
+  const { id } = router.query;
+
+  const postFormValuesApiUrl = `/api/banners/myPage/${id}`; // post
+  const getFormValuesApiUrl = `/api/banners/myPage`;
+  const currentPagePath = '/bf-admin/banner/mypage-banner'
+
+
   const mct = useModalContext();
   const [modalMessage, setModalMessage] = useState('');
   const [isLoading, setIsLoading] = useState({});
@@ -59,8 +68,9 @@ function UpdateMypageBanner() {
   // console.log(formValues);
   // console.log(fileValues);
 
-
   useEffect(() => {
+    if(id)return;
+
     (async () => {
       try {
         setIsLoading((prevState) => ({
@@ -70,6 +80,8 @@ function UpdateMypageBanner() {
         const res = await getData(getFormValuesApiUrl);
         const data = res.data;
         console.log(res);
+        const thisBannerId = data.id;
+        await router.push(`${currentPagePath}?id=${thisBannerId}`)
         const initialFormValues = {
           name : data.name,
           status: data.status,
@@ -99,7 +111,7 @@ function UpdateMypageBanner() {
         fetching: false,
       }));
     })();
-  }, []);
+  }, [id]);
 
 
 
@@ -136,9 +148,6 @@ function UpdateMypageBanner() {
     const errObj = validate(formValues, fileValues);
     const isPassed = valid_hasFormErrors(errObj);
     setFormErrors(errObj);
-    // ! 1. 수정이......... 어떤 값을 넘겨야 수정이 되는 것인지????? (아무 값도 없는 경우)
-    // ! 2. 기존에 존재하는 배너를 그대로 업데이트 할 경우, 파일 첨부를 할 수 없음
-
     try {
       setIsLoading((prevState) => ({
         ...prevState,
@@ -184,7 +193,7 @@ function UpdateMypageBanner() {
   };
   const onGlobalModalCallback = () => {
     mct.alertHide();
-    router.push('/bf-admin/community/event');
+    router.push(`${currentPagePath}`);
   };
 
   return (
@@ -205,7 +214,7 @@ function UpdateMypageBanner() {
               <div className="cont_divider">
                 <div className="input_row">
                   <div className="title_section fixedHeight">
-                    <label className="title" htmlFor="banner-name">
+                    <label className="title" htmlFor="name">
                       배너이름
                     </label>
                   </div>
@@ -257,7 +266,7 @@ function UpdateMypageBanner() {
                         <PreviewImage
                           file={fileValues.pcFile?.file}
                           thumbLink={fileValues.pcFile?.url}
-                          objectFit={'contain'}
+                          objectFit={'cover'}
                           className={s["upload-image"]}
                         />
                       )}
@@ -318,7 +327,8 @@ function UpdateMypageBanner() {
                         <PreviewImage
                           file={fileValues.mobileFile?.file}
                           thumbLink={fileValues.mobileFile?.url}
-                          objectFit={'contain'}
+                          style={{maxWidth:'375px'}}
+                          objectFit={'cover'}
                           className={s["upload-image"]}
                         />
                       )}
@@ -340,7 +350,7 @@ function UpdateMypageBanner() {
                 </div>
                 <div className="input_row multipleLines">
                   <div className="title_section fixedHeight">
-                    <label className="title" htmlFor="link-image-mobile">
+                    <label className="title" htmlFor="mobileLinkUrl">
                       연결링크
                       <Tooltip message={'*링크가 없을 경우, 배너 클릭 이벤트가 발생하지 않습니다.'} messagePosition={'left'} />
                     </label>
