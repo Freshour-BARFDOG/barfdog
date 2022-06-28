@@ -15,11 +15,8 @@ import { SketchPicker } from 'react-color';
 import { validate } from '/util/func/validation_lineBanner';
 import { valid_hasFormErrors } from '/util/func/validationPackage';
 import { getData, postObjData, putObjData } from '/api/reqData';
-// import PreviewInnerHTML from '/src/components/atoms/PreviewInnerHTML';
-import dynamic from 'next/dynamic';
-const PreviewInnerHTML = dynamic(() => import('/src/components/atoms/PreviewInnerHTML'), {
-  ssr: false,
-});
+import PreviewInnerHTML from '/src/components/atoms/PreviewInnerHTML';
+
 
 const initialValues = {
   name: '',
@@ -56,21 +53,21 @@ function LineBanner() {
         }));
         const res = await getData(getFormValuesApiUrl);
         console.log(res);
-        // const DATA = res?.data;
-        // const thisItemId = DATA.id;
-        // if (thisItemId) {
-        //   await router.push(`/bf-admin/banner/line-banner?id=${thisItemId}`);
-        //   const initialFormValues = {
-        //     name: DATA.name,
-        //     status: DATA.status,
-        //     backgroundColor: DATA.backgroundColor,
-        //     fontColor: DATA.fontColor,
-        //     pcLinkUrl: DATA.pcLinkUrl,
-        //     mobileLinkUrl: DATA.mobileLinkUrl,
-        //   };
-        //   setFormValues(initialFormValues);
-        //   textField.document.querySelector('body').innerHTML = DATA.name;
-        // }
+        const DATA = res?.data;
+        const thisItemId = DATA?.id;
+        if (thisItemId) {
+          await router.push(`/bf-admin/banner/line-banner?id=${thisItemId}`);
+          const initialFormValues = {
+            name: DATA.name,
+            status: DATA.status,
+            backgroundColor: DATA.backgroundColor,
+            fontColor: DATA.fontColor,
+            pcLinkUrl: DATA.pcLinkUrl,
+            mobileLinkUrl: DATA.mobileLinkUrl,
+          };
+          setFormValues(initialFormValues);
+          textField.document.querySelector('body').innerHTML = DATA.name;
+        }
       } catch (err) {
         console.error('Failed Get Data:',err);
         alert(err);
@@ -110,8 +107,6 @@ function LineBanner() {
 
   const onInputChangeHandler = (e) => {
     const input = e.currentTarget;
-    console.log(input);
-    console.log(input.dataset.test);
     const { id, value } = input;
     const filteredType = input.dataset.filteredType;
     let filteredValue = value;

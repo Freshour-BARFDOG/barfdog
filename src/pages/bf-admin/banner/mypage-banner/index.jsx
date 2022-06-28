@@ -14,7 +14,7 @@ import {validate} from "/util/func/validation_mypageBanner";
 import {getData, postObjData} from "/api/reqData";
 import Spinner from "/src/components/atoms/Spinner";
 import {valid_hasFormErrors} from "/util/func/validationPackage";
-
+import Tooltip from "/src/components/atoms/Tooltip";
 
 
 
@@ -56,8 +56,8 @@ function UpdateMypageBanner() {
   const [fileValues, setFileValues] = useState(initialImageFiles);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  console.log(formValues);
-  console.log(fileValues);
+  // console.log(formValues);
+  // console.log(fileValues);
 
 
   useEffect(() => {
@@ -193,7 +193,7 @@ function UpdateMypageBanner() {
       <AdminLayout>
         <AdminContentWrapper>
           <div className="title_main">
-            <h1>마이페이지 배너      {isLoading.fetching && <Spinner style={{ color: 'var(--color-main)', width: '20', height: '20' }} speed={0.6} />}</h1>
+            <h1>마이페이지 배너 {isLoading.fetching && <Spinner style={{ color: 'var(--color-main)', width: '20', height: '20' }} speed={0.6} />}</h1>
           </div>
           <form
             action="/"
@@ -277,10 +277,11 @@ function UpdateMypageBanner() {
                     )}
                   </div>
                 </div>
-                <div className="input_row multipleLines">
+                <div className="input_row">
                   <div className="title_section fixedHeight">
-                    <label className="title" htmlFor="link-image-pc">
+                    <label className="title" htmlFor="pcLinkUrl">
                       연결링크
+                      <Tooltip message={'*링크가 없을 경우, 배너 클릭 이벤트가 발생하지 않습니다.'} messagePosition={'left'} />
                     </label>
                   </div>
                   <div className="inp_section">
@@ -293,9 +294,6 @@ function UpdateMypageBanner() {
                         placeholder="ex. https://barfdog.co.kr/path/1"
                         onChange={onInputChangeHandler}
                       />
-                    </div>
-                    <div className="desc">
-                      *링크가 없을 경우, 배너 클릭 이벤트가 발생하지 않습니다.
                     </div>
                     {formErrors.pcLinkUrl && (
                       <ErrorMessage>{formErrors.pcLinkUrl}</ErrorMessage>
@@ -344,6 +342,7 @@ function UpdateMypageBanner() {
                   <div className="title_section fixedHeight">
                     <label className="title" htmlFor="link-image-mobile">
                       연결링크
+                      <Tooltip message={'*링크가 없을 경우, 배너 클릭 이벤트가 발생하지 않습니다.'} messagePosition={'left'} />
                     </label>
                   </div>
                   <div className="inp_section">
@@ -357,9 +356,6 @@ function UpdateMypageBanner() {
                         onChange={onInputChangeHandler}
                       />
                     </div>
-                    <div className="desc">
-                      *링크가 없을 경우, 배너 클릭 이벤트가 발생하지 않습니다.
-                    </div>
                     {formErrors.mobileLinkUrl && (
                       <ErrorMessage>{formErrors.mobileLinkUrl}</ErrorMessage>
                     )}
@@ -367,31 +363,31 @@ function UpdateMypageBanner() {
                 </div>
               </div>
             </div>
-            <div className="cont_bottom">
-              <div className="btn_section">
-                <button
-                  type="button"
-                  id="btn-cancle"
-                  className="admin_btn confirm_l line"
-                  onClick={returnToPrevPage}
-                >
-                  취소
-                </button>
-                <button
-                  type="button"
-                  id="btn-create"
-                  className="admin_btn confirm_l solid"
-                  onClick={onSubmit}
-                >
-                  {isLoading.submit ? (
-                    <Spinner style={{ color: '#fff', width: '15', height: '15' }} speed={0.6} />
-                  ) : (
-                    '등록'
-                  )}
-                </button>
-              </div>
-            </div>
           </form>
+          <div className="cont_bottom">
+            <div className="btn_section">
+              <button
+                type="button"
+                id="btn-cancle"
+                className="admin_btn confirm_l line"
+                onClick={returnToPrevPage}
+              >
+                취소
+              </button>
+              <button
+                type="button"
+                id="btn-create"
+                className="admin_btn confirm_l solid"
+                onClick={onSubmit}
+              >
+                {isLoading.submit ? (
+                  <Spinner style={{ color: '#fff', width: '15', height: '15' }} speed={0.6} />
+                ) : (
+                  '등록'
+                )}
+              </button>
+            </div>
+          </div>
         </AdminContentWrapper>
       </AdminLayout>
       <Modal_global_alert message={modalMessage} onClick={onGlobalModalCallback} background />
