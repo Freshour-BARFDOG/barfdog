@@ -5,24 +5,27 @@ import rem from '/util/func/rem';
 import CloseButton from '/src/components/atoms/CloseButton';
 import { getData, putObjData } from '/api/reqData';
 import SelectTag from '/src/components/atoms/SelectTag';
-import { valid_isEmptyObject } from '/util/func/validationPackage';
+import ErrorMessage from '../atoms/ErrorMessage';
+import Spinner from '../atoms/Spinner';
+import validation_article from '/util/func/Validation_article';
 
 /* Todo List
     1. 추천아티클 이미 선택된 option 기능
     2. api > put > 이미 선정된 아티클이 없을 경우, 500 에러남 // put을 post로 변경불가능할지??
 * */
 
-function Modal_AdminRecommendArticle({ setActiveModal }) {
-  const firstBlogId = 'firstBlogId';
-  const secondBlogId = 'secondBlogId';
+const firstBlogId = 'firstBlogId';
+const secondBlogId = 'secondBlogId';
 
-  const initialArticles = {
+function Modal_AdminRecommendArticle({ setActiveModal }) {
+  const initialArticleId = {
     [firstBlogId]: null,
     [secondBlogId]: null,
   };
-
+  const [formError, setFormError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [blogList, setBlogList] = useState([]);
-  const [artricle, setArtricle] = useState(initialArticles);
+  const [artricleIdObj, setArtricleIdObj] = useState(initialArticleId);
   const selectOptions = [
     ...blogList.map((list) => ({
       label: list.title,
@@ -34,10 +37,6 @@ function Modal_AdminRecommendArticle({ setActiveModal }) {
     },
   ].reverse();
 
-  // console.log(blogList);
-  console.log(artricle);
-  // id값이 동일한 것으로 initial value 로 설정한다.
-
   useEffect(() => {
     (async () => {
       const res = await getData('api/admin/articles');
@@ -48,7 +47,7 @@ function Modal_AdminRecommendArticle({ setActiveModal }) {
         [firstBlogId]: articles[0]?.blogId,
         [secondBlogId]: articles[1]?.blogId,
       };
-      setArtricle(articleData);
+      setArtricleIdObj(articleData);
       let blogData = [];
       const blogs = res.data.blogTitlesDtos;
       blogs.forEach((list) => {
@@ -61,27 +60,41 @@ function Modal_AdminRecommendArticle({ setActiveModal }) {
     })();
   }, []);
 
+
   const onHideModal = () => {
     setActiveModal(false);
   };
 
+
   const onInputChangeHandler = (value, id) => {
     const blogId = Number(value);
-    // 전송한다...그리고 그 이후에 업데이트 한다.
-    setArtricle((prevState) => ({
+    setArtricleIdObj((prevState) => ({
       ...prevState,
       [id]: blogId,
     }));
-    console.log(artricle);
-    onSaveArticle(artricle);
   };
 
+
   const onSaveArticle = () => {
-    const errorMessage = valid_isEmptyObject(artricle);
-    if (errorMessage) return alert('추천아티클을 모두 선정해주세요.');
+    const errorMessage = validation_article(artricleIdObj);
+    setFormError(errorMessage);
+    if (errorMessage) return;
     (async () => {
-      const res = await putObjData('/api/admin/articles', artricle);
-      console.log(res);
+      setIsLoading(true);
+      await putObjData('/api/admin/articles', artricleIdObj)
+        .then((res) => {
+          console.log(res);
+          if (!res.isDone) {
+            setFormError(res.error);
+            alert(`추천아티클을 설정할 수 없습니다.\nError Message: ${res.error}`);
+            onHideModal();
+          } else {
+            alert('추천아티클 설정이 완료되었습니다.');
+            onHideModal();
+          }
+        })
+        .catch((err) => console.log(err));
+      setIsLoading(false);
     })();
   };
 
@@ -110,7 +123,7 @@ function Modal_AdminRecommendArticle({ setActiveModal }) {
               id={firstBlogId}
               onChange={onInputChangeHandler}
               options={selectOptions}
-              initialValue={artricle[firstBlogId]}
+              initialValue={artricleIdObj[firstBlogId]}
             />
           </label>
           <label className={s['input-row']} htmlFor="recommend-1">
@@ -120,8 +133,9 @@ function Modal_AdminRecommendArticle({ setActiveModal }) {
               id={secondBlogId}
               onChange={onInputChangeHandler}
               options={selectOptions}
-              initialValue={artricle[secondBlogId]}
+              initialValue={artricleIdObj[secondBlogId]}
             />
+            {<ErrorMessage>{formError}</ErrorMessage>}
           </label>
         </div>
         <div className={s['btn-section']}>
@@ -129,7 +143,14 @@ function Modal_AdminRecommendArticle({ setActiveModal }) {
             닫기
           </button>
           <button className="admin_btn line confirm_l point" onClick={onSaveArticle}>
-            저장
+            {isLoading ? (
+              <Spinner
+                style={{ color: 'var(--color-main)', width: '20', height: '20' }}
+                speed={0.6}
+              />
+            ) : (
+              '저장'
+            )}
           </button>
         </div>
       </div>
