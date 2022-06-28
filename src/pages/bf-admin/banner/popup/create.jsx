@@ -1,170 +1,134 @@
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
-import AdminLayout from "/src/components/admin/AdminLayout";
-import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
-import MetaTitle from "@src/components/atoms/MetaTitle";
+import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import AdminLayout from '/src/components/admin/AdminLayout';
+import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
+import MetaTitle from '/src/components/atoms/MetaTitle';
 
-import InputRadio_status, {
-  CustomRadio,
-} from "/src/components/admin/form/InputRadioPackage";
-import Fake_input from "@src/components/atoms/fake_input";
-import PreviewImage from "@src/components/atoms/PreviewImage";
-import ErrorMessage from "/src/components/atoms/ErrorMessage";
-import getAdminToken from "@api/getAdminToken";
-import { postData } from "@api/reqData";
+import CustomRadio from '/src/components/admin/form/CustomRadio';
+import Fake_input from '/src/components/atoms/fake_input';
+import PreviewImage from '/src/components/atoms/PreviewImage';
+import ErrorMessage from '/src/components/atoms/ErrorMessage';
+import { useModalContext } from '/store/modal-context';
+import { validate } from '/util/func/validation_popup';
+import { valid_hasFormErrors } from '/util/func/validationPackage';
+import { postObjData } from '/api/reqData';
+import Spinner from '/src/components/atoms/Spinner';
+import Modal_global_alert from '/src/components/modal/Modal_global_alert';
+import Tooltip from "../../../../components/atoms/Tooltip";
 
+const initialFormValues = {
+  name: '',
+  status: 'LEAKED',
+  position: 'MID',
+  pcLinkUrl: '',
+  mobileLinkUrl: '',
+};
 
-
-// IMAGE RATIO설정필요 (미리보기이미지)
-
-
-
-
-
-
+const initialImageFiles = {
+  pcFile: {
+    file: '',
+    filename: '',
+    url: '',
+  },
+  mobileFile: {
+    file: '',
+    filename: '',
+    url: '',
+  },
+};
 
 function CreatePopupPage() {
+  const postFormValuesApiUrl = `/api/banners/popup`;
   const router = useRouter();
-  const { id } = router.query;
-
-  const REQUEST_URL = `/api/banners/popup`;
-
-  const [modalMessage, setModalMessage] = useState("");
-  const [initialValues, setInitialValues] = useState({});
-  const [formValues, setFormValues] = useState({
-    position:'CENTER'
-  });
-  const [imageFile, setImageFile] = useState({});
+  const mct = useModalContext();
+  const [modalMessage, setModalMessage] = useState('');
+  const [isLoading, setIsLoading] = useState({});
+  const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState({});
-
-
+  const [fileValues, setFileValues] = useState(initialImageFiles);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  console.log(formValues);
+  console.log(fileValues);
 
   const onInputChangeHandler = (e) => {
-    const input = e.currentTarget;
-    const value = input.value;
-    const type = input.type && input.dataset.type;
-    const name = input.name;
-    if (type === "link") {
-      const device = input.dataset.device === "pc" ? "pc" : "mobile";
-      const query = `${device}LinkUrl`;
-      setFormValues({
-        ...formValues,
-        [query]: value,
-      });
-    } else if (name === "name") {
-      setFormValues({
-        ...formValues,
-        name: value,
-      });
-    }
-  };
-
-  const onRadioButtonHandler = (data) => {
-    const { key, value } = data;
+    const { id, value } = e.currentTarget;
     setFormValues({
       ...formValues,
-      [key]: value,
+      [id]: value,
     });
   };
 
-  const imageFileChangeHandler = (e) => {
+  const onFileChangeHandler = (e) => {
     const thisInput = e.currentTarget;
+    const id = thisInput.id;
     const file = thisInput.files[0];
-    console.log(file);
-    const filename = file ? file.name : "";
-    const device = thisInput.dataset.device === "pc" ? "pc" : "mobile";
-    setImageFile({
-      ...imageFile,
-      [device]: {
+    const filename = file ? file.name : '';
+    setFileValues((prevState) => ({
+      ...prevState,
+      [id]: {
         file,
-        filename: file ? filename : initialValues[device].filename,
-        thumbLink: file ? "" : initialValues[device].thumbLink, //파일이 없을 경우 : 기존파일 링크 유지
+        filename,
       },
-    });
+    }));
   };
 
-  const valid_isEmpty = (value) => {
-    let errors;
-
-    if (!value) {
-      errors = "항목이 비어있습니다.";
-    } else {
-      errors = "";
-    }
-
-    return errors;
-  };
-
-  const valid_link = (value) => {
-    let errorsMessage;
-
-    const regexURL = new RegExp(
-      "^(https?:\\/\\/)?" + // protocol
-        "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|" + // domain name
-        "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
-        "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
-        "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
-        "(\\#[-a-z\\d_]*)?$",
-      "gi"
-    ); // fragment locator
-
-    const RESULT = regexURL.test(value);
-
-    if (value && !RESULT) {
-      errorsMessage = "유효하지 않은 링크입니다.";
-    } else {
-      errorsMessage = "";
-    }
-
-    return errorsMessage;
-  };
-
-  const validate = (obj) => {
-    let errors = {};
-    const keys = Object.keys(obj);
-
-    keys.forEach((key) => {
-      const val = obj[key];
-
-      switch (key) {
-        case "name":
-          valid_isEmpty(val) && (errors[key] = "필수항목입니다.");
-          break;
-        case "pcLinkUrl":
-          valid_link(val) && (errors[key] = valid_link(val));
-          break;
-        case "mobileLinkUrl":
-          valid_link(val) && (errors[key] = valid_link(val));
-          break;
-
-        default:
-          break;
-      }
-    });
-
-    // * 파일 유효성검사 불필요
-    // * 파일 empty: 기존 파일 유지 (파일 전송 X)
-    // * 파일 exist: 파일 전송
-    console.log("Validation Result: ", errors);
-
-    return errors;
-  };
-
-  const onSubmitHandler = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    setFormErrors(validate(formValues));
-    if (Object.keys(formErrors).length) return console.error(formErrors);
-    postDataToServer();
+    console.log('formValues: ', formValues);
+    console.log('fileValues: ', fileValues);
+    if (isSubmitted) return;
+    const errObj = validate(formValues, fileValues);
+    const isPassed = valid_hasFormErrors(errObj);
+    setFormErrors(errObj);
+    // ! 1. 수정이......... 어떤 값을 넘겨야 수정이 되는 것인지????? (아무 값도 없는 경우)
+    // ! 2. 기존에 존재하는 배너를 그대로 업데이트 할 경우, 파일 첨부를 할 수 없음
+
+    try {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        submit: true,
+      }));
+      if (isPassed) {
+        const jsonData = JSON.stringify(formValues);
+        const blob = new Blob([jsonData], { type: 'application/json' });
+        const formData = new FormData();
+        formData.append('requestDto', blob);
+        formData.append('pcFile', fileValues.pcFile.file);
+        formData.append('mobileFile', fileValues.mobileFile.file);
+        const res = await postObjData(postFormValuesApiUrl, formData, 'multipart/form-data');
+        console.log(res);
+        if (res.isDone) {
+          onShowModalHandler('팝업이 생성되었습니다.');
+          setIsSubmitted(true);
+        } else {
+          alert(res.error, '\n내부 통신장애입니다. 시도해주세요.');
+          console.error(res.error);
+        }
+      }
+    } catch (err) {
+      alert('ERROR');
+      console.error(err);
+    }
+    setIsLoading((prevState) => ({
+      ...prevState,
+      submit: false,
+    }));
   };
-
-
 
   const returnToPrevPage = () => {
-    if (confirm("이전 페이지로 돌아가시겠습니까?")) {
+    if (confirm('이전 페이지로 돌아가시겠습니까?')) {
       router.back();
     }
   };
 
+  const onShowModalHandler = (message) => {
+    mct.alertShow();
+    setModalMessage(message);
+  };
+  const onGlobalModalCallback = () => {
+    mct.alertHide();
+    router.push('/bf-admin/banner/popup');
+  };
 
   return (
     <>
@@ -174,13 +138,7 @@ function CreatePopupPage() {
           <div className="title_main">
             <h1>팝업 생성</h1>
           </div>
-          <form
-            action="/"
-            className="cont"
-            encType="multipart/form-data"
-            method="post"
-            onSubmit={onSubmitHandler}
-          >
+          <form action="/" className="cont" encType="multipart/form-data" method="post">
             <div className="cont_body">
               <div className="cont_divider">
                 <div className="input_row">
@@ -193,14 +151,12 @@ function CreatePopupPage() {
                     <div className="inp_box">
                       <input
                         type="text"
-                        name="name"
+                        id="name"
+                        value={formValues.name || ''}
                         className="fullWidth"
                         onChange={onInputChangeHandler}
-                        value={formValues.name || ""}
                       />
-                      {/* {formErrors.name && (
-                        <ErrorMessage>{formErrors.name}</ErrorMessage>
-                      )} */}
+                      {formErrors.name && <ErrorMessage>{formErrors.name}</ErrorMessage>}
                     </div>
                   </div>
                 </div>
@@ -213,12 +169,11 @@ function CreatePopupPage() {
                   </div>
                   <div className="inp_section">
                     <CustomRadio
-                      formValues={formValues}
-                      setFormValues={setFormValues}
-                      title="popup-position"
-                      name="popup-poisiton"
-                      idList={["CENTER", "LEFT", "RIGHT"]}
-                      labelList={["중간", "왼쪽", "오른쪽"]}
+                      setValue={setFormValues}
+                      name="position"
+                      idList={['MID', 'LEFT', 'RIGHT']}
+                      labelList={['중간', '왼쪽', '오른쪽']}
+                      value={formValues.position}
                     />
                   </div>
                 </div>
@@ -228,61 +183,54 @@ function CreatePopupPage() {
                 <h5 className="cont_divider_title">
                   <b>PC</b>
                 </h5>
-                <div className="input_row upload_image">
+                <div className="input_row upload1_image multipleLines">
                   <div className="title_section">
                     <p className="title">이미지</p>
                   </div>
                   <div className="inp_section">
-                    <label className="inp_wrap file" htmlFor="upload-image-pc">
-                      <PreviewImage
-                        file={imageFile.pc?.file}
-                        thumbLink={imageFile.pc?.thumbLink}
-                        ratio={1920 / 450}
-                      />
+                    <label className="inp_wrap file" htmlFor="pcFile">
+                      {(fileValues.pcFile?.file || fileValues.pcFile?.url) && (
+                        <PreviewImage
+                          file={fileValues.pcFile?.file}
+                          thumbLink={fileValues.pcFile?.url}
+                          objectFit={'contain'}
+                          ratio={1}
+                          style={{ maxWidth: '400px' }}
+                        />
+                      )}
                       <span className="inp_box">
                         <input
                           type="file"
-                          data-type="file"
-                          id="upload-image-pc"
-                          name="imageFilePc"
+                          id="pcFile"
                           accept="image/*"
                           className="hide"
-                          data-device="pc"
-                          onChange={imageFileChangeHandler}
+                          onChange={onFileChangeHandler}
                         />
-                        <Fake_input filename={imageFile.pc?.filename} />
-                        {/* {formErrors.file_pc && (
-                          <ErrorMessage>{formErrors.file_pc}</ErrorMessage>
-                        )} */}
+                        <Fake_input filename={fileValues.pcFile?.filename} />
                       </span>
                     </label>
+                    {formErrors.pcFile && <ErrorMessage>{formErrors.pcFile}</ErrorMessage>}
                   </div>
                 </div>
-                <div className="input_row upload_image">
+                <div className="input_row multipleLines">
                   <div className="title_section fixedHeight">
-                    <label className="title" htmlFor="link-image-pc">
+                    <label className="title" htmlFor="pcLinkUrl">
                       연결링크
+                      <Tooltip message={'*링크가 없을 경우, 배너 클릭 이벤트가 발생하지 않습니다.'} messagePosition={'left'} />
                     </label>
                   </div>
                   <div className="inp_section">
                     <div className="inp_box">
                       <input
                         type="text"
-                        name="pcLinkUrl"
-                        data-type="link"
+                        id="pcLinkUrl"
                         className="halfWidth"
-                        data-device="pc"
-                        value={formValues.pcLinkUrl || ""}
-                        placeholder="ex. https://barfdog.co.kr/event/1"
+                        value={formValues.pcLinkUrl || ''}
+                        placeholder="ex. https://barfdog.co.kr/path/1"
                         onChange={onInputChangeHandler}
                       />
                     </div>
-                    <div className="desc">
-                      *링크가 없을 경우, 배너 클릭 이벤트가 발생하지 않습니다.
-                    </div>
-                    {/* {formErrors.pcLinkUrl && (
-                      <ErrorMessage>{formErrors.pcLinkUrl}</ErrorMessage>
-                    )} */}
+                    {formErrors.pcLinkUrl && <ErrorMessage>{formErrors.pcLinkUrl}</ErrorMessage>}
                   </div>
                 </div>
               </div>
@@ -291,63 +239,52 @@ function CreatePopupPage() {
                 <h5 className="cont_divider_title">
                   <b>Mobile</b>
                 </h5>
-                <div className="input_row upload_image">
+                <div className="input_row upload_image multipleLines">
                   <div className="title_section">
-                    <p className="title" htmlFor="upload-image-mobile">
-                      이미지
-                    </p>
+                    <p className="title">이미지</p>
                   </div>
                   <div className="inp_section">
-                    <label
-                      className="inp_wrap file"
-                      htmlFor="upload-image-mobile"
-                    >
-                      <PreviewImage
-                        file={imageFile.mobile?.file}
-                        thumbLink={imageFile.mobile?.thumbLink}
-                        ratio={1920 / 450}
-                      />
-                      <div className="inp_box">
+                    <label className="inp_wrap file" htmlFor="mobileFile">
+                      {(fileValues.mobileFile?.file || fileValues.mobileFile?.url) && (
+                        <PreviewImage
+                          file={fileValues.mobileFile?.file}
+                          thumbLink={fileValues.mobileFile?.url}
+                          objectFit={'contain'}
+                          ratio={1}
+                          style={{ maxWidth: '400px' }}
+                        />
+                      )}
+                      <span className="inp_box">
                         <input
                           type="file"
-                          data-type="file"
-                          id="upload-image-mobile"
-                          name="imageFile"
+                          id="mobileFile"
                           accept="image/*"
                           className="hide"
-                          data-device="mobile"
-                          multiple={false}
-                          onChange={imageFileChangeHandler}
+                          onChange={onFileChangeHandler}
                         />
-                        <Fake_input filename={imageFile.mobile?.filename} />
-                        {formErrors.file_mobile && (
-                          <ErrorMessage>{formErrors.file_mobile}</ErrorMessage>
-                        )}
-                      </div>
+                        <Fake_input filename={fileValues.mobileFile?.filename} />
+                      </span>
                     </label>
+                    {formErrors.mobileFile && <ErrorMessage>{formErrors.mobileFile}</ErrorMessage>}
                   </div>
                 </div>
-                <div className="input_row upload_image">
+                <div className="input_row multipleLines">
                   <div className="title_section fixedHeight">
                     <label className="title" htmlFor="link-image-mobile">
                       연결링크
+                      <Tooltip message={'*링크가 없을 경우, 배너 클릭 이벤트가 발생하지 않습니다.'} messagePosition={'left'} />
                     </label>
                   </div>
                   <div className="inp_section">
                     <div className="inp_box">
                       <input
                         type="text"
-                        data-type="link"
-                        name="mobileLinkUrl"
+                        id="mobileLinkUrl"
                         className="halfWidth"
-                        data-device="mobile"
+                        value={formValues.mobileLinkUrl || ''}
+                        placeholder="ex. https://barfdog.co.kr/path/mobile"
                         onChange={onInputChangeHandler}
-                        value={formValues.mobileLinkUrl || ""}
-                        placeholder="ex. https://barfdog.co.kr/event/2"
                       />
-                    </div>
-                    <div className="desc">
-                      *링크가 없을 경우, 배너 클릭 이벤트가 발생하지 않습니다.
                     </div>
                     {formErrors.mobileLinkUrl && (
                       <ErrorMessage>{formErrors.mobileLinkUrl}</ErrorMessage>
@@ -355,31 +292,53 @@ function CreatePopupPage() {
                   </div>
                 </div>
               </div>
-            </div>
-            {/* cont_divider */}
-            <div className="cont_bottom">
-              <div className="btn_section">
-                <button
-                  type="button"
-                  id="btn-cancle"
-                  className="admin_btn confirm_l line"
-                  onClick={returnToPrevPage}
-                >
-                  취소
-                </button>
-                <button
-                  type="submit"
-                  id="btn-update"
-                  className="admin_btn confirm_l solid"
-                >
-                  수정
-                </button>
+              <div className="cont_divider">
+                <div className="input_row">
+                  <div className="title_section">
+                    <p className="title">노출여부</p>
+                  </div>
+                  <div className="inp_section">
+                    <CustomRadio
+                      setValue={setFormValues}
+                      name="status"
+                      idList={['LEAKED', 'HIDDEN']}
+                      labelList={['Y', 'N']}
+                      value={formValues.status}
+                    />
+                  </div>
+                </div>
               </div>
+              {/* cont_divider */}
             </div>
           </form>
+          <div className="cont_bottom">
+            <div className="btn_section">
+              <button
+                type="button"
+                id="btn-cancle"
+                className="admin_btn confirm_l line"
+                onClick={returnToPrevPage}
+              >
+                취소
+              </button>
+              <button
+                type="button"
+                id="btn-create"
+                className="admin_btn confirm_l solid"
+                onClick={onSubmit}
+              >
+                {isLoading.submit ? (
+                  <Spinner style={{ color: '#fff', width: '15', height: '15' }} speed={0.6} />
+                ) : (
+                  '등록'
+                )}
+              </button>
+            </div>
+          </div>
           {/* cont */}
         </AdminContentWrapper>
       </AdminLayout>
+      <Modal_global_alert message={modalMessage} onClick={onGlobalModalCallback} background />
     </>
   );
 }

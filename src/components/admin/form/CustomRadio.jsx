@@ -3,6 +3,7 @@ import s from './customRadio.module.scss';
 
 const CustomRadio = ({ setValue, name, idList, labelList, initIndex, value }) => {
   const initialValue = value || idList[initIndex || 0];
+
   const [selectedRadio, setSelectedRadio] = useState(initialValue);
 
   useEffect(() => {
