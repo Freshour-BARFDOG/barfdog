@@ -85,15 +85,18 @@ export const postData = async (url, data, callback, contType) => {
 
 export const putData = async (url, data) => {
 
-  axios
+  const response = axios
     .put(url, data, axiosConfig())
     .then((res) => {
       console.log(res);
+      return res;
     })
     .catch((err) => {
+      return err;
       console.log(err.response);
-      console.log(err.request);
     });
+
+  return response;
 };
 
 
@@ -107,6 +110,7 @@ export const deleteData = async (url) => {
       return res;
     })
     .catch((err) => {
+      console.error(err)
       return err.response;
     });
 
@@ -163,8 +167,8 @@ export const putObjData = async (url, data, contType) => {
     })
     .catch((err) => {
       console.log(err.response);
-      const errStatus = err.response.status >= 400;
-      const errorMessage = err.response.data.error;
+      const errStatus = err.response?.status >= 400;
+      const errorMessage = err.response?.data.error;
       result.error = errorMessage
       return !errStatus;
     });
