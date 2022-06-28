@@ -7,7 +7,7 @@ import { getData, putObjData } from '/api/reqData';
 import SelectTag from '/src/components/atoms/SelectTag';
 import ErrorMessage from '../atoms/ErrorMessage';
 import Spinner from '../atoms/Spinner';
-import validation_article from '/util/func/Validation_article';
+import validation_article from '/util/func/validation/validation_article';
 
 /* Todo List
     1. 추천아티클 이미 선택된 option 기능

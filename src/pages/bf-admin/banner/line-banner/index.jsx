@@ -12,8 +12,8 @@ import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import Spinner from '/src/components/atoms/Spinner';
 import filter_emptyValue from '/util/func/filter_emptyValue';
 import { SketchPicker } from 'react-color';
-import { validate } from '/util/func/validation_lineBanner';
-import { valid_hasFormErrors } from '/util/func/validationPackage';
+import { validate } from '/util/func/validation/validation_lineBanner';
+import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
 import { getData, postObjData, putObjData } from '/api/reqData';
 import PreviewInnerHTML from '/src/components/atoms/PreviewInnerHTML';
 

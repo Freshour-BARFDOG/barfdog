@@ -14,10 +14,10 @@ import axios from "axios";
 import DaumPostcode from "react-daum-postcode";
 import { useRouter } from 'next/router';
 import MetaTitle from "/src/components/atoms/MetaTitle";
-import {validate} from "/util/func/validation_signup";
+import {validate} from "/util/func/validation/validation_signup";
 import {
   valid_policyCheckbox
-} from '/util/func/validationPackage';
+} from '/util/func/validation/validationPackage';
 
 
 

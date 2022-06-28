@@ -15,7 +15,7 @@ import Wrapper from '/src/components/common/Wrapper';
 import filter_emptyValue from '/util/func/filter_emptyValue';
 import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 import ErrorMessage from "/src/components/atoms/ErrorMessage";
-import {validate} from "/util/func/validation_userLogin";
+import {validate} from "/util/func/validation/validation_userLogin";
 import PureCheckbox from "/src/components/atoms/PureCheckbox";
 
 

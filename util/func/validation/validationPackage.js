@@ -1,5 +1,5 @@
 import axios from 'axios';
-import checkCharactorSamenessAndContinuity from './checkCharactorSamenessAndContinuity';
+import checkCharactorSamenessAndContinuity from '../checkCharactorSamenessAndContinuity';
 
 
 export const valid_isEmpty = (value) => {

@@ -10,10 +10,10 @@ import PreviewImage from "/src/components/atoms/PreviewImage";
 import ErrorMessage from "/src/components/atoms/ErrorMessage";
 import Fake_input from "/src/components/atoms/fake_input";
 import CustomRadio from "/src/components/admin/form/CustomRadio";
-import {validate} from "/util/func/validation_mypageBanner";
+import {validate} from "/util/func/validation/validation_mypageBanner";
 import {getData, postObjData} from "/api/reqData";
 import Spinner from "/src/components/atoms/Spinner";
-import {valid_hasFormErrors} from "/util/func/validationPackage";
+import {valid_hasFormErrors} from "/util/func/validation/validationPackage";
 import Tooltip from "/src/components/atoms/Tooltip";
 
 
