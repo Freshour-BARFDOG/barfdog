@@ -10,14 +10,13 @@ import PreviewImage from '/src/components/atoms/PreviewImage';
 import SelectTag from '/src/components/atoms/SelectTag';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import rem from '/util/func/rem';
-import {postFileUpload, postObjData} from '/api/reqData';
+import { postFileUpload, postObjData } from '/api/reqData';
 import Spinner from '/src/components/atoms/Spinner';
 import { validate } from '/util/func/validation_blog';
 import { valid_hasFormErrors } from '/util/func/validationPackage';
-import Modal_global_alert from "/src/components/modal/Modal_global_alert";
-import {useModalContext} from "/store/modal-context";
-import CustomRadio from "/src/components/admin/form/CustomRadio";
-
+import Modal_global_alert from '/src/components/modal/Modal_global_alert';
+import { useModalContext } from '/store/modal-context';
+import CustomRadio from '/src/components/admin/form/CustomRadio';
 
 const initialFormValues = {
   title: '',
@@ -27,7 +26,6 @@ const initialFormValues = {
   blogImageIdList: [],
   status: 'LEAKED',
 };
-
 
 const CreateBlogPage = () => {
   const blogDetailImageUploadApiURL = '/api/admin/blogs/image/upload';
@@ -42,8 +40,7 @@ const CreateBlogPage = () => {
   const [thumbFile, setThumbFile] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-
-  console.log(formValues)
+  console.log(formValues);
   //  INIT QUILL EDITOR
   useEffect(() => {
     if (document) {
@@ -70,15 +67,12 @@ const CreateBlogPage = () => {
     }
   };
 
-
-
   const imageFileChangeHandler = async (e) => {
     // - 파일이 존재하지 않는 경우 -> 삭제 API는 따로 없음
     // - server에서 일정시간마다 찌꺼기 file을 삭제하는 처리하는 방식으로 구현됨
     const thisInput = e.currentTarget;
     const file = thisInput.files[0];
     const filename = file ? file.name : '';
-
 
     if (!file) {
       setFormValues((prevState) => ({
@@ -96,8 +90,6 @@ const CreateBlogPage = () => {
       });
       return;
     }
-
-
 
     try {
       setIsLoading((prevState) => ({
@@ -133,12 +125,9 @@ const CreateBlogPage = () => {
     }));
   };
 
-
-
-
   const onSubmit = async (e) => {
     e.preventDefault();
-    if(isSubmitted)return; // ! IMPORTANT : create Event후, 사용자가 enter를 쳤을 경우, 똑같은 요청이 전송되지 않게 하기 위해서 필요함.
+    if (isSubmitted) return; // ! IMPORTANT : create Event후, 사용자가 enter를 쳤을 경우, 똑같은 요청이 전송되지 않게 하기 위해서 필요함.
 
     const errObj = validate(formValues);
     setFormErrors(errObj);
@@ -151,10 +140,10 @@ const CreateBlogPage = () => {
       if (isPassed) {
         const objData = formValues;
         const res = await postObjData('api/admin/blogs', objData);
-        if(res.isDone){
+        if (res.isDone) {
           onShowModalHandler('블로그가 생성되었습니다.');
           setIsSubmitted(true);
-        }else {
+        } else {
           alert(res.error, '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.');
         }
       }
@@ -173,17 +162,14 @@ const CreateBlogPage = () => {
     }
   };
 
-
-  const onShowModalHandler = (message)=>{
+  const onShowModalHandler = (message) => {
     mct.alertShow();
     setModalMessage(message);
-
-  }
-  const onGlobalModalCallback = ()=>{
+  };
+  const onGlobalModalCallback = () => {
     mct.alertHide();
     router.push('/bf-admin/community/blog');
-  }
-
+  };
 
   return (
     <>
@@ -193,13 +179,7 @@ const CreateBlogPage = () => {
           <div className="title_main">
             <h1>블로그 생성</h1>
           </div>
-          <form
-            action="/"
-            className="cont"
-            encType="multipart/form-data"
-            method="post"
-
-          >
+          <form action="/" className="cont" encType="multipart/form-data" method="post">
             <div className="cont_body">
               <div className="cont_divider">
                 <div className="input_row">
@@ -330,7 +310,7 @@ const CreateBlogPage = () => {
                     <CustomRadio
                       setValue={setFormValues}
                       name="status"
-                      idList={['LEAKED!!', 'HIDDEN']}
+                      idList={['LEAKED', 'HIDDEN']}
                       labelList={['노출', '숨김']}
                     />
                   </div>
@@ -348,20 +328,24 @@ const CreateBlogPage = () => {
                 >
                   취소
                 </button>
-                <button type="button" id="btn-create" className="admin_btn confirm_l solid"            onClick={onSubmit}>
+                <button
+                  type="button"
+                  id="btn-create"
+                  className="admin_btn confirm_l solid"
+                  onClick={onSubmit}
+                >
                   {isLoading.submit ? (
-                    <Spinner
-                      style={{ color: '#fff', width: '15', height: '15' }}
-                      speed={0.6}
-                    />
-                  ) : '등록'}
+                    <Spinner style={{ color: '#fff', width: '15', height: '15' }} speed={0.6} />
+                  ) : (
+                    '등록'
+                  )}
                 </button>
               </div>
             </div>
           </form>
         </AdminContentWrapper>
       </AdminLayout>
-      <Modal_global_alert message={modalMessage} onClick={onGlobalModalCallback} background/>
+      <Modal_global_alert message={modalMessage} onClick={onGlobalModalCallback} background />
     </>
   );
 };

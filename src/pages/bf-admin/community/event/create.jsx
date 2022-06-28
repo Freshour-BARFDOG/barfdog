@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import {useModalContext} from "/store/modal-context";
+import { useModalContext } from '/store/modal-context';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
@@ -13,12 +13,8 @@ import { valid_hasFormErrors } from '/util/func/validationPackage';
 import CustomRadio from '/src/components/admin/form/CustomRadio';
 import Spinner from '/src/components/atoms/Spinner';
 import EventDetailImage from './EventDetailImage';
-import Modal_global_alert from "/src/components/modal/Modal_global_alert";
+import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import { postFileUpload, postObjData } from '/api/reqData';
-
-
-
-
 
 const initialFormValues = {
   status: 'LEAKED',
@@ -28,7 +24,9 @@ const initialFormValues = {
 };
 
 const CreateEventPage = () => {
-
+  const postFormValuesApiUrl = `/api/admin/events`;
+  const postDetailImageFileApiUrl = 'api/admin/events/image';
+  const postThumbFileApiUrl = 'api/admin/events/thumbnail';
   const router = useRouter();
   const mct = useModalContext();
   const [modalMessage, setModalMessage] = useState('');
@@ -37,7 +35,6 @@ const CreateEventPage = () => {
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
-
 
   const onInputChangeHandler = (e) => {
     const { id, value } = e.currentTarget;
@@ -48,7 +45,6 @@ const CreateEventPage = () => {
   };
 
   const thumbFileChangeHandler = async (e) => {
-    const postApiUrl = 'api/admin/events/thumbnail';
     // - 파일이 존재하지 않는 경우 -> 삭제 API는 따로 없음
     // - server에서 일정시간마다 찌꺼기 file을 삭제하는 처리하는 방식으로 구현됨
     const thisInput = e.currentTarget;
@@ -79,12 +75,11 @@ const CreateEventPage = () => {
       }));
       const formData = new FormData();
       formData.append('file', file);
-      // const response = await postFileUpload(postApiUrl, formData);
-      const response = {
-        // ! TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST
-        data: { id: Math.floor(Math.random() * 100)},
-        status: 200,
-      }; // ! TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST
+      const response = await postFileUpload(postThumbFileApiUrl, formData);
+      // const response = { //TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST
+      //   data: { id: Math.floor(Math.random() * 100)},
+      //   status: 200,
+      // };
 
       const imageId = response.data.id;
       const isFailed = response.status !== 200 && response.status !== 201;
@@ -109,15 +104,11 @@ const CreateEventPage = () => {
       ...prevState,
       thumb: false,
     }));
-  };;
-
-
+  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const PostFormValuesApiURL = `/api/admin/event`;
     console.log(formValues);
-
     // ! IMPORTANT : create Event후, 사용자가 enter를 쳤을 경우, 똑같은 요청이 전송되지 않게 하기 위해서 필요함.
     if (isSubmitted) return;
 
@@ -131,13 +122,14 @@ const CreateEventPage = () => {
       }));
       if (isPassed) {
         const objData = formValues;
-        // const res = await postObjData(PostFormValuesApiURL, objData);
-        const res = { // ! TEST
-          isDone : true,
-          error: ''
-        }
+        const res = await postObjData(postFormValuesApiUrl, objData);
+        console.log(res);
+        // const res = { // TESTTESTTESTTESTTESTTESTTESTTESTTEST
+        //   isDone : true,
+        //   error: ''
+        // }
         if (res.isDone) {
-          onShowModalHandler('블로그가 생성되었습니다.');
+          onShowModalHandler('이벤트가 생성되었습니다.');
           setIsSubmitted(true);
         } else {
           alert(res.error, '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.');
@@ -159,16 +151,14 @@ const CreateEventPage = () => {
     }
   };
 
-
-  const onShowModalHandler = (message)=>{
+  const onShowModalHandler = (message) => {
     mct.alertShow();
     setModalMessage(message);
-
-  }
-  const onGlobalModalCallback = ()=>{
+  };
+  const onGlobalModalCallback = () => {
     mct.alertHide();
     router.push('/bf-admin/community/event');
-  }
+  };
   return (
     <>
       <MetaTitle title="이벤트 생성" admin={true} />
@@ -202,7 +192,7 @@ const CreateEventPage = () => {
               </div>
               {/* cont_divider */}
               <div className="cont_divider">
-                <div className="input_row upload_image">
+                <div className="input_row upload_image multipleLines">
                   <div className="title_section">
                     <p className="title">썸네일</p>
                   </div>
@@ -256,7 +246,13 @@ const CreateEventPage = () => {
                   <div className="title_section">
                     <p className="title">상세설명</p>
                   </div>
-                  <EventDetailImage id={'eventImageRequestDtoList'} setFormValues={setFormValues} formErrors={formErrors} setFormErrors={setFormErrors}/>
+                  <EventDetailImage
+                    id={'eventImageRequestDtoList'}
+                    setFormValues={setFormValues}
+                    formErrors={formErrors}
+                    setFormErrors={setFormErrors}
+                    apiUrl={postDetailImageFileApiUrl}
+                  />
                 </div>
               </div>
               {/* cont_divider */}
@@ -270,7 +266,9 @@ const CreateEventPage = () => {
                       setValue={setFormValues}
                       name="status"
                       idList={['LEAKED', 'HIDDEN']}
-                      labelList={['노출', '숨김']} initIndex={0}/>
+                      labelList={['노출', '숨김']}
+                      initIndex={0}
+                    />
                   </div>
                 </div>
               </div>
@@ -293,18 +291,17 @@ const CreateEventPage = () => {
                   onClick={onSubmit}
                 >
                   {isLoading.submit ? (
-                    <Spinner
-                      style={{ color: '#fff', width: '15', height: '15' }}
-                      speed={0.6}
-                    />
-                  ) : '등록'}
+                    <Spinner style={{ color: '#fff', width: '15', height: '15' }} speed={0.6} />
+                  ) : (
+                    '등록'
+                  )}
                 </button>
               </div>
             </div>
           </form>
         </AdminContentWrapper>
       </AdminLayout>
-      <Modal_global_alert message={modalMessage} onClick={onGlobalModalCallback} background/>
+      <Modal_global_alert message={modalMessage} onClick={onGlobalModalCallback} background />
     </>
   );
 };

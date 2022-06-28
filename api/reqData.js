@@ -13,6 +13,7 @@
 
 import axios from "axios";
 import axiosConfig from './axios.config';
+import {useRouter} from "next/router";
 
 
 
@@ -32,6 +33,21 @@ export const getData = async (url, callback) => {
     })
     .catch((err) => {
       console.error('ERROR: ', err.response);
+      const errorObj = err.response;
+      const status = errorObj.status;
+      if(status === 401){
+        const EXPIRED_TOKEN = errorObj.reason === "EXPIRED_TOKEN";
+        const UNAUTHORIZED = errorObj.reason === "UNAUTHORIZED";
+        console.log(EXPIRED_TOKEN)
+        if(EXPIRED_TOKEN){
+          alert('로그인 토큰이 만료되었습니다. 다시 로그인해주세요.');
+        }
+        console.error("errorType > EXPIRED_TOKEN : ", EXPIRED_TOKEN);
+        console.error("errorType > UNAUTHORIZED : ", UNAUTHORIZED);
+      }else if (status === 403) {
+        const FORBIDDEN = errorObj.reason === "FORBIDDEN";
+        console.error("errorType > FORBIDDEN : ", FORBIDDEN);
+      }
       const errorMessage =  err.response?.data.error || '데이터를 불러오는데 실패했습니다.'
       alert(errorMessage);
       return err;
@@ -100,19 +116,23 @@ export const deleteData = async (url) => {
 export const postObjData = async (url, data, contType) => {
   const result = {
     isDone: false,
-    error: ''
+    error: '',
+    data: null,
   }
+
   const response = await axios
     .post(url, data, axiosConfig(contType))
     .then((res) => {
       console.log(res);
+      result.data = res;
       return res.status === 200 || res.status === 201;
     })
     .catch((err) => {
-      console.log('ERROR내용: ',err);
-      const errStatus = err.response?.status >= 400;
-      const errorMessage = err.response?.data.error;
-      result.error = errorMessage || '서버와 통신오류가 발생했습니다.'
+      const error = err.response;
+      console.log('ERROR내용: ',err.response);
+      const errStatus = error?.status >= 400;
+      let errorMessage = error?.data.error ||(error.data.reason === 'EXPIRED_TOKEN' && '관리자 로그인 토큰이 만료되었습니다.');
+      result.error = errorMessage || '서버와 통신오류가 발생했습니다.';
       return !errStatus;
     });
 
@@ -126,12 +146,14 @@ export const postObjData = async (url, data, contType) => {
 export const putObjData = async (url, data, contType) => {
   const result = {
     isDone: false,
-    error: ''
+    error: '',
+    data: null,
   }
   const response = await axios
     .put(url, data, axiosConfig(contType))
     .then((res) => {
       console.log(res);
+      result.data = res;
       return res.status === 200 || res.status === 201;
     })
     .catch((err) => {
@@ -151,6 +173,7 @@ export const putObjData = async (url, data, contType) => {
 
 
 export const postFileUpload = async (url, formData) => {
+  console.log(url, formData)
   const response = await axios
     .post(url, formData, axiosConfig("multipart/fomdata"))
     .then((res) => {

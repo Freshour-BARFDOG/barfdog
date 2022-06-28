@@ -5,7 +5,6 @@ import { useRouter } from 'next/router';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
-import InputRadio_status from '/src/components/admin/form/InputRadioPackage';
 import Fake_input from '/src/components/atoms/fake_input';
 import PreviewImage from '/src/components/atoms/PreviewImage';
 import SelectTag from '/src/components/atoms/SelectTag';
@@ -17,6 +16,7 @@ import { validate } from '/util/func/validation_blog';
 import { valid_hasFormErrors } from '/util/func/validationPackage';
 import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 import { useModalContext } from "/store/modal-context";
+import CustomRadio from "/src/components/admin/form/CustomRadio";
 
 
 
@@ -374,10 +374,12 @@ export default function UpdateBlogPage () {
                     <p className="title">노출여부</p>
                   </div>
                   <div className="inp_section">
-                    <InputRadio_status
+                    <CustomRadio
+                      setValue={setFormValues}
                       name="status"
-                      exposedStatus={formValues.status}
-                      onRadioButtonHandler={onRadioButtonHandler}
+                      idList={['LEAKED', 'HIDDEN']}
+                      labelList={['노출', '숨김']}
+                      value={formValues.status}
                     />
                   </div>
                 </div>

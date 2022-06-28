@@ -7,15 +7,17 @@ import AdminBtn_moveToPage from "@src/components/atoms/AdminBtn_moveToPage";
 import AmdinErrorMessage from "@src/components/atoms/AmdinErrorMessage";
 import Pagination from "@src/components/atoms/Pagination";
 import EventList from "./EventList";
+import PaginationWithAPI from "/src/components/atoms/PaginationWithAPI";
 
 
 
 
 
-const TEST_ITEM = [1, 2, 3];
 
 function EventNoticePage() {
-  const [itemList, setItemList] = useState(TEST_ITEM);
+  const getListApiUrl = '/api/admin/events';
+  const [itemList, setItemList] = useState([]);
+  console.log(itemList);
   return (
     <>
       <MetaTitle title="이벤트 관리" admin={true} />
@@ -52,11 +54,7 @@ function EventNoticePage() {
               </div>
             </div>
             <div className={s["pagination-section"]}>
-              <Pagination
-                itemCountPerGroup={10}
-                itemTotalCount={100}
-                className={"square"} 
-              />
+              <PaginationWithAPI apiURL={getListApiUrl} size={10} theme={'square'} setItemList={setItemList} queryItemList={'queryEventsAdminDtoList'}/>
             </div>
           </div>
         </AdminContentWrapper>

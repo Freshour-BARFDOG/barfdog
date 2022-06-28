@@ -22,7 +22,7 @@ const SelectTag = ({ name, id, onChange, options = [], initialValue, style, ...p
         id={id || name}
         onChange={onChangeHandler}
         style={style}
-        value={initialValue} /* IMPORTANT: to set Initial Value */
+        value={initialValue || ''} /* IMPORTANT: to set Initial Value */
         {...props}
       >
         {options.map((option, i) => {
