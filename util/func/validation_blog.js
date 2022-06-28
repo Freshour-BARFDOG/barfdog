@@ -1,7 +1,7 @@
 import React from 'react';
-import {valid_isEmpty, valid_isEmptyArray,} from "./validationPackage";
+import {valid_isEmpty, valid_isEmptyArray, valid_isEmptyFile,} from "./validationPackage";
 
-export const validate = (obj) => {
+export const validate = (obj, fileObj) => {
   let errors = {};
 
   const keys = Object.keys(obj);
@@ -28,6 +28,9 @@ export const validate = (obj) => {
       //   break;
     }
   }
+
+  const thumbnailKey = 'thumbnailId'
+  errors[thumbnailKey] = valid_isEmptyFile(fileObj, 'thumbnailUrl');
   console.log('Valid Result (formValues) : ', errors);
   return errors;
 };

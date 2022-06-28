@@ -35,7 +35,6 @@ export const valid_isEmptyFile = (obj, substituteKey ) => {
     } else if(key === 'file' && !val){
       error = '항목이 비었습니다.';
     }
-
   }
 
   return error;
