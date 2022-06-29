@@ -21,35 +21,40 @@ const Pagination = ({
   const [curPage, setCurPage] = useState(pageFromQuery);
 
   useEffect(() => {
-    if(setIsLoading && typeof setIsLoading === 'function'){
-      setIsLoading(prevState => ({
-        ...prevState,
-        fetching: true
-      }))
-    }
 
     (async () => {
 
-      const calcedPageIndex = (curPage - 1).toString();
-      const res = await getData(`${apiURL}?page=${calcedPageIndex}&size=${size}`);
-      const pageData = res.data?.page;
-      console.log(res);
-      const noItems = pageData?.totalElements === 0;
-      if (noItems) return;
-      const newPageInfo = {
-        totalPages: pageData.totalPages,
-        size: pageData.size,
-        totalItems: pageData.totalElements,
-        currentPageIndex: pageData.number,
-        newItemList: res.data._embedded[queryItemList] || {},
-        newPageNumber: pageData.number + 1,
-      };
-      setPageInfo(newPageInfo);
-      setItemList(newPageInfo.newItemList);
-      await router.push({
-        search: `?page=${newPageInfo.newPageNumber}`,
-      });
+      try {
+        if(setIsLoading && typeof setIsLoading === 'function'){
+          setIsLoading(prevState => ({
+            ...prevState,
+            fetching: true
+          }))
+        }
 
+        const calcedPageIndex = (curPage - 1).toString();
+        const res = await getData(`${apiURL}?page=${calcedPageIndex}&size=${size}`);
+        const pageData = res.data?.page;
+        console.log(res);
+        const hasItems = pageData?.totalElements !== 0;
+        if (hasItems) {
+          const newPageInfo = {
+            totalPages: pageData.totalPages,
+            size: pageData.size,
+            totalItems: pageData.totalElements,
+            currentPageIndex: pageData.number,
+            newItemList: res.data._embedded[queryItemList] || {},
+            newPageNumber: pageData.number + 1,
+          };
+          setPageInfo(newPageInfo);
+          setItemList(newPageInfo.newItemList);
+          await router.push({
+            search: `?page=${newPageInfo.newPageNumber}`,
+          });
+        }
+      } catch (err) {
+          console.error(err)
+      }
       if(setIsLoading && typeof setIsLoading === 'function'){
         setIsLoading(prevState => ({
           ...prevState,

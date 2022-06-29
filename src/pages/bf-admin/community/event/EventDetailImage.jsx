@@ -224,7 +224,6 @@ const uploadImage = async (file, setFormValues, id, setFormErrors, postApiUrl, l
   //   data: { id: Math.floor(Math.random() * 100), leakOrder: Math.floor(Math.random() * 100) },
   //   status: 200,
   // };
-  console.log(response);
 
   const imageId = response.data.id;
   const imageUrl = response.data.url;
