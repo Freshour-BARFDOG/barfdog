@@ -17,6 +17,8 @@ function BlogIndexPage() {
   const [isLoading, setIsLoading] = useState({});
   const [activeModal, setActiveModal] = useState(false);
 
+  console.log(isLoading)
+
   const onShowRecommendArticleModal = async (returnVal) => {
     setActiveModal(returnVal);
   };
