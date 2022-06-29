@@ -18,6 +18,7 @@ import { getData, postObjData, putObjData } from '/api/reqData';
 import PreviewInnerHTML from '/src/components/atoms/PreviewInnerHTML';
 
 
+
 const initialValues = {
   name: '',
   status: 'LEAKED',
@@ -27,7 +28,8 @@ const initialValues = {
   mobileLinkUrl: '',
 };
 
-function LineBanner() {
+function LineBanner(props) {
+  console.log(props)
   const router = useRouter();
   const { id } = router.query;
   const getFormValuesApiUrl = `/api/banners/top`;
@@ -462,3 +464,24 @@ function LineBanner() {
 }
 
 export default LineBanner;
+
+
+//
+//
+// export async function getStaticProps(context) {
+//
+//   const data = context;
+//
+//   // if (!params) {
+//   //   return {
+//   //     redirect: { destination: "/no-data" },
+//   //   };
+//   // }
+//
+//
+//   return {
+//     props: {
+//       id: data,
+//     },
+//   };
+// }
