@@ -1,26 +1,37 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import s from './customRadio.module.scss';
+// 어떤 조건이면.... true냐 false냐만........토해내도록 한다.....
 
-const CustomRadio = ({ setValue, name, idList, labelList, initIndex, value }) => {
-  const initialValue = value || idList[initIndex || 0];
+const CustomRadio = ({
+  setValue,
+  value,
+  name,
+  idList,
+  labelList,
+  initIndex,
+}) => {
 
+
+  const initialValue = value || idList[initIndex || 0] ;
   const [selectedRadio, setSelectedRadio] = useState(initialValue);
 
   useEffect(() => {
     setSelectedRadio(initialValue);
   }, [initialValue]);
 
-
   const onChangeHandler = (e) => {
     const { id } = e.currentTarget;
-    setSelectedRadio(id);
+    const isNameIncluded = id.indexOf(name) >= 0
+    const filteredId = isNameIncluded ? id.replace(name,'') : id;
+    setSelectedRadio(filteredId);
+    if (setValue && typeof setValue === 'function') {
+      setValue((prevState) => ({
+        ...prevState,
+        [name]: filteredId,
+      }));
+    }
 
-    setValue((prevState) => ({
-      ...prevState,
-      [name]: id,
-    }));
   };
-
 
   if (!idList.length || !idList) return;
 
@@ -28,15 +39,15 @@ const CustomRadio = ({ setValue, name, idList, labelList, initIndex, value }) =>
     <>
       <div className={`${s['inp-wrap']} ${s['radio']}`}>
         {idList.map((id, index) => {
+          const convertedId = `${name}${id}`;
           return (
-            <label key={`radio-${name}-${index}`} htmlFor={id}>
+            <label key={convertedId} htmlFor={convertedId}>
               <input
-                id={id}
+                id={convertedId}
                 name={name}
                 type="radio"
-                // value={id}
-                checked={selectedRadio === id} // _ important
                 onChange={onChangeHandler}
+                checked={selectedRadio === id} // ! important: idList의 id와 selectedRadio를 매칭시킨다.
               />
               {labelList[index]}
             </label>
@@ -48,3 +59,4 @@ const CustomRadio = ({ setValue, name, idList, labelList, initIndex, value }) =>
 };
 
 export default CustomRadio;
+

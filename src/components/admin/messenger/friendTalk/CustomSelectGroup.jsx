@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import CustomSelect from "/src/components/admin/form/CustomSelect";
+import CustomSelectForTwoSelects from "/src/components/admin/form/CustomSelectForTwoSelects";
 
 
 
@@ -29,14 +29,14 @@ const CustomSelectGroup = ({setFormValues, groupOptions}) => {
   // console.log(options)
 
   return (<>
-    <CustomSelect
+    <CustomSelectForTwoSelects
       name={startName}
       id={startName}
       options={options}
       onChange={setSelectedGrade}
     />
     <span style={{margin: '0 10px'}}>~</span>
-    <CustomSelect
+    <CustomSelectForTwoSelects
       name={endName}
       id={endName}
       options={gradeEndList}

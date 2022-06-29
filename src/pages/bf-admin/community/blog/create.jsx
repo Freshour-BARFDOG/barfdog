@@ -33,11 +33,11 @@ const CreateBlogPage = () => {
   const mct = useModalContext();
   const [modalMessage, setModalMessage] = useState('');
   const [isLoading, setIsLoading] = useState({});
-  const [QuillEditor, setQuillEditor] = useState(null);
+  const [thumbFile, setThumbFile] = useState({});
   const [originImageIdList, setOriginImageIdList] = useState([]);
+  const [QuillEditor, setQuillEditor] = useState(null);
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState({});
-  const [thumbFile, setThumbFile] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   // console.log(formValues);

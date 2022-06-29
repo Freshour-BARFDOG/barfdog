@@ -40,8 +40,7 @@ export default function EventDetailImage({
         url: data.url,
       }));
       setFileList(initFileList);
-    }
-    1;
+    };
   }, [originImageDatas]);
 
   useEffect(() => {
