@@ -1,8 +1,14 @@
 import { useRouter } from 'next/router';
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { authAction } from '@store/auth-slice';
-import useUserData from "@util/hook/useUserData";
+import { authAction } from '/store/auth-slice';
+import useUserData from "/util/hook/useUserData";
+
+
+const FullScreenLoading = () => {
+  return <p>풀스크린 로딩컴포넌트: 추후 추가예정</p>
+}
+
 
 
 
@@ -24,10 +30,6 @@ import useUserData from "@util/hook/useUserData";
    useEffect(() => {
 
 
-     // ADMIN PATH
-     const ADMIN_BASE_PATH_KEY = "bf-admin";
-     const ADMIN_PUBLIC_PATH = ['/index', '/login', '/dashboard'];
-     const isAdminPath = router.asPath.split("/")[1] === ADMIN_BASE_PATH_KEY;
 
 
      // USER PATH
@@ -38,21 +40,27 @@ import useUserData from "@util/hook/useUserData";
          return nonMemberPath = true
        }
      });
+     setIsAuth(!!userData);
 
-     setIsAuth(!!userData)
-
-    if (!isAuth && nonMemberPath ) {
-      alert('로그인이 필요한 서비스입니다.')
-      console.error('Redir: User FOBBIDEN PAGE');
-      router.push('/account/login')
-      // 로그인상태확인
-      // 포비든 페이지확인
-      // 안내문을 띄우고, 로그인페이지로 이동시킨다.
+    if ( nonMemberPath ) {
+      dispatch(authAction.userRestoreAuthState());
+      if(!isAuth ){
+        // alert('로그인이 필요한 서비스입니다.');
+        // router.push('/account/login');
+        console.error('Redir: User FOBBIDEN PAGE');
+        return;
+      }
     }
 
 
-    if (isAdminPath){ // TEST
-      dispatch(authAction.adminRestoreAuthState()); // 토큰 다시 발급
+
+
+     // ADMIN PATH
+     const ADMIN_BASE_PATH_KEY = "bf-admin";
+     const ADMIN_PUBLIC_PATH = ['/index', '/login', '/dashboard'];
+     const isAdminPath = router.asPath.split("/")[1] === ADMIN_BASE_PATH_KEY;
+     if (isAdminPath){ // TEST
+      dispatch(authAction.adminRestoreAuthState());
 
       let isPublicAdminPath;
       ADMIN_PUBLIC_PATH.map(path=>{
@@ -68,9 +76,7 @@ import useUserData from "@util/hook/useUserData";
    }, [curPath, dispatch, router, userData, isAuth]);
 
 
-   const FullScreenLoading = () => {
-     return <p>풀스크린 로딩컴포넌트: 추후 추가예정</p>
-   }
+
 
    return (
      <>

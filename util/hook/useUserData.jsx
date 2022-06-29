@@ -5,15 +5,18 @@ import { axiosUserConfig } from '/api/axios.config';
 
 
 export default function useUserData() {
-  const [userData, setUserData] = useState();
+  const [userData, setUserData] = useState(null);
   const auth = useSelector((state) => state.auth);
 
+
   useEffect(() => {
+    if(!auth.isAuth || auth.isAdmin)return;
     (async () => {
+
       const res = await axios
         .get('/api/members', axiosUserConfig())
         .catch((err) => {
-          console.log(err);
+          console.log(err.response);
       });
       if (res?.status !== 200) return;
       const data = {
@@ -32,7 +35,9 @@ export default function useUserData() {
       };
       setUserData(data);
     })();
-  }, [auth]);
+  }, []);
+
+
 
   return userData;
 }

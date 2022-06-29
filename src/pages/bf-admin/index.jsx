@@ -10,7 +10,7 @@ function AdminIndex() {
   const auth = useSelector(state=>state.auth);
   const isAuth = auth.token ? true : false;
   useEffect(() => {
-    console.log(auth);
+    // console.log(auth);
     if (isAuth) {
       router.push('/bf-admin/dashboard');
     }

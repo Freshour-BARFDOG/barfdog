@@ -1,123 +1,96 @@
-import React, { useEffect, useRef, useState, useMemo } from "react";
-import dynamic from "next/dynamic";
-import "react-quill/dist/quill.snow.css";
-import { postFileUpload } from "@api/reqData";
-import axios from 'axios';
-import axiosConfig from '@api/axios.config';
-import { relative } from "path";
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import 'react-quill/dist/quill.snow.css';
+import { formats, toolbarOptions } from './QuillEditorSettings';
+import { postFileUpload } from '/api/reqData';
+import Spinner from 'src/components/atoms/Spinner';
+import s from './editor.module.scss';
 
+/*
+ * - Officaial Doc : https://quilljs.com/docs/api
+ * - * 이미지 고유 id: 이미지 업로드 후 , api를 통하여 부여받음
+ *   -> body(innerHTML)에 삽입
+ *   -> 부모 component에서 innerHTML의 str을 통하여 이미지 id값 추출
+ */
 
+export default function QuillEditor({
+  id,
+  imageId,
+  setFormValues,
+  imageUploadApiURL,
+  originImageIdList = [],
+  initialValue,
+  mode = 'create',
+}) {
+  /* - 모듈 추가 시, 필요
+   * const Quill = typeof window == 'object' ? require('quill') : () => false;
+   */
 
-
-const quillFormats = [
-  "header",
-  // "font",
-  "size",
-  "bold",
-  "italic",
-  "underline",
-  "strike",
-  "align",
-  "blockquote",
-  "list",
-  "bullet",
-  "indent",
-  "background",
-  "color",
-  "link",
-  "image",
-  "video",
-  "width",
-];
-
-
-
-const toolbarOptions = [
-  [{ header: [false, 6, 5, 4, 3, 2, 1] }],
-  [{ size: ["small", false, "large", "huge"] }],
-  [{ color: [] }, { background: [] }],
-  ["bold", "italic", "underline", "strike", "blockquote"],
-  [{ align: [] }],
-  [
-    { indent: "-1" },
-    { indent: "+1" },
-    { list: "ordered" },
-    { list: "bullet" },
-  ],
-  ["link", "image"],
-  ["clean"],
-];
-
-
-
-
-
-
-
-
-
-
-export default function QuillEditor({ body, handleQuillChange, setTempImageIdList, apiImageUploadURL }) {
-  console.log(apiImageUploadURL)
-  // const originImageList = []; // 서버로부터 받은 이미지리스트
-
-  // const [imageIdList, setImageIdList] = useState({
-  //   temp: originImageList,
-  //   cur: [],
-  // });
-
-  // submit : 현재 textArea에 존재하는 이미지 리스트,
-
-  const ReactQuill =
-    typeof window == "object" ? require("react-quill") : () => false;
-
-  // * ----- 추후에 모듈 추가할 때 필요 ----- * //
-  const Quill = typeof window == "object" ? require("quill") : () => false;
-  // * ----- 추후에 모듈 추가할 때 필요 ----- * //
-
+  const ReactQuill = typeof window == 'object' ? require('react-quill') : () => false;
   const quillRef = useRef();
 
-  const onBlurhandler = (e) => {
-    console.log("blur:", e);
-  };
+  if (!setFormValues || typeof setFormValues !== 'function') return;
+  const [isLoading, setIsLoading] = useState(false);
+  const [body, setBody] = useState(initialValue);
+  const [fullImageIdList, setFullImageIdList] = useState(originImageIdList);
+
+  useEffect(() => {
+    const imageIdList = analyze_ImageIdListCRUD(fullImageIdList, body, originImageIdList);
+    const isBodyEmpty = body === '<p><br></p>';
+    if (mode === 'create') {
+      setFormValues((prevState) => ({
+        ...prevState,
+        [id]: isBodyEmpty ? '' : body,
+        [imageId]: imageIdList?.add || [],
+      }));
+    } else if ('update') {
+      setFormValues((prevState) => ({
+        ...prevState,
+        [id]: isBodyEmpty ? '' : body,
+        addImageIdList: imageIdList?.add,
+        deleteImageIdList: imageIdList?.del,
+      }));
+    }
+  }, [body, fullImageIdList]);
 
   const imageHandler = () => {
-
-    const input = document.createElement("input");
-
-    if(apiImageUploadURL === 'BLOCK') return;
-    input.setAttribute("type", "file");
-    input.setAttribute("accept", "image/*");
+    if (!imageUploadApiURL) return;
+    const input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
     document.body.appendChild(input);
     input.click();
-
     input.onchange = async () => {
       const [file] = input.files;
-
-      const apiURL = apiImageUploadURL || `/api/admin/blogImage/upload`;
-
       const formData = new FormData();
-      formData.append("file", file);
+      formData.append('file', file);
+      try {
+        setIsLoading(true);
+        const response = await postFileUpload(imageUploadApiURL, formData);
+        if (response.status !== 200 && response.status !== 201) return;
+        const imageData = response.data;
 
-      const imageData = await postFileUpload(apiURL, formData);
-      const range = quillRef.current.getEditorSelection();
-      const id = imageData.data.id.toString();
-      const url = imageData.data.url;
-      // console.log(id);
+        const id = imageData.id.toString();
+        const url = imageData.url;
 
-      quillRef.current.getEditor();
-      quillRef.current
-        .getEditor()
-        .insertEmbed(range?.index, "image", url + `#__id=${id}`);
-      quillRef.current.getEditor().setSelection((range ? range.index : 0) + 1);
-      document.body.querySelector(":scope > input").remove();
+        const editor = quillRef.current;
+        const range = editor.getEditorSelection();
+        const imageIndex = range?.index === 0 ? '0' : range?.index;
 
-      setTempImageIdList((prevList) => [...prevList, id]);
-      // setImageIdList((prevList) => ({
-      //   temp: [...prevList.temp, id],
-      //   cur: [...prevList.cur, id],
-      // }));
+        editor.getEditor().insertEmbed(imageIndex, 'image', url + `#id=${id}#`);
+        editor.getEditor().setSelection((range ? range.index : 0) + 1);
+        document.body.querySelector(':scope > input').remove();
+        if (!imageId) return;
+        setFullImageIdList((prevState) => [...prevState, id]);
+      } catch (err) {
+        // console.log(err);
+        alert(`에러가 발생했습니다.\n${err}`);
+      }
+      setIsLoading(false);
     };
+  };
+
+  const onContentChangeHandler = (innerHTML) => {
+    setBody(innerHTML);
   };
 
   const quillModules = useMemo(
@@ -139,207 +112,111 @@ export default function QuillEditor({ body, handleQuillChange, setTempImageIdLis
       //   // quillModules: ["Resize"],
       // },
     }),
-    []
+    [],
   );
 
   return (
-    <>
+    <div className={s['editor-wrap']}>
       <ReactQuill
+        id={id}
         theme="snow"
         modules={quillModules}
-        formats={quillFormats}
-        placeholder={"내용을 입력하세요."}
+        formats={formats}
+        placeholder={'내용을 입력하세요.'}
         preserveWhitespace // 띄어쓰기 보존
-        onChange={handleQuillChange}
-        onBlur={onBlurhandler}
+        onChange={onContentChangeHandler}
+        defaultValue={initialValue}
         ref={quillRef}
       />
-    </>
+      {isLoading && (
+        <Spinner
+          className={s.spinner}
+          style={{ color: 'var(--color-main)', width: '15', height: '15' }}
+          speed={0.6}
+        />
+      )}
+    </div>
   );
 }
 
+const analyze_ImageIdListCRUD = (standardImageIdList, innerHTML = '', originImageIdList = []) => {
+  let result;
+  if (!standardImageIdList.length) return;
+  const currentImageIdList = extractImageIdList(innerHTML);
+  result = compareImageList(standardImageIdList, currentImageIdList, originImageIdList);
+  return result;
+};
+
+const extractImageIdList = (html) => {
+  let curimageIdList = [];
+
+  const queryImageTag = html.split('<img');
+  queryImageTag.filter((str) => {
+    if (str.indexOf('src') < 0) return;
+    const imgTag = str.split('>')[0];
+    const queryFileData = imgTag.split('?')[1];
+    const queryImageData = queryFileData.split('#')[1];
+    const id = queryImageData.split('=')[1];
+    if (id) {
+      curimageIdList.push(id);
+    }
+  });
+  return curimageIdList;
+};
+
+const compareImageList = (allArrBefore, curArrBefore, originArrBefore) => {
 
 
+  if (!allArrBefore.length) return console.error('There is no Image File.');
+
+  const originArr = originArrBefore.map(a=>Number(a));
+  const allArr = allArrBefore.map(a=>Number(a));
+  const curArr = curArrBefore.map(a=>Number(a));
+
+  let result = {
+    origin: originArr, // very First image List
+    all: allArr, // full image List
+    cur: curArr, // innerHTML image List
+    add: [], // new image List that have been completely uploaded in this process
+    del: [], // the image List to be deleted
+  };
+
+  for (const key in result) {
+    let arr = result[key];
+    result[key] = arr.map(a=>Number(a));
+  }
 
 
+  allArr.map((id) => {
+    const isCurArr = curArr.indexOf(id) >= 0;
+    const isOriginArr = originArr.indexOf(id) >= 0;
+    const isNew = isCurArr && !isOriginArr;
+    const isToBeDeleted = curArr.indexOf(id) < 0;
+
+    isNew && result.add.push(id);
+    isToBeDeleted && result.del.push(id);
+  });
 
 
+  return result;
+};
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// * ------------------------------------------------------- * //
-// * ------------------------------------------------------- * //
-// * ------------------------------------------------------- * //
-// * ------------------------------------------------------- * //
-// * ------------------------------------------------------- * //
-
-
-
-
-
-/*  
-* Officaial Doc : https://quilljs.com/docs/api
- */
-
-
-
-
-
-
-
-// // const QuillNoSSRWrapper = dynamic(
-// //   async () => {
-// //     const { default: RQ} = await import("react-quill");
-// //     return function comp({ forwardedRef, ...props }) {
-// //       return <RQ ref={forwardedRef} {...props} />;
-// //     };
-// //   },
-// //   { ssr: false }
-// // );
-
-
-
-
-// const QuillEditor = ({ handleQuillChange }) => {
-//   const quillRef = useRef();
-//   const [enableEditor, setEnableEditor] = useState(false);
-//   const [isError, setIsError] = useState(false);
-  
-//   useEffect(() => {
-//     setEnableEditor(true);
-//     // loadQuill();
-//   }, [setEnableEditor]);
-
-//   const onBlurhandler = (e) => {
-//     console.log("blur:", e);
-//   };
-
-//   // const onChangehandler = (innerHTML) => {
-//   //   handleQuillChange(innerHTML);
-//   // };
-
-//   const imageHandler = (e) => {
-//     const input = document.createElement("input");
-
-//     input.setAttribute("type", "file");
-//     input.setAttribute("accept", "image/*");
-//     document.body.appendChild(input);
-
-//     input.click();
-
-//     input.onchange = async () => {
-//       const [file] = input.files;
-//       // const URL = `/api/admin/blogImage/upload`;
-//       // const data = {
-//       //   file: file,
-//       // };
-//       // const reponse = await postData(URL, file, null, "multipart/form-data");
-//       // console.log(reponse);
-//       // ! ------- 업로드...........여기서 에러난다.
-//       // ! ------- 업로드...........여기서 에러난다.
-//       // ! ------- 업로드...........여기서 에러난다.
-//       // ! ------- 업로드...........여기서 에러난다.
-//       // ! ------- 업로드...........여기서 에러난다.
-//       // ! ------- 업로드...........여기서 에러난다.
-//       // ! ------- 업로드...........여기서 에러난다.
-
-//       // await uploadImage(presignedURL, file);
-
-
-
-//       const range = quillRef.current.getEditorSelection();
-//       quillRef.current.getEditor();
-//       quillRef.current
-//         .getEditor()
-//         .insertEmbed(
-//           range.index,
-//           "image",
-//           "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTp9eL42GbYri0fLCk2Eszu0YtdjYyVdq3jtpGvSEQzj4L2sIf7c3To1GqPP86JVmIDnx4&usqp=CAU"
-//         );
-//       quillRef.current.getEditor().setSelection(range.index + 1);
-//       document.body.querySelector(":scope > input").remove();
-//     };
-//   };
-
-//   const quillModules = {
-//     toolbar: {
-//       container: toolbarOptions,
-//       handlers: { image: imageHandler },
-//     },
-//     history: {
-//       delay: 2000,
-//       maxStack: 500,
-//       userOnly: true,
-//     },
-//     clipboard: {
-//       matchVisual: false, // toggle to add extra line breaks when pasting HTML:
-//     },
-//     // imageResize: {
-//     //   // quillModules: ["Resize"],
-//     // },
-//   };
-
-//   return (
-//     <>
-//       {enableEditor && (
-//         <QuillNoSSRWrapper
-//           id={"quill-editor"}
-//           theme="snow"
-//           modules={quillModules}
-//           formats={quillFormats}
-//           placeholder={"내용을 입력하세요."}
-//           forwardedRef={quillRef} // dynamic import > forwardedRef props 필수
-//           preserveWhitespace // 띄어쓰기 보존import { postData } from '@api/reqData';
-//           onBlur={onBlurhandler}
-//           onChange={handleQuillChange}
-//           // value={body || ""}
-//         />
-//       )}
-//     </>
-//   );
+// * Quill > 사진사이즈 조절 모듈 추가 > 추후 업데이트 반영
+// const loadQuill = async () => {
+//   return new Promise(async (resolve, reject) => {
+//     const Quill = await require("react-quill").Quill;
+//     const ImageResize = (await require("quill-image-resize")).default;
+//     resolve({ Quill, ImageResize });
+//   })
+//     .then(({ Quill, ImageResize }) => {
+//       Quill.register("modules/ImageResize", ImageResize);
+//       console.log(Quill);
+//       return;
+//     })
+//     .then((value) => {
+//       setEnableEditor(true);
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
 // };
-
-
-//  export default QuillEditor;
-
-
-
-
-
-
-
-
-  // * Quill > 사진사이즈 조절 모듈 추가 > 추후 업데이트 반영
-  // const loadQuill = async () => {
-  //   return new Promise(async (resolve, reject) => {
-  //     const Quill = await require("react-quill").Quill;
-  //     const ImageResize = (await require("quill-image-resize")).default;
-  //     resolve({ Quill, ImageResize });
-  //   })
-  //     .then(({ Quill, ImageResize }) => {
-  //       Quill.register("modules/ImageResize", ImageResize);
-  //       console.log(Quill);
-  //       return;
-  //     })
-  //     .then((value) => {
-  //       setEnableEditor(true);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };

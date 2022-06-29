@@ -1,0 +1,29 @@
+
+$browser-context: 16;
+@function rem($px, $context: $browser-context) {
+  @return #{$px / $context}rem;
+}
+
+
+#main {
+  h2.title{
+    font-size: rem(20);
+    padding-bottom: rem(15);
+    border-bottom: rem(1) solid var(--color-line-02);
+  }
+  input{text-align: right}
+  section:not(:last-child){margin-bottom: rem(20);}
+}
+
+
+
+
+.numberUnit{
+  position: absolute;
+  left: rem(12);
+  top:50%;
+  transform:translate(0,-50%);
+  font-size: rem(14);
+  color: var(--color-font-sub2);
+  pointer-events: none;
+}

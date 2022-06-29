@@ -206,7 +206,8 @@ function CreateMainBannerPage() {
       }
     };
 
-    postData('/api/banners/main', formData, axiosConfig, postCallback);
+    const response = await postData('/api/banners/main', formData, axiosConfig, postCallback);
+    console.log(response);
   };
 
   return (

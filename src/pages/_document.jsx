@@ -56,7 +56,6 @@ const CustomDocument = ()=> {
       <body>
         <Main />
       </body>
-      <div id="__modal-root"></div>
       <NextScript />
     </Html>
   );

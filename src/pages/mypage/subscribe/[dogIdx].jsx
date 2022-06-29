@@ -13,9 +13,9 @@ import Styles from "./[dogIdx].module.scss";
 
 import { slideUp , slideDown } from "/util/func/slideToggle";
 
-import Icon_Itemlabel from "@src/components/atoms/ItemLabel";
-import Icon_Checked from "@public/img/icon/icon_checked.svg";
-import rem from '@src/components/atoms/rem';
+import Icon_Itemlabel from "/src/components/atoms/ItemLabel";
+import Icon_Checked from "/public/img/icon/icon_checked.svg";
+import rem from '/util/func/rem';
 
 // -------------------------토글박스
 function ToggleBox({ title, children }) {

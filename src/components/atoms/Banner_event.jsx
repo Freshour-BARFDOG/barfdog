@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
-import rem from './rem';
+import rem from '../../../util/func/rem';
 
 // * 입력받을 내용: 배너이름 / 노출여부 / 배경색/ 글자색 / 링크주소 PC / 링크주소 Mobile
 

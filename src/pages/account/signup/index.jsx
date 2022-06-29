@@ -3,10 +3,6 @@ import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import s from './signup.module.scss';
 
-import {
-  validate,
-  valid_policyCheckbox
-} from '/util/func/signup_validation';
 
 import SignInputList from "/src/components/user_signup/SignInputList";
 import SignupPolicyList, { policy_KEYS } from "/src/components/user_signup/SignupPolicyList";
@@ -18,6 +14,10 @@ import axios from "axios";
 import DaumPostcode from "react-daum-postcode";
 import { useRouter } from 'next/router';
 import MetaTitle from "/src/components/atoms/MetaTitle";
+import {validate} from "/util/func/validation/validation_signup";
+import {
+  valid_policyCheckbox
+} from '/util/func/validation/validationPackage';
 
 
 

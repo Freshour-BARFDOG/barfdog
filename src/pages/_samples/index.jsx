@@ -4,11 +4,11 @@ import Layout from "/src/components/common/Layout";
 import Wrapper from "/src/components/common/Wrapper";
 import { slideUp, slideDown } from "/util/func/slideToggle";
 import { IoIosArrowForward } from "react-icons/io";
-import Icon_Checked from "@public/img/icon/icon_checked.svg";
-import rem from '@src/components/atoms/rem';
-import Icon_Itemlabel from "@src/components/atoms/ItemLabel";
-import Pagination from "@src/components/atoms/Pagination";
-import ScrollContainer from "@src/components/atoms/ScrollContainer";
+import Icon_Checked from "/public/img/icon/icon_checked.svg";
+import rem from '/util/func/rem';
+import Icon_Itemlabel from "/src/components/atoms/ItemLabel";
+import Pagination from "/src/components/atoms/Pagination";
+import ScrollContainer from "/src/components/atoms/ScrollContainer";
 /* -------------------- 토글박스 ------------------ */
 // * SCSS 파일 코드
 

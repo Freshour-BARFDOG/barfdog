@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from "next/image";
 import styled from "styled-components";
-import rem from './rem';
+import rem from '../../../util/func/rem';
 
 
 const Star = styled.div`

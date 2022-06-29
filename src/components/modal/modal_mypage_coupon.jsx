@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import Link from "next/link";
 import Image from "next/image";
 import zIndex from "@styles/global/zIndex.module.scss";
-import rem from "@src/components/atoms/rem";
+import rem from "/util/func/rem";
 import CloseButton from "@src/components/atoms/CloseButton";
 
 

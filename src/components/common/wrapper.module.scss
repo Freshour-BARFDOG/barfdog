@@ -15,6 +15,7 @@ $browser-context:16; // html font-size:
       width:100vw; //width: 100%; 을 수정
     }
     .row{
+      position:relative;
       padding: 0; //padding: 0 rem(0); 을 수정
     }
   }

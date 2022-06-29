@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from "styled-components";
-import rem from '../atoms/rem';
+import rem from '@util/func/rem';
 
 const Viewer = styled.li`
   border-left: 1px solid var(--color-line);

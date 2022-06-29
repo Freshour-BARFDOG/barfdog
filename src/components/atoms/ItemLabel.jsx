@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import rem from "/src/components/atoms/rem";
+import rem from "/util/func/rem";
 import { HiStar } from 'react-icons/hi'
 
 const Icon = styled.i`
@@ -28,7 +28,6 @@ const Icon_Recommend = styled.i`
     flex-direction: column;
     align-items: center;
     justify-content: flex-end;
-    font-weight: 500;
     transform-origin: center;
     position: absolute;
     font-size: ${rem(16)};

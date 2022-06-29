@@ -1,0 +1,22 @@
+$browser-context: 16;
+@function rem($px, $context: $browser-context) {
+  @return #{$px / $context}rem;
+}
+
+#main {
+  h2.title {
+    font-size: rem(18);
+    font-weight: 500;
+  }
+  input {
+    text-align: right;
+  }
+  section:not(:last-child) {
+    padding-bottom: rem(20);
+    margin-bottom: rem(40);
+    border-bottom: rem(1) solid var(--color-line-03);
+  }
+  .cont_divider{
+    input + em:not(:last-child) {margin-right:rem(40);}
+  }
+}

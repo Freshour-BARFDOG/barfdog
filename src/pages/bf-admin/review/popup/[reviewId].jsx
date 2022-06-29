@@ -6,7 +6,7 @@ import PopupWrapper from "/src/components/popup/PopupWrapper";
 import {PopupCloseButton, PopupCloseButton_typeX} from "/src/components/popup/PopupCloseButton";
 import RatingStars from "/src/components/atoms/RatingStars";
 import {ItemRecommendlabel} from "/src/components/atoms/ItemLabel";
-import rem from "/src/components/atoms/rem";
+import rem from "/util/func/rem";
 
 import {Swiper, SwiperSlide} from "swiper/react";
 import {Navigation} from "swiper";
@@ -71,7 +71,7 @@ function ReviewDetailPage() {
       setReviewStatus('승인');
       setModalMessage('리뷰가 승인되었습니다.');
       onShowModal();
-    };
+    }
   }
 
 
@@ -91,7 +91,7 @@ function ReviewDetailPage() {
       console.log(value);
       setModalMessage('리뷰가 반려되었습니다.');
       setRejectStart(false);
-    };
+    }
   }
 
   const onSelectBestReview = () => {
@@ -99,7 +99,7 @@ function ReviewDetailPage() {
       setIsBestReview(true);
       setModalMessage('선택하신 리뷰(ID:1234)가 \n베스트 리뷰로 선정되었습니다.');
       onShowModal();
-    };
+    }
   }
 
 

@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import s from "./modal_recipes.module.scss";
-import ScrollContainer from "@src/components/atoms/ScrollContainer";
-import ModalWrapper from "@src/components/modal/ModalWrapper";
+import ScrollContainer from "/src/components/atoms/ScrollContainer";
+import ModalWrapper from "/src/components/modal/ModalWrapper";
 import Image from "next/image";
-import getElemIdx from "@util/func/getElemIdx.js";
-import rem from "/src/components/atoms/rem";
+import getElemIdx from "/util/func/getElemIdx.js";
+import rem from "/util/func/rem";
 import styled from "styled-components";
 
 const indicatorAniDirection = "left"; // 이동 기준
@@ -53,7 +53,7 @@ const Modal_recipes = ({ data, selectedIndex, onHideModal, isActiveModal }) => {
       indicatorMove(initialActiveMenuIdx);
       activeMenu(initialActiveMenuIdx);
     }
-  }, [])
+  }, [activeMenu])
 
 
 
@@ -80,7 +80,7 @@ const Modal_recipes = ({ data, selectedIndex, onHideModal, isActiveModal }) => {
     // * scroll-container Height
     onScrollContainerHeightHandler();
 
-  };;
+  }
 
   const onScrollContainerHeightHandler = () => {
     const ScrollContainerRef = scrollContainerRef.current;
@@ -193,6 +193,6 @@ const Modal_recipes = ({ data, selectedIndex, onHideModal, isActiveModal }) => {
       </ModalWrapper>
     </>
   );
-};;
+}
 
 export default Modal_recipes;

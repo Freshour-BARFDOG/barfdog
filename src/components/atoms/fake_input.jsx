@@ -1,6 +1,6 @@
 import React from "react";
 import styled from 'styled-components';
-import rem from '@src/components/atoms/rem';
+import rem from '@util/func/rem';
 
 
 const FakeInput = styled.div`
@@ -9,11 +9,14 @@ const FakeInput = styled.div`
   justify-content: flex-start;
   align-items: center;
   cursor:pointer;
+  width: 100%;
 `;
 
 const FakeInputBody = styled.span`
   margin-right: ${rem(8)};
   display: flex;
+  align-content: center;
+  justify-content: center;
   cursor:pointer;
   width: ${rem(75)};
   white-space:nowrap;
@@ -27,10 +30,11 @@ const FakeInputName = styled.span`
   text-overflow: ellipsis;
 `;
 
-function Fake_input({filename}) {
+
+function Fake_input({filename, loadingIcon}) {
   return (
     <FakeInput className="fake_input">
-      <FakeInputBody className="fake_input_body admin_btn line basic_m" type="submit">파일선택</FakeInputBody>
+      <FakeInputBody className="fake_input_body admin_btn line basic_m" type="submit">{loadingIcon || '파일선택'}</FakeInputBody>
       <FakeInputName className="fake_input_filename">{filename? filename : '선택된 파일이 없습니다.'}</FakeInputName>
     </FakeInput>
   );

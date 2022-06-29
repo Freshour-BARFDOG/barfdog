@@ -10,7 +10,7 @@ import {authAction} from "/store/auth-slice";
 
 
 
-export default function Menu({ ...props }) {
+export default function MypageMenu({ ...props }) {
   const dispatch = useDispatch();
   const onLogout = ()=>{
     dispatch(authAction.logout());

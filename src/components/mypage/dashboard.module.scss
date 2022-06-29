@@ -42,7 +42,7 @@ $counterBoxWidth : rem(200);
     float:left;
     padding: 0 rem(40);
     box-sizing: border-box;
-    width: calc(100% - ($counterBoxWidth * 3));
+    width: calc(100% - (#{$counterBoxWidth} * 3));
     .user_photo{
       width:rem(60);
       height: rem(60);
@@ -126,9 +126,13 @@ $counterBoxWidth : rem(200);
 }
 
 .sendMessage{
-  button{cursor:pointer;}
+  * {
+    cursor: pointer !important;
+  }
 }
 
-.copyLink{ 
-  button{cursor:pointer}
+.copyLink{
+  * {
+    cursor: pointer !important;
+  }
 }

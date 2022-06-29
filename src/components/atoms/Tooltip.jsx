@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import rem from '@src/components/atoms/rem';
+import rem from '/util/func/rem';
 
 const Wrap = styled.div`
   position: relative;
@@ -59,6 +59,13 @@ const MessageBody = styled.pre`
     left: 0;
     right: auto;
     transform: translate(0, 100%);
+  }
+  &[data-align='center'] {
+    left: ${rem(24)};
+    right: auto;
+    top:50%;
+    bottom:auto;
+    transform: translate(0%, -50%);
   }
   &[data-device='pc'] {
     width: initial;

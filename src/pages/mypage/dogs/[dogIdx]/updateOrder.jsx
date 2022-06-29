@@ -5,10 +5,9 @@ import MetaTitle from "/src/components/atoms/MetaTitle";
 import s from "./updateOrder.module.scss";
 import Image from 'next/image';
 import ItemLabel, {ItemRecommendlabel} from "/src/components/atoms/ItemLabel";
-import rem from '/src/components/atoms/rem';
+import rem from '/util/func/rem';
 import CustomInput from "/src/components/atoms/CustomInput";
 import { useRouter } from "next/router";
-import Link from "next/link";
 
 
 
@@ -534,7 +533,7 @@ function MypageSubscribeProductPage() {
                 <button onClick={onPrevPage} className={s['prevPage']}>
                   뒤로가기
                 </button>
-                <button className={s.actionButton} type={'button'} data-type={'결제시작'}>맞춤레시피 구매하기</button>
+                <button className={s.actionButton} type={'button'}>맞춤레시피 구매하기</button>
                 <button className={s.actionButton} type={'button'} onClick={onUpdateMyRecipe}>맞춤레시피 적용하기</button>
               </div>
             </section>

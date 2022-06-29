@@ -5,8 +5,7 @@ import ModalWrapper from './ModalWrapper';
 
 
 
-
-function Modal_global_alert({ message }) {
+function Modal_global_alert({ message, onClick, background }) {
   const mct = useModalContext();
   const modalState = mct.hasAlert;
   const [style, setStyle] = useState({});
@@ -26,6 +25,13 @@ function Modal_global_alert({ message }) {
     mct.alertHide();
   };
 
+  const onClickHandler = ()=>{
+    if(onClick && typeof onClick==='function'){
+      mct.alertHide();
+      onClick();
+    }
+  }
+
   return (
     <>
       <ModalWrapper
@@ -40,13 +46,15 @@ function Modal_global_alert({ message }) {
           </header>
           <div className={s['btn-section']}>
             <button
-              onClick={onHideModalHandler}
+              onClick={onClickHandler || onHideModalHandler}
             >
               확인
             </button>
           </div>
         </div>
       </ModalWrapper>
+      {modalState && background && <section className={s.background}/> }
+
     </>
   );
 }

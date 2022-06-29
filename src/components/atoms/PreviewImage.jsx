@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import rem from '@src/components/atoms/rem';
+import rem from '/util/func/rem';
 
 const Frame = styled.div`
   cursor: pointer;
@@ -14,24 +14,28 @@ const Frame = styled.div`
 `;
 
 const Img = styled.img`
-  object-fit: contain;
-  object-fit: ${props => {
-    props.objectFit;
-  }};
+  object-fit: ${props => props.objectFit || 'contain'};
   width: 100%;
   height: 100%;
   display: ${(props) => props.isDisplayed};
 `;
 
 
-function PreviewImage({ file, className, thumbLink, ratio, style, backgroundColor , objectFit }) {
+
+const IMAGE = ({SRC, objectFit}) => {
+  return SRC ? (
+    <Img src={SRC} alt="미리보기 이미지" style={{objectFit:objectFit}}></Img>
+  ) : null;
+};
+
+
+
+
+
+
+function PreviewImage({ file, className, thumbLink, ratio, style, backgroundColor , objectFit, ...props }) {
   const [SRC, setSRC] = useState(null);
 
-  const IMAGE = () => {
-    return SRC ? (
-      <Img src={SRC} alt="미리보기 이미지" style={{objectFit:objectFit}}></Img>
-    ) : null;
-  };
 
   useEffect(() => {
     // console.log(file);
@@ -52,7 +56,8 @@ function PreviewImage({ file, className, thumbLink, ratio, style, backgroundColo
 
   return (
     <Frame className={`preview_img ${className || ''}`} ratio={ratio} style={style} backgroundColor={backgroundColor}>
-      <IMAGE/>
+      <IMAGE SRC={SRC} objectFit={objectFit}/>
+      {props.children}
     </Frame>
   );
 }

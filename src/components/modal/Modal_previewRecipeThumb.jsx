@@ -6,7 +6,7 @@ import CustomInput from '../atoms/CustomInput';
 import { ItemRecommendlabel } from '../atoms/ItemLabel';
 import ScrollContainer from '/src/components/atoms/ScrollContainer';
 import PreviewImage from '/src/components/atoms/PreviewImage';
-import checkStringUnderConsonant from '/util/func/CheckStringUnderConsonant';
+import checkStringUnderConsonant from '/util/func/checkStringUnderConsonant';
 
 
 

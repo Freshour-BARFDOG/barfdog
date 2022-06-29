@@ -1,11 +1,62 @@
 import axios from 'axios';
-import checkCharactorSamenessAndContinuity from './checkCharactorSamenessAndContinuity';
+import checkCharactorSamenessAndContinuity from '../checkCharactorSamenessAndContinuity';
 
 
 export const valid_isEmpty = (value) => {
   const message = value ? '' : '항목이 비어있습니다.';
   return message;
 };
+
+
+
+export const valid_isEmptyArray = (arr) =>{
+  let message;
+  if(typeof arr !== 'object'){
+    alert('데이터 처리 중 에러가 발생했습니다. 개발사에게 문의하세요.')
+    return console.error('ERROR: Parameter type must be array');
+  }
+  message = arr.length ? '' : '항목이 비어있습니다.';
+  return message;
+}
+
+
+export const valid_isEmptyFile = (obj, substituteKey ) => {
+  let error = '';
+
+  if(!Object.keys(obj).length){
+    error = '항목이 비었습니다.'
+  }
+
+  for (const key in obj) {
+    const val = obj[key];
+
+    if(key === substituteKey && val){
+      return error = '';
+    } else if(key === 'file' && !val){
+      error = '항목이 비었습니다.';
+    }
+  }
+
+  return error;
+}
+
+
+
+export const valid_isEmptyObject = (obj) => {
+  let message;
+  for ( const key in obj ) {
+    const val = obj[key];
+    console.log(val)
+    if(!val){
+      message = `빈 항목이 있습니다.`;
+      break
+    }
+  }
+
+  return message;
+}
+
+
 
 
 
@@ -179,58 +230,39 @@ export const valid_policyCheckbox = (obj, standardObjList = [])=>{
 
 
 
-export const validate = async (obj, formErrors) => {
-  let errors = {};
+export const valid_URL = (value)=>{
+  let error='';
+
+  const url = value;
+  const regExp = /(http|https):\/\/((\w+)[.])+(asia|biz|cc|cn|com|de|eu|in|info|jobs|jp|kr|mobi|mx|name|net|nz|org|travel|tv|tw|uk|us)(\/(\w*))*$/i;
+
+  const result = regExp.test(url);
+
+  if(!url){
+    error = ''; // 필수항목아니므로 비어있어도 됨
+  } else if (!result) {
+    error = '링크 형식이 올바르지 않습니다.';
+  }
+
+  return error;
+}
 
 
-  const keys = Object.keys(obj);
-
-  for (const key of keys) {
-    const val = obj[key];
 
 
-    switch (key) {
-      case 'name':
-        errors[key] = valid_isEmpty(val);
-        break;
-      case 'email':
-        errors[key] = valid_isEmpty(val) || valid_email(val);
-        break;
-      case 'password':
-        errors[key] = valid_password(val).error;
-        break;
-      case 'confirmPassword':
-        const pw1 = obj['password'];
-        const pw2 = val;
-        errors[key] = valid_confirmPassword(pw1, pw2).error;
-        break;
-      case 'phoneNumber':
-        errors[key] = valid_isEmpty(val) || valid_phoneNumber(val);
-        break;
-      case 'address':
-        const addrObj = val;
-        const targetKey = Object.keys(addrObj)[0];
-        const thisVal = addrObj[targetKey];
-        errors[key] = valid_isEmpty(thisVal);
-        break;
-      case 'detailAddress':
-        errors[key] = valid_isEmpty(val);
-        break;
-      case 'birthday':
-        errors[key] = valid_isEmpty(val);
-        break;
-      default:
-        break;
+
+
+export const valid_hasFormErrors = (errorObj) => {
+  let isPassed = true;
+  for ( const key in errorObj ) {
+    const val = errorObj[key];
+    if(val){
+      isPassed = false;
+      break
     }
-  };
-
-  errors.isEmailDuplicated = formErrors.isEmailDuplicated;
-  errors.isValidPhoneNumber=formErrors.isValidPhoneNumber;
-
-  console.log('Valid Result (formValues) : ', errors);
-  return errors;
-};
-
+  }
+  return isPassed;
+}
 
 
 

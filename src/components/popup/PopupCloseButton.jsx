@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import rem from "@src/components/atoms/rem";
+import rem from '/util/func/rem';
 
 const Button = styled.button`
-  width: ${(props) => props.style?.width || rem(32)};
-  height: ${(props) => props.style?.height || rem(32)};
+  width: ${props => props.style?.width || rem(32)};
+  height: ${props => props.style?.height || rem(32)};
   display: inline-block;
   position: relative;
   cursor: pointer;

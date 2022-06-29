@@ -1,7 +1,7 @@
 import React, {useRef} from "react";
 import s from "@src/components/common/menu.module.scss";
 import style2 from "/src/components/common/menu.module.scss";
-import {List, SubmenuList, SubmenuTitle} from "/src/components/mypage/Menu";
+import {List, SubmenuList, SubmenuTitle} from "/src/components/mypage/MypageMenu";
 import Link from 'next/link';
 import Icon_setting from "/public/img/icon/setting.svg";
 
@@ -71,8 +71,8 @@ function AdminGnb() {
       <div className={`${s.site_settings} ${s.menu_title} ${style2['admin-site-setting']}`}>
         <List title="설정" iconOnLeftSide={<Icon_setting />}>
           <SubmenuList title="알고리즘" link="/bf-admin/settings/algorithm" />
-          <SubmenuList title="배송비" link="/bf-admin/settings/delivery" />
-          <SubmenuList title="쿠폰" link="/bf-admin/settings/coupon" />
+          <SubmenuList title="배송정책" link="/bf-admin/settings/delivery" />
+          <SubmenuList title="쿠폰정책" link="/bf-admin/settings/coupon" />
         </List>
       </div>
     </nav>

@@ -1,7 +1,7 @@
 import {Provider} from "react-redux";
 import store from "@store/index";
 import "@styles/global/global.scss";
-import AuthInterceptor from "@util/hook/auth-interceptor";
+import AuthInterceptor from "@store/auth-interceptor";
 import '/api/axios.config';
 import {ModalContextProvider} from '@store/modal-context';
 import ChannelTalkProvider from "/api/channelTalk/ChannelTalkProvider";

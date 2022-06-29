@@ -22,7 +22,6 @@ function FriendTalkPage() {
     exposedTarget: 'ALL'
   }
   const [formValues, setFormValues] = useState(initialValues);
-  // console.log(formValues);
 
   const onShowModal = () => {
     setIsModalActive(true);

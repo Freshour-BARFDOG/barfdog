@@ -76,6 +76,16 @@ const authSlice = createSlice({
       }
       Router.push("/");
     },
+    userRestoreAuthState(state) {
+      const token = JSON.parse(localStorage.getItem("user"))?.token;
+      // * 서버측 refresh token 없이 임시로 만듦
+      console.log('User Restore Auth State');
+      if (token) {
+        state.isAdmin = false;
+        state.isAuth = true;
+        state.token = token;
+      }
+    },
     logout(state) {
       state.isAuth = false;
       state.token = null;

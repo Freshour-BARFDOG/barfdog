@@ -5,7 +5,6 @@ import MetaTitle from "/src/components/atoms/MetaTitle";
 import s from "src/pages/survey/order/index.module.scss"
 import Image from 'next/image';
 import ItemLabel, { ItemRecommendlabel } from "/src/components/atoms/ItemLabel";
-import rem from '/src/components/atoms/rem';
 import CustomInput from "/src/components/atoms/CustomInput";
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -519,7 +518,7 @@ function SelectPlanPage() {
               <button className={s.prevPage} onClick={onPrevPage}>
                 뒤로가기
               </button>
-              <Link href="/survey/delivery" passHref>
+              <Link href="/survey/deliveryInfo" passHref>
                 <a><button className={s.nextPage}>맞춤레시피 구매하기</button></a>
               </Link>
             </div>
