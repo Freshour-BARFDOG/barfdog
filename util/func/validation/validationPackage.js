@@ -1,6 +1,27 @@
 import axios from 'axios';
 import checkCharactorSamenessAndContinuity from '../checkCharactorSamenessAndContinuity';
-import transformClearLocalCurrency from "../transformClearLocalCurrency";
+import transformClearLocalCurrency from '../transformClearLocalCurrency';
+
+
+
+
+
+export const valid_hasFormErrors = (errorObj) => {
+  let isPassed = true;
+  for ( const key in errorObj ) {
+    const val = errorObj[key];
+    if(val){
+      isPassed = false;
+      break
+    }
+  }
+  return isPassed;
+}
+
+
+
+
+
 
 
 export const valid_isEmpty = (value) => {
@@ -261,11 +282,9 @@ export const valid_URL = (value)=>{
 
 
 export const valid_currency = (value)=>{
-  console.log(value)
   let error ='';
   const stringValue = typeof value === 'number' ? String(value) : value;
   const currency = transformClearLocalCurrency(stringValue);
-  console.log(currency)
   if ( currency < 0 ) {
     error = '가격은 0보다 작을 수 없습니다.'
   }
@@ -275,19 +294,34 @@ export const valid_currency = (value)=>{
 
 
 
-export const valid_hasFormErrors = (errorObj) => {
-  let isPassed = true;
-  for ( const key in errorObj ) {
-    const val = errorObj[key];
-    if(val){
-      isPassed = false;
-      break
+export const valid_arrayErrorCount = (arr) => {
+  let errorCount = 0;
+  if (arr.length) {
+    arr.map((optionObj) => {
+      const errorObj = valid_singleItemOptionObj(optionObj);
+      const isPassed = valid_hasFormErrors(errorObj);
+      !isPassed && errorCount++;
+    });
+  }
+  return errorCount;
+};
+const valid_singleItemOptionObj = (optionObj) => {
+  let error = {};
+
+  for (const key in optionObj) {
+    const val = optionObj[key];
+    switch (key) {
+      case 'name':
+        error[key] = valid_isEmpty(val);
+        break;
+      case 'price':
+        error[key] = ''; // 옵션가격은 추가 검증할 내역 없음
+        break;
+      case 'remaining':
+        error[key] = valid_isEmptyCurrency(val);
+        break;
     }
   }
-  return isPassed;
-}
-
-
-
-
-
+  // console.log('singleOptions Error:', error)
+  return error;
+};

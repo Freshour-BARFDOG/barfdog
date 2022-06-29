@@ -25,9 +25,10 @@ export default function SingleItemDiscountOptions({id,  formValues, setFormValue
       formValues.discountType,
       formValues.discountDegree,
     );
+    // console.log(result);
 
     const resultObj = {
-      salePrice: result?.salePrice,
+      salePrice: !result ? formValues.originalPrice : result.salePrice, // 할인적용이 안됐을 경우, 원금이랑 동일하게 처리한다.
       saleAmount: result?.saleAmount
     }
     setSalePriceInfo(resultObj);
@@ -56,11 +57,11 @@ export default function SingleItemDiscountOptions({id,  formValues, setFormValue
           data-input-type={`currency, number, ${
             formValues.discountType === 'FLAT_RATE' && 'discountPercent'
           }`}
-          value={formValues.discountDegree || '0'}
+          value={formValues.discountDegree || 0}
           onChange={onChange}
         />
-        {formErrors.discountDegree && (
-          <ErrorMessage>{formErrors.discountDegree}</ErrorMessage>
+        {formErrors?.discountDegree && (
+          <ErrorMessage>{formErrors?.discountDegree}</ErrorMessage>
         )}
         <UnitBox
           name={'discountType'}
@@ -79,8 +80,8 @@ export default function SingleItemDiscountOptions({id,  formValues, setFormValue
           (할인가<em>{salePriceInfo?.saleAmount}</em>원)
         </span>
       </div>
-      {formErrors.salePrice && (
-        <ErrorMessage>{formErrors.salePrice}</ErrorMessage>
+      {formErrors?.salePrice && (
+        <ErrorMessage>{formErrors?.salePrice}</ErrorMessage>
       )}
     </>
   );

@@ -6,22 +6,26 @@ const CustomRadioTrueOrFalse = ({ name, labelList = [], value, setValue, returnB
   const trueRadioId = `${name}${labelList[0]}`;
   const falseRadioId = `${name}${labelList[1]}`;
   const initialValue = value === true ? trueRadioId : falseRadioId;
+
   const [selectedRadio, setSelectedRadio] = useState(initialValue);
 
 
-  useEffect(() => {
+  useEffect(() => { // init value
     setSelectedRadio(initialValue);
   }, [initialValue]);
 
   const onChangeHandler = (e) => {
     const { id } = e.currentTarget;
+    setSelectedRadio(id);
+
     let booleanValue;
     if(id === trueRadioId){
       booleanValue = true;
     }   else if ( id === falseRadioId) {
       booleanValue = false;
     }
-    setSelectedRadio(id);
+
+
     if(returnBooleanValue){
       setValue(booleanValue);
     } else {
@@ -35,9 +39,9 @@ const CustomRadioTrueOrFalse = ({ name, labelList = [], value, setValue, returnB
   return (
     <>
       <div className={`${s['inp-wrap']} ${s['radio']}`}>
-        <label htmlFor={trueRadioId}> {/* TRUE값 반환 */}
+        <label htmlFor={`${name}${labelList[0]}`}> {/* TRUE값 반환 */}
           <input
-            id={trueRadioId}
+            id={`${name}${labelList[0]}`}
             name={name}
             type="radio"
             checked={selectedRadio === trueRadioId}
@@ -45,9 +49,9 @@ const CustomRadioTrueOrFalse = ({ name, labelList = [], value, setValue, returnB
           />
           {labelList[0]}
         </label>
-        <label htmlFor={falseRadioId}> {/* FALSE RADIO */}
+        <label htmlFor={`${name}${labelList[1]}`}> {/* FALSE RADIO */}
           <input
-            id={falseRadioId}
+            id={`${name}${labelList[1]}`}
             name={name}
             type="radio"
             checked={selectedRadio === falseRadioId}

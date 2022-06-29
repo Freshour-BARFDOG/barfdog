@@ -307,6 +307,7 @@ $inputDefaultHeight: rem(38);
     align-items: center;
     &.multipleLines {
       align-items: flex-start;
+      .inp_section{margin-top:rem(3);}
     }
     &:not(:last-child) {
       margin-bottom: rem(15);
@@ -527,3 +528,15 @@ $inputDefaultHeight: rem(38);
   color: var(--color-main);
 }
 
+
+.required {
+  position:relative;
+  &:after{
+    content:'*';
+    position:absolute;
+    right:rem(-6);
+    top:rem(-1);
+    font-size:rem(10);
+    color:var(--color-main);
+  }
+}

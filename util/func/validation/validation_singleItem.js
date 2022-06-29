@@ -1,4 +1,10 @@
-import {valid_isEmpty, valid_isEmptyCurrency, valid_isEmptyArray, valid_currency} from './validationPackage';
+import {
+  valid_arrayErrorCount,
+  valid_currency,
+  valid_isEmpty,
+  valid_isEmptyArray,
+  valid_isEmptyCurrency,
+} from './validationPackage';
 
 export const validate = (obj) => {
   let errors = {};
@@ -24,13 +30,27 @@ export const validate = (obj) => {
       case 'salePrice':
         errors[key] = valid_currency(val);
         break;
-
-      case 'eventImageRequestDtoList':
+      case 'remaining':
+        const inStock = obj['inStock'];
+        errors[key] = (inStock && valid_isEmpty(val)) || ''; // 에러조건: (재고존재 && 재고수량 0개)
+        break;
+      case 'itemOptionSaveDtoList':
+        const optionsArr = val;
+        const errorCount = valid_arrayErrorCount(optionsArr);
+        errors[key] =
+          errorCount > 0 ? `${errorCount}개의 옵션리스트 내에 적절하지 않은 항목이 있습니다.! ` : '';
+        break;
+      case 'itemImageOrderDtoList': // 썸네일
         errors[key] = valid_isEmptyArray(val);
+        break;
+      case 'contents':
+        errors[key] = valid_isEmpty(val);
         break;
     }
   }
   console.log('Valid Result (formValues) : ', errors);
   return errors;
 };
+
+
 

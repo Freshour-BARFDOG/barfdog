@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import s from './customRadio.module.scss';
-// 어떤 조건이면.... true냐 false냐만........토해내도록 한다.....
 
 const CustomRadio = ({
   setValue,

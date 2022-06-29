@@ -14,6 +14,7 @@ import QuillEditor from '../../createSingle/QuillEditor';
 import SingleItemThumbnail from "../../createSingle/SingleItemThumnail";
 import SingleItemOptions from "../../createSingle/SingleItemOptions";
 import SingleItemDiscountOptions from "../../createSingle/SingleItemDiscountOptions";
+import FileInput from "../../../../../components/admin/form/FileInput";
 
 /* TODO - 다중  이미지 처리 -> Preview && 업로드 즉시 API 통신
  */
@@ -50,6 +51,9 @@ const initialFormErrors = {};
 function UpdateSingleItemPage() {
   const router = useRouter();
 
+  const postFormValuesApiUrl = 'api/admin/items';
+  const postThumbFileApiUrl = '/api/admin/items/image/upload';
+  const postDetailImageFileApiUrl = '/api/admin/items/contentImage/upload';
   const [fileList, setFileList] = useState([]);
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState(initialFormErrors);
@@ -241,7 +245,7 @@ function UpdateSingleItemPage() {
                         썸네일
                       </label>
                     </div>
-                    <SingleItemThumbnail fileList={fileList} setFileList={setFileList} formErrors={formErrors} />
+                    <FileInput id={'itemImageOrderDtoList'}  apiUrl={postThumbFileApiUrl} setFormValues={setFormValues} formErrors={formErrors} setFormErrors={setFormErrors} originImageDatas={[]} mode={'update'} maxFileSize={10000000} maxImageCount={10}/>
                   </div>
                 </div>
                 {/* cont_divider */}

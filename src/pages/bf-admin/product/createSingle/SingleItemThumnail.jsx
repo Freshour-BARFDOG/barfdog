@@ -11,37 +11,6 @@ export default function SingleItemThumbnail({fileList, setFileList, formErrors }
 
   // console.log(fileList)
 
-  //
-  // const imageFileChangeHandler = (e) => {
-  //   const curFiles = e.currentTarget.files;
-  //   if(!curFiles?.length) return;
-  //
-  //   const maxImageCount = 10;
-  //   const currentFileListCount = fileList.length;
-  //   const updatedFileListCount = curFiles.length;
-  //   if (currentFileListCount + updatedFileListCount > maxImageCount) {
-  //     return alert(`이미지는 최대 ${maxImageCount}장까지 등록할 수 있습니다.`);
-  //   }
-  //
-  //
-  //
-  //   if (curFiles.length === 1) {
-  //     const file = curFiles[0];
-  //     return setFileList((prevState) => [...prevState, { file: file, filename: file.name }]);
-  //   } else if (curFiles.length > 1) {
-  //     let newFileList = [];
-  //     for (const filesKey in curFiles) {
-  //       const file = curFiles[filesKey];
-  //       if (typeof file === 'object') {
-  //         newFileList.push({
-  //           file: file,
-  //           filename: file.name,
-  //         });
-  //       }
-  //     }
-  //     return setFileList((prevState) => [...prevState, ...newFileList]);
-  //   }
-  // };
 
   const imageFileChangeHandler = async (e) => {
     // - 파일이 존재하지 않는 경우 -> 삭제 API는 따로 없음
