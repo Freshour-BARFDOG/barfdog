@@ -5,41 +5,101 @@ import Fake_input from "/src/components/atoms/fake_input";
 import ErrorMessage from "/src/components/atoms/ErrorMessage";
 import ItemLabel from "/src/components/atoms/ItemLabel";
 import rem from "/util/func/rem";
+import {postFileUpload} from "../../../../../api/reqData";
 
 export default function SingleItemThumbnail({fileList, setFileList, formErrors }) {
 
   // console.log(fileList)
 
+  //
+  // const imageFileChangeHandler = (e) => {
+  //   const curFiles = e.currentTarget.files;
+  //   if(!curFiles?.length) return;
+  //
+  //   const maxImageCount = 10;
+  //   const currentFileListCount = fileList.length;
+  //   const updatedFileListCount = curFiles.length;
+  //   if (currentFileListCount + updatedFileListCount > maxImageCount) {
+  //     return alert(`이미지는 최대 ${maxImageCount}장까지 등록할 수 있습니다.`);
+  //   }
+  //
+  //
+  //
+  //   if (curFiles.length === 1) {
+  //     const file = curFiles[0];
+  //     return setFileList((prevState) => [...prevState, { file: file, filename: file.name }]);
+  //   } else if (curFiles.length > 1) {
+  //     let newFileList = [];
+  //     for (const filesKey in curFiles) {
+  //       const file = curFiles[filesKey];
+  //       if (typeof file === 'object') {
+  //         newFileList.push({
+  //           file: file,
+  //           filename: file.name,
+  //         });
+  //       }
+  //     }
+  //     return setFileList((prevState) => [...prevState, ...newFileList]);
+  //   }
+  // };
 
-  const imageFileChangeHandler = (e) => {
-    const curFiles = e.currentTarget.files;
-    if(!curFiles?.length) return;
+  const imageFileChangeHandler = async (e) => {
+    // - 파일이 존재하지 않는 경우 -> 삭제 API는 따로 없음
+    // - server에서 일정시간마다 찌꺼기 file을 삭제하는 처리하는 방식으로 구현됨
+    const thisInput = e.currentTarget;
+    const file = thisInput.files[0];
+    const filename = file ? file.name : '';
 
-    const maxImageCount = 10;
-    const currentFileListCount = fileList.length;
-    const updatedFileListCount = curFiles.length;
-    if (currentFileListCount + updatedFileListCount > maxImageCount) {
-      return alert(`이미지는 최대 ${maxImageCount}장까지 등록할 수 있습니다.`);
+    if (!file) {
+      setFormValues((prevState) => ({
+        ...prevState,
+        thumbnailId: '',
+      }));
+      setFormErrors((prevState) => ({
+        ...prevState,
+        thumbnailId: '필수항목입니다.',
+      }));
+      setThumbFile({
+        ...thumbFile,
+        file: '',
+        filename: '',
+      });
+      return;
     }
 
-
-
-    if (curFiles.length === 1) {
-      const file = curFiles[0];
-      return setFileList((prevState) => [...prevState, { file: file, filename: file.name }]);
-    } else if (curFiles.length > 1) {
-      let newFileList = [];
-      for (const filesKey in curFiles) {
-        const file = curFiles[filesKey];
-        if (typeof file === 'object') {
-          newFileList.push({
-            file: file,
-            filename: file.name,
-          });
-        }
-      }
-      return setFileList((prevState) => [...prevState, ...newFileList]);
+    try {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        thumb: '업로드 중',
+      }));
+      const formData = new FormData();
+      formData.append('file', file);
+      const thumbApiURL = '/api/admin/blogs/thumbnail/upload';
+      const response = await postFileUpload(thumbApiURL, formData);
+      const thumbId = response.data.id;
+      const isFaild = response.status !== 200 && response.status !== 201;
+      setFormValues((prevState) => ({
+        ...prevState,
+        thumbnailId: thumbId,
+      }));
+      setFormErrors((prevState) => ({
+        ...prevState,
+        thumbnailId: isFaild && '업로드에 실패했습니다. 파일형식을 확인하세요.',
+      }));
+      setThumbFile({
+        ...thumbFile,
+        file: !isFaild && file,
+        filename: !isFaild && filename,
+        thumbnailId: thumbId,
+      });
+    } catch (err) {
+      alert(`에러가 발생했습니다.\n${err}`);
     }
+
+    setIsLoading((prevState) => ({
+      ...prevState,
+      thumb: false,
+    }));
   };
 
 

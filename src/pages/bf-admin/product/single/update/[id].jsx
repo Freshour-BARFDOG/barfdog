@@ -3,7 +3,7 @@ import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
 import { useRouter } from 'next/router';
-import CustomSelect from '/src/components/admin/form/CustomSelect';
+import CustomSelectForTwoSelects from '/src/components/admin/form/CustomSelectForTwoSelects';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import CustomRadio from '/src/components/admin/form/CustomRadio';
 import filter_emptyValue from '/util/func/filter_emptyValue';
@@ -127,7 +127,7 @@ function UpdateSingleItemPage() {
                     </div>
                     <div className="inp_section">
                       <div className="inp_box">
-                        <CustomSelect
+                        <CustomSelectForTwoSelects
                           name="itemType"
                           id="itemType"
                           options={[

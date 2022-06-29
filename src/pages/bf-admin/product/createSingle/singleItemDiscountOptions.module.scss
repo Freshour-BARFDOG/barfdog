@@ -8,7 +8,7 @@ $browser-context: 16;
   max-width: rem(500);
   display: inline-grid;
   align-items: center;
-  grid-template-columns: rem(40) minmax(rem(50), rem(120)) minmax(rem(50), rem(120));
+  grid-template-columns: rem(70) minmax(rem(50), rem(120)) minmax(rem(50), rem(120));
   column-gap: rem(10);
 
   .discountPrice {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
@@ -10,16 +10,28 @@ import filter_emptyValue from '/util/func/filter_emptyValue';
 import filter_onlyNumber from '/util/func/filter_onlyNumber';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import QuillEditor from './QuillEditor';
-import SingleItemThumbnail from "./SingleItemThumnail";
-import SingleItemOptions from "./SingleItemOptions";
-import SingleItemDiscountOptions from "./SingleItemDiscountOptions";
-import transformClearLocalCurrency from "/util/func/transformClearLocalCurrency";
+import SingleItemThumbnail from './SingleItemThumnail';
+import SingleItemOptions from './SingleItemOptions';
+import SingleItemDiscountOptions from './SingleItemDiscountOptions';
+import transformClearLocalCurrency from '/util/func/transformClearLocalCurrency';
+import Spinner from '/src/components/atoms/Spinner';
+import { validate } from '/util/func/validation/validation_singleItem';
+import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
+import { postObjData } from '/api/reqData';
+import { useModalContext } from '/store/modal-context';
+import dynamic from 'next/dynamic';
+import Modal_global_alert from '/src/components/modal/Modal_global_alert';
+import CustomRadioTrueOrFalse from '/src/components/admin/form/CustomRadioTrueOrFalse';
 
-/* TODO - 다중  이미지 처리 -> Preview && 업로드 즉시 API 통신
- */
 
 
-
+/* - TODO
+    ! 할인설정이 N돼있으면, 유효성에서 제외 -0--> ON이면 유효성에 포함 ((((( 오후에 할 것)))))
+    ///--------------------------- 옵션추가 유효성 검사 (PM 6:09)
+    [] 상품설명 > Editor추가
+    [] 유효성 검사
+* */
+// 할인된 값이 존재할 경우에......... customRadioTrueOrFalse에게 true값을 전달한다.
 
 const initialFormValues = {
   itemType: '',
@@ -29,39 +41,60 @@ const initialFormValues = {
   discountType: 'FLAT_RATE' || 'FIXED_RATE',
   discountDegree: 0, // 할인정도
   salePrice: 0, // 할인적용 후 판매가격
-  inStock: true,
+  inStock: 'LEAKED',
   remaining: 9999,
   contents: '',
-  deliveryFree: false,
+  deliveryFree: true,
   itemStatus: 'LEAKED',
   itemOptionSaveDtoList: [
     {
       name: '',
       price: 0,
-      remaining: 9999,
+      remaining: 0,
     },
   ],
-  contentImageIdList: [],
-  itemImageOrderDtoList: [{ id: 0, leakOrder: 1 }],
+  contentImageIdList: [], // 상품설명 내 이미지 리스트
+  itemImageOrderDtoList: [{ id: 0, leakOrder: 1 }], // 썸네일 아이디 리스트
 };
 
 const initialFormErrors = {};
 
 function CreateSingleItemPage() {
+  const postFormValuesApiUrl = 'api/admin/items';
+  const postThumbFileApiUrl = '/api/admin/items/image/upload';
+  const postDetailImageFileApiUrl = '/api/admin/items/contentImage/upload';
   const router = useRouter();
+  const mct = useModalContext();
 
-  const [fileList, setFileList] = useState([]);
+  const [modalMessage, setModalMessage] = useState('');
+  const [isLoading, setIsLoading] = useState({});
+
+  const [thumbFileList, setThumbFileList] = useState([]);
+  const [originImageIdList, setOriginImageIdList] = useState([]);
+  const [QuillEditor, setQuillEditor] = useState(null);
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState(initialFormErrors);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [activeDiscountOption, setActiveDiscountOption] = useState(false);
 
-  // console.log(fileList);
-  console.log(formValues);
-
-  const returnToPrevPage = () => {
-    if (confirm('이전 페이지로 돌아가시겠습니까?')) {
-      router.back();
+  useEffect(() => {
+    // 할인적용된 가격이 존재할 경우, 할인설정 option변경
+    if (formValues.salePrice) {
+      const active = !!formValues.salePrice;
+      setActiveDiscountOption(active);
     }
-  };
+  }, [formValues.salePrice]);
+
+  console.log(formValues);
+  // console.log(fileList);
+  //  INIT QUILL EDITOR
+  useEffect(() => {
+    if (document) {
+      const QuillEditor = dynamic(() => import('/src/components/admin/form/QuillEditor'));
+      setQuillEditor(QuillEditor);
+      console.log('Editor init is complete.');
+    }
+  }, []);
 
   const onInputChangeHandler = (e) => {
     const input = e.currentTarget;
@@ -92,15 +125,63 @@ function CreateSingleItemPage() {
     }));
   };
 
-
-
-  const onSubmitHandler = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    console.log('제출!');
-  }; // * onSubmitHandler
+    console.log(formValues);
+    // ! IMPORTANT : create Event후, 사용자가 enter를 쳤을 경우, 똑같은 요청이 전송되지 않게 하기 위해서 필요함.
 
+    if (isSubmitted) return;
 
+    const errObj = validate(formValues);
+    setFormErrors(errObj);
+    const isPassed = valid_hasFormErrors(errObj);
 
+    return;
+
+    try {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        submit: true,
+      }));
+      if (isPassed) {
+        const res = await postObjData(postFormValuesApiUrl, formValues);
+        console.log(res);
+        // const res = { // TESTTESTTESTTESTTESTTESTTESTTESTTEST
+        //   isDone : true,
+        //   error: ''
+        // }
+        if (res.isDone) {
+          onShowModalHandler('이벤트가 생성되었습니다.');
+          setIsSubmitted(true);
+        } else {
+          alert(res.error, '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.');
+        }
+      }
+    } catch (err) {
+      alert('API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.');
+      console.error('API통신 오류 : ', err);
+    }
+    setIsLoading((prevState) => ({
+      ...prevState,
+      submit: false,
+    }));
+  };
+
+  const returnToPrevPage = () => {
+    if (confirm('이전 페이지로 돌아가시겠습니까?')) {
+      router.back();
+    }
+  };
+
+  const onShowModalHandler = (message) => {
+    mct.alertShow();
+    setModalMessage(message);
+  };
+
+  const onGlobalModalCallback = () => {
+    mct.alertHide();
+    router.push('/bf-admin/community/event');
+  };
 
   return (
     <>
@@ -112,12 +193,7 @@ function CreateSingleItemPage() {
           </div>
           <section className="cont">
             <div className="cont_body">
-              <form
-                action="/"
-                encType="multipart/form-data"
-                method="post"
-                onSubmit={onSubmitHandler}
-              >
+              <form action="/" encType="multipart/form-data" method="post">
                 <div className="cont_divider">
                   <div className="input_row">
                     <div className="title_section fixedHeight">
@@ -128,7 +204,6 @@ function CreateSingleItemPage() {
                     <div className="inp_section">
                       <div className="inp_box">
                         <CustomSelect
-                          name="itemType"
                           id="itemType"
                           options={[
                             { label: '선택', value: '' },
@@ -136,9 +211,10 @@ function CreateSingleItemPage() {
                             { label: '토핑 (간식 및 토핑류)', value: 'TOPPING' },
                             { label: '굿즈 (그 밖의 제품)', value: 'GOODS' },
                           ]}
-                          onChange={setFormValues}
+                          value={formValues.itemType}
+                          setFormValues={setFormValues}
                         />
-                        {formErrors.category && <ErrorMessage>{formErrors.category}</ErrorMessage>}
+                        {formErrors.itemType && <ErrorMessage>{formErrors.itemType}</ErrorMessage>}
                       </div>
                     </div>
                   </div>
@@ -208,7 +284,9 @@ function CreateSingleItemPage() {
                           onChange={onInputChangeHandler}
                         />
                         <em className="unit">원</em>
-                        {formErrors.originalPrice && <ErrorMessage>{formErrors.originalPrice}</ErrorMessage>}
+                        {formErrors.originalPrice && (
+                          <ErrorMessage>{formErrors.originalPrice}</ErrorMessage>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -217,11 +295,30 @@ function CreateSingleItemPage() {
                 <div className="cont_divider">
                   <div className="input_row multipleLines">
                     <div className="title_section fixedHeight">
-                      <label className="t정itle" htmlFor={'discountDegree'}>
+                      <label className="title" htmlFor={'discountDegree'}>
                         할인설정
                       </label>
                     </div>
-                    <SingleItemDiscountOptions formValues={formValues} setFormValues={setFormValues} onChange={onInputChangeHandler}/>
+                    <div className="inp_section">
+                      <div className="inp_box">
+                        <CustomRadioTrueOrFalse
+                          name="discount"
+                          value={activeDiscountOption}
+                          setValue={setActiveDiscountOption}
+                          labelList={['Y', 'N']}
+                          returnBooleanValue
+                        />
+                      </div>
+                      {activeDiscountOption && (
+                        <SingleItemDiscountOptions
+                          id={'salePrice'}
+                          formValues={formValues}
+                          setFormValues={setFormValues}
+                          formErrors={formErrors}
+                          onChange={onInputChangeHandler}
+                        />
+                      )}
+                    </div>
                   </div>
                 </div>
                 {/* cont_divider */}
@@ -241,25 +338,34 @@ function CreateSingleItemPage() {
                         썸네일
                       </label>
                     </div>
-                    <SingleItemThumbnail fileList={fileList} setFileList={setFileList} formErrors={formErrors} />
+                    <SingleItemThumbnail
+                      id={'itemImageOrderDtoList'}
+                      fileList={thumbFileList}
+                      setFileList={setThumbFileList}
+                      formErrors={formErrors}
+                    />
                   </div>
                 </div>
                 {/* cont_divider */}
-
                 <div className="cont_divider">
                   <div className="input_row multipleLines">
                     <div className="title_section fixedHeight">
                       <h5 className="title">상품설명</h5>
                     </div>
                     <div className="inp_section">
-                      <QuillEditor />
-                      {/*EDITOR--------------------------------*/}
-                      {/*EDITOR--------------------------------*/}
-                      {/*EDITOR--------------------------------*/}
-                      {/*EDITOR--------------------------------*/}
-                      {/*EDITOR--------------------------------*/}
-                      {/*EDITOR--------------------------------*/}
-                      {/*EDITOR--------------------------------*/}
+                      {formErrors.contents && <ErrorMessage>{formErrors.contents}</ErrorMessage>}
+                      {/* // * --------- QUILL EDITOR --------- * // */}
+                      {QuillEditor && (
+                        <QuillEditor
+                          id={'contents'}
+                          mode={'create'}
+                          imageId={'contentImageIdList'}
+                          originImageIdList={originImageIdList}
+                          setFormValues={setFormValues}
+                          imageUploadApiURL={postDetailImageFileApiUrl}
+                        />
+                      )}
+                      {/* // * --------- QUILL EDITOR --------- * // */}
                     </div>
                   </div>
                 </div>
@@ -272,11 +378,11 @@ function CreateSingleItemPage() {
                     </div>
                     <div className="inp_section">
                       <div className="inp_box">
-                        <CustomRadio
-                          setValue={setFormValues}
+                        <CustomRadioTrueOrFalse
                           name="deliveryFree"
-                          idList={['deliveryFree-FALSE', 'deliveryFree-TRUE']}
-                          labelList={['선불', '무료배송']}
+                          value={formValues.deliveryFree}
+                          setValue={setFormValues}
+                          labelList={['무료배송', '선불']}
                         />
                       </div>
                     </div>
@@ -290,11 +396,18 @@ function CreateSingleItemPage() {
                     </div>
                     <div className="inp_section">
                       <div className="inp_box">
+                        {/*<CustomRadio*/}
+                        {/*  name="itemStatus"*/}
+                        {/*  idList={['itemStatus-FALSE', 'itemStatus-TRUE']}*/}
+                        {/*  labelList={['노출', '숨김']}*/}
+                        {/*  setValue={setFormValues}*/}
+                        {/*/>*/}
                         <CustomRadio
                           setValue={setFormValues}
                           name="itemStatus"
-                          idList={['itemStatus-TRUE', 'itemStatus-FALSE']}
+                          idList={['LEAKED', 'HIDDEN']}
                           labelList={['노출', '숨김']}
+                          value={formValues.itemStatus}
                         />
                       </div>
                     </div>
@@ -315,13 +428,23 @@ function CreateSingleItemPage() {
               >
                 취소
               </button>
-              <button type="submit" id="btn-create" className="admin_btn confirm_l solid">
-                등록
+              <button
+                type="submit"
+                id="btn-create"
+                className="admin_btn confirm_l solid"
+                onClick={onSubmit}
+              >
+                {isLoading.submit ? (
+                  <Spinner style={{ color: '#fff', width: '15', height: '15' }} speed={0.6} />
+                ) : (
+                  '등록'
+                )}
               </button>
             </div>
           </div>
         </AdminContentWrapper>
       </AdminLayout>
+      <Modal_global_alert message={modalMessage} onClick={onGlobalModalCallback} background />
     </>
   );
 }

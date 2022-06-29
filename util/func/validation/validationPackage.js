@@ -1,22 +1,23 @@
 import axios from 'axios';
 import checkCharactorSamenessAndContinuity from '../checkCharactorSamenessAndContinuity';
+import transformClearLocalCurrency from "../transformClearLocalCurrency";
 
 
 export const valid_isEmpty = (value) => {
-  const message = value ? '' : '항목이 비어있습니다.';
-  return message;
+  const error = value ? '' : '항목이 비어있습니다.';
+  return error;
 };
 
 
 
 export const valid_isEmptyArray = (arr) =>{
-  let message;
+  let error;
   if(typeof arr !== 'object'){
     alert('데이터 처리 중 에러가 발생했습니다. 개발사에게 문의하세요.')
     return console.error('ERROR: Parameter type must be array');
   }
-  message = arr.length ? '' : '항목이 비어있습니다.';
-  return message;
+  error = arr.length ? '' : '항목이 비어있습니다.';
+  return error;
 }
 
 
@@ -42,18 +43,27 @@ export const valid_isEmptyFile = (obj, substituteKey ) => {
 
 
 
+export const valid_isEmptyCurrency = (value) => {
+  const stringValue = typeof value === 'number' ? String(value) : value;
+  const currency = transformClearLocalCurrency(stringValue);
+  const error = currency !== 0 ? '' : '항목이 비어있습니다.';
+  return error;
+};
+
+
+
+
 export const valid_isEmptyObject = (obj) => {
-  let message;
+  let error;
   for ( const key in obj ) {
     const val = obj[key];
     console.log(val)
     if(!val){
-      message = `빈 항목이 있습니다.`;
+      error = `빈 항목이 있습니다.`;
       break
     }
   }
-
-  return message;
+  return error;
 }
 
 
@@ -248,6 +258,19 @@ export const valid_URL = (value)=>{
 }
 
 
+
+
+export const valid_currency = (value)=>{
+  console.log(value)
+  let error ='';
+  const stringValue = typeof value === 'number' ? String(value) : value;
+  const currency = transformClearLocalCurrency(stringValue);
+  console.log(currency)
+  if ( currency < 0 ) {
+    error = '가격은 0보다 작을 수 없습니다.'
+  }
+  return error;
+}
 
 
 
