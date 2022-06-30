@@ -1,10 +1,8 @@
-import s from "./single.module.scss";
-import getElemIdx from "@util/func/getElemIdx";
-import Link from "next/link";
-import transformDate from "@util/func/transformDate";
-
-
-
+import s from './single.module.scss';
+import getElemIdx from '@util/func/getElemIdx';
+import Link from 'next/link';
+import transformDate from '/util/func/transformDate';
+import transformLocalCurrency from "/util/func/transformLocalCurrency";
 
 export default function SearchResultList({ items, onDeleteItem }) {
   if (!items || !items.length) return;
@@ -20,27 +18,24 @@ export default function SearchResultList({ items, onDeleteItem }) {
 
 
 
-const ItemList = ({ item, sortableItemRef }) => {
-
+const ItemList = ({ item }) => {
   const DATA = {
-    id: item.id || "0",
-    pruductId: item.pruductId || "20220256841568",
-    category: item.category || "생식단품",
-    itemName: item.itemName || "바프레드",
-    price: item.price || "7,700",
-    stockQuantity: item.stockQuantity || "999",
-    discount: item.discount || "10%",
-    status: item.status || "N",
+    id: item.id,
+    name: item.name,
+    category: item.category,
+    originalPrice: transformLocalCurrency(item.originalPrice+1231231231231) + '원',
+    salePrice: transformLocalCurrency(item.salePrice) + '원',
+    remaining: transformLocalCurrency(item.remaining),
+    discount: item.discount || '10%',
+    status: item.status === 'LEAKED' ? 'Y':"N",
     apiurl: {
-      // self: item._links.query_banner.href,
-      // orderUp: item._links.mainBanner_leakedOrder_up.href,
-      // orderDown: item._links.mainBanner_leakedOrder_down.href,
-      // delete: item._links.delete_banner.href,
+      update: item._links.update_item.href,
+      delete: item._links.delete_item.href,
     },
   };
 
   const onDeleteItemHandler = (e) => {
-    const target = e.currentTarget.closest("li");
+    const target = e.currentTarget.closest('li');
     const targetViewIdx = getElemIdx(target);
     const apiURL = e.currentTarget.dataset.apiurl;
     const reviewName = items[targetViewIdx]?.name;
@@ -50,21 +45,23 @@ const ItemList = ({ item, sortableItemRef }) => {
   };
 
   return (
-    <li
-      className={s.item}
-      key={`item-${DATA.id}`}
-      ref={sortableItemRef}
-      data-idx={DATA.id}
-    >
+    <li className={s.item} key={`item-${DATA.id}`} data-idx={DATA.id}>
       <span>
-        <em className={"text-transform-ellipsis"}>{DATA.pruductId}</em>
+        <em className={'overflow-x-scroll'}>{DATA.id}</em>
       </span>
-      <span>{DATA.category}</span>
       <span>
-        <em className={"text-transform-ellipsis"}>{DATA.itemName}</em>
+        <em className={'overflow-x-scroll'}>{DATA.category}</em>
       </span>
-      <span>{DATA.price}</span>
-      <span>{DATA.stockQuantity}</span>
+      <span>
+        <em className={'overflow-x-scroll'}>{DATA.name}</em>
+      </span>
+      <span>
+        <em className={'overflow-x-scroll'}>{DATA.originalPrice}</em>
+      </span>
+      <span>
+        <em className={'overflow-x-scroll'}>{DATA.salePrice}</em>
+      </span>
+      <span>{DATA.remaining}</span>
       <span>{DATA.discount}</span>
       <span>{DATA.status}</span>
       <span>
@@ -78,7 +75,7 @@ const ItemList = ({ item, sortableItemRef }) => {
         <button
           className="admin_btn basic_s solid"
           onClick={onDeleteItemHandler}
-          // data-apiurl={DATA.apiurl.delete}
+          data-apiurl={DATA.apiurl.delete}
         >
           삭제
         </button>
