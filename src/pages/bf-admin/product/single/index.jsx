@@ -27,10 +27,8 @@ function SingleItemPage() {
   const [searchValue, setSearchValue] = useState(initalSearchValue);
   const [pageInfo, setPageInfo] = useState({});
 
-// -
-// 카테고리
-// 원가
-// 상품옵션 존재여부
+// - TODO
+// API서버에서 요청할
 
 
 
@@ -57,12 +55,12 @@ function SingleItemPage() {
 
   return (
     <>
-      <MetaTitle title="단품 관리" admin={true} />
+      <MetaTitle title="일반상품 관리" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
           <div className="title_main">
             <h1>
-              단품 관리
+              일반상품 관리
               {isLoading.fetching && <Spinner/>}
             </h1>
           </div>

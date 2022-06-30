@@ -190,11 +190,11 @@ function CreateSingleItemPage() {
 
   return (
     <>
-      <MetaTitle title="단품 생성" admin={true} />
+      <MetaTitle title="일반상품 생성" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
           <div className="title_main">
-            <h1>단품 등록</h1>
+            <h1>일반상품 등록</h1>
           </div>
           <section className="cont">
             <div className="cont_body">
