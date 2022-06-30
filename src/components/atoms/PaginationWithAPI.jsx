@@ -11,7 +11,9 @@ const Pagination = ({
   theme = 'square',
   setItemList,
   queryItemList,
-                      setIsLoading,
+  setIsLoading,
+  urlQuery,
+  setPageData,
 }) => {
   const router = useRouter();
   const query = router.query;
@@ -21,19 +23,20 @@ const Pagination = ({
   const [curPage, setCurPage] = useState(pageFromQuery);
 
   useEffect(() => {
-
     (async () => {
-
       try {
-        if(setIsLoading && typeof setIsLoading === 'function'){
-          setIsLoading(prevState => ({
+        if (setIsLoading && typeof setIsLoading === 'function') {
+          setIsLoading((prevState) => ({
             ...prevState,
-            fetching: true
-          }))
+            fetching: true,
+          }));
         }
 
         const calcedPageIndex = (curPage - 1).toString();
-        const res = await getData(`${apiURL}?page=${calcedPageIndex}&size=${size}`);
+        const defaultQuery = `?page=${calcedPageIndex}&size=${size}`;
+        let urlQueries = urlQuery ? `${defaultQuery}${urlQuery}` : defaultQuery;
+        console.log(urlQueries);
+        const res = await getData(`${apiURL}${urlQueries}`);
         const pageData = res.data?.page;
         console.log(res);
         const hasItems = pageData?.totalElements !== 0;
@@ -48,21 +51,24 @@ const Pagination = ({
           };
           setPageInfo(newPageInfo);
           setItemList(newPageInfo.newItemList);
+          if(setPageData && typeof setPageData === 'function'){
+            setPageData(newPageInfo)
+          }
           await router.push({
             search: `?page=${newPageInfo.newPageNumber}`,
           });
         }
       } catch (err) {
-          console.error(err)
+        console.error(err);
       }
-      if(setIsLoading && typeof setIsLoading === 'function'){
-        setIsLoading(prevState => ({
+      if (setIsLoading && typeof setIsLoading === 'function') {
+        setIsLoading((prevState) => ({
           ...prevState,
-          fetching: false
-        }))
+          fetching: false,
+        }));
       }
     })();
-  }, [curPage]);
+  }, [curPage, urlQuery]);
 
   const Num = ({ pagenum }) => {
     const calcedPageNum = pagenum + 1;

@@ -64,7 +64,7 @@ const Item = ({ item }) => {
       <span>{DATA.phoneNumber}</span>
       <span className={s.scrollBox}>{DATA.dogName}</span>
       <span>
-        <em className={'text-transform-ellipsis'}>{DATA.accumulatedAmount}원</em>
+        <em className={'overflow-x-scroll'}>{DATA.accumulatedAmount}원</em>
       </span>
       <span>{DATA.subscribe}</span>
       <span>{DATA.longUnconnected}</span>

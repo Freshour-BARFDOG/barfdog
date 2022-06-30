@@ -32,7 +32,7 @@ import s from "../coupon.module.scss";
         <span>{DATA.code}</span>
         <span>{DATA.sort}</span>
         <span>{DATA.name}</span>
-        <span className={"text-transform-ellipsis"}>{DATA.description}</span>
+        <span className={"overflow-x-scroll"}>{DATA.description}</span>
         <span>{DATA.discount}</span>
         <span>{DATA.couponTarget}</span>
         <span>{DATA.amount}</span>

@@ -57,7 +57,7 @@ const ItemList = ({ item, sortableItemRef }) => {
       data-idx={DATA.id}
     >
       <span>
-        <em className={"text-transform-ellipsis"}>{DATA.itemName}</em>
+        <em className={"overflow-x-scroll"}>{DATA.itemName}</em>
       </span>
       <span>{DATA.priceConst}</span>
       <span>{DATA.weightConst}</span>

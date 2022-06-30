@@ -29,12 +29,17 @@ $inputDefaultHeight: rem(38);
   width: rem(200);
 }
 
-.text-transform-ellipsis {
+.overflow-x-scroll {
   white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
+  //text-overflow: ellipsis;
+  //overflow-x: hidden;
+  overflow-x: auto;
   justify-content: flex-start !important;
+  &::-webkit-scrollbar {display:none;}
 }
+
+
+
 .btn_link {
   cursor: pointer;
   color: var(--color-link);

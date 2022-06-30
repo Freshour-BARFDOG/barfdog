@@ -78,18 +78,18 @@ const ItemList = ({ item, sortableItemRef }) => {
         </button>
       </span>
       <span>
-        <em className={"text-transform-ellipsis"}>{DATA.orderId}</em>
+        <em className={"overflow-x-scroll"}>{DATA.orderId}</em>
       </span>
       <span>
-        <em className={"text-transform-ellipsis"}>{DATA.pruductId}</em>
+        <em className={"overflow-x-scroll"}>{DATA.pruductId}</em>
       </span>
       <span>
-        <em className={"text-transform-ellipsis"}>
+        <em className={"overflow-x-scroll"}>
           {DATA.orderStatus} {DATA.orderDate}
         </em>
       </span>
       <span>
-        <em className={"text-transform-ellipsis"}>{DATA.reason}</em>
+        <em className={"overflow-x-scroll"}>{DATA.reason}</em>
       </span>
       <span>{DATA.buyerId}</span>
       <span>
