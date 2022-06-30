@@ -136,18 +136,6 @@ function CreateSingleItemPage() {
     e.preventDefault();
     if (isSubmitted) return;
     // ! IMPORTANT : submit 이후 enterKey event로 trigger되는 중복submit 방지
-    // console.log(formValues);
-
-
-
-    // ! 유효성 검사 끝냈다 (06.30 목 아침7시 ////)
-    // ! 전송해보니깐 500에러뜬다 ---> 왜지 ?????????
-    // ! 전송해보니깐 500에러뜬다 ---> 왜지 ?????????
-    // ! 전송해보니깐 500에러뜬다 ---> 왜지 ?????????
-    // ! 전송해보니깐 500에러뜬다 ---> 왜지 ?????????
-    // ! 전송해보니깐 500에러뜬다 ---> 왜지 ?????????
-    // ! 전송해보니깐 500에러뜬다 ---> 왜지 ?????????
-    // ! 전송해보니깐 500에러뜬다 ---> 왜지 ?????????
     // ! 전송해보니깐 500에러뜬다 ---> 왜지 ?????????
     const errObj = validate(formValues);
     setFormErrors(errObj);
@@ -156,7 +144,6 @@ function CreateSingleItemPage() {
     let filteredFormValues = formValues;
     const filterStringList = ['originalPrice', 'salePrice', 'discountDegree', {'itemOptionSaveDtoList':['price', 'remaining']}];
     filteredFormValues = transformClearLocalCurrencyInEveryObject(filteredFormValues, filterStringList);
-    console.log(filteredFormValues);
 
     try {
       setIsLoading((prevState) => ({
@@ -165,13 +152,9 @@ function CreateSingleItemPage() {
       }));
       if (isPassed) {
         const res = await postObjData(postFormValuesApiUrl, filteredFormValues);
-        console.log(res);
-        // const res = { // TESTTESTTESTTESTTESTTESTTESTTESTTEST
-        //   isDone : true,
-        //   error: ''
-        // }
+        // console.log(res);
         if (res.isDone) {
-          onShowModalHandler('이벤트가 생성되었습니다.');
+          onShowModalHandler('일반상품이 생성되었습니다.');
           setIsSubmitted(true);
         } else {
           alert(res.error, '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.');
@@ -202,7 +185,7 @@ function CreateSingleItemPage() {
 
   const onGlobalModalCallback = () => {
     mct.alertHide();
-    router.push('/bf-admin/community/event');
+    router.push('/bf-admin/product/single');
   };
 
   return (
