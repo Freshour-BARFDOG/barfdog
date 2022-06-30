@@ -8,6 +8,7 @@ import AmdinErrorMessage from "@src/components/atoms/AmdinErrorMessage";
 import Pagination from "@src/components/atoms/Pagination";
 import EventList from "./EventList";
 import PaginationWithAPI from "/src/components/atoms/PaginationWithAPI";
+import Spinner from "../../../../components/atoms/Spinner";
 
 
 
@@ -17,13 +18,24 @@ import PaginationWithAPI from "/src/components/atoms/PaginationWithAPI";
 function EventNoticePage() {
   const getListApiUrl = '/api/admin/events';
   const [itemList, setItemList] = useState([]);
+  const [isLoading, setIsLoading] = useState({});
   console.log(itemList);
   return (
     <>
       <MetaTitle title="이벤트 관리" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
-          <h1 className="title_main">이벤트 관리</h1>
+          <div className="title_main">
+            <h1>
+              이벤트 관리
+              {isLoading.fetching && (
+                <Spinner
+                  style={{ color: 'var(--color-main)', width: '20', height: '20' }}
+                  speed={0.6}
+                />
+              )}
+            </h1>
+          </div>
           <div className="cont">
             <div className="cont_header clearfix">
               <p className="cont_title cont-left">목록</p>
@@ -54,7 +66,7 @@ function EventNoticePage() {
               </div>
             </div>
             <div className={s["pagination-section"]}>
-              <PaginationWithAPI apiURL={getListApiUrl} size={10} theme={'square'} setItemList={setItemList} queryItemList={'queryEventsAdminDtoList'}/>
+              <PaginationWithAPI apiURL={getListApiUrl} size={10} theme={'square'} setItemList={setItemList} queryItemList={'queryEventsAdminDtoList'} setIsLoading={setIsLoading}/>
             </div>
           </div>
         </AdminContentWrapper>
