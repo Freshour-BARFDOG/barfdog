@@ -179,6 +179,9 @@ $topLinkBannerHeight : rem(38);
   .cont {
     max-height: calc(100vh - #{rem(83)
   });
+    overflow: scroll;
+    &::-webkit-scrollbar {display: none;}
+
     ul {
       grid-template-columns: 1fr ;
       li:not(:last-child) {
@@ -248,3 +251,4 @@ $topLinkBannerHeight : rem(38);
     top: rem(16);
   }
 }
+

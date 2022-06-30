@@ -42,9 +42,10 @@ const Message_emptySigleItem = () => {
 const SubscribeItemList = () => {
   return (
     <div className={Styles["subscribeItem-container"]}>
+      {/* Styles["subscribeItem-container" 는 여러개X Styles.day부터 개체 복사 */}
       <div className={Styles.day}>2022.02.14</div>
 
-      <hr />
+      <hr className={Styles.hr1} />
 
       <div className={Styles.content_body}>
         <div className={Styles.left_box}>
@@ -85,6 +86,9 @@ const SubscribeItemList = () => {
           <div className={Styles.btn2}>구독관리</div>
         </div>
       </div>
+
+      <hr className={Styles.hr2} />
+
     </div>
   );
   
@@ -93,39 +97,48 @@ const SubscribeItemList = () => {
 
 const SingleItemList = () => {
   return (
-    <div className={Styles["item-container"]}>
-      <div className={Styles.left_box}>
-        <div className={`${Styles.image} img-wrap`}>
-          <Image
-            priority
-            src={require("public/img/mypage/order_history/subscribe_sample_1.png")}
-            objectFit="cover"
-            layout="fill"
-            alt="카드 이미지"
-          />
+    <div className={Styles["subscribeItem-container"]}>
+          <div className={Styles.day}>2022.02.14</div>
+
+      <hr className={Styles.hr1} />
+
+      <div className={Styles["item-container"]}>
+        <div className={Styles.left_box}>
+          <div className={`${Styles.image} img-wrap`}>
+            <Image
+              priority
+              src={require("public/img/mypage/order_history/subscribe_sample_1.png")}
+              objectFit="cover"
+              layout="fill"
+              alt="카드 이미지"
+            />
+          </div>
+
+          <div className={Styles.flex_box}>
+            <div className={Styles.text}>
+              <div className={Styles.last_text}>바프레드 외 8건</div>
+            </div>
+
+            <div className={Styles.text2}>
+              <div>주문번호</div>
+              <div>10000826742324</div>
+              <div>결제금액</div>
+              <div>84,000원</div>
+            </div>
+          </div>
         </div>
 
-        <div className={Styles.flex_box}>
-          <div className={Styles.text}>
-            <div className={Styles.last_text}>바프레드 외 8건</div>
-          </div>
+        <div className={Styles.mid_box}>배송중</div>
 
-          <div className={Styles.text2}>
-            <div>주문번호</div>
-            <div>10000826742324</div>
-            <div>결제금액</div>
-            <div>84,000원</div>
-          </div>
+        <div className={Styles.right_box}>
+          <Link href="/mypage/orderHistory/single/1" passHref>
+            <a className={Styles.btn}>주문상세</a>
+          </Link>
         </div>
       </div>
 
-      <div className={Styles.mid_box}>배송중</div>
-
-      <div className={Styles.right_box}>
-        <Link href="/mypage/orderHistory/single/1" passHref>
-          <a className={Styles.btn}>주문상세</a>
-        </Link>
-      </div>
+      <hr className={Styles.hr2} />
+    
     </div>
   );
 };
