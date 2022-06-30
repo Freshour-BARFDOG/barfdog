@@ -70,9 +70,9 @@ function SignInput_address(props) {
         }
       >
         <WindowOpener url={'/popup/searchAddress'} bridge={onReceivePopupData}>
-          <button type={'button'} className={`${s.btn} ${s.bigbtn}`}>
+          <span type={'button'} className={`${s.btn} ${s.bigbtn}`}>
             {formValues.address.city ? '재검색' : '주소검색'}
-          </button>
+          </span>
         </WindowOpener>
         {formErrors.address && <ErrorMessage>{formErrors.address}</ErrorMessage>}
         {formValues.address.street && (
