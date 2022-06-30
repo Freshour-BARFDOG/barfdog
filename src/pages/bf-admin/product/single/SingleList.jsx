@@ -23,7 +23,7 @@ const ItemList = ({ item }) => {
     id: item.id,
     name: item.name,
     category: item.category,
-    originalPrice: transformLocalCurrency(item.originalPrice+1231231231231) + '원',
+    originalPrice: transformLocalCurrency(item.originalPrice) + '원',
     salePrice: transformLocalCurrency(item.salePrice) + '원',
     remaining: transformLocalCurrency(item.remaining),
     discount: item.discount || '10%',

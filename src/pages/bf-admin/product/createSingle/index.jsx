@@ -274,7 +274,7 @@ function CreateSingleItemPage() {
                   <div className="input_row">
                     <div className="title_section fixedHeight">
                       <label className="title" htmlFor="originalPrice">
-                        판매가격
+                        상품가격
                       </label>
                     </div>
                     <div className="inp_section">
@@ -474,7 +474,7 @@ function CreateSingleItemPage() {
                           name="deliveryFree"
                           value={formValues.deliveryFree}
                           setValue={setFormValues}
-                          labelList={['무료배송', '선불']}
+                          labelList={['무료', '선불']}
                         />
                       </div>
                     </div>
