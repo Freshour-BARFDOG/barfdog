@@ -14,7 +14,7 @@ import transformClearLocalCurrency from '/util/func/transformClearLocalCurrency'
 import Spinner from '/src/components/atoms/Spinner';
 import { validate } from '/util/func/validation/validation_singleItem';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
-import { getData, postObjData } from '/api/reqData';
+import {getData, postObjData, putObjData} from '/api/reqData';
 import { useModalContext } from '/store/modal-context';
 import dynamic from 'next/dynamic';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
@@ -33,9 +33,10 @@ import SingleItemDiscountOptions from '../../createSingle/SingleItemDiscountOpti
 
 function UpdateSingleItemPage({ id }) {
   const getFormValuesApiUrl = `/api/admin/items/${id}`;
-  const postFormValuesApiUrl = `/api/admin/items/${id}`;
+  const putFormValuesApiUrl = `/api/admin/items/${id}`;
   const postThumbFileApiUrl = '/api/admin/items/image/upload';
   const postContentImageApiUrl = '/api/admin/items/contentImage/upload';
+  const router = useRouter();
   const mct = useModalContext();
 
   const [modalMessage, setModalMessage] = useState('');
@@ -87,8 +88,6 @@ function UpdateSingleItemPage({ id }) {
           salePrice: transformLocalCurrency(DATA.salePrice), // 할인 적용 후 판매가격
           inStock: DATA.inStock, // 재고 여부
           remaining: transformLocalCurrency(DATA.remaining), // 재고 수량
-          
-          
           
           
           
@@ -205,21 +204,23 @@ function UpdateSingleItemPage({ id }) {
     const isPassed = valid_hasFormErrors(errObj);
   
     console.log(formValues);
-    return;
     
     let filteredFormValues = formValues;
+    
     const filterStringList = [
       'originalPrice',
       'salePrice',
+      'remaining',
       'discountDegree',
       { itemOptionSaveDtoList: ['price', 'remaining'] },
+      { itemOptionUpdateDtoList: ['price', 'remaining'] },
     ];
     filteredFormValues = transformClearLocalCurrencyInEveryObject(
       filteredFormValues,
       filterStringList,
     );
+    console.log(filteredFormValues)
 
-    // console.log(filteredFormValues)
     
     try {
       setIsLoading((prevState) => ({
@@ -227,10 +228,10 @@ function UpdateSingleItemPage({ id }) {
         submit: true,
       }));
       if (isPassed) {
-        const res = await postObjData(postFormValuesApiUrl, filteredFormValues);
-        // console.log(res);
+        const res = await putObjData(putFormValuesApiUrl, filteredFormValues);
+        console.log(res);
         if (res.isDone) {
-          onShowModalHandler('일반상품이 생성되었습니다.');
+          onShowModalHandler('일반상품이 수정되었습니다.');
           setIsSubmitted(true);
         } else {
           alert(res.error, '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.');
@@ -611,7 +612,7 @@ function UpdateSingleItemPage({ id }) {
                 className="admin_btn confirm_l solid"
                 onClick={onSubmit}
               >
-                {isLoading.submit ? <Spinner/> : '등록'}
+                {isLoading.submit ? <Spinner style={{color:'#fff'}}/> : '수정'}
               </button>
             </div>
           </div>

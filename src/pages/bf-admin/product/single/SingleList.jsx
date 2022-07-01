@@ -3,7 +3,7 @@ import getElemIdx from '@util/func/getElemIdx';
 import Link from 'next/link';
 import transformDate from '/util/func/transformDate';
 import transformLocalCurrency from "/util/func/transformLocalCurrency";
-
+import {global_itemType} from "/store/TYPE/itemType";
 export default function SearchResultList({ items, onDeleteItem }) {
   if (!items || !items.length) return;
 
@@ -17,23 +17,25 @@ export default function SearchResultList({ items, onDeleteItem }) {
 }
 
 
-
 const ItemList = ({ item }) => {
+  console.log(item)
   const DATA = {
     id: item.id,
     name: item.name,
-    category: item.category,
+    itemType: global_itemType
+      [item.itemType],
     originalPrice: transformLocalCurrency(item.originalPrice) + '원',
     salePrice: transformLocalCurrency(item.salePrice) + '원',
-    remaining: transformLocalCurrency(item.remaining),
+    remaining: transformLocalCurrency(item.remaining) === '0' ? '품절' : transformLocalCurrency(item.remaining),
     discount: item.discount || '10%',
     status: item.status === 'LEAKED' ? 'Y':"N",
+    reg_date: transformDate(item.createdDate) || '-',
     apiurl: {
       update: item._links.update_item.href,
       delete: item._links.delete_item.href,
     },
   };
-
+  
   const onDeleteItemHandler = (e) => {
     const target = e.currentTarget.closest('li');
     const targetViewIdx = getElemIdx(target);
@@ -50,7 +52,7 @@ const ItemList = ({ item }) => {
         <em className={'overflow-x-scroll'}>{DATA.id}</em>
       </span>
       <span>
-        <em className={'overflow-x-scroll'}>{DATA.category}</em>
+        <em className={'overflow-x-scroll'}>{DATA.itemType}</em>
       </span>
       <span>
         <em className={'overflow-x-scroll'}>{DATA.name}</em>
@@ -61,9 +63,10 @@ const ItemList = ({ item }) => {
       <span>
         <em className={'overflow-x-scroll'}>{DATA.salePrice}</em>
       </span>
-      <span>{DATA.remaining}</span>
+      <span className={`${DATA.remaining === '품절' ? 'pointColor' : ""}`}>{DATA.remaining}</span>
       <span>{DATA.discount}</span>
       <span>{DATA.status}</span>
+      <span>{DATA.reg_date}</span>
       <span>
         <Link href={`/bf-admin/product/single/update/${DATA.id}`} passHref>
           <a>

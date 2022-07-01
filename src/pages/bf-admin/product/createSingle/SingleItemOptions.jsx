@@ -14,7 +14,7 @@ export default function SingleItemOptions({ id, formErrors, setFormValues, mode=
   
   useEffect(() => {
     // ! important: 데이터fetching없이 useEffect의 dependency가 변화하지 않을 경우, 무한루프 (console로 확인가능)
-    if(mode === 'update'){
+    if(mode === 'update'){ // for INIT DATA
       const initFullIdList = originDataList.map((data) => data.id);
       setAllIdList(initFullIdList)
       const initOptionList = originDataList.map((data) => ({
@@ -33,7 +33,6 @@ export default function SingleItemOptions({ id, formErrors, setFormValues, mode=
   useEffect(() => {
     if (!setFormValues || typeof setFormValues !== 'function') return console.error('setFormValues타입이 올바르지 않습니다.');
     
-    console.log(options);
     
     if (!isFirstRendering) {
       if (mode === 'update') {
@@ -51,8 +50,6 @@ export default function SingleItemOptions({ id, formErrors, setFormValues, mode=
         // - 수정 옵션: 객체 {_____id)), name, price, remaining},
         let newOptionObj; // 그대로 집어넣음 되겠는데?
         let isNewOption;
-        // options.map(option => option.id ? )
-        // 옵션들 각각을 조회해야겠따.
         
         const newOptionArray = [];
         const updatedOptionArray = [];

@@ -79,12 +79,12 @@ function SingleItemPage() {
                 setSearchValue={setSearchValue}
                 searchValue={searchValue}
               />
-              <SearchPlainInput
-                title="소항목 타이틀"
-                name={'single-title'}
-                onChange={setSearchValue}
-                searchValue={searchValue}
-              />
+              {/*<SearchPlainInput*/}
+              {/*  title="소항목 타이틀"*/}
+              {/*  name={'single-title'}*/}
+              {/*  onChange={setSearchValue}*/}
+              {/*  searchValue={searchValue}*/}
+              {/*/>*/}
             </SearchBar>
           </section>
           <section className="cont">
@@ -106,6 +106,7 @@ function SingleItemPage() {
                   <li className={s.table_th}>재고수량</li>
                   <li className={s.table_th}>할인</li>
                   <li className={s.table_th}>노출여부</li>
+                  <li className={s.table_th}>생성일</li>
                   <li className={s.table_th}>수정</li>
                   <li className={s.table_th}>삭제</li>
                 </ul>

@@ -47,14 +47,6 @@ const transformClearLocalCurrencyInEveryObject = (obj, filterStringList) => {
   });
 
   return resultObj;
-  // // 모든 요소를 변환할 겨우
-  // for (const key in filteredObj) {
-  //   const val = filteredObj[key];
-  //   filteredObj = {
-  //     ...filteredObj,
-  //     [key]: transformClearLocalCurrency(val),
-  //   };
-  // }
 };
 
 export default transformClearLocalCurrencyInEveryObject;

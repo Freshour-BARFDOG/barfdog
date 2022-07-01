@@ -114,18 +114,5 @@ function ManageUserPage(props) {
 
 
 
-export async function getStaticProps() {
-  const data = [1, 2, 3];
-
-  if (!data.length) {
-    return {
-      redirect: {
-        destination: '/bf-admin/banner/line-banner',
-      },
-    };
-  }
-
-  return { props: [{ id: 0 }] };
-}
 
 export default ManageUserPage;
