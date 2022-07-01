@@ -52,31 +52,29 @@ export const getData = async (url, callback) => {
     })
     .catch((err) => {
       let errorMessage;
-      console.log(err);
-      console.log(err.response);
+      // console.log(err);
+  
       const errorObj = err.response;
       const status = errorObj?.status;
       if(status === 401){
         const errorReason = errorObj.data.reason;
         if(errorReason === "EXPIRED_TOKEN"){
           console.error("ERROR REASON: ", errorReason);
-          errorMessage = '로그인 토큰이 만료되었습니다. 다시 로그인해주세요.';
+          errorMessage = status + errorReason+ '\n로그인 토큰이 만료되었습니다. 다시 로그인해주세요.';
         } else if(errorReason === "UNAUTHORIZED") {
-          console.error("ERROR REASON: ", errorReason);
-          errorMessage = '권한이 없습니다.'
+          errorMessage = errorReason +  '\n권한이 없습니다.'
         }
       }else if (status === 403) {
-        const FORBIDDEN = errorObj.reason === "FORBIDDEN";
-        console.error("errorType > FORBIDDEN : ", FORBIDDEN);
-      } else if(errorObj?.data?.error) {
-        console.error('errorObj.data.error: ',errorObj?.data?.error);
-        errorMessage =  errorObj?.data?.error + '\n\n불러올 데이터가 존재하지 않거나, 서버 내부 에러입니다.';
+        errorMessage =  errorReason + '\n접근 불가한 페이지입니다.';
+      } else if(status === 500) {
+        errorMessage =  errorObj?.data?.error + '\n데이터가 존재하지 않거나, 서버 내부 에러입니다.';
       } else {
         errorMessage =  'Failed Fetching Data: 데이터를 불러오는데 실패했습니다.';
       }
-
-      alert(errorMessage);
-      return err;
+      
+      console.log(err.response);
+      console.error(errorMessage);
+      return err.response;
     });
 
   return response;

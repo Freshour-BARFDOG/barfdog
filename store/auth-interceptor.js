@@ -54,14 +54,16 @@ export default function AuthInterceptor ({ children })  {
             if (curPath.indexOf(`/${ADMIN_BASE_PATH_KEY}${path}`) >= 0)
               return (isPublicAdminPath = true);
           });
-          if(isPublicAdminPath) return;
-        
-          const adminAuth = localStorage?.getItem('admin');
-          const errorMessage = await valid_authToken();
-          if(errorMessage){
-            await router.push(`/${ADMIN_BASE_PATH_KEY}/login`)
-            alert(errorMessage);
-          }
+          const isAdminPath = !isPublicAdminPath;
+          if(isAdminPath) {
+            const adminAuth = localStorage?.getItem('admin');
+            const errorMessage = await valid_authToken();
+            if(errorMessage){
+              await router.push(`/${ADMIN_BASE_PATH_KEY}/login`)
+              alert(errorMessage);
+            }
+          };
+          
         }
       })();
     } catch (err) {
@@ -80,12 +82,12 @@ export default function AuthInterceptor ({ children })  {
 
 
 const valid_authToken = async () => {
-  let error;
+  let error = null;
   try {
     const checkTokenAPiUrl = '/api/admin/setting';
     const response = await getData(checkTokenAPiUrl);
     // const response = await testTokenStateWithOldToken(checkTokenAPiUrl);
-    const status = response.status || '';
+    const status = response.status;
     switch (status) {
       case 200:
         error = '';
@@ -105,14 +107,17 @@ const valid_authToken = async () => {
         error = '해당 토큰으로는 접근할 수 없습니다.';
         break;
       case 404:
-        error = '요청한 리소스가 없습니다.';
+        error = '요청한 리소스가 서버에 없습니다.';
         break;
       case 409:
         error = '중복된 리소스가 이미 존재합니다.';
         break;
+      case 500:
+        error = `${status}: 데이터를 조회할 수 없습니다.`;
+        break;
     }
   } catch (err) {
-    console.error('TOKEN VALID ERROR RESPONSE: ', err.response);
+    console.error('TOKEN VALID > ERROR RESPONSE : ', err.response);
   }
   return error;
 };
