@@ -12,14 +12,15 @@ export default function useUserData() {
   useEffect(() => {
     if(!auth.isAuth || auth.isAdmin)return;
     (async () => {
-
       const res = await axios
         .get('/api/members', axiosUserConfig())
         .catch((err) => {
           console.log(err.response);
       });
+      console.log(res)
+      
       if (res?.status !== 200) return;
-      const data = {
+      const DATA = {
         birthday: res.data.birthday,
         gender: res.data.gender,
         name: res.data.name,
@@ -32,10 +33,14 @@ export default function useUserData() {
           street: res.data.address.street,
           detailAddress: res.data.address.detailAddress,
         },
+        authState:{
+          autoLogin: auth.autoLogin,
+          isAdmin: auth.isAdmin,
+        }
       };
-      setUserData(data);
+      setUserData(DATA);
     })();
-  }, []);
+  }, [auth]);
 
 
 
