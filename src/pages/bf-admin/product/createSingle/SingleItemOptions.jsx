@@ -4,20 +4,83 @@ import filter_emptyValue from '/util/func/filter_emptyValue';
 import filter_onlyNumber from '/util/func/filter_onlyNumber';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
+import compareIdList from "/util/func/compareIdList";
 
-export default function SingleItemOptions({ id, formErrors, setFormValues }) {
+export default function SingleItemOptions({ id, formErrors, setFormValues, mode='create', originDataList=[]  }) {
+  
+  const [isFirstRendering, setIsFirstRendering] = useState(true);
+  const [allIdList, setAllIdList] = useState([]); // for Post update summit event;
   const [options, setOptions] = useState([]);
-
+  
   useEffect(() => {
-    if (setFormValues && typeof setFormValues === 'function') {
-      setFormValues((prevState) => ({
-        ...prevState,
-        [id]: options,
+    // ! important: 데이터fetching없이 useEffect의 dependency가 변화하지 않을 경우, 무한루프 (console로 확인가능)
+    if(mode === 'update'){
+      const initFullIdList = originDataList.map((data) => data.id);
+      setAllIdList(initFullIdList)
+      const initOptionList = originDataList.map((data) => ({
+        id: data.id,
+        name: data.name,
+        price: transformLocalCurrency(data.optionPrice),
+        remaining: transformLocalCurrency(data.remaining),
       }));
+      setOptions(initOptionList);
     }
+
+  }, [originDataList]);
+  
+  
+  
+  useEffect(() => {
+    if (!setFormValues || typeof setFormValues !== 'function') return console.error('setFormValues타입이 올바르지 않습니다.');
+    
+    console.log(options);
+    
+    if (!isFirstRendering) {
+      if (mode === 'update') {
+        const curIdList = options.map((list) => list.id);
+        const originIdList = originDataList.map((list) => list.id);
+        const resultIdList = compareIdList(
+          allIdList,
+          curIdList,
+          originIdList,
+        );
+        // -> 새로 추가한 항목은 undefined임요
+        console.log('::: Array CRUD RESULT :::', resultIdList);
+        // - 삭제될 옵션: ID list
+        // - 신규 옵션: 객체 {name, price, remaining},
+        // - 수정 옵션: 객체 {_____id)), name, price, remaining},
+        let newOptionObj; // 그대로 집어넣음 되겠는데?
+        let isNewOption;
+        // options.map(option => option.id ? )
+        // 옵션들 각각을 조회해야겠따.
+        
+        const newOptionArray = [];
+        const updatedOptionArray = [];
+        options.forEach(option => {
+          option.id ? updatedOptionArray.push(option) : newOptionArray.push(option);
+        })
+        
+        // console.log('new: ',newOptionArray,'___updated: ',updatedOptionArray)
+        setFormValues((prevState) => ({
+          ...prevState,
+          [id]: newOptionArray,
+          itemOptionUpdateDtoList: updatedOptionArray,
+          deleteOptionIdList: resultIdList?.del || [], // array속에 객체리스트로 넣어야함.
+        }));
+      } else if (mode === 'create'){
+        setFormValues((prevState) => ({
+          ...prevState,
+          [id]: options,
+        }));
+      }
+    }
+    
+    setIsFirstRendering(false);
   }, [options]);
-
-
+  
+  
+  
+  
   const onAddOptionHandler = () => {
     const initialValueObj = { name: '', price: 0, remaining: 0 };
     setOptions((prevState) => [...prevState, initialValueObj]);
@@ -67,7 +130,7 @@ export default function SingleItemOptions({ id, formErrors, setFormValues }) {
     <>
       <div className="inp_section">
         {options.length > 0 && (
-          <div className={`${s.cont_viewer}`}>
+          <div key={`${options}`} className={`${s.cont_viewer}`}>
             <div className={s.table}>
               <ul className={s.table_header}>
                 <li className={s.table_th}>
@@ -81,7 +144,7 @@ export default function SingleItemOptions({ id, formErrors, setFormValues }) {
               </ul>
               <ul className="table_body">
                 {options.map((DATA, index) => (
-                  <li key={`${index}`} className={s.item}>
+                  <li key={`options-${index}`} className={s.item}>
                     <span>
                       <input
                         id={`name-${index}`}

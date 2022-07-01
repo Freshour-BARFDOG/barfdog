@@ -5,7 +5,9 @@ import Fake_input from '/src/components/atoms/fake_input';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import Spinner from '/src/components/atoms/Spinner';
 import convertFileSizeToMegabyte from '/util/func/ConvertFileSizeToMegabyte';
-import { postFileUpload } from '/api/reqData';
+import compareIdList from '/util/func/compareIdList';
+import uploadImageToApiServer from '/util/func/uploadImageToApiServer';
+import { valid_fileSize } from '/util/func/validation/validationPackage';
 
 export default function FileInput({
   id,
@@ -16,62 +18,66 @@ export default function FileInput({
   originImageDatas = [],
   maxImageCount = 5,
   maxFileSize = 10000000,
-  mode,
+  mode = 'create',
 }) {
+  
+
   const [isFirstRendering, setIsFirstRendering] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+
+  const [allIdList, setAllIdList] = useState([]); // for Post update summit event;
   const [fileList, setFileList] = useState([]); // for Preview;
-  const [fullImageIdList, setFullImageIdList] = useState([]); // for Post update summit event;
-
-  // console.log(fullImageIdList);
+  // console.log(allIdList);
   // console.log(fileList);
-
+  // console.log(originImageDatas);
+  
   useEffect(() => {
-    // init values
-    if (mode === 'update') {
-      const initCondition = fullImageIdList.length === 0;
-      const initImageIdList = originImageDatas.map((data) => data.id);
-      initCondition && setFullImageIdList(initImageIdList);
+    // ! important: 데이터fetching없이 useEffect의 dependency가 변화하지 않을 경우, 무한루프실행됨.
+    if(mode === 'update'){
+      const initAllIdList = originImageDatas.map(data => data.id);
       const initFileList = originImageDatas.map((data) => ({
         file: null,
         filename: data.filename,
         id: data.id,
         url: data.url,
       }));
+      setAllIdList(initAllIdList);
       setFileList(initFileList);
     }
   }, [originImageDatas]);
+  
 
   useEffect(() => {
+ 
     if (!isFirstRendering) {
       if (mode === 'update') {
-        const currentImageIdList = fileList.map((list) => list.id);
-        const originImageIdList = originImageDatas.map((list) => list.id);
-        const resultImageIdList = compareImageList(
-          fullImageIdList,
-          currentImageIdList,
-          originImageIdList,
+        const curIdList = fileList.map(list => list.id);
+        const originIdList = originImageDatas.map(list => list.id);
+        const resultIdList = compareIdList(
+          allIdList,
+          curIdList,
+          originIdList,
         );
-        console.log(resultImageIdList);
-        const newImageValues = resultImageIdList?.cur.map((imageId, index) => ({
+        // console.log('::: File Upload To Server CRUD RESULT :::', resultIdList);
+        const newImageValues = resultIdList?.cur.map((imageId, index) => ({
           id: imageId,
-          leakOrder: index + 1, // order는 1부터 시작함.
+          leakOrder: index + 1, // order 시작숫자: 1. (!== index 시작숫자: 0)
         }));
         setFormValues((prevState) => ({
           ...prevState,
           [id]: newImageValues || [],
-          addImageIdList: resultImageIdList?.add || [],
-          deleteImageIdList: resultImageIdList?.del || [],
+          addImageIdList: resultIdList?.cur || [],
+          deleteImageIdList: resultIdList?.del || [],
         }));
-      } else {
+      } else if (mode === 'create'){
         setFormErrors((prevState) => ({
           ...prevState,
           [id]: !fileList.length ? '필수항목입니다.' : '',
         }));
-        const currentFileIdList = fileList.map((list) => list.id);
+        const curIdList = fileList.map((list) => list.id);
         setFormValues((prevState) => ({
           ...prevState,
-          [id]: prevState[id].filter((list) => currentFileIdList.indexOf(list.id) >= 0),
+          [id]: prevState[id].filter((list) => curIdList.indexOf(list.id) >= 0),
         }));
       }
     }
@@ -80,9 +86,9 @@ export default function FileInput({
 
   const multipleImageFileChangeHandler = async (e) => {
     const curFiles = e.currentTarget.files;
-    const currentFileListCount = fileList.length;
+    const curFileListCount = fileList.length;
     const updatedFileListCount = curFiles.length;
-    if (currentFileListCount + updatedFileListCount > maxImageCount) {
+    if (curFileListCount + updatedFileListCount > maxImageCount) {
       return alert(`이미지는 최대 ${maxImageCount}장까지 등록할 수 있습니다.`);
     }
 
@@ -92,8 +98,8 @@ export default function FileInput({
         const hasError = valid_fileSize(file, maxFileSize);
         if (hasError) return;
         setIsLoading(true);
-        const leakOrder = currentFileListCount + 1;
-        const response = await uploadImage(
+        const leakOrder = curFileListCount + 1;
+        const response = await uploadImageToApiServer(
           file,
           setFormValues,
           id,
@@ -106,10 +112,10 @@ export default function FileInput({
           ...prevState,
           { file: file, filename: file.name, id: response.id, url: response.url },
         ]);
-        setFullImageIdList((prevState) => [...prevState, response.id]);
+        setAllIdList((prevState) => [...prevState, response.id]);
       } else if (curFiles.length > 1) {
         let newFileList = [];
-        let fileCount = currentFileListCount;
+        let fileCount = curFileListCount;
         for (const filesKey in curFiles) {
           const leakOrder = fileCount + 1;
           const file = curFiles[filesKey];
@@ -117,7 +123,7 @@ export default function FileInput({
           const hasError = valid_fileSize(file, maxFileSize);
           if (hasError) break;
           setIsLoading(true);
-          const response = await uploadImage(
+          const response = await uploadImageToApiServer(
             file,
             setFormValues,
             id,
@@ -135,7 +141,7 @@ export default function FileInput({
         }
         setFileList((prevState) => [...prevState, ...newFileList]);
         const newfileIdList = newFileList.map((list) => list.id);
-        setFullImageIdList((prevState) => prevState.concat(newfileIdList));
+        setAllIdList((prevState) => prevState.concat(newfileIdList));
       }
     } catch (err) {
       console.log(err);
@@ -155,25 +161,27 @@ export default function FileInput({
   return (
     <>
       <div className="inp_section multiImageBox">
-        {fileList?.length > 0 && <div className={`col-${maxImageCount} grid-box grid-column`}>
-          {fileList?.map((file, index) => {
-            return (
-              <PreviewImage
-                key={`${file.filename}-${file.id}`}
-                file={file.file}
-                thumbLink={file.url}
-                objectFit={'contain'}
-                style={{ cursor: 'default' }}
-              >
-                <CloseButton
-                  data-id={`${file.id}`}
-                  onClick={onDeleteThumbHandler}
-                  className={'preview-delete-button'}
-                />
-              </PreviewImage>
-            );
-          })}
-        </div>}
+        {fileList?.length > 0 && (
+          <div className={`col-${maxImageCount} grid-box grid-column`}>
+            {fileList?.map((file, index) => {
+              return (
+                <PreviewImage
+                  key={`${file.filename}-${file.id}`}
+                  file={file.file}
+                  thumbLink={file.url}
+                  objectFit={'contain'}
+                  style={{ cursor: 'default' }}
+                >
+                  <CloseButton
+                    data-id={`${file.id}`}
+                    onClick={onDeleteThumbHandler}
+                    className={'preview-delete-button'}
+                  />
+                </PreviewImage>
+              );
+            })}
+          </div>
+        )}
         <label className="inp_wrap file" htmlFor={id}>
           <div className="inp_box">
             <input
@@ -186,14 +194,7 @@ export default function FileInput({
             />
             <Fake_input
               filename={fileList.length && fileList[0].filename}
-              loadingIcon={
-                isLoading && (
-                  <Spinner
-                    style={{ color: 'var(--color-main)', width: '15', height: '15' }}
-                    speed={0.6}
-                  />
-                )
-              }
+              loadingIcon={isLoading && <Spinner />}
             />
           </div>
         </label>
@@ -211,83 +212,3 @@ export default function FileInput({
   );
 }
 
-const uploadImage = async (file, setFormValues, id, setFormErrors, postApiUrl, leakOrder) => {
-  let result = {
-    id: '',
-    url: '',
-    leakOrder: undefined,
-  };
-  const formData = new FormData();
-  formData.append('file', file);
-  const response = await postFileUpload(postApiUrl, formData); // ! ORIGIN CODE
-  // const response = {// TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST
-  //   data: { id: Math.floor(Math.random() * 100), leakOrder: Math.floor(Math.random() * 100) },
-  //   status: 200,
-  // };
-
-  const imageId = response.data.id;
-  const imageUrl = response.data.url;
-  const isFailed = response.status !== 200 && response.status !== 201;
-
-  result.id = imageId;
-  result.url = imageUrl;
-  result.leakOrder = leakOrder;
-
-  setFormValues((prevState) => ({
-    ...prevState,
-    [id]: [...prevState[id], { id: imageId, leakOrder: leakOrder }],
-  }));
-  setFormErrors((prevState) => ({
-    ...prevState,
-    [id]: isFailed && '업로드에 실패했습니다. 파일형식을 확인하세요.',
-  }));
-
-  return result;
-};
-
-const valid_fileSize = (file, maxFileSize) => {
-  const error = file.size >= maxFileSize;
-  if (error) {
-    alert(
-      `- 최대 파일크기: ${convertFileSizeToMegabyte(
-        maxFileSize,
-      )}MB 이상의 파일이 포함돼있습니다.\n- 초과된 파일명: ${
-        file.name
-      } \n- 초과된 파일크기: ${convertFileSizeToMegabyte(file.size)}MB`,
-    );
-  }
-  return error;
-};
-
-const compareImageList = (allArrBefore, curArrBefore, originArrBefore) => {
-  if (!allArrBefore.length) return console.error('There is no Image File.');
-
-  const originArr = originArrBefore.map((a) => Number(a));
-  const allArr = allArrBefore.map((a) => Number(a));
-  const curArr = curArrBefore.map((a) => Number(a));
-
-  let result = {
-    origin: originArr, // very First image List
-    all: allArr, // full image List
-    cur: curArr, // innerHTML image List
-    add: [], // new image List that have been completely uploaded in this process
-    del: [], // the image List to be deleted
-  };
-
-  for (const key in result) {
-    let arr = result[key];
-    result[key] = arr.map((a) => Number(a));
-  }
-
-  allArr.map((id) => {
-    const isCurArr = curArr.indexOf(id) >= 0;
-    const isOriginArr = originArr.indexOf(id) >= 0;
-    const isNew = isCurArr && !isOriginArr;
-    const isToBeDeleted = curArr.indexOf(id) < 0;
-
-    isNew && result.add.push(id);
-    isToBeDeleted && result.del.push(id);
-  });
-
-  return result;
-};

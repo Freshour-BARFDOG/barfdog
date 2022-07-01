@@ -267,6 +267,7 @@ $inputDefaultHeight: rem(38);
       i {
         cursor: default;
       }
+      label i, label b{cursor: inherit}
       .table_body {
         min-height: $inputDefaultHeight;
       }

@@ -74,6 +74,8 @@ function CreateSingleItemPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [activeDiscountOption, setActiveDiscountOption] = useState(false);
 
+  
+  
   // console.log(formValues)
   useEffect(() => {
     // - 품절일 경우, 재고수량 초기화
@@ -388,6 +390,7 @@ function CreateSingleItemPage() {
                       id={'itemOptionSaveDtoList'}
                       formErrors={formErrors}
                       setFormValues={setFormValues}
+                      mode={'create'}
                     />
                   </div>
                 </div>
@@ -519,11 +522,7 @@ function CreateSingleItemPage() {
                 className="admin_btn confirm_l solid"
                 onClick={onSubmit}
               >
-                {isLoading.submit ? (
-                  <Spinner style={{ color: '#fff', width: '15', height: '15' }} speed={0.6} />
-                ) : (
-                  '등록'
-                )}
+                {isLoading.submit ? <Spinner /> : '등록'}
               </button>
             </div>
           </div>

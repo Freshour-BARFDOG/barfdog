@@ -11,49 +11,72 @@ const Wrap = styled.div`
   column-gap: ${rem(10)};
 `;
 
-const CheckboxGroup = ({id, items = [], formValues, setFormValues}) => {
-  let initialValueArray = [];
-  if (formValues[id]) {
-    initialValueArray = formValues[id]?.replace(/\s/g, '').split(',');
-  }
-
-  const [selectedValues, setSelectedValues] = useState(initialValueArray);
-
-  // console.log(selectedValues);
 
 
+const CheckboxGroup = ({id, items = [], formValues, setFormValues, mode}) => {
+
+  // 내부 checkbox UI(checked값)를 위한 State
+  const [selectedValues, setSelectedValues] = useState({});
+  
+
+  
   useEffect(() => {
+    if(mode !== 'update') return;
+    let initialValue = {};
+    const tempArr = formValues[id]?.replace(/\s/g, '').split(',') || [];
+  
+    if (tempArr.length && Array.isArray(tempArr)) {
+      tempArr.forEach((key) => {
+        initialValue = {
+          ...initialValue,
+          [key]: true,
+        };
+      });
+    }
+    setSelectedValues(initialValue);
+  }, [formValues[id]]);
+  
+  const onClickHandler = async (isChecked, checkboxId) => {
+    
+    let convertedValue;
+    await setSelectedValues((prevState) =>{
+      const nextState = {
+        ...prevState,
+        [checkboxId]: isChecked,
+      }
+      convertedValue = nextState; // for formvalue
+      return nextState; // for checkbox inner state
+    });
+    const allValueArr= [];
+    for (const key in convertedValue) {
+      const val = convertedValue[key];
+      if(val) allValueArr.push(key);
+    }
+    const convertedAllValues  = allValueArr.join(',');
     setFormValues((prevState) => ({
       ...prevState,
-      [id]: selectedValues.join(','),
+      [id]: convertedAllValues
     }));
-  }, [selectedValues]);
-
-  const onClickHandler = (isChecked, checkboxId) => {
-    setSelectedValues((prevState) => {
-      let newState = [];
-      const alreadyExist = prevState.indexOf(checkboxId) >= 0;
-      if (isChecked && !alreadyExist) {
-        newState = prevState.concat(checkboxId);
-      } else if (!isChecked) {
-        newState = prevState.filter((id) => id !== checkboxId);
-      }
-      return newState;
-    });
   };
+  
+  
+  
+  
+  
   if (!items.length) return;
 
   return (
     <Wrap className={'inp_wrap'}>
-      {items.map((item, index) => (
-        <Checkbox
-          key={`${item.value}-${index}`}
-          id={item.value}
+      {items.map((item, index) => {
+        const checkboxId = item.value;
+        return (<Checkbox
+          key={`${checkboxId}-${index}`}
+          id={checkboxId}
           label={item.label}
           onClick={onClickHandler}
-          checked={selectedValues.indexOf(item.value) >= 0}
-        />
-      ))}
+          checked={selectedValues[checkboxId]}
+        />)
+      })}
     </Wrap>
   );
 };

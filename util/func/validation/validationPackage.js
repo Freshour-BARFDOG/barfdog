@@ -1,22 +1,19 @@
 import axios from 'axios';
 import checkCharactorSamenessAndContinuity from '../checkCharactorSamenessAndContinuity';
 import transformClearLocalCurrency from '../transformClearLocalCurrency';
-
-
-
-
+import convertFileSizeToMegabyte from '../ConvertFileSizeToMegabyte';
 
 export const valid_hasFormErrors = (errorObj) => {
   let isPassed = true;
-  for ( const key in errorObj ) {
+  for (const key in errorObj) {
     const val = errorObj[key];
-    if(val){
+    if (val) {
       isPassed = false;
-      break
+      break;
     }
   }
   return isPassed;
-}
+};
 
 
 
@@ -323,5 +320,19 @@ const valid_singleItemOptionObj = (optionObj) => {
     }
   }
   // console.log('singleOptions Error:', error)
+  return error;
+};
+
+
+export const valid_fileSize = (file, maxFileSize) => {
+  let error = file.size > maxFileSize;
+  if (error) {
+    error = `- 최대 파일크기: ${convertFileSizeToMegabyte(
+      maxFileSize,
+    )}MB 이상의 파일이 포함돼있습니다.\n- 초과된 파일명: ${
+      file.name
+    } \n- 초과된 파일크기: ${convertFileSizeToMegabyte(file.size)}MB`;
+    alert(error);
+  }
   return error;
 };

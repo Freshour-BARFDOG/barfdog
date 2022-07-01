@@ -3,6 +3,7 @@ import s from './singleItemDiscountOptions.module.scss';
 import UnitBox from '/src/components/atoms/UnitBox';
 import calculateSalePrice from '/util/func/calculateSalePrice';
 import ErrorMessage from "/src/components/atoms/ErrorMessage";
+import transformClearLocalCurrency from "/util/func/transformClearLocalCurrency";
 
 
 
@@ -11,21 +12,32 @@ import ErrorMessage from "/src/components/atoms/ErrorMessage";
 export default function SingleItemDiscountOptions({id,  formValues, setFormValues, formErrors, onChange }) {
 
 
-  const [salePriceInfo, setSalePriceInfo] = useState({});
+  const initialValue = {
+    salePrice : formValues.salePrice || formValues.originalPrice || 0,
+    saleAmount: 0
+  }
+  const [salePriceInfo, setSalePriceInfo] = useState(initialValue);
 
   const unitSettings = [
     { label: '%', value: 'FLAT_RATE' },
     { label: '원', value: 'FIXED_RATE' },
   ]
 
+  // console.log(formValues)
 
   useEffect(() => {
+    // discountType 이 퍼센트면 dgree를 100으로 반환해서 계산한다.
+    let filteredDiscountDegree = formValues.discountDegree ;
+    if(formValues.discountType === 'FLAT_RATE' &&transformClearLocalCurrency(formValues.discountDegree)  > 100){
+      filteredDiscountDegree = 100;
+      
+    }
+    // console.log(filteredDiscountDegree)
     const result = calculateSalePrice(
       formValues.originalPrice,
       formValues.discountType,
-      formValues.discountDegree,
+      filteredDiscountDegree,
     );
-    // console.log(result);
 
     const resultObj = {
       salePrice: !result ? formValues.originalPrice : result.salePrice, // 할인적용이 안됐을 경우, 원금이랑 동일하게 처리한다.
@@ -36,15 +48,8 @@ export default function SingleItemDiscountOptions({id,  formValues, setFormValue
       ...prevState,
       [id]: resultObj.salePrice,
     }))
-  }, [formValues.originalPrice, formValues.discountDegree]);
+  }, [formValues.originalPrice, formValues.discountDegree, formValues.discountType]);
 
-
-  useEffect(() => {
-    setFormValues(prevState => ({
-      ...prevState,
-      discountDegree: 0, // 할인타입 변경했을 경우, 초기화
-    }))
-  }, [formValues.discountType]);
 
 
   return (
@@ -67,17 +72,18 @@ export default function SingleItemDiscountOptions({id,  formValues, setFormValue
           name={'discountType'}
           setValue={setFormValues}
           unitList={unitSettings}
+          value={formValues.discountType}
         />
         <div className="unit">할인</div>
       </div>
       <div className={s.calculator}>
-        <span className={s.title}>할인적용가</span>
+        <span className={s.title}>최종가격</span>
         <span className={s.discountPrice}>
           <b>{salePriceInfo?.salePrice}</b>
           <em className="unit">원</em>
         </span>
         <span className={s.discountAmount}>
-          (할인가<em>{salePriceInfo?.saleAmount}</em>원)
+          (할인<em>{salePriceInfo?.saleAmount}</em>원)
         </span>
       </div>
       {formErrors?.salePrice && (

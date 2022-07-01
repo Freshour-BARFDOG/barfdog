@@ -349,14 +349,7 @@ export default function UpdateBlogPage ({ id }) {
                           onChange={imageFileChangeHandler}
                         />
                         <Fake_input
-                          loadingIcon={
-                            isLoading.thumb && (
-                              <Spinner
-                                style={{ color: 'var(--color-main)', width: '15', height: '15' }}
-                                speed={0.6}
-                              />
-                            )
-                          }
+                          loadingIcon={isLoading.thumb && <Spinner/>}
                           filename={thumbFile.filename}
                         />
                       </span>
