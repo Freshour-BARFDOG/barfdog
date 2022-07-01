@@ -74,7 +74,7 @@ const CheckboxGroup = ({id, items = [], formValues, setFormValues, mode}) => {
           id={checkboxId}
           label={item.label}
           onClick={onClickHandler}
-          checked={selectedValues[checkboxId]}
+          checked={selectedValues[checkboxId] || false}
         />)
       })}
     </Wrap>
