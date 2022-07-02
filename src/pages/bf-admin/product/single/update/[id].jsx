@@ -534,7 +534,7 @@ function UpdateSingleItemPage({ id }) {
                       <h5 className="title">
                         상품아이콘
                         <Tooltip
-                          message={'일반상품리스트 썸네일 상단에 노출된 아이콘입니다.'}
+                          message={'SHOP페이지 일반상품 목록에 노출될 아이콘입니다.'}
                           messagePosition={'left'}
                         />
                       </h5>

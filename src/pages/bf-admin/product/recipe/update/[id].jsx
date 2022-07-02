@@ -405,9 +405,7 @@ function UpdateRecipePage() {
                       <label className="title">
                         썸네일 (레시피)
                         <Tooltip
-                          message={
-                            '1. 썸네일 상단의 글자는 이미지로 삽입해야합니다.\n2. 플랜, 레시피 페이지의 레시피 썸네일에 노출 '
-                          }
+                          message={'SHOP페이지 일반상품 목록에 노출될 아이콘입니다.'}
                           wordBreaking
                           messagePosition={'left'}
                         />
