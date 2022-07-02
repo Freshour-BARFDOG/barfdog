@@ -138,7 +138,7 @@ function CreateSingleItemPage() {
     e.preventDefault();
     if (isSubmitted) return;
     // ! IMPORTANT : submit 이후 enterKey event로 trigger되는 중복submit 방지
-    // ! 전송해보니깐 500에러뜬다 ---> 왜지 ?????????
+    console.log(filteredFormValues);
     const errObj = validate(formValues);
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
@@ -146,6 +146,7 @@ function CreateSingleItemPage() {
     let filteredFormValues = formValues;
     const filterStringList = ['originalPrice', 'salePrice', 'discountDegree', {'itemOptionSaveDtoList':['price', 'remaining']}];
     filteredFormValues = transformClearLocalCurrencyInEveryObject(filteredFormValues, filterStringList);
+    console.log(filteredFormValues);
 
     try {
       setIsLoading((prevState) => ({
