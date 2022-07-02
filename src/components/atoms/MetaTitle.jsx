@@ -6,13 +6,13 @@ import {pageAction} from "@store/page-slice";
 
 
 function MetaTitle({title, admin}) {
-
+  const dispatch = useDispatch();
   const router = useRouter();
   const curPath = router.asPath;
   const isCurPathMypage = curPath.split('/')[1] === 'mypage';
   if(isCurPathMypage){
     const mypageTitle = title.split(' ')[1];
-    const dispatch = useDispatch();
+    
     dispatch(pageAction.saveCurrentPageInfo({pageTitle: mypageTitle}))
   }
 
