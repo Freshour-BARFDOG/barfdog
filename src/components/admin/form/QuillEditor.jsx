@@ -27,7 +27,6 @@ export default function QuillEditor({
    */
   const ReactQuill = typeof window == 'object' ? require('react-quill') : () => false;
   const quillRef = useRef();
-  if (!setFormValues || typeof setFormValues !== 'function') return;
   const [isLoading, setIsLoading] = useState(false);
   const [body, setBody] = useState(initialValue);
   const [allImageIdList, setAllImageIdList] = useState([]);
