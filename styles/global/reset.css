@@ -133,7 +133,7 @@ figcaption {
   outline: 0;
   border: 0;
   background: transparent;
-  font-family: 'Pretendard Variable';
+  font-family: inherit;
 }
 
 /*폰트 초기화*/
