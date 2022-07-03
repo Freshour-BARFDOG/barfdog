@@ -193,8 +193,9 @@ $inputDefaultHeight: rem(38);
     margin-bottom: rem(10);
     * {
       display: flex;
-      gap: rem(10);
       font-size: inherit;
+      align-items: center;
+      gap: rem(10);
       cursor: default;
     }
   }
