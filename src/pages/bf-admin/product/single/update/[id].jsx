@@ -58,12 +58,10 @@ function UpdateSingleItemPage({ id }) {
     if (!id) return;
     (async () => {
       try {
-        if (setIsLoading && typeof setIsLoading === 'function') {
-          setIsLoading((prevState) => ({
-            ...prevState,
-            fetching: true,
-          }));
-        }
+        setIsLoading((prevState) => ({
+          ...prevState,
+          fetching: true,
+        }));
         const res = await getData(getFormValuesApiUrl);
         console.log(res);
         
@@ -130,12 +128,10 @@ function UpdateSingleItemPage({ id }) {
       } catch (err) {
         console.error(err);
       }
-      if (setIsLoading && typeof setIsLoading === 'function') {
-        setIsLoading((prevState) => ({
-          ...prevState,
-          fetching: false,
-        }));
-      }
+      setIsLoading((prevState) => ({
+        ...prevState,
+        fetching: false,
+      }));
     })();
   }, []);
 

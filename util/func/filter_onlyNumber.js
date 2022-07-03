@@ -2,7 +2,7 @@
     if (!value) return '';
     let filteredValue;
     const regExp = /[^0-9\.]/g;
-    filteredValue = Number(value.replace(regExp, ""));
+    filteredValue = value.replace(regExp, ""); // Number() 사용 시, 소수입력 불가
     return filteredValue;
   };
 

@@ -59,7 +59,7 @@ const initialFormValues = {
 const initialFormErrors = {};
 
 function CreateSingleItemPage() {
-  const postFormValuesApiUrl = 'api/admin/items';
+  const postFormValuesApiUrl = '/api/admin/items';
   const postThumbFileApiUrl = '/api/admin/items/image/upload';
   const postDetailImageFileApiUrl = '/api/admin/items/contentImage/upload';
   const router = useRouter();
@@ -67,7 +67,7 @@ function CreateSingleItemPage() {
 
   const [modalMessage, setModalMessage] = useState('');
   const [isLoading, setIsLoading] = useState({});
-  const [originImageIdList, setOriginImageIdList] = useState([]);
+  // const [originImageIdList, setOriginImageIdList] = useState([]); // CREATE타이밍에는 불필요
   const [QuillEditor, setQuillEditor] = useState(null);
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState(initialFormErrors);
@@ -430,7 +430,7 @@ function CreateSingleItemPage() {
                           id={'contents'}
                           mode={'create'}
                           imageId={'contentImageIdList'}
-                          originImageIdList={originImageIdList}
+                          originImageIdList={[]}
                           setFormValues={setFormValues}
                           imageUploadApiURL={postDetailImageFileApiUrl}
                         />
