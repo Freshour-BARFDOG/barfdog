@@ -34,7 +34,7 @@ const CreateBlogPage = () => {
   const [modalMessage, setModalMessage] = useState('');
   const [isLoading, setIsLoading] = useState({});
   const [thumbFile, setThumbFile] = useState({});
-  const [originImageIdList, setOriginImageIdList] = useState([]);
+  // const [originImageIdList, setOriginImageIdList] = useState([]); // create시에는 불필요
   const [QuillEditor, setQuillEditor] = useState(null);
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState({});
@@ -292,7 +292,7 @@ const CreateBlogPage = () => {
                         id={'contents'}
                         mode={'create'}
                         imageId={'blogImageIdList'}
-                        originImageIdList={originImageIdList}
+                        originImageIdList={[]}
                         setFormValues={setFormValues}
                         imageUploadApiURL={blogDetailImageUploadApiURL}
                       />

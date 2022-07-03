@@ -4,7 +4,7 @@ import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
 import filter_emptyValue from "/util/func/filter_emptyValue";
 import filter_onlyNumber from "/util/func/filter_onlyNumber";
-import filter_numberZeoFromTheIntegerPartOfTheDecimal from "/util/func/filter_numberZeoFromTheIntegerPartOfTheDecimal";
+import filter_numberZeoFromTheIntegerPartOfTheDecimals from "/util/func/filter_numberZeoFromTheIntegerPartOfTheDecimals";
 import ErrorMessage from "/src/components/atoms/ErrorMessage";
 import ToolTip from "/src/components/atoms/Tooltip";
 import transformLocalCurrency from "/util/func/transformLocalCurrency";
@@ -39,17 +39,16 @@ function DeliverySettingPage() {
 
     if (filteredType) {
       filteredValue = filter_emptyValue(value);
+      if (filteredType.indexOf('number') >= 0) {
+        filteredValue = filter_onlyNumber(filteredValue);
+      }
+      if (filteredType.indexOf('currency') >= 0) {
+        filteredValue = transformLocalCurrency(filteredValue);
+      }
+  
+      filteredValue = filter_numberZeoFromTheIntegerPartOfTheDecimals(filteredValue);
     }
 
-    if (filteredType && filteredType.indexOf('number') >= 0) {
-      filteredValue = filter_onlyNumber(filteredValue);
-    }
-
-    if (filteredType && filteredType.indexOf('currency') >= 0) {
-      filteredValue = transformLocalCurrency(filteredValue);
-    }
-
-    filteredValue = filter_numberZeoFromTheIntegerPartOfTheDecimal(filteredValue);
 
     setFormValues((prevState) => ({
       ...prevState,
