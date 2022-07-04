@@ -14,11 +14,9 @@ export default function IngredientsItemList({ id, formValues, setFormValues }) {
   const [isImportingOriginItemListCompleted, setIsImportingOriginItemListCompleted] = useState( false );
   const [itemList, setItemList] = useState([]); //
   const [innerFormErrors, setInnerFormErrors] = useState('');
-  // console.log(itemList);
   
   
   useEffect(() => {
-    const TEST_DATA = ['소','양','낙타','칠면조'];
     // Init
     (async ()=>{
       try {
@@ -26,7 +24,7 @@ export default function IngredientsItemList({ id, formValues, setFormValues }) {
         const regacyIngredientList = [];
         const res = await getData(getAllRecipeIngredientListApiUrl);
         console.log(res);
-        const allRegisteredRecipeIngredientList = res?.data._embedded.stringList || TEST_DATA;
+        const allRegisteredRecipeIngredientList = res?.data._embedded.stringList || [];
         if (allRegisteredRecipeIngredientList.length) {
           allRegisteredRecipeIngredientList.forEach((ingredientName) => {
             const itemObj = {
@@ -131,14 +129,17 @@ export default function IngredientsItemList({ id, formValues, setFormValues }) {
       }
     })
   };
+  
 
   const onKeyboardHandler = (event) => {
     enterKey(event, onAddIngredient);
   };
   
+  
   const onBlurHandler= ()=>{
     setInnerFormErrors('');
   }
+  
 
   return (
     <>

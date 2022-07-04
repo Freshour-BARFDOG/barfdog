@@ -41,7 +41,6 @@ function UpdateSingleItemPage({ id }) {
 
   const [modalMessage, setModalMessage] = useState('');
   const [isLoading, setIsLoading] = useState({});
-
   const [originContentImageIdList, setOriginContentImageIdList] = useState([]); // Editor내부이미지 원본
   const [originThumbDataList, setOriginThumbDataList] = useState([]); // 썸네일 데이터 원본
   const [originOptionList, setOriginOptionList] = useState([]); // 옵션 원본
@@ -51,8 +50,7 @@ function UpdateSingleItemPage({ id }) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [activeDiscountOption, setActiveDiscountOption] = useState(false);
 
-  // console.log(formValues);
-  // console.log(originImageIdList);
+  
 
   useEffect(() => {
     if (!id) return;
@@ -74,8 +72,9 @@ function UpdateSingleItemPage({ id }) {
         const originContentImageIdListFromServer = res.data.itemContentImageDtoList?.map(list=>list.id);
         setOriginContentImageIdList(originContentImageIdListFromServer);// 원본 상세설명 내의 이미지 ID list
   
-        //////
+        
         const DATA = res.data.itemAdminDto;
+        
         const initialFormValues = {
           itemType: DATA.itemType, // 카테고리
           name: DATA.name, // 상품명
@@ -89,8 +88,8 @@ function UpdateSingleItemPage({ id }) {
           
           
           
-          itemOptionSaveDtoList: res.data.itemOptionAdminDtoList, // 옵션 > 추가 List
-          itemOptionUpdateDtoList: [], // 옵션 > 수정 List
+          itemOptionSaveDtoList: [], // 옵션 > 추가 List
+          itemOptionUpdateDtoList: res.data.itemOptionAdminDtoList, // 옵션 > 수정 List
           deleteOptionIdList: [], // 옵션 > 삭제 List
           
           
@@ -100,20 +99,11 @@ function UpdateSingleItemPage({ id }) {
           
           
           
-          
-          
           contents: DATA.contents, // 상품 설명
           addContentImageIdList: [], // 에디터 > 추가 이미지 List
           deleteContentImageIdList: [], // 에디터 > 삭제 이미지List
           
-          itemIcons: DATA.itemIcons || 'NEW,BEST',
-          // 상품아이콘 // ! 테스트 VALUE테스트 VALUE테스트 VALUE테스트 VALUE테스트
-          // 상품아이콘 // ! 테스트 VALUE테스트 VALUE테스트 VALUE테스트 VALUE테스트
-          // 상품아이콘 // ! 테스트 VALUE테스트 VALUE테스트 VALUE테스트 VALUE테스트
-          // 상품아이콘 // ! 테스트 VALUE테스트 VALUE테스트 VALUE테스트 VALUE테스트
-          // 상품아이콘 // ! 테스트 VALUE테스트 VALUE테스트 VALUE테스트 VALUE테스트
-          // 상품아이콘 // ! 테스트 VALUE테스트 VALUE테스트 VALUE테스트 VALUE테스트
-          // 상품아이콘 // ! 테스트 VALUE테스트 VALUE테스트 VALUE테스트 VALUE테스트
+          itemIcons: DATA.itemIcons,
           deliveryFree: DATA.deliveryFree, // 배송비무료
           itemStatus: DATA.status, // 노출 여부
         };
@@ -134,6 +124,8 @@ function UpdateSingleItemPage({ id }) {
       }));
     })();
   }, []);
+  
+  
 
   useEffect(() => {
     // - 품절일 경우, 재고수량 초기화
@@ -153,15 +145,9 @@ function UpdateSingleItemPage({ id }) {
     }
   }, [formValues.salePrice]);
 
-  useEffect(() => {
-    // - INIT QUILL EDITOR
-    if (document) {
-      const QuillEditor = dynamic(() => import('/src/components/admin/form/QuillEditor'));
-      setQuillEditor(QuillEditor);
-      console.log('Editor init is complete.');
-    }
-  }, []);
-
+  
+  
+  
   const onInputChangeHandler = (e) => {
     // 만약에 할인옵션이 false면, ..... 할인적용후 가격 -> 판매가격과 동일하게 설정한다.
     const input = e.currentTarget;
@@ -202,21 +188,21 @@ function UpdateSingleItemPage({ id }) {
     console.log(formValues);
     
     let filteredFormValues = formValues;
-    
-    const filterStringList = [
-      'originalPrice',
-      'salePrice',
-      'remaining',
-      'discountDegree',
-      { itemOptionSaveDtoList: ['price', 'remaining'] },
-      { itemOptionUpdateDtoList: ['price', 'remaining'] },
-    ];
+    const filterStringObj = {
+      originalPrice: 'originalPrice',
+      salePrice: 'salePrice',
+      remaining : 'remaining',
+      discountDegree: 'discountDegree',
+      itemOptionSaveDtoList: { price: 'price', remaining: 'remaining'},
+      itemOptionUpdateDtoList: { price: 'price', remaining: 'remaining'},
+    }
     filteredFormValues = transformClearLocalCurrencyInEveryObject(
       filteredFormValues,
-      filterStringList,
+      filterStringObj,
     );
-    console.log(filteredFormValues)
+    console.log(filteredFormValues);
 
+    
     
     try {
       setIsLoading((prevState) => ({

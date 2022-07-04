@@ -1,48 +1,65 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import s from './recipe.module.scss';
 import AdminLayout from "@src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "@src/components/admin/AdminWrapper";
 import MetaTitle from "@src/components/atoms/MetaTitle";
-import axios from "axios";
-import axiosConfig from "/api/axios.config";
-import AmdinErrorMessage from "@src/components/atoms/AmdinErrorMessage";
-import sorting from "@util/func/sorting";
-import Pagination from "@src/components/atoms/Pagination";
+import AmdinErrorMessage from "/src/components/atoms/AmdinErrorMessage";
 import RecipeList from "./RecipeList";
+import Spinner from "/src/components/atoms/Spinner";
+import {getData} from "/api/reqData";
 
 
 
 
-const TEST_ITEM = [1, 2, 3, 4, 5];
 
 
 
 function RecipePage() {
+  
+  const getListApiUrl = '/api/recipes';
+  const apiDataQueryString = 'recipeListResponseDtoList';
+  const [isLoading, setIsLoading] = useState({});
+  const [itemList, setItemList] = useState([]);
 
-  const [modalMessage, setModalMessage] = useState("");
-  const [itemList, setItemList] = useState(TEST_ITEM);
-  const [searchValue, setSearchValue] = useState({});
-
-  console.log(searchValue);
-  const onResetSearchValues = (e) => {
-    setSearchValue("");
-    console.log("초기화 실행");
-  };
-
-  const onSearchHandler = (e) => {
-    console.log("검색 실행");
-  };
+  console.log(itemList);
+  useEffect( () => {
+    (async () => {
+      try {
+        setIsLoading((prevState) => ({
+          ...prevState,
+          fetching: true,
+        }));
+        const res = await getData(getListApiUrl);
+        const data = res.data._embedded[apiDataQueryString];
+        setItemList(data);
+      } catch (err) {
+        console.error(err);
+        alert('데이터를 가져올 수 없습니다.');
+      }
+      setIsLoading((prevState) => ({
+        ...prevState,
+        fetching: false,
+      }));
+    })();
+  }, [] );
+  
+  
 
   return (
     <>
       <MetaTitle title="레시피 관리" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
-          <h1 className="title_main">레시피 관리</h1>
+          <div className="title_main">
+            <h1>
+              레시피 관리
+              {isLoading.fetching && <Spinner />}
+            </h1>
+          </div>
           <section className="cont">
             <div className="cont_header clearfix">
               <p className="cont_title cont-left">
-                레시피 목록 &#40;총<em className={s["product-count"]}>4</em>
+                레시피 목록 &#40;총<em className={s['product-count']}>{itemList.length}</em>
                 개&#41;
               </p>
               <div className="controls cont-left"></div>
@@ -50,12 +67,13 @@ function RecipePage() {
             <div className={`${s.cont_viewer}`}>
               <div className={s.table}>
                 <ul className={s.table_header}>
-                  <li className={s.table_th}>레시피명</li>
-                  <li className={s.table_th}>가격상수&#40;원/g&#41;</li>
-                  <li className={s.table_th}>무게상수&#40;g/Kcal&#41;</li>
-                  <li className={s.table_th}>품절여부</li>
-                  <li className={s.table_th}>노출여부</li>
-                  <li className={s.table_th}>최초 등록일</li>
+                  <li className={s.table_th}>레시피 이름</li>
+                  <li className={s.table_th}>레시피 설명</li>
+                  <li className={s.table_th}>가격 상수&#40;원/g&#41;</li>
+                  <li className={s.table_th}>무게 상수&#40;g/Kcal&#41;</li>
+                  <li className={s.table_th}>재료</li>
+                  <li className={s.table_th}>노출 여부</li>
+                  <li className={s.table_th}>판매 여부</li>
                   <li className={s.table_th}>마지막 수정일</li>
                   <li className={s.table_th}>수정</li>
                   <li className={s.table_th}>삭제</li>
@@ -69,13 +87,6 @@ function RecipePage() {
                   <AmdinErrorMessage text="조회된 데이터가 없습니다." />
                 )}
               </div>
-            </div>
-            <div className={s["pagination-section"]}>
-              <Pagination
-                itemCountPerGroup={10}
-                itemTotalCount={100}
-                className={"square"}
-              />
             </div>
           </section>
         </AdminContentWrapper>

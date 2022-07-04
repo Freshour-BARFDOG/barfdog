@@ -13,12 +13,12 @@ export default function SingleItemOptions({ id, formErrors, setFormValues, mode=
   const [options, setOptions] = useState([]);
   
   useEffect(() => {
-    // ! important: 데이터fetching없이 useEffect의 dependency가 변화하지 않을 경우, 무한루프 (console로 확인가능)
+    // ! important: 데이터fetching없이 useEffect의 dependency가 변화하지 않을 경우, 무한루프
     if(mode === 'update'){ // for INIT DATA
       const initFullIdList = originDataList.map((data) => data.id);
       setAllIdList(initFullIdList)
       const initOptionList = originDataList.map((data) => ({
-        id: data.id,
+        id: data.id, // ! 기존에 존재하는 옵션일 경우 id조재함.
         name: data.name,
         price: transformLocalCurrency(data.optionPrice),
         remaining: transformLocalCurrency(data.remaining),
@@ -31,9 +31,6 @@ export default function SingleItemOptions({ id, formErrors, setFormValues, mode=
   
   
   useEffect(() => {
-    if (!setFormValues || typeof setFormValues !== 'function') return console.error('setFormValues타입이 올바르지 않습니다.');
-    
-    
     if (!isFirstRendering) {
       if (mode === 'update') {
         const curIdList = options.map((list) => list.id);
@@ -43,25 +40,18 @@ export default function SingleItemOptions({ id, formErrors, setFormValues, mode=
           curIdList,
           originIdList,
         );
-        // -> 새로 추가한 항목은 undefined임요
-        console.log('::: Array CRUD RESULT :::', resultIdList);
-        // - 삭제될 옵션: ID list
-        // - 신규 옵션: 객체 {name, price, remaining},
-        // - 수정 옵션: 객체 {_____id)), name, price, remaining},
-        let newOptionObj; // 그대로 집어넣음 되겠는데?
-        let isNewOption;
-        
-        const newOptionArray = [];
-        const updatedOptionArray = [];
+        // console.log('::: Array CRUD RESULT :::', resultIdList);
+        const newOptionArray = []; // 새로 추가된 옵션
+        const updatedOptionArray = []; // 기존 옵션
         options.forEach(option => {
           option.id ? updatedOptionArray.push(option) : newOptionArray.push(option);
         })
-        
-        // console.log('new: ',newOptionArray,'___updated: ',updatedOptionArray)
+        // console.log('newOptionArray: ',newOptionArray)
+        // console.log('updatedOptionArray: ',updatedOptionArray)
         setFormValues((prevState) => ({
           ...prevState,
           [id]: newOptionArray,
-          itemOptionUpdateDtoList: updatedOptionArray,
+          itemOptionUpdateDtoList: updatedOptionArray, // 기존에 존재했던 목록
           deleteOptionIdList: resultIdList?.del || [], // array속에 객체리스트로 넣어야함.
         }));
       } else if (mode === 'create'){
@@ -71,7 +61,6 @@ export default function SingleItemOptions({ id, formErrors, setFormValues, mode=
         }));
       }
     }
-    
     setIsFirstRendering(false);
   }, [options]);
   

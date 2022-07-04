@@ -21,9 +21,7 @@ import { validate } from '/util/func/validation/validation_recipe';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
 import { postObjData } from '/api/reqData';
 
-// ! T O D O
-// - 업로드하느 ㄴ시점에, checked된 재료리스트를 전송한다.
-// - ingredient는.... cheched된 항목을 기준으로 strigValue가 생성되야한다. retaeSingle ItemPage 참고
+
 
 const initialFormValues = {
   name: '',
@@ -32,7 +30,7 @@ const initialFormValues = {
   uiNameEnglish: '',
   pricePerGram: '',
   gramPerKcal: '',
-  ingredients: '호랭이, 뱀', // 띄어쓰기 없이 콤마로 전송
+  ingredients: '', // 띄어쓰기 없이 콤마로 전송
   descriptionForSurvey: '',
   leaked: 'LEAKED',
   inStock: true,
@@ -64,7 +62,7 @@ function CreateRecipePage() {
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  console.log(formValues);
+  // console.log(formValues);
 
 
   
@@ -116,7 +114,6 @@ function CreateRecipePage() {
     setFormErrors(errObj);
 
     const isPassed = valid_hasFormErrors(errObj);
-    return;
 
     try {
       setIsLoading((prevState) => ({
@@ -124,10 +121,16 @@ function CreateRecipePage() {
         submit: true,
       }));
       if (isPassed) {
-        const res = await postObjData(postFormValuesApiUrl, formValues);
-        // console.log(res);
+        const jsonData = JSON.stringify(formValues);
+        const blob = new Blob([jsonData], { type: 'application/json' });
+        const formData = new FormData();
+        formData.append('requestDto', blob);
+        formData.append('file1', thumbFile.surveyResult.file);
+        formData.append('file2', thumbFile.recipeThumb.file);
+        const res = await postObjData(postFormValuesApiUrl, formData, 'multipart/form-data');
+        console.log(res);
         if (res.isDone) {
-          onShowPreviewModalHandler('일반상품이 생성되었습니다.');
+          onShowModalHandler('레시피가 성공적으로 생성되었습니다.');
           setIsSubmitted(true);
         } else {
           alert(res.error, '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.');
@@ -157,7 +160,7 @@ function CreateRecipePage() {
 
   const onGlobalModalCallback = () => {
     mct.alertHide();
-    router.push('/bf-admin/product/single');
+    router.push('/bf-admin/product/recipe');
   };
 
   return (
@@ -492,9 +495,8 @@ function CreateRecipePage() {
                             '1. 품절된 레시피는 신규설문조사에서 구입 불가능합니다.\n2. 품절된 레시피를 구독 중인 고객은 결제 중지됩니다. \n3. 알림톡으로 품절안내 메시지가 전송됩니다. \n4. 유저는 사이트 접속 시, 안내창을 통해 품절상태를 확인하게 됩니다.'
                           }
                           wordBreaking={true}
-                          messagePosition={'left'}
-                          style={{ width: '400px' }}
-                        />
+                          messagePosition={'center'}
+                          width={'400px'}/>
                       </div>
                     </div>
                     <div className="inp_section">
@@ -505,13 +507,7 @@ function CreateRecipePage() {
                           setValue={setFormValues}
                           labelList={['예', '품절']}
                         />
-                        {/*<CustomRadio*/}
-                        {/*  setValue={setFormValues}*/}
-                        {/*  name="inStock"*/}
-                        {/*  idList={['inStock-FALSE', 'inStock-TRUE']}*/}
-                        {/*  labelList={['예', '품절']}*/}
-                        {/*/>*/}
-                        <em className={'errorMSG'}>( *품절처리 시, 상품이 삭제됩니다. )</em>
+                        <em className={'errorMSG'}>( *품절 처리된 레시피를 구독 중인 고객은 결제 중지됩니다. )</em>
                       </div>
                     </div>
                   </div>
@@ -526,7 +522,7 @@ function CreateRecipePage() {
               <button
                 type="button"
                 className="admin_btn confirm_l line"
-                onClick={onShowModalHandler}
+                onClick={onShowPreviewModalHandler}
               >
                 미리보기
               </button>

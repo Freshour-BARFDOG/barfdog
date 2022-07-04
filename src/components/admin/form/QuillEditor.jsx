@@ -31,8 +31,7 @@ export default function QuillEditor({
   const [isLoading, setIsLoading] = useState(false);
   const [isInitAllImageIdListCompleted, setIsInitAllImageIdListCompleted] = useState( false );
   const [body, setBody] = useState(initialValue);
-  const [allImageIdList, setAllImageIdList] = useState([originImageIdList]) ;
-
+  const [allImageIdList, setAllImageIdList] = useState(originImageIdList) ;
 
   useEffect(() => {
     if(isInitAllImageIdListCompleted) return;
@@ -44,7 +43,7 @@ export default function QuillEditor({
     const isInnerHtmlEmpty = body === '<p><br></p>';
     const resultIdList = analyze_ImageIdListCRUD(allImageIdList, body, originImageIdList);
     // console.log('::: Quill Editor Inner Image > CRUD RESULT :::', resultIdList);
-    if (mode === 'create' && resultIdList) {
+    if (mode === 'create') {
       setFormValues((prevState) => ({
         ...prevState,
         [id]: isInnerHtmlEmpty ? '' : body,
@@ -194,7 +193,7 @@ const extractImageIdList = (html) => {
 };
 
 const compareImageList = (allArrBefore, curArrBefore, originArrBefore) => {
-  if (!allArrBefore.length) return console.error('There is no Image File.');
+  if (!allArrBefore.length) return console.log('There is no Image File.');
 
   const originArr = originArrBefore.map((a) => Number(a));
   const allArr = allArrBefore.map((a) => Number(a));
@@ -213,6 +212,8 @@ const compareImageList = (allArrBefore, curArrBefore, originArrBefore) => {
     result[key] = arr.map((a) => Number(a));
   }
 
+    // console.log(allArrBefore);
+    // console.log(allArr);
   allArr.map((id) => {
     const isCurArr = curArr.indexOf(id) >= 0;
     const isOriginArr = originArr.indexOf(id) >= 0;

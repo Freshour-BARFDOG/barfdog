@@ -75,6 +75,7 @@ function CreateSingleItemPage() {
   const [activeDiscountOption, setActiveDiscountOption] = useState(false);
 
   
+  // console.log(formValues)
   
   // console.log(formValues)
   useEffect(() => {
@@ -138,14 +139,20 @@ function CreateSingleItemPage() {
     e.preventDefault();
     if (isSubmitted) return;
     // ! IMPORTANT : submit 이후 enterKey event로 trigger되는 중복submit 방지
-    console.log(filteredFormValues);
+    console.log(formValues);
     const errObj = validate(formValues);
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
 
     let filteredFormValues = formValues;
-    const filterStringList = ['originalPrice', 'salePrice', 'discountDegree', {'itemOptionSaveDtoList':['price', 'remaining']}];
-    filteredFormValues = transformClearLocalCurrencyInEveryObject(filteredFormValues, filterStringList);
+    const filterStringObj = {
+      originalPrice: 'originalPrice',
+      salePrice: 'salePrice',
+      remaining : 'remaining',
+      discountDegree: 'discountDegree',
+      itemOptionSaveDtoList: { price: 'price', remaining: 'remaining'},
+    }
+    filteredFormValues = transformClearLocalCurrencyInEveryObject(filteredFormValues, filterStringObj);
     console.log(filteredFormValues);
 
     try {
