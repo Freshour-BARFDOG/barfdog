@@ -8,7 +8,7 @@ import filter_numberZeoFromTheIntegerPartOfTheDecimals from "/util/func/filter_n
 import ErrorMessage from "/src/components/atoms/ErrorMessage";
 import {useModalContext} from "/store/modal-context";
 import {getData, putObjData} from "/api/reqData";
-import {validate} from "/util/func/validation/validation_adminSettings";
+import {validate} from "/util/func/validation/validation_siteSettings";
 import {valid_hasFormErrors} from "/util/func/validation/validationPackage";
 import Spinner from "/src/components/atoms/Spinner";
 import transformDate from "/util/func/transformDate";
@@ -227,7 +227,7 @@ function DeliverySettingPage() {
             </div>
             <section className="btn_section">
               <button type="button" id="btn-create" className="admin_btn confirm_l solid" onClick={onSubmit}>
-                설정저장
+                {isLoading.submit ? <Spinner style={{color:'#fff'}}/> : '설정 저장'}
               </button>
             </section>
           </form>

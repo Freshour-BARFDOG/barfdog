@@ -7,13 +7,23 @@ import filter_numberZeoFromTheIntegerPartOfTheDecimals from '/util/func/filter_n
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import transformClearLocalCurrency from '/util/func/transformClearLocalCurrency';
 
+const GradeCouponSettingInput = ({
+  label,
+  id,
+  innerId,
+  index,
+  formValues,
+  setFormValues,
+  formErrors,
+}) => {
+  // console.log(formValues);
+  // console.log(formErrors[index])
 
-const GradeCouponSettingInput = ({ label, id, type, name, formValues, setFormValues, formErrors }) => {
   const onInputChangeHandler = (e) => {
     const input = e.currentTarget;
     const value = input.value;
-    const grade = input.id.split('-')[0];
-    const id = input.id.split('-')[1];
+    const id = Number(input.dataset.id);
+    const innerId = input.dataset.innerId;
     const filteredType = input.dataset.inputType;
     let filteredValue = value;
 
@@ -36,49 +46,64 @@ const GradeCouponSettingInput = ({ label, id, type, name, formValues, setFormVal
 
     filteredValue = filter_numberZeoFromTheIntegerPartOfTheDecimals(filteredValue);
 
-    setFormValues((prevState) => ({
-      ...prevState,
-      [name]: {
-        ...prevState[name],
-        [grade]: {
-          ...prevState[name][grade],
-          [id]: filteredValue
-        },
-      },
-    }));
+    setFormValues((items) => {
+      const nextState = items.map((itemObj) => {
+        let tempObj = {};
+        if (itemObj.id === id) {
+          tempObj = {
+            ...itemObj,
+            [innerId]: filteredValue,
+          };
+        } else {
+          tempObj = itemObj;
+        }
+        return tempObj;
+      });
+      console.log(nextState);
+
+      return nextState;
+    });
   };
+
   return (
-    <div className={`cont_divider ${s.cont_divider}`}>
-      <div className="input_row">
+    <div className={`cont_divider`}>
+      <div className={`${s['input_row']} input_row`}>
         <div className="title_section fixedHeight">
-          <label className="title" htmlFor={`${id}-${type[0]}`}>
+          <label className="title" htmlFor={`${id}`}>
             {label}
           </label>
         </div>
-        <div className="inp_section">
-          <div className={`inp_box`}>
+        <div className={`${s.inp_section} inp_section`}>
+          <div className={`${s.inp_box} inp_box`}>
             <input
-              id={`${id}-${type[0]}`}
+              data-id={id}
+              data-inner-id={innerId[0]}
               type="text"
-              name={name}
               data-align={'right'}
               data-input-type={'number, currency'}
-              value={formValues[name][id][type[0]] || ''}
+              id={`${id}`}
+              value={formValues[index][innerId[0]] || ''}
               onChange={onInputChangeHandler}
             />
             <em className="unit">원 할인</em>
-            {formErrors.name && <ErrorMessage>{formErrors.name}</ErrorMessage>}
+            {formErrors[index] && formErrors[index][innerId[0]] && (
+              <ErrorMessage>{formErrors[index][innerId[0]]}</ErrorMessage>
+            )}
+          </div>
+          <div className={`${s.inp_box} inp_box`}>
             <input
-              id={`${id}-${type[1]}`}
+              data-id={id}
+              data-inner-id={innerId[1]}
               type="text"
-              name={name}
               data-align={'right'}
               data-input-type={'number, currency'}
-              value={formValues[name][id][type[1]] || ''}
+              value={formValues[index][innerId[1]] || ''}
               onChange={onInputChangeHandler}
             />
-            <em className="unit">원 결제 시</em>
-            {formErrors.name && <ErrorMessage>{formErrors.name}</ErrorMessage>}
+            <em className="unit">원 이상 결제 시</em>
+            {formErrors[index] && formErrors[index][innerId[1]] && (
+              <ErrorMessage>{formErrors[index] && formErrors[index][innerId[1]]}</ErrorMessage>
+            )}
           </div>
         </div>
       </div>

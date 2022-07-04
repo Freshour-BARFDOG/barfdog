@@ -3,15 +3,26 @@ import checkCharactorSamenessAndContinuity from '../checkCharactorSamenessAndCon
 import transformClearLocalCurrency from '../transformClearLocalCurrency';
 import convertFileSizeToMegabyte from '../convertFileSizeToMegabyte';
 
-export const valid_hasFormErrors = (errorObj) => {
+export const valid_hasFormErrors = (errorObj, type='array') => {
   let isPassed = true;
-  for (const key in errorObj) {
-    const val = errorObj[key];
-    if (val) {
-      isPassed = false;
-      break;
+  if(type === 'array' && Array.isArray(errorObj)){
+    const errorArray = errorObj;
+    errorArray.map(innerObj=>{
+      const result = valid_hasFormErrors(innerObj);
+      console.log(result)
+      // result중에 false가 하나라도 있으면 error로 취급한다.
+    })
+    
+  } else{
+    for (const key in errorObj) {
+      const val = errorObj[key];
+      if (val) {
+        isPassed = false;
+        break;
+      }
     }
   }
+  
   return isPassed;
 };
 

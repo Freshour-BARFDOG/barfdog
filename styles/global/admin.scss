@@ -312,6 +312,7 @@ $inputDefaultHeight: rem(38);
   .input_row {
     display: flex;
     align-items: center;
+
     &.multipleLines {
       align-items: flex-start;
       .inp_section{margin-top:rem(3);}
