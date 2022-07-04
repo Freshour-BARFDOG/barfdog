@@ -4,7 +4,7 @@ import CloseButton from '/src/components/atoms/CloseButton';
 import Fake_input from '/src/components/atoms/fake_input';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import Spinner from '/src/components/atoms/Spinner';
-import convertFileSizeToMegabyte from '/util/func/ConvertFileSizeToMegabyte';
+import convertFileSizeToMegabyte from '/util/func/convertFileSizeToMegabyte';
 import compareIdList from '/util/func/compareIdList';
 import uploadImageToApiServer from '/util/func/uploadImageToApiServer';
 import { valid_fileSize } from '/util/func/validation/validationPackage';
