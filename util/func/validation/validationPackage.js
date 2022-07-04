@@ -1,7 +1,7 @@
 import axios from 'axios';
 import checkCharactorSamenessAndContinuity from '../checkCharactorSamenessAndContinuity';
 import transformClearLocalCurrency from '../transformClearLocalCurrency';
-import convertFileSizeToMegabyte from '../ConvertFileSizeToMegabyte';
+import convertFileSizeToMegabyte from '../convertFileSizeToMegabyte';
 
 export const valid_hasFormErrors = (errorObj) => {
   let isPassed = true;
