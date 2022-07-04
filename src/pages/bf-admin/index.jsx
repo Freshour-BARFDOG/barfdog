@@ -13,6 +13,8 @@ function AdminIndex() {
     // console.log(auth);
     if (isAuth) {
       router.push('/bf-admin/dashboard');
+    }else {
+      router.push('/bf-admin/login');
     }
   }, [isAuth]);
   
