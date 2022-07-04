@@ -3,15 +3,23 @@ import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
 import { useRouter } from 'next/router';
+import { useModalContext } from '/store/modal-context';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import Tooltip from '/src/components/atoms/Tooltip';
 import CustomRadio from '/src/components/admin/form/CustomRadio';
 import Fake_input from '/src/components/atoms/fake_input';
 import Modal_previewRecipeThumb from '/src/components/modal/Modal_previewRecipeThumb';
 import IngredientsItemList from '/src/components/admin/product/ingredientsItemList';
-import enterKey from '/util/func/enterKey';
-import PreviewImage from "/src/components/atoms/PreviewImage";
-
+import PreviewImage from '/src/components/atoms/PreviewImage';
+import Spinner from '/src/components/atoms/Spinner';
+import Modal_global_alert from '/src/components/modal/Modal_global_alert';
+import filter_emptyValue from '/util/func/filter_emptyValue';
+import filter_onlyNumber from '/util/func/filter_onlyNumber';
+import filter_numberZeoFromTheIntegerPartOfTheDecimals from '/util/func/filter_numberZeoFromTheIntegerPartOfTheDecimals';
+import CustomRadioTrueOrFalse from '/src/components/admin/form/CustomRadioTrueOrFalse';
+import { validate } from '/util/func/validation/validation_recipe';
+import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
+import {getData, postObjData} from '/api/reqData';
 
 
 
@@ -22,137 +30,214 @@ const initialFormValues = {
   uiNameEnglish: '',
   pricePerGram: '',
   gramPerKcal: '',
-  ingredients: '',
+  ingredients: '', // 띄어쓰기 없이 콤마로 전송
   descriptionForSurvey: '',
   leaked: 'LEAKED',
   inStock: true,
 };
 
-const initialFormErrors = {};
+const initialFileValues = {
+  surveyResult: {
+    file: '',
+    filename: '',
+    thumbnailUrl: '',
+  },
+  recipeThumb: {
+    file: '',
+    filename: '',
+    thumbnailUrl: '',
+  },
+};
 
-function UpdateRecipePage() {
-
-
+function UpdateRecipePage( { id }) {
+  const getFormValuesApiUrl = `/api/recipes/${id}`;
+  const postFormValuesApiUrl = `/api/recipes/${id}`;
+  // - cf.) 파일 업로드 : post할 때, JSON파일과  IMAGE파일을 한 번에 전송 ( REST API 초기: 이미지를 업로드하는 시점에 upload하는 방식을 도입하기 전이었음)
   const router = useRouter();
-  const [createdItem, setCreatedItem] = useState({});
-  const [isActiveModal, setIsActiveModal] = useState(false);
+  const mct = useModalContext();
+  const [modalMessage, setModalMessage] = useState('');
+  const [isLoading, setIsLoading] = useState({});
+  const [activePreviewModal, setActivePreviewModal] = useState(false);
+  const [thumbFile, setThumbFile] = useState(initialFileValues);
   const [formValues, setFormValues] = useState(initialFormValues);
-  const [formErrors, setFormErrors] = useState(initialFormErrors);
-  const [file, setFile] = useState({
-    surveyResult: {
-      file: '',
-      filename: '',
-    },
-    recipeThumb: {
-      file: '',
-      filename: '',
-    },
-  });
-
-
-  // console.log(formValues);
-
-
-
-
+  const [formErrors, setFormErrors] = useState({});
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  
+  console.log(formValues);
+  
   useEffect(() => {
-    // MEMO 재료 등록 후 , 초기화시킴
-    setFormValues(prevState=>({
-      ...prevState,
-      ingredients: ''
-    }))
-  }, [createdItem]);
-
-
-
-  const onShowModalHandler = () => {
-    setIsActiveModal(true);
+    if (!id) return;
+    (async () => {
+      try {
+        setIsLoading((prevState) => ({
+          ...prevState,
+          fetching: true,
+        }));
+        const res = await getData(getFormValuesApiUrl);
+        console.log(res);
+ 
+       
+        const DATA = res.data;
+        
+        const initialFormValues = {
+          name: DATA.name,
+          description: DATA.description,
+          uiNameKorean: DATA.uiNameKorean,
+          uiNameEnglish: DATA.uiNameEnglish,
+          pricePerGram: DATA.pricePerGram,
+          gramPerKcal: DATA.gramPerKcal,
+          ingredients: DATA.ingredientList.join(','),
+          descriptionForSurvey: DATA.descriptionForSurvey,
+          leaked: DATA.leaked,
+          inStock: DATA.inStock,
+  
+        };
+        setFormValues(initialFormValues);
+  
+  
+        const thumbFileData = {
+          surveyResult: {
+            file:null,
+            filename:'TEST // 유효성검사는 끝남 -> 파일경로 & 이름을 받음된다 ',
+            thumbnailUrl: DATA.thumbnailUrl1 || 'http://211.219.225.118:9999/display/items?filename=6bd75a5a-5003-41aa-b18c-ce364b7c5448_05_메인페이지_램앤비프_썸네일.jpg'
+          },
+          recipeThumb: {
+            file:null,
+            filename:'TEST // 유효성검사는 끝남 -> 파일경로 & 이름을 받음된다 ',
+            thumbnailUrl: DATA.thumbnailUrl2 || 'http://211.219.225.118:9999/display/items?filename=6bd75a5a-5003-41aa-b18c-ce364b7c5448_05_메인페이지_램앤비프_썸네일.jpg'
+      
+          },
+        }
+        setThumbFile(thumbFileData)// 원본 thumnail ID list
+      
+      } catch (err) {
+        console.error(err);
+      }
+      setIsLoading((prevState) => ({
+        ...prevState,
+        fetching: false,
+      }));
+    })();
+  }, []);
+  
+  
+  
+  const onShowPreviewModalHandler = () => {
+    setActivePreviewModal(true);
   };
-  const onHideModalHandler = () => {
-    setIsActiveModal(false);
+  const onHidePreviewModalHandler = () => {
+    setActivePreviewModal(false);
   };
-
-
-
-
-  const onAddIngredients = () => {
-    const id = formValues.ingredients;
-    setFormErrors(prevState=>({
-      ...prevState,
-      ingredients: id ? '' : '입력된 값이 없습니다.'
-    }))
-
-    if(!id)return;
-
-    setCreatedItem(prevState => ({
-      ...prevState,
-      id
-    }))
-
-  };
-
+  
   const onInputChangeHandler = (event) => {
-    const { id, value } = event.currentTarget;
-
+    const input = event.currentTarget;
+    const { id, value } = input;
+    const filteredType = input.dataset.inputType;
+    let filteredValue = value;
+    
+    if (filteredType) {
+      filteredValue = filter_emptyValue(value);
+      if (filteredType.indexOf('number') >= 0) {
+        filteredValue = filter_onlyNumber(filteredValue);
+      }
+      if (filteredType.indexOf('demicals') >= 0) {
+        filteredValue = filter_numberZeoFromTheIntegerPartOfTheDecimals(filteredValue);
+      }
+    }
     setFormValues((prevState) => ({
       ...prevState,
-      [id]: value,
+      [id]: filteredValue,
     }));
   };
-
-
-
-
+  
   const imageFileChangeHandler = (e) => {
     const { id, files } = e.currentTarget;
     const file = files[0];
     const filename = file && file.name;
-    setFile((prevState) => ({
+    setThumbFile((prevState) => ({
       ...prevState,
       [id]: { file, filename },
     }));
   };
-
-
-
-
-
-  const onKeyboardHandler = (event) => {
-    enterKey(event, onAddIngredients)
-  }
-
+  
+  
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    if (isSubmitted) return;
+    // ! IMPORTANT : submit 이후 enterKey event로 trigger되는 중복submit 방지
+    console.log(formValues);
+    const errObj = validate(formValues, thumbFile);
+    setFormErrors(errObj);
+    
+    const isPassed = valid_hasFormErrors(errObj);
+    
+    try {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        submit: true,
+      }));
+      if (isPassed) {
+        const jsonData = JSON.stringify(formValues);
+        const blob = new Blob([jsonData], { type: 'application/json' });
+        const formData = new FormData();
+        formData.append('requestDto', blob);
+        formData.append('file1', thumbFile.surveyResult.file);
+        formData.append('file2', thumbFile.recipeThumb.file);
+        const res = await postObjData(postFormValuesApiUrl, formData, 'multipart/form-data');
+        console.log(res);
+        if (res.isDone) {
+          onShowModalHandler('레시피가 성공적으로 생성되었습니다.');
+          setIsSubmitted(true);
+        } else {
+          alert(res.error, '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.');
+        }
+      } else {
+        alert('유효하지 않은 항목이 있습니다.');
+      }
+    } catch (err) {
+      alert('API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.');
+      console.error('API통신 오류 : ', err);
+    }
+    setIsLoading((prevState) => ({
+      ...prevState,
+      submit: false,
+    }));
+  };
   const returnToPrevPage = () => {
     if (confirm('이전 페이지로 돌아가시겠습니까?')) {
       router.back();
     }
   };
-
-  const onSubmitHandler = (e) => {
-    e.preventDefault();
-    console.log('제출!');
-  }; // * onSubmitHandler
-
+  
+  const onShowModalHandler = (message) => {
+    mct.alertShow();
+    setModalMessage(message);
+  };
+  
+  const onGlobalModalCallback = () => {
+    mct.alertHide();
+    router.push('/bf-admin/product/recipe');
+  };
+  
   return (
     <>
       <MetaTitle title="레시피 수정" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
           <div className="title_main">
-            <h1>레시피 수정</h1>
+            <h1>
+              레시피 수정
+              {isLoading.fetching && <Spinner />}
+            </h1>
           </div>
           <section className="cont">
             <div className="cont_body">
-              <form
-                action="/a"
-                encType="multipart/form-data"
-                method="post"
-                onSubmit={onSubmitHandler}
-              >
+              <form action="/" encType="multipart/form-data" method="post">
                 <div className="cont_divider">
                   <div className="input_row">
                     <div className="title_section fixedHeight">
                       <label className="title" htmlFor="name">
-                        상품명
+                        레시피 이름
                       </label>
                     </div>
                     <div className="inp_section">
@@ -162,6 +247,7 @@ function UpdateRecipePage() {
                           type="text"
                           name="name"
                           className="fullWidth"
+                          value={formValues.name || ''}
                           onChange={onInputChangeHandler}
                         />
                         {formErrors.name && <ErrorMessage>{formErrors.name}</ErrorMessage>}
@@ -183,6 +269,7 @@ function UpdateRecipePage() {
                           id={'description'}
                           name="description"
                           className="fullWidth"
+                          value={formValues.description || ''}
                           onChange={onInputChangeHandler}
                         />
                         {formErrors.name && <ErrorMessage>{formErrors.description}</ErrorMessage>}
@@ -205,6 +292,7 @@ function UpdateRecipePage() {
                           type="text"
                           name="uiNameKorean"
                           className="fullWidth"
+                          value={formValues.uiNameKorean || ''}
                           onChange={onInputChangeHandler}
                         />
                         {formErrors.uiNameKorean && (
@@ -229,6 +317,7 @@ function UpdateRecipePage() {
                           type="text"
                           name="uiNameEnglish"
                           className="fullWidth"
+                          value={formValues.uiNameEnglish || ''}
                           onChange={onInputChangeHandler}
                         />
                         {formErrors.uiNameEnglish && (
@@ -251,7 +340,10 @@ function UpdateRecipePage() {
                         <input
                           id={'pricePerGram'}
                           type="text"
+                          className={'text-align-right'}
+                          data-input-type={'number, demicals'}
                           name="pricePerGram"
+                          value={formValues.pricePerGram}
                           onChange={onInputChangeHandler}
                         />
                         <em className="unit">원 / g</em>
@@ -275,7 +367,9 @@ function UpdateRecipePage() {
                         <input
                           id={'gramPerKcal'}
                           type="text"
-                          name="gramPerKcal"
+                          data-input-type={'number, demicals'}
+                          className={'text-align-right'}
+                          value={formValues.gramPerKcal}
                           onChange={onInputChangeHandler}
                         />
                         <em className="unit">g / Kcal</em>
@@ -307,16 +401,17 @@ function UpdateRecipePage() {
                           type="text"
                           name="descriptionForSurvey"
                           onChange={onInputChangeHandler}
+                          value={formValues.descriptionForSurvey || ''}
                           style={{ width: '286px' }}
                         />
-                        {formErrors.uiNameEnglish && (
-                          <ErrorMessage>{formErrors.uiNameEnglish}</ErrorMessage>
+                        {formErrors.descriptionForSurvey && (
+                          <ErrorMessage>{formErrors.descriptionForSurvey}</ErrorMessage>
                         )}
                       </div>
                     </div>
                   </div>
                 </div>
-
+                
                 <div className="cont_divider">
                   <div className="input_row multipleLines">
                     <div className="title_section fixedHeight">
@@ -333,32 +428,19 @@ function UpdateRecipePage() {
                       </label>
                     </div>
                     <div className="inp_section">
-                      <div className="inp_box">
-                        <input
-                          id={'ingredients'}
-                          type="text"
-                          name="ingredients"
-                          onChange={onInputChangeHandler}
-                          value={formValues.ingredients}
-                          onKeyDown={onKeyboardHandler}
-                        />
-                        <button
-                          type={'button'}
-                          className={'admin_btn solid basic_l'}
-                          onClick={onAddIngredients}
-                        >
-                          추가
-                        </button>
-                        {formErrors.ingredients && (
-                          <ErrorMessage>{formErrors.ingredients}</ErrorMessage>
-                        )}
-                      </div>
-                      <IngredientsItemList newItemObj={createdItem} />
+                      <IngredientsItemList
+                        id={'ingredients'}
+                        formValues={formValues}
+                        mode={'update'}
+                        setFormValues={setFormValues}
+                      />
+                      {formErrors.ingredients && <ErrorMessage>{formErrors.ingredients}</ErrorMessage>
+                      }
                     </div>
                   </div>
                 </div>
                 {/* cont_divider */}
-
+                
                 <div className="cont_divider">
                   <div className="input_row multipleLines">
                     <div className="title_section">
@@ -372,13 +454,14 @@ function UpdateRecipePage() {
                     </div>
                     <div className="inp_section">
                       <label className="inp_wrap file" htmlFor="surveyResult">
-                        {
-                          file.surveyResult.file && <PreviewImage
-                            file={file.surveyResult.file}
+                        {(thumbFile.surveyResult.file || thumbFile.surveyResult.thumbnailUrl) && (
+                          <PreviewImage
+                            file={thumbFile.surveyResult.file}
+                            thumbLink={thumbFile.surveyResult?.thumbnailUrl}
                             backgroundColor={'transparent'}
                             style={{ margin: '0', maxWidth: '200px', marginBottom: '10px' }}
                           />
-                        }
+                        )}
                         <div className="inp_box">
                           <input
                             id={'surveyResult'}
@@ -388,7 +471,7 @@ function UpdateRecipePage() {
                             multiple={false}
                             onChange={imageFileChangeHandler}
                           />
-                          <Fake_input filename={file.surveyResult.filename} />
+                          <Fake_input filename={thumbFile.surveyResult.filename} />
                           {formErrors.surveyResult && (
                             <ErrorMessage>{formErrors.surveyResult}</ErrorMessage>
                           )}
@@ -398,14 +481,15 @@ function UpdateRecipePage() {
                   </div>
                 </div>
                 {/* cont_divider */}
-
                 <div className="cont_divider">
                   <div className="input_row multipleLines">
                     <div className="title_section">
                       <label className="title">
                         썸네일 (레시피)
                         <Tooltip
-                          message={'SHOP페이지 일반상품 목록에 노출될 아이콘입니다.'}
+                          message={
+                            '1. 썸네일 상단의 글자는 이미지로 삽입해야합니다.\n2. 플랜, 레시피 페이지의 레시피 썸네일에 노출 '
+                          }
                           wordBreaking
                           messagePosition={'left'}
                         />
@@ -413,11 +497,14 @@ function UpdateRecipePage() {
                     </div>
                     <div className="inp_section">
                       <label className="inp_wrap file" htmlFor="recipeThumb">
-                        { file.recipeThumb.file && <PreviewImage
-                          file={file.recipeThumb.file}
-                          backgroundColor={'transparent'}
-                          style={{ margin: '0', maxWidth: '200px', marginBottom: '10px' }}
-                        />}
+                        {(thumbFile.recipeThumb.file || thumbFile.recipeThumb.thumbnailUrl) && (
+                          <PreviewImage
+                            file={thumbFile.recipeThumb.file}
+                            thumbLink={thumbFile.recipeThumb?.thumbnailUrl}
+                            backgroundColor={'transparent'}
+                            style={{ margin: '0', maxWidth: '200px', marginBottom: '10px' }}
+                          />
+                        )}
                         <div className="inp_box">
                           <input
                             id={'recipeThumb'}
@@ -427,42 +514,12 @@ function UpdateRecipePage() {
                             multiple={false}
                             onChange={imageFileChangeHandler}
                           />
-                          <Fake_input filename={file.recipeThumb.filename} />
+                          <Fake_input filename={thumbFile.recipeThumb.filename} />
                           {formErrors.recipeThumb && (
                             <ErrorMessage>{formErrors.recipeThumb}</ErrorMessage>
                           )}
                         </div>
                       </label>
-                    </div>
-                  </div>
-                </div>
-                {/* cont_divider */}
-
-                <div className="cont_divider">
-                  <div className="input_row">
-                    <div className="title_section fixedHeight">
-                      <div className="title">
-                        품절 여부
-                        <Tooltip
-                          message={
-                            '1. 품절된 레시피는 신규설문조사에서 구입 불가능합니다.\n2. 품절된 레시피를 구독 중인 고객은 결제 중지됩니다. \n3. 알림톡으로 품절안내 메시지가 전송됩니다. \n4. 유저는 사이트 접속 시, 안내창을 통해 품절상태를 확인하게 됩니다.'
-                          }
-                          wordBreaking={true}
-                          messagePosition={'left'}
-                          style={{ width: '400px' }}
-                        />
-                      </div>
-                    </div>
-                    <div className="inp_section">
-                      <div className="inp_box">
-                        <CustomRadio
-                          setValue={setFormValues}
-                          name="inStock"
-                          idList={['inStock-FALSE', 'inStock-TRUE']}
-                          labelList={['아니오', '품절']}
-                        />
-                        <em className={'errorMSG'}>( *품절처리 시, 상품이 삭제됩니다. )</em>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -481,11 +538,40 @@ function UpdateRecipePage() {
                     <div className="inp_section">
                       <div className="inp_box">
                         <CustomRadio
-                          setValue={setFormValues}
                           name="leaked"
-                          idList={['leaked-FALSE', 'leaked-TRUE']}
-                          labelList={['아니오', '노출']}
+                          idList={['LEAKED', 'HIDDEN']}
+                          labelList={['노출', '숨김']}
+                          value={formValues.leaked}
+                          setValue={setFormValues}
                         />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {/* cont_divider */}
+                <div className="cont_divider">
+                  <div className="input_row">
+                    <div className="title_section fixedHeight">
+                      <div className="title">
+                        재고 여부
+                        <Tooltip
+                          message={
+                            '1. 품절된 레시피는 신규설문조사에서 구입 불가능합니다.\n2. 품절된 레시피를 구독 중인 고객은 결제 중지됩니다. \n3. 알림톡으로 품절안내 메시지가 전송됩니다. \n4. 유저는 사이트 접속 시, 안내창을 통해 품절상태를 확인하게 됩니다.'
+                          }
+                          wordBreaking={true}
+                          messagePosition={'center'}
+                          width={'400px'}/>
+                      </div>
+                    </div>
+                    <div className="inp_section">
+                      <div className="inp_box">
+                        <CustomRadioTrueOrFalse
+                          name="inStock"
+                          value={formValues.inStock}
+                          setValue={setFormValues}
+                          labelList={['예', '품절']}
+                        />
+                        <em className={'errorMSG'}>( *품절 처리된 레시피를 구독 중인 고객은 결제 중지됩니다. )</em>
                       </div>
                     </div>
                   </div>
@@ -494,13 +580,13 @@ function UpdateRecipePage() {
               </form>
             </div>
           </section>
-
+          
           <div className="cont_bottom">
             <div className="btn_section">
               <button
                 type="button"
                 className="admin_btn confirm_l line"
-                onClick={onShowModalHandler}
+                onClick={onShowPreviewModalHandler}
               >
                 미리보기
               </button>
@@ -512,18 +598,38 @@ function UpdateRecipePage() {
               >
                 취소
               </button>
-              <button type="submit" id="btn-create" className="admin_btn confirm_l solid">
-                등록
+              <button
+                type="submit"
+                id="btn-create"
+                className="admin_btn confirm_l solid"
+                onClick={onSubmit}
+              >
+                {isLoading.submit ? <Spinner style={{color:'#fff'}}/> : '등록'}
               </button>
             </div>
           </div>
         </AdminContentWrapper>
       </AdminLayout>
-      {isActiveModal && (
-        <Modal_previewRecipeThumb data={formValues} file={file} onModalHide={onHideModalHandler} />
+      {activePreviewModal && (
+        <Modal_previewRecipeThumb
+          data={formValues}
+          file={thumbFile}
+          onModalHide={onHidePreviewModalHandler}
+        />
       )}
+      <Modal_global_alert message={modalMessage} onClick={onGlobalModalCallback} background />
     </>
   );
 }
 
 export default UpdateRecipePage;
+
+
+
+
+UpdateRecipePage.getInitialProps = async ({ query }) => {
+  const { id } = query
+  
+  return { id : id};
+  
+}
