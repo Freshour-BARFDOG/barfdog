@@ -5,7 +5,7 @@ import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
 import CustomRadio from '/src/components/admin/form/CustomRadio';
-import CustomSelect from '/src/components/admin/form/CustomSelect';
+import CustomSelectForTwoSelects from '/src/components/admin/form/CustomSelectForTwoSelects';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import SearchGroupForm from "/src/components/admin/form/SearchGroupForm";
 import SearchPersonalForm from "/src/components/admin/form/SearchPersonalForm";
@@ -143,7 +143,7 @@ function ReleaseCouponPage() {
                     </label>
                   </div>
                   <div className="inp_section">
-                    <CustomSelect
+                    <CustomSelectForTwoSelects
                       name="coupon"
                       id="coupon"
                       options={[

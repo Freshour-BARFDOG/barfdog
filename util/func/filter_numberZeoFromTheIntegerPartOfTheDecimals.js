@@ -1,4 +1,4 @@
-const filter_numberZeoFromTheIntegerPartOfTheDecimal = (stringTypeNumber) => {
+const filter_numberZeoFromTheIntegerPartOfTheDecimals = (stringTypeNumber) => {
   let filteredValue = stringTypeNumber;
   const integer = filteredValue.split('.')[0];
   const decimal = filteredValue.split('.')[1];
@@ -25,4 +25,4 @@ const filter_numberZeoFromTheIntegerPartOfTheDecimal = (stringTypeNumber) => {
 
 
 
-export default filter_numberZeoFromTheIntegerPartOfTheDecimal;
+export default filter_numberZeoFromTheIntegerPartOfTheDecimals;

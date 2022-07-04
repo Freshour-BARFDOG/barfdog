@@ -70,19 +70,19 @@ const ItemList = ({ item, sortableItemRef }) => {
         </button>
       </span>
       <span>
-        <em className={"text-transform-ellipsis"}>{DATA.orderId}</em>
+        <em className={"overflow-x-scroll"}>{DATA.orderId}</em>
       </span>
       <span>
-        <em className={"text-transform-ellipsis"}>{DATA.pruductId}</em>
+        <em className={"overflow-x-scroll"}>{DATA.pruductId}</em>
       </span>
       <span>
-        <em className={"text-transform-ellipsis"}>
+        <em className={"overflow-x-scroll"}>
           {DATA.orderStatus} {DATA.orderDate}
         </em>
       </span>
       <span>{DATA.deliveryStatus}</span>
       <span>
-        <button className={"text-transform-ellipsis btn_link"}>
+        <button className={"overflow-x-scroll btn_link"}>
           {DATA.trackingNumber}
         </button>
       </span>

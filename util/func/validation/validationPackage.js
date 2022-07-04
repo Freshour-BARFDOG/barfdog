@@ -1,22 +1,41 @@
 import axios from 'axios';
-import checkCharactorSamenessAndContinuity from './checkCharactorSamenessAndContinuity';
+import checkCharactorSamenessAndContinuity from '../checkCharactorSamenessAndContinuity';
+import transformClearLocalCurrency from '../transformClearLocalCurrency';
+import convertFileSizeToMegabyte from '../ConvertFileSizeToMegabyte';
+
+export const valid_hasFormErrors = (errorObj) => {
+  let isPassed = true;
+  for (const key in errorObj) {
+    const val = errorObj[key];
+    if (val) {
+      isPassed = false;
+      break;
+    }
+  }
+  return isPassed;
+};
+
+
+
+
+
 
 
 export const valid_isEmpty = (value) => {
-  const message = value ? '' : '항목이 비어있습니다.';
-  return message;
+  const error = value ? '' : '항목이 비어있습니다.';
+  return error;
 };
 
 
 
 export const valid_isEmptyArray = (arr) =>{
-  let message;
+  let error;
   if(typeof arr !== 'object'){
     alert('데이터 처리 중 에러가 발생했습니다. 개발사에게 문의하세요.')
     return console.error('ERROR: Parameter type must be array');
   }
-  message = arr.length ? '' : '항목이 비어있습니다.';
-  return message;
+  error = arr.length ? '' : '항목이 비어있습니다.';
+  return error;
 }
 
 
@@ -35,7 +54,6 @@ export const valid_isEmptyFile = (obj, substituteKey ) => {
     } else if(key === 'file' && !val){
       error = '항목이 비었습니다.';
     }
-
   }
 
   return error;
@@ -43,18 +61,27 @@ export const valid_isEmptyFile = (obj, substituteKey ) => {
 
 
 
+export const valid_isEmptyCurrency = (value) => {
+  const stringValue = typeof value === 'number' ? String(value) : value;
+  const currency = transformClearLocalCurrency(stringValue);
+  const error = currency !== 0 ? '' : '항목이 비어있습니다.';
+  return error;
+};
+
+
+
+
 export const valid_isEmptyObject = (obj) => {
-  let message;
+  let error;
   for ( const key in obj ) {
     const val = obj[key];
     console.log(val)
     if(!val){
-      message = `빈 항목이 있습니다.`;
+      error = `빈 항목이 있습니다.`;
       break
     }
   }
-
-  return message;
+  return error;
 }
 
 
@@ -251,21 +278,61 @@ export const valid_URL = (value)=>{
 
 
 
-
-
-export const valid_hasFormErrors = (errorObj) => {
-  let isPassed = true;
-  for ( const key in errorObj ) {
-    const val = errorObj[key];
-    if(val){
-      isPassed = false;
-      break
-    }
+export const valid_currency = (value)=>{
+  let error ='';
+  const stringValue = typeof value === 'number' ? String(value) : value;
+  const currency = transformClearLocalCurrency(stringValue);
+  if ( currency < 0 ) {
+    error = '가격은 0보다 작을 수 없습니다.'
   }
-  return isPassed;
+  return error;
 }
 
 
 
 
+export const valid_arrayErrorCount = (arr) => {
+  let errorCount = 0;
+  if (arr.length) {
+    arr.map((optionObj) => {
+      const errorObj = valid_singleItemOptionObj(optionObj);
+      const isPassed = valid_hasFormErrors(errorObj);
+      !isPassed && errorCount++;
+    });
+  }
+  return errorCount;
+};
+const valid_singleItemOptionObj = (optionObj) => {
+  let error = {};
 
+  for (const key in optionObj) {
+    const val = optionObj[key];
+    switch (key) {
+      case 'name':
+        error[key] = valid_isEmpty(val);
+        break;
+      case 'price':
+        error[key] = ''; // 옵션가격은 추가 검증할 내역 없음
+        break;
+      case 'remaining':
+        error[key] = valid_isEmptyCurrency(val);
+        break;
+    }
+  }
+  // console.log('singleOptions Error:', error)
+  return error;
+};
+
+
+export const valid_fileSize = (file, maxFileSize) => {
+  let error = file.size > maxFileSize;
+  if (error) {
+    error = `- 최대 파일크기: ${convertFileSizeToMegabyte(
+      maxFileSize,
+    )}MB 이상의 파일이 포함돼있습니다.\n- 초과된 파일명: ${
+      file.name
+    } \n- 초과된 파일크기: ${convertFileSizeToMegabyte(file.size)}MB`;
+    alert(error);
+  }
+  return error;
+};

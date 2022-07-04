@@ -1,69 +1,63 @@
-import s from "./popup.module.scss";
-import React, { useState, useEffect } from "react";
-import AdminLayout from "/src/components/admin/AdminLayout";
-import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
-import MetaTitle from "@src/components/atoms/MetaTitle";
-import axios from "axios";
-import axiosConfig from "/api/axios.config";
-import PopupList from "./PopupList";
-import AdminBtn_moveToPage from "@src/components/atoms/AdminBtn_moveToPage";
-import { getData, putData, deleteData } from "/api/reqData";
-import AmdinErrorMessage from "@src/components/atoms/AmdinErrorMessage";
-
-
-
-
-
-const TEST_ITEM = [1, 2, 3, 4, 5];
+import s from './popup.module.scss';
+import React, { useState, useEffect } from 'react';
+import AdminLayout from '/src/components/admin/AdminLayout';
+import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
+import MetaTitle from '/src/components/atoms/MetaTitle';
+import axios from 'axios';
+import axiosConfig from '/api/axios.config';
+import PopupList from './PopupList';
+import AdminBtn_moveToPage from '@src/components/atoms/AdminBtn_moveToPage';
+import { getData } from '/api/reqData';
+import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
+import Spinner from '/src/components/atoms/Spinner';
+import sorting from "/util/func/sorting";
 
 
 function PopupIndexPage() {
+  const getFormValuesApiUrl = `/api/banners/popup`;
+  const [isLoading, setIsLoading] = useState({});
+  const [itemList, setItemList] = useState([]);
+  const [orderEditMode, setOrderEditMode] = useState(false);
+  const [fetchingData, setFetchingData] = useState(false);
 
-  const [itemList, setItemList] = useState(TEST_ITEM);
-  const [editListOrder, setEditListOrder] = useState(false);
+  // useEffect(() => {
+  //   let sortedList = sorting(itemList, 'leakedOrder');
+  //   setItemList(sortedList)
+  // }, [itemList]);
+
 
   useEffect(() => {
-    const getDataFromAPI = (res) => {
-      console.log(res);
-      const data = res.data._embedded.popupBannerListResponseDtoList;
-      setItemList(data);
-    };
-     getData("/api/banners/popup", getDataFromAPI);
-
-  }, []);
-
-
-  const onEditHandler = () => {
-    setEditListOrder(true);
-  };
-
-  const onExitEditListOrderHandler = () => {
-    setEditListOrder(false);
-  };
-
-  const onLeakedOrderUp = (id) => {
-    const data = '';
-    putData(`api/banners/main/${id}/up`, data);
-  };
-  const onLeakedOrderDown = (id) => {
-     const data = '';
-    putData(`api/banners/main/${id}/down`, data);
-  };
-
-
-
-  const onDeleteItem = (url) => {
-    axios
-      .delete(url, axiosConfig())
-      .then((res) => {
+    (async () => {
+      try {
+        setIsLoading((prevState) => ({
+          ...prevState,
+          fetching: true,
+        }));
+        const res = await getData(getFormValuesApiUrl);
+        const DATA = res.data._embedded.popupBannerListResponseDtoList;
+        let sortedList = sorting(DATA, 'leakedOrder');
+        setItemList(sortedList)
         console.log(res);
-        getDataWithSettingState("/api/review", setItemList);
-        setModalMessage("리뷰가 삭제되었습니다.");
-      })
-      .catch((err) => {
-        setModalMessage("삭제 실패: ", err);
-      });
+      } catch (err) {
+        console.error(err);
+        alert('데이터를 가져올 수 없습니다.');
+      }
+      setIsLoading((prevState) => ({
+        ...prevState,
+        fetching: false,
+      }));
+    })();
+  }, [fetchingData]);
+
+
+  const onStartEditMode = () => {
+    setOrderEditMode(true);
   };
+
+  const onEndEditMode = () => {
+    setOrderEditMode(false);
+  };
+
 
 
   const BtnEditListOrder = () => (
@@ -71,7 +65,7 @@ function PopupIndexPage() {
       type="button"
       id="edit_order"
       className="admin_btn line basic_m"
-      onClick={onEditHandler}
+      onClick={onStartEditMode}
     >
       순서편집
     </button>
@@ -82,21 +76,28 @@ function PopupIndexPage() {
       type="button"
       id="set_order"
       className="admin_btn line basic_m point"
-      onClick={onExitEditListOrderHandler}
+      onClick={onEndEditMode}
     >
       닫기
     </button>
   );
 
-
-
-  
   return (
     <>
       <MetaTitle title="팝업 관리" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
-          <h1 className="title_main">팝업 관리</h1>
+          <div className="title_main">
+            <h1>
+              팝업 관리
+              {isLoading.fetching && (
+                <Spinner
+                  style={{ color: 'var(--color-main)', width: '20', height: '20' }}
+                  speed={0.6}
+                />
+              )}
+            </h1>
+          </div>
           <section className="cont">
             <div className="cont_header clearfix">
               <p className="cont_title cont-left">목록</p>
@@ -110,7 +111,7 @@ function PopupIndexPage() {
               </div>
               <div className="controls cont-left">
                 <BtnEditListOrder />
-                {editListOrder && <BtnSave />}
+                {orderEditMode && <BtnSave />}
               </div>
             </div>
             <div className={`${s.cont_viewer}`}>
@@ -126,12 +127,8 @@ function PopupIndexPage() {
                 {itemList.length ? (
                   <PopupList
                     items={itemList}
-                    setItemList={setItemList}
-                    setEditListOrder={setEditListOrder}
-                    editListOrder={editListOrder}
-                    onLeakedOrderUp={onLeakedOrderUp}
-                    onLeakedOrderDown={onLeakedOrderDown}
-                    onDeleteItem={onDeleteItem}
+                    orderEditMode={orderEditMode}
+                    onUpdateList={setFetchingData}
                   />
                 ) : (
                   <AmdinErrorMessage text="조회된 데이터가 없습니다." />
@@ -139,7 +136,6 @@ function PopupIndexPage() {
               </div>
             </div>
           </section>
-          {/* inner */}
         </AdminContentWrapper>
       </AdminLayout>
     </>

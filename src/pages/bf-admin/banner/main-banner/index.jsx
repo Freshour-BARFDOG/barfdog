@@ -146,7 +146,7 @@ function MainBannerIndexPage(props) {
                     items={itemList}
                     setItemList={setItemList}
                     setEditListOrder={setEditListOrder}
-                    editListOrder={editListOrder}
+                    orderEditMode={editListOrder}
                     onLeakedOrderUp={onLeakedOrderUp}
                     onLeakedOrderDown={onLeakedOrderDown}
                     onDeleteItem={onDeleteItem}

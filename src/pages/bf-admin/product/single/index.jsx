@@ -1,74 +1,96 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import s from './single.module.scss';
-import AdminLayout from "@src/components/admin/AdminLayout";
-import { AdminContentWrapper } from "@src/components/admin/AdminWrapper";
-import MetaTitle from "@src/components/atoms/MetaTitle";
-import axios from "axios";
-import axiosConfig from "/api/axios.config";
-import AmdinErrorMessage from "@src/components/atoms/AmdinErrorMessage";
-import sorting from "@util/func/sorting";
-import Pagination from "@src/components/atoms/Pagination";
-import SearchBar from "@src/components/admin/form/searchBar";
-import SearchSelect from "@src/components/admin/form/searchBar/SearchSelect";
-import SearchPlainInput from "@src/components/admin/form/searchBar/SearchPlainInput";
-import SingleList from "./SingleList";
+import AdminLayout from '/src/components/admin/AdminLayout';
+import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
+import MetaTitle from '/src/components/atoms/MetaTitle';
+import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
+import SearchBar from '/src/components/admin/form/searchBar';
+import SearchSelect from '/src/components/admin/form/searchBar/SearchSelect';
+import SearchPlainInput from '/src/components/admin/form/searchBar/SearchPlainInput';
+import SingleList from './SingleList';
+import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
+import Spinner from '/src/components/atoms/Spinner';
 
 
-
-
-const TEST_ITEM = [1, 2, 3, 4, 5];
-
-
+const initalSearchValue = {
+  itemType: 'ALL',
+  smallTitle :''
+}
 
 function SingleItemPage() {
+  const getListApiUrl = '/api/admin/items';
+  const apiDataQueryString = 'queryItemsAdminDtoList';
+  const initialQuery = `&itemType=ALL`;
+  const [urlQuery, setUrlQuery] = useState(initialQuery);
+  const [itemList, setItemList] = useState([]);
+  const [isLoading, setIsLoading] = useState({});
+  const [searchValue, setSearchValue] = useState(initalSearchValue);
+  const [pageInfo, setPageInfo] = useState({});
 
-  const [modalMessage, setModalMessage] = useState("");
-  const [itemList, setItemList] = useState(TEST_ITEM);
-  const [searchValue, setSearchValue] = useState({});
+// - TODO
+// API서버에서 요청할
 
-  console.log(searchValue);
-  const onResetSearchValues = (e) => {
-    setSearchValue("");
-    console.log("초기화 실행");
+
+
+
+  const onResetSearchValues = () => {
+    setSearchValue(initalSearchValue);
   };
 
-  const onSearchHandler = (e) => {
-    console.log("검색 실행");
+  const onSearchHandler = () => {
+    console.log(searchValue);
+    const tempUrlQuery = [];
+    for (const key in searchValue) {
+      const val = searchValue[key];
+      if(val){
+        const tempString = `${key}=${val}`;
+        tempUrlQuery.push(tempString);
+      }
+    }
+    const separator = '&'
+    const resultSearchQuery = separator + tempUrlQuery.join('&');
+    setUrlQuery(resultSearchQuery);
+    console.log('검색 실행', resultSearchQuery);
   };
 
   return (
     <>
-      <MetaTitle title="단품 관리" admin={true} />
+      <MetaTitle title="일반상품 관리" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
-          <h1 className="title_main">단품 관리</h1>
+          <div className="title_main">
+            <h1>
+              일반상품 관리
+              {isLoading.fetching && <Spinner/>}
+            </h1>
+          </div>
           <section className="cont">
             <SearchBar onReset={onResetSearchValues} onSearch={onSearchHandler}>
               <SearchSelect
                 title="카테고리"
-                name="category"
-                id="category"
+                name="itemType"
+                id="itemType"
                 options={[
-                  { label: "전체", value: "ALL" },
-                  { label: "생식", value: "RAW" },
-                  { label: "토핑", value: "TOPPING" },
-                  { label: "기타", value: "ETC" },
+                  { label: '전체', value: 'ALL' },
+                  { label: '생식', value: 'RAW' },
+                  { label: '토핑', value: 'TOPPING' },
+                  { label: '기타', value: 'GOODS' },
                 ]}
-                onChange={setSearchValue}
+                setSearchValue={setSearchValue}
                 searchValue={searchValue}
               />
-              <SearchPlainInput
-                title="소항목 타이틀"
-                name={"single-title"}
-                onChange={setSearchValue}
-                searchValue={searchValue}
-              />
+              {/*<SearchPlainInput*/}
+              {/*  title="소항목 타이틀"*/}
+              {/*  name={'single-title'}*/}
+              {/*  onChange={setSearchValue}*/}
+              {/*  searchValue={searchValue}*/}
+              {/*/>*/}
             </SearchBar>
           </section>
           <section className="cont">
             <div className="cont_header clearfix">
               <p className="cont_title cont-left">
-                상품목록 &#40;총<em className={s["product-count"]}>16</em>
+                상품목록 &#40;총<em className={s['product-count']}>{pageInfo.totalPages || 0}</em>
                 개&#41;
               </p>
               <div className="controls cont-left"></div>
@@ -76,13 +98,15 @@ function SingleItemPage() {
             <div className={`${s.cont_viewer}`}>
               <div className={s.table}>
                 <ul className={s.table_header}>
-                  <li className={s.table_th}>레시피명</li>
+                  <li className={s.table_th}>상품번호</li>
                   <li className={s.table_th}>카테고리</li>
                   <li className={s.table_th}>상품명</li>
+                  <li className={s.table_th}>원가</li>
                   <li className={s.table_th}>판매가</li>
                   <li className={s.table_th}>재고수량</li>
-                  <li className={s.table_th}>할인률</li>
+                  <li className={s.table_th}>할인</li>
                   <li className={s.table_th}>노출여부</li>
+                  <li className={s.table_th}>생성일</li>
                   <li className={s.table_th}>수정</li>
                   <li className={s.table_th}>삭제</li>
                 </ul>
@@ -96,12 +120,15 @@ function SingleItemPage() {
                 )}
               </div>
             </div>
-            <div className={s["pagination-section"]}>
-              <Pagination
-                itemCountPerGroup={10}
-                itemTotalCount={100}
-                className={"square"}
-              />
+            <div className={s['pagination-section']}>
+              <PaginationWithAPI
+                apiURL={getListApiUrl}
+                size={1}
+                theme={'square'}
+                setItemList={setItemList}
+                queryItemList={apiDataQueryString}
+                setIsLoading={setIsLoading}
+                urlQuery={urlQuery} setPageData={setPageInfo}/>
             </div>
           </section>
         </AdminContentWrapper>

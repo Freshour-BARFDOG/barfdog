@@ -29,12 +29,17 @@ $inputDefaultHeight: rem(38);
   width: rem(200);
 }
 
-.text-transform-ellipsis {
+.overflow-x-scroll {
   white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
+  //text-overflow: ellipsis;
+  //overflow-x: hidden;
+  overflow-x: auto;
   justify-content: flex-start !important;
+  &::-webkit-scrollbar {display:none;}
 }
+
+
+
 .btn_link {
   cursor: pointer;
   color: var(--color-link);
@@ -188,8 +193,9 @@ $inputDefaultHeight: rem(38);
     margin-bottom: rem(10);
     * {
       display: flex;
-      gap: rem(10);
       font-size: inherit;
+      align-items: center;
+      gap: rem(10);
       cursor: default;
     }
   }
@@ -262,6 +268,7 @@ $inputDefaultHeight: rem(38);
       i {
         cursor: default;
       }
+      label i, label b{cursor: inherit}
       .table_body {
         min-height: $inputDefaultHeight;
       }
@@ -307,6 +314,7 @@ $inputDefaultHeight: rem(38);
     align-items: center;
     &.multipleLines {
       align-items: flex-start;
+      .inp_section{margin-top:rem(3);}
     }
     &:not(:last-child) {
       margin-bottom: rem(15);
@@ -527,3 +535,15 @@ $inputDefaultHeight: rem(38);
   color: var(--color-main);
 }
 
+
+.required {
+  position:relative;
+  &:after{
+    content:'*';
+    position:absolute;
+    right:rem(-6);
+    top:rem(-1);
+    font-size:rem(10);
+    color:var(--color-main);
+  }
+}

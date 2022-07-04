@@ -1,42 +1,47 @@
-import s from "./member.module.scss";
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import axiosConfig from "/api/axios.config";
-import MetaTitle from "/src/components/atoms/MetaTitle";
-import AdminLayout from "/src/components/admin/AdminLayout";
-import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
-import AmdinErrorMessage from "@src/components/atoms/AmdinErrorMessage";
-import Pagination from "@src/components/atoms/Pagination";
-import SearchBar from "@src/components/admin/form/searchBar";
-import SearchTerm from "@src/components/admin/form/searchBar/SearchTerm";
-import SearchTextWithCategory from "@src/components/admin/form/searchBar/SearchTextWithCategory";
-import MemberList from './MemberList'
-import ToolTip from '@src/components/atoms/Tooltip'
+import s from './member.module.scss';
+import React, { useState, useEffect } from 'react';
+import MetaTitle from '/src/components/atoms/MetaTitle';
+import AdminLayout from '/src/components/admin/AdminLayout';
+import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
+import AmdinErrorMessage from '@src/components/atoms/AmdinErrorMessage';
+import SearchBar from '@src/components/admin/form/searchBar';
+import SearchTerm from '@src/components/admin/form/searchBar/SearchTerm';
+import SearchTextWithCategory from '@src/components/admin/form/searchBar/SearchTextWithCategory';
+import MemberList from './MemberList';
+import ToolTip from '@src/components/atoms/Tooltip';
+import { getData } from '/api/reqData';
 
+// TODO >
+// - 검색기능
+// -  회원정보 조회기능 > 검색 시, 기본값으로 먼저 전달한다.
 
+function ManageUserPage(props) {
+ console.log(props);
 
+  const getListApiUrl = '/api/admin/members';
 
-
-
-const TEST_ITEM = [1,2,3,4,5];
-
-
-function ManageUserPage() {
-  const [modalMessage, setModalMessage] = useState("");
-  const [itemList, setItemList] = useState(TEST_ITEM);
+  const [modalMessage, setModalMessage] = useState('');
+  const [itemList, setItemList] = useState([]);
+  const [isLoading, setIsLoading] = useState({});
   const [searchValue, setSearchValue] = useState({});
 
   // console.log(searchValue);
+  useEffect(() => {
+    (async () => {
+      const res = await getData(
+        `/api/admin/members?page=1&size=5&email=&name=&from=2020-01-01&to=2022-06-24`,
+      );
+    })();
+  }, []);
 
   const onResetSearchValues = (e) => {
-    setSearchValue("");
-    console.log("초기화 실행");
+    setSearchValue('');
+    console.log('초기화 실행');
   };
 
   const onSearchHandler = (e) => {
-    console.log("검색 실행");
+    console.log('검색 실행');
   };
-
 
   return (
     <>
@@ -47,10 +52,10 @@ function ManageUserPage() {
           <section className="cont">
             <SearchBar onReset={onResetSearchValues} onSearch={onSearchHandler}>
               <SearchTerm
-                title={"조회기간"}
+                title={'조회기간'}
                 searchValue={searchValue}
                 setSearchValue={setSearchValue}
-                tooltip={<ToolTip message={"회원가입 시점"} />}
+                tooltip={<ToolTip message={'회원가입 시점'} />}
               />
               <SearchTextWithCategory
                 searchValue={searchValue}
@@ -59,8 +64,8 @@ function ManageUserPage() {
                 name="search-category"
                 id="search-category"
                 options={[
-                  { label: "아이디", value: "id" },
-                  { label: "이름", value: "name" },
+                  { label: '아이디', value: 'id' },
+                  { label: '이름', value: 'name' },
                 ]}
               />
             </SearchBar>
@@ -89,12 +94,15 @@ function ManageUserPage() {
                 )}
               </div>
             </div>
-            <div className={s["pagination-section"]}>
-              <Pagination
-                itemCountPerGroup={10}
-                itemTotalCount={100}
-                className={"square"}
-              />
+            <div className={s['pagination-section']}>
+              {/*<PaginationWithAPI*/}
+              {/*  apiURL={getListApiUrl}*/}
+              {/*  size={1}*/}
+              {/*  theme={'square'}*/}
+              {/*  setItemList={setItemList}*/}
+              {/*  queryItemList={'queryBlogsAdminDtoList'}*/}
+              {/*  setIsLoading={setIsLoading}*/}
+              {/*/>*/}
             </div>
           </section>
           {/* inner */}
@@ -103,5 +111,8 @@ function ManageUserPage() {
     </>
   );
 }
+
+
+
 
 export default ManageUserPage;

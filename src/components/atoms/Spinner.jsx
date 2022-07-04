@@ -1,7 +1,7 @@
 import React from 'react';
 import styledComponents from 'styled-components';
-import {ImSpinner2} from 'react-icons/im';
-import {CgSpinner} from 'react-icons/cg';
+import { ImSpinner2 } from 'react-icons/im';
+import { CgSpinner } from 'react-icons/cg';
 
 const Wrap = styledComponents.i`
     display:flex;
@@ -16,9 +16,19 @@ const Wrap = styledComponents.i`
     }
   `;
 
-const Spinner = ({style, speed = '0.6', ...props}) => {
+const Spinner = ({ style, speed = '0.6', ...props }) => {
+  const defaultStyle = {
+    ...style,
+    width: style?.width || '20',
+    height: style?.height || '20',
+    color: style?.color || 'var(--color-main)',
+  };
 
-  return (<Wrap className={'spinner'} speed={speed} {...props}><ImSpinner2 style={style}/></Wrap>)
-}
+  return (
+    <Wrap className={'spinner'} speed={speed} {...props}>
+      <ImSpinner2 style={defaultStyle} />
+    </Wrap>
+  );
+};
 
 export default Spinner;

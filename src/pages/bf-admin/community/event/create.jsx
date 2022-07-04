@@ -8,8 +8,8 @@ import Fake_input from '/src/components/atoms/fake_input';
 import PreviewImage from '/src/components/atoms/PreviewImage';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import rem from '/util/func/rem';
-import { validate } from '/util/func/validation_event';
-import { valid_hasFormErrors } from '/util/func/validationPackage';
+import { validate } from '/util/func/validation/validation_event';
+import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
 import CustomRadio from '/src/components/admin/form/CustomRadio';
 import Spinner from '/src/components/atoms/Spinner';
 import EventDetailImage from './EventDetailImage';
@@ -25,8 +25,8 @@ const initialFormValues = {
 
 const CreateEventPage = () => {
   const postFormValuesApiUrl = `/api/admin/events`;
-  const postDetailImageFileApiUrl = 'api/admin/events/image';
   const postThumbFileApiUrl = 'api/admin/events/thumbnail';
+  const postDetailImageFileApiUrl = 'api/admin/events/image';
   const router = useRouter();
   const mct = useModalContext();
   const [modalMessage, setModalMessage] = useState('');

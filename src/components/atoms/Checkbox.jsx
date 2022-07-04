@@ -1,4 +1,4 @@
-import React from 'react';
+import React , {useState} from 'react';
 import s from './checkbox.module.scss';
 
 export function Title (props) {
@@ -9,8 +9,9 @@ export function Title (props) {
   )
 }
 
-export function Btn (props) {  
-  
+
+
+export function Btn (props) {
   const test = props.style === 'white' ? 'white' : "red" ;
   
   return(
@@ -25,8 +26,7 @@ export function Btn (props) {
 
 
 export default function Checkbox({ id, label, callback, onClick ,labelStyle, checked,  ...props}) {
-
-
+  
   const onChangeHandler = (e) => {
     const { checked, id } = e.currentTarget;
     if (callback && typeof callback === "function") callback(checked, id);
@@ -35,7 +35,6 @@ export default function Checkbox({ id, label, callback, onClick ,labelStyle, che
   const onClickHandler = (e) => {
     const { checked, id } = e.currentTarget;
     if (onClick && typeof onClick === "function") onClick(checked, id);
-
   }
 
 
@@ -46,6 +45,7 @@ export default function Checkbox({ id, label, callback, onClick ,labelStyle, che
         id={id}
         onChange={onChangeHandler}
         onClick={onClickHandler}
+        checked={checked}
       />
       <i className={`${s.on} ${!label ? s.noLabel : ''}`} />
       <span className={s.label} style={labelStyle}>{label}</span>

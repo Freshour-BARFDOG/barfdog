@@ -12,14 +12,12 @@ import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import Spinner from '/src/components/atoms/Spinner';
 import filter_emptyValue from '/util/func/filter_emptyValue';
 import { SketchPicker } from 'react-color';
-import { validate } from '/util/func/validation_lineBanner';
-import { valid_hasFormErrors } from '/util/func/validationPackage';
+import { validate } from '/util/func/validation/validation_lineBanner';
+import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
 import { getData, postObjData, putObjData } from '/api/reqData';
-// import PreviewInnerHTML from '/src/components/atoms/PreviewInnerHTML';
-import dynamic from 'next/dynamic';
-const PreviewInnerHTML = dynamic(() => import('/src/components/atoms/PreviewInnerHTML'), {
-  ssr: false,
-});
+import PreviewInnerHTML from '/src/components/atoms/PreviewInnerHTML';
+
+
 
 const initialValues = {
   name: '',
@@ -30,7 +28,8 @@ const initialValues = {
   mobileLinkUrl: '',
 };
 
-function LineBanner() {
+function LineBanner(props) {
+  console.log(props)
   const router = useRouter();
   const { id } = router.query;
   const getFormValuesApiUrl = `/api/banners/top`;
@@ -55,8 +54,9 @@ function LineBanner() {
           fetching: true,
         }));
         const res = await getData(getFormValuesApiUrl);
-        const DATA = res.data;
-        const thisItemId = DATA.id;
+        console.log(res);
+        const DATA = res?.data;
+        const thisItemId = DATA?.id;
         if (thisItemId) {
           await router.push(`/bf-admin/banner/line-banner?id=${thisItemId}`);
           const initialFormValues = {
@@ -71,7 +71,8 @@ function LineBanner() {
           textField.document.querySelector('body').innerHTML = DATA.name;
         }
       } catch (err) {
-        console.error(err);
+        console.error('Failed Get Data:',err);
+        alert(err);
       }
       setIsLoading((prevState) => ({
         ...prevState,
@@ -108,8 +109,6 @@ function LineBanner() {
 
   const onInputChangeHandler = (e) => {
     const input = e.currentTarget;
-    console.log(input);
-    console.log(input.dataset.test);
     const { id, value } = input;
     const filteredType = input.dataset.filteredType;
     let filteredValue = value;
@@ -465,3 +464,24 @@ function LineBanner() {
 }
 
 export default LineBanner;
+
+
+//
+//
+// export async function getStaticProps(context) {
+//
+//   const data = context;
+//
+//   // if (!params) {
+//   //   return {
+//   //     redirect: { destination: "/no-data" },
+//   //   };
+//   // }
+//
+//
+//   return {
+//     props: {
+//       id: data,
+//     },
+//   };
+// }

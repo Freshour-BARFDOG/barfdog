@@ -8,16 +8,20 @@ import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
 import AdminBtn_moveToPage from '/src/components/atoms/AdminBtn_moveToPage';
 import Modal_AdminRecommendArticle from '/src/components/modal/Modal_AdminRecommendArticle';
 import Button_acceptClickEvent from '/src/components/atoms/Button_acceptClickEvent';
-import PaginationWithAPI from "/src/components/atoms/PaginationWithAPI";
+import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
+import Spinner from '/src/components/atoms/Spinner';
+
 
 
 function BlogIndexPage() {
   const getListApiUrl = '/api/admin/blogs';
   const [itemList, setItemList] = useState([]);
+  const [isLoading, setIsLoading] = useState({});
   const [activeModal, setActiveModal] = useState(false);
 
+  console.log(isLoading)
+
   const onShowRecommendArticleModal = async (returnVal) => {
-    // 추천아티클 정보 가져온다
     setActiveModal(returnVal);
   };
   // console.log(itemList);
@@ -26,8 +30,18 @@ function BlogIndexPage() {
       <MetaTitle title="블로그 관리" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
-          <h1 className="title_main">블로그 관리</h1>
-          <div className="cont">
+          <div className="title_main">
+            <h1>
+              블로그 관리
+              {isLoading.fetching && (
+                <Spinner
+                  style={{ color: 'var(--color-main)', width: '20', height: '20' }}
+                  speed={0.6}
+                />
+              )}
+            </h1>
+          </div>
+          <section className="cont">
             <div className="cont_header clearfix">
               <p className="cont_title cont-left">목록</p>
               <div className="cont-right">
@@ -63,12 +77,19 @@ function BlogIndexPage() {
               </div>
             </div>
             <div className={s['pagination-section']}>
-              <PaginationWithAPI apiURL={getListApiUrl} size={1} theme={'square'} setItemList={setItemList} queryItemList={'queryBlogsAdminDtoList'}/>
+              <PaginationWithAPI
+                apiURL={getListApiUrl}
+                size={1}
+                theme={'square'}
+                setItemList={setItemList}
+                queryItemList={'queryBlogsAdminDtoList'}
+                setIsLoading={setIsLoading}
+              />
             </div>
-          </div>
+          </section>
         </AdminContentWrapper>
       </AdminLayout>
-      {activeModal && <Modal_AdminRecommendArticle setActiveModal={setActiveModal}/>}
+      {activeModal && <Modal_AdminRecommendArticle setActiveModal={setActiveModal} />}
     </>
   );
 }

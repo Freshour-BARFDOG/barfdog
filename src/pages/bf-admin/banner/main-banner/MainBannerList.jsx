@@ -15,7 +15,7 @@ import changeArrayOrder from '@util/func/changeArrayOrder'
 
 export default function MainBannerList({
   items,
-  editListOrder,
+  orderEditMode,
   onLeakedOrderUp,
   onLeakedOrderDown,
   onDeleteItem,
@@ -106,7 +106,7 @@ export default function MainBannerList({
         data-idx={DATA.id}
         data-leaked-order={DATA.leakedOrder}
       >
-        {editListOrder ? (
+        {orderEditMode ? (
           <SortHandle apiurl={DATA.apiurl} />
         ) : (
           <span>{DATA.leakedOrder}</span>

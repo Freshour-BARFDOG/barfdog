@@ -115,6 +115,7 @@ export const CustomRadio = ({
   idList,
   labelList,
 }) => {
+
   const initialValue = idList[0];
   const [selectedRadio, setSelectedRadio] = useState(initialValue); // * component 내부 value
 

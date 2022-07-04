@@ -12,21 +12,23 @@ import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import rem from '/util/func/rem';
 import {getData, postFileUpload, putObjData} from '/api/reqData';
 import Spinner from '/src/components/atoms/Spinner';
-import { validate } from '/util/func/validation_blog';
-import { valid_hasFormErrors } from '/util/func/validationPackage';
+import { validate } from '/util/func/validation/validation_blog';
+import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
 import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 import { useModalContext } from "/store/modal-context";
 import CustomRadio from "/src/components/admin/form/CustomRadio";
+import Tooltip from "/src/components/atoms/Tooltip";
 
 
 
 
 
-export default function UpdateBlogPage () {
-  const router = useRouter();
-  const {id} = router.query;
-  const apiUrl = `/api/admin/blogs/${id}`;
-  const imageUploadApiURL = '/api/admin/blogs/image/upload';
+
+export default function UpdateBlogPage ({ id }) {
+  console.log(id);
+  const getFormValuesApiUrl = `/api/admin/blogs/${id}`;
+  const putFormValuesApiUrl = `/api/admin/blogs/${id}`;
+  const postContentimageApiURL = '/api/admin/blogs/image/upload';
 
   const mct = useModalContext();
   const [modalMessage, setModalMessage] = useState('');
@@ -38,45 +40,62 @@ export default function UpdateBlogPage () {
   const [thumbFile, setThumbFile] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-
   // console.log(formValues)
 
   //  INIT QUILL EDITOR
   useEffect(() => {
     if(!id)return;
     (async ()=>{
-      const res = await getData(apiUrl);
-      const DATA = res.data.blogAdminDto;
-      const initialFormValues = {
-        title: DATA.title,
-        category: DATA.category,
-        contents: DATA.contents,
-        thumbnailId: DATA.thumbnailId,
-        status: DATA.status,
-        addImageIdList:[],
-        deleteImageIdList: []
-      };
-      setFormValues(initialFormValues);
-
-
-      const editorImageDATA = res.data.adminBlogImageDtos;
-      const originInnerHTMLImageIdList = editorImageDATA.map((list)=>list.blogImageId)
-      console.log(res)
-      setOriginImageIdList(originInnerHTMLImageIdList);
-
-      setThumbFile({
-        file: '',
-        filename: DATA.filename,
-        thumbnailUrl: DATA.thumbnailUrl,
-        id: DATA.thumbnailId,
-      })
-
-
-      if (document) {
-        const QuillEditor = dynamic(() => import('/src/components/admin/form/QuillEditor'));
-        setQuillEditor(QuillEditor);
-        console.log('Editor init is complete.');
+      try {
+        if (setIsLoading && typeof setIsLoading === 'function') {
+          setIsLoading((prevState) => ({
+            ...prevState,
+            fetching: true,
+          }));
+        }
+        const res = await getData(getFormValuesApiUrl);
+        const DATA = res.data.blogAdminDto;
+        const initialFormValues = {
+          title: DATA.title,
+          category: DATA.category,
+          contents: DATA.contents,
+          thumbnailId: DATA.thumbnailId,
+          status: DATA.status,
+          addImageIdList:[],
+          deleteImageIdList: []
+        };
+        setFormValues(initialFormValues);
+  
+  
+        const editorImageDATA = res.data.adminBlogImageDtos;
+        const originInnerHTMLImageIdList = editorImageDATA.map((list)=>list.blogImageId)
+        console.log(res)
+        setOriginImageIdList(originInnerHTMLImageIdList);
+  
+        setThumbFile({
+          file: '',
+          filename: DATA.filename,
+          originFilename: DATA.filename,
+          thumbnailUrl: DATA.thumbnailUrl,
+          id: DATA.thumbnailId,
+        })
+  
+  
+        if (document) {
+          const QuillEditor = dynamic(() => import('/src/components/admin/form/QuillEditor'));
+          setQuillEditor(QuillEditor);
+          console.log('Editor init is complete.');
+        }
+      } catch (err) {
+          console.error(err)
       }
+      if (setIsLoading && typeof setIsLoading === 'function') {
+        setIsLoading((prevState) => ({
+          ...prevState,
+          fetching: false,
+        }));
+      }
+      
 
     })();
 
@@ -129,11 +148,11 @@ export default function UpdateBlogPage () {
         ...prevState,
         thumbnailId: '필수항목입니다.',
       }));
-      setThumbFile({
-        ...thumbFile,
+      setThumbFile(prevState => ({
+        ...prevState,
         file: '',
-        filename: '',
-      });
+        filename: prevState['originFilename'],
+      }));
       return;
     }
 
@@ -158,11 +177,11 @@ export default function UpdateBlogPage () {
         ...prevState,
         thumbnailId: isFaild && '업로드에 실패했습니다. 파일형식을 확인하세요.',
       }));
-      setThumbFile({
-        ...thumbFile,
+      setThumbFile(prevState => ({
+        ...prevState,
         file: !isFaild && file,
         filename: !isFaild && filename,
-      });
+      }));
     } catch (err) {
       alert(`에러가 발생했습니다.\n${err}`);
     }
@@ -181,7 +200,7 @@ export default function UpdateBlogPage () {
 
     // ! IMPORTANT : create Event후, 사용자가 enter를 쳤을 경우, 똑같은 요청이 전송되지 않게 하기 위해서 필요함.
     if(isSubmitted)return;
-    const errObj = validate(formValues);
+    const errObj = validate(formValues, thumbFile);
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
 
@@ -192,7 +211,7 @@ export default function UpdateBlogPage () {
       }));
       if (isPassed) {
         const objData = formValues;
-        const res = await putObjData(apiUrl, objData);
+        const res = await putObjData(putFormValuesApiUrl, objData);
         if(res.isDone){
           onShowModalHandler('블로그가 수정되었습니다.');
           setIsSubmitted(true);
@@ -236,7 +255,10 @@ export default function UpdateBlogPage () {
       <AdminLayout>
         <AdminContentWrapper>
           <div className="title_main">
-            <h1>블로그 수정</h1>
+            <h1>
+              블로그 수정
+              {isLoading.fetching && <Spinner />}
+            </h1>
           </div>
           <form
             action="/"
@@ -298,7 +320,9 @@ export default function UpdateBlogPage () {
               <div className="cont_divider">
                 <div className="input_row upload_image multipleLines">
                   <div className="title_section">
-                    <p className="title">썸네일</p>
+                    <div className="title">썸네일
+                      <Tooltip message={'새로운 썸네일 파일을 첨부한 이력이 있다면, 반드시 기존 썸네일 외에 새로운 파일을 첨부해야합니다. 기존 파일을 사용하고자 할 경우에는 새로고침 후 다시 시도하시기 바랍니다.'} messagePosition={'left'} wordBreaking={true} />
+                    </div>
                   </div>
                   <div className="inp_section">
                     <label
@@ -325,14 +349,7 @@ export default function UpdateBlogPage () {
                           onChange={imageFileChangeHandler}
                         />
                         <Fake_input
-                          loadingIcon={
-                            isLoading.thumb && (
-                              <Spinner
-                                style={{ color: 'var(--color-main)', width: '15', height: '15' }}
-                                speed={0.6}
-                              />
-                            )
-                          }
+                          loadingIcon={isLoading.thumb && <Spinner/>}
                           filename={thumbFile.filename}
                         />
                       </span>
@@ -359,7 +376,7 @@ export default function UpdateBlogPage () {
                         imageId={'blogImageIdList'}
                         originImageIdList={originImageIdList}
                         setFormValues={setFormValues}
-                        imageUploadApiURL={imageUploadApiURL}
+                        imageUploadApiURL={postContentimageApiURL}
                         initialValue={formValues.contents}
                       />
                     )}
@@ -414,3 +431,9 @@ export default function UpdateBlogPage () {
   );
 };
 
+
+UpdateBlogPage.getInitialProps = async ({ query }) => {
+  const { id } = query
+  return { id };
+  
+}

@@ -37,7 +37,7 @@ $browser-context:16;
       z-index: 1;
       display:grid;
       grid-gap:0;
-      grid-template-rows: minmax(rem(60), auto);
+      grid-template-rows: minmax(rem(40), auto);
       grid-template-columns:
         minmax(rem(100), 1fr)
         minmax(rem(100), rem(200))

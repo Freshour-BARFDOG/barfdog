@@ -88,12 +88,12 @@ export default function BestReviewList({
         <span>{DATA.id}</span>
         <span>{DATA.status}</span>
         <span>
-          <em className={"text-transform-ellipsis"}>{DATA.itemName}</em>
+          <em className={"overflow-x-scroll"}>{DATA.itemName}</em>
         </span>
         <span>
           <Link href={`/bf-admin/review/popup/${DATA.id}`} passHref>
             <a
-              className={"text-transform-ellipsis btn_link"}onClick={onPopupHandler}
+              className={"overflow-x-scroll btn_link"} onClick={onPopupHandler}
             >
             {DATA.innerText}
           </a>

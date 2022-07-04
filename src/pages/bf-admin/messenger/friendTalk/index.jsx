@@ -4,7 +4,7 @@ import AdminLayout from "/src/components/admin/AdminLayout";
 import {AdminContentWrapper} from "/src/components/admin/AdminWrapper";
 
 import CustomRadio from "/src/components/admin/form/CustomRadio";
-import CustomSelect from "/src/components/admin/form/CustomSelect";
+import CustomSelectForTwoSelects from "/src/components/admin/form/CustomSelectForTwoSelects";
 import Modal_alimTalk_Preview from "../../../../components/admin/messenger/friendTalk/Modal_alimTalk_Preview";
 import FormOfGroupType from '../../../../components/admin/messenger/friendTalk/FormOfGroupType';
 
@@ -50,7 +50,7 @@ function FriendTalkPage() {
                   </div>
                   <div className="inp_section">
                     <div className="inp_box">
-                      <CustomSelect
+                      <CustomSelectForTwoSelects
                         name="template"
                         id="template"
                         options={[

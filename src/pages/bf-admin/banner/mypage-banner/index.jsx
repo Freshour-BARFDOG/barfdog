@@ -10,10 +10,12 @@ import PreviewImage from "/src/components/atoms/PreviewImage";
 import ErrorMessage from "/src/components/atoms/ErrorMessage";
 import Fake_input from "/src/components/atoms/fake_input";
 import CustomRadio from "/src/components/admin/form/CustomRadio";
-import {validate} from "/util/func/validation_mypageBanner";
+import {validate} from "/util/func/validation/validation_mypageBanner";
 import {getData, postObjData} from "/api/reqData";
 import Spinner from "/src/components/atoms/Spinner";
-import {valid_hasFormErrors} from "/util/func/validationPackage";
+import {valid_hasFormErrors} from "/util/func/validation/validationPackage";
+import Tooltip from "/src/components/atoms/Tooltip";
+
 
 
 
@@ -43,11 +45,18 @@ const initialImageFiles = {
 }
 
 
+
+
 function UpdateMypageBanner() {
-  const postFormValuesApiUrl = `/api/banners/myPage`;
-  const getFormValuesApiUrl = `/api/banners/myPage`;
 
   const router = useRouter();
+  const { id } = router.query;
+
+  const postFormValuesApiUrl = `/api/banners/myPage/${id}`; // post
+  const getFormValuesApiUrl = `/api/banners/myPage`;
+  const currentPagePath = '/bf-admin/banner/mypage-banner'
+
+
   const mct = useModalContext();
   const [modalMessage, setModalMessage] = useState('');
   const [isLoading, setIsLoading] = useState({});
@@ -56,11 +65,12 @@ function UpdateMypageBanner() {
   const [fileValues, setFileValues] = useState(initialImageFiles);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  console.log(formValues);
-  console.log(fileValues);
-
+  // console.log(formValues);
+  // console.log(fileValues);
 
   useEffect(() => {
+    if(id)return;
+
     (async () => {
       try {
         setIsLoading((prevState) => ({
@@ -70,6 +80,8 @@ function UpdateMypageBanner() {
         const res = await getData(getFormValuesApiUrl);
         const data = res.data;
         console.log(res);
+        const thisBannerId = data.id;
+        await router.push(`${currentPagePath}?id=${thisBannerId}`)
         const initialFormValues = {
           name : data.name,
           status: data.status,
@@ -99,7 +111,7 @@ function UpdateMypageBanner() {
         fetching: false,
       }));
     })();
-  }, []);
+  }, [id]);
 
 
 
@@ -136,9 +148,6 @@ function UpdateMypageBanner() {
     const errObj = validate(formValues, fileValues);
     const isPassed = valid_hasFormErrors(errObj);
     setFormErrors(errObj);
-    // ! 1. 수정이......... 어떤 값을 넘겨야 수정이 되는 것인지????? (아무 값도 없는 경우)
-    // ! 2. 기존에 존재하는 배너를 그대로 업데이트 할 경우, 파일 첨부를 할 수 없음
-
     try {
       setIsLoading((prevState) => ({
         ...prevState,
@@ -184,7 +193,7 @@ function UpdateMypageBanner() {
   };
   const onGlobalModalCallback = () => {
     mct.alertHide();
-    router.push('/bf-admin/community/event');
+    router.push(`${currentPagePath}`);
   };
 
   return (
@@ -193,7 +202,7 @@ function UpdateMypageBanner() {
       <AdminLayout>
         <AdminContentWrapper>
           <div className="title_main">
-            <h1>마이페이지 배너      {isLoading.fetching && <Spinner style={{ color: 'var(--color-main)', width: '20', height: '20' }} speed={0.6} />}</h1>
+            <h1>마이페이지 배너 {isLoading.fetching && <Spinner style={{ color: 'var(--color-main)', width: '20', height: '20' }} speed={0.6} />}</h1>
           </div>
           <form
             action="/"
@@ -205,7 +214,7 @@ function UpdateMypageBanner() {
               <div className="cont_divider">
                 <div className="input_row">
                   <div className="title_section fixedHeight">
-                    <label className="title" htmlFor="banner-name">
+                    <label className="title" htmlFor="name">
                       배너이름
                     </label>
                   </div>
@@ -257,7 +266,7 @@ function UpdateMypageBanner() {
                         <PreviewImage
                           file={fileValues.pcFile?.file}
                           thumbLink={fileValues.pcFile?.url}
-                          objectFit={'contain'}
+                          objectFit={'cover'}
                           className={s["upload-image"]}
                         />
                       )}
@@ -277,10 +286,11 @@ function UpdateMypageBanner() {
                     )}
                   </div>
                 </div>
-                <div className="input_row multipleLines">
+                <div className="input_row">
                   <div className="title_section fixedHeight">
-                    <label className="title" htmlFor="link-image-pc">
+                    <label className="title" htmlFor="pcLinkUrl">
                       연결링크
+                      <Tooltip message={'*링크가 없을 경우, 배너 클릭 이벤트가 발생하지 않습니다.'} messagePosition={'left'} />
                     </label>
                   </div>
                   <div className="inp_section">
@@ -293,9 +303,6 @@ function UpdateMypageBanner() {
                         placeholder="ex. https://barfdog.co.kr/path/1"
                         onChange={onInputChangeHandler}
                       />
-                    </div>
-                    <div className="desc">
-                      *링크가 없을 경우, 배너 클릭 이벤트가 발생하지 않습니다.
                     </div>
                     {formErrors.pcLinkUrl && (
                       <ErrorMessage>{formErrors.pcLinkUrl}</ErrorMessage>
@@ -320,7 +327,8 @@ function UpdateMypageBanner() {
                         <PreviewImage
                           file={fileValues.mobileFile?.file}
                           thumbLink={fileValues.mobileFile?.url}
-                          objectFit={'contain'}
+                          style={{maxWidth:'375px'}}
+                          objectFit={'cover'}
                           className={s["upload-image"]}
                         />
                       )}
@@ -342,8 +350,9 @@ function UpdateMypageBanner() {
                 </div>
                 <div className="input_row multipleLines">
                   <div className="title_section fixedHeight">
-                    <label className="title" htmlFor="link-image-mobile">
+                    <label className="title" htmlFor="mobileLinkUrl">
                       연결링크
+                      <Tooltip message={'*링크가 없을 경우, 배너 클릭 이벤트가 발생하지 않습니다.'} messagePosition={'left'} />
                     </label>
                   </div>
                   <div className="inp_section">
@@ -357,9 +366,6 @@ function UpdateMypageBanner() {
                         onChange={onInputChangeHandler}
                       />
                     </div>
-                    <div className="desc">
-                      *링크가 없을 경우, 배너 클릭 이벤트가 발생하지 않습니다.
-                    </div>
                     {formErrors.mobileLinkUrl && (
                       <ErrorMessage>{formErrors.mobileLinkUrl}</ErrorMessage>
                     )}
@@ -367,31 +373,31 @@ function UpdateMypageBanner() {
                 </div>
               </div>
             </div>
-            <div className="cont_bottom">
-              <div className="btn_section">
-                <button
-                  type="button"
-                  id="btn-cancle"
-                  className="admin_btn confirm_l line"
-                  onClick={returnToPrevPage}
-                >
-                  취소
-                </button>
-                <button
-                  type="button"
-                  id="btn-create"
-                  className="admin_btn confirm_l solid"
-                  onClick={onSubmit}
-                >
-                  {isLoading.submit ? (
-                    <Spinner style={{ color: '#fff', width: '15', height: '15' }} speed={0.6} />
-                  ) : (
-                    '등록'
-                  )}
-                </button>
-              </div>
-            </div>
           </form>
+          <div className="cont_bottom">
+            <div className="btn_section">
+              <button
+                type="button"
+                id="btn-cancle"
+                className="admin_btn confirm_l line"
+                onClick={returnToPrevPage}
+              >
+                취소
+              </button>
+              <button
+                type="button"
+                id="btn-create"
+                className="admin_btn confirm_l solid"
+                onClick={onSubmit}
+              >
+                {isLoading.submit ? (
+                  <Spinner style={{ color: '#fff', width: '15', height: '15' }} speed={0.6} />
+                ) : (
+                  '등록'
+                )}
+              </button>
+            </div>
+          </div>
         </AdminContentWrapper>
       </AdminLayout>
       <Modal_global_alert message={modalMessage} onClick={onGlobalModalCallback} background />

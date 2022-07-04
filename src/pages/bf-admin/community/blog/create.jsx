@@ -12,8 +12,8 @@ import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import rem from '/util/func/rem';
 import { postFileUpload, postObjData } from '/api/reqData';
 import Spinner from '/src/components/atoms/Spinner';
-import { validate } from '/util/func/validation_blog';
-import { valid_hasFormErrors } from '/util/func/validationPackage';
+import { validate } from '/util/func/validation/validation_blog';
+import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import { useModalContext } from '/store/modal-context';
 import CustomRadio from '/src/components/admin/form/CustomRadio';
@@ -33,14 +33,14 @@ const CreateBlogPage = () => {
   const mct = useModalContext();
   const [modalMessage, setModalMessage] = useState('');
   const [isLoading, setIsLoading] = useState({});
+  const [thumbFile, setThumbFile] = useState({});
+  // const [originImageIdList, setOriginImageIdList] = useState([]); // create시에는 불필요
   const [QuillEditor, setQuillEditor] = useState(null);
-  const [originImageIdList, setOriginImageIdList] = useState([]);
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState({});
-  const [thumbFile, setThumbFile] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  console.log(formValues);
+  // console.log(formValues);
   //  INIT QUILL EDITOR
   useEffect(() => {
     if (document) {
@@ -114,6 +114,7 @@ const CreateBlogPage = () => {
         ...thumbFile,
         file: !isFaild && file,
         filename: !isFaild && filename,
+        thumbnailId: thumbId,
       });
     } catch (err) {
       alert(`에러가 발생했습니다.\n${err}`);
@@ -129,7 +130,7 @@ const CreateBlogPage = () => {
     e.preventDefault();
     if (isSubmitted) return; // ! IMPORTANT : create Event후, 사용자가 enter를 쳤을 경우, 똑같은 요청이 전송되지 않게 하기 위해서 필요함.
 
-    const errObj = validate(formValues);
+    const errObj = validate(formValues, thumbFile);
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
     try {
@@ -291,7 +292,7 @@ const CreateBlogPage = () => {
                         id={'contents'}
                         mode={'create'}
                         imageId={'blogImageIdList'}
-                        originImageIdList={originImageIdList}
+                        originImageIdList={[]}
                         setFormValues={setFormValues}
                         imageUploadApiURL={blogDetailImageUploadApiURL}
                       />

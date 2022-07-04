@@ -1,14 +1,20 @@
 import Arrow from '@public/img/icon/pagination-arrow.svg';
 import DoubleArrow from '@public/img/icon/pagination-double-arrow.svg';
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import s from './pagination.module.scss';
-import {useRouter} from "next/router";
-import {getData} from "/api/reqData";
+import { useRouter } from 'next/router';
+import { getData } from '/api/reqData';
 
-
-
-
-const Pagination = ({ apiURL, size=10, theme = 'square', setItemList, queryItemList }) => {
+const Pagination = ({
+  apiURL,
+  size = 10,
+  theme = 'square',
+  setItemList,
+  queryItemList,
+  setIsLoading,
+  urlQuery,
+  setPageData,
+}) => {
   const router = useRouter();
   const query = router.query;
   const pageFromQuery = Number(query?.page) || 1;
@@ -16,34 +22,53 @@ const Pagination = ({ apiURL, size=10, theme = 'square', setItemList, queryItemL
   const [pageInfo, setPageInfo] = useState({});
   const [curPage, setCurPage] = useState(pageFromQuery);
 
+  useEffect(() => {
+    (async () => {
+      try {
+        if (setIsLoading && typeof setIsLoading === 'function') {
+          setIsLoading((prevState) => ({
+            ...prevState,
+            fetching: true,
+          }));
+        }
 
-  useEffect(()=>{
-    (async ()=>{
-      const calcedPageIndex = (curPage - 1).toString();
-      const res = await getData(`${apiURL}?page=${calcedPageIndex}&size=${size}`);
-      const pageData = res.data?.page;
-      // console.log(res);
-      const noItems = pageData.totalElements === 0;
-      if(noItems) return;
-      const newPageInfo = {
-        totalPages: pageData.totalPages,
-        size: pageData.size,
-        totalItems: pageData.totalElements,
-        currentPageIndex: pageData.number,
-        newItemList: res.data._embedded[queryItemList] || {},
-        newPageNumber: pageData.number + 1,
-      };
-      setPageInfo(newPageInfo);
-      setItemList(newPageInfo.newItemList);
-      await router.push({
-        search: `?page=${newPageInfo.newPageNumber}`
-      });
+        const calcedPageIndex = (curPage - 1).toString();
+        const defaultQuery = `?page=${calcedPageIndex}&size=${size}`;
+        let urlQueries = urlQuery ? `${defaultQuery}${urlQuery}` : defaultQuery;
+        console.log(urlQueries);
+        const res = await getData(`${apiURL}${urlQueries}`);
+        const pageData = res.data?.page;
+        console.log(res);
+        const hasItems = pageData?.totalElements !== 0;
+        if (hasItems) {
+          const newPageInfo = {
+            totalPages: pageData.totalPages,
+            size: pageData.size,
+            totalItems: pageData.totalElements,
+            currentPageIndex: pageData.number,
+            newItemList: res.data._embedded[queryItemList] || {},
+            newPageNumber: pageData.number + 1,
+          };
+          setPageInfo(newPageInfo);
+          setItemList(newPageInfo.newItemList);
+          if(setPageData && typeof setPageData === 'function'){
+            setPageData(newPageInfo)
+          }
+          await router.push({
+            search: `?page=${newPageInfo.newPageNumber}`,
+          });
+        }
+      } catch (err) {
+        console.error(err);
+      }
+      if (setIsLoading && typeof setIsLoading === 'function') {
+        setIsLoading((prevState) => ({
+          ...prevState,
+          fetching: false,
+        }));
+      }
     })();
-  }, [curPage]);
-
-
-
-
+  }, [curPage, urlQuery]);
 
   const Num = ({ pagenum }) => {
     const calcedPageNum = pagenum + 1;
@@ -86,8 +111,6 @@ const Pagination = ({ apiURL, size=10, theme = 'square', setItemList, queryItemL
       </>
     );
   };
-
-
 
   const Paginations = [];
   const leftSideNumber = curPage - 2;
@@ -152,30 +175,37 @@ const Pagination = ({ apiURL, size=10, theme = 'square', setItemList, queryItemL
 
   return (
     <>
-      {pageInfo.totalItems > 0 && <div
-        className={`${s['pagination']} ${hasMultiPages ? s.multiPages : s.singlePage}`}
-        page-counter-per-gourp={size}
-        data-cur-page={curPage}
-      >
-        {hasMultiPages && <><span className={`${s['arrow']} ${s['first-page']}`} onClick={onFirstPage}>
-        <DoubleArrow />
-      </span>
-          <span className={`${s['arrow']} ${s['prev-page']}`} onClick={onPrevPage}>
-        <Arrow />
-      </span></>}
+      {pageInfo.totalItems > 0 && (
+        <div
+          className={`${s['pagination']} ${hasMultiPages ? s.multiPages : s.singlePage}`}
+          page-counter-per-gourp={size}
+          data-cur-page={curPage}
+        >
+          {hasMultiPages && (
+            <>
+              <span className={`${s['arrow']} ${s['first-page']}`} onClick={onFirstPage}>
+                <DoubleArrow />
+              </span>
+              <span className={`${s['arrow']} ${s['prev-page']}`} onClick={onPrevPage}>
+                <Arrow />
+              </span>
+            </>
+          )}
 
-        <ul className={s.pages}>
-          {Paginations}
-        </ul>
+          <ul className={s.pages}>{Paginations}</ul>
 
-        {hasMultiPages && <><span className={`${s['arrow']} ${s['next-page']}`} onClick={onNextPage}>
-        <Arrow />
-      </span>
-          <span className={`${s['arrow']} ${s['last-page']}`} onClick={onLastPage}>
-        <DoubleArrow />
-      </span></>}
-
-      </div>}
+          {hasMultiPages && (
+            <>
+              <span className={`${s['arrow']} ${s['next-page']}`} onClick={onNextPage}>
+                <Arrow />
+              </span>
+              <span className={`${s['arrow']} ${s['last-page']}`} onClick={onLastPage}>
+                <DoubleArrow />
+              </span>
+            </>
+          )}
+        </div>
+      )}
     </>
   );
 };

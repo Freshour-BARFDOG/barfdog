@@ -85,6 +85,7 @@ const ToolTip = ({
   theme,
   wordBreaking,
   onClick,
+  width,
   ...props
 }) => {
   const [isActive, setIsActive] = useState(false);
@@ -116,7 +117,10 @@ const ToolTip = ({
         </Icon>
         {isActive && (
           <MessageBody
-            style={style}
+            style={{
+              ...style,
+              width: width
+            }}
             data-align={messagePosition}
             data-device={device}
             theme={theme}

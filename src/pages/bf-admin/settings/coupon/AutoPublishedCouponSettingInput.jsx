@@ -3,7 +3,7 @@ import s from './couponSettingInput.module.scss';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import filter_emptyValue from '/util/func/filter_emptyValue';
 import filter_onlyNumber from '/util/func/filter_onlyNumber';
-import filter_numberZeoFromTheIntegerPartOfTheDecimal from '/util/func/filter_numberZeoFromTheIntegerPartOfTheDecimal';
+import filter_numberZeoFromTheIntegerPartOfTheDecimals from '/util/func/filter_numberZeoFromTheIntegerPartOfTheDecimals';
 import transformLocalCurrency from "/util/func/transformLocalCurrency";
 import transformClearLocalCurrency from "/util/func/transformClearLocalCurrency";
 
@@ -42,7 +42,7 @@ const AutoPublishedCouponSettingInput = ({
       // - MEMO 100 : string이어야함.
     }
 
-    filteredValue = filter_numberZeoFromTheIntegerPartOfTheDecimal(filteredValue);
+    filteredValue = filter_numberZeoFromTheIntegerPartOfTheDecimals(filteredValue);
 
     setFormValues((prevState) => ({
       ...prevState,
