@@ -1,10 +1,7 @@
-import s from "./recipe.module.scss";
-import getElemIdx from "@util/func/getElemIdx";
-import Link from "next/link";
-import transformDate from "@util/func/transformDate";
-
-
-
+import s from './recipe.module.scss';
+import Link from 'next/link';
+import transformDate from '/util/func/transformDate';
+import { putObjData } from '/api/reqData';
 
 export default function SearchResultList({ items, onDeleteItem }) {
   if (!items || !items.length) return;
@@ -18,52 +15,58 @@ export default function SearchResultList({ items, onDeleteItem }) {
   );
 }
 
-
-
 const ItemList = ({ item, sortableItemRef }) => {
-
+  // console.log(item)
   const DATA = {
-    id: item.id || "0",
-    itemName: item.itemName || "바프레드",
-    priceConst: item.priceConst || "36.649",
-    weightConst: item.weightConst || "1.49462",
-    soldoutStatus: item.soldoutStatus || "N",
-    leakedStatus: item.leakedStatus || "Y",
-    createdDate: "22-02-22" || transformDate(item.createdDate),
-    modifiedDate: "22-06-22" || transformDate(item.modifiedDate),
+    id: item.id,
+    name: item.name,
+    description: item.description,
+    priceConst: item.priceConst || '36.649',
+    weightConst: item.weightConst || '1.49462',
+    ingredients: item.ingredients || '닭,소,오리,염소',
+    leaked: item.leaked === 'LEAKED' ? 'Y' : 'N',
+    inStock: item.inStock === true ? 'Y' : '품절',
+    modifiedDate: transformDate(item.modifiedDate),
     apiurl: {
-      // self: item._links.query_banner.href,
-      // orderUp: item._links.mainBanner_leakedOrder_up.href,
-      // orderDown: item._links.mainBanner_leakedOrder_down.href,
-      // delete: item._links.delete_banner.href,
+      update: item._links.update_recipe?.href,
+      delete: item._links.inactive_recipe?.href,
     },
   };
 
-  const onDeleteItemHandler = (e) => {
-    const target = e.currentTarget.closest("li");
-    const targetViewIdx = getElemIdx(target);
+  const onDeleteItemHandler = async (e) => {
+    // ! 레시피는 REST API서버에서 실제 삭제되는 것이 아니라, admin단에서도 숨김처리가 된다 -> 실제 삭제가 될 경우, 결제 등의 데이터처리에 문제가 될 수 있음
     const apiURL = e.currentTarget.dataset.apiurl;
-    const reviewName = items[targetViewIdx]?.name;
-    if (confirm(`선택된 리뷰(${reviewName})를 정말 삭제하시겠습니까?`)) {
-      onDeleteItem(apiURL);
+    const itemId = item.id;
+    if (confirm(`선택된 레시피(${item.name || ''})를 정말 삭제하시겠습니까?`)) {
+      const res = await putObjData(apiURL, itemId);
+      console.log(res);
+      if (res.data.status === 200 || res.data.status === 201) {
+        window.location.reload();
+      } else {
+        alert('삭제할 수 없습니다. 새로고침 후 , 다시 시도해보세요.');
+      }
     }
   };
 
   return (
-    <li
-      className={s.item}
-      key={`item-${DATA.id}`}
-      ref={sortableItemRef}
-      data-idx={DATA.id}
-    >
+    <li className={s.item} key={`item-${DATA.id}`} ref={sortableItemRef} data-idx={DATA.id}>
       <span>
-        <em className={"overflow-x-scroll"}>{DATA.itemName}</em>
+        <em className={'overflow-x-scroll'}>{DATA.name}</em>
+      </span>
+      <span>
+        <em className={'overflow-x-scroll'}>{DATA.description}</em>
       </span>
       <span>{DATA.priceConst}</span>
       <span>{DATA.weightConst}</span>
-      <span>{DATA.soldoutStatus}</span>
-      <span>{DATA.leakedStatus}</span>
-      <span>{DATA.createdDate}</span>
+      <span>{DATA.ingredients}</span>
+      <span
+        style={{
+          color: `${DATA.inStock === '품절' ? 'var(--color-warning)' : 'var(--color-font-def)'}`,
+        }}
+      >
+        {DATA.inStock}
+      </span>
+      <span>{DATA.leaked}</span>
       <span>{DATA.modifiedDate}</span>
       <span>
         <Link href={`/bf-admin/product/recipe/update/${DATA.id}`} passHref>
@@ -75,8 +78,8 @@ const ItemList = ({ item, sortableItemRef }) => {
       <span>
         <button
           className="admin_btn basic_s solid"
+          data-apiurl={DATA.apiurl.delete}
           onClick={onDeleteItemHandler}
-          // data-apiurl={DATA.apiurl.delete}
         >
           삭제
         </button>
