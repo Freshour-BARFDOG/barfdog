@@ -1,10 +1,10 @@
-import s from './single.module.scss';
-import getElemIdx from '@util/func/getElemIdx';
+import s from './singleItem.module.scss';
 import Link from 'next/link';
 import transformDate from '/util/func/transformDate';
 import transformLocalCurrency from "/util/func/transformLocalCurrency";
 import {global_itemType} from "/store/TYPE/itemType";
-export default function SearchResultList({ items, onDeleteItem }) {
+import {deleteData} from "/api/reqData";
+export default function SearchResultList({ items }) {
   if (!items || !items.length) return;
 
   return (
@@ -27,22 +27,25 @@ const ItemList = ({ item }) => {
     originalPrice: transformLocalCurrency(item.originalPrice) + '원',
     salePrice: transformLocalCurrency(item.salePrice) + '원',
     remaining: transformLocalCurrency(item.remaining) === '0' ? '품절' : transformLocalCurrency(item.remaining),
-    discount: item.discount || '10%',
+    discount: item.discount, // - REST API server에서 할인 단위(% 또는 원) 적용되어서 전달됨
     status: item.status === 'LEAKED' ? 'Y':"N",
     reg_date: transformDate(item.createdDate) || '-',
     apiurl: {
-      update: item._links.update_item.href,
-      delete: item._links.delete_item.href,
+      update: item._links.update_item?.href,
+      delete: item._links.delete_item?.href,
     },
   };
   
-  const onDeleteItemHandler = (e) => {
-    const target = e.currentTarget.closest('li');
-    const targetViewIdx = getElemIdx(target);
+  const onDeleteItemHandler = async (e) => {
+    // const target = e.currentTarget.closest('li');
     const apiURL = e.currentTarget.dataset.apiurl;
-    const reviewName = items[targetViewIdx]?.name;
-    if (confirm(`선택된 리뷰(${reviewName})를 정말 삭제하시겠습니까?`)) {
-      onDeleteItem(apiURL);
+    if (confirm(`선택된 항목(${item.name || ''})을 정말 삭제하시겠습니까?`)) {
+      const res = await deleteData(apiURL);
+      if(res.status === 200 || res.status === 201 ){
+        window.location.reload();
+      } else {
+        alert('삭제할 수 없습니다. 새로고침 후 , 다시 시도해보세요.')
+      }
     }
   };
 

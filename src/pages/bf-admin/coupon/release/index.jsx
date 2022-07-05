@@ -60,8 +60,9 @@ function ReleaseCouponPage() {
   const [formErrors, setFormErrors] = useState(initialFormErrors);
 
 
-  // 발행대상이 바뀌었을 경우 초기화됨
   useEffect(() => {
+    // 발행대상이 바뀌었을 경우 , formValue초기화
+    // formError 초기화
     setFormValues(initialFormValues[issuedTarget.issuedTarget]);
     // console.log(issuedTarget.issuedTarget)
     // console.log(initialFormValues)

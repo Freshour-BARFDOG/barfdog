@@ -25,46 +25,60 @@ export default function QuillEditor({
   /* - 모듈 추가 시, 필요
    * const Quill = typeof window == 'object' ? require('quill') : () => false;
    */
+  
   const ReactQuill = typeof window == 'object' ? require('react-quill') : () => false;
   const quillRef = useRef();
   const [isLoading, setIsLoading] = useState(false);
+  const [isInitAllImageIdListCompleted, setIsInitAllImageIdListCompleted] = useState( false );
   const [body, setBody] = useState(initialValue);
-  const [allImageIdList, setAllImageIdList] = useState([]);
+  const [allImageIdList, setAllImageIdList] = useState(originImageIdList) ;
 
   useEffect(() => {
+    if(isInitAllImageIdListCompleted) return;
     setAllImageIdList(originImageIdList);
+    setIsInitAllImageIdListCompleted(true);
   }, [originImageIdList]);
-
+  
   useEffect(() => {
+    const isInnerHtmlEmpty = body === '<p><br></p>';
     const resultIdList = analyze_ImageIdListCRUD(allImageIdList, body, originImageIdList);
-    if (!resultIdList) return; // ! important validation: allImageIdList가 init되기 전에 실행될 경우, undefined가 반환되고, formvalue에 적절하지 않은 값들이 할당됨 => updatePage에서 정상작동하지 않게 됨.
     // console.log('::: Quill Editor Inner Image > CRUD RESULT :::', resultIdList);
-    const isBodyEmpty = body === '<p><br></p>';
-    if (mode === 'update') {
+    if (mode === 'create') {
+      setFormValues((prevState) => ({
+        ...prevState,
+        [id]: isInnerHtmlEmpty ? '' : body,
+        [imageId]: resultIdList?.cur || [],
+      }));
+    }
+    
+    
+    if (mode === 'update'){
+      if (!resultIdList) return; // ! important validation: allImageIdList가 init되기 전에 실행될 경우, undefined가 반환되고, formvalue에 적절하지 않은 값들이 할당됨 => updatePage에서 정상작동하지 않게 됨.
       if (formValuesKey) {
         const { addImageKey, delImageKey } = formValuesKey;
         setFormValues((prevState) => ({
           ...prevState,
-          [id]: isBodyEmpty ? '' : body,
+          [id]: isInnerHtmlEmpty ? '' : body,
           [addImageKey]: resultIdList?.cur,
           [delImageKey]: resultIdList?.del,
         }));
       } else {
         setFormValues((prevState) => ({
           ...prevState,
-          [id]: isBodyEmpty ? '' : body,
+          [id]: isInnerHtmlEmpty ? '' : body,
           addImageIdList: resultIdList?.cur,
           deleteImageIdList: resultIdList?.del,
         }));
       }
-    } else if (mode === 'create') {
-      setFormValues((prevState) => ({
-        ...prevState,
-        [id]: isBodyEmpty ? '' : body,
-        [imageId]: resultIdList?.add || [],
-      }));
-    }
+    };
+   
   }, [body, allImageIdList]);
+  
+  
+
+  
+  
+  
 
   const imageHandler = () => {
     if (!imageUploadApiURL) return;
@@ -179,7 +193,7 @@ const extractImageIdList = (html) => {
 };
 
 const compareImageList = (allArrBefore, curArrBefore, originArrBefore) => {
-  if (!allArrBefore.length) return console.error('There is no Image File.');
+  if (!allArrBefore.length) return console.log('There is no Image File.');
 
   const originArr = originArrBefore.map((a) => Number(a));
   const allArr = allArrBefore.map((a) => Number(a));
@@ -198,6 +212,8 @@ const compareImageList = (allArrBefore, curArrBefore, originArrBefore) => {
     result[key] = arr.map((a) => Number(a));
   }
 
+    // console.log(allArrBefore);
+    // console.log(allArr);
   allArr.map((id) => {
     const isCurArr = curArr.indexOf(id) >= 0;
     const isOriginArr = originArr.indexOf(id) >= 0;

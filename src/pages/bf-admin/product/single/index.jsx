@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import s from './single.module.scss';
+import s from './singleItem.module.scss';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
 import SearchBar from '/src/components/admin/form/searchBar';
 import SearchSelect from '/src/components/admin/form/searchBar/SearchSelect';
-import SearchPlainInput from '/src/components/admin/form/searchBar/SearchPlainInput';
-import SingleList from './SingleList';
+import SingleList from './SingleItemList';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import Spinner from '/src/components/atoms/Spinner';
 
@@ -79,12 +78,6 @@ function SingleItemPage() {
                 setSearchValue={setSearchValue}
                 searchValue={searchValue}
               />
-              {/*<SearchPlainInput*/}
-              {/*  title="소항목 타이틀"*/}
-              {/*  name={'single-title'}*/}
-              {/*  onChange={setSearchValue}*/}
-              {/*  searchValue={searchValue}*/}
-              {/*/>*/}
             </SearchBar>
           </section>
           <section className="cont">

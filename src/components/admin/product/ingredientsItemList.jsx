@@ -4,40 +4,62 @@ import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import enterKey from '/util/func/enterKey';
 import {getData} from "/api/reqData";
 import Spinner from "/src/components/atoms/Spinner";
+import filter_emptyValue from "/util/func/filter_emptyValue";
 
 
-export default function IngredientsItemList({ id, formValues, setFormValues }) {
+export default function IngredientsItemList({ id, formValues, setFormValues, mode='create' }) {
   
   const getAllRecipeIngredientListApiUrl = '/api/recipes/ingredients';
   const [isLoading, setIsLoading] = useState( false );
   const addIngredientInputRef = useRef(null);
   const [isImportingOriginItemListCompleted, setIsImportingOriginItemListCompleted] = useState( false );
   const [itemList, setItemList] = useState([]); //
+  const [legacyItemList, setLegacyItemList] = useState( [] );
   const [innerFormErrors, setInnerFormErrors] = useState('');
-  // console.log(itemList);
+  
+  useEffect( () => {
+    const originItemList = formValues[id] && transformStringWithCommanToArray(formValues[id]);
+    const emptyValue = !originItemList[0];
+    // ! important 현재 recipe에 기존 등록된 ingredient list -> itemlist에 추가
+    if(mode !== 'update' || isImportingOriginItemListCompleted || !legacyItemList.length || emptyValue) return;
+    setItemList(prevList =>{
+      const filteredLegacyList = legacyItemList.map(regacyItem=>{
+        const isDuplicated = originItemList.indexOf(regacyItem.id) >= 0;
+        const convertedItem = {
+          ...regacyItem,
+          value: isDuplicated
+        }
+        return convertedItem;
+      });
+      // console.log(filteredLegacyList); ///  Check Init value on Update mode;
+      return legacyItemList.length ? filteredLegacyList.concat(prevList) : prevList;
+    });
+    setIsImportingOriginItemListCompleted(true);
+    
+  }, [formValues[id], isLoading] , itemList);
   
   
   useEffect(() => {
-    const TEST_DATA = ['소','양','낙타','칠면조'];
-    // Init
+    // Init Regacy List
     (async ()=>{
       try {
         setIsLoading(true);
-        const regacyIngredientList = [];
         const res = await getData(getAllRecipeIngredientListApiUrl);
-        console.log(res);
-        const allRegisteredRecipeIngredientList = res?.data._embedded.stringList || TEST_DATA;
-        if (allRegisteredRecipeIngredientList.length) {
-          allRegisteredRecipeIngredientList.forEach((ingredientName) => {
+        const legacyIngredientList = [];
+        const allLegacyItemList = res?.data._embedded.stringList || [];
+        if (allLegacyItemList.length) {
+          allLegacyItemList.forEach((ingredientName) => {
             const itemObj = {
               id: ingredientName,
               value: false,
-              deletable: false // 삭제불가능함
+              deletable: false // 삭제 불가능
             };
-            regacyIngredientList.push(itemObj);
+            legacyIngredientList.push(itemObj);
           });
         }
-        setItemList(prevList =>regacyIngredientList.length ? regacyIngredientList.concat(prevList) : prevList);
+        mode === 'create' && setItemList(legacyIngredientList);
+        mode === 'update' && setLegacyItemList(legacyIngredientList);
+   
       } catch (err) {
         console.error(err)
       }
@@ -52,19 +74,21 @@ export default function IngredientsItemList({ id, formValues, setFormValues }) {
   const onClickCheckbox = async (targetId, checkedOnThisCheckbox) => {
     
     const checkedValueArr= [];
-    await setItemList((prevState) => prevState.map(item=>{
-      if(item.id === targetId){
-        checkedOnThisCheckbox === false && checkedValueArr.push(item.id);
-      }else {
-        item.value && checkedValueArr.push(item.id);
-      }
-
-      return ({
-        ...item,
-        value: item.id === targetId ? !checkedOnThisCheckbox : item.value
+    await setItemList((prevState) => {
+      console.log(prevState)
+      return prevState.map(item=>{
+        if(item.id === targetId && checkedOnThisCheckbox === false){
+          checkedValueArr.push(item.id);
+        }else {
+          item.value && checkedValueArr.push(item.id);
+        }
+        return ({
+          ...item,
+          value: item.id === targetId ? !checkedOnThisCheckbox : item.value
+        })
       })
-    }));
-    
+    });
+  
     const transformValueToStringWithComma  = checkedValueArr.join(',');
     setFormValues((prevState) => ({
       ...prevState,
@@ -73,30 +97,12 @@ export default function IngredientsItemList({ id, formValues, setFormValues }) {
   };
   
   
-  
-  // ! 삭제했을 때, 삭제한 놈은....formvalue에서 제거한다.
-  
-  useEffect( () => {
-    // ! important 현재 recipe에 기존 등록된 ingredient list -> itemlist에 추가
-    if(isImportingOriginItemListCompleted) return;
-    const originItemList = formValues[id] && transformStringWithCommanToArray(formValues[id])
-    setIsImportingOriginItemListCompleted(true); // ! 실행 순서 중요
-    const emptyValue = !originItemList[0];
-    if(emptyValue) return;
-    const convertedOriginItemList = originItemList.map(ingredient=>({
-      id:ingredient,
-      value: true,
-      deletable: true
-    }))
-    setItemList(prevState => prevState.concat(convertedOriginItemList));
-  }, [formValues[id]] );
-  
-  
   const onAddIngredient = () => {
     const input = addIngredientInputRef.current;
     const newItemId = input.value;
     setInnerFormErrors(newItemId ? '' : '입력된 값이 없습니다.');
     if (!newItemId || isLoading) return;
+    
     
     setItemList((prevState) => {
       let error;
@@ -131,14 +137,24 @@ export default function IngredientsItemList({ id, formValues, setFormValues }) {
       }
     })
   };
+  
+  const onInputChangeHandler = (e)=>{
+    const { value } = e.currentTarget;
+    const filteredValue = filter_emptyValue(value)
+    addIngredientInputRef.current.value = filteredValue;
+    
+  }
+  
 
   const onKeyboardHandler = (event) => {
     enterKey(event, onAddIngredient);
   };
   
+  
   const onBlurHandler= ()=>{
     setInnerFormErrors('');
   }
+  
 
   return (
     <>
@@ -147,9 +163,11 @@ export default function IngredientsItemList({ id, formValues, setFormValues }) {
           id={'addIngredients'}
           type="text"
           name="ingredients"
+          data-filter-type={'space'}
           ref={addIngredientInputRef}
           onKeyDown={onKeyboardHandler}
           onBlur={onBlurHandler}
+          onChange={onInputChangeHandler}
         />
         <button type={'button'} className={`admin_btn solid basic_l ${isLoading ? 'disabled' : ''}`} onClick={onAddIngredient} disabled={isLoading}>
           {isLoading ? <Spinner style={{color:'#fff'}}/> : '추가'}

@@ -43,11 +43,13 @@ export default function Modal_previewRecipeThumb({ data, file, onModalHide }) {
             <div className={s.row}>
               <section className={s.divider}>
                 <h3 className={s.mainTitle}>썸네일1</h3>
-                <div className={s.title_grid_box}>
+                {!file.surveyResult.file && !file.surveyResult.thumbnailUrl ? '첨부된 썸네일이 없습니다.' : <div className={s.title_grid_box}>
                   <div className={s.grid_left}>
                     <figure className={`${s.image} img-wrap`}>
+      
                       <PreviewImage
                         file={file.surveyResult.file}
+                        thumbLink={file.surveyResult.thumbnailUrl}
                         backgroundColor={'transparent'}
                         style={{margin:'0'}}
                       />
@@ -57,7 +59,7 @@ export default function Modal_previewRecipeThumb({ data, file, onModalHide }) {
                       <p className={s.title_ko}>{data.uiNameKorean}</p>
                     </figcaption>
                   </div>
-
+  
                   <div className={s.grid_right}>
                     <div className={s.result_title}>
                       <p>시호에게는</p>
@@ -83,7 +85,8 @@ export default function Modal_previewRecipeThumb({ data, file, onModalHide }) {
                     </div>
                     <div className={s.desc}>바프독 생식기준 결과</div>
                   </div>
-                </div>
+                </div>}
+                
               </section>
               <section className={s.divider}>
                 <h3 className={s.mainTitle}>썸네일2</h3>
@@ -105,13 +108,17 @@ export default function Modal_previewRecipeThumb({ data, file, onModalHide }) {
                     <div className={s.recipe_choice_box}>
                       <div className={s.img_box}>
                         <div className={`${s.image} img-wrap`}>
-                          <PreviewImage
+                          
+                            <PreviewImage
                             file={file.recipeThumb.file}
+                            thumbLink={file.recipeThumb.thumbnailUrl}
                             ratio={'200/220'}
                             backgroundColor={'transparent'}
                           />
+                          
                         </div>
                       </div>
+                      {!file.recipeThumb.file && !file.recipeThumb.thumbnailUrl && '첨부된 썸네일이 없습니다.'}
                       <div className={s.row_1}>{data.uiNameEnglish}</div>
                       <div className={s.row_2}>{data.uiNameKorean}</div>
                       <div className={s.row_3}>

@@ -6,22 +6,10 @@ import filter_onlyNumber from '/util/func/filter_onlyNumber';
 import filter_numberZeoFromTheIntegerPartOfTheDecimals from '/util/func/filter_numberZeoFromTheIntegerPartOfTheDecimals';
 
 
-
-
-const AlgorithmInput = ({
-  label,
-  name,
-  level,
-  numberUnit,
-  formValues,
-  setFormValues,
-  formErrors,
-}) => {
-
+const AlgorithmInput = ({ id, label, numberUnit, formValues, setFormValues, formErrors }) => {
   const onInputChangeHandler = (e) => {
     const input = e.currentTarget;
     const { id, value } = input;
-    const level = id.split('-')[1];
     const filteredType = input.dataset.inputType;
     let filteredValue = value;
 
@@ -33,37 +21,40 @@ const AlgorithmInput = ({
       filteredValue = filter_onlyNumber(filteredValue);
     }
 
-    filteredValue = filter_numberZeoFromTheIntegerPartOfTheDecimals(filteredValue);
+    filteredValue = filter_numberZeoFromTheIntegerPartOfTheDecimals(filteredValue, numberUnit);
 
     setFormValues((prevState) => ({
       ...prevState,
-      [name]: {
-        ...prevState[name],
-        [level]: filteredValue,
-      },
+      [id]: filteredValue,
     }));
   };
   return (
     <div className="cont_divider">
       <div className="input_row">
         <div className="title_section fixedHeight">
-          <label className="title" htmlFor={`${name}-VERY_LITTLE`}>
+          <label className="title" htmlFor={`${id}`}>
             {label}
           </label>
         </div>
         <div className="inp_section">
           <div className={`inp_box`}>
             <input
-              id={`${name}-${level}`}
+              id={`${id}`}
               type="text"
-              name={name}
               data-input-type={'number'}
-              value={formValues[name][level] || ''}
+              value={formValues[id] === 0 ? '0' : formValues[id] || ''}
+              onChange={onInputChangeHandler}
+            />
+            <input
+              id={`${id}`}
+              type="hidden"
+              data-input-type={'number'}
+              value={formValues[id] === 0 ? '0' : formValues[id] || ''}
               onChange={onInputChangeHandler}
             />
             <em className={s['numberUnit']}>{numberUnit}</em>
             <em className="unit">%</em>
-            {formErrors.name && <ErrorMessage>{formErrors.name}</ErrorMessage>}
+            {formErrors[id] && <ErrorMessage>{formErrors[id]}</ErrorMessage>}
           </div>
         </div>
       </div>

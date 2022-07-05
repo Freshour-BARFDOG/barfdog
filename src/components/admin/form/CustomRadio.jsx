@@ -8,6 +8,7 @@ const CustomRadio = ({
   idList,
   labelList,
   initIndex,
+  getDirValue,
 }) => {
 
 
@@ -23,7 +24,9 @@ const CustomRadio = ({
     const isNameIncluded = id.indexOf(name) >= 0
     const filteredId = isNameIncluded ? id.replace(name,'') : id;
     setSelectedRadio(filteredId);
-    if (setValue && typeof setValue === 'function') {
+    if (getDirValue){
+      setValue( filteredId );
+    } else if (setValue && typeof setValue === 'function') {
       setValue((prevState) => ({
         ...prevState,
         [name]: filteredId,

@@ -4,33 +4,36 @@ import UnitBox from '/src/components/atoms/UnitBox';
 import calculateSalePrice from '/util/func/calculateSalePrice';
 import ErrorMessage from "/src/components/atoms/ErrorMessage";
 import transformClearLocalCurrency from "/util/func/transformClearLocalCurrency";
+import {discountUnitType} from "/store/TYPE/discountUnitType";
 
 
 
+
+const unitSettings = [
+  { label: '%', value: discountUnitType.FIXED_RATE },
+  { label: '원', value: discountUnitType.FLAT_RATE },
+]
 
 
 export default function SingleItemDiscountOptions({id,  formValues, setFormValues, formErrors, onChange }) {
 
 
+  
   const initialValue = {
     salePrice : formValues.salePrice || formValues.originalPrice || 0,
     saleAmount: 0
   }
   const [salePriceInfo, setSalePriceInfo] = useState(initialValue);
 
-  const unitSettings = [
-    { label: '%', value: 'FLAT_RATE' },
-    { label: '원', value: 'FIXED_RATE' },
-  ]
+
 
   // console.log(formValues)
 
   useEffect(() => {
     // discountType 이 퍼센트면 dgree를 100으로 반환해서 계산한다.
     let filteredDiscountDegree = formValues.discountDegree ;
-    if(formValues.discountType === 'FLAT_RATE' &&transformClearLocalCurrency(formValues.discountDegree)  > 100){
+    if(formValues.discountType === discountUnitType.FIXED_RATE &&transformClearLocalCurrency(formValues.discountDegree)  > 100){
       filteredDiscountDegree = 100;
-      
     }
     // console.log(filteredDiscountDegree)
     const result = calculateSalePrice(
@@ -60,7 +63,7 @@ export default function SingleItemDiscountOptions({id,  formValues, setFormValue
           type="text"
           className={'text-align-right'}
           data-input-type={`currency, number, ${
-            formValues.discountType === 'FLAT_RATE' && 'discountPercent'
+            formValues.discountType === discountUnitType.FIXED_RATE && 'discountPercent'
           }`}
           value={formValues.discountDegree || 0}
           onChange={onChange}

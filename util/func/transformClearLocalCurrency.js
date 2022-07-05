@@ -1,13 +1,16 @@
 
 
 
-export default function transformClearLocalCurrency(stringValue) {
+export default function transformClearLocalCurrency(value) {
   let number;
-  if(typeof stringValue === 'number' && stringValue === 0){
+  if(typeof value === 'number' && value === 0){
     return number = 0;
+  } else if(typeof value === 'number'){
+    return value;
+    
   }
 
-  if(!stringValue || typeof stringValue !== 'string' )return ;
-  number = Number(stringValue.replace(/,/gi, ''));
+  if(!value || typeof value !== 'string' )return ;
+  number = Number(value.replace(/,/gi, ''));
   return number;
 }
