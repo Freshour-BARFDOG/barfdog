@@ -2,10 +2,10 @@ import React from 'react';
 import CustomSelectGroup from '/src/components/admin/messenger/friendTalk/CustomSelectGroup';
 import calcedAgeList from '/util/func/calcedAgeList';
 import CustomRadio from '/src/components/admin/form/CustomRadio';
+import ErrorMessage from "../../atoms/ErrorMessage";
 
 
-export default function SearchGroupForm (props)  {
-  const {setFormValues} = props;
+export default function SearchGroupForm ({id, setFormValues, formErrors})  {
 
 
   return (
@@ -36,6 +36,9 @@ export default function SearchGroupForm (props)  {
                     ],
                   }}
                 />
+                {formErrors.gradeList && (
+                  <ErrorMessage>{formErrors.gradeList}</ErrorMessage>
+                )}
               </div>
             </div>
           </div>
@@ -57,6 +60,9 @@ export default function SearchGroupForm (props)  {
                     options: calcedAgeList(),
                   }}
                 />
+                {formErrors.birthYearFrom || formErrors.birthYearTo && (
+                  <ErrorMessage>{formErrors.birthYearFrom || formErrors.birthYearTo}</ErrorMessage>
+                )}
               </div>
             </div>
           </div>

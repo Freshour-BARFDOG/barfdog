@@ -5,17 +5,17 @@ import AmdinErrorMessage from "/src/components/atoms/AmdinErrorMessage";
 import dynamic from "next/dynamic";
 import UserList from "../../../pages/popup/searchUser/UserList";
 import s from "../../../pages/popup/searchUser/searchUser.module.scss";
+import ErrorMessage from "../../atoms/ErrorMessage";
 const WindowOpener = dynamic(() => import('/util/func/window-opener'), { ssr: false });
 
 
 
 const TEST_ITEM = [1,2,3,4,5];
 
-export default function SearchPersonalForm (props)  {
-  const {setFormValues} = props;
+export default function SearchPersonalForm ({id, setFormValues, formErrors})  {
 
   const [selectedUser, setSelectedUser] = useState([]);
-  const [userList, setUserList] = useState(TEST_ITEM);
+  const [memberIdList, setMemberIdList] = useState(TEST_ITEM);
 
 
   // MEMO 체크된 사람들리스트를 selectedUser  &&  setFormValues에 넣는다.
@@ -47,6 +47,9 @@ export default function SearchPersonalForm (props)  {
               <span className={'admin_btn solid basic_m'} type={'button'}>회원검색</span>
             </WindowOpener>
             <button className={'admin_btn line basic_m'} type={'button'}>선택삭제</button>
+            {formErrors[id] && (
+              <ErrorMessage>{formErrors[id]}</ErrorMessage>
+            )}
           </div>
           <div className={s.cont_viewer}>
             <div className={s.table}>
@@ -54,9 +57,6 @@ export default function SearchPersonalForm (props)  {
                 <li className={s.table_th}>
                   <Checkbox
                     id="checkAll"
-                    onClick={(isChecked) => {
-                      console.log(isChecked);
-                    }}
                   />
                 </li>
                 <li className={s.table_th}>상세보기</li>
@@ -69,8 +69,8 @@ export default function SearchPersonalForm (props)  {
                 <li className={s.table_th}>구독여부</li>
                 <li className={s.table_th}>장기미접속</li>
               </ul>
-              {userList.length ? (
-                <UserList items={userList} />
+              {memberIdList.length ? (
+                <UserList items={memberIdList} />
               ) : (
                 <AmdinErrorMessage text="쿠폰을 발행할 대상이 없습니다." />
               )}
