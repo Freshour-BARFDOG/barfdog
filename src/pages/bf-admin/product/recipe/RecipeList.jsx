@@ -16,14 +16,14 @@ export default function SearchResultList({ items, onDeleteItem }) {
 }
 
 const ItemList = ({ item, sortableItemRef }) => {
-  // console.log(item)
+  console.log(item)
   const DATA = {
     id: item.id,
     name: item.name,
     description: item.description,
     priceConst: item.priceConst || '36.649',
-    weightConst: item.weightConst || '1.49462',
-    ingredients: item.ingredients || '닭,소,오리,염소',
+    gramPerKcal: item.gramPerKcal,
+    ingredients: item.ingredients,
     leaked: item.leaked === 'LEAKED' ? 'Y' : 'N',
     inStock: item.inStock === true ? 'Y' : '품절',
     modifiedDate: transformDate(item.modifiedDate),
@@ -57,7 +57,7 @@ const ItemList = ({ item, sortableItemRef }) => {
         <em className={'overflow-x-scroll'}>{DATA.description}</em>
       </span>
       <span>{DATA.priceConst}</span>
-      <span>{DATA.weightConst}</span>
+      <span>{DATA.gramPerKcal}</span>
       <span>{DATA.ingredients}</span>
       <span
         style={{
