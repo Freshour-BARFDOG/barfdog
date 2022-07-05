@@ -25,6 +25,7 @@ import FileInput from '/src/components/admin/form/FileInput';
 import Tooltip from '/src/components/atoms/Tooltip';
 import CheckboxGroup from "/src/components/atoms/CheckboxGroup";
 import transformClearLocalCurrencyInEveryObject from "/util/func/transformClearLocalCurrencyInEveryObject";
+import {discountUnitType} from "/store/TYPE/discountUnitType";
 
 // - 할인적용 후 판매가격 -> N일 경우 그냥 판매가격이랑 동일하게 처리한다.
 // - 아이템 아이콘
@@ -34,7 +35,7 @@ const initialFormValues = {
   name: '',
   description: '',
   originalPrice: 0, // 판매가격
-  discountType: 'FLAT_RATE' || 'FIXED_RATE',
+  discountType: discountUnitType.FLAT_RATE || discountUnitType.FIXED_RATE,
   discountDegree: 0, // 할인정도
   salePrice: 0, // 할인적용가
   inStock: true, // 일반상품 > 재고 여부

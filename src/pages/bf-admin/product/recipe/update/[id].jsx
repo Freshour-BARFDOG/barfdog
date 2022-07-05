@@ -99,12 +99,12 @@ function UpdateRecipePage( { id }) {
           surveyResult: {
             file:null,
             filename:'TEST // 유효성검사는 끝남 -> 파일경로 & 이름을 받음된다 ',
-            thumbnailUrl: DATA.thumbnailUrl1 || 'http://211.219.225.118:9999/display/items?filename=6bd75a5a-5003-41aa-b18c-ce364b7c5448_05_메인페이지_램앤비프_썸네일.jpg'
+            thumbnailUrl: DATA.thumbnailUrl1
           },
           recipeThumb: {
             file:null,
             filename:'TEST // 유효성검사는 끝남 -> 파일경로 & 이름을 받음된다 ',
-            thumbnailUrl: DATA.thumbnailUrl2 || 'http://211.219.225.118:9999/display/items?filename=6bd75a5a-5003-41aa-b18c-ce364b7c5448_05_메인페이지_램앤비프_썸네일.jpg'
+            thumbnailUrl: DATA.thumbnailUrl2
       
           },
         }

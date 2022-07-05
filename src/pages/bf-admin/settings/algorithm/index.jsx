@@ -11,7 +11,7 @@ import { getData, putObjData } from '/api/reqData';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import Spinner from '/src/components/atoms/Spinner';
 import Tooltip from '/src/components/atoms/Tooltip';
-import transformDate from "../../../../../util/func/transformDate";
+import transformDate from "/util/func/transformDate";
 
 
 
@@ -44,11 +44,9 @@ export default function AlgorithmSettingPage() {
           activityNormal: DATA.activityConstant.activityNormal,
           activityLittle: DATA.activityConstant.activityLittle,
           activityVeryLittle: DATA.activityConstant.activityVeryLittle,
-          // snackVeryMuch: DATA.snackConstant.snackVeryMuch, // ! API parameter 추가 필요함
           snackMuch: DATA.snackConstant.snackMuch,
           snackNormal: DATA.snackConstant.snackNormal,
           snackLittle: DATA.snackConstant.snackLittle,
-          // snackVeryLittle: DATA.snackConstant.snackVeryLittle, // ! API parameter 추가 필요함
           price: DATA.deliveryConstant.price,
           freeCondition: DATA.deliveryConstant.freeCondition,
         };
@@ -184,14 +182,6 @@ export default function AlgorithmSettingPage() {
                 <section>
                   <h2 className={s['title']}>간식량 상수</h2>
                   <AlgorithmInput
-                    id={'snackVeryMuch'}
-                    label={'매우 많아요'}
-                    numberUnit={'+'}
-                    formValues={formValues}
-                    setFormValues={setFormValues}
-                    formErrors={formErrors}
-                  />
-                  <AlgorithmInput
                     id={'snackMuch'}
                     label={'많아요'}
                     numberUnit={'+'}
@@ -210,14 +200,6 @@ export default function AlgorithmSettingPage() {
                   <AlgorithmInput
                     id={'snackLittle'}
                     label={'적어요'}
-                    numberUnit={'-'}
-                    formValues={formValues}
-                    setFormValues={setFormValues}
-                    formErrors={formErrors}
-                  />
-                  <AlgorithmInput
-                    id={'snackVeryLittle'}
-                    label={'매우 적어요'}
                     numberUnit={'-'}
                     formValues={formValues}
                     setFormValues={setFormValues}
