@@ -7,6 +7,10 @@ import Checkbox from '/src/components/atoms/Checkbox';
 import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
 import UserList from './UserList';
 import SearchTextWithCategory from "/src/components/admin/form/searchBar/SearchTextWithCategory";
+import Spinner from "../../../components/atoms/Spinner";
+import {FullScreenLoading} from "../../../components/admin/fullScreenLoading";
+import PaginationWithAPI from "../../../components/atoms/PaginationWithAPI";
+import {getData} from "../../../../api/reqData";
 
 
 
@@ -14,6 +18,13 @@ import SearchTextWithCategory from "/src/components/admin/form/searchBar/SearchT
 const TEST_ITEM = [1, 2, 3, 4, 5,1,1,2];
 
 export default function SearchUserPopup() {
+  
+  const getListApiUrl = '/api/admin/members';
+  const apiDataQueryString = 'queryMembersDtoList';
+  const initialQuery = 'email=user%40gmail.com&name=&from=2020-05-11&to=2022-06-30';
+ 
+  const [isLoading, setIsLoading] = useState({});
+  const [urlQuery, setUrlQuery] = useState(initialQuery);
   const [searchValue, setSearchValue] = useState({});
   const [userList, setUserList] = useState(TEST_ITEM);
 
@@ -27,9 +38,20 @@ export default function SearchUserPopup() {
     }
   };
 
-  const onSearchHandler = () => {
-    console.log('검색 시작');
+  const onSearchHandler = async () => {
+    // 검색어를 url query에다가 넣는다.
+    const res = await getData(`/api/admin/members?page=1&size=5&email="admin@gmail.com"&name=""&from=2022-07-06&to=2022-07-06`);
+    console.log(res);
   }
+  
+  
+  
+  //
+  // if(isLoading){
+  //   return <FullScreenLoading/>
+  // }
+  
+  
   return (
     <>
       <MetaTitle title="회원 검색" />
@@ -59,17 +81,12 @@ export default function SearchUserPopup() {
                   ]}
                   searchButton={<button className={'admin_btn solid basic_l'} type={'button'} onClick={onSearchHandler}>검색</button>}
                 />
-
               </div>
               <div className={s.cont_viewer}>
                 <div className={s.table}>
                   <ul className={s.table_header}>
                     <li className={s.table_th}>
                       <Checkbox
-                        id="checkAll"
-                        onClick={(isChecked) => {
-                          console.log(isChecked);
-                        }}
                       />
                     </li>
                     <li className={s.table_th}>상세보기</li>
@@ -87,8 +104,18 @@ export default function SearchUserPopup() {
                   ) : (
                     <AmdinErrorMessage text="쿠폰을 발행할 대상이 없습니다." />
                   )}
+                  <div className={s['pagination-section']}>
+                    <PaginationWithAPI
+                      apiURL={getListApiUrl}
+                      size={1}
+                      queryItemList={apiDataQueryString}
+                      setItemList={setUserList}
+                      setIsLoading={setIsLoading}
+                      />
+                  </div>
                 </div>
               </div>
+              
             </div>
           </main>
           <section className={s['btn-section']}>
@@ -105,3 +132,17 @@ export default function SearchUserPopup() {
     </>
   );
 }
+
+//
+// export async function getServerSideProps (ctx) {
+//   const { params, req, res} = ctx;
+//   console.log(params)
+//   console.log('REQUEST: ',req)
+//   console.log('RESPONSE: ', res);
+//
+//   return {
+//     props: {
+//       id: 'user1'   }
+//   }
+//
+// }

@@ -1,11 +1,36 @@
-import React from 'react';
-import CustomSelectGroup from '/src/components/admin/messenger/friendTalk/CustomSelectGroup';
-import calcedAgeList from '/util/func/calcedAgeList';
-import CustomRadio from '/src/components/admin/form/CustomRadio';
+import React, {useEffect, useState} from 'react';
 import ErrorMessage from "../../atoms/ErrorMessage";
+import CustomRadio from '/src/components/admin/form/CustomRadio';
+import CustomRadioTrueOrFalse from "./CustomRadioTrueOrFalse";
+import SelectUserAges from "./SelectUserAges";
+import SelectUserGrades from "./SelectUserGrades";
 
 
-export default function SearchGroupForm ({id, setFormValues, formErrors})  {
+export default function SearchGroupForm ({ formValues, setFormValues, formErrors})  {
+  
+  //
+  // const ageKeys = {
+  //   birthYearFrom: 'birthYearFrom',
+  //   birthYearTo: 'birthYearTo',
+  // }
+  // const [ages, setAges] = useState( '' );
+  // useEffect( () => {
+  //   const valueArr = Object.values(ages);
+  //   const birthYearData = valueArr.map((innerObj)=>innerObj.value);
+  //   const birthFrom = birthYearData[0];
+  //   let birthTo = birthYearData[1] || birthFrom;
+  //   if(Number(birthFrom) > Number(birthTo)){
+  //     birthTo = birthFrom;
+  //   }
+  //
+  //   setFormValues(prevState => ({
+  //     ...prevState,
+  //     [ageKeys.birthYearFrom]: birthFrom, // string
+  //     [ageKeys.birthYearTo]: birthTo, // string
+  //   }))
+  // }, [ages] );
+  //
+  //
 
 
   return (
@@ -20,22 +45,7 @@ export default function SearchGroupForm ({id, setFormValues, formErrors})  {
             </div>
             <div className="inp_section">
               <div className="inp_box">
-                <CustomSelectGroup
-                  setFormValues={setFormValues}
-                  groupOptions={{
-                    startName: 'grade-start',
-                    endName: 'grade-end',
-                    options: [
-                      { label: '선택', value: '' },
-                      { label: '브론즈', value: 'BRONZE' },
-                      { label: '실버', value: 'SILVER' },
-                      { label: '골드', value: 'GOLD' },
-                      { label: '플래티넘', value: 'PLATINUM' },
-                      { label: '다이아', value: 'DIA' },
-                      { label: '더바프', value: 'THEBARF' },
-                    ],
-                  }}
-                />
+                <SelectUserGrades id={'gradeList'} setFormValues={setFormValues} />
                 {formErrors.gradeList && (
                   <ErrorMessage>{formErrors.gradeList}</ErrorMessage>
                 )}
@@ -52,15 +62,8 @@ export default function SearchGroupForm ({id, setFormValues, formErrors})  {
             </div>
             <div className="inp_section">
               <div className="inp_box">
-                <CustomSelectGroup
-                  setFormValues={setFormValues}
-                  groupOptions={{
-                    startName: 'age-start',
-                    endName: 'age-end',
-                    options: calcedAgeList(),
-                  }}
-                />
-                {formErrors.birthYearFrom || formErrors.birthYearTo && (
+                <SelectUserAges setFormValues={setFormValues} fromId={'birthYearFrom'} toId={'birthYearTo'} />
+                {(formErrors.birthYearFrom ||  formErrors.birthYearTo) && (
                   <ErrorMessage>{formErrors.birthYearFrom || formErrors.birthYearTo}</ErrorMessage>
                 )}
               </div>
@@ -79,6 +82,7 @@ export default function SearchGroupForm ({id, setFormValues, formErrors})  {
                 <CustomRadio
                   setValue={setFormValues}
                   name="area"
+                  value={formValues.area}
                   idList={['ALL', 'METRO', 'NON-METRO']}
                   labelList={['전체', '수도권', '비수도권']}
                 />
@@ -95,10 +99,10 @@ export default function SearchGroupForm ({id, setFormValues, formErrors})  {
             </div>
             <div className="inp_section">
               <div className="inp_box">
-                <CustomRadio
-                  setValue={setFormValues}
+                <CustomRadioTrueOrFalse
                   name="subscribe"
-                  idList={['TRUE', 'FALSE']}
+                  setValue={setFormValues}
+                  value={formValues.subscribe}
                   labelList={['Y', 'N']}
                 />
               </div>
@@ -114,10 +118,10 @@ export default function SearchGroupForm ({id, setFormValues, formErrors})  {
             </div>
             <div className="inp_section">
               <div className="inp_box">
-                <CustomRadio
-                  setValue={setFormValues}
+                <CustomRadioTrueOrFalse
                   name="longUnconnected"
-                  idList={['TRUE', 'FALSE']}
+                  setValue={setFormValues}
+                  value={formValues.longUnconnected}
                   labelList={['Y', 'N']}
                 />
               </div>
