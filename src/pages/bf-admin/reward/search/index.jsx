@@ -15,6 +15,8 @@ const TEST_ITEM = [1, 2, 3, 4, 5];
 
 
 function RewardListPage() {
+  
+  const getListApiUrl = '/api/admin/rewards?page=1&size=5&email="a"&name=""&from=2002-07-06&to=2022-07-06'
   const [modalMessage, setModalMessage] = useState("");
   const [itemList, setItemList] = useState(TEST_ITEM);
   const [searchValue, setSearchValue] = useState({});

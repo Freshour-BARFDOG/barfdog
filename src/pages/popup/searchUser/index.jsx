@@ -40,7 +40,7 @@ export default function SearchUserPopup() {
 
   const onSearchHandler = async () => {
     // 검색어를 url query에다가 넣는다.
-    const res = await getData(`/api/admin/members?page=1&size=5&email="admin@gmail.com"&name=""&from=2022-07-06&to=2022-07-06`);
+    const res = await getData(`/api/admin/rewards?page=1&size=5&email="a"&name=""&from=2002-07-06&to=2022-07-06`);
     console.log(res);
   }
   
