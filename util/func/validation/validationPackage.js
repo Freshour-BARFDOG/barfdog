@@ -2,6 +2,7 @@ import axios from 'axios';
 import checkCharactorSamenessAndContinuity from '../checkCharactorSamenessAndContinuity';
 import transformClearLocalCurrency from '../transformClearLocalCurrency';
 import convertFileSizeToMegabyte from '../convertFileSizeToMegabyte';
+import {discountUnitType} from "../../../store/TYPE/discountUnitType";
 
 export const valid_hasFormErrors = (errorObj, type='array') => {
   let isPassed = true;
@@ -151,7 +152,6 @@ export const valid_email_duplication = async (value) => {
 
 
 
-
 export const valid_password = (value) => {
 
   let error = '';
@@ -289,13 +289,30 @@ export const valid_URL = (value)=>{
 
 
 
-export const valid_currency = (value)=>{
+export const valid_currency = (value, options ={mode:'',unit:''}, availableMaxDiscount)=>{
   let error ='';
   const stringValue = typeof value === 'number' ? String(value) : value;
   const currency = transformClearLocalCurrency(stringValue);
+ const maxDiscountNum = transformClearLocalCurrency(availableMaxDiscount);
   if ( currency < 0 ) {
     error = '가격은 0보다 작을 수 없습니다.'
   }
+  
+  if (options.unit === discountUnitType.FIXED_RATE && currency <= 0){
+    error = '할인률은 0 이하로 설정할 수 없습니다.'
+    
+  } else if (options.unit === discountUnitType.FIXED_RATE && currency >= 100){
+    error = '할인률은 100 이상 설정할 수 없습니다.'
+  } else if(options.mode==='strict' && currency <= 0) {
+    error = '항목이 비어있습니다.'
+  }
+  
+  
+  if (maxDiscountNum < currency){
+    error = '할인금액은 최대사용금액보다 높을 수 없습니다.'
+  }
+  
+  
   return error;
 }
 
@@ -347,3 +364,46 @@ export const valid_fileSize = (file, maxFileSize) => {
   }
   return error;
 };
+
+
+
+export const valid_couponCode = (val) => {
+  /*
+  < 관리자 생성: 쿠폰코드 있을 경우 >
+  - 유저: 쿠폰코드를 입력 후, 수령
+  - 유저: 쿠폰코드 등록 단 1회만 가능 (어드민 중복발행과 관계 없음)
+  - 어드민: 쿠폰 수정 불가 (수정이 필요할 경우, 쿠폰 삭제 후 재발행)
+*/
+  let error = '';
+  
+  // PART 1
+  const maxLength = 15;
+  const codeLength = val.length;
+  
+  // PART 2
+  const pattern_num = /[0-9]/;
+  const pattern_en = /[a-zA-Z]/;
+  const pattern_ko = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+  const pattern_spChar = /[\{\}\[\]\/?.,;:|\)*~`_!^+<>@\#$%&\\\=\(\'\"]/g;
+  const availableSpecialChar = '하이픈(-)';
+  let mixedCharCount = 0;
+  pattern_num.test(val) && mixedCharCount++;
+  pattern_en.test(val) && mixedCharCount++;
+  const pettern_mixedChar = mixedCharCount >= 2;
+  
+  if (!val) {
+    // 입력한 값이 없을 경우, 관리자 쿠폰으로 발행됨
+    error = '쿠폰코드는 공란일 수 없습니다.';
+  } else if (pattern_ko.test(val)) {
+    error = '한글은 포함될 수 없습니다.';
+  } else if (pattern_spChar.test(val)) {
+    error = `${availableSpecialChar}외의 특수문자는 포함될 수 없습니다.`;
+  } else if (!pettern_mixedChar) {
+    error = '영문 및 숫자가 포함되어야합니다.';
+  } else if (codeLength > maxLength) {
+    error = '코드 글자 수는 15자 이내입니다.';
+  }
+  
+  return error;
+};
+

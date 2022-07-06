@@ -170,7 +170,7 @@ $inputDefaultHeight: rem(38);
   background-color: var(--color-bg);
 
   .errorMSG {
-    padding-top: rem(4);
+    //padding-top: rem(4);
   }
   .desc {
     font-size: rem(12);
@@ -371,7 +371,7 @@ $inputDefaultHeight: rem(38);
         gap: rem(10);
         font-size: rem(14);
         .checkbox-wrap:not(:first-child) {
-          margin-left: rem(30);
+          margin-left: rem(10);
         }
         &.radio:not(:last-child) {
           margin-right: rem(24);
