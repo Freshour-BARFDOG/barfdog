@@ -6,13 +6,13 @@ const CustomRadioTrueOrFalse = ({ name, labelList = [], value, setValue, returnB
   const trueRadioId = `${name}${labelList[0]}`;
   const falseRadioId = `${name}${labelList[1]}`;
   const initialValue = value === true ? trueRadioId : falseRadioId;
-
   const [selectedRadio, setSelectedRadio] = useState(initialValue);
 
 
   useEffect(() => { // init value
     setSelectedRadio(initialValue);
   }, [initialValue]);
+  
 
   const onChangeHandler = (e) => {
     const { id } = e.currentTarget;
