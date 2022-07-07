@@ -98,7 +98,6 @@ function CouponSettingPage() {
       const finalFormValues = {
         [autoCouponKey]: convertedFormValues
       }
-  
       // console.log('formValues: ', formValues);
       // console.log('convertedFormValues: ', convertedFormValues);
       // console.log('formErrors: ', formErrors);
@@ -107,7 +106,7 @@ function CouponSettingPage() {
         const res = await putObjData(putFormValuesApiUrl, finalFormValues);
         console.log(res);
         if (res.isDone) {
-          // onShowModalHandler('사이트 설정이 성공적으로 저장되었습니다.');
+          onShowModalHandler('사이트 설정이 성공적으로 저장되었습니다.');
           setIsSubmitted(true);
         } else {
           alert(res.error, '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.');
