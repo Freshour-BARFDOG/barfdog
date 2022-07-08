@@ -59,7 +59,7 @@ const Pagination = ({
             search: `?page=${newPageInfo.newPageNumber}`,
           });
         }else{
-          // setItemList([]);
+          setItemList([]);
         }
       } catch (err) {
         console.error(err);

@@ -12,13 +12,15 @@ import enterKey from '/util/func/enterKey';
 import Spinner from '/src/components/atoms/Spinner';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import Tooltip from '/src/components/atoms/Tooltip';
-import { global_couponType } from '/store/TYPE/global_couponType';
+import { global_couponType } from '/store/TYPE/couponType';
 
 /*-  auto: '/api/admin/coupons/auto', // 자동발행쿠폰
   - direct: '/api/admin/coupons/direct', // 직접발행쿠폰
   - directOnCode: '/api/admin/coupons/publication/code', // 직접발행 && 쿠폰코드로 생성한 쿠폰
   - directOnGeneral: '/api/admin/coupons/publication/general', // 직접발행 && 쿠폰코드없이 (! 삭제된 기능)
 * */
+
+
 const initialSearchValue = {
   keyword: '',
   couponType: 'AUTO_PUBLISHED', // AUTO_PUBLISHED,  CODE_PUBLISHED
@@ -42,6 +44,7 @@ function CouponListPage() {
   const [itemList, setItemList] = useState([]);
   const [searchValue, setSearchValue] = useState(initialSearchValue);
   const [apiUrlWithQuery, setApiUrlWithQuery] = useState(initialApiUrlWithQuery);
+  
 
   const onResetSearchValues = () => {
     setSearchValue(initialSearchValue);
@@ -76,6 +79,8 @@ function CouponListPage() {
   const onSearchInputKeydown = (e) => {
     enterKey(e, onSearchHandler);
   };
+  
+
 
   return (
     <>
@@ -108,10 +113,10 @@ function CouponListPage() {
               <div className="cont_title cont-left">
                 쿠폰목록
                 <Tooltip
-                  message={`1. 자동발행쿠폰은 생성할 수 없습니다.\n2. 코드발행쿠폰은 유저가 쿠폰코드 입력한 뒤 생성됩니다.`}
+                  message={`1. 자동발행쿠폰은 생성 및 삭제할 수 없습니다.\n2. 코드발행쿠폰은 유저가 쿠폰코드 입력 후 생성됩니다.`}
                   messagePosition={'left'}
                   wordBreaking={true}
-                  width={'240px'}
+                  width={'320px'}
                 />
                 {isLoading.fetching && <Spinner />}
               </div>

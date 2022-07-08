@@ -1,5 +1,6 @@
 import s from "../coupon.module.scss";
-import {global_couponType} from "/store/TYPE/global_couponType";
+import {global_couponType} from "/store/TYPE/couponType";
+import {putObjData} from "/api/reqData";
 
 
 
@@ -19,11 +20,11 @@ import {global_couponType} from "/store/TYPE/global_couponType";
     
     let couponType;
     if(item.couponType === global_couponType.AUTO_PUBLISHED){
-      couponType = '자동발행'
+      couponType = '자동발행';
     } else  if(item.couponType === global_couponType.CODE_PUBLISHED){
-      couponType = '코드발행'
+      couponType = '코드발행';
     } else if (item.couponType === global_couponType.GENERAL_PUBLISHED) {
-      couponType = '일반발행'
+      couponType = '일반발행';
     }
   
     
@@ -38,13 +39,25 @@ import {global_couponType} from "/store/TYPE/global_couponType";
       couponTarget: couponTarget,
       amount: item.amount,
       expiredDate: item.expiredDate || "-",
-      _links: {
-        // query_member: {
-        //   href: "http://localhost:8080/api/admin/members/91",
+      apiurl: {
+          delete: `/api/admin/coupons/${item.id}/inactive`,
       },
     };
-
-
+  
+  
+    const onInactiveItemHandler = async (e) => {
+      const button = e.currentTarget;
+      const apiURL = button.dataset.apiUrl;
+      const name = DATA.name;
+      if (confirm(`정말 삭제하시겠습니까?\n쿠폰명: ${name}`)) {
+        const res = await putObjData(apiURL, {id:DATA.id});
+        console.log(res)
+        // window.location.reload();
+      }
+    };
+  
+    
+  
     return (
       <li className={s.item} key={`item-${DATA.id}`}>
         <span>{DATA.couponType}</span>
@@ -55,13 +68,14 @@ import {global_couponType} from "/store/TYPE/global_couponType";
         <span>{DATA.couponTarget}</span>
         <span>{DATA.amount}</span>
         <span>
-          <button
+          {couponType === '자동발행' ? <em className={'errorMSG'}>삭제불가</em> : <button
             className="admin_btn basic_s solid"
-            // onClick={onDeleteItemHandler}
-            // data-apiurl={DATA.apiurl.delete}
+            onClick={onInactiveItemHandler}
+            data-api-url={DATA.apiurl.delete}
           >
             삭제
-          </button>
+          </button>}
+          
         </span>
       </li>
     );

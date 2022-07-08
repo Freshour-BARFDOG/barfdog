@@ -2,19 +2,20 @@ import axios from 'axios';
 import checkCharactorSamenessAndContinuity from '../checkCharactorSamenessAndContinuity';
 import transformClearLocalCurrency from '../transformClearLocalCurrency';
 import convertFileSizeToMegabyte from '../convertFileSizeToMegabyte';
-import {discountUnitType} from "../../../store/TYPE/discountUnitType";
+import { discountUnitType } from '../../../store/TYPE/discountUnitType';
+import { transformToday } from '../transformDate';
+import deleteHypenOnDate from '../deleteHypenOnDate';
 
-export const valid_hasFormErrors = (errorObj, type='array') => {
+export const valid_hasFormErrors = (errorObj, type = 'array') => {
   let isPassed = true;
-  if(type === 'array' && Array.isArray(errorObj)){
+  if (type === 'array' && Array.isArray(errorObj)) {
     const errorArray = errorObj;
-    errorArray.map(innerObj=>{
+    errorArray.map((innerObj) => {
       const result = valid_hasFormErrors(innerObj);
-      console.log(result)
+      console.log(result);
       // result중에 false가 하나라도 있으면 error로 취급한다.
-    })
-    
-  } else{
+    });
+  } else {
     for (const key in errorObj) {
       const val = errorObj[key];
       if (val) {
@@ -23,7 +24,7 @@ export const valid_hasFormErrors = (errorObj, type='array') => {
       }
     }
   }
-  
+
   return isPassed;
 };
 
@@ -40,7 +41,12 @@ export const valid_isEmpty = (value) => {
 
 
 export const valid_isNumberEmpty = (value) => {
-  const error = (Number(value) === 0 || !value) && '항목이 비어있습니다.'
+  let error;
+  if(Number(value) === 0){
+    error = '항목은 0보다 커야합니다.'
+  } else if(!value){
+    error = '항목이 비어있습니다.'
+  }
   return error;
 };
 
@@ -425,3 +431,29 @@ export const valid_isTheSameArray = (beforeArr1, beforeArr2) => {
   
   return arr1 === arr2;
 }
+
+
+
+
+export const valid_expireDate = (d) => {
+  let error;
+  let expiredDate;
+  if(d.split("-").length !== 3){
+    const unit= d.split('-');
+    if(unit[0].length===4 && unit[1].length===2 && unit[2].length===2){
+      return error = '날짜 형식에 맞지 않습니다.'
+    }
+  }
+  
+  const convertedDate = deleteHypenOnDate(d);
+  const selectedDate = Number(convertedDate);
+  const todayWithHypen = transformToday();
+  const stringToday = deleteHypenOnDate(todayWithHypen);
+  const today = Number(stringToday);
+  if(selectedDate < today){
+    error = '유효기간은 발급당일(오늘)보다 과거일 수 없습니다.';
+  }
+  expiredDate = selectedDate - today;
+  return { error, expiredDate };
+}
+

@@ -1,66 +1,60 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
 import CustomRadio from '/src/components/admin/form/CustomRadio';
 import CustomSelectForTwoSelects from '/src/components/admin/form/CustomSelectForTwoSelects';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
-import SearchGroupForm from "/src/components/admin/form/SearchGroupForm";
-import SearchPersonalForm from "/src/components/admin/form/SearchPersonalForm";
-import Modal_global_alert from "/src/components/modal/Modal_global_alert";
-import Spinner from "/src/components/atoms/Spinner";
-import CustomRadioTrueOrFalse from "/src/components/admin/form/CustomRadioTrueOrFalse";
-import {useRouter} from "next/router";
-import {useModalContext} from "/store/modal-context";
-import filter_emptyValue from "/util/func/filter_emptyValue";
-import filter_onlyNumber from "/util/func/filter_onlyNumber";
-import transformLocalCurrency from "/util/func/transformLocalCurrency";
-import {validate} from "/util/func/validation/validation_releaseCoupon";
-import {valid_hasFormErrors} from "/util/func/validation/validationPackage";
-import transformClearLocalCurrency from "/util/func/transformClearLocalCurrency";
-import {getData, postObjData} from "/api/reqData";
-import {global_couponType} from "/store/TYPE/global_couponType";
-
-
+import SearchGroupForm from '/src/components/admin/form/SearchGroupForm';
+import SearchPersonalForm from '/src/components/admin/form/SearchPersonalForm';
+import Modal_global_alert from '/src/components/modal/Modal_global_alert';
+import Spinner from '/src/components/atoms/Spinner';
+import CustomRadioTrueOrFalse from '/src/components/admin/form/CustomRadioTrueOrFalse';
+import { useRouter } from 'next/router';
+import { useModalContext } from '/store/modal-context';
+import filter_emptyValue from '/util/func/filter_emptyValue';
+import filter_onlyNumber from '/util/func/filter_onlyNumber';
+import transformLocalCurrency from '/util/func/transformLocalCurrency';
+import { validate } from '/util/func/validation/validation_releaseCoupon';
+import { valid_expireDate, valid_hasFormErrors } from '/util/func/validation/validationPackage';
+import { getData, postObjData } from '/api/reqData';
+import { global_couponType } from '/store/TYPE/couponType';
+import CustomSelect from '/src/components/admin/form/CustomSelect';
 
 const initialFormValues = {
-  ALL:{
-    expiredDate : "", // 발행할 쿠폰의 만료 기간 설정 'yyyy-MM-dd' String 타입
-    couponId : undefined, // number
-    alimTalk : false,
-    couponType : global_couponType.CODE_PUBLISHED, // string // 어드민에서 생성가능한 쿠폰타입은 AUTO
+  ALL: {
+    expiredDate: '', // 발행할 쿠폰의 만료 기간 설정 'yyyy-MM-dd' String 타입
+    couponId: undefined, // number
+    alimTalk: false,
+    couponType: global_couponType.CODE_PUBLISHED, // string // 어드민에서 생성가능한 쿠폰타입은 AUTO
   },
   PERSONAL: {
-    expiredDate : "",
-    couponId : undefined,
-    alimTalk : false,
-    couponType : global_couponType.CODE_PUBLISHED,
-    memberIdList : [],
+    expiredDate: '',
+    couponId: undefined,
+    alimTalk: false,
+    couponType: global_couponType.CODE_PUBLISHED,
+    memberIdList: [],
   },
   GROUP: {
-    expiredDate : "",
-    couponId : undefined,
-    alimTalk : false,
-    couponType : global_couponType.CODE_PUBLISHED,
-    subscribe : false,
-    longUnconnected : false,
-    gradeList : [],
-    area : "ALL",
-    birthYearFrom : "",
-    birthYearTo : "",
+    expiredDate: '',
+    couponId: undefined,
+    alimTalk: false,
+    couponType: global_couponType.CODE_PUBLISHED,
+    subscribe: false,
+    longUnconnected: false,
+    gradeList: [],
+    area: 'ALL',
+    birthYearFrom: '',
+    birthYearTo: '',
   },
 };
 
-
-
 function ReleaseCouponPage() {
-  
   const getCouponList = '/api/admin/coupons/publication/code';
   const postFormValuesApiUrlToAll = `/api/admin/coupons/all`;
   const postFormValuesApiUrlToGroup = `/api/admin/coupons/group`;
   const postFormValuesApiUrlToPersonal = `/api/admin/coupons/personal`;
-  
-  
+
   const router = useRouter();
   const mct = useModalContext();
   const [modalMessage, setModalMessage] = useState('');
@@ -69,57 +63,54 @@ function ReleaseCouponPage() {
   const [formValues, setFormValues] = useState(initialFormValues['ALL']);
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [couponOptions, setCouponOptions] = useState( [] );
-  
-  useEffect(() => {
-    const selectedFormValues = initialFormValues[target]
-    setFormValues(selectedFormValues);
-  }, [target]);
-  
+  const [couponOptions, setCouponOptions] = useState([]);
 
   useEffect(() => {
-    // 쿠폰리스트 조회하기
-    // 쿠폰리스트 나타날때까지 지속적으로
+    const selectedFormValues = initialFormValues[target];
+    setFormValues(selectedFormValues);
+  }, [target]);
+
+  useEffect(() => {
     (async () => {
       try {
         setIsLoading((prevState) => ({
           ...prevState,
-          fetching: true,
+          fetchingCouponList: true,
         }));
         const res = await getData(getCouponList);
         console.log(res);
         const DATA = res.data._embedded.publicationCouponDtoList;
-        const newCouponOptions = DATA.map(data=>({
+        const newCouponOptions = DATA.map((data) => ({
           value: data.couponId,
-          label: `(할인율: ${data.discount}) ${data.name}`,
+          label: `[ 할인: ${data.discount} ] ${data.name}`,
         }));
-        
-        const emptyOptions = [{
-          value:'',
-          label:'선택'
-        }];
+
+        const emptyOptions = [
+          {
+            value: '',
+            label: '선택',
+          },
+        ];
         emptyOptions.concat(newCouponOptions);
-        
-        setCouponOptions(emptyOptions.concat(newCouponOptions))
+
+        setCouponOptions(emptyOptions.concat(newCouponOptions));
       } catch (err) {
         console.error(err);
         alert('데이터를 가져올 수 없습니다.');
       }
       setIsLoading((prevState) => ({
         ...prevState,
-        // fetching: false,
+        fetchingCouponList: false,
       }));
     })();
   }, []);
-  
-  
-  
+
   const onInputChangeHandler = (event) => {
     const input = event.currentTarget;
     const { id, value } = input;
     const filteredType = input.dataset.inputType;
     let filteredValue = value;
-    
+
     if (filteredType) {
       filteredValue = filter_emptyValue(value);
       if (filteredType.indexOf('number') >= 0) {
@@ -134,48 +125,48 @@ function ReleaseCouponPage() {
       [id]: filteredValue,
     }));
   };
-  
-  
-  
+
   const onSubmit = async (e) => {
     e.preventDefault();
-    console.log(formValues);
-    const errObj = validate(formValues);
+    // console.log(formValues);
+    const filteredFormValues = {
+      ...formValues,
+      couponId: Number(formValues.couponId),
+    };
+    console.log(filteredFormValues);
+    const errObj = validate(filteredFormValues);
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
     if (!isPassed) {
       return alert('유효하지 않은 항목이 있습니다.');
-    } else if(isSubmitted){      // ! IMPORTANT : submit 이후 enterKey event로 trigger되는 중복submit 방지
+    } else if (isSubmitted) {
+      // ! IMPORTANT : submit 이후 enterKey event로 trigger되는 중복submit 방지
       alert('이미 제출된 양식입니다.');
       router.back();
-      return
+      return;
     }
-    
+    const expiredDate = valid_expireDate(filteredFormValues.expiredDate).expiredDate;
+    const confirmMessage = `* 쿠폰을 정말 발행하시겠습니까?\n- 유효기간: ~${filteredFormValues.expiredDate}까지\n- 남은일수: ${expiredDate}일\n- 발급대상:${target}`;
+    if (!confirm(confirmMessage)) return;
+
     try {
       setIsLoading((prevState) => ({
         ...prevState,
         submit: true,
       }));
       let postFormValuesApiUrl;
-      if(target === 'ALL'){
+      if (target === 'ALL') {
         postFormValuesApiUrl = postFormValuesApiUrlToAll;
-      } else if(target === 'GROUP'){
+      } else if (target === 'GROUP') {
         postFormValuesApiUrl = postFormValuesApiUrlToGroup;
-      } else if(target === 'PERSONAL'){
+      } else if (target === 'PERSONAL') {
         postFormValuesApiUrl = postFormValuesApiUrlToPersonal;
       }
-      const filteredFormValues = {
-        ...formValues,
-        amount: transformClearLocalCurrency(formValues.amount),
-      };
-      
-      console.log(postFormValuesApiUrl)
-      console.log(filteredFormValues)
-      
+
       const res = await postObjData(postFormValuesApiUrl, filteredFormValues);
       console.log(res);
       if (res.isDone) {
-        onShowModalHandler('쿠이 성공적으로 발행되었습니다.');
+        onShowModalHandler('쿠폰이 성공적으로 발행되었습니다.');
         setIsSubmitted(true);
       } else {
         alert(res.error, '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.');
@@ -188,31 +179,24 @@ function ReleaseCouponPage() {
       ...prevState,
       submit: false,
     }));
-    
-    
   };
-  
-  
+
   const returnToPrevPage = () => {
     if (confirm('이전 페이지로 돌아가시겠습니까?')) {
       router.back();
     }
   };
-  
+
   const onShowModalHandler = (message) => {
     mct.alertShow();
     setModalMessage(message);
   };
-  
+
   const onGlobalModalCallback = () => {
     mct.alertHide();
-    router.push('/bf-admin/reward/search');
+    router.push('/bf-admin/coupon/search');
   };
-  
-  
-  
-  
-  
+
   return (
     <>
       <MetaTitle title="쿠폰 발행" admin={true} />
@@ -269,11 +253,7 @@ function ReleaseCouponPage() {
                   </div>
                   <div className="inp_section">
                     <div className="inp_box">
-                      <input
-                        id={'expiredDate'}
-                        type="date"
-                        onChange={onInputChangeHandler}
-                      />
+                      <input id={'expiredDate'} type="date" onChange={onInputChangeHandler} />
                       <span>일</span>
                       {formErrors.expiredDate && (
                         <ErrorMessage>{formErrors.expiredDate}</ErrorMessage>
@@ -285,18 +265,18 @@ function ReleaseCouponPage() {
               <div className="cont_divider">
                 <div className="input_row">
                   <div className="title_section fixedHeight">
-                    <label className="title" htmlFor="name">
-                      쿠폰 선택
-                      {isLoading.fetching && <Spinner/>}
+                    <label className="title" htmlFor="couponId">
+                      쿠폰선택
                     </label>
+                    {isLoading.fetchingCouponList && <Spinner />}
                   </div>
                   <div className="inp_section">
-                    <CustomSelectForTwoSelects
-                      name="coupon"
+                    <CustomSelect
                       id="couponId"
                       options={couponOptions}
                       style={{ width: '100%', maxWidth: '600px' }}
-                      onChange={setFormValues}
+                      value={formValues.couponId}
+                      setFormValues={setFormValues}
                     />
                     {formErrors.couponId && <ErrorMessage>{formErrors.couponId}</ErrorMessage>}
                   </div>
@@ -322,7 +302,7 @@ function ReleaseCouponPage() {
                 </div>
               </div>
             </div>
-         </div>
+          </div>
           <div className="btn_section outer">
             <button
               type="button"

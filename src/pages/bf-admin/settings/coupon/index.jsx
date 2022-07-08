@@ -13,7 +13,7 @@ import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
 import Tooltip from '/src/components/atoms/Tooltip';
 import Spinner from '/src/components/atoms/Spinner';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
-import {autoPublishedCouponType} from "/store/TYPE/global_couponType";
+import {autoPublishedCouponType} from "/store/TYPE/couponType";
 import {global_gradeType} from "/store/TYPE/gradeType";
 import transformLocalCurrency from "/util/func/transformLocalCurrency";
 import transformClearLocalCurrency from "../../../../../util/func/transformClearLocalCurrency";

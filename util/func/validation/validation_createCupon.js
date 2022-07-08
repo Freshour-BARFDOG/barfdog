@@ -1,7 +1,7 @@
 import {
   valid_couponCode,
   valid_currency,
-  valid_isEmpty,
+  valid_isEmpty, valid_isNumberEmpty,
 } from './validationPackage';
 
 export const validate = (obj) => {
@@ -38,7 +38,7 @@ export const validate = (obj) => {
         errors[key] = valid_currency(val, { mode: 'strict' });
         break;
       case 'amount':
-        errors[key] = valid_isEmpty(val);
+        errors[key] = valid_isNumberEmpty(val);
         break;
     }
   }
