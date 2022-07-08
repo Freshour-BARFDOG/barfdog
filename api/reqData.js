@@ -158,10 +158,14 @@ export const postObjData = async (url, data, contType) => {
     .catch((err) => {
       const error = err.response;
       console.log('ERROR내용: ',err.response);
-      const errStatus = error?.status >= 400;
-      let errorMessage = error?.data.error ||(error.data.reason === 'EXPIRED_TOKEN' && '관리자 로그인 토큰이 만료되었습니다.');
-      result.error = errorMessage || '서버와 통신오류가 발생했습니다.';
-      return !errStatus;
+      if (error.data.errors[0].defaultMessage) {
+        result.error = error.data.errors[0].defaultMessage;
+      } else if(error?.data.error.error){
+        result.error = '서버와 통신오류가 발생했습니다.'
+      } else if (error.data.reason === 'EXPIRED_TOKEN') {
+        result.error = '관리자 로그인 토큰이 만료되었습니다.'
+      }
+      return !error?.status >= 400;
     });
 
   result.isDone = response;
