@@ -10,22 +10,32 @@ const Wrap = styledComponents.i`
     pointer-events:none;
     // opacity:0;
     animation: rotate ${(props) => props.speed}s linear infinite ;
+    
+    &.floating{
+      position:absolute;
+      left:50%;
+      top:50%;
+      transform:translate(-50%,-50%);
+    }
+    
     @keyframes rotate {
       from{transform:rotate(0);}
       to{transform:rotate(360deg);}
     }
   `;
 
-const Spinner = ({ style, speed = '0.6', ...props }) => {
+const Spinner = ({ style, speed = '0.6', floating, ...props }) => {
   const defaultStyle = {
     ...style,
     width: style?.width || '20',
     height: style?.height || '20',
     color: style?.color || 'var(--color-main)',
   };
+  
+ 
 
   return (
-    <Wrap className={'spinner'} speed={speed} {...props}>
+    <Wrap className={`spinner ${floating ? 'floating' : ''}`} speed={speed} {...props}>
       <ImSpinner2 style={defaultStyle} />
     </Wrap>
   );

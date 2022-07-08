@@ -18,21 +18,15 @@ export default function UserList({ items }) {
 
 const Item = ({ item }) => {
   const DATA = {
-    id: item.memberId || Math.random(),
+    id: item.memberId || Math.floor(Math.random() * 100),
     grade: item.grade || '실버',
     name: item.name || '김바프',
     email: item.email || 'useruseruseruser@gmail.com',
     phoneNumber: item.phoneNumber || '010-1234-4567',
-    dogName: item.dogName || '스칼렛스칼렛스칼렛스칼렛',
+    dogName: item.dogName || '스칼렛 ',
     accumulatedAmount: item.accumulatedAmount || '1,265,100',
     subscribe: item.subscribe || 'Y',
     longUnconnected: item.longUnconnected || 'N',
-    apiurl: {
-      // self: item._links.query_banner.href,
-      // orderUp: item._links.mainBanner_leakedOrder_up.href,
-      // orderDown: item._links.mainBanner_leakedOrder_down.href,
-      // delete: item._links.delete_banner.href,
-    },
   };
   const onPopupHandler = (e) => {
     e.preventDefault();
@@ -52,7 +46,7 @@ const Item = ({ item }) => {
         />
       </span>
       <span>
-        <Link href={`/bf-admin/member/popup/${DATA.id}`} passHref>
+        <Link href={`/bf-admin/popup/memberInfo/${DATA.id}`} passHref>
           <a target="_blank" className="admin_btn basic_s solid" onClick={onPopupHandler}>
             상세보기
           </a>
@@ -60,7 +54,9 @@ const Item = ({ item }) => {
       </span>
       <span>{DATA.grade}</span>
       <span>{DATA.name}</span>
-      <span className={s.scrollBox}>{DATA.email}</span>
+      <span>
+        <em className={'overflow-x-scroll'}>{DATA.email}</em>
+      </span>
       <span>{DATA.phoneNumber}</span>
       <span className={s.scrollBox}>{DATA.dogName}</span>
       <span>

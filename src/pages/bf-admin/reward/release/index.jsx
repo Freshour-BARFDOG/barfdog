@@ -17,8 +17,7 @@ import filter_emptyValue from '/util/func/filter_emptyValue';
 import filter_onlyNumber from '/util/func/filter_onlyNumber';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import CustomRadioTrueOrFalse from '/src/components/admin/form/CustomRadioTrueOrFalse';
-import transformClearLocalCurrencyInEveryObject from "/util/func/transformClearLocalCurrencyInEveryObject";
-import transformClearLocalCurrency from "../../../../../util/func/transformClearLocalCurrency";
+import transformClearLocalCurrency from "/util/func/transformClearLocalCurrency";
 
 
 const initialFormValues = {
@@ -87,6 +86,7 @@ function ReleaseRewardPage(props) {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    console.log(formValues);
     const errObj = validate(formValues);
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
@@ -109,14 +109,14 @@ function ReleaseRewardPage(props) {
         amount: transformClearLocalCurrency(formValues.amount),
       };
   
-      console.log(formValues);
+
       console.log(postFormValuesApiUrl)
       console.log(filteredFormValues)
       
       const res = await postObjData(postFormValuesApiUrl, filteredFormValues);
       console.log(res);
       if (res.isDone) {
-        onShowModalHandler('레시피가 성공적으로 생성되었습니다.');
+        onShowModalHandler('적립금이 성공적으로 발행되었습니다.');
         setIsSubmitted(true);
       } else {
         alert(res.error, '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.');

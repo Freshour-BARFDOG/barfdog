@@ -1,10 +1,10 @@
 import React , { useState, useEffect }from 'react'
 import { useRouter } from 'next/router';
-import s from './popup.module.scss';
-import PopupWrapper from "@src/components/popup/PopupWrapper";
-import { PopupCloseButton, PopupCloseButton_typeX } from "@src/components/popup/PopupCloseButton";
-import Modal_member_class from '@src/components/modal/Modal_member_class';
-import Modal_member_subscribe from "@src/components/modal/Modal_member_subscribe";
+import s from './memberInfo.module.scss';
+import PopupWrapper from "/src/components/popup/PopupWrapper";
+import { PopupCloseButton, PopupCloseButton_typeX } from "/src/components/popup/PopupCloseButton";
+import Modal_member_class from '/src/components/modal/Modal_member_class';
+import Modal_member_subscribe from "/src/components/modal/Modal_member_subscribe";
 import UpdateSingleItemPage from "../../product/single/update/[id]";
 
 
