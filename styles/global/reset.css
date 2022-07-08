@@ -303,7 +303,7 @@ input[type='date']::-webkit-datetime-edit {
   font-size: var(--reset-font-size);
   cursor: pointer;
 }
-input[type='date']::-webkit-datetime-edit-fields-wrapper {}
+input[type='date']::-webkit-datetime-edit-fields-wrapper {font-size: 14px;}
 input[type='date']::-webkit-datetime-edit-text {}
 input[type='date']::-webkit-datetime-edit-month-field {}
 input[type='date']::-webkit-datetime-edit-day-field {}
@@ -314,6 +314,7 @@ input[type='date']::-webkit-calendar-picker-indicator {
     opacity: 0.8;
     cursor: pointer;
 }
+
 
 input::placeholder {
   color: var(--color-placeholder);
