@@ -29,7 +29,7 @@ const initialFormValues = {
   couponTarget: 'ALL', //str // Radio Button
   code: '', // str
   discountDegree: '0', // ui comma표기 시, str => submit시 num으로 변경
-  discountType: 'FLAT_RATE', // str
+  discountType: discountUnitType.FIXED_RATE, // str
   availableMaxDiscount: '0', // ui comma표기 시, str => submit시 num으로 변경
   availableMinPrice: '0', // ui comma표기 시, str => submit시 num으로 변경
   amount: '0', // ui comma표기 시, str => submit시 num으로 변경
@@ -54,6 +54,7 @@ function CreateCouponPage() {
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   
+  // console.log(formValues)
   
   useEffect( () => {
     setFormValues(prevState => ({
