@@ -3,7 +3,7 @@ import s from "./searchBar.module.scss";
 
 
 
-function SearchPlainInput({ title, name, onChange, searchValue, tooltip }) {
+function SearchPlainInput({ title, name, onChange, searchValue, tooltip, onKeydown }) {
   const onChangeHandler = (e) => {
     const thisSelect = e.currentTarget;
     const value = thisSelect.value;
@@ -26,6 +26,7 @@ function SearchPlainInput({ title, name, onChange, searchValue, tooltip }) {
           type="text"
           value={searchValue && searchValue[name]}
           onChange={onChangeHandler}
+          onKeyDown={onKeydown}
         />
       </div>
     </div>

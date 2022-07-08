@@ -12,10 +12,11 @@ const SearchRadio = ({
   name,
   idList,
   labelList,
-  tooltip
+  tooltip,
+  value,
 }) => {
 
-  const initialValue = idList[0];
+  const initialValue = value || idList[0];
   const [selectedRadio, setSelectedRadio] = useState(initialValue); // * component 내부 value
 
   useEffect(() => {

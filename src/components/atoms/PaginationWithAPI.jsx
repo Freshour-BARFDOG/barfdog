@@ -34,15 +34,15 @@ const Pagination = ({
 
         const calcedPageIndex = (curPage - 1).toString();
         const defaultQuery = `?page=${calcedPageIndex}&size=${size}`;
-        let urlQueries = urlQuery ? `${defaultQuery}${urlQuery}` : defaultQuery;
-        console.log(urlQueries);
+        let urlQueries = urlQuery ? `${defaultQuery}&${urlQuery}` : defaultQuery;
+        console.log(`${apiURL}${urlQueries}`);
         const res = await getData(`${apiURL}${urlQueries}`);
         const pageData = res.data?.page;
         console.log(res);
         const hasItems = pageData?.totalElements !== 0;
         if (hasItems) {
           const newPageInfo = {
-            totalPages: pageData.totalPages,
+            totalPages: pageData?.totalPages || 0,
             size: pageData.size,
             totalItems: pageData.totalElements,
             currentPageIndex: pageData.number,

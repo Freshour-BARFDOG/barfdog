@@ -253,7 +253,7 @@ const sortingDateOrder = (obj, secondDate) => {
 //     tempValueArr.push(tempDate);
 //   });
  
-//   tempValueArr.sort((a, b) => {
+//   tempValueArr.type((a, b) => {
 //     return a - b; // 오름차순 정렬
 //   });
 

@@ -6,19 +6,30 @@ import s from "../coupon.module.scss";
 
 
   const ItemList = ({ item }) => {
+    console.log(item);
     
+    let couponTarget;
+    if(item.couponTarget === 'ALL'){
+      couponTarget = '전체'
+    } else  if(item.couponTarget === 'SUBSCRIBE'){
+      couponTarget = '정기구독'
+    } else if (item.couponTarget === 'GENERAL') {
+      couponTarget = '일반상품'
+    }
 
+    // 쿠폰 타입 > AUTO_PUBLISHED : 자동발행 / 삭제불가
+    // 쿠폰 타입 > GENERAL_PUBLISHED  : 직접발행 / 유저 쿠폰함에 쿠폰 생성시킴 (고객사와 협의 후, 사용하지 않기로 협의된 기능)
+    // 쿠폰 타입 > CODE_PUBLISHED :  직접발행 / 유저가 코드 입력 후 쿠폰함에 생성
     const DATA = {
-      id: item.id || 91,
-      name: item.name || "견주 생일 쿠폰",
-      code: item.code || "BA123456",
-      sort: item.sort || "자동발행쿠폰",
+      id: item.id,
+      type: item.type || "자동발행쿠폰",
+      name: item.name,
+      code: item.code || "-",
       description:
-        item.description ||
-        "쿠폰설명..쿠폰설명..쿠폰설명..쿠폰설명..쿠폰설명..",
-      discount: item.discount || "15%",
-      couponTarget: item.couponTarget || "ALL",
-      amount: item.amount || "무제한",
+        item.description,
+      discount: item.discount,
+      couponTarget: couponTarget,
+      amount: item.amount,
       expiredDate: item.expiredDate || "-",
       _links: {
         // query_member: {
@@ -29,10 +40,10 @@ import s from "../coupon.module.scss";
 
     return (
       <li className={s.item} key={`item-${DATA.id}`}>
+        <span>{DATA.type}</span>
         <span>{DATA.code}</span>
-        <span>{DATA.sort}</span>
         <span>{DATA.name}</span>
-        <span className={"overflow-x-scroll"}>{DATA.description}</span>
+        <span><em className="overflow-x-scroll">{DATA.description}</em></span>
         <span>{DATA.discount}</span>
         <span>{DATA.couponTarget}</span>
         <span>{DATA.amount}</span>
