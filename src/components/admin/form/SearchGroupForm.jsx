@@ -4,6 +4,7 @@ import CustomRadio from '/src/components/admin/form/CustomRadio';
 import CustomRadioTrueOrFalse from "./CustomRadioTrueOrFalse";
 import SelectUserAges from "./SelectUserAges";
 import SelectUserGrades from "./SelectUserGrades";
+import {global_areaType} from "/store/TYPE/areaType";
 
 
 export default function SearchGroupForm ({ formValues, setFormValues, formErrors})  {
@@ -81,7 +82,7 @@ export default function SearchGroupForm ({ formValues, setFormValues, formErrors
                   setValue={setFormValues}
                   name="area"
                   value={formValues?.area}
-                  idList={['ALL', 'METRO', 'NON-METRO']}
+                  idList={[global_areaType.ALL, global_areaType.ALL, global_areaType.NON_METRO]}
                   labelList={['전체', '수도권', '비수도권']}
                 />
               </div>

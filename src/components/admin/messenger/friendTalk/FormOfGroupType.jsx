@@ -3,6 +3,7 @@ import CustomSelectGroup from './CustomSelectGroup';
 import CustomRadio from '/src/components/admin/form/CustomRadio';
 import ToolTip from '/src/components/atoms/Tooltip';
 import calcedAgeList from '/util/func/calcedAgeList';
+import {global_areaType} from "/store/TYPE/areaType";
 
 const FormOfGroupType = ({ setFormValues }) => {
   return (
@@ -87,10 +88,17 @@ const FormOfGroupType = ({ setFormValues }) => {
             </div>
             <div className="inp_section">
               <div className="inp_box">
+                {/*<CustomRadio*/}
+                {/*  setValue={setFormValues}*/}
+                {/*  name="location"*/}
+                {/*  idList={['ALL', 'METRO', 'NON-METRO']}*/}
+                {/*  labelList={['전체', '수도권', '비수도권']}*/}
+                {/*/>*/}
                 <CustomRadio
                   setValue={setFormValues}
-                  name="location"
-                  idList={['ALL', 'METRO', 'NON-METRO']}
+                  name="area"
+                  // value={formValues?.area}
+                  idList={[global_areaType.ALL, global_areaType.ALL, global_areaType.NON_METRO]}
                   labelList={['전체', '수도권', '비수도권']}
                 />
               </div>
