@@ -407,3 +407,14 @@ export const valid_couponCode = (val) => {
   return error;
 };
 
+
+
+export const valid_isTheSameArray = (beforeArr1, beforeArr2) => {
+  if(beforeArr1.length === 0 && beforeArr2.length === 0){
+    return false;
+  }
+  const arr1 = JSON.stringify( beforeArr1.sort() );
+  const arr2 = JSON.stringify( beforeArr2.sort() );
+  
+  return arr1 === arr2;
+}

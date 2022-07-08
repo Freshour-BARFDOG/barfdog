@@ -18,7 +18,6 @@ const SearchTextWithCategory = ({
   const initialValue = options[0].value || '';
   const [selectedCategory, setSelectedCategory] = useState(initialValue);
 
-  console.log(searchValue)
   // useEffect(() => {
   //   if (!searchValue) {
   //     initializeOptionalButtons();

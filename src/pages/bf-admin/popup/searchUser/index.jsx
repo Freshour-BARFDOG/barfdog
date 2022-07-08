@@ -4,26 +4,24 @@ import PopupWrapper from '/src/components/popup/PopupWrapper';
 import { PopupCloseButton_typeX } from '/src/components/popup/PopupCloseButton';
 import s from './searchUser.module.scss';
 import Checkbox from '/src/components/atoms/Checkbox';
-import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
 import UserList from './UserList';
 import SearchTextWithCategory from '/src/components/admin/form/searchBar/SearchTextWithCategory';
-import Spinner from '../../../../components/atoms/Spinner';
-import { FullScreenLoading } from '../../../../components/admin/fullScreenLoading';
-import PaginationWithAPI from '../../../../components/atoms/PaginationWithAPI';
-import { getData } from '../../../../../api/reqData';
-import enterKey from "../../../../../util/func/enterKey";
-
-
+import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
+import enterKey from '/util/func/enterKey';
+import { transformDateWithHyphen, transformToday } from '/util/func/transformDate';
+import {valid_isTheSameArray} from "/util/func/validation/validationPackage";
+import AmdinErrorMessage from "/src/components/atoms/AmdinErrorMessage";
+import Spinner from "/src/components/atoms/Spinner";
+import {TEST_MEMBERS} from "/store/data/test/user";
 
 
 
 let initialSearchValues = {
   email: '',
   name: '',
-  from: '',
-  to: '',
+  from: transformDateWithHyphen(2000, 1, 1),
+  to: transformToday(),
 };
-
 
 
 
@@ -35,19 +33,11 @@ export default function SearchUserPopup() {
   const [isLoading, setIsLoading] = useState({});
   const [searchValues, setSearchValues] = useState(initialSearchValues);
   const [searchQuery, setSearchQuery] = useState('');
-  const [itemList, setItemList] = useState([1,2,3,49]);
+  const [itemList, setItemList] = useState(TEST_MEMBERS
+  );
+  const [selectedItems, setSelectedItems] = useState([]);
 
-  console.log(searchValues);
-  console.log(searchQuery);
 
-  const onCloseWindowHandler = () => {
-    // 성공하고나서, window 닫는다.
-    if (confirm('선택된 고객을 추가하시겠습니까')) {
-      window.opener.onSuccess('전송할 데이터');
-      window.close();
-    }
-  };
-  
   const onSearchHandler = () => {
     const queryArr = [];
     for (const key in searchValues) {
@@ -55,15 +45,44 @@ export default function SearchUserPopup() {
       const thisQuery = `${key}=${val}`;
       queryArr.push(thisQuery);
     }
-    
+
     const query = `${queryArr.join('&')}`;
     setSearchQuery(query);
   };
-  
+
   const onSearchInputKeydown = (e) => {
-    console.log('실행')
+    console.log('실행');
     enterKey(e, onSearchHandler);
   };
+
+  const onCloseWindowHandler = () => {
+
+    if(selectedItems.length === 0 ){
+      alert('선택된 회원이 없습니다.')
+    }else {
+      if (confirm(`선택된 ${selectedItems.length}명의 회원을 추가 하시겠습니까?`)) {
+        window.opener.onSuccess(selectedItems);
+        window.close();
+      }
+    }
+
+  };
+  
+  const onAllSelectItemsList = (checked)=>{
+    if(checked){
+      setSelectedItems(itemList.map(item=> item.id)); // 모두 선택
+    }else {
+      setSelectedItems([]); //초기화
+    }
+  }
+
+  const valid_allCheckboxexChecked = ()=>{
+    if(!Array.isArray(itemList) || !Array.isArray(selectedItems)) return;
+    const allSelectedList = itemList.map(item=>item.id);
+    return valid_isTheSameArray(allSelectedList, selectedItems);
+  };
+
+  
   
   return (
     <>
@@ -104,11 +123,11 @@ export default function SearchUserPopup() {
                   }
                 />
               </div>
-              <div className={s.cont_viewer}>
+              <div className={`${s.cont_viewer} ${s.fixedHeight}`}>
                 <div className={s.table}>
-                  <ul className={s.table_header}>
+                  <ul className={`${s.table_header}`}>
                     <li className={s.table_th}>
-                      <Checkbox />
+                      <Checkbox onClick={onAllSelectItemsList} checked={valid_allCheckboxexChecked()}/>
                     </li>
                     <li className={s.table_th}>상세보기</li>
                     <li className={s.table_th}>등급</li>
@@ -126,21 +145,20 @@ export default function SearchUserPopup() {
                     } else if (!itemList.length) {
                       return <AmdinErrorMessage text="검색결과가 존재하지 않습니다." />;
                     } else {
-                      return <UserList items={itemList} />;
+                      return <UserList items={itemList} setSelectedItems={setSelectedItems} selectedItems={selectedItems}/>;
                     }
                   })()}
-                  {}
-                  <div className={s['pagination-section']}>
-                    <PaginationWithAPI
-                      apiURL={getListApiUrl}
-                      urlQuery={searchQuery}
-                      queryItemList={apiDataQueryString}
-                      size={searchPageSize}
-                      setItemList={setItemList}
-                      setIsLoading={setIsLoading}
-                    />
-                  </div>
                 </div>
+                {itemList.length > 0 && <div className={s['pagination-section']}>
+                  <PaginationWithAPI
+                    apiURL={getListApiUrl}
+                    urlQuery={searchQuery}
+                    queryItemList={apiDataQueryString}
+                    size={searchPageSize}
+                    setItemList={setItemList}
+                    setIsLoading={setIsLoading}
+                  />
+                </div>}
               </div>
             </div>
           </main>

@@ -30,8 +30,7 @@ function RewardListPage() {
   const [itemList, setItemList] = useState([]);
   const [searchValues, setSearchValues] = useState({});
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
-  console.log(searchValues)
-  console.log(searchQuery);
+
 
   const onResetSearchValues = () => {
     setSearchValues(initialSearchValue);
@@ -95,7 +94,7 @@ function RewardListPage() {
               <p className="cont_title cont-left">적립금 목록</p>
               <div className="controls cont-left"></div>
             </div>
-            <div className={`${s.cont_viewer}`}>
+            <div className={`${s.cont_viewer} ${s.fullWidth}`}>
               <div className={s.table}>
                 <ul className={s.table_header}>
                   <li className={s.table_th}>적립일자</li>

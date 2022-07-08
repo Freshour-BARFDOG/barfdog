@@ -1,43 +1,95 @@
 @import '/styles/global/rem';
 
-
-
-.product-count{color: var(--color-primary04); margin-left:rem(4)}
-
+$border: rem(1) solid var(--color-line-03);
+$itemListHeight: rem(60);
+$color-tableHeader : #f1f2f4;
 
 
 
 .cont_viewer {
+  width: 100%;
+  position: relative;
+  //overflow-y: scroll;
+  &.fixedHeight .table{
+    height: rem(380);
+  }
+  &.fullWidth{
+    &:before{
+      content: "";
+      position: absolute;
+      width:calc(100% - #{rem(2)});
+      top:rem(1);
+      left:50%;
+      transform:translateX(-50%);
+      z-index: 1;
+      height: $itemListHeight;
+      background-color: $color-tableHeader;
+      border-bottom: $border;
+    }
+    //.table_header{width: 100% !important}
+    .table_th:last-child,
+    .item > span:last-child,
+    .table_body > li > span:last-child{
+      border-right: $border;
+    }
+  }
+
+  /* -------------------- border line -------------------- */
+  .table{border: $border;}
+  .table_header{border-bottom: $border;}
+  .table_th:not(:last-child),
+  .item > span:not(:last-child),
+  .table_body > li > span:not(:last-child) {
+    border-right: $border;
+  }
+  .item:first-child,
+  .item:not(:last-child) > span{
+    border-bottom: $border;
+  }
+  /* -------------------- border line -------------------- */
+
   .table{
-    overflow-x:scroll;
+    overflow-x: scroll;
+    overflow-y: initial;
+    position: relative;
     font-size: rem(15);
-    /* border line */
-    .table_header{
-      border: rem(1) solid var(--color-line-03);
-      background-color:#f1f1f4;
-      border: rem(1) solid var(--color-line-03);
+    padding-top: $itemListHeight;
+    box-sizing: border-box;
+    background: #fff;
+
+
+    .table_header, .table_body, .item{
       width: fit-content;
     }
+
+    .table_header{
+      height: calc(#{$itemListHeight} + #{rem(1)});
+      position: absolute !important;
+      top:0;
+      left:0;
+      z-index: 1;
+      background-color: $color-tableHeader;
+      box-sizing: border-box;
+    }
+
+    .table_body{
+      z-index: 0;
+      position: relative;
+      overflow-x: initial;
+      overflow-y: scroll;
+    }
+
     .table_body > li > span,
     .table_th, .item > span{
-      border-right: rem(1) solid var(--color-line-03);
       overflow:hidden;
       text-align: center;
-      // background-color: #fff;
     }
-    .table_body > li > span:last-child,
-    .table_th:last-child,
-    .item > span:last-child{border-right: 0}
-    .item:not(:last-child){border-bottom: rem(1) solid var(--color-line-03);}
 
     .table_header, .item{
-      width: fit-content;
-      box-sizing: border-box;
-      position: relative;
-      z-index: 1;
       display:grid;
       grid-gap:0;
-      grid-template-rows: minmax(rem(60), auto);
+
+      grid-template-rows: minmax(#{$itemListHeight}, auto);
       grid-template-columns:
         minmax(rem(100), rem(160))
         minmax(rem(100), rem(120))
@@ -60,7 +112,6 @@
       }
       .table_th{
         font-weight: 600;
-        background-color:#f1f1f4;
         height: 100%;
       }
       > span{
@@ -71,8 +122,6 @@
 
     .item{
       background-color: #fff;
-      border: rem(1) solid var(--color-line-03);
-      width: fit-content;
       margin-top:rem(-1);
     }
 
@@ -88,5 +137,6 @@
 
 .pagination-section {
   margin-top: rem(20);
-
 }
+
+

@@ -36,14 +36,14 @@ const Pagination = ({
         const calcedPageIndex = (curPage - 1).toString();
         const defaultQuery = `?page=${calcedPageIndex}&size=${size}`;
         let urlQueries = urlQuery ? `${defaultQuery}&${urlQuery}` : defaultQuery;
-        console.log(urlQueries);
+        console.log('Serach Query: ',urlQueries);
         const res = await getData(`${apiURL}${urlQueries}`);
-        const pageData = res.data?.page;
         console.log(res);
+        const pageData = res.data?.page;
         const hasItems = pageData?.totalElements !== 0;
-        if (hasItems) {
+        if (pageData && hasItems) {
           const newPageInfo = {
-            totalPages: pageData?.totalPages || 0,
+            totalPages: pageData.totalPages,
             size: pageData.size,
             totalItems: pageData.totalElements,
             currentPageIndex: pageData.number,
@@ -59,7 +59,7 @@ const Pagination = ({
             search: `?page=${newPageInfo.newPageNumber}`,
           });
         }else{
-          setItemList([]);
+          // setItemList([]);
         }
       } catch (err) {
         console.error(err);

@@ -3,30 +3,38 @@ import s from './searchUser.module.scss';
 import Checkbox from '/src/components/atoms/Checkbox';
 import Link from "next/link";
 import popupWindow from "/util/func/popupWindow";
+import transformLocalCurrency from "/util/func/transformLocalCurrency";
 
-export default function UserList({ items }) {
+export default function UserList({ items,selectedItems, setSelectedItems, onPopup }) {
   if (!items || !items.length) return;
-
   return (
-    <ul className="table_body">
+    <ul className={s.table_body}>
       {items.map((item, index) => (
-        <Item key={`item-${item.id}-${index}`} item={item} />
+        <Item
+          key={`item-${item.id}-${index}`}
+          item={item}
+          setSelectedItems={setSelectedItems}
+          selectedItems={selectedItems}
+        />
       ))}
     </ul>
   );
 }
 
-const Item = ({ item }) => {
+
+const Item = ({ item, selectedItems,   setSelectedItems }) => {
+  // console.log(item)
+  
   const DATA = {
-    id: item.memberId || Math.floor(Math.random() * 100),
-    grade: item.grade || '실버',
-    name: item.name || '김바프',
-    email: item.email || 'useruseruseruser@gmail.com',
-    phoneNumber: item.phoneNumber || '010-1234-4567',
-    dogName: item.dogName || '스칼렛 ',
-    accumulatedAmount: item.accumulatedAmount || '1,265,100',
-    subscribe: item.subscribe || 'Y',
-    longUnconnected: item.longUnconnected || 'N',
+    id: item.id,
+    grade: item.grade,
+    name: item.name ,
+    email: item.email,
+    phoneNumber: item.phoneNumber,
+    dogName: item.dogName,
+    accumulatedAmount: transformLocalCurrency(item.accumulatedAmount)+'원',
+    subscribe: item.subscribe ? 'Y' : 'N',
+    longUnconnected: item.longUnconnected ? 'Y' : 'N',
   };
   const onPopupHandler = (e) => {
     e.preventDefault();
@@ -34,15 +42,23 @@ const Item = ({ item }) => {
     const href = e.currentTarget.href;
     popupWindow(href, {width:1000, height:716});
   }
-
+  
+  const onSelectHandler = (checked, thisId)=>{
+    const selectedId = Number(thisId);
+    if(checked){
+      setSelectedItems(prevState => prevState.concat(selectedId));
+    }else {
+      setSelectedItems(prevState => prevState.filter((id)=>id !== selectedId))
+    }
+  }
+  
   return (
     <li className={s.item} key={`item-${DATA.id}`} data-idx={DATA.id}>
       <span>
         <Checkbox
           id={DATA.id}
-          onClick={(value) => {
-            console.log(value);
-          }}
+          onClick={onSelectHandler}
+          checked={selectedItems.indexOf(DATA.id) >= 0}
         />
       </span>
       <span>
@@ -60,7 +76,7 @@ const Item = ({ item }) => {
       <span>{DATA.phoneNumber}</span>
       <span className={s.scrollBox}>{DATA.dogName}</span>
       <span>
-        <em className={'overflow-x-scroll'}>{DATA.accumulatedAmount}원</em>
+        <em className={'overflow-x-scroll'}>{DATA.accumulatedAmount}</em>
       </span>
       <span>{DATA.subscribe}</span>
       <span>{DATA.longUnconnected}</span>

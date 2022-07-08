@@ -75,12 +75,11 @@ $windowWidthForRightSideBorder: rem(850);
 
 
 .cont_viewer {
-  //border: rem(1) solid var(--color-line-03);
-  box-sizing: border-box;
-  height: rem(380);
-  width: 100%;
-  overflow-x: auto;
-  overflow-y: scroll;
+
+  //
+  //width: 100%;
+  //overflow-x: auto;
+  //overflow-y: scroll;
   .table {
 
     .table_header,
@@ -114,7 +113,6 @@ $windowWidthForRightSideBorder: rem(850);
   background-color: #fff;
   padding: rem(20) 0 rem(30);
   width: 100%;
-  margin-top: rem(20);
   display: flex;
   align-items: center;
   justify-content: center;

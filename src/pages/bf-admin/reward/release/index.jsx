@@ -40,13 +40,10 @@ const initialFormValues = {
   },
 };
 
-function ReleaseRewardPage(props) {
-  // console.log(props);
-  
-  const getFormValuesApiUrl = `/api/admin/rewards/personal`;
-  const getFormValuesApiUrl2 = `/api/admin/rewards/group`;
+function ReleaseRewardPage() {
+
   const postFormValuesApiUrlToGroup = `/api/admin/rewards/group`;
-  const postFormValuesApiUrlToPerson = `/api/admin/rewards/personal`;
+  const postFormValuesApiUrlToPersonal = `/api/admin/rewards/personal`;
 
   const router = useRouter();
   const mct = useModalContext();
@@ -103,7 +100,7 @@ function ReleaseRewardPage(props) {
         ...prevState,
         submit: true,
       }));
-      const postFormValuesApiUrl = target === 'GROUP' ? postFormValuesApiUrlToGroup : postFormValuesApiUrlToPerson;
+      const postFormValuesApiUrl = target === 'GROUP' ? postFormValuesApiUrlToGroup : postFormValuesApiUrlToPersonal;
       const filteredFormValues = {
         ...formValues,
         amount: transformClearLocalCurrency(formValues.amount),
