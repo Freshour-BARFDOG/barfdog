@@ -39,6 +39,13 @@ export const valid_isEmpty = (value) => {
 };
 
 
+export const valid_isNumberEmpty = (value) => {
+  const error = (Number(value) === 0 || !value) && '항목이 비어있습니다.'
+  return error;
+};
+
+
+
 
 export const valid_isEmptyArray = (arr) =>{
   let error;

@@ -1,5 +1,5 @@
 import React from 'react';
-import {valid_isEmpty, valid_isEmptyArray, valid_isEmptyCurrency} from "./validationPackage";
+import {valid_isEmpty, valid_isEmptyArray, valid_isNumberEmpty} from "./validationPackage";
 
 export const validate = (obj) => {
   let errors = {};
@@ -9,11 +9,11 @@ export const validate = (obj) => {
     const val = obj[key];
 
     switch (key) {
-      case 'name':
+      case 'expiredDate':
         errors[key] = valid_isEmpty(val);
         break;
-      case 'amount':
-        errors[key] = valid_isEmptyCurrency(val);
+      case 'couponId':
+        errors[key] = valid_isNumberEmpty(val);
         break;
       case 'memberIdList':
         errors[key] = valid_isEmptyArray(val);
