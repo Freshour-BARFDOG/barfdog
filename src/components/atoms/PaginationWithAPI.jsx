@@ -15,6 +15,7 @@ const Pagination = ({
   urlQuery,
   setPageData,
 }) => {
+  
   const router = useRouter();
   const query = router.query;
   const pageFromQuery = Number(query?.page) || 1;
@@ -35,7 +36,6 @@ const Pagination = ({
         const calcedPageIndex = (curPage - 1).toString();
         const defaultQuery = `?page=${calcedPageIndex}&size=${size}`;
         let urlQueries = urlQuery ? `${defaultQuery}&${urlQuery}` : defaultQuery;
-        console.log(`${apiURL}${urlQueries}`);
         const res = await getData(`${apiURL}${urlQueries}`);
         const pageData = res.data?.page;
         console.log(res);
@@ -57,6 +57,8 @@ const Pagination = ({
           await router.push({
             search: `?page=${newPageInfo.newPageNumber}`,
           });
+        }else{
+          setItemList([]);
         }
       } catch (err) {
         console.error(err);
@@ -68,7 +70,7 @@ const Pagination = ({
         }));
       }
     })();
-  }, [curPage, urlQuery]);
+  }, [curPage, urlQuery, apiURL]);
 
   const Num = ({ pagenum }) => {
     const calcedPageNum = pagenum + 1;

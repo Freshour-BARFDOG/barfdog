@@ -1,14 +1,14 @@
 import s from "../coupon.module.scss";
-
+import {global_couponType} from "/store/TYPE/global_couponType";
 
 
 
 
 
   const ItemList = ({ item }) => {
-    console.log(item);
+    // console.log(item);
     
-    let couponTarget;
+    let couponTarget= '';
     if(item.couponTarget === 'ALL'){
       couponTarget = '전체'
     } else  if(item.couponTarget === 'SUBSCRIBE'){
@@ -16,13 +16,20 @@ import s from "../coupon.module.scss";
     } else if (item.couponTarget === 'GENERAL') {
       couponTarget = '일반상품'
     }
-
-    // 쿠폰 타입 > AUTO_PUBLISHED : 자동발행 / 삭제불가
-    // 쿠폰 타입 > GENERAL_PUBLISHED  : 직접발행 / 유저 쿠폰함에 쿠폰 생성시킴 (고객사와 협의 후, 사용하지 않기로 협의된 기능)
-    // 쿠폰 타입 > CODE_PUBLISHED :  직접발행 / 유저가 코드 입력 후 쿠폰함에 생성
+    
+    let couponType;
+    if(item.couponType === global_couponType.AUTO_PUBLISHED){
+      couponType = '자동발행'
+    } else  if(item.couponType === global_couponType.CODE_PUBLISHED){
+      couponType = '코드발행'
+    } else if (item.couponType === global_couponType.GENERAL_PUBLISHED) {
+      couponType = '일반발행'
+    }
+  
+    
     const DATA = {
       id: item.id,
-      type: item.type || "자동발행쿠폰",
+      couponType: couponType,
       name: item.name,
       code: item.code || "-",
       description:
@@ -40,7 +47,7 @@ import s from "../coupon.module.scss";
 
     return (
       <li className={s.item} key={`item-${DATA.id}`}>
-        <span>{DATA.type}</span>
+        <span>{DATA.couponType}</span>
         <span>{DATA.code}</span>
         <span>{DATA.name}</span>
         <span><em className="overflow-x-scroll">{DATA.description}</em></span>

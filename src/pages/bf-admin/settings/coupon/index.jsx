@@ -13,7 +13,7 @@ import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
 import Tooltip from '/src/components/atoms/Tooltip';
 import Spinner from '/src/components/atoms/Spinner';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
-import {global_autoCouponType} from "/store/TYPE/autoCouponType";
+import {autoPublishedCouponType} from "/store/TYPE/global_couponType";
 import {global_gradeType} from "/store/TYPE/gradeType";
 import transformLocalCurrency from "/util/func/transformLocalCurrency";
 import transformClearLocalCurrency from "../../../../../util/func/transformClearLocalCurrency";
@@ -123,7 +123,7 @@ function CouponSettingPage() {
       submit: false,
     }));
   };
-
+가
   const onShowModalHandler = (message) => {
     mct.alertShow();
     setModalMessage(message);
@@ -152,7 +152,7 @@ function CouponSettingPage() {
                   <h2 className={s['title']}>자동발행 쿠폰</h2>
                   {formValues.map((coupon, index)=>{
                     const couponName = coupon.name.replace(/(\s*)/gi, "");
-                    const categoryList = global_autoCouponType; // ['정기구독할인쿠폰', '반려견생일쿠폰', '견주생일쿠폰']
+                    const categoryList = autoPublishedCouponType; // ['정기구독할인쿠폰', '반려견생일쿠폰', '견주생일쿠폰']
                     if(categoryList.indexOf(couponName) >= 0){
                       return <AutoPublishedCouponSettingInput
                         key={`${coupon.name}${coupon.id}`}

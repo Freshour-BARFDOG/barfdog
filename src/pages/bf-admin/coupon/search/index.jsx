@@ -4,18 +4,19 @@ import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
 import SearchBar from '/src/components/admin/form/searchBar';
-import Pagination from '/src/components/atoms/Pagination';
 import SearchPlainInput from '/src/components/admin/form/searchBar/SearchPlainInput';
 import SearchRadio from '/src/components/admin/form/searchBar/SearchRadio';
 import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
 import CouponList from './CouponList';
 import enterKey from '/util/func/enterKey';
-import { getData } from '/api/reqData';
 import Spinner from '/src/components/atoms/Spinner';
 import PaginationWithAPI from "/src/components/atoms/PaginationWithAPI";
+import Tooltip from "/src/components/atoms/Tooltip";
+import {global_couponType} from "/store/TYPE/global_couponType";
 
-// /delivery/:path:*
-// someURL/:path:
+
+
+
 
 /*-  auto: '/api/admin/coupons/auto', // 자동발행쿠폰
   - direct: '/api/admin/coupons/direct', // 직접발행쿠폰
@@ -40,47 +41,26 @@ const initialSearchValue = {
 function CouponListPage() {
   
   const apiDataQueryString = 'couponListResponseDtoList';
+  
+  const apiURL = {
+    auto:'/api/admin/coupons/auto',
+    direct: '/api/admin/coupons/direct'
+  }
   const searchPageSize = 10;
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList ] = useState([]);
   const [searchValue, setSearchValue] = useState(initialSearchValue);
   const [apiUrlWithQuery, setApiUrlWithQuery] = useState(initialApiUrlWithQuery);
-
-  // useEffect(() => {
-  //   if(!apiUrlWithQuery.url.length) return;
-  //   const query = apiUrlWithQuery.query || '?keyword=';
-  //   const url = apiUrlWithQuery.url;
-  //
-  //   const apiUrl = `${url}${query}`
-  //   if(!apiUrl) return;
-  //   (async () => {
-  //     try {
-  //       setIsLoading((prevState) => ({
-  //         ...prevState,
-  //         fetching: true,
-  //       }));
-  //       const res = await getData(apiUrl);
-  //       const data = res.data?._embedded[apiDataQueryString];
-  //       console.log(res);
-  //       // console.log(data)
-  //       setItemList(data);
-  //     } catch (err) {
-  //       console.error(err);
-  //       console.error('데이터를 가져올 수 없습니다.');
-  //       setItemList('')
-  //     }
-  //     await setIsLoading((prevState) => ({
-  //       ...prevState,
-  //       fetching: false,
-  //     }));
-  //   })();
-  // }, [apiUrlWithQuery]);
-
+  
+  
+  
   const onResetSearchValues = () => {
-    setSearchValue('');
+    setSearchValue(initialSearchValue);
   };
+  
 
   const onSearchHandler = () => {
+    // 서치벨류가 바뀌면 이거 작동하게 한다.
     const queryArr = [];
     let url = '';
     for (const key in searchValue) {
@@ -91,9 +71,9 @@ function CouponListPage() {
           break;
         case 'couponType':
           if(val === 'AUTO_PUBLISHED'){
-            url = '/api/admin/coupons/auto';
+            url = apiURL.auto;
           } else if(val === 'CODE_PUBLISHED') {
-            url = '/api/admin/coupons/direct';
+            url = apiURL.direct;
           }
           break;
       }
@@ -130,15 +110,17 @@ function CouponListPage() {
                 setSearchValue={setSearchValue}
                 title="종류"
                 name="couponType"
-                idList={['AUTO_PUBLISHED', 'CODE_PUBLISHED']}
+                idList={[global_couponType.AUTO_PUBLISHED, global_couponType.CODE_PUBLISHED]}
                 labelList={[ '자동발행', '직접발행']}
-                value={searchValue.type}
+                value={searchValue.couponType}
               />
             </SearchBar>
           </section>
           <section className="cont">
             <div className="cont_header clearfix">
-              <p className="cont_title cont-left">쿠폰목록 {isLoading.fetching && <Spinner />}</p>
+              <div className="cont_title cont-left">쿠폰목록
+                <Tooltip message={`1. 자동발행쿠폰은 생성할 수 없습니다.\n2. 코드발행쿠폰은 유저가 쿠폰코드 입력한 뒤 생성됩니다.`} messagePosition={'left'} wordBreaking={true} width={'240px'}/>
+                {isLoading.fetching && <Spinner />}</div>
               <div className="controls cont-left"></div>
             </div>
             <div className={`${s.cont_viewer}`}>

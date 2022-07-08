@@ -19,11 +19,20 @@ const SearchRadio = ({
   const initialValue = value || idList[0];
   const [selectedRadio, setSelectedRadio] = useState(initialValue); // * component 내부 value
 
-  useEffect(() => {
-    if(!searchValue){
-      setSelectedRadio(initialValue);
-    }
-  }, [searchValue]);
+  // useEffect(() => {
+  //   if(!searchValue){
+  //     console.log('서치벨류가 바낏을때, 초기화되는 조건 ')
+  //     setSelectedRadio(initialValue);
+  //   }
+  // }, [searchValue]);
+  //
+  useEffect( () => {
+    // 초기화
+    setSelectedRadio(initialValue);
+  }, [initialValue] );
+  
+  
+  
 
   const onChangeHandler = (e) => {
     const { id } = e.currentTarget;
