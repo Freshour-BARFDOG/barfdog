@@ -14,7 +14,7 @@ import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import transformClearLocalCurrency from '/util/func/transformClearLocalCurrency';
 import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 import Spinner from "/src/components/atoms/Spinner";
-import {validate} from "/util/func/validation/validation_coupon";
+import {validate} from "/util/func/validation/validation_createCupon";
 import {valid_couponCode, valid_hasFormErrors} from "/util/func/validation/validationPackage";
 import {postObjData} from "/api/reqData";
 import {useModalContext} from "/store/modal-context";
