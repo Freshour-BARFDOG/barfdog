@@ -8,29 +8,6 @@ import {global_areaType} from "/store/TYPE/areaType";
 
 
 export default function SearchGroupForm ({ formValues, setFormValues, formErrors})  {
-  
-  //
-  // const ageKeys = {
-  //   birthYearFrom: 'birthYearFrom',
-  //   birthYearTo: 'birthYearTo',
-  // }
-  // const [ages, setAges] = useState( '' );
-  // useEffect( () => {
-  //   const valueArr = Object.values(ages);
-  //   const birthYearData = valueArr.map((innerObj)=>innerObj.value);
-  //   const birthFrom = birthYearData[0];
-  //   let birthTo = birthYearData[1] || birthFrom;
-  //   if(Number(birthFrom) > Number(birthTo)){
-  //     birthTo = birthFrom;
-  //   }
-  //
-  //   setFormValues(prevState => ({
-  //     ...prevState,
-  //     [ageKeys.birthYearFrom]: birthFrom, // string
-  //     [ageKeys.birthYearTo]: birthTo, // string
-  //   }))
-  // }, [ages] );
-
 
   return (
     <>
@@ -82,7 +59,7 @@ export default function SearchGroupForm ({ formValues, setFormValues, formErrors
                   setValue={setFormValues}
                   name="area"
                   value={formValues?.area}
-                  idList={[global_areaType.ALL, global_areaType.ALL, global_areaType.NON_METRO]}
+                  idList={[global_areaType.ALL, global_areaType.METRO, global_areaType.NON_METRO]}
                   labelList={['전체', '수도권', '비수도권']}
                 />
               </div>
