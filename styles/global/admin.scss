@@ -328,6 +328,7 @@ $inputDefaultHeight: rem(38);
         height: $inputDefaultHeight;
         display: flex;
         align-items: center;
+        gap: rem(10);
       }
       .title {
         display: flex;
