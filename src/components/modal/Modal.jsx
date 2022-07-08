@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useModalContext } from "@store/modal-context";
-import zIndex from "/styles/global/zIndex.module.scss";
+import zIndex from "/styles/module/zIndex.module.scss";
 
 
 

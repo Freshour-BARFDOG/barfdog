@@ -6,29 +6,39 @@ import s from './searchUser.module.scss';
 import Checkbox from '/src/components/atoms/Checkbox';
 import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
 import UserList from './UserList';
-import SearchTextWithCategory from "/src/components/admin/form/searchBar/SearchTextWithCategory";
-import Spinner from "../../../components/atoms/Spinner";
-import {FullScreenLoading} from "../../../components/admin/fullScreenLoading";
-import PaginationWithAPI from "../../../components/atoms/PaginationWithAPI";
-import {getData} from "../../../../api/reqData";
+import SearchTextWithCategory from '/src/components/admin/form/searchBar/SearchTextWithCategory';
+import Spinner from '../../../../components/atoms/Spinner';
+import { FullScreenLoading } from '../../../../components/admin/fullScreenLoading';
+import PaginationWithAPI from '../../../../components/atoms/PaginationWithAPI';
+import { getData } from '../../../../../api/reqData';
+import enterKey from "../../../../../util/func/enterKey";
 
 
 
 
-const TEST_ITEM = [1, 2, 3, 4, 5,1,1,2];
+
+let initialSearchValues = {
+  email: '',
+  name: '',
+  from: '',
+  to: '',
+};
+
+
+
 
 export default function SearchUserPopup() {
-  
   const getListApiUrl = '/api/admin/members';
+  const searchPageSize = 10;
   const apiDataQueryString = 'queryMembersDtoList';
-  const initialQuery = 'email=user%40gmail.com&name=&from=2020-05-11&to=2022-06-30';
- 
-  const [isLoading, setIsLoading] = useState({});
-  const [urlQuery, setUrlQuery] = useState(initialQuery);
-  const [searchValue, setSearchValue] = useState({});
-  const [userList, setUserList] = useState(TEST_ITEM);
 
-  // console.log(userList)
+  const [isLoading, setIsLoading] = useState({});
+  const [searchValues, setSearchValues] = useState(initialSearchValues);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [itemList, setItemList] = useState([1,2,3,49]);
+
+  console.log(searchValues);
+  console.log(searchQuery);
 
   const onCloseWindowHandler = () => {
     // 성공하고나서, window 닫는다.
@@ -37,20 +47,23 @@ export default function SearchUserPopup() {
       window.close();
     }
   };
-
-  const onSearchHandler = async () => {
-    // 검색어를 url query에다가 넣는다.
-    const res = await getData(`/api/admin/rewards?page=1&size=5&email="a"&name=""&from=2002-07-06&to=2022-07-06`);
-    console.log(res);
-  }
   
+  const onSearchHandler = () => {
+    const queryArr = [];
+    for (const key in searchValues) {
+      const val = searchValues[key];
+      const thisQuery = `${key}=${val}`;
+      queryArr.push(thisQuery);
+    }
+    
+    const query = `${queryArr.join('&')}`;
+    setSearchQuery(query);
+  };
   
-  
-  //
-  // if(isLoading){
-  //   return <FullScreenLoading/>
-  // }
-  
+  const onSearchInputKeydown = (e) => {
+    console.log('실행')
+    enterKey(e, onSearchHandler);
+  };
   
   return (
     <>
@@ -70,24 +83,32 @@ export default function SearchUserPopup() {
               <div className={s['search-wrap']}>
                 <SearchTextWithCategory
                   className={s.searchBar}
-                  searchValue={searchValue}
-                  setSearchValue={setSearchValue}
+                  searchValue={searchValues}
+                  setSearchValue={setSearchValues}
+                  onSearch={onSearchInputKeydown}
                   title="회원검색"
                   name="keyword"
                   id="keyword"
                   options={[
-                    { label: "이메일", value: "email" },
-                    { label: "이름", value: "name" },
+                    { label: '이메일', value: 'email' },
+                    { label: '이름', value: 'name' },
                   ]}
-                  searchButton={<button className={'admin_btn solid basic_l'} type={'button'} onClick={onSearchHandler}>검색</button>}
+                  searchButton={
+                    <button
+                      className={'admin_btn solid basic_l'}
+                      type={'button'}
+                      onClick={onSearchHandler}
+                    >
+                      검색
+                    </button>
+                  }
                 />
               </div>
               <div className={s.cont_viewer}>
                 <div className={s.table}>
                   <ul className={s.table_header}>
                     <li className={s.table_th}>
-                      <Checkbox
-                      />
+                      <Checkbox />
                     </li>
                     <li className={s.table_th}>상세보기</li>
                     <li className={s.table_th}>등급</li>
@@ -99,23 +120,28 @@ export default function SearchUserPopup() {
                     <li className={s.table_th}>구독여부</li>
                     <li className={s.table_th}>장기미접속</li>
                   </ul>
-                  {userList.length ? (
-                    <UserList items={userList} />
-                  ) : (
-                    <AmdinErrorMessage text="쿠폰을 발행할 대상이 없습니다." />
-                  )}
+                  {(() => {
+                    if (isLoading.fetching) {
+                      return <Spinner floating={true} />;
+                    } else if (!itemList.length) {
+                      return <AmdinErrorMessage text="검색결과가 존재하지 않습니다." />;
+                    } else {
+                      return <UserList items={itemList} />;
+                    }
+                  })()}
+                  {}
                   <div className={s['pagination-section']}>
                     <PaginationWithAPI
                       apiURL={getListApiUrl}
-                      size={1}
+                      urlQuery={searchQuery}
                       queryItemList={apiDataQueryString}
-                      setItemList={setUserList}
+                      size={searchPageSize}
+                      setItemList={setItemList}
                       setIsLoading={setIsLoading}
-                      />
+                    />
                   </div>
                 </div>
               </div>
-              
             </div>
           </main>
           <section className={s['btn-section']}>
@@ -132,17 +158,3 @@ export default function SearchUserPopup() {
     </>
   );
 }
-
-//
-// export async function getServerSideProps (ctx) {
-//   const { params, req, res} = ctx;
-//   console.log(params)
-//   console.log('REQUEST: ',req)
-//   console.log('RESPONSE: ', res);
-//
-//   return {
-//     props: {
-//       id: 'user1'   }
-//   }
-//
-// }

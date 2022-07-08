@@ -1,5 +1,5 @@
 @import '/styles/global/rem';
-@import 'styles/global/zIndex.module.scss';
+@import '../../../styles/module/zIndex.module';
 
 $mobileMenuHeight: rem(48);
 .mobileNav {

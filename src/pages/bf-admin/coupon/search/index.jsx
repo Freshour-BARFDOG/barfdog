@@ -10,57 +10,44 @@ import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
 import CouponList from './CouponList';
 import enterKey from '/util/func/enterKey';
 import Spinner from '/src/components/atoms/Spinner';
-import PaginationWithAPI from "/src/components/atoms/PaginationWithAPI";
-import Tooltip from "/src/components/atoms/Tooltip";
-import {global_couponType} from "/store/TYPE/global_couponType";
-
-
-
-
+import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
+import Tooltip from '/src/components/atoms/Tooltip';
+import { global_couponType } from '/store/TYPE/global_couponType';
 
 /*-  auto: '/api/admin/coupons/auto', // 자동발행쿠폰
   - direct: '/api/admin/coupons/direct', // 직접발행쿠폰
   - directOnCode: '/api/admin/coupons/publication/code', // 직접발행 && 쿠폰코드로 생성한 쿠폰
   - directOnGeneral: '/api/admin/coupons/publication/general', // 직접발행 && 쿠폰코드없이 (! 삭제된 기능)
 * */
-
-
-const initialApiUrlWithQuery = {
-  keyword: '',
-  url: '/api/admin/coupons/auto',
-  query: 'keyword='
-};
-
 const initialSearchValue = {
   keyword: '',
   couponType: 'AUTO_PUBLISHED', // AUTO_PUBLISHED,  CODE_PUBLISHED
 };
 
-
+const initialApiUrlWithQuery = {
+  keyword: '',
+  url: '/api/admin/coupons/auto',
+  query: 'keyword=',
+};
 
 function CouponListPage() {
-  
   const apiDataQueryString = 'couponListResponseDtoList';
-  
+
   const apiURL = {
-    auto:'/api/admin/coupons/auto',
-    direct: '/api/admin/coupons/direct'
-  }
+    auto: '/api/admin/coupons/auto',
+    direct: '/api/admin/coupons/direct',
+  };
   const searchPageSize = 10;
   const [isLoading, setIsLoading] = useState({});
-  const [itemList, setItemList ] = useState([]);
+  const [itemList, setItemList] = useState([]);
   const [searchValue, setSearchValue] = useState(initialSearchValue);
   const [apiUrlWithQuery, setApiUrlWithQuery] = useState(initialApiUrlWithQuery);
-  
-  
-  
+
   const onResetSearchValues = () => {
     setSearchValue(initialSearchValue);
   };
-  
 
   const onSearchHandler = () => {
-    // 서치벨류가 바뀌면 이거 작동하게 한다.
     const queryArr = [];
     let url = '';
     for (const key in searchValue) {
@@ -70,9 +57,9 @@ function CouponListPage() {
           queryArr.push(`${key}=${val}`);
           break;
         case 'couponType':
-          if(val === 'AUTO_PUBLISHED'){
+          if (val === 'AUTO_PUBLISHED') {
             url = apiURL.auto;
-          } else if(val === 'CODE_PUBLISHED') {
+          } else if (val === 'CODE_PUBLISHED') {
             url = apiURL.direct;
           }
           break;
@@ -111,16 +98,23 @@ function CouponListPage() {
                 title="종류"
                 name="couponType"
                 idList={[global_couponType.AUTO_PUBLISHED, global_couponType.CODE_PUBLISHED]}
-                labelList={[ '자동발행', '직접발행']}
+                labelList={['자동발행', '직접발행']}
                 value={searchValue.couponType}
               />
             </SearchBar>
           </section>
           <section className="cont">
             <div className="cont_header clearfix">
-              <div className="cont_title cont-left">쿠폰목록
-                <Tooltip message={`1. 자동발행쿠폰은 생성할 수 없습니다.\n2. 코드발행쿠폰은 유저가 쿠폰코드 입력한 뒤 생성됩니다.`} messagePosition={'left'} wordBreaking={true} width={'240px'}/>
-                {isLoading.fetching && <Spinner />}</div>
+              <div className="cont_title cont-left">
+                쿠폰목록
+                <Tooltip
+                  message={`1. 자동발행쿠폰은 생성할 수 없습니다.\n2. 코드발행쿠폰은 유저가 쿠폰코드 입력한 뒤 생성됩니다.`}
+                  messagePosition={'left'}
+                  wordBreaking={true}
+                  width={'240px'}
+                />
+                {isLoading.fetching && <Spinner />}
+              </div>
               <div className="controls cont-left"></div>
             </div>
             <div className={`${s.cont_viewer}`}>
@@ -136,16 +130,21 @@ function CouponListPage() {
                   <li className={s.table_th}>삭제</li>
                 </ul>
                 {itemList.length ? (
-                  <CouponList
-                    items={itemList}
-                  />
+                  <CouponList items={itemList} />
                 ) : (
                   <AmdinErrorMessage text="조회된 데이터가 없습니다." />
                 )}
               </div>
             </div>
-            <div className={s["pagination-section"]}>
-              <PaginationWithAPI apiURL={apiUrlWithQuery.url} size={searchPageSize} setItemList={setItemList} queryItemList={apiDataQueryString} urlQuery={apiUrlWithQuery.query} setIsLoading={setIsLoading}/>
+            <div className={s['pagination-section']}>
+              <PaginationWithAPI
+                apiURL={apiUrlWithQuery.url}
+                size={searchPageSize}
+                setItemList={setItemList}
+                queryItemList={apiDataQueryString}
+                urlQuery={apiUrlWithQuery.query}
+                setIsLoading={setIsLoading}
+              />
             </div>
           </section>
         </AdminContentWrapper>

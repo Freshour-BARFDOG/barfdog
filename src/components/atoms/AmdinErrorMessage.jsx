@@ -8,7 +8,7 @@ const Wrap = Styled.div`
   // border: ${rem(1)} solid var(--color-line-03);
   padding: ${rem(30)};
   text-align:center;
-  margin-top: ${rem(-1)};
+  // margin-top: ${rem(-1)};
   position:relative;
   z-index:0;
 `;

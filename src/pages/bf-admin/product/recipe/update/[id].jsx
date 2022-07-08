@@ -40,14 +40,15 @@ const initialFileValues = {
   surveyResult: {
     file: '',
     filename: '',
-    thumbnailUrl: '',
+    thumbnailUri: '',
   },
   recipeThumb: {
     file: '',
     filename: '',
-    thumbnailUrl: '',
+    thumbnailUri: '',
   },
 };
+
 
 function UpdateRecipePage( { id }) {
   const getFormValuesApiUrl = `/api/recipes/${id}`;
@@ -63,7 +64,8 @@ function UpdateRecipePage( { id }) {
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   
-  console.log(formValues);
+  // console.log(thumbFile)
+  // console.log(formValues);
   
   useEffect(() => {
     if (!id) return;
@@ -90,7 +92,6 @@ function UpdateRecipePage( { id }) {
           descriptionForSurvey: DATA.descriptionForSurvey,
           leaked: DATA.leaked,
           inStock: DATA.inStock,
-  
         };
         setFormValues(initialFormValues);
   
@@ -98,13 +99,13 @@ function UpdateRecipePage( { id }) {
         const thumbFileData = {
           surveyResult: {
             file:null,
-            filename:'TEST // 유효성검사는 끝남 -> 파일경로 & 이름을 받음된다 ',
-            thumbnailUrl: DATA.thumbnailUrl1
+            filename: DATA.filename1,
+            thumbnailUri: DATA.thumbnailUri1
           },
           recipeThumb: {
             file:null,
-            filename:'TEST // 유효성검사는 끝남 -> 파일경로 & 이름을 받음된다 ',
-            thumbnailUrl: DATA.thumbnailUrl2
+            filename: DATA.filename2,
+            thumbnailUri: DATA.thumbnailUri2
       
           },
         }
@@ -440,7 +441,6 @@ function UpdateRecipePage( { id }) {
                   </div>
                 </div>
                 {/* cont_divider */}
-                
                 <div className="cont_divider">
                   <div className="input_row multipleLines">
                     <div className="title_section">
@@ -454,10 +454,10 @@ function UpdateRecipePage( { id }) {
                     </div>
                     <div className="inp_section">
                       <label className="inp_wrap file" htmlFor="surveyResult">
-                        {(thumbFile.surveyResult.file || thumbFile.surveyResult.thumbnailUrl) && (
+                        {(thumbFile.surveyResult.file || thumbFile.surveyResult.thumbnailUri) && (
                           <PreviewImage
                             file={thumbFile.surveyResult.file}
-                            thumbLink={thumbFile.surveyResult?.thumbnailUrl}
+                            thumbLink={thumbFile.surveyResult?.thumbnailUri}
                             backgroundColor={'transparent'}
                             style={{ margin: '0', maxWidth: '200px', marginBottom: '10px' }}
                           />
@@ -497,10 +497,10 @@ function UpdateRecipePage( { id }) {
                     </div>
                     <div className="inp_section">
                       <label className="inp_wrap file" htmlFor="recipeThumb">
-                        {(thumbFile.recipeThumb.file || thumbFile.recipeThumb.thumbnailUrl) && (
+                        {(thumbFile.recipeThumb.file || thumbFile.recipeThumb.thumbnailUri) && (
                           <PreviewImage
                             file={thumbFile.recipeThumb.file}
-                            thumbLink={thumbFile.recipeThumb?.thumbnailUrl}
+                            thumbLink={thumbFile.recipeThumb?.thumbnailUri}
                             backgroundColor={'transparent'}
                             style={{ margin: '0', maxWidth: '200px', marginBottom: '10px' }}
                           />
@@ -580,7 +580,6 @@ function UpdateRecipePage( { id }) {
               </form>
             </div>
           </section>
-          
           <div className="cont_bottom">
             <div className="btn_section">
               <button
@@ -629,7 +628,6 @@ export default UpdateRecipePage;
 
 UpdateRecipePage.getInitialProps = async ({ query }) => {
   const { id } = query
-  
   return { id : id};
   
 }

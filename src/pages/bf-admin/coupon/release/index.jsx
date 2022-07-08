@@ -54,19 +54,17 @@ function ReleaseCouponPage() {
 
 
 
-  const [issuedTarget, setIssuedTarget] = useState({issuedTarget:'ALL'});
+  const [issuedTarget, setIssuedTarget] = useState({type:'ALL'});
 
   const [formValues, setFormValues] = useState(initialFormValues['ALL']);
   const [formErrors, setFormErrors] = useState(initialFormErrors);
 
 
+  console.log(formValues)
   useEffect(() => {
     // 발행대상이 바뀌었을 경우 , formValue초기화
-    // formError 초기화
-    setFormValues(initialFormValues[issuedTarget.issuedTarget]);
-    // console.log(issuedTarget.issuedTarget)
-    // console.log(initialFormValues)
-    console.log(initialFormValues[issuedTarget.issuedTarget])
+    const selectedFormValues = initialFormValues[issuedTarget.type]
+    setFormValues(selectedFormValues);
   }, [issuedTarget]);
 
 
@@ -101,7 +99,7 @@ function ReleaseCouponPage() {
                     <div className="inp_box">
                       <CustomRadio
                         setValue={setIssuedTarget}
-                        name="issuedTarget"
+                        name="type"
                         idList={['ALL', 'GROUP', 'PERSONAL']}
                         labelList={['전체', '그룹', '개인']}
                       />
@@ -111,8 +109,8 @@ function ReleaseCouponPage() {
                   </div>
                 </div>
               </div>
-              {issuedTarget.issuedTarget === 'GROUP' && (<SearchGroupForm setFormValues={setFormValues} />)}
-              {issuedTarget.issuedTarget === 'PERSONAL' && (<SearchPersonalForm setFormValues={setFormValues} />)}
+              {issuedTarget.type === 'GROUP' && (<SearchGroupForm setFormValues={setFormValues} />)}
+              {issuedTarget.type === 'PERSONAL' && (<SearchPersonalForm setFormValues={setFormValues} />)}
               <div className="cont_divider">
                 <div className="input_row">
                   <div className="title_section fixedHeight">

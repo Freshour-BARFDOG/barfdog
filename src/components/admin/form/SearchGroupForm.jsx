@@ -29,8 +29,6 @@ export default function SearchGroupForm ({ formValues, setFormValues, formErrors
   //     [ageKeys.birthYearTo]: birthTo, // string
   //   }))
   // }, [ages] );
-  //
-  //
 
 
   return (
@@ -46,7 +44,7 @@ export default function SearchGroupForm ({ formValues, setFormValues, formErrors
             <div className="inp_section">
               <div className="inp_box">
                 <SelectUserGrades id={'gradeList'} setFormValues={setFormValues} />
-                {formErrors.gradeList && (
+                {formErrors?.gradeList && (
                   <ErrorMessage>{formErrors.gradeList}</ErrorMessage>
                 )}
               </div>
@@ -63,7 +61,7 @@ export default function SearchGroupForm ({ formValues, setFormValues, formErrors
             <div className="inp_section">
               <div className="inp_box">
                 <SelectUserAges setFormValues={setFormValues} fromId={'birthYearFrom'} toId={'birthYearTo'} />
-                {(formErrors.birthYearFrom ||  formErrors.birthYearTo) && (
+                {(formErrors?.birthYearFrom ||  formErrors?.birthYearTo) && (
                   <ErrorMessage>{formErrors.birthYearFrom || formErrors.birthYearTo}</ErrorMessage>
                 )}
               </div>
@@ -82,7 +80,7 @@ export default function SearchGroupForm ({ formValues, setFormValues, formErrors
                 <CustomRadio
                   setValue={setFormValues}
                   name="area"
-                  value={formValues.area}
+                  value={formValues?.area}
                   idList={['ALL', 'METRO', 'NON-METRO']}
                   labelList={['전체', '수도권', '비수도권']}
                 />

@@ -3,8 +3,8 @@ import React, {useState} from 'react';
 import Checkbox from "/src/components/atoms/Checkbox";
 import AmdinErrorMessage from "/src/components/atoms/AmdinErrorMessage";
 import dynamic from "next/dynamic";
-import UserList from "../../../pages/popup/searchUser/UserList";
-import s from "../../../pages/popup/searchUser/searchUser.module.scss";
+import UserList from "../../../pages/bf-admin/popup/searchUser/UserList";
+import s from "../../../pages/bf-admin/popup/searchUser/searchUser.module.scss";
 import ErrorMessage from "../../atoms/ErrorMessage";
 const WindowOpener = dynamic(() => import('/util/func/window-opener'), { ssr: false });
 
@@ -43,7 +43,7 @@ export default function SearchPersonalForm ({id, setFormValues, formErrors})  {
       <div className="optional-section">
         <div className="search-box">
           <div className="controls">
-            <WindowOpener url={'/popup/searchUser'} bridge={onReceivePopupData} options={{width:825,height:642}}>
+            <WindowOpener url={'/bf-admin/popup/searchUser'} bridge={onReceivePopupData} options={{width:825,height:642}}>
               <span className={'admin_btn solid basic_m'} type={'button'}>회원검색</span>
             </WindowOpener>
             <button className={'admin_btn line basic_m'} type={'button'}>선택삭제</button>

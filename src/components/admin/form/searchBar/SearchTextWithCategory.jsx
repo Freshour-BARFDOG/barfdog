@@ -12,48 +12,60 @@ const SearchTextWithCategory = ({
   className,
   options = [],
   searchButton,
+  onSearch,
 }) => {
-  // const optionalRef = useRef();
 
   const initialValue = options[0].value || '';
-  const [selectedValue, setSelectedValue] = useState(initialValue);
+  const [selectedCategory, setSelectedCategory] = useState(initialValue);
 
-  const userInfoQuery = "query";
-
-  useEffect(() => {
-    if (!searchValue) {
-      initializeOptionalButtons();
-    }
-  }, [searchValue]);
-
-  const initializeOptionalButtons = () => {
-    setSelectedValue(initialValue);
-    setSearchValue((prevState) => ({
-      ...prevState,
-      [userInfoQuery]: '',
-    }));
-  };
+  console.log(searchValue)
+  // useEffect(() => {
+  //   if (!searchValue) {
+  //     initializeOptionalButtons();
+  //   }
+  // }, [searchValue]);
+  //
+  // const initializeOptionalButtons = () => {
+  //   setSelectedCategory(initialValue);
+  //   setSearchValue((prevState) => ({
+  //     ...prevState,
+  //     [userInfoQuery]: '',
+  //   }));
+  // };
 
   const onSelectChangeHandler = (e) => {
     const thisSelect = e.currentTarget;
     const value = thisSelect.value;
-    setSelectedValue(value);
-    if (setSearchValue && typeof setSearchValue === "function") {
-      setSearchValue((prevState) => ({
-        ...prevState,
-        [name]: value,
-      }));
-    }
+    setSelectedCategory(value);
+    const searchQuery = value;
+    setSearchValue((prevState) => {
+      let tobeInitializedValueObj = {}
+      options.forEach(option=> {
+        if(option.value !== searchQuery){
+          tobeInitializedValueObj = {
+            ...tobeInitializedValueObj,
+            [option.value]: ''
+          }
+        }
+      });
+      return {
+      ...prevState,
+        [searchQuery]: '',
+        ...tobeInitializedValueObj,
+      }
+    });
   };
 
-  const onTextChangeHandler = (e) => {
+  const onInputChangeHandler = (e) => {
     const { value } = e.currentTarget;
     setSearchValue((prevState) => ({
       ...prevState,
-      [userInfoQuery]: value,
+      [selectedCategory]: value,
     }));
   };
-
+  
+  
+  
   if (!options.length) return;
 
   return (
@@ -69,7 +81,7 @@ const SearchTextWithCategory = ({
             name={name}
             id={id || name}
             onChange={onSelectChangeHandler}
-            value={selectedValue}
+            value={selectedCategory}
           >
             {options.map((option, i) => {
               return i === 0 ? (
@@ -89,8 +101,9 @@ const SearchTextWithCategory = ({
           </select>
           <input
             type="text"
-            onChange={onTextChangeHandler}
-            value={searchValue[userInfoQuery] || ''}
+            onChange={onInputChangeHandler}
+            onKeyDown={onSearch}
+            value={searchValue[selectedCategory] || ''}
           />
           {searchButton}
         </div>

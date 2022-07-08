@@ -36,6 +36,7 @@ const Pagination = ({
         const calcedPageIndex = (curPage - 1).toString();
         const defaultQuery = `?page=${calcedPageIndex}&size=${size}`;
         let urlQueries = urlQuery ? `${defaultQuery}&${urlQuery}` : defaultQuery;
+        console.log(urlQueries);
         const res = await getData(`${apiURL}${urlQueries}`);
         const pageData = res.data?.page;
         console.log(res);
