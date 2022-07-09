@@ -48,11 +48,16 @@ import {putObjData} from "/api/reqData";
     const onInactiveItemHandler = async (e) => {
       const button = e.currentTarget;
       const apiURL = button.dataset.apiUrl;
-      const name = DATA.name;
-      if (confirm(`정말 삭제하시겠습니까?\n쿠폰명: ${name}`)) {
-        const res = await putObjData(apiURL, {id:DATA.id});
-        console.log(res)
-        // window.location.reload();
+      
+      if (confirm(`정말 삭제하시겠습니까?\n쿠폰명: ${DATA.name}`)) {
+        const res = await putObjData(apiURL, {id:DATA.id});// rl 'http://localhost:8080/api/admin/coupons/3550/inactive' -i -X PUT \
+        console.log('쿠폰삭제결과',res);
+        if(res.isDone){
+          window.location.reload();
+        } else{
+          alert('쿠폰 삭제에 실패하였습니다. 새로고침 후 다시 시도해주세요.');
+        }
+        
       }
     };
   
