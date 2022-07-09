@@ -149,8 +149,8 @@ function CreateCouponPage() {
       if (res.isDone) {
         onShowModalHandler('쿠폰이 성공적으로 등록되었습니다.');
         setIsSubmitted(true);
-      } else {
-        alert(res.error, '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.');
+      } else{
+        alert(`Error: ${res.error}`);
       }
     } catch (err) {
       alert('API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.');
