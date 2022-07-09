@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import PopupWrapper from '/src/components/popup/PopupWrapper';
 import { PopupCloseButton_typeX } from '/src/components/popup/PopupCloseButton';
@@ -12,7 +12,7 @@ import { transformDateWithHyphen, transformToday } from '/util/func/transformDat
 import {valid_isTheSameArray} from "/util/func/validation/validationPackage";
 import AmdinErrorMessage from "/src/components/atoms/AmdinErrorMessage";
 import Spinner from "/src/components/atoms/Spinner";
-import {TEST_MEMBERS} from "/store/data/test/user";
+import {useMemberList} from "/store/data/test/user"; //  ! TESTTESTTESTTESTTESTTESTTEST
 
 
 
@@ -23,20 +23,32 @@ let initialSearchValues = {
   to: transformToday(),
 };
 
-
-
 export default function SearchUserPopup() {
+  
+  const TEST_MEMBERS = useMemberList();
+  
   const getListApiUrl = '/api/admin/members';
+  // const getListApiUrl = '/api/admin/members/publication';
   const searchPageSize = 10;
   const apiDataQueryString = 'queryMembersDtoList';
+  // const apiDataQueryString = 'memberPublishResponseDtoList';
 
   const [isLoading, setIsLoading] = useState({});
   const [searchValues, setSearchValues] = useState(initialSearchValues);
   const [searchQuery, setSearchQuery] = useState('');
-  const [itemList, setItemList] = useState(TEST_MEMBERS
-  );
-  const [selectedItems, setSelectedItems] = useState([]);
-
+  const [itemList, setItemList] = useState(TEST_MEMBERS);
+  const [selectedMemberIdList, setSelectedMemberIdList] = useState([]);
+  
+  
+  
+  // ! TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST
+  useEffect( () => {
+    // setItemList(TEST_MEMBERS.concat(TEST_MEMBERS))
+    setItemList(TEST_MEMBERS)
+  }, [TEST_MEMBERS] );
+  // ! TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST
+  
+  
 
   const onSearchHandler = () => {
     const queryArr = [];
@@ -51,35 +63,34 @@ export default function SearchUserPopup() {
   };
 
   const onSearchInputKeydown = (e) => {
-    console.log('실행');
     enterKey(e, onSearchHandler);
   };
 
+  
+  
   const onCloseWindowHandler = () => {
-
-    if(selectedItems.length === 0 ){
+    console.log(window.opener)
+    if(selectedMemberIdList.length === 0 ){
       alert('선택된 회원이 없습니다.')
-    }else {
-      if (confirm(`선택된 ${selectedItems.length}명의 회원을 추가 하시겠습니까?`)) {
-        window.opener.onSuccess(selectedItems);
+    }else if(selectedMemberIdList.length && confirm(`선택된 ${selectedMemberIdList.length}명의 회원을 추가 하시겠습니까?`) ){
+        window.opener.onSuccess(selectedMemberIdList);
         window.close();
-      }
     }
 
   };
   
   const onAllSelectItemsList = (checked)=>{
     if(checked){
-      setSelectedItems(itemList.map(item=> item.id)); // 모두 선택
+      setSelectedMemberIdList(itemList.map(item=> item.id)); // 모두 선택
     }else {
-      setSelectedItems([]); //초기화
+      setSelectedMemberIdList([]); //초기화
     }
   }
 
-  const valid_allCheckboxexChecked = ()=>{
-    if(!Array.isArray(itemList) || !Array.isArray(selectedItems)) return;
+  const valid_allCheckboxesChecked = ()=>{
+    if(!Array.isArray(itemList) || !Array.isArray(selectedMemberIdList)) return;
     const allSelectedList = itemList.map(item=>item.id);
-    return valid_isTheSameArray(allSelectedList, selectedItems);
+    return valid_isTheSameArray(allSelectedList, selectedMemberIdList);
   };
 
   
@@ -127,7 +138,7 @@ export default function SearchUserPopup() {
                 <div className={s.table}>
                   <ul className={`${s.table_header}`}>
                     <li className={s.table_th}>
-                      <Checkbox onClick={onAllSelectItemsList} checked={valid_allCheckboxexChecked()}/>
+                      <Checkbox onClick={onAllSelectItemsList} checked={valid_allCheckboxesChecked()}/>
                     </li>
                     <li className={s.table_th}>상세보기</li>
                     <li className={s.table_th}>등급</li>
@@ -145,11 +156,11 @@ export default function SearchUserPopup() {
                     } else if (!itemList.length) {
                       return <AmdinErrorMessage text="검색결과가 존재하지 않습니다." />;
                     } else {
-                      return <UserList items={itemList} setSelectedItems={setSelectedItems} selectedItems={selectedItems}/>;
+                      return <UserList items={itemList} setSelectedItems={setSelectedMemberIdList} selectedItems={selectedMemberIdList}/>;
                     }
                   })()}
                 </div>
-                {itemList.length > 0 && <div className={s['pagination-section']}>
+                <div className={s['pagination-section']}>
                   <PaginationWithAPI
                     apiURL={getListApiUrl}
                     urlQuery={searchQuery}
@@ -158,7 +169,7 @@ export default function SearchUserPopup() {
                     setItemList={setItemList}
                     setIsLoading={setIsLoading}
                   />
-                </div>}
+                </div>
               </div>
             </div>
           </main>

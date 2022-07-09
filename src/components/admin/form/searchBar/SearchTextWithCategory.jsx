@@ -70,10 +70,10 @@ const SearchTextWithCategory = ({
   return (
     <>
       <div className={`${s["search-row"]} ${className}`}>
-        <h4 className={s["title"]}>
+        <label className={s["title"]} htmlFor={'popup-searchUser-keyword'}>
           {title}
           {tooltip && <span className={s["tooltip-wrap"]}>{tooltip}</span>}
-        </h4>
+        </label>
         <div className={`${s["inp-wrap"]} ${s["textWidhCategory"]}`}>
           <select
             className="admin_select"
@@ -99,6 +99,7 @@ const SearchTextWithCategory = ({
             })}
           </select>
           <input
+            id={"popup-searchUser-keyword"}
             type="text"
             onChange={onInputChangeHandler}
             onKeyDown={onSearch}

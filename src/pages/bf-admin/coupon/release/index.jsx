@@ -65,6 +65,7 @@ function ReleaseCouponPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [couponOptions, setCouponOptions] = useState([]);
 
+  // console.log(formValues)
   useEffect(() => {
     const selectedFormValues = initialFormValues[target];
     setFormValues(selectedFormValues);
@@ -105,6 +106,8 @@ function ReleaseCouponPage() {
     })();
   }, []);
 
+  
+  
   const onInputChangeHandler = (event) => {
     const input = event.currentTarget;
     const { id, value } = input;
@@ -128,7 +131,9 @@ function ReleaseCouponPage() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitted) return console.error('이미 제출된 양식입니다.');
     // console.log(formValues);
+    // ! IMPORTANT : submit 이후 enterKey event로 trigger되는 중복submit 방지
     const filteredFormValues = {
       ...formValues,
       couponId: Number(formValues.couponId),
@@ -139,14 +144,17 @@ function ReleaseCouponPage() {
     const isPassed = valid_hasFormErrors(errObj);
     if (!isPassed) {
       return alert('유효하지 않은 항목이 있습니다.');
-    } else if (isSubmitted) {
-      // ! IMPORTANT : submit 이후 enterKey event로 trigger되는 중복submit 방지
-      alert('이미 제출된 양식입니다.');
-      router.back();
-      return;
+    }
+    let targetInKorean;
+    if(target === 'PERSONAL'){
+      targetInKorean ='개인 회원'
+    } else if (target === 'GROUP') {
+      targetInKorean ='그룹'
+    } else if(target === 'ALL' ) {
+      targetInKorean ='전체 회원'
     }
     const expiredDate = valid_expireDate(filteredFormValues.expiredDate).expiredDate;
-    const confirmMessage = `* 쿠폰을 정말 발행하시겠습니까?\n- 유효기간: ~${filteredFormValues.expiredDate}까지\n- 남은일수: ${expiredDate}일\n- 발급대상:${target}`;
+    const confirmMessage = `* 쿠폰을 정말 발행하시겠습니까?\n- 유효기간: ~${filteredFormValues.expiredDate}까지\n- 남은일수: ${expiredDate}일\n- 발급대상: ${targetInKorean}`;
     if (!confirm(confirmMessage)) return;
 
     try {
