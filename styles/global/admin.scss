@@ -302,11 +302,14 @@ $inputDefaultHeight: rem(38);
     padding-top: rem(15);
     margin-top: rem(15);
     border-top: rem(1) solid var(--color-line-03);
-    overflow: hidden;
-
-    button:not(:last-child) {
-      margin-right: rem(5);
-    }
+    display: flex;
+    column-gap:rem(5);
+    justify-content: flex-start;
+    align-items: center;
+    //overflow: hidden;
+    //button:not(:last-child) {
+    //  margin-right: rem(5);
+    //}
   }
 
   .input_row {
