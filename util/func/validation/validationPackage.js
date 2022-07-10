@@ -441,7 +441,6 @@ export const valid_isTheSameArray = (beforeArr1, beforeArr2) => {
 
 
 export const valid_date = (d, type='future') => {
-  console.log('type: ',type);
   let error = '';
   let expiredDate = '';
   const convertedDate = deleteHypenOnDate(d);
@@ -470,3 +469,17 @@ export const valid_date = (d, type='future') => {
   return { error, expiredDate };
 }
 
+
+export const valid_maxLength = (val, maxLength)=>{
+  let error = '';
+  if(!maxLength || typeof maxLength !== 'number') {
+    new Error('Required maxLength of Number Type');
+  }
+  
+  
+  if(val.length > maxLength){
+    error = '작성 가능한 최대 글자수를 초과했습니다.';
+  }
+  
+  return error;
+}

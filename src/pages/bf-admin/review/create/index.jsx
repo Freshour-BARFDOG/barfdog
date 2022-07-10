@@ -17,6 +17,8 @@ import { getData, postObjData } from '/api/reqData';
 import CustomSelect from '/src/components/admin/form/CustomSelect';
 import Spinner from '/src/components/atoms/Spinner';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
+import { useModalContext } from '/store/modal-context';
+import FileInput from '/src/components/admin/form/FileInput';
 
 const initialFormValues = {
   // type: '', // str
@@ -33,6 +35,8 @@ const initialFormValues = {
 function CreateRewardPage() {
   const router = useRouter();
   const postFormValuesApiUrl = '/api/admin/reviews';
+  const mct = useModalContext();
+  const maxContentsLength = 1000;
 
   const [modalMessage, setModalMessage] = useState('');
   const [isLoading, setIsLoading] = useState({});
@@ -45,6 +49,7 @@ function CreateRewardPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   // console.log(formValues);
+  // console.log(formErrors)
 
   useEffect(() => {
     if (!formValues.type) return;
@@ -127,7 +132,7 @@ function CreateRewardPage() {
     };
     console.log(formValues);
     console.log(convertedFormValues);
-    const errObj = validate(convertedFormValues);
+    const errObj = validate(convertedFormValues, { contents: maxContentsLength });
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
     if (!isPassed) return alert('유효하지 않은 항목이 있습니다.');
@@ -141,7 +146,7 @@ function CreateRewardPage() {
       const res = await postObjData(postFormValuesApiUrl, convertedFormValues);
       console.log(res);
       if (res.isDone) {
-        onShowModalHandler('쿠폰이 성공적으로 등록되었습니다.');
+        onShowModalHandler('리뷰가 성공적으로 생성되었습니다.');
         setIsSubmitted(true);
       } else {
         alert(`Error: ${res.error}`);
@@ -302,16 +307,19 @@ function CreateRewardPage() {
                         </div>
                       </section>
                       {/* cont_divider */}
-                      <li className={s.how_was}>
+                      <section className={s.how_was}>
                         <div className={s.text}>상품은 어떠셨나요?</div>
                         <div>
-                          <RatingStars id={'star'} count={formValues.star} margin={12} size={25} setFormValues={setFormValues}/>
+                          <RatingStars
+                            id={'star'}
+                            count={formValues.star}
+                            margin={12}
+                            size={25}
+                            setFormValues={setFormValues}
+                          />
                         </div>
-                      </li>
-                      <li className={s.line}>
-                        <hr />
-                      </li>
-                      <li className={s.body}>
+                      </section>
+                      <section className={s.body}>
                         <div className={s.flex}>
                           <div className={s.left_side}>
                             <label htmlFor={'contents'} className={s.text2}>
@@ -319,50 +327,57 @@ function CreateRewardPage() {
                             </label>
                           </div>
                           <div className={s.right_side}>
-                            <textarea
-                              id={'contents'}
-                              placeholder="50자 이상 작성시 300원이 적립됩니다.&#13;상품에 대한 견주님의 의견을 남겨주시면 큰 힘이 됩니다."
-                              onChange={onInputChangeHandler}
-                              value={formValues.contents}
-                            ></textarea>
-                            <span className={s['textLength-indicator']}>0/1000</span>
+                            <div className={s.input_wrap}>
+                              <textarea
+                                id={'contents'}
+                                placeholder="50자 이상 작성시 300원이 적립됩니다.&#13;상품에 대한 견주님의 의견을 남겨주시면 큰 힘이 됩니다."
+                                onChange={onInputChangeHandler}
+                                value={formValues.contents}
+                              />
+                              <span className={s['textLength-indicator']}>
+                                {formValues.contents.length}/{maxContentsLength}
+                              </span>
+                            </div>
                             {formErrors.contents && (
                               <ErrorMessage>{formErrors.contents}</ErrorMessage>
                             )}
                           </div>
                         </div>
-                      </li>
-                      <li className={s.picture_attach}>
+                      </section>
+                      <section className={s.picture_attach}>
                         <div className={s.flex}>
                           <div className={s.left_side}>
-                            <div className={s.text2}>사진첨부</div>
+                            <label htmlFor={'reviewImageIdList'} className={s.text2}>
+                              사진첨부
+                            </label>
                             <div className={s.outer}>
                               <div className={s.red_text}>500원 추가적립!</div>
                             </div>
                           </div>
-
                           <div className={s.right_side}>
-                            <div className={s.square}>
-                              <div className={s.cross}></div>
-                            </div>
-                            <div className={s.text_color_sub}>
-                              20MB 이하. JPG, PNG, GIF 파일 10장 이내
-                            </div>
+                            <FileInput
+                              id={'reviewImageIdList'}
+                              // apiUrl={postThumbFileApiUrl}
+                              setFormValues={setFormValues}
+                              formErrors={formErrors}
+                              setFormErrors={setFormErrors}
+                              // originImageDatas={originThumbDataList}
+                              maxImageCount={10}
+                              maxFileSize={20000000}
+                              mode={'create'}
+                              required={false}
+                              theme={'modern'}
+                            />
                           </div>
                         </div>
-                      </li>
-                      <li className={s.line2}>
-                        <hr />
-                      </li>
-                      <section className={s.btn}>
-                        <div className={s.flex}>
-                          <button type={'button'} className={s.left_btn} onClick={returnToPrevPage}>
-                            취소
-                          </button>
-                          <button type={'button'} className={s.right_btn} onClick={onSubmit}>
-                            {isLoading.submit ? <Spinner style={{ color: '#fff' }} /> : '등록'}
-                          </button>
-                        </div>
+                      </section>
+                      <section className={s['btn-section']}>
+                        <button type={'button'} className={s.cancel} onClick={returnToPrevPage}>
+                          취소
+                        </button>
+                        <button type={'button'} className={s.save} onClick={onSubmit}>
+                          {isLoading.submit ? <Spinner style={{ color: '#fff' }} /> : '등록'}
+                        </button>
                       </section>
                     </>
                   )}
