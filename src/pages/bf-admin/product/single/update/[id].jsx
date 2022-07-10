@@ -274,9 +274,9 @@ function UpdateSingleItemPage({ id }) {
                           id="itemType"
                           options={[
                             { label: '선택', value: '' },
-                            { label: '생식 (일반상품)', value: 'RAW' },
-                            { label: '토핑 (간식 및 토핑류)', value: 'TOPPING' },
-                            { label: '굿즈 (그 밖의 제품)', value: 'GOODS' },
+                            { label: '생식 (일반상품)', value: global_itemType.RAW },
+                            { label: '토핑 (간식 및 토핑류)', value: global_itemType.TOPPING },
+                            { label: '굿즈 (그 밖의 제품)', value: global_itemType.GOODS },
                           ]}
                           value={formValues.itemType}
                           setFormValues={setFormValues}

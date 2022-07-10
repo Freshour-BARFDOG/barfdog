@@ -202,7 +202,7 @@ function UpdateMypageBanner() {
       <AdminLayout>
         <AdminContentWrapper>
           <div className="title_main">
-            <h1>마이페이지 배너 {isLoading.fetching && <Spinner style={{ color: 'var(--color-main)', width: '20', height: '20' }} speed={0.6} />}</h1>
+            <h1>마이페이지 배너 {isLoading.fetching && <Spinner />}</h1>
           </div>
           <form
             action="/"
