@@ -1,20 +1,16 @@
 @import './adminCommon.module.scss';
-
-$browser-context: 16;
-// convert px to rem
-@function rem($px, $context: $browser-context) {
-  @return #{$px / $context}rem;
-}
+@import '/styles/global/rem';
+@import "/styles/module/zIndex.module";
 
 $menu-Padding: 20;
 $list-height: rem(58);
 
 .admin_nav {
+  z-index: $adminNav;
   position: fixed;
   top: $header-height;
   background-color: #fff;
   left: 0;
-  float: left;
   padding: rem(20) 0 0;
   height: calc(100vh - #{$header-height});
   box-sizing: border-box;

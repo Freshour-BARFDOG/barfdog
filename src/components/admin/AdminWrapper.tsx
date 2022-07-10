@@ -13,8 +13,8 @@ export const AdminContentWrapper = ( {className, ...props }) => {
 };
 
 
-export const AdminBodyWrapper = ({ children }) => {
-  return <div className={s.body_container}>{children}</div>;
+export const AdminBodyWrapper = ({ children,  folded, }) => {
+  return <div className={`${s.body_container} ${folded ? s.folded : ''}`}>{children}</div>;
 };
 
 

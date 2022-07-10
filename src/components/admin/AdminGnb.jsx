@@ -1,11 +1,8 @@
 import React, {useRef} from "react";
-import s from "@src/components/common/menu.module.scss";
-import style2 from "/src/components/common/menu.module.scss";
+import s from "/src/components/common/menu.module.scss";
 import {List, SubmenuList, SubmenuTitle} from "/src/components/mypage/MypageMenu";
-import Link from 'next/link';
 import Icon_setting from "/public/img/icon/setting.svg";
-
-
+import { IoMenuSharp  } from "react-icons/io5";
 
 
 function AdminGnb() {
@@ -68,7 +65,7 @@ function AdminGnb() {
           <SubmenuList title="채널톡" link="/bf-admin/messenger/channelTalk" />
         </List>
       </ul>
-      <div className={`${s.site_settings} ${s.menu_title} ${style2['admin-site-setting']}`}>
+      <div className={`${s.site_settings} ${s.menu_title} ${s['admin-site-setting']}`}>
         <List title="설정" iconOnLeftSide={<Icon_setting />}>
           <SubmenuList title="알고리즘" link="/bf-admin/settings/algorithm" />
           <SubmenuList title="배송정책" link="/bf-admin/settings/delivery" />
