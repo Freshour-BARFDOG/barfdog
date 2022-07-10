@@ -1,25 +1,25 @@
-$browser-context:16; // html font-size
-@function rem($px, $context: $browser-context){
-  @return #{$px / $context}rem;
-}
-@import '../../../../styles/global/guide';
+@import '/styles/global/rem';
+@import '/styles/global/guide';
 
-section.title{ padding : rem(8) 0 rem(17);}
-section.content_title { padding :0 0 rem(0) }
-section.how_was { padding-top: rem(20) }
-section.picture_attach { padding-top: rem(20)}
+$border: rem(1) solid var(--color-line-03);
 
-.line {
-  hr {
-    margin: rem(15) 0 rem(21);
-    border: rem(1) solid var(--color-line-03);
-  }
+section.title_section {
+  padding: rem(8) 0 rem(17);
 }
-.line2 {
-  hr {
-    margin: rem(40) 0 rem(30);
-    border: rem(1) solid var(--color-line-03);
-  }
+section.content_title {
+  padding: 0 0 rem(0);
+}
+section.how_was {
+  padding-top: rem(20);
+  border-bottom: rem(1) solid var(--color-line-03);
+  padding-bottom: rem(15);
+  margin-bottom: rem(21);
+}
+section.picture_attach {
+  padding-top: rem(20);
+  padding-bottom: rem(40);
+  margin-bottom: rem(30);
+  border-bottom: $border;
 }
 
 
@@ -35,17 +35,17 @@ section.picture_attach { padding-top: rem(20)}
 
     p {
       @include char(l14);
-      color : var(--color-font-sub);
+      color: var(--color-font-sub);
     }
 
     @include char(l16);
     .left_box {
       width: 30%;
-      max-width:rem(50);
+      max-width: rem(50);
       display: flex;
       justify-content: center;
       padding-right: rem(16);
-      
+
       .image {
         width: 100%;
         max-width: rem(50);
@@ -57,7 +57,7 @@ section.picture_attach { padding-top: rem(20)}
       width: 85%;
       display: flex;
       flex-direction: column;
-      row-gap: rem(8);     
+      row-gap: rem(8);
     }
 
     .right_box {
@@ -68,126 +68,143 @@ section.picture_attach { padding-top: rem(20)}
 }
 
 .how_was {
-  // padding-top: rem(24);
   display: flex;
+  gap: rem(42);
   align-items: center;
   .text {
-    display: flex;
-    align-items: center;
     @include char(l18);
-    padding-right: rem(42);
   }
 }
-
-
 
 
 .flex {
   display: flex;
   justify-content: space-between;
-}
 
-.left_side {
-  width: 18%;
-  max-width: rem(160);
-}
-.right_side {
-  width: 81%;
-  max-width: rem(745);
-  .box {
-    padding: rem(20) rem(18) rem(18) rem(18);
-    height: rem(260);
-    box-sizing: border-box;
-    border: rem(1) solid var(--color-line-03);
+  .left_side {
+    width: 18%;
+    max-width: rem(160);
+    .left_title {
+      padding-top: rem(4);
+      @include char(l18);
+      font-weight: 600;
+    }
+
+  }
+  .right_side {
+    width: 81%;
+    max-width: rem(745);
     position: relative;
-    .dd {
+
+    .input_wrap{
+      position:relative;
+    }
+    textarea {
+      padding: rem(20) rem(18) rem(18) rem(18);
+      height: rem(260);
+      box-sizing: border-box;
+      border: rem(1) solid var(--color-line-03);
+      position: relative;
       display: block;
-      height: 100%;
-      .right_bot {
-        position: absolute;
-        right: rem(20);
-        bottom: rem(12);
+      width: 100%;
+      ::placeholder {
+        color: var(--color-placeholder);
       }
     }
+    .textLength-indicator {
+      position: absolute;
+      right: rem(12);
+      bottom: rem(8);
+      color: var(--color-font-sub2);
+      background: #fff;
+      border-radius: rem(8);
+      padding: 0 rem(8);
+
+    }
+
+
   }
 }
 
-.text2 {
-  padding-top: rem(4);
-  @include char(l18);
-  font-weight: 600;
-}
-.text_color_sub {
-  @include char(l16);
-  color: var(--color-font-sub);
-  line-height: rem(22.4);
-}
-.red_text {
-  color: var(--color-main);
-}
+
+
+
+
 
 .picture_attach {
+  border-bottom: rem(1) solid var(--color-line-03);
+  padding-bottom: rem(15);
+  margin-bottom: rem(21);
   @include char(l14);
   .outer {
     padding-top: rem(13);
+    .red_text {
+      color: var(--color-main);
+    }
   }
   .square {
     background-color: #4d4d4d;
     width: rem(80);
     height: rem(80);
     position: relative;
-
-    :after {
-      content: "";
+    &:after {
+      content: '';
       width: rem(2);
       height: rem(28);
       position: absolute;
-      top : 33.3%;
-      left : 50%;
+      top: 33.3%;
+      left: 50%;
       background-color: #fff;
     }
-    :before {
-      content: "";
+    &:before {
+      content: '';
       width: rem(28);
       height: rem(2);
       position: absolute;
       top: 50%;
-      left : 33.3% ;
+      left: 33.3%;
       background-color: #fff;
     }
   }
-  .text_color_sub{
+  .text_color_sub {
     padding-top: rem(12);
     @include char(l14);
   }
+  p{
+    font-size: 0.75rem;
+    color: var(--color-font-medium);
+    padding-top: 0.25rem;
+    cursor: default;
+  }
 }
 
-.btn{
-  .flex {
+.btn-section {
+  display: grid;
+  column-gap: rem(10);
+  justify-content: center;
+  grid-template-columns: rem(160) rem(160);
+  grid-template-rows: rem(50);
+  align-items: center;
+  @include char(l16);
+  button {
+    max-height: rem(50);
+    display: flex;
+    align-items: center;
     justify-content: center;
-    column-gap: rem(7);
-    @include char(l16);
+    max-width: rem(160);
+    border-radius: rem(4);
+    height: 100%;
+    box-sizing: border-box;
+  }
 
-    .left_btn {
-      display: grid;
-      place-items: center;
-      padding: rem(16) 0;
-      width: 100%;
-      max-width: rem(160);
-      border: rem(1) solid var(--color-line-03);
-      border-radius: rem(4);
-    }
+  button.cancel {
+    border: rem(1) solid var(--color-line-03);
+    color: var(--color-font-def);
+  }
 
-    .right_btn {
-      display: grid;
-      place-items: center;
-      // padding: rem(1) 0;
-      width: 100%;
-      max-width: rem(160);
-      border: rem(1) solid var(--color-main);
-      border-radius: rem(4);
-      color: #fff;
-      background-color: var(--color-main);
-    }
+  button.save {
+    border: rem(1) solid transparent;
+    color: #fff;
+    background-color: var(--color-main);
   }
 }
