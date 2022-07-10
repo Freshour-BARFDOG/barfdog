@@ -15,6 +15,7 @@ const Star = styled.i`
   position: relative;
   display: inline-block;
   overflow: hidden;
+  cursor:pointer;
   min-width: ${rem(10)};
   min-height: ${rem(10)};
   &:not(:last-child) {
