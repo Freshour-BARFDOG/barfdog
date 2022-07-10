@@ -35,7 +35,12 @@ export const valid_hasFormErrors = (errorObj, type = 'array') => {
 
 
 export const valid_isEmpty = (value) => {
-  const error = value ? '' : '항목이 비어있습니다.';
+  let error = '';
+  if(typeof value === 'string' && !value.replace(/\s*/g, '').length){
+    error = '항목이 비어있습니다.'
+  } else if (!value){
+    error = '항목이 비어있습니다.'
+  }
   return error;
 };
 
@@ -435,25 +440,33 @@ export const valid_isTheSameArray = (beforeArr1, beforeArr2) => {
 
 
 
-export const valid_expireDate = (d) => {
-  let error;
-  let expiredDate;
-  if(d.split("-").length !== 3){
-    const unit= d.split('-');
-    if(unit[0].length===4 && unit[1].length===2 && unit[2].length===2){
-      return error = '날짜 형식에 맞지 않습니다.'
-    }
-  }
-  
+export const valid_date = (d, type='future') => {
+  console.log('type: ',type);
+  let error = '';
+  let expiredDate = '';
   const convertedDate = deleteHypenOnDate(d);
   const selectedDate = Number(convertedDate);
   const todayWithHypen = transformToday();
   const stringToday = deleteHypenOnDate(todayWithHypen);
   const today = Number(stringToday);
-  if(selectedDate < today){
-    error = '유효기간은 발급당일(오늘)보다 과거일 수 없습니다.';
-  }
   expiredDate = selectedDate - today;
+  if(d.split("-").length !== 3){
+    const unit= d.split('-');
+    if(unit[0].length===4 && unit[1].length===2 && unit[2].length===2){
+      error = '날짜 형식에 맞지 않습니다.'
+    }
+  } else if(!d){
+    error = '항목이 비었습니다.'
+  }
+  
+  if(type === 'future' && selectedDate < today){
+    error = '오늘보다 과거일 수 없습니다.';
+    
+  } else if(type === 'past' && selectedDate > today){
+    error = '오늘보다 미래일 수 없습니다.';
+  }
+  
+  
   return { error, expiredDate };
 }
 

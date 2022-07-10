@@ -30,8 +30,8 @@ export const transformToday = ()=>{
   let mm = today.getMonth()+1; // important
   let dd = today.getDate();
   
-  mm = mm < 10 && '0'+mm.toString();
-  dd = dd < 10 && '0'+dd.toString();
+  mm = mm < 10 ?  '0'+mm.toString() : mm;
+  dd = dd < 10 ? '0'+dd.toString() : dd;
   
   return `${yy}-${mm}-${dd}`
 }
