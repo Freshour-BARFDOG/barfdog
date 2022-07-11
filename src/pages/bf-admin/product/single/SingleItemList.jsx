@@ -9,7 +9,7 @@ export default function SearchResultList({ items }) {
 
   return (
     <ul className="table_body">
-      {items.map((item, index) => (
+      {items.map((item) => (
         <ItemList key={`item-${item.id}`} index={item.id} item={item} />
       ))}
     </ul>
