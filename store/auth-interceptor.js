@@ -1,10 +1,9 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { authAction } from '/store/auth-slice';
 import useUserData from '/util/hook/useUserData';
 import { FullScreenLoading } from '/src/components/atoms/fullScreenLoading';
-import getAdminToken from '@src/pages/api/getAdminToken';
 import { getData, testTokenStateWithOldToken } from '/src/pages/api/reqData';
 
 export default function AuthInterceptor ({ children })  {
@@ -29,7 +28,7 @@ export default function AuthInterceptor ({ children })  {
     if (nonMemberPath) {
       dispatch(authAction.userRestoreAuthState());
       if (!isAuth) {
-        // alert('로그인이 필요한 서비스입니다.');
+        // alert('로그인이 필요한 서비스입니다.');  // ! 실제 서비스에서는 작동시켜야하는 기능입니다..
         // router.push('/account/login');
         console.error('Redir: User FOBBIDEN PAGE');
       }
@@ -73,7 +72,7 @@ export default function AuthInterceptor ({ children })  {
     setLoading(false);
   }, [dispatch, router, isAuth]);
   
-  return <>{loading ? <FullScreenLoading /> : children}</>;
+  return <>{children}</>;
 };
 
 
