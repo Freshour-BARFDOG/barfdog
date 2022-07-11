@@ -16,7 +16,7 @@ const uploadImageToApiServer = async (
   const formData = new FormData();
   formData.append('file', file);
   const response = await postFileUpload(postApiUrl, formData); // ! ORIGIN CODE
-  
+  console.log(response)
   const imageId = response.data.id;
   const imageUrl = response.data.url;
   const isFailed = response.status !== 200 && response.status !== 201;
