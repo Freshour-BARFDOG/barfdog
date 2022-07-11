@@ -19,6 +19,7 @@ import Spinner from '/src/components/atoms/Spinner';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import { useModalContext } from '/store/modal-context';
 import FileInput from '/src/components/admin/form/FileInput';
+import GoodsFlowTest from "/src/pages/api/goodsFlow";
 
 const initialFormValues = {
   // type: '', // str
@@ -50,6 +51,8 @@ function CreateRewardPage() {
 
   // console.log(formValues);
   // console.log(formErrors)
+  
+  
 
   useEffect(() => {
     if (!formValues.type) return;
@@ -393,3 +396,4 @@ function CreateRewardPage() {
 }
 
 export default CreateRewardPage;
+
