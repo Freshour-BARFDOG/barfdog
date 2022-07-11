@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import Router from "next/router";
 import setExpiryDate from "@util/func/setExpiryDate";
 import transformDate from "@util/func/transformDate";
+import {setCookie} from "@util/func/cookie";
 
 
 
@@ -29,7 +30,8 @@ const authSlice = createSlice({
       state.isAuth = true;
       state.isAdmin = false;
       state.token = action.payload.token;
-      localStorage.setItem("user", JSON.stringify({ token: state.token }));
+      localStorage.setItem("user", JSON.stringify({ token: state.token
+      }));
       if (state.isAdmin) {
         return alert("관리자는 중복 로그인할 수 없습니다.");
       }
@@ -57,6 +59,7 @@ const authSlice = createSlice({
       state.isAuth = true;
       state.token = action.payload.token;
       localStorage.setItem("admin", JSON.stringify({ token: state.token }));
+      
       alert("관리자 로그인에 성공하였습니다.");
       Router.push("/bf-admin/dashboard");
     },
@@ -68,6 +71,9 @@ const authSlice = createSlice({
       const {email, password} = action.payload.account;
       // ! 개발단계에서 임시로 사용하는 방법
       const expiryDate = setExpiryDate(7);
+      // setCookie('authorization',  state.token,  'date', 7 );
+      
+      // !  CF.) COOKIE를 사용할 경우 getInitialProps에서 Cookie정보속에서 token을 사용할 수 있다.
       localStorage.setItem("admin", JSON.stringify({ token: state.token, account: {email, password}, expires: expiryDate }));
       // ! 추후에 Backend API > refresh토큰이 개발 후, refresh token으로 변경하기
       // - 자동로그인 on일 경우, 로컬에 저장된 정보를 통해서 getToken함수를 실행하도록한다.

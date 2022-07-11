@@ -3,7 +3,7 @@ import ModalWrapper from '/src/components/modal/ModalWrapper';
 import s from './Modal_AdminRecommendArticle.module.scss';
 import rem from '/util/func/rem';
 import CloseButton from '/src/components/atoms/CloseButton';
-import { getData, putObjData } from '/api/reqData';
+import { getData, putObjData } from '/src/pages/api/reqData';
 import SelectTag from '/src/components/atoms/SelectTag';
 import ErrorMessage from '../atoms/ErrorMessage';
 import Spinner from '../atoms/Spinner';

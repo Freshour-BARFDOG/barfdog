@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import 'react-quill/dist/quill.snow.css';
 import { formats, toolbarOptions } from './QuillEditorSettings';
-import { postFileUpload } from '/api/reqData';
+import { postFileUpload } from '/src/pages/api/reqData';
 import Spinner from 'src/components/atoms/Spinner';
 import s from './editor.module.scss';
 

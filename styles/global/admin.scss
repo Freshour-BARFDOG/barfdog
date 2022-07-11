@@ -170,7 +170,7 @@ $inputDefaultHeight: rem(38);
   background-color: var(--color-bg);
 
   .errorMSG {
-    padding-top: rem(4);
+    //padding-top: rem(4);
   }
   .desc {
     font-size: rem(12);
@@ -302,11 +302,14 @@ $inputDefaultHeight: rem(38);
     padding-top: rem(15);
     margin-top: rem(15);
     border-top: rem(1) solid var(--color-line-03);
-    overflow: hidden;
-
-    button:not(:last-child) {
-      margin-right: rem(5);
-    }
+    display: flex;
+    column-gap:rem(5);
+    justify-content: flex-start;
+    align-items: center;
+    //overflow: hidden;
+    //button:not(:last-child) {
+    //  margin-right: rem(5);
+    //}
   }
 
   .input_row {
@@ -328,6 +331,7 @@ $inputDefaultHeight: rem(38);
         height: $inputDefaultHeight;
         display: flex;
         align-items: center;
+        gap: rem(10);
       }
       .title {
         display: flex;
@@ -371,7 +375,7 @@ $inputDefaultHeight: rem(38);
         gap: rem(10);
         font-size: rem(14);
         .checkbox-wrap:not(:first-child) {
-          margin-left: rem(30);
+          margin-left: rem(10);
         }
         &.radio:not(:last-child) {
           margin-right: rem(24);
@@ -389,6 +393,9 @@ $inputDefaultHeight: rem(38);
       }
     }
   }
+
+
+  label{cursor: pointer;}
 
   input.fullWidth {
     width: 100%;
@@ -477,6 +484,23 @@ $inputDefaultHeight: rem(38);
 
 .multiImageBox{
 
+  &.modern-theme{
+    > .grid-box{
+      display: grid;
+      grid-template-columns: rem(80) 1fr;
+    }
+    .preview-wrap{
+      display: grid;
+      justify-content: flex-start;
+      grid-template-columns: repeat(auto-fill, 80px) ;
+      max-width: initial !important;
+      > * {
+        width:rem(80);
+        aspect-ratio: 1;
+      }
+    }
+  }
+
   .grid-box {
     display: grid;
     align-items: flex-start;
@@ -506,11 +530,16 @@ $inputDefaultHeight: rem(38);
     padding: rem(6);
     z-index: 99;
   }
-
-
-
 }
 
+
+
+.inline-flex{
+  display: inline-flex;
+}
+.inline-grid{
+  display: inline-grid;
+}
 
 @for $i from 1 through 20 {
   .mt-#{5*$i} {

@@ -204,3 +204,32 @@ $browser-context: 16;
     margin-right: 20px;
   }
 }
+
+
+
+@media (max-width: rem(400)) {
+
+  .flex__container {
+    margin: 35px auto;
+    width: 100%;
+  }
+
+  
+  .inputbox{
+    margin-bottom: 0px;
+  }
+
+  .btnbox{
+    margin-bottom: rem(20);
+  }
+
+  .input__box {
+    .input__title{
+      display: none;
+    }
+  }
+
+  .auto__login__check {
+    margin-top: 0px;
+  }
+}

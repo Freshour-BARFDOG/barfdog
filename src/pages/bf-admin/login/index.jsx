@@ -6,7 +6,7 @@ import s from './login.module.scss';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import Image from 'next/image';
 import Checkbox from '/src/components/atoms/Checkbox';
-import getAdminToken from '/api/getAdminToken';
+import getAdminToken from '/src/pages/api/getAdminToken';
 
 import Modal from '/src/components/modal/Modal';
 import Modal_AdminResetPassword from '/src/components/modal/Modal_AdminResetPassword';

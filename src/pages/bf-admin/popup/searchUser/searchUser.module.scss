@@ -1,14 +1,10 @@
-$browser-context: 16;
-// convert px to rem
-@function rem($px, $context: $browser-context) {
-  @return #{$px / $context}rem;
-}
+@import '/styles/global/rem';
+@import '/styles/module/itemList.module';
 
 // *  ------- COMMON ------- * //
 $backgroundColorDef: #f8f8ff;
 $popupMainHeaderHeight: rem(66);
 $popupCloseButtonSectionHeight: rem(88);
-
 $windowWidthForRightSideBorder: rem(850);
 
 #popup {
@@ -42,6 +38,8 @@ $windowWidthForRightSideBorder: rem(850);
   padding: 0 rem(20);
 }
 
+
+
 // -- LAYOUT --
 .body {
   padding-top: $popupMainHeaderHeight;
@@ -74,39 +72,16 @@ $windowWidthForRightSideBorder: rem(850);
   }
 }
 
+
+
 .cont_viewer {
-  border: rem(1) solid var(--color-line-03);
-  box-sizing: border-box;
-  height: rem(380);
-  width: 100%;
-  overflow-x: auto;
-  overflow-y: scroll;
+
+  //
+  //width: 100%;
+  //overflow-x: auto;
+  //overflow-y: scroll;
   .table {
-    position: relative;
-    z-index: 0;
-    font-size: rem(15);
 
-    /* border line */
-    .table_header {
-      border-bottom: rem(1) solid var(--color-line-03);
-    }
-    .table_th:not(:last-child),
-    .item > span:not(:last-child) {
-      border-right: rem(1) solid var(--color-line-03);
-    }
-    .table_th,
-    .item:not(:last-child) > span {
-      border-bottom: rem(1) solid var(--color-line-03);
-    }
-    .item:not(:last-child) {
-      border-bottom: rem(1) solid var(--color-line-03);
-    }
-    /* border line */
-
-    .table_header {
-      z-index: 1;
-      position: relative;
-    }
     .table_header,
     .item {
       display: grid;
@@ -121,38 +96,8 @@ $windowWidthForRightSideBorder: rem(850);
         rem(140)
         rem(140)
         rem(160)
-        rem(80)
-        rem(80);
-
-      .table_th,
-      span {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .table_th {
-        font-weight: 600;
-        background-color: #f1f1f4;
-        height: 100%;
-      }
-      input[type='checkbox'] ~ span {
-        padding: 0;
-      }
-      span {
-        padding: rem(5) rem(10);
-        overflow-y: scroll;
-
-        &.scrollBox {
-          display: flex;
-          justify-content: flex-start;
-          white-space: nowrap;
-        }
-      }
-    }
-
-    .item {
-      > span {background-color: #fff;}
-      margin-top: rem(-1);
+        rem(100)
+        rem(100);
     }
   }
 }
@@ -168,7 +113,6 @@ $windowWidthForRightSideBorder: rem(850);
   background-color: #fff;
   padding: rem(20) 0 rem(30);
   width: 100%;
-  margin-top: rem(20);
   display: flex;
   align-items: center;
   justify-content: center;

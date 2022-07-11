@@ -1,9 +1,6 @@
 @import './adminCommon.module.scss';
+@import '/styles/global/rem';
 
-$browser-context:16; // html font-size:
-@function rem($px, $context: $browser-context){
-  @return #{$px / $context}rem;
-}
 
 $header-height: rem(80);
 $nav-width: rem(300);
@@ -18,6 +15,40 @@ $contents-maxWidth: rem(1620);
 
 
 
+/* ----------------------------------------- */
+.body_container{
+  width: $container-maxWidth;
+  margin:0 auto;
+  display: flex;
+  align-items: flex-start;
+  grid-template-columns: 30px 1000px;
+  justify-content: flex-end;
+  column-gap: rem(20);
+  /* - MENU: FOLD EFFECT*/
+  > * {
+    transition-duration:  .4s;
+    transition-timing-function: ease-out;
+  }
+  > nav:nth-child(1) {
+    transition-property: left;
+    left: 0;
+  }
+  > *:nth-child(2){
+    transition-property: width;
+    width: calc(100vw - #{$nav-width});
+  }
+  &.folded{
+    > nav:nth-child(1) {left: -100%}
+    > *:nth-child(2){
+      width: 100vw;
+      max-width: initial;
+    }
+  }
+
+
+}
+
+/* ----------------------------------------- */
 
 .container_outer{
   display:flex;
@@ -37,11 +68,8 @@ $contents-maxWidth: rem(1620);
   
 
 
-
-
 .contents_container_outer{
-  float:right;
-  width: calc(100% - #{$nav-width});
+
   background-color: var(--color-bg-ghostWhite);
 }
 .contents_container{
@@ -63,11 +91,6 @@ $contents-maxWidth: rem(1620);
 .contents_row{padding:0;}
 
 
-.body_container{
-  width: $container-maxWidth;
-  margin:0 auto;
-  overflow: hidden;
-}
 
 
 
@@ -79,15 +102,9 @@ $contents-maxWidth: rem(1620);
 
 } 
 
+
 @media (max-width: $contents-maxWidth){
-
-  // .contents_row{
-  //   padding-left:rem(20);
-  //   padding-right:0;
-  // }
-
-
-} 
+}
 
 
 @media (max-width:1080px){

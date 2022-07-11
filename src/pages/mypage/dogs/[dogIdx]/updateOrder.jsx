@@ -45,46 +45,55 @@ const CustomInputRadio_plan = ({name, handler}) => {
               }}
           />
 
-          <div className={s.plan_box}>
-            <div className={s.img_box}>
-              <div className={`${s.image} img-wrap`}>
-                <Image
-                    priority
-                    src={require("public/img/pages/subscribe_full_plan.png")}
-                    objectFit="cover"
-                    layout="fill"
-                    alt="카드 이미지"
-                />
-              </div>
+        <ul className={s.plan_box}>
+
+        <li className={s.plan_grid_1}>
+          <div className={s.img_box}>
+            <div className={`${s.image} img-wrap`}>
+              <Image
+                priority
+                src={require("public/img/pages/subscribe_full_plan.png")}
+                objectFit="cover"
+                layout="fill"
+                alt="카드 이미지"
+              />
             </div>
-
-            <h2>풀플랜</h2>
-            <p>하루에 두 끼를 바프독으로 먹어요</p>
-
-            <div className={s.grid_box}>
-              <div className={s.row_1}>
-                하루에<span>&nbsp;2팩</span>
-              </div>
-              <div className={s.row_2}>
-                <span>2주</span>&nbsp;정기배송
-              </div>
-              <div className={s.row_3}>
-                <span>143g</span>&nbsp;(1팩기준)
-              </div>
-              <div className={s.row_4}>
-                20팩 x <span>7,200원</span>
-              </div>
-            </div>
-
-            <div className={s.text1}>
-              5%&nbsp; <span>144,000원</span>
-            </div>
-
-            <div className={s.text2}>
-              142,560원
-            </div>
-
           </div>
+          <h2>풀플랜</h2>
+        </li>
+
+        <li>
+          <p>하루에 <em>두 끼</em>를 바프독으로 먹어요</p>
+        </li>
+
+        <li>
+          <div className={s.grid_box}>
+            <div className={s.row_1}>
+              하루에<span>&nbsp;2팩</span>
+            </div>
+            <div className={s.row_2}>
+              <span>2주</span>&nbsp;정기배송
+            </div>
+            <div className={s.row_3}>
+              <span>143g</span>&nbsp;(1팩기준)
+            </div>
+            <div className={s.row_4}>
+              20팩 x <span>7,200원</span> 
+            </div>
+          </div>
+        </li>
+
+        <li>
+          <div className={s.text1}>
+            5%&nbsp; <span>144,000원</span>
+          </div>
+
+          <div className={s.text2}>
+            142,560원
+          </div>
+        </li>
+
+        </ul>
 
         </CustomInput>
         <CustomInput
@@ -95,22 +104,28 @@ const CustomInputRadio_plan = ({name, handler}) => {
             setSelectedRadio={setSelectedRadio}
         >
 
-          <div className={s.plan_box}>
+          <ul className={s.plan_box}>
+
+          <li>
             <div className={s.img_box}>
               <div className={`${s.image} img-wrap`}>
                 <Image
-                    priority
-                    src={require("public/img/pages/subscribe_full_plan.png")}
-                    objectFit="cover"
-                    layout="fill"
-                    alt="카드 이미지"
+                  priority
+                  src={require("public/img/pages/subscribe_full_plan.png")}
+                  objectFit="cover"
+                  layout="fill"
+                  alt="카드 이미지"
                 />
               </div>
             </div>
-
             <h2>하프플랜</h2>
-            <p>하루에 한 끼를 바프독으로 먹어요</p>
+          </li>
 
+          <li>
+            <p>하루에 <em>한 끼</em>를 바프독으로 먹어요</p>
+          </li>
+
+          <li>
             <div className={s.grid_box}>
               <div className={s.row_1}>
                 하루에<span>&nbsp;2팩</span>
@@ -122,10 +137,12 @@ const CustomInputRadio_plan = ({name, handler}) => {
                 <span>143g</span>&nbsp;(1팩기준)
               </div>
               <div className={s.row_4}>
-                20팩 x <span>7,200원</span>
+                20팩 x <span>7,200원</span> 
               </div>
             </div>
+          </li>
 
+          <li>
             <div className={s.text1}>
               5%&nbsp; <span>144,000원</span>
             </div>
@@ -133,7 +150,9 @@ const CustomInputRadio_plan = ({name, handler}) => {
             <div className={s.text2}>
               142,560원
             </div>
-          </div>
+          </li>
+
+          </ul>
 
 
         </CustomInput>
@@ -157,37 +176,45 @@ const CustomInputRadio_plan = ({name, handler}) => {
           />
 
 
-          <div className={s.plan_box}>
+          <ul className={s.plan_box}>
+
+          <li>
             <div className={s.img_box}>
               <div className={`${s.image} img-wrap`}>
                 <Image
-                    priority
-                    src={require("public/img/pages/subscribe_full_plan.png")}
-                    objectFit="cover"
-                    layout="fill"
-                    alt="카드 이미지"
+                  priority
+                  src={require("public/img/pages/subscribe_full_plan.png")}
+                  objectFit="cover"
+                  layout="fill"
+                  alt="카드 이미지"
                 />
               </div>
             </div>
-
             <h2>토핑플랜</h2>
-            <p>토핑용으로 바프독으로 섞어서 먹어요</p>
+          </li>
 
+          <li>
+            <p><em>토핑용</em>으로 바프독으로 섞어서 먹어요</p>
+          </li>
+
+          <li>
             <div className={s.grid_box}>
               <div className={s.row_1}>
                 하루에<span>&nbsp;2팩</span>
               </div>
               <div className={s.row_2}>
-                <span>2주</span>&nbsp;정기배송
+                <span>4주</span>&nbsp;정기배송
               </div>
               <div className={s.row_3}>
                 <span>143g</span>&nbsp;(1팩기준)
               </div>
               <div className={s.row_4}>
-                20팩 x <span>7,200원</span>
+                20팩 x <span>7,200원</span> 
               </div>
             </div>
+          </li>
 
+          <li>
             <div className={s.text1}>
               5%&nbsp; <span>144,000원</span>
             </div>
@@ -195,7 +222,10 @@ const CustomInputRadio_plan = ({name, handler}) => {
             <div className={s.text2}>
               142,560원
             </div>
-          </div>
+          </li>
+
+          </ul>
+
         </CustomInput>
       </div>
   );

@@ -17,16 +17,17 @@ section.title{ padding : rem(8) 0 rem(19);}
 
 .content {
   @include char(l16);
-  max-width: rem(920);
   border-bottom: rem(1) solid var(--color-line-03);
     &:last-child {
       border-bottom: rem(0);
     }
 
   .flex_box {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     align-items: center;
     padding: rem(30) 0;
+    width: 100%;
     .text2 {
       color: var(--color-font-sub);
     }
@@ -36,7 +37,6 @@ section.title{ padding : rem(8) 0 rem(19);}
 
     .col_1 {
       display: flex;
-      width: 47.8%;
       max-width: rem(440);
       align-items: center;
       padding-left : rem(20);
@@ -66,25 +66,98 @@ section.title{ padding : rem(8) 0 rem(19);}
       }
     }
 
-    .col_2 {
-      width: 19.5%;
-      text-align: center;
-    }
-    .col_3 {
-      width: 19.5%;
-      text-align: center;
-    }
-    .col_4 {
-      width: 13.04%;
-      .btn {
-        width: 100%;
-        background-color: var(--color-main);
-        color: #fff;
+    .grid{
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr rem(120);
+
+      .col_2 {
         text-align: center;
-        @include char(l15);
-        padding: rem(14) 0;
-        border-radius: rem(4);
+      }
+      .col_3 {
+        text-align: center;
+      }
+      .col_4 {
+        .btn {
+          width: rem(120);
+          background-color: #fff;
+          color: var(--color-main);
+          border: rem(1) solid var(--color-main);
+          text-align: center;
+          @include char(l15);
+          padding: rem(14) 0;
+          border-radius: rem(4);
+        }
       }
     }
   }
+}
+
+
+@media (max-width: rem(900)) {
+
+  .content {
+    .flex_box {
+      grid-template-columns: 1fr;
+
+      .col_1{
+        padding-left: 0;
+
+        .text{
+          padding-left: rem(20);
+        }
+      }
+
+      .grid{
+        margin-top: rem(20);
+        grid-template-columns: 1fr 1fr;
+        grid-row-gap: rem(15);
+        position: relative;
+        
+        &::after{
+          content: "";
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%) translateY(rem(-28));
+          width: rem(1);
+          height: rem(40);
+          background-color: #dddddd;
+        }
+
+        .col_2, .col_3 {
+          background-color: #f1f1f4;
+          padding: rem(10) 0;
+        }
+        
+        .col_4 {
+          .btn {
+            width: 200%;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: rem(600)) {
+
+  .title{
+    display: none;
+  }
+
+  .content {
+    .flex_box {
+      .col_1{
+        .image {
+          max-width: rem(60);
+        }
+        
+        .text{
+          padding-left: rem(15);
+        }
+      }
+    }
+  }
+
 }

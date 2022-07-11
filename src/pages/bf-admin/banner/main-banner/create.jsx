@@ -9,8 +9,8 @@ import InputRadio_status, {
 import Fake_input from '@src/components/atoms/fake_input';
 import PreviewImage from '@src/components/atoms/PreviewImage';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
-import getAdminToken from '@api/getAdminToken';
-import { postData } from '@api/reqData';
+import getAdminToken from '@src/pages/api/getAdminToken';
+import { postData } from '@src/pages/api/reqData';
 
 function CreateMainBannerPage() {
   const router = useRouter();

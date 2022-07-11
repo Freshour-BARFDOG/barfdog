@@ -46,12 +46,14 @@ export default class WindowOpener extends React.Component {
     // each time we send a message will use the `onSuccess`
 
     browser.onSuccess = (res) => {
+      // console.log('onSuccess!')
       props.bridge(null, res);
       // Because of an error, the first param is used as null
     }
 
     // each time we failed we will use the `onError`
     browser.onError = (error) => {
+      // console.log('onError!')
       props.bridge(error);
     }
 

@@ -78,8 +78,8 @@ function OrderOnSellPage() {
                 setSearchValue={setSearchValue}
                 title="주문유형"
                 name="orderType"
-                idList={["ALL", "SINGLE", "SUBSCRIBE"]}
-                labelList={["전체", "일반주문", "정기구독주문"]}
+                idList={["SINGLE", "SUBSCRIBE"]}
+                labelList={["일반주문", "정기구독주문"]}
               />
             </SearchBar>
           </section>

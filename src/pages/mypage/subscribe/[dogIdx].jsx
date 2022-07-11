@@ -157,46 +157,55 @@ const CustomInputRadio = ({name}) => {
           }}
         />
 
-        <div className={Styles.plan_box}>
-          <div className={Styles.img_box}>
-            <div className={`${Styles.image} img-wrap`}>
-              <Image
-                priority
-                src={require("public/img/pages/subscribe_full_plan.png")}
-                objectFit="cover"
-                layout="fill"
-                alt="카드 이미지"
-              />
-            </div>
-          </div>
+        <ul className={Styles.plan_box}>
 
-          <h2>풀플랜</h2>
-          <p>하루에 두 끼를 바프독으로 먹어요</p>
-
-          <div className={Styles.grid_box}>
-            <div className={Styles.row_1}>
-              하루에<span>&nbsp;2팩</span>
+          <li className={Styles.plan_grid_1}>
+            <div className={Styles.img_box}>
+              <div className={`${Styles.image} img-wrap`}>
+                <Image
+                  priority
+                  src={require("public/img/pages/subscribe_full_plan.png")}
+                  objectFit="cover"
+                  layout="fill"
+                  alt="카드 이미지"
+                />
+              </div>
             </div>
-            <div className={Styles.row_2}>
-              <span>2주</span>&nbsp;정기배송
-            </div>
-            <div className={Styles.row_3}>
-              <span>143g</span>&nbsp;(1팩기준)
-            </div>
-            <div className={Styles.row_4}>
-              20팩 x <span>7,200원</span> 
-            </div>
-          </div>
+            <h2>풀플랜</h2>
+          </li>
+          
+          <li>
+            <p>하루에 <em>두 끼</em>를 바프독으로 먹어요</p>
+          </li>
 
-          <div className={Styles.text1}>
-            5%&nbsp; <span>144,000원</span>
-          </div>
+          <li>
+            <div className={Styles.grid_box}>
+              <div className={Styles.row_1}>
+                하루에<span>&nbsp;2팩</span>
+              </div>
+              <div className={Styles.row_2}>
+                <span>2주</span>&nbsp;정기배송
+              </div>
+              <div className={Styles.row_3}>
+                <span>143g</span>&nbsp;(1팩기준)
+              </div>
+              <div className={Styles.row_4}>
+                20팩 x <span>7,200원</span> 
+              </div>
+            </div>
+          </li>
 
-          <div className={Styles.text2}>
-            142,560원
-          </div>
+          <li>
+            <div className={Styles.text1}>
+              5%&nbsp; <span>144,000원</span>
+            </div>
 
-        </div>
+            <div className={Styles.text2}>
+              142,560원
+            </div>
+          </li>
+
+        </ul>
 
       </CustomInput>
       <CustomInput
@@ -207,7 +216,9 @@ const CustomInputRadio = ({name}) => {
         setSelectedRadio={setSelectedRadio}
       >
 
-        <div className={Styles.plan_box}>
+        <ul className={Styles.plan_box}>
+
+        <li>
           <div className={Styles.img_box}>
             <div className={`${Styles.image} img-wrap`}>
               <Image
@@ -219,10 +230,14 @@ const CustomInputRadio = ({name}) => {
               />
             </div>
           </div>
-
           <h2>하프플랜</h2>
-          <p>하루에 한 끼를 바프독으로 먹어요</p>
+        </li>
 
+        <li>
+          <p>하루에 <em>한 끼</em>를 바프독으로 먹어요</p>
+        </li>
+
+        <li>
           <div className={Styles.grid_box}>
             <div className={Styles.row_1}>
               하루에<span>&nbsp;2팩</span>
@@ -237,7 +252,9 @@ const CustomInputRadio = ({name}) => {
               20팩 x <span>7,200원</span> 
             </div>
           </div>
+        </li>
 
+        <li>
           <div className={Styles.text1}>
             5%&nbsp; <span>144,000원</span>
           </div>
@@ -245,7 +262,9 @@ const CustomInputRadio = ({name}) => {
           <div className={Styles.text2}>
             142,560원
           </div>
-        </div>
+        </li>
+
+        </ul>
 
 
       </CustomInput>
@@ -269,45 +288,56 @@ const CustomInputRadio = ({name}) => {
         />
 
 
-        <div className={Styles.plan_box}>
-          <div className={Styles.img_box}>
-            <div className={`${Styles.image} img-wrap`}>
-              <Image
-                priority
-                src={require("public/img/pages/subscribe_full_plan.png")}
-                objectFit="cover"
-                layout="fill"
-                alt="카드 이미지"
-              />
-            </div>
-          </div>
+          <ul className={Styles.plan_box}>
 
-          <h2>토핑플랜</h2>
-          <p>토핑용으로 바프독으로 섞어서 먹어요</p>
+          <li>
+            <div className={Styles.img_box}>
+              <div className={`${Styles.image} img-wrap`}>
+                <Image
+                  priority
+                  src={require("public/img/pages/subscribe_full_plan.png")}
+                  objectFit="cover"
+                  layout="fill"
+                  alt="카드 이미지"
+                />
+              </div>
+            </div>
+            <h2>토핑플랜</h2>
+          </li>
 
-          <div className={Styles.grid_box}>
-            <div className={Styles.row_1}>
-              하루에<span>&nbsp;2팩</span>
-            </div>
-            <div className={Styles.row_2}>
-              <span>2주</span>&nbsp;정기배송
-            </div>
-            <div className={Styles.row_3}>
-              <span>143g</span>&nbsp;(1팩기준)
-            </div>
-            <div className={Styles.row_4}>
-              20팩 x <span>7,200원</span> 
-            </div>
-          </div>
+          <li>
+            <p><em>토핑용</em>으로 바프독으로 섞어서 먹어요</p>
+          </li>
 
-          <div className={Styles.text1}>
-            5%&nbsp; <span>144,000원</span>
-          </div>
+          <li>
+            <div className={Styles.grid_box}>
+              <div className={Styles.row_1}>
+                하루에<span>&nbsp;2팩</span>
+              </div>
+              <div className={Styles.row_2}>
+                <span>4주</span>&nbsp;정기배송
+              </div>
+              <div className={Styles.row_3}>
+                <span>143g</span>&nbsp;(1팩기준)
+              </div>
+              <div className={Styles.row_4}>
+                20팩 x <span>7,200원</span> 
+              </div>
+            </div>
+          </li>
 
-          <div className={Styles.text2}>
-            142,560원
-          </div>
-        </div>
+          <li>
+            <div className={Styles.text1}>
+              5%&nbsp; <span>144,000원</span>
+            </div>
+
+            <div className={Styles.text2}>
+              142,560원
+            </div>
+          </li>
+
+          </ul>
+
       </CustomInput>
     </div>    
   );
@@ -520,6 +550,7 @@ function SubscribeInfoPage() {
               <div className={Styles.flex_box}>
                 <div className={Styles.text}>
                   <span>구독변경 마감</span>
+                  <br />
                   2일 16:54:12 이후 구독정보 변경 불가
                 </div>
 
@@ -824,22 +855,25 @@ function SubscribeInfoPage() {
                   바프독이 더 나은 서비스를 제공할 수 있도록 중단하시는 이유를 알려주세요.
                 </div>
 
-                <div className={Styles.check_grid_box}>
-                  <div>1</div>
-                  <div>아이가 잘 먹지않아요</div>
-                  <div>3</div>
-                  <div>급여방식이 너무 번거로워요</div>
-                  <div>5</div>
-                  <div>더 작은 용량의 샘플구매를 하고싶어요</div>
-                  <div>7</div>
-                  <div>제품 패키징이 불편해요 </div>
-                  <div>9</div>
-                  <div>급여 방법을 잘 모르겠어요</div>
-                  <div>11</div>
-                  <div>기타</div>
+                <div className={Styles.check_box}>
+
+                  <div className={Styles.check_grid_box}>
+                    <div>1</div>
+                    <div>아이가 잘 먹지않아요</div>
+                    <div>3</div>
+                    <div>급여방식이 너무 번거로워요</div>
+                    <div>5</div>
+                    <div>더 작은 용량의 샘플구매를 하고싶어요</div>
+                    <div>7</div>
+                    <div>제품 패키징이 불편해요 </div>
+                    <div>9</div>
+                    <div>급여 방법을 잘 모르겠어요</div>
+                    <div>11</div>
+                    <div>기타</div>
+                  </div>
                 </div>
 
-                <div>
+                <div className={Styles.input_bg}>
                   <input className={Styles.input_box} placeholder="상세 사유를 입력해주세요" />
                 </div>
 
@@ -877,39 +911,39 @@ function SubscribeInfoPage() {
                     <div>
                       <label>
                         <input type="radio" namne='13' id="12" /> 
-                        <div>
-                          정기구독 10%할인
-                        </div>
                       </label>
+                      <div>
+                        정기구독 10%할인
+                      </div>
                     </div>
                     <div>
-                      1개
+                      <span>·</span> 99개
                     </div>
                     <div>
-                      2022.12.31
+                      <span>~</span>2022.12.31
                     </div>
                     <div>
-                      9,400원
+                      9,400원 <span>할인</span>
                     </div>
                   </div>
 
                   <div className={Styles.row_flex2}>
                     <div>
                       <label>
-                        <input type="radio" name='13'id="12" /> 
-                        <div>
-                          등급구독 10%할인
-                        </div>
+                        <input type="radio" namne='13' id="12" /> 
                       </label>
+                      <div>
+                        정기구독 10%할인
+                      </div>
                     </div>
                     <div>
-                      1개
+                      <span>·</span> 1개
                     </div>
                     <div>
-                      2022.12.31
+                      <span>~</span>2022.12.31
                     </div>
                     <div>
-                      9,400원
+                      9,400원 <span>할인</span>
                     </div>
                   </div>
                 </div>

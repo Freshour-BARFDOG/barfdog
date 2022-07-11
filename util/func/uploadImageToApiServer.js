@@ -1,4 +1,4 @@
-import {postFileUpload} from '/api/reqData';
+import {postFileUpload} from '/src/pages/api/reqData';
 
 const uploadImageToApiServer = async (
   file,

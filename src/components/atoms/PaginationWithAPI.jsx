@@ -3,7 +3,7 @@ import DoubleArrow from '@public/img/icon/pagination-double-arrow.svg';
 import { useEffect, useState } from 'react';
 import s from './pagination.module.scss';
 import { useRouter } from 'next/router';
-import { getData } from '/api/reqData';
+import { getData } from '/src/pages/api/reqData';
 
 const Pagination = ({
   apiURL,
@@ -15,6 +15,7 @@ const Pagination = ({
   urlQuery,
   setPageData,
 }) => {
+  
   const router = useRouter();
   const query = router.query;
   const pageFromQuery = Number(query?.page) || 1;
@@ -34,13 +35,13 @@ const Pagination = ({
 
         const calcedPageIndex = (curPage - 1).toString();
         const defaultQuery = `?page=${calcedPageIndex}&size=${size}`;
-        let urlQueries = urlQuery ? `${defaultQuery}${urlQuery}` : defaultQuery;
-        console.log(urlQueries);
+        let urlQueries = urlQuery ? `${defaultQuery}&${urlQuery}` : defaultQuery;
+        console.log('Serach Query: ',urlQueries);
         const res = await getData(`${apiURL}${urlQueries}`);
-        const pageData = res.data?.page;
         console.log(res);
+        const pageData = res.data?.page;
         const hasItems = pageData?.totalElements !== 0;
-        if (hasItems) {
+        if (pageData && hasItems) {
           const newPageInfo = {
             totalPages: pageData.totalPages,
             size: pageData.size,
@@ -57,6 +58,8 @@ const Pagination = ({
           await router.push({
             search: `?page=${newPageInfo.newPageNumber}`,
           });
+        }else{
+          // setItemList([]);  // TEST 끝난 뒤, 주석 해제
         }
       } catch (err) {
         console.error(err);
@@ -68,7 +71,7 @@ const Pagination = ({
         }));
       }
     })();
-  }, [curPage, urlQuery]);
+  }, [curPage, urlQuery, apiURL]);
 
   const Num = ({ pagenum }) => {
     const calcedPageNum = pagenum + 1;

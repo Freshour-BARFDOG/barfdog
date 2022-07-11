@@ -19,7 +19,7 @@ import filter_numberZeoFromTheIntegerPartOfTheDecimals from '/util/func/filter_n
 import CustomRadioTrueOrFalse from '/src/components/admin/form/CustomRadioTrueOrFalse';
 import { validate } from '/util/func/validation/validation_recipe';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
-import { postObjData } from '/api/reqData';
+import { postObjData } from '/src/pages/api/reqData';
 
 
 

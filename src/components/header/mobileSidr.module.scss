@@ -1,5 +1,5 @@
 @import '/styles/global/rem';
-@import '/styles/global/zIndex.module';
+@import '/styles/module/zIndex.module';
 
 
 $main-padding: rem(20);
@@ -9,12 +9,13 @@ $bottom-menu-list-height: rem(50);
 #sidr {
   z-index: $mobileSidr;
   position: fixed;
-  right: -100vw;
+  right: -200vw;
   height: 100vh;
   top: 0;
-  transition: right 0.3s ease;
+  transition: right 0.6s ease;
   &.open {
     right: 0;
+    transition: right 0.3s ease;
   }
   &.member{
     width: 100vw;

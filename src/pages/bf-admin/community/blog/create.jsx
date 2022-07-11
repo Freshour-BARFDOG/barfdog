@@ -10,7 +10,7 @@ import PreviewImage from '/src/components/atoms/PreviewImage';
 import SelectTag from '/src/components/atoms/SelectTag';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import rem from '/util/func/rem';
-import { postFileUpload, postObjData } from '/api/reqData';
+import { postFileUpload, postObjData } from '/src/pages/api/reqData';
 import Spinner from '/src/components/atoms/Spinner';
 import { validate } from '/util/func/validation/validation_blog';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';

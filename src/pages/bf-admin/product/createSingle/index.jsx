@@ -16,7 +16,7 @@ import transformClearLocalCurrency from '/util/func/transformClearLocalCurrency'
 import Spinner from '/src/components/atoms/Spinner';
 import {validate} from '/util/func/validation/validation_singleItem';
 import {valid_hasFormErrors} from '/util/func/validation/validationPackage';
-import {postObjData} from '/api/reqData';
+import {postObjData} from '/src/pages/api/reqData';
 import {useModalContext} from '/store/modal-context';
 import dynamic from 'next/dynamic';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';

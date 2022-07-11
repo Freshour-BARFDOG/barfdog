@@ -1,7 +1,7 @@
 import s from './recipe.module.scss';
 import Link from 'next/link';
 import transformDate from '/util/func/transformDate';
-import { putObjData } from '/api/reqData';
+import { putObjData } from '/src/pages/api/reqData';
 
 export default function SearchResultList({ items, onDeleteItem }) {
   if (!items || !items.length) return;
@@ -21,7 +21,7 @@ const ItemList = ({ item, sortableItemRef }) => {
     id: item.id,
     name: item.name,
     description: item.description,
-    priceConst: item.priceConst || '36.649',
+    pricePerGram: item.pricePerGram,
     gramPerKcal: item.gramPerKcal,
     ingredients: item.ingredients,
     leaked: item.leaked === 'LEAKED' ? 'Y' : 'N',
@@ -56,7 +56,7 @@ const ItemList = ({ item, sortableItemRef }) => {
       <span>
         <em className={'overflow-x-scroll'}>{DATA.description}</em>
       </span>
-      <span>{DATA.priceConst}</span>
+      <span>{DATA.pricePerGram}</span>
       <span>{DATA.gramPerKcal}</span>
       <span>{DATA.ingredients}</span>
       <span

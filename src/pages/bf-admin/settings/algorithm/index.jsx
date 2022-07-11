@@ -7,7 +7,7 @@ import AlgorithmInput from './AlgorithmInput';
 import { useModalContext } from '/store/modal-context';
 import { validate } from '/util/func/validation/validation_siteSettings';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
-import { getData, putObjData } from '/api/reqData';
+import { getData, putObjData } from '/src/pages/api/reqData';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import Spinner from '/src/components/atoms/Spinner';
 import Tooltip from '/src/components/atoms/Tooltip';
@@ -25,7 +25,8 @@ export default function AlgorithmSettingPage() {
   const [formValues, setFormValues] = useState({});
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
-
+  
+  
   useEffect(() => {
     (async () => {
       try {
@@ -137,7 +138,10 @@ export default function AlgorithmSettingPage() {
             <div className="cont">
               <div className="cont_body">
                 <section className={s.section}>
-                  <h2 className={s['title']}>활동량 상수</h2>
+                  <h2 className={s['title']}>
+                    활동량 상수
+                    <Tooltip message={`소수점 이하 2자리까지 사용가능합니다.`} wordBreaking={true} width={'300px'} messagePosition={'left'}/>
+                  </h2>
                   <AlgorithmInput
                     id={'activityVeryMuch'}
                     label={'매우 많아요'}
@@ -180,7 +184,8 @@ export default function AlgorithmSettingPage() {
                   />
                 </section>
                 <section>
-                  <h2 className={s['title']}>간식량 상수</h2>
+                  <h2 className={s['title']}>간식량 상수
+                    <Tooltip message={`소수점 이하 2자리까지 사용가능합니다.`} wordBreaking={true} width={'300px'} messagePosition={'left'}/></h2>
                   <AlgorithmInput
                     id={'snackMuch'}
                     label={'많아요'}

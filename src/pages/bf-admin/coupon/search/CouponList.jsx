@@ -1,49 +1,86 @@
 import s from "../coupon.module.scss";
-
+import {global_couponType} from "/store/TYPE/couponType";
+import {putObjData} from "/src/pages/api/reqData";
 
 
 
 
 
   const ItemList = ({ item }) => {
+    // console.log(item);
     
-
+    let couponTarget= '';
+    if(item.couponTarget === 'ALL'){
+      couponTarget = '전체'
+    } else  if(item.couponTarget === 'SUBSCRIBE'){
+      couponTarget = '정기구독'
+    } else if (item.couponTarget === 'GENERAL') {
+      couponTarget = '일반상품'
+    }
+    
+    let couponType;
+    if(item.couponType === global_couponType.AUTO_PUBLISHED){
+      couponType = '자동발행';
+    } else  if(item.couponType === global_couponType.CODE_PUBLISHED){
+      couponType = '코드발행';
+    } else if (item.couponType === global_couponType.GENERAL_PUBLISHED) {
+      couponType = '일반발행';
+    }
+  
+    
     const DATA = {
-      id: item.id || 91,
-      name: item.name || "견주 생일 쿠폰",
-      code: item.code || "BA123456",
-      sort: item.sort || "자동발행쿠폰",
+      id: item.id,
+      couponType: couponType,
+      name: item.name,
+      code: item.code || "-",
       description:
-        item.description ||
-        "쿠폰설명..쿠폰설명..쿠폰설명..쿠폰설명..쿠폰설명..",
-      discount: item.discount || "15%",
-      couponTarget: item.couponTarget || "ALL",
-      amount: item.amount || "무제한",
+        item.description,
+      discount: item.discount,
+      couponTarget: couponTarget,
+      amount: item.amount,
       expiredDate: item.expiredDate || "-",
-      _links: {
-        // query_member: {
-        //   href: "http://localhost:8080/api/admin/members/91",
+      apiurl: {
+          delete: `/api/admin/coupons/${item.id}/inactive`,
       },
     };
-
-
+  
+  
+    const onInactiveItemHandler = async (e) => {
+      const button = e.currentTarget;
+      const apiURL = button.dataset.apiUrl;
+      
+      if (confirm(`정말 삭제하시겠습니까?\n쿠폰명: ${DATA.name}`)) {
+        const res = await putObjData(apiURL, {id:DATA.id});// rl 'http://localhost:8080/api/admin/coupons/3550/inactive' -i -X PUT \
+        console.log('쿠폰삭제결과',res);
+        if(res.isDone){
+          window.location.reload();
+        } else{
+          alert('쿠폰 삭제에 실패하였습니다. 새로고침 후 다시 시도해주세요.');
+        }
+        
+      }
+    };
+  
+    
+  
     return (
       <li className={s.item} key={`item-${DATA.id}`}>
+        <span>{DATA.couponType}</span>
         <span>{DATA.code}</span>
-        <span>{DATA.sort}</span>
         <span>{DATA.name}</span>
-        <span className={"overflow-x-scroll"}>{DATA.description}</span>
+        <span><em className="overflow-x-scroll">{DATA.description}</em></span>
         <span>{DATA.discount}</span>
         <span>{DATA.couponTarget}</span>
         <span>{DATA.amount}</span>
         <span>
-          <button
+          {couponType === '자동발행' ? <em className={'errorMSG'}>삭제불가</em> : <button
             className="admin_btn basic_s solid"
-            // onClick={onDeleteItemHandler}
-            // data-apiurl={DATA.apiurl.delete}
+            onClick={onInactiveItemHandler}
+            data-api-url={DATA.apiurl.delete}
           >
             삭제
-          </button>
+          </button>}
+          
         </span>
       </li>
     );

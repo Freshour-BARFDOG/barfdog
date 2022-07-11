@@ -1,92 +1,27 @@
-$browser-context:16;
-@function rem($px, $context: $browser-context) {
-  @return #{$px / $context}rem;
-}
+@import '/styles/global/rem';
+@import '/styles/module/itemList.module';
 
-
-$windowWidthForRightSideBorder: rem(1344);
 
 
 .cont_viewer {
-  overflow-x: auto; //
-  overflow-y: scroll; //
-  border: rem(1) solid var(--color-line-03); //
-  width: 100%;
   .table{
-    font-size: rem(15);
-    /* border line */
-    .table_header {
-      border-bottom: rem(1) solid var(--color-line-03);
+    .table_th:last-child,
+    .item > span:last-child,
+    .table_body > li > span:not(:last-child) {
+      border-right: $border;
     }
-    .table_th:not(:last-child),
-    .item > span:not(:last-child) {
-      border-right: rem(1) solid var(--color-line-03);
-    }
-    .table_th,
-    .item:not(:last-child) > span {
-      border-bottom: rem(1) solid var(--color-line-03);
-    }
-    .item:not(:last-child) {
-      border-bottom: rem(1) solid var(--color-line-03);
-    }
-    /* border line */
     .table_header, .item{
       display:grid;
       grid-gap:0;
       grid-template-rows: minmax(rem(60), auto);
       grid-template-columns:
-        minmax(rem(70), rem(140))
-        minmax(rem(70), rem(300))
-        minmax(rem(70), rem(180))
+        rem(140)
+        rem(300)
+        rem(180)
         rem(120)
         rem(180);
-
-      .table_th, span{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0 rem(16);
-      }
-      .table_th{
-        font-weight: 600;
-        background-color:#f1f1f4;
-        height: 100%;
-      }
-      > span{
-        padding: rem(5) rem(10);
-        button{font-size: inherit; }
-      }
-    }
-
-    .item{
-      background-color: #fff;
-      //border: rem(1) solid var(--color-line-03);
-      margin-top:rem(-1);
-    }
-
-    .img-wrap{
-      position: relative;
-      width:100%;
-      height: 100%;
     }
   }
 }
 
 
-
-.pagination-section {
-  margin-top: rem(20);
-
-}
-
-
-
-
-@media (max-width: ($windowWidthForRightSideBorder)) {
-  .cont_viewer{
-    .table {
-      .table_th:last-child, .table_body > li > span:last-child, .item > span:last-child{border-right: 0}
-    }
-  }
-
-}

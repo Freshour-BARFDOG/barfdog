@@ -44,17 +44,20 @@ module.exports = {
       "shop-phinf.pstatic.net",
     ],
   },
-  async rewrites() {
+  async rewrites () {
     console.log('Delopy Type is Dev ?',process.env.NODE_ENV !== "production");
-    console.log(process.env.NEXT_PUBLIC_API_URL_DEV);
-    console.log(process.env.NEXT_PUBLIC_API_URL_PRODUCT);
-    // console.log(process.env.SOURCE_PATH <--- URL  /api/이하 요청되었을 때  실행됨);
+    console.log('Default API URL (DEV): ',process.env.NEXT_PUBLIC_API_URL_DEV);
+    console.log('Default API URL (PRUD): ',process.env.NEXT_PUBLIC_API_URL_PRODUCT);
     if (process.env.NODE_ENV === "development") {
       return [
         {
           source: process.env.SOURCE_PATH,
           destination: process.env.NEXT_PUBLIC_API_URL_DEV,
         },
+        {
+          source: '/api/gf/:path*',
+          destination: 'https://test.goodsflow.com/:path*',
+        }
       ];
     } else {
       return [

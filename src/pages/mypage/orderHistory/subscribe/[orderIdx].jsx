@@ -10,7 +10,7 @@ import Image from 'next/image';
 function SubScribe_OrderHistoryPage() {
   return (
     <>
-      <MetaTitle title="마이페이지 주문내역: 정기구독" />
+      <MetaTitle title="마이페이지 주문내역 정기구독" />
       <Layout>
         <Wrapper>
           <MypageWrapper>
@@ -24,8 +24,13 @@ function SubScribe_OrderHistoryPage() {
                 </div>
                 
                 <hr />
+                
+                <span className={Styles.change}>
+                  *2022/02/14 구독 정보 변경으로 주문 변경 내용이 있습니다. 
+                </span>
 
                 <div className={Styles.body_content}>
+
                   <div className={Styles.left_box}>
                     <div className={`${Styles.image} img-wrap`}>
                       <Image
@@ -135,6 +140,19 @@ function SubScribe_OrderHistoryPage() {
                 {/* 주문상품 결제정보 배송정보 */}
                 <div className={Styles.body_content_3}>
                   <p>배송중 상태에서 조회가 가능합니다.</p>
+
+                  <ul className={Styles.content_grid}>
+                    <li>
+                      <span>CJ대한통운</span>
+                      <span>운송장번호</span>
+                      <span>510017079554</span>
+                    </li>
+                    <li>배송중</li>
+                    <li>
+                      <button>배송조회</button>
+                    </li>
+                  </ul>
+                  
                 </div>
               </section>
 

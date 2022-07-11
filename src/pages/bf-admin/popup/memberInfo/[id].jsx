@@ -1,15 +1,17 @@
 import React , { useState, useEffect }from 'react'
 import { useRouter } from 'next/router';
-import s from './popup.module.scss';
-import PopupWrapper from "@src/components/popup/PopupWrapper";
-import { PopupCloseButton, PopupCloseButton_typeX } from "@src/components/popup/PopupCloseButton";
-import Modal_member_class from '@src/components/modal/Modal_member_class';
-import Modal_member_subscribe from "@src/components/modal/Modal_member_subscribe";
+import s from './memberInfo.module.scss';
+import PopupWrapper from "/src/components/popup/PopupWrapper";
+import { PopupCloseButton, PopupCloseButton_typeX } from "/src/components/popup/PopupCloseButton";
+import Modal_member_class from '/src/components/modal/Modal_member_class';
+import Modal_member_subscribe from "/src/components/modal/Modal_member_subscribe";
+import UpdateSingleItemPage from "../../product/single/update/[id]";
 
 
 
 
-function Popup_MemeberDetailPage() {
+function Popup_MemeberDetailPage(id) {
+  console.log(id);
   const router = useRouter();
   const initialValues = {
     birthday: '1992-02-15',
@@ -263,4 +265,24 @@ function Popup_MemeberDetailPage() {
   );
 }
 
-export default Popup_MemeberDetailPage
+export default Popup_MemeberDetailPage;
+
+// Popup_MemeberDetailPage.getInitialProps = async ({ query }) => {
+//   const { id } = query
+//
+//   return { id : id};
+//
+// }
+
+export async function getServerSideProps (ctx) {
+  const { params, req, res} = ctx;
+  console.log(params)
+  // console.log('REQUEST: ',req)
+  // console.log('RESPONSE: ', res);
+  
+  return {
+    props: {
+      id: 'user1'   }
+  }
+
+}

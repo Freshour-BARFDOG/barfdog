@@ -3,7 +3,7 @@ import Link from 'next/link';
 import transformDate from '/util/func/transformDate';
 import transformLocalCurrency from "/util/func/transformLocalCurrency";
 import {global_itemType} from "/store/TYPE/itemType";
-import {deleteData} from "/api/reqData";
+import {deleteData} from "/src/pages/api/reqData";
 export default function SearchResultList({ items }) {
   if (!items || !items.length) return;
 
@@ -22,7 +22,7 @@ const ItemList = ({ item }) => {
   const DATA = {
     id: item.id,
     name: item.name,
-    itemType: global_itemType
+    itemType: global_itemType.KOR
       [item.itemType],
     originalPrice: transformLocalCurrency(item.originalPrice) + '원',
     salePrice: transformLocalCurrency(item.salePrice) + '원',

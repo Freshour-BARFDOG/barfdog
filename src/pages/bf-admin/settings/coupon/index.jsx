@@ -6,14 +6,14 @@ import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
 import AutoPublishedCouponSettingInput from './AutoPublishedCouponSettingInput';
 import GradeCouponSettingInput from './GradeCouponSettingInput';
 import { useModalContext } from '/store/modal-context';
-import { getData, putObjData } from '/api/reqData';
+import { getData, putObjData } from '/src/pages/api/reqData';
 import transformDate from '/util/func/transformDate';
 import {valid_isEmptyInCustom, validate} from '/util/func/validation/validation_autoCoupon';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
 import Tooltip from '/src/components/atoms/Tooltip';
 import Spinner from '/src/components/atoms/Spinner';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
-import {global_autoCouponType} from "/store/TYPE/autoCouponType";
+import {autoPublishedCouponType} from "/store/TYPE/couponType";
 import {global_gradeType} from "/store/TYPE/gradeType";
 import transformLocalCurrency from "/util/func/transformLocalCurrency";
 import transformClearLocalCurrency from "../../../../../util/func/transformClearLocalCurrency";
@@ -98,7 +98,6 @@ function CouponSettingPage() {
       const finalFormValues = {
         [autoCouponKey]: convertedFormValues
       }
-  
       // console.log('formValues: ', formValues);
       // console.log('convertedFormValues: ', convertedFormValues);
       // console.log('formErrors: ', formErrors);
@@ -107,7 +106,7 @@ function CouponSettingPage() {
         const res = await putObjData(putFormValuesApiUrl, finalFormValues);
         console.log(res);
         if (res.isDone) {
-          // onShowModalHandler('사이트 설정이 성공적으로 저장되었습니다.');
+          onShowModalHandler('사이트 설정이 성공적으로 저장되었습니다.');
           setIsSubmitted(true);
         } else {
           alert(res.error, '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.');
@@ -124,7 +123,7 @@ function CouponSettingPage() {
       submit: false,
     }));
   };
-
+가
   const onShowModalHandler = (message) => {
     mct.alertShow();
     setModalMessage(message);
@@ -153,7 +152,7 @@ function CouponSettingPage() {
                   <h2 className={s['title']}>자동발행 쿠폰</h2>
                   {formValues.map((coupon, index)=>{
                     const couponName = coupon.name.replace(/(\s*)/gi, "");
-                    const categoryList = global_autoCouponType; // ['정기구독할인쿠폰', '반려견생일쿠폰', '견주생일쿠폰']
+                    const categoryList = autoPublishedCouponType; // ['정기구독할인쿠폰', '반려견생일쿠폰', '견주생일쿠폰']
                     if(categoryList.indexOf(couponName) >= 0){
                       return <AutoPublishedCouponSettingInput
                         key={`${coupon.name}${coupon.id}`}

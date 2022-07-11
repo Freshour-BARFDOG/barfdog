@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import rem from '/util/func/rem';
 
-const Wrap = styled.div`
+const Wrap = styled.em`
   position: relative;
   display: inline-flex;
   align-items: center;

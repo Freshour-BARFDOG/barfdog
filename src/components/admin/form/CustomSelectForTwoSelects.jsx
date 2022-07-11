@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import getElemIdx from '/util/func/getElemIdx';
 
-const CustomSelectForTwoSelects = ({ name, id, onChange, options = [], style, ...props }) => {
-  const initialValue = options[0].value || '';
-  const [selectedValue, setSelectedValue] = useState(initialValue);
+const CustomSelectForTwoSelects = ({ name, id, onChange, options = [], value, style, ...props }) => {
+  // const initialValue = options[0].value || '';
+  const [selectedValue, setSelectedValue] = useState('');
+  
+  useEffect( () => {
+    setSelectedValue(value);
+  }, [value] );
+  
 
   const onChangeHandler = (e) => {
-    const thisSelect = e.currentTarget;
-    const value = thisSelect.value;
-    const options = Array.from(thisSelect.children);
+    const select = e.currentTarget;
+    const value = select.value;
+    const options = Array.from(select.children);
     let selectedOptionIdx;
     options.map((option) => {
       const thisOptionValue = option.value;
@@ -38,7 +43,19 @@ const CustomSelectForTwoSelects = ({ name, id, onChange, options = [], style, ..
         style={style}
         {...props}
       >
-        {options.map((option, i) => {
+        {options.map((option, i) => (
+          <option key={`${option}-${i}`} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+    </>
+  );
+};
+
+export default CustomSelectForTwoSelects;
+
+/*        {options.map((option, i) => {
           return i === 0 ? (
             <option key={`${option.label}-${i}`} value={option.value} defaultValue>
               {option.label}
@@ -49,9 +66,5 @@ const CustomSelectForTwoSelects = ({ name, id, onChange, options = [], style, ..
             </option>
           );
         })}
-      </select>
-    </>
-  );
-};
-
-export default CustomSelectForTwoSelects;
+* 
+* */

@@ -22,10 +22,11 @@ font-family: 'GmarketSansBold'
   --color-point-disabled: #f69999; /* *  포인트색상 Disabled */
   --color-point-hover: #e02d2d; /* * 포인트색상 Hover */
 
-  --color-primary01: #ca1011;
-  --color-primary02: #f11a39;
-  --color-primary03: #ff5959;
-  --color-primary04: #ed3333;
+  --color-primary01: var(--color-main);
+  /*--color-primary02: #f11a39;*/
+  /*--color-primary03: #ff5959;*/
+  /*--color-primary04: #ed3333;*/
+  --color-primary04: var(--color-main);
 
   --color-checked: #50a057;
   --color-warning: #ff4444;
@@ -302,7 +303,7 @@ input[type='date']::-webkit-datetime-edit {
   font-size: var(--reset-font-size);
   cursor: pointer;
 }
-input[type='date']::-webkit-datetime-edit-fields-wrapper {}
+input[type='date']::-webkit-datetime-edit-fields-wrapper {font-size: 14px;}
 input[type='date']::-webkit-datetime-edit-text {}
 input[type='date']::-webkit-datetime-edit-month-field {}
 input[type='date']::-webkit-datetime-edit-day-field {}
@@ -313,6 +314,7 @@ input[type='date']::-webkit-calendar-picker-indicator {
     opacity: 0.8;
     cursor: pointer;
 }
+
 
 input::placeholder {
   color: var(--color-placeholder);

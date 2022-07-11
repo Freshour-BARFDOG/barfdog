@@ -69,7 +69,7 @@ const ItemList = ({ item, sortableItemRef }) => {
       </span>
       <span>
         <Link
-          href={`/bf-admin/sell/popup/${DATA.paymentType}/${DATA.id}`}
+          href={`/bf-admin/popup/sell/${DATA.paymentType}/${DATA.id}`}
           passHref
         >
           <a onClick={onPopupHandler} className="admin_btn basic_s solid">

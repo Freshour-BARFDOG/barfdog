@@ -202,8 +202,8 @@ $input-height: rem(44);
       color: var(--color-main);
       font-size: rem(14);
       svg {
-        width: 20px;
-        height: 20px;
+        width: rem(20);
+        height: rem(20);
       }
     }
 
@@ -245,7 +245,7 @@ $input-height: rem(44);
 .btn-section {
   display: flex;
   justify-content: center;
-  margin-top: 56px;
+  margin-top: rem(56);
 
   .btn.join {
     max-width: rem(240);
@@ -254,7 +254,7 @@ $input-height: rem(44);
     background-color: var(--color-main);
     color: white;
     font-weight: bold;
-    font-size: 15px;
+    font-size: rem(15);
   }
 }
 
@@ -317,3 +317,14 @@ $input-height: rem(44);
   animation: show var(--ani-default);
 }
 
+
+
+@media (max-width: rem(600)) {
+  
+  .join__wrap {
+
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  
+}
