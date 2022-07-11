@@ -135,6 +135,10 @@ $popupCloseButtonSectionHeight: rem(88);
     color: var(--color-font-def);
     font-size: rem(18);
     font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 70%;
   }
 
   .name {
@@ -149,6 +153,7 @@ $popupCloseButtonSectionHeight: rem(88);
   .userText {
     margin-bottom: rem(10);
     color: var(--gray10);
+    white-space: break-spaces;
   }
 
   .userImages .img-wrap {
