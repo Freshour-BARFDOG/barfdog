@@ -14,6 +14,7 @@ import Spinner from "/src/components/atoms/Spinner";
 import {global_reviewStateType} from "/store/TYPE/reviewStateType";
 import {valid_isTheSameArray} from "/util/func/validation/validationPackage";
 import ToolTip from "/src/components/atoms/Tooltip";
+import {putObjData} from "/src/pages/api/reqData";
 
 
 
@@ -29,16 +30,18 @@ const initialSearchValue = {
 
 
 const initialApiUrlQuery = {
-  query: 'status=ALL&order=desc',
+  query: 'status=ALL&order=desc&from=2022-06-01&to=2022-07-11',
   url: '/api/admin/reviews'
 };
+
+const putApprovalReviewApiUrl = '/api/admin/reviews/approval';
+const apiDataQueryString = 'queryAdminReviewsDtoList';
+const searchPageSize = 10;
+
 
 
 
 function ReviewPage() {
-  
-  const apiDataQueryString = 'queryAdminReviewsDtoList';
-  const searchPageSize = 10;
   
   const [modalMessage, setModalMessage] = useState( '' );
   const [isLoading, setIsLoading] = useState({});
@@ -50,23 +53,19 @@ function ReviewPage() {
   // console.log(itemList);
   // console.log(searchValue);
   // console.log(apiUrlWithQuery);
-  console.log(selectedItemList);
-  
+  // console.log(searchValue);
   const onResetSearchValues = () => {
     setSearchValue(initialSearchValue);
   };
   
+  
   const onSearchHandler = () => {
-    const defaultQuery = 'order=desc'
+    const defaultQuery = 'order=desc';
     const queryArr = [defaultQuery];
     let url = initialApiUrlQuery.url;
     for (const key in searchValue) {
       const val = searchValue[key];
-      switch (key) {
-        case 'status':
-          queryArr.push(`${key}=${val}`);
-          break;
-      }
+      queryArr.push(`${key}=${val}`);
     }
     
     const query = `${queryArr.join('&')}`;
@@ -87,21 +86,26 @@ function ReviewPage() {
     }
   };
   
-  const onDeleteItemList = ()=>{
-    if(!selectedItemList.length) return alert('선택된 항목이 없습니다.');
-    if(confirm(`선택된 ${selectedItemList.length}개의 항목을 삭제하시겠습니까?`)){
-      setItemList(prevState => {
-        return prevState.filter((item)=> selectedItemList.indexOf(item.id) < 0);
-      })
-      setSelectedItemList([]);
-    }
-  };
-  // 선택된 항목에 대하여 delete Item 실행한다.
   const valid_allCheckboxesChecked = () => {
     if (!Array.isArray(itemList) || !Array.isArray(selectedItemList) || itemList.length === 0) return;
     const allSelectedList = itemList.map((item) => item.id);
     return valid_isTheSameArray(allSelectedList, selectedItemList);
   };
+  
+  
+  
+  const onApprovalReview = async () => {
+    console.log(selectedItemList);
+    const res = await putObjData(putApprovalReviewApiUrl, selectedItemList);
+    console.log(res);
+    if(res.status === 200){
+      console.log('리뷰 승인 성공 ');
+      setSelectedItemList([]); // 초기화 시킴
+    }
+    
+    // seelcted Item에 대해서 리뷰 승인 상태로 변환시킨다 (LIST)
+    // selectedItem 상태를 초기화시킨다.
+  }
   
   return (
     <>
@@ -134,7 +138,7 @@ function ReviewPage() {
                 <ToolTip messagePosition={'left'} message={'체크박스는 리뷰 승인 및 베스트리뷰 선정에 사용됩니다.'} />
               </p>
               <div className="controls cont-left">
-                <button className="admin_btn line basic_m">리뷰 승인</button>
+                <button className="admin_btn line basic_m" onClick={onApprovalReview}>리뷰 승인</button>
                 <button className="admin_btn line basic_m">
                   베스트 리뷰 선정
                 </button>

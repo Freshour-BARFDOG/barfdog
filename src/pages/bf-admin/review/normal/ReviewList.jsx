@@ -1,12 +1,13 @@
+import React from 'react';
 import s from './review.module.scss';
 import Checkbox from '/src/components/atoms/Checkbox';
 import transformDate from '/util/func/transformDate';
 import popupWindow from '/util/func/popupWindow';
 import Link from 'next/link';
 import { deleteData } from '/src/pages/api/reqData';
-import React from 'react';
+import { global_reviewStateType } from '/store/TYPE/reviewStateType';
 
-export default function BestReviewList({ items, selectedItems, setSelectedItems }) {
+export default function ReviewList({ items, selectedItems, setSelectedItems }) {
   if (!items || !items.length) return;
 
   return (
@@ -26,9 +27,15 @@ export default function BestReviewList({ items, selectedItems, setSelectedItems 
 
 const ItemList = ({ item, selectedItems, setSelectedItems }) => {
   // console.log(item);
+  let itemStatus;
+  global_reviewStateType.forEach((type) => {
+    if (type.ENG === item.status) {
+      itemStatus = type.KOR;
+    }
+  });
   const DATA = {
     id: item.id,
-    status: item.status,
+    status: itemStatus,
     title: item.title,
     contents: item.contents,
     star: item.star,
@@ -68,6 +75,7 @@ const ItemList = ({ item, selectedItems, setSelectedItems }) => {
     }
   };
 
+  //
   return (
     <li className={s.item} key={`item-${DATA.id}`} data-idx={DATA.id}>
       <span>

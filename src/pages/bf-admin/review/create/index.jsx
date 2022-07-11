@@ -52,7 +52,7 @@ const initialFormValues = {
 function CreateRewardPage() {
   const router = useRouter();
   const postFormValuesApiUrl = '/api/admin/reviews';
-  const postThumbFileApiUrl = '/api/reviews/upload'; //
+  const postThumbFileApiUrl = '/api/reviews/upload';
   const mct = useModalContext();
   const maxContentsLength = 1000;
 
@@ -140,14 +140,15 @@ function CreateRewardPage() {
       console.error('이미 제출된 양식입니다.');
       return onGlobalModalCallback();
     }
-  
-    // console.log(formValues);
+
     const convertedFormValues = {
       ...formValues,
       id: Number(formValues.id),
       reviewImageIdList: formValues.reviewImageIdList.map(list=>list.id)
     };
-   
+  
+  
+    console.log(formValues);
     console.log(convertedFormValues);
     const errObj = validate(convertedFormValues, { contents: maxContentsLength });
     setFormErrors(errObj);
