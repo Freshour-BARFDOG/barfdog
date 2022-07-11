@@ -7,13 +7,12 @@ import BestReviewList from "./BestReviewList";
 import axios from "axios";
 import axiosConfig from "/src/pages/api/axios.config";
 import AmdinErrorMessage from "/src/components/atoms/AmdinErrorMessage";
-import sorting from "/util/func/sorting";
 import {
   Button_EditListOrder,
   Button_InactiveEditListOrder,
 } from "/src/components/atoms/Button_EditListOrder";
 import {getData} from "/src/pages/api/reqData";
-import Spinner from "../../../../components/atoms/Spinner";
+import Spinner from "/src/components/atoms/Spinner";
 
 
 const getApiUrl = '/api/admin/reviews/best';
