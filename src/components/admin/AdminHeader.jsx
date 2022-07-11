@@ -6,15 +6,24 @@ import Image from 'next/image';
 import s from "./adminHeader.module.scss";
 import Link from 'next/link';
 import {IoMenuSharp} from "react-icons/io5";
+import {userStateAction} from "@store/userState-slice";
 
-function AdminHeader({setFolded}) {
+function AdminHeader({folded}) {
   const dispatch = useDispatch();
   const onLogoutHandler = () => {
     dispatch(authAction.adminLogout());
   }
 
   const onChangeGnbMode = ()=>{
-    setFolded(prevState=>!prevState)
+    console.log('click! ');
+    console.log(folded)
+    if(folded){
+      dispatch(userStateAction.unfold());
+    } else {
+      dispatch(userStateAction.fold());
+    }
+    
+    // setFolded(prevState=>!prevState);
   }
 
   const adminName = '관리자'; // * 정적인 이름 필요할 경우 변경
