@@ -6,7 +6,7 @@ import MetaTitle from "/src/components/atoms/MetaTitle";
 import AdminLayout from "/src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
 import ErrorMessage from "/src/components/atoms/ErrorMessage";
-import {getData, putObjData} from "/api/reqData";
+import {getData, putObjData} from "/src/pages/api/reqData";
 import {validate} from "/util/func/validation/validation_notice";
 import {valid_hasFormErrors} from "/util/func/validation/validationPackage";
 import CustomRadio from "/src/components/admin/form/CustomRadio";

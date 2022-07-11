@@ -2,10 +2,10 @@ import {Provider} from "react-redux";
 import store from "@store/index";
 import "@styles/global/global.scss";
 import AuthInterceptor from "@store/auth-interceptor";
-import '/api/axios.config';
+import '/src/pages/api/axios.config';
 import {ModalContextProvider} from '@store/modal-context';
-import ChannelTalkProvider from "/api/channelTalk/ChannelTalkProvider";
-import GAProvider from "/api/googleAnalytics/GAProvider";
+import ChannelTalkProvider from "/src/pages/api/channelTalk/ChannelTalkProvider";
+import GAProvider from "/src/pages/api/googleAnalytics/GAProvider";
 
 // Server Only File (client에서 사용하는 로직 사용불가)
 // Next JS : 최초실행

@@ -5,7 +5,7 @@ import { AdminContentWrapper } from "@src/components/admin/AdminWrapper";
 import MetaTitle from "@src/components/atoms/MetaTitle";
 import BestReviewList from "./ReviewList";
 import axios from "axios";
-import axiosConfig from "/api/axios.config";
+import axiosConfig from "/src/pages/api/axios.config";
 import AmdinErrorMessage from "@src/components/atoms/AmdinErrorMessage";
 import Checkbox from "@src/components/atoms/Checkbox";
 

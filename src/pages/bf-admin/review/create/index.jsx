@@ -13,7 +13,7 @@ import { global_itemType } from '/store/TYPE/itemType';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import { validate } from '/util/func/validation/validation_review';
 import { valid_couponCode, valid_hasFormErrors } from '/util/func/validation/validationPackage';
-import { getData, postObjData } from '/api/reqData';
+import { getData, postObjData } from '/src/pages/api/reqData';
 import CustomSelect from '/src/components/admin/form/CustomSelect';
 import Spinner from '/src/components/atoms/Spinner';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';

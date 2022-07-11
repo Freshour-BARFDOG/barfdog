@@ -9,7 +9,7 @@ import RatingStars from '/src/components/atoms/RatingStars';
 import Spinner from '../../../components/atoms/Spinner';
 import { validate } from '/util/func/validation/validation_review';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
-import { postObjData } from '/api/reqData';
+import { postObjData } from '/src/pages/api/reqData';
 import { useRouter } from 'next/router';
 import { transformToday } from '/util/func/transformDate';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';

@@ -1,6 +1,6 @@
 import s from "./event.module.scss";
 import Link from "next/link";
-import {deleteData} from "../../../../../api/reqData";
+import {deleteData} from "../../../api/reqData";
 
 export default function EventList({ items, onDeleteItem }) {
   if (!items || !items.length) return;

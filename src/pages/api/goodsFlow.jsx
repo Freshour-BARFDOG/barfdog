@@ -8,7 +8,6 @@ const { validateHeaderName } = require('http');
 
 const GoodsFlowTest = async (req, res) => {
   axios.defaults.baseURL = 'https://test.goodsflow.com/';
-  // console.log('TEST!!!');
   //// 'https://test.goodsflow.com/delivery/api/v2/otps/partner/BARFDOG',
 
   try {
@@ -30,7 +29,7 @@ const GoodsFlowTest = async (req, res) => {
       )
       .then((res) => {
         console.log(
-          '------------------------------------------------------------------ AXIOS > RESPONSE ------------------------------------------------------------------ ',
+          '---------------------------- AXIOS > RESPONSE ----------------------------',
           res,
         );
         return res.data;
@@ -41,7 +40,6 @@ const GoodsFlowTest = async (req, res) => {
         return err.response;
       });
     console.log('---------- AXIOS > RESPONSE: ', DATA);
-    // console.log('---------- AXIOS > RESPONSE: ', JSON.parse(DATA));
     console.log('---------- AXIOS > RESPONSE: ', JSON.stringify(DATA));
    
     const defaultCorsHeader = {
@@ -52,14 +50,14 @@ const GoodsFlowTest = async (req, res) => {
       "Accept": 'application/json',
       "Content-Type": "application/json"
     };
-    
-    const body = {
-      appVersion: DATA.appVersion,
-      id: DATA.id,
-      data: DATA.data,
-      success: DATA.success,
-    }
-    console.log('BODY: ', body);
+    //
+    // const body = {
+    //   appVersion: DATA.appVersion,
+    //   id: DATA.id,
+    //   data: DATA.data,
+    //   success: DATA.success,
+    // }
+    // console.log('BODY: ', body);
     
     
     res.writeHead(200, defaultCorsHeader);

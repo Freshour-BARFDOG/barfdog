@@ -9,7 +9,7 @@ import SearchTerm from '@src/components/admin/form/searchBar/SearchTerm';
 import SearchTextWithCategory from '@src/components/admin/form/searchBar/SearchTextWithCategory';
 import MemberList from './MemberList';
 import ToolTip from '@src/components/atoms/Tooltip';
-import { getData } from '/api/reqData';
+import { getData } from '/src/pages/api/reqData';
 
 // TODO >
 // - 검색기능

@@ -1,7 +1,7 @@
 import s from "./blog.module.scss";
 import Link from 'next/link';
 import getElemIdx from "../../../../../util/func/getElemIdx";
-import {deleteData} from "../../../../../api/reqData";
+import {deleteData} from "../../../api/reqData";
 
 
 export default function BlogList({ items, setItemList }) {

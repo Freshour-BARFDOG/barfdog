@@ -7,7 +7,7 @@ import s from '/src/pages/bf-admin/popup/searchUser/searchUser.module.scss';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import { valid_isTheSameArray } from '/util/func/validation/validationPackage';
 import Spinner from '/src/components/atoms/Spinner';
-import { getMemberList } from '/api/getMemberList';
+import { getMemberList } from '/src/pages/api/getMemberList';
 import Tooltip from "../../atoms/Tooltip";
 
 const WindowOpener = dynamic(() => import('/util/func/window-opener'), { ssr: false });

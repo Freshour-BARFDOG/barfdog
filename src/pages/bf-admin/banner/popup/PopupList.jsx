@@ -7,7 +7,7 @@ import Descend from '/public/img/icon/btn_descend.svg';
 import getElemIdx from '/util/func/getElemIdx.js';
 import changeArrayOrder from '/util/func/changeArrayOrder';
 import transformDate from '/util/func/transformDate';
-import { deleteData, putObjData } from '/api/reqData';
+import { deleteData, putObjData } from '/src/pages/api/reqData';
 import extractPartOfURL from '/util/func/extractPartOfURL';
 
 

@@ -1,4 +1,4 @@
-import {getData} from "/api/reqData";
+import {getData} from "/src/pages/api/reqData";
 import {useEffect, useState} from "react";
 
 

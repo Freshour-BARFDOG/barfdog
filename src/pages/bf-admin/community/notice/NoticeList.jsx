@@ -1,6 +1,6 @@
 import s from "./notice.module.scss";
 import Link from "next/link";
-import {deleteData} from "../../../../../api/reqData";
+import {deleteData} from "../../../api/reqData";
 
 
 

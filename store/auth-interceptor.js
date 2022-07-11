@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { authAction } from '/store/auth-slice';
 import useUserData from '/util/hook/useUserData';
 import { FullScreenLoading } from '/src/components/atoms/fullScreenLoading';
-import getAdminToken from '@api/getAdminToken';
-import { getData, testTokenStateWithOldToken } from '/api/reqData';
+import getAdminToken from '@src/pages/api/getAdminToken';
+import { getData, testTokenStateWithOldToken } from '/src/pages/api/reqData';
 
 export default function AuthInterceptor ({ children })  {
   const [loading, setLoading] = useState(true);

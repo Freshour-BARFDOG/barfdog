@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import IngredientsItem from './ingredientsItem';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import enterKey from '/util/func/enterKey';
-import {getData} from "/api/reqData";
+import {getData} from "/src/pages/api/reqData";
 import Spinner from "/src/components/atoms/Spinner";
 import filter_emptyValue from "/util/func/filter_emptyValue";
 

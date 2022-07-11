@@ -5,7 +5,7 @@ import Fake_input from "/src/components/atoms/fake_input";
 import ErrorMessage from "/src/components/atoms/ErrorMessage";
 import ItemLabel from "/src/components/atoms/ItemLabel";
 import rem from "/util/func/rem";
-import {postFileUpload} from "../../../../../api/reqData";
+import {postFileUpload} from "../../../api/reqData";
 
 export default function SingleItemThumbnail({fileList, setFileList, formErrors }) {
 

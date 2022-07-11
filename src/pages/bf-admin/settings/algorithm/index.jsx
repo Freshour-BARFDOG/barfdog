@@ -7,7 +7,7 @@ import AlgorithmInput from './AlgorithmInput';
 import { useModalContext } from '/store/modal-context';
 import { validate } from '/util/func/validation/validation_siteSettings';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
-import { getData, putObjData } from '/api/reqData';
+import { getData, putObjData } from '/src/pages/api/reqData';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import Spinner from '/src/components/atoms/Spinner';
 import Tooltip from '/src/components/atoms/Tooltip';

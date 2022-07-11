@@ -1,5 +1,5 @@
 import React from 'react';
-import DaumPostCode from "/api/daumPostCode";
+import DaumPostCode from "/src/pages/api/daumPostCode";
 import MetaTitle from "/src/components/atoms/MetaTitle";
 
 

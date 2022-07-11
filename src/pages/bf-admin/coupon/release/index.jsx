@@ -17,7 +17,7 @@ import filter_onlyNumber from '/util/func/filter_onlyNumber';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import { validate } from '/util/func/validation/validation_releaseCoupon';
 import { valid_date, valid_hasFormErrors } from '/util/func/validation/validationPackage';
-import { getData, postObjData } from '/api/reqData';
+import { getData, postObjData } from '/src/pages/api/reqData';
 import { global_couponType } from '/store/TYPE/couponType';
 import CustomSelect from '/src/components/admin/form/CustomSelect';
 

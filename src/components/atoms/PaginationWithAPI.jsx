@@ -3,7 +3,7 @@ import DoubleArrow from '@public/img/icon/pagination-double-arrow.svg';
 import { useEffect, useState } from 'react';
 import s from './pagination.module.scss';
 import { useRouter } from 'next/router';
-import { getData } from '/api/reqData';
+import { getData } from '/src/pages/api/reqData';
 
 const Pagination = ({
   apiURL,

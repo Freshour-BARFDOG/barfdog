@@ -5,7 +5,7 @@ import Fake_input from '/src/components/atoms/fake_input';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import Spinner from '/src/components/atoms/Spinner';
 import convertFileSizeToMegabyte from '/util/func/convertFileSizeToMegabyte';
-import { postFileUpload } from '/api/reqData';
+import { postFileUpload } from '/src/pages/api/reqData';
 
 export default function EventDetailImage({
   id,

@@ -7,7 +7,7 @@ import filter_onlyNumber from "/util/func/filter_onlyNumber";
 import filter_numberZeoFromTheIntegerPartOfTheDecimals from "/util/func/filter_numberZeoFromTheIntegerPartOfTheDecimals";
 import ErrorMessage from "/src/components/atoms/ErrorMessage";
 import {useModalContext} from "/store/modal-context";
-import {getData, putObjData} from "/api/reqData";
+import {getData, putObjData} from "/src/pages/api/reqData";
 import {validate} from "/util/func/validation/validation_siteSettings";
 import {valid_hasFormErrors} from "/util/func/validation/validationPackage";
 import Spinner from "/src/components/atoms/Spinner";

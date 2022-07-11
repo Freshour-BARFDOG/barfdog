@@ -11,7 +11,7 @@ import ErrorMessage from "/src/components/atoms/ErrorMessage";
 import Fake_input from "/src/components/atoms/fake_input";
 import CustomRadio from "/src/components/admin/form/CustomRadio";
 import {validate} from "/util/func/validation/validation_mypageBanner";
-import {getData, postObjData} from "/api/reqData";
+import {getData, postObjData} from "/src/pages/api/reqData";
 import Spinner from "/src/components/atoms/Spinner";
 import {valid_hasFormErrors} from "/util/func/validation/validationPackage";
 import Tooltip from "/src/components/atoms/Tooltip";
