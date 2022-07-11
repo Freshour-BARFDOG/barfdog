@@ -41,21 +41,23 @@ function SubscribeIndexPage() {
 
                 </div>
 
-                <div className={Styles.col_2}>
-                  <div className={Styles.text2}>다음 결제일</div>
-                  <div className={Styles.text3}>2022-03-14</div>
-                </div>
-
-                <div className={Styles.col_3}>
-                  <div className={Styles.text2}>다음 결제금액</div>
-                  <div className={Styles.text3}>280,000원</div>
-                </div>
-
-                <div className={Styles.col_4}>
-                  <div className={Styles.btn}>
-                    관리하기
+                <div className={Styles.grid}>
+                  <div className={Styles.col_2}>
+                    <div className={Styles.text2}>다음 결제일</div>
+                    <div className={Styles.text3}>2022-03-14</div>
                   </div>
 
+                  <div className={Styles.col_3}>
+                    <div className={Styles.text2}>다음 결제금액</div>
+                    <div className={Styles.text3}>280,000원</div>
+                  </div>
+
+                  <div className={Styles.col_4}>
+                    <button className={Styles.btn}>
+                      관리하기
+                    </button>
+
+                  </div>
                 </div>
 
               </div>
@@ -87,21 +89,22 @@ function SubscribeIndexPage() {
 
                 </div>
 
-                <div className={Styles.col_2}>
-                  <div className={Styles.text2}>다음 결제일</div>
-                  <div className={Styles.text3}>2022-03-14</div>
-                </div>
-
-                <div className={Styles.col_3}>
-                  <div className={Styles.text2}>다음 결제금액</div>
-                  <div className={Styles.text3}>280,000원</div>
-                </div>
-
-                <div className={Styles.col_4}>
-                  <div className={Styles.btn}>
-                    관리하기
+                <div className={Styles.grid}>
+                  <div className={Styles.col_2}>
+                    <div className={Styles.text2}>다음 결제일</div>
+                    <div className={Styles.text3}>2022-03-14</div>
                   </div>
 
+                  <div className={Styles.col_3}>
+                    <div className={Styles.text2}>다음 결제금액</div>
+                    <div className={Styles.text3}>280,000원</div>
+                  </div>
+
+                  <div className={Styles.col_4}>
+                    <button className={Styles.btn}>
+                      관리하기
+                    </button>
+                  </div>
                 </div>
 
               </div>
@@ -130,21 +133,23 @@ function SubscribeIndexPage() {
 
                 </div>
 
-                <div className={Styles.col_2}>
-                  <div className={Styles.text2}>다음 결제일</div>
-                  <div className={Styles.text3}>2022-03-14</div>
-                </div>
-
-                <div className={Styles.col_3}>
-                  <div className={Styles.text2}>다음 결제금액</div>
-                  <div className={Styles.text3}>280,000원</div>
-                </div>
-
-                <div className={Styles.col_4}>
-                  <div className={Styles.btn}>
-                    관리하기
+                
+                <div className={Styles.grid}>
+                  <div className={Styles.col_2}>
+                    <div className={Styles.text2}>다음 결제일</div>
+                    <div className={Styles.text3}>2022-03-14</div>
                   </div>
 
+                  <div className={Styles.col_3}>
+                    <div className={Styles.text2}>다음 결제금액</div>
+                    <div className={Styles.text3}>280,000원</div>
+                  </div>
+
+                  <div className={Styles.col_4}>
+                    <button className={Styles.btn}>
+                      관리하기
+                    </button>
+                  </div>
                 </div>
 
               </div>

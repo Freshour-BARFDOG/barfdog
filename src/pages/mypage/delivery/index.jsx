@@ -21,6 +21,7 @@ const TEST_ContTobeInserted = () => {
         <div className={Styles.grid_box}>
           <div className={Styles.col_1}>
             <p>2022.02.14</p>
+            <div></div>
             <div>믹스 레시피 (8회차) · 시호</div>
             <div className={Styles.text}>
               <div className={`${Styles.image} img-wrap`}>
@@ -36,26 +37,30 @@ const TEST_ContTobeInserted = () => {
             </div>
           </div>
 
-          <div className={Styles.col_2}>
-            <p>조리예정일</p>
-            <div>3월 12일</div>
+          <div className={Styles.grid}>
+            <div className={Styles.col_2}>
+              <p>조리예정일</p>
+              <div>3월 12일</div>
+            </div>
+
+            <div className={Styles.col_3}>
+              <p>발송예정일</p>
+              <div>3월 16일</div>
+            </div>
+
+            <div className={Styles.col_4}>배송예정</div>
+
+            <div className={Styles.col_5}>
+              <div className={Styles.btn}>배송조회</div>
+            </div>
           </div>
 
-          <div className={Styles.col_3}>
-            <p>발송예정일</p>
-            <div>3월 16일</div>
-          </div>
-
-          <div className={Styles.col_4}>배송예정</div>
-
-          <div className={Styles.col_5}>
-            <div className={Styles.btn}>배송조회</div>
-          </div>
         </div>
 
         <div className={Styles.grid_box}>
           <div className={Styles.col_1}>
             <p>2022.02.14</p>
+            <div></div>
             <div>믹스 레시피 (8회차) · 시호</div>
             <div className={Styles.text}>
               <div className={`${Styles.image} img-wrap`}>
@@ -71,26 +76,31 @@ const TEST_ContTobeInserted = () => {
             </div>
           </div>
 
-          <div className={Styles.col_2}>
-            <p>조리예정일</p>
-            <div>3월 12일</div>
+          
+          <div className={Styles.grid}>
+            <div className={Styles.col_2}>
+              <p>조리예정일</p>
+              <div>3월 12일</div>
+            </div>
+
+            <div className={Styles.col_3}>
+              <p>발송예정일</p>
+              <div>3월 16일</div>
+            </div>
+
+            <div className={Styles.col_4}>배송예정</div>
+
+            <div className={Styles.col_5}>
+              <div className={Styles.btn}>배송조회</div>
+            </div>
           </div>
 
-          <div className={Styles.col_3}>
-            <p>발송예정일</p>
-            <div>3월 16일</div>
-          </div>
-
-          <div className={Styles.col_4}>배송예정</div>
-
-          <div className={Styles.col_5}>
-            <div className={Styles.btn}>배송조회</div>
-          </div>
         </div>
 
         <div className={Styles.grid_box}>
           <div className={Styles.col_1}>
             <p>2022.02.14</p>
+            <div></div>
             <div>바프레드 외 8건</div>
             <div className={Styles.text}>
               <div className={`${Styles.image} img-wrap`}>
@@ -106,20 +116,31 @@ const TEST_ContTobeInserted = () => {
             </div>
           </div>
 
-          <div className={Styles.col_2}></div>
+         
+          <div className={Styles.grid}>
+            <div className={Styles.col_2}>
+              <p>조리예정일</p>
+              <div>3월 12일</div>
+            </div>
 
-          <div className={Styles.col_3}></div>
+            <div className={Styles.col_3}>
+              <p>발송예정일</p>
+              <div>3월 16일</div>
+            </div>
 
-          <div className={Styles.col_4}>배송중</div>
+            <div className={Styles.col_4}>배송예정</div>
 
-          <div className={Styles.col_5}>
-            <div className={Styles.btn}>배송조회</div>
+            <div className={Styles.col_5}>
+              <div className={Styles.btn}>배송조회</div>
+            </div>
           </div>
+
         </div>
 
         <div className={Styles.grid_box}>
           <div className={Styles.col_1}>
             <p>2022.02.14</p>
+            <div></div>
             <div>바프레드 외 8건</div>
             <div className={Styles.text}>
               <div className={`${Styles.image} img-wrap`}>
@@ -135,14 +156,23 @@ const TEST_ContTobeInserted = () => {
             </div>
           </div>
 
-          <div className={Styles.col_2}></div>
+         
+          <div className={Styles.grid}>
+            <div className={Styles.col_2}>
+              <p>조리예정일</p>
+              <div>3월 12일</div>
+            </div>
 
-          <div className={Styles.col_3}></div>
+            <div className={Styles.col_3}>
+              <p>발송예정일</p>
+              <div>3월 16일</div>
+            </div>
 
-          <div className={Styles.col_4}>배송중</div>
+            <div className={Styles.col_4}>배송예정</div>
 
-          <div className={Styles.col_5}>
-            <div className={Styles.btn}>배송조회</div>
+            <div className={Styles.col_5}>
+              <div className={Styles.btn}>배송조회</div>
+            </div>
           </div>
         </div>
       </section>

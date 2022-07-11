@@ -30,7 +30,7 @@ section.title{ padding : rem(8) 0 rem(30);}
     display: flex;
     justify-content: center;
     .btn {
-      width: 17%;
+      width: rem(155);
       background-color: var(--color-main);
       color: #fff;
 
@@ -83,7 +83,7 @@ section.title{ padding : rem(8) 0 rem(30);}
             position: relative;
             top:45%;
             // transform: translateX(%);
-            border: 1px solid var(--color-line-02);
+            border: rem(1) solid var(--color-line-02);
             width : rem(15);
             transform:rotate(90deg);
           }
@@ -116,16 +116,16 @@ section.title{ padding : rem(8) 0 rem(30);}
     .btn {
       padding: rem(14) 0;
       text-align: center;
-      border: 1px solid var(--color-main);
-      border-radius: 4px;
+      border: rem(1) solid var(--color-main);
+      border-radius: rem(4);
       color: var(--color-main);
     }
     .btn2 {
       padding: rem(14) 0;
       margin-top: rem(8);
       text-align: center;
-      border: 1px solid var(--color-line-02);
-      border-radius: 4px;
+      border: rem(1) solid var(--color-line-02);
+      border-radius: rem(4);
       
     }
   } 
@@ -147,7 +147,15 @@ section.title{ padding : rem(8) 0 rem(30);}
     padding-bottom: rem(7);
   }
   > hr {
-    border: 1px solid var(--color-line-04);
+    border: rem(1) solid var(--color-line-04);
+  }
+
+  .hr1{
+    display: block;
+  }
+
+  .hr2{
+    display: none;
   }
 
   .content_body {
@@ -168,6 +176,7 @@ section.title{ padding : rem(8) 0 rem(30);}
         padding: rem(11) 0 0 rem(20);
         .text {
           display: flex;
+          margin-bottom: rem(-30);
           > p {
             width: 17%;
             @include char(l18);
@@ -179,9 +188,9 @@ section.title{ padding : rem(8) 0 rem(30);}
             width: 10%;
             > hr {
               position: relative;
-              top:45%;
+              top: rem(8);
               // transform: translateX(%);
-              border: 1px solid var(--color-line-02);
+              border: rem(1) solid var(--color-line-02);
               width : rem(15);
               transform:rotate(90deg);
             }
@@ -208,22 +217,129 @@ section.title{ padding : rem(8) 0 rem(30);}
       text-align: center;
     }
     .right_box {
-      width: 16.4%;
-      padding: rem(12) rem(10);
+      width: rem(140);
+      padding: rem(12) rem(0);
       @include char(l15);
       .btn {
         padding: rem(14) 0;
         text-align: center;
-        border: 1px solid var(--color-main);
-        border-radius: 4px;
+        border: rem(1) solid var(--color-main);
+        border-radius: rem(4);
         color: var(--color-main);
       }
       .btn2 {
         padding: rem(14) 0;
         margin-top: rem(8);
         text-align: center;
-        border: 1px solid var(--color-line-02);
-        border-radius: 4px;
+        border: rem(1) solid var(--color-line-02);
+        border-radius: rem(4);
+        
+      }
+    } 
+  }
+
+}
+
+
+@media (max-width: rem(900)) {
+
+  
+  .title {
+    visibility: hidden;
+    margin-top: rem(-60);
+  }
+
+  .subscribeItem-container {
+    .hr1{
+      display: none;
+    }
+    .hr2{
+      display: block;
+      margin-bottom: rem(20);
+    }
+
+    .content_body {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-gap: 0;
+      width: 100%;
+      position: relative;
+
+
+      .left_box {
+        width: 100%;
+      }
+
+      .mid_box {
+        text-align: left;
+        top: 0;
+        left: 0;
+        position: absolute;
+        transform: translate(rem(100), rem(-28));
+      }
+      .right_box {
+        width: 100%;
+        padding: rem(12) 0;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: rem(10);
+
+        .btn2 {
+          margin-top: rem(0);
+        }
+      }
+    }
+  }
+
+  // .content {
+  //   p {
+  //     display: none;
+  //   }
+    
+  //   .btn_box {
+  //     display: none;
+  //   }
+  // }
+
+
+  .item-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 0;
+    width: 100%;
+    position: relative;
+
+
+    .left_box {
+      width: 100%;
+    }
+  
+    .mid_box {
+      text-align: left;
+      top: 0;
+      left: 0;
+      position: absolute;
+      transform: translate(rem(100), rem(-28))
+    }
+
+    .right_box {
+      
+      width: 100%;
+      padding: rem(12) 0;
+
+      .btn {
+        padding: rem(14) 0;
+        text-align: center;
+        border: rem(1) solid var(--color-main);
+        border-radius: rem(4);
+        color: var(--color-main);
+      }
+      .btn2 {
+        padding: rem(14) 0;
+        margin-top: rem(8);
+        text-align: center;
+        border: rem(1) solid var(--color-line-02);
+        border-radius: rem(4);
         
       }
     } 

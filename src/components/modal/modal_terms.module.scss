@@ -62,6 +62,8 @@ $browser-context:16;
   font-size: rem(14);
   color: var(--color-font-sub);
   h6{font-weight: 600;}
+  overflow-y: scroll;
+    &::-webkit-scrollbar {display: none;}
 }
 
 

@@ -8,6 +8,9 @@ $counterBoxWidth : rem(200);
 
 
 .dashboard{
+  display: grid;
+  grid-template-columns: 450px 1fr;
+  grid-gap: 0px;
   *:not(button) {cursor: default;}
   
   padding : rem(40) 0;
@@ -18,6 +21,12 @@ $counterBoxWidth : rem(200);
   .user_info, .user_counter{height:rem(120); overflow:hidden;}
 
   .user_info{
+    float:left;
+    padding-left: rem(40);
+    box-sizing: border-box;
+    //width: calc(100% - (#{$counterBoxWidth} * 3));
+
+
     .info_row{overflow:hidden;}
     .info_row:not(:first-child){
       margin-top:rem(14);
@@ -39,10 +48,6 @@ $counterBoxWidth : rem(200);
       &:not(:last-child){margin-right:rem(30);}
     }
 
-    float:left;
-    padding: 0 rem(40);
-    box-sizing: border-box;
-    width: calc(100% - (#{$counterBoxWidth} * 3));
     .user_photo{
       width:rem(60);
       height: rem(60);
@@ -115,10 +120,15 @@ $counterBoxWidth : rem(200);
   .user_counter{
     float:right;
     ul{
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-gap: 0px;
       overflow:hidden;
       li{
-        float:left;
-        width: $counterBoxWidth;
+        //width: $counterBoxWidth;
+        width: 100%;
+        padding-right: 0;
+        padding-left: 0;
       }
     }
   }
@@ -135,4 +145,14 @@ $counterBoxWidth : rem(200);
   * {
     cursor: pointer !important;
   }
+}
+
+
+
+@media (max-width: rem(900)) {
+
+  .dashboard{
+    grid-template-columns: 250px 1fr;
+  }
+
 }
