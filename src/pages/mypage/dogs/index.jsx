@@ -71,16 +71,19 @@ const ItemList = ()=>{
         </div>
 
         {/* 설문결과 설문수정 결제하기 버튼3개 */}
-        <div className={Styles['btn-section']}>
-          <Link href={"/mypage/dogs/[id]/statistic"} passHref>
-            <a>설문결과</a>
-          </Link>
-          <Link href={"/mypage/dogs/[id]/updateSurvey"} passHref>
-            <a>설문수정</a>
-          </Link>
-          <button className={Styles.payment}>결제하기</button>
-        </div>
+        
       </div>
+      <div className={Styles.select_box}>
+        <div className={Styles['btn-section']}>
+            <Link href={"/mypage/dogs/[id]/statistic"} passHref>
+              <a>설문결과</a>
+            </Link>
+            <Link href={"/mypage/dogs/[id]/updateSurvey"} passHref>
+              <a>설문수정</a>
+            </Link>
+            <button className={Styles.payment}>결제하기</button>
+          </div>
+        </div>
     </div>
   </>)
 }

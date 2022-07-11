@@ -9,7 +9,7 @@ import Image from 'next/image';
 function SingleItem_OrderHistoryPage() {
   return (
     <>
-      <MetaTitle title="마이페이지 주문내역: 일반상품" />
+      <MetaTitle title="마이페이지 주문내역 일반상품" />
       <Layout>
         <Wrapper>
           <MypageWrapper>
@@ -21,15 +21,18 @@ function SingleItem_OrderHistoryPage() {
                 <div className={Styles.btn}>주문취소</div>
               </div>
 
-              <hr />
+              <hr  className={Styles.line1} />
 
               <section className={Styles.body_content_4}>
+              <div className={Styles.grid_title}>
+                    <div className={Styles.col_1}>상품 정보</div>
+                    <div className={Styles.col_2}>수량</div>
+                    <div className={Styles.col_3}>총 주문금액</div>
+                    <div className={Styles.col_4}>쿠폰할인</div>
+                    <div className={Styles.col_5}>주문상태</div>
+                  </div>
                 <div className={Styles.grid_box2}>
-                  <div className={Styles.col_1}>상품 정보</div>
-                  <div className={Styles.col_2}>수량</div>
-                  <div className={Styles.col_3}>총 주문금액</div>
-                  <div className={Styles.col_4}>쿠폰할인</div>
-                  <div className={Styles.col_5}>주문상태</div>
+                  
                 </div>
 
                 <hr />
@@ -56,8 +59,10 @@ function SingleItem_OrderHistoryPage() {
                       <div>세트2) 스타터5+터키브프5팩 / 2개</div>
                     </div>
                   </div>
-                  <div className={Styles.col_2}>3개</div>
-                  <div className={Styles.col_3}>86,900원</div>
+                  <ul className={Styles.col_9}>
+                    <div className={Styles.col_2}>3개</div>
+                    <div className={Styles.col_3}>86,900원</div>
+                  </ul>
                   <div className={Styles.col_7}>-8,690원</div>
                   <div className={Styles.col_5}>결제완료</div>
                 </div>
@@ -80,8 +85,10 @@ function SingleItem_OrderHistoryPage() {
                       <p>바프레드</p>
                     </div>
                   </div>
-                  <div className={Styles.col_2}>1개</div>
-                  <div className={Styles.col_3}>86,900원</div>
+                  <ul className={Styles.col_9}>
+                    <div className={Styles.col_2}>1개</div>
+                    <div className={Styles.col_3}>86,900원</div>
+                  </ul>
                   <div className={Styles.col_8}>0원</div>
                   <div className={Styles.col_5}>결제완료</div>
                 </div>
@@ -104,8 +111,10 @@ function SingleItem_OrderHistoryPage() {
                       <p>바프레드</p>
                     </div>
                   </div>
-                  <div className={Styles.col_2}>1개</div>
-                  <div className={Styles.col_3}>86,900원</div>
+                  <ul className={Styles.col_9}>
+                    <div className={Styles.col_2}>1개</div>
+                    <div className={Styles.col_3}>86,900원</div>
+                  </ul>
                   <div className={Styles.col_8}>0원</div>
                   <div className={Styles.col_5}>결제완료</div>
                 </div>
@@ -128,8 +137,10 @@ function SingleItem_OrderHistoryPage() {
                       <p>바프레드</p>
                     </div>
                   </div>
-                  <div className={Styles.col_2}>1개</div>
-                  <div className={Styles.col_3}>86,900원</div>
+                  <ul className={Styles.col_9}>
+                    <div className={Styles.col_2}>1개</div>
+                    <div className={Styles.col_3}>86,900원</div>
+                  </ul>
                   <div className={Styles.col_8}>0원</div>
                   <div className={Styles.col_5}>결제완료</div>
                 </div>
@@ -165,12 +176,25 @@ function SingleItem_OrderHistoryPage() {
                 {false && <p>배송중 상태에서 조회가 가능합니다.</p>}
                 {true && (
                   <div className={Styles.deliveryTracking}>
-                    <span className={Styles.deliverytitle}>CJ대한통운</span>
+                    {/* <span className={Styles.deliverytitle}>CJ대한통운</span>
                     <span data-delivery-trackingNumber={""}>
                       운송장번호<em>510017079554</em>
                     </span>
                     <span data-delivery-title={"배송상태"}>배송 중</span>
-                    <button className={Styles.btn}>배송조회</button>
+                    <button className={Styles.btn}>배송조회</button> */}
+                    
+                    <ul className={Styles.content_grid}>
+                      <li>
+                        <span>CJ대한통운</span>
+                        <span data-delivery-trackingNumber={""}>운송장번호</span>
+                        <span>510017079554</span>
+                      </li>
+                      <li data-delivery-title={"배송상태"}>배송중</li>
+                      <li>
+                        <button>배송조회</button>
+                      </li>
+                    </ul>
+
                   </div>
                 )}
               </div>

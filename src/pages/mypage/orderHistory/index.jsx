@@ -83,7 +83,7 @@ const SubscribeItemList = () => {
           <Link href="/mypage/orderHistory/subscribe/1" passHref>
             <a className={Styles.btn}>주문상세 </a>
           </Link>
-          <div className={Styles.btn2}>구독관리</div>
+          <a className={Styles.btn2}>구독관리</a>
         </div>
       </div>
 

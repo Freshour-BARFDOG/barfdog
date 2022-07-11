@@ -75,18 +75,22 @@ function Mypage() {
                   </div>
 
                   <div>
+                    <span className={Styles.col_1_m}>다음 결제일</span>
                     2022.03.04
                   </div>
 
                   <div>
+                    <span className={Styles.col_1_m}>다음 결제금액</span>
                     282,000원
                   </div>
                   
                   <div className={Styles.btn_box}>
-                    <div className={Styles.btn}>
+                    <button className={Styles.btn}>
                       카드변경
-                    </div>
+                    </button>
                   </div>
+                  
+                  <hr />
                 </div>
 
                 <div className={Styles.grid_body_box}>
@@ -108,18 +112,22 @@ function Mypage() {
                   </div>
 
                   <div>
+                    <span className={Styles.col_1_m}>다음 결제일</span>
                     2022.03.04
                   </div>
 
                   <div>
+                    <span className={Styles.col_1_m}>다음 결제금액</span>
                     282,000원
                   </div>
                   
                   <div className={Styles.btn_box}>
-                    <div className={Styles.btn}>
+                    <button className={Styles.btn}>
                       카드변경
-                    </div>
+                    </button>
                   </div>
+
+                  <hr />
                 </div>
 
                 <div className={Styles.grid_body_box}>
@@ -141,18 +149,21 @@ function Mypage() {
                   </div>
 
                   <div>
+                    <span className={Styles.col_1_m}>다음 결제일</span>
                     2022.03.04
                   </div>
 
                   <div>
+                    <span className={Styles.col_1_m}>다음 결제금액</span>
                     282,000원
                   </div>
                   
                   <div className={Styles.btn_box}>
-                    <div className={Styles.btn}>
+                    <button className={Styles.btn}>
                       카드변경
-                    </div>
+                    </button>
                   </div>
+
                 </div>
               </div>
             </section>

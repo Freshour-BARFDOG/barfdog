@@ -116,3 +116,13 @@ $browser-context: 16;
   }
 }
 
+@media (max-width: rem(600)) {
+
+  .swiperSurvey{
+    padding: rem(55) 0 0 !important;
+  
+    .swiper-pagination{
+      max-width: rem(264);
+    }
+  }
+}

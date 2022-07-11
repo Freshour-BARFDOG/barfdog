@@ -41,7 +41,7 @@ section.body {padding : 0 0 rem(138)}
 }
 
 .line {
-  border : 1px solid var(--color-line-01);
+  border : rem(1) solid var(--color-line-01);
 }
 
 
@@ -83,19 +83,23 @@ section.body {padding : 0 0 rem(138)}
           aspect-ratio: 1/1;
         }
       }
+      .col_1_m{
+        display: none;
+      }
       .col_2 {
         @include char(l16);
       }
       .btn_box {
-        width: 100%;
+        width: rem(100);
         display: flex;
         justify-content: center;
+        font-size: rem(15);
 
         .btn {
           @include char(l15);
           text-align: center;
           width: 66.7%;
-          border: 1px solid var(--color-line-03);
+          border: rem(1) solid var(--color-line-03);
           padding: rem(8) 0 ;
         }
       }
@@ -105,7 +109,7 @@ section.body {padding : 0 0 rem(138)}
 
 .second_body {
   > hr {
-    border : 1px solid var(--color-line-03);
+    border : rem(1) solid var(--color-line-03);
   }
   .text {
     padding-top : rem(7);
@@ -116,7 +120,7 @@ section.body {padding : 0 0 rem(138)}
 .modal {
   width: rem(247);
   height: rem(144);
-  border: 1px solid var(--color-line-02);
+  border: rem(1) solid var(--color-line-02);
   @include char(l14);
   font-weight: 600;
 
@@ -137,4 +141,61 @@ section.body {padding : 0 0 rem(138)}
     }
 
   }
+}
+
+
+@media (max-width: rem(900)) {
+  
+  .body {
+    .table_box {
+      .grid_title_box {
+        display: none;
+      }
+      
+      .grid_body_box {
+        grid-template-columns: 1fr;
+        grid-gap: rem(10);
+        text-align: left;
+        justify-items: flex-start;
+
+        hr{
+          margin-bottom: rem(-10);
+          width: 100%;
+          border: rem(1) solid #dedede;
+        }
+
+        .col_1 {
+          margin-left: 0;
+          font-weight: bold;
+
+        }
+        
+        .col_1_m{
+          display: inline-block;
+          font-weight: bold;
+          margin-right: rem(10);
+        }
+
+        .btn_box {
+          width: 100%;
+          .btn {
+            width: 100%;
+          }
+        }
+      }
+    }
+    
+  }
+}
+
+@media (max-width: rem(600)) {
+
+.title{
+  display: none;
+}
+
+.line{
+  display: none;
+}
+
 }

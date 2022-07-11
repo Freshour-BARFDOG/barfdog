@@ -30,7 +30,7 @@ section.title{ padding : rem(8) 0 rem(30);}
     display: flex;
     justify-content: center;
     .btn {
-      width: 155px;
+      width: rem(155);
       background-color: var(--color-main);
       color: #fff;
 
@@ -83,7 +83,7 @@ section.title{ padding : rem(8) 0 rem(30);}
             position: relative;
             top:45%;
             // transform: translateX(%);
-            border: 1px solid var(--color-line-02);
+            border: rem(1) solid var(--color-line-02);
             width : rem(15);
             transform:rotate(90deg);
           }
@@ -116,16 +116,16 @@ section.title{ padding : rem(8) 0 rem(30);}
     .btn {
       padding: rem(14) 0;
       text-align: center;
-      border: 1px solid var(--color-main);
-      border-radius: 4px;
+      border: rem(1) solid var(--color-main);
+      border-radius: rem(4);
       color: var(--color-main);
     }
     .btn2 {
       padding: rem(14) 0;
       margin-top: rem(8);
       text-align: center;
-      border: 1px solid var(--color-line-02);
-      border-radius: 4px;
+      border: rem(1) solid var(--color-line-02);
+      border-radius: rem(4);
       
     }
   } 
@@ -147,7 +147,7 @@ section.title{ padding : rem(8) 0 rem(30);}
     padding-bottom: rem(7);
   }
   > hr {
-    border: 1px solid var(--color-line-04);
+    border: rem(1) solid var(--color-line-04);
   }
 
   .hr1{
@@ -176,7 +176,7 @@ section.title{ padding : rem(8) 0 rem(30);}
         padding: rem(11) 0 0 rem(20);
         .text {
           display: flex;
-          margin-bottom: -30px;
+          margin-bottom: rem(-30);
           > p {
             width: 17%;
             @include char(l18);
@@ -188,9 +188,9 @@ section.title{ padding : rem(8) 0 rem(30);}
             width: 10%;
             > hr {
               position: relative;
-              top: 8px;
+              top: rem(8);
               // transform: translateX(%);
-              border: 1px solid var(--color-line-02);
+              border: rem(1) solid var(--color-line-02);
               width : rem(15);
               transform:rotate(90deg);
             }
@@ -217,22 +217,22 @@ section.title{ padding : rem(8) 0 rem(30);}
       text-align: center;
     }
     .right_box {
-      width: 16.4%;
-      padding: rem(12) rem(10);
+      width: rem(140);
+      padding: rem(12) rem(0);
       @include char(l15);
       .btn {
         padding: rem(14) 0;
         text-align: center;
-        border: 1px solid var(--color-main);
-        border-radius: 4px;
+        border: rem(1) solid var(--color-main);
+        border-radius: rem(4);
         color: var(--color-main);
       }
       .btn2 {
         padding: rem(14) 0;
         margin-top: rem(8);
         text-align: center;
-        border: 1px solid var(--color-line-02);
-        border-radius: 4px;
+        border: rem(1) solid var(--color-line-02);
+        border-radius: rem(4);
         
       }
     } 
@@ -246,7 +246,7 @@ section.title{ padding : rem(8) 0 rem(30);}
   
   .title {
     visibility: hidden;
-    margin-top: -60px;
+    margin-top: rem(-60);
   }
 
   .subscribeItem-container {
@@ -255,7 +255,7 @@ section.title{ padding : rem(8) 0 rem(30);}
     }
     .hr2{
       display: block;
-      margin-bottom: 20px;
+      margin-bottom: rem(20);
     }
 
     .content_body {
@@ -275,14 +275,14 @@ section.title{ padding : rem(8) 0 rem(30);}
         top: 0;
         left: 0;
         position: absolute;
-        transform: translate(100px, -28px);
+        transform: translate(rem(100), rem(-28));
       }
       .right_box {
         width: 100%;
         padding: rem(12) 0;
         display: grid;
         grid-template-columns: 1fr 1fr;
-        grid-gap: 10px;
+        grid-gap: rem(10);
 
         .btn2 {
           margin-top: rem(0);
@@ -319,7 +319,7 @@ section.title{ padding : rem(8) 0 rem(30);}
       top: 0;
       left: 0;
       position: absolute;
-      transform: translate(100px, -28px)
+      transform: translate(rem(100), rem(-28))
     }
 
     .right_box {
@@ -330,16 +330,16 @@ section.title{ padding : rem(8) 0 rem(30);}
       .btn {
         padding: rem(14) 0;
         text-align: center;
-        border: 1px solid var(--color-main);
-        border-radius: 4px;
+        border: rem(1) solid var(--color-main);
+        border-radius: rem(4);
         color: var(--color-main);
       }
       .btn2 {
         padding: rem(14) 0;
         margin-top: rem(8);
         text-align: center;
-        border: 1px solid var(--color-line-02);
-        border-radius: 4px;
+        border: rem(1) solid var(--color-line-02);
+        border-radius: rem(4);
         
       }
     } 
