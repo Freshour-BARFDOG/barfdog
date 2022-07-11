@@ -11,6 +11,7 @@ import AmdinErrorMessage from "@src/components/atoms/AmdinErrorMessage";
 import ReturnList from "./ExchangeList";
 import Pagination from "@src/components/atoms/Pagination";
 import Checkbox from "@src/components/atoms/Checkbox";
+import Tooltip from "../../../../components/atoms/Tooltip";
 
 
 const TEST_ITEM = [1, 2, 3, 4, 5];
@@ -38,7 +39,9 @@ function ExchangeOnSellPage() {
       <MetaTitle title="교환 관리" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
-          <h1 className="title_main">교환 관리</h1>
+          <div className="title_main">
+            <h1>교환 관리</h1>
+          </div>
           <section className="cont">
             <SearchBar onReset={onResetSearchValues} onSearch={onSearchHandler}>
               <SearchTerm
@@ -71,8 +74,12 @@ function ExchangeOnSellPage() {
           </section>
           <section className="cont">
             <div className="cont_header clearfix">
-              <p className="cont_title cont-left">목록</p>
+              <p className="cont_title cont-left">
+                목록
+                <Tooltip message={'- 교환 가능한 일반상품 리스트만 존재합니다.\n- 구매자 귀책 택배비: 6,000원\n- 판매자 귀책: 택배비 없음\n- 교환불가: 교환불가처리된 상품은 배송완료상태가 됩니다.'} messagePosition={'left'} wordBreaking={true} width={'340px'}/>
+              </p>
               <div className="controls cont-left">
+                
                 <button className="admin_btn line basic_m">
                   교환승인&#40;구매자&#41;
                 </button>

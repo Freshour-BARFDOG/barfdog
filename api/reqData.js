@@ -13,9 +13,6 @@
 
 import axios from "axios";
 import axiosConfig from './axios.config';
-import {useRouter} from "next/router";
-
-
 
 
 /* - async / await 사용법
@@ -23,6 +20,28 @@ import {useRouter} from "next/router";
      동일하게 async await을 사용해서 response를 받아야 정상적으로 값을 받을 수 있다.
      ! 그렇지 않을경우 <promise>를 return값으로 받는다 (타이밍 문제로 인함)
 * */
+
+export const testTokenStateWithOldToken = async (url)=>{
+  const res = await axios
+    .get(url, {
+      headers: {
+        authorization:
+          'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLthqDtgbAg7J2066aEIiwiaWQiOjUsImV4cCI6MTY1MTg5MjU3NiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20ifQ.Wycm9ZmiiK-GwtsUkvMCHHeExDBtkveDbhKRealjmd8C4OZMp3SFqGFcFWudXMiL5Mxdj6FcTAV9OVsOYsn_Mw',
+        'Content-Type': 'application/json',
+      },
+    })
+    .then((res) => {
+      console.log('OLD TOKEN RESULT: ', res.response);
+      return res;
+    })
+    .catch((err) => {
+      console.error('OLD TOKEN RESULT: ', err);
+      return err.response;
+    });
+  return res;
+}
+
+
 export const getData = async (url, callback) => {
   const response = await axios
     .get(url, axiosConfig())
@@ -32,31 +51,30 @@ export const getData = async (url, callback) => {
       return res;
     })
     .catch((err) => {
-      console.log(err);
-      console.log(err.response);
       let errorMessage;
+      // console.log(err);
+  
       const errorObj = err.response;
       const status = errorObj?.status;
-      if(status && status === 401){
-        const EXPIRED_TOKEN = errorObj.reason === "EXPIRED_TOKEN";
-        const UNAUTHORIZED = errorObj.reason === "UNAUTHORIZED";
-        if(EXPIRED_TOKEN){
-          errorMessage = '로그인 토큰이 만료되었습니다. 다시 로그인해주세요.'
+      if(status === 401){
+        const errorReason = errorObj.data.reason;
+        if(errorReason === "EXPIRED_TOKEN"){
+          console.error("ERROR REASON: ", errorReason);
+          errorMessage = status + errorReason+ '\n로그인 토큰이 만료되었습니다. 다시 로그인해주세요.';
+        } else if(errorReason === "UNAUTHORIZED") {
+          errorMessage = errorReason +  '\n권한이 없습니다.'
         }
-        console.error("errorType > EXPIRED_TOKEN : ", EXPIRED_TOKEN);
-        console.error("errorType > UNAUTHORIZED : ", UNAUTHORIZED);
       }else if (status === 403) {
-        const FORBIDDEN = errorObj.reason === "FORBIDDEN";
-        console.error("errorType > FORBIDDEN : ", FORBIDDEN);
-      } else if(errorObj?.data?.error) {
-        console.error('errorObj.data.error: ',errorObj?.data?.error);
-        errorMessage =  errorObj?.data?.error + '\n\n불러올 데이터가 존재하지 않거나, 서버 내부 에러입니다.';
+        errorMessage =  errorReason + '\n접근 불가한 페이지입니다.';
+      } else if(status === 500) {
+        errorMessage =  errorObj?.data?.error + '\n데이터가 존재하지 않거나, 서버 내부 에러입니다.';
       } else {
         errorMessage =  'Failed Fetching Data: 데이터를 불러오는데 실패했습니다.';
       }
-
-      alert(errorMessage);
-      return err;
+      
+      console.log(err.response);
+      console.error(errorMessage);
+      return err.response;
     });
 
   return response;
@@ -140,10 +158,14 @@ export const postObjData = async (url, data, contType) => {
     .catch((err) => {
       const error = err.response;
       console.log('ERROR내용: ',err.response);
-      const errStatus = error?.status >= 400;
-      let errorMessage = error?.data.error ||(error.data.reason === 'EXPIRED_TOKEN' && '관리자 로그인 토큰이 만료되었습니다.');
-      result.error = errorMessage || '서버와 통신오류가 발생했습니다.';
-      return !errStatus;
+      if (error.data.errors[0].defaultMessage) {
+        result.error = error.data.errors[0].defaultMessage;
+      } else if(error?.data.error.error){
+        result.error = '서버와 통신오류가 발생했습니다.'
+      } else if (error.data.reason === 'EXPIRED_TOKEN') {
+        result.error = '관리자 로그인 토큰이 만료되었습니다.'
+      }
+      return !error?.status >= 400;
     });
 
   result.isDone = response;

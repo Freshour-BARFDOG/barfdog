@@ -1,5 +1,8 @@
 import transformClearLocalCurrency from './transformClearLocalCurrency';
 import transformLocalCurrency from './transformLocalCurrency';
+import {discountUnitType} from "/store/TYPE/discountUnitType";
+
+
 
 const calculateSalePrice = (originPrice, discountType, discountDegree) => {
   if (!originPrice) return;
@@ -9,10 +12,10 @@ const calculateSalePrice = (originPrice, discountType, discountDegree) => {
   const degree = transformClearLocalCurrency(discountDegree) || 0;
 
   let saleAmount =
-    discountType === 'FLAT_RATE' ? Math.round(originalPrice * (degree / 100)) : degree;
+    discountType === discountUnitType.FIXED_RATE ? Math.round(originalPrice * (degree / 100)) : degree;
   const calculatedPrice = originalPrice - saleAmount;
 
-  if (discountType === 'FLAT_RATE') {
+  if (discountType === discountUnitType.FLAT_RATE) {
     salePrice = !degree ? originalPrice : calculatedPrice;
   } else {
     salePrice = calculatedPrice;

@@ -69,7 +69,6 @@ const SortableItem = ({ item, items,  sortableItemRef, onDeleteHandler, onUpdate
       key={`item-${DATA.id}`}
       ref={sortableItemRef}
       data-idx={DATA.id}
-      data-order={DATA.leakedOrder}
     >
       {orderEditMode ? (
         <SortHandle items={items} onUpdateList={onUpdateList} apiurl={DATA.apiurl} />

@@ -69,7 +69,7 @@ const ItemList = ({ item, sortableItemRef }) => {
       </span>
       <span>
         <Link
-          href={`/bf-admin/sell/popup/${DATA.paymentType}/${DATA.id}`}
+          href={`/bf-admin/popup/sell/${DATA.paymentType}/${DATA.id}`}
           passHref
         >
           <a onClick={onPopupHandler} className="admin_btn basic_s solid">
@@ -78,13 +78,13 @@ const ItemList = ({ item, sortableItemRef }) => {
         </Link>
       </span>
       <span>
-        <em className={"text-transform-ellipsis"}>{DATA.orderId}</em>
+        <em className={"overflow-x-scroll"}>{DATA.orderId}</em>
       </span>
       <span>
-        <em className={"text-transform-ellipsis"}>{DATA.pruductId}</em>
+        <em className={"overflow-x-scroll"}>{DATA.pruductId}</em>
       </span>
       <span>
-        <em className={"text-transform-ellipsis"}>
+        <em className={"overflow-x-scroll"}>
           {DATA.orderStatus} {DATA.orderDate}
         </em>
       </span>

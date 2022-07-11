@@ -1,22 +1,66 @@
 import axios from 'axios';
 import checkCharactorSamenessAndContinuity from '../checkCharactorSamenessAndContinuity';
+import transformClearLocalCurrency from '../transformClearLocalCurrency';
+import convertFileSizeToMegabyte from '../convertFileSizeToMegabyte';
+import { discountUnitType } from '../../../store/TYPE/discountUnitType';
+import { transformToday } from '../transformDate';
+import deleteHypenOnDate from '../deleteHypenOnDate';
 
+export const valid_hasFormErrors = (errorObj, type = 'array') => {
+  let isPassed = true;
+  if (type === 'array' && Array.isArray(errorObj)) {
+    const errorArray = errorObj;
+    errorArray.map((innerObj) => {
+      const result = valid_hasFormErrors(innerObj);
+      console.log(result);
+      // result중에 false가 하나라도 있으면 error로 취급한다.
+    });
+  } else {
+    for (const key in errorObj) {
+      const val = errorObj[key];
+      if (val) {
+        isPassed = false;
+        break;
+      }
+    }
+  }
 
-export const valid_isEmpty = (value) => {
-  const message = value ? '' : '항목이 비어있습니다.';
-  return message;
+  return isPassed;
 };
 
 
 
+
+
+
+
+export const valid_isEmpty = (value) => {
+  const error = value ? '' : '항목이 비어있습니다.';
+  return error;
+};
+
+
+export const valid_isNumberEmpty = (value) => {
+  let error;
+  if(Number(value) === 0){
+    error = '항목은 0보다 커야합니다.'
+  } else if(!value){
+    error = '항목이 비어있습니다.'
+  }
+  return error;
+};
+
+
+
+
 export const valid_isEmptyArray = (arr) =>{
-  let message;
+  let error;
   if(typeof arr !== 'object'){
     alert('데이터 처리 중 에러가 발생했습니다. 개발사에게 문의하세요.')
     return console.error('ERROR: Parameter type must be array');
   }
-  message = arr.length ? '' : '항목이 비어있습니다.';
-  return message;
+  error = arr.length ? '' : '항목이 비어있습니다.';
+  return error;
 }
 
 
@@ -42,18 +86,27 @@ export const valid_isEmptyFile = (obj, substituteKey ) => {
 
 
 
+export const valid_isEmptyCurrency = (value) => {
+  const stringValue = typeof value === 'number' ? String(value) : value;
+  const currency = transformClearLocalCurrency(stringValue);
+  const error = currency !== 0 ? '' : '항목이 비어있습니다.';
+  return error;
+};
+
+
+
+
 export const valid_isEmptyObject = (obj) => {
-  let message;
+  let error;
   for ( const key in obj ) {
     const val = obj[key];
     console.log(val)
     if(!val){
-      message = `빈 항목이 있습니다.`;
+      error = `빈 항목이 있습니다.`;
       break
     }
   }
-
-  return message;
+  return error;
 }
 
 
@@ -107,7 +160,6 @@ export const valid_email_duplication = async (value) => {
   // console.log('err:', error, '& msg:', message)
   return {error, message};
 };
-
 
 
 
@@ -250,21 +302,158 @@ export const valid_URL = (value)=>{
 
 
 
-
-
-export const valid_hasFormErrors = (errorObj) => {
-  let isPassed = true;
-  for ( const key in errorObj ) {
-    const val = errorObj[key];
-    if(val){
-      isPassed = false;
-      break
-    }
+export const valid_currency = (value, options ={mode:'',unit:''}, availableMaxDiscount)=>{
+  let error ='';
+  const stringValue = typeof value === 'number' ? String(value) : value;
+  const currency = transformClearLocalCurrency(stringValue);
+ const maxDiscountNum = transformClearLocalCurrency(availableMaxDiscount);
+  if ( currency < 0 ) {
+    error = '가격은 0보다 작을 수 없습니다.'
   }
-  return isPassed;
+  
+  if (options.unit === discountUnitType.FIXED_RATE && currency <= 0){
+    error = '할인률은 0 이하로 설정할 수 없습니다.'
+    
+  } else if (options.unit === discountUnitType.FIXED_RATE && currency >= 100){
+    error = '할인률은 100 이상 설정할 수 없습니다.'
+  } else if(options.mode==='strict' && currency <= 0) {
+    error = '항목이 비어있습니다.'
+  }
+  
+  
+  if (maxDiscountNum < currency){
+    error = '할인금액은 최대사용금액보다 높을 수 없습니다.'
+  }
+  
+  
+  return error;
 }
 
 
 
 
+export const valid_arrayErrorCount = (arr) => {
+  let errorCount = 0;
+  if (arr.length) {
+    arr.map((optionObj) => {
+      const errorObj = valid_singleItemOptionObj(optionObj);
+      const isPassed = valid_hasFormErrors(errorObj);
+      !isPassed && errorCount++;
+    });
+  }
+  return errorCount;
+};
+const valid_singleItemOptionObj = (optionObj) => {
+  let error = {};
+
+  for (const key in optionObj) {
+    const val = optionObj[key];
+    switch (key) {
+      case 'name':
+        error[key] = valid_isEmpty(val);
+        break;
+      case 'price':
+        error[key] = ''; // 옵션가격은 추가 검증할 내역 없음
+        break;
+      case 'remaining':
+        error[key] = valid_isEmptyCurrency(val);
+        break;
+    }
+  }
+  // console.log('singleOptions Error:', error)
+  return error;
+};
+
+
+export const valid_fileSize = (file, maxFileSize) => {
+  let error = file.size > maxFileSize;
+  if (error) {
+    error = `- 최대 파일크기: ${convertFileSizeToMegabyte(
+      maxFileSize,
+    )}MB 이상의 파일이 포함돼있습니다.\n- 초과된 파일명: ${
+      file.name
+    } \n- 초과된 파일크기: ${convertFileSizeToMegabyte(file.size)}MB`;
+    alert(error);
+  }
+  return error;
+};
+
+
+
+export const valid_couponCode = (val) => {
+  /*
+  < 관리자 생성: 쿠폰코드 있을 경우 >
+  - 유저: 쿠폰코드를 입력 후, 수령
+  - 유저: 쿠폰코드 등록 단 1회만 가능 (어드민 중복발행과 관계 없음)
+  - 어드민: 쿠폰 수정 불가 (수정이 필요할 경우, 쿠폰 삭제 후 재발행)
+*/
+  let error = '';
+  
+  // PART 1
+  const maxLength = 15;
+  const codeLength = val.length;
+  
+  // PART 2
+  const pattern_num = /[0-9]/;
+  const pattern_en = /[a-zA-Z]/;
+  const pattern_ko = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+  const pattern_spChar = /[\{\}\[\]\/?.,;:|\)*~`_!^+<>@\#$%&\\\=\(\'\"]/g;
+  const availableSpecialChar = '하이픈(-)';
+  let mixedCharCount = 0;
+  pattern_num.test(val) && mixedCharCount++;
+  pattern_en.test(val) && mixedCharCount++;
+  const pettern_mixedChar = mixedCharCount >= 2;
+  
+  if (!val) {
+    // 입력한 값이 없을 경우, 관리자 쿠폰으로 발행됨
+    error = '쿠폰코드는 공란일 수 없습니다.';
+  } else if (pattern_ko.test(val)) {
+    error = '한글은 포함될 수 없습니다.';
+  } else if (pattern_spChar.test(val)) {
+    error = `${availableSpecialChar}외의 특수문자는 포함될 수 없습니다.`;
+  } else if (!pettern_mixedChar) {
+    error = '영문 및 숫자가 포함되어야합니다.';
+  } else if (codeLength > maxLength) {
+    error = '코드 글자 수는 15자 이내입니다.';
+  }
+  
+  return error;
+};
+
+
+
+export const valid_isTheSameArray = (beforeArr1, beforeArr2) => {
+  if(beforeArr1.length === 0 && beforeArr2.length === 0){
+    return false;
+  }
+  const arr1 = JSON.stringify( beforeArr1.sort() );
+  const arr2 = JSON.stringify( beforeArr2.sort() );
+  
+  return arr1 === arr2;
+}
+
+
+
+
+export const valid_expireDate = (d) => {
+  let error;
+  let expiredDate;
+  if(d.split("-").length !== 3){
+    const unit= d.split('-');
+    if(unit[0].length===4 && unit[1].length===2 && unit[2].length===2){
+      return error = '날짜 형식에 맞지 않습니다.'
+    }
+  }
+  
+  const convertedDate = deleteHypenOnDate(d);
+  const selectedDate = Number(convertedDate);
+  const todayWithHypen = transformToday();
+  const stringToday = deleteHypenOnDate(todayWithHypen);
+  const today = Number(stringToday);
+  if(selectedDate < today){
+    error = '유효기간은 발급당일(오늘)보다 과거일 수 없습니다.';
+  }
+  expiredDate = selectedDate - today;
+  return { error, expiredDate };
+}
 

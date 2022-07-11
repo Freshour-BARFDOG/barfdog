@@ -36,8 +36,8 @@ function AdminGnb() {
           <SubmenuList title="구매 확정" link="/bf-admin/sell/confirm" />
         </List>
         <List title="상품관리">
-          <SubmenuList title="단품 관리" link="/bf-admin/product/single" />
-          <SubmenuList title="단품 등록" link="/bf-admin/product/createSingle" />
+          <SubmenuList title="일반상품 관리" link="/bf-admin/product/single" />
+          <SubmenuList title="일반상품 등록" link="/bf-admin/product/createSingle" />
           <SubmenuList title="레시피 관리" link="/bf-admin/product/recipe" />
           <SubmenuList title="레시피 등록" link="/bf-admin/product/createRecipe" />
         </List>

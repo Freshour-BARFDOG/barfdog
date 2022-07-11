@@ -121,7 +121,7 @@ export default function BestReviewList({
         <span>{DATA.reviewId}</span>
         <span>{DATA.itemName}</span>
         <span>
-          <p className={"text-transform-ellipsis"}>{DATA.innerText}</p>
+          <p className={"overflow-x-scroll"}>{DATA.innerText}</p>
         </span>
         <span>{DATA.rating}</span>
         <span>{DATA.userName}</span>

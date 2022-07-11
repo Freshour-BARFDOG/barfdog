@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import rem from '/util/func/rem';
-import zIndex from '/styles/global/zIndex.module.scss';
+import zIndex from '/styles/module/zIndex.module.scss';
 import CloseButton from './CloseButton';
 import useDeviceState from "/util/hook/useDeviceState";
 import Favicon from '/public/img/icon/favicon.svg'

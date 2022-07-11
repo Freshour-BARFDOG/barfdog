@@ -3,14 +3,15 @@ import s from "./return.module.scss";
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import AdminLayout from "/src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
-import SearchBar from "@src/components/admin/form/searchBar";
-import SearchTerm from "@src/components/admin/form/searchBar/SearchTerm";
-import SearchTextWithCategory from "@src/components/admin/form/searchBar/SearchTextWithCategory";
-import SearchRadio from "@src/components/admin/form/searchBar/SearchRadio";
-import AmdinErrorMessage from "@src/components/atoms/AmdinErrorMessage";
-import Checkbox from "@src/components/atoms/Checkbox";
+import SearchBar from "/src/components/admin/form/searchBar";
+import SearchTerm from "/src/components/admin/form/searchBar/SearchTerm";
+import SearchTextWithCategory from "/src/components/admin/form/searchBar/SearchTextWithCategory";
+import SearchRadio from "/src/components/admin/form/searchBar/SearchRadio";
+import AmdinErrorMessage from "/src/components/atoms/AmdinErrorMessage";
+import Checkbox from "/src/components/atoms/Checkbox";
 import ReturnList from "./ReturnList";
-import Pagination from "@src/components/atoms/Pagination";
+import Pagination from "/src/components/atoms/Pagination";
+import Tooltip from "/src/components/atoms/Tooltip";
 
 
 
@@ -39,7 +40,10 @@ function ReturnOnSellPage() {
       <MetaTitle title="반품 관리" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
-          <h1 className="title_main">반품 관리</h1>
+          <div className="title_main">
+            <h1>반품 관리
+            </h1>
+          </div>
           <section className="cont">
             <SearchBar onReset={onResetSearchValues} onSearch={onSearchHandler}>
               <SearchTerm
@@ -72,7 +76,10 @@ function ReturnOnSellPage() {
           </section>
           <section className="cont">
             <div className="cont_header clearfix">
-              <p className="cont_title cont-left">목록</p>
+              <p className="cont_title cont-left">
+                목록
+                <Tooltip message={'- 반품 가능한 일반상품 리스트만 존재합니다.\n- 구매자 귀책 택배비: 6,000원\n- 판매자 귀책: 택배비 없음\n- 반품불가: 반품불가처리된 상품은 배송완료상태가 됩니다.'} messagePosition={'left'} wordBreaking={true} width={'340px'}/>
+              </p>
               <div className="controls cont-left">
                 <button className="admin_btn line basic_m">
                   반품승인&#40;구매자&#41;

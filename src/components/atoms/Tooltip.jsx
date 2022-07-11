@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import rem from '/util/func/rem';
 
-const Wrap = styled.div`
+const Wrap = styled.em`
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -85,6 +85,7 @@ const ToolTip = ({
   theme,
   wordBreaking,
   onClick,
+  width,
   ...props
 }) => {
   const [isActive, setIsActive] = useState(false);
@@ -116,7 +117,10 @@ const ToolTip = ({
         </Icon>
         {isActive && (
           <MessageBody
-            style={style}
+            style={{
+              ...style,
+              width: width
+            }}
             data-align={messagePosition}
             data-device={device}
             theme={theme}

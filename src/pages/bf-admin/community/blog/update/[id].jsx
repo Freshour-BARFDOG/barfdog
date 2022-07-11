@@ -23,11 +23,12 @@ import Tooltip from "/src/components/atoms/Tooltip";
 
 
 
-export default function UpdateBlogPage () {
-  const router = useRouter();
-  const {id} = router.query;
-  const apiUrl = `/api/admin/blogs/${id}`;
-  const imageUploadApiURL = '/api/admin/blogs/image/upload';
+
+export default function UpdateBlogPage ({ id }) {
+  console.log(id);
+  const getFormValuesApiUrl = `/api/admin/blogs/${id}`;
+  const putFormValuesApiUrl = `/api/admin/blogs/${id}`;
+  const postContentimageApiURL = '/api/admin/blogs/image/upload';
 
   const mct = useModalContext();
   const [modalMessage, setModalMessage] = useState('');
@@ -39,46 +40,62 @@ export default function UpdateBlogPage () {
   const [thumbFile, setThumbFile] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-
   // console.log(formValues)
 
   //  INIT QUILL EDITOR
   useEffect(() => {
     if(!id)return;
     (async ()=>{
-      const res = await getData(apiUrl);
-      const DATA = res.data.blogAdminDto;
-      const initialFormValues = {
-        title: DATA.title,
-        category: DATA.category,
-        contents: DATA.contents,
-        thumbnailId: DATA.thumbnailId,
-        status: DATA.status,
-        addImageIdList:[],
-        deleteImageIdList: []
-      };
-      setFormValues(initialFormValues);
-
-
-      const editorImageDATA = res.data.adminBlogImageDtos;
-      const originInnerHTMLImageIdList = editorImageDATA.map((list)=>list.blogImageId)
-      console.log(res)
-      setOriginImageIdList(originInnerHTMLImageIdList);
-
-      setThumbFile({
-        file: '',
-        filename: DATA.filename,
-        originFilename: DATA.filename,
-        thumbnailUrl: DATA.thumbnailUrl,
-        id: DATA.thumbnailId,
-      })
-
-
-      if (document) {
-        const QuillEditor = dynamic(() => import('/src/components/admin/form/QuillEditor'));
-        setQuillEditor(QuillEditor);
-        console.log('Editor init is complete.');
+      try {
+        if (setIsLoading && typeof setIsLoading === 'function') {
+          setIsLoading((prevState) => ({
+            ...prevState,
+            fetching: true,
+          }));
+        }
+        const res = await getData(getFormValuesApiUrl);
+        const DATA = res.data.blogAdminDto;
+        const initialFormValues = {
+          title: DATA.title,
+          category: DATA.category,
+          contents: DATA.contents,
+          thumbnailId: DATA.thumbnailId,
+          status: DATA.status,
+          addImageIdList:[],
+          deleteImageIdList: []
+        };
+        setFormValues(initialFormValues);
+  
+  
+        const editorImageDATA = res.data.adminBlogImageDtos;
+        const originInnerHTMLImageIdList = editorImageDATA.map((list)=>list.blogImageId)
+        console.log(res)
+        setOriginImageIdList(originInnerHTMLImageIdList);
+  
+        setThumbFile({
+          file: '',
+          filename: DATA.filename,
+          originFilename: DATA.filename,
+          thumbnailUrl: DATA.thumbnailUrl,
+          id: DATA.thumbnailId,
+        })
+  
+  
+        if (document) {
+          const QuillEditor = dynamic(() => import('/src/components/admin/form/QuillEditor'));
+          setQuillEditor(QuillEditor);
+          console.log('Editor init is complete.');
+        }
+      } catch (err) {
+          console.error(err)
       }
+      if (setIsLoading && typeof setIsLoading === 'function') {
+        setIsLoading((prevState) => ({
+          ...prevState,
+          fetching: false,
+        }));
+      }
+      
 
     })();
 
@@ -194,7 +211,7 @@ export default function UpdateBlogPage () {
       }));
       if (isPassed) {
         const objData = formValues;
-        const res = await putObjData(apiUrl, objData);
+        const res = await putObjData(putFormValuesApiUrl, objData);
         if(res.isDone){
           onShowModalHandler('블로그가 수정되었습니다.');
           setIsSubmitted(true);
@@ -238,7 +255,10 @@ export default function UpdateBlogPage () {
       <AdminLayout>
         <AdminContentWrapper>
           <div className="title_main">
-            <h1>블로그 수정</h1>
+            <h1>
+              블로그 수정
+              {isLoading.fetching && <Spinner />}
+            </h1>
           </div>
           <form
             action="/"
@@ -329,14 +349,7 @@ export default function UpdateBlogPage () {
                           onChange={imageFileChangeHandler}
                         />
                         <Fake_input
-                          loadingIcon={
-                            isLoading.thumb && (
-                              <Spinner
-                                style={{ color: 'var(--color-main)', width: '15', height: '15' }}
-                                speed={0.6}
-                              />
-                            )
-                          }
+                          loadingIcon={isLoading.thumb && <Spinner/>}
                           filename={thumbFile.filename}
                         />
                       </span>
@@ -363,7 +376,7 @@ export default function UpdateBlogPage () {
                         imageId={'blogImageIdList'}
                         originImageIdList={originImageIdList}
                         setFormValues={setFormValues}
-                        imageUploadApiURL={imageUploadApiURL}
+                        imageUploadApiURL={postContentimageApiURL}
                         initialValue={formValues.contents}
                       />
                     )}
@@ -418,3 +431,9 @@ export default function UpdateBlogPage () {
   );
 };
 
+
+UpdateBlogPage.getInitialProps = async ({ query }) => {
+  const { id } = query
+  return { id };
+  
+}

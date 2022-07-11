@@ -16,7 +16,42 @@ $browser-context: 16;
     margin-bottom: rem(40);
     border-bottom: rem(1) solid var(--color-line-03);
   }
-  .cont_divider{
-    input + em:not(:last-child) {margin-right:rem(40);}
+  .input_row{
+    display: inline-grid;
+    grid-template-columns: minmax(rem(100), rem(150)) minmax(rem(100), 1fr);
+    .inp_section{
+      width: 100%;
+      display: grid;
+      align-items: flex-start;
+      gap: rem(40);
+      grid-template-columns: 1fr 1fr;
+      .inp_box{
+        display: grid;
+        grid-template-columns: minmax(rem(180), 1fr) minmax(rem(100), rem(120));
+      }
+    }
   }
+}
+
+
+
+@media (max-width: (rem(1200))) {
+  #main {
+    .input_row{
+
+      .inp_section{
+        display: flex;
+        flex-direction: column;
+        gap:rem(10);
+
+
+
+        .inp_box{
+        }
+      }
+    }
+
+
+  }
+
 }

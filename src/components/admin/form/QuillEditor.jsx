@@ -19,38 +19,66 @@ export default function QuillEditor({
   imageUploadApiURL,
   originImageIdList = [],
   initialValue,
+  formValuesKey,
   mode = 'create',
 }) {
   /* - 모듈 추가 시, 필요
    * const Quill = typeof window == 'object' ? require('quill') : () => false;
    */
-
+  
   const ReactQuill = typeof window == 'object' ? require('react-quill') : () => false;
   const quillRef = useRef();
-
-  if (!setFormValues || typeof setFormValues !== 'function') return;
   const [isLoading, setIsLoading] = useState(false);
+  const [isInitAllImageIdListCompleted, setIsInitAllImageIdListCompleted] = useState( false );
   const [body, setBody] = useState(initialValue);
-  const [fullImageIdList, setFullImageIdList] = useState(originImageIdList);
+  const [allImageIdList, setAllImageIdList] = useState(originImageIdList) ;
 
   useEffect(() => {
-    const imageIdList = analyze_ImageIdListCRUD(fullImageIdList, body, originImageIdList);
-    const isBodyEmpty = body === '<p><br></p>';
+    if(isInitAllImageIdListCompleted) return;
+    setAllImageIdList(originImageIdList);
+    setIsInitAllImageIdListCompleted(true);
+  }, [originImageIdList]);
+  
+  useEffect(() => {
+    const isInnerHtmlEmpty = body === '<p><br></p>';
+    const resultIdList = analyze_ImageIdListCRUD(allImageIdList, body, originImageIdList);
+    // console.log('::: Quill Editor Inner Image > CRUD RESULT :::', resultIdList);
     if (mode === 'create') {
       setFormValues((prevState) => ({
         ...prevState,
-        [id]: isBodyEmpty ? '' : body,
-        [imageId]: imageIdList?.add || [],
-      }));
-    } else if ('update') {
-      setFormValues((prevState) => ({
-        ...prevState,
-        [id]: isBodyEmpty ? '' : body,
-        addImageIdList: imageIdList?.add,
-        deleteImageIdList: imageIdList?.del,
+        [id]: isInnerHtmlEmpty ? '' : body,
+        [imageId]: resultIdList?.cur || [],
       }));
     }
-  }, [body, fullImageIdList]);
+    
+    
+    if (mode === 'update'){
+      if (!resultIdList) return; // ! important validation: allImageIdList가 init되기 전에 실행될 경우, undefined가 반환되고, formvalue에 적절하지 않은 값들이 할당됨 => updatePage에서 정상작동하지 않게 됨.
+      if (formValuesKey) {
+        const { addImageKey, delImageKey } = formValuesKey;
+        setFormValues((prevState) => ({
+          ...prevState,
+          [id]: isInnerHtmlEmpty ? '' : body,
+          [addImageKey]: resultIdList?.cur,
+          [delImageKey]: resultIdList?.del,
+        }));
+      } else {
+        setFormValues((prevState) => ({
+          ...prevState,
+          [id]: isInnerHtmlEmpty ? '' : body,
+          addImageIdList: resultIdList?.cur,
+          deleteImageIdList: resultIdList?.del,
+        }));
+      }
+    };
+   
+  }, [body, allImageIdList]);
+  
+  
+
+  
+  
+  
 
   const imageHandler = () => {
     if (!imageUploadApiURL) return;
@@ -80,7 +108,7 @@ export default function QuillEditor({
         editor.getEditor().setSelection((range ? range.index : 0) + 1);
         document.body.querySelector(':scope > input').remove();
         if (!imageId) return;
-        setFullImageIdList((prevState) => [...prevState, id]);
+        setAllImageIdList((prevState) => [...prevState, id]);
       } catch (err) {
         // console.log(err);
         alert(`에러가 발생했습니다.\n${err}`);
@@ -165,13 +193,11 @@ const extractImageIdList = (html) => {
 };
 
 const compareImageList = (allArrBefore, curArrBefore, originArrBefore) => {
+  if (!allArrBefore.length) return console.log('There is no Image File.');
 
-
-  if (!allArrBefore.length) return console.error('There is no Image File.');
-
-  const originArr = originArrBefore.map(a=>Number(a));
-  const allArr = allArrBefore.map(a=>Number(a));
-  const curArr = curArrBefore.map(a=>Number(a));
+  const originArr = originArrBefore.map((a) => Number(a));
+  const allArr = allArrBefore.map((a) => Number(a));
+  const curArr = curArrBefore.map((a) => Number(a));
 
   let result = {
     origin: originArr, // very First image List
@@ -183,10 +209,11 @@ const compareImageList = (allArrBefore, curArrBefore, originArrBefore) => {
 
   for (const key in result) {
     let arr = result[key];
-    result[key] = arr.map(a=>Number(a));
+    result[key] = arr.map((a) => Number(a));
   }
 
-
+    // console.log(allArrBefore);
+    // console.log(allArr);
   allArr.map((id) => {
     const isCurArr = curArr.indexOf(id) >= 0;
     const isOriginArr = originArr.indexOf(id) >= 0;
@@ -196,7 +223,6 @@ const compareImageList = (allArrBefore, curArrBefore, originArrBefore) => {
     isNew && result.add.push(id);
     isToBeDeleted && result.del.push(id);
   });
-
 
   return result;
 };

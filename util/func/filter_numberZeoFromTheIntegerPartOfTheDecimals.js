@@ -1,9 +1,10 @@
-const filter_numberZeoFromTheIntegerPartOfTheDecimal = (stringTypeNumber) => {
+const filter_numberZeoFromTheIntegerPartOfTheDecimals = (stringTypeNumber, unit='+') => {
   let filteredValue = stringTypeNumber;
   const integer = filteredValue.split('.')[0];
   const decimal = filteredValue.split('.')[1];
   const hasComma = filteredValue.indexOf('.') >= 0;
 
+ 
   if (hasComma && !integer){
     filteredValue = '0' + filteredValue;
   } else  if(hasComma){
@@ -20,9 +21,11 @@ const filter_numberZeoFromTheIntegerPartOfTheDecimal = (stringTypeNumber) => {
     transformedInteger = integer.replace(/(^0+)/, `${!isSecondCharZero ? '' : '0'}`);
     filteredValue = `${transformedInteger}.${decimal}`;
   }
+  
+  filteredValue = unit === '-' ? unit+filteredValue : filteredValue;
   return filteredValue;
 }
 
 
 
-export default filter_numberZeoFromTheIntegerPartOfTheDecimal;
+export default filter_numberZeoFromTheIntegerPartOfTheDecimals;

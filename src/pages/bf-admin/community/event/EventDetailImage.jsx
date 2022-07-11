@@ -4,7 +4,7 @@ import CloseButton from '/src/components/atoms/CloseButton';
 import Fake_input from '/src/components/atoms/fake_input';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import Spinner from '/src/components/atoms/Spinner';
-import convertFileSizeToMegabyte from '/util/func/ConvertFileSizeToMegabyte';
+import convertFileSizeToMegabyte from '/util/func/convertFileSizeToMegabyte';
 import { postFileUpload } from '/api/reqData';
 
 export default function EventDetailImage({
@@ -40,8 +40,7 @@ export default function EventDetailImage({
         url: data.url,
       }));
       setFileList(initFileList);
-    }
-    1;
+    };
   }, [originImageDatas]);
 
   useEffect(() => {
@@ -225,7 +224,6 @@ const uploadImage = async (file, setFormValues, id, setFormErrors, postApiUrl, l
   //   data: { id: Math.floor(Math.random() * 100), leakOrder: Math.floor(Math.random() * 100) },
   //   status: 200,
   // };
-  console.log(response);
 
   const imageId = response.data.id;
   const imageUrl = response.data.url;

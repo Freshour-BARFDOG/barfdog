@@ -1,56 +1,46 @@
-import React, {useEffect, useState} from "react";
-import getElemIdx from "/util/func/getElemIdx";
+import React from 'react';
 
-const CustomSelect = ({name, id, onChange, options = [], style, ...props}) => {
+const CustomSelect = ({ id,value,  setFormValues, options = [], style, ...props }) => {
 
-  const initialValue = options[0].value || '';
-  const [selectedValue, setSelectedValue] = useState(initialValue);
 
   const onChangeHandler = (e) => {
     const thisSelect = e.currentTarget;
     const value = thisSelect.value;
-    const options = Array.from(thisSelect.children);
-    let selectedOptionIdx;
-    options.map((option)=>{
-      const thisOptionValue = option.value;
-      if(value === thisOptionValue) {
-        selectedOptionIdx = getElemIdx(option);
-      }
-    })
-    setSelectedValue(value);
-    if (onChange && typeof onChange === "function") {
-      onChange((prevState) => ({
-        ...prevState, [name]: {value, selectedIdx: selectedOptionIdx},
-      }));
+    if (!setFormValues || typeof setFormValues !== 'function') {
+      return console.error('ERROR: need setFormValues props type of function');
     }
-  };
 
+    setFormValues((prevState) => ({
+      ...prevState,
+      [id]: value
+    }));
+  };
 
   if (!options.length) return;
 
-  return (<>
-    <select
-      className="admin_select"
-      name={name}
-      id={id || name}
-      onChange={onChangeHandler}
-      value={selectedValue}
-      style={style}
-      {...props}
-    >
-      {options.map((option, i) => {
-        return i === 0 ? (<option
-          key={`${option.label}-${i}`}
-          value={option.value}
-          defaultValue
-        >
-          {option.label}
-        </option>) : (<option key={`${option}-${i}`} value={option.value}>
-          {option.label}
-        </option>);
-      })}
-    </select>
-  </>);
+  return (
+    <>
+      <select
+        className="admin_select"
+        id={id}
+        onChange={onChangeHandler}
+        value={value || ''} /* IMPORTANT: to set Initial Value */
+        style={style}
+        {...props}
+      >
+        {options.map((option, i) => {
+          return (
+            <option
+              key={`${option}-${i}`}
+              value={option.value}
+            >
+              {option.label}
+            </option>
+          );
+        })}
+      </select>
+    </>
+  );
 };
 
 export default CustomSelect;

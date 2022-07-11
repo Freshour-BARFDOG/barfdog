@@ -25,8 +25,8 @@ const initialFormValues = {
 
 const CreateEventPage = () => {
   const postFormValuesApiUrl = `/api/admin/events`;
-  const postDetailImageFileApiUrl = 'api/admin/events/image';
   const postThumbFileApiUrl = 'api/admin/events/thumbnail';
+  const postDetailImageFileApiUrl = 'api/admin/events/image';
   const router = useRouter();
   const mct = useModalContext();
   const [modalMessage, setModalMessage] = useState('');

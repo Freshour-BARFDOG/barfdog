@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 
-function UnitBox({unitList, name, setValue}) {
+function UnitBox({unitList, name,value, setValue}) {
 
 
-  const initialValue = unitList[0].value;
+  const initialValue = value || unitList[0].value;
   const [selectedRadio, setSelectedRadio] = useState(initialValue);
 
 

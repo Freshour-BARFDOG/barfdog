@@ -11,8 +11,11 @@ const Pagination = ({
   theme = 'square',
   setItemList,
   queryItemList,
-                      setIsLoading,
+  setIsLoading,
+  urlQuery,
+  setPageData,
 }) => {
+  
   const router = useRouter();
   const query = router.query;
   const pageFromQuery = Number(query?.page) || 1;
@@ -21,43 +24,54 @@ const Pagination = ({
   const [curPage, setCurPage] = useState(pageFromQuery);
 
   useEffect(() => {
-    if(setIsLoading && typeof setIsLoading === 'function'){
-      setIsLoading(prevState => ({
-        ...prevState,
-        fetching: true
-      }))
-    }
-
     (async () => {
+      try {
+        if (setIsLoading && typeof setIsLoading === 'function') {
+          setIsLoading((prevState) => ({
+            ...prevState,
+            fetching: true,
+          }));
+        }
 
-      const calcedPageIndex = (curPage - 1).toString();
-      const res = await getData(`${apiURL}?page=${calcedPageIndex}&size=${size}`);
-      const pageData = res.data?.page;
-      console.log(res);
-      const noItems = pageData?.totalElements === 0;
-      if (noItems) return;
-      const newPageInfo = {
-        totalPages: pageData.totalPages,
-        size: pageData.size,
-        totalItems: pageData.totalElements,
-        currentPageIndex: pageData.number,
-        newItemList: res.data._embedded[queryItemList] || {},
-        newPageNumber: pageData.number + 1,
-      };
-      setPageInfo(newPageInfo);
-      setItemList(newPageInfo.newItemList);
-      await router.push({
-        search: `?page=${newPageInfo.newPageNumber}`,
-      });
-
-      if(setIsLoading && typeof setIsLoading === 'function'){
-        setIsLoading(prevState => ({
+        const calcedPageIndex = (curPage - 1).toString();
+        const defaultQuery = `?page=${calcedPageIndex}&size=${size}`;
+        let urlQueries = urlQuery ? `${defaultQuery}&${urlQuery}` : defaultQuery;
+        console.log('Serach Query: ',urlQueries);
+        const res = await getData(`${apiURL}${urlQueries}`);
+        console.log(res);
+        const pageData = res.data?.page;
+        const hasItems = pageData?.totalElements !== 0;
+        if (pageData && hasItems) {
+          const newPageInfo = {
+            totalPages: pageData.totalPages,
+            size: pageData.size,
+            totalItems: pageData.totalElements,
+            currentPageIndex: pageData.number,
+            newItemList: res.data._embedded[queryItemList] || {},
+            newPageNumber: pageData.number + 1,
+          };
+          setPageInfo(newPageInfo);
+          setItemList(newPageInfo.newItemList);
+          if(setPageData && typeof setPageData === 'function'){
+            setPageData(newPageInfo)
+          }
+          await router.push({
+            search: `?page=${newPageInfo.newPageNumber}`,
+          });
+        }else{
+          // setItemList([]);  // TEST 끝난 뒤, 주석 해제
+        }
+      } catch (err) {
+        console.error(err);
+      }
+      if (setIsLoading && typeof setIsLoading === 'function') {
+        setIsLoading((prevState) => ({
           ...prevState,
-          fetching: false
-        }))
+          fetching: false,
+        }));
       }
     })();
-  }, [curPage]);
+  }, [curPage, urlQuery, apiURL]);
 
   const Num = ({ pagenum }) => {
     const calcedPageNum = pagenum + 1;

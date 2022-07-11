@@ -29,12 +29,17 @@ $inputDefaultHeight: rem(38);
   width: rem(200);
 }
 
-.text-transform-ellipsis {
+.overflow-x-scroll {
   white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
+  //text-overflow: ellipsis;
+  //overflow-x: hidden;
+  overflow-x: auto;
   justify-content: flex-start !important;
+  &::-webkit-scrollbar {display:none;}
 }
+
+
+
 .btn_link {
   cursor: pointer;
   color: var(--color-link);
@@ -165,7 +170,7 @@ $inputDefaultHeight: rem(38);
   background-color: var(--color-bg);
 
   .errorMSG {
-    padding-top: rem(4);
+    //padding-top: rem(4);
   }
   .desc {
     font-size: rem(12);
@@ -188,8 +193,9 @@ $inputDefaultHeight: rem(38);
     margin-bottom: rem(10);
     * {
       display: flex;
-      gap: rem(10);
       font-size: inherit;
+      align-items: center;
+      gap: rem(10);
       cursor: default;
     }
   }
@@ -262,6 +268,7 @@ $inputDefaultHeight: rem(38);
       i {
         cursor: default;
       }
+      label i, label b{cursor: inherit}
       .table_body {
         min-height: $inputDefaultHeight;
       }
@@ -295,18 +302,23 @@ $inputDefaultHeight: rem(38);
     padding-top: rem(15);
     margin-top: rem(15);
     border-top: rem(1) solid var(--color-line-03);
-    overflow: hidden;
-
-    button:not(:last-child) {
-      margin-right: rem(5);
-    }
+    display: flex;
+    column-gap:rem(5);
+    justify-content: flex-start;
+    align-items: center;
+    //overflow: hidden;
+    //button:not(:last-child) {
+    //  margin-right: rem(5);
+    //}
   }
 
   .input_row {
     display: flex;
     align-items: center;
+
     &.multipleLines {
       align-items: flex-start;
+      .inp_section{margin-top:rem(3);}
     }
     &:not(:last-child) {
       margin-bottom: rem(15);
@@ -319,6 +331,7 @@ $inputDefaultHeight: rem(38);
         height: $inputDefaultHeight;
         display: flex;
         align-items: center;
+        gap: rem(10);
       }
       .title {
         display: flex;
@@ -362,7 +375,7 @@ $inputDefaultHeight: rem(38);
         gap: rem(10);
         font-size: rem(14);
         .checkbox-wrap:not(:first-child) {
-          margin-left: rem(30);
+          margin-left: rem(10);
         }
         &.radio:not(:last-child) {
           margin-right: rem(24);
@@ -527,3 +540,15 @@ $inputDefaultHeight: rem(38);
   color: var(--color-main);
 }
 
+
+.required {
+  position:relative;
+  &:after{
+    content:'*';
+    position:absolute;
+    right:rem(-6);
+    top:rem(-1);
+    font-size:rem(10);
+    color:var(--color-main);
+  }
+}

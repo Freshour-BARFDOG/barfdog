@@ -1,56 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 import Router from "next/router";
+import setExpiryDate from "@util/func/setExpiryDate";
+import transformDate from "@util/func/transformDate";
+import {setCookie} from "@util/func/cookie";
 
 
-
-
-// ! API SERVER > 에러처리 기능 추가예정 (0513금 )
-
-/* 
-*  (async () => {
-*  const token = axiosConfig();
-*  // console.log(token.headers.authorization);
-*  const response = await axios
-*    .get(
-*      REQUEST_URL,
-*      {
-*        headers: {
-*          authorization:
-*            "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLthqDtgbAg7J2066aEIiwiaWQiOjUsImV4cCI6MTY1MTg5MjU3NiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20ifQ.Wycm9ZmiiK-GwtsUkvMCHHeExDBtkveDbhKRealjmd8C4OZMp3SFqGFcFWudXMiL5Mxdj6FcTAV9OVsOYsn_Mw",  
-// 만료된 쿠폰을 넣은 경우
-*          "Content-Type": "application/json",
-*        },
-*      },
-*      axiosConfig()
-*    )
-*    .then((res) => {
-*      console.log(res.data);
-*      return res.data;
-*    })
-*    .catch((err) => {
-*      console.error(err.request.response); //////*******중요
-*      const errorObj = JSON.parse(err.request?.response);
-*      const status = errorObj.status;
-*      console.log(status);
-*      if(status === 401){
-*        const EXPIRED_TOKEN = errorObj.reason === "EXPIRED_TOKEN";
-*        const UNAUTHORIZED = errorObj.reason === "UNAUTHORIZED";
-*        console.error("errorType > EXPIRED_TOKEN : ", EXPIRED_TOKEN);
-*        console.error("errorType > UNAUTHORIZED : ", UNAUTHORIZED);
-*        
-*      }else if (status === 403) {
-*        const FORBIDDEN = errorObj.reason === "FORBIDDEN";
-*        console.error("errorType > FORBIDDEN : ", FORBIDDEN);
-*      }
-*      
-*      
-*    });
-*/
 
 const initialAuthState = {
   token: null,
   isAuth: false,
   isAdmin: false,
+  autoLogin: false,
 };
 
 const authSlice = createSlice({
@@ -70,7 +30,8 @@ const authSlice = createSlice({
       state.isAuth = true;
       state.isAdmin = false;
       state.token = action.payload.token;
-      localStorage.setItem("user", JSON.stringify({ token: state.token }));
+      localStorage.setItem("user", JSON.stringify({ token: state.token
+      }));
       if (state.isAdmin) {
         return alert("관리자는 중복 로그인할 수 없습니다.");
       }
@@ -98,7 +59,27 @@ const authSlice = createSlice({
       state.isAuth = true;
       state.token = action.payload.token;
       localStorage.setItem("admin", JSON.stringify({ token: state.token }));
+      
       alert("관리자 로그인에 성공하였습니다.");
+      Router.push("/bf-admin/dashboard");
+    },
+    adminAugoLogin(state, action) {
+      state.isAdmin = true;
+      state.isAuth = true;
+      state.token = action.payload.token;
+      state.autoLogin = true;
+      const {email, password} = action.payload.account;
+      // ! 개발단계에서 임시로 사용하는 방법
+      const expiryDate = setExpiryDate(7);
+      // setCookie('authorization',  state.token,  'date', 7 );
+      
+      // !  CF.) COOKIE를 사용할 경우 getInitialProps에서 Cookie정보속에서 token을 사용할 수 있다.
+      localStorage.setItem("admin", JSON.stringify({ token: state.token, account: {email, password}, expires: expiryDate }));
+      // ! 추후에 Backend API > refresh토큰이 개발 후, refresh token으로 변경하기
+      // - 자동로그인 on일 경우, 로컬에 저장된 정보를 통해서 getToken함수를 실행하도록한다.
+      alert(`관리자 로그인에 성공하였습니다.\n자동로그인: On\n반드시 본인 기기에서만 사용하시기 바랍니다.`);
+      
+      
       Router.push("/bf-admin/dashboard");
     },
     adminLogout(state) {

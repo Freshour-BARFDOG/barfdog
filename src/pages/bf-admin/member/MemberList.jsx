@@ -38,7 +38,7 @@ import popupWindow from "@util/func/popupWindow";
     return (
       <li className={s.item} key={`item-${DATA.id}`}>
         <span>
-          <Link href={`/bf-admin/member/popup/${DATA.id}`} passHref>
+          <Link href={`/bf-admin/popup/member/${DATA.id}`} passHref>
             <a
               target="_blank"
               className="admin_btn basic_s solid"

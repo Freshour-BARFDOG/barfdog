@@ -7,19 +7,30 @@ import AdminBtn_moveToPage from "@src/components/atoms/AdminBtn_moveToPage";
 import AmdinErrorMessage from "@src/components/atoms/AmdinErrorMessage";
 import NoticeList from "./NoticeList";
 import PaginationWithAPI from "/src/components/atoms/PaginationWithAPI";
+import Spinner from "/src/components/atoms/Spinner";
 
 
 
 
-function NoticeIndexPage(props) {
+function NoticeIndexPage() {
+  const getListApiUrl = '/api/admin/notices';
   const [itemList, setItemList] = useState([]);
+  const [isLoading, setIsLoading] = useState({});
   console.log(itemList);
   return (
     <>
       <MetaTitle title="공지사항 관리" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
-          <h1 className="title_main">공지사항 관리</h1>
+          <div className="title_main">
+            <h1>공지사항 관리
+              {isLoading.fetching && (
+                <Spinner
+                  style={{ color: 'var(--color-main)', width: '20', height: '20' }}
+                  speed={0.6}
+                />
+              )}</h1>
+          </div>
           <div className="cont">
             <div className="cont_header clearfix">
               <p className="cont_title cont-left">목록</p>
@@ -50,7 +61,7 @@ function NoticeIndexPage(props) {
               </div>
             </div>
             <div className={s['pagination-section']}>
-              <PaginationWithAPI apiURL={'/api/admin/notices'} size={1} theme={'square'} setItemList={setItemList} queryItemList={'queryBlogsAdminDtoList'} />
+              <PaginationWithAPI apiURL={getListApiUrl} size={1} theme={'square'} setItemList={setItemList} queryItemList={'queryBlogsAdminDtoList'} setIsLoading={setIsLoading}/>
             </div>
           </div>
         </AdminContentWrapper>

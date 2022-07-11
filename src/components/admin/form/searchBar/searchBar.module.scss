@@ -28,6 +28,8 @@ $browser-context: 16;
     align-items: center;
   }
   > *:nth-child(2){
+    display: flex;
+    align-items: center;
     grid-column: 2 / auto;
     grid-row:1 /2;
   }
@@ -122,6 +124,7 @@ $browser-context: 16;
 
   color: var(--color-font-def);
   label {
+    cursor: pointer;
     padding: rem(4) 0;
     display: flex;
     align-items: center;
