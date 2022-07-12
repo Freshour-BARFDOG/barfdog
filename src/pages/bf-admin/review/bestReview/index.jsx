@@ -85,7 +85,7 @@ function BestReviewPage() {
       .delete(url, axiosConfig())
       .then((res) => {
         console.log(res);
-        getDataWithSettingState("/api/banners/main", setItemList);
+        // getDataWithSettingState("/api/banners/main", setItemList);
         setModalMessage("배너가 삭제되었습니다.");
       })
       .catch((err) => {

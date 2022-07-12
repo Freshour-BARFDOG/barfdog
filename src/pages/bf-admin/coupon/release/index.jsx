@@ -79,25 +79,30 @@ function ReleaseCouponPage() {
           fetchingCouponList: true,
         }));
         const res = await getData(getCouponList);
-        console.log(res);
-        const DATA = res.data._embedded.publicationCouponDtoList;
-        const newCouponOptions = DATA.map((data) => ({
-          value: data.couponId,
-          label: `[ 할인: ${data.discount} ] ${data.name}`,
-        }));
-
+        const hasDATA = res.data._embedded;
+        let newCouponOptions = [];
         const emptyOptions = [
           {
             value: '',
             label: '선택',
           },
         ];
-        emptyOptions.concat(newCouponOptions);
+  
+        if(hasDATA){
+          const DATA = res.data._embedded.publicationCouponDtoList;
+          newCouponOptions = DATA.map((data) => ({
+            value: data.couponId,
+            label: `[ 할인: ${data.discount} ] ${data.name}`,
+          }));
+  
 
+        }
+        emptyOptions.concat(newCouponOptions);
         setCouponOptions(emptyOptions.concat(newCouponOptions));
+       
       } catch (err) {
         console.error(err);
-        alert('데이터를 가져올 수 없습니다.');
+        console.error('데이터를 가져올 수 없습니다.');
       }
       setIsLoading((prevState) => ({
         ...prevState,

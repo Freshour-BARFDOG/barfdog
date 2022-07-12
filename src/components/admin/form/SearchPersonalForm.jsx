@@ -14,7 +14,9 @@ const WindowOpener = dynamic(() => import('/util/func/window-opener'), { ssr: fa
 
 
 export default function SearchPersonalForm({ id, setFormValues, formErrors }) {
-
+  
+  
+  const [errorMessage, setErrorMessage] = useState( '발급대상인 회원이 없습니다.');
   const [isLoading, setIsLoading] = useState(false);
   const [itemList, setItemList] = useState([]);
   const [selectedItemList, setSelectedItemList] = useState([]);
@@ -32,19 +34,23 @@ export default function SearchPersonalForm({ id, setFormValues, formErrors }) {
   const onReceivePopupData = async (err, idList) => {
     // console.log('err: ', err, 'idList: ', idList);
   
-    setIsLoading(true);
     const targetMemberIdList = idList;
-    if (err) {
-      return alert(err);
-    } else if (!Array.isArray(targetMemberIdList) || !targetMemberIdList.length) {
-      return alert('데이터가 없거나, 불러오는데 실패했습니다.');
+    
+    if ( err ) {
+      return setErrorMessage( '회원검색 데이터를 불러오는데 실패했습니다.' );
+    } else if ( !Array.isArray( targetMemberIdList ) || !targetMemberIdList.length ) {
+      return setErrorMessage( '발행대상인 회원이 없습니다.' );
     }
-
-    const newMemberList = await getMemberList(targetMemberIdList);
-    setItemList(prevState => prevState.concat(newMemberList))
-    setIsLoading(false);
-
-  };
+  
+    try {
+      setIsLoading( true );
+      const newMemberList = await getMemberList( targetMemberIdList );
+      setItemList( prevState => prevState.concat( newMemberList ) )
+    } catch (err) {
+        console.error(err)
+    }
+    setIsLoading( false );
+  }
 
 
   const onAllSelectItemsList = (checked) => {
@@ -112,7 +118,7 @@ export default function SearchPersonalForm({ id, setFormValues, formErrors }) {
                 if (isLoading) {
                   return <Spinner floating={true} />;
                 } else if (!itemList.length) {
-                  return <AmdinErrorMessage text="발급대상인 회원이 없습니다."/>;
+                  return <AmdinErrorMessage text={errorMessage}/>;
                 } else {
                   return (
                     <UserList

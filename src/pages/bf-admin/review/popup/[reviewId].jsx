@@ -17,36 +17,38 @@ import ArrowRight from '/public/img/icon/swiper-arrow-large-r.svg';
 import Modal from '/src/components/modal/Modal';
 import { useModalContext } from '/store/modal-context';
 import Modal_alert, { Modal_innerForm } from '/src/components/modal/Modal_alert';
-import { getData } from '/src/pages/api/reqData';
-import { FullScreenLoading } from '../../../../components/atoms/fullScreenLoading';
+import {getData, postObjData} from '/src/pages/api/reqData';
+import { FullScreenLoading } from '/src/components/atoms/fullScreenLoading';
+import {global_reviewStateType} from "/store/TYPE/reviewStateType";
 
-const allDATA = [
-  {
-    link: 'https://images.unsplash.com/photo-1654124803072-3198bd80d438?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1024&q=80',
-  },
-  {
-    link: 'https://images.unsplash.com/photo-1638913662415-8c5f79b20656?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80',
-  },
-  {
-    link: 'https://images.unsplash.com/photo-1654187808886-f52d45d8cd0c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80',
-  },
-];
 
-// 1. 필터 // 가운데랑 마지막을 제외하고 * 별표처리
-// 2 . 제목란은..... 상세내용중에서 일부를 가져와서 뿌린다.
 
 export default function ReviewDetailPage({ reviewId }) {
-  const getApiUrl = `/api/reviews/${reviewId}`;
+  
+  const getReviewInfoApiUrl = `/api/admin/reviews/${reviewId}`;
+  const postRegisterBestReviewApiUrl = '/api/admin/reviews/best';
+  const apiDataQuery = 'reviewDto';
 
+  
+  
+  
   const [isLoading, setIsLoading] = useState({});
   const [modalMessage, setModalMessage] = useState('');
   const [reviewStatus, setReviewStatus] = useState('요청');
-  const [isBestReview, setIsBestReview] = useState(false);
+  // const [isBestReview, setIsBestReview] = useState(false);
   const [isRejectStart, setRejectStart] = useState(false);
   const [itemValues, setItemValues] = useState({});
   const modalInnerInputRef = useRef();
-
-  console.log(itemValues);
+  //
+  // console.log(itemValues);
+  // console.log(isBestReview);
+  useEffect( () => {
+    (async ()=>{
+      const res = await getData('/api/admin/reviews/best');
+      console.log(res);
+    })();
+  }, [itemValues.bestReview] );
+  
 
   useEffect(() => {
     (async () => {
@@ -55,19 +57,31 @@ export default function ReviewDetailPage({ reviewId }) {
           ...prevState,
           fetching: true,
         }));
-        const res = await getData(getApiUrl);
-        const DATA = res.data.reviewDto;
-        const initialValues = {
-          contents: DATA.contents,
-          id: DATA.id,
-          name: filter_blindingUserName(DATA.name),
-          star: DATA.star,
-          thumbnailUrl: DATA.thumbnailUrl,
-          title: DATA.title,
-          writtenDate: DATA.wrriten,
-          imageList: res.data.reviewImageDtoList,
-        };
-        setItemValues(initialValues);
+        const res = await getData(getReviewInfoApiUrl);
+        console.log(res)
+        if(res.data[apiDataQuery]){
+          const DATA = res.data[apiDataQuery];
+          const initialValues = {
+            id: DATA.id,
+            status: DATA.status,
+            writtenDate: DATA.writtenDate,
+            star: DATA.star,
+            contents: DATA.contents,
+            username: filter_blindingUserName(DATA.username),
+            imageList: res.data.imageUrlList,
+            bestReview: res.bestReview
+          };
+          setItemValues(initialValues);
+          global_reviewStateType.forEach((type) => {
+            if (type.ENG === DATA.status) {
+              setReviewStatus(type.KOR);
+            }
+          });
+        }else{
+          alert('데이터를 가져올 수 없습니다.');
+        }
+
+        
       } catch (err) {
         console.error(err);
         console.error(err.response);
@@ -78,7 +92,7 @@ export default function ReviewDetailPage({ reviewId }) {
         fetching: false,
       }));
     })();
-  }, []);
+  }, [getReviewInfoApiUrl, itemValues.bestReview]);
 
   const navPrev_mainRef = useRef();
   const navNext_mainRef = useRef();
@@ -133,15 +147,27 @@ export default function ReviewDetailPage({ reviewId }) {
       const value = modalInnerInputRef.current.value;
       console.log(value);
       setModalMessage('리뷰가 반려되었습니다.');
+      onShowModal();
       setRejectStart(false);
     }
   };
 
-  const onSelectBestReview = () => {
+  const onSelectBestReview = async () => {
     if (confirm(`베스트리뷰로 선정하시겠습니까?`)) {
-      setIsBestReview(true);
-      setModalMessage('선택하신 리뷰(ID:1234)가 \n베스트 리뷰로 선정되었습니다.');
-      onShowModal();
+      const reviewIdList = [Number(reviewId)];
+      const formValues = {
+        reviewIdList:reviewIdList
+      }
+      const res = await postObjData(postRegisterBestReviewApiUrl, formValues)
+      console.log(res);
+      if(res.isDone){
+        setItemValues(prevState => ({
+          ...prevState,
+          bestReview: true,
+        }))
+        setModalMessage(`선택하신 리뷰(id:${reviewId})가 \n베스트 리뷰로 선정되었습니다.`);
+        onShowModal();
+      }
     }
   };
   
@@ -182,7 +208,7 @@ export default function ReviewDetailPage({ reviewId }) {
             </div>
           </header>
           <main className={s.body}>
-            {isBestReview && (
+            {itemValues.bestReview && (
               <ItemRecommendlabel
                 className={'animation-show'}
                 label={'BEST'}
@@ -207,7 +233,7 @@ export default function ReviewDetailPage({ reviewId }) {
                   <div>
                     <span className={s['status-title']}>베스트리뷰:</span>
                     <span className={`${s['isBestReview']} pointColor`}>
-                      {isBestReview ? 'Y' : 'N'}
+                      {itemValues.bestReview ? 'Y' : 'N'}
                     </span>
                   </div>
                 </div>
@@ -223,7 +249,7 @@ export default function ReviewDetailPage({ reviewId }) {
                     리뷰반려
                   </button>
                 )}
-                {!isBestReview && reviewStatus !== '반려' && (
+                {!itemValues.bestReview && reviewStatus !== '반려' && (
                   <button
                     className={`admin_btn line basic_m ${
                       reviewStatus === ('요청' || '반려') ? 'disabled' : 'confirmed'
@@ -237,7 +263,6 @@ export default function ReviewDetailPage({ reviewId }) {
               <div className={s['info-section']}>
                 <div className={s['info-row']}>
                   <span className={s.date}>{itemValues.writtenDate || '작성된 날짜가 없습니다.'}</span>
-                  <span className={s.date}>상품명: {itemValues.title}</span>
                 </div>
                 <div className={s['info-row']}>
                   <h3 className={s.title}>{itemValues.contents}</h3>
@@ -253,7 +278,7 @@ export default function ReviewDetailPage({ reviewId }) {
                     />
                   </span>
                   <p>
-                    작성자 : <span className={s.name}>{itemValues.name}</span>
+                    작성자 : <span className={s.name}>{itemValues.username}</span>
                   </p>
                 </div>
               </div>
@@ -267,9 +292,6 @@ export default function ReviewDetailPage({ reviewId }) {
                     swiper.navigation.destroy();
                     swiper.navigation.init();
                     swiper.navigation.update();
-                    // swiper.pagination.destroy();
-                    // swiper.pagination.init();
-                    // swiper.pagination.update();
                   }}
                 >
                   <div className={s.swiper_navigation_container}>

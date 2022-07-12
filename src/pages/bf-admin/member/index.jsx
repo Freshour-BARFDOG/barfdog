@@ -42,7 +42,7 @@ function ManageUserPage() {
   
 
   const onResetSearchValues = () => {
-    setSearchValue(initialSearchValue);
+    setSearchValue(initialSearchValues);
   };
   
   
@@ -118,8 +118,8 @@ function ManageUserPage() {
                     return (
                       <MemberList
                         items={itemList}
-                        setSelectedItems={setSelectedItemList}
-                        selectedItems={selectedItemList}
+                        // setSelectedItems={setSelectedItemList}
+                        // selectedItems={selectedItemList}
                       />
                     );
                   }

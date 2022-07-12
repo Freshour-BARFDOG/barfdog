@@ -15,6 +15,7 @@ import {global_reviewStateType} from "/store/TYPE/reviewStateType";
 import {valid_isTheSameArray} from "/util/func/validation/validationPackage";
 import ToolTip from "/src/components/atoms/Tooltip";
 import {putObjData} from "/src/pages/api/reqData";
+import {transformToday} from "/util/func/transformDate";
 
 
 
@@ -26,6 +27,8 @@ import {putObjData} from "/src/pages/api/reqData";
 
 const initialSearchValue = {
   status: 'ALL',
+  from: transformToday(),
+  to: transformToday(),
 };
 
 
@@ -135,7 +138,7 @@ function ReviewPage() {
             <div className="cont_header clearfix">
               <p className="cont_title cont-left">
                 목록
-                <ToolTip messagePosition={'left'} message={'체크박스는 리뷰 승인 및 베스트리뷰 선정에 사용됩니다.'} />
+                <ToolTip messagePosition={'left'} message={'1. 체크박스는 리뷰 승인 및 베스트리뷰 선정에 사용됩니다.\n2. 승인된 리뷰'} />
               </p>
               <div className="controls cont-left">
                 <button className="admin_btn line basic_m" onClick={onApprovalReview}>리뷰 승인</button>
