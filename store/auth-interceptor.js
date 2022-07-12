@@ -13,9 +13,14 @@ export default function AuthInterceptor({ children }) {
   const router = useRouter();
   const curPath = router.route;
   const dispatch = useDispatch();
+  
+  console.log(isAuth)
+
 
   useEffect(() => {
     // USER PATH
+    
+    // STEP1
     const USER_FOBBIDEN_PATH = ['cart', 'mypage', 'survey'];
     let nonMemberPath;
     router.asPath.split('/').map((path) => {
@@ -23,7 +28,16 @@ export default function AuthInterceptor({ children }) {
         return (nonMemberPath = true);
       }
     });
-    setIsAuth(!!userData);
+    
+    // STEP 2 // CHECK member & admin Logged in
+    if(window && typeof window !=='undefined'){
+      const isAutoLoginState = getCookie('adminAutoLogin');
+      const loginAdminAccount = !!JSON.parse(isAutoLoginState).email
+      const loginMemberAccount = !!userData;
+      setIsAuth(loginMemberAccount || loginAdminAccount);
+    }
+    
+    // STEP 3 // BLOCKING auth PATH
     if (nonMemberPath) {
       dispatch(authAction.userRestoreAuthState());
       if (!isAuth) {
@@ -36,18 +50,19 @@ export default function AuthInterceptor({ children }) {
     
     // ADMIN PATH
     (async () => {
-      const ADMIN_BASE_PATH_KEY = 'bf-admin';
+      const ADMIN_BASE_PATH = '/bf-admin';
       const ADMIN_PUBLIC_PATH = ['/index', '/login', '/dashboard'];
-      let isPublicAdminPath;
-      const isAdminPath = router.asPath.split('/')[1] === ADMIN_BASE_PATH_KEY;
+      const isAdminPath = router.asPath.split('/')[1] === ADMIN_BASE_PATH.split('/')[1];
+      if(!isAdminPath) return;
+      let isPublicAdminPath = router.asPath === ADMIN_BASE_PATH;
       ADMIN_PUBLIC_PATH.map((path) => {
-        if (curPath.indexOf(`/${ADMIN_BASE_PATH_KEY}${path}`) >= 0)
+        if (curPath.indexOf(`${ADMIN_BASE_PATH}${path}`) >= 0)
           return (isPublicAdminPath = true);
       });
-      if(!isAdminPath) return;
+      
+      
       try {
 
-        
         if (!isPublicAdminPath) {
           // const adminAuth = localStorage?.getItem('admin'); // PAST VERSION.
           const res = await valid_adminAuthToken();
@@ -62,9 +77,10 @@ export default function AuthInterceptor({ children }) {
             // console.log(accessToken)
             dispatch(authAction.adminRestoreAuthState(accessToken));
           } else if (res.error) {
-            await router.push(`/${ADMIN_BASE_PATH_KEY}/login?redir=${status}`);
+            await router.push(`/${ADMIN_BASE_PATH}/login?redir=${status}`);
             const errorMessage = res.error;
-            alert(errorMessage);
+            // console.log(router.query)
+            // console.error(errorMessage);
           }
           
           

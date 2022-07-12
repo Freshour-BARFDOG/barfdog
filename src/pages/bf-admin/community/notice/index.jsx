@@ -16,7 +16,7 @@ function NoticeIndexPage() {
   const getListApiUrl = '/api/admin/notices';
   const [itemList, setItemList] = useState([]);
   const [isLoading, setIsLoading] = useState({});
-  console.log(itemList);
+  // console.log(itemList);
   return (
     <>
       <MetaTitle title="공지사항 관리" admin={true} />

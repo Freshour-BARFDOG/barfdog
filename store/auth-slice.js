@@ -54,15 +54,13 @@ const authSlice = createSlice({
     // --------------------------------------------- //
     // --------------------------------------------- //
     // --------------------------------------------- //
-    // --------------------------------------------- //
     adminLogin(state, action) {
       state.isAdmin = true;
       state.isAuth = true;
       state.token = action.payload.token;
-      setCookie('adminLoginCookie',  state.token,  'date', 1 , {path:'/bf-admin'});
+      // setCookie('adminLoginCookie',  state.token,  'date', autoLoginExpiredDate , {path:'/bf-admin'}); // ! 필요할 경우 path설정
+      setCookie('adminLoginCookie',  state.token,  'date', autoLoginExpiredDate , {path:'/'});
       // localStorage.setItem('admin', JSON.stringify({ token: state.token }));
-      alert('관리자 로그인에 성공하였습니다.');
-      Router.push('/bf-admin/dashboard');
     },
     adminAugoLogin(state, action) {
       state.isAdmin = true;
@@ -70,29 +68,25 @@ const authSlice = createSlice({
       state.token = action.payload.token;
       state.autoLogin = true;
       const { email, password } = action.payload.account;
-      const autoLoginExpiredDate = 7;
-      console.log(this);
-      setCookie('adminLoginCookie',  state.token,  'date', autoLoginExpiredDate , {path:'/bf-admin'});
-      setCookie('adminAutoLogin', JSON.stringify({ email, password }),  'date', autoLoginExpiredDate ,{path:'/bf-admin'});
+      const autoLoginExpiredDate = action.payload.expiredDate;
+      // setCookie('adminLoginCookie',  state.token,  'date', autoLoginExpiredDate , {path:'/bf-admin'}); // ! 필요할 경우 path설정
+      setCookie('adminLoginCookie',  state.token,  'date', autoLoginExpiredDate , {path:'/'});
+      setCookie('adminAutoLogin', JSON.stringify({ email, password }),  'date', autoLoginExpiredDate ,{path:'/'});
       // localStorage.setItem(
       //   'admin',
       //   JSON.stringify({ token: state.token, account: { email, password }, expires: expiryDate }),
       // );
       // ! 추후에 Backend API > refresh토큰이 개발 후, refresh token으로 변경하기
-      alert(
-        `관리자 로그인에 성공하였습니다.\n본인 기기에서만 사용하시기 바랍니다.\n자동로그인: ${autoLoginExpiredDate}일간 유지`,
-      );
-      Router.push('/bf-admin/dashboard');
     },
     adminLogout(state) {
       state.isAdmin = false;
       state.isAuth = false;
       state.token = null;
       // localStorage.removeItem('admin');
-      setCookie('adminLoginCookie',  state.token,  'date', 0 );
+      setCookie('adminLoginCookie',  state.token,  'date', 0, {path:'/'} );
       // deleteCookie('adminAuth')
       alert('로그아웃 처리되었습니다.');
-      Router.push('/bf-admin');
+      Router.push('/bf-admin/login');
     },
     adminRestoreAuthState (state, action) {
       state.isAdmin = true;
