@@ -11,10 +11,7 @@ const Button = styled.button`
   position: relative;
   cursor: pointer;
   transition: transform .2s ease;
-
-  &:hover{
-    transform: rotate(90deg);
-  }
+  
   &:before,
   &:after {
     content: "";
