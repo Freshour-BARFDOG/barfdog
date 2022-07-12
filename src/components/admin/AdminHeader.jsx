@@ -15,15 +15,7 @@ function AdminHeader({folded}) {
   }
 
   const onChangeGnbMode = ()=>{
-    console.log('click! ');
-    console.log(folded)
-    if(folded){
-      dispatch(userStateAction.unfold());
-    } else {
-      dispatch(userStateAction.fold());
-    }
-    
-    // setFolded(prevState=>!prevState);
+    dispatch(folded ? userStateAction.unfold() : userStateAction.fold());
   }
 
   const adminName = '관리자'; // * 정적인 이름 필요할 경우 변경
