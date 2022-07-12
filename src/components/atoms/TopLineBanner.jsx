@@ -21,12 +21,12 @@ const TopLineBanner = () => {
   const [isVisible, setIsVisible] = useState();
 
   useEffect(() => {
-    const visibility = getCookie('bf-topbanner') !== 'false';
+    const visibility = getCookie('topbanner') !== 'false';
     setIsVisible(visibility);
   }, []);
 
   const onHideHandler = () => {
-    setCookie('bf-topbanner', 'false', 'date', 1);
+    setCookie('topbanner', 'false', 'date', 1);
     setIsVisible(false);
 
   };

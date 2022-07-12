@@ -1,4 +1,5 @@
 import axios from "axios";
+import {getCookie} from "@util/func/cookie";
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_URL_DEV;
 axios.defaults.withCredentials = true;
@@ -6,10 +7,11 @@ axios.defaults.withCredentials = true;
 
 
 const axiosConfig = (contType = "application/json") => {
-  // console.log(contType);
+  // const accessToken = JSON.parse(localStorage.getItem("admin"))?.token; // PAST VERSION.
+  const accessToken = getCookie('adminLoginCookie');
   return {
     headers: {
-      authorization: JSON.parse(localStorage.getItem("admin"))?.token,
+      authorization: accessToken,
       "content-Type": contType,
     }
   }
