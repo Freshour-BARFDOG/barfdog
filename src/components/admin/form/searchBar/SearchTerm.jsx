@@ -3,35 +3,45 @@ import s from './searchBar.module.scss';
 import siblings from '@util/func/siblings';
 import ToolTip from '@src/components/atoms/Tooltip';
 import { transformToday } from '/util/func/transformDate';
-import getDiffDate from '/util/func/getDiffDate';
+import {getDiffDate, getDiffDateNumber} from '/util/func/getDiffDate';
+import {global_searchDateType} from "/store/TYPE/searchDateType";
+
+
+//내부에서 from 과 to값을 비교해서, 그차이만큼의 값이랑 button의 inner value의 값이 동일하면 active가 되도록만든다. 
+
 
 const SearchTerm = ({ searchValue, setSearchValue, title, tooltip }) => {
   const optionalRef = useRef();
 
   useEffect(() => {
-    const isTermValueEmpty = !searchValue.from && !searchValue.to;
-    if ((!searchValue && optionalRef.current) || isTermValueEmpty) {
-      initializeOptionalButtons();
-    }
+    const diffDate = getDiffDateNumber(searchValue.from, searchValue.to);
+    initializeOptionalButtons(diffDate);
   }, [searchValue]);
 
-  const initializeOptionalButtons = () => {
+  const initializeOptionalButtons = (diffDateNum) => {
     const optionalButtons = Array.from(optionalRef.current.children);
-    optionalButtons.map((t) => t.classList.remove(s.active));
+    optionalButtons.forEach((t) => {
+      const dateValue = t.dataset.value;
+      if(Number(dateValue) === diffDateNum){
+        t.classList.add(s.active)
+      } else {
+        t.classList.remove(s.active)
+      }
+    });
   };
 
   const onOptionalTermHandler = (e) => {
     const target = e.currentTarget;
     const value = target.dataset.value;
     const to = transformToday();
-    const from = value === 'all' ? '1900-01-01' : getDiffDate(value);
+    const from = value === 'all' ? global_searchDateType.lastTime : getDiffDate(value);
     setSearchValue((prevState) => ({
       ...prevState,
       from,
       to,
     }));
-    target.classList.add(s.active);
-    siblings(target).forEach((t) => t.classList.remove(s.active));
+    // target.classList.add(s.active);
+    // siblings(target).forEach((t) => t.classList.remove(s.active));
   };
 
   const onDriectTermHandler = (e) => {
@@ -46,6 +56,7 @@ const SearchTerm = ({ searchValue, setSearchValue, title, tooltip }) => {
     const optionalCategoryList = Array.from(optionalRef.current.children);
     optionalCategoryList.forEach((t) => t.classList.remove(s.active));
   };
+  // searcj Value의 from값과
 
   return (
     <>
@@ -100,7 +111,7 @@ const SearchTerm = ({ searchValue, setSearchValue, title, tooltip }) => {
             </button>
             <button
               onClick={onOptionalTermHandler}
-              data-value={'all'}
+              data-value={global_searchDateType.lastTimeDiffDate}
               className="admin_btn line basic_l"
             >
               전체
