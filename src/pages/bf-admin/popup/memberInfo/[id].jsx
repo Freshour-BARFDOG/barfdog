@@ -1,55 +1,156 @@
-import React , { useState, useEffect }from 'react'
-import { useRouter } from 'next/router';
+import React, { useState, useEffect } from 'react';
 import s from './memberInfo.module.scss';
-import PopupWrapper from "/src/components/popup/PopupWrapper";
-import { PopupCloseButton, PopupCloseButton_typeX } from "/src/components/popup/PopupCloseButton";
+import PopupWrapper from '/src/components/popup/PopupWrapper';
+import { PopupCloseButton, PopupCloseButton_typeX } from '/src/components/popup/PopupCloseButton';
 import Modal_member_class from '/src/components/modal/Modal_member_class';
-import Modal_member_subscribe from "/src/components/modal/Modal_member_subscribe";
-import UpdateSingleItemPage from "../../product/single/update/[id]";
+import Modal_member_subscribe from '/src/components/modal/Modal_member_subscribe';
+import { getData, putObjData } from '/src/pages/api/reqData';
+import { FullScreenLoading } from '/src/components/atoms/fullScreenLoading';
 
+function Popup_MemeberDetailPage({ id }) {
+  const getReviewInfoApiUrl = `/api/admin/members/${id}`;
+  const apiDataQuery = 'memberDto';
+  const putMemberBirthdayApiUrl = `/api/admin/members/${id}/birthday`;
+  const putMemberGradeApiUrl = `/api/admin/members/${id}/grade`;
 
+  const [isLoading, setIsLoading] = useState({});
+  const [formValues, setFormValues] = useState({});
+  const [tempValues, setTempValues] = useState({});
+  const [activeGradeModal, setActiveGradeModal] = useState(false);
+  const [activeSubscribeModal, setActiveSubscribeModal] = useState(false);
 
+  // console.log(tempValues)
+  // console.log(formValues)
+  useEffect(() => {
+    (async () => {
+      try {
+        setIsLoading((prevState) => ({
+          ...prevState,
+          fetching: true,
+        }));
+        const res = await getData(getReviewInfoApiUrl);
+        console.log('GET DATA: ', res);
+        let initialValues = [];
+        if (res.data[apiDataQuery]) {
+          const DATA = res.data[apiDataQuery];
+          initialValues = {
+            id: DATA.id,
+            name: DATA.name,
+            email: DATA.email,
+            address: {
+              zipcode: DATA.address.zipcode,
+              city: DATA.address.city,
+              street: DATA.address.street,
+              detailAddress: DATA.address.detailAddress,
+            },
+            phoneNumber: transformPhoneNumber(DATA.phoneNumber),
+            birthday: transformBirthDay(DATA.birthday),
+            accumulatedAmount: DATA.accumulatedAmount + '원',
+            grade: DATA.grade,
+            subscribe: DATA.subscribe,
+            accumulatedSubscribe: DATA.accumulatedSubscribe + '회',
+            lastLoginDate: DATA.lastLoginDate || '로그인 정보가 없습니다.',
+            longUnconnected: DATA.longUnconnected ? 'Y' : 'N',
+            withdrawal: DATA.withdrawal ? 'Y' : 'N',
+            dogNames:
+              res.data.dogNames
+                .map((dogname, index) => (index === 0 ? `${dogname} (대표견)` : dogname))
+                .join(',') || '등록된 반려견이 없습니다.',
+          };
+        } else {
+          alert('데이터를 가져올 수 없습니다.');
+        }
+        setFormValues(initialValues);
+      } catch (err) {
+        console.error(err);
+        console.error(err.response);
+        // alert('데이터를 가져올 수 없습니다.');
+      }
+      setIsLoading((prevState) => ({
+        ...prevState,
+        fetching: false,
+      }));
+    })();
+  }, [id, formValues.birthday, formValues.grade]);
 
-function Popup_MemeberDetailPage(id) {
-  console.log(id);
-  const router = useRouter();
-  const initialValues = {
-    birthday: '1992-02-15',
-    class:'BRONZE'
-  }
-  const [formValue, setFormValue] = useState(initialValues);
-  const [disabledBirthDayInput, setDisabledBirthDayInput] = useState(true);
-  const [isActiveClassModal,setIsActiveClassModal] = useState(false);
-  const [isActiveSubscribeModal,setIsActiveSubscribeModal] = useState(false);
-
-  console.log(formValue);
-
-
-
-  const onChangeBirthdayHandler = (e) => {
-    const {value} = e.currentTarget;
-    setFormValue({
-      ...formValue,
+  const onInputChange = (e) => {
+    const { value } = e.currentTarget;
+    setTempValues((prevState) => ({
+      ...prevState,
       birthday: value,
-    });
+    }));
+  };
+
+  const onChangeMemberBirthday = () => {
     
-  }
-
-  const onActiveBirthdayHandler =() => {
-    setDisabledBirthDayInput(prevState=>!prevState);
-  }
-
-  // console.log(formValue)
-  const onClassModalHandler = () => {
-    setIsActiveClassModal(prevState=> !prevState);
-  }
-
-  const onSubscribeModalHandler = () => {
-    setIsActiveSubscribeModal((prevState) => !prevState);
-  }
-
+    if (!tempValues.birthday || formValues.birthday === tempValues.birthday) {
+      alert('기존 생일과 동일합니다.');
+    } else if (confirm('회원 생일을 정말 변경하시겠습니까?')) {
+      (async () => {
+        const newBirthday = tempValues.birthday;
+        const data = {
+          birthday: newBirthday,
+        };
+        const res = await putObjData(putMemberBirthdayApiUrl, data);
+        console.log(res);
+        if (res.isDone) {
+          alert('회원 생일 변경이 완료되었습니다.')
+          setFormValues((prevState) => ({
+            ...prevState,
+            birthday: newBirthday,
+          }));
+          setTempValues((prevState) => ({
+            ...prevState,
+            birthday: null,
+          }));
+        }
+      })();
+    }
+  };
+  
   
 
+  const onChangeMemberGrade = () => {
+    if (!tempValues.grade || formValues.grade === tempValues.grade) {
+      alert('기존 등급과 동일합니다.');
+    } else if (confirm('회원 등급을 정말 변경하시겠습니까?')) {
+      (async () => {
+        const newGrade = tempValues.grade;
+        const data = {
+          grade: newGrade,
+        };
+        const res = await putObjData(putMemberGradeApiUrl, data);
+        if (res.isDone) {
+          alert('회원 등급 변경이 완료되었습니다.')
+          setFormValues((prevState) => ({
+            ...prevState,
+            grade: newGrade,
+          }));
+          setTempValues((prevState) => ({
+            ...prevState,
+            newGrade: null,
+          }));
+          onActiveGradeModal();
+        }
+      })();
+    }
+  };
+
+  const onActiveGradeModal = () => {
+    setActiveGradeModal((prevState) => !prevState);
+    setTempValues(prevState => ({
+      ...prevState,
+      grade: null
+    }))
+  };
+
+  const onActiveSubscribeModal = () => {
+    setActiveSubscribeModal((prevState) => !prevState);
+  };
+
+  if (isLoading.fetching) {
+    return <FullScreenLoading />;
+  }
 
   return (
     <>
@@ -58,7 +159,7 @@ function Popup_MemeberDetailPage(id) {
           <header className={s.header}>
             <div className={s.row}>
               <div className={s.cont}>
-                <h1 className={s["popup-title"]}>회원정보 조회</h1>
+                <h1 className={s['popup-title']}>회원정보 조회</h1>
                 <PopupCloseButton_typeX />
               </div>
             </div>
@@ -67,21 +168,21 @@ function Popup_MemeberDetailPage(id) {
             <div className={s.row}>
               <section className={s.table}>
                 <ul>
-                  <li className={s["table-list"]}>
-                    <div className={s["t-header"]}>
+                  <li className={s['table-list']}>
+                    <div className={s['t-header']}>
                       <h4 className={s.title}>기본 정보</h4>
                     </div>
-                    <ul className={s["t-body"]}>
-                      <li className={`${s["t-row"]}`}>
-                        <div className={s["t-box"]}>
+                    <ul className={s['t-body']}>
+                      <li className={`${s['t-row']}`}>
+                        <div className={s['t-box']}>
                           <div className={`${s.innerBox} ${s.label}`}>
                             <span>이름</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
-                            <span>김바프</span>
+                            <span>{formValues.name}</span>
                           </div>
                         </div>
-                        <div className={s["t-box"]}>
+                        <div className={s['t-box']}>
                           <div className={`${s.innerBox} ${s.label}`}>
                             <span>생일</span>
                           </div>
@@ -89,18 +190,14 @@ function Popup_MemeberDetailPage(id) {
                             <span>
                               <input
                                 type="date"
-                                disabled={disabledBirthDayInput}
-                                className={
-                                  disabledBirthDayInput ? s.disabled : ""
-                                }
-                                value={formValue.birthday}
-                                onChange={onChangeBirthdayHandler}
+                                value={tempValues.birthday || formValues.birthday}
+                                onChange={onInputChange}
                               />
                             </span>
                             <span>
                               <button
                                 className="admin_btn line point basic_s"
-                                onClick={onActiveBirthdayHandler}
+                                onClick={onChangeMemberBirthday}
                               >
                                 변경
                               </button>
@@ -108,60 +205,60 @@ function Popup_MemeberDetailPage(id) {
                           </div>
                         </div>
                       </li>
-                      <li className={`${s["t-row"]}`}>
-                        <div className={s["t-box"]}>
+                      <li className={`${s['t-row']}`}>
+                        <div className={s['t-box']}>
                           <div className={`${s.innerBox} ${s.label}`}>
                             <span>아이디</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
-                            <span>testID</span>
+                            <span>{formValues.email}</span>
                           </div>
                         </div>
-                        <div className={s["t-box"]}>
+                        <div className={s['t-box']}>
                           <div className={`${s.innerBox} ${s.label}`}>
                             <span>연락처</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
-                            <span>010-1234-5678</span>
+                            <span>{formValues.phoneNumber}</span>
                           </div>
                         </div>
                       </li>
-                      <li className={`${s["t-row"]} ${s["fullWidth"]}`}>
-                        <div className={s["t-box"]}>
+                      <li className={`${s['t-row']} ${s['fullWidth']}`}>
+                        <div className={s['t-box']}>
                           <div className={`${s.innerBox} ${s.label}`}>
                             <span>주소</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
-                            <span>서울 서대문구 독립문로1길 9-12 503호</span>
+                            <span>{formValues.address?.street}</span>
                           </div>
                         </div>
                       </li>
                     </ul>
                   </li>
-                  <li className={s["table-list"]}>
-                    <div className={s["t-header"]}>
+                  <li className={s['table-list']}>
+                    <div className={s['t-header']}>
                       <h4 className={s.title}>구매 현황</h4>
                     </div>
-                    <ul className={s["t-body"]}>
-                      <li className={`${s["t-row"]}`}>
-                        <div className={s["t-box"]}>
+                    <ul className={s['t-body']}>
+                      <li className={`${s['t-row']}`}>
+                        <div className={s['t-box']}>
                           <div className={`${s.innerBox} ${s.label}`}>
                             <span>누적구매금액</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
-                            <span>1,324,200원</span>
+                            <span>{formValues.accumulatedAmount}</span>
                           </div>
                         </div>
-                        <div className={s["t-box"]}>
+                        <div className={s['t-box']}>
                           <div className={`${s.innerBox} ${s.label}`}>
                             <span>등급</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
-                            <span>다이아</span>
+                            <span>{formValues.grade}</span>
                             <span>
                               <button
                                 className="admin_btn line point basic_s"
-                                onClick={onClassModalHandler}
+                                onClick={onActiveGradeModal}
                               >
                                 변경
                               </button>
@@ -169,74 +266,74 @@ function Popup_MemeberDetailPage(id) {
                           </div>
                         </div>
                       </li>
-                      <li className={`${s["t-row"]}`}>
-                        <div className={s["t-box"]}>
+                      <li className={`${s['t-row']}`}>
+                        <div className={s['t-box']}>
                           <div className={`${s.innerBox} ${s.label}`}>
                             <span>정기구독여부</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
-                            <span>Y</span>
+                            <span>{formValues.subscribe}</span>
                             <span>
                               <button
                                 className="admin_btn line point basic_s"
-                                onClick={onSubscribeModalHandler}
+                                onClick={onActiveSubscribeModal}
                               >
                                 구독정보보기
                               </button>
                             </span>
                           </div>
                         </div>
-                        <div className={s["t-box"]}>
+                        <div className={s['t-box']}>
                           <div className={`${s.innerBox} ${s.label}`}>
                             <span>누적구독횟수</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
-                            <span>14번</span>
+                            <span>{formValues.accumulatedSubscribe}</span>
                           </div>
                         </div>
                       </li>
-                      <li className={`${s["t-row"]} ${s["fullWidth"]}`}>
-                        <div className={s["t-box"]}>
+                      <li className={`${s['t-row']} ${s['fullWidth']}`}>
+                        <div className={s['t-box']}>
                           <div className={`${s.innerBox} ${s.label}`}>
                             <span>반려견</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
-                            <span>(대표견)시호, 방울이, 영심이</span>
+                            <span>{formValues.dogNames}</span>
                           </div>
                         </div>
                       </li>
                     </ul>
                   </li>
-                  <li className={s["table-list"]}>
-                    <div className={s["t-header"]}>
+                  <li className={s['table-list']}>
+                    <div className={s['t-header']}>
                       <h4 className={s.title}>로그인 정보</h4>
                     </div>
-                    <ul className={s["t-body"]}>
-                      <li className={`${s["t-row"]}`}>
-                        <div className={s["t-box"]}>
+                    <ul className={s['t-body']}>
+                      <li className={`${s['t-row']}`}>
+                        <div className={s['t-box']}>
                           <div className={`${s.innerBox} ${s.label}`}>
                             <span>장기미접속</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
-                            <span>N</span>
+                            <span>{formValues.longUnconnected}</span>
                           </div>
                         </div>
-                        <div className={s["t-box"]}>
+                        <div className={s['t-box']}>
                           <div className={`${s.innerBox} ${s.label}`}>
                             <span>마지막로그인</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
-                            <span>2022-05-26</span>
+                            <span>{formValues.lastLoginDate}</span>
                           </div>
                         </div>
                       </li>
-                      <li className={`${s["t-row"]} ${s["fullWidth"]}`}>
-                        <div className={s["t-box"]}>
+                      <li className={`${s['t-row']} ${s['fullWidth']}`}>
+                        <div className={s['t-box']}>
                           <div className={`${s.innerBox} ${s.label}`}>
                             <span>탈퇴여부</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
-                            <span>N</span>
+                            <span>{formValues.withdrawal}</span>
                           </div>
                         </div>
                       </li>
@@ -244,45 +341,50 @@ function Popup_MemeberDetailPage(id) {
                   </li>
                 </ul>
               </section>
-              <section className={s["btn-section"]}>
+              <section className={s['btn-section']}>
                 <PopupCloseButton />
               </section>
             </div>
           </main>
         </PopupWrapper>
       </div>
-      {isActiveClassModal && (
+      {activeGradeModal && (
         <Modal_member_class
-          onClick={setIsActiveClassModal}
-          formValue={formValue}
-          setFormValue={setFormValue}
+          id={'grade'}
+          value={tempValues.grade || formValues.grade}
+          setValue={setTempValues}
+          onCancel={onActiveGradeModal}
+          onConfirm={onChangeMemberGrade}
         />
       )}
-      {isActiveSubscribeModal && (
-        <Modal_member_subscribe onClick={setIsActiveSubscribeModal} />
-      )}
+      {activeSubscribeModal && <Modal_member_subscribe onClick={setActiveSubscribeModal} memberId={id} setIsLoading={setIsLoading}/>}
     </>
   );
 }
 
 export default Popup_MemeberDetailPage;
 
-// Popup_MemeberDetailPage.getInitialProps = async ({ query }) => {
-//   const { id } = query
-//
-//   return { id : id};
-//
-// }
+Popup_MemeberDetailPage.getInitialProps = async ({ query }) => {
+  const { id } = query;
+  return { id };
+};
 
-export async function getServerSideProps (ctx) {
-  const { params, req, res} = ctx;
-  console.log(params)
-  // console.log('REQUEST: ',req)
-  // console.log('RESPONSE: ', res);
-  
-  return {
-    props: {
-      id: 'user1'   }
-  }
+const transformBirthDay = (date) => {
+  const RegExp = /^([1|2])([0-9]{3})([0|1])([0-9])([0|1|2|3])([0-9])$/;
+  const error = !RegExp.test(date);
+  if (error) return console.error('입력받은 생년월일은 올바르지 않은 형식입니다.');
+  const yyyy = date.slice(0, 4);
+  const mm = date.slice(4, 6);
+  const dd = date.slice(6, 8);
+  return `${yyyy}-${mm}-${dd}`;
+};
 
-}
+const transformPhoneNumber = (phoneNum) => {
+  const RegExp = /^01([0|1|6|7|8|9])([0-9]{3,4})([0-9]{4})$/;
+  const error = !RegExp.test(phoneNum);
+  if (error) return console.error('입력받은 생년월일은 올바르지 않은 형식입니다.');
+  const n1 = phoneNum.slice(0, 3);
+  const n2 = phoneNum.slice(3, 7);
+  const n3 = phoneNum.slice(7, 11);
+  return `${n1}-${n2}-${n3}`;
+};
