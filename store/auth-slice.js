@@ -29,12 +29,10 @@ const authSlice = createSlice({
     autoLogin(state, action) {
       state.isAuth = true;
       state.isAdmin = false;
+      state.autoLogin = true;
       state.token = action.payload.token;
-      localStorage.setItem("user", JSON.stringify({ token: state.token
-      }));
-      if (state.isAdmin) {
-        return alert("관리자는 중복 로그인할 수 없습니다.");
-      }
+      localStorage.setItem("user", JSON.stringify({ token: state.token}));
+      if (state.isAdmin)  return alert("관리자는 중복 로그인할 수 없습니다.");
       Router.push("/");
     },
     userRestoreAuthState(state) {

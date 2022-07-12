@@ -56,9 +56,11 @@ export default function AuthInterceptor ({ children })  {
           const isAdminPath = !isPublicAdminPath;
           if(isAdminPath) {
             const adminAuth = localStorage?.getItem('admin');
-            const errorMessage = await valid_authToken();
+            const res = await valid_authToken();
+            const status = res.status;
+            const errorMessage = res.error;
             if(errorMessage){
-              await router.push(`/${ADMIN_BASE_PATH_KEY}/login`)
+              await router.push(`/${ADMIN_BASE_PATH_KEY}/login?redir=${status}`)
               alert(errorMessage);
             }
           };
@@ -80,13 +82,14 @@ export default function AuthInterceptor ({ children })  {
 
 
 
-const valid_authToken = async () => {
+export const valid_authToken = async () => {
   let error = null;
+  let status;
   try {
     const checkTokenAPiUrl = '/api/admin/setting';
     const response = await getData(checkTokenAPiUrl);
     // const response = await testTokenStateWithOldToken(checkTokenAPiUrl);
-    const status = response.status;
+    status = response.status;
     switch (status) {
       case 200:
         error = '';
@@ -118,5 +121,5 @@ const valid_authToken = async () => {
   } catch (err) {
     console.error('TOKEN VALID > ERROR RESPONSE : ', err.response);
   }
-  return error;
+  return { error, status };
 };
