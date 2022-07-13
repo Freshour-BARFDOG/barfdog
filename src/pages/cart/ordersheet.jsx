@@ -126,7 +126,9 @@ function OrderSheetPage() {
     <>
       <MetaTitle title="주문서"/>
       <Layout>
-        <Wrapper>
+
+        <div className={Styles.container_outer}>
+        <div className={Styles.Wrapper}>
           {false && <Modal_coupon/>}
           <section className={Styles.title_box}>
             <div className={Styles.title}>주문서</div>
@@ -151,30 +153,44 @@ function OrderSheetPage() {
 
               <div className={Styles.count_col}>3개</div>
 
+              <div className={Styles.title_col}>총 주문금액</div>
               <div className={Styles.price_col}>
                 <div className={Styles.price_inner}>98,000원</div>
-                108,000원
+                <span>108,000원</span> 
               </div>
 
-              <div className={Styles.coupon_col}>0원</div>
+              <div className={Styles.title_col}>배송비</div>
+              <div className={Styles.del_col}>0원</div>
+              <div className={Styles.coupon_col_red}>-9800원</div>
 
+
+              <div className={Styles.title_col}>쿠폰할인</div>
               <div className={Styles.apply_coupon_col}>
                 <div className={Styles.btn}>쿠폰 선택</div>
               </div>
             </div>
 
             <div className={Styles.flex_box}>
-              <div className={Styles.info_col}>바프레드</div>
-
-              <div className={Styles.count_col}></div>
-
-              <div className={Styles.price_col}>
-                <div className={Styles.price_inner}>7,000원</div>
-                108,000원
+              <div className={Styles.info_col}>
+                스타터프리미엄
+                <div className={Styles.info_inner}>옵션 : 옵션1 1개</div>
+                <div className={Styles.info_inner}>옵션 : 옵션2 2개</div>
               </div>
 
-              <div className={Styles.coupon_col}></div>
+              <div className={Styles.count_col}>3개</div>
 
+              <div className={Styles.title_col}>총 주문금액</div>
+              <div className={Styles.price_col}>
+                <div className={Styles.price_inner}>98,000원</div>
+                <span>108,000원</span> 
+              </div>
+
+              <div className={Styles.title_col}>배송비</div>
+              <div className={Styles.del_col}>0원</div>
+              <div className={Styles.coupon_col}>0원</div>
+
+
+              <div className={Styles.title_col}>쿠폰할인</div>
               <div className={Styles.apply_coupon_col}>
                 <div className={Styles.btn}>쿠폰 선택</div>
               </div>
@@ -218,22 +234,19 @@ function OrderSheetPage() {
                   placeholder="홍길동"
                 ></input>
               </div>
-              <div></div>
 
-              <div>받는 분</div>
+              <div>연락처</div>
               <div className={Styles.input_col}>
                 <input className={Styles.input_box} placeholder=""></input>
               </div>
-              <div></div>
 
               <div>주소</div>
-              <div className={Styles.input_col}>
+
+              <div className={Styles.adress_box}>
                 <input
                   className={Styles.input_box}
-                  placeholder="placeholder"
+                  placeholder="우편번호"
                 ></input>
-              </div>
-              <div>
                 <div className={Styles.btn_box}>주소검색</div>
               </div>
 
@@ -241,16 +254,22 @@ function OrderSheetPage() {
               <div className={Styles.input_col}>
                 <input
                   className={Styles.input_box}
+                  placeholder="주소"
+                ></input>
+              </div>
+              
+              <div></div>
+              <div className={Styles.input_col}>
+                <input
+                  className={Styles.input_box}
                   placeholder="상세주소"
                 ></input>
               </div>
-              <div></div>
 
               <div>배송 요청사항</div>
               <div className={Styles.input_col}>
                 <input className={Styles.input_box} placeholder=""></input>
               </div>
-              <div></div>
             </div>
           </section>
 
@@ -462,7 +481,8 @@ function OrderSheetPage() {
             {/* 결제버튼 */}
             <Payment/>
           </section>
-        </Wrapper>
+        </div>
+        </div>
       </Layout>
     </>
   );

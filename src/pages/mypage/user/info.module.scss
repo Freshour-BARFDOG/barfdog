@@ -9,7 +9,7 @@ $browser-context:16; // html font-size
 .chk_box {
 display: inline-flex; 
 cursor: pointer; 
-font-size: 14px; 
+font-size: rem(14); 
 -webkit-user-select: none; 
 -moz-user-select: none; 
 -ms-user-select: none; 
@@ -19,9 +19,9 @@ user-select: none;
 display: none; 
 } /* 선택되지 않은 체크박스 스타일 꾸미기 */ 
 .chk_box .on {
-width: 20px; 
-height: 20px;
-margin-right: 8px; 
+width: rem(20); 
+height: rem(20);
+margin-right: rem(8); 
 background: #ddd; 
 position: relative;
 display: block;
@@ -40,20 +40,20 @@ display: none;
 display: block; 
 } 
 .on:after {
-width: 6px; 
-height: 10px; 
+width: rem(6); 
+height: rem(10); 
 border: solid #fff; 
-border-width: 0 2px 2px 0; 
+border-width: 0 rem(2) rem(2) 0; 
 -webkit-transform: rotate(45deg); 
 -ms-transform: rotate(45deg); 
 transform: rotate(45deg); 
 position: absolute; 
-left: 6px; 
-top: 2px; 
+left: rem(6); 
+top: rem(2); 
 }
 .autologin {
 display: block;
-letter-spacing: -.8px;
+letter-spacing: rem(-.8);
 }
 
 
@@ -78,7 +78,7 @@ section.btn_section { padding : rem(70) 0 }
   row-gap: rem(20);
   
   .flex_box {
-    width: 54%;
+    width: rem(500);
 
     &:last-child {
       padding-bottom: rem(30);
@@ -133,6 +133,7 @@ section.btn_section { padding : rem(70) 0 }
           position: absolute;
           right: rem(20);
           top: rem(10);
+          cursor: pointer;
         }
 
         .input_box {
@@ -156,25 +157,32 @@ section.btn_section { padding : rem(70) 0 }
       }
       
       .mid_box {
+        display: flex;
         width: 100%;
+        max-width: rem(340);
+        justify-content: space-between;
+        
         .input_box {
           width: 100%;
           max-width: rem(230);
           padding: rem(13) 0 rem(13) rem(16);
           @include char(l15);
         }
+
+        
+        .right_box_red{
+          width: 100%;
+          max-width : rem(100);
+          padding : rem(15) 0;
+          border: rem(1) solid var(--color-main);
+          border-radius: rem(5);
+          color: var(--color-main);
+          @include char(l14);
+          text-align: center;
+          cursor: pointer;
+        }
       }
 
-      .right_box_red{
-        width: 100%;
-        max-width : rem(100);
-        padding : rem(13) 0;
-        border: rem(1) solid var(--color-main);
-        border-radius: rem(5);
-        color: var(--color-main);
-        @include char(l14);
-        text-align: center;
-      }
 
       .radio_box {
         width: 100%;
@@ -201,7 +209,7 @@ section.btn_section { padding : rem(70) 0 }
   .flex_box {
     display: flex;
     align-items: center;
-    width: 54%;
+    width: rem(500);
 
     .left_box {
       width: 100%;
@@ -231,6 +239,7 @@ section.btn_section { padding : rem(70) 0 }
     justify-content: center;
     column-gap: rem(10);
     @include char(l16);
+
     .left_box {
       border : rem(1) solid var(--color-line-02);
       border-radius: rem(4);
@@ -239,6 +248,7 @@ section.btn_section { padding : rem(70) 0 }
       max-width: rem(160);
       text-align: center;
       padding: rem(17) 0;
+      cursor: pointer;
     }
 
     .right_box {
@@ -250,6 +260,7 @@ section.btn_section { padding : rem(70) 0 }
       max-width: rem(240);
       text-align: center;
       padding: rem(17) 0;
+      cursor: pointer;
     }
   }
 }
@@ -281,8 +292,108 @@ section.btn_section { padding : rem(70) 0 }
       text-align: center;
       padding: rem(14) 0 ;
       color: #fff; 
+      cursor: pointer;
       
 
    }
  }
+}
+
+
+
+
+@media (max-width: rem(800)) {
+
+  .content {
+    .flex_box {
+      width: 100%;
+      
+      .label_box {
+        display: grid;
+        grid-template-columns: 1fr;
+        .left_box {
+          margin-bottom: rem(10);
+        }
+        
+        .left_top_box {
+          padding-bottom: 0;
+          margin-bottom: rem(10);
+        }
+
+        .right_box {
+
+          .input_box {
+            max-width: 100%;
+            padding: rem(13) 0 rem(13) 0;
+          }
+        }
+
+        .right_double_box {
+          .input_box {
+            max-width: 100%;
+          }
+        }
+
+        .right_box_gray {
+          max-width: 100%;
+        }
+
+        .mid_box {
+          max-width: 100%;
+          
+          .input_box {
+            max-width: 100%;
+            margin-right: rem(10);
+          }
+        }
+      }
+    }
+  }
+
+  .content2 {
+    
+    .flex_box {
+      display: grid;
+      width: 100%;
+
+  
+      .left_box {
+        max-width: 100%;
+        text-align: center;
+        margin-bottom: rem(30);
+      }
+      .right_box {
+        justify-content: center;
+      }
+    }
+  }
+}
+
+
+@media (max-width: rem(600)) {
+  .title {
+    display: none;
+  }
+
+  .btn_section {
+    .btn_box {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-gap: rem(10);
+      width: 100%;
+
+      .left_box {
+        border : none;
+        max-width: 100%;
+        order: 1;
+        text-decoration: underline;
+      }
+  
+      .right_box {
+        width: 100%;
+        max-width: 100%;
+      }
+    }
+  }
+
 }

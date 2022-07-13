@@ -245,8 +245,7 @@ section.title{ padding : rem(8) 0 rem(30);}
 
   
   .title {
-    visibility: hidden;
-    margin-top: rem(-60);
+    display: none;
   }
 
   .subscribeItem-container {
@@ -286,6 +285,7 @@ section.title{ padding : rem(8) 0 rem(30);}
 
         .btn2 {
           margin-top: rem(0);
+          cursor: pointer;
         }
       }
     }

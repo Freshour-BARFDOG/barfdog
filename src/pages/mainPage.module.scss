@@ -861,11 +861,15 @@ section.sns {
   .swiper_button_next_sns {
     transform: translate(-50%, -50%) translateX(rem(600));
   }
+}
 
-  .swiper_sns_box{
-  }
 
-  .swiper_sns_img{
+
+@media only screen and (min-width:rem(100)) and (max-width: rem(1400)) {
+  
+  .swiper-button-prev,
+  .swiper-button-next {
+    display: none;
   }
 }
 
