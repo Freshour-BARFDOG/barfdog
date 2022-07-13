@@ -16,8 +16,8 @@ import filter_emptyValue from '/util/func/filter_emptyValue';
 import filter_onlyNumber from '/util/func/filter_onlyNumber';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import { validate } from '/util/func/validation/validation_releaseCoupon';
-import { valid_expireDate, valid_hasFormErrors } from '/util/func/validation/validationPackage';
-import { getData, postObjData } from '/api/reqData';
+import { valid_date, valid_hasFormErrors } from '/util/func/validation/validationPackage';
+import { getData, postObjData } from '/src/pages/api/reqData';
 import { global_couponType } from '/store/TYPE/couponType';
 import CustomSelect from '/src/components/admin/form/CustomSelect';
 
@@ -79,25 +79,30 @@ function ReleaseCouponPage() {
           fetchingCouponList: true,
         }));
         const res = await getData(getCouponList);
-        console.log(res);
-        const DATA = res.data._embedded.publicationCouponDtoList;
-        const newCouponOptions = DATA.map((data) => ({
-          value: data.couponId,
-          label: `[ 할인: ${data.discount} ] ${data.name}`,
-        }));
-
+        const hasDATA = res.data._embedded;
+        let newCouponOptions = [];
         const emptyOptions = [
           {
             value: '',
             label: '선택',
           },
         ];
-        emptyOptions.concat(newCouponOptions);
+  
+        if(hasDATA){
+          const DATA = res.data._embedded.publicationCouponDtoList;
+          newCouponOptions = DATA.map((data) => ({
+            value: data.couponId,
+            label: `[ 할인: ${data.discount} ] ${data.name}`,
+          }));
+  
 
+        }
+        emptyOptions.concat(newCouponOptions);
         setCouponOptions(emptyOptions.concat(newCouponOptions));
+       
       } catch (err) {
         console.error(err);
-        alert('데이터를 가져올 수 없습니다.');
+        console.error('데이터를 가져올 수 없습니다.');
       }
       setIsLoading((prevState) => ({
         ...prevState,
@@ -153,7 +158,7 @@ function ReleaseCouponPage() {
     } else if(target === 'ALL' ) {
       targetInKorean ='전체 회원'
     }
-    const expiredDate = valid_expireDate(filteredFormValues.expiredDate).expiredDate;
+    const expiredDate = valid_date(filteredFormValues.expiredDate).expiredDate;
     const confirmMessage = `* 쿠폰을 정말 발행하시겠습니까?\n- 유효기간: ~${filteredFormValues.expiredDate}까지\n- 남은일수: ${expiredDate}일\n- 발급대상: ${targetInKorean}`;
     if (!confirm(confirmMessage)) return;
 

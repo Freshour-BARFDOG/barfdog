@@ -16,7 +16,7 @@ import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 import Spinner from "/src/components/atoms/Spinner";
 import {validate} from "/util/func/validation/validation_createCupon";
 import {valid_couponCode, valid_hasFormErrors} from "/util/func/validation/validationPackage";
-import {postObjData} from "/api/reqData";
+import {postObjData} from "/src/pages/api/reqData";
 import {useModalContext} from "/store/modal-context";
 import transformClearLocalCurrencyInEveryObject from "/util/func/transformClearLocalCurrencyInEveryObject";
 import ErrorMessage from "/src/components/atoms/ErrorMessage";
@@ -292,7 +292,7 @@ function CreateCouponPage() {
                 <div className="input_row">
                   <div className="title_section fixedHeight">
                     <label className="title" htmlFor="discountDegree">
-                      할인금액
+                      할인{formValues.discountType === discountUnitType.FIXED_RATE ? "률" : "금액"}
                     </label>
                   </div>
                   <div className="inp_section">

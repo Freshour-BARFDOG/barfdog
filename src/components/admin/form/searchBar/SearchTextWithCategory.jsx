@@ -13,24 +13,12 @@ const SearchTextWithCategory = ({
   options = [],
   searchButton,
   onSearch,
+  onKeydown,
 }) => {
 
   const initialValue = options[0].value || '';
   const [selectedCategory, setSelectedCategory] = useState(initialValue);
 
-  // useEffect(() => {
-  //   if (!searchValue) {
-  //     initializeOptionalButtons();
-  //   }
-  // }, [searchValue]);
-  //
-  // const initializeOptionalButtons = () => {
-  //   setSelectedCategory(initialValue);
-  //   setSearchValue((prevState) => ({
-  //     ...prevState,
-  //     [userInfoQuery]: '',
-  //   }));
-  // };
 
   const onSelectChangeHandler = (e) => {
     const thisSelect = e.currentTarget;

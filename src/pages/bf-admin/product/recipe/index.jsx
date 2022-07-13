@@ -6,7 +6,7 @@ import MetaTitle from "@src/components/atoms/MetaTitle";
 import AmdinErrorMessage from "/src/components/atoms/AmdinErrorMessage";
 import RecipeList from "./RecipeList";
 import Spinner from "/src/components/atoms/Spinner";
-import {getData} from "/api/reqData";
+import {getData} from "/src/pages/api/reqData";
 
 
 

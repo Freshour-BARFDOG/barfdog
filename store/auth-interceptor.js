@@ -1,23 +1,26 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { authAction } from '/store/auth-slice';
 import useUserData from '/util/hook/useUserData';
-import { FullScreenLoading } from '/src/components/admin/fullScreenLoading';
-import getAdminToken from '@api/getAdminToken';
-import { getData, testTokenStateWithOldToken } from '/api/reqData';
+import { getData, testTokenStateWithOldToken } from '/src/pages/api/reqData';
+import {getCookie} from "@util/func/cookie";
+import getAdminToken from "@src/pages/api/getAdminToken";
 
-export default function AuthInterceptor ({ children })  {
-  const [loading, setLoading] = useState(true);
+export default function AuthInterceptor({ children }) {
   const [isAuth, setIsAuth] = useState(false);
   const userData = useUserData();
   const router = useRouter();
   const curPath = router.route;
   const dispatch = useDispatch();
   
+  console.log(isAuth)
+
 
   useEffect(() => {
     // USER PATH
+    
+    // STEP1
     const USER_FOBBIDEN_PATH = ['cart', 'mypage', 'survey'];
     let nonMemberPath;
     router.asPath.split('/').map((path) => {
@@ -25,69 +28,83 @@ export default function AuthInterceptor ({ children })  {
         return (nonMemberPath = true);
       }
     });
-    setIsAuth(!!userData);
+    
+    // STEP 2 // CHECK member & admin Logged in
+    if(window && typeof window !=='undefined'){
+      const isAutoLoginState = getCookie('adminAutoLogin');
+      const loginAdminAccount = !!JSON.parse(isAutoLoginState).email
+      const loginMemberAccount = !!userData;
+      setIsAuth(loginMemberAccount || loginAdminAccount);
+    }
+    
+    // STEP 3 // BLOCKING auth PATH
     if (nonMemberPath) {
       dispatch(authAction.userRestoreAuthState());
       if (!isAuth) {
-        // alert('로그인이 필요한 서비스입니다.');
+        // alert('로그인이 필요한 서비스입니다.');  // ! 실제 서비스에서는 작동시켜야하는 기능입니다.
         // router.push('/account/login');
         console.error('Redir: User FOBBIDEN PAGE');
       }
     }
-  }, [dispatch, router, userData, isAuth]);
-  
-  
-  useEffect(() => {
-    try {
-      setLoading(true);
-      (async () => {
-        // ADMIN PATH
-        const ADMIN_BASE_PATH_KEY = 'bf-admin';
-        const ADMIN_PUBLIC_PATH = ['/index', '/login', '/dashboard'];
-        const isAdminPath = router.asPath.split('/')[1] === ADMIN_BASE_PATH_KEY;
-        if (isAdminPath) {
-          // TEST
-          dispatch(authAction.adminRestoreAuthState());
-        
-          let isPublicAdminPath;
-          ADMIN_PUBLIC_PATH.map((path) => {
-            if (curPath.indexOf(`/${ADMIN_BASE_PATH_KEY}${path}`) >= 0)
-              return (isPublicAdminPath = true);
-          });
-          const isAdminPath = !isPublicAdminPath;
-          if(isAdminPath) {
-            const adminAuth = localStorage?.getItem('admin');
-            const errorMessage = await valid_authToken();
-            if(errorMessage){
-              await router.push(`/${ADMIN_BASE_PATH_KEY}/login`)
-              alert(errorMessage);
-            }
-          };
+    
+    
+    // ADMIN PATH
+    (async () => {
+      const ADMIN_BASE_PATH = '/bf-admin';
+      const ADMIN_PUBLIC_PATH = ['/index', '/login', '/dashboard'];
+      const isAdminPath = router.asPath.split('/')[1] === ADMIN_BASE_PATH.split('/')[1];
+      if(!isAdminPath) return;
+      let isPublicAdminPath = router.asPath === ADMIN_BASE_PATH;
+      ADMIN_PUBLIC_PATH.map((path) => {
+        if (curPath.indexOf(`${ADMIN_BASE_PATH}${path}`) >= 0)
+          return (isPublicAdminPath = true);
+      });
+      
+      
+      try {
+
+        if (!isPublicAdminPath) {
+          // const adminAuth = localStorage?.getItem('admin'); // PAST VERSION.
+          const res = await valid_adminAuthToken();
+          // console.log(res)
+          const status = res.status;
+          const expiredTokenStatus = res.status === 401
+          const isAutoLoginState = getCookie('adminAutoLogin');
+          if(expiredTokenStatus && isAutoLoginState){
+            const refreshToken = JSON.parse(isAutoLoginState);// ! 리프레쉬 토큰 기능에 대한 임시방편 수단
+            // ! 또는 server에서 token의 생명주기를 autoLogin에 따라 조절
+            const accessToken = await getAdminToken(refreshToken)
+            // console.log(accessToken)
+            dispatch(authAction.adminRestoreAuthState(accessToken));
+          } else if (res.error) {
+            await router.push(`/${ADMIN_BASE_PATH}/login?redir=${status}`);
+            const errorMessage = res.error;
+            // console.log(router.query)
+            // console.error(errorMessage);
+          }
+          
           
         }
-      })();
-    } catch (err) {
-      console.error(err);
-    }
-  
-    setLoading(false);
-  }, [dispatch, router, isAuth]);
-  
-  return <>{loading ? <FullScreenLoading /> : children}</>;
-};
+      } catch (err) {
+        console.error(err);
+      }
+    })();
+    
+  }, [userData, router,  isAuth]);
 
 
+  return <>{children}</>;
+}
 
 
-
-
-const valid_authToken = async () => {
+export const valid_adminAuthToken = async () => {
   let error = null;
+  let status;
   try {
-    const checkTokenAPiUrl = '/api/admin/setting';
+    const checkTokenAPiUrl = '/api/admin/setting'; // 임의의 admin api를 통하여, admin token의 유효성 체크
     const response = await getData(checkTokenAPiUrl);
     // const response = await testTokenStateWithOldToken(checkTokenAPiUrl);
-    const status = response.status;
+    status = response.status;
     switch (status) {
       case 200:
         error = '';
@@ -119,5 +136,5 @@ const valid_authToken = async () => {
   } catch (err) {
     console.error('TOKEN VALID > ERROR RESPONSE : ', err.response);
   }
-  return error;
+  return { error, status };
 };

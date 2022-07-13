@@ -394,6 +394,9 @@ $inputDefaultHeight: rem(38);
     }
   }
 
+
+  label{cursor: pointer;}
+
   input.fullWidth {
     width: 100%;
   }
@@ -481,6 +484,23 @@ $inputDefaultHeight: rem(38);
 
 .multiImageBox{
 
+  &.modern-theme{
+    > .grid-box{
+      display: grid;
+      grid-template-columns: rem(80) 1fr;
+    }
+    .preview-wrap{
+      display: grid;
+      justify-content: flex-start;
+      grid-template-columns: repeat(auto-fill, 80px) ;
+      max-width: initial !important;
+      > * {
+        width:rem(80);
+        aspect-ratio: 1;
+      }
+    }
+  }
+
   .grid-box {
     display: grid;
     align-items: flex-start;
@@ -510,11 +530,16 @@ $inputDefaultHeight: rem(38);
     padding: rem(6);
     z-index: 99;
   }
-
-
-
 }
 
+
+
+.inline-flex{
+  display: inline-flex;
+}
+.inline-grid{
+  display: inline-grid;
+}
 
 @for $i from 1 through 20 {
   .mt-#{5*$i} {

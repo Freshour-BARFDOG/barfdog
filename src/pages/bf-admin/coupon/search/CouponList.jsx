@@ -1,6 +1,6 @@
 import s from "../coupon.module.scss";
 import {global_couponType} from "/store/TYPE/couponType";
-import {putObjData} from "/api/reqData";
+import {putObjData} from "/src/pages/api/reqData";
 
 
 

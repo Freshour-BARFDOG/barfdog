@@ -14,7 +14,7 @@ import CustomRadio from '/src/components/admin/form/CustomRadio';
 import Spinner from '/src/components/atoms/Spinner';
 import EventDetailImage from '../EventDetailImage';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
-import {getData, postFileUpload, putObjData} from '/api/reqData';
+import {getData, postFileUpload, putObjData} from '/src/pages/api/reqData';
 
 const initialFormValues = {
   status: '',

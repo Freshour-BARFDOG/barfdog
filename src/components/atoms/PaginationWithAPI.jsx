@@ -3,7 +3,7 @@ import DoubleArrow from '@public/img/icon/pagination-double-arrow.svg';
 import { useEffect, useState } from 'react';
 import s from './pagination.module.scss';
 import { useRouter } from 'next/router';
-import { getData } from '/api/reqData';
+import { getData } from '/src/pages/api/reqData';
 
 const Pagination = ({
   apiURL,
@@ -59,7 +59,7 @@ const Pagination = ({
             search: `?page=${newPageInfo.newPageNumber}`,
           });
         }else{
-          // setItemList([]);  // TEST 끝난 뒤, 주석 해제
+          setItemList([]);  // ! TEST 끝난 뒤, 주석 해제
         }
       } catch (err) {
         console.error(err);

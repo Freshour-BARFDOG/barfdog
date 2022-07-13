@@ -15,11 +15,11 @@ import Spinner from '/src/components/atoms/Spinner';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import filter_emptyValue from '/util/func/filter_emptyValue';
 import filter_onlyNumber from '/util/func/filter_onlyNumber';
-import filter_numberZeoFromTheIntegerPartOfTheDecimals from '/util/func/filter_numberZeoFromTheIntegerPartOfTheDecimals';
+import filter_extraIntegerNumberZeo from '/util/func/filter_extraIntegerNumberZeo';
 import CustomRadioTrueOrFalse from '/src/components/admin/form/CustomRadioTrueOrFalse';
 import { validate } from '/util/func/validation/validation_recipe';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
-import {getData, postObjData} from '/api/reqData';
+import {getData, postObjData} from '/src/pages/api/reqData';
 
 
 
@@ -142,7 +142,7 @@ function UpdateRecipePage( { id }) {
         filteredValue = filter_onlyNumber(filteredValue);
       }
       if (filteredType.indexOf('demicals') >= 0) {
-        filteredValue = filter_numberZeoFromTheIntegerPartOfTheDecimals(filteredValue);
+        filteredValue = filter_extraIntegerNumberZeo(filteredValue);
       }
     }
     setFormValues((prevState) => ({

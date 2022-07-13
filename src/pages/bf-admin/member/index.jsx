@@ -1,48 +1,67 @@
 import s from './member.module.scss';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
-import AmdinErrorMessage from '@src/components/atoms/AmdinErrorMessage';
-import SearchBar from '@src/components/admin/form/searchBar';
-import SearchTerm from '@src/components/admin/form/searchBar/SearchTerm';
-import SearchTextWithCategory from '@src/components/admin/form/searchBar/SearchTextWithCategory';
+import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
+import SearchBar from '/src/components/admin/form/searchBar';
+import SearchTerm from '/src/components/admin/form/searchBar/SearchTerm';
+import SearchTextWithCategory from '/src/components/admin/form/searchBar/SearchTextWithCategory';
 import MemberList from './MemberList';
-import ToolTip from '@src/components/atoms/Tooltip';
-import { getData } from '/api/reqData';
+import ToolTip from '/src/components/atoms/Tooltip';
+import PaginationWithAPI from "/src/components/atoms/PaginationWithAPI";
+import Spinner from "/src/components/atoms/Spinner";
+import {transformToday} from "/util/func/transformDate";
+import enterKey from "/util/func/enterKey";
 
-// TODO >
-// - 검색기능
-// -  회원정보 조회기능 > 검색 시, 기본값으로 먼저 전달한다.
 
-function ManageUserPage(props) {
- console.log(props);
 
-  const getListApiUrl = '/api/admin/members';
+const initialSearchValues = {
+  email:'',
+  name:'',
+  from: transformToday(),
+  to:transformToday(),
+}
 
-  const [modalMessage, setModalMessage] = useState('');
-  const [itemList, setItemList] = useState([]);
+const getListApiUrl = '/api/admin/members';
+const apiDataQueryString = 'queryMembersDtoList';
+const searchPageSize = 10;
+
+
+
+
+function ManageUserPage() {
+
   const [isLoading, setIsLoading] = useState({});
-  const [searchValue, setSearchValue] = useState({});
-
+  const [itemList, setItemList] = useState([]);
+  const [searchValue, setSearchValue] = useState(initialSearchValues);
+  const [searchQuery, setSearchQuery] = useState('');
+  
   // console.log(searchValue);
-  useEffect(() => {
-    (async () => {
-      const res = await getData(
-        `/api/admin/members?page=1&size=5&email=&name=&from=2020-01-01&to=2022-06-24`,
-      );
-    })();
-  }, []);
+  // console.log(searchQuery);
+  
 
-  const onResetSearchValues = (e) => {
-    setSearchValue('');
-    console.log('초기화 실행');
+  const onResetSearchValues = () => {
+    setSearchValue(initialSearchValues);
   };
-
-  const onSearchHandler = (e) => {
-    console.log('검색 실행');
+  
+  
+  const onSearchHandler = () => {
+    const queryArr = [];
+    for (const key in searchValue) {
+      const val = searchValue[key];
+      queryArr.push(`${key}=${val}`);
+    }
+    const query = `${queryArr.join('&')}`;
+    setSearchQuery(query);
   };
-
+  
+  
+  const onSearchInputKeydown = (e) => {
+    enterKey(e, onSearchHandler);
+  };
+  
+  
   return (
     <>
       <MetaTitle title="회원 관리" admin={true} />
@@ -55,16 +74,17 @@ function ManageUserPage(props) {
                 title={'조회기간'}
                 searchValue={searchValue}
                 setSearchValue={setSearchValue}
-                tooltip={<ToolTip message={'회원가입 시점'} />}
+                tooltip={<ToolTip message={'좌측 조회기간은 우측 조회기간보다 과거시점이어야 합니다.'} messagePosition={'left'}/>}
               />
               <SearchTextWithCategory
                 searchValue={searchValue}
                 setSearchValue={setSearchValue}
                 title="회원검색"
-                name="search-category"
-                id="search-category"
+                name="keyword"
+                id="keyword"
+                onSearch={onSearchInputKeydown}
                 options={[
-                  { label: '아이디', value: 'id' },
+                  { label: '아이디', value: 'email' },
                   { label: '이름', value: 'name' },
                 ]}
               />
@@ -87,22 +107,34 @@ function ManageUserPage(props) {
                   <li className={s.table_th}>누적구매금액</li>
                   <li className={s.table_th}>장기미접속</li>
                 </ul>
-                {itemList.length ? (
-                  <MemberList items={itemList} />
-                ) : (
-                  <AmdinErrorMessage text="조회된 데이터가 없습니다." />
-                )}
+                
+  
+                {(() => {
+                  if (isLoading.fetching) {
+                    return (<><Spinner/></>);
+                  } else if (!itemList.length) {
+                    return <AmdinErrorMessage text="조회된 데이터가 없습니다." />;
+                  } else {
+                    return (
+                      <MemberList
+                        items={itemList}
+                        // setSelectedItems={setSelectedItemList}
+                        // selectedItems={selectedItemList}
+                      />
+                    );
+                  }
+                })()}
               </div>
             </div>
             <div className={s['pagination-section']}>
-              {/*<PaginationWithAPI*/}
-              {/*  apiURL={getListApiUrl}*/}
-              {/*  size={1}*/}
-              {/*  theme={'square'}*/}
-              {/*  setItemList={setItemList}*/}
-              {/*  queryItemList={'queryBlogsAdminDtoList'}*/}
-              {/*  setIsLoading={setIsLoading}*/}
-              {/*/>*/}
+              <PaginationWithAPI
+                apiURL={getListApiUrl}
+                size={searchPageSize}
+                setItemList={setItemList}
+                queryItemList={apiDataQueryString}
+                urlQuery={searchQuery}
+                setIsLoading={setIsLoading}
+              />
             </div>
           </section>
           {/* inner */}

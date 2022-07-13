@@ -1,5 +1,5 @@
 import DaumPostcode from "react-daum-postcode";
-import s from "/api/daumPostCode/daumPostCode.module.scss";
+import s from "/src/pages/api/daumPostCode/daumPostCode.module.scss";
 
 
 

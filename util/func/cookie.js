@@ -1,7 +1,8 @@
 
 
+const option = {path: '/'}
 
-export const setCookie = function (name, value, dateUnit, expNumber) {
+export const setCookie = function (name, value, dateUnit, expNumber, option={path: '/'}) {
   const date = new Date();
   let expiryTime;
   switch (dateUnit){
@@ -18,7 +19,7 @@ export const setCookie = function (name, value, dateUnit, expNumber) {
       expiryTime = 24 * 60 * 60 * 1000; // 만료시간  기본 1일 후
   }
   date.setTime(date.getTime() + expiryTime);
-  document.cookie = name + '=' + value + ';expires=' + date.toUTCString() + ';path=/';
+  document.cookie = name + '=' + value + ';expires=' + date.toUTCString() + `;path=${option.path}`;
   // console.log('쿠키 만료예정:  +', expNumber, dateUnit)
 };
 

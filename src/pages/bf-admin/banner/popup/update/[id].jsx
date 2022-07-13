@@ -11,7 +11,7 @@ import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import { useModalContext } from '/store/modal-context';
 import { validate } from '/util/func/validation/validation_popup';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
-import {getData, postObjData} from '/api/reqData';
+import {getData, postObjData} from '/src/pages/api/reqData';
 import Spinner from '/src/components/atoms/Spinner';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import Tooltip from "/src/components/atoms/Tooltip";

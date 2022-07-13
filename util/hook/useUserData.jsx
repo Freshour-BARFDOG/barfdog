@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { axiosUserConfig } from '/api/axios.config';
+import { axiosUserConfig } from '/src/pages/api/axios.config';
 
 
 export default function useUserData() {
@@ -9,6 +9,7 @@ export default function useUserData() {
   const auth = useSelector((state) => state.auth);
 
 
+  
   useEffect(() => {
     if(!auth.isAuth || auth.isAdmin)return;
     (async () => {

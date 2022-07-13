@@ -1,11 +1,6 @@
- // html font-size
-$browser-context:16;
-// convert px to rem
-
-@function rem($px, $context: $browser-context){
-  @return #{$px / $context}rem;
-}
+@import "/styles/global/rem";
 $admin-headerHeight:rem(80);
+$logoWidth : rem(180);
 
 #admin_header{
   font-size:rem(15); color:#4d4d4d;
@@ -16,20 +11,43 @@ $admin-headerHeight:rem(80);
   z-index: 1000;
   background-color: #fff;
   left:0; top:0;right:0;
+  > *{
+    height: 100%;
+  }
   &+ *{
     padding-top: $admin-headerHeight;
-
   }
 }
 
 .inner{
-  // padding: rem(30) 0;
-  // box-sizing: border-box;
-  
-  .logo{width:rem(200); float:left;}
+  display: grid;
+  padding-left: rem(10);
+  grid-template-columns: rem(30) minmax(100px, $logoWidth) 1fr;
+  align-items: center;
+  column-gap: rem(20);
+  justify-content: center;
+
+
+  .gnb-toggle-fold-button{
+    border-radius:50%;
+    box-sizing: border-box;
+    background-color:#fff;
+    border: rem(1) solid var(--color-line-04);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1;
+    transition: box-shadow 0.3s cubic-bezier(0.58, 0.31, 0.44, 0.94);
+    &:hover{
+      box-shadow: 0 0 rem(40) 0 rgba(0,0,0,0.25);
+    }
+  }
+
   .header_menus{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
     font-size: rem(15);
-    float:right; overflow:hidden;
     & > * {float:left;cursor: default;}
     & > *:not(:last-child) {
       margin-right:rem(18);
@@ -46,10 +64,11 @@ $admin-headerHeight:rem(80);
         height: rem(18);
       }
     }
-
     .admin_name{margin-right:rem(2); font-size:inherit;}
     .btn_logout{cursor: pointer; font-size:inherit;}
 
   }
 }
+
+
 

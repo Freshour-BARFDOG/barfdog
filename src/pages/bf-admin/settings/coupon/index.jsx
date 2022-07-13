@@ -6,7 +6,7 @@ import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
 import AutoPublishedCouponSettingInput from './AutoPublishedCouponSettingInput';
 import GradeCouponSettingInput from './GradeCouponSettingInput';
 import { useModalContext } from '/store/modal-context';
-import { getData, putObjData } from '/api/reqData';
+import { getData, putObjData } from '/src/pages/api/reqData';
 import transformDate from '/util/func/transformDate';
 import {valid_isEmptyInCustom, validate} from '/util/func/validation/validation_autoCoupon';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';

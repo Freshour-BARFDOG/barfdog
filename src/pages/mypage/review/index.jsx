@@ -12,6 +12,9 @@ import TabContentContainer, {
 } from "/src/components/atoms/TabContentContainer";
 import Tabmenu_TwoButton from "/src/components/atoms/Tabmenu_TwoButton";
 import Pagination from "@src/components/atoms/Pagination";
+import Link from "next/link";
+
+
 
 const ModalExam = () => {
   return (
@@ -29,7 +32,8 @@ const ModalExam = () => {
 
 function ReviewPage() {
   const [activeMenu, setActiveMenu] = useState("left");
-
+  const [itemList, setItemList] = useState( []);
+  
   return (
     <>
       <MetaTitle title="마이페이지 후기" />
@@ -44,90 +48,42 @@ function ReviewPage() {
             />
             <TabContentContainer>
               <LeftContainer activeMenu={activeMenu}>
-                <section className={Styles.content}>
-                  <div className={Styles.flex}>
-                    <div className={Styles.left}>
-                      <div className={`${Styles.image} img-wrap`}>
-                        <Image
-                          priority
-                          src={require("public/img/mypage/review_pic_1.png")}
-                          objectFit="cover"
-                          layout="fill"
-                          alt="카드 이미지"
-                        />
-                      </div>
-                      <div className={Styles.title_text}>
-                        <p>믹스 레시피</p>
-                        <div className={Styles.mid_text}>
-                          정기구독 &middot; 3회차
+                <ul className={'item_wrap'}>
+                  {[1,2,3].map((item, index)=><li key={`itemlist-${index}`} className={Styles.content}>
+                    <div className={Styles.flex}>
+                      <div className={Styles.left}>
+                        <div className={`${Styles.image} img-wrap`}>
+                          <Image
+                            priority
+                            src={require("public/img/mypage/review_pic_1.png")}
+                            objectFit="cover"
+                            layout="fill"
+                            alt="카드 이미지"
+                          />
                         </div>
-                        <div className={Styles.day_text}>2022.02.15</div>
-                      </div>
-                    </div>
-
-                    <div className={Styles.right}>
-                      <div className={Styles.btn}>후기 작성하기</div>
-                    </div>
-                  </div>
-                </section>
-
-                <section className={Styles.content}>
-                  <div className={Styles.flex}>
-                    <div className={Styles.left}>
-                      <div className={`${Styles.image} img-wrap`}>
-                        <Image
-                          priority
-                          src={require("public/img/mypage/review_pic_1.png")}
-                          objectFit="cover"
-                          layout="fill"
-                          alt="카드 이미지"
-                        />
-                      </div>
-                      <div className={Styles.title_text}>
-                        <p>믹스 레시피</p>
-                        <div className={Styles.mid_text}>
-                          정기구독 &middot; 3회차
+                        <div className={Styles.title_text}>
+                          <p>믹스 레시피</p>
+                          <div className={Styles.mid_text}>
+                            정기구독 &middot; 3회차
+                          </div>
+                          <div className={Styles.day_text}>2022.02.15</div>
                         </div>
-                        <div className={Styles.day_text}>2022.02.15</div>
+                      </div>
+                      <div className={Styles.right}>
+                        <Link href="/mypage/review/create" passHref>
+                          <a className={Styles.btn}>후기 작성하기</a>
+                        </Link>
                       </div>
                     </div>
-
-                    <div className={Styles.right}>
-                      <div className={Styles.btn}>후기 작성하기</div>
-                    </div>
-                  </div>
-                </section>
-
-                <section className={Styles.content}>
-                  <div className={Styles.flex}>
-                    <div className={Styles.left}>
-                      <div className={`${Styles.image} img-wrap`}>
-                        <Image
-                          priority
-                          src={require("public/img/mypage/review_pic_1.png")}
-                          objectFit="cover"
-                          layout="fill"
-                          alt="카드 이미지"
-                        />
-                      </div>
-                      <div className={Styles.title_text}>
-                        <p>믹스 레시피</p>
-                        <div className={Styles.mid_text}>
-                          정기구독 &middot; 3회차
-                        </div>
-                        <div className={Styles.day_text}>2022.02.15</div>
-                      </div>
-                    </div>
-
-                    <div className={Styles.right}>
-                      <div className={Styles.btn}>후기 작성하기</div>
-                    </div>
-                  </div>
-                </section>
+                  </li>)}
+                </ul>
                 <div className={Styles.pagination_box}>
                   <Pagination itemCountPerGroup={5} itemTotalCount={30} />
                 </div>
               </LeftContainer>
+              
+              
+              
               <RightContainer activeMenu={activeMenu}>
                 <section className={Styles.content}>
                   <div className={Styles.content_box}>

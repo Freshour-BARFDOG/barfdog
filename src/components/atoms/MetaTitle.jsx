@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Head from 'next/head';
 import {useDispatch} from "react-redux";
 import {useRouter} from "next/router";
@@ -10,16 +10,23 @@ function MetaTitle({title, admin}) {
   const router = useRouter();
   const curPath = router.asPath;
   const isCurPathMypage = curPath.split('/')[1] === 'mypage';
-  if(isCurPathMypage){
-    const mypageTitle = title.split(' ')[1];
-    
-    dispatch(pageAction.saveCurrentPageInfo({pageTitle: mypageTitle}))
-  }
+  
+  const [metaTitle, setMetaTitle] = useState( title );
+  useEffect( () => {
+  
+    if(isCurPathMypage){
+      const mypageTitle = title.split(' ')[1];
+      setMetaTitle(mypageTitle);
+      dispatch(pageAction.saveCurrentPageInfo({pageTitle: mypageTitle}))
+    }
+  }, [title] );
+  
+  
 
 
   return (
     <Head>
-      <title>{`${title ? title : "바프독"} | Barf Dog ${admin ? '관리자': ''}`}</title>
+      <title>{`${metaTitle || "바프독"} | Barf Dog ${admin ? '관리자': ''}`}</title>
     </Head>
   );
 }

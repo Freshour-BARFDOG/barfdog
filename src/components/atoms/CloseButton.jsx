@@ -10,7 +10,8 @@ const Button = styled.button`
   display: inline-block;
   position: relative;
   cursor: pointer;
-
+  transition: transform .2s ease;
+  
   &:before,
   &:after {
     content: "";

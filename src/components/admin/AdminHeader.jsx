@@ -1,23 +1,31 @@
 import React from 'react';
 import { useDispatch } from "react-redux";
-import { authAction } from "@store/auth-slice";
+import { authAction } from "/store/auth-slice";
 import AdminWrapper from '/src/components/admin/AdminWrapper';
 import Image from 'next/image';
 import s from "./adminHeader.module.scss";
 import Link from 'next/link';
+import {IoMenuSharp} from "react-icons/io5";
+import {userStateAction} from "@store/userState-slice";
 
-function AdminHeader() {
+function AdminHeader({folded}) {
   const dispatch = useDispatch();
   const onLogoutHandler = () => {
     dispatch(authAction.adminLogout());
   }
 
+  const onChangeGnbMode = ()=>{
+    dispatch(folded ? userStateAction.unfold() : userStateAction.fold());
+  }
 
   const adminName = '관리자'; // * 정적인 이름 필요할 경우 변경
   return (
-    <header id={s.admin_header} className={`${s.inner} flex-wrap`}>
+    <header id={s.admin_header}>
       <AdminWrapper>
-        <div className={`${s.inner} clearfix`}>
+        <div className={`${s.inner}`}>
+          <button type={"button"} className={`${s['gnb-toggle-fold-button']}`} onClick={onChangeGnbMode}>
+            <IoMenuSharp size={'24'}/>
+          </button>
           <div className={s.logo}>
             <Link href="/" passHref>
               <a>

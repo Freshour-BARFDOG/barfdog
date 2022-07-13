@@ -11,7 +11,7 @@ import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import { useModalContext } from '/store/modal-context';
 import { validate } from '/util/func/validation/validation_popup';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
-import { postObjData } from '/api/reqData';
+import { postObjData } from '/src/pages/api/reqData';
 import Spinner from '/src/components/atoms/Spinner';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import Tooltip from "../../../../components/atoms/Tooltip";
@@ -327,11 +327,7 @@ function CreatePopupPage() {
                 className="admin_btn confirm_l solid"
                 onClick={onSubmit}
               >
-                {isLoading.submit ? (
-                  <Spinner style={{ color: '#fff', width: '15', height: '15' }} speed={0.6} />
-                ) : (
-                  '등록'
-                )}
+                {isLoading.submit ? <Spinner /> :'등록'}
               </button>
             </div>
           </div>

@@ -10,7 +10,7 @@ import { useRouter } from 'next/router';
 import { useModalContext } from '/store/modal-context';
 import { validate } from '/util/func/validation/validation_reward';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
-import { postObjData } from '/api/reqData';
+import { postObjData } from '/src/pages/api/reqData';
 import Spinner from '/src/components/atoms/Spinner';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import filter_emptyValue from '/util/func/filter_emptyValue';

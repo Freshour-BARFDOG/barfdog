@@ -9,7 +9,7 @@ import ModalAlert from "@src/components/modal/Modal_alert";
 import MainBannerList from './MainBannerList';
 import AdminBtn_moveToPage from "@src/components/atoms/AdminBtn_moveToPage";
 import axios from "axios";
-import axiosConfig from "/api/axios.config"; 
+import axiosConfig from "/src/pages/api/axios.config";
 import AmdinErrorMessage from '@src/components/atoms/AmdinErrorMessage';
 import sorting from '@util/func/sorting';
 import {

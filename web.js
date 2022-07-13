@@ -6,22 +6,10 @@ const port = parseInt(process.env.PORT, 10) || 4000;
 const next = require("next");
 const nextApp = next({ dev });
 const handle = nextApp.getRequestHandler();
-// const useDispatch = require('react-redux');
-// const popupAction = require("./store/popup-slice");
-
-
-
 
 
 nextApp.prepare().then(() => {
-
-  //
-  // server.get('/selfApi/*', (req, res) => {
-  //   console.log("Hello, World~~!!!");
-  //   // res.send("Hello, World!");
-  // });
-  //
-
+  
   server.all("*", (req, res) => {
     return handle(req, res);
   });

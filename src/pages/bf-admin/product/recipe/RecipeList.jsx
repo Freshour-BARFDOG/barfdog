@@ -1,7 +1,7 @@
 import s from './recipe.module.scss';
 import Link from 'next/link';
 import transformDate from '/util/func/transformDate';
-import { putObjData } from '/api/reqData';
+import { putObjData } from '/src/pages/api/reqData';
 
 export default function SearchResultList({ items, onDeleteItem }) {
   if (!items || !items.length) return;
