@@ -1,4 +1,4 @@
-export const genderType = {
+export const dogGenderType = {
   MALE: 'MALE',
   FEMALE: 'FEMALE'
 }

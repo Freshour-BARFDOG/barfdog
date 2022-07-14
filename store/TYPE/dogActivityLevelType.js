@@ -1,4 +1,4 @@
-export const activityLevelType = {
+export const dogActivityLevelType = {
   VERY_LITTLE: 'VERY_LITTLE',
   LITTLE: 'LITTLE',
   NORMAL: 'NORMAL',
