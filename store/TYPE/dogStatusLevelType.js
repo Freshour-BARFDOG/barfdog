@@ -1,0 +1,7 @@
+export const dogStatusLevelType = {
+  HEALTHY: 'HEALTHY',
+  NEED_DIET: 'NEED_DIET',
+  OBESITY: 'OBESITY',
+  PREGNANT: 'PREGNANT',
+  LACTATING: 'LACTATING'
+}
