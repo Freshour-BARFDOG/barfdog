@@ -1,32 +1,36 @@
 import React, { useEffect, useState } from 'react';
 import s from './customRadio.module.scss';
 
-const CustomRadioTrueOrFalse = ({ name, labelList = [], value, setValue, returnBooleanValue }) => {
-
+const CustomRadioTrueOrFalse = ({
+  name,
+  labelList = [],
+  value,
+  setValue,
+  returnBooleanValue,
+  theme,
+}) => {
   const trueRadioId = `${name}${labelList[0]}`;
   const falseRadioId = `${name}${labelList[1]}`;
   const initialValue = value === true ? trueRadioId : falseRadioId;
   const [selectedRadio, setSelectedRadio] = useState(initialValue);
 
-
-  useEffect(() => { // init value
+  useEffect(() => {
+    // init value
     setSelectedRadio(initialValue);
   }, [initialValue]);
-  
 
   const onChangeHandler = (e) => {
     const { id } = e.currentTarget;
     setSelectedRadio(id);
 
     let booleanValue;
-    if(id === trueRadioId){
+    if (id === trueRadioId) {
       booleanValue = true;
-    }   else if ( id === falseRadioId) {
+    } else if (id === falseRadioId) {
       booleanValue = false;
     }
 
-
-    if(returnBooleanValue){
+    if (returnBooleanValue) {
       setValue(booleanValue);
     } else {
       setValue((prevState) => ({
@@ -38,8 +42,12 @@ const CustomRadioTrueOrFalse = ({ name, labelList = [], value, setValue, returnB
 
   return (
     <>
-      <div className={`${s['inp-wrap']} ${s['radio']}`}>
-        <label htmlFor={`${name}${labelList[0]}`}> {/* TRUE값 반환 */}
+      <div className={`${s['inp-wrap']} ${s['radio']} ${theme ? s[theme] : ''}`}>
+        <label
+          htmlFor={`${name}${labelList[0]}`}
+          className={`${selectedRadio === trueRadioId && s.checked}`}
+        >
+          {/* TRUE값 반환 */}
           <input
             id={`${name}${labelList[0]}`}
             name={name}
@@ -49,7 +57,11 @@ const CustomRadioTrueOrFalse = ({ name, labelList = [], value, setValue, returnB
           />
           {labelList[0]}
         </label>
-        <label htmlFor={`${name}${labelList[1]}`}> {/* FALSE RADIO */}
+        <label
+          htmlFor={`${name}${labelList[1]}`}
+          className={`${selectedRadio === falseRadioId && s.checked}`}
+        >
+          {/* FALSE RADIO */}
           <input
             id={`${name}${labelList[1]}`}
             name={name}

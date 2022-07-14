@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import s from "../../pages/survey/survey.module.scss";
+import React, { useState } from 'react';
+import s from '../../pages/survey/survey.module.scss';
 
 const SurveyInputRadio = ({
   surveyValues,
@@ -10,6 +10,7 @@ const SurveyInputRadio = ({
   className,
   desc,
   defaultStyle,
+  formValueKey,
 }) => {
   const [selectedRadio, setSelectedRadio] = useState(surveyValues); // * component 내부 value
 
@@ -19,14 +20,13 @@ const SurveyInputRadio = ({
 
     setSurveyValues((prevState) => ({
       ...prevState,
-      [name]: id,
+      [formValueKey]: id,
     }));
   };
 
-
   return (
     <>
-      <ul className={`${className} ${s["inputRadio-wrap"]}`}>
+      <ul className={`${className} ${s['inputRadio-wrap']}`}>
         {idList.map((id, index) => {
           return (
             <li key={`radio-${name}-${index}`}>
@@ -41,17 +41,13 @@ const SurveyInputRadio = ({
                     onChange={onChangeHandler}
                   />
                   {labelList[index]}
-                  {desc && desc.length && (
-                    <span className={s.desc}>{desc[index]}</span>
-                  )}
+                  {desc && desc.length && <span className={s.desc}>{desc[index]}</span>}
                 </label>
               ) : (
                 <label
                   key={`radio-${name}-${index}`}
                   htmlFor={id}
-                  className={`${s.inputRadio} ${
-                    selectedRadio === id && s.checked
-                  }`}
+                  className={`${s.inputRadio} ${selectedRadio === id && s.checked}`}
                 >
                   <input
                     id={id}
@@ -63,9 +59,7 @@ const SurveyInputRadio = ({
                     onChange={onChangeHandler}
                   />
                   {labelList[index]}
-                  {desc && desc.length && (
-                    <span className={s.desc}>{desc[index]}</span>
-                  )}
+                  {desc && desc.length && <span className={s.desc}>{desc[index]}</span>}
                 </label>
               )}
             </li>

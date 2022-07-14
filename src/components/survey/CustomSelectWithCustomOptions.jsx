@@ -1,0 +1,102 @@
+import s from './customSelectWithCustomOptions.module.scss';
+import ScrollContainer from '../atoms/ScrollContainer';
+import React, {useEffect, useRef, useState} from 'react';
+import rem from "/util/func/rem";
+
+export const CustomSelectWithCustomOptions = ({id, options, value, setValues, placeholder, unit, width=120}) => {
+  
+  const initialSelectedOption = value || options[0].value;
+  const [selectedOption, setSelectedOption] = useState(initialSelectedOption);
+  const [isActive, setIsActive] = useState( false );
+  const optionBoxRef = useRef( null );
+  const inputRef = useRef( null );
+  
+  
+  
+  
+  useEffect( () => {
+    // 초기값 세팅
+    setValues( (prevState) => ({
+      ...prevState,
+      [id]: initialSelectedOption,
+    }));
+  }, [initialSelectedOption] );
+  
+  
+  useEffect( () => {
+    // HIDE Option
+    const optionBox = optionBoxRef.current;
+    const input = inputRef.current;
+    if(window && typeof window !=='undefined' && optionBox && input){
+      document.body.addEventListener('click', (e)=>{
+        let isBoxClicked = false;
+        const clickedTarget = e.target;
+        const targetList = [clickedTarget, ...Array.from(clickedTarget.children)];
+        const exceptList = [input, optionBox, ...Array.from(optionBox.children)];
+        targetList.forEach((target)=>{
+          const targetClassName = target.className;
+          const exceptClassNameList = exceptList.map(list=>list.className);
+          if(exceptClassNameList.indexOf(targetClassName) >= 0){
+            isBoxClicked = true;
+            return;
+          }
+        })
+        if(!isBoxClicked){
+          setIsActive(false)
+        }
+      })
+    }
+  }, [optionBoxRef.current] );
+  
+  
+  
+  const onOptionClick = (e) => {
+    const option = e.currentTarget;
+    const value = option.dataset.value;
+    setSelectedOption(value);
+    setValues( (prevState) => ({
+      ...prevState,
+      [id]: value,
+    }) );
+  };
+  
+  
+  const onActiveOptionBox = ()=>{
+    setIsActive(!isActive);
+  }
+  
+  
+  const Options = ({value}) => {
+    return (
+      <p data-value={value} className={`${s.option} ${selectedOption === value ? s.selected : ''}`} onClick={onOptionClick}>
+        {value}
+      </p>
+    );
+  };
+  
+  
+  
+  return (
+    <>
+      <div className={s['customSelectWithOptions']} style={{ width: `${rem(width)}` }}>
+        <input
+          type="text"
+          id={id}
+          placeholder={placeholder}
+          value={value || selectedOption || ''}
+          onChange={setValues}
+          readOnly
+          onClick={onActiveOptionBox}
+          className={'costomSelectInput'}
+          ref={inputRef}
+        />
+        <em className={s.unit}>{unit}</em>
+        <ScrollContainer  height={'200'} scrollBarWidth={'0'} className={`${s.scrollContainer} ${isActive ? s.active : ''}`} ref={optionBoxRef}>
+          {options.map((option, i) => (
+            <Options key={`options-${id}-${i}`} value={option.value} />
+          ))}
+        </ScrollContainer>
+      </div>
+    </>
+  );
+};

@@ -292,7 +292,7 @@ const SurveyStep1_SelectOptions = ({
 
 
 
-const SurveyStep2 = ({ surveyValues, setSurveyValues }) => {
+const SurveyStep2 = ({ formValues, setFormValues }) => {
 
   return (
       <section className={s.step2page}>
@@ -304,8 +304,8 @@ const SurveyStep2 = ({ surveyValues, setSurveyValues }) => {
 
         <div className="input-row">
           <SurveyInputRadio
-              surveyValues={surveyValues.healthStatus}
-              setSurveyValues={setSurveyValues}
+              surveyValues={formValues.healthStatus}
+              setSurveyValues={setFormValues}
               title="종류"
               className={s.activity}
               name="activity"
@@ -354,8 +354,8 @@ const SurveyStep2 = ({ surveyValues, setSurveyValues }) => {
 
         <div className="input-row">
           <SurveyInputRadio
-              surveyValues={surveyValues.healthStatus}
-              setSurveyValues={setSurveyValues}
+              surveyValues={formValues.healthStatus}
+              setSurveyValues={setFormValues}
               title="종류"
               className={s.healthStatus}
               name="healthStatus"
@@ -382,7 +382,7 @@ const SurveyStep2 = ({ surveyValues, setSurveyValues }) => {
 
 
 
-const SurveyStep3 = ({ surveyValues, setSurveyValues }) => {
+const SurveyStep3 = ({ formValues, setFormValues }) => {
   return (
       <section className={s.step3page}>
         <div className="input-row">
@@ -394,8 +394,8 @@ const SurveyStep3 = ({ surveyValues, setSurveyValues }) => {
 
         <div className="input-row">
           <SurveyInputRadio
-              surveyValues={surveyValues.numberOfSnacks}
-              setSurveyValues={setSurveyValues}
+              surveyValues={formValues.numberOfSnacks}
+              setSurveyValues={setFormValues}
               title="종류"
               className={s.numberOfSnacks}
               name="numberOfSnacks"
@@ -428,8 +428,8 @@ const SurveyStep3 = ({ surveyValues, setSurveyValues }) => {
             반려견은 못먹는 음식이
           </div>
           <SurveyInputRadio
-              surveyValues={surveyValues.size}
-              setSurveyValues={setSurveyValues}
+              surveyValues={formValues.size}
+              setSurveyValues={setFormValues}
               title="못먹는음식"
               className={s.food_check}
               name="foodcheck"
@@ -485,8 +485,8 @@ const SurveyStep3 = ({ surveyValues, setSurveyValues }) => {
             특별히 챙겨주고 싶은 부분은
           </div>
           <SurveyInputRadio
-              surveyValues={surveyValues.size}
-              setSurveyValues={setSurveyValues}
+              surveyValues={formValues.size}
+              setSurveyValues={setFormValues}
               title="넣어둬넣어둬"
               className={s.take_care}
               name="take_care"
@@ -511,8 +511,8 @@ const SurveyStep3 = ({ surveyValues, setSurveyValues }) => {
             기타 특이사항(질병 등)이
           </div>
           <SurveyInputRadio
-              surveyValues={surveyValues.size}
-              setSurveyValues={setSurveyValues}
+              surveyValues={formValues.size}
+              setSurveyValues={setFormValues}
               title="질병유무"
               className={s.disease_check}
               name="take_care"
@@ -679,8 +679,8 @@ function SurveySwiper({surveyValues, setSurveyValues}) {
           </SwiperSlide>
           <SwiperSlide>
             <SurveyStep2
-                surveyValues={surveyValues}
-                setSurveyValues={setSurveyValues}
+                formValues={surveyValues}
+                setFormValues={setSurveyValues}
             />
             <SwiperButtonWrapper
                 refer={{ prev: navPrev_mainRef, next: navNext_mainRef }}
@@ -688,8 +688,8 @@ function SurveySwiper({surveyValues, setSurveyValues}) {
           </SwiperSlide>
           <SwiperSlide>
             <SurveyStep3
-                surveyValues={surveyValues}
-                setSurveyValues={setSurveyValues}
+                formValues={surveyValues}
+                setFormValues={setSurveyValues}
             />
             <SwiperButtonWrapper
                 refer={{ prev: navPrev_mainRef, next: navNext_mainRef }}
