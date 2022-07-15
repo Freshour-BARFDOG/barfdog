@@ -240,6 +240,20 @@ section.title{ padding : rem(8) 0 rem(30);}
 
 }
 
+.pagination_box {
+  display: flex;
+  justify-content: center;
+  padding-top: rem(40);
+  padding-bottom : rem(44);
+  .content {
+    width: 23%;
+    display: flex;
+    justify-content: space-between;
+    @include char(l16);
+    color: var(--color-font-sub);
+  }
+}
+
 
 @media (max-width: rem(900)) {
 
@@ -263,7 +277,6 @@ section.title{ padding : rem(8) 0 rem(30);}
       grid-gap: 0;
       width: 100%;
       position: relative;
-
 
       .left_box {
         width: 100%;

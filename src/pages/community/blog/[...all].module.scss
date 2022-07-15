@@ -5,15 +5,22 @@ $browser-context:16; // html font-size
 @import '../../../../styles/global/guide';
 
 section.title_box { padding : rem(100) 0 rem(48); }
-section.line_box { padding : 0 0 rem(54); }
+section.line_box { padding : 0 0 rem(60); }
 section.content_box { padding : 0 0 rem(60) }
 section.line_box2 { padding : 0 0 rem(20) }
-section.btn_box { padding : 0 0 rem(19)}
+section.btn_box { padding : 0 0 rem(76)}
 
 
 .title_box {
-  text-align: center;
-  @include char(t28);
+  .text{
+    text-align: center;
+    @include char(t28);
+  }
+
+  .title_date{
+    text-align: right;
+    color: var(--color-font-sub);
+  }
 }
 
 .line_box {
@@ -27,7 +34,7 @@ section.btn_box { padding : 0 0 rem(19)}
   place-items: center;
   .picture {
     width: 100%;
-    max-width: rem(760);
+    max-width: rem(780);
     aspect-ratio: 0.92/1;
     background: rgba(0, 26, 255, 0.2);
   }
@@ -45,13 +52,53 @@ section.btn_box { padding : 0 0 rem(19)}
   .btn {
     display: grid;
     place-items: center;
-    width: 40%;
-    max-width: rem(200);
+    width: rem(200);
     height: rem(44);
     background-color: var(--color-main);
     border-radius: rem(2);
+    cursor: pointer;
 
     @include char(l15);
     color : #fff;
   }
+}
+
+
+@media (max-width: rem(900)) {
+
+  .title_box {
+    .title_date{
+      text-align: center;
+    }
+  }
+  
+}
+
+
+@media (max-width: rem(600)) {
+  
+  section.title_box { padding : rem(70) 0 rem(20) }
+  section.line_box { padding : 0 0 rem(10) }
+  section.content_box { padding : 0 0 rem(30) }
+
+  .title_box {
+    .text{
+      font-size: rem(24);
+    }
+  }
+
+}
+
+@media (max-width: rem(400)) {
+  
+  .title_box {
+    .text{
+      font-size: rem(20);
+    }
+
+    .title_date{
+      font-size: rem(15);
+    }
+  }
+
 }

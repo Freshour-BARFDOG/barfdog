@@ -46,7 +46,8 @@ $topLinkBannerHeight: rem(38);
 }
 
 .container {
-  width: $containerSize;
+  // width: $containerSize;
+  width: rem(800);
 }
 
 // * --------- cont --------- * //
@@ -57,15 +58,27 @@ $topLinkBannerHeight: rem(38);
   box-shadow: 0 0 rem(30) rgba(0, 0, 0, 0.15);
   border-radius: rem(8);
   padding: rem(80) rem(40);
+  width: 100%;
   box-sizing: border-box;
-  overflow: hidden;
+  overflow: scroll;
+  &::-webkit-scrollbar{
+    display: none;
+  }
 }
 
 .cont {
   display: grid;
-  grid-template-columns: 50% 50%;
+  grid: 
+  "swiper_bestReview_outerWrap details"
+  "swiper_bestReview_outerWrap row4"/50% 50%;
+
+  .swiper_bestReview_outerWrap {
+    grid-row: 1/span 4;
+  }
+
   .details {
-    padding-left:rem(20);
+    padding-left: rem(20);
+
     .row1 {
       display: flex;
       margin-bottom: rem(9);
@@ -94,6 +107,10 @@ $topLinkBannerHeight: rem(38);
       color: #4d4d4d;
       font-size: rem(15);
     }
+  }
+
+  .row4{
+    padding-left: rem(20);
   }
 }
 
@@ -140,7 +157,51 @@ $topLinkBannerHeight: rem(38);
 }
 
 
+@media (max-width: rem(800)) {
 
+  .container {
+    width: 100vw;
+    max-width: rem(400);
+  }
+  .card {
+    padding: rem(80) rem(20) rem(40);
+
+    .cont {
+      grid: 
+      "details"
+      "swiper_bestReview_outerWrap"
+      "row4"/100%;
+
+      .swiper_bestReview_outerWrap {
+        order: 2;
+        grid-row: 2/span 4;
+      }
+
+      .details {
+        padding: 0;
+
+        .row3 {
+          padding-bottom: 0;
+          border: none;
+        }
+      }
+
+      .row4{
+        padding: 0;
+        order: 3;
+      }
+    }
+  }
+}
+
+
+
+@media (max-height: rem(750)) {
+  
+  .card {
+    height: 100vh;
+  }
+}
 
 
 

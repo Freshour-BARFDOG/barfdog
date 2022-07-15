@@ -90,7 +90,7 @@ const ShopBoard = () => {
               <div>배송정보</div>
 
               <div>
-                택배배송 3,000원 (50,000원 이상 구매 시 무료)
+                택배배송 3,000원<br className={Styles.del_br}></br>(50,000원 이상 구매 시 무료)
                 <br />
                 <div className={Styles.text}>
                   제주 및 도서산간 지역은 배송이 불가능합니다
@@ -158,8 +158,8 @@ const ReturnExchageGuideBox = () => {
 
       <div className={Styles.flex_box2}>
         <div className={Styles.left}>
-          반품/교환 사유에 따른요청
-          <br /> 가능 기간
+          반품/교환 사유에 따른<br />
+          요청 가능 기간
         </div>
         <div className={Styles.right}>
           선식품, 맞춤제작식품: 불가 / 일반상품: 7일
@@ -246,7 +246,7 @@ const ReviewBox = () => {
       <li>
         <figure className={Styles.grid_box} onClick={onClickHandler}>
           {/* 그리드 1 시작지점 */}
-          <span>48</span>
+          <span className={Styles.number}>48</span>
           <i className={Styles.star_box}>
             <RatingStars count={3} margin={0} />
           </i>
@@ -261,8 +261,8 @@ const ReviewBox = () => {
             </i>
             사진 굿굿 너무 좋아요
           </p>
-          <span> 바&#42;독</span>
-          <span> 2022.01.20</span>
+          <span className={Styles.name}> 바&#42;독</span>
+          <span className={Styles.date}> 2022.01.20</span>
         </figure>
         <div className={Styles.review_box} ref={boxRef}>
           <p className={Styles.text}>
@@ -286,6 +286,10 @@ const ReviewBox = () => {
           </div>
           <RatingStars count={4} size={27} />
         </div>
+      </div>
+
+      <div className={Styles.button_box}>
+        <button className={Styles.write_button}>후기 작성하기</button>
       </div>
 
       <div className={Styles.notice_board}>
@@ -392,17 +396,13 @@ const ItemInfoBox = () => {
               한 팩에 완벽한 영양을 담았습니다.
             </div>
             <div className={Styles.left_box_content}>
-              <div>70%</div>
-              <div>풍부하게 담은 두가지 고기</div>
-              <div>10%</div>
-              <div>풍부한 칼슘</div>
-              <div>10%</div>
-              <div>안전하게 맞춤 제조된 내장</div>
-              <div>10%</div>
-              <div>유기농 야채와 신선한 과일</div>
+              <div>70% 풍부하게 담은 두가지 고기</div>
+              <div>10% 풍부한 칼슘</div>
+              <div>10% 안전하게 맞춤 제조된 내장</div>
+              <div>10% 유기농 야채와 신선한 과일</div>
             </div>
             <div className={Styles.last_contain}>
-              그리고 유기농 씨앗과 켈프, 스피루리나의 프리미엄 영양소로 구성되어
+              그리고 유기농 씨앗과 켈프, 스피루리나<br />의 프리미엄 영양소로 구성되어
               있습니다.
               <br /> 바프독은 AAFCO, NRC, fediaf의
               <br />
@@ -415,7 +415,7 @@ const ItemInfoBox = () => {
             <div className={Styles.title}>두가지 고기</div>
             <p>한가지 고기가 아닙니다</p>
             <div className={Styles.title_content}>
-              바프독은 모든 레시피에 두가지 고기를 풍부하게 담았습니다.
+              바프독은 모든 레시피에 두가지<br />고기를 풍부하게 담았습니다.
             </div>
 
             <div className={Styles.last_contain}>
@@ -430,7 +430,7 @@ const ItemInfoBox = () => {
               균형잡힌 식사를 만들어주기 때문입니다.
               <br />
               <br />
-              그래서 바프독은 모든 레시피에 두 가지 고기를 담아, 충분한
+              그래서 바프독은 모든 레시피에 두가지<br />고기를 담아, 충분한
               영양섭취를 돕습니다.
             </div>
           </div>
@@ -440,7 +440,7 @@ const ItemInfoBox = () => {
             <p>사람이 먹을 수 있는 음식</p>
             <div className={Styles.title_content}>
               바프독은 일반 고기보다 영양소가
-              <br /> 많은 방목고기를 사용합니다.
+              <br />많은 방목고기를 사용합니다.
             </div>
 
             <div className={Styles.last_contain}>
@@ -452,8 +452,8 @@ const ItemInfoBox = () => {
               자란 양고기를 사용합니다.
               <br />
               <br />
-              바프독의 생자연식은 최고등급의 유기농 방목고기, 채소를 사용하여
-              골고루 영양분을 섭취할 수있습니다.
+              바프독의 생자연식은 최고등급의 유기농<br />방목고기, 채소를 사용하여
+              골고루 영양분<br />을 섭취할 수있습니다.
             </div>
           </div>
         </div>
@@ -461,7 +461,7 @@ const ItemInfoBox = () => {
       <section className={Styles.barf_note}>
         <div className={Styles.title}>BARFDOG’s Note</div>
         <p>
-          진짜 펫푸드에 대한 바프독의 생각. 바프독이 생각하는 본질을
+          진짜 펫푸드에 대한 바프독의 생각.<br />바프독이 생각하는 본질을
           그대로담았습니다.
         </p>
 
@@ -553,10 +553,10 @@ const ItemInfoBox = () => {
         <p>
           권장급여량은 걱정하지 마세요.
           <br />
-          입력해주신 아이들의 정보에 맞추어 나누어 담아 드립니다.
+          입력해주신 아이들의 정보에 맞추어 <br className={Styles.p_br}></br>나누어 담아 드립니다.
         </p>
         <div className={Styles.red_word}>
-          생식이 처음이라면 가이드라인과 급여가이드를 먼저 참고하세요!
+          생식이 처음이라면 가이드라인과 <br className={Styles.p_br}></br> 급여가이드를 먼저 참고하세요!
         </div>
         <div className={Styles.mid_box}>
           <ul className={Styles.guide_box}>
@@ -630,15 +630,13 @@ const ItemInfoBox = () => {
             </div>
 
             <div className={Styles.last_contain}>
-              바프독의 모든 레시피는 반려견 생식 관련 역사가 오래된 미국
-              생식관련 반려동물 협회 및 미국 생식 전문사이트 영양수의사에게
-              정기적인 미팅을 통해 레시피를 검토하고 있으며 모든 전문가들의
+              바프독은 반려견 생식 관련 역사가 오래된 미국
+              생식관련 반려동물 협회 및 미국 생식전문사이트의 영양학전문수의사와
+              정기적인 미팅을 통하여 레시피를 까다롭게 검토하고 있으며, 모든 전문가들의
               공통된 의견을 존중하고 있습니다.
               <br />
               <br />
-              따라서 각 바프독 레시피가 가지고 있는 장점을 골고루 섭취하기 위해
-              정기구독 서비스로 반려견 친구들이 다양한 영양을 골고루 섭취할 수
-              있도록 다양한 레시피를 급여하시기를 추천드립니다.
+              따라서, 각 바프독 레시피가 가지고 있는 장점들을 골고루 섭취할 수 있도록 도와주는 정기구독 서비스를 통해 반려견 친구들에게 보다 다양한 레시피를 급여해보시길 추천드립니다.
             </div>
           </div>
           <div className={Styles.right_box}>

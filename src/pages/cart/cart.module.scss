@@ -112,6 +112,36 @@ section.btn_box { margin : 0 0 rem(206)}
 }
 
 .product_list {
+  .emty_box{
+    width: 100%;
+    text-align: center;
+    padding: rem(60) 0;
+
+    span {
+      color: #636363;
+    }
+
+    .button_box{
+      margin-top: rem(40);
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .emty_button{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        
+        width: rem(218);
+        height: rem(42);
+        border: rem(1) solid var(--color-main);
+        border-radius: rem(4);
+        color: var(--color-main);
+      }
+    }
+  }
+
   .flex_box {
     display: grid;
     grid-template-columns: rem(80) rem(120) 1fr rem(250) rem(40) ;
@@ -119,7 +149,6 @@ section.btn_box { margin : 0 0 rem(206)}
     border-bottom: rem(1) solid #DDDDDD;
     height: 100%;
     > .check_box {
-
       // padding-right: rem(32);
     }
 

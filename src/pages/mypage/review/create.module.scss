@@ -78,11 +78,11 @@ section.picture_attach {
 
 
 .flex {
-  display: flex;
+  display: grid;
+  grid-template-columns: rem(160) 1fr;
   justify-content: space-between;
 
   .left_side {
-    width: 18%;
     max-width: rem(160);
     .left_title {
       padding-top: rem(4);
@@ -92,7 +92,6 @@ section.picture_attach {
 
   }
   .right_side {
-    width: 81%;
     max-width: rem(745);
     position: relative;
 
@@ -107,6 +106,7 @@ section.picture_attach {
       position: relative;
       display: block;
       width: 100%;
+      overflow: scroll;
       ::placeholder {
         color: var(--color-placeholder);
       }
@@ -196,7 +196,17 @@ section.picture_attach {
     height: 100%;
     box-sizing: border-box;
   }
-<<<<<<< HEAD
+
+  button.cancel {
+    border: rem(1) solid var(--color-line-03);
+    color: var(--color-font-def);
+  }
+  
+  button.save {
+    border: rem(1) solid transparent;
+    color: #fff;
+    background-color: var(--color-main);
+  }
 }
 
 
@@ -224,43 +234,43 @@ section.picture_attach {
     grid-template-columns: 1fr;
     grid-gap: rem(10);
     justify-content: normal;
-  }
-
-  .left_side {
-    width: 100%;
-    max-width: 100%;
-    display: flex;
-
-    .outer{
-      .red_text{
-        margin-left: rem(10);
-        transform: translateY(rem(-7));
-      }
-    }
-  }
-  .right_side {
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .btn{
-    .flex {
-      .left_btn {
-        display: grid;
-        place-items: center;
-        padding: rem(16) 0;
-        width: 100%;
-        max-width: 100%;
-        border: rem(1) solid var(--color-line-03);
-        border-radius: rem(4);
-      }
+    .left_side {
+      width: 100%;
+      max-width: 100%;
+      display: flex;
   
-      .right_btn {
-        max-width: 100%;
-        padding: rem(16) 0;
+      .outer{
+        .red_text{
+          margin-left: rem(10);
+          transform: translateY(rem(-7));
+        }
+      }
+    }
+    .right_side {
+      width: 100%;
+      max-width: 100%;
+    }
+  
+    .btn{
+      .flex {
+        .left_btn {
+          display: grid;
+          place-items: center;
+          padding: rem(16) 0;
+          width: 100%;
+          max-width: 100%;
+          border: rem(1) solid var(--color-line-03);
+          border-radius: rem(4);
+        }
+    
+        .right_btn {
+          max-width: 100%;
+          padding: rem(16) 0;
+        }
       }
     }
   }
+
   
 }
 
@@ -294,7 +304,7 @@ section.picture_attach {
   }
 
   .content_title{
-    margin-top: rem(50);
+    margin-top: 0;
     margin-bottom: rem(-50);
   }
 
@@ -302,26 +312,34 @@ section.picture_attach {
 
     .text{
       padding-right: 0;
-
+      text-align: center;
     }
 
     div{
       margin: 0 auto;
     }
+  }
 
+  section.picture_attach {
+    margin-bottom: 0;
+  }
+
+
+  .btn-section {
+    padding-top: 0;
+    grid-template-columns: 1fr;
+    width: 100%;
+    row-gap: rem(10);
+    margin-bottom: rem(50);
+
+    button.cancel {
+      order: 1;
+    }
+
+    button.cancel, button.save {
+      height: rem(50);
+      width: 100%;
+      max-width: 100%;
+    }
   }
 }
-=======
-
-  button.cancel {
-    border: rem(1) solid var(--color-line-03);
-    color: var(--color-font-def);
-  }
-
-  button.save {
-    border: rem(1) solid transparent;
-    color: #fff;
-    background-color: var(--color-main);
-  }
-}
->>>>>>> 89229fd360960fb141b64d1fa8d4a5b64f7c3c01

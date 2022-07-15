@@ -6,8 +6,9 @@ import Styles from "/src/pages/review/review.module.scss";
 import ReviewItem_Pagination from "@src/components/atoms/Pagination";
 import Image from "next/image";
 import RatingStars from "/src/components/atoms/RatingStars";
-import ArrowLeft_m from "/public/img/icon/swiper-arrow-medium.svg";
-import ArrowRight_m from "/public/img/icon/swiper-arrow-medium-style2.svg";
+import ArrowLeft from '/public/img/icon/swiper-arrow-large-l.svg';
+import ArrowRight from "/public/img/icon/swiper-arrow-large-r.svg";
+
 import Modal_bestReview from "@src/components/modal/Modal_bestReview";
 
 
@@ -59,11 +60,20 @@ function Swiper_review({ onShowBestReviewModalHandler }) {
 
   const swiperSettings_review = {
     className: `${Styles.swiper_review}`,
+    slidesPerView: 'auto',
     spaceBetween: 40,
     loop: true,
-    centeredSlides: false,
-    slidesPerView: isMobile ? 1 : 3,
-    //모바일 에서는 1개 pc에서는 3개
+    breakpoints: { //반응형 조건 속성
+      300: {
+        slidesPerView: 1,
+      },
+      600: { //601 이상일 경우
+        slidesPerView: 2, //레이아웃 2열
+      },
+      900: {
+        slidesPerView: 3,
+      },
+    },
     pagination: {
       clickable: true,
     },
@@ -72,7 +82,6 @@ function Swiper_review({ onShowBestReviewModalHandler }) {
       nextEl: navNextRef.current,
     },
     modules: [Navigation],
-    //존재하면 쓸수있음
   };
 
 
@@ -84,10 +93,14 @@ function Swiper_review({ onShowBestReviewModalHandler }) {
   return (
     <div className={Styles.swiper_review_outerWrap}>
       <i className={Styles["swiper-button-prev"]} ref={navPrevRef}>
-        <ArrowLeft_m />
+        <svg viewBox="0 0 50 50">
+          <ArrowLeft className={Styles.arrow_left}></ArrowLeft>
+        </svg>
       </i>
       <i className={Styles["swiper-button-next"]} ref={navNextRef}>
-        <ArrowRight_m />
+        <svg viewBox="0 0 50 50">
+          <ArrowRight className={Styles.arrow_right}></ArrowRight>
+        </svg>
       </i>
       <Swiper
         {...swiperSettings_review}
@@ -166,7 +179,7 @@ const ReviewBox = () => {
       <li>
         <figure className={Styles.grid_box} onClick={onClickHandler}>
           {/* 그리드 1 시작지점 */}
-          <span>98</span>
+          <span className={Styles.grid_num}>98</span>
           <div className={Styles.mid_box}>
             <i className={`${Styles.image_product} img-wrap`}>
               <Image
@@ -192,8 +205,8 @@ const ReviewBox = () => {
             </i>
             사진 굿굿 너무 좋아요
           </p>
-          <span> 바&#42;독</span>
-          <span> 2022.01.20</span>
+          <span  className={Styles.grid_name}> 바&#42;독</span>
+          <span  className={Styles.grid_date}> 2022.01.20</span>
         </figure>
         <div className={Styles.text_box} ref={boxRef}>
           <p className={Styles.text}>
@@ -259,7 +272,7 @@ function ReviewPage() {
       <Layout>
         <Wrapper>
           <section className={Styles.review_title}>
-            <div>바프독 견주님들의 생생한 후기를 확인하세요</div>
+            <div>바프독 견주님들의 <br />생생한 후기를 확인하세요</div>
           </section>
 
           <section className={Styles.swiper_box}>
@@ -282,7 +295,7 @@ function ReviewPage() {
 
                 <div className={Styles.text_box}>
                   <p className={Styles.top_text}>
-                    리뷰 작성하고 BEST 리뷰가 되어보세요!
+                    리뷰 작성하고 BEST <br />리뷰가 되어보세요!
                   </p>
                   <p className={Styles.bot_text}>
                     지금 리뷰 작성하고 적립금 받기!
@@ -302,8 +315,7 @@ function ReviewPage() {
 
           <section className={Styles.notice_text}>
             <div className={Styles.notice}>
-              상품에 대한 후기를 남기는 공간입니다. 해당 게시판의 성격과 다른
-              글은 사전동의 없이 담당 게시판으로 이동될 수 있습니다.
+              상품에 대한 후기를 남기는 공간입니다. <br className={Styles.notice_br} /> 해당 게시판의 성격과 다른 글은 사전동의 없이 담당 게시판으로 이동될 수 있습니다.
               <br />
               배송관련, 주문(취소/교환/환불)관련 문의 및 요청사항은 마이페이지
               내 1:1 문의에 남겨주시면 빠른 상담이 가능합니다.

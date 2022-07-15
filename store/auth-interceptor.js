@@ -32,7 +32,7 @@ export default function AuthInterceptor({ children }) {
     // STEP 2 // CHECK member & admin Logged in
     if(window && typeof window !=='undefined'){
       const isAutoLoginState = getCookie('adminAutoLogin');
-      const loginAdminAccount = !!JSON.parse(isAutoLoginState).email
+      const loginAdminAccount = isAutoLoginState && !!JSON.parse(isAutoLoginState).email
       const loginMemberAccount = !!userData;
       setIsAuth(loginMemberAccount || loginAdminAccount);
     }

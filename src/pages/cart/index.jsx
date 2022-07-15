@@ -37,6 +37,19 @@ function CartPage() {
           </section>
 
           {/* 리스트 */}
+
+          <section className={Styles.product_list}>
+            <div className={Styles.emty_box}>
+              <span>아직 장바구니에 담은 상품이 없습니다.</span>
+              <div className={Styles.button_box}>
+                <Link href="/shop?category=all" passHref>
+                  <a className={Styles.emty_button}>상품 담으러 가기</a>
+                </Link>
+              </div>
+            </div>
+          </section>
+
+
           <section className={Styles.product_list}>
             <div className={Styles.flex_box}>
               {/* <div className={Styles.check_box}> */}

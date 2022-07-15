@@ -23,7 +23,11 @@ function BlogPostPage() {
       <Layout>
         <Wrapper>
           <section className={Styles.title_box}>
+            <div className={Styles.text}>
             반려동물 사료를 바꿔야 하는 7가지 이유
+            </div>
+
+            <div className={Styles.title_date}>등록일 : 2022.01.20</div>
           </section>
 
           <section className={Styles.line_box}>

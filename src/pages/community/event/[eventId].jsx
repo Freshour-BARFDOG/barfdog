@@ -20,6 +20,8 @@ function EventPostPage() {
             <div className={Styles.text}>
               정기구독 신청하고 최대 50%할인 받자
             </div>
+
+            <div className={Styles.title_date}>등록일 : 2022.01.20</div>
           </section>
 
           <section className={Styles.line_box}>

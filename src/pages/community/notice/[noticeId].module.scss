@@ -21,12 +21,12 @@ section.before_after {padding : 0 0 rem(110)}
   .content {
     .flex_box {
       display: grid;
-      grid-template-columns: (13.8% 58.6% 13.8% 13.8%);
+      grid-template-columns: rem(160) 1fr rem(160) rem(160);
       border-top: 1px solid var(--color-line-01);
-      border-bottom: 1px solid var(--color-line-04);
       > * {
-        padding: rem(18) 0 rem(18) rem(24);
+        padding: rem(18) rem(24);
         @include char(b15);
+        border-bottom: 1px solid var(--color-line-04);
       } 
       > p {
         background-color: var(--color-bg-footer);
@@ -60,6 +60,8 @@ section.before_after {padding : 0 0 rem(110)}
     
     display: grid;
     place-items: center;
+    cursor: pointer;
+
 
     @include char(l15);
     font-weight: 500;
@@ -72,9 +74,9 @@ section.before_after {padding : 0 0 rem(110)}
   border-top: 1px solid var(--color-line-01);
   .grid_box {
     display: grid;
-    grid-template-columns: 9% 5% 86.2%;
+    grid-template-columns: rem(110) rem(50) 1fr;
     > * {
-      padding: rem(16) 0 rem(16) rem(20);
+      padding: rem(16) rem(20);
       border-bottom: 1px solid var(--color-line-04);
       color : var(--color-font-sub);
       @include char(l15);
@@ -86,6 +88,47 @@ section.before_after {padding : 0 0 rem(110)}
     .image{
       width: rem(12);
       aspect-ratio: 1/1;
+      cursor: pointer;
+    }
+  }
+}
+
+
+@media (max-width: rem(900)) {
+  
+  .announcement {
+    .content {
+      .flex_box {
+        grid-template-columns: rem(160) 1fr;
+      }
+    }
+  }
+}
+
+@media (max-width: rem(600)) {
+
+  section.title {padding : rem(70) 0 rem(20)}
+  
+  .announcement {
+    .content {
+      .flex_box {
+        grid-template-columns: rem(80) 1fr;
+        
+        > p {
+          padding: rem(18) 0 rem(18) rem(0);
+          text-align: center;
+        }
+      }
+    }
+  }
+
+  .before_after {
+    .grid_box {
+      grid-template-columns: rem(50) rem(30) 1fr;
+
+      > * {
+        padding: rem(16) 0;
+      }
     }
   }
 }

@@ -4,7 +4,7 @@ $browser-context:16;
   @return #{$px / $context}rem;
 }
 
-section.top{padding : rem(40) 0 rem(27)}
+section.top{padding : rem(40) 0 rem(30)}
 section.mid{padding : 0 0 rem(37) 0}
 section.btn-section{padding : rem(80) 0 rem(451) 0 }
 
@@ -89,7 +89,9 @@ section.btn-section{padding : rem(80) 0 rem(451) 0 }
     width: 100%;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-gap: rem(40);
+    column-gap: rem(40);
+    row-gap: rem(80);
+
 
     .shop_list {
       width: 100%;
@@ -157,7 +159,7 @@ section.btn-section{padding : rem(80) 0 rem(451) 0 }
               top:rem(-2);
               letter-spacing: rem(2);
               // padding-top: rem(4);
-              padding:rem(5) rem(10) 0 ;
+              padding: rem(1) rem(6.5) ;
               
               font-family: 'Pretendard Variable';
               font-weight: 00;
@@ -202,7 +204,8 @@ section.btn-section{padding : rem(80) 0 rem(451) 0 }
 @media (max-width: rem(1200)) {
   .bot {
     .inner {
-      grid-gap: rem(20);
+      column-gap: rem(20);
+      row-gap: rem(60);
     }
   }
 }
@@ -222,7 +225,7 @@ section.btn-section{padding : rem(80) 0 rem(451) 0 }
 
 
 @media (max-width: rem(600)) {
-  section.top{padding : rem(50) 0 rem(27)}
+  section.top{padding : rem(70) 0 rem(30)}
   section.mid{padding : 0}
 
   .mid {
@@ -302,3 +305,11 @@ section.btn-section{padding : rem(80) 0 rem(451) 0 }
   }
 }
 
+@media (max-width: rem(350)) {
+
+  .bot {
+    .inner {
+      grid-template-columns: 1fr;
+    }
+  }
+}
