@@ -7,7 +7,7 @@ export const DogTypeCustomSelectWithCustomOptions = ({id, options, width, value,
   
   
   
-  const initialSelectedOption = value || options[0]?.value || '';
+  const initialSelectedOption = value[id] || options[0]?.value || '';
   const [selectedOption, setSelectedOption] = useState(initialSelectedOption);
   const [isActive, setIsActive] = useState( false );
   const [keyword, setKeyword] = useState( '' );
@@ -15,14 +15,6 @@ export const DogTypeCustomSelectWithCustomOptions = ({id, options, width, value,
   const optionBoxRef = useRef( null );
   const inputRef = useRef( null );
   const searchInputRef = useRef( null );
-  
-  useEffect( () => {
-    setFormValues( (prevState) => ({
-      ...prevState,
-      [id]: initialSelectedOption,
-    }));
-  }, [initialSelectedOption] );
-  
   
   
   useEffect( () => {
@@ -79,14 +71,14 @@ export const DogTypeCustomSelectWithCustomOptions = ({id, options, width, value,
     setIsActive( !isActive );
   };
   
-  const Options = ({value}) => {
+  const Options = ({label, value}) => {
     return (
       <p
         data-value={value}
         className={`${s.option} ${selectedOption === value ? s.selected : ''}`}
         onClick={onOptionClick}
       >
-        {value}
+        {label}
       </p>
     );
   };
@@ -125,10 +117,10 @@ export const DogTypeCustomSelectWithCustomOptions = ({id, options, width, value,
                 <div key={`${option.value}-${i}`} className={s.option}>
                   {keyword.length ? (
                     <>
-                      {searchResult && <Options value={option.value}/>}
+                      {searchResult && <Options label={option.label} value={option.value}/>}
                     </>
                   ) : (
-                    <Options value={option.value} />
+                    <Options  label={option.label} value={option.value} />
                   )}
                 </div>
               );

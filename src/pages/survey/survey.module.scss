@@ -1,6 +1,6 @@
 @import '/styles/global/guide.scss';
 @import '/styles/global/rem';
-// LAY-OUT
+// ------------ LAY-OUT
 .survey-page {
   margin-bottom: rem(150);
   .step1Page {
@@ -10,12 +10,15 @@
     padding: rem(60) 0 rem(80);
   }
   .step3page {
-    padding: rem(60) 0 0;
+    padding: rem(60) 0 rem(100);
   }
+}
+.input-row:not(:last-child) {
+  margin-bottom: rem(60);
 }
 
 
-// INPUT STYLE
+// ----------- INPUT STYLE
 .survey-page {
   .input-wrap{
     position: relative;
@@ -47,37 +50,44 @@
       transform: translateY(-50%);
     }
   }
-  //input.focus-underline {background-color: red}
-
-
 
 }
 
-.input-row:not(:last-child) {
-  margin-bottom: rem(60);
-}
 
 .input_title {
   text-align: center;
   cursor: default;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap:rem(10);
   @include char(l20);
   font-weight: 600;
   padding-bottom: rem(30);
 }
 
+
+.display-flex-column{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+// ---------- 1페이지
 .step1Page {
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
+}
 
-  .input_box_1 {
-    text-align: center;
-    width: rem(360);
-    border: rem(0);
-    border-radius: rem(0);
-    border-bottom: rem(1) solid var(--color-disabled);
-  }
+.input_underLine {
+  text-align: center;
+  width: rem(360);
+  border: rem(0);
+  border-radius: rem(0);
+  border-bottom: rem(1) solid var(--color-disabled);
 }
 
 .radio_gender {
@@ -105,16 +115,18 @@
   }
 }
 
-.radio_check {
+.oldDog {
   @include char(l16);
   padding-top: rem(30);
   text-align: center;
+  justify-content: center;
   label {
-    cursor: pointer;
-    display: inline-flex;
-    column-gap: rem(8);
-    justify-content: center;
     align-items: center;
+    font-size: rem(16);
+    line-height: 1.2;
+  }
+  > *{
+    display: inline-flex !important;
   }
 }
 
@@ -147,62 +159,14 @@
   }
 }
 
-// * ------- Navigation Button  ------- * //
-.swiper-navigation-container {
+.dogStatus{
+  padding: 0 rem(60);
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: rem(560);
-  margin: 0 auto;
-  button {
-    display: flex;
-    justify-content: center;
-    column-gap: rem(4);
-    border: rem(1) solid var(--color-main);
-    width: rem(120);
-    @include char(l16);
-    font-weight: 600;
-    color: var(--color-main);
-    text-align: center;
-    padding: rem(19) 0;
-    border-radius: rem(4);
-
-    transition-timing-function: ease-out;
-    transition-duration: 0.4s;
-    transition-property: background-color, box-shadow;
-
-    .image_box {
-      position: relative;
-      width: rem(12);
-      aspect-ratio: 1/1;
-      img {
-        transition: inherit;
-      }
-    }
-  }
-  .swiper-button-prev {
-    border-color: var(--color-main);
-    background-color: #fff;
-    color: var(--color-main);
-    box-shadow: 0 rem(2) rem(10) 0 rgba(0, 0, 0, 0.1);
-    &[disabled] {
-      border-color: var(--color-disabled);
-      color: var(--color-disabled);
-      box-shadow: none;
-      img {
-        filter: grayscale(100);
-        opacity: 0.5;
-      }
-    }
-  }
-
-  .swiper-button-next {
-    border-color: transparent;
-    background-color: var(--color-main);
-    color: #fff;
-    box-shadow: 0 rem(2) rem(10) 0 rgba(202, 16, 16, 0.6);
-  }
+  flex-direction: column;
+  justify-content: center;
+  gap: rem(26);
 }
+
 
 // * ------- 2페이지  ------- * //
 
@@ -257,31 +221,41 @@
   }
 }
 
-.food_check {
+.inedibleFood {
   display: grid;
+  max-width: rem(220);
   grid-template-columns: 1fr 1fr;
-  column-gap: rem(20);
+  column-gap: rem(17);
   justify-content: center;
   row-gap: rem(12);
   @include char(l18);
-  padding-bottom: rem(30);
+  label{
+    overflow-y: scroll;
+    display: flex;
+    align-items: flex-start;
+    box-sizing: border-box;
+    height: rem(42);
+    padding-top:rem(10);
+    padding-bottom:0;
+    &::-webkit-scrollbar {display: none;}
+  }
 }
 
 .red_text {
   @include char(b14);
   color: var(--color-primary04);
   text-align: center;
-  padding-bottom: rem(80);
 }
 
-.take_care {
+.recommendRecipeId {
   display: grid;
   row-gap: rem(14);
   @include char(l18);
-  padding-bottom: rem(80);
 }
 
-.disease_check {
+.caution {
+  width: rem(220);
+  margin:0 auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
   column-gap: rem(20);
@@ -289,9 +263,12 @@
   row-gap: rem(12);
   @include char(l18);
   padding-bottom: rem(30);
+  label{
+   padding: 0;
+  }
 }
 // * ------- 활동량  ------- * //
-.activity {
+.activityLevel {
   display: flex;
   align-items: flex-start;
   width: rem(410);
@@ -314,9 +291,6 @@
       margin-bottom: rem(16);
     }
   }
-  // display:inline-flex;
-  // flex-direction: row;
-  // gap: rem(14);
 }
 
 // * ------- 건강상태  ------- * //
@@ -331,32 +305,37 @@
   }
 }
 
-.numberOfSnacks {
+.snackCountLevel {
   display: inline-flex;
   flex-direction: row;
   gap: rem(14);
-  label {
-    position: relative;
-  }
-  padding-bottom: rem(123);
+  $descHeight : rem(40);
+  $descBottomPos: rem(10);
+  padding-bottom: calc(#{$descHeight} + #{$descBottomPos});
   .desc {
     position: absolute;
     width: 100%;
-    bottom: rem(-10);
+    height: $descHeight;
+    bottom: -$descBottomPos;
     transform: translateY(100%);
     color: #878787;
     font-size: rem(14);
+  }
+  label {
+    position: relative;
   }
 }
 
 // * ------- Custom Input 공통 ------ *
 .inputRadio-wrap {
   text-align: center;
+  label{cursor: pointer}
 }
 .inputRadio {
   cursor: pointer;
   border-radius: rem(50);
   background-color: #fff;
+  width: 100%;
   height: rem(42);
   display: inline-flex;
   align-items: center;
@@ -455,5 +434,73 @@
   }
   .scrollContainer {
     background-color: #fff;
+  }
+}
+
+
+
+
+
+// * ------- Navigation Button  ------- * //
+.swiper-navigation-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: rem(560);
+  margin: 0 auto;
+  button {
+    display: flex;
+    justify-content: center;
+    column-gap: rem(4);
+    border: rem(1) solid var(--color-main);
+    width: rem(120);
+    @include char(l16);
+    font-weight: 600;
+    color: var(--color-main);
+    text-align: center;
+    padding: rem(19) 0;
+    border-radius: rem(4);
+
+    transition-timing-function: ease-out;
+    transition-duration: 0.4s;
+    transition-property: background-color, box-shadow;
+
+    .image_box {
+      position: relative;
+      width: rem(12);
+      aspect-ratio: 1/1;
+      img {
+        transition: inherit;
+      }
+    }
+  }
+  .swiper-button-prev {
+    border-color: var(--color-main);
+    background-color: #fff;
+    color: var(--color-main);
+    box-shadow: 0 rem(2) rem(10) 0 rgba(0, 0, 0, 0.1);
+    &[disabled] {
+      border-color: var(--color-disabled);
+      color: var(--color-disabled);
+      box-shadow: none;
+      img {
+        filter: grayscale(100);
+        opacity: 0.5;
+      }
+    }
+  }
+
+  .swiper-button-next {
+    border-color: transparent;
+    background-color: var(--color-main);
+    color: #fff;
+    box-shadow: 0 rem(2) rem(10) 0 rgba(202, 16, 16, 0.6);
+  }
+  .swiper-button-submit{
+    border-color: transparent;
+    background-color: var(--color-main);
+    color: #fff;
+    box-shadow: 0 rem(2) rem(10) 0 rgba(202, 16, 16, 0.6);
+    display: none;
   }
 }

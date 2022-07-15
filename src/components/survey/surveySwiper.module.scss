@@ -12,9 +12,14 @@ $browser-context: 16;
 
 .swiperSurvey{
   padding: rem(55) 0 0 !important;
-
+  > div{
+    // => '있어요'항목 클릭 시, 새로운 elem들이 나타남으로서, slide의 height값이 변화될 때의 Animation효과를 부드럽게 주기위함
+    // (ex. 반려견 못먹는 음식 '있어요' / 기타 특이사항: '있어요')
+    transition-duration: .3s !important;
+    transition-timing-function: var(--transition-cubic) !important;
+  }
   .swiper-pagination{
-    $transitionAttr: .1s linear; 
+    $transitionAttr: .1s linear;
     $margin-bottom: rem(25);
     position:relative;
     display: flex;
@@ -26,10 +31,11 @@ $browser-context: 16;
     margin:0 auto;
     margin-bottom:$margin-bottom !important;
 
+
     .swiper-pagination-bullet{
       box-shadow: none;
       opacity:1;
-      padding:0;
+      padding:rem(10);
       width:rem(26); height:rem(26);
       box-sizing: border-box;
       margin: 0 !important;
@@ -73,11 +79,12 @@ $browser-context: 16;
         border-color:  var(--color-main);
         transition: transform $transitionAttr;
         transition-delay: .1s;
-        transform:translate(-50%,-50%)scale(2);
+        transform:translate(-50%,-50%)scale(2.1);
         background-color: #fff;
         border-color:var(--color-main);
         @include insertBackgroundImage;
         background-image: url('pagination-logo.png');
+        background-size: 80% 80%;
       }
 
       .desc{color:var(--color-font-def);}

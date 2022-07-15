@@ -11,11 +11,19 @@ const CustomRadioTrueOrFalse = ({
 }) => {
   const trueRadioId = `${name}${labelList[0]}`;
   const falseRadioId = `${name}${labelList[1]}`;
-  const initialValue = value === true ? trueRadioId : falseRadioId;
+  let initialValue;
+  if(value === null){
+    initialValue = '';
+  } else if(value === true){
+    initialValue = trueRadioId
+  } else if(value === false) {
+    initialValue =  falseRadioId;
+  }
   const [selectedRadio, setSelectedRadio] = useState(initialValue);
 
   useEffect(() => {
     // init value
+    // console.log(value)
     setSelectedRadio(initialValue);
   }, [initialValue]);
 

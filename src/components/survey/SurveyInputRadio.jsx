@@ -1,26 +1,50 @@
-import React, { useState } from 'react';
-import s from '../../pages/survey/survey.module.scss';
+import React, {useEffect, useState} from 'react';
+import s from '/src/pages/survey/survey.module.scss';
 
 const SurveyInputRadio = ({
-  surveyValues,
-  setSurveyValues,
+  formValueKey,
+  formValues,
+  setFormValues,
   name,
   idList,
   labelList,
   className,
   desc,
   defaultStyle,
-  formValueKey,
+  dataType='string'
 }) => {
-  const [selectedRadio, setSelectedRadio] = useState(surveyValues); // * component 내부 value
-
+  
+  const initialSelectedRadio = `${formValueKey}-${formValues[formValueKey]}`;
+  const [selectedRadio, setSelectedRadio] = useState(initialSelectedRadio); // * component 내부 value
+  
+  
+  
+  useEffect( () => {
+    // '기타' input의 입력값(value)와 연계한 UI의 변화
+    // => input value에 SurveyInputRadio의 idList 중의 id를 입력했을 경우, 해당 id에 checked 표기하기 위함.
+    // ex. 기타 특이사항 (질병) 등이 있어요 => 기타란에 'NONE'입력했을 경우 => '없어요 SurveyInputRadio'가 선택된다.
+    idList.forEach((id)=>{
+      if(formValues[formValueKey] === id){
+        // console.log('formValues[formValueKey]',formValues[formValueKey],'& id:', id)
+        setSelectedRadio(`${formValueKey}-${id}`); // 목적지고
+      }
+    })
+  }, [formValues[formValueKey]] );
+  
   const onChangeHandler = (e) => {
     const { id } = e.currentTarget;
     setSelectedRadio(id);
+    if(id.indexOf(formValueKey) < 0 ) return console.error('formValueKey를 입력해주세요.');
+    const separator = '-';
+    let val = id.split(separator)[1];
 
-    setSurveyValues((prevState) => ({
+    if(dataType === 'number'){
+      val = Number(val);
+    }
+   
+    setFormValues((prevState) => ({
       ...prevState,
-      [formValueKey]: id,
+      [formValueKey]: val,
     }));
   };
 
@@ -33,11 +57,9 @@ const SurveyInputRadio = ({
               {defaultStyle ? (
                 <label>
                   <input
-                    id={id}
-                    name={name}
+                    id={`${formValueKey}-${id}`}
                     type="radio"
-                    value={id}
-                    checked={selectedRadio === id} // * important
+                    checked={selectedRadio === `${formValueKey}-${id}`} // * important
                     onChange={onChangeHandler}
                   />
                   {labelList[index]}
@@ -45,17 +67,15 @@ const SurveyInputRadio = ({
                 </label>
               ) : (
                 <label
-                  key={`radio-${name}-${index}`}
-                  htmlFor={id}
-                  className={`${s.inputRadio} ${selectedRadio === id && s.checked}`}
+                  key={`radio-${formValueKey}-${index}`}
+                  htmlFor={`${formValueKey}-${id}`}
+                  className={`${s.inputRadio} ${selectedRadio === (formValueKey+'-'+id) && s.checked}`}
                 >
                   <input
-                    id={id}
-                    name={name}
+                    id={`${formValueKey}-${id}`}
                     type="radio"
-                    value={id}
                     className="hide"
-                    checked={selectedRadio === id} // * important
+                    checked={selectedRadio === `${formValueKey}-${id}`} // * important
                     onChange={onChangeHandler}
                   />
                   {labelList[index]}

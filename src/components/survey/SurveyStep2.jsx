@@ -1,66 +1,109 @@
 import s from '/src/pages/survey/survey.module.scss';
 import SurveyInputRadio from './SurveyInputRadio';
 import React from 'react';
+import {dogActivityLevelType} from "/store/TYPE/dogActivityLevelType";
+import {CustomSelectWithCustomOptions} from "./CustomSelectWithCustomOptions";
+import {dogPhysicalStatusType} from "/store/TYPE/dogPhysicalStatusType";
 
-export default function SurveyStep2 ({formValues, setFormValues}) {
+
+
+
+export default function SurveyStep2 ({formValues, setFormValues, onInputChangeHandler}) {
+  
+  const defaultLabel = {label: '선택', value: ''};
+  let walkingCountPerWeekOptions = new Array(7);
+  for (let i =0; i < walkingCountPerWeekOptions.length; i++) {
+    walkingCountPerWeekOptions[i] = {label: `${(i+1)}`, value: (i+1).toString()};
+  }
+
+  
+  let walkingTimePerOneTimeOptions = new Array(24);
+  for (let i =0; i < walkingTimePerOneTimeOptions.length; i++) {
+    walkingTimePerOneTimeOptions[i] = {label: `${(i+1) * 0.5}`, value: `${((i+1) * 0.5).toString()}`};
+  }
+  
+  walkingCountPerWeekOptions.unshift(defaultLabel);
+  walkingTimePerOneTimeOptions.unshift(defaultLabel);
+  
+  const walkingOption = ()=>{
+  
+  }
+  
   return (
     <section className={s.step2page}>
       <div className={s.input_title}>반려견의 활동량은</div>
-
       <div className="input-row">
         <SurveyInputRadio
-          surveyValues={formValues.healthStatus}
-          setSurveyValues={setFormValues}
-          title="종류"
-          className={s.activity}
-          name="activity"
+          formValueKey={'activityLevel'}
+          formValues={formValues}
+          setFormValues={setFormValues}
+          className={s.activityLevel}
           idList={[
-            'healthStatus-TOO LITTLE',
-            'healthStatus-LTTIEL',
-            'healthStatus-USUALLY',
-            'healthStatus-MUCH',
-            'healthStatus-TOO MUCH',
+            dogActivityLevelType.VERY_LITTLE,
+            dogActivityLevelType.LITTLE,
+            dogActivityLevelType.NORMAL,
+            dogActivityLevelType.MUCH,
+            dogActivityLevelType.VERY_MUCH,
           ]}
-          labelList={['매우 적어요', '', '보통', '', '매우 많아요']}
+          labelList={[
+            dogActivityLevelType.KOR.VERY_LITTLE,
+            '',
+            dogActivityLevelType.KOR.NORMAL,
+            '',
+            dogActivityLevelType.KOR.VERY_MUCH,
+          ]}
           defaultStyle
         />
       </div>
 
       <div className={s.input_title}>일주일 산책 횟수</div>
-
       <div className={s.flex_box2}>
         <div className={s.inner_flex_box}>
           평균
-          <div className={`${s.inner}  ${s['input-wrap']}`}>
-            <input className={`${s.input_1} ${s['focus-underline']}`} type="text" name="survey" />
-            <em className={`${s.unit}`}>회</em>
-          </div>
+          <CustomSelectWithCustomOptions
+            id={'walkingCountPerWeek'}
+            options={walkingCountPerWeekOptions}
+            value={formValues.walkingCountPerWeek}
+            setValues={setFormValues}
+            unit={'회'}
+            width={120}
+            placeholder={'n'}
+          />
         </div>
         <div className={s.inner_flex_box}>
           1회 당
-          <div className={`${s.inner}  ${s['input-wrap']}`}>
-            <input type="text" className={`${s.input_1} ${s['focus-underline']}`} name="survey" />
-            <em className={s.unit}>시간</em>
-          </div>
+          <CustomSelectWithCustomOptions
+            id={'walkingTimePerOneTime'}
+            options={walkingTimePerOneTimeOptions}
+            value={formValues.walkingTimePerOneTime}
+            setValues={setFormValues}
+            unit={'시간'}
+            width={120}
+            placeholder={'0.0'}
+          />
         </div>
       </div>
-
       <div className={s.input_title}>현재 상태는</div>
       <div className="input-row">
         <SurveyInputRadio
-          surveyValues={formValues.healthStatus}
-          setSurveyValues={setFormValues}
-          title="종류"
-          className={s.healthStatus}
-          name="healthStatus"
+          formValueKey={'dogStatus'}
+          formValues={formValues}
+          setFormValues={setFormValues}
+          className={s.dogStatus}
           idList={[
-            'healthStatus-HEALTH',
-            'healthStatus-NEED DIET',
-            'healthStatus-SERIOUS FAT',
-            'healthStatus-PRAGNENT',
-            'healthStatus-LACATATING',
+            dogPhysicalStatusType.HEALTHY,
+            dogPhysicalStatusType.NEED_DIET,
+            dogPhysicalStatusType.OBESITY,
+            dogPhysicalStatusType.PREGNANT,
+            dogPhysicalStatusType.LACTATING,
           ]}
-          labelList={['건강해요', '다이어트 필요', '심각한 비만', '임신한 상태', '수유 중']}
+          labelList={[
+            dogPhysicalStatusType.KOR.HEALTHY,
+            dogPhysicalStatusType.KOR.NEED_DIET,
+            dogPhysicalStatusType.KOR.OBESITY,
+            dogPhysicalStatusType.KOR.PREGNANT,
+            dogPhysicalStatusType.KOR.LACTATING,
+          ]}
         />
       </div>
     </section>

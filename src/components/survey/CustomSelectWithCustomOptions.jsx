@@ -3,24 +3,13 @@ import ScrollContainer from '../atoms/ScrollContainer';
 import React, {useEffect, useRef, useState} from 'react';
 import rem from "/util/func/rem";
 
-export const CustomSelectWithCustomOptions = ({id, options, value, setValues, placeholder, unit, width=120}) => {
+export const CustomSelectWithCustomOptions = ({id, options, value, setValues, placeholder, unit, width=120, dataType='sting'}) => {
   
   const initialSelectedOption = value || options[0].value;
   const [selectedOption, setSelectedOption] = useState(initialSelectedOption);
   const [isActive, setIsActive] = useState( false );
   const optionBoxRef = useRef( null );
   const inputRef = useRef( null );
-  
-  
-  
-  
-  useEffect( () => {
-    // 초기값 세팅
-    setValues( (prevState) => ({
-      ...prevState,
-      [id]: initialSelectedOption,
-    }));
-  }, [initialSelectedOption] );
   
   
   useEffect( () => {
@@ -52,8 +41,11 @@ export const CustomSelectWithCustomOptions = ({id, options, value, setValues, pl
   
   const onOptionClick = (e) => {
     const option = e.currentTarget;
-    const value = option.dataset.value;
+    let value = option.dataset.value;
     setSelectedOption(value);
+    if(dataType === 'number'){
+      value = Number(value);
+    }
     setValues( (prevState) => ({
       ...prevState,
       [id]: value,
@@ -66,10 +58,10 @@ export const CustomSelectWithCustomOptions = ({id, options, value, setValues, pl
   }
   
   
-  const Options = ({value}) => {
+  const Options = ({value, label}) => {
     return (
       <p data-value={value} className={`${s.option} ${selectedOption === value ? s.selected : ''}`} onClick={onOptionClick}>
-        {value}
+        {label || value}
       </p>
     );
   };
@@ -93,7 +85,7 @@ export const CustomSelectWithCustomOptions = ({id, options, value, setValues, pl
         <em className={s.unit}>{unit}</em>
         <ScrollContainer  height={'200'} scrollBarWidth={'0'} className={`${s.scrollContainer} ${isActive ? s.active : ''}`} ref={optionBoxRef}>
           {options.map((option, i) => (
-            <Options key={`options-${id}-${i}`} value={option.value} />
+            <Options key={`options-${id}-${i}`} value={option.value} label={option.label}/>
           ))}
         </ScrollContainer>
       </div>
