@@ -1,47 +1,40 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MetaTitle from '@src/components/atoms/MetaTitle';
 import s from './loading.module.scss';
-import Image from 'next/image';
+import IconLeft from '/public/img/survey/survey_loading_left.svg';
+import IconRight from '/public/img/survey/survey_loading_right.svg';
+import {useRouter} from "next/router";
 
-function LoadingPage() {
+
+export default function LoadingPage() {
+  const router = useRouter();
+  const transitionPageDelay = 3000;
+  useEffect( () => {
+    setTimeout(()=>{
+      router.push('/survey/statistics');
+    }, transitionPageDelay)
+  }, [] );
+  
   return (
     <>
-      <MetaTitle title="로딩 중" />
+      <MetaTitle title="Loading .." />
       <Layout>
         <Wrapper>
           <section className={s.image_section}>
-            <div className={s.image_flex}>
               <i className={s['progress-bar']}></i>
-              <figure className={s.image_box}>
-                <Image
-                  priority
-                  src={require('public/img/survey/survey_loading_left.png')}
-                  objectFit="cover"
-                  layout="fill"
-                  alt="이전 화살표"
-                />
-              </figure>
-              <figure className={s.image_box}>
-                <Image
-                  priority
-                  src={require('public/img/survey/survey_loading_mid.png')}
-                  objectFit="cover"
-                  layout="fill"
-                  alt="이전 화살표"
-                />
-              </figure>
-              <figure className={s.image_box}>
-                <Image
-                  priority
-                  src={require('public/img/survey/survey_loading_right.png')}
-                  objectFit="cover"
-                  layout="fill"
-                  alt="이전 화살표"
-                />
-              </figure>
-            </div>
+              <div className={s['ani-box-wrap']}>
+                <span className={`${s['ani-box']} ${s.left}`}>
+                  <IconLeft />
+                </span>
+                <span className={`${s['ani-box']} ${s.mid}`}>
+                  <em>분석중</em>
+                </span>
+                <span className={`${s['ani-box']} ${s.right}`}>
+                  <IconRight />
+                </span>
+              </div>
           </section>
           <section className={s.text_box}>
             <div className={s.text_row1}>
@@ -63,4 +56,3 @@ function LoadingPage() {
   );
 }
 
-export default LoadingPage;

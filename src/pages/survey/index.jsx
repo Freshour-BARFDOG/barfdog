@@ -91,7 +91,7 @@ export default function Survey() {
   const nextBtnRef = useRef(null);
   const submitBtnRef = useRef(null);
   const surveyPageRef = useRef(null);
-  console.log(formValues)
+  // console.log(formValues)
   
   
   // -------------------------------------------------------------------------------- //
@@ -197,7 +197,7 @@ export default function Survey() {
       if (idx === 1) desc.innerText = '활동량 입력';
       if (idx === 2) desc.innerText = '추가정보 입력';
     });
-    setModalMessage(''); // initializse modal message
+    initializeAlertModal();
   };
   
   
@@ -309,7 +309,11 @@ export default function Survey() {
     router.back();
   };
   
-  console.log(submitState)
+  const initializeAlertModal = ()=>{
+    mct.alertHide();
+    setModalMessage('');
+  }
+  
   
   return (
     <>
