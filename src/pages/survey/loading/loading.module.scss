@@ -1,37 +1,32 @@
-$browser-context:16; // html font-size
-@function rem($px, $context: $browser-context){
-  @return #{$px / $context}rem;
-}
 @import 'styles/global/guide.scss';
-
-section.image_section { padding: rem(100) 0 rem(55);}
-
+@import '/styles/global/rem.scss';
 
 
-.image_section{
-  
+
+section.image_section {
+  padding: rem(100) 0 rem(55);
+}
+
+.image_section {
   .image_flex {
-
+    max-width: rem(460);
+    margin: 0 auto;
+    overflow: hidden;
     display: flex;
     justify-content: center;
     column-gap: rem(50);
     position: relative;
-    .line{
-      position: absolute;
-      top: 47%;
-      transform: translateY(-50%);
-      width: 20%;
-      border-top : rem(10) dotted #ed3333;
-    } 
-    
+
+
+
     .image_box {
-      .image {
-        width: rem(120);
-        aspect-ratio: 1/1;
-      }
+      position: relative;
+      width: rem(120);
+      aspect-ratio: 1/1;
     }
   }
 }
+
 
 .text_box {
   text-align: center;
@@ -40,14 +35,32 @@ section.image_section { padding: rem(100) 0 rem(55);}
     line-height: 120%;
     font-weight: 700;
     padding-bottom: rem(30);
-    
-
   }
   .text_row2 {
     @include char(b16);
     line-height: 150%;
     color: var(--color-font-sub);
-    padding-bottom: rem(395);
-
+    padding-bottom: rem(150);
   }
+}
+
+
+.progress-bar {
+  position: absolute;
+  top: 50%;
+  right:0;
+  transform: translateY(-50%);
+  width: 200%;
+  border-top: rem(10) dotted #ed3333;
+  animation: moving 5s linear infinite;
+  @keyframes moving {
+    from{right:0%}
+    to{right:-100%;}
+  }
+
+}
+
+
+@media (max-width: rem(600)) {
+  .progress-bar{border-width: 2vw}
 }
