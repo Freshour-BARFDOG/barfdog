@@ -5,7 +5,7 @@ import ModalWrapper from './ModalWrapper';
 
 
 
-function Modal_global_alert({ message, onClick, background }) {
+function Modal_global_alert({ message, onClick, background, ...props }) {
   const mct = useModalContext();
   const modalState = mct.hasAlert;
   const [style, setStyle] = useState({});
@@ -21,40 +21,32 @@ function Modal_global_alert({ message, onClick, background }) {
     }, delay);
   };
 
-  const onHideModalHandler = () => {
-    mct.alertHide();
-  };
-
   const onClickHandler = ()=>{
     if(onClick && typeof onClick==='function'){
-      mct.alertHide();
       onClick();
+    } else {
+      mct.alertHide();
     }
+    
   }
 
   return (
     <>
       <ModalWrapper
-        className={`${s["modal_wrap"]} ${s["global"]} ${
-          modalState ? "active" : "inactive"
-        }`}
+        className={`${s['modal_wrap']} ${s['global']} ${modalState ? 'active' : 'inactive'}`}
         label="Modal Global Alert"
+        {...props}
       >
-        <div className={s['body']} style={modalState ? { display: "flex" } : style}>
+        <div className={s['body']} style={modalState ? { display: 'flex' } : style}>
           <header className={s['title-section']}>
             <pre className={`${s.text} ${s.only}`}>{message}</pre>
           </header>
           <div className={s['btn-section']}>
-            <button
-              onClick={onClickHandler || onHideModalHandler}
-            >
-              확인
-            </button>
+            <button onClick={onClickHandler}>확인</button>
           </div>
         </div>
       </ModalWrapper>
-      {modalState && background && <section className={s.background}/> }
-
+      {modalState && background && <section className={s.background} />}
     </>
   );
 }

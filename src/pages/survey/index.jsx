@@ -36,25 +36,46 @@ import {useRouter} from "next/router";
     2. birth 기본값이......... formValue에 들어가도록 설정한다.
  * */
 
+
 const initialFormValues = {
-  name: '', // 강아지이름 str
-  gender: '', // 강아지 성별 str
-  birth: '', // 강아지 생월 str // [YYYYMM]
+  name: '1', // 강아지이름 str
+  gender: 'MALE', // 강아지 성별 str
+  birth: '202201', // 강아지 생월 str // [YYYYMM]
   oldDog: false, // 노견 여부 boolean (checkbox type)
-  dogSize: '', // 강아지 체급 str
-  dogType: '', // 강아지 종 str
-  weight: '', // 강아지 몸무게 str // 몸무게 소수점 아래 1자리
-  neutralization: null, // 중성화여부 Boolean
+  dogSize: 'MIDDLE', // 강아지 체급 str
+  dogType: '삽살개', // 강아지 종 str
+  weight: '12.2', // 강아지 몸무게 str // 몸무게 소수점 아래 1자리
+  neutralization: false, // 중성화여부 Boolean
   activityLevel: dogActivityLevelType.NORMAL, // 활동량 레벨 str
-  walkingCountPerWeek: null, // 주당 산책 횟수 num
-  walkingTimePerOneTime: null, // 한 번 산책할 때 산책 시간 num
-  dogStatus: '', // 강아지 건강/임신 등의 상태 str
-  snackCountLevel: '', //  간식먹는 정도 str
+  walkingCountPerWeek: 1, // 주당 산책 횟수 num
+  walkingTimePerOneTime: 2, // 한 번 산책할 때 산책 시간 num
+  dogStatus: 'PREGNANT', // 강아지 건강/임신 등의 상태 str
+  snackCountLevel: 'LITTLE', //  간식먹는 정도 str
   inedibleFood: dogInedibleFoodType.NONE, // 못 먹는 음식 str => get API 리스트 // 빈값('')일 경우, '있어요'선택됨)
-  inedibleFoodEtc: '', // 못 먹는 음식 > '기타' 일경우
+  inedibleFoodEtc: 'NONE', // 못 먹는 음식 > '기타' 일경우
   recommendRecipeId: null, // 특별히 챙겨주고 싶은 부분에 해당하는 Recipe => get API 리스트
   caution: dogCautionType.NONE, // 기타 특이사항 // 빈값('')일 경우, '있어요'선택됨)
 };
+
+// const initialFormValues = {
+//   name: '', // 강아지이름 str
+//   gender: '', // 강아지 성별 str
+//   birth: '', // 강아지 생월 str // [YYYYMM]
+//   oldDog: false, // 노견 여부 boolean (checkbox type)
+//   dogSize: '', // 강아지 체급 str
+//   dogType: '', // 강아지 종 str
+//   weight: '', // 강아지 몸무게 str // 몸무게 소수점 아래 1자리
+//   neutralization: null, // 중성화여부 Boolean
+//   activityLevel: dogActivityLevelType.NORMAL, // 활동량 레벨 str
+//   walkingCountPerWeek: null, // 주당 산책 횟수 num
+//   walkingTimePerOneTime: null, // 한 번 산책할 때 산책 시간 num
+//   dogStatus: '', // 강아지 건강/임신 등의 상태 str
+//   snackCountLevel: '', //  간식먹는 정도 str
+//   inedibleFood: dogInedibleFoodType.NONE, // 못 먹는 음식 str => get API 리스트 // 빈값('')일 경우, '있어요'선택됨)
+//   inedibleFoodEtc: '', // 못 먹는 음식 > '기타' 일경우
+//   recommendRecipeId: null, // 특별히 챙겨주고 싶은 부분에 해당하는 Recipe => get API 리스트
+//   caution: dogCautionType.NONE, // 기타 특이사항 // 빈값('')일 경우, '있어요'선택됨)
+// };
 
 export default function Survey() {
   
@@ -63,15 +84,15 @@ export default function Survey() {
   const mct = useModalContext();
   const [formValues, setFormValues] = useState(initialFormValues);
   const [curStep, setCurStep] = useState(1); // num
-  const [isLoading, setIsLoading] = useState(false); // boolean
+  const [isLoading, setIsLoading] = useState({}); // obj
   const [modalMessage, setModalMessage] = useState('');
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [modalCallback, setModalCallback] = useState();
+  const [submitState, setSubmitState] = useState(null);
   const prevBtnRef = useRef(null);
   const nextBtnRef = useRef(null);
   const submitBtnRef = useRef(null);
   const surveyPageRef = useRef(null);
-  const swiperSlide = useSwiperSlide();
+  console.log(formValues)
+  
   
   // -------------------------------------------------------------------------------- //
   const changeSwiperHeightDependencies = [formValues.inedibleFood, formValues.caution]
@@ -176,6 +197,7 @@ export default function Survey() {
       if (idx === 1) desc.innerText = '활동량 입력';
       if (idx === 2) desc.innerText = '추가정보 입력';
     });
+    setModalMessage(''); // initializse modal message
   };
   
   
@@ -191,8 +213,8 @@ export default function Survey() {
     siblings(bullets[idx]).forEach((sib) =>
       sib.classList.remove(StyleSwiper['swiper-pagination-bullet-active']),
     );
-    setIsLoading(true);
-    setTimeout(() => setIsLoading(false), 400);
+    setIsLoading(prevState => ({nextPage: true}))
+    setTimeout(() => setIsLoading(prevState => ({nextPage: false})), 400);
     resetWindowPos();
   };
   
@@ -235,17 +257,16 @@ export default function Survey() {
       onShowModalHandler(errorMessages);
       // - prevent to the Next step when validation failed
       curBtn !== submitBtn && swiper.slidePrev();
-      return;
     } else {
-      isSubmitButton && onShowModalHandler('설문조사를 제출하시겠습니까?', onSubmit);
+      isSubmitButton && onShowModalHandler('설문조사를 제출하시겠습니까?');
+      setSubmitState('READY');
     }
-  
-    
   }
   
   
   
-  const onSubmit = async (formValues) => {
+  const onSubmit = async () => {
+    if(submitState === true) return;
     const postFormValuesApiUrl = '/api/dogs';
     try {
       setIsLoading((prevState) => ({
@@ -257,13 +278,15 @@ export default function Survey() {
       console.log(res);
       if (res.isDone) {
         modalMessage = '설문조사가 성공적으로 등록되었습니다.'
-        setIsSubmitted(true);
+        onShowModalHandler(modalMessage);
+        setSubmitState(true);
       } else {
-        modalMessage = '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.'
+        modalMessage = '내부 통신장애입니다. 잠시 후 다시 시도해주세요.'
+        onShowModalHandler(modalMessage);
+        setSubmitState(false);
       }
-      onShowModalHandler(modalMessage, moveToNextPage);// 함수를 전달한다.
     } catch (err) {
-      onShowModalHandler('API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.', moveToPrevPage);
+      await onShowModalHandler('API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.', moveToPrevPage);
       console.error('API통신 오류 : ', err);
     }
     setIsLoading((prevState) => ({
@@ -272,41 +295,28 @@ export default function Survey() {
     }));
   };
   
-  
-  
-  const onShowModalHandler = (message, cb) => {
+  const onShowModalHandler = (message) => {
     mct.alertShow();
     setModalMessage(message);
-    if(cb && typeof cb === 'function'){
-      setModalCallback(cb)
-    }
   };
   
-  const onClickModalConfirmButton = ()=>{
-    mct.alertHide();
-    setModalMessage('');
-    if(modalCallback && typeof modalCallback === 'function'){
-      modalCallback();
-    }
-    
-  }
-  
+
   const moveToNextPage = () => {
-    isSubmitted && router.push('/survey/loading');
+    submitState && router.push('/survey/loading');
   };
-  
   
   const moveToPrevPage = () => {
     router.back();
   };
   
+  console.log(submitState)
   
   return (
     <>
       <MetaTitle title="설문조사" />
       <Layout>
         <Wrapper>
-          {isLoading && <FullScreenLoading opacity={1}/> }
+          {(isLoading.submit || isLoading.nextPage) && <FullScreenLoading opacity={1}/> }
           <div className={s['survey-page']} ref={surveyPageRef}>
             <Swiper
               {...surveySwiperSettings}
@@ -331,7 +341,11 @@ export default function Survey() {
           </div>
         </Wrapper>
       </Layout>
-      <Modal_global_alert message={modalMessage} onClick={onClickModalConfirmButton} background />
+      {submitState === null && <Modal_global_alert message={modalMessage} background />}
+      {submitState === 'READY' && <Modal_global_alert message={modalMessage} onClick={onSubmit} background />}
+      {submitState === false && <Modal_global_alert message={modalMessage} onClick={moveToPrevPage} background />}
+      {submitState === true && <Modal_global_alert message={modalMessage} onClick={moveToNextPage} background />}
+      
     </>
   );
 }

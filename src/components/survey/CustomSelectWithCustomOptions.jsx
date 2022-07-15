@@ -11,6 +11,18 @@ export const CustomSelectWithCustomOptions = ({id, options, value, setValues, pl
   const optionBoxRef = useRef( null );
   const inputRef = useRef( null );
   
+  useEffect( () => {
+  
+    let initValue = selectedOption;
+    if(dataType === 'number'){
+      initValue = Number(initValue);
+    }
+    setValues(prevState => ({
+      ...prevState,
+      [id]: initValue
+    }))
+  }, [initialSelectedOption] );
+  
   
   useEffect( () => {
     // HIDE Option
