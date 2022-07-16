@@ -65,12 +65,11 @@ function UserInfoPage() {
 
                   <div className={s.mid_box}>
                     <input className= {s.input_box} type="text" placeholder='01012345678'/>
-                  </div>
-                  <div className={s.right_box_red}>
-                    <div className={s.btn}>
+                    <div className={s.right_box_red}>
                       인증번호 받기
                     </div>
                   </div>
+
                 </label>
               </div>
 

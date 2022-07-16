@@ -25,16 +25,14 @@ section.pageline { padding: rem(40) 0 0 0}
 
   .flex_box {
     display: flex;
-    justify-content: space-between;
-    width: 40%;
-    max-width: rem(362);
+    width: 100%;
 
     .input_box {
-      width: 77.5%;
-      max-width: rem(280);
+      width: rem(280);
       border-radius: rem(4);
       padding: rem(13) 0 rem(13) rem(20);
       @include char(l15);
+      margin-right: rem(5);
     }
 
     .btn_box {
@@ -46,6 +44,7 @@ section.pageline { padding: rem(40) 0 0 0}
         padding: rem(15) 0;
         @include char(l15);
         text-align: center;
+        cursor: pointer;
 
       }
     }
@@ -82,7 +81,7 @@ section.pageline { padding: rem(40) 0 0 0}
 .coupon_content_grid_box {
   display: grid;
   justify-content: space-between;
-  grid-template-columns: repeat(auto-fill, minmax(rem(400) , rem(452)));
+  grid-template-columns: 1fr 1fr;
   column-gap: rem(16);
   row-gap : rem(16);
 
@@ -90,7 +89,7 @@ section.pageline { padding: rem(40) 0 0 0}
     display: grid;
     justify-content: space-between;
     align-items: center;
-    grid-template-columns: 72% 28%;
+    grid-template-columns: 1fr rem(110);
     border: rem(1) solid #c4c4c4;
     padding: rem(20) rem(30) rem(30) rem(30);
     row-gap: rem(10);
@@ -140,3 +139,58 @@ section.pageline { padding: rem(40) 0 0 0}
 
 }
 
+@media (max-width: rem(1000)) {
+  .coupon_content_grid_box {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: rem(800)) {
+
+  .coupon_content_grid_box {
+  
+    .grid_box {
+      padding: rem(20) rem(10) rem(30) rem(10);
+
+      .left_top {
+        font-size: rem(20);
+      }
+    }
+
+    .left_bot {
+      font-size: rem(14);
+    }
+  }
+}
+
+@media (max-width: rem(600)) {
+
+  section.coupon_state_section { padding: rem(50) 0 0 0;}
+  section.coupon_code { margin-top: rem(30);}
+  section.pageline { padding: rem(40) 0 rem(80)}
+
+
+  .title {
+    display: none;
+  }
+
+  .coupon_code {
+  
+    .flex_box {
+      .input_box {
+        width: 100%;
+        margin-right: rem(5);
+      }
+    } 
+  }
+
+  .coupon_content_grid_box {
+  
+    .grid_box {
+      .right_top {
+        font-size: rem(22);
+      }
+    }
+  }
+
+}

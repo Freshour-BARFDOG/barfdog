@@ -36,7 +36,7 @@ function CouponPage() {
 
   return (
     <>
-      <MetaTitle title="마이페이지 쿠폰" />
+      <MetaTitle title="마이페이지 쿠폰조회" />
       <Layout>
         <Wrapper>
           <MypageWrapper>

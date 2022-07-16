@@ -49,23 +49,27 @@ section.btn { padding : rem(77) 0 rem(80)}
   width: 100%;
   display: flex;
   justify-content: center;
+
   .btn_box {
-    width: 40%;
-    max-width: rem(290);
+    width: 100%;
     display: flex;
     // justify-content: center;
     column-gap: rem(10) ;
+    justify-content: center;
     @include char(l16);
     .btn_cancel {
+      width: 100%;
+      max-width: rem(140);
       display: flex;
       justify-content: center;
-      width: 50%;
       padding: rem(17) 0;
       border: rem(1) solid var(--color-main);
       border-radius: rem(4);
+      cursor: pointer;
     }
     .btn_withdraw {
-      width: 50%;
+      width: 100%;
+      max-width: rem(140);
       display: flex;
       justify-content: center;
       padding: rem(17) 0;
@@ -73,6 +77,55 @@ section.btn { padding : rem(77) 0 rem(80)}
       background-color: var(--color-main);
       color: #fff;
       border-radius: rem(4);
+      cursor: pointer;
     }
   }
+}
+
+@media (max-width: rem(600)) {
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    .content_text {
+      max-width: rem(400);
+      @include char(b15);
+      color: var(--color-font-sub);
+      text-align: center;
+      padding-bottom: rem(46);
+    }
+  
+    .labe_box {
+      display: grid;
+      grid-template-columns: 1fr;
+      justify-content: center;
+      width: 100%;
+      text-align: center;
+
+      .label_text {
+        @include char(l14);
+        padding: 0;
+        margin-bottom: rem(20);
+      }
+
+      .input_box {
+        max-width: 100%;
+      }
+    }
+  }
+
+  .btn {
+    .btn_box {
+      @include char(l16);
+      .btn_cancel {
+        max-width: 100%;
+      }
+      .btn_withdraw {
+        max-width: 100%;
+      }
+    }
+  }
+  
 }

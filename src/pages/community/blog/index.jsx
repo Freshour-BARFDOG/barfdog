@@ -22,11 +22,13 @@ function BlogIndexPage() {
           <section className={Styles.title}>
             <div className={Styles.text1}>블로그</div>
             <div className={Styles.text2}>
-              바프독과 반려견의 모든 정보를 이곳에서 확인하세요
+              바프독과 반려견의 모든 정보를 <br />이곳에서 확인하세요
             </div>
           </section>
+        </Wrapper>
 
-          <section className={Styles.article_box}>
+        <section className={Styles.article_box}>
+          <Wrapper>
             <div className={Styles.article}>
               <p>추천 아티클</p>
 
@@ -42,11 +44,14 @@ function BlogIndexPage() {
                     />
                   </div>
 
-                  <p>영양</p>
-                  <div className={Styles.article_title}>
-                    반려동물 사료를 바꿔야 하는 7가지 이유
+                  <div className={Styles.subject}>
+                    <p>영양</p>
+                    <div className={Styles.article_title}>
+                      반려동물 사료를 바꿔야 하는 7가지 이유
+                    </div>
+                    <div className={Styles.day}>2022.02.08</div>
                   </div>
-                  <div className={Styles.day}>2022.02.08</div>
+
                 </div>
                 <div className={Styles.right_box}>
                   <div className={`${Styles.image} img-wrap`}>
@@ -67,8 +72,10 @@ function BlogIndexPage() {
                 </div>
               </div>
             </div>
-          </section>
+          </Wrapper>
+        </section>
 
+        <Wrapper>
           <section className={Styles.menu_box}>
             <ul className={Styles.menu}>
               <li>

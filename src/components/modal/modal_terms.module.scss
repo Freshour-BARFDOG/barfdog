@@ -15,6 +15,11 @@ $browser-context:16;
   height: 100% !important;
   width: 100% !important;
   position: relative;
+  overflow: scroll !important;;
+  &::-webkit-scrollbar{
+    display: none;
+  }
+
   .x-button{
     position: absolute;
     right:rem(10);

@@ -39,3 +39,37 @@ section.title { padding : rem(40) 0 rem(30);}
     }
   }
 }
+
+
+
+@media (max-width: rem(800)) {
+
+
+  .event_box {
+    .image {
+      height: 160px;
+      .text_box {
+        position: absolute;
+        top: rem(26);
+        left: calc(100% / 10.8);
+      }
+    }
+  }
+
+}
+
+@media (max-width: rem(600)) {
+
+  section.title { padding : rem(70) 0 rem(30);}
+
+
+  // width: 600사이즈용 이미지 별도로 필요
+  .event_box {
+    .image {
+      .text_box {
+        top: rem(32);
+        font-size: rem(28);
+      }
+    }
+  }
+}

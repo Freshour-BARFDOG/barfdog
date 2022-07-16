@@ -522,6 +522,7 @@ font-style: normal;
     .image {
       width: rem(238);
       aspect-ratio: 5.95/1;
+      cursor: pointer;
     }
   }
 }
@@ -593,7 +594,7 @@ font-style: normal;
           padding : rem(14) 0;
           @include char(l16);
           font-weight: 700;
-
+          cursor: pointer;
         }
       }
     }
@@ -658,6 +659,7 @@ font-style: normal;
     .image {
       width: rem(300);
       aspect-ratio: 4.225/1;
+      cursor: pointer;
     }
   }
 

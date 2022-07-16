@@ -37,6 +37,19 @@ function CartPage() {
           </section>
 
           {/* 리스트 */}
+
+          <section className={Styles.product_list}>
+            <div className={Styles.emty_box}>
+              <span>아직 장바구니에 담은 상품이 없습니다.</span>
+              <div className={Styles.button_box}>
+                <Link href="/shop?category=all" passHref>
+                  <a className={Styles.emty_button}>상품 담으러 가기</a>
+                </Link>
+              </div>
+            </div>
+          </section>
+
+
           <section className={Styles.product_list}>
             <div className={Styles.flex_box}>
               {/* <div className={Styles.check_box}> */}
@@ -64,17 +77,20 @@ function CartPage() {
                 <span>46,200원</span>
                 <div>44,900원</div>
               </div>
+              
+              <div className={Styles.grid_box}>
+                <div className={Styles.count_box}>
+                  <div className={Styles.minus}>-</div>
 
-              <div className={Styles.count_box}>
-                <div className={Styles.minus}>-</div>
-
-                <div className={Styles.mid_box}>
-                  <input classtype="text" id="count" placeholder="99"></input>
+                  <div className={Styles.mid_box}>
+                    <input classtype="text" id="count" placeholder="99"></input>
+                  </div>
+                  <div className={Styles.plus}> +</div>
                 </div>
-                <div className={Styles.plus}> +</div>
-              </div>
 
-              <div className={Styles.price}>186,200원</div>
+
+                <div className={Styles.price}>186,200원</div>
+              </div>
 
               <div className={Styles.delete_btn}>
                 <div className={`${Styles.image} img-wrap`}>
@@ -118,16 +134,19 @@ function CartPage() {
                 <div>44,900원</div>
               </div>
 
-              <div className={Styles.count_box}>
-                <div className={Styles.minus}>-</div>
+              <div className={Styles.grid_box}>
+                <div className={Styles.count_box}>
+                  <div className={Styles.minus}>-</div>
 
-                <div className={Styles.mid_box}>
-                  <input classtype="text" id="count" placeholder="99"></input>
+                  <div className={Styles.mid_box}>
+                    <input classtype="text" id="count" placeholder="99"></input>
+                  </div>
+                  <div className={Styles.plus}> +</div>
                 </div>
-                <div className={Styles.plus}> +</div>
-              </div>
 
-              <div className={Styles.price}>186,200원</div>
+
+                <div className={Styles.price}>186,200원</div>
+              </div>
 
               <div className={Styles.delete_btn}>
                 <div className={`${Styles.image} img-wrap`}>
@@ -171,16 +190,19 @@ function CartPage() {
                 <div>44,900원</div>
               </div>
 
-              <div className={Styles.count_box}>
-                <div className={Styles.minus}>-</div>
+              <div className={Styles.grid_box}>
+                <div className={Styles.count_box}>
+                  <div className={Styles.minus}>-</div>
 
-                <div className={Styles.mid_box}>
-                  <input classtype="text" id="count" placeholder="99"></input>
+                  <div className={Styles.mid_box}>
+                    <input classtype="text" id="count" placeholder="99"></input>
+                  </div>
+                  <div className={Styles.plus}> +</div>
                 </div>
-                <div className={Styles.plus}> +</div>
-              </div>
 
-              <div className={Styles.price}>186,200원</div>
+
+                <div className={Styles.price}>186,200원</div>
+              </div>
 
               <div className={Styles.delete_btn}>
                 <div className={`${Styles.image} img-wrap`}>
@@ -246,11 +268,12 @@ function CartPage() {
           </section>
 
           <section className={Styles.btn_box}>
-            <div className={Styles.btn_box}>
-              <Link href="/cart/ordersheet" passHref>
-                <a className={Styles.btn}>총 1건 주문하기</a>
-              </Link>
-            </div>
+            <Link href="/cart/ordersheet" passHref>
+              <div className={Styles.btn_box}>
+                  <a className={Styles.btn}>총 1건 주문하기</a>
+              </div>
+            </Link>
+
           </section>
         </Wrapper>
       </Layout>

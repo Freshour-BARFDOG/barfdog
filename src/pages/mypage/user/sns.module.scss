@@ -19,7 +19,7 @@ section.content { padding : rem(28) 0 rem(22)}
   justify-content: center;
 
   .gray_box {
-    width: 57%;
+    width: 100%;
     max-width: rem(520);
     background-color:#F5F5F5 ;
     border-radius: rem(8);
@@ -54,6 +54,19 @@ section.content { padding : rem(28) 0 rem(22)}
       text-align: center;
       padding: rem(17) 0;
       @include char(l16);
+      cursor: pointer;
+    }
+  }
+}
+
+@media (max-width: rem(600)) {
+
+  
+  .btn {
+    .btn_box {
+      .red_btn {
+        max-width: 100%;
+      }
     }
   }
 }

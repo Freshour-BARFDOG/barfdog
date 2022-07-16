@@ -180,7 +180,8 @@ function CreateReviewPage() {
             <section className={s.body}>
               <div className={s.flex}>
                 <div className={s.left_side}>
-                  <label htmlFor={'contents'} className={`${s.left_title} required`}>
+                  <label htmlFor={'contents'} className={`${s.left_title}`}>
+                  {/* <label htmlFor={'contents'} className={`${s.left_title} required`}> required삭제, required:after 발생, 상세리뷰 옆에 붉은 점 찍힘  */}
                     상세리뷰
                   </label>
                 </div>

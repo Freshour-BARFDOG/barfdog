@@ -37,7 +37,7 @@ function NoticeIndexPage() {
                     <Link href="/community/notice/1" passHref>
                       <a>
                         <div className={Styles.content_box}>
-                          <span>{item}</span>
+                          <span className={Styles.counter_num}>{item}</span>
                           <p>설날 배송 안내</p>
                           <span>2022.01.20</span>
                         </div>
