@@ -228,7 +228,30 @@ export const postFileUpload = async (url, formData) => {
 
 
 
-////
+// -------- SSR DATA FETCHING -------- //
+/* - EXAMPLE
+
+export async function getServerSideProps({req}) {
+  const getApiUrl = '/api/dogs'
+  const res = await getDataSSR(req , getApiUrl )
+  let DATA;
+  const hasData = res.data._embedded.queryDogsDtoList.length;
+  if(hasData){
+    const dataList = res.data._embedded.queryDogsDtoList;
+    DATA = dataList.map((data)=>({
+      id : data.id,
+      pictureUrl : data.pictureUrl, // 반려견 프로필 사진
+      name : data.name, // 반려견 이름
+      birth : data.birth, // 반려견 생년월 //YYYYMM
+      gender : data.gender, // 반려견 성별
+      representative : data.representative, // 대표견 여부
+      subscribeStatus : data.subscribeStatus, // 구독상태
+    }))
+  }
+  return { props: { data: DATA } };
+}
+
+*/
 
 
 
