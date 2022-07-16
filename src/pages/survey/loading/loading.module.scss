@@ -49,11 +49,13 @@
     font-size: rem(18);
     cursor: default;
     $animationDuration : 1.6s;
-    animation: border_flicker $animationDuration cubic-bezier(0.63, 0.2, 0.45, 1) infinite;
     @for $i from 1 through 3 {
       &:nth-child(#{$i}){
         animation-delay: $i*.3s;
       }
+    }
+    &.left{
+      border-color: var(--color-primary04)
     }
     &.mid{
       border-color: transparent;
@@ -63,7 +65,6 @@
         letter-spacing: rem(0.6);
         position: relative;
         top:rem(2);
-        animation: text_flicker $animationDuration/2 cubic-bezier(0.63, 0.2, 0.45, 1) infinite;
       }
     }
   }
@@ -77,9 +78,10 @@
   transform: translateY(-50%);
   width: 200%;
   border-top: rem(10) dotted #ed3333;
-  animation: moving 4s linear infinite;
+  animation: moving 8s linear infinite;
 }
 
+.ani-text {animation: text_flicker 1s cubic-bezier(0.63, 0.2, 0.45, 1) infinite;}
 
 
 @keyframes moving {
@@ -94,11 +96,9 @@
 
 
 @keyframes border_flicker {
-  0%,10%,100%{border-color: var(--color-line-03);}
+  0%,100%{border-color: var(--color-line-03);}
   10%,80%{border-color: var(--color-primary04);}
 }
-
-
 
 
 @media (max-width: rem(600)) {

@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MetaTitle from '@src/components/atoms/MetaTitle';
@@ -8,18 +8,23 @@ import IconRight from '/public/img/survey/survey_loading_right.svg';
 import {useRouter} from "next/router";
 
 
-export default function LoadingPage() {
+export default function LoadingPage(props) {
+  // console.log(props);
+  
+  
+  const [isLoading, setIsLoading] = useState( false );
   const router = useRouter();
-  const transitionPageDelay = 3000;
   useEffect( () => {
+    const transitionPageDelay = 3000;
     setTimeout(()=>{
-      router.push('/survey/statistics');
+      // router.push('/survey/statistics');
     }, transitionPageDelay)
   }, [] );
   
+  // - 강아지 등록 후에, 설문조사 ID (강아지 ID값을 받아야함)
   return (
     <>
-      <MetaTitle title="Loading .." />
+      <MetaTitle title="Loading" />
       <Layout>
         <Wrapper>
           <section className={s.image_section}>
@@ -29,7 +34,7 @@ export default function LoadingPage() {
                   <IconLeft />
                 </span>
                 <span className={`${s['ani-box']} ${s.mid}`}>
-                  <em>분석중</em>
+                  <em className={`${s['ani-text']}`}>분석중</em>
                 </span>
                 <span className={`${s['ani-box']} ${s.right}`}>
                   <IconRight />
@@ -54,5 +59,27 @@ export default function LoadingPage() {
       </Layout>
     </>
   );
+}
+
+
+
+
+
+
+export async function getServerSideProps(context) {
+  const { req } = context;
+  const cookie = req.headers.cookie;
+  const key = 'userLoginCookie';
+  let token;
+  cookie.split(';').forEach((c) => {
+    if (c.indexOf(key) >= 0) {
+      const data = c.split('=')[1];
+      token = data;
+      console.log('dat: ', data)
+    }
+  });
+  const apiUrl = '/api/surveyReports/261'
+  // console.log(cookie)
+  return { props: { cookie } };
 }
 

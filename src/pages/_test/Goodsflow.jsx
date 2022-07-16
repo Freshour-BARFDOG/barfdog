@@ -55,7 +55,7 @@ export default function Goodsflow() {
 //
 //
 // Goodsflow.getInitialProps = async () => {
-//   const res = await GoodsFlowTest();
+//   const res = await getSurveyReports();
 //   console.log('------------------------------------------------------------------ ServerSide Request ------------------------------------------------------------------ ', res);
 //   return { props: { id: 'dummyDataForTesting' } };
 // };
