@@ -225,3 +225,53 @@ export const postFileUpload = async (url, formData) => {
 
 
 
+
+
+
+////
+
+
+
+
+export const getTokenFromCookie = (req)=>{
+  let token;
+  const cookie = req.headers.cookie;
+  const tokenKey = 'userLoginCookie';
+  cookie.split(';').forEach((c) => {
+    if (c.indexOf(tokenKey) >= 0) {
+      token = c.split('=')[1];
+      return
+    }
+  });
+  
+  return token;
+  
+}
+
+
+
+
+
+
+
+export const getDataSSR = async (req, url)=>{
+  const token = getTokenFromCookie(req);
+  const result = await axios
+    .get(url,{
+      headers: {
+        authorization: token,
+        "content-Type": "application/json",
+      }
+    })
+    .then((res) => {
+      // console.log(res);
+      return res;
+    })
+    .catch((err) => {
+      // console.log(err.response)
+      return err.response
+    });
+  
+  return result;
+  
+}
