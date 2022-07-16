@@ -78,10 +78,12 @@ const ItemList = ()=>{
             <Link href={"/mypage/dogs/[id]/statistic"} passHref>
               <a>설문결과</a>
             </Link>
-            <Link href={"/mypage/dogs/[id]/updateSurvey"} passHref>
+            <Link href={"/survey?type=update&dogId=12"} passHref>
               <a>설문수정</a>
             </Link>
-            <button className={Styles.payment}>결제하기</button>
+          <Link href={"/order/ordersheet"} passHref>
+            <a className={Styles.payment}>결제하기</a>
+          </Link>
           </div>
         </div>
     </div>
@@ -97,7 +99,6 @@ function MypageDogInfoPage() {
         <Wrapper>
           <MypageWrapper>
             <section className={Styles.title}>반려견정보</section>
-
             <section>
               {[1,2,3].map((item, index)=><ItemList key={index} data={{item}}/>)}
             </section>

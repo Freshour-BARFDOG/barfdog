@@ -77,6 +77,8 @@ const initialFormValues = {
 //   caution: dogCautionType.NONE, // 기타 특이사항 // 빈값('')일 경우, '있어요'선택됨)
 // };
 
+// ! 설문조사 수정인지 // 생성인지에 따라서 =>버튼이름 변경하
+
 export default function Survey() {
   
   const lastStep = 3;
@@ -302,7 +304,7 @@ export default function Survey() {
   
 
   const moveToNextPage = () => {
-    submitState && router.push('/survey/loading');
+    submitState && router.push('/survey/statistics');
   };
   
   const moveToPrevPage = () => {

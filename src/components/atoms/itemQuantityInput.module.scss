@@ -1,0 +1,48 @@
+@import '/styles/global/rem';
+
+
+
+
+.input-wrap {
+  display: grid;
+  grid-template-columns: 1fr rem(50) 1fr;
+  align-items: center;
+  max-width: rem(480);
+  background-color: #fff;
+  border : rem(1) solid #909090;
+  border-radius: rem(4);
+  height: 100%;
+  box-sizing: border-box;
+  > * {
+    height: 20px;
+    padding-left: 0;
+  }
+  button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color .3s var(--transition-cubic);
+    &:first-child {
+      justify-content: flex-start;
+    }
+    &:last-child {
+      justify-content: flex-end;
+    }
+    &:hover .unit{color: #777;}
+    .unit{
+      width:rem(30);
+      font-size: rem(24);
+      font-weight: 200;
+      color: #ABABAB;
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: inherit;
+    }
+  }
+  input{
+    border:0; text-align: center;
+    &::placeholder{color:var(--color-font-def)}
+  }
+}
