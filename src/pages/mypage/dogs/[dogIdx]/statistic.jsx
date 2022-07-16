@@ -4,11 +4,14 @@ import Wrapper from "/src/components/common/Wrapper";
 import MypageWrapper from "/src/components/mypage/MypageWrapper";
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import { useRouter } from "next/router";
-import s from './statistic.module.scss';
+import s from '/src/components/survey/surveyStatistics(mypageVersion).module.scss';
 import Link from "next/link";
-
-
 import Image from 'next/image';
+import {SurveyStatistics} from "../../../../components/survey/SurveyStatistics";
+
+
+
+
 
 function MypageSubscribe_statisticPage() {
   const isThisDogSubscribedState = false;
@@ -29,9 +32,28 @@ function MypageSubscribe_statisticPage() {
       <Layout>
         <Wrapper>
           <MypageWrapper>
+  
+            {/* ------------------ 추가한 Component ------------------ */}
+            {/*
+            1개의 component(Statistic.jsx)만 사용하여
+            data Fetching 코드를 2번 작성하는 작업을 줄이기 위해서
+            해당 작업을 요청드립니다.
+            - < 작업 경로 >
+            - http://localhost:4000/mypage/dogs/12334/statistic
+            - http://localhost:4000/survey/statistics
+            - < CSS파일 >
+            - 이전 작업파일: src/components/survey/surveyStatistics(mypageVersion).module.scss
+            - 최종으로 남길 파일: src/components/survey/surveyStatistics.module.scss
+            */}
+            <SurveyStatistics mode={'mypage'}/>
+            {/* ------------------ 추가한 Component ------------------ */}
             
+            
+            
+            
+            {/* ------------------ 기존 코드 ------------------ */}
             <section className={s.title}>
-              시호의 맞춤 레포트 
+              시호의 맞춤 레포트
               <span>2022-02-24 설문결과</span>
             </section>
 
@@ -47,19 +69,19 @@ function MypageSubscribe_statisticPage() {
                     
                     <div className={s.stick_box}>
                       <div className={s.stick}>
-                        
+                      
                       </div>
                       <div className={s.stick_red}>
 
                       </div>
                       <div className={s.stick}>
-                        
+                      
                       </div>
                       <div className={s.stick}>
-                        
+                      
                       </div>
                       <div className={s.stick}>
-                        
+                      
                       </div>
                     </div>
                     
@@ -92,17 +114,17 @@ function MypageSubscribe_statisticPage() {
                     
                     <div className={s.stick_box}>
                       <div className={s.stick}>
-                        
+                      
                       </div>
                     
                       <div className={s.stick}>
-                        
+                      
                       </div>
                       <div className={s.stick}>
-                        
+                      
                       </div>
                       <div className={s.stick}>
-                        
+                      
                       </div>
                       <div className={s.stick_red}>
 
@@ -138,20 +160,20 @@ function MypageSubscribe_statisticPage() {
                     
                     <div className={s.stick_box}>
                       <div className={s.stick}>
-                        
+                      
                       </div>
                       
                       <div className={s.stick}>
-                        
+                      
                       </div>
                       <div className={s.stick_red}>
 
                       </div>
                       <div className={s.stick}>
-                        
+                      
                       </div>
                       <div className={s.stick}>
-                        
+                      
                       </div>
                     </div>
                     
@@ -181,7 +203,7 @@ function MypageSubscribe_statisticPage() {
                 
               </div>
               <div className={s.left}>
-                <div className={s.left_title}> 
+                <div className={s.left_title}>
                   시호의 산책 점검
                 </div>
 
@@ -225,7 +247,7 @@ function MypageSubscribe_statisticPage() {
                   </div>
                 </div>
 
-                <div className={s.left_title}> 
+                <div className={s.left_title}>
                   견종별 산책시간
                   <p>(일주일기준)</p>
                 </div>
@@ -270,7 +292,7 @@ function MypageSubscribe_statisticPage() {
 
               <div className={s.t_right}>
 
-                <div className={s.left_title}> 
+                <div className={s.left_title}>
                   견종별 간식 횟수
                 </div>
 
@@ -279,25 +301,25 @@ function MypageSubscribe_statisticPage() {
                     대형견
                   </div>
                   <div className={s.horizon_stick}>
-                    
+                  
                   </div>
                   <div>
                     중형견
                   </div>
                   <div className={s.horizon_stick}>
-                    
+                  
                   </div>
                   <div>
                     소형견
                   </div>
                   <div className={s.horizon_stick}>
-                    
+                  
                   </div>
                   <div className={s.hero_name}>
                     시호
                   </div>
                   <div className={s.horizon_stick_red}>
-                    
+                  
                   </div>
 
 
@@ -308,7 +330,7 @@ function MypageSubscribe_statisticPage() {
               </div>
 
               <div className={s.b_right}>
-                <div className={s.left_title}> 
+                <div className={s.left_title}>
                   바프독 생식기준 결과
                 </div>
                 <div className={s.b_right_grid_box}>

@@ -1,43 +1,61 @@
-$browser-context:16; // html font-size
-@function rem($px, $context: $browser-context){
-  @return #{$px / $context}rem;
-}
-@import '../../../../../styles/global/guide';
+@import '/styles/global/rem';
+@import '/styles/global/guide';
 
 
-
-section.title { 
-  padding : rem(8) 0 rem(18) 
-}
+$container-maxWidth: rem(960);
 
 
 .title {
   @include char(t24);
-  span {
-    @include char(l15);
+  text-align: center;
+
+  &.default{
+    padding : rem(60) 0 rem(40);
+  }
+  > span {
     padding-left: rem(8);
+    padding-top: rem(10);
+    @include char(l16);
+    font-weight: 400;
     color: vaR(--color-font-sub);
+  }
+  &.mypage{
+    padding : rem(8) 0 rem(18);
+    > span {
+      @include char(l15);
+    }
   }
 }
 
+
+
+
+.grid_container_box {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
 .grid_container {
+  width: $container-maxWidth;
   display: grid;
   grid :
-  "top top" 
+  "top top"
   "left t_right"
   "left b_right"
   / 1fr 1fr;
-  gap: rem(20);
+
+  gap: rem(34);
 
   .top {
     grid-area: top;
-    padding: rem(42) rem(65) ;
-    box-shadow: 0 0 rem(20) rgba(69, 69, 83, 0.08);
-    border-radius: rem(24);
-
+    padding: rem(42) rem(85) ;
+    box-shadow: 0px 0px 20px rgba(69, 69, 83, 0.08);
+    border-radius: 24px;
 
     .flex_box {
       display: flex;
+
+      column-gap: rem(80);
       div {
         width: 33%;
         p {
@@ -49,12 +67,13 @@ section.title {
       .box {
         display: flex;
         flex-direction: column;
-        row-gap: rem(30);
 
         .stick_box {
+          margin: rem(40) rem(30) rem(30);
           display: flex;
           justify-content: center;
           width: 100%;
+          max-width: rem(150);
           column-gap: rem(16);
           .stick {
             width: rem(16);
@@ -72,8 +91,8 @@ section.title {
         .top_text_box {
           display: flex;
           flex-direction: column;
-          width: 100%;
-          margin: auto;
+          margin: 0 auto;
+          width: 72%;
           max-width: rem(150);
           row-gap: rem(10);
           @include char(l16);
@@ -85,12 +104,10 @@ section.title {
 
             .left_text {
               width: 50%;
-
             }
             .right_text {
               width: 50%;
               text-align: right;
-
             }
           }
 
@@ -115,13 +132,15 @@ section.title {
     }
   }
 
-//나중에 크기 조절
+
+
   .left {
 
     width: 100%;
+    max-width: rem(460);
 
-    box-shadow: 0 0 rem(20) rgba(69, 69, 83, 0.08);
-    border-radius: rem(24);
+    box-shadow: 0px 0px 20px rgba(69, 69, 83, 0.08);
+    border-radius: 24px;
 
     grid-area: left;
     display: flex;
@@ -150,11 +169,11 @@ section.title {
       margin: 0 rem(35);
       .left_box{
         background: #F9EDEC;
-        border-radius: rem(32);
+        border-radius: 32px;
         width: 43%;
         max-width: rem(160);
         text-align: center;
-        
+
         p {
           @include char(l16);
           color: var(--color-font-sub);
@@ -208,15 +227,14 @@ section.title {
       justify-content: center;
       column-gap: rem(10);
       width : 100%;
-      max-width: rem(380);
+      max-width: 380px;
       text-align: center;
       padding-top: rem(16);
       margin-bottom: rem(30);
       margin-left: rem(35);
       margin-right: rem(35);
-    
+
       .content_box {
-        // background-color: rosybrown;
         width: 100%;
         @include char(l16);
         font-weight: 700;
@@ -243,8 +261,9 @@ section.title {
       }
     }
   }
-  
 
+
+  .t_right{max-width: inherit}
   .t_right {
     grid-area: t_right;
     display: flex;
@@ -253,9 +272,10 @@ section.title {
     align-items: center;
 
     width: 100%;
+    max-width: rem(460);
 
-    box-shadow: 0 0 rem(20) rgba(69, 69, 83, 0.08);
-    border-radius: rem(24);
+    box-shadow: 0px 0px 20px rgba(69, 69, 83, 0.08);
+    border-radius: 24px;
 
     .left_title {
       @include char(l20);
@@ -269,18 +289,18 @@ section.title {
       // grid-template-rows: 1fr 1fr 1fr 1fr;
       row-gap: rem(20);
       column-gap: rem(10);
-      padding: 0 rem(30);
+      margin: 0 rem(30);
 
       div {
         @include char(l16);
       }
       .horizon_stick {
         background: #F9EDEC;
-        border-radius: rem(20);
+        border-radius: 20px;
       }
       .horizon_stick_red {
         background: #FF5959;
-        border-radius: rem(20);
+        border-radius: 20px;
       }
       .hero_name {
         font-weight: 600;
@@ -289,12 +309,13 @@ section.title {
   }
 
 
+
   .b_right {
     grid-area: b_right;
-    box-shadow: 0 0 rem(20) rgba(69, 69, 83, 0.08);
-    border-radius: rem(32);
+    box-shadow: 0px 0px 20px rgba(69, 69, 83, 0.08);
+    border-radius: 32px;
     width: 100%;
-
+    max-width: rem(460);
     .left_title {
       text-align: center;
       @include char(l20);
@@ -307,7 +328,7 @@ section.title {
       grid-template-columns: minmax(rem(226),auto) minmax(rem(115), auto);
       row-gap: rem(20);
       margin: 0 rem(35);
-      
+
     }
     .right_text {
       @include char(l20);
@@ -324,64 +345,62 @@ section.title {
     .left_text {
       display: flex;
       align-items: center;
-      justify-content: flex-end;
+      justify-content: end;
       @include char(d32);
       color: var(--color-main);
 
     }
   }
-
 }
+
 .last_text {
-  padding-top: rem(26);
+  padding-top: rem(38);
   @include char(l15);
   color: var(--color-font-sub);
   display: flex;
   flex-direction: column;
   align-items: center;
   row-gap: rem(6);
-  margin-bottom:rem(40);
-  line-height: 1.4;
-  .ref-message{}
-  .notice-message{margin-top:rem(53); color:var(--color-main); text-align: center;}
 }
-
-
 
 
 .btn_box {
+  padding-top: rem(42);
   display: flex;
   justify-content: center;
-  flex-direction: column;
-  align-items:center;
-
-  gap:rem(10);
-  button, a {
+  padding-bottom: rem(48);
+  .btn {
     width: 100%;
     max-width: rem(315);
+    background-color: var(--color-main);
     text-align: center;
+    color: #fff;
     @include char(l16);
     padding : rem(17) 0;
     border-radius: rem(4);
-    color: #fff;
-    background-color: var(--color-main);
   }
-  .link{background-color:#fff; color:var(--color-font-def); border: rem(1) solid var(--color-line-03)}
-
 }
 
-@media (max-width: rem(1000)) {
+
+
+
+
+
+@media (max-width:$container-maxWidth) {
 
   .grid_container {
     grid :
-    "top t_right" 
+    "top t_right"
     "top b_right "
     "left left"
     / 1fr 1fr;
 
+    .top .top_text_box{
+      margin-top: rem(30) !important;
+    }
     .top {
       padding: rem(42) rem(10) ;
-      
+
       .flex_box {
         display: grid;
         row-gap: rem(60);
@@ -392,7 +411,7 @@ section.title {
         .box {
           display: flex;
           flex-direction: column;
-  
+
           .stick_box {
             margin: auto;
           }
@@ -432,35 +451,37 @@ section.title {
 
   .grid_container {
     grid :
-    "top" 
+    "top"
     "left"
-    "t_right" 
+    "t_right"
     "b_right "
     / 1fr;
-    
+
     .left{
       grid-column: span 1;
+    }
+    .t_right, .b_right {max-width: initial}
+    .t_right {
+      height: rem(240);
+    }
+
+    .b_right {
+      height: rem(440);
     }
   }
 
 
-  .t_right {
-    height: rem(240);
-  }
-  
-  .b_right {
-    height: rem(440);
-  }
+
 }
 
 @media (max-width: rem(600)) {
 
-  
-  section.title { 
+
+  section.title {
     padding: rem(30) 0;
-    text-align: center; 
+    text-align: center;
   }
-  
+
   .title {
     span {
       padding-left: 0;
@@ -473,3 +494,5 @@ section.title {
     margin-bottom: rem(100);
   }
 }
+
+

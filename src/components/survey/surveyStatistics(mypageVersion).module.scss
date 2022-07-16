@@ -1,53 +1,40 @@
-$browser-context:16; // html font-size
-@function rem($px, $context: $browser-context){
-  @return #{$px / $context}rem;
+@import '/styles/global/rem';
+@import '/styles/global/guide';
+
+
+
+section.title {
+  padding : rem(8) 0 rem(18)
 }
-@import 'styles/global/guide.scss';
 
-
-section.title { padding : rem(60) 0 rem(40) }
 
 .title {
   @include char(t24);
-  text-align: center;
-  line-height: 120%;
-  font-weight: 700;
-
-  > div {
-    padding-top: rem(10);
-    @include char(l16);
-    font-weight: 500;
-    line-height: 120%;
-    color: vaR(--color-font-sub);
+  span {
+    @include char(l15);
+    padding-left: rem(8);
+    color: var(--color-font-sub);
   }
 }
 
-.grid_container_box {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-.grid_container {  
-  width: rem(960);
+.grid_container {
   display: grid;
   grid :
-  "top top" 
+  "top top"
   "left t_right"
   "left b_right"
   / 1fr 1fr;
-
-  gap: rem(34);
+  gap: rem(20);
 
   .top {
     grid-area: top;
-    padding: rem(42) rem(85) ;
-    box-shadow: 0px 0px 20px rgba(69, 69, 83, 0.08);
-    border-radius: 24px;
+    padding: rem(42) rem(65) ;
+    box-shadow: 0 0 rem(20) rgba(69, 69, 83, 0.08);
+    border-radius: rem(24);
+
 
     .flex_box {
       display: flex;
-
-      column-gap: rem(80);
       div {
         width: 33%;
         p {
@@ -59,13 +46,12 @@ section.title { padding : rem(60) 0 rem(40) }
       .box {
         display: flex;
         flex-direction: column;
+        row-gap: rem(30);
 
         .stick_box {
-          margin: rem(40) rem(30) rem(30) rem(30);
           display: flex;
           justify-content: center;
           width: 100%;
-          max-width: rem(150);
           column-gap: rem(16);
           .stick {
             width: rem(16);
@@ -84,8 +70,7 @@ section.title { padding : rem(60) 0 rem(40) }
           display: flex;
           flex-direction: column;
           width: 100%;
-          margin: 0 rem(30) 0 rem(30);
-          width: 72%;
+          margin: auto;
           max-width: rem(150);
           row-gap: rem(10);
           @include char(l16);
@@ -97,10 +82,12 @@ section.title { padding : rem(60) 0 rem(40) }
 
             .left_text {
               width: 50%;
+
             }
             .right_text {
               width: 50%;
               text-align: right;
+
             }
           }
 
@@ -125,15 +112,13 @@ section.title { padding : rem(60) 0 rem(40) }
     }
   }
 
-
-
+//나중에 크기 조절
   .left {
 
     width: 100%;
-    max-width: rem(460);
 
-    box-shadow: 0px 0px 20px rgba(69, 69, 83, 0.08);
-    border-radius: 24px;
+    box-shadow: 0 0 rem(20) rgba(69, 69, 83, 0.08);
+    border-radius: rem(24);
 
     grid-area: left;
     display: flex;
@@ -162,11 +147,11 @@ section.title { padding : rem(60) 0 rem(40) }
       margin: 0 rem(35);
       .left_box{
         background: #F9EDEC;
-        border-radius: 32px;
+        border-radius: rem(32);
         width: 43%;
         max-width: rem(160);
         text-align: center;
-        
+
         p {
           @include char(l16);
           color: var(--color-font-sub);
@@ -220,14 +205,15 @@ section.title { padding : rem(60) 0 rem(40) }
       justify-content: center;
       column-gap: rem(10);
       width : 100%;
-      max-width: 380px;
+      max-width: rem(380);
       text-align: center;
       padding-top: rem(16);
       margin-bottom: rem(30);
       margin-left: rem(35);
       margin-right: rem(35);
-    
+
       .content_box {
+        // background-color: rosybrown;
         width: 100%;
         @include char(l16);
         font-weight: 700;
@@ -254,7 +240,7 @@ section.title { padding : rem(60) 0 rem(40) }
       }
     }
   }
-  
+
 
   .t_right {
     grid-area: t_right;
@@ -264,10 +250,9 @@ section.title { padding : rem(60) 0 rem(40) }
     align-items: center;
 
     width: 100%;
-    max-width: rem(460);
 
-    box-shadow: 0px 0px 20px rgba(69, 69, 83, 0.08);
-    border-radius: 24px;
+    box-shadow: 0 0 rem(20) rgba(69, 69, 83, 0.08);
+    border-radius: rem(24);
 
     .left_title {
       @include char(l20);
@@ -281,17 +266,18 @@ section.title { padding : rem(60) 0 rem(40) }
       // grid-template-rows: 1fr 1fr 1fr 1fr;
       row-gap: rem(20);
       column-gap: rem(10);
+      padding: 0 rem(30);
 
       div {
         @include char(l16);
       }
       .horizon_stick {
         background: #F9EDEC;
-        border-radius: 20px;
+        border-radius: rem(20);
       }
       .horizon_stick_red {
         background: #FF5959;
-        border-radius: 20px;
+        border-radius: rem(20);
       }
       .hero_name {
         font-weight: 600;
@@ -302,10 +288,10 @@ section.title { padding : rem(60) 0 rem(40) }
 
   .b_right {
     grid-area: b_right;
-    box-shadow: 0px 0px 20px rgba(69, 69, 83, 0.08);
-    border-radius: 32px;
+    box-shadow: 0 0 rem(20) rgba(69, 69, 83, 0.08);
+    border-radius: rem(32);
     width: 100%;
-    max-width: rem(460);
+
     .left_title {
       text-align: center;
       @include char(l20);
@@ -318,7 +304,7 @@ section.title { padding : rem(60) 0 rem(40) }
       grid-template-columns: minmax(rem(226),auto) minmax(rem(115), auto);
       row-gap: rem(20);
       margin: 0 rem(35);
-      
+
     }
     .right_text {
       @include char(l20);
@@ -335,38 +321,157 @@ section.title { padding : rem(60) 0 rem(40) }
     .left_text {
       display: flex;
       align-items: center;
-      justify-content: end;
+      justify-content: flex-end;
       @include char(d32);
       color: var(--color-main);
 
     }
   }
-}
 
+}
 .last_text {
-  padding-top: rem(38);
+  padding-top: rem(26);
   @include char(l15);
   color: var(--color-font-sub);
   display: flex;
   flex-direction: column;
   align-items: center;
-  row-gap: rem(6);  
+  row-gap: rem(6);
+  margin-bottom:rem(40);
+  line-height: 1.4;
+  .ref-message{}
+  .notice-message{margin-top:rem(53); color:var(--color-main); text-align: center;}
 }
+
+
 
 
 .btn_box {
-  padding-top: rem(42);
   display: flex;
   justify-content: center;
-  padding-bottom: rem(48);
-  .btn {
-    width: 35%;
+  flex-direction: column;
+  align-items:center;
+
+  gap:rem(10);
+  button, a {
+    width: 100%;
     max-width: rem(315);
-    background-color: var(--color-main);
     text-align: center;
-    color: #fff;
     @include char(l16);
     padding : rem(17) 0;
     border-radius: rem(4);
+    color: #fff;
+    background-color: var(--color-main);
+  }
+  .link{background-color:#fff; color:var(--color-font-def); border: rem(1) solid var(--color-line-03)}
+}
+
+
+
+@media (max-width: rem(1000)) {
+
+  .grid_container {
+    grid :
+    "top t_right"
+    "top b_right "
+    "left left"
+    / 1fr 1fr;
+
+    .top {
+      padding: rem(42) rem(10) ;
+
+      .flex_box {
+        display: grid;
+        row-gap: rem(60);
+
+        div {
+          width: 100%;
+        }
+        .box {
+          display: flex;
+          flex-direction: column;
+
+          .stick_box {
+            margin: auto;
+          }
+        }
+
+        .top_text_box {
+          width: 100%;
+          margin: auto;
+          max-width: 100%;
+        }
+      }
+    }
+
+    .left{
+      grid-column: span 2;
+      max-width: 100%;
+    }
+
+    .b_right {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      .left_title {
+        padding-top: 0;
+      }
+
+      .b_right_grid_box {
+        grid-template-columns: 1fr;
+      }
+    }
   }
 }
+
+@media (max-width: rem(800)) {
+
+  .grid_container {
+    grid :
+    "top"
+    "left"
+    "t_right"
+    "b_right "
+    / 1fr;
+
+    .left{
+      grid-column: span 1;
+    }
+  }
+
+
+  .t_right {
+    height: rem(240);
+  }
+
+  .b_right {
+    height: rem(440);
+  }
+}
+
+@media (max-width: rem(600)) {
+
+
+  section.title {
+    padding: rem(30) 0;
+    text-align: center;
+  }
+
+  .title {
+    span {
+      padding-left: 0;
+      width: 100%;
+      display: inline-block
+    }
+  }
+
+  .btn_box {
+    margin-bottom: rem(100);
+  }
+}
+
+
+
+
