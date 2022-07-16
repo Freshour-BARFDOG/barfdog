@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Layout from "/src/components/common/Layout";
 import Wrapper from "/src/components/common/Wrapper";
 import MetaTitle from "/src/components/atoms/MetaTitle";
-import s from "src/pages/survey/order/index.module.scss"
+import s from "src/pages/order/subscribe/index.module.scss"
 import Image from 'next/image';
 import ItemLabel, { ItemRecommendlabel } from "/src/components/atoms/ItemLabel";
 import CustomInput from "/src/components/atoms/CustomInput";
@@ -424,7 +424,7 @@ function SelectPlanPage() {
                   <figure className={`${s.image} img-wrap`}>
                     <Image
                       priority
-                      src={require("src/pages/survey/order/survey_order_title_left.png")}
+                      src={require("src/pages/order/subscribe/survey_order_title_left.png")}
                       objectFit="cover"
                       layout="fill"
                       alt="레시피 이미지"
@@ -518,7 +518,7 @@ function SelectPlanPage() {
               <button className={s.prevPage} onClick={onPrevPage}>
                 뒤로가기
               </button>
-              <Link href="/survey/deliveryInfo" passHref>
+              <Link href="/order/deliveryInfo" passHref>
                 <a><button className={s.nextPage}>맞춤레시피 구매하기</button></a>
               </Link>
             </div>

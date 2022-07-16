@@ -2,7 +2,7 @@ import React from "react";
 import Layout from "/src/components/common/Layout";
 import Wrapper from "/src/components/common/Wrapper";
 import MetaTitle from "@src/components/atoms/MetaTitle";
-import s from 'src/pages/survey/orderCompleted/index.module.scss';
+import s from 'src/pages/order/orderCompleted/index.module.scss';
 import Image from 'next/image';
 
 function OrderCompletedPage() {

@@ -152,9 +152,9 @@ export default function MypageSubscribe_DeliveryInfoPage() {
                   홈으로
                 </a>
               </Link>
-              <Link href={'/cart/ordersheet'} passHref>
+              <Link href={'/order/ordersheet'} passHref>
                 <a className={s.right_btn}>
-                  주문서로 이동
+                  주문하러 가기
                 </a>
               </Link>
             </div>

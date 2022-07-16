@@ -2,7 +2,7 @@ $browser-context:16; // html font-size
 @function rem($px, $context: $browser-context){
   @return #{$px / $context}rem;
 }
-@import 'styles/global/guide.scss';
+@import '../../../../styles/global/guide';
 
 section.text_box { padding: rem(80) 0 rem(80); }
 section.btn_box {padding: 0 0 rem(217) ;}

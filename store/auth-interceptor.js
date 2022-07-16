@@ -19,8 +19,8 @@ export default function AuthInterceptor({ children }) {
     // USER PATH
     
     // STEP1
-    // const USER_FOBBIDEN_PATH = ['cart', 'mypage', 'survey'];
     const USER_FOBBIDEN_PATH = [];
+    // const USER_FOBBIDEN_PATH = ['cart', 'order','mypage', 'survey'];
     let nonMemberPath;
     router.asPath.split('/').map((path) => {
       if (USER_FOBBIDEN_PATH.indexOf(path) >= 0) {

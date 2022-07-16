@@ -1,5 +1,5 @@
-@import 'styles/global/guide.scss';
-@import '/styles/global/rem.scss';
+@import '../../../styles/global/guide';
+@import '/styles/global/rem';
 
 
 
@@ -46,6 +46,8 @@
     background-color: #fff;
     color:#fff;
     aspect-ratio: 1/1;
+    //min-width: rem(70);
+    //min-height: rem(70);
     font-size: rem(18);
     cursor: default;
     $animationDuration : 1.6s;

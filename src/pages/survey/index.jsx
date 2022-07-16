@@ -9,7 +9,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import siblings from '/util/func/siblings';
-import { SurveyPagination } from './SurveyPagination';
+import { SurveyPagination } from '../../components/survey/SurveyPagination';
 import { FullScreenLoading } from '/src/components/atoms/fullScreenLoading';
 import {EffectFade, Navigation, Pagination} from 'swiper';
 import SurveyStep1 from '/src/components/survey/SurveyStep1';

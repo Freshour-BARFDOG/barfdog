@@ -1,4 +1,4 @@
-import s from './survey.module.scss';
+import s from '../../pages/survey/survey.module.scss';
 import Image from 'next/image';
 import React from 'react';
 
