@@ -1,11 +1,31 @@
-import React from "react";
+import React, {useState} from "react";
 import Layout from "/src/components/common/Layout";
 import Wrapper from "/src/components/common/Wrapper";
 import MetaTitle from "@src/components/atoms/MetaTitle";
-import Styles from "src/pages/survey/orderSheet/index.module.scss"
+import Styles from "src/pages/survey/ordersheet/index.module.scss"
 import Image from 'next/image';
+import {Payment} from "../../api/payment";
+import s from "../../cart/ordersheet.module.scss";
 
-function OrderSheepPage() {
+export default function SurveyOrderSheetPage() {
+  
+  const [activeModal, setActiveModal] = useState({
+    termsOfService: false,
+    coupon: false,
+  });
+  const [formValues, setFormValues] = useState({});
+  
+  const onActivleModalHandler = (e) => {
+    const button = e.currentTarget;
+    const modalType = button.dataset.modalType;
+    
+    setActiveModal((prevState) => ({
+      ...prevState,
+      [modalType]: !prevState[modalType],
+    }));
+  };
+  
+  
   return (
     <>
       <MetaTitle title="주문서" />
@@ -27,7 +47,6 @@ function OrderSheepPage() {
               <div>쿠폰할인</div>
               <div>쿠폰적용</div>
             </div>
-
             <div className={Styles.flex_box}>
               <div className={Styles.info_col}>
                 스타터프리미엄
@@ -38,7 +57,6 @@ function OrderSheepPage() {
                   옵션 : 옵션2 2개
                 </div>
               </div>
-
               <div className={Styles.count_col}>3개</div>
 
               <div className={Styles.price_col}>
@@ -49,34 +67,19 @@ function OrderSheepPage() {
               </div>
 
               <div className={Styles.coupon_col}>0원</div>
-
-              <div className={Styles.apply_coupon_col}>
-                <div className={Styles.btn}>
+  
+              <div className={s.apply_coupon_col}>
+                <button
+                  type={'button'}
+                  className={`${s['btn']}`}
+                  data-modal-type={'coupon'}
+                  onClick={onActivleModalHandler}
+                >
                   쿠폰 선택
-                </div>
+                </button>
               </div>
             </div>
             
-            <div className={Styles.flex_box}>
-              <div className={Styles.info_col}>바프레드</div> 
-
-              <div className={Styles.count_col}></div>
-
-              <div className={Styles.price_col}>
-                <div className={Styles.price_inner}>
-                  7,000원
-                </div>
-                  108,000원
-              </div>
-
-              <div className={Styles.coupon_col}></div>
-
-              <div className={Styles.apply_coupon_col}>
-                <div className={Styles.btn}>
-                  쿠폰 선택
-                </div>
-              </div>
-            </div>
           </section>
 
           <section className={Styles.orderer_info}>
@@ -362,7 +365,7 @@ function OrderSheepPage() {
             </div>
             
           </section>
-
+          
           <section className={Styles.line}>
             <hr />
           </section>
@@ -371,9 +374,9 @@ function OrderSheepPage() {
 
           <section className={Styles.final_btn}>
             <p>위 주문 내용을 확인 하였으며, 회원 본인은 결제에 동의합니다.</p>
-            <div className={Styles.btn_box}>결제하기</div>
-
+            <Payment />
           </section>
+         
         
         </Wrapper>
     
@@ -382,4 +385,4 @@ function OrderSheepPage() {
   );
 }
 
-export default OrderSheepPage;
+
