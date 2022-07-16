@@ -83,7 +83,7 @@ function LoginIndexPage({ autoLoginAccount }) {
         setIsSubmitted(true);
       }
     } catch (err) {
-      alert('API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.');
+      alert('로그인할 수 없습니다. 오류가 발생했습니다. 관리자에게 문의하세요.');
       console.error('API통신 오류 : ', err);
     }
     setIsLoading((prevState) => ({

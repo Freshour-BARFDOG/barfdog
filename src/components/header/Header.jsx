@@ -60,6 +60,8 @@ const Header = () => {
       }));
     }
   };
+  
+  
 
   const returnToPrevPage = () => {
     router.back();

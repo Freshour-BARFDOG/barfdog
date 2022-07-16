@@ -2,7 +2,6 @@ import { createSlice } from '@reduxjs/toolkit';
 import Router from 'next/router';
 import setExpiryDate from '/util/func/setExpiryDate';
 import {deleteCookie, setCookie} from '/util/func/cookie';
-import getAdminToken from "@src/pages/api/getAdminToken";
 
 const initialAuthState = {
   token: null,
@@ -19,19 +18,21 @@ const authSlice = createSlice({
       state.isAuth = true;
       state.isAdmin = false;
       state.token = action.payload.token;
-      if (state.isAdmin) {
-        return alert('관리자는 중복 로그인할 수 없습니다.');
-      }
+      setCookie('userLoginCookie',  state.token,  'date', 1 , {path:'/'});
       Router.push('/');
+      // console.log('일반 로그인')
     },
     autoLogin(state, action) {
       state.isAuth = true;
       state.isAdmin = false;
       state.autoLogin = true;
       state.token = action.payload.token;
-      localStorage.setItem('user', JSON.stringify({ token: state.token }));
-      if (state.isAdmin) return alert('관리자는 중복 로그인할 수 없습니다.');
+      const autoLoginExpiredDate = action.payload.expiredDate;
+      // localStorage.setItem('user', JSON.stringify({ token: state.token }));
+      setCookie('userLoginCookie',  state.token,  'date', autoLoginExpiredDate , {path:'/'});
+      setCookie('userAutoLoginCookie', true,  'date', autoLoginExpiredDate ,{path:'/'});
       Router.push('/');
+      // console.log('Auto 로그인')
     },
     userRestoreAuthState(state) {
       const token = JSON.parse(localStorage.getItem('user'))?.token;
@@ -58,6 +59,7 @@ const authSlice = createSlice({
       state.isAdmin = true;
       state.isAuth = true;
       state.token = action.payload.token;
+      const autoLoginExpiredDate = action.payload.expiredDate;
       // setCookie('adminLoginCookie',  state.token,  'date', autoLoginExpiredDate , {path:'/bf-admin'}); // ! 필요할 경우 path설정
       setCookie('adminLoginCookie',  state.token,  'date', autoLoginExpiredDate , {path:'/'});
       // localStorage.setItem('admin', JSON.stringify({ token: state.token }));

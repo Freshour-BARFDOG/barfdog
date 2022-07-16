@@ -14,14 +14,13 @@ export default function AuthInterceptor({ children }) {
   const curPath = router.route;
   const dispatch = useDispatch();
   
-  console.log(isAuth)
-
 
   useEffect(() => {
     // USER PATH
     
     // STEP1
-    const USER_FOBBIDEN_PATH = ['cart', 'mypage', 'survey'];
+    // const USER_FOBBIDEN_PATH = ['cart', 'mypage', 'survey'];
+    const USER_FOBBIDEN_PATH = [];
     let nonMemberPath;
     router.asPath.split('/').map((path) => {
       if (USER_FOBBIDEN_PATH.indexOf(path) >= 0) {
@@ -32,7 +31,7 @@ export default function AuthInterceptor({ children }) {
     // STEP 2 // CHECK member & admin Logged in
     if(window && typeof window !=='undefined'){
       const isAutoLoginState = getCookie('adminAutoLogin');
-      const loginAdminAccount = !!JSON.parse(isAutoLoginState).email
+      const loginAdminAccount = isAutoLoginState && !!JSON.parse(isAutoLoginState)?.email;
       const loginMemberAccount = !!userData;
       setIsAuth(loginMemberAccount || loginAdminAccount);
     }
@@ -62,7 +61,6 @@ export default function AuthInterceptor({ children }) {
       
       
       try {
-
         if (!isPublicAdminPath) {
           // const adminAuth = localStorage?.getItem('admin'); // PAST VERSION.
           const res = await valid_adminAuthToken();
@@ -74,10 +72,9 @@ export default function AuthInterceptor({ children }) {
             const refreshToken = JSON.parse(isAutoLoginState);// ! 리프레쉬 토큰 기능에 대한 임시방편 수단
             // ! 또는 server에서 token의 생명주기를 autoLogin에 따라 조절
             const accessToken = await getAdminToken(refreshToken)
-            // console.log(accessToken)
             dispatch(authAction.adminRestoreAuthState(accessToken));
           } else if (res.error) {
-            await router.push(`/${ADMIN_BASE_PATH}/login?redir=${status}`);
+            await router.push(`${ADMIN_BASE_PATH}/login?redir=${status}`);
             const errorMessage = res.error;
             // console.log(router.query)
             // console.error(errorMessage);

@@ -6,7 +6,7 @@ axios.defaults.withCredentials = true;
 
 
 
-const axiosConfig = (contType = "application/json") => {
+export default function axiosConfig (contType = "application/json") {
   // const accessToken = JSON.parse(localStorage.getItem("admin"))?.token; // PAST VERSION.
   const accessToken = getCookie('adminLoginCookie');
   return {
@@ -18,18 +18,17 @@ const axiosConfig = (contType = "application/json") => {
 };
 
 
-export default axiosConfig;
 
 
 
-
-
-
-export const axiosUserConfig = (contType = "application/json") => {
+export function axiosUserConfig (contType = "application/json") {
+  const accessToken = getCookie('userLoginCookie');
+  console.log(accessToken)
   return {
     headers: {
-      authorization: JSON.parse(localStorage.getItem("user"))?.token,
+      authorization: accessToken || JSON.parse(localStorage.getItem("user"))?.token,
       "content-Type": contType,
     }
   }
 };
+

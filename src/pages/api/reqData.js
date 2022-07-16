@@ -146,6 +146,7 @@ export const postObjData = async (url, data, contType) => {
     isDone: false,
     error: '',
     data: null,
+    status: null,
   }
 
   const response = await axios
@@ -153,13 +154,14 @@ export const postObjData = async (url, data, contType) => {
     .then((res) => {
       console.log(res);
       result.data = res;
+      result.status = res.status;
       return res.status === 200 || res.status === 201;
     })
     .catch((err) => {
       const error = err.response;
       console.log('ERROR내용: ',err.response);
-      if (error.data.errors[0].defaultMessage) {
-        result.error = error.data.errors[0].defaultMessage;
+      if (error.data.error || error.data.errors[0].defaultMessage) {
+        result.error = error.data.error || error.data.errors[0].defaultMessage;
       } else if(error?.data.error.error){
         result.error = '서버와 통신오류가 발생했습니다.'
       } else if (error.data.reason === 'EXPIRED_TOKEN') {
