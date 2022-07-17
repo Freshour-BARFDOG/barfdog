@@ -45,8 +45,8 @@ function AdminHeader({folded}) {
           <ul className={s.header_menus}>
             <li className={s.admin_info}>
               
-              <b className={s.admin_name}>{userData.name}
-                <span className={s.admin_email}>{userData.email}</span>
+              <b className={s.admin_name}>{userData?.name}
+                <span className={s.admin_email}>{userData?.email}</span>
               </b>님 반갑습니다.
             </li>
             <li>

@@ -12,6 +12,10 @@ section.before_after {padding : 0 0 rem(110)}
 
 .title {
   .text {
+    display: flex;
+    align-items: center;
+    gap: rem(10);
+    justify-content: center;
     text-align: center;
     @include char(t24);
   }
@@ -74,22 +78,38 @@ section.before_after {padding : 0 0 rem(110)}
   border-top: 1px solid var(--color-line-01);
   .grid_box {
     display: grid;
-    grid-template-columns: rem(110) rem(50) 1fr;
-    > * {
-      padding: rem(16) rem(20);
+    grid-template-rows: repeat(2, rem(50));
+    align-items: center;
+    li {
+      height: 100%;
+      display: grid;
+      align-items: center;
+      grid-template-columns: rem(160) 1fr;
       border-bottom: 1px solid var(--color-line-04);
       color : var(--color-font-sub);
       @include char(l15);
+      p, button{
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 rem(20);
+      }
+
+      p{
+        cursor: default;}
+      button {
+        color: #4d4d4d;
+        width: 100%;
+      }
+      .image{
+        width: rem(12);
+        aspect-ratio: 1/1;
+        cursor: pointer;
+      }
     }
     
-    div {
-      color: var(--color-font-sub);
-    }
-    .image{
-      width: rem(12);
-      aspect-ratio: 1/1;
-      cursor: pointer;
-    }
+
   }
 }
 

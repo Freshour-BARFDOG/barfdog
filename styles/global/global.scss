@@ -1,6 +1,4 @@
 /* 전역에서 사용될 CSS */
-
-@charset "utf-8";
 @import './reset.css';
 @import './font.css';
 @import './custom-swiper.scss';
@@ -76,7 +74,17 @@ html, body{width:100vw; overflow-x:hidden;}
       animation-delay:0.1*$i +s;
     }
   }
+}
 
+
+
+.ani-show-all-child{
+  animation: show var(--ani-default) forwards;
+  @for $i from 1 through 20 {
+    * :nth-child(#{$i}){
+      animation: show .4s var(--transition-cubic) forwards;
+    }
+  }
 }
 
 @keyframes show {
