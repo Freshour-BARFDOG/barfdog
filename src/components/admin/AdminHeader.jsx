@@ -11,7 +11,7 @@ import useUserData from "@util/hook/useUserData";
 
 function AdminHeader({folded}) {
   const userData = useUserData();
-  console.log(userData)
+  // console.log(userData)
   const dispatch = useDispatch();
   const onLogoutHandler = () => {
     dispatch(authAction.adminLogout());
