@@ -18,7 +18,6 @@ export default function NoticeIndexPage() {
   const searchPageSize = 10;
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
-  // console.log(pageData);
   // console.log(itemList);
   return (
     <>
