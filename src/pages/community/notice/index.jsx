@@ -7,9 +7,18 @@ import Link from 'next/link';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import Spinner from '/src/components/atoms/Spinner';
 import { EmptyContMessage } from '/src/components/atoms/emptyContMessage';
-import transformDate from "/util/func/transformDate";
-import s from "./[noticeId].module.scss";
+import transformDate from '/util/func/transformDate';
+import s from './[noticeId].module.scss';
 
+//
+// "id" : 270,
+//   "title" : "공지사항7",
+//   "createdDate" : "2022-07-15T16:52:11.942",
+//   "_links" : {
+//   "query_notice" : {
+//     "href" : "http://localhost:8080/api/notices/270"
+//   }
+//
 // const DUMMY_DATA = [
 //   {
 //     id: 140,
@@ -48,21 +57,22 @@ import s from "./[noticeId].module.scss";
 // ];
 
 export default function NoticeIndexPage() {
-  const getListApiUrl = "/api/admin/notices";
-  const apiDataQueryString = 'queryBlogsAdminDtoList';
+  const getListApiUrl = '/api/notices';
+  const apiDataQueryString = 'queryNoticesDtoList';
   const searchPageSize = 10;
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
-  const [pageData, setPageData] = useState( {} );
-  console.log(pageData)
-  console.log(itemList)
+  const [pageData, setPageData] = useState({});
+  // console.log(pageData);
+  // console.log(itemList);
   return (
     <>
       <MetaTitle title="공지사항" />
-      <Layout >
+      <Layout>
         <Wrapper className={`${Styles['notice-wrap']}`}>
           <section className={Styles.title}>
-            <p className={Styles.text}>공지사항
+            <p className={Styles.text}>
+              공지사항
               {isLoading.fetching && <Spinner />}
             </p>
           </section>
@@ -76,21 +86,18 @@ export default function NoticeIndexPage() {
             <ul className="cont_list">
               {itemList.length > 0 ? (
                 itemList.map((item, index) => {
-                  if(item.status !== 'LEAKED'){
-                    return;
-                  }
                   return (
                     <li key={`notice-${item.id}-${index}`}>
-                        <Link href={`/community/notice/${item.id}`} passHref>
-                          <a>
-                            <div className={Styles.content_box}>
-                              <span className={Styles.counter_num}>{item.id}</span>
-                              <p>{item.title}</p>
-                              <span>{transformDate(item.createdDate) || '-'}</span>
-                            </div>
-                          </a>
-                        </Link>
-                      </li>
+                      <Link href={`/community/notice/${item.id}`} passHref>
+                        <a>
+                          <div className={Styles.content_box}>
+                            <span className={Styles.counter_num}>{item.id}</span>
+                            <p>{item.title}</p>
+                            <span>{transformDate(item.createdDate) || '-'}</span>
+                          </div>
+                        </a>
+                      </Link>
+                    </li>
                   );
                 })
               ) : (
@@ -104,11 +111,12 @@ export default function NoticeIndexPage() {
               size={searchPageSize}
               setItemList={setItemList}
               queryItemList={apiDataQueryString}
-              setIsLoading={setIsLoading} setPageData={setPageData}/>
+              setIsLoading={setIsLoading}
+              setPageData={setPageData}
+            />
           </div>
         </Wrapper>
       </Layout>
     </>
   );
 }
-

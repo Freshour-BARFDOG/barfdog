@@ -32,8 +32,10 @@ export default function NoticePostPage({ noticeId }) {
   }
   
   useEffect(() => {
-    const getFormValuesApiUrl = `/api/admin/notices/${curPageId}`;
-    const getIemListApiUrl = `/api/admin/notices`;
+    const getFormValuesApiUrl = `/api/notices/${curPageId}`;
+    const formValueQuery = 'noticeDto'
+    const getIemListApiUrl = `/api/notices`;
+    const itemListQuery = 'queryNoticesDtoList';
     (async () => {
       try {
         setIsLoading((prevState) => ({
@@ -44,7 +46,7 @@ export default function NoticePostPage({ noticeId }) {
 
         let DATA;
         if (res.data) {
-          const data = res.data.noticeAdminDto;
+          const data = res.data[formValueQuery];
           DATA = {
             id: data.id,
             status: data.status,
@@ -70,11 +72,11 @@ export default function NoticePostPage({ noticeId }) {
           fetching: true,
         }));
         const res = await getData(getIemListApiUrl);
-        // console.log(res);
+        console.log(res);
         if (res.data) {
-          const itemListInfo = res.data._embedded.queryBlogsAdminDtoList;
+          const itemListInfo = res.data._embedded[itemListQuery];
           let curItemIndex;
-          const tempItemList = itemListInfo.filter(list=>list.status===itemExposureType.LEAKED).reverse(); // 배열인덱스를 과거순을 정렬
+          const tempItemList = itemListInfo.reverse(); // 배열인덱스를 과거순을 정렬
           for (let i = 0; i < tempItemList.length; i++) {
             if (tempItemList[i].id === curPageId) {
               curItemIndex = i;
