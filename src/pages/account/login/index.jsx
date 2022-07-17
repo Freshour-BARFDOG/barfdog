@@ -26,6 +26,7 @@ const initialValues = {
 };
 
 export default function LoginPage() {
+  const postFormValuesApiUrl = '/api/login';
   const router = useRouter();
   const dispatch = useDispatch();
   const mct = useModalContext();
@@ -46,7 +47,6 @@ export default function LoginPage() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-
     // console.log(formValues)
     const errObj = validate(formValues);
     const isPassed = valid_hasFormErrors(errObj);
@@ -59,7 +59,7 @@ export default function LoginPage() {
         ...prevState,
         submit: true,
       }));
-      const postFormValuesApiUrl = '/api/login';
+      
       await axios
         .post(postFormValuesApiUrl, formValues, {
           headers: {
@@ -68,7 +68,6 @@ export default function LoginPage() {
         })
         .then((res) => {
           console.log(res);
-          
           if (res.status === 200) {
             const token = res.headers.authorization;
             activeAutoLogin

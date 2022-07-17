@@ -1,10 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
 import Router from 'next/router';
-import setExpiryDate from '/util/func/setExpiryDate';
-import {deleteCookie, setCookie} from '/util/func/cookie';
+import {setCookie} from '/util/func/cookie';
+
+// - --------------------------------------------------------------------
+// - cf. Cookie: expiredDate값이 null일 경우, application expired값이 session으로 설정
+// const token = JSON.parse(localStorage.getItem('user'))?.token; // PAST VER.
+// - --------------------------------------------------------------------
+const autoLoginExpiredDate = 7;
 
 const initialAuthState = {
-  token: null,
+  refreshToken: null,
   isAuth: false,
   isAdmin: false,
   autoLogin: false,
@@ -15,89 +20,92 @@ const authSlice = createSlice({
   initialState: initialAuthState,
   reducers: {
     login(state, action) {
-      state.isAuth = true;
       state.isAdmin = false;
-      state.token = action.payload.token;
-      setCookie('userLoginCookie',  state.token,  'date', 1 , {path:'/'});
+      state.isAuth = true;
+      state.autoLogin = false;
+      const accessToken = action.payload.token;
+      setCookie('userLoginCookie',  accessToken,  'date', 1 , {path:'/'});
+      setCookie('userRefreshToken', JSON.stringify({refreshToken:null,  autoLogin: false }),  'date', 1 ,{path:'/'});
       Router.push('/');
-      // console.log('일반 로그인')
     },
     autoLogin(state, action) {
-      state.isAuth = true;
       state.isAdmin = false;
+      state.isAuth = true;
       state.autoLogin = true;
-      state.token = action.payload.token;
-      const autoLoginExpiredDate = action.payload.expiredDate;
-      // localStorage.setItem('user', JSON.stringify({ token: state.token }));
-      setCookie('userLoginCookie',  state.token,  'date', autoLoginExpiredDate , {path:'/'});
-      setCookie('userAutoLoginCookie', true,  'date', autoLoginExpiredDate ,{path:'/'});
+      const accessToken = action.payload.token;
+      setCookie('userLoginCookie',  accessToken,  'date', autoLoginExpiredDate , {path:'/'});
+      setCookie('userRefreshToken', JSON.stringify({refreshToken: 'make_your_refreshToken', autoLogin:true}),  'date', autoLoginExpiredDate ,{path:'/'});
       Router.push('/');
-      // console.log('Auto 로그인')
     },
     userRestoreAuthState(state) {
-      const token = JSON.parse(localStorage.getItem('user'))?.token;
-      // * 서버측 refresh token 없이 임시로 만듦
       console.log('User Restore Auth State');
-      if (token) {
-        state.isAdmin = false;
-        state.isAuth = true;
-        state.token = token;
-        state.autoLogin = true;
-      }
+      state.isAdmin = false;
+      state.isAuth = true;
+      state.autoLogin = true;
+    },
+    userSaveNewAccessToken (state, action) {
+      state.isAdmin = false;
+      state.isAuth = true;
+      state.autoLogin = true;
+      state.refreshToken = action.payload.token; // ! 유저 리프레쉬 토큰 기능없음. 만료될 경우, 다시 로그인해야함.
+      setCookie('userRefreshToken',  state.token,  'date', 7, {path:'/'} );
     },
     logout(state) {
+      state.isAdmin = false;
       state.isAuth = false;
-      state.token = null;
-      localStorage.removeItem('user');
+      state.refreshToken = null;
       alert('로그아웃');
       Router.push('/');
+      // localStorage.removeItem('user');
     },
-    // --------------------------------------------- //
-    // --------------------------------------------- //
-    // --------------------------------------------- //
+    // ------------------------------------------------------------------------------------ //
+    // ------------------------------------------------------------------------------------ //
     adminLogin(state, action) {
       state.isAdmin = true;
       state.isAuth = true;
-      state.token = action.payload.token;
-      const autoLoginExpiredDate = action.payload.expiredDate;
-      // setCookie('adminLoginCookie',  state.token,  'date', autoLoginExpiredDate , {path:'/bf-admin'}); // ! 필요할 경우 path설정
-      setCookie('adminLoginCookie',  state.token,  'date', autoLoginExpiredDate , {path:'/'});
-      // localStorage.setItem('admin', JSON.stringify({ token: state.token }));
+      state.autoLogin = false;
+      const accessToken = action.payload.token;
+      setCookie('adminLoginCookie',  accessToken,  'date', 1 , {path:'/'});
+      setCookie('adminRefreshToken', JSON.stringify({refreshToken:null,  autoLogin: false }),  'date', 1, {path:'/'})
     },
-    adminAugoLogin(state, action) {
+    adminAutoLogin(state, action) {
       state.isAdmin = true;
       state.isAuth = true;
-      state.token = action.payload.token;
       state.autoLogin = true;
-      const { email, password } = action.payload.account;
-      const autoLoginExpiredDate = action.payload.expiredDate;
-      // setCookie('adminLoginCookie',  state.token,  'date', autoLoginExpiredDate , {path:'/bf-admin'}); // ! 필요할 경우 path설정
-      setCookie('adminLoginCookie',  state.token,  'date', autoLoginExpiredDate , {path:'/'});
-      setCookie('adminAutoLogin', JSON.stringify({ email, password }),  'date', autoLoginExpiredDate ,{path:'/'});
-      // localStorage.setItem(
-      //   'admin',
-      //   JSON.stringify({ token: state.token, account: { email, password }, expires: expiryDate }),
-      // );
-      // ! 추후에 Backend API > refresh토큰이 개발 후, refresh token으로 변경하기
+      const accessToken = action.payload.token;
+      setCookie('adminLoginCookie',  accessToken,  'date', 1 , {path:'/'});
+      const refreshToken = action.payload.refreshToken;
+      // ! 추후 Backend API  refresh토큰 개발될 경우, 변경
+      setCookie('adminRefreshToken',  JSON.stringify({ refreshToken: refreshToken, autoLogin: true }),  'date', autoLoginExpiredDate ,{path:'/'});
+    },
+    adminRestoreAuthState (state, action) {
+      console.log('admnin Restore Auth State');
+      // console.log('autoLogin : ',state.payload.autoLogin)
+      state.isAdmin = true;
+      state.isAuth = true;
+      state.autoLogin = action.payload.autoLogin; // 유저의 autologin 상태를 FE에서 관라히기 위함.
+    },
+    adminUpdateAccessToken (state, action) {
+      state.autoLogin = true;
+      state.isAdmin = true;
+      state.isAuth = true;
+      const accessToken = action.payload.token;
+      const refreshToken = action.payload.refreshToken; // REDUX에만 표기한다.
+      state.refreshToken = refreshToken
+      setCookie('adminLoginCookie',  accessToken,  'date', 1, {path:'/'} );
+      // REFRESH TOKEN : updateAccessToken시에, cookie에 저장하지 않는다. // autologin시점에만 업데이트한다.
+    },
+    adminResetPassword(state) {
+      state.isAdmin = true;
     },
     adminLogout(state) {
       state.isAdmin = false;
       state.isAuth = false;
-      state.token = null;
-      // localStorage.removeItem('admin');
-      setCookie('adminLoginCookie',  state.token,  'date', 0, {path:'/'} );
-      // deleteCookie('adminAuth')
-      alert('로그아웃 처리되었습니다.');
+      state.refreshToken = null;
+      setCookie('adminLoginCookie',  null,  'date', 0, {path:'/'} );
+      setCookie('adminRefreshToken',  null,  'date', 0, {path:'/'} );
+      alert('관리자 계정 로그아웃 처리되었습니다.');
       Router.push('/bf-admin/login');
-    },
-    adminRestoreAuthState (state, action) {
-      state.isAdmin = true;
-      state.isAuth = true;
-      state.autoLogin = true;
-      state.token = action.payload.token;
-    },
-    adminResetPassword(state) {
-      state.isAdmin = true;
     },
   },
 });

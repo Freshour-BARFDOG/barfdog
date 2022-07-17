@@ -64,6 +64,8 @@ $browser-context: 16;
         height: rem(32);
         margin-right: rem(30);
         overflow: hidden;
+        position: relative;
+        top: rem(-1);
       }
       .username {
         cursor: default;

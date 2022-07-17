@@ -50,9 +50,14 @@ function LoginIndexPage({ autoLoginAccount }) {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (isSubmitted) return;
-    // ! IMPORTANT : submit 이후 enterKey event로 trigger되는 중복submit 방지
-    // console.log(formValues);
+    if (isSubmitted) return; // ! IMPORTANT : submit 이후 enterKey event로 trigger되는 중복submit 방지
+    // ! --------------------------------------------------------------------------- ! //
+    // TEST => 예외 계정 처리
+     const forbiddenUser  = {email:'user@gmail.com', password: 'user'};
+    if(formValues.email === forbiddenUser.email && formValues.password === forbiddenUser.password){
+      return alert('관리자로서 로그인이 불가한 계정입니다.');
+    }
+    // ! --------------------------------------------------------------------------- ! //
     const errObj = validate(formValues);
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
@@ -71,10 +76,9 @@ function LoginIndexPage({ autoLoginAccount }) {
       } else {
         if (autoLogin) {
           const { email, password } = formValues;
-          const autoLoginExpiredDate = 7;
-          dispatch(authAction.adminAugoLogin({ token: token, account: { email, password }, expiredDate: autoLoginExpiredDate }));
-          onShowModalHandler(`관리자 로그인에 성공하였습니다.
-본인 기기에서만 사용하시기 바랍니다.\n자동로그인: ${autoLoginExpiredDate}일간 유지`);
+          const refreshToken = { email, password }; // ! RefreshToken에 대한 임시사용
+          dispatch(authAction.adminAutoLogin({ token: token, refreshToken}));
+          onShowModalHandler(`관리자 로그인에 성공하였습니다.\n자동로그인: ${autoLogin}`);
         } else {
           dispatch(authAction.adminLogin({ token: token }));
           onShowModalHandler('관리자 로그인에 성공하였습니다.');
@@ -117,6 +121,7 @@ function LoginIndexPage({ autoLoginAccount }) {
     if (isSubmitted) {
       Router.push('/bf-admin/dashboard');
     }
+      mct.alertHide();
   };
   
 
@@ -125,6 +130,12 @@ function LoginIndexPage({ autoLoginAccount }) {
   return (
     <>
       <MetaTitle title="관리자 로그인" admin={true} />
+      <Modal_global_alert message={modalMessage} background onClick={onGlobalModalCallback} />
+      {mct.isActive && (
+        <Modal onClick={onHideResetPasswordModal} background title="비밀번호 재설정">
+          <Modal_AdminResetPassword />
+        </Modal>
+      )}
       <main id={s['loginPage']}>
         <section className="flex-wrap">
           <div className={s.frame}>
@@ -199,12 +210,6 @@ function LoginIndexPage({ autoLoginAccount }) {
           </div>
         </section>
       </main>
-      <Modal_global_alert message={modalMessage} background onClick={onGlobalModalCallback} />
-      {mct.isActive && (
-        <Modal onClick={onHideResetPasswordModal} background title="비밀번호 재설정">
-          <Modal_AdminResetPassword />
-        </Modal>
-      )}
     </>
   );
 }

@@ -8,17 +8,30 @@ export default function useUserData() {
   const [userData, setUserData] = useState(null);
   const auth = useSelector((state) => state.auth);
 
-  
+  // console.log('useUserData.js\n',auth)
   useEffect(() => {
-    if(!auth.isAuth || auth.isAdmin || userData)return;
+    
+    // ADMIN
+    if(auth.isAdmin){
+      let adminDATA = {
+        name: '관리자',
+        email: 'admin@gmail.com',
+        grade: 'ADMIN',
+      };
+      setUserData(adminDATA)
+    }
+    
+    // MEMBER
+    if(!auth.isAuth || userData)return;
     (async () => {
+      let memberDATA = null
       const res = await axios
         .get('/api/members', axiosUserConfig())
         .catch((err) => {
           console.log(err.response);
       });
       if (res?.status === 200){
-        const DATA = {
+        memberDATA = {
           birthday: res.data.birthday,
           gender: res.data.gender,
           name: res.data.name,
@@ -36,8 +49,8 @@ export default function useUserData() {
             isAdmin: auth.isAdmin,
           }
         };
-        setUserData(DATA);
       };
+      setUserData(memberDATA);
     })();
   }, [auth]);
 
@@ -45,3 +58,4 @@ export default function useUserData() {
 
   return userData;
 }
+

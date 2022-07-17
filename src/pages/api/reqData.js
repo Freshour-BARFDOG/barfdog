@@ -51,29 +51,55 @@ export const getData = async (url, callback) => {
       return res;
     })
     .catch((err) => {
-      let errorMessage;
-      // console.log(err);
-  
-      const errorObj = err.response;
-      const status = errorObj?.status;
-      if(status === 401){
-        const errorReason = errorObj.data.reason;
-        if(errorReason === "EXPIRED_TOKEN"){
-          console.error("ERROR REASON: ", errorReason);
-          errorMessage = status + errorReason+ '\n로그인 토큰이 만료되었습니다. 다시 로그인해주세요.';
-        } else if(errorReason === "UNAUTHORIZED") {
-          errorMessage = errorReason +  '\n권한이 없습니다.'
-        }
-      }else if (status === 403) {
-        errorMessage =  errorReason + '\n접근 불가한 페이지입니다.';
-      } else if(status === 500) {
-        errorMessage =  errorObj?.data?.error + '\n데이터가 존재하지 않거나, 서버 내부 에러입니다.';
-      } else {
-        errorMessage =  'Failed Fetching Data: 데이터를 불러오는데 실패했습니다.';
-      }
-      
       console.log(err.response);
-      console.error(errorMessage);
+      let errorMessage;
+      const errorObj = err?.response;
+      const status = errorObj?.status;
+      // if(status === 401){
+      //   const errorReason = err?.response.data.reason;
+      //   if(errorReason === "EXPIRED_TOKEN"){
+      //     console.error("ERROR REASON: ", errorReason);
+      //     errorMessage = status + errorReason+ '\n로그인 토큰이 만료되었습니다. 다시 로그인해주세요.';
+      //   } else if(errorReason === "UNAUTHORIZED") {
+      //     errorMessage = errorReason +  '\n권한이 없습니다.'
+      //   }
+      // }else if (status === 403) {
+      //   errorMessage = '\n접근 불가한 페이지입니다.';
+      // } else if(status === 500) {
+      //   errorMessage =  errorObj?.data?.error + '\n데이터가 존재하지 않거나, 서버 내부 에러입니다.';
+      // } else {
+      //   errorMessage =  'Failed Fetching Data: 데이터를 불러오는데 실패했습니다.';
+      // }
+      let error = null;
+      console.log(status)
+      switch (status) {
+        case 200:
+          error = '';  // 유효한 토큰 : 요청을 성공적으로 처리함
+          break;
+        case 201:
+          error = '';
+          // 새 리소스를 성공적으로 생성함. 응답의 Location 헤더에 해당 리소스의 URI가 담겨있다.
+          break;
+        case 400:
+          error = '잘못된 요청을 보냈습니다.';
+          break;
+        case 401:
+          error = '인증 토큰이 만료되었습니다';
+          break;
+        case 403:
+          error = '해당 토큰으로는 접근할 수 없는 페이지입니다..';
+          break;
+        case 404:
+          error = '요청한 리소스가 서버에 없습니다.';
+          break;
+        case 409:
+          error = '중복된 리소스가 이미 존재합니다.';
+          break;
+        case 500:
+          error = `${status}: 데이터를 조회할 수 없습니다.`;
+          break;
+      }
+      console.error(error); // 개발 시, Response Status 확인용
       return err.response;
     });
 
@@ -167,6 +193,7 @@ export const postObjData = async (url, data, contType) => {
       } else if (error.data.reason === 'EXPIRED_TOKEN') {
         result.error = '관리자 로그인 토큰이 만료되었습니다.'
       }
+      result.status = err.response.status;
       return !error?.status >= 400;
     });
 
@@ -182,6 +209,7 @@ export const putObjData = async (url, data, contType) => {
     isDone: false,
     error: '',
     data: null,
+    status: null,
   }
   const response = await axios
     .put(url, data, axiosConfig(contType))
@@ -194,7 +222,9 @@ export const putObjData = async (url, data, contType) => {
       console.log(err.response);
       const errStatus = err.response?.status >= 400;
       const errorMessage = err.response?.data.error;
-      result.error = errorMessage
+      result.status = err.response.status;
+      result.error = errorMessage;
+      result.data = err.response;
       return !errStatus;
     });
 
@@ -271,7 +301,35 @@ export const getTokenFromCookie = (req)=>{
   
 }
 
+export const getAdminTokenFromCookie = (req)=>{
+  let token;
+  const cookie = req.headers.cookie;
+  const tokenKey = 'adminLoginCookie';
+  cookie.split(';').forEach((c) => {
+    if (c.indexOf(tokenKey) >= 0) {
+      token = c.split('=')[1];
+      return
+    }
+  });
+  return token;
+}
 
+
+
+export const getAdminAutoLoginStatus = (req)=>{
+  let autologinStatus;
+  const cookie = req.headers.cookie;
+  const tokenKey = 'adminAutoLogin';
+  cookie.split(';').forEach((c) => {
+    if (c.indexOf(tokenKey) >= 0) {
+      autologinStatus = c.split('=')[1];
+      console.log(JSON.parse(autologinStatus));
+      autologinStatus = !!JSON.parse(autologinStatus).email;
+      return;
+    }
+  });
+  return autologinStatus;
+}
 
 
 

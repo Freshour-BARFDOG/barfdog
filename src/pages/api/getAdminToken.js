@@ -10,15 +10,10 @@ const getAdminToken = async (payload, callback) => {
     },
     data: "data",
     dataType: "json",
-    encType: "multipart/form-data", //파일전송 시 필수
+    // encType: "multipart/form-data", //파일전송 시 필수
     processData: false,
   };
-
-  // const adminAccount = {
-  //   email: "admin@gmail.com",
-  //   password: "admin",
-  // };
-
+  
   const adminAccount = {
     email: payload.email,
     password: payload.password,

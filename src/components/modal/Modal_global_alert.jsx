@@ -5,7 +5,7 @@ import ModalWrapper from './ModalWrapper';
 
 
 
-function Modal_global_alert({ message, onClick, background, ...props }) {
+function Modal_global_alert({ message, onClick, background,   ...props }) {
   const mct = useModalContext();
   const modalState = mct.hasAlert;
   const [style, setStyle] = useState({});
@@ -27,7 +27,6 @@ function Modal_global_alert({ message, onClick, background, ...props }) {
     } else {
       mct.alertHide();
     }
-    
   }
 
   return (

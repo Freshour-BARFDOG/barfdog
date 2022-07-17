@@ -23,7 +23,7 @@ export default function axiosConfig (contType = "application/json") {
 
 export function axiosUserConfig (contType = "application/json") {
   const accessToken = getCookie('userLoginCookie');
-  console.log(accessToken)
+  // console.log(accessToken)
   return {
     headers: {
       authorization: accessToken || JSON.parse(localStorage.getItem("user"))?.token,

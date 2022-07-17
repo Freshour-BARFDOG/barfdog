@@ -7,8 +7,11 @@ import s from "./adminHeader.module.scss";
 import Link from 'next/link';
 import {IoMenuSharp} from "react-icons/io5";
 import {userStateAction} from "@store/userState-slice";
+import useUserData from "@util/hook/useUserData";
 
 function AdminHeader({folded}) {
+  const userData = useUserData();
+  console.log(userData)
   const dispatch = useDispatch();
   const onLogoutHandler = () => {
     dispatch(authAction.adminLogout());
@@ -18,7 +21,6 @@ function AdminHeader({folded}) {
     dispatch(folded ? userStateAction.unfold() : userStateAction.fold());
   }
 
-  const adminName = '관리자'; // * 정적인 이름 필요할 경우 변경
   return (
     <header id={s.admin_header}>
       <AdminWrapper>
@@ -42,7 +44,10 @@ function AdminHeader({folded}) {
           </div>
           <ul className={s.header_menus}>
             <li className={s.admin_info}>
-              <b className={s.admin_name}>{adminName}</b>님 반갑습니다.
+              
+              <b className={s.admin_name}>{userData.name}
+                <span className={s.admin_email}>{userData.email}</span>
+              </b>님 반갑습니다.
             </li>
             <li>
               <button
