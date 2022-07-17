@@ -373,7 +373,7 @@ const valid_singleItemOptionObj = (optionObj) => {
 
 
 export const valid_fileSize = (file, maxFileSize) => {
-  let error = file.size > maxFileSize;
+  let error = file?.size > maxFileSize;
   if (error) {
     error = `- 최대 파일크기: ${convertFileSizeToMegabyte(
       maxFileSize,

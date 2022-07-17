@@ -1,0 +1,31 @@
+@import 'styles/global/rem';
+@import '/styles/global/guide';
+
+.empty-cont-box{
+  height: rem(300);
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  .inner > *:not(:last-child){margin-bottom:rem(20);}
+
+  .text{
+    color: var(--color-font-sub);
+    font-size: rem(16);
+  }
+  .btn{
+    width: fit-content;
+    min-width: rem(200);
+    color:#fff;
+    padding: 0 rem(40);
+    box-sizing: border-box;
+    height: rem(44);
+    background-color: var(--color-main);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: rem(4);
+    margin: 0 auto;
+  }
+
+}

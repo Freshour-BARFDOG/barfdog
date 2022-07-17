@@ -25,10 +25,12 @@ const uploadImageToApiServer = async (
   result.url = imageUrl;
   result.leakOrder = leakOrder;
   if (setFormValues && typeof setFormValues === 'function') {
-    setFormValues((prevState) => ({
-      ...prevState,
-      [id]: [...prevState[id], {id: imageId, leakOrder: leakOrder}],
-    }));
+    setFormValues((prevState) => {
+      return id ? {
+        ...prevState,
+        [id]: [...prevState[id], {id: imageId, leakOrder: leakOrder}],
+      } : {id: imageId, leakOrder: leakOrder}
+    });
   }
   
   if (setFormErrors && typeof setFormErrors === 'function') {
