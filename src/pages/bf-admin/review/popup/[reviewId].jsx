@@ -18,7 +18,7 @@ import Modal from '/src/components/modal/Modal';
 import { useModalContext } from '/store/modal-context';
 import Modal_alert, { Modal_innerForm } from '/src/components/modal/Modal_alert';
 import {getData, postObjData} from '/src/pages/api/reqData';
-import { FullScreenLoading } from '/src/components/atoms/fullScreenLoading';
+import { FullScreenLoading } from '/src/components/atoms/FullScreenLoading';
 import {global_reviewStateType} from "/store/TYPE/reviewStateType";
 
 

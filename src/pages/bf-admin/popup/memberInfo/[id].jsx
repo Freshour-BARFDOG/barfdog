@@ -5,7 +5,7 @@ import { PopupCloseButton, PopupCloseButton_typeX } from '/src/components/popup/
 import Modal_member_class from '/src/components/modal/Modal_member_class';
 import Modal_member_subscribe from '/src/components/modal/Modal_member_subscribe';
 import { getData, putObjData } from '/src/pages/api/reqData';
-import { FullScreenLoading } from '/src/components/atoms/fullScreenLoading';
+import { FullScreenLoading } from '/src/components/atoms/FullScreenLoading';
 
 function Popup_MemeberDetailPage({ id }) {
   const getReviewInfoApiUrl = `/api/admin/members/${id}`;
