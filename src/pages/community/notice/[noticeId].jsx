@@ -9,8 +9,8 @@ import Spinner from '/src/components/atoms/Spinner';
 import Link from 'next/link';
 import transformDate from '/util/func/transformDate';
 import {useRouter} from "next/router";
-import {itemExposureType} from "../../../../store/TYPE/itemExposureType";
 import 'react-quill/dist/quill.snow.css';
+import {MoveToNextPrevPage} from "../../../components/common/MoveToNextPrevPage";
 
 export default function NoticePostPage({ noticeId }) {
   const router = useRouter();
@@ -49,7 +49,6 @@ export default function NoticePostPage({ noticeId }) {
           const data = res.data[formValueQuery];
           DATA = {
             id: data.id,
-            status: data.status,
             title: data.title,
             contents: data.contents,
           };
@@ -130,52 +129,7 @@ export default function NoticePostPage({ noticeId }) {
               <a className={s.btn}>목록 보기</a>
             </Link>
           </section>
-          <section className={`${s.before_after} ani-show-all-child`}>
-            <ul className={s.grid_box}>
-              <li>
-                <p>
-                  다음 글
-                  <i className={`${s.image} img-wrap`}>
-                    <Image
-                      priority="false"
-                      src={require('/public/img/pages/community/up_arrow.png')}
-                      objectFit="contain"
-                      layout="fill"
-                      alt="카드 이미지"
-                    />
-                  </i>
-                </p>
-                {pageInfo.next ? (
-                  <button type={'button'} onClick={onChangePageId} data-page-id={pageInfo.next.id}>
-                    {pageInfo.next.title}
-                  </button>
-                ) : (
-                  <p>다음 글이 없습니다.</p>
-                )}
-              </li>
-              <li>
-                <p>
-                  이전 글
-                  <i className={`${s.image} img-wrap`}>
-                    <Image
-                      priority="false"
-                      src={require('/public/img/pages/community/down_arrow.png')}
-                      objectFit="contain"
-                      layout="fill"
-                      alt="카드 이미지"
-                    />
-                  </i>
-                </p>
-                {pageInfo.prev ? (
-                  <button type={'button'} onClick={onChangePageId} data-page-id={pageInfo.prev.id}>
-                    {pageInfo.prev.title}
-                  </button>
-                ) : (
-                  <p>이전 글이 없습니다.</p>
-                )}
-              </li>
-            </ul>
-          </section>
+          <MoveToNextPrevPage pageInfo={pageInfo} setCurPageId={setCurPageId} borderColor={'var(--color-line-01)'}/>
         </Wrapper>
       </Layout>
     </>
@@ -186,3 +140,4 @@ NoticePostPage.getInitialProps = async ({ query }) => {
   const { noticeId } = query;
   return { noticeId };
 };
+

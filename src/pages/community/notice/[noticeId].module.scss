@@ -8,7 +8,7 @@ $browser-context:16; // html font-size
 section.title {padding : rem(60) 0 rem(60)}
 section.announcement {padding : 0 0 rem(20)}
 section.list_gotosee {padding : 0 0 rem(40)}
-section.before_after {padding : 0 0 rem(110)}
+section.wrap {padding : 0 0 rem(110)}
 
 .title {
   .text {
@@ -74,7 +74,7 @@ section.before_after {padding : 0 0 rem(110)}
 }
 
 
-.before_after {
+.wrap {
   border-top: 1px solid var(--color-line-01);
   .grid_box {
     display: grid;
@@ -142,7 +142,7 @@ section.before_after {padding : 0 0 rem(110)}
     }
   }
 
-  .before_after {
+  .wrap {
     .grid_box {
       grid-template-columns: rem(50) rem(30) 1fr;
 
