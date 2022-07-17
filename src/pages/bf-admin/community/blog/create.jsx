@@ -17,6 +17,7 @@ import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import { useModalContext } from '/store/modal-context';
 import CustomRadio from '/src/components/admin/form/CustomRadio';
+import {blogCategoryType} from "/store/TYPE/blogCategoryType";
 
 const initialFormValues = {
   title: '',
@@ -26,6 +27,7 @@ const initialFormValues = {
   blogImageIdList: [],
   status: 'LEAKED',
 };
+
 
 const CreateBlogPage = () => {
   const blogDetailImageUploadApiURL = '/api/admin/blogs/image/upload';
@@ -39,10 +41,13 @@ const CreateBlogPage = () => {
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
-
-  // console.log(formValues);
-  //  INIT QUILL EDITOR
+  
+  // console.log(formValues)
+  
+  
+  
   useEffect(() => {
+    //  INIT QUILL EDITOR
     if (document) {
       const QuillEditor = dynamic(() => import('/src/components/admin/form/QuillEditor'));
       setQuillEditor(QuillEditor);
@@ -197,10 +202,11 @@ const CreateBlogPage = () => {
                         onChange={onInputChangeHandler}
                         options={[
                           { label: '카테고리 선택', value: '' },
-                          { label: '영양', value: 'NUTRITION' },
-                          { label: '건강', value: 'HEALTH' },
-                          { label: '생애', value: 'LIFE' },
+                          { label: blogCategoryType.KOR.NUTRITION, value: blogCategoryType.NUTRITION },
+                          { label: blogCategoryType.KOR.HEALTH, value: blogCategoryType.HEALTH },
+                          { label: blogCategoryType.KOR.LIFE, value: blogCategoryType.LIFE },
                         ]}
+                        initialValue={formValues.category}
                       />
                       {formErrors.category && <ErrorMessage>{formErrors.category}</ErrorMessage>}
                     </div>
