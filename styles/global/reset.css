@@ -379,6 +379,21 @@ img {
   display: block;
 }
 
+.init-next-image{
+  position: relative !important;
+  display: inline-flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+.init-next-image span, .init-next-image img{
+  overflow: initial !important;
+  position: relative !important;
+  max-height: initial !important;
+  max-width: initial !important;
+  width: initial !important;
+  height: initial !important;
+}
+
 /* 숨기기 */
 .hide {
   position: absolute;
