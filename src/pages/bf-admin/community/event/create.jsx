@@ -167,7 +167,7 @@ const CreateEventPage = () => {
           <div className="title_main">
             <h1>이벤트 생성</h1>
           </div>
-          <form action="/" className="cont" encType="multipart/form-data" method="post">
+          <main className="cont">
             <div className="cont_body">
               <div className="cont_divider">
                 <div className="input_row">
@@ -298,7 +298,7 @@ const CreateEventPage = () => {
                 </button>
               </div>
             </div>
-          </form>
+          </main>
         </AdminContentWrapper>
       </AdminLayout>
       <Modal_global_alert message={modalMessage} onClick={onGlobalModalCallback} background />
