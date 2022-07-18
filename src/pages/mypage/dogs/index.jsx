@@ -8,24 +8,24 @@ import Image from "next/image";
 import Link from "next/link";
 
 
-const EmptyCont = () => {
-  return (
-    <>
-      <section className={Styles.body}>
-        <div className={Styles.flex_box}>
-          <div className={Styles.text}>
-            아직 등록된 반려견이 없습니다
-            <br />내 강아지 정보를 입력하고 맞춤 플랜을 확인하세요
-          </div>
+// const EmptyCont = () => {
+//   return (
+//     <>
+//       <section className={Styles.body}>
+//         <div className={Styles.flex_box}>
+//           <div className={Styles.text}>
+//             아직 등록된 반려견이 없습니다
+//             <br />내 강아지 정보를 입력하고 맞춤 플랜을 확인하세요
+//           </div>
 
-          <div className={Styles.btn_box}>
-            <div className={Styles.btn}>맞춤플랜 확인하기</div>
-          </div>
-        </div>
-      </section>
-    </>
-  );
-}
+//           <div className={Styles.btn_box}>
+//             <div className={Styles.btn}>맞춤플랜 확인하기</div>
+//           </div>
+//         </div>
+//       </section>
+//     </>
+//   );
+// }
 
 const ItemList = ()=>{
 
@@ -97,6 +97,21 @@ function MypageDogInfoPage() {
         <Wrapper>
           <MypageWrapper>
             <section className={Styles.title}>반려견정보</section>
+
+            
+            <section className={Styles.body}>
+              <div className={Styles.flex_box}>
+                <div className={Styles.text}>
+                  아직 등록된 반려견이 없습니다
+                  <br />내 강아지 정보를 입력하고 맞춤 플랜을 확인하세요
+                </div>
+
+                <div className={Styles.empty_btn_box}>
+                  <button className={Styles.btn}>맞춤플랜 확인하기</button>
+                </div>
+              </div>
+            </section>
+
 
             <section>
               {[1,2,3].map((item, index)=><ItemList key={index} data={{item}}/>)}

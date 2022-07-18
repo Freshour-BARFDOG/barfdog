@@ -294,7 +294,7 @@ const CustomInputCheckbox_recipe = ({
             selectedRadio={selectedRadio}
             setSelectedRadio={setSelectedRadio}
         >
-          <ItemRecommendlabel
+          <ItemRecommendlabel className={s.ItemRecommendlabel}
             label="추천!"
             style={{
               backgroundColor: "#000",
@@ -368,6 +368,12 @@ const CustomInputCheckbox_recipe = ({
             selectedRadio={selectedRadio}
             setSelectedRadio={setSelectedRadio}
         >
+          <ItemRecommendlabel className={s.ItemRecommendlabel}
+            label="추천!"
+            style={{
+              backgroundColor: "#000",
+            }}
+          />
           <div className={s.recipe_choice_box}>
             <div className={s.img_box}>
               <div className={`${s.image} img-wrap`}>
@@ -465,23 +471,24 @@ function MypageSubscribeProductPage() {
 
               <div className={s.title_content_box}>
                 <div className={s.title_grid_box}>
-                  <div className={s.grid_left}>
-                    <figure className={`${s.image} img-wrap`}>
-                      <Image
-                          priority
-                          src={require("src/pages/survey/order/survey_order_title_left.png")}
-                          objectFit="cover"
-                          layout="fill"
-                          alt="레시피 이미지"
-                      />
-                    </figure>
-                    <figcaption className={s.recipe_title}>
-                      <p className={s.title_ko}>STARTER PREMIUM</p>
-                      <p className={s.title_en}>스타터프리미엄</p>
-                    </figcaption>
-                  </div>
 
-                  <div className={s.grid_right}>
+                  <div className={s.grid}>
+                    <div className={s.grid_left}>
+                      <figure className={`${s.image} img-wrap`}>
+                        <Image
+                            priority
+                            src={require("src/pages/survey/order/survey_order_title_left.png")}
+                            objectFit="cover"
+                            layout="fill"
+                            alt="레시피 이미지"
+                        />
+                      </figure>
+                      <figcaption className={s.recipe_title}>
+                        <p className={s.title_ko}>STARTER PREMIUM</p>
+                        <p className={s.title_en}>스타터프리미엄</p>
+                      </figcaption>
+                    </div>
+
                     <p className={s.result_title}>
                       시호에게는
                       <br />
@@ -489,19 +496,24 @@ function MypageSubscribeProductPage() {
                       <br />
                       <b>스타터프리미엄</b> 레시피를 추천합니다. <br />
                     </p>
-                    <div className={s.recommend_data_wrap}>
-                      <span className={s.title}>시호의 하루 권장 칼로리</span>
-                      <span className={s.data}>479kcal</span>
-                      <span className={s.title}>하루 권장 식사량</span>
-                      <span className={s.data}>286g</span>
-                      <span className={s.title}>
-                      한끼 권장 식사량
-                      <br />
-                      <span>&#40;하루 두 끼 기준&#41;</span>
-                    </span>
-                      <span className={s.data}>143g</span>
+
+                    <div className={s.grid_bottom}>
+                      <div className={s.recommend_data_wrap}>
+                        <span className={s.title}>시호의 하루 권장 칼로리</span>
+                        <span className={s.data}>479kcal</span>
+                        <span className={s.title}>하루 권장 식사량</span>
+                        <span className={s.data}>286g</span>
+                        <span className={s.title}>
+                        한끼 권장 식사량
+                        <br />
+                        <span>&#40;하루 두 끼 기준&#41;</span>
+                      </span>
+                        <span className={s.data}>143g</span>
+                      </div>
+
+                      <div className={s.desc}>바프독 생식기준 결과</div>
                     </div>
-                    <div className={s.desc}>바프독 생식기준 결과</div>
+                    
                   </div>
                 </div>
               </div>
@@ -509,7 +521,7 @@ function MypageSubscribeProductPage() {
 
             <section className={s.regular_delivery}>
               <div className={s.regular_delivery_title}>
-                급여량에 따른 정기배송 수량을 선택해 주세요
+                급여량에 따른 <br /> 정기배송 수량을 선택해 주세요
               </div>
 
               <CustomInputRadio_plan name="plan" handler={setSelectedPlan} />
@@ -517,7 +529,7 @@ function MypageSubscribeProductPage() {
 
             <section className={s.notice}>
               <h2 className={s.notice_row_1}>
-                구매하실 레시피 한가지를 선택해 주세요
+                급여량에 따른 정기배송 수량을 선택해 주세요 
               </h2>
               <p className={s.notice_row_2}>
                 <em>풀플랜</em>만 두 개의 레시피를 동시 선택할 수 있습니다.
@@ -560,7 +572,7 @@ function MypageSubscribeProductPage() {
               </div>
 
               <div className={s.btn_box}>
-                <button onClick={onPrevPage} className={s['prevPage']}>
+                <button onClick={onPrevPage} className={s.prevPage}>
                   뒤로가기
                 </button>
                 <button className={s.actionButton} type={'button'}>맞춤레시피 구매하기</button>
