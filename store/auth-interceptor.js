@@ -138,8 +138,8 @@ export default function AuthInterceptor({ children }) {
 
         // STEP 2 REISSUANCE WHEN TOKEN HAS EXPIRED
         const cookieData = JSON.parse(adminCookie || userCookie);
-        console.log('adminTokenRes : ', adminTokenRes);
-        console.log('userTokenRes : ', userTokenRes);
+        // console.log('adminTokenRes : ', adminTokenRes);
+        // console.log('userTokenRes : ', userTokenRes);
   
         const autoLogin = cookieData.autoLogin;
         if (autoLogin && (!adminTokenRes.valid || !userTokenRes.valid)) {
@@ -185,7 +185,7 @@ const valid_authByTokenStatus = async (userType = 'admin') => {
   let error;
   const res = await valid_accessToken(userType);
   const status = res.status;
-  console.log(res); //
+  // console.log(res); //
   const availableToken = status === 200;
   const expiredToken = status === 401; // 추후 REFRESH TOKEN기능 개발 후 확인
   if (availableToken) {
