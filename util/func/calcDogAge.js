@@ -20,3 +20,14 @@ export const calcDogAge = (yyyymm, calcMethod = 'american') => {
   const m = calcedMonth % 12;
   return age = y ? `${y}년 ${m}개월` : `${m}개월`;
 }
+
+
+
+
+export const calcDogAgebyMonth = (month) =>{
+  let age;
+  const mon = typeof month !== 'number' ? Number(month) : month;
+  const y = Math.floor(mon / 12);
+  const m = mon % 12;
+  return age = y ? `${y}살` : `${m}개월`;
+}

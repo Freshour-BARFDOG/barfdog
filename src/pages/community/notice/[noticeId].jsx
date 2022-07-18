@@ -3,33 +3,20 @@ import MetaTitle from '@src/components/atoms/MetaTitle';
 import Wrapper from '/src/components/common/Wrapper';
 import Layout from '/src/components/common/Layout';
 import s from './[noticeId].module.scss';
-import Image from 'next/image';
 import { getData } from '/src/pages/api/reqData';
 import Spinner from '/src/components/atoms/Spinner';
 import Link from 'next/link';
 import transformDate from '/util/func/transformDate';
 import {useRouter} from "next/router";
 import 'react-quill/dist/quill.snow.css';
-import {MoveToNextPrevPage} from "../../../components/common/MoveToNextPrevPage";
+import {MoveToNextPrevPage} from "/src/components/common/MoveToNextPrevPage";
+
 
 export default function NoticePostPage({ noticeId }) {
-  const router = useRouter();
   const [curPageId, setCurPageId] = useState( Number(noticeId ));
   const [isLoading, setIsLoading] = useState({});
   const [itemInfo, setItemInfo] = useState({});
   const [pageInfo, setPageInfo] = useState({});
-  
-  
-  const onChangePageId = (e)=>{
-    const endPointIndexOnPath = 3;
-    const targetPageId = Number(e.currentTarget.dataset.pageId);
-    const curPath = router.asPath;
-    router.query = targetPageId;
-    const path = curPath.split('/')
-    const newPath = path.map((p,index)=>index === endPointIndexOnPath ? targetPageId : p).join('/');
-    router.push(newPath);
-    setCurPageId(targetPageId)
-  }
   
   useEffect(() => {
     const getFormValuesApiUrl = `/api/notices/${curPageId}`;

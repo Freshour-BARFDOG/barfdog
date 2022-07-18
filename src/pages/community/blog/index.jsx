@@ -134,7 +134,7 @@ export default function BlogIndexPage() {
                 {articles.length > 0 ? (
                   articles.map((atc) => (
                     <li key={`article-${atc.id}`} className={s.box}>
-                      <Link href={`/community/blog/${atc.id}`} passHref>
+                      <Link href={`/community/blog/${atc.id}?category=${atc.category}`} passHref>
                         <a>
                           <div className={`${s.image} img-wrap`}>
                             <Image
@@ -202,11 +202,11 @@ export default function BlogIndexPage() {
 
           <section className={s.content_box}>
             <ul className="cont_list">
-              {itemList.length > 0 ? (
+              {itemList?.length > 0 ? (
                 itemList.map((item, index) => {
                   return (
                     <li key={`blog-${item.id}-${index}`}>
-                      <Link href={`/community/blog/${item.id}`} passHref>
+                      <Link href={`/community/blog/${item.id}?category=${item.category}`} passHref>
                         <a>
                           <div className={s.line}>
                             <div className={s.flex_box}>
