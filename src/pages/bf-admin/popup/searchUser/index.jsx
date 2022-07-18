@@ -12,43 +12,45 @@ import { transformDateWithHyphen, transformToday } from '/util/func/transformDat
 import {valid_isTheSameArray} from "/util/func/validation/validationPackage";
 import AmdinErrorMessage from "/src/components/atoms/AmdinErrorMessage";
 import Spinner from "/src/components/atoms/Spinner";
-import {useMemberList} from "/store/data/test/user"; //  ! TESTTESTTESTTESTTESTTESTTEST
+import {useMemberList} from "/public/data/test/user"; //  ! TESTTESTTESTTESTTESTTESTTEST
 
 
 
 let initialSearchValues = {
   email: '',
   name: '',
-  from: transformDateWithHyphen(2000, 1, 1),
+  from: transformDateWithHyphen(2020, 1, 1),
   to: transformToday(),
 };
 
+
+const searchPageSize = 10;
+const getListApiUrl = '/api/admin/members';
+const apiDataQueryString = 'queryMembersDtoList';
+
 export default function SearchUserPopup() {
   
-  const TEST_MEMBERS = useMemberList();
-  
-  const getListApiUrl = '/api/admin/members';
-  // const getListApiUrl = '/api/admin/members/publication';
-  const searchPageSize = 10;
-  const apiDataQueryString = 'queryMembersDtoList';
-  // const apiDataQueryString = 'memberPublishResponseDtoList';
+
 
   const [isLoading, setIsLoading] = useState({});
   const [searchValues, setSearchValues] = useState(initialSearchValues);
   const [searchQuery, setSearchQuery] = useState('');
-  const [itemList, setItemList] = useState(TEST_MEMBERS);
+  const [itemList, setItemList] = useState([]);
   const [selectedMemberIdList, setSelectedMemberIdList] = useState([]);
   
   
+  console.log(searchQuery)
   
-  // ! TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST
-  useEffect( () => {
-    // setItemList(TEST_MEMBERS.concat(TEST_MEMBERS))
-    setItemList(TEST_MEMBERS)
-  }, [TEST_MEMBERS] );
-  // ! TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST
+  // // ! TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST
+  // const TEST_MEMBERS = useMemberList();
   
-  
+  // useEffect( () => {
+  //   // setItemList(TEST_MEMBERS.concat(TEST_MEMBERS))
+  //   setItemList(TEST_MEMBERS)
+  // }, [TEST_MEMBERS] );
+  // // ! TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST
+  //
+  //
 
   const onSearchHandler = () => {
     const queryArr = [];
@@ -57,7 +59,6 @@ export default function SearchUserPopup() {
       const thisQuery = `${key}=${val}`;
       queryArr.push(thisQuery);
     }
-
     const query = `${queryArr.join('&')}`;
     setSearchQuery(query);
   };

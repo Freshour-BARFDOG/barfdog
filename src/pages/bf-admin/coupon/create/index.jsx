@@ -292,7 +292,7 @@ function CreateCouponPage() {
                 <div className="input_row">
                   <div className="title_section fixedHeight">
                     <label className="title" htmlFor="discountDegree">
-                      할인금액
+                      할인{formValues.discountType === discountUnitType.FIXED_RATE ? "률" : "금액"}
                     </label>
                   </div>
                   <div className="inp_section">

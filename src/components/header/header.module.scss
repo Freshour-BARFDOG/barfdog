@@ -1,9 +1,9 @@
-$browser-context: 16;
-@function rem($px, $context: $browser-context) {
-  @return #{$px / $context}rem;
-}
+@import "/styles/global/rem";
+@import "/styles/module/zIndex.module";
 
 #site_header {
+  position: relative;
+  z-index: $site_header;
   border-bottom: 1px solid var(--color-line-03);
   svg {
     display: block;
@@ -64,6 +64,8 @@ $browser-context: 16;
         height: rem(32);
         margin-right: rem(30);
         overflow: hidden;
+        position: relative;
+        top: rem(-1);
       }
       .username {
         cursor: default;
@@ -181,7 +183,7 @@ $browser-context: 16;
   > *:nth-child(1){justify-content: flex-start;}
   > *:nth-child(2){justify-content: center;}
   > *:nth-child(3){justify-content: flex-end}
-  .title-wrap{font-size: rem(18);}
+  .title-wrap{font-size: rem(18); font-weight: 500;}
   .movepage-wrap{
     display: flex;
     align-items: center;
@@ -197,6 +199,10 @@ $browser-context: 16;
 }
 
 @media (max-width: rem(600)) {
+  #site_header {
+    border-bottom: none;
+  }
+
   .headerContainer {
     display: grid;
     grid-template-columns: 1fr 1fr;

@@ -36,7 +36,6 @@ const IMAGE = ({SRC, objectFit}) => {
 function PreviewImage({ file, className, thumbLink, ratio, style, backgroundColor , objectFit, ...props }) {
   const [SRC, setSRC] = useState(null);
 
-
   useEffect(() => {
     // console.log(file);
     // console.log(thumbLink);
@@ -51,6 +50,10 @@ function PreviewImage({ file, className, thumbLink, ratio, style, backgroundColo
     } else if (thumbLink) {
       // console.log(SRC);
       setSRC(thumbLink);
+    } else {
+      setSRC(''); // preview 이미지 초기화
+      // 파일 업로드창을 켠뒤 esc를 넣었을 경우,
+      // file값이 없어진 것과 매칭시키기 위함
     }
   }, [file, thumbLink]);
 

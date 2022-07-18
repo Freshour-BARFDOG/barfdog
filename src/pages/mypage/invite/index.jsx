@@ -32,7 +32,7 @@ function InvitePage() {
                   추천코드
                 </div>
                 
-                <div className={s.flex_box}>
+                <div className={s.grid_box}>
                   <input className={s.input_box} type='text' placeholder='추천코드를 입력해주세요'/>
 
                   <div className={s.btn_box}>
@@ -46,25 +46,27 @@ function InvitePage() {
 
             <section className={s.count_box}>
               <div className={s.mid}>
-                <div className={s.count_flex_box}>
-                  <div className={s.left_box}>
-                    <p>가입한 친구</p>
-                    <div className={s.count_text}>
-                      0
+                <div className={s.count_grid_box}>
+                  <div className={s.count_flex_box}>
+                    <div className={s.left_box}>
+                      <p>가입한 친구</p>
+                      <div className={s.count_text}>
+                        0
+                      </div>
                     </div>
-                  </div>
-                  
-                  <div className={s.mid_box}>
-                    <p>주문한 친구</p>
-                    <div className={s.count_text}>
-                      0
+
+                    <div className={s.mid_box}>
+                      <p>주문한 친구</p>
+                      <div className={s.count_text}>
+                        0
+                      </div>
                     </div>
                   </div>
 
                   <div className={s.mid_box}>
                     <p>총 적립 포인트</p>
                     <div className={s.count_text}>
-                      0
+                      3000<span>원</span>
                     </div>
                   </div>
                 </div>
@@ -77,48 +79,56 @@ function InvitePage() {
 
 
             <section className={s.content}>
-              <div className={s.flex_box}>
-                <div className={s.day_text}>
-                  21.04.01
-                </div>
-                <div className={s.content_text}>
-                  [친구초대] 친구 초대 적립금 (김*프)
-                </div>
-                <div className={s.price_text}>
-                  +3000 원
-                </div>
-              </div>
-
-              <div className={s.flex_box}>
-                <div className={s.day_text}>
-                  21.04.01
-                </div>
-                <div className={s.content_text}>
-                  [친구초대] 친구 초대 적립금 (김*프)
+              <div className={s.grid_box}>
+                <div className={s.flex_box}>
+                  <div className={s.day_text}>
+                    21.04.01
+                  </div>
+                  <div className={s.content_text}>
+                    [친구초대] 친구 초대 적립금 (김*프)
+                  </div>
                 </div>
                 <div className={s.price_text}>
                   +3000 원
                 </div>
               </div>
 
-              <div className={s.flex_box}>
-                <div className={s.day_text}>
-                  21.04.01
-                </div>
-                <div className={s.content_text}>
-                  [친구초대] 친구 초대 적립금 (김*프)
+              <div className={s.grid_box}>
+                <div className={s.flex_box}>
+                  <div className={s.day_text}>
+                    21.04.01
+                  </div>
+                  <div className={s.content_text}>
+                    [친구초대] 친구 초대 적립금 (김*프)
+                  </div>
                 </div>
                 <div className={s.price_text}>
                   +3000 원
                 </div>
               </div>
 
-              <div className={s.flex_box}>
-                <div className={s.day_text}>
-                  21.04.01
+              <div className={s.grid_box}>
+                <div className={s.flex_box}>
+                  <div className={s.day_text}>
+                    21.04.01
+                  </div>
+                  <div className={s.content_text}>
+                    [친구초대] 친구 초대 적립금 (김*프)
+                  </div>
                 </div>
-                <div className={s.content_text}>
-                  [친구초대] 친구 초대 적립금 (김*프)
+                <div className={s.price_text}>
+                  +3000 원
+                </div>
+              </div>
+
+              <div className={s.grid_box}>
+                <div className={s.flex_box}>
+                  <div className={s.day_text}>
+                    21.04.01
+                  </div>
+                  <div className={s.content_text}>
+                    [친구초대] 친구 초대 적립금 (김*프)
+                  </div>
                 </div>
                 <div className={s.price_text}>
                   +3000 원

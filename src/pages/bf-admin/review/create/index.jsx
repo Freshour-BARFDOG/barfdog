@@ -19,13 +19,12 @@ import Spinner from '/src/components/atoms/Spinner';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import { useModalContext } from '/store/modal-context';
 import FileInput from '/src/components/admin/form/FileInput';
-import GoodsFlowTest from "/src/pages/api/goodsFlow";
 
 const initialFormValues = {
-  // type: '', // str
-  // id: null, // num // 정기 구독 상품 또는 일반 상품의 id
-  type: global_reviewType.ITEM, // ! TESET
-  id: 1, // ! TEST
+  type: '', // str
+  id: null, // num // 정기 구독 상품 또는 일반 상품의 id
+  // type: global_reviewType.ITEM, // ! TESET
+  // id: 1, // ! TEST
   writtenDate: transformToday(), // str (yyyy-mm-dd)
   star: 5, // num
   contents: '', // str
@@ -33,9 +32,27 @@ const initialFormValues = {
   reviewImageIdList: [], // array : 리뷰 이미지 id 리스트
 };
 
+// const TEST_itemOptionList = [
+//   {
+//     label: `${formValues.type} > 아이템 1`,
+//     value: 1,
+//   },
+//   {
+//     label: `${formValues.type} > 아이템 2`,
+//     value: 2,
+//   },
+//   {
+//     label: `${formValues.type} > 아이템 3`,
+//     value: 3,
+//   },
+// ];
+//
+
+
 function CreateRewardPage() {
   const router = useRouter();
   const postFormValuesApiUrl = '/api/admin/reviews';
+  const postThumbFileApiUrl = '/api/reviews/upload';
   const mct = useModalContext();
   const maxContentsLength = 1000;
 
@@ -48,9 +65,13 @@ function CreateRewardPage() {
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
-
+  
+  
   // console.log(formValues);
   // console.log(formErrors)
+  //
+  
+  // console.log(itemOptionList)
   
   
 
@@ -59,49 +80,41 @@ function CreateRewardPage() {
     const getRecipeListApiUrl = '/api/admin/reviews/recipes';
     const getItemListApiUrl = `/api/admin/reviews/items/${singleItemCategory}`;
 
+    
     let apiUrl;
     let dataQuery;
     if (formValues.type === global_reviewType.SUBSCRIBE) {
       apiUrl = getRecipeListApiUrl;
       dataQuery = 'reviewRecipesDtoList';
+      // reviewRecipesDtoList
     } else if (formValues.type === global_reviewType.ITEM) {
       apiUrl = getItemListApiUrl;
       dataQuery = 'reviewItemsDtoList';
     }
-    const TEST_itemOptionList = [
-      {
-        label: `${formValues.type} > 아이템 1`,
-        value: 1,
-      },
-      {
-        label: `${formValues.type} > 아이템 2`,
-        value: 2,
-      },
-      {
-        label: `${formValues.type} > 아이템 3`,
-        value: 3,
-      },
-    ];
 
-    setItemOptionList(defaultItemOptionList.concat(TEST_itemOptionList));
+    // setItemOptionList(defaultItemOptionList.concat(TEST_itemOptionList));
     (async () => {
       try {
         setIsLoading((prevState) => ({
           ...prevState,
           fetching: true,
         }));
+        // console.log(apiUrl);
         const res = await getData(apiUrl);
-        const dataList = res.data?._embedded[dataQuery];
-        if (!res.data || !dataList.length) return alert('데이터가 존재하지 않습니다.');
-        console.log(data);
-        const itemOptionList = dataList.map((data) => ({
-          label: data.name,
-          value: data.id,
-        }));
-        setItemOptionList(defaultItemOptionList.concat(itemOptionList));
+        console.log(res);
+        let newItemOptionList = []
+        // console.log(res.data);
+        if(res.data._embedded){
+          const dataList = res.data._embedded[dataQuery];
+          newItemOptionList = dataList.map((data) => ({
+            label: data.name,
+            value: data.id,
+          })) ;
+        }
+        // console.log(newItemOptionList)
+        setItemOptionList(defaultItemOptionList.concat(newItemOptionList));
       } catch (err) {
-        console.error(err.response);
-        // alert('데이터를 가져올 수 없습니다.');
+        console.error('Data Fetching Error: ',err);
       }
 
       setIsLoading((prevState) => ({
@@ -114,7 +127,6 @@ function CreateRewardPage() {
   const onInputChangeHandler = (e) => {
     const input = e.currentTarget;
     const { id, value } = input;
-    console.log(id, value);
 
     setFormValues((prevState) => ({
       ...prevState,
@@ -132,7 +144,10 @@ function CreateRewardPage() {
     const convertedFormValues = {
       ...formValues,
       id: Number(formValues.id),
+      reviewImageIdList: formValues.reviewImageIdList.map(list=>list.id)
     };
+  
+  
     console.log(formValues);
     console.log(convertedFormValues);
     const errObj = validate(convertedFormValues, { contents: maxContentsLength });
@@ -140,7 +155,6 @@ function CreateRewardPage() {
     const isPassed = valid_hasFormErrors(errObj);
     if (!isPassed) return alert('유효하지 않은 항목이 있습니다.');
 
-    return;
     try {
       setIsLoading((prevState) => ({
         ...prevState,
@@ -218,6 +232,7 @@ function CreateRewardPage() {
                           <SelectTag
                             id={'singleItemCategory'}
                             onChange={setSingleItemCategory}
+                            initialValue={singleItemCategory}
                             options={[
                               { label: global_itemType.KOR.ALL, value: global_itemType.ALL },
                               { label: global_itemType.KOR.RAW, value: global_itemType.RAW },
@@ -360,11 +375,11 @@ function CreateRewardPage() {
                           <div className={s.right_side}>
                             <FileInput
                               id={'reviewImageIdList'}
-                              // apiUrl={postThumbFileApiUrl}
+                              apiUrl={postThumbFileApiUrl}
                               setFormValues={setFormValues}
                               formErrors={formErrors}
                               setFormErrors={setFormErrors}
-                              // originImageDatas={originThumbDataList}
+                              originImageDatas={[]}
                               maxImageCount={10}
                               maxFileSize={20000000}
                               mode={'create'}

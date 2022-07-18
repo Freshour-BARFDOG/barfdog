@@ -54,6 +54,9 @@ font-family: 'GmarketSansBold'
   --font-Gmarket-bold: 'GmarketSansBold';
   --font-ink: 'InkLipquid';
   -webkit-font-smooting: antialiased;
+
+  /* TRANSITION */
+  --transition-cubic:cubic-bezier(0.69, 0.06, 0.38, 0.96);
 }
 
 /* 여백 초기화 */

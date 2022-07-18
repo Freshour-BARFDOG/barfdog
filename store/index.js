@@ -18,3 +18,4 @@ const store = configureStore({
 });
 
 export default store;
+export {subscribeStatus} from "@store/TYPE/subscribeStatus";

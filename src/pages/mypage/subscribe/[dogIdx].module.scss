@@ -91,6 +91,7 @@ section.title{ padding : rem(8) 0 rem(17);}
         max-width: rem(100);
         box-sizing: border-box;
         text-align: center;
+        cursor: pointer;
       }
     }
   } 
@@ -810,20 +811,69 @@ section.title{ padding : rem(8) 0 rem(17);}
 
   .check_box{
     width: 50%;
-    height: rem(230);
     position: relative;
 
-    .check_grid_box {
+    .chk__box {
+      margin-bottom: rem(25);
+      display: flex;
+      cursor: pointer;
+      height: 100%;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      padding-bottom: rem(1);
+      .sub {
+        place-items: center;
+        @include char(l15);
+        color: var(--color-font-sub);
+        padding-left: rem(10);
+        line-height: 130%;
+      };
+    } /* 기본 체크박스 숨기기 */ 
+    .chk__box input[type='checkbox'] {
+      display: none;
+      
+    } /* 선택되지 않은 체크박스 스타일 꾸미기 */ 
+    .chk__box .on {
+      width: rem(20);
+      height: rem(20);
+      background: #ddd;
+      position: relative;
+      display: flex;
+      top: 0;
+      left: 0;
+    } /* 선택된 체크박스 스타일 꾸미기 */ 
+    .chk__box input[type="checkbox"]:checked + .on {
+      background:var(--color-main);
+    } 
+    .on:after { 
+      content: "";
+      width: rem(6);
+      height: rem(10);
+      border: solid #fff;
+      border-width: 0 rem(2) rem(2) 0;
+      -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+      transform: rotate(45deg);
       position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      display: grid;
-      grid-template-columns: rem(20) 1fr;
-      row-gap: rem(24);
-
-      @include char(l16);
-      padding-bottom: rem(10);
+      left: rem(6);
+      top: rem(2);
+    } 
+    .chk__box input[type="checkbox"]:checked + .on:after {
+      display: flex;
+    } 
+    .on:after {
+      width: rem(6);
+      height: rem(10);
+      border: solid #fff;
+      border-width: 0 rem(2) rem(2) 0;
+      -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+      transform: rotate(45deg);
+      position: absolute;
+      left: rem(6);
+      top: rem(2);
     }
 
     .input_bg{
@@ -1422,22 +1472,4 @@ section.title{ padding : rem(8) 0 rem(17);}
     }
   }
 
-
-  .content_box {
-    .top_flex_box {
-      .right_box {
-        .flex_box3 {
-          .inner_mid_box{
-          }
-        }
-      }
-    }
-  }
-
-
-  .content_inner_box5 {
-    .check_box{
-      height: rem(250);
-    }
-  }
 }

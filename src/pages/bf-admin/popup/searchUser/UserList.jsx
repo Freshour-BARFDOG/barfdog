@@ -5,7 +5,7 @@ import Link from "next/link";
 import popupWindow from "/util/func/popupWindow";
 import transformLocalCurrency from "/util/func/transformLocalCurrency";
 
-export default function UserList({ items,selectedItems, setSelectedItems, onPopup }) {
+export default function UserList({ items,selectedItems, setSelectedItems }) {
   if (!items || !items.length) return;
   return (
     <ul className={s.table_body}>

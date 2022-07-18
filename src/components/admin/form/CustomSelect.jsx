@@ -21,7 +21,7 @@ const CustomSelect = ({ id,value,  setFormValues, options = [], style, ...props 
   return (
     <>
       <select
-        className="admin_select"
+        className={`s.admin_select`}
         id={id}
         onChange={onChangeHandler}
         value={value || ''} /* IMPORTANT: to set Initial Value */
@@ -30,10 +30,7 @@ const CustomSelect = ({ id,value,  setFormValues, options = [], style, ...props 
       >
         {options.map((option, i) => {
           return (
-            <option
-              key={`${option}-${i}`}
-              value={option.value}
-            >
+            <option key={`${option}-${i}`} value={option.value}>
               {option.label}
             </option>
           );

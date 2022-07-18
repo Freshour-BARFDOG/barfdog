@@ -25,12 +25,13 @@ import Tooltip from "/src/components/atoms/Tooltip";
 
 
 export default function UpdateBlogPage ({ id }) {
-  console.log(id);
+  // console.log(id);
   const getFormValuesApiUrl = `/api/admin/blogs/${id}`;
   const putFormValuesApiUrl = `/api/admin/blogs/${id}`;
   const postContentimageApiURL = '/api/admin/blogs/image/upload';
 
   const mct = useModalContext();
+  const router = useRouter();
   const [modalMessage, setModalMessage] = useState('');
   const [isLoading, setIsLoading] = useState({});
   const [QuillEditor, setQuillEditor] = useState(null);

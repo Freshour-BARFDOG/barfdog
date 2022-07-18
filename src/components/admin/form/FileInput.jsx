@@ -89,42 +89,42 @@ export default function FileInput({
   
     /// ! TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
     /// ! TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
-    if (curFiles.length === 1) {
-      const file = curFiles[0];
-      const hasError = valid_fileSize(file, maxFileSize);
-      if (hasError) return;
-      setIsLoading(true);
-      const response = {id : Math.floor(Math.random() *100)}
-      console.log(response)
-      setFileList((prevState) => [
-        ...prevState,
-        { file: file, filename: file.name, id: response.id, url: null },
-      ]);
-      setAllIdList((prevState) => [...prevState, response.id]);
-    } else if (curFiles.length > 1) {
-      let newFileList = [];
-      let fileCount = curFileListCount;
-      for (const filesKey in curFiles) {
-        const leakOrder = fileCount + 1;
-        const file = curFiles[filesKey];
-        if (typeof file !== 'object') break; // file 순회 시 파일 외 요소 filtering
-        const hasError = valid_fileSize(file, maxFileSize);
-        if (hasError) break;
-        setIsLoading(true);
-        const response = {id : Math.floor(Math.random() *100)}
-        newFileList.push({
-          file: file,
-          filename: file.name,
-          id: response.id,
-        });
-        fileCount++;
-      }
-      setFileList((prevState) => [...prevState, ...newFileList]);
-      const newfileIdList = newFileList.map((list) => list.id);
-      setAllIdList((prevState) => prevState.concat(newfileIdList));
-    }
-    setIsLoading(false);
-    return
+    // if (curFiles.length === 1) {
+    //   const file = curFiles[0];
+    //   const hasError = valid_fileSize(file, maxFileSize);
+    //   if (hasError) return;
+    //   setIsLoading(true);
+    //   const response = {id : Math.floor(Math.random() *100)}
+    //   console.log(response)
+    //   setFileList((prevState) => [
+    //     ...prevState,
+    //     { file: file, filename: file.name, id: response.id, url: null },
+    //   ]);
+    //   setAllIdList((prevState) => [...prevState, response.id]);
+    // } else if (curFiles.length > 1) {
+    //   let newFileList = [];
+    //   let fileCount = curFileListCount;
+    //   for (const filesKey in curFiles) {
+    //     const leakOrder = fileCount + 1;
+    //     const file = curFiles[filesKey];
+    //     if (typeof file !== 'object') break; // file 순회 시 파일 외 요소 filtering
+    //     const hasError = valid_fileSize(file, maxFileSize);
+    //     if (hasError) break;
+    //     setIsLoading(true);
+    //     const response = {id : Math.floor(Math.random() *100)}
+    //     newFileList.push({
+    //       file: file,
+    //       filename: file.name,
+    //       id: response.id,
+    //     });
+    //     fileCount++;
+    //   }
+    //   setFileList((prevState) => [...prevState, ...newFileList]);
+    //   const newfileIdList = newFileList.map((list) => list.id);
+    //   setAllIdList((prevState) => prevState.concat(newfileIdList));
+    // }
+    // setIsLoading(false);
+    // return
     /// ! TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
     /// ! TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
     

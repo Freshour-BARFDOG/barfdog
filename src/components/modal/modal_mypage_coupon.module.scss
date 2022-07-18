@@ -58,12 +58,13 @@ $topLinkBannerHeight : rem(38);
 .cont {
   position: relative;
   background-color: #fff;
-  overflow: hidden;
   box-shadow: 0 0 rem(30) rgba(0, 0, 0, 0.15);
   border-radius: rem(8);
   padding: rem(22) rem(20);
   box-sizing: border-box;
-  overflow: hidden;
+  overflow: scroll;
+  &::-webkit-scrollbar {display: none;}
+
   ul {
     display: grid;
     align-items: flex-start;

@@ -1,68 +1,66 @@
-import React, { useState } from "react";
-import s from "./modal_member_class.module.scss";
-import ModalWrapper from "/src/components/modal/ModalWrapper";
-import SelectTag from "/src/components/atoms/SelectTag";
+import React, { useState } from 'react';
+import s from './modal_member_class.module.scss';
+import ModalWrapper from '/src/components/modal/ModalWrapper';
+import SelectTag from '/src/components/atoms/SelectTag';
 import rem from '/util/func/rem';
+import {global_gradeType, global_gradeType_ENG} from "../../../store/TYPE/gradeType";
+import CustomSelect from "../admin/form/CustomSelect";
 
-function Modal_member_class({ onClick, formValue, setFormValue }) {
-  const thisKey = "class";
-  const initialValue = formValue[thisKey] || "";
-  const [selectedValue, setSelectedValue] = useState(initialValue);
 
-  const onHideModalHandler = () => {
-    onClick();
+
+function Modal_member_class({id, value, setValue, onConfirm, onCancel }) {
+  const [selectedValue, setSelectedValue] = useState(value);
+  
+  const options = global_gradeType.map((typeKO)=>({
+    label: typeKO,
+    value: typeKO,
+  }))
+  
+
+  const onInputChangehandler = (value) => {
+    setSelectedValue(value)
+    setValue(prevState => ({
+      ...prevState,
+      [id]: value
+    }))
   };
 
-  const onChangehandler = (value) => {
-    setSelectedValue(value);
-  };
-
-  const onSubmitHandler = () => {
-    if (selectedValue) {
-      const confirmMessage = "유저의 회원등급을 변경하시겠습니까.";
-      if (confirm(confirmMessage)) {
-        setFormValue((prevState) => {
-          return {
-            ...prevState,
-            [thisKey]: selectedValue,
-          };
-        });
-        onHideModalHandler();
-      }
+  const onConfirmHandler = () => {
+    if(onConfirm && typeof onConfirm === 'function'){
+      onConfirm();
     }
-    // console.log(selectedValue);
+  };
+  const onCancelHandler = () => {
+    if(onCancel && typeof onCancel === 'function'){
+      onCancel();
+    }
   };
 
   return (
     <ModalWrapper
       background
       label="회원등급 변경"
-      onBackgroundClick={onHideModalHandler}
+      onBackgroundClick={onCancelHandler}
       style={{ padding: `${rem(30)} ${rem(50)}` }}
+      positionCenter
     >
-      <header className={s["title-section"]}>
+      <header className={s['title-section']}>
         <h1 className={s.title}>회원등급변경</h1>
         <h3 className={s.subtitle}>변경할 등급을 선택해주세요.</h3>
       </header>
-      <section className={s["cont-section"]}>
+      <section className={s['cont-section']}>
         <SelectTag
           name="userClass"
-          onChange={onChangehandler}
-          options={[
-            { label: "브론즈", value: "BRONZE" },
-            { label: "실버", value: "SILVER" },
-            { label: "골드", value: "GOLD" },
-            { label: "플래티넘", value: "PLATINUM" },
-            { label: "다이아", value: "DIA" },
-            { label: "더바프", value: "THEBARF" },
-          ]}
+          onChange={onInputChangehandler}
+          options={options}
+          initialValue={selectedValue}
         />
       </section>
-      <footer className={s["btn-section"]}>
-        <button className="admin_btn line popup" onClick={onHideModalHandler}>
+      <footer className={s['btn-section']}>
+        <button className="admin_btn line popup" onClick={onCancelHandler}>
           취소
         </button>
-        <button className="admin_btn solid popup" onClick={onSubmitHandler}>
+        <button className="admin_btn solid popup" onClick={onConfirmHandler}>
           확인
         </button>
       </footer>

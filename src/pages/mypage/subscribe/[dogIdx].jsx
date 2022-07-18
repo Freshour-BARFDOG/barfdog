@@ -857,7 +857,45 @@ function SubscribeInfoPage() {
 
                 <div className={Styles.check_box}>
 
-                  <div className={Styles.check_grid_box}>
+                
+
+                  <label className={Styles.chk__box}>
+                    <input type="checkbox"/>
+                    <span className={Styles.on}/>
+                    <div className={Styles.sub}>아이가 잘 먹지않아요</div>
+                  </label>
+
+                  <label className={Styles.chk__box}>
+                    <input type="checkbox"/>
+                    <span className={Styles.on}/>
+                    <div className={Styles.sub}>급여방식이 너무 번거로워요</div>
+                  </label>
+
+                  <label className={Styles.chk__box}>
+                    <input type="checkbox"/>
+                    <span className={Styles.on}/>
+                    <div className={Styles.sub}>더 작은 용량의 샘플구매를 하고싶어요</div>
+                  </label>
+
+                  <label className={Styles.chk__box}>
+                    <input type="checkbox"/>
+                    <span className={Styles.on}/>
+                    <div className={Styles.sub}>제품 패키징이 불편해요</div>
+                  </label>
+
+                  <label className={Styles.chk__box}>
+                    <input type="checkbox"/>
+                    <span className={Styles.on}/>
+                    <div className={Styles.sub}>급여 방법을 잘 모르겠어요</div>
+                  </label>
+
+                  <label className={Styles.chk__box}>
+                    <input type="checkbox"/>
+                    <span className={Styles.on}/>
+                    <div className={Styles.sub}>기타</div>
+                  </label>
+
+                  {/* <div className={Styles.check_grid_box}>
                     <div>1</div>
                     <div>아이가 잘 먹지않아요</div>
                     <div>3</div>
@@ -870,7 +908,8 @@ function SubscribeInfoPage() {
                     <div>급여 방법을 잘 모르겠어요</div>
                     <div>11</div>
                     <div>기타</div>
-                  </div>
+                  </div> */}
+
                 </div>
 
                 <div className={Styles.input_bg}>

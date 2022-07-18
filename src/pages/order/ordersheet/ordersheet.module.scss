@@ -1,0 +1,716 @@
+@import '/styles/global/guide';
+@import '/styles/global/rem';
+
+section.title_box {
+  padding: rem(60) 0 rem(35);
+}
+section.content_box {
+  padding-bottom: rem(50);
+}
+// section.line { padding : rem(50) 0 rem(20) ;}
+section.orderer_info {
+  padding: 0 0 rem(50);
+}
+section.reciever {
+  padding: rem(20) 0 rem(41);
+}
+section.shipping {
+  padding: rem(30) 0 rem(50);
+}
+section.reserves {
+  padding: rem(38) 0 rem(50);
+}
+section.method {
+  padding: rem(30) 0 rem(50);
+}
+section.payment {
+  padding: rem(30) 0 rem(50);
+}
+section.final_btn {
+  padding: rem(30) 0 rem(63);
+}
+
+.container_outer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .Wrapper {
+    width: rem(760);
+    max-width: rem(760);
+  }
+}
+
+.check_box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+    .chk__box {
+      display: flex;
+      cursor: pointer;
+      height: 100%;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      padding-bottom: rem(1);
+      .text {
+        display: grid;
+        place-items: center;
+        @include char(l15);
+        color: var(--color-font-sub);
+        padding-left: rem(10);
+      }
+    } /* 기본 체크박스 숨기기 */
+    .chk__box input[type='checkbox'] {
+      display: none;
+    } /* 선택되지 않은 체크박스 스타일 꾸미기 */
+    .chk__box .on {
+      width: rem(20);
+      height: rem(20);
+      background: #ddd;
+      position: relative;
+      display: flex;
+      top: 0;
+      left: 0;
+    } /* 선택된 체크박스 스타일 꾸미기 */
+    .chk__box input[type='checkbox']:checked + .on {
+      background: var(--color-main);
+    }
+    .on:after {
+      content: '';
+      width: rem(6);
+      height: rem(10);
+      border: solid #fff;
+      border-width: 0 rem(2) rem(2) 0;
+      -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+      transform: rotate(45deg);
+      position: absolute;
+      left: rem(6);
+      top: rem(2);
+    }
+    .chk__box input[type='checkbox']:checked + .on:after {
+      display: flex;
+    }
+    .on:after {
+      width: rem(6);
+      height: rem(10);
+      border: solid #fff;
+      border-width: 0 rem(2) rem(2) 0;
+      -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+      transform: rotate(45deg);
+      position: absolute;
+      left: rem(6);
+      top: rem(2);
+    }
+}
+
+.title_box {
+  .title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    @include char(t24);
+  }
+}
+
+.title {
+  @include char(t20);
+}
+
+.content_box {
+  .title {
+    padding-bottom: rem(8);
+  }
+
+  .flex_title_box {
+    display: grid;
+    grid-template-columns: 1fr rem(60) repeat(3, rem(100));
+    border-bottom: rem(1) solid var(--color-line-01);
+    > div {
+      text-align: center;
+      padding: rem(18) 0;
+      @include char(l14);
+      font-weight: 500;
+
+      &:nth-child(1) {
+        padding-left: rem(10);
+      }
+    }
+  }
+
+  .flex_box {
+    display: grid;
+    grid-template-columns: 1fr rem(60) repeat(3, rem(100));
+    border-bottom: rem(1) solid var(--color-line-04);
+    align-items: center;
+
+    text-align: center;
+    padding: rem(20) 0;
+    @include char(l15);
+    font-weight: 400;
+
+    .title_col {
+      display: none;
+    }
+
+    .info_col {
+      padding-left: rem(10);
+      .info_inner {
+        @include char(l14);
+        color: var(--color-font-sub);
+        padding-top: rem(8);
+        padding-bottom: rem(6);
+        &:last-child {
+          padding: 0;
+        }
+      }
+    }
+    .count_col {
+    }
+    .price_col {
+      .price_inner {
+        color: var(--color-font-sub);
+        text-decoration: line-through;
+      }
+    }
+    .del_col {
+      display: none;
+    }
+    .coupon_col {
+      color: var(--color-font-sub);
+    }
+    .coupon_col_red {
+      color: var(--color-main);
+    }
+    .apply_coupon_col {
+      display: flex;
+      justify-content: center;
+      .btn {
+        max-height: rem(37);
+        display: flex;
+        align-items: center;
+        padding: rem(10) rem(10);
+        box-sizing: border-box;
+        border: rem(1) solid var(--color-line-03);
+        border-radius: rem(2);
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.orderer_info {
+  .title {
+    padding-bottom: rem(30);
+  }
+  .grid_box {
+    display: grid;
+    grid-template-columns: rem(120) 1fr;
+    // grid-template-rows: repeat(2, 1fr);
+    row-gap: rem(10);
+  }
+}
+
+.line {
+  > hr {
+    border: rem(1) solid var(--color-line-04);
+  }
+}
+
+.reciever {
+  .title {
+    padding-bottom: rem(30);
+  }
+  .check_box {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    .auto__login__check {
+      .chk__box {
+        .text {
+          @include char(l16);
+          color: var(--color-font-def);
+          padding: rem(2) 0 rem(2) rem(8);
+        }
+      }
+    }
+  }
+
+  .grid_box {
+    width: 100%;
+    max-width: rem(500);
+    display: grid;
+    align-items: center;
+    grid-template-columns: rem(120) 1fr;
+    grid-template-rows: repeat(4, 1fr);
+    row-gap: rem(16);
+    column-gap: rem(10);
+    padding: rem(22) 0 0;
+
+    @include char(l15);
+    .input_col {
+      width: 100%;
+      .input_box {
+        width: 100%;
+        @include char(l15);
+        padding: rem(13) 0 rem(13) rem(16);
+      }
+    }
+
+    .adress_box {
+      display: grid;
+      grid-template-columns: 1fr rem(160);
+      width: 100%;
+      align-items: center;
+      grid-gap: rem(10);
+
+      .input_box {
+        padding: rem(9.2) 0 rem(9.2) rem(16);
+      }
+
+      .btn_box {
+        text-align: center;
+        padding: rem(14.5) 0;
+        border: rem(1) solid var(--color-main);
+        border-radius: rem(5);
+        color: var(--color-main);
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.shipping {
+  .title {
+    padding-bottom: rem(30);
+  }
+  .box {
+    border: rem(1) solid var(--color-line-03);
+
+    .grid_box {
+      display: grid;
+      grid-template-columns: 1fr rem(1) rem(100) 1fr;
+      margin: rem(14) 0 rem(14) rem(20);
+      column-gap: rem(5);
+
+      @include char(b15);
+      p {
+        margin-top: rem(3);
+      }
+
+      .left_box {
+        border-right: rem(1) solid var(--color-line-03);
+        > span {
+          color: var(--color-font-sub);
+        }
+      }
+      .mid_box {
+        color: var(--color-font-sub);
+      }
+      .right_box {
+        > p {
+          color: var(--color-main);
+          > span {
+            font-weight: 600;
+          }
+        }
+      }
+    }
+  }
+  .box2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: rem(10);
+    padding-top: rem(20);
+
+    .flex_box {
+      display: flex;
+      align-items: center;
+      // justify-content: space-around;
+      padding: rem(16) rem(3) rem(16);
+      border: rem(1) solid var(--color-main);
+      border-radius: rem(4);
+      cursor: pointer;
+
+      .image {
+        margin: 0 3%;
+        width: 20%;
+        max-width: rem(20);
+        min-width: rem(20);
+        aspect-ratio: 1/1;
+      }
+      &:nth-child(2) {
+        border: rem(1) solid var(--color-line-01);
+        color: var(--color-font-sub);
+      }
+      .text {
+        width: 100%;
+        padding-left: rem(5);
+        font-weight: 600;
+        > p {
+          @include char(b14);
+          font-weight: 400;
+        }
+      }
+    }
+  }
+}
+
+.reserves {
+  .title {
+    padding-bottom: rem(30);
+  }
+
+  .flex_box {
+    display: grid;
+    grid-template-columns: 0.5fr 1fr rem(105) 1fr;
+    grid-gap: rem(10);
+    align-items: center;
+    height: rem(40);
+    @include char(l15);
+    > p {
+      @include char(l16);
+      font-weight: 600;
+      max-width: rem(120);
+    }
+
+    .input_box {
+      width: 1fr;
+
+      input {
+        width: 100%;
+        height: rem(44);
+      }
+    }
+
+    .btn_box {
+      height: rem(44);
+      display: grid;
+      place-items: center;
+      width: rem(105);
+      border-radius: rem(2);
+
+      background-color: var(--color-main);
+      color: #fff;
+      cursor: pointer;
+    }
+    .point {
+      color: var(--color-font-sub);
+    }
+  }
+}
+
+.method {
+  .title {
+    padding-bottom: rem(30);
+  }
+
+  .grid_box {
+    display: grid;
+    justify-content: flex-start;
+    grid-template-columns: repeat(auto-fill, minmax(rem(240), rem(240)));
+    column-gap: rem(10);
+    row-gap: rem(8);
+
+    .inner_box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: rem(18) 0;
+
+      border: rem(1) solid var(--color-line-03);
+      color: var(--color-font-sub);
+      @include char(l15);
+      cursor: pointer;
+
+      .image {
+        width: 100%;
+        max-width: rem(24);
+        aspect-ratio: 1/1;
+        border: 0;
+      }
+    }
+    div:nth-child(1) {
+      border: rem(1) solid var(--color-line-01);
+      color: var(--color-font-def);
+    }
+  }
+}
+
+section.payment {
+  .title {
+    padding-bottom: rem(32);
+  }
+
+  @include char(l15);
+
+  .flex_box {
+    display: flex;
+    justify-content: space-between;
+  }
+  hr {
+    border: rem(1) solid var(--color-line-04);
+  }
+
+  .flex_box2 {
+    display: flex;
+    justify-content: space-between;
+    color: var(--color-font-sub);
+    padding: rem(15) 0 0 rem(20);
+  }
+
+  .flex_box3 {
+    display: flex;
+    justify-content: space-between;
+    color: var(--color-font-sub);
+
+    padding: rem(12) 0 rem(20) rem(20);
+    div:nth-child(2) {
+      color: var(--color-main);
+    }
+  }
+  .flex_box4 {
+    display: flex;
+    justify-content: space-between;
+    padding: rem(25) 0 rem(25);
+  }
+  .flex_box5 {
+    display: flex;
+    justify-content: space-between;
+  }
+  .flex_box6 {
+    display: flex;
+    justify-content: space-between;
+    padding: rem(25) 0 rem(25);
+  }
+
+  .last_flex_box {
+    display: flex;
+    justify-content: space-between;
+    padding: rem(25) 0 rem(45);
+
+    div:nth-child(2) {
+      @include char(l20);
+    }
+  }
+
+  .check_box {
+    justify-content: flex-start;
+    font-size: rem(15);
+    &:not(:last-child) {
+      padding-bottom: rem(16);
+    }
+    > *:not(:last-child) {margin-right:rem(8)}
+    .text {
+      display: flex;
+      color: var(--color-font-def);
+    }
+    button.termsOfService{
+      color: var(--color-main);
+      font-size: inherit;
+      position: relative;
+      top: rem(-1);
+    }
+  }
+}
+
+.final_btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+
+  > p {
+    text-align: center;
+    @include char(l15);
+    font-weight: 500;
+    padding-bottom: rem(20);
+  }
+  .btn_box {
+    display: grid;
+    place-items: center;
+
+    width: rem(315);
+    background-color: var(--color-main);
+    border-radius: rem(4);
+    color: #fff;
+
+    padding: rem(17) 0;
+    @include char(l16);
+  }
+}
+
+
+@media (max-width: rem(800)) {
+  .container_outer {
+    .Wrapper {
+      padding: 0 rem(20);
+    }
+  }
+}
+
+@media (max-width: rem(600)) {
+  section.title_box {
+    padding: rem(20) 0;
+  }
+  section.orderer_info {
+    padding: 0 0 rem(20);
+  }
+  section.reciever {
+    padding: rem(20) 0 rem(20);
+  }
+  section.shipping {
+    padding: rem(30) 0 rem(30);
+  }
+
+  .content_box {
+    .title {
+      border-bottom: rem(1) solid var(--color-line-02);
+    }
+
+    .flex_title_box {
+      display: none;
+    }
+
+    .flex_box {
+      grid-template-columns: 1fr 1fr;
+      padding: rem(16) 0 0;
+
+      .title_col {
+        display: block;
+        text-align: left;
+        padding: rem(10) 0 rem(10) rem(10);
+      }
+
+      .info_col {
+        padding-bottom: rem(20);
+        padding-left: 0;
+      }
+
+      .count_col {
+        text-align: right;
+        padding-bottom: rem(20);
+      }
+      .price_col {
+        padding-right: rem(10);
+        display: flex;
+        justify-content: flex-end;
+        column-gap: rem(5);
+
+        .price_inner {
+          font-size: rem(13);
+        }
+      }
+
+      .del_col {
+        display: block;
+        text-align: right;
+        padding-right: rem(10);
+      }
+      .coupon_col,
+      .coupon_col_red {
+        padding-right: rem(10);
+        text-align: right;
+        order: 5;
+        width: 200%;
+        transform: translate(rem(-110), rem(-26));
+      }
+
+      .apply_coupon_col {
+        padding-right: rem(10);
+        display: flex;
+        justify-content: flex-end;
+        .btn {
+          padding: rem(10) rem(10);
+          box-sizing: border-box;
+          border: rem(1) solid var(--color-line-03);
+          border-radius: rem(2);
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
+  .reciever {
+    .grid_box {
+      max-width: 100%;
+      grid-template-columns: 1fr;
+      grid-template-rows: none;
+      row-gap: rem(5);
+
+      .adress_box {
+        grid-template-columns: 1fr;
+      }
+
+      .input_col {
+        margin-bottom: rem(10);
+
+        &:nth-child(8) {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+
+  .shipping {
+    .box {
+      .grid_box {
+        grid-template-columns: 1fr 2fr;
+        margin: rem(14) rem(10);
+        column-gap: 0;
+        row-gap: rem(10);
+
+        .left_box {
+          border: none;
+        }
+        .mid_box {
+          padding-top: rem(10);
+          border-top: rem(1) solid var(--color-line-03);
+        }
+        .right_box {
+          padding-top: rem(10);
+          border-top: rem(1) solid var(--color-line-03);
+        }
+      }
+    }
+  }
+
+  .shipping {
+    .box2 {
+      grid-template-columns: 1fr;
+      row-gap: rem(10);
+    }
+  }
+
+  .reserves {
+    .flex_box {
+      grid-template-columns: rem(80) 1fr rem(105);
+
+      .point {
+        width: 300%;
+        transform: translateX(rem(90));
+      }
+    }
+  }
+
+  .method {
+    .title {
+      padding-bottom: rem(30);
+    }
+
+    .grid_box {
+      display: grid;
+      justify-content: flex-start;
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .final_btn {
+    .btn_box {
+      width: 100%;
+    }
+  }
+}

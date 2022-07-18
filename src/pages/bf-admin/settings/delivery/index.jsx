@@ -4,7 +4,7 @@ import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
 import filter_emptyValue from "/util/func/filter_emptyValue";
 import filter_onlyNumber from "/util/func/filter_onlyNumber";
-import filter_numberZeoFromTheIntegerPartOfTheDecimals from "/util/func/filter_numberZeoFromTheIntegerPartOfTheDecimals";
+import filter_extraIntegerNumberZeo from "/util/func/filter_extraIntegerNumberZeo";
 import ErrorMessage from "/src/components/atoms/ErrorMessage";
 import {useModalContext} from "/store/modal-context";
 import {getData, putObjData} from "/src/pages/api/reqData";
@@ -90,7 +90,7 @@ function DeliverySettingPage() {
         filteredValue = transformLocalCurrency(filteredValue);
       }
   
-      filteredValue = filter_numberZeoFromTheIntegerPartOfTheDecimals(filteredValue);
+      filteredValue = filter_extraIntegerNumberZeo(filteredValue);
     }
 
 

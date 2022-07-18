@@ -12,6 +12,15 @@ import s from './editor.module.scss';
  *   -> 부모 component에서 innerHTML의 str을 통하여 이미지 id값 추출
  */
 
+/* Usage In UserScreen
+ * - 1. css file을 import
+ * - import 'react-quill/dist/quill.snow.css';
+ * - 2. HTML Tag class => 'view ql-editor' 추가.
+ * - <div className={`view ql-editor`}
+ * -  dangerouslySetInnerHTML={{ __html: itemInfo.contents }}></div>
+ * - (global에서 css파일들이 섞이지 않도록 유의)
+* */
+
 export default function QuillEditor({
   id,
   imageId,
@@ -25,20 +34,20 @@ export default function QuillEditor({
   /* - 모듈 추가 시, 필요
    * const Quill = typeof window == 'object' ? require('quill') : () => false;
    */
-  
+
   const ReactQuill = typeof window == 'object' ? require('react-quill') : () => false;
   const quillRef = useRef();
   const [isLoading, setIsLoading] = useState(false);
-  const [isInitAllImageIdListCompleted, setIsInitAllImageIdListCompleted] = useState( false );
+  const [isInitAllImageIdListCompleted, setIsInitAllImageIdListCompleted] = useState(false);
   const [body, setBody] = useState(initialValue);
-  const [allImageIdList, setAllImageIdList] = useState(originImageIdList) ;
+  const [allImageIdList, setAllImageIdList] = useState(originImageIdList);
 
   useEffect(() => {
-    if(isInitAllImageIdListCompleted) return;
+    if (isInitAllImageIdListCompleted) return;
     setAllImageIdList(originImageIdList);
     setIsInitAllImageIdListCompleted(true);
   }, [originImageIdList]);
-  
+
   useEffect(() => {
     const isInnerHtmlEmpty = body === '<p><br></p>';
     const resultIdList = analyze_ImageIdListCRUD(allImageIdList, body, originImageIdList);
@@ -50,9 +59,8 @@ export default function QuillEditor({
         [imageId]: resultIdList?.cur || [],
       }));
     }
-    
-    
-    if (mode === 'update'){
+
+    if (mode === 'update') {
       if (!resultIdList) return; // ! important validation: allImageIdList가 init되기 전에 실행될 경우, undefined가 반환되고, formvalue에 적절하지 않은 값들이 할당됨 => updatePage에서 정상작동하지 않게 됨.
       if (formValuesKey) {
         const { addImageKey, delImageKey } = formValuesKey;
@@ -70,15 +78,8 @@ export default function QuillEditor({
           deleteImageIdList: resultIdList?.del,
         }));
       }
-    };
-   
+    }
   }, [body, allImageIdList]);
-  
-  
-
-  
-  
-  
 
   const imageHandler = () => {
     if (!imageUploadApiURL) return;
@@ -212,8 +213,8 @@ const compareImageList = (allArrBefore, curArrBefore, originArrBefore) => {
     result[key] = arr.map((a) => Number(a));
   }
 
-    // console.log(allArrBefore);
-    // console.log(allArr);
+  // console.log(allArrBefore);
+  // console.log(allArr);
   allArr.map((id) => {
     const isCurArr = curArr.indexOf(id) >= 0;
     const isOriginArr = originArr.indexOf(id) >= 0;

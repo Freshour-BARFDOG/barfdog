@@ -59,7 +59,7 @@ const Pagination = ({
             search: `?page=${newPageInfo.newPageNumber}`,
           });
         }else{
-          // setItemList([]);  // TEST 끝난 뒤, 주석 해제
+          setItemList([]);  // ! TEST 끝난 뒤, 주석 해제
         }
       } catch (err) {
         console.error(err);

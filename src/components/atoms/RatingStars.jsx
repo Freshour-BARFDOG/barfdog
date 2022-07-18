@@ -15,7 +15,7 @@ const Star = styled.i`
   position: relative;
   display: inline-block;
   overflow: hidden;
-  cursor:pointer;
+  cursor:${(props) => (props.disabled ? 'default' : 'pointer')};
   min-width: ${rem(10)};
   min-height: ${rem(10)};
   &:not(:last-child) {
@@ -25,7 +25,7 @@ const Star = styled.i`
 
 
 
-const RatingStars = ({ count, size, margin,id,  setFormValues }) => {
+const RatingStars = ({ count, size, margin,id,  setFormValues, disabled  = false}) => {
   const initialStars = [];
   const maxStarCount = 5;
   for (let i = 0; i < maxStarCount; i++) {
@@ -49,6 +49,7 @@ const RatingStars = ({ count, size, margin,id,  setFormValues }) => {
 
 
   const onClickHandler = (e) => {
+    if(disabled) return;
     const star = e.currentTarget;
     const rating = Number(star.dataset.index) + 1;
     updateStarCount(rating);
@@ -77,7 +78,7 @@ const RatingStars = ({ count, size, margin,id,  setFormValues }) => {
   return (
     <Wrap>
       {allStars.map((booleanValue, index) => (
-        <Star className={`${(isRenderingDone && booleanValue) ? 'animation-show' : ''} animation-delay-${index}`} size={size} margin={margin} key={`rating-star-${index}`} onClick={onClickHandler} data-index={index}>
+        <Star className={`${(isRenderingDone && booleanValue) ? 'animation-show' : ''} animation-delay-${index}`} size={size} margin={margin} key={`rating-star-${index}`} onClick={onClickHandler} data-index={index} disabled={ disabled }>
           <Image
             src={require(`/public/img/icon/${booleanValue ? 'star_yellow' : 'star_dark' }.png`)}
             objectFit="cover"

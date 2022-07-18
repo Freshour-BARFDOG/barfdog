@@ -1,98 +1,71 @@
-import React from 'react';
-import MetaTitle from "@src/components/atoms/MetaTitle";
-import Pagination from "@src/components/atoms/Pagination";
-import Wrapper from "/src/components/common/Wrapper";
-import Layout from "/src/components/common/Layout";
-import Styles from './event.module.scss'
+import React, { useState } from 'react';
+import MetaTitle from '@src/components/atoms/MetaTitle';
+import Wrapper from '/src/components/common/Wrapper';
+import Layout from '/src/components/common/Layout';
+import s from './event.module.scss';
 import Image from 'next/image';
 import Link from 'next/link';
-
-
+import Spinner from '/src/components/atoms/Spinner';
+import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
+import { EmptyContMessage } from '/src/components/atoms/emptyContMessage';
 
 function EventIndexPage() {
-  const data = []
+  const getListApiUrl = '/api/events';
+  const apiDataQueryString = 'queryEventsDtoList';
+  const searchPageSize = 10;
+  const [isLoading, setIsLoading] = useState({});
+  const [itemList, setItemList] = useState([]);
+  const [pageData, setPageData] = useState({});
 
-  for(let i =0; i < 3; i++ ){
-    data.push(i+1)
-  }
-  data.reverse();
+  console.log(itemList);
 
   return (
     <>
       <MetaTitle title="이벤트" />
       <Layout>
-        <Wrapper>
-          <section className={Styles.title}>
-            <p>진행중인 이벤트</p>
+        <Wrapper className={`${s['event-wrap']}`}>
+          <section className={s.title}>
+            <p>
+              진행중인 이벤트
+              {isLoading.fetching && <Spinner />}
+            </p>
           </section>
 
-          <section className={Styles.event_picture_box}>
+          <section className={s.event_box}>
             <ul className="cont_list">
-              {data.map((item, index) => {
-                return (
-                  <li key={index}>
-                    <Link href="/community/event/1" passHref>
-                      <a>
-                        <div className={Styles.event_box}>
-                          <div className={`${Styles.image} img-wrap`}>
-                            <Image
-                              priority="false"
-                              src={require("public/img/pages/community/event_1.png")}
-                              objectFit="cover"
-                              layout="fill"
-                              alt="카드 이미지"
-                            />
-                            <div className={Styles.text_box}>
-                              정기구독 신청하고
-                              <p>최대 50%할인 받자</p>
-                              <span>~ 2월 21일까지</span>
-                            </div>
-                          </div>
-                        </div>
-                      </a>
-                    </Link>
-                  </li>
-                );
-              })}
+              {itemList.length > 0 ? (
+                itemList.map((item, index) => {
+                  return (
+                    <li key={`event-${item.id}-${index}`}>
+                      <Link href={`/community/event/${item.id}`} passHref>
+                        <a>
+                          <Image
+                            priority={item.id < 3}
+                            src={item.thumbnailUrl}
+                            objectFit="cover"
+                            layout="fill"
+                            alt="카드 이미지"
+                          />
+                        </a>
+                      </Link>
+                    </li>
+                  );
+                })
+              ) : (
+                <EmptyContMessage message={'등록된 이벤트가 없습니다.'} />
+              )}
             </ul>
-
-            {/* <div className={Styles.event_box}>
-                  <div className={`${Styles.image} img-wrap`}>
-                    <Image
-                      priority="false"
-                      src={require("public/img/pages/community/event_1.png")}
-                      objectFit="cover"
-                      layout="fill"
-                      alt="카드 이미지"
-                    />
-                    <div className={Styles.text_box}>
-                      생자연식 레시피
-                      <p>리얼 바프 15% 할인</p>
-                      <span>~ 2월 21일까지</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className={Styles.event_box}>
-                  <div className={`${Styles.image} img-wrap`}>
-                    <Image
-                      priority="false"
-                      src={require("public/img/pages/community/event_1.png")}
-                      objectFit="cover"
-                      layout="fill"
-                      alt="카드 이미지"
-                    />
-                    <div className={Styles.text_box}>
-                      친구 초대하면
-                      <p>친구도 나도 3000원씩</p>
-                      <span>자세히 보러가기</span>
-                    </div>
-                  </div>
-                </div> */}
           </section>
-          <section className={`pagination-section`}>
-            <Pagination itemCountPerGroup={5} itemTotalCount={100} />
-          </section>
+          <div className={s.page_no}>
+            <PaginationWithAPI
+              apiURL={getListApiUrl}
+              size={searchPageSize}
+              setItemList={setItemList}
+              queryItemList={apiDataQueryString}
+              setIsLoading={setIsLoading}
+              setPageData={setPageData}
+            />
+          </div>
         </Wrapper>
       </Layout>
     </>

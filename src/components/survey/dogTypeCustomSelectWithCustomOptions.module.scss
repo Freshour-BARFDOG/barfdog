@@ -1,0 +1,101 @@
+@import '/styles/global/guide.scss';
+@import "/styles/global/rem";
+
+
+// * ------- 견종선택 Selct Tag  ------- * //
+
+.selectDogBreed {
+  input {
+    border:1px solid var(--color-line-03) !important;
+    border-radius: rem(4) !important;
+    margin-bottom:rem(4);
+    &:focus{
+      border: {
+        top: rem(1) solid !important;
+        left: rem(1) solid !important;
+        right: rem(1) solid !important;
+      }
+      border:1px solid var(--color-main) !important;
+    }
+  }
+
+  position: relative;
+  z-index: 1;
+  .viewer {
+    cursor: pointer;
+    background-color: #f1f1f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-font-def);
+    border-radius: rem(16);
+    height: rem(50);
+    max-width: rem(360);
+    margin-bottom: rem(4);
+  }
+}
+
+
+.modal-selectDogBreed {
+  background-color: #fff;
+  border-radius: rem(8);
+  width: 100%;
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, 100%);
+  font-size: rem(16);
+  overflow: hidden;
+  transition-timing-function: cubic-bezier(0.69, 0.06, 0.38, 0.96);
+  transition-duration: 0.25s;
+  transition-property: height, margin, padding, box-shadow;
+
+  height: 0;
+  margin:0;
+  padding: 0 rem(5);
+  box-shadow: 0 0 rem(0) rgba(0, 0, 0, 0.0);
+  border:0;
+  pointer-events: none;
+  &.active{
+    height: rem(200);
+    margin:auto;
+    padding: rem(10)  rem(5);
+    border: rem(1) solid var(--color-line-04);
+    box-shadow: 0 0 rem(25) rgba(0, 0, 0, 0.1);
+    pointer-events: all;
+  }
+
+  .search {
+    display: flex;
+    height: rem(44);
+    width: 100%;
+  }
+
+  p {
+    transition-timing-function: ease;
+    transition-duration: 0.1s;
+    transition-property: color, background-color;
+    padding-left: rem(10);
+    font-size: inherit;
+    height: rem(38);
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    &.selected{
+      background-color: var(--color-main) !important;
+      color:#fff;
+    }
+    &:not(.selected):hover {
+      background-color: var(--color-bg) !important;
+    }
+  }
+  .scrollContainer {
+    background-color: #fff;
+    .option{
+      background-color: #fff;
+
+    }
+  }
+}
+

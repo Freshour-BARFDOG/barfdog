@@ -16,11 +16,24 @@ import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import { useModalContext } from '/store/modal-context';
 import FileInput from '/src/components/admin/form/FileInput';
+import {global_reviewType} from "../../../../store/TYPE/reviewType";
+
+
+// ***** TSET // 임시데이터  // 결제 이후에 손봐야함
+/*
+0: {id: 13, name: '스타트'}
+1: {id: 14, name: '터키비프'}
+2: {id: 15, name: '덕램'}
+3: {id: 16, name: '램비프'}
+* */
+
 
 const initialFormValues = {
   // type: '', // str
+  type: global_reviewType.ITEM, // ! TEST TEST TEST TEST TEST TEST TEST TEST
   // id: null, // num // 정기 구독 상품 또는 일반 상품의 id
-  id: 1, // ! TEST
+  id: 13, // ! TEST TEST TEST TEST TEST TEST TEST TEST
+  targetId: 13, // '리뷰 대상  id'
   writtenDate: transformToday(), // str (yyyy-mm-dd)
   star: 5, // num
   contents: '', // str
@@ -30,6 +43,7 @@ const initialFormValues = {
 function CreateReviewPage() {
   const router = useRouter();
   const postFormValuesApiUrl = '/api/reviews';
+  const postThumbFileApiUrl = '/api/reviews/upload';
   const mct = useModalContext();
   const maxContentsLength = 1000;
 
@@ -51,7 +65,6 @@ function CreateReviewPage() {
   const onInputChangeHandler = (e) => {
     const input = e.currentTarget;
     const { id, value } = input;
-    // console.log(id, value);
 
     setFormValues((prevState) => ({
       ...prevState,
@@ -65,10 +78,11 @@ function CreateReviewPage() {
       console.error('이미 제출된 양식입니다.');
       return onGlobalModalCallback();
     }
-
+    
     const convertedFormValues = {
       ...formValues,
       id: Number(formValues.id),
+      reviewImageIdList: formValues.reviewImageIdList.map(list=>list.id)
     };
     console.log(formValues);
     console.log(convertedFormValues);
@@ -77,9 +91,7 @@ function CreateReviewPage() {
     const isPassed = valid_hasFormErrors(errObj);
     if (!isPassed) return;
 
-    alert('유효성 검증 완료');
 
-    return;
     try {
       setIsLoading((prevState) => ({
         ...prevState,
@@ -95,7 +107,6 @@ function CreateReviewPage() {
       }
     } catch (err) {
       onShowModalHandler('장애가 발생했습니다. 잠시 후 다시 시도해주세요.');
-      // alert('장애가 발생했습니다. 잠시 후 다시 시도해주세요.');
       console.error('API통신 오류 : ', err);
     }
     setIsLoading((prevState) => ({
@@ -103,6 +114,7 @@ function CreateReviewPage() {
       submit: false,
     }));
   };
+  
   const returnToPrevPage = () => {
     if (confirm('이전 페이지로 돌아가시겠습니까?')) {
       router.back();
@@ -168,7 +180,8 @@ function CreateReviewPage() {
             <section className={s.body}>
               <div className={s.flex}>
                 <div className={s.left_side}>
-                  <label htmlFor={'contents'} className={`${s.left_title} required`}>
+                  <label htmlFor={'contents'} className={`${s.left_title}`}>
+                  {/* <label htmlFor={'contents'} className={`${s.left_title} required`}> required삭제, required:after 발생, 상세리뷰 옆에 붉은 점 찍힘  */}
                     상세리뷰
                   </label>
                 </div>
@@ -201,11 +214,11 @@ function CreateReviewPage() {
                 <div className={s.right_side}>
                   <FileInput
                     id={'reviewImageIdList'}
-                    // apiUrl={postThumbFileApiUrl}
+                    apiUrl={postThumbFileApiUrl}
                     setFormValues={setFormValues}
                     formErrors={formErrors}
                     setFormErrors={setFormErrors}
-                    // originImageDatas={originThumbDataList}
+                    originImageDatas={[]}
                     maxImageCount={10}
                     maxFileSize={20000000}
                     mode={'create'}

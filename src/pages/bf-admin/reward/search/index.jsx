@@ -10,17 +10,19 @@ import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
 import RewardList from './RewardList';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import ToolTip from "/src/components/atoms/Tooltip";
+import {transformToday} from "/util/func/transformDate";
+import Spinner from "/src/components/atoms/Spinner";
+import enterKey from "/util/func/enterKey";
 
 
 
-const initialSearchValue = {
-  keyword: '',
+const initialSearchValues = {
   email:'',
   name:'',
-  from:'',
-  to:'',
-};
-const initialSearchQuery = 'email=user%40gmail.com&name=&from=2020-01-11&to=2022-07-06';
+  from: transformToday(),
+  to:transformToday(),
+}
+
 
 function RewardListPage() {
   const getListApiUrl = '/api/admin/rewards';
@@ -28,8 +30,8 @@ function RewardListPage() {
   const searchPageSize = 10;
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
-  const [searchValues, setSearchValues] = useState({});
-  const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
+  const [searchValues, setSearchValues] = useState(initialSearchValues);
+  const [searchQuery, setSearchQuery] = useState('');
 
 
   const onResetSearchValues = () => {
@@ -38,25 +40,17 @@ function RewardListPage() {
 
   const onSearchHandler = () => {
     const queryArr = [];
-    let url = '';
     for (const key in searchValues) {
       const val = searchValues[key];
-      const thisQuery = `${key}=${val}`;
-      switch (key) {
-        case 'keyword':
-          queryArr.push(thisQuery);
-          break;
-        case 'term':
-          queryArr.push(thisQuery)
-          break;
-      }
+      queryArr.push(`${key}=${val}`);
     }
+    
     const query = `${queryArr.join('&')}`;
-    setSearchQuery((prevState) => ({
-      ...prevState,
-      query,
-      url,
-    }));
+    setSearchQuery(query);
+  };
+  
+  const onSearchInputKeydown = (e) => {
+    enterKey(e, onSearchHandler);
   };
 
   return (
@@ -65,26 +59,25 @@ function RewardListPage() {
       <AdminLayout>
         <AdminContentWrapper>
           <div className="title_main">
-            <h1>적립금 조회
-              <ToolTip message={'회원 이름을 기준으로 발급된 적립금 내역을 조회'} messagePosition={'left'} />
-            </h1>
+            <h1>적립금 조회</h1>
           </div>
           <section className="cont">
             <SearchBar onReset={onResetSearchValues} onSearch={onSearchHandler}>
               <SearchTerm
                 title={'조회기간'}
-                searchValue={searchValues}
+                searchValue={searchValues || ''}
                 setSearchValue={setSearchValues}
               />
               <SearchTextWithCategory
                 searchValue={searchValues}
                 setSearchValue={setSearchValues}
                 title="조건검색"
-                name="content"
-                id="content"
+                name="keyword"
+                id="keyword"
+                onSearch={onSearchInputKeydown}
                 options={[
-                  { label: '아이디', value: 'userId' },
-                  { label: '이름', value: 'useName' },
+                  { label: '아이디', value: 'email' },
+                  { label: '이름', value: 'name' },
                 ]}
               />
             </SearchBar>
@@ -103,14 +96,20 @@ function RewardListPage() {
                   <li className={s.table_th}>회원이름</li>
                   <li className={s.table_th}>아이디</li>
                 </ul>
-                {itemList.length ? (
-                  <RewardList
-                    items={itemList}
-                    // onDeleteItem={onDeleteItem}
-                  />
-                ) : (
-                  <AmdinErrorMessage text="조회된 데이터가 없습니다." />
-                )}
+  
+                {(() => {
+                  if (isLoading.fetching) {
+                    return (<><Spinner/></>);
+                  } else if (!itemList.length) {
+                    return <AmdinErrorMessage text="조회된 데이터가 없습니다." />;
+                  } else {
+                    return (
+                      <RewardList
+                        items={itemList}
+                      />
+                    );
+                  }
+                })()}
               </div>
             </div>
             <div className={s['pagination-section']}>

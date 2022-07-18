@@ -1,146 +1,256 @@
-import React from "react";
-import Wrapper from "/src/components/common/Wrapper";
-import Layout from "/src/components/common/Layout";
-import Styles from "./blog.module.scss";
-import Image from "next/image";
-import Link from "next/link";
-import MetaTitle from "@src/components/atoms/MetaTitle";
-import Pagination from "@src/components/atoms/Pagination";
+import React, { useEffect, useState } from 'react';
+import Wrapper from '/src/components/common/Wrapper';
+import Layout from '/src/components/common/Layout';
+import s from './blog.module.scss';
+import Image from 'next/image';
+import Link from 'next/link';
+import MetaTitle from '/src/components/atoms/MetaTitle';
+import Spinner from '/src/components/atoms/Spinner';
+import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
+import transformDate from '/util/func/transformDate';
+import { EmptyContMessage } from '/src/components/atoms/emptyContMessage';
+import { blogCategoryType } from '/store/TYPE/blogCategoryType';
+import { filter_HTMLStrings } from '/util/func/filter_HTMLStrings';
+import { useRouter } from 'next/router';
+import { getData } from '/src/pages/api/reqData';
+import sorting from '/util/func/sorting';
 
-function BlogIndexPage() {
-  const data = [];
+export default function BlogIndexPage() {
+  const router = useRouter();
+  const searchPageSize = 10;
+  const getListApiUrl = '/api/blogs';
+  const apiDataQueryString = 'queryBlogsDtoList';
+  const getArticleListApiUrl = `/api/blogs/articles`;
+  const [isLoading, setIsLoading] = useState({});
+  const [itemList, setItemList] = useState([]);
+  const [originItemList, setOriginItemList] = useState([]);
+  // const [isInitialized, setIsInitialized] = useState( false );
+  const [searchApiUrl, setSearchApiUrl] = useState(getListApiUrl);
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [articles, setArticles] = useState([]);
 
-  for (let i = 0; i < 4; i++) {
-    data.push(i + 1);
-  }
-  data.reverse();
+  console.log(articles);
+
+  // useEffect( () => {
+  // ! 카테고리로 api 요청하기 전 Ver.
+  //   if(!isInitialized && itemList.length > 0){
+  //
+  //     setOriginItemList(itemList)
+  //     setIsInitialized(true);
+  //   }
+  // }, [itemList] );
+
+  const onFilteringItemList = (e) => {
+    const button = e.currentTarget;
+    const thiscategory = button.dataset.filterCategory;
+    setSelectedCategory(thiscategory);
+    const endPoint = thiscategory === 'ALL' ? '' : thiscategory.toLowerCase();
+    const url = `${getListApiUrl}/${endPoint}`;
+    setSearchApiUrl(url);
+
+    // Change query
+    const query = router.query;
+    const allQuery = { ...query, category: thiscategory };
+    let newQuery = [];
+    for (const key in allQuery) {
+      const val = allQuery[key];
+      const tempObj = `${key}=${val}`;
+      newQuery.push(tempObj);
+    }
+    window.history.replaceState(
+      window.history.state,
+      '',
+      `${window.location.pathname}?${newQuery.join('&')}`,
+    );
+
+    //// ! 카테고리로 api 요청하기 전 Ver.
+    // UI Rendering
+    // const filtredItemList = originItemList.filter((list)=>{
+    //   if(thiscategory === 'ALL'){
+    //     return list;
+    //   } else{
+    //     return list.category === thiscategory && list;
+    //   }
+    // });
+    // setItemList(filtredItemList)
+  };
+
+  useEffect(() => {
+    (async () => {
+      const dataQuery = 'articlesDtoList';
+      try {
+        setIsLoading((prevState) => ({
+          ...prevState,
+          fetching: true,
+        }));
+        const res = await getData(getArticleListApiUrl);
+        console.log(res);
+        let DATAList;
+        if (res.data._embedded) {
+          const tempDataList = res.data._embedded[dataQuery];
+          DATAList = tempDataList.map((data) => ({
+            id: data.id,
+            number: data.number,
+            url: data.url,
+            category: data.category,
+            title: data.title,
+            createdDate: transformDate(data.createdDate),
+          }));
+        }
+        setArticles(DATAList);
+      } catch (err) {
+        console.error(err);
+        alert('데이터를 가져올 수 없습니다.');
+      }
+      setIsLoading((prevState) => ({
+        ...prevState,
+        fetching: false,
+      }));
+    })();
+  }, []);
+
   return (
     <>
       <MetaTitle title="블로그" />
       <Layout>
         <Wrapper>
-          <section className={Styles.title}>
-            <div className={Styles.text1}>블로그</div>
-            <div className={Styles.text2}>
-              바프독과 반려견의 모든 정보를 이곳에서 확인하세요
+          <section className={s.title}>
+            <div className={s.text1}>
+              블로그
+              {isLoading.fetching && <Spinner />}
+            </div>
+            <div className={s.text2}>
+              바프독과 반려견의 모든 정보를 <br />
+              이곳에서 확인하세요
             </div>
           </section>
+        </Wrapper>
 
-          <section className={Styles.article_box}>
-            <div className={Styles.article}>
+        <section className={s.article_box}>
+          <Wrapper className={'ani-show-all-child'} bgColor={'#f5f5f5'}>
+            <div className={s.article}>
               <p>추천 아티클</p>
-
-              <div className={Styles.flex_box}>
-                <div className={Styles.left_box}>
-                  <div className={`${Styles.image} img-wrap`}>
-                    <Image
-                      priority="false"
-                      src={require("public/img/pages/community/left_pic.png")}
-                      objectFit="cover"
-                      layout="fill"
-                      alt="카드 이미지"
-                    />
-                  </div>
-
-                  <p>영양</p>
-                  <div className={Styles.article_title}>
-                    반려동물 사료를 바꿔야 하는 7가지 이유
-                  </div>
-                  <div className={Styles.day}>2022.02.08</div>
-                </div>
-                <div className={Styles.right_box}>
-                  <div className={`${Styles.image} img-wrap`}>
-                    <Image
-                      priority="false"
-                      src={require("public/img/pages/community/right_pic.png")}
-                      objectFit="cover"
-                      layout="fill"
-                      alt="카드 이미지"
-                    />
-                  </div>
-
-                  <p>영양</p>
-                  <div className={Styles.article_title}>
-                    우리의 댕댕이가 배고프다는 신호를 어떻게 알까?
-                  </div>
-                  <div className={Styles.day}>2022.02.08</div>
-                </div>
-              </div>
+              <ul className={s.flex_box}>
+                {articles.length > 0 ? (
+                  articles.map((atc) => (
+                    <li key={`article-${atc.id}`} className={s.box}>
+                      <Link href={`/community/blog/${atc.id}`} passHref>
+                        <a>
+                          <div className={`${s.image} img-wrap`}>
+                            <Image
+                              priority
+                              src={atc.url}
+                              objectFit="cover"
+                              layout="fill"
+                              alt="카드 이미지"
+                            />
+                          </div>
+                          <div className={s.subject}>
+                            <p>{atc.category}</p>
+                            <div className={s.article_title}>{atc.title}</div>
+                            <div className={s.day}>{atc.createdDate}</div>
+                          </div>
+                        </a>
+                      </Link>
+                    </li>
+                  ))
+                ) : (
+                  <EmptyContMessage message={'추천아티클이 없습니다.'} />
+                )}
+              </ul>
             </div>
-          </section>
+          </Wrapper>
+        </section>
 
-          <section className={Styles.menu_box}>
-            <ul className={Styles.menu}>
-              <li>
-                <Link href="/community/blog?category=all" passHref>
-                  <a>전체</a>
-                </Link>
+        <Wrapper className={'ani-show-all-child'}>
+          <section className={s.menu_box}>
+            <ul className={s.menu}>
+              <li className={`${selectedCategory === 'ALL' || '' ? s.active : ''}`}>
+                <button type={'button'} data-filter-category={'ALL'} onClick={onFilteringItemList}>
+                  전체
+                </button>
               </li>
-              <li>
-                <Link href="/community/blog?category=nutrition" passHref>
-                  <a>영양</a>
-                </Link>
+              <li className={`${selectedCategory === blogCategoryType.NUTRITION ? s.active : ''}`}>
+                <button
+                  type={'button'}
+                  data-filter-category={blogCategoryType.NUTRITION}
+                  onClick={onFilteringItemList}
+                >
+                  {blogCategoryType.KOR.NUTRITION}
+                </button>
               </li>
-              <li>
-                <Link href="/community/blog?category=health" passHref>
-                  <a>건강</a>
-                </Link>
+              <li className={`${selectedCategory === blogCategoryType.HEALTH ? s.active : ''}`}>
+                <button
+                  type={'button'}
+                  data-filter-category={blogCategoryType.HEALTH}
+                  onClick={onFilteringItemList}
+                >
+                  {blogCategoryType.KOR.HEALTH}
+                </button>
               </li>
-              <li>
-                <Link href="/community/blog?category=living" passHref>
-                  <a>생애</a>
-                </Link>
+              <li className={`${selectedCategory === blogCategoryType.LIFE ? s.active : ''}`}>
+                <button
+                  type={'button'}
+                  data-filter-category={blogCategoryType.LIFE}
+                  onClick={onFilteringItemList}
+                >
+                  {blogCategoryType.KOR.LIFE}
+                </button>
               </li>
             </ul>
           </section>
 
-          <section className={Styles.content_box}>
+          <section className={s.content_box}>
             <ul className="cont_list">
-              {data.map((item, index) => {
-                return (
-                  <li key={index}>
-                    <Link href="/community/blog/1" passHref>
-                      <a>
-                        <div className={Styles.line}>
-                          <div className={Styles.flex_box}>
-                            <div className={Styles.left_box}>
-                              <p>영양</p>
-                              <div className={Styles.article_title}>
-                                반려동물 사료를 바꿔야 하는 7가지 이유
+              {itemList.length > 0 ? (
+                itemList.map((item, index) => {
+                  return (
+                    <li key={`blog-${item.id}-${index}`}>
+                      <Link href={`/community/blog/${item.id}`} passHref>
+                        <a>
+                          <div className={s.line}>
+                            <div className={s.flex_box}>
+                              <div className={s.left_box}>
+                                <p>{blogCategoryType.KOR[item.category]}</p>
+                                <div className={s.article_title}>{item.title}</div>
+                                <div
+                                  className={`${s.text} ${s['HTML-container']}`}
+                                  dangerouslySetInnerHTML={{
+                                    __html: filter_contentImages(item.contents),
+                                  }}
+                                ></div>
+                                <div className={s.day}>{transformDate(item.createdDate)}</div>
                               </div>
-                              <div className={Styles.text}>
-                                텍스트 영역입니다. Lorem ipsum dolor sit amet,
-                                consectetur adipiscing elit. Ultrices eu
-                                ullamcorper at ut aliquam nulla non nec. Massa
-                                arcu, non commodo lectus suspendisse. At amet,
-                                est malesuada laoreet. Integer feugiat nibh
-                                mattis neque tincidunt. Mattis ut ac imperdiet
-                                n...
-                              </div>
-                              <div className={Styles.day}>2022.02.08</div>
-                            </div>
-                            <div className={Styles.right_box}>
-                              <div className={`${Styles.image} img-wrap`}>
-                                <Image
-                                  priority="false"
-                                  src={require("public/img/pages/community/right_pic.png")}
-                                  objectFit="cover"
-                                  layout="fill"
-                                  alt="카드 이미지"
-                                />
+                              <div className={s.right_box}>
+                                <div className={`${s.image} img-wrap`}>
+                                  <Image
+                                    src={item.url}
+                                    objectFit="cover"
+                                    layout="fill"
+                                    alt="카드 이미지"
+                                  />
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      </a>
-                    </Link>
-                  </li>
-                );
-              })}
+                        </a>
+                      </Link>
+                    </li>
+                  );
+                })
+              ) : (
+                <EmptyContMessage message={'등록된 블로그가 없습니다.'} />
+              )}
             </ul>
           </section>
-          <div className={Styles.pagination_box}>
-            <Pagination itemCountPerGroup={5} itemTotalCount={100} />
+          <div className={s.pagination_box}>
+            <PaginationWithAPI
+              apiURL={searchApiUrl}
+              size={searchPageSize}
+              setItemList={setItemList}
+              queryItemList={apiDataQueryString}
+              setIsLoading={setIsLoading}
+            />
           </div>
         </Wrapper>
       </Layout>
@@ -148,4 +258,14 @@ function BlogIndexPage() {
   );
 }
 
-export default BlogIndexPage;
+const filter_contentImages = (innerHTML) => {
+  if (typeof innerHTML !== 'string') {
+    console.error('* required string type of HTML value');
+    return innerHTML;
+  }
+  let filteredHTML = innerHTML;
+  filteredHTML = filter_HTMLStrings(filteredHTML, ' class="', '"'); // filter Class
+  filteredHTML = filter_HTMLStrings(filteredHTML, ' style="', '"'); // filter style
+  filteredHTML = filter_HTMLStrings(filteredHTML, '<img src="', '>'); // filter Image
+  return filteredHTML;
+};

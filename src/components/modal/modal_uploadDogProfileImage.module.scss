@@ -1,0 +1,33 @@
+@import '/styles/global/rem';
+
+
+.title {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: rem(10);
+  text-align: center;
+}
+
+.preview-wrap {
+  width: rem(100);
+  margin: 0 auto rem(20);
+  border: rem(1) solid var(--color-line-04);
+  border-radius: 50%;
+  overflow: hidden;
+  aspect-ratio: 1;
+}
+
+.desc {
+  font-size: rem(13);
+  font-weight: 400;
+  color: var(--color-disabled);
+  margin: rem(10) auto 0;
+}
+
+.btn-section {
+  margin-top: rem(24);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: rem(10);
+}

@@ -113,7 +113,7 @@ function CouponListPage() {
               <div className="cont_title cont-left">
                 쿠폰목록
                 <Tooltip
-                  message={`1. 자동발행쿠폰은 생성 및 삭제할 수 없습니다.\n2. 코드발행쿠폰은 유저가 쿠폰코드 입력 후 생성됩니다.`}
+                  message={`1. 자동발행쿠폰은 생성 및 삭제할 수 없습니다.\n2. 직접발행 쿠폰은 유저에게 쿠폰을 발행하고 유효기간이 존재할 경우, 목록에 나타납니다.`}
                   messagePosition={'left'}
                   wordBreaking={true}
                   width={'320px'}

@@ -32,9 +32,15 @@ function ShopPage() {
                     </Link>
                   </li>
                   <li>
+                    <hr />
+                  </li>
+                  <li>
                     <Link href="/shop?category=raw" passHref>
                       <a>생식</a>
                     </Link>
+                  </li>
+                  <li>
+                    <hr />
                   </li>
                   <li>
                     <Link href="/shop?category=topping" passHref>
@@ -42,9 +48,15 @@ function ShopPage() {
                     </Link>
                   </li>
                   <li>
+                    <hr />
+                  </li>
+                  <li>
                     <Link href="/shop?category=etc" passHref>
                       <a>기타</a>
                     </Link>
+                  </li>
+                  <li>
+                    <hr />
                   </li>
                   <li>
                     <Link href="/shop?category=goods" passHref>
@@ -54,7 +66,7 @@ function ShopPage() {
                 </ul>
                 <div className={s['select-box']}>
                   <select name="sort-order" id="sort-order">
-                    <option value="recent" selected={true}>
+                    <option value="recent" select="true">
                       최근순
                     </option>
                     <option value="resistered">등록순</option>
@@ -87,7 +99,115 @@ function ShopPage() {
                         <span className={s.price}>37,900</span>
                         <span className={s.won}>원</span>
                         <span className={s.position_mid}>
-                          <span className={s.out_of_stock}>SOLD OUT</span>
+                          <span className={s.out_of_stock}>품절</span>
+                        </span>
+                      </div>
+                    </figcaption>
+                    <div className={s.grade_box}>
+                      <div className={s.star_box}>
+                        <RatingStars count="4" />
+                      </div>
+                      <p className={s.avg_score}>4.0</p>
+                      <p className={s.nuber_comment}>(49)</p>
+                    </div>
+                  </a>
+                </Link>
+              </li>
+              
+              
+              <li className={s.shop_list}>
+                <Link href="/shop/single" passHref>
+                  <a href="">
+                    <figure className={s.shop_image}>
+                      <div className={`${s['img-wrap']} img-wrap`}>
+                        <Image
+                          src={require('/public/img/shop/shop_1.png')}
+                          objectFit="cover"
+                          layout="fill"
+                          alt="카드 이미지"
+                        />
+                      </div>
+                    </figure>
+                    <figcaption className={s.text_box}>
+                      <p className={s.title}>
+                        강아지 고양이 냄새제거 살균 소독 탈취제 바프레쉬 BARF, FRESH 500ml
+                      </p>
+                      <div className={s.price_box}>
+                        <span className={s.price}>37,900</span>
+                        <span className={s.won}>원</span>
+                        <span className={s.position_mid}>
+                          <span className={s.out_of_stock}>품절</span>
+                        </span>
+                      </div>
+                    </figcaption>
+                    <div className={s.grade_box}>
+                      <div className={s.star_box}>
+                        <RatingStars count="4" />
+                      </div>
+                      <p className={s.avg_score}>4.0</p>
+                      <p className={s.nuber_comment}>(49)</p>
+                    </div>
+                  </a>
+                </Link>
+              </li>
+
+              
+              <li className={s.shop_list}>
+                <Link href="/shop/single" passHref>
+                  <a href="">
+                    <figure className={s.shop_image}>
+                      <div className={`${s['img-wrap']} img-wrap`}>
+                        <Image
+                          src={require('/public/img/shop/shop_1.png')}
+                          objectFit="cover"
+                          layout="fill"
+                          alt="카드 이미지"
+                        />
+                      </div>
+                    </figure>
+                    <figcaption className={s.text_box}>
+                      <p className={s.title}>
+                        강아지 고양이 냄새제거 살균 소독 탈취제 바프레쉬 BARF, FRESH 500ml
+                      </p>
+                      <div className={s.price_box}>
+                        <span className={s.price}>37,900</span>
+                        <span className={s.won}>원</span>
+                        <span className={s.position_mid}>
+                          <span className={s.out_of_stock}>품절</span>
+                        </span>
+                      </div>
+                    </figcaption>
+                    <div className={s.grade_box}>
+                      <div className={s.star_box}>
+                        <RatingStars count="4" />
+                      </div>
+                      <p className={s.avg_score}>4.0</p>
+                      <p className={s.nuber_comment}>(49)</p>
+                    </div>
+                  </a>
+                </Link>
+              </li> <li className={s.shop_list}>
+                <Link href="/shop/single" passHref>
+                  <a href="">
+                    <figure className={s.shop_image}>
+                      <div className={`${s['img-wrap']} img-wrap`}>
+                        <Image
+                          src={require('/public/img/shop/shop_1.png')}
+                          objectFit="cover"
+                          layout="fill"
+                          alt="카드 이미지"
+                        />
+                      </div>
+                    </figure>
+                    <figcaption className={s.text_box}>
+                      <p className={s.title}>
+                        강아지 고양이 냄새제거 살균 소독 탈취제 바프레쉬 BARF, FRESH 500ml
+                      </p>
+                      <div className={s.price_box}>
+                        <span className={s.price}>37,900</span>
+                        <span className={s.won}>원</span>
+                        <span className={s.position_mid}>
+                          <span className={s.out_of_stock}>품절</span>
                         </span>
                       </div>
                     </figcaption>

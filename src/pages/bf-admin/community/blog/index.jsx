@@ -14,6 +14,7 @@ import Spinner from '/src/components/atoms/Spinner';
 
 
 function BlogIndexPage() {
+  const pageSize = 10;
   const getListApiUrl = '/api/admin/blogs';
   const [itemList, setItemList] = useState([]);
   const [isLoading, setIsLoading] = useState({});
@@ -79,7 +80,7 @@ function BlogIndexPage() {
             <div className={s['pagination-section']}>
               <PaginationWithAPI
                 apiURL={getListApiUrl}
-                size={1}
+                size={pageSize}
                 theme={'square'}
                 setItemList={setItemList}
                 queryItemList={'queryBlogsAdminDtoList'}

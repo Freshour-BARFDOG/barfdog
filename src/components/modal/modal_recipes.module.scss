@@ -11,7 +11,7 @@ $topLinkBannerHeight: rem(38);
 
 #modal_recipe{
   top: 50%;
-  transform:translate(-50%,-50%);
+  transform: translate(-50%, -50%);
   width: initial;
   padding:0;
   border-radius: rem(16);
@@ -102,18 +102,18 @@ $topLinkBannerHeight: rem(38);
 
 
 
-
-@media only screen and (min-width:rem(100)) and (max-width: rem(900)) {
+@media (max-width: rem(900)) {
 
   #modal_recipe{
-    height: 80%;
-    overflow-y: scroll;
+    height: 100%;
+    max-height: rem(736);
+    overflow: scroll;
     &::-webkit-scrollbar {display:none;}
   }
 
 
   .container {
-    width: $mobile_containerSize;
+    width: rem(354);
   }
   
   .inner{
@@ -161,14 +161,14 @@ $topLinkBannerHeight: rem(38);
 
     
     .img-wrap{
-      width: 315px;
-      height: 295px;
+      width: rem(315);
+      height: rem(295);
     }
 
     .details {
       padding-left: rem(0);
       height: rem(240);
-      margin-top: 20px;
+      margin-top: rem(20);
     }
   }
 

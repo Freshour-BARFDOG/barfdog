@@ -14,10 +14,10 @@ const SurveyInputRadio = ({
   const [selectedRadio, setSelectedRadio] = useState(surveyValues); // * component 내부 value
 
   // useEffect(() => {
-  //   if (!surveyValues) {
+  //   if (!formValues) {
   //     setSelectedRadio('');
   //   }
-  // }, [surveyValues]);
+  // }, [formValues]);
 
   const onChangeHandler = (e) => {
     const { id } = e.currentTarget;

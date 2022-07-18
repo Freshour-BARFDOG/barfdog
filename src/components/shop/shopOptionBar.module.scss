@@ -1,0 +1,98 @@
+@import '/styles/global/rem';
+@import "/styles/module/zIndex.module";
+
+// 자기 높이만큼 왔다갔다해야한다.
+
+#shop-optionBar{
+  position: fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background-color: #fff;
+  transition: transform 0.3s var(--transition-cubic);
+  transform:translateY(100%);
+  border-top: rem(1) solid var(--color-main);
+  z-index: $shopOptionBar;
+  &.active{
+    transform:translateY(0);
+  }
+}
+
+
+
+.optionBar-visibility-button{
+  position: absolute;
+  top:0;
+  right:rem(40);
+  color: #fff;
+  background-color: var(--color-main);
+  padding: rem(10);
+  transform:translateY(-100%);
+  width:100%;
+  border-radius: rem(4) rem(4) 0 0 ;
+  max-width: rem(240);
+}
+
+.container{
+  padding: rem(20) 0 rem(30);
+  display: grid;
+  gap: rem(20);
+  align-items: center;
+}
+
+.selector{
+  width: 100%;
+  max-width: rem(640);
+  select{width: 100%;
+    min-width: initial;
+  }
+}
+
+.item{
+  background-color: var(--color-bg);
+  display: grid;
+  height: rem(50);
+  box-sizing: border-box;
+  padding: rem(7) 0;
+  grid-template-columns: 1fr rem(120) rem(130) rem(50);
+  .title{justify-content: flex-start; padding-left: rem(20);}
+  margin-bottom: rem(2);
+  > span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: rem(16);
+    color: var(--color-font-def);
+  }
+  .input-quantity{
+    box-sizing: border-box;
+  }
+}
+
+.price-indicator{
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap:rem(4);
+  .title{
+    font-size: rem(14);
+  }
+  .totalPrice{
+    font-size: rem(28);
+    font-weight: 700;
+  }
+  .unit{   font-size: rem(16);}
+}
+.btn-section{
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+@media (max-width: rem(600)) {
+
+  .btn-active{right:rem(20);
+    max-width: rem(160);
+  }
+
+}

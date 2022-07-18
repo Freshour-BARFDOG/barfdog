@@ -82,6 +82,7 @@ function Swiper_main() {
     pagination: {
       type: "fraction",
     },
+    allowTouchMove: true,
   };
 
   return (
@@ -165,7 +166,7 @@ function Swiper_recipe() {
   
   const swiperSettings_recipe = {
     className: `${Styles.swiper_recipe}`,
-    slidesPerView: 1,
+    slidesPerView: 'auto',
     centeredSlides: false, // 가운데 갈지 말지 고민
     modules: [Navigation], //존재하면 쓸수있음
     breakpoints: { //반응형 조건 속성
@@ -331,7 +332,7 @@ function Swiper_review() {
   const swiperSettings_review = {
     className: `${Styles.swiper_review}`,
     spaceBetween: 0,
-    slidesPerView: 1,
+    slidesPerView: 'auto',
     // loop: true,
     centeredSlides: false,
     pagination: {
@@ -580,8 +581,9 @@ function Swiper_sns() {
     className: `${Styles.swiper_sns}`,
     // loop: true,
     spaceBetween: 0,
+    loop: true,
     centeredSlides: false, // 가운데 갈지 말지 고민
-    slidesPerView: 2,
+    slidesPerView: 'auto',
     navigation: {
       prevEl: navPrevRef.current,
       nextEl: navNextRef.current,

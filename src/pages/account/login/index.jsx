@@ -2,41 +2,37 @@ import React, {useEffect, useRef, useState} from 'react';
 import s from './login.module.scss';
 import axios from 'axios';
 import Link from 'next/link';
-import MetaTitle from "/src/components/atoms/MetaTitle";
-import {useDispatch} from "react-redux";
-import {useModalContext} from "/store/modal-context";
-import {authAction} from "@store/auth-slice";
-import {useRouter} from 'next/router';
+import MetaTitle from '/src/components/atoms/MetaTitle';
+import { useDispatch } from 'react-redux';
+import { useModalContext } from '/store/modal-context';
+import { authAction } from '/store/auth-slice';
+import { useRouter } from 'next/router';
 import Kakao from '/public/img/icon/kakao.png';
 import Naver from '/public/img/icon/naver.png';
 import Image from 'next/image';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import filter_emptyValue from '/util/func/filter_emptyValue';
-import Modal_global_alert from "/src/components/modal/Modal_global_alert";
-import ErrorMessage from "/src/components/atoms/ErrorMessage";
-import {validate} from "/util/func/validation/validation_userLogin";
-import PureCheckbox from "/src/components/atoms/PureCheckbox";
-
-
-/*
-*  MEMO 4. 그리고, 로그인 토큰이 존재한다면,,,, 로그인 / 회원가입 페이지에 접근할 경우 . Redir
-*
-* */
-
+import Modal_global_alert from '/src/components/modal/Modal_global_alert';
+import ErrorMessage from '/src/components/atoms/ErrorMessage';
+import { validate } from '/util/func/validation/validation_userLogin';
+import PureCheckbox from '/src/components/atoms/PureCheckbox';
+import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
+import Spinner from '/src/components/atoms/Spinner';
 
 const initialValues = {
   email: '',
   password: '',
-  // autoLogin:false
 };
 
-
 export default function LoginPage() {
+  const postFormValuesApiUrl = '/api/login';
   const router = useRouter();
   const dispatch = useDispatch();
   const mct = useModalContext();
-  const [alertModalMessage, setAlertModalMessage] = useState('');
+  const [modalMessage, setModalMessage] = useState('');
+  const [isLoading, setIsLoading] = useState({});
+  const [activeAutoLogin, setActiveAutoLogin] = useState(false);
   const [formValues, setFormValues] = useState(initialValues);
   const [formErrors, setFormErrors] = useState();
 
@@ -74,66 +70,72 @@ export default function LoginPage() {
     router.push(KAKAO_AUTH_URL);
   }
 
+  const onAutoLoginHandler = (id, checked) => {
+    setActiveAutoLogin(checked);
+  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    // console.log(formValues)
+    const errObj = validate(formValues);
+    const isPassed = valid_hasFormErrors(errObj);
+    setFormErrors(errObj);
+    // console.log('FORMVALUES : ', formValues);
+    if (!isPassed) return;
+
     try {
-      const errorObj = await validate(formValues);
-      setFormErrors(prevState => ({
+      setIsLoading((prevState) => ({
         ...prevState,
-        ...errorObj
+        submit: true,
       }));
-      let isPassedValid = true;
-      for (const key in errorObj) {
-        const error = errorObj[key]
-        if (error) isPassedValid = false;
-      }
-      if (isPassedValid) {
-        sendFormValueData(formValues);
-      }
+      
+      await axios
+        .post(postFormValuesApiUrl, formValues, {
+          headers: {
+            'content-Type': 'application/json',
+          },
+        })
+        .then((res) => {
+          console.log(res);
+          if (res.status === 200) {
+            const token = res.headers.authorization;
+            activeAutoLogin
+              ? dispatch(authAction.autoLogin({ token }))
+              : dispatch(authAction.login({ token }));
+          }
+        })
+        .catch((err) => {
+          console.error('ERROR: ', err.response);
+          const errorStatus = err.response.status;
+          let errorMessage= '';
+          if(errorStatus === 400 || errorStatus === 404){
+            // status 400 잘못된 비밀번호
+            // status 404 : 계정이 존재하지 않음
+            errorMessage= '아이디 또는 비밀번호가 정확하지 않습니다. \n계정정보를 확인해주세요.';
+          } else{
+            errorMessage = '서버 장애입니다. 잠시 후 다시 시도해주세요.';
+          }
+
+          mct.alertShow();
+          setModalMessage(errorMessage);
+        });
     } catch (err) {
       console.error('통신에러: ', err);
-      setAlertModalMessage(`데이터 처리 중 오류가 발생했습니다.\n${err}`);
+      setModalMessage(`데이터 처리 중 오류가 발생했습니다.\n${err}`);
     }
+    setIsLoading((prevState) => ({
+      ...prevState,
+      submit: false,
+    }));
   };
 
-  const sendFormValueData = (data) => {
-    // console.log(data);
-    const TEST_DATA = {
-      email: data.email,
-      password: data.password
-    }
-    // console.log('FORMVALUES : ', formValues);
-    // console.log('FORMERRORS : ', formErrors);
-    axios
-      .post('/api/login', TEST_DATA, {
-        headers: {
-          'content-Type': 'application/json',
-        },
-      })
-      .then((res) => {
-        console.log(res);
-        console.log(formValues)
-        if (res.status === 200) {
-          const token = res.headers.authorization;
-          const activeAutoLogin = data.autoLogin;
-          activeAutoLogin ? dispatch(authAction.autoLogin({token})) : dispatch(authAction.login({token}))
-          ;
-        }
-      })
-      .catch((err) => {
-        console.error('서버통신오류: ', err);
-        mct.alertShow();
-        setAlertModalMessage('서버 장애입니다. 잠시 후 다시 시도해주세요.');
-        console.error(err.request);
-        console.error(err.response);
-      });
+  const onGlobalModalCallback = () => {
+    mct.alertHide();
   };
-
 
   return (
     <>
-      <MetaTitle title="로그인"/>
+      <MetaTitle title="로그인" />
       <Layout>
         <Wrapper>
           <div className={s.flex__container}>
@@ -150,7 +152,10 @@ export default function LoginPage() {
                   id={'email'}
                   placeholder={'아이디를 입력해주세요.'}
                   setFormValues={setFormValues}
-                  errorMessage={formErrors?.email && <ErrorMessage>{formErrors?.email}</ErrorMessage>}
+                  autoComplete={'username'}
+                  errorMessage={
+                    formErrors?.email && <ErrorMessage>{formErrors?.email}</ErrorMessage>
+                  }
                 />
                 <InputBox
                   name="비밀번호"
@@ -158,22 +163,25 @@ export default function LoginPage() {
                   id={'password'}
                   placeholder={'비밀번호를 입력해주세요.'}
                   setFormValues={setFormValues}
-                  errorMessage={formErrors?.password && <ErrorMessage>{formErrors?.password}</ErrorMessage>}
+                  autoComplete={'current-password'}
+                  errorMessage={
+                    formErrors?.password && <ErrorMessage>{formErrors?.password}</ErrorMessage>
+                  }
                 />
               </div>
               <div className={s.auto__login__check}>
                 <label htmlFor="autoLogin" className={s.chk__box}>
                   <PureCheckbox
                     id={'autoLogin'}
-                    value={formValues.autoLogin}
-                    setValue={setFormValues}
+                    value={activeAutoLogin || ''}
+                    onClick={onAutoLoginHandler}
                   />
                   <div className={s.autologin}>자동 로그인</div>
                 </label>
               </div>
               <div className={s.btnbox}>
                 <button type={'button'} className={`${s.btn} ${s.btn_login}`} onClick={onSubmit}>
-                  로그인
+                  {isLoading.submit ? <Spinner style={{ color: '#fff' }} /> : '로그인'}
                 </button>
                 <Link href={'/account/signup'} passHref>
                   <a>
@@ -204,7 +212,7 @@ export default function LoginPage() {
                 </button>
                 {/* naver가 제공해주는 로그인 버튼*/}
                 <div ref={naverRef} id="naverIdLogin"></div>
-                <button className={s.naver} type={'submit'} onClick={naverLoginFunc}>
+                <button className={s.naver} type={'buttom'} onClick={naverLoginFunc}>
                   <Image src={Naver} width="72" height="72" alt="네이버 아이콘"/>
                 </button>
               </div>
@@ -212,13 +220,12 @@ export default function LoginPage() {
           </div>
         </Wrapper>
       </Layout>
-      <Modal_global_alert message={alertModalMessage}/>
+      <Modal_global_alert message={modalMessage} onClick={onGlobalModalCallback} />
     </>
   );
 }
 
-
-const InputBox = ({id, name, type, placeholder, setFormValues, errorMessage}) => {
+const InputBox = ({ id, name, type, placeholder, setFormValues, errorMessage, autoComplete }) => {
   const [value, setValue] = useState('');
 
   const onChangeHandler = (e) => {
@@ -233,7 +240,7 @@ const InputBox = ({id, name, type, placeholder, setFormValues, errorMessage}) =>
         };
       });
     }
-  }
+  };
 
   return (
     <div className={s.input__box}>
@@ -245,9 +252,10 @@ const InputBox = ({id, name, type, placeholder, setFormValues, errorMessage}) =>
           onChange={onChangeHandler}
           type={type || 'text'}
           placeholder={placeholder}
+          autoComplete={autoComplete}
         />
         {errorMessage}
       </label>
     </div>
   );
-}
+};

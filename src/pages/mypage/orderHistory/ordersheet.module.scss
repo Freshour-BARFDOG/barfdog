@@ -1,9 +1,6 @@
-$browser-context:16; // html font-size
-@function rem($px, $context: $browser-context){
-  @return #{$px / $context}rem;
-}
-@import '../../../../styles/global/guide';
 
+@import '/styles/global/guide';
+@import '/styles/global/rem.scss';
 
 
 section.title{ padding : 0 0 rem(30);}
@@ -69,6 +66,7 @@ section.content_title { padding :0 0 rem(31) }
   .flex_box{
     display: flex;
     justify-content: space-between;
+    align-items: center;
 
     .btn {
       border: rem(1) solid var(--color-main);
@@ -80,6 +78,7 @@ section.content_title { padding :0 0 rem(31) }
       text-align: center;
       padding: rem(10) 0;
       margin-bottom: rem(10);
+      cursor: pointer;
     }
   }
   
@@ -272,7 +271,7 @@ section.content_title { padding :0 0 rem(31) }
   .body {
     .flex_box{
       .btn {
-        margin-bottom: 0;
+        cursor: pointer;
       }
     }
 
@@ -325,8 +324,15 @@ section.content_title { padding :0 0 rem(31) }
 }
 
 @media (max-width: rem(600)) {
+
+  
+  .title {
+    display: none;
+  }
   
   .body {
+    margin-top: rem(30);
+
     .body_content_3 {
       .content_grid{
         grid-template-columns: 1fr;

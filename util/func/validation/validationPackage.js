@@ -34,9 +34,11 @@ export const valid_hasFormErrors = (errorObj, type = 'array') => {
 
 
 
-export const valid_isEmpty = (value) => {
+export const valid_isEmpty = (value, option={detail:false}) => {
   let error = '';
-  if(typeof value === 'string' && !value.replace(/\s*/g, '').length){
+  if(option.detail){
+    error = value === null ? '항목이 비었습니다.' : ''
+  } else if(typeof value === 'string' && !value.replace(/\s*/g, '').length){
     error = '항목이 비어있습니다.'
   } else if (!value){
     error = '항목이 비어있습니다.'
@@ -371,7 +373,7 @@ const valid_singleItemOptionObj = (optionObj) => {
 
 
 export const valid_fileSize = (file, maxFileSize) => {
-  let error = file.size > maxFileSize;
+  let error = file?.size > maxFileSize;
   if (error) {
     error = `- 최대 파일크기: ${convertFileSizeToMegabyte(
       maxFileSize,
@@ -483,3 +485,37 @@ export const valid_maxLength = (val, maxLength)=>{
   
   return error;
 }
+
+
+
+
+
+
+export const valid_dogBirthYearAndMonth = (val)=>{
+  let error= '';
+  if(!val){
+    error = '항목이 비어있습니다.'
+  } else if (val.length === 2){
+    error = '년도 항목이 비어있습니다.'
+  } else if (val.length === 4){
+    error = '생월 항목이 비어있습니다.'
+  }
+  return error;
+}
+
+
+
+export const valid_dogWeight = (val, limitIntCount = 2)=>{
+  let error= '';
+  if(!val){
+    error = '항목이 비어있습니다.'
+  }
+  
+  const isOnlyIntValue = val.indexOf('.') < 0;
+  if(isOnlyIntValue && val.length > limitIntCount){
+    error = '항목의 정수값은 최대 2자리입니다.'
+  };
+  
+  return error;
+}
+

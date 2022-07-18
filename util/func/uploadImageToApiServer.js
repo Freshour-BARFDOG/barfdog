@@ -16,7 +16,7 @@ const uploadImageToApiServer = async (
   const formData = new FormData();
   formData.append('file', file);
   const response = await postFileUpload(postApiUrl, formData); // ! ORIGIN CODE
-  
+  console.log(response)
   const imageId = response.data.id;
   const imageUrl = response.data.url;
   const isFailed = response.status !== 200 && response.status !== 201;
@@ -25,10 +25,12 @@ const uploadImageToApiServer = async (
   result.url = imageUrl;
   result.leakOrder = leakOrder;
   if (setFormValues && typeof setFormValues === 'function') {
-    setFormValues((prevState) => ({
-      ...prevState,
-      [id]: [...prevState[id], {id: imageId, leakOrder: leakOrder}],
-    }));
+    setFormValues((prevState) => {
+      return id ? {
+        ...prevState,
+        [id]: [...prevState[id], {id: imageId, leakOrder: leakOrder}],
+      } : {id: imageId, leakOrder: leakOrder}
+    });
   }
   
   if (setFormErrors && typeof setFormErrors === 'function') {

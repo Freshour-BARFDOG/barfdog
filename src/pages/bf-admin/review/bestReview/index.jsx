@@ -1,44 +1,59 @@
 import s from "./bestReview.module.scss";
 import React, { useState, useEffect } from "react";
-import AdminLayout from "@src/components/admin/AdminLayout";
-import { AdminContentWrapper } from "@src/components/admin/AdminWrapper";
-import MetaTitle from "@src/components/atoms/MetaTitle";
-
+import AdminLayout from "/src/components/admin/AdminLayout";
+import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
+import MetaTitle from "/src/components/atoms/MetaTitle";
 import BestReviewList from "./BestReviewList";
 import axios from "axios";
 import axiosConfig from "/src/pages/api/axios.config";
-import AmdinErrorMessage from "@src/components/atoms/AmdinErrorMessage";
-import sorting from "@util/func/sorting";
+import AmdinErrorMessage from "/src/components/atoms/AmdinErrorMessage";
 import {
   Button_EditListOrder,
   Button_InactiveEditListOrder,
-} from "@src/components/atoms/Button_EditListOrder";
-import Pagination from "@src/components/atoms/Pagination";
-
-const getDataWithSettingState = (url, callback) => {
-  axios
-    .get(url, axiosConfig())
-    .then((res) => {
-      const allData = res.data._embedded.mainBannerListResponseDtoList;
-      const arrangedItems = sorting(allData, "leakedOrder");
-      if (arrangedItems) callback(arrangedItems);
-    })
-    .catch((err) => {
-      console.error(err);
-    });
-};
+} from "/src/components/atoms/Button_EditListOrder";
+import {getData} from "/src/pages/api/reqData";
+import Spinner from "/src/components/atoms/Spinner";
 
 
-const TEST_ITEM = [1,2,3,4,5];
+const getApiUrl = '/api/admin/reviews/best';
+const dataQuery = 'queryAdminBestReviewsDtoList'
 
-
-function BestReviewPage(props) {
+function BestReviewPage() {
+  
+  
   const [modalMessage, setModalMessage] = useState("");
-  const [itemList, setItemList] = useState(TEST_ITEM);
+  const [isLoading, setIsLoading] = useState({});
+  const [itemList, setItemList] = useState([]);
   const [editListOrder, setEditListOrder] = useState(false);
 
   useEffect(() => {
-    getDataWithSettingState("/api/banners/main", setItemList);
+    (async () => {
+      try {
+        setIsLoading((prevState) => ({
+          ...prevState,
+          fetching: true,
+        }));
+        const res = await getData(getApiUrl);
+        console.log(res);
+        let itemList = []
+        if(res.data._embedded){
+          const dataList = res.data._embedded[dataQuery];
+          itemList = dataList.map((data) => ({
+            label: data.name,
+            value: data.id,
+          })) ;
+        }
+        setItemList(itemList);
+      } catch (err) {
+        console.error('Data Fetching Error: ',err);
+      }
+    
+      setIsLoading((prevState) => ({
+        ...prevState,
+        fetching: false,
+      }));
+    })();
+    
   }, []);
 
   const onLeakedOrderUp = (url) => {
@@ -46,7 +61,7 @@ function BestReviewPage(props) {
     axios
       .put(url, data, axiosConfig())
       .then(() => {
-        getDataWithSettingState("/api/banners/main", setItemList);
+        // getDataWithSettingState("/api/banners/main", setItemList);
       })
       .catch((err) => {
         alert("전송실패: ", err);
@@ -58,7 +73,7 @@ function BestReviewPage(props) {
     axios
       .put(url, data, axiosConfig())
       .then(() => {
-        getDataWithSettingState("/api/banners/main", setItemList);
+        // getDataWithSettingState("/api/banners/main", setItemList);
       })
       .catch((err) => {
         alert("전송실패: ", err);
@@ -70,7 +85,7 @@ function BestReviewPage(props) {
       .delete(url, axiosConfig())
       .then((res) => {
         console.log(res);
-        getDataWithSettingState("/api/banners/main", setItemList);
+        // getDataWithSettingState("/api/banners/main", setItemList);
         setModalMessage("배너가 삭제되었습니다.");
       })
       .catch((err) => {
@@ -87,12 +102,12 @@ function BestReviewPage(props) {
           <h1 className="title_main">베스트리뷰 관리</h1>
           <div className="cont">
             <div className="cont_header clearfix">
-              <p className="cont_title cont-left">목록</p>
+              <p className="cont_title cont-left">
+                목록
+                {isLoading.fetching && <Spinner style={{ color: '#fff' }} />}
+              </p>
               <div className="controls cont-left">
-                <Button_EditListOrder
-                  itemList={itemList}
-                  setEditListOrder={setEditListOrder}
-                />
+                <Button_EditListOrder itemList={itemList} setEditListOrder={setEditListOrder} />
                 {editListOrder && (
                   <Button_InactiveEditListOrder
                     itemList={itemList}
@@ -122,20 +137,11 @@ function BestReviewPage(props) {
                     editListOrder={editListOrder}
                     onLeakedOrderUp={onLeakedOrderUp}
                     onLeakedOrderDown={onLeakedOrderDown}
-                    onDeleteItem={onDeleteItem}
-                    getDataWithSettingState={getDataWithSettingState}
                   />
                 ) : (
                   <AmdinErrorMessage text="조회된 데이터가 없습니다." />
                 )}
               </div>
-            </div>
-            <div className={s["pagination-section"]}>
-              <Pagination
-                itemCountPerGroup={10}
-                itemTotalCount={100}
-                className={"square"}
-              />
             </div>
           </div>
           {/* inner */}

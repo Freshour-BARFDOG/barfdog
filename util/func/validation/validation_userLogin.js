@@ -3,7 +3,7 @@ import {valid_email} from "./validationPackage";
 
 
 
-export const validate = async (obj) => {
+export const validate = (obj) => {
   let errors = {};
   const keys = Object.keys(obj);
 

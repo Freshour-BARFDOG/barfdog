@@ -10,7 +10,6 @@ $browser-context: 16;
   display: flex;
   align-items: center;
 
-
   color: var(--color-font-def);
   label {
     padding: rem(4) 0;
@@ -25,3 +24,39 @@ $browser-context: 16;
 
 }
 
+.inp-wrap.radio.letter-in-shape{
+  column-gap: rem(18);
+  label{
+    cursor: pointer;
+    border-radius: rem(50);
+    background-color: #fff;
+    height: rem(42);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: rem(12) rem(24);
+    box-sizing: border-box;
+    border: rem(2) solid var(--color-line-03);
+    transition: border-color 0.2s var(--transition-cubic);
+    font-size: rem(18);
+    font-weight: 600;
+    margin:0;
+
+    input {
+      position: absolute;
+      display: none;
+      overflow: hidden;
+      width: 0;
+      height: 0;
+      line-height: 0;
+      opacity: 0;
+      text-indent: -9999px;
+
+    }
+    &.checked {
+      border-color: var(--color-main);
+    }
+
+  }
+
+}

@@ -11,8 +11,9 @@ import ArrowLeft from "/public/img/icon/swiper-arrow-medium.svg";
 import ArrowRight from "/public/img/icon/swiper-arrow-medium.svg";
 import RatingStars from "/src/components/atoms/RatingStars";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper";
+import { Pagination, Navigation } from "swiper";
 import "swiper/css";
+import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 
@@ -103,7 +104,9 @@ const ModalCont = ({ onCloseModalHandler, data }) => {
         <CloseButton style={btnStylesObj} />
       </i>
       <figure className={s.cont}>
+
         <Swiper_bestReview />
+
         <div className={s.details}>
           <div className={s.row1}>
             <span className={s.date}>2022.01.20</span>
@@ -117,14 +120,18 @@ const ModalCont = ({ onCloseModalHandler, data }) => {
             </i>
             <span className={s.name}>바*독</span>
           </div>
-          <div className={s.row4}>
+        </div>
+
+        <div></div>
+
+        <div className={s.row4}>
             {text.trim().length > 300 ? (
               <ScrollContainer height={200} scrollBarWidth={10}>{text}</ScrollContainer>
             ) : (
               text
             )}
-          </div>
         </div>
+
       </figure>
     </article>
   );
@@ -154,7 +161,10 @@ const Swiper_bestReview = () => {
       prevEl: navPrevRef.current,
       nextEl: navNextRef.current,
     },
-    modules: [Navigation],
+    modules: [Pagination, Navigation],
+    pagination: {
+      clickable: true,
+    },
   };
 
 
@@ -182,9 +192,14 @@ const Swiper_bestReview = () => {
         onInit={(swiper) => {
           swiper.params.navigation.prevEl = navPrevRef.current;
           swiper.params.navigation.nextEl = navNextRef.current;
+          swiper.params.pagination.el.classList.add();
+          swiper.params.pagination.el.classList.add();
           swiper.navigation.destroy();
           swiper.navigation.init();
           swiper.navigation.update();
+          swiper.pagination.destroy();
+          swiper.pagination.init();
+          swiper.pagination.update();
         }}
         onSlideChange={(e) => {
           const curIdx = e.activeIndex;
