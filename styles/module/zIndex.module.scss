@@ -1,9 +1,11 @@
 // *  ------- Global - Z-INDEX 관리
 
 
-$mobileSidr: 10000001 !important; // ChannelTalk보다 위에 나타남( 채널톡 Z-index: 10000000)
-$mobileSidrBackground: 1999;
+$mobileSidr: 10000002 !important; // ChannelTalk보다 상위 위치
+$shopOptionBar: 10000001 !important; // ChannelTalk보다 상위 위치
 
+/* ------------------------- ChannelTalk > z-index : 10,000,000  ------------------------ */
+$mobileSidrBackground: 1999;
 
 
 .modal-wrapper{z-index:1001 !important;} // * 사용처: Global Alert
@@ -19,4 +21,5 @@ $globalModal-background:1000;
 $adminNav : 100;
 $mobileNav : 100;
 $mobileGnbSubmenuZindex : 99;
+$site_header : 10;
 

@@ -45,6 +45,9 @@ $browser-context: 16;
   display: block;
   top: 0;
   left: 0;
+  transition-timing-function: var(--transition-cubic);
+  transition-property: background-color;
+  transition-duration: .2s;
 }
 
 .fakeCheckBox:after {
@@ -73,3 +76,22 @@ $browser-context: 16;
   display: block;
 }
 
+
+/* THEME */
+.circle{
+  .fakeCheckBox{
+    border-radius: 50%;
+  }
+  .fakeCheckBox:after {
+    width: 50%;
+    height: 50%;
+    border-radius:50%;
+    border-color: transparent;
+    background-color: #fff;
+    border-width: 0;
+    transform: translate(-50%,-50%);
+    left:50%;
+    top: 50%;
+
+  }
+}

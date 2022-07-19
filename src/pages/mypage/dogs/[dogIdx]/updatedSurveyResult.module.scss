@@ -1,8 +1,8 @@
-$browser-context:16; // html font-size
-@function rem($px, $context: $browser-context){
-  @return #{$px / $context}rem;
-}
-@import 'styles/global/guide.scss';
+@import '/styles/global/rem';
+@import '/styles/global/guide';
+
+
+
 
 section.title {padding : rem(60) 0 rem(40) 0 ; }
 section.mid_image_box { padding: rem(25) 0 rem(25) 0;}

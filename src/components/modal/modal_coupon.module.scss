@@ -1,0 +1,126 @@
+@import '/styles/global/rem';
+@import '/styles/global/guide';
+
+
+.modal-container{
+  padding: rem(30) rem(40) !important;
+  width: 100% !important;
+   max-width: rem(640);
+}
+
+
+.modal {
+  min-width: rem(500);
+
+  .title_box {
+    width: 100%;
+    padding-bottom: rem(20);
+    display: flex;
+    align-items: center;
+    .title {
+      width: 87.5%;
+      display: flex;
+      justify-content: flex-start;
+
+      @include char(t20);
+      span {
+        @include char(l14);
+        color: var(--color-font-sub);
+        padding-left: rem(10);
+      }
+    }
+  }
+  .content_box {
+    display: flex;
+    justify-content: center;
+    .flex_box {
+      width: 87.5%;
+      display: flex;
+      justify-content: space-between;
+      border-top: rem(1) solid var(--color-line-01);
+      border-bottom: rem(1) solid var(--color-line-01);
+
+      @include char(l15);
+      font-weight: 600;
+      > div:nth-child(1) {
+        display: flex;
+        justify-content: flex-start;
+        width: 50%;
+        padding-left: rem(20);
+        box-sizing: border-box;
+      }
+      > div:nth-child(2) {
+        width: 14.2%;
+      }
+      > div:nth-child(3) {
+        width: 17.8%;
+      }
+      > div:nth-child(4) {
+        width: 17.8%;
+      }
+    }
+
+    .flex_box2 {
+      width: 87.5%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: rem(1) solid var(--color-line-03);
+      @include char(l15);
+      font-weight: 600;
+      .check_box {
+        width: 50%;
+        padding: rem(15) 0 rem(15);
+        input {
+          margin-left: rem(5);
+          margin-right: rem(10);
+        }
+      }
+      div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      div:nth-child(1) {
+        justify-content: flex-start;
+      }
+      div:nth-child(2) {
+        width: 14.2%;
+      }
+      div:nth-child(3) {
+        width: 17.8%;
+      }
+      div:nth-child(4) {
+        width: 17.8%;
+        color: var(--color-main);
+      }
+    }
+  }
+  .btn_box {
+    display: flex;
+    justify-content: center;
+    column-gap: rem(10);
+    padding-top: rem(40);
+    .cancle_btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 18.7%;
+      padding: rem(14) 0 rem(14);
+
+      border: rem(1) solid var(--color-line-03);
+      border-radius: rem(4);
+    }
+    .choice_btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 18.7%;
+      padding: rem(14) 0 rem(14);
+
+      background: var(--color-main);
+      border-radius: rem(4);
+      color: #fff;
+    }
+  }
+}

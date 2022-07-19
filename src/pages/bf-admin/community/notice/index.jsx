@@ -13,6 +13,7 @@ import Spinner from "/src/components/atoms/Spinner";
 
 
 function NoticeIndexPage() {
+  const pageSize = 10;
   const getListApiUrl = '/api/admin/notices';
   const [itemList, setItemList] = useState([]);
   const [isLoading, setIsLoading] = useState({});
@@ -61,7 +62,7 @@ function NoticeIndexPage() {
               </div>
             </div>
             <div className={s['pagination-section']}>
-              <PaginationWithAPI apiURL={getListApiUrl} size={1} theme={'square'} setItemList={setItemList} queryItemList={'queryBlogsAdminDtoList'} setIsLoading={setIsLoading}/>
+              <PaginationWithAPI apiURL={getListApiUrl} size={pageSize} theme={'square'} setItemList={setItemList} queryItemList={'queryBlogsAdminDtoList'} setIsLoading={setIsLoading}/>
             </div>
           </div>
         </AdminContentWrapper>

@@ -1,61 +1,75 @@
-import React from 'react';
-import MetaTitle from "@src/components/atoms/MetaTitle";
-import Wrapper from "/src/components/common/Wrapper";
-import Layout from "/src/components/common/Layout";
-import Styles from './notice.module.scss'
-import Pagination from "@src/components/atoms/Pagination";
+import React, { useEffect, useState } from 'react';
+import MetaTitle from '@src/components/atoms/MetaTitle';
+import Wrapper from '/src/components/common/Wrapper';
+import Layout from '/src/components/common/Layout';
+import s from './notice.module.scss';
 import Link from 'next/link';
+import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
+import Spinner from '/src/components/atoms/Spinner';
+import { EmptyContMessage } from '/src/components/atoms/emptyContMessage';
+import transformDate from '/util/func/transformDate';
 
-function NoticeIndexPage() {
-  const data = []
 
-  for(let i =0; i < 50; i++ ){
-    data.push(i+1)
-  }
-  data.reverse();
 
+
+export default function NoticeIndexPage() {
+  const getListApiUrl = '/api/notices';
+  const apiDataQueryString = 'queryNoticesDtoList';
+  const searchPageSize = 10;
+  const [isLoading, setIsLoading] = useState({});
+  const [itemList, setItemList] = useState([]);
+  // console.log(itemList);
   return (
     <>
       <MetaTitle title="공지사항" />
       <Layout>
-        <Wrapper>
-          <section className={Styles.title}>
-            <p className={Styles.text}>공지사항</p>
+        <Wrapper className={`${s['notice-wrap']}`}>
+          <section className={s.title}>
+            <p className={s.text}>
+              공지사항
+              {isLoading.fetching && <Spinner />}
+            </p>
           </section>
 
-          <section className={Styles.notice_board_box}>
-            <div className={Styles.grid_box}>
+          <section className={s.notice_board_box}>
+            <div className={s.grid_box}>
               <span>No.</span>
               <p>제목</p>
               <span>등록일</span>
             </div>
-
             <ul className="cont_list">
-              {data.map((item, index) => {
-                return (
-                  <li key={index}>
-                    <Link href="/community/notice/1" passHref>
-                      <a>
-                        <div className={Styles.content_box}>
-                          <span className={Styles.counter_num}>{item}</span>
-                          <p>설날 배송 안내</p>
-                          <span>2022.01.20</span>
-                        </div>
-                      </a>
-                    </Link>
-                  </li>
-                );
-              })}
+              {itemList.length > 0 ? (
+                itemList.map((item, index) => {
+                  return (
+                    <li key={`notice-${item.id}-${index}`}>
+                      <Link href={`/community/notice/${item.id}`} passHref>
+                        <a>
+                          <div className={s.content_box}>
+                            <span className={s.counter_num}>{item.id}</span>
+                            <p>{item.title}</p>
+                            <span>{transformDate(item.createdDate) || '-'}</span>
+                          </div>
+                        </a>
+                      </Link>
+                    </li>
+                  );
+                })
+              ) : (
+                <EmptyContMessage message={'등록된 공지사항이 없습니다.'} />
+              )}
             </ul>
           </section>
-
-          <section className={Styles.page_no}>
-            <Pagination itemCountPerGroup={10} itemTotalCount={100} />
-          </section>
+          <div className={s.page_no}>
+            <PaginationWithAPI
+              apiURL={getListApiUrl}
+              size={searchPageSize}
+              setItemList={setItemList}
+              queryItemList={apiDataQueryString}
+              setIsLoading={setIsLoading}
+            />
+          </div>
         </Wrapper>
       </Layout>
     </>
   );
 }
-
-export default NoticeIndexPage;

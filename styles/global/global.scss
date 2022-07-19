@@ -1,6 +1,4 @@
 /* 전역에서 사용될 CSS */
-
-@charset "utf-8";
 @import './reset.css';
 @import './font.css';
 @import './custom-swiper.scss';
@@ -9,14 +7,39 @@
 @import './admin.scss';
 @import './modal.scss';
 @import './input-radio.scss';
+@import './rem';
 
- // html font-size
-$browser-context:16;
-// convert px to rem
-@function rem($px, $context: $browser-context){
-  @return #{$px / $context}rem;
+
+@for $i from 1 through 20 {
+  .mt-#{5*$i} {
+    margin-top: rem(5*$i);
+  }
+  .mb-#{5*$i} {
+    margin-bottom: rem(5*$i);
+  }
+  .ml-#{5*$i} {
+    margin-left: rem(5*$i);
+  }
+  .mr-#{5*$i} {
+    margin-right: rem(5*$i);
+  }
 }
 
+
+@for $i from 1 through 20 {
+  .pt-#{5*$i} {
+    padding-top: rem(5*$i);
+  }
+  .pb-#{5*$i} {
+    padding-bottom: rem(5*$i);
+  }
+  .pl-#{5*$i} {
+    padding-left: rem(5*$i);
+  }
+  .pr-#{5*$i} {
+    padding-right: rem(5*$i);
+  }
+}
 
 
 
@@ -51,7 +74,17 @@ html, body{width:100vw; overflow-x:hidden;}
       animation-delay:0.1*$i +s;
     }
   }
+}
 
+
+
+.ani-show-all-child{
+  animation: show var(--ani-default) forwards;
+  @for $i from 1 through 20 {
+    * :nth-child(#{$i}){
+      animation: show .4s var(--transition-cubic) forwards;
+    }
+  }
 }
 
 @keyframes show {

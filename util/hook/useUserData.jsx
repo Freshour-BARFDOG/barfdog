@@ -8,38 +8,49 @@ export default function useUserData() {
   const [userData, setUserData] = useState(null);
   const auth = useSelector((state) => state.auth);
 
-
-  
+  // console.log('useUserData.js\n',auth)
   useEffect(() => {
-    if(!auth.isAuth || auth.isAdmin)return;
+    
+    // ADMIN
+    if(auth.isAdmin){
+      let adminDATA = {
+        name: '관리자',
+        email: 'admin@gmail.com',
+        grade: 'ADMIN',
+      };
+      setUserData(adminDATA)
+    }
+    
+    // MEMBER
+    if(!auth.isAuth || userData)return;
     (async () => {
+      let memberDATA = null
       const res = await axios
         .get('/api/members', axiosUserConfig())
         .catch((err) => {
           console.log(err.response);
       });
-      console.log(res)
-      
-      if (res?.status !== 200) return;
-      const DATA = {
-        birthday: res.data.birthday,
-        gender: res.data.gender,
-        name: res.data.name,
-        phoneNumber: res.data.phoneNumber,
-        email: res.data.email,
-        grade: res.data.grade || '웰컴',
-        address: {
-          zipcode: res.data.address.zipcode,
-          city: res.data.address.city,
-          street: res.data.address.street,
-          detailAddress: res.data.address.detailAddress,
-        },
-        authState:{
-          autoLogin: auth.autoLogin,
-          isAdmin: auth.isAdmin,
-        }
+      if (res?.status === 200){
+        memberDATA = {
+          birthday: res.data.birthday,
+          gender: res.data.gender,
+          name: res.data.name,
+          phoneNumber: res.data.phoneNumber,
+          email: res.data.email,
+          grade: res.data.grade || '웰컴',
+          address: {
+            zipcode: res.data.address.zipcode,
+            city: res.data.address.city,
+            street: res.data.address.street,
+            detailAddress: res.data.address.detailAddress,
+          },
+          authState:{
+            autoLogin: auth.autoLogin,
+            isAdmin: auth.isAdmin,
+          }
+        };
       };
-      setUserData(DATA);
+      setUserData(memberDATA);
     })();
   }, [auth]);
 
@@ -47,3 +58,4 @@ export default function useUserData() {
 
   return userData;
 }
+

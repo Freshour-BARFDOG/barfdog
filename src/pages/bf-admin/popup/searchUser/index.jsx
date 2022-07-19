@@ -12,7 +12,7 @@ import { transformDateWithHyphen, transformToday } from '/util/func/transformDat
 import {valid_isTheSameArray} from "/util/func/validation/validationPackage";
 import AmdinErrorMessage from "/src/components/atoms/AmdinErrorMessage";
 import Spinner from "/src/components/atoms/Spinner";
-import {useMemberList} from "/store/data/test/user"; //  ! TESTTESTTESTTESTTESTTESTTEST
+import {useMemberList} from "/public/data/test/user"; //  ! TESTTESTTESTTESTTESTTESTTEST
 
 
 

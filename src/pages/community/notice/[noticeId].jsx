@@ -1,116 +1,143 @@
-import React from 'react';
-import MetaTitle from "@src/components/atoms/MetaTitle";
-import Wrapper from "/src/components/common/Wrapper";
-import Layout from "/src/components/common/Layout";
-import { useRouter } from "next/router";
-import Styles from './[noticeId].module.scss';
-import Image from "next/image";
+import React, { useEffect, useState } from 'react';
+import MetaTitle from '@src/components/atoms/MetaTitle';
+import Wrapper from '/src/components/common/Wrapper';
+import Layout from '/src/components/common/Layout';
+import s from './[noticeId].module.scss';
+import Image from 'next/image';
+import { getData } from '/src/pages/api/reqData';
+import Spinner from '/src/components/atoms/Spinner';
+import Link from 'next/link';
+import transformDate from '/util/func/transformDate';
+import {useRouter} from "next/router";
+import 'react-quill/dist/quill.snow.css';
+import {MoveToNextPrevPage} from "../../../components/common/MoveToNextPrevPage";
 
-function NoticePostPage() {
-    const router = useRouter();
-    if(!router.isReady) return;
-    const { noticeId } = router.query;
-    
+export default function NoticePostPage({ noticeId }) {
+  const router = useRouter();
+  const [curPageId, setCurPageId] = useState( Number(noticeId ));
+  const [isLoading, setIsLoading] = useState({});
+  const [itemInfo, setItemInfo] = useState({});
+  const [pageInfo, setPageInfo] = useState({});
+  
+  
+  const onChangePageId = (e)=>{
+    const endPointIndexOnPath = 3;
+    const targetPageId = Number(e.currentTarget.dataset.pageId);
+    const curPath = router.asPath;
+    router.query = targetPageId;
+    const path = curPath.split('/')
+    const newPath = path.map((p,index)=>index === endPointIndexOnPath ? targetPageId : p).join('/');
+    router.push(newPath);
+    setCurPageId(targetPageId)
+  }
+  
+  useEffect(() => {
+    const getFormValuesApiUrl = `/api/notices/${curPageId}`;
+    const formValueQuery = 'noticeDto'
+    const getIemListApiUrl = `/api/notices`;
+    const itemListQuery = 'queryNoticesDtoList';
+    (async () => {
+      try {
+        setIsLoading((prevState) => ({
+          ...prevState,
+          fetching: true,
+        }));
+        const res = await getData(getFormValuesApiUrl);
+
+        let DATA;
+        if (res.data) {
+          const data = res.data[formValueQuery];
+          DATA = {
+            id: data.id,
+            title: data.title,
+            contents: data.contents,
+          };
+          setItemInfo(DATA);
+        }
+        console.log(res);
+      } catch (err) {
+        console.error('데이터를 가져올 수 없습니다.');
+      }
+      setIsLoading((prevState) => ({
+        ...prevState,
+        fetching: false,
+      }));
+    })();
+
+    (async () => {
+      try {
+        setIsLoading((prevState) => ({
+          ...prevState,
+          fetching: true,
+        }));
+        const res = await getData(getIemListApiUrl);
+        console.log(res);
+        if (res.data) {
+          const itemListInfo = res.data._embedded[itemListQuery];
+          let curItemIndex;
+          const tempItemList = itemListInfo.reverse(); // 배열인덱스를 과거순을 정렬
+          for (let i = 0; i < tempItemList.length; i++) {
+            if (tempItemList[i].id === curPageId) {
+              curItemIndex = i;
+              break;
+            }
+          }
+          const prevItemListInfo = tempItemList[curItemIndex - 1];
+          const curItemListInfo = tempItemList[curItemIndex];
+          const nextItemListInfo = tempItemList[curItemIndex + 1];
+          setPageInfo({
+            prev: prevItemListInfo,
+            cur: curItemListInfo,
+            next: nextItemListInfo,
+          });
+          // console.log(prevItemListInfo, nextItemListInfo)
+        }
+      } catch (err) {
+        console.error('데이터를 가져올 수 없습니다.');
+      }
+      setIsLoading((prevState) => ({
+        ...prevState,
+        fetching: false,
+      }));
+    })();
+  }, [curPageId]);
 
   return (
     <>
       <MetaTitle title={`공지사항`} />
       <Layout>
         <Wrapper>
-          <section className={Styles.title}>
-            <div className={Styles.text}>공지사항</div>
+          <section className={s.title}>
+            <div className={s.text}>공지사항 {isLoading.fetching && <Spinner />}</div>
           </section>
-
-          {/* 게시판 */}
-          <section className={Styles.announcement}>
-            <div className={Styles.content}>
-              <div className={Styles.flex_box}>
+          <section className={`${s.announcement} ani-show-all-child`}>
+            <div className={s.content}>
+              <div className={s.flex_box}>
                 <p>제목</p>
-                <span>타이틀영역입니다</span>
+                <span>{itemInfo.title}</span>
                 <p>등록일</p>
-                <span>2022.01.20</span>
+                <span>{transformDate(pageInfo.cur?.createdDate) || ''}</span>
               </div>
-
-              {/* 내용 텍스트 */}
-              <div className={Styles.content_text}>
-                텍스트 영역입니다.
-                <br />
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                <br />
-                Ultrices eu ullamcorper at ut aliquam nulla non nec. Massa arcu,
-                non commodo lectus suspendisse.
-                <br />
-                At amet, est malesuada laoreet. Integer feugiat nibh mattis
-                neque tincidunt. Mattis ut ac imperdiet tempor leo at viverra.
-                <br />
-                <br />
-                Phasellus id facilisi amet quisque. In enim, sagittis, nibh
-                luctus arcu gravida. Molestie ullamcorper id potenti fringilla
-                dolor suspendisse id non.
-                <br />
-                Vel vestibulum egestas viverra quam felis gravida. Risus ut
-                interdum in ligula sit lorem eu ultrices. Elementum mauris donec
-                mauris cras nullam non.
-                <br />
-                Commodo nunc, est quis netus urna malesuada.
-                <br />
-                <br />
-                Sed aliquam, dictum velit non a. Nunc risus aliquet est posuere.
-                Maecenas eget a nam at congue. Vitae elementum in at malesuada
-                tellus.
-                <br />
-                ullamcorper pellentesque turpis vitae lorem morbi. Id sapien
-                lacus interdum dolor.
-                <br />
-                <br />
-                Turpis adipiscing in sed placerat massa. Fringilla id cursus
-                turpis lobortis in congue. Porttitor id ut odio metus, ultrices.
-                Porttitor orci mauris, velit risus. Est sapien enim commodo diam
-                id vitae pulvinar faucibus. Augue tellus faucibus tortor arcu a
-                tortor sollicitudin nullam sem.
-              </div>
+              <div
+                className={`${s.content_text} view ql-editor`}
+                dangerouslySetInnerHTML={{ __html: itemInfo.contents }}
+              ></div>
             </div>
           </section>
-
-          <section className={Styles.list_gotosee}>
-            <div className={Styles.btn}>목록 보기</div>
+          <section className={s.list_gotosee}>
+            <Link href={'/community/notice'} passHref>
+              <a className={s.btn}>목록 보기</a>
+            </Link>
           </section>
-
-          <section className={Styles.before_after}>
-            <div className={Styles.grid_box}>
-              <p>다음글</p>
-              <div>
-                <div className={`${Styles.image} img-wrap`}>
-                  <Image
-                    priority="false"
-                    src={require("/public/img/pages/community/up_arrow.png")}
-                    objectFit="contain"
-                    layout="fill"
-                    alt="카드 이미지"
-                  />
-                </div>
-              </div>
-              <div>제목 영역입니다</div>
-
-              <p>이전글</p>
-              <div>
-                <div className={`${Styles.image} img-wrap`}>
-                  <Image
-                    priority="false"
-                    src={require("/public/img/pages/community/down_arrow.png")}
-                    objectFit="contain"
-                    layout="fill"
-                    alt="카드 이미지"
-                  />
-                </div>
-              </div>
-              <div>설날 배송 안내~~~텍스트 영역</div>
-            </div>
-          </section>
+          <MoveToNextPrevPage pageInfo={pageInfo} setCurPageId={setCurPageId} borderColor={'var(--color-line-01)'}/>
         </Wrapper>
       </Layout>
     </>
   );
 }
 
-export default NoticePostPage;
+NoticePostPage.getInitialProps = async ({ query }) => {
+  const { noticeId } = query;
+  return { noticeId };
+};
+

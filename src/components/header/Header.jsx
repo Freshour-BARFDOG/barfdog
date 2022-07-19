@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import Wrapper from '/src/components/common/Wrapper';
 import useUserData from '/util/hook/useUserData';
@@ -25,11 +25,13 @@ import MobileLogo from '/public/img/mobile_logo.png';
 import MobileLogo_2x from '/public/img/mobile_logo@2x.png';
 import Icon_Home from '/public/img/icon/icon-home.svg';
 import Icon_mypage from '/public/img/icon/mypage.svg';
+import {authAction} from "/store/auth-slice";
 
 const Modal_subscribeWidhSSR = dynamic(() => import('/src/components/modal/Modal_subscribe'));
 
 const Header = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const curPath = router.asPath;
   const userData = useUserData();
   const isLogin = !!userData;
@@ -60,10 +62,22 @@ const Header = () => {
       }));
     }
   };
+  // console.log(userData)
+  
+  
 
   const returnToPrevPage = () => {
     router.back();
   };
+  
+  const onAdminLogout = () => {
+    dispatch(authAction.adminLogout());
+  }
+  
+  const onMemberLogout = () => {
+    dispatch(authAction.logout());
+  }
+
 
   // ! 사용목적: isMobile상태로인해 , '랜더링 되었다가 사라지는 component'를 애초에 랜더링하지 않게하기 위함
   if (isMobile === null) return;
@@ -95,7 +109,9 @@ const Header = () => {
               <section id="account" className={`${s.account_area} pc`}>
                 <ul>
                   {isLogin ? <MemberMemu data={userData} /> : <Non_MemberMenu />}
-                  <ServiceCenter />
+                  {userData?.name !== '관리자' && <ServiceCenter />}
+                  {userData?.name !== '관리자' && <button type={'button'} onClick={onAdminLogout}> 로그아웃</button>}
+                  {userData?.name === '관리자' && <button type={'button'} onClick={onMemberLogout}> 로그아웃</button>}
                 </ul>
               </section>
               <section className={s.logo_area}>

@@ -1,43 +1,93 @@
-$browser-context: 16;
-@function rem($px, $context: $browser-context) {
-  @return #{$px / $context}rem;
+@import '/styles/global/guide.scss';
+@import '/styles/global/rem';
+// ------------ LAY-OUT
+.survey-page {
+  margin-bottom: rem(150);
+  .step1Page {
+    padding: rem(86) 0 rem(80);
+  }
+  .step2page {
+    padding: rem(60) 0 rem(80);
+  }
+  .step3page {
+    padding: rem(60) 0 rem(100);
+  }
 }
-@import 'styles/global/guide.scss';
+.input-row:not(:last-child) {
+  margin-bottom: rem(60);
+}
 
-.step1Page {
-  padding: rem(60) 0 ;
-  // margin-bottom: 20vh;
+
+// ----------- INPUT STYLE
+.survey-page {
+  .input-wrap{
+    position: relative;
+    input{width: 100% !important;}
+  }
+  input.focus-underline {
+    border: {
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+    }
+    border-radius: 0;
+    border-bottom: rem(1) solid var(--color-line-02) !important;
+    cursor: pointer;
+    &:focus {
+      border: {
+        top: 0;
+        left: 0;
+        right: 0;
+        border-bottom: rem(1) solid
+      }
+      border-color: var(--color-main) !important;
+    }
+    + .unit {
+      position: absolute;
+      cursor: default;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+
 }
-.step2page {
-  padding: rem(60) 0 ;
-  // margin-bottom: 20vh;
-}
-.step3page {
-  padding: rem(60) 0 ;
-  // margin-bottom: 20vh;
-}
+
 
 .input_title {
   text-align: center;
+  cursor: default;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap:rem(10);
   @include char(l20);
   font-weight: 600;
   padding-bottom: rem(30);
 }
 
 
+.display-flex-column{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+// ---------- 1페이지
 .step1Page {
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
-    
-  .input_box_1 {
-    text-align: center;
-    width: rem(360);
-    border: rem(0);
-    border-radius: rem(0);
-    border-bottom: rem(1) solid var(--color-disabled) ;
-  }
+}
+
+.input_underLine {
+  text-align: center;
+  width: rem(360);
+  border: rem(0);
+  border-radius: rem(0);
+  border-bottom: rem(1) solid var(--color-disabled);
 }
 
 .radio_gender {
@@ -46,11 +96,6 @@ $browser-context: 16;
   @include char(l18);
   font-weight: 600;
 }
-
-.item_box {
-  padding-bottom: rem(60);
-}
-
 
 //반려견성별
 .flex_box {
@@ -62,7 +107,7 @@ $browser-context: 16;
     align-items: center;
     text-align: center;
     input {
-      border : rem(0);
+      border: rem(0);
       width: rem(100);
       text-align: center;
     }
@@ -70,131 +115,57 @@ $browser-context: 16;
   }
 }
 
-
-.radio_check {
+.oldDog {
   @include char(l16);
-
-  padding-top :rem(30);
-  padding-bottom: rem(60);
-  .radio {
-    display: flex;
-    column-gap: rem(8);
-    justify-content: center;
-
+  padding-top: rem(30);
+  text-align: center;
+  justify-content: center;
+  label {
+    align-items: center;
+    font-size: rem(16);
+    line-height: 1.2;
+  }
+  > *{
+    display: inline-flex !important;
   }
 }
 
-.selectDogBreed {
-  width: rem(360);
+.dogBirth {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: rem(20);
 }
+
 .dog_choice {
-  padding: rem(60);
+  padding: 0 rem(60);
   display: flex;
   justify-content: center;
   column-gap: rem(20);
   @include char(l18);
 }
 
-
 .inner_kg {
-  width: rem(360);
+  max-width: rem(360);
+  width: 100%;
   display: flex;
   align-items: center;
   text-align: right;
-  border-bottom: rem(1) solid var(--color-disabled);
-  margin-bottom: rem(60);
+  position: relative;
   input {
-    border : rem(0);
-    width: rem(350);
+    border: rem(0);
+    width: rem(360);
     text-align: center;
   }
 }
 
-
-.swiper_navigation_container{
+.dogStatus{
+  padding: 0 rem(60);
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  > i {cursor: pointer;}
-.left_side_btn {
-  .left_btn {
-    display: flex;
-    justify-content: center;
-    column-gap: rem(4);
-
-    border: rem(1) solid var(--color-main);
-    width: rem(120);
-    @include char(l16);
-    font-weight: 600;
-    color : var(--color-main);
-    text-align: center;
-    padding : rem(19) 0;
-    border-radius: rem(4);
-    .image_box {
-      .image {
-        width: rem(12);
-        aspect-ratio: 1/1;
-      }
-    }
-  }
+  flex-direction: column;
+  justify-content: center;
+  gap: rem(26);
 }
-
-.right_side_btn {
-  .right_btn {
-    display: flex;
-    justify-content: center;
-    column-gap: rem(4);
-
-    border: rem(1) solid var(--color-main);
-    width: rem(120);
-    @include char(l16);
-    font-weight: 600;
-    background-color: var(--color-main);
-    color : #fff;
-    text-align: center;
-    padding : rem(19) 0;
-    border-radius: rem(4);
-    .image_box {
-      .image {
-        width: rem(12);
-        aspect-ratio: 1/1;
-      }
-    }
-  }
-}
-}
-
-
-// .swiper_main_outerWrap {
-//   position: relative;
-//   z-index: 100;
-//   // .swiper_navigation_container {
-//   .left_side_btn {
-//     position: absolute;
-//     bottom: 20%;
-//     left: 300px;
-//   }
-//   .right_side_btn {
-//     position: absolute;
-//     bottom: 20%;
-//     right: 300px;
-    
-//   }
-// }
-// .swiper_navigation_container{display: block;
-//   .left_side_btn {
-//     // .swiper_navigation_container {
-//       position: relative;
-//       // bottom: 20%;
-//       // left: 300px;
-//     }
-//     .right_side_btn {
-//       position: relative;
-//       // bottom: 20%;
-//       // right: 300px;
-      
-//     }
-// }
 
 
 // * ------- 2페이지  ------- * //
@@ -222,25 +193,13 @@ $browser-context: 16;
     width: rem(120);
     display: flex;
     align-items: center;
-    text-align: center;
     justify-content: space-between;
     input {
-      border : rem(0);
-      // background: rosybrown;
-      margin-left: rem(5);
+      border: rem(0);
       width: rem(80);
       text-align: center;
     }
-    .input_1 {
-      border : rem(0);
-      // background: red;
-      margin-left: rem(10);
-      width: rem(80);
-      text-align: center;
 
-    }
-    text-align: right;
-    border-bottom: rem(1) solid var(--color-disabled);
   }
 }
 
@@ -262,31 +221,41 @@ $browser-context: 16;
   }
 }
 
-.food_check {
+.inedibleFood {
   display: grid;
+  max-width: rem(220);
   grid-template-columns: 1fr 1fr;
-  column-gap: rem(20);
+  column-gap: rem(17);
   justify-content: center;
   row-gap: rem(12);
   @include char(l18);
-  padding-bottom: rem(30);
+  label{
+    overflow-y: scroll;
+    display: flex;
+    align-items: flex-start;
+    box-sizing: border-box;
+    height: rem(42);
+    padding-top:rem(10);
+    padding-bottom:0;
+    &::-webkit-scrollbar {display: none;}
+  }
 }
 
 .red_text {
   @include char(b14);
-  color : var(--color-primary04);
+  color: var(--color-primary04);
   text-align: center;
-  padding-bottom: rem(80);
 }
 
-.take_care {
+.recommendRecipeId {
   display: grid;
   row-gap: rem(14);
   @include char(l18);
-  padding-bottom:rem(80);
 }
 
-.disease_check {
+.caution {
+  width: rem(220);
+  margin:0 auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
   column-gap: rem(20);
@@ -294,9 +263,12 @@ $browser-context: 16;
   row-gap: rem(12);
   @include char(l18);
   padding-bottom: rem(30);
+  label{
+   padding: 0;
+  }
 }
 // * ------- 활동량  ------- * //
-.activity {
+.activityLevel {
   display: flex;
   align-items: flex-start;
   width: rem(410);
@@ -307,20 +279,18 @@ $browser-context: 16;
   li {
     display: inline-flex;
     flex-direction: row;
-    justify-content:center;
+    justify-content: center;
     width: 20%;
-
   }
   label {
     display: inline-flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    input{ margin-bottom:rem(16);}
+    input {
+      margin-bottom: rem(16);
+    }
   }
-  // display:inline-flex;
-  // flex-direction: row;
-  // gap: rem(14);
 }
 
 // * ------- 건강상태  ------- * //
@@ -335,37 +305,37 @@ $browser-context: 16;
   }
 }
 
-.numberOfSnacks{
+.snackCountLevel {
   display: inline-flex;
   flex-direction: row;
   gap: rem(14);
-  label{position:relative;}
-  padding-bottom: rem(123);
-  .desc{
-    position:absolute;
+  $descHeight : rem(40);
+  $descBottomPos: rem(10);
+  padding-bottom: calc(#{$descHeight} + #{$descBottomPos});
+  .desc {
+    position: absolute;
     width: 100%;
-    bottom:rem(-10);
-    transform:translateY(100%);
+    height: $descHeight;
+    bottom: -$descBottomPos;
+    transform: translateY(100%);
     color: #878787;
     font-size: rem(14);
   }
-
+  label {
+    position: relative;
+  }
 }
-
-
-
-
-
-
 
 // * ------- Custom Input 공통 ------ *
 .inputRadio-wrap {
   text-align: center;
+  label{cursor: pointer}
 }
 .inputRadio {
   cursor: pointer;
   border-radius: rem(50);
   background-color: #fff;
+  width: 100%;
   height: rem(42);
   display: inline-flex;
   align-items: center;
@@ -373,7 +343,7 @@ $browser-context: 16;
   padding: rem(12) rem(25);
   box-sizing: border-box;
   border: rem(2) solid var(--color-line-03);
-  transition: border-color 0.1s ease;
+  transition: border-color 0.2s var(--transition-cubic);
 
   &.checked {
     border-color: var(--color-main);
@@ -395,7 +365,6 @@ $browser-context: 16;
 .selectDogBreed {
   position: relative;
   z-index: 1;
-  max-width: rem(360);
   .viewer {
     cursor: pointer;
     background-color: #f1f1f4;
@@ -408,27 +377,47 @@ $browser-context: 16;
     max-width: rem(360);
   }
 }
+
 .modal-selectDogBreed {
+  background-color: #fff;
   border-radius: rem(8);
-  box-shadow: 0 0 rem(25) rgba(0, 0, 0, 0.1);
-  padding: rem(5);
-  border: rem(1) solid var(--color-line-04);
+
   width: 100%;
   position: absolute;
-  left: 0;
+  left: 50%;
   bottom: 0;
-  transform: translateY(100%);
-  font-size: rem(18);
+  transform: translate(-50%, 100%);
+  font-size: rem(16);
+  overflow: hidden;
+  transition-timing-function: cubic-bezier(0.69, 0.06, 0.38, 0.96);
+  transition-duration: 0.25s;
+  transition-property: height, margin, padding, box-shadow;
+
+  height: 0;
+  margin: 0;
+  padding: 0 rem(5);
+  box-shadow: 0 0 rem(0) rgba(0, 0, 0, 0);
+  border: 0;
+  pointer-events: none;
+  &.active {
+    height: rem(200);
+    margin: auto;
+    padding: rem(10) rem(5);
+    border: rem(1) solid var(--color-line-04);
+    box-shadow: 0 0 rem(25) rgba(0, 0, 0, 0.1);
+    pointer-events: all;
+  }
 
   .search {
     display: flex;
     height: rem(44);
     width: 100%;
   }
+
   p {
     transition-timing-function: ease;
     transition-duration: 0.1s;
-    transition-property: color background-color;
+    transition-property: color, background-color;
     padding-left: rem(10);
     font-size: inherit;
     height: rem(38);
@@ -445,5 +434,73 @@ $browser-context: 16;
   }
   .scrollContainer {
     background-color: #fff;
+  }
+}
+
+
+
+
+
+// * ------- Navigation Button  ------- * //
+.swiper-navigation-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: rem(560);
+  margin: 0 auto;
+  button {
+    display: flex;
+    justify-content: center;
+    column-gap: rem(4);
+    border: rem(1) solid var(--color-main);
+    width: rem(120);
+    @include char(l16);
+    font-weight: 600;
+    color: var(--color-main);
+    text-align: center;
+    padding: rem(19) 0;
+    border-radius: rem(4);
+
+    transition-timing-function: ease-out;
+    transition-duration: 0.4s;
+    transition-property: background-color, box-shadow;
+
+    .image_box {
+      position: relative;
+      width: rem(12);
+      aspect-ratio: 1/1;
+      img {
+        transition: inherit;
+      }
+    }
+  }
+  .swiper-button-prev {
+    border-color: var(--color-main);
+    background-color: #fff;
+    color: var(--color-main);
+    box-shadow: 0 rem(2) rem(10) 0 rgba(0, 0, 0, 0.1);
+    &[disabled] {
+      border-color: var(--color-disabled);
+      color: var(--color-disabled);
+      box-shadow: none;
+      img {
+        filter: grayscale(100);
+        opacity: 0.5;
+      }
+    }
+  }
+
+  .swiper-button-next {
+    border-color: transparent;
+    background-color: var(--color-main);
+    color: #fff;
+    box-shadow: 0 rem(2) rem(10) 0 rgba(202, 16, 16, 0.6);
+  }
+  .swiper-button-submit{
+    border-color: transparent;
+    background-color: var(--color-main);
+    color: #fff;
+    box-shadow: 0 rem(2) rem(10) 0 rgba(202, 16, 16, 0.6);
+    display: none;
   }
 }

@@ -44,14 +44,15 @@ $logoWidth : rem(180);
   }
 
   .header_menus{
+    $distance: rem(18);
     display: flex;
     align-items: center;
     justify-content: flex-end;
     font-size: rem(15);
     & > * {float:left;cursor: default;}
     & > *:not(:last-child) {
-      margin-right:rem(18);
-      padding-right:rem(18);
+      margin-right:$distance;
+      padding-right:$distance;
       position:relative;
       &:after{
         content:"";
@@ -64,7 +65,27 @@ $logoWidth : rem(180);
         height: rem(18);
       }
     }
-    .admin_name{margin-right:rem(2); font-size:inherit;}
+    .admin_info{
+      position:relative;
+      overflow: hidden;
+      &:hover{
+        overflow: initial;
+        .admin_email{
+          opacity:1;
+        }
+      }
+      .admin_email{
+        position: absolute;
+        bottom:0;
+        font-weight: initial;
+        right:$distance;
+        transform:translateY(-100%);
+        opacity: 0;
+        transition: opacity .3s var(--transition-cubic);
+      }
+
+      b{margin-right:rem(4);}
+    }
     .btn_logout{cursor: pointer; font-size:inherit;}
 
   }

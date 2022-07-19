@@ -1,9 +1,9 @@
-$browser-context: 16;
-@function rem($px, $context: $browser-context) {
-  @return #{$px / $context}rem;
-}
+@import "/styles/global/rem";
+@import "/styles/module/zIndex.module";
 
 #site_header {
+  position: relative;
+  z-index: $site_header;
   border-bottom: 1px solid var(--color-line-03);
   svg {
     display: block;
@@ -64,6 +64,8 @@ $browser-context: 16;
         height: rem(32);
         margin-right: rem(30);
         overflow: hidden;
+        position: relative;
+        top: rem(-1);
       }
       .username {
         cursor: default;
