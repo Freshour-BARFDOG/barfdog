@@ -56,7 +56,7 @@ const Pagination = ({
             setPageData(newPageInfo)
           }
           await router.push({
-            search: `?page=${newPageInfo.newPageNumber}`,
+            search: urlQueries,
           });
         }else{
           setItemList([]);  // ! TEST 끝난 뒤, 주석 해제
