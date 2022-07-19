@@ -25,6 +25,7 @@ import CheckboxGroup from '/src/components/atoms/CheckboxGroup';
 import transformClearLocalCurrencyInEveryObject from '/util/func/transformClearLocalCurrencyInEveryObject';
 import SingleItemOptions from '../../createSingle/SingleItemOptions';
 import SingleItemDiscountOptions from '../../createSingle/SingleItemDiscountOptions';
+import {global_itemType} from "/store/TYPE/itemType";
 
 
 
@@ -488,7 +489,7 @@ function UpdateSingleItemPage({ id }) {
                 <div className="cont_divider">
                   <div className="input_row multipleLines">
                     <div className="title_section fixedHeight">
-                      <h5 className="title">상품설명</h5>
+                      <h5 className="title">상세정보</h5>
                     </div>
                     <div className="inp_section">
                       {formErrors.contents && <ErrorMessage>{formErrors.contents}</ErrorMessage>}
