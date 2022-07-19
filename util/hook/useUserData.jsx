@@ -29,6 +29,9 @@ export default function useUserData() {
         .get('/api/members', axiosUserConfig())
         .catch((err) => {
           console.log(err.response);
+          if(err.response.status === 401){
+            alert('토큰이 만료되었습니다. 다시 로그인해주세요.')
+          }
       });
       if (res?.status === 200){
         memberDATA = {
