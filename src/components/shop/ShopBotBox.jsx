@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {slideDown, slideUp} from '../../../util/func/slideToggle';
-import Styles from '../../pages/shop/single.module.scss';
+import Styles from '../../pages/shop/item/[itemId].module.scss';
 import Image from 'next/image';
 
 export function ShopBotBox ({title, children}) {

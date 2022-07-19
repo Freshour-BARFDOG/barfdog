@@ -1,4 +1,4 @@
-import Styles from '../../pages/shop/single.module.scss';
+import Styles from '../../pages/shop/item/[itemId].module.scss';
 import React from 'react';
 
 export const ShopReturnExchageGuideBox = () => {

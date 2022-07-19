@@ -2,13 +2,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import MetaTitle from '@src/components/atoms/MetaTitle';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
-import Styles from './single.module.scss';
-import { ShopBoard } from '../../components/shop/ShopBoard';
-import { ShopReturnExchageGuideBox } from '../../components/shop/ShopReturnExchageGuideBox';
-import { ShopItemInfoBox } from '../../components/shop/ShopItemInfoBox';
-import { ShopTabMenus } from '../../components/shop/ShopTabMenus';
-import { ShopReviewBox } from '../../components/shop/ShopReviewBox';
-import {ShopOptionBar} from "../../components/shop/ShopOptionBar";
+import Styles from './[itemId].module.scss';
+import { ShopBoard } from '../../../components/shop/ShopBoard';
+import { ShopReturnExchageGuideBox } from '../../../components/shop/ShopReturnExchageGuideBox';
+import { ShopItemInfoBox } from '../../../components/shop/ShopItemInfoBox';
+import { ShopTabMenus } from '../../../components/shop/ShopTabMenus';
+import { ShopReviewBox } from '../../../components/shop/ShopReviewBox';
+import {ShopOptionBar} from "../../../components/shop/ShopOptionBar";
 
 
 // /$ curl 'http://localhost:8080/api/items/297' -i -X GET \

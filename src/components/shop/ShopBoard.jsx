@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import Styles from '../../pages/shop/single.module.scss';
+import Styles from '../../pages/shop/item/[itemId].module.scss';
 import Image from 'next/image';
 import {ItemQuantityInput} from '../atoms/ItemQuantityInput';
 

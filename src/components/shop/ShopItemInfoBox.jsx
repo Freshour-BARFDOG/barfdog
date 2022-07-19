@@ -1,4 +1,4 @@
-import Styles from '../../pages/shop/single.module.scss';
+import Styles from '../../pages/shop/item/[itemId].module.scss';
 import Image from 'next/image';
 import {ShopBotBox} from './ShopBotBox';
 import React from 'react';

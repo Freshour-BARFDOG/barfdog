@@ -1,11 +1,5 @@
-$browser-context:16;
-// convert px to rem
-
-@import '../../../styles/global/guide';
-
-@function rem($px, $context: $browser-context){
-  @return #{$px / $context}rem;
-}
+@import '/styles/global/guide';
+@import '/styles/global/rem.scss';
 
 section.top{padding-top: rem(40); padding-bottom: rem(60);}
 section.tab_menu{padding-top: 0; padding-bottom: 0;}

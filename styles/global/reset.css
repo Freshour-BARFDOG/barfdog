@@ -23,9 +23,9 @@ font-family: 'GmarketSansBold'
   --color-point-hover: #e02d2d; /* * 포인트색상 Hover */
 
   --color-primary01: var(--color-main);
-  /*--color-primary02: #f11a39;*/
-  /*--color-primary03: #ff5959;*/
-  /*--color-primary04: #ed3333;*/
+  --color-primary02: #f11a39;
+  --color-primary03: #ff5959;
+  --color-primary04: #ed3333;
   --color-primary04: var(--color-main);
 
   --color-checked: #50a057;

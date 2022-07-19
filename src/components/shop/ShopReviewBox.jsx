@@ -1,4 +1,4 @@
-import Styles from '../../pages/shop/single.module.scss';
+import Styles from '../../pages/shop/item/[itemId].module.scss';
 import RatingStars from '../atoms/RatingStars';
 import React, {useEffect, useRef, useState} from 'react';
 import {slideDown, slideUp} from "../../../util/func/slideToggle";

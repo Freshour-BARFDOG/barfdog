@@ -4,7 +4,7 @@ import Wrapper from '../common/Wrapper';
 import { ItemQuantityInput } from '../atoms/ItemQuantityInput';
 import CloseButton from '../atoms/CloseButton';
 import CustomSelect from '../admin/form/CustomSelect';
-import Styles from '../../pages/shop/single.module.scss';
+import Styles from '../../pages/shop/item/[itemId].module.scss';
 import { CustomSelectWithCustomOptions } from '../survey/CustomSelectWithCustomOptions';
 
 /*
