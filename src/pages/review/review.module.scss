@@ -1,13 +1,5 @@
 @import '/styles/global/guide';
-
-
-$browser-context:16;
-// convert px to rem
-@function rem($px, $context: $browser-context){
-  @return #{$px / $context}rem;
-}
-
-
+@import '/styles/global/rem';
 
 section.review_title {padding : rem(60) 0 rem(40);}
 .swiper_review_outerWrap {padding : 0 0 rem(70); }
@@ -52,16 +44,17 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
     }
     .content_title {
       @include char(l20);
-      padding: rem(20) rem(30) rem(10);
+      padding: rem(20) rem(30) 0;
+      margin-bottom: rem(10);
+      color: var(--color-font-def);
     }
     >p {
       @include char(b16);
       color: var(--color-font-sub);
-      padding: rem(10) rem(30) rem(20);
+      padding: 0  rem(30) rem(20);
       max-height: 30px;
-      
       display: -webkit-box;
-      -webkit-line-clamp: 2;  // 말줄임표 표시할 줄 수 
+      -webkit-line-clamp: 1;  // 말줄임표 표시할 줄 수
       -webkit-box-orient: vertical;
       text-overflow: ellipsis; // 말줄임표
       overflow: hidden; // 넘침 숨김
@@ -307,6 +300,15 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
       // width: 80%;
       // margin:0 auto;
       color: #4d4d4d;
+    }
+    .images{
+      background-color: red;
+      display: grid;
+      grid-template-columns: 1fr;
+      min-height: rem(50);
+      .img-wrap{
+        position: relative;
+      }
     }
 
   }

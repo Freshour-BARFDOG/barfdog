@@ -1,28 +1,96 @@
-import s from "./modal_bestReview.module.scss";
-import React, {useEffect, useState, useRef} from "react";
-import zIndex from "/styles/module/zIndex.module.scss";
-import rem from "/util/func/rem";
-import CloseButton from "/src/components/atoms/CloseButton";
-import ScrollContainer from "/src/components/atoms/ScrollContainer";
+import s from './modal_bestReview.module.scss';
+import React, { useEffect, useRef, useState } from 'react';
+import zIndex from '/styles/module/zIndex.module.scss';
+import rem from '/util/func/rem';
+import CloseButton from '/src/components/atoms/CloseButton';
+import ScrollContainer from '/src/components/atoms/ScrollContainer';
 
+import Image from 'next/image';
+import ArrowLeft from '/public/img/icon/swiper-arrow-medium.svg';
+import ArrowRight from '/public/img/icon/swiper-arrow-medium.svg';
+import RatingStars from '/src/components/atoms/RatingStars';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination } from 'swiper';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
+import axios from 'axios';
+import { FullScreenLoading } from '../atoms/FullScreenLoading';
+import { filter_blindingUserName } from '/util/func/filter_blindingUserName';
 
-import Image from "next/image";
-import ArrowLeft from "/public/img/icon/swiper-arrow-medium.svg";
-import ArrowRight from "/public/img/icon/swiper-arrow-medium.svg";
-import RatingStars from "/src/components/atoms/RatingStars";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Navigation } from "swiper";
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
+const DUMMY_DATA = {
+  reviewDto: {
+    id: 39,
+    writtenDate: '2022-07-19',
+    star: 1,
+    username: '세바스찬',
+    contents:
+      '열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자',
+  },
+  reviewImageDtoList: [
+    {
+      filename: 'filename1.jpg',
+      url: 'https://images.unsplash.com/photo-1517849845537-4d257902454a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80',
+    },
+    {
+      filename: 'filename2.jpg',
+      url: 'https://images.unsplash.com/photo-1552053831-71594a27632d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=662&q=80',
+    },
+    {
+      filename: 'filename3.jpg',
+      url: 'https://images.unsplash.com/photo-1561037404-61cd46aa615b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
+    },
+  ],
+};
 
+export default function Modal_bestReview({ isActiveModal, setIsActiveModal, reviewId }) {
+  const [info, setInfo] = useState({});
+  const [isLoading, setIsLoading] = useState({});
+  const [btnStylesObj, setBtnStyleObj] = useState({});
 
+  useEffect(() => {
+    if (!reviewId) return;
+    const url = `/api/reviews/${reviewId}/community`;
+    (async () => {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        fetching: true,
+      }));
+      const res = await axios
+        .get(url, {
+          headers: {
+            'content-Type': 'application/json',
+          },
+        })
+        .then((res) => {
+          return res;
+        })
+        .catch((err) => {
+          return err.response;
+        });
+      const data = res.data || DUMMY_DATA;
+      console.log(data);
+      if (!data) return;
+      const DATA = {
+        id: data.reviewDto.id,
+        writtenDate: data.reviewDto.writtenDate,
+        star: data.reviewDto.star,
+        username: data.reviewDto.username,
+        contents: data.reviewDto.contents,
+        imageList: data.reviewImageDtoList,
+      };
+      setInfo(DATA);
+      console.log(res);
+      setIsLoading((prevState) => ({
+        ...prevState,
+        fetching: false,
+      }));
+    })();
+  }, [reviewId]);
 
-
-
-
-function Modal_bestReview({ isActiveModal, setIsActiveModal, data }) {
-
+  useEffect(() => {
+    setBtnStyleObj(closeButtonStyles(window.innerWidth));
+  }, []);
 
   useEffect(() => {
     const scrollYPos = window.scrollY;
@@ -32,7 +100,6 @@ function Modal_bestReview({ isActiveModal, setIsActiveModal, data }) {
         top : -${scrollYPos}px;
       `;
     }
-
     return () => {
       document.body.style.cssText = ``;
       window?.scrollTo(0, parseInt(-scrollYPos || 10) * -1);
@@ -40,18 +107,50 @@ function Modal_bestReview({ isActiveModal, setIsActiveModal, data }) {
   }, [isActiveModal]);
 
   const onHideModalHandler = () => {
-      setIsActiveModal(false);
-    };
+    setIsActiveModal(false);
+  };
 
   return (
     <>
-      <section
-        className={`${s["modal-bestReview"]} ${zIndex["modal-bestReview"]}`}
-      >
-        <div className={s.background} onClick={onHideModalHandler}></div>
+      <section className={`${s['modal-bestReview']} ${zIndex['modal-bestReview']}`}>
+        <div
+          className={s.background}
+          onClick={onHideModalHandler}
+          style={{ cursor: 'pointer' }}
+        ></div>
         <div className={s.body}>
           <div className={s.container}>
-            <ModalCont onCloseModalHandler={onHideModalHandler} data={data} />
+            {isLoading.fetching && <FullScreenLoading />}
+            <article className={s.card} data-id={info.id}>
+              <i className={s.btn_close_modal} onClick={onHideModalHandler}>
+                <CloseButton style={btnStylesObj} />
+              </i>
+              <figure className={s.cont}>
+                <Swiper_bestReview imgDataList={info.imageList} />
+                <div className={s.details}>
+                  <div className={s.row1}>
+                    <span className={s.date}>{info.writtenDate}</span>
+                  </div>
+                  <div className={s.row2}>
+                    <h2 className={s.title}>{info.contents}</h2>
+                  </div>
+                  <div className={s.row3}>
+                    <i className={s.rating}>
+                      <RatingStars count={4} size={15} margin={5} disabled />
+                    </i>
+                    <span className={s.name}>{filter_blindingUserName(info.username)}</span>
+                  </div>
+                </div>
+                <div className={s.row4}>
+                  <ScrollContainer
+                    height={200}
+                    scrollBarWidth={info?.contents?.trim().length > 300 ? '10' : '0'}
+                  >
+                    {info.contents}
+                  </ScrollContainer>
+                </div>
+              </figure>
+            </article>
           </div>
         </div>
       </section>
@@ -59,97 +158,13 @@ function Modal_bestReview({ isActiveModal, setIsActiveModal, data }) {
   );
 }
 
-export default Modal_bestReview;
-
-
-
-
-
-
-// 닫기 버튼 반응형 시 ,크기 변형
-const closeButtonStyles = (windowWidth) => {
-  if (!windowWidth) return;
-
-  let style;
-  const triggeredWindowWidth = 600;
-
-  style = {
-    width: windowWidth > triggeredWindowWidth ? `${rem(40)}` : `${rem(20)}`,
-    height: windowWidth > triggeredWindowWidth ? `${rem(40)}` : `${rem(20)}`,
-  };
-  return style;
-};
-
-
-
-const ModalCont = ({ onCloseModalHandler, data }) => {
-  const [btnStylesObj, setBtnStyleObj] = useState({});
- 
-  useEffect(() => {
-    setBtnStyleObj(closeButtonStyles(window.innerWidth));
-  }, []);
-
-
-  const text = `너무          잘먹고요. 모질이 좋아지는게 눈에 보여요.너무 잘먹고요. 모질이
-              좋아지는게 눈에 보여요.너무 잘먹고요. 모질이 좋아지는게 눈에
-              보여요.너무 잘먹고요. 모질이 좋아지는게 눈에 보여요.너무 잘먹고요.
-              모질이 좋아지는게 눈에 보여요.너무 잘먹고요. 모질이 좋아지는게
-              눈에 보여요. 너무 잘먹고요.좋아지는게 눈에 보여요.너무 잘먹고요. 모질이 좋아지는게 눈에
-              보여요.너무 잘먹고요. 너무 잘먹고요. 너무 잘먹고요. 너무 잘먹고요. `;
-
-
-  return (
-    <article className={s.card}>
-      <i className={s.btn_close_modal} onClick={onCloseModalHandler}>
-        <CloseButton style={btnStylesObj} />
-      </i>
-      <figure className={s.cont}>
-
-        <Swiper_bestReview />
-
-        <div className={s.details}>
-          <div className={s.row1}>
-            <span className={s.date}>2022.01.20</span>
-          </div>
-          <div className={s.row2}>
-            <h2 className={s.title}>굿굿</h2>
-          </div>
-          <div className={s.row3}>
-            <i className={s.rating}>
-              <RatingStars count={4} size={15} margin={5} />
-            </i>
-            <span className={s.name}>바*독</span>
-          </div>
-        </div>
-
-        <div></div>
-
-        <div className={s.row4}>
-            {text.trim().length > 300 ? (
-              <ScrollContainer height={200} scrollBarWidth={10}>{text}</ScrollContainer>
-            ) : (
-              text
-            )}
-        </div>
-
-      </figure>
-    </article>
-  );
-};
-
-
-
-
-
-const Swiper_bestReview = () => {
-
+const Swiper_bestReview = ({ imgDataList }) => {
   const navPrevRef = useRef();
   const navNextRef = useRef();
 
   const swiperInit = true;
   const [isFirstSlide, setIsFirstSlide] = useState(swiperInit);
   const [isLastSlide, setIsLastSlide] = useState();
-
 
   const swiperSettings = {
     className: `${s.swiper_bestReivew}`,
@@ -167,22 +182,16 @@ const Swiper_bestReview = () => {
     },
   };
 
-
-
   return (
     <div className={s.swiper_bestReview_outerWrap}>
       <i
-        className={`${s["swiper-button-prev"]} ${
-          isFirstSlide ? s.invisible : ""
-        }`}
+        className={`${s['swiper-button-prev']} ${isFirstSlide ? s.invisible : ''}`}
         ref={navPrevRef}
       >
         <ArrowLeft />
       </i>
       <i
-        className={`${s["swiper-button-next"]} ${
-          isLastSlide ? s.invisible : ""
-        }`}
+        className={`${s['swiper-button-next']} ${isLastSlide ? s.invisible : ''}`}
         ref={navNextRef}
       >
         <ArrowRight />
@@ -208,41 +217,28 @@ const Swiper_bestReview = () => {
           setIsLastSlide(curIdx === totalSlideCount);
         }}
       >
-        <SwiperSlide>
-          <div className={`${s["img-wrap"]} img-wrap`}>
-            <Image
-              src={require("/public/img/pages/review/review_slide_2.png")}
-              objectFit="cover"
-              layout="fill"
-              alt="카드 이미지"
-            />
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <div className={`${s["img-wrap"]} img-wrap`}>
-            <Image
-            priority
-              src={require("/public/img/pages/review/review_slide_2.png")}
-              objectFit="cover"
-              layout="fill"
-              alt="카드 이미지"
-            />
-          </div>
-        </SwiperSlide>
-        {/* {TEST_DATA.map((item) => (
-          <SwiperSlide className={s.slide} key={item.id}>
-            <div className={`${s.image} img-wrap`}>
-              <Image
-                src={require("/public/img/pages/review/review_slide_1.png")}
-                objectFit="cover"
-                layout="fill"
-                alt="카드 이미지"
-              />
+        {imgDataList?.map((data, index) => (
+          <SwiperSlide key={`bestReview-inner-slide-${index + 1}`}>
+            <div className={`${s['img-wrap']} img-wrap`}>
+              <Image src={data.url} objectFit="cover" layout="fill" alt={data.filename} />
             </div>
           </SwiperSlide>
-        ))} */}
+        ))}
       </Swiper>
     </div>
   );
-  
-}
+};
+
+// 닫기 버튼 반응형 시 ,크기 변형
+const closeButtonStyles = (windowWidth) => {
+  if (!windowWidth) return;
+
+  let style;
+  const triggeredWindowWidth = 600;
+
+  style = {
+    width: windowWidth > triggeredWindowWidth ? `${rem(40)}` : `${rem(20)}`,
+    height: windowWidth > triggeredWindowWidth ? `${rem(40)}` : `${rem(20)}`,
+  };
+  return style;
+};
