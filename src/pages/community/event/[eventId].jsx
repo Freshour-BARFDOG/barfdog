@@ -110,8 +110,6 @@ export default function EventPostPage({ eventId }) {
               {/*  alt="카드 이미지"*/}
               {/*/>*/}
             </div>
-
-            <div className={Styles.title_date}>등록일 : 2022.01.20</div>
           </section>
           <section className={s.btn_box}>
             <div className={s.btn}>목록 보기</div>

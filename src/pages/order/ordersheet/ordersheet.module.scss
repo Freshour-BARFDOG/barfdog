@@ -157,6 +157,7 @@ section.final_btn {
     }
 
     .info_col {
+      text-align: left;
       padding-left: rem(10);
       .info_inner {
         @include char(l14);

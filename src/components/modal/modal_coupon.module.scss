@@ -10,15 +10,16 @@
 
 
 .modal {
-  min-width: rem(500);
+  width: 100%;
 
   .title_box {
     width: 100%;
     padding-bottom: rem(20);
     display: flex;
     align-items: center;
+
     .title {
-      width: 87.5%;
+      width: 100%;
       display: flex;
       justify-content: flex-start;
 
@@ -27,71 +28,67 @@
         @include char(l14);
         color: var(--color-font-sub);
         padding-left: rem(10);
+        font-weight: 400;
+        line-height: 200%;
       }
     }
   }
   .content_box {
-    display: flex;
-    justify-content: center;
     .flex_box {
-      width: 87.5%;
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: 1fr rem(80) rem(100) rem(100);
+      height: rem(50);
+      width: 100%;
       border-top: rem(1) solid var(--color-line-01);
       border-bottom: rem(1) solid var(--color-line-01);
+      text-align: center;
+      align-content: center;
 
       @include char(l15);
       font-weight: 600;
       > div:nth-child(1) {
         display: flex;
         justify-content: flex-start;
-        width: 50%;
         padding-left: rem(20);
         box-sizing: border-box;
-      }
-      > div:nth-child(2) {
-        width: 14.2%;
-      }
-      > div:nth-child(3) {
-        width: 17.8%;
-      }
-      > div:nth-child(4) {
-        width: 17.8%;
       }
     }
 
     .flex_box2 {
-      width: 87.5%;
-      display: flex;
+      width: 100%;
+      display: grid;
+      grid-template-columns: rem(40) 1fr rem(100) rem(100);
       align-items: center;
       justify-content: center;
       border-bottom: rem(1) solid var(--color-line-03);
       @include char(l15);
-      font-weight: 600;
+      font-weight: 400;
+
       .check_box {
-        width: 50%;
         padding: rem(15) 0 rem(15);
-        input {
-          margin-left: rem(5);
-          margin-right: rem(10);
+        justify-content: center;
+      }
+
+      .name_box {
+        justify-content: flex-start;
+        display: grid;
+        grid-template-columns: 1fr rem(80);
+
+        .name {
+         justify-content: flex-start;
         }
       }
+
+      span {
+        display: none;
+      }
+
       div {
         display: flex;
         align-items: center;
         justify-content: center;
       }
-      div:nth-child(1) {
-        justify-content: flex-start;
-      }
-      div:nth-child(2) {
-        width: 14.2%;
-      }
-      div:nth-child(3) {
-        width: 17.8%;
-      }
-      div:nth-child(4) {
-        width: 17.8%;
+      .price {
         color: var(--color-main);
       }
     }
@@ -105,22 +102,97 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 18.7%;
-      padding: rem(14) 0 rem(14);
+      width: rem(120);
+      padding: rem(8.5) 0;
 
       border: rem(1) solid var(--color-line-03);
       border-radius: rem(4);
+      cursor: pointer;
     }
     .choice_btn {
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 18.7%;
-      padding: rem(14) 0 rem(14);
+      width: rem(120);
+      padding: rem(8.5) 0;
 
       background: var(--color-main);
       border-radius: rem(4);
       color: #fff;
+      cursor: pointer;
     }
   }
+}
+
+@media (max-width: rem(600)) {
+  .modal-container{
+    padding: rem(20) rem(25) !important;
+    width: 100% !important;
+    max-width: rem(340);
+  }
+
+  .modal {
+
+    .title_box {
+      .title {
+        display: grid;
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+    }
+
+    .content_box {
+
+      .flex_box {
+        display: none;
+      }
+  
+      .flex_box2 {
+        grid:
+        "check_box name_box price"
+        "check_box date price"/rem(40) 1fr rem(100);
+        row-gap: rem(10);
+        padding: rem(10) 0;
+        margin-bottom: rem(10);
+        border: rem(1) solid var(--color-line-03);
+        border-radius: rem(4);
+        font-size: rem(15);
+
+        .check_box {
+          grid-row: 1/span 2;
+
+          input {
+            min-width: rem(16);
+            min-height: rem(16);
+          }
+        }
+
+        .name_box {
+          display: flex;
+        }
+
+        span {
+          display: block;
+        }
+
+        .count {
+          color: #909090;
+        }
+
+        .date {
+          color: #909090;
+          justify-content: flex-start;
+        }
+
+        .price {
+          grid-column: 3/span 1;
+          grid-row: 1/span 2;
+          justify-content: flex-end;
+          margin-right: rem(12);
+          font-size: rem(14);
+        }
+      }
+    }
+  }
+
 }

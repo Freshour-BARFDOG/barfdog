@@ -12,6 +12,7 @@ $browser-context:16; // html font-size
 section.title{padding : rem(40) 0 rem(30);}
 section.notice_board_box {padding : 0 0 rem(40);}
 section.page_no {padding: 0 0 rem(128)}
+
 .title {
   .text {
     @include char(t24);
@@ -27,7 +28,7 @@ section.page_no {padding: 0 0 rem(128)}
 
   .grid_box {
     display: grid;
-    grid-template-columns: 13.7% 68.9% 17.2%; 
+    grid-template-columns: rem(160) 1fr rem(200); 
     border-bottom: 1px solid var(--color-line-01);
     > * {
       @include char(l18);
@@ -41,7 +42,7 @@ section.page_no {padding: 0 0 rem(128)}
 
   .content_box {
     display: grid;
-    grid-template-columns: 13.7% 68.9% 17.2%; 
+    grid-template-columns: rem(160) 1fr rem(200); 
     border-bottom: 1px solid var(--color-line-03);
     > * {
       @include char(l15);
@@ -51,6 +52,7 @@ section.page_no {padding: 0 0 rem(128)}
     >p {
       padding-left: rem(20);
       text-align: start;
+      color: var(--color-font-strong);
     }
   }
 }
@@ -74,7 +76,6 @@ section.page_no {padding: 0 0 rem(128)}
   .notice_board_box {
     .grid_box {
       display: none;
-
     }
 
     .content_box {
@@ -84,7 +85,8 @@ section.page_no {padding: 0 0 rem(128)}
       }
       
       >p {
-        padding-left: 0;
+        padding-left: rem(5);
+        padding-right: rem(5);
       }
     }
   }

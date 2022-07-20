@@ -320,6 +320,8 @@ $browser-context:16; // html font-size
 @media only screen and (min-width:rem(100)) and (max-width: rem(600)) {
 
   .top {
+    margin-top: rem(48);
+
     .back_image {
       .img_wrap {
         //사용 이미지가 우측하단 둥글게 편집, 정상이미지 사용 후 rem(230) 적용
