@@ -109,17 +109,20 @@ const currentPageIndicator = (ref, curPath, setActivemenu) => {
   const curPageDepth1 = curPathArray[1];
   const curPageDepth2 = curPathArray[2];
 
+
   const menuList = Array.from(nav.querySelectorAll('a, button'));
   menuList.forEach((thisMenu)=>{
     const menuPath = thisMenu.pathname || thisMenu.dataset.link;
     if (!menuPath) return;
     const menuQuery = thisMenu.search?.replace(/\?/g, "");
     const thisMenuId = thisMenu.id;
-
-
+  
     menuPath.split('/').forEach((thisMenuPath, index)=>{
       const depth1 = index === 1;
       const depth2 = index === 2;
+  
+  
+      // console.log(thisMenuPath, curPageDepth2)
       // DEPTH 1
       if(depth1 && curPageDepth1.indexOf(thisMenuPath) >= 0){
         thisMenu.dataset.currentPage = 'depth1';
@@ -131,10 +134,10 @@ const currentPageIndicator = (ref, curPath, setActivemenu) => {
           thisMenu.dataset.currentPage = curPageDepth1.indexOf(menuQuery)>= 0 && 'depth2';
         }
       }
+  
       // DEPTH 2
       if(depth2){
-        thisMenu.dataset.currentPage = thisMenuPath === curPageDepth2 && 'depth2';
-
+        thisMenu.dataset.currentPage = curPageDepth2?.indexOf(thisMenuPath) >= 0 && 'depth2';
       }
 
     })
