@@ -23,7 +23,7 @@ const Pagination = ({
   const ButtonCounts = 5; // UI상으로 노출시킬 연속된 페이지네이션 수;
   const [pageInfo, setPageInfo] = useState({});
   const [curPage, setCurPage] = useState(pageFromQuery);
-console.log(pageInfo)
+// console.log(pageInfo)
   useEffect(() => {
     (async () => {
       try {

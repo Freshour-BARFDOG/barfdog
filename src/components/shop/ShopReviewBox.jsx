@@ -1,102 +1,136 @@
-import Styles from '../../pages/shop/item/[itemId].module.scss';
+import s from '/src/pages/shop/item/[itemId].module.scss';
 import RatingStars from '../atoms/RatingStars';
-import React, {useEffect, useRef, useState} from 'react';
-import {slideDown, slideUp} from "../../../util/func/slideToggle";
-import Image from "next/image";
+import React, { useEffect, useRef, useState } from 'react';
+import { slideDown, slideUp } from '/util/func/slideToggle';
+import { useSelector } from 'react-redux';
+import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
+import Spinner from '/src/components/atoms/Spinner';
+import { EmptyContMessage } from '/src/components/atoms/emptyContMessage';
+import { filter_blindingUserName } from '/util/func/filter_blindingUserName';
+import MiniImageIcon from '/public/img/icon/icon-mini-image.svg';
+import Image from 'next/image';
 
-export const ShopReviewBox = () => {
+export const ShopReviewBox = ({ data }) => {
+  // console.log(data);
+  const auth = useSelector((state) => state.auth);
+  const isAdmin = auth.isAdmin;
+  const getListApiUrl = `/api/items/${data.itemId}/reviews`;
+  const searchPageSize = 10;
+  const apiDataQueryString = 'itemReviewsDtoList';
+  const [itemList, setItemList] = useState([]);
+  const [isLoading, setIsLoading] = useState({});
+
+  // console.log(itemList);
 
   return (
-    <section className={Styles.tab_slide_box2}>
+    <section className={s.tab_slide_box2}>
       {/* 리뷰별점박스 */}
-      <div className={Styles.flex_box}>
-        <div className={Styles.content}>
-          <div className={Styles.title}>59개의 리뷰</div>
-          
-          <div className={Styles.grade}>
-            4.0 /<span className={Styles.red}>5.0</span>
+      <div className={s.flex_box}>
+        <div className={s.content}>
+          <div className={s.title}>{data.count}개의 리뷰</div>
+          <div className={s.grade}>
+            {data.star.toFixed(1)} /<span className={s.red}>5.0</span>
           </div>
-          <RatingStars count={4} size={27} disabled/>
+          <RatingStars count={data.star} size={27} disabled />
         </div>
       </div>
-      
-      <div className={Styles.button_box}>
-        <button className={Styles.write_button}>후기 작성하기</button>
-      </div>
-      
-      <div className={Styles.notice_board}>
-        <div className={Styles.flex_title}>
+
+      {/* ADMIN 전용 후기작성버튼*/}
+      {isAdmin && (
+        <div className={s.button_box}>
+          <a
+            className={s.write_button}
+            href={`/bf-admin/review/create?itemId=${data.itemId}`}
+            target={'_blank'}
+          >
+            후기 작성하기
+          </a>
+        </div>
+      )}
+
+      <div className={s.notice_board}>
+        <div className={s.flex_title}>
           <div>No</div>
           <div>별점</div>
-          <div className={Styles.px16_title_content}>제목</div>
+          <div className={s.px16_title_content}>제목</div>
           <div></div>
           <div>등록일</div>
         </div>
         <ul className="reviewBox">
-          {[1,2,3].map((data, index)=><ReviewList key={`review-list-${index}`} data={data}/>)}
+          {isLoading.fetching && <Spinner />}
+          {itemList.length > 0 ? (
+            itemList.map((data, index) => <ReviewList key={`review-list-${index}`} data={data} />)
+          ) : (
+            <EmptyContMessage message={'등록된 댓글이 없습니다.'} />
+          )}
         </ul>
       </div>
-      
-      {/* // * B! Ventures > News Page > Pagination 사용예정  */}
-      <div className={Styles.pagination_box}>
-        <div className={Styles.content}>
-          <div> &#60;</div>
-          <div>1</div>
-          <div>2</div>
-          <div>3</div>
-          <div>4</div>
-          <div>5</div>
-          <div>...</div>
-          <div>11</div>
-          <div> &#62;</div>
-        </div>
-      </div>
+      <section className={s['pagination_box']}>
+        <PaginationWithAPI
+          apiURL={getListApiUrl}
+          size={searchPageSize}
+          setItemList={setItemList}
+          queryItemList={apiDataQueryString}
+          setIsLoading={setIsLoading}
+          routerDisabled={true}
+        />
+      </section>
     </section>
   );
 };
 
-
-
-
-const ReviewList = ({data}) => {
+const ReviewList = ({ data }) => {
+  const DATA = {
+    id: data.reviewDto.id,
+    star: data.reviewDto.star,
+    contents: data.reviewDto.contents,
+    username: data.reviewDto.username,
+    createdDate: data.reviewDto.createdDate,
+    itemImages: data.reviewImageDtoList,
+  };
   const [visible, setVisible] = useState(false);
   const boxRef = useRef(null);
   const onClickHandler = (e) => {
     visible ? setVisible(false) : setVisible(true);
   };
-  
+
   useEffect(() => {
     const selectedElem = boxRef.current;
     if (!selectedElem) return;
     visible ? slideDown(selectedElem) : slideUp(selectedElem);
   }, [visible]);
-  
+
   return (
     <li>
-      <figure className={Styles.grid_box} onClick={onClickHandler}>
+      <figure className={`${s.grid_box} ${s.review_thead}`} onClick={onClickHandler}>
         {/* 그리드 1 시작지점 */}
-        <span className={Styles.number}>48</span>
-        <i className={Styles.star_box}>
-          <RatingStars count={3} margin={0} disabled/>
+        <span className={s.number}>{DATA.id}</span>
+        <i className={s.star_box}>
+          <RatingStars count={DATA.star} margin={0} disabled />
         </i>
-        <p className={Styles.content}>
-          <i className={`${Styles.image} img-wrap`}>
-            <Image
-              src={require('public/img/pages/review/review_slide_sample.png')}
-              objectFit="contain"
-              layout="fill"
-              alt="카드 이미지"
-            />
-          </i>
-          사진 굿굿 너무 좋아요
+        <p className={s.content}>
+          <i className={`${s.image} img-wrap`}>{DATA.itemImages.length > 0 && <MiniImageIcon />}</i>
+          <em className={s.title}>{DATA.contents}</em>
         </p>
-        <span className={Styles.name}> 바&#42;독</span>
-        <span className={Styles.date}> 2022.01.20</span>
+        <span className={s.name}>{filter_blindingUserName(DATA.username)}</span>
+        <span className={s.date}>{DATA.createdDate}</span>
       </figure>
-      <div className={Styles.review_box} ref={boxRef}>
-        <p className={Styles.text}>너무 잘먹고요. 모질이 좋아지는게 눈에 보여요.</p>
+      <div className={s.review_tbody} ref={boxRef}>
+        <p className={s.text}>{DATA.contents}</p>
+        <ul className={s.images}>
+          {DATA.itemImages.map((image, index) => (
+            <li key={`member-review-image-${image.id}-${index}`} className={'img-wrap'}>
+              <Image
+                priority={false}
+                src={image.url}
+                objectFit="cover"
+                layout="fill"
+                alt={image.filename}
+              />
+            </li>
+          ))}
+        </ul>
       </div>
     </li>
   );
 };
-

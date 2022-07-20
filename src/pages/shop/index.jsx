@@ -31,6 +31,7 @@ export default function ShopPage() {
   const [searchQuery, setSearchQuery] = useState('');
 
   console.log(itemList);
+  console.log(searchValues.itemType)
   useEffect(() => {
     // - CASE: Nav GNB에서 shop > submenu Click event
     // - IMPORTANT : to prevent Inifinite Loop when router query is changed
@@ -41,8 +42,8 @@ export default function ShopPage() {
       }
     }
     if (readyToSetSearchValue) {
-      console.log(readyToSetSearchValue);
-      console.log(router.query);
+      // console.log(readyToSetSearchValue);
+      // console.log(router.query);
       for (const key in router.query) {
         if (key === searchQueryType.ITEMTYPE) {
           const val = router.query[key];
@@ -57,7 +58,6 @@ export default function ShopPage() {
 
   useEffect(() => {
     // 검색기능: searchValue를 통하여 query update -> 검색시작
-    console.log(searchValues);
     const newQueryArr = [];
     for (const key in searchValues) {
       const val = searchValues[key];
@@ -99,7 +99,7 @@ export default function ShopPage() {
             <div className={s.inner}>
               <div className={s.menu_box}>
                 <ul className={s.menu}>
-                  <li className={s.active}>
+                  <li className={searchValues.itemType === global_itemType.ALL ? s.active : ''}>
                     <button
                       type={'button'}
                       onClick={onChagneItemType}
@@ -111,7 +111,7 @@ export default function ShopPage() {
                   <li>
                     <hr />
                   </li>
-                  <li>
+                  <li className={searchValues.itemType === global_itemType.RAW ? s.active : ''}>
                     <button
                       type={'button'}
                       onClick={onChagneItemType}
@@ -123,7 +123,7 @@ export default function ShopPage() {
                   <li>
                     <hr />
                   </li>
-                  <li>
+                  <li className={searchValues.itemType === global_itemType.TOPPING ? s.active : ''}>
                     <button
                       type={'button'}
                       onClick={onChagneItemType}
@@ -135,7 +135,7 @@ export default function ShopPage() {
                   <li>
                     <hr />
                   </li>
-                  <li>
+                  <li className={searchValues.itemType === global_itemType.GOODS ? s.active : ''}>
                     <button
                       type={'button'}
                       onClick={onChagneItemType}

@@ -13,8 +13,9 @@
   border-radius: rem(4);
   height: 100%;
   box-sizing: border-box;
+  min-height: rem(36);
   > * {
-    height: 20px;
+    height: rem(20);
     padding-left: 0;
   }
   button{

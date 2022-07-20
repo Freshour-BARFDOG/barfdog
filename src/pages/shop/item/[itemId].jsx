@@ -3,113 +3,56 @@ import MetaTitle from '@src/components/atoms/MetaTitle';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import Styles from './[itemId].module.scss';
-import { ShopBoard } from '../../../components/shop/ShopBoard';
-import { ShopReturnExchageGuideBox } from '../../../components/shop/ShopReturnExchageGuideBox';
-import { ShopItemInfoBox } from '../../../components/shop/ShopItemInfoBox';
-import { ShopTabMenus } from '../../../components/shop/ShopTabMenus';
-import { ShopReviewBox } from '../../../components/shop/ShopReviewBox';
-import {ShopOptionBar} from "../../../components/shop/ShopOptionBar";
-
-
-// /$ curl 'http://localhost:8080/api/items/297' -i -X GET \
-
-
-const TES_DATA = {
-  "itemDto" : {
-    "id" : 297,
-    "name" : "굿즈 상품1",
-    "description" : "상품설명1",
-    "originalPrice" : 10000,
-    "discountType" : "FLAT_RATE",
-    "discountDegree" : 1000,
-    "salePrice" : 9000,
-    "inStock" : true,
-    "remaining" : 999,
-    "totalSalesAmount" : 1,
-    "contents" : "상세 내용1",
-    "itemIcons" : "NEW,BEST",
-    "deliveryFree" : true
-  },
-  "deliveryCondDto" : {
-    "price" : 3000,
-    "freeCondition" : 50000
-  },
-  "itemOptionDtoList" : [ {
-    "id" : 299,
-    "name" : "옵션1",
-    "optionPrice" : 1000,
-    "remaining" : 999
-  }, {
-    "id" : 301,
-    "name" : "옵션2",
-    "optionPrice" : 2000,
-    "remaining" : 999
-  }, {
-    "id" : 303,
-    "name" : "옵션3",
-    "optionPrice" : 3000,
-    "remaining" : 999
-  } ],
-  "itemImageDtoList" : [ { // 상품 썸네일
-    "id" : 298,
-    "leakedOrder" : 1,
-    "filename" : "filename1.jpg",
-    "url" : "http://localhost:8080/display/items?filename=filename1.jpg"
-  }, {
-    "id" : 300,
-    "leakedOrder" : 2,
-    "filename" : "filename2.jpg",
-    "url" : "http://localhost:8080/display/items?filename=filename2.jpg"
-  }, {
-    "id" : 302,
-    "leakedOrder" : 3,
-    "filename" : "filename3.jpg",
-    "url" : "http://localhost:8080/display/items?filename=filename3.jpg"
-  } ],
-  "reviewDto" : {
-    "star" : 3.0,
-    "count" : 3
-  },
-  "_links" : {
-    "self" : {
-      "href" : "http://localhost:8080/api/items/297"
-    },
-    "query_item_reviews" : {
-      "href" : "http://localhost:8080/api/items/297/reviews"
-    },
-    "profile" : {
-      "href" : "/docs/index.html#resources-query-item"
-    }
-  }
-}
-// -  이미 첫 랜더링 할 떄, 상품이 존재해야하고,
-// -  그 상품의 옵션이랑......옵션 개수..랑 가격을 받아와야하네.....
-
-
+import { ShopBoard } from '/src/components/shop/ShopBoard';
+import { ShopReturnExchageGuideBox } from '/src/components/shop/ShopReturnExchageGuideBox';
+import { ShopItemInfoBox } from '/src/components/shop/ShopItemInfoBox';
+import { ShopTabMenus } from '/src/components/shop/ShopTabMenus';
+import { ShopReviewBox } from '/src/components/shop/ShopReviewBox';
+import { ShopOptionBar } from '/src/components/shop/ShopOptionBar';
+import { getDataSSR } from '/src/pages/api/reqData';
+import { useRouter } from 'next/router';
+import calculateSalePrice from '/util/func/calculateSalePrice';
+import transformClearLocalCurrency from '/util/func/transformClearLocalCurrency';
 
 //
-// const initialFormValues = {
-//   itemId : 0, // 상품 ID
-//   amount : 0, // 상품 개수
-//   selectOptionDtoList : [// 옵션 개수 & ID
+// ! 일반 주문 주문하기
+// const initialValue_BUY = { // 일반 주문 시 , 데이터는 queryDAta에 시
+//   itemId: null,
+//   amount: null,
+//   selectOptionDtoList: [
 //     {
-//       itemOptionId : null,
-//       amount : null
-//     }
+//       itemOptionId: null,
+//       amount: null,
+//     },
 //   ]
-// }
+// };
 
+export default function SingleItemPage({ data }) {
+  // console.log(data)
+  const minItemQuantity = 1;
+  const maxItemQuantity = 5;
+  const initialFormValues_CART = {
+    // ! 기준: 장바구니 담기 request body
+    itemId: data.item.id,
+    itemAmount: 1,
+    optionDtoList: [
+      // { optionId : null, optionAmount : null }
+    ],
+    itemPrice: validation_itemPrice(data), // 장바구니항목에서 제외
+    totalPrice: 0, // 장바구니 항목 아님
+  };
 
-// 어떤form을전송해야하느냐............. 장바구니에...... API문서 봐야겠지 ? 그래...
-export default function SingleItemPage() {
-  const [activeTabmenuIndex, setActiveTabmenuIndex] = useState(0);
   const contentRef = useRef();
-  const [formValues, setFormValues] = useState( {} );
-  const [itemInfo, setItemInfo] = useState( TES_DATA );
-  // 장바구니에 넣을 formValues
-  
+  const [isLoading, setIsLoading] = useState({ fetching: true });
+  const [activeTabmenuIndex, setActiveTabmenuIndex] = useState(0);
+  const [formValues, setFormValues] = useState(initialFormValues_CART);
+
+  // console.log('formValues', formValues);
+
+  // console.log(formValues)
   useEffect(() => {
-    const contentList = Array.from(contentRef.current.children);
+    if (!contentRef.current) return;
+    const contentList = Array.from(contentRef.current?.children);
     contentList.forEach((thisCont) => {
       const thisContentIdx = contentList.indexOf(thisCont);
       if (thisContentIdx === activeTabmenuIndex) {
@@ -122,31 +65,119 @@ export default function SingleItemPage() {
     });
   }, [activeTabmenuIndex]);
 
+  if (!data) {
+    alert('데이터를 불러올 수 없습니다.');
+    const router = useRouter();
+    router.back();
+
+    return;
+  }
+
   return (
     <>
       <MetaTitle title="SHOP" />
-      <ShopOptionBar optionInfo={itemInfo.itemOptionDtoList} setFormValues={setFormValues}/>
+      <ShopOptionBar
+        id={'optionDtoList'}
+        data={{ opt: data?.opt, minQuantity: minItemQuantity, maxQuantity: maxItemQuantity }}
+        formValues={formValues}
+        setFormValues={setFormValues}
+      />
       <Layout>
         <Wrapper>
-          <ShopBoard />
+          <ShopBoard
+            data={{
+              item: data.item,
+              itemImages: data.itemImages,
+              delivery: data.delivery,
+              minQuantity: minItemQuantity,
+              maxQuantity: maxItemQuantity,
+            }}
+            formValues={formValues}
+            setFormValues={setFormValues}
+          />
           <ShopTabMenus activeIndex={activeTabmenuIndex} setActiveIndex={setActiveTabmenuIndex} />
           <ul id={Styles.content} ref={contentRef}>
             <li className={Styles.cont_list}>
-              <ShopItemInfoBox />
+              <ShopItemInfoBox contents={data.item.contents} />
             </li>
             <li className={Styles.cont_list}>
               <ShopReturnExchageGuideBox />
             </li>
             <li className={Styles.cont_list}>
-              <ShopReviewBox />
+              <ShopReviewBox data={data?.review} />
             </li>
           </ul>
         </Wrapper>
       </Layout>
-     
     </>
   );
 }
 
+const validation_itemPrice = (data) => {
+  let itemPrice;
+  const item = data?.item;
+  itemPrice = item.salePrice || item.originPrice;
+  const result = calculateSalePrice(item.originalPrice, item.discountType, item.discountDegree);
+  const salePricebyAdminPageCalcuator = transformClearLocalCurrency(result.salePrice);
+  if (itemPrice !== salePricebyAdminPageCalcuator) {
+    return alert('세일가격에 이상이 있습니다. 관리자에게 문의하세요.');
+  }
+  if (item.originalPrice < item.salePrice) {
+    // validation Price
+    return alert('아이템 가격설정에 문제 발생하였습니다. 관리자에게 문의하세요.');
+  }
 
+  return itemPrice;
+};
 
+export async function getServerSideProps(ctx) {
+  const { query, req } = ctx;
+  const itemId = query.itemId;
+  let DATA = null;
+  const getApiUrl = `/api/items/${itemId}`;
+
+  const res = await getDataSSR(req, getApiUrl);
+  console.log(res);
+  const data = res?.data;
+  if (data) {
+    DATA = {
+      item: {
+        id: data.itemDto.id,
+        name: data.itemDto.name,
+        description: data.itemDto.description,
+        originalPrice: data.itemDto.originalPrice,
+        discountType: data.itemDto.discountType,
+        discountDegree: data.itemDto.discountDegree,
+        salePrice: data.itemDto.salePrice,
+        inStock: data.itemDto.inStock,
+        remaining: data.itemDto.remaining,
+        totalSalesAmount: data.itemDto.totalSalesAmount,
+        contents: data.itemDto.contents,
+        itemIcons: data.itemDto.itemIcons,
+        deliveryFree: data.itemDto.deliveryFree,
+      },
+      delivery: {
+        price: data.deliveryCondDto.price,
+        freeCondition: data.deliveryCondDto.freeCondition,
+      },
+      opt: data.itemOptionDtoList.map((thisOpt) => ({
+        id: thisOpt.id,
+        name: thisOpt.name,
+        optionPrice: thisOpt.optionPrice,
+        remaining: thisOpt.remaining,
+      })),
+      itemImages: data.itemImageDtoList.map((thisImage) => ({
+        id: thisImage.id,
+        leakedOrder: thisImage.leakedOrder,
+        filename: thisImage.filename,
+        url: thisImage.url,
+      })),
+      review: {
+        star: data.reviewDto.star,
+        count: data.reviewDto.count,
+        itemId: data.itemDto.id,
+      },
+    };
+  }
+  return { props: { data: DATA } };
+}
