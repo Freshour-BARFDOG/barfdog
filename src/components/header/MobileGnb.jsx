@@ -5,6 +5,8 @@ import { useModalContext } from '/store/modal-context';
 import useDeviceState from '/util/hook/useDeviceState';
 import { IoIosArrowDown } from 'react-icons/io';
 import { useRouter } from 'next/router';
+import {global_itemType} from "/store/TYPE/itemType";
+
 
 const menuNameObj = {
   shop: 'shop',
@@ -18,6 +20,7 @@ export default function MobileGnb() {
   const [isWideMode, setIsWideMode] = useState(false);
   const deviceWidth = deviceState.deviceWidth;
 
+  
 
   const router = useRouter();
   const curPath = router.asPath;
@@ -72,10 +75,10 @@ export default function MobileGnb() {
           <ul
             className={`${s['mobile-submenu']} ${activeMenuId === menuNameObj.shop ? s.active : ''}`}
           >
-            <MobileMenu title="ALL" link="/shop?category=all" />
-            <MobileMenu title="생식" link="/shop?category=raw" />
-            <MobileMenu title="토핑" link="/shop?category=topping" />
-            <MobileMenu title="굿즈" link="/shop?category=goods" />
+            <MobileMenu title="ALL" link={`/shop?itemType=${global_itemType.ALL}`}  />
+            <MobileMenu title="생식" link={`/shop?itemType=${global_itemType.RAW}`} />
+            <MobileMenu title="토핑" link={`/shop?itemType=${global_itemType.TOPPING}`} />
+            <MobileMenu title="굿즈" link={`/shop?itemType=${global_itemType.GOODS}`} />
           </ul>
           <ul
             className={`${s['mobile-submenu']} ${
@@ -110,7 +113,7 @@ const currentPageIndicator = (ref, curPath, setActivemenu) => {
   menuList.forEach((thisMenu)=>{
     const menuPath = thisMenu.pathname || thisMenu.dataset.link;
     if (!menuPath) return;
-    const menuQuery = thisMenu.search;
+    const menuQuery = thisMenu.search?.replace(/\?/g, "");
     const thisMenuId = thisMenu.id;
 
 
