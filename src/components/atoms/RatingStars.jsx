@@ -59,10 +59,10 @@ const RatingStars = ({ count, size, margin,id,  setFormValues, disabled  = false
   
   const updateStarCount = (rating)=>{
     const nextStars = [];
-    for (let i =0; i < rating; i++) {
+    for (let i =0; i < Math.round(rating); i++) {
       nextStars.push(true);
     }
-    for (let i =0; i < maxStarCount - rating; i++) {
+    for (let i =0; i < Math.round(maxStarCount - rating); i++) {
       nextStars.push(false);
     }
     setAllStars(nextStars);
