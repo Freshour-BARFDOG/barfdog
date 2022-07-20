@@ -4,18 +4,17 @@ import s from './surveyStatistics.module.scss';
 import Image from 'next/image';
 import Loading from '/src/components/common/Loading';
 import { calcDogAgebyMonth } from '/util/func/calcDogAge';
-import { useRouter } from 'next/router';
-import { dogActivityLevelType } from '../../../store/TYPE/dogActivityLevelType';
+import { dogActivityLevelType } from '/store/TYPE/dogActivityLevelType';
 
-export const SurveyStatistics = ({ surveyReportsId, mode = 'default' }) => {
+export const SurveyStatistics = ({ surveyReportsId , mode = 'default' }) => {
   const [info, setInfo] = useState({});
   const [isLoading, setIsLoading] = useState({ fetching: true });
-  const router = useRouter();
   const [isRendered, setIsRendered] = useState(true);
-
+  console.log(info);
   useEffect(() => {
     // if(Object.keys(info).length >0 ) return;
     const getSurveyReportsApiUrl = `/api/surveyReports/${surveyReportsId}`;
+    console.log(getSurveyReportsApiUrl);
     (async () => {
       try {
         setIsLoading((prevState) => ({
@@ -189,11 +188,11 @@ export const SurveyStatistics = ({ surveyReportsId, mode = 'default' }) => {
     })();
   }, []);
 
-  console.log(info);
 
-  // if (isLoading.fetching || isRendered) {
-  //   return <Loading />;
-  // }
+
+  if (isLoading.fetching || isRendered) {
+    return <Loading />;
+  }
 
   return (
     <div id="statistics">
@@ -290,7 +289,7 @@ export const SurveyStatistics = ({ surveyReportsId, mode = 'default' }) => {
                     <div className={s.right_text}>
                       {
                         Object.values(dogActivityLevelType.KOR)[
-                          info?.activityAnalysis?.myActivityGroup
+                          info?.activityAnalysis?.avgActivityLevel
                         ]
                       }
                     </div>
