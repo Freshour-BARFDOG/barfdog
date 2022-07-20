@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import s from './pagination.module.scss';
 import { useRouter } from 'next/router';
 import { getData } from '/src/pages/api/reqData';
+import {searchQueryType} from "../../../store/TYPE/searchQueryType";
 
 const Pagination = ({
   apiURL,
@@ -34,8 +35,8 @@ const Pagination = ({
         }
 
         const calcedPageIndex = (curPage - 1).toString();
-        const defaultQuery = `?page=${calcedPageIndex}&size=${size}`;
-        let urlQueries = urlQuery ? `${defaultQuery}&${urlQuery}` : defaultQuery;
+        const defQuery = `?${searchQueryType.PAGE}=${calcedPageIndex}&${searchQueryType.SIZE}=${size}`;
+        let urlQueries = urlQuery ? `${defQuery}&${urlQuery}` : defQuery;
         console.log('Serach Query: ',urlQueries);
         const res = await getData(`${apiURL}${urlQueries}`);
         console.log(res);
@@ -55,8 +56,11 @@ const Pagination = ({
           if(setPageData && typeof setPageData === 'function'){
             setPageData(newPageInfo)
           }
+          // UPDATE URL Query For Client User (Not For Logic)
+          let defSearchQuery = `?page=${Number(calcedPageIndex)+1}&size=${size}`;
+          let searchKeywords = urlQuery ? `${defSearchQuery}&${urlQuery}` : defQuery;
           await router.push({
-            search: urlQueries,
+            search: searchKeywords, // ! important > def url query는 pagination 내에서만 관리
           });
         }else{
           setItemList([]);  // ! TEST 끝난 뒤, 주석 해제
@@ -72,6 +76,7 @@ const Pagination = ({
       }
     })();
   }, [curPage, urlQuery, apiURL]);
+  
 
   const Num = ({ pagenum }) => {
     const calcedPageNum = pagenum + 1;

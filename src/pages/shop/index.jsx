@@ -12,52 +12,64 @@ import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import { useRouter } from 'next/router';
 import { EmptyContMessage } from '/src/components/atoms/emptyContMessage';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
-import ItemLabel from "../../components/atoms/ItemLabel";
-import rem from "../../../util/func/rem";
-import Icon_Itemlabel from "../../components/atoms/ItemLabel";
+import Icon_Itemlabel from '/src/components/atoms/ItemLabel';
+import { searchQueryType } from '/store/TYPE/searchQueryType';
 
 const getListApiUrl = '/api/items';
 const apiDataQueryString = 'queryItemsDtoList';
-const searchPageSize = 10;
+const searchPageSize = 6; // 화면에 뿌릴 상품수
 
 const initialSearchValues = {
   sortBy: itemSortQueryType.RECENT,
   itemType: global_itemType.ALL, // url Query is lowerCase
 };
 
-function ShopPage() {
+export default function ShopPage() {
   const router = useRouter();
-  const queryOnURL = router.query;
-  const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
   const [searchValues, setSearchValues] = useState(initialSearchValues);
   const [searchQuery, setSearchQuery] = useState('');
 
   console.log(itemList);
   useEffect(() => {
-    const queryArr = [];
+    // - CASE: Nav GNB에서 shop > submenu Click event
+    // - IMPORTANT : to prevent Inifinite Loop when router query is changed
+    let readyToSetSearchValue = true;
+    for (const key in router.query) {
+      if (key !== searchQueryType.ITEMTYPE) {
+        readyToSetSearchValue = false;
+      }
+    }
+    if (readyToSetSearchValue) {
+      console.log(readyToSetSearchValue);
+      console.log(router.query);
+      for (const key in router.query) {
+        if (key === searchQueryType.ITEMTYPE) {
+          const val = router.query[key];
+          setSearchValues((prevState) => {
+            console.log()
+            return { ...prevState, [searchQueryType.ITEMTYPE]: val };
+          });
+        }
+      }
+    }
+  }, [router.query]);
+
+  useEffect(() => {
+    // 검색기능: searchValue를 통하여 query update -> 검색시작
+    console.log(searchValues);
+    const newQueryArr = [];
     for (const key in searchValues) {
       const val = searchValues[key];
-      queryArr.push(`${key}=${val}`);
+      newQueryArr.push(`${key}=${val}`);
     }
-    const query = `${queryArr.join('&')}`;
-    setSearchQuery(query);
-    console.log(router.query); // 헤더에선느 query만 변경시켜서 접속한디
-
-    // query에 itemType=ALL <--이것만 추가하면, 검색결과에 반영되도록 만드는거지
-
-    window.history.replaceState(window.history.state, '', `${window.location.pathname}?${query}`);
-    // const curPath = router.pathname;
-    // router.push({search: `${query}`});
-
-    // router.query가 변경되면 이게 실행되도록 만든다
-    // router가 변경되어서, searchQuery는.....
+    setSearchQuery(newQueryArr.join('&'));
   }, [searchValues]);
 
   const onChagneItemType = (e) => {
     const button = e.currentTarget;
     const itemType = button.dataset.itemType;
-    const searchKey = 'itemType';
+    const searchKey = searchQueryType.ITEMTYPE;
     const convertTypeToQuery = itemType; // 객체로 searchValue에 넣는다.
     setSearchValues((prevState) => ({
       ...prevState,
@@ -71,9 +83,7 @@ function ShopPage() {
       ...prevState,
       [id]: value,
     }));
-    console.log(id, value);
   };
-
 
   return (
     <>
@@ -153,19 +163,27 @@ function ShopPage() {
             <ul className={s.inner}>
               {itemList.length > 0 ? (
                 itemList.map((item, index) => (
-                  <li className={s.shop_list} key={`item-${item.id}-${index}`}>
+                  <li className={`${s.shop_list} animation-show`} key={`item-${item.id}-${index}`}>
                     <Link href={`/shop/item/${item.id}`} passHref>
                       <a>
                         <figure className={s.shop_image}>
-                          {item.itemIcons && (item.itemIcons?.indexOf(',') >= 0 ? item.itemIcons.split(',').map((label) => (
-                            <Icon_Itemlabel
-                              label={label}
-                              className={label === 'NEW' ? s.new : s.best}
-                            />
-                          )) : <Icon_Itemlabel
-                            label={item.itemIcons}
-                            className={item.itemIcons === 'NEW' ? s.new : s.best}
-                          />)}
+                          {item.itemIcons &&
+                            (item.itemIcons?.indexOf(',') >= 0 ? (
+                              item.itemIcons
+                                .split(',')
+                                .map((label, index) => (
+                                  <Icon_Itemlabel
+                                    label={label}
+                                    key={`${label}-${index}`}
+                                    className={label === 'NEW' ? s.new : s.best}
+                                  />
+                                ))
+                            ) : (
+                              <Icon_Itemlabel
+                                label={item.itemIcons}
+                                className={item.itemIcons === 'NEW' ? s.new : s.best}
+                              />
+                            ))}
                           <div className={`${s['img-wrap']} img-wrap`}>
                             <Image
                               src={item.thumbnailUrl}
@@ -216,23 +234,17 @@ function ShopPage() {
               )}
             </ul>
           </section>
-          <div className={s['pagination-section']}>
+          <section className={s['pagination-section']}>
             <PaginationWithAPI
               apiURL={getListApiUrl}
               size={searchPageSize}
               setItemList={setItemList}
               queryItemList={apiDataQueryString}
               urlQuery={searchQuery}
-              setIsLoading={setIsLoading}
             />
-          </div>
-          {/*<section className={s['btn-section']}>*/}
-          {/*  <Pagination itemTotalCount={100} itemCountPerGroup={9} />*/}
-          {/*</section>*/}
+          </section>
         </Wrapper>
       </Layout>
     </>
   );
 }
-
-export default ShopPage;
