@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import s from './pagination.module.scss';
 import { useRouter } from 'next/router';
 import { getData } from '/src/pages/api/reqData';
-import {searchQueryType} from "../../../store/TYPE/searchQueryType";
+import { searchQueryType } from '../../../store/TYPE/searchQueryType';
 
 const Pagination = ({
   apiURL,
@@ -15,8 +15,8 @@ const Pagination = ({
   setIsLoading,
   urlQuery,
   setPageData,
+  routerDisabled= false,
 }) => {
-  
   const router = useRouter();
   const query = router.query;
   const pageFromQuery = Number(query?.page) || 1;
@@ -33,11 +33,10 @@ console.log(pageInfo)
             fetching: true,
           }));
         }
-
         const calcedPageIndex = (curPage - 1).toString();
         const defQuery = `?${searchQueryType.PAGE}=${calcedPageIndex}&${searchQueryType.SIZE}=${size}`;
         let urlQueries = urlQuery ? `${defQuery}&${urlQuery}` : defQuery;
-        console.log('Serach Query: ',urlQueries);
+        console.log('API URL: ', apiURL, '\nSerach Query: ', urlQueries);
         const res = await getData(`${apiURL}${urlQueries}`);
         console.log(res);
         const pageData = res.data?.page;
@@ -51,23 +50,29 @@ console.log(pageInfo)
             newItemList: res.data._embedded[queryItemList] || {},
             newPageNumber: pageData.number + 1,
           };
-          setPageInfo(newPageInfo);
+          // console.log(newPageInfo);
+          setPageInfo(newPageInfo); // ! 페이지네이션 버튼 나타나게 함
           setItemList(newPageInfo.newItemList);
-          if(setPageData && typeof setPageData === 'function'){
-            setPageData(newPageInfo)
+          if (setPageData && typeof setPageData === 'function') {
+            setPageData(newPageInfo);
           }
+          
           // UPDATE URL Query For Client User (Not For Logic)
-          let defSearchQuery = `?page=${Number(calcedPageIndex)+1}&size=${size}`;
-          let searchKeywords = urlQuery ? `${defSearchQuery}&${urlQuery}` : defQuery;
-          await router.push({
-            search: searchKeywords, // ! important > def url query는 pagination 내에서만 관리
-          });
-        }else{
-          setItemList([]);  // ! TEST 끝난 뒤, 주석 해제
+          if(routerDisabled === false) {
+            let defSearchQuery = `?page=${Number(calcedPageIndex) + 1}&size=${size}`;
+            let searchKeywords = urlQuery ? `${defSearchQuery}&${urlQuery}` : defQuery;
+            await router.push({
+              search: searchKeywords, // ! important > def url query는 pagination 내에서만 관리
+            });
+          }
+          
+        } else {
+          setItemList([]); // ! TEST 끝난 뒤, 주석 해제
         }
       } catch (err) {
         console.error(err);
       }
+      
       if (setIsLoading && typeof setIsLoading === 'function') {
         setIsLoading((prevState) => ({
           ...prevState,
@@ -76,7 +81,6 @@ console.log(pageInfo)
       }
     })();
   }, [curPage, urlQuery, apiURL]);
-  
 
   const Num = ({ pagenum }) => {
     const calcedPageNum = pagenum + 1;
