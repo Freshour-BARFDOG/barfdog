@@ -10,7 +10,7 @@ import sorting from "/util/func/sorting";
 import Link from "next/link";
 
 
-export const ShopBoard = ({ data , formValues, setFormValues }) => {
+export const ShopBoard = ({ data , formValues, setFormValues, onAddCart }) => {
 
   
   const item = data?.item;
@@ -99,15 +99,10 @@ export const ShopBoard = ({ data , formValues, setFormValues }) => {
                 <span className={s.last_text}>원</span>
               </div>
             </div>
-
             {/* 장바구니 버튼 */}
             <div className={s['btn-section']}>
-              <Link href="/cart" passHref>
-                <a className={s.cart}>장바구니</a>
-              </Link>
-              <Link href="/order/ordersheet" passHref>
-                <a className={s.buy}>구매하기</a>
-              </Link>
+              <button className={s.cart} onClick={onAddCart}>장바구니</button>
+              <button className={s.buy} onClick={onAddCart}>구매하기</button>
             </div>
           </div>
         </div>

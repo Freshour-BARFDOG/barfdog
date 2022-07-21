@@ -9,7 +9,7 @@ import { ShopItemInfoBox } from '/src/components/shop/ShopItemInfoBox';
 import { ShopTabMenus } from '/src/components/shop/ShopTabMenus';
 import { ShopReviewBox } from '/src/components/shop/ShopReviewBox';
 import { ShopOptionBar } from '/src/components/shop/ShopOptionBar';
-import { getDataSSR } from '/src/pages/api/reqData';
+import {getDataSSR, postData, postUserObjData, putData, putObjData} from '/src/pages/api/reqData';
 import { useRouter } from 'next/router';
 import calculateSalePrice from '/util/func/calculateSalePrice';
 import transformClearLocalCurrency from '/util/func/transformClearLocalCurrency';
@@ -72,6 +72,37 @@ export default function SingleItemPage({ data }) {
 
     return;
   }
+  
+  const onAddCart = async ()=>{
+    // 장바구니에 담겼습니다.
+    // 장바구니로 이동하시겠습니까?
+    // 결제하기
+    //
+    
+    
+    const postDataApiUrl = '/api/baskets';
+    try {
+      const objData = {
+        itemAmount: formValues.itemAmount,
+        itemId: formValues.itemId,
+        optionDtoList: formValues.optionDtoList
+      }
+      console.log(objData);
+      // setIsLoading((prevState) => ({
+      //   ...prevState,
+      //   submit: true,
+      // }));
+      const res = await postUserObjData(postDataApiUrl, objData);
+    
+      console.log(res);
+      if(res.isDone){
+      }else {
+        alert(`${res.error}`);
+      }
+    } catch (err) {
+      console.log('API통신 오류 : ', err);
+    }
+  }
 
   return (
     <>
@@ -94,6 +125,7 @@ export default function SingleItemPage({ data }) {
             }}
             formValues={formValues}
             setFormValues={setFormValues}
+            onAddCart ={onAddCart}
           />
           <ShopTabMenus activeIndex={activeTabmenuIndex} setActiveIndex={setActiveTabmenuIndex} />
           <ul id={Styles.content} ref={contentRef}>
