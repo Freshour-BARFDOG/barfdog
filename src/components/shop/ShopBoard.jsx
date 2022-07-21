@@ -11,6 +11,8 @@ import sorting from '/util/func/sorting';
 import Link from 'next/link';
 import CloseButton from '../atoms/CloseButton';
 
+
+
 export const ShopBoard = ({
   data,
   formValues,
@@ -39,7 +41,7 @@ export const ShopBoard = ({
         <div className={Style.top_box}>
           <div className={Style.left_box}>
             <Swiper {...surveySwiperSettings}>
-              {sorting(data?.itemImages, 'leakedOrder', 'ascend')?.map((image, index) => (
+              {data && sorting(data?.itemImages, 'leakedOrder', 'ascend')?.map((image, index) => (
                 <SwiperSlide key={`item-image-${image.id}-${index}`}>
                   <div className={`${Style.image}`}>
                     <Image

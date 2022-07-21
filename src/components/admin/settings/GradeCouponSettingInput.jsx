@@ -82,11 +82,11 @@ const GradeCouponSettingInput = ({
               data-align={'right'}
               data-input-type={'number, currency'}
               id={`${id}`}
-              value={formValues[index][innerId[0]] || ''}
+              value={formValues ? formValues[index][innerId[0]] : ''}
               onChange={onInputChangeHandler}
             />
             <em className="unit">원 할인</em>
-            {formErrors[index] && formErrors[index][innerId[0]] && (
+            {formErrors && formErrors[index] && formErrors[index][innerId[0]] && (
               <ErrorMessage>{formErrors[index][innerId[0]]}</ErrorMessage>
             )}
           </div>
@@ -101,7 +101,7 @@ const GradeCouponSettingInput = ({
               onChange={onInputChangeHandler}
             />
             <em className="unit">원 이상 결제 시</em>
-            {formErrors[index] && formErrors[index][innerId[1]] && (
+            {formErrors && formErrors[index] && formErrors[index][innerId[1]] && (
               <ErrorMessage>{formErrors[index] && formErrors[index][innerId[1]]}</ErrorMessage>
             )}
           </div>

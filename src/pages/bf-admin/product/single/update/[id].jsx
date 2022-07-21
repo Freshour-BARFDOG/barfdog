@@ -14,7 +14,7 @@ import transformClearLocalCurrency from '/util/func/transformClearLocalCurrency'
 import Spinner from '/src/components/atoms/Spinner';
 import { validate } from '/util/func/validation/validation_singleItem';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
-import {getData, postObjData, putObjData} from '/src/pages/api/reqData';
+import {getData, getDataSSR, postObjData, putObjData} from '/src/pages/api/reqData';
 import { useModalContext } from '/store/modal-context';
 import dynamic from 'next/dynamic';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
@@ -23,8 +23,8 @@ import FileInput from '/src/components/admin/form/FileInput';
 import Tooltip from '/src/components/atoms/Tooltip';
 import CheckboxGroup from '/src/components/atoms/CheckboxGroup';
 import transformClearLocalCurrencyInEveryObject from '/util/func/transformClearLocalCurrencyInEveryObject';
-import SingleItemOptions from '../../createSingle/SingleItemOptions';
-import SingleItemDiscountOptions from '../../createSingle/SingleItemDiscountOptions';
+import SingleItemOptions from '../../../../../components/admin/product/SingleItemOptions';
+import SingleItemDiscountOptions from '../../../../../components/admin/product/SingleItemDiscountOptions';
 import {global_itemType} from "/store/TYPE/itemType";
 
 
@@ -32,7 +32,7 @@ import {global_itemType} from "/store/TYPE/itemType";
 
 
 
-function UpdateSingleItemPage({ id }) {
+export default function UpdateSingleItemPage({ id }) {
   const getFormValuesApiUrl = `/api/admin/items/${id}`;
   const putFormValuesApiUrl = `/api/admin/items/${id}`;
   const postThumbFileApiUrl = '/api/admin/items/image/upload';
@@ -606,12 +606,11 @@ function UpdateSingleItemPage({ id }) {
   );
 }
 
-export default UpdateSingleItemPage;
 
 
-UpdateSingleItemPage.getInitialProps = async ({ query }) => {
-  const { id } = query
-  
-  return { id : id};
-  
+export async function getServerSideProps(ctx) {
+  const { query } = ctx;
+  const { id } = query;
+ 
+  return {props :  { id: id || null}};
 }

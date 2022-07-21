@@ -14,7 +14,7 @@ export const ShopReviewBox = ({ data }) => {
   // console.log(data);
   const auth = useSelector((state) => state.auth);
   const isAdmin = auth.isAdmin;
-  const getListApiUrl = `/api/items/${data.itemId}/reviews`;
+  const getListApiUrl = `/api/items/${data?.itemId}/reviews`;
   const searchPageSize = 10;
   const apiDataQueryString = 'itemReviewsDtoList';
   const [itemList, setItemList] = useState([]);
@@ -27,11 +27,11 @@ export const ShopReviewBox = ({ data }) => {
       {/* 리뷰별점박스 */}
       <div className={s.flex_box}>
         <div className={s.content}>
-          <div className={s.title}>{data.count}개의 리뷰</div>
+          <div className={s.title}>{data?.count}개의 리뷰</div>
           <div className={s.grade}>
-            {data.star.toFixed(1)} /<span className={s.red}>5.0</span>
+            {data?.star.toFixed(1)} /<span className={s.red}>5.0</span>
           </div>
-          <RatingStars count={data.star} size={27} disabled />
+          <RatingStars count={data?.star} size={27} disabled />
         </div>
       </div>
 
@@ -40,7 +40,7 @@ export const ShopReviewBox = ({ data }) => {
         <div className={s.button_box}>
           <a
             className={s.write_button}
-            href={`/bf-admin/review/create?itemId=${data.itemId}`}
+            href={`/bf-admin/review/create?itemId=${data?.itemId}`}
             target={'_blank'}
             rel={'noreferrer'}
           >

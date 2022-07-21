@@ -115,7 +115,7 @@ export default function SingleItemOptions({ id, formErrors, setFormValues, mode=
   return (
     <>
       <div className="inp_section">
-        {options?.length > 0 && (
+        {options && options?.length > 0 && (
           <div key={`${options}`} className={`${s.cont_viewer}`}>
             <div className={s.table}>
               <ul className={s.table_header}>
