@@ -12,14 +12,12 @@ import {useModalContext} from "/store/modal-context";
 import Modal_global_alert from "./Modal_global_alert";
 
 
-export const Modal_uploadDogProfileImage = ({data, onActive , setItemList}) => {
+export const Modal_uploadDogProfileImage = ({data, onActiveModal , setItemList, setModalMessage}) => {
   const maxFileSize = 10000000;
   const mct = useModalContext();
   const dogId = data.id
   const postFileApiUrl = '/api/dogs/picture/upload';
   const putFileApiUrl = `/api/dogs/${dogId}/picture`;
-  const [modalMessage, setModalMessage] = useState('');
-  
   // console.log(data)
 
   
@@ -69,8 +67,7 @@ export const Modal_uploadDogProfileImage = ({data, onActive , setItemList}) => {
       );
       console.log(response)
       const registedImageId = response.id;
-      const isDone = registedImageId;
-      const message = isDone ? '반려견 프로필 사진이 등록되었습니다.' : '업로드에 실패하였습니다.'
+      const message = registedImageId ? '반려견 프로필 사진이 등록되었습니다.' : '업로드에 실패하였습니다.'
       onShowModalHandler(message);
       if(registedImageId){
         const dogId = data.id
@@ -85,9 +82,6 @@ export const Modal_uploadDogProfileImage = ({data, onActive , setItemList}) => {
           }
         }));
       }
-      
-      
-
     } catch (err) {
         console.error(err)
     }
@@ -100,8 +94,8 @@ export const Modal_uploadDogProfileImage = ({data, onActive , setItemList}) => {
   };
   
   const onHideModal = () => {
-    if (onActive && typeof onActive === 'function') {
-      onActive(false);
+    if (onActiveModal && typeof onActiveModal === 'function') {
+      onActiveModal(false);
       mct.alertHide(); // 모달이 다시 켜졌을 때를 대비한, 초기화
     }
   };
@@ -155,7 +149,6 @@ export const Modal_uploadDogProfileImage = ({data, onActive , setItemList}) => {
           </button>
         </div>
       </ModalWrapper>
-      <Modal_global_alert message={modalMessage} onClick={onHideModal} background/>
     </>
   );
 };

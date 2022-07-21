@@ -42,7 +42,7 @@ const RatingStars = ({ count, size, margin,id,  setFormValues, disabled  = false
   
   
   useEffect( () => {
-    if(typeof count !== 'number' || count > maxStarCount || count <= 0 ) return console.error(`별점은 1 ~ ${maxStarCount} 사이의 값을 할당 할 수 있습니다.`);
+    if(typeof count !== 'number' || count > maxStarCount || count < 0 ) return console.error(`별점은 1 ~ ${maxStarCount} 사이의 number type값이 입력되어야 합니다.`);
     updateStarCount(count);
   }, [count] );
   
@@ -59,10 +59,10 @@ const RatingStars = ({ count, size, margin,id,  setFormValues, disabled  = false
   
   const updateStarCount = (rating)=>{
     const nextStars = [];
-    for (let i =0; i < rating; i++) {
+    for (let i =0; i < Math.round(rating); i++) {
       nextStars.push(true);
     }
-    for (let i =0; i < maxStarCount - rating; i++) {
+    for (let i =0; i < Math.round(maxStarCount - rating); i++) {
       nextStars.push(false);
     }
     setAllStars(nextStars);

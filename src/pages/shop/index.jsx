@@ -1,17 +1,90 @@
-import React, { useState } from "react";
-import MetaTitle from "/src/components/atoms/MetaTitle";
-import Layout from "/src/components/common/Layout";
-import Wrapper from "/src/components/common/Wrapper";
-import s from "./shop.module.scss"
+import React, { useEffect, useState } from 'react';
+import MetaTitle from '/src/components/atoms/MetaTitle';
+import Layout from '/src/components/common/Layout';
+import Wrapper from '/src/components/common/Wrapper';
+import s from './shop.module.scss';
 import Link from 'next/link';
-/* Images */
-import Image from "next/image";
-import RatingStars from "/src/components/atoms/RatingStars";
-import Pagination from "/src/components/atoms/Pagination";
+import Image from 'next/image';
+import RatingStars from '/src/components/atoms/RatingStars';
+import { global_itemType } from '/store/TYPE/itemType';
+import { itemSortQueryType } from '/store/TYPE/itemSortQueryType';
+import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
+import { useRouter } from 'next/router';
+import { EmptyContMessage } from '/src/components/atoms/emptyContMessage';
+import transformLocalCurrency from '/util/func/transformLocalCurrency';
+import Icon_Itemlabel from '/src/components/atoms/ItemLabel';
+import { searchQueryType } from '/store/TYPE/searchQueryType';
 
+const getListApiUrl = '/api/items';
+const apiDataQueryString = 'queryItemsDtoList';
+const searchPageSize = 6; // 화면에 뿌릴 상품수
 
+const initialSearchValues = {
+  sortBy: itemSortQueryType.RECENT,
+  itemType: global_itemType.ALL, // url Query is lowerCase
+};
 
-function ShopPage() {
+export default function ShopPage() {
+  const router = useRouter();
+  const [itemList, setItemList] = useState([]);
+  const [searchValues, setSearchValues] = useState(initialSearchValues);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  console.log(itemList);
+  console.log(searchValues.itemType)
+  useEffect(() => {
+    // - CASE: Nav GNB에서 shop > submenu Click event
+    // - IMPORTANT : to prevent Inifinite Loop when router query is changed
+    let readyToSetSearchValue = true;
+    for (const key in router.query) {
+      if (key !== searchQueryType.ITEMTYPE) {
+        readyToSetSearchValue = false;
+      }
+    }
+    if (readyToSetSearchValue) {
+      // console.log(readyToSetSearchValue);
+      // console.log(router.query);
+      for (const key in router.query) {
+        if (key === searchQueryType.ITEMTYPE) {
+          const val = router.query[key];
+          setSearchValues((prevState) => {
+            console.log()
+            return { ...prevState, [searchQueryType.ITEMTYPE]: val };
+          });
+        }
+      }
+    }
+  }, [router.query]);
+
+  useEffect(() => {
+    // 검색기능: searchValue를 통하여 query update -> 검색시작
+    const newQueryArr = [];
+    for (const key in searchValues) {
+      const val = searchValues[key];
+      newQueryArr.push(`${key}=${val}`);
+    }
+    setSearchQuery(newQueryArr.join('&'));
+  }, [searchValues]);
+
+  const onChagneItemType = (e) => {
+    const button = e.currentTarget;
+    const itemType = button.dataset.itemType;
+    const searchKey = searchQueryType.ITEMTYPE;
+    const convertTypeToQuery = itemType; // 객체로 searchValue에 넣는다.
+    setSearchValues((prevState) => ({
+      ...prevState,
+      [searchKey]: convertTypeToQuery,
+    }));
+  };
+
+  const onChangeSorting = (e) => {
+    const { id, value } = e.currentTarget;
+    setSearchValues((prevState) => ({
+      ...prevState,
+      [id]: value,
+    }));
+  };
+
   return (
     <>
       <MetaTitle title="샵" />
@@ -26,51 +99,61 @@ function ShopPage() {
             <div className={s.inner}>
               <div className={s.menu_box}>
                 <ul className={s.menu}>
-                  <li>
-                    <Link href="/shop?category=all" passHref>
-                      <a>전체</a>
-                    </Link>
+                  <li className={searchValues.itemType === global_itemType.ALL ? s.active : ''}>
+                    <button
+                      type={'button'}
+                      onClick={onChagneItemType}
+                      data-item-type={global_itemType.ALL}
+                    >
+                      {global_itemType.KOR.ALL}
+                    </button>
                   </li>
                   <li>
                     <hr />
                   </li>
-                  <li>
-                    <Link href="/shop?category=raw" passHref>
-                      <a>생식</a>
-                    </Link>
+                  <li className={searchValues.itemType === global_itemType.RAW ? s.active : ''}>
+                    <button
+                      type={'button'}
+                      onClick={onChagneItemType}
+                      data-item-type={global_itemType.RAW}
+                    >
+                      {global_itemType.KOR.RAW}
+                    </button>
                   </li>
                   <li>
                     <hr />
                   </li>
-                  <li>
-                    <Link href="/shop?category=topping" passHref>
-                      <a>토핑</a>
-                    </Link>
+                  <li className={searchValues.itemType === global_itemType.TOPPING ? s.active : ''}>
+                    <button
+                      type={'button'}
+                      onClick={onChagneItemType}
+                      data-item-type={global_itemType.TOPPING}
+                    >
+                      {global_itemType.KOR.TOPPING}
+                    </button>
                   </li>
                   <li>
                     <hr />
                   </li>
-                  <li>
-                    <Link href="/shop?category=etc" passHref>
-                      <a>기타</a>
-                    </Link>
-                  </li>
-                  <li>
-                    <hr />
-                  </li>
-                  <li>
-                    <Link href="/shop?category=goods" passHref>
-                      <a>굿즈</a>
-                    </Link>
+                  <li className={searchValues.itemType === global_itemType.GOODS ? s.active : ''}>
+                    <button
+                      type={'button'}
+                      onClick={onChagneItemType}
+                      data-item-type={global_itemType.GOODS}
+                    >
+                      {global_itemType.KOR.GOODS}
+                    </button>
                   </li>
                 </ul>
                 <div className={s['select-box']}>
-                  <select name="sort-order" id="sort-order">
-                    <option value="recent" select="true">
-                      최근순
+                  <select id="sortBy" onChange={onChangeSorting} value={searchValues.sortBy}>
+                    <option value={itemSortQueryType.RECENT}>{itemSortQueryType.KOR.RECENT}</option>
+                    <option value={itemSortQueryType.REGISTRATION}>
+                      {itemSortQueryType.KOR.REGISTRATION}
                     </option>
-                    <option value="resistered">등록순</option>
-                    <option value="sold">판매순</option>
+                    <option value={itemSortQueryType.SALEAMOUNT}>
+                      {itemSortQueryType.KOR.SALEAMOUNT}
+                    </option>
                   </select>
                 </div>
               </div>
@@ -78,158 +161,90 @@ function ShopPage() {
           </section>
           <section className={s.bot}>
             <ul className={s.inner}>
-              <li className={s.shop_list}>
-                <Link href="/shop/single" passHref>
-                  <a href="">
-                    <figure className={s.shop_image}>
-                      <div className={`${s['img-wrap']} img-wrap`}>
-                        <Image
-                          src={require('/public/img/shop/shop_1.png')}
-                          objectFit="cover"
-                          layout="fill"
-                          alt="카드 이미지"
-                        />
-                      </div>
-                    </figure>
-                    <figcaption className={s.text_box}>
-                      <p className={s.title}>
-                        강아지 고양이 냄새제거 살균 소독 탈취제 바프레쉬 BARF, FRESH 500ml
-                      </p>
-                      <div className={s.price_box}>
-                        <span className={s.price}>37,900</span>
-                        <span className={s.won}>원</span>
-                        <span className={s.position_mid}>
-                          <span className={s.out_of_stock}>품절</span>
-                        </span>
-                      </div>
-                    </figcaption>
-                    <div className={s.grade_box}>
-                      <div className={s.star_box}>
-                        <RatingStars count="4" />
-                      </div>
-                      <p className={s.avg_score}>4.0</p>
-                      <p className={s.nuber_comment}>(49)</p>
-                    </div>
-                  </a>
-                </Link>
-              </li>
-              
-              
-              <li className={s.shop_list}>
-                <Link href="/shop/single" passHref>
-                  <a href="">
-                    <figure className={s.shop_image}>
-                      <div className={`${s['img-wrap']} img-wrap`}>
-                        <Image
-                          src={require('/public/img/shop/shop_1.png')}
-                          objectFit="cover"
-                          layout="fill"
-                          alt="카드 이미지"
-                        />
-                      </div>
-                    </figure>
-                    <figcaption className={s.text_box}>
-                      <p className={s.title}>
-                        강아지 고양이 냄새제거 살균 소독 탈취제 바프레쉬 BARF, FRESH 500ml
-                      </p>
-                      <div className={s.price_box}>
-                        <span className={s.price}>37,900</span>
-                        <span className={s.won}>원</span>
-                        <span className={s.position_mid}>
-                          <span className={s.out_of_stock}>품절</span>
-                        </span>
-                      </div>
-                    </figcaption>
-                    <div className={s.grade_box}>
-                      <div className={s.star_box}>
-                        <RatingStars count="4" />
-                      </div>
-                      <p className={s.avg_score}>4.0</p>
-                      <p className={s.nuber_comment}>(49)</p>
-                    </div>
-                  </a>
-                </Link>
-              </li>
-
-              
-              <li className={s.shop_list}>
-                <Link href="/shop/single" passHref>
-                  <a href="">
-                    <figure className={s.shop_image}>
-                      <div className={`${s['img-wrap']} img-wrap`}>
-                        <Image
-                          src={require('/public/img/shop/shop_1.png')}
-                          objectFit="cover"
-                          layout="fill"
-                          alt="카드 이미지"
-                        />
-                      </div>
-                    </figure>
-                    <figcaption className={s.text_box}>
-                      <p className={s.title}>
-                        강아지 고양이 냄새제거 살균 소독 탈취제 바프레쉬 BARF, FRESH 500ml
-                      </p>
-                      <div className={s.price_box}>
-                        <span className={s.price}>37,900</span>
-                        <span className={s.won}>원</span>
-                        <span className={s.position_mid}>
-                          <span className={s.out_of_stock}>품절</span>
-                        </span>
-                      </div>
-                    </figcaption>
-                    <div className={s.grade_box}>
-                      <div className={s.star_box}>
-                        <RatingStars count="4" />
-                      </div>
-                      <p className={s.avg_score}>4.0</p>
-                      <p className={s.nuber_comment}>(49)</p>
-                    </div>
-                  </a>
-                </Link>
-              </li> <li className={s.shop_list}>
-                <Link href="/shop/single" passHref>
-                  <a href="">
-                    <figure className={s.shop_image}>
-                      <div className={`${s['img-wrap']} img-wrap`}>
-                        <Image
-                          src={require('/public/img/shop/shop_1.png')}
-                          objectFit="cover"
-                          layout="fill"
-                          alt="카드 이미지"
-                        />
-                      </div>
-                    </figure>
-                    <figcaption className={s.text_box}>
-                      <p className={s.title}>
-                        강아지 고양이 냄새제거 살균 소독 탈취제 바프레쉬 BARF, FRESH 500ml
-                      </p>
-                      <div className={s.price_box}>
-                        <span className={s.price}>37,900</span>
-                        <span className={s.won}>원</span>
-                        <span className={s.position_mid}>
-                          <span className={s.out_of_stock}>품절</span>
-                        </span>
-                      </div>
-                    </figcaption>
-                    <div className={s.grade_box}>
-                      <div className={s.star_box}>
-                        <RatingStars count="4" />
-                      </div>
-                      <p className={s.avg_score}>4.0</p>
-                      <p className={s.nuber_comment}>(49)</p>
-                    </div>
-                  </a>
-                </Link>
-              </li>
+              {itemList.length > 0 ? (
+                itemList.map((item, index) => (
+                  <li className={`${s.shop_list} animation-show`} key={`item-${item.id}-${index}`}>
+                    <Link href={`/shop/item/${item.id}`} passHref>
+                      <a>
+                        <figure className={s.shop_image}>
+                          {item.itemIcons &&
+                            (item.itemIcons?.indexOf(',') >= 0 ? (
+                              item.itemIcons
+                                .split(',')
+                                .map((label, index) => (
+                                  <Icon_Itemlabel
+                                    label={label}
+                                    key={`${label}-${index}`}
+                                    className={label === 'NEW' ? s.new : s.best}
+                                  />
+                                ))
+                            ) : (
+                              <Icon_Itemlabel
+                                label={item.itemIcons}
+                                className={item.itemIcons === 'NEW' ? s.new : s.best}
+                              />
+                            ))}
+                          <div className={`${s['img-wrap']} img-wrap`}>
+                            <Image
+                              src={item.thumbnailUrl}
+                              objectFit="cover"
+                              layout="fill"
+                              alt={`상품 ${item.name}`}
+                            />
+                          </div>
+                        </figure>
+                        <figcaption className={s.text_box}>
+                          <p className={s.title}>{item.name}</p>
+                          <div className={s.price_box}>
+                            <span className={s.price}>
+                              {transformLocalCurrency(item.salePrice || item.originalPrice)}
+                            </span>
+                            <span className={s.won}>원</span>
+                            {item.salePrice !== 0 && (
+                              <>
+                                <span className={s.originPrice}>
+                                  {transformLocalCurrency(item.originalPrice)}원
+                                </span>
+                                <span className={s.discount}>
+                                  {Math.ceil(
+                                    ((1 - item.salePrice / item.originalPrice) * 100).toFixed(2),
+                                  )}
+                                  %
+                                </span>
+                              </>
+                            )}
+                            <span className={s.position_mid}>
+                              {!item.inStock && <span className={s.out_of_stock}>품절</span>}
+                            </span>
+                          </div>
+                        </figcaption>
+                        <div className={s.grade_box}>
+                          <div className={s.star_box}>
+                            <RatingStars count={item.star} margin={4} />
+                          </div>
+                          <p className={s.avg_score}>{item.star.toFixed(1).toString()}</p>
+                          <p className={s.nuber_comment}>({item.reviewCount})</p>
+                        </div>
+                      </a>
+                    </Link>
+                  </li>
+                ))
+              ) : (
+                <EmptyContMessage message={'등록된 상품이 없습니다.'} />
+              )}
             </ul>
           </section>
-          <section className={s['btn-section']}>
-            <Pagination itemTotalCount={100} itemCountPerGroup={9} />
+          <section className={s['pagination-section']}>
+            <PaginationWithAPI
+              apiURL={getListApiUrl}
+              size={searchPageSize}
+              setItemList={setItemList}
+              queryItemList={apiDataQueryString}
+              urlQuery={searchQuery}
+            />
           </section>
         </Wrapper>
       </Layout>
     </>
   );
 }
-
-export default ShopPage;

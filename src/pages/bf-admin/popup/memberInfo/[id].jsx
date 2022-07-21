@@ -47,7 +47,7 @@ function Popup_MemeberDetailPage({ id }) {
             birthday: transformBirthDay(DATA.birthday),
             accumulatedAmount: DATA.accumulatedAmount + '원',
             grade: DATA.grade,
-            subscribe: DATA.subscribe,
+            subscribe: DATA.subscribe === false ? 'N' : 'Y',
             accumulatedSubscribe: DATA.accumulatedSubscribe + '회',
             lastLoginDate: DATA.lastLoginDate || '로그인 정보가 없습니다.',
             longUnconnected: DATA.longUnconnected ? 'Y' : 'N',
@@ -372,7 +372,7 @@ Popup_MemeberDetailPage.getInitialProps = async ({ query }) => {
 const transformBirthDay = (date) => {
   const RegExp = /^([1|2])([0-9]{3})([0|1])([0-9])([0|1|2|3])([0-9])$/;
   const error = !RegExp.test(date);
-  if (error) return console.error('입력받은 생년월일은 올바르지 않은 형식입니다.');
+  if (error) return console.error('입력받은 생년월일의 형식이 올바르지 않습니다.');
   const yyyy = date.slice(0, 4);
   const mm = date.slice(4, 6);
   const dd = date.slice(6, 8);
@@ -382,7 +382,7 @@ const transformBirthDay = (date) => {
 const transformPhoneNumber = (phoneNum) => {
   const RegExp = /^01([0|1|6|7|8|9])([0-9]{3,4})([0-9]{4})$/;
   const error = !RegExp.test(phoneNum);
-  if (error) return console.error('입력받은 생년월일은 올바르지 않은 형식입니다.');
+  if (error) return console.error('입력받은 휴대전호번호의 형식이 올바르지 않습니다.');
   const n1 = phoneNum.slice(0, 3);
   const n2 = phoneNum.slice(3, 7);
   const n3 = phoneNum.slice(7, 11);

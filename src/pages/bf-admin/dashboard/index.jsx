@@ -98,6 +98,19 @@ function DashboardPage() {
             <div className={s['title-section']}>
               <h2 className={s.title}>통계
               </h2>
+              <SelectTag
+                name={'period'}
+                id={'new-order'}
+                className={s['select-period']}
+                // onChange={onCategoryHandler}
+                options={[
+                  { label: '최근 1일', value: 1 },
+                  { label: '최근 3일', value: 3 },
+                  { label: '최근 7일', value: 7 },
+                  { label: '최근 30일', value: 30 },
+                ]}
+                style={{ width: '90px', minWidth: 'auto' }}
+              />
             </div>
             <div className={s['cont-section']}>
               <ul className={s.box}>
@@ -107,19 +120,7 @@ function DashboardPage() {
                     <span>
                       <b>0</b>건
                     </span>
-                    <SelectTag
-                      name={'period'}
-                      id={'new-order'}
-                      className={s['select-period']}
-                      // onChange={onCategoryHandler}
-                      options={[
-                        { label: '최근 1일', value: 1 },
-                        { label: '최근 3일', value: 3 },
-                        { label: '최근 7일', value: 7 },
-                        { label: '최근 30일', value: 30 },
-                      ]}
-                      style={{ width: '90px', minWidth: 'auto' }}
-                    />
+                    
                   </div>
                 </li>
                 <li>
@@ -128,19 +129,6 @@ function DashboardPage() {
                     <span>
                       <b>0</b>건
                     </span>
-                    <SelectTag
-                      name={'period'}
-                      id={'new-join'}
-                      className={s['select-period']}
-                      // onChange={onCategoryHandler}
-                      options={[
-                        { label: '최근 1일', value: 1 },
-                        { label: '최근 3일', value: 3 },
-                        { label: '최근 7일', value: 7 },
-                        { label: '최근 30일', value: 30 },
-                      ]}
-                      style={{ width: '90px', minWidth: 'auto' }}
-                    />
                   </div>
                 </li>
                 <li>
@@ -149,19 +137,6 @@ function DashboardPage() {
                     <span>
                       <b>0</b>건
                     </span>
-                    <SelectTag
-                      name={'period'}
-                      id={'visitor'}
-                      className={s['select-period']}
-                      // onChange={onCategoryHandler}
-                      options={[
-                        { label: '최근 1일', value: 1 },
-                        { label: '최근 3일', value: 3 },
-                        { label: '최근 7일', value: 7 },
-                        { label: '최근 30일', value: 30 },
-                      ]}
-                      style={{ width: '90px', minWidth: 'auto' }}
-                    />
                   </div>
                 </li>
               </ul>

@@ -1,12 +1,10 @@
-$browser-context:16;
-// convert px to rem
+@import '/styles/global/guide';
+@import '/styles/global/rem.scss';
 
-@import '../../../styles/global/guide';
-
-@function rem($px, $context: $browser-context){
-  @return #{$px / $context}rem;
+@keyframes show {
+  from{opacity:0; pointer-events: none;}
+  to{opacity:1; pointer-events: all;}
 }
-
 section.top{padding-top: rem(40); padding-bottom: rem(60);}
 section.tab_menu{padding-top: 0; padding-bottom: 0;}
 section.body_top_content{padding: rem(120) 0 rem(109);}
@@ -26,25 +24,29 @@ section.tab_slide_box2{padding: 0 0 rem(130)}
     &.active{display:block;}
   }
 }
-@keyframes show {
-  from{opacity:0; pointer-events: none;}
-  to{opacity:1; pointer-events: all;}
-}
 
+
+.section.body_top_content{}
 .top {
   .inner {
     .top_box {
       display: grid;
       // grid-template-columns: repeat(2, minmax(rem(375), 1fr));
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: 50% 1fr;
       gap: rem(40);
       .left_box {
+        .mainSwiper{
+          aspect-ratio: 1;
+        }
+        position: relative;
+        max-width: rem(560);
         .image {
           width: 100%;
           height: 100%;
+          position: relative;
           // aspect-ratio: 1/1;
           span{
-            aspect-ratio: 1/1;
+            //aspect-ratio: 1/1;
           }
         }
       }
@@ -63,7 +65,28 @@ section.tab_slide_box2{padding: 0 0 rem(130)}
             padding-left: rem(4);
             @include char(l18);
             font-weight: 500;
+            margin-right: rem(10);
           }
+
+          .originPrice{
+            position: relative;
+            font-size:rem(16);
+            color:var(--color-font-light);
+            letter-spacing: 0;
+            margin-right: rem(12);
+            white-space: nowrap;
+            &:after{
+              content:'';
+              position:absolute;
+              width: calc(100% + #{rem(4)});
+              height: rem(1);
+              background-color: var(--color-font-light);
+              transform:translate(-50%,-50%);
+              left:50%;
+              top:50%;
+            }
+          }
+
         }
         .mid_box {
           border-top: rem(1) solid #EFEFEF;
@@ -178,9 +201,9 @@ section.tab_slide_box2{padding: 0 0 rem(130)}
           @include char(t20);
         }
       }
-      .shop_button_box{
+      .btn-section{
         display: flex;
-        .basket_button{
+        .cart{
           cursor: pointer;
           display: flex;
           align-items: center;
@@ -194,7 +217,7 @@ section.tab_slide_box2{padding: 0 0 rem(130)}
           border-radius: rem(4); 
           font-size: rem(16);
         }
-        .buy_button{
+        .buy{
           cursor: pointer;
           margin-left: rem(10) ;
           display: flex;
@@ -357,8 +380,6 @@ section.tab_slide_box2{padding: 0 0 rem(130)}
 
     background-color: var(--color-bg-02);
     .content {
-      
-
       .title {
         @include char(l16);
       }
@@ -384,6 +405,7 @@ section.tab_slide_box2{padding: 0 0 rem(130)}
         }
       }
     }
+
   }
 
   .button_box{
@@ -392,6 +414,9 @@ section.tab_slide_box2{padding: 0 0 rem(130)}
     padding-bottom: rem(10);
 
     .write_button{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       width: rem(140);
       height: rem(44);
       background-color: var(--color-main);
@@ -399,7 +424,6 @@ section.tab_slide_box2{padding: 0 0 rem(130)}
       color: #fff;
     }
   }
-
 
   //
   .notice_board {
@@ -470,9 +494,10 @@ section.tab_slide_box2{padding: 0 0 rem(130)}
         font-size: rem(16);
         padding-left: rem(10);
         .image{
-          width: rem(20);
-          min-width: rem(20);
-          aspect-ratio: 1.25/1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-width: rem(24);
           margin-bottom: rem(2);
           margin-right: rem(4);
         }
@@ -496,19 +521,45 @@ section.tab_slide_box2{padding: 0 0 rem(130)}
 }
 
 
-// 리뷰 클릭시 슬라이드 
-.review_box{
-  display: none;
+// 리뷰 클릭시 슬라이드
+.review_thead{
+  .image{margin-right:rem(4) !important;}
+  .title{
+    display:-webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+  }
+}
+.review_tbody{
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: var(--color-bg-02);
   @include char(b16);
-  padding: 0 rem(60);
-  height: rem(66);
+  padding: rem(20) rem(60);
+  //height: rem(66);
+  > *:not(:last-child){margin-bottom:rem(10)}
   .text{
     width: 100%;
     color: #4d4d4d;
+
+  }
+  .images{
+    width: 100%;
+    > li{
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      aspect-ratio: 1;
+      margin:0 auto;
+      max-width: rem(720);
+      &:not(:last-child){margin-bottom:rem(10)}
+    }
+    image{
+      width: 100%;
+    }
   }
 }
 
@@ -1547,7 +1598,7 @@ $animationDuration : 0.2s;
     }
   }
 
-  .review_box{
+  .review_tbody{
     padding: rem(10) rem(20);
     height: auto;
   }

@@ -7,16 +7,19 @@ export const MoveToNextPrevPage = ({
   pageInfo = { next: { title: '', id: null }, prev: { title: '', id: null } },
   setCurPageId, borderColor, ...props
 }) => {
+  
+  
   const router = useRouter();
+  
   const onChangePageId = (e) => {
     const endPointIndexOnPath = 3;
     const targetPageId = Number(e.currentTarget.dataset.pageId);
     const curPath = router.asPath;
-    router.query = targetPageId;
     const path = curPath.split('/');
     const newPath = path
       .map((p, index) => (index === endPointIndexOnPath ? targetPageId : p))
       .join('/');
+    console.log(newPath);
     router.push(newPath);
     setCurPageId(targetPageId);
   };

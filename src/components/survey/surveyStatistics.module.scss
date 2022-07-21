@@ -4,6 +4,9 @@
 
 $container-maxWidth: rem(960);
 
+.stick_red{
+  background-color:#FF5959;
+}
 
 .title {
   @include char(t24);
@@ -64,6 +67,7 @@ $container-maxWidth: rem(960);
           @include char(l20);
           text-align: center;
           line-height: 120%;
+          margin-bottom: rem(40)
         }
       }
       .box {
@@ -74,10 +78,17 @@ $container-maxWidth: rem(960);
         .stick_box {
           display: flex;
           justify-content: center;
+          align-items: baseline;
           width: 100%;
+<<<<<<< HEAD
+=======
+          max-width: rem(150);
+          height: rem(120);
+>>>>>>> f46eb1a26e6bb856b1634513c29f275f28e16f1b
           column-gap: rem(16);
           .stick {
             width: rem(16);
+            max-height: rem(120);
             height: rem(120);
             background-color: #F9EDEC;
             border-radius: rem(20);
@@ -123,7 +134,7 @@ $container-maxWidth: rem(960);
           .top_text_row2 {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start; // (center 에서 수정)
             width: 100%;
             @include char(l16);
             font-weight: 700;
@@ -250,13 +261,15 @@ $container-maxWidth: rem(960);
         .left_stick_box {
           display: flex;
           justify-content: center;
+          align-items: flex-end;
           width: 100%;
           max-width: rem(120);
+          box-sizing: border-box;
           column-gap: rem(16);
           padding-bottom: rem(23);
+          height: rem(186);
           .stick {
             width: rem(16);
-            height: rem(186);
             background-color: #F9EDEC;
             border-radius: rem(20);
           }
@@ -279,11 +292,12 @@ $container-maxWidth: rem(960);
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
+    padding: rem(40);
     width: 100%;
     max-width: rem(460);
+    box-sizing: border-box;
 
-    box-shadow: 0px 0px 20px rgba(69, 69, 83, 0.08);
+    box-shadow: 0 0 rem(20) rgba(69, 69, 83, 0.08);
     border-radius: 24px;
 
     .left_title {
@@ -295,10 +309,9 @@ $container-maxWidth: rem(960);
     .t_right_grid_box {
       display : grid;
       grid-template-columns: minmax(rem(50),rem(60)) minmax(rem(100), rem(310));
-      // grid-template-rows: 1fr 1fr 1fr 1fr;
+     grid-template-rows: repeat(4, rem(20));
       row-gap: rem(20);
       column-gap: rem(10);
-      margin: 0 rem(30);
 
       div {
         @include char(l16);
@@ -319,7 +332,7 @@ $container-maxWidth: rem(960);
 
 
 
-  .b_right {
+  .analysis-result.b_right {
     grid-area: b_right;
     box-shadow: 0px 0px 20px rgba(69, 69, 83, 0.08);
     border-radius: 32px;
@@ -345,16 +358,19 @@ $container-maxWidth: rem(960);
       display: flex;
       align-items: center;
       // padding: rem(9) 0;
+      > *:not(:last-child){margin-right:rem(10);}
       span {
         @include char(l15);
         color: #4d4d4d;
-
+      }
+      em{
+        max-width:rem(230);
       }
     }
     .left_text {
       display: flex;
       align-items: center;
-      justify-content: end;
+      justify-content: flex-end;
       @include char(d32);
       color: var(--color-main);
 
@@ -389,6 +405,7 @@ $container-maxWidth: rem(960);
     border-radius: rem(4);
   }
 }
+
 
 
 

@@ -8,14 +8,13 @@ import { getData } from '/src/pages/api/reqData';
 import transformDate from '/util/func/transformDate';
 import Spinner from '/src/components/atoms/Spinner';
 import { MoveToNextPrevPage } from '/src/components/common/MoveToNextPrevPage';
+import Image from 'next/image';
 
 export default function EventPostPage({ eventId }) {
-  const router = useRouter();
   const [curPageId, setCurPageId] = useState(Number(eventId));
   const [isLoading, setIsLoading] = useState({});
   const [itemInfo, setItemInfo] = useState({});
   const [pageInfo, setPageInfo] = useState({});
-  console.log(itemInfo);
 
   useEffect(() => {
     const getFormValuesApiUrl = `/api/events/${curPageId}`;
@@ -37,6 +36,7 @@ export default function EventPostPage({ eventId }) {
             id: data.id,
             title: data.title,
             createdDate: transformDate(data.createdDate),
+            imageUrlList: res.data.imageUrlList,
           };
           setItemInfo(DATA);
         }
@@ -87,11 +87,12 @@ export default function EventPostPage({ eventId }) {
     })();
   }, [curPageId]);
 
+  console.log(itemInfo);
   return (
     <>
       <MetaTitle title="이벤트" />
       <Layout>
-        <Wrapper className={'ani-show-all-child'}>
+        <Wrapper>
           <section className={s.title_box}>
             <div className={s.text}>
               {itemInfo.title}
@@ -100,35 +101,31 @@ export default function EventPostPage({ eventId }) {
 
             <div className={s.title_date}>등록일 : {itemInfo.createdDate}</div>
           </section>
-          <section className={s.picture_box}>
-            <div className={s.picture}>
-              {/*<Image*/}
-              {/*  priority="false"*/}
-              {/*  // src={itemInfo.thum}*/}
-              {/*  objectFit="contain"*/}
-              {/*  layout="fill"*/}
-              {/*  alt="카드 이미지"*/}
-              {/*/>*/}
-            </div>
+          <section className={`${s.picture_box} ani-show-all-child`}>
+            {itemInfo.imageUrlList?.length > 0 &&
+              itemInfo.imageUrlList.map((url, index) => (
+                <div className={`${s.picture} init-next-image`}>
+                  <Image
+                    priority="true"
+                    src={url}
+                    // objectFit="contain"
+                    layout="fill"
+                    alt={`이벤트 상세보기 이미지-${index + 1}`}
+                  />
+                </div>
+              ))}
           </section>
           <section className={s.btn_box}>
             <div className={s.btn}>목록 보기</div>
           </section>
-          <MoveToNextPrevPage pageInfo={pageInfo} setCurPageId={setCurPageId}/>
+          <MoveToNextPrevPage pageInfo={pageInfo} setCurPageId={setCurPageId} />
         </Wrapper>
       </Layout>
     </>
   );
 }
 
-
-
 EventPostPage.getInitialProps = async ({ query }) => {
   const { eventId } = query;
   return { eventId };
 };
-
-
-
-
-

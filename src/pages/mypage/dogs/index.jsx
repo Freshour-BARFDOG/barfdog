@@ -16,18 +16,16 @@ import Spinner from '/src/components/atoms/Spinner';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import { useModalContext } from '/store/modal-context';
 import {useRouter} from "next/router";
-import Modal_confirm from "../../../components/modal/Modal_confirm";
+import Modal_confirm from "/src/components/modal/Modal_confirm";
 
 export default function MypageDogInfoPage({ data }) {
-  console.log(data)
   const mct = useModalContext();
-  const [activeModal, setActiveModal] = useState(false);
+  const [activeUploadDogProfileModal, setActiveUploadDogProfileModal] = useState(false);
   const [itemList, setItemList] = useState(data);
   const [selectedItemData, setSelectedItemData] = useState(null);
   const [modalMessage, setModalMessage] = useState('');
   
-
-
+  
 
   const getItemData = (itemData) => {
     setSelectedItemData({
@@ -37,7 +35,7 @@ export default function MypageDogInfoPage({ data }) {
     onActiveModal();
   };
   const onActiveModal = () => {
-    setActiveModal(true);
+    setActiveUploadDogProfileModal(true);
   };
   const onShowModalHandler = (message) => {
     mct.alertShow();
@@ -46,6 +44,7 @@ export default function MypageDogInfoPage({ data }) {
   
   const onHideModalHandler = ()=>{
     mct.alertHide();
+    setActiveUploadDogProfileModal(false);
   }
 
   return (
@@ -77,10 +76,10 @@ export default function MypageDogInfoPage({ data }) {
           </MypageWrapper>
         </Wrapper>
       </Layout>
-      {activeModal && (
+      {activeUploadDogProfileModal && (
         <Modal_uploadDogProfileImage
           data={selectedItemData}
-          onActive={setActiveModal}
+          onActiveModal={setActiveUploadDogProfileModal}
           setItemList={setItemList}
           setModalMessage={setModalMessage}
         />
@@ -109,7 +108,7 @@ const ItemList = ({ data, onUploadImageModalHandler, onShowModalHandler }) => {
     }
   
 
-    const apiUrl = `api/dogs/${dogId}/representative`;
+    const apiUrl = `/api/dogs/${dogId}/representative`;
     (async () => {
       try {
         setIsLoading((prevState) => ({
@@ -134,6 +133,7 @@ const ItemList = ({ data, onUploadImageModalHandler, onShowModalHandler }) => {
         }
   
         onShowModalHandler(resultMessage);
+        setActiveConfirmModal(false);
         console.log(res);
         
       } catch (err) {
