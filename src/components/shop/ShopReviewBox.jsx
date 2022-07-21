@@ -42,7 +42,7 @@ export const ShopReviewBox = ({ data }) => {
             className={s.write_button}
             href={`/bf-admin/review/create?itemId=${data.itemId}`}
             target={'_blank'}
-            rel={noreferrer}
+            rel={'noreferrer'}
           >
             후기 작성하기
           </a>
@@ -60,7 +60,7 @@ export const ShopReviewBox = ({ data }) => {
         <ul className="reviewBox">
           {isLoading.fetching && <Spinner />}
           {itemList.length > 0 ? (
-            itemList.map((data, index) => <ReviewList key={`review-list-${index}`} data={data} />)
+            itemList?.map((data, index) => <ReviewList key={`review-list-${index}`} data={data} />)
           ) : (
             <EmptyContMessage message={'등록된 댓글이 없습니다.'} />
           )}
@@ -119,7 +119,7 @@ const ReviewList = ({ data }) => {
       <div className={s.review_tbody} ref={boxRef}>
         <p className={s.text}>{DATA.contents}</p>
         <ul className={s.images}>
-          {DATA.itemImages.map((image, index) => (
+          {DATA.itemImages?.map((image, index) => (
             <li key={`member-review-image-${image.id}-${index}`} className={'img-wrap'}>
               <Image
                 priority={false}
