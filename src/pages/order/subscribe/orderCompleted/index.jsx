@@ -8,7 +8,7 @@ import Image from 'next/image';
 function OrderCompletedPage() {
   return (
     <>
-      <MetaTitle title="일반상품 주문완료" />
+      <MetaTitle title="정기구독 주문완료" />
       <Layout>
         <Wrapper>
           <section className={s.text_box}>

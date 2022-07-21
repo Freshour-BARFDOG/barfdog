@@ -26,6 +26,9 @@ export default function OrderSheetPage() {
     termsOfService: false,
     coupon: false,
   });
+  
+  
+  
 
   const TEST_change_productType = () => {
     setProductType((prevState) =>

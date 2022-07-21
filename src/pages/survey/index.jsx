@@ -4,41 +4,40 @@ import StyleSwiper from '/src/components/survey/surveySwiper.module.scss';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
-import {Swiper, SwiperSlide, useSwiper, useSwiperSlide} from 'swiper/react';
+import { Swiper, SwiperSlide, useSwiper, useSwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import siblings from '/util/func/siblings';
 import { SurveyPagination } from '../../components/survey/SurveyPagination';
 import { FullScreenLoading } from '/src/components/atoms/FullScreenLoading';
-import {EffectFade, Navigation, Pagination} from 'swiper';
+import { EffectFade, Navigation, Pagination } from 'swiper';
 import SurveyStep1 from '/src/components/survey/SurveyStep1';
 import SurveyStep2 from '/src/components/survey/SurveyStep2';
 import SurveyStep3 from '/src/components/survey/SurveyStep3';
 import getAbsoluteOffsetTop from '/util/func/getAbsoluteOffsetTop';
-import filter_emptyValue from "/util/func/filter_emptyValue";
-import filter_onlyNumber from "/util/func/filter_onlyNumber";
-import filter_extraIntegerNumberZeo from "/util/func/filter_extraIntegerNumberZeo";
-import filter_ints from "/util/func/filter_ints";
-import filter_demicals from "/util/func/filter_demicals";
-import {dogCautionType} from "/store/TYPE/dogCautionType";
-import rem from "/util/func/rem";
-import {dogActivityLevelType} from "/store/TYPE/dogActivityLevelType";
-import {dogInedibleFoodType} from "/store/TYPE/dogInedibleFoodType";
-import Modal_global_alert from "/src/components/modal/Modal_global_alert";
-import {useModalContext} from "/store/modal-context";
-import {validate} from "/util/func/validation/validation_survey";
-import {valid_hasFormErrors} from "/util/func/validation/validationPackage";
-import {postObjData} from "../api/reqData";
-import {useRouter} from "next/router";
+import filter_emptyValue from '/util/func/filter_emptyValue';
+import filter_onlyNumber from '/util/func/filter_onlyNumber';
+import filter_extraIntegerNumberZeo from '/util/func/filter_extraIntegerNumberZeo';
+import filter_ints from '/util/func/filter_ints';
+import filter_demicals from '/util/func/filter_demicals';
+import { dogCautionType } from '/store/TYPE/dogCautionType';
+import rem from '/util/func/rem';
+import { dogActivityLevelType } from '/store/TYPE/dogActivityLevelType';
+import { dogInedibleFoodType } from '/store/TYPE/dogInedibleFoodType';
+import Modal_global_alert from '/src/components/modal/Modal_global_alert';
+import { useModalContext } from '/store/modal-context';
+import { validate } from '/util/func/validation/validation_survey';
+import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
+import { postObjData } from '../api/reqData';
+import { useRouter } from 'next/router';
 
 /* - 1. formErrrors => globa Modal alert사용해서, Modal에다가 에러에 해당하는 내용을 뿌려준다
     2. birth 기본값이......... formValue에 들어가도록 설정한다.
  * */
 
-
 const initialFormValues = {
-  name: '1', // 강아지이름 str
+  name: '테스트 반려견-', // 강아지이름 str
   gender: 'MALE', // 강아지 성별 str
   birth: '202201', // 강아지 생월 str // [YYYYMM]
   oldDog: false, // 노견 여부 boolean (checkbox type)
@@ -80,7 +79,6 @@ const initialFormValues = {
 // ! 설문조사 수정인지 // 생성인지에 따라서 =>버튼이름 변경하
 
 export default function Survey() {
-  
   const lastStep = 3;
   const router = useRouter();
   const mct = useModalContext();
@@ -94,11 +92,10 @@ export default function Survey() {
   const submitBtnRef = useRef(null);
   const surveyPageRef = useRef(null);
   // console.log(formValues)
-  
-  
+
   // -------------------------------------------------------------------------------- //
-  const changeSwiperHeightDependencies = [formValues.inedibleFood, formValues.caution]
-  useEffect ( () => {
+  const changeSwiperHeightDependencies = [formValues.inedibleFood, formValues.caution];
+  useEffect(() => {
     // 코드의 역할: UI '짤림 현상'해결
     // (ex. 반려견 못먹는 음식 '있어요' / 기타 특이사항: '있어요')
     // => '있어요'항목 클릭 시, 새로운 elem들이 나타남으로서, slide의 height값이 증가됨
@@ -110,13 +107,9 @@ export default function Survey() {
     const activeSlideHeight = slideWithDependencyElem.offsetHeight;
     const targetSwiperElem = swiperWrap.querySelector('.swiper-wrapper');
     targetSwiperElem.style.height = rem(activeSlideHeight);
-    
-  }, changeSwiperHeightDependencies );
+  }, changeSwiperHeightDependencies);
   // -------------------------------------------------------------------------------- //
 
-
-  
-  
   const onInputChangeHandler = (e) => {
     const input = e.currentTarget;
     const { id, value } = input;
@@ -144,8 +137,8 @@ export default function Survey() {
         filteredValue = demicalNum ? filter_demicals(filteredValue, demicalNum) : filteredValue;
       }
     }
-    
-    setFormValues ((prevState) => ({
+
+    setFormValues((prevState) => ({
       ...prevState,
       [id]: filteredValue,
     }));
@@ -168,12 +161,10 @@ export default function Survey() {
       prevEl: prevBtnRef.current,
       nextEl: nextBtnRef.current,
     },
-    effects:'fade',
+    effects: 'fade',
     modules: [Navigation, Pagination, EffectFade],
   };
-  
-  
-  
+
   const onSwiperInit = (swiper) => {
     swiper.params.navigation.prevEl = prevBtnRef.current;
     swiper.params.navigation.nextEl = nextBtnRef.current;
@@ -201,9 +192,7 @@ export default function Survey() {
     });
     initializeAlertModal();
   };
-  
-  
-  
+
   const onSwiperChangeIndex = (swiper) => {
     const el = swiper.pagination.el;
     const idx = swiper.activeIndex;
@@ -215,42 +204,36 @@ export default function Survey() {
     siblings(bullets[idx]).forEach((sib) =>
       sib.classList.remove(StyleSwiper['swiper-pagination-bullet-active']),
     );
-    setIsLoading(prevState => ({nextPage: true}))
-    setTimeout(() => setIsLoading(prevState => ({nextPage: false})), 400);
+    setIsLoading((prevState) => ({ nextPage: true }));
+    setTimeout(() => setIsLoading((prevState) => ({ nextPage: false })), 400);
     resetWindowPos();
   };
-  
-  
-  
+
   const resetWindowPos = () => {
     if (!surveyPageRef.current) return;
     const surveyPageEl = surveyPageRef.current;
     const scrollYPos = getAbsoluteOffsetTop(surveyPageEl);
     window?.scrollTo(0, scrollYPos);
   };
-  
-  
 
-  
-  useEffect( () => {
+  useEffect(() => {
     // navigation Button > Hide & Show
     const nextBtn = nextBtnRef.current;
     const submitBtn = submitBtnRef.current;
     nextBtn.style.display = curStep < lastStep ? 'flex' : 'none';
     submitBtn.style.display = curStep === lastStep ? 'flex' : 'none';
-  }, [curStep] );
-  
-  
-  const onNavButtonClick = (e)=>{
+  }, [curStep]);
+
+  const onNavButtonClick = (e) => {
     const curBtn = e.currentTarget;
     const submitBtn = submitBtnRef.current;
     const isSubmitButton = curBtn === submitBtn;
-    const realCurStep = curStep - 1 ; // ! important : onSwiperChangeIndex => curStep +1 을 고려하여 -1 계산
+    const realCurStep = curStep - 1; // ! important : onSwiperChangeIndex => curStep +1 을 고려하여 -1 계산
     const errObj = validate(formValues, isSubmitButton ? lastStep : realCurStep);
     const isPassed = valid_hasFormErrors(errObj);
     const swiper = document.querySelector('.swiper').swiper;
-    if(!isPassed){
-      let errorMessages = ['- 오류 안내 -\n',];
+    if (!isPassed) {
+      let errorMessages = ['- 오류 안내 -\n'];
       let count = 0;
       for (const key in errObj) {
         const errorMessage = errObj[key];
@@ -263,12 +246,10 @@ export default function Survey() {
       isSubmitButton && onShowModalHandler('설문조사를 제출하시겠습니까?');
       setSubmitState('READY');
     }
-  }
-  
-  
-  
+  };
+
   const onSubmit = async () => {
-    if(submitState === true) return;
+    if (submitState === true) return;
     const postFormValuesApiUrl = '/api/dogs';
     try {
       setIsLoading((prevState) => ({
@@ -279,16 +260,25 @@ export default function Survey() {
       const res = await postObjData(postFormValuesApiUrl, formValues);
       console.log(res);
       if (res.isDone) {
-        modalMessage = '설문조사가 성공적으로 등록되었습니다.'
+        modalMessage = '설문조사가 성공적으로 등록되었습니다.';
+        const slicedReportApiLink = res.data.data._links.query_surveyReport.href.split('/');
+        const linkLength = slicedReportApiLink.length;
+        const endPoint = slicedReportApiLink[linkLength - 1];
+        const surveyReportsId = endPoint;
+        const curPath = router.pathname;
+        await router.push(`${curPath}?surveyReportsId=${surveyReportsId}`);
         onShowModalHandler(modalMessage);
         setSubmitState(true);
       } else {
-        modalMessage = '내부 통신장애입니다. 잠시 후 다시 시도해주세요.'
+        modalMessage = '내부 통신장애입니다. 잠시 후 다시 시도해주세요.';
         onShowModalHandler(modalMessage);
         setSubmitState(false);
       }
     } catch (err) {
-      await onShowModalHandler('API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.', moveToPrevPage);
+      await onShowModalHandler(
+        'API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.',
+        moveToPrevPage,
+      );
       console.error('API통신 오류 : ', err);
     }
     setIsLoading((prevState) => ({
@@ -296,33 +286,33 @@ export default function Survey() {
       submit: false,
     }));
   };
-  
+
   const onShowModalHandler = (message) => {
     mct.alertShow();
     setModalMessage(message);
   };
-  
 
   const moveToNextPage = () => {
-    submitState && router.push('/survey/statistics');
+    const surveyReportsId = router.query.surveyReportsId || '';
+    console.log(surveyReportsId);
+    submitState && router.push(`/survey/statistics/${surveyReportsId}`);
   };
-  
+
   const moveToPrevPage = () => {
     router.back();
   };
-  
-  const initializeAlertModal = ()=>{
+
+  const initializeAlertModal = () => {
     mct.alertHide();
     setModalMessage('');
-  }
-  
-  
+  };
+
   return (
     <>
       <MetaTitle title="설문조사" />
       <Layout>
         <Wrapper>
-          {(isLoading.submit || isLoading.nextPage) && <FullScreenLoading opacity={1}/> }
+          {(isLoading.submit || isLoading.nextPage) && <FullScreenLoading opacity={1} />}
           <div className={s['survey-page']} ref={surveyPageRef}>
             <Swiper
               {...surveySwiperSettings}
@@ -331,13 +321,25 @@ export default function Survey() {
               onRealIndexChange={onSwiperChangeIndex}
             >
               <SwiperSlide>
-                <SurveyStep1 formValues={formValues} setFormValues={setFormValues} onInputChangeHandler={onInputChangeHandler}/>
+                <SurveyStep1
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                  onInputChangeHandler={onInputChangeHandler}
+                />
               </SwiperSlide>
               <SwiperSlide>
-                <SurveyStep2 formValues={formValues} setFormValues={setFormValues} onInputChangeHandler={onInputChangeHandler}/>
+                <SurveyStep2
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                  onInputChangeHandler={onInputChangeHandler}
+                />
               </SwiperSlide>
               <SwiperSlide>
-                <SurveyStep3 formValues={formValues} setFormValues={setFormValues} onInputChangeHandler={onInputChangeHandler}/>
+                <SurveyStep3
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                  onInputChangeHandler={onInputChangeHandler}
+                />
               </SwiperSlide>
             </Swiper>
             <SurveyPagination
@@ -348,10 +350,15 @@ export default function Survey() {
         </Wrapper>
       </Layout>
       {submitState === null && <Modal_global_alert message={modalMessage} background />}
-      {submitState === 'READY' && <Modal_global_alert message={modalMessage} onClick={onSubmit} background />}
-      {submitState === false && <Modal_global_alert message={modalMessage} onClick={moveToPrevPage} background />}
-      {submitState === true && <Modal_global_alert message={modalMessage} onClick={moveToNextPage} background />}
-      
+      {submitState === 'READY' && (
+        <Modal_global_alert message={modalMessage} onClick={onSubmit} background />
+      )}
+      {submitState === false && (
+        <Modal_global_alert message={modalMessage} onClick={moveToPrevPage} background />
+      )}
+      {submitState === true && (
+        <Modal_global_alert message={modalMessage} onClick={moveToNextPage} background />
+      )}
     </>
   );
 }

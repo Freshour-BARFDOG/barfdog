@@ -1,4 +1,4 @@
 export default function transformLocalCurrency(number) {
-  const currency = Number(number).toLocaleString(navigator.language);
+  const currency = Number(number).toLocaleString('ko-KR');
   return currency;
 }

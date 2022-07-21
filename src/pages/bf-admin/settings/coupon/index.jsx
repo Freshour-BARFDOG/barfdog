@@ -123,7 +123,7 @@ function CouponSettingPage() {
       submit: false,
     }));
   };
-가
+
   const onShowModalHandler = (message) => {
     mct.alertShow();
     setModalMessage(message);

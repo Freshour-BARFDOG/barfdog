@@ -206,9 +206,9 @@ export const valid_accessToken = async (type = 'admin') => {
   let status;
   try {
     const checkTokenAPiUrl = type === 'admin' ? '/api/admin/setting' : '/api/members';
-    const response = await getData(checkTokenAPiUrl);
+    const response = await getData(checkTokenAPiUrl, type);
     status = response.status;
-    // console.log(type, checkTokenAPiUrl, response)
+    console.log(type, checkTokenAPiUrl, response)
     // const response = await testTokenStateWithOldToken(checkTokenAPiUrl);
     switch (status) {
       case 200:
@@ -227,7 +227,7 @@ export const valid_accessToken = async (type = 'admin') => {
         } else if (response.data.reason === 'UNAUTHORIZED') {
           error = 'UNAUTHORIZED';
         }
-        error = '인증 토큰이 만료되었습니다';
+        error = `${type} 인증 토큰이 만료되었습니다`;
         break;
       case 403:
         error = '해당 토큰으로는 접근할 수 없습니다.';

@@ -42,12 +42,12 @@ export default function ReviewDetailPage({ reviewId }) {
   //
   // console.log(itemValues);
   // console.log(isBestReview);
-  useEffect( () => {
-    (async ()=>{
-      const res = await getData('/api/admin/reviews/best');
-      console.log(res);
-    })();
-  }, [itemValues.bestReview] );
+  // useEffect( () => {
+  //   (async ()=>{
+  //     const res = await getData('/api/admin/reviews/best');
+  //     console.log(res);
+  //   })();
+  // }, [itemValues.bestReview] );
   
 
   useEffect(() => {
@@ -154,18 +154,18 @@ export default function ReviewDetailPage({ reviewId }) {
 
   const onSelectBestReview = async () => {
     if (confirm(`베스트리뷰로 선정하시겠습니까?`)) {
-      const reviewIdList = [Number(reviewId)];
-      const formValues = {
-        reviewIdList:reviewIdList
+      const reviewIdList = [Number(reviewId)]; // - requerst body Param은 배열
+      const body = {
+        reviewIdList
       }
-      const res = await postObjData(postRegisterBestReviewApiUrl, formValues)
+      const res = await postObjData(postRegisterBestReviewApiUrl, body)
       console.log(res);
       if(res.isDone){
         setItemValues(prevState => ({
           ...prevState,
           bestReview: true,
         }))
-        setModalMessage(`선택하신 리뷰(id:${reviewId})가 \n베스트 리뷰로 선정되었습니다.`);
+        setModalMessage(`선택하신 ${reviewId}번 리뷰가 \n베스트 리뷰로 선정되었습니다.`);
         onShowModal();
       }
     }
@@ -303,10 +303,9 @@ export default function ReviewDetailPage({ reviewId }) {
                       <ArrowRight />
                     </i>
                   </div>
-                  <label htmlFor=""></label>
-                  {itemValues.imageList?.length > 0 && itemValues.imageList.map((data) => {
+                  {itemValues.imageList?.length > 0 && itemValues.imageList.map((data, index) => {
                     return (
-                      <SwiperSlide key={`image-${data.id}`}>
+                      <SwiperSlide key={`image-${data.id}-${index}`}>
                         <div className={s.userImages}>
                           <figure className={s['img-wrap']}>
                             <Image

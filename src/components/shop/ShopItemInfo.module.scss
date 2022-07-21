@@ -1,0 +1,15 @@
+@import '/styles/global/rem';
+
+
+.contents-wrap{
+  padding: rem(120) 0 rem(140);
+  .ql-editor{padding:0;}
+}
+
+
+@media (max-width: rem(600)) {
+
+  .contents-wrap{
+    padding: rem(50) 0 rem(140);
+  }
+}

@@ -6,14 +6,14 @@ import { SurveyStatistics } from '/src/components/survey/SurveyStatistics';
 import s from "/src/components/survey/surveyStatistics.module.scss";
 import Link from "next/link";
 
-export default function SurveyStatisticsPage() {
-
+export default function SurveyStatisticsPage({surveyReportsId}) {
+  // 설문조사 조회시, 강아지 ID가 아닌  설문조사의 ID로 조회한다.
   return (
     <>
       <MetaTitle title="설문조사 통계" />
       <Layout>
         <Wrapper>
-          <SurveyStatistics dogId={10}/>
+          <SurveyStatistics surveyReportsId={surveyReportsId}/>
           <section className={s.last_text}>
             <div>
               ※ 해당 결과지는 바프독 고객을 대상으로한 참고용 결과이니, <br/>
@@ -33,20 +33,9 @@ export default function SurveyStatisticsPage() {
   );
 }
 
-//
-// export async function getServerSideProps(context) {
-//   const { req } = context;
-//   const cookie = req.headers.cookie;
-//   const key = 'userLoginCookie';
-//   let token;
-//   cookie.split(';').forEach((c) => {
-//     if (c.indexOf(key) >= 0) {
-//       const data = c.split('=')[1];
-//       token = data;
-//       console.log('dat: ', data);
-//     }
-//   });
-//   const apiUrl = '/api/surveyReports/261';
-//   // console.log(cookie)
-//   return { props: { cookie } };
-// }
+
+SurveyStatisticsPage.getInitialProps = async ({ query }) => {
+  const { surveyReportsId } = query;
+  return { surveyReportsId };
+};
+

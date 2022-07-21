@@ -26,7 +26,7 @@ export default function BlogIndexPage() {
   const [originItemList, setOriginItemList] = useState([]);
   // const [isInitialized, setIsInitialized] = useState( false );
   const [searchApiUrl, setSearchApiUrl] = useState(getListApiUrl);
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('ALL');
   const [articles, setArticles] = useState([]);
 
   console.log(articles);
@@ -46,6 +46,7 @@ export default function BlogIndexPage() {
     setSelectedCategory(thiscategory);
     const endPoint = thiscategory === 'ALL' ? '' : thiscategory.toLowerCase();
     const url = `${getListApiUrl}/${endPoint}`;
+    
     setSearchApiUrl(url);
 
     // Change query
@@ -108,6 +109,7 @@ export default function BlogIndexPage() {
       }));
     })();
   }, []);
+  console.log(selectedCategory)
 
   return (
     <>
@@ -134,7 +136,7 @@ export default function BlogIndexPage() {
                 {articles.length > 0 ? (
                   articles.map((atc) => (
                     <li key={`article-${atc.id}`} className={s.box}>
-                      <Link href={`/community/blog/${atc.id}`} passHref>
+                      <Link href={`/community/blog/${atc.id}?category=${atc.category}`} passHref>
                         <a>
                           <div className={`${s.image} img-wrap`}>
                             <Image
@@ -165,7 +167,7 @@ export default function BlogIndexPage() {
         <Wrapper className={'ani-show-all-child'}>
           <section className={s.menu_box}>
             <ul className={s.menu}>
-              <li className={`${selectedCategory === 'ALL' || '' ? s.active : ''}`}>
+              <li className={`${(selectedCategory === 'ALL') ? s.active : ''}`}>
                 <button type={'button'} data-filter-category={'ALL'} onClick={onFilteringItemList}>
                   전체
                 </button>
@@ -202,11 +204,11 @@ export default function BlogIndexPage() {
 
           <section className={s.content_box}>
             <ul className="cont_list">
-              {itemList.length > 0 ? (
+              {itemList?.length > 0 ? (
                 itemList.map((item, index) => {
                   return (
                     <li key={`blog-${item.id}-${index}`}>
-                      <Link href={`/community/blog/${item.id}`} passHref>
+                      <Link href={`/community/blog/${item.id}?category=${item.category}`} passHref>
                         <a>
                           <div className={s.line}>
                             <div className={s.flex_box}>

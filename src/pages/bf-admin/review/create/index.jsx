@@ -13,24 +13,13 @@ import { global_itemType } from '/store/TYPE/itemType';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import { validate } from '/util/func/validation/validation_review';
 import { valid_couponCode, valid_hasFormErrors } from '/util/func/validation/validationPackage';
-import { getData, postObjData } from '/src/pages/api/reqData';
+import {getData, getDataSSR, postObjData} from '/src/pages/api/reqData';
 import CustomSelect from '/src/components/admin/form/CustomSelect';
 import Spinner from '/src/components/atoms/Spinner';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import { useModalContext } from '/store/modal-context';
 import FileInput from '/src/components/admin/form/FileInput';
 
-const initialFormValues = {
-  type: '', // str
-  id: null, // num // 정기 구독 상품 또는 일반 상품의 id
-  // type: global_reviewType.ITEM, // ! TESET
-  // id: 1, // ! TEST
-  writtenDate: transformToday(), // str (yyyy-mm-dd)
-  star: 5, // num
-  contents: '', // str
-  username: '', // str
-  reviewImageIdList: [], // array : 리뷰 이미지 id 리스트
-};
 
 // const TEST_itemOptionList = [
 //   {
@@ -48,8 +37,25 @@ const initialFormValues = {
 // ];
 //
 
+// query가 존재할 경우 => 일반상품의 해당 아이템이 자동선택되도록
 
-function CreateRewardPage() {
+
+export default function CreateRewardPage({itemId}) {
+  
+  const defaultType = itemId ? global_reviewType.ITEM : ''; // 관리자가 Shop > Review section에서 후기작성 버튼을 클릭으로 해당 페이지 접속한 경우
+  const initialFormValues = {
+    type: defaultType, // str
+    id: itemId || null, // num // 정기 구독 상품 또는 일반 상품의 id
+    // type: global_reviewType.ITEM, // ! TESET
+    // id: 1, // ! TEST
+    writtenDate: transformToday(), // str (yyyy-mm-dd)
+    star: 5, // num
+    contents: '', // str
+    username: '', // str
+    reviewImageIdList: [], // array : 리뷰 이미지 id 리스트
+  };
+  
+  
   const router = useRouter();
   const postFormValuesApiUrl = '/api/admin/reviews';
   const postThumbFileApiUrl = '/api/reviews/upload';
@@ -258,7 +264,10 @@ function CreateRewardPage() {
                     <div className="input_row">
                       <div className="title_section fixedHeight">
                         <label className="title" htmlFor="id">
-                          상품명
+                          상품명<ToolTip
+                          message={'SHOP페이지 리뷰에서 후기작성버튼을 통해 접속한 경우 변경할 수 없습니다.'}
+                          messagePosition={'center'}
+                        />
                         </label>
                       </div>
                       <div className="inp_section">
@@ -266,7 +275,7 @@ function CreateRewardPage() {
                           <CustomSelect
                             id="id"
                             options={itemOptionList}
-                            value={formValues.id}
+                            value={itemId || formValues.id}
                             setFormValues={setFormValues}
                           />
                           {formErrors.id && <ErrorMessage>{formErrors.id}</ErrorMessage>}
@@ -275,7 +284,7 @@ function CreateRewardPage() {
                     </div>
                   </section>
                   {/* cont_divider */}
-                  {formValues.id && (
+                  {(itemId || formValues.id) && (
                     <>
                       <section className="cont_divider">
                         <div className="input_row">
@@ -410,5 +419,10 @@ function CreateRewardPage() {
   );
 }
 
-export default CreateRewardPage;
 
+
+export async function getServerSideProps(ctx) {
+  const { query } = ctx;
+  const itemId = query.itemId ? query.itemId : null;
+  return { props: { itemId } };
+}

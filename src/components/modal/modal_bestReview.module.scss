@@ -101,6 +101,10 @@ $topLinkBannerHeight: rem(38);
     .title {
       font-size: rem(18);
       color: var(--color-font-def);
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+      overflow: hidden;
     }
     .rating {}
     .name {

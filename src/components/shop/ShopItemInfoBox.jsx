@@ -1,38 +1,53 @@
-import Styles from '../../pages/shop/single.module.scss';
+import Styles from '/src/pages/shop/item/[itemId].module.scss';
 import Image from 'next/image';
-import {ShopBotBox} from './ShopBotBox';
+import { ShopBotBox } from './ShopBotBox';
 import React from 'react';
+import 'react-quill/dist/quill.snow.css';
+import s from './ShopItemInfo.module.scss'
 
-export const ShopItemInfoBox = () => {
+export const ShopItemInfoBox = ({ contents }) => {
+  return (
+    <>
+      <section className={s['contents-wrap']}>
+        <div
+          className={`view ql-editor ${s['ql-editor']}`}
+          dangerouslySetInnerHTML={{ __html: contents }}
+        ></div>
+      </section>
+    </>
+  );
+};
+
+export const ShopItemInfoBox_StarterPremium = () => {
   return (
     <>
       <section className={Styles.body_top_content}>
         <p className={Styles.top_content}>
           바프독은 15도 이하의 저온 살균 자체 시설에서 제조되어
-          <br/>
+          <br />
           모든 레시피를 안전하고 신선하게 보내드립니다.
         </p>
         <div className={Styles.line}>
-          <hr/>
+          <hr />
         </div>
-        
+
         <p className={Styles.red_title}>믿고 먹일 수 있는</p>
-        
+
         <div className={Styles.title_box}>BARFDOG</div>
         <div className={Styles.title_contnet}>
           여러분은 삼시세끼 ‘라면’만 드실 수 있나요?
-          <br/>
-          <br/>
+          <br />
+          <br />
           반려견이 다양한 ‘사료’만 먹는다는 것은 곧 인스턴트 라면 혹은 건빵을 먹는 것과 같습니다.
-          <br/>
+          <br />
           그래서 바프독은 고민했습니다. 진짜 반려견을 위한 음식은 무엇일지 연구하고 진짜 음식의
-          본질에 집중했습니다. <br/>
+          본질에 집중했습니다. <br />
           영양을 골고루 섭취할 수 있는 국내 최초 더블 고기 레시피에 리얼 바프식(barf) 생식을 반영한
           적절한 야채비율까지 더 했습니다.
-          <br/>
-          <br/>
+          <br />
+          <br />
           이제는 매일 먹는 ‘라면’과 ‘건빵’이 아닌
-          <br/>
+          <br />
           신선하고 영양이 풍부한 생자연식을 골고루 선물해주세요.
         </div>
       </section>
@@ -41,18 +56,18 @@ export const ShopItemInfoBox = () => {
         <div className={Styles.image_box}>
           <div className={`${Styles.image} img-wrap`}>
             <Image
-              src={require( '/public/img/shop/single/shop_single_main_1.png' )}
+              src={require('/public/img/shop/single/shop_single_main_1.png')}
               objectFit="cover"
               layout="fill"
               alt="카드 이미지"
             />
           </div>
-          
+
           <p>함께 급여하면 좋아요</p>
-          
+
           <div className={`${Styles.image2} img-wrap`}>
             <Image
-              src={require( '/public/img/shop/single/shop_single_main_2.png' )}
+              src={require('/public/img/shop/single/shop_single_main_2.png')}
               objectFit="cover"
               layout="fill"
               alt="카드 이미지"
@@ -76,37 +91,37 @@ export const ShopItemInfoBox = () => {
             </div>
             <div className={Styles.last_contain}>
               그리고 유기농 씨앗과 켈프, 스피루리나
-              <br/>의 프리미엄 영양소로 구성되어 있습니다.
-              <br/> 바프독은 AAFCO, NRC, fediaf의
-              <br/>
+              <br />의 프리미엄 영양소로 구성되어 있습니다.
+              <br /> 바프독은 AAFCO, NRC, fediaf의
+              <br />
               가이드라인을 준수합니다.
             </div>
           </div>
-          
+
           <div className={Styles.mid}>
             <div className={Styles.title_num}>01</div>
             <div className={Styles.title}>두가지 고기</div>
             <p>한가지 고기가 아닙니다</p>
             <div className={Styles.title_content}>
               바프독은 모든 레시피에 두가지
-              <br/>
+              <br />
               고기를 풍부하게 담았습니다.
             </div>
-            
+
             <div className={Styles.last_contain}>
               영양학 전문가들은 반려견 생식 급여시,
-              <br/>
+              <br />
               한끼당 두가지 이상의고기를 섭취하도록
-              <br/>
+              <br />
               권장합니다. 다양한 고기가 갖고있는 필수
-              <br/>
+              <br />
               지방산 및 비타민 등을 골고루 섭취하면서
-              <br/>
+              <br />
               균형잡힌 식사를 만들어주기 때문입니다.
-              <br/>
-              <br/>
+              <br />
+              <br />
               그래서 바프독은 모든 레시피에 두가지
-              <br/>
+              <br />
               고기를 담아, 충분한 영양섭취를 돕습니다.
             </div>
           </div>
@@ -116,23 +131,23 @@ export const ShopItemInfoBox = () => {
             <p>사람이 먹을 수 있는 음식</p>
             <div className={Styles.title_content}>
               바프독은 일반 고기보다 영양소가
-              <br/>
+              <br />
               많은 방목고기를 사용합니다.
             </div>
-            
+
             <div className={Styles.last_contain}>
               호주의 드넓은 초지에서 자유롭게
-              <br/> 자라 유기농 인증을 받은 소고기와,
-              <br/>
+              <br /> 자라 유기농 인증을 받은 소고기와,
+              <br />
               뉴질랜드 천혜의 자연 환경에서 자유롭게
-              <br/>
+              <br />
               자란 양고기를 사용합니다.
-              <br/>
-              <br/>
+              <br />
+              <br />
               바프독의 생자연식은 최고등급의 유기농
-              <br/>
+              <br />
               방목고기, 채소를 사용하여 골고루 영양분
-              <br/>을 섭취할 수있습니다.
+              <br />을 섭취할 수있습니다.
             </div>
           </div>
         </div>
@@ -141,17 +156,17 @@ export const ShopItemInfoBox = () => {
         <div className={Styles.title}>BARFDOG’s Note</div>
         <p>
           진짜 펫푸드에 대한 바프독의 생각.
-          <br/>
+          <br />
           바프독이 생각하는 본질을 그대로담았습니다.
         </p>
-        
+
         <div className={Styles.content_box}>
           <div className={Styles.box_title}>우리가 먹을 수 있는 재료로만 만듭니다</div>
-          
+
           <div className={Styles.image_box}>
             <div className={`${Styles.image} img-wrap`}>
               <Image
-                src={require( '/public/img/shop/single/shop_main_note_1.png' )}
+                src={require('/public/img/shop/single/shop_main_note_1.png')}
                 objectFit="cover"
                 layout="fill"
                 alt="카드 이미지"
@@ -159,7 +174,7 @@ export const ShopItemInfoBox = () => {
             </div>
             <div className={`${Styles.image} img-wrap`}>
               <Image
-                src={require( '/public/img/shop/single/shop_main_note_1-1.png' )}
+                src={require('/public/img/shop/single/shop_main_note_1-1.png')}
                 objectFit="cover"
                 layout="fill"
                 alt="카드 이미지"
@@ -167,13 +182,13 @@ export const ShopItemInfoBox = () => {
             </div>
           </div>
         </div>
-        
+
         <div className={Styles.content_box}>
           <div className={Styles.box_title}>100% 휴먼그레이드 프리미엄 생식</div>
           <div className={Styles.image2_box}>
             <div className={`${Styles.image} img-wrap`}>
               <Image
-                src={require( '/public/img/shop/single/shop_main_note_2-1.png' )}
+                src={require('/public/img/shop/single/shop_main_note_2-1.png')}
                 objectFit="cover"
                 layout="fill"
                 alt="카드 이미지"
@@ -181,7 +196,7 @@ export const ShopItemInfoBox = () => {
             </div>
             <div className={`${Styles.image} img-wrap`}>
               <Image
-                src={require( '/public/img/shop/single/shop_main_note_2-2.png' )}
+                src={require('/public/img/shop/single/shop_main_note_2-2.png')}
                 objectFit="cover"
                 layout="fill"
                 alt="카드 이미지"
@@ -189,7 +204,7 @@ export const ShopItemInfoBox = () => {
             </div>
             <div className={`${Styles.image} img-wrap`}>
               <Image
-                src={require( '/public/img/shop/single/shop_main_note_2-3.png' )}
+                src={require('/public/img/shop/single/shop_main_note_2-3.png')}
                 objectFit="cover"
                 layout="fill"
                 alt="카드 이미지"
@@ -197,7 +212,7 @@ export const ShopItemInfoBox = () => {
             </div>
             <div className={`${Styles.image} img-wrap`}>
               <Image
-                src={require( '/public/img/shop/single/shop_main_note_2-4.png' )}
+                src={require('/public/img/shop/single/shop_main_note_2-4.png')}
                 objectFit="cover"
                 layout="fill"
                 alt="카드 이미지"
@@ -205,7 +220,7 @@ export const ShopItemInfoBox = () => {
             </div>
             <div className={`${Styles.image} img-wrap`}>
               <Image
-                src={require( '/public/img/shop/single/shop_main_note_2-5.png' )}
+                src={require('/public/img/shop/single/shop_main_note_2-5.png')}
                 objectFit="cover"
                 layout="fill"
                 alt="카드 이미지"
@@ -213,7 +228,7 @@ export const ShopItemInfoBox = () => {
             </div>
             <div className={`${Styles.image} img-wrap`}>
               <Image
-                src={require( '/public/img/shop/single/shop_main_note_2-6.png' )}
+                src={require('/public/img/shop/single/shop_main_note_2-6.png')}
                 objectFit="cover"
                 layout="fill"
                 alt="카드 이미지"
@@ -222,12 +237,12 @@ export const ShopItemInfoBox = () => {
           </div>
         </div>
       </section>
-      
+
       <section className={Styles.barf_guide}>
         <div className={Styles.title}>BARFDOG’s Guide</div>
         <p>
           권장급여량은 걱정하지 마세요.
-          <br/>
+          <br />
           입력해주신 아이들의 정보에 맞추어 <br className={Styles.p_br}></br>나누어 담아 드립니다.
         </p>
         <div className={Styles.red_word}>
@@ -240,7 +255,7 @@ export const ShopItemInfoBox = () => {
             <ShopBotBox title="급여가이드 보러가기">
               <div className={`${Styles.image_slide} img-wrap`}>
                 <Image
-                  src={require( '/public/img/shop/single/shop_main_guide_slide_1.png' )}
+                  src={require('/public/img/shop/single/shop_main_guide_slide_1.png')}
                   objectFit="cover"
                   layout="fill"
                   alt="카드 이미지"
@@ -250,7 +265,7 @@ export const ShopItemInfoBox = () => {
             <ShopBotBox title="생식 적응기간을 위한 가이드라인 보러가기">
               <div className={`${Styles.image_slide2} img-wrap`}>
                 <Image
-                  src={require( '/public/img/shop/single/shop_main_guide_slide_2.png' )}
+                  src={require('/public/img/shop/single/shop_main_guide_slide_2.png')}
                   objectFit="cover"
                   layout="fill"
                   alt="카드 이미지"
@@ -266,24 +281,24 @@ export const ShopItemInfoBox = () => {
           <div className={Styles.left_box}>
             <div className={Styles.text_box}>
               레시피 <span>두가지를 골고루 급여</span>하여
-              <br/>
+              <br />
               다양한 영양성분을 섭취 할 수 있도록 해주세요!
             </div>
             <div className={`${Styles.image} img-wrap`}>
               <Image
-                src={require( '/public/img/shop/single/shop_main_tip_left.png' )}
+                src={require('/public/img/shop/single/shop_main_tip_left.png')}
                 objectFit="cover"
                 layout="fill"
                 alt="카드 이미지"
               />
             </div>
-            
+
             <div className={Styles.last_contain}>
               바프독은 반려견 생식 관련 역사가 오래된 미국 생식관련 반려동물 협회 및 미국
               생식전문사이트의 영양학전문수의사와 정기적인 미팅을 통하여 레시피를 까다롭게 검토하고
               있으며, 모든 전문가들의 공통된 의견을 존중하고 있습니다.
-              <br/>
-              <br/>
+              <br />
+              <br />
               따라서, 각 바프독 레시피가 가지고 있는 장점들을 골고루 섭취할 수 있도록 도와주는
               정기구독 서비스를 통해 반려견 친구들에게 보다 다양한 레시피를 급여해보시길
               추천드립니다.
@@ -293,7 +308,7 @@ export const ShopItemInfoBox = () => {
             <div className={`${Styles.image} img-wrap`}>
               <Image
                 priority="false"
-                src={require( '/public/img/shop/single/shop_main_tip_right.png' )}
+                src={require('/public/img/shop/single/shop_main_tip_right.png')}
                 objectFit="cover"
                 layout="fill"
                 alt="카드 이미지"
@@ -303,26 +318,26 @@ export const ShopItemInfoBox = () => {
         </div>
       </section>
       <div className={Styles.mid_box}>
-        <hr className={Styles.line}/>
+        <hr className={Styles.line} />
       </div>
       <section className={Styles.barf_subscription}>
         <p className={Styles.title}>특별함을 일상처럼 매일먹는 특식,</p>
         <p className={Styles.title2}>Real Barf</p>
-        
+
         <div className={`${Styles.image} img-wrap`}>
           <Image
-            src={require( '/public/img/shop/single/shop_main_subscription.png' )}
+            src={require('/public/img/shop/single/shop_main_subscription.png')}
             objectFit="cover"
             layout="fill"
             alt="카드 이미지"
           />
         </div>
       </section>
-      
+
       {/* // ! ---------------------------------------------------- */}
       {/* // ! ---------------------급여가이드------------------------------- */}
       {/* // ! ---------------------------------------------------- // */}
-      
+
       {/*
       <section className={`${Styles.bot} ${visible && Styles.active}`}>
         <BotBox title="급여가이드 보러가기">
