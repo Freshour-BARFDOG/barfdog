@@ -53,8 +53,8 @@ export const ShopOptionBar = ({ data, formValues, setFormValues }) => {
     setFormValues((prevState) => ({
       ...prevState,
       optionDtoList: selectedOptionDataList.map((option) => ({
-        itemOptionId: option.id,
-        amount: option.quantity,
+        optionId: option.id,
+        optionAmount: option.quantity,
       })),
       totalPrice: totalPrice,
     }));
