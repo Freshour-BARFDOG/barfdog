@@ -29,6 +29,7 @@ import transformClearLocalCurrency from '/util/func/transformClearLocalCurrency'
 
 export default function SingleItemPage({ data }) {
   // console.log(data)
+  const router = useRouter();
   const minItemQuantity = 1;
   const maxItemQuantity = 5;
   const initialFormValues_CART = {
@@ -69,7 +70,6 @@ export default function SingleItemPage({ data }) {
 
   if (!data) {
     alert('데이터를 불러올 수 없습니다.');
-    const router = useRouter();
     router.back();
 
     return;
