@@ -133,7 +133,7 @@ export default function BlogIndexPage() {
             <div className={s.article}>
               <p>추천 아티클</p>
               <ul className={s.flex_box}>
-                {articles.length > 0 ? (
+                {articles?.length > 0 ? (
                   articles.map((atc) => (
                     <li key={`article-${atc.id}`} className={s.box}>
                       <Link href={`/community/blog/${atc.id}?category=${atc.category}`} passHref>
