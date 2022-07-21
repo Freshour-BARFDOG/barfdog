@@ -34,6 +34,7 @@ section.content_box {
 
 .article_box {
   width: 100%;
+  background-color: #f5f5f5;
 
   .article {
     padding: rem(46) 0 0;
@@ -46,8 +47,10 @@ section.content_box {
       padding-top: rem(26);
       display: grid;
       justify-content: center;
-      grid-template-columns: 57fr 43fr;
-      gap: rem(40);
+      grid-template-columns: 66fr 44fr;
+      //grid-template-columns: 66.09fr 45.88fr;
+      //grid-template-columns: 57% 40%;
+      gap: rem(20);
 
 
       p {
@@ -65,11 +68,11 @@ section.content_box {
         padding-bottom: rem(30);
       }
 
-      .box:nth-child(1) .image{aspect-ratio: 1}
-      .box:nth-child(2).image{aspect-ratio: 1}
+      //.box:nth-child(1) .image{aspect-ratio: 1}
+      .box:nth-child(2) .image{aspect-ratio: 1;}
       .image {
         width: 100%;
-        aspect-ratio: 1.57/1;
+        aspect-ratio: 1.5/1;
         margin-bottom: rem(11);
         max-height: rem(420);
       }
@@ -164,7 +167,7 @@ section.content_box {
       }
 
       .right_box {
-        padding-right: rem(20);
+        height: rem(240);
 
         .image {
           width: 240px;
@@ -194,8 +197,6 @@ section.content_box {
 @media (max-width: rem(1200)) {
   .article_box {
     .article {
-      padding: 0;
-
       .flex_box {
         gap: rem(20);
       }
@@ -227,8 +228,8 @@ section.content_box {
             display: none;
           }
         }
-
         .right_box {
+          height: rem(160);
           .image {
             width: rem(160);
           }
@@ -242,56 +243,78 @@ section.content_box {
   section.title {
     padding: rem(70) 0 rem(30);
   }
+
+  
+  section.menu_box {
+    padding: rem(40) 0;
+  }
+
   .title {
     br {
       display: block;
     }
   }
+  .ani-show-all-child {
+    background-color: #fff;
+  }
 
   .article_box {
+    background-color: #fff;
+    
     .article {
+      padding: 0;
+
+      > p {
+        font-size: rem(16);
+      }
+      
       .flex_box {
-        .left_box {
+        width: 100%;
+        grid-template-columns: 1fr;
+        position: relative;
+
+        .box:nth-child(2) {
+          display: none;
+        }
+        .image {
           width: 100%;
+          aspect-ratio: 1/1;
+          max-height: 100%;
+          margin-bottom: 0;
           position: relative;
 
-          .image {
-            width: 100%;
-            aspect-ratio: 1/1;
-            margin-bottom: rem(11);
-            position: relative;
-
-            &::after {
-              content: '';
-              position: absolute;
-              top: 0;
-              left: 0;
-              width: 100%;
-              height: 100%;
-              background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 100%);
-            }
-          }
-
-          .subject {
+          &::after {
+            content: '';
             position: absolute;
-            bottom: rem(20);
-            left: rem(20);
-            color: #fff;
-            font-size: 3.5vw;
-
-            .article_title {
-              width: 80vw;
-              font-size: 7vw;
-            }
-            .day {
-              color: #fff;
-              font-size: 3.5vw;
-              font-weight: 100;
-            }
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 100%);
           }
         }
-        .right_box {
-          display: none;
+
+        .subject {
+          position: absolute;
+          bottom: rem(20);
+          left: rem(20);
+          color: #fff;
+          font-size: 3.5vw;
+
+          p{
+            color: #fff;
+            font-size: 4vw;
+          }
+
+          .article_title {
+            width: 80vw;
+            font-size: 7vw;
+          }
+          .day {
+            color: #fff;
+            font-size: 3.5vw;
+            font-weight: 100;
+          }
         }
       }
     }
@@ -312,16 +335,15 @@ section.content_box {
   .content_box {
     .line {
       margin-bottom: rem(10);
-
       .flex_box {
         grid-template-columns: 1fr rem(80);
         padding: rem(10);
         grid-gap: rem(10);
-
         .left_box {
           padding-top: 0;
           > p {
             padding-bottom: rem(8);
+            font-size: rem(13);
           }
           .article_title {
             padding-bottom: rem(16);
@@ -332,11 +354,13 @@ section.content_box {
             display: none;
           }
           .day {
+            font-size: rem(14);
             padding-bottom: 0;
           }
         }
-
         .right_box {
+          height: rem(80);
+
           .image {
             width: rem(80);
           }

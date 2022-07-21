@@ -4,7 +4,7 @@ $browser-context: 16; // html font-size
 }
 
 section.recipe_info {
-  padding: rem(120) 0 rem(120)
+  padding: rem(120) 0 rem(170)
 }
 
 section.barfraw {
@@ -106,12 +106,23 @@ section.sns {
 //레시피
 .swiper_recipe_outerWrap {
   position: relative;
-  height: rem(600);
+  height: rem(538);
   margin-top: rem(70);
 
   .swiper_recipe{
     height: 100%;
     padding: rem(20) rem(20) 0;
+  }
+
+  .btn_box {
+    display: flex;
+    justify-content: center;;
+    
+    .btn_main{
+      width: rem(246);
+      padding: rem(20) rem(50);
+      font-weight: bold;
+    }
   }
 }
 
@@ -1092,6 +1103,10 @@ section.sns {
         .barfgood_textbox{
           margin-top: 0;
         }
+
+        p {
+          width: 100%;
+        }
       }
       
       .rightbox {
@@ -1119,6 +1134,12 @@ section.sns {
 
 
 @media only screen and (min-width:rem(100)) and (max-width: rem(600)) {
+
+
+  section.recipe_info {
+    padding: rem(60) 0 rem(140)
+  }
+
   
 //최상단 그림배너
   .banner {
@@ -1140,6 +1161,9 @@ section.sns {
 
 //레시피 설명 4가지 사진
   .swiper_recipe_outerWrap {
+     margin-top: rem(20);
+     height: rem(520);
+
     .swiper_recipe{
       width: rem(300);
       left: rem(20);
@@ -1408,10 +1432,6 @@ section.sns {
   }
 
 
-
-  section.recipe_info {
-    padding: rem(60) 0 rem(50)
-  }
 
   section.barfraw {
     padding: rem(40) 0 rem(80)

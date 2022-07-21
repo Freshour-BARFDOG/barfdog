@@ -268,7 +268,7 @@ function CartPage() {
           </section>
 
           <section className={Styles.btn_box}>
-            <Link href="/cart/Payment" passHref>
+            <Link href="../order/ordersheet" passHref>
               <div className={Styles.btn_box}>
                   <a className={Styles.btn}>총 1건 주문하기</a>
               </div>

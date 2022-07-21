@@ -8,7 +8,7 @@ $browser-context:16;
 
 
 .flex_container {
-  margin: rem(50) auto rem(240);
+  margin: rem(100) auto rem(240);
   max-width: rem(315);
 }
 
@@ -23,7 +23,7 @@ $browser-context:16;
 .cont {
   text-align: center;
   font-size: rem(16);
-  margin-bottom: rem(47);
+  margin-bottom: rem(60);
 
  
 }
@@ -45,7 +45,18 @@ $browser-context:16;
 
 
 .btnbox {
-  margin-bottom: 10px;
+  margin-bottom: rem(10);
 }
 
 
+
+@media (max-width: rem(600)) {
+
+  .flex_container {
+    margin: rem(85) auto rem(240);
+  }
+
+  .cont {
+    margin-bottom: rem(50);
+  }
+}

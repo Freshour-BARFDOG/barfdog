@@ -321,10 +321,20 @@ $input-height: rem(44);
 
 @media (max-width: rem(600)) {
   
-  .join__wrap {
+.main {
+  margin: rem(35) auto rem(111);
 
-    display: grid;
-    grid-template-columns: 1fr;
+  .title-wrap{
+    margin-bottom: rem(20);
   }
-  
+}
+
+  .input-section {
+    border-bottom: rem(1) solid var(--color-line-03);
+    
+    .join__wrap{
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+  }
 }
