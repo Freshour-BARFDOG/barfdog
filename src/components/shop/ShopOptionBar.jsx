@@ -9,7 +9,7 @@ import rem from '/util/func/rem';
 import sorting from '/util/func/sorting';
 import Link from 'next/link';
 
-export const ShopOptionBar = ({ data, formValues, setFormValues }) => {
+export const ShopOptionBar = ({ data, formValues, setFormValues, onAddToCart, onActiveModal }) => {
   // SELECT OPTION
   const defaultOption = { label: '상품선택', value: '' };
   const selectOptions = data.opt.map((option) => ({
@@ -169,18 +169,17 @@ export const ShopOptionBar = ({ data, formValues, setFormValues }) => {
             </span>
             <em className={s.unit}>원</em>
           </div>
-          <div className={s['btn-section']}>
-            <Link href="/cart" passHref>
-              <a className={s.cart}>장바구니</a>
-            </Link>
-            <Link href="/order/ordersheet" passHref>
-              <a className={s.buy}>구매하기</a>
-            </Link>
-          </div>
+          <section className={`${s['shop-btn-section']} ${s['on-optionBar']}`}>
+            <div className={s['grid-box']}>
+              <button className={`${s.cart} ${s.btn}`} onClick={onAddToCart}>
+                장바구니
+              </button>
+              <button className={`${s.buy} ${s.btn}`}>구매하기</button>
+            </div>
+          </section>
         </div>
       </Wrapper>
     </div>
   );
 };
 
-// 최종가격 => 기본 상품가격 + 옵션 각각에 대하여 계산한 가격

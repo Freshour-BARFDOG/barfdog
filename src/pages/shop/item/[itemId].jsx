@@ -9,7 +9,7 @@ import { ShopItemInfoBox } from '/src/components/shop/ShopItemInfoBox';
 import { ShopTabMenus } from '/src/components/shop/ShopTabMenus';
 import { ShopReviewBox } from '/src/components/shop/ShopReviewBox';
 import { ShopOptionBar } from '/src/components/shop/ShopOptionBar';
-import {getDataSSR, postData, postUserObjData, putData, putObjData} from '/src/pages/api/reqData';
+import { getDataSSR, postData, postUserObjData, putData, putObjData } from '/src/pages/api/reqData';
 import { useRouter } from 'next/router';
 import calculateSalePrice from '/util/func/calculateSalePrice';
 import transformClearLocalCurrency from '/util/func/transformClearLocalCurrency';
@@ -47,6 +47,8 @@ export default function SingleItemPage({ data }) {
   const [activeTabmenuIndex, setActiveTabmenuIndex] = useState(0);
   const [formValues, setFormValues] = useState(initialFormValues_CART);
 
+  const [activeCartShortcutModal, setActiveCartShortcutModal] = useState(false);
+
   // console.log('formValues', formValues);
 
   // console.log(formValues)
@@ -72,37 +74,34 @@ export default function SingleItemPage({ data }) {
 
     return;
   }
-  
-  const onAddCart = async ()=>{
-    // 장바구니에 담겼습니다.
-    // 장바구니로 이동하시겠습니까?
-    // 결제하기
-    //
-    
-    
+
+  const onAddToCart = async () => {
     const postDataApiUrl = '/api/baskets';
     try {
       const objData = {
         itemAmount: formValues.itemAmount,
         itemId: formValues.itemId,
-        optionDtoList: formValues.optionDtoList
-      }
-      console.log(objData);
+        optionDtoList: formValues.optionDtoList,
+      };
       // setIsLoading((prevState) => ({
       //   ...prevState,
       //   submit: true,
       // }));
       const res = await postUserObjData(postDataApiUrl, objData);
-    
-      console.log(res);
-      if(res.isDone){
-      }else {
+
+      if (res.isDone) {
+        onActiveCartShortcutModal();
+      } else {
         alert(`${res.error}`);
       }
     } catch (err) {
       console.log('API통신 오류 : ', err);
     }
-  }
+  };
+
+  const onActiveCartShortcutModal = (active) => {
+    setActiveCartShortcutModal(true);
+  };
 
   return (
     <>
@@ -112,6 +111,8 @@ export default function SingleItemPage({ data }) {
         data={{ opt: data?.opt, minQuantity: minItemQuantity, maxQuantity: maxItemQuantity }}
         formValues={formValues}
         setFormValues={setFormValues}
+        onAddToCart={onAddToCart}
+        onActiveModal={onActiveCartShortcutModal}
       />
       <Layout>
         <Wrapper>
@@ -125,7 +126,9 @@ export default function SingleItemPage({ data }) {
             }}
             formValues={formValues}
             setFormValues={setFormValues}
-            onAddCart ={onAddCart}
+            onAddToCart={onAddToCart}
+            activeModal={activeCartShortcutModal}
+            onActiveModal={setActiveCartShortcutModal}
           />
           <ShopTabMenus activeIndex={activeTabmenuIndex} setActiveIndex={setActiveTabmenuIndex} />
           <ul id={Styles.content} ref={contentRef}>
