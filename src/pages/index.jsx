@@ -174,15 +174,15 @@ function Swiper_recipe() {
         slidesPerView: 1,
         spaceBetween: 0,
       },
-      601: { //601 이상일 경우
+      600: { //601 이상일 경우
         slidesPerView: 2, //레이아웃 2열
         spaceBetween: -80,
       },
-      901: {
+      950: {
         slidesPerView: 3,
         spaceBetween: -40,
       },
-      1201: {
+      1200: {
         slidesPerView: 4,
         spaceBetween: 20,
       },
@@ -310,6 +310,12 @@ function Swiper_recipe() {
         {/* <SwiperSlide style={{height:"244px",backgroundColor:'var(--color-bg)'}}>Slide 5</SwiperSlide> */}
         {/* <SwiperSlide style={{height:"244px",backgroundColor:'var(--color-bg)'}}>Slide 6</SwiperSlide> */}
       </Swiper>
+
+      <div className={Styles.btn_box}>
+        <button type="button" className={Styles.btn_main}>
+          정기구독 신청하러 가기
+        </button>
+      </div>
     </div>
   );
 }

@@ -55,6 +55,7 @@ $browser-context: 16;
     }
     &.checked {
       border-color: var(--color-main);
+      color: var(--color-main);
     }
 
   }

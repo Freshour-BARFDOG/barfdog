@@ -10,7 +10,7 @@
   right:0;
   background-color: #fff;
   transition: transform 0.3s var(--transition-cubic);
-  transform:translateY(100%);
+  transform:translateY(calc(100% - rem(10)));
   border-top: rem(1) solid var(--color-main);
   z-index: $shopOptionBar;
   &.active{
@@ -23,11 +23,11 @@
 .optionBar-visibility-button{
   position: absolute;
   top:0;
-  right:rem(40);
+  left: 50%;
   color: #fff;
   background-color: var(--color-main);
   padding: rem(10);
-  transform:translateY(-100%);
+  transform: translateX(-50%) translateY(-100%);
   width:100%;
   border-radius: rem(4) rem(4) 0 0 ;
   max-width: rem(240);
@@ -51,11 +51,10 @@
 .item{
   background-color: var(--color-bg);
   display: grid;
-  height: rem(50);
   box-sizing: border-box;
   padding: rem(7) 0;
   grid-template-columns: 1fr rem(120) rem(130) rem(50);
-  .title{justify-content: flex-start; padding-left: rem(20);}
+  .title{justify-content: flex-start; padding-left: rem(20); padding-right: rem(20);}
   margin-bottom: rem(2);
   > span {
     display: flex;
@@ -66,6 +65,7 @@
   }
   .input-quantity{
     box-sizing: border-box;
+    height: rem(36);
   }
 }
 
@@ -83,16 +83,93 @@
   }
   .unit{   font-size: rem(16);}
 }
+
 .btn-section{
   display: flex;
   align-items: center;
   justify-content: flex-end;
+
+  button {
+    width: rem(240);
+    height: rem(54);
+    border: rem(1) solid var(--color-main);
+    border-radius: rem(4);
+  }
+
+  .cart {
+    color: var(--color-main);
+    margin-right: rem(10);
+  }
+
+  .buy {
+    color: #fff;
+    background-color: var(--color-main);
+  }
 }
 
 @media (max-width: rem(600)) {
 
+  .optionBar-visibility-button{
+    max-width: rem(160);
+  }
+
   .btn-active{right:rem(20);
     max-width: rem(160);
   }
+
+  .item{
+    padding: rem(15);
+    grid:
+    "title title span"
+    "input-quantity price price"/1fr 1fr rem(40);
+    row-gap: rem(10);
+
+    .title {
+      grid-column: 1/span 2;
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .input-quantity {
+      order: 4;
+      width: rem(120);
+    }
+
+    .price {
+      order: 5;
+      grid-column: 2/span 1;
+      justify-content: flex-end;
+    }
+
+    span:last-child {
+      padding-top: rem(4);
+      align-items: flex-start;
+      justify-content: flex-end;
+    }
+  }
+
+  .btn-section{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: rem(10);
+  
+    button {
+      width: 100%;
+      height: rem(54);
+      border: rem(1) solid var(--color-main);
+      border-radius: rem(4);
+    }
+  
+    .cart {
+      color: var(--color-main);
+      margin-right: 0;
+    }
+  
+    .buy {
+      color: #fff;
+      background-color: var(--color-main);
+    }
+  }
+
 
 }

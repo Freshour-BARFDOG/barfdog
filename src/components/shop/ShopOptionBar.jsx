@@ -65,7 +65,7 @@ export const ShopOptionBar = ({ optionInfo, setFormValues }) => {
                     style={{ borderColor: '#ddd' }}
                   />
                 </div>
-                <span>52,200원</span>
+                <span className={s.price}>52,200원</span>
                 <span>
                   <CloseButton onClick={''} lineColor={'#ababab'} style={{width:'18px', height:'18px'}}/>
                 </span>

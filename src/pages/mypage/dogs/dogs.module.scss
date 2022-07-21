@@ -46,7 +46,7 @@ section.body { padding : rem(120) 0 0 }
   margin-bottom: rem(10);
 
   &:last-child {
-    margin-bottom: rem(0);
+    margin-bottom: rem(120);
   }
   .left_box {
     width:100%;
@@ -226,7 +226,11 @@ section.body { padding : rem(120) 0 0 }
   .dogInfo-wrap {
     max-height: rem(400);
     padding: 0 rem(20);
-    grid-template-columns: rem(100) 1fr;
+    grid-template-columns: rem(90) 1fr;
+
+    &:last-child {
+      margin-bottom: rem(120);
+    }
 
     .left_box {
       width:100%;
@@ -262,12 +266,15 @@ section.body { padding : rem(120) 0 0 }
       }
 
       .controls {
-        display: grid;
-        grid-template-columns: rem(110) rem(85);
+        display: flex;
         margin-bottom: rem(30);
   
         button {
           font-size: rem(14);
+
+          &:last-child {
+            padding-right: 0;
+          }
         }
       }
       

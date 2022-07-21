@@ -47,7 +47,8 @@ section.content_box {
       padding-top: rem(26);
       display: grid;
       justify-content: center;
-      grid-template-columns: 66.09fr 45.88fr;
+      grid-template-columns: 66fr 44fr;
+      //grid-template-columns: 66.09fr 45.88fr;
       //grid-template-columns: 57% 40%;
       gap: rem(20);
 
@@ -68,10 +69,10 @@ section.content_box {
       }
 
       //.box:nth-child(1) .image{aspect-ratio: 1}
-      .box:nth-child(2) .image{aspect-ratio: 1.09/1;}
+      .box:nth-child(2) .image{aspect-ratio: 1;}
       .image {
         width: 100%;
-        aspect-ratio: 1.57/1;
+        aspect-ratio: 1.5/1;
         margin-bottom: rem(11);
         max-height: rem(420);
       }

@@ -237,7 +237,7 @@ export async function getServerSideProps({ req }) {
   const embeddedData = res?.data._embedded
   // console.log(embeddedData);
   if (embeddedData) {
-    const dataList = embeddedData['dataQuery'] || [];
+    const dataList = embeddedData[dataQuery] || [];
     if(!dataList.length) return;
     DATA = dataList.map((data) => ({
       id: data.id,

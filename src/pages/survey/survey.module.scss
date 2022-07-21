@@ -4,13 +4,13 @@
 .survey-page {
   margin-bottom: rem(150);
   .step1Page {
-    padding: rem(86) 0 rem(80);
+    padding: rem(70) 0 rem(80);
   }
   .step2page {
-    padding: rem(60) 0 rem(80);
+    padding: rem(70) 0 rem(80);
   }
   .step3page {
-    padding: rem(60) 0 rem(100);
+    padding: rem(70) 0 rem(80);
   }
 }
 .input-row:not(:last-child) {
@@ -51,6 +51,18 @@
     }
   }
 
+}
+
+.survey-page {
+  .step3page {
+    .input-row {
+      .inputRadio {
+          span {
+            font-weight: 500;
+          }
+      }
+    }
+  }
 }
 
 
@@ -344,9 +356,11 @@
   box-sizing: border-box;
   border: rem(2) solid var(--color-line-03);
   transition: border-color 0.2s var(--transition-cubic);
+  font-weight: 600;
 
   &.checked {
     border-color: var(--color-main);
+    color: var(--color-main);
   }
   input {
     position: absolute;
@@ -503,4 +517,62 @@
     box-shadow: 0 rem(2) rem(10) 0 rgba(202, 16, 16, 0.6);
     display: none;
   }
+}
+
+
+@media (max-width: rem(600)) {
+
+  // * ------- Custom Input 공통 ------ *
+  .inputRadio-wrap {
+    width: auto;
+  }
+  .survey-page {
+    .step3page {
+      .input-row:last-child {
+        width: rem(250);
+      }
+    }
+  }
+
+  .survey-page {
+    input.focus-underline {
+      width: auto;
+    }
+  }
+
+  
+  .dog_choice {
+    padding: 0;
+    column-gap: rem(10);
+    display: grid;
+    grid-template-columns:repeat(3, 1fr);
+    
+    li{
+      > .inputRadio {
+        padding: rem(12) rem(20);
+      }
+    }
+  }
+  
+
+  .flex_box2 {
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: rem(25);
+    transform: translateX(rem(-8));
+    .inner_flex_box {
+      justify-content: flex-end;
+    }
+  }
+
+  
+  .dogStatus{
+    gap: rem(14);
+  }
+
+
+  .inputRadio {
+    padding: rem(12) rem(20);
+  }
+
 }
