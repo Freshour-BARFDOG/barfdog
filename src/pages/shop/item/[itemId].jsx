@@ -34,7 +34,7 @@ export default function SingleItemPage({ data }) {
   const maxItemQuantity = 5;
   const initialFormValues_CART = {
     // ! 기준: 장바구니 담기 request body
-    itemId: data.item.id,
+    itemId: data?.item.id,
     itemAmount: 1,
     optionDtoList: [
       // { optionId : null, optionAmount : null }
@@ -67,13 +67,12 @@ export default function SingleItemPage({ data }) {
       }
     });
   }, [activeTabmenuIndex]);
-
-  if (!data) {
-    alert('데이터를 불러올 수 없습니다.');
-    router.back();
-
-    return;
-  }
+  //
+  // if (!data) {
+  //   alert('데이터를 불러올 수 없습니다.');
+  //   router.back();
+  //   return;
+  // }
 
   const onAddToCart = async () => {
     const postDataApiUrl = '/api/baskets';
@@ -118,9 +117,9 @@ export default function SingleItemPage({ data }) {
         <Wrapper>
           <ShopBoard
             data={{
-              item: data.item,
-              itemImages: data.itemImages,
-              delivery: data.delivery,
+              item: data?.item,
+              itemImages: data?.itemImages,
+              delivery: data?.delivery,
               minQuantity: minItemQuantity,
               maxQuantity: maxItemQuantity,
             }}
@@ -133,7 +132,7 @@ export default function SingleItemPage({ data }) {
           <ShopTabMenus activeIndex={activeTabmenuIndex} setActiveIndex={setActiveTabmenuIndex} />
           <ul id={Styles.content} ref={contentRef}>
             <li className={Styles.cont_list}>
-              <ShopItemInfoBox contents={data.item.contents} />
+              <ShopItemInfoBox contents={data?.item.contents} />
             </li>
             <li className={Styles.cont_list}>
               <ShopReturnExchageGuideBox />
@@ -150,8 +149,9 @@ export default function SingleItemPage({ data }) {
 
 const validation_itemPrice = (data) => {
   let itemPrice;
+  if(!data) return null
   const item = data?.item;
-  itemPrice = item.salePrice || item.originPrice;
+  itemPrice = item?.salePrice || item?.originPrice;
   const result = calculateSalePrice(item.originalPrice, item.discountType, item.discountDegree);
   const salePricebyAdminPageCalcuator = transformClearLocalCurrency(result.salePrice);
   if (itemPrice !== salePricebyAdminPageCalcuator) {
@@ -172,7 +172,7 @@ export async function getServerSideProps(ctx) {
   const getApiUrl = `/api/items/${itemId}`;
 
   const res = await getDataSSR(req, getApiUrl);
-  console.log(res);
+  console.log('SERVER REPONSE: ',res);
   const data = res?.data;
   if (data) {
     DATA = {

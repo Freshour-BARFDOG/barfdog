@@ -42,6 +42,7 @@ export const ShopReviewBox = ({ data }) => {
             className={s.write_button}
             href={`/bf-admin/review/create?itemId=${data.itemId}`}
             target={'_blank'}
+            rel={noreferrer}
           >
             후기 작성하기
           </a>
