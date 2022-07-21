@@ -222,7 +222,7 @@ export const valid_accessToken = async (type = 'admin') => {
         error = '잘못된 요청을 보냈습니다.';
         break;
       case 401:
-        if (response.data.reason === 'EXPIRED_TOKEN') {
+        if (response.data.reason === 'EXPIRED_TOKEN') { // 토큰 생사여부 체크 (SERVER 첫 번째 검증단계)
           error = 'EXPIRED_TOKEN';
         } else if (response.data.reason === 'UNAUTHORIZED') {
           error = 'UNAUTHORIZED';
@@ -230,7 +230,7 @@ export const valid_accessToken = async (type = 'admin') => {
         error = `${type} 인증 토큰이 만료되었습니다`;
         break;
       case 403:
-        error = '해당 토큰으로는 접근할 수 없습니다.';
+        error = '해당 토큰으로는 접근할 수 없습니다.'; // 권한 체크 ( SERVER 토큰 이후 검증 단계)
         break;
       case 404:
         error = '요청한 리소스가 서버에 없습니다.';
