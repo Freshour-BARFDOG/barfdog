@@ -131,7 +131,7 @@ export default function AuthInterceptor({ children }) {
         // STEP 1 : VALIDATION COOKIE
         const adminTokenRes = await valid_authByTokenStatus('admin'); // 토큰의 유효성 검증함
         const isAdmin = adminTokenRes.valid;
-        const userTokenRes = await valid_authByTokenStatus('user'); // 토큰
+        const userTokenRes = !isAdmin && await valid_authByTokenStatus('user'); // 토큰
         const isAuthUser = userTokenRes.valid;
         const adminCookie = getCookie('adminRefreshToken');
         const userCookie = getCookie('userRefreshToken');
@@ -208,7 +208,7 @@ export const valid_accessToken = async (type = 'admin') => {
     const checkTokenAPiUrl = type === 'admin' ? '/api/admin/setting' : '/api/members';
     const response = await getData(checkTokenAPiUrl, type);
     status = response.status;
-    console.log(type, checkTokenAPiUrl, response)
+    // console.log(type, checkTokenAPiUrl, response)
     // const response = await testTokenStateWithOldToken(checkTokenAPiUrl);
     switch (status) {
       case 200:

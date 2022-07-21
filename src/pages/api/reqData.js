@@ -43,7 +43,7 @@ export const testTokenStateWithOldToken = async (url)=>{
 
 
 export const getData = async (url, type) => {
-  console.log(url, type)
+  // console.log(url, type)
   const response = await axios
     .get(url, type === 'admin' ? axiosConfig() : axiosUserConfig())
     // .get(url,axiosConfig())
