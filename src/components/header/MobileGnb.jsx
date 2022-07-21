@@ -5,8 +5,7 @@ import { useModalContext } from '/store/modal-context';
 import useDeviceState from '/util/hook/useDeviceState';
 import { IoIosArrowDown } from 'react-icons/io';
 import { useRouter } from 'next/router';
-import {global_itemType} from "/store/TYPE/itemType";
-
+import { global_itemType } from '/store/TYPE/itemType';
 
 const menuNameObj = {
   shop: 'shop',
@@ -20,8 +19,6 @@ export default function MobileGnb() {
   const [isWideMode, setIsWideMode] = useState(false);
   const deviceWidth = deviceState.deviceWidth;
 
-  
-
   const router = useRouter();
   const curPath = router.asPath;
   const curMenuRef = useRef();
@@ -30,8 +27,6 @@ export default function MobileGnb() {
     if (!curMenuRef.current) return;
     currentPageIndicator(curMenuRef.current, curPath, setActiveMenuId);
   }, [curPath]);
-
-
 
   const onActiveSubmenuHandler = (menuId) => {
     if (menuId) {
@@ -50,13 +45,20 @@ export default function MobileGnb() {
 
   return (
     <>
-      <nav className={`${s.mobileNav} mobile`}  ref={curMenuRef}>
+      <nav className={`${s.mobileNav} mobile`} ref={curMenuRef}>
         <section
-          className={`${s['mobile-menu-wrap']} ${deviceWidth < 300 ? s['scroll-container'] : ''}`}
+          className={`${s['mobile-menu-wrap']} mobile-menu-wrap ${
+            deviceWidth < 300 ? s['scroll-container'] : ''
+          }`}
         >
           <ul className={`${s['mobile-menu']} `}>
             <MobileMenu title={'정기구독'} fakeLink="/survey" onClick={onShowModal} />
-            <MobileMenu title={'샵'} fakeLink="/shop" id={menuNameObj.shop} onClick={onActiveSubmenuHandler} />
+            <MobileMenu
+              title={'샵'}
+              fakeLink="/shop"
+              id={menuNameObj.shop}
+              onClick={onActiveSubmenuHandler}
+            />
             <MobileMenu title={'레시피'} link={'/recipes'} />
             <MobileMenu
               title={'커뮤니티'}
@@ -68,14 +70,16 @@ export default function MobileGnb() {
           </ul>
         </section>
         <section
-          className={`${s['mobile-submenu-wrap']} ${activeMenuId ? s.active : ''} ${
-            isWideMode ? s.widemode : ''
-          } ${deviceWidth < 300 ? s['scroll-container'] : ''}`}
+          className={`${s['mobile-submenu-wrap']} mobile-submenu-wrap ${
+            activeMenuId ? s.active : ''
+          } ${isWideMode ? s.widemode : ''} ${deviceWidth < 300 ? s['scroll-container'] : ''}`}
         >
           <ul
-            className={`${s['mobile-submenu']} ${activeMenuId === menuNameObj.shop ? s.active : ''}`}
+            className={`${s['mobile-submenu']}  ${
+              activeMenuId === menuNameObj.shop ? s.active : ''
+            }`}
           >
-            <MobileMenu title="ALL" link={`/shop?itemType=${global_itemType.ALL}`}  />
+            <MobileMenu title="ALL" link={`/shop?itemType=${global_itemType.ALL}`} />
             <MobileMenu title="생식" link={`/shop?itemType=${global_itemType.RAW}`} />
             <MobileMenu title="토핑" link={`/shop?itemType=${global_itemType.TOPPING}`} />
             <MobileMenu title="굿즈" link={`/shop?itemType=${global_itemType.GOODS}`} />
@@ -99,55 +103,89 @@ export default function MobileGnb() {
   );
 }
 
-
-
-
 const currentPageIndicator = (ref, curPath, setActivemenu) => {
   if (!ref) return;
   const nav = ref;
   const curPathArray = curPath.split('/');
-  const curPageDepth1 = curPathArray[1];
+  const curPageDepth1 = curPath.indexOf('?') >= 0 ? curPath?.split('?')[0] : curPathArray[1];
   const curPageDepth2 = curPathArray[2];
 
+  const mainMenus = Array.from(
+    nav.querySelectorAll(`.mobile-menu-wrap a, .mobile-menu-wrap button`),
+  );
+  
+  mainMenus.forEach((mainmenu) => {
+    const thisMenuId = mainmenu.id;
+    const menuPath = mainmenu.pathname || mainmenu.dataset.link;
+    if (!menuPath || !curPageDepth1) return;
+    if (menuPath.indexOf(curPageDepth1) >= 0) {
+      mainmenu.dataset.currentPage = 'depth1';
+      if (thisMenuId) setActivemenu(thisMenuId); // - submenu active -> 태그 id가 필요함.
+    }
+    // console.log('curPageDepth1',curPageDepth1, 'menuPath',menuPath);
+  });
 
-  const menuList = Array.from(nav.querySelectorAll('a, button'));
-  menuList.forEach((thisMenu)=>{
-    const menuPath = thisMenu.pathname || thisMenu.dataset.link;
-    if (!menuPath) return;
-    const menuQuery = thisMenu.search?.replace(/\?/g, "");
-    const thisMenuId = thisMenu.id;
-  
-    menuPath.split('/').forEach((thisMenuPath, index)=>{
-      const depth1 = index === 1;
-      const depth2 = index === 2;
-  
-  
-      // console.log(thisMenuPath, curPageDepth2)
-      // DEPTH 1
-      if(depth1 && curPageDepth1.indexOf(thisMenuPath) >= 0){
-        thisMenu.dataset.currentPage = 'depth1';
-        if(thisMenuId) setActivemenu(thisMenuId) // - submenu active -> 태그 id가 필요함.
-
-        // DEPTH 2: with query
-        const hasMenuQuery = curPageDepth1.indexOf('?') >= 0;
-        if(hasMenuQuery && menuQuery){
-          thisMenu.dataset.currentPage = curPageDepth1.indexOf(menuQuery)>= 0 && 'depth2';
-        }
+  const subMenus = Array.from(
+    nav.querySelectorAll(`.mobile-submenu-wrap a, .mobile-submenu-wrap button`),
+  );
+  subMenus.forEach((submenu) => {
+    const menuPath = submenu.pathname || submenu.dataset.link;
+    if (!menuPath && curPathArray) return;
+    console.log(menuPath)
+    console.log(curPageDepth2)
+    submenu.dataset.currentPage = menuPath.indexOf(curPageDepth2) >= 0 && 'depth2'
+    
+    if (curPath.indexOf('/shop') >= 0) {
+      const keyword = 'itemType=';
+      let submenuSearch = submenu.search.split(keyword)[1];
+      let curUrlSearch = window.location.search.split(keyword)[1];
+      if (curUrlSearch?.indexOf('&') >= 0) {
+        submenuSearch = curUrlSearch.split('&')[0];
+        curUrlSearch = curUrlSearch.split('&')[0];
       }
-  
-      // DEPTH 2
-      if(depth2){
-        thisMenu.dataset.currentPage = curPageDepth2?.indexOf(thisMenuPath) >= 0 && 'depth2';
-      }
+      submenu.dataset.currentPage = curUrlSearch.indexOf(submenuSearch) >= 0 && 'depth2';
+    }
+    
+    
+  });
 
-    })
-  })
-
+  //
+  // const mainMenus = Array.from(nav.querySelectorAll(`${s['mobile-menu-wrap']} a, button`));
+  // mainMenus.forEach((thisMenu)=>{
+  //   const menuPath = thisMenu.pathname || thisMenu.dataset.link;
+  //   if (!menuPath) return;
+  //   const menuQuery = thisMenu.search?.replace(/\?/g, "");
+  //   const thisMenuId = thisMenu.id;
+  //
+  //   menuPath.split('/').forEach((thisMenuPath, index)=>{
+  //     const depth1 = index === 1;
+  //     const depth2 = index === 2;
+  //
+  //     // ! 위치가 서브메뉴가 아니라, 본메뉴에 존재할것!!
+  //     // console.log(thisMenuPath, curPageDepth2)
+  //     console.log('menuPath', menuPath,thisMenuPath, depth1, depth2)
+  //     // DEPTH 1
+  //     if(depth1 && curPageDepth1.indexOf(thisMenuPath) >= 0){
+  //       thisMenu.dataset.currentPage = 'depth1';
+  //       if(thisMenuId) setActivemenu(thisMenuId) // - submenu active -> 태그 id가 필요함.
+  //
+  //       // DEPTH 2: with query
+  //       const hasMenuQuery = curPageDepth1.indexOf('?') >= 0;
+  //       if(hasMenuQuery && menuQuery){
+  //         thisMenu.dataset.currentPage = curPageDepth1.indexOf(menuQuery)>= 0 && 'depth2';
+  //       }
+  //     }
+  //
+  //     // DEPTH 2
+  //     if(depth2){
+  //       thisMenu.dataset.currentPage = curPageDepth2?.indexOf(thisMenuPath) >= 0 && 'depth2';
+  //     }
+  //
+  //   })
+  // })
 };
 
-
 const MobileMenu = ({ onClick, link, fakeLink, id, title }) => {
-
   const onClickHandler = () => {
     if (onClick && typeof onClick === 'function') {
       onClick(id);
@@ -157,10 +195,10 @@ const MobileMenu = ({ onClick, link, fakeLink, id, title }) => {
     <li onClick={onClick && onClickHandler}>
       {link ? (
         <Link href={link} passHref>
-          <a id={id} >{title}</a>
+          <a id={id}>{title}</a>
         </Link>
       ) : (
-        <button id={id}  data-link={fakeLink} type={'button'}>
+        <button id={id} data-link={fakeLink} type={'button'}>
           {title}
         </button>
       )}
