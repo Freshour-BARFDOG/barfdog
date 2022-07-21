@@ -12,6 +12,7 @@ $browser-context: 16;
 
 .swiperSurvey{
   padding: rem(55) 0 0 !important;
+  overflow:initial;
   > div{
     // => '있어요'항목 클릭 시, 새로운 elem들이 나타남으로서, slide의 height값이 변화될 때의 Animation효과를 부드럽게 주기위함
     // (ex. 반려견 못먹는 음식 '있어요' / 기타 특이사항: '있어요')

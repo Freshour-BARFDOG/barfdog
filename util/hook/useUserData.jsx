@@ -18,11 +18,11 @@ export default function useUserData() {
         email: 'admin@gmail.com',
         grade: 'ADMIN',
       };
-      setUserData(adminDATA)
+      return setUserData(adminDATA)
     }
     
     // MEMBER
-    if(!auth.isAuth || userData)return;
+    if(!auth.isAdmin &&!auth.isAuth || userData)return;
     (async () => {
       let memberDATA = null
       const res = await axios

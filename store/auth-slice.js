@@ -55,6 +55,8 @@ const authSlice = createSlice({
       state.isAuth = false;
       state.refreshToken = null;
       alert('로그아웃');
+      setCookie('userLoginCookie',  null,  'date', 0, {path:'/'} );
+      setCookie('userRefreshToken',  null,  'date', 0, {path:'/'} );
       Router.push('/');
       // localStorage.removeItem('user');
     },
@@ -102,6 +104,8 @@ const authSlice = createSlice({
       state.isAdmin = false;
       state.isAuth = false;
       state.refreshToken = null;
+      setCookie('userLoginCookie',  null,  'date', 0, {path:'/'} );
+      setCookie('userRefreshToken',  null,  'date', 0, {path:'/'} );
       setCookie('adminLoginCookie',  null,  'date', 0, {path:'/'} );
       setCookie('adminRefreshToken',  null,  'date', 0, {path:'/'} );
       alert('관리자 계정 로그아웃 처리되었습니다.');
