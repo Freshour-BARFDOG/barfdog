@@ -39,7 +39,7 @@ export const ShopBoard = ({
         <div className={Style.top_box}>
           <div className={Style.left_box}>
             <Swiper {...surveySwiperSettings}>
-              {sorting(data?.itemImages, 'leakedOrder', 'ascend').map((image, index) => (
+              {sorting(data?.itemImages, 'leakedOrder', 'ascend')?.map((image, index) => (
                 <SwiperSlide key={`item-image-${image.id}-${index}`}>
                   <div className={`${Style.image}`}>
                     <Image
@@ -56,18 +56,18 @@ export const ShopBoard = ({
           </div>
 
           <div className={`${Style.right_box}`}>
-            <div className={Style.content_title}>{data.item.name}</div>
+            <div className={Style.content_title}>{data?.item?.name}</div>
 
             <div className={Style.price_box}>
               <span className={Style.price}>{transformLocalCurrency(formValues.itemPrice)}</span>
               <span className={Style.won}>원</span>
-              {item.salePrice !== 0 && item.salePrice !== item.originalPrice && (
+              {item?.salePrice !== 0 && item?.salePrice !== item?.originalPrice && (
                 <>
                   <span className={Style.originPrice}>
                     {transformLocalCurrency(item?.originalPrice || 0)}원
                   </span>
                   <span className={Style.discount}>
-                    {Math.ceil(((1 - item.salePrice / item.originalPrice) * 100).toFixed(2))}%
+                    {Math.ceil(((1 - item?.salePrice / item?.originalPrice) * 100).toFixed(2))}%
                   </span>
                 </>
               )}
@@ -76,7 +76,7 @@ export const ShopBoard = ({
             <div className={Style.mid_box}>
               <div>Tip</div>
 
-              <div>{item.description}</div>
+              <div>{item?.description}</div>
 
               <div>배송정보</div>
 

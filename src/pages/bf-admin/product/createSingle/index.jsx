@@ -91,11 +91,11 @@ function CreateSingleItemPage() {
 
   useEffect(() => {
     // - 할인적용된 가격이 존재할 경우, 할인설정 option변경
-    if (formValues.salePrice) {
-      const active = !!formValues.salePrice;
+    if (formValues?.salePrice) {
+      const active = !!formValues?.salePrice;
       setActiveDiscountOption(active);
     }
-  }, [formValues.salePrice]);
+  }, [formValues?.salePrice]);
 
   useEffect(() => {
     // - INIT QUILL EDITOR
