@@ -140,49 +140,13 @@ const currentPageIndicator = (ref, curPath, setActivemenu) => {
       let submenuSearch = submenu.search.split(keyword)[1];
       let curUrlSearch = window.location.search.split(keyword)[1];
       if (curUrlSearch?.indexOf('&') >= 0) {
-        submenuSearch = curUrlSearch.split('&')[0];
-        curUrlSearch = curUrlSearch.split('&')[0];
+        submenuSearch = curUrlSearch?.split('&')[0];
+        curUrlSearch = curUrlSearch?.split('&')[0];
       }
-      submenu.dataset.currentPage = curUrlSearch.indexOf(submenuSearch) >= 0 && 'depth2';
+      submenu.dataset.currentPage = curUrlSearch?.indexOf(submenuSearch) >= 0 && 'depth2';
     }
-    
-    
   });
 
-  //
-  // const mainMenus = Array.from(nav.querySelectorAll(`${s['mobile-menu-wrap']} a, button`));
-  // mainMenus.forEach((thisMenu)=>{
-  //   const menuPath = thisMenu.pathname || thisMenu.dataset.link;
-  //   if (!menuPath) return;
-  //   const menuQuery = thisMenu.search?.replace(/\?/g, "");
-  //   const thisMenuId = thisMenu.id;
-  //
-  //   menuPath.split('/').forEach((thisMenuPath, index)=>{
-  //     const depth1 = index === 1;
-  //     const depth2 = index === 2;
-  //
-  //     // ! 위치가 서브메뉴가 아니라, 본메뉴에 존재할것!!
-  //     // console.log(thisMenuPath, curPageDepth2)
-  //     console.log('menuPath', menuPath,thisMenuPath, depth1, depth2)
-  //     // DEPTH 1
-  //     if(depth1 && curPageDepth1.indexOf(thisMenuPath) >= 0){
-  //       thisMenu.dataset.currentPage = 'depth1';
-  //       if(thisMenuId) setActivemenu(thisMenuId) // - submenu active -> 태그 id가 필요함.
-  //
-  //       // DEPTH 2: with query
-  //       const hasMenuQuery = curPageDepth1.indexOf('?') >= 0;
-  //       if(hasMenuQuery && menuQuery){
-  //         thisMenu.dataset.currentPage = curPageDepth1.indexOf(menuQuery)>= 0 && 'depth2';
-  //       }
-  //     }
-  //
-  //     // DEPTH 2
-  //     if(depth2){
-  //       thisMenu.dataset.currentPage = curPageDepth2?.indexOf(thisMenuPath) >= 0 && 'depth2';
-  //     }
-  //
-  //   })
-  // })
 };
 
 const MobileMenu = ({ onClick, link, fakeLink, id, title }) => {
