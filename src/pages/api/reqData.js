@@ -12,7 +12,7 @@
 
 
 import axios from "axios";
-import axiosConfig from './axios.config';
+import axiosConfig, {axiosUserConfig} from './axios.config';
 
 
 /* - async / await 사용법
@@ -42,12 +42,13 @@ export const testTokenStateWithOldToken = async (url)=>{
 }
 
 
-export const getData = async (url, callback) => {
+export const getData = async (url, type) => {
+  console.log(url, type)
   const response = await axios
-    .get(url, axiosConfig())
+    .get(url, type === 'admin' ? axiosConfig() : axiosUserConfig())
+    // .get(url,axiosConfig())
     .then((res) => {
       // console.log(res);
-      if(callback && typeof callback === 'function') callback(res);
       return res;
     })
     .catch((err) => {
@@ -84,10 +85,10 @@ export const getData = async (url, callback) => {
           error = '잘못된 요청을 보냈습니다.';
           break;
         case 401:
-          error = '인증 토큰이 만료되었습니다';
+          error = type + '인증 토큰이 만료되었습니다';
           break;
         case 403:
-          error = '해당 토큰으로는 접근할 수 없는 페이지입니다..';
+          error = type + ' 토큰으로는 접근할 수 없는 페이지입니다.';
           break;
         case 404:
           error = '요청한 리소스가 서버에 없습니다.';
@@ -253,6 +254,45 @@ export const postFileUpload = async (url, formData) => {
     return response;
 }
 
+
+
+
+
+
+
+export const postUserObjData = async (url, data, contType) => {
+  const result = {
+    isDone: false,
+    error: '',
+    data: null,
+    status: null,
+  }
+  
+  const response = await axios
+    .post(url, data, axiosUserConfig(contType))
+    .then((res) => {
+      console.log(res);
+      result.data = res;
+      result.status = res.status;
+      return res.status === 200 || res.status === 201;
+    })
+    .catch((err) => {
+      const error = err.response;
+      console.log('ERROR내용: ',err.response);
+      if (error.data.error || error.data.errors[0].defaultMessage) {
+        result.error = error.data.error || error.data.errors[0].defaultMessage;
+      } else if(error?.data.error.error){
+        result.error = '서버와 통신오류가 발생했습니다.'
+      } else if (error.data.reason === 'EXPIRED_TOKEN') {
+        result.error = '유저 토큰이 만료되었습니다.'
+      }
+      result.status = err.response.status;
+      return !error?.status >= 400;
+    });
+  
+  result.isDone = response;
+  return result;
+}
 
 
 
