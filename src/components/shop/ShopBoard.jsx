@@ -10,8 +10,7 @@ import 'swiper/css/autoplay';
 import sorting from '/util/func/sorting';
 import Link from 'next/link';
 import CloseButton from '../atoms/CloseButton';
-
-
+import Spinner from '../atoms/Spinner';
 
 export const ShopBoard = ({
   data,
@@ -20,6 +19,8 @@ export const ShopBoard = ({
   onAddToCart,
   onActiveModal,
   activeModal,
+  isLoading,
+  onStartBuying,
 }) => {
   const item = data?.item;
   const surveySwiperSettings = {
@@ -41,19 +42,20 @@ export const ShopBoard = ({
         <div className={Style.top_box}>
           <div className={Style.left_box}>
             <Swiper {...surveySwiperSettings}>
-              {data && sorting(data?.itemImages, 'leakedOrder', 'ascend')?.map((image, index) => (
-                <SwiperSlide key={`item-image-${image.id}-${index}`}>
-                  <div className={`${Style.image}`}>
-                    <Image
-                      priority
-                      src={image.url}
-                      objectFit="cover"
-                      layout="fill"
-                      alt={image.filename}
-                    />
-                  </div>
-                </SwiperSlide>
-              ))}
+              {data &&
+                sorting(data?.itemImages, 'leakedOrder', 'ascend')?.map((image, index) => (
+                  <SwiperSlide key={`item-image-${image.id}-${index}`}>
+                    <div className={`${Style.image}`}>
+                      <Image
+                        priority
+                        src={image.url}
+                        objectFit="cover"
+                        layout="fill"
+                        alt={image.filename}
+                      />
+                    </div>
+                  </SwiperSlide>
+                ))}
             </Swiper>
           </div>
 
@@ -114,10 +116,11 @@ export const ShopBoard = ({
             {/* 장바구니 버튼 */}
             <section className={s['shop-btn-section']}>
               <div className={s['grid-box']}>
-                <button className={`${s.cart} ${s.btn}`} onClick={onAddToCart}>
-                  장바구니
+                <button type={'button'} className={`${s.cart} ${s.btn}`} onClick={onAddToCart}>
+                  {isLoading.cart ? <Spinner /> : '장바구니'}
                 </button>
-                <button className={`${s.buy} ${s.btn}`}>구매하기</button>
+                <button onClick={onStartBuying} type={'button'} className={`${s.buy} ${s.btn}`}>
+                  {isLoading.buy ? <Spinner style={{color:'#fff'}} /> : '구매하기'}</button>
               </div>
               {activeModal && (
                 <div className={`${s['cart-shortcut']} animation-show`}>

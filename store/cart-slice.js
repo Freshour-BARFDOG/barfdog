@@ -2,24 +2,19 @@ import { createSlice } from '@reduxjs/toolkit';
 
 
 const initialState = {
-  token: null,
-  isAuth: false,
-  isAdmin: false,
+  item: {},
+  cartList: []
 };
 
 const cartSlice = createSlice({
-  name: "auth",
+  name: "cart",
   initialState: initialState,
   reducers: {
-    addToken (state, action){
-      // ! 추후 추가할 것 --> 로그인에 성공한 경우, isAuth: true로 변경한다
-      // if (state.isAuth){
-        //   state.token = action.payload.token;
-        // }else{
-          //   // 토큰이 만료되었다 -> 다시 로그인 필요
-          //   // 토큰 갱신 ?
-          // }
-      state.token = action.payload.token;
+    instantPayment(state, action) {
+      const data = action.payload.data;
+      const itemId = data.itemId.toString();
+      state.item[itemId] = data;
+      
     }
   }
 });

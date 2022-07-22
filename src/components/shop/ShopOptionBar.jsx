@@ -8,8 +8,9 @@ import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import rem from '/util/func/rem';
 import sorting from '/util/func/sorting';
 import Link from 'next/link';
+import Spinner from "../atoms/Spinner";
 
-export const ShopOptionBar = ({ data, formValues, setFormValues, onAddToCart, onActiveModal }) => {
+export const ShopOptionBar = ({ data, formValues, setFormValues, onAddToCart, onStartBuying, isLoading, onActiveModal }) => {
   // SELECT OPTION
   const defaultOption = { label: '상품선택', value: '' };
   const selectOptions = data?.opt?.map((option) => ({
@@ -171,10 +172,11 @@ export const ShopOptionBar = ({ data, formValues, setFormValues, onAddToCart, on
           </div>
           <section className={`${s['shop-btn-section']} ${s['on-optionBar']}`}>
             <div className={s['grid-box']}>
-              <button className={`${s.cart} ${s.btn}`} onClick={onAddToCart}>
-                장바구니
+              <button type={'button'} className={`${s.cart} ${s.btn}`} onClick={onAddToCart}>
+                {isLoading.cart ? <Spinner /> : '장바구니'}
               </button>
-              <button className={`${s.buy} ${s.btn}`}>구매하기</button>
+              <button onClick={onStartBuying} type={'button'} className={`${s.buy} ${s.btn}`}>
+                {isLoading.buy ? <Spinner style={{color:'#fff'}} /> : '구매하기'}</button>
             </div>
           </section>
         </div>

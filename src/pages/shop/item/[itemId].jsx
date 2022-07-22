@@ -9,11 +9,12 @@ import { ShopItemInfoBox } from '/src/components/shop/ShopItemInfoBox';
 import { ShopTabMenus } from '/src/components/shop/ShopTabMenus';
 import { ShopReviewBox } from '/src/components/shop/ShopReviewBox';
 import { ShopOptionBar } from '/src/components/shop/ShopOptionBar';
-import { getDataSSR, postData, postUserObjData, putData, putObjData } from '/src/pages/api/reqData';
+import {getDataSSR, postData, postSelfApiData, postUserObjData, putData, putObjData} from '/src/pages/api/reqData';
 import { useRouter } from 'next/router';
 import calculateSalePrice from '/util/func/calculateSalePrice';
 import transformClearLocalCurrency from '/util/func/transformClearLocalCurrency';
-
+import {useDispatch} from "react-redux";
+import {cartAction} from "/store/cart-slice";
 //
 // ! 일반 주문 주문하기
 // const initialValue_BUY = { // 일반 주문 시 , 데이터는 queryDAta에 시
@@ -28,7 +29,8 @@ import transformClearLocalCurrency from '/util/func/transformClearLocalCurrency'
 // };
 
 export default function SingleItemPage({ data }) {
-  console.log(data)
+  // console.log(data)
+  const dispatch = useDispatch();
   const router = useRouter();
   const minItemQuantity = 1;
   const maxItemQuantity = 5;
@@ -67,13 +69,28 @@ export default function SingleItemPage({ data }) {
       }
     });
   }, [activeTabmenuIndex]);
-  //
-  // if (!data) {
-  //   alert('데이터를 불러올 수 없습니다.');
-  //   router.back();
-  //   return;
-  // }
 
+
+  
+  
+
+  const onActiveCartShortcutModal = (active) => {
+    setActiveCartShortcutModal(true);
+    setTimeout(()=>{
+      setActiveCartShortcutModal(false);
+    }, 4000)
+  };
+  
+  
+
+  if (!data) {
+    alert('데이터를 불러올 수 없습니다.');
+    router.back();
+    return;
+  }
+  
+  
+  
   const onAddToCart = async () => {
     const postDataApiUrl = '/api/baskets';
     try {
@@ -82,12 +99,13 @@ export default function SingleItemPage({ data }) {
         itemId: formValues.itemId,
         optionDtoList: formValues.optionDtoList,
       };
-      // setIsLoading((prevState) => ({
-      //   ...prevState,
-      //   submit: true,
-      // }));
+      setIsLoading((prevState) => ({
+        ...prevState,
+        cart: true,
+      }));
       const res = await postUserObjData(postDataApiUrl, objData);
-
+      
+      
       if (res.isDone) {
         onActiveCartShortcutModal();
       } else {
@@ -96,15 +114,42 @@ export default function SingleItemPage({ data }) {
     } catch (err) {
       console.log('API통신 오류 : ', err);
     }
+    setIsLoading((prevState) => ({
+      ...prevState,
+      cart: false,
+    }));
   };
-
-  const onActiveCartShortcutModal = (active) => {
-    setActiveCartShortcutModal(true);
-    setTimeout(()=>{
-      setActiveCartShortcutModal(false);
-    }, 4000)
+  
+  
+  
+  console.log(formValues);
+  
+  const onClickBuyButton = async () => {
+    const postDataPath = `/order/ordersheet/${formValues.itemId}`;
+    try {
+      const DATA = {
+        itemAmount: formValues.itemAmount,
+        itemId: formValues.itemId,
+        optionDtoList: formValues.optionDtoList,
+        itemPrice: formValues.itemPrice,
+        totalPrice: formValues.totalPrice
+      };
+      setIsLoading((prevState) => ({
+        ...prevState,
+        buy: true,
+      }));
+      await dispatch(cartAction.instantPayment({ data: DATA}));
+      await router.push(postDataPath);
+    } catch (err) {
+      console.log('API통신 오류 : ', err);
+    }
+    setIsLoading((prevState) => ({
+      ...prevState,
+      buy: false,
+    }));
   };
-
+  
+  
   return (
     <>
       <MetaTitle title="SHOP" />
@@ -115,6 +160,8 @@ export default function SingleItemPage({ data }) {
         setFormValues={setFormValues}
         onAddToCart={onAddToCart}
         onActiveModal={onActiveCartShortcutModal}
+        onStartBuying={onClickBuyButton}
+        isLoading={isLoading}
       />
       <Layout>
         <Wrapper>
@@ -131,6 +178,8 @@ export default function SingleItemPage({ data }) {
             onAddToCart={onAddToCart}
             activeModal={activeCartShortcutModal}
             onActiveModal={setActiveCartShortcutModal}
+            isLoading={isLoading}
+            onStartBuying={onClickBuyButton}
           />
           <ShopTabMenus activeIndex={activeTabmenuIndex} setActiveIndex={setActiveTabmenuIndex} />
           <ul id={Styles.content} ref={contentRef}>
@@ -173,13 +222,13 @@ const validation_itemPrice = (data) => {
 export async function getServerSideProps(ctx) {
   const { query, req } = ctx;
   const itemId = query.itemId;
-  console.log(itemId)
+  // console.log(itemId);
   let DATA = null;
   const getApiUrl = `/api/items/${itemId}`;
-  console.log(getApiUrl)
+  // console.log(getApiUrl)
 
   const res = await getDataSSR(req, getApiUrl);
-  console.log('SERVER REPONSE: ',res);
+  // console.log('SERVER REPONSE: ',res);
   const data = res?.data;
   if (data) {
     DATA = {
