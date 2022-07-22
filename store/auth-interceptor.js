@@ -6,171 +6,109 @@ import useUserData from '/util/hook/useUserData';
 import { getData, testTokenStateWithOldToken } from '/src/pages/api/reqData';
 import { getCookie } from '/util/func/cookie';
 import getAdminToken from '/src/pages/api/getAdminToken';
+import {cookieType} from "/store/TYPE/cookieType";
+import {userType} from "/store/TYPE/userAuthType";
 
 export default function AuthInterceptor({ children }) {
-  // const [isAuth, setIsAuth] = useState(false);
-  // const userData = useUserData();
-  // console.log(userData);
-  
-  
-  
+
   const router = useRouter();
-  const curPath = router.route;
   const dispatch = useDispatch();
 
 
-  //
-  // useEffect(() => {
-  //   // USER PATH
-  //   // STEP1
-  //   const USER_FOBBIDEN_PATH = [];
-  //   // const USER_FOBBIDEN_PATH = ['cart', 'order','mypage', 'survey'];
-  //   let nonMemberPath;
-  //   router.asPath.split('/').map((path) => {
-  //     if (USER_FOBBIDEN_PATH.indexOf(path) >= 0) {
-  //       return (nonMemberPath = true);
-  //     }
-  //   });
-  //   // STEP 2 // CHECK member & admin Logged in
-  //   if(window && typeof window !=='undefined'){
-  //     const isAutoLoginState = getCookie('adminAutoLogin');
-  //     const loginAdminAccount = isAutoLoginState && !!JSON.parse(isAutoLoginState)?.email;
-  //     const loginMemberAccount = !!userData;
-  //     setIsAuth(loginMemberAccount || loginAdminAccount);
-  //   }
-  //
-  //   // STEP 3 // BLOCKING auth PATH
-  //   if (nonMemberPath) {
-  //     dispatch(authAction.userRestoreAuthState());
-  //     if (!isAuth) {
-  //       // alert('로그인이 필요한 서비스입니다.');  // ! ---------- 실제 서비스에서는 작동시켜야하는 기능입니다.
-  //       // router.push('/account/login');
-  //       console.error('Redir: User FOBBIDEN PAGE');
-  //     }
-  //   }
-  // }, [userData, router,  isAuth]);
-  //
-  //
-
-  //
-  //
-  // useEffect(() => {
-  //   // ADMIN PATH
-  //   (async () => {
-  //     const ADMIN_BASE_PATH = '/bf-admin';
-  //     const ADMIN_PUBLIC_PATH = ['/index', '/login', '/dashboard'];
-  //     const isAdminPath = router.asPath.split('/')[1] === ADMIN_BASE_PATH.split('/')[1];
-  //
-  //     // 너의 권한이 무엇이냐 => 쿠키를 통해서 알아봐라
-  //
-  //     if(!isAdminPath) return;
-  //
-  //
-  //
-  //     let isPublicAdminPath = router.asPath === ADMIN_BASE_PATH;
-  //     ADMIN_PUBLIC_PATH.map((path) => {
-  //       if (curPath.indexOf(`${ADMIN_BASE_PATH}${path}`) >= 0)
-  //         return (isPublicAdminPath = true);
-  //     });
-  //     // admin은 모든 path에 대해서, 항상 토큰을 검증한다....... 그래서........... 공개된 adminPath를 제외하고
-  //     //
-  //     try {
-  //       if (!isPublicAdminPath) {
-  //         // const adminAuth = localStorage?.getItem('admin'); // PAST VERSION : localStorage
-  //         const res = await valid_adminAuthToken();
-  //         // console.log('Valid Token Response: \n',res);
-  //         const status = res.status;
-  //         const availableToken = status === 200;
-  //         const expiredToken = status === 401 // 추후 REFRESH TOKEN기능 개발 후 확인
-  //         const adminCookie = getCookie('adminRefreshToken');
-  //         const data = JSON.parse(adminCookie);
-  //         const autoLogin = data.autoLogin;
-  //         if(availableToken) {
-  //           dispatch(authAction.adminRestoreAuthState({ autoLogin}));
-  //
-  //         } else if (expiredToken){
-  //           // CASE 1. (basic) Cookie의 토큰 만료 => 다시 로그인
-  //           // CASE 2. (Advanced) Refresh Token기능을 server 쪽에서 개발돠고나서 가능할 것
-  //           // CASE 3. (FORBIDDEN) 용자의 ID, PW를 클라이언트에 저장해 => 자동으로 재발급받게 하는것은 제외
-  //           if(autoLogin){
-  //             const refreshToken = data.refreshToken; // ! 리프레쉬 토큰의 임시방편
-  //             const accessToken = await getAdminToken(refreshToken)
-  //             dispatch(authAction.adminUpdateAccessToken({token: accessToken, refreshToken}));
-  //           } else if (res.error) {
-  //             await router.push(`${ADMIN_BASE_PATH}/login?redir=${status}`);
-  //           }
-  //         }
-  //       }
-  //     } catch (err) {
-  //       console.error(err);
-  //     }
-  //   })();
-  // }, [userData, router,  isAuth]);
-
   useEffect(() => {
     (async () => {
-      // ADMIN
-      const ADMIN_BASE_PATH = '/bf-admin';
-      const ADMIN_PUBLIC_PATH = ['/index', '/login', '/dashboard'];
       
-      let isPublicAdminPath = router.asPath === ADMIN_BASE_PATH;
-      ADMIN_PUBLIC_PATH.map((path) => {
-        if (curPath.indexOf(`${ADMIN_BASE_PATH}${path}`) >= 0) return (isPublicAdminPath = true);
-      });
-      // MEMBER
-      const MEMBER_BASE_PATH = '/';
-      const NON_MEMBER_FOBBIDEN_PATH = ['cart', 'order', 'mypage', 'survey'];
-      let MEMBER_PATH;
-      router.asPath.split('/').map((path) => {
-        if (NON_MEMBER_FOBBIDEN_PATH.indexOf(path) >= 0) {
-          return (MEMBER_PATH = true);
+      // const res = await fetch('/api/authState');
+      // console.log(res);
+      //
+      // SET CONDITION
+      // STEP 1 : CHECK USER TYPE
+      const valid_adminState = await valid_authByTokenStatus(userType.ADMIN); // 토큰의 유효성 검증함
+      const valid_memberState = await valid_authByTokenStatus(userType.MEMBER); // 토큰
+ 
+      
+      const USER_TYPE_ADMIN = valid_adminState.status === 200 && valid_memberState.status === 200;
+      const USER_TYPE_MEMBER = valid_adminState.status !== 200 && valid_memberState.status === 200;
+      const USERTYPE = USER_TYPE_ADMIN ? userType.ADMIN : USER_TYPE_MEMBER ? userType.MEMBER : userType.NON_MEMBER;
+      //
+      // console.log('valid_adminState', valid_adminState)
+      // console.log('valid_memberState', valid_memberState)
+      // console.log('USERTYPE: ', USERTYPE)
+      // STEP. FE SERVER > VALIDATION > COOKIE
+      if(USERTYPE !== userType.NON_MEMBER){
+        const loginCookie = getCookie(cookieType.LOGIN_COOKIE);
+        loginCookie && dispatch(authAction.userRestoreAuthState());
+      }
+      
+
+      
+      
+  
+      // MEMBER PATH
+      const ADMIN_BASE_PATH_KEY = 'bf-admin';
+      let MEMBER_PATH = false;
+      const memberPathList = ['cart', 'order', 'mypage', 'survey'];
+      router.asPath.split('/').forEach((path, index) => {
+        if(memberPathList.indexOf(path) >= 0 && (index === 1 && path !== ADMIN_BASE_PATH_KEY)){
+          return MEMBER_PATH = true;
         }
       });
-
+      
+      // ADMIN PATH
+      let ADMIN_PATH = false;
+      const curPath = router.asPath;
+      const ADMIN_BASE_PATH = '/bf-admin';
+      const adminPublicPathList = ['/index', '/login'];
+      let ADMIN_PUBLIC_PATH = false;
+      adminPublicPathList.forEach((path) => {
+        const adminPath = curPath.replace(ADMIN_BASE_PATH, '')
+        if (adminPath.indexOf(`${path}`) >= 0){
+          ADMIN_PUBLIC_PATH = true;
+        }
+      });
+      if(router.asPath.indexOf('bf-admin')  >= 0 && !ADMIN_PUBLIC_PATH){
+        ADMIN_PATH = true;
+      }
+      // console.log('MEMBER_PATH', MEMBER_PATH)
+      // console.log('ADMIN_PATH', ADMIN_PATH)
+      if(!MEMBER_PATH && !ADMIN_PATH)return;
+      
       try {
-        // STEP 1 : VALIDATION COOKIE
-        const adminTokenRes = await valid_authByTokenStatus('admin'); // 토큰의 유효성 검증함
-        const isAdmin = adminTokenRes.valid;
-        const userTokenRes = !isAdmin && await valid_authByTokenStatus('user'); // 토큰
-        const isAuthUser = userTokenRes.valid;
-        const adminCookie = getCookie('adminRefreshToken');
-        const userCookie = getCookie('userRefreshToken');
+        
+        // LAYER : ADMIN LAYER (BASE) => MEMBER LAYER => SUBSCRIBER LAYER (TOP)
+        const REDIR_PATH = ADMIN_PATH ? '/bf-admin/login' : '/account/login'
 
-        // STEP 2 REISSUANCE WHEN TOKEN HAS EXPIRED
-        const cookieData = JSON.parse(adminCookie || userCookie);
-        // console.log('adminTokenRes : ', adminTokenRes);
-        // console.log('userTokenRes : ', userTokenRes);
+        if (MEMBER_PATH && USERTYPE === userType.NON_MEMBER){
+          alert('회원가입이 필요한 페이지입니다.');
+          return  await router.push(REDIR_PATH);
+        } else if (USERTYPE !== userType.ADMIN && ADMIN_PATH){
+          alert('일반 사용자에게 접근권한이 없는 페이지입니다.');
+          return await router.push(REDIR_PATH);
+        }
   
-        const autoLogin = cookieData.autoLogin;
-        if (autoLogin && (!adminTokenRes.valid || !userTokenRes.valid)) {
-          const refreshToken = cookieData.refreshToken;
-          const accessToken = await getAdminToken(refreshToken);
-          dispatch(authAction.adminUpdateAccessToken({ token: accessToken, refreshToken })); //refreshToken은 client Dev 상태에서 redux check 용도로 사용
-          // CASE 1. (basic) Cookie의 토큰 만료 => 다시 로그인
-          // CASE 2. (Advanced) Refresh Token기능을 server 쪽에서 개발돠고나서 가능할 것
-          // CASE 3. (FORBIDDEN) ID, PW 쿠키에 저장 후, refresh Token처럼 사용  => ! 현재 admin에서 임시로 사용
-         
+  
+        
+        const EXPIRED_TOKEN_ADMIN = valid_adminState.status === 401;
+        const EXPIRED_TOKEN_MEMBER = valid_memberState.status === 401;
+        if(EXPIRED_TOKEN_MEMBER){
+          alert('사용자 인증 시간이 만료되었습니다. 다시 로그인해주세요.');
+          return await router.push(REDIR_PATH);
+        }else if(EXPIRED_TOKEN_ADMIN){
+          alert('어드민 인증 시간이 만료되었습니다. 다시 로그인해주세요.');
+          return await router.push(REDIR_PATH);
+        }
+        
+        
+        
+        const autoLoginCookie = JSON.parse(getCookie(cookieType.AUTO_LOGIN_COOKIE));
+  
+        // 쿠키 데이터가 존재하면
+        if (autoLoginCookie && (!valid_adminState.valid || !valid_memberState.valid)) {
+          // const accessToken = await getAdminToken(refreshToken);
         }
 
         // STEP 3 : GET COOKIE && UPDATE USER STATE ( REDUX )
-        if (isAdmin) {
-          // console.log('어드민')
-          dispatch(authAction.adminRestoreAuthState({ autoLogin }));
-        } else if (isAuthUser) {
-          // console.log('유저')
-          dispatch(authAction.userRestoreAuthState({ autoLogin }));
-        }
 
-        // STEP 4 : REDIRECT (WHEN USER DO NOT HAVE PERMISSION)
-        const isAdminPath = router.asPath.split('/')[1] === ADMIN_BASE_PATH.split('/')[1];
-        if (!isAdmin && isAdminPath && !isPublicAdminPath) {
-          // admin Path
-          alert('관리자 외에 접근 권한이 없는 페이지입니다.');
-          await router.push(`${ADMIN_BASE_PATH}/login?redir=${adminTokenRes.status}`);
-        } else if (!isAdmin && !isAuthUser && MEMBER_PATH) {
-          alert('비회원은 접근 권한이 없는 페이지입니다.');
-          await router.push(`/account/login?redir=${userTokenRes.status}`);
-        }
       } catch (err) {
         console.error(err);
       }
@@ -180,10 +118,10 @@ export default function AuthInterceptor({ children }) {
   return <>{children}</>;
 }
 
-const valid_authByTokenStatus = async (userType = 'admin') => {
+const valid_authByTokenStatus = async (type = userType.ADMIN) => {
   let valid;
   let error;
-  const res = await valid_accessToken(userType);
+  const res = await valid_accessToken(type);
   const status = res.status;
   // console.log(res); //
   const availableToken = status === 200;
@@ -199,13 +137,13 @@ const valid_authByTokenStatus = async (userType = 'admin') => {
   return { valid, status, error };
 };
 
-export const valid_accessToken = async (type = 'admin') => {
+export const valid_accessToken = async (type = userType.ADMIN) => {
   // 임의의 admin api를 통하여, admin token의 유효성 체크
   
   let error = null;
   let status;
   try {
-    const checkTokenAPiUrl = type === 'admin' ? '/api/admin/setting' : '/api/members';
+    const checkTokenAPiUrl = type === userType.ADMIN ? '/api/admin/setting' : '/api/members';
     const response = await getData(checkTokenAPiUrl, type);
     status = response.status;
     // console.log(type, checkTokenAPiUrl, response)
@@ -227,7 +165,7 @@ export const valid_accessToken = async (type = 'admin') => {
         } else if (response.data.reason === 'UNAUTHORIZED') {
           error = 'UNAUTHORIZED';
         }
-        error = `${type} 인증 토큰이 만료되었습니다`;
+        error = `인증 토큰이 만료되었습니다`;
         break;
       case 403:
         error = '해당 토큰으로는 접근할 수 없습니다.'; // 권한 체크 ( SERVER 토큰 이후 검증 단계)

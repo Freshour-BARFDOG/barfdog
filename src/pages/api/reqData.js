@@ -57,21 +57,6 @@ export const getData = async (url, type) => {
       let errorMessage;
       const errorObj = err?.response;
       const status = errorObj?.status;
-      // if(status === 401){
-      //   const errorReason = err?.response.data.reason;
-      //   if(errorReason === "EXPIRED_TOKEN"){
-      //     console.error("ERROR REASON: ", errorReason);
-      //     errorMessage = status + errorReason+ '\n로그인 토큰이 만료되었습니다. 다시 로그인해주세요.';
-      //   } else if(errorReason === "UNAUTHORIZED") {
-      //     errorMessage = errorReason +  '\n권한이 없습니다.'
-      //   }
-      // }else if (status === 403) {
-      //   errorMessage = '\n접근 불가한 페이지입니다.';
-      // } else if(status === 500) {
-      //   errorMessage =  errorObj?.data?.error + '\n데이터가 존재하지 않거나, 서버 내부 에러입니다.';
-      // } else {
-      //   errorMessage =  'Failed Fetching Data: 데이터를 불러오는데 실패했습니다.';
-      // }
       let error = null;
       console.log(status)
       switch (status) {
@@ -86,10 +71,10 @@ export const getData = async (url, type) => {
           error = '잘못된 요청을 보냈습니다.';
           break;
         case 401:
-          error = type + '인증 토큰이 만료되었습니다';
+          error = '인증 토큰이 만료되었습니다';
           break;
         case 403:
-          error = type + ' 토큰으로는 접근할 수 없는 페이지입니다.';
+          error = '접근권한이 없는 페이지입니다.';
           break;
         case 404:
           error = '요청한 리소스가 서버에 없습니다.';
@@ -296,6 +281,43 @@ export const postUserObjData = async (url, data, contType) => {
 }
 
 
+
+
+
+export const postSelfApiData = async (selfPath, data, contType) => {
+  const result = {
+    isDone: false,
+    error: '',
+    data: null,
+    status: null,
+  }
+  const selfApiUrl = window.location.origin;
+  axios.defaults.baseURL = selfApiUrl;
+  const response = await axios
+    .post(`${selfApiUrl}${selfPath}`, data, axiosUserConfig(contType))
+    .then((res) => {
+      console.log('',res);
+      result.data = res;
+      result.status = res.status;
+      return res.status === 200 || res.status === 201;
+    })
+    .catch((err) => {
+      const error = err.response;
+      console.log('ERROR내용: ',err.response);
+      if (error.data.error || error.data.errors[0].defaultMessage) {
+        result.error = error.data.error || error.data.errors[0].defaultMessage;
+      } else if(error?.data.error.error){
+        result.error = '서버와 통신오류가 발생했습니다.'
+      } else if (error.data.reason === 'EXPIRED_TOKEN') {
+        result.error = '유저 토큰이 만료되었습니다.'
+      }
+      result.status = err.response.status;
+      return !error?.status >= 400;
+    });
+  
+  result.isDone = response;
+  return result;
+}
 
 
 

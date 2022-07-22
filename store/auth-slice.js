@@ -49,7 +49,7 @@ const authSlice = createSlice({
       state.isAuth = false;
       state.autoLogin = false;
       alert('로그아웃');
-      setCookie(cookieType.LOGIN_COOKIE,  null,  'hour', 0, {path:'/'} );
+      setCookie(cookieType.LOGIN_COOKIE,  null,  'date', 0, {path:'/'} );
       setCookie(cookieType.AUTO_LOGIN_COOKIE, null, 'date', 0)
       Router.push('/');
     },
