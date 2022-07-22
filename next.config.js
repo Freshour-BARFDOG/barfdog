@@ -53,10 +53,6 @@ module.exports = {
         {
           source: process.env.SOURCE_PATH,
           destination: process.env.NEXT_PUBLIC_API_URL_DEV,
-        },
-        {
-          source: '/api/gf/:path*',
-          destination: 'https://test.goodsflow.com/:path*',
         }
       ];
     } else {
