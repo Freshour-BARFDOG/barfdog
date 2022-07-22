@@ -85,35 +85,12 @@
   .unit{   font-size: rem(16);}
 }
 
-<<<<<<< HEAD
-.btn-section{
-=======
 
 
 .shop-btn-section{
   position: relative;
->>>>>>> f46eb1a26e6bb856b1634513c29f275f28e16f1b
   display: flex;
   justify-content: flex-end;
-<<<<<<< HEAD
-
-  button {
-    width: rem(240);
-    height: rem(54);
-    border: rem(1) solid var(--color-main);
-    border-radius: rem(4);
-  }
-
-  .cart {
-    color: var(--color-main);
-    margin-right: rem(10);
-  }
-
-  .buy {
-    color: #fff;
-    background-color: var(--color-main);
-  }
-=======
   align-content: center;
 
   &.on-optionBar{
@@ -185,7 +162,6 @@
 
 
 
->>>>>>> f46eb1a26e6bb856b1634513c29f275f28e16f1b
 }
 
 @media (max-width: rem(600)) {

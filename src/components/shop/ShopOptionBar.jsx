@@ -131,24 +131,6 @@ export const ShopOptionBar = ({ data, formValues, setFormValues, onAddToCart, on
             />
           </div>
           <ul>
-<<<<<<< HEAD
-            {optionInfo?.map((option, index) => (
-              <li key={`item-option-${option.id || index}`} className={s.item}>
-                <span className={s.title}>강아지 고양이 냄새제거 살균 소독 탈취제 바프레쉬 BARF, FRESH 500ml</span>
-                <div className={s['input-quantity']}>
-                  <ItemQuantityInput
-                    id={'01'}
-                    setFormValues={setFormValues}
-                    style={{ borderColor: '#ddd' }}
-                  />
-                </div>
-                <span className={s.price}>52,200원</span>
-                <span>
-                  <CloseButton onClick={''} lineColor={'#ababab'} style={{width:'18px', height:'18px'}}/>
-                </span>
-              </li>
-            ))}
-=======
             {optionDataList?.length > 0 &&
               optionDataList?.map(
                 (option, index) =>
@@ -179,7 +161,6 @@ export const ShopOptionBar = ({ data, formValues, setFormValues, onAddToCart, on
                     </li>
                   ),
               )}
->>>>>>> f46eb1a26e6bb856b1634513c29f275f28e16f1b
           </ul>
           <div className={s['price-indicator']}>
             <span className={s.title}>총 상품금액 :</span>

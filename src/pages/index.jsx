@@ -923,14 +923,14 @@ function Home() {
                     있습니다.완벽한 비율으로 구성해 반려견이 필요한 영양분을
                     골고루섭취할 수 있습니다. 완벽한 비율으로
                   </p>
-                  <button type="button" className={`${Styles.btn_main}`}>
+                  <button type="button" className={`${Styles.btn_worry}`}>
                     바프생식 둘러보기
                   </button>
                 </div>
               </div>
               <div className={`${Styles["cont-right"]} cont-right`}>
                 <div className={Styles.cont_section}>
-                  <ul className="clearfix">
+                  <ul className={Styles.clearfix}>
                     <li>
                       <div className={Styles.card}>
                         <div className={`${Styles["img-wrap"]} img-wrap`}>
@@ -988,6 +988,10 @@ function Home() {
                       </div>
                     </li>
                   </ul>
+
+                  <button type="button" className={`${Styles.btn_main}`}>
+                    바프생식 둘러보기
+                  </button>
                 </div>
               </div>
             </div>

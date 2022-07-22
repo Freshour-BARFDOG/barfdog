@@ -90,7 +90,6 @@ function Mypage() {
                     </button>
                   </div>
                   
-                  <hr />
                 </div>
 
                 <div className={Styles.grid_body_box}>
@@ -127,7 +126,6 @@ function Mypage() {
                     </button>
                   </div>
 
-                  <hr />
                 </div>
 
                 <div className={Styles.grid_body_box}>
@@ -169,7 +167,6 @@ function Mypage() {
             </section>
 
             <section className={Styles.second_body}>
-              <hr />
               <div className={Styles.text}>
                 정기구독 결제 카드가 여기에 표시됩니다.
               </div>

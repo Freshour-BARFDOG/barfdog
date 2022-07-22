@@ -54,8 +54,8 @@ $container-maxWidth: rem(960);
   .top {
     grid-area: top;
     padding: rem(42) rem(65) ;
-    box-shadow: 0px 0px 20px rgba(69, 69, 83, 0.08);
-    border-radius: 24px;
+    box-shadow: 0 0 rem(20) rgba(69, 69, 83, 0.08);
+    border-radius: rem(24);
 
     .flex_box {
       display: flex;
@@ -80,11 +80,8 @@ $container-maxWidth: rem(960);
           justify-content: center;
           align-items: baseline;
           width: 100%;
-<<<<<<< HEAD
-=======
           max-width: rem(150);
           height: rem(120);
->>>>>>> f46eb1a26e6bb856b1634513c29f275f28e16f1b
           column-gap: rem(16);
           .stick {
             width: rem(16);
@@ -159,8 +156,8 @@ $container-maxWidth: rem(960);
     width: 100%;
     max-width: rem(460);
 
-    box-shadow: 0px 0px 20px rgba(69, 69, 83, 0.08);
-    border-radius: 24px;
+    box-shadow: 0 0 rem(20) rgba(69, 69, 83, 0.08);
+    border-radius: rem(24);
 
     grid-area: left;
     display: flex;
@@ -189,7 +186,7 @@ $container-maxWidth: rem(960);
       margin: 0 rem(35);
       .left_box{
         background: #F9EDEC;
-        border-radius: 32px;
+        border-radius: rem(32);
         width: 43%;
         max-width: rem(160);
         text-align: center;
@@ -247,7 +244,7 @@ $container-maxWidth: rem(960);
       justify-content: center;
       column-gap: rem(10);
       width : 100%;
-      max-width: 380px;
+      max-width: rem(380);
       text-align: center;
       padding-top: rem(16);
       margin-bottom: rem(30);
@@ -298,7 +295,7 @@ $container-maxWidth: rem(960);
     box-sizing: border-box;
 
     box-shadow: 0 0 rem(20) rgba(69, 69, 83, 0.08);
-    border-radius: 24px;
+    border-radius: rem(24);
 
     .left_title {
       @include char(l20);
@@ -318,11 +315,11 @@ $container-maxWidth: rem(960);
       }
       .horizon_stick {
         background: #F9EDEC;
-        border-radius: 20px;
+        border-radius: rem(20);
       }
       .horizon_stick_red {
         background: #FF5959;
-        border-radius: 20px;
+        border-radius: rem(20);
       }
       .hero_name {
         font-weight: 600;
@@ -334,8 +331,8 @@ $container-maxWidth: rem(960);
 
   .analysis-result.b_right {
     grid-area: b_right;
-    box-shadow: 0px 0px 20px rgba(69, 69, 83, 0.08);
-    border-radius: 32px;
+    box-shadow: 0 0 rem(20) rgba(69, 69, 83, 0.08);
+    border-radius: rem(32);
     width: 100%;
     max-width: rem(460);
     .left_title {
