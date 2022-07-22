@@ -13,6 +13,7 @@
 
 import axios from "axios";
 import axiosConfig, {axiosUserConfig} from './axios.config';
+import {cookieType} from "@store/TYPE/cookieType";
 
 
 /* - async / await 사용법
@@ -43,7 +44,7 @@ export const testTokenStateWithOldToken = async (url)=>{
 
 
 export const getData = async (url, type) => {
-  console.log(url, type)
+  // console.log(url, type)
   const response = await axios
     .get(url, type === 'admin' ? axiosConfig() : axiosUserConfig())
     // .get(url,axiosConfig())
@@ -327,9 +328,11 @@ export async function getServerSideProps({req}) {
 
 
 export const getTokenFromCookie = (req)=>{
+  // - MEMBER & ADMIN 모두 동일한 API에서 동일한 TOKEN을 발급받는다
+  // - SERVER에서 TOKEN 속에 권한에 대한 값을 설정하여 검증한다.
   let token;
   const cookie = req.headers.cookie;
-  const tokenKey = 'userLoginCookie';
+  const tokenKey = cookieType.LOGIN_COOKIE;
   cookie.split(';').forEach((c) => {
     if (c.indexOf(tokenKey) >= 0) {
       token = c.split('=')[1];
@@ -341,25 +344,25 @@ export const getTokenFromCookie = (req)=>{
   
 }
 
-export const getAdminTokenFromCookie = (req)=>{
-  let token;
-  const cookie = req.headers.cookie;
-  const tokenKey = 'adminLoginCookie';
-  cookie.split(';').forEach((c) => {
-    if (c.indexOf(tokenKey) >= 0) {
-      token = c.split('=')[1];
-      return
-    }
-  });
-  return token;
-}
+// export const getAdminTokenFromCookie = (req)=>{
+//   let token;
+//   const cookie = req.headers.cookie;
+//   const tokenKey = 'adminLoginCookie';
+//   cookie.split(';').forEach((c) => {
+//     if (c.indexOf(tokenKey) >= 0) {
+//       token = c.split('=')[1];
+//       return
+//     }
+//   });
+//   return token;
+// }
 
 
 
 export const getAdminAutoLoginStatus = (req)=>{
   let autologinStatus;
   const cookie = req.headers.cookie;
-  const tokenKey = 'adminAutoLogin';
+  const tokenKey = cookieType.LOGIN_COOKIE;
   cookie.split(';').forEach((c) => {
     if (c.indexOf(tokenKey) >= 0) {
       autologinStatus = c.split('=')[1];

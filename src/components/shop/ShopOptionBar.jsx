@@ -12,17 +12,17 @@ import Link from 'next/link';
 export const ShopOptionBar = ({ data, formValues, setFormValues, onAddToCart, onActiveModal }) => {
   // SELECT OPTION
   const defaultOption = { label: '상품선택', value: '' };
-  const selectOptions = data.opt.map((option) => ({
+  const selectOptions = data?.opt?.map((option) => ({
     label:
       `${option.name} (재고: ` +
       `${option.remaining > 0 ? transformLocalCurrency(option.remaining) : '없음'})`,
     value: option.id,
     inStock: option.remaining > 0,
   }));
-  selectOptions.unshift(defaultOption);
+  selectOptions?.unshift(defaultOption);
 
   // SELECTED OPTION LIST INFO
-  const initialOptionDataList = data.opt.map((option) => ({
+  const initialOptionDataList = data.opt?.map((option) => ({
     id: option.id,
     name: option.name,
     optionPrice: option.optionPrice,

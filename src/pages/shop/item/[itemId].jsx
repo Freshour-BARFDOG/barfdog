@@ -28,17 +28,18 @@ import transformClearLocalCurrency from '/util/func/transformClearLocalCurrency'
 // };
 
 export default function SingleItemPage({ data }) {
-  // console.log(data)
+  console.log(data)
+  const router = useRouter();
   const minItemQuantity = 1;
   const maxItemQuantity = 5;
   const initialFormValues_CART = {
     // ! 기준: 장바구니 담기 request body
-    itemId: data.item.id,
+    itemId: data?.item.id,
     itemAmount: 1,
     optionDtoList: [
       // { optionId : null, optionAmount : null }
     ],
-    itemPrice: validation_itemPrice(data), // 장바구니항목에서 제외
+    itemPrice: validation_itemPrice(data.item), // 장바구니항목에서 제외
     totalPrice: 0, // 장바구니 항목 아님
   };
 
@@ -66,14 +67,12 @@ export default function SingleItemPage({ data }) {
       }
     });
   }, [activeTabmenuIndex]);
-
-  if (!data) {
-    alert('데이터를 불러올 수 없습니다.');
-    const router = useRouter();
-    router.back();
-
-    return;
-  }
+  //
+  // if (!data) {
+  //   alert('데이터를 불러올 수 없습니다.');
+  //   router.back();
+  //   return;
+  // }
 
   const onAddToCart = async () => {
     const postDataApiUrl = '/api/baskets';
@@ -101,6 +100,9 @@ export default function SingleItemPage({ data }) {
 
   const onActiveCartShortcutModal = (active) => {
     setActiveCartShortcutModal(true);
+    setTimeout(()=>{
+      setActiveCartShortcutModal(false);
+    }, 4000)
   };
 
   return (
@@ -118,9 +120,9 @@ export default function SingleItemPage({ data }) {
         <Wrapper>
           <ShopBoard
             data={{
-              item: data.item,
-              itemImages: data.itemImages,
-              delivery: data.delivery,
+              item: data?.item,
+              itemImages: data?.itemImages,
+              delivery: data?.delivery,
               minQuantity: minItemQuantity,
               maxQuantity: maxItemQuantity,
             }}
@@ -133,7 +135,7 @@ export default function SingleItemPage({ data }) {
           <ShopTabMenus activeIndex={activeTabmenuIndex} setActiveIndex={setActiveTabmenuIndex} />
           <ul id={Styles.content} ref={contentRef}>
             <li className={Styles.cont_list}>
-              <ShopItemInfoBox contents={data.item.contents} />
+              <ShopItemInfoBox contents={data?.item.contents} />
             </li>
             <li className={Styles.cont_list}>
               <ShopReturnExchageGuideBox />
@@ -149,30 +151,35 @@ export default function SingleItemPage({ data }) {
 }
 
 const validation_itemPrice = (data) => {
-  let itemPrice;
-  const item = data?.item;
-  itemPrice = item.salePrice || item.originPrice;
-  const result = calculateSalePrice(item.originalPrice, item.discountType, item.discountDegree);
+  
+  let itemPrice = data.salePrice || data?.originalPrice;
+  const result = calculateSalePrice(data.originalPrice, data.discountType, data.discountDegree);
   const salePricebyAdminPageCalcuator = transformClearLocalCurrency(result.salePrice);
   if (itemPrice !== salePricebyAdminPageCalcuator) {
-    return alert('세일가격에 이상이 있습니다. 관리자에게 문의하세요.');
+    alert('세일가격에 이상이 있습니다. 관리자에게 문의하세요.');
+    return null;
   }
-  if (item.originalPrice < item.salePrice) {
+  if (data.originalPrice < data.salePrice) {
     // validation Price
-    return alert('아이템 가격설정에 문제 발생하였습니다. 관리자에게 문의하세요.');
+    alert('아이템 가격설정에 문제 발생하였습니다. 관리자에게 문의하세요.');
+    return null
   }
 
   return itemPrice;
 };
 
+
+
 export async function getServerSideProps(ctx) {
   const { query, req } = ctx;
   const itemId = query.itemId;
+  console.log(itemId)
   let DATA = null;
   const getApiUrl = `/api/items/${itemId}`;
+  console.log(getApiUrl)
 
   const res = await getDataSSR(req, getApiUrl);
-  console.log(res);
+  console.log('SERVER REPONSE: ',res);
   const data = res?.data;
   if (data) {
     DATA = {

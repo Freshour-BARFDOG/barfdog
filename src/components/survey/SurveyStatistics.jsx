@@ -190,9 +190,9 @@ export const SurveyStatistics = ({ surveyReportsId , mode = 'default' }) => {
 
 
 
-  if (isLoading.fetching || isRendered) {
-    return <Loading />;
-  }
+  // if (isLoading.fetching || isRendered) {
+  //   return <Loading />;
+  // }
 
   return (
     <div id="statistics">

@@ -12,7 +12,7 @@ import { validate } from '/util/func/validation/validation_event';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
 import CustomRadio from '/src/components/admin/form/CustomRadio';
 import Spinner from '/src/components/atoms/Spinner';
-import EventDetailImage from './EventDetailImage';
+import EventDetailImage from '../../../../components/admin/community/EventDetailImage';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import { postFileUpload, postObjData } from '/src/pages/api/reqData';
 

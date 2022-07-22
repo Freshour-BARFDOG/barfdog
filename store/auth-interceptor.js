@@ -131,7 +131,7 @@ export default function AuthInterceptor({ children }) {
         // STEP 1 : VALIDATION COOKIE
         const adminTokenRes = await valid_authByTokenStatus('admin'); // 토큰의 유효성 검증함
         const isAdmin = adminTokenRes.valid;
-        const userTokenRes = await valid_authByTokenStatus('user'); // 토큰
+        const userTokenRes = !isAdmin && await valid_authByTokenStatus('user'); // 토큰
         const isAuthUser = userTokenRes.valid;
         const adminCookie = getCookie('adminRefreshToken');
         const userCookie = getCookie('userRefreshToken');
@@ -208,7 +208,7 @@ export const valid_accessToken = async (type = 'admin') => {
     const checkTokenAPiUrl = type === 'admin' ? '/api/admin/setting' : '/api/members';
     const response = await getData(checkTokenAPiUrl, type);
     status = response.status;
-    console.log(type, checkTokenAPiUrl, response)
+    // console.log(type, checkTokenAPiUrl, response)
     // const response = await testTokenStateWithOldToken(checkTokenAPiUrl);
     switch (status) {
       case 200:
@@ -222,7 +222,7 @@ export const valid_accessToken = async (type = 'admin') => {
         error = '잘못된 요청을 보냈습니다.';
         break;
       case 401:
-        if (response.data.reason === 'EXPIRED_TOKEN') {
+        if (response.data.reason === 'EXPIRED_TOKEN') { // 토큰 생사여부 체크 (SERVER 첫 번째 검증단계)
           error = 'EXPIRED_TOKEN';
         } else if (response.data.reason === 'UNAUTHORIZED') {
           error = 'UNAUTHORIZED';
@@ -230,7 +230,7 @@ export const valid_accessToken = async (type = 'admin') => {
         error = `${type} 인증 토큰이 만료되었습니다`;
         break;
       case 403:
-        error = '해당 토큰으로는 접근할 수 없습니다.';
+        error = '해당 토큰으로는 접근할 수 없습니다.'; // 권한 체크 ( SERVER 토큰 이후 검증 단계)
         break;
       case 404:
         error = '요청한 리소스가 서버에 없습니다.';

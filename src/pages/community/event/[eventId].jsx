@@ -104,7 +104,7 @@ export default function EventPostPage({ eventId }) {
           <section className={`${s.picture_box} ani-show-all-child`}>
             {itemInfo.imageUrlList?.length > 0 &&
               itemInfo.imageUrlList.map((url, index) => (
-                <div className={`${s.picture} init-next-image`}>
+                <div key={`blog-image-${index}`} className={`${s.picture} init-next-image`}>
                   <Image
                     priority="true"
                     src={url}
