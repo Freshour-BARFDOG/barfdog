@@ -13,12 +13,13 @@ import CloseButton from '../atoms/CloseButton';
 import Spinner from '../atoms/Spinner';
 
 export const ShopBoard = ({
+  id,
   data,
   formValues,
   setFormValues,
   onAddToCart,
-  onActiveModal,
   activeModal,
+  onActiveModal,
   isLoading,
   onStartBuying,
 }) => {
@@ -33,9 +34,12 @@ export const ShopBoard = ({
   };
 
   const onHideCartShortcut = () => {
-    onActiveModal(false);
+    onActiveModal({
+      [id]: false
+    });
   };
   // console.log(item);
+
 
   return (
     <section className={`${Style.top} ani-show-all-child`}>
@@ -122,14 +126,14 @@ export const ShopBoard = ({
             {/* 장바구니 버튼 */}
             <section className={s['shop-btn-section']}>
               <div className={s['grid-box']}>
-                <button type={'button'} className={`${s.cart} ${s.btn}`} onClick={onAddToCart}>
+                <button type={'button'} className={`${s.cart} ${s.btn}`} data-area={id} onClick={onAddToCart}>
                   {isLoading.cart ? <Spinner /> : '장바구니'}
                 </button>
                 <button onClick={onStartBuying} type={'button'} className={`${s.buy} ${s.btn}`}>
                   {isLoading.buy ? <Spinner style={{ color: '#fff' }} /> : '구매하기'}
                 </button>
               </div>
-              {activeModal && (
+              {activeModal[id] && (
                 <div className={`${s['cart-shortcut']} animation-show`}>
                   <p>상품이 장바구니에 담겼습니다.</p>
                   <CloseButton onClick={onHideCartShortcut} className={s.close} />

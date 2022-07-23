@@ -51,7 +51,7 @@ export default function SingleItemPage({ data }) {
   const [activeTabmenuIndex, setActiveTabmenuIndex] = useState(0);
   const [formValues, setFormValues] = useState(initialFormValues_CART);
 
-  const [activeCartShortcutModal, setActiveCartShortcutModal] = useState(false);
+  const [activeCartShortcutModal, setActiveCartShortcutModal] = useState({});
 
   // console.log('formValues', formValues);
   useEffect(() => {
@@ -73,10 +73,14 @@ export default function SingleItemPage({ data }) {
   
   
 
-  const onActiveCartShortcutModal = (active) => {
-    setActiveCartShortcutModal(true);
+  const onActiveCartShortcutModal = (buttonArea) => {
+    setActiveCartShortcutModal({
+      [buttonArea]: true
+    });
     setTimeout(()=>{
-      setActiveCartShortcutModal(false);
+      setActiveCartShortcutModal({
+        [buttonArea]: false
+      });
     }, 4000)
   };
   
@@ -90,7 +94,10 @@ export default function SingleItemPage({ data }) {
   
   
   
-  const onAddToCart = async () => {
+  const onAddToCart = async (e) => {
+    const button = e.currentTarget;
+    const thisButtonArea = button.dataset.area;
+  
     const postDataApiUrl = '/api/baskets';
     try {
       const objData = {
@@ -105,8 +112,9 @@ export default function SingleItemPage({ data }) {
       const res = await postUserObjData(postDataApiUrl, objData);
       
       
+      console.log(res)
       if (res.isDone) {
-        onActiveCartShortcutModal();
+        onActiveCartShortcutModal(thisButtonArea);
       } else {
         alert(`${res.error}`);
       }
@@ -155,6 +163,7 @@ export default function SingleItemPage({ data }) {
         formValues={formValues}
         setFormValues={setFormValues}
         onAddToCart={onAddToCart}
+        activeModal={activeCartShortcutModal}
         onActiveModal={onActiveCartShortcutModal}
         onStartBuying={onClickBuyButton}
         isLoading={isLoading}
@@ -162,6 +171,7 @@ export default function SingleItemPage({ data }) {
       <Layout>
         <Wrapper>
           <ShopBoard
+            id={'shopBoard'}
             data={{
               item: data?.item,
               itemImages: data?.itemImages,
