@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { authAction } from '/store/auth-slice';
 import useUserData from '/util/hook/useUserData';
 import { getData, testTokenStateWithOldToken } from '/src/pages/api/reqData';
-import { getCookie } from '/util/func/cookie';
+import {getCookie, setCookie} from '/util/func/cookie';
 import getAdminToken from '/src/pages/api/getAdminToken';
 import {cookieType} from "/store/TYPE/cookieType";
 import {userType} from "/store/TYPE/userAuthType";
@@ -25,12 +25,22 @@ export default function AuthInterceptor({ children }) {
       // STEP 1 : CHECK USER TYPE
       const valid_adminState = await valid_authByTokenStatus(userType.ADMIN); // 토큰의 유효성 검증함
       const valid_memberState = await valid_authByTokenStatus(userType.MEMBER); // 토큰
- 
       
+      // 토큰 만료 시, 만료된 Cookie 자동 삭제
+      const EXPIRED_TOKEN_ADMIN = valid_adminState.status === 401;
+      const EXPIRED_TOKEN_MEMBER = valid_memberState.status === 401;
+      if(EXPIRED_TOKEN_MEMBER){
+        setCookie(cookieType.LOGIN_COOKIE,  null,  'date', 0, {path:'/'} );
+      }else if(EXPIRED_TOKEN_ADMIN){
+        // CF. ADMIN과 USER가 동일한 쿠키를 사용하지만, (Server에서 발급하는 JWT에서 Role을 구별하는 방식)
+        // CF.  FONTEND에서 해당 사항을 인지할 수 있도록, 명시성을 위해 중복하여 코드를 작성함
+        setCookie(cookieType.LOGIN_COOKIE,  null,  'date', 0, {path:'/'} );
+      }
+  
+  
       const USER_TYPE_ADMIN = valid_adminState.status === 200 && valid_memberState.status === 200;
       const USER_TYPE_MEMBER = valid_adminState.status !== 200 && valid_memberState.status === 200;
       const USERTYPE = USER_TYPE_ADMIN ? userType.ADMIN : USER_TYPE_MEMBER ? userType.MEMBER : userType.NON_MEMBER;
-      //
       // console.log('valid_adminState', valid_adminState)
       // console.log('valid_memberState', valid_memberState)
       // console.log('USERTYPE: ', USERTYPE)
@@ -88,13 +98,15 @@ export default function AuthInterceptor({ children }) {
   
   
         
-        const EXPIRED_TOKEN_ADMIN = valid_adminState.status === 401;
-        const EXPIRED_TOKEN_MEMBER = valid_memberState.status === 401;
+       
+        // 이동 중에 토큰 만료됐을 경우.
         if(EXPIRED_TOKEN_MEMBER){
           alert('사용자 인증 시간이 만료되었습니다. 다시 로그인해주세요.');
+          dispatch(authAction.logout());
           return await router.push(REDIR_PATH);
         }else if(EXPIRED_TOKEN_ADMIN){
           alert('어드민 인증 시간이 만료되었습니다. 다시 로그인해주세요.');
+          dispatch(authAction.adminLogout());
           return await router.push(REDIR_PATH);
         }
         
