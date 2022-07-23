@@ -35,7 +35,7 @@ export const ShopBoard = ({
   const onHideCartShortcut = () => {
     onActiveModal(false);
   };
-  console.log(item);
+  // console.log(item);
 
   return (
     <section className={`${Style.top} ani-show-all-child`}>

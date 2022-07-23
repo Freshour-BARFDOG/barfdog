@@ -145,7 +145,7 @@ export const ShopOptionBar = ({ data, formValues, setFormValues, onAddToCart, on
                           onChange={onChangeQuantityInputHandler}
                           value={option.quantity}
                           minQuantity={data.minQuantity}
-                          maxQuantity={data.maxQuantity}
+                          maxQuantity={option.remaining}
                         />
                       </div>
                       <span className={s.optionPrice}>
