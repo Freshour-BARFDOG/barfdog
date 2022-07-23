@@ -10,10 +10,10 @@ import {cookieType} from "@store/TYPE/cookieType";
 const autoLoginExpiredDate = 7;
 
 const initialAuthState = {
-  // refreshToken: null,
   isAuth: false,
   isAdmin: false,
   autoLogin: false,
+  userType: null,
 };
 
 const authSlice = createSlice({
@@ -94,6 +94,10 @@ const authSlice = createSlice({
       alert('관리자 로그아웃 처리되었습니다.');
       Router.push('/bf-admin/login');
     },
+    setUserType(state, action) {
+      const userType = action.payload.userType;
+      state.userType = userType;
+    }
   },
 });
 
