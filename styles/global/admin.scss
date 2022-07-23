@@ -395,29 +395,29 @@ $inputDefaultHeight: rem(38);
   }
 
 
-  label{cursor: pointer;}
-
-  input.fullWidth {
-    width: 100%;
-  }
-  textarea.fullWidth {
-    width: 100%;
-    border: rem(1) solid var(--color-line-03);
-    padding: rem(10) rem(8);
-    min-height: rem(100);
-  }
-  input.halfWidth {
-    width: 50%;
-  }
-  input.text-align-right {
-    text-align: right;
-  }
-  input.text-align-center {
-    text-align: center;
-  }
-  input[data-align='right']{
-    text-align: right;
-  }
+  //label{cursor: pointer;}
+  //
+  //input.fullWidth {
+  //  width: 100%;
+  //}
+  //textarea.fullWidth {
+  //  width: 100%;
+  //  border: rem(1) solid var(--color-line-03);
+  //  padding: rem(10) rem(8);
+  //  min-height: rem(100);
+  //}
+  //input.halfWidth {
+  //  width: 50%;
+  //}
+  //input.text-align-right {
+  //  text-align: right;
+  //}
+  //input.text-align-center {
+  //  text-align: center;
+  //}
+  //input[data-align='right']{
+  //  text-align: right;
+  //}
 
   .unit-box-wrap {
     display: flex;
