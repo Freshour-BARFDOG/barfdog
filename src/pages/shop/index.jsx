@@ -30,8 +30,8 @@ export default function ShopPage() {
   const [searchValues, setSearchValues] = useState(initialSearchValues);
   const [searchQuery, setSearchQuery] = useState('');
 
-  console.log(itemList);
-  console.log(searchValues.itemType)
+  // console.log(itemList);
+  // console.log(searchValues.itemType)
   useEffect(() => {
     // - CASE: Nav GNB에서 shop > submenu Click event
     // - IMPORTANT : to prevent Inifinite Loop when router query is changed

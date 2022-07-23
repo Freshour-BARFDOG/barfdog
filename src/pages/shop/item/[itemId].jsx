@@ -33,7 +33,7 @@ export default function SingleItemPage({ data }) {
   const dispatch = useDispatch();
   const router = useRouter();
   const minItemQuantity = 1;
-  const maxItemQuantity = 5;
+  const maxItemQuantity = data.item.remaining; // 재고수량이상 선택 불가
   const initialFormValues_CART = {
     // ! 기준: 장바구니 담기 request body
     itemId: data?.item.id,
@@ -44,6 +44,7 @@ export default function SingleItemPage({ data }) {
     itemPrice: validation_itemPrice(data.item), // 장바구니항목에서 제외
     totalPrice: 0, // 장바구니 항목 아님
   };
+  // console.log(data)
 
   const contentRef = useRef();
   const [isLoading, setIsLoading] = useState({ fetching: true });
@@ -53,8 +54,6 @@ export default function SingleItemPage({ data }) {
   const [activeCartShortcutModal, setActiveCartShortcutModal] = useState(false);
 
   // console.log('formValues', formValues);
-
-  // console.log(formValues)
   useEffect(() => {
     if (!contentRef.current) return;
     const contentList = Array.from(contentRef.current?.children);
@@ -120,9 +119,6 @@ export default function SingleItemPage({ data }) {
     }));
   };
   
-  
-  
-  console.log(formValues);
   
   const onClickBuyButton = async () => {
     const postDataPath = `/order/ordersheet/${formValues.itemId}`;
