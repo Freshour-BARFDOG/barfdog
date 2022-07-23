@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import s from './memberInfo.module.scss';
 import PopupWrapper from '/src/components/popup/PopupWrapper';
 import { PopupCloseButton, PopupCloseButton_typeX } from '/src/components/popup/PopupCloseButton';
@@ -6,6 +6,8 @@ import Modal_member_class from '/src/components/modal/Modal_member_class';
 import Modal_member_subscribe from '/src/components/modal/Modal_member_subscribe';
 import { getData, putObjData } from '/src/pages/api/reqData';
 import { FullScreenLoading } from '/src/components/atoms/FullScreenLoading';
+import { transformBirthDay } from '../../../../../util/func/transformBirthDay';
+import { transformPhoneNumber } from '../../../../../util/func/transformPhoneNumber';
 
 function Popup_MemeberDetailPage({ id }) {
   const getReviewInfoApiUrl = `/api/admin/members/${id}`;
@@ -82,7 +84,6 @@ function Popup_MemeberDetailPage({ id }) {
   };
 
   const onChangeMemberBirthday = () => {
-    
     if (!tempValues.birthday || formValues.birthday === tempValues.birthday) {
       alert('기존 생일과 동일합니다.');
     } else if (confirm('회원 생일을 정말 변경하시겠습니까?')) {
@@ -94,7 +95,7 @@ function Popup_MemeberDetailPage({ id }) {
         const res = await putObjData(putMemberBirthdayApiUrl, data);
         console.log(res);
         if (res.isDone) {
-          alert('회원 생일 변경이 완료되었습니다.')
+          alert('회원 생일 변경이 완료되었습니다.');
           setFormValues((prevState) => ({
             ...prevState,
             birthday: newBirthday,
@@ -107,8 +108,6 @@ function Popup_MemeberDetailPage({ id }) {
       })();
     }
   };
-  
-  
 
   const onChangeMemberGrade = () => {
     if (!tempValues.grade || formValues.grade === tempValues.grade) {
@@ -121,7 +120,7 @@ function Popup_MemeberDetailPage({ id }) {
         };
         const res = await putObjData(putMemberGradeApiUrl, data);
         if (res.isDone) {
-          alert('회원 등급 변경이 완료되었습니다.')
+          alert('회원 등급 변경이 완료되었습니다.');
           setFormValues((prevState) => ({
             ...prevState,
             grade: newGrade,
@@ -138,10 +137,10 @@ function Popup_MemeberDetailPage({ id }) {
 
   const onActiveGradeModal = () => {
     setActiveGradeModal((prevState) => !prevState);
-    setTempValues(prevState => ({
+    setTempValues((prevState) => ({
       ...prevState,
-      grade: null
-    }))
+      grade: null,
+    }));
   };
 
   const onActiveSubscribeModal = () => {
@@ -357,7 +356,13 @@ function Popup_MemeberDetailPage({ id }) {
           onConfirm={onChangeMemberGrade}
         />
       )}
-      {activeSubscribeModal && <Modal_member_subscribe onClick={setActiveSubscribeModal} memberId={id} setIsLoading={setIsLoading}/>}
+      {activeSubscribeModal && (
+        <Modal_member_subscribe
+          onClick={setActiveSubscribeModal}
+          memberId={id}
+          setIsLoading={setIsLoading}
+        />
+      )}
     </>
   );
 }
@@ -369,22 +374,3 @@ Popup_MemeberDetailPage.getInitialProps = async ({ query }) => {
   return { id };
 };
 
-const transformBirthDay = (date) => {
-  const RegExp = /^([1|2])([0-9]{3})([0|1])([0-9])([0|1|2|3])([0-9])$/;
-  const error = !RegExp.test(date);
-  if (error) return console.error('입력받은 생년월일의 형식이 올바르지 않습니다.');
-  const yyyy = date.slice(0, 4);
-  const mm = date.slice(4, 6);
-  const dd = date.slice(6, 8);
-  return `${yyyy}-${mm}-${dd}`;
-};
-
-const transformPhoneNumber = (phoneNum) => {
-  const RegExp = /^01([0|1|6|7|8|9])([0-9]{3,4})([0-9]{4})$/;
-  const error = !RegExp.test(phoneNum);
-  if (error) return console.error('입력받은 휴대전호번호의 형식이 올바르지 않습니다.');
-  const n1 = phoneNum.slice(0, 3);
-  const n2 = phoneNum.slice(3, 7);
-  const n3 = phoneNum.slice(7, 11);
-  return `${n1}-${n2}-${n3}`;
-};
