@@ -1,5 +1,5 @@
-import {userType} from '@store/TYPE/userAuthType';
-import {getData} from '@src/pages/api/reqData';
+import {userType} from '/store/TYPE/userAuthType';
+import {getData} from '/src/pages/api/reqData';
 
 export const valid_accessToken = async (type = userType.ADMIN) => {
   // 임의의 admin api를 통하여, admin token의 유효성 체크
