@@ -2,21 +2,36 @@ import { createSlice } from '@reduxjs/toolkit';
 
 
 const initialState = {
-  item: {},
-  cartList: []
+  orderItemList: [],
+  cartList: [],
+  info:{},
+  itemCount: 0,
 };
 
 const cartSlice = createSlice({
   name: "cart",
   initialState: initialState,
   reducers: {
-    instantPayment(state, action) {
+    setOrderItemList(state, action) {
+      const curItems = action.payload.items
+      state.orderItemList = curItems;
+      state.itemCount = curItems.length;
+    },
+    setInfo(state, action){
       const data = action.payload.data;
-      const itemId = data.itemId.toString();
-      state.item[itemId] = data;
-      
+      const {deliveryConstant, basketDtoList} = data;
+      state.deliveryConstant = {
+        price: deliveryConstant.price,
+        freeCondition: deliveryConstant.freeCondition,
+      };
+      state.cartList = basketDtoList;
+      state.itemCount = basketDtoList?.length;
+    },
+    setItemCount (state, action) {
+      state.itemCount = action.payload.count;
+      console.log(action.payload.count)
     }
-  }
+  },
 });
 
 export const cartAction = cartSlice.actions;
