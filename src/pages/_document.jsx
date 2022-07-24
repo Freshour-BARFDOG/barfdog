@@ -14,19 +14,8 @@ import {GA_TRACKING_ID, UA_TRACKING_ID} from "/src/pages/api/googleAnalytics/gta
 // Next JS : _app.js 파일 이후 2번 째 실행
 
 
-// export default class CustomDocument extends Document {
-//   static getInitialProps({ renderPage }) {
-//     const { html, head } = renderPage();
-//     return { html, head };
-//   }
-//   render() {
-//     return ();
-//   }
-// }
 
-
-const CustomDocument = ()=> {
-
+export default function CustomDocument () {
   return (
     <Html lang="ko">
       <Head>
@@ -62,15 +51,40 @@ const CustomDocument = ()=> {
 }
 
 
+// export default class CustomDocument extends Document {
+//   static getInitialProps({ renderPage }) {
+//     const { html, head } = renderPage();
+//     return { html, head };
+//   }
+//   render() {
+//     return ();
+//   }
+// }
 
-CustomDocument.getInitialProps = async ({ renderPage, ctx }) => {
-  // const initialProps = await Document.getInitialProps(ctx)
-  const { html, head } = renderPage();
 
-  return { html, head };
+//
+// CustomDocument.getInitialProps = async ({ renderPage }) => {
+//   const { html, head } = renderPage();
+//
+//   return { html, head };
+// };
+
+
+
+/*{
+ - CF. < DOCUMENT param Obj >
+  err: undefined,
+  req: undefined,
+  res: undefined,
+  pathname: '/',
+  query: {},
+  asPath: '/',
+  locale: undefined,
+  locales: undefined,
+  defaultLocale: undefined,
+  AppTree: [Function: AppTree],
+  defaultGetInitialProps: [AsyncFunction: defaultGetInitialProps],
+  renderPage: [Function: renderPage]
 }
 
-
-
-
-export default CustomDocument;
+* */

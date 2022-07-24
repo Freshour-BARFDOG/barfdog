@@ -58,7 +58,6 @@ export const getData = async (url, type) => {
       const errorObj = err?.response;
       const status = errorObj?.status;
       let error = null;
-      console.log(status)
       switch (status) {
         case 200:
           error = '';  // 유효한 토큰 : 요청을 성공적으로 처리함
@@ -124,8 +123,8 @@ export const putData = async (url, data) => {
       return res;
     })
     .catch((err) => {
-      return err;
       console.log(err.response);
+      return err;
     });
 
   return response;
@@ -215,6 +214,36 @@ export const putObjData = async (url, data, contType) => {
       return !errStatus;
     });
 
+  result.isDone = response;
+  return result;
+}
+
+
+
+export const deleteObjData = async (url, data, contType) => {
+  const result = {
+    isDone: false,
+    error: '',
+    data: null,
+    status: null,
+  }
+  const response = await axios
+    .delete(url, data, axiosConfig(contType))
+    .then((res) => {
+      console.log(res);
+      result.data = res;
+      return res.status === 200 || res.status === 201;
+    })
+    .catch((err) => {
+      console.log(err.response);
+      const errStatus = err.response?.status >= 400;
+      const errorMessage = err.response?.data.error;
+      result.status = err.response.status;
+      result.error = errorMessage;
+      result.data = err.response;
+      return !errStatus;
+    });
+  
   result.isDone = response;
   return result;
 }
@@ -349,75 +378,76 @@ export async function getServerSideProps({req}) {
 
 
 
-export const getTokenFromCookie = (req)=>{
+
+
+export const getTokenClientSide = (req)=>{
   // - MEMBER & ADMIN 모두 동일한 API에서 동일한 TOKEN을 발급받는다
   // - SERVER에서 TOKEN 속에 권한에 대한 값을 설정하여 검증한다.
   let token;
-  const cookie = req.headers.cookie;
-  const tokenKey = cookieType.LOGIN_COOKIE;
-  cookie.split(';').forEach((c) => {
-    if (c.indexOf(tokenKey) >= 0) {
-      token = c.split('=')[1];
-      return
-    }
-  });
-  
-  return token;
-  
-}
-
-// export const getAdminTokenFromCookie = (req)=>{
-//   let token;
-//   const cookie = req.headers.cookie;
-//   const tokenKey = 'adminLoginCookie';
-//   cookie.split(';').forEach((c) => {
-//     if (c.indexOf(tokenKey) >= 0) {
-//       token = c.split('=')[1];
-//       return
-//     }
-//   });
-//   return token;
-// }
-
-
-
-export const getAdminAutoLoginStatus = (req)=>{
-  let autologinStatus;
-  const cookie = req.headers.cookie;
-  const tokenKey = cookieType.LOGIN_COOKIE;
-  cookie.split(';').forEach((c) => {
-    if (c.indexOf(tokenKey) >= 0) {
-      autologinStatus = c.split('=')[1];
-      console.log(JSON.parse(autologinStatus));
-      autologinStatus = !!JSON.parse(autologinStatus).email;
-      return;
-    }
-  });
-  return autologinStatus;
-}
-
-
-
-
-
-export const getDataSSR = async (req, url)=>{
-  const token = getTokenFromCookie(req);
-  const result = await axios
-    .get(url,{
-      headers: {
-        authorization: token,
-        "content-Type": "application/json",
+  const headers = req.headers;
+  if(headers){
+  const cookie = headers.cookie;
+    const tokenKey = cookieType.LOGIN_COOKIE;
+    cookie.split(';').forEach((c) => {
+      if (c.indexOf(tokenKey) >= 0) {
+        return token = c.split('=')[1];
       }
-    })
-    .then((res) => {
-      // console.log(res);
-      return res;
-    })
-    .catch((err) => {
-      // console.log(err.response)
-      return err.response
     });
+  }
+  return token;
+}
+
+
+
+export const getTokenFromServerSide = (req)=>{
+  // - MEMBER & ADMIN 모두 동일한 API에서 동일한 TOKEN을 발급받는다
+  // - SERVER에서 TOKEN 속에 권한에 대한 값을 설정하여 검증한다.
+  let token;
+  console.log(req.headers)
+  const cookie = req.headers.cookie.split(';');
+  const tokenKey = cookieType.LOGIN_COOKIE;
+  if (cookie) {
+    for (const key of cookie) {
+      if (key.indexOf(tokenKey) >= 0) {
+        token = key.split('=')[1];
+        break;
+      }
+    }
+  }
+  return token;
+}
+
+
+
+
+export const getDataSSR = async (req, url, tokenFromSSR)=>{
+  let result ;
+  const token = tokenFromSSR || getTokenFromServerSide(req);
+  // console.log('token:', token)
+  try {
+    result = await axios
+      .get(url,{
+        headers: {
+          authorization: token,
+          "content-Type": "application/json",
+        }
+      })
+      .then((res) => {
+        // console.log(res);
+        return res;
+      })
+      .catch((err) => {
+        // console.log(err.response)
+        return err.response
+      });
+  
+  } catch (err) {
+      // console.error(err)
+    return err.response;
+  }
+  
   
   return result;
   
 }
+
