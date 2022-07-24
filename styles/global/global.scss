@@ -120,7 +120,7 @@ input[data-align='right']{
 
 
 
-.ani-show-all-child{
+.animation-show-all-child{
   animation: show var(--ani-default) forwards;
   @for $i from 1 through 20 {
     * :nth-child(#{$i}){
