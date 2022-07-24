@@ -20,7 +20,7 @@ export const Modal_coupon = ({onModalActive, data, className}) => {
         <section className={s.modal}>
           <div className={s.title_box}>
             <div className={s.title}>
-              적용가능쿠폰 <span>쿠폰은 최대 2장까지 적용가능합니다.</span>
+              적용가능쿠폰 <span>쿠폰은 최대 1장까지 적용가능합니다.</span>
             </div>
           </div>
           <div className={s.content_box}>

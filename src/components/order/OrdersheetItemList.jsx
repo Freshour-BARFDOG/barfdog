@@ -23,8 +23,8 @@ export const OrdersheetItemList = ({form, isLoading, event = {onActiveModal}}) =
           {isLoading.item ? (
             <Spinner/>
           ) : (
-            form.orderItemDtoList?.map( (item) => (
-              <li key={`item-${item.itemId}`} className={s.flex_box}>
+            form.orderItemDtoList?.map( (item, index) => (
+              <li key={`item-${item.itemId}-${index}`} className={s.flex_box}>
                 <div className={s.info_col}>
                   {item.name}
                   {item.selectOptionDtoList?.map( (option) => (
