@@ -174,9 +174,8 @@ export default function ShopPage() {
             </div>
           </section>
           <section className={s.bot}>
-            <ul className={s.inner}>
-              {itemList.length > 0 ? (
-                itemList.map((item, index) => (
+            {itemList.length === 0 ? <EmptyContMessage message={'등록된 상품이 없습니다.'} /> : <ul className={s.inner}>
+              {itemList.map((item, index) => (
                   <li className={`${s.shop_list} animation-show`} key={`item-${item.id}-${index}`}>
                     <Link href={`/shop/item/${item.id}`} passHref>
                       <a onClick={onClickItem}>
@@ -242,11 +241,9 @@ export default function ShopPage() {
                       </a>
                     </Link>
                   </li>
-                ))
-              ) : (
-                <EmptyContMessage message={'등록된 상품이 없습니다.'} />
-              )}
-            </ul>
+                ))}
+            </ul>}
+            
           </section>
           <section className={s['pagination-section']}>
             <PaginationWithAPI
