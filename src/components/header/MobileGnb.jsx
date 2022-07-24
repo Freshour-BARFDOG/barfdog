@@ -14,6 +14,7 @@ const menuNameObj = {
 
 export default function MobileGnb() {
   const mcx = useModalContext();
+
   const deviceState = useDeviceState();
   const [activeMenuId, setActiveMenuId] = useState('');
   const [isWideMode, setIsWideMode] = useState(false);
@@ -131,8 +132,8 @@ const currentPageIndicator = (ref, curPath, setActivemenu) => {
   subMenus.forEach((submenu) => {
     const menuPath = submenu.pathname || submenu.dataset.link;
     if (!menuPath && curPathArray) return;
-    console.log(menuPath)
-    console.log(curPageDepth2)
+    // console.log(menuPath)
+    // console.log(curPageDepth2)
     submenu.dataset.currentPage = menuPath.indexOf(curPageDepth2) >= 0 && 'depth2'
     
     if (curPath.indexOf('/shop') >= 0) {
