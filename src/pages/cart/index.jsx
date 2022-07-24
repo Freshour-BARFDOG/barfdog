@@ -46,8 +46,7 @@ export default function CartPage({ data, error }) {
         name: item.itemDto.name, // str 상품 이름
         originalPrice: item.itemDto.originalPrice, // num 상품 원가
         salePrice: item.itemDto.salePrice, //num  상품 할인 적용 후 판매가격
-        subtractedPrice:
-          (item.itemDto.originalPrice - item.itemDto.salePrice) * item.itemDto.amount, // ! Client Only Param
+        
         amount: item.itemDto.amount, // num 상품 수량
         deliveryFree: item.itemDto.deliveryFree, // boolean 배송비 무료 여부
         options: item.itemOptionDtoList.map((opt) => ({
@@ -57,6 +56,8 @@ export default function CartPage({ data, error }) {
           amount: opt.amount, // num 옵션 개수
         })),
         totalPrice: item.totalPrice, // '기본할인 적용가' * 수량 + 옵션가격총합 - Server Param
+        subtractedPrice:
+          (item.itemDto.originalPrice - item.itemDto.salePrice) * item.itemDto.amount, // ! Client Only Param
         deliveryCharge: deliveryCharge, // 배송비 ! Client Only Param
         finalPrice: finalPrice, // 최종가 = totalPrice + 배송비  ! Client Only Param
         _links: {
@@ -68,10 +69,10 @@ export default function CartPage({ data, error }) {
     }),
     // ! Client Only Params
     total: {
-      itemPrice: 0, // 상품금액 총합
+      originPrice: 0, // 상품 원금 총합
+      subtractedPrice: 0, // 할인 총합
       deliveryFee: 0, // 배송비 총합
-      salePirce: 0, // 할인금액 총합
-      finalPrice: 0, // 총 주문금액
+      finalPrice: 0, // 총 주문금액 총합
     },
   };
   const initialAllBasketIdList = data?.basketDtoList.map((item) => item.itemDto.basketId);
@@ -98,58 +99,59 @@ export default function CartPage({ data, error }) {
         if (amountUnit){ // 수량 증가 버튼 클릭 시 작동
           nextAmount = amountUnit  === 'decrease' ? --nextItem.amount : ++nextItem.amount;
         }
+        
         // ! 추후 확인필요: 만약 salePrice 0원인 경우, 전액할인 한 CASE인지.
-        const isCurItem = nextItem.basketId === basketId;
-        const hasOption = nextItem.options.length > 0;
+        const isCurItem = item.basketId === basketId;
+        const hasOption = item.options.length > 0;
         const optionPrice = hasOption
-          ? nextItem.options
+          ? item.options
             ?.map((option) => option.optionPrice * option.amount)
             ?.reduce((acc, cur) => acc + cur)
           : 0;
-        const nextTotalPrice = item.salePrice * nextAmount + optionPrice;
-        const deliveryCharge =
-          nextItem.deliveryFree || nextTotalPrice >= deliveryConstant.freeCondition
-            ? 0
-            : deliveryConstant.price; // ! 상품 목록 '1줄'의 합게가 무료배송 조건에 부합할 경우, 배송비 제외
-        const nextSubtractedPrice = (item.originalPrice - item.salePrice) * nextAmount;
-        const nextItemFinalPrice = nextTotalPrice + deliveryCharge;
+        
         return isCurItem
           ? {
             ...nextItem,
-            totalPrice: nextTotalPrice,
-            deliveryCharge: deliveryCharge,
-            subtractedPrice: nextSubtractedPrice,
-            amount: nextAmount,
-            finalPrice: nextItemFinalPrice,
-            fulfileDeliveryFreeCondition: deliveryCharge === 0,
+            amount: nextAmount, // 수량
+            totalPrice: nextItem.salePrice * nextAmount + optionPrice, // 상품 금액 (원금에서 할인 후 금액)
+            subtractedPrice: (item.originalPrice - item.salePrice) * nextAmount, // 원금과 판매가의 차액 (할인된 금액)
+            deliveryCharge: item.deliveryFree ? 0 : deliveryConstant.price, // 배송비
+            finalPrice: nextItem.salePrice * nextAmount + optionPrice, // 상품 목록 하나의 최종가 (= 판매가 * 수량 + 옵션가격총합)
           }
           : item;
       });
     
-      // CASE. 개별상품들의 (기본할인적용가*수량+옵션총합)에 대한 총합 => 무료배송조건을 충족할 경우
-      const sumOfAllItemsTotalPrice = calcTotalPriceOfTargetKey('totalPrice', nextBasketDtoList);
-      const isDeliveryConditionFulfiled = sumOfAllItemsTotalPrice >= deliveryConstant.freeCondition;
-      const ntextDeliveryFee = isDeliveryConditionFulfiled ? 0 : deliveryConstant.price;
-      nextBasketDtoList = nextBasketDtoList.map(itemObj=>({
-        ...itemObj,
-        deliveryCharge: itemObj.deliveryFree ? 0 : ntextDeliveryFee,
-        finalPrice: (isDeliveryConditionFulfiled && !itemObj.deliveryFree) ? (itemObj.finalPrice - itemObj.deliveryCharge) : itemObj.finalPrice // ! important '전체 상품'합계가 무료배송 조건에 부합할 시, 모든 상품 배송비 무료
-        
-      }))
+      const sumOfTotalPrice = calcTotalPriceOfTargetKey('totalPrice', nextBasketDtoList); // 기본할인이 적용된 가격
+      const nextSubtractedPrice = calcTotalPriceOfTargetKey('subtractedPrice', nextBasketDtoList) // 할인정도
+      const ntextDeliveryFee = sumOfTotalPrice >= deliveryConstant.freeCondition ? 0 : deliveryConstant.price;
+      console.log(nextSubtractedPrice)
+      console.log(sumOfTotalPrice)
+      
       return {
         ...prevState,
         basketDtoList: nextBasketDtoList,
         total: {
-          itemPrice: sumOfAllItemsTotalPrice, // 상품금액 총합
+          originPrice: sumOfTotalPrice + nextSubtractedPrice, // 상품 원금 총합
+          subtractedPrice: nextSubtractedPrice, // 할인금액 총합
           deliveryFee: ntextDeliveryFee, // 배송비 총합
-          salePirce: calcTotalPriceOfTargetKey('subtractedPrice', nextBasketDtoList), // 할인금액 총합
-          finalPrice: calcTotalPriceOfTargetKey('finalPrice', nextBasketDtoList), // 총 주문금액
+          finalPrice: sumOfTotalPrice + ntextDeliveryFee, // 총 주문금액 총합
+          // ! important '전체 상품'합계가 무료배송 조건에 부합할 시, 모든 상품 배송비 무료
         },
       };
     });
     
   }
-
+  
+  
+  const calcTotalPriceOfTargetKey = (DATA_basketDtoListKey, targetItemList=[]) => {
+    let sum = 0;
+    const selectedItems = targetItemList?.filter(item=>selectedItemBasketIds.indexOf(item.basketId) >= 0);
+    if(selectedItems.length > 0){
+      sum = selectedItems.map((item) => item[DATA_basketDtoListKey]).reduce((acc, cur) => acc + cur);
+      
+    }
+    return sum;
+  };
   
   const onChangeItemAmount = async (e) => {
     const btn = e.currentTarget;
@@ -189,17 +191,6 @@ export default function CartPage({ data, error }) {
       [basketId]: false,
     }));
     // const apiUrl = btn.dataset.
-  };
-  
-  
-  const calcTotalPriceOfTargetKey = (DATA_basketDtoListKey, targetItemList=[]) => {
-    let sum = 0;
-    const selectedItems = targetItemList?.filter(item=>selectedItemBasketIds.indexOf(item.basketId) >= 0);
-    if(selectedItems.length > 0){
-      sum = selectedItems.map((item) => item[DATA_basketDtoListKey]).reduce((acc, cur) => acc + cur);
-      
-    }
-    return sum;
   };
   
   
@@ -337,7 +328,6 @@ export default function CartPage({ data, error }) {
   };
   
   
-  console.log(DATA)
   
   if (error) {
     return console.error('데이터를 가져올 수 없습니다.');
@@ -424,14 +414,6 @@ export default function CartPage({ data, error }) {
                             </p>
                           ))}
                       </div>
-                      <div className={s['delivery-row']}>
-                        <span>
-                          배송비
-                           {item.deliveryCharge > 0
-                            ? ` ${transformLocalCurrency(item.deliveryCharge)}원`
-                            : ' 무료'}
-                        </span>
-                      </div>
                     </figcaption>
 
                     <span className={s.grid_box}>
@@ -442,6 +424,7 @@ export default function CartPage({ data, error }) {
                           data-id={item.basketId}
                           data-button-type={'decrease'}
                           onClick={onChangeItemAmount}
+                          disabled={isLoading[item.basketId] || item.amount <= 1}
                         >
                           -
                         </button>
@@ -484,44 +467,43 @@ export default function CartPage({ data, error }) {
           <section className={s.total_price}>
             <div className={s.flex_box}>
               <div className={s.amount}>
-                <p className={s.up_text}>상품금액</p>
-                <p className={s.down_text}>{transformLocalCurrency(DATA.total?.itemPrice)}원</p>
+                <p className={s.up_text}>상품 금액</p>
+                <p className={s.down_text}>{transformLocalCurrency(DATA.total?.originPrice)}원</p>
               </div>
-
-              <div className={s.math}>
-                <div className={`${s.image} img-wrap`}>
-                  <Image
-                    priority
-                    src={require('/public/img/cart/cart_plus.png')}
-                    objectFit="cover"
-                    layout="fill"
-                    alt="카드 이미지"
-                  />
-                </div>
-              </div>
-
-              <div className={s.shipping}>
-                <p className={s.up_text}>배송비</p>
-                <p className={s.down_text}>{transformLocalCurrency(DATA.total?.deliveryFee)}원</p>
-              </div>
-
-              <div className={s.math}>
-                <div className={`${s.image} img-wrap`}>
+  
+              <i className={s.math}>
+                <figure className={`${s.image} img-wrap`}>
                   <Image
                     priority
                     src={require('/public/img/cart/cart_minus.png')}
                     objectFit="cover"
                     layout="fill"
-                    alt="카드 이미지"
+                    alt="- 아이콘"
                   />
-                </div>
-              </div>
-
+                </figure>
+              </i>
+  
               <div className={s.discount}>
-                <p className={s.up_text}>할인금액</p>
-                <p className={s.down_text}>{transformLocalCurrency(DATA.total?.salePirce)}원</p>
+                <p className={s.up_text}>할인</p>
+                <p className={s.down_text}>{transformLocalCurrency(DATA.total?.subtractedPrice)}원</p>
               </div>
-
+  
+              <i className={s.math}>
+                <figure className={`${s.image} img-wrap`}>
+                  <Image
+                    priority
+                    src={require('/public/img/cart/cart_plus.png')}
+                    objectFit="cover"
+                    layout="fill"
+                    alt="+ 아이콘"
+                  />
+                </figure>
+              </i>
+              <div className={s.shipping}>
+                <p className={s.up_text}>배송비</p>
+                <p className={s.down_text}>{transformLocalCurrency(DATA.total?.deliveryFee)}원</p>
+              </div>
+  
               <div className={s.flex_text_box}>
                 <div className={s.total}>총 주문 금액</div>
                 <p>{transformLocalCurrency(DATA.total?.finalPrice)}원</p>
@@ -554,3 +536,6 @@ export async function getServerSideProps({ req }) {
 
   return { props: { data, error } };
 }
+
+
+
