@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import MetaTitle from '@src/components/atoms/MetaTitle';
+import MetaTitle from '/src/components/atoms/MetaTitle';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import Styles from './[itemId].module.scss';
@@ -9,12 +9,19 @@ import { ShopItemInfoBox } from '/src/components/shop/ShopItemInfoBox';
 import { ShopTabMenus } from '/src/components/shop/ShopTabMenus';
 import { ShopReviewBox } from '/src/components/shop/ShopReviewBox';
 import { ShopOptionBar } from '/src/components/shop/ShopOptionBar';
-import {getDataSSR, postData, postSelfApiData, postUserObjData, putData, putObjData} from '/src/pages/api/reqData';
+import {
+  getDataSSR,
+  postData,
+  postSelfApiData,
+  postUserObjData,
+  putData,
+  putObjData,
+} from '/src/pages/api/reqData';
 import { useRouter } from 'next/router';
 import calculateSalePrice from '/util/func/calculateSalePrice';
 import transformClearLocalCurrency from '/util/func/transformClearLocalCurrency';
-import {useDispatch} from "react-redux";
-import {cartAction} from "/store/cart-slice";
+import { useDispatch } from 'react-redux';
+import { cartAction } from '/store/cart-slice';
 //
 // ! 일반 주문 주문하기
 // const initialValue_BUY = { // 일반 주문 시 , 데이터는 queryDAta에 시
@@ -28,20 +35,21 @@ import {cartAction} from "/store/cart-slice";
 //   ]
 // };
 
-export default function SingleItemPage({ data }) {
-  // console.log(data)
+export default function SingleItemPage(props) {
+  // console.log(props)
+  const data = props.data;
   const dispatch = useDispatch();
   const router = useRouter();
   const minItemQuantity = 1;
-  const maxItemQuantity = data.item.remaining; // 재고수량이상 선택 불가
+  const maxItemQuantity = data?.item?.remaining; // 재고수량이상 선택 불가
   const initialFormValues_CART = {
     // ! 기준: 장바구니 담기 request body
-    itemId: data?.item.id,
+    itemId: data?.item?.id,
     itemAmount: 1,
     optionDtoList: [
       // { optionId : null, optionAmount : null }
     ],
-    itemPrice: validation_itemPrice(data.item), // 장바구니항목에서 제외
+    itemPrice: validation_itemPrice(data?.item), // 장바구니항목에서 제외
     totalPrice: 0, // 장바구니 항목 아님
   };
   // console.log(data)
@@ -69,38 +77,28 @@ export default function SingleItemPage({ data }) {
     });
   }, [activeTabmenuIndex]);
 
-
-  
-  
-
   const onActiveCartShortcutModal = (buttonArea) => {
     setActiveCartShortcutModal({
-      [buttonArea]: true
+      [buttonArea]: true,
     });
-    setTimeout(()=>{
+    setTimeout(() => {
       setActiveCartShortcutModal({
-        [buttonArea]: false
+        [buttonArea]: false,
       });
-    }, 4000)
+    }, 4000);
   };
-  
-  
 
   if (!data) {
-    alert('데이터를 불러올 수 없습니다.');
-    router.back();
     return;
   }
-  
-  
-  
+
   const onAddToCart = async (e) => {
     const button = e.currentTarget;
     const thisButtonArea = button.dataset.area;
-  
+
     const postDataApiUrl = '/api/baskets';
     try {
-      const objData = {
+      const body = {
         itemAmount: formValues.itemAmount,
         itemId: formValues.itemId,
         optionDtoList: formValues.optionDtoList,
@@ -109,10 +107,9 @@ export default function SingleItemPage({ data }) {
         ...prevState,
         cart: true,
       }));
-      const res = await postUserObjData(postDataApiUrl, objData);
-      
-      
-      console.log(res)
+      console.log(body);
+      const res = await postUserObjData(postDataApiUrl, body);
+      console.log(res);
       if (res.isDone) {
         onActiveCartShortcutModal(thisButtonArea);
       } else {
@@ -126,24 +123,27 @@ export default function SingleItemPage({ data }) {
       cart: false,
     }));
   };
-  
-  
+
   const onClickBuyButton = async () => {
-    const postDataPath = `/order/ordersheet/${formValues.itemId}`;
     try {
-      const DATA = {
-        itemAmount: formValues.itemAmount,
-        itemId: formValues.itemId,
-        optionDtoList: formValues.optionDtoList,
-        itemPrice: formValues.itemPrice,
-        totalPrice: formValues.totalPrice
-      };
+      const items = [
+        {
+          itemDto: {
+            itemId: formValues.itemId, // 상품 id
+            amount: formValues.itemAmount, // 아이템 수량
+          },
+          optionDtoList: formValues.optionDtoList.map((option) => ({
+            itemOptionId: option.optionId,
+            amount: option.optionAmount,
+          })), // 옵션 리스트
+        },
+      ];
       setIsLoading((prevState) => ({
         ...prevState,
         buy: true,
       }));
-      await dispatch(cartAction.instantPayment({ data: DATA}));
-      await router.push(postDataPath);
+      await dispatch(cartAction.setOrderItemList({ items }));
+      await router.push(`/order/ordersheet/general`);
     } catch (err) {
       console.log('API통신 오류 : ', err);
     }
@@ -152,8 +152,7 @@ export default function SingleItemPage({ data }) {
       buy: false,
     }));
   };
-  
-  
+
   return (
     <>
       <MetaTitle title="SHOP" />
@@ -206,7 +205,7 @@ export default function SingleItemPage({ data }) {
 }
 
 const validation_itemPrice = (data) => {
-  
+  if (!data) return null;
   let itemPrice = data.salePrice || data?.originalPrice;
   const result = calculateSalePrice(data.originalPrice, data.discountType, data.discountDegree);
   const salePricebyAdminPageCalcuator = transformClearLocalCurrency(result.salePrice);
@@ -217,21 +216,18 @@ const validation_itemPrice = (data) => {
   if (data.originalPrice < data.salePrice) {
     // validation Price
     alert('아이템 가격설정에 문제 발생하였습니다. 관리자에게 문의하세요.');
-    return null
+    return null;
   }
 
   return itemPrice;
 };
 
-
-
 export async function getServerSideProps(ctx) {
   const { query, req } = ctx;
+  // console.log(query, req)
   const itemId = query.itemId;
-  // console.log(itemId);
   let DATA = null;
   const getApiUrl = `/api/items/${itemId}`;
-  // console.log(getApiUrl)
 
   const res = await getDataSSR(req, getApiUrl);
   // console.log('SERVER REPONSE: ',res);
