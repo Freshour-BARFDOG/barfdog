@@ -110,7 +110,7 @@ export default function CartPage({ data, error }) {
         const deliveryCharge =
           nextItem.deliveryFree || nextTotalPrice >= deliveryConstant.freeCondition
             ? 0
-            : deliveryConstant.price;
+            : deliveryConstant.price; // ! 상품 목록 '1줄'의 합게가 무료배송 조건에 부합할 경우, 배송비 제외
         const nextSubtractedPrice = (item.originalPrice - item.salePrice) * nextAmount;
         const nextItemFinalPrice = nextTotalPrice + deliveryCharge;
         return isCurItem
@@ -132,7 +132,9 @@ export default function CartPage({ data, error }) {
       const ntextDeliveryFee = isDeliveryConditionFulfiled ? 0 : deliveryConstant.price;
       nextBasketDtoList = nextBasketDtoList.map(itemObj=>({
         ...itemObj,
-        deliveryCharge: itemObj.deliveryFree ? 0 : ntextDeliveryFee
+        deliveryCharge: itemObj.deliveryFree ? 0 : ntextDeliveryFee,
+        finalPrice: (isDeliveryConditionFulfiled && !itemObj.deliveryFree) ? (itemObj.finalPrice - itemObj.deliveryCharge) : itemObj.finalPrice // ! important '전체 상품'합계가 무료배송 조건에 부합할 시, 모든 상품 배송비 무료
+        
       }))
       return {
         ...prevState,
