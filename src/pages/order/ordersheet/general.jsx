@@ -54,7 +54,7 @@ const global_productType = {
   GENERAL: 'GENERAL',
 };
 
-export default function OrderSheetPage({ orderId }) {
+export default function GeneralOrderSheetPage() {
   
   const TEST_change_productType = () => {
     setProductType((prevState) =>
@@ -82,29 +82,27 @@ export default function OrderSheetPage({ orderId }) {
   });
 
   useEffect(() => {
-    const curItem = cart.item[orderId];
-    if(!orderId || !curItem){
+    const curItem = cart.orderItemList;
+    if(!curItem.length){
       return router.push('/');
     }
     
-    console.log(curItem)
-    const requestBody = {
-      orderItemDtoList: [
-        {
-          itemDto: {
-            itemId: curItem.itemId,
-            amount: curItem.itemAmount,
-          },
-          itemOptionDtoList: curItem.optionDtoList.map((option) => ({
-            itemOptionId: option.optionId,
-            amount: option.optionAmount,
-          })),
-        },
-      ],
-    };
-    // console.log(requestBody);
-    if (Object.keys(info).length > 0) return; // 최초 data fetching 후 Re-rendering 방지
+
     
+    const requestBody = {
+      orderItemDtoList: curItem.map((item)=>({
+        itemDto: {
+          itemId: item.itemDto.itemId,
+          amount: item.itemDto.amount,
+        },
+        itemOptionDtoList: item.optionDtoList.map((option) => ({
+          itemOptionId: option.itemOptionId,
+          amount: option.amount,
+        })),
+      }))
+    };
+  
+    if (Object.keys(info).length > 0) return; // 최초 data fetching 후 Re-rendering 방지
     (async () => {
       setIsLoading((prevState) => ({
         ...prevState,
@@ -113,11 +111,12 @@ export default function OrderSheetPage({ orderId }) {
       try {
         // API: 상품 주문정보
         const postItemInfoApiUrl = `/api/orders/sheet/general`;
-        const res = await postUserObjData(postItemInfoApiUrl, requestBody); // 요청 파라미터가 복잡하여 GET이 아닌 POST 사용
+        const res = await postUserObjData(postItemInfoApiUrl, requestBody);
+        // 요청 파라미터가 복잡하여 GET이 아닌 POST 사용
         console.log(res);
         if (res.status !== 200) {
-          alert('상품 정보를 확인할 수 없습니다.');
-          return await router.push('/');
+          // alert('상품 정보를 확인할 수 없습니다.');
+          // return await router.push('/');
         }
         const info = res.data.data;
         console.log(info);
@@ -150,10 +149,10 @@ export default function OrderSheetPage({ orderId }) {
               expiredDate: transformDate(cp.expiredDate),
             })) ||
             [], //////////// ! DUMMY DATA
-          orderPrice: info.orderPrice, //  주문 상품 총 가격 (할인 적용 전)
-          reward: info.reward,
-          deliveryPrice: info.deliveryPrice, // 배송비
-          freeCondition: info.freeCondition, // 배송비 무료 조건
+          orderPrice: info.orderPrice, //  장바구니 or 결제전 "최종 가격" (할인 적용 전)
+          reward: info.reward, // 적립금
+          deliveryPrice: info.deliveryPrice, // 배송비 : 장바구니에서, 최종 배송비
+          freeCondition: info.freeCondition, // 사이트 > 배송비 무료 조건
           brochure: info.brochure, // 브로슈어 받은 적 있는지 true/false => 브로슈어는 1번만 받을 수 있다.
         };
 
@@ -290,8 +289,3 @@ export default function OrderSheetPage({ orderId }) {
   );
 }
 
-export async function getServerSideProps(ctx) {
-  const { query, req } = ctx;
-  const { orderId } = query;
-  return { props: { orderId } };
-}
