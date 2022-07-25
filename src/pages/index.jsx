@@ -6,6 +6,7 @@ import Layout from '/src/components/common/Layout'
 import Wrapper from "/src/components/common/Wrapper";
 import Link from 'next/link';
 import { useRouter } from "next/router";
+import { useModalContext } from '/store/modal-context';
 
 //////////////////////////////////////////////////
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -193,6 +194,15 @@ function Swiper_recipe() {
     window.innerWidth <= 600 ? setIsMobile(true) : setIsMobile(false);
   }, [isMobile]);
 
+
+  const mcx = useModalContext();
+
+//정기구독 모달
+  const onShowModal = () => {
+    mcx.subscribe.onShow();
+    mcx.event.setScrollY();
+  };
+
   return (
     <div className={Styles.swiper_recipe_outerWrap}>
       
@@ -312,7 +322,7 @@ function Swiper_recipe() {
       </Swiper>
 
       <div className={Styles.btn_box}>
-        <button type="button" className={Styles.btn_main}>
+        <button type="button" className={Styles.btn_main} onClick={onShowModal}>
           정기구독 신청하러 가기
         </button>
       </div>
@@ -339,7 +349,7 @@ function Swiper_review() {
     className: `${Styles.swiper_review}`,
     spaceBetween: 0,
     slidesPerView: 'auto',
-    // loop: true,
+    loop: true,
     centeredSlides: false,
     pagination: {
       clickable: true,
@@ -585,7 +595,6 @@ function Swiper_sns() {
   
   const swiperSettings_sns = {
     className: `${Styles.swiper_sns}`,
-    // loop: true,
     spaceBetween: 0,
     loop: true,
     centeredSlides: false, // 가운데 갈지 말지 고민
@@ -706,6 +715,14 @@ function Home() {
     window.innerWidth <= 600 ? setIsMobile(true) : setIsMobile(false);
   }, [isMobile]);
 
+//정기구독 모달
+  const mcx = useModalContext();
+
+  const onShowModal = () => {
+    mcx.subscribe.onShow();
+    mcx.event.setScrollY();
+  };
+
   return (
     <>
       <MetaTitle title="바프독" />
@@ -813,6 +830,7 @@ function Home() {
                 width={560}
                 height={560}
                 alt="카드 이미지" 
+                position="fixed"
               ></Image>
             </div>
           </section>
@@ -1094,7 +1112,7 @@ function Home() {
                   </li>
                 </ul>
                 <div className={Styles.btn_box}>
-                  <button type="button" className={Styles.btn_main}>
+                  <button type="button" className={Styles.btn_main}  onClick={onShowModal}>
                     정기구독 신청하러 가기
                   </button>
                 </div>

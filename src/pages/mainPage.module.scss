@@ -118,11 +118,11 @@ section.sns {
     display: flex;
     justify-content: center;;
     
-    .btn_main{
-      width: rem(246);
-      padding: rem(20) rem(50);
-      font-weight: bold;
-    }
+    // .btn_main{
+    //   width: rem(246);
+    //   padding: rem(20) 0;
+    //   font-weight: bold;
+    // }
   }
 }
 
@@ -512,9 +512,20 @@ section.sns {
   }
 }
 
-.btn_main, .btn_worry {
+.btn_main {
   display: inline-block;
-  padding: rem(14) rem(52);
+  padding: rem(14) 0;
+  color: #fff;
+  font-size: rem(16);
+  border-radius: rem(12);
+  background-color: var(--color-main);
+  width: rem(220);
+  box-sizing: border-box;
+}
+
+.btn_worry {
+  display: inline-block;
+  padding: rem(14) 0;
   color: #fff;
   font-size: rem(16);
   border-radius: rem(12);
@@ -652,12 +663,6 @@ section.sns {
       display: flex;
       justify-content: center;
       margin-top: rem(90);
-
-      .btn_main {
-        width: rem(246);
-        padding: rem(20) rem(50);
-        font-weight: bold;
-      }
     }
   }
 }

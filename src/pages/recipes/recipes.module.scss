@@ -49,12 +49,12 @@ section.subscribe_discount { margin-bottom: rem(80);}
   }
   .btn {
     color: var(--color-main);
-    border: rem(2) solid var(--color-main);
+    border: rem(1) solid var(--color-main);
     background-color: #fff;
     border-radius: rem(100);
     padding : rem(8) rem(26) rem(8) rem(26);
     @include char(l15);
-    font-weight: 600;
+    font-weight: 500;
     margin-top: rem(20);
   }
   .image_box {

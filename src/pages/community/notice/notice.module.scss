@@ -29,7 +29,7 @@ section.page_no {padding: 0 0 rem(128)}
   .grid_box {
     display: grid;
     grid-template-columns: rem(160) 1fr rem(200); 
-    border-bottom: 1px solid var(--color-line-01);
+    border-bottom: rem(1) solid var(--color-line-01);
     > * {
       @include char(l18);
       padding : rem(18) 0 rem(18);
@@ -43,7 +43,7 @@ section.page_no {padding: 0 0 rem(128)}
   .content_box {
     display: grid;
     grid-template-columns: rem(160) 1fr rem(200); 
-    border-bottom: 1px solid var(--color-line-03);
+    border-bottom: rem(1) solid var(--color-line-03);
     > * {
       @include char(l15);
       padding : rem(18) 0 rem(18);
@@ -79,7 +79,7 @@ section.page_no {padding: 0 0 rem(128)}
     }
 
     .content_box {
-      grid-template-columns: 1fr rem(80); 
+      grid-template-columns: 1fr rem(90); 
       .counter_num{
         display: none;
       }
