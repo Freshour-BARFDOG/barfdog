@@ -124,8 +124,8 @@ export default function CartPage({ data, error }) {
       const sumOfTotalPrice = calcTotalPriceOfTargetKey('totalPrice', nextBasketDtoList); // 기본할인이 적용된 가격
       const nextSubtractedPrice = calcTotalPriceOfTargetKey('subtractedPrice', nextBasketDtoList) // 할인정도
       const ntextDeliveryFee = sumOfTotalPrice >= deliveryConstant.freeCondition ? 0 : deliveryConstant.price;
-      console.log(nextSubtractedPrice)
-      console.log(sumOfTotalPrice)
+      // console.log(nextSubtractedPrice)
+      // console.log(sumOfTotalPrice)
       
       return {
         ...prevState,

@@ -34,14 +34,14 @@ export const valid_hasFormErrors = (errorObj, type = 'array') => {
 
 
 
-export const valid_isEmpty = (value, option={detail:false}) => {
+export const valid_isEmpty = (value, option={detail:false, message:'필수 항목입니다.'}) => {
   let error = '';
   if(option.detail){
     error = value === null ? '항목이 비었습니다.' : ''
   } else if(typeof value === 'string' && !value.replace(/\s*/g, '').length){
-    error = '항목이 비어있습니다.'
+    error = option.message || '항목이 비어있습니다.'
   } else if (!value){
-    error = '항목이 비어있습니다.'
+    error = option.message || '항목이 비어있습니다.'
   }
   return error;
 };

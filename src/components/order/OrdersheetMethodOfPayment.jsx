@@ -3,10 +3,11 @@ import {Payment} from './Payment';
 import Image from 'next/image';
 import React from 'react';
 import {paymentMethodType} from "/store/TYPE/paymentMethodType";
+import ErrorMessage from "../atoms/ErrorMessage";
 
 
 
-export const OrdersheetMethodOfPayment = ({id,info, form, setForm}) => {
+export const OrdersheetMethodOfPayment = ({id, form, setForm, formErrors}) => {
   
   
   const onClickHandler = (e)=>{
@@ -59,6 +60,7 @@ export const OrdersheetMethodOfPayment = ({id,info, form, setForm}) => {
             카카오페이
           </li>
         </ul>
+        {formErrors[id] && <ErrorMessage>{formErrors[id]}</ErrorMessage>}
       </section>
       <section className={s.line}>
         <hr/>

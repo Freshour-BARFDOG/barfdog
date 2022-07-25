@@ -36,6 +36,7 @@ section.final_btn {
   display: flex;
   justify-content: center;
   align-items: center;
+  span, div, p{cursor:default;}
 
   .Wrapper {
     width: rem(760);
@@ -192,14 +193,23 @@ section.final_btn {
       display: flex;
       justify-content: center;
       .btn {
+        width: rem(81);
+        height: rem(37);
         max-height: rem(37);
+        white-space: nowrap;
         display: flex;
+        justify-content: center;
         align-items: center;
-        padding: rem(10) rem(10);
         box-sizing: border-box;
         border: rem(1) solid var(--color-line-03);
         border-radius: rem(2);
         cursor: pointer;
+        &.applied{
+          transition: border .2s var(--transition-cubic);
+          transition-padding: border, color,;
+          color: var(--color-main);
+          &:hover{border-color: var(--color-main);;}
+        }
       }
     }
   }
@@ -567,6 +577,7 @@ section.payment {
   .flex_box {
     display: flex;
     justify-content: space-between;
+    width: 100%;
   }
   hr {
     border: rem(1) solid var(--color-line-04);
@@ -606,8 +617,11 @@ section.payment {
 
   .last_flex_box {
     display: flex;
+    flex-direction: column;
+    align-items: flex-end;
     justify-content: space-between;
     padding: rem(25) 0 rem(45);
+    > *:not(:last-child){margin-bottom:rem(10);}
 
     div:nth-child(2) {
       @include char(l20);
@@ -616,6 +630,7 @@ section.payment {
 
 
   .check_box {
+    display: flex;
     justify-content: flex-start;
     font-size: rem(15);
     margin-bottom: rem(16);
@@ -632,13 +647,13 @@ section.payment {
   display: flex;
   flex-direction: column;
   align-items: center;
-  cursor: pointer;
 
   > p {
     text-align: center;
     @include char(l15);
     font-weight: 500;
     padding-bottom: rem(20);
+    cursor: default;
   }
   .btn_box {
     display: grid;
