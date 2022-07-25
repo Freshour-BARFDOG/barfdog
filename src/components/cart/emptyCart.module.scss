@@ -1,0 +1,33 @@
+@import '/styles/global/rem';
+
+
+.empty_box{
+  width: 100%;
+  text-align: center;
+  padding: rem(60) 0;
+
+  span {
+    color: #636363;
+  }
+
+
+  .button_box{
+    margin-top: rem(40);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .emty_button{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      width: rem(218);
+      height: rem(42);
+      border: rem(1) solid var(--color-main);
+      border-radius: rem(4);
+      color: var(--color-main);
+    }
+  }
+}

@@ -161,7 +161,7 @@ function Swiper_bestReview({ items }) {
           swiper.navigation.update();
         }}
       >
-        {itemList.map((item) => (
+        {itemList?.length > 0 && itemList?.map((item) => (
           <SwiperSlide
             className={s.slide}
             key={`bestReview-${item.id}`}

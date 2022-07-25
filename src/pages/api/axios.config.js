@@ -34,5 +34,4 @@ export function axiosUserConfig (contType = "application/json") {
       "content-Type": contType,
     }
   }
-};
-
+}

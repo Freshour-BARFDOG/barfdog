@@ -14,6 +14,8 @@ import { EmptyContMessage } from '/src/components/atoms/emptyContMessage';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import Icon_Itemlabel from '/src/components/atoms/ItemLabel';
 import { searchQueryType } from '/store/TYPE/searchQueryType';
+import {useSelector} from "react-redux";
+import {userType} from "/store/TYPE/userAuthType";
 
 const getListApiUrl = '/api/items';
 const apiDataQueryString = 'queryItemsDtoList';
@@ -29,9 +31,11 @@ export default function ShopPage() {
   const [itemList, setItemList] = useState([]);
   const [searchValues, setSearchValues] = useState(initialSearchValues);
   const [searchQuery, setSearchQuery] = useState('');
+  const auth = useSelector(state=>state.auth);
+  
 
-  console.log(itemList);
-  console.log(searchValues.itemType)
+  // console.log(itemList);
+  // console.log(searchValues.itemType)
   useEffect(() => {
     // - CASE: Nav GNB에서 shop > submenu Click event
     // - IMPORTANT : to prevent Inifinite Loop when router query is changed
@@ -84,6 +88,16 @@ export default function ShopPage() {
       [id]: value,
     }));
   };
+  const onClickItem = (e)=>{
+    e.preventDefault();
+    const thisUserType = auth.userType;
+    if(thisUserType === userType.NON_MEMBER){
+      alert('회원가입 후 이용가능합니다.')
+    }else{
+      const link = e.currentTarget.href;
+      router.push(link);
+    }
+  }
 
   return (
     <>
@@ -160,12 +174,11 @@ export default function ShopPage() {
             </div>
           </section>
           <section className={s.bot}>
-            <ul className={s.inner}>
-              {itemList.length > 0 ? (
-                itemList.map((item, index) => (
+            {itemList.length === 0 ? <EmptyContMessage message={'등록된 상품이 없습니다.'} /> : <ul className={s.inner}>
+              {itemList.map((item, index) => (
                   <li className={`${s.shop_list} animation-show`} key={`item-${item.id}-${index}`}>
                     <Link href={`/shop/item/${item.id}`} passHref>
-                      <a>
+                      <a onClick={onClickItem}>
                         <figure className={s.shop_image}>
                           {item.itemIcons &&
                             (item.itemIcons?.indexOf(',') >= 0 ? (
@@ -231,11 +244,9 @@ export default function ShopPage() {
                       </a>
                     </Link>
                   </li>
-                ))
-              ) : (
-                <EmptyContMessage message={'등록된 상품이 없습니다.'} />
-              )}
-            </ul>
+                ))}
+            </ul>}
+            
           </section>
           <section className={s['pagination-section']}>
             <PaginationWithAPI

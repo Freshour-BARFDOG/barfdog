@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Loading from '/src/components/common/Loading';
 import { calcDogAgebyMonth } from '/util/func/calcDogAge';
 import { dogActivityLevelType } from '/store/TYPE/dogActivityLevelType';
+import {dogSizeType} from "../../../store/TYPE/dogSizeType";
 
 export const SurveyStatistics = ({ surveyReportsId , mode = 'default' }) => {
   const [info, setInfo] = useState({});
@@ -29,6 +30,7 @@ export const SurveyStatistics = ({ surveyReportsId , mode = 'default' }) => {
         const DATA = {
           lastSurveyDate: data.lastSurveyDate,
           myDogName: data.myDogName,
+          dogSize: dogSizeType.KOR[data.dogSize],
           ageAnalysis: {
             // 바프독을 시작한 평균 나이
             avgAgeMonth: data.ageAnalysis.avgAgeMonth, // 나이 단위 : 1년미만 -> 개월 / 1년이상 -> 살
@@ -237,7 +239,7 @@ export const SurveyStatistics = ({ surveyReportsId , mode = 'default' }) => {
 
               {/* 가운데박스 */}
               <div className={s.box}>
-                <p>{'소형견'} 평균 체중</p>
+                <p>{info.dogSize} 평균 체중</p>
 
                 <div className={s.stick_box}>
                   {info?._percentDATA?.weightAnalysis.length &&
@@ -252,7 +254,7 @@ export const SurveyStatistics = ({ surveyReportsId , mode = 'default' }) => {
 
                 <div className={s.top_text_box}>
                   <div className={s.top_text_row1}>
-                    <div className={s.left_text}>{'소형견'} 평균</div>
+                    <div className={s.left_text}>{info.dogSize} 평균</div>
                     <div className={s.right_text}>{info.weightAnalysis?.avgWeight}kg</div>
                   </div>
                   <div className={s.top_text_row2}>
@@ -264,7 +266,7 @@ export const SurveyStatistics = ({ surveyReportsId , mode = 'default' }) => {
 
               {/* 오른쪽 박스 */}
               <div className={s.box}>
-                <p>{'소형견'} 평균 활동량</p>
+                <p>{info.dogSize} 평균 활동량</p>
 
                 <div className={s.stick_box}>
                   {info?._percentDATA?.activityAnalysis.length &&
@@ -288,7 +290,7 @@ export const SurveyStatistics = ({ surveyReportsId , mode = 'default' }) => {
                     <div className={s.left_text}>{info?.myDogName}</div>
                     <div className={s.right_text}>
                       {
-                        Object.values(dogActivityLevelType.KOR)[
+                        dogActivityLevelType.KOR[
                           info?.activityAnalysis?.avgActivityLevel
                         ]
                       }
@@ -396,7 +398,7 @@ export const SurveyStatistics = ({ surveyReportsId , mode = 'default' }) => {
                     }}
                   ></span>
                 </div>
-                {'소형견'} 중에서
+                {info.dogSize} 중에서
               </div>
             </div>
           </section>

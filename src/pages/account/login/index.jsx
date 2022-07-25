@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import s from './login.module.scss';
 import axios from 'axios';
 import Link from 'next/link';
@@ -35,6 +35,35 @@ export default function LoginPage() {
   const [activeAutoLogin, setActiveAutoLogin] = useState(false);
   const [formValues, setFormValues] = useState(initialValues);
   const [formErrors, setFormErrors] = useState();
+
+  const naverRef = useRef();
+  useEffect(() => {
+    const naverScript = document.createElement("script");
+    naverScript.src = "https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js";
+    naverScript.type = "text/javascript";
+    document.head.appendChild(naverScript);
+
+    naverScript.onload = () => {
+      const naverLogin = new window.naver.LoginWithNaverId({
+        clientId: process.env.NEXT_PUBLIC_NAVER_CLIENT_ID,
+        callbackUrl: process.env.NEXT_PUBLIC_NAVER_REDIRECT_URI,
+        callbackHandle: true,
+        isPopup: false,
+        loginButton: {
+          color: "green",
+          type: 3,
+          height: 0,
+        }
+      });
+      naverLogin.init();
+      naverLogin.logout(); //네이버 로그인이 계속 유지되는 경우가 있음, 초기화시 로그아웃
+    }
+  }, []);
+
+  function naverLoginFunc() {
+    naverRef.current.children[0].click();
+
+  }
 
   function kakaoLoginFunc() {
     const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}&response_type=code`;
@@ -179,10 +208,12 @@ export default function LoginPage() {
               <h5 className={s.easylogin}>간편로그인</h5>
               <div className={s.login_sns}>
                 <button type={'button'} className={s.kakao} onClick={kakaoLoginFunc}>
-                  <Image src={Kakao} width={72} height={72} alt="카카오톡 아이콘" />
+                  <Image src={Kakao} width={72} height={72} alt="카카오톡 아이콘"/>
                 </button>
-                <button className={s.naver} type={'buttom'}>
-                  <Image src={Naver} width="72" height="72" alt="네이버 아이콘" />
+                {/* naver가 제공해주는 로그인 버튼*/}
+                <div ref={naverRef} id="naverIdLogin"></div>
+                <button className={s.naver} type={'buttom'} onClick={naverLoginFunc}>
+                  <Image src={Naver} width="72" height="72" alt="네이버 아이콘"/>
                 </button>
               </div>
             </form>
@@ -198,7 +229,7 @@ const InputBox = ({ id, name, type, placeholder, setFormValues, errorMessage, au
   const [value, setValue] = useState('');
 
   const onChangeHandler = (e) => {
-    const { id, value } = e.currentTarget;
+    const {id, value} = e.currentTarget;
     let filteredValue = filter_emptyValue(value);
     setValue(filteredValue);
     if (setFormValues && typeof setFormValues === 'function') {

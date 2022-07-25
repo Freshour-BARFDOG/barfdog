@@ -8,8 +8,9 @@ import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import rem from '/util/func/rem';
 import sorting from '/util/func/sorting';
 import Link from 'next/link';
+import Spinner from "../atoms/Spinner";
 
-export const ShopOptionBar = ({ data, formValues, setFormValues, onAddToCart, onActiveModal }) => {
+export const ShopOptionBar = ({ id, data, formValues, setFormValues, onAddToCart, onStartBuying, isLoading, activeModal,onActiveModal }) => {
   // SELECT OPTION
   const defaultOption = { label: '상품선택', value: '' };
   const selectOptions = data?.opt?.map((option) => ({
@@ -110,6 +111,13 @@ export const ShopOptionBar = ({ data, formValues, setFormValues, onAddToCart, on
   const onActiveShopOptionBar = () => {
     setActive((prevState) => !prevState);
   };
+  
+  
+  const onHideCartShortcut = () => {
+    onActiveModal({
+      [id]: false
+    });
+  };
 
   return (
     <div id={s['shop-optionBar']} className={`${active ? s.active : ''}`}>
@@ -144,7 +152,7 @@ export const ShopOptionBar = ({ data, formValues, setFormValues, onAddToCart, on
                           onChange={onChangeQuantityInputHandler}
                           value={option.quantity}
                           minQuantity={data.minQuantity}
-                          maxQuantity={data.maxQuantity}
+                          maxQuantity={option.remaining}
                         />
                       </div>
                       <span className={s.optionPrice}>
@@ -171,11 +179,21 @@ export const ShopOptionBar = ({ data, formValues, setFormValues, onAddToCart, on
           </div>
           <section className={`${s['shop-btn-section']} ${s['on-optionBar']}`}>
             <div className={s['grid-box']}>
-              <button className={`${s.cart} ${s.btn}`} onClick={onAddToCart}>
-                장바구니
+              <button type={'button'} className={`${s.cart} ${s.btn}`} data-area={id} onClick={onAddToCart}>
+                {isLoading.cart ? <Spinner /> : '장바구니'}
               </button>
-              <button className={`${s.buy} ${s.btn}`}>구매하기</button>
+              <button onClick={onStartBuying} type={'button'} className={`${s.buy} ${s.btn}`}>
+                {isLoading.buy ? <Spinner style={{color:'#fff'}} /> : '구매하기'}</button>
             </div>
+            {activeModal[id] && (
+              <div className={`${s['cart-shortcut']} animation-show`}>
+                <p>상품이 장바구니에 담겼습니다.</p>
+                <CloseButton onClick={onHideCartShortcut} className={s.close} />
+                <Link href="/cart" passHref>
+                  <a className={`${s.cart} ${s.btn}`}>장바구니로 바로가기</a>
+                </Link>
+              </div>
+            )}
           </section>
         </div>
       </Wrapper>

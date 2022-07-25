@@ -57,23 +57,7 @@ export const getData = async (url, type) => {
       let errorMessage;
       const errorObj = err?.response;
       const status = errorObj?.status;
-      // if(status === 401){
-      //   const errorReason = err?.response.data.reason;
-      //   if(errorReason === "EXPIRED_TOKEN"){
-      //     console.error("ERROR REASON: ", errorReason);
-      //     errorMessage = status + errorReason+ '\n로그인 토큰이 만료되었습니다. 다시 로그인해주세요.';
-      //   } else if(errorReason === "UNAUTHORIZED") {
-      //     errorMessage = errorReason +  '\n권한이 없습니다.'
-      //   }
-      // }else if (status === 403) {
-      //   errorMessage = '\n접근 불가한 페이지입니다.';
-      // } else if(status === 500) {
-      //   errorMessage =  errorObj?.data?.error + '\n데이터가 존재하지 않거나, 서버 내부 에러입니다.';
-      // } else {
-      //   errorMessage =  'Failed Fetching Data: 데이터를 불러오는데 실패했습니다.';
-      // }
       let error = null;
-      console.log(status)
       switch (status) {
         case 200:
           error = '';  // 유효한 토큰 : 요청을 성공적으로 처리함
@@ -86,10 +70,10 @@ export const getData = async (url, type) => {
           error = '잘못된 요청을 보냈습니다.';
           break;
         case 401:
-          error = type + '인증 토큰이 만료되었습니다';
+          error = '인증 토큰이 만료되었습니다';
           break;
         case 403:
-          error = type + ' 토큰으로는 접근할 수 없는 페이지입니다.';
+          error = '접근권한이 없는 페이지입니다.';
           break;
         case 404:
           error = '요청한 리소스가 서버에 없습니다.';
@@ -139,8 +123,8 @@ export const putData = async (url, data) => {
       return res;
     })
     .catch((err) => {
-      return err;
       console.log(err.response);
+      return err;
     });
 
   return response;
@@ -236,6 +220,36 @@ export const putObjData = async (url, data, contType) => {
 
 
 
+export const deleteObjData = async (url, data, contType) => {
+  const result = {
+    isDone: false,
+    error: '',
+    data: null,
+    status: null,
+  }
+  const response = await axios
+    .delete(url, data, axiosConfig(contType))
+    .then((res) => {
+      console.log(res);
+      result.data = res;
+      return res.status === 200 || res.status === 201;
+    })
+    .catch((err) => {
+      console.log(err.response);
+      const errStatus = err.response?.status >= 400;
+      const errorMessage = err.response?.data.error;
+      result.status = err.response.status;
+      result.error = errorMessage;
+      result.data = err.response;
+      return !errStatus;
+    });
+  
+  result.isDone = response;
+  return result;
+}
+
+
+
 
 
 export const postFileUpload = async (url, formData) => {
@@ -299,6 +313,43 @@ export const postUserObjData = async (url, data, contType) => {
 
 
 
+export const postSelfApiData = async (selfPath, data, contType) => {
+  const result = {
+    isDone: false,
+    error: '',
+    data: null,
+    status: null,
+  }
+  const selfApiUrl = window.location.origin;
+  axios.defaults.baseURL = selfApiUrl;
+  const response = await axios
+    .post(`${selfApiUrl}${selfPath}`, data, axiosUserConfig(contType))
+    .then((res) => {
+      console.log('',res);
+      result.data = res;
+      result.status = res.status;
+      return res.status === 200 || res.status === 201;
+    })
+    .catch((err) => {
+      const error = err.response;
+      console.log('ERROR내용: ',err.response);
+      if (error.data.error || error.data.errors[0].defaultMessage) {
+        result.error = error.data.error || error.data.errors[0].defaultMessage;
+      } else if(error?.data.error.error){
+        result.error = '서버와 통신오류가 발생했습니다.'
+      } else if (error.data.reason === 'EXPIRED_TOKEN') {
+        result.error = '유저 토큰이 만료되었습니다.'
+      }
+      result.status = err.response.status;
+      return !error?.status >= 400;
+    });
+  
+  result.isDone = response;
+  return result;
+}
+
+
+
 // -------- SSR DATA FETCHING -------- //
 /* - EXAMPLE
 
@@ -327,75 +378,76 @@ export async function getServerSideProps({req}) {
 
 
 
-export const getTokenFromCookie = (req)=>{
+
+
+export const getTokenClientSide = (req)=>{
   // - MEMBER & ADMIN 모두 동일한 API에서 동일한 TOKEN을 발급받는다
   // - SERVER에서 TOKEN 속에 권한에 대한 값을 설정하여 검증한다.
   let token;
-  const cookie = req.headers.cookie;
-  const tokenKey = cookieType.LOGIN_COOKIE;
-  cookie.split(';').forEach((c) => {
-    if (c.indexOf(tokenKey) >= 0) {
-      token = c.split('=')[1];
-      return
-    }
-  });
-  
-  return token;
-  
-}
-
-// export const getAdminTokenFromCookie = (req)=>{
-//   let token;
-//   const cookie = req.headers.cookie;
-//   const tokenKey = 'adminLoginCookie';
-//   cookie.split(';').forEach((c) => {
-//     if (c.indexOf(tokenKey) >= 0) {
-//       token = c.split('=')[1];
-//       return
-//     }
-//   });
-//   return token;
-// }
-
-
-
-export const getAdminAutoLoginStatus = (req)=>{
-  let autologinStatus;
-  const cookie = req.headers.cookie;
-  const tokenKey = cookieType.LOGIN_COOKIE;
-  cookie.split(';').forEach((c) => {
-    if (c.indexOf(tokenKey) >= 0) {
-      autologinStatus = c.split('=')[1];
-      console.log(JSON.parse(autologinStatus));
-      autologinStatus = !!JSON.parse(autologinStatus).email;
-      return;
-    }
-  });
-  return autologinStatus;
-}
-
-
-
-
-
-export const getDataSSR = async (req, url)=>{
-  const token = getTokenFromCookie(req);
-  const result = await axios
-    .get(url,{
-      headers: {
-        authorization: token,
-        "content-Type": "application/json",
+  const headers = req.headers;
+  if(headers){
+  const cookie = headers.cookie;
+    const tokenKey = cookieType.LOGIN_COOKIE;
+    cookie.split(';').forEach((c) => {
+      if (c.indexOf(tokenKey) >= 0) {
+        return token = c.split('=')[1];
       }
-    })
-    .then((res) => {
-      // console.log(res);
-      return res;
-    })
-    .catch((err) => {
-      // console.log(err.response)
-      return err.response
     });
+  }
+  return token;
+}
+
+
+
+export const getTokenFromServerSide = (req)=>{
+  // - MEMBER & ADMIN 모두 동일한 API에서 동일한 TOKEN을 발급받는다
+  // - SERVER에서 TOKEN 속에 권한에 대한 값을 설정하여 검증한다.
+  let token;
+  console.log(req.headers)
+  const cookie = req.headers.cookie.split(';');
+  const tokenKey = cookieType.LOGIN_COOKIE;
+  if (cookie) {
+    for (const key of cookie) {
+      if (key.indexOf(tokenKey) >= 0) {
+        token = key.split('=')[1];
+        break;
+      }
+    }
+  }
+  return token;
+}
+
+
+
+
+export const getDataSSR = async (req, url, tokenFromSSR)=>{
+  let result ;
+  const token = tokenFromSSR || getTokenFromServerSide(req);
+  // console.log('token:', token)
+  try {
+    result = await axios
+      .get(url,{
+        headers: {
+          authorization: token,
+          "content-Type": "application/json",
+        }
+      })
+      .then((res) => {
+        // console.log(res);
+        return res;
+      })
+      .catch((err) => {
+        // console.log(err.response)
+        return err.response
+      });
+  
+  } catch (err) {
+      // console.error(err)
+    return err.response;
+  }
+  
   
   return result;
   
 }
+

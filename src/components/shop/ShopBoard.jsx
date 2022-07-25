@@ -10,16 +10,18 @@ import 'swiper/css/autoplay';
 import sorting from '/util/func/sorting';
 import Link from 'next/link';
 import CloseButton from '../atoms/CloseButton';
-
-
+import Spinner from '../atoms/Spinner';
 
 export const ShopBoard = ({
+  id,
   data,
   formValues,
   setFormValues,
   onAddToCart,
-  onActiveModal,
   activeModal,
+  onActiveModal,
+  isLoading,
+  onStartBuying,
 }) => {
   const item = data?.item;
   const surveySwiperSettings = {
@@ -32,8 +34,12 @@ export const ShopBoard = ({
   };
 
   const onHideCartShortcut = () => {
-    onActiveModal(false);
+    onActiveModal({
+      [id]: false
+    });
   };
+  // console.log(item);
+
 
   return (
     <section className={`${Style.top} ani-show-all-child`}>
@@ -41,19 +47,20 @@ export const ShopBoard = ({
         <div className={Style.top_box}>
           <div className={Style.left_box}>
             <Swiper {...surveySwiperSettings}>
-              {data && sorting(data?.itemImages, 'leakedOrder', 'ascend')?.map((image, index) => (
-                <SwiperSlide key={`item-image-${image.id}-${index}`}>
-                  <div className={`${Style.image}`}>
-                    <Image
-                      priority
-                      src={image.url}
-                      objectFit="cover"
-                      layout="fill"
-                      alt={image.filename}
-                    />
-                  </div>
-                </SwiperSlide>
-              ))}
+              {data &&
+                sorting(data?.itemImages, 'leakedOrder', 'ascend')?.map((image, index) => (
+                  <SwiperSlide key={`item-image-${image.id}-${index}`}>
+                    <div className={`${Style.image}`}>
+                      <Image
+                        priority
+                        src={image.url}
+                        objectFit="cover"
+                        layout="fill"
+                        alt={image.filename}
+                      />
+                    </div>
+                  </SwiperSlide>
+                ))}
             </Swiper>
           </div>
 
@@ -83,11 +90,16 @@ export const ShopBoard = ({
               <div>배송정보</div>
 
               <div>
-                택배배송 {transformLocalCurrency(data?.delivery?.price)}원{' '}
-                <br className={Style.del_br}></br>(
-                {transformLocalCurrency(data?.delivery?.freeCondition)}원 이상 구매 시 무료)
+                {item.deliveryFree ? '무료' :  (
+                  <>
+                    택배배송 {transformLocalCurrency(data?.delivery?.price)}원
+                    <p className={Style.del_br}></p> (
+                    {transformLocalCurrency(data?.delivery?.freeCondition)}원 이상 구매 시 무료)
+                  </>
+                )}
+
                 <br />
-                <div className={Style.text}>제주 및 도서산간 지역은 배송이 불가능합니다</div>
+                <p className={Style.text}>제주 및 도서산간 지역은 배송이 불가능합니다</p>
               </div>
 
               <div>
@@ -114,12 +126,14 @@ export const ShopBoard = ({
             {/* 장바구니 버튼 */}
             <section className={s['shop-btn-section']}>
               <div className={s['grid-box']}>
-                <button className={`${s.cart} ${s.btn}`} onClick={onAddToCart}>
-                  장바구니
+                <button type={'button'} className={`${s.cart} ${s.btn}`} data-area={id} onClick={onAddToCart}>
+                  {isLoading.cart ? <Spinner /> : '장바구니'}
                 </button>
-                <button className={`${s.buy} ${s.btn}`}>구매하기</button>
+                <button onClick={onStartBuying} type={'button'} className={`${s.buy} ${s.btn}`}>
+                  {isLoading.buy ? <Spinner style={{ color: '#fff' }} /> : '구매하기'}
+                </button>
               </div>
-              {activeModal && (
+              {activeModal[id] && (
                 <div className={`${s['cart-shortcut']} animation-show`}>
                   <p>상품이 장바구니에 담겼습니다.</p>
                   <CloseButton onClick={onHideCartShortcut} className={s.close} />

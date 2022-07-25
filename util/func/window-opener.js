@@ -107,10 +107,10 @@ export default class WindowOpener extends React.Component {
   }
 
   render () {
-    const { children } = this.props;
+    const { children, disabled } = this.props;
     return (
       <>
-        <button type={'button'} autoFocus={false} onClick={this.onClickHandler}>
+        <button type={'button'} autoFocus={false} onClick={this.onClickHandler} disabled={disabled}>
           {children}
         </button>
       </>

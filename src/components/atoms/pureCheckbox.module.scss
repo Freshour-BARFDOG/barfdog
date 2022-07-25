@@ -6,7 +6,7 @@ $browser-context: 16;
 
 
 .checkbox-wrap{
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: flex-start;
   pre{margin:0 !important; padding-left: rem(10) !important;
@@ -15,8 +15,9 @@ $browser-context: 16;
 }
 
 .checkbox {
-  display: grid;
+  display: inline-grid;
   grid-template-columns: rem(20) 1fr;
+  align-items: center;
   column-gap: rem(10);
   cursor: pointer;
   font-size: rem(14);
