@@ -7,14 +7,21 @@ import { calcDogAgebyMonth } from '/util/func/calcDogAge';
 import { dogActivityLevelType } from '/store/TYPE/dogActivityLevelType';
 import {dogSizeType} from "../../../store/TYPE/dogSizeType";
 
-export const SurveyStatistics = ({ surveyReportsId , mode = 'default' }) => {
+export const SurveyStatistics = ({ dogId ,  mode = 'default' }) => {
   const [info, setInfo] = useState({});
   const [isLoading, setIsLoading] = useState({ fetching: true });
   const [isRendered, setIsRendered] = useState(true);
   console.log(info);
   useEffect(() => {
     // if(Object.keys(info).length >0 ) return;
-    const getSurveyReportsApiUrl = `/api/surveyReports/${surveyReportsId}`;
+    
+    
+    //MYPAGE API URL
+    const getSurveyReportsApiUrl = mode === 'mypage' ? `/api/dogs/${dogId}/surveyReport` : `/api/surveyReports/${dogId}`;
+    
+    // 설문조사 리포트 조회
+    // GET 요청을 사용해서 설문조사 분석 리포트를 조회 할 수 있다.
+    // const getSurveyReportsApiUrl = `/api/surveyReports/${dogId}`;
     console.log(getSurveyReportsApiUrl);
     (async () => {
       try {
@@ -192,9 +199,9 @@ export const SurveyStatistics = ({ surveyReportsId , mode = 'default' }) => {
 
 
 
-  // if (isLoading.fetching || isRendered) {
-  //   return <Loading />;
-  // }
+  if (isLoading.fetching || isRendered) {
+    return <Loading />;
+  }
 
   return (
     <div id="statistics">

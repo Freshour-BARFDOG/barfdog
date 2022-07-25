@@ -6,14 +6,14 @@ import { SurveyStatistics } from '/src/components/survey/SurveyStatistics';
 import s from "/src/components/survey/surveyStatistics.module.scss";
 import Link from "next/link";
 
-export default function SurveyStatisticsPage({surveyReportsId}) {
+export default function SurveyStatisticsPage({dogId}) {
   // 설문조사 조회시, 강아지 ID가 아닌  설문조사의 ID로 조회한다.
   return (
     <>
       <MetaTitle title="설문조사 통계" />
       <Layout>
         <Wrapper>
-          <SurveyStatistics surveyReportsId={surveyReportsId}/>
+          <SurveyStatistics dogId={dogId} mode={'default'}/>
           <section className={s.last_text}>
             <div>
               ※ 해당 결과지는 바프독 고객을 대상으로한 참고용 결과이니, <br/>
@@ -34,8 +34,17 @@ export default function SurveyStatisticsPage({surveyReportsId}) {
 }
 
 
-SurveyStatisticsPage.getInitialProps = async ({ query }) => {
-  const { surveyReportsId } = query;
-  return { surveyReportsId };
-};
 
+// CF) _app.jsx SSR 적용 후 , getinitialProps에서 query가져올 수 없음
+// SurveyStatisticsPage.getInitialProps = async ({ query }) => {
+//   const { surveyReportsId } = query;
+//   return { surveyReportsId };
+// };
+
+
+
+export async function getServerSideProps({ query }) {
+  const { dogId } = query;
+  
+  return { props: { dogId } };
+}
