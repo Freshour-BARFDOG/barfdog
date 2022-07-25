@@ -20,7 +20,7 @@ export const Modal_coupon = ({onModalActive, data, className}) => {
         <section className={s.modal}>
           <div className={s.title_box}>
             <div className={s.title}>
-              적용가능쿠폰 <span>쿠폰은 최대 2장까지 적용가능합니다.</span>
+              적용가능쿠폰 <span>쿠폰은 최대 1장까지 적용가능합니다.</span>
             </div>
           </div>
           <div className={s.content_box}>
@@ -36,29 +36,34 @@ export const Modal_coupon = ({onModalActive, data, className}) => {
             <div className={s.flex_box2}>
               <div className={s.check_box}>
                 <input type="radio" name="" id="" />
-                등급쿠폰 10%할인
               </div>
-              <div>1개</div>
-              <div>2022.12.31</div>
-              <div>1,640원</div>
+              <div className={s.name_box}>
+                <div className={s.name}>등급쿠폰 10%할인</div>
+                <div className={s.count}><span>&nbsp;·&nbsp;</span>1개</div>
+              </div>
+              <div className={s.date}> <span>~</span> 2022.12.31</div>
+              <div className={s.price}>1,640원</div>
             </div>
           </div>
 
+          
           <div className={s.content_box}>
             <div className={s.flex_box2}>
               <div className={s.check_box}>
                 <input type="radio" name="" id="" />
-                등급쿠폰 10%할인
               </div>
-              <div>1개</div>
-              <div>2022.12.31</div>
-              <div>1,640원</div>
+              <div className={s.name_box}>
+                <div className={s.name}>등급쿠폰 10%할인</div>
+                <div className={s.count}><span>&nbsp;·&nbsp;</span>1개</div>
+              </div>
+              <div className={s.date}> <span>~</span> 2022.12.31</div>
+              <div className={s.price}>1,640원</div>
             </div>
           </div>
 
           <div className={s.btn_box}>
             <div className={s.cancle_btn}>취소</div>
-            <div className={s.choice_btn}>쿠폰선택</div>
+            <div className={s.choice_btn}>쿠폰적용</div>
           </div>
         </section>
       </ModalWrapper>

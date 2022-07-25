@@ -6,11 +6,11 @@ $browser-context: 16;
 
 .btn {
   width: 100%;
-  height: 50px;
-  border: 1px solid var(--color-main);
-  border-radius: 3px;
+  height: rem(50);
+  border: rem(1) solid var(--color-main);
+  border-radius: rem(3);
   color: var(--color-main);
-  font-size: 15px;
+  font-size: rem(15);
   font-weight: 400;
   align-items: center;
   justify-content: center;
@@ -21,17 +21,17 @@ $browser-context: 16;
 
 
 .flex__container {
-  // height: 338px;//높이 맞는지 확인 피그마보고 임의로 떄림
+  // height: rem(338);//높이 맞는지 확인 피그마보고 임의로 떄림
   //k:높이를 고정보다 마진으로 변경?
-  margin: 50px auto 260px;
-  width: 360px;
+  margin: rem(50) auto rem(260);
+  width: rem(360);
   justify-content: center;
   align-items: center;
   flex-direction: column;
   
   // 로그인 타이틀
   .title {
-    margin-bottom: 33px;
+    margin-bottom: rem(33);
     text-align: center;
     .h2 {
     font-weight: 500;
@@ -40,24 +40,24 @@ $browser-context: 16;
 
   //이름 입력 
   .input__title{
-    padding-left: 4px;
-    margin-bottom: 5px;
+    padding-left: rem(4);
+    margin-bottom: rem(5);
   }
   input {
     display: block;
     // box-sizing: border-box;
-    padding: 0 20px;
+    padding: 0 rem(20);
     width: 100%;
-    height: 50px;
-    border:1px solid #ddd;
+    height: rem(50);
+    border: rem(1) solid #ddd;
     outline:none;
-    font-size: 20px;
-    margin-bottom: 16px;
+    font-size: rem(20);
+    margin-bottom: rem(16);
     // color : #b7b7b7;
   }
 
   .input__field{
-    margin-bottom: 40px;
+    margin-bottom: rem(40);
   }
   
   // 아이디 찾기 버튼
@@ -72,12 +72,12 @@ $browser-context: 16;
 
 
 @media (max-width: rem(400)) {
-  
+
   .flex__container {
     width: 100%;
     
     input {
-      font-size: 16px;
+      font-size: rem(16);
     }
   }
 

@@ -10,19 +10,35 @@
 @import './rem';
 
 
-@for $i from 1 through 20 {
-  .mt-#{5*$i} {
-    margin-top: rem(5*$i);
+@for $i from 0 through 20 {
+  @if ($i == 0){
+    .mt-#{5*$i} {
+      margin-top: rem(5*$i) !important;
+    }
+    .mb-#{5*$i} {
+      margin-bottom: rem(5*$i) !important;
+    }
+    .ml-#{5*$i} {
+      margin-left: rem(5*$i)!important;
+    }
+    .mr-#{5*$i} {
+      margin-right: rem(5*$i)!important;
+    }
+  } @else {
+    .mt-#{5*$i} {
+      margin-top: rem(5*$i);
+    }
+    .mb-#{5*$i} {
+      margin-bottom: rem(5*$i);
+    }
+    .ml-#{5*$i} {
+      margin-left: rem(5*$i);
+    }
+    .mr-#{5*$i} {
+      margin-right: rem(5*$i);
+    }
   }
-  .mb-#{5*$i} {
-    margin-bottom: rem(5*$i);
-  }
-  .ml-#{5*$i} {
-    margin-left: rem(5*$i);
-  }
-  .mr-#{5*$i} {
-    margin-right: rem(5*$i);
-  }
+
 }
 
 
@@ -44,6 +60,32 @@
 
 
 html, body{width:100vw; overflow-x:hidden;}
+
+label{cursor: pointer;}
+
+input.fullWidth {
+  width: 100%;
+}
+textarea.fullWidth {
+  width: 100%;
+  border: rem(1) solid var(--color-line-03);
+  padding: rem(10) rem(8);
+  min-height: rem(100);
+}
+input.halfWidth {
+  width: 50%;
+}
+input.text-align-right {
+  text-align: right;
+}
+input.text-align-center {
+  text-align: center;
+}
+input[data-align='right']{
+  text-align: right;
+}
+
+
 
 .img-wrap, .img_wrap{
   position:relative;
@@ -78,7 +120,7 @@ html, body{width:100vw; overflow-x:hidden;}
 
 
 
-.ani-show-all-child{
+.animation-show-all-child{
   animation: show var(--ani-default) forwards;
   @for $i from 1 through 20 {
     * :nth-child(#{$i}){

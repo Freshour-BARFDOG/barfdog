@@ -1,8 +1,11 @@
 @import '/styles/global/rem';
 
+.ModalWrapper{
+  width: rem(400) !important;
+}
 
 .title {
-  font-size: 18px;
+  font-size: rem(18);
   font-weight: 500;
   margin-bottom: rem(10);
   text-align: center;
@@ -30,4 +33,15 @@
   align-items: center;
   justify-content: center;
   gap: rem(10);
+}
+
+
+
+@media (max-width: rem(600)) {
+
+  .title {
+    width: 80vw;
+    max-width: rem(335);
+  }
+
 }

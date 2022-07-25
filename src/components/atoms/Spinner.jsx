@@ -9,7 +9,7 @@ const Wrap = styledComponents.i`
     justify-content:center;
     pointer-events:none;
     // opacity:0;
-    animation: rotate ${(props) => props.speed}s linear infinite ;
+    animation: rotate ${(props) => props.speed}s linear infinite !important;
     
     &.floating{
       position:absolute;

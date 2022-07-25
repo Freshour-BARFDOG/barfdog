@@ -26,8 +26,7 @@ $browser-context:16;
   padding-top: rem(50);
   width: 100%;
   height: rem(183);
-  border-color: black;
-  border: rem(1) solid black;
+  border: rem(1) solid #dbdbdb;
   box-sizing: border-box;  
 
  
@@ -77,6 +76,7 @@ $browser-context:16;
 
   .linebox {
     height: auto;
+    padding: rem(20) rem(20);
 
     .frontline {
       display: grid;

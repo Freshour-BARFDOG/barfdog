@@ -2,10 +2,35 @@
 @import '/styles/global/guide';
 
 section.title { padding : rem(8) 0 rem(18) }
-
+section.body { padding : rem(120) 0 0 }
 
 .title {
   @include char(t24);
+}
+
+.body {
+  width: 100%;
+  text-align: center;
+  .flex_box {
+    .text {
+      padding-bottom: rem(20)
+    }
+
+    .empty_btn_box {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      .btn {
+        background-color: var(--color-main);
+        color: #fff;
+        padding: rem(10) 0;
+        width: rem(200);
+        border-radius: rem(4);
+        font-size: rem(15);
+        font-weight: 500;
+      }
+    }
+  }
 }
 
 .dogInfo-wrap {
@@ -21,7 +46,7 @@ section.title { padding : rem(8) 0 rem(18) }
   margin-bottom: rem(10);
 
   &:last-child {
-    margin-bottom: rem(0);
+    margin-bottom: rem(120);
   }
   .left_box {
     width:100%;
@@ -119,7 +144,7 @@ section.title { padding : rem(8) 0 rem(18) }
   .select_box{
     width: 100%;
     grid-column: 2 / span 2;
-    transform: translateY(-80px);
+    transform: translateY(rem(-80));
 
     .btn-section {
       display: flex;
@@ -148,13 +173,64 @@ section.title { padding : rem(8) 0 rem(18) }
   }
 }
 
+
+// finishedOrder
+
+.text_box{
+  padding: rem(85) 0 rem(80);
+  text-align: center;
+  .maintext{
+    font-size: rem(28);
+    font-weight: 600;
+  }
+  .subtext{
+    font-size: rem(19);
+
+    span {
+      color: var(--color-main);
+    }
+
+    
+    br {
+      display: none;
+    }
+  }
+}
+
+.btn_box{
+  display: flex;
+  justify-content: center;
+  column-gap: rem(10);
+  padding-bottom: rem(220);
+
+  > button {
+    padding: rem(12) 0;
+    width: rem(200);
+    border-radius: rem(4);
+  }
+
+  .link_home{
+    background: #FFFFFF;
+    border: rem(1) solid #DDDDDD;
+  }
+  .link_orderlist{
+    background: var(--color-main);
+    color: #fff;
+  }
+}
+
+
 @media (max-width: rem(900)) {
 
 
   .dogInfo-wrap {
     max-height: rem(400);
     padding: 0 rem(20);
-    grid-template-columns: 100px 1fr;
+    grid-template-columns: rem(90) 1fr;
+
+    &:last-child {
+      margin-bottom: rem(120);
+    }
 
     .left_box {
       width:100%;
@@ -176,7 +252,7 @@ section.title { padding : rem(8) 0 rem(18) }
         .inner_flex {
           display: grid;
           grid-template-columns: 1fr;
-          grid-row-gap: 10px;
+          grid-row-gap: rem(10);
 
           .dog_name {
             order: 2;
@@ -185,17 +261,20 @@ section.title { padding : rem(8) 0 rem(18) }
         }
         
         .image {
-          transform: translateY(-15px);
+          transform: translateY(rem(-15));
         }
       }
 
       .controls {
-        display: grid;
-        grid-template-columns: 110px 85px;
+        display: flex;
         margin-bottom: rem(30);
   
         button {
-          font-size: 14px;
+          font-size: rem(14);
+
+          &:last-child {
+            padding-right: 0;
+          }
         }
       }
       
@@ -204,15 +283,15 @@ section.title { padding : rem(8) 0 rem(18) }
    
     .select_box{
       grid-column: 1 / span 2;
-      transform: translateY(-20px);
+      transform: translateY(rem(-20));
 
       .btn-section {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        grid-gap: 10px;
+        grid-gap: rem(10);
 
         .payment{
-          width: calc(200% + 10px);
+          width: calc(200% + rem(10));
         }
       }
     }  

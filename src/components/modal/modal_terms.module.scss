@@ -112,3 +112,9 @@ $browser-context:16;
     transform:translateY(-50%)rotate(-450deg);
   }
 }
+
+@media (max-width: rem(600)) {
+  .modal-wrap{
+    padding: rem(36) rem(25) rem(24) !important;
+  }
+}

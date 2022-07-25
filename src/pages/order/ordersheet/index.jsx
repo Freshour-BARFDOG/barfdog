@@ -6,9 +6,8 @@ import Image from 'next/image';
 import Modal_termsOfSerivce from '/src/components/modal/Modal_termsOfSerivce';
 import { Modal_coupon } from '/src/components/modal/Modal_coupon';
 
-// 결제 타입
-// 1. 정기구독
-// 2. 일반
+// 일반 주문 주문하기
+
 
 // ! 확인할 사항: 유저의 첫구매 여부 ( 첫구매 아닐 시, 첫구매 브로슈어 수령 checkbox란 ===>  hide 처리)
 
@@ -20,6 +19,7 @@ const global_productType = {
 };
 
 export default function OrderSheetPage() {
+  const getOrderInfoApiUrl = `/api/orders/general/`;
   const [productType, setProductType] = useState(global_productType.SUBSCRIBE);
   const [formValues, setFormValues] = useState({});
   const [activeModal, setActiveModal] = useState({

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { axiosUserConfig } from '/src/pages/api/axios.config';
+import {userType} from "@store/TYPE/userAuthType";
 
 
 export default function useUserData() {
@@ -22,7 +23,7 @@ export default function useUserData() {
     }
     
     // MEMBER
-    if(!auth.isAdmin &&!auth.isAuth || userData)return;
+    if(!auth.userType || auth.userType === userType.NON_MEMBER || userData)return;
     (async () => {
       let memberDATA = null
       const res = await axios
@@ -35,6 +36,7 @@ export default function useUserData() {
       });
       if (res?.status === 200){
         memberDATA = {
+          userType: auth.userType,
           birthday: res.data.birthday,
           gender: res.data.gender,
           name: res.data.name,

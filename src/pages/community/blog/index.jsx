@@ -129,11 +129,11 @@ export default function BlogIndexPage() {
         </Wrapper>
 
         <section className={s.article_box}>
-          <Wrapper className={'ani-show-all-child'} bgColor={'#f5f5f5'}>
+          <Wrapper className={'animation-show-all-child'}>
             <div className={s.article}>
               <p>추천 아티클</p>
               <ul className={s.flex_box}>
-                {articles.length > 0 ? (
+                {articles?.length > 0 ? (
                   articles.map((atc) => (
                     <li key={`article-${atc.id}`} className={s.box}>
                       <Link href={`/community/blog/${atc.id}?category=${atc.category}`} passHref>
@@ -164,7 +164,7 @@ export default function BlogIndexPage() {
           </Wrapper>
         </section>
 
-        <Wrapper className={'ani-show-all-child'}>
+        <Wrapper className={'animation-show-all-child'}>
           <section className={s.menu_box}>
             <ul className={s.menu}>
               <li className={`${(selectedCategory === 'ALL') ? s.active : ''}`}>

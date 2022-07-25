@@ -9,9 +9,9 @@ import CustomRadio from '/src/components/admin/form/CustomRadio';
 import filter_emptyValue from '/util/func/filter_emptyValue';
 import filter_onlyNumber from '/util/func/filter_onlyNumber';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
-import QuillEditor from './QuillEditor';
-import SingleItemOptions from './SingleItemOptions';
-import SingleItemDiscountOptions from './SingleItemDiscountOptions';
+import QuillEditor from '../../../../components/admin/product/QuillEditor';
+import SingleItemOptions from '../../../../components/admin/product/SingleItemOptions';
+import SingleItemDiscountOptions from '../../../../components/admin/product/SingleItemDiscountOptions';
 import transformClearLocalCurrency from '/util/func/transformClearLocalCurrency';
 import Spinner from '/src/components/atoms/Spinner';
 import {validate} from '/util/func/validation/validation_singleItem';
@@ -91,11 +91,11 @@ function CreateSingleItemPage() {
 
   useEffect(() => {
     // - 할인적용된 가격이 존재할 경우, 할인설정 option변경
-    if (formValues.salePrice) {
-      const active = !!formValues.salePrice;
+    if (formValues?.salePrice) {
+      const active = !!formValues?.salePrice;
       setActiveDiscountOption(active);
     }
-  }, [formValues.salePrice]);
+  }, [formValues?.salePrice]);
 
   useEffect(() => {
     // - INIT QUILL EDITOR

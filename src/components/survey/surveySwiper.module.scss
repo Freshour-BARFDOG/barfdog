@@ -71,6 +71,7 @@ $browser-context: 16;
         transform:Translate(-50%,100%);
         color:var(--color-font-sub2);
         font-size:rem(15);
+        font-weight: 500;
         width: rem(200)
       }
     }
@@ -124,3 +125,31 @@ $browser-context: 16;
   }
 }
 
+
+
+@media (max-width: rem(600)) {
+
+  
+  .swiperSurvey{
+    .swiper-pagination{
+      max-width: rem(180);
+
+      .swiper-pagination-bullet{
+        padding:rem(5);
+
+        .desc{
+          font-size: rem(12);
+          font-weight: 500;
+        }
+      }
+
+      .swiper-pagination-bullet-active{
+        padding:rem(10);
+
+        .desc{
+          transform:Translate(-50%,100%) translateY(rem(-2));
+        }
+      }
+    }
+  }
+}

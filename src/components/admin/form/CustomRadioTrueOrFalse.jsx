@@ -8,6 +8,8 @@ const CustomRadioTrueOrFalse = ({
   setValue,
   returnBooleanValue,
   theme,
+  className='',
+  components=[]
 }) => {
   const trueRadioId = `${name}${labelList[0]}`;
   const falseRadioId = `${name}${labelList[1]}`;
@@ -50,7 +52,7 @@ const CustomRadioTrueOrFalse = ({
 
   return (
     <>
-      <div className={`${s['inp-wrap']} ${s['radio']} ${theme ? s[theme] : ''}`}>
+      <div className={`${s['inp-wrap']} ${s['radio']} ${theme ? s[theme] : ''} ${className ? className : ''}`}>
         <label
           htmlFor={`${name}${labelList[0]}`}
           className={`${selectedRadio === trueRadioId && s.checked}`}
@@ -63,7 +65,7 @@ const CustomRadioTrueOrFalse = ({
             checked={selectedRadio === trueRadioId}
             onChange={onChangeHandler}
           />
-          {labelList[0]}
+          {components[0] || labelList[0]}
         </label>
         <label
           htmlFor={`${name}${labelList[1]}`}
@@ -77,7 +79,7 @@ const CustomRadioTrueOrFalse = ({
             checked={selectedRadio === falseRadioId}
             onChange={onChangeHandler}
           />
-          {labelList[1]}
+          {components[1] || labelList[1]}
         </label>
       </div>
     </>

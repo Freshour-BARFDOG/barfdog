@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import s from './couponSettingInput.module.scss';
+import s from '../../../../components/admin/settings/couponSettingInput.module.scss';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
-import AutoPublishedCouponSettingInput from './AutoPublishedCouponSettingInput';
-import GradeCouponSettingInput from './GradeCouponSettingInput';
+import AutoPublishedCouponSettingInput from '../../../../components/admin/settings/AutoPublishedCouponSettingInput';
+import GradeCouponSettingInput from '../../../../components/admin/settings/GradeCouponSettingInput';
 import { useModalContext } from '/store/modal-context';
 import { getData, putObjData } from '/src/pages/api/reqData';
 import transformDate from '/util/func/transformDate';

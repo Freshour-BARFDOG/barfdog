@@ -14,7 +14,7 @@ export default function MypageSubscribe_DeliveryInfoPage() {
         <Wrapper>
           <section className={s.top_content}>
             <div className={s.top_text_box}>
-              <div className={s.title}>정기구독 배송안내</div>
+              <div className={s.title}>- 정기구독 배송안내 -</div>
               <div className={s.text_row2}>고객님의 정기구독 발송 예정일은</div>
               <div className={s.text_row2}>
                 <span>3월 16일</span> 입니다

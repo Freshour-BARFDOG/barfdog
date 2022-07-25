@@ -20,7 +20,7 @@ export default function SingleItemDiscountOptions({id,  formValues, setFormValue
 
   
   const initialValue = {
-    salePrice : formValues.salePrice || formValues.originalPrice || 0,
+    salePrice : formValues?.salePrice || formValues?.originalPrice || 0,
     saleAmount: 0
   }
   const [salePriceInfo, setSalePriceInfo] = useState(initialValue);

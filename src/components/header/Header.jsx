@@ -29,7 +29,7 @@ import { authAction } from '/store/auth-slice';
 
 const Modal_subscribeWidhSSR = dynamic(() => import('/src/components/modal/Modal_subscribe'));
 
-const Header = () => {
+export default function Header () {
   const router = useRouter();
   const dispatch = useDispatch();
   const curPath = router.asPath;
@@ -148,9 +148,14 @@ const Header = () => {
   );
 };
 
-export default Header;
 
-export const Gnb_my = ({ isMobile, setSidrOpen }) => {
+
+
+export const Gnb_my = (props) => {
+  const cart = useSelector(s=>s.cart);
+  // console.log(cart)
+  
+  const { isMobile, setSidrOpen } = props;
   const onShowMobileSideMenu = () => {
     setSidrOpen(true);
   };
@@ -163,7 +168,7 @@ export const Gnb_my = ({ isMobile, setSidrOpen }) => {
               <a id="gnb_cart">
                 <div className={s.shop_wrap}>
                   <Icon_cart />
-                  <span className={s.gnb_shop_count}>{10}</span>
+                  <span className={s.gnb_shop_count}>{cart.itemCount || 0}</span>
                   <i className={'DeadlineTimer-wrapper pc'}>
                     <DeadlineTimer />
                   </i>
