@@ -13,6 +13,7 @@ import {MoveToNextPrevPage} from "/src/components/common/MoveToNextPrevPage";
 
 
 export default function NoticePostPage({ noticeId }) {
+  console.log(noticeId)
   const [curPageId, setCurPageId] = useState( Number(noticeId ));
   const [isLoading, setIsLoading] = useState({});
   const [itemInfo, setItemInfo] = useState({});
@@ -23,6 +24,7 @@ export default function NoticePostPage({ noticeId }) {
     const formValueQuery = 'noticeDto'
     const getIemListApiUrl = `/api/notices`;
     const itemListQuery = 'queryNoticesDtoList';
+    console.log(getFormValuesApiUrl);
     (async () => {
       try {
         setIsLoading((prevState) => ({
@@ -123,8 +125,17 @@ export default function NoticePostPage({ noticeId }) {
   );
 }
 
-NoticePostPage.getInitialProps = async ({ query }) => {
-  const { noticeId } = query;
-  return { noticeId };
-};
+// CF) _app.jsx SSR 적용 후 , getinitialProps에서 query가져올 수 없음
+// NoticePostPage.getInitialProps = async (ctx) => {
+//   console.log(ctx)
+//   const { noticeId } = query;
+//   return { noticeId };
+// };
 
+
+
+export async function getServerSideProps({ query }) {
+  const { noticeId } = query;
+
+  return { props: { noticeId } };
+}
