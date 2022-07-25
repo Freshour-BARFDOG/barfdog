@@ -512,7 +512,7 @@ export default function CartPage({ data, error }) {
           </section>
 
           <section className={s.btn_box}>
-            <button onClick={onClickOrderButton} type={'button'} className={`${s.btn_box}`}>
+            <button disabled={DATA.basketDtoList?.length === 0} onClick={onClickOrderButton} type={'button'} className={`${s.btn_box} ${DATA.basketDtoList?.length === 0 ? 'custom_btn solid disabled' : ''}`}>
               {isLoading.buy ? <Spinner style={{ color: '#fff' }} /> : `총 ${selectedItemBasketIds.length}건 주문하기`}
             </button>
           </section>
