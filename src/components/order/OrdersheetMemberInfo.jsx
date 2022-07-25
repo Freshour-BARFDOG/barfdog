@@ -9,12 +9,12 @@ export const OrdersheetMemberInfo = ({info}) => {
       <section className={s.orderer_info}>
         <div className={s.title}>주문자 정보</div>
         <div className={s.grid_box}>
-          <div>보내는 분</div>
-          <div>{info.name}</div>
-          <div>이메일</div>
-          <div>{info.email}</div>
-          <div>연락처</div>
-          <div>{transformPhoneNumber( info.phoneNumber )}</div>
+          <span>보내는 분</span>
+          <span>{info.name}</span>
+          <span>이메일</span>
+          <span>{info.email}</span>
+          <span>연락처</span>
+          <span>{transformPhoneNumber( info.phone )}</span>
         </div>
       </section>
       <section className={s.line}>

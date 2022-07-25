@@ -15,8 +15,9 @@ import { subscribeStatus } from '/store';
 import Spinner from '/src/components/atoms/Spinner';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import { useModalContext } from '/store/modal-context';
-import {useRouter} from "next/router";
-import Modal_confirm from "/src/components/modal/Modal_confirm";
+import { useRouter } from 'next/router';
+import Modal_confirm from '/src/components/modal/Modal_confirm';
+
 
 export default function MypageDogInfoPage({ data }) {
   const mct = useModalContext();
@@ -24,8 +25,6 @@ export default function MypageDogInfoPage({ data }) {
   const [itemList, setItemList] = useState(data);
   const [selectedItemData, setSelectedItemData] = useState(null);
   const [modalMessage, setModalMessage] = useState('');
-  
-  
 
   const getItemData = (itemData) => {
     setSelectedItemData({
@@ -41,11 +40,11 @@ export default function MypageDogInfoPage({ data }) {
     mct.alertShow();
     setModalMessage(message);
   };
-  
-  const onHideModalHandler = ()=>{
+
+  const onHideModalHandler = () => {
     mct.alertHide();
     setActiveUploadDogProfileModal(false);
-  }
+  };
 
   return (
     <>
@@ -89,6 +88,8 @@ export default function MypageDogInfoPage({ data }) {
   );
 }
 
+
+
 const ItemList = ({ data, onUploadImageModalHandler, onShowModalHandler }) => {
   const router = useRouter();
   const mct = useModalContext();
@@ -97,9 +98,10 @@ const ItemList = ({ data, onUploadImageModalHandler, onShowModalHandler }) => {
   const dogAge = calcDogAge(data.birth);
   const gender =
     data.gender === dogGenderType.MALE ? dogGenderType.KOR.MALE : dogGenderType.KOR.FEMALE;
-  
+
   const [activeConfirmModal, setActiveConfirmModal] = useState( false );
   
+
   
   const onSetRepresentative = (confirm) => {
     if(!confirm){
@@ -107,7 +109,8 @@ const ItemList = ({ data, onUploadImageModalHandler, onShowModalHandler }) => {
       return onShowModalHandler('취소되었습니다.');
     }
   
-
+  
+  
     const apiUrl = `/api/dogs/${dogId}/representative`;
     (async () => {
       try {
@@ -247,6 +250,23 @@ export async function getServerSideProps({ req }) {
       gender: data.gender, // 반려견 성별
       representative: data.representative, // 대표견 여부
       subscribeStatus: data.subscribeStatus, // 구독상태
+      _links : {
+        update_picture: {
+          href: data._links.update_picture.href
+        },
+        set_representative_dog: {
+          href: data._links.set_representative_dog.href
+        },
+        query_dog: {
+          href: data._links.query_dog.href
+        },
+        query_surveyReport: {
+          href: data._links.query_surveyReport.href
+        },
+        delete_dog: {
+          href: data._links.delete_dog.href
+        }
+      }
     }));
   }
   return { props: { data: DATA } };

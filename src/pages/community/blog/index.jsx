@@ -29,7 +29,7 @@ export default function BlogIndexPage() {
   const [selectedCategory, setSelectedCategory] = useState('ALL');
   const [articles, setArticles] = useState([]);
 
-  console.log(articles);
+  // console.log(articles);
 
   // useEffect( () => {
   // ! 카테고리로 api 요청하기 전 Ver.
@@ -45,7 +45,7 @@ export default function BlogIndexPage() {
     const thiscategory = button.dataset.filterCategory;
     setSelectedCategory(thiscategory);
     const endPoint = thiscategory === 'ALL' ? '' : thiscategory.toLowerCase();
-    const url = `${getListApiUrl}/${endPoint}`;
+    const url = `${getListApiUrl}/category/${endPoint}`;
     
     setSearchApiUrl(url);
 
@@ -109,7 +109,7 @@ export default function BlogIndexPage() {
       }));
     })();
   }, []);
-  console.log(selectedCategory)
+
 
   return (
     <>

@@ -5,12 +5,15 @@ import filter_onlyNumber from '../../../util/func/filter_onlyNumber';
 import ErrorMessage from '../atoms/ErrorMessage';
 import transformLocalCurrency from '../../../util/func/transformLocalCurrency';
 import transformClearLocalCurrency from "../../../util/func/transformClearLocalCurrency";
+import {calcOrdersheetPrices} from "./calcOrdersheetPrices";
 
 export const OrdersheetReward = ({ id, info, form, setForm, formErrors, setFormErrors }) => {
   
-  const availableMaxReward = info.reward;
+  const availableMaxReward = info.reward > form.orderPrice ? form.orderPrice: info.reward;
+  
   
   const onInputChangeHandler = (e) => {
+    const currentItemPrice = info.orderPrice
     const input = e.currentTarget;
     const { value } = input;
     const filteredType = input.dataset.inputType;
@@ -21,25 +24,24 @@ export const OrdersheetReward = ({ id, info, form, setForm, formErrors, setFormE
         filteredValue = filter_onlyNumber(filteredValue);
       }
     }
-    if (filteredType && filteredType.indexOf('currency') >= 0) {
-      filteredValue = transformLocalCurrency(filteredValue);
-    }
     
-    // - validation 적립금 금액이, 사용가능한 금액보다 클 경우 초기화
-    if(transformClearLocalCurrency(filteredValue) > availableMaxReward){
+    let error='';
+    if(filteredValue > currentItemPrice) {
       filteredValue = 0;
-      setFormErrors(prevState=>({
-        ...prevState,
-        [id] : '사용가능한 포인트를 초과하였습니다.'
-        })
-      )
-    }else{
-      setFormErrors(prevState=>({
-          ...prevState,
-          [id] : ''
-        })
-      )
+      error = '주문금액을 초과하여 사용할 수 없습니다.'
+    } else if (filteredValue > availableMaxReward ) {
+      filteredValue = 0;
+      error = '사용가능한 포인트를 초과하였습니다.'
+    } else {
+      error = ''
     }
+
+    setFormErrors(prevState=>({
+        ...prevState,
+        [id] : error
+      })
+    )
+    
     
     setForm((prevState) => ({
       ...prevState,
@@ -50,12 +52,11 @@ export const OrdersheetReward = ({ id, info, form, setForm, formErrors, setFormE
   const onClickDisCountReward = () => {
     setForm((prevState) => ({
       ...prevState,
-      [id]: transformLocalCurrency(availableMaxReward),
+      [id]: calcOrdersheetPrices(form).availableMaxReward,
     }));
   };
   
 
-  // console.log('FORM: ', form);
   return (
     <>
       <section className={s.reserves}>
@@ -70,7 +71,7 @@ export const OrdersheetReward = ({ id, info, form, setForm, formErrors, setFormE
                 type={'text'}
                 className={'text-align-right'}
                 data-input-type={'currency, number'}
-                value={form.discountReward || '0'}
+                value={transformLocalCurrency(form.discountReward) || 0}
                 onChange={onInputChangeHandler}
               />
               {formErrors.discountReward && <ErrorMessage>{formErrors.discountReward}</ErrorMessage>}
@@ -79,12 +80,9 @@ export const OrdersheetReward = ({ id, info, form, setForm, formErrors, setFormE
               모두 사용
             </button>
             <span className={s.point}>
-              사용 가능 포인트 {transformLocalCurrency(info.reward)+' P'}
+              보유 포인트 {transformLocalCurrency(info.reward)+' P'}
             </span>
           </div>
-         
-          
-          
         </div>
       </section>
 

@@ -134,9 +134,16 @@ export default function BlogPostPage({blogId}) {
 }
 
 
+// // CF) _app.jsx SSR 적용 후 , getinitialProps에서 query가져올 수 없음
+// BlogPostPage.getInitialProps = async ({ query }) => {
+//   const { blogId } = query;
+//   return { blogId };
+// };
 
-BlogPostPage.getInitialProps = async ({ query }) => {
+
+
+export async function getServerSideProps({ query }) {
   const { blogId } = query;
-  return { blogId };
-};
-
+  
+  return { props: { blogId } };
+}
