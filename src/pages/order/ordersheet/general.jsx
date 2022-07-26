@@ -7,7 +7,7 @@ import { Modal_coupon } from '/src/components/modal/Modal_coupon';
 import { postUserObjData } from '/src/pages/api/reqData';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-import transformDate from '/util/func/transformDate';
+import transformDate, { transformToday } from '/util/func/transformDate';
 import { OrdersheetItemList } from '/src/components/order/OrdersheetItemList';
 import { OrdersheetMemberInfo } from '/src/components/order/OrdersheetMemberInfo';
 import { OrdersheetDeliveryForm } from '/src/components/order/OrdersheetDeliveryForm';
@@ -15,67 +15,54 @@ import { Payment } from '/src/components/order/Payment';
 import { OrdersheetReward } from '/src/components/order/OrdersheetReward';
 import { OrdersheetMethodOfPayment } from '/src/components/order/OrdersheetMethodOfPayment';
 import { OrdersheetAmountOfPayment } from '/src/components/order/OrdersheetAmountOfPayment';
-import {userType} from "/store/TYPE/userAuthType";
+import { userType } from '/store/TYPE/userAuthType';
+import { global_couponType } from '../../../../store/TYPE/couponType';
+import { discountUnitType } from '../../../../store/TYPE/discountUnitType';
 
 const DUMMY_MEMEBER_COUPON_LIST = [
   {
     memberCouponId: 45,
-    name: '반려견 생일 쿠폰',
+    name: '쿠폰1-최소사용가능아잍템가격 7천이상 ',
     discountType: 'FIXED_RATE',
     discountDegree: 10,
-    availableMaxDiscount: 100000,
-    availableMinPrice: 0,
-    remaining: 3,
+    availableMaxDiscount: 2000,
+    availableMinPrice: 7000,
+    remaining: 1,
     expiredDate: '2023-12-31T23:59:59',
   },
   {
     memberCouponId: 46,
-    name: '반려견 생일 쿠폰2',
+    name: '쿠폰2-최대할인 금액 1만원 조건 ',
     discountType: 'FLAT_RATE',
     discountDegree: 2000,
-    availableMaxDiscount: 100000,
+    availableMaxDiscount: 10000,
     availableMinPrice: 0,
     remaining: 3,
     expiredDate: '2023-12-31T23:59:59',
   },
   {
     memberCouponId: 47,
-    name: '반려견 생일 쿠폰3',
+    name: '쿠폰3-최대 할인가3천원',
     discountType: 'FIXED_RATE',
     discountDegree: 30,
-    availableMaxDiscount: 100000,
+    availableMaxDiscount: 3000,
     availableMinPrice: 0,
     remaining: 3,
     expiredDate: '2023-12-31T23:59:59',
   },
 ];
-const global_productType = {
-  SUBSCRIBE: 'SUBSCRIBE',
-  GENERAL: 'GENERAL',
-};
 
 export default function GeneralOrderSheetPage() {
-  
-  const TEST_change_productType = () => {
-    setProductType((prevState) =>
-      prevState === global_productType.SUBSCRIBE
-        ? global_productType.GENERAL
-        : global_productType.SUBSCRIBE,
-    );
-  };
-  
   const router = useRouter();
-  const auth = useSelector(s=> s.auth);
+  const auth = useSelector((s) => s.auth);
   const USER_TYPE = auth.userType;
-  
+
   const cart = useSelector((state) => state.cart);
-  const [productType, setProductType] = useState(global_productType.SUBSCRIBE);
   const [isLoading, setIsLoading] = useState({ fetching: true });
   const [info, setInfo] = useState({});
   const [form, setForm] = useState({});
   const [formErrors, setFormErrors] = useState({});
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [couponList, setCouponList] = useState([]);
+  const [selectedItemId, setSelectedItemId] = useState(null);
   const [activeModal, setActiveModal] = useState({
     termsOfService: false,
     coupon: false,
@@ -83,14 +70,12 @@ export default function GeneralOrderSheetPage() {
 
   useEffect(() => {
     const curItem = cart.orderItemList;
-    if(!curItem.length){
+    if (!curItem.length) {
       return router.push('/');
     }
-    
 
-    
     const requestBody = {
-      orderItemDtoList: curItem.map((item)=>({
+      orderItemDtoList: curItem.map((item) => ({
         itemDto: {
           itemId: item.itemDto.itemId,
           amount: item.itemDto.amount,
@@ -99,9 +84,9 @@ export default function GeneralOrderSheetPage() {
           itemOptionId: option.itemOptionId,
           amount: option.amount,
         })),
-      }))
+      })),
     };
-  
+
     if (Object.keys(info).length > 0) return; // 최초 data fetching 후 Re-rendering 방지
     (async () => {
       setIsLoading((prevState) => ({
@@ -113,29 +98,27 @@ export default function GeneralOrderSheetPage() {
         const postItemInfoApiUrl = `/api/orders/sheet/general`;
         const res = await postUserObjData(postItemInfoApiUrl, requestBody);
         // 요청 파라미터가 복잡하여 GET이 아닌 POST 사용
-        console.log(res);
+        // console.log(res);
         if (res.status !== 200) {
           // alert('상품 정보를 확인할 수 없습니다.');
           // return await router.push('/');
         }
         const info = res.data.data;
         console.log(info);
- 
+
         // 주문에 대한 모든 데이터
         const initInfo = {
           name: info.name, // 구매자
           email: info.email, // 연락처
-          phoneNumber: info.phoneNumber,
+          phone: info.phoneNumber,
           address: {
-            name: info.address.name, // 수령자 이름 ("정기배송과" 묶음 배송일 경우, null => 정기배송 수령자를 따름)
-            phone: info.address.phone, // 수령자 전화번호 (묶음 배송일 경우, null)
-            zipcode: info.address.zipcode, // 우편번호 (묶음 배송일 경우, null)
-            street: info.address.street, // 도로명 주소 (묶음 배송일 경우, null)
-            detailAddress: info.address.detailAddress, // 상세주소 (묶음 배송일 경우, null)
-            request: info.address.request, // 배송 요청사항 (묶음 배송일 경우, null)
+            city: info.address.city, // 시도
+            street: info.address.street, // 도로명 주소
+            detailAddress: info.address.detailAddress, // 상세주소
+            zipcode: info.address.zipcode, // 우편번호
           },
-          deliveryId: info.deliveryId || Math.floor(Math.random()*100), // ! IMPORTANT : 묶음 배송할 배송 ID (묶음배송 불가능할 경우 null)
-          nextSubscribeDeliveryDate: info.nextSubscribeDeliveryDate || '2022-07-20', // ! IMPORTANT: 묶음배송할 배송 예정일 . 묶음배송 불가능한 경우 null
+          deliveryId: info.deliveryId || Math.floor(Math.random() * 100), // ! IMPORTANT : 묶음 배송할 정기구독 배송 ID (묶음배송 불가능할 경우 null / 묶음 배송 불가할 경우, 배송정보의 묶음배송 Radio input 비활성화)
+          nextSubscribeDeliveryDate: info.nextSubscribeDeliveryDate || transformToday(), // ! IMPORTANT: 묶음배송할 배송 예정일 . 묶음배송 불가능한 경우 null
           coupons:
             DUMMY_MEMEBER_COUPON_LIST ||
             info.coupons?.map((cp) => ({
@@ -149,16 +132,35 @@ export default function GeneralOrderSheetPage() {
               expiredDate: transformDate(cp.expiredDate),
             })) ||
             [], //////////// ! DUMMY DATA
-          orderPrice: info.orderPrice, //  장바구니 or 결제전 "최종 가격" (할인 적용 전)
+          orderPrice: info.orderPrice, //  장바구니 또는 결제 전 상품의 "최종 가격" (기본 어드민 설정할인율 적용 / 결제페이지의 쿠폰 및 적립금 적용 전 가격)
           reward: info.reward, // 적립금
           deliveryPrice: info.deliveryPrice, // 배송비 : 장바구니에서, 최종 배송비
           freeCondition: info.freeCondition, // 사이트 > 배송비 무료 조건
           brochure: info.brochure, // 브로슈어 받은 적 있는지 true/false => 브로슈어는 1번만 받을 수 있다.
+          totalOrderPrice: info.orderPrice,
+          totalOriginalPrice: info.orderItemDtoList
+            ?.map((item) => item.originalOrderLinePrice)
+            .reduce((acc, cur) => acc + cur),
         };
 
-        // 결제 시 전송될 data
+        // FormDatas
         const initForm = {
-          sameUserInfo: false, // -- submit 미포함
+          selfInfo:{
+            reward: info.reward,  // ! CLIENT ONLY
+          },
+          coupons: //////////// ! DUMMY DATA
+            DUMMY_MEMEBER_COUPON_LIST ||
+            info.coupons?.map((cp) => ({
+              memberCouponId: cp.memberCouponId,
+              name: cp.name,
+              discountType: cp.discountType,
+              discountDegree: cp.discountDegree,
+              availableMaxDiscount: cp.availableMaxDiscount,
+              availableMinPrice: cp.availableMinPrice,
+              remaining: cp.remaining,
+              expiredDate: transformDate(cp.expiredDate),
+            })) ||
+            [],
           orderItemDtoList: info.orderItemDtoList?.map((item) => ({
             itemId: item.itemId, // 상품 ID
             amount: item.amount, // 상품 수량
@@ -167,8 +169,8 @@ export default function GeneralOrderSheetPage() {
               item.optionDtoList.map((op) => ({
                 itemOptionId: op.optionId, // 옵션 ID
                 amount: op.amount, // 옵션 수량
-                name: op.name, // 옵션 이름 -- submit 미포함
-                price: op.price, // 옵션 가격 -- submit 미포함
+                name: op.name, // 옵션 이름 ! CLIENT ONLY
+                price: op.price, // 옵션 가격 ! CLIENT ONLY
               })) || [],
             memberCouponId: null, // 사용한 쿠폰 ID // 데이터뿌릴떄
             discountAmount: 0, // 쿠폰할인 총계
@@ -183,8 +185,7 @@ export default function GeneralOrderSheetPage() {
             detailAddress: null, // 상세주소 (묶음 배송일 경우, null)
             request: null, // 배송 요청사항 (묶음 배송일 경우, null)
           },
-          deliveryId: null, // ! IMPORTANT : 묶음 배송일 경우 , info.deliveryId값 추가/ 일반배송: null)
-          orderPrice: null, //  주문 상품 총 가격 (할인 적용 전) // ! 계산기
+          deliveryId: info.deliveryId, // ! IMPORTANT : 묶음 배송일 경우 , info.deliveryId값 추가/ 일반배송: null)
           deliveryPrice: 0, // 배송비
           discountTotal: 0, // 총 할인 합계
           discountReward: 0, // 사용할 적립금
@@ -193,8 +194,10 @@ export default function GeneralOrderSheetPage() {
           paymentMethod: null, // 결제방법  [CREDIT_CARD, NAVER_PAY, KAKAO_PAY]
           agreePrivacy: false, // 개인정보 제공 동의
           brochure: false, // 브로슈어 수령여부
+          orderPrice: info?.orderItemDtoList
+            .map((item) => item.orderLinePrice)
+            .reduce((acc, cur) => acc + cur), //  주문 상품 총 가격 ( 주문금액 -쿠폰할인 -적립금)
         };
-
         setInfo(initInfo);
         setForm(initForm);
       } catch (err) {
@@ -208,62 +211,69 @@ export default function GeneralOrderSheetPage() {
     })();
   }, [cart]);
 
-
-
   const onActivleModalHandler = (e) => {
     const button = e.currentTarget;
     const modalType = button.dataset.modalType;
-
+    const selectedItemId = button.dataset.itemId;
+    setSelectedItemId(selectedItemId);
     setActiveModal((prevState) => ({
       ...prevState,
       [modalType]: !prevState[modalType],
     }));
   };
 
-  
-  
   // validation
   // - 1. 상품정보 없이 , 해당 페이지에 접근했을 경우
   // - 2. 새로고침했을 경우 : REDUX정보 초기화됨
   //    > 이때, Shop Item Detail페이지에서 가져온 정보 초기화되어, 서버에서 데이터 가져올 수 없음)
-  if(!info || !USER_TYPE || USER_TYPE === userType.NON_MEMBER)return;
-  
-  
-  // console.log('INFO: ', info);
-  // console.log('FORM: ', form);
+  if (!info || !USER_TYPE || USER_TYPE === userType.NON_MEMBER) return;
+
 
   return (
     <>
       <MetaTitle title="주문서" />
       <Layout>
-        {/*<div className={'mt-40 mb-20 ml-20'} style={{ fontSize: '12px', color: '#555' }}>*/}
-        {/*  <button*/}
-        {/*    type={'button'}*/}
-        {/*    onClick={TEST_change_productType}*/}
-        {/*    className={'admin_btn line basic_l mb-10'}*/}
-        {/*  >*/}
-        {/*    주문서 유형 변경하기 버튼 (사용x / 일반결제와 정기결제 페이지를 구분할 예정)*/}
-        {/*  </button>*/}
-        {/*  <p className={'ml-20'}>*/}
-        {/*    현재주문서 유형: {productType}*/}
-        {/*    {productType === 'SUBSCRIBE' && <span> (묶음 배송여부 체크박스 나타남)</span>}*/}
-        {/*  </p>*/}
-        {/*</div>*/}
         <div className={s.container_outer}>
           <div className={s.Wrapper}>
             <OrdersheetItemList
               form={form}
+              setForm={setForm}
               isLoading={isLoading}
               event={{ onActiveModal: onActivleModalHandler }}
             />
             <OrdersheetMemberInfo info={info} />
-            <OrdersheetDeliveryForm id={'deliveryDto'} info={info} form={form} setForm={setForm} formErrors={formErrors} setFormErrors={setFormErrors}/>
-            <OrdersheetReward id={'discountReward'} info={info} form={form} setForm={setForm} formErrors={formErrors} setFormErrors={setFormErrors}/>
-            <OrdersheetMethodOfPayment id={'paymentMethod'} info={info} form={form} setForm={setForm} formErrors={formErrors}/>
-            <OrdersheetAmountOfPayment info={info} form={form} setForm={setForm} event={{onActiveModal:onActivleModalHandler}} formErrors={formErrors}/>
+            <OrdersheetDeliveryForm
+              info={info}
+              form={form}
+              setForm={setForm}
+              formErrors={formErrors}
+              setFormErrors={setFormErrors}
+            />
+            <OrdersheetReward
+              id={'discountReward'}
+              info={info}
+              form={form}
+              setForm={setForm}
+              formErrors={formErrors}
+              setFormErrors={setFormErrors}
+            />
+            <OrdersheetMethodOfPayment
+              id={'paymentMethod'}
+              info={info}
+              form={form}
+              setForm={setForm}
+              formErrors={formErrors}
+            />
+            <OrdersheetAmountOfPayment
+              info={info}
+              form={form}
+              setForm={setForm}
+              event={{ onActiveModal: onActivleModalHandler }}
+              formErrors={formErrors}
+            />
             <section className={s.final_btn}>
               <p>위 주문 내용을 확인 하였으며, 회원 본인은 결제에 동의합니다.</p>
-              <Payment isLoading={isLoading} />   {/* 결제버튼 */}
+              <Payment isLoading={isLoading} info={info} form={form} setFormErrors={setFormErrors}/> {/* 결제버튼 */}
             </section>
           </div>
         </div>
@@ -274,18 +284,13 @@ export default function GeneralOrderSheetPage() {
           setModalState={setActiveModal}
         />
       )}
-      {activeModal.coupon && (
+      {activeModal.coupons && (
         <Modal_coupon
-          data={info.coupons}
-          onModalActive={() => {
-            setActiveModal((prevState) => ({
-              ...prevState,
-              coupon: false,
-            }));
-          }}
+          data={{ selectedItemId: selectedItemId, ...form }}
+          onModalActive={setActiveModal}
+          setForm={setForm}
         />
       )}
     </>
   );
 }
-

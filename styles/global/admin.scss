@@ -58,7 +58,7 @@ $inputDefaultHeight: rem(38);
   *  <button className="admin_btn solid popup">버튼</button>
 */
 
-.admin_btn {
+.admin_btn, .custom_btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;

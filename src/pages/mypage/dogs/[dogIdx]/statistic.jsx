@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import s from '/src/components/survey/surveyStatistics(mypageVersion).module.scss';
 import Link from "next/link";
 import Image from 'next/image';
-import {SurveyStatistics} from "../../../../components/survey/SurveyStatistics";
+import {SurveyStatistics} from "/src/components/survey/SurveyStatistics";
 
 
 
@@ -32,30 +32,7 @@ function MypageSubscribe_statisticPage() {
       <Layout>
         <Wrapper>
           <MypageWrapper>
-  
-            {/* ------------------ 추가한 Component ------------------ */}
-            {/*
-            1개의 component(Statistic.jsx)만 사용하여
-            data Fetching 코드를 2번 작성하는 작업을 줄이기 위해서
-            해당 작업을 요청드립니다.
-            - < 작업 경로 >
-            - http://localhost:4000/mypage/dogs/12334/statistic
-            - http://localhost:4000/survey/statistics
-            - < CSS파일 >
-            - 이전 작업파일: src/components/survey/surveyStatistics(mypageVersion).module.scss
-            - 최종으로 남길 파일: src/components/survey/surveyStatistics.module.scss
-            */}
-            <SurveyStatistics mode={'mypage'}/>
-            {/* ------------------ 추가한 Component ------------------ */}
-            
-            
-            
-            
-            {/* ------------------ 기존 코드 ------------------ */}
-
-            {/* 기존코드 삭제 */}
-
-
+            <SurveyStatistics dogId={dogIdx} mode={'mypage'}/>
             <section className={s.last_text}>
               <p className={s['ref-message']}>
                 ※ 해당 결과지는 바프독 고객을 대상으로한 참고용 결과이니, <br/>
@@ -77,7 +54,6 @@ function MypageSubscribe_statisticPage() {
               </button>
 
             </section>
-          
           </MypageWrapper>
         </Wrapper>
       </Layout>

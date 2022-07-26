@@ -125,7 +125,16 @@ export default function EventPostPage({ eventId }) {
   );
 }
 
-EventPostPage.getInitialProps = async ({ query }) => {
+
+// CF) _app.jsx SSR 적용 후 , getinitialProps에서 query가져올 수 없음
+// EventPostPage.getInitialProps = async ({ query }) => {
+//   const { eventId } = query;
+//   return { eventId };
+// };
+
+
+
+export async function getServerSideProps({ query }) {
   const { eventId } = query;
-  return { eventId };
-};
+  return { props: { eventId } };
+}
