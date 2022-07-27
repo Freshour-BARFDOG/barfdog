@@ -77,14 +77,19 @@ MyApp.getInitialProps = async (initialProps) => {
     }
 
     // STEP 2. EXPIRED TOKEN
+  
+    // 토큰 만료 확인 후 , login Page Redir한 경우 => 무한 redir을 방지하기 위해 토큰 만료 초기화
+  
     if (res_ADMIN && res_ADMIN.status === 401) {
-      EXPIRED_TOKEN_ADMIN = true;
+      console.log('EXPIRED_TOKEN_ADMIN: ', EXPIRED_TOKEN_ADMIN);
+      EXPIRED_TOKEN_ADMIN = req.headers.referer?.indexOf('/bf-admin/login') >= 0 ? true : null;
     } else if (res_ADMIN) {
       EXPIRED_TOKEN_ADMIN = false;
     }
 
     if (res_MEMBER && res_MEMBER.status === 401) {
-      EXPIRED_TOKEN_MEMBER = true;
+      console.log('EXPIRED_TOKEN_MEMBER: ', EXPIRED_TOKEN_MEMBER);
+      EXPIRED_TOKEN_MEMBER = req.headers.referer?.indexOf('/bf-admin/login') >= 0 ? true : null;
     } else if (res_MEMBER) {
       EXPIRED_TOKEN_MEMBER = false;
     }
@@ -129,12 +134,7 @@ MyApp.getInitialProps = async (initialProps) => {
       failedFetchingCartData = 'failed Fetching ServerSide CART DATA';
     }
   }
-
-  // console.log('DATA: ',cart_DATA);
-  // console.log('TOKEN: ',token)
-  // console.log('USER TYPE: ',USER_TYPE)
-  console.log('EXPIRED_TOKEN_ADMIN: ', EXPIRED_TOKEN_ADMIN);
-  console.log('EXPIRED_TOKEN_MEMBER: ', EXPIRED_TOKEN_MEMBER);
+  
 
   if (EXPIRED_TOKEN_MEMBER || EXPIRED_TOKEN_ADMIN) {
     const redirectPath = EXPIRED_TOKEN_MEMBER
@@ -143,10 +143,22 @@ MyApp.getInitialProps = async (initialProps) => {
         ? '/bf-admin/login'
         : null;
   
-    res.setHeader("location", redirectPath);
-    res.statusCode = 401;
-    res.end();
-    return
+    // res.setHeader("location", redirectPath);
+    return {
+      Component,
+      pageProps,
+      CustomProps: {
+        data: { cart: cart_DATA || null, error: failedFetchingCartData || null },
+        token: token,
+        USERTYPE: USER_TYPE || null,
+        EXPIRED_TOKEN: { ADMIN: EXPIRED_TOKEN_ADMIN, MEMBER: EXPIRED_TOKEN_MEMBER },
+      },
+      redirect: {
+        destination: redirectPath,
+        permanent: false,
+      },
+    }
+  
   }
   
   return {
