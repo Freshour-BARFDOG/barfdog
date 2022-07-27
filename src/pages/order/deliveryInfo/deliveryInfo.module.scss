@@ -128,6 +128,10 @@ section.btn_section { padding : 0 0 rem(62) 0;}
       width: 100%;
       max-width: rem(200);
       padding: rem(17) 0;
+      font-size: rem(16);
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
       border: rem(1) solid var(--color-line-03);
       border-radius: rem(4);
