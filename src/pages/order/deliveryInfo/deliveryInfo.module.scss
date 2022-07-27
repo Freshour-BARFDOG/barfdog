@@ -37,6 +37,7 @@ section.btn_section { padding : 0 0 rem(62) 0;}
       }
     }
     .text_row3 {
+      em{font-weight: 600; font-size:rem(20); margin: 0 rem(2);}
       color: var(--color-font-sub);
       @include char(l18);
     }
