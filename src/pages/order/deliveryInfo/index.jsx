@@ -1,57 +1,54 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import s from './deliveryInfo.module.scss';
 import Image from 'next/image';
 import Link from 'next/link';
-import {useSelector} from "react-redux";
-import {subscribePlanType} from "../../../../store/TYPE/subscribePlanType";
-import {useRouter} from "next/router";
-import transformDate, {transformToday} from "../../../../util/func/transformDate";
-
-
-
-const calcNextDeliveryDate = (d= transformToday(), unit='월일')=>{
-  // WEEK = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-  const FRI = 5 // 금
-  const next_WED = 10;
-  const theWeekAfterNext_WED = 17;
-  const today = new Date(d); //
-  const dayOfWeek = today.getDay(); // num // 0 ~ 6
-  const sundayOfWeek = today.getDate() - dayOfWeek // 이번 주의 첫 번째 일 (SUN)
-  const diff = sundayOfWeek + (dayOfWeek <= FRI ? next_WED : theWeekAfterNext_WED);
-  const nextDeliveryDate = new Date(today.setDate(diff)).toISOString().substring(0,10);
-  // console.log(new Date(today.setDate(diff)).toISOString().substring(0,10));
-  return transformDate(nextDeliveryDate, unit);
-}
-
+import { useSelector } from 'react-redux';
+import { subscribePlanType } from '/store/TYPE/subscribePlanType';
+import { useRouter } from 'next/router';
+import { calcNextDeliveryDate } from '/util/func/calcNextDeliveryDate';
+import { FullScreenRunningDog } from '/src/components/atoms/FullScreenLoading';
 
 export default function DeliveryInfoPage() {
-  
+  const loadingDuration = 1800; // ms
+  const cart = useSelector((state) => state.cart);
+  const [isLoading, setIsLoading] = useState({ nextPage: true }); // boolean
+  const [info, setInfo] = useState(cart.subscribeOrder);
+  // console.log(info)
 
-  
-  const router = useRouter();
-  const cart = useSelector(state=> state.cart);
-  const [info, setInfo] = useState( cart.subscribeOrder );
-  console.log(info)
-  
-  useEffect( () => {
-    const subscriberOrderInfo = cart.subscribeOrder
-    setInfo(subscriberOrderInfo)
-  }, [cart] );
-  ;
-  
-  
-  console.log(cart)
-  if(!Object.keys(cart.subscribeOrder).length){
-    return router.back();
+  useEffect(() => {
+    const subscriberOrderInfo = cart.subscribeOrder;
+    setInfo(subscriberOrderInfo);
     
-  }
-  
-  
+    setTimeout(() => {
+      setIsLoading({ nextPage: false });
+    }, loadingDuration);
+    if (!cart.subscribeOrder.subscribeId && typeof window !== 'undefined') {
+      return (window.location.href = '/');
+    }
+  }, [cart]);
+
+  console.log('주문정보', cart.subscribeId);
+
+  const onNextPage = () => {
+    setIsLoading({ nextPage: true });
+    setTimeout(() => {
+      if (cart.subscribeId) {
+        router.push(`/order/ordersheet/subscribe/${cart.subscribeId}`);
+        setIsLoading({ nextPage: false });
+      } else {
+        console.error('there is no Subscribe ID', cart.subscribeId);
+        alert('주문정보를 확인할 수 없습니다.');
+        window.location.href = '/';
+      }
+    }, loadingDuration);
+  };
+
   return (
     <>
+      {isLoading?.nextPage && <FullScreenRunningDog opacity={1} />}
       <MetaTitle title={`정기구독 배송안내`} />
       <Layout>
         <Wrapper>
@@ -63,7 +60,17 @@ export default function DeliveryInfoPage() {
                 <span>{calcNextDeliveryDate()}</span> 입니다
               </div>
               <div className={s.text_row3}>
-                 (선택하신 <em>{subscribePlanType[info?.plan]?.KOR}</em> 플랜은 하루 <em>{subscribePlanType[info?.plan]?.numberOfPacksPerDay === 1 ? '한' : subscribePlanType[info?.plan]?.numberOfPacksPerDay === 2 ? '두' : '세'}끼</em> 기준, <em>{subscribePlanType[info?.plan]?.weeklyPaymentCycle}</em>주마다 정기 배송됩니다)
+                (선택하신 <em>{subscribePlanType[info?.plan]?.KOR}</em> 플랜은 하루{' '}
+                <em>
+                  {subscribePlanType[info?.plan]?.numberOfPacksPerDay === 1
+                    ? '한'
+                    : subscribePlanType[info?.plan]?.numberOfPacksPerDay === 2
+                    ? '두'
+                    : '세'}
+                  끼
+                </em>
+                기준, <em>{subscribePlanType[info?.plan]?.weeklyPaymentCycle}</em>주마다 정기
+                배송됩니다)
               </div>
             </div>
           </section>
@@ -191,15 +198,11 @@ export default function DeliveryInfoPage() {
           <section className={s.btn_section}>
             <div className={s.box_btn}>
               <Link href={'/'} passHref>
-                <a className={s.left_btn}>
-                  홈으로
-                </a>
+                <a className={s.left_btn}>홈으로</a>
               </Link>
-              <Link href={'/order/ordersheet/subscribe'} passHref>
-                <a className={s.right_btn}>
-                  주문하러 가기
-                </a>
-              </Link>
+              <button type={'button'} className={s.right_btn} onClick={onNextPage}>
+                주문하러 가기
+              </button>
             </div>
           </section>
         </Wrapper>

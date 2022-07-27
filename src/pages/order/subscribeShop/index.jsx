@@ -15,6 +15,7 @@ import {subscribePlanType} from "/store/TYPE/subscribePlanType";
 import ErrorMessage from "/src/components/atoms/ErrorMessage";
 import {useDispatch} from "react-redux";
 import {cartAction} from "/store/cart-slice";
+import {FullScreenRunningDog} from "../../../components/atoms/FullScreenLoading";
 
 
 // - 1.  설문조사 리포트 레시피 추천 결과 조회  못먹는 음식 조회 /api/dogs/14
@@ -67,7 +68,6 @@ export default function RegisterSubscribeInfoPage({ data }) {
     if (confirm(`이전 페이지로 돌아가시겠습니까?`)) router.back();
   };
 
-  
   
   
   const calcSubscribePlanPaymentPrice = (totalNumberOfPacks, discountPercent) => {
@@ -136,13 +136,16 @@ export default function RegisterSubscribeInfoPage({ data }) {
         ...prevState,
         submit: true,
       }));
+      
       const res = await postObjData(postFormValuesApiUrl, body);
       
       console.log(res);
       if (res.isDone) {
         await dispatch(cartAction.setSubscribeOrder({ data: { subscribeId: info.subscribeId, ...body } }));
-        await router.push(`/order/deliveryInfo?`);
         setSubmitted(true);
+  
+        setIsLoading({nextPage: true})
+        await router.push(`/order/deliveryInfo`)
       } else {
         alert('플랜,레시피 등록에 실패하였습니다.');
       }

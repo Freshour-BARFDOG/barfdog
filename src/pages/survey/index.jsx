@@ -310,10 +310,10 @@ export default function Survey() {
 console.log(submitState)
   return (
     <>
+      {(isLoading.submit || isLoading.nextPage) && submitState !== true && <FullScreenRunningDog opacity={1} />}
       <MetaTitle title="설문조사" />
       <Layout>
         <Wrapper>
-          {(isLoading.submit || isLoading.nextPage) && submitState !== true && <FullScreenRunningDog opacity={1} />}
           <div className={s['survey-page']} ref={surveyPageRef}>
             <Swiper
               {...surveySwiperSettings}

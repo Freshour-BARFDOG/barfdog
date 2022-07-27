@@ -6,7 +6,7 @@ import { subscribePlanType } from '/store/TYPE/subscribePlanType';
 import 'swiper/css';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { getData } from '/src/pages/api/reqData';
-import {FullScreenLoading} from '/src/components/atoms/FullScreenLoading';
+import {FullScreenRunningDog} from '/src/components/atoms/FullScreenLoading';
 import popupWindow from '/util/func/popupWindow';
 import {SubscribeCustomInput} from "./SubscribeCustomInput";
 import checkStringUnderConsonant from "../../../util/func/checkStringUnderConsonant";
@@ -36,6 +36,7 @@ const swiperSettings = {
 export const SubscribeRecipe = ({ name, info, setInfo, form, setForm }) => {
   // * 풀플랜: 최대 2가지 레시피 선택 가능
   // * 그 외 플랜: 1가지 레시피 선택 가능
+  const loadingDuration = 1800; // ms
   const [isLoading, setIsLoading] = useState({}); // boolean
   const [recipes, setRecipes] = useState([]);
   const [initialize, setInitialize] = useState(false);
@@ -74,11 +75,14 @@ export const SubscribeRecipe = ({ name, info, setInfo, form, setForm }) => {
       } catch (err) {
         console.error(err.response);
       }
-
-      setIsLoading((prevState) => ({
-        ...prevState,
-        fetching: false,
-      }));
+  
+      setTimeout(() => {
+        setIsLoading((prevState) => ({
+          ...prevState,
+          fetching: false,
+        }));
+      }, loadingDuration);
+      
     })();
   }, []);
   
@@ -172,7 +176,7 @@ export const SubscribeRecipe = ({ name, info, setInfo, form, setForm }) => {
       </div>}
       
       {isLoading?.fetching ? (
-        <FullScreenLoading/>
+        <FullScreenRunningDog opacity={1}/>
       ) : (
         <Swiper {...swiperSettings} watchOverflow={false}>
           {recipes.length > 0 &&
