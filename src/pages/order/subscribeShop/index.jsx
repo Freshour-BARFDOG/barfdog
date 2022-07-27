@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import s from 'src/pages/order/subscribe/index.module.scss';
+import s from 'src/pages/order/subscribeShop/index.module.scss';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
@@ -14,7 +14,7 @@ import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
 import {subscribePlanType} from "/store/TYPE/subscribePlanType";
 import ErrorMessage from "/src/components/atoms/ErrorMessage";
 import {useDispatch} from "react-redux";
-import {cartAction} from "../../../../store/cart-slice";
+import {cartAction} from "/store/cart-slice";
 
 
 // - 1.  설문조사 리포트 레시피 추천 결과 조회  못먹는 음식 조회 /api/dogs/14
@@ -140,8 +140,8 @@ export default function RegisterSubscribeInfoPage({ data }) {
       
       console.log(res);
       if (res.isDone) {
-        await router.push(`/order/deliveryInfo`);
-        dispatch(cartAction.setSubscribeOrder({ data: { subscribeId: info.subscribeId, ...body } }));
+        await dispatch(cartAction.setSubscribeOrder({ data: { subscribeId: info.subscribeId, ...body } }));
+        await router.push(`/order/deliveryInfo?`);
         setSubmitted(true);
       } else {
         alert('플랜,레시피 등록에 실패하였습니다.');

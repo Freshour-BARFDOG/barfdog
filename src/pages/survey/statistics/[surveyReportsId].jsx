@@ -22,7 +22,7 @@ export default function SurveyStatisticsPage({surveyReportsId}) {
   
           <section className={s.btn_box}>
             {/*<div className={s.btn}>맞춤 플랜 확인하기</div>*/}
-              <a href={`/order/subscribe?surveyReportsId=${surveyReportsId}`} className={s.btn} >맞춤 플랜 확인하기</a>
+              <a href={`/order/subscribeShop?surveyReportsId=${surveyReportsId}`} className={s.btn} >맞춤 플랜 확인하기</a>
           </section>
         </Wrapper>
       </Layout>

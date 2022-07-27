@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import s from '../../pages/order/subscribe/index.module.scss';
+import s from '../../pages/order/subscribeShop/index.module.scss';
 import CustomInput from '../atoms/CustomInput';
 import ItemLabel from '../atoms/ItemLabel';
 import Image from 'next/image';
