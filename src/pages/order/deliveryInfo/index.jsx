@@ -10,18 +10,18 @@ import { subscribePlanType } from '/store/TYPE/subscribePlanType';
 import { useRouter } from 'next/router';
 import { calcNextDeliveryDate } from '/util/func/calcNextDeliveryDate';
 import { FullScreenRunningDog } from '/src/components/atoms/FullScreenLoading';
+import {transformToday} from "../../../../util/func/transformDate";
 
 export default function DeliveryInfoPage() {
   const loadingDuration = 1800; // ms
+  const router = useRouter();
   const cart = useSelector((state) => state.cart);
+  const subscriberOrderInfo = cart.subscribeOrder;
   const [isLoading, setIsLoading] = useState({ nextPage: true }); // boolean
-  const [info, setInfo] = useState(cart.subscribeOrder);
+  const [info, setInfo] = useState(subscriberOrderInfo);
   // console.log(info)
 
   useEffect(() => {
-    const subscriberOrderInfo = cart.subscribeOrder;
-    setInfo(subscriberOrderInfo);
-    
     setTimeout(() => {
       setIsLoading({ nextPage: false });
     }, loadingDuration);
@@ -30,16 +30,18 @@ export default function DeliveryInfoPage() {
     }
   }, [cart]);
 
-  console.log('주문정보', cart.subscribeId);
+  console.log('Subscribe Order Information: ', cart.subscribeOrder);
 
-  const onNextPage = () => {
+  const onNextPage = async () => {
     setIsLoading({ nextPage: true });
     setTimeout(() => {
-      if (cart.subscribeId) {
-        router.push(`/order/ordersheet/subscribe/${cart.subscribeId}`);
-        setIsLoading({ nextPage: false });
+      if (info.subscribeId) {
+        router.push( `/order/ordersheet/subscribe/${info.subscribeId}`);
+        // - router.push() => 라우터 적용 시, '자동'으로 setIsLoading 초기화
+        // setIsLoading({ nextPage: false });
+     
       } else {
-        console.error('there is no Subscribe ID', cart.subscribeId);
+        console.error('there is no Subscribe ID', info.subscribeId);
         alert('주문정보를 확인할 수 없습니다.');
         window.location.href = '/';
       }
@@ -48,33 +50,32 @@ export default function DeliveryInfoPage() {
 
   return (
     <>
-      {isLoading?.nextPage && <FullScreenRunningDog opacity={1} />}
       <MetaTitle title={`정기구독 배송안내`} />
-      <Layout>
+      {isLoading?.nextPage ? <FullScreenRunningDog opacity={1} /> : <Layout>
         <Wrapper>
           <section className={s.top_content}>
             <div className={s.top_text_box}>
               <div className={s.title}>- 정기구독 배송안내 -</div>
               <div className={s.text_row2}>고객님의 정기구독 발송 예정일은</div>
               <div className={s.text_row2}>
-                <span>{calcNextDeliveryDate()}</span> 입니다
+                <span>{calcNextDeliveryDate(transformToday(), '월일')}</span> 입니다.
               </div>
               <div className={s.text_row3}>
-                (선택하신 <em>{subscribePlanType[info?.plan]?.KOR}</em> 플랜은 하루{' '}
+                (선택하신 <em>{subscribePlanType[info?.plan]?.KOR} 플랜</em>은 하루
                 <em>
                   {subscribePlanType[info?.plan]?.numberOfPacksPerDay === 1
                     ? '한'
                     : subscribePlanType[info?.plan]?.numberOfPacksPerDay === 2
-                    ? '두'
-                    : '세'}
+                      ? '두'
+                      : '세'}
                   끼
                 </em>
                 기준, <em>{subscribePlanType[info?.plan]?.weeklyPaymentCycle}</em>주마다 정기
-                배송됩니다)
+                배송됩니다.)
               </div>
             </div>
           </section>
-
+    
           <section className={s.image_box}>
             <div className={`${s.image} img-wrap`}>
               <Image
@@ -86,7 +87,7 @@ export default function DeliveryInfoPage() {
               />
             </div>
           </section>
-
+    
           <section className={s.mid_content}>
             <div className={s.mid_content_title}>- 주의사항 -</div>
             <div className={s.mid_content_box}>
@@ -106,7 +107,7 @@ export default function DeliveryInfoPage() {
                   냉동 보관해주세요
                 </div>
               </div>
-
+        
               <div className={s.mid_content_inner_box}>
                 <div className={`${s.image} img-wrap`}>
                   <Image
@@ -117,7 +118,7 @@ export default function DeliveryInfoPage() {
                     alt="카드 이미지"
                   />
                 </div>
-
+          
                 <div className={s.mid_content_inner_box_text}>하루 전 해동</div>
                 <div className={s.mid_content_inner_box_text2}>
                   급여 하루 전 냉장실 해동
@@ -127,7 +128,7 @@ export default function DeliveryInfoPage() {
                   해동해주세요
                 </div>
               </div>
-
+        
               <div className={s.mid_content_inner_box}>
                 <div className={`${s.image} img-wrap`}>
                   <Image
@@ -144,7 +145,7 @@ export default function DeliveryInfoPage() {
                   재냉동하지 말아주세요
                 </div>
               </div>
-
+        
               <div className={s.mid_content_inner_box}>
                 <div className={`${s.image} img-wrap`}>
                   <Image
@@ -162,7 +163,7 @@ export default function DeliveryInfoPage() {
                   급여하지 마시고 폐기해주세요
                 </div>
               </div>
-
+        
               <div className={s.mid_content_inner_box}>
                 <div className={`${s.image} img-wrap`}>
                   <Image
@@ -182,7 +183,7 @@ export default function DeliveryInfoPage() {
               </div>
             </div>
           </section>
-
+    
           <section className={s.image_box2}>
             <div className={`${s.image} img-wrap`}>
               <Image
@@ -194,7 +195,7 @@ export default function DeliveryInfoPage() {
               />
             </div>
           </section>
-
+    
           <section className={s.btn_section}>
             <div className={s.box_btn}>
               <Link href={'/'} passHref>
@@ -206,7 +207,8 @@ export default function DeliveryInfoPage() {
             </div>
           </section>
         </Wrapper>
-      </Layout>
+      </Layout>}
+      
     </>
   );
 }

@@ -127,7 +127,7 @@ export default function RegisterSubscribeInfoPage({ data }) {
     
     const errObj = validate(body);
     const isPassed = valid_hasFormErrors(errObj);
-    if (!isPassed) alert('유효하지 않은 항목이 있습니다.\n선택한 레시피 및 플랜을 확인해주세요. ');
+    if (!isPassed) return alert('유효하지 않은 항목이 있습니다.\n선택한 레시피 및 플랜을 확인해주세요. ');
   
  
     const postFormValuesApiUrl = `/api/subscribes/${info.subscribeId}/planRecipes`;
@@ -143,7 +143,6 @@ export default function RegisterSubscribeInfoPage({ data }) {
       if (res.isDone) {
         await dispatch(cartAction.setSubscribeOrder({ data: { subscribeId: info.subscribeId, ...body } }));
         setSubmitted(true);
-  
         setIsLoading({nextPage: true})
         await router.push(`/order/deliveryInfo`)
       } else {
