@@ -12,4 +12,7 @@ export const calcNextDeliveryDate = (d = transformToday(), unit = '월일') => {
   const nextDeliveryDate = new Date( today.setDate( diff ) ).toISOString().substring( 0, 10 );
   // console.log(new Date(today.setDate(diff)).toISOString().substring(0,10));
   return transformDate( nextDeliveryDate, unit );
+  // unit: null  > 'YYYY-MM-DD'
+  // unit: 년월일 > 'YYYY년 MM월 DD일'
+  
 };
