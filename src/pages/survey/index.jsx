@@ -4,13 +4,13 @@ import StyleSwiper from '/src/components/survey/surveySwiper.module.scss';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
-import { Swiper, SwiperSlide, useSwiper, useSwiperSlide } from 'swiper/react';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import siblings from '/util/func/siblings';
 import { SurveyPagination } from '../../components/survey/SurveyPagination';
-import { FullScreenLoading } from '/src/components/atoms/FullScreenLoading';
+import { FullScreenRunningDog} from '/src/components/atoms/FullScreenLoading';
 import { EffectFade, Navigation, Pagination } from 'swiper';
 import SurveyStep1 from '/src/components/survey/SurveyStep1';
 import SurveyStep2 from '/src/components/survey/SurveyStep2';
@@ -77,6 +77,8 @@ const initialFormValues = {
 // ! 설문조사 수정인지 // 생성인지에 따라서 =>버튼이름 변경하
 
 export default function Survey() {
+  
+  const loadingDuration = 1800; // ms
   const lastStep = 3;
   const router = useRouter();
   const mct = useModalContext();
@@ -202,8 +204,9 @@ export default function Survey() {
     siblings(bullets[idx]).forEach((sib) =>
       sib.classList.remove(StyleSwiper['swiper-pagination-bullet-active']),
     );
-    setIsLoading((prevState) => ({ nextPage: true }));
-    setTimeout(() => setIsLoading((prevState) => ({ nextPage: false })), 400);
+    
+    setIsLoading(() => ({ nextPage: true }));
+    setTimeout(() => setIsLoading(() => ({ nextPage: false })), loadingDuration);
     resetWindowPos();
   };
 
@@ -255,6 +258,7 @@ export default function Survey() {
         submit: true,
       }));
       let modalMessage;
+      setSubmitState(true);
       const res = await postObjData(postFormValuesApiUrl, formValues);
       console.log(res);
       if (res.isDone) {
@@ -266,7 +270,6 @@ export default function Survey() {
         const curPath = router.pathname;
         await router.push(`${curPath}?surveyReportsId=${surveyReportsId}`);
         onShowModalHandler(modalMessage);
-        setSubmitState(true);
       } else {
         modalMessage = '내부 통신장애입니다. 잠시 후 다시 시도해주세요.';
         onShowModalHandler(modalMessage);
@@ -304,13 +307,13 @@ export default function Survey() {
     mct.alertHide();
     setModalMessage('');
   };
-
+console.log(submitState)
   return (
     <>
       <MetaTitle title="설문조사" />
       <Layout>
         <Wrapper>
-          {(isLoading.submit || isLoading.nextPage) && <FullScreenLoading opacity={1} />}
+          {(isLoading.submit || isLoading.nextPage) && submitState !== true && <FullScreenRunningDog opacity={1} />}
           <div className={s['survey-page']} ref={surveyPageRef}>
             <Swiper
               {...surveySwiperSettings}
