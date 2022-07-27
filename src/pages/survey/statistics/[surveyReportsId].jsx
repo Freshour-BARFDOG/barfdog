@@ -4,16 +4,15 @@ import Wrapper from '/src/components/common/Wrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import { SurveyStatistics } from '/src/components/survey/SurveyStatistics';
 import s from "/src/components/survey/surveyStatistics.module.scss";
-import Link from "next/link";
 
-export default function SurveyStatisticsPage({dogId}) {
+export default function SurveyStatisticsPage({surveyReportsId}) {
   // 설문조사 조회시, 강아지 ID가 아닌  설문조사의 ID로 조회한다.
   return (
     <>
       <MetaTitle title="설문조사 통계" />
       <Layout>
         <Wrapper>
-          <SurveyStatistics dogId={dogId} mode={'default'}/>
+          <SurveyStatistics id={surveyReportsId} mode={'default'}/>
           <section className={s.last_text}>
             <div>
               ※ 해당 결과지는 바프독 고객을 대상으로한 참고용 결과이니, <br/>
@@ -23,9 +22,7 @@ export default function SurveyStatisticsPage({dogId}) {
   
           <section className={s.btn_box}>
             {/*<div className={s.btn}>맞춤 플랜 확인하기</div>*/}
-            <Link href={'/order/subscribe'} passHref>
-              <a className={s.btn} >맞춤 플랜 확인하기</a>
-            </Link>
+              <a href={`/order/subscribe?surveyReportsId=${surveyReportsId}`} className={s.btn} >맞춤 플랜 확인하기</a>
           </section>
         </Wrapper>
       </Layout>
@@ -44,7 +41,7 @@ export default function SurveyStatisticsPage({dogId}) {
 
 
 export async function getServerSideProps({ query }) {
-  const { dogId } = query;
+  const { surveyReportsId } = query;
   
-  return { props: { dogId } };
+  return { props: { surveyReportsId } };
 }

@@ -48,10 +48,10 @@ export const validate = (obj, fileObj) => {
     const objVal = fileObj[key];
     switch (key) {
       case 'surveyResult':
-        errors[key] = valid_isEmptyFile( objVal , 'thumbnailUrl');
+        errors[key] = valid_isEmptyFile( objVal , 'thumbnailUri'); // ! 주의: thumbnailUri (O) thumbnailUrl (X)
         break;
       case 'recipeThumb':
-        errors[key] = valid_isEmptyFile( objVal, 'thumbnailUrl' );
+        errors[key] = valid_isEmptyFile( objVal, 'thumbnailUri' );  // ! 주의: thumbnailUri (O) thumbnailUrl (X)
         break;
     }
   }

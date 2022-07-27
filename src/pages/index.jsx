@@ -24,7 +24,7 @@ import {getDataSSR} from "@src/pages/api/reqData";
 import Link from "next/link";
 
 export default function Home({ data }) {
-  console.log(data);
+  // console.log(data);
   
   const DATA = {
     topBannerDto: data.topBannerDto,

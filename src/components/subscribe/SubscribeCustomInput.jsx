@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Icon_Checked from '/public/img/icon/icon_checked.svg';
-import s from './customInput.module.scss';
+import s from './subscribeCustomInput.module.scss';
 
-const CustomInput = ({
+export const SubscribeCustomInput = ({
   children,
   id,
   type,
@@ -16,28 +16,32 @@ const CustomInput = ({
   backgroundColor,
   ...props
 }) => {
+  
+  
   const [isChecked, setIsChecked] = useState(false);
   useEffect(() => {
+    // 초기화
+    // console.log("초기화 실행");
     setIsChecked(false);
     setSelectedRadio(false);
     if (setSelectedCheckbox && typeof setSelectedCheckbox === 'function') setSelectedCheckbox([]);
-  }, [type, setSelectedRadio, setSelectedCheckbox, initialize]);
+  }, [type, initialize]);
 
+  
   const onCheckboxInputHandler = (e) => {
     setIsChecked(!isChecked);// checkbox 활성화
-    if (setSelectedCheckbox && typeof setSelectedCheckbox === 'function') {
-      const { id } = e.currentTarget;
-      const curState = { label: id, value: !isChecked };
+    const { id } = e.currentTarget;
+    const curState = { label: id, value: !isChecked };
 
-      setSelectedCheckbox((prevState) => {
-        return {
-          ...prevState,
-          [curState.label]: curState.value,
-        };
-      });
-    }
+    setSelectedCheckbox((prevState) => {
+      return {
+        ...prevState,
+        [curState.label]: curState.value,
+      };
+    });
   };
 
+  
   const onRadioInputHandler = (e) => {
     const { id } = e.currentTarget;
     setSelectedRadio(id);
@@ -102,4 +106,3 @@ const CustomInput = ({
   );
 };
 
-export default CustomInput;

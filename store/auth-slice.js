@@ -48,7 +48,7 @@ const authSlice = createSlice({
      
     },
     userRestoreAuthState(state, action) { // 쿠키가 존재할 경우 restoreAuthState
-      console.log('User Restore Auth State');
+      console.log('Restored User Auth State');
       state.isAdmin = action.payload.USERTYPE === userType.ADMIN;
       state.isAuth = true;
       state.autoLogin = true;
@@ -80,7 +80,7 @@ const authSlice = createSlice({
       window.location.href = '/bf-admin/dashboard';
     },
     adminRestoreAuthState (state, action) {
-      console.log('admnin Restore Auth State');
+      console.log('Restored Admin Auth State');
       state.isAdmin = true;
       state.isAuth = true;
       state.autoLogin = true; // 유저의 autologin 상태를 FE에서 관라히기 위함.

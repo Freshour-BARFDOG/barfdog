@@ -5,6 +5,7 @@ import convertFileSizeToMegabyte from '../convertFileSizeToMegabyte';
 import { discountUnitType } from '../../../store/TYPE/discountUnitType';
 import { transformToday } from '../transformDate';
 import deleteHypenOnDate from '../deleteHypenOnDate';
+import {isArray} from "util";
 
 export const valid_hasFormErrors = (errorObj, type = 'array') => {
   let isPassed = true;
@@ -62,11 +63,14 @@ export const valid_isNumberEmpty = (value) => {
 
 export const valid_isEmptyArray = (arr) =>{
   let error;
-  if(typeof arr !== 'object'){
+  if(Array.isArray(arr)){
+    error = arr.length ? '' : '항목이 비어있습니다.';
+  } else if(typeof arr !== 'object'){
     alert('데이터 처리 중 에러가 발생했습니다. 개발사에게 문의하세요.')
     return console.error('ERROR: Parameter type must be array');
   }
-  error = arr.length ? '' : '항목이 비어있습니다.';
+  
+  
   return error;
 }
 

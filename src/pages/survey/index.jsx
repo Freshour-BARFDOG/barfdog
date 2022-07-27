@@ -32,9 +32,7 @@ import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
 import { postObjData } from '../api/reqData';
 import { useRouter } from 'next/router';
 
-/* - 1. formErrrors => globa Modal alert사용해서, Modal에다가 에러에 해당하는 내용을 뿌려준다
-    2. birth 기본값이......... formValue에 들어가도록 설정한다.
- * */
+
 
 const initialFormValues = {
   name: '테스트 반려견-', // 강아지이름 str
