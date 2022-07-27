@@ -9,12 +9,20 @@ const transformDate = (d, option) => {
 
   let result = `${yy}-${mm}-${dd}`;
   
+  if(option === '년월일'){
+    result = `${yy}년 ${mm}월 ${dd}일`;
+  } else if(option === '월일'){
+    result = `${mm}월 ${dd}일`;
+  } else if (option === '일'){
+    result = `${dd}일`;
+  }
+  
   if(option === 'time'){
     const t = d?.split("-")[2].split("T")[1];
     const hour = t?.split(':')[0];
     const min = t?.split(':')[1];
     const sec = Math.floor(t?.split(':')[2]);
-    result = option === 'time' && `${yy}년 ${mm}월 ${dd}일 ${hour}시 ${min}분 ${sec}초`;
+    result = `${yy}년 ${mm}월 ${dd}일 ${hour}시 ${min}분 ${sec}초`;
   }
   
   return result;
