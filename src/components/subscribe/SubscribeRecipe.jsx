@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import s from '/src/pages/order/subscribe/index.module.scss';
+import s from '/src/pages/order/subscribeShop/index.module.scss';
 import { ItemRecommendlabel } from '/src/components/atoms/ItemLabel';
 import Image from 'next/image';
 import { subscribePlanType } from '/store/TYPE/subscribePlanType';

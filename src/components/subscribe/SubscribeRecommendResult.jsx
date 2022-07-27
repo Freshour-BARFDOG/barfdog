@@ -1,4 +1,4 @@
-import s from '../../pages/order/subscribe/index.module.scss';
+import s from '../../pages/order/subscribeShop/index.module.scss';
 import Image from 'next/image';
 import React from 'react';
 
