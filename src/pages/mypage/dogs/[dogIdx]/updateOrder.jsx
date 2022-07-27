@@ -54,7 +54,7 @@ const CustomInputRadio_plan = ({name, handler}) => {
             <div className={`${s.image} img-wrap`}>
               <Image
                 priority
-                src={require("public/img/pages/subscribe_full_plan.png")}
+                src={require("public/img/subscribe/subscribe_full_plan.png")}
                 objectFit="cover"
                 layout="fill"
                 alt="카드 이미지"
@@ -113,7 +113,7 @@ const CustomInputRadio_plan = ({name, handler}) => {
               <div className={`${s.image} img-wrap`}>
                 <Image
                   priority
-                  src={require("public/img/pages/subscribe_full_plan.png")}
+                  src={require("public/img/subscribe/subscribe_full_plan.png")}
                   objectFit="cover"
                   layout="fill"
                   alt="카드 이미지"
@@ -185,7 +185,7 @@ const CustomInputRadio_plan = ({name, handler}) => {
               <div className={`${s.image} img-wrap`}>
                 <Image
                   priority
-                  src={require("public/img/pages/subscribe_full_plan.png")}
+                  src={require("public/img/subscribe/subscribe_full_plan.png")}
                   objectFit="cover"
                   layout="fill"
                   alt="카드 이미지"
