@@ -35,13 +35,13 @@ export default function AuthInterceptor({ CustomProps, children }) {
     // STEP 2. 만료된 토큰 삭제
     // CF. ADMIN과 USER가 동일한 쿠키를 사용하지만, (Server에서 발급하는 JWT에서 Role을 구별하는 방식)
     // CF.  FONTEND에서 해당 사항을 인지할 수 있도록, 명시성을 위해 중복하여 코드를 작성함
-    if (EXPIRED_TOKEN.ADMIN === true) {
+    if (USERTYPE !== userType.ADMIN &&EXPIRED_TOKEN.ADMIN === true) {
       setCookie(cookieType.LOGIN_COOKIE, null, 'date', 0, { path: '/' });
       alert('어드민 인증 시간이 만료되었습니다. 다시 로그인해주세요.');
       dispatch(authAction.adminLogout());
     }
 
-    if (EXPIRED_TOKEN.MEMBER === true) {
+    if (USERTYPE !== userType.MEMBER && EXPIRED_TOKEN.MEMBER === true) {
       setCookie(cookieType.LOGIN_COOKIE, null, 'date', 0, { path: '/' });
       alert('사용자 인증 시간이 만료되었습니다. 다시 로그인해주세요.');
       dispatch(authAction.logout());

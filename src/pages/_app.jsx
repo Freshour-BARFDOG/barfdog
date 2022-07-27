@@ -61,12 +61,12 @@ MyApp.getInitialProps = async (initialProps) => {
     token = getTokenFromServerSide(req);
     const valid_adminApiUrl = '/api/admin/setting';
     const valid_memberApiUrl = `/api/baskets`;
-    const res_ADMIN = await getDataSSR(req, valid_adminApiUrl, { tokenFromSSR: token });
-    const res_MEMBER = await getDataSSR(req, valid_memberApiUrl, { tokenFromSSR: token });
-
+    const res_ADMIN = await getDataSSR(req, valid_adminApiUrl, token);
+    const res_MEMBER = await getDataSSR(req, valid_memberApiUrl, token);
+    
     // console.log('res_ADMIN: ',res_ADMIN)
     // console.log('res_MEMBER: ',res_MEMBER)
-
+    
     // STEP 1. USER TYPE
     if (res_ADMIN && res_ADMIN.status === 200 && res_MEMBER.status === 200) {
       USER_TYPE = userType.ADMIN;
@@ -76,26 +76,30 @@ MyApp.getInitialProps = async (initialProps) => {
       USER_TYPE = userType.NON_MEMBER;
     }
 
+
     // STEP 2. EXPIRED TOKEN
   
     // 토큰 만료 확인 후 , login Page Redir한 경우 => 무한 redir을 방지하기 위해 토큰 만료 초기화
   
     if (res_ADMIN && res_ADMIN.status === 401) {
       console.log('EXPIRED_TOKEN_ADMIN: ', EXPIRED_TOKEN_ADMIN);
-      EXPIRED_TOKEN_ADMIN = req.headers.referer?.indexOf('/bf-admin/login') >= 0 ? true : null;
+      // EXPIRED_TOKEN_ADMIN = req.headers.referer?.indexOf('/bf-admin/login') >= 0 ? true : null;
+      EXPIRED_TOKEN_ADMIN = true;
     } else if (res_ADMIN) {
       EXPIRED_TOKEN_ADMIN = false;
     }
 
     if (res_MEMBER && res_MEMBER.status === 401) {
       console.log('EXPIRED_TOKEN_MEMBER: ', EXPIRED_TOKEN_MEMBER);
-      EXPIRED_TOKEN_MEMBER = req.headers.referer?.indexOf('/bf-admin/login') >= 0 ? true : null;
+      // EXPIRED_TOKEN_MEMBER = req.headers.referer?.indexOf('/bf-admin/login') >= 0 ? true : null;
+      EXPIRED_TOKEN_MEMBER = true;
     } else if (res_MEMBER) {
       EXPIRED_TOKEN_MEMBER = false;
     }
 
     // STEP 3. CART DATA
     const data = res_MEMBER?.data;
+    console.log('CART DATA:', data)
     if (
       (USER_TYPE === userType.MEMBER && res_MEMBER.status === 200) ||
       (USER_TYPE === userType.ADMIN && res_ADMIN.status === 200)
@@ -136,30 +140,30 @@ MyApp.getInitialProps = async (initialProps) => {
   }
   
 
-  if (EXPIRED_TOKEN_MEMBER || EXPIRED_TOKEN_ADMIN) {
-    const redirectPath = EXPIRED_TOKEN_MEMBER
-      ? '/account/login'
-      : EXPIRED_TOKEN_ADMIN
-        ? '/bf-admin/login'
-        : null;
-  
-    // res.setHeader("location", redirectPath);
-    return {
-      Component,
-      pageProps,
-      CustomProps: {
-        data: { cart: cart_DATA || null, error: failedFetchingCartData || null },
-        token: token,
-        USERTYPE: USER_TYPE || null,
-        EXPIRED_TOKEN: { ADMIN: EXPIRED_TOKEN_ADMIN, MEMBER: EXPIRED_TOKEN_MEMBER },
-      },
-      redirect: {
-        destination: redirectPath,
-        permanent: false,
-      },
-    }
-  
-  }
+  // if (EXPIRED_TOKEN_MEMBER || EXPIRED_TOKEN_ADMIN) {
+  //   const redirectPath = EXPIRED_TOKEN_MEMBER
+  //     ? '/account/login'
+  //     : EXPIRED_TOKEN_ADMIN
+  //       ? '/bf-admin/login'
+  //       : null;
+  //
+  //   // res.setHeader("location", redirectPath);
+  //   return {
+  //     Component,
+  //     pageProps,
+  //     CustomProps: {
+  //       data: { cart: cart_DATA || null, error: failedFetchingCartData || null },
+  //       token: token,
+  //       USERTYPE: USER_TYPE || null,
+  //       EXPIRED_TOKEN: { ADMIN: EXPIRED_TOKEN_ADMIN, MEMBER: EXPIRED_TOKEN_MEMBER },
+  //     },
+  //     redirect: {
+  //       destination: redirectPath,
+  //       permanent: false,
+  //     },
+  //   }
+  //
+  // }
   
   return {
     Component,
