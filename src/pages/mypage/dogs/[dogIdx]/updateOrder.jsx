@@ -477,7 +477,7 @@ function MypageSubscribeProductPage() {
                     <figure className={`${s.image} img-wrap`}>
                       <Image
                           priority
-                          src={require("src/pages/order/subscribe/survey_order_title_left.png")}
+                          src={require("src/pages/order/subscribeShop/survey_order_title_left.png")}
                           objectFit="cover"
                           layout="fill"
                           alt="레시피 이미지"
@@ -494,7 +494,7 @@ function MypageSubscribeProductPage() {
                       <figure className={`${s.image} img-wrap`}>
                         <Image
                             priority
-                            src={require("src/pages/order/subscribe/survey_order_title_left.png")}
+                            src={require("src/pages/order/subscribeShop/survey_order_title_left.png")}
                             objectFit="cover"
                             layout="fill"
                             alt="레시피 이미지"
