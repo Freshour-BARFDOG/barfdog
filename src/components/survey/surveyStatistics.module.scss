@@ -361,7 +361,7 @@ $container-maxWidth: rem(960);
     .left_text {
       display: flex;
       align-items: center;
-      justify-content: end;
+      justify-content: flex-end;
       @include char(d32);
       color: var(--color-main);
 
