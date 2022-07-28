@@ -1,6 +1,6 @@
 import transformDate, {transformToday} from './transformDate';
 
-export const calcNextDeliveryDate = (d = transformToday(), unit = '월일') => {
+export const calcNextSubscribeDeliveryDate = (d = transformToday(), unit = '월일') => {
   // WEEK = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
   const FRI = 5; // 금
   const next_WED = 10;

@@ -24,9 +24,12 @@ export function Payment({info,  form, isLoading, setIsLoading, setFormErrors }) 
     };
   }, []);
 
+
   const onSubmit = async (e) => {
+    console.log(form)
     e.preventDefault();
     if (isSubmitted) return;
+    
 
     const valid_target = form.bundle ? {
       paymentMethod: form.paymentMethod,

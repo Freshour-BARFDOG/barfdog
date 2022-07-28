@@ -34,6 +34,7 @@ export const validate = (obj) => {
         errors[key] = valid_isEmpty(val);
         break;
       case 'paymentPrice':
+        console.log(val,'zzz')
         errors[key] = valid_paymentPrice(val);
         break;
     }
@@ -44,7 +45,7 @@ export const validate = (obj) => {
 
 
 const valid_paymentPrice = (val) =>{
-  let error;
+  let error='';
   if(typeof val !== 'number') {
     error = '결제금액의 타입은 Number를 사용해야 합니다.'
   } else if( val < 0 ){

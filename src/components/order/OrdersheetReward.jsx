@@ -7,13 +7,18 @@ import transformLocalCurrency from '../../../util/func/transformLocalCurrency';
 import transformClearLocalCurrency from "../../../util/func/transformClearLocalCurrency";
 import {calcOrdersheetPrices} from "./calcOrdersheetPrices";
 
-export const OrdersheetReward = ({ id, info, form, setForm, formErrors, setFormErrors }) => {
+export const OrdersheetReward = ({ id, info, form, setForm, formErrors, setFormErrors, orderType='general' }) => {
   
-  const availableMaxReward = info.reward > form.orderPrice ? form.orderPrice: info.reward;
-  
+  let availableMaxReward
+  if(orderType === 'general'){
+    availableMaxReward = info.reward > form.orderPrice ? form.orderPrice: info.reward
+  }else if (orderType === 'subscribe') {
+    availableMaxReward = info.reward > form.orderPrice ? form.orderPrice : info.reward
+  }
   
   const onInputChangeHandler = (e) => {
-    const currentItemPrice = info.orderPrice
+    const currentItemPrice = orderType === 'general' ? info.orderPrice : info.subscribeDto.nextPaymentPrice;
+    
     const input = e.currentTarget;
     const { value } = input;
     const filteredType = input.dataset.inputType;

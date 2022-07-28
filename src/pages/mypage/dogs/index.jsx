@@ -20,6 +20,9 @@ import Modal_confirm from '/src/components/modal/Modal_confirm';
 
 
 export default function MypageDogInfoPage({ data }) {
+  
+  // 구독 주문 리스트 검색(페이징)
+  // /api/orders/subscribe?size=5&page=1' -i -X GET \
   const mct = useModalContext();
   const [activeUploadDogProfileModal, setActiveUploadDogProfileModal] = useState(false);
   const [itemList, setItemList] = useState(data);
@@ -212,6 +215,7 @@ const ItemList = ({ data, onUploadImageModalHandler, onShowModalHandler }) => {
           </div>
 
           {/* 설문결과 설문수정 결제하기 버튼3개 */}
+          {/* 리포트 결과를 조회ㅏ면, 강아지에 대한 구독 조회버튼이 등장한다.*/}
         </div>
         <div className={s.select_box}>
           <div className={s['btn-section']}>
@@ -221,7 +225,9 @@ const ItemList = ({ data, onUploadImageModalHandler, onShowModalHandler }) => {
             <Link href={`/mypage/dogs/${dogId}/updateSurvey`} passHref>
               <a>설문수정</a>
             </Link>
-            <Link href={'/order/ordersheet'} passHref>
+            
+            {/* 강아지가 구독중이지 않고, 결제하지 않은 구독 정보 중....에서..*/}
+            <Link href={`/order/ordersheet/subscribe/${subscribeId}`} passHref>
               <a className={s.payment}>결제하기</a>
             </Link>
           </div>

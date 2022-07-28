@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import { subscribePlanType } from '/store/TYPE/subscribePlanType';
 import { useRouter } from 'next/router';
-import { calcNextDeliveryDate } from '/util/func/calcNextDeliveryDate';
+import { calcNextSubscribeDeliveryDate } from '/util/func/calcNextSubscribeDeliveryDate';
 import { FullScreenRunningDog } from '/src/components/atoms/FullScreenLoading';
 import {transformToday} from "../../../../util/func/transformDate";
 
@@ -58,7 +58,7 @@ export default function DeliveryInfoPage() {
               <div className={s.title}>- 정기구독 배송안내 -</div>
               <div className={s.text_row2}>고객님의 정기구독 발송 예정일은</div>
               <div className={s.text_row2}>
-                <span>{calcNextDeliveryDate(transformToday(), '월일')}</span> 입니다.
+                <span>{calcNextSubscribeDeliveryDate(transformToday(), '월일')}</span> 입니다.
               </div>
               <div className={s.text_row3}>
                 (선택하신 <em>{subscribePlanType[info?.plan]?.KOR} 플랜</em>은 하루

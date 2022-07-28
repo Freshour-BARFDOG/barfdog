@@ -143,8 +143,8 @@ export default function RegisterSubscribeInfoPage({ data }) {
       if (res.isDone) {
         await dispatch(cartAction.setSubscribeOrder({ data: { subscribeId: info.subscribeId, ...body } }));
         setSubmitted(true);
-        setIsLoading({nextPage: true})
-        await router.push(`/order/deliveryInfo`)
+        setIsLoading({nextPage: true});
+        await router.push(`/order/deliveryInfo`);
       } else {
         alert('플랜,레시피 등록에 실패하였습니다.');
       }
