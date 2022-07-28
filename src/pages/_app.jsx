@@ -6,14 +6,13 @@ import '/src/pages/api/axios.config';
 import { ModalContextProvider } from '/store/modal-context';
 import ChannelTalkProvider from '/src/pages/api/channelTalk/ChannelTalkProvider';
 import GAProvider from '/src/pages/api/googleAnalytics/GAProvider';
-import {getDataSSR, getTokenClientSide, getTokenFromServerSide} from '/src/pages/api/reqData';
+import { getDataSSR, getTokenClientSide, getTokenFromServerSide } from '/src/pages/api/reqData';
 import { userType } from '/store/TYPE/userAuthType';
 import { cookieType } from '@store/TYPE/cookieType';
 
 // Server Only File (client에서 사용하는 로직 사용불가)
 // Next JS : 최초실행
 //👉 공통된 Data Fetching이 필요하다면 _app.js에 getInitialProps를 붙이면 된다.CustomProps
-
 
 /* ! < '최초' 랜더링 시, 2번 API FETCHING 이유 >
    - nextjs는 pre-rendering 과정을 사전에 한번 거치는데 그때 한번 실행되고
@@ -23,7 +22,6 @@ import { cookieType } from '@store/TYPE/cookieType';
 
 *
 * */
-
 
 export default function MyApp({ Component, pageProps, CustomProps }) {
   // console.log('pageProps: ', pageProps, '\nCURSOMPROPS:', props);
@@ -41,9 +39,6 @@ export default function MyApp({ Component, pageProps, CustomProps }) {
     </GAProvider>
   );
 }
-
-
-
 
 MyApp.getInitialProps = async (initialProps) => {
   // console.log(origin);
@@ -68,10 +63,10 @@ MyApp.getInitialProps = async (initialProps) => {
     const valid_memberApiUrl = `/api/baskets`;
     const res_ADMIN = await getDataSSR(req, valid_adminApiUrl, token);
     const res_MEMBER = await getDataSSR(req, valid_memberApiUrl, token);
-
+    
     // console.log('res_ADMIN: ',res_ADMIN)
     // console.log('res_MEMBER: ',res_MEMBER)
-
+    
     // STEP 1. USER TYPE
     if (res_ADMIN && res_ADMIN.status === 200 && res_MEMBER.status === 200) {
       USER_TYPE = userType.ADMIN;
@@ -81,14 +76,22 @@ MyApp.getInitialProps = async (initialProps) => {
       USER_TYPE = userType.NON_MEMBER;
     }
 
+
     // STEP 2. EXPIRED TOKEN
+  
+    // 토큰 만료 확인 후 , login Page Redir한 경우 => 무한 redir을 방지하기 위해 토큰 만료 초기화
+  
     if (res_ADMIN && res_ADMIN.status === 401) {
+      console.log('EXPIRED_TOKEN_ADMIN: ', EXPIRED_TOKEN_ADMIN);
+      // EXPIRED_TOKEN_ADMIN = req.headers.referer?.indexOf('/bf-admin/login') >= 0 ? true : null;
       EXPIRED_TOKEN_ADMIN = true;
     } else if (res_ADMIN) {
       EXPIRED_TOKEN_ADMIN = false;
     }
 
     if (res_MEMBER && res_MEMBER.status === 401) {
+      console.log('EXPIRED_TOKEN_MEMBER: ', EXPIRED_TOKEN_MEMBER);
+      // EXPIRED_TOKEN_MEMBER = req.headers.referer?.indexOf('/bf-admin/login') >= 0 ? true : null;
       EXPIRED_TOKEN_MEMBER = true;
     } else if (res_MEMBER) {
       EXPIRED_TOKEN_MEMBER = false;
@@ -96,7 +99,11 @@ MyApp.getInitialProps = async (initialProps) => {
 
     // STEP 3. CART DATA
     const data = res_MEMBER?.data;
-    if ((USER_TYPE === userType.MEMBER && res_MEMBER.status === 200) || USER_TYPE === userType.ADMIN && res_ADMIN.status === 200) {
+    console.log('CART DATA:', data)
+    if (
+      (USER_TYPE === userType.MEMBER && res_MEMBER.status === 200) ||
+      (USER_TYPE === userType.ADMIN && res_ADMIN.status === 200)
+    ) {
       cart_DATA = {
         deliveryConstant: {
           price: data.deliveryConstant.price,
@@ -128,24 +135,44 @@ MyApp.getInitialProps = async (initialProps) => {
         })),
       };
     } else {
-      failedFetchingCartData ='failed Fetching ServerSide CART DATA'
+      failedFetchingCartData = 'failed Fetching ServerSide CART DATA';
     }
   }
+  
 
-  // console.log('DATA: ',cart_DATA);
-  // console.log('TOKEN: ',token)
-  // console.log('USER TYPE: ',USER_TYPE)
-  // console.log('EXPIRED_TOKEN_ADMIN: ',EXPIRED_TOKEN_ADMIN);
-  // console.log('EXPIRED_TOKEN_MEMBER: ',EXPIRED_TOKEN_MEMBER);
-
+  // if (EXPIRED_TOKEN_MEMBER || EXPIRED_TOKEN_ADMIN) {
+  //   const redirectPath = EXPIRED_TOKEN_MEMBER
+  //     ? '/account/login'
+  //     : EXPIRED_TOKEN_ADMIN
+  //       ? '/bf-admin/login'
+  //       : null;
+  //
+  //   // res.setHeader("location", redirectPath);
+  //   return {
+  //     Component,
+  //     pageProps,
+  //     CustomProps: {
+  //       data: { cart: cart_DATA || null, error: failedFetchingCartData || null },
+  //       token: token,
+  //       USERTYPE: USER_TYPE || null,
+  //       EXPIRED_TOKEN: { ADMIN: EXPIRED_TOKEN_ADMIN, MEMBER: EXPIRED_TOKEN_MEMBER },
+  //     },
+  //     redirect: {
+  //       destination: redirectPath,
+  //       permanent: false,
+  //     },
+  //   }
+  //
+  // }
+  
   return {
     Component,
     pageProps,
     CustomProps: {
-      data: { cart: cart_DATA, error:failedFetchingCartData },
+      data: { cart: cart_DATA || null, error: failedFetchingCartData || null },
       token: token,
       USERTYPE: USER_TYPE || null,
       EXPIRED_TOKEN: { ADMIN: EXPIRED_TOKEN_ADMIN, MEMBER: EXPIRED_TOKEN_MEMBER },
-    },
+    }
   };
-};
+}

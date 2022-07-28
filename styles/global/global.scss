@@ -170,8 +170,8 @@ input[data-align='right']{
 
 
 @media (max-width:rem(600)){
-  .mobile{display:block !important;}
-  .pc{display:none !important;}
+  #__next .mobile{display:block !important;}
+  #__next .pc{display:none !important;}
 }
 
 ////////////////////////////////////////////////////

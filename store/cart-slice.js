@@ -5,6 +5,7 @@ const initialState = {
   orderItemList: [],
   cartList: [],
   info:{},
+  subscribeOrder:{},
   itemCount: 0,
 };
 
@@ -29,7 +30,11 @@ const cartSlice = createSlice({
     },
     setItemCount (state, action) {
       state.itemCount = action.payload.count;
-      console.log(action.payload.count)
+      // console.log(action.payload.count)
+    },
+    setSubscribeOrder (state, action) {
+      // console.log(action.payload.data)
+      state.subscribeOrder = action.payload.data
     }
   },
 });

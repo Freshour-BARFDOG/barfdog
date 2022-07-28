@@ -527,8 +527,8 @@ export async function getServerSideProps({ req }) {
   let error = null;
   const getApiUrl = `/api/baskets`;
   const res = await getDataSSR(req, getApiUrl);
-  console.log('SERVER REPONSE: ', res);
-  if (res.status === 200) {
+  // console.log('SERVER REPONSE: ', res);
+  if (res?.status === 200) {
     data = res.data;
   } else {
     error = true;

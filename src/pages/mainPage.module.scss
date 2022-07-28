@@ -137,25 +137,33 @@ section.sns {
     height: rem(456);
     background-color: #fff;
     box-shadow: rem(10) rem(10) rem(30) rgba(0, 0, 0, .1);
+    padding: rem(10);
+    box-sizing: border-box;
+    text-align: center;
   }
 
   .img_wrap{
-    position: absolute;
-    top: rem(10);
-    left: rem(10);
+    //position: absolute;
+    position: relative;
     height: rem(240);
     width: rem(240);
   }
 
-  .secondbox {
-    position: absolute;
+  .uiNameKorean {
+    margin-top:rem(8);
+    margin-bottom:rem(10);
     left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    bottom: rem(-50);
     font-size: rem(24);
     font-weight: bold;
     text-align: center;
+  }
+
+  .desc{color:#717171;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp:3;
+    overflow: hidden;
+
   }
 
   .pbox {
@@ -166,6 +174,16 @@ section.sns {
     bottom: rem(-125);
     text-align: center;
     line-height: 1.35;
+    .title_en {
+      font-family: "GmarketSansbold";
+      font-size: rem(20);
+      margin-bottom: rem(20);
+    }
+    .title_ko {
+      font-family: var(--font-ink);
+      font-size: rem(27);
+    }
+
   }
     
   .recipe_btn{
@@ -772,6 +790,8 @@ section.sns {
     border-radius: rem(8);
     background-color: #fff;
     box-shadow: 0.3125rem 0.3125rem 1.25rem rgb(0 0 0 / 10%);
+    padding: rem(40) rem(30);
+    box-sizing: border-box;
   }
 
   .swiper_review_box{
@@ -780,9 +800,15 @@ section.sns {
   }
 
   .swiper_review_img{
-    margin: rem(40) auto 0;
+    //margin: rem(40) auto 0;
+    position:relative;
+    padding: 0 rem(20);
+    box-sizing: border-box;
+    margin: 0 auto;
     width: rem(240);
     height: rem(240);
+    border-radius:50%;
+    overflow: hidden;
   }
 
   .swiper_review_txt{
@@ -790,10 +816,13 @@ section.sns {
     text-align: center;
   }
 
-  p{
+  .contents{
     margin: rem(20) auto;
     text-align: center;
-    width: 85%;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
   }
 
   .swiper-button-prev,
@@ -878,10 +907,10 @@ section.sns {
 
 @media only screen and (min-width:rem(100)) and (max-width: rem(1400)) {
   
-  .swiper-button-prev,
-  .swiper-button-next {
-    display: none;
-  }
+  //.swiper-button-prev,
+  //.swiper-button-next {
+  //  display: none;
+  //}
 }
 
 

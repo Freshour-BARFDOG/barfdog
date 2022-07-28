@@ -7,8 +7,13 @@ import ErrorMessage from '../atoms/ErrorMessage';
 import WindowOpener from '/util/func/window-opener';
 import CustomRadioTrueOrFalse from '../admin/form/CustomRadioTrueOrFalse';
 
-export const OrdersheetDeliveryForm = ({ info, form, setForm, formErrors }) => {
-  
+export const OrdersheetDeliveryForm = ({
+  info,
+  form,
+  setForm,
+  formErrors,
+  orderType = 'general',
+}) => {
   const initialDeliveryInfos = {
     name: null, // 수령자 이름 ("정기배송과" 묶음 배송일 경우, null => 정기배송 수령자를 따름)
     phone: null, // 수령자 전화번호 (묶음 배송일 경우, null)
@@ -17,37 +22,35 @@ export const OrdersheetDeliveryForm = ({ info, form, setForm, formErrors }) => {
     city: null,
     detailAddress: null, // 상세주소 (묶음 배송일 경우, null)
     request: null, // 배송 요청사항 (묶음 배송일 경우, null)
-  }
+  };
   // 묶음배송여부 ! Client ONLY  (cf. 묶음배송아닐 경우, form.deliveryId = null)
-  const [bundle, setBundle] = useState( false );
-  const [sameUserInfo, setSameUserInfo] = useState( false );
+  const [bundle, setBundle] = useState(false);
+  const [sameUserInfo, setSameUserInfo] = useState(false);
   // 배송정보
   const [deliveryInfo, setDeliveryInfo] = useState(initialDeliveryInfos);
   // console.log(deliveryInfo)
   // console.log(sameUserInfo)
 
   useEffect(() => {
-    
-     const deliveryDto = {}
+    const deliveryDto = {};
     for (const key in deliveryInfo) {
       const val = deliveryInfo[key];
       deliveryDto[key] = bundle ? null : val;
     }
-    
+
     setForm((prevState) => ({
       ...prevState,
       deliveryDto,
       deliveryId: bundle ? info.deliveryId : null,
-      bundle
+      bundle,
     }));
-    
   }, [deliveryInfo]);
-  
-  useEffect( () => {
+
+  useEffect(() => {
     // !bundle && form.sameUserInfo ? info.phoneNumber : deliveryInfo.phone || ''
     // console.log('배송정버 뱐걍 ')
     // {!bundle && form.sameUserInfo ? info.name : deliveryInfo.name || ''}
-    setDeliveryInfo(prevState => ({
+    setDeliveryInfo((prevState) => ({
       ...prevState,
       name: bundle ? null : sameUserInfo ? info.name : '',
       phone: bundle ? null : sameUserInfo ? info.phone : '', // 수령자 전화번호 (묶음 배송일 경우, null)
@@ -56,12 +59,11 @@ export const OrdersheetDeliveryForm = ({ info, form, setForm, formErrors }) => {
       city: bundle ? null : sameUserInfo ? info.address.city : '',
       detailAddress: bundle ? null : sameUserInfo ? info.address.detailAddress : '', // 상세주소 (묶음 배송일 경우, null)
       request: bundle ? null : sameUserInfo ? info.address.request : '', // 배송 요청사항 (묶음 배송일 경우, null)
-    }))
-    if(bundle){
-      setDeliveryInfo(initialDeliveryInfos)
+    }));
+    if (bundle) {
+      setDeliveryInfo(initialDeliveryInfos);
     }
-  }, [bundle, sameUserInfo] );
-  
+  }, [bundle, sameUserInfo]);
 
   const onReceivePopupData = (err, data) => {
     // MEMO DATA from POSTCODE API
@@ -105,7 +107,7 @@ export const OrdersheetDeliveryForm = ({ info, form, setForm, formErrors }) => {
             <PureCheckbox
               id={'sameUserInfo'}
               className={s.text}
-              value={!bundle && sameUserInfo || ''}
+              value={(!bundle && sameUserInfo) || ''}
               setValue={setSameUserInfo}
               disabled={bundle}
               returnBoolean
@@ -121,8 +123,8 @@ export const OrdersheetDeliveryForm = ({ info, form, setForm, formErrors }) => {
               id={'name'}
               type={'text'}
               className={s.input_box}
-              placeholder={bundle ? '다음 정기구독 수령자': '이름'}
-              value={!bundle && deliveryInfo.name || ''}
+              placeholder={bundle ? '다음 정기구독 수령자' : '이름'}
+              value={(!bundle && deliveryInfo.name) || ''}
               onChange={onInputChangeHandler}
               disabled={bundle}
             />
@@ -136,8 +138,8 @@ export const OrdersheetDeliveryForm = ({ info, form, setForm, formErrors }) => {
               type={'text'}
               className={s.input_box}
               data-input-type={'number'}
-              placeholder={bundle ? '' : "‘-’없이 숫자만 입력"}
-              value={!bundle && deliveryInfo.phone || ''}
+              placeholder={bundle ? '' : '‘-’없이 숫자만 입력'}
+              value={(!bundle && deliveryInfo.phone) || ''}
               onChange={onInputChangeHandler}
               disabled={bundle}
             />
@@ -152,16 +154,20 @@ export const OrdersheetDeliveryForm = ({ info, form, setForm, formErrors }) => {
                 type={'text'}
                 className={`${s.input_box}`}
                 data-input-type={'number'}
-                placeholder={bundle ? '': '우편번호'}
+                placeholder={bundle ? '' : '우편번호'}
                 disabled
-                value={!bundle && deliveryInfo.zipcode || ''}
+                value={(!bundle && deliveryInfo.zipcode) || ''}
               />
               <WindowOpener
                 url={'/popup/searchAddress'}
                 bridge={onReceivePopupData}
-                disabled={!bundle && !!form.sameUserInfo || bundle}
+                disabled={(!bundle && !!form.sameUserInfo) || bundle}
               >
-                <span className={`${s.btn} ${s.btn_box} ${(bundle || form.sameUserInfo) ? s.disabled : ''}`}>
+                <span
+                  className={`${s.btn} ${s.btn_box} ${
+                    bundle || form.sameUserInfo ? s.disabled : ''
+                  }`}
+                >
                   {deliveryInfo?.city ? '재검색' : '주소검색'}
                 </span>
               </WindowOpener>
@@ -174,7 +180,7 @@ export const OrdersheetDeliveryForm = ({ info, form, setForm, formErrors }) => {
                 id={'street'}
                 type={'text'}
                 disabled
-                value={!bundle && deliveryInfo.street || ''}
+                value={(!bundle && deliveryInfo.street) || ''}
               />
               <ErrorMessage>{formErrors.street}</ErrorMessage>
             </li>
@@ -183,8 +189,8 @@ export const OrdersheetDeliveryForm = ({ info, form, setForm, formErrors }) => {
                 id={'detailAddress'}
                 type={'text'}
                 className={s.input_box}
-                placeholder={bundle ? '':'상세주소'}
-                value={!bundle && deliveryInfo.detailAddress || ''}
+                placeholder={bundle ? '' : '상세주소'}
+                value={(!bundle && deliveryInfo.detailAddress) || ''}
                 onChange={onInputChangeHandler}
                 disabled={bundle}
               />
@@ -196,10 +202,10 @@ export const OrdersheetDeliveryForm = ({ info, form, setForm, formErrors }) => {
           <div className={s.input_col}>
             <input
               className={s.input_box}
-              placeholder={bundle ? '': '직접입력'}
+              placeholder={bundle ? '' : '직접입력'}
               id={'request'}
               type={'text'}
-              value={!bundle && deliveryInfo.request || ''}
+              value={(!bundle && deliveryInfo.request) || ''}
               onChange={onInputChangeHandler}
               disabled={bundle}
             />
@@ -215,14 +221,15 @@ export const OrdersheetDeliveryForm = ({ info, form, setForm, formErrors }) => {
         <div className={s.box}>
           <ul className={s.grid_box}>
             <li className={s.left_box}>
-              <span>단품</span>
-              {form?.orderItemDtoList && (
+              <span>{orderType === 'general' ? '일반 상품' : '구독 상품'}</span>
+              {orderType === 'general' && form?.orderItemDtoList && (
                 <p>
                   {form.orderItemDtoList[0].name}
                   {form.orderItemDtoList.length >= 2 &&
                     ` 외 ${form?.orderItemDtoList.length - 2}건`}
                 </p>
               )}
+              {orderType === 'subscribe' && <p>{info.recipeNameList?.join(', ')}</p>}
             </li>
             <li></li>
             <li className={s.mid_box}>
@@ -231,20 +238,23 @@ export const OrdersheetDeliveryForm = ({ info, form, setForm, formErrors }) => {
             </li>
 
             <li className={s.right_box}>
-              <span>단품주문</span>
+              <span>{orderType === 'general' ? '단품주문' : '정기구독'}</span>
               <p>
                 {/*정기구독 묶음 배송이 true인 경우, 최근 정기배송일자 //// false인 경우,, 단품배송일자*/}
-                <span>
-                  {form.deliveryId
-                    ? info.nextSubscribeDeliveryDate
-                    : '***TEST_일반배송일 경우, 배송예정일시***'}
-                </span>
+                {orderType === 'general' && (
+                  <span>
+                    {form.deliveryId
+                      ? info.nextSubscribeDeliveryDate
+                      : '***TEST_일반배송일 경우, 배송예정일시***'}
+                  </span>
+                )}
+                {orderType === 'subscribe' && <span>{form.nextDeliveryDate}&nbsp;</span>}
                 (배송 후 카톡 안내)
               </p>
             </li>
           </ul>
         </div>
-        {info.deliveryId && (
+        {info.deliveryId && orderType !== 'subscribe' && (
           <CustomRadioTrueOrFalse
             name="bundle"
             returnBooleanValue

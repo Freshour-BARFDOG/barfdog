@@ -9,22 +9,26 @@ import transformLocalCurrency from '../../../util/func/transformLocalCurrency';
  * availableMinPrice : 사용가능한 최소 물품 가격
  *
  * */
-export const Modal_coupon = ({ onModalActive, data, setForm }) => {
+export const Modal_coupon = ({ onModalActive, data, setForm, orderType ='general' }) => {
   
   
   // Selected Item Info
-  const selectedItemId = Number(data.selectedItemId);
-  const selectedItemInfo = data.orderItemDtoList.filter(
-    (item) => item.itemId === selectedItemId,
-  )[0];
-  const selectedItemPrice = selectedItemInfo.orderLinePrice;
+  let selectedItemPrice;
+  let selectedItemId;
+  let selectedItemInfo;
+  if(orderType=== 'general'){
+    selectedItemId = Number(data.selectedItemId);
+    selectedItemInfo = data.orderItemDtoList.filter(
+      (item) => item.itemId === selectedItemId,
+    )[0];
+    selectedItemPrice = selectedItemInfo.orderLinePrice;
+  }else if ( orderType === 'subscribe'){
+    selectedItemId = Number(data.selectedItemInfo.id);
+    selectedItemPrice = data.selectedItemInfo.nextPaymentPrice
+  }
+  
   const [selectedRadioInfo, setSelectedRadioInfo] = useState(null);
 
-  // console.log(data);
-  // console.log(selectedItemPrice);
-  //
-  
-  
   
   const onHideModal = () => {
     onModalActive((prevState) => ({
@@ -56,21 +60,35 @@ export const Modal_coupon = ({ onModalActive, data, setForm }) => {
     if(!selectedRadioInfo) return alert('선택된 쿠폰이 없습니다.');
     const { couponId, itemId, discountAmount} = selectedRadioInfo;
     // console.log(couponId, itemId)
-    setForm(prevState => ({
-      ...prevState,
-      orderItemDtoList: prevState.orderItemDtoList.map((itemObj)=>{
-        const updatedState = {
-          ...itemObj,
-          memberCouponId: Number(couponId),
-          discountAmount: Number(discountAmount)
-        }
-        return itemObj.itemId ===  Number(itemId) ? updatedState : itemObj
-      }),
-      coupons: prevState.coupons.map((coupon)=>coupon.memberCouponId === Number(couponId) ? {
-        ...coupon,
-        remaining: --coupon.remaining
-      } : coupon)
-    }));
+    if(orderType=== 'general') {
+      setForm(prevState => ({
+        ...prevState,
+        orderItemDtoList: prevState.orderItemDtoList.map((itemObj)=>{
+          const updatedState = {
+            ...itemObj,
+            memberCouponId: Number(couponId),
+            discountAmount: Number(discountAmount)
+          }
+          return itemObj.itemId ===  Number(itemId) ? updatedState : itemObj
+        }),
+        coupons: prevState.coupons.map((coupon)=>coupon.memberCouponId === Number(couponId) ? {
+          ...coupon,
+          remaining: --coupon.remaining
+        } : coupon)
+      }));
+    } else if (orderType === 'subscribe') {
+      setForm(prevState => ({
+        ...prevState,
+        memberCouponId: Number(couponId),
+        discountCoupon: Number(discountAmount),
+        coupons: prevState.coupons.map((coupon)=>coupon.memberCouponId === Number(couponId) ? {
+          ...coupon,
+          remaining: --coupon.remaining
+        } : coupon)
+      }))
+    }
+    
+    
     onHideModal();
     
     

@@ -19,7 +19,7 @@ import filter_extraIntegerNumberZeo from '/util/func/filter_extraIntegerNumberZe
 import CustomRadioTrueOrFalse from '/src/components/admin/form/CustomRadioTrueOrFalse';
 import { validate } from '/util/func/validation/validation_recipe';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
-import {getData, postObjData} from '/src/pages/api/reqData';
+import {getData, getDataSSR, postObjData} from '/src/pages/api/reqData';
 
 
 
@@ -50,7 +50,8 @@ const initialFileValues = {
 };
 
 
-function UpdateRecipePage( { id }) {
+export default function UpdateRecipePage( { id }) {
+  console.log(id);
   const getFormValuesApiUrl = `/api/recipes/${id}`;
   const postFormValuesApiUrl = `/api/recipes/${id}`;
   // - cf.) 파일 업로드 : post할 때, JSON파일과  IMAGE파일을 한 번에 전송 ( REST API 초기: 이미지를 업로드하는 시점에 upload하는 방식을 도입하기 전이었음)
@@ -621,13 +622,18 @@ function UpdateRecipePage( { id }) {
   );
 }
 
-export default UpdateRecipePage;
 
 
 
 
-UpdateRecipePage.getInitialProps = async ({ query }) => {
-  const { id } = query
-  return { id : id};
-  
+export async function getServerSideProps({  query }) {
+  const { id } = query;
+  return { props: { id } };
 }
+
+
+// UpdateRecipePage.getInitialProps = async ({ query }) => {
+//   const { id } = query
+//   return { id : id};
+//
+// }
