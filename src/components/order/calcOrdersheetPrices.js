@@ -1,7 +1,7 @@
 export const calcOrdersheetPrices = (form, orderType='general') => {
   
-  let discountCoupon;
-  let discountReward;
+  let discountCoupon = 0;
+  let discountReward = 0;
   if(orderType === 'general'){
     discountCoupon = form.orderItemDtoList?.length ? form.orderItemDtoList.map( item => item.discountAmount ).reduce( (acc, cur) => acc + cur ) : 0;
     discountReward = Number(form.discountReward);
@@ -14,7 +14,6 @@ export const calcOrdersheetPrices = (form, orderType='general') => {
   const paymentPrice = calc ? calc : 0;
   const reward = form.selfInfo?.reward;
   let availableMaxReward;
-  
   if(reward > paymentPrice && paymentPrice >= 0){
     availableMaxReward = paymentPrice
   } else if (paymentPrice <= 0){
@@ -22,12 +21,15 @@ export const calcOrdersheetPrices = (form, orderType='general') => {
   } else {
     availableMaxReward = reward;
   }
-  console.log(paymentPrice)
-  console.log(paymentPrice, discountCoupon, discountReward)
+  
+  const discountTotal = discountCoupon + discountReward;
+
+  // console.log('쿠폰할인 ',discountCoupon, '할인총합', discountTotal, 'paymentPrice: ', paymentPrice)
+  
   return {
     discountReward,
     discountCoupon,
-    discountTotal: discountCoupon + discountReward,
+    discountTotal,
     paymentPrice,
     availableMaxReward: availableMaxReward
   }

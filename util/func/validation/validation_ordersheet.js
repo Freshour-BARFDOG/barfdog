@@ -34,7 +34,6 @@ export const validate = (obj) => {
         errors[key] = valid_isEmpty(val);
         break;
       case 'paymentPrice':
-        console.log(val,'zzz')
         errors[key] = valid_paymentPrice(val);
         break;
     }
@@ -51,8 +50,6 @@ const valid_paymentPrice = (val) =>{
   } else if( val < 0 ){
     error = '결제금액은 0원보다 적을 수 없습니다.'
   }
-  
-  if(error) alert(error);
   
   return error;
 }
