@@ -473,21 +473,6 @@ function MypageSubscribeProductPage() {
 
               <div className={s.title_content_box}>
                 <div className={s.title_grid_box}>
-                  <div className={s.grid_left}>
-                    <figure className={`${s.image} img-wrap`}>
-                      <Image
-                          priority
-                          src={require("src/pages/order/subscribe/survey_order_title_left.png")}
-                          objectFit="cover"
-                          layout="fill"
-                          alt="레시피 이미지"
-                      />
-                    </figure>
-                    <figcaption className={s.recipe_title}>
-                      <p className={s.title_ko}>STARTER PREMIUM</p>
-                      <p className={s.title_en}>스타터프리미엄</p>
-                    </figcaption>
-                  </div>
 
                   <div className={s.grid}>
                     <div className={s.grid_left}>

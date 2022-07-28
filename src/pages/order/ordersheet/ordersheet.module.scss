@@ -290,8 +290,8 @@ section.final_btn {
           display:grid;
           gap: rem(10);
           grid-template-columns: 1fr 2fr;
-          input{text-align:center;
-          padding:0 rem(10);
+          input{text-align:left;
+          padding:0 rem(16);
           }
         }
         button{
@@ -639,6 +639,7 @@ section.payment {
     button.termsOfService{
       color: var(--color-main);
       font-size: inherit;
+      margin-top: rem(-1);
     }
   }
 }
@@ -691,7 +692,7 @@ section.payment {
     padding: rem(30) 0 rem(30);
   }
 
-  .content_box {
+ .content_box {
     .title {
       border-bottom: rem(1) solid var(--color-line-02);
     }
@@ -701,63 +702,64 @@ section.payment {
     }
 
     .flex_box {
-      grid-template-columns: 1fr 1fr;
-      padding: rem(16) 0 0;
+      position: relative;
+      grid: 
+      "info_col info_col info_col count_col"
+      "price_col price_col price_col price_col"
+      "coupon_col_red coupon_col_red coupon_col_red apply_coupon_col"/1fr 1fr 1fr 1fr;
+      row-gap: rem(20);
 
-      .title_col {
-        display: block;
-        text-align: left;
-        padding: rem(10) 0 rem(10) rem(10);
+      &::after {
+        content: "총 주문금액";
+        position: absolute;
+        bottom: rem(77);
+        left: 0;
+      }
+      &::before {
+        content: "쿠폰할인";
+        position: absolute;
+        bottom: rem(30);
+        left: 0;
       }
 
       .info_col {
-        padding-bottom: rem(20);
-        padding-left: 0;
+        grid-column: 1/span 3;
       }
 
       .count_col {
+        grid-column: 4/span 1;
         text-align: right;
-        padding-bottom: rem(20);
       }
       .price_col {
-        padding-right: rem(10);
+        grid-column: 1/span 4;
+        text-align: right;
         display: flex;
         justify-content: flex-end;
-        column-gap: rem(5);
+        padding-top: rem(10);
 
         .price_inner {
-          font-size: rem(13);
+          padding-right: rem(10);
         }
       }
 
-      .del_col {
-        display: block;
-        text-align: right;
-        padding-right: rem(10);
-      }
-      .coupon_col,
       .coupon_col_red {
-        padding-right: rem(10);
+        grid-column: 1/span 3;
         text-align: right;
-        order: 5;
-        width: 200%;
-        transform: translate(rem(-110), rem(-26));
       }
 
       .apply_coupon_col {
-        padding-right: rem(10);
-        display: flex;
+        grid-column: 4/span 1;
         justify-content: flex-end;
+        padding-left: rem(10);
+
         .btn {
-          padding: rem(10) rem(10);
-          box-sizing: border-box;
-          border: rem(1) solid var(--color-line-03);
-          border-radius: rem(2);
-          cursor: pointer;
+          width: 80%;
+          min-width: rem(80);
         }
       }
     }
   }
+
 
   .reciever {
     .grid_box {
