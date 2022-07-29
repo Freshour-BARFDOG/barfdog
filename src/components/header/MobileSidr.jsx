@@ -67,56 +67,16 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
   const data = auth.userInfo;
   const isMobile = useDeviceState().isMobile;
   const isLogin = data.userType !== userType.NON_MEMBER;
-  console.log(data);
   
-  const [isLoading, setIsLoading] = useState( false );
-  // const [data, setData] = useState({} );
-
   const onCloseSidr = () => {
     setSidrOpen(false);
   };
   const onLogout = () => {
     dispatch(authAction.logout());
   };
-  
-  // useEffect( () => {
-  //   if ( ! isMobile ) return;
-  //   (async () => {
-  //     try {
-  //       setIsLoading( (prevState) => ({
-  //         ...prevState,
-  //         fetching: true,
-  //       }) );
-  //       // const res = await getData(getFormValuesApiUrl)
-  //       const res = DUMMY_DATA;
-  //       const data = res.data;
-  //       // console.log( res );
-  //       if ( !data ) return;
-  //       const DATA = {
-  //         id: data.mypageMemberDto.id,
-  //         dogName: data.mypageDogDto.dogName,
-  //         email: userData?.email || 'useEmail@gmail.com', // ! userDATA에서 가져온 값
-  //         memberName: data.mypageMemberDto.memberName,
-  //         grade: data.mypageMemberDto.grade,
-  //         myRecommendationCode: data.mypageMemberDto.myRecommendationCode,
-  //         myDogthumbnailUrl: data.mypageDogDto.thumbnailUrl,
-  //         deliveryCount: data.deliveryCount,
-  //         reward: data.mypageMemberDto.reward,
-  //         couponCount: data.couponCount,
-  //       }
-  //       setData( DATA );
-  //     } catch (err) {
-  //       console.error( err );
-  //       alert( '데이터를 가져올 수 없습니다.' );
-  //     }
-  //     setIsLoading( (prevState) => ({
-  //       ...prevState,
-  //       fetching: false,
-  //     }) );
-  //   })();
-  // },[isMobile])
 
   useEffect(() => {
+    // 모바일 sidr mount => 스크롤 기능: INACTIVE
     if (isOpen) {
       document.body.style.cssText = `
         overflow-y:scroll;
@@ -125,11 +85,14 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
         // top : -${0}px;
       `;
     }
+    
+    // unmount => 스크롤 기능: ACTIVE
     return () => {
       document.body.style.cssText = ``;
       window?.scrollTo(0, parseInt(10 * -1));
     };
   }, [isOpen]);
+  
   
   if(!isMobile) return;
 
