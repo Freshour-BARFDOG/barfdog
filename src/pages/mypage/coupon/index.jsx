@@ -1,13 +1,17 @@
-import React, { useState } from "react";
-import Layout from "/src/components/common/Layout";
-import Wrapper from "/src/components/common/Wrapper";
-import MypageWrapper from "/src/components/mypage/MypageWrapper";
-import MetaTitle from "/src/components/atoms/MetaTitle";
-import styled from "styled-components";
-import Modal_useCoupon from "@src/components/modal/modal_mypage_coupon";
-import s from "./coupon.module.scss";
-import Pagination from "@src/components/atoms/Pagination";
-
+import React, { useRef, useState } from 'react';
+import Layout from '/src/components/common/Layout';
+import Wrapper from '/src/components/common/Wrapper';
+import MypageWrapper from '/src/components/mypage/MypageWrapper';
+import MetaTitle from '/src/components/atoms/MetaTitle';
+import styled from 'styled-components';
+import Modal_useCoupon from '/src/components/modal/modal_mypage_coupon';
+import s from './coupon.module.scss';
+import PaginationWithAPI from '../../../components/atoms/PaginationWithAPI';
+import transformDate from '../../../../util/func/transformDate';
+import { EmptyContMessage } from '../../../components/atoms/emptyContMessage';
+import Spinner from '../../../components/atoms/Spinner';
+import { Modal_registerCoupon } from '../../../components/modal/Modal_registerCoupon';
+import {putObjData} from "../../api/reqData";
 
 const Temp_button = styled.button`
   display: flex;
@@ -23,16 +27,98 @@ const Temp_button = styled.button`
   cursor: pointer;
 `;
 
-function CouponPage() {
-  const [isActiveModal, setIsActiveModal] = useState(false);
+export default function CouponPage() {
+  const searchApiUrl = 'api/coupons';
+  const searchPageSize = 10;
+  const apiDataQueryString = 'queryCouponsDtoList';
+  const [isLoading, setIsLoading] = useState({});
+  const [itemList, setItemList] = useState([]);
+  const [activeUseCouponModal, setActiveUseCouponModal] = useState(false);
+  {
+    /* ! 비밀번호를 입력해 쿠폰생성하는 방식 => 취소된 기능 */
+  }
+  const [activeRegisterCouponModal, setActiveRegisterCouponModal] = useState(false);
+
+  const [form, setForm] = useState({});
+
+
+
+  const couponCodeRef = useRef(null);
 
   const onActiveModalHandler = () => {
-    setIsActiveModal(true);
-  }
+    setActiveUseCouponModal(true);
+  };
 
+  const pageInterCeptor = (res) => {
+    // SERVER pagination query가 변경되엇을 경우 사용하는 FUNC
+    const pageData = res.data.couponsPageDto.page;
+    let newPageInfo = {
+      totalPages: pageData.totalPages,
+      size: pageData.size,
+      totalItems: pageData.totalElements,
+      currentPageIndex: pageData.number,
+      newPageNumber: pageData.number + 1,
+      newItemList: res.data.couponsPageDto._embedded.queryCouponsDtoList || {},
+    };
+    return newPageInfo;
+  };
 
+  const onInputChangeHandler = (e) => {
+    const { id, value } = e.currentTarget;
+    setForm((prevState) => ({
+      ...prevState,
+      [id]: value,
+    }));
+  };
+  
+  const onActiveCouponRegisterModal = () => {
+    if(!form.code){
+      return alert('쿠폰코드를 입력해주세요.');
+    }
+    
+    setActiveRegisterCouponModal(true);
+  };
 
-
+  
+  const onRegisterCouponByCode = async () => {
+    // 유저 쿠폰 > 쿠폰코드를 입력하여 쿠폰받는 방식/
+    if(!form.pw){
+      return alert('비밀번호를 입력해주세요.');
+    }
+    const apiUrl = '/api/coupons/code';
+    try {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        rep: true,
+      }));
+      const body = {
+        code : form.code,
+        password : form.pw
+      }
+      const res = await putObjData(apiUrl,body);
+      // console.log(res)
+   
+      let resultMessage;
+      if (res.isDone) {
+        setActiveRegisterCouponModal(false);
+        alert('쿠폰이 등록되었습니다.');
+        window.location.reload();
+      } else if (res.status === 400 && res.status < 500) {
+        let defErrorMessage = '쿠폰코드를 등록할 수 없습니다.';
+        let errorMessage = res.data.data.errors[0].defaultMessage;
+        console.log(errorMessage);
+        errorMessage = errorMessage === "이미 사용된 쿠폰 입니다." ? '이미 등록되었거나, 사용된 쿠폰입니다.' : errorMessage;
+        alert(errorMessage || defErrorMessage);
+      }
+      console.log(res);
+    } catch (err) {
+      console.error(err);
+    }
+    setIsLoading((prevState) => ({
+      ...prevState,
+      rep: false,
+    }));
+  };
 
   return (
     <>
@@ -40,172 +126,107 @@ function CouponPage() {
       <Layout>
         <Wrapper>
           <MypageWrapper>
-            <section className={s.title}>
-              쿠폰 조회
-            </section>
-
+            <section className={s.title}>쿠폰 조회</section>
             <section className={s.coupon_code}>
               <label>
-                <div className={s.coupon_code_row1}>
-                  쿠폰등록
-                </div>
-                
-                <div className={s.flex_box}>
-                  <input className={s.input_box} type='text' placeholder='쿠폰코드를 입력해주세요'/>
+                <div className={s.coupon_code_row1}>쿠폰등록</div>
 
+                <div className={s.flex_box}>
+                  <input
+                    className={s.input_box}
+                    id={'code'}
+                    type="text"
+                    placeholder="쿠폰코드를 입력해주세요"
+                    ref={couponCodeRef}
+                    value={form.code || ''}
+                    onChange={onInputChangeHandler}
+                  />
                   <div className={s.btn_box}>
-                    <div className={s.btn}>
+                    <button className={s.btn} onClick={onActiveCouponRegisterModal}>
                       등록
-                    </div>
+                    </button>
                   </div>
                 </div>
               </label>
             </section>
-
             <section className={s.coupon_state_section}>
               <div className={s.coupon_state_flex_box}>
                 <div className={s.left_box}>
-                  전체 쿠폰 : <span>2</span>개
+                  전체 쿠폰 : <span>{itemList?.length}</span>개
                 </div>
-                <div className={s.line}>
-                  <hr />
-                </div>
-                <div className={s.right_box}>
-                  사용가능 쿠폰 : <span>2</span>개
-                </div>
+                {/*<div className={s.line}>*/}
+                {/*<hr />*/}
+                {/*</div>*/}
+                {/*<div className={s.right_box}>*/}
+                {/*  사용가능 쿠폰 : <span>{itemList?.length > 0 && itemList.filter(i=>i.status === 'ACTIVE').length}</span>개*/}
+                {/*</div>*/}
+                {/* 사용가능 쿠폰 개수 표시하지 않음*/}
               </div>
-              
+
               <div className={s.horizon}>
                 <hr />
               </div>
-
-              <div className={s.coupon_content_grid_box}>
-                <div className={s.grid_box}>
-                  <div className={s.left_top}>
-                    신규회원 할인쿠폰
-                  </div>
-                  <div className={s.right_top}>
-                    30%
-                  </div>
-
-                  <div className={s.left_bot}>
-                    <div className={s.left_bot_text}>
-                      신규 회원가입 할인쿠폰
-                      <div className={s.inner_flex_box}>
-                        <div className={s.left_text}>
-                          사용기한 
+              {isLoading.fetching ? (
+                <Spinner />
+              ) : itemList.length === 0 ? (
+                <EmptyContMessage message={'사용가능한 쿠폰이 없습니다.'} />
+              ) : (
+                <ul className={s.coupon_content_grid_box}>
+                  {itemList
+                    .filter((item) => item.status === 'ACTIVE')
+                    .map((item, index) => (
+                      <li key={`coupon-${item.id}`} className={s.grid_box}>
+                        <div className={s.left_top}>{item.name}</div>
+                        <div className={s.right_top}>{item.discount}</div>
+                        <div className={s.left_bot}>
+                          <div className={s.left_bot_text}>
+                            {item.description}
+                            <div className={s.inner_flex_box}>
+                              <div className={s.left_text}>사용기한</div>
+                              <div className={s.line}>
+                                <hr />
+                              </div>
+                              <div>{transformDate(item.expiredDate)}</div>
+                            </div>
+                          </div>
                         </div>
-                        
-                        <div className={s.line}>
-                          <hr />
+                        <div className={s.right_bot}>
+                          <Temp_button onClick={onActiveModalHandler}>쿠폰 사용</Temp_button>
                         </div>
-
-                        <div>
-                          무제한
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className={s.right_bot}>
-                    <Temp_button onClick={onActiveModalHandler}>
-                      쿠폰 사용
-                    </Temp_button>
-                  </div>
-
-                </div>
-
-
-                <div className={s.grid_box}>
-                  <div className={s.left_top}>
-                    신규회원 할인쿠폰
-                  </div>
-                  <div className={s.right_top}>
-                    30%
-                  </div>
-
-                  <div className={s.left_bot}>
-                    <div className={s.left_bot_text}>
-                      신규 회원가입 할인쿠폰
-                      <div className={s.inner_flex_box}>
-                        <div>
-                          사용기한 
-                        </div>
-                        
-                        <div>
-                          <hr />
-                        </div>
-
-                        <div>
-                          무제한
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className={s.right_bot}>
-                    <Temp_button onClick={onActiveModalHandler}>
-                      쿠폰 사용
-                    </Temp_button>
-                  </div>
-                </div>
-
-
-                <div className={s.grid_box}>
-                  <div className={s.left_top}>
-                    신규회원 할인쿠폰
-                  </div>
-                  <div className={s.right_top}>
-                    30%
-                  </div>
-
-                  <div className={s.left_bot}>
-                    <div className={s.left_bot_text}>
-                      신규 회원가입 할인쿠폰
-                      <div className={s.inner_flex_box}>
-                        <div>
-                          사용기한 
-                        </div>
-                        
-                        <div>
-                          <hr />
-                        </div>
-
-                        <div>
-                          무제한
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className={s.right_bot}>
-                    <Temp_button onClick={onActiveModalHandler}>
-                      쿠폰 사용
-                    </Temp_button>
-                  </div>
-                </div>
-
-              </div>
-
+                      </li>
+                    ))}
+                </ul>
+              )}
             </section>
-
-
-            <section className={s.pageline}>
-              <Pagination itemCountPerGroup={1} itemTotalCount={1}  />
-            </section>
-
-
+            <div className={s.pagination_box}>
+              <PaginationWithAPI
+                apiURL={searchApiUrl}
+                size={searchPageSize}
+                setItemList={setItemList}
+                queryItemList={apiDataQueryString}
+                setIsLoading={setIsLoading}
+                pageInterceptor={pageInterCeptor}
+              />
+            </div>
           </MypageWrapper>
         </Wrapper>
       </Layout>
-      {isActiveModal && (
+      {activeUseCouponModal && (
         <Modal_useCoupon
-          isActiveModal={isActiveModal}
-          setIsActiveModal={setIsActiveModal}
+          isActiveModal={activeUseCouponModal}
+          setIsActiveModal={setActiveUseCouponModal}
+        />
+      )}
+      {activeRegisterCouponModal && (
+        <Modal_registerCoupon
+          isActiveModal={activeUseCouponModal}
+          setIsActiveModal={setActiveRegisterCouponModal}
+          form={form}
+          onChange={onInputChangeHandler}
+          event={onRegisterCouponByCode}
+          isLoading={isLoading}
         />
       )}
     </>
   );
 }
-
-export default CouponPage;

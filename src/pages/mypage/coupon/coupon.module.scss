@@ -139,6 +139,10 @@ section.pageline { padding: rem(40) 0 0 0}
 
 }
 
+.pagination_box{
+  margin-top:rem(40);
+}
+
 @media (max-width: rem(1000)) {
   .coupon_content_grid_box {
     grid-template-columns: 1fr;
