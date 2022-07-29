@@ -112,8 +112,6 @@ export default function LoginPage() {
               expiredDate: res.data.expiresAt,
               token,
             };
-            console.log(token)
-            
             if(autoLogin){
               dispatch(authAction.autoLogin(payload))
             } else{
