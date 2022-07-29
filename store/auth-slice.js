@@ -26,6 +26,7 @@ const initialAuthState = {
   isAuth: false,
   isAdmin: false,
   userType: null,
+  userInfo: null,
 };
 
 const authSlice = createSlice({
@@ -35,6 +36,7 @@ const authSlice = createSlice({
     login(state, action) {
       state.isAdmin = false;
       state.isAuth = true;
+      state.userType = true;
       const accessToken = action.payload.token;
       const expiredDate = action.payload.expiredDate && cookieType.LOGIN_EXPIRED_PERIOD.VALUE;// 서버 token지속 기본값: 2시간
       setCookie(cookieType.LOGIN_COOKIE,  accessToken,  cookieType.LOGIN_EXPIRED_PERIOD.UNIT, expiredDate, {path:'/'});
@@ -83,7 +85,8 @@ const authSlice = createSlice({
       console.log('Restored User Auth State');
       state.isAdmin = action.payload.USERTYPE === userType.ADMIN;
       state.isAuth = true;
-      state.userType = action.payload.userType;;
+      state.userType = action.payload.data.member.userType;
+      state.userInfo = action.payload.data.member;
     }
   },
 });

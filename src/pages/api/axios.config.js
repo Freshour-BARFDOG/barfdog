@@ -30,7 +30,7 @@ export function axiosUserConfig (contType = "application/json") {
   // console.log(accessToken)
   return {
     headers: {
-      authorization: accessToken || JSON.parse(localStorage.getItem("user"))?.token,
+      authorization: accessToken,
       "content-Type": contType,
     }
   }

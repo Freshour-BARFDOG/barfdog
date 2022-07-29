@@ -8,29 +8,17 @@ import { userType } from '/store/TYPE/userAuthType';
 import { cartAction } from './cart-slice';
 
 export default function AuthInterceptor({ CustomProps, children }) {
+
   const router = useRouter();
   const dispatch = useDispatch();
   const {data, token, EXPIRED_TOKEN, USERTYPE} = CustomProps;
-  const [currentUSERTYPE, setCurrentUSERTYPE] = useState(USERTYPE); // ! IMPORTANT // INITIALIZE BY _app.jsx
-
-  console.log('auth-interceptor.js\n','USER_TYPE: ',currentUSERTYPE, '\nEXPIRED_TOKEN:',EXPIRED_TOKEN, '\ndata: ', data)
+  // STEP 1. CHECK USER TYPE & UPDATE(in NextJS SERVER)
+  token && dispatch(authAction.userRestoreAuthState({data}));
+  console.log('auth-interceptor.js\n','USER_TYPE: ',USERTYPE, '\nEXPIRED_TOKEN: ',EXPIRED_TOKEN, '\nDATA: ', data)
+  
+  
   
   useEffect(() => {
-    // 장바구니 정보 REDUX 저장 > 헤더 장바구니 개수 표기
-    if (data?.cart) {
-      dispatch(cartAction.setInfo({ data: data.cart }));
-    }
-  }, [data]);
-  
-  useEffect(() => {
-    // STEP 1. CHECK USER TYPE (IN FE SERVER)
-    if (USERTYPE !== null) {
-      // IMPORTANT
-      token && dispatch(authAction.userRestoreAuthState({USERTYPE}));
-      setCurrentUSERTYPE(USERTYPE);
-    }
-    
-
     // STEP 2. 만료된 토큰 삭제
     // CF. ADMIN과 USER가 동일한 쿠키를 사용하지만, (Server에서 발급하는 JWT에서 Role을 구별하는 방식)
     // CF.  FONTEND에서 해당 사항을 인지할 수 있도록, 명시성을 위해 중복하여 코드를 작성함
@@ -79,20 +67,26 @@ export default function AuthInterceptor({ CustomProps, children }) {
     if (!MEMBER_PATH && !ADMIN_PATH) return;
 
     const REDIR_PATH = ADMIN_PATH ? '/bf-admin/login' : '/account/login';
-    if (MEMBER_PATH && currentUSERTYPE === userType.NON_MEMBER) {
+    if (MEMBER_PATH && USERTYPE === userType.NON_MEMBER) {
       alert('회원가입이 필요한 페이지입니다.');
       router.push(REDIR_PATH);
-    } else if (ADMIN_PATH && currentUSERTYPE !== userType.ADMIN) {
+    } else if (ADMIN_PATH && USERTYPE !== userType.ADMIN) {
       alert('일반 사용자에게 접근 권한이 없는 페이지입니다.');
       router.push(REDIR_PATH);
     }
     // console.log('MEMBER_PATH', MEMBER_PATH)
     // console.log('ADMIN_PATH', ADMIN_PATH)
   }, [USERTYPE, EXPIRED_TOKEN, router]);
-
-
-
-
+  
+  
+  useEffect(() => {
+    // 장바구니 정보 REDUX 저장 > 헤더 장바구니 개수 표기
+    if (data?.cart) {
+      dispatch(cartAction.setInfo({ data: data.cart }));
+    }
+  }, [data]);
+  
+  
   return <>{children}</>;
 }
 
