@@ -85,7 +85,7 @@ const authSlice = createSlice({
       console.log('Restored User Auth State');
       state.isAdmin = action.payload.USERTYPE === userType.ADMIN;
       state.isAuth = true;
-      state.userType = action.payload.data.member.userType;
+      state.userType = action.payload.data.member?.userType;
       state.userInfo = action.payload.data.member;
     }
   },
