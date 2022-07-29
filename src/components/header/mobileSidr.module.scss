@@ -194,6 +194,7 @@ $bottom-menu-list-height: rem(50);
       > *:not(:last-child){margin-right:rem(6);}
     }
     .image{
+      background-color: #f1f2f3;
       position: relative;
       aspect-ratio: 1/1;
       border-radius:50%;

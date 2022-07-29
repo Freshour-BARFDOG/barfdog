@@ -33,7 +33,7 @@ function InvitePage() {
                 </div>
                 
                 <div className={s.grid_box}>
-                  <input className={s.input_box} type='text' placeholder='추천코드를 입력해주세요'/>
+                  <input className={s.input_box} type='text' placeholder='친구의 추천코드를 입력해주세요'/>
 
                   <div className={s.btn_box}>
                     <div className={s.btn}>

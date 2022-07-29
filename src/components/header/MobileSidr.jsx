@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Kakao from '/public/img/icon/kakao.png';
 import Naver from '/public/img/icon/naver.png';
 import Link from 'next/link';
-import { useDispatch } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import { authAction } from '/store/auth-slice';
 import { IoIosArrowForward } from 'react-icons/io';
 import useUserData from '/util/hook/useUserData';
@@ -17,6 +17,44 @@ import IconMypageInvite from '/public/img/icon/icon-mypage-invite.svg';
 import IconMypageDogs from '/public/img/icon/icon-mypage-dogs.svg';
 import IconMypageUser from '/public/img/icon/icon-mypage-user.svg';
 import IconMypageReview from '/public/img/icon/icon-mypage-review.svg';
+import useDeviceState from "../../../util/hook/useDeviceState";
+import transformLocalCurrency from "../../../util/func/transformLocalCurrency";
+import {userType} from "../../../store/TYPE/userAuthType";
+
+
+
+
+const DUMMY_DATA = {
+  data: {
+    "mypageMemberDto" : {
+      "id" : 10,
+      "memberName" : "김회원",
+      "grade" : "더바프",
+      "myRecommendationCode" : "2BngT6yMM",
+      "reward" : 50000
+    },
+    "mypageDogDto" : {
+      "thumbnailUrl" : "https://images.unsplash.com/photo-1422565096762-bdb997a56a84?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80",
+      "dogName" : "강아지1"
+    },
+    "deliveryCount" : 4,
+    "couponCount" : 4,
+    "_links" : {
+      "self" : {
+        "href" : "http://localhost:8080/api/mypage"
+      },
+      "profile" : {
+        "href" : "/docs/index.html#resources-my-page"
+      }
+    }
+  }
+  
+}
+
+
+
+
+
 
 function kakaoLoginFunc() {
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}&response_type=code`;
@@ -25,10 +63,14 @@ function kakaoLoginFunc() {
 
 export default function MobileSidr({ isOpen, setSidrOpen }) {
   const dispatch = useDispatch();
-  const userData = useUserData();
-  const isLogin = true || !!userData;
-
-
+  const auth = useSelector(s=>s.auth);
+  const data = auth.userInfo;
+  const isMobile = useDeviceState().isMobile;
+  const isLogin = data.userType !== userType.NON_MEMBER;
+  console.log(data);
+  
+  const [isLoading, setIsLoading] = useState( false );
+  // const [data, setData] = useState({} );
 
   const onCloseSidr = () => {
     setSidrOpen(false);
@@ -36,6 +78,43 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
   const onLogout = () => {
     dispatch(authAction.logout());
   };
+  
+  // useEffect( () => {
+  //   if ( ! isMobile ) return;
+  //   (async () => {
+  //     try {
+  //       setIsLoading( (prevState) => ({
+  //         ...prevState,
+  //         fetching: true,
+  //       }) );
+  //       // const res = await getData(getFormValuesApiUrl)
+  //       const res = DUMMY_DATA;
+  //       const data = res.data;
+  //       // console.log( res );
+  //       if ( !data ) return;
+  //       const DATA = {
+  //         id: data.mypageMemberDto.id,
+  //         dogName: data.mypageDogDto.dogName,
+  //         email: userData?.email || 'useEmail@gmail.com', // ! userDATA에서 가져온 값
+  //         memberName: data.mypageMemberDto.memberName,
+  //         grade: data.mypageMemberDto.grade,
+  //         myRecommendationCode: data.mypageMemberDto.myRecommendationCode,
+  //         myDogthumbnailUrl: data.mypageDogDto.thumbnailUrl,
+  //         deliveryCount: data.deliveryCount,
+  //         reward: data.mypageMemberDto.reward,
+  //         couponCount: data.couponCount,
+  //       }
+  //       setData( DATA );
+  //     } catch (err) {
+  //       console.error( err );
+  //       alert( '데이터를 가져올 수 없습니다.' );
+  //     }
+  //     setIsLoading( (prevState) => ({
+  //       ...prevState,
+  //       fetching: false,
+  //     }) );
+  //   })();
+  // },[isMobile])
 
   useEffect(() => {
     if (isOpen) {
@@ -51,6 +130,8 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
       window?.scrollTo(0, parseInt(10 * -1));
     };
   }, [isOpen]);
+  
+  if(!isMobile) return;
 
   return (
     <>
@@ -104,42 +185,46 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                 <div className={s.row}>
                   <div className={s.userInfo}>
                     <figure className={`${s['cont-left']} ${s.image}`}>
-                      <Image
-                        alt="대표견 이미지"
-                        src="https://images.unsplash.com/photo-1561037404-61cd46aa615b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
-                        objectFit="cover"
-                        layout="fill"
-                      />
+                      {data.dog.thumbnailUrl && (
+                        <Image
+                          alt="반려견 대표 이미지"
+                          src={data.dog.thumbnailUrl}
+                          objectFit="cover"
+                          layout="fill"
+                        />
+                      )}
                     </figure>
                     <figcaption className={s['cont-right']}>
                       <p className={s.innerRow}>
                         <span className={s.dogName}>
-                          바둑이<em className={s.unit}>견주</em>
+                          {data.dog.dogName}
+                          <em className={s.unit}>견주</em>
                         </span>
                       </p>
                       <p className={s.innerRow}>
                         <span className={s.userName}>
-                          홍길동<em className={s.unit}>님</em>
+                          {data.name}
+                          <em className={s.unit}>님</em>
                         </span>
-                        <i className={s.grade}>더바프</i>
+                        <i className={s.grade}>{data.grade}</i>
                       </p>
                       <p className={s.innerRow}>
-                        <span className={s.email}>barfdog2021@barfdog.com</span>
+                        <span className={s.email}>{data.email}</span>
                       </p>
                     </figcaption>
                   </div>
                   <div className={s.dashboard}>
                     <ul>
                       <li>
-                        <em className={s.num}>1</em>
+                        <em className={s.num}>{data.deliveryCount}</em>
                         <span className={s.text}>배송현황</span>
                       </li>
                       <li>
-                        <em className={s.num}>3,000</em>
+                        <em className={s.num}>{transformLocalCurrency(data.reward)}</em>
                         <span className={s.text}>적립금</span>
                       </li>
                       <li>
-                        <em className={s.num}>3</em>
+                        <em className={s.num}>{data.couponCount}</em>
                         <span className={s.text}>쿠폰</span>
                       </li>
                     </ul>
@@ -197,13 +282,12 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                 {/*/ ! 어드민에서 생성한 이미지 사용될 예정 /*/}
                 <div className={s.row}>
                   <span>
-                  친구초대할 때마다 <b> 5천원 무한적립!</b>
-                </span>
+                    친구초대할 때마다 <b> 5천원 무한적립!</b>
+                  </span>
                   <span>
-                  <IoIosArrowForward />
-                </span>
+                    <IoIosArrowForward />
+                  </span>
                 </div>
-
               </section>
             )}
             <section className={s['bottom-menu-section']}>
