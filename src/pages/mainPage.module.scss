@@ -107,7 +107,7 @@ section.sns {
 .swiper_recipe_outerWrap {
   position: relative;
   height: rem(538);
-  margin-top: rem(70);
+  margin-top: rem(65);
 
   .swiper_recipe{
     height: 100%;
@@ -345,7 +345,7 @@ section.sns {
     .title {
       font-size: rem(20);
       font-weight: bold;
-      margin-bottom: rem(20);
+      margin-bottom: rem(25);
     }
 
     li {
@@ -459,12 +459,6 @@ section.sns {
     }
   }
 
-  .cont-left {
-  }
-
-  .cont-right {
-  }
-
   .cont_section {
     > ul {
       > li {
@@ -475,6 +469,10 @@ section.sns {
           margin-right: rem(40);
         }
       }
+    }
+
+    > .btn_main {
+      display: none;
     }
   }
 
@@ -532,7 +530,7 @@ section.sns {
   }
 }
 
-.btn_main {
+.btn_main, .btn_worry {
   display: inline-block;
   padding: rem(14) rem(52);
   color: #fff;
@@ -705,9 +703,6 @@ section.sns {
   a {
     width: 100%;
     height: 100%;
-  }
-
-  .img-wrap {
   }
 }
 
@@ -961,39 +956,36 @@ section.sns {
 
     
 //고민
-  .subtitle {
-    display: none;
-  }
-
   .clientWorry {
-    height: rem(1500);
-    .title_section {
-      .btn_main {
-      }
-    }
-
     .cont_section {
-      ul{
-        li{
+      .clearfix{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        width: 100%;
+        column-gap: rem(20);
+        > li{
           float: none;
+          width: 100%;
         }
       }
     }
     
     .card {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
+      // position: absolute;
+      // left: 50%;
+      // transform: translateX(-50%);
       margin-top: rem(30);
       padding: rem(40) rem(30);
-      width: rem(500);
+      width: 100%;
       max-width: rem(500);
     }
-    li:nth-child(2) .card{
-      left: 50%;
-      transform: translateX(-50%) translateY(100%) translateY(rem(40));
-    }
+    // li:nth-child(2) .card{
+    //   left: 50%;
+    //   transform: translateX(-50%) translateY(100%) translateY(rem(40));
+    // }
   }
+
+  
     
   .cont-right {
     float: none;
@@ -1043,7 +1035,7 @@ section.sns {
 
 
           &:nth-child(2) {
-            margin-top: rem(50);
+            margin-top: rem(85);
           }
 
           .card{
@@ -1231,6 +1223,14 @@ section.sns {
     }
   }
 
+  .difference {
+    .inner {
+      h1 {
+        font-size: rem(28);
+      }
+    }
+  }
+
 
 
 //차별점 그림 3개
@@ -1240,7 +1240,7 @@ section.sns {
       width: 100%;
 
       .title {
-        margin-top: rem(20);
+        font-size: rem(24)
       }
 
       li {
@@ -1249,20 +1249,25 @@ section.sns {
       }
 
       .text {
-        padding-top: rem(40);
+        padding: rem(40) rem(50) rem(90);
         font-size: rem(16);
         height: rem(80);
-        padding-left: rem(50);
-        padding-right: rem(50);
       }
     }
   }
 
 
 
+  section.difference3 {
+    padding: rem(50) 0 0;
+  }
+
 //프리미엄바프
   .difference3 {
+    height: rem(450);
+
     .title {
+      font-size: rem(28);
       margin: 0 auto;
       letter-spacing: rem(1);
     }
@@ -1324,8 +1329,31 @@ section.sns {
 
 
 
+
+section.clientWorry {
+  padding: rem(85) 0 rem(185)
+}
+
 //고민
+
+  .subtitle {
+    display: none;
+  }
+
+
+  .btn_worry {
+    display: none;
+  }
+
   .clientWorry {
+    height: rem(1500);
+
+    .title_section {
+      .title {
+        margin-bottom: rem(65);
+      }
+    }
+
     .cont-left {
       width: 100%;
       margin-right: 0;
@@ -1346,10 +1374,22 @@ section.sns {
           }
         }
       }
+
+      > .btn_main {
+        display: block;
+        margin: rem(60) auto 0;
+      }
+      
+      .clearfix{
+        grid-template-columns: 1fr;
+        row-gap: rem(40);
+      }
     }
+
 
     .card {
       width: 100%;
+      margin-top: 0;
       padding: rem(40) rem(30);
       max-width: auto;
 
@@ -1375,6 +1415,18 @@ section.sns {
 
 
 //리뷰 후기
+section.review {
+  padding: rem(120) 0 rem(110)
+}
+
+.review {
+  .inner {
+    .title {
+      font-size: rem(28);
+    }
+  }
+}
+
   .swiper_review_outerWrap {
     height: rem(600);
 
@@ -1398,6 +1450,7 @@ section.sns {
 
     .swiper_review{
       position: absolute;
+      top: rem(40);
       left: 50%;
       transform: translateX(-50%);
       width: rem(280);
@@ -1412,21 +1465,38 @@ section.sns {
       width: rem(180);
       height: rem(180);
     }
+
+    .swiper-pagination__reviewSection {
+      bottom: rem(100) !important;
+    }
   }
 
 
 
 //이용방법
+section.Howtouse {
+  padding: rem(65) 0 rem(60)
+}
+
   .Howtouse{
+    .inner {
+      .title {
+        font-size: rem(28);
+      }
+    }
+
     .cont_body{
       > ul {
         grid-template-columns: repeat(1, 100%);
+        margin-top: 0;
+
         
         > li {
-          margin-top: rem(50);
+          margin-top: rem(65);
           .card{
             .details {
               width: 70%;
+              margin-top: rem(35);
             }
 
             .img-wrap {
@@ -1436,12 +1506,28 @@ section.sns {
           }
         }
       }
+
+      .btn_box {
+        margin-top: rem(80);
+      }
     }
   }
 
 
 
 //SNS
+  .title {
+    font-size: rem(28);
+  }
+
+  .sns {
+    .inner {
+      > p {
+        padding: rem(12) 0 rem(50);
+      }
+    }
+  }
+
   .swiper_sns_outerWrap {
     .swiper_button_prev_sns {
       transform: translate(-50%, -50%) translateX(rem(-170));
@@ -1472,7 +1558,7 @@ section.sns {
   // }
 
   section.difference2 {
-    padding: rem(40) 0 rem(50)
+    padding: rem(45) 0 rem(50)
   }
 
   // section.difference3{padding: rem(120) 0 rem(150)}
