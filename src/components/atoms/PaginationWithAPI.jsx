@@ -37,11 +37,11 @@ const Pagination = ({
         const calcedPageIndex = (curPage - 1).toString();
         const defQuery = `?${searchQueryType.PAGE}=${calcedPageIndex}&${searchQueryType.SIZE}=${size}`;
         let urlQueries = urlQuery ? `${defQuery}&${urlQuery}` : defQuery;
-        console.log('API URL: ', apiURL, '\nSerach Query: ', urlQueries);
+
         const res = await getData(`${apiURL}${urlQueries}`);
         const pageData = res.data?.page;
         const hasItems = pageData?.totalElements !== 0;
-        
+        console.log('API URL: ', apiURL, '\nSerach Query: ', urlQueries, '\nPagination res: ',res);
          if ((pageInterceptor && typeof pageInterceptor === 'function') || (pageData && hasItems)) { // 여기에 인터셉터가 있다면 인터셉터로 작동하게 한다.
           const newPageInfo_InterCeptor = (pageInterceptor && typeof pageInterceptor === 'function') && pageInterceptor(res); // SERVER API 쿼리가 변경되는 것에, 대응하기 위해 추가함
           const newPageInfo = newPageInfo_InterCeptor ||  {
@@ -52,7 +52,7 @@ const Pagination = ({
             newPageNumber: pageData.number + 1,
             newItemList: res.data._embedded[queryItemList] || {},
           };
-          // console.log(newPageInfo);
+          
           setPageInfo(newPageInfo); // ! 페이지네이션 버튼 나타나게 함
           setItemList(newPageInfo.newItemList);
           if (setPageData && typeof setPageData === 'function') {

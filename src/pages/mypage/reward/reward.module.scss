@@ -72,7 +72,7 @@ section.content { padding : rem(30) 0 rem(40)}
   
   .flex_box {
     display: grid;
-    grid-template-columns: 1fr rem(75);
+    grid-template-columns: 1fr rem(100); // 적립금액 3자리 이상일 경우 대응 (22.07.29)
     width: 100%;
     align-items: center;
     border-bottom: rem(1) solid var(--color-line-03);
@@ -89,7 +89,7 @@ section.content { padding : rem(30) 0 rem(40)}
 
 
     .day_text {
-      width: rem(70);
+      //width: rem(70);
       @include char(l14);
       color: #909090;
     }
