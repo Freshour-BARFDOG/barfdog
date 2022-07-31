@@ -34,17 +34,10 @@ export default function CouponPage() {
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
   const [activeUseCouponModal, setActiveUseCouponModal] = useState(false);
-  {
-    /* ! 비밀번호를 입력해 쿠폰생성하는 방식 => 취소된 기능 */
-  }
   const [activeRegisterCouponModal, setActiveRegisterCouponModal] = useState(false);
-
   const [form, setForm] = useState({});
-
-
-
   const couponCodeRef = useRef(null);
-
+  
   const onActiveModalHandler = () => {
     setActiveUseCouponModal(true);
   };
