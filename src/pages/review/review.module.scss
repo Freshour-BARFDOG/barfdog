@@ -76,7 +76,7 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
       top: 0;
       left: 0;
       width: 100%;
-      height: calc(100% - rem(3));
+      height: calc(100% - #{rem(3)});
       outline: rem(2) solid var(--color-main);
     }
 
@@ -388,7 +388,7 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
     position:absolute;
     left:50%;
     transform:translateX(-50%);
-    bottom: calc(-100% + rem(8));
+    bottom: calc(-100% + #{rem(8)});
     content:"더보기";
     color:#fff;
     font-size: rem(14);
@@ -556,7 +556,7 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
   .review_write_ad {
     .red_box {
       &::after {
-        height: calc(100% - rem(2));
+        height: calc(100% - #{rem(2)});
       }
 
       .content_box {
