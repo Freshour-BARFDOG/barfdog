@@ -7,7 +7,7 @@ $browser-context: 16; // html font-size
 section.order_title {
   padding: rem(80) 0 rem(150) 0;
 }
-section.notice {
+section.regular_delivery {
   padding: 0 0 rem(180) 0;
 }
 
@@ -127,7 +127,7 @@ section.notice {
     padding-bottom: rem(9);
   }
   .notice_row_2 {
-    // width: 600px;
+    // width: rem(680);
     @include char(l16);
     color: var(--color-font-sub);
     padding-bottom: rem(29);
@@ -137,7 +137,7 @@ section.notice {
     justify-content: center;
     width: 100%;
     .color_box {
-      width: 80%;
+      width: 100%;
       max-width: rem(560);
       background-color: #f9edec;
       border-radius: rem(8);
@@ -163,6 +163,7 @@ section.notice {
       .color_box_row_2 {
         @include char(b16);
         color: var(--color-font-sub);
+        padding: 0 rem(30);
         em{font-weight:600;}
       }
     }
@@ -185,7 +186,6 @@ section.notice {
       position:relative !important;
       aspect-ratio:200/215 !important;
     }
-
   }
   .row_1 {
     padding-top: rem(20);
@@ -220,10 +220,18 @@ section.notice {
 }
 
 .plan_box {
+  li:nth-child(2){
+    span{
+      color: var(--color-main);
+      font-weight: 500;
+    }
+  }
+
   .img_box {
     display: flex;
     justify-content: center;
     padding-top: rem(4);
+
     .image {
       width: 100%;
       max-width: rem(80);
@@ -439,4 +447,208 @@ section.notice {
       opacity: 1;
     }
   }
+}
+
+
+
+@media (max-width: rem(900)) {
+
+  .flex_box {
+    grid-template-columns: 1fr;
+    max-width: rem(660);
+    row-gap: rem(10);
+  }
+
+  .plan_box {
+    max-width: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+
+    li:first-child{
+      transform: translateY(rem(40));
+
+      h2{
+      padding-top: 0;
+      }
+    }
+
+    li:nth-child(2){
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+    }
+
+    li:nth-child(3){
+      order: 2;
+      transform: translateY(rem(60));
+    }
+
+    li:last-child{
+      order:3;
+
+      .text1{
+        font-size: rem(18);
+        line-height: rem(26);
+
+        span{
+          font-size: rem(16);
+        }
+      }
+      .text2{
+        font-size: rem(24);
+      }
+    }
+  }
+
+  .flex_box2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: rem(10);
+
+    .row_1 {
+      padding-top: rem(9);
+      font-size: rem(12);
+    }
+    .row_2 {
+      font-size: rem(22);
+    }
+    .row_3 {
+      font-size: rem(14);
+    }
+    .row_4 {
+      padding-top: rem(15);
+      @include char(l15);
+      color: var(--color-main);
+      font-weight: 600;
+      text-decoration-line: underline;
+    }
+  }
+
+}
+
+
+
+@media (max-width: rem(600)) {
+
+  section.order_title {
+    padding: rem(35) 0 rem(80) 0;
+  }
+
+
+  section.regular_delivery {
+    padding: 0 0 rem(70) 0;
+  }
+
+  .order_title {
+    .text {
+      padding-bottom: rem(22);
+      font-size: rem(24);
+      font-weight: 700;
+    }
+
+    .title_content_box {
+      .title_grid_box {
+        .grid {
+          column-gap: 0;
+          grid:
+          "result_title"
+          "grid_left"
+          "grid_bottom"/1fr;
+          row-gap: rem(30);
+
+          .grid_left {
+            margin: 0 auto;
+            order: 2;
+            grid-row: 2/span 1;
+          }
+          .result_title {
+            padding-bottom: 0;
+            text-align: center;
+            font-size: rem(18);
+          }
+          .recommend_data_wrap {
+            order: 3;
+            .title {
+              font-size: rem(18);
+              span {
+                font-size: rem(13);
+              }
+            }
+            .data {
+              font-size: rem(24);
+            }
+          }
+
+          .desc{
+            font-size: rem(13);
+          }
+        }
+      }
+    }
+  }
+
+  .regular_delivery {
+    .regular_delivery_title {
+      padding-bottom: rem(30);
+      font-size: rem(18);
+      font-weight: 600;
+      br {
+        display: block;
+      }
+    }
+  }
+
+  .notice {
+    .notice_row_1 {
+      font-size: rem(18);
+    }
+    .notice_row_2 {
+      font-size: rem(15);
+    }
+    .notice_row_3 {
+      .color_box {
+        .color_box_row_1 {
+          font-size: rem(16);
+        }
+
+        .color_box_row_2 {
+          font-size: rem(15);
+        }
+      }
+    }
+  }
+
+  .recipeInputWrap{margin-bottom:rem(50);}
+
+
+  .flex_box2 {
+    margin-top: rem(30);
+
+    .ItemRecommendlabel{
+      top: rem(-10);
+      left: rem(-10);
+      font-size: rem(7);
+      padding-bottom: rem(2);
+    }
+  }
+
+  .btn_box {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+    row-gap: rem(10);
+    padding: rem(10) 0 rem(90);
+
+    button{
+      width: 100%;
+
+      &.prevPage{
+        order: 3;
+      }
+    }
+  }
+
 }

@@ -504,7 +504,6 @@ section.title{ padding : rem(8) 0 rem(17);}
   //justify-content: center;
 }
 
-
 .plan_box {
   max-width: rem(220);
   box-sizing: border-box;
@@ -1101,22 +1100,6 @@ section.title{ padding : rem(8) 0 rem(17);}
 
   .content_box {
     .top_flex_box {
-      
-      .top_left_box {
-        .top_flex_box2 {
-          display: grid;
-          grid-template-columns: 1fr;
-          .right {
-            text-align: right;
-          }
-
-          &.second {
-            display: grid;
-            grid-template-columns: 1fr;
-          }
-        }
-      }
-
       .right_box {
         .flex_box3 {
           column-gap: rem(20);
@@ -1216,6 +1199,42 @@ section.title{ padding : rem(8) 0 rem(17);}
   .flex_box2{
     grid-template-columns: 1fr;
   }
+
+
+  .content_box {
+    .top_flex_box {
+      grid-template-columns: 1fr;
+      grid-row-gap: rem(20);
+      .top_left_box {
+        order: 2;
+        max-width: 100%;
+      }
+      
+      .right_box {
+        padding: rem(20) rem(10);
+
+        .flex_box3 {
+          column-gap: 0;
+          grid-column-gap: 0;
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          width: 100%;
+
+          .inner_mid_box{
+            text-align: center;
+          }
+
+          .inner_left_box, .inner_mid_box, .inner_right_box {
+            width: auto;
+            .row_2 {
+              font-size: rem(16);
+            }
+          }
+        }
+      }
+    }
+  }
+
 }
 
 
@@ -1233,39 +1252,6 @@ section.title{ padding : rem(8) 0 rem(17);}
 
       .text {
         width: 100%;
-      }
-    }
-  }
-
-  .content_box {
-    .top_flex_box {
-      grid-template-columns: 1fr;
-      grid-row-gap: rem(20);
-      .top_left_box {
-        order: 2;
-        max-width: 100%;
-      }
-      
-      .right_box {
-        padding: rem(20) rem(10);
-
-        .flex_box3 {
-          column-gap: rem(10);
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          width: 100%;
-
-          .inner_mid_box{
-            text-align: center;
-          }
-
-          .inner_left_box, .inner_mid_box, .inner_right_box {
-            width: auto;
-            .row_2 {
-              font-size: rem(16);
-            }
-          }
-        }
       }
     }
   }

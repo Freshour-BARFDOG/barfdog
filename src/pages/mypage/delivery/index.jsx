@@ -135,6 +135,45 @@ const TEST_ContTobeInserted = () => {
             <div className={Styles.col_4}>배송예정</div>
 
             <div className={Styles.col_5}>
+              <div className={Styles.btn}>배송조회</div>
+            </div>
+
+        </div>
+        
+        <div className={Styles.grid_box}>
+          <div className={Styles.col_1}>
+            <p>2022.02.14</p>
+            <div></div>
+            <div>비건 레시피</div>
+            <div className={Styles.text}>
+              <div>
+                <div className={`${Styles.image} img-wrap`}>
+                  <Image
+                    priority
+                    src={require("public/img/pages/delivery/delivery_icon_1.png")}
+                    objectFit="cover"
+                    layout="fill"
+                    alt="카드 이미지"
+                  />
+                </div>
+                주문정보
+              </div>
+            </div>
+          </div>
+
+            <div className={Styles.col_2}>
+              <p>조리예정일</p>
+              <div>3월 12일</div>
+            </div>
+
+            <div className={Styles.col_3}>
+              <p>발송예정일</p>
+              <div>3월 16일</div>
+            </div>
+
+            <div className={Styles.col_4}>배송예정</div>
+
+            <div className={Styles.col_5}>
               <a href="http://nexs.cjgls.com/web/service02_01.jsp?slipno" target="_blank">
                 <div className={Styles.btn}>배송조회</div>
               </a>
