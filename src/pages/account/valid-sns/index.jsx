@@ -1,21 +1,33 @@
 import React, { useState } from 'react';
+import s from 'src/pages/account/valid-sns/index.module.scss';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
-import s from 'src/pages/account/valid-sns/index.module.scss';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import filter_emptyValue from '/util/func/filter_emptyValue';
-import filter_onlyNumber from '/util/func/filter_onlyNumber';
+import axios from 'axios';
+import Modal_global_alert from '/src/components/modal/Modal_global_alert';
+import {useDispatch, useSelector} from 'react-redux';
+import Spinner from '/src/components/atoms/Spinner';
+import {useModalContext} from "/store/modal-context";
+import enterKey from "../../../../util/func/enterKey";
+import {authAction} from "../../../../store/auth-slice";
 
-function ValidSnsPage() {
+
+export default function ValidSnsPage() {
+  const userState = useSelector((s) => s.userState);
+  const dispatch = useDispatch();
+  const mct = useModalContext();
+  const [alertModalMessage, setAlertModalMessage] = useState('');
   const [formValues, setFormValues] = useState({});
   const [formErrors, setFormErrors] = useState({});
+  const [isSubmitted, setIsSubmitted] = useState( false );
+  const [tokenFromServer, setTokenFromServer] = useState( null );
+  const [isLoading, setIsLoading] = useState({});
 
-  console.log(formValues);
   const onChangeHandler = (e) => {
     const { id, value } = e.currentTarget;
     let filteredValue = filter_emptyValue(value);
-    filteredValue = filter_onlyNumber(filteredValue);
     setFormValues((prevState) => {
       return {
         ...prevState,
@@ -24,10 +36,93 @@ function ValidSnsPage() {
     });
   };
 
-  const onSubmitHandler = () => {
-    console.log('비밀번호 조회 후, 일치하지 않을 경우 error메시지 ');
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    if(isSubmitted)return console.error('이미 제출된 양식입니다.');
+    if(!formValues.password){ // client 유효성검사: 비밀번호가 비어있는지
+      mct.alertShow();
+      return setAlertModalMessage(`비밀번호를 입력해주세요.`);
+    }
+  
+    // const body = { // ! TEST TESTTESTTESTTESTTESTTEST
+    //   password: 'user',
+    //   phoneNumber: '01099038544',
+    //   provider: userState.snsInfo.provider, // SNS 업체
+    //   providerId: userState.snsInfo.providerId, // sns 고유값
+    //   tokenValidDays: null, // null 일 경우, 서버 최소 토큰유지: 2시간
+    // };
+    // console.log(body);
+    
+    
+    const body = {
+      password: formValues.password,
+      phoneNumber: userState.snsInfo.mobile.replace(/-/g, '') || userState.snsInfo.mobile_e164, // 본인 휴대폰번호 ! Q. 국제번호일경우 => 처리 방침 ?
+      provider: userState.snsInfo.provider, // SNS 업체
+      providerId: userState.snsInfo.providerId, // sns 고유값
+      tokenValidDays: null, // null 일 경우, 서버 최소 토큰유지: 2시간
+    };
+    console.log('valid_body:', body)
+    
+    try {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        submit: true,
+      }));
+      await axios
+        .post('/api/connectSns', body, {
+          headers: {
+            'content-Type': 'application/json',
+          },
+        })
+        .then((res) => {
+          console.log(res);
+          if (res.status === 200) {
+            const token = res.headers.authorization;
+            setAlertModalMessage(`SNS연동에 성공하였습니다.`);
+            setIsSubmitted(true);
+            setTokenFromServer(token);
+            mct.alertShow();
+          }
+        })
+        .catch((err) => {
+          mct.alertHide();
+          // console.log(err.response);
+          if(err.response.status === 400){
+            mct.alertShow();
+            setAlertModalMessage(`비밀번호가 올바르지 않습니다.`);
+          }
+          console.error('서버통신오류: ', err);
+        });
+    } catch (err) {
+      console.error(err);
+    }
+    setIsLoading((prevState) => ({
+      ...prevState,
+      submit: false,
+    }));
   };
-
+  
+  const onEnterKeyHandler = (e) => {
+    enterKey(e, onSubmit);
+  };
+  
+  
+  const onGlobalModalCallback = () => {
+    mct.alertHide();
+  };
+  
+  const GlobalModalSuccessCallback = ()=>{
+    mct.alertHide();
+    const token = tokenFromServer;
+    if(token){
+      dispatch(authAction.login({ token }));
+    } else {
+      alert('인증과정 중에 문제가 발생했습니다. 다시 시도해주세요.');
+      window.location.href ='/account/login'
+    }
+    
+  }
+  
   return (
     <>
       <MetaTitle title="SNS계정 연동확인" />
@@ -46,21 +141,20 @@ function ValidSnsPage() {
                   id={'password'}
                   name={'password'}
                   placeholder={'비밀번호를 입력해주세요.'}
+                  onKeyDown={onEnterKeyHandler}
                   onChange={onChangeHandler}
                   value={formValues.password || ''}
                 />
                 {formErrors.password && <ErrorMessage>{formErrors.password}</ErrorMessage>}
               </div>
-              <button  type={'button'} className={s.btn} onClick={onSubmitHandler}>
-                연동하기
+              <button type={'button'} className={s.btn} onClick={onSubmit}>
+                {isLoading.submit ? <Spinner style={{ color: '#fff' }} /> : '연동하기'}
               </button>
             </div>
-
           </div>
         </Wrapper>
       </Layout>
+      <Modal_global_alert message={alertModalMessage} onClick={isSubmitted ? GlobalModalSuccessCallback : onGlobalModalCallback}/>
     </>
   );
 }
-
-export default ValidSnsPage;
