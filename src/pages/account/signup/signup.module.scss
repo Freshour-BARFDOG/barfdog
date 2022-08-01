@@ -172,6 +172,9 @@ $input-height: rem(44);
     justify-content: flex-start;
     column-gap: rem(2);
     margin-bottom: rem(13);
+    label[for='agree-all']{
+      align-items: flex-start;
+    }
 
     &.space-between{
       justify-content: space-between;

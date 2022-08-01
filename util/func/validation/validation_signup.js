@@ -19,7 +19,8 @@ export const validate = async (obj, formErrors) => {
         errors[key] = valid_isEmpty(val);
         break;
       case 'email':
-        errors[key] = valid_isEmpty(val) || valid_email(val);
+        
+        errors[key] = valid_isEmpty(val) || valid_email(val) || formErrors.isEmailDuplicated === null ? '이메일 중복확인을 하지 않았습니다.' : '';
         break;
       case 'password':
         errors[key] = valid_password(val).error;
