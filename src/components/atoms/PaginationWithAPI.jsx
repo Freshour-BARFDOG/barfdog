@@ -43,7 +43,7 @@ const Pagination = ({
         const hasItems = pageData?.totalElements !== 0;
         console.log('API URL: ', apiURL, '\nSerach Query: ', urlQueries, '\nPagination res: ',res);
          if ((pageInterceptor && typeof pageInterceptor === 'function') || (pageData && hasItems)) { // 여기에 인터셉터가 있다면 인터셉터로 작동하게 한다.
-          const newPageInfo_InterCeptor = (pageInterceptor && typeof pageInterceptor === 'function') && pageInterceptor(res); // SERVER API 쿼리가 변경되는 것에, 대응하기 위해 추가함
+          const newPageInfo_InterCeptor = (pageInterceptor && typeof pageInterceptor === 'function') && await pageInterceptor(res); // SERVER API 쿼리가 변경되는 것에, 대응하기 위해 추가함
           const newPageInfo = newPageInfo_InterCeptor ||  {
             totalPages: pageData.totalPages,
             size: pageData.size,
