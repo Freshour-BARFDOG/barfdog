@@ -83,8 +83,8 @@ const authSlice = createSlice({
     },
     userRestoreAuthState(state, action) { // 쿠키가 존재할 경우 restoreAuthState
       console.log('Restored User Auth State');
-      state.isAdmin = action.payload.USERTYPE === userType.ADMIN;
       state.isAuth = true;
+      state.isAdmin = action.payload.data.member?.userType === userType.ADMIN;
       state.userType = action.payload.data.member?.userType;
       state.userInfo = action.payload.data.member;
     }
