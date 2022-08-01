@@ -563,7 +563,7 @@ export async function getServerSideProps({ req }) {
   let DATA = null;
   const url = '/api/home';
   const res = await getDataSSR( req, url );
-  console.log(res)
+  // console.log(res)
   const data = res?.data || null
   if(data){
     DATA = {
@@ -594,7 +594,7 @@ export async function getServerSideProps({ req }) {
     }
   }
   
-  console.log('MAIN DATA : " ', data);
+  // console.log('MAIN DATA : " ', data);
 
 
   return { props: { data:DATA } };
