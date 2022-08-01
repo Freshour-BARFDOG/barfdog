@@ -16,14 +16,14 @@ import {rewardStatusType} from "/store/TYPE/rewardStatusType";
 export default function RewardPage() {
   const searchApiUrl = '/api/rewards';
   const searchPageSize = 10;
-  const apiDataQueryString = 'queryRewardsDtoList';
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
-  const [totalReward, setTotalReward] = useState( 0);
+  const [totalReward, setTotalReward] = useState( 0); // // ! 문제 있는 값임 // 수정 후 , 사용할 것
+   // console.log(totalReward)
   
-  const pageInterCeptor = (res) => {
-    // SERVER pagination query가 변경되었을 경우 사용하는 function
-    setTotalReward(res.data.reward);
+  
+  const pageInterCeptor = (res) => {// SERVER pagination query가 변경되었을 경우 사용하는 function
+    setTotalReward(res.data.reward); // ! 문제 있는 값임
     const pageData = res.data.pagedModel.page;
     let newPageInfo = {
       totalPages: pageData.totalPages,
@@ -31,7 +31,7 @@ export default function RewardPage() {
       totalItems: pageData.totalElements,
       currentPageIndex: pageData.number,
       newPageNumber: pageData.number + 1,
-      newItemList: res.data.pagedModel._embedded.queryRewardsDtoList || {},
+      newItemList: res.data.pagedModel._embedded.queryRewardsDtoList || [],
     };
     return newPageInfo;
   };
@@ -50,9 +50,9 @@ export default function RewardPage() {
               <div className={s.box}> 
                 <div className={s.flex_box}>
                   <div className={s.left_box}>
-                    사용 가능 적립금 (****** 친구초대 적립금 포함해야함)
+                    사용 가능 적립금
                     {/* 적립금 => 직접계산 */}
-                    <span>{transformLocalCurrency(itemList.filter(item=>item.rewardStatus === rewardStatusType.SAVED).map(item=>item.tradeReward).reduce((acc, cur)=>acc+cur))}원</span>
+                    <span>{itemList.length > 0 ? transformLocalCurrency(itemList?.filter(item=>item.rewardStatus === rewardStatusType.SAVED).map(item=>item.tradeReward).reduce((acc, cur)=>acc+cur)) : 0}원</span>
                     {/*적립금 => 서버에서 받은 값 (적립금 발행 후에도, 변하지 않음 22.07.29)*/}
                     {/*<span>{transformLocalCurrency(totalReward)}원</span>*/}
                   </div>
@@ -76,7 +76,7 @@ export default function RewardPage() {
               ) : (
                 <ul className={s.coupon_content_grid_box}>
                   {itemList.map((item, index) => (
-                      <li className={s.flex_box}>
+                      <li key={`item-list-${index}`} className={s.flex_box}>
                         <div className={s.grid_box}>
                           <div className={s.day_text}>
                             {transformDate(item.createdTime)}
@@ -94,16 +94,16 @@ export default function RewardPage() {
               )}
             </section>
   
-            <div className={s.pagination_box}>
+            <section className={s.pagination_box}>
               <PaginationWithAPI
                 apiURL={searchApiUrl}
                 size={searchPageSize}
                 setItemList={setItemList}
-                queryItemList={apiDataQueryString}
+                // queryItemList={apiDataQueryString}
                 setIsLoading={setIsLoading}
                 pageInterceptor={pageInterCeptor}
               />
-            </div>
+            </section>
           </MypageWrapper>
         </Wrapper>
       </Layout>

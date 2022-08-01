@@ -1,9 +1,9 @@
-import React from "react";
+import React, {useEffect} from "react";
 import ModalWrapper from "./ModalWrapper";
 import s from "./modal.module.scss";
 import CloseButton from "@src/components/atoms/CloseButton";
 
-function Modal_confirm({ title, text, isConfirm, positionCenter }) {
+function Modal_confirm({ title, text, isConfirm, positionCenter ,theme}) {
   const onCancleHandler = () => {
     if (isConfirm && typeof isConfirm === "function") {
       isConfirm(false);
@@ -14,9 +14,24 @@ function Modal_confirm({ title, text, isConfirm, positionCenter }) {
       isConfirm(true);
     }
   };
+  
+  useEffect(() => {
+    const scrollYPos = window.scrollY;
+    document.body.style.cssText = `
+      overflow-y:scroll;
+      position:fixed;
+      width:100%;
+      top : -${scrollYPos}px;
+    `;
+    
+    return () => {
+      document.body.style.cssText = ``;
+      window?.scrollTo(0, parseInt(-scrollYPos || 10) * -1);
+    };
+  }, []);
 
   return (
-    <ModalWrapper className={`${s['modal-wrap']} ${s['confirm']}`} background positionCenter>
+    <ModalWrapper className={`${s['modal-wrap']} ${s['confirm']}`} background positionCenter={positionCenter} data-theme={theme} >
       {/*<div className={s.btn_close_modal} onClick={onCancleHandler}>*/}
       {/*  <CloseButton />*/}
       {/*</div>*/}

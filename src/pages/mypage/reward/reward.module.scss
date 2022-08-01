@@ -18,18 +18,19 @@ section.content { padding : rem(30) 0 rem(40)}
     border: rem(1) solid var(--color-line-03);
     display: flex;
     justify-content: center;
+    padding: 0 rem(40);
   
     .flex_box {
       display: flex;
-      justify-content: space-between;
-      width: 92%;
-      max-width: rem(840);
+      //justify-content: space-between;
+      //max-width: rem(840);
+      width: 100%;
       .left_box {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        width: 43%;
-        max-width: rem(353);
+        width: 50%;
+        //max-width: rem(353);
         @include char(l16);
         padding: rem(45) 0 rem(45) 0;
         span {
@@ -83,7 +84,11 @@ section.content { padding : rem(30) 0 rem(40)}
     }
 
     .grid_box{
-      display: flex;
+      display: grid;
+      grid-template-columns: rem(80) 1fr;
+      gap: rem(10);
+      align-items: center;
+      justify-content: flex-start;
       width: 100%;
     }
 
