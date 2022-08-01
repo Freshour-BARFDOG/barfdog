@@ -3,40 +3,24 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { axiosUserConfig } from '/src/pages/api/axios.config';
 import {userType} from "@store/TYPE/userAuthType";
+import {getData} from "@src/pages/api/reqData";
 
 
 export default function useUserData() {
+  
   const [userData, setUserData] = useState(null);
   const auth = useSelector((state) => state.auth);
 
-  // console.log('useUserData.js\n',auth)
   useEffect(() => {
-    
-    // ADMIN
-    if(auth.isAdmin){
-      let adminDATA = {
-        name: '관리자',
-        email: 'admin@gmail.com',
-        grade: 'ADMIN',
-      };
-      return setUserData(adminDATA)
-    }
-    
     // MEMBER
-    if(!auth.userType || auth.userType === userType.NON_MEMBER || userData)return;
+    if(auth.userType === userType.NON_MEMBER || userData)return;
     (async () => {
-      let memberDATA = null
-      const res = await axios
-        .get('/api/members', axiosUserConfig())
-        .catch((err) => {
-          console.log(err.response);
-          if(err.response.status === 401){
-            alert('토큰이 만료되었습니다. 다시 로그인해주세요.')
-          }
-      });
+      let DATA = null;
+      const url = '/api/members'
+      const res = await getData(url);
       if (res?.status === 200){
-        memberDATA = {
-          userType: auth.userType,
+        DATA = {
+          userType: auth.userType || userType.MEMBER,
           birthday: res.data.birthday,
           gender: res.data.gender,
           name: res.data.name,
@@ -49,13 +33,10 @@ export default function useUserData() {
             street: res.data.address.street,
             detailAddress: res.data.address.detailAddress,
           },
-          authState:{
-            autoLogin: auth.autoLogin,
-            isAdmin: auth.isAdmin,
-          }
         };
-      };
-      setUserData(memberDATA);
+      }
+     
+      setUserData(DATA);
     })();
   }, [auth]);
 

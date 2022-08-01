@@ -15,6 +15,142 @@ import filter_onlyNumber from "@util/func/filter_onlyNumber";
 import randomNumbers from "@util/func/randomNumbers";
 import CloseButton from "@src/components/atoms/CloseButton";
 import Modal_alert from "./Modal_alert";
+import {postObjData} from "../../pages/api/reqData";
+
+
+
+
+
+export default function AdminResetPassword() {
+  
+  const mct = useModalContext();
+  const initialTime = 181;
+  const [isSendNumber, setIsSendNumber] = useState(false);
+  const [startTimer, setStartTimer] = useState(false);
+  const [time, setTime] = useState(initialTime);
+  const [displayedTime, setDisplayedTime] = useState();
+  const [authNum, setAuthNum] =  useState();
+  const [email, setEmail] = useState();
+  const [modalMessage, setModalMessage] = useState('');
+  
+  
+  useEffect(() => {
+    if (time !== 0 && startTimer)
+      timer(time, [setTime, setDisplayedTime], setStartTimer);
+  }, [time, startTimer]);
+  
+  
+  const onModalHandler = (isConfirm) => {
+    if (isConfirm) setModalMessage('');
+  }
+  
+  const onSendEmailHandler = (e) => {
+    e.preventDefault();
+    const val = email?.trim(); // test account: 'develope07@binter.co.kr'
+    if (!val) {
+      mct.alertShow("이메일을 입력해주세요.");
+      return;
+    }
+
+    (async() => {
+      // 관리자 비밀번호 변경을 위해 이메일 인증번호 보내기
+      const body = {
+        email: val,
+      };
+      try {
+        // insert async & await code
+        const url = "/api/adminPasswordEmailAuth"
+        const res = await axios
+          .post(url, body, {
+            headers:{
+              "Content-Type": "application/json",
+            }
+          })
+          .then((res) => {
+            return res;
+          })
+          .catch((err) => {
+            return err
+          });
+        
+        console.log(res);
+        if (res?.status === 200){
+          const authNumber = res.data.authNumber;
+          setIsSendNumber(true);
+          setStartTimer(true);
+          setTime(initialTime);
+          setAuthNum(authNumber);
+        } else{
+          mct.alertShow(
+            "관리자 이메일이 아닌 경우 발송되지 않습니다. 지속적으로 에러가 발생할 경우 서버 관리자에게 문의하세요."
+          );
+        }
+      } catch (err) {
+          console.error(err);
+          alert(err);
+      }
+    })();
+    
+  }
+  
+  const onEmailChangeHandler = (e) => {
+    const val = e.currentTarget.value;
+    setEmail(val);
+  }
+  
+  
+  return (
+    <>
+      {/* {modalMessage && (
+        <Modal_alert text={modalMessage} isConfirm={onModalHandler} />
+      )} */}
+      <div className={s["modal-wrap"]}>
+        <i className={s["btn-close"]}>
+          <CloseButton />
+        </i>
+        <h3 className={s.title}>비밀번호 재설정</h3>
+        <div className={s.form}>
+          <div className={s["form-row"]}>
+            <label htmlFor={s["modal-email"]}>
+              <input
+                type="email"
+                id="modal-email"
+                placeholder="관리자 이메일주소를 입력해주세요."
+                value={email || ''}
+                onChange={onEmailChangeHandler}
+                disabled={startTimer && true}
+              />
+            </label>
+          </div>
+          <div className={s["btn-section"]}>
+            <button
+              type="button"
+              className={`admin_btn solid fullWidth confirm_l ${
+                startTimer && "disabled"
+              }`}
+              onClick={onSendEmailHandler}
+            >
+              {isSendNumber ? "인증번호 재전송" : "인증번호 전송"}
+            </button>
+          </div>
+          <div className={s.notice}>
+            <p>1.개발사에게 전달한 바프독 사내 이메일을 입력하세요.</p>
+            <p>
+              2. 이메일, 비밀번호 모두가 기억나지 않을 경우, 개발사에게
+              문의하세요
+            </p>
+          </div>
+        </div>
+        {isSendNumber && (
+          <AuthNumberComponent
+            displayedTime={displayedTime}
+            authNum={authNum}
+          />
+        )}
+      </div>
+    </>
+  );
+}
 
 
 
@@ -22,7 +158,7 @@ import Modal_alert from "./Modal_alert";
 
 const AuthNumberComponent = ({ displayedTime, authNum }) => {
 
-  const [numberBeforeAuth, setNumberBeforeAuth] = useState("");
+  const [userText, setUserText] = useState("");
   const [modalMessage, setModalMessage] = useState("");
   const [isAuth, setAuth]= useState(false);
   const router = useRouter();
@@ -33,16 +169,15 @@ const AuthNumberComponent = ({ displayedTime, authNum }) => {
     if (isConfirm) setModalMessage("");
     if(isAuth) router.push(`/bf-admin/index/password?authnum=${authNum}`);
   };
-
+  
   const onAuthNumberHandler = (e) => {
     e.preventDefault();
+    if(!userText) return alert('인증번호를 입력해주세요.')
     console.log('인증코드 확인용 console: ',authNum); // ! -------> 테스트용: 개발기간 끝난 후 삭제할 것
-    if (authNum === numberBeforeAuth) {
-      
+    if (authNum === userText) {
       setModalMessage(
         `인증 완료: 페이지 새로고침 전까지 비밀번호를 변경할 수 있습니다.`
       )
-      mct.onHide();
       dispatch(authAction.adminResetPassword());
       setAuth(true);
     }else{
@@ -55,7 +190,7 @@ const AuthNumberComponent = ({ displayedTime, authNum }) => {
   const onChangeHandler = (e) => {
     const val = e.currentTarget.value;
     const filteredValue = filter_onlyNumber(val);
-    setNumberBeforeAuth(filteredValue);
+    setUserText(filteredValue);
   };
 
 
@@ -65,25 +200,25 @@ const AuthNumberComponent = ({ displayedTime, authNum }) => {
       {/* {modalMessage && (
         <Modal_alert text={modalMessage} isConfirm={onModalHandler} />
       )} */}
-      <form action="/bf-admin/login" onSubmit={onAuthNumberHandler}>
+      <div>
         <div className={s["form-row"]}>
           <label htmlFor={s["modal-email"]}>
             <input
               type="text"
               id="modal-email"
-              value={numberBeforeAuth}
-              placeholder="인증번호 6자리를 입력해주세요."
+              value={userText || ''}
+              placeholder="인증번호 4자리를 입력해주세요."
               onChange={onChangeHandler}
             />
             <em className={s.displayedTime}>{transformTime(displayedTime)}</em>
           </label>
         </div>
         <div className={s["btn-section"]}>
-          <button type="submit" className="admin_btn solid fullWidth confirm_l">
+          <button type="button" className="admin_btn solid fullWidth confirm_l" onClick={onAuthNumberHandler}>
             인증하기
           </button>
         </div>
-      </form>
+      </div>
     </>
   );
 };
@@ -97,131 +232,3 @@ const AuthNumberComponent = ({ displayedTime, authNum }) => {
 
 
 
-
-
-
-function AdminResetPassword(props) {
-
-  const mct = useModalContext();
-  const initialTime = 181;
-  const [isSendNumber, setIsSendNumber] = useState(false);
-  const [startTimer, setStartTimer] = useState(false);
-  const [time, setTime] = useState(initialTime);
-  const [displayedTime, setDisplayedTime] = useState();
-  const [authNum, setAuthNum] =  useState();
-  const [email, setEmail] = useState();
-  const [modalMessage, setModalMessage] = useState('');
-
-
-  useEffect(() => {
-    if (time !== 0 && startTimer)
-      timer(time, [setTime, setDisplayedTime], setStartTimer);
-  }, [time, startTimer]);
-
-
-  const onModalHandler = (isConfirm) => {
-    if (isConfirm) setModalMessage('');
-  }
-
-  const onSendEmailHandler = (e) => {
-    e.preventDefault();
-    const val = email?.trim(); // test account: 'develope07@binter.co.kr'
-
-    if (!val) {
-      mct.alertShow("이메일을 입력해주세요.");
-      return;
-    }
-
-    const body = {
-      email: val,
-    };
-    
-    (async(res) => {
-      const response = await axios
-        .post("/api/adminPasswordEmailAuth", body, {
-          "Content-Type": "application/json",
-        })
-        .then((res) => {
-          // console.log(res);
-          return res;
-
-        })
-        .catch((err) => {
-          console.log(err.response);
-          console.log(err.request);
-        });
-        if (response?.status === 200){
-          setIsSendNumber(true);
-          setStartTimer(true);
-          setTime(initialTime);
-          setAuthNum(randomNumbers(6));
-        } else{
-          mct.alertShow(
-            "관리자 이메일이 아닌 경우 발송되지 않습니다. 지속적으로 에러가 발생할 경우 서버 관리자에게 문의하세요."
-          );
-        }
-    })();
-
-
-
-  }
-
-  const onEmailChangeHandler = (e) => {
-    const val = e.currentTarget.value;
-    setEmail(val);
-  }
-
-
-  return (
-    <>
-      {/* {modalMessage && (
-        <Modal_alert text={modalMessage} isConfirm={onModalHandler} />
-      )} */}
-      <div className={s["modal-wrap"]}>
-        <i className={s["btn-close"]}>
-          <CloseButton />
-        </i>
-        <h3 className={s.title}>비밀번호 재설정</h3>
-        <form action="/bf-admin/login" onSubmit={onSendEmailHandler}>
-          <div className={s["form-row"]}>
-            <label htmlFor={s["modal-email"]}>
-              <input
-                type="email"
-                id="modal-email"
-                placeholder="관리자 이메일주소를 입력해주세요."
-                value={email}
-                onChange={onEmailChangeHandler}
-                disabled={startTimer && true}
-              />
-            </label>
-          </div>
-          <div className={s["btn-section"]}>
-            <button
-              type="submit"
-              className={`admin_btn solid fullWidth confirm_l ${
-                startTimer && "disabled"
-              }`}
-            >
-              {isSendNumber ? "인증번호 재전송" : "인증번호 전송"}
-            </button>
-          </div>
-          <div className={s.notice}>
-            <p>1.개발사에게 전달한 바프독 사내 이메일을 입력하세요.</p>
-            <p>
-              2. 이메일, 비밀번호 모두가 기억나지 않을 경우, 개발사에게
-              문의하세요
-            </p>
-          </div>
-        </form>
-        {isSendNumber && (
-          <AuthNumberComponent
-            displayedTime={displayedTime}
-            authNum={authNum}
-          />
-        )}
-      </div>
-    </>
-  );
-}
-
-export default AdminResetPassword

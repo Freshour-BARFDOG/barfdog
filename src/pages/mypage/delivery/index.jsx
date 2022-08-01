@@ -139,7 +139,7 @@ const TEST_ContTobeInserted = () => {
             </div>
 
         </div>
-
+        
         <div className={Styles.grid_box}>
           <div className={Styles.col_1}>
             <p>2022.02.14</p>
@@ -185,23 +185,23 @@ const TEST_ContTobeInserted = () => {
           <div className={Styles.col_1}>
             <p>2022.02.14</p>
             <div></div>
-            <div>바프레드 외 8건</div>
+            <div>비건 레시피</div>
             <div className={Styles.text}>
-              <div className={`${Styles.image} img-wrap`}>
-                <Image
-                  priority
-                  src={require("public/img/pages/delivery/delivery_icon_1.png")}
-                  objectFit="cover"
-                  layout="fill"
-                  alt="카드 이미지"
-                />
+              <div>
+                <div className={`${Styles.image} img-wrap`}>
+                  <Image
+                    priority
+                    src={require("public/img/pages/delivery/delivery_icon_1.png")}
+                    objectFit="cover"
+                    layout="fill"
+                    alt="카드 이미지"
+                  />
+                </div>
+                주문정보
               </div>
-              주문정보
             </div>
           </div>
 
-         
-          <div className={Styles.grid}>
             <div className={Styles.col_2}>
               <p>조리예정일</p>
               <div>3월 12일</div>
@@ -222,7 +222,7 @@ const TEST_ContTobeInserted = () => {
                 </a>
                 </div>
             </div>
-          </div>
+
         </div>
       </section>
     </>

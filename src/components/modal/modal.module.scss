@@ -1,26 +1,25 @@
 @import '/styles/global/rem';
 @import '/styles/module/zIndex.module';
 
-
-
 .modal-wrap {
-
   .btn_close_modal {
     position: absolute;
     right: rem(10);
     top: rem(10);
     display: flex;
   }
-  &[data-modal-status="hasChildren"] .title-section{
+  &[data-modal-status='hasChildren'] .title-section {
     margin-bottom: rem(8);
   }
-  &:not([data-modal-status="hasChildren"]) .title-section{
+  &:not([data-modal-status='hasChildren']) .title-section {
     margin-bottom: rem(30);
   }
 
   .title-section {
     text-align: center;
-    * {cursor:default}
+    * {
+      cursor: default;
+    }
     .title {
       font-size: rem(20);
       margin-bottom: rem(16);
@@ -32,33 +31,35 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      &.only{
-        margin-top:rem(8);
+      &.only {
+        margin-top: rem(8);
         height: rem(50);
       }
       &:not(:last-child) {
         margin-bottom: rem(43);
       }
     }
-
   }
 
-  .form-section{
+  .form-section {
     margin-bottom: rem(30);
     display: flex;
     align-items: center;
     justify-content: center;
-    label, input{width:100%; text-align: center;}
-    input{
+    label,
+    input {
+      width: 100%;
+      text-align: center;
+    }
+    input {
       padding: rem(6) 0;
       border : {
         radius: 0;
-        top:0;
-        left:0;
-        right:0;
+        top: 0;
+        left: 0;
+        right: 0;
       }
     }
-
   }
 
   .btn-section {
@@ -71,15 +72,14 @@
       }
     }
   }
-
 }
 
-.modal_wrap.global{
+.modal_wrap.global {
   //aspect-ratio: 1.613;
   padding: 0;
   width: 100%;
   max-width: rem(420);
-  .body{
+  .body {
     padding: rem(60) rem(40) rem(20);
     box-sizing: border-box;
     min-height: rem(240);
@@ -88,22 +88,22 @@
     align-items: center;
     height: 100%;
   }
-  .title-section{
+  .title-section {
     margin-bottom: rem(20);
-    .text{
+    .text {
       white-space: break-spaces;
       text-align: center;
       height: auto !important;
-      display:block !important;
+      display: block !important;
       font-size: rem(16);
       word-break: break-all;
     }
   }
-  .btn-section{
+  .btn-section {
     width: 100%;
     display: flex;
     justify-content: center;
-    button{
+    button {
       background-color: var(--color-main);
       color: #fff;
       width: 100%;
@@ -115,8 +115,7 @@
   }
 }
 
-
-.modal-wrap.confirm{
+.modal-wrap.confirm {
   display: grid;
   align-items: end;
   justify-content: center;
@@ -124,13 +123,34 @@
   aspect-ratio: 1.618;
 }
 
-.background{
+.background {
   position: fixed;
   width: 100vw;
   left: 0;
   right: 0;
-  top:0;
+  top: 0;
   bottom: 0;
-  background-color: rgba(0,0,0,0.6);
+  background-color: rgba(0, 0, 0, 0.6);
   z-index: $globalModal-background;
+}
+
+.modal-wrap[data-theme='userPage'] {
+  width: rem(420);
+  padding: rem(20) rem(44);
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr rem(44);
+  .title-section {
+    height: 100%;
+    margin: 0;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+  }
+  .btn-section{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: rem(12);
+    button{ width: auto; margin:0; border-radius: rem(4);}
+    button:nth-child(1){ background-color: var(--color-line-02); color:#fff;}
+  }
 }

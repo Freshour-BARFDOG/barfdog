@@ -4,28 +4,28 @@ import MetaTitle from '/src/components/atoms/MetaTitle';
 import s from '../ordersheet.module.scss';
 import Modal_termsOfSerivce from '/src/components/modal/Modal_termsOfSerivce';
 import { Modal_coupon } from '/src/components/modal/Modal_coupon';
-import {getData, postUserObjData} from '/src/pages/api/reqData';
+import { getData, postUserObjData } from '/src/pages/api/reqData';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import transformDate, { transformToday } from '/util/func/transformDate';
-import {OrdersheetSubscribeItemList } from '/src/components/order/OrdersheetSubscribeItemList';
+import { OrdersheetSubscribeItemList } from '/src/components/order/OrdersheetSubscribeItemList';
 import { OrdersheetMemberInfo } from '/src/components/order/OrdersheetMemberInfo';
 import { OrdersheetDeliveryForm } from '/src/components/order/OrdersheetDeliveryForm';
 import { Payment } from '/src/components/order/Payment';
 import { OrdersheetReward } from '/src/components/order/OrdersheetReward';
 import { OrdersheetMethodOfPayment } from '/src/components/order/OrdersheetMethodOfPayment';
 import { OrdersheetAmountOfPayment } from '/src/components/order/OrdersheetAmountOfPayment';
-import {calcNextSubscribeDeliveryDate} from "/util/func/calcNextSubscribeDeliveryDate";
-import {subscribePlanType} from "/store/TYPE/subscribePlanType";
+import { calcNextSubscribeDeliveryDate } from '/util/func/calcNextSubscribeDeliveryDate';
+import { subscribePlanType } from '/store/TYPE/subscribePlanType';
 
 const DUMMY_MEMEBER_COUPON_LIST = [
   {
     memberCouponId: 45,
     name: '50%할인쿠폰 ',
     discountType: 'FIXED_RATE',
-    discountDegree: 50,
-    availableMaxDiscount: 200000,
-    availableMinPrice: 7000,
+    discountDegree: 70,
+    availableMaxDiscount: 1000000,
+    availableMinPrice: 5000,
     remaining: 1,
     expiredDate: '2023-12-31T23:59:59',
   },
@@ -51,14 +51,14 @@ const DUMMY_MEMEBER_COUPON_LIST = [
   },
 ];
 
-export default function SubscribeOrderSheetPage({subscribeId}) {
+export default function SubscribeOrderSheetPage({ subscribeId }) {
   const router = useRouter();
   const auth = useSelector((s) => s.auth);
   const USER_TYPE = auth.userType;
 
   const cart = useSelector((state) => state.cart);
   const [isLoading, setIsLoading] = useState({ fetching: true });
-  const [isRendered, setIsRendered] = useState( false );
+  const [isRendered, setIsRendered] = useState(false);
   const [info, setInfo] = useState({});
   const [form, setForm] = useState({});
   const [formErrors, setFormErrors] = useState({});
@@ -67,24 +67,19 @@ export default function SubscribeOrderSheetPage({subscribeId}) {
     termsOfService: false,
     coupon: false,
   });
-  
-  useEffect( () => {
-    if(window && typeof window !== 'undefined'){
-      setIsRendered(true)
-    }
-    
-  }, [] );
-  
+
   useEffect(() => {
-    
-    
+    if (window && typeof window !== 'undefined') {
+      setIsRendered(true);
+    }
+  }, []);
+
+  useEffect(() => {
     // const curItem = cart.subscribeOrder; // ! subscribe Item
     // if (!Object.keys(curItem).length || !subscribeId) {
     //   return window.location.href='/';
     // }
 
- 
-    
     // ! surveyReportID가 곧 subscribeId가 되는것인지?????
     (async () => {
       setIsLoading((prevState) => ({
@@ -95,13 +90,13 @@ export default function SubscribeOrderSheetPage({subscribeId}) {
         // API: 구독 주문서에 필요한 내용 조회 ( ! Q. subscribeId는 매 구독 회차마다 생성 or 갱신 ?)
         const postItemInfoApiUrl = `/api/orders/sheet/subscribe/${subscribeId}`;
         const body = {
-          id : subscribeId
+          id: subscribeId,
         };
         const res = await getData(postItemInfoApiUrl, body);
         // console.log(res)
         if (res.status !== 200) {
           alert('주문 정보를 확인할 수 없습니다.');
-          return window.location.href='/';
+          return (window.location.href = '/');
         }
         const info = res.data;
         console.log(info);
@@ -109,10 +104,13 @@ export default function SubscribeOrderSheetPage({subscribeId}) {
         // 주문에 대한 모든 데이터
         const initInfo = {
           subscribeDto: {
-            id : info.subscribeDto.id,
-            plan : info.subscribeDto.plan,
-            nextPaymentPrice : info.subscribeDto.nextPaymentPrice,
-            originPrice : calcSubscribePlanOriginPrice(info.subscribeDto.plan, info.subscribeDto.nextPaymentPrice).originPrice,
+            id: info.subscribeDto.id,
+            plan: info.subscribeDto.plan,
+            nextPaymentPrice: info.subscribeDto.nextPaymentPrice,
+            originPrice: calcSubscribePlanOriginPrice(
+              info.subscribeDto.plan,
+              info.subscribeDto.nextPaymentPrice,
+            ).originPrice,
           },
           recipeNameList: info.recipeNameList, // [] 구독으로 선택한 레시피 이름 리스트 // FULL-PLAN일 경우, 최대 2개
           name: info.name, // 구매자
@@ -127,16 +125,17 @@ export default function SubscribeOrderSheetPage({subscribeId}) {
             zipcode: info.address.zipcode, // 우편번호
           },
           deliveryPrice: 0, // 정기구독 배송비: 무료
-          reward: info.reward || 200000, // 적립금 // ! TEST
+          reward: info.reward || 200000, // !  ------- TEST
           brochure: info.brochure, // 브로슈어 받은 적 있는지 true/false => 브로슈어는 1번만 받을 수 있다.
         };
 
         // FormDatas
         const initForm = {
-          selfInfo:{
-            reward: info.reward,  // ! CLIENT ONLY // 적립금 계산 시, 사용됨
+          selfInfo: {
+            reward: info.reward || 200000, //  ! ------- TEST
           },
-          coupons: // ! DUMMY DATA
+          // ! DUMMY DATA
+          coupons:
             DUMMY_MEMEBER_COUPON_LIST ||
             info.coupons?.map((cp) => ({
               memberCouponId: cp.memberCouponId,
@@ -198,29 +197,33 @@ export default function SubscribeOrderSheetPage({subscribeId}) {
   //    > 이때, Shop Item Detail페이지에서 가져온 정보 초기화되어, 서버에서 데이터 가져올 수 없음)
   // if (!info || !USER_TYPE || USER_TYPE === userType.NON_MEMBER) return;
 
-
   return (
     <>
-      <MetaTitle title="정기구독 주문서"/>
+      <MetaTitle title="정기구독 주문서" />
       <Layout>
         <div className={s.container_outer}>
-          <div className={s.Wrapper}>{form &&  <OrdersheetSubscribeItemList
-            orderType={'subscribe'}
-            info={info}
-            form={form}
-            setForm={setForm}
-            isLoading={isLoading}
-            event={{ onActiveModal: onActivleModalHandler }}
-          />}
+          <div className={s.Wrapper}>
+            {form && (
+              <OrdersheetSubscribeItemList
+                orderType={'subscribe'}
+                info={info}
+                form={form}
+                setForm={setForm}
+                isLoading={isLoading}
+                event={{ onActiveModal: onActivleModalHandler }}
+              />
+            )}
             <OrdersheetMemberInfo info={info} />
-            {isRendered && <OrdersheetDeliveryForm
-              orderType={'subscribe'}
-              info={info}
-              form={form}
-              setForm={setForm}
-              formErrors={formErrors}
-              setFormErrors={setFormErrors}
-            />}
+            {isRendered && (
+              <OrdersheetDeliveryForm
+                orderType={'subscribe'}
+                info={info}
+                form={form}
+                setForm={setForm}
+                formErrors={formErrors}
+                setFormErrors={setFormErrors}
+              />
+            )}
             <OrdersheetReward
               orderType={'subscribe'}
               id={'discountReward'}
@@ -248,7 +251,15 @@ export default function SubscribeOrderSheetPage({subscribeId}) {
             />
             <section className={s.final_btn}>
               <p>위 주문 내용을 확인 하였으며, 회원 본인은 결제에 동의합니다.</p>
-              <Payment isLoading={isLoading} info={info} form={form} setFormErrors={setFormErrors}/> {/* 결제버튼 */}
+              <Payment
+                isLoading={isLoading}
+                setIsLoading={setIsLoading}
+                info={info}
+                form={form}
+                setFormErrors={setFormErrors}
+                orderType={'subscribe'}
+              />
+              {/* 결제버튼 */}
             </section>
           </div>
         </div>
@@ -271,24 +282,18 @@ export default function SubscribeOrderSheetPage({subscribeId}) {
   );
 }
 
-
-
 export const calcSubscribePlanOriginPrice = (planName, paymentPrice) => {
   const discountPercent = subscribePlanType[planName].discountPercent; // 할인율 / 어드민설정이 아닌 고정값
-  let calcPrice =  paymentPrice * (100 / (100 - discountPercent))
+  let calcPrice = paymentPrice * (100 / (100 - discountPercent));
   const cutOffUnit = 10;
-  const originPrice = Math.floor(calcPrice/cutOffUnit) * cutOffUnit
-  
+  const originPrice = Math.floor(calcPrice / cutOffUnit) * cutOffUnit;
+
   return {
-    originPrice
-  }
+    originPrice,
+  };
 };
-
-
 
 export async function getServerSideProps({ query }) {
   const { subscribeId } = query;
   return { props: { subscribeId: subscribeId || null } };
 }
-
-

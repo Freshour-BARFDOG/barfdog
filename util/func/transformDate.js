@@ -3,10 +3,13 @@
 
 const transformDate = (d, option) => {
   if(!d?.indexOf('-'))return;
-  const yy = d.split("-")[0];
-  const mm = d.split("-")[1];
-  const dd = d.split("-")[2].split("T")[0];
-
+  // const yy = d.split("-")[0];
+  const yy = d.slice(0,4);
+  // const mm = d.split("-")[1];
+  const mm = d.slice(5,7);
+  // const dd = d.split("-")[2].split("T")[0];
+  const dd = d.slice(8,10);
+  
   let result = `${yy}-${mm}-${dd}`;
   
   if(option === '년월일'){

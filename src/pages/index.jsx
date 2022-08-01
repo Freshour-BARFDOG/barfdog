@@ -24,29 +24,20 @@ import {getDataSSR} from "@src/pages/api/reqData";
 import Link from "next/link";
 
 export default function Home({ data }) {
-  // console.log(data);
   
-  const DATA = {
-    topBannerDto: data.topBannerDto,
-    mainBannerDtoList: data.mainBannerDtoList,
-    recipeDtoList: data.recipeDtoList,
-    queryBestReviewsDtoList: data.queryBestReviewsDtoList,
-  
-  }
+  console.log(data)
+  // const DATA = {
+  //   topBannerDto: data.topBannerDto,
+  //   mainBannerDtoList: data.mainBannerDtoList,
+  //   recipeDtoList: data.recipeDtoList,
+  //   queryBestReviewsDtoList: data.queryBestReviewsDtoList,
+  // }
+  //
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     window.innerWidth <= 600 ? setIsMobile(true) : setIsMobile(false);
   }, [isMobile]);
-
-//정기구독 모달
-  // const mcs 삭제 후 접속가능 220729
-  //const mcx = useModalContext();
-
-  const onShowModal = () => {
-    mcx.subscribe.onShow();
-    mcx.event.setScrollY();
-  };
 
   return (
     <>
@@ -56,7 +47,7 @@ export default function Home({ data }) {
         {/* <Wrapper bgColor="#fbf7f6" fullWidth={true}> */}
         <Wrapper fullWidth={true} rowStyle={{ padding: 0 }}>
           {/* 스와이프주석 */}
-          <Swiper_main data={DATA.mainBannerDtoList} isMobile={isMobile}/>
+          <Swiper_main data={data?.mainBannerDtoList} isMobile={isMobile}/>
         </Wrapper>
 
         {/* 섹션1 레시피 4가지 소개*/}
@@ -66,7 +57,7 @@ export default function Home({ data }) {
               <h2 className={Styles.recipe_title}>
                 &quot;진짜 생식&#34; <br /> 바프독의 4가지 레시피
               </h2>
-              <Swiper_recipe data={DATA.recipeDtoList} isMobile={isMobile}/>
+              <Swiper_recipe data={data?.recipeDtoList} isMobile={isMobile}/>
             </div>
           </section>
         </Wrapper>
@@ -323,7 +314,7 @@ export default function Home({ data }) {
                 수많은 후기가 증명하는 <br /> BARFDOG
               </h2>
               <div className={Styles.cont_body}>
-                <Swiper_review data={DATA.queryBestReviewsDtoList}/>
+                <Swiper_review data={data?.queryBestReviewsDtoList}/>
                 <div className={Styles.redbox}>
                   <div className={Styles.red}></div>
                 </div>
@@ -568,12 +559,43 @@ const DUMMY_DATA = {
 
 
 export async function getServerSideProps({ req }) {
-  //
-  // // const url = '/api/home';
-  // // const res = await getDataSSR( req, url );
-  // // console.log('res" ', res);
-  // const data = res.data || null
-  //
+  
+  let DATA = null;
+  const url = '/api/home';
+  const res = await getDataSSR( req, url );
+  // console.log(res)
+  const data = res?.data || null
+  if(data){
+    DATA = {
+      topBannerDtoList: data.topBannerDto,
+      mainBannerDtoList: data.mainBannerDtoList?.length > 0 && data.mainBannerDtoList.map(list=>({
+        id: list.id,
+        leakedOrder: list.leakedOrder,
+        name: list.name,
+        pcFilename: list.pcFilename,
+        pcImageUrl: list.pcImageUrl,
+        pcLinkUrl: list.pcLinkUrl,
+        mobileFilename: list.mobileFilename,
+        mobileImageUrl: list.mobileImageUrl,
+        mobileLinkUrl: list.mobileLinkUrl,
+      })),
+      recipeDtoList: data.recipeDtoList?.length > 0 && data.recipeDtoList.map(list=>({
+        id: list.id,
+        name: list.id,
+        description: list.description,
+        uiNameKorean: list.uiNameKorean,
+        uiNameEnglish: list.uiNameEnglish,
+        filename1: list.filename1,
+        imageUrl1: list.imageUrl1,
+        filename2: list.filename2,
+        imageUrl2: list.imageUrl2,
+      })),
+      queryBestReviewsDtoList: data.queryBestReviewsDtoList || [],
+    }
+  }
+  
+  // console.log('MAIN DATA : " ', data);
 
-  return { props: { data: DUMMY_DATA } };
+
+  return { props: { data:DATA } };
 }

@@ -204,6 +204,8 @@ section.final_btn {
         border: rem(1) solid var(--color-line-03);
         border-radius: rem(2);
         cursor: pointer;
+        font-size: rem(15);
+        font-weight: 500;
         &.applied{
           transition: border .2s var(--transition-cubic);
           transition-padding: border, color,;

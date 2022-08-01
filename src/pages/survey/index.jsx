@@ -78,7 +78,7 @@ const initialFormValues = {
 
 export default function Survey() {
   
-  const loadingDuration = 1800; // ms
+  const loadingDuration = 1200; // ms
   const lastStep = 3;
   const router = useRouter();
   const mct = useModalContext();
@@ -307,7 +307,7 @@ export default function Survey() {
     mct.alertHide();
     setModalMessage('');
   };
-console.log(submitState)
+// console.log(submitState)
   return (
     <>
       {(isLoading.submit || isLoading.nextPage) && submitState !== true && <FullScreenRunningDog opacity={1} />}

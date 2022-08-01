@@ -9,50 +9,96 @@ import RatingStars from '/src/components/atoms/RatingStars';
 import Spinner from '../../../components/atoms/Spinner';
 import { validate } from '/util/func/validation/validation_review';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
-import { postObjData } from '/src/pages/api/reqData';
+import { getData, postObjData } from '/src/pages/api/reqData';
 import { useRouter } from 'next/router';
-import { transformToday } from '/util/func/transformDate';
+import transformDate, { transformToday } from '/util/func/transformDate';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import { useModalContext } from '/store/modal-context';
 import FileInput from '/src/components/admin/form/FileInput';
-import {global_reviewType} from "../../../../store/TYPE/reviewType";
+import { global_reviewType } from '/store/TYPE/reviewType';
+import { useSelector } from 'react-redux';
 
-
-// ***** TSET // 임시데이터  // 결제 이후에 손봐야함
-/*
-0: {id: 13, name: '스타트'}
-1: {id: 14, name: '터키비프'}
-2: {id: 15, name: '덕램'}
-3: {id: 16, name: '램비프'}
-* */
-
+const DUMMY_DATA = {
+  data: {
+    reviewDto: {
+      id: 371,
+      title: '상품1',
+      name: '김회원',
+      thumbnailUrl: 'http://localhost:8080/display/items?filename=filename1.jpg',
+      writtenDate: '2022-07-22',
+      star: 0,
+      contents: '열글자 이상의 내용 작성',
+    },
+    reviewImageDtoList: [
+      {
+        id: 4331,
+        filename: 'filename1.jpg',
+        url: 'http://localhost:8080/display/reviews?filename=filename1.jpg',
+      },
+      {
+        id: 4332,
+        filename: 'filename2.jpg',
+        url: 'http://localhost:8080/display/reviews?filename=filename2.jpg',
+      },
+      {
+        id: 4333,
+        filename: 'filename3.jpg',
+        url: 'http://localhost:8080/display/reviews?filename=filename3.jpg',
+      },
+    ],
+    _links: {
+      self: {
+        href: 'http://localhost:8080/api/reviews/371',
+      },
+      update_review: {
+        href: 'http://localhost:8080/api/reviews/371',
+      },
+      profile: {
+        href: '/docs/index.html#resources-query-review',
+      },
+    },
+  },
+};
 
 const initialFormValues = {
-  // type: '', // str
-  type: global_reviewType.ITEM, // ! TEST TEST TEST TEST TEST TEST TEST TEST
-  // id: null, // num // 정기 구독 상품 또는 일반 상품의 id
-  id: 13, // ! TEST TEST TEST TEST TEST TEST TEST TEST
-  targetId: 13, // '리뷰 대상  id'
-  writtenDate: transformToday(), // str (yyyy-mm-dd)
+  reviewType: null, // 리뷰타입
+  id: null, // 주문한 상품 id or 구독 id [orderItemId or subscribeId]
+  targetId: null, // 리뷰 대상 id [itemId or recipeId]
   star: 5, // num
   contents: '', // str
   reviewImageIdList: [], // array : 리뷰 이미지 id 리스트
+  // writtenDate: transformToday(), // str (yyyy-mm-dd)
 };
 
-function CreateReviewPage() {
-  const router = useRouter();
+export default function CreateReviewPage() {
   const postFormValuesApiUrl = '/api/reviews';
   const postThumbFileApiUrl = '/api/reviews/upload';
   const mct = useModalContext();
   const maxContentsLength = 1000;
 
+  const router = useRouter();
+  const userState = useSelector((s) => s.userState);
+
   const [modalMessage, setModalMessage] = useState('');
   const [isLoading, setIsLoading] = useState({});
-
-  const [formValues, setFormValues] = useState(initialFormValues);
+  const [form, setForm] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  console.log(form);
+  useEffect(() => {
+    const reviewInfo = userState.reviewInfo;
+    const { reviewType, id, targetId, title, orderedDate, itemThumbnailUrl } = reviewInfo;
+    setForm((prevState) => ({
+      ...prevState,
+      reviewType,
+      id,
+      targetId,
+      itemThumbnailUrl,
+      title,
+      orderedDate,
+    }));
+  }, [userState]);
 
   useEffect(() => {
     const isPassed = valid_hasFormErrors(formErrors);
@@ -66,7 +112,7 @@ function CreateReviewPage() {
     const input = e.currentTarget;
     const { id, value } = input;
 
-    setFormValues((prevState) => ({
+    setForm((prevState) => ({
       ...prevState,
       [id]: value,
     }));
@@ -78,26 +124,27 @@ function CreateReviewPage() {
       console.error('이미 제출된 양식입니다.');
       return onGlobalModalCallback();
     }
-    
-    const convertedFormValues = {
-      ...formValues,
-      id: Number(formValues.id),
-      reviewImageIdList: formValues.reviewImageIdList.map(list=>list.id)
+
+    const body = {
+      reviewType: form.reviewType,
+      id: Number(form.id),
+      targetId: form.targetId,
+      star: form.star,
+      contents: form.contents,
+      reviewImageIdList: form.reviewImageIdList.map((list) => list.id),
     };
-    console.log(formValues);
-    console.log(convertedFormValues);
-    const errObj = validate(convertedFormValues, { contents: maxContentsLength });
+    // console.log(body);
+    const errObj = validate(body, { contents: maxContentsLength });
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
     if (!isPassed) return;
-
 
     try {
       setIsLoading((prevState) => ({
         ...prevState,
         submit: true,
       }));
-      const res = await postObjData(postFormValuesApiUrl, convertedFormValues);
+      const res = await postObjData(postFormValuesApiUrl, body);
       console.log(res);
       if (res.isDone) {
         onShowModalHandler('리뷰가 성공적으로 등록되었습니다.');
@@ -114,7 +161,7 @@ function CreateReviewPage() {
       submit: false,
     }));
   };
-  
+
   const returnToPrevPage = () => {
     if (confirm('이전 페이지로 돌아가시겠습니까?')) {
       router.back();
@@ -141,29 +188,33 @@ function CreateReviewPage() {
         <Wrapper>
           <MypageWrapper>
             <section className={s.title_section}>
-              <h1 className={s.title}>후기 작성</h1>
+              <h1 className={s.title}>
+                후기 작성
+                {isLoading.fetching && <Spinner />}
+              </h1>
             </section>
             <section className={s.content_title}>
               <div className={s.title_flex_box}>
                 <div className={s.left_box}>
                   <div className={`${s.image} img-wrap`}>
-                    <Image
-                      priority
-                      src={require('public/img/mypage/review_create.png')}
+                    {form.itemThumbnailUrl && <Image
+                      src={form.itemThumbnailUrl}
                       objectFit="cover"
                       layout="fill"
                       alt="카드 이미지"
-                    />
+                    />}
+                    
+                  </div>
+                </div>
+                <div className={s.mid_box}>
+                  {form.title}
+                  <div className={s.mid_text}>
+                    {global_reviewType.KOR[form.reviewType]}
                   </div>
                 </div>
 
-                <div className={s.mid_box}>
-                  바프레드
-                  <p>정기구독 &middot; 3회차</p>
-                </div>
-
                 <div className={s.right_box}>
-                  <p>2022.02.15 주문</p>
+                  <p>{transformDate(form.orderedDate)} 주문</p>
                 </div>
               </div>
             </section>
@@ -171,17 +222,17 @@ function CreateReviewPage() {
               <p className={s.text}>상품은 어떠셨나요?</p>
               <RatingStars
                 id={'star'}
-                count={formValues.star}
+                count={form.star}
                 margin={12}
                 size={25}
-                setFormValues={setFormValues}
+                setFormValues={setForm}
               />
             </section>
             <section className={s.body}>
               <div className={s.flex}>
                 <div className={s.left_side}>
                   <label htmlFor={'contents'} className={`${s.left_title}`}>
-                  {/* <label htmlFor={'contents'} className={`${s.left_title} required`}> required삭제, required:after 발생, 상세리뷰 옆에 붉은 점 찍힘  */}
+                    {/* <label htmlFor={'contents'} className={`${s.left_title} required`}> required삭제, required:after 발생, 상세리뷰 옆에 붉은 점 찍힘  */}
                     상세리뷰
                   </label>
                 </div>
@@ -191,10 +242,10 @@ function CreateReviewPage() {
                       id={'contents'}
                       placeholder="50자 이상 작성시 300원이 적립됩니다.&#13;상품에 대한 견주님의 의견을 남겨주시면 큰 힘이 됩니다."
                       onChange={onInputChangeHandler}
-                      value={formValues.contents}
+                      value={form.contents}
                     />
                     <span className={s['textLength-indicator']}>
-                      {formValues.contents.length}/{maxContentsLength}
+                      {form.contents.length}/{maxContentsLength}
                     </span>
                   </div>
                   {formErrors.contents && <ErrorMessage>{formErrors.contents}</ErrorMessage>}
@@ -215,7 +266,7 @@ function CreateReviewPage() {
                   <FileInput
                     id={'reviewImageIdList'}
                     apiUrl={postThumbFileApiUrl}
-                    setFormValues={setFormValues}
+                    setFormValues={setForm}
                     formErrors={formErrors}
                     setFormErrors={setFormErrors}
                     originImageDatas={[]}
@@ -245,4 +296,6 @@ function CreateReviewPage() {
   );
 }
 
-export default CreateReviewPage;
+// export async function getServerSideProps({ query }) {
+//   return { props: { query } };
+// }

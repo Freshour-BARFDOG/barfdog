@@ -98,10 +98,10 @@ const ItemList = ({ data, onUploadImageModalHandler, onShowModalHandler }) => {
   const mct = useModalContext();
   const [isLoading, setIsLoading] = useState({}); // obj
   const dogId = data.id;
+  const subscribeId = null; //  ! ! ! ! ! !  값 확인하기
   const dogAge = calcDogAge(data.birth);
   const gender =
     data.gender === dogGenderType.MALE ? dogGenderType.KOR.MALE : dogGenderType.KOR.FEMALE;
-
   const [activeConfirmModal, setActiveConfirmModal] = useState( false );
   
 

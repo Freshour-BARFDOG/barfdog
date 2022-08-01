@@ -7,7 +7,6 @@ import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Wrapper from '/src/components/common/Wrapper';
-import useUserData from '/util/hook/useUserData';
 import useDeviceState from '/util/hook/useDeviceState';
 
 import { MemberMemu, Non_MemberMenu } from './memberStateMenu';
@@ -26,16 +25,19 @@ import MobileLogo_2x from '/public/img/mobile_logo@2x.png';
 import Icon_Home from '/public/img/icon/icon-home.svg';
 import Icon_mypage from '/public/img/icon/mypage.svg';
 import { authAction } from '/store/auth-slice';
+import {userType} from "/store/TYPE/userAuthType";
 
 const Modal_subscribeWidhSSR = dynamic(() => import('/src/components/modal/Modal_subscribe'));
 
 export default function Header () {
+  const auth = useSelector(state=>state.auth);
+  const userData = auth.userInfo;
+  
   const router = useRouter();
   const dispatch = useDispatch();
   const curPath = router.asPath;
-  const userData = useUserData();
-  const isLogin = !!userData?.email;
   const isMobile = useDeviceState().isMobile;
+  
 
   const pageInfo = useSelector((state) => state.page);
   const pageTitle = pageInfo.pageTitle;
@@ -105,12 +107,12 @@ export default function Header () {
             <div className={s.headerContainer}>
               <section id="account" className={`${s.account_area} pc`}>
                 <ul>
-                  {isLogin ? <MemberMemu data={userData} /> : <Non_MemberMenu />}
-                  {isLogin && userData?.name !== '관리자' && <ServiceCenter />}
-                  {isLogin && (
+                  {userData ? <MemberMemu data={userData} /> : <Non_MemberMenu />}
+                  {userData?.userType !== userType.ADMIN && <ServiceCenter />}
+                  {userData && (
                     <button
                       type={'button'}
-                      onClick={userData?.name === '관리자' ? onAdminLogout : onMemberLogout}
+                      onClick={userData.userType === userType.ADMIN ? onAdminLogout : onMemberLogout}
                       data-desc={'admin-logout'}
                     >
                       로그아웃

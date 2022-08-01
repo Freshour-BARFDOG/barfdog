@@ -35,7 +35,7 @@ import { cartAction } from '/store/cart-slice';
 //   ]
 // };
 
-export default function SingleItemPage(props) {
+export default function SingleItemDetailPage(props) {
   // console.log(props)
   const data = props.data;
   const dispatch = useDispatch();

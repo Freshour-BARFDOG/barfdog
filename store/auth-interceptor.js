@@ -8,41 +8,28 @@ import { userType } from '/store/TYPE/userAuthType';
 import { cartAction } from './cart-slice';
 
 export default function AuthInterceptor({ CustomProps, children }) {
+
   const router = useRouter();
   const dispatch = useDispatch();
-  const {data, token, EXPIRED_TOKEN, USERTYPE} = CustomProps;
-  const [currentUSERTYPE, setCurrentUSERTYPE] = useState(USERTYPE); // ! IMPORTANT // INITIALIZE BY _app.jsx
-
-  console.log('auth-interceptor.js\n','USER_TYPE: ',currentUSERTYPE, '\nEXPIRED_TOKEN:',EXPIRED_TOKEN, '\ndata: ', data)
+  const {data, token, EXPIRED_TOKEN, USERTYPE} = CustomProps; // DATA FROM SSR
+  const [DATA, setDATA] = useState( {data, token, EXPIRED_TOKEN, USERTYPE} ); // DATA FROM CLIENT SIDE // 새로고침 이전까지 유지되는 데이터
+  // console.log('SSR >> auth-interceptor.js\n','USER_TYPE: ',data, '\nEXPIRED_TOKEN: ',!token, '\nDATA: ', data)
+  // console.log('CRS >> auth-interceptor.js\n','USER_TYPE: ',DATA.USERTYPE, '\nEXPIRED_TOKEN: ',!DATA.EXPIRED_TOKEN, '\nDATA: ', DATA.data)
+  //
+  // STEP 1. CHECK USER TYPE UPDATE & stored DATA in REDUX (in NextJS SERVER)
+  token && dispatch(authAction.userRestoreAuthState({data: DATA.data}));
+  
   
   useEffect(() => {
-    // 장바구니 정보 REDUX 저장 > 헤더 장바구니 개수 표기
-    if (data?.cart) {
-      dispatch(cartAction.setInfo({ data: data.cart }));
-    }
-  }, [data]);
-  
-  useEffect(() => {
-    // STEP 1. CHECK USER TYPE (IN FE SERVER)
-    if (USERTYPE !== null) {
-      // IMPORTANT
-      dispatch(authAction.setUserType({ userType: USERTYPE }));
-      token && dispatch(authAction.userRestoreAuthState({USERTYPE}));
-      setCurrentUSERTYPE(USERTYPE);
-    }
-
-
     // STEP 2. 만료된 토큰 삭제
     // CF. ADMIN과 USER가 동일한 쿠키를 사용하지만, (Server에서 발급하는 JWT에서 Role을 구별하는 방식)
     // CF.  FONTEND에서 해당 사항을 인지할 수 있도록, 명시성을 위해 중복하여 코드를 작성함
-    if (USERTYPE !== userType.ADMIN &&EXPIRED_TOKEN.ADMIN === true) {
-      setCookie(cookieType.LOGIN_COOKIE, null, 'date', 0, { path: '/' });
+    if (DATA.USERTYPE !== userType.ADMIN && EXPIRED_TOKEN.ADMIN === true) {
+      setCookie(cookieType.LOGIN_COOKIE, null, cookieType.AUTO_LOGIN_COOKIE.UNIT, 0, { path: '/' });
       alert('어드민 인증 시간이 만료되었습니다. 다시 로그인해주세요.');
       dispatch(authAction.adminLogout());
-    }
-
-    if (USERTYPE !== userType.MEMBER && EXPIRED_TOKEN.MEMBER === true) {
-      setCookie(cookieType.LOGIN_COOKIE, null, 'date', 0, { path: '/' });
+    } else if (DATA.USERTYPE !== userType.MEMBER && EXPIRED_TOKEN.MEMBER === true) {
+      setCookie(cookieType.LOGIN_COOKIE, null, cookieType.AUTO_LOGIN_COOKIE.UNIT, 0, { path: '/' });
       alert('사용자 인증 시간이 만료되었습니다. 다시 로그인해주세요.');
       dispatch(authAction.logout());
     }
@@ -82,20 +69,26 @@ export default function AuthInterceptor({ CustomProps, children }) {
     if (!MEMBER_PATH && !ADMIN_PATH) return;
 
     const REDIR_PATH = ADMIN_PATH ? '/bf-admin/login' : '/account/login';
-    if (MEMBER_PATH && currentUSERTYPE === userType.NON_MEMBER) {
+    if (MEMBER_PATH && DATA.USERTYPE === userType.NON_MEMBER) {
       alert('회원가입이 필요한 페이지입니다.');
       router.push(REDIR_PATH);
-    } else if (ADMIN_PATH && currentUSERTYPE !== userType.ADMIN) {
-      alert('일반 사용자에게 접근권한이 없는 페이지입니다.');
+    } else if (ADMIN_PATH && DATA.USERTYPE !== userType.ADMIN) {
+      alert('일반 사용자에게 접근 권한이 없는 페이지입니다.');
       router.push(REDIR_PATH);
     }
     // console.log('MEMBER_PATH', MEMBER_PATH)
     // console.log('ADMIN_PATH', ADMIN_PATH)
-  }, [USERTYPE, EXPIRED_TOKEN, router]);
-
-
-
-
+  }, [router]);
+  
+  
+  useEffect(() => {
+    // 장바구니 정보 REDUX 저장 > 헤더 장바구니 개수 표기
+    if (data?.cart) {
+      dispatch(cartAction.setInfo({ data: data.cart }));
+    }
+  }, [data]);
+  
+  
   return <>{children}</>;
 }
 

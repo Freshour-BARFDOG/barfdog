@@ -24,6 +24,7 @@ export const setCookie = function (name, value, dateUnit, expNumber, option={pat
 };
 
 
+
 export const getCookie = function (name) {
   const value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
   return value ? value[2] : null;

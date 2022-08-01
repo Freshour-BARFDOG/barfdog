@@ -190,13 +190,27 @@ $popupMainHeaderHeight:rem(66);
     font-weight: 600;
     text-decoration-line: underline;
   }
+}
 
+.input-phoneNumber-wrap{
+  display: grid;
+  align-items: center;
+  justify-content: space-between;
+  grid-template-columns: rem(80) 1fr;
+}
+
+.user-entered-input{
+  width: rem(80);
+  margin: 0 rem(10);
+  &::placeholder{font-size:rem(14);}
+  &.phoneNumber{
+    width: rem(200);
+  }
 }
 
 
-//
-//
-//
+
+
 //.title_grid_box {
 //  display: grid;
 //  grid-template-columns: rem(260) rem(360);

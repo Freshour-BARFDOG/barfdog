@@ -29,7 +29,7 @@ function Banner_event({Text, isVisible, bgColor, color, link_pc, link_mobile}) {
   const innerText = Text || ( // 어드민에서 입력한 HTML태그를 받는다.
     <p>
       <span>친구초대할 때마다 </span>
-      <b>5천원 무한적립!</b>
+      <b>3천 원 무한적립!</b>
     </p>
   ); // 태그로 받는다.
 
