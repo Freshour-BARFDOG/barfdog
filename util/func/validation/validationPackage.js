@@ -476,6 +476,22 @@ export const valid_date = (d, type='future') => {
 }
 
 
+export const valid_minLength = (val, minLength)=>{
+  let error = '';
+  if(!minLength || typeof minLength !== 'number') {
+    new Error('Required minLength of Number Type');
+  }
+  
+  
+  if(val.length < minLength){
+    error = `최소 ${minLength} 글자 이상 작성해주세요.`;
+  }
+  
+  return error;
+}
+
+
+
 export const valid_maxLength = (val, maxLength)=>{
   let error = '';
   if(!maxLength || typeof maxLength !== 'number') {

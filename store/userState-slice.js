@@ -19,7 +19,7 @@ const userStateSlice = createSlice({
     unfold(state, action) {
       state.foldMenu = false;
     },
-    createReview (state, action ){
+    setReviewInfo (state, action ){
       console.log(action)
       state.reviewInfo = action.payload.data;
       

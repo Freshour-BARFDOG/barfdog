@@ -55,10 +55,12 @@ export default function ReviewPage() {
   const [activeDeleteConfirmModal, setActiveDeleteConfirmModal] = useState(false);
   const [selectedReivewId, setSelectedReivewId] = useState(null); //
 
+  // console.log(writableReviewList)
+  // console.log(reviewList)
   const writableReviewListPageInterCeptor = (res) => {
     // SERVER pagination query가 변경되었을 경우 사용하는 function;
     res = DUMMY_RESPONSE_DATA_writableReview;
-    console.log(res);
+    // console.log(res);
     const pageData = res.data.page;
     let newPageInfo = {
       totalPages: pageData.totalPages,
@@ -73,8 +75,8 @@ export default function ReviewPage() {
 
   const reviewListPageInterCeptor = (res) => {
     // SERVER pagination query가 변경되었을 경우 사용하는 function;
-    // res = DUMMY_RESPONSE_DATA_reviewList;
-    console.log(res);
+    // res = DUMMY_RESPONSE_DATA_reviewList; // ! TEST
+    // console.log(res);
     const pageData = res.data.page;
     let newPageInfo = {
       totalPages: pageData.totalPages,
@@ -86,25 +88,39 @@ export default function ReviewPage() {
     };
     return newPageInfo;
   };
+  
 
-  const createReviewHandler = (e) => {
+  const createReviewHandler = (e, type = 'create') => { // - REDUX 사용 (router.push())
     const button = e.currentTarget;
     const reviewId = Number(button.dataset.reviewId);
-    console.log(reviewId);
-    const info = writableReviewList.filter((item) => item.id === reviewId)[0];
-    console.log(info);
-    const data = {
+    const targetReviewList = type === 'create' ? writableReviewList : reviewList ;
+    const info = targetReviewList.filter((item) => item.id === reviewId)[0];
+    const data = type === 'create' ? {
+      itemThumbnailUrl: info.imageUrl, // ! 상품 image Url (** update와 key가 다르므로 주의)
       reviewType: info.reviewType, // 리뷰 타입 (단품 / 구독상품)
+      id: info.id, // 주문한 상품의 id 또는 구독 id입
+      targetId: info.targetId,// 리뷰대상 (리뷰 대상 id [itemId or recipeId] )
+      title: info.title, // 상품 타이틀
+      orderedDate : info.orderedDate, // 주문일자
+    } : {
+      // review update > (좌측 상단 item info list) + review ID
+      itemThumbnailUrl: info.thumbnailUrl, // ! 상품 image Url (** create와 key가 다르므로 주의)
+      reviewType: info.reviewType, ///////////// ! server data 추가 필요
+      title: info.title, // 상품 타이틀
       id: info.id, // 주문한 상품의 id 또는 구독 id
-      targetId: info.targetId,// 리뷰대상 (단일상품 또는 레시피
-      imageUrl: info.imageUrl,
-      orderedDate : info.orderedDate,
-      title: info.title,
     };
-    
-    dispatch(userStateAction.createReview({ data }));
-    router.push('/mypage/review/create');
+    dispatch(userStateAction.setReviewInfo({ data })); 
+    router.push(`/mypage/review/${type}`);
   };
+  
+  const updateReviewHandler = (e)=>{
+    const type = 'update'
+    createReviewHandler(e, type)
+    // const reviewId = Number(button.dataset.reviewId);
+    // const info = reviewList.filter((item) => item.id === reviewId)[0];
+    // dispatch(userStateAction.setReviewInfo({ data }));
+    // router.push(`/mypage/review/create`);
+  }
 
   const onShowReviewImageModal = (e) => {
     const selectedReviewId = e.currentTarget.dataset.reviewId;
@@ -198,16 +214,6 @@ export default function ReviewPage() {
                               className={s.btn}
                               data-review-id={item.id}
                               onClick={createReviewHandler}
-                              // data-target-query={
-                              //   typeof window !== 'undefined' &&
-                              //   btoa(
-                              //     JSON.stringify({
-                              //       reviewType: item.reviewType,
-                              //       id: item.id,
-                              //       targetId: item.targetId,
-                              //     }),
-                              //   )
-                              // }
                             >
                               후기 작성하기
                             </button>
@@ -251,7 +257,7 @@ export default function ReviewPage() {
                                         src={item.thumbnailUrl}
                                         objectFit="cover"
                                         layout="fill"
-                                        alt="카드 이미지"
+                                        alt="상품 이미지"
                                       />
                                     )}
                                   </div>
@@ -301,7 +307,14 @@ export default function ReviewPage() {
                             </div>
                             <div className={s.right_box}>
                               <div className={s.btn_box}>
-                                <div className={s.red_btn}>수정</div>
+                                {/*<div className={s.red_btn}>수정</div>*/}
+                                <button
+                                  className={s.red_btn}
+                                  data-review-id={item.id}
+                                  onClick={updateReviewHandler}
+                                >
+                                  수정
+                                </button>
                               </div>
                               <div className={s.btn_box}>
                                 <button
