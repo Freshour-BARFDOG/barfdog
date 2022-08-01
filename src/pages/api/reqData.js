@@ -1,20 +1,7 @@
-// * ----------------------------------- * //
-// *  < AXIOS PARAM for Server API>
 
-// * get(url, config)
-// * post(url, data, config)
-// * put(url, data, config)
-// ! put() : data param값 필수 (수정할 값 없을 시, ''빈값 전송)
-// * delete(url, config)
-// ! delete() :  data param값 제외 (data param존재할 경우, 서버에서 token 에러발생)
-
-// * ----------------------------------- * //
-
-
-import axios from "axios";
-import axiosConfig, {axiosUserConfig} from './axios.config';
-import {cookieType} from "@store/TYPE/cookieType";
-
+import axios from 'axios';
+import axiosConfig, { axiosUserConfig } from './axios.config';
+import { cookieType } from '/store/TYPE/cookieType';
 
 /* - async / await 사용법
      아래 async await을 사용한 함수를 호출하는 함수도
@@ -22,25 +9,27 @@ import {cookieType} from "@store/TYPE/cookieType";
      ! 그렇지 않을경우 <promise>를 return값으로 받는다 (타이밍 문제로 인함)
 * */
 
-export const testTokenStateWithOldToken = async (url)=>{
-  const res = await axios
-    .get(url, {
-      headers: {
-        authorization:
-          'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLthqDtgbAg7J2066aEIiwiaWQiOjUsImV4cCI6MTY1MTg5MjU3NiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20ifQ.Wycm9ZmiiK-GwtsUkvMCHHeExDBtkveDbhKRealjmd8C4OZMp3SFqGFcFWudXMiL5Mxdj6FcTAV9OVsOYsn_Mw',
-        'Content-Type': 'application/json',
-      },
-    })
-    .then((res) => {
-      console.log('OLD TOKEN RESULT: ', res.response);
-      return res;
-    })
-    .catch((err) => {
-      console.error('OLD TOKEN RESULT: ', err);
-      return err.response;
-    });
-  return res;
-}
+//
+// export const testTokenStateWithOldToken = async (url) => {
+//   const res = await axios
+//     .get(url, {
+//       headers: {
+//         authorization:
+//           'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLthqDtgbAg7J2066aEIiwiaWQiOjUsImV4cCI6MTY1MTg5MjU3NiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20ifQ.Wycm9ZmiiK-GwtsUkvMCHHeExDBtkveDbhKRealjmd8C4OZMp3SFqGFcFWudXMiL5Mxdj6FcTAV9OVsOYsn_Mw',
+//         'Content-Type': 'application/json',
+//       },
+//     })
+//     .then((res) => {
+//       console.log('OLD TOKEN RESULT: ', res.response);
+//       return res;
+//     })
+//     .catch((err) => {
+//       console.error('OLD TOKEN RESULT: ', err);
+//       return err.response;
+//     });
+//   return res;
+// };
+
 
 
 export const getData = async (url, type) => {
@@ -60,7 +49,7 @@ export const getData = async (url, type) => {
       let error = null;
       switch (status) {
         case 200:
-          error = '';  // 유효한 토큰 : 요청을 성공적으로 처리함
+          error = ''; // 유효한 토큰 : 요청을 성공적으로 처리함
           break;
         case 201:
           error = '';
@@ -92,9 +81,6 @@ export const getData = async (url, type) => {
   return response;
 };
 
-
-
-
 export const postData = async (url, data, callback, contType) => {
   axios
     .post(url, data, axiosConfig(contType))
@@ -105,17 +91,12 @@ export const postData = async (url, data, callback, contType) => {
     })
     .catch((err) => {
       console.log(err);
-      if (callback && typeof callback === "function") callback(err);
-      alert("데이터 전송에 실패하였습니다.");
+      if (callback && typeof callback === 'function') callback(err);
+      alert('데이터 전송에 실패하였습니다.');
     });
 };
 
-
-
-
-
 export const putData = async (url, data) => {
-
   const response = axios
     .put(url, data, axiosConfig())
     .then((res) => {
@@ -130,9 +111,6 @@ export const putData = async (url, data) => {
   return response;
 };
 
-
-
-
 export const deleteData = async (url) => {
   const response = axios
     .delete(url, axiosConfig())
@@ -141,7 +119,7 @@ export const deleteData = async (url) => {
       return res;
     })
     .catch((err) => {
-      console.error(err)
+      console.error(err);
       return err.response;
     });
 
@@ -150,16 +128,13 @@ export const deleteData = async (url) => {
 
 // 비아이벤처스로 리다이렉ㅇ트된 비언ㅌ--> 다시 분리시키기
 
-
-
-
 export const postObjData = async (url, data, contType) => {
   const result = {
     isDone: false,
     error: '',
     data: null,
     status: null,
-  }
+  };
 
   const response = await axios
     .post(url, data, axiosConfig(contType))
@@ -171,13 +146,13 @@ export const postObjData = async (url, data, contType) => {
     })
     .catch((err) => {
       const error = err.response;
-      console.log('ERROR내용: ',err.response);
+      console.log('ERROR내용: ', err.response);
       if (error.data.error || error.data.errors[0].defaultMessage) {
         result.error = error.data.error || error.data.errors[0].defaultMessage;
-      } else if(error?.data.error.error){
-        result.error = '서버와 통신오류가 발생했습니다.'
+      } else if (error?.data.error.error) {
+        result.error = '서버와 통신오류가 발생했습니다.';
       } else if (error.data.reason === 'EXPIRED_TOKEN') {
-        result.error = '관리자 로그인 토큰이 만료되었습니다.'
+        result.error = '관리자 로그인 토큰이 만료되었습니다.';
       }
       result.status = err.response.status;
       return !error?.status >= 400;
@@ -185,10 +160,7 @@ export const postObjData = async (url, data, contType) => {
 
   result.isDone = response;
   return result;
-}
-
-
-
+};
 
 export const putObjData = async (url, data, contType) => {
   const result = {
@@ -196,7 +168,7 @@ export const putObjData = async (url, data, contType) => {
     error: '',
     data: null,
     status: null,
-  }
+  };
   const response = await axios
     .put(url, data, axiosConfig(contType))
     .then((res) => {
@@ -216,9 +188,7 @@ export const putObjData = async (url, data, contType) => {
 
   result.isDone = response;
   return result;
-}
-
-
+};
 
 export const deleteObjData = async (url, data, contType) => {
   const result = {
@@ -226,7 +196,7 @@ export const deleteObjData = async (url, data, contType) => {
     error: '',
     data: null,
     status: null,
-  }
+  };
   const response = await axios
     .delete(url, data, axiosConfig(contType))
     .then((res) => {
@@ -243,19 +213,15 @@ export const deleteObjData = async (url, data, contType) => {
       result.data = err.response;
       return !errStatus;
     });
-  
+
   result.isDone = response;
   return result;
-}
-
-
-
-
+};
 
 export const postFileUpload = async (url, formData) => {
-  console.log(url, formData)
+  console.log(url, formData);
   const response = await axios
-    .post(url, formData, axiosConfig("multipart/fomdata"))
+    .post(url, formData, axiosConfig('multipart/fomdata'))
     .then((res) => {
       // console.log(res);
       return res;
@@ -266,14 +232,8 @@ export const postFileUpload = async (url, formData) => {
       console.log(err.request);
     });
 
-    return response;
-}
-
-
-
-
-
-
+  return response;
+};
 
 export const postUserObjData = async (url, data, contType) => {
   const result = {
@@ -281,8 +241,8 @@ export const postUserObjData = async (url, data, contType) => {
     error: '',
     data: null,
     status: null,
-  }
-  
+  };
+
   const response = await axios
     .post(url, data, axiosUserConfig(contType))
     .then((res) => {
@@ -293,25 +253,21 @@ export const postUserObjData = async (url, data, contType) => {
     })
     .catch((err) => {
       const error = err.response;
-      console.log('ERROR내용: ',err.response);
+      console.log('ERROR내용: ', err.response);
       if (error.data.error || error.data.errors[0].defaultMessage) {
         result.error = error.data.error || error.data.errors[0].defaultMessage;
-      } else if(error?.data.error.error){
-        result.error = '서버와 통신오류가 발생했습니다.'
+      } else if (error?.data.error.error) {
+        result.error = '서버와 통신오류가 발생했습니다.';
       } else if (error.data.reason === 'EXPIRED_TOKEN') {
-        result.error = '유저 토큰이 만료되었습니다.'
+        result.error = '유저 토큰이 만료되었습니다.';
       }
       result.status = err.response.status;
       return !error?.status >= 400;
     });
-  
+
   result.isDone = response;
   return result;
-}
-
-
-
-
+};
 
 export const postSelfApiData = async (selfPath, data, contType) => {
   const result = {
@@ -319,36 +275,34 @@ export const postSelfApiData = async (selfPath, data, contType) => {
     error: '',
     data: null,
     status: null,
-  }
+  };
   const selfApiUrl = window.location.origin;
   axios.defaults.baseURL = selfApiUrl;
   const response = await axios
     .post(`${selfApiUrl}${selfPath}`, data, axiosUserConfig(contType))
     .then((res) => {
-      console.log('',res);
+      console.log('', res);
       result.data = res;
       result.status = res.status;
       return res.status === 200 || res.status === 201;
     })
     .catch((err) => {
       const error = err.response;
-      console.log('ERROR내용: ',err.response);
+      console.log('ERROR내용: ', err.response);
       if (error.data.error || error.data.errors[0].defaultMessage) {
         result.error = error.data.error || error.data.errors[0].defaultMessage;
-      } else if(error?.data.error.error){
-        result.error = '서버와 통신오류가 발생했습니다.'
+      } else if (error?.data.error.error) {
+        result.error = '서버와 통신오류가 발생했습니다.';
       } else if (error.data.reason === 'EXPIRED_TOKEN') {
-        result.error = '유저 토큰이 만료되었습니다.'
+        result.error = '유저 토큰이 만료되었습니다.';
       }
       result.status = err.response.status;
       return !error?.status >= 400;
     });
-  
+
   result.isDone = response;
   return result;
-}
-
-
+};
 
 // -------- SSR DATA FETCHING -------- //
 /* - EXAMPLE
@@ -375,35 +329,28 @@ export async function getServerSideProps({req}) {
 
 */
 
-
-
-
-
-
-export const getTokenClientSide = (req)=>{
+export const getTokenClientSide = (req) => {
   // - MEMBER & ADMIN 모두 동일한 API에서 동일한 TOKEN을 발급받는다
   // - SERVER에서 TOKEN 속에 권한에 대한 값을 설정하여 검증한다.
   let token;
   const headers = req.headers;
-  if(headers){
-  const cookie = headers.cookie;
+  if (headers) {
+    const cookie = headers.cookie;
     const tokenKey = cookieType.LOGIN_COOKIE;
     cookie.split(';').forEach((c) => {
       if (c.indexOf(tokenKey) >= 0) {
-        return token = c.split('=')[1];
+        return (token = c.split('=')[1]);
       }
     });
   }
   return token;
-}
+};
 
-
-
-export const getTokenFromServerSide = (req)=>{
+export const getTokenFromServerSide = (req) => {
   // - MEMBER & ADMIN 모두 동일한 API에서 동일한 TOKEN을 발급받는다
   // - SERVER에서 TOKEN 속에 권한에 대한 값을 설정하여 검증한다.
   let token;
-  console.log(req.headers)
+  // console.log(req.headers);
   const cookie = req.headers.cookie.split(';');
   const tokenKey = cookieType.LOGIN_COOKIE;
   if (cookie) {
@@ -415,22 +362,19 @@ export const getTokenFromServerSide = (req)=>{
     }
   }
   return token;
-}
+};
 
-
-
-
-export const getDataSSR = async (req, url, tokenFromSSR)=>{
-  let result ;
+export const getDataSSR = async (req, url, tokenFromSSR) => {
+  let result;
   const token = tokenFromSSR || getTokenFromServerSide(req);
   // console.log('token:', token)
   try {
     result = await axios
-      .get(url,{
+      .get(url, {
         headers: {
           authorization: token,
-          "content-Type": "application/json",
-        }
+          'content-Type': 'application/json',
+        },
       })
       .then((res) => {
         // console.log(res);
@@ -438,16 +382,41 @@ export const getDataSSR = async (req, url, tokenFromSSR)=>{
       })
       .catch((err) => {
         // console.log(err.response)
-        return err.response
+        return err.response;
       });
-  
   } catch (err) {
-      // console.error(err)
+    // console.error(err)
     return err.response;
   }
-  
-  
-  return result;
-  
-}
 
+  return result;
+};
+
+//
+//
+// export const axiosServerSide = async (req, method, url, data) => {
+//   let result = {
+//     isDone: null,
+//     err: null,
+//     res: null,
+//     status: null,
+//   };
+//
+//   await axios({
+//     url: url,
+//     method: method,
+//     headers: {
+//       authorization: getTokenFromServerSide(req),
+//       'content-Type': 'application/json',
+//     },
+//     data: data,
+//   })
+//     .then((res) => {
+//       result.res = res;
+//     })
+//     .catch((err) => {
+//       result.err =  err;
+//     });
+//
+//   return result;
+// };
