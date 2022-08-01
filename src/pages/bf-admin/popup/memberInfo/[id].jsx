@@ -6,9 +6,9 @@ import Modal_member_class from '/src/components/modal/Modal_member_class';
 import Modal_member_subscribe from '/src/components/modal/Modal_member_subscribe';
 import { getData, putObjData } from '/src/pages/api/reqData';
 import { FullScreenLoading } from '/src/components/atoms/FullScreenLoading';
-import { transformBirthDay } from '../../../../../util/func/transformBirthDay';
-import { transformPhoneNumber } from '../../../../../util/func/transformPhoneNumber';
-
+import { transformBirthDay } from '/util/func/transformBirthDay';
+import { transformPhoneNumber } from '/util/func/transformPhoneNumber';
+import transformDate from "../../../../../util/func/transformDate";
 function Popup_MemeberDetailPage({ id }) {
   const getReviewInfoApiUrl = `/api/admin/members/${id}`;
   const apiDataQuery = 'memberDto';
@@ -322,7 +322,7 @@ function Popup_MemeberDetailPage({ id }) {
                             <span>마지막로그인</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
-                            <span>{formValues.lastLoginDate}</span>
+                            <span>{transformDate(formValues.lastLoginDate, 'time')}</span>
                           </div>
                         </div>
                       </li>
@@ -369,8 +369,17 @@ function Popup_MemeberDetailPage({ id }) {
 
 export default Popup_MemeberDetailPage;
 
-Popup_MemeberDetailPage.getInitialProps = async ({ query }) => {
+// Popup_MemeberDetailPage.getInitialProps = async ({ query }) => {
+//   const { id } = query;
+//   return { id };
+// };
+//
+//
+
+
+export async function getServerSideProps({ query }) {
   const { id } = query;
-  return { id };
-};
+  
+  return { props: { id } };
+}
 
