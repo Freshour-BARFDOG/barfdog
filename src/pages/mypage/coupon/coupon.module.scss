@@ -155,12 +155,18 @@ section.pageline { padding: rem(40) 0 0 0}
       .left_top {
         font-size: rem(20);
       }
+
+      
+      .right_top {
+        font-size: rem(22);
+      }
     }
 
     .left_bot {
       font-size: rem(14);
     }
   }
+
 }
 
 @media (max-width: rem(600)) {
@@ -184,13 +190,5 @@ section.pageline { padding: rem(40) 0 0 0}
     } 
   }
 
-  .coupon_content_grid_box {
   
-    .grid_box {
-      .right_top {
-        font-size: rem(22);
-      }
-    }
-  }
-
 }

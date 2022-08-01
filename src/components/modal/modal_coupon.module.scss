@@ -35,7 +35,7 @@
 
     .flex_box {
       display: grid;
-      grid-template-columns: 1fr rem(80) rem(100) rem(100);
+      grid-template-columns: rem(25) 1fr rem(80) rem(100) rem(100);
       height: rem(50);
       width: 100%;
       box-sizing: border-box;
@@ -51,22 +51,31 @@
 
       @include char(l15);
       font-weight: 600;
+
+      .coupon_title {
+        grid-column: 1 /span 2;
+      }
+
       > span:nth-child(1) {
         display: flex;
         justify-content: flex-start;
-        padding-left: rem(20);
         box-sizing: border-box;
       }
 
       &.coupons {
+        height: 100%;
+        min-height: rem(50);
         border-top:0;
         border-bottom: rem(1) solid var(--color-line-03);
         .radio{
-          justify-content: flex-start;
+          justify-content: center;
           gap:rem(10);
-          padding-left:rem(5);
         }
-        .name{text-align:left;}
+        .name{
+          text-align: left;
+          justify-content: flex-start;
+          padding-left: rem(5);
+        }
         .price{
           color: var(--color-main);
         }
@@ -74,7 +83,6 @@
           display: flex;
           align-items: center;
           justify-content: center;
-          height: 100%;
           font-weight:400 !important;
           font-size:rem(14);
         }
@@ -164,53 +172,59 @@
     }
 
     .content_box {
-      .flex_box {
-        display: none;
-      }
+      .flex_box{
 
-      .flex_box2 {
-        grid:
-          'check_box name_box price'
-          'check_box date price' / rem(40) 1fr rem(100);
-        row-gap: rem(10);
-        padding: rem(10) 0;
-        margin-bottom: rem(10);
-        border: rem(1) solid var(--color-line-03);
-        border-radius: rem(4);
-        font-size: rem(15);
+        &.header {
+          display: none;
+        }
 
-        .check_box {
-          grid-row: 1 / span 2;
+        &.coupons {
+          grid:
+            'radio name count price'
+            'radio date count price' / rem(40) 1fr rem(30) rem(100);
+          border: rem(1) solid var(--color-line-03);
+          border-radius: rem(4);
+          font-size: rem(15);
+          align-items: center;
+          min-height: 100%;
+          padding: rem(5) 0;
 
-          input {
-            min-width: rem(16);
-            min-height: rem(16);
+          .radio {
+            grid-row: 1 / span 2;
+
+            input {
+              min-width: rem(16);
+              min-height: rem(16);
+            }
           }
-        }
 
-        .name_box {
-          display: flex;
-        }
+          span {
+            display: block;
+          }
+          
+          .name{
+            padding-left: 0;
+            align-items: flex-start;
+          }
 
-        span {
-          display: block;
-        }
+          .count {
+            color: #909090;
+            grid-column: 3 / span 1;
+            grid-row: 1 / span 2;
+          }
 
-        .count {
-          color: #909090;
-        }
+          .date {
+            color: #909090;
+            grid-column: 2 / span 1;
+            text-align: left;
+            padding-top: rem(5);
+          }
 
-        .date {
-          color: #909090;
-          justify-content: flex-start;
-        }
-
-        .price {
-          grid-column: 3 / span 1;
-          grid-row: 1 / span 2;
-          justify-content: flex-end;
-          margin-right: rem(12);
-          font-size: rem(14);
+          .price {
+            grid-column: 4 / span 1;
+            grid-row: 1 / span 2;
+            font-size: rem(14);
+          }
         }
       }
     }

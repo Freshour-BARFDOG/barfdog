@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Layout from "/src/components/common/Layout";
 import Wrapper from "/src/components/common/Wrapper";
 import MetaTitle from "/src/components/atoms/MetaTitle";
-import s from "src/pages/order/subscribe/index.module.scss"
+import s from "src/pages/order/subscribeShop/index.module.scss"
 import Image from 'next/image';
 import ItemLabel, { ItemRecommendlabel } from "/src/components/atoms/ItemLabel";
 import CustomInput from "/src/components/atoms/CustomInput";
@@ -47,7 +47,7 @@ const CustomInputRadio_plan = ({name, handler}) => {
               <div className={`${s.image} img-wrap`}>
                 <Image
                   priority
-                  src={require("public/img/pages/subscribe_full_plan.png")}
+                  src={require("public/img/subscribe/subscribe_full_plan.png")}
                   objectFit="cover"
                   layout="fill"
                   alt="카드 이미지"
@@ -107,7 +107,7 @@ const CustomInputRadio_plan = ({name, handler}) => {
               <div className={`${s.image} img-wrap`}>
                 <Image
                   priority
-                  src={require("public/img/pages/subscribe_full_plan.png")}
+                  src={require("public/img/subscribe/subscribe_full_plan.png")}
                   objectFit="cover"
                   layout="fill"
                   alt="카드 이미지"
@@ -175,7 +175,7 @@ const CustomInputRadio_plan = ({name, handler}) => {
               <div className={`${s.image} img-wrap`}>
                 <Image
                   priority
-                  src={require("public/img/pages/subscribe_full_plan.png")}
+                  src={require("public/img/subscribe/subscribe_full_plan.png")}
                   objectFit="cover"
                   layout="fill"
                   alt="카드 이미지"
@@ -458,7 +458,7 @@ function SelectPlanPage() {
                       <figure className={`${s.image} img-wrap`}>
                         <Image
                           priority
-                          src={require("src/pages/order/subscribe/survey_order_title_left.png")}
+                          src={require("src/pages/order/subscribeShop/survey_order_title_left.png")}
                           objectFit="cover"
                           layout="fill"
                           alt="레시피 이미지"

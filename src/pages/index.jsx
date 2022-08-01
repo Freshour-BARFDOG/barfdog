@@ -40,7 +40,8 @@ export default function Home({ data }) {
   }, [isMobile]);
 
 //정기구독 모달
-  const mcx = useModalContext();
+  // const mcs 삭제 후 접속가능 220729
+  //const mcx = useModalContext();
 
   const onShowModal = () => {
     mcx.subscribe.onShow();
