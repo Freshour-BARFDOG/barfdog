@@ -81,14 +81,14 @@ const DUMMY_NEW_MEMBER_RESPONSE = {
     resultcode: '251',
     message: 'new member',
     response: {
-      id: 'p4N4jAY5Q0qszLDW8Wx2W30K3eKkRUlHEVivAHgR0XQ', // SNS 고유 식별 ID
-      gender: 'M',
-      email: 'verin4494@naver.com',
-      mobile: '010-9903-8544',
-      mobile_e164: '+821099038544',
-      name: '조영한',
-      birthday: '05-21',
-      birthyear: '1993',
+      id: 'p4N4jAY5Q0qszLDW8Wx2W30K3eKkRUlHEVivAHgR0XQ222', // SNS 고유 식별 ID
+      gender: 'F',
+      email: 'develope07@binter.co.kr',
+      mobile: '01056781234',
+      mobile_e164: '+821056781234',
+      name: '관리자계정',
+      birthday: '12-01',
+      birthyear: '1999',
     },
   },
 };
@@ -100,13 +100,13 @@ const DUMMY_MEMBER_RESPONSE = {
     message: 'need to connect new sns',
     response: {
       id: 'p4N4jAY5Q0qszLDW8Wx2W30K3eKkRUlHEVivAHgR0XQ', // SNS 고유 식별 ID
-      gender: 'M',
-      email: 'verin4494@naver.com',
-      mobile: '010-9903-8544',
-      mobile_e164: '+821099038544',
-      name: '조영한',
-      birthday: '05-21',
-      birthyear: '1993',
+      gender: 'F',
+      email: 'develope07@binter.co.kr',
+      mobile: '01056781234',
+      mobile_e164: '+821056781234',
+      name: '관리자계정',
+      birthday: '12-01',
+      birthyear: '1999',
     },
   },
 };
