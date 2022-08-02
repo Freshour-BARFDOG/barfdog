@@ -71,6 +71,6 @@ $browser-context:16; // html font-size
 
 @media (max-width: rem(600)) {
   .custom_input_wrapper {
-    padding: rem(20) rem(10) rem(10);
+    //padding: rem(20) rem(10) rem(10); order/subscribeShop - plan 버튼 패딩
   }
 }

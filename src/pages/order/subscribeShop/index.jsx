@@ -163,6 +163,7 @@ export default function RegisterSubscribeInfoPage({ data }) {
       <Layout>
         <Wrapper>
           <SubscribeRecommendResult info={info} />
+          <SubscribePlan name={'plan'} info={info} form={form} setForm={setForm} calcPrice={calcSubscribePlanPaymentPrice}/>
           <SubscribeRecipe
             name="recipeIdList"
             info={info}
@@ -170,7 +171,6 @@ export default function RegisterSubscribeInfoPage({ data }) {
             form={form}
             setForm={setForm}
           />
-          <SubscribePlan name={'plan'} info={info} form={form} setForm={setForm} calcPrice={calcSubscribePlanPaymentPrice}/>
           <section className={s.btn_box}>
             <button className={s.prevPage} onClick={onPrevPage}>
               뒤로가기

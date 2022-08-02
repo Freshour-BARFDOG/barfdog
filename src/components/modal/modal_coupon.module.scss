@@ -128,7 +128,7 @@
     display: flex;
     justify-content: center;
     column-gap: rem(10);
-    padding-top: rem(40);
+    padding-top: rem(30);
     .cancle_btn {
       display: flex;
       justify-content: center;
@@ -181,13 +181,14 @@
         &.coupons {
           grid:
             'radio name count price'
-            'radio date count price' / rem(40) 1fr rem(30) rem(100);
+            'radio date count price' / rem(40) 1fr rem(30) minmax(rem(80), auto);
           border: rem(1) solid var(--color-line-03);
           border-radius: rem(4);
           font-size: rem(15);
           align-items: center;
-          min-height: 100%;
+          min-height: rem(65);
           padding: rem(5) 0;
+          margin-bottom: rem(8);
 
           .radio {
             grid-row: 1 / span 2;
@@ -217,13 +218,14 @@
             color: #909090;
             grid-column: 2 / span 1;
             text-align: left;
-            padding-top: rem(5);
+            padding-top: rem(10);
           }
 
           .price {
             grid-column: 4 / span 1;
             grid-row: 1 / span 2;
             font-size: rem(14);
+            padding-right: rem(5);
           }
         }
       }

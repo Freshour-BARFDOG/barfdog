@@ -445,7 +445,7 @@ export const SurveyStatistics = ({ id ,  mode = 'default' }) => {
             <div className={s.left_title}>바프독 생식기준 결과</div>
             <div className={s.b_right_grid_box}>
               <div className={s.right_text}>
-                <em>{info?.myDogName}의 하루 권장 칼로리</em>
+                <em>{info?.myDogName}의 <br /> 하루 권장 칼로리</em>
               </div>
               <div className={s.left_text}>
                 {Number(info?.foodAnalysis?.oneDayRecommendKcal).toFixed(0)}kcal

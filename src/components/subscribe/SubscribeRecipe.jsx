@@ -3,6 +3,9 @@ import s from '/src/pages/order/subscribeShop/index.module.scss';
 import { ItemRecommendlabel } from '/src/components/atoms/ItemLabel';
 import Image from 'next/image';
 import { subscribePlanType } from '/store/TYPE/subscribePlanType';
+import { Navigation } from 'swiper';
+import ArrowLeft from '/public/img/icon/swiper-arrow-large-l.svg';
+import ArrowRight from '/public/img/icon/swiper-arrow-large-r.svg';
 import 'swiper/css';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { getData } from '/src/pages/api/reqData';
@@ -15,17 +18,27 @@ import checkStringUnderConsonant from "../../../util/func/checkStringUnderConson
 
 const swiperSettings = {
   className: s.swiper_recipes,
-  slidesPerView: 4,
+  slidesPerView: 'auto',
   spaceBetween: 20,
   loop: false, // ! Important : loop사용 시, checkbox복수 선택 불가함 (loop에 사용되는 dummy slider로 인함)
   autoplay: false,
   breakpoints: {
     300: {
       slidesPerView: 1,
+      spaceBetween: 0,
     },
-    600: {
+    651: {
       //601 이상일 경우
-      slidesPerView: 4, //레이아웃 2열
+      slidesPerView: 2, //레이아웃 2열
+      spaceBetween: 20,
+    },
+    901: {
+      slidesPerView: 3,
+      spaceBetween: 20,
+    },
+    1101: {
+      slidesPerView: 4,
+      spaceBetween: 20,
     },
   },
 };

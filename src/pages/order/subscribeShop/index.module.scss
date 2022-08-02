@@ -16,6 +16,7 @@ section.regular_delivery {
     @include char(t28);
     text-align: center;
     padding-bottom: rem(50);
+    font-weight: 600;
   }
   .title_content_box {
     display: flex;
@@ -23,10 +24,15 @@ section.regular_delivery {
     .title_grid_box {
       display: grid;
       grid-template-columns: rem(260) rem(360);
+      grid:
+      "grid_left result_title"
+      "grid_left grid_right"
+      ;
       justify-content: space-between;
       column-gap: rem(40);
 
       .grid_left {
+        grid-row: 1 / span 2;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -49,13 +55,14 @@ section.regular_delivery {
         }
       }
 
+      .result_title {
+        @include char(t24);
+        line-height: 120%;
+        font-weight:300;
+        max-width: rem(340);
+      }
+
       .grid_right {
-        .result_title {
-          @include char(t24);
-          line-height: 120%;
-          padding-bottom: rem(40);
-          font-weight:300;
-        }
         .recommend_data_wrap {
           display: grid;
           grid-template-columns: 7fr 3fr;
@@ -63,6 +70,7 @@ section.regular_delivery {
           border-top: rem(2) solid var(--color-font-def);
           border-bottom: rem(2) solid var(--color-font-def);
           row-gap: rem(8);
+          column-gap: rem(20);
           padding: rem(16) 0;
 
           .title {
@@ -136,6 +144,7 @@ section.regular_delivery {
     display: flex;
     justify-content: center;
     width: 100%;
+    margin-bottom: rem(30);
     .color_box {
       width: 100%;
       max-width: rem(560);
@@ -174,7 +183,7 @@ section.regular_delivery {
 .swiper_recipes {
   max-width: rem(1100);
   width: 100%;
-  margin: rem(60) auto 0;
+  margin: rem(30) auto 0;
   .slide{
     label{padding: rem(30) rem(20) rem(20);}
   }
@@ -492,12 +501,27 @@ section.regular_delivery {
 
 
 
+@media (max-width: rem(1100)) {
+  .swiper_recipes {
+    left: rem(10);
+    width: rem(820);
+    overflow: visible !important;
+
+    .slide{
+      label{
+        width: rem(218);
+      }
+    }
+  }
+}
+
+
 @media (max-width: rem(900)) {
 
   .flex_box {
     grid-template-columns: 1fr;
-    max-width: rem(660);
-    row-gap: rem(10);
+    max-width: rem(450);
+    row-gap: rem(20);
   }
 
   .plan_box {
@@ -506,6 +530,7 @@ section.regular_delivery {
     display: grid;
     grid-template-columns: 1fr 1fr;
     position: relative;
+    height: rem(226);
 
     li:first-child{
       transform: translateY(rem(40));
@@ -544,10 +569,8 @@ section.regular_delivery {
     }
   }
 
-  .flex_box2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: rem(10);
+  .swiper_recipes {
+    width: rem(540);
 
     .row_1 {
       padding-top: rem(9);
@@ -562,6 +585,19 @@ section.regular_delivery {
   }
 
 }
+
+
+
+
+
+@media (max-width: rem(650)) {
+
+  .swiper_recipes {
+    width: rem(280);
+  }
+}
+
+
 
 
 
@@ -585,24 +621,24 @@ section.regular_delivery {
 
     .title_content_box {
       .title_grid_box {
-        .grid {
-          column-gap: 0;
-          grid:
-          "result_title"
-          "grid_left"
-          "grid_bottom"/1fr;
-          row-gap: rem(30);
+        column-gap: 0;
+        grid:
+        "result_title"
+        "grid_left"
+        "grid_right"/1fr;
+        row-gap: rem(30);
 
-          .grid_left {
-            margin: 0 auto;
-            order: 2;
-            grid-row: 2/span 1;
-          }
-          .result_title {
-            padding-bottom: 0;
-            text-align: center;
-            font-size: rem(18);
-          }
+        .grid_left {
+          margin: 0 auto;
+          order: 1;
+          grid-row: 2/span 1;
+        }
+        .result_title {
+          padding-bottom: 0;
+          text-align: center;
+          font-size: rem(18);
+        }
+        .grid_right {
           .recommend_data_wrap {
             order: 3;
             .title {
@@ -643,6 +679,8 @@ section.regular_delivery {
       font-size: rem(15);
     }
     .notice_row_3 {
+      margin-bottom: rem(20);
+
       .color_box {
         .color_box_row_1 {
           font-size: rem(16);
@@ -674,7 +712,7 @@ section.regular_delivery {
     grid-template-columns: 1fr;
     width: 100%;
     row-gap: rem(10);
-    padding: rem(10) 0 rem(90);
+    padding: rem(50) 0 rem(90);
 
     button{
       width: 100%;
@@ -683,6 +721,11 @@ section.regular_delivery {
         order: 3;
       }
     }
+  }
+
+  
+  .swiper_recipes {
+    margin: rem(10) auto 0;
   }
 
 }

@@ -29,6 +29,11 @@ section.btn_section { padding : 0 0 rem(62) 0;}
       line-height: 100%;
       color: var(--color-font-sub);
       padding-bottom: rem(12);
+
+      &:nth-child(3) {
+        padding-bottom: rem(20);
+      }
+
       span {
         color: var(--color-main);
         font-weight: 700;
@@ -119,13 +124,13 @@ section.btn_section { padding : 0 0 rem(62) 0;}
   justify-content: center;
   .box_btn {
     display: flex;
-    width: 50%;
+    width: 100%;
     justify-content: center;
     @include char(l15);
     text-align: center;
     column-gap: rem(10);
     .left_btn {
-      width: 100%;
+      width: rem(200);
       max-width: rem(200);
       padding: rem(17) 0;
       font-size: rem(16);
@@ -137,7 +142,7 @@ section.btn_section { padding : 0 0 rem(62) 0;}
       border-radius: rem(4);
     }
     .right_btn {
-      width: 100%;
+      width: rem(200);
       max-width: rem(200);
       padding: rem(17) 0;
 
@@ -203,6 +208,8 @@ section.btn_section { padding : 0 0 rem(62) 0;}
       }
       .text_row3 {
         font-size: rem(14);
+
+        em{font-size:rem(16);}
       }
     }
   }
