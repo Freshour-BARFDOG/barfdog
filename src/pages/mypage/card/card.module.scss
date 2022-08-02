@@ -33,7 +33,7 @@ section.title { padding : rem(8) 0 rem(20) }
 
 section.title { padding : rem(8) 0 rem(20) }
 section.line_box { padding-top : rem(4)}
-section.body {padding : 0 0 rem(138)}
+section.body {padding : 0 0 rem(55)}
 
 
 .title {
@@ -108,9 +108,8 @@ section.body {padding : 0 0 rem(138)}
 }
 
 .second_body {
-  > hr {
-    border : rem(1) solid var(--color-line-03);
-  }
+    border-top : rem(1) solid var(--color-line-03);
+
   .text {
     padding-top : rem(7);
     color : var(--color-font-sub);
@@ -120,9 +119,10 @@ section.body {padding : 0 0 rem(138)}
 .modal {
   width: rem(247);
   height: rem(144);
-  border: rem(1) solid var(--color-line-02);
+  border: rem(1) solid #dddddd;
   @include char(l14);
   font-weight: 600;
+  box-shadow: 0 rem(2) rem(10) rgba(0, 0, 0, 0.1);
 
   .grid_box {
     padding: rem(20);
@@ -145,6 +145,8 @@ section.body {padding : 0 0 rem(138)}
 
 
 @media (max-width: rem(900)) {
+
+  section.body {padding : 0 0 rem(18)}
   
   .body {
     .table_box {
@@ -157,11 +159,11 @@ section.body {padding : 0 0 rem(138)}
         grid-gap: rem(10);
         text-align: left;
         justify-items: flex-start;
+        border-bottom: rem(1) solid var(--color-line-03);
+        padding-bottom: rem(18);
 
-        hr{
-          margin-bottom: rem(-10);
-          width: 100%;
-          border: rem(1) solid #dedede;
+        &:last-child {
+          border-bottom: none;
         }
 
         .col_1 {

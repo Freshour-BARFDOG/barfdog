@@ -5,6 +5,7 @@ import Router from "next/router";
 
 const initialState = {
   foldMenu: false,
+  reviewInfo: {}
 };
 
 
@@ -18,6 +19,11 @@ const userStateSlice = createSlice({
     unfold(state, action) {
       state.foldMenu = false;
     },
+    setReviewInfo (state, action ){
+      console.log(action)
+      state.reviewInfo = action.payload.data;
+      
+    }
   }
 })
 

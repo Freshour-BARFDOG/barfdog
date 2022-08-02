@@ -6,7 +6,8 @@ $browser-context: 16;
 $containerSize: rem(800);
 $topLinkBannerHeight: rem(38);
 
-.modal-bestReview {
+
+.modal-bestReview, .modal-singleReivew {
   position: fixed;
   // ! z-index: 1000 // global zindex에서 관리
   left: 0;
@@ -35,6 +36,7 @@ $topLinkBannerHeight: rem(38);
   top: 50%;
   transform: translate(-50%, -50%);
   animation: show var(--ani-default) forwards;
+  border-radius: rem(4);
 }
 
 .btn_close_modal {
@@ -160,6 +162,36 @@ $topLinkBannerHeight: rem(38);
   transform: translateY(-50%)rotate(180deg);
 }
 
+
+
+/* --- MEMEBER > 리뷰 페이지 > 작성한 각 리뷰 내에 이미지 목록을 보여주는 모달 --- */
+.modal-singleReivew{
+  .body{
+    border-radius: rem(4);
+    background-color: #fff;
+    box-sizing: border-box;
+    .swiper_bestReview_outerWrap{
+      padding: rem(20) !important;
+    }
+  }
+  .swiper-button-next,
+  .swiper-button-prev{
+    &:after{
+      content:'';
+      position: absolute;
+      left:50%;
+      top:50%;
+      transform:translate(-50%,-50%);
+      width: calc(100% - #{rem(4)});
+      height: calc(100% - #{rem(4)});
+      background-color: rgba(0,0,0,0.6);
+      box-shadow: 0 0 rem(20) 0 rgba(0,0,0,0.6);
+      border-radius: 50%;
+      z-index: -1;
+
+    }
+  }
+}
 
 @media (max-width: rem(800)) {
 

@@ -101,7 +101,7 @@ const ModalCont = ({onCloseModalHandler}) => {
             <p>내 반려견에 딱 맞는 생식을 정기배송해드려요</p>
           </figcaption>
           <div className={s["btn-section"]}>
-            <Link href="/survey" passHref>
+            <Link href="/surveyGuide" passHref>
               <a className="flex-wrap" onClick={onCloseModalHandler}>
                 정기구독 시작하기
               </a>
@@ -122,7 +122,7 @@ const ModalCont = ({onCloseModalHandler}) => {
             <p>바프독의 다양한 상품을 만나보세요</p>
           </figcaption>
           <div className={s["btn-section"]}>
-            <Link href="/shop?category=all" passHref>
+            <Link href="/shop?itemType=ALL" passHref>
               <a className="flex-wrap" onClick={onCloseModalHandler}>
                 상품 보러 가기
               </a>

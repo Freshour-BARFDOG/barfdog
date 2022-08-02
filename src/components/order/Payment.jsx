@@ -4,10 +4,17 @@ import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
 import { postObjData, postData } from '/src/pages/api/reqData';
 import s from '/src/pages/order/ordersheet/ordersheet.module.scss';
 import Spinner from '/src/components/atoms/Spinner';
-import {calcOrdersheetPrices} from "./calcOrdersheetPrices";
-import ErrorMessage from "../atoms/ErrorMessage";
+import { calcOrdersheetPrices } from './calcOrdersheetPrices';
+import ErrorMessage from '../atoms/ErrorMessage';
 
-export function Payment({info,  form, isLoading, setIsLoading, setFormErrors }) {
+export function Payment({
+  info,
+  form,
+  isLoading,
+  setIsLoading,
+  setFormErrors,
+  orderType = 'general',
+}) {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
@@ -27,14 +34,11 @@ export function Payment({info,  form, isLoading, setIsLoading, setFormErrors }) 
   }, []);
 
   const onSubmit = async (e) => {
+    console.log(form);
     e.preventDefault();
     if (isSubmitted) return;
 
-    const valid_target = form.bundle ? {
-      paymentMethod: form.paymentMethod,
-      agreePrivacy: form.agreePrivacy,
-      paymentPrice: calcOrdersheetPrices(form).paymentPrice
-    } : {
+    const valid_target = {
       name: form.deliveryDto.name,
       phone: form.deliveryDto.phone,
       city: form.deliveryDto.city,
@@ -42,51 +46,52 @@ export function Payment({info,  form, isLoading, setIsLoading, setFormErrors }) 
       detailAddress: form.deliveryDto.detailAddress,
       paymentMethod: form.paymentMethod,
       agreePrivacy: form.agreePrivacy,
-      paymentPrice: calcOrdersheetPrices(form).paymentPrice
-    }
+      paymentPrice: calcOrdersheetPrices(form, orderType).paymentPrice,
+    };
+    console.log(form);
     // console.log(valid_target)
     // console.log(info)
-    console.log(form)
     const errObj = validate(valid_target);
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
-    // console.log(isPassed);
-    
-    if (isPassed) {
-      const body = {
-        orderItemDtoList: form.orderItemDtoList.map((item) => ({
-          itemId: item.itemId, // 상품 ID
-          amount: item.amount, // 상품 수량
-          selectOptionDtoList: item.selectOptionDtoList.map((op) => ({
-            itemOptionId: op.itemOptionId, // 옵션 ID
-            amount: op.amount, // 옵션 수량
-          })),
-          memberCouponId: item.memberCouponId || null, // 사용한 쿠폰 ID
-          discountAmount: item.discountAmount, // 쿠폰할인 총계
-          finalPrice: item.orderLinePrice - item.discountAmount, // 자체 할인 전 상품 + 옵션 가격 총 가격
-        })),
-        deliveryDto: {
-          name: form.deliveryDto.name, // 수령자 이름 ("정기배송과" 묶음 배송일 경우, null => 정기배송 수령자를 따름)
-          phone: form.deliveryDto.phone, // 수령자 전화번호 (묶음 배송일 경우, null)
-          zipcode: form.deliveryDto.zipcode, // 우편번호 (묶음 배송일 경우, null)
-          street: form.deliveryDto.street, // 도로명 주소 (묶음 배송일 경우, null)
-          detailAddress: form.deliveryDto.detailAddress, // 상세주소 (묶음 배송일 경우, null)
-          request: form.deliveryDto.request, // 배송 요청사항 (묶음 배송일 경우, null)
-        },
-        deliveryId: form.deliveryId, // 배송 ID (묶음 배송일 경우, null)
-        orderPrice: form.orderPrice, //  주문 상품 총 가격 (할인 적용 전)
-        deliveryPrice: form.deliveryPrice, // 배송비
-        discountReward: form.discountReward, // 사용할 적립금
-        discountCoupon: calcOrdersheetPrices(form).discountCoupon, // 쿠폰 적용으로 인한 할인금
-        discountTotal: calcOrdersheetPrices(form).discountTotal, // 총 할인 합계
-        paymentPrice: calcOrdersheetPrices(form).paymentPrice, // 최종 결제 금액
-        paymentMethod: form.paymentMethod, // 결제방법  [CREDIT_CARD, NAVER_PAY, KAKAO_PAY]
-        agreePrivacy: form.agreePrivacy, // 개인정보 제공 동의
-        brochure: form.brochure, // 브로슈어 수령여부
-      };
 
-      // 결제 로직을 시작한다.
-      document.body.style.cssText = `
+    const body = {
+      memberCouponId: form.memberCouponId,
+      deliveryDto: {
+        name: form.deliveryDto.name, // 수령자 이름
+        phone: form.deliveryDto.phone, // 수령자 전화번호
+        zipcode: form.deliveryDto.zipcode, // 우편번호
+        street: form.deliveryDto.street, // 도로명 주소
+        detailAddress: form.deliveryDto.detailAddress, // 상세주소
+        request: form.deliveryDto.request, // 배송 요청사항
+      },
+      orderPrice: form.orderPrice, //  주문 상품 총 가격 (할인 적용 전)
+      deliveryPrice: form.deliveryPrice, // 배송비
+      discountTotal: calcOrdersheetPrices(form, 'subscribe').discountTotal, // 총 할인 합계    ! 쿠폰할인금 적용
+      discountReward: Number(form.discountReward), // 사용할 적립금
+      discountCoupon: calcOrdersheetPrices(form, 'subscribe').discountCoupon, // 쿠폰 적용으로 인한 할인금 ! coupon할인금 적용
+      paymentPrice: calcOrdersheetPrices(form, 'subscribe').paymentPrice, // 최종 결제 금액 ! coupon할인금 적용
+      paymentMethod: form.paymentMethod, // 결제방법  [CREDIT_CARD, NAVER_PAY, KAKAO_PAY]
+      nextDeliveryDate: form.nextDeliveryDate,
+      agreePrivacy: form.agreePrivacy, // 개인정보 제공 동의
+      brochure: form.brochure, // 브로슈어 수령여부
+    };
+
+    console.log(body);
+    if (!isPassed) return alert('유효하지 않은 항목이 있습니다.');
+    // console.log(isPassed);
+    // 결제 로직을 시작한다.
+    try {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        submit: true,
+      }));
+      // send DATA to api server after successful payment
+      const res = await postObjData(`/api/orders/subscribe/${info.subscribeDto.id}`, body);
+      console.log(res);
+      if (res.isDone) {
+        alert('결제완료 -> 이후 확인버튼 클릭 -> 결제완료페이지로 Redir');
+        document.body.style.cssText = `
         overflow-y:scroll;
         height:100%;
         position:fixed;
@@ -97,9 +102,19 @@ export function Payment({info,  form, isLoading, setIsLoading, setFormErrors }) 
       //   window?.scrollTo(0, parseInt(-mcx.event.scrollY || 10) * -1);
       // };
       await startPayment(body);
-    } else {
-      alert('유효하지 않은 항목이 있습니다.');
+    }  else {
+        alert(res.error, '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.');
+      }
+    } catch (err) {
+      alert('API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.');
+      console.error('API통신 오류 : ', err);
     }
+    setIsLoading((prevState) => ({
+      ...prevState,
+      submit: false,
+    }));
+
+
   };
 
   async function startPayment(body) {
@@ -187,6 +202,5 @@ export function Payment({info,  form, isLoading, setIsLoading, setFormErrors }) 
         {isLoading.submit ? <Spinner style={{ color: '#fff' }} /> : '결제하기'}
       </button>
     </>
-    
   );
 }

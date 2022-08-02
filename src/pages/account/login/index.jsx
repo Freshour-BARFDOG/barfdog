@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import s from './login.module.scss';
 import axios from 'axios';
 import Link from 'next/link';
@@ -19,6 +19,8 @@ import { validate } from '/util/func/validation/validation_userLogin';
 import PureCheckbox from '/src/components/atoms/PureCheckbox';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
 import Spinner from '/src/components/atoms/Spinner';
+import { cookieType } from '../../../../store/TYPE/cookieType';
+import enterKey from '../../../../util/func/enterKey';
 
 const initialValues = {
   email: '',
@@ -26,21 +28,20 @@ const initialValues = {
 };
 
 export default function LoginPage() {
-  const postFormValuesApiUrl = '/api/login';
   const router = useRouter();
   const dispatch = useDispatch();
   const mct = useModalContext();
   const [modalMessage, setModalMessage] = useState('');
   const [isLoading, setIsLoading] = useState({});
-  const [activeAutoLogin, setActiveAutoLogin] = useState(false);
+  const [autoLogin, setAutoLogin] = useState(false);
   const [formValues, setFormValues] = useState(initialValues);
   const [formErrors, setFormErrors] = useState();
-
+  const [isSubmitted, setIsSubmitted] = useState( false );
   const naverRef = useRef();
   useEffect(() => {
-    const naverScript = document.createElement("script");
-    naverScript.src = "https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js";
-    naverScript.type = "text/javascript";
+    const naverScript = document.createElement('script');
+    naverScript.src = 'https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js';
+    naverScript.type = 'text/javascript';
     document.head.appendChild(naverScript);
 
     naverScript.onload = () => {
@@ -50,47 +51,55 @@ export default function LoginPage() {
         callbackHandle: true,
         isPopup: false,
         loginButton: {
-          color: "green",
+          color: 'green',
           type: 3,
           height: 0,
-        }
+        },
       });
       naverLogin.init();
       naverLogin.logout(); //네이버 로그인이 계속 유지되는 경우가 있음, 초기화시 로그아웃
-    }
+    };
   }, []);
 
   function naverLoginFunc() {
     naverRef.current.children[0].click();
-
   }
 
   function kakaoLoginFunc() {
     const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}&response_type=code`;
     router.push(KAKAO_AUTH_URL);
   }
+ 
 
   const onAutoLoginHandler = (id, checked) => {
-    setActiveAutoLogin(checked);
+    setAutoLogin(checked);
   };
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    // console.log(formValues)
+  const onEnterKeyHandler = (e) => {
+    enterKey(e, onSubmit);
+  };
+
+  const onSubmit = async () => {
+    if(isSubmitted) return console.error('이미 제출된 양식입니다.');
+    
     const errObj = validate(formValues);
     const isPassed = valid_hasFormErrors(errObj);
     setFormErrors(errObj);
-    // console.log('FORMVALUES : ', formValues);
     if (!isPassed) return;
-
     try {
       setIsLoading((prevState) => ({
         ...prevState,
         submit: true,
       }));
-      
+      const autologinValue = cookieType.AUTO_LOGIN_EXPIRED_PERIOD.VALUE; // 변경가능
+      const defValue = cookieType.LOGIN_EXPIRED_PERIOD.VALUE_FOR_RESTAPI; // 2시간 (클라이언트에서 def 값은 변경불가)
+      const body = {
+        email: formValues.email,
+        password: formValues.password,
+        tokenValidDays: autoLogin ? autologinValue : defValue,
+      };
       await axios
-        .post(postFormValuesApiUrl, formValues, {
+        .post('/api/login', body, {
           headers: {
             'content-Type': 'application/json',
           },
@@ -99,20 +108,28 @@ export default function LoginPage() {
           console.log(res);
           if (res.status === 200) {
             const token = res.headers.authorization;
-            activeAutoLogin
-              ? dispatch(authAction.autoLogin({ token }))
-              : dispatch(authAction.login({ token }));
+            const payload = {
+              expiredDate: res.data.expiresAt,
+              token,
+            };
+            if(autoLogin){
+              dispatch(authAction.autoLogin(payload))
+            } else{
+              dispatch(authAction.login(payload));
+            }
+            
           }
         })
         .catch((err) => {
-          console.error('ERROR: ', err.response);
-          const errorStatus = err.response.status;
-          let errorMessage= '';
-          if(errorStatus === 400 || errorStatus === 404){
+          if (!err) return;
+          console.error('ERROR: ', err);
+          const errorStatus = err?.response?.status;
+          let errorMessage = '';
+          if (errorStatus === 400 || errorStatus === 404) {
             // status 400 잘못된 비밀번호
             // status 404 : 계정이 존재하지 않음
-            errorMessage= '아이디 또는 비밀번호가 정확하지 않습니다. \n계정정보를 확인해주세요.';
-          } else{
+            errorMessage = '아이디 또는 비밀번호가 정확하지 않습니다. \n계정정보를 확인해주세요.';
+          } else {
             errorMessage = '서버 장애입니다. 잠시 후 다시 시도해주세요.';
           }
 
@@ -144,7 +161,7 @@ export default function LoginPage() {
                 <h2>로그인</h2>
               </header>
             </div>
-            <form action="/" onSubmit={onSubmit}>
+            <div onSubmit={onSubmit}>
               <div className={s.inputbox}>
                 <InputBox
                   name="아이디"
@@ -153,6 +170,7 @@ export default function LoginPage() {
                   placeholder={'아이디를 입력해주세요.'}
                   setFormValues={setFormValues}
                   autoComplete={'username'}
+                  onKeydown={onEnterKeyHandler}
                   errorMessage={
                     formErrors?.email && <ErrorMessage>{formErrors?.email}</ErrorMessage>
                   }
@@ -164,6 +182,7 @@ export default function LoginPage() {
                   placeholder={'비밀번호를 입력해주세요.'}
                   setFormValues={setFormValues}
                   autoComplete={'current-password'}
+                  onKeydown={onEnterKeyHandler}
                   errorMessage={
                     formErrors?.password && <ErrorMessage>{formErrors?.password}</ErrorMessage>
                   }
@@ -173,7 +192,7 @@ export default function LoginPage() {
                 <label htmlFor="autoLogin" className={s.chk__box}>
                   <PureCheckbox
                     id={'autoLogin'}
-                    value={activeAutoLogin || ''}
+                    value={autoLogin || ''}
                     onClick={onAutoLoginHandler}
                   />
                   <div className={s.autologin}>자동 로그인</div>
@@ -208,15 +227,15 @@ export default function LoginPage() {
               <h5 className={s.easylogin}>간편로그인</h5>
               <div className={s.login_sns}>
                 <button type={'button'} className={s.kakao} onClick={kakaoLoginFunc}>
-                  <Image src={Kakao} width={72} height={72} alt="카카오톡 아이콘"/>
+                  <Image src={Kakao} width={72} height={72} alt="카카오톡 아이콘" />
                 </button>
                 {/* naver가 제공해주는 로그인 버튼*/}
                 <div ref={naverRef} id="naverIdLogin"></div>
                 <button className={s.naver} type={'buttom'} onClick={naverLoginFunc}>
-                  <Image src={Naver} width="72" height="72" alt="네이버 아이콘"/>
+                  <Image src={Naver} width="72" height="72" alt="네이버 아이콘" />
                 </button>
               </div>
-            </form>
+            </div>
           </div>
         </Wrapper>
       </Layout>
@@ -225,11 +244,20 @@ export default function LoginPage() {
   );
 }
 
-const InputBox = ({ id, name, type, placeholder, setFormValues, errorMessage, autoComplete }) => {
+const InputBox = ({
+  id,
+  name,
+  type,
+  placeholder,
+  setFormValues,
+  errorMessage,
+  autoComplete,
+  onKeydown,
+}) => {
   const [value, setValue] = useState('');
 
   const onChangeHandler = (e) => {
-    const {id, value} = e.currentTarget;
+    const { id, value } = e.currentTarget;
     let filteredValue = filter_emptyValue(value);
     setValue(filteredValue);
     if (setFormValues && typeof setFormValues === 'function') {
@@ -253,6 +281,7 @@ const InputBox = ({ id, name, type, placeholder, setFormValues, errorMessage, au
           type={type || 'text'}
           placeholder={placeholder}
           autoComplete={autoComplete}
+          onKeyDown={onKeydown}
         />
         {errorMessage}
       </label>

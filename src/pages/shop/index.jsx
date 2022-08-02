@@ -211,24 +211,27 @@ export default function ShopPage() {
                           <div className={s.price_box}>
                             <span className={s.price}>
                               {transformLocalCurrency(item.salePrice || item.originalPrice)}
+                              <span className={s.won}>&nbsp;원</span>
+                              
+                              <span className={s.position_mid}>
+                                {!item.inStock && <span className={s.out_of_stock}>품절</span>}
+                              </span>
                             </span>
-                            <span className={s.won}>원</span>
                             {item.salePrice !== 0 && (
                               <>
-                                <span className={s.originPrice}>
-                                  {transformLocalCurrency(item.originalPrice)}원
-                                </span>
-                                <span className={s.discount}>
-                                  {Math.ceil(
-                                    ((1 - item.salePrice / item.originalPrice) * 100).toFixed(2),
-                                  )}
-                                  %
-                                </span>
+                                <div className={s.discount_box}>
+                                  <span className={s.originPrice}>
+                                    {transformLocalCurrency(item.originalPrice)}원
+                                  </span>
+                                  <span className={s.discount}>
+                                    {Math.ceil(
+                                      ((1 - item.salePrice / item.originalPrice) * 100).toFixed(2),
+                                    )}
+                                    %
+                                  </span>
+                                </div>
                               </>
                             )}
-                            <span className={s.position_mid}>
-                              {!item.inStock && <span className={s.out_of_stock}>품절</span>}
-                            </span>
                           </div>
                         </figcaption>
                         <div className={s.grade_box}>

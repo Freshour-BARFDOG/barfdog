@@ -52,7 +52,7 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
       @include char(b16);
       color: var(--color-font-sub);
       padding: 0  rem(30) rem(20);
-      max-height: 30px;
+      max-height: rem(30);
       display: -webkit-box;
       -webkit-line-clamp: 1;  // 말줄임표 표시할 줄 수
       -webkit-box-orient: vertical;
@@ -76,7 +76,7 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
       top: 0;
       left: 0;
       width: 100%;
-      height: calc(100% - rem(3));
+      height: calc(100% - #{rem(3)});
       outline: rem(2) solid var(--color-main);
     }
 
@@ -104,7 +104,7 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
       }
       .top_text {
         font-weight: 700;
-        font-size: 22px;
+        font-size: rem(22);
         line-height: 120%;
         letter-spacing: -0.02em;
         padding: rem(17) 0 rem(10);
@@ -187,8 +187,8 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
     .flex_title {
       display: grid;
       grid-template-columns : rem(60) rem(60) rem(100) 1fr rem(130) rem(100);
-      border-top: 1px solid var(--color-line-02);
-      border-bottom: 1px solid var(--color-line-02);
+      border-top: rem(1) solid var(--color-line-02);
+      border-bottom: rem(1) solid var(--color-line-02);
       align-items: center;
       div{
         display: inline;
@@ -227,7 +227,7 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
       > * {
         text-align: center;
         display: inline-grid;
-        border-bottom: 1px solid var(--color-line-04);
+        border-bottom: rem(1) solid var(--color-line-04);
         align-items: center;
         height: auto;
         min-height: rem(72);
@@ -369,8 +369,8 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
   .swiper-button-prev,
   .swiper-button-next{
     opacity: 0.5;
-    // box-shadow: 3px 3px 5px rgba(255, 255, 255, 255);
-    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.15);
+    // box-shadow: rem(3) rem(3) rem(5) rgba(255, 255, 255, 255);
+    box-shadow: rem(1) rem(1) rem(10) rgba(0, 0, 0, 0.15);
     border-radius: 100%;
     width: rem(40);
     height: rem(40);
@@ -388,7 +388,7 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
     position:absolute;
     left:50%;
     transform:translateX(-50%);
-    bottom: calc(-100% + rem(8));
+    bottom: calc(-100% + #{rem(8)});
     content:"더보기";
     color:#fff;
     font-size: rem(14);
@@ -421,93 +421,7 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
 
 
 
-@media (max-width: rem(700)) {
-  
-  .notice_text {
-    .notice {
-      .notice_br {
-        display: block;
-      }
-    }
-  }
-
-}
-
-
-
-@media (max-width: rem(600)) {
-
-  section.review_title {padding : rem(40) 0 rem(20);}
-
-  .review_title {
-    >div {
-      br {
-        display: block;
-      }
-    }
-}
-
-
-  .swiper_review_outerWrap {
-  
-    .swiper_review {
-      width: 100%;
-      transform: translateX(rem(-20));
-    }
-
-    .slide{
-      .mid_box{
-        padding: 0;
-      }
-    }
-  }  
-  
-  .swiper-button-next{
-    right: rem(-20);
-  }
-  .swiper-button-prev{
-    left: rem(-20);
-  }
-
-
-  .review_write_ad {
-    .red_box {
-      &::after {
-        height: calc(100% - rem(2));
-      }
-
-      .content_box {
-        grid-template-columns: rem(60) 1fr rem(60);
-
-        br {
-          display: block;
-        }
-  
-        .text_box {
-          margin : 0 rem(10) 0 0;
-          text-align: center;
-        }
-
-        .top_text {
-          font-size: rem(16);
-          padding: 0;
-        }
-
-        .bot_text {
-          display: none;
-        }
-
-        .image_right {
-          // width: 100%;
-          width: rem(38);
-        }
-      }
-    }
-  }
-
-  .notice_text {
-    display: none;
-  }
+@media (max-width: rem(800)) {
 
   .tab_slide_box {
     margin-top: rem(20);
@@ -550,6 +464,7 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
           grid-column: 2/span 2;
           text-align: left;
           padding-left: rem(10);
+          font-size: rem(12);
         }
 
         .star_box {
@@ -559,9 +474,13 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
         .grid_date{
           order: 4;
           text-align: left;
+          font-size: rem(13);
+          color: #4D4D4D;
         }
 
         .content {
+          letter-spacing: -0.02em;
+          font-size: rem(15);
           order: 5;
           grid-column: 1/span 3;
           min-height: rem(40);
@@ -571,6 +490,108 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
       }
     }
   }
+
+}
+
+
+@media (max-width: rem(700)) {
+  
+  .notice_text {
+    .notice {
+      .notice_br {
+        display: block;
+      }
+    }
+  }
+
+}
+
+
+
+@media (max-width: rem(600)) {
+
+  section.review_title {padding : rem(40) 0 rem(20);}
+
+  .review_title {
+    >div {
+      font-size: rem(20);
+
+      br {
+        display: block;
+      }
+    }
+}
+
+
+  .swiper_review_outerWrap {
+
+    padding: 0 0 rem(45);
+  
+    .swiper_review {
+      width: 100%;
+      transform: translateX(rem(-20));
+    }
+
+    .slide{
+      .mid_box{
+        padding: 0;
+      }
+      .content_title {
+        font-size: rem(18);
+      }
+      >p {
+        font-size: rem(15);
+      }
+    }
+  }  
+  
+  .swiper-button-next{
+    right: rem(-20);
+  }
+  .swiper-button-prev{
+    left: rem(-20);
+  }
+
+
+  .review_write_ad {
+    .red_box {
+      &::after {
+        height: calc(100% - #{rem(2)});
+      }
+
+      .content_box {
+        grid-template-columns: rem(60) 1fr rem(60);
+
+        br {
+          display: block;
+        }
+  
+        .text_box {
+          margin : 0 rem(10) 0 0;
+          text-align: center;
+        }
+
+        .top_text {
+          font-size: rem(16);
+          padding: 0;
+        }
+
+        .bot_text {
+          display: none;
+        }
+
+        .image_right {
+          // width: 100%;
+          width: rem(38);
+        }
+      }
+    }
+  }
+
+  .notice_text {
+    display: none;
+  }
+
 
   .review_box{
     .text_box{

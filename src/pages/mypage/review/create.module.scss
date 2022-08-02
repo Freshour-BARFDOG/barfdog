@@ -5,6 +5,12 @@ $border: rem(1) solid var(--color-line-03);
 
 section.title_section {
   padding: rem(8) 0 rem(17);
+  .title{
+    display: flex;
+    align-items: center;
+    gap: rem(10);
+  }
+
 }
 section.content_title {
   padding: 0 0 rem(0);

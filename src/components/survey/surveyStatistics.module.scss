@@ -54,8 +54,8 @@ $container-maxWidth: rem(960);
   .top {
     grid-area: top;
     padding: rem(42) rem(65) ;
-    box-shadow: 0px 0px 20px rgba(69, 69, 83, 0.08);
-    border-radius: 24px;
+    box-shadow: 0 0 rem(20) rgba(69, 69, 83, 0.08);
+    border-radius: rem(24);
 
     .flex_box {
       display: flex;
@@ -67,6 +67,7 @@ $container-maxWidth: rem(960);
           @include char(l20);
           text-align: center;
           line-height: 120%;
+          margin-bottom: rem(40)
         }
       }
       .box {
@@ -77,12 +78,14 @@ $container-maxWidth: rem(960);
         .stick_box {
           display: flex;
           justify-content: center;
-          width: 100%;
-          column-gap: rem(16);
-          height: 120px;
           align-items: baseline;
+          width: 100%;
+          max-width: rem(150);
+          height: rem(120);
+          column-gap: rem(16);
           .stick {
             width: rem(16);
+            max-height: rem(120);
             height: rem(120);
             background-color: #F9EDEC;
             border-radius: rem(20);
@@ -128,7 +131,7 @@ $container-maxWidth: rem(960);
           .top_text_row2 {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start; // (center 에서 수정)
             width: 100%;
             @include char(l16);
             font-weight: 700;
@@ -153,8 +156,8 @@ $container-maxWidth: rem(960);
     width: 100%;
     max-width: rem(460);
 
-    box-shadow: 0px 0px 20px rgba(69, 69, 83, 0.08);
-    border-radius: 24px;
+    box-shadow: 0 0 rem(20) rgba(69, 69, 83, 0.08);
+    border-radius: rem(24);
 
     grid-area: left;
     display: flex;
@@ -183,7 +186,7 @@ $container-maxWidth: rem(960);
       margin: 0 rem(35);
       .left_box{
         background: #F9EDEC;
-        border-radius: 32px;
+        border-radius: rem(32);
         width: 43%;
         max-width: rem(160);
         text-align: center;
@@ -241,7 +244,7 @@ $container-maxWidth: rem(960);
       justify-content: center;
       column-gap: rem(10);
       width : 100%;
-      max-width: 380px;
+      max-width: rem(380);
       text-align: center;
       padding-top: rem(16);
       margin-bottom: rem(30);
@@ -255,15 +258,15 @@ $container-maxWidth: rem(960);
         .left_stick_box {
           display: flex;
           justify-content: center;
+          align-items: flex-end;
           width: 100%;
           max-width: rem(120);
+          box-sizing: border-box;
           column-gap: rem(16);
           padding-bottom: rem(23);
-          height: 120px;
-          align-items: flex-end;
+          height: rem(186);
           .stick {
             width: rem(16);
-            height: rem(186);
             background-color: #F9EDEC;
             border-radius: rem(20);
           }
@@ -286,12 +289,13 @@ $container-maxWidth: rem(960);
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
+    padding: rem(40);
     width: 100%;
     max-width: rem(460);
+    box-sizing: border-box;
 
-    box-shadow: 0px 0px 20px rgba(69, 69, 83, 0.08);
-    border-radius: 24px;
+    box-shadow: 0 0 rem(20) rgba(69, 69, 83, 0.08);
+    border-radius: rem(24);
 
     .left_title {
       @include char(l20);
@@ -302,21 +306,20 @@ $container-maxWidth: rem(960);
     .t_right_grid_box {
       display : grid;
       grid-template-columns: minmax(rem(50),rem(60)) minmax(rem(100), rem(310));
-      // grid-template-rows: 1fr 1fr 1fr 1fr;
+     grid-template-rows: repeat(4, rem(20));
       row-gap: rem(20);
       column-gap: rem(10);
-      margin: 0 rem(30);
 
       div {
         @include char(l16);
       }
       .horizon_stick {
         background: #F9EDEC;
-        border-radius: 20px;
+        border-radius: rem(20);
       }
       .horizon_stick_red {
         background: #FF5959;
-        border-radius: 20px;
+        border-radius: rem(20);
       }
       .hero_name {
         font-weight: 600;
@@ -326,10 +329,10 @@ $container-maxWidth: rem(960);
 
 
 
-  .b_right {
+  .analysis-result.b_right {
     grid-area: b_right;
-    box-shadow: 0px 0px 20px rgba(69, 69, 83, 0.08);
-    border-radius: 32px;
+    box-shadow: 0 0 rem(20) rgba(69, 69, 83, 0.08);
+    border-radius: rem(32);
     width: 100%;
     max-width: rem(460);
     .left_title {
@@ -352,10 +355,13 @@ $container-maxWidth: rem(960);
       display: flex;
       align-items: center;
       // padding: rem(9) 0;
+      > *:not(:last-child){margin-right:rem(10);}
       span {
         @include char(l15);
         color: #4d4d4d;
-
+      }
+      em{
+        max-width:rem(230);
       }
     }
     .left_text {
@@ -396,6 +402,7 @@ $container-maxWidth: rem(960);
     border-radius: rem(4);
   }
 }
+
 
 
 
@@ -504,11 +511,18 @@ $container-maxWidth: rem(960);
       width: 100%;
       display: inline-block
     }
+
+    
+    &.mypage{
+      text-align: center;
+    }
   }
 
   .btn_box {
     margin-bottom: rem(100);
   }
+
+  
 }
 
 

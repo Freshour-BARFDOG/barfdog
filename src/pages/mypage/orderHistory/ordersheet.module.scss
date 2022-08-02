@@ -232,8 +232,9 @@ section.content_title { padding :0 0 rem(31) }
         .inner_text {
           display: flex;
           flex-direction: column;
-          justify-content: center;
           text-align: start;
+
+          //justify-content: center;
 
           > p {
             // padding-bottom: rem(10);
@@ -335,8 +336,9 @@ section.content_title { padding :0 0 rem(31) }
 
     .body_content_3 {
       .content_grid{
-        grid-template-columns: 1fr;
-        grid-row-gap: rem(10);
+        li:first-child{
+          font-size: rem(15);
+        }
       }
     }
   }

@@ -91,7 +91,7 @@ export default function CartPage({ data, error }) {
   
   const updateDATAState = (basketId, amountUnit) => {
     setDATA((prevState) => {
-      let nextBasketDtoList = prevState.basketDtoList.map((item) => {
+      let nextBasketDtoList = prevState.basketDtoList?.map((item) => {
         const nextItem = JSON.parse(JSON.stringify(item)); // ! important : 깊은 복사를 사용하여, 원본객체와의 참조를 끊어냄
   
         // 체크박스 클릭 Event 및 수량버튼 증가&감소버튼 Event를 구분지음

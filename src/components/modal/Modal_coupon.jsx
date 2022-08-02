@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import ModalWrapper from './ModalWrapper';
 import transformDate from '/util/func/transformDate';
 import { discountUnitType } from '/store/TYPE/discountUnitType';
-import transformLocalCurrency from '../../../util/func/transformLocalCurrency';
+import transformLocalCurrency from '/util/func/transformLocalCurrency';
+import {calcOrdersheetPrices} from "../order/calcOrdersheetPrices";
 
 /* availableMaxDiscount: 적용가능 최대 할인 금액
  * availableMinPrice : 사용가능한 최소 물품 가격
@@ -77,6 +78,7 @@ export const Modal_coupon = ({ onModalActive, data, setForm, orderType ='general
         } : coupon)
       }));
     } else if (orderType === 'subscribe') {
+      console.log('쿠폰 할인 시작')
       setForm(prevState => ({
         ...prevState,
         memberCouponId: Number(couponId),
@@ -84,11 +86,10 @@ export const Modal_coupon = ({ onModalActive, data, setForm, orderType ='general
         coupons: prevState.coupons.map((coupon)=>coupon.memberCouponId === Number(couponId) ? {
           ...coupon,
           remaining: --coupon.remaining
-        } : coupon)
+        } : coupon),
       }))
     }
-    
-    
+
     onHideModal();
     
     

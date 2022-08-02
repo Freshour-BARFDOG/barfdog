@@ -7,6 +7,7 @@ import Modal_recipes from "@src/components/modal/Modal_recipes";
 import s from './recipes.module.scss';
 import Image from 'next/image';
 import styled from "styled-components";
+import { useModalContext } from '/store/modal-context';
 
 
 const Button_ModalTrigger = styled.button`
@@ -1302,6 +1303,14 @@ export default function RecipePage() {
     setIsActiveModal(false);
   };
 
+//정기구독 모달
+  const mcx = useModalContext();
+
+  const onShowSurvey = () => {
+    mcx.subscribe.onShow();
+    mcx.event.setScrollY();
+  };
+
   return (
     <>
       <MetaTitle title="레시피" />
@@ -1353,15 +1362,27 @@ export default function RecipePage() {
             <div className={s.recipe_grid_box}>
               <div className={s.left_top}>
 
+              {/* hover gif실행, scss: 182 opacity: 0; */}
                 <div className={s.image_box}>
                   <div className={`${s.image} img-wrap`}>
+                    {/* gif 이미지 */}
                     <Image
                       priority
-                      src={require("public/img/recipe_left_top.png")}
+                      src={require("public/img/recipes/recipe_left_top.gif")}
                       objectFit="cover"
                       layout="fill"
                       alt="브랜드 소개 이미지"
                     />
+                    <div className={`${s.image} img-wrap`}>
+                      {/* 기본 이미지 */}
+                      <Image
+                        priority
+                        src={require("public/img/recipe_left_top.png")}
+                        objectFit="cover"
+                        layout="fill"
+                        alt="브랜드 소개 이미지"
+                      />
+                    </div>
                   </div>
                 </div>
 
@@ -1385,11 +1406,20 @@ export default function RecipePage() {
                   <div className={`${s.image} img-wrap`}>
                     <Image
                       priority
-                      src={require("public/img/recipe_right_top.png")}
+                      src={require("public/img/recipes/recipe_right_top.gif")}
                       objectFit="cover"
                       layout="fill"
                       alt="브랜드 소개 이미지"
                     />
+                    <div className={`${s.image} img-wrap`}>
+                      <Image
+                        priority
+                        src={require("public/img/recipe_right_top.png")}
+                        objectFit="cover"
+                        layout="fill"
+                        alt="브랜드 소개 이미지"
+                      />
+                    </div>
                   </div>
                 </div>
 
@@ -1412,11 +1442,20 @@ export default function RecipePage() {
                   <div className={`${s.image} img-wrap`}>
                     <Image
                       priority
-                      src={require("public/img/recipe_left_bot.png")}
+                      src={require("public/img/recipes/recipe_left_bot.gif")}
                       objectFit="cover"
                       layout="fill"
                       alt="브랜드 소개 이미지"
                     />
+                    <div className={`${s.image} img-wrap`}>
+                      <Image
+                        priority
+                        src={require("public/img/recipe_left_bot.png")}
+                        objectFit="cover"
+                        layout="fill"
+                        alt="브랜드 소개 이미지"
+                      />
+                    </div>
                   </div>
                 </div>
 
@@ -1439,11 +1478,20 @@ export default function RecipePage() {
                   <div className={`${s.image} img-wrap`}>
                     <Image
                       priority
-                      src={require("public/img/recipe_right_bot.png")}
+                      src={require("public/img/recipes/recipe_right_bot.gif")}
                       objectFit="cover"
                       layout="fill"
                       alt="브랜드 소개 이미지"
                     />
+                    <div className={`${s.image} img-wrap`}>
+                      <Image
+                        priority
+                        src={require("public/img/recipe_right_bot.png")}
+                        objectFit="cover"
+                        layout="fill"
+                        alt="브랜드 소개 이미지"
+                      />
+                    </div>
                   </div>
                 </div>
 
@@ -1610,7 +1658,7 @@ export default function RecipePage() {
 
             <div className={s.btn_box}>
               <div className={s.image_box}>
-                <div className={`${s.image} img-wrap`}>
+                <div className={`${s.image} img-wrap`} onClick={onShowSurvey}>
                   <Image
                     priority
                     src={require("public/img/recipe_subscribe.png")}
@@ -1669,9 +1717,9 @@ export default function RecipePage() {
                 </div>
 
                 <div className={s.health_btn_box}>
-                  <div className={s.health_btn}>
+                  <a href='https://blog.naver.com/barfdog'rel="noreferrer" target="_blank" className={s.health_btn}>
                     자세히 보기
-                  </div>
+                  </a>
                 </div>
 
               </div>

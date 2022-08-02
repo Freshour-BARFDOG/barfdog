@@ -15,6 +15,10 @@ import { validate } from '/util/func/validation/validation_adminLogin';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
 import Router from 'next/router';
 import Link from "next/link";
+import axios from "axios";
+import {postObjData} from "../../api/reqData";
+import {cookieType} from "../../../../store/TYPE/cookieType";
+import {userType} from "../../../../store/TYPE/userAuthType";
 
 
 
@@ -50,14 +54,7 @@ function LoginIndexPage({ autoLoginAccount }) {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (isSubmitted) return; // ! IMPORTANT : submit 이후 enterKey event로 trigger되는 중복submit 방지
-    // ! --------------------------------------------------------------------------- ! //
-    // TEST => 예외 계정 처리
-     const forbiddenUser  = {email:'user@gmail.com', password: 'user'};
-    if(formValues.email === forbiddenUser.email && formValues.password === forbiddenUser.password){
-      return alert('관리자로서 로그인이 불가한 계정입니다.');
-    }
-    // ! --------------------------------------------------------------------------- ! //
+    if (isSubmitted) return;
     const errObj = validate(formValues);
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
@@ -67,24 +64,39 @@ function LoginIndexPage({ autoLoginAccount }) {
         ...prevState,
         submit: true,
       }));
-      const token = await getAdminToken(formValues);
-      if (!token) {
+      const autoLoginPeriod = cookieType.AUTO_LOGIN_EXPIRED_PERIOD.VALUE; // 변경가능
+      const defPeriod = cookieType.LOGIN_EXPIRED_PERIOD.VALUE_FOR_RESTAPI; // 2시간 (클라이언트에서 def 값은 변경불가)
+      const body = {
+        email: formValues.email,
+        password: formValues.password,
+        tokenValidDays: autoLogin ? autoLoginPeriod : defPeriod,
+      };
+      const res = await postObjData("/api/login", body);
+      if (res.status === 200) {
+        const data = res.data.data;
+        console.log(res);
+        const isAdmin = data.roleList?.indexOf(userType.ADMIN) >= 0;
+        if(!isAdmin){
+          return alert('관리자 계정을 정확히 입력해주세요.')
+        }
+        const payload = {
+          expiredDate: data.expiresAt,
+          token: res.data.headers.authorization,
+          roleList: data.roleList
+        }
+        if(autoLogin){
+          dispatch(authAction.adminAutoLogin(payload));
+          onShowModalHandler(`관리자 로그인에 성공하였습니다.\n자동로그인 유지기간: ${autoLoginPeriod}일`);
+        } else{
+          dispatch(authAction.adminLogin(payload));
+          onShowModalHandler('관리자 로그인에 성공하였습니다.');
+        }
+        setIsSubmitted(true);
+      }else {
         setIsSubmitted(false);
         onShowModalHandler(
           '로그인 실패: 아이디, 비밀번호를 확인해주세요.\n지속적으로 문제발생 시, 서버장애일 수 있습니다.',
         );
-      } else {
-        if (autoLogin) {
-          const { email, password } = formValues;
-          const refreshToken = { email, password }; // ! RefreshToken에 대한 임시사용
-          dispatch(authAction.adminAutoLogin({ token: token, refreshToken}));
-          onShowModalHandler(`관리자 로그인에 성공하였습니다.\n자동로그인: ${autoLogin}`);
-        } else {
-          dispatch(authAction.adminLogin({ token: token }));
-          onShowModalHandler('관리자 로그인에 성공하였습니다.');
-        }
-
-        setIsSubmitted(true);
       }
     } catch (err) {
       alert('로그인할 수 없습니다. 오류가 발생했습니다. 관리자에게 문의하세요.');
@@ -119,7 +131,8 @@ function LoginIndexPage({ autoLoginAccount }) {
 
   const onGlobalModalCallback = () => {
     if (isSubmitted) {
-      Router.push('/bf-admin/dashboard');
+      window.location.href = '/bf-admin/dashboard';
+      // Router.push('/bf-admin/dashboard');
     }
       mct.alertHide();
   };
@@ -220,14 +233,6 @@ export async function getServerSideProps(context) {
   const { req } = context;
   const cookie = req.headers.cookie;
   let autoLoginAccount = null;
-  const autoLoginKey = 'adminAutoLogin';
-  cookie.split(';').forEach((c) => {
-    if (c.indexOf(autoLoginKey) >= 0) {
-      const obj = c.split('=')[1];
-      const data = JSON.parse(obj);
-      autoLoginAccount = data.email;
-    }
-  });
   // console.log(cookie)
   return { props: { autoLoginAccount: autoLoginAccount } };
 }

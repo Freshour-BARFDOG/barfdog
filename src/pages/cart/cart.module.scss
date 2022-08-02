@@ -277,6 +277,7 @@ section.btn_box { margin : 0 0 rem(206)}
     .itemList {
       grid-template-columns: rem(24) rem(120) 1fr rem(40);
       grid-gap: rem(10);
+      align-items: flex-start;
 
       .list_text {
         padding-left: 0;

@@ -11,10 +11,24 @@ section.health_care { margin-bottom : rem(20);}
 section.subscribe_discount { margin-bottom: rem(80);}
 
 .top {
-  background: #FFF7F3;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100vw;
+    height: 100%;
+    background-color: #FFF7F3;
+    z-index: -9;
+  }
+
+
   .top_title {
     font-family: 'Gmarket Sans';
     font-weight: 700;
@@ -36,9 +50,11 @@ section.subscribe_discount { margin-bottom: rem(80);}
   .btn {
     color: var(--color-main);
     border: rem(1) solid var(--color-main);
+    background-color: #fff;
     border-radius: rem(100);
     padding : rem(8) rem(26) rem(8) rem(26);
     @include char(l15);
+    font-weight: 500;
     margin-top: rem(20);
   }
   .image_box {
@@ -162,6 +178,10 @@ section.subscribe_discount { margin-bottom: rem(80);}
         width: 100%;
         max-width: rem(560);
         aspect-ratio: 1.333/1;
+
+        &:hover:nth-child(2) {
+          opacity: 0;
+        }
       }
     }
   }
@@ -528,12 +548,24 @@ font-style: normal;
 }
 
 .ingredients {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: rgba(230, 230, 230, 0.29);
   padding: rem(80) 0 rem(100) ;
-  
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100vw;
+    height: 100%;
+    background-color: rgba(230, 230, 230, 0.29);
+    z-index: -9;
+  }
+
   .recipe_title2 {
     @include char(b16);
     text-align: center;
@@ -555,10 +587,22 @@ font-style: normal;
 
 
 .health_care {
+  position: relative;
   width: 100%;
-  background: #FFF7F3;
   display: flex;
   justify-content: center;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100vw;
+    height: 100%;
+    background-color: #FFF7F3;
+    z-index: -9;
+  }
 
   .health_grid_box {
     width: 87%;
@@ -618,12 +662,22 @@ font-style: normal;
 }
 
 .subscribe_discount {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: rgba(230, 230, 230, 0.29);
 
-  
+  &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100vw;
+      height: 100%;
+      background-color: rgba(230, 230, 230, 0.29);
+      z-index: -9;
+    }
 
   .sub_row_1 {
     padding-top: rem(70);
@@ -808,6 +862,25 @@ font-style: normal;
 
 
 @media only screen and (min-width:rem(100)) and (max-width: rem(600)) {
+
+  .top {
+    .top_title {
+      padding: rem(50) 0 rem(24);
+    }
+    .top_text {
+      padding-bottom: rem(8);
+    }
+    .btn {
+      padding : rem(8) rem(26) rem(8) rem(26);
+      margin-top: rem(20);
+    }
+    .image_box {
+      margin : rem(40) 0 rem(40);
+    }
+  }
+
+
+
 
   .recipe_title {
       br{

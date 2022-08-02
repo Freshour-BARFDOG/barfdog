@@ -24,15 +24,15 @@ import {getDataSSR} from "@src/pages/api/reqData";
 import Link from "next/link";
 
 export default function Home({ data }) {
-  // console.log(data);
   
-  const DATA = {
-    topBannerDto: data.topBannerDto,
-    mainBannerDtoList: data.mainBannerDtoList,
-    recipeDtoList: data.recipeDtoList,
-    queryBestReviewsDtoList: data.queryBestReviewsDtoList,
-  
-  }
+  console.log(data)
+  // const DATA = {
+  //   topBannerDto: data.topBannerDto,
+  //   mainBannerDtoList: data.mainBannerDtoList,
+  //   recipeDtoList: data.recipeDtoList,
+  //   queryBestReviewsDtoList: data.queryBestReviewsDtoList,
+  // }
+  //
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -47,7 +47,7 @@ export default function Home({ data }) {
         {/* <Wrapper bgColor="#fbf7f6" fullWidth={true}> */}
         <Wrapper fullWidth={true} rowStyle={{ padding: 0 }}>
           {/* 스와이프주석 */}
-          <Swiper_main data={DATA.mainBannerDtoList} isMobile={isMobile}/>
+          <Swiper_main data={data?.mainBannerDtoList} isMobile={isMobile}/>
         </Wrapper>
 
         {/* 섹션1 레시피 4가지 소개*/}
@@ -57,7 +57,7 @@ export default function Home({ data }) {
               <h2 className={Styles.recipe_title}>
                 &quot;진짜 생식&#34; <br /> 바프독의 4가지 레시피
               </h2>
-              <Swiper_recipe data={DATA.recipeDtoList} isMobile={isMobile}/>
+              <Swiper_recipe data={data?.recipeDtoList} isMobile={isMobile}/>
             </div>
           </section>
         </Wrapper>
@@ -231,14 +231,14 @@ export default function Home({ data }) {
                     영양분을 골고루 섭취할 수 있습니다.완벽한 비율으로 구성해 반려견이 필요한
                     영양분을 골고루섭취할 수 있습니다. 완벽한 비율으로
                   </p>
-                  <button type="button" className={`${Styles.btn_main}`}>
+                  <button type="button" className={`${Styles.btn_worry}`}>
                     바프생식 둘러보기
                   </button>
                 </div>
               </div>
               <div className={`${Styles['cont-right']} cont-right`}>
                 <div className={Styles.cont_section}>
-                  <ul className="clearfix">
+                  <ul className={Styles.clearfix}>
                     <li>
                       <div className={Styles.card}>
                         <div className={`${Styles['img-wrap']} img-wrap`}>
@@ -296,6 +296,10 @@ export default function Home({ data }) {
                       </div>
                     </li>
                   </ul>
+
+                  <button type="button" className={`${Styles.btn_main}`}>
+                    바프생식 둘러보기
+                  </button>
                 </div>
               </div>
             </div>
@@ -310,7 +314,7 @@ export default function Home({ data }) {
                 수많은 후기가 증명하는 <br /> BARFDOG
               </h2>
               <div className={Styles.cont_body}>
-                <Swiper_review data={DATA.queryBestReviewsDtoList}/>
+                <Swiper_review data={data?.queryBestReviewsDtoList}/>
                 <div className={Styles.redbox}>
                   <div className={Styles.red}></div>
                 </div>
@@ -555,12 +559,43 @@ const DUMMY_DATA = {
 
 
 export async function getServerSideProps({ req }) {
-  //
-  // // const url = '/api/home';
-  // // const res = await getDataSSR( req, url );
-  // // console.log('res" ', res);
-  // const data = res.data || null
-  //
+  
+  let DATA = null;
+  const url = '/api/home';
+  const res = await getDataSSR( req, url );
+  // console.log(res)
+  const data = res?.data || null
+  if(data){
+    DATA = {
+      topBannerDtoList: data.topBannerDto,
+      mainBannerDtoList: data.mainBannerDtoList?.length > 0 && data.mainBannerDtoList.map(list=>({
+        id: list.id,
+        leakedOrder: list.leakedOrder,
+        name: list.name,
+        pcFilename: list.pcFilename,
+        pcImageUrl: list.pcImageUrl,
+        pcLinkUrl: list.pcLinkUrl,
+        mobileFilename: list.mobileFilename,
+        mobileImageUrl: list.mobileImageUrl,
+        mobileLinkUrl: list.mobileLinkUrl,
+      })),
+      recipeDtoList: data.recipeDtoList?.length > 0 && data.recipeDtoList.map(list=>({
+        id: list.id,
+        name: list.id,
+        description: list.description,
+        uiNameKorean: list.uiNameKorean,
+        uiNameEnglish: list.uiNameEnglish,
+        filename1: list.filename1,
+        imageUrl1: list.imageUrl1,
+        filename2: list.filename2,
+        imageUrl2: list.imageUrl2,
+      })),
+      queryBestReviewsDtoList: data.queryBestReviewsDtoList || [],
+    }
+  }
+  
+  // console.log('MAIN DATA : " ', data);
 
-  return { props: { data: DUMMY_DATA } };
+
+  return { props: { data:DATA } };
 }

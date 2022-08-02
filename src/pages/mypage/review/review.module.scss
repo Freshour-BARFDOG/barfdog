@@ -1,11 +1,12 @@
-$browser-context:16; // html font-size
-@function rem($px, $context: $browser-context){
+$browser-context: 16; // html font-size
+@function rem($px, $context: $browser-context) {
   @return #{$px / $context}rem;
 }
 @import '../../../../styles/global/guide';
 
-section.title{ padding : rem(8) 0 rem(30);}
-
+section.title {
+  padding: rem(8) 0 rem(30);
+}
 
 .title {
   @include char(t24);
@@ -43,24 +44,23 @@ section.title{ padding : rem(8) 0 rem(30);}
         padding-bottom: rem(10);
         border-bottom: rem(2) solid var(--color-main);
       }
-
     }
   }
 }
 
 .content {
-  >p {
+  > p {
     padding-top: rem(120);
     @include char(l16);
-    color : var(--color-font-sub);
+    color: var(--color-font-sub);
     text-align: center;
     padding-bottom: rem(30);
   }
 }
 
-
-
-section.content_title2{ padding-bottom: rem(30);}
+section.content_title2 {
+  padding-bottom: rem(30);
+}
 
 .content_title2 {
   .flex_box {
@@ -73,7 +73,7 @@ section.content_title2{ padding-bottom: rem(30);}
     @include char(l16);
     .left_box {
       width: 50%;
-      
+
       display: flex;
       justify-content: center;
       div {
@@ -95,14 +95,13 @@ section.content_title2{ padding-bottom: rem(30);}
   padding: rem(20) 0;
   border-bottom: rem(1) solid var(--color-line-03);
   &:last-child {
-  border-bottom: 0;
+    border-bottom: 0;
   }
 
   .flex {
     display: grid;
     grid-template-columns: 1fr rem(160);
-  
-    
+
     .left {
       max-width: rem(720);
       display: flex;
@@ -113,12 +112,11 @@ section.content_title2{ padding-bottom: rem(30);}
         aspect-ratio: 1/1;
       }
 
-      .title_text{
+      .title_text {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         padding: rem(4) 0 0 rem(16);
-
 
         @include char(l18);
         font-weight: 600;
@@ -129,7 +127,7 @@ section.content_title2{ padding-bottom: rem(30);}
           padding-bottom: rem(25);
         }
         .day_text {
-          @include char(l16);
+          @include char(l14);
           font-weight: 400;
           color: var(--color-font-sub2);
         }
@@ -139,7 +137,7 @@ section.content_title2{ padding-bottom: rem(30);}
       display: flex;
       align-items: center;
       justify-content: right;
-      .btn{
+      .btn {
         display: flex;
         justify-content: center;
         border: rem(1) solid var(--color-main);
@@ -159,7 +157,7 @@ section.content_title2{ padding-bottom: rem(30);}
   display: flex;
   justify-content: center;
   padding-top: rem(40);
-  padding-bottom : rem(44);
+  padding-bottom: rem(44);
   .content5 {
     width: 23%;
     display: flex;
@@ -169,11 +167,11 @@ section.content_title2{ padding-bottom: rem(30);}
   }
 }
 
-
-
 //////////////////////////////////////
 
-section.content_title5 { padding-bottom: rem(30);}
+section.content_title5 {
+  padding-bottom: rem(30);
+}
 
 .title5 {
   @include char(t24);
@@ -199,7 +197,7 @@ section.content_title5 { padding-bottom: rem(30);}
         padding-bottom: rem(10);
         // border-bottom: rem(2) solid var(--color-main);
         // color: var(--color-font-sub);
-        // 색 바꿔야됨 
+        // 색 바꿔야됨
       }
     }
     .right_box {
@@ -228,7 +226,7 @@ section.content_title5 { padding-bottom: rem(30);}
 
     .left_box {
       max-width: rem(560);
-      
+
       .row_1 {
         display: flex;
         align-items: center;
@@ -236,6 +234,7 @@ section.content_title5 { padding-bottom: rem(30);}
         .pic_box {
           padding-right: rem(16);
           .image {
+            background-color: var(--color-bg);
             display: flex;
             align-items: center;
             width: rem(50);
@@ -263,20 +262,39 @@ section.content_title5 { padding-bottom: rem(30);}
 
       .row_4 {
         padding-top: rem(8);
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
         .pic_box {
-          .image {
+          position: relative;
+          display: flex;
+          align-items: center;
+          width: rem(200);
+          aspect-ratio: 1/1;
+          .imageCount{
+            position: absolute;
+            right:0;
+            bottom: 0;
+            width: rem(40);
+            height: rem(40);
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1;
+            color:#fff;
             display: flex;
             align-items: center;
-            width: rem(200);
-            aspect-ratio: 1/1;
+            justify-content: center;
           }
         }
-
       }
       .row_5 {
         padding-top: rem(11);
         color: var(--color-font-sub2);
         @include char(l14);
+      }
+      .returnMessage {
+        font-size: rem(15);
+        color: var(--color-warning);
+        margin-top: rem(10);
       }
     }
     .mid_box {
@@ -298,7 +316,7 @@ section.content_title5 { padding-bottom: rem(30);}
         display: flex;
         justify-content: right;
         width: 100%;
-        .red_btn{
+        .red_btn {
           display: flex;
           justify-content: center;
           border: rem(1) solid var(--color-main);
@@ -311,7 +329,7 @@ section.content_title5 { padding-bottom: rem(30);}
           width: 100%;
           cursor: pointer;
         }
-        .grey_btn{
+        .grey_btn {
           display: flex;
           justify-content: center;
           border: rem(1) solid var(--color-line-03);
@@ -341,7 +359,6 @@ section.content_title5 { padding-bottom: rem(30);}
   }
 }
 
-
 .review_del {
   width: rem(420);
   height: rem(240);
@@ -355,7 +372,7 @@ section.content_title5 { padding-bottom: rem(30);}
   .btn_box {
     display: flex;
     justify-content: center;
-    
+
     .btn {
       @include char(l15);
       max-width: rem(160);
@@ -372,65 +389,58 @@ section.content_title5 { padding-bottom: rem(30);}
 
 
 @media (max-width: rem(900)) {
-
   .content {
     .flex {
       display: grid;
       grid-template-columns: 1fr;
       grid-row-gap: rem(10);
 
-      
       .right {
-        .btn{
+        .btn {
           max-width: 100%;
         }
       }
     }
-  }  
+  }
 
-  
-.content {
-  .flex_box5 {
-    grid-template-columns: 1fr;
-    grid-gap: rem(10);
+  .content {
+    .flex_box5 {
+      grid-template-columns: 1fr;
+      grid-gap: rem(10);
 
-    
-    .mid_box {
-      max-width: 100%;
-      align-items: normal;
-      justify-content: normal;
-    }
+      .mid_box {
+        max-width: 100%;
+        align-items: normal;
+        justify-content: normal;
+      }
 
-    .right_box {
-      max-width: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      row-gap: rem(8);
-      .btn_box {
-        width: 100%;
-        .red_btn{
-          max-width: 100%;
+      .right_box {
+        max-width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        row-gap: rem(8);
+        .btn_box {
           width: 100%;
-        }
-        .grey_btn{
-          max-width: 100%;
-          width: 100%;
-        }
-        .btn2 {
-          max-width: 100%;
-          width: 100%;
+          .red_btn {
+            max-width: 100%;
+            width: 100%;
+          }
+          .grey_btn {
+            max-width: 100%;
+            width: 100%;
+          }
+          .btn2 {
+            max-width: 100%;
+            width: 100%;
+          }
         }
       }
     }
   }
 }
 
-
-}
-
 @media (max-width: rem(600)) {
-  
   .title {
     display: none;
   }

@@ -1,10 +1,7 @@
-$browser-context: 16;
-@function rem($px, $context: $browser-context) {
-  @return #{$px / $context}rem;
-}
+@import '/styles/global/rem';
 
 $containerSize: rem(800);
-$topLinkBannerHeight : rem(38);
+$topLinkBannerHeight: rem(38);
 
 .modal-subscribe {
   position: fixed;
@@ -23,15 +20,11 @@ $topLinkBannerHeight : rem(38);
   }
 }
 
-
-
 .background {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.3);
 }
-
-
 
 .body {
   position: absolute;
@@ -41,8 +34,6 @@ $topLinkBannerHeight : rem(38);
   animation: show var(--ani-default) forwards;
 }
 
-
-
 .btn_close_modal {
   position: fixed;
   right: rem(20);
@@ -51,9 +42,9 @@ $topLinkBannerHeight : rem(38);
   z-index: 1;
 }
 
-.container {width: $containerSize;}
-
-
+.container {
+  width: $containerSize;
+}
 
 .cont {
   position: relative;
@@ -63,7 +54,9 @@ $topLinkBannerHeight : rem(38);
   padding: rem(22) rem(20);
   box-sizing: border-box;
   overflow: scroll;
-  &::-webkit-scrollbar {display: none;}
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   ul {
     display: grid;
@@ -76,12 +69,9 @@ $topLinkBannerHeight : rem(38);
   }
 }
 
-
-
-
 .card {
   padding: rem(27) rem(50) rem(42);
-  box-sizing:border-box;
+  box-sizing: border-box;
   text-align: center;
   display: flex;
   flex-wrap: wrap;
@@ -98,25 +88,24 @@ $topLinkBannerHeight : rem(38);
     z-index: 0;
   }
 
-
   .title {
     width: 100%;
     font-size: rem(24);
     letter-spacing: rem(-0.2);
-    font-weight:500;
+    font-weight: 500;
     text-align: center;
-    margin-bottom:rem(17);
-    cursor:default;
+    margin-bottom: rem(17);
+    cursor: default;
   }
 
   .desc {
     font-weight: 400;
     letter-spacing: rem(-0.4);
     color: var(--color-font-def);
-    cursor:default;
+    cursor: default;
     margin-bottom: rem(33);
   }
-  
+
   .btn-section {
     width: 100%;
     a {
@@ -130,45 +119,73 @@ $topLinkBannerHeight : rem(38);
   }
 }
 
+#modal-register-coupon {
+  //aspect-ratio: 1.618;
+  padding: rem(40) rem(40) rem(20);
+  box-sizing: border-box;
+  width: 100%;
+  max-width: rem(420);
 
+  .title {
+    margin-bottom: rem(20);
+    font-size: rem(16);
+    text-align: center;
+  }
 
+  .input-wrap{
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
+    input{width: 100%;
+      max-width: rem(280);
+      &::placeholder{font-size:rem(14)}
+    }
+  }
 
-
-
-
-
-
-
-
-@media (max-width: $containerSize) {
-
-  .container {
-    width: calc(100vw - rem(40))
+  .btn-section {
+    margin-top: rem(40);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .btn {
+      background-color: var(--color-main);
+      border-radius: rem(4);
+      width: 100%;
+      max-width: rem(160);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      height: rem(44);
+    }
   }
 }
 
-
-
+@media (max-width: $containerSize) {
+  .container {
+    width: calc(100vw - #{rem(40)});
+  }
+}
 
 @media (max-width: rem(600)) {
-
   $marginForBackgroundTouch: rem(26);
 
-  
-  .body{
+  .body {
     margin-top: calc($topLinkBannerHeight + $marginForBackgroundTouch);
     margin-bottom: $marginForBackgroundTouch;
     box-sizing: border-box;
     height: calc(100vh - $topLinkBannerHeight);
-    top:0;
-    transform:translate(-50%,0)
+    top: 0;
+    transform: translate(-50%, 0);
   }
-  .container {max-width: rem(335);} 
+  .container {
+    max-width: rem(335);
+  }
   .cont {
-    max-height: calc(100vh - rem(83));
+    max-height: calc(100vh - #{rem(83)});
     ul {
-      grid-template-columns: 1fr ;
+      grid-template-columns: 1fr;
       li:not(:last-child) {
         border-right: 0;
         border-bottom: rem(1) solid var(--color-line-04);
@@ -190,26 +207,25 @@ $topLinkBannerHeight : rem(38);
       }
     }
 
-    .title-section{
-      margin-bottom:rem(12);
+    .title-section {
+      margin-bottom: rem(12);
       .title {
         font-size: rem(28);
-        margin-bottom:rem(0);
+        margin-bottom: rem(0);
       }
-
     }
   }
-
 }
 
-
-
 @media (max-width: rem(320)) {
-
-  .container {width: calc(100vw - rem(16));} 
+  .container {
+    width: calc(100vw - #{rem(16)});
+  }
   .cont {
-    overflow-y:scroll;
-    &::-webkit-scrollbar {display:none;} //  스크롤바 숨김
+    overflow-y: scroll;
+    &::-webkit-scrollbar {
+      display: none;
+    } //  스크롤바 숨김
   }
 
   .card {
