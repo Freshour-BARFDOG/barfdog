@@ -1,4 +1,5 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useContext, useState } from 'react';
+import { Modal_changePassword } from '@src/components/modal/Modal_changePassword';
 
 const ModalContext = createContext({
   // 컴포넌트를 포함한 객체가 될 예정이기 때문에, 첫 단어를 대문자로 지정
@@ -13,13 +14,14 @@ const ModalContext = createContext({
 
 const useModalContext = () => useContext(ModalContext);
 
-const ModalContextProvider = ({ children }) => {
+const ModalContextProvider = ({ children, ...props }) => {
   const [isActive, setIsActive] = useState(false);
   const [hasAlert, setHasAlert] = useState(false);
   const [alertModalMessage, setAlertModalMessage] = useState('');
   const [isActiveSubscribeModal, setIsActiveSubscribeModal] = useState(false);
   const [scrollY, setScrollY] = useState(0);
-
+  const [activeChangePasswordModal, setActiveChangePasswordModal] = useState( false );
+  
   const onShowHandler = () => {
     setIsActive(true);
   };
@@ -49,6 +51,16 @@ const ModalContextProvider = ({ children }) => {
     const Y = window ? window.scrollY : 0;
     setScrollY(Y);
   };
+  
+  
+  const onShowChagnePasswordModal  = ()=>{
+    setActiveChangePasswordModal(true)
+  }
+  const onHideChagnePasswordModal  = ()=>{
+    setActiveChangePasswordModal(false)
+  }
+  
+
 
   return (
     <ModalContext.Provider
@@ -69,12 +81,20 @@ const ModalContextProvider = ({ children }) => {
           onShow: onSubScribeModalShowHandler,
           onHide: onSubScribeModalHideHandler,
         },
+        ChangePW:{
+          onShow: onShowChagnePasswordModal,
+          onHide: onHideChagnePasswordModal,
+        }
       }}
     >
       {children}
+      {activeChangePasswordModal && <Modal_changePassword onHideModal={onHideChagnePasswordModal} active={activeChangePasswordModal}/>}
     </ModalContext.Provider>
   );
 };
 
 export default ModalContext;
 export { useModalContext, ModalContextProvider };
+
+
+
