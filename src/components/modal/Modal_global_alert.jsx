@@ -8,11 +8,25 @@ import ModalWrapper from './ModalWrapper';
 function Modal_global_alert({ message, onClick, background,   ...props }) {
   const mct = useModalContext();
   const modalState = mct.hasAlert;
+  const modalContextMessage = mct.message;
   const [style, setStyle] = useState({});
-
+  const [targetScrollYPos, setTargetScrollYPos] = useState( null );
+  
   useEffect(() => {
     callbackAfterAnimation(modalState);
+    const scrollYPos = window.scrollY;
+    if(modalState){
+      document.body.style.cssText = `
+      position:fixed;
+      top : -${scrollYPos}px;
+    `;
+      setTargetScrollYPos(scrollYPos)
+    } else {
+      document.body.style.cssText = ``;
+      window.scrollTo(0, parseInt(targetScrollYPos));
+    }
   }, [modalState]);
+  
 
   const callbackAfterAnimation = (modalState) => {
     const delay = modalState ? 0 : 500;
@@ -38,7 +52,7 @@ function Modal_global_alert({ message, onClick, background,   ...props }) {
       >
         <div className={s['body']} style={modalState ? { display: 'flex' } : style}>
           <header className={s['title-section']}>
-            <pre className={`${s.text} ${s.only}`}>{message}</pre>
+            <pre className={`${s.text} ${s.only}`}>{message || modalContextMessage}</pre>
           </header>
           <div className={s['btn-section']}>
             <button onClick={onClickHandler}>확인</button>

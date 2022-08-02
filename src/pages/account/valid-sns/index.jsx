@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import s from 'src/pages/account/valid-sns/index.module.scss';
+import React, {useEffect, useState} from 'react';
+import s from 'src/pages/account/valid-sns/valid-sns.module.scss';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
@@ -10,8 +10,8 @@ import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import {useDispatch, useSelector} from 'react-redux';
 import Spinner from '/src/components/atoms/Spinner';
 import {useModalContext} from "/store/modal-context";
-import enterKey from "../../../../util/func/enterKey";
-import {authAction} from "../../../../store/auth-slice";
+import enterKey from "/util/func/enterKey";
+import {authAction} from "/store/auth-slice";
 
 
 export default function ValidSnsPage() {
@@ -24,7 +24,14 @@ export default function ValidSnsPage() {
   const [isSubmitted, setIsSubmitted] = useState( false );
   const [tokenFromServer, setTokenFromServer] = useState( null );
   const [isLoading, setIsLoading] = useState({});
-
+  
+  useEffect( () => {
+    if(!userState.snsInfo.provider || !userState.snsInfo.provider){
+      alert('연동할 SNS정보가 없습니다.');
+      window.location.href= '/';
+    }
+  }, [] );
+  
   const onChangeHandler = (e) => {
     const { id, value } = e.currentTarget;
     let filteredValue = filter_emptyValue(value);
@@ -115,13 +122,21 @@ export default function ValidSnsPage() {
     mct.alertHide();
     const token = tokenFromServer;
     if(token){
-      dispatch(authAction.login({ token }));
+      dispatch(authAction.login({ token, redirect: '/account/valid-sns/result' }));
     } else {
       alert('인증과정 중에 문제가 발생했습니다. 다시 시도해주세요.');
       window.location.href ='/account/login'
     }
     
   }
+  
+
+  if(!userState.snsInfo.providerId || !userState.snsInfo.provider){
+    return console.error('Required Provider')
+  }
+
+
+  
   
   return (
     <>

@@ -6,23 +6,20 @@ import s from './login.module.scss';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import Image from 'next/image';
 import Checkbox from '/src/components/atoms/Checkbox';
-import getAdminToken from '/src/pages/api/getAdminToken';
 import Modal from '/src/components/modal/Modal';
 import Modal_AdminResetPassword from '/src/components/modal/Modal_AdminResetPassword';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import Spinner from '/src/components/atoms/Spinner';
 import { validate } from '/util/func/validation/validation_adminLogin';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
-import Router from 'next/router';
 import Link from "next/link";
-import axios from "axios";
-import {postObjData} from "../../api/reqData";
-import {cookieType} from "../../../../store/TYPE/cookieType";
-import {userType} from "../../../../store/TYPE/userAuthType";
+import {postObjData} from "/src/pages/api/reqData";
+import {cookieType} from "/store/TYPE/cookieType";
+import {userType} from "/store/TYPE/userAuthType";
 
 
 
-function LoginIndexPage({ autoLoginAccount }) {
+export default function AdminLoginPage({ autoLoginAccount }) {
   const dispatch = useDispatch();
   const mct = useModalContext();
   const [modalMessage, setModalMessage] = useState('');
@@ -33,6 +30,7 @@ function LoginIndexPage({ autoLoginAccount }) {
   const [autoLogin, setAutoLogin] = useState(false);
 
   useEffect(() => {
+    mct.alertHide();
     if (autoLoginAccount) {
       setAutoLogin(true);
       setFormValues((prevState) => ({
@@ -145,7 +143,7 @@ function LoginIndexPage({ autoLoginAccount }) {
       <MetaTitle title="관리자 로그인" admin={true} />
       <Modal_global_alert message={modalMessage} background onClick={onGlobalModalCallback} />
       {mct.isActive && (
-        <Modal onClick={onHideResetPasswordModal} background title="비밀번호 재설정">
+        <Modal onClick={mct.alertHide} background title="비밀번호 재설정">
           <Modal_AdminResetPassword />
         </Modal>
       )}
@@ -201,7 +199,7 @@ function LoginIndexPage({ autoLoginAccount }) {
                       />
                     </span>
                     <span className={s['reset-pw']}>
-                      <button type="button" onClick={onShowResetPasswordModal}>
+                      <button type="button" onClick={mct.onShow}>
                         비밀번호 재설정
                       </button>
                     </span>
@@ -227,7 +225,6 @@ function LoginIndexPage({ autoLoginAccount }) {
   );
 }
 
-export default LoginIndexPage;
 
 export async function getServerSideProps(context) {
   const { req } = context;
