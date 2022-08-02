@@ -66,8 +66,7 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
   const auth = useSelector(s=>s.auth);
   const data = auth.userInfo;
   const isMobile = useDeviceState().isMobile;
-  const isLogin = data.userType !== userType.NON_MEMBER;
-  
+  const isLogin = data?.userType && data?.userType !== userType.NON_MEMBER;
   const onCloseSidr = () => {
     setSidrOpen(false);
   };

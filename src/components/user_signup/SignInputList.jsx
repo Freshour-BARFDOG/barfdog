@@ -148,6 +148,7 @@ function SignInpuList(props) {
     }))
 
     const response = await getAuthNumberForPhoneNumber(formValues.phoneNumber);
+    console.log(response);
     setAuthPhoneNumber((prevState)=> ({
       ...prevState,
       authNumber: response.authNumber,
@@ -193,6 +194,7 @@ function SignInpuList(props) {
         required={true}
         id={'name'}
         title={'이름(견주님)'}
+        formValue={formValues.name}
         setFormValues={setFormValues}
         errorMessage={
           formErrors.name && <ErrorMessage className={`${s.msg}`}>{formErrors.name}</ErrorMessage>
@@ -204,6 +206,7 @@ function SignInpuList(props) {
         id={'email'}
         title={'이메일주소(아이디)'}
         addedClassName={['add-btn-section']}
+        formValue={formValues.email}
         setFormValues={setFormValues}
         errorMessage={
           (isLoading.email ||
@@ -284,6 +287,7 @@ function SignInpuList(props) {
         id={'phoneNumber'}
         title={'휴대폰 번호'}
         addedClassName={['add-btn-section']}
+        formValue={formValues.phoneNumber}
         setFormValues={setFormValues}
         errorMessage={
           (formErrors.phoneNumber ||

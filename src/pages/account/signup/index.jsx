@@ -1,153 +1,135 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import s from './signup.module.scss';
-
-
-import SignInputList from "/src/components/user_signup/SignInputList";
-import SignupPolicyList, { policy_KEYS } from "/src/components/user_signup/SignupPolicyList";
-import Modal_termsOfSerivce from "/src/components/modal/Modal_termsOfSerivce";
-import Modal_privacy from "/src/components/modal/Modal_privacy";
-import Modal_global_alert from "/src/components/modal/Modal_global_alert";
-import { useModalContext } from "/store/modal-context";
-import axios from "axios";
-import DaumPostcode from "react-daum-postcode";
+import SignInputList from '/src/components/user_signup/SignInputList';
+import SignupPolicyList, { policy_KEYS } from '/src/components/user_signup/SignupPolicyList';
+import Modal_termsOfSerivce from '/src/components/modal/Modal_termsOfSerivce';
+import Modal_privacy from '/src/components/modal/Modal_privacy';
+import Modal_global_alert from '/src/components/modal/Modal_global_alert';
+import { useModalContext } from '/store/modal-context';
+import axios from 'axios';
 import { useRouter } from 'next/router';
-import MetaTitle from "/src/components/atoms/MetaTitle";
-import {validate} from "/util/func/validation/validation_signup";
-import {
-  valid_policyCheckbox
-} from '/util/func/validation/validationPackage';
+import MetaTitle from '/src/components/atoms/MetaTitle';
+import { validate } from '/util/func/validation/validation_signup';
+import { valid_policyCheckbox } from '/util/func/validation/validationPackage';
+import {useSelector} from "react-redux";
 
 
-
-
-const initialFormValues = {
-  name: '',
-  email: '',
-  password: '',
-  confirmPassword: '',
-  phoneNumber: '',
-  address: {
-    zipcode: '',
-    street:'',
-    city:'',
-    detailAddress: ''
-  },
-  birthday: '',
-  gender: 'NONE',
-  recommendCode: '',
-  agreement : {
-    servicePolicy : false,
-    privacyPolicy : false,
-    receiveSms : false,
-    receiveEmail : false,
-    over14YearsOld : false
-  }
-};
-
-
-const initialFormErrors = {
-  name: "",
-  email: "",
-  isEmailDuplicated: "이메일인증이 필요합니다.",
-  password: "",
-  confirmPassword: "",
-  phoneNumber: "",
-  isValidPhoneNumber: "휴대폰번호 인증이 필요합니다.",
-  gender: "",
-  address: "",
-  birthday: "",
-  privacyPolicy: "",
-  servicePolicy: "",
-  over14YearsOld: ""
-}
-
-const SignupPage = () => {
-
+export default function SignupPage() {
   const mct = useModalContext();
   const router = useRouter();
+  const userState = useSelector(s=>s.userState);
+  
+  const initialFormValues = {
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    phoneNumber: '',
+    address: {
+      zipcode: '',
+      street: '',
+      city: '',
+      detailAddress: '',
+    },
+    birthday: '',
+    gender: 'NONE',
+    recommendCode: '',
+    agreement: {
+      servicePolicy: false,
+      privacyPolicy: false,
+      receiveSms: false,
+      receiveEmail: false,
+      over14YearsOld: false,
+    },
+    provider: userState.snsInfo.provider || null,
+    providerId: userState.snsInfo.providerId || null,
+  }
+  
+  // console.log('userState: ',userState)
+  // console.log('initialFormValues: ',initialFormValues)
+  
+  const initialFormErrors = {
+    isEmailDuplicated: null,
+    isValidPhoneNumber: '휴대폰번호 인증이 필요합니다.',
+  }
+  
+  
   const [isModalActive, setIsModalActive] = useState({
     termsOfService: false,
-    privacy: false
+    privacy: false,
   });
   const [alertModalMessage, setAlertModalMessage] = useState('');
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState(initialFormErrors);
-
-
+  
+  
 
   const onSubmit = async (e) => {
     e.preventDefault();
     // console.log(formErrors);
-
     try {
       const validFormResultObj = await validate(formValues, formErrors);
       const validPolicyResultObj = valid_policyCheckbox(formValues.agreement, policy_KEYS);
-      setFormErrors(prevState => ({
+      setFormErrors((prevState) => ({
         ...prevState,
         ...validFormResultObj,
         ...validPolicyResultObj,
       }));
 
-
       let isPassedValid = true;
       for (const validFormResultObjKey in validFormResultObj) {
-        const error = validFormResultObj[validFormResultObjKey]
-        if(error) isPassedValid = false;
+        const error = validFormResultObj[validFormResultObjKey];
+        if (error) isPassedValid = false;
       }
 
       for (const validPolicyResultObjKey in validPolicyResultObj) {
         const error = validPolicyResultObj[validPolicyResultObjKey];
-        if(error) isPassedValid = false;
+        if (error) isPassedValid = false;
       }
 
-      if(isPassedValid){
-        sendSignupData(formValues);
+      if (isPassedValid) {
         mct.alertHide();
-        setAlertModalMessage('')
-      }else{
+        setAlertModalMessage('');
+        await sendSignupData(formValues);
+      } else {
         mct.alertShow();
         setAlertModalMessage('유효하지 않은 항목이 있습니다.');
       }
     } catch (err) {
-      console.error('통신에러: ',err);
+      console.error('통신에러: ', err);
       setAlertModalMessage(`데이터 처리 중 오류가 발생했습니다.\n${err}`);
     }
-
   };
 
   // console.log(formValues)
 
-  const sendSignupData = (data) => {
-    // console.log(data);
-    console.log('FORMVALUES : ',formValues);
-    console.log('FORMERRORS : ', formErrors);
-
-    axios
-      .post('/api/join', data, {
+  const sendSignupData = async (data) => {
+    console.log('FORMVALUES',data);
+  
+    // data.providerId = "asdfasdf-asdfasdf"; // ! TEST 임의의 providerID를 서버에 전송해도, 가입이 된다.
+    // 단, providerID가 중복될 경우, 해당 providerId sns계정으로 가입불가능.
+    await axios
+      .post('/api/join', formValues, {
         headers: {
           'content-Type': 'application/json',
-        }
+        },
       })
       .then((res) => {
-        // console.log(res);
-        // console.log(res.data);
-        if(res.status === 201){
+        console.log(res);
+        console.log(res.data);
+        if (res.status === 201) {
+          alert('회원가입에 성공하였습니다.')
           router.push(`/account/signup/success?username=${data.name}`);
         }
       })
       .catch((err) => {
         mct.alertHide();
         setAlertModalMessage(`ERROR\n\n서버와 통신할 수 없습니다.`);
-        console.error('서버통신오류: ',err);
-        // console.log(err.request)
-        // console.log(err.response)
+        console.error('서버통신오류: ', err);
       });
-  }
-
-
-
+  };
 
   return (
     <>
@@ -201,7 +183,4 @@ const SignupPage = () => {
       <Modal_global_alert message={alertModalMessage} />
     </>
   );
-};
-
-export default SignupPage;
-
+}

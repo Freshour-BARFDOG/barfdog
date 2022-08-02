@@ -40,7 +40,7 @@ const authSlice = createSlice({
       const accessToken = action.payload.token;
       const expiredDate = action.payload.expiredDate && cookieType.LOGIN_EXPIRED_PERIOD.VALUE;// 서버 token지속 기본값: 2시간
       setCookie(cookieType.LOGIN_COOKIE,  accessToken,  cookieType.LOGIN_EXPIRED_PERIOD.UNIT, expiredDate, {path:'/'});
-      window.location.href = '/';
+      window.location.href = action.payload.redirect || '/';
     },
     autoLogin(state, action) {
       state.isAdmin = false;
@@ -71,15 +71,18 @@ const authSlice = createSlice({
       const expiredDate = action.payload.expiredDate && cookieType.AUTO_LOGIN_EXPIRED_PERIOD.VALUE; // 서버로 부터 전달받은 값을 그대로 cookie의 expiredDate로 사용.
       setCookie(cookieType.AUTO_LOGIN_COOKIE,  accessToken,  cookieType.AUTO_LOGIN_EXPIRED_PERIOD.UNIT, expiredDate, {path:'/'});
     },
-    adminResetPassword(state) {
-      state.isAdmin = true;
-    },
     adminLogout(state) {
       state.isAdmin = false;
       state.isAuth = false;
       setCookie(cookieType.LOGIN_COOKIE,  null,  'date', 0, {path:'/'} );
       // alert('관리자 로그아웃 처리되었습니다.');
       window.location.href = '/bf-admin/login';
+    },
+    adminResetPassword(state, action) {
+      state.isAdmin = true;
+      state.adminInfo = {
+        email: action.payload.data.email
+      }
     },
     userRestoreAuthState(state, action) { // 쿠키가 존재할 경우 restoreAuthState
       console.log('Restored User Auth State');
