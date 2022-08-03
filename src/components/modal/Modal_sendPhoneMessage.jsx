@@ -130,7 +130,7 @@ const Modal_sendPhoneMessage = ({ setModalState, data, setModalMessage }) => {
           <h2>문자보내기</h2>
         </section>
         <section className="cont-section">
-          <ScrollContainer scrollBarWidth={'0'} height={'168'}>
+          <ScrollContainer scrollBarWidth={'0'}>
             <p>[바프독]</p>
             <p>
               <span>{data.name}</span>님이

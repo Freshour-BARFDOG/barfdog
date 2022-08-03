@@ -955,6 +955,8 @@ section.sns {
 
   .swiper_recipe_outerWrap {
     .swiper_recipe{
+      overflow: visible !important;
+      width: rem(864);
       left: rem(20);
     }
   }
@@ -1085,7 +1087,17 @@ section.sns {
   }
 }
 
+@media only screen and (min-width:rem(100)) and (max-width: rem(1000)) {
+  
+  //레시피 설명 4가지 사진
+  .swiper_recipe_outerWrap {
+    .swiper_recipe{
+      width: rem(570);
+      left: 0;
+    }
+  }
 
+}
 
 @media only screen and (min-width:rem(100)) and (max-width: rem(900)) {
   
@@ -1096,14 +1108,6 @@ section.sns {
     }
   }
   
-
-
-//레시피 설명 4가지 사진
-  .swiper_recipe_outerWrap {
-    .swiper_recipe{
-      left: rem(60);
-    }
-  }
 
 
 
@@ -1159,6 +1163,21 @@ section.sns {
 }
 
 
+@media only screen and (min-width:rem(100)) and (max-width: rem(650)) {
+  
+  //레시피 설명 4가지 사진
+  .swiper_recipe_outerWrap {
+    margin-top: rem(20);
+    height: rem(520);
+
+    .swiper_recipe{
+      width: rem(295);
+      left: rem(20);
+    }
+  }
+
+}
+
 
 @media only screen and (min-width:rem(100)) and (max-width: rem(600)) {
 
@@ -1186,16 +1205,6 @@ section.sns {
   
 
 
-//레시피 설명 4가지 사진
-  .swiper_recipe_outerWrap {
-     margin-top: rem(20);
-     height: rem(520);
-
-    .swiper_recipe{
-      width: rem(300);
-      left: rem(20);
-    }
-  }
 
 
 
@@ -1576,16 +1585,12 @@ section.Howtouse {
 
 
 
-@media (max-width: rem(400)) {
-  // .swiper_review_outerWrap {
-
-  //   .swiper-button-prev {
-  //     display: none;
-  //   }
-  
-  //   .swiper-button-next {
-  //     display: none;
-  //   }
-  // }
+@media (max-width: rem(370)) {
+  //레시피 설명 4가지 사진
+  .swiper_recipe_outerWrap {
+    .swiper_recipe{
+      left: 0;
+    }
+  }
 }
 
