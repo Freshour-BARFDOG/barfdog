@@ -7,13 +7,13 @@ import Link from 'next/link';
 import filter_emptyValue from '/util/func/filter_emptyValue';
 import filter_onlyNumber from '/util/func/filter_onlyNumber';
 import { validate } from '/util/func/validation/validation_resetPassword';
-import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
+import {valid_hasFormErrors, valid_password} from '/util/func/validation/validationPackage';
 import {putObjData} from '/src/pages/api/reqData';
 import Spinner from '/src/components/atoms/Spinner';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import {useModalContext} from "/store/modal-context";
-import ErrorMessage from "../../../components/atoms/ErrorMessage";
-import enterKey from "../../../../util/func/enterKey";
+import ErrorMessage from "/src/components/atoms/ErrorMessage";
+import enterKey from "/util/func/enterKey";
 
 function ResetPasswordPage() {
   const initialFormValues = {
@@ -130,7 +130,16 @@ function ResetPasswordPage() {
                         data-input-type={'string'}
                       />
                     </label>
-                    {formErrors.password && <ErrorMessage>{formErrors.password}</ErrorMessage>}
+                    {form.password?.length > 0 && valid_password(form.password).message.map((msg, index) => (
+                      <><ErrorMessage
+                        key={`pw-msg-${index}`}
+                        className={`${s.msg} ${msg.valid ? s.valid : ''} ${index !== 0 && s.siblings}`}
+                      >
+                        {msg.label}
+                      </ErrorMessage><br/>
+                      </>
+                    ))}
+                    {/*{formErrors.password && <ErrorMessage>{formErrors.password}</ErrorMessage>}*/}
                   </div>
                   <div className={s['form-row']}>
                     <label htmlFor="passwordConfirm">

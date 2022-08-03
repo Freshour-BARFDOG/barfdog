@@ -1,9 +1,7 @@
 import {
   valid_confirmPassword,
-  valid_email,
   valid_isEmpty,
   valid_password,
-  valid_phoneNumber,
 } from './validationPackage';
 
 export const validate = (obj) => {
@@ -25,6 +23,19 @@ export const validate = (obj) => {
         const pw1 = obj['password'];
         const pw2 = val;
         errors[key] = valid_confirmPassword(pw1, pw2).error;
+        break;
+  
+  
+      case 'originPassword':
+        errors[key] = valid_isEmpty(val);
+        break;
+      case 'newPassword':
+        errors[key] = valid_password(val).error;
+        break;
+      case 'newPasswordConfirm':
+        const newPw1 = obj['newPassword'];
+        const newPw2 = val;
+        errors[key] = valid_confirmPassword(newPw1, newPw2).error;
         break;
     }
   }

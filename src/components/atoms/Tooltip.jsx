@@ -13,6 +13,7 @@ const Icon = styled.i`
   background: #fff;
   z-index: 9;
   border-radius: 50%;
+  overflow: hidden;
   border: ${rem(1)} solid #ababab;
   color: #ababab;
   font-size: ${rem(13)} !important;
