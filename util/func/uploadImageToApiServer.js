@@ -1,4 +1,4 @@
-import {postFileUpload} from '/src/pages/api/reqData';
+import {postFileUpload, putObjData} from '/src/pages/api/reqData';
 
 const uploadImageToApiServer = async (
   file,
@@ -7,6 +7,7 @@ const uploadImageToApiServer = async (
   setFormErrors,
   postApiUrl,
   leakOrder,
+  option={method:'POST', body: {}},
 ) => {
   let result = {
     id: '',
@@ -15,12 +16,17 @@ const uploadImageToApiServer = async (
   };
   const formData = new FormData();
   formData.append('file', file);
-  const response = await postFileUpload(postApiUrl, formData); // ! ORIGIN CODE
-  console.log(response)
+  let response;
+  if(option.method === 'POST') {
+    response = await postFileUpload(postApiUrl, formData); // ! ORIGIN CODE
+  } else if(option.method === 'PUT') {
+    response = await putObjData(postApiUrl, option.body)
+  }
   const imageId = response.data.id;
   const imageUrl = response.data.url;
   const isFailed = response.status !== 200 && response.status !== 201;
   
+  result.response = response;
   result.id = imageId;
   result.url = imageUrl;
   result.leakOrder = leakOrder;

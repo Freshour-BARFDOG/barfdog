@@ -16,6 +16,7 @@ import ErrorMessage from "/src/components/atoms/ErrorMessage";
 import {useDispatch} from "react-redux";
 import {cartAction} from "/store/cart-slice";
 import {FullScreenRunningDog} from "../../../components/atoms/FullScreenLoading";
+import {filter_apiHostname} from "../../../../util/func/filter_api_hostname";
 
 
 // - 1.  설문조사 리포트 레시피 추천 결과 조회  못먹는 음식 조회 /api/dogs/14
@@ -178,6 +179,9 @@ export default function RegisterSubscribeInfoPage({ data }) {
             <button className={s.nextPage} onClick={onSubmit}>
               {isLoading?.submit ? <Spinner style={{ color: '#fff' }} /> : '맞춤레시피 구매하기'}
             </button>
+            <button className={s.nextPage} onClick={onSubmit}>
+              {isLoading?.submit ? <Spinner style={{ color: '#fff' }} /> : '맞춤플랜 적용하기'}
+            </button>
           </section>
         </Wrapper>
       </Layout>
@@ -186,14 +190,22 @@ export default function RegisterSubscribeInfoPage({ data }) {
 }
 
 export async function getServerSideProps({ req, query }) {
-  const { surveyReportsId } = query;
+  const { surveyReportsId, dogId } = query;
 
   let data = null;
-  const getSurveyInfoApiUrl = `/api/surveyReports/${surveyReportsId}/result`;
-  const surveyInfoRes = await getDataSSR(req, getSurveyInfoApiUrl); // 해당 정보가 중요
-  const dogId = surveyInfoRes.data.dogId;
-  const getDogInfoApiUrl = `/api/dogs/${dogId}`;
+  let surveyInfoRes;
+  if(surveyReportsId){
+    const getSurveyInfoApiUrl = `/api/surveyReports/${surveyReportsId}/result`;
+    surveyInfoRes = await getDataSSR(req, getSurveyInfoApiUrl); // 해당 정보가 중요
+  } else {
+    const surveyReportResultApiUrl = `/api/dogs/${dogId}/surveyReportResult`;
+    surveyInfoRes = await getDataSSR(req, surveyReportResultApiUrl);
+  }
+  
+  const thisDogId = dogId || surveyInfoRes.data.dogId;
+  const getDogInfoApiUrl = `/api/dogs/${thisDogId}`;
   const dogInfoRes = await getDataSSR(req, getDogInfoApiUrl);
+  
   data = {
     dogDto: dogInfoRes.data.dogDto || null,
     recipeDtoList: dogInfoRes.data.recipeDtoList || null,

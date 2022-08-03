@@ -1,46 +1,49 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import s from './dogs.module.scss';
+import { dogGenderType } from '/store/TYPE/dogGenderType';
+import { subscribeStatus } from '/store';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from '/src/components/mypage/MypageWrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
-import s from './dogs.module.scss';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Modal_uploadDogProfileImage } from '/src/components/modal/Modal_uploadDogProfileImage';
-import { getDataSSR, putObjData } from '/src/pages/api/reqData';
+import { deleteObjData, getData, getDataSSR, putObjData } from '/src/pages/api/reqData';
 import { EmptyContMessage } from '/src/components/atoms/emptyContMessage';
 import { calcDogAge } from '/util/func/calcDogAge';
-import { dogGenderType } from '/store/TYPE/dogGenderType';
-import { subscribeStatus } from '/store';
 import Spinner from '/src/components/atoms/Spinner';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import { useModalContext } from '/store/modal-context';
 import { useRouter } from 'next/router';
 import Modal_confirm from '/src/components/modal/Modal_confirm';
-
+import { filter_apiHostname } from '../../../../util/func/filter_api_hostname';
+import { paymentMethodType } from '../../../../store/TYPE/paymentMethodType';
 
 export default function MypageDogInfoPage({ data }) {
-  
-  // 구독 주문 리스트 검색(페이징)
-  // /api/orders/subscribe?size=5&page=1' -i -X GET \
+  console.log(data);
   const mct = useModalContext();
   const [activeUploadDogProfileModal, setActiveUploadDogProfileModal] = useState(false);
   const [itemList, setItemList] = useState(data);
   const [selectedItemData, setSelectedItemData] = useState(null);
   const [modalMessage, setModalMessage] = useState('');
 
-  const getItemData = (itemData) => {
-    setSelectedItemData({
-      id: itemData.id,
-      pictureUrl: itemData.pictureUrl,
-    });
+  useEffect(() => {
+    // 반려견 등록 후 , 해당 페이지 최초 접근 시, 모달메시지 나타나는 버그에 대한 일시적인 해결
+    mct.alertHide();
+  }, []);
+
+  // console.log(itemList);
+  const onUploadImageModalHandler = (selectedItemData) => {
+    setSelectedItemData(selectedItemData);
     onActiveModal();
   };
+
   const onActiveModal = () => {
     setActiveUploadDogProfileModal(true);
   };
   const onShowModalHandler = (message) => {
-    mct.alertShow();
+    if (message) mct.alertShow();
     setModalMessage(message);
   };
 
@@ -62,7 +65,7 @@ export default function MypageDogInfoPage({ data }) {
                   <ItemList
                     key={`${item.id}-${index}`}
                     data={item}
-                    onUploadImageModalHandler={getItemData}
+                    onEditImage={onUploadImageModalHandler}
                     onShowModalHandler={onShowModalHandler}
                   />
                 ))
@@ -91,29 +94,27 @@ export default function MypageDogInfoPage({ data }) {
   );
 }
 
+const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
+  // console.log(data)
 
-
-const ItemList = ({ data, onUploadImageModalHandler, onShowModalHandler }) => {
   const router = useRouter();
   const mct = useModalContext();
-  const [isLoading, setIsLoading] = useState({}); // obj
   const dogId = data.id;
-  const subscribeId = null; //  ! ! ! ! ! !  값 확인하기
+  const subscribeId = null; //  ! 값 확인하기
   const dogAge = calcDogAge(data.birth);
   const gender =
     data.gender === dogGenderType.MALE ? dogGenderType.KOR.MALE : dogGenderType.KOR.FEMALE;
-  const [activeConfirmModal, setActiveConfirmModal] = useState( false );
-  
 
-  
+  const [activeConfirmModal, setActiveConfirmModal] = useState(false);
+  const [isLoading, setIsLoading] = useState({}); // obj
+
   const onSetRepresentative = (confirm) => {
-    if(!confirm){
+    if (!confirm) {
       setActiveConfirmModal(false);
-      return onShowModalHandler('취소되었습니다.');
+      onShowModalHandler('취소되었습니다.');
+      return;
     }
-  
-  
-  
+
     const apiUrl = `/api/dogs/${dogId}/representative`;
     (async () => {
       try {
@@ -124,24 +125,26 @@ const ItemList = ({ data, onUploadImageModalHandler, onShowModalHandler }) => {
         const res = await putObjData(apiUrl, {
           id: dogId,
         });
-        
+
         let resultMessage;
-        if(res.isDone){
-          resultMessage  = `${data.name}으로 대표견 설정이 완료되었습니다.`;
-        }else if (res.status === 401){
-          resultMessage  = `토큰이 만료되었습니다. 로그인 페이지로 이동합니다.`;
-          setTimeout(()=>{
+        if (res.isDone) {
+          resultMessage = `선택하신 반려견(${data.name})으로\n대표견 설정되었습니다.`;
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
+        } else if (res.status === 401) {
+          resultMessage = `토큰이 만료되었습니다. 로그인 페이지로 이동합니다.`;
+          setTimeout(() => {
             router.push('/account/login');
             mct.alertHide();
-          }, 2000)
+          }, 2000);
         } else {
-          resultMessage  = `대표견 설정에 실패하였습니다.`;
+          resultMessage = `대표견 설정에 실패하였습니다.`;
         }
-  
+
         onShowModalHandler(resultMessage);
         setActiveConfirmModal(false);
         console.log(res);
-        
       } catch (err) {
         console.error(err);
       }
@@ -151,17 +154,59 @@ const ItemList = ({ data, onUploadImageModalHandler, onShowModalHandler }) => {
       }));
     })();
   };
-  
-  const onActiveConfirmModal = ()=>{
-    setActiveConfirmModal(true)
-  }
-  
 
-  const onEditProfileImageHandler = () => {
-    onUploadImageModalHandler({
-      id: data.id,
-      pictureUrl: data.pictureUrl,
-    });
+  const onActiveConfirmModal = (e) => {
+    const btn = e.currentTarget;
+    const btnType = btn.dataset.buttonType;
+    setActiveConfirmModal({ [btnType]: true });
+  };
+
+  const onEditProfileImage = () => {
+    onEditImage(data);
+  };
+
+  const onDeleteItem = (confirm) => {
+    const isRepDog = data.representative;
+    if (!confirm) {
+      setActiveConfirmModal(false);
+      return onShowModalHandler('취소되었습니다.');
+    }
+    if (confirm && isRepDog) {
+      onShowModalHandler('대표 반려견은 삭제할 수 없습니다.');
+      setActiveConfirmModal(false);
+      return;
+    }
+
+    (async () => {
+      try {
+        setIsLoading((prevState) => ({
+          ...prevState,
+          rep: true,
+        }));
+        const apiUrl = `/api/dogs/${dogId}`;
+        const res = await deleteObjData(apiUrl);
+        console.log(res);
+        if (res.isDone) {
+          onShowModalHandler('선택하신 반려견이 삭제되었습니다.');
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
+        } else if (res.status === 400) {
+          onShowModalHandler('대표 반려견은 삭제할 수 없습니다.');
+        } else if (res.status === 404) {
+          onShowModalHandler('삭제할 반려견 정보가 존재하지 않습니다.');
+        } else {
+          onShowModalHandler('강아지를 삭제하는데 실패하였습니다.');
+        }
+        setActiveConfirmModal(false);
+      } catch (err) {
+        console.error(err);
+      }
+      setIsLoading((prevState) => ({
+        ...prevState,
+        rep: false,
+      }));
+    })();
   };
 
   const beforePaymentStatus =
@@ -193,7 +238,11 @@ const ItemList = ({ data, onUploadImageModalHandler, onShowModalHandler }) => {
                 {data.representative && <i className={s.representative}>대표견</i>}
               </div>
             </div>
-            <div className={`${s.image} img-wrap`}>
+            <div
+              className={`${s.image} img-wrap`}
+              data-button-type={'deleteItem'}
+              onClick={onActiveConfirmModal}
+            >
               <Image
                 priority
                 src={require('/public/img/mypage/dog_info_delete.png')}
@@ -205,17 +254,15 @@ const ItemList = ({ data, onUploadImageModalHandler, onShowModalHandler }) => {
           </div>
 
           <div className={s.controls}>
-            <button type={'button'} onClick={onEditProfileImageHandler}>
+            <button type={'button'} onClick={onEditProfileImage}>
               프로필사진 편집
             </button>
-            <button type={'button'} onClick={onActiveConfirmModal}>
+            <button type={'button'} data-button-type={'setRep'} onClick={onActiveConfirmModal}>
               대표견 설정
               {isLoading.rep && <Spinner />}
             </button>
           </div>
-
           {/* 설문결과 설문수정 결제하기 버튼3개 */}
-          {/* 리포트 결과를 조회ㅏ면, 강아지에 대한 구독 조회버튼이 등장한다.*/}
         </div>
         <div className={s.select_box}>
           <div className={s['btn-section']}>
@@ -225,29 +272,41 @@ const ItemList = ({ data, onUploadImageModalHandler, onShowModalHandler }) => {
             <Link href={`/mypage/dogs/${dogId}/updateSurvey`} passHref>
               <a>설문수정</a>
             </Link>
-            
-            {/* 강아지가 구독중이지 않고, 결제하지 않은 구독 정보 중....에서..*/}
-            <Link href={`/order/ordersheet/subscribe/${subscribeId}`} passHref>
-              <a className={s.payment}>결제하기</a>
-            </Link>
+            {/* 버튼 생성 조건 :  결제전 또는 구독 보류일 경우*/}
+            {(data.subscribeStatus === subscribeStatus.BEFORE_PAYMENT ||
+              data.subscribeStatus === subscribeStatus.SUBSCRIBE_PENDING) && (
+              <Link href={`/order/subscribeShop?dogId=${dogId}`} passHref>
+                <a className={s.payment}>결제하기</a>
+              </Link>
+            )}
           </div>
         </div>
       </li>
-      {activeConfirmModal && <Modal_confirm text={'대표견으로 설정하시겠습니까?'} isConfirm={onSetRepresentative}/>}
+      {(activeConfirmModal.setRep || activeConfirmModal.deleteItem) && (
+        <Modal_confirm
+          text={
+            activeConfirmModal.setRep
+              ? ' 대표견으로 설정하시겠습니까?'
+              : `반려견(${data.name})을 삭제 하시겠습니까?`
+          }
+          isConfirm={activeConfirmModal.setRep ? onSetRepresentative : onDeleteItem}
+          positionCenter
+        />
+      )}
     </>
   );
 };
 
 export async function getServerSideProps({ req }) {
-  const dataQuery = 'queryDogsDtoList';
   const getApiUrl = '/api/dogs';
   const res = await getDataSSR(req, getApiUrl);
   let DATA = null;
-  const embeddedData = res?.data._embedded
+  const embeddedData = res?.data._embedded;
   // console.log(embeddedData);
   if (embeddedData) {
-    const dataList = embeddedData[dataQuery] || [];
-    if(!dataList.length) return;
+    const dataList = embeddedData?.queryDogsDtoList || [];
+    // console.log(dataList)
+    if (!dataList.length) return;
     DATA = dataList.map((data) => ({
       id: data.id,
       pictureUrl: data.pictureUrl, // 반려견 프로필 사진
@@ -256,23 +315,23 @@ export async function getServerSideProps({ req }) {
       gender: data.gender, // 반려견 성별
       representative: data.representative, // 대표견 여부
       subscribeStatus: data.subscribeStatus, // 구독상태
-      _links : {
+      _links: {
         update_picture: {
-          href: data._links.update_picture.href
+          href: data._links.update_picture.href,
         },
         set_representative_dog: {
-          href: data._links.set_representative_dog.href
+          href: data._links.set_representative_dog.href,
         },
         query_dog: {
-          href: data._links.query_dog.href
+          href: data._links.query_dog.href,
         },
         query_surveyReport: {
-          href: data._links.query_surveyReport.href
+          href: data._links.query_surveyReport.href,
         },
         delete_dog: {
-          href: data._links.delete_dog.href
-        }
-      }
+          href: data._links.delete_dog.href,
+        },
+      },
     }));
   }
   return { props: { data: DATA } };

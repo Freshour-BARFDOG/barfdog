@@ -8,16 +8,17 @@ import { dogActivityLevelType } from '/store/TYPE/dogActivityLevelType';
 import {dogSizeType} from "/store/TYPE/dogSizeType";
 
 export const SurveyStatistics = ({ id ,  mode = 'default' }) => {
+  
+  const reportLoadingDuration = 2000;
   const [info, setInfo] = useState({});
   const [isLoading, setIsLoading] = useState({ fetching: true });
   const [isRendered, setIsRendered] = useState(true);
-  console.log(info);
+  
+  
   useEffect(() => {
-    // if(Object.keys(info).length >0 ) return;
+    // ! mypage => '강아지' id로 조회
+    // ! survey => '설문조사' id로 조회
     const getSurveyReportsApiUrl = mode === 'mypage' ? `/api/dogs/${id}/surveyReport` : `/api/surveyReports/${id}`;
-    // - mypage => '강아지' id로 조회
-    // - survey => '설문조사' id로 조회
-    
     // console.log(getSurveyReportsApiUrl);
     (async () => {
       try {
@@ -189,7 +190,7 @@ export const SurveyStatistics = ({ id ,  mode = 'default' }) => {
           ...prevState,
           fetching: false,
         }));
-      }, 3000);
+      }, reportLoadingDuration);
     })();
   }, []);
 
@@ -205,8 +206,7 @@ export const SurveyStatistics = ({ id ,  mode = 'default' }) => {
         {info.myDogName}의 맞춤 레포트
         <span>{info.lastSurveyDate} 설문결과</span>
       </section>
-
-      <main className={s.grid_container_box}>
+      <main className={`${s.grid_container_box} animation-show-all-child`}>
         <div className={s.grid_container}>
           <section className={s.top}>
             <div className={s.flex_box}>
