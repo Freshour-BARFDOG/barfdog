@@ -5,6 +5,7 @@
 $bottom-menu-list-height: rem(50);
 
 .routing-menu-section {
+  padding-top: rem(30);
   padding-bottom: calc(100vh - #{$bottom-menu-list-height}*4);
   ul {
     li {

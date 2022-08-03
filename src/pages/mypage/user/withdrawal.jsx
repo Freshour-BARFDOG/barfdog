@@ -103,7 +103,7 @@ export default function WithDrawalPage() {
 
           <section className={s.content}>
             <div className={s.content_text}>
-              정말 탈퇴하시겠습니까? 탈퇴 시 보유 적립금은 모두 삭제됩니다.
+              정말 탈퇴하시겠습니까? <br></br>탈퇴 시 보유 적립금은 모두 삭제됩니다.
             </div>
 
             <label id="hi" className={s.labe_box}>

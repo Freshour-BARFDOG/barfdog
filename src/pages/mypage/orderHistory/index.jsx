@@ -266,6 +266,9 @@ const SingleItemList = () => {
     </Link>
   </div>
 </div>
+
+<hr className={Styles.hr2} />
+
       <div className={Styles.pagination_box}>
         <Pagination itemCountPerGroup={5} itemTotalCount={100} />
       </div>

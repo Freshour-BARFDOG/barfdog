@@ -45,6 +45,7 @@ $topLinkBannerHeight : rem(38);
 
 .btn_close_modal {
   position: fixed;
+  width: rem(40);
   right: rem(20);
   top: rem(20);
   display: flex;
@@ -58,11 +59,16 @@ $topLinkBannerHeight : rem(38);
 .cont {
   position: relative;
   background-color: #fff;
-  overflow: hidden;
+  overflow: scroll;
+  &::-webkit-scrollbar {display: none;}
+
   box-shadow: 0 0 rem(30) rgba(0, 0, 0, 0.15);
   border-radius: rem(8);
   padding: rem(22) rem(20);
   box-sizing: border-box;
+  max-height: rem(520);
+  height: 100vh;
+
   ul {
     display: grid;
     align-items: flex-start;
@@ -178,9 +184,6 @@ $topLinkBannerHeight : rem(38);
   //   max-height: calc(100vh - #{rem(83)
   // });
   max-height: rem(754);
-  height: 100vh;
-  overflow: scroll;
-  &::-webkit-scrollbar {display: none;}
  
     ul {
       grid-template-columns: 1fr ;
