@@ -1,16 +1,8 @@
-import React, {useEffect, useState} from "react";
-import s from "./customRadio.module.scss";
+import React, { useEffect, useState } from 'react';
+import s from './customRadio.module.scss';
 
-
-const CustomRadio = ({
-                       setValue,
-                       name,
-                       labelList,
-                       className,
-                       initialValueIndex
-                     }) => {
-
-  const initialValue = labelList[initialValueIndex || 0].value;
+const CustomRadio = ({ setValue, name, labelList, className, initialValueIndex, value }) => {
+  const initialValue = value || labelList[initialValueIndex || 0].value;
   const [selectedRadio, setSelectedRadio] = useState(initialValue);
 
   const onChangeHandler = (e) => {
@@ -27,23 +19,23 @@ const CustomRadio = ({
 
   return (
     <>
-        <div className={`${s["inp-wrap"]} ${s["radio"]} ${className || ''}`}>
-          {labelList.map((list, index) => {
-            return (
-              <label key={`radio-${name}-${index}`} htmlFor={list.value}>
-                <input
-                  id={list.value}
-                  name={name}
-                  type="radio"
-                  value={list.value}
-                  checked={selectedRadio === list.value} // _ important
-                  onChange={onChangeHandler}
-                />
-                {list.label}
-              </label>
-            );
-          })}
-        </div>
+      <div className={`${s['inp-wrap']} ${s['radio']} ${className || ''}`}>
+        {labelList.map((list, index) => {
+          return (
+            <label key={`radio-${name}-${index}`} htmlFor={list.value}>
+              <input
+                id={list.value}
+                name={name}
+                type="radio"
+                value={list.value}
+                checked={selectedRadio === list.value} // _ important
+                onChange={onChangeHandler}
+              />
+              {list.label}
+            </label>
+          );
+        })}
+      </div>
     </>
   );
 };

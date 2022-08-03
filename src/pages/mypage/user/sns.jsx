@@ -4,8 +4,15 @@ import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from "/src/components/mypage/MypageWrapper";
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import s from './sns.module.scss';
+import {useSelector} from "react-redux";
+import {snsProviderType} from "/store/TYPE/snsProviderType";
+import Image from "next/image";
 
-function SNSManagementPage() {
+export default function SNSManagementPage() {
+  
+  const auth = useSelector(s=>s.auth);
+  const userInfo = auth.userInfo;
+  
   return (
     <>
       <MetaTitle title="마이페이지 SNS연동"/>
@@ -25,17 +32,36 @@ function SNSManagementPage() {
                   연동된 SNS
                 </div>
                 <div className={s.row_2}>
-                  네이버 <span>(barfdog@naver.com)</span>
+                  {!userInfo.provider && <span>현재 연결된 SNS가 없습니다.</span>}
+                  {userInfo.provider === snsProviderType.KAKAO && (
+                    <figure className={`${s.image} img-wrap`}>
+                      <Image
+                        src={require('/public/img/icon/kakao.png')}
+                        objectFit="cover"
+                        layout="fill"
+                        alt="카카오톡 아이콘"
+                      />
+                    </figure>
+                  )}
+                  {userInfo.provider === snsProviderType.NAVER && (
+                    <figure className={`${s.image} img-wrap`}>
+                      <Image
+                        src={require('/public/img/icon/naver.png')}
+                        objectFit="cover"
+                        layout="fill"
+                        alt="카카오톡 아이콘"
+                      />
+                    </figure>
+                  )}
                 </div>
-
               </div>
             </section>
             
             <section className={s.btn}>
               <div className={s.btn_box}>
-                <div className={s.red_btn}>
+                <button className={`${s.red_btn } ${!userInfo.provider ? 'disabled' : ''}`} disabled={!userInfo.provider}>
                   연동 해제하기
-                </div>
+                </button>
               </div>
             </section>
           </MypageWrapper>
@@ -44,5 +70,3 @@ function SNSManagementPage() {
     </>
   );
 }
-
-export default SNSManagementPage;

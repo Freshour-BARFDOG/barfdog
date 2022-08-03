@@ -10,6 +10,7 @@ const WindowOpener = dynamic(() => import('/util/func/window-opener'), { ssr: fa
 function SignInput_address(props) {
   const { formValues, setFormValues, formErrors, setFormErrors } = props;
 
+  console.log(formValues)
 
   const onReceivePopupData = (err, data) => {
     // MEMO DATA from POSTCODE API
@@ -70,7 +71,7 @@ function SignInput_address(props) {
         }
       >
         <WindowOpener url={'/popup/searchAddress'} bridge={onReceivePopupData}>
-          <span type={'button'} className={`${s.btn} ${s.bigbtn}`}>
+          <span className={`${s.btn} ${s.bigbtn}`}>
             {formValues.address.city ? '재검색' : '주소검색'}
           </span>
         </WindowOpener>

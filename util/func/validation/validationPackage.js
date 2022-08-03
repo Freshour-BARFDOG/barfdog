@@ -162,7 +162,6 @@ export const valid_email_duplication = async (value) => {
     })
     .catch((err) => {
       if(err.request.status === 409 ){
-        console.log('계정 중복검사')
         error = '이미 존재하는 계정입니다.'
       } else {
         error = '서버와 통신할 수 없습니다. \n관리자에게 문의하세요.';
@@ -190,13 +189,16 @@ export const valid_password = (value) => {
   const pattern_en = /[a-zA-Z]/;
   const pattern_spChar = /[~!@#$%^&*()<>+-]/;
 
-  if(!value) error = '항목이 비었습니다.';
+  if(!value){
+    error = '항목이 비었습니다.';
+    return {error , message}
+  };
 
 
 
   // PART 1
   const passwordMinLength = 7;
-  const pattern_minLength = pw.length >= passwordMinLength;
+  const pattern_minLength = pw?.length >= passwordMinLength;
   !pattern_minLength && (error = '최소 글자 수 미충족');
 
 

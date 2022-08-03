@@ -6,14 +6,14 @@ import SignupInput from "./SignupInput";
 import SignInput_address from "./SignInput_address";
 import CustomRadio from "/src/components/atoms/CustomRadio";
 import getAuthNumberForPhoneNumber from "/util/func/getAuthNumberForPhoneNumber";
-import {valid_authNumber, valid_confirmPassword, valid_email, valid_email_duplication, valid_password, valid_phoneNumber} from "/util/func/validation/validationPackage";
+import {valid_authNumber, valid_phoneNumber} from "/util/func/validation/validationPackage";
 import rem from "/util/func/rem";
+import {genderType} from "/store/TYPE/genderType";
+import {transformBirthDay} from "/util/func/transformBirthDay";
 
 
-let isFirstRendering = true;
 
 export default function SignInpuList({formValues, setFormValues, formErrors, setFormErrors}) {
-
 
   const initialLoadingState = {
     email: false,
@@ -29,91 +29,6 @@ export default function SignInpuList({formValues, setFormValues, formErrors, set
     messageOnPhoneNumberInput: '',
     messageOnAuthNumberInput: ''
   });
-
-  const [confirmPasswordMessage, setConfirmPasswordMessage ] = useState('');
-  const [emailPassedValdationMessage, setEmailPassedValidationMessage ] = useState('');
-
-  useEffect( () => {
-    (async ()=>{
-      const response = !valid_email(formValues.email) && (await valid_email_duplication(formValues.email))
-      const message = response.message;
-      const error = response.error;
-
-      setEmailPassedValidationMessage(error ? "" : message)
-    })();
-
-  }, [formErrors.isEmailDuplicated]);
-
-
-
-
-  useEffect(() => {
-    if (!isFirstRendering) {
-      const validPassword = valid_password(formValues.password);
-      const validConfirmPassword = valid_confirmPassword(
-        formValues.password,
-        formValues.confirmPassword,
-      );
-      // console.log('Keyboardevent!: ',validConfirmPassword)
-      setFormErrors((prevState) => ({
-        ...prevState,
-        password: validPassword,
-        confirmPassword: validConfirmPassword.error,
-
-      }));
-      setConfirmPasswordMessage(validConfirmPassword.message)
-    }
-    isFirstRendering = false;
-  }, [formValues.password, formValues.confirmPassword, setFormErrors]);
-
-
-
-
-
-  const onCheckEmailDuplication = async () => {
-
-    const error =  valid_email(formValues.email);
-    if(error || isLoading.email){
-      return setFormErrors((prevState) => ({
-        ...prevState,
-        email: error,
-        messageOnEmail:'',
-        isEmailDuplicated: '이메일 중복확인 초기화'
-      }));
-    }
-
-
-    setIsLoading(prevState => ({
-      ...prevState,
-      email: '이메일 중복확인 중입니다.'
-    }));
-
-
-    try {
-      const response = await valid_email_duplication(formValues.email);
-      // console.log(response);
-      setFormErrors((prevState) => ({
-        ...prevState,
-        email: response.error,
-        isEmailDuplicated: response.error,
-        _messageOnEmail: response.message
-    }));
-    } catch (err) {
-      setFormErrors((prevState) => ({
-        ...prevState,
-        isEmailDuplicated: !!err,
-      }));
-      console.error('SignInputList > Email 중복확인: ',err);
-    }
-
-    setIsLoading(prevState => ({
-      ...prevState,
-      email: false
-    }));
-
-  };
-
-
 
 
   const onGetAuthNumberHandler = async () => {
@@ -144,7 +59,7 @@ export default function SignInpuList({formValues, setFormValues, formErrors, set
     }))
 
     const response = await getAuthNumberForPhoneNumber(formValues.phoneNumber);
-    console.log(response);
+    console.log('AuthNumber from SERVER\n',response);
     setAuthPhoneNumber((prevState)=> ({
       ...prevState,
       authNumber: response.authNumber,
@@ -179,13 +94,14 @@ export default function SignInpuList({formValues, setFormValues, formErrors, set
     }));
   }
 
-// console.log(formErrors)
 
 
 
   return (
     <>
+      {/* ! STYLE 방법 => addClassName => 배열 ['cn1', 'cn2',...] class명 삽입(여러개 가능) => signup.module.scss파일에서 작업가능 */}
       <SignupInput
+        addedClassName={['ex1', 'ex2']}
         type={'text'}
         required={true}
         id={'name'}
@@ -198,83 +114,21 @@ export default function SignInpuList({formValues, setFormValues, formErrors, set
       />
       <SignupInput
         type={'text'}
-        required={true}
         id={'email'}
         title={'이메일주소(아이디)'}
-        addedClassName={['add-btn-section']}
         formValue={formValues.email}
         setFormValues={setFormValues}
-        errorMessage={
-          (isLoading.email ||
-            formErrors.email ||
-            (formValues.email && formErrors.isEmailDuplicated) ||
-            emailPassedValdationMessage) && (
-            <ErrorMessage
-              className={`${s.msg} ${isLoading.email ? s.loading : ''} ${
-                ((!formErrors.email && !formErrors.isEmailDuplicated) ||
-                  emailPassedValdationMessage) &&
-                s.valid
-              }`}
-            >
-              {isLoading.email ||
-                formErrors.email ||
-                formErrors.isEmailDuplicated ||
-                emailPassedValdationMessage}
-            </ErrorMessage>
-          )
-        }
+        disabled={true}
       >
-        <button className={`${s.btn}`} onClick={onCheckEmailDuplication}>
-          {isLoading.email ? (
-            <Spinner
-              style={{ color: 'var(--color-main)', width: '15', height: '15' }}
-              speed={0.6}
-            />
-          ) : (
-            '중복확인'
-          )}
-        </button>
       </SignupInput>
       <SignupInput
         type={'password'}
         required={true}
         id={'password'}
         title={'비밀번호'}
+        placeholder={'현재 비밀번호를 입력하세요.'}
         setFormValues={setFormValues}
-        errorMessage={
-          formErrors.password && (
-            <>
-              {valid_password(formValues.password).message.map((msg, index) => (
-                <ErrorMessage
-                  key={`pw-msg-${index}`}
-                  className={`${s.msg} ${msg.valid ? s.valid : ''} ${index !== 0 && s.siblings}`}
-                >
-                  {msg.label}
-                </ErrorMessage>
-              ))}
-            </>
-          )
-        }
-      />
-      <SignupInput
-        type={'password'}
-        required={true}
-        id={'confirmPassword'}
-        title={'비밀번호 확인'}
-        setFormValues={setFormValues}
-        errorMessage={
-          (formErrors.confirmPassword || confirmPasswordMessage) && (
-            <>
-              <ErrorMessage
-                className={`${s.msg} ${
-                  (!formErrors.confirmPassword || confirmPasswordMessage.isValid) && s.valid
-                }`}
-              >
-                {formErrors.confirmPassword || confirmPasswordMessage.label}
-              </ErrorMessage>
-            </>
-          )
-        }
+        errorMessage={formErrors.password && <ErrorMessage>{formErrors.password}</ErrorMessage>}
       />
       <SignupInput
         type={'text'}
@@ -353,14 +207,15 @@ export default function SignInpuList({formValues, setFormValues, formErrors, set
 
       <SignupInput
         type={'date'}
-        required={true}
         id={'birthday'}
         filteredType={'date'}
         title={'생년월일(견주님)'}
+        disabled={true}
+        formValue={transformBirthDay(formValues.birthday)}
         setFormValues={setFormValues}
         errorMessage={formErrors.birthday && <ErrorMessage>{formErrors.birthday}</ErrorMessage>}
       />
-      <div className={s['join__wrap']}>
+      <div className={`${s['join__wrap']} ${s['align-items-center']}`}>
         <div className={s['input-title-wrap']}>
           <label htmlFor={'radios-gender'}>
             <span className={`${s['inp-title']} ${s['required']}`}>{'성별(견주님)'}</span>
@@ -368,30 +223,19 @@ export default function SignInpuList({formValues, setFormValues, formErrors, set
         </div>
         <div className={`${s['input-wrap']}`}>
           <CustomRadio
-            className={s['gender']}
+            className={`${s['gender']}`}
             name={'gender'}
             labelList={[
-              { label: '남자', value: 'MALE' },
-              { label: '여자', value: 'FEMAIL' },
-              {
-                label: '선택 안함',
-                value: 'NONE',
-              },
+              { label: genderType.KOR.MALE, value: genderType.MALE },
+              { label: genderType.KOR.FEMALE, value: genderType.FEMALE },
+              { label: genderType.KOR.NONE, value: genderType.NONE },
             ]}
             type={'radio'}
-            initialValueIndex={2}
+            value={genderType[formValues.gender]}
             setValue={setFormValues}
           />
         </div>
       </div>
-      <SignupInput
-        type={'text'}
-        required={false}
-        id={'recommendCode'}
-        title={'추천코드'}
-        placeholder={'추천코드는 계정 당 한 번만 입력 가능합니다.'}
-        setFormValues={setFormValues}
-      />
     </>
   );
 }

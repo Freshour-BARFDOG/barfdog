@@ -112,7 +112,7 @@ const Pagination = ({ itemCountPerGroup, itemTotalCount, theme }) => {
   return (
     <div
       className={s['pagination']}
-      page-counter-per-gourp={itemCountPerGroup}
+      // page-counter-per-group={itemCountPerGroup}
       data-cur-page={curPage}
     >
       <span className={`${s['arrow']} ${s['first-page']}`} onClick={onFirstPage}>

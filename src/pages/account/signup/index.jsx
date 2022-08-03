@@ -106,8 +106,7 @@ export default function SignupPage() {
   // console.log(formValues)
 
   const sendSignupData = async (data) => {
-    console.log('FORMVALUES',data);
-  
+    console.log('SUBMIT DATA:\n',data);
     // data.providerId = "asdfasdf-asdfasdf"; // ! TEST 임의의 providerID를 서버에 전송해도, 가입이 된다.
     // 단, providerID가 중복될 경우, 해당 providerId sns계정으로 가입불가능.
     await axios

@@ -1,9 +1,23 @@
-$browser-context: 16;
-@function rem($px, $context: $browser-context) {
-  @return #{$px / $context}rem;
-}
-
+@import '/styles/global/rem';
 $input-height: rem(44);
+
+
+
+
+/////////// STYLE EXAMPLE /////////
+// EditUserInfoInputList.jsx 파일에서 , className을 삽입 시, 현재 scss파일에 적용됨// .
+.ex1{
+  background-color: red;
+}
+.ex2{
+  background-color: rgba(0,0,0,0.15);
+  animation: test 3s ease infinite;
+}
+@keyframes test {
+  0%, 100%{background-color:  rgba(0,0,0,0)}
+  50%{background-color:  rgba(0,0,0,0.45)}
+}
+/////////// STYLE EXAMPLE /////////
 
 
 
@@ -53,12 +67,15 @@ $input-height: rem(44);
 
   display: grid;
   grid-template-columns: rem(150) calc(100% - #{rem(150)});
-
+  &.align-items-center{
+    align-items: center;
+  }
   &:not(:last-child) {
     margin-bottom: rem(20);
   }
 
   .input-title-wrap {
+    cursor: default;
     label {
       display: flex;
       align-items: center;
@@ -73,20 +90,25 @@ $input-height: rem(44);
     .input-wrap {
       width: 100%;
       position: relative;
+
+
     }
 
     input:not([type="radio"]) {
       width: 100%;
       height: $input-height;
       padding: rem(8) rem(16);
+      &[disabled]{
+        background-color: var(--color-bg-02);
+        color: var(--color-font-sub2);
+        cursor: default;
+      }
     }
     ::placeholder {
       font-size: rem(14) !important;
       color: var(--color-font-light);
       font-weight: 300;
     }
-
-
 
 
 
@@ -125,7 +147,12 @@ $input-height: rem(44);
       height: $input-height;
     }
   }
+  .gender{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
 }
+
 
 
 
@@ -232,6 +259,10 @@ $input-height: rem(44);
     margin-left:rem(35);
     font-size: rem(13);
     padding-left:rem(18);
+    &.inMypage{
+      margin-left:0;
+      left: rem(-20);
+    }
     .icon {
       position:absolute;
       width:rem(8);
@@ -313,12 +344,12 @@ $input-height: rem(44);
   top:50%;
   transform:translateY(-50%);
   border-radius: rem(4);
-  background-color: #fff;
   color: #fff;
   font-size: rem(13);
   padding: 0;
   animation: show var(--ani-default);
 }
+
 
 
 
@@ -338,6 +369,7 @@ $input-height: rem(44);
     .join__wrap{
       display: grid;
       grid-template-columns: 1fr;
+
     }
   }
 }
