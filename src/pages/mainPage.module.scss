@@ -749,7 +749,8 @@ section.sns {
   width: 100%;
 
   .swiper_navigation_container {
-    width: 0%;
+    width: 100%;
+    max-width: rem(1320);
     position: absolute;
     top: 50%;
     left: 50%;
@@ -757,13 +758,6 @@ section.sns {
     z-index: 2;
   }
 
-  .swiper-button-next {
-    transform: translateX(rem(680));
-  }
-
-  .swiper-button-prev {
-    transform: translateX(rem(-680));
-  }
 
   .swiper-pagination__mainSection{
     display: none;
@@ -906,12 +900,15 @@ section.sns {
 
 
 
-@media only screen and (min-width:rem(100)) and (max-width: rem(1400)) {
+@media only screen and (min-width:rem(100)) and (max-width: rem(1350)) {
   
-  //.swiper-button-prev,
-  //.swiper-button-next {
-  //  display: none;
-  //}
+  .swiper-button-next {
+    margin-right: rem(20);
+  }
+
+  .swiper-button-prev {
+    margin-left: rem(20);
+  }
 }
 
 
@@ -923,6 +920,12 @@ section.sns {
   .banner {
     .inner {
       height: rem(300);
+    }
+  }
+
+  .swiper_main_outerWrap {
+    .swiper_navigation_container {
+      display: none;
     }
   }
 
@@ -1104,7 +1107,7 @@ section.sns {
 //최상단 그림배너
   .banner {
     .inner {
-      height: rem(200);
+      height: rem(220);
     }
   }
   

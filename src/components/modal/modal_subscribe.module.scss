@@ -164,23 +164,24 @@ $topLinkBannerHeight : rem(38);
 
   
   .body{
-    margin-top: calc(#{ $topLinkBannerHeight
-  } + #{$marginForBackgroundTouch
-  });
-    margin-bottom: $marginForBackgroundTouch;
+  //   margin-top: calc(#{ $topLinkBannerHeight
+  // } + #{$marginForBackgroundTouch
+  // });
+  //   margin-bottom: $marginForBackgroundTouch;
+    // height: calc(100vh - #{$topLinkBannerHeight
+    // });
     box-sizing: border-box;
-    height: calc(100vh - #{$topLinkBannerHeight
-  });
-    top:0;
-    transform:translate(-50%,0)
   }
   .container {max-width: rem(335);} 
-  .cont {
-    max-height: calc(100vh - #{rem(83)
-  });
-    overflow: scroll;
-    &::-webkit-scrollbar {display: none;}
 
+  .cont {
+  //   max-height: calc(100vh - #{rem(83)
+  // });
+  max-height: rem(754);
+  height: 100vh;
+  overflow: scroll;
+  &::-webkit-scrollbar {display: none;}
+ 
     ul {
       grid-template-columns: 1fr ;
       li:not(:last-child) {
@@ -188,6 +189,10 @@ $topLinkBannerHeight : rem(38);
         border-bottom: rem(1) solid var(--color-line-04);
       }
     }
+  }
+
+  .btn_close_modal {
+    width: rem(24);
   }
 
 
