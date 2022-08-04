@@ -260,16 +260,15 @@ $input-height: rem(44);
   padding: 0 rem(28);
   .flex-wrap{
     display:flex;
-    justify-content: center;
     align-items: center;
     column-gap:rem(80);
   }
 
   .guidetext {
     margin-top: rem(13);
+    left: rem(10);
     color: var(--color-main);
     position: relative;
-    margin-left:rem(35);
     font-size: rem(13);
     padding-left:rem(18);
     &.inMypage{
@@ -399,6 +398,16 @@ $input-height: rem(44);
 
   .title-wrap{
     margin-bottom: rem(20);
+  }
+}
+
+.policy-section {
+  .title-wrap {
+    .main-title{
+      margin-top: rem(34);
+      font-size: rem(19);
+      font-weight: 700;
+    }
   }
 }
 

@@ -192,6 +192,7 @@ section.content_body { padding : rem(18) 0 0}
 
 
 @media (max-width: rem(600)) {
+section.content_body { padding : rem(18) 0 rem(100)}
     
   .title {
     display: none;

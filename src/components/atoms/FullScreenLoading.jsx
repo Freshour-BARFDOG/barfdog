@@ -19,7 +19,7 @@ const ScreenLoader = Styled.div`
   bottom:0;
 `;
 const ImageWrap = Styled.span`
-  width: ${rem(100)};
+  width: ${rem(70)};
   aspect-ratio: 267/159;
   position:relative;
 `

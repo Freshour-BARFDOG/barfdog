@@ -141,6 +141,7 @@ section.title{ padding : rem(8) 0 rem(19);}
 }
 
 @media (max-width: rem(600)) {
+  section.content:last-child{ padding : 0 0 rem(100);}
 
   .title{
     display: none;

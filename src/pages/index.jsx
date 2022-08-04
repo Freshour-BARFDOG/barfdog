@@ -135,13 +135,13 @@ export default function Home({ data }) {
             <div className={Styles.inner}>
               <p>CEHCK POINT</p>
               <h1>바프독을 선택해야 하는 이유</h1>
-              <Image
-                src={Halftest}
-                objectFit="fit"
-                width={560}
-                height={560}
-                alt="카드 이미지"
-              ></Image>
+                <Image
+                    src={Halftest}
+                    objectFit="fit"
+                    width={560}
+                    height={560}
+                    alt="카드 이미지"
+                  ></Image>
             </div>
           </section>
         </Wrapper>

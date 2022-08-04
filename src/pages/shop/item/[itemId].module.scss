@@ -347,14 +347,14 @@ section.tab_slide_box2{padding: 0 0 rem(130)}
     width: 100%;
     grid-gap: rem(30);
     align-items: flex-start;
-    border-top: 1px solid #EFEFEF;;
+    border-top: rem(1) solid #EFEFEF;;
     padding : rem(30) 0 rem(30) 0;
     &:nth-child(2) {
-      border-top: 0px;
+      border-top: 0;
       padding: 0 0 rem(30) 0;
     }
     &:nth-child(6){
-      border-bottom: 1px solid #EFEFEF;;
+      border-bottom: rem(1) solid #EFEFEF;;
     }
     .left {
       font-weight: 600;
@@ -431,8 +431,8 @@ section.tab_slide_box2{padding: 0 0 rem(130)}
     .flex_title {
       display: grid;
       grid-template-columns : rem(60) rem(100) 1fr rem(130) rem(100);
-      border-top: 1px solid var(--color-line-02);
-      border-bottom: 1px solid var(--color-line-02);
+      border-top: rem(1) solid var(--color-line-02);
+      border-bottom: rem(1) solid var(--color-line-02);
       align-items: center;
       div{
         display: inline;
@@ -461,7 +461,7 @@ section.tab_slide_box2{padding: 0 0 rem(130)}
       > * {
         text-align: center;
         display: inline-grid;
-        border-bottom: 1px solid var(--color-line-04);
+        border-bottom: rem(1) solid var(--color-line-04);
         align-items: center;
         height: auto;
         min-height: rem(76);
@@ -1204,7 +1204,7 @@ $animationDuration : 0.2s;
             }
             
             > div:nth-child(3), div:nth-child(5) {
-              margin-bottom: -20px;
+              margin-bottom: rem(-20);
             }
           }
         }
@@ -1267,7 +1267,7 @@ $animationDuration : 0.2s;
             column-gap: rem(20);
             
             > div:nth-child(3), div:nth-child(5) {
-              margin-bottom: -20px;
+              margin-bottom: rem(-20);
             }
           }
         }
@@ -1553,7 +1553,7 @@ $animationDuration : 0.2s;
 
       .grid_box {
         grid-template-columns : 2fr 1fr;
-        border-bottom: 1px solid var(--color-line-04);
+        border-bottom: rem(1) solid var(--color-line-04);
 
         > * {
           border: none;

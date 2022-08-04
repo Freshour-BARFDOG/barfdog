@@ -1,7 +1,7 @@
 // 메인 Swiper
 import React, {useRef} from 'react';
 import Styles from '@src/pages/mainPage.module.scss';
-import {EffectFade, Navigation, Pagination} from 'swiper';
+import {EffectFade, Navigation, Pagination, Autoplay} from 'swiper';
 import ArrowLeft from '@public/img/icon/swiper-arrow-large-l.svg';
 import ArrowRight from '@public/img/icon/swiper-arrow-large-r.svg';
 import {Swiper, SwiperSlide} from 'swiper/react';
@@ -16,9 +16,9 @@ const swiperSettings_main = {
   loop: true,
   effect: 'fade',
   centeredSlides: true,
-  autoplay: {delay: 500, disableOnInteraction: false},
+  autoplay: {delay: 2500, disableOnInteraction: false},
   slidesPerView: 1,
-  modules: [Pagination, Navigation, EffectFade],
+  modules: [Pagination, Navigation, EffectFade, Autoplay],
   pagination: {
     type: 'fraction',
   },
