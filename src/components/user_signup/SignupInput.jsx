@@ -18,10 +18,12 @@ const SingupInput = ({
   setFormValues,
   errorMessage,
   filteredType,
+  formValue,
   icon,
   ...props
 }) => {
-  const [value, setValue] = useState('');
+  const initialValue = formValue || ''
+  const [value, setValue] = useState(initialValue);
 
   const onKeyboardHandler = (e) => {
     if (e.keyCode === 13) {
@@ -82,6 +84,7 @@ const SingupInput = ({
               onChange={onChangeHandler}
               onKeyDown={onKeyboardHandler}
               value={value}
+              autoComplete="off"
               {...props}
             />
             {icon && icon}

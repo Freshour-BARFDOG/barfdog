@@ -45,6 +45,7 @@ $topLinkBannerHeight : rem(38);
 
 .btn_close_modal {
   position: fixed;
+  width: rem(40);
   right: rem(20);
   top: rem(20);
   display: flex;
@@ -58,11 +59,16 @@ $topLinkBannerHeight : rem(38);
 .cont {
   position: relative;
   background-color: #fff;
-  overflow: hidden;
+  overflow: scroll;
+  &::-webkit-scrollbar {display: none;}
+
   box-shadow: 0 0 rem(30) rgba(0, 0, 0, 0.15);
   border-radius: rem(8);
   padding: rem(22) rem(20);
   box-sizing: border-box;
+  max-height: rem(520);
+  height: 100vh;
+
   ul {
     display: grid;
     align-items: flex-start;
@@ -164,23 +170,21 @@ $topLinkBannerHeight : rem(38);
 
   
   .body{
-    margin-top: calc(#{ $topLinkBannerHeight
-  } + #{$marginForBackgroundTouch
-  });
-    margin-bottom: $marginForBackgroundTouch;
+  //   margin-top: calc(#{ $topLinkBannerHeight
+  // } + #{$marginForBackgroundTouch
+  // });
+  //   margin-bottom: $marginForBackgroundTouch;
+    // height: calc(100vh - #{$topLinkBannerHeight
+    // });
     box-sizing: border-box;
-    height: calc(100vh - #{$topLinkBannerHeight
-  });
-    top:0;
-    transform:translate(-50%,0)
   }
   .container {max-width: rem(335);} 
-  .cont {
-    max-height: calc(100vh - #{rem(83)
-  });
-    overflow: scroll;
-    &::-webkit-scrollbar {display: none;}
 
+  .cont {
+  //   max-height: calc(100vh - #{rem(83)
+  // });
+  max-height: rem(754);
+ 
     ul {
       grid-template-columns: 1fr ;
       li:not(:last-child) {
@@ -188,6 +192,10 @@ $topLinkBannerHeight : rem(38);
         border-bottom: rem(1) solid var(--color-line-04);
       }
     }
+  }
+
+  .btn_close_modal {
+    width: rem(24);
   }
 
 

@@ -111,7 +111,7 @@ function Dashboard({ className, ...props }) {
             <User_counter_viewer
               title="적립금"
               counter={transformLocalCurrency(data.reward)}
-              unit=""
+              unit="원"
             />
             <User_counter_viewer title="보유쿠폰" counter={data.couponCount} unit="개" />
           </ul>

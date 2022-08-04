@@ -1,63 +1,68 @@
-import React from "react";
-import MetaTitle from "/src/components/atoms/MetaTitle";
-import Layout from "/src/components/common/Layout";
-import Wrapper from "/src/components/common/Wrapper";
-import { Btn, Title } from "/src/components/atoms/Checkbox";
-import Styles from "./result.module.scss";
-import Image from "next/image";
+import React, {useEffect} from 'react';
+import MetaTitle from '/src/components/atoms/MetaTitle';
+import Layout from '/src/components/common/Layout';
+import Wrapper from '/src/components/common/Wrapper';
+import { Title } from '/src/components/atoms/Checkbox';
+import s from './result.module.scss';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useSelector } from 'react-redux';
+import {snsProviderType} from "/store/TYPE/snsProviderType";
 
-
-function ValidSnsResultPage() {
+export default function ValidSnsResultPage() {
+  const auth = useSelector((s) => s.auth);
+  const userInfo = auth.userInfo;
+  useEffect(() => {
+    if (!userInfo?.email) {
+      alert('조회된 계정이 없습니다.');
+      window.location.href = '/account/login';
+    }
+  }, []);
+  
+  if (!userInfo?.email) {
+    return;
+  }
   return (
     <>
       <MetaTitle title="SNS계정 연동결과" />
       <Layout>
         <Wrapper>
-        <div className={Styles.flex_container}>
-          <div className={Styles.titlebox}>
-            <Title name='계정이 연동되었습니다.'></Title>
+          <div className={s.flex_container}>
+            <Title name="계정이 연동되었습니다." />
+            <section className={s.linebox}>
+              <div className={s.frontline}>
+                <span className={s.title}>가입된 이메일</span>
+                <span className={s.email}>{userInfo.email}</span>
+              </div>
+              <div className={s.secondline}>
+                <span className={s.title}>연결된 SNS</span>
+                {!userInfo.provider && <span>현재 연결된 SNS가 없습니다.</span>}
+                {userInfo.provider === snsProviderType.KAKAO && <figure className={`${s.image} img-wrap`}>
+                  <Image
+                    src={require('/public/img/icon/kakao.png')}
+                    objectFit="cover"
+                    layout="fill"
+                    alt="카카오톡 아이콘"
+                  />
+                </figure>}
+                {userInfo.provider === snsProviderType.NAVER && <figure className={`${s.image} img-wrap`}>
+                  <Image
+                    src={require('/public/img/icon/naver.png')}
+                    objectFit="cover"
+                    layout="fill"
+                    alt="카카오톡 아이콘"
+                  />
+                </figure>}
+              </div>
+            </section>
+            <Link href={'/'} passHref>
+              <button type={'button'} className={s.btn}>
+                홈으로
+              </button>
+            </Link>
           </div>
-
-          <div className={Styles.box}>
-            <div className={Styles.linebox}>
-              <div className={Styles.frontline}>가입된 이메일
-                <p>barfdog2021@barfdog.com</p>
-              </div>
-              <div className={Styles.secondline}>
-                연결된 SNS
-
-
-              <p>현재 연결된 SNS가 없습니다.</p>
-
-              <div className={`${Styles.image} img-wrap`}>
-                <Image
-                  priority
-                  src={require("/public/img/icon/kakao.png")}
-                  objectFit="cover"
-                  layout="fill"
-                  alt="카드 이미지"
-                />
-              </div>
-
-              <div className={`${Styles.image} img-wrap`}>
-                <Image
-                  priority
-                  src={require("/public/img/icon/naver.png")}
-                  objectFit="cover"
-                  layout="fill"
-                  alt="카드 이미지"
-                />
-              </div>   
-              {/* 연결된 sns가 있을때 새로 페이지? */}
-              </div>
-            </div>
-          </div>
-           <Btn name='로그인' style='red'></Btn>
-        </div>
         </Wrapper>
       </Layout>
     </>
   );
 }
-
-export default ValidSnsResultPage;

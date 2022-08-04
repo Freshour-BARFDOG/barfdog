@@ -38,6 +38,8 @@ export default function LoginPage() {
   const [formErrors, setFormErrors] = useState();
   const [isSubmitted, setIsSubmitted] = useState( false );
   const naverRef = useRef();
+  
+  
   useEffect(() => {
     const naverScript = document.createElement('script');
     naverScript.src = 'https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js';
@@ -75,9 +77,6 @@ export default function LoginPage() {
     setAutoLogin(checked);
   };
 
-  const onEnterKeyHandler = (e) => {
-    enterKey(e, onSubmit);
-  };
 
   const onSubmit = async () => {
     if(isSubmitted) return console.error('이미 제출된 양식입니다.');
@@ -117,8 +116,11 @@ export default function LoginPage() {
             } else{
               dispatch(authAction.login(payload));
             }
-            
+          }else {
+            alert('로그인에 실패하였습니다.')
           }
+          
+          setIsSubmitted(true);
         })
         .catch((err) => {
           if (!err) return;
@@ -140,12 +142,19 @@ export default function LoginPage() {
       console.error('통신에러: ', err);
       setModalMessage(`데이터 처리 중 오류가 발생했습니다.\n${err}`);
     }
+  
     setIsLoading((prevState) => ({
       ...prevState,
       submit: false,
     }));
   };
+  
+  const onEnterKeyHandler = (e) => {
+    enterKey(e, onSubmit);
+  };
 
+  
+  
   const onGlobalModalCallback = () => {
     mct.alertHide();
   };
@@ -170,7 +179,7 @@ export default function LoginPage() {
                   placeholder={'아이디를 입력해주세요.'}
                   setFormValues={setFormValues}
                   autoComplete={'username'}
-                  onKeydown={onEnterKeyHandler}
+                  onKeyDown={onEnterKeyHandler}
                   errorMessage={
                     formErrors?.email && <ErrorMessage>{formErrors?.email}</ErrorMessage>
                   }

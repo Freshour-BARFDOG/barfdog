@@ -20,16 +20,16 @@ const swiperSettings_recipe = {
       slidesPerView: 1,
       spaceBetween: 0,
     },
-    600: {
+    651: {
       //601 이상일 경우
       slidesPerView: 2, //레이아웃 2열
-      spaceBetween: -80,
+      spaceBetween: 20,
     },
-    950: {
+    1001: {
       slidesPerView: 3,
-      spaceBetween: -40,
+      spaceBetween: 20,
     },
-    1200: {
+    1201: {
       slidesPerView: 4,
       spaceBetween: 20,
     },

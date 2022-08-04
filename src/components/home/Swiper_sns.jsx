@@ -53,7 +53,20 @@ export function Swiper_sns() {
       <i className={Styles.swiper_button_next_sns} ref={navNextRef}>
         <ArrowRight_s />
       </i>
-      <Swiper {...swiperSettings_sns}>
+      <Swiper 
+      navigation={{
+        prevEl: navPrevRef.current,
+        nextEl: navNextRef.current,
+      }}
+      {...swiperSettings_sns}
+      onInit={(swiper) => {
+        swiper.params.navigation.prevEl = navPrevRef.current;
+        swiper.params.navigation.nextEl = navNextRef.current;
+        swiper.navigation.destroy();
+        swiper.navigation.init();
+        swiper.navigation.update();
+      }}
+      >
         <SwiperSlide className={Styles.swiper_sns_box}>
           <a
             href="https://www.instagram.com/barfdog_official/"

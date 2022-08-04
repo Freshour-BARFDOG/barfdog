@@ -115,7 +115,7 @@ export const Modal_coupon = ({ onModalActive, data, setForm, orderType ='general
           </div>
           <div className={s.content_box}>
             <div className={`${s.flex_box} ${s.header}`}>
-              <span>쿠폰명</span>
+              <span className={s.coupon_title}>쿠폰명</span>
               <span>적용가능수량</span>
               <span>유효기간</span>
               <span>할인금액</span>
@@ -166,12 +166,13 @@ export const Modal_coupon = ({ onModalActive, data, setForm, orderType ='general
                           onChange={onChangeHandler}
                           checked={selectedRadioInfo?.id === item.couponId}
                         />
-                        <span className={s.name}>{`${item.name} (${item.couponDiscountInfo})`}</span>
                       </span>
+                      
+                  <span className={s.name}>{`${item.name} (${item.couponDiscountInfo})`}</span>
                   <span className={s.count}>{item.remaining}개</span>
                   <span className={s.date}>{transformDate(item.expiredDate)}</span>
                   <span className={s.price}>
-                        {transformLocalCurrency(item.couponDiscountAmount)}원
+                        {transformLocalCurrency(item.couponDiscountAmount)}원 할인
                       </span>
                 </label>
               ))

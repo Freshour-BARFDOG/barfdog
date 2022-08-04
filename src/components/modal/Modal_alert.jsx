@@ -22,7 +22,7 @@ export const Modal_innerForm = (props) => {
 }
 
 
-function Modal_alert({text, isConfirm, onClick, children}) {
+function Modal_alert({text, isConfirm, onClick, className,  children}) {
 
 
   const onClickHandler = () => {
@@ -37,7 +37,7 @@ function Modal_alert({text, isConfirm, onClick, children}) {
   };
 
   return (
-    <ModalWrapper className={`${s['modal-wrap']}`} data-modal-status={children ? 'hasChildren' : 'alert'}>
+    <ModalWrapper className={`${s['modal-wrap']} ${className}`} data-modal-status={children ? 'hasChildren' : 'alert'}>
       <header className={s['title-section']}>
         {text && <pre className={`${s.text} ${s.only}`}>{text}</pre>}
       </header>

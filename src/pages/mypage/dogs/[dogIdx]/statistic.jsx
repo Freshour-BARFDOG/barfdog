@@ -13,26 +13,23 @@ import {SurveyStatistics} from "/src/components/survey/SurveyStatistics";
 
 
 
-function MypageSubscribe_statisticPage() {
+export default function MypageSubscribe_statisticPage({dogId}) {
+  
+  const router = useRouter();
   const isThisDogSubscribedState = false;
   const hasSurveyDataChangedEnoughtToRecommend = true;
-  const router = useRouter();
-  if (!router.isReady) return;
-  const { dogIdx } = router.query;
+  
   const onPrevPage = () => {
     router.back();
   }
 
-
-
-
   return (
     <>
-      <MetaTitle title={`설문결과: ${dogIdx}`} />
+      <MetaTitle title={`마이페이지 설문결과: ${dogId}`} />
       <Layout>
         <Wrapper>
           <MypageWrapper>
-            <SurveyStatistics dogId={dogIdx} mode={'mypage'}/>
+            <SurveyStatistics id={dogId} mode={'mypage'}/>
             <section className={s.last_text}>
               <p className={s['ref-message']}>
                 ※ 해당 결과지는 바프독 고객을 대상으로한 참고용 결과이니, <br/>
@@ -61,4 +58,10 @@ function MypageSubscribe_statisticPage() {
   );
 }
 
-export default MypageSubscribe_statisticPage;
+
+export async function getServerSideProps ({ query}) {
+  const { dogIdx } = query;
+  
+  return { props : {dogId: dogIdx}}
+  
+}

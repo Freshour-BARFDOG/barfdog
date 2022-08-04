@@ -31,7 +31,7 @@ section.btn_box {padding: 0 0 rem(217) ;}
   }
   .row_2 {
     font-size: rem(16);
-    line-height: 100%;
+    line-height: 130%;
     letter-spacing: -0.02em;
     color: #4d4d4d;
 
@@ -73,6 +73,7 @@ section.btn_box {padding: 0 0 rem(217) ;}
       border-radius: rem(4);
       box-sizing: border-box;
       color: var(--color-main);
+      height: rem(50);
     }
     .right_btn {
       width: rem(200);

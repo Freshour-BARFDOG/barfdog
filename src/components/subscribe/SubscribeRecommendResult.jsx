@@ -23,15 +23,16 @@ export const SubscribeRecommendResult = ({info}) => {
               <p className={s.title_en}>{info.uiNameEnglish}</p>
             </figcaption>
           </div>
-          
-          <div className={s.grid_right}>
-            <p className={s.result_title}>
+
+          <p className={s.result_title}>
               {info.dogName}에게는
               <br/>
               {info.recommendRecipeDescription}이 필요한
               <br/>
               <b>{info.recommendRecipeName}</b> 레시피를 추천합니다. <br/>
             </p>
+          
+          <div className={s.grid_right}>
             <div className={s.recommend_data_wrap}>
               <span className={s.title}>{info.dogName}의 하루 권장 칼로리</span>
               <span className={s.data}>

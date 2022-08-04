@@ -13,7 +13,6 @@ section.title{ padding : rem(8) 0 rem(30);}
   @include char(t24);
 }
 
-
 .content {
   padding :rem(105) 0;
 
@@ -25,7 +24,6 @@ section.title{ padding : rem(8) 0 rem(30);}
     padding-bottom: rem(30);
   }
   
-  
   .btn_box {
     display: flex;
     justify-content: center;
@@ -33,69 +31,48 @@ section.title{ padding : rem(8) 0 rem(30);}
       width: rem(155);
       background-color: var(--color-main);
       color: #fff;
-
       text-align: center;
-
       @include char(l15);
       padding : rem(14) 0 rem(14);
       border-radius: rem(4);
-  
     }
-
   }
-
-
 }
 
 
 
-
-
-
 .item-container {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 0.15fr rem(140);
   align-items: center;
-  padding-bottom: rem(10);
+  padding: rem(10) 0 rem(20);
+
   .left_box {
-    display: flex;
-    padding: rem(10) 0 rem(10);
-    width: 70.5%;
+    display: grid;
+    grid-template-columns: rem(100) 1fr;
+    width: 100%;
+    align-items: center;
+    column-gap: rem(20);
+
     .image {
       width: 100%;
       max-width: rem(100);
       aspect-ratio: 1/1;
     }
+
     .flex_box {
-      padding: rem(11) 0 0 rem(20);
       .text {
         display: flex;
-        > p {
-          width: 17%;
-          @include char(l18);
-          color : var(--color-main);
-          font-weight: 500;
 
-        }
-        .line_box{
-          width: 10%;
-          > hr {
-            position: relative;
-            top:45%;
-            // transform: translateX(%);
-            border: rem(1) solid var(--color-line-02);
-            width : rem(15);
-            transform:rotate(90deg);
-          }
-        }
         .last_text {
           @include char(l18);
           font-weight: 500;
         }
       }
+      
       .text2 {
         display: grid;
-        grid-template-columns: 30% 61%;
+        grid-template-columns: rem(60) 1fr;
         row-gap: rem(1);
         column-gap: rem(20);
         padding-top: rem(10);
@@ -106,12 +83,9 @@ section.title{ padding : rem(8) 0 rem(30);}
 
 
   .mid_box {
-    width: 17.4%;
-    text-align: center;
+    text-align: left;
   }
   .right_box {
-    width: 16.4%;
-    padding: rem(12) rem(10);
     @include char(l15);
     .btn {
       padding: rem(14) 0;
@@ -130,12 +104,6 @@ section.title{ padding : rem(8) 0 rem(30);}
     }
   } 
 }
-
-
-
-
-
-
 
 
 
@@ -159,33 +127,43 @@ section.title{ padding : rem(8) 0 rem(30);}
   }
 
   .content_body {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 0.15fr rem(140);
     align-items: center;
     padding-bottom: rem(10);
+
     .left_box {
-      display: flex;
-      padding: rem(10) 0 rem(10);
-      width: 70.5%;
+      display: grid;
+      grid-template-columns: rem(100) 1fr;
+      width: 100%;
+      align-items: center;
+      column-gap: rem(20);
+      padding: rem(10) rem(0);
+      
       .image {
         width: 100%;
         max-width: rem(100);
         aspect-ratio: 1/1;
       }
+
       .flex_box {
-        padding: rem(11) 0 0 rem(20);
         .text {
-          display: flex;
-          margin-bottom: rem(-30);
+          display: grid;
+          grid-template-columns: minmax(rem(34), auto) rem(18) 1fr;
+          margin-bottom: 0;
+
           > p {
-            width: 17%;
             @include char(l18);
             color : var(--color-main);
             font-weight: 500;
-
+            padding-bottom: 0;
+            width: 100%;
+            max-width: rem(96);
+            text-overflow: ellipsis;
+            text-align: left;
           }
+
           .line_box{
-            width: 10%;
             > hr {
               position: relative;
               top: rem(8);
@@ -195,14 +173,16 @@ section.title{ padding : rem(8) 0 rem(30);}
               transform:rotate(90deg);
             }
           }
+          
           .last_text {
             @include char(l18);
             font-weight: 500;
           }
         }
+
         .text2 {
           display: grid;
-          grid-template-columns: 30% 61%;
+          grid-template-columns: rem(60) 1fr;
           row-gap: rem(1);
           column-gap: rem(20);
           padding-top: rem(10);
@@ -211,15 +191,14 @@ section.title{ padding : rem(8) 0 rem(30);}
       }
     }
 
-
     .mid_box {
-      width: 17.4%;
-      text-align: center;
+      text-align: left;
     }
+
     .right_box {
       width: rem(140);
-      padding: rem(12) rem(0);
       @include char(l15);
+
       .btn {
         padding: rem(14) 0;
         text-align: center;
@@ -227,13 +206,13 @@ section.title{ padding : rem(8) 0 rem(30);}
         border-radius: rem(4);
         color: var(--color-main);
       }
+
       .btn2 {
         padding: rem(14) 0;
         margin-top: rem(8);
         text-align: center;
         border: rem(1) solid var(--color-line-02);
         border-radius: rem(4);
-        
       }
     } 
   }
@@ -262,83 +241,25 @@ section.title{ padding : rem(8) 0 rem(30);}
     display: none;
   }
 
-  .subscribeItem-container {
-    .hr1{
-      display: none;
-    }
-    .hr2{
-      display: block;
-      margin-bottom: rem(20);
-    }
 
-    .content_body {
-      display: grid;
-      grid-template-columns: 1fr;
-      grid-gap: 0;
-      width: 100%;
-      position: relative;
-
-      .left_box {
-        width: 100%;
-      }
-
-      .mid_box {
-        text-align: left;
-        top: 0;
-        left: 0;
-        position: absolute;
-        transform: translate(rem(100), rem(-28));
-      }
-      .right_box {
-        width: 100%;
-        padding: rem(12) 0;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-gap: rem(10);
-
-        .btn2 {
-          margin-top: rem(0);
-          cursor: pointer;
-        }
-      }
-    }
-  }
-
-  // .content {
-  //   p {
-  //     display: none;
-  //   }
-    
-  //   .btn_box {
-  //     display: none;
-  //   }
-  // }
 
 
   .item-container {
-    display: grid;
     grid-template-columns: 1fr;
-    grid-gap: 0;
-    width: 100%;
     position: relative;
-
-
-    .left_box {
-      width: 100%;
-    }
+    padding: rem(10) 0;
   
     .mid_box {
       text-align: left;
       top: 0;
       left: 0;
       position: absolute;
-      transform: translate(rem(100), rem(-28))
+      transform: translate(rem(90), rem(-28))
     }
 
     .right_box {
-      
       width: 100%;
-      padding: rem(12) 0;
+      padding: rem(10) 0;
 
       .btn {
         padding: rem(14) 0;
@@ -358,4 +279,127 @@ section.title{ padding : rem(8) 0 rem(30);}
     } 
   }
 
+
+
+
+  .subscribeItem-container {
+    .hr1{
+      display: none;
+    }
+    .hr2{
+      display: block;
+      margin-bottom: rem(20);
+    }
+
+    .content_body {
+      grid-template-columns: 1fr;
+      position: relative;
+
+      .mid_box {
+        width: 100%;
+        top: 0;
+        left: 0;
+        position: absolute;
+        transform: translate(rem(90), rem(-28));
+      }
+      .right_box {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: rem(10);
+        padding-bottom: rem(10);
+
+        .btn2 {
+          margin-top: rem(0);
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+
+
+@media (max-width: rem(600)) {
+
+  .item-container {
+    .left_box {
+      grid-template-columns: rem(60) 1fr;
+      column-gap: rem(10);
+  
+      .image {
+        width: rem(60);
+        max-width: rem(60);
+      }
+
+      .flex_box {
+        .text {
+          .last_text {
+            font-size: rem(16);
+          }
+        }
+        
+        .text2 {
+          grid-template-columns: rem(50) 1fr;
+          column-gap: rem(20);
+          row-gap: 0;
+          padding-top: rem(8);
+          font-size: rem(14);
+          line-height: 1.3;
+          color: var(--color-font-sub);
+        }
+      }
+    }
+  }
+
+
+
+  
+  .subscribeItem-container {
+    .content_body {
+      .left_box {
+        grid-template-columns: rem(60) 1fr;
+        column-gap: rem(10);
+
+        .image {
+          min-width: rem(60);
+          width: rem(60);
+        }
+
+        .flex_box {
+          .text {
+            display: grid;
+            grid-template-columns: minmax(rem(30), auto) rem(15) 1fr;
+            margin-bottom: 0;
+
+            > p {
+              width: 100%;
+              padding-bottom: 0;
+              font-size: rem(16);
+            }
+
+            .line_box{
+              > hr {
+                width : rem(12);
+                top: rem(6);
+              }
+            }
+
+            .last_text {
+              font-size: rem(16);
+            }
+          }
+
+          .text2 {
+            grid-template-columns: rem(50) 1fr;
+            column-gap: rem(20);
+            row-gap: 0;
+            padding-top: rem(8);
+            font-size: rem(14);
+            line-height: 1.3;
+            color: var(--color-font-sub);
+          }
+        }
+      }
+    }
+  }
 }

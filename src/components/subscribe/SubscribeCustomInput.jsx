@@ -3,19 +3,19 @@ import Icon_Checked from '/public/img/icon/icon_checked.svg';
 import s from './subscribeCustomInput.module.scss';
 
 export const SubscribeCustomInput = ({
-  children,
-  id,
-  type,
-  name,
-  selectedRadio,
-  setSelectedRadio,
-  selectedCheckbox,
-  setSelectedCheckbox,
-  disabled,
-  initialize,
-  backgroundColor,
-  ...props
-}) => {
+                                       children,
+                                       id,
+                                       type,
+                                       name,
+                                       selectedRadio,
+                                       setSelectedRadio,
+                                       selectedCheckbox,
+                                       setSelectedCheckbox,
+                                       disabled,
+                                       initialize,
+                                       backgroundColor,
+                                       ...props
+                                     }) => {
   
   
   const [isChecked, setIsChecked] = useState(false);
@@ -26,13 +26,13 @@ export const SubscribeCustomInput = ({
     setSelectedRadio(false);
     if (setSelectedCheckbox && typeof setSelectedCheckbox === 'function') setSelectedCheckbox([]);
   }, [type, initialize]);
-
   
-  const onCheckboxInputHandler = (e) => {
+  
+  const onCheckboxInputHandler = (e, labelId) => {
     setIsChecked(!isChecked);// checkbox 활성화
     const { id } = e.currentTarget;
-    const curState = { label: id, value: !isChecked };
-
+    const curState = { label: labelId || id, value: !isChecked };
+    
     setSelectedCheckbox((prevState) => {
       return {
         ...prevState,
@@ -40,13 +40,13 @@ export const SubscribeCustomInput = ({
       };
     });
   };
-
   
-  const onRadioInputHandler = (e) => {
+  
+  const onRadioInputHandler = (e, labelId) => {
     const { id } = e.currentTarget;
-    setSelectedRadio(id);
+    setSelectedRadio(labelId || id);
   };
-
+  
   const InputRadio = () => {
     return (
       <input
@@ -59,7 +59,7 @@ export const SubscribeCustomInput = ({
       />
     );
   };
-
+  
   const InputCheckbox = () => {
     return (
       <input
@@ -72,7 +72,7 @@ export const SubscribeCustomInput = ({
       />
     );
   };
-
+  
   const Input = () => {
     return (
       <>
@@ -87,7 +87,19 @@ export const SubscribeCustomInput = ({
       </>
     );
   };
+  
 
+  const onLabelClick = (e)=>{
+    e.preventDefault();
+    const id = e.currentTarget.dataset.id
+    if(type === 'checkbox'){
+      onCheckboxInputHandler(e, id);
+    }else {
+      onRadioInputHandler(e, id);
+    }
+    
+  }
+  
   return (
     <>
       <label
@@ -98,6 +110,7 @@ export const SubscribeCustomInput = ({
         }`}
         style={{backgroundColor:backgroundColor}}
         {...props}
+        onClick={onLabelClick}
       >
         <div className={s.custom_input_cont}>{children}</div>
         <Input />

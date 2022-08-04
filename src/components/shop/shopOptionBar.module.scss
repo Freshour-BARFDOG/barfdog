@@ -186,9 +186,9 @@
       width: rem(120);
     }
 
-    .price {
-      order: 5;
-      grid-column: 2/span 1;
+    span:nth-child(3) {
+      order: 6;
+      grid-column: 2/span 2;
       justify-content: flex-end;
     }
 
@@ -196,6 +196,8 @@
       padding-top: rem(4);
       align-items: flex-start;
       justify-content: flex-end;
+      grid-column: 3 / span 1;
+      grid-row: 1 / span 1;
     }
   }
 

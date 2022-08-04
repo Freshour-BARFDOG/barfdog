@@ -37,6 +37,7 @@ section.content_box {
   background-color: #f5f5f5;
 
   .article {
+    //padding: rem(46) 0 rem(26);
     padding: rem(46) 0 0;
     p {
       @include char(l18);
@@ -127,8 +128,8 @@ section.content_box {
   width: 100%;
 
   .line {
-    border-top: 1px solid var(--color-line-04);
-    border-bottom: 1px solid var(--color-line-04);
+    border-top: rem(1) solid var(--color-line-04);
+    border-bottom: rem(1) solid var(--color-line-04);
     margin-bottom: rem(20);
     cursor: pointer;
 
@@ -170,10 +171,10 @@ section.content_box {
         height: rem(240);
 
         .image {
-          width: 240px;
+          width: rem(240);
           aspect-ratio: 1/1;
           background-color: var(--color-bg);
-          text-indent: -9999px;
+          text-indent: rem(-9999);
         }
       }
     }
@@ -209,7 +210,7 @@ section.content_box {
     width: 100%;
 
     .line {
-      border: 1px solid var(--color-line-04);
+      border: rem(1) solid var(--color-line-04);
 
       .flex_box {
         grid-template-columns: 1fr rem(160);

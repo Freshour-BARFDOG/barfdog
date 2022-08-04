@@ -43,6 +43,11 @@ $browser-context: 16;
     padding-left: rem(4);
     margin-bottom: rem(5);
   }
+
+  .input__box{
+    display: block;
+    margin-bottom: rem(16);
+  }
   input {
     display: block;
     // box-sizing: border-box;
@@ -51,9 +56,9 @@ $browser-context: 16;
     height: rem(50);
     border: rem(1) solid #ddd;
     outline:none;
-    font-size: rem(20);
-    margin-bottom: rem(16);
-    // color : #b7b7b7;
+    font-size: rem(15);
+
+    &::placeholder{font-size:rem(15); color:var(--color-disabled);}
   }
 
   .input__field{
