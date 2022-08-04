@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { validate } from '/util/func/validation/validation_ordersheet';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
-import { postObjData, postData } from '/src/pages/api/reqData';
+import { postObjData } from '/src/pages/api/reqData';
 import s from '/src/pages/order/ordersheet/ordersheet.module.scss';
 import Spinner from '/src/components/atoms/Spinner';
 import { calcOrdersheetPrices } from './calcOrdersheetPrices';
 import ErrorMessage from '../atoms/ErrorMessage';
+import { useRouter } from 'next/router';
 
 export function Payment({
   info,
@@ -15,9 +16,13 @@ export function Payment({
   setFormErrors,
   orderType = 'general',
 }) {
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false); 
+  const router = useRouter();
 
   useEffect(() => {
+    // console.log(router);
+    // console.log(router.query.subscribeId);
+
     const jquery = document.createElement('script');
     jquery.src = 'https://code.jquery.com/jquery-1.12.4.min.js';
 
@@ -26,6 +31,7 @@ export function Payment({
 
     document.head.appendChild(jquery);
     document.head.appendChild(iamport);
+
     
     return () => {
       document.head.removeChild(jquery);
@@ -34,10 +40,11 @@ export function Payment({
   }, []);
 
   const onSubmit = async (e) => {
-    console.log(form);
+    // console.log(info,'info');
+    // console.log(form);
     e.preventDefault();
     if (isSubmitted) return;
-
+ 
     const valid_target = {
       name: form.deliveryDto.name,
       phone: form.deliveryDto.phone,
@@ -48,12 +55,20 @@ export function Payment({
       agreePrivacy: form.agreePrivacy,
       paymentPrice: calcOrdersheetPrices(form, orderType).paymentPrice,
     };
-    console.log(form);
     // console.log(valid_target)
     // console.log(info)
     const errObj = validate(valid_target);
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
+
+
+    if (!isPassed) return alert('유효하지 않은 항목이 있습니다.');
+    // console.log(isPassed);
+    // 결제 로직을 시작한다.
+    await startPayment();
+  };
+
+  async function startPayment(){
 
     const body = {
       memberCouponId: form.memberCouponId,
@@ -77,32 +92,40 @@ export function Payment({
       brochure: form.brochure, // 브로슈어 수령여부
     };
 
-    console.log(body);
-    if (!isPassed) return alert('유효하지 않은 항목이 있습니다.');
-    // console.log(isPassed);
-    // 결제 로직을 시작한다.
     try {
       setIsLoading((prevState) => ({
         ...prevState,
         submit: true,
       }));
+      console.log(orderType);
+
+
       // send DATA to api server after successful payment
-      const res = await postObjData(`/api/orders/subscribe/${info.subscribeDto.id}`, body);
+      const apiUrl = orderType === 'general' ? `/api/orders/general` : `/api/orders/subscribe/${router.query.subscribeId}`
+      const res = await postObjData(apiUrl, body);
       console.log(res);
       if (res.isDone) {
-        alert('결제완료 -> 이후 확인버튼 클릭 -> 결제완료페이지로 Redir');
+        if( orderType === 'general'){ 
+          // 일반 주문 결제
+          // res.data.data.id = 주문번호 id
+          await generalPayment(body,res.data.data.id,res.data.data.merchantUid);
+        }else{
+          // 구독 주문 결제
+          await subscribePayment(body,res.data.data.id,res.data.data.merchantUid);
+        }
+        // alert('결제완료 -> 이후 확인버튼 클릭 -> 결제완료페이지로 Redir');
         document.body.style.cssText = `
         overflow-y:scroll;
         height:100%;
         position:fixed;
         width:100%;
       `;
-      // return () => {
-      //   document.body.style.cssText = ``;
-      //   window?.scrollTo(0, parseInt(-mcx.event.scrollY || 10) * -1);
-      // };
-      await startPayment(body);
-    }  else {
+        // return () => {
+        //   document.body.style.cssText = ``;
+        //   window?.scrollTo(0, parseInt(-mcx.event.scrollY || 10) * -1);
+        // };
+        // 결제 시작 
+      } else {
         alert(res.error, '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.');
       }
     } catch (err) {
@@ -114,86 +137,130 @@ export function Payment({
       submit: false,
     }));
 
+  }
 
-  };
-
-  async function startPayment(body) {
+  async function generalPayment(body,id,merchantUid) {
     /* 1. 가맹점 식별하기 */
     const IMP = window.IMP;
     IMP.init(process.env.NEXT_PUBLIC_IAMPORT_CODE);
-    
-    // 서버에 주문정보 전송 후 merchant_uid 받음(실제 결제 완료되었지만 서버에 저장되지않는 경우 방지하기위해 주문 정보 전송 후 결제 성공/실패 결과 전송
-    const res = await postObjData(`/api/orders/general`, body);
-    console.log(res);
-    // console.log(res.data.data.merchantUid);
-    // 주문번호
-    console.log(res.data.data.id);
 
-    if(res.isDone){
-      /* 2. 결제 데이터 정의하기 */
-      const data = {
-        pg: 'kcp', // PG사
-        pay_method: 'card', // 결제수단
-        merchant_uid: res.data.data.merchantUid, // 주문번호
-        amount: 100 || body.paymentPrice, // 결제금액
-        name: '바프독 아임포트 결제 테스트', // 주문명
-        buyer_name: 'username' || info.name, // 구매자 이름
-        buyer_tel: '01000000000' || info.phone, // 구매자 전화번호
-        buyer_email: 'a@gmail' || info.email, // 구매자 이메일
-        buyer_addr: '센텀2로' || `${info.address.street},${info.address.detailAddress}`, // 구매자 주소
-        buyer_postcode: '00000' || info.address.zipcode, // 구매자 우편번호
-      };
-  
-      /* 4. 결제 창 호출하기 */
-      IMP.request_pay(data, callback);
+    /* 2. 결제 데이터 정의하기  1원 결제 -> 실패 , 100원 결제 -> 성공 */
+    const data = {
+      pg: 'kcp', // PG사
+      pay_method: 'card', // 결제수단
+      merchant_uid: merchantUid, // 주문번호
+      amount: 100 || body.paymentPrice, // 결제금액
+      name: '바프독 아임포트 결제 테스트', // 주문명
+      buyer_name: 'username' || info.name, // 구매자 이름
+      buyer_tel: '01000000000' || info.phone, // 구매자 전화번호
+      buyer_email: 'a@gmail' || info.email, // 구매자 이메일
+      buyer_addr: '센텀2로' || `${info.address.street},${info.address.detailAddress}`, // 구매자 주소
+      buyer_postcode: '00000' || info.address.zipcode, // 구매자 우편번호
+    };
+    IMP.request_pay(data, callback);
     
-    }
-    
-    /* 3. 콜백 함수 정의하기 */
+    /* 4. 결제 창 호출하기 */
     async function callback(response) {
       console.log(response);
       const { success, imp_uid, merchant_uid, error_msg } = response;
-  
-      if (success) {
-        // 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우
-        // 결제 정보 전달
-        const r = await postObjData(`/api/orders/${res.data.data.id}/general/success`, {
-          impUid : imp_uid,
-          merchantUid : merchant_uid
-        });
-        console.log(r);
-
+      
+    /* 3. 콜백 함수 정의하기 */
+    if (success) {
+      // 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우
+      // TODO: 결제 정보 전달
+      
+      const r = await postObjData(`/api/orders/${id}/general/success`, {
+        impUid : imp_uid,
+        merchantUid : merchant_uid
+      });
+      console.log(r);
+      if(r.isDone){
         alert('결제 성공');
-        try {
-          setIsLoading((prevState) => ({
-            ...prevState,
-            submit: true,
-          }));
-      // send DATA to api server after successful payment 
-      if (r.isDone) {
-        alert('결제완료 -> 이후 확인버튼 클릭 -> 결제완료페이지로 Redir');
         setIsSubmitted(true);
-      } else {
-        alert(res.error, '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.');
+        window.location.href= `/order/orderCompleted/${id}`;
+
       }
-    } catch (err) {
-      alert('API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.');
-      console.error('API통신 오류 : ', err);
+    } else {
+       // 결제 실패 : 쿠폰null일때 500err -> 서버 오류 수정하셨다고 함 TODO 나중에 테스트하기
+       const fail = await postObjData(`/api/orders/${id}/general/fail`);
+       console.log(fail);
+        if(fail.isDone){
+          alert(`결제 실패: ${error_msg}`);
+          startPayment();
+          // if (typeof window !== "undefined"){
+          //   // 임시로 넣은 코드 :  결제취소시 , 전역에 import 결제 html이 잔류하여, 없애기위한 용도
+          //   // window.location.href = '/';
+            
+          // }
+        }
+      
     }
-      setIsLoading((prevState) => ({
-        ...prevState,
-        submit: false,
-      }));
-      setIsSubmitted(true);
-      } else {
-        // 결제 실패 : 쿠폰null일때 500err -> 서버 오류 수정하셨다고 함 TODO 나중에 테스트하기
-        const fail = await postData(`/api/orders/${res.data.data.id}/general/fail`);
-        console.log(fail);
-        alert(`결제 실패: ${error_msg}`);
-        window.location.reload(); // 임시로 넣은 코드 :  결제취소시 , 전역에 import 결제 html이 잔류하여, 없애기위한 용도
-      }
-    } 
   
+    };
+    
+  }
+
+  async function subscribePayment(body,id,merchantUid) {
+    /* 1. 가맹점 식별하기 */
+    const IMP = window.IMP;
+    IMP.init(process.env.NEXT_PUBLIC_IAMPORT_CODE);
+
+    const randomStr= new Date().getTime().toString(36);
+    /* 2. 결제 데이터 정의하기 */
+    const data = {
+      pg: 'kcp_billing', // PG사
+      pay_method: 'card', // 결제수단
+      merchant_uid: merchantUid, // 주문번호
+      amount: 1 || body.paymentPrice, // 결제금액
+      customer_uid : `customer_Uid_${randomStr}`,
+      name: '바프독 아임포트 결제 테스트', // 주문명
+      buyer_name: 'username' || info.name, // 구매자 이름
+      buyer_tel: '01000000000' || info.phone, // 구매자 전화번호
+      buyer_email: 'a@gmail' || info.email, // 구매자 이메일
+      buyer_addr: '센텀2로' || `${info.address.street},${info.address.detailAddress}`, // 구매자 주소
+      buyer_postcode: '00000' || info.address.zipcode, // 구매자 우편번호
+    };
+    IMP.request_pay(data, callback);
+    
+    /* 4. 결제 창 호출하기 */
+    async function callback(response) {
+      console.log(response);
+      const { success,customer_uid, imp_uid, merchant_uid,card_name,card_number, error_msg } = response;
+      
+    /* 3. 콜백 함수 정의하기 */
+    if (success) {
+      // 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우
+      // TODO: 결제 정보 전달 
+      const r = await postObjData(`/api/orders/${id}/subscribe/success`, {
+        impUid : imp_uid,
+        merchantUid : merchant_uid,
+        customerUid : customer_uid,
+        cardName : card_name,
+        cardNumber :card_number
+      });
+      console.log(r);
+      if(r.isDone){
+        alert('결제 성공');
+        setIsSubmitted(true);
+
+        window.location.href = `/order/orderCompleted/subscribe/${id}`;
+      }
+    } else {
+       // 결제 실패 : 쿠폰null일때 500err -> 서버 오류 수정하셨다고 함 TODO 나중에 테스트하기
+       const fail = await postObjData(`/api/orders/${id}/subscribe/fail`);
+       console.log(fail);
+        if(fail.isDone){
+          alert(`결제 실패: ${error_msg}`);
+          // 임시로 넣은 코드 :  결제취소시 , 전역에 import 결제 html이 잔류하여, 없애기위한 용도
+          // window.location.href= '/';
+          startPayment();
+
+        }
+      
+    }
+  
+    };
+    
   }
 
   return (

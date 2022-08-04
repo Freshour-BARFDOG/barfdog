@@ -286,3 +286,10 @@ function SubScribe_OrderHistoryPage() {
 }
 
 export default SubScribe_OrderHistoryPage;
+
+export async function getServerSideProps({ query }) {
+  
+  const { orderIdx } = query;
+  
+  return { props: { orderIdx } };
+}
