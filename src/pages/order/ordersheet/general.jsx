@@ -273,7 +273,14 @@ export default function GeneralOrderSheetPage() {
             />
             <section className={s.final_btn}>
               <p>위 주문 내용을 확인 하였으며, 회원 본인은 결제에 동의합니다.</p>
-              <Payment isLoading={isLoading} info={info} form={form} setFormErrors={setFormErrors}/> {/* 결제버튼 */}
+              
+              <Payment
+                isLoading={isLoading}
+                setIsLoading={setIsLoading}
+                info={info}
+                form={form}
+                setFormErrors={setFormErrors}
+              /> {/* 결제버튼 */}
             </section>
           </div>
         </div>
