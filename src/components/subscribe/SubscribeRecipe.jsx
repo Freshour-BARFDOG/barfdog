@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import s from '/src/pages/order/subscribeShop/index.module.scss';
-import {ItemRecommendlabel, ItemSoldOutLabel} from '/src/components/atoms/ItemLabel';
+import { ItemRecommendlabel, ItemSoldOutLabel } from '/src/components/atoms/ItemLabel';
 import Image from 'next/image';
 import { subscribePlanType } from '/store/TYPE/subscribePlanType';
 import { Navigation } from 'swiper';
@@ -42,20 +42,16 @@ const swiperSettings = {
 };
 
 export const SubscribeRecipe = ({
-  event = { loadingDuration: 1000 },
   name,
   info,
-  setInfo,
   form,
   setForm,
 }) => {
-  // * 풀플랜: 최대 2가지 레시피 선택 가능
-  // * 그 외 플랜: 1가지 레시피 선택 가능
-  const [isLoading, setIsLoading] = useState({}); // boolean
-  const [recipes, setRecipes] = useState([]);
+  
+  
   const [initialize, setInitialize] = useState(false);
-  const [selectedCheckbox, setSelectedCheckbox] = useState([]);
-  const [selectedRadio, setSelectedRadio] = useState(null);
+  const [selectedCheckbox, setSelectedCheckbox] = useState([]); // * 풀플랜: 최대 2가지 레시피 선택 가능 (Checkbox Input)
+  const [selectedRadio, setSelectedRadio] = useState(null); // * 그 외 플랜: 1가지 레시피 선택 가능 (Radio Input)
   const [inputType, setInputType] = useState('radio');
 
   const selectedRecipe = info.recipeInfoList?.filter((rc) => form.recipeIdList.indexOf(rc.id) >= 0);
@@ -68,51 +64,16 @@ export const SubscribeRecipe = ({
     ?.filter((ingr, i) => selectedIngredientList.indexOf(ingr) === i)
     .join(', ');
 
-  useEffect(() => {
-    // 레시피 모든 정보 조회
-    (async () => {
-      setIsLoading((prevState) => ({
-        ...prevState,
-        fetching: true,
-      }));
-      try {
-        const url = `/api/recipes`;
-        const res = await getData(url);
-        const recipeIdList = res.data?._embedded?.recipeListResponseDtoList?.map((l) => l.id);
-        const recipeInfoList = [];
-        for (const recipeId of recipeIdList) {
-          const apiUrl = `/api/recipes/${recipeId}`;
-          const res = await getData(apiUrl);
-          // console.log(res)
-          recipeInfoList.push(res.data);
-        }
-        setRecipes(recipeInfoList);
-        setInfo((prevState) => ({
-          ...prevState,
-          recipeInfoList,
-        }));
-      } catch (err) {
-        console.error(err.response);
-      }
-
-      // - Fullscreen Loading
-      setTimeout(() => {
-        setIsLoading((prevState) => ({
-          ...prevState,
-          fetching: false,
-        }));
-      }, event.loadingDuration);
-    })();
-  }, []);
-
+  
   useEffect(() => {
     // Recipe Input 타입 변환
     const type = form.plan === subscribePlanType.FULL.NAME ? 'checkbox' : 'radio';
     setInputType(type);
   }, [form.plan]);
 
+  
   useEffect(() => {
-    const selectedId = recipes.filter(
+    const selectedId = info.recipeInfoList.filter(
       (rc, index) => rc.name === `${selectedRadio && selectedRadio.split('-')[0]}`,
     )[0]?.id;
     setForm((prevState) => ({
@@ -128,7 +89,7 @@ export const SubscribeRecipe = ({
     const keys = Object.keys(selectedCheckbox);
     const seletedIdList = [];
     keys.forEach((key) => {
-      const selectedId = recipes.filter(
+      const selectedId = info.recipeInfoList.filter(
         (rc, index) => rc.name === `${selectedCheckbox && key.split('-')[0]}`,
       )[0]?.id;
       const val = selectedCheckbox[key];
@@ -183,7 +144,7 @@ export const SubscribeRecipe = ({
             <div className={s.color_box_row_2}>
               {info.inedibleFood && (
                 <>
-                  <em>{info.inedibleFood}</em>에 못먹는 음식으로 체크해 주셨네요!
+                  <em>{info.inedibleFood}</em>에 못먹는 음식으로 체크해 주셨네요!&nbsp;
                 </>
               )}
               <em>{selectedPlan}</em> 레시피에는 <em>&lsquo;{curIngredient}&rsquo;</em>
@@ -194,63 +155,58 @@ export const SubscribeRecipe = ({
           </div>
         </div>
       )}
-  
-  
-      <h6 className={'pointColor'}>******SOLD OUT 항목 2번째 레시피에 강제 적용. (테스트 기간 이후 삭제)</h6>
-      {isLoading?.fetching ? (
-        <FullScreenRunningDog opacity={1} />
-      ) : (
-        <Swiper {...swiperSettings} watchOverflow={false}>
-          {recipes.length > 0 &&
-            recipes.map((rc, index) => (
-              <SwiperSlide key={`recipe-${rc.id}-${index}`} className={s.slide}>
-                {(()=>{ // ! TEST
-                  if(index === 1){
-                    rc.inStock = false;
-                  }
-                })()}
-                <SubscribeCustomInput
-                  id={`${rc.name}-${index}`}
-                  selectedRadio={selectedRadio}
-                  type={inputType}
-                  name={name}
-                  initialize={initialize}
-                  disabled={!rc.inStock}
-                  selectedCheckbox={selectedCheckbox}
-                  setSelectedCheckbox={setSelectedCheckbox}
-                  setSelectedRadio={setSelectedRadio}
-                >
-                  {info.recommendRecipeName === rc.name && (
-                    <ItemRecommendlabel
-                      label="추천!"
-                      style={{
-                        backgroundColor: '#000',
-                      }}
-                    />
-                  )}
-                  {!rc.inStock && <ItemSoldOutLabel/>}
-                  <figure className={`${s.image} img-wrap`}>
-                    <Image
-                      className={'init-next-image'}
-                      src={rc.thumbnailUri2}
-                      objectFit="cover"
-                      layout="fill"
-                      alt="레시피 상세 이미지"
-                    />
-                  </figure>
-                  <p className={s.row_1}>{rc.uiNameEnglish}</p>
-                  <p className={s.row_2}>{rc.uiNameKorean}</p>
-                  <p className={s.row_3}>{rc.description}</p>
-                  <p className={s.row_4}>
-                    <a href="/recipes" onClick={onPopupHandler}>
-                      더 알아보기
-                    </a>
-                  </p>
-                </SubscribeCustomInput>
-              </SwiperSlide>
-            ))}
-        </Swiper>
-      )}
+      <h6 className={'pointColor'}>******SOLD OUT: 1번째 레시피 강제 적용. (테스트 이후 삭제)</h6>
+      <Swiper {...swiperSettings} watchOverflow={false}>
+        {info.recipeInfoList.length > 0 &&
+          info.recipeInfoList.map((rc, index) => (
+            <SwiperSlide key={`recipe-${rc.id}-${index}`} className={s.slide}>
+              {(() => {
+                // ! TEST
+                if (index === 0) {
+                  rc.inStock = false;
+                }
+              })()}
+              <SubscribeCustomInput
+                id={`${rc.name}-${index}`}
+                selectedRadio={selectedRadio}
+                type={inputType}
+                name={name}
+                initialize={initialize}
+                disabled={!rc.inStock}
+                selectedCheckbox={selectedCheckbox}
+                setSelectedCheckbox={setSelectedCheckbox}
+                setSelectedRadio={setSelectedRadio}
+              >
+                {info.recommendRecipeName === rc.name && (
+                  <ItemRecommendlabel
+                    label="추천!"
+                    style={{
+                      backgroundColor: '#000',
+                    }}
+                  />
+                )}
+                {!rc.inStock && <ItemSoldOutLabel />}
+                <figure className={`${s.image} img-wrap`}>
+                  <Image
+                    className={'init-next-image'}
+                    src={rc.thumbnailUri2}
+                    objectFit="cover"
+                    layout="fill"
+                    alt="레시피 상세 이미지"
+                  />
+                </figure>
+                <p className={s.row_1}>{rc.uiNameEnglish}</p>
+                <p className={s.row_2}>{rc.uiNameKorean}</p>
+                <p className={s.row_3}>{rc.description}</p>
+                <p className={s.row_4}>
+                  <a href="/recipes" onClick={onPopupHandler}>
+                    더 알아보기
+                  </a>
+                </p>
+              </SubscribeCustomInput>
+            </SwiperSlide>
+          ))}
+      </Swiper>
     </section>
   );
 };

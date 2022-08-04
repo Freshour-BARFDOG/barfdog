@@ -5,7 +5,8 @@ import checkStringUnderConsonant from "/util/func/checkStringUnderConsonant";
 
 export const SubscribeRecommendResult = ({info}) => {
   
-  const recommendDescriptionForSurvey = info.recipeDtoList.filter(recipe=>recipe.id === info.recommendRecipeId)[0].descriptionForSurvey;
+  
+  const recommendDescriptionForSurvey = info.recipeInfoList.length > 0 && info.recipeInfoList?.filter(recipe=>recipe.id === info.recommendRecipeId)[0].descriptionForSurvey;
   const hasRecipeNameUnderConsonant = checkStringUnderConsonant(recommendDescriptionForSurvey);
   
   return (

@@ -7,6 +7,7 @@ import { subscribePlanType } from '/store/TYPE/subscribePlanType';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 
 export const SubscribePlan = ({ name, info, form, setForm, calcPrice }) => {
+  
   const [selectedPlan, setSelectedPlan] = useState(null);
 
   useEffect(() => {
@@ -16,9 +17,6 @@ export const SubscribePlan = ({ name, info, form, setForm, calcPrice }) => {
     }));
     // 선택된 플랜을 의존성으로 넣어서 계산한다.
   }, [selectedPlan]);
-  
-
-  
 
   return (
     <section className={s.regular_delivery}>
@@ -68,7 +66,7 @@ export const SubscribePlan = ({ name, info, form, setForm, calcPrice }) => {
                   <span>{subscribePlanType.FULL.weeklyPaymentCycle}주</span>&nbsp;정기배송
                 </div>
                 <div className={s.row_3}>
-                  <span>{info.foodAnalysis.oneDayRecommendGram}g</span>&nbsp;(1팩기준)
+                  <span>{info.foodAnalysis.oneMealRecommendGram}g</span>&nbsp;(1팩기준)
                 </div>
                 <div className={s.row_4}>
                   {subscribePlanType.FULL.totalNumberOfPacks}팩 x
@@ -145,7 +143,7 @@ export const SubscribePlan = ({ name, info, form, setForm, calcPrice }) => {
                   <span>{subscribePlanType.HALF.weeklyPaymentCycle}주</span>&nbsp;정기배송
                 </div>
                 <div className={s.row_3}>
-                  <span>143g</span>&nbsp;(1팩기준)
+                  <span>{info.foodAnalysis.oneMealRecommendGram}g</span>&nbsp;(1팩기준)
                 </div>
                 <div className={s.row_4}>
                   {subscribePlanType.HALF.totalNumberOfPacks}팩 x
@@ -229,7 +227,7 @@ export const SubscribePlan = ({ name, info, form, setForm, calcPrice }) => {
                   <span>{subscribePlanType.HALF.weeklyPaymentCycle}주</span>&nbsp;정기배송
                 </div>
                 <div className={s.row_3}>
-                  <span>143g</span>&nbsp;(1팩기준)
+                  <span>{info.foodAnalysis.oneMealRecommendGram}g</span>&nbsp;(1팩기준)
                 </div>
                 <div className={s.row_4}>
                   {subscribePlanType.TOPPING.totalNumberOfPacks}팩 x
