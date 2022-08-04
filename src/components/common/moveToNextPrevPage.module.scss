@@ -2,7 +2,7 @@
 @import "/styles/global/rem";
 
 .wrap {
-  border-top: 1px solid var(--color-line-03);
+  border-top: rem(1) solid var(--color-line-03);
   .grid_box {
     display: grid;
     grid-template-rows: repeat(2, rem(50));
@@ -13,7 +13,7 @@
       display: grid;
       align-items: center;
       grid-template-columns: rem(160) 1fr;
-      border-bottom: 1px solid var(--color-line-04);
+      border-bottom: rem(1) solid var(--color-line-04);
       color : var(--color-font-sub);
 
       p, button{

@@ -400,7 +400,7 @@ section.sns {
   .textbox {
     position: absolute;
     top: 0;
-    right: 0;
+    right: rem(10);
     transform: translate(calc(100% - #{rem(33)}), 30%);
 
     .text {
@@ -746,6 +746,7 @@ section.sns {
 
 .swiper_main_outerWrap {
   position: relative;
+  height: rem(400);
   width: 100%;
 
   .swiper_navigation_container {
@@ -770,6 +771,7 @@ section.sns {
 .swiper_review_outerWrap {
   padding: 0 rem(50) 0;
   position: relative;
+  height: rem(600);
 
   .swiper_review {
     padding: rem(60) 0 rem(80);
@@ -900,7 +902,7 @@ section.sns {
 
 
 
-@media only screen and (min-width:rem(100)) and (max-width: rem(1350)) {
+@media (max-width: rem(1350)) {
   
   .swiper-button-next {
     margin-right: rem(20);
@@ -914,7 +916,8 @@ section.sns {
 
 
 /* RESPONSIVE */
-@media only screen and (min-width:rem(100)) and (max-width: rem(1200)) {
+@media (max-width: rem(1200)) {
+
   
 //최상단 그림배너
   .banner {
@@ -924,6 +927,8 @@ section.sns {
   }
 
   .swiper_main_outerWrap {
+    height: rem(300);
+
     .swiper_navigation_container {
       display: none;
     }
@@ -939,6 +944,7 @@ section.sns {
       font-weight: 300;
       transform: translateX(rem(-30));
       text-align: right;
+      pointer-events: none;
     }
     
     .swiper-pagination__mainSection::before{
@@ -1090,7 +1096,7 @@ section.sns {
   }
 }
 
-@media only screen and (min-width:rem(100)) and (max-width: rem(1000)) {
+@media (max-width: rem(1000)) {
   
   //레시피 설명 4가지 사진
   .swiper_recipe_outerWrap {
@@ -1102,7 +1108,7 @@ section.sns {
 
 }
 
-@media only screen and (min-width:rem(100)) and (max-width: rem(900)) {
+@media (max-width: rem(900)) {
   
 //최상단 그림배너
   .banner {
@@ -1112,6 +1118,9 @@ section.sns {
   }
   
 
+  .swiper_main_outerWrap {
+    height: rem(220);
+  }
 
 
 //바프생식 바뀌는 점
@@ -1166,7 +1175,7 @@ section.sns {
 }
 
 
-@media only screen and (min-width:rem(100)) and (max-width: rem(650)) {
+@media (max-width: rem(650)) {
   
   //레시피 설명 4가지 사진
   .swiper_recipe_outerWrap {
@@ -1182,7 +1191,7 @@ section.sns {
 }
 
 
-@media only screen and (min-width:rem(100)) and (max-width: rem(600)) {
+@media (max-width: rem(600)) {
 
 
   section.recipe_info {
@@ -1197,6 +1206,9 @@ section.sns {
     }
   }
 
+  .swiper_main_outerWrap {
+    height: rem(400);
+  }
 
 
 //최상위 그림배너 모바일 이미지 테스트

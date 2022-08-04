@@ -21,7 +21,7 @@ $contents-maxWidth: rem(1620);
   margin:0 auto;
   display: flex;
   align-items: flex-start;
-  grid-template-columns: 30px 1000px;
+  grid-template-columns: rem(30) rem(1000);
   justify-content: flex-end;
   column-gap: rem(20);
   /* - MENU: FOLD EFFECT*/
@@ -107,22 +107,22 @@ $contents-maxWidth: rem(1620);
 }
 
 
-@media (max-width:1080px){
+@media (max-width:rem(1080)){
 
 }
 
 
-@media (max-width:768px){
+@media (max-width:rem(768)){
 
 }
 
 
-@media (max-width:600px){
+@media (max-width:rem(600)){
 
 }
 
 
-@media (max-width:320px){
+@media (max-width:rem(320)){
 
 }
 

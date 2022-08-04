@@ -47,7 +47,7 @@ $animationDuration : 0.2s;
         width: rem(180);
         height: rem(60);
         background-color :#fff;
-        border: 1px solid #EFEFEF;
+        border: rem(1) solid #EFEFEF;
         box-sizing: border-box;
         margin-left: rem(-1);
         transition-property: background-color, color;
@@ -83,7 +83,7 @@ $animationDuration : 0.2s;
   
   // .whatsraw {
   //   .bot_boxes {
-  //     margin: 0 20px 0;
+  //     margin: 0 rem(20) 0;
   //     .title_box {
   //       padding: rem(29) rem(10) rem(29);
 
@@ -99,7 +99,7 @@ $animationDuration : 0.2s;
   //         font-family: 'Pretendard Variable';
   //         font-style: normal;
   //         font-weight: 700;
-  //         font-size: 16px;
+  //         font-size: rem(16);
   //         line-height: 140%;
   //         letter-spacing: -0.02em;
   //         color: #CA1010;
@@ -113,7 +113,7 @@ $animationDuration : 0.2s;
   //         font-family: 'Noto Sans';
   //         font-style: normal;
   //         font-weight: 400;
-  //         font-size: 15px;
+  //         font-size: rem(15);
   //         line-height: 190%;
   //         letter-spacing: -0.02em;
   //         color: #202020;
@@ -171,7 +171,7 @@ $animationDuration : 0.2s;
     }
   // .line{
   //   margin: 0 rem(20) 0;
-  //   border: 1px solid #DDDDDD;
+  //   border: rem(1) solid #DDDDDD;
   //   }
   .text_box {
     display:none;
@@ -204,7 +204,7 @@ $animationDuration : 0.2s;
       .boxes {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        grid-gap: 0px;
+        grid-gap: 0;
         .box {
           width: 100%;
           &.active{
@@ -216,7 +216,7 @@ $animationDuration : 0.2s;
   }
 
   .bot {
-    margin-top: 20px;
+    margin-top: rem(20);
       
     .bot_box { 
       .title_box {
