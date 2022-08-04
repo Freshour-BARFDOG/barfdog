@@ -1,8 +1,13 @@
 import s from '../../pages/order/subscribeShop/index.module.scss';
 import Image from 'next/image';
 import React from 'react';
+import checkStringUnderConsonant from "/util/func/checkStringUnderConsonant";
 
 export const SubscribeRecommendResult = ({info}) => {
+  
+  const recommendDescriptionForSurvey = info.recipeDtoList.filter(recipe=>recipe.id === info.recommendRecipeId)[0].descriptionForSurvey;
+  const hasRecipeNameUnderConsonant = checkStringUnderConsonant(recommendDescriptionForSurvey);
+  
   return (
     <section className={s.order_title}>
       <h1 className={s.text}>결과지를 종합해본 결과</h1>
@@ -24,13 +29,16 @@ export const SubscribeRecommendResult = ({info}) => {
             </figcaption>
           </div>
 
-          <p className={s.result_title}>
-              {info.dogName}에게는
-              <br/>
-              {info.recommendRecipeDescription}이 필요한
-              <br/>
-              <b>{info.recommendRecipeName}</b> 레시피를 추천합니다. <br/>
+          <div className={s.result_title}>
+            <p>{info.dogName}에게는</p>
+            <p>
+              <em className={s.accent}>{recommendDescriptionForSurvey}</em>
+              <span>{hasRecipeNameUnderConsonant ? '이' : '가'} </span>필요한
             </p>
+            <p>
+              <b>{info.recommendRecipeName}</b> 레시피를 추천합니다.
+            </p>
+          </div>
           
           <div className={s.grid_right}>
             <div className={s.recommend_data_wrap}>

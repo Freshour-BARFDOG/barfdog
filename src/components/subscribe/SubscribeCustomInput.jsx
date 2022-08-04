@@ -18,6 +18,7 @@ export const SubscribeCustomInput = ({
                                      }) => {
   
   
+  
   const [isChecked, setIsChecked] = useState(false);
   useEffect(() => {
     // 초기화
@@ -66,7 +67,6 @@ export const SubscribeCustomInput = ({
         id={id}
         type="checkbox"
         value={isChecked}
-        disabled={disabled}
         onChange={onCheckboxInputHandler}
         name={name}
       />
@@ -91,6 +91,9 @@ export const SubscribeCustomInput = ({
 
   const onLabelClick = (e)=>{
     e.preventDefault();
+    const disabled = e.currentTarget.dataset.disabled === 'true'; // ! String 으로 입력됨 true / false값
+    if(disabled) return console.error('NOTICE: disabled Element');
+    
     const id = e.currentTarget.dataset.id
     if(type === 'checkbox'){
       onCheckboxInputHandler(e, id);
@@ -105,6 +108,7 @@ export const SubscribeCustomInput = ({
       <label
         htmlFor={id}
         data-id={id}
+        data-disabled={disabled}
         className={`${s.custom_input_wrapper} ${isChecked && s.checked} ${
           selectedRadio === id && s.checked
         }`}
