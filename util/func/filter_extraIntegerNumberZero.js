@@ -1,4 +1,4 @@
-const filter_extraIntegerNumberZeo = (stringTypeNumber, unit='+') => {
+const filter_extraIntegerNumberZero = (stringTypeNumber, unit='+') => {
   let filteredValue = stringTypeNumber;
   const integer = filteredValue.split('.')[0];
   const decimal = filteredValue.split('.')[1];
@@ -28,4 +28,4 @@ const filter_extraIntegerNumberZeo = (stringTypeNumber, unit='+') => {
 
 
 
-export default filter_extraIntegerNumberZeo;
+export default filter_extraIntegerNumberZero;

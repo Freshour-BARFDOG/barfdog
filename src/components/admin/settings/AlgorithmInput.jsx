@@ -3,7 +3,7 @@ import s from './algorithm.module.scss';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import filter_emptyValue from '/util/func/filter_emptyValue';
 import filter_onlyNumber from '/util/func/filter_onlyNumber';
-import filter_extraIntegerNumberZeo from '/util/func/filter_extraIntegerNumberZeo';
+import filter_extraIntegerNumberZero from '/util/func/filter_extraIntegerNumberZero';
 
 
 const AlgorithmInput = ({ id, label, numberUnit, formValues, setFormValues, formErrors }) => {
@@ -21,7 +21,7 @@ const AlgorithmInput = ({ id, label, numberUnit, formValues, setFormValues, form
       filteredValue = filter_onlyNumber(filteredValue);
     }
 
-    filteredValue = filter_extraIntegerNumberZeo(filteredValue, numberUnit);
+    filteredValue = filter_extraIntegerNumberZero(filteredValue, numberUnit);
 
     setFormValues((prevState) => ({
       ...prevState,
