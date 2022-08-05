@@ -35,13 +35,13 @@ import { useRouter } from 'next/router';
 
 
 const initialFormValues = {
-  name: '테스트 반려견-', // 강아지이름 str
+  name: 'dog-', // 강아지이름 str
   gender: 'MALE', // 강아지 성별 str
   birth: '202201', // 강아지 생월 str // [YYYYMM]
   oldDog: false, // 노견 여부 boolean (checkbox type)
   dogSize: 'MIDDLE', // 강아지 체급 str
-  dogType: '삽살개', // 강아지 종 str
-  weight: '12.2', // 강아지 몸무게 str // 몸무게 소수점 아래 1자리
+  dogType: '닥스훈트', // 강아지 종 str
+  weight: '2.7', // 강아지 몸무게 str // 몸무게 소수점 아래 1자리
   neutralization: false, // 중성화여부 Boolean
   activityLevel: dogActivityLevelType.NORMAL, // 활동량 레벨 str
   walkingCountPerWeek: 1, // 주당 산책 횟수 num
