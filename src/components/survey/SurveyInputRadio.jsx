@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import s from '/src/pages/survey/survey.module.scss';
+import {dogInedibleFoodType} from "../../../store/TYPE/dogInedibleFoodType";
+import {dogCautionType} from "../../../store/TYPE/dogCautionType";
 
 const SurveyInputRadio = ({
   formValueKey,
@@ -13,12 +15,24 @@ const SurveyInputRadio = ({
   defaultStyle,
   dataType='string'
 }) => {
+
   
-  const initialSelectedRadio = `${formValueKey}-${formValues[formValueKey]}`;
+
+
+  // 최초 값
+  let initialSelectedRadio = `${formValueKey}-${formValues[formValueKey]}`;
+  if(formValueKey === 'caution'){
+    // 설문조사 수정하기 > 있어요항목 UI > checked표시를 위함
+    const val = formValues[formValueKey];
+    if(val !== dogCautionType.NONE){
+      initialSelectedRadio = `${formValueKey}-`
+    }
+  }
+  
   const [selectedRadio, setSelectedRadio] = useState(initialSelectedRadio); // * component 내부 value
+
   
-  
-  
+  console.log()
   useEffect( () => {
     // '기타' input의 입력값(value)와 연계한 UI의 변화
     // => input value에 SurveyInputRadio의 idList 중의 id를 입력했을 경우, 해당 id에 checked 표기하기 위함.
@@ -30,6 +44,7 @@ const SurveyInputRadio = ({
       }
     })
   }, [formValues[formValueKey]] );
+  
   
   const onChangeHandler = (e) => {
     const { id } = e.currentTarget;

@@ -1,31 +1,47 @@
 
 
 
-const transformDate = (d, option) => {
-  if(!d?.indexOf('-'))return;
-  // const yy = d.split("-")[0];
+const transformDate = (d, unit, option={seperator:'-'}) => {
+  if(d?.indexOf('-') < 0)return;
+  let result;
+  let yymmdd;
+  let time;
+  let hour, min, sec
+  
+
+  // YYMMDD
   const yy = d.slice(0,4);
-  // const mm = d.split("-")[1];
   const mm = d.slice(5,7);
-  // const dd = d.split("-")[2].split("T")[0];
   const dd = d.slice(8,10);
+  yymmdd = `${yy}${option.seperator}${mm}${option.seperator}${dd}`;
+  result = yymmdd;
   
-  let result = `${yy}-${mm}-${dd}`;
-  
-  if(option === '년월일'){
+  if(unit === '년월일'){
     result = `${yy}년 ${mm}월 ${dd}일`;
-  } else if(option === '월일'){
+  } else if(unit === '월일'){
     result = `${mm}월 ${dd}일`;
-  } else if (option === '일'){
+  } else if (unit === '일'){
     result = `${dd}일`;
   }
   
-  if(option === 'time'){
+  
+  
+  // TIME
+  if(d.indexOf('T') >= 0){
     const t = d?.split("-")[2].split("T")[1];
-    const hour = t?.split(':')[0];
-    const min = t?.split(':')[1];
-    const sec = Math.floor(t?.split(':')[2]);
+    // const hour = t?.split(':')[0];
+    hour = t.slice(0,2);
+    min = t.slice(3,5);
+    sec = t.slice(6,8);
+    time = `${hour}:${min}:${sec}`;
+  }
+  
+  if(unit === 'time'){
     result = `${yy}년 ${mm}월 ${dd}일 ${hour}시 ${min}분 ${sec}초`;
+  }
+  
+  if ( unit === 'total') {
+    result = `${yymmdd} ${time}`;
   }
   
   return result;
