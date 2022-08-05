@@ -7,7 +7,7 @@ import Modal_recipes from "@src/components/modal/Modal_recipes";
 import s from './recipes.module.scss';
 import Image from 'next/image';
 import styled from "styled-components";
-import { useModalContext } from '/store/modal-context';
+import Link from "next/link";
 
 
 const Button_ModalTrigger = styled.button`
@@ -1303,8 +1303,6 @@ export default function RecipePage() {
     setIsActiveModal(false);
   };
 
-//정기구독 모달
-  const mcx = useModalContext();
 
   const onShowSurvey = () => {
     mcx.subscribe.onShow();
@@ -1658,14 +1656,16 @@ export default function RecipePage() {
 
             <div className={s.btn_box}>
               <div className={s.image_box}>
-                <div className={`${s.image} img-wrap`} onClick={onShowSurvey}>
-                  <Image
-                    priority
-                    src={require("public/img/recipe_subscribe.png")}
-                    objectFit="cover"
-                    layout="fill"
-                    alt="브랜드 소개 이미지"
-                  />
+                <div className={`${s.image} img-wrap`}>
+                  <Link href={'/surveyGuide'} passHref>
+                    <Image
+                      priority
+                      src={require("public/img/recipe_subscribe.png")}
+                      objectFit="cover"
+                      layout="fill"
+                      alt="브랜드 소개 이미지"
+                    />
+                  </Link>
                 </div>
               </div>
             </div>

@@ -27,6 +27,7 @@ section.method {
 }
 section.payment {
   padding: rem(30) 0 rem(50);
+  border-bottom: rem(1) solid var(--color-line-04);;
 }
 section.final_btn {
   padding: rem(30) 0 rem(63);
@@ -234,7 +235,8 @@ section.final_btn {
 
 .line {
   > hr {
-    border: rem(1) solid var(--color-line-04);
+    border: 0;
+    border-bottom: rem(1) solid var(--color-line-04);
   }
 }
 
@@ -595,7 +597,8 @@ section.payment {
     width: 100%;
   }
   hr {
-    border: rem(1) solid var(--color-line-04);
+    border: 0;
+    border-bottom: rem(1) solid var(--color-line-04);
   }
 
   .flex_box2 {
@@ -860,15 +863,15 @@ section.payment {
       grid-template-columns: rem(80) 1fr;
 
       .input_box{
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: 1fr rem(105);
         > * {
           width: 100%;
         }
 
       }
       .point {
-        //width: 300%;
-        //transform: translateX(rem(90));
+        grid-column: 1 / span 2;
       }
     }
   }

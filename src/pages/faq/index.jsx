@@ -82,6 +82,7 @@ function FAQindexPage() {
                   <li className={Styles.box}>레시피</li>
                   <li className={Styles.box}>보관 및 급여</li>
                   <li className={Styles.box}>계정 관리</li>
+                  <li className={Styles.box}></li>
                 </ul>
               </div>
             </nav>
