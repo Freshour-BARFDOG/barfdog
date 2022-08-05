@@ -14,5 +14,16 @@ export const calcNextSubscribeDeliveryDate = (d = transformToday(), unit = '월�
   return transformDate( nextDeliveryDate, unit );
   // unit: null  > 'YYYY-MM-DD'
   // unit: 년월일 > 'YYYY년 MM월 DD일'
-  
 };
+
+
+
+
+export const calcChangedSubscribeDeliveryDate = (originDate='YYYY-MM-DD', periodInWeeks)=>{
+  const convertingOriginDate = transformDate(originDate);
+  const weeks = periodInWeeks * 7;
+  const prevDate = new Date(convertingOriginDate);
+  const nextDate = new Date(prevDate.setDate(prevDate.getDate() + weeks));
+  return transformDate(nextDate.toISOString()); // YYYY-MM-DD
+
+}

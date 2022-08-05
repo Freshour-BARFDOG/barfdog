@@ -13,12 +13,17 @@ section.btn_section { padding : rem(40) 0 rem(98) 0;}
   .title_text {
     @include char(t24);
     font-weight: 700;
-    padding-bottom: rem(10);
+    margin-bottom:rem(10);
   }
   .title_text_2  {
     @include char(l16);
     font-weight: 500;
     color: var(--color-font-sub2);
+  }
+  .notice{
+    color:var(--color-main);
+    font-size: rem(12);
+    margin-top:rem(4);
   }
 }
 
@@ -126,12 +131,16 @@ section.btn_section { padding : rem(40) 0 rem(98) 0;}
         .left_box {
           display: grid;
           place-items: center;
+          align-items: flex-start;
           color: var(--color-font-sub);
           font-weight: 500;
         }
         .right_box {
           text-align: right;
           font-weight: 600;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
         }
 
       }  

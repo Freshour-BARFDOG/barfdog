@@ -39,10 +39,10 @@ function Modal_confirm({ title, text, isConfirm, positionCenter ,theme}) {
         {title ? (
           <>
             <p className={s.title}>{title}</p>
-            <p className={s.text}>{text}</p>
+            <pre className={s.text}>{text}</pre>
           </>
         ) : (
-          text && <p className={`${s.text} ${s.only}`}>{text}</p>
+          text && <pre className={`${s.text} ${s.only}`}>{text}</pre>
         )}
       </div>
       <div className={s['btn-section']}>

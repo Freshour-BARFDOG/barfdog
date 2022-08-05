@@ -18,7 +18,7 @@ import SurveyStep3 from '/src/components/survey/SurveyStep3';
 import getAbsoluteOffsetTop from '/util/func/getAbsoluteOffsetTop';
 import filter_emptyValue from '/util/func/filter_emptyValue';
 import filter_onlyNumber from '/util/func/filter_onlyNumber';
-import filter_extraIntegerNumberZeo from '/util/func/filter_extraIntegerNumberZeo';
+import filter_extraIntegerNumberZero from '/util/func/filter_extraIntegerNumberZero';
 import filter_ints from '/util/func/filter_ints';
 import filter_demicals from '/util/func/filter_demicals';
 import { dogCautionType } from '/store/TYPE/dogCautionType';
@@ -121,7 +121,7 @@ export default function Survey() {
         filteredValue = filter_onlyNumber(filteredValue);
       }
       if (filteredType.indexOf('ints') >= 0) {
-        filteredValue = filter_extraIntegerNumberZeo(filteredValue);
+        filteredValue = filter_extraIntegerNumberZero(filteredValue);
         const thisFilteredType = filteredType
           .split(',')
           .filter((type) => type.indexOf('ints') >= 0)[0];
@@ -129,7 +129,7 @@ export default function Survey() {
         filteredValue = intNum ? filter_ints(filteredValue, intNum) : filteredValue;
       }
       if (filteredType.indexOf('demicals') >= 0) {
-        filteredValue = filter_extraIntegerNumberZeo(filteredValue);
+        filteredValue = filter_extraIntegerNumberZero(filteredValue);
         const thisFilteredType = filteredType
           .split(',')
           .filter((type) => type.indexOf('demicals') >= 0)[0];

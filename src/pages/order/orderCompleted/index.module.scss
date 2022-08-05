@@ -1,11 +1,9 @@
-$browser-context:16; // html font-size
-@function rem($px, $context: $browser-context){
-  @return #{$px / $context}rem;
-}
-@import '../../../../styles/global/guide';
+
+@import '/styles/global/guide';
+@import '/styles/global/rem';
 
 section.image_box { padding: rem(60) 0 rem(40); }
-section.text_box { padding: 0 0 rem(40); }
+section.text_box { padding: rem(80) 0 rem(40); }
 section.order_box { padding: 0 0 rem(64); }
 section.btn_box {padding: 0 0 rem(217) ;}
 
@@ -60,29 +58,29 @@ section.btn_box {padding: 0 0 rem(217) ;}
   display: flex;
   justify-content: center;
   @include char(l15);
-  font-weight: 400c;
+  font-weight: 400;
   .flex_box {
     display: flex;
     justify-content: center;
     text-align: center;
     column-gap: rem(10);
 
-    .left_btn {
+    button {
       width: rem(200);
       border: rem(1) solid var(--color-main);
       border-radius: rem(4);
       box-sizing: border-box;
       color: var(--color-main);
       height: rem(50);
+      background-color: #fff;
+    }
+    .left_btn {
+      border-color: var(--color-main);
+      color: var(--color-main)
     }
     .right_btn {
-      width: rem(200);
-      border: rem(1) solid var(--color-main);
       background-color: var(--color-main);
       color: #fff;
-      border-radius: rem(4);
-      box-sizing: border-box;
-      height: rem(50);
     }
   }
 }

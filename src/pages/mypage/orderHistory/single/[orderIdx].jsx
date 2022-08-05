@@ -5,7 +5,9 @@ import MypageWrapper from "/src/components/mypage/MypageWrapper";
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import Styles from 'src/pages/mypage/orderHistory/ordersheet.module.scss';
 import Image from 'next/image';
-
+import {
+  getDataSSR
+} from '/src/pages/api/reqData';
 function SingleItem_OrderHistoryPage() {
   return (
     <>
@@ -266,3 +268,62 @@ function SingleItem_OrderHistoryPage() {
 }
 
 export default SingleItem_OrderHistoryPage;
+
+export async function getServerSideProps(ctx) {
+  
+  const { query, req } = ctx;
+  // console.log(query, req)
+
+  // const { orderIdx } = query;
+  const orderIdx = query.orderIdx;
+
+  // let DATA = null;
+  const getApiUrl = `/api/orders/${orderIdx}/general`;
+
+  const res = await getDataSSR(req, getApiUrl);
+  console.log('SERVER REPONSE: ',res);
+  // const data = res?.data;
+  // if (data) {
+  //   DATA = {
+  //     item: {
+  //       id: data.itemDto.id,
+  //       name: data.itemDto.name,
+  //       description: data.itemDto.description,
+  //       originalPrice: data.itemDto.originalPrice,
+  //       discountType: data.itemDto.discountType,
+  //       discountDegree: data.itemDto.discountDegree,
+  //       salePrice: data.itemDto.salePrice,
+  //       inStock: data.itemDto.inStock,
+  //       remaining: data.itemDto.remaining,
+  //       totalSalesAmount: data.itemDto.totalSalesAmount,
+  //       contents: data.itemDto.contents,
+  //       itemIcons: data.itemDto.itemIcons,
+  //       deliveryFree: data.itemDto.deliveryFree,
+  //     },
+  //     delivery: {
+  //       price: data.deliveryCondDto.price,
+  //       freeCondition: data.deliveryCondDto.freeCondition,
+  //     },
+  //     opt: data.itemOptionDtoList.map((thisOpt) => ({
+  //       id: thisOpt.id,
+  //       name: thisOpt.name,
+  //       optionPrice: thisOpt.optionPrice,
+  //       remaining: thisOpt.remaining,
+  //     })),
+  //     itemImages: data.itemImageDtoList.map((thisImage) => ({
+  //       id: thisImage.id,
+  //       leakedOrder: thisImage.leakedOrder,
+  //       filename: thisImage.filename,
+  //       url: thisImage.url,
+  //     })),
+  //     review: {
+  //       star: data.reviewDto.star,
+  //       count: data.reviewDto.count,
+  //       itemId: data.itemDto.id,
+  //     },
+  //   };
+  // }
+  // return { props: { orderIdx, data: DATA } };
+  return { props: { orderIdx } };
+
+}
