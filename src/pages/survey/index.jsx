@@ -241,6 +241,7 @@ export default function Survey() {
         errorMessage && errorMessages.push(`${++count}. ${errorMessage}\n`);
       }
       onShowModalHandler(errorMessages);
+      setSubmitState(null);
       // - prevent to the Next step when validation failed
       curBtn !== submitBtn && swiper.slidePrev();
     } else {
@@ -250,7 +251,13 @@ export default function Survey() {
   };
 
   const onSubmit = async () => {
+    console.log('제출버튼 클릭됐음');
     if (submitState === true) return;
+  
+    const errObj = validate(formValues, 3);
+    console.log(errObj )
+    const isPassed = valid_hasFormErrors(errObj);
+    if(!isPassed) return;
     const postFormValuesApiUrl = '/api/dogs';
     try {
       setIsLoading((prevState) => ({
@@ -258,7 +265,6 @@ export default function Survey() {
         submit: true,
       }));
       let modalMessage;
-      setSubmitState(true);
       const res = await postObjData(postFormValuesApiUrl, formValues);
       console.log(res);
       if (res.isDone) {
@@ -270,6 +276,7 @@ export default function Survey() {
         const curPath = router.pathname;
         await router.push(`${curPath}?surveyReportsId=${surveyReportsId}`);
         onShowModalHandler(modalMessage);
+        setSubmitState(true);
       } else {
         modalMessage = '내부 통신장애입니다. 잠시 후 다시 시도해주세요.';
         onShowModalHandler(modalMessage);
