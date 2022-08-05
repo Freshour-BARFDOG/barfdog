@@ -85,7 +85,7 @@ export const OrdersheetReward = ({ id, info, form, setForm, formErrors, setFormE
               모두 사용
             </button>
             <span className={s.point}>
-              보유 포인트 {transformLocalCurrency(info.reward)+' P'}
+              <p>보유 포인트</p> {transformLocalCurrency(info.reward)+' P'}
             </span>
           </div>
         </div>
