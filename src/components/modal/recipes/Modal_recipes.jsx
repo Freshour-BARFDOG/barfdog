@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import s from "./modal_recipes.module.scss";
+import s from "../modal_recipes.module.scss";
 import ScrollContainer from "/src/components/atoms/ScrollContainer";
 import ModalWrapper from "/src/components/modal/ModalWrapper";
 import Image from "next/image";
