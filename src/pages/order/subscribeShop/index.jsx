@@ -5,8 +5,8 @@ import { useRouter } from 'next/router';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
-import { SubscribeRecipe } from '/src/components/subscribe/SubscribeRecipe';
-import { SubscribePlan } from '/src/components/subscribe/SubscribePlan';
+import { SubscribeShopRecipe } from '/src/components/subscribe/SubscribeShopRecipe';
+import { SubscribeShopPlan } from '/src/components/subscribe/SubscribeShopPlan';
 import { getDataSSR, postObjData} from '/src/pages/api/reqData';
 import Spinner from '/src/components/atoms/Spinner';
 import { SubscribeRecommendResult } from '/src/components/subscribe/SubscribeRecommendResult';
@@ -258,14 +258,14 @@ export default function RegisterSubscribeInfoPage({ data }) {
       <Layout>
         <Wrapper>
           <SubscribeRecommendResult info={info} />
-          <SubscribePlan
+          <SubscribeShopPlan
             name={'plan'}
             info={info}
             form={form}
             setForm={setForm}
             calcPrice={calcSubscribePlanPaymentPrice}
           />
-          <SubscribeRecipe
+          <SubscribeShopRecipe
             name="recipeIdList"
             info={info}
             form={form}

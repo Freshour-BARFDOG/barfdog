@@ -1,8 +1,6 @@
-$browser-context:16; // html font-size
-@function rem($px, $context: $browser-context){
-  @return #{$px / $context}rem;
-}
-@import '../../../../styles/global/guide';
+
+@import '/styles/global/rem';
+@import '/styles/global/guide';
 
 
 section.title{ padding : rem(8) 0 rem(17);}
@@ -10,7 +8,7 @@ section.title{ padding : rem(8) 0 rem(17);}
 
 .toggleBox {
   margin-top: rem(20);
-  border: rem(1) solid var(--color-line-03);
+  border: rem(1) solid var(--color-line-04);
   padding: rem(16) rem(40);
   border-radius: rem(12);
 
@@ -42,6 +40,7 @@ section.title{ padding : rem(8) 0 rem(17);}
     border-top: rem(1) solid var(--color-line-04);
   }
 }
+
 
 
 .title {
@@ -496,12 +495,23 @@ section.title{ padding : rem(8) 0 rem(17);}
   }
 }
 
-// 구독팩수 변경
-//라디오 박스 마진 값
-.flex_box {
-  display: flex;
-  column-gap: rem(15);
-  //justify-content: center;
+// ---------- 구독팩수 변경 > REFACTORING (22.08)
+.subscribePlan {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  ul li{display: block;}
+  .price{
+    display: flex;
+    flex-direction: column;
+  }
+  .text2{
+    font-weight: 700;
+    font-size: 2rem;
+    letter-spacing: -0.02em;
+    text-align: center;
+    padding-top: 0.0625rem;
+  }
+
 }
 
 .plan_box {
@@ -901,200 +911,200 @@ section.title{ padding : rem(8) 0 rem(17);}
   }
 }
 
+//
+//.add_page {
+//  width: 100%;
+//  // min-width: ;
+//  max-width: rem(640);
+//  .page_box {
+//    display: grid;
+//    grid-template :
+//    "header"
+//    "main1"
+//    "main2"
+//    "footer"
+//    / 1fr;
+//    row-gap: rem(20);
+//    padding: rem(30) rem(40) rem(30);
+//
+//    div.title {
+//      padding-bottom:rem(2) ;
+//      @include char(l20);
+//      font-weight: 600;
+//    }
+//
+//    div.grid_box {
+//      display: grid;
+//      grid-template:
+//      "header"
+//      "main"
+//      / 1fr;
+//
+//      .row_flex {
+//        font-weight: 600;
+//        display: grid;
+//        grid-template-columns: 1fr rem(100) rem(100) rem(100);
+//
+//        justify-content: space-between;
+//        padding: rem(15) 0;
+//        text-align: center;
+//
+//        border-top : rem(1) solid var(--color-line-01);
+//        border-bottom : rem(1) solid var(--color-line-01);
+//
+//        @include char(l15);
+//        div {
+//          padding: rem(3) 0;
+//          &:nth-child(1){
+//            width: 50%;
+//            text-align: start;
+//            padding-left: rem(20);
+//          }
+//        }
+//      }
+//
+//      .row_flex2 {
+//        font-weight: 600;
+//        display: grid;
+//        grid-template-columns: 1fr rem(100) rem(100) rem(100);
+//
+//        justify-content: space-between;
+//        padding: rem(15) 0;
+//        text-align: center;
+//        align-items: center;
+//
+//        border-bottom : rem(1) solid var(--color-line-03);
+//        @include char(l15);
+//
+//        div {
+//          padding: rem(3) 0;
+//          &:nth-child(1){
+//            display: flex;
+//            padding-left: rem(5);
+//            text-align: start;
+//
+//            label {
+//              display: flex;
+//              margin-right: rem(10);
+//
+//              div {
+//                padding-left: rem(10);
+//              }
+//            }
+//          }
+//
+//          span{
+//            display: none;
+//          }
+//
+//          &:nth-child(4){
+//            color: var(--color-main);
+//          }
+//        }
+//      }
+//    }
+//
+//    .price {
+//      padding-top: rem(10);
+//      .price_flex_box {
+//        display: flex;
+//        justify-content: space-between;
+//        text-align: center;
+//        align-items: center;
+//        padding: 0 rem(20);
+//
+//        p {
+//          @include char(l15);
+//          font-weight: 400;
+//          padding-bottom: rem(10);
+//        }
+//        .text_price {
+//          @include char(l18);
+//          font-weight: 500;
+//        }
+//        .col_3 {
+//          font-weight: 700;
+//          span {
+//            padding-left: rem(18) ;
+//            color: var(--color-main);
+//            @include char(l20);
+//            font-weight: 600;
+//          }
+//        }
+//        .line {
+//          border: rem(1) solid color var(--color-line-04);
+//          width: rem(16);
+//        }
+//        .vertical_line {
+//          border: rem(1) solid color var(--color-line-04);
+//          width: rem(40);
+//          transform: rotate(90deg);
+//        }
+//      }
+//    }
+//
+//    .coupon_btn_box {
+//      display: flex;
+//      @include char(l15);
+//      column-gap: rem(10);
+//      justify-content: center;
+//      text-align: center;
+//      padding-top: rem(40);
+//
+//      .btn {
+//        width: rem(120);
+//        min-width: rem(60);
+//        max-width: rem(120);
+//        border: rem(1) solid var(--color-line-03);
+//        border-radius: rem(4);
+//        padding: rem(14) 0;
+//        cursor: pointer;
+//      }
+//      .red_btn {
+//        width: rem(120);
+//        min-width: rem(60);
+//        max-width: rem(120);
+//        border: rem(1) solid var(--color-main);
+//        border-radius: rem(4);
+//        color: #fff;
+//        background-color: var(--color-main);;
+//        padding: rem(14) 0;
+//        cursor: pointer;
+//      }
+//    }
+//  }
+//}
 
-.add_page {
-  width: 100%;
-  // min-width: ;
-  max-width: rem(640);
-  .page_box {
-    display: grid;
-    grid-template :
-    "header" 
-    "main1"
-    "main2"
-    "footer"
-    / 1fr;
-    row-gap: rem(20);
-    padding: rem(30) rem(40) rem(30);
-
-    div.title {
-      padding-bottom:rem(2) ;
-      @include char(l20);
-      font-weight: 600;
-    }
-
-    div.grid_box {
-      display: grid;
-      grid-template:
-      "header"
-      "main"
-      / 1fr;
-
-      .row_flex {
-        font-weight: 600;
-        display: grid;
-        grid-template-columns: 1fr rem(100) rem(100) rem(100);
-    
-        justify-content: space-between;
-        padding: rem(15) 0;
-        text-align: center;
-
-        border-top : rem(1) solid var(--color-line-01);
-        border-bottom : rem(1) solid var(--color-line-01);
-
-        @include char(l15);
-        div {
-          padding: rem(3) 0;
-          &:nth-child(1){
-            width: 50%;
-            text-align: start;
-            padding-left: rem(20);
-          }
-        }
-      }
-
-      .row_flex2 {
-        font-weight: 600;
-        display: grid;
-        grid-template-columns: 1fr rem(100) rem(100) rem(100);
-    
-        justify-content: space-between;
-        padding: rem(15) 0;
-        text-align: center;
-        align-items: center;
-
-        border-bottom : rem(1) solid var(--color-line-03);
-        @include char(l15);
-
-        div {
-          padding: rem(3) 0;
-          &:nth-child(1){
-            display: flex;
-            padding-left: rem(5);
-            text-align: start;
-            
-            label {
-              display: flex;
-              margin-right: rem(10);
-
-              div {
-                padding-left: rem(10);
-              }
-            }
-          }
-
-          span{
-            display: none;
-          }
-
-          &:nth-child(4){
-            color: var(--color-main);
-          }
-        }
-      }
-    }
-
-    .price {
-      padding-top: rem(10);
-      .price_flex_box {
-        display: flex;
-        justify-content: space-between;
-        text-align: center;
-        align-items: center;
-        padding: 0 rem(20);
-
-        p {
-          @include char(l15);
-          font-weight: 400;
-          padding-bottom: rem(10);
-        }
-        .text_price {
-          @include char(l18);
-          font-weight: 500;
-        }
-        .col_3 {
-          font-weight: 700;
-          span {
-            padding-left: rem(18) ;
-            color: var(--color-main);
-            @include char(l20);
-            font-weight: 600;
-          }
-        }
-        .line {
-          border: rem(1) solid color var(--color-line-04);
-          width: rem(16);
-        }
-        .vertical_line {
-          border: rem(1) solid color var(--color-line-04);
-          width: rem(40);
-          transform: rotate(90deg);
-        }
-      }
-    }
-
-    .coupon_btn_box {
-      display: flex;
-      @include char(l15);
-      column-gap: rem(10);
-      justify-content: center;
-      text-align: center;
-      padding-top: rem(40);
-
-      .btn {
-        width: rem(120);
-        min-width: rem(60);
-        max-width: rem(120);
-        border: rem(1) solid var(--color-line-03);
-        border-radius: rem(4);
-        padding: rem(14) 0;
-        cursor: pointer;
-      }
-      .red_btn {
-        width: rem(120);
-        min-width: rem(60);
-        max-width: rem(120);
-        border: rem(1) solid var(--color-main);
-        border-radius: rem(4);
-        color: #fff;
-        background-color: var(--color-main);;
-        padding: rem(14) 0;
-        cursor: pointer;
-      }
-    }
-  }
-}
-
-
-.add_page2 {
-  width: rem(420);
-
-  background-color: rosybrown;
-  .page_box{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-bottom: rem(20);
-    
-    .text{
-      @include char(l16);
-      padding : rem(80) 0 rem(69);
-    }
-
-    .red_btn {
-      width: rem(120);
-      min-width: rem(60);
-      max-width: rem(120);
-      border: rem(1) solid var(--color-main);
-      border-radius: rem(4);
-      color: #fff;
-      background-color: var(--color-main);;
-      padding: rem(14) 0;
-      text-align: center;
-      cursor: pointer;
-    }
-  }
-}
+//
+//.add_page2 {
+//  width: rem(420);
+//
+//  background-color: rosybrown;
+//  .page_box{
+//    display: flex;
+//    flex-direction: column;
+//    align-items: center;
+//    padding-bottom: rem(20);
+//
+//    .text{
+//      @include char(l16);
+//      padding : rem(80) 0 rem(69);
+//    }
+//
+//    .red_btn {
+//      width: rem(120);
+//      min-width: rem(60);
+//      max-width: rem(120);
+//      border: rem(1) solid var(--color-main);
+//      border-radius: rem(4);
+//      color: #fff;
+//      background-color: var(--color-main);;
+//      padding: rem(14) 0;
+//      text-align: center;
+//      cursor: pointer;
+//    }
+//  }
+//}
 
 @media (max-width: rem(1200)) {
 
@@ -1109,7 +1119,7 @@ section.title{ padding : rem(8) 0 rem(17);}
   }
 
   .content_inner_box {
-    .flex_box {
+    .subscribePlan {
       .content_right_box {
         .grid_box {
           grid-template-columns: repeat(2, 1fr);
@@ -1437,9 +1447,9 @@ section.title{ padding : rem(8) 0 rem(17);}
   .toggleBox {
     padding: rem(8) rem(20);
   }
-  .add_page2 {
-    width: 100%;
-  }
+  //.add_page2 {
+  //  width: 100%;
+  //}
 
 }
 

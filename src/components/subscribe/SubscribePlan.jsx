@@ -1,273 +1,218 @@
 import React, { useEffect, useState } from 'react';
-import s from '../../pages/order/subscribeShop/index.module.scss';
+import s from '/src/pages/mypage/subscribe/[subscribeId].module.scss';
 import CustomInput from '../atoms/CustomInput';
-import ItemLabel from '../atoms/ItemLabel';
 import Image from 'next/image';
 import { subscribePlanType } from '/store/TYPE/subscribePlanType';
+import ItemLabel from '/src/components/atoms/ItemLabel';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
+import { getData, getDataSSR } from '/src/pages/api/reqData';
 
-export const SubscribePlan = ({ name, info, form, setForm, calcPrice }) => {
-  
+export const SubscribePlan = ({ name = 'test' }) => {
   const [selectedPlan, setSelectedPlan] = useState(null);
+  const [info, setInfo] = useState({});
 
   useEffect(() => {
-    setForm((prevState) => ({
-      ...prevState,
-      plan: selectedPlan,
-    }));
-    // 선택된 플랜을 의존성으로 넣어서 계산한다.
-  }, [selectedPlan]);
+    async () => {
+      const getRecipeInfoApiUrl = `/api/recipes`;
+      const recipeInfoRes = await getData(getRecipeInfoApiUrl);
+      const recipeIdList =
+        recipeInfoRes?.data?._embedded?.recipeListResponseDtoList?.map((l) => l.id) || [];
+      const recipeInfoList = [];
+      for (const recipeId of recipeIdList) {
+        const apiUrl = `/api/recipes/${recipeId}`;
+        const res = await getData(apiUrl);
+        // console.log(res)
+        recipeInfoList.push(res.data);
+        setInfo(recipeInfoList);
+      }
+    };
+  }, []);
 
-  return (
-    <section className={s.regular_delivery}>
-      <div className={s.regular_delivery_title}>급여량에 따른 정기배송 수량을 선택해 주세요</div>
-      <div className={s.flex_box} data-input-title={name}>
-        <CustomInput
-          id={subscribePlanType.FULL.NAME}
-          type="radio"
-          name={name}
-          selectedRadio={selectedPlan}
-          setSelectedRadio={setSelectedPlan}
-        >
+  const planInfoList = [
+    {
+      id: subscribePlanType.FULL.NAME,
+      name: subscribePlanType.FULL.KOR,
+      imageUrl: require('/public/img/subscribe/subscribe_full_plan.png'),
+      desc: '하루에 두 끼를 바프독으로 섞어서 먹어요',
+      onePackGram: 100,
+      numberOfPacksPerDay: subscribePlanType.FULL.numberOfPacksPerDay,
+      totalNumberOfPacks: subscribePlanType.FULL.totalNumberOfPacks,
+      weeklyPaymentCycle: subscribePlanType.FULL.weeklyPaymentCycle,
+      discountPercent: subscribePlanType.FULL.discountPercent,
+      price: {
+        onePack: 3800,
+        origin: 144000,
+        sale: 122000,
+      },
+      option: {
+        itemLabel: (
           <ItemLabel
             label="BEST"
             style={{
               backgroundColor: 'var(--color-main)',
             }}
           />
-          <ul className={s.plan_box}>
-            <li className={s.plan_grid_1}>
-
-              <div className={s.img_box}>
-                <div className={`${s.image} img-wrap`}>
-                  <Image
-                    priority
-                    src={require('public/img/subscribe/subscribe_full_plan.png')}
-                    objectFit="cover"
-                    layout="fill"
-                    alt="카드 이미지"
-                  />
-                </div>
-              </div>
-
-              <h2>풀플랜</h2>
-            </li>
-
-            <li>
-              <p>하루에 <span>두 끼</span>를 바프독으로 먹어요</p>
-            </li>
-
-            <li>
-              <div className={s.grid_box}>
-                <div className={s.row_1}>
-                  하루에<span>&nbsp;{subscribePlanType.FULL.numberOfPacksPerDay}팩</span>
-                </div>
-                <div className={s.row_2}>
-                  <span>{subscribePlanType.FULL.weeklyPaymentCycle}주</span>&nbsp;정기배송
-                </div>
-                <div className={s.row_3}>
-                  <span>{info.foodAnalysis.oneMealRecommendGram}g</span>&nbsp;(1팩기준)
-                </div>
-                <div className={s.row_4}>
-                  {subscribePlanType.FULL.totalNumberOfPacks}팩 x
-                  <span>
-                    &nbsp;{transformLocalCurrency(calcPrice().perPack) + '원'}
-                  </span>
-                </div>
-              </div>
-            </li>
-
-            <li>
-              {form.recipeIdList?.length > 0 && form.recipeIdList[0] && (
-                <div className={s.text1}>
-                  {subscribePlanType.FULL.discountPercent + '%'}&nbsp;
-                  <span>
-                    {transformLocalCurrency(
-                      calcPrice(subscribePlanType.FULL.totalNumberOfPacks)
-                        .originPrice,
-                    )}
-                    원
-                  </span>
-                </div>
-              )}
-              {form.recipeIdList?.length > 0 && form.recipeIdList[0] && (
-                <div className={s.text2}>
-                  {transformLocalCurrency(
-                    calcPrice(
-                      subscribePlanType.FULL.totalNumberOfPacks,
-                      subscribePlanType.FULL.discountPercent,
-                    ).salePrice,
-                  )}
-                  원
-                </div>
-              )}
-            </li>
-
-          </ul>
-        </CustomInput>
-
-        <CustomInput
-          id={subscribePlanType.HALF.NAME}
-          type="radio"
-          name={name}
-          selectedRadio={selectedPlan}
-          setSelectedRadio={setSelectedPlan}
-        >
-          <ul className={s.plan_box}>
-            <li className={s.plan_grid_1}>
-              <div className={s.img_box}>
-                <div className={`${s.image} img-wrap`}>
-                  <Image
-                    priority
-                    src={require('public/img/subscribe/subscribe_half_plan.png')}
-                    objectFit="cover"
-                    layout="fill"
-                    alt="카드 이미지"
-                  />
-                </div>
-              </div>
-
-              <h2>하프플랜</h2>
-            </li>
-
-            <li>
-              <p>하루에 <span>한 끼</span>를 바프독으로 먹어요</p>
-            </li>
-
-            <li>
-              <div className={s.grid_box}>
-                <div className={s.row_1}>
-                  하루에<span>&nbsp;{subscribePlanType.HALF.numberOfPacksPerDay}팩</span>
-                </div>
-                <div className={s.row_2}>
-                  <span>{subscribePlanType.HALF.weeklyPaymentCycle}주</span>&nbsp;정기배송
-                </div>
-                <div className={s.row_3}>
-                  <span>{info.foodAnalysis.oneMealRecommendGram}g</span>&nbsp;(1팩기준)
-                </div>
-                <div className={s.row_4}>
-                  {subscribePlanType.HALF.totalNumberOfPacks}팩 x
-                  <span>
-                    &nbsp;{transformLocalCurrency(calcPrice().perPack) + '원'}
-                  </span>
-                </div>
-              </div>
-            </li>
-
-            <li>
-              {form.recipeIdList?.length > 0 && form.recipeIdList[0] && (
-                <div className={s.text1}>
-                  {subscribePlanType.HALF.discountPercent + '%'}&nbsp;
-                  <span>
-                    {transformLocalCurrency(
-                      calcPrice(subscribePlanType.HALF.totalNumberOfPacks)
-                        .originPrice,
-                    )}
-                    원
-                  </span>
-                </div>
-              )}
-              {form.recipeIdList?.length > 0 && form.recipeIdList[0] && (
-                <div className={s.text2}>
-                  {transformLocalCurrency(
-                    calcPrice(
-                      subscribePlanType.HALF.totalNumberOfPacks,
-                      subscribePlanType.HALF.discountPercent,
-                    ).salePrice,
-                  )}
-                  원
-                </div>
-              )}
-            </li>
-            
-          </ul>
-        </CustomInput>
-
-        <CustomInput
-          id={subscribePlanType.TOPPING.NAME}
-          type="radio"
-          name={name}
-          selectedRadio={selectedPlan}
-          setSelectedRadio={setSelectedPlan}
-        >
+        ),
+      },
+    },
+    {
+      id: subscribePlanType.HALF.NAME,
+      name: subscribePlanType.HALF.KOR,
+      imageUrl: require('/public/img/subscribe/subscribe_half_plan.png'),
+      desc: '하루에 한 끼를 바프독으로 섞어서 먹어요',
+      onePackGram: 100,
+      numberOfPacksPerDay: subscribePlanType.HALF.numberOfPacksPerDay,
+      totalNumberOfPacks: subscribePlanType.HALF.totalNumberOfPacks,
+      weeklyPaymentCycle: subscribePlanType.HALF.weeklyPaymentCycle,
+      discountPercent: subscribePlanType.HALF.discountPercent,
+      price: {
+        onePack: 3800,
+        origin: 144000,
+        sale: 122000,
+      },
+      option: {
+        itemLabel: null,
+      },
+    },
+    {
+      id: subscribePlanType.TOPPING.NAME,
+      name: subscribePlanType.TOPPING.KOR,
+      imageUrl: require('/public/img/subscribe/subscribe_half_plan.png'),
+      desc: '토핑용으로 바프독으로 섞어서 먹어요',
+      onePackGram: 100,
+      numberOfPacksPerDay: subscribePlanType.TOPPING.numberOfPacksPerDay,
+      totalNumberOfPacks: subscribePlanType.TOPPING.totalNumberOfPacks,
+      weeklyPaymentCycle: subscribePlanType.TOPPING.weeklyPaymentCycle,
+      discountPercent: subscribePlanType.TOPPING.discountPercent,
+      price: {
+        onePack: 3800,
+        origin: 144000,
+        sale: 122000,
+      },
+      option: {
+        itemLabel: (
           <ItemLabel
             label="NEW"
             style={{
               backgroundColor: '#FF8C16',
             }}
           />
+        ),
+      },
+    },
+  ];
 
-          <ul className={s.plan_box}>
-            <li className={s.plan_grid_1}>
-              <div className={s.img_box}>
-                <div className={`${s.image} img-wrap`}>
-                  <Image
-                    priority
-                    src={require('public/img/subscribe/subscribe_half_plan.png')}
-                    objectFit="cover"
-                    layout="fill"
-                    alt="카드 이미지"
-                  />
+  return (
+    <>
+      <div className={`${s.flex_box} ${s.subscribePlan}`}>
+        {planInfoList.map((info) => (
+          <CustomInput
+            id={info.id}
+            type="radio"
+            name={'plan'}
+            selectedRadio={selectedPlan}
+            setSelectedRadio={setSelectedPlan}
+            option={{ label: '플랜 선택' }}
+          >
+            {info.option.itemLabel}
+            <ul className={s.plan_box}>
+              <li className={s.plan_grid_1}>
+                <div className={s.img_box}>
+                  <figure className={`${s.image} img-wrap`}>
+                    <Image
+                      priority
+                      src={info.imageUrl}
+                      objectFit="cover"
+                      layout="fill"
+                      alt="아이콘 이미지"
+                    />
+                  </figure>
                 </div>
-              </div>
+                <h2>{info.name}</h2>
+              </li>
+              <li>
+                <p>
+                  {info.desc}
+                </p>
+              </li>
+              <li>
+                <div className={s.grid_box}>
+                  <div className={s.row_1}>
+                    하루에<span>&nbsp;{info.numberOfPacksPerDay}팩</span>
+                  </div>
+                  <div className={s.row_2}>
+                    <span>{info.weeklyPaymentCycle}주</span>&nbsp;정기배송
+                  </div>
+                  <div className={s.row_3}>
+                    <span>{info.onePackGram}g</span>&nbsp;(1팩기준)
+                  </div>
+                  <div className={s.row_4}>
+                    {info.totalNumberOfPacks}팩 x
+                    <span>&nbsp;{transformLocalCurrency(info.price.onePack)}원</span>
+                  </div>
+                </div>
+              </li>
 
-              <h2>토핑플랜</h2>
-            </li>
-
-            <li>
-              <p>토핑용으로 바프독으로 섞어서 먹어요</p>
-            </li>
-
-            <li>
-              <div className={s.grid_box}>
-                <div className={s.row_1}>
-                  하루에<span>&nbsp;{subscribePlanType.HALF.numberOfPacksPerDay}팩</span>
-                </div>
-                <div className={s.row_2}>
-                  <span>{subscribePlanType.HALF.weeklyPaymentCycle}주</span>&nbsp;정기배송
-                </div>
-                <div className={s.row_3}>
-                  <span>{info.foodAnalysis.oneMealRecommendGram}g</span>&nbsp;(1팩기준)
-                </div>
-                <div className={s.row_4}>
-                  {subscribePlanType.TOPPING.totalNumberOfPacks}팩 x
+              <li className={s.price}>
+                <p className={s.text1}>
+                  {info.discountPercent}%&nbsp;
                   <span>
-                    &nbsp;{transformLocalCurrency(calcPrice().perPack) + '원'}
+                    {transformLocalCurrency(info.price.origin)}원
                   </span>
-                </div>
-              </div>
-            </li>
-
-            <li>
-              {form.recipeIdList?.length > 0 && form.recipeIdList[0] && (
-                <div className={s.text1} style={{ opacity: `${!form.recipeIdList ? 0 : 1}` }}>
-                  {subscribePlanType.TOPPING.discountPercent + '%'}&nbsp;
-                  <span>
-                    {transformLocalCurrency(
-                      calcPrice(subscribePlanType.TOPPING.totalNumberOfPacks)
-                        .originPrice,
-                    )}
-                    원
-                  </span>
-                </div>
-              )}
-              {form.recipeIdList?.length > 0 && form.recipeIdList[0] && (
-                <div className={s.text2}>
-                  {transformLocalCurrency(
-                    calcPrice(
-                      subscribePlanType.TOPPING.totalNumberOfPacks,
-                      subscribePlanType.TOPPING.discountPercent,
-                    ).salePrice,
-                  )}
-                  원
-                </div>
-              )}
-            </li>
-
-            
-          </ul>
-        </CustomInput>
+                </p>
+                <p className={s.text2}>
+                  {transformLocalCurrency(info.price.sale)}원
+                </p>
+              </li>
+            </ul>
+          </CustomInput>
+        ))}
       </div>
-    </section>
+      <div className={s.recipe_btn_box}>
+        <button type={'button'} className={s.btn}>변경 플랜 적용하기</button>
+      </div>
+    </>
   );
 };
+
+//
+// const calcSubscribePlanPaymentPrice = (totalNumberOfPacks, discountPercent) => {
+//   // if (!form.recipeIdList[0]) {
+//   //   return {
+//   //     perPack: 0,
+//   //     originPrice: 0,
+//   //     salePrice: 0,
+//   //   };
+//   // }
+//   //
+//   // const selectedRecipes = info.recipeInfoList?.filter(
+//   //   (rc) => form.recipeIdList.indexOf(rc.id) >= 0,
+//   // );
+//   // const result = selectedRecipes?.map((recipe) => {
+//   //   const recipeGramConst = recipe.pricePerGram; // 1g 당 가격 상수 ( 어드민에서 입력한 값 )
+//   //   const recipeGram = info?.foodAnalysis.oneMealRecommendGram; // 한끼(한팩) 무게g
+//   //   const perPack = Number((recipeGramConst * recipeGram).toFixed(0));
+//   //
+//   //   return {
+//   //     perPack: perPack, // 팩당가격상수 * 무게
+//   //     originPrice: totalNumberOfPacks * perPack, // 할인 전 가격
+//   //     salePrice: totalNumberOfPacks * perPack * (1 - discountPercent / 100), // 할인 후 가격 (판매가)
+//   //   };
+//   // });
+//
+//   // // 평균
+//   // let perPack = result.map((r) => r.perPack).reduce((acc, cur) => acc + cur) / result.length;
+//   // let originPrice =
+//   //   result.map((r) => r.originPrice).reduce((acc, cur) => acc + cur) / result.length;
+//   // let salePrice = result.map((r) => r.salePrice).reduce((acc, cur) => acc + cur) / result.length; // ! 1원 단위 절삭
+//   // // console.log(result)
+//   // const cutOffUnit = 10; // '10'원단위로 절사 (1원단위 버림)
+//   // perPack = Math.floor(perPack / cutOffUnit) * cutOffUnit;
+//   // originPrice = Math.floor(originPrice / cutOffUnit) * cutOffUnit;
+//   // salePrice = Math.floor(salePrice / cutOffUnit) * cutOffUnit;
+//   // return {
+//   //   perPack,
+//   //   originPrice,
+//   //   salePrice,
+//   // };
+// };

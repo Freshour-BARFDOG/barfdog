@@ -14,6 +14,7 @@ const CustomInput = ({
   disabled,
   initialize,
   backgroundColor,
+  option={label:'플랜 선택'},
   ...props
 }) => {
   const [isChecked, setIsChecked] = useState(false);
@@ -75,7 +76,7 @@ const CustomInput = ({
         {type === 'radio' && <InputRadio />}
         {type === 'checkbox' && <InputCheckbox />}
         <span className={s.fake_checkbox}>
-          {(isChecked || selectedRadio === id )? '선택됨' : '플랜선택'}
+          {(isChecked || selectedRadio === id )? '선택됨' : option.label}
           <i className={s.icon_checked}>
             <Icon_Checked />
           </i>
