@@ -17,15 +17,22 @@ export const SubscribeCustomInput = ({
   option = { label: '플랜 선택' },
   ...props
 }) => {
-  const [isChecked, setIsChecked] = useState(false);
+  
+  let initialChecked = setInitCheckboxValue(selectedCheckbox, id);
+  
+  const [isChecked, setIsChecked] = useState(initialChecked || false); //
+  
+  
   useEffect(() => {
-    // 초기화
-    // console.log("초기화 실행");
-    setIsChecked(false);
-    setSelectedRadio(false);
-    if (setSelectedCheckbox && typeof setSelectedCheckbox === 'function') setSelectedCheckbox([]);
+    // value 초기화
+    if (initialize) {
+      setIsChecked(false);
+      setSelectedRadio(false);
+      if (setSelectedCheckbox && typeof setSelectedCheckbox === 'function') setSelectedCheckbox(null);
+    }
   }, [type, initialize]);
 
+  
   const onCheckboxInputHandler = (e, labelId) => {
     setIsChecked(!isChecked); // checkbox 활성화
     const { id } = e.currentTarget;
@@ -85,6 +92,8 @@ export const SubscribeCustomInput = ({
   };
 
   const onLabelClick = (e) => {
+    // CUSTOM FUNCTION (block browser auto focus)
+    // : swiper 내에서 input selected됐을 경우, selecgted Input에 auto focusing blocking하기 위함
     e.preventDefault();
     const disabled = e.currentTarget.dataset.disabled === 'true'; // ! String 으로 입력됨 true / false값
     if (disabled) return console.error('NOTICE: disabled Element');
@@ -98,21 +107,36 @@ export const SubscribeCustomInput = ({
   };
 
   return (
-    <>
-      <label
-        htmlFor={id}
-        data-id={id}
-        data-disabled={disabled}
-        className={`${s.custom_input_wrapper} ${isChecked && s.checked} ${
-          selectedRadio === id && s.checked
-        }`}
-        style={{ backgroundColor: backgroundColor }}
-        {...props}
-        onClick={onLabelClick}
-      >
-        <div className={s.custom_input_cont}>{children}</div>
-        <Input />
-      </label>
-    </>
+    <label
+      htmlFor={id}
+      data-id={id}
+      data-disabled={disabled}
+      className={`${s.custom_input_wrapper} ${isChecked && s.checked} ${
+        selectedRadio === id && s.checked
+      }`}
+      style={{ backgroundColor: backgroundColor }}
+      {...props}
+      onClick={onLabelClick}
+    >
+      <div className={s.custom_input_cont}>{children}</div>
+      <Input />
+    </label>
   );
 };
+
+
+
+const setInitCheckboxValue = (checkboxValueObj, checkboxId)=>{
+  let checked;
+  if(checkboxValueObj && typeof checkboxValueObj === 'object'){
+    // 유저가 FULL PLAN & 2개 이상 recipe을 구독중인 경우의 initial value
+    Object.entries(checkboxValueObj).forEach((arr)=>{
+      const key = arr[0];
+      const val = arr[1];
+      if(key.indexOf(checkboxId) >= 0 && val === true ){
+        return checked = true;
+      }
+    })
+  }
+  return checked;
+}

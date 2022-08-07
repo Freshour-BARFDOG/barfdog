@@ -73,15 +73,16 @@ export default function SubscribeOrderChangedPage({ data }) {
       const apiUrl = `/api/subscribes/${data.subscribeId}`;
       const res = await putObjData(apiUrl, body);
       console.log(res);
-      if (!res.isDone) {
-        ////////////////// ! TEST CODE //
+      if (!res.isDone) { //! TEST CODE //
         // if(res.isDone){  // ! PRODUCT CODE
         setSubmitted(true);
-        setActiveConfirmModal(false);
+        
         onShowModal('맞춤레시피 변경이 완료되었습니다.');
       } else {
         onShowModal(`데이터를 전송하는데 실패했습니다.\n${res.error}`);
       }
+  
+      setActiveConfirmModal(false);
     } catch (err) {
       console.error(err);
     }

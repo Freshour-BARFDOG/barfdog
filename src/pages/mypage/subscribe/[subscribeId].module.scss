@@ -499,6 +499,8 @@ section.title{ padding : rem(8) 0 rem(17);}
 .subscribePlan {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  gap:rem(15);
+
   ul li{display: block;}
   .price{
     display: flex;
@@ -510,6 +512,14 @@ section.title{ padding : rem(8) 0 rem(17);}
     letter-spacing: -0.02em;
     text-align: center;
     padding-top: 0.0625rem;
+  }
+  .desc{
+    color: var(--gray10)
+  }
+  .accent{
+    color: var(--color-main);
+    font-weight: 400;
+
   }
 
 }
@@ -624,7 +634,7 @@ section.title{ padding : rem(8) 0 rem(17);}
 //구독 레시피 종류 변경
 
 
-.notice {
+section.recipe, .notice {
   text-align: center;
   .notice_row_1 {
     @include char(l18);

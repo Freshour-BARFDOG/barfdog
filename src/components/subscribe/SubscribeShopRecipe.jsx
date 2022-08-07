@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import s from '/src/pages/order/subscribeShop/index.module.scss';
+import swiperStyle from './subscribeRecipe.module.scss'
 import { ItemRecommendlabel, ItemSoldOutLabel } from '/src/components/atoms/ItemLabel';
 import Image from 'next/image';
 import { subscribePlanType } from '/store/TYPE/subscribePlanType';
-import { Navigation } from 'swiper';
-import ArrowLeft from '/public/img/icon/swiper-arrow-large-l.svg';
-import ArrowRight from '/public/img/icon/swiper-arrow-large-r.svg';
 import 'swiper/css';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { getData } from '/src/pages/api/reqData';
-import { FullScreenRunningDog } from '/src/components/atoms/FullScreenLoading';
 import popupWindow from '/util/func/popupWindow';
 import { SubscribeCustomInput } from './SubscribeCustomInput';
-import checkStringUnderConsonant from '../../../util/func/checkStringUnderConsonant';
+import checkStringUnderConsonant from '/util/func/checkStringUnderConsonant';
 
 const swiperSettings = {
   className: s.swiper_recipes,
@@ -55,7 +51,7 @@ export const SubscribeShopRecipe = ({
   const [inputType, setInputType] = useState('radio');
 
   const selectedRecipe = info.recipeInfoList?.filter((rc) => form.recipeIdList.indexOf(rc.id) >= 0);
-  const selectedPlan = selectedRecipe?.map((rc) => rc.name).join(',');
+  const selectedRecipeNames = selectedRecipe?.map((rc) => rc.name).join(',');
   const selectedIngredientList = selectedRecipe
     ?.map((rc) => rc.ingredientList)
     .join(',')
@@ -147,7 +143,7 @@ export const SubscribeShopRecipe = ({
                   <em>{info.inedibleFood}</em>에 못먹는 음식으로 체크해 주셨네요!&nbsp;
                 </>
               )}
-              <em>{selectedPlan}</em> 레시피에는 <em>&lsquo;{curIngredient}&rsquo;</em>
+              <em>{selectedRecipeNames}</em> 레시피에는 <em>&lsquo;{curIngredient}&rsquo;</em>
               {checkStringUnderConsonant(curIngredient) ? '이' : '가'} 들어가 있습니다.
               <br />
               반려견에게 알레르기를 유발할 수 있으니 레시피 선택에 유의해 주시기 바랍니다.

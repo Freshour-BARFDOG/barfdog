@@ -5,44 +5,33 @@ import Image from 'next/image';
 import { subscribePlanType } from '/store/TYPE/subscribePlanType';
 import ItemLabel from '/src/components/atoms/ItemLabel';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
-import { getData, getDataSSR } from '/src/pages/api/reqData';
+import Spinner from '/src/components/atoms/Spinner';
+import {postObjData} from "/src/pages/api/reqData";
+import Modal_confirm from "/src/components/modal/Modal_confirm";
+import Modal_global_alert from "/src/components/modal/Modal_global_alert";
+import {useModalContext} from "/store/modal-context";
 
-export const SubscribePlan = ({ name = 'test' }) => {
-  const [selectedPlan, setSelectedPlan] = useState(null);
-  const [info, setInfo] = useState({});
-
-  useEffect(() => {
-    async () => {
-      const getRecipeInfoApiUrl = `/api/recipes`;
-      const recipeInfoRes = await getData(getRecipeInfoApiUrl);
-      const recipeIdList =
-        recipeInfoRes?.data?._embedded?.recipeListResponseDtoList?.map((l) => l.id) || [];
-      const recipeInfoList = [];
-      for (const recipeId of recipeIdList) {
-        const apiUrl = `/api/recipes/${recipeId}`;
-        const res = await getData(apiUrl);
-        // console.log(res)
-        recipeInfoList.push(res.data);
-        setInfo(recipeInfoList);
-      }
-    };
-  }, []);
-
+export const SubscribePlan = ({ subscribeInfo }) => {
+  // console.log(subscribeInfo )
   const planInfoList = [
     {
       id: subscribePlanType.FULL.NAME,
       name: subscribePlanType.FULL.KOR,
       imageUrl: require('/public/img/subscribe/subscribe_full_plan.png'),
-      desc: '하루에 두 끼를 바프독으로 섞어서 먹어요',
-      onePackGram: 100,
+      desc: (
+        <>
+          하루에 <em className={s.accent}>두 끼</em>를 바프독으로 섞어서 먹어요
+        </>
+      ),
       numberOfPacksPerDay: subscribePlanType.FULL.numberOfPacksPerDay,
       totalNumberOfPacks: subscribePlanType.FULL.totalNumberOfPacks,
       weeklyPaymentCycle: subscribePlanType.FULL.weeklyPaymentCycle,
       discountPercent: subscribePlanType.FULL.discountPercent,
+      onePackGram: subscribeInfo?.info.oneMealRecommendGram,
       price: {
-        onePack: 3800,
-        origin: 144000,
-        sale: 122000,
+        perPack: subscribeInfo.price[subscribePlanType.FULL.NAME].perPack,
+        originPrice: subscribeInfo.price[subscribePlanType.FULL.NAME].originPrice,
+        salePrice: subscribeInfo.price[subscribePlanType.FULL.NAME].salePrice,
       },
       option: {
         itemLabel: (
@@ -59,16 +48,20 @@ export const SubscribePlan = ({ name = 'test' }) => {
       id: subscribePlanType.HALF.NAME,
       name: subscribePlanType.HALF.KOR,
       imageUrl: require('/public/img/subscribe/subscribe_half_plan.png'),
-      desc: '하루에 한 끼를 바프독으로 섞어서 먹어요',
-      onePackGram: 100,
+      desc: (
+        <>
+          하루에 <em className={s.accent}>한 끼</em>를 바프독으로 섞어서 먹어요
+        </>
+      ),
       numberOfPacksPerDay: subscribePlanType.HALF.numberOfPacksPerDay,
       totalNumberOfPacks: subscribePlanType.HALF.totalNumberOfPacks,
       weeklyPaymentCycle: subscribePlanType.HALF.weeklyPaymentCycle,
       discountPercent: subscribePlanType.HALF.discountPercent,
+      onePackGram: subscribeInfo?.info.oneMealRecommendGram,
       price: {
-        onePack: 3800,
-        origin: 144000,
-        sale: 122000,
+        perPack: subscribeInfo.price[subscribePlanType.HALF.NAME].perPack,
+        originPrice: subscribeInfo.price[subscribePlanType.HALF.NAME].originPrice,
+        salePrice: subscribeInfo.price[subscribePlanType.HALF.NAME].salePrice,
       },
       option: {
         itemLabel: null,
@@ -77,17 +70,21 @@ export const SubscribePlan = ({ name = 'test' }) => {
     {
       id: subscribePlanType.TOPPING.NAME,
       name: subscribePlanType.TOPPING.KOR,
-      imageUrl: require('/public/img/subscribe/subscribe_half_plan.png'),
-      desc: '토핑용으로 바프독으로 섞어서 먹어요',
-      onePackGram: 100,
+      imageUrl: require('/public/img/subscribe/subscribe_topping_plan.png'),
+      desc: (
+        <>
+          <em className={s.accent}>토핑용</em>으로 바프독을 섞어서 먹어요
+        </>
+      ),
       numberOfPacksPerDay: subscribePlanType.TOPPING.numberOfPacksPerDay,
       totalNumberOfPacks: subscribePlanType.TOPPING.totalNumberOfPacks,
       weeklyPaymentCycle: subscribePlanType.TOPPING.weeklyPaymentCycle,
       discountPercent: subscribePlanType.TOPPING.discountPercent,
+      onePackGram: subscribeInfo?.info.oneMealRecommendGram,
       price: {
-        onePack: 3800,
-        origin: 144000,
-        sale: 122000,
+        perPack: subscribeInfo.price[subscribePlanType.TOPPING.NAME].perPack,
+        originPrice: subscribeInfo.price[subscribePlanType.TOPPING.NAME].originPrice,
+        salePrice: subscribeInfo.price[subscribePlanType.TOPPING.NAME].salePrice,
       },
       option: {
         itemLabel: (
@@ -101,39 +98,98 @@ export const SubscribePlan = ({ name = 'test' }) => {
       },
     },
   ];
+  const mct = useModalContext();
+  const initialMemeberPlanName = subscribeInfo.info.planName;
+  const [selectedPlanName, setSelectedPlanName] = useState(initialMemeberPlanName);
+  const [submitted, setSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [activeConfirmModal, setActiveConfirmModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+  
+  const onActiveConfirmModal = (e) => {
+    // ! validation : 처음과 동일한 플랜일 경우
+    if (selectedPlanName === initialMemeberPlanName) {
+      onShowModal('기존과 동일한 플랜입니다.');
+    } else {
+      setActiveConfirmModal(true);
+    }
+  };
+  
+  
+  
+  const onChangePlan = async (confirm) => {
+    if(submitted) return console.error('이미 제출된 양식입니다.');
+    if(!confirm){
+      return setActiveConfirmModal(false);
+    }
+  
+  
+    const body = {
+      plan: selectedPlanName,
+      nextPaymentPrice: subscribeInfo.price[selectedPlanName].salePrice, // 선택된 플랜의 판매가격
+      recipeIdList: subscribeInfo.recipe.idList,
+    };
 
+    
+    try {
+      setIsLoading(true);
+      const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/plan`;
+      const res = await postObjData(url, body)
+      console.log(res);
+      if (!res.isDone) {  // ! TEST CODE //
+      // if (res.isDone) {  // ! PRODUCT CODE //
+        setSubmitted(true);
+        onShowModal('맞춤레시피 변경이 완료되었습니다.');
+      } else {
+        onShowModal(`데이터 전송 실패\n${res.error}`);
+      }
+      setActiveConfirmModal(false);
+    } catch (err) {
+      console.error('err: ',err);
+    }
+    setIsLoading(false);
+  };
+  
+  
+  const onShowModal = (message) => {
+    if (message) mct.alertShow();
+    setModalMessage(message);
+  };
+  const onHideModal = () => {
+    setModalMessage('');
+    mct.alertHide();
+  };
+  
+  const onSuccessChangeSubscribeOrder = () => {
+    onHideModal();
+    window.location.reload();
+  };
   return (
     <>
       <div className={`${s.flex_box} ${s.subscribePlan}`}>
-        {planInfoList.map((info) => (
+        {planInfoList.map((info, index) => (
           <CustomInput
+            key={`subscribe-plan-input-${index}`}
             id={info.id}
             type="radio"
             name={'plan'}
-            selectedRadio={selectedPlan}
-            setSelectedRadio={setSelectedPlan}
+            selectedRadio={selectedPlanName}
+            setSelectedRadio={setSelectedPlanName}
             option={{ label: '플랜 선택' }}
+            initialize={false}
           >
             {info.option.itemLabel}
             <ul className={s.plan_box}>
               <li className={s.plan_grid_1}>
                 <div className={s.img_box}>
                   <figure className={`${s.image} img-wrap`}>
-                    <Image
-                      priority
-                      src={info.imageUrl}
-                      objectFit="cover"
-                      layout="fill"
-                      alt="아이콘 이미지"
-                    />
+                    <Image src={info.imageUrl} objectFit="cover" layout="fill" alt="플랜 아이콘" />
                   </figure>
                 </div>
                 <h2>{info.name}</h2>
               </li>
               <li>
-                <p>
-                  {info.desc}
-                </p>
+                <p className={s.desc}>{info.desc}</p>
               </li>
               <li>
                 <div className={s.grid_box}>
@@ -148,7 +204,7 @@ export const SubscribePlan = ({ name = 'test' }) => {
                   </div>
                   <div className={s.row_4}>
                     {info.totalNumberOfPacks}팩 x
-                    <span>&nbsp;{transformLocalCurrency(info.price.onePack)}원</span>
+                    <span>&nbsp;{transformLocalCurrency(info.price.perPack)}원</span>
                   </div>
                 </div>
               </li>
@@ -156,63 +212,31 @@ export const SubscribePlan = ({ name = 'test' }) => {
               <li className={s.price}>
                 <p className={s.text1}>
                   {info.discountPercent}%&nbsp;
-                  <span>
-                    {transformLocalCurrency(info.price.origin)}원
-                  </span>
+                  <span>{transformLocalCurrency(info.price.originPrice)}원</span>
                 </p>
-                <p className={s.text2}>
-                  {transformLocalCurrency(info.price.sale)}원
-                </p>
+                <p className={s.text2}>{transformLocalCurrency(info.price.salePrice)}원</p>
               </li>
             </ul>
           </CustomInput>
         ))}
       </div>
       <div className={s.recipe_btn_box}>
-        <button type={'button'} className={s.btn}>변경 플랜 적용하기</button>
+        <button type={'button'} className={s.btn} onClick={onActiveConfirmModal}>
+          {isLoading ? <Spinner style={{ color: '#fff' }} /> : '변경 플랜 적용하기'}
+        </button>
       </div>
+      {(activeConfirmModal) && (
+        <Modal_confirm
+          text={`${subscribePlanType[selectedPlanName].KOR}으로 플랜을 변경하시겠습니까?`}
+          isConfirm={onChangePlan}
+          positionCenter
+        />
+      )}
+      <Modal_global_alert
+        message={modalMessage}
+        onClick={submitted ? onSuccessChangeSubscribeOrder : onHideModal}
+        background
+      />
     </>
   );
 };
-
-//
-// const calcSubscribePlanPaymentPrice = (totalNumberOfPacks, discountPercent) => {
-//   // if (!form.recipeIdList[0]) {
-//   //   return {
-//   //     perPack: 0,
-//   //     originPrice: 0,
-//   //     salePrice: 0,
-//   //   };
-//   // }
-//   //
-//   // const selectedRecipes = info.recipeInfoList?.filter(
-//   //   (rc) => form.recipeIdList.indexOf(rc.id) >= 0,
-//   // );
-//   // const result = selectedRecipes?.map((recipe) => {
-//   //   const recipeGramConst = recipe.pricePerGram; // 1g 당 가격 상수 ( 어드민에서 입력한 값 )
-//   //   const recipeGram = info?.foodAnalysis.oneMealRecommendGram; // 한끼(한팩) 무게g
-//   //   const perPack = Number((recipeGramConst * recipeGram).toFixed(0));
-//   //
-//   //   return {
-//   //     perPack: perPack, // 팩당가격상수 * 무게
-//   //     originPrice: totalNumberOfPacks * perPack, // 할인 전 가격
-//   //     salePrice: totalNumberOfPacks * perPack * (1 - discountPercent / 100), // 할인 후 가격 (판매가)
-//   //   };
-//   // });
-//
-//   // // 평균
-//   // let perPack = result.map((r) => r.perPack).reduce((acc, cur) => acc + cur) / result.length;
-//   // let originPrice =
-//   //   result.map((r) => r.originPrice).reduce((acc, cur) => acc + cur) / result.length;
-//   // let salePrice = result.map((r) => r.salePrice).reduce((acc, cur) => acc + cur) / result.length; // ! 1원 단위 절삭
-//   // // console.log(result)
-//   // const cutOffUnit = 10; // '10'원단위로 절사 (1원단위 버림)
-//   // perPack = Math.floor(perPack / cutOffUnit) * cutOffUnit;
-//   // originPrice = Math.floor(originPrice / cutOffUnit) * cutOffUnit;
-//   // salePrice = Math.floor(salePrice / cutOffUnit) * cutOffUnit;
-//   // return {
-//   //   perPack,
-//   //   originPrice,
-//   //   salePrice,
-//   // };
-// };

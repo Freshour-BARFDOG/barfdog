@@ -19,9 +19,11 @@ const CustomInput = ({
 }) => {
   const [isChecked, setIsChecked] = useState(false);
   useEffect(() => {
-    setIsChecked(false);
-    setSelectedRadio(false);
-    if (setSelectedCheckbox && typeof setSelectedCheckbox === 'function') setSelectedCheckbox([]);
+    if(initialize){
+      setIsChecked(false);
+      setSelectedRadio(false);
+      if (setSelectedCheckbox && typeof setSelectedCheckbox === 'function') setSelectedCheckbox([]);
+    }
   }, [type, setSelectedRadio, setSelectedCheckbox, initialize]);
 
   const onCheckboxInputHandler = (e) => {
