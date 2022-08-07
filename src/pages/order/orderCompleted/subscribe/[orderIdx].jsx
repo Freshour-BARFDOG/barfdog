@@ -4,6 +4,8 @@ import Wrapper from "/src/components/common/Wrapper";
 import MetaTitle from "@src/components/atoms/MetaTitle";
 import s from 'src/pages/order/orderCompleted/index.module.scss';
 import Image from 'next/image';
+import Link from "next/link";
+
 
 function OrderCompletedPage(props) {
   return (
