@@ -162,9 +162,10 @@ export const SubscribeRecipe = ({subscribeInfo}) => {
     }
     
     
+    const curPlan = subscribeInfo.info.planName;
     const body = {
-      plan: subscribeInfo.info.planName,
-      nextPaymentPrice: subscribeInfo.price[selectedPlanName].salePrice, // 선택된 플랜의 판매가격
+      plan: curPlan,
+      nextPaymentPrice: subscribeInfo.price[curPlan].salePrice, // 선택된 플랜의 판매가격
       recipeIdList: selectedIdList,
     };
     
