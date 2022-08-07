@@ -99,8 +99,8 @@ export const SubscribePlan = ({ subscribeInfo }) => {
     },
   ];
   const mct = useModalContext();
-  const initialMemeberPlanName = subscribeInfo.info.planName;
-  const [selectedPlanName, setSelectedPlanName] = useState(initialMemeberPlanName);
+  const initialMemberPlanName = subscribeInfo.info.planName;
+  const [selectedPlanName, setSelectedPlanName] = useState(initialMemberPlanName);
   const [submitted, setSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [activeConfirmModal, setActiveConfirmModal] = useState(false);
@@ -108,7 +108,7 @@ export const SubscribePlan = ({ subscribeInfo }) => {
   
   const onActiveConfirmModal = (e) => {
     // ! validation : 처음과 동일한 플랜일 경우
-    if (selectedPlanName === initialMemeberPlanName) {
+    if (selectedPlanName === initialMemberPlanName) {
       onShowModal('기존과 동일한 플랜입니다.');
     } else {
       setActiveConfirmModal(true);

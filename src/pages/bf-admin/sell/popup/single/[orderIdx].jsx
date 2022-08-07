@@ -34,7 +34,7 @@ import ProductInfo_delivery from "/src/components/popup/admin_ProductInfo/Produc
 
 const TEST_DATA = { orderStatus: "EXCHANGE_REQUEST", itemList: [1, 2, 3] , paymentType:"일반주문"};
 
-function Popup_MemeberDetailPage() {
+export default function Popup_MemberDetailPage() {
   const router = useRouter();
   const orderIdx = router.query.orderIdx;
 
@@ -120,4 +120,3 @@ function Popup_MemeberDetailPage() {
   );
 }
 
-export default Popup_MemeberDetailPage;
