@@ -18,7 +18,8 @@ import DeadlineTimer from '/src/components/atoms/DeadlineTimer';
 import { IoIosArrowBack } from 'react-icons/io';
 
 import Icon_cart from '/public/img/icon/cart.svg';
-import Logo from '/public/img/logo.png';
+import Logo from '/public/img/logo(HQ).png';
+// import Logo from '/public/img/logo.png';
 import Logo_2x from '/public/img/logo@2x.png';
 import MobileLogo from '/public/img/mobile_logo.png';
 import MobileLogo_2x from '/public/img/mobile_logo@2x.png';
