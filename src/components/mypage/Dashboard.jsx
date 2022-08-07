@@ -71,7 +71,7 @@ function Dashboard({ className, ...props }) {
                   {data.dog.dogName ? <><span>{data.dog.dogName}</span>&nbsp;견주</> : <span>대표반려견 없음</span>}
                 </em>
                 <em className={s.user_name}>
-                  <span>{data.name}</span>님
+                  <span>{data.name}</span>&nbsp;님
                 </em>
               </figcaption>
             </div>

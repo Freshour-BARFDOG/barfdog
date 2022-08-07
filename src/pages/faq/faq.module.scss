@@ -55,6 +55,10 @@ $animationDuration : 0.2s;
         transition-duration: $animationDuration;
         cursor: pointer;
 
+        &:last-child {
+          display: none;
+        }
+
         &.active{
           background-color: var(--color-main) !important;
           color: #fff;
@@ -201,13 +205,41 @@ $animationDuration : 0.2s;
 @media (max-width: rem(600)) {
   .menu {
     .inner {
+      position: relative;
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 33.4%;
+        height: 50%;
+      }
+
       .boxes {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         grid-gap: 0;
         .box {
           width: 100%;
+          border-top: 0;
+          border-right: 0;
+          &:first-child, &:nth-child(2) {
+            border-top: rem(1) solid #EFEFEF;
+          }
+          &:nth-child(3) {
+            border-top: rem(1) solid #EFEFEF;
+            border-right: rem(1) solid #EFEFEF;
+          }
+          &:last-child {
+            display: block;
+            border-bottom: 0;
+          }
+
           &.active{
+            width: 100%;
+          }
+          &:hover {
             width: 100%;
           }
         }

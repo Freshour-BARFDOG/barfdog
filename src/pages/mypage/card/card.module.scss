@@ -41,7 +41,8 @@ section.body {padding : 0 0 rem(55)}
 }
 
 .line {
-  border : rem(1) solid var(--color-line-01);
+  border: 0;
+  border-bottom: rem(1) solid var(--color-line-01);
 }
 
 
@@ -92,7 +93,7 @@ section.body {padding : 0 0 rem(55)}
         margin-left: rem(10);
       }
       .btn_box {
-        width: rem(100);
+        width: rem(80);
         display: flex;
         justify-content: center;
         font-size: rem(15);
@@ -100,9 +101,9 @@ section.body {padding : 0 0 rem(55)}
         .btn {
           @include char(l15);
           text-align: center;
-          width: 66.7%;
+          width: 100%;
           border: rem(1) solid var(--color-line-03);
-          padding: rem(8) 0 ;
+          padding: rem(8) 0;
         }
       }
     }

@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
-
-import Layout from '/src/components/common/Layout';
-import Wrapper from '/src/components/common/Wrapper';
-import MetaTitle from '/src/components/atoms/MetaTitle';
-import Modal_recipes from '/src/components/modal/recipes/Modal_recipes';
+import React, { useState } from "react";
 import s from './recipes.module.scss';
+import Layout from "/src/components/common/Layout";
+import Wrapper from "/src/components/common/Wrapper";
+import MetaTitle from "/src/components/atoms/MetaTitle";
 import Image from 'next/image';
-import styled from 'styled-components';
+import Link from "next/link";
 import { useModalContext } from '/store/modal-context';
+import Modal_recipes from "@src/components/modal/Modal_recipes";
 import {Modal_cont_point_01} from "/src/components/modal/recipes/Modal_cont_point_01";
 import {Modal_cont_point_02} from "/src/components/modal/recipes/Modal_cont_point_02";
 import {Modal_cont_point_03} from "/src/components/modal/recipes/Modal_cont_point_03";
@@ -437,20 +436,18 @@ export default function RecipePage() {
 
             <div className={s.btn_box}>
               <div className={s.image_box}>
-                <div className={`${s.image} img-wrap`} onClick={onShowSurvey}>
-                  <Image
-                    priority
-                    src={require("public/img/recipe_subscribe.png")}
-                    objectFit="cover"
-                    layout="fill"
-                    alt="브랜드 소개 이미지"
-                  />
+                <div className={`${s.image} img-wrap`}>
+                  <Link href={'/surveyGuide'} passHref>
+                    <Image
+                      src={require("public/img/recipe_subscribe.png")}
+                      objectFit="cover"
+                      layout="fill"
+                      alt="브랜드 소개 이미지"
+                    />
+                  </Link>
                 </div>
               </div>
             </div>
-
-
-
           </section>
 
 

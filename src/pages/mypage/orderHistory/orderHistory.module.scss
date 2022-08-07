@@ -115,7 +115,8 @@ section.title{ padding : rem(8) 0 rem(30);}
     padding-bottom: rem(7);
   }
   > hr {
-    border: rem(1) solid var(--color-line-04);
+    border: 0;
+    border-bottom: rem(1) solid var(--color-line-04);
   }
 
   .hr1{
@@ -168,7 +169,8 @@ section.title{ padding : rem(8) 0 rem(30);}
               position: relative;
               top: rem(8);
               // transform: translateX(%);
-              border: rem(1) solid var(--color-line-02);
+              border: 0;
+              border-bottom: rem(1) solid var(--color-line-02);
               width : rem(15);
               transform:rotate(90deg);
             }
