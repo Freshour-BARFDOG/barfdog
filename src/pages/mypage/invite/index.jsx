@@ -105,7 +105,7 @@ export default function InvitePage() {
     const pageData = res.data?.pagedModel?.page;
     let newItemList = res.data?.pagedModel?._embedded?.queryRewardsDtoList || [];
     if(!newItemList.length){
-      newItemList = await getAllRewardList()
+      newItemList = await getAllRewardList();
     }
     const newPageInfo = {
       totalPages: pageData.totalPages,
@@ -113,7 +113,7 @@ export default function InvitePage() {
       totalItems: pageData.totalElements,
       currentPageIndex: pageData.number,
       newPageNumber: pageData.number + 1,
-      newItemList,
+      newItemList: newItemList || [],
     };
     return newPageInfo;
   };
@@ -181,6 +181,8 @@ export default function InvitePage() {
       }));
     })();
   };
+  
+  console.log(itemList)
 
   return (
     <>
@@ -271,11 +273,11 @@ export default function InvitePage() {
             <section className={s.content}>
               {isLoading.fetching ? (
                 <Spinner />
-              ) : itemList.length === 0 ? (
+              ) : itemList?.length === 0 ? (
                 <EmptyContMessage message={'친구초대 적립내역이 없습니다.'} />
               ) : (
                 <ul className={s.coupon_content_grid_box}>
-                  {itemList.map((item, index) => (
+                  {itemList?.map((item, index) => (
                     <li key={`invite-item-${index}`} className={s.grid_box}>
                       <div className={s.flex_box}>
                         <div className={s.day_text}>{transformDate(item.createdTime)}</div>
