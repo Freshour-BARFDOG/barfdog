@@ -21,6 +21,7 @@ $browser-context:16; // html font-size
       position: absolute;
       width: rem(660);
       height: rem(778);
+      border-radius: rem(300) 0 0 0;
       left : calc(50% - rem(660) /2 - rem(270) );
       top: rem(1192);
       z-index: -3;
@@ -268,6 +269,9 @@ $browser-context:16; // html font-size
       .img_wrap {
         border-radius: 0;
       }
+      .img_wrap2 {
+        border-radius: 0;
+      }
     }
 
     .inner {
@@ -325,7 +329,7 @@ $browser-context:16; // html font-size
     .back_image {
       .img_wrap {
         //사용 이미지가 우측하단 둥글게 편집, 정상이미지 사용 후 rem(230) 적용
-        height: rem(270);
+        height: rem(210);
       }
 
       .img_wrap2 {
@@ -339,6 +343,8 @@ $browser-context:16; // html font-size
     } 
 
     .inner {
+      padding:rem(210) 0 0 0;
+
       .letter_box{
         border-radius: 0;
         width: calc(100% - rem(20));
@@ -363,13 +369,14 @@ $browser-context:16; // html font-size
         position: absolute;
         bottom: 0;
         left: 0;
-        background-image: url(https://barf-draft.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fcommunity_2.da2c81b3.png&w=1200&q=75);
+        background-image: url("../../../.././public/img/pages/community/community_2.png");
         background-repeat: no-repeat;
-        background-size: rem(660) rem(778);
-        background-position: rem(-40) rem(-180);
+        background-size: rem(560);
+        background-position: center;
         width: 100%;
-        height: rem(300);
-        transform: translateY(rem(300));
+        height: rem(400);
+        transform: translateY(rem(377));
+        z-index: -999;
       }
 
       .letter_box2{
