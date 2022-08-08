@@ -1,10 +1,19 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {createContext, useEffect, useMemo, useRef, useState} from 'react';
 import {slideDown, slideUp} from '../../../util/func/slideToggle';
 import s from '../../pages/mypage/subscribe/[subscribeId].module.scss';
 import {IoIosArrowForward} from 'react-icons/io';
 
+
+export const ToggleBoxContext = createContext(()=>({
+  setVisible: ()=>{},
+}))
+
+
 export function ToggleBox ({title, className, children,  ...props}) {
   const [visible, setVisible] = useState( false ); // ! 또는 useState(false) --> 토글박스 초기상태 설정
+  const value = useMemo( () => ({
+    visible
+  }), [visible] );
   const boxRef = useRef( null );
   
   const onClickHandler = (e) => {
@@ -27,8 +36,10 @@ export function ToggleBox ({title, className, children,  ...props}) {
           </i>
         </h2>
       </div>
-      <div className={s.cont} ref={boxRef}>
-        {children}
+      <div className={`${s.cont} ${visible ? 'active' : 'inactive'}`} ref={boxRef}>
+        <ToggleBoxContext.Provider value={value}>
+          {children}
+        </ToggleBoxContext.Provider>
       </div>
     </div>
   );
