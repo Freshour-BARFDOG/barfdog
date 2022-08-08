@@ -1,9 +1,9 @@
 @import '/styles/global/rem';
 @import '/styles/global/guide';
 
-section.title {
-  padding: rem(8) 0 rem(17);
-}
+
+section.title{ padding : rem(8) 0 rem(17);}
+
 
 .toggleBox {
   margin-top: rem(20);
@@ -44,9 +44,9 @@ section.title {
 
 .title {
   display: grid;
-  grid-template-columns: 1fr 1fr;
   grid-gap: rem(20);
-  align-items: center;
+  grid-template-columns: 1fr rem(100);
+  align-items: flex-start;
 
   .title_text {
     @include char(t24);
@@ -56,13 +56,19 @@ section.title {
     @include char(l15);
     display: flex;
     width: 100%;
-    justify-content: right;
+    justify-content: flex-start;
     box-sizing: border-box;
 
+
+    .title_text{
+      @include char(t24);
+      padding-right: rem(20);
+    }
+
     .text {
-      width: rem(350);
+      width: rem(335);
       text-align: center;
-      background: #f9edec;
+      background: #F9EDEC;
       border-radius: rem(8);
       padding: rem(11) 0;
       box-sizing: border-box;
@@ -76,20 +82,20 @@ section.title {
         display: none;
       }
     }
+  }
 
-    .btn_box {
-      width: rem(100);
-      .btn {
-        position: relative;
-        border: rem(1) solid var(--color-line-03);
-        padding: rem(10) 0;
-        border-radius: rem(4);
-        width: 100%;
-        max-width: rem(100);
-        box-sizing: border-box;
-        text-align: center;
-        cursor: pointer;
-      }
+  .btn_box {
+    width: rem(100);
+    .btn {
+      position: relative;
+      border: rem(1) solid var(--color-line-03);
+      padding: rem(10) 0;
+      border-radius: rem(4);
+      width: 100%;
+      max-width: rem(100);
+      box-sizing: border-box;
+      text-align: center;
+      cursor: pointer;
     }
   }
 }
@@ -104,7 +110,7 @@ section.title {
       border-radius: rem(12);
       max-width: rem(300);
       box-sizing: border-box;
-      padding: rem(37) rem(30);
+      padding : rem(37) rem(30);
 
       @include char(l16);
       .top_flex_box2 {
@@ -193,10 +199,9 @@ section.title {
           .row_3 {
             background-color: var(--color-line-04);
             color: var(--color-font-sub);
-
-            width: rem(94);
+            width: rem(100);
             border-radius: rem(4);
-            padding: 0 rem(10);
+            cursor: pointer;
           }
         }
 
@@ -473,8 +478,7 @@ section.title {
 
       width: rem(56);
       padding: rem(5) 0;
-
-      background: #219f94;
+      background: #219F94;
       border-radius: rem(30);
       color: #fff;
       font-weight: 700;
@@ -500,7 +504,7 @@ section.title {
         .red_btn2 {
           width: 100%;
           max-width: rem(300);
-          background-color: #f9edec;
+          background-color: #F9EDEC;
           border-radius: rem(4);
           color: var(--color-main);
           padding: rem(14) 0;
@@ -560,7 +564,6 @@ section.title {
   h2 {
     padding-top: rem(10);
     @include char(d28);
-    text-align: right;
     font-weight: 500;
     text-align: center;
   }
@@ -663,7 +666,7 @@ section.recipe,
     .color_box {
       width: 80%;
       max-width: rem(560);
-      background-color: #f9edec;
+      background-color: #F9EDEC;
       border-radius: rem(8);
       padding: 0 rem(19) rem(19);
       .color_box_row_1 {
@@ -874,8 +877,6 @@ section.recipe,
       height: rem(10);
       border: solid #fff;
       border-width: 0 rem(2) rem(2) 0;
-      -webkit-transform: rotate(45deg);
-      -ms-transform: rotate(45deg);
       transform: rotate(45deg);
       position: absolute;
       left: rem(6);
@@ -889,8 +890,6 @@ section.recipe,
       height: rem(10);
       border: solid #fff;
       border-width: 0 rem(2) rem(2) 0;
-      -webkit-transform: rotate(45deg);
-      -ms-transform: rotate(45deg);
       transform: rotate(45deg);
       position: absolute;
       left: rem(6);
@@ -923,200 +922,6 @@ section.recipe,
   }
 }
 
-//
-//.add_page {
-//  width: 100%;
-//  // min-width: ;
-//  max-width: rem(640);
-//  .page_box {
-//    display: grid;
-//    grid-template :
-//    "header"
-//    "main1"
-//    "main2"
-//    "footer"
-//    / 1fr;
-//    row-gap: rem(20);
-//    padding: rem(30) rem(40) rem(30);
-//
-//    div.title {
-//      padding-bottom:rem(2) ;
-//      @include char(l20);
-//      font-weight: 600;
-//    }
-//
-//    div.grid_box {
-//      display: grid;
-//      grid-template:
-//      "header"
-//      "main"
-//      / 1fr;
-//
-//      .row_flex {
-//        font-weight: 600;
-//        display: grid;
-//        grid-template-columns: 1fr rem(100) rem(100) rem(100);
-//
-//        justify-content: space-between;
-//        padding: rem(15) 0;
-//        text-align: center;
-//
-//        border-top : rem(1) solid var(--color-line-01);
-//        border-bottom : rem(1) solid var(--color-line-01);
-//
-//        @include char(l15);
-//        div {
-//          padding: rem(3) 0;
-//          &:nth-child(1){
-//            width: 50%;
-//            text-align: start;
-//            padding-left: rem(20);
-//          }
-//        }
-//      }
-//
-//      .row_flex2 {
-//        font-weight: 600;
-//        display: grid;
-//        grid-template-columns: 1fr rem(100) rem(100) rem(100);
-//
-//        justify-content: space-between;
-//        padding: rem(15) 0;
-//        text-align: center;
-//        align-items: center;
-//
-//        border-bottom : rem(1) solid var(--color-line-03);
-//        @include char(l15);
-//
-//        div {
-//          padding: rem(3) 0;
-//          &:nth-child(1){
-//            display: flex;
-//            padding-left: rem(5);
-//            text-align: start;
-//
-//            label {
-//              display: flex;
-//              margin-right: rem(10);
-//
-//              div {
-//                padding-left: rem(10);
-//              }
-//            }
-//          }
-//
-//          span{
-//            display: none;
-//          }
-//
-//          &:nth-child(4){
-//            color: var(--color-main);
-//          }
-//        }
-//      }
-//    }
-//
-//    .price {
-//      padding-top: rem(10);
-//      .price_flex_box {
-//        display: flex;
-//        justify-content: space-between;
-//        text-align: center;
-//        align-items: center;
-//        padding: 0 rem(20);
-//
-//        p {
-//          @include char(l15);
-//          font-weight: 400;
-//          padding-bottom: rem(10);
-//        }
-//        .text_price {
-//          @include char(l18);
-//          font-weight: 500;
-//        }
-//        .col_3 {
-//          font-weight: 700;
-//          span {
-//            padding-left: rem(18) ;
-//            color: var(--color-main);
-//            @include char(l20);
-//            font-weight: 600;
-//          }
-//        }
-//        .line {
-//          border: rem(1) solid color var(--color-line-04);
-//          width: rem(16);
-//        }
-//        .vertical_line {
-//          border: rem(1) solid color var(--color-line-04);
-//          width: rem(40);
-//          transform: rotate(90deg);
-//        }
-//      }
-//    }
-//
-//    .coupon_btn_box {
-//      display: flex;
-//      @include char(l15);
-//      column-gap: rem(10);
-//      justify-content: center;
-//      text-align: center;
-//      padding-top: rem(40);
-//
-//      .btn {
-//        width: rem(120);
-//        min-width: rem(60);
-//        max-width: rem(120);
-//        border: rem(1) solid var(--color-line-03);
-//        border-radius: rem(4);
-//        padding: rem(14) 0;
-//        cursor: pointer;
-//      }
-//      .red_btn {
-//        width: rem(120);
-//        min-width: rem(60);
-//        max-width: rem(120);
-//        border: rem(1) solid var(--color-main);
-//        border-radius: rem(4);
-//        color: #fff;
-//        background-color: var(--color-main);;
-//        padding: rem(14) 0;
-//        cursor: pointer;
-//      }
-//    }
-//  }
-//}
-
-//
-//.add_page2 {
-//  width: rem(420);
-//
-//  background-color: rosybrown;
-//  .page_box{
-//    display: flex;
-//    flex-direction: column;
-//    align-items: center;
-//    padding-bottom: rem(20);
-//
-//    .text{
-//      @include char(l16);
-//      padding : rem(80) 0 rem(69);
-//    }
-//
-//    .red_btn {
-//      width: rem(120);
-//      min-width: rem(60);
-//      max-width: rem(120);
-//      border: rem(1) solid var(--color-main);
-//      border-radius: rem(4);
-//      color: #fff;
-//      background-color: var(--color-main);;
-//      padding: rem(14) 0;
-//      text-align: center;
-//      cursor: pointer;
-//    }
-//  }
-//}
 
 @media (max-width: rem(1200)) {
   .content_box {
@@ -1150,10 +955,8 @@ section.recipe,
 
 @media (max-width: rem(1000)) {
   .title {
-    .flex_box {
-      .btn_box {
-        display: none;
-      }
+    .btn_box {
+      display: none;
     }
   }
   .custom_input_wrapper {
@@ -1265,6 +1068,12 @@ section.recipe,
     grid-gap: rem(10);
 
     .flex_box {
+      flex-direction: column;
+
+      .title_text{
+        text-align: center;
+      }
+
       .text {
         width: 100%;
       }
@@ -1324,6 +1133,7 @@ section.recipe,
       }
     }
   }
+
 
   .add_page {
     .page_box {
@@ -1438,6 +1248,10 @@ section.recipe,
 
   .toggleBox {
     padding: rem(8) rem(20);
+
+    &:last-child {
+      margin-bottom: rem(100);
+    }
   }
   //.add_page2 {
   //  width: 100%;

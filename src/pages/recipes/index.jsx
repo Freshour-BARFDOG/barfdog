@@ -6,7 +6,7 @@ import MetaTitle from "/src/components/atoms/MetaTitle";
 import Image from 'next/image';
 import Link from "next/link";
 import { useModalContext } from '/store/modal-context';
-import Modal_recipes from "@src/components/modal/Modal_recipes";
+import Modal_recipes from "@src/components/modal/recipes/Modal_recipes";
 import {Modal_cont_point_01} from "/src/components/modal/recipes/Modal_cont_point_01";
 import {Modal_cont_point_02} from "/src/components/modal/recipes/Modal_cont_point_02";
 import {Modal_cont_point_03} from "/src/components/modal/recipes/Modal_cont_point_03";

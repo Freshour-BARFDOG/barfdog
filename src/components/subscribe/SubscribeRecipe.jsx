@@ -25,15 +25,15 @@ const swiperSettings = {
   autoplay: false,
   breakpoints: {
     300: {
-      slidesPerView: 0.9,
-      spaceBetween: 10,
+      slidesPerView: 1,
+      spaceBetween: 0,
     },
-    600: {
+    651: {
       //601 이상일 경우
       slidesPerView: 2, //레이아웃 2열
-      spaceBetween: 10,
+      spaceBetween: 20,
     },
-    901: {
+    1001: {
       slidesPerView: 3,
       spaceBetween: 20,
     },

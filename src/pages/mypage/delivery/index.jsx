@@ -53,7 +53,7 @@ const TEST_ContTobeInserted = () => {
 
             <div className={Styles.col_5}>
               {/* TODO 운송장번호 연결 */}
-              <a href="http://nexs.cjgls.com/web/service02_01.jsp?slipno" target="_blank">
+              <a href="http://nexs.cjgls.com/web/service02_01.jsp?slipno" target="_blank" rel="noopener noreferrer">
                 <div className={Styles.btn}>배송조회</div>
               </a>
             </div>
@@ -94,7 +94,7 @@ const TEST_ContTobeInserted = () => {
             <div className={Styles.col_4}>배송예정</div>
 
             <div className={Styles.col_5}>
-              <a href="http://nexs.cjgls.com/web/service02_01.jsp?slipno" target="_blank">
+              <a href="http://nexs.cjgls.com/web/service02_01.jsp?slipno" target="_blank" rel="noopener noreferrer">
                 <div className={Styles.btn}>배송조회</div>
               </a>
             </div>
@@ -174,7 +174,7 @@ const TEST_ContTobeInserted = () => {
             <div className={Styles.col_4}>배송예정</div>
 
             <div className={Styles.col_5}>
-              <a href="http://nexs.cjgls.com/web/service02_01.jsp?slipno" target="_blank">
+              <a href="http://nexs.cjgls.com/web/service02_01.jsp?slipno" target="_blank" rel="noopener noreferrer">
                 <div className={Styles.btn}>배송조회</div>
               </a>
             </div>
@@ -217,7 +217,7 @@ const TEST_ContTobeInserted = () => {
             <div className={Styles.col_5}>
               <div className={Styles.btn}>
                 {/* TODO 운송장번호 연결 */}
-                <a href="http://nexs.cjgls.com/web/service02_01.jsp?slipno" target="_blank">
+                <a href="http://nexs.cjgls.com/web/service02_01.jsp?slipno" target="_blank" rel="noopener noreferrer">
                   배송조회
                 </a>
                 </div>
