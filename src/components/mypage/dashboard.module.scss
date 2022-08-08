@@ -77,6 +77,10 @@ $counterBoxWidth : rem(200);
       border-radius:50%;
       margin-right:rem(12);
       background-color : #f1f2f3;
+      background-image: url("../../.././public/img/mypage/Profile_basic.png");
+      background-repeat: no-repeat;
+      background-size: rem(45);
+      background-position: bottom;
     }
     .user_names{
       margin-top: rem(5);

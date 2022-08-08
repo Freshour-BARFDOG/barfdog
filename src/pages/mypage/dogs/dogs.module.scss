@@ -58,6 +58,10 @@ section.body { padding : rem(120) 0 0 }
       aspect-ratio : 1/1;
       border-radius: 50%;
       background-color: var(--gray-v10);
+      background-image: url("../../../.././public/img/mypage/Dog_basic.png");
+      background-repeat: no-repeat;
+      background-size: rem(60);
+      background-position: center;
     }
   }
 

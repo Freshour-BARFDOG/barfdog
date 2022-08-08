@@ -21,7 +21,8 @@ export default function MypageSubscribe_statisticPage({ data }) {
 
   return (
     <>
-      <MetaTitle title={`마이페이지 ${data.dogName}의 설문결과`} />
+      {/* <MetaTitle title={`마이페이지 ${data.name}의${"\u00a0"}설문결과`} /> */}
+      <MetaTitle title={`마이페이지 설문결과`} />
       <Layout>
         <Wrapper>
           <MypageWrapper>

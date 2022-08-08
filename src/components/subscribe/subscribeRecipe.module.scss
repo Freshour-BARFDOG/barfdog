@@ -64,6 +64,17 @@ section.recipe, .notice {
   text-align: center;
   &.inMypage{
     overflow: hidden !important;
+
+    .row_1 {
+      padding-top: rem(9);
+      font-size: rem(12);
+    }
+    .row_2 {
+      font-size: rem(22);
+    }
+    .row_3 {
+      font-size: rem(14);
+    }
   }
   .slide{
     label{padding: rem(30) rem(20) rem(20);background-color: #fff;}
@@ -135,11 +146,28 @@ section.recipe, .notice {
     left: rem(10);
     width: rem(820);
     overflow: visible !important;
+    &.inMypage{
+      width: rem(658);
+      overflow: visible !important;
+      .slide{
+        label{
+          width: rem(164);
+        }
+      }
+    }
 
     .slide{
       label{
         width: rem(218);
       }
+    }
+  }
+}
+
+@media (max-width: rem(1000)) {
+  .swiper_recipes {
+    &.inMypage{
+      width: rem(432);
     }
   }
 }
@@ -172,6 +200,10 @@ section.recipe, .notice {
 
   .swiper_recipes {
     width: rem(280);
+
+    &.inMypage{
+      width: rem(226);
+    }
   }
 }
 

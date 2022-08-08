@@ -6,6 +6,7 @@ $browser-context:16; // html font-size
 
 
 section.title{ padding : rem(8) 0 rem(19);}
+section.pagination_box{ padding: rem(80) 0 0}
 
 
 .title {
@@ -29,6 +30,11 @@ section.title{ padding : rem(8) 0 rem(19);}
     align-items: center;
     padding: rem(30) 0;
     width: 100%;
+
+    &:hover .col_1 .image .dogName{
+      opacity: 1;
+    }
+
     .text2 {
       color: var(--color-font-sub);
     }
@@ -62,9 +68,6 @@ section.title{ padding : rem(8) 0 rem(19);}
           justify-content: center;
           opacity: 0;
           transition: opacity .2s var(--transition-cubic);
-          &:hover{
-            opacity: 1;
-          }
         }
       }
       .text {
@@ -175,6 +178,8 @@ section.title{ padding : rem(8) 0 rem(19);}
 
 @media (max-width: rem(600)) {
   section.content:last-child{ padding : 0 0 rem(100);}
+  section.pagination_box{ padding: rem(50) 0}
+  
 
   .title{
     display: none;

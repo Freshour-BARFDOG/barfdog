@@ -1,23 +1,26 @@
 import s from '../../pages/mypage/subscribe/[subscribeId].module.scss';
 import Image from 'next/image';
 import React from 'react';
+import Link from 'next/link';
 
 export const SubscribDashboard = () => {
   return (
     <>
       <section className={s.title}>
+      <div className={s.flex_box}>
         <div className={s.title_text}>시호의 구독정보</div>
         
-        <div className={s.flex_box}>
           <div className={s.text}>
             <span>구독변경 마감</span>
             <br/>
             2일 16:54:12 이후 구독정보 변경 불가
           </div>
+        </div>
           
-          <div className={s.btn_box}>
+        <div className={s.btn_box}>
+          <Link href="/mypage/subscribe" passHref>
             <div className={s.btn}>목록보기</div>
-          </div>
+          </Link>
         </div>
       </section>
       <section className={s.content_box}>
