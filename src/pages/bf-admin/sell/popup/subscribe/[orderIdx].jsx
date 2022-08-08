@@ -41,33 +41,33 @@ const TEST_DATA = { orderStatus: "CANCEL_REQUEST", itemList: [1, 2, 3] , payment
 
 
 
-function Popup_MemeberDetailPage() {
-
-
+export default function Popup_MemberDetailPage() {
+  
+  
   const allData = TEST_DATA;
   const canceldOrderStatusList = [
-    { boxLabel: "취소", value: "CANCEL_REQUEST" },
-    { boxLabel: "취소", value: "CANCEL_DONE" },
+    {boxLabel: "취소", value: "CANCEL_REQUEST"},
+    {boxLabel: "취소", value: "CANCEL_DONE"},
   ];
   let isCanceledOrderStatus = false;
   let canceledOrderStatusLabel = "취소";
   for (let i = 0; i < canceldOrderStatusList.length; i++) {
-    if (allData.orderStatus === canceldOrderStatusList[i].value) {
+    if ( allData.orderStatus === canceldOrderStatusList[i].value ) {
       isCanceledOrderStatus = true;
       break
     }
   }
-
-
+  
+  
   return (
     <>
       <div id={s.popup}>
-        <PopupWrapper style={{ width: 1000 }}>
+        <PopupWrapper style={{width: 1000}}>
           <header className={s.header}>
             <div className={s.row}>
               <div className={s.cont}>
                 <h1 className={s["popup-title"]}>주문상세정보</h1>
-                <PopupCloseButton_typeX />
+                <PopupCloseButton_typeX/>
               </div>
             </div>
           </header>
@@ -87,22 +87,22 @@ function Popup_MemeberDetailPage() {
                     </li>
                   )}
                   <li className={s["table-list"]}>
-                    <ProductInfo_dog />
+                    <ProductInfo_dog/>
                   </li>
                   <li className={s["table-list"]}>
-                    <ProductInfo_subscribe />
-                    <ProductInfo_subscribe isChangedSubscribeInfo={true} />
+                    <ProductInfo_subscribe/>
+                    <ProductInfo_subscribe isChangedSubscribeInfo={true}/>
                   </li>
                   <li className={s["table-list"]}>
-                    <ProductInfo_payment />
+                    <ProductInfo_payment/>
                   </li>
                   <li className={s["table-list"]}>
-                    <ProductInfo_delivery />
+                    <ProductInfo_delivery/>
                   </li>
                 </ul>
               </section>
               <section className={s["btn-section"]}>
-                <PopupCloseButton />
+                <PopupCloseButton/>
               </section>
             </div>
           </main>
@@ -111,5 +111,3 @@ function Popup_MemeberDetailPage() {
     </>
   );
 }
-
-export default Popup_MemeberDetailPage;

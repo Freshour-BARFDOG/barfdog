@@ -9,7 +9,7 @@ import { FullScreenLoading } from '/src/components/atoms/FullScreenLoading';
 import { transformBirthDay } from '/util/func/transformBirthDay';
 import { transformPhoneNumber } from '/util/func/transformPhoneNumber';
 import transformDate from "../../../../../util/func/transformDate";
-function Popup_MemeberDetailPage({ id }) {
+export default function Popup_MemberDetailPage({ id }) {
   const getReviewInfoApiUrl = `/api/admin/members/${id}`;
   const apiDataQuery = 'memberDto';
   const putMemberBirthdayApiUrl = `/api/admin/members/${id}/birthday`;
@@ -366,15 +366,6 @@ function Popup_MemeberDetailPage({ id }) {
     </>
   );
 }
-
-export default Popup_MemeberDetailPage;
-
-// Popup_MemeberDetailPage.getInitialProps = async ({ query }) => {
-//   const { id } = query;
-//   return { id };
-// };
-//
-//
 
 
 export async function getServerSideProps({ query }) {

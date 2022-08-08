@@ -187,6 +187,20 @@ section.subscribe_discount { margin-bottom: rem(80);}
   }
 }
 
+
+.showModal_btn{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  border-radius: rem(100);
+  border: rem(1) solid var(--color-line-03);
+  color: var(--color-font-sub);
+  font-size: 15px;
+  padding: rem(5) rem(26);
+  font-weight: 500;
+}
+
 // ------------------- 모달 레시피 내용
 // ------------------- 영양포인트111111
 .modal_text_box:not(:last-child) {

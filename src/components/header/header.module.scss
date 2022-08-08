@@ -87,6 +87,10 @@
   justify-content: center;
   align-items: center;
   padding: rem(125) 0 rem(90);
+  a{
+    max-width: rem(280);
+    aspect-ratio: 279/48;
+  }
 }
 
 .gnb_area {

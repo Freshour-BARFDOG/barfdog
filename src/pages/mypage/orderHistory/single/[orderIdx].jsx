@@ -5,10 +5,16 @@ import MypageWrapper from "/src/components/mypage/MypageWrapper";
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import Styles from 'src/pages/mypage/orderHistory/ordersheet.module.scss';
 import Image from 'next/image';
-import {
-  getDataSSR
-} from '/src/pages/api/reqData';
-function SingleItem_OrderHistoryPage() {
+import {getDataSSR} from '/src/pages/api/reqData';
+import transformLocalCurrency from '/util/func/transformLocalCurrency';
+import transformPhoneNumber from '/util/func/transformPhoneNumber';
+import popupWindow from '/util/func/popupWindow';
+
+
+function SingleItem_OrderHistoryPage(props) {
+
+  const data = props.data;
+  // console.log(data);
   return (
     <>
       <MetaTitle title="마이페이지 주문내역 일반상품" />
@@ -158,10 +164,10 @@ function SingleItem_OrderHistoryPage() {
               <div className={Styles.body_content_2}>
                 <div className={Styles.grid_box}>
                   <div>주문번호</div>
-                  <div>10000826742324</div>
+                  <div>{data?.orderDto.merchantUid}</div>
 
                   <div>주문(결제)일시</div>
-                  <div>2022/02/14 14:19</div>
+                  <div>{data?.orderDto.paymentDate}</div>
                   <div>배송정보</div>
                   <div>정기 구독 배송</div>
                 </div>
@@ -188,12 +194,16 @@ function SingleItem_OrderHistoryPage() {
                     <ul className={Styles.content_grid}>
                       <li>
                         <span>CJ대한통운</span>
-                        <span data-delivery-trackingNumber={""}>운송장번호</span>
-                        <span>510017079554</span>
+                        <span data-delivery-tracking-number={""}>운송장번호</span>
+                        <span>{data?.orderDto.deliveryNumber}</span>
                       </li>
                       <li data-delivery-title={"배송상태"}>배송중</li>
                       <li>
-                        <button>배송조회</button>
+                        <button>
+                          <a href={`http://nexs.cjgls.com/web/service02_01.jsp?slipno=${data?.orderDto.deliveryNumber}`} target="_blank">
+                            배송조회
+                          </a>  
+                        </button>
                       </li>
                     </ul>
 
@@ -211,25 +221,25 @@ function SingleItem_OrderHistoryPage() {
               <div className={Styles.body_content_2}>
                 <div className={Styles.grid_box}>
                   <div>주문금액</div>
-                  <div>193,400원</div>
-
+                  <div>{transformLocalCurrency( data?.orderDto.orderPrice )}원</div>
+                  
                   <div>배송비</div>
-                  <div>5,000원</div>
-
+                  <div>{transformLocalCurrency( data?.orderDto.deliveryPrice )}원</div>
+                  
                   <div>할인금액</div>
-                  <div>0원</div>
+                  <div>{transformLocalCurrency( data?.orderDto.discountTotal )}원</div>
 
                   <div>적립금 사용</div>
-                  <div>0원</div>
+                  <div>{transformLocalCurrency( data?.orderDto.discountReward )}원</div>
 
                   <div>쿠폰사용</div>
-                  <div>0원</div>
+                  <div>{transformLocalCurrency( data?.orderDto.discountCoupon )}원</div>
 
                   <div>결제 금액</div>
-                  <div>193,400원</div>
+                  <div>{transformLocalCurrency( data?.orderDto.paymentPrice )}원</div>
 
                   <div>적립예정금액</div>
-                  <div>3,000원</div>
+                  <div>{transformLocalCurrency( data?.savedRewardTotal )}원</div>
 
                   <div>결제방법</div>
                   <div>정기구독 카드결제</div>
@@ -245,18 +255,18 @@ function SingleItem_OrderHistoryPage() {
               <div className={Styles.body_content_2}>
                 <div className={Styles.grid_box}>
                   <div>받는 분</div>
-                  <div>김바프</div>
+                  <div>{data?.orderDto.name}</div>
 
                   <div>핸드폰</div>
-                  <div>010-8888-8888</div>
+                  <div>{data?.orderDto.phone.replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, "$1-$2-$3").replace(/\-{1,2}$/g, "")}</div>
 
                   <div>배송방법</div>
                   <div>택배배송</div>
 
                   <div>배송주소</div>
-                  <div>충북 충주시 연수동 번영대로 프레쉬아워</div>
+                  <div>{data?.orderDto.street} {data?.orderDto.detailAddress}</div>
                   <div>배송요청사항</div>
-                  <div>부재시 문 앞에 놔주세요</div>
+                  <div>{data?.orderDto.request}</div>
                 </div>
               </div>
             </section>
@@ -277,53 +287,40 @@ export async function getServerSideProps(ctx) {
   // const { orderIdx } = query;
   const orderIdx = query.orderIdx;
 
-  // let DATA = null;
+  let DATA = null;
   const getApiUrl = `/api/orders/${orderIdx}/general`;
 
   const res = await getDataSSR(req, getApiUrl);
   console.log('SERVER REPONSE: ',res);
-  // const data = res?.data;
-  // if (data) {
-  //   DATA = {
-  //     item: {
-  //       id: data.itemDto.id,
-  //       name: data.itemDto.name,
-  //       description: data.itemDto.description,
-  //       originalPrice: data.itemDto.originalPrice,
-  //       discountType: data.itemDto.discountType,
-  //       discountDegree: data.itemDto.discountDegree,
-  //       salePrice: data.itemDto.salePrice,
-  //       inStock: data.itemDto.inStock,
-  //       remaining: data.itemDto.remaining,
-  //       totalSalesAmount: data.itemDto.totalSalesAmount,
-  //       contents: data.itemDto.contents,
-  //       itemIcons: data.itemDto.itemIcons,
-  //       deliveryFree: data.itemDto.deliveryFree,
-  //     },
-  //     delivery: {
-  //       price: data.deliveryCondDto.price,
-  //       freeCondition: data.deliveryCondDto.freeCondition,
-  //     },
-  //     opt: data.itemOptionDtoList.map((thisOpt) => ({
-  //       id: thisOpt.id,
-  //       name: thisOpt.name,
-  //       optionPrice: thisOpt.optionPrice,
-  //       remaining: thisOpt.remaining,
-  //     })),
-  //     itemImages: data.itemImageDtoList.map((thisImage) => ({
-  //       id: thisImage.id,
-  //       leakedOrder: thisImage.leakedOrder,
-  //       filename: thisImage.filename,
-  //       url: thisImage.url,
-  //     })),
-  //     review: {
-  //       star: data.reviewDto.star,
-  //       count: data.reviewDto.count,
-  //       itemId: data.itemDto.id,
-  //     },
-  //   };
-  // }
-  // return { props: { orderIdx, data: DATA } };
-  return { props: { orderIdx } };
+  const data = res?.data;
+  console.log(data);
+  if (data) {
+    DATA = {
+      orderItemDtoList:data.orderItemDtoList,
+      orderDto:{
+        orderId: data.orderDto.orderId,
+        merchantUid: data.orderDto.merchantUid,
+        paymentDate: data.orderDto.paymentDate,
+        deliveryNumber: data.orderDto.deliveryNumber,
+        orderPrice:data.orderDto.orderPrice,
+        deliveryPrice: data.orderDto.deliveryPrice,
+        discountTotal: data.orderDto.discountTotal,
+        discountReward: data.orderDto.discountReward,
+        discountCoupon: data.orderDto.discountCoupon,
+        paymentPrice: data.orderDto.paymentPrice,
+        paymentMethod: data.orderDto.paymentMethod,
+        name: data.orderDto.name,
+        phone: data.orderDto.phone,
+        zipcode: data.orderDto.zipcode,
+        street: data.orderDto.street,
+        detailAddress: data.orderDto.detailAddress,
+        request: data.orderDto.request,
+        package: data.orderDto.package
+      },
+      savedRewardTotal:data.savedRewardTotal
+    };
+    console.log(DATA);
+  }
+  return { props: { orderIdx, data: DATA } }; 
 
 }

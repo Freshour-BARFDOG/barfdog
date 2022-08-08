@@ -26,7 +26,7 @@ const DUMMY_DATA = {
       id: 371,
       title: '상품1',
       name: '김회원',
-      thumbnailUrl: 'http://localhost:8080/display/items?filename=filename1.jpg',
+      thumbnailUrl: 'https://images.unsplash.com/photo-1537151625747-768eb6cf92b2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=685&q=80',
       writtenDate: '2022-07-22',
       star: 0,
       contents: '열글자 이상의 내용 작성',
@@ -35,17 +35,17 @@ const DUMMY_DATA = {
       {
         id: 4331,
         filename: 'filename1.jpg',
-        url: 'http://localhost:8080/display/reviews?filename=filename1.jpg',
+        url: 'https://images.unsplash.com/photo-1588943211346-0908a1fb0b01?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80',
       },
       {
         id: 4332,
         filename: 'filename2.jpg',
-        url: 'http://localhost:8080/display/reviews?filename=filename2.jpg',
+        url: 'https://images.unsplash.com/photo-1576201836106-db1758fd1c97?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
       },
       {
         id: 4333,
         filename: 'filename3.jpg',
-        url: 'http://localhost:8080/display/reviews?filename=filename3.jpg',
+        url: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
       },
     ],
     _links: {
