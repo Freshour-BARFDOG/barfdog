@@ -7,6 +7,7 @@ import Styles from "src/pages/mypage/orderHistory/ordersheet.module.scss";
 import Image from 'next/image';
 import {getDataSSR} from '/src/pages/api/reqData';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
+import popupWindow from '/util/func/popupWindow';
 
 
 function SubScribe_OrderHistoryPage(props) {
@@ -30,7 +31,10 @@ function SubScribe_OrderHistoryPage(props) {
                 <hr />
                 
                 <span className={Styles.change}>
-                  *2022/02/14 구독 정보 변경으로 주문 변경 내용이 있습니다. 
+                  {data?.orderDto.beforePlan === null 
+                    && data?.orderDto.beforeOneMealRecommendGram === null 
+                    && data?.orderDto.beforeRecipeName === null 
+                    && data?.orderDto.beforeOrderPrice === 0 ? '':'* 구독 정보 변경으로 주문 변경 내용이 있습니다. '}
                 </span>
 
                 <div className={Styles.body_content}>
@@ -61,7 +65,7 @@ function SubScribe_OrderHistoryPage(props) {
                         반려견
                       </div>
                       <div>
-                      {data?.orderDto.dogName}
+                        {data?.orderDto.dogName}
                       </div>
 
                       <div>
@@ -115,7 +119,7 @@ function SubScribe_OrderHistoryPage(props) {
                       주문번호
                     </div>
                     <div>
-                      10000826742324
+                      {data?.orderDto.merchantUid}
                     </div>
 
                     <div>
@@ -138,9 +142,7 @@ function SubScribe_OrderHistoryPage(props) {
 
               <section className={Styles.body}>
                 <div className={Styles.body_title}>
-                  <a href={`http://nexs.cjgls.com/web/service02_01.jsp?slipno=${data?.orderDto.deliveryNumber}`} target="_blank" rel="noreferrer">
                       배송조회
-                  </a>
                 </div>
 
                 <hr />
@@ -157,7 +159,8 @@ function SubScribe_OrderHistoryPage(props) {
                     </li>
                     <li>배송중</li>
                     <li>
-                      <button>배송조회</button>
+                      <button onClick={()=>popupWindow(`http://nexs.cjgls.com/web/service02_01.jsp?slipno=${data?.orderDto.deliveryNumber}`)}>
+                        배송조회</button>
                     </li>
                   </ul>
                   
@@ -272,7 +275,6 @@ function SubScribe_OrderHistoryPage(props) {
                     </div>
                     <div>
                     {data?.orderDto.street} {data?.orderDto.detailAddress}
-                   
                     </div>
                     <div>
                       배송요청사항
