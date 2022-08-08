@@ -36,6 +36,8 @@ $animationDuration : 0.2s;
 
 .menu {
   .inner {
+    margin: 0 auto;
+    max-width: rem(900);
     .boxes {
       display: flex;
       justify-content: center;
