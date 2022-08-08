@@ -5,9 +5,13 @@ import MypageWrapper from "/src/components/mypage/MypageWrapper";
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import Styles from "src/pages/mypage/orderHistory/ordersheet.module.scss";
 import Image from 'next/image';
+import {getDataSSR} from '/src/pages/api/reqData';
+import transformLocalCurrency from '/util/func/transformLocalCurrency';
 
 
-function SubScribe_OrderHistoryPage() {
+function SubScribe_OrderHistoryPage(props) {
+  const data = props.data;
+
   return (
     <>
       <MetaTitle title="마이페이지 주문내역 정기구독" />
@@ -35,7 +39,7 @@ function SubScribe_OrderHistoryPage() {
                     <div className={`${Styles.image} img-wrap`}>
                       <Image
                         priority
-                        src={require("public/img/mypage/order_history/subscribe_sample_1.png")}
+                        src={data?.recipeDto.thumbnailUrl}
                         objectFit="cover"
                         layout="fill"
                         alt="카드 이미지"
@@ -50,42 +54,44 @@ function SubScribe_OrderHistoryPage() {
                         구독정보
                       </div>
                       <div>
-                        스타터 프리미엄(1회차)
+                        {data?.recipeNames} ({data?.orderDto.subscribeCount}회차)
                       </div>
 
                       <div>
                         반려견
                       </div>
                       <div>
-                        시호
+                      {data?.orderDto.dogName}
                       </div>
 
                       <div>
                         급여량  
                       </div>
                       <div>
-                        272g
+                        {data?.orderDto.oneMealRecommendGram}g
                       </div>
 
                       <div>
                         플랜  
                       </div>
                       <div>
-                        풀플랜(28개)
+                        {/* 풀플랜(28개) */}
+                        {data?.orderDto.plan}
                       </div>
 
                       <div>
                         레시피  
                       </div>
                       <div>
-                        믹스레시피(스타터프리미엄, 덕&amp;램)
+                        {/* 믹스레시피(스타터프리미엄, 덕&amp;램) */}
+                        {data?.recipeDto.recipeName}
                       </div>
 
                       <div>
                         가격
                       </div>
                       <div>
-                        193,400원
+                        {transformLocalCurrency( data?.orderDto.orderPrice )}원
                       </div>
 
                     </div>
@@ -116,7 +122,7 @@ function SubScribe_OrderHistoryPage() {
                       주문(결제)일시
                     </div>
                     <div>
-                      2022/02/14 14:19
+                    {data?.orderDto.orderDate}
                     </div>
                     <div>
                       배송정보
@@ -132,7 +138,9 @@ function SubScribe_OrderHistoryPage() {
 
               <section className={Styles.body}>
                 <div className={Styles.body_title}>
-                  배송조회
+                  <a href={`http://nexs.cjgls.com/web/service02_01.jsp?slipno=${data?.orderDto.deliveryNumber}`} target="_blank" rel="noreferrer">
+                      배송조회
+                  </a>
                 </div>
 
                 <hr />
@@ -145,7 +153,7 @@ function SubScribe_OrderHistoryPage() {
                     <li>
                       <span>CJ대한통운</span>
                       <span>운송장번호</span>
-                      <span>510017079554</span>
+                      <span>{data?.orderDto.deliveryNumber}</span>
                     </li>
                     <li>배송중</li>
                     <li>
@@ -171,7 +179,7 @@ function SubScribe_OrderHistoryPage() {
                       주문금액
                     </div>
                     <div>
-                      193,400원
+                      {transformLocalCurrency( data?.orderDto.orderPrice )}원
                     </div>
 
                     <div>
@@ -185,30 +193,30 @@ function SubScribe_OrderHistoryPage() {
                       할인금액
                     </div>
                     <div>
-                      0원
+                      {transformLocalCurrency( data?.orderDto.discountTotal )}원   
                     </div>
 
                     <div>
                       적립금 사용
                     </div>
                     <div>
-                      0원
+                      {transformLocalCurrency( data?.orderDto.discountReward )}원
                     </div>
 
                     <div>
                       쿠폰사용
                     </div>
                     <div>
-                      0원  
+                      {transformLocalCurrency( data?.orderDto.discountCoupon )}원  
                     </div>
 
                     <div>
                       결제 금액
                     </div>
                     <div>
-                      193,400원
+                      {transformLocalCurrency( data?.orderDto.paymentPrice )}원
                     </div>
-
+                    {/* TODO: */}
                     <div>
                       적립예정금액
                     </div>
@@ -242,14 +250,14 @@ function SubScribe_OrderHistoryPage() {
                       받는 분
                     </div>
                     <div>
-                      김바프
+                    {data?.orderDto.recipientName}
                     </div>
 
                     <div>
                       핸드폰
                     </div>
                     <div>
-                      010-8888-8888
+                      {data?.orderDto.recipientPhone.replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, "$1-$2-$3").replace(/\-{1,2}$/g, "")}
                     </div>
 
                     <div>
@@ -263,13 +271,14 @@ function SubScribe_OrderHistoryPage() {
                       배송주소
                     </div>
                     <div>
-                      충북 충주시 연수동 번영대로 프레쉬아워
+                    {data?.orderDto.street} {data?.orderDto.detailAddress}
+                   
                     </div>
                     <div>
                       배송요청사항
                     </div>
                     <div>
-                      부재시 문 앞에 놔주세요
+                    {data?.orderDto.request}
                     </div>
 
                   </div>
@@ -287,9 +296,65 @@ function SubScribe_OrderHistoryPage() {
 
 export default SubScribe_OrderHistoryPage;
 
-export async function getServerSideProps({ query }) {
+export async function getServerSideProps(ctx) {
   
-  const { orderIdx } = query;
+  const { query, req } = ctx;
+  // console.log(query, req)
+
+  // const { orderIdx } = query;
+  const orderIdx = query.orderIdx;
+
+  let DATA = null;
+  const getApiUrl = `/api/orders/${orderIdx}/subscribe`;
   
-  return { props: { orderIdx } };
+  const res = await getDataSSR(req, getApiUrl);
+  console.log('SERVER REPONSE: ',res);
+  const data = res?.data;
+  console.log(data);
+  if (data) {
+    DATA = {
+      recipeDto:{
+        thumbnailUrl: data.recipeDto.thumbnailUrl,
+        recipeName: data.recipeDto.recipeName
+      },
+      recipeNames:data.recipeNames,
+      orderDto:{
+        subscribeCount: data.orderDto.subscribeCount,
+        dogName: data.orderDto.dogName,
+        oneMealRecommendGram: data.orderDto.oneMealRecommendGram,
+        plan: data.orderDto.plan,
+
+        // paymentDate: data.orderDto.paymentDate,
+        orderPrice:data.orderDto.orderPrice,
+        beforeSubscribeCount: data.orderDto.beforeSubscribeCount,
+        beforePlan: data.orderDto.beforePlan,
+        beforeOneMealRecommendGram: data.orderDto.beforeOneMealRecommendGram,
+        beforeRecipeName: data.orderDto.beforeRecipeName,
+        beforeOrderPrice: data.orderDto.beforeOrderPrice,
+        merchantUid: data.orderDto.merchantUid,
+        orderType: data.orderDto.orderType,
+        orderDate: data.orderDto.orderDate,
+        deliveryNumber: data.orderDto.deliveryNumber,
+        deliveryStatus: data.orderDto.deliveryStatus,
+        deliveryPrice: data.orderDto.deliveryPrice,
+
+        discountTotal: data.orderDto.discountTotal,
+        discountReward: data.orderDto.discountReward,
+        discountCoupon: data.orderDto.discountCoupon,
+        paymentPrice: data.orderDto.paymentPrice,
+        paymentMethod: data.orderDto.paymentMethod,
+        recipientName: data.orderDto.recipientName,
+        recipientPhone: data.orderDto.recipientPhone,
+        zipcode: data.orderDto.zipcode,
+        street: data.orderDto.street,
+        detailAddress: data.orderDto.detailAddress,
+        request: data.orderDto.request,
+        // package: data.orderDto.package
+      },
+      // savedRewardTotal:data.savedRewardTotal
+    };
+    console.log(DATA);
+  }
+  return { props: { orderIdx, data: DATA } };  
+
 }
