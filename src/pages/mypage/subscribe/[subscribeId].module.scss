@@ -1,10 +1,9 @@
-
 @import '/styles/global/rem';
 @import '/styles/global/guide';
 
-
-section.title{ padding : rem(8) 0 rem(17);}
-
+section.title {
+  padding: rem(8) 0 rem(17);
+}
 
 .toggleBox {
   margin-top: rem(20);
@@ -18,6 +17,8 @@ section.title{ padding : rem(8) 0 rem(17);}
   .clickTrigger {
     padding: rem(16) 0;
     cursor: pointer;
+    text-align: left;
+    width: 100%;
     .title {
       cursor: inherit;
       position: relative;
@@ -30,8 +31,8 @@ section.title{ padding : rem(8) 0 rem(17);}
         right: 0;
         top: 50%;
         transform: translateY(-50%) rotate(90deg);
-        
-        transition: transform var(--ani-default); 
+
+        transition: transform var(--ani-default);
       }
     }
   }
@@ -41,15 +42,13 @@ section.title{ padding : rem(8) 0 rem(17);}
   }
 }
 
-
-
 .title {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: rem(20);
   align-items: center;
 
-  .title_text{
+  .title_text {
     @include char(t24);
   }
 
@@ -59,12 +58,11 @@ section.title{ padding : rem(8) 0 rem(17);}
     width: 100%;
     justify-content: right;
     box-sizing: border-box;
-    
-    
+
     .text {
       width: rem(350);
       text-align: center;
-      background: #F9EDEC;
+      background: #f9edec;
       border-radius: rem(8);
       padding: rem(11) 0;
       box-sizing: border-box;
@@ -78,7 +76,7 @@ section.title{ padding : rem(8) 0 rem(17);}
         display: none;
       }
     }
-  
+
     .btn_box {
       width: rem(100);
       .btn {
@@ -93,7 +91,7 @@ section.title{ padding : rem(8) 0 rem(17);}
         cursor: pointer;
       }
     }
-  } 
+  }
 }
 
 .content_box {
@@ -106,9 +104,9 @@ section.title{ padding : rem(8) 0 rem(17);}
       border-radius: rem(12);
       max-width: rem(300);
       box-sizing: border-box;
-      padding : rem(37) rem(30);
+      padding: rem(37) rem(30);
 
-      @include char(l16);      
+      @include char(l16);
       .top_flex_box2 {
         display: flex;
         justify-content: space-between;
@@ -122,7 +120,7 @@ section.title{ padding : rem(8) 0 rem(17);}
 
         .left {
           color: var(--color-font-sub);
-          font-weight: 500; 
+          font-weight: 500;
         }
         .right {
           font-weight: 600;
@@ -130,7 +128,7 @@ section.title{ padding : rem(8) 0 rem(17);}
 
         &.first {
           padding-bottom: rem(12);
-          align-self: flex-start ;
+          align-self: flex-start;
         }
 
         &.second {
@@ -162,7 +160,7 @@ section.title{ padding : rem(8) 0 rem(17);}
         align-items: flex-start;
         justify-content: center;
         column-gap: rem(40);
-        padding-top: rem(8); 
+        padding-top: rem(8);
         @include char(l15);
 
         .image {
@@ -170,11 +168,11 @@ section.title{ padding : rem(8) 0 rem(17);}
           max-width: rem(60);
           aspect-ratio: 1/1;
         }
-        
+
         .row_1 {
           padding: rem(7) 0 rem(8);
         }
-        
+
         .row_2 {
           @include char(l20);
           padding-bottom: rem(10);
@@ -184,7 +182,6 @@ section.title{ padding : rem(8) 0 rem(17);}
           justify-content: center;
           align-items: center;
           height: rem(25);
-          
         }
 
         .inner_left_box {
@@ -192,8 +189,7 @@ section.title{ padding : rem(8) 0 rem(17);}
           display: flex;
           align-items: center;
           flex-direction: column;
-          
-          
+
           .row_3 {
             background-color: var(--color-line-04);
             color: var(--color-font-sub);
@@ -203,7 +199,7 @@ section.title{ padding : rem(8) 0 rem(17);}
             padding: 0 rem(10);
           }
         }
-        
+
         .inner_mid_box {
           width: rem(140);
           display: flex;
@@ -221,13 +217,12 @@ section.title{ padding : rem(8) 0 rem(17);}
           display: flex;
           align-items: center;
           flex-direction: column;
-
         }
       }
     }
   }
-  .coupon-btn{
-    box-sizing:border-box;
+  .coupon-btn {
+    box-sizing: border-box;
     height: rem(25);
     border: rem(1) solid var(--color-main);
     border-radius: rem(4);
@@ -237,14 +232,17 @@ section.title{ padding : rem(8) 0 rem(17);}
   }
 }
 
-
 .grid_box {
-  .image{transition: transform 0.3s ease;}
-  &.open{
-    .image{transform:rotate(-180deg)}
+  .image {
+    transition: transform 0.3s ease;
+  }
+  &.open {
+    .image {
+      transform: rotate(-180deg);
+    }
   }
   .inner_box {
-    padding: rem(32) rem(40) rem(16) ;
+    padding: rem(32) rem(40) rem(16);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -269,20 +267,15 @@ section.title{ padding : rem(8) 0 rem(17);}
   //슬라이드 내용부분
   .content_box {
     border-top: rem(1) solid var(--color-line-04);
-    margin : 0 rem(40) 0;       
-    
+    margin: 0 rem(40) 0;
   }
 }
-
-
-
-
 
 .custom_input_wrapper {
   width: 100%;
   box-sizing: border-box;
   position: relative;
-  $transitionValues : 0.15s ease;
+  $transitionValues: 0.15s ease;
   display: block;
   overflow: hidden;
   border-radius: rem(12);
@@ -290,19 +283,19 @@ section.title{ padding : rem(8) 0 rem(17);}
   padding: rem(15) rem(25);
   transition: border-color, box-shadow $transitionValues;
   cursor: pointer;
-  
-  &:hover{
-    box-shadow: 0 0 rem(30) rgba(0,0,0,0.1);
+
+  &:hover {
+    box-shadow: 0 0 rem(30) rgba(0, 0, 0, 0.1);
   }
 
-  .custom_input_cont{
+  .custom_input_cont {
     // * CONTENTS CSS
     margin-bottom: rem(20);
   }
 
   .fake_checkbox {
     border-radius: rem(4);
-    overflow:hidden;
+    overflow: hidden;
     display: block;
     width: 100%;
     // height: 100%;
@@ -327,17 +320,18 @@ section.title{ padding : rem(8) 0 rem(17);}
     transition: opacity $transitionValues;
   }
 
-  &.checked{
-
+  &.checked {
     border-color: var(--color-main);
-     .fake_checkbox{
-        background-color: var(--color-main);
-        color: #fff;
-     }
-     .icon_checked{opacity: 1;}
+    .fake_checkbox {
+      background-color: var(--color-main);
+      color: #fff;
+    }
+    .icon_checked {
+      opacity: 1;
+    }
   }
 
-  input{ 
+  input {
     position: absolute;
     overflow: hidden;
     width: 0;
@@ -348,13 +342,36 @@ section.title{ padding : rem(8) 0 rem(17);}
   }
 }
 
-
-
-
 //구독 그람수 변경
 .content_inner_box {
   padding: 0 0 rem(16);
-  
+  // CSS 코드 추가 (220808월)
+  .selectBox {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+    justify-content: center;
+    .customSelect {
+      border: rem(1) solid var(--color-main);
+      border-radius: rem(12);
+      width: 100% !important;
+      box-sizing: border-box;
+      height: rem(50);
+      padding: 0 rem(10);
+      //max-width: rem(180);
+      input {
+        border-bottom: 0;
+        &:focus{
+          border:0 !important;
+        }
+      }
+      em {
+        right: calc(50% - #{rem(12)});
+        transform: translate(100%, -50%);
+      }
+    }
+  }
+
   .flex_box {
     display: flex;
     @include char(l14);
@@ -380,7 +397,7 @@ section.title{ padding : rem(8) 0 rem(17);}
           padding-top: rem(2);
         }
       }
-      
+
       .text3 {
         @include char(l15);
         padding-top: rem(10);
@@ -392,7 +409,7 @@ section.title{ padding : rem(8) 0 rem(17);}
         grid-template-columns: repeat(3, 1fr);
         padding-top: rem(30);
         padding-bottom: rem(43);
-        
+
         span {
           padding-left: rem(16);
           color: var(--color-main);
@@ -413,6 +430,7 @@ section.title{ padding : rem(8) 0 rem(17);}
           @include char(l18);
           background-color: var(--color-bg-02);
           padding: rem(14) 0 rem(14) rem(20);
+          border-radius: rem(12);
         }
         .bot_2 {
           border: rem(1) solid var(--color-main);
@@ -427,11 +445,10 @@ section.title{ padding : rem(8) 0 rem(17);}
             right: rem(16);
             width: rem(16);
             aspect-ratio: 1/1;
-
           }
         }
       }
-    
+
       .red_btn_box {
         width: rem(300);
         padding-bottom: rem(30);
@@ -455,8 +472,8 @@ section.title{ padding : rem(8) 0 rem(17);}
 
       width: rem(56);
       padding: rem(5) 0;
-      
-      background: #219F94;
+
+      background: #219f94;
       border-radius: rem(30);
       color: #fff;
       font-weight: 700;
@@ -482,7 +499,7 @@ section.title{ padding : rem(8) 0 rem(17);}
         .red_btn2 {
           width: 100%;
           max-width: rem(300);
-          background-color: #F9EDEC;
+          background-color: #f9edec;
           border-radius: rem(4);
           color: var(--color-main);
           padding: rem(14) 0;
@@ -500,29 +517,29 @@ section.title{ padding : rem(8) 0 rem(17);}
 .subscribePlan {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap:rem(15);
+  gap: rem(15);
 
-  ul li{display: block;}
-  .price{
+  ul li {
+    display: block;
+  }
+  .price {
     display: flex;
     flex-direction: column;
   }
-  .text2{
+  .text2 {
     font-weight: 700;
     font-size: 2rem;
     letter-spacing: -0.02em;
     text-align: center;
     padding-top: 0.0625rem;
   }
-  .desc{
-    color: var(--gray10)
+  .desc {
+    color: var(--gray10);
   }
-  .accent{
+  .accent {
     color: var(--color-main);
     font-weight: 400;
-
   }
-
 }
 
 .plan_box {
@@ -551,33 +568,29 @@ section.title{ padding : rem(8) 0 rem(17);}
     @include char(l16);
     text-align: center;
     letter-spacing: -0.06em;
-
   }
   .grid_box {
     display: grid;
     grid-template-rows: repeat(4, 1fr);
-  
+
     background-color: #f9f9f9;
     border-top: rem(1) solid var(--color-disabled);
     border-bottom: rem(1) solid var(--color-disabled);
 
     div {
-   
       border-bottom: rem(1) dashed var(--color-line-03);
       padding: rem(12) 0;
       text-align: center;
       &:last-child {
         border-bottom: rem(0);
       }
-
     }
-    .row{
+    .row {
       color: var(--color-font-sub);
     }
-    
-    * {
-      @include char(l16);      
 
+    * {
+      @include char(l16);
     }
     span {
       font-weight: 700;
@@ -602,7 +615,6 @@ section.title{ padding : rem(8) 0 rem(17);}
       @include char(l18);
       color: var(--color-font-sub2);
       text-decoration: line-through;
-
     }
   }
   .text2 {
@@ -610,7 +622,6 @@ section.title{ padding : rem(8) 0 rem(17);}
     text-align: center;
     line-height: 100%;
     padding-top: rem(1);
-
   }
 }
 .recipe_btn_box {
@@ -618,24 +629,23 @@ section.title{ padding : rem(8) 0 rem(17);}
   justify-content: center;
   align-items: center;
   padding-top: rem(40);
- 
+
   .btn {
     width: rem(300);
     @include char(l15);
-    padding : rem(15) 0; 
+    padding: rem(15) 0;
     text-align: center;
     background-color: var(--color-main);
     border-radius: rem(4);
-    color : #fff;
+    color: #fff;
     cursor: pointer;
   }
 }
 
-
 //구독 레시피 종류 변경
 
-
-section.recipe, .notice {
+section.recipe,
+.notice {
   text-align: center;
   .notice_row_1 {
     @include char(l18);
@@ -652,7 +662,7 @@ section.recipe, .notice {
     .color_box {
       width: 80%;
       max-width: rem(560);
-      background-color: #F9EDEC;
+      background-color: #f9edec;
       border-radius: rem(8);
       padding: 0 rem(19) rem(19);
       .color_box_row_1 {
@@ -681,8 +691,7 @@ section.recipe, .notice {
   }
 }
 
-
-.flex_box2{
+.flex_box2 {
   margin-top: rem(30);
   display: flex;
   grid-gap: rem(10);
@@ -691,7 +700,7 @@ section.recipe, .notice {
     // max-width: rem(200) ;
     .img_box {
       .image {
-        width: 100% ;
+        width: 100%;
         max-width: rem(170);
         aspect-ratio: 0.91/1;
       }
@@ -702,7 +711,6 @@ section.recipe, .notice {
     @include char(l18);
     font-weight: 500;
     font-family: var(--font-Gmarket-bold);
-
   }
   .row_2 {
     padding-top: rem(7);
@@ -722,17 +730,13 @@ section.recipe, .notice {
     font-weight: 600;
     text-decoration-line: underline;
   }
-
 }
-
-
-
 
 // 구독건너뛰기 css
 .content_inner_box4 {
   text-align: center;
   .text {
-    padding-bottom : rem(30);
+    padding-bottom: rem(30);
     @include char(l18);
     line-height: 140%;
   }
@@ -741,7 +745,7 @@ section.recipe, .notice {
     justify-content: center;
     column-gap: rem(60);
     padding-bottom: rem(45);
-    
+
     @include char(l16);
     font-weight: 600;
     label {
@@ -750,7 +754,7 @@ section.recipe, .notice {
       column-gap: rem(10);
 
       &:nth-child(2) {
-        color : var(--color-font-sub);
+        color: var(--color-font-sub);
       }
     }
   }
@@ -760,7 +764,7 @@ section.recipe, .notice {
     justify-content: center;
     @include char(l18);
     padding-bottom: rem(10);
-    >span {
+    > span {
       @include char(t28);
       color: var(--color-font-sub);
       padding: 0 rem(10);
@@ -771,7 +775,7 @@ section.recipe, .notice {
     align-items: center;
     justify-content: center;
     @include char(l18);
-    >span {
+    > span {
       @include char(t28);
       color: var(--color-main);
       padding: 0 rem(10);
@@ -791,7 +795,7 @@ section.recipe, .notice {
     display: flex;
     justify-content: center;
     padding-top: rem(23);
-    
+
     .btn {
       width: 100%;
       max-width: rem(300);
@@ -806,9 +810,6 @@ section.recipe, .notice {
   }
 }
 
-
-
-
 // 구독취소
 .content_inner_box5 {
   display: flex;
@@ -819,7 +820,7 @@ section.recipe, .notice {
   .title_text {
     padding: rem(40) 0 rem(27);
     @include char(l20);
-    font-weight :500;
+    font-weight: 500;
   }
   .text {
     padding-bottom: rem(60);
@@ -829,7 +830,7 @@ section.recipe, .notice {
     color: var(--color-font-sub);
   }
 
-  .check_box{
+  .check_box {
     width: 50%;
     position: relative;
 
@@ -849,12 +850,11 @@ section.recipe, .notice {
         color: var(--color-font-sub);
         padding-left: rem(10);
         line-height: 130%;
-      };
-    } /* 기본 체크박스 숨기기 */ 
+      }
+    } /* 기본 체크박스 숨기기 */
     .chk__box input[type='checkbox'] {
       display: none;
-      
-    } /* 선택되지 않은 체크박스 스타일 꾸미기 */ 
+    } /* 선택되지 않은 체크박스 스타일 꾸미기 */
     .chk__box .on {
       width: rem(20);
       height: rem(20);
@@ -863,12 +863,12 @@ section.recipe, .notice {
       display: flex;
       top: 0;
       left: 0;
-    } /* 선택된 체크박스 스타일 꾸미기 */ 
-    .chk__box input[type="checkbox"]:checked + .on {
-      background:var(--color-main);
-    } 
-    .on:after { 
-      content: "";
+    } /* 선택된 체크박스 스타일 꾸미기 */
+    .chk__box input[type='checkbox']:checked + .on {
+      background: var(--color-main);
+    }
+    .on:after {
+      content: '';
       width: rem(6);
       height: rem(10);
       border: solid #fff;
@@ -879,10 +879,10 @@ section.recipe, .notice {
       position: absolute;
       left: rem(6);
       top: rem(2);
-    } 
-    .chk__box input[type="checkbox"]:checked + .on:after {
+    }
+    .chk__box input[type='checkbox']:checked + .on:after {
       display: flex;
-    } 
+    }
     .on:after {
       width: rem(6);
       height: rem(10);
@@ -896,10 +896,10 @@ section.recipe, .notice {
       top: rem(2);
     }
 
-    .input_bg{
+    .input_bg {
       width: 100%;
     }
-    
+
     .input_box {
       border: rem(1) solid var(--color-line-03);
       color: var(--color-font-sub2);
@@ -916,7 +916,7 @@ section.recipe, .notice {
     text-align: center;
     @include char(l15);
     padding: rem(14) 0;
-    margin-top : rem(80);
+    margin-top: rem(80);
     border-radius: rem(5);
     cursor: pointer;
   }
@@ -1118,7 +1118,6 @@ section.recipe, .notice {
 //}
 
 @media (max-width: rem(1200)) {
-
   .content_box {
     .top_flex_box {
       .right_box {
@@ -1139,19 +1138,16 @@ section.recipe, .notice {
     }
   }
 
-  .flex_box2{
+  .flex_box2 {
     display: grid;
     grid-template-columns: 1fr 1fr;
     .recipe_choice_box {
       margin-top: rem(20);
     }
   }
-
 }
 
-
 @media (max-width: rem(1000)) {
-
   .title {
     .flex_box {
       .btn_box {
@@ -1176,51 +1172,50 @@ section.recipe, .notice {
       grid-template-columns: 1fr 1fr;
       position: relative;
 
-      li:first-child{
+      li:first-child {
         transform: translateY(rem(40));
 
-        h2{
-         padding-top: 0;
+        h2 {
+          padding-top: 0;
         }
       }
-     
-      li:nth-child(2){
+
+      li:nth-child(2) {
         position: absolute;
         left: 50%;
         transform: translateX(-50%);
         width: 60%;
-        em{
+        em {
           color: var(--color-main);
         }
       }
 
-      li:nth-child(3){
+      li:nth-child(3) {
         order: 2;
         transform: translateY(rem(60));
       }
 
-      li:last-child{
-        order:3;
+      li:last-child {
+        order: 3;
 
-        .text1{
+        .text1 {
           font-size: rem(18);
           line-height: rem(26);
-          
-          span{
+
+          span {
             font-size: rem(16);
           }
         }
-        .text2{
+        .text2 {
           font-size: rem(24);
         }
       }
     }
   }
 
-  .flex_box2{
+  .flex_box2 {
     grid-template-columns: 1fr;
   }
-
 
   .content_box {
     .top_flex_box {
@@ -1230,7 +1225,7 @@ section.recipe, .notice {
         order: 2;
         max-width: 100%;
       }
-      
+
       .right_box {
         padding: rem(20) rem(10);
 
@@ -1241,11 +1236,13 @@ section.recipe, .notice {
           grid-template-columns: repeat(3, 1fr);
           width: 100%;
 
-          .inner_mid_box{
+          .inner_mid_box {
             text-align: center;
           }
 
-          .inner_left_box, .inner_mid_box, .inner_right_box {
+          .inner_left_box,
+          .inner_mid_box,
+          .inner_right_box {
             width: auto;
             .row_2 {
               font-size: rem(16);
@@ -1255,12 +1252,9 @@ section.recipe, .notice {
       }
     }
   }
-
 }
 
-
 @media (max-width: rem(900)) {
-
   .toggleBox {
     padding: rem(16) rem(30);
   }
@@ -1270,61 +1264,58 @@ section.recipe, .notice {
     grid-gap: rem(10);
 
     .flex_box {
-
       .text {
         width: 100%;
       }
     }
   }
 
-  
   .content_inner_box {
-      .flex_box {
-        display: grid;
-        grid-template-columns: 1fr;
+    .flex_box {
+      display: grid;
+      grid-template-columns: 1fr;
 
-        .content_right_box {
-          padding-top: 0;
-          margin-top: rem(-10);
+      .content_right_box {
+        padding-top: 0;
+        margin-top: rem(-10);
 
-          .grid_box {
-            grid-template-columns: 1fr;
+        .grid_box {
+          grid-template-columns: 1fr;
 
-            .bot_1 {
-              display: block;
-              text-align: center;
-            }
-          }
-  
-          .red_btn_box {
-            width: 100%;
-            .red_btn {
-              max-width: 100%;
-            }
-          }
-
-          .flex_box {
-            display: grid;
-            grid-template-columns: 1fr;
-
-            .text1 {
-              transform: translate(rem(65), rem(-10));
-            }
-          }
-          
-          .text3 {
-            padding-top: rem(12);
+          .bot_1 {
+            display: block;
+            text-align: center;
           }
         }
-      }
 
+        .red_btn_box {
+          width: 100%;
+          .red_btn {
+            max-width: 100%;
+          }
+        }
+
+        .flex_box {
+          display: grid;
+          grid-template-columns: 1fr;
+
+          .text1 {
+            transform: translate(rem(65), rem(-10));
+          }
+        }
+
+        .text3 {
+          padding-top: rem(12);
+        }
+      }
+    }
 
     .flex_box.second {
       .content_right_box {
         margin-top: rem(-10);
         .red_btn_box2 {
           width: 100%;
-  
+
           .red_btn2 {
             max-width: 100%;
           }
@@ -1332,10 +1323,6 @@ section.recipe, .notice {
       }
     }
   }
-
-
-
-
 
   .add_page {
     .page_box {
@@ -1345,52 +1332,52 @@ section.recipe, .notice {
         .row_flex {
           display: none;
         }
-  
+
         .row_flex2 {
           grid-template-columns: rem(150) rem(40) 1fr;
           border: rem(1) solid var(--color-line-03);
           border-radius: rem(5);
           padding: rem(10) rem(15) rem(10) rem(5);
           margin-bottom: rem(10);
-  
+
           div {
-            &:nth-child(1){
-              
-              label{
+            &:nth-child(1) {
+              label {
                 transform: translateY(rem(10));
-                
               }
             }
-            
-            span{
+
+            span {
               display: inline-block;
             }
-  
-            &:nth-child(2){
+
+            &:nth-child(2) {
               text-align: left;
             }
 
-            &:nth-child(3){
+            &:nth-child(3) {
               order: 4;
               color: var(--color-font-sub2);
               font-weight: normal;
             }
-  
-            &:nth-child(4){
+
+            &:nth-child(4) {
               text-align: right;
               transform: translateY(50%);
             }
           }
         }
       }
-  
+
       .price {
         .price_flex_box {
           display: grid;
           grid-template-columns: 1fr;
           padding: 0;
-  
-          .col_1, .col_2, .col_3 {
+
+          .col_1,
+          .col_2,
+          .col_3 {
             display: flex;
             justify-content: space-between;
           }
@@ -1415,43 +1402,36 @@ section.recipe, .notice {
     }
     .d_day_text {
       font-size: rem(16);
-      >span {
+      > span {
         font-size: rem(20);
         padding: 0 rem(5);
       }
     }
     .d_day_text2 {
       font-size: rem(16);
-      >span {
+      > span {
         font-size: rem(20);
         padding: 0 rem(5);
       }
     }
   }
   .content_inner_box5 {
-    .check_box{
+    .check_box {
       width: 100%;
     }
 
-    .input_bg{
+    .input_bg {
       width: 100%;
     }
-    
+
     .input_box {
       width: 100%;
     }
   }
-
-  
-
-
 }
 
-
-
-
 @media (max-width: rem(600)) {
-  .title_text{
+  .title_text {
     text-align: center;
   }
 
@@ -1461,12 +1441,9 @@ section.recipe, .notice {
   //.add_page2 {
   //  width: 100%;
   //}
-
 }
 
-
 @media (max-width: rem(400)) {
-
   .title {
     .flex_box {
       .text {
@@ -1478,5 +1455,4 @@ section.recipe, .notice {
       }
     }
   }
-
 }
