@@ -7,7 +7,7 @@ import rem from '@util/func/rem';
 const Container = styled.div`
   overflow-y: scroll;
   height: ${(props) => props.height && rem(props.height)};
-  min-height: ${rem(1)};
+  min-height: 0;
   &::-webkit-scrollbar {
     width: ${(props) =>
       props.scrollBarWidth ? rem(props.scrollBarWidth) : rem(12)};
