@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import s from '/src/pages/mypage/subscribe/[subscribeId].module.scss';
 import CustomInput from '../atoms/CustomInput';
 import Image from 'next/image';
@@ -10,6 +10,7 @@ import {postObjData} from "/src/pages/api/reqData";
 import Modal_confirm from "/src/components/modal/Modal_confirm";
 import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 import {useModalContext} from "/store/modal-context";
+import {ToggleBoxContext} from "../atoms/ToggleBox";
 
 export const SubscribePlan = ({ subscribeInfo }) => {
   // console.log(subscribeInfo )
@@ -99,6 +100,7 @@ export const SubscribePlan = ({ subscribeInfo }) => {
     },
   ];
   const mct = useModalContext();
+  const tbContext = useContext( ToggleBoxContext );
   const initialMemberPlanName = subscribeInfo.info.planName;
   const [selectedPlanName, setSelectedPlanName] = useState(initialMemberPlanName);
   const [submitted, setSubmitted] = useState(false);
@@ -232,11 +234,11 @@ export const SubscribePlan = ({ subscribeInfo }) => {
           positionCenter
         />
       )}
-      <Modal_global_alert
+      {tbContext.visible &&   <Modal_global_alert
         message={modalMessage}
         onClick={submitted ? onSuccessChangeSubscribeOrder : onHideModal}
         background
-      />
+      />}
     </>
   );
 };

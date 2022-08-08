@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import s from './subscribeRecipe.module.scss'
 import 'swiper/css';
 import Image from 'next/image';
@@ -13,7 +13,8 @@ import popupWindow from "/util/func/popupWindow";
 import {useModalContext} from "/store/modal-context";
 import Modal_confirm from "/src/components/modal/Modal_confirm";
 import Modal_global_alert from "/src/components/modal/Modal_global_alert";
-import {valid_isTheSameArray} from "../../../util/func/validation/validationPackage";
+import {valid_isTheSameArray} from "/util/func/validation/validationPackage";
+import {ToggleBoxContext} from "../atoms/ToggleBox";
 
 
 const swiperSettings = {
@@ -47,6 +48,7 @@ const swiperSettings = {
 export const SubscribeRecipe = ({subscribeInfo}) => {
   
   const mct = useModalContext();
+  const tbContext = useContext( ToggleBoxContext );
   const initialInputType = subscribeInfo.info.planName === subscribePlanType.FULL.NAME ? 'checkbox' : 'radio';
   const curIngredient = subscribeInfo.recipe.ingredients;
   const [initialize, setInitialize] = useState(false);
@@ -311,11 +313,11 @@ export const SubscribeRecipe = ({subscribeInfo}) => {
           positionCenter
         />
       )}
-      <Modal_global_alert
+      {tbContext.visible && <Modal_global_alert
         message={modalMessage}
         onClick={submitted ? onSuccessChangeSubscribeOrder : onHideModal}
         background
-      />
+      />}
     </>
   );
 };

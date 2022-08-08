@@ -73,9 +73,9 @@ export const Modal_couponWithSubscribeApi = ({
 
   const onApplyingCoupon = async () => {
     // 이미 적용된 쿠폰일 경우 => ERRRO;
-    if (!selectedRadioInfo.couponId) return alert('선택된 쿠폰이 없습니다.');
+    if (!selectedRadioInfo.couponId) return mct.alertShow('선택된 쿠폰이 없습니다.');
     if (selectedRadioInfo.couponId === info.usingMemberCouponId)
-      return alert('이미 적용된 쿠폰입니다.');
+      return mct.alertShow('이미 적용된 쿠폰입니다.');
     const body = {
       memberCouponId: selectedRadioInfo.couponId,
       discount: selectedRadioInfo.discountAmount,

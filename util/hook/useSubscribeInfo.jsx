@@ -62,8 +62,8 @@ export const useSubscribeInfo = (subscribeId) => {
         
         const calcEveryPlanPrice = (plan)=>{
           const calcPriceList = memberRecipes.map(recipe => {
-            const gramConst = recipe.pricePerGram;
-            return calcSubscribePrices(plan, {gramConst: gramConst, oneMealGram: oneMealRecommendGram });
+            const pricePerGram = recipe.pricePerGram;
+            return calcSubscribePrices(plan, {pricePerGram: pricePerGram, oneMealGram: oneMealRecommendGram });
           });
           return calcAvgSubscribePrices(calcPriceList);
         }
@@ -100,6 +100,7 @@ export const useSubscribeInfo = (subscribeId) => {
             idList: curRecipeIdList,
             nameList: data.subscribeRecipeDtoList.map((list) => list.recipeName),
             ingredients: memberIngredients,
+            pricePerGram : memberRecipes.map(list=>list.pricePerGram),
             inStockInfoList: memberRecipes.map((list) => ({ [list.name]: list.inStock })),
             leakedInfoList: memberRecipes.map((list) => ({ [list.name]: list.leaked })),
             soldOut: isSoldOut, // 재고소진여부 -> 재고소진 시, 사이트 전역에서, 유저에게 알림메시지
@@ -141,12 +142,12 @@ export const useSubscribeInfo = (subscribeId) => {
 
 
 
-const calcSubscribePrices = (planName, recipe={gramConst: 0, oneMealGram: 0}) => {
-  const recipeGramConst = recipe.gramConst; // 1g 당 가격 상수 ( 어드민에서 입력한 값 )
+const calcSubscribePrices = (planType, recipe={pricePerGram: 0, oneMealGram: 0}) => {
+  const recipePricePerGram = recipe.pricePerGram; // 1g 당 가격 상수 ( 어드민에서 입력한 값 )
   const recipeOneMealGram= recipe.oneMealGram; // 한 팩(한 끼) 무게
-  const perPack = Number((recipeGramConst * recipeOneMealGram));
-  const totalNumberOfPacks = subscribePlanType[planName].totalNumberOfPacks;
-  const discountPercent = subscribePlanType[planName].discountPercent;
+  const perPack = Number((recipePricePerGram * recipeOneMealGram));
+  const totalNumberOfPacks = subscribePlanType[planType].totalNumberOfPacks;
+  const discountPercent = subscribePlanType[planType].discountPercent;
   return {
     perPack: perPack, // 팩당가격상수 * 무게
     originPrice: totalNumberOfPacks * perPack, // 할인 전 가격
@@ -160,21 +161,28 @@ const calcAvgSubscribePrices= (subscribePriceList) => {
   let perPack = subscribePriceList.map((r) => r.perPack).reduce((acc, cur) => acc + cur) / subscribePriceList.length;
   let originPrice =
     subscribePriceList.map((r) => r.originPrice).reduce((acc, cur) => acc + cur) / subscribePriceList.length;
-  let salePrice = subscribePriceList.map((r) => r.salePrice).reduce((acc, cur) => acc + cur) / subscribePriceList.length; // ! 1원 단위 절삭
-  const cutOffUnit = 10; // '10'원단위로 절사 (1원단위 버림)
-  perPack = Math.floor(perPack); // 팩당가격에서는 절사 하지 않음
+  let salePrice = subscribePriceList.map((r) => r.salePrice).reduce((acc, cur) => acc + cur) / subscribePriceList.length;
+  const cutOffUnit = 10; // ! '10'원단위로 절사 (= 1원단위 버림)
+  perPack = Math.floor(perPack);
   originPrice = Math.floor(originPrice / cutOffUnit) * cutOffUnit;
   salePrice = Math.floor(salePrice / cutOffUnit) * cutOffUnit;
   
   // ! 참고) 만약 고객 측에서 UI상의 salePrice 결과가 몇 원 차이나는 것에 대해 문의할 경우,
   //  => (숨김 처리한) 팩당 가격을 소수점 이하까지 계산해보면, 10원 단위로 절사한 가격임을 알 수 있음.
   return {
-    perPack,
-    originPrice,
-    salePrice,
+    perPack,  // ! 팩당가격 : 소수점 이하 버림
+    originPrice,  // ! 원가:  1원 단위 절사
+    salePrice,  // ! 판매가: 1원 단위 절사
   };
 }
 
+
+export const calcSubscribePrice = (planType, pricePerGramList, oneMealGram ) => {
+  const calcPriceList = pricePerGramList.map((pricePerGram) => {
+    return calcSubscribePrices(planType, { pricePerGram, oneMealGram });
+  });
+  return calcAvgSubscribePrices(calcPriceList);
+};
 
 
 ///////

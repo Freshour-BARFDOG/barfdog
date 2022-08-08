@@ -151,7 +151,7 @@ export const SubscribDashboard = ({ subscribeInfo }) => {
       {activeCouponModal && (
         <Modal_couponWithSubscribeApi data={info.coupon} event={{ hideModal: hideCouponModal }} setAlertModalMessage={setAlertModalMessage} setSubmitted={setSubmitted} />
       )}
-      <Modal_global_alert message={alertModalMessage} onClick={submitted && hideCouponModal} />
+      {activeCouponModal && <Modal_global_alert message={alertModalMessage} onClick={submitted && hideCouponModal}/>}
     </>
   );
 };
