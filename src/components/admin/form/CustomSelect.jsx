@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 
 const CustomSelect = ({
   id,
@@ -6,11 +6,10 @@ const CustomSelect = ({
   setFormValues,
   options = [],
   dataType = 'string',
+  className,
   style,
   ...props
 }) => {
-  
-
   const onChangeHandler = (e) => {
     const thisSelect = e.currentTarget;
     let value = thisSelect.value;
@@ -20,8 +19,8 @@ const CustomSelect = ({
     if (dataType.indexOf('number') >= 0) {
       value = Number(value);
     }
-  
-    if(id){
+
+    if (id) {
       setFormValues((prevState) => ({
         ...prevState,
         [id]: value,
@@ -29,7 +28,6 @@ const CustomSelect = ({
     } else {
       setFormValues(value);
     }
-
   };
 
   if (!options.length) return;
@@ -37,7 +35,7 @@ const CustomSelect = ({
   return (
     <>
       <select
-        className={`s.admin_select`}
+        className={`custom_select ${className}`}
         id={id}
         onChange={onChangeHandler}
         value={value || ''} /* IMPORTANT: to set Initial Value */
@@ -47,7 +45,11 @@ const CustomSelect = ({
         {options.map((option, i) => {
           // - option.inStock === undefined => inStock 항목이 존재하지 않을 경우, disabled 항목을 활성화 시키지 않음.
           return (
-            <option key={`${option}-${i}`} value={option.value} disabled={option.inStock === undefined ? false : !option.inStock}>
+            <option
+              key={`${option}-${i}`}
+              value={option.value}
+              disabled={option.inStock === undefined ? false : !option.inStock}
+            >
               {option.label}
             </option>
           );

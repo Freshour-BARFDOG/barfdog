@@ -3,7 +3,7 @@ import ScrollContainer from '../atoms/ScrollContainer';
 import React, {useEffect, useRef, useState} from 'react';
 import rem from "/util/func/rem";
 
-export const CustomSelectWithCustomOptions = ({id, options, value, setValues, placeholder, unit, width=120, dataType='sting'}) => {
+export const CustomSelectWithCustomOptions = ({id, options, value, setValues, placeholder, unit, width=120, dataType='sting',  className, onChange ,...props}) => {
   
   const initialSelectedOption = value || options[0].value;
   const [selectedOption, setSelectedOption] = useState(initialSelectedOption);
@@ -17,10 +17,14 @@ export const CustomSelectWithCustomOptions = ({id, options, value, setValues, pl
     if(dataType === 'number'){
       initValue = Number(initValue);
     }
-    setValues(prevState => ({
-      ...prevState,
-      [id]: initValue
-    }))
+  
+    if(setValues && typeof setValues === 'function'){
+      setValues( (prevState) => ({
+        ...prevState,
+        [id]: initValue,
+      }) );
+    }
+    
   }, [initialSelectedOption] );
   
   
@@ -58,10 +62,18 @@ export const CustomSelectWithCustomOptions = ({id, options, value, setValues, pl
     if(dataType === 'number'){
       value = Number(value);
     }
-    setValues( (prevState) => ({
-      ...prevState,
-      [id]: value,
-    }) );
+    if(setValues && typeof setValues === 'function'){
+      setValues( (prevState) => ({
+        ...prevState,
+        [id]: value,
+      }) );
+    }
+    
+    if(onChange && typeof onChange === 'function'){
+      onChange(value);
+    }
+    
+    
   };
   
   
@@ -82,7 +94,7 @@ export const CustomSelectWithCustomOptions = ({id, options, value, setValues, pl
   
   return (
     <>
-      <div className={s['customSelectWithOptions']} style={{ width: `${rem(width)}` }}>
+      <div className={`${s['customSelectWithOptions']} ${className}`} style={{ width: `${rem(width)}` }} {...props}>
         <input
           type="text"
           id={id}
@@ -91,7 +103,7 @@ export const CustomSelectWithCustomOptions = ({id, options, value, setValues, pl
           onChange={setValues}
           readOnly
           onClick={onActiveOptionBox}
-          className={'costomSelectInput'}
+          className={'customSelectInput'}
           ref={inputRef}
         />
         <em className={s.unit}>{unit}</em>
