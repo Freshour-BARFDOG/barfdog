@@ -29,8 +29,8 @@ export default function SubscribeInfoPage({data}) {
           <MypageWrapper>
             <SubscribDashboard subscribeInfo={subscribeInfo} />
 
-            <ToggleBox title="구독 그램(g) 변경" style={boxStyle}>
-              <SubscribeGram />
+            <ToggleBox title="구독 무게(g) 변경" style={boxStyle}>
+              <SubscribeGram subscribeInfo={subscribeInfo}/>
             </ToggleBox>
 
             <ToggleBox title="구독 플랜 변경" style={boxStyle}>
