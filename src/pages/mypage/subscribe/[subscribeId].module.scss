@@ -159,7 +159,7 @@ section.title{ padding : rem(8) 0 rem(17);}
 
       .flex_box3 {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         justify-content: center;
         column-gap: rem(40);
         padding-top: rem(8); 
@@ -214,14 +214,6 @@ section.title{ padding : rem(8) 0 rem(17);}
           br {
             display: none;
           }
-          
-          .row_3 {
-            border: rem(1) solid var(--color-main);
-            border-radius: rem(4);
-            color: var(--color-main);
-            width: rem(71);
-          }
-
         }
 
         .inner_right_box {
@@ -233,6 +225,15 @@ section.title{ padding : rem(8) 0 rem(17);}
         }
       }
     }
+  }
+  .coupon-btn{
+    box-sizing:border-box;
+    height: rem(25);
+    border: rem(1) solid var(--color-main);
+    border-radius: rem(4);
+    color: var(--color-main);
+    font-size: rem(15);
+    width: rem(71);
   }
 }
 

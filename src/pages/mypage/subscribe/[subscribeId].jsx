@@ -14,7 +14,7 @@ import {useSubscribeInfo} from "/util/hook/useSubscribeInfo";
 import {FullScreenLoading} from "/src/components/atoms/FullScreenLoading";
 
 export default function SubscribeInfoPage({data}) {
-  const subscribeId = data?.subscribeId;
+  const { subscribeId } = data;
   const subscribeInfo = useSubscribeInfo(subscribeId);
   const boxStyle = { boxShadow: '0 5px 1.25rem rgb(0 0 0 / 3%)' };
   
@@ -27,7 +27,7 @@ export default function SubscribeInfoPage({data}) {
       <Layout>
         <Wrapper>
           <MypageWrapper>
-            <SubscribDashboard />
+            <SubscribDashboard subscribeInfo={subscribeInfo} />
 
             <ToggleBox title="구독 그램(g) 변경" style={boxStyle}>
               <SubscribeGram />

@@ -15,16 +15,20 @@ function Modal_global_alert({ message, onClick, background,   ...props }) {
   useEffect(() => {
     callbackAfterAnimation(modalState);
     const scrollYPos = window.scrollY;
-    if(modalState){
+    if(modalState && scrollYPos){
       document.body.style.cssText = `
       position:fixed;
       top : -${scrollYPos}px;
     `;
       setTargetScrollYPos(scrollYPos)
+      window.scrollTo(0, parseInt(scrollYPos || targetScrollYPos));
     } else {
-      document.body.style.cssText = ``;
-      window.scrollTo(0, parseInt(targetScrollYPos));
+      // document.body.style.cssText = ``;
+      // window.scrollTo(0, parseInt(scrollYPos || targetScrollYPos));
     }
+    return (()=>{
+      document.body.style.cssText = ``;
+    })
   }, [modalState]);
   
 

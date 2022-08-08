@@ -10,8 +10,13 @@ export const useSubscribeInfo = (subscribeId) => {
     (async () => {
       try {
         const url = `/api/subscribes/${subscribeId}`;
-        const res = DUMMY_RESPONSE(subscribeId) || (await getData(url));
-        // console.log(res);
+        let res = await getData(url);
+        console.log(res)
+        /// ! TEST TEST TEST TEST TEST
+        if(res.status === 404 ) {
+          res = DUMMY_RESPONSE(subscribeId);
+        }
+        /// ! TEST TEST TEST TEST TEST
         const data = res.data;
         if (!data) return;
         const curRecipeIdList = data.subscribeRecipeDtoList.map((list) => list.recipeId);
@@ -60,7 +65,7 @@ export const useSubscribeInfo = (subscribeId) => {
             const gramConst = recipe.pricePerGram;
             return calcSubscribePrices(plan, {gramConst: gramConst, oneMealGram: oneMealRecommendGram });
           });
-          return calcAvgSubscribePrices(calcPriceList);;
+          return calcAvgSubscribePrices(calcPriceList);
         }
   
         const allPlanNameList = Object.keys(subscribePlanType);
@@ -72,7 +77,7 @@ export const useSubscribeInfo = (subscribeId) => {
           allPriceObj[key] = val;
         }
         
-        
+        // console.log(data)
         const DATA = {
           // 구독 기본 정보 + 구독정보의 Dashboard
           info: {
@@ -200,14 +205,34 @@ let DUMMY_RESPONSE = ( subscribeId) => ({
     ],
     memberCouponDtoList: [
       {
-        memberCouponId: 3104,
-        name: '관리자 직접 발행 쿠폰2',
+        memberCouponId: 49,
+        name: '관리자 직접 발행 쿠폰1',
         discountType: 'FIXED_RATE',
         discountDegree: 10,
-        availableMaxDiscount: 10000,
+        availableMaxDiscount: 100000,
         availableMinPrice: 5000,
         remaining: 3,
         expiredDate: '2022-07-25T09:56:38.693',
+      },
+      {
+        memberCouponId: 3200,
+        name: '관리자 직접 발행 쿠폰2',
+        discountType: 'FIXED_RATE',
+        discountDegree: 20,
+        availableMaxDiscount: 70000,
+        availableMinPrice: 50000,
+        remaining: 3,
+        expiredDate: '2022-08-25T09:56:38.693',
+      },
+      {
+        memberCouponId: 3104,
+        name: '쿠폰3',
+        discountType: 'FLAT_RATE',
+        discountDegree: 5000,
+        availableMaxDiscount: 1000000,
+        availableMinPrice: 5000,
+        remaining: 3,
+        expiredDate: '2022-09-25T09:56:38.693',
       },
     ],
     recipeDtoList: [

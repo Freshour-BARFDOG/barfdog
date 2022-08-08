@@ -32,7 +32,6 @@
     }
   }
   .content_box {
-
     .flex_box {
       display: grid;
       grid-template-columns: rem(25) 1fr rem(80) rem(100) rem(100);
@@ -42,7 +41,7 @@
 
       text-align: center;
       align-content: center;
-      &.header{
+      &.header {
         border: {
           top: rem(1) solid var(--color-line-01);
           bottom: rem(1) solid var(--color-line-01);
@@ -53,7 +52,7 @@
       font-weight: 600;
 
       .coupon_title {
-        grid-column: 1 /span 2;
+        grid-column: 1 / span 2;
       }
 
       > span:nth-child(1) {
@@ -65,31 +64,32 @@
       &.coupons {
         height: 100%;
         min-height: rem(50);
-        border-top:0;
+        border-top: 0;
         border-bottom: rem(1) solid var(--color-line-03);
-        .radio{
+        .radio {
           justify-content: center;
-          gap:rem(10);
+          gap: rem(10);
         }
-        .name{
+        > span {
+          color: var(--color-font-def);
+        }
+        .name {
           text-align: left;
           justify-content: flex-start;
           padding-left: rem(5);
         }
-        .price{
+        .price {
           color: var(--color-main);
         }
         > * {
           display: flex;
           align-items: center;
           justify-content: center;
-          font-weight:400 !important;
-          font-size:rem(14);
+          font-weight: 400 !important;
+          font-size: rem(14);
         }
       }
     }
-
-
 
     .flex_box2 {
       width: 100%;
@@ -114,6 +114,7 @@
           justify-content: flex-start;
         }
       }
+
       //
       //span {
       //  display: none;
@@ -155,6 +156,77 @@
   }
 }
 
+.calculator {
+  margin-top: rem(30);
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+  align-items: center;
+
+  p {
+    @include char(l15);
+    font-weight: 400;
+    padding-bottom: rem(10);
+    color: var(--color-font-def)
+  }
+  .text_price {
+    @include char(l18);
+    font-weight: 500;
+  }
+
+  .col_3 {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    span {
+      padding-left: rem(18);
+      color: var(--color-main);
+      @include char(l20);
+      font-weight: 600;
+    }
+  }
+  .line {
+    display: flex;
+    border-top: rem(1) solid var(--color-line-01);
+    width: rem(16);
+    height: rem(1);
+  }
+  .vertical_line {
+    display: flex;
+    border-right: rem(1) solid var(--color-line-03);
+    width: rem(1);
+    height: rem(40);
+  }
+}
+
+@media (max-width: rem(900)) {
+  .calculator {
+    .price_flex_box {
+      display: grid;
+      grid-template-columns: 1fr;
+      padding: 0;
+
+      .col_1,
+      .col_2,
+      .col_3 {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .line {
+        display: none;
+      }
+
+      .vertical_line {
+        width: 100%;
+        transform: rotate(0deg);
+        margin: rem(10) 0;
+      }
+    }
+  }
+}
+
 @media (max-width: rem(600)) {
   .modal-container {
     padding: rem(20) rem(25) !important;
@@ -172,8 +244,7 @@
     }
 
     .content_box {
-      .flex_box{
-
+      .flex_box {
         &.header {
           display: none;
         }
@@ -202,8 +273,8 @@
           span {
             display: block;
           }
-          
-          .name{
+
+          .name {
             padding-left: 0;
             align-items: flex-start;
           }

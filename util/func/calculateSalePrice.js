@@ -4,7 +4,7 @@ import {discountUnitType} from "/store/TYPE/discountUnitType";
 
 
 
-const calculateSalePrice = (originPrice, discountType, discountDegree) => {
+export default function calculateSalePrice (originPrice, discountType, discountDegree) {
   if (!originPrice) return;
 
   let salePrice;
@@ -21,12 +21,9 @@ const calculateSalePrice = (originPrice, discountType, discountDegree) => {
     salePrice = calculatedPrice;
   }
 
-  const trasformPriceObj = {
+
+  return {
     salePrice: transformLocalCurrency(salePrice),
     saleAmount: transformLocalCurrency(saleAmount),
-  };
-
-  return trasformPriceObj;
+  };;
 };
-
-export default calculateSalePrice;
