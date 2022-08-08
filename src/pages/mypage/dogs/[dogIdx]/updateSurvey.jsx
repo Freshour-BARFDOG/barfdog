@@ -229,11 +229,12 @@ export default function UpdateSurveyPage({ data }) {
 
 export async function getServerSideProps({ req, query }) {
   const { dogIdx } = query;
+  console.log(dogIdx)
 
   const getDogInfoApiUrl = `/api/dogs/${dogIdx}`;
   const dogInfoRes = await getDataSSR(req, getDogInfoApiUrl);
   const data = dogInfoRes.data || null;
-  data.dogIdx = Number(dogIdx); // form submit 에 사용
+  
   if (!data) {
     return {
       redirect: {
@@ -242,6 +243,8 @@ export async function getServerSideProps({ req, query }) {
       },
       props: { data: null },
     };
+  }else {
+    data.dogIdx = Number(dogIdx); // form submit 에 사용
   }
 
   return { props: { data } };
