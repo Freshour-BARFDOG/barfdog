@@ -1,7 +1,7 @@
 // SNS Swiper
 import React, { useEffect, useRef, useState } from 'react';
 import Styles from '@src/pages/mainPage.module.scss';
-import { Navigation } from 'swiper';
+import { Navigation, Autoplay } from 'swiper';
 import ArrowLeft_s from '@public/img/icon/swiper-arrow-small-l.svg';
 import ArrowRight_s from '@public/img/icon/swiper-arrow-small-r.svg';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -20,11 +20,12 @@ export function Swiper_sns() {
     loop: true,
     centeredSlides: false, // 가운데 갈지 말지 고민
     slidesPerView: 'auto',
+    autoplay: {delay: 2500, disableOnInteraction: false},
     navigation: {
       prevEl: navPrevRef.current,
       nextEl: navNextRef.current,
     },
-    modules: [Navigation],
+    modules: [Navigation, Autoplay],
     breakpoints: {
       100: {
         slidesPerView: 2,

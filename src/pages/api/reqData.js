@@ -146,8 +146,10 @@ export const postObjData = async (url, data, contType) => {
     })
     .catch((err) => {
       const error = err.response;
-      console.log('ERROR내용: ', err.response);
-      if (error.data.error || error.data.errors[0].defaultMessage) {
+      // console.log('ERROR내용: ', err.response);
+      if(!error.data){
+        result.error = '요청에 대응하는 데이터가 서버에 없습니다.';
+      } else if (error.data.error || error.data.errors[0].defaultMessage) {
         result.error = error.data.error || error.data.errors[0].defaultMessage;
       } else if (error?.data.error.error) {
         result.error = '서버와 통신오류가 발생했습니다.';

@@ -22,7 +22,7 @@ $logoWidth : rem(180);
 .inner{
   display: grid;
   padding-left: rem(10);
-  grid-template-columns: rem(30) minmax(100px, $logoWidth) 1fr;
+  grid-template-columns: rem(30) minmax(rem(100), $logoWidth) 1fr;
   align-items: center;
   column-gap: rem(20);
   justify-content: center;

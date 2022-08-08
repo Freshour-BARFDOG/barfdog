@@ -26,7 +26,7 @@ $browser-context:16; // html font-size:
 
 
 /* RESPONSIVE */
-@media (max-width:1200px){
+@media (max-width:rem(1200)){
     
   .container_outer{
     .container{
@@ -42,15 +42,15 @@ $browser-context:16; // html font-size:
   }
 
 }
-@media (max-width:1080px){
+@media (max-width:rem(1080)){
 
 }
 
-@media (max-width:768px){
+@media (max-width:rem(768)){
 
 }
 
-@media (max-width:600px){
+@media (max-width:rem(600)){
   .container_outer{
     .container{
       .row{

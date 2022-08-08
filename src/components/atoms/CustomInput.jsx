@@ -14,13 +14,16 @@ const CustomInput = ({
   disabled,
   initialize,
   backgroundColor,
+  option={label:'플랜 선택'},
   ...props
 }) => {
   const [isChecked, setIsChecked] = useState(false);
   useEffect(() => {
-    setIsChecked(false);
-    setSelectedRadio(false);
-    if (setSelectedCheckbox && typeof setSelectedCheckbox === 'function') setSelectedCheckbox([]);
+    if(initialize){
+      setIsChecked(false);
+      setSelectedRadio(false);
+      if (setSelectedCheckbox && typeof setSelectedCheckbox === 'function') setSelectedCheckbox([]);
+    }
   }, [type, setSelectedRadio, setSelectedCheckbox, initialize]);
 
   const onCheckboxInputHandler = (e) => {
@@ -75,7 +78,7 @@ const CustomInput = ({
         {type === 'radio' && <InputRadio />}
         {type === 'checkbox' && <InputCheckbox />}
         <span className={s.fake_checkbox}>
-          {(isChecked || selectedRadio === id )? '선택됨' : '플랜선택'}
+          {(isChecked || selectedRadio === id )? '선택됨' : option.label}
           <i className={s.icon_checked}>
             <Icon_Checked />
           </i>

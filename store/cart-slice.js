@@ -2,11 +2,10 @@ import { createSlice } from '@reduxjs/toolkit';
 
 
 const initialState = {
+  itemCount: 0,
   orderItemList: [],
   cartList: [],
-  info:{},
   subscribeOrder:{},
-  itemCount: 0,
 };
 
 const cartSlice = createSlice({
@@ -30,11 +29,12 @@ const cartSlice = createSlice({
     },
     setItemCount (state, action) {
       state.itemCount = action.payload.count;
-      // console.log(action.payload.count)
     },
     setSubscribeOrder (state, action) {
-      // console.log(action.payload.data)
       state.subscribeOrder = action.payload.data
+    },
+    changeSubscribeOrder (state, action) {
+      state.subscribeOrder = action.payload.data;
     }
   },
 });

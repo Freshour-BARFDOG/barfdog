@@ -9,7 +9,6 @@ export const EmptyContMessage = ({
       url: '',
       label: '',
     },
-    buttonLink: null,
   },
 }) => {
   return (

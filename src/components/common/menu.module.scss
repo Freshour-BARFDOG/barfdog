@@ -31,7 +31,7 @@ $menuPadding: 20;
 
     
     &:not(:last-child) a, &:not(:last-child) 
-    p{border-bottom: 1px solid var(--color-line-04);}
+    p{border-bottom: rem(1) solid var(--color-line-04);}
 
     > ul{
       background-color:#f4f4f4;
@@ -88,12 +88,12 @@ $menuPadding: 20;
           content: "";
           position: absolute;
           left: rem($menuPadding + 30);
-          top: calc(50% - 2px);
-          width: 5px;
-          height: 5px;
+          top: calc(50% - rem(2));
+          width: rem(5);
+          height: rem(5);
           transform: translateY(-50%);
-          border-left: 2px solid #333;
-          border-bottom: 2px solid #333;
+          border-left: rem(2) solid #333;
+          border-bottom: rem(2) solid #333;
           transition: border-color var(--ani-short);
         }
 

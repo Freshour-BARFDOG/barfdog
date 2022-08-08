@@ -47,13 +47,17 @@ $animationDuration : 0.2s;
         width: rem(180);
         height: rem(60);
         background-color :#fff;
-        border: 1px solid #EFEFEF;
+        border: rem(1) solid #EFEFEF;
         box-sizing: border-box;
         margin-left: rem(-1);
         transition-property: background-color, color;
         transition-timing-function: ease;
         transition-duration: $animationDuration;
         cursor: pointer;
+
+        &:last-child {
+          display: none;
+        }
 
         &.active{
           background-color: var(--color-main) !important;
@@ -83,7 +87,7 @@ $animationDuration : 0.2s;
   
   // .whatsraw {
   //   .bot_boxes {
-  //     margin: 0 20px 0;
+  //     margin: 0 rem(20) 0;
   //     .title_box {
   //       padding: rem(29) rem(10) rem(29);
 
@@ -99,7 +103,7 @@ $animationDuration : 0.2s;
   //         font-family: 'Pretendard Variable';
   //         font-style: normal;
   //         font-weight: 700;
-  //         font-size: 16px;
+  //         font-size: rem(16);
   //         line-height: 140%;
   //         letter-spacing: -0.02em;
   //         color: #CA1010;
@@ -113,7 +117,7 @@ $animationDuration : 0.2s;
   //         font-family: 'Noto Sans';
   //         font-style: normal;
   //         font-weight: 400;
-  //         font-size: 15px;
+  //         font-size: rem(15);
   //         line-height: 190%;
   //         letter-spacing: -0.02em;
   //         color: #202020;
@@ -171,7 +175,7 @@ $animationDuration : 0.2s;
     }
   // .line{
   //   margin: 0 rem(20) 0;
-  //   border: 1px solid #DDDDDD;
+  //   border: rem(1) solid #DDDDDD;
   //   }
   .text_box {
     display:none;
@@ -201,13 +205,41 @@ $animationDuration : 0.2s;
 @media (max-width: rem(600)) {
   .menu {
     .inner {
+      position: relative;
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 33.4%;
+        height: 50%;
+      }
+
       .boxes {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        grid-gap: 0px;
+        grid-gap: 0;
         .box {
           width: 100%;
+          border-top: 0;
+          border-right: 0;
+          &:first-child, &:nth-child(2) {
+            border-top: rem(1) solid #EFEFEF;
+          }
+          &:nth-child(3) {
+            border-top: rem(1) solid #EFEFEF;
+            border-right: rem(1) solid #EFEFEF;
+          }
+          &:last-child {
+            display: block;
+            border-bottom: 0;
+          }
+
           &.active{
+            width: 100%;
+          }
+          &:hover {
             width: 100%;
           }
         }
@@ -216,7 +248,7 @@ $animationDuration : 0.2s;
   }
 
   .bot {
-    margin-top: 20px;
+    margin-top: rem(20);
       
     .bot_box { 
       .title_box {

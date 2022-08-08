@@ -84,3 +84,51 @@ export const ItemRecommendlabel = ({ label, className, style }) => {
     </>
   );
 };
+
+
+const Icon_SoldOut = styled.em`;
+  width: 100%;
+  position:absolute;
+  left:0;
+  top:0;
+  right:0;
+  bottom:0;
+  background-color: rgba(255,255,255,0.7);
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  z-index: 1;
+  
+  i{
+    position: absolute;
+    top:15%;
+    width:100% ;
+    height: 100%;
+    border-radius:50%;
+    aspect-ratio: 1;
+    max-height: ${rem(120)};
+    max-width: ${rem(120)};
+    background-color: rgba(0,0,0,0.8);
+    color:#fff;
+    font-weight:500;
+    font-size:${rem(28)};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top:${rem(8)};
+    padding-left:${rem(2)};
+    box-sizing: border-box;
+    line-height: 1.1;
+  }
+`
+
+
+export const ItemSoldOutLabel = ({label})=>{ // 재고 없을 경우 ICON
+  
+  
+  return (<>
+    <Icon_SoldOut>
+      {label ? <i>{label}</i> : <i>SOLD OUT</i>}
+    </Icon_SoldOut>
+  </>)
+}

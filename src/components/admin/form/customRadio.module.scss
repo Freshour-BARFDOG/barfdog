@@ -50,7 +50,7 @@ $browser-context: 16;
       height: 0;
       line-height: 0;
       opacity: 0;
-      text-indent: -9999px;
+      text-indent: rem(-9999);
 
     }
     &.checked {

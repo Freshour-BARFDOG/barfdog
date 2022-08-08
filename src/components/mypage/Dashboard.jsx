@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import s from './dashboard.module.scss';
-import User_counter_viewer from './User_counter_viewer';
+import Dashboard_countViewer from './Dashboard_countViewer';
 import Image from 'next/image';
 import { IoMdLink, IoMdMail } from 'react-icons/io';
 import Modal_sendPhoneMessage from '@src/components/modal/Modal_sendPhoneMessage';
@@ -71,7 +71,7 @@ function Dashboard({ className, ...props }) {
                   {data.dog.dogName ? <><span>{data.dog.dogName}</span>&nbsp;견주</> : <span>대표반려견 없음</span>}
                 </em>
                 <em className={s.user_name}>
-                  <span>{data.name}</span>님
+                  <span>{data.name}</span>&nbsp;님
                 </em>
               </figcaption>
             </div>
@@ -107,13 +107,13 @@ function Dashboard({ className, ...props }) {
 
         <div className={s.user_counter}>
           <ul>
-            <User_counter_viewer title="배송예정" counter={data.deliveryCount} unit="건" />
-            <User_counter_viewer
+            <Dashboard_countViewer title="배송예정" counter={data.deliveryCount} unit="건" />
+            <Dashboard_countViewer
               title="적립금"
               counter={transformLocalCurrency(data.reward)}
               unit="원"
             />
-            <User_counter_viewer title="보유쿠폰" counter={data.couponCount} unit="개" />
+            <Dashboard_countViewer title="보유쿠폰" counter={data.couponCount} unit="개" />
           </ul>
         </div>
         {/* user_counter */}

@@ -21,7 +21,7 @@ const Counter = styled.i`
 `;
 
 
-function User_counter_viewer({title, counter, unit}) {
+function Dashboard_countViewer({title, counter, unit}) {
   return (
     <Viewer>
       <Title>{title}</Title>
@@ -32,4 +32,4 @@ function User_counter_viewer({title, counter, unit}) {
   );
 }
 
-export default User_counter_viewer;
+export default Dashboard_countViewer;

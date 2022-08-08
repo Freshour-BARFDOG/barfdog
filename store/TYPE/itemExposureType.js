@@ -1,4 +1,4 @@
 export const itemExposureType = {
   LEAKED:'LEAKED',
-  HIDDENL: 'HIDDEN'
+  HIDDEN: 'HIDDEN'
 }

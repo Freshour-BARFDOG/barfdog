@@ -99,9 +99,6 @@ export const OrdersheetAmountOfPayment = ({ info, form, setForm, event, formErro
           </PureCheckbox>
         </div>
       </section>
-      <section className={s.line}>
-        <hr />
-      </section>
     </>
   );
 };

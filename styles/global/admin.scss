@@ -492,7 +492,7 @@ $inputDefaultHeight: rem(38);
     .preview-wrap{
       display: grid;
       justify-content: flex-start;
-      grid-template-columns: repeat(auto-fill, 80px) ;
+      grid-template-columns: repeat(auto-fill, rem(80)) ;
       max-width: initial !important;
       > * {
         width:rem(80);

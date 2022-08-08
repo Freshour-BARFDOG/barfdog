@@ -18,7 +18,7 @@ import SurveyStep3 from '/src/components/survey/SurveyStep3';
 import getAbsoluteOffsetTop from '/util/func/getAbsoluteOffsetTop';
 import filter_emptyValue from '/util/func/filter_emptyValue';
 import filter_onlyNumber from '/util/func/filter_onlyNumber';
-import filter_extraIntegerNumberZeo from '/util/func/filter_extraIntegerNumberZeo';
+import filter_extraIntegerNumberZero from '/util/func/filter_extraIntegerNumberZero';
 import filter_ints from '/util/func/filter_ints';
 import filter_demicals from '/util/func/filter_demicals';
 import { dogCautionType } from '/store/TYPE/dogCautionType';
@@ -35,13 +35,13 @@ import { useRouter } from 'next/router';
 
 
 const initialFormValues = {
-  name: '테스트 반려견-', // 강아지이름 str
+  name: 'dog-', // 강아지이름 str
   gender: 'MALE', // 강아지 성별 str
   birth: '202201', // 강아지 생월 str // [YYYYMM]
   oldDog: false, // 노견 여부 boolean (checkbox type)
   dogSize: 'MIDDLE', // 강아지 체급 str
-  dogType: '삽살개', // 강아지 종 str
-  weight: '12.2', // 강아지 몸무게 str // 몸무게 소수점 아래 1자리
+  dogType: '닥스훈트', // 강아지 종 str
+  weight: '2.7', // 강아지 몸무게 str // 몸무게 소수점 아래 1자리
   neutralization: false, // 중성화여부 Boolean
   activityLevel: dogActivityLevelType.NORMAL, // 활동량 레벨 str
   walkingCountPerWeek: 1, // 주당 산책 횟수 num
@@ -121,7 +121,7 @@ export default function Survey() {
         filteredValue = filter_onlyNumber(filteredValue);
       }
       if (filteredType.indexOf('ints') >= 0) {
-        filteredValue = filter_extraIntegerNumberZeo(filteredValue);
+        filteredValue = filter_extraIntegerNumberZero(filteredValue);
         const thisFilteredType = filteredType
           .split(',')
           .filter((type) => type.indexOf('ints') >= 0)[0];
@@ -129,7 +129,7 @@ export default function Survey() {
         filteredValue = intNum ? filter_ints(filteredValue, intNum) : filteredValue;
       }
       if (filteredType.indexOf('demicals') >= 0) {
-        filteredValue = filter_extraIntegerNumberZeo(filteredValue);
+        filteredValue = filter_extraIntegerNumberZero(filteredValue);
         const thisFilteredType = filteredType
           .split(',')
           .filter((type) => type.indexOf('demicals') >= 0)[0];
@@ -241,6 +241,7 @@ export default function Survey() {
         errorMessage && errorMessages.push(`${++count}. ${errorMessage}\n`);
       }
       onShowModalHandler(errorMessages);
+      setSubmitState(null);
       // - prevent to the Next step when validation failed
       curBtn !== submitBtn && swiper.slidePrev();
     } else {
@@ -250,7 +251,13 @@ export default function Survey() {
   };
 
   const onSubmit = async () => {
+    console.log('제출버튼 클릭됐음');
     if (submitState === true) return;
+  
+    const errObj = validate(formValues, 3);
+    console.log(errObj )
+    const isPassed = valid_hasFormErrors(errObj);
+    if(!isPassed) return;
     const postFormValuesApiUrl = '/api/dogs';
     try {
       setIsLoading((prevState) => ({
@@ -258,7 +265,6 @@ export default function Survey() {
         submit: true,
       }));
       let modalMessage;
-      setSubmitState(true);
       const res = await postObjData(postFormValuesApiUrl, formValues);
       console.log(res);
       if (res.isDone) {
@@ -270,6 +276,7 @@ export default function Survey() {
         const curPath = router.pathname;
         await router.push(`${curPath}?surveyReportsId=${surveyReportsId}`);
         onShowModalHandler(modalMessage);
+        setSubmitState(true);
       } else {
         modalMessage = '내부 통신장애입니다. 잠시 후 다시 시도해주세요.';
         onShowModalHandler(modalMessage);

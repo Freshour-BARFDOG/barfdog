@@ -80,14 +80,22 @@ export default function SurveyStep3({ formValues, setFormValues, onInputChangeHa
   
   
   
+  
   useEffect( () => {
     // inedibleFoodEtc => inedibleFood의 formvalue가 'ETC'가 아닌 경우,
-    // {inedibleFoodEtc:'NONE'}
+    // console.log('inedibleFood',formValues.inedibleFood,'&& inedibleFoodETc',formValues.inedibleFoodEtc); // TEST
+    let inedibleFoodEtcValue = formValues.inedibleFood === dogInedibleFoodType.ETC ? formValues.inedibleFoodEtc :  dogInedibleFoodType.NONE ;
+    // console.log('inedibleFoodEtcValue: ',inedibleFoodEtcValue)
+    // 특별히 챙겨주고싶은부분: 기타항목 => value를 ''값으로 할당
+    inedibleFoodEtcValue = (formValues.inedibleFood === dogInedibleFoodType.ETC && inedibleFoodEtcValue === dogInedibleFoodType.NONE) ? null : inedibleFoodEtcValue;
     setFormValues((prevState) => ({
       ...prevState,
-      inedibleFoodEtc:
-        formValues.inedibleFood !== dogInedibleFoodType.ETC ? dogInedibleFoodType.NONE : '',
+      inedibleFoodEtc: inedibleFoodEtcValue
+      
     }));
+    
+    // ETC 일경우에는 '기존입력값' 또는 ''
+    // ETC가 아닐 경우에는 NONE
   }, [formValues.inedibleFood] );
   
   

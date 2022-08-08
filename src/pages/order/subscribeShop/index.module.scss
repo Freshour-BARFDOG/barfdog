@@ -1,8 +1,5 @@
-$browser-context: 16; // html font-size
-@function rem($px, $context: $browser-context) {
-  @return #{$px / $context}rem;
-}
-@import "../../../../styles/global/guide";
+@import "/styles/global/rem";
+@import "/styles/global/guide";
 
 section.order_title {
   padding: rem(80) 0 rem(150) 0;
@@ -59,7 +56,11 @@ section.regular_delivery {
         @include char(t24);
         line-height: 120%;
         font-weight:300;
-        max-width: rem(340);
+        //max-width: rem(340);
+        .accent{
+          font-weight:400 ;
+          margin-right: rem(4);
+        }
       }
 
       .grid_right {
@@ -679,7 +680,7 @@ section.regular_delivery {
       font-size: rem(15);
     }
     .notice_row_3 {
-      margin-bottom: rem(20);
+      margin-bottom: rem(50);
 
       .color_box {
         .color_box_row_1 {

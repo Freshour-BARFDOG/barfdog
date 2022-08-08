@@ -6,7 +6,7 @@ import SearchTextWithCategory from '/src/components/admin/form/searchBar/SearchT
 import s from "./channelTalk.module.scss";
 import Pagination from "/src/components/atoms/Pagination";
 import AmdinErrorMessage from "/src/components/atoms/AmdinErrorMessage";
-import ChannelTalkMemberList from "./ChannelTalkMemeberList";
+import ChannelTalkMemberList from "./ChannelTalkMemberList";
 
 
 const TEST_ITEM = [1,2,3,4,5];

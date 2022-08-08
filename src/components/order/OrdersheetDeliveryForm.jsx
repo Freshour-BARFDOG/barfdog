@@ -138,7 +138,7 @@ export const OrdersheetDeliveryForm = ({
               type={'text'}
               className={s.input_box}
               data-input-type={'number'}
-              placeholder={bundle ? '' : '‘-’없이 숫자만 입력'}
+              placeholder={bundle ? '' : '‘-’ 없이 숫자만 입력'}
               value={(!bundle && deliveryInfo.phone) || ''}
               onChange={onInputChangeHandler}
               disabled={bundle}
@@ -231,7 +231,6 @@ export const OrdersheetDeliveryForm = ({
               )}
               {orderType === 'subscribe' && <p>{info.recipeNameList?.join(', ')}</p>}
             </li>
-            <li></li>
             <li className={s.mid_box}>
               <span>배송방법</span>
               <p>배송 예정 일시</p>
