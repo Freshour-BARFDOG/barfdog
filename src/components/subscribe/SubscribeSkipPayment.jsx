@@ -10,10 +10,9 @@ import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 import CustomRadio from "/src/components/admin/form/CustomRadio";
 import {subscribePlanType} from "/store/TYPE/subscribePlanType";
 import transformDate from "/util/func/transformDate";
-import {calcChangedSubscribeDeliveryDate, calcNextSubscribeDeliveryDate} from "/util/func/calcNextSubscribeDeliveryDate";
+import {calcChangedSubscribeDeliveryDate} from "/util/func/calcNextSubscribeDeliveryDate";
 
 
-// ! 배송일정 계산기 => 수요일에 맞춰지도록!
 
 export const SubscribeSkipPayment = ({subscribeInfo}) => {
   // console.log(subscribeInfo);
