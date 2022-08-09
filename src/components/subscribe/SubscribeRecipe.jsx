@@ -15,6 +15,7 @@ import Modal_confirm from "/src/components/modal/Modal_confirm";
 import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 import {valid_isTheSameArray} from "/util/func/validation/validationPackage";
 import {ToggleBoxContext} from "../atoms/ToggleBox";
+import {FullScreenLoading} from "../atoms/FullScreenLoading";
 
 
 const swiperSettings = {
@@ -205,6 +206,7 @@ export const SubscribeRecipe = ({subscribeInfo}) => {
   };
   
   const onSuccessChangeSubscribeOrder = () => {
+    setIsLoading({reload:true});
     onHideModal();
     window.location.reload();
   };
@@ -212,6 +214,7 @@ export const SubscribeRecipe = ({subscribeInfo}) => {
   
   return (
     <>
+      {isLoading.reload && <FullScreenLoading/>}
       {isLoading.fetching ? <Spinner/> : <section className={s.recipe}>
         <h2 className={s.notice_row_1}>구매하실 레시피 한가지를 선택해 주세요</h2>
         <p className={s.notice_row_2}>
