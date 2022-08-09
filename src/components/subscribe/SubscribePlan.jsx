@@ -11,6 +11,7 @@ import Modal_confirm from "/src/components/modal/Modal_confirm";
 import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 import {useModalContext} from "/store/modal-context";
 import {ToggleBoxContext} from "../atoms/ToggleBox";
+import {FullScreenLoading} from "../atoms/FullScreenLoading";
 
 export const SubscribePlan = ({ subscribeInfo }) => {
   // console.log(subscribeInfo )
@@ -141,7 +142,7 @@ export const SubscribePlan = ({ subscribeInfo }) => {
       if (!res.isDone) {  // ! TEST CODE //
       // if (res.isDone) {  // ! PRODUCT CODE //
         setSubmitted(true);
-        onShowModal('맞춤레시피 변경이 완료되었습니다.');
+        onShowModal('플랜 변경이 완료되었습니다.');
       } else {
         onShowModal(`데이터 전송 실패\n${res.error}`);
       }
@@ -163,11 +164,13 @@ export const SubscribePlan = ({ subscribeInfo }) => {
   };
   
   const onSuccessChangeSubscribeOrder = () => {
+    setIsLoading({reload:true});
     onHideModal();
     window.location.reload();
   };
   return (
     <>
+      {isLoading.reload && <FullScreenLoading/>}
       <div className={`${s.flex_box} ${s.subscribePlan}`}>
         {planInfoList.map((info, index) => (
           <CustomInput

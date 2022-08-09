@@ -1,5 +1,5 @@
 import s from '/src/pages/mypage/subscribe/[subscribeId].module.scss';
-import React, {useContext, useState} from 'react';
+import React, { useContext, useState } from 'react';
 import Link from 'next/link';
 import { CustomSelectWithCustomOptions } from '/src/components/survey/CustomSelectWithCustomOptions';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
@@ -10,14 +10,12 @@ import Modal_confirm from '../modal/Modal_confirm';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import { postObjData } from '/src/pages/api/reqData';
 import { useModalContext } from '/store/modal-context';
-import {ToggleBoxContext} from "/src/components/atoms/ToggleBox";
-import {FullScreenLoading} from "/src/components/atoms/FullScreenLoading";
+import { ToggleBoxContext } from '/src/components/atoms/ToggleBox';
+import { FullScreenLoading } from '/src/components/atoms/FullScreenLoading';
 
 export const SubscribeGram = ({ subscribeInfo }) => {
-  
-  const tbContext = useContext( ToggleBoxContext );
+  const tbContext = useContext(ToggleBoxContext);
 
-  
   // console.log(subscribeInfo);
 
   const planType = subscribeInfo.plan.name;
@@ -43,12 +41,11 @@ export const SubscribeGram = ({ subscribeInfo }) => {
   const [form, setForm] = useState(initForm);
   const [isLoading, setIsLoading] = useState(false);
   const [activeConfirmModal, setActiveConfirmModal] = useState(false);
-  const [modalMessage, setModalMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
   const onInputChange = (value) => {
     const nextAmount = value;
-    const nextGram =  Number((form.originGram * (1 + nextAmount / 100)).toFixed(4)); // ! 1팩 당 무게: 최대 소수점 '4'자리
+    const nextGram = Number((form.originGram * (1 + nextAmount / 100)).toFixed(4)); // ! 1팩 당 무게: 최대 소수점 '4'자리
     const recipePricePerGramList = form.recipeInfo.pricePerGramList;
     const planType = form.planInfo.planType;
     const { perPack, originPrice, salePrice } = calcSubscribePrice(
@@ -80,7 +77,6 @@ export const SubscribeGram = ({ subscribeInfo }) => {
     }
     if (submitted) return console.error('이미 제출된 양식입니다.');
 
-
     const body = {
       gram: form.nextGram,
       totalPrice: form.nextSalePrice,
@@ -107,17 +103,16 @@ export const SubscribeGram = ({ subscribeInfo }) => {
     }
     setIsLoading(false);
   };
-  
 
   const onSuccessChangeSubscribeOrder = () => {
-    setIsLoading({reload:true});
+    setIsLoading({ reload: true });
     mct.alertHide();
     window.location.reload();
   };
 
   return (
     <>
-      {isLoading.reload && <FullScreenLoading/>}
+      {isLoading.reload && <FullScreenLoading />}
       <div className={s.content_inner_box}>
         <div className={s.flex_box}>
           <div className={s.content_left_box}>
@@ -129,8 +124,8 @@ export const SubscribeGram = ({ subscribeInfo }) => {
               <div className={s.text2}>반려견이 성견인데 몸무게 변화가 있으신가요?</div>
             </div>
             <div className={s.text3}>
-              아래 무게를 변경한 뒤 적용 버튼 눌러 주세요.<br/> 제조 전 등록해주셔야 변경사항이
-              적용 됩니다.
+              아래 무게를 변경한 뒤 적용 버튼 눌러 주세요.
+              <br /> 제조 전 등록해주셔야 변경사항이 적용 됩니다.
             </div>
 
             <div className={s.grid_box}>
@@ -217,11 +212,12 @@ export const SubscribeGram = ({ subscribeInfo }) => {
       {activeConfirmModal && (
         <Modal_confirm text={`무게 변경을 적용하시겠습니까?`} isConfirm={onSubmit} positionCenter />
       )}
-      {tbContext.visible && <Modal_global_alert
-        message={modalMessage}
-        onClick={submitted ? onSuccessChangeSubscribeOrder : mct.alertHide}
-        background
-      />}
+      {tbContext.visible && (
+        <Modal_global_alert
+          onClick={submitted ? onSuccessChangeSubscribeOrder : mct.alertHide}
+          background
+        />
+      )}
     </>
   );
 };
