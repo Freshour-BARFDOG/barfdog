@@ -39,6 +39,7 @@ section.title{ padding : rem(8) 0 rem(17);}
   .cont {
     padding: rem(27) 0 rem(16);
     border-top: rem(1) solid var(--color-line-04);
+    display: none;
   }
 }
 
@@ -737,6 +738,33 @@ section.recipe,
 }
 
 // 구독건너뛰기 css
+.customRadio-weeklySkipCount{
+  display: flex;
+  align-content: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: rem(290);
+  label[data-checked='false']{
+    color: var(--gray20);
+  }
+  label[data-checked='true']{
+    color: var(--color-font-def) !important;
+  }
+  input{
+    border:0;
+    border-color:transparent !important;
+  }
+  input:before{
+    opacity: 1;
+    width:rem(9);
+    height:rem(9);
+  }
+  input:not(:focus){
+    animation: show ;
+    background: var(--gray30);
+  }
+}
+
 .content_inner_box4 {
   text-align: center;
   .text {
@@ -756,7 +784,7 @@ section.recipe,
       display: flex;
       align-items: center;
       column-gap: rem(10);
-
+      font-size:rem(16) !important;
       &:nth-child(2) {
         color: var(--color-font-sub);
       }

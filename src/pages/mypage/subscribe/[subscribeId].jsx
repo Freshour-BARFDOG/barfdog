@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from '/src/components/mypage/MypageWrapper';
@@ -10,16 +10,17 @@ import { SubscribeSkipPayment } from '/src/components/subscribe/SubscribeSkipPay
 import { SubscribeCancle } from '/src/components/subscribe/SubscribeCancle';
 import { SubscribePlan } from '/src/components/subscribe/SubscribePlan';
 import { SubscribeRecipe } from '/src/components/subscribe/SubscribeRecipe';
-import {useSubscribeInfo} from "/util/hook/useSubscribeInfo";
-import {FullScreenLoading} from "/src/components/atoms/FullScreenLoading";
+import { useSubscribeInfo } from '/util/hook/useSubscribeInfo';
+import { FullScreenLoading } from '/src/components/atoms/FullScreenLoading';
 
-export default function SubscribeInfoPage({data}) {
+export default function SubscribeInfoPage({ data }) {
   const { subscribeId } = data;
   const subscribeInfo = useSubscribeInfo(subscribeId);
   const boxStyle = { boxShadow: '0 5px 1.25rem rgb(0 0 0 / 3%)' };
+
   
-  if(!subscribeInfo){
-    return <FullScreenLoading/>
+  if (!subscribeInfo) {
+    return <FullScreenLoading />;
   }
   return (
     <>
@@ -30,23 +31,23 @@ export default function SubscribeInfoPage({data}) {
             <SubscribDashboard subscribeInfo={subscribeInfo} />
 
             <ToggleBox title="구독 무게(g) 변경" style={boxStyle}>
-              <SubscribeGram subscribeInfo={subscribeInfo}/>
+              <SubscribeGram subscribeInfo={subscribeInfo} />
             </ToggleBox>
 
             <ToggleBox title="구독 플랜 변경" style={boxStyle}>
               <SubscribePlan subscribeInfo={subscribeInfo} />
             </ToggleBox>
 
-            <ToggleBox title="구독 레시피  변경" style={{ overflow:'hidden',...boxStyle }}>
+            <ToggleBox title="구독 레시피  변경" style={{ overflow: 'hidden', ...boxStyle }}>
               <SubscribeRecipe subscribeInfo={subscribeInfo} />
             </ToggleBox>
 
             <ToggleBox title="구독 건너뛰기" style={boxStyle}>
-              <SubscribeSkipPayment />
+              <SubscribeSkipPayment subscribeInfo={subscribeInfo} />
             </ToggleBox>
 
             <ToggleBox title="구독 취소" style={boxStyle}>
-              <SubscribeCancle />
+              <SubscribeCancle subscribeInfo={subscribeInfo} />
             </ToggleBox>
           </MypageWrapper>
         </Wrapper>
@@ -55,15 +56,12 @@ export default function SubscribeInfoPage({data}) {
   );
 }
 
-
 export async function getServerSideProps({ query }) {
-
   const { subscribeId } = query;
 
-
   const data = {
-    subscribeId
-  }
+    subscribeId,
+  };
 
   return { props: { data } };
 }

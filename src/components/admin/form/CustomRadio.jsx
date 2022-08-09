@@ -44,7 +44,7 @@ const CustomRadio = ({
         {idList.map((id, index) => {
           const convertedId = `${name}${id}`;
           return (
-            <label key={convertedId} htmlFor={convertedId}>
+            <label key={convertedId} htmlFor={convertedId} data-checked={selectedRadio === id}>
               <input
                 id={convertedId}
                 name={name}
