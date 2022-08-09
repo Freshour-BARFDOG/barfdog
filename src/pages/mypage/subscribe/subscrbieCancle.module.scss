@@ -110,3 +110,20 @@
   }
 }
 
+
+
+@media (max-width: rem(900)) {
+  .content_inner_box5 {
+    .check_box {
+      width: 100%;
+    }
+
+    .input_bg {
+      width: 100%;
+    }
+
+    .input_box {
+      width: 100%;
+    }
+  }
+}

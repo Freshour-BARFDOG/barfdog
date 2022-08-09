@@ -107,3 +107,59 @@ section.title{ padding : rem(8) 0 rem(17);}
     }
   }
 }
+
+
+@media (max-width: rem(900)) {
+  .toggleBox {
+    padding: rem(16) rem(30);
+  }
+
+  .title {
+    grid-template-columns: 1fr;
+    grid-gap: rem(10);
+
+    .flex_box {
+      flex-direction: column;
+
+      .title_text{
+        text-align: center;
+      }
+
+      .text {
+        width: 100%;
+      }
+    }
+  }
+
+}
+
+@media (max-width: rem(600)) {
+  .title_text {
+    text-align: center;
+  }
+
+  .toggleBox {
+    padding: rem(8) rem(20);
+
+    &:last-child {
+      margin-bottom: rem(100);
+    }
+  }
+  //.add_page2 {
+  //  width: 100%;
+  //}
+}
+
+@media (max-width: rem(400)) {
+  .title {
+    .flex_box {
+      .text {
+        line-height: rem(20);
+
+        br {
+          display: block;
+        }
+      }
+    }
+  }
+}
