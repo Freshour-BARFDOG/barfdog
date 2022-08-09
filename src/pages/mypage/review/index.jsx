@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from '/src/components/mypage/MypageWrapper';
@@ -18,26 +19,14 @@ import { global_reviewType } from '/store/TYPE/reviewType';
 import transformDate from '/util/func/transformDate';
 import { useRouter } from 'next/router';
 import { reviewStatusOnMemberPage } from '/store/TYPE/reviewStateType';
-import Modal_singleReviewImages from '../../../components/modal/Modal_singleReviewImages';
-import Modal_confirm from '../../../components/modal/Modal_confirm';
-import { deleteObjData } from '../../api/reqData';
-import { useDispatch, useSelector } from 'react-redux';
-import { userType } from '../../../../store/TYPE/userAuthType';
-import userStateSlice, { userStateAction } from '../../../../store/userState-slice';
+import Modal_singleReviewImages from '/src/components/modal/Modal_singleReviewImages';
+import Modal_confirm from '/src/components/modal/Modal_confirm';
+import { deleteObjData } from '/src/pages/api/reqData';
 
-const ModalExam = () => {
-  return (
-    <>
-      <section className={s.review_del}>
-        <div className={s.text}>후기를 삭제하시겠습니까?</div>
+import { userType } from '/store/TYPE/userAuthType';
+import userStateSlice, { userStateAction } from '/store/userState-slice';
 
-        <div className={s.btn_box}>
-          <div className={s.btn}>확인</div>
-        </div>
-      </section>
-    </>
-  );
-};
+
 
 export default function ReviewPage() {
   const searchWritableReivewApiUrl = '/api/reviews/writeable'; // 작성 가능한 후기
