@@ -9,7 +9,6 @@ import Link from 'next/link';
 import {useDispatch, useSelector} from 'react-redux';
 import { authAction } from '/store/auth-slice';
 import { IoIosArrowForward } from 'react-icons/io';
-import useUserData from '/util/hook/useUserData';
 import IconMypageOrderHIstory from '/public/img/icon/icon-mypage-orderHIstory.svg';
 import IconMypageCard from '/public/img/icon/icon-mypage-card.svg';
 import IconMypageSubscribe from '/public/img/icon/icon-mypage-subscribe.svg';
@@ -17,9 +16,9 @@ import IconMypageInvite from '/public/img/icon/icon-mypage-invite.svg';
 import IconMypageDogs from '/public/img/icon/icon-mypage-dogs.svg';
 import IconMypageUser from '/public/img/icon/icon-mypage-user.svg';
 import IconMypageReview from '/public/img/icon/icon-mypage-review.svg';
-import useDeviceState from "../../../util/hook/useDeviceState";
-import transformLocalCurrency from "../../../util/func/transformLocalCurrency";
-import {userType} from "../../../store/TYPE/userAuthType";
+import useDeviceState from "/util/hook/useDeviceState";
+import transformLocalCurrency from "/util/func/transformLocalCurrency";
+import {userType} from "/store/TYPE/userAuthType";
 
 
 
@@ -178,16 +177,30 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                   <div className={s.dashboard}>
                     <ul>
                       <li>
-                        <em className={s.num}>{data.deliveryCount}</em>
-                        <span className={s.text}>배송현황</span>
+                        <Link href="/mypage/delivery">
+                          <a>
+                            <em className={s.num}>{data.deliveryCount}</em>
+                            <span className={s.text}>배송현황</span>
+                          </a>
+                        </Link>
                       </li>
                       <li>
-                        <em className={s.num}>{transformLocalCurrency(data.reward)}</em>
-                        <span className={s.text}>적립금</span>
+                        <Link href="/mypage/reward">
+                          <a>
+                            <em className={s.num}>{transformLocalCurrency(data.reward)}</em>
+                            <span className={s.text}>적립금</span>
+                          </a>
+                        </Link>
+                       
                       </li>
                       <li>
-                        <em className={s.num}>{data.couponCount}</em>
-                        <span className={s.text}>쿠폰</span>
+                        <Link href="/mypage/coupon">
+                          <a>
+                            <em className={s.num}>{data.couponCount}</em>
+                            <span className={s.text}>쿠폰</span>
+                          </a>
+                        </Link>
+                      
                       </li>
                     </ul>
                   </div>
