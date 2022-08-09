@@ -106,3 +106,27 @@
     }
   }
 }
+
+
+@media (max-width: rem(900)) {
+
+  .content_inner_box4 {
+    .radio_box {
+      column-gap: rem(30);
+    }
+    .d_day_text {
+      font-size: rem(16);
+      > span {
+        font-size: rem(20);
+        padding: 0 rem(5);
+      }
+    }
+    .d_day_text2 {
+      font-size: rem(16);
+      > span {
+        font-size: rem(20);
+        padding: 0 rem(5);
+      }
+    }
+  }
+}

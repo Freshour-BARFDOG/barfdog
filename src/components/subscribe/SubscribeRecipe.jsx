@@ -243,6 +243,7 @@ export const SubscribeRecipe = ({subscribeInfo}) => {
                     <em>{'TEST, TEST2'}</em>에 못먹는 음식으로 체크해 주셨네요!&nbsp;
                   </>
                 )}
+                <br />
                 <em>{subscribeInfo.recipe.nameList.join(', ')}</em> 레시피에는 <em>&lsquo;{curIngredient}&rsquo;</em>
                 {checkStringUnderConsonant(curIngredient) ? '이' : '가'} 들어가 있습니다.
                 <br />

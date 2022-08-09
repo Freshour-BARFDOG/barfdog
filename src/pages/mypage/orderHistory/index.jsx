@@ -46,7 +46,7 @@ export default function OrderHistoryPage() {
                   {true && (
                     <EmptyContMessage
                       message={'주문한 상품내역이 없습니다.'}
-                      options={{ button: { url: '/shop?itemType=ALL', label: '숍 시작하기' } }}
+                      options={{ button: { url: '/shop?itemType=ALL', label: '상품 담기' } }}
                     />
                   )}
                   {true && <SingleItemList />}
