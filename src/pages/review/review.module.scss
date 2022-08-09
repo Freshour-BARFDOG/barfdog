@@ -302,12 +302,21 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
       color: #4d4d4d;
     }
     .images{
-      background-color: #fff;
-      display: grid;
-      grid-template-columns: 1fr;
-      min-height: rem(50);
+      background-color: var(--color-bg-02);
+      display: flex;
+      flex-direction: column;
+      
       .img-wrap{
         position: relative;
+        margin-top: rem(10);
+        max-width: rem(500);
+
+        span {
+          > img {
+            width: 100% !important;
+            max-width: rem(500) !important;
+          }
+        }
       }
     }
 

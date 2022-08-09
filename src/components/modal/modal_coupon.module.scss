@@ -63,7 +63,7 @@
 
       &.coupons {
         height: 100%;
-        min-height: rem(50);
+        min-height: rem(51);
         border-top: 0;
         border-bottom: rem(1) solid var(--color-line-03);
         .radio {
@@ -200,34 +200,34 @@
   }
 }
 
-@media (max-width: rem(900)) {
-  .calculator {
-    .price_flex_box {
-      display: grid;
-      grid-template-columns: 1fr;
-      padding: 0;
-
-      .col_1,
-      .col_2,
-      .col_3 {
-        display: flex;
-        justify-content: space-between;
-      }
-
-      .line {
-        display: none;
-      }
-
-      .vertical_line {
-        width: 100%;
-        transform: rotate(0deg);
-        margin: rem(10) 0;
-      }
-    }
-  }
-}
 
 @media (max-width: rem(600)) {
+  .calculator {
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 0;
+
+    .col_1,
+    .col_2,
+    .col_3 {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .line {
+      display: none;
+    }
+
+    .vertical_line {
+      height: 0;
+      width: 100%;
+      margin: 0 0 rem(10);
+      border-right: 0;
+      border-bottom: rem(1) solid var(--color-line-03);
+    }
+  }
+
+
   .modal-container {
     padding: rem(20) rem(25) !important;
     width: 100% !important;

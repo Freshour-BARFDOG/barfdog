@@ -113,7 +113,8 @@ section.pageline { padding-top : rem(40)}
 
 .line {
   hr {
-    border: rem(1) solid var(--color-line-03);
+    border: 0;
+    border-bottom: rem(1) solid var(--color-line-03);
   }
 }
 
@@ -186,7 +187,7 @@ section.pageline { padding-top : rem(40)}
             left: 50%;
             transform: translate(-50%, -50%) translateY(rem(3));
             width: rem(1);
-            height: rem(14);
+            height: rem(16);
             background-color: #ddd;
           }
 
