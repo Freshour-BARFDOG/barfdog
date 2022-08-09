@@ -1,0 +1,108 @@
+@import '/styles/global/rem';
+@import '/styles/global/guide';
+
+
+// 구독건너뛰기 css
+.customRadio-weeklySkipCount{
+  display: flex;
+  align-content: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: rem(290);
+  label[data-checked='false']{
+    color: var(--gray20);
+  }
+  label[data-checked='true']{
+    color: var(--color-font-def) !important;
+  }
+  input{
+    border:0;
+    border-color:transparent !important;
+  }
+  input:before{
+    opacity: 1;
+    width:rem(9);
+    height:rem(9);
+  }
+  input:not(:focus){
+    animation: show ;
+    background: var(--gray30);
+  }
+}
+
+.content_inner_box4 {
+  text-align: center;
+  .text {
+    padding-bottom: rem(30);
+    @include char(l18);
+    line-height: 140%;
+  }
+  .radio_box {
+    display: flex;
+    justify-content: center;
+    column-gap: rem(60);
+    padding-bottom: rem(45);
+
+    @include char(l16);
+    font-weight: 600;
+    label {
+      display: flex;
+      align-items: center;
+      column-gap: rem(10);
+      font-size:rem(16) !important;
+      &:nth-child(2) {
+        color: var(--color-font-sub);
+      }
+    }
+  }
+  .d_day_text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @include char(l18);
+    padding-bottom: rem(10);
+    > span {
+      @include char(t28);
+      color: var(--color-font-sub);
+      padding: 0 rem(10);
+    }
+  }
+  .d_day_text2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @include char(l18);
+    > span {
+      @include char(t28);
+      color: var(--color-main);
+      padding: 0 rem(10);
+    }
+  }
+
+  .picture_box {
+    padding-top: rem(24);
+    .image {
+      width: 100%;
+      max-width: rem(520);
+      aspect-ratio: 1.3/1;
+    }
+  }
+
+  .btn_box {
+    display: flex;
+    justify-content: center;
+    padding-top: rem(23);
+
+    .btn {
+      width: 100%;
+      max-width: rem(300);
+      background-color: var(--color-main);
+      border-radius: rem(4);
+      color: #fff;
+
+      @include char(l15);
+      padding: rem(14) 0;
+      cursor: pointer;
+    }
+  }
+}

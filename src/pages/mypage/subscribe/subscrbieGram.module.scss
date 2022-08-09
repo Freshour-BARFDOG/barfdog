@@ -1,0 +1,175 @@
+@import '/styles/global/rem';
+@import '/styles/global/guide';
+
+
+
+//구독 그람수 변경
+.content_inner_box {
+  padding: 0 0 rem(16);
+  // CSS 코드 추가 (220808 월)
+  .selectBox {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+    justify-content: center;
+    .customSelect {
+      border: rem(1) solid var(--color-main);
+      border-radius: rem(12);
+      width: 100% !important;
+      box-sizing: border-box;
+      height: rem(50);
+      //max-width: rem(180);
+      input {
+        border-bottom: 0;
+        &:focus{
+          border:0 !important;
+        }
+      }
+      em {
+        pointer-events: none;
+        right: calc(50% - #{rem(12)});
+        transform: translate(100%, -50%);
+      }
+    }
+  }
+
+  .flex_box {
+    display: flex;
+    @include char(l14);
+    column-gap: rem(0);
+    .content_left_box {
+      padding-right: rem(6);
+    }
+    .content_right_box {
+      width: 100%;
+      padding-top: rem(3);
+      .flex_box {
+        display: flex;
+        align-items: center;
+        .text1 {
+          @include char(l18);
+          font-weight: 600;
+          padding-right: rem(6);
+        }
+        .text2 {
+          font-weight: 600;
+          @include char(l16);
+          color: var(--color-font-sub);
+          padding-top: rem(2);
+        }
+      }
+
+      .text3 {
+        @include char(l15);
+        padding-top: rem(10);
+      }
+
+      .grid_box {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        padding-top: rem(30);
+        padding-bottom: rem(43);
+
+        span {
+          padding-left: rem(16);
+          color: var(--color-main);
+          @include char(l14);
+        }
+
+        row-gap: rem(32);
+        column-gap: rem(40);
+        .top_text {
+          @include char(l15);
+          color: var(--color-font-sub);
+          padding-bottom: rem(8);
+        }
+
+        .bot_1 {
+          cursor:default;
+          display: flex;
+          align-items: center;
+          @include char(l18);
+          background-color: var(--color-bg-02);
+          padding: rem(14) 0 rem(14) rem(20);
+          border-radius: rem(12);
+        }
+        .bot_2 {
+          border: rem(1) solid var(--color-main);
+          border-radius: rem(8);
+          @include char(l18);
+          padding: rem(14) 0;
+          text-align: center;
+          position: relative;
+
+          .image2 {
+            position: absolute;
+            right: rem(16);
+            width: rem(16);
+            aspect-ratio: 1/1;
+          }
+        }
+      }
+
+      .red_btn_box {
+        width: rem(300);
+        padding-bottom: rem(30);
+        .red_btn {
+          width: 100%;
+          max-width: rem(300);
+          background-color: var(--color-main);
+          border-radius: rem(4);
+          color: #fff;
+          padding: rem(14) 0;
+          text-align: center;
+          @include char(l15);
+          font-weight: 400;
+          cursor: pointer;
+        }
+      }
+    }
+    .btn {
+      display: flex;
+      justify-content: center;
+
+      width: rem(56);
+      padding: rem(5) 0;
+      background: #219F94;
+      border-radius: rem(30);
+      color: #fff;
+      font-weight: 700;
+    }
+  }
+
+  // B유형 css
+  .flex_box.second {
+    border-top: rem(1) solid var(--color-line-04);
+
+    .content_left_box {
+      margin-top: rem(31);
+    }
+
+    .content_right_box {
+      margin-top: rem(31);
+
+      .red_btn_box2 {
+        width: rem(300);
+        padding-top: rem(21);
+        padding-left: rem(1);
+
+        .red_btn2 {
+          width: 100%;
+          max-width: rem(300);
+          background-color: #F9EDEC;
+          border-radius: rem(4);
+          color: var(--color-main);
+          padding: rem(14) 0;
+          text-align: center;
+          @include char(l15);
+          font-weight: 400;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
