@@ -246,6 +246,7 @@ export default function DeliverInfoPage() {
                               target="_blank"
                               rel="noopener noreferrer"
                               onClick={onPopupHandler}
+                              data-order-id={item.orderDeliveryDto.orderId}
                             >
                               <button
                                 type={'button'}
@@ -284,11 +285,13 @@ export default function DeliverInfoPage() {
   );
 }
 
+
 const availableSearchDeliveryCondition = (deliveryStatus) => {
   return (
     deliveryStatus === orderStatus.DELIVERY_START || deliveryStatus === orderStatus.DELIVERY_DONE
   );
 };
+
 
 
 
