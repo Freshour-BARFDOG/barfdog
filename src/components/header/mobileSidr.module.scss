@@ -199,6 +199,10 @@ $bottom-menu-list-height: rem(50);
       aspect-ratio: 1/1;
       border-radius:50%;
       overflow: hidden;
+      background-image: url("../../.././public/img/mypage/Dog_basic.png");
+      background-repeat: no-repeat;
+      background-size: rem(30);
+      background-position: center;
     }
     .dogName{margin-right: rem(2);font-weight: 500;}
     .userName{font-size: rem(16); font-weight: 500;}
@@ -206,11 +210,13 @@ $bottom-menu-list-height: rem(50);
       font-size: rem(10);
       color: var(--color-font-sub2);
       padding: rem(0) rem(4);
-      border-radius: rem(30);
+      border-radius: rem(20);
       box-sizing: border-box;
-      border: rem(1.5) solid var(--color-line-02);
+      border: rem(1) solid var(--color-line-02);
       cursor: default;
       font-weight: 600;
+      height: rem(16);
+      line-height: 1.4;
     }
     .email{
       color:var(--color-font-medium);
