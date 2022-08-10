@@ -286,13 +286,13 @@ export const SubscribeRecipe = ({subscribeInfo}) => {
                   )}
                   {!rc.inStock && <ItemSoldOutLabel />}
                   <figure className={`${s.image} img-wrap`}>
-                    <Image
+                    {rc.thumbnailUri2 && <Image
                       className={'init-next-image'}
                       src={rc.thumbnailUri2}
                       objectFit="cover"
                       layout="fill"
                       alt="레시피 상세 이미지"
-                    />
+                    />}
                   </figure>
                   <p className={s.row_1}>{rc.uiNameEnglish}</p>
                   <p className={s.row_2}>{rc.uiNameKorean}</p>
