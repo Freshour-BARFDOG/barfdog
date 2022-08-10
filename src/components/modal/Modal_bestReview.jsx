@@ -143,7 +143,8 @@ export default function Modal_bestReview({ isActiveModal, setIsActiveModal, revi
                 </div>
                 <div className={s.row4}>
                   <ScrollContainer
-                    height={200}
+                    className={s.row4_scroll}
+                    height={220}
                     scrollBarWidth={info?.contents?.trim().length > 300 ? '10' : '0'}
                   >
                     {info.contents}
