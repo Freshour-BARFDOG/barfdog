@@ -26,7 +26,7 @@ export const RightContainer = ({ activeMenu, children }) => {
   return (
     <Container
       className={activeMenu === "right" ? 'active' : ""}
-      data-title="content-left-container"
+      data-title="content-right-container"
     >
       {children}
     </Container>
