@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from '/src/components/mypage/MypageWrapper';
@@ -17,10 +17,12 @@ import { EmptyContMessage } from '/src/components/atoms/emptyContMessage';
 import transformDate from '/util/func/transformDate';
 import popupWindow from '/util/func/popupWindow';
 import { orderStatus } from '/store/TYPE/orderStatusTYPE';
+import animateWindow from "/util/func/animateWindow";
 
 
 
 export default function DeliverInfoPage() {
+  
   // ! SERVER => 조리예정일(토일월) , 발송예정일자(수요일) 확인필요
   const ITEM_TYPE  = {
     GENERAL:'GENERAL',
@@ -28,27 +30,26 @@ export default function DeliverInfoPage() {
     
   }
   
-  const subscribeApiUrl = '/api/deliveries/subscribe'; // 작성 가능한 후기
-  const generalItemApiUrl = '/api/deliveries/general'; // 작성 가능한 후기
+  const subscribeApiUrl = '/api/deliveries/subscribe';
+  const generalItemApiUrl = '/api/deliveries/general';
   const searchPageSize = 10;
 
   const [isLoading, setIsLoading] = useState({});
   const [activeMenu, setActiveMenu] = useState('left');
   const [itemList, setItemList] = useState([]);
   const [itemType, setItemType] = useState( ITEM_TYPE.SUBSCRIBE );
-  const [scrollY, setScrollY] = useState( null );
+  
   
   useEffect( () => {
-    // 정기구독과 일반상품 => 각각 페이징이 존재하면서, 2개의 API를 사용해야하기 때문에, 페이지 최상단으로 scroll 위치가 변경됨 => 그것을 보완하기 위한 scroll Position
-    if(window && typeof window !== "undefined"){
+    // set Scroll Position
+    // 정기구독과 일반상품 => 각각 페이징이 존재하면서, 2개의 API를 사용해야하기 때문에,
+    // 페이지 최상단으로 scroll 위치 초기화를 보완
+    if(window && typeof window !== "undefined" ){
       const Y = window.scrollY;
-      setScrollY(Y);
-      window?.scrollTo(0, parseInt(scrollY));
+      animateWindow(Y);
     }
- 
-  }, [activeMenu, itemType] );
+  }, [activeMenu] );
   
-  // console.log(itemList);
 
   const pageInterCeptor = async (res) => {
     // console.log(res);
@@ -133,7 +134,7 @@ export default function DeliverInfoPage() {
                   <EmptyContMessage message={'배송 중인 정기구독 상품이 없습니다.'} />
                 ) : (
                   itemType === ITEM_TYPE.SUBSCRIBE && (
-                    <ul className={s.content_body}>
+                    <ul className={`${s.content_body} content_body`}>
                       {itemList.map((item, index) => (
                         <li key={`subscribe-item-list-${index}`} className={s.grid_box}>
                           <div className={s.col_1}>
