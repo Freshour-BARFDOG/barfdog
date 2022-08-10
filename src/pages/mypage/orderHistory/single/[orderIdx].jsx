@@ -102,13 +102,16 @@ function SingleItem_OrderHistoryPage(props) {
                 </div>
 
                 <hr className={Styles.line2} />
-
+                {/* TODO 서버에서 받은 아이템 리스트 */}
+                {
+                data?.orderItemDtoList.map((item,i) => (
+                <>
                 <div className={Styles.grid_box2}>
-                  <div className={Styles.col_6}>
+                  <div className={Styles.col_6} key={i}>
                     <div className={`${Styles.image} img-wrap`}>
                       <Image
                         priority
-                        src={require("public/img/mypage/order_history/subscribe_order_detail_1.png")}
+                        src={item.thumbnailUrl}
                         objectFit="cover"
                         layout="fill"
                         alt="카드 이미지"
@@ -116,42 +119,25 @@ function SingleItem_OrderHistoryPage(props) {
                     </div>
 
                     <div className={Styles.inner_text}>
-                      <p>바프레드</p>
+                      <p>{item.itemName}</p>
                     </div>
                   </div>
                   <ul className={Styles.col_9}>
-                    <div className={Styles.col_2}>1개</div>
-                    <div className={Styles.col_3}>86,900원</div>
+                    <div className={Styles.col_2}>{item.amount}개</div>
+                    <div className={Styles.col_3}>{transformLocalCurrency(item.finalPrice)}원</div>
                   </ul>
-                  <div className={Styles.col_8}>0원</div>
+                  
+                  { item.discountAmount > 0 ?
+                  <div className={Styles.col_7}>-${transformLocalCurrency(item.discountAmount)}원</div>
+                  : <div className={Styles.col_8}>0원</div>
+                  }
+                  
                   <div className={Styles.col_5}>결제완료</div>
                 </div>
-
-                <hr className={Styles.line2} />
-
-                <div className={Styles.grid_box2}>
-                  <div className={Styles.col_6}>
-                    <div className={`${Styles.image} img-wrap`}>
-                      <Image
-                        priority
-                        src={require("public/img/mypage/order_history/subscribe_order_detail_1.png")}
-                        objectFit="cover"
-                        layout="fill"
-                        alt="카드 이미지"
-                      />
-                    </div>
-
-                    <div className={Styles.inner_text}>
-                      <p>바프레드</p>
-                    </div>
-                  </div>
-                  <ul className={Styles.col_9}>
-                    <div className={Styles.col_2}>1개</div>
-                    <div className={Styles.col_3}>86,900원</div>
-                  </ul>
-                  <div className={Styles.col_8}>0원</div>
-                  <div className={Styles.col_5}>결제완료</div>
-                </div>
+                { i !== (data?.orderItemDtoList.length - 1) ? <hr className={Styles.line2} />:null}
+                </>
+                ))
+                }
               </section>
             </section>
 
@@ -199,10 +185,8 @@ function SingleItem_OrderHistoryPage(props) {
                       </li>
                       <li data-delivery-title={"배송상태"}>배송중</li>
                       <li>
-                        <button>
-                          <a href={`http://nexs.cjgls.com/web/service02_01.jsp?slipno=${data?.orderDto.deliveryNumber}`} target="_blank">
-                            배송조회
-                          </a>  
+                        <button onClick={()=>popupWindow(`http://nexs.cjgls.com/web/service02_01.jsp?slipno=${data?.orderDto.deliveryNumber}`)}>
+                          배송조회
                         </button>
                       </li>
                     </ul>
@@ -282,9 +266,7 @@ export default SingleItem_OrderHistoryPage;
 export async function getServerSideProps(ctx) {
   
   const { query, req } = ctx;
-  // console.log(query, req)
 
-  // const { orderIdx } = query;
   const orderIdx = query.orderIdx;
 
   let DATA = null;
@@ -294,9 +276,20 @@ export async function getServerSideProps(ctx) {
   console.log('SERVER REPONSE: ',res);
   const data = res?.data;
   console.log(data);
+
   if (data) {
     DATA = {
-      orderItemDtoList:data.orderItemDtoList,
+      orderItemDtoList: data.orderItemDtoList?.map((item) => ({
+        // orderItemId: item.id,
+        thumbnailUrl: item.thumbnailUrl,
+        selectOptionDtoList: item.selectOptionDtoList,
+        itemName: item.itemName,
+        amount: item.amount,
+        finalPrice: item.finalPrice,
+        discountAmount: item.discountAmount,
+        status: item.status,
+        saveReward: item.saveReward,
+      })),
       orderDto:{
         orderId: data.orderDto.orderId,
         merchantUid: data.orderDto.merchantUid,
