@@ -1,5 +1,5 @@
 
-export const global_itemType = {
+export const general_itemType = {
   ALL: 'ALL',
   RAW: 'RAW',
   TOPPING: 'TOPPING',
@@ -12,3 +12,9 @@ export const global_itemType = {
   }
 }
 
+
+export const productType = {
+  GENERAL:"GENERAL",
+  SUBSCRIBE:"SUBSCRIBE",
+
+}

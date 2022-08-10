@@ -31,23 +31,23 @@ export const CustomSelectWithCustomOptions = ({id, options, value, setValues, pl
   useEffect( () => {
     // HIDE Option
     const optionBox = optionBoxRef.current;
-    const input = inputRef.current;
-    if(window && typeof window !=='undefined' && optionBox && input){
+    const viewerInput = inputRef.current;
+    if(window && typeof window !=='undefined' && optionBox && viewerInput){
       document.body.addEventListener('click', (e)=>{
         let isBoxClicked = false;
         const clickedTarget = e.target;
-        const targetList = [clickedTarget, ...Array.from(clickedTarget.children)];
-        const exceptList = [input, optionBox, ...Array.from(optionBox.children)];
-        targetList.forEach((target)=>{
+        const clickedElemList = [clickedTarget, ...Array.from(clickedTarget.children)];
+        clickedElemList.forEach((target)=>{
           const targetClassName = target.className;
-          const exceptClassNameList = exceptList.map(list=>list.className);
+          // const exceptClassNameList = [input, optionBox, ...Array.from(optionBox.children)].map(list=>list.className);
+          const exceptClassNameList = [optionBox, ...Array.from(optionBox.children)].map(list=>list.className);
           if(exceptClassNameList.indexOf(targetClassName) >= 0){
             isBoxClicked = true;
             return;
           }
         })
-        if(!isBoxClicked){
-          setIsActive(false)
+        if(isBoxClicked || clickedTarget !== viewerInput){
+          setIsActive(false);
         }
       })
     }

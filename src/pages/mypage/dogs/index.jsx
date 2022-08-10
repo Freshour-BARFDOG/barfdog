@@ -257,10 +257,10 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
             <button type={'button'} onClick={onEditProfileImage}>
               프로필사진 편집
             </button>
-            <button type={'button'} data-button-type={'setRep'} onClick={onActiveConfirmModal}>
+            {!data.representative && <button type={'button'} data-button-type={'setRep'} onClick={onActiveConfirmModal}>
               대표견 설정
               {isLoading.rep && <Spinner />}
-            </button>
+            </button>}
           </div>
           {/* 설문결과 설문수정 결제하기 버튼3개 */}
         </div>

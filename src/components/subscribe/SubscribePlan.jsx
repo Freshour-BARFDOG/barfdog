@@ -188,7 +188,7 @@ export const SubscribePlan = ({ subscribeInfo }) => {
               <li className={s.plan_grid_1}>
                 <div className={s.img_box}>
                   <figure className={`${s.image} img-wrap`}>
-                    <Image src={info.imageUrl} objectFit="cover" layout="fill" alt="플랜 아이콘" />
+                    {info.imageUrl &&  <Image src={info.imageUrl} objectFit="cover" layout="fill" alt="플랜 아이콘" />}
                   </figure>
                 </div>
                 <h2>{info.name}</h2>

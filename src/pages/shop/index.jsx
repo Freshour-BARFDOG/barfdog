@@ -6,7 +6,7 @@ import s from './shop.module.scss';
 import Link from 'next/link';
 import Image from 'next/image';
 import RatingStars from '/src/components/atoms/RatingStars';
-import { global_itemType } from '/store/TYPE/itemType';
+import { general_itemType } from '/store/TYPE/itemType';
 import { itemSortQueryType } from '/store/TYPE/itemSortQueryType';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import { useRouter } from 'next/router';
@@ -23,7 +23,7 @@ const searchPageSize = 6; // 화면에 뿌릴 상품수
 
 const initialSearchValues = {
   sortBy: itemSortQueryType.RECENT,
-  itemType: global_itemType.ALL, // url Query is lowerCase
+  itemType: general_itemType.ALL, // url Query is lowerCase
 };
 
 export default function ShopPage() {
@@ -113,49 +113,49 @@ export default function ShopPage() {
             <div className={s.inner}>
               <div className={s.menu_box}>
                 <ul className={s.menu}>
-                  <li className={searchValues.itemType === global_itemType.ALL ? s.active : ''}>
+                  <li className={searchValues.itemType === general_itemType.ALL ? s.active : ''}>
                     <button
                       type={'button'}
                       onClick={onChagneItemType}
-                      data-item-type={global_itemType.ALL}
+                      data-item-type={general_itemType.ALL}
                     >
-                      {global_itemType.KOR.ALL}
+                      {general_itemType.KOR.ALL}
                     </button>
                   </li>
                   <li>
                     <hr />
                   </li>
-                  <li className={searchValues.itemType === global_itemType.RAW ? s.active : ''}>
+                  <li className={searchValues.itemType === general_itemType.RAW ? s.active : ''}>
                     <button
                       type={'button'}
                       onClick={onChagneItemType}
-                      data-item-type={global_itemType.RAW}
+                      data-item-type={general_itemType.RAW}
                     >
-                      {global_itemType.KOR.RAW}
+                      {general_itemType.KOR.RAW}
                     </button>
                   </li>
                   <li>
                     <hr />
                   </li>
-                  <li className={searchValues.itemType === global_itemType.TOPPING ? s.active : ''}>
+                  <li className={searchValues.itemType === general_itemType.TOPPING ? s.active : ''}>
                     <button
                       type={'button'}
                       onClick={onChagneItemType}
-                      data-item-type={global_itemType.TOPPING}
+                      data-item-type={general_itemType.TOPPING}
                     >
-                      {global_itemType.KOR.TOPPING}
+                      {general_itemType.KOR.TOPPING}
                     </button>
                   </li>
                   <li>
                     <hr />
                   </li>
-                  <li className={searchValues.itemType === global_itemType.GOODS ? s.active : ''}>
+                  <li className={searchValues.itemType === general_itemType.GOODS ? s.active : ''}>
                     <button
                       type={'button'}
                       onClick={onChagneItemType}
-                      data-item-type={global_itemType.GOODS}
+                      data-item-type={general_itemType.GOODS}
                     >
-                      {global_itemType.KOR.GOODS}
+                      {general_itemType.KOR.GOODS}
                     </button>
                   </li>
                 </ul>

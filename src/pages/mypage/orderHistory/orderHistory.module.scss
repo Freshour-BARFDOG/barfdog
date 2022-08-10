@@ -40,85 +40,96 @@ section.title{ padding : rem(8) 0 rem(30);}
 }
 
 
+.generalItem-container{
+  padding-top:rem(30);
 
-.item-container {
-  display: grid;
-  grid-template-columns: 1fr 0.15fr rem(140);
-  align-items: center;
-  padding: rem(10) 0 rem(20);
+  .day{
+    border-bottom: rem(1) solid var(--color-line-04);
+  }
 
-  .left_box {
+  hr{display: none;}
+
+  .item-container {
     display: grid;
-    grid-template-columns: rem(100) 1fr;
-    width: 100%;
+    grid-template-columns: 1fr rem(160) rem(160);
     align-items: center;
-    column-gap: rem(20);
+    padding: rem(10) 0 rem(20);
 
-    .image {
+    .left_box {
+      display: grid;
+      grid-template-columns: rem(100) 1fr;
       width: 100%;
-      max-width: rem(100);
-      aspect-ratio: 1/1;
-    }
+      align-items: center;
+      column-gap: rem(20);
 
-    .flex_box {
-      .text {
-        display: flex;
+      .image {
+        width: 100%;
+        max-width: rem(100);
+        aspect-ratio: 1/1;
+        background-color: var(--color-bg-02);
+        font-size: 0;
+      }
 
-        .last_text {
-          @include char(l18);
-          font-weight: 500;
+      .flex_box {
+        .text {
+          display: flex;
+
+          .last_text {
+            @include char(l18);
+            font-weight: 500;
+          }
+        }
+
+        .text2 {
+          display: grid;
+          grid-template-columns: rem(60) 1fr;
+          row-gap: rem(1);
+          column-gap: rem(20);
+          padding-top: rem(10);
+          color: var(--color-font-sub);
         }
       }
-      
-      .text2 {
-        display: grid;
-        grid-template-columns: rem(60) 1fr;
-        row-gap: rem(1);
-        column-gap: rem(20);
-        padding-top: rem(10);
-        color: var(--color-font-sub);
+    }
+
+
+    .mid_box {
+      text-align: center;
+    }
+    .right_box {
+      padding: 0 rem(10);
+      @include char(l15);
+      .btn {
+        padding: rem(14) 0;
+        text-align: center;
+        border: rem(1) solid var(--color-main);
+        border-radius: rem(4);
+        color: var(--color-main);
+      }
+      .btn2 {
+        padding: rem(14) 0;
+        margin-top: rem(8);
+        text-align: center;
+        border: rem(1) solid var(--color-line-02);
+        border-radius: rem(4);
+
       }
     }
   }
 
-
-  .mid_box {
-    text-align: left;
-  }
-  .right_box {
-    @include char(l15);
-    .btn {
-      padding: rem(14) 0;
-      text-align: center;
-      border: rem(1) solid var(--color-main);
-      border-radius: rem(4);
-      color: var(--color-main);
-    }
-    .btn2 {
-      padding: rem(14) 0;
-      margin-top: rem(8);
-      text-align: center;
-      border: rem(1) solid var(--color-line-02);
-      border-radius: rem(4);
-      
-    }
-  } 
 }
 
 
 
 
 .subscribeItem-container {
+  padding: rem(30) 0 ;
   .day {
     @include char(l16);
     font-weight: 600; 
     padding-bottom: rem(7);
-  }
-  > hr {
-    border: 0;
     border-bottom: rem(1) solid var(--color-line-04);
-  }
 
+  }
   .hr1{
     display: block;
   }
@@ -129,7 +140,7 @@ section.title{ padding : rem(8) 0 rem(30);}
 
   .content_body {
     display: grid;
-    grid-template-columns: 1fr 0.15fr rem(140);
+    grid-template-columns: 1fr rem(160) rem(160);
     align-items: center;
     padding-bottom: rem(10);
 
@@ -145,6 +156,9 @@ section.title{ padding : rem(8) 0 rem(30);}
         width: 100%;
         max-width: rem(100);
         aspect-ratio: 1/1;
+        background-color:  var(--color-bg-02);
+        font-size: 0;
+        text-indent: -9999px;
       }
 
       .flex_box {
@@ -194,14 +208,18 @@ section.title{ padding : rem(8) 0 rem(30);}
     }
 
     .mid_box {
-      text-align: left;
+      text-align: center;
     }
 
     .right_box {
-      width: rem(140);
+      width: 100%;
+
       @include char(l15);
+      padding: 0 rem(10);
+      box-sizing: border-box;
 
       .btn {
+        max-width: rem(140);
         padding: rem(14) 0;
         text-align: center;
         border: rem(1) solid var(--color-main);
@@ -218,7 +236,6 @@ section.title{ padding : rem(8) 0 rem(30);}
       }
     } 
   }
-
 }
 
 .pagination_box {

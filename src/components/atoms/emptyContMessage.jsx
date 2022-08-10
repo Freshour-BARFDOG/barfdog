@@ -10,12 +10,14 @@ export const EmptyContMessage = ({
       label: '',
     },
   },
+  children,
 }) => {
   return (
     <>
       <div className={s['empty-cont-box']}>
         <div className={s.inner}>
-          <pre className={s.text}>{message}</pre>
+          { message && <pre className={s.text}>{message}</pre>}
+          {children}
           {options.button.url && (
             <Link href={options.button.url} passHref>
               <a className={s.btn}>{options.button.label}</a>

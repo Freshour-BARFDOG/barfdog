@@ -1,8 +1,5 @@
-$browser-context:16; // html font-size
-@function rem($px, $context: $browser-context){
-  @return #{$px / $context}rem;
-}
-@import '../../../../styles/global/guide';
+@import '/styles/global/rem';
+@import '/styles/global/guide';
 
 
 
@@ -50,6 +47,15 @@ section.content_body { padding : rem(18) 0 0}
     grid-template-columns: 2fr 1fr 1fr 1fr rem(160);
     justify-items: center;
     align-items: center;
+    &.generalItem{
+      grid-template-columns: 1fr rem(160) rem(160);
+      .btn-section{
+        padding: rem(38) rem(10);
+        a{display: flex;}
+        button {width: 100%}
+
+      }
+    }
 
     border-bottom: rem(1) solid var(--color-line-03);
     &:last-child {
@@ -98,7 +104,8 @@ section.content_body { padding : rem(18) 0 0}
     .col_5 {
       width: 100%;
       padding: rem(38) 0 rem(38) rem(20);
-      justify-self: start;
+      box-sizing: border-box;
+      justify-self: flex-start;
       .btn {
         width: 88.9%;
         border: rem(1) solid var(--color-main);
@@ -113,6 +120,12 @@ section.content_body { padding : rem(18) 0 0}
 
       }
     }
+  }
+
+  button.disabled {
+    color: var(--color-disabled) !important;
+    background-color: var(--gray-v30);
+    border-color: var(--color-line-03) !important;
   }
 }
 

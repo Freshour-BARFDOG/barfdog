@@ -36,7 +36,8 @@ export default function RewardPage() {
     return newPageInfo;
   };
   
-  // console.log(itemList);
+  console.log(itemList);
+  const availableItems = itemList?.filter(item=>item.rewardStatus === rewardStatusType.SAVED).map(item=>item.tradeReward);
   return (
     <>
       <MetaTitle title="마이페이지 적립금" />
@@ -52,9 +53,9 @@ export default function RewardPage() {
                   <div className={s.left_box}>
                     사용 가능 적립금
                     {/* 적립금 => 직접계산 */}
-                    <span>{itemList.length > 0 ? transformLocalCurrency(itemList?.filter(item=>item.rewardStatus === rewardStatusType.SAVED).map(item=>item.tradeReward).reduce((acc, cur)=>acc+cur)) : 0}원</span>
+                    <span>{transformLocalCurrency(availableItems.length > 0 ? availableItems.reduce((acc, cur)=>acc+cur) : 0)}원</span>
                     {/*적립금 => 서버에서 받은 값 (적립금 발행 후에도, 변하지 않음 22.07.29)*/}
-                    {/*<span>{transformLocalCurrency(totalReward)}원</span>*/}
+                    <span>{transformLocalCurrency(totalReward)}원</span>
                   </div>
                   {/* 소멸예정 적립금 : 삭제됨(3월 2주 문서)*/}
                   {/*<div className={s.mid_box}>*/}
