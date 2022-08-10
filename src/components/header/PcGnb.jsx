@@ -3,7 +3,7 @@ import s from './header.module.scss';
 import { useModalContext } from '@store/modal-context';
 import MenuLayout, { SubmenuList } from '/src/components/header/MenuLayout';
 import SVG_subscribe from '/public/img/icon/subscribe.svg';
-import {global_itemType} from "../../../store/TYPE/itemType";
+import {itemType} from "../../../store/TYPE/itemType";
 
 
 const PcGnb = () => {
@@ -11,10 +11,10 @@ const PcGnb = () => {
     <>
       <Gnb_survey/>
       <MenuLayout title="샵">
-        <SubmenuList title="ALL" link={`/shop?itemType=${global_itemType.ALL}`} />
-        <SubmenuList title="생식" link={`/shop?itemType=${global_itemType.RAW}`}/>
-        <SubmenuList title="토핑" link={`/shop?itemType=${global_itemType.TOPPING}`}/>
-        <SubmenuList title="굿즈" link={`/shop?itemType=${global_itemType.GOODS}`}/>
+        <SubmenuList title="ALL" link={`/shop?itemType=${itemType.ALL}`} />
+        <SubmenuList title="생식" link={`/shop?itemType=${itemType.RAW}`}/>
+        <SubmenuList title="토핑" link={`/shop?itemType=${itemType.TOPPING}`}/>
+        <SubmenuList title="굿즈" link={`/shop?itemType=${itemType.GOODS}`}/>
       </MenuLayout>
       <MenuLayout title="레시피" link="/recipes"/>
       <MenuLayout title="커뮤니티">
