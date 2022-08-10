@@ -9,7 +9,7 @@ import SelectTag from '/src/components/atoms/SelectTag';
 import ToolTip from '/src/components/atoms/Tooltip';
 import { transformToday } from '/util/func/transformDate';
 import { global_reviewType } from '/store/TYPE/reviewType';
-import { itemType } from '/store/TYPE/itemType';
+import { general_itemType } from '/store/TYPE/itemType';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import { validate } from '/util/func/validation/validation_review';
 import { valid_couponCode, valid_hasFormErrors } from '/util/func/validation/validationPackage';
@@ -67,7 +67,7 @@ export default function CreateRewardPage({itemId}) {
 
   const defaultItemOptionList = [{ label: '상품 선택', value: '' }];
   const [itemOptionList, setItemOptionList] = useState(defaultItemOptionList);
-  const [singleItemCategory, setSingleItemCategory] = useState(itemType.ALL);
+  const [singleItemCategory, setSingleItemCategory] = useState(general_itemType.ALL);
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -240,13 +240,13 @@ export default function CreateRewardPage({itemId}) {
                             onChange={setSingleItemCategory}
                             initialValue={singleItemCategory}
                             options={[
-                              { label: itemType.KOR.ALL, value: itemType.ALL },
-                              { label: itemType.KOR.RAW, value: itemType.RAW },
+                              { label: general_itemType.KOR.ALL, value: general_itemType.ALL },
+                              { label: general_itemType.KOR.RAW, value: general_itemType.RAW },
                               {
-                                label: itemType.KOR.TOPPING,
-                                value: itemType.TOPPING,
+                                label: general_itemType.KOR.TOPPING,
+                                value: general_itemType.TOPPING,
                               },
-                              { label: itemType.KOR.GOODS, value: itemType.GOODS },
+                              { label: general_itemType.KOR.GOODS, value: general_itemType.GOODS },
                             ]}
                           />
                         </label>

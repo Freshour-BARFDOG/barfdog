@@ -1,5 +1,5 @@
 
-export const itemType = {
+export const general_itemType = {
   ALL: 'ALL',
   RAW: 'RAW',
   TOPPING: 'TOPPING',

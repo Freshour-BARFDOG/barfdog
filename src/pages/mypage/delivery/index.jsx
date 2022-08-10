@@ -10,25 +10,18 @@ import TabContentContainer, {
   RightContainer,
 } from '/src/components/atoms/TabContentContainer';
 import Tabmenu_TwoButton from '/src/components/atoms/Tabmenu_TwoButton';
-// import s from "../review/review.module.scss";
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import Spinner from '/src/components/atoms/Spinner';
 import { EmptyContMessage } from '/src/components/atoms/emptyContMessage';
 import transformDate from '/util/func/transformDate';
 import popupWindow from '/util/func/popupWindow';
-import { orderStatus } from '/store/TYPE/orderStatusTYPE';
 import animateWindow from "/util/func/animateWindow";
-
-
+import { orderStatus } from '/store/TYPE/orderStatusTYPE';
+import { productType} from "/store/TYPE/itemType";
 
 export default function DeliverInfoPage() {
   
   // ! SERVER => 조리예정일(토일월) , 발송예정일자(수요일) 확인필요
-  const ITEM_TYPE  = {
-    GENERAL:'GENERAL',
-    SUBSCRIBE:'SUBSCRIBE',
-    
-  }
   
   const subscribeApiUrl = '/api/deliveries/subscribe';
   const generalItemApiUrl = '/api/deliveries/general';
@@ -37,7 +30,7 @@ export default function DeliverInfoPage() {
   const [isLoading, setIsLoading] = useState({});
   const [activeMenu, setActiveMenu] = useState('left');
   const [itemList, setItemList] = useState([]);
-  const [itemType, setItemType] = useState( ITEM_TYPE.SUBSCRIBE );
+  const [itemType, setItemType] = useState( productType.SUBSCRIBE );
   
   
   useEffect( () => {
@@ -97,7 +90,7 @@ export default function DeliverInfoPage() {
       newPageNumber: pageData.number + 1,
       newItemList: activeMenu === 'left' ? subscribeItemList : generalItemList,
     };
-    setItemType(activeMenu === 'left' ? ITEM_TYPE.SUBSCRIBE : ITEM_TYPE.GENERAL);
+    setItemType(activeMenu === 'left' ? productType.SUBSCRIBE : productType.GENERAL);
     return newPageInfo;
   };
 
@@ -130,10 +123,10 @@ export default function DeliverInfoPage() {
               <LeftContainer activeMenu={activeMenu}>
                 {isLoading.fetching ? (
                   <EmptyContMessage> <Spinner/></EmptyContMessage>
-                ) : itemType === ITEM_TYPE.SUBSCRIBE && itemList.length === 0 ? (
+                ) : itemType === productType.SUBSCRIBE && itemList.length === 0 ? (
                   <EmptyContMessage message={'배송 중인 정기구독 상품이 없습니다.'} />
                 ) : (
-                  itemType === ITEM_TYPE.SUBSCRIBE && (
+                  itemType === productType.SUBSCRIBE && (
                     <ul className={`${s.content_body} content_body`}>
                       {itemList.map((item, index) => (
                         <li key={`subscribe-item-list-${index}`} className={s.grid_box}>
@@ -209,10 +202,10 @@ export default function DeliverInfoPage() {
                 {isLoading.fetching ? (
                   <EmptyContMessage> <Spinner/></EmptyContMessage>
                  
-                ) : itemType === ITEM_TYPE.GENERAL && itemList.length === 0 ? (
+                ) : itemType === productType.GENERAL && itemList.length === 0 ? (
                   <EmptyContMessage message={'배송 중인 일반 상품이 없습니다.'} />
                 ) : (
-                  itemType === ITEM_TYPE.GENERAL && (
+                  itemType === productType.GENERAL && (
                     <ul className={s.content_body}>
                       {itemList.map((item, index) => (
                         <li key={`general-item-list-${index}`} className={`${s.grid_box} ${s.generalItem}`}>

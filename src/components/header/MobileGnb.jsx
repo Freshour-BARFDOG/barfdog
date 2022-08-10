@@ -5,7 +5,7 @@ import { useModalContext } from '/store/modal-context';
 import useDeviceState from '/util/hook/useDeviceState';
 import { IoIosArrowDown } from 'react-icons/io';
 import { useRouter } from 'next/router';
-import { itemType } from '/store/TYPE/itemType';
+import { general_itemType } from '/store/TYPE/itemType';
 
 const menuNameObj = {
   shop: 'shop',
@@ -80,10 +80,10 @@ export default function MobileGnb() {
               activeMenuId === menuNameObj.shop ? s.active : ''
             }`}
           >
-            <MobileMenu title="ALL" link={`/shop?itemType=${itemType.ALL}`} />
-            <MobileMenu title="생식" link={`/shop?itemType=${itemType.RAW}`} />
-            <MobileMenu title="토핑" link={`/shop?itemType=${itemType.TOPPING}`} />
-            <MobileMenu title="굿즈" link={`/shop?itemType=${itemType.GOODS}`} />
+            <MobileMenu title="ALL" link={`/shop?itemType=${general_itemType.ALL}`} />
+            <MobileMenu title="생식" link={`/shop?itemType=${general_itemType.RAW}`} />
+            <MobileMenu title="토핑" link={`/shop?itemType=${general_itemType.TOPPING}`} />
+            <MobileMenu title="굿즈" link={`/shop?itemType=${general_itemType.GOODS}`} />
           </ul>
           <ul
             className={`${s['mobile-submenu']} ${
