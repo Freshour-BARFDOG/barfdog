@@ -134,25 +134,28 @@ section.content_title { padding :0 0 rem(31) }
   .body_content_3 {
     padding: rem(10) 0 rem(75);
 
-    > p {
+    > * {
+      height: rem(48);
+    }
+    > p.emptyCont {
       color: var(--color-font-sub);
       text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .content_grid{
       width: 100%;
       display: grid;
       // grid-template-columns: rem(120) rem(80) 1fr rem(100) rem(140);
-      grid-template-columns: 1fr rem(100) rem(140);
-      text-align: center;
+      grid-template-columns: rem(150) 1fr rem(160) rem(140);
+      text-align: left;
       align-items: center;
 
-      li:first-child{
+      li{
         text-align: left;
-
-        span{
-          margin-right: rem(10);
-        }
+        &.deliveryStatus{text-align: center;}
       }
       button{
         color: var(--color-main);
