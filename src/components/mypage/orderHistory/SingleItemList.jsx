@@ -10,7 +10,7 @@ import {orderStatus} from "/store/TYPE/orderStatusTYPE";
 
 
 export const SingleItemList = ({ itemList }) => {
-  console.log(itemList);
+  // console.log(itemList);
   // ! 주문상세보기 링크????
   return (
     <ul className={s['generalItem-container']}>
@@ -40,10 +40,10 @@ export const SingleItemList = ({ itemList }) => {
                     </span>
                   </div>
                   <div className={s.text2}>
-                    <span>주문번호</span>
-                    <span>{item.orderDto.merchantUid}</span>
-                    <span>결제금액</span>
-                    <span>{transformLocalCurrency(item.orderDto.paymentPrice)}원</span>
+                    <p><span>주문번호</span>
+                      <span>{item.orderDto.merchantUid}asdklfjasdlkfjasdklfjasdlkfj</span></p>
+                    <p><span>결제금액</span>
+                      <span>{transformLocalCurrency(item.orderDto.paymentPrice)}원</span></p>
                   </div>
                 </div>
               </div>
