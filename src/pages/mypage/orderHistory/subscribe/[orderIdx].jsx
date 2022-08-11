@@ -3,7 +3,7 @@ import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from '/src/components/mypage/MypageWrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
-import s from 'src/pages/mypage/orderHistory/ordersheet.module.scss';
+import s from 'src/pages/mypage/orderHistory/orderHistoryOrdersheet.module.scss';
 import Image from 'next/image';
 import { getDataSSR } from '/src/pages/api/reqData';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
@@ -15,6 +15,8 @@ import {orderStatus} from "/store/TYPE/orderStatusTYPE";
 
 
 export default function SubScribe_OrderHistoryPage(props) {
+  
+
   const data = props.data;
   // console.log(data);
 
@@ -103,7 +105,6 @@ export default function SubScribe_OrderHistoryPage(props) {
                 <div className={s.grid_box}>
                   <span>주문번호</span>
                   <span>{data?.orderDto.merchantUid}</span>
-
                   <span>주문(결제)일시</span>
                   <span>{transformDate(data?.orderDto.orderDate, 'time', {seperator: '/'})}</span>
                   <span>배송정보</span>

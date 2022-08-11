@@ -424,8 +424,8 @@ export const valid_couponCode = (val) => {
     error = '한글은 포함될 수 없습니다.';
   } else if (pattern_spChar.test(val)) {
     error = `${availableSpecialChar}외의 특수문자는 포함될 수 없습니다.`;
-  } else if (!pettern_mixedChar) {
-    error = '영문 및 숫자가 포함되어야합니다.';
+  // } else if (!pettern_mixedChar) {
+  //   error = '영문 및 숫자가 포함되어야합니다.';
   } else if (codeLength > maxLength) {
     error = '코드 글자 수는 15자 이내입니다.';
   }

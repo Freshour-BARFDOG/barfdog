@@ -43,6 +43,16 @@ export const orderStatus = {
   },
 };
 
+
+export const availableCancelStatus = (status)=>{
+  let valid;
+  const availableCancleStateList = [orderStatus.BEFORE_PAYMENT, orderStatus.PAYMENT_DONE, orderStatus.PRUDUCING ,orderStatus.DELIVERY_READY];
+  valid = availableCancleStateList.indexOf(status) >= 0;
+  return valid;
+  
+}
+
+
 /* - 구매확정
 <구독상품>
 1. 정기결제 상품 > 배송완료 직후
