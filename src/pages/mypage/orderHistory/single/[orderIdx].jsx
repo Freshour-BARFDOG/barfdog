@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import s from 'src/pages/mypage/orderHistory/orderHistoryOrdersheet.module.scss';
-import { availableCancelStatus, orderStatus } from '/store/TYPE/orderStatusTYPE';
+import { orderStatus } from '/store/TYPE/orderStatusTYPE';
 import { paymentMethodType } from '/store/TYPE/paymentMethodType';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
@@ -10,23 +10,40 @@ import Image from 'next/image';
 import { getDataSSR } from '/src/pages/api/reqData';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import popupWindow from '/util/func/popupWindow';
-
 import { valid_deliveryCondition } from '/util/func/validation/valid_deliveryCondition';
 import transformDate from '/util/func/transformDate';
 import Modal_confirm from '/src/components/modal/Modal_confirm';
 import { transformPhoneNumber } from '/util/func/transformPhoneNumber';
+import { Modal_changeItemOrderState } from '/src/components/modal/Modal_changeItemOrderState';
+import { filter_availableReturnAndExchangeItemList } from '/util/func/filter_availableReturnAndExchangeItemList';
+import { valid_availableCancelOrder } from '/util/func/validation/valid_availableCancelOrder';
+
+// ! =====> 상품정보란 보완필요
+// ! =====> 배송완료 시점필요
+// ! =====> 환불금액 총합 , 환불배송비 계산
 
 export default function SingleItem_OrderHistoryPage({ data }) {
-  // ! ====================> 상품정보란 보완필요
-  // ! =====> 배송완료 상태 이후 교환신청, 반품신청 버튼 나타남
-  // const data = props.data;
-  console.log(data);
-
-  const [activeConfirmModal, setActiveConfirmModal] = useState(false);
+  // console.log(data)
+  const originItemList = data.orderItemDtoList;
+  const [activeModal, setActiveModal] = useState(false);
   const [confirmMessage, setConfirmMessage] = useState('');
   const [confirmType, setConfirmType] = useState('');
-  const isAvailableCancleState = availableCancelStatus(data.orderItemDtoList.status);
-
+  const [filteredItemList, setFilteredItemList] = useState({});
+  let isAvailableCancleState = true;
+  for (const objInArr of originItemList) {
+    // ! 전체취소만 가능 => 아이템 각각 조회하여, 취소불가능한 상태가 하나라도 존재일 경우 , 취소 불가
+    const itemStatus = objInArr.status;
+    const valid = valid_availableCancelOrder(itemStatus);
+    if (!valid) {
+      isAvailableCancleState = false;
+      break;
+    }
+  }
+  /////////////////////////////////////////// ! TEST 임시 추가 => filter_availableReturnAndExchangeItemList 내부에 , TEST코드 들어있음
+  const isAvailableReturnAndExchangeState =
+    filter_availableReturnAndExchangeItemList(originItemList);
+  /////////////////////////////////////////// ! TEST 임시 추가 => filter_availableReturnAndExchangeItemList 내부에 , TEST코드 들어있음
+  console.log(isAvailableReturnAndExchangeState);
   const onPopupHandler = (e) => {
     e.preventDefault();
     if (typeof window === 'undefined') return console.error('window is not defined');
@@ -34,68 +51,60 @@ export default function SingleItem_OrderHistoryPage({ data }) {
     popupWindow(href, { width: 540, height: 480, left: 200, top: 100 });
   };
 
-  const initializeConfirmModal = () => {
+  const initializeModalState = () => {
+    setFilteredItemList(originItemList);
     setConfirmMessage('');
-    setActiveConfirmModal(false);
+    setActiveModal(null);
     setConfirmType(null);
   };
-  const onStartConfirm = (e) => {
-    const btn = e.currentTarget;
-    const itemName = btn.dataset.itemName;
-    setActiveConfirmModal(true);
-    setConfirmMessage(
-      `선택하신 상품(${itemName})을 구매확정합니다.\n구매확정 시, 반품 및 교환 불가합니다.`,
-    );
+
+  const filter_availableConfirmItemList = (itemList) => {
+    return itemList.filter((item) => {
+      return item.status === orderStatus.DELIVERY_DONE && item.status !== orderStatus.CONFIRM;
+    });
+  };
+
+  const onStartConfirm = () => {
+    const availableItemList = filter_availableConfirmItemList(originItemList);
+    if (!availableItemList.length) return alert('구매확정 가능한 상품이 없습니다.');
+    setFilteredItemList(availableItemList);
+    setActiveModal({ confirm: true });
     setConfirmType(orderStatus.CONFIRM);
   };
 
-  const onOrderConfirm = (confirm) => {
-    if (!confirm) return initializeConfirmModal();
-
-    console.log('구매확정 API 시작');
+  const onStartReturn = () => {
+    const availableItemList = filter_availableReturnAndExchangeItemList(originItemList);
+    if (!availableItemList.length) return alert('반품 가능한 상품이 없습니다.');
+    setFilteredItemList(availableItemList);
+    setActiveModal({ return: true });
+    setConfirmType(orderStatus.RETURN_REQUEST);
   };
-  
 
+  const onStartExchange = () => {
+    const availableItemList = filter_availableReturnAndExchangeItemList(originItemList);
+    if (!availableItemList.length) return alert('교환 가능한 상품이 없습니다.');
+    setFilteredItemList(availableItemList);
+    setActiveModal({ exchange: true });
+    setConfirmType(orderStatus.EXCHANGE_REQUEST);
+  };
   const onStartCancel = () => {
-    setActiveConfirmModal(true);
+    setActiveModal({ cancle: true });
     setConfirmMessage(`전체 상품이 주문 취소됩니다.`);
     setConfirmType(orderStatus.CANCEL_REQUEST);
   };
 
   const onOrderCancle = (confirm) => {
-    if (!confirm) return initializeConfirmModal();
+    if (!confirm) return initializeModalState();
     console.log('전체 주문취소 API 실행 // 부분 취소 불가');
   };
 
-  const onStartReturn = () => {
-    setActiveConfirmModal(true);
-    setConfirmMessage(`반품신청을 진행하시겠습니까?`);
-    setConfirmType(orderStatus.RETURN_REQUEST);
-  };
-
-  const onOrderReturn = (confirm) => {
-    if (!confirm) return initializeConfirmModal();
-    console.log('반품신청 API 시작');
-  };
-
-  const onStartExchange = () => {
-    setActiveConfirmModal(true);
-    setConfirmMessage(`교환신청을 진행하시겠습니까?`);
-    setConfirmType(orderStatus.EXCHANGE_REQUEST);
-  };
-
-  const onOrderExchange = (confirm) => {
-    if (!confirm) return initializeConfirmModal();
-    console.log('교환신청 API 시작');
-  };
-  
   const confirmBCallbackType = {
-    [orderStatus.CONFIRM] : onOrderConfirm,
-    [orderStatus.CANCEL_REQUEST] : onOrderCancle,
-    [orderStatus.RETURN_REQUEST] : onOrderReturn,
-    [orderStatus.EXCHANGE_REQUEST] : onOrderExchange,
-  }
-  
+    [orderStatus.CANCEL_REQUEST]: onOrderCancle,
+    // [orderStatus.CONFIRM]: addSomeFunction, // 필요한 function을 추가하면 됨
+  };
+
+  console.log(originItemList);
+
   return (
     <>
       <MetaTitle title="마이페이지 주문내역 일반상품" />
@@ -108,7 +117,7 @@ export default function SingleItem_OrderHistoryPage({ data }) {
               <h1 className={s.body_title}>
                 <p>주문상품</p>
                 <div className={s['order-button-controller']}>
-                  {!isAvailableCancleState && (
+                  {isAvailableCancleState && (
                     <button
                       type={'button'}
                       className={`${s.btn} ${s.cancel}`}
@@ -117,12 +126,16 @@ export default function SingleItem_OrderHistoryPage({ data }) {
                       주문취소
                     </button>
                   )}
-                  <button type={'button'} className={`${s.btn}`} onClick={onStartReturn}>
-                    반품신청
-                  </button>
-                  <button type={'button'} className={`${s.btn}`} onClick={onStartExchange}>
-                    교환
-                  </button>
+                  {isAvailableReturnAndExchangeState && (
+                    <>
+                      <button type={'button'} className={`${s.btn}`} onClick={onStartReturn}>
+                        반품신청
+                      </button>
+                      <button type={'button'} className={`${s.btn}`} onClick={onStartExchange}>
+                        교환신청
+                      </button>
+                    </>
+                  )}
                 </div>
               </h1>
 
@@ -137,7 +150,7 @@ export default function SingleItem_OrderHistoryPage({ data }) {
 
                 {/* TODO 서버에서 받은 아이템 리스트 */}
                 <ul>
-                  {data.orderItemDtoList.map((item, i) => (
+                  {originItemList.map((item, i) => (
                     <li
                       key={`order-item-${i}`}
                       className={`${s.grid_box2} ${s.item}`}
@@ -156,7 +169,7 @@ export default function SingleItem_OrderHistoryPage({ data }) {
                           <p className={s.top_text}>{item.itemName}</p>
                           {item.selectOptionDtoList.length > 0 &&
                             item.selectOptionDtoList?.map((opt, i) => (
-                              <p key={`item-option-${i}`} className={s.mid_text}>
+                              <p key={`order-item-option-${i}`} className={s.mid_text}>
                                 {opt.optionName}&nbsp;/&nbsp;{opt.optionAmount}개
                               </p>
                             ))}
@@ -175,7 +188,16 @@ export default function SingleItem_OrderHistoryPage({ data }) {
                         {transformLocalCurrency(item.discountAmount)}원
                       </span>
                       <span className={`${s.col_5} ${s.orderStatus}`}>
-                        <span className={s.text}>{orderStatus.KOR[item.status]}</span>
+                        <span className={s.text}>
+                          {orderStatus.KOR[item.status].indexOf('(') >= 0
+                            ? orderStatus.KOR[item.status].split('(').map((str, i) => (
+                                <p className={s.orderStatus} key={`order-item-status-${i}`}>
+                                  {i === 1 && '('}
+                                  {str}
+                                </p>
+                              ))
+                            : orderStatus.KOR[item.status]}
+                        </span>
                         {item.status === orderStatus.DELIVERY_DONE && (
                           <button
                             type={'button'}
@@ -190,44 +212,6 @@ export default function SingleItem_OrderHistoryPage({ data }) {
                     </li>
                   ))}
                 </ul>
-
-                {/* TODO 서버에서 받은 아이템 리스트 */}
-                {/*{data?.orderItemDtoList.map((item, i) => (*/}
-                {/*  <>*/}
-                {/*    <div className={s.grid_box2}>*/}
-                {/*      <div className={s.col_6} key={i}>*/}
-                {/*        <div className={`${s.image} img-wrap`}>*/}
-                {/*          <Image*/}
-                {/*            priority*/}
-                {/*            src={item.thumbnailUrl}*/}
-                {/*            objectFit="cover"*/}
-                {/*            layout="fill"*/}
-                {/*            alt="카드 이미지"*/}
-                {/*          />*/}
-                {/*        </div>*/}
-
-                {/*        <div className={s.inner_text}>*/}
-                {/*          <p>{item.itemName}</p>*/}
-                {/*        </div>*/}
-                {/*      </div>*/}
-                {/*      <ul className={s.col_9}>*/}
-                {/*        <div className={s.col_2}>{item.amount}개</div>*/}
-                {/*        <div className={s.col_3}>{transformLocalCurrency(item.finalPrice)}원</div>*/}
-                {/*      </ul>*/}
-
-                {/*      {item.discountAmount > 0 ? (*/}
-                {/*        <div className={s.col_7}>*/}
-                {/*          -${transformLocalCurrency(item.discountAmount)}원*/}
-                {/*        </div>*/}
-                {/*      ) : (*/}
-                {/*        <div className={s.col_8}>0원</div>*/}
-                {/*      )}*/}
-
-                {/*      <div className={s.col_5}>결제완료</div>*/}
-                {/*    </div>*/}
-                {/*    {i !== data?.orderItemDtoList.length - 1 ? <hr className={s.line2} /> : null}*/}
-                {/*  </>*/}
-                {/*))}*/}
               </section>
             </section>
 
@@ -277,39 +261,6 @@ export default function SingleItem_OrderHistoryPage({ data }) {
                   <p className={s.emptyCont}>배송 중 상태에서 조회 가능합니다.</p>
                 )}
               </div>
-              {/*<div className={s.body_content_3}>*/}
-              {/*  {false && <p>배송중 상태에서 조회가 가능합니다.</p>}*/}
-              {/*  {true && (*/}
-              {/*    <div className={s.deliveryTracking}>*/}
-              {/*      /!* <span className={Styles.deliverytitle}>CJ대한통운</span>*/}
-              {/*      <span data-delivery-trackingNumber={""}>*/}
-              {/*        운송장번호<em>510017079554</em>*/}
-              {/*      </span>*/}
-              {/*      <span data-delivery-title={"배송상태"}>배송 중</span>*/}
-              {/*      <button className={Styles.btn}>배송조회</button> *!/*/}
-
-              {/*      <ul className={s.content_grid}>*/}
-              {/*        <li>*/}
-              {/*          <span>CJ대한통운</span>*/}
-              {/*          <span data-delivery-tracking-number={''}>운송장번호</span>*/}
-              {/*          <span>{data?.orderDto.deliveryNumber}</span>*/}
-              {/*        </li>*/}
-              {/*        <li data-delivery-title={'배송상태'}>배송중</li>*/}
-              {/*        <li>*/}
-              {/*          <button*/}
-              {/*            onClick={() =>*/}
-              {/*              popupWindow(*/}
-              {/*                `http://nexs.cjgls.com/web/service02_01.jsp?slipno=${data?.orderDto.deliveryNumber}`,*/}
-              {/*              )*/}
-              {/*            }*/}
-              {/*          >*/}
-              {/*            배송조회*/}
-              {/*          </button>*/}
-              {/*        </li>*/}
-              {/*      </ul>*/}
-              {/*    </div>*/}
-              {/*  )}*/}
-              {/*</div>*/}
             </section>
 
             {/* 주문상품 결제정보 배송정보 */}
@@ -352,34 +303,7 @@ export default function SingleItem_OrderHistoryPage({ data }) {
                   <span>{data?.orderDto.name}</span>
 
                   <span>핸드폰</span>
-                  <span>
-                    {transformPhoneNumber(data?.orderDto.phone)}
-                    {(() => {
-                      {
-                        /* - MEMO  10자리 휴대폰 번호에서 유효하지 않아서, 위 함수로 적용함*/
-                      }
-                      {
-                        /*{data?.orderDto.phone*/
-                      }
-                      {
-                        /*  .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, '$1-$2-$3')*/
-                      }
-                      {
-                        /*  .replace(/\-{1,2}$/g, '')}*/
-                      }
-                      // console.log(
-                      //   '0162225555'.replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, '$1-$2-$3'),
-                      // );
-                      // console.log(
-                      //   '01099992222'
-                      //     .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, '$1-$2-$3')
-                      //     .replace(/\-{1,2}$/g, ''),
-                      // );
-                      //
-                      // console.log(transformPhoneNumber('0162225555'));
-                      // console.log(transformPhoneNumber('01099992222'));
-                    })()}
-                  </span>
+                  <span>{transformPhoneNumber(data?.orderDto.phone)}</span>
 
                   <span>배송방법</span>
                   <span>택배배송</span>
@@ -393,10 +317,44 @@ export default function SingleItem_OrderHistoryPage({ data }) {
                 </div>
               </div>
             </section>
+            <AdditionalOrderStatusInfo
+              orderTypeAsLabel={'환불'}
+              originItemList={originItemList}
+              targetOrderStatusList={[
+                orderStatus.CANCEL_DONE_BUYER,
+                orderStatus.CANCEL_DONE_SELLER,
+                orderStatus.EXCHANGE_DONE_BUYER,
+                orderStatus.EXCHANGE_DONE_SELLER,
+                orderStatus.RETURN_DONE_BUYER,
+                orderStatus.RETURN_DONE_SELLER,
+              ]}
+              paymentMethod={paymentMethodType.KOR[data.orderDto.paymentMethod]}
+              orderQuery={'orderCancel'}
+            />
+            {/*<AdditionalOrderStatusInfo*/}
+            {/*  orderTypeAsLabel={'교환'}*/}
+            {/*  originItemList={originItemList}*/}
+            {/*  targetOrderStatusList={[*/}
+            {/*    orderStatus.EXCHANGE_DONE_BUYER,*/}
+            {/*    orderStatus.EXCHANGE_DONE_SELLER,*/}
+            {/*  ]}*/}
+            {/*  paymentMethod={paymentMethodType.KOR[data.orderDto.paymentMethod]}*/}
+            {/*  orderQuery={'orderExchange'}*/}
+            {/*/>*/}
+            {/*<AdditionalOrderStatusInfo*/}
+            {/*  orderTypeAsLabel={'반품'}*/}
+            {/*  originItemList={originItemList}*/}
+            {/*  targetOrderStatusList={[*/}
+            {/*    orderStatus.RETURN_DONE_BUYER,*/}
+            {/*    orderStatus.RETURN_DONE_SELLER,*/}
+            {/*  ]}*/}
+            {/*  paymentMethod={paymentMethodType.KOR[data.orderDto.paymentMethod]}*/}
+            {/*  orderQuery={'orderReturn'}*/}
+            {/*/>*/}
           </MypageWrapper>
         </Wrapper>
       </Layout>
-      {activeConfirmModal && (
+      {activeModal?.cancle && (
         <Modal_confirm
           text={confirmMessage}
           isConfirm={confirmBCallbackType[confirmType]}
@@ -404,9 +362,109 @@ export default function SingleItem_OrderHistoryPage({ data }) {
           option={{ wordBreak: true }}
         />
       )}
+      {(activeModal?.exchange || activeModal?.return || activeModal?.confirm) && (
+        <Modal_changeItemOrderState
+          onHideModal={initializeModalState}
+          confirmType={confirmType}
+          items={filteredItemList}
+          hasForm={!activeModal?.confirm}
+        />
+      )}
     </>
   );
 }
+
+const AdditionalOrderStatusInfo = ({
+  orderTypeAsLabel,
+  originItemList,
+  targetOrderStatusList = [],
+  paymentMethod,
+}) => {
+  return (
+    <>
+      {originItemList.filter((item) => targetOrderStatusList.indexOf(item.status) >= 0).length >
+        0 && (
+        <section className={`${s['additional-info-section']}`}>
+          <h6 className={s.body_title}>{orderTypeAsLabel} 정보</h6>
+          <ul>
+            {originItemList
+              .filter((item) => targetOrderStatusList.indexOf(item.status) >= 0)
+              .map((item, i) => {
+                 let orderQuery = 'orderCancel';
+                if (
+                  item.status === orderStatus.CANCEL_DONE_SELLER ||
+                  item.status === orderStatus.CANCEL_DONE_BUYER
+                ) {
+                  orderQuery = 'orderCancel';
+                } else if (
+                  item.status === orderStatus.RETURN_DONE_SELLER ||
+                  item.status === orderStatus.RETURN_DONE_BUYER
+                ) {
+                  orderQuery = 'orderReturn';
+                }
+                if (
+                  item.status === orderStatus.EXCHANGE_DONE_SELLER ||
+                  item.status === orderStatus.EXCHANGE_DONE_BUYER
+                ) {
+                  orderQuery = 'orderExchange';
+                }
+
+                console.log(orderQuery)
+                return (
+                  <li key={`cancel-state-item-${i}`} className={s.body_content_2}>
+                    <span>{orderTypeAsLabel} 상태</span>
+                    <span>
+                      {orderStatus.KOR[item.status].indexOf('(') >= 0
+                        ? orderStatus.KOR[item.status].split('(').map((str, i) => (
+                            <em className={s.orderStatus} key={`addition-orderStatus-${i}`}>
+                              {i === 1 && '('}
+                              {str}
+                            </em>
+                          ))
+                        : orderStatus.KOR[item.status]}
+                    </span>
+
+                    <span>{orderTypeAsLabel} 상품명</span>
+                    <span>{item.itemName}</span>
+                    <span>{orderTypeAsLabel} 요청일자</span>
+                    <span>
+                      {transformDate(item[orderQuery].requestDate, 'time', {
+                        seperator: '.',
+                      })}
+                    </span>
+                    <span>{orderTypeAsLabel} 처리일자</span>
+                    <span>
+                      {transformDate(item[orderQuery].confirmDate, 'time', {
+                        seperator: '.',
+                      })}
+                    </span>
+
+                    <span>{orderTypeAsLabel} 사유</span>
+                    <span>{item[orderQuery].reason}</span>
+
+                    <span>{orderTypeAsLabel} 상세사유</span>
+                    <span>{item[orderQuery].detailReason}</span>
+
+                    <span>상품 금액</span>
+                    <span>{transformLocalCurrency(item.finalPrice)}원</span>
+
+                    <span>상품 할인금액</span>
+                    <span>{transformLocalCurrency(item.discountAmount)}원</span>
+
+                    <span>총 환불금액</span>
+                    <span>{transformLocalCurrency(item.finalPrice - item.discountAmount)}원</span>
+
+                    <span>환불 수단</span>
+                    <span>{paymentMethod}</span>
+                  </li>
+                );
+              })}
+          </ul>
+        </section>
+      )}
+    </>
+  );
+};
 
 export async function getServerSideProps(ctx) {
   const { query, req } = ctx;
@@ -418,14 +476,14 @@ export async function getServerSideProps(ctx) {
 
   let res = await getDataSSR(req, getApiUrl);
   res = DUMMY_RESPONSE; // ! TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
-  console.log('SERVER REPONSE: ', res);
+  // console.log('SERVER REPONSE: ', res);
   const data = res?.data;
   console.log(data);
 
   if (data) {
     DATA = {
       orderItemDtoList: data.orderItemDtoList?.map((item) => ({
-        // orderItemId: item.id,
+        orderItemId: item.orderItemId, // 주문한 상품 id
         thumbnailUrl: item.thumbnailUrl,
         selectOptionDtoList: item.selectOptionDtoList,
         itemName: item.itemName,
@@ -434,6 +492,24 @@ export async function getServerSideProps(ctx) {
         discountAmount: item.discountAmount,
         status: item.status,
         saveReward: item.saveReward,
+        orderCancel: {
+          reason: item.orderCancel.cancelReason,
+          detailReason: item.orderCancel.cancelDetailReason,
+          requestDate: item.orderCancel.cancelRequestDate,
+          confirmDate: item.orderCancel.cancelConfirmDate,
+        },
+        orderReturn: {
+          reason: item.orderReturn.returnReason,
+          detailReason: item.orderReturn.returnDetailReason,
+          requestDate: item.orderReturn.returnRequestDate,
+          confirmDate: item.orderReturn.returnConfirmDate,
+        },
+        orderExchange: {
+          reason: item.orderExchange.exchangeReason,
+          detailReason: item.orderExchange.exchangeDetailReason,
+          requestDate: item.orderExchange.exchangeRequestDate,
+          confirmDate: item.orderExchange.exchangeConfirmDate,
+        },
       })),
       orderDto: {
         orderId: data.orderDto.orderId,
@@ -474,7 +550,7 @@ const DUMMY_RESPONSE = {
         amount: 1,
         finalPrice: 9000,
         discountAmount: 0,
-        status: 'DELIVERY_START',
+        status: 'BEFORE_PAYMENT',
         saveReward: 500,
         orderCancel: {
           cancelReason: '이유',
@@ -540,6 +616,216 @@ const DUMMY_RESPONSE = {
           exchangeDetailReason: '상세이유',
           exchangeRequestDate: '2022-07-19T09:56:10.016',
           exchangeConfirmDate: '2022-07-21T09:56:10.016',
+        },
+      },
+      {
+        orderItemId: 426,
+        thumbnailUrl:
+          'https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2053&q=80',
+        selectOptionDtoList: [],
+        itemName: '굿즈 상품3',
+        amount: 1,
+        finalPrice: 9000,
+        discountAmount: 0,
+        status: 'CONFIRM',
+        saveReward: 500,
+        orderCancel: {
+          cancelReason: '이유',
+          cancelDetailReason: '상세이유',
+          cancelRequestDate: '2022-07-19T09:56:10.014',
+          cancelConfirmDate: '2022-07-21T09:56:10.014',
+        },
+        orderReturn: {
+          returnReason: '이유',
+          returnDetailReason: '상세이유',
+          returnRequestDate: '2022-07-19T09:56:10.014',
+          returnConfirmDate: '2022-07-21T09:56:10.014',
+        },
+        orderExchange: {
+          exchangeReason: '이유',
+          exchangeDetailReason: '상세이유',
+          exchangeRequestDate: '2022-07-19T09:56:10.014',
+          exchangeConfirmDate: '2022-07-21T09:56:10.014',
+        },
+      },
+      {
+        orderItemId: 427,
+        thumbnailUrl:
+          'https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2053&q=80',
+        selectOptionDtoList: [],
+        itemName: '굿즈 상품4',
+        amount: 1,
+        finalPrice: 9000,
+        discountAmount: 0,
+        status: 'RETURN_REQUEST',
+        saveReward: 500,
+        orderCancel: {
+          cancelReason: '이유',
+          cancelDetailReason: '상세이유',
+          cancelRequestDate: '2022-07-19T09:56:10.014',
+          cancelConfirmDate: '2022-07-21T09:56:10.014',
+        },
+        orderReturn: {
+          returnReason: '이유',
+          returnDetailReason: '상세이유',
+          returnRequestDate: '2022-07-19T09:56:10.014',
+          returnConfirmDate: '2022-07-21T09:56:10.014',
+        },
+        orderExchange: {
+          exchangeReason: '이유',
+          exchangeDetailReason: '상세이유',
+          exchangeRequestDate: '2022-07-19T09:56:10.014',
+          exchangeConfirmDate: '2022-07-21T09:56:10.014',
+        },
+      },
+      {
+        orderItemId: 428,
+        thumbnailUrl:
+          'https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2053&q=80',
+        selectOptionDtoList: [],
+        itemName: '굿즈 상품5',
+        amount: 1,
+        finalPrice: 9000,
+        discountAmount: 0,
+        status: 'EXCHANGE_REQUEST',
+        saveReward: 500,
+        orderCancel: {
+          cancelReason: '이유',
+          cancelDetailReason: '상세이유',
+          cancelRequestDate: '2022-07-19T09:56:10.014',
+          cancelConfirmDate: '2022-07-21T09:56:10.014',
+        },
+        orderReturn: {
+          returnReason: '이유',
+          returnDetailReason: '상세이유',
+          returnRequestDate: '2022-07-19T09:56:10.014',
+          returnConfirmDate: '2022-07-21T09:56:10.014',
+        },
+        orderExchange: {
+          exchangeReason: '이유',
+          exchangeDetailReason: '상세이유',
+          exchangeRequestDate: '2022-07-19T09:56:10.014',
+          exchangeConfirmDate: '2022-07-21T09:56:10.014',
+        },
+      },
+      {
+        orderItemId: 429,
+        thumbnailUrl:
+          'https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2053&q=80',
+        selectOptionDtoList: [],
+        itemName: '굿즈 상품6 (취소완료상품)',
+        amount: 2,
+        finalPrice: 9000,
+        discountAmount: 1000,
+        status: 'CANCEL_DONE_SELLER',
+        saveReward: 500,
+        orderCancel: {
+          cancelReason: '이유',
+          cancelDetailReason: '상세이유',
+          cancelRequestDate: '2022-07-19T09:56:10.014',
+          cancelConfirmDate: '2022-07-21T09:56:10.014',
+        },
+        orderReturn: {
+          returnReason: '이유',
+          returnDetailReason: '상세이유',
+          returnRequestDate: '2022-07-19T09:56:10.014',
+          returnConfirmDate: '2022-07-21T09:56:10.014',
+        },
+        orderExchange: {
+          exchangeReason: '이유',
+          exchangeDetailReason: '상세이유',
+          exchangeRequestDate: '2022-07-19T09:56:10.014',
+          exchangeConfirmDate: '2022-07-21T09:56:10.014',
+        },
+      },
+      {
+        orderItemId: 430,
+        thumbnailUrl:
+          'https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2053&q=80',
+        selectOptionDtoList: [],
+        itemName: '굿즈 상품7 (교환완료상품)',
+        amount: 2,
+        finalPrice: 9000,
+        discountAmount: 1000,
+        status: 'EXCHANGE_DONE_BUYER',
+        saveReward: 500,
+        orderCancel: {
+          cancelReason: '이유',
+          cancelDetailReason: '상세이유',
+          cancelRequestDate: '2022-07-19T09:56:10.014',
+          cancelConfirmDate: '2022-07-21T09:56:10.014',
+        },
+        orderReturn: {
+          returnReason: '이유',
+          returnDetailReason: '상세이유',
+          returnRequestDate: '2022-07-19T09:56:10.014',
+          returnConfirmDate: '2022-07-21T09:56:10.014',
+        },
+        orderExchange: {
+          exchangeReason: '이유',
+          exchangeDetailReason: '상세이유',
+          exchangeRequestDate: '2022-07-19T09:56:10.014',
+          exchangeConfirmDate: '2022-07-21T09:56:10.014',
+        },
+      },
+      {
+        orderItemId: 431,
+        thumbnailUrl:
+          'https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2053&q=80',
+        selectOptionDtoList: [],
+        itemName: '굿즈 상품8 (반품완료상품)',
+        amount: 2,
+        finalPrice: 19000,
+        discountAmount: 2000,
+        status: 'RETURN_DONE_BUYER',
+        saveReward: 500,
+        orderCancel: {
+          cancelReason: '이유',
+          cancelDetailReason: '상세이유',
+          cancelRequestDate: '2022-07-19T09:56:10.014',
+          cancelConfirmDate: '2022-07-21T09:56:10.014',
+        },
+        orderReturn: {
+          returnReason: '반품이유',
+          returnDetailReason: '반품상세이유',
+          returnRequestDate: '2022-07-19T09:56:10.014',
+          returnConfirmDate: '2022-07-21T09:56:10.014',
+        },
+        orderExchange: {
+          exchangeReason: '이유',
+          exchangeDetailReason: '상세이유',
+          exchangeRequestDate: '2022-07-19T09:56:10.014',
+          exchangeConfirmDate: '2022-07-21T09:56:10.014',
+        },
+      },
+      {
+        orderItemId: 432,
+        thumbnailUrl:
+          'https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2053&q=80',
+        selectOptionDtoList: [],
+        itemName: '굿즈 상품9 (반품완료상품22222)',
+        amount: 2,
+        finalPrice: 39000,
+        discountAmount: 6000,
+        status: 'RETURN_DONE_SELLER',
+        saveReward: 3500,
+        orderCancel: {
+          cancelReason: '이유',
+          cancelDetailReason: '상세이유',
+          cancelRequestDate: '2022-07-19T09:56:10.014',
+          cancelConfirmDate: '2022-07-21T09:56:10.014',
+        },
+        orderReturn: {
+          returnReason: '반품이유222222',
+          returnDetailReason: '반품상세이유22222',
+          returnRequestDate: '2022-08-19T09:56:10.014',
+          returnConfirmDate: '2022-08-24T09:56:10.014',
+        },
+        orderExchange: {
+          exchangeReason: '이유',
+          exchangeDetailReason: '상세이유',
+          exchangeRequestDate: '2022-07-19T09:56:10.014',
+          exchangeConfirmDate: '2022-07-21T09:56:10.014',
         },
       },
     ],
