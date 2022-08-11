@@ -1,0 +1,115 @@
+@import '/styles/global/guide';
+@import '/styles/global/rem';
+
+// 구독 주문 변경내용 안내 메시지
+.change {
+  display: block;
+  width: 100%;
+  padding-top: rem(15);
+  color: var(--color-main);
+}
+
+
+// SUBSCRIBE ORDERSHEET - 주문상품
+.body_content {
+  display: flex;
+  @include char(l16);
+  padding: rem(20) 0 rem(60);
+
+  .left_box {
+    width: rem(80);
+    padding-right: rem(20);
+    .image {
+      width: 100%;
+      aspect-ratio: 1/1;
+    }
+  }
+
+  .right_box {
+    width: 100%;
+    .grid_box {
+      display: grid;
+      grid-template-columns: rem(100) 1fr;
+      column-gap: rem(3);
+      row-gap: rem(18);
+      width: 100%;
+    }
+  }
+}
+// SUBSCRIBE ORDERSHEET - 주문정보
+.body_content_2 {
+  @include char(l16);
+  .grid_box {
+    width: 100%;
+    display: grid;
+    grid-template-columns: rem(150) 1fr;
+    row-gap: rem(24);
+    padding: rem(20) 0 rem(60);
+    .desc {
+      color: var(--color-font-light);
+    }
+  }
+}
+
+// SUBSCRIBE ORDERSHEET - 배송조회
+.body_content_3 {
+  padding: rem(10) 0 rem(75);
+
+  > * {
+    height: rem(48);
+  }
+  > p.emptyCont {
+    color: var(--color-font-sub);
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .content_grid {
+    width: 100%;
+    display: grid;
+    // grid-template-columns: rem(120) rem(80) 1fr rem(100) rem(140);
+    grid-template-columns: rem(150) 1fr rem(160) rem(140);
+    text-align: left;
+    align-items: center;
+
+    li {
+      text-align: left;
+      &.deliveryStatus {
+        text-align: center;
+      }
+    }
+    button {
+      color: var(--color-main);
+      border: rem(1) solid var(--color-main);
+      border-radius: rem(5);
+      padding: rem(10) 0;
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: rem(900)) {
+  .body_content_3 .content_grid {
+    grid-template-columns: 1fr rem(140);
+    li:first-child {
+      span:nth-child(2) {
+        display: none;
+      }
+    }
+    li:nth-child(2) {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: rem(600)) {
+  .body_content_3 {
+    .content_grid {
+      li:first-child {
+        font-size: rem(15);
+      }
+    }
+  }
+}

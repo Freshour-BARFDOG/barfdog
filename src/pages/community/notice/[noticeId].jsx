@@ -13,7 +13,6 @@ import {MoveToNextPrevPage} from "/src/components/common/MoveToNextPrevPage";
 
 
 export default function NoticePostPage({ noticeId }) {
-  console.log(noticeId)
   const [curPageId, setCurPageId] = useState( Number(noticeId ));
   const [isLoading, setIsLoading] = useState({});
   const [itemInfo, setItemInfo] = useState({});
@@ -105,7 +104,7 @@ export default function NoticePostPage({ noticeId }) {
                 <p>제목</p>
                 <span>{itemInfo.title}</span>
                 <p>등록일</p>
-                <span>{transformDate(pageInfo.cur?.createdDate) || ''}</span>
+                <span>{pageInfo?.cur && transformDate(pageInfo.cur.createdDate)}</span>
               </div>
               <div
                 className={`${s.content_text} view ql-editor`}

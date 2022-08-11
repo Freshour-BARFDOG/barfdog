@@ -3,7 +3,7 @@ import ModalWrapper from "./ModalWrapper";
 import s from "./modal.module.scss";
 import CloseButton from "@src/components/atoms/CloseButton";
 
-function Modal_confirm({ title, text, isConfirm, positionCenter ,theme}) {
+function Modal_confirm({ title, text, isConfirm, positionCenter ,theme, option={wordbreak:false}}) {
   const onCancleHandler = () => {
     if (isConfirm && typeof isConfirm === "function") {
       isConfirm(false);
@@ -39,10 +39,10 @@ function Modal_confirm({ title, text, isConfirm, positionCenter ,theme}) {
         {title ? (
           <>
             <p className={s.title}>{title}</p>
-            <pre className={s.text}>{text}</pre>
+            {option.wordBreak ? <p className={s.text}>{text}</p> : <pre className={s.text}>{text}</pre>}
           </>
         ) : (
-          text && <pre className={`${s.text} ${s.only}`}>{text}</pre>
+          text && (option.wordBreak ? <p className={s.text}>{text}</p> : <pre className={s.text}>{text}</pre>)
         )}
       </div>
       <div className={s['btn-section']}>

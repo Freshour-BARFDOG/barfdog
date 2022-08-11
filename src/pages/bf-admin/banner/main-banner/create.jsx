@@ -10,7 +10,8 @@ import Fake_input from '@src/components/atoms/fake_input';
 import PreviewImage from '@src/components/atoms/PreviewImage';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import getAdminToken from '@src/pages/api/getAdminToken';
-import { postData } from '@src/pages/api/reqData';
+import {postData, postObjData} from '@src/pages/api/reqData';
+import {valid_hasFormErrors} from "@util/func/validation/validationPackage";
 
 function CreateMainBannerPage() {
   const router = useRouter();
@@ -39,14 +40,87 @@ function CreateMainBannerPage() {
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  useEffect(() => {
-    if (isSubmitting && !Object.keys(formErrors).length) {
-      console.log('데이터 전송');
-      postDataToServer();
+  // useEffect(() => {
+  //   if (isSubmitting && !Object.keys(formErrors).length) {
+  //     console.log('데이터 전송');
+  //     postDataToServer();
+  //   } else {
+  //     console.log(formErrors);
+  //   }
+  // }, [formErrors, isSubmitting]);
+  
+  
+  const valid_isEmpty = (value) => {
+    let errors;
+    
+    if (!value) {
+      errors = '항목이 비어있습니다.';
     } else {
-      console.log(formErrors);
+      errors = '';
     }
-  }, [formErrors, isSubmitting]);
+    
+    return errors;
+  };
+  
+  const valid_link = (value) => {
+    let errorsMessage;
+    
+    const regexURL = new RegExp(
+      '^(https?:\\/\\/)?' + // protocol
+      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|' + // domain name
+      '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+      '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+      '(\\#[-a-z\\d_]*)?$',
+      'gi',
+    ); // fragment locator
+    
+    const RESULT = regexURL.test(value);
+    
+    if (value && !RESULT) {
+      errorsMessage = '유효하지 않은 링크입니다.';
+    } else {
+      errorsMessage = '';
+    }
+    
+    return errorsMessage;
+  };
+  
+  const validate = (obj) => {
+    let errors = {};
+    const keys = Object.keys(obj);
+    
+    keys.forEach((key) => {
+      const val = obj[key];
+      
+      switch (key) {
+        case 'name':
+          valid_isEmpty(val) && (errors[key] = '필수항목입니다.');
+          break;
+        case 'pcLinkUrl':
+          valid_link(val) && (errors[key] = valid_link(val));
+          break;
+        case 'mobileLinkUrl':
+          valid_link(val) && (errors[key] = valid_link(val));
+          break;
+        
+        default:
+          break;
+      }
+    });
+    
+    // valid_isEmpty(file_pc.file)
+    //   ? (errors["file_pc"] = valid_isEmpty(file_pc.file))
+    //   : "";
+    // valid_isEmpty(file_mobile.file)
+    //   ? (errors["file_mobile"] = valid_isEmpty(file_mobile.file))
+    //   : "";
+    valid_isEmpty(file_pc.file) && (errors['file_pc'] = valid_isEmpty(file_pc.file));
+    valid_isEmpty(file_mobile.file) && (errors['file_mobile'] = valid_isEmpty(file_mobile.file));
+    console.log('Validation Result: ', errors);
+    
+    return errors;
+  };
 
   const onInputChangeHandler = (e) => {
     const { name, value } = e.currentTarget;
@@ -102,113 +176,41 @@ function CreateMainBannerPage() {
     }
   };
 
-  const valid_isEmpty = (value) => {
-    let errors;
+ 
 
-    if (!value) {
-      errors = '항목이 비어있습니다.';
-    } else {
-      errors = '';
-    }
-
-    return errors;
-  };
-
-  const valid_link = (value) => {
-    let errorsMessage;
-
-    const regexURL = new RegExp(
-      '^(https?:\\/\\/)?' + // protocol
-        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|' + // domain name
-        '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
-        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
-        '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
-        '(\\#[-a-z\\d_]*)?$',
-      'gi',
-    ); // fragment locator
-
-    const RESULT = regexURL.test(value);
-
-    if (value && !RESULT) {
-      errorsMessage = '유효하지 않은 링크입니다.';
-    } else {
-      errorsMessage = '';
-    }
-
-    return errorsMessage;
-  };
-
-  const validate = (obj) => {
-    let errors = {};
-    const keys = Object.keys(obj);
-
-    keys.forEach((key) => {
-      const val = obj[key];
-
-      switch (key) {
-        case 'name':
-          valid_isEmpty(val) && (errors[key] = '필수항목입니다.');
-          break;
-        case 'pcLinkUrl':
-          valid_link(val) && (errors[key] = valid_link(val));
-          break;
-        case 'mobileLinkUrl':
-          valid_link(val) && (errors[key] = valid_link(val));
-          break;
-
-        default:
-          break;
-      }
-    });
-
-    // valid_isEmpty(file_pc.file)
-    //   ? (errors["file_pc"] = valid_isEmpty(file_pc.file))
-    //   : "";
-    // valid_isEmpty(file_mobile.file)
-    //   ? (errors["file_mobile"] = valid_isEmpty(file_mobile.file))
-    //   : "";
-    valid_isEmpty(file_pc.file) && (errors['file_pc'] = valid_isEmpty(file_pc.file));
-    valid_isEmpty(file_mobile.file) && (errors['file_mobile'] = valid_isEmpty(file_mobile.file));
-    console.log('Validation Result: ', errors);
-
-    return errors;
-  };
-
-  const onSubmitHandler = (e) => {
+  const onSubmitHandler = async (e) => {
     e.preventDefault();
-    setFormErrors(validate(formValues));
-    if (Object.keys(formErrors).length) return console.error(formErrors);
-    setIsSubmitting(true);
-  }; // * onSubmitHandler
+    if(isSubmitting) return console.error('이미 제출된 양식입니다.');
+    const errObj = validate(formValues);
+    setFormErrors(errObj);
+    const isPassed = valid_hasFormErrors(errObj);
+    if (!isPassed) return alert('유효하지 않은 항목이 있습니다.');
 
-  const postDataToServer = async () => {
-    // * POST LIST:  1.JSON  2.파일(이미지) 3. 파일(이미지 모바일)
-    const jsonData = JSON.stringify(formValues);
-    const blob = new Blob([jsonData], { type: 'application/json' });
-
-    const formData = new FormData();
-    formData.append('requestDto', blob);
-    formData.append('pcFile', file_pc.file);
-    formData.append('mobileFile', file_mobile.file);
-
-    const token = await getAdminToken();
-    const axiosConfig = {
-      headers: {
-        authorization: token,
-        'Content-Type': 'multipart/form-data',
-      },
-    };
-
-    const postCallback = () => {
-      alert('배너등록이 완료되었습니다.');
-      if (window) {
-        location.reload();
+    try {
+      // * POST LIST:  1.JSON  2.파일(이미지) 3. 파일(이미지 모바일)
+      const jsonData = JSON.stringify(formValues);
+      const blob = new Blob([jsonData], { type: 'application/json' });
+      const formData = new FormData();
+      formData.append('requestDto', blob);
+      formData.append('pcFile', file_pc.file);
+      formData.append('mobileFile', file_mobile.file);
+  
+      const url = '/api/banners/main';
+      const r = await postObjData(url, formData, 'multipart/form-data');
+      console.log(r);
+      if(r.isDone){
+        setIsSubmitting(true);
+        alert('메인배너가 성공적으로 등록되었습니다.');
+        window.location.href='/bf-admin/banner/main-banner';
+      } else {
+        alert('배너 등록에 실패하였습니다.');
       }
-    };
-
-    const response = await postData('/api/banners/main', formData, axiosConfig, postCallback);
-    console.log(response);
+    } catch (err) {
+        console.error(err)
+    }
+   
   };
+
 
   return (
     <>
@@ -407,7 +409,7 @@ function CreateMainBannerPage() {
               >
                 취소
               </button>
-              <button type="submit" id="btn-create" className="admin_btn confirm_l solid">
+              <button type="submit" id="btn-create" className="admin_btn confirm_l solid" onClick={onSubmitHandler}>
                 등록
               </button>
             </div>
@@ -419,3 +421,5 @@ function CreateMainBannerPage() {
 }
 
 export default CreateMainBannerPage;
+
+
