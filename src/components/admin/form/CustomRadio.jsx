@@ -6,6 +6,7 @@ const CustomRadio = ({
   value,
   name,
   idList,
+  className,
   labelList,
   initIndex,
   getDirValue,
@@ -40,7 +41,7 @@ const CustomRadio = ({
 
   return (
     <>
-      <div className={`${s['inp-wrap']} ${s['radio']}`} {...props}>
+      <div className={`${s['inp-wrap']} ${s['radio']} ${className ? className : ''}`} {...props}>
         {idList.map((id, index) => {
           const convertedId = `${name}${id}`;
           return (

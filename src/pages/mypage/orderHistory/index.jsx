@@ -30,7 +30,6 @@ export default function OrderHistoryPage() {
   const [itemList, setItemList] = useState([]);
   const [itemType, setItemType] = useState(productType.SUBSCRIBE);
 
-  console.log('itemList', itemList)
   useEffect(() => {
     // set Scroll Position: 페이지 최상단으로 scroll 위치 초기화 보완
     if (window && typeof window !== 'undefined') {
@@ -44,44 +43,48 @@ export default function OrderHistoryPage() {
     // res = activeMenu === 'left' ? DUMMY_SUBSCRIBE_DELVIERY_RESPONSE : DUMMY_GENERAL_DELVIERY_RESPONSE; // ! TEST
     // res = activeMenu === 'left' ? res : DUMMY_GENERAL_DELVIERY_RESPONSE; // ! TEST
     const pageData = res.data.page;
-    const newItemList =
-      res.data?._embedded[
-        activeMenu === 'left' ? 'querySubscribeOrdersDtoList' : 'queryGeneralOrdersDtoList'
-      ] || [];
+    let subscribeItemList = [], generalItemList = [];
+    if(res.data._embedded){
+      const tmepItemList =
+        res.data?._embedded[
+          activeMenu === 'left' ? 'querySubscribeOrdersDtoList' : 'queryGeneralOrdersDtoList'
+          ] || [];
+      subscribeItemList =
+        activeMenu === 'left' &&
+        tmepItemList.map((item) => ({
+          recipeDto: {
+            thumbnailUrl: item.recipeDto.thumbnailUrl,
+            recipeName: item.recipeDto.recipeName,
+          },
+          subscribeOrderDto: {
+            orderId: item.subscribeOrderDto.orderId, // 주문 id
+            subscribeId: item.subscribeOrderDto.subscribeId, // 구독 id
+            orderDate: item.subscribeOrderDto.orderDate, // 주문일자
+            dogName: item.subscribeOrderDto.dogName, // 반려견 명
+            subscribeCount: item.subscribeOrderDto.subscribeCount, // 구독회차
+            merchantUid: item.subscribeOrderDto.merchantUid, // 주문번호
+            paymentPrice: item.subscribeOrderDto.paymentPrice, // 결제금액
+            orderStatus: item.subscribeOrderDto.orderStatus, // 주문상태
+          },
+          link: item._links.query_subscribeOrder.href, // 구독상세보기 Link
+        }));
+      generalItemList =
+        activeMenu === 'right' &&
+        tmepItemList.map((item) => ({
+          thumbnailUrl: item.thumbnailUrl,
+          orderDto: {
+            id: item.orderDto.id,
+            merchantUid: item.orderDto.merchantUid,
+            paymentPrice: item.orderDto.paymentPrice,
+            orderStatus: item.orderDto.orderStatus,
+            orderDate: item.orderDto.orderDate,
+          },
+          itemNameList: item.itemNameList,
+          link: item._links.query_order.href,
+        }));
+    }
 
-    const subscribeItemList =
-      activeMenu === 'left' &&
-      newItemList.map((item) => ({
-        recipeDto: {
-          thumbnailUrl: item.recipeDto.thumbnailUrl,
-          recipeName: item.recipeDto.recipeName,
-        },
-        subscribeOrderDto: {
-          orderId: item.subscribeOrderDto.orderId, // 주문 id
-          subscribeId: item.subscribeOrderDto.subscribeId, // 구독 id
-          orderDate: item.subscribeOrderDto.orderDate, // 주문일자
-          dogName: item.subscribeOrderDto.dogName, // 반려견 명
-          subscribeCount: item.subscribeOrderDto.subscribeCount, // 구독회차
-          merchantUid: item.subscribeOrderDto.merchantUid, // 주문번호
-          paymentPrice: item.subscribeOrderDto.paymentPrice, // 결제금액
-          orderStatus: item.subscribeOrderDto.orderStatus, // 주문상태
-        },
-        link: item._links.query_subscribeOrder.href, // 구독상세보기 Link
-      }));
-    const generalItemList =
-      activeMenu === 'right' &&
-      newItemList.map((item) => ({
-        thumbnailUrl: item.thumbnailUrl,
-        orderDto: {
-          id: item.orderDto.id,
-          merchantUid: item.orderDto.merchantUid,
-          paymentPrice: item.orderDto.paymentPrice,
-          orderStatus: item.orderDto.orderStatus,
-          orderDate: item.orderDto.orderDate,
-        },
-        itemNameList: item.itemNameList,
-        link: item._links.query_order.href,
-      }));
+    
 
     let newPageInfo = {
       totalPages: pageData.totalPages,
@@ -95,7 +98,7 @@ export default function OrderHistoryPage() {
     return newPageInfo;
   };
 
-  console.log(itemList);
+  console.log(itemType, itemList);
 
   return (
     <>
@@ -139,7 +142,7 @@ export default function OrderHistoryPage() {
                 )}
               </RightContainer>
             </TabContentContainer>
-            <section className={s.pagination_box}>
+            {<section className={s.pagination_box}>
               <PaginationWithAPI
                 apiURL={activeMenu === 'left' ? subscribeApiUrl : generalItemApiUrl}
                 size={searchPageSize}
@@ -147,7 +150,7 @@ export default function OrderHistoryPage() {
                 setIsLoading={setIsLoading}
                 pageInterceptor={pageInterCeptor}
               />
-            </section>
+            </section>}
           </MypageWrapper>
         </Wrapper>
       </Layout>

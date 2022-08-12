@@ -5,13 +5,13 @@ import MypageWrapper from '/src/components/mypage/MypageWrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import s from './card.module.scss';
 import Image from 'next/image';
-import { getDataSSR } from '/src/pages/api/reqData';
+import { getDataSSR, postObjData } from '/src/pages/api/reqData';
 import Spinner from '/src/components/atoms/Spinner';
 import { EmptyContMessage } from '/src/components/atoms/emptyContMessage';
 import {subscribePlanType} from "/store/TYPE/subscribePlanType";
 import transformDate from "/util/func/transformDate";
 import transformLocalCurrency from "/util/func/transformLocalCurrency";
-
+import { useEffect } from 'react';
 
 
 export default function MypageCardPage({ data }) {
@@ -20,9 +20,67 @@ export default function MypageCardPage({ data }) {
   const [cardList, setCardList] = useState(data || []);
   console.log(data);
 
-  const onChangeCard = () => {
-    alert('card 변경 로직 시작');
+  useEffect(() => {
+    // console.log(router);
+    // console.log(router.query.subscribeId);
+
+    const jquery = document.createElement('script');
+    jquery.src = 'https://code.jquery.com/jquery-1.12.4.min.js';
+
+    const iamport = document.createElement('script');
+    iamport.src = 'https://cdn.iamport.kr/js/iamport.payment-1.2.0.js';
+
+    document.head.appendChild(jquery);
+    document.head.appendChild(iamport);
+    
+    return () => {
+      document.head.removeChild(jquery);
+      document.head.removeChild(iamport);
+    };
+
+  }, []);
+
+  const onChangeCard = async(id) => {
+    // alert('card 변경 로직 시작');
+   /* 1. 가맹점 식별하기 */
+    const IMP = window.IMP;
+    IMP.init(process.env.NEXT_PUBLIC_IAMPORT_CODE);
+
+    const randomStr= new Date().getTime().toString(36);
+    /* 2. 결제 데이터 정의하기 */
+    const data = {
+      pg: 'kcp_billing', // PG사
+      pay_method: 'card', // 결제수단
+      amount:0,
+      customer_uid : `customer_Uid_${randomStr}`,   
+      };
+    IMP.request_pay(data, callback);
+    
+    /* 4. 결제 창 호출하기 */
+    async function callback(response) {
+      console.log(response);
+      const { success,customer_uid, imp_uid, merchant_uid,card_name,card_number, error_msg } = response;
+      
+    /* 3. 콜백 함수 정의하기 */
+    if (success) {
+      // 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우
+      // TODO: 결제 정보 전달 
+      const r = await postObjData(`/api/cards/subscribes/${id}`, {
+        customerUid : customer_uid,
+        cardName : card_name,
+        cardNumber :card_number
+      });
+      console.log(r);
+      if(r.isDone){
+        alert('카드변경 성공');
+      }
+    } else {
+        alert('카드변경 실패');
+    } 
+    }
   }
+
+
   return (
     <>
       <MetaTitle title="마이페이지 카드관리" />
@@ -73,7 +131,7 @@ export default function MypageCardPage({ data }) {
                           {transformLocalCurrency(card.subscribeCardDto.nextPaymentPrice)}원
                         </div>
                         <div className={s.btn_box}>
-                          <button className={s.btn} type={'button'} onClick={onChangeCard}>카드변경</button>
+                          <button className={s.btn} type={'button'} onClick={()=>onChangeCard(card.subscribeCardDto.subscribeId)}>카드변경</button>
                         </div>
                       </li>
                     ))}
