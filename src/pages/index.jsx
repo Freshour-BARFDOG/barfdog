@@ -22,8 +22,9 @@ import { Swiper_recipe } from '@src/components/home/Swiper_recipe';
 import { Swiper_main } from '@src/components/home/Swiper_main';
 import {getDataSSR} from "@src/pages/api/reqData";
 import Link from "next/link";
+import axios from "axios";
 
-export default function Home({ data }) {
+export default function MainPage({ data }) {
   
   // console.log(data)
   // const DATA = {
@@ -562,37 +563,59 @@ export async function getServerSideProps({ req }) {
   
   let DATA = null;
   const url = '/api/home';
-  const res = await getDataSSR( req, url );
-  // console.log(res)
-  const data = res?.data || null
-  if(data){
-    DATA = {
-      topBannerDtoList: data.topBannerDto,
-      mainBannerDtoList: data.mainBannerDtoList?.length > 0 && data.mainBannerDtoList.map(list=>({
-        id: list.id,
-        leakedOrder: list.leakedOrder,
-        name: list.name,
-        pcFilename: list.pcFilename,
-        pcImageUrl: list.pcImageUrl,
-        pcLinkUrl: list.pcLinkUrl,
-        mobileFilename: list.mobileFilename,
-        mobileImageUrl: list.mobileImageUrl,
-        mobileLinkUrl: list.mobileLinkUrl,
-      })),
-      recipeDtoList: data.recipeDtoList?.length > 0 && data.recipeDtoList.map(list=>({
-        id: list.id,
-        name: list.id,
-        description: list.description,
-        uiNameKorean: list.uiNameKorean,
-        uiNameEnglish: list.uiNameEnglish,
-        filename1: list.filename1,
-        imageUrl1: list.imageUrl1,
-        filename2: list.filename2,
-        imageUrl2: list.imageUrl2,
-      })),
-      queryBestReviewsDtoList: data.queryBestReviewsDtoList || [],
+  let res;
+
+  try {
+    res = await axios
+      .get(url, {
+        headers: {
+          authorization: null,
+          'content-Type': 'application/json',
+        },
+      })
+      .then((res) => {
+        // console.log(res);
+        return res;
+      })
+      .catch((err) => {
+        console.log(err.response)
+        return err.response;
+      });
+    const data = res?.data || null
+    if(data){
+      DATA = {
+        topBannerDtoList: data.topBannerDto,
+        mainBannerDtoList: data.mainBannerDtoList?.length > 0 && data.mainBannerDtoList.map(list=>({
+          id: list.id,
+          leakedOrder: list.leakedOrder,
+          name: list.name,
+          pcFilename: list.pcFilename,
+          pcImageUrl: list.pcImageUrl,
+          pcLinkUrl: list.pcLinkUrl,
+          mobileFilename: list.mobileFilename,
+          mobileImageUrl: list.mobileImageUrl,
+          mobileLinkUrl: list.mobileLinkUrl,
+        })),
+        recipeDtoList: data.recipeDtoList?.length > 0 && data.recipeDtoList.map(list=>({
+          id: list.id,
+          name: list.id,
+          description: list.description,
+          uiNameKorean: list.uiNameKorean,
+          uiNameEnglish: list.uiNameEnglish,
+          filename1: list.filename1,
+          imageUrl1: list.imageUrl1,
+          filename2: list.filename2,
+          imageUrl2: list.imageUrl2,
+        })),
+        queryBestReviewsDtoList: data.queryBestReviewsDtoList || [],
+      }
     }
+  } catch (err) {
+    console.error(err)
+    return err.response;
   }
+  
+  
   
   // console.log('MAIN DATA : " ', data);
 
