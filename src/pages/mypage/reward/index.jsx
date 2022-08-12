@@ -23,7 +23,10 @@ export default function RewardPage() {
   
   
   const pageInterCeptor = (res) => {// SERVER pagination query가 변경되었을 경우 사용하는 function
-    setTotalReward(res.data.reward); // ! 문제 있는 값임
+    // console.log(res)
+    setTotalReward(res.data.reward); // 서버에서 이미 rewardStatus.SAVED 값만 계산해서 나온 값 ==> 그대로 사용하면 됨
+    const newItemList = res.data.pagedModel._embedded.queryRewardsDtoList || [];
+    console.log(newItemList)
     const pageData = res.data.pagedModel.page;
     let newPageInfo = {
       totalPages: pageData.totalPages,
@@ -31,13 +34,13 @@ export default function RewardPage() {
       totalItems: pageData.totalElements,
       currentPageIndex: pageData.number,
       newPageNumber: pageData.number + 1,
-      newItemList: res.data.pagedModel._embedded.queryRewardsDtoList || [],
+      newItemList,
     };
     return newPageInfo;
   };
   
-  console.log(itemList);
-  const availableItems = itemList?.filter(item=>item.rewardStatus === rewardStatusType.SAVED).map(item=>item.tradeReward);
+  // console.log(itemList);
+  // const availableItems = itemList?.filter(item=>item.rewardStatus === rewardStatusType.SAVED).map(item=>item.tradeReward);
   return (
     <>
       <MetaTitle title="마이페이지 적립금" />
@@ -53,7 +56,7 @@ export default function RewardPage() {
                   <div className={s.left_box}>
                     사용 가능 적립금
                     {/* 적립금 => 직접계산 */}
-                    <span>{transformLocalCurrency(availableItems.length > 0 ? availableItems.reduce((acc, cur)=>acc+cur) : 0)}원</span>
+                    {/*<span>{transformLocalCurrency(availableItems.length > 0 ? availableItems.reduce((acc, cur)=>acc+cur) : 0)}원</span>*/}
                     {/*적립금 => 서버에서 받은 값 (적립금 발행 후에도, 변하지 않음 22.07.29)*/}
                     <span>{transformLocalCurrency(totalReward)}원</span>
                   </div>

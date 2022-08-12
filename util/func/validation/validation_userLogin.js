@@ -12,7 +12,7 @@ export const validate = (obj) => {
 
     switch (key) {
       case 'email':
-        errors[key] = valid_isEmpty(val) || valid_email(val);
+        errors[key] = valid_isEmpty(val);
         break;
       case 'password':
         errors[key] = valid_isEmpty(val);

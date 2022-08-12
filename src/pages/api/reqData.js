@@ -368,8 +368,8 @@ export const getTokenFromServerSide = (req) => {
 export const getDataSSR = async (req, url, tokenFromSSR) => {
   let result;
   const token = tokenFromSSR || getTokenFromServerSide(req);
-  // console.log('token:', token)
-  try {
+  try { // ! TOKEN이 없을 경우 , axios 실행되지 않아야 함
+    // console.log('여기 --- ', token);
     result = await axios
       .get(url, {
         headers: {
@@ -378,17 +378,19 @@ export const getDataSSR = async (req, url, tokenFromSSR) => {
         },
       })
       .then((res) => {
-        // console.log(res);
+        // console.log('SSR RESPONSE: ',res);
         return res;
       })
       .catch((err) => {
         // console.log(err.response)
         return err.response;
       });
+    // console.log('result:::', result)
   } catch (err) {
     // console.error(err)
     return err.response;
   }
+  
 
   return result;
 };

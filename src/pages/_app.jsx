@@ -55,8 +55,8 @@ MyApp.getInitialProps = async (initialProps) => {
   // ! CCR : request & response '없음' => _app.jsx가 실행될 때,  token, USER_TYPE이 위에 정의된 값으로 초기화됨.
   // ! 따라서, Login State을 유지하기 위해서는, Redux등으로, SSR이 안되었을 때를 대비하여, 상태관리를 해줘야함.
   // ! auth-interceptor에서, 토큰만료를 확인하는 조건 => null이 아닌 false일 때로, 구체적으로 명시하여 구분해야함.
-  const SSR_cookie = req?.headers.cookie || res?.headers.cookie;
-  if (SSR_cookie) {
+  // const SSR_cookie = req?.headers?.cookie || res?.headers?.cookie;
+  if (req?.headers?.cookie || res?.headers?.cookie) {
     token = getTokenFromServerSide(req);
     const valid_adminApiUrl = '/api/admin/setting';
     const valid_memberApiUrl = `/api/baskets`;
@@ -102,7 +102,7 @@ MyApp.getInitialProps = async (initialProps) => {
       const data = res_MEMBER.data;
       const res_MEMBER_Dashboard = await getDataSSR(req, getMemberDashboardDataApiUrl, token);
       const mypageData = res_MEMBER_Dashboard.data;
-      // console.log(data);
+      console.log(data);
       // console.log(mypageData);
       memberDATA = {
         userType: USER_TYPE,

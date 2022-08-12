@@ -65,7 +65,7 @@ export default function ReviewPage() {
   const reviewListPageInterCeptor = (res) => {
     // SERVER pagination query가 변경되었을 경우 사용하는 function;
     // res = DUMMY_RESPONSE_DATA_reviewList; // ! TEST
-    // console.log(res);
+    console.log(res);
     const pageData = res.data.page;
     let newPageInfo = {
       totalPages: pageData.totalPages,

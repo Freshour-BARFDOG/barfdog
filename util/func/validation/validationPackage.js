@@ -208,7 +208,7 @@ export const valid_password = (value) => {
   pattern_num.test(pw) && mixedCharCount++;
   pattern_en.test(pw) && mixedCharCount++;
   pattern_spChar.test(pw) && mixedCharCount++;
-  const pettern_mixedChar = mixedCharCount >= 2;
+  const pettern_mixedChar = mixedCharCount >= 3;
   !pettern_mixedChar && (error = '문자 조합 미중축');
 
 

@@ -52,7 +52,7 @@ export const validate = async (obj, formErrors) => {
         errors[key] = valid_isEmpty(val);
         break;
       case 'birthday':
-        errors[key] = valid_isEmpty(val);
+        errors[key] = valid_isEmpty(val) || valid_minAge(val);
         break;
       default:
         break;
@@ -65,3 +65,23 @@ export const validate = async (obj, formErrors) => {
   console.log('Valid Result (formValues) : ', errors);
   return errors;
 };
+
+
+const valid_minAge = (birthDay, limitedAge=14)=>{
+  let error = '';
+  const birthYear = Number(birthDay.slice(0,4)); // YYYYMMDD
+  const curYear = new Date().getFullYear();
+  const koreanAgeUnit = +1;
+  const age = curYear - birthYear + koreanAgeUnit;
+  const minAge = limitedAge;
+  if(!birthDay){
+    error = '항목이 비어있습니다.'
+  } else if(birthDay.length !== 8){
+    error=`생년월일 형식이 올바르지 않습니다.`
+  } else if(age < minAge){
+    error=`${minAge}세 미만입니다.`
+  }
+  
+  return error;
+  
+}

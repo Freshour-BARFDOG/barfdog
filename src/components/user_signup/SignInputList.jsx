@@ -8,7 +8,7 @@ import CustomRadio from "/src/components/atoms/CustomRadio";
 import getAuthNumberForPhoneNumber from "/util/func/getAuthNumberForPhoneNumber";
 import {valid_authNumber, valid_confirmPassword, valid_email, valid_email_duplication, valid_password, valid_phoneNumber} from "/util/func/validation/validationPackage";
 import rem from "/util/func/rem";
-
+import {genderType} from "/store/TYPE/genderType";
 
 let isFirstRendering = true;
 
@@ -371,11 +371,11 @@ export default function SignInpuList({formValues, setFormValues, formErrors, set
             className={s['gender']}
             name={'gender'}
             labelList={[
-              { label: '남자', value: 'MALE' },
-              { label: '여자', value: 'FEMAIL' },
+              { label: genderType.KOR.MALE, value: genderType.MALE },
+              { label: genderType.KOR.FEMALE, value: genderType.FEMALE },
               {
-                label: '선택 안함',
-                value: 'NONE',
+                label: genderType.KOR.NONE,
+                value: genderType.NONE,
               },
             ]}
             type={'radio'}

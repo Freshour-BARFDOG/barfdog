@@ -433,8 +433,7 @@ export default function UpdateBlogPage ({ id }) {
 };
 
 
-UpdateBlogPage.getInitialProps = async ({ query }) => {
+export async function getServerSideProps({ query}) {
   const { id } = query
-  return { id };
-  
+  return { props: { id } };
 }

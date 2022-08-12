@@ -13,14 +13,13 @@ import { useRouter } from 'next/router';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import { validate } from '/util/func/validation/validation_signup';
 import { valid_policyCheckbox } from '/util/func/validation/validationPackage';
-import {useSelector} from "react-redux";
-
+import { useSelector } from 'react-redux';
 
 export default function SignupPage() {
   const mct = useModalContext();
   const router = useRouter();
-  const userState = useSelector(s=>s.userState);
-  
+  const userState = useSelector((s) => s.userState);
+
   const initialFormValues = {
     name: '',
     email: '',
@@ -45,17 +44,16 @@ export default function SignupPage() {
     },
     provider: userState.snsInfo.provider || null,
     providerId: userState.snsInfo.providerId || null,
-  }
-  
+  };
+
   // console.log('userState: ',userState)
   // console.log('initialFormValues: ',initialFormValues)
-  
+
   const initialFormErrors = {
     isEmailDuplicated: null,
     isValidPhoneNumber: '휴대폰번호 인증이 필요합니다.',
-  }
-  
-  
+  };
+
   const [isModalActive, setIsModalActive] = useState({
     termsOfService: false,
     privacy: false,
@@ -63,8 +61,6 @@ export default function SignupPage() {
   const [alertModalMessage, setAlertModalMessage] = useState('');
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState(initialFormErrors);
-  
-  
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -105,12 +101,12 @@ export default function SignupPage() {
 
   // console.log(formValues)
 
-  const sendSignupData = async (data) => {
-    console.log('SUBMIT DATA:\n',data);
+  const sendSignupData = async (formvalues) => {
+    console.log('SUBMIT DATA:\n', formvalues);
     // data.providerId = "asdfasdf-asdfasdf"; // ! TEST 임의의 providerID를 서버에 전송해도, 가입이 된다.
     // 단, providerID가 중복될 경우, 해당 providerId sns계정으로 가입불가능.
     await axios
-      .post('/api/join', formValues, {
+      .post('/api/join', formvalues, {
         headers: {
           'content-Type': 'application/json',
         },
@@ -119,8 +115,9 @@ export default function SignupPage() {
         console.log(res);
         console.log(res.data);
         if (res.status === 201) {
-          alert('회원가입에 성공하였습니다.')
-          router.push(`/account/signup/success?username=${data.name}`);
+          const userName = formvalues.name
+          alert('회원가입에 성공하였습니다.');
+          router.push(`/account/signup/success?username=${userName}`);
         }
       })
       .catch((err) => {
@@ -183,3 +180,4 @@ export default function SignupPage() {
     </>
   );
 }
+
