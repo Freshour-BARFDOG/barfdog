@@ -475,7 +475,7 @@ export async function getServerSideProps(ctx) {
   const getApiUrl = `/api/orders/${orderIdx}/general`;
 
   let res = await getDataSSR(req, getApiUrl);
-  res = DUMMY_RESPONSE; // ! TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
+  // res = DUMMY_RESPONSE; // ! TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
   // console.log('SERVER REPONSE: ', res);
   const data = res?.data;
   console.log(data);
@@ -493,22 +493,22 @@ export async function getServerSideProps(ctx) {
         status: item.status,
         saveReward: item.saveReward,
         orderCancel: {
-          reason: item.orderCancel.cancelReason,
-          detailReason: item.orderCancel.cancelDetailReason,
-          requestDate: item.orderCancel.cancelRequestDate,
-          confirmDate: item.orderCancel.cancelConfirmDate,
+          reason: item.orderCancel?.cancelReason || null,
+          detailReason: item.orderCancel?.cancelDetailReason || null,
+          requestDate: item.orderCancel?.cancelRequestDate || null,
+          confirmDate: item.orderCancel?.cancelConfirmDate || null,
         },
         orderReturn: {
-          reason: item.orderReturn.returnReason,
-          detailReason: item.orderReturn.returnDetailReason,
-          requestDate: item.orderReturn.returnRequestDate,
-          confirmDate: item.orderReturn.returnConfirmDate,
+          reason: item.orderReturn?.returnReason || null,
+          detailReason: item.orderReturn?.returnDetailReason || null,
+          requestDate: item.orderReturn?.returnRequestDate || null,
+          confirmDate: item.orderReturn?.returnConfirmDate || null,
         },
         orderExchange: {
-          reason: item.orderExchange.exchangeReason,
-          detailReason: item.orderExchange.exchangeDetailReason,
-          requestDate: item.orderExchange.exchangeRequestDate,
-          confirmDate: item.orderExchange.exchangeConfirmDate,
+          reason: item.orderExchange?.exchangeReason || null,
+          detailReason: item.orderExchange?.exchangeDetailReas || null,
+          requestDate: item.orderExchange?.exchangeRequestDate || null,
+          confirmDate: item.orderExchange?.exchangeConfirmDate || null,
         },
       })),
       orderDto: {
