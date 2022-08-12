@@ -148,6 +148,9 @@ section.content_title {
         min-width: rem(50);
         max-height: rem(60);
         aspect-ratio: 1/1;
+        background-color: var(--color-bg);
+        font-size: 0;
+        text-indent: -9999px;
       }
 
       .inner_text {
