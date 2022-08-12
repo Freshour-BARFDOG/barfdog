@@ -101,6 +101,7 @@ export default function InvitePage() {
       orderedCount: res.data.orderedCount, // 본인의 추천코드로 친구가 주문한 수
       totalRewards: res.data.totalRewards, // 그로 인한 총 적립 포인트
     };
+    console.log(recommendData)
     setRecommendInfo(recommendData);
     const pageData = res.data?.pagedModel?.page;
     let newItemList = res.data?.pagedModel?._embedded?.queryRewardsDtoList || [];
