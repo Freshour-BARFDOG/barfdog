@@ -54,6 +54,11 @@ section.pagination_box{ padding: rem(80) 0 0}
         aspect-ratio: 1/1;
         border-radius:50%;
         background-color: var(--color-bg-ghostWhite);
+        background-image: url("../../../.././public/img/mypage/Dog_basic.png");
+        background-repeat: no-repeat;
+        background-size: rem(35);
+        background-position: center;
+
         .dogName{
           position: absolute;
           left: 50%;

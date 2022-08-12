@@ -252,8 +252,9 @@ export default function SingleItem_OrderHistoryPage({ data }) {
                 {!valid_deliveryCondition(data?.orderDto.deliveryStatus) ? (
                   <ul className={s.content_grid}>
                     <li>CJ대한통운</li>
-                    <li>운송장번호&nbsp;{data?.orderDto.deliveryNumber || '(발급 전)'}</li>
+                    <li><span>운송장번호</span> {data?.orderDto.deliveryNumber || '(발급 전)'}</li>
                     <li className={s.deliveryStatus}>
+                      배송완료
                       {orderStatus.KOR[data?.orderDto.deliveryStatus]}
                     </li>
                     <li>

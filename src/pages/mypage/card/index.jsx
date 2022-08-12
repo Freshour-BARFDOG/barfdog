@@ -152,8 +152,8 @@ export default function MypageCardPage({ data }) {
 
 export async function getServerSideProps({ req }) {
   const getApiUrl = '/api/cards';
-  // const res = DUMMY_RESPONSE  // ! TSET
-  const res =await getDataSSR(req, getApiUrl);
+  const res = DUMMY_RESPONSE  // ! TSET
+  // const res =await getDataSSR(req, getApiUrl);
   let DATA = null;
   const embeddedData = res?.data._embedded;
   if (embeddedData) {

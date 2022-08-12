@@ -40,10 +40,10 @@ export const SingleItemList = ({ itemList }) => {
                     </span>
                   </div>
                   <div className={s.text2}>
-                    <p><span>주문번호</span>
-                      <span>{item.orderDto.merchantUid}asdklfjasdlkfjasdklfjasdlkfj</span></p>
-                    <p><span>결제금액</span>
-                      <span>{transformLocalCurrency(item.orderDto.paymentPrice)}원</span></p>
+                    <span>주문번호</span>
+                      <span>{item.orderDto.merchantUid}asdklfjasdlkfjasdklfjasdlkfj</span>
+                    <span>결제금액</span>
+                      <span>{transformLocalCurrency(item.orderDto.paymentPrice)}원</span>
                   </div>
                 </div>
               </div>

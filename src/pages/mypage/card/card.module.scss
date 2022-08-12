@@ -52,7 +52,7 @@ section.body {padding : 0 0 rem(55)}
     font-weight: 600;
     .grid_title_box {
       display: grid;
-      grid-template-columns:  rem(115) 1fr 13% 13% 13%;
+      grid-template-columns:  rem(150) 1fr 13% 13% 13%;
       justify-items: center;
       align-items: center;
       padding: rem(15) 0;
@@ -66,7 +66,7 @@ section.body {padding : 0 0 rem(55)}
 
     .grid_body_box {
       display : grid;
-      grid-template-columns: rem(115) 1fr 13% 13% 13%;
+      grid-template-columns: minmax(rem(115), auto) 1fr 13% 13% 13%;
       justify-items: center;
       align-items: center;
       padding: rem(8) 0;
@@ -75,7 +75,7 @@ section.body {padding : 0 0 rem(55)}
         width: 100%;
         margin-left: rem(20);
         display: grid;
-        grid-template-columns: rem(24) rem(100);
+        grid-template-columns: rem(24) 1fr;
         align-items: center;
         column-gap: rem(10);
         
