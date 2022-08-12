@@ -34,9 +34,6 @@ export const SubscribeItems = ({ itemList }) => {
                   <div className={s.flex_box}>
                     <div className={s.text}>
                       <p>{item.subscribeOrderDto.dogName}</p>
-                      <div className={s.line_box}>
-                        <hr />
-                      </div>
                       <div className={s.last_text}>
                         {item.recipeDto.recipeName} ({item.subscribeOrderDto.subscribeCount}회차)
                       </div>

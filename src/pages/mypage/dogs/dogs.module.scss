@@ -150,8 +150,8 @@ section.body { padding : rem(120) 0 0 }
     transform: translateY(rem(-80));
 
     .btn-section {
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
       column-gap: rem(10);
       
       @include char(l15);
