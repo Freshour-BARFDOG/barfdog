@@ -25,6 +25,7 @@ export const SubscribeSkipPayment = ({subscribeInfo}) => {
   const initialInputValue = inputIdList[0];
   const initialDelvieryDate = subscribeInfo.info.nextDeliveryDate;
   
+  
   const mct = useModalContext();
   const tbContext = useContext(ToggleBoxContext);
   const [skipCount, setSkipCount] = useState( initialInputValue);
@@ -61,9 +62,9 @@ export const SubscribeSkipPayment = ({subscribeInfo}) => {
       const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/${selectedSkipCount}`;
       const res = await postObjData(url, body);
       console.log(res);
-      if (!res.isDone) {
+      // if (!res.isDone) {
         // ! TEST CODE //
-        // if (res.isDone) {  // ! PRODUCT CODE //
+        if (res.isDone) {  // ! PRODUCT CODE //
         setSubmitted(true);
         mct.alertShow('구독 건너뛰기가 적용되었습니다.');
       } else {
@@ -106,7 +107,7 @@ export const SubscribeSkipPayment = ({subscribeInfo}) => {
         </div>
 
         <p className={s.d_day_text}>
-          기존 발송 예정일은<span>{transformDate(initialDelvieryDate, '월일')}</span>입니다
+          기존 발송 예정일은<span>{transformDate(initialDelvieryDate, '월일') || 'EMPTY DATA'}</span>입니다
         </p>
         <p className={s.d_day_text2}>
           변경 발송 예정일은<span className={s.red_span}>{transformDate(changedDelvieryDate, '월일')}</span>입니다

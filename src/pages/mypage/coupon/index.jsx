@@ -1,17 +1,17 @@
 import React, { useRef, useState } from 'react';
+import s from './coupon.module.scss';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from '/src/components/mypage/MypageWrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import styled from 'styled-components';
 import Modal_useCoupon from '/src/components/modal/modal_mypage_coupon';
-import s from './coupon.module.scss';
-import PaginationWithAPI from '../../../components/atoms/PaginationWithAPI';
-import transformDate from '../../../../util/func/transformDate';
-import { EmptyContMessage } from '../../../components/atoms/emptyContMessage';
-import Spinner from '../../../components/atoms/Spinner';
-import { Modal_registerCoupon } from '../../../components/modal/Modal_registerCoupon';
-import {putObjData} from "../../api/reqData";
+import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
+import transformDate from '/util/func/transformDate';
+import { EmptyContMessage } from '/src/components/atoms/emptyContMessage';
+import Spinner from '/src/components/atoms/Spinner';
+import { Modal_registerCoupon } from '/src/components/modal/Modal_registerCoupon';
+import {putObjData} from "/src/pages/api/reqData";
 
 const Temp_button = styled.button`
   display: flex;
@@ -43,7 +43,6 @@ export default function CouponPage() {
   };
 
   const pageInterCeptor = (res) => {
-    // SERVER pagination query가 변경되엇을 경우 사용하는 FUNC
     const pageData = res.data.couponsPageDto.page;
     let newPageInfo = {
       totalPages: pageData.totalPages,
@@ -145,7 +144,7 @@ export default function CouponPage() {
             <section className={s.coupon_state_section}>
               <div className={s.coupon_state_flex_box}>
                 <div className={s.left_box}>
-                  전체 쿠폰 : <span>{itemList?.length}</span>개
+                  사용 가능한 쿠폰 : <span>{itemList.filter(cp=>cp.status === 'ACTIVE')?.length}</span>개
                 </div>
                 {/*<div className={s.line}>*/}
                 {/*<hr />*/}

@@ -22,8 +22,8 @@ export default function ManageSubscribePage() {
   console.log(itemList);
 
   const pageInterCeptor = async (res) => {
-    // console.log(res);
-    res = DUMMY_SUBSCRIBE_LIST_RESPONSE; // ! TEST
+    console.log(res);
+    // res = DUMMY_SUBSCRIBE_LIST_RESPONSE; // ! TEST
     const pageData = res.data.page;
     const curItemList = res.data?._embedded?.querySubscribesDtoList || [];
 
@@ -85,7 +85,7 @@ export default function ManageSubscribePage() {
                         <div className={s.grid}>
                           <div className={s.col_2}>
                             <span className={s.text2}>다음 결제일</span>
-                            <span className={s.text3}>{transformDate(item.subscribeDto.nextPaymentDate)}</span>
+                            <span className={s.text3}>{transformDate(item.subscribeDto?.nextPaymentDate)}</span>
                           </div>
 
                           <div className={s.col_3}>

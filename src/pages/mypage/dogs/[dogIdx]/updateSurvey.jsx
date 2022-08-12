@@ -3,7 +3,7 @@ import s from '/src/pages/survey/survey.module.scss';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
-import { FullScreenRunningDog } from '/src/components/atoms/FullScreenLoading';
+import {FullScreenLoading, FullScreenRunningDog} from '/src/components/atoms/FullScreenLoading';
 import SurveyStep1 from '/src/components/survey/SurveyStep1';
 import SurveyStep2 from '/src/components/survey/SurveyStep2';
 import SurveyStep3 from '/src/components/survey/SurveyStep3';
@@ -121,6 +121,7 @@ export default function UpdateSurveyPage({ data }) {
   }
 
   const onSubmit = async (confirm) => {
+    console.log(confirm)
     if (!confirm || submitState === true) {
       return setActiveConfirmModal(false)
     }
@@ -136,13 +137,19 @@ export default function UpdateSurveyPage({ data }) {
       console.log(res);
       if (res.isDone) {
         modalMessage = '설문조사가 성공적으로 수정되었습니다.';
-        const slicedReportApiLink = res.data.data._links.query_surveyReport.href.split('/');
-        const linkLength = slicedReportApiLink.length;
-        const endPoint = slicedReportApiLink[linkLength - 1];
-        const surveyReportsId = endPoint;
-        const curPath = router.pathname;
-        await router.push(`${curPath}?surveyReportsId=${surveyReportsId}`);
         onShowModal(modalMessage);
+        setTimeout(()=>{
+          window.location.reload();
+        }, 1000);
+        setIsLoading({reload:true});
+        console.log(res.data.data)
+        // const slicedReportApiLink = res.data.data._links.query_surveyReport.href.split('/');
+        // const linkLength = slicedReportApiLink.length;
+        // const endPoint = slicedReportApiLink[linkLength - 1];
+        // const surveyReportsId = endPoint;
+        // const curPath = router.pathname;
+        // await router.push(`${curPath}?surveyReportsId=${surveyReportsId}`);
+
       } else {
         modalMessage = '내부 통신장애입니다. 잠시 후 다시 시도해주세요.';
         onShowModal(modalMessage);
@@ -150,8 +157,11 @@ export default function UpdateSurveyPage({ data }) {
       }
       setActiveConfirmModal(false)
     } catch (err) {
-      await onShowModal('API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.', moveToPrevPage);
       console.error('API통신 오류 : ', err);
+      onShowModal('API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.');
+      // setTimeout(()=>{
+      //   window.location.reload();
+      // }, 1000);
     }
     setIsLoading((prevState) => ({
       ...prevState,
@@ -172,7 +182,7 @@ export default function UpdateSurveyPage({ data }) {
   };
 
   useEffect(() => {
-    if (!data) {
+    if (!data && window && typeof window !== 'undefined') {
       window.location.href = '/mypage/dogs';
     }
   }, [data]);
@@ -183,6 +193,10 @@ export default function UpdateSurveyPage({ data }) {
     return <FullScreenRunningDog opacity={1} />
   }
 
+  if(isLoading.reload){
+    return <FullScreenLoading opacity={0.5}/>
+  }
+  
   return (
     <>
       <MetaTitle title="설문조사 수정하기" />

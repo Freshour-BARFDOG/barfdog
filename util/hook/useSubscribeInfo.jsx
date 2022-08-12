@@ -11,7 +11,7 @@ export const useSubscribeInfo = (subscribeId) => {
       try {
         const url = `/api/subscribes/${subscribeId}`;
         let res = await getData(url);
-        console.log(res)
+        console.log('useSubscribeInfo: ',res)
         /// ! TEST TEST TEST TEST TEST
         if(res.status === 404 ) {
           res = DUMMY_RESPONSE(subscribeId);
@@ -81,8 +81,8 @@ export const useSubscribeInfo = (subscribeId) => {
         const DATA = {
           // 구독 기본 정보 + 구독정보의 Dashboard
           info: {
-            subscribeId: subscribeId  === data.subscribeDto.id ? subscribeId : null, // validation 요청한 페이지의 구독id와 server에서 받은 값을 대조
-            dogId: '',
+            subscribeId: Number(subscribeId)  === data.subscribeDto.id ? Number(subscribeId) : null, // validation 요청한 페이지의 구독id와 server에서 받은 값을 대조
+            dogId: 'DOG_ID_필요함',
             dogName: data.subscribeDto.dogName,
             subscribeCount: data.subscribeDto.subscribeCount,
             nextPaymentDate: data.subscribeDto.nextPaymentDate,

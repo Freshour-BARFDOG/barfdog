@@ -89,9 +89,8 @@ export const SubscribeGram = ({ subscribeInfo }) => {
       const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/gram`;
       const res = await postObjData(url, body);
       console.log(res);
-      if (!res.isDone) {
-        // ! TEST CODE //
-        // if (res.isDone) {  // ! PRODUCT CODE //
+      // if (!res.isDone) { // ! TEST CODE //
+        if (res.isDone) {  // ! PRODUCT CODE //
         setSubmitted(true);
         mct.alertShow('무게 변경 변경이 완료되었습니다.');
       } else {
