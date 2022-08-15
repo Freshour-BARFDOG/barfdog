@@ -3,7 +3,7 @@ import DoubleArrow from '@public/img/icon/pagination-double-arrow.svg';
 import { useEffect, useState } from 'react';
 import s from './pagination.module.scss';
 import { useRouter } from 'next/router';
-import { getData } from '/src/pages/api/reqData';
+import {getData, postObjData} from '/src/pages/api/reqData';
 import { searchQueryType } from '../../../store/TYPE/searchQueryType';
 
 const Pagination = ({
@@ -16,7 +16,8 @@ const Pagination = ({
   urlQuery,
   setPageData,
   routerDisabled= false,
-  pageInterceptor
+  pageInterceptor,
+  option={apiMethod:'GET'}
 }) => {
   const router = useRouter();
   const query = router.query;
@@ -38,7 +39,13 @@ const Pagination = ({
         const defQuery = `?${searchQueryType.PAGE}=${calcedPageIndex}&${searchQueryType.SIZE}=${size}`;
         let urlQueries = urlQuery ? `${defQuery}&${urlQuery}` : defQuery;
 
-        const res = await getData(`${apiURL}${urlQueries}`);
+        let res;
+        if (option.apiMethod === 'GET') {
+          res = await getData(`${apiURL}${urlQueries}`);
+        } else if (option.apiMethod === 'POST') {
+          const body = urlQuery;
+          res = await postObjData(`${apiURL}${defQuery}`, body);
+        }
         const pageData = res.data?.page;
         const hasItems = pageData?.totalElements !== 0;
         

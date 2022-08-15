@@ -16,10 +16,7 @@ import { orderStatus } from '/store/TYPE/orderStatusTYPE';
 import EmptyMessage from '/src/components/atoms/AmdinErrorMessage';
 import Spinner from '/src/components/atoms/Spinner';
 import { productType } from '/store/TYPE/itemType';
-import {transformToday} from "/util/func/transformDate";
-
-
-
+import { transformToday } from '/util/func/transformDate';
 
 const initialSearchValues = {
   from: transformToday(),
@@ -32,16 +29,14 @@ const initialSearchValues = {
   orderType: productType.GENERAL,
 };
 
-
-
 export default function SearchOnSellPage() {
-  
   const searchApiUrl = `/api/admin/orders/search`;
   const searchPageSize = 10;
   const [isLoading, setIsLoading] = useState({});
   const [modalMessage, setModalMessage] = useState('');
   const [itemList, setItemList] = useState([1, 2, 3]);
-  const [searchValue, setSearchValue] = useState(initialSearchValues);
+  const [searchValues, setSearchValues] = useState(initialSearchValues);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const searchOption = Object.keys(orderStatus)
     .filter((key) => key !== orderStatus.BEFORE_PAYMENT && key !== 'KOR')
@@ -51,13 +46,24 @@ export default function SearchOnSellPage() {
     }));
 
   const onResetSearchValues = () => {
-    setSearchValue(initialSearchValues);
+    setSearchValues(initialSearchValues);
   };
 
-  const onSearchHandler = (e) => {
-    console.log('검색 실행', searchValue);
-   
+  const onSearchHandler = () => {
+    const body = {
+      from: searchValues.from,
+      to: searchValues.to,
+      merchantUid: searchValues.merchantUid,
+      memberName: searchValues.memberName,
+      memberEmail: searchValues.memberEmail,
+      recipientName: searchValues.recipientName,
+      statusList: [searchValues.statusList], // ! 배열로 전송
+      orderType: searchValues.orderType,
+    };
+    setSearchQuery(body);
   };
+
+  console.log(itemList);
 
   return (
     <>
@@ -69,12 +75,12 @@ export default function SearchOnSellPage() {
             <SearchBar onReset={onResetSearchValues} onSearch={onSearchHandler}>
               <SearchTerm
                 title={'조회기간'}
-                searchValue={searchValue}
-                setSearchValue={setSearchValue}
+                searchValue={searchValues}
+                setSearchValue={setSearchValues}
               />
               <SearchTextWithCategory
-                searchValue={searchValue}
-                setSearchValue={setSearchValue}
+                searchValue={searchValues}
+                setSearchValue={setSearchValues}
                 title="검색내용"
                 name="detail"
                 id="detail"
@@ -90,17 +96,17 @@ export default function SearchOnSellPage() {
                 name="statusList"
                 id="statusList"
                 options={searchOption}
-                setSearchValue={setSearchValue}
-                searchValue={searchValue}
+                setSearchValue={setSearchValues}
+                searchValue={searchValues}
               />
               <SearchRadio
-                searchValue={searchValue}
-                setSearchValue={setSearchValue}
+                searchValue={searchValues}
+                setSearchValue={setSearchValues}
                 title="주문유형"
                 name="orderType"
                 idList={[productType.GENERAL, productType.SUBSCRIBE]}
                 labelList={[productType.KOR.GENERAL, productType.KOR.SUBSCRIBE]}
-                value={searchValue.orderType}
+                value={searchValues.orderType}
               />
             </SearchBar>
           </section>
@@ -133,17 +139,15 @@ export default function SearchOnSellPage() {
                   <li className={s.table_th}>수령자</li>
                   <li className={s.table_th}>묶음배송 여부</li>
                 </ul>
-                {isLoading ? (
-                  <EmptyMessage>
-                    <Spinner />
-                  </EmptyMessage>
-                ) : itemList.length > 0 ? (
+                {isLoading.fetching ? (
+                  <AmdinErrorMessage loading={<Spinner />} />
+                ) : itemList.length === 0 ? (
+                  <AmdinErrorMessage text="조회된 데이터가 없습니다." />
+                ) : (
                   <SearchResultList
                     items={itemList}
                     // onDeleteItem={onDeleteItem}
                   />
-                ) : (
-                  <AmdinErrorMessage text="조회된 데이터가 없습니다." />
                 )}
               </div>
             </div>
@@ -151,8 +155,10 @@ export default function SearchOnSellPage() {
               <PaginationWithAPI
                 apiURL={searchApiUrl}
                 size={searchPageSize}
+                urlQuery={searchQuery}
                 setItemList={setItemList}
                 setIsLoading={setIsLoading}
+                option={{ apiMethod: 'POST' }}
               />
             </div>
           </section>
@@ -162,4 +168,3 @@ export default function SearchOnSellPage() {
     </>
   );
 }
-
