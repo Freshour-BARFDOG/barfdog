@@ -2,23 +2,23 @@
 $input-height: rem(44);
 
 
-
-
-/////////// STYLE EXAMPLE /////////
-// EditUserInfoInputList.jsx 파일에서 , className을 삽입 시, 현재 scss파일에 적용됨// .
-.ex1{
-  background-color: red;
-}
-.ex2{
-  border-radius: rem(6);
-  background-color: rgba(0,0,0,0.15);
-  animation: test 3s ease infinite;
-}
-@keyframes test {
-  0%, 100%{background-color:  rgba(0,0,0,0)}
-  50%{background-color:  rgba(0,0,0,0.45)}
-}
-/////////// STYLE EXAMPLE /////////
+//
+//
+///////////// STYLE EXAMPLE /////////
+//// EditUserInfoInputList.jsx 파일에서 , className을 삽입 시, 현재 scss파일에 적용됨// .
+//.ex1{
+//  background-color: red;
+//}
+//.ex2{
+//  border-radius: rem(6);
+//  background-color: rgba(0,0,0,0.15);
+//  animation: test 3s ease infinite;
+//}
+//@keyframes test {
+//  0%, 100%{background-color:  rgba(0,0,0,0)}
+//  50%{background-color:  rgba(0,0,0,0.45)}
+//}
+///////////// STYLE EXAMPLE /////////
 
 
 
