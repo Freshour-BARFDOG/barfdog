@@ -31,12 +31,22 @@ section.content { padding : rem(28) 0 rem(22)}
       padding: rem(24) 0 rem(19) 0;
     }
     .row_2 {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap:rem(10);
+      font-size:rem(15);
       text-align: center;
       @include char(l15);
       padding-bottom: rem(28);
       span {
         color: var(--color-font-sub);
       }
+    }
+    .image{
+      position: relative;
+      width: rem(30);
+      aspect-ratio: 1;
     }
   }
 }
@@ -63,7 +73,7 @@ section.content { padding : rem(28) 0 rem(22)}
 
   
   .btn {
-    padding-bottom: calc(100vh - rem(250));
+    padding-bottom: calc(100vh - #{rem(250)});
     max-width: rem(350);
     margin: 0 auto;
 

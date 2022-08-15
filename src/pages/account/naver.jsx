@@ -164,7 +164,8 @@ export async function getServerSideProps({ query }) {
       });
 
     // console.log('BARFDOG API SERVER res::::: ',res)
-    res = DUMMY_MEMBER_RESPONSE; ////////  ! TEST
+    res = DUMMY_NEW_MEMBER_RESPONSE; ////////  ! TEST
+    // res = DUMMY_MEMBER_RESPONSE; ////////  ! TEST
 
     if(res.data){
       const resultCode = Number(res.data.resultcode) || null;
@@ -215,7 +216,7 @@ export async function getServerSideProps({ query }) {
   const serverSideData = {
     snsUserType,
     providerId: code,
-    provider: snsProviderType.KAKAO,
+    provider: snsProviderType.NAVER, // ! IMPORTANT:  PROVIDER > NAVER
     userInfo: userInfo,
   };
   return { props: { data: serverSideData, err } };

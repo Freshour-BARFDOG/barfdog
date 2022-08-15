@@ -137,7 +137,8 @@ export async function getServerSideProps({ query }) {
         return err;
       });
 
-    res = DUMMY_MEMBER_RESPONSE; ////////  ! TEST
+    res = DUMMY_NEW_MEMBER_RESPONSE; ////////  ! TEST
+    // res = DUMMY_MEMBER_RESPONSE; ////////  ! TEST
 
     const resultCode = Number(res.data.resultcode) || null;
     const resultMessage = res.data.message;

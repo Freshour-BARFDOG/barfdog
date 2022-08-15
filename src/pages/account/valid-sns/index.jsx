@@ -12,7 +12,7 @@ import Spinner from '/src/components/atoms/Spinner';
 import { useModalContext } from '/store/modal-context';
 import enterKey from '/util/func/enterKey';
 import { authAction } from '/store/auth-slice';
-import { filter_blindEmail } from '../../../../util/func/filter_blindEmail';
+import { filter_blindEmail } from '/util/func/filter_blindEmail';
 
 export default function ValidSnsPage() {
   const userState = useSelector((s) => s.userState);
@@ -29,7 +29,7 @@ export default function ValidSnsPage() {
   useEffect(() => {
     if (!userState.snsInfo.provider || !userState.snsInfo.provider) {
       alert('연동할 SNS정보가 없습니다.');
-      // window.location.href= '/';
+      window.location.href= '/';
     }
   }, []);
 
