@@ -16,8 +16,8 @@ const SearchTextWithCategory = ({
   onKeydown,
 }) => {
 
-  const initialValue = options[0].value || '';
-  const [selectedCategory, setSelectedCategory] = useState(initialValue);
+  const initialCategory = options[0].value || '';
+  const [selectedCategory, setSelectedCategory] = useState(initialCategory);
 
 
   const onSelectChangeHandler = (e) => {

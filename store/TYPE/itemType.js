@@ -1,4 +1,3 @@
-
 export const general_itemType = {
   ALL: 'ALL',
   RAW: 'RAW',
@@ -9,12 +8,14 @@ export const general_itemType = {
     RAW: '생식',
     TOPPING: '토핑',
     GOODS: '굿즈',
-  }
-}
-
+  },
+};
 
 export const productType = {
-  GENERAL:"GENERAL",
-  SUBSCRIBE:"SUBSCRIBE",
-
-}
+  GENERAL: 'GENERAL',
+  SUBSCRIBE: 'SUBSCRIBE',
+  KOR: {
+    GENERAL: '일반',
+    SUBSCRIBE: '구독',
+  },
+};

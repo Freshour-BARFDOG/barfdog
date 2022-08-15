@@ -21,8 +21,8 @@ export const orderStatus = {
   CONFIRM: 'CONFIRM',
   KOR: {
     ALL: '전체', // * 배송상태 미포함 (검색결과 조회 시에 사용)
-    BEFORE_PAYMENT: '결제 전',
     HOLD: '구독 보류',
+    BEFORE_PAYMENT: '결제 전',
     PAYMENT_DONE: '결제 완료',
     PRUDUCING: '생산 중', // 구독 상품
     DELIVERY_READY: '배송 준비 중', // 일반상품

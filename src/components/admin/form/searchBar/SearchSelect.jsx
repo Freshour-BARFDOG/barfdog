@@ -12,13 +12,11 @@ const SearchSelect = ({
   ...props
 }) => {
 
-  const initialValue = options[0].value;
+  const initialValue = searchValue[id] || options[0].value;
   const [selectedValue, setSelectedValue] = useState(initialValue);
 
-  useEffect(() => {
-    // initValue
-    if (!searchValue[id]) setSelectedValue(initialValue);
-    setSelectedValue(searchValue[id]);
+  useEffect(() => { // initValue
+    setSelectedValue(initialValue);
   }, [searchValue[id]]);
 
   const onChangeHandler = (e) => {
@@ -28,7 +26,7 @@ const SearchSelect = ({
     if (setSearchValue && typeof setSearchValue === 'function') {
       setSearchValue((prevState) => ({
         ...prevState,
-        [name]: value,
+        [id]: value,
       }));
     }
   };
