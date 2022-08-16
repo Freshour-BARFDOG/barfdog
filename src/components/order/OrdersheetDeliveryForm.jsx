@@ -262,11 +262,11 @@ export const OrdersheetDeliveryForm = ({
             labelList={['HIDDEN-LABEL-TRUE', 'HIDDEN_LABEL-FALSE']}
             className={`${s.bundleShipping} ${bundle ? s.active : s.inActive}`}
             components={[
-              <div className={s.text}>
+              <div className={s.text} key={'delivery-message-subscribe'}>
                 정기구독 배송시 묶음 배송 신청
                 <p>배송비가 추가 되지 않아요</p>
               </div>,
-              <div className={s.text}>
+              <div className={s.text} key={'delivery-message-general'}>
                 단품 주문으로 별도 배송 요청
                 <p>배송비가 추가 됩니다</p>
               </div>,

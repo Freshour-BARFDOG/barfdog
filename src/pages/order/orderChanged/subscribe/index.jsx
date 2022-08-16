@@ -127,7 +127,7 @@ export default function SubscribeOrderChangedPage({ data }) {
             <div className={s.title_text}>구독정보 변경</div>
             <div className={s.title_text_2}>{DATA.lastSurveyDate} 설문결과</div>
             <div className={`${s.notice}`}>
-              변경사항은 '다음 정기결제'부터 적용되며, <br />
+              변경사항은 &apos;다음 정기결제&apos;부터 적용되며, <br />
               발송예정일이 공휴일인 경우 익일 배송됩니다.
             </div>
           </section>

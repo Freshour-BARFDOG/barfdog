@@ -3,7 +3,7 @@ import DoubleArrow from '@public/img/icon/pagination-double-arrow.svg';
 import { useEffect, useState } from 'react';
 import s from './pagination.module.scss';
 import { useRouter } from 'next/router';
-import {getData, postObjData} from '/src/pages/api/reqData';
+import { getData, postObjData } from '/src/pages/api/reqData';
 import { searchQueryType } from '../../../store/TYPE/searchQueryType';
 
 const Pagination = ({
@@ -15,9 +15,9 @@ const Pagination = ({
   setIsLoading,
   urlQuery,
   setPageData,
-  routerDisabled= false,
+  routerDisabled = false,
   pageInterceptor,
-  option={apiMethod:'GET', body: null}
+  option = { apiMethod: 'GET', body: null },
 }) => {
   const router = useRouter();
   const query = router.query;
@@ -25,7 +25,7 @@ const Pagination = ({
   const ButtonCounts = 5; // UI상으로 노출시킬 연속된 페이지네이션 수;
   const [pageInfo, setPageInfo] = useState({});
   const [curPage, setCurPage] = useState(pageFromQuery);
-  
+
   useEffect(() => {
     (async () => {
       try {
@@ -42,21 +42,25 @@ const Pagination = ({
         let res;
         if (option.apiMethod === 'GET') {
           res = await getData(`${apiURL}${urlQueries}`);
-          
         } else if (option.apiMethod === 'POST') {
-          if(!option.body) return console.error('required Search Request Body');
-          const body = option.body;
-          res = await postObjData(`${apiURL}${defQuery}`, body);
-          res = res.data; // postObjData에서 data query하기 위함
+          if (option.body) {
+            const body = option.body;
+            res = await postObjData(`${apiURL}${defQuery}`, body);
+            res = res.data; // postObjData에서 data query하기 위함
+          }
         }
-        
+
         const hasItems = pageData?.totalElements !== 0;
-        const pageData = res.data?.page;
-        console.log('API URL: ', apiURL, '\nSerach Query: ', urlQueries, '\nPagination res: ',res);
+        const pageData = res?.data?.page;
+        console.log('API URL: ', apiURL, '\nSerach Query: ', urlQueries, '\nPagination res: ', res);
         // console.log('API URL: ', apiURL, '\nSerach Query: ', urlQueries, '\nPagination res: ',res,'\nPOST BODY:', option.body);
-         if ((pageInterceptor && typeof pageInterceptor === 'function') || (pageData && hasItems)) { // 여기에 인터셉터가 있다면 인터셉터로 작동하게 한다.
-          const newPageInfo_InterCeptor = (pageInterceptor && typeof pageInterceptor === 'function') && await pageInterceptor(res); // SERVER API 쿼리가 변경되는 것에, 대응하기 위해 추가함
-          const newPageInfo = newPageInfo_InterCeptor ||  {
+        if ((pageInterceptor && typeof pageInterceptor === 'function') || (pageData && hasItems)) {
+          // 여기에 인터셉터가 있다면 인터셉터로 작동하게 한다.
+          const newPageInfo_InterCeptor =
+            pageInterceptor &&
+            typeof pageInterceptor === 'function' &&
+            (await pageInterceptor(res)); // SERVER API 쿼리가 변경되는 것에, 대응하기 위해 추가함
+          const newPageInfo = newPageInfo_InterCeptor || {
             totalPages: pageData.totalPages,
             size: pageData.size,
             totalItems: pageData.totalElements,
@@ -64,14 +68,14 @@ const Pagination = ({
             newPageNumber: pageData.number + 1,
             newItemList: res.data._embedded[queryItemList] || [],
           };
-  
+
           setPageInfo(newPageInfo); // ! 페이지네이션 버튼 나타나게 함
           setItemList(newPageInfo.newItemList);
           if (setPageData && typeof setPageData === 'function') {
             setPageData(newPageInfo);
           }
           // UPDATE URL Query For Client User (Not For Logic)
-          if(routerDisabled === false) {
+          if (routerDisabled === false) {
             let defSearchQuery = `?page=${Number(calcedPageIndex) + 1}&size=${size}`;
             let searchKeywords = urlQuery ? `${defSearchQuery}&${urlQuery}` : defQuery;
             await router.push({
@@ -84,7 +88,7 @@ const Pagination = ({
       } catch (err) {
         console.error(err);
       }
-      
+
       if (setIsLoading && typeof setIsLoading === 'function') {
         setIsLoading((prevState) => ({
           ...prevState,
@@ -93,7 +97,6 @@ const Pagination = ({
       }
     })();
   }, [curPage, urlQuery, apiURL, option.body]);
-
 
   const Num = ({ pagenum }) => {
     const calcedPageNum = pagenum + 1;

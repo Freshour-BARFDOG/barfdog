@@ -41,7 +41,7 @@ export default function MypageSubscribe_statisticPage({ data }) {
                   <br/>
                   <br/>
                   <br/>
-                  ( -  TEST > 반려견 정보 수정 이후, 권장식사량 변동에 대한 데이터를 불러올 수 있을 경우 , 적용가능한 기능)
+                  ( -  TEST : 반려견 정보 수정 이후, 권장식사량 변동에 대한 데이터를 불러올 수 있을 경우 , 적용가능한 기능)
                   <br/>
                   ( - 현재는 비구독 상태일 경우에 나타남 )
                 </p>

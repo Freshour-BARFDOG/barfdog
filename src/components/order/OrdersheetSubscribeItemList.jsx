@@ -85,8 +85,8 @@ export const OrdersheetSubscribeItemList = ({
             <li className={s.flex_box}>
               <div className={s.info_col}>
                 <p className={s.subscribeName}>[정기구독] {info.subscribeDto?.plan}</p>
-                {info.recipeNames?.map((name) => (
-                  <p className={s.recipeName}>{name}</p>
+                {info.recipeNames?.map((name, i) => (
+                  <p key={`info-recipeName-${i}`} className={s.recipeName}>{name}</p>
                 ))}
               </div>
 

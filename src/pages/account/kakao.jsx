@@ -70,7 +70,7 @@ export default function KAKAO_Auth({ data, err }) {
 
   return (
     <div>
-      <h1>KAKAO > valid Login State</h1>
+      <h1>KAKAO &gt; valid Login State</h1>
     </div>
   );
 }
