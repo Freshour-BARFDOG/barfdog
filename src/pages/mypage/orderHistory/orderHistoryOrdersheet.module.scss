@@ -133,9 +133,11 @@ section.content_title {
     padding: rem(18) 0;
     align-items: center;
     text-align: center;
-    &:not(:last-child) {
-      border-bottom: rem(1) solid var(--color-line-04);
-    }
+    border-bottom: rem(1) solid var(--color-line-04);
+
+    // &:not(:last-child) {
+    //   border-bottom: rem(1) solid var(--color-line-04);
+    // }
 
     //.col_1 {}
     .itemInfo {
@@ -195,7 +197,6 @@ section.content_title {
     //.col_5{}
     .orderStatus {
       display: flex;
-      align-items: center;
       justify-content: center;
       gap: rem(8);
       flex-direction: column;
