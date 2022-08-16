@@ -16,6 +16,7 @@ import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 import {valid_isTheSameArray} from "/util/func/validation/validationPackage";
 import {ToggleBoxContext} from "../atoms/ToggleBox";
 import {FullScreenLoading} from "../atoms/FullScreenLoading";
+import Link from "next/link";
 
 
 const swiperSettings = {
@@ -298,9 +299,11 @@ export const SubscribeRecipe = ({subscribeInfo}) => {
                   <p className={s.row_2}>{rc.uiNameKorean}</p>
                   <p className={s.row_3}>{rc.description}</p>
                   <p className={s.row_4}>
-                    <a href="/recipes" target={'_blank'} rel={'noreferrer'} onClick={onPopupHandler}>
-                      더 알아보기
-                    </a>
+                    <Link href="/recipes" passHref>
+                      <a target={'_blank'} rel={'noreferrer'}  onClick={onPopupHandler}>
+                        더 알아보기
+                      </a>
+                    </Link>
                   </p>
                 </SubscribeCustomInput>
               </SwiperSlide>

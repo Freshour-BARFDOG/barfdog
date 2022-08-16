@@ -9,6 +9,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import popupWindow from '/util/func/popupWindow';
 import { SubscribeCustomInput } from './SubscribeCustomInput';
 import checkStringUnderConsonant from '/util/func/checkStringUnderConsonant';
+import Link from "next/link";
 
 const swiperSettings = {
   className: s.swiper_recipes,
@@ -197,9 +198,11 @@ export const SubscribeShopRecipe = ({
                 <p className={s.row_2}>{rc.uiNameKorean}</p>
                 <p className={s.row_3}>{rc.description}</p>
                 <p className={s.row_4}>
-                  <a href="/recipes" onClick={onPopupHandler}>
-                    더 알아보기
-                  </a>
+                  <Link href="/recipes" passHref>
+                    <a target={'_blank'} rel={'noreferrer'}  onClick={onPopupHandler}>
+                      더 알아보기
+                    </a>
+                  </Link>
                 </p>
               </SubscribeCustomInput>
             </SwiperSlide>
