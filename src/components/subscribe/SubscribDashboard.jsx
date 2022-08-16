@@ -5,8 +5,31 @@ import { subscribePlanType } from '/store/TYPE/subscribePlanType';
 import transformDate from '/util/func/transformDate';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import { Modal_couponWithSubscribeApi } from '../modal/Modal_couponWithSubscribeApi';
-import Modal_global_alert from "/src/components/modal/Modal_global_alert";
-import {useModalContext} from "/store/modal-context";
+import Modal_global_alert from '/src/components/modal/Modal_global_alert';
+import { useModalContext } from '/store/modal-context';
+
+const DUMMY_COUPON_DATA = [
+  {
+    memberCouponId: 3133,
+    name: '테스트 쿠폰1',
+    discountType: 'FIXED_RATE',
+    discountDegree: 10,
+    availableMaxDiscount: 10000,
+    availableMinPrice: 5000,
+    remaining: 3,
+    expiredDate: '2022-08-12T16:01:46.853',
+  },
+  {
+    memberCouponId: 3000,
+    name: '테스트 쿠폰2',
+    discountType: 'FIXED_RATE',
+    discountDegree: 40,
+    availableMaxDiscount: 10000,
+    availableMinPrice: 300,
+    remaining: 3,
+    expiredDate: '2022-08-17T16:01:46.853',
+  },
+];
 
 export const SubscribDashboard = ({ subscribeInfo }) => {
   // console.log(subscribeInfo);
@@ -24,8 +47,9 @@ export const SubscribDashboard = ({ subscribeInfo }) => {
     subscribeCount: subscribeInfo.info.subscribeCount,
     coupon: {
       // 쿠폰은 상품 당, 하나만 적용됨
-      subscribeId : subscribeInfo.info.subscribeId,
+      subscribeId: subscribeInfo.info.subscribeId,
       usingMemberCouponId: subscribeInfo.info.usingMemberCouponId,
+      // availableCouponList: DUMMY_COUPON_DATA, /////////////////// ! TEST TEST TEST TEST TEST TEST TEST TEST TEST
       availableCouponList: subscribeInfo.coupon || [],
       originPrice: subscribeInfo.info.nextPaymentPrice,
     },
@@ -33,23 +57,26 @@ export const SubscribDashboard = ({ subscribeInfo }) => {
   const mct = useModalContext();
   const [submitted, setSubmitted] = useState(false);
   const [alertModalMessage, setAlertModalMessage] = useState('');
-  const [activeCouponModal, setActiveCouponModal] = useState(false);
+  const [activeModal, setActiveModal] = useState(false);
 
   const onActiveCouponModal = () => {
-    setActiveCouponModal(true);
+    if (!info.coupon.availableCouponList.length) {
+      mct.alertShow('적용가능한 쿠폰이 없습니다.');
+      setActiveModal({ alert: true });
+      return;
+    }
+
+    setActiveModal({ coupon: true, alert: true });
   };
 
   const hideCouponModal = () => {
-    if(submitted){
+    if (submitted) {
       window.location.reload();
-    }else{
+    } else {
       mct.alertHide();
-      setActiveCouponModal(false);
+      setActiveModal({ coupon: false, alert: false });
     }
-    
-    
   };
-  
 
   return (
     <>
@@ -80,7 +107,9 @@ export const SubscribDashboard = ({ subscribeInfo }) => {
               <div className={s.left}>레시피</div>
               <div className={s.right}>
                 {info.recipeNameList.length > 0 &&
-                  info.recipeNameList.map((recipeName, index) => <p key={`${recipeName}-${index}`}>{recipeName}</p>)}
+                  info.recipeNameList.map((recipeName, index) => (
+                    <p key={`${recipeName}-${index}`}>{recipeName}</p>
+                  ))}
               </div>
             </div>
 
@@ -148,10 +177,17 @@ export const SubscribDashboard = ({ subscribeInfo }) => {
           </div>
         </div>
       </section>
-      {activeCouponModal && (
-        <Modal_couponWithSubscribeApi data={info.coupon} event={{ hideModal: hideCouponModal }} setAlertModalMessage={setAlertModalMessage} setSubmitted={setSubmitted} />
+      {activeModal.coupon && (
+        <Modal_couponWithSubscribeApi
+          data={info.coupon}
+          event={{ hideModal: hideCouponModal }}
+          setAlertModalMessage={setAlertModalMessage}
+          setSubmitted={setSubmitted}
+        />
       )}
-      {activeCouponModal && <Modal_global_alert message={alertModalMessage} onClick={submitted && hideCouponModal}/>}
+      {activeModal.alert && (
+        <Modal_global_alert message={alertModalMessage} onClick={submitted && hideCouponModal}/>
+      )}
     </>
   );
 };

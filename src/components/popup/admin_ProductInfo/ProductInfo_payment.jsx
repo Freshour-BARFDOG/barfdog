@@ -1,76 +1,83 @@
-import s from "./popup_sell.module.scss";
+import s from './popup_sell.module.scss';
+import transformLocalCurrency from '/util/func/transformLocalCurrency';
+import { orderStatus } from '/store/TYPE/orderStatusTYPE';
 
-const ProductInfo_payment = () => {
+const ProductInfo_payment = ({ paymentInfo }) => {
+  // console.log(paymentInfo);
   return (
     <>
-      <div className={s["t-header"]}>
+      <div className={s['t-header']}>
         <h4 className={s.title}>결제정보</h4>
       </div>
-      <ul className={s["t-body"]}>
-        <li className={`${s["t-row"]}`}>
-          <div className={s["t-box"]}>
+      <ul className={s['t-body']}>
+        <li className={`${s['t-row']}`}>
+          <div className={s['t-box']}>
             <div className={`${s.innerBox} ${s.label}`}>
               <span>총 상품금액</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
-              <span>78,600원</span>
+              <span>{transformLocalCurrency(paymentInfo.orderPrice)}원</span>
             </div>
           </div>
-          <div className={s["t-box"]}>
-            <div className={`${s.innerBox} ${s.label}`}>
-              <span>배송비</span>
-            </div>
-            <div className={`${s.innerBox} ${s.cont}`}>
-              <span>무료배송</span>
-            </div>
-          </div>
-        </li>
-
-        <li className={`${s["t-row"]}`}>
-          <div className={s["t-box"]}>
-            <div className={`${s.innerBox} ${s.label}`}>
-              <span>적립금사용</span>
-            </div>
-            <div className={`${s.innerBox} ${s.cont}`}>
-              <span>3,000원</span>
-            </div>
-          </div>
-          <div className={s["t-box"]}>
-            <div className={`${s.innerBox} ${s.label}`}>
-              <span>쿠폰할인금액</span>
-            </div>
-            <div className={`${s.innerBox} ${s.cont}`}>
-              <span>6,000원</span>
-            </div>
-          </div>
-        </li>
-        <li className={`${s["t-row"]}`}>
-          <div className={s["t-box"]}>
+          <div className={s['t-box']}>
             <div className={`${s.innerBox} ${s.label}`}>
               <span>총 결제금액</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
-              <span>69,600원</span>
+              <span>{transformLocalCurrency(paymentInfo.paymentPrice)}원</span>
             </div>
           </div>
-          <div className={s["t-box"]}>
+        </li>
+
+        <li className={`${s['t-row']}`}>
+          <div className={s['t-box']}>
+            <div className={`${s.innerBox} ${s.label}`}>
+              <span>적립금사용</span>
+            </div>
+            <div className={`${s.innerBox} ${s.cont}`}>
+              <span>{transformLocalCurrency(paymentInfo.discountReward)}원</span>
+            </div>
+          </div>
+          <div className={s['t-box']}>
+            <div className={`${s.innerBox} ${s.label}`}>
+              <span>쿠폰할인금액</span>
+            </div>
+            <div className={`${s.innerBox} ${s.cont}`}>
+              <span>{transformLocalCurrency(paymentInfo.discountCoupon)}원</span>
+            </div>
+          </div>
+        </li>
+        <li className={`${s['t-row']}`}>
+          <div className={s['t-box']}>
+            <div className={`${s.innerBox} ${s.label}`}>
+              <span>배송비</span>
+            </div>
+            <div className={`${s.innerBox} ${s.cont}`}>
+              <span>
+                {!paymentInfo.deliveryPrice
+                  ? '무료'
+                  : `${transformLocalCurrency(paymentInfo.deliveryPrice)}원`}
+              </span>
+            </div>
+          </div>
+          <div className={s['t-box']}>
             <div className={`${s.innerBox} ${s.label}`}>
               <span>결제방법</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
               <span>
-                <span>결제방법</span>
+                <span>***MEMO_서버측 데이터 필요**</span>
               </span>
             </div>
           </div>
         </li>
-        <li className={`${s["t-row"]} ${s["fullWidth"]}`}>
-          <div className={s["t-box"]}>
+        <li className={`${s['t-row']} ${s['fullWidth']}`}>
+          <div className={s['t-box']}>
             <div className={`${s.innerBox} ${s.label}`}>
-              <span>결제방법</span>
+              <span>처리상태</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
-              <span>카드결제</span>
+              <span>{orderStatus.KOR[paymentInfo.orderStatus]}</span>
             </div>
           </div>
         </li>

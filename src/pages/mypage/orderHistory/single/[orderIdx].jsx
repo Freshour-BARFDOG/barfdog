@@ -7,7 +7,7 @@ import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from '/src/components/mypage/MypageWrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import Image from 'next/image';
-import { getDataSSR } from '/src/pages/api/reqData';
+import {getDataSSR, postData, postObjData} from '/src/pages/api/reqData';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import popupWindow from '/util/func/popupWindow';
 import { valid_deliveryCondition } from '/util/func/validation/valid_deliveryCondition';
@@ -43,7 +43,7 @@ export default function SingleItem_OrderHistoryPage({ data }) {
   const isAvailableReturnAndExchangeState =
     filter_availableReturnAndExchangeItemList(originItemList);
   /////////////////////////////////////////// ! TEST 임시 추가 => filter_availableReturnAndExchangeItemList 내부에 , TEST코드 들어있음
-  console.log(isAvailableReturnAndExchangeState);
+  // console.log(isAvailableReturnAndExchangeState);
   const onPopupHandler = (e) => {
     e.preventDefault();
     if (typeof window === 'undefined') return console.error('window is not defined');
@@ -92,10 +92,20 @@ export default function SingleItem_OrderHistoryPage({ data }) {
     setConfirmMessage(`전체 상품이 주문 취소됩니다.`);
     setConfirmType(orderStatus.CANCEL_REQUEST);
   };
-
-  const onOrderCancle = (confirm) => {
+  
+  const onOrderCancle = async (confirm) => {
     if (!confirm) return initializeModalState();
     console.log('전체 주문취소 API 실행 // 부분 취소 불가');
+    
+    const r = await postObjData(`/api/orders/${data?.orderDto.orderId}/general/cancelRequest`);
+    console.log(r);
+    if(r.isDone){
+      alert('전체 주문 결제취소완료');
+      window.location.reload();
+    }
+    
+    setActiveModal(null);
+    
   };
 
   const confirmBCallbackType = {

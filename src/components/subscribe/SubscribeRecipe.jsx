@@ -179,8 +179,8 @@ export const SubscribeRecipe = ({subscribeInfo}) => {
       const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/planRecipes`;
       const res = await postObjData(url, body)
       console.log(res);
-      if (!res.isDone) {  // ! TEST CODE //
-        // if (res.isDone) {  // ! PRODUCT CODE //
+      // if (!res.isDone) {  // ! TEST CODE //
+        if (res.isDone) {  // ! PRODUCT CODE //
         setSubmitted(true);
         onShowModal('레시피 변경이 완료되었습니다.');
       } else {

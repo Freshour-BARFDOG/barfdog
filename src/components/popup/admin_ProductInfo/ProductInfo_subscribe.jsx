@@ -1,7 +1,8 @@
 import s from "./popup_sell.module.scss";
+import {subscribePlanType} from "/store/TYPE/subscribePlanType";
+import transformLocalCurrency from "../../../../util/func/transformLocalCurrency";
 
-
-const ProductInfo_subscribe = ({ isChangedSubscribeInfo }) => {
+const ProductInfo_subscribe = ({subscribeInfo,  isChangedSubscribeInfo }) => {
   return (
     <>
       {isChangedSubscribeInfo ? (
@@ -21,7 +22,7 @@ const ProductInfo_subscribe = ({ isChangedSubscribeInfo }) => {
               <span>구독회차</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
-              <span>2회차</span>
+              <span>{subscribeInfo.subscribeCount}회차</span>
             </div>
           </div>
         </li>
@@ -31,7 +32,7 @@ const ProductInfo_subscribe = ({ isChangedSubscribeInfo }) => {
               <span>플랜</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
-              <span>풀플랜</span>
+              <span>{subscribePlanType[subscribeInfo.plan].KOR}</span>
             </div>
           </div>
           <div className={s["t-box"]}>
@@ -39,7 +40,7 @@ const ProductInfo_subscribe = ({ isChangedSubscribeInfo }) => {
               <span>급여량</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
-              <span>272g</span>
+              <span>{transformLocalCurrency(subscribeInfo.oneMealRecommendGram)}g</span>
             </div>
           </div>
         </li>
@@ -49,7 +50,7 @@ const ProductInfo_subscribe = ({ isChangedSubscribeInfo }) => {
               <span>레시피</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
-              <span>스타터프리미엄 / 덕&amp;램</span>
+              <span>{subscribeInfo.recipeName}</span>
             </div>
           </div>
         </li>
@@ -57,7 +58,5 @@ const ProductInfo_subscribe = ({ isChangedSubscribeInfo }) => {
     </>
   );
 };
-
-
 
 export default ProductInfo_subscribe;

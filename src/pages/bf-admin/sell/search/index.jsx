@@ -1,35 +1,73 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from 'react';
 import s from './search.module.scss';
-import MetaTitle from "/src/components/atoms/MetaTitle";
-import AdminLayout from "/src/components/admin/AdminLayout";
-import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
-import SearchBar from "/src/components/admin/form/searchBar";
-import SearchTerm from "/src/components/admin/form/searchBar/SearchTerm";
-import SearchTextWithCategory from "/src/components/admin/form/searchBar/SearchTextWithCategory";
-import SearchSelect from "/src/components/admin/form/searchBar/SearchSelect";
-import SearchRadio from "/src/components/admin/form/searchBar/SearchRadio";
-import AmdinErrorMessage from "/src/components/atoms/AmdinErrorMessage";
-import Checkbox from "/src/components/atoms/Checkbox";
-import SearchResultList from "./SearchResultList";
-import Pagination from "/src/components/atoms/Pagination";
+import MetaTitle from '/src/components/atoms/MetaTitle';
+import AdminLayout from '/src/components/admin/AdminLayout';
+import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
+import SearchBar from '/src/components/admin/form/searchBar';
+import SearchTerm from '/src/components/admin/form/searchBar/SearchTerm';
+import SearchTextWithCategory from '/src/components/admin/form/searchBar/SearchTextWithCategory';
+import SearchSelect from '/src/components/admin/form/searchBar/SearchSelect';
+import SearchRadio from '/src/components/admin/form/searchBar/SearchRadio';
+import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
+import Checkbox from '/src/components/atoms/Checkbox';
+import SearchResultList from './SearchResultList';
+import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
+import { orderStatus } from '/store/TYPE/orderStatusTYPE';
+import Spinner from '/src/components/atoms/Spinner';
+import { productType } from '/store/TYPE/itemType';
+import { transformToday } from '/util/func/transformDate';
 
-const TEST_ITEM = [1, 2, 3, 4, 5];
+const initialSearchValues = {
+  from: transformToday(),
+  to: transformToday(),
+  merchantUid: null,
+  memberName: null,
+  memberEmail: null,
+  recipientName: null,
+  statusList: orderStatus.ALL,
+  orderType: productType.GENERAL,
+};
 
-function SearchOnSellPage() {
-  const [modalMessage, setModalMessage] = useState("");
-  const [itemList, setItemList] = useState(TEST_ITEM);
-  const [searchValue, setSearchValue] = useState({});
+export default function SearchOnSellPage() {
+  const searchApiUrl = `/api/admin/orders/search`;
+  const searchPageSize = 10;
+  const [isLoading, setIsLoading] = useState({});
+  const [itemList, setItemList] = useState([]);
+  const [searchValues, setSearchValues] = useState(initialSearchValues);
+  const [searchBody, setSearchBody] = useState(null);
 
-  console.log(searchValue);
+  const searchOption = Object.keys(orderStatus)
+    .filter((key) => key !== orderStatus.BEFORE_PAYMENT && key !== 'KOR')
+    .map((key) => ({
+      label: orderStatus.KOR[key],
+      value: key,
+    }));
 
-  const onResetSearchValues = (e) => {
-    setSearchValue("");
-    console.log("초기화 실행");
+  const onResetSearchValues = () => {
+    setSearchValues(initialSearchValues);
   };
 
-  const onSearchHandler = (e) => {
-    console.log("검색 실행");
+  const onSearchHandler = () => {
+    const body = {
+      from: searchValues.from,
+      to: searchValues.to,
+      merchantUid: searchValues.merchantUid,
+      memberName: searchValues.memberName,
+      memberEmail: searchValues.memberEmail,
+      recipientName: searchValues.recipientName,
+      statusList: [searchValues.statusList], // ! 배열로 전송
+      orderType: searchValues.orderType,
+    };
+    setSearchBody(body);
   };
+  
+  const pageInterceptor = (res)=>{
+    console.log(res);
+    
+  }
+
+  console.log(itemList);
+  // console.log(searchBody, searchBody.statusList);
 
   return (
     <>
@@ -40,55 +78,39 @@ function SearchOnSellPage() {
           <section className="cont">
             <SearchBar onReset={onResetSearchValues} onSearch={onSearchHandler}>
               <SearchTerm
-                title={"조회기간"}
-                searchValue={searchValue}
-                setSearchValue={setSearchValue}
+                title={'조회기간'}
+                searchValue={searchValues}
+                setSearchValue={setSearchValues}
               />
               <SearchTextWithCategory
-                searchValue={searchValue}
-                setSearchValue={setSearchValue}
+                searchValue={searchValues}
+                setSearchValue={setSearchValues}
                 title="검색내용"
-                name="content"
-                id="content"
+                name="detail"
+                id="detail"
                 options={[
-                  { label: "주문번호", value: "orderIdx" },
-                  { label: "구매자 이름", value: "buyerName" },
-                  { label: "구매자 ID", value: "buyerId" },
-                  { label: "수령자 이름", value: "receiverName" },
+                  { label: '주문번호', value: 'merchantUid' },
+                  { label: '구매자 이름', value: 'memberName' },
+                  { label: '구매자 ID', value: 'memberEmail' },
+                  { label: '수령자 이름', value: 'recipientName' },
                 ]}
               />
               <SearchSelect
                 title="주문상태"
-                name="status"
-                id="status"
-                options={[
-                  { label: "전체", value: "ALL" },
-                  { label: "구독보류", value: "HOLD" },
-                  { label: "결제완료", value: "PAYMENT_DONE" },
-                  { label: "생산 중", value: "PRUDUCING" },
-                  { label: "배송준비 중", value: "DELIVERY_READY" },
-                  { label: "배송시작", value: "DELIVERY_START" },
-                  { label: "배송완료", value: "DELIVERY_DONE" },
-                  { label: "판매취소", value: "SELLING_CANCLE" },
-                  { label: "취소요청", value: "CANCEL_REQUEST " },
-                  { label: "취소완료", value: "CANCEL_DONE" },
-                  { label: "반품요청", value: "RETURN_REQUEST" },
-                  { label: "반품완료", value: "RETURN_DONE" },
-                  { label: "교환요청", value: "EXCHANGE_REQUEST" },
-                  { label: "교환완료", value: "EXCHANGE_DONE" },
-                  { label: "실패함", value: "FAILED" },
-                  { label: "구매확정", value: "CONFIRM" },
-                ]}
-                onChange={setSearchValue}
-                searchValue={searchValue}
+                name="statusList"
+                id="statusList"
+                options={searchOption}
+                setSearchValue={setSearchValues}
+                searchValue={searchValues}
               />
               <SearchRadio
-                searchValue={searchValue}
-                setSearchValue={setSearchValue}
+                searchValue={searchValues}
+                setSearchValue={setSearchValues}
                 title="주문유형"
                 name="orderType"
-                idList={["SINGLE", "SUBSCRIBE"]}
-                labelList={["일반주문", "정기구독주문"]}
+                idList={[productType.GENERAL, productType.SUBSCRIBE]}
+                labelList={[productType.KOR.GENERAL, productType.KOR.SUBSCRIBE]}
+                value={searchValues.orderType}
               />
             </SearchBar>
           </section>
@@ -121,21 +143,27 @@ function SearchOnSellPage() {
                   <li className={s.table_th}>수령자</li>
                   <li className={s.table_th}>묶음배송 여부</li>
                 </ul>
-                {itemList.length ? (
+                {isLoading.fetching ? (
+                  <AmdinErrorMessage loading={<Spinner />} />
+                ) : itemList.length === 0 ? (
+                  <AmdinErrorMessage text="조회된 데이터가 없습니다." />
+                ) : (
                   <SearchResultList
                     items={itemList}
-                    // onDeleteItem={onDeleteItem}
                   />
-                ) : (
-                  <AmdinErrorMessage text="조회된 데이터가 없습니다." />
                 )}
               </div>
             </div>
-            <div className={s["pagination-section"]}>
-              <Pagination
-                itemCountPerGroup={10}
-                itemTotalCount={100}
-                className={"square"}
+            <div className={s['pagination-section']}>
+              <PaginationWithAPI
+                apiURL={searchApiUrl}
+                size={searchPageSize}
+                // urlQuery={searchQuery}
+                pageInterceptor={pageInterceptor}
+                queryItemList={'queryAdminOrdersDtoList'}
+                setItemList={setItemList}
+                setIsLoading={setIsLoading}
+                option={{ apiMethod: 'POST', body:searchBody }}
               />
             </div>
           </section>
@@ -145,5 +173,3 @@ function SearchOnSellPage() {
     </>
   );
 }
-
-export default SearchOnSellPage;

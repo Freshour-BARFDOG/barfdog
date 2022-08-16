@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import s from '/src/pages/mypage/subscribe/[subscribeId].module.scss';
 import CustomInput from '../atoms/CustomInput';
 import Image from 'next/image';
@@ -6,12 +6,12 @@ import { subscribePlanType } from '/store/TYPE/subscribePlanType';
 import ItemLabel from '/src/components/atoms/ItemLabel';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import Spinner from '/src/components/atoms/Spinner';
-import {postObjData} from "/src/pages/api/reqData";
-import Modal_confirm from "/src/components/modal/Modal_confirm";
-import Modal_global_alert from "/src/components/modal/Modal_global_alert";
-import {useModalContext} from "/store/modal-context";
-import {ToggleBoxContext} from "../atoms/ToggleBox";
-import {FullScreenLoading} from "../atoms/FullScreenLoading";
+import { postObjData } from '/src/pages/api/reqData';
+import Modal_confirm from '/src/components/modal/Modal_confirm';
+import Modal_global_alert from '/src/components/modal/Modal_global_alert';
+import { useModalContext } from '/store/modal-context';
+import { ToggleBoxContext } from '../atoms/ToggleBox';
+import { FullScreenLoading } from '../atoms/FullScreenLoading';
 
 export const SubscribePlan = ({ subscribeInfo }) => {
   // console.log(subscribeInfo )
@@ -101,14 +101,14 @@ export const SubscribePlan = ({ subscribeInfo }) => {
     },
   ];
   const mct = useModalContext();
-  const tbContext = useContext( ToggleBoxContext );
+  const tbContext = useContext(ToggleBoxContext);
   const initialMemberPlanName = subscribeInfo.info.planName;
   const [selectedPlanName, setSelectedPlanName] = useState(initialMemberPlanName);
   const [submitted, setSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [activeConfirmModal, setActiveConfirmModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
-  
+
   const onActiveConfirmModal = (e) => {
     // ! validation : 처음과 동일한 플랜일 경우
     if (selectedPlanName === initialMemberPlanName) {
@@ -117,30 +117,26 @@ export const SubscribePlan = ({ subscribeInfo }) => {
       setActiveConfirmModal(true);
     }
   };
-  
-  
-  
+
   const onChangePlan = async (confirm) => {
-    if(submitted) return console.error('이미 제출된 양식입니다.');
-    if(!confirm){
+    if (submitted) return console.error('이미 제출된 양식입니다.');
+    if (!confirm) {
       return setActiveConfirmModal(false);
     }
-  
-  
+
     const body = {
       plan: selectedPlanName,
       nextPaymentPrice: subscribeInfo.price[selectedPlanName].salePrice, // 선택된 플랜의 판매가격
       recipeIdList: subscribeInfo.recipe.idList,
     };
 
-    
     try {
       setIsLoading(true);
       const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/plan`;
-      const res = await postObjData(url, body)
+      const res = await postObjData(url, body);
       console.log(res);
-      if (!res.isDone) {  // ! TEST CODE //
-      // if (res.isDone) {  // ! PRODUCT CODE //
+      // if (!res.isDone) { // ! TEST CODE //
+        if (res.isDone) {  // ! PRODUCT CODE //
         setSubmitted(true);
         onShowModal('플랜 변경이 완료되었습니다.');
       } else {
@@ -148,29 +144,28 @@ export const SubscribePlan = ({ subscribeInfo }) => {
       }
       setActiveConfirmModal(false);
     } catch (err) {
-      console.error('err: ',err);
+      console.error('err: ', err);
     }
     setIsLoading(false);
   };
-  
-  
+
   const onShowModal = (message) => {
-    if (message) mct.alertShow();
+    if (message) mct.alertShow(message);
     setModalMessage(message);
   };
   const onHideModal = () => {
     setModalMessage('');
     mct.alertHide();
   };
-  
+
   const onSuccessChangeSubscribeOrder = () => {
-    setIsLoading({reload:true});
+    setIsLoading({ reload: true });
     onHideModal();
     window.location.reload();
   };
   return (
     <>
-      {isLoading.reload && <FullScreenLoading/>}
+      {isLoading.reload && <FullScreenLoading />}
       <div className={`${s.flex_box} ${s.subscribePlan}`}>
         {planInfoList.map((info, index) => (
           <CustomInput
@@ -188,7 +183,14 @@ export const SubscribePlan = ({ subscribeInfo }) => {
               <li className={s.plan_grid_1}>
                 <div className={s.img_box}>
                   <figure className={`${s.image} img-wrap`}>
-                    {info.imageUrl &&  <Image src={info.imageUrl} objectFit="cover" layout="fill" alt="플랜 아이콘" />}
+                    {info.imageUrl && (
+                      <Image
+                        src={info.imageUrl}
+                        objectFit="cover"
+                        layout="fill"
+                        alt="플랜 아이콘"
+                      />
+                    )}
                   </figure>
                 </div>
                 <h2>{info.name}</h2>
@@ -230,18 +232,20 @@ export const SubscribePlan = ({ subscribeInfo }) => {
           {isLoading ? <Spinner style={{ color: '#fff' }} /> : '변경 플랜 적용하기'}
         </button>
       </div>
-      {(activeConfirmModal) && (
+      {activeConfirmModal && (
         <Modal_confirm
           text={`${subscribePlanType[selectedPlanName].KOR}으로 플랜을 변경하시겠습니까?`}
           isConfirm={onChangePlan}
           positionCenter
         />
       )}
-      {tbContext.visible &&   <Modal_global_alert
-        message={modalMessage}
-        onClick={submitted ? onSuccessChangeSubscribeOrder : onHideModal}
-        background
-      />}
+      {tbContext.visible && (
+        <Modal_global_alert
+          message={modalMessage}
+          onClick={submitted ? onSuccessChangeSubscribeOrder : onHideModal}
+          background
+        />
+      )}
     </>
   );
 };

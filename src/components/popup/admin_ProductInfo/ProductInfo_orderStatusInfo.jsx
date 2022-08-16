@@ -1,9 +1,10 @@
 
 import s from "./popup_sell.module.scss";
+import {orderStatus} from "/store/TYPE/orderStatusTYPE";
+import transformDate from "/util/func/transformDate";
 
-const ProductInfo_orderStatusInfo = ({ data, boxLabel }) => {
-  const DATA = data;
-
+const ProductInfo_orderStatusInfo = ({ basicOrderInfo, boxLabel }) => {
+  // console.log(basicOrderInfo)
   return (
     <>
       <div className={s["t-header"]}>
@@ -16,7 +17,7 @@ const ProductInfo_orderStatusInfo = ({ data, boxLabel }) => {
               <span>처리상태</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
-              <span>취소요청</span>
+              <span>{orderStatus.KOR[basicOrderInfo.orderStatus]}</span>
             </div>
           </div>
         </li>
@@ -26,7 +27,8 @@ const ProductInfo_orderStatusInfo = ({ data, boxLabel }) => {
               <span>{boxLabel}요청일</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
-              <span>2022-05-28 11:30:11</span>
+              <span>{transformDate(basicOrderInfo.cancelRequestDate, 'time', {seperator: '/'}) || '-'}</span>
+              
             </div>
           </div>
           <div className={s["t-box"]}>
@@ -34,7 +36,7 @@ const ProductInfo_orderStatusInfo = ({ data, boxLabel }) => {
               <span>{boxLabel}승인일</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
-              <span>2022-05-28 11:30:11</span>
+              <span>{transformDate(basicOrderInfo.cancelConfirmDate, 'time', {seperator: '/'}) || '-'}</span>
             </div>
           </div>
         </li>
@@ -45,8 +47,7 @@ const ProductInfo_orderStatusInfo = ({ data, boxLabel }) => {
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
               <span>
-                단순변심단순변심단순변심단순변심단순변심단순변심단순변심
-                단순변심 단순변심 단순변심 단순변심 단순변심
+                {basicOrderInfo.cancelReason || '-'}
               </span>
             </div>
           </div>
@@ -58,12 +59,7 @@ const ProductInfo_orderStatusInfo = ({ data, boxLabel }) => {
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
               <span>
-                단순변심단순변심단순변심단순변심단순변심단순변심단순변심
-                단순변심 단순변심 단순변심 단순변심
-                단순변심단순변심단순변심단순변심단순변심단순변심단순변심단순변심
-                단순변심 단순변심 단순변심 단순변심
-                단순변심단순변심단순변심단순변심단순변심단순변심단순변심단순변심
-                단순변심 단순변심 단순변심 단순변심 단순변심
+                {basicOrderInfo.cancelDetailReason || '-'}
               </span>
             </div>
           </div>

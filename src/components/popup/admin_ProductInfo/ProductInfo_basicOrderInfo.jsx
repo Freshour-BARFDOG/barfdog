@@ -1,8 +1,10 @@
 import s from "./popup_sell.module.scss";
+import {productType} from "/store/TYPE/itemType";
+import transformDate from "/util/func/transformDate";
+import {transformPhoneNumber} from "/util/func/transformPhoneNumber";
 
-const ProductInfo_basicOrderInfo = (props) => {
-  const DATA = props.data;
-
+const ProductInfo_basicOrderInfo = ({basicOrderInfo}) => {
+  // console.log(basicOrderInfo);
   return (
     <>
       <div className={s["t-header"]}>
@@ -15,7 +17,7 @@ const ProductInfo_basicOrderInfo = (props) => {
               <span>주문번호</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
-              <span>10000826742324</span>
+              <span>{basicOrderInfo.merchantUid}</span>
             </div>
           </div>
           <div className={s["t-box"]}>
@@ -23,7 +25,7 @@ const ProductInfo_basicOrderInfo = (props) => {
               <span>주문&#40;결제&#41;일시</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
-              <span>2022/02/14 14:19</span>
+              <span>{transformDate(basicOrderInfo.orderDate, 'time', {seperator: '/'})}</span>
             </div>
           </div>
         </li>
@@ -33,7 +35,7 @@ const ProductInfo_basicOrderInfo = (props) => {
               <span>주문유형</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
-              <span>{DATA.paymentType}</span>
+              <span>{productType.KOR[basicOrderInfo?.orderType]}</span>
             </div>
           </div>
           <div className={s["t-box"]}>
@@ -41,7 +43,7 @@ const ProductInfo_basicOrderInfo = (props) => {
               <span>묶음배송여부</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
-              <span>Y</span>
+              <span>{basicOrderInfo.package ? 'Y' : 'N'}</span>
             </div>
           </div>
         </li>
@@ -51,7 +53,7 @@ const ProductInfo_basicOrderInfo = (props) => {
               <span>구매자명</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
-              <span>홍길동</span>
+              <span>{basicOrderInfo.memberName}</span>
             </div>
           </div>
           <div className={s["t-box"]}>
@@ -59,7 +61,7 @@ const ProductInfo_basicOrderInfo = (props) => {
               <span>연락처</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
-              <span>01053216549</span>
+              <span>{transformPhoneNumber(basicOrderInfo.phoneNumber)}</span>
             </div>
           </div>
         </li>
@@ -69,7 +71,7 @@ const ProductInfo_basicOrderInfo = (props) => {
               <span>구매자ID</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
-              <span>TEST_ID</span>
+              <span>{basicOrderInfo.email}</span>
             </div>
           </div>
           <div className={s["t-box"]}>
@@ -77,7 +79,7 @@ const ProductInfo_basicOrderInfo = (props) => {
               <span>구독회원</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
-              <span>Y</span>
+              <span>{basicOrderInfo.subscribe ? 'Y' : 'N'}</span>
             </div>
           </div>
         </li>
@@ -85,5 +87,7 @@ const ProductInfo_basicOrderInfo = (props) => {
     </>
   );
 };
+
+
 
 export default ProductInfo_basicOrderInfo;

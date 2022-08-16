@@ -8,6 +8,9 @@ const transformDate = (d, unit, option={seperator:'-'}) => {
   let time;
   let hour, min, sec
   
+  if(!d){
+    return console.error('required Date')
+  }
 
   // YYMMDD
   const yy = d.slice(0,4);

@@ -70,10 +70,25 @@ $popupMainHeaderHeight:rem(66);
       &.fullWidth {
         grid-template-columns: 1fr;
       }
+      &.autoHeight{
+        .cont{
+          height: 100%;
+        }
+        .innerBox{
+          height: 100%;
+          span{
+            display: block;
+            overflow: initial;
+          }
+          span:not(:first-child){margin-top:rem(10);}
+        }
+
+      }
     }
     .t-row:not(:first-child) {
       margin-top: rem(-1);
     }
+
 
     .t-box {
       display: grid;
@@ -103,12 +118,9 @@ $popupMainHeaderHeight:rem(66);
             margin-left: rem(10);
           }
         }
-        &.auto-height{
-          height: 100%;
-          span{margin-left:0;}
-          span:not(:first-child){margin-top:rem(10);}
-        }
+
       }
+
       .innerBox:nth-child(2) {
         margin-left: rem(-1);
       }

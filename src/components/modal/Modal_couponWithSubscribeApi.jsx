@@ -22,7 +22,7 @@ export const Modal_couponWithSubscribeApi = ({
   const info = {
     subscribeId: data.subscribeId,
     originPrice: data.originPrice,
-    usingMemberCouponId: 49 || data.usingMemberCouponId,
+    usingMemberCouponId: data.usingMemberCouponId,
     availableCouponList:
       data.availableCouponList.map((coupon) => ({
         availableMaxDiscount: coupon.availableMaxDiscount,
@@ -43,8 +43,8 @@ export const Modal_couponWithSubscribeApi = ({
   )[0];
   const calcedCouponInfo = calculateSalePrice(
     info.originPrice,
-    initSelectedCoupon.discountType,
-    initSelectedCoupon.discountDegree,
+    initSelectedCoupon?.discountType,
+    initSelectedCoupon?.discountDegree,
   );
   const initialRadioInfo = {
     couponId: info.usingMemberCouponId,
@@ -73,6 +73,8 @@ export const Modal_couponWithSubscribeApi = ({
 
   const onApplyingCoupon = async () => {
     // 이미 적용된 쿠폰일 경우 => ERRRO;
+    console.log(info)
+    console.log(selectedRadioInfo)
     if (!selectedRadioInfo.couponId) return mct.alertShow('선택된 쿠폰이 없습니다.');
     if (selectedRadioInfo.couponId === info.usingMemberCouponId)
       return mct.alertShow('이미 적용된 쿠폰입니다.');
@@ -85,9 +87,8 @@ export const Modal_couponWithSubscribeApi = ({
       const url = `/api/subscribes/${info.subscribeId}/coupon`;
       const res = await postObjData(url, body);
       // console.log(res);
-      if (!res.isDone) {
-        // ! TEST CODE //
-        // if (res.isDone) {  // ! PRODUCT CODE //
+      // if (!res.isDone) { // ! TEST CODE //
+        if (res.isDone) {  // ! PRODUCT CODE //
         setSubmitted(true);
         setAlertModalMessage('쿠폰이 적용되었습니다.');
       } else {

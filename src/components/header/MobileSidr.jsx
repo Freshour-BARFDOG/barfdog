@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Kakao from '/public/img/icon/kakao.png';
 import Naver from '/public/img/icon/naver.png';
 import Link from 'next/link';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { authAction } from '/store/auth-slice';
 import { IoIosArrowForward } from 'react-icons/io';
 import IconMypageOrderHIstory from '/public/img/icon/icon-mypage-orderHIstory.svg';
@@ -16,63 +16,49 @@ import IconMypageInvite from '/public/img/icon/icon-mypage-invite.svg';
 import IconMypageDogs from '/public/img/icon/icon-mypage-dogs.svg';
 import IconMypageUser from '/public/img/icon/icon-mypage-user.svg';
 import IconMypageReview from '/public/img/icon/icon-mypage-review.svg';
-import useDeviceState from "/util/hook/useDeviceState";
-import transformLocalCurrency from "/util/func/transformLocalCurrency";
-import {userType} from "/store/TYPE/userAuthType";
+import useDeviceState from '/util/hook/useDeviceState';
+import transformLocalCurrency from '/util/func/transformLocalCurrency';
+import { userType } from '/store/TYPE/userAuthType';
+import {useRouter} from "next/router";
 
-
-
-
-const DUMMY_DATA = {
-  data: {
-    "mypageMemberDto" : {
-      "id" : 10,
-      "memberName" : "김회원",
-      "grade" : "더바프",
-      "myRecommendationCode" : "2BngT6yMM",
-      "reward" : 50000
-    },
-    "mypageDogDto" : {
-      "thumbnailUrl" : "https://images.unsplash.com/photo-1422565096762-bdb997a56a84?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80",
-      "dogName" : "강아지1"
-    },
-    "deliveryCount" : 4,
-    "couponCount" : 4,
-    "_links" : {
-      "self" : {
-        "href" : "http://localhost:8080/api/mypage"
-      },
-      "profile" : {
-        "href" : "/docs/index.html#resources-my-page"
-      }
-    }
-  }
-  
-}
-
-
-
-
-
-
-function kakaoLoginFunc() {
-  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}&response_type=code`;
-  router.push(KAKAO_AUTH_URL);
-}
 
 export default function MobileSidr({ isOpen, setSidrOpen }) {
   const dispatch = useDispatch();
-  const auth = useSelector(s=>s.auth);
+  const router = useRouter();
+  const auth = useSelector((s) => s.auth);
   const data = auth.userInfo;
   const isMobile = useDeviceState().isMobile;
   const isLogin = data?.userType && data?.userType !== userType.NON_MEMBER;
-  const onCloseSidr = () => {
-    setSidrOpen(false);
-  };
-  const onLogout = () => {
-    dispatch(authAction.logout());
-  };
-
+  
+  const kakaoLoginHandler = ()=> {
+    const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}&response_type=code`;
+    router.push(KAKAO_AUTH_URL);
+  }
+  
+  
+  const naverLoginHandler = ()=> {
+    alert('바프독 Naver Dev Account > Client Id 변경필요');
+    // => 추후 바프독 naver Client ID계정으로 변경해야함
+    //request Boby
+    // 1. 네이버 API > access token //
+    // 2. tokenValidDays // 서버에서 발급될 token의 유효기간
+    const KAKAO_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize`;
+    const clientId= 'sEUSn5TmLc7I0bmI93Us'; // ! 개인개정 client Id => 추후 바프독 clienet Id 로 변경
+    const redirUri = 'http://localhost:4000/account/naver'
+    const state = 'testStateString'// state(상태 유지를 위한 임의의 문자열) 정보를 넣어 아래 예제와 같은 주소로 요청을 보낸다.
+    // ! state => 필수항목 / 상태토큰값은 어디에서 확인하는지 , API 가이드에서 추가 확인 필요함????
+    router.push(`${KAKAO_AUTH_URL}?response_type=code&client_id=${clientId}&redirect_uri=${redirUri}&state=${state}`);
+    
+    
+    // ! 추후에 할 것
+    // 네이버 인증 후, 성공했을 경우 redir된다 => redir URL 에서 URL param중
+    // 1. code => 네이버 로그인 인증에 성공하면 반환받는 인증 코드, 접근 토큰(access token) 발급에 사용
+    // 2. state => 위에서 임의로 입력한 state
+    //위의 두 가지 값을 돌려받는다.
+    
+    // dlwp
+  }
+  
   useEffect(() => {
     // 모바일 sidr mount => 스크롤 기능: INACTIVE
     if (isOpen) {
@@ -82,6 +68,8 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
         width:100%;
         // top : -${0}px;
       `;
+      
+      // document.head.insertBefore('')
     }
     
     // unmount => 스크롤 기능: ACTIVE
@@ -91,8 +79,17 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
     };
   }, [isOpen]);
   
+ 
   
-  if(!isMobile) return;
+  const onCloseSidr = () => {
+    setSidrOpen(false);
+  };
+  const onLogout = () => {
+    dispatch(authAction.logout());
+  };
+
+
+  if (!isMobile) return;
 
   return (
     <>
@@ -128,13 +125,13 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                     <i />
                   </div>
                   <div className={s['sns']}>
-                    <button type={'button'} className={s.kakao} onClick={kakaoLoginFunc}>
+                    <button type={'button'} className={s.kakao} onClick={kakaoLoginHandler}>
                       <Image src={Kakao} width={72} height={72} alt="카카오톡 아이콘" />
                       <em className={s.desc}>
                         카카오로 <b> 3초만에 시작</b>하기
                       </em>
                     </button>
-                    <button className={s.naver} type={'submit'}>
+                    <button type={'button'} className={s.naver} onClick={naverLoginHandler}>
                       <Image src={Naver} width="72" height="72" alt="네이버 아이콘" />
                     </button>
                   </div>
@@ -191,7 +188,6 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                             <span className={s.text}>적립금</span>
                           </a>
                         </Link>
-                       
                       </li>
                       <li>
                         <Link href="/mypage/coupon">
@@ -200,7 +196,6 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                             <span className={s.text}>쿠폰</span>
                           </a>
                         </Link>
-                      
                       </li>
                     </ul>
                   </div>
@@ -316,4 +311,34 @@ const MypageMenuList = ({ title, link, icon }) => {
       </Link>
     </li>
   );
+};
+
+
+
+
+const DUMMY_DATA = {
+  data: {
+    mypageMemberDto: {
+      id: 10,
+      memberName: '김회원',
+      grade: '더바프',
+      myRecommendationCode: '2BngT6yMM',
+      reward: 50000,
+    },
+    mypageDogDto: {
+      thumbnailUrl:
+        'https://images.unsplash.com/photo-1422565096762-bdb997a56a84?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
+      dogName: '강아지1',
+    },
+    deliveryCount: 4,
+    couponCount: 4,
+    _links: {
+      self: {
+        href: 'http://localhost:8080/api/mypage',
+      },
+      profile: {
+        href: '/docs/index.html#resources-my-page',
+      },
+    },
+  },
 };

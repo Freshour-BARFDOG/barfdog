@@ -79,9 +79,8 @@ export const SubscribeCancle = ({ subscribeInfo }) => {
       const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/stop`;
       const res = await postObjData(url, body);
       console.log(res);
-      if (!res.isDone) {
-        // ! TEST CODE //
-        // if (res.isDone) {  // ! PRODUCT CODE //
+      // if (!res.isDone) { // ! TEST CODE //
+        if (res.isDone) {  // ! PRODUCT CODE //
         setSubmitted(true);
         mct.alertShow('구독이 취소되었습니다.');
       } else {

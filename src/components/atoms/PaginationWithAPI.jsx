@@ -3,7 +3,7 @@ import DoubleArrow from '@public/img/icon/pagination-double-arrow.svg';
 import { useEffect, useState } from 'react';
 import s from './pagination.module.scss';
 import { useRouter } from 'next/router';
-import { getData } from '/src/pages/api/reqData';
+import {getData, postObjData} from '/src/pages/api/reqData';
 import { searchQueryType } from '../../../store/TYPE/searchQueryType';
 
 const Pagination = ({
@@ -16,7 +16,8 @@ const Pagination = ({
   urlQuery,
   setPageData,
   routerDisabled= false,
-  pageInterceptor
+  pageInterceptor,
+  option={apiMethod:'GET', body: null}
 }) => {
   const router = useRouter();
   const query = router.query;
@@ -24,7 +25,7 @@ const Pagination = ({
   const ButtonCounts = 5; // UI상으로 노출시킬 연속된 페이지네이션 수;
   const [pageInfo, setPageInfo] = useState({});
   const [curPage, setCurPage] = useState(pageFromQuery);
-// console.log(pageInfo)
+  
   useEffect(() => {
     (async () => {
       try {
@@ -38,11 +39,21 @@ const Pagination = ({
         const defQuery = `?${searchQueryType.PAGE}=${calcedPageIndex}&${searchQueryType.SIZE}=${size}`;
         let urlQueries = urlQuery ? `${defQuery}&${urlQuery}` : defQuery;
 
-        const res = await getData(`${apiURL}${urlQueries}`);
-        const pageData = res.data?.page;
-        const hasItems = pageData?.totalElements !== 0;
+        let res;
+        if (option.apiMethod === 'GET') {
+          res = await getData(`${apiURL}${urlQueries}`);
+          
+        } else if (option.apiMethod === 'POST') {
+          if(!option.body) return console.error('required Search Request Body');
+          const body = option.body;
+          res = await postObjData(`${apiURL}${defQuery}`, body);
+          res = res.data; // postObjData에서 data query하기 위함
+        }
         
+        const hasItems = pageData?.totalElements !== 0;
+        const pageData = res.data?.page;
         console.log('API URL: ', apiURL, '\nSerach Query: ', urlQueries, '\nPagination res: ',res);
+        // console.log('API URL: ', apiURL, '\nSerach Query: ', urlQueries, '\nPagination res: ',res,'\nPOST BODY:', option.body);
          if ((pageInterceptor && typeof pageInterceptor === 'function') || (pageData && hasItems)) { // 여기에 인터셉터가 있다면 인터셉터로 작동하게 한다.
           const newPageInfo_InterCeptor = (pageInterceptor && typeof pageInterceptor === 'function') && await pageInterceptor(res); // SERVER API 쿼리가 변경되는 것에, 대응하기 위해 추가함
           const newPageInfo = newPageInfo_InterCeptor ||  {
@@ -81,7 +92,7 @@ const Pagination = ({
         }));
       }
     })();
-  }, [curPage, urlQuery, apiURL]);
+  }, [curPage, urlQuery, apiURL, option.body]);
 
 
   const Num = ({ pagenum }) => {

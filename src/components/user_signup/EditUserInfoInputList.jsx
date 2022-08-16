@@ -101,7 +101,7 @@ export default function SignInpuList({formValues, setFormValues, formErrors, set
     <>
       {/* ! STYLE 방법 => addClassName => 배열 ['cn1', 'cn2',...] class명 삽입(여러개 가능) => signup.module.scss파일에서 작업가능 */}
       <SignupInput
-        addedClassName={['ex1', 'ex2']}
+        // addedClassName={['ex1', 'ex2']}
         type={'text'}
         required={true}
         id={'name'}
