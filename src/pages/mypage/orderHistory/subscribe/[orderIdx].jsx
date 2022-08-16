@@ -38,7 +38,6 @@ export default function SubScribe_OrderHistoryPage(props) {
             <section className={s.body}>
               <div className={s.body_title}>주문상품</div>
 
-              <hr />
 
               <span className={s.change}>
                 {data?.orderDto.beforePlan === null &&
@@ -95,11 +94,10 @@ export default function SubScribe_OrderHistoryPage(props) {
               </div>
             </section>
 
+
             {/* 주문상품 결제정보 배송정보 */}
             <section className={s.body}>
               <div className={s.body_title}>주문정보</div>
-
-              <hr />
 
               <div className={s.body_content_2}>
                 <div className={s.grid_box}>
@@ -116,7 +114,6 @@ export default function SubScribe_OrderHistoryPage(props) {
             <section className={s.body}>
               <div className={s.body_title}>배송조회</div>
 
-              <hr />
 
               {/* 주문상품 결제정보 배송정보 */}
            
@@ -146,7 +143,6 @@ export default function SubScribe_OrderHistoryPage(props) {
             <section className={s.body}>
               <div className={s.body_title}>결제정보</div>
 
-              <hr />
 
               <div className={s.body_content_2}>
                 <div className={s.grid_box}>
@@ -180,7 +176,6 @@ export default function SubScribe_OrderHistoryPage(props) {
             <section className={s.body}>
               <div className={s.body_title}>배송정보</div>
 
-              <hr />
 
               <div className={s.body_content_2}>
                 <div className={s.grid_box}>

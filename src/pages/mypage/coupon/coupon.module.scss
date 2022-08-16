@@ -155,6 +155,7 @@ section.pageline { padding: rem(40) 0 0 0}
   .coupon_content_grid_box {
   
     .grid_box {
+      grid-template-columns: 1fr rem(120);
       padding: rem(20) rem(10) rem(30) rem(10);
 
       .left_top {

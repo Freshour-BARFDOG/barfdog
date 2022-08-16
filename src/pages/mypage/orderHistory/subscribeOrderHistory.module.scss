@@ -12,7 +12,8 @@
 
 // SUBSCRIBE ORDERSHEET - 주문상품
 .body_content {
-  display: flex;
+  display: grid;
+  grid-template-columns: rem(100) 1fr;
   @include char(l16);
   padding: rem(20) 0 rem(60);
 
@@ -29,7 +30,7 @@
     width: 100%;
     .grid_box {
       display: grid;
-      grid-template-columns: rem(100) 1fr;
+      grid-template-columns: rem(90) 1fr;
       column-gap: rem(3);
       row-gap: rem(18);
       width: 100%;
@@ -45,6 +46,8 @@
     grid-template-columns: rem(150) 1fr;
     row-gap: rem(24);
     padding: rem(20) 0 rem(60);
+    word-break: break-all;
+    
     .desc {
       color: var(--color-font-light);
     }
@@ -114,8 +117,9 @@
 @media (max-width: rem(750)) {
   
   .body_content_3 .content_grid {
+    padding-top: rem(11);
     grid-template-columns: minmax(rem(150), auto) 1fr;
-    row-gap: rem(20);
+    row-gap: rem(10);
 
     li:last-child{
       grid-column: 1 / span 2;
@@ -127,6 +131,20 @@
 
 
 @media (max-width: rem(600)) {
+  .body_content {
+    grid-template-columns: rem(80) 1fr;
+
+    .left_box {
+      width: rem(60);
+    }
+
+    .right_box {
+      .grid_box {
+        grid-template-columns: rem(80) 1fr;
+      }
+    }
+  }
+
   .body_content_3 {
     .content_grid {
       li:first-child {
