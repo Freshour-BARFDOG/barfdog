@@ -3,33 +3,33 @@ import Checkbox from '@src/components/atoms/Checkbox';
 import transformDate from '/util/func/transformDate';
 import { orderStatus } from '/store/TYPE/orderStatusTYPE';
 import {transformPhoneNumber} from "/util/func/transformPhoneNumber";
-import popupWindow from "../../../../../util/func/popupWindow";
+import popupWindow from "/util/func/popupWindow";
 
 export default function SearchResultList({ items }) {
   if (!items || !items.length) return;
 
   return (
     <ul className="table_body">
-      {items.map((item, index) => (
-        <Item key={`item-${item.id}`} index={item.id} item={item} />
+      {items.map((item, i) => (
+        <Item key={`item-${item.id}-${i}`} index={i} item={item} />
       ))}
     </ul>
   );
 }
 
-const Item = ({ item, sortableItemRef }) => {
+const Item = ({ item, sortableItemRef, index }) => {
   
   const DATA = {
     id: item.id, // 주문 id => ! 주문 id로 주문정보를 조회가능
-    orderItemId: item.orderItemId || '56841568', // 주문한 상품의 id
-    merchantUid: item.merchantUid || '20220256841568', // 상품 주문 번호
+    orderItemId: item.orderItemId, // 주문한 상품의 id
+    merchantUid: item.merchantUid, // 상품 주문 번호
     orderStatus: orderStatus.KOR[item.orderStatus],
     orderDate: transformDate(item.orderDate, 'time', { seperator: '/' }),
     orderType: item.orderType,
     buyerId: item.memberEmail,
     buyerName: item.memberName,
     buyerPhone: transformPhoneNumber(item.memberPhoneNumber),
-    recipientName: item.recipientName || '나수령',
+    recipientName: item.recipientName,
     recipientPhoneNumber: transformPhoneNumber(item.recipientPhoneNumber),
     bundleStatus: item.packageDelivery ? 'Y' : 'N',
   };
@@ -44,7 +44,7 @@ const Item = ({ item, sortableItemRef }) => {
   
   
   return (
-    <li className={s.item} key={`item-${DATA.id}`} ref={sortableItemRef} data-idx={DATA.id}>
+    <li className={s.item} ref={sortableItemRef} data-idx={DATA.id}>
       <span>
         <Checkbox
           id="reviewId"

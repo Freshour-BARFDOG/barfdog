@@ -61,13 +61,13 @@ export default function SearchOnSellPage() {
     setSearchBody(body);
   };
   
-  const pageInterceptor = (res)=>{
-    console.log(res);
-    
-  }
+  // const pageInterceptor = (res)=>{
+  //   console.log(res);
+  //
+  // }
 
-  console.log(itemList);
   // console.log(searchBody, searchBody.statusList);
+  console.log(itemList);
 
   return (
     <>
@@ -159,7 +159,7 @@ export default function SearchOnSellPage() {
                 apiURL={searchApiUrl}
                 size={searchPageSize}
                 // urlQuery={searchQuery}
-                pageInterceptor={pageInterceptor}
+                // pageInterceptor={pageInterceptor}
                 queryItemList={'queryAdminOrdersDtoList'}
                 setItemList={setItemList}
                 setIsLoading={setIsLoading}
