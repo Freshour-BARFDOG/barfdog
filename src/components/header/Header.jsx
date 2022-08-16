@@ -159,6 +159,7 @@ export const Gnb_my = ({ isMobile, setSidrOpen, authData }) => {
   const mct = useModalContext();
   const activeGlobalAlertModal = mct.hasAlert;
   const cart = useSelector((s) => s.cart);
+  const router = useRouter();
 
   const onShowMobileSideMenu = () => {
     setSidrOpen(true);
