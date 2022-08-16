@@ -13,7 +13,6 @@ import Checkbox from '/src/components/atoms/Checkbox';
 import SearchResultList from './SearchResultList';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import { orderStatus } from '/store/TYPE/orderStatusTYPE';
-import EmptyMessage from '/src/components/atoms/AmdinErrorMessage';
 import Spinner from '/src/components/atoms/Spinner';
 import { productType } from '/store/TYPE/itemType';
 import { transformToday } from '/util/func/transformDate';
@@ -33,10 +32,9 @@ export default function SearchOnSellPage() {
   const searchApiUrl = `/api/admin/orders/search`;
   const searchPageSize = 10;
   const [isLoading, setIsLoading] = useState({});
-  const [modalMessage, setModalMessage] = useState('');
-  const [itemList, setItemList] = useState([1, 2, 3]);
+  const [itemList, setItemList] = useState([]);
   const [searchValues, setSearchValues] = useState(initialSearchValues);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchBody, setSearchBody] = useState(null);
 
   const searchOption = Object.keys(orderStatus)
     .filter((key) => key !== orderStatus.BEFORE_PAYMENT && key !== 'KOR')
@@ -60,10 +58,16 @@ export default function SearchOnSellPage() {
       statusList: [searchValues.statusList], // ! 배열로 전송
       orderType: searchValues.orderType,
     };
-    setSearchQuery(body);
+    setSearchBody(body);
   };
+  
+  const pageInterceptor = (res)=>{
+    console.log(res);
+    
+  }
 
   console.log(itemList);
+  // console.log(searchBody, searchBody.statusList);
 
   return (
     <>
@@ -146,7 +150,6 @@ export default function SearchOnSellPage() {
                 ) : (
                   <SearchResultList
                     items={itemList}
-                    // onDeleteItem={onDeleteItem}
                   />
                 )}
               </div>
@@ -155,10 +158,12 @@ export default function SearchOnSellPage() {
               <PaginationWithAPI
                 apiURL={searchApiUrl}
                 size={searchPageSize}
-                urlQuery={searchQuery}
+                // urlQuery={searchQuery}
+                pageInterceptor={pageInterceptor}
+                queryItemList={'queryAdminOrdersDtoList'}
                 setItemList={setItemList}
                 setIsLoading={setIsLoading}
-                option={{ apiMethod: 'POST' }}
+                option={{ apiMethod: 'POST', body:searchBody }}
               />
             </div>
           </section>
