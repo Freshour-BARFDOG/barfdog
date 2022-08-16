@@ -20,8 +20,9 @@ import {
 import { useRouter } from 'next/router';
 import calculateSalePrice from '/util/func/calculateSalePrice';
 import transformClearLocalCurrency from '/util/func/transformClearLocalCurrency';
-import { useDispatch } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import { cartAction } from '/store/cart-slice';
+import axios from "axios";
 //
 // ! 일반 주문 주문하기
 // const initialValue_BUY = { // 일반 주문 시 , 데이터는 queryDAta에 시
@@ -35,9 +36,9 @@ import { cartAction } from '/store/cart-slice';
 //   ]
 // };
 
-export default function SingleItemDetailPage(props) {
-  // console.log(props)
-  const data = props.data;
+export default function SingleItemDetailPage({data}) {
+  const auth = useSelector((s) => s.auth);
+  const userInfo = auth.userInfo;
   const dispatch = useDispatch();
   const router = useRouter();
   const minItemQuantity = 1;
@@ -53,11 +54,13 @@ export default function SingleItemDetailPage(props) {
     totalPrice: 0, // 장바구니 항목 아님
   };
   // console.log(data)
-
+  console.log(userInfo)
   const contentRef = useRef();
   const [isLoading, setIsLoading] = useState({ fetching: true });
   const [activeTabmenuIndex, setActiveTabmenuIndex] = useState(0);
   const [formValues, setFormValues] = useState(initialFormValues_CART);
+  
+  
 
   const [activeCartShortcutModal, setActiveCartShortcutModal] = useState({});
 
@@ -87,12 +90,13 @@ export default function SingleItemDetailPage(props) {
       });
     }, 4000);
   };
-
-  if (!data) {
-    return;
-  }
+  
 
   const onAddToCart = async (e) => {
+    if(!userInfo){
+      return alert('로그인 후 이용가능한 기능입니다.');
+    }
+    
     const button = e.currentTarget;
     const thisButtonArea = button.dataset.area;
 
@@ -124,7 +128,11 @@ export default function SingleItemDetailPage(props) {
     }));
   };
 
+
   const onClickBuyButton = async () => {
+    if(!userInfo){
+      return alert('로그인 후 이용가능한 기능입니다.');
+    }
     try {
       const items = [
         {
@@ -152,6 +160,16 @@ export default function SingleItemDetailPage(props) {
       buy: false,
     }));
   };
+  
+  
+  useEffect( () => {
+    if(!data){
+      alert('데이터를 불러올 수 없ㅅ브니다.')
+      window.history.back();
+    }
+  }, [data] );
+  
+  
 
   return (
     <>
@@ -227,50 +245,72 @@ export async function getServerSideProps(ctx) {
   // console.log(query, req)
   const itemId = query.itemId;
   let DATA = null;
-  const getApiUrl = `/api/items/${itemId}`;
+  const apiUrl = `/api/items/${itemId}`;
+  let res;
 
-  const res = await getDataSSR(req, getApiUrl);
-  // console.log('SERVER REPONSE: ',res);
-  const data = res?.data;
-  if (data) {
-    DATA = {
-      item: {
-        id: data.itemDto.id,
-        name: data.itemDto.name,
-        description: data.itemDto.description,
-        originalPrice: data.itemDto.originalPrice,
-        discountType: data.itemDto.discountType,
-        discountDegree: data.itemDto.discountDegree,
-        salePrice: data.itemDto.salePrice,
-        inStock: data.itemDto.inStock,
-        remaining: data.itemDto.remaining,
-        totalSalesAmount: data.itemDto.totalSalesAmount,
-        contents: data.itemDto.contents,
-        itemIcons: data.itemDto.itemIcons,
-        deliveryFree: data.itemDto.deliveryFree,
-      },
-      delivery: {
-        price: data.deliveryCondDto.price,
-        freeCondition: data.deliveryCondDto.freeCondition,
-      },
-      opt: data.itemOptionDtoList.map((thisOpt) => ({
-        id: thisOpt.id,
-        name: thisOpt.name,
-        optionPrice: thisOpt.optionPrice,
-        remaining: thisOpt.remaining,
-      })),
-      itemImages: data.itemImageDtoList.map((thisImage) => ({
-        id: thisImage.id,
-        leakedOrder: thisImage.leakedOrder,
-        filename: thisImage.filename,
-        url: thisImage.url,
-      })),
-      review: {
-        star: data.reviewDto.star,
-        count: data.reviewDto.count,
-        itemId: data.itemDto.id,
-      },
-    };
+  try {
+    res = await axios
+      .get(apiUrl, {
+        headers: {
+          authorization: null,
+          'content-Type': 'application/json',
+        },
+      })
+      .then((res) => {
+        // console.log('shop singleItem > res: ',res);
+        return res;
+      })
+      .catch((err) => {
+        // console.log('shop singleItem > ERROR: ',err.response)
+        return err.response;
+      });
+    const data = res?.data;
+    if (data) {
+      DATA = {
+        item: {
+          id: data.itemDto.id,
+          name: data.itemDto.name,
+          description: data.itemDto.description,
+          originalPrice: data.itemDto.originalPrice,
+          discountType: data.itemDto.discountType,
+          discountDegree: data.itemDto.discountDegree,
+          salePrice: data.itemDto.salePrice,
+          inStock: data.itemDto.inStock,
+          remaining: data.itemDto.remaining,
+          totalSalesAmount: data.itemDto.totalSalesAmount,
+          contents: data.itemDto.contents,
+          itemIcons: data.itemDto.itemIcons,
+          deliveryFree: data.itemDto.deliveryFree,
+        },
+        delivery: {
+          price: data.deliveryCondDto.price,
+          freeCondition: data.deliveryCondDto.freeCondition,
+        },
+        opt: data.itemOptionDtoList.map((thisOpt) => ({
+          id: thisOpt.id,
+          name: thisOpt.name,
+          optionPrice: thisOpt.optionPrice,
+          remaining: thisOpt.remaining,
+        })),
+        itemImages: data.itemImageDtoList.map((thisImage) => ({
+          id: thisImage.id,
+          leakedOrder: thisImage.leakedOrder,
+          filename: thisImage.filename,
+          url: thisImage.url,
+        })),
+        review: {
+          star: data.reviewDto.star,
+          count: data.reviewDto.count,
+          itemId: data.itemDto.id,
+        },
+      };
+    }
+  } catch (err) {
+      console.error(err)
+  
   }
+  // const res = await getDataSSR(req, getApiUrl);
+  // console.log('SERVER REPONSE: ',res);
+  
   return { props: { data: DATA } };
 }
