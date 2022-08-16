@@ -26,19 +26,20 @@ import MobileLogo_2x from '/public/img/mobile_logo@2x.png';
 import Icon_Home from '/public/img/icon/icon-home.svg';
 import Icon_mypage from '/public/img/icon/mypage.svg';
 import { authAction } from '/store/auth-slice';
-import {userType} from "/store/TYPE/userAuthType";
+import { userType } from '/store/TYPE/userAuthType';
+import { useModalContext } from '../../../store/modal-context';
+import Modal_global_alert from '../modal/Modal_global_alert';
 
 const Modal_subscribeWidhSSR = dynamic(() => import('/src/components/modal/Modal_subscribe'));
 
-export default function Header () {
-  const auth = useSelector(state=>state.auth);
+export default function Header() {
+  const auth = useSelector((state) => state.auth);
   const userData = auth.userInfo;
-  
+
   const router = useRouter();
   const dispatch = useDispatch();
   const curPath = router.asPath;
   const isMobile = useDeviceState().isMobile;
-  
 
   const pageInfo = useSelector((state) => state.page);
   const pageTitle = pageInfo.pageTitle;
@@ -113,7 +114,9 @@ export default function Header () {
                   {userData && (
                     <button
                       type={'button'}
-                      onClick={userData.userType === userType.ADMIN ? onAdminLogout : onMemberLogout}
+                      onClick={
+                        userData.userType === userType.ADMIN ? onAdminLogout : onMemberLogout
+                      }
                       data-desc={'admin-logout'}
                     >
                       로그아웃
@@ -138,7 +141,7 @@ export default function Header () {
                     <PcGnb />
                   </ul>
                 </nav>
-                <Gnb_my isMobile={isMobile} setSidrOpen={setIsSidrOpen} />
+                <Gnb_my isMobile={isMobile} setSidrOpen={setIsSidrOpen} authData={auth} />
               </section>
             </div>
           )}
@@ -149,35 +152,42 @@ export default function Header () {
       <Modal_subscribeWidhSSR />
     </>
   );
-};
+}
 
+export const Gnb_my = ({ isMobile, setSidrOpen, authData }) => {
+  const userInfo = authData.userInfo;
+  const mct = useModalContext();
+  const activeGlobalAlertModal = mct.hasAlert;
+  const cart = useSelector((s) => s.cart);
 
-
-
-export const Gnb_my = (props) => {
-  const cart = useSelector(s=>s.cart);
-  // console.log(cart)
-  
-  const { isMobile, setSidrOpen } = props;
   const onShowMobileSideMenu = () => {
     setSidrOpen(true);
   };
+  const onMovePage = (e) => {
+    e.preventDefault();
+    if (!userInfo) {
+      return alert('로그인 후 이용가능합니다.');
+    }
+
+    const btn = e.currentTarget;
+    const link = btn.dataset.link;
+    router.push(link);
+  };
+
   return (
     <>
       <div className={s.gnb_my}>
         <ul className="clearfix">
           <li>
-            <Link href="/cart" passHref>
-              <a id="gnb_cart">
-                <div className={s.shop_wrap}>
-                  <Icon_cart />
-                  <span className={s.gnb_shop_count}>{cart.itemCount || 0}</span>
-                  <i className={'DeadlineTimer-wrapper pc'}>
-                    <DeadlineTimer />
-                  </i>
-                </div>
-              </a>
-            </Link>
+            <button id="gnb_cart" data-link={'/cart'} onClick={onMovePage}>
+              <div className={s.shop_wrap}>
+                <Icon_cart />
+                <span className={s.gnb_shop_count}>{cart.itemCount || 0}</span>
+                <i className={'DeadlineTimer-wrapper pc'}>
+                  <DeadlineTimer />
+                </i>
+              </div>
+            </button>
           </li>
           <li>
             {isMobile ? (
@@ -185,11 +195,9 @@ export const Gnb_my = (props) => {
                 <Icon_mypage />
               </button>
             ) : (
-              <Link href="/mypage/orderHistory" passHref>
-                <a>
-                  <Icon_mypage />
-                </a>
-              </Link>
+              <button data-link={'/mypage/orderHistory'} onClick={onMovePage}>
+                <Icon_mypage />
+              </button>
             )}
           </li>
         </ul>
@@ -197,6 +205,7 @@ export const Gnb_my = (props) => {
       <i className={'mobile'}>
         <DeadlineTimer />
       </i>
+      {/*{activeGlobalAlertModal && <Modal_global_alert background />}*/}
     </>
   );
 };

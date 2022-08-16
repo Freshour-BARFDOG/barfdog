@@ -10,12 +10,7 @@ import { ShopTabMenus } from '/src/components/shop/ShopTabMenus';
 import { ShopReviewBox } from '/src/components/shop/ShopReviewBox';
 import { ShopOptionBar } from '/src/components/shop/ShopOptionBar';
 import {
-  getDataSSR,
-  postData,
-  postSelfApiData,
   postUserObjData,
-  putData,
-  putObjData,
 } from '/src/pages/api/reqData';
 import { useRouter } from 'next/router';
 import calculateSalePrice from '/util/func/calculateSalePrice';
@@ -23,6 +18,8 @@ import transformClearLocalCurrency from '/util/func/transformClearLocalCurrency'
 import {useDispatch, useSelector} from 'react-redux';
 import { cartAction } from '/store/cart-slice';
 import axios from "axios";
+import {useModalContext} from "/store/modal-context";
+import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 //
 // ! 일반 주문 주문하기
 // const initialValue_BUY = { // 일반 주문 시 , 데이터는 queryDAta에 시
@@ -37,6 +34,8 @@ import axios from "axios";
 // };
 
 export default function SingleItemDetailPage({data}) {
+  const mct = useModalContext();
+  const activeGlobalAlertModal = mct.hasAlert;
   const auth = useSelector((s) => s.auth);
   const userInfo = auth.userInfo;
   const dispatch = useDispatch();
@@ -53,8 +52,7 @@ export default function SingleItemDetailPage({data}) {
     itemPrice: validation_itemPrice(data?.item), // 장바구니항목에서 제외
     totalPrice: 0, // 장바구니 항목 아님
   };
-  // console.log(data)
-  console.log(userInfo)
+  
   const contentRef = useRef();
   const [isLoading, setIsLoading] = useState({ fetching: true });
   const [activeTabmenuIndex, setActiveTabmenuIndex] = useState(0);
@@ -94,7 +92,7 @@ export default function SingleItemDetailPage({data}) {
 
   const onAddToCart = async (e) => {
     if(!userInfo){
-      return alert('로그인 후 이용가능한 기능입니다.');
+      return mct.alertShow('로그인 후 이용가능합니다.');
     }
     
     const button = e.currentTarget;
@@ -131,7 +129,7 @@ export default function SingleItemDetailPage({data}) {
 
   const onClickBuyButton = async () => {
     if(!userInfo){
-      return alert('로그인 후 이용가능한 기능입니다.');
+      return mct.alertShow('로그인 후 이용가능합니다.');
     }
     try {
       const items = [
@@ -218,6 +216,7 @@ export default function SingleItemDetailPage({data}) {
           </ul>
         </Wrapper>
       </Layout>
+      {activeGlobalAlertModal && <Modal_global_alert background />}
     </>
   );
 }
