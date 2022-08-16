@@ -55,20 +55,20 @@ export const Modal_changeItemOrderState = ({ items, onHideModal, confirmType, ha
     '상품이 파손되었을 때 (판매자 귀책)',
   ];
   const formLabelList = [
-    <p className={s.reason}>
+    <p className={s.reason} key={"form-label-01"}>
       구매의사 취소&nbsp;<span className={s.responsibility}>(구매자 귀책)</span>
     </p>,
-    <p className={s.reason}>
+    <p className={s.reason} key={"form-label-02"}>
       다른 상품 잘못 주문&nbsp;<span className={s.responsibility}>(구매자 귀책)</span>
     </p>,
-    <p className={s.reason}>
+    <p className={s.reason} key={"form-label-03"}>
       택배사의 귀책으로 상품이 훼손됐을 때&nbsp;<span className={s.responsibility}>(판매자 귀책)</span>
     </p>,
-    <p className={s.reason}>
+    <p className={s.reason} key={"form-label-04"}>
       고객이 주문한 제품과 다른 제품이 배송됐을 때&nbsp;
       <span className={s.responsibility}>(판매자 귀책)</span>
     </p>,
-    <p className={s.reason}>
+    <p className={s.reason} key={"form-label-05"}>
       상품이 파손됐을 때&nbsp;<span className={s.responsibility}>(판매자 귀책)</span>
     </p>,
   ];

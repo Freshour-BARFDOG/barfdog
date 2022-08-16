@@ -298,7 +298,7 @@ export const SubscribeRecipe = ({subscribeInfo}) => {
                   <p className={s.row_2}>{rc.uiNameKorean}</p>
                   <p className={s.row_3}>{rc.description}</p>
                   <p className={s.row_4}>
-                    <a href="/recipes" onClick={onPopupHandler}>
+                    <a href="/recipes" target={'_blank'} rel={'noreferrer'} onClick={onPopupHandler}>
                       더 알아보기
                     </a>
                   </p>

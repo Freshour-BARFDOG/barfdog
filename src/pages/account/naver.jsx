@@ -94,7 +94,7 @@ export default function NAVER_Auth({ data, err}) {
 
   return (
     <div>
-      <h1>NAVER login > valid Login State...</h1>
+      <h1>NAVER login &gt; valid Login State...</h1>
     </div>
   );
 }

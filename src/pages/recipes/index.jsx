@@ -6,7 +6,7 @@ import MetaTitle from "/src/components/atoms/MetaTitle";
 import Image from 'next/image';
 import Link from "next/link";
 import { useModalContext } from '/store/modal-context';
-import Modal_recipes from "@src/components/modal/recipes/Modal_recipes";
+import Modal_recipes from "/src/components/modal/recipes/Modal_recipes";
 import {Modal_cont_point_01} from "/src/components/modal/recipes/Modal_cont_point_01";
 import {Modal_cont_point_02} from "/src/components/modal/recipes/Modal_cont_point_02";
 import {Modal_cont_point_03} from "/src/components/modal/recipes/Modal_cont_point_03";
@@ -39,28 +39,28 @@ const DATA = {
   ],
   component: {
     tab1: [
-      <Modal_cont_point_01/>,
-      <Modal_cont_point_02/>,
-      <Modal_cont_point_03/>,
-      <Modal_cont_point_04/>,
+      <Modal_cont_point_01 key={'point-01'}/>,
+      <Modal_cont_point_02 key={'point-02'}/>,
+      <Modal_cont_point_03 key={'point-03'}/>,
+      <Modal_cont_point_04 key={'point-04'}/>,
     ],
     tab2: [
-      <Modal_cont_ingredient_01/>,
-      <Modal_cont_ingredient_02/>,
-      <Modal_cont_ingredient_03/>,
-      <Modal_cont_ingredient_04/>,
+      <Modal_cont_ingredient_01 key={'ingredient-01'}/>,
+      <Modal_cont_ingredient_02 key={'ingredient-02'}/>,
+      <Modal_cont_ingredient_03 key={'ingredient-03'}/>,
+      <Modal_cont_ingredient_04 key={'ingredient-04'}/>,
     ],
     tab3: [
-      <Modal_cont_ingredient_main_01/>,
-      <Modal_cont_ingredient_main_02/>,
-      <Modal_cont_ingredient_main_03/>,
-      <Modal_cont_ingredient_main_04/>,
+      <Modal_cont_ingredient_main_01 key={'ingredient-main-01'}/>,
+      <Modal_cont_ingredient_main_02 key={'ingredient-main-02'}/>,
+      <Modal_cont_ingredient_main_03 key={'ingredient-main-03'}/>,
+      <Modal_cont_ingredient_main_04 key={'ingredient-main-04'}/>,
     ],
     tab4: [
-      <Modal_cont_ingredient_total_01/>,
-      <Modal_cont_ingredient_total_02/>,
-      <Modal_cont_ingredient_total_03/>,
-      <Modal_cont_ingredient_total_04/>,
+      <Modal_cont_ingredient_total_01 key={'ingredient-total-01'}/>,
+      <Modal_cont_ingredient_total_02 key={'ingredient-total-02'}/>,
+      <Modal_cont_ingredient_total_03 key={'ingredient-total-03'}/>,
+      <Modal_cont_ingredient_total_04 key={'ingredient-total-04'}/>,
     ],
   },
 };
