@@ -9,6 +9,10 @@ $browser-context: 16;
   display: inline-flex;
   align-items: center;
   justify-content: flex-start;
+  &.onlyCheckbox {
+    label{gap:0;}
+    span{margin:0;}
+  }
   pre{margin:0 !important; padding-left: rem(10) !important;
     &:before{display: none;}
   }
