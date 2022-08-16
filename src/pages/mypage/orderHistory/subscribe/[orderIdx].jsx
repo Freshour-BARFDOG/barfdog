@@ -5,20 +5,25 @@ import MypageWrapper from '/src/components/mypage/MypageWrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import s from 'src/pages/mypage/orderHistory/orderHistoryOrdersheet.module.scss';
 import Image from 'next/image';
-import { getDataSSR } from '/src/pages/api/reqData';
+import { getDataSSR, postObjData } from '/src/pages/api/reqData';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import popupWindow from '/util/func/popupWindow';
 import {valid_deliveryCondition} from "/util/func/validation/valid_deliveryCondition";
 import {subscribePlanType} from "/store/TYPE/subscribePlanType";
 import transformDate from "/util/func/transformDate";
 import {orderStatus} from "/store/TYPE/orderStatusTYPE";
+import { useState } from 'react';
+import Modal_confirm from '/src/components/modal/Modal_confirm';
+import { filter_availableReturnAndExchangeItemList } from '/util/func/filter_availableReturnAndExchangeItemList';
+import { valid_availableCancelOrder } from '/util/func/validation/valid_availableCancelOrder';
 
+export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
 
-export default function SubScribe_OrderHistoryPage(props) {
-  
-
-  const data = props.data;
   // console.log(data);
+
+  const [activeModal, setActiveModal] = useState(false);
+  const [confirmMessage, setConfirmMessage] = useState('');
+  const [confirmType, setConfirmType] = useState('');
 
   const onPopupHandler = (e) => {
     e.preventDefault();
@@ -27,6 +32,39 @@ export default function SubScribe_OrderHistoryPage(props) {
     popupWindow(href, { width: 540, height: 480, left: 200, top: 100 });
   };
   
+  const initializeModalState = () => {
+    // setFilteredItemList(originItemList);
+    setConfirmMessage('');
+    setActiveModal(null);
+    setConfirmType(null);
+  };
+
+  const onStartCancel = () => {
+    setActiveModal({ cancle: true });
+    setConfirmMessage(`구독 상품이 주문 취소됩니다.`);
+    setConfirmType(orderStatus.CANCEL_REQUEST);
+  };
+
+  const onOrderCancle = async (confirm) => {
+    // if (!confirm) return initializeModalState();
+    console.log('전체 주문취소 API 실행 // 부분 취소 불가');
+    
+    const r = await postObjData(`/api/orders/${orderIdx}/subscribe/cancelRequest`);
+    console.log(r);
+    if(r.isDone){
+      alert('구독 주문 결제취소완료');
+      window.location.reload();
+    }
+    
+    setActiveModal(null);
+    
+  };
+
+  const confirmBCallbackType = {
+    [orderStatus.CANCEL_REQUEST]: onOrderCancle,
+    // [orderStatus.CONFIRM]: addSomeFunction, // 필요한 function을 추가하면 됨
+  };
+
   return (
     <>
       <MetaTitle title="마이페이지 주문내역 정기구독" />
@@ -34,12 +72,28 @@ export default function SubScribe_OrderHistoryPage(props) {
         <Wrapper>
           <MypageWrapper>
             <section className={s.title}>주문상세정보</section>
-
-            <section className={s.body}>
-              <div className={s.body_title}>주문상품</div>
-
-              <hr />
-
+          
+            <section>
+              <h1 className={s.body_title}>
+                <p>주문상품</p>
+                <div className={s['order-button-controller']}>
+                  <button
+                      type={'button'}
+                      className={`${s.btn} ${s.cancel}`}
+                      onClick={onStartCancel}
+                    >
+                      주문취소
+                    </button>
+                    <>
+                      <button type={'button'} className={`${s.btn}`}>
+                        반품신청
+                      </button>
+                      <button type={'button'} className={`${s.btn}`}>
+                        교환신청
+                      </button>
+                    </>
+                </div>
+              </h1>
               <span className={s.change}>
                 {data?.orderDto.beforePlan === null &&
                 data?.orderDto.beforeOneMealRecommendGram === null &&
@@ -209,6 +263,14 @@ export default function SubScribe_OrderHistoryPage(props) {
           </MypageWrapper>
         </Wrapper>
       </Layout>
+      {activeModal?.cancle && (
+        <Modal_confirm
+          text={confirmMessage}
+          isConfirm={confirmBCallbackType[confirmType]}
+          positionCenter
+          option={{ wordBreak: true }}
+        />
+      )}
     </>
   );
 }
