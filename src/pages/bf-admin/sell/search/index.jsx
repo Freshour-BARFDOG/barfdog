@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import s from './search.module.scss';
+import SearchResultList from './SearchResultList';
+import { orderStatus } from '/store/TYPE/orderStatusTYPE';
+import { productType } from '/store/TYPE/itemType';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
@@ -9,11 +12,8 @@ import SearchTextWithCategory from '/src/components/admin/form/searchBar/SearchT
 import SearchSelect from '/src/components/admin/form/searchBar/SearchSelect';
 import SearchRadio from '/src/components/admin/form/searchBar/SearchRadio';
 import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
-import SearchResultList from './SearchResultList';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
-import { orderStatus } from '/store/TYPE/orderStatusTYPE';
 import Spinner from '/src/components/atoms/Spinner';
-import { productType } from '/store/TYPE/itemType';
 import { transformToday } from '/util/func/transformDate';
 import { valid_isTheSameArray } from '/util/func/validation/validationPackage';
 import PureCheckbox from '/src/components/atoms/PureCheckbox';
@@ -38,8 +38,6 @@ export default function SearchOnSellPage() {
   const [itemList, setItemList] = useState([]);
   const [searchValues, setSearchValues] = useState(initialSearchValues);
   const [searchBody, setSearchBody] = useState(null);
-  const [selectedIdList, setSelectedIdList] = useState([]);
-  const allItemIdList = itemList.map((item) => item.id);
 
   const searchOption = Object.keys(orderStatus)
     .filter((key) => key !== orderStatus.BEFORE_PAYMENT && key !== 'KOR')
@@ -131,23 +129,10 @@ export default function SearchOnSellPage() {
           <section className="cont">
             <div className="cont_header clearfix">
               <p className="cont_title cont-left">목록</p>
-              {/*<div className="controls cont-left">*/}
-              {/*  <button className="admin_btn line basic_m" onClick={onOrderConfirm}>주문확인</button>*/}
-              {/*  <button className="admin_btn line basic_m" onClick={onOrderRegisterDelivery}>발송처리</button>*/}
-              {/*  <button className="admin_btn line basic_m" onClick={onStartOrderCancle}>판매취소</button>*/}
-              {/*</div>*/}
             </div>
             <div className={`${s.cont_viewer}`}>
               <div className={s.table}>
                 <ul className={s.table_header}>
-                  {/*<li className={s.table_th}>*/}
-                  {/*  <PureCheckbox*/}
-                  {/*    className={s.inner}*/}
-                  {/*    eventHandler={onSelectAllItems}*/}
-                  {/*    value={valid_isTheSameArray(allItemIdList, selectedIdList)}*/}
-                  {/*  />*/}
-                  {/*</li>*/}
-                  
                   <li className={s.table_th}>상세보기</li>
                   <li className={s.table_th}>주문번호</li>
                   {/*<li className={s.table_th}>상품주문번호</li>*/} {/* ! 개별 상품 취소 기능 삭제로 인하여, 해당 column 미노출*/}
@@ -170,7 +155,6 @@ export default function SearchOnSellPage() {
               <PaginationWithAPI
                 apiURL={searchApiUrl}
                 size={searchPageSize}
-                // urlQuery={searchQuery}
                 pageInterceptor={pageInterceptor}
                 queryItemList={'queryAdminOrdersDtoList'}
                 setItemList={setItemList}

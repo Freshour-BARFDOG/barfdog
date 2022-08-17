@@ -254,7 +254,7 @@ export default function OrderOnSellPage() {
     }));
   };
 
-  const onStartOrderCancle = () => {
+  const onStartCancelOrder = () => {
     if (!selectedOrderIdList.length) {
       return alert('선택된 상품이 없습니다.');
     }
@@ -263,7 +263,7 @@ export default function OrderOnSellPage() {
 
   
   
-  const onOrderCancel = async (enteredDetailReason) => {
+  const onCancelOrder = async (enteredDetailReason) => {
 
     if(!enteredDetailReason) return alert('판매취소사유를 입력해주세요.');
     if (!confirm(`선택하신 ${selectedOrderIdList.length} 개의 상품을 판매취소 처리하시겠습니까?`)) return;
@@ -368,7 +368,7 @@ export default function OrderOnSellPage() {
                 <button className="admin_btn line basic_m" onClick={onStartRegisterDelivery}>
                   주문발송
                 </button>
-                <button className="admin_btn line basic_m" onClick={onStartOrderCancle}>
+                <button className="admin_btn line basic_m" onClick={onStartCancelOrder}>
                   {isLoading.orderCancel ? <Spinner /> : '판매취소'}
                 </button>
               </div>
@@ -385,7 +385,7 @@ export default function OrderOnSellPage() {
                   </li>
                   <li className={s.table_th}>상세보기</li>
                   <li className={s.table_th}>주문번호</li>
-                  {/*<li className={s.table_th}>상품주문번호</li>*/}{' '}
+                  {/*<li className={s.table_th}>상품주문번호</li>*/}
                   {/* ! 개별 상품 취소 기능 삭제로 인하여, 해당 column 미노출*/}
                   <li className={s.table_th}>주문상태</li>
                   <li className={s.table_th}>구매자 ID</li>
@@ -410,7 +410,6 @@ export default function OrderOnSellPage() {
               <PaginationWithAPI
                 apiURL={searchApiUrl}
                 size={searchPageSize}
-                // urlQuery={searchQuery}
                 pageInterceptor={pageInterceptor}
                 queryItemList={'queryAdminOrdersDtoList'}
                 setItemList={setItemList}
@@ -426,7 +425,7 @@ export default function OrderOnSellPage() {
         <Modal_orderCancleReason
           id={'orderCancel'}
           setActiveModal={setActiveModal}
-          onConfirm={onOrderCancel}
+          onConfirm={onCancelOrder}
         />
       )}
     </>
