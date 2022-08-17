@@ -9,7 +9,6 @@ import SearchTerm from "/src/components/admin/form/searchBar/SearchTerm";
 import SearchTextWithCategory from "/src/components/admin/form/searchBar/SearchTextWithCategory";
 import SearchRadio from "/src/components/admin/form/searchBar/SearchRadio";
 import AmdinErrorMessage from "/src/components/atoms/AmdinErrorMessage";
-import ConfirmList from "./ConfirmList";
 import {transformToday} from "/util/func/transformDate";
 import {orderStatus} from "/store/TYPE/orderStatusTYPE";
 import {productType} from "/store/TYPE/itemType";
