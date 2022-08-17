@@ -52,7 +52,7 @@ export default function UserInfoPage() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    console.log(form);
+   
     if (isSubmitted) return console.error('이미 제출된 양식입니다.');
     const errObj = validate(form, formErrors);
     setFormErrors(errObj);
@@ -84,6 +84,7 @@ export default function UserInfoPage() {
         receiveSms: form.receiveSms,
         receiveEmail: form.receiveEmail,
       };
+      console.log(body);
       const url = '/api/members';
       const res = await putObjData(url, body);
       console.log(res);

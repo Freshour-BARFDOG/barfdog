@@ -12,30 +12,27 @@ function Modal_global_alert({
   ...props
 }) {
   const mct = useModalContext();
-  const modalState = mct.hasAlert;
+  const activeGlobalAlertModal = mct.hasAlert;
   const modalContextMessage = mct.message;
   const [style, setStyle] = useState({});
   const [targetScrollYPos, setTargetScrollYPos] = useState(null);
 
   useEffect(() => {
-    callbackAfterAnimation(modalState);
+    callbackAfterAnimation(activeGlobalAlertModal);
     const scrollYPos = window.scrollY;
-    if (modalState && scrollYPos) {
+    if (activeGlobalAlertModal) {
       document.body.style.cssText = `
       position:fixed;
       top : -${scrollYPos}px;
     `;
       setTargetScrollYPos(scrollYPos);
       window.scrollTo(0, parseInt(scrollYPos || targetScrollYPos));
-    } else {
-      // document.body.style.cssText = ``;
-      // window.scrollTo(0, parseInt(scrollYPos || targetScrollYPos));
     }
     return () => {
       document.body.style.cssText = ``;
       window.scrollTo(0, parseInt(scrollYPos || targetScrollYPos)); // alert가 unmounted 되고,  body의 fixed styled이 사라지면서, scrollY position이 화면 최상단으로 변경되는 것을 막음
     };
-  }, [modalState]);
+  }, [activeGlobalAlertModal]);
 
   const callbackAfterAnimation = (modalState) => {
     const delay = modalState ? 0 : 500;
@@ -55,11 +52,11 @@ function Modal_global_alert({
   return (
     <>
       <ModalWrapper
-        className={`${s['modal_wrap']} ${s['global']} ${modalState ? 'active' : 'inactive'}`}
+        className={`${s['modal_wrap']} ${s['global']} ${activeGlobalAlertModal ? 'active' : 'inactive'}`}
         label="Modal Global Alert"
         {...props}
       >
-        <div className={s['body']} style={modalState ? { display: 'flex' } : style}>
+        <div className={s['body']} style={activeGlobalAlertModal ? { display: 'flex' } : style}>
           <header className={s['title-section']}>
             <pre className={`${s.text} ${s.only}`}>{message || modalContextMessage}</pre>
           </header>
@@ -68,7 +65,7 @@ function Modal_global_alert({
           </div>
         </div>
       </ModalWrapper>
-      {modalState && background && <section className={s.background} />}
+      {activeGlobalAlertModal && background && <section className={s.background} />}
     </>
   );
 }

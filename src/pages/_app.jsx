@@ -102,7 +102,7 @@ MyApp.getInitialProps = async (initialProps) => {
       const data = res_MEMBER.data;
       const res_MEMBER_Dashboard = await getDataSSR(req, getMemberDashboardDataApiUrl, token);
       const mypageData = res_MEMBER_Dashboard.data;
-      console.log(data);
+      // console.log('/api/members => ',data);
       // console.log(mypageData);
       memberDATA = {
         userType: USER_TYPE,
