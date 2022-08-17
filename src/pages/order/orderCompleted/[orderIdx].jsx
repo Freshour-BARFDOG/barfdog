@@ -5,6 +5,7 @@ import MetaTitle from "@src/components/atoms/MetaTitle";
 import s from 'src/pages/order/orderCompleted/index.module.scss';
 import Image from 'next/image';
 import Link from 'next/link';
+import { postObjData, getDataSSR ,postDataSSR} from '/src/pages/api/reqData';
 
 function OrderCompletedPage(props) {
   return (
@@ -74,7 +75,7 @@ function OrderCompletedPage(props) {
               발송예정일
             </div>
             <div className={s.row_4}>
-             2022-02-16 수요일
+             협의필요
             </div>
           </div>
           </section>
@@ -128,8 +129,33 @@ function OrderCompletedPage(props) {
 
 export default OrderCompletedPage;
 
-export async function getServerSideProps({ query }) {
-  const { orderIdx } = query;
+export async function getServerSideProps(ctx) {
+  const { query, req } = ctx;
+
+  const { orderIdx , imp_uid, merchant_uid, imp_success,error_msg} = query;
   
+  console.log(query);
+  
+  if(imp_success == 'true'){
+    console.log(merchant_uid);
+    console.log(imp_success);
+    
+    const r = await postDataSSR(req,`/api/orders/${orderIdx}/general/success`, {
+      impUid : imp_uid,
+      merchantUid : merchant_uid
+    });
+
+    console.log(r);
+  } else {
+     // 모바일 결제 실패
+     const fail = await postDataSSR(req,`/api/orders/${orderIdx}/general/fail`);
+     console.log(fail); 
+     if (typeof window !== "undefined"){
+      // 임시로 넣은 코드 :  결제취소시 , 전역에 import 결제 html이 잔류하여, 없애기위한 용도
+      // window.location.href= '/';
+    }
+    
+  }
+
   return { props: { orderIdx } };
 }
