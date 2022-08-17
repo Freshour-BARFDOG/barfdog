@@ -88,7 +88,8 @@ $browser-context: 16;
     -webkit-user-select: none; 
     -moz-user-select: none; 
     -ms-user-select: none; 
-    user-select: none; 
+    user-select: none;
+    gap:rem(10);
   } /* 기본 체크박스 숨기기 */ 
   .chk__box input[type='checkbox'] { 
     display: none; 
