@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import s from './pagination.module.scss';
 import { useRouter } from 'next/router';
 import { getData, postObjData } from '/src/pages/api/reqData';
-import { searchQueryType } from '../../../store/TYPE/searchQueryType';
+import { searchQueryType } from '/store/TYPE/searchQueryType';
 
 const Pagination = ({
   apiURL,
@@ -42,12 +42,11 @@ const Pagination = ({
         let res;
         if (option.apiMethod === 'GET') {
           res = await getData(`${apiURL}${urlQueries}`);
-        } else if (option.apiMethod === 'POST') {
-          if (option.body) {
-            const body = option.body;
-            res = await postObjData(`${apiURL}${defQuery}`, body);
-            res = res.data; // postObjData에서 data query하기 위함
-          }
+        } else if (option.apiMethod === 'POST' && option.body) {
+          const body = option.body;
+          res = await postObjData(`${apiURL}${defQuery}`, body);
+          console.log(body, res)
+          res = res.data; // postObjData에서 data query하기 위함
         }
 
         const hasItems = pageData?.totalElements !== 0;
@@ -55,7 +54,6 @@ const Pagination = ({
         console.log('API URL: ', apiURL, '\nSerach Query: ', urlQueries, '\nPagination res: ', res);
         // console.log('API URL: ', apiURL, '\nSerach Query: ', urlQueries, '\nPagination res: ',res,'\nPOST BODY:', option.body);
         if ((pageInterceptor && typeof pageInterceptor === 'function') || (pageData && hasItems)) {
-          // 여기에 인터셉터가 있다면 인터셉터로 작동하게 한다.
           const newPageInfo_InterCeptor =
             pageInterceptor &&
             typeof pageInterceptor === 'function' &&
