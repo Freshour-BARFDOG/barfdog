@@ -126,7 +126,6 @@ export const deleteData = async (url) => {
   return response;
 };
 
-// 비아이벤처스로 리다이렉ㅇ트된 비언ㅌ--> 다시 분리시키기
 
 export const postObjData = async (url, data, contType) => {
   const result = {

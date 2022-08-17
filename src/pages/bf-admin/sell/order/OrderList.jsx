@@ -3,17 +3,27 @@ import Link from "next/link";
 import Checkbox from "/src/components/atoms/Checkbox";
 import popupWindow from "/util/func/popupWindow";
 import transformDate from "/util/func/transformDate";
+import React from "react";
+import {orderStatus} from "../../../../../store/TYPE/orderStatusTYPE";
+import {transformPhoneNumber} from "../../../../../util/func/transformPhoneNumber";
+import PureCheckbox from "../../../../components/atoms/PureCheckbox";
 
 
 
 
-export default function SearchResultList({ items, onDeleteItem }) {
+export default function SearchResultList({ items, selectedIdList, onSelectedItem }) {
   if (!items || !items.length) return;
 
   return (
     <ul className="table_body">
-      {items.map((item, index) => (
-        <ItemList key={`item-${item.id}`} index={item.id} item={item} />
+      {items.map((item, i) => (
+        <Item
+          key={`item-${item.id}-${i}`}
+          index={i}
+          item={item}
+          selectedIdList={selectedIdList}
+          onSelectedItem={onSelectedItem}
+        />
       ))}
     </ul>
   );
@@ -21,79 +31,72 @@ export default function SearchResultList({ items, onDeleteItem }) {
 
 
 
-const ItemList = ({ item, sortableItemRef }) => {
+const Item = ({ item, sortableItemRef, selectedIdList, onSelectedItem }) => {
   const DATA = {
-    id: item.id || "0",
-    orderId: item.orderId || "56841568",
-    paymentType: item.paymentType || "subscribe",
-    pruductId: item.pruductId || "20220256841568",
-    orderStatus: item.orderStatus || "결제완료",
-    orderDate: item.date || "05/25 15:34",
-    buyerId: item.userId || "barf1234",
-    buyerName: item.buyerName || "김바프",
-    buyerPhone: item.buyerPhone || "01061535496",
-    recipientName: item.recipientName || "나수령",
-    recipientPhone: item.recipientPhone || "01031234213",
-    bundleStatus: item.bundleStatus || "N",
-    apiurl: {
-      // self: item._links.query_banner.href,
-      // orderUp: item._links.mainBanner_leakedOrder_up.href,
-      // orderDown: item._links.mainBanner_leakedOrder_down.href,
-      // delete: item._links.delete_banner.href,
-    },
+    id: item.id, // 주문 id => ! 주문 id로 주문정보를 조회가능
+    orderItemId: item.orderItemId, // 주문한 상품의 id
+    // merchantUid: item.merchantUid, // 상품 주문 번호 // ! 개별 상품 취소 기능 삭제로 인하여, 해당 column 미노출
+    orderStatus: orderStatus.KOR[item.orderStatus],
+    orderDate: transformDate(item.orderDate, 'time', { seperator: '/' }),
+    orderType: item.orderType,
+    buyerId: item.memberEmail,
+    buyerName: item.memberName,
+    buyerPhone: transformPhoneNumber(item.memberPhoneNumber),
+    recipientName: item.recipientName,
+    recipientPhoneNumber: transformPhoneNumber(item.recipientPhoneNumber),
+    bundleStatus: item.packageDelivery ? 'Y' : 'N',
+  };
+  
+  
+  
+  const onPopupHandler = (e) => {
+    e.preventDefault();
+    if (typeof window === 'undefined') return;
+    const href = `/bf-admin/sell/popup/${DATA.orderType}/${DATA.id}`;
+    popupWindow(href, { width: 1000, height: 716 });
   };
 
 
-    const onPopupHandler = (e) => {
-      e.preventDefault();
-      if (typeof window === "undefined") return;
-      const href = e.currentTarget.href;
-      popupWindow(href, { width: 1000, height: 716 });
-    };
-
 
   return (
-    <li
-      className={s.item}
-      key={`item-${DATA.id}`}
-      ref={sortableItemRef}
-      data-idx={DATA.id}
-    >
+    <li className={s.item} ref={sortableItemRef} data-idx={DATA.id}>
       <span>
-        <Checkbox
-          id="reviewId"
-          onClick={(value) => {
-            console.log(value);
-          }}
+        <PureCheckbox
+          id={item.id}
+          className={s.inner}
+          onClick={onSelectedItem}
+          value={selectedIdList.indexOf(item.id) >= 0 || ''}
         />
       </span>
       <span>
-        <Link
-          href={`/bf-admin/popup/sell/${DATA.paymentType}/${DATA.id}`}
-          passHref
+        <button
+          className="admin_btn basic_s solid"
+          data-order-id={DATA.id}
+          onClick={onPopupHandler}
         >
-          <a onClick={onPopupHandler} className="admin_btn basic_s solid">
-            상세보기
-          </a>
-        </Link>
+          상세보기
+        </button>
       </span>
       <span>
-        <em className={"overflow-x-scroll"}>{DATA.orderId}</em>
+        <em className={'overflow-x-scroll'}>{DATA.orderItemId}</em>
       </span>
+      {/*<span>*/}
+      {/*  <em className={'overflow-x-scroll'}>{DATA.merchantUid}</em>*/}
+      {/*</span>*/}
       <span>
-        <em className={"overflow-x-scroll"}>{DATA.pruductId}</em>
-      </span>
-      <span>
-        <em className={"overflow-x-scroll"}>
-          {DATA.orderStatus} {DATA.orderDate}
+        <em className={'overflow-x-scroll'}>
+          <p>{DATA.orderStatus}</p>
+          <p>{DATA.orderDate}</p>
         </em>
       </span>
       <span>{DATA.buyerId}</span>
-      <span>
-        {DATA.buyerName} {DATA.buyerPhone}
+      <span className={s.flex_col}>
+        <p>{DATA.buyerName}</p>
+        <p>{DATA.buyerPhone}</p>
       </span>
-      <span>
-        {DATA.recipientName} {DATA.recipientPhone}
+      <span className={s.flex_col}>
+        <p>{DATA.recipientName}</p>
+        <p>{DATA.recipientPhoneNumber}</p>
       </span>
       <span>{DATA.bundleStatus}</span>
     </li>

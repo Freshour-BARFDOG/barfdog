@@ -44,7 +44,7 @@ const PureCheckbox = ({
 
   return (
     <>
-      <div className={`${s['checkbox-wrap']} ${theme ? s[theme] : ''}`}>
+      <div className={`${s['checkbox-wrap']} ${theme ? s[theme] : ''} ${!children ? s.onlyCheckbox : ''}`}>
         <label
           htmlFor={id}
           className={`${s.checkbox} ${disabled ? s.disabled : ''} ${className || ''}`}

@@ -1,0 +1,66 @@
+@import 'styles/global/guide.scss';
+@import 'styles/global/rem';
+
+// LAYOUT
+.title-section {
+  margin-top: rem(10);
+  margin-bottom: rem(26);
+}
+.body-section {
+  margin-bottom: rem(30);
+}
+
+// CONT
+.title-section {
+  text-align: center;
+  .title {
+    font-size: rem(17) !important;
+  }
+
+  cursor: default;
+  .itemCount {
+    font-size: rem(13);
+    color: var(--color-font-sub);
+  }
+}
+
+.body-section {
+  input {
+    font-size: rem(14);
+    width: 100%;
+    border: {
+      top: 0;
+      left: 0;
+      right: 0;
+      radius: 0;
+    }
+    &:focus {
+      border: {
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+      }
+    }
+    &::placeholder {
+      font-size: rem(14);
+    }
+  }
+}
+
+.btn-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: rem(10);
+  button {
+    width: 100%;
+  }
+}
+
+.close-button {
+  position: absolute !important;
+  right: rem(10);
+  top: rem(10);
+  width: rem(20) !important;
+  height: rem(20) !important;
+}
