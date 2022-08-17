@@ -4,6 +4,8 @@ import Wrapper from "/src/components/common/Wrapper";
 import MetaTitle from "@src/components/atoms/MetaTitle";
 import s from 'src/pages/order/orderCompleted/index.module.scss';
 import Image from 'next/image';
+import Link from 'next/link';
+
 
 function OrderCompletedPage() {
   return (
@@ -81,12 +83,16 @@ function OrderCompletedPage() {
 
           <section className={s.btn_box}>
             <div className={s.flex_box}>
-              <button className={s.left_btn}>
-                홈으로
-              </button>
-              <button className={s.right_btn}>
-                주문내역 확인
-              </button>
+              <Link href="/" passHref>
+                <a>
+                  <button className={s.left_btn}>홈으로</button>
+                </a>
+              </Link>
+              <Link href={"/"} passHref>
+                <a>
+                  <button className={s.right_btn}>주문내역 확인</button>
+                </a>
+              </Link>
             </div>
           </section>
 
