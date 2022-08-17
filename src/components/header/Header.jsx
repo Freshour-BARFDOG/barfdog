@@ -155,7 +155,7 @@ export default function Header() {
 }
 
 export const Gnb_my = ({ isMobile, setSidrOpen, authData }) => {
-  const userInfo = authData.userInfo;
+  const userInfo = authData?.userInfo;
   const mct = useModalContext();
   const activeGlobalAlertModal = mct.hasAlert;
   const cart = useSelector((s) => s.cart);
