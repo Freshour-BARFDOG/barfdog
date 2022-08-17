@@ -59,6 +59,10 @@ $inputDefaultHeight: rem(38);
 */
 
 .admin_btn, .custom_btn {
+
+  &.autoWidth{
+    width: auto !important;
+  }
   display: inline-flex;
   align-items: center;
   justify-content: center;

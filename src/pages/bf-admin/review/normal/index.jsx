@@ -142,7 +142,7 @@ function ReviewPage() {
               </p>
               <div className="controls cont-left">
                 <button className="admin_btn line basic_m" onClick={onApprovalReview}>리뷰 승인</button>
-                <button className="admin_btn line basic_m">
+                <button className="admin_btn line basic_m autoWidth">
                   베스트 리뷰 선정
                 </button>
               </div>
