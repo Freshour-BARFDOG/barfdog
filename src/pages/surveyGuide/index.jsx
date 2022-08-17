@@ -7,10 +7,12 @@ import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import {useModalContext} from "/store/modal-context";
 import Modal_global_alert from "/src/components/modal/Modal_global_alert";
+import {useRouter} from "next/router";
 
 
 export default function SurveyGuidePage() {
   const mct = useModalContext();
+  const router = useRouter();
   const activeGlobalAlertModal = mct.hasAlert;
   const auth = useSelector((s) => s.auth);
   const userInfo = auth.userInfo;
