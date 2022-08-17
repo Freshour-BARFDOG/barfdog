@@ -394,6 +394,37 @@ export const getDataSSR = async (req, url, tokenFromSSR) => {
   return result;
 };
 
+export const postDataSSR = async (req, url,data, tokenFromSSR) => {
+  let result;
+  const token = tokenFromSSR || getTokenFromServerSide(req);
+  try { // ! TOKEN이 없을 경우 , axios 실행되지 않아야 함
+    // console.log('여기 --- ', token);
+    result = await axios
+      .post(url, data,
+      {
+        headers: {
+          authorization: token,
+          'content-Type': 'application/json',
+        },
+      }
+      )
+      .then((res) => {
+        // console.log('SSR RESPONSE: ',res);
+        return res;
+      })
+      .catch((err) => {
+        // console.log(err.response)
+        return err.response;
+      });
+    // console.log('result:::', result)
+  } catch (err) {
+    // console.error(err)
+    return err.response;
+  }
+  
+
+  return result;
+};
 //
 //
 // export const axiosServerSide = async (req, method, url, data) => {
