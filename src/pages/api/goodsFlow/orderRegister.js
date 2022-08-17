@@ -7,6 +7,7 @@ const { validateHeaderName } = require('http');
 // TODO: 주문정보 업데이트하기
 
 const OrderRegister = async (req, res) => {
+  console.log(req);
   axios.defaults.baseURL = 'https://test.goodsflow.com/';
   //// 'https://test.goodsflow.com/delivery/api/v2/otps/partner/BARFDOG',
 console.log(req.body);
