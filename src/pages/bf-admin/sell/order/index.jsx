@@ -263,9 +263,9 @@ export default function OrderOnSellPage() {
 
   
   
-  const onOrderCancel = async (reason) => {
+  const onOrderCancel = async (enteredDetailReason) => {
 
-    if(!reason) return alert('판매취소사유를 입력해주세요.');
+    if(!enteredDetailReason) return alert('판매취소사유를 입력해주세요.');
     if (!confirm(`선택하신 ${selectedOrderIdList.length} 개의 상품을 판매취소 처리하시겠습니까?`)) return;
     
     const seletedOrderItemIdList = itemList
@@ -276,14 +276,14 @@ export default function OrderOnSellPage() {
       itemType === productType.GENERAL
         ? {
             orderItemIdList: seletedOrderItemIdList, // 주문한 "상품의 id" List
-            reason: reason,
-            detailReason: reason,
+            reason: enteredDetailReason,
+            detailReason: enteredDetailReason,
           }
         : itemType === productType.SUBSCRIBE
         ? {
             orderIdList: selectedOrderIdList, // "주문 id" list
-            reason: reason,
-            detailReason: reason,
+            reason: '판매자 취소',
+            detailReason: enteredDetailReason,
           }
         : null;
     
