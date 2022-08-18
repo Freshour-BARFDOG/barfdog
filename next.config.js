@@ -1,6 +1,27 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true
+  reactStrictMode: true,
+  async rewrites() {
+    // console.log('Delopy Type is Dev ?',process.env.NODE_ENV !== "production");
+    console.log('Default API URL (DEV): ', process.env.NEXT_PUBLIC_API_URL_DEV);
+    console.log('Default API URL (PROD): ', process.env.NEXT_PUBLIC_API_URL_PRODUCT);
+    console.log('Deploy Type is Production ? ', process.env.NODE_ENV === 'production');
+    if (process.env.NODE_ENV === 'development') {
+      return [
+        {
+          source: process.env.SOURCE_PATH,
+          destination: process.env.NEXT_PUBLIC_API_URL_DEV
+        }
+      ];
+    } else if (process.env.NODE_ENV === 'production') {
+      return [
+        {
+          source: process.env.SOURCE_PATH,
+          destination: process.env.NEXT_PUBLIC_API_URL_PRODUCT
+        }
+      ];
+    }
+  }
 };
 
 module.exports = {
@@ -43,25 +64,5 @@ module.exports = {
       'shop-phinf.pstatic.net'
     ]
   },
-  async rewrites() {
-    // console.log('Delopy Type is Dev ?',process.env.NODE_ENV !== "production");
-    console.log('Default API URL (DEV): ', process.env.NEXT_PUBLIC_API_URL_DEV);
-    console.log('Default API URL (PROD): ', process.env.NEXT_PUBLIC_API_URL_PRODUCT);
-    console.log('Deploy Type is Production ?: ', process.env.NODE_ENV === 'production');
-    if (process.env.NODE_ENV === 'development') {
-      return [
-        {
-          source: process.env.SOURCE_PATH,
-          destination: process.env.NEXT_PUBLIC_API_URL_DEV
-        }
-      ];
-    } else if (process.env.NODE_ENV === 'production') {
-      return [
-        {
-          source: process.env.SOURCE_PATH,
-          destination: process.env.NEXT_PUBLIC_API_URL_PRODUCT
-        }
-      ];
-    }
-  }
+  
 };
