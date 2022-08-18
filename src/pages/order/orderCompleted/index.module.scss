@@ -2,8 +2,8 @@
 @import '/styles/global/guide';
 @import '/styles/global/rem';
 
-section.image_box { padding: rem(60) 0 rem(40); }
-section.text_box { padding: rem(80) 0 rem(40); }
+section.image_box { padding: rem(60) 0 0; }
+section.text_box { padding: rem(40) 0 rem(40); }
 section.order_box { padding: 0 0 rem(64); }
 section.btn_box {padding: 0 0 rem(217) ;}
 
@@ -22,6 +22,10 @@ section.btn_box {padding: 0 0 rem(217) ;}
 
 .text_box {
   text-align: center;
+  .box {
+    padding-top: rem(40);
+  }
+
   .row_1 {
     @include char(t24);
     font-weight: 700;
