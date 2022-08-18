@@ -137,25 +137,48 @@ const DUMMY_MEMBER_RESPONSE = {
 
 export async function getServerSideProps({ query }) {
   const { code } = query;
+ 
   let err = null;
+
   let snsUserType = null;
   let userInfo = null;
+  let token = null;
 
+  // let token = await axios.post(`https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&client_id=${process.env.NEXT_PUBLIC_NAVER_CLIENT_ID}&client_secret=${process.env.NEXT_PUBLIC_NAVER_CLIENT_SECRET}&code=${code}`,
+  try{
+    let tokenData = await axios.post(`https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&client_id=V3rQRVaRHmNC2v_9RF76&client_secret=ItgUL9cVR4&code=${code}`,
+    {
+    },
+    {
+      headers: {
+        'content-Type': 'application/json',
+      },
+    }
+    );
+    console.log(tokenData);
+    token = tokenData.data.access_token;
+  }catch(e){
+    console.log(e);
+  }
+  
   // console.log('code::::: ',code)
   const body = {
-    accessToken: code, // Naver Api Access Token
+    accessToken: token, // Naver Api Access Token
     tokenValidDays: null, // null일경우 2시간 유효 ( 회원검증을 위해서 , 최소한의 시간만 로그인 State을 유지시킴)
   };
 
   try {
-    let res = await axios({
-      url: '/api/login/naver',
-      method: 'post',
-      headers: {
-        'content-Type': 'application/json',
-      },
-      body,
-    })
+
+    let res = await axios
+      .post(
+        '/api/login/naver',
+        body,
+        {
+          headers: {
+            'content-Type': 'application/json',
+          },
+        },
+      )
       .then((res) => {
         return res;
       })
@@ -163,13 +186,14 @@ export async function getServerSideProps({ query }) {
         return err;
       });
 
-    // console.log('BARFDOG API SERVER res::::: ',res)
-    res = DUMMY_NEW_MEMBER_RESPONSE; ////////  ! TEST
+    console.log('BARFDOG API SERVER res::::: ',res);
+    // res = DUMMY_NEW_MEMBER_RESPONSE; ////////  ! TEST
     // res = DUMMY_MEMBER_RESPONSE; ////////  ! TEST
 
     if(res.data){
       const resultCode = Number(res.data.resultcode) || null;
       const resultMessage = res.data.message;
+
       if (resultCode === 251) {
         snsUserType = userType.NON_MEMBER; // 비회원
       } else if (resultCode === 252) {
