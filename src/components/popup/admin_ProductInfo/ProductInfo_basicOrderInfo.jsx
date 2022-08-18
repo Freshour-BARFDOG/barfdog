@@ -17,7 +17,7 @@ const ProductInfo_basicOrderInfo = ({basicOrderInfo}) => {
               <span>주문번호</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
-              <span>{basicOrderInfo.merchantUid}</span>
+              <span>{basicOrderInfo.id}</span>
             </div>
           </div>
           <div className={s["t-box"]}>
