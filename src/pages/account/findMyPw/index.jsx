@@ -108,6 +108,7 @@ export default function FindMyPwPage() {
     mct.alertHide();
   };
 
+  console.log(form)
   return (
     <>
       <MetaTitle title="비밀번호 찾기" />
@@ -133,7 +134,7 @@ export default function FindMyPwPage() {
                 formErrors={formErrors}
                 value={form}
                 onChange={onInputChangeHandler}
-                filterType={'number'}
+                filterType={''}
               />
               <FindMyAccountInputBox
                 id={'phoneNumber'}

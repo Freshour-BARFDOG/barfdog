@@ -14,6 +14,7 @@ export default function SubscribeOrderCompletedPage({subscribeId}) {
       <Layout>
         <Wrapper>
           <section className={s.text_box}>
+            <div className={s.box}></div>
             <div className={s.row_1}>
               견주님,
               <br />
