@@ -42,7 +42,7 @@ const transformDate = (d, unit, option={seperator:'-'}) => {
   if(unit === 'time'){
     result = `${yy}년 ${mm}월 ${dd}일 ${hour}시 ${min}분 ${sec}초`;
     if(option.seperator){
-      result = `${yy}${option.seperator}${mm}${option.seperator}${dd}${option.seperator} ${hour}:${min}:${sec}`;
+      result = `${yy}${option.seperator}${mm}${option.seperator}${dd} ${hour}:${min}:${sec}`;
     }
   }
   

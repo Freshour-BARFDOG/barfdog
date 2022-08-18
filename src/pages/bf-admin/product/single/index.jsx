@@ -10,46 +10,37 @@ import SingleList from './SingleItemList';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import Spinner from '/src/components/atoms/Spinner';
 
-
 const initalSearchValue = {
   itemType: 'ALL',
-  smallTitle :''
-}
+  smallTitle: '',
+};
 
 function SingleItemPage() {
   const getListApiUrl = '/api/admin/items';
   const apiDataQueryString = 'queryItemsAdminDtoList';
   const initialQuery = `&itemType=ALL`;
+  const searchPageSize = 10;
   const [urlQuery, setUrlQuery] = useState(initialQuery);
   const [itemList, setItemList] = useState([]);
   const [isLoading, setIsLoading] = useState({});
   const [searchValue, setSearchValue] = useState(initalSearchValue);
   const [pageInfo, setPageInfo] = useState({});
 
-// - TODO
-// API서버에서 요청할
-
-
-
-
   const onResetSearchValues = () => {
     setSearchValue(initalSearchValue);
   };
 
   const onSearchHandler = () => {
-    console.log(searchValue);
     const tempUrlQuery = [];
     for (const key in searchValue) {
       const val = searchValue[key];
-      if(val){
+      if (val) {
         const tempString = `${key}=${val}`;
         tempUrlQuery.push(tempString);
       }
     }
-    const separator = '&'
-    const resultSearchQuery = separator + tempUrlQuery.join('&');
+    const resultSearchQuery = tempUrlQuery.join('&');
     setUrlQuery(resultSearchQuery);
-    console.log('검색 실행', resultSearchQuery);
   };
 
   return (
@@ -60,7 +51,7 @@ function SingleItemPage() {
           <div className="title_main">
             <h1>
               일반상품 관리
-              {isLoading.fetching && <Spinner/>}
+              {isLoading.fetching && <Spinner />}
             </h1>
           </div>
           <section className="cont">
@@ -83,7 +74,7 @@ function SingleItemPage() {
           <section className="cont">
             <div className="cont_header clearfix">
               <p className="cont_title cont-left">
-                상품목록 &#40;총<em className={s['product-count']}>{pageInfo.totalPages || 0}</em>
+                상품목록 &#40;총<em className={s['product-count']}>{pageInfo.totalItems || 0}</em>
                 개&#41;
               </p>
               <div className="controls cont-left"></div>
@@ -116,12 +107,13 @@ function SingleItemPage() {
             <div className={s['pagination-section']}>
               <PaginationWithAPI
                 apiURL={getListApiUrl}
-                size={1}
+                size={searchPageSize}
                 theme={'square'}
                 setItemList={setItemList}
                 queryItemList={apiDataQueryString}
                 setIsLoading={setIsLoading}
-                urlQuery={urlQuery} setPageData={setPageInfo}/>
+                urlQuery={urlQuery}
+                setPageData={setPageInfo}/>
             </div>
           </section>
         </AdminContentWrapper>

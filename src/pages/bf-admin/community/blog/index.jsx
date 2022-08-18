@@ -54,10 +54,14 @@ function BlogIndexPage() {
                 />
               </div>
               <div className="controls cont-left">
-                <Button_acceptClickEvent
-                  title={'추천 아티클'}
+                <button
+                  type="button"
+                  id="set_order"
+                  className="admin_btn line basic_m autoWidth"
                   onClick={onShowRecommendArticleModal}
-                />
+                >
+                  추천 아티클
+                </button>
               </div>
             </div>
             <div className={`${s.cont_viewer}`}>
