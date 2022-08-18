@@ -19,21 +19,43 @@ export default function SignupPage() {
   const mct = useModalContext();
   const router = useRouter();
   const userState = useSelector((s) => s.userState);
-
+  console.log(userState.snsInfo);
+  
+const naverGender = function (gender) {
+  // naver 성별
+  // - F: 여성
+  // - M: 남성
+  // - U: 확인불가
+  switch (gender) {
+    case 'F': 
+      return 'FEMALE';
+    case 'M': 
+      return 'MALE';
+    case 'U':
+    default:
+      return 'NONE';
+  }
+}
+  // naver 에서 받는 성별 출력
+  // console.log(naverGender(userState.snsInfo.gender));
   const initialFormValues = {
-    name: '',
-    email: '',
+    name: userState.snsInfo.name ||'',
+    email: userState.snsInfo.email ||'',
     password: '',
     confirmPassword: '',
-    phoneNumber: '',
+    phoneNumber: userState.snsInfo.mobile || '',
     address: {
       zipcode: '',
       street: '',
       city: '',
       detailAddress: '',
     },
-    birthday: '',
-    gender: 'NONE',
+    // ! 생년월일 셋팅 확인 필요
+    birthday:`${userState.snsInfo.birthyear}-${userState.snsInfo.birthday}` || '',
+    // ! gender 셋팅 확인 필요
+    gender: userState.snsInfo.provider == 'naver'? naverGender(userState.snsInfo.gender): 'NONE',
+    // gender:'MALE',
+
     recommendCode: '',
     agreement: {
       servicePolicy: false,

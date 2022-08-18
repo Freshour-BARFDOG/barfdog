@@ -196,6 +196,20 @@ export async function getServerSideProps({ query }) {
 
       if (resultCode === 251) {
         snsUserType = userType.NON_MEMBER; // 비회원
+        const serverRes = res.data.response;
+        userInfo = {
+          accessToken: body.accessToken, // Naver Api Access Token
+          tokenValidDays: body.tokenValidDays, // 토큰 지속시간
+          id: serverRes.id,
+          gender: serverRes.gender,
+          email: serverRes.email,
+          mobile: serverRes.mobile,
+          mobile_e164: serverRes.mobile_e164,
+          name: serverRes.name,
+          birthday: serverRes.birthday,
+          birthyear: serverRes.birthyear,
+        };
+        console.log('USERINFO : ', userInfo)
       } else if (resultCode === 252) {
         snsUserType = userType.MEMBER; // 회원 & SNS연동 아직 안 한 CASE
         //res.data.response
