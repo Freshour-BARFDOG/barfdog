@@ -36,10 +36,9 @@ export default function LoginPage() {
   const [autoLogin, setAutoLogin] = useState(false);
   const [formValues, setFormValues] = useState(initialValues);
   const [formErrors, setFormErrors] = useState();
-  const [isSubmitted, setIsSubmitted] = useState( false );
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const naverRef = useRef();
-  
-  
+
   useEffect(() => {
     const naverScript = document.createElement('script');
     naverScript.src = 'https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js';
@@ -66,27 +65,27 @@ export default function LoginPage() {
   function naverLoginFunc() {
     // naverRef.current.children[0].click();
     const KAKAO_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize`;
-    const clientId= process.env.NEXT_PUBLIC_NAVER_CLIENT_ID; // ! 개인개정 client Id => 추후 바프독 clienet Id 로 변경
-    const redirUri = 'http://localhost:4000/account/naver'
-    const state = 'testStateString'// state(상태 유지를 위한 임의의 문자열) 정보를 넣어 아래 예제와 같은 주소로 요청을 보낸다.
+    const clientId = process.env.NEXT_PUBLIC_NAVER_CLIENT_ID; // ! 개인개정 client Id => 추후 바프독 clienet Id 로 변경
+    const redirUri = 'http://localhost:4000/account/naver';
+    const state = 'testStateString'; // state(상태 유지를 위한 임의의 문자열) 정보를 넣어 아래 예제와 같은 주소로 요청을 보낸다.
     // ! state => 필수항목 / 상태토큰값은 어디에서 확인하는지 , API 가이드에서 추가 확인 필요함????
-    router.push(`${KAKAO_AUTH_URL}?response_type=code&client_id=${clientId}&redirect_uri=${redirUri}&state=${state}`);
+    router.push(
+      `${KAKAO_AUTH_URL}?response_type=code&client_id=${clientId}&redirect_uri=${redirUri}&state=${state}`,
+    );
   }
 
   function kakaoLoginFunc() {
     const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}&response_type=code`;
     router.push(KAKAO_AUTH_URL);
   }
- 
 
   const onAutoLoginHandler = (id, checked) => {
     setAutoLogin(checked);
   };
 
-
   const onSubmit = async () => {
-    if(isSubmitted) return console.error('이미 제출된 양식입니다.');
-    
+    if (isSubmitted) return console.error('이미 제출된 양식입니다.');
+
     const errObj = validate(formValues);
     const isPassed = valid_hasFormErrors(errObj);
     setFormErrors(errObj);
@@ -113,19 +112,27 @@ export default function LoginPage() {
           console.log(res);
           if (res.status === 200) {
             const token = res.headers.authorization;
+            const { temporaryPassword, email, name, roleList} = res.data;
+
             const payload = {
-              expiredDate: res.data.expiresAt,
               token,
+              expiredDate: res.data.expiresAt,
+              data: {
+                temporaryPassword,
+                email,
+                name,
+                roleList,
+              },
             };
-            if(autoLogin){
-              dispatch(authAction.autoLogin(payload))
-            } else{
+            if (autoLogin) {
+              dispatch(authAction.autoLogin(payload));
+            } else {
               dispatch(authAction.login(payload));
             }
-          }else {
-            alert('로그인에 실패하였습니다.')
+          } else {
+            alert('로그인에 실패하였습니다.');
           }
-          
+
           setIsSubmitted(true);
         })
         .catch((err) => {
@@ -148,19 +155,17 @@ export default function LoginPage() {
       console.error('통신에러: ', err);
       setModalMessage(`데이터 처리 중 오류가 발생했습니다.\n${err}`);
     }
-  
+
     setIsLoading((prevState) => ({
       ...prevState,
       submit: false,
     }));
   };
-  
+
   const onEnterKeyHandler = (e) => {
     enterKey(e, onSubmit);
   };
 
-  
-  
   const onGlobalModalCallback = () => {
     mct.alertHide();
   };
