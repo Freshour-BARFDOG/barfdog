@@ -1,8 +1,4 @@
-$browser-context: 16;
-// convert px to rem
-@function rem($px, $context: $browser-context) {
-  @return #{$px / $context}rem;
-}
+@import '/styles/global/rem';
 
 // *  ------- COMMON ------- * //
 $backgroundColorDef: #f8f8ff;
@@ -117,6 +113,13 @@ $popupMainHeaderHeight:rem(66);
           &:not(:first-child) {
             margin-left: rem(10);
           }
+        }
+        .option{
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          gap:rem(10);
+          span{margin: 0 !important;}
         }
 
       }

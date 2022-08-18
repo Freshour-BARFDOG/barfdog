@@ -1,12 +1,10 @@
 import s from './order.module.scss';
-import Link from "next/link";
-import Checkbox from "/src/components/atoms/Checkbox";
 import popupWindow from "/util/func/popupWindow";
 import transformDate from "/util/func/transformDate";
 import React from "react";
-import {orderStatus} from "../../../../../store/TYPE/orderStatusTYPE";
-import {transformPhoneNumber} from "../../../../../util/func/transformPhoneNumber";
-import PureCheckbox from "../../../../components/atoms/PureCheckbox";
+import {orderStatus} from "/store/TYPE/orderStatusTYPE";
+import {transformPhoneNumber} from "/util/func/transformPhoneNumber";
+import PureCheckbox from "/src/components/atoms/PureCheckbox";
 
 
 
@@ -78,10 +76,10 @@ const Item = ({ item, sortableItemRef, selectedIdList, onSelectedItem }) => {
         </button>
       </span>
       <span>
-        <em className={'overflow-x-scroll'}>{DATA.orderItemId}</em>
+        <em className={'overflow-x-scroll'}>{DATA.id}</em>
       </span>
       {/*<span>*/}
-      {/*  <em className={'overflow-x-scroll'}>{DATA.merchantUid}</em>*/}
+      {/*  <em className={'overflow-x-scroll'}>{DATA.orderItemId}</em>*/}
       {/*</span>*/}
       <span>
         <em className={'overflow-x-scroll'}>

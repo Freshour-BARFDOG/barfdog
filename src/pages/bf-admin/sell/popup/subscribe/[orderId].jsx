@@ -8,13 +8,10 @@ import ProductInfo_subscribe from '/src/components/popup/admin_ProductInfo/Produ
 import ProductInfo_payment from '/src/components/popup/admin_ProductInfo/ProductInfo_payment';
 import ProductInfo_delivery from '/src/components/popup/admin_ProductInfo/ProductInfo_delivery';
 import ProductInfo_orderStatusInfo from '/src/components/popup/admin_ProductInfo/ProductInfo_orderStatusInfo';
-import { getDataSSR } from '/src/pages/api/reqData';
 import { orderStatus } from '/store/TYPE/orderStatusTYPE';
 
-// ! 주문상태에 따라서....... rendering조건을........달리해준다
-// ! 1. 일단 data fetching부터 => sssr 가능?????????
 
-export default function Popup_MemberDetailPage({ data }) {
+export default function Popup_SubscribeOrderDetailInfoPage({ data }) {
   const canceldOrderStatusList = [
     { boxLabel: '취소', value: orderStatus.CANCEL_REQUEST },
     { boxLabel: '취소', value: orderStatus.CANCEL_DONE_BUYER },
@@ -171,7 +168,7 @@ export async function getServerSideProps({ req, query }) {
   const { orderId } = query;
   let DATA = null;
   let orderStatus = null;
-  const apiUrl = `api/admin/orders/${orderId}/subscribe`;
+  const apiUrl = `/api/admin/orders/${orderId}/subscribe`;
   const res =DUMMY_RES;
   // const res = await getDataSSR(req, apiUrl);
   if (res.data) {

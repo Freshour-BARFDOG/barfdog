@@ -21,7 +21,7 @@ import { filter_apiHostname } from '../../../../util/func/filter_api_hostname';
 import { paymentMethodType } from '../../../../store/TYPE/paymentMethodType';
 
 export default function MypageDogInfoPage({ data }) {
-  console.log(data);
+  // console.log(data);
   const mct = useModalContext();
   const [activeUploadDogProfileModal, setActiveUploadDogProfileModal] = useState(false);
   const [itemList, setItemList] = useState(data);
@@ -220,7 +220,7 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
     <>
       <li className={s['dogInfo-wrap']} data-id={dogId}>
         <div className={s.left_box}>
-          <div className={`${s.image} img-wrap`}>
+          <div className={`${s.image} ${data.pictureUrl ? s.hasImage : ''}`}>
             {data.pictureUrl && (
               <Image src={data.pictureUrl} objectFit="cover" layout="fill" alt="카드 이미지" />
             )}

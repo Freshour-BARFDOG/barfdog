@@ -57,7 +57,7 @@ export default function UserInfoPage() {
     const errObj = validate(form, formErrors);
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
-    // console.log(form);
+    console.log(form);
     if (!isPassed) {
       mct.alertShow();
       setAlertModalMessage('유효하지 않은 항목이 있습니다.');
@@ -81,13 +81,13 @@ export default function UserInfoPage() {
         },
         birthday: form.birthday,
         gender: form.gender,
-        receiveSms: form.receiveSms,
-        receiveEmail: form.receiveEmail,
+        receiveSms: form.agreement.receiveSms,
+        receiveEmail: form.agreement.receiveEmail,
       };
-      console.log(body);
+      // console.log(body);
       const url = '/api/members';
       const res = await putObjData(url, body);
-      console.log(res);
+      // console.log(res);
       if (res.isDone) {
         mct.alertShow();
         setIsSubmitted(true);

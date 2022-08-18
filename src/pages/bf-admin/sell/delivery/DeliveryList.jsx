@@ -1,97 +1,90 @@
-import s from "./delivery.module.scss";
-import getElemIdx from "@util/func/getElemIdx";
-import transformDate from "@util/func/transformDate";
+import React from 'react';
+import s from './delivery.module.scss';
+import transformDate from '/util/func/transformDate';
+import { orderStatus } from '/store/TYPE/orderStatusTYPE';
+import { transformPhoneNumber } from '/util/func/transformPhoneNumber';
+import popupWindow from '/util/func/popupWindow';
 
-
-
-
-export default function SearchResultList({ items, onDeleteItem }) {
+export default function SearchResultList({ items }) {
   if (!items || !items.length) return;
 
   return (
     <ul className="table_body">
-      {items.map((item, index) => (
-        <ItemList key={`item-${item.id}`} index={item.id} item={item} />
+      {items.map((item, i) => (
+        <ItemList key={`item-${item.id}-${i}`} index={i} item={item} />
       ))}
     </ul>
   );
 }
 
-
-
 const ItemList = ({ item, sortableItemRef }) => {
-
+  // console.log(item);
   const DATA = {
-    id: item.id || "0",
-    orderId: item.orderId || "56841568",
-    pruductId: item.pruductId || "20220256841568",
-    orderStatus: item.orderStatus || "취소요청",
-    deliveryStatus: item.deliveryStatus || "배송중",
-    orderDate: item.date || "05/25 15:34",
-    trackingNumber: item.trackingNumber || "21335564522125",
-    buyerId: item.userId || "barf1234",
-    buyerName: item.buyerName || "김바프",
-    buyerPhone: item.buyerPhone || "01061535496",
-    recipientName: item.recipientName || "나수령",
-    recipientPhone: item.recipientPhone || "01031234213",
-    bundleStatus: item.bundleStatus || "N",
-    apiurl: {
-      // self: item._links.query_banner.href,
-      // orderUp: item._links.mainBanner_leakedOrder_up.href,
-      // orderDown: item._links.mainBanner_leakedOrder_down.href,
-      // delete: item._links.delete_banner.href,
-    },
+    id: item.id, // 주문 id => ! 주문 id로 주문정보를 조회가능
+    orderItemId: item.orderItemId, // 주문한 상품의 id
+    orderStatus: orderStatus.KOR[item.orderStatus],
+    orderDate: transformDate(item.orderDate, 'time', { seperator: '/' }),
+    orderType: item.orderType,
+    deliveryNumber: item.deliveryNumber,
+    deliveryStatus: item.deliveryStatus || '__데이터 없음__', // ! 배송상태 추가 필요
+    buyerId: item.memberEmail,
+    buyerName: item.memberName,
+    buyerPhone: transformPhoneNumber(item.memberPhoneNumber),
+    recipientName: item.recipientName,
+    recipientPhoneNumber: transformPhoneNumber(item.recipientPhoneNumber),
+    bundleStatus: item.packageDelivery ? 'Y' : 'N',
   };
 
-  const onDeleteItemHandler = (e) => {
-    const target = e.currentTarget.closest("li");
-    const targetViewIdx = getElemIdx(target);
-    const apiURL = e.currentTarget.dataset.apiurl;
-    const reviewName = items[targetViewIdx]?.name;
-    if (confirm(`선택된 리뷰(${reviewName})를 정말 삭제하시겠습니까?`)) {
-      onDeleteItem(apiURL);
-    }
+  const onDetailInfoPopupHandler = (e) => {
+    e.preventDefault();
+    if (typeof window === 'undefined') return;
+    const href = `/bf-admin/sell/popup/${DATA.orderType}/${DATA.id}`;
+    popupWindow(href, { width: 1000, height: 716 });
+  };
+  const onDeliveryPopupHandler = (e) => {
+    e.preventDefault();
+    if (typeof window === 'undefined') return console.error('window is not defined');
+    const href = e.currentTarget.href;
+    popupWindow(href, { width: 540, height: 480, left: 200, top: 100 });
   };
 
   return (
-    <li
-      className={s.item}
-      key={`item-${DATA.id}`}
-      ref={sortableItemRef}
-      data-idx={DATA.id}
-    >
+    <li className={s.item} key={`item-${DATA.id}`} ref={sortableItemRef} data-idx={DATA.id}>
       <span>
         <button
           className="admin_btn basic_s solid"
-          // onClick={onDeleteItemHandler}
-          // data-apiurl={DATA.apiurl.delete}
+          data-order-id={DATA.id}
+          onClick={onDetailInfoPopupHandler}
         >
           상세보기
         </button>
       </span>
       <span>
-        <em className={"overflow-x-scroll"}>{DATA.orderId}</em>
+        <em className={'overflow-x-scroll'}>{DATA.orderItemId}</em>
       </span>
       <span>
-        <em className={"overflow-x-scroll"}>{DATA.pruductId}</em>
-      </span>
-      <span>
-        <em className={"overflow-x-scroll"}>
+        <em className={'overflow-x-scroll'}>
           {DATA.orderStatus} {DATA.orderDate}
         </em>
       </span>
       <span>{DATA.deliveryStatus}</span>
       <span>
-        <button className={"overflow-x-scroll btn_link"}>
-          {DATA.trackingNumber}
-        </button>
+        <a
+          className={'overflow-x-scroll btn_link'}
+          href={`http://nexs.cjgls.com/web/service02_01.jsp?slipno=${DATA.deliveryNumber}`}
+          target="_blank"
+          rel={'noreferrer'}
+          onClick={onDeliveryPopupHandler}
+        >
+          {DATA.deliveryNumber}
+        </a>
       </span>
       <span>{DATA.buyerId}</span>
       <span>
         {DATA.buyerName} {DATA.buyerPhone}
       </span>
       <span>
-        {DATA.recipientName} {DATA.recipientPhone}
+        {DATA.recipientName} {DATA.recipientPhoneNumber}
       </span>
       <span>{DATA.bundleStatus}</span>
     </li>
