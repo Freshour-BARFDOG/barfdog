@@ -1,8 +1,4 @@
 # Barfdog Web Shopping Mall
-<br />
-
-TEST
-
 
 ### Install
 <br/>
