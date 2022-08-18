@@ -10,6 +10,7 @@ import { valid_fileSize } from '/util/func/validation/validationPackage';
 import uploadImageToApiServer from '/util/func/uploadImageToApiServer';
 import { useModalContext } from '/store/modal-context';
 import Modal_global_alert from './Modal_global_alert';
+import { postObjData, putObjData } from '../../pages/api/reqData';
 
 export const Modal_uploadDogProfileImage = ({
   data,
@@ -19,7 +20,7 @@ export const Modal_uploadDogProfileImage = ({
 }) => {
   const maxFileSize = 10000000;
   const mct = useModalContext();
-  
+
   // console.log(data);
 
   const initialFileValues = {
@@ -28,13 +29,12 @@ export const Modal_uploadDogProfileImage = ({
     pictureUrl: data.pictureUrl,
     dogPictureId: data.dogPictureId,
     uploadMode: data.pictureUrl ? 'update' : 'create',
-    ...data
+    ...data,
   };
   // console.log(initialFileValues)
 
   const [fileObj, setFileObj] = useState(initialFileValues);
   const [isLoading, setIsLoading] = useState(false);
-
 
   const onChangeFile = (e) => {
     const curFiles = e.currentTarget.files;
@@ -55,50 +55,48 @@ export const Modal_uploadDogProfileImage = ({
   };
 
   const onSaveImageHandler = async () => {
+    const isUnchanged = !fileObj.file && fileObj.pictureUrl;
+
     if (fileObj.uploadMode === 'create' && !fileObj.file) return alert('저장할 파일이 없습니다.');
+    if (fileObj.uploadMode === 'update' && isUnchanged) return alert('기존과 동일한 파일입니다.');
     const dogId = data.id;
-    const postFileApiUrl = '/api/dogs/picture/upload';
-    const putFileApiUrl = `/api/dogs/${dogId}/picture`;
-    const apiUrl = data.pictureUrl ? putFileApiUrl : postFileApiUrl;
-    const body = {
-      dogPictureId: 'pictureId', // 강아지 사진 Id, null일 경우, 사진 삭제
-    };
-    
+    const uploadThumbApiUrl = '/api/dogs/picture/upload';
+    const matchingThumbApiUrl = `/api/dogs/${dogId}/picture`;
+
     try {
       setIsLoading(true);
-      const res = await uploadImageToApiServer(fileObj.file, setFileObj, null, null, apiUrl, null, {
-        method: fileObj.uploadMode === 'create' ? 'POST' : 'PUT',
-        body:fileObj.uploadMode === 'update' ? body : null
-      });
-      console.log(res);
-      
+      const uploadResponse =
+        fileObj.file &&
+        (await uploadImageToApiServer(fileObj.file, setFileObj, null, null, uploadThumbApiUrl));
+
+      const isToBeDeleted = !fileObj.file && !fileObj.pictureUrl;
       let modalMessage;
-      if (res.response.status === 200) {
-        modalMessage = '반려견 프로필 사진이 등록되었습니다.'
-        const dogPictureId = res.id;
-        setFileObj((prevState) => ({
-          ...prevState,
-          pictureUrl: res.url,
-          dogPictureId: dogPictureId
-        }));
-        setItemList((prevState) =>
-          prevState.map((dogListObj) => {
-            if (dogListObj.id === dogId) {
-              return {
-                ...dogListObj,
-                pictureUrl: res.url,
-                dogPictureId: dogPictureId
-              };
-            } else {
-              return dogListObj;
-            }
-          }),
-        );
-        // setTimeout(() => { // ! 추후에, CRUD SERVER에서 적용될 경우, reload() 적용
-        //   window.location.reload();
-        // }, 500);
-      } else if(res.response.status === 400) {
-        modalMessage = fileObj.uploadMode === 'create' ?'프로필 사진 업로드에 실패하였습니다.' : '프로필 사진 수정에 실패하였습니다.'
+      if (
+        uploadResponse?.response?.status === 200 ||
+        (fileObj.uploadMode === 'update' && isToBeDeleted)
+      ) {
+        const dogPictureId = isToBeDeleted ? null : uploadResponse.id;
+        const body = { dogPictureId };
+        const matchingThumbResponse = await putObjData(matchingThumbApiUrl, body);
+        if (matchingThumbResponse.isDone) {
+          modalMessage =
+            fileObj.uploadMode === 'create'
+              ? '프로필 사진이 등록되었습니다.'
+              : '프로필 사진이 수정되었습니다.';
+          setFileObj((prevState) => ({
+            ...prevState,
+            pictureUrl: uploadResponse?.url,
+            dogPictureId: dogPictureId,
+          }));
+        }
+        
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
+        
+      } else if (uploadResponse && uploadResponse?.response.status === 400) {
+        // ERROR STATUS
+        modalMessage = '프로필 사진 업데이트에 실패하였습니다.';
       }
       onShowModalHandler(modalMessage);
     } catch (err) {

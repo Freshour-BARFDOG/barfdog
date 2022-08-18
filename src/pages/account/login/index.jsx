@@ -66,7 +66,7 @@ export default function LoginPage() {
   function naverLoginFunc() {
     // naverRef.current.children[0].click();
     const KAKAO_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize`;
-    const clientId= 'sEUSn5TmLc7I0bmI93Us'; // ! 개인개정 client Id => 추후 바프독 clienet Id 로 변경
+    const clientId= process.env.NEXT_PUBLIC_NAVER_CLIENT_ID; // ! 개인개정 client Id => 추후 바프독 clienet Id 로 변경
     const redirUri = 'http://localhost:4000/account/naver'
     const state = 'testStateString'// state(상태 유지를 위한 임의의 문자열) 정보를 넣어 아래 예제와 같은 주소로 요청을 보낸다.
     // ! state => 필수항목 / 상태토큰값은 어디에서 확인하는지 , API 가이드에서 추가 확인 필요함????
