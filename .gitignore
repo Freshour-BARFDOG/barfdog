@@ -14,6 +14,10 @@
 # trash Files
 /trash/
 
+# localhost HTTP / HTTPS for DEV
+/certificates
+
+
 # next.js
 /.next/
 /out/

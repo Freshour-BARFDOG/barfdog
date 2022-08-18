@@ -19,8 +19,9 @@ import { validate } from '/util/func/validation/validation_userLogin';
 import PureCheckbox from '/src/components/atoms/PureCheckbox';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
 import Spinner from '/src/components/atoms/Spinner';
-import { cookieType } from '../../../../store/TYPE/cookieType';
-import enterKey from '../../../../util/func/enterKey';
+import { cookieType } from '/store/TYPE/cookieType';
+import enterKey from '/util/func/enterKey';
+import {getData} from "../../api/reqData";
 
 const initialValues = {
   email: '',
@@ -170,6 +171,14 @@ export default function LoginPage() {
     mct.alertHide();
   };
 
+  const testApi = async ()=>{
+    const url = `/api/home`
+    const res = await fetch(url)
+      .then((response) => console.log("response:", response))
+      .catch((error) => console.log("error:", error));
+  };
+  
+  
   return (
     <>
       <MetaTitle title="로그인" />
@@ -178,7 +187,7 @@ export default function LoginPage() {
           <div className={s.flex__container}>
             <div className={s.titlebox}>
               <header className={s.title}>
-                <h2>로그인</h2>
+                <h2 onClick={testApi}>로그인</h2>
               </header>
             </div>
             <div onSubmit={onSubmit}>

@@ -46,8 +46,8 @@ const authSlice = createSlice({
         expiredDate,
         { path: '/' },
       );
-      Router.push('/');
-      // window.location.href = action.payload.redirect || '/';
+      // Router.push('/');
+      window.location.href = action.payload.redirect || '/';
     },
     autoLogin(state, action) {
       state.isAdmin = false;

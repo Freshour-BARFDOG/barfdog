@@ -1,7 +1,21 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  async rewrites() {
+  crossOrigin: 'anonymous'
+};
+
+module.exports = {
+  async headers() {
+    return [
+      {
+        source: "/api/:path*",
+        headers: [
+          { key: "Access-Control-Allow-Origin", value: "*" },
+        ],
+      },
+    ]
+  },
+  async rewrites () {
     // console.log('Delopy Type is Dev ?',process.env.NODE_ENV !== "production");
     console.log('Default API URL (DEV): ', process.env.NEXT_PUBLIC_API_URL_DEV);
     console.log('Default API URL (PROD): ', process.env.NEXT_PUBLIC_API_URL_PRODUCT);
@@ -10,50 +24,47 @@ const nextConfig = {
       return [
         {
           source: process.env.SOURCE_PATH,
-          destination: process.env.NEXT_PUBLIC_API_URL_DEV
+          destination: process.env.NEXT_PUBLIC_API_URL_DEV,
         }
       ];
     } else if (process.env.NODE_ENV === 'production') {
       return [
         {
           source: process.env.SOURCE_PATH,
-          destination: process.env.NEXT_PUBLIC_API_URL_PRODUCT
+          destination: process.env.NEXT_PUBLIC_API_URL_PRODUCT,
         }
       ];
     }
-  }
-};
-
-module.exports = {
+  },
   nextConfig,
   entry: './web.js',
   output: {
-    filename: 'compiled.js'
+    filename: 'compiled.js',
   },
   resolve: {
     extensions: ['js', 'jsx', 'ts', 'tsx'],
     fallback: {
-      fs: require.resolve('fs')
-    }
+      fs: require.resolve('fs'),
+    },
   },
   trailingSlash: false,
   env: {
-    SANITY_PROJECT_ID: ''
+    SANITY_PROJECT_ID: '',
   },
   webpack: (config) => {
     const prod = process.env.NODE_ENV === 'production';
     const newConfig = {
       ...config,
-      mode: prod ? 'production' : 'development'
+      mode: prod ? 'production' : 'development',
     };
     if (prod) {
       newConfig.devtool = 'hidden-source-map';
     }
     config.module.rules.push({
       test: /\.svg$/,
-      use: ['@svgr/webpack']
+      use: ['@svgr/webpack'],
     });
-    
+
     return newConfig;
   },
   images: {
@@ -61,8 +72,8 @@ module.exports = {
       'images.unsplash.com',
       '211.219.225.118',
       'https://freshour.cafe24.com',
-      'shop-phinf.pstatic.net'
-    ]
+      'shop-phinf.pstatic.net',
+    ],
   },
   
 };
