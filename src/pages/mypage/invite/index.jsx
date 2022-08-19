@@ -204,7 +204,6 @@ export default function InvitePage() {
                     <p>총 적립 포인트</p>
                     <div className={s.count_text}>
                       {transformLocalCurrency(recommendInfo.totalRewards)}
-                      <span>&nbsp;P</span>
                     </div>
                   </div>
                 </div>
