@@ -15,11 +15,11 @@ export const validate = async (obj) => {
     const val = obj[key];
 
     switch (key) {
-      case 'name':
+      case 'email':
         errors[key] = valid_isEmpty(val);
         break;
-      case 'email':
-        errors[key] = valid_isEmpty(val) || valid_email(val);
+      case 'name':
+        errors[key] = valid_isEmpty(val);
         break;
       case 'phoneNumber':
         errors[key] = valid_isEmpty(val) || valid_phoneNumber(val);
