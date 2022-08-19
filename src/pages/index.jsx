@@ -139,8 +139,8 @@ export default function MainPage({ data }) {
                 <Image
                     src={Halftest}
                     objectFit="fit"
-                    width={560}
-                    height={560}
+                    width={525}
+                    height={520}
                     alt="카드 이미지"
                   ></Image>
             </div>
@@ -277,7 +277,7 @@ export default function MainPage({ data }) {
                       <div className={Styles.card}>
                         <div className={`${Styles['img-wrap']} img-wrap`}>
                           <Image
-                            src={require('/public/img/pages/home/home_clientWorry.png')}
+                            src={require('/public/img/pages/home/home_clientWorry@2x.png')}
                             objectFit="cover"
                             layout="fill"
                             alt="카드 이미지"
