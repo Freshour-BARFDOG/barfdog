@@ -12,74 +12,15 @@ import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import { EmptyContMessage } from '/src/components/atoms/emptyContMessage';
 import transformDate from '/util/func/transformDate';
 import { rewardStatusType } from '/store/TYPE/rewardStatusType';
-
-const DUMMY_DATA = {
-  data: {
-    recommend: '2BoaXmwIA',
-    joinedCount: 24,
-    orderedCount: 13,
-    totalRewards: 39000,
-    pagedModel: {
-      _embedded: {
-        queryRewardsDtoList: [
-          {
-            createdTime: '2022-07-22T09:57:05.945',
-            name: '초대 적립금10',
-            rewardStatus: 'USED',
-            tradeReward: 3000,
-          },
-          {
-            createdTime: '2022-07-22T09:57:05.945',
-            name: '초대 적립금6',
-            rewardStatus: 'SAVED',
-            tradeReward: 7000,
-          },
-          {
-            createdTime: '2022-07-22T09:57:05.945',
-            name: '초대 적립금3',
-            rewardStatus: 'SAVED',
-            tradeReward: 3000,
-          },
-        ],
-      },
-      _links: {
-        first: {
-          href: 'http://localhost:8080/api/rewards/invite?page=0&size=5',
-        },
-        prev: {
-          href: 'http://localhost:8080/api/rewards/invite?page=0&size=5',
-        },
-        self: {
-          href: 'http://localhost:8080/api/rewards/invite?page=1&size=5',
-        },
-        next: {
-          href: 'http://localhost:8080/api/rewards/invite?page=2&size=5',
-        },
-        last: {
-          href: 'http://localhost:8080/api/rewards/invite?page=2&size=5',
-        },
-      },
-      page: {
-        size: 5,
-        totalElements: 13,
-        totalPages: 3,
-        number: 1,
-      },
-    },
-    _links: {
-      recommend_friend: {
-        href: 'http://localhost:8080/api/rewards/recommend',
-      },
-      profile: {
-        href: '/docs/index.html#resources-query-rewards-invite',
-      },
-    },
-  },
-};
+import Modal_global_alert from "/src/components/modal/Modal_global_alert";
+import {useModalContext} from "/store/modal-context";
 
 export default function InvitePage() {
   const searchApiUrl = '/api/rewards/invite'; // 친구추천 적립금 내역 조회
   const searchPageSize = 10;
+  
+  const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
   const [recommendCode, setRecommendCode] = useState(''); // 친구 추천 코드
@@ -90,18 +31,18 @@ export default function InvitePage() {
     totalRewards: null,
   });
   
+  
   // console.log(itemList);
 
-  const pageInterCeptor = async (res) => { // SERVER pagination query가 변경되엇을 경우 사용하는 FUNC
+  const pageInterCeptor = async (res) => {
     // res = DUMMY_DATA; // ! TEST
-    
     const recommendData = {
       recommend: res.data.recommend,
       joinedCount: res.data.joinedCount, // 본인의 추천코드로 친구가 가입한 수
       orderedCount: res.data.orderedCount, // 본인의 추천코드로 친구가 주문한 수
       totalRewards: res.data.totalRewards, // 그로 인한 총 적립 포인트
     };
-    console.log(recommendData)
+    // console.log(recommendData)
     setRecommendInfo(recommendData);
     const pageData = res.data?.pagedModel?.page;
     let newItemList = res.data?.pagedModel?._embedded?.queryRewardsDtoList || [];
@@ -152,7 +93,7 @@ export default function InvitePage() {
   const registerRecommendCodeHandler = () => {
     // 친구추천코드 등록
     if (!recommendCode) {
-      return alert('친구추천코드를 입력해주세요.');
+      return mct.alertShow('친구추천코드를 입력해주세요.');
     }
 
     (async () => {
@@ -169,8 +110,10 @@ export default function InvitePage() {
         if (res.isDone) {
           alert('친구추천코드가 등록되었습니다.');
           window.location.reload();
+        } else if (res.status === 400) {
+          mct.alertShow('본인코드는 입력할 수 없습니다.')
         } else {
-          alert('추천코드가 정확하지 않습니다.');
+          mct.alertShow('추천코드가 정확하지 않습니다.');
         }
         console.log(res);
       } catch (err) {
@@ -183,7 +126,7 @@ export default function InvitePage() {
     })();
   };
   
-  console.log(itemList)
+  // console.log(itemList);
 
   return (
     <>
@@ -261,7 +204,6 @@ export default function InvitePage() {
                     <p>총 적립 포인트</p>
                     <div className={s.count_text}>
                       {transformLocalCurrency(recommendInfo.totalRewards)}
-                      <span>&nbsp;P</span>
                     </div>
                   </div>
                 </div>
@@ -313,6 +255,74 @@ export default function InvitePage() {
           </MypageWrapper>
         </Wrapper>
       </Layout>
+      {hasAlert && <Modal_global_alert background />}
     </>
   );
 }
+
+
+
+
+const DUMMY_DATA = {
+  data: {
+    recommend: '2BoaXmwIA',
+    joinedCount: 24,
+    orderedCount: 13,
+    totalRewards: 39000,
+    pagedModel: {
+      _embedded: {
+        queryRewardsDtoList: [
+          {
+            createdTime: '2022-07-22T09:57:05.945',
+            name: '초대 적립금10',
+            rewardStatus: 'USED',
+            tradeReward: 3000,
+          },
+          {
+            createdTime: '2022-07-22T09:57:05.945',
+            name: '초대 적립금6',
+            rewardStatus: 'SAVED',
+            tradeReward: 7000,
+          },
+          {
+            createdTime: '2022-07-22T09:57:05.945',
+            name: '초대 적립금3',
+            rewardStatus: 'SAVED',
+            tradeReward: 3000,
+          },
+        ],
+      },
+      _links: {
+        first: {
+          href: 'http://localhost:8080/api/rewards/invite?page=0&size=5',
+        },
+        prev: {
+          href: 'http://localhost:8080/api/rewards/invite?page=0&size=5',
+        },
+        self: {
+          href: 'http://localhost:8080/api/rewards/invite?page=1&size=5',
+        },
+        next: {
+          href: 'http://localhost:8080/api/rewards/invite?page=2&size=5',
+        },
+        last: {
+          href: 'http://localhost:8080/api/rewards/invite?page=2&size=5',
+        },
+      },
+      page: {
+        size: 5,
+        totalElements: 13,
+        totalPages: 3,
+        number: 1,
+      },
+    },
+    _links: {
+      recommend_friend: {
+        href: 'http://localhost:8080/api/rewards/recommend',
+      },
+      profile: {
+        href: '/docs/index.html#resources-query-rewards-invite',
+      },
+    },
+  },
+};

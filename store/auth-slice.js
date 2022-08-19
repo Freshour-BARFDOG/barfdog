@@ -24,7 +24,6 @@ const initialAuthState = {
   isAdmin: false,
   userType: null,
   userInfo: null,
-  temporaryPassword: null,
 };
 
 const authSlice = createSlice({
@@ -38,7 +37,7 @@ const authSlice = createSlice({
       const accessToken = action.payload.token;
       const expiredDate = action.payload.expiredDate && cookieType.LOGIN_EXPIRED_PERIOD.VALUE; // 서버 token지속 기본값: 2시간
       const { temporaryPassword, email, name, roleList } = action.payload.data;
-      state.temporaryPassword = temporaryPassword;
+      // state.temporaryPassword = temporaryPassword;
       setCookie(
         cookieType.LOGIN_COOKIE,
         accessToken,
@@ -46,8 +45,7 @@ const authSlice = createSlice({
         expiredDate,
         { path: '/' },
       );
-      Router.push('/');
-      // window.location.href = action.payload.redirect || '/';
+      window.location.href = action.payload.redirect || temporaryPassword ? '/?tempPw=true' : '/';
     },
     autoLogin(state, action) {
       state.isAdmin = false;

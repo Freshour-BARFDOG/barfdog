@@ -61,6 +61,7 @@ export default function RegisterSubscribeInfoPage({ data }) {
   
   const fullscreenLoadingDuration = 0; // ms
   const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
   const router = useRouter();
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(); // boolean
@@ -295,11 +296,11 @@ export default function RegisterSubscribeInfoPage({ data }) {
           </section>
         </Wrapper>
       </Layout>
-      <Modal_global_alert
+      {hasAlert && <Modal_global_alert
         message={modalMessage}
         onClick={onHideModal}
         background
-      />
+      />}
     </>
   );
 }

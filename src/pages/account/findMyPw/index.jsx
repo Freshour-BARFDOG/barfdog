@@ -16,18 +16,12 @@ import { FindMyAccountInputBox } from '../findMyId';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import MetaTitle from "../../../components/atoms/MetaTitle";
 
-const initialFormValues = {
-  // TEST ACCOUNT
-  email: 'admin@gmail.com',
-  name: '관리자',
-  phoneNumber: '01056785678',
-};
 
-// const initialFormValues = {
-//   email: null,
-//   name: null,
-//   phoneNumber: null,
-// }
+const initialFormValues = {
+  email: null,
+  name: null,
+  phoneNumber: null,
+}
 
 export default function FindMyPwPage() {
   const mct = useModalContext();
@@ -108,7 +102,6 @@ export default function FindMyPwPage() {
     mct.alertHide();
   };
 
-  console.log(form)
   return (
     <>
       <MetaTitle title="비밀번호 찾기" />

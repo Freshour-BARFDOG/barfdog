@@ -19,8 +19,8 @@ import { validate } from '/util/func/validation/validation_userLogin';
 import PureCheckbox from '/src/components/atoms/PureCheckbox';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
 import Spinner from '/src/components/atoms/Spinner';
-import { cookieType } from '../../../../store/TYPE/cookieType';
-import enterKey from '../../../../util/func/enterKey';
+import { cookieType } from '/store/TYPE/cookieType';
+import enterKey from '/util/func/enterKey';
 
 const initialValues = {
   email: '',
@@ -170,6 +170,8 @@ export default function LoginPage() {
     mct.alertHide();
   };
 
+  
+  
   return (
     <>
       <MetaTitle title="로그인" />

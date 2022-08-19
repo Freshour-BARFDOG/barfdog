@@ -1,75 +1,41 @@
-
-const dev = process.env.NODE_ENV !== "production";
-const express = require("express");
+const { createServer: http } = require('http');
+const { createServer: https } = require('https');
+const express = require('express');
 const server = express();
-const port = parseInt(process.env.PORT, 10) || 4000;
-const next = require("next");
+const fs = require('fs');
+const next = require('next');
+const dev = process.env.NODE_ENV !== 'production';
 const nextApp = next({ dev });
 const handle = nextApp.getRequestHandler();
 
+const ports = {
+  http: 4000,
+  https: 4001,
+};
 
-nextApp.prepare().then(() => {
-  
-  server.all("*", (req, res) => {
-    return handle(req, res);
-  });
+const httpsOptions = {
+  key: fs.readFileSync('./certificates/localhost.key'),
+  cert: fs.readFileSync('./certificates/localhost.crt'),
+};
 
-  server.listen(port, (err) => {
-    if (err) throw err;
-    console.log(`> Server Running on http://localhost:${port}`);
-  });
+nextApp
+  .prepare()
+  .then(() => {
+    server.all('*', (req, res) => {
+      return handle(req, res);
+    });
 
-})
+    http(server).listen(ports.http, (err) => {
+      if (err) throw err;
+      console.log(`> HTTP Server Running on http://localhost:${ports.http}`);
+    });
+
+    https(httpsOptions, server).listen(ports.https, (err) => {
+      if (err) throw err;
+      console.log(`> HTTPS Server Running on https://localhost:${ports.https}`);
+    });
+  })
   .catch((err) => {
-    console.error('ERROR::::::' , err.stack);
+    console.error('ERROR:::', err.stack);
     process.exit(1);
   });
-
-
-
-
-// const proxy = require('http-proxy-middleware')
-
-
-// nextApp.prepare().then(() => {
-
-//   // server.use(express.json());
-//   // Express에서 처리할 외부 API가 있는 경우 (middleware 등)
-
-//   server.get('/a', (req, res) => {
-//     res.send("Hello, World!");
-//     // return nextApp.render(req, res, '/a', req.query);
-//   });
-
-//   server.get('/b', (req, res) => {
-//     res.writeHead(200, {'Access-Control-Allow-Origin' : '*'})
-//     return nextApp.render(req, res, '/b', req.query)
-//   });
-
-//   // require("./routes/indexRouter")(server, nextApp);
-  
-//   // * Express에서 처리한 항목 외 --> Next Js 라우팅으로 넘김
-//   server.all("*", (req, res) => {
-//     res.header("Access-Control-Allow-Origin", "*");
-//     res.header(
-//       "Access-Control-Allow-Headers",
-//       "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-//     );
-//     return handle(req, res);
-//   });
-
-
-//   server.listen(port, (err) => {
-//     if (err) throw err;
-//     console.log(`> Server Running on http://localhost:${port}`);
-//   });
-
-
-// })
-// .catch((ex) => {
-//   console.error(ex.stack);
-//   process.exit(1);
-// });
-
-
-
