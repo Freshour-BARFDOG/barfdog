@@ -144,13 +144,13 @@ export default function MainPage({ data }) {
             <div className={s.inner}>
               <p>CEHCK POINT</p>
               <h1>바프독을 선택해야 하는 이유</h1>
-              <Image
-                src={Halftest}
-                objectFit="fit"
-                width={560}
-                height={560}
-                alt="카드 이미지"
-              ></Image>
+                <Image
+                    src={Halftest}
+                    objectFit="fit"
+                    width={525}
+                    height={520}
+                    alt="카드 이미지"
+                  ></Image>
             </div>
           </section>
         </Wrapper>
@@ -285,7 +285,7 @@ export default function MainPage({ data }) {
                       <div className={s.card}>
                         <div className={`${s['img-wrap']} img-wrap`}>
                           <Image
-                            src={require('/public/img/pages/home/home_clientWorry.png')}
+                            src={require('/public/img/pages/home/home_clientWorry@2x.png')}
                             objectFit="cover"
                             layout="fill"
                             alt="카드 이미지"

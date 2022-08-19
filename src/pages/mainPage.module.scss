@@ -215,21 +215,23 @@ section.sns {
 //바프생식이란?
 .barfraw {
   .inner {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: rem(40);
     justify-content: center;
     align-items: center;
 
     .leftbox {
       position: relative;
-      width: rem(360);
+      width: 100%;
       height: rem(360);
     }
 
     .rightbox {
-      height: 100%;
-      width: rem(359);
+      width: 100%;
+      max-width: rem(360);
       position: relative;
-      margin-left: rem(40);
+      word-break: break-all;
 
       p {
         position: absolute;
@@ -325,6 +327,7 @@ section.sns {
     h1 {
       font-size: rem(32);
       font-weight: bold;
+      margin-bottom: rem(80);
     }
   }
 }
@@ -650,8 +653,8 @@ section.sns {
         text-align: center;
 
         .img-wrap {
-          width: rem(360);
-          height: rem(360);
+          width: rem(375);
+          height: rem(375);
         }
 
         .details {
@@ -1237,7 +1240,7 @@ section.sns {
       .rightbox {
         margin-top: rem(40);
         width: 100%;
-        margin-left: 0;
+        max-width: 100%;
 
         p, h1, h3 {
           position: relative;
