@@ -438,12 +438,30 @@ export default function MainPage({ data }) {
 
 export async function getServerSideProps({ req }) {
   let DATA = null;
-  const url = '/api/home';
+  const apiUrl = '/api/home';
+  const popupApiUrl = '/api/banners/popup';
   let res;
+  let popupRes;
 
   try {
     res = await axios
-      .get(url, {
+      .get(apiUrl, {
+        headers: {
+          authorization: null,
+          'content-Type': 'application/json',
+        },
+      })
+      .then((res) => {
+        // console.log(res);
+        return res;
+      })
+      .catch((err) => {
+        // console.log(err.response)
+        return err.response;
+      });
+    
+    popupRes = await axios
+      .get(popupApiUrl, {
         headers: {
           authorization: null,
           'content-Type': 'application/json',
@@ -458,7 +476,9 @@ export async function getServerSideProps({ req }) {
         return err.response;
       });
     const data = res?.data || null;
+    const popupData = popupRes?.data || null;
     if (data) {
+      console.log('popupUrl: ',popupApiUrl, '','popupData: \n',popupData)
       DATA = {
         topBannerDtoList: data.topBannerDto || [],
         mainBannerDtoList:
