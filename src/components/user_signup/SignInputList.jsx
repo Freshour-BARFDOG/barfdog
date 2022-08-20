@@ -357,6 +357,7 @@ export default function SignInpuList({formValues, setFormValues, formErrors, set
         id={'birthday'}
         filteredType={'date'}
         title={'생년월일(견주님)'}
+        formValue={formValues.birthday}
         setFormValues={setFormValues}
         errorMessage={formErrors.birthday && <ErrorMessage>{formErrors.birthday}</ErrorMessage>}
       />
@@ -379,7 +380,7 @@ export default function SignInpuList({formValues, setFormValues, formErrors, set
               },
             ]}
             type={'radio'}
-            initialValueIndex={2}
+            value={formValues.gender || genderType.NONE}
             setValue={setFormValues}
           />
         </div>
