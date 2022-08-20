@@ -1,24 +1,8 @@
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
-import { useSelector } from "react-redux";
-import MetaTitle from "/src/components/atoms/MetaTitle";
+import MetaTitle from '/src/components/atoms/MetaTitle';
+import { userType } from '/store/TYPE/userAuthType';
+import { getDataSSR, getTokenFromServerSide } from '../api/reqData';
 
-
-
-function AdminIndex() {
-  const router = useRouter();
-  const auth = useSelector(state=>state.auth);
-  const isAuth = auth.token ? true : false;
-  useEffect(() => {
-    // console.log(auth);
-    if (isAuth) {
-      router.push('/bf-admin/dashboard');
-    }else {
-      router.push('/bf-admin/login');
-    }
-  }, [isAuth]);
-  
-
+export default function AdminIndex() {
   return (
     <>
       <MetaTitle title="관리자 Index" admin={true} />
@@ -26,4 +10,25 @@ function AdminIndex() {
   );
 }
 
-export default AdminIndex;
+
+export async function getServerSideProps({ req }) {
+  let token = null;
+  let USER_TYPE = null;
+  if (req?.headers?.cookie) {
+    token = getTokenFromServerSide( req );
+    const getApiUrl = `/api/admin/setting`;
+    const res = await getDataSSR( req, getApiUrl, token );
+    if ( res && res.status === 200 ) {
+      USER_TYPE = userType.ADMIN;
+      
+    }
+  }
+  
+  return {
+    redirect: {
+      permanent: false,
+      destination: (USER_TYPE && USER_TYPE === userType.ADMIN) ? '/bf-admin/dashboard' : '/bf-admin/login'
+    },
+    props:null
+  }
+}
