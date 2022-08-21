@@ -22,6 +22,9 @@ nextApp
   .prepare()
   .then(() => {
     server.all('*', (req, res) => {
+      res.setHeader("Access-Control-Allow-Origin", "*"); // CORS 허용
+      res.setHeader("Access-Control-Request-Methods", "GET, POST, DELETE"); // CORS 허용
+      res.setHeader("Access-Control-Allow-Credentials", "true"); // 쿠키 주고받기 허용
       return handle(req, res);
     });
 
