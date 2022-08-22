@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import s from '/src/pages/account/signup/signup.module.scss';
 import filter_onlyNumber from '/util/func/filter_onlyNumber';
 import filter_emptyValue from '/util/func/filter_emptyValue';
@@ -10,21 +10,28 @@ const SingupInput = ({
   type,
   required,
   id,
+  formValue,
+  setFormValues,
   title,
   children,
   addedClassName,
   disabled,
   placeholder,
-  setFormValues,
   errorMessage,
   filteredType,
-  formValue,
   icon,
   ...props
 }) => {
   const initialValue = formValue || ''
   const [value, setValue] = useState(initialValue);
 
+  // useEffect(()=>{
+  //   if(type === 'date'){
+  //     setValue('1990-02-28')
+  //   }
+  //
+  //
+  // },[])
   const onKeyboardHandler = (e) => {
     if (e.keyCode === 13) {
       // Enter Key입력방지

@@ -1,39 +1,46 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+import s from './signup.module.scss';
+import { useRouter } from 'next/router';
+import MetaTitle from '/src/components/atoms/MetaTitle';
+import { useSelector } from 'react-redux';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
-import s from './signup.module.scss';
 import SignInputList from '/src/components/user_signup/SignInputList';
 import SignupPolicyList, { policy_KEYS } from '/src/components/user_signup/SignupPolicyList';
 import Modal_termsOfSerivce from '/src/components/modal/Modal_termsOfSerivce';
 import Modal_privacy from '/src/components/modal/Modal_privacy';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import { useModalContext } from '/store/modal-context';
-import axios from 'axios';
-import { useRouter } from 'next/router';
-import MetaTitle from '/src/components/atoms/MetaTitle';
 import { validate } from '/util/func/validation/validation_signup';
 import { valid_policyCheckbox } from '/util/func/validation/validationPackage';
-import { useSelector } from 'react-redux';
+import { transformPhoneNumber } from '/util/func/transformPhoneNumber';
+import { naverGender } from '/util/func/naverGender';
 
 export default function SignupPage() {
   const mct = useModalContext();
   const router = useRouter();
   const userState = useSelector((s) => s.userState);
+  // console.log(userState.snsInfo);
 
   const initialFormValues = {
-    name: '',
-    email: '',
+    name: userState.snsInfo.name || '',
+    email: userState.snsInfo.email || '',
     password: '',
     confirmPassword: '',
-    phoneNumber: '',
+    phoneNumber: transformPhoneNumber(userState.snsInfo.mobile, { seperator: '' }) || '',
     address: {
       zipcode: '',
       street: '',
       city: '',
       detailAddress: '',
     },
-    birthday: '',
-    gender: 'NONE',
+    // ! 생년월일 셋팅 확인 필요
+    birthday: `${userState.snsInfo.birthyear}-${userState.snsInfo.birthday}` || '',
+    // ! gender 셋팅 확인 필요
+    gender: userState.snsInfo.provider == 'naver' ? naverGender(userState.snsInfo.gender) : 'NONE',
+    // gender:'MALE',
+
     recommendCode: '',
     agreement: {
       servicePolicy: false,
@@ -64,7 +71,6 @@ export default function SignupPage() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    // console.log(formErrors);
     try {
       const validFormResultObj = await validate(formValues, formErrors);
       const validPolicyResultObj = valid_policyCheckbox(formValues.agreement, policy_KEYS);
@@ -99,11 +105,10 @@ export default function SignupPage() {
     }
   };
 
-  // console.log(formValues)
 
   const sendSignupData = async (formvalues) => {
     console.log('SUBMIT DATA:\n', formvalues);
-    // data.providerId = "asdfasdf-asdfasdf"; // ! TEST 임의의 providerID를 서버에 전송해도, 가입이 된다.
+    // data.providerId = "asdfasdf-asdfasdf"; // ! 참고: 임의의 providerID를 서버에 전송해도, 가입 됨
     // 단, providerID가 중복될 경우, 해당 providerId sns계정으로 가입불가능.
     await axios
       .post('/api/join', formvalues, {
@@ -115,7 +120,7 @@ export default function SignupPage() {
         console.log(res);
         console.log(res.data);
         if (res.status === 201) {
-          const userName = formvalues.name
+          const userName = formvalues.name;
           alert('회원가입에 성공하였습니다.');
           router.push(`/account/signup/success?username=${userName}`);
         }

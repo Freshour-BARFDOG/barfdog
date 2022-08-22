@@ -2,30 +2,28 @@ import React, { useEffect, useState } from 'react';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
-import LineChart, { data } from '/src/components/admin/dashboard/LineChart';
+import LineChart from '/src/components/admin/dashboard/LineChart';
 import s from './dashboard.module.scss';
 import ToolTip from '/src/components/atoms/Tooltip';
 import SelectTag from '/src/components/atoms/SelectTag';
 import Spinner from '/src/components/atoms/Spinner';
 import { getData } from '/src/pages/api/reqData';
-import { transformToday } from '/util/func/transformDate';
-import {orderStatus} from "/store/TYPE/orderStatusTYPE";
+import transformDate, { transformToday } from '/util/func/transformDate';
+import { orderStatus } from '/store/TYPE/orderStatusTYPE';
 
 export default function DashboardPage() {
-  // 관리자 페이지 관련
-  // /api/admin/dashBoard?from=2022-07-19&to=2022-07-26
 
   const initialTerm = {
     from: transformToday(),
     to: transformToday(),
+    diffDate:1, // 1, 7, 30 , 365일
   };
-  // 1일,  7일 ,30일, 전체
+  
   const [term, setTerm] = useState(initialTerm);
   const [isLoading, setIsLoading] = useState(false);
-  const [info, setInfo] = useState( {} );
-  
-  console.log(info)
-  useEffect(() => {
+  const [info, setInfo] = useState({});
+
+  useEffect(() => { // 기간에 따른 통계 update
     (async () => {
       setIsLoading((prevState) => ({
         ...prevState,
@@ -33,35 +31,81 @@ export default function DashboardPage() {
       }));
       try {
         const url = `/api/admin/dashBoard?from=${term.from}&to=${term.to}`;
-        // const res = await getData(url);
-        const res = DUMMY_RESPONSE;
-
+        const res = await getData(url);
+        // const res = DUMMY_RESPONSE; // TEST
         if (res.data) {
           const data = res.data;
           const DATA = {
-            statistics:{
+            statistics: {
               newOrderCount: data.newOrderCount,
-              newMemberCount:data.newMemberCount,
-              visitorCount: 0,  // ! ------------------- GOOGLE ANALYTICS 연결필요 -------------------
+              newMemberCount: data.newMemberCount,
+              visitorCount: 0, // ! ------------------- GOOGLE ANALYTICS 연결필요 -------------------
             },
             orderCount: {
-              PAYMENT_DONE: data.orderStatusCountDtoList.length && data.orderStatusCountDtoList?.filter(order=>order.orderstatus === orderStatus.PAYMENT_DONE)[0]?.count || 0,
-              FAILED: data.orderStatusCountDtoList.length && data.orderStatusCountDtoList?.filter(order=>order.orderstatus === orderStatus.FAILED)[0]?.count || 0,
-              SUBSCRIBE_PENDING: data.orderStatusCountDtoList.length &&data.subscribePendingCount,
-              DELIVERY_START: data.orderStatusCountDtoList.length &&data.orderStatusCountDtoList?.filter(order=>order.orderstatus === orderStatus.DELIVERY_START)[0]?.count || 0,
-              CANCEL_REQUEST: data.orderStatusCountDtoList.length &&data.orderStatusCountDtoList?.filter(order=>order.orderstatus === orderStatus.CANCEL_REQUEST)[0]?.count || 0,
-              RETURN_REQUEST: data.orderStatusCountDtoList.length &&data.orderStatusCountDtoList?.filter(order=>order.orderstatus === orderStatus.RETURN_REQUEST)[0]?.count || 0,
-              EXCHANGE_REQUEST: data.orderStatusCountDtoList.length &&data.orderStatusCountDtoList?.filter(order=>order.orderstatus === orderStatus.EXCHANGE_REQUEST)[0]?.count || 0,
+              PAYMENT_DONE:
+                (data.orderStatusCountDtoList.length &&
+                  data.orderStatusCountDtoList?.filter(
+                    (order) => order.orderstatus === orderStatus.PAYMENT_DONE,
+                  )[0]?.count) ||
+                0,
+              FAILED:
+                (data.orderStatusCountDtoList.length &&
+                  data.orderStatusCountDtoList?.filter(
+                    (order) => order.orderstatus === orderStatus.FAILED,
+                  )[0]?.count) ||
+                0,
+              SUBSCRIBE_PENDING: data.orderStatusCountDtoList.length && data.subscribePendingCount,
+              DELIVERY_START:
+                (data.orderStatusCountDtoList.length &&
+                  data.orderStatusCountDtoList?.filter(
+                    (order) => order.orderstatus === orderStatus.DELIVERY_START,
+                  )[0]?.count) ||
+                0,
+              CANCEL_REQUEST:
+                (data.orderStatusCountDtoList.length &&
+                  data.orderStatusCountDtoList?.filter(
+                    (order) => order.orderstatus === orderStatus.CANCEL_REQUEST,
+                  )[0]?.count) ||
+                0,
+              RETURN_REQUEST:
+                (data.orderStatusCountDtoList.length &&
+                  data.orderStatusCountDtoList?.filter(
+                    (order) => order.orderstatus === orderStatus.RETURN_REQUEST,
+                  )[0]?.count) ||
+                0,
+              EXCHANGE_REQUEST:
+                (data.orderStatusCountDtoList.length &&
+                  data.orderStatusCountDtoList?.filter(
+                    (order) => order.orderstatus === orderStatus.EXCHANGE_REQUEST,
+                  )[0]?.count) ||
+                0,
             },
-            orderInfo: {
-              general: data.generalOrderCountByMonthList.map(l=>l.generalCount).length > 0 ? data.generalOrderCountByMonthList.map(l=>l.generalCount).reduce((acc, cur)=>acc+cur) : 0,
-              subscribe: data.subscribeOrderCountByMonthList.map(l=>l.subscribeCount).length > 0 ? data.subscribeOrderCountByMonthList.map(l=>l.subscribeCount).reduce((acc, cur)=>acc+cur) : 0,
+            newOrderInfo: {
+              general:
+                data.generalOrderCountByMonthList.map((l) => l.generalCount).length > 0
+                  ? data.generalOrderCountByMonthList
+                      .map((l) => l.generalCount)
+                      .reduce((acc, cur) => acc + cur)
+                  : 0,
+              subscribe:
+                data.subscribeOrderCountByMonthList.map((l) => l.subscribeCount).length > 0
+                  ? data.subscribeOrderCountByMonthList
+                      .map((l) => l.subscribeCount)
+                      .reduce((acc, cur) => acc + cur)
+                  : 0,
             },
-            graph:{
-              general: data.generalOrderCountByMonthList.map((list)=>({month:list.month, count:list.generalCount})),
-              subscribe: data.subscribeOrderCountByMonthList.map((list)=>({month:list.month, count:list.subscribeCount})),
+            chart: {
+              general: data.generalOrderCountByMonthList.map((list) => ({
+                x: list.month,
+                y: list.generalCount,
+              })),
+              subscribe: data.subscribeOrderCountByMonthList.map((list) => ({
+                x: list.month,
+                y: list.subscribeCount,
+              })),
             },
           };
+          console.log(url, DATA)
           setInfo(DATA);
         }
       } catch (err) {
@@ -72,20 +116,19 @@ export default function DashboardPage() {
         fetching: false,
       }));
     })();
-    
-    
   }, [term]);
-  
-  const onChangeSelectHandler = (value, id)=>{
-  // calc before day
-    const today = new Date(transformToday());
-    const prevDay = Number(value);
-    console.log(today)
-    console.log(today.getDate());
-    
-    
-  }
 
+  const onChangeSelectHandler = (value) => {
+    const today = new Date(transformToday());
+    const diffDate = Number(value);
+    const curDate = today.getDate();
+    const prevDate = new Date(today.setDate(curDate - diffDate)).toISOString();
+    setTerm({
+      from: transformDate(prevDate),
+      to: transformToday(),
+      diffDate: diffDate
+    });
+  };
 
   return (
     <>
@@ -165,6 +208,7 @@ export default function DashboardPage() {
                 name={'period'}
                 id={'new-order'}
                 className={s['select-period']}
+                initialValue={term.diffDate}
                 onChange={onChangeSelectHandler}
                 options={[
                   { label: '최근 1일', value: 1 },
@@ -194,7 +238,13 @@ export default function DashboardPage() {
                   </div>
                 </li>
                 <li>
-                  <span>방문자수</span>
+                  <span>방문자수
+                    <ToolTip
+                      message={'GA 기반 데이터'}
+                      theme={'white'}
+                      className={s.tooltip}
+                    />
+                  </span>
                   <div>
                     <span>
                       <b>{info.statistics?.visitorCount}</b>건
@@ -207,9 +257,9 @@ export default function DashboardPage() {
           <section className={`cont ${s['cont-right']}`}>
             <div className={s['title-section']}>
               <h2 className={s.title}>
-                신규주문
+                주문량
                 <ToolTip
-                  message={'Google Analytics 데이터를 기반으로 한 통계입니다.'}
+                  message={'통계섹션에서 선택된 기간에 따른 월별 주문수의 총합'}
                   theme={'white'}
                   messagePosition={'left'}
                   className={s.tooltip}
@@ -222,18 +272,18 @@ export default function DashboardPage() {
                   <li>
                     <span>일반결제</span>
                     <span>
-                      <b>{info.orderInfo?.general}</b>건
+                      <b>{info.newOrderInfo?.general}</b>건
                     </span>
                   </li>
                   <li>
                     <span>정기결제</span>
                     <span>
-                      <b>{info.orderInfo?.subscribe}</b>건
+                      <b>{info.newOrderInfo?.subscribe}</b>건
                     </span>
                   </li>
                 </ul>
               </div>
-              {/*<LineChart chartData={info.orderInfo?.graph} />*/}
+              <LineChart chartData={info.chart} />
             </div>
           </section>
         </AdminContentWrapper>
@@ -279,7 +329,7 @@ const DUMMY_RESPONSE = {
         generalCount: 2,
       },
       {
-        month: '2022-04',
+        month: '2022-06',
         generalCount: 3,
       },
       {

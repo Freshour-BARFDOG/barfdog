@@ -64,7 +64,7 @@ const authSlice = createSlice({
     logout(state) {
       state.isAdmin = false;
       state.isAuth = false;
-      // alert('로그아웃');
+      alert('로그아웃');
       setCookie(cookieType.LOGIN_COOKIE, null, 'date', 0, { path: '/' });
       window.location.href = '/';
     },
@@ -98,7 +98,7 @@ const authSlice = createSlice({
       state.isAdmin = false;
       state.isAuth = false;
       setCookie(cookieType.LOGIN_COOKIE, null, 'date', 0, { path: '/' });
-      // alert('관리자 로그아웃 처리되었습니다.');
+      alert('관리자 로그아웃 처리되었습니다.');
       window.location.href = '/bf-admin/login';
     },
     adminResetPassword(state, action) {
