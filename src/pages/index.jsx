@@ -16,30 +16,28 @@ import LeftPic from '/public/img/leftPic.png';
 import midPic from '/public/img/midPic.png';
 import rightPic from '/public/img/rightPic.png';
 import barfPack from '/public/img/barfPack.png';
-import { Swiper_sns } from '@src/components/home/Swiper_sns';
-import { Swiper_review } from '@src/components/home/Swiper_review';
-import { Swiper_recipe } from '@src/components/home/Swiper_recipe';
-import { Swiper_main } from '@src/components/home/Swiper_main';
+import { Swiper_sns } from '/src/components/home/Swiper_sns';
+import { Swiper_review } from '/src/components/home/Swiper_review';
+import { Swiper_recipe } from '/src/components/home/Swiper_recipe';
+import { Swiper_main } from '/src/components/home/Swiper_main';
 import Link from 'next/link';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { Modal_tempPasswrod } from '@src/components/modal/Modal_tempPasswrod';
+import { Modal_tempPasswrod } from '/src/components/modal/Modal_tempPasswrod';
+import { Modal_Popup } from '/src/components/modal/Modal_Popup';
+import useDeviceState from "/util/hook/useDeviceState";
 
 export default function MainPage({ data }) {
   const router = useRouter();
-
-  const [isMobile, setIsMobile] = useState(false);
+  const isMobile = useDeviceState().isMobile;
   const [activeTempPasswordModal, setActiveTempPasswordModal] = useState(false);
-
+  
   useEffect(() => {
     const { query } = router;
     const isTempPassword = !!query.tempPw;
     setActiveTempPasswordModal(isTempPassword);
     // 임시비밀번호 조회
   }, []);
-  useEffect(() => {
-    window.innerWidth <= 600 ? setIsMobile(true) : setIsMobile(false);
-  }, [isMobile]);
 
   const onClickModalButtons = (confirm) => {
     if (confirm) {
@@ -49,11 +47,13 @@ export default function MainPage({ data }) {
     }
   };
 
+
   return (
     <>
+      <Modal_Popup popupData={data.popupDtoList}></Modal_Popup>
       <MetaTitle title="바프독" />
       <Layout>
-        {activeTempPasswordModal && <Modal_tempPasswrod isConfirm={onClickModalButtons}/>}
+        {activeTempPasswordModal && <Modal_tempPasswrod isConfirm={onClickModalButtons} />}
         <Wrapper fullWidth={true} rowStyle={{ padding: 0 }}>
           {/* 스와이프주석 */}
           <Swiper_main data={data?.mainBannerDtoList} isMobile={isMobile} />
@@ -144,13 +144,13 @@ export default function MainPage({ data }) {
             <div className={s.inner}>
               <p>CEHCK POINT</p>
               <h1>바프독을 선택해야 하는 이유</h1>
-                <Image
-                    src={Halftest}
-                    objectFit="fit"
-                    width={525}
-                    height={520}
-                    alt="카드 이미지"
-                  ></Image>
+              <Image
+                src={Halftest}
+                objectFit="fit"
+                width={525}
+                height={520}
+                alt="카드 이미지"
+              ></Image>
             </div>
           </section>
         </Wrapper>
@@ -436,15 +436,13 @@ export default function MainPage({ data }) {
   );
 }
 
-export async function getServerSideProps({ req }) {
+export async function getServerSideProps({req, res}) {
   let DATA = null;
   const apiUrl = '/api/home';
-  const popupApiUrl = '/api/banners/popup';
-  let res;
-  let popupRes;
-
+  let homeApi_res = null;
+  
   try {
-    res = await axios
+    homeApi_res = await axios
       .get(apiUrl, {
         headers: {
           authorization: null,
@@ -459,26 +457,10 @@ export async function getServerSideProps({ req }) {
         // console.log(err.response)
         return err.response;
       });
-    
-    popupRes = await axios
-      .get(popupApiUrl, {
-        headers: {
-          authorization: null,
-          'content-Type': 'application/json',
-        },
-      })
-      .then((res) => {
-        // console.log(res);
-        return res;
-      })
-      .catch((err) => {
-        // console.log(err.response)
-        return err.response;
-      });
-    const data = res?.data || null;
-    const popupData = popupRes?.data || null;
+
+    const data = homeApi_res?.data || null;
+    // const data = DUMMY_DATA;
     if (data) {
-      console.log('popupUrl: ',popupApiUrl, '','popupData: \n',popupData)
       DATA = {
         topBannerDtoList: data.topBannerDto || [],
         mainBannerDtoList:
@@ -510,13 +492,24 @@ export async function getServerSideProps({ req }) {
               }))
             : [],
         queryBestReviewsDtoList: data.queryBestReviewsDtoList || [],
+        popupDtoList: data.popupDtoList?.map((list)=>({
+          id: list.id,
+          position: list.position,
+          leakedOrder:list.leakedOrder,
+          pcFilename:list.pcFilename,
+          pcImageUrl:list.pcImageUrl,
+          pcLinkUrl:list.pcLinkUrl,
+          mobileFilename:list.mobileFilename,
+          mobileImageUrl:list.mobileImageUrl,
+          mobileLinkUrl:list.mobileLinkUrl,
+        })) || [],
       };
     }
   } catch (err) {
     console.error(err);
     return err.response;
   }
-
+  
   // console.log('MAIN DATA : " ', data);
 
   return { props: { data: DATA } };
@@ -639,7 +632,6 @@ const DUMMY_DATA = {
         'https://images.unsplash.com/photo-1542010589005-d1eacc3918f2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2092&q=80g',
     },
   ],
-
   queryBestReviewsDtoList: [
     {
       id: 1,
@@ -677,6 +669,74 @@ const DUMMY_DATA = {
         'https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1017&q=80',
       leakedOrder: 5,
       contents: '열글자 이상의 구독 리뷰5',
+    },
+  ],
+  popupDtoList: [
+    {
+      id: 1,
+      position: 'left',
+      leakedOrder:1,
+      pcFilename: 'PC파일명1',
+      pcImageUrl: 'https://images.unsplash.com/photo-1647350650908-c78791bf8efd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80',
+      pcLinkUrl: '/recipes',
+      mobileFilename: '모바일 파일명1',
+      mobileImageUrl: 'https://images.unsplash.com/photo-1648139731984-56bcce3b86e9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80',
+      mobileLinkUrl: '/surveyGuide',
+    },
+    {
+      id: 2,
+      position: 'center',
+      leakedOrder:2,
+      pcFilename: 'PC파일명1',
+      pcImageUrl: 'https://images.unsplash.com/photo-1659787050050-d5aa2b1ec0dc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1009&q=80',
+      pcLinkUrl: '/recipes',
+      mobileFilename: '모바일 파일명1',
+      mobileImageUrl: 'https://images.unsplash.com/photo-1658246944434-04b7ec2cb7f7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80',
+      mobileLinkUrl: '/surveyGuide',
+    },
+    {
+      id: 3,
+      position: 'right',
+      leakedOrder:3,
+      pcFilename: 'PC파일명1',
+      pcImageUrl: 'https://images.unsplash.com/photo-1634832802370-164cf82ec82a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80',
+      pcLinkUrl: '/recipes',
+      mobileFilename: '모바일 파일명1',
+      mobileImageUrl: 'https://images.unsplash.com/photo-1656519966579-da21868b7ed7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2093&q=80',
+      mobileLinkUrl: '/surveyGuide',
+    },
+    {
+      id: 4,
+      position: 'left',
+      leakedOrder:4,
+      pcFilename: 'PC파일명1',
+      pcImageUrl: 'https://images.unsplash.com/photo-1647350650908-c78791bf8efd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80',
+      pcLinkUrl: '/recipes',
+      mobileFilename: '모바일 파일명1',
+      mobileImageUrl: 'https://images.unsplash.com/photo-1648139731984-56bcce3b86e9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80',
+      mobileLinkUrl: '/surveyGuide',
+    },
+    {
+      id: 5,
+      position: 'center',
+      leakedOrder:6,
+      pcFilename: 'PC파일명1',
+      pcImageUrl: 'https://images.unsplash.com/photo-1659787050050-d5aa2b1ec0dc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1009&q=80',
+      pcLinkUrl: '/recipes',
+      mobileFilename: '모바일 파일명1',
+      mobileImageUrl: 'https://images.unsplash.com/photo-1658246944434-04b7ec2cb7f7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80',
+      mobileLinkUrl: '/surveyGuide',
+    },
+    {
+      id: 6,
+      position: 'right',
+      leakedOrder:7,
+      pcFilename: 'PC파일명1',
+      pcImageUrl: 'https://images.unsplash.com/photo-1634832802370-164cf82ec82a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80',
+      pcLinkUrl: '/recipes',
+      mobileFilename: '모바일 파일명1',
+      mobileImageUrl: 'https://images.unsplash.com/photo-1656519966579-da21868b7ed7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2093&q=80',
+      mobileLinkUrl: '/surveyGuide',
     },
   ],
   _links: {
