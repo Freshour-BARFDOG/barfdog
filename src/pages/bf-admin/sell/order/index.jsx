@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import s from './order.module.scss';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
@@ -40,7 +40,19 @@ export default function OrderOnSellPage() {
   const [selectedOrderIdList, setSelectedOrderIdList] = useState([]);
   const [activeModal, setActiveModal] = useState({});
   const allItemIdList = itemList.map((item) => item.id); // 주문 id
-
+  const [selectedItemList, setSelectedItemList] = useState([]);
+  
+  useEffect( () => {
+    // 최초 검색
+    setSearchBody(initialSearchValues);
+    
+  }, [] );
+  
+  useEffect(() => {
+    const selectedList = itemList.filter((data)=>selectedOrderIdList.indexOf(data.id) >= 0);
+    setSelectedItemList(selectedList);
+  }, [selectedOrderIdList]);
+  
   const searchOption = Object.keys(orderStatus)
     .filter(
       (key) =>
@@ -74,7 +86,7 @@ export default function OrderOnSellPage() {
 
   const pageInterceptor = (res) => {
     // console.log(res);
-    res = DUMMY__ADMIN_ORDER_ITEMS_RESPONSE; //  ! TEST
+    // res = searchValues.orderType === productType.GENERAL ? DUMMY__ADMIN_ORDER_ITEMS_GENERAL_RESPONSE :  DUMMY__ADMIN_ORDER_ITEMS_SUBSCRIBE_RESPONSE; //  ! TEST TEST TEST TEST TEST TEST
     const pageData = res.data.page;
     const curItemList = res.data?._embedded?.queryAdminOrdersDtoList || [];
     let newPageInfo = {
@@ -110,12 +122,14 @@ export default function OrderOnSellPage() {
 
     const seletedOrderItemIdList = itemList
       .filter((item) => selectedOrderIdList.indexOf(item.id) >= 0)
-      .map((item) => item.orderItemId);
+      .map((item) => item.orderItemId); // ! 한 주문 내에, 2가지 이상의 상품이 존재할 경우에도 orderItemId가 1개인 현재 상황으로 충분한지???
+    // console.log(seletedOrderItemIdList);
+    
     const itemType = searchValues.orderType;
     const body =
       itemType === productType.GENERAL
         ? {
-            orderItemIdList: seletedOrderItemIdList, // 주문한 "상품의 id" List
+            orderItemIdList: seletedOrderItemIdList, // 주문 내에 속한 "상품의 id" List
           }
         : itemType === productType.SUBSCRIBE
         ? {
@@ -261,15 +275,14 @@ export default function OrderOnSellPage() {
     setActiveModal({ orderCancel: true });
   };
 
-  
-  
-  const onCancelOrder = async (enteredDetailReason) => {
+  const onCancelOrder = async (enteredDetailReason, selectedIdList) => {
+    if (!enteredDetailReason) return alert('판매취소사유를 입력해주세요.');
+    if(selectedIdList.length <= 0) return alert('판매취소할 상품을 선택해주세요.')
+    if (!confirm(`선택하신 ${selectedIdList.length} 개의 상품을 판매취소 처리하시겠습니까?\n선택된 상품이 포함된 주문은 전체취소처리됩니다.`))
+      return;
 
-    if(!enteredDetailReason) return alert('판매취소사유를 입력해주세요.');
-    if (!confirm(`선택하신 ${selectedOrderIdList.length} 개의 상품을 판매취소 처리하시겠습니까?`)) return;
-    
     const seletedOrderItemIdList = itemList
-      .filter((item) => selectedOrderIdList.indexOf(item.id) >= 0)
+      .filter((item) => selectedIdList.indexOf(item.id) >= 0)
       .map((item) => item.orderItemId);
     const itemType = searchValues.orderType;
     const body =
@@ -286,6 +299,7 @@ export default function OrderOnSellPage() {
             detailReason: enteredDetailReason,
           }
         : null;
+
     
     try {
       setIsLoading((prevState) => ({
@@ -294,7 +308,7 @@ export default function OrderOnSellPage() {
       }));
       const apiUrl = `/api/admin/orders/${itemType.toLowerCase()}/orderCancel`;
       const res = await postObjData(apiUrl, body);
-      console.log('onOrderCancel: \n','apiUrl:',apiUrl, '\nbody:',body);
+      console.log('onOrderCancel: \n', 'apiUrl:', apiUrl, '\nbody:', body);
       console.log('response: admin > sell > search > index.jsx\n', res);
       if (res.isDone) {
         alert('주문취소 처리되었습니다.');
@@ -311,7 +325,8 @@ export default function OrderOnSellPage() {
     }));
   };
 
-  // console.log(searchValues);
+  // console.log(itemList);
+  // console.log(searchBody)
 
   return (
     <>
@@ -360,7 +375,9 @@ export default function OrderOnSellPage() {
           </section>
           <section className="cont">
             <div className="cont_header clearfix">
-              <p className="cont_title cont-left">목록</p>
+              <p className="cont_title cont-left">
+                {itemList.length > 0 && itemList[0] && productType.KOR[itemList[0].orderType]}
+                상품 목록</p>
               <div className="controls cont-left">
                 <button className="admin_btn line basic_m" onClick={onOrderConfirm}>
                   {isLoading.confirm ? <Spinner /> : '주문확인'}
@@ -426,13 +443,14 @@ export default function OrderOnSellPage() {
           id={'orderCancel'}
           setActiveModal={setActiveModal}
           onConfirm={onCancelOrder}
+          selectedItemData={selectedItemList}
         />
       )}
     </>
   );
 }
 
-const DUMMY__ADMIN_ORDER_ITEMS_RESPONSE = {
+const DUMMY__ADMIN_ORDER_ITEMS_GENERAL_RESPONSE = {
   data: {
     _embedded: {
       queryAdminOrdersDtoList: [
@@ -458,7 +476,7 @@ const DUMMY__ADMIN_ORDER_ITEMS_RESPONSE = {
         },
         {
           id: 7789,
-          orderType: 'subscribe',
+          orderType: 'general',
           merchantUid: 'merchant_uid13',
           orderItemId: 77890,
           orderStatus: 'PAYMENT_DONE',
@@ -496,11 +514,106 @@ const DUMMY__ADMIN_ORDER_ITEMS_RESPONSE = {
             },
           },
         },
+      ],
+    },
+    _links: {
+      first: {
+        href: 'http://localhost:8080/api/admin/orders/search?page=0&size=5',
+      },
+      prev: {
+        href: 'http://localhost:8080/api/admin/orders/search?page=0&size=5',
+      },
+      self: {
+        href: 'http://localhost:8080/api/admin/orders/search?page=1&size=5',
+      },
+      next: {
+        href: 'http://localhost:8080/api/admin/orders/search?page=2&size=5',
+      },
+      last: {
+        href: 'http://localhost:8080/api/admin/orders/search?page=2&size=5',
+      },
+      profile: {
+        href: '/docs/index.html#resources-query-admin-orders',
+      },
+    },
+    page: {
+      size: 10,
+      totalElements: 14,
+      totalPages: 1,
+      number: 1,
+    },
+  },
+};
+
+const DUMMY__ADMIN_ORDER_ITEMS_SUBSCRIBE_RESPONSE = {
+  data: {
+    _embedded: {
+      queryAdminOrdersDtoList: [
         {
-          id: 7735,
-          orderType: 'general',
+          id: 8000,
+          orderType: 'subscribe',
+          merchantUid: 'merchant_uid15',
+          orderItemId: 88000,
+          orderStatus: 'PAYMENT_DONE',
+          deliveryNumber: 'cj02392342315',
+          memberEmail: 'admin@gmail.com',
+          memberName: '관리자',
+          memberPhoneNumber: '01056785678',
+          recipientName: '관리자',
+          recipientPhoneNumber: '01056785678',
+          packageDelivery: false,
+          orderDate: '2022-08-12T11:19:51.139',
+          _links: {
+            query_order: {
+              href: 'http://localhost:8080/api/admin/orders/7819/general',
+            },
+          },
+        },
+        {
+          id: 8001,
+          orderType: 'subscribe',
+          merchantUid: 'merchant_uid13',
+          orderItemId: 88001,
+          orderStatus: 'PAYMENT_DONE',
+          deliveryNumber: 'cj02392342313',
+          memberEmail: 'admin@gmail.com',
+          memberName: '관리자',
+          memberPhoneNumber: '01056785678',
+          recipientName: '관리자',
+          recipientPhoneNumber: '01056785678',
+          packageDelivery: false,
+          orderDate: '2022-08-12T11:19:51.139',
+          _links: {
+            query_order: {
+              href: 'http://localhost:8080/api/admin/orders/7789/general',
+            },
+          },
+        },
+        {
+          id: 8002,
+          orderType: 'subscribe',
+          merchantUid: 'merchant_uid16',
+          orderItemId: 88002,
+          orderStatus: 'PAYMENT_DONE',
+          deliveryNumber: 'cj02392342316',
+          memberEmail: 'admin@gmail.com',
+          memberName: '관리자',
+          memberPhoneNumber: '01056785678',
+          recipientName: '관리자',
+          recipientPhoneNumber: '01056785678',
+          packageDelivery: false,
+          orderDate: '2022-08-12T11:19:51.139',
+          _links: {
+            query_order: {
+              href: 'http://localhost:8080/api/admin/orders/7834/general',
+            },
+          },
+        },
+        {
+          id: 8003,
+          orderType: 'subscribe',
           merchantUid: 'merchant_uid7',
-          orderItemId: 77350,
+          orderItemId: 88003,
           orderStatus: 'PAYMENT_DONE',
           deliveryNumber: 'cj0239234237',
           memberEmail: 'user@gmail.com',
@@ -513,26 +626,6 @@ const DUMMY__ADMIN_ORDER_ITEMS_RESPONSE = {
           _links: {
             query_order: {
               href: 'http://localhost:8080/api/admin/orders/7735/general',
-            },
-          },
-        },
-        {
-          id: 7720,
-          orderType: 'general',
-          merchantUid: 'merchant_uid6',
-          orderItemId: 77210,
-          orderStatus: 'PAYMENT_DONE',
-          deliveryNumber: 'cj0239234236',
-          memberEmail: 'user@gmail.com',
-          memberName: '김회원',
-          memberPhoneNumber: '01099038544',
-          recipientName: '김회원',
-          recipientPhoneNumber: '01099038544',
-          packageDelivery: false,
-          orderDate: '2022-08-12T11:19:51.137',
-          _links: {
-            query_order: {
-              href: 'http://localhost:8080/api/admin/orders/7720/general',
             },
           },
         },
@@ -566,6 +659,7 @@ const DUMMY__ADMIN_ORDER_ITEMS_RESPONSE = {
     },
   },
 };
+
 
 const DUMMY_ADMIN_DELIVERY_INFO = {
   isDone: true,
