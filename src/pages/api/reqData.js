@@ -138,22 +138,28 @@ export const postObjData = async (url, data, contType) => {
   const response = await axios
     .post(url, data, axiosConfig(contType))
     .then((res) => {
-      console.log(res);
+      console.log('postObjDataResponse:\n',res);
       result.data = res;
       result.status = res.status;
       return res.status === 200 || res.status === 201;
     })
     .catch((err) => {
+      // console.error('postObjDataResponseError:\n',err.response);
       const error = err.response;
       // console.log('ERROR내용: ', err.response);
       if(!error.data){
         result.error = '요청에 대응하는 데이터가 서버에 없습니다.';
-      } else if (error.data.error || error.data.errors[0].defaultMessage) {
-        result.error = error.data.error || error.data.errors[0].defaultMessage;
-      } else if (error?.data.error.error) {
-        result.error = '서버와 통신오류가 발생했습니다.';
+      } else if (error.data?.error) {
+        result.error = error.data.error;
+        if(error.data?.errors?.length > 0){
+          result.error = error.data.errors[0].defaultMessage;
+        } else if(error?.data?.error?.error){
+          result.error = '서버와 통신오류가 발생했습니다.';
+        }
       } else if (error.data.reason === 'EXPIRED_TOKEN') {
         result.error = '관리자 로그인 토큰이 만료되었습니다.';
+      } else {
+        result.error = '서버측의 정의되지않은 Reponse Error 발생'
       }
       result.status = err.response.status;
       return !error?.status >= 400;
