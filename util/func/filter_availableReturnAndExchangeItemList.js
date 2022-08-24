@@ -11,8 +11,6 @@ export const filter_availableReturnAndExchangeItemList = (allItemList) => {
   return allItemList.filter((item, i) => {
     ////// ! TEST TEST TEST TEST TEST 임시 추가 - 배송완료시점 TEST
     ////// ! TEST TEST TEST TEST TEST 임시 추가 - 배송완료시점 TEST
-    ////// ! TEST TEST TEST TEST TEST 임시 추가 - 배송완료시점 TEST
-    ////// ! TEST TEST TEST TEST TEST 임시 추가 - 배송완료시점 TEST
     // CASE 1 // 일부만 교환가능 status
     // if ( i === 0 ) {
     //   item.deliveryDoneDate = '2022-08-02T09:56:10.014';
@@ -25,17 +23,15 @@ export const filter_availableReturnAndExchangeItemList = (allItemList) => {
     // }
     
     // CASE 2 // 모두 교환불가능 status
-    item.deliveryDoneDate = '2022-08-02T09:56:10.014';
+    // item.deliveryDoneDate = '2022-08-02T09:56:10.014';
     // item.category = TOPPING;
     
     // CASE 3 // 모두 교환가능 status
     // item.status = orderStatus.DELIVERY_DONE;
-    item.deliveryDoneDate = new Date().toISOString();
+    // item.deliveryDoneDate = new Date().toISOString();
     ////// ! TEST TEST TEST TEST TEST 임시 추가 - 배송완료시점 TEST
     ////// ! TEST TEST TEST TEST TEST 임시 추가 - 배송완료시점 TEST
-    ////// ! TEST TEST TEST TEST TEST 임시 추가 - 배송완료시점 TEST
-    // console.log(item.status, item.deliveryDoneDate)
-    return valid_availableReturnAndExchangelOrder(item.status, item.deliveryDoneDate);
+    return valid_availableReturnAndExchangelOrder(item.status, item.arrivalDate);
   });
 };
 
