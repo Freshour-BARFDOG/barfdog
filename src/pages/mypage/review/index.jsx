@@ -29,8 +29,8 @@ import userStateSlice, { userStateAction } from '/store/userState-slice';
 
 
 export default function ReviewPage() {
-  const searchWritableReivewApiUrl = '/api/reviews/writeable'; // 작성 가능한 후기
-  const searchMyReivewApiUrl = '/api/reviews'; // 작성한 후기
+  const searchWritableReivewApiUrl = '/api/reviews/writeable'; // 작성 가능한 리뷰 리스트 조회(페이징)
+  const searchMyReivewApiUrl = '/api/reviews'; // 작성한 리뷰 리스트 조회(페이징)
   const searchPageSize = 10;
 
   const dispatch = useDispatch();
@@ -48,7 +48,7 @@ export default function ReviewPage() {
   // console.log(reviewList)
   const writableReviewListPageInterCeptor = (res) => {
     // res = DUMMY_RESPONSE_DATA_writableReview; // ! TEST
-    // console.log(res);
+    console.log(res);
     const pageData = res.data.page;
     let newPageInfo = {
       totalPages: pageData.totalPages,
@@ -356,7 +356,13 @@ export default function ReviewPage() {
     </>
   );
 }
+//
 
+/*
+* imageUrl:'https://images.unsplash.com/photo-1657299156653-d3c0147ba3ee?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
+* imageUrl:'https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2053&q=80',
+* imageUrl:'https://images.unsplash.com/photo-1563865436874-9aef32095fad?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80',
+* */
 const DUMMY_RESPONSE_DATA_writableReview = {
   data: {
     _embedded: {

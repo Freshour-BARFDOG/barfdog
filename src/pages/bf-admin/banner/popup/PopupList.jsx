@@ -23,8 +23,13 @@ export default function PopupList({ items, orderEditMode, onUpdateList }) {
     const targetIndex = targetLeakedOrder - 1;
     const bannerName = items[targetIndex].name;
     if (confirm(`정말 삭제하시겠습니까?\n배너명: ${bannerName}`)) {
-      await deleteData(apiURL);
-      window.location.reload();
+      const res = await deleteData(apiURL);
+      console.log(res)
+      if(res.isDone){
+        window.location.reload();
+      } else {
+        alert('삭제에 실패하였습니다.');
+      }
     }
   };
 
