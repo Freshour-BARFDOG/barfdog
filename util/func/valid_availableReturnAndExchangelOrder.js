@@ -2,9 +2,12 @@ import transformDate, {transformToday} from './transformDate';
 import {getDiffDateNumber} from './getDiffDate';
 import {orderStatus} from '../../store/TYPE/orderStatusTYPE';
 
-export const valid_availableReturnAndExchangelOrder = (status, deliveryDoneDate) => {
+export const valid_availableReturnAndExchangelOrder = (status, arrivalDate) => {
   let valid;
-  const delvieryDoneDate = transformDate( deliveryDoneDate );
+  if(!arrivalDate || !status){
+    return false;
+  }
+  const delvieryDoneDate = transformDate( arrivalDate );
   const today = transformToday();
   const diffDate = getDiffDateNumber( today, delvieryDoneDate );
   const availableReturnAndExchangeTerm = 7;
