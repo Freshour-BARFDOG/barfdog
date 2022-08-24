@@ -152,7 +152,7 @@ export default function GeneralOrderSheetPage() {
             request: null, // 배송 요청사항 (묶음 배송일 경우, null)
           },
           deliveryId: info.deliveryId, // ! IMPORTANT : 묶음 배송일 경우 , info.deliveryId값 추가/ 일반배송: null)
-          deliveryPrice: 0, // 배송비
+          deliveryPrice: info.deliveryPrice, // 배송비
           discountTotal: 0, // 총 할인 합계
           discountReward: 0, // 사용할 적립금
           discountCoupon: 0, // 쿠폰 적용으로 인한 할인금
@@ -240,14 +240,14 @@ export default function GeneralOrderSheetPage() {
             />
             <section className={s.final_btn}>
               <p>위 주문 내용을 확인 하였으며, 회원 본인은 결제에 동의합니다.</p>
-              
+              {/* 결제버튼 */}
               <Payment
                 isLoading={isLoading}
                 setIsLoading={setIsLoading}
                 info={info}
                 form={form}
                 setFormErrors={setFormErrors}
-              /> {/* 결제버튼 */}
+              />
             </section>
           </div>
         </div>
