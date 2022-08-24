@@ -16,41 +16,7 @@ import { OrdersheetReward } from '/src/components/order/OrdersheetReward';
 import { OrdersheetMethodOfPayment } from '/src/components/order/OrdersheetMethodOfPayment';
 import { OrdersheetAmountOfPayment } from '/src/components/order/OrdersheetAmountOfPayment';
 import { userType } from '/store/TYPE/userAuthType';
-import { global_couponType } from '../../../../store/TYPE/couponType';
-import { discountUnitType } from '../../../../store/TYPE/discountUnitType';
 
-const DUMMY_MEMEBER_COUPON_LIST = [
-  {
-    memberCouponId: 45,
-    name: '쿠폰1-최소사용가능아잍템가격 7천이상 ',
-    discountType: 'FIXED_RATE',
-    discountDegree: 10,
-    availableMaxDiscount: 2000,
-    availableMinPrice: 7000,
-    remaining: 1,
-    expiredDate: '2023-12-31T23:59:59',
-  },
-  {
-    memberCouponId: 46,
-    name: '쿠폰2-최대할인 금액 1만원 조건 ',
-    discountType: 'FLAT_RATE',
-    discountDegree: 2000,
-    availableMaxDiscount: 10000,
-    availableMinPrice: 0,
-    remaining: 3,
-    expiredDate: '2023-12-31T23:59:59',
-  },
-  {
-    memberCouponId: 47,
-    name: '쿠폰3-최대 할인가3천원',
-    discountType: 'FIXED_RATE',
-    discountDegree: 30,
-    availableMaxDiscount: 3000,
-    availableMinPrice: 0,
-    remaining: 3,
-    expiredDate: '2023-12-31T23:59:59',
-  },
-];
 
 export default function GeneralOrderSheetPage() {
   const router = useRouter();
@@ -98,13 +64,13 @@ export default function GeneralOrderSheetPage() {
         const postItemInfoApiUrl = `/api/orders/sheet/general`;
         const res = await postUserObjData(postItemInfoApiUrl, requestBody);
         // 요청 파라미터가 복잡하여 GET이 아닌 POST 사용
-        // console.log(res);
+        console.log(res);
         if (res.status !== 200) {
-          // alert('상품 정보를 확인할 수 없습니다.');
-          // return await router.push('/');
+          alert('상품 정보를 확인할 수 없습니다.');
+          return window.location.href = '/cart';
         }
         const info = res.data.data;
-        console.log(info);
+        // console.log(info);
 
         // 주문에 대한 모든 데이터
         const initInfo = {
@@ -118,9 +84,9 @@ export default function GeneralOrderSheetPage() {
             zipcode: info.address.zipcode, // 우편번호
           },
           deliveryId: info.deliveryId || Math.floor(Math.random() * 100), // ! IMPORTANT : 묶음 배송할 정기구독 배송 ID (묶음배송 불가능할 경우 null / 묶음 배송 불가할 경우, 배송정보의 묶음배송 Radio input 비활성화)
-          nextSubscribeDeliveryDate: info.nextSubscribeDeliveryDate || transformToday(), // ! IMPORTANT: 묶음배송할 배송 예정일 . 묶음배송 불가능한 경우 null
+          nextSubscribeDeliveryDate: info.nextSubscribeDeliveryDate, // ! IMPORTANT: 묶음배송할 배송 예정일 . 묶음배송 불가능한 경우 null
           coupons:
-            DUMMY_MEMEBER_COUPON_LIST ||
+            // DUMMY_MEMEBER_COUPON_LIST ||
             info.coupons?.map((cp) => ({
               memberCouponId: cp.memberCouponId,
               name: cp.name,
@@ -149,7 +115,7 @@ export default function GeneralOrderSheetPage() {
             reward: info.reward,  // ! CLIENT ONLY
           },
           coupons: //////////// ! DUMMY DATA
-            DUMMY_MEMEBER_COUPON_LIST ||
+            // DUMMY_MEMEBER_COUPON_LIST ||
             info.coupons?.map((cp) => ({
               memberCouponId: cp.memberCouponId,
               name: cp.name,
@@ -228,6 +194,7 @@ export default function GeneralOrderSheetPage() {
   //    > 이때, Shop Item Detail페이지에서 가져온 정보 초기화되어, 서버에서 데이터 가져올 수 없음)
   if (!info || !USER_TYPE || USER_TYPE === userType.NON_MEMBER) return;
 
+  
 
   return (
     <>
@@ -301,3 +268,38 @@ export default function GeneralOrderSheetPage() {
     </>
   );
 }
+
+
+
+const DUMMY_MEMEBER_COUPON_LIST = [
+  {
+    memberCouponId: 45,
+    name: '쿠폰1-최소사용가능아잍템가격 7천이상 ',
+    discountType: 'FIXED_RATE',
+    discountDegree: 10,
+    availableMaxDiscount: 2000,
+    availableMinPrice: 7000,
+    remaining: 1,
+    expiredDate: '2023-12-31T23:59:59',
+  },
+  {
+    memberCouponId: 46,
+    name: '쿠폰2-최대할인 금액 1만원 조건 ',
+    discountType: 'FLAT_RATE',
+    discountDegree: 2000,
+    availableMaxDiscount: 10000,
+    availableMinPrice: 0,
+    remaining: 3,
+    expiredDate: '2023-12-31T23:59:59',
+  },
+  {
+    memberCouponId: 47,
+    name: '쿠폰3-최대 할인가3천원',
+    discountType: 'FIXED_RATE',
+    discountDegree: 30,
+    availableMaxDiscount: 3000,
+    availableMinPrice: 0,
+    remaining: 3,
+    expiredDate: '2023-12-31T23:59:59',
+  },
+];
