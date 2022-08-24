@@ -9,27 +9,16 @@ import { cookieType } from '/store/TYPE/cookieType';
      ! 그렇지 않을경우 <promise>를 return값으로 받는다 (타이밍 문제로 인함)
 * */
 
-//
-// export const testTokenStateWithOldToken = async (url) => {
-//   const res = await axios
-//     .get(url, {
-//       headers: {
-//         authorization:
-//           'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiLthqDtgbAg7J2066aEIiwiaWQiOjUsImV4cCI6MTY1MTg5MjU3NiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20ifQ.Wycm9ZmiiK-GwtsUkvMCHHeExDBtkveDbhKRealjmd8C4OZMp3SFqGFcFWudXMiL5Mxdj6FcTAV9OVsOYsn_Mw',
-//         'Content-Type': 'application/json',
-//       },
-//     })
-//     .then((res) => {
-//       console.log('OLD TOKEN RESULT: ', res.response);
-//       return res;
-//     })
-//     .catch((err) => {
-//       console.error('OLD TOKEN RESULT: ', err);
-//       return err.response;
-//     });
-//   return res;
-// };
-
+/*
+axios.request(config)
+axios.get(url[, config])
+axios.delete(url[, config])
+axios.head(url[, config])
+axios.options(url[, config])
+axios.post(url[, data[, config]])
+axios.put(url[, data[, config]])
+axios.patch(url[, data[, config]])
+*/
 
 
 export const getData = async (url, type) => {
@@ -111,19 +100,48 @@ export const putData = async (url, data) => {
   return response;
 };
 
-export const deleteData = async (url) => {
+export const deleteData = async (url,config={data: {}} ) => {
+  const result = {
+    isDone: false,
+    error: '',
+    data: null,
+    status: null,
+  };
   const response = axios
-    .delete(url, axiosConfig())
+    .delete(url, {
+      ...config, // delete에 body를 추가하기 위함
+      ...axiosConfig(), // header
+    })
     .then((res) => {
-      console.log(res);
-      return res;
+      console.log('postObjDataResponse:\n',res);
+      result.data = res;
+      result.status = res.status;
+      return res.status === 200 || res.status === 201;
     })
     .catch((err) => {
-      console.error(err);
-      return err.response;
+      // console.error('postObjDataResponseError:\n',err.response);
+      const error = err.response;
+      // console.log('ERROR내용: ', err.response);
+      if(!error.data){
+        result.error = '요청에 대응하는 데이터가 서버에 없습니다.';
+      } else if (error.data?.error) {
+        result.error = error.data.error;
+        if(error.data?.errors?.length > 0){
+          result.error = error.data.errors[0].defaultMessage;
+        } else if(error?.data?.error?.error){
+          result.error = '서버와 통신오류가 발생했습니다.';
+        }
+      } else if (error.data.reason === 'EXPIRED_TOKEN') {
+        result.error = '관리자 로그인 토큰이 만료되었습니다.';
+      } else {
+        result.error = '서버측의 정의되지않은 Reponse Error 발생'
+      }
+      result.status = err.response.status;
+      return !error?.status >= 400;
     });
-
-  return response;
+  
+  result.isDone = response;
+  return result;
 };
 
 
@@ -197,7 +215,7 @@ export const putObjData = async (url, data, contType) => {
   return result;
 };
 
-export const deleteObjData = async (url, data, contType) => {
+export const deleteObjData = async (url, data,) => {
   const result = {
     isDone: false,
     error: '',
@@ -205,7 +223,7 @@ export const deleteObjData = async (url, data, contType) => {
     status: null,
   };
   const response = await axios
-    .delete(url, data, axiosConfig(contType))
+    .delete(url, data, axiosConfig())
     .then((res) => {
       console.log(res);
       result.data = res;
@@ -275,40 +293,6 @@ export const postUserObjData = async (url, data, contType) => {
   return result;
 };
 
-export const postSelfApiData = async (selfPath, data, contType) => {
-  const result = {
-    isDone: false,
-    error: '',
-    data: null,
-    status: null,
-  };
-  const selfApiUrl = window.location.origin;
-  axios.defaults.baseURL = selfApiUrl;
-  const response = await axios
-    .post(`${selfApiUrl}${selfPath}`, data, axiosUserConfig(contType))
-    .then((res) => {
-      console.log('', res);
-      result.data = res;
-      result.status = res.status;
-      return res.status === 200 || res.status === 201;
-    })
-    .catch((err) => {
-      const error = err.response;
-      console.log('ERROR내용: ', err.response);
-      if (error.data.error || error.data.errors[0].defaultMessage) {
-        result.error = error.data.error || error.data.errors[0].defaultMessage;
-      } else if (error?.data.error.error) {
-        result.error = '서버와 통신오류가 발생했습니다.';
-      } else if (error.data.reason === 'EXPIRED_TOKEN') {
-        result.error = '유저 토큰이 만료되었습니다.';
-      }
-      result.status = err.response.status;
-      return !error?.status >= 400;
-    });
-
-  result.isDone = response;
-  return result;
-};
 
 // -------- SSR DATA FETCHING -------- //
 /* - EXAMPLE

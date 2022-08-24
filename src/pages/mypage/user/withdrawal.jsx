@@ -1,39 +1,39 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
-import MetaTitle from "/src/components/atoms/MetaTitle";
-import s from "./withdrawal.module.scss";
-import {useModalContext} from "/store/modal-context";
-import {useRouter} from "next/router";
-import filter_emptyValue from "/util/func/filter_emptyValue";
-import useDeviceState from "/util/hook/useDeviceState";
-import {validate} from "../../../../util/func/validation/validation_resetPassword";
-import {valid_hasFormErrors, valid_isEmpty} from "../../../../util/func/validation/validationPackage";
-import {deleteObjData, putObjData} from "../../api/reqData";
-import Spinner from "../../../components/atoms/Spinner";
-import ErrorMessage from "../../../components/atoms/ErrorMessage";
-import Modal_global_alert from "../../../components/modal/Modal_global_alert";
-import enterKey from "../../../../util/func/enterKey";
-
+import MetaTitle from '/src/components/atoms/MetaTitle';
+import s from './withdrawal.module.scss';
+import { useModalContext } from '/store/modal-context';
+import { useRouter } from 'next/router';
+import filter_emptyValue from '/util/func/filter_emptyValue';
+import useDeviceState from '/util/hook/useDeviceState';
+import { valid_isEmpty } from '/util/func/validation/validationPackage';
+import { deleteData } from '/src/pages/api/reqData';
+import Spinner from '/src/components/atoms/Spinner';
+import Modal_global_alert from '/src/components/modal/Modal_global_alert';
+import enterKey from '/util/func/enterKey';
+import { authAction } from '/store/auth-slice';
+import { useDispatch } from 'react-redux';
 
 export default function WithDrawalPage() {
   const mct = useModalContext();
   const router = useRouter();
+  const dispatch = useDispatch();
   const deviceState = useDeviceState();
   const isMobile = deviceState.isMobile;
-  
+
   const [pw, setPw] = useState('');
-  const [isSubmitted, setIsSubmitted] = useState( false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState({});
   const [alertModalMessage, setAlertModalMessage] = useState('');
-  
+
   const onInputChangeHandler = (e) => {
     const input = e.currentTarget;
     const { value } = input;
     let filteredValue = filter_emptyValue(value); // 스페이스바 제거
     setPw(filteredValue);
   };
-  
+
   const onSubmit = async (e) => {
     e.preventDefault();
     if (isSubmitted) return console.error('이미 제출된 양식입니다.');
@@ -43,26 +43,26 @@ export default function WithDrawalPage() {
       setAlertModalMessage('비밀번호를 입력해주세요.');
       return;
     }
-    
+
     try {
       setIsLoading((prevState) => ({
         ...prevState,
         submit: true,
       }));
-      const body = {
-        password: pw,
-      };
-      console.log(body)
-      const url = '/api/members';
-      const res = await deleteObjData(url, body);
+
+      const url = process.env.NEXT_PUBLIC_API_URL_DEV + '/api/members';
+      const res = await deleteData(url, {
+        data: { password: pw },
+      });
       console.log(res);
       if (res.isDone) {
         mct.alertShow();
         setIsSubmitted(true);
-        setAlertModalMessage('회원 탈퇴되었습니다.\n그동안 바프독을 이용해주셔서 감사합니다.');
+        setAlertModalMessage('회원 탈퇴되었습니다.\n그 동안 바프독을 이용해주셔서 감사합니다.');
+        dispatch(authAction.logout());
       } else if (res.status === 400) {
         mct.alertShow();
-        const errorMessage = `현재 비밀번호가 올바르지 않습니다.`;
+        const errorMessage = `비밀번호가 올바르지 않습니다.`;
         setAlertModalMessage(errorMessage);
       }
     } catch (err) {
@@ -74,24 +74,19 @@ export default function WithDrawalPage() {
       submit: false,
     }));
   };
-  
-  
+
   const onKeyDownHandler = (e) => {
     enterKey(e, onSubmit);
   };
-  
-  const onCancel = ()=>{
+
+  const onCancel = () => {
     window.location.href = isMobile ? '/mypage/user' : '/mypage/user/info';
-  }
-  
-  const onModalConfirmButtonClick = ()=>{
-    // 회원탈퇴처리되었습니다. 그동안이용해주셔서 감사합니다.
-    // 오케이 버튼 ->
-    window.location.href='/account/login';
-  }
-  
-  
-  
+  };
+
+  const onModalConfirmButtonClick = () => {
+    window.location.href = '/account/login';
+  };
+
   return (
     <>
       <MetaTitle title="회원탈퇴" />
@@ -108,7 +103,7 @@ export default function WithDrawalPage() {
 
             <label id="hi" className={s.labe_box}>
               <div className={s.label_text}>비밀번호 확인</div>
-              
+
               <input
                 className={s.input_box}
                 type="password"
@@ -130,7 +125,10 @@ export default function WithDrawalPage() {
           </section>
         </Wrapper>
       </Layout>
-      <Modal_global_alert message={alertModalMessage} onClick={isSubmitted && onModalConfirmButtonClick}/>
+      <Modal_global_alert
+        message={alertModalMessage}
+        onClick={isSubmitted && onModalConfirmButtonClick}
+      />
     </>
   );
 }
