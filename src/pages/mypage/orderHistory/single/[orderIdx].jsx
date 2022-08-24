@@ -7,7 +7,7 @@ import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from '/src/components/mypage/MypageWrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import Image from 'next/image';
-import {getDataSSR, postData, postObjData} from '/src/pages/api/reqData';
+import { getDataSSR, postData, postObjData } from '/src/pages/api/reqData';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import popupWindow from '/util/func/popupWindow';
 import { valid_deliveryCondition } from '/util/func/validation/valid_deliveryCondition';
@@ -17,13 +17,14 @@ import { transformPhoneNumber } from '/util/func/transformPhoneNumber';
 import { Modal_changeItemOrderState } from '/src/components/modal/Modal_changeItemOrderState';
 import { filter_availableReturnAndExchangeItemList } from '/util/func/filter_availableReturnAndExchangeItemList';
 import { valid_availableCancelOrder } from '/util/func/validation/valid_availableCancelOrder';
+import {valid_availableReturnAndExchangelOrder} from "../../../../../util/func/valid_availableReturnAndExchangelOrder";
 
 // ! =====> 상품정보란 보완필요
 // ! =====> 배송완료 시점필요
 // ! =====> 환불금액 총합 , 환불배송비 계산
 
 export default function SingleItem_OrderHistoryPage({ data }) {
-  // console.log(data)
+  console.log(data)
   const originItemList = data.orderItemDtoList;
   const [activeModal, setActiveModal] = useState(false);
   const [confirmMessage, setConfirmMessage] = useState('');
@@ -39,11 +40,9 @@ export default function SingleItem_OrderHistoryPage({ data }) {
       break;
     }
   }
-  /////////////////////////////////////////// ! TEST 임시 추가 => filter_availableReturnAndExchangeItemList 내부에 , TEST코드 들어있음
-  const isAvailableReturnAndExchangeState =
-    filter_availableReturnAndExchangeItemList(originItemList);
-  /////////////////////////////////////////// ! TEST 임시 추가 => filter_availableReturnAndExchangeItemList 내부에 , TEST코드 들어있음
-  // console.log(isAvailableReturnAndExchangeState);
+  // 교환 반품 조건 // 배송완료 & 배송완료 7일 이내
+  const isAvailableReturnAndExchangeState = valid_availableReturnAndExchangelOrder(originItemList[0].status, data.orderDto.arrivalDate);
+  
   const onPopupHandler = (e) => {
     e.preventDefault();
     if (typeof window === 'undefined') return console.error('window is not defined');
@@ -92,20 +91,19 @@ export default function SingleItem_OrderHistoryPage({ data }) {
     setConfirmMessage(`전체 상품이 주문 취소됩니다.`);
     setConfirmType(orderStatus.CANCEL_REQUEST);
   };
-  
+
   const onOrderCancle = async (confirm) => {
     if (!confirm) return initializeModalState();
     console.log('전체 주문취소 API 실행 // 부분 취소 불가');
-    
+
     const r = await postObjData(`/api/orders/${data?.orderDto.orderId}/general/cancelRequest`);
     console.log(r);
-    if(r.isDone){
+    if (r.isDone) {
       alert('전체 주문 결제취소완료');
       window.location.reload();
     }
-    
+
     setActiveModal(null);
-    
   };
 
   const confirmBCallbackType = {
@@ -113,7 +111,7 @@ export default function SingleItem_OrderHistoryPage({ data }) {
     // [orderStatus.CONFIRM]: addSomeFunction, // 필요한 function을 추가하면 됨
   };
 
-  console.log(originItemList);
+  // console.log(originItemList);
 
   return (
     <>
@@ -252,12 +250,14 @@ export default function SingleItem_OrderHistoryPage({ data }) {
                 {!valid_deliveryCondition(data?.orderDto.deliveryStatus) ? (
                   <ul className={s.content_grid}>
                     <li>CJ대한통운</li>
-                    <li><span>운송장번호</span> {data?.orderDto.deliveryNumber || '(발급 전)'}</li>
+                    <li>
+                      <span>운송장번호</span> {data?.orderDto.deliveryNumber || '(발급 전)'}
+                    </li>
                     <li className={s.deliveryStatus}>
                       배송완료
                       {orderStatus.KOR[data?.orderDto.deliveryStatus]}
                     </li>
-                    <li>
+                    {data?.orderDto.deliveryNumber && <li>
                       <a
                         href={`http://nexs.cjgls.com/web/service02_01.jsp?slipno=${data?.orderDto.deliveryNumber}`}
                         target="_blank"
@@ -266,7 +266,7 @@ export default function SingleItem_OrderHistoryPage({ data }) {
                       >
                         <button>배송조회</button>
                       </a>
-                    </li>
+                    </li>}
                   </ul>
                 ) : (
                   <p className={s.emptyCont}>배송 중 상태에서 조회 가능합니다.</p>
@@ -401,7 +401,7 @@ const AdditionalOrderStatusInfo = ({
             {originItemList
               .filter((item) => targetOrderStatusList.indexOf(item.status) >= 0)
               .map((item, i) => {
-                 let orderQuery = 'orderCancel';
+                let orderQuery = 'orderCancel';
                 if (
                   item.status === orderStatus.CANCEL_DONE_SELLER ||
                   item.status === orderStatus.CANCEL_DONE_BUYER
@@ -420,7 +420,7 @@ const AdditionalOrderStatusInfo = ({
                   orderQuery = 'orderExchange';
                 }
 
-                console.log(orderQuery)
+                console.log(orderQuery);
                 return (
                   <li key={`cancel-state-item-${i}`} className={s.body_content_2}>
                     <span>{orderTypeAsLabel} 상태</span>
@@ -483,7 +483,7 @@ export async function getServerSideProps(ctx) {
   const orderIdx = query.orderIdx;
 
   let DATA = null;
-  const getApiUrl = `/api/orders/${orderIdx}/general`;
+  const getApiUrl = `/api/orders/${orderIdx}/general`; // API 검색어: 일반 주문 하나 조회
 
   let res = await getDataSSR(req, getApiUrl);
   // res = DUMMY_RESPONSE; // ! TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
@@ -494,9 +494,13 @@ export async function getServerSideProps(ctx) {
   if (data) {
     DATA = {
       orderItemDtoList: data.orderItemDtoList?.map((item) => ({
+        arrivalDate: data.orderDto.arrivalDate || null, // ! 확인필요 => 전체 배송완료상태를, 상품 각각에 부여하는것 (예외가 없다면 그대로 진행)
         orderItemId: item.orderItemId, // 주문한 상품 id
         thumbnailUrl: item.thumbnailUrl,
-        selectOptionDtoList: item.selectOptionDtoList,
+        selectOptionDtoList: item.selectOptionDtoList.map((op) => ({
+          optionName: op.optionName,
+          optionAmount: op.optionAmount,
+        })),
         itemName: item.itemName,
         amount: item.amount,
         finalPrice: item.finalPrice,
@@ -527,6 +531,7 @@ export async function getServerSideProps(ctx) {
         merchantUid: data.orderDto.merchantUid,
         paymentDate: data.orderDto.paymentDate,
         deliveryNumber: data.orderDto.deliveryNumber,
+        arrivalDate: data.orderDto.arrivalDate || null,
         orderPrice: data.orderDto.orderPrice,
         deliveryPrice: data.orderDto.deliveryPrice,
         discountTotal: data.orderDto.discountTotal,
@@ -544,7 +549,7 @@ export async function getServerSideProps(ctx) {
       },
       savedRewardTotal: data.savedRewardTotal,
     };
-    console.log(DATA);
+    // console.log(DATA);
   }
   return { props: { orderIdx, data: DATA } };
 }
