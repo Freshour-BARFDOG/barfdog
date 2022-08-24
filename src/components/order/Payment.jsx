@@ -70,6 +70,7 @@ export function Payment({
 
   async function startPayment(){
 
+    console.log(form)
     const body = orderType === 'general'?{
       orderItemDtoList: form.orderItemDtoList?.map((item) => ({
         itemId: item.itemId, // 상품 ID
@@ -79,8 +80,8 @@ export function Payment({
             itemOptionId: op.optionId, // 옵션 ID
             amount: op.amount, // 옵션 수량
           })) || [],
-        memberCouponId: null, // 사용한 쿠폰 ID // 데이터뿌릴떄
-        discountAmount: 0, // 쿠폰할인 총계
+        memberCouponId: item.memberCouponId, // 사용한 쿠폰 ID // 데이터뿌릴떄
+        discountAmount: item.discountAmount, // 쿠폰할인 총계
         finalPrice: item.orderLinePrice,
         
       })),
