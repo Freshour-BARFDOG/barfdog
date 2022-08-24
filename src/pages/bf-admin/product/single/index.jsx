@@ -94,7 +94,7 @@ function SingleItemPage() {
                   <li className={s.table_th}>수정</li>
                   <li className={s.table_th}>삭제</li>
                 </ul>
-                {itemList.length ? (
+                {itemList.length > 0 ? (
                   <SingleList
                     items={itemList}
                     // onDeleteItem={onDeleteItem}
