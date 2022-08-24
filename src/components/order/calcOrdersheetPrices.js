@@ -10,7 +10,8 @@ export const calcOrdersheetPrices = (form, orderType='general') => {
     discountReward = Number(form.discountReward);
   }
   
-  const calc = Number(form.orderPrice) - discountCoupon - discountReward;
+  
+  const calc = Number(form.orderPrice) - discountCoupon - discountReward + form.deliveryPrice;
   const paymentPrice = calc ? calc : 0;
   const reward = form.selfInfo?.reward;
   let availableMaxReward;
