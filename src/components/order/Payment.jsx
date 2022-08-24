@@ -70,14 +70,13 @@ export function Payment({
 
   async function startPayment(){
 
-    console.log(form)
     const body = orderType === 'general'?{
       orderItemDtoList: form.orderItemDtoList?.map((item) => ({
         itemId: item.itemId, // 상품 ID
         amount: item.amount, // 상품 수량
         selectOptionDtoList:
-          item.optionDtoList?.map((op) => ({
-            itemOptionId: op.optionId, // 옵션 ID
+          item.selectOptionDtoList?.map((op) => ({
+            itemOptionId: op.itemOptionId, // 옵션 ID
             amount: op.amount, // 옵션 수량
           })) || [],
         memberCouponId: item.memberCouponId, // 사용한 쿠폰 ID // 데이터뿌릴떄
@@ -125,12 +124,12 @@ export function Payment({
       brochure: form.brochure, // 브로슈어 수령여부
     };
 
+    console.log(body)
     try {
       setIsLoading((prevState) => ({
         ...prevState,
         submit: true,
       }));
-      console.log(orderType);
 
 
       // send DATA to api server after successful payment
