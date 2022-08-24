@@ -9,15 +9,15 @@ import {calcOrdersheetPrices} from "./calcOrdersheetPrices";
 
 export const OrdersheetReward = ({ id, info, form, setForm, formErrors, setFormErrors, orderType='general' }) => {
   
-  let availableMaxReward
+  let availableMaxReward;
+  const totalPrice = info.orderPrice + form.deliveryPrice;
   if(orderType === 'general'){
-    availableMaxReward = info.reward > form.orderPrice ? form.orderPrice: info.reward
+    availableMaxReward = info.reward > totalPrice ? totalPrice: info.reward
   }else if (orderType === 'subscribe') {
-    availableMaxReward = info.reward > form.orderPrice ? form.orderPrice : info.reward
+    availableMaxReward = info.reward > totalPrice ? totalPrice : info.reward
   }
   
   const onInputChangeHandler = (e) => {
-    const currentItemPrice = orderType === 'general' ? info.orderPrice : info.subscribeDto.nextPaymentPrice;
     
     const input = e.currentTarget;
     const { value } = input;
@@ -31,7 +31,8 @@ export const OrdersheetReward = ({ id, info, form, setForm, formErrors, setFormE
     }
     
     let error='';
-    if(filteredValue > currentItemPrice) {
+    const limitedPrice = orderType === 'general' ? totalPrice : info.subscribeDto.nextPaymentPrice;
+    if(filteredValue > limitedPrice) {
       filteredValue = 0;
       error = '주문금액을 초과하여 사용할 수 없습니다.'
     } else if (filteredValue > availableMaxReward ) {
