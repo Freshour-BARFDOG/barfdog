@@ -299,7 +299,7 @@ export const valid_URL = (value)=>{
   let error='';
 
   const url = value;
-  const regExp = /(http|https):\/\/((\w+)[.])+(asia|biz|cc|cn|com|de|eu|in|info|jobs|jp|kr|mobi|mx|name|net|nz|org|travel|tv|tw|uk|us)(\/(\w*))*$/i;
+  const regExp = /(http|https):\/\/((\w+)[.])+(asia|biz|cc|cn|com|de|eu|in|info|jobs|jp|kr|mobi|mx|name|net|nz|org|travel|tv|tw|uk|us|app)(\/(\w*))*$/i;
 
   const result = regExp.test(url);
 
