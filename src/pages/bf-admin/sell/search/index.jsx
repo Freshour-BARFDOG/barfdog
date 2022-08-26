@@ -32,7 +32,7 @@ const initialSearchValues = {
 };
 
 export default function SearchOnSellPage() {
-  const searchApiUrl = `/api/admin/orders/search`;
+  const searchApiUrl = `/api/admin/orders/cancelRequest`; // api 이름과 관계없이, '주문단위'조회에 사용가능함
   const searchPageSize = 10;
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
@@ -65,10 +65,10 @@ export default function SearchOnSellPage() {
   };
 
   const pageInterceptor = (res) => {
-    // console.log(res);
-    res = DUMMY_RESPONSE; //  ! TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
+    console.log(res);
+    // res = DUMMY_RESPONSE; //  ! TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
     const pageData = res.data.page;
-    const curItemList = res.data?._embedded?.queryAdminOrdersDtoList || [];
+    const curItemList = res.data?._embedded?.queryAdminCancelRequestDtoList || [];
     let newPageInfo = {
       totalPages: pageData.totalPages,
       size: pageData.size,
@@ -128,7 +128,8 @@ export default function SearchOnSellPage() {
           </section>
           <section className="cont">
             <div className="cont_header clearfix">
-              <p className="cont_title cont-left">목록</p>
+              <p className="cont_title cont-left">
+                {itemList.length > 0 && itemList[0] && productType.KOR[itemList[0].orderType]+'상품 '}목록</p>
             </div>
             <div className={`${s.cont_viewer}`}>
               <div className={s.table}>
