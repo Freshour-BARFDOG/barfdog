@@ -82,7 +82,6 @@ export function Payment({
         memberCouponId: item.memberCouponId, // 사용한 쿠폰 ID // 데이터뿌릴떄
         discountAmount: item.discountAmount, // 쿠폰할인 총계
         finalPrice: item.orderLinePrice,
-        
       })),
       deliveryDto: {
         name: form.deliveryDto.name, // 수령자 이름
@@ -94,12 +93,12 @@ export function Payment({
       },
       orderPrice: form.orderPrice, //  주문 상품 총 가격 (할인 적용 전)
       deliveryPrice: form.deliveryPrice, // 배송비
-      discountTotal: calcOrdersheetPrices(form, 'subscribe').discountTotal, // 총 할인 합계    ! 쿠폰할인금 적용
+      discountTotal: calcOrdersheetPrices(form, 'general').discountTotal, // 총 할인 합계    ! 쿠폰할인금 적용
       discountReward: Number(form.discountReward), // 사용할 적립금
-      discountCoupon: calcOrdersheetPrices(form, 'subscribe').discountCoupon, // 쿠폰 적용으로 인한 할인금 ! coupon할인금 적용
-      paymentPrice: calcOrdersheetPrices(form, 'subscribe').paymentPrice, // 최종 결제 금액 ! coupon할인금 적용
+      discountCoupon: calcOrdersheetPrices(form, 'general').discountCoupon, // 쿠폰 적용으로 인한 할인금 ! coupon할인금 적용
+      paymentPrice: calcOrdersheetPrices(form, 'general').paymentPrice, // 최종 결제 금액 ! coupon할인금 적용
       paymentMethod: form.paymentMethod, // 결제방법  [CREDIT_CARD, NAVER_PAY, KAKAO_PAY]
-      nextDeliveryDate: form.nextDeliveryDate,
+      // nextDeliveryDate: form.nextDeliveryDate, // ! 일반주문 시, request field에 없는 값.
       agreePrivacy: form.agreePrivacy, // 개인정보 제공 동의
       brochure: form.brochure, // 브로슈어 수령여부
     }:{
@@ -136,6 +135,7 @@ export function Payment({
       const apiUrl = orderType === 'general' ? `/api/orders/general` : `/api/orders/subscribe/${router.query.subscribeId}`
       const res = await postObjData(apiUrl, body);
       console.log(res);
+      
       if (res.isDone) {
         if( orderType === 'general'){ 
           // 일반 주문 결제
@@ -217,13 +217,12 @@ export function Payment({
        const fail = await postObjData(`/api/orders/${id}/general/fail`);
        console.log(fail);
         if(fail.isDone){
+          // startPayment();
           alert(`결제 실패: ${error_msg}`);
-          startPayment();
-          // if (typeof window !== "undefined"){
-          //   // 임시로 넣은 코드 :  결제취소시 , 전역에 import 결제 html이 잔류하여, 없애기위한 용도
-          //   // window.location.href = '/';
-            
-          // }
+          // 결제 취소 시 , 전역에 import 결제 html이 잔류하여, 없앰
+          document.body.style.cssText='';
+          document.body.querySelector('.imp-dialog ').innerHTML='';
+          document.body.querySelector('.imp-dialog ').style.cssText='display:none !important';
         }
       
     }
