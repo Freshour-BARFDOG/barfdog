@@ -436,7 +436,7 @@ export default function MainPage({ data }) {
   );
 }
 
-export async function getServerSideProps({req, res}) {
+export async function getServerSideProps({}) {
   let DATA = null;
   const apiUrl = '/api/home';
   let homeApi_res = null;
@@ -492,9 +492,10 @@ export async function getServerSideProps({req, res}) {
               }))
             : [],
         queryBestReviewsDtoList: data.queryBestReviewsDtoList || [],
-        popupDtoList: data.popupDtoList?.map((list)=>({
+        popupDtoList: data.popupBannerDtoList?.map((list)=>({
           id: list.id,
           position: list.position,
+          name: list.name,
           leakedOrder:list.leakedOrder,
           pcFilename:list.pcFilename,
           pcImageUrl:list.pcImageUrl,
@@ -671,7 +672,7 @@ const DUMMY_DATA = {
       contents: '열글자 이상의 구독 리뷰5',
     },
   ],
-  popupDtoList: [
+  popupBannerDtoList: [
     {
       id: 1,
       position: 'left',
