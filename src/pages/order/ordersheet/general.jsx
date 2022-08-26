@@ -152,7 +152,7 @@ export default function GeneralOrderSheetPage() {
             request: null, // 배송 요청사항 (묶음 배송일 경우, null)
           },
           deliveryId: info.deliveryId, // ! IMPORTANT : 묶음 배송일 경우 , info.deliveryId값 추가/ 일반배송: null)
-          deliveryPrice: info.deliveryPrice, // 배송비
+          deliveryPrice: info.orderPrice >= info.freeCondition ? 0 : info.deliveryPrice, // 배송비
           discountTotal: 0, // 총 할인 합계
           discountReward: 0, // 사용할 적립금
           discountCoupon: 0, // 쿠폰 적용으로 인한 할인금
@@ -164,6 +164,7 @@ export default function GeneralOrderSheetPage() {
             .map((item) => item.orderLinePrice)
             .reduce((acc, cur) => acc + cur), //  주문 상품 총 가격 ( 주문금액 -쿠폰할인 -적립금)
         };
+        console.log(initForm)
         setInfo(initInfo);
         setForm(initForm);
       } catch (err) {
