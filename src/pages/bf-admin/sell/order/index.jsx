@@ -18,6 +18,7 @@ import PureCheckbox from '/src/components/atoms/PureCheckbox';
 import Spinner from '/src/components/atoms/Spinner';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import { Modal_orderCancleReason } from '/src/components/modal/Modal_orderCancleReason';
+import {Modal_orderConfirm} from "/src/components/modal/Modal_orderConfirm";
 
 const initialSearchValues = {
   from: transformToday(),
@@ -26,12 +27,12 @@ const initialSearchValues = {
   memberName: null,
   memberEmail: null,
   recipientName: null,
-  statusList: null,
+  statusList: orderStatus.PAYMENT_DONE,
   orderType: productType.GENERAL,
 };
 
 export default function OrderOnSellPage() {
-  const searchApiUrl = `/api/admin/orders/search`;
+  const searchApiUrl = `/api/admin/orders/cancelRequest`;
   const searchPageSize = 10;
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
@@ -82,13 +83,15 @@ export default function OrderOnSellPage() {
       orderType: searchValues.orderType,
     };
     setSearchBody(body);
+    setSelectedOrderIdList([]); // 선택된 아이템 id 리스트 초기화
   };
 
   const pageInterceptor = (res) => {
     // console.log(res);
     // res = searchValues.orderType === productType.GENERAL ? DUMMY__ADMIN_ORDER_ITEMS_GENERAL_RESPONSE :  DUMMY__ADMIN_ORDER_ITEMS_SUBSCRIBE_RESPONSE; //  ! TEST TEST TEST TEST TEST TEST
+    console.log(res);
     const pageData = res.data.page;
-    const curItemList = res.data?._embedded?.queryAdminOrdersDtoList || [];
+    const curItemList = res.data?._embedded?.queryAdminCancelRequestDtoList || [];
     let newPageInfo = {
       totalPages: pageData.totalPages,
       size: pageData.size,
@@ -114,28 +117,32 @@ export default function OrderOnSellPage() {
     const allItemsIdList = itemList.map((item) => item.id);
     setSelectedOrderIdList(checked ? allItemsIdList : []);
   };
-
-  const onOrderConfirm = async () => {
-    if (!selectedOrderIdList.length) return alert('선택된 상품이 없습니다.');
-    if (!confirm(`선택하신 ${selectedOrderIdList.length}개의 상품을 주문확인 처리하시겠습니까?`))
+  
+  const onStartOrderConfirm = () => {
+    if (!selectedOrderIdList.length) {
+      return alert('선택된 상품이 없습니다.');
+    }
+    setActiveModal({ orderConfirm: true });
+  };
+  // console.log(selectedOrderIdList);
+  const onOrderConfirm = async (selectedIdList) => {
+    if (!selectedIdList.length) return alert('선택된 상품이 없습니다.');
+    if (!confirm(`선택하신 ${selectedIdList.length}개의 상품을 주문확인 처리하시겠습니까?`))
       return;
 
-    const seletedOrderItemIdList = itemList
-      .filter((item) => selectedOrderIdList.indexOf(item.id) >= 0)
-      .map((item) => item.orderItemId); // ! 한 주문 내에, 2가지 이상의 상품이 존재할 경우에도 orderItemId가 1개인 현재 상황으로 충분한지???
-    // console.log(seletedOrderItemIdList);
-    
+    // console.log(selectedIdList)
     const itemType = searchValues.orderType;
-    const body =
-      itemType === productType.GENERAL
-        ? {
-            orderItemIdList: seletedOrderItemIdList, // 주문 내에 속한 "상품의 id" List
-          }
-        : itemType === productType.SUBSCRIBE
-        ? {
-            orderIdList: selectedOrderIdList, // "주문 id" list
-          }
-        : null;
+    let body;
+    if(itemType === productType.GENERAL){
+      body = {
+        orderItemIdList: selectedIdList, // 주문 내에 속한 "상품의 id" List
+      }
+    } else if(itemType === productType.SUBSCRIBE) {
+      body = {
+        orderIdList: selectedIdList, // "주문 id" list
+      }
+    }
+    
 
     try {
       setIsLoading((prevState) => ({
@@ -171,34 +178,46 @@ export default function OrderOnSellPage() {
       return;
 
     const itemType = searchValues.orderType;
-    const body =
-      itemType === productType.GENERAL
-        ? {
-            orderItemIdList: selectedOrderIdList, // 일반상품 & 구독상품 모두 '주문 id'로 요청함
-          }
-        : itemType === productType.SUBSCRIBE
-        ? {
-            orderIdList: selectedOrderIdList, // 일반상품 & 구독상품 모두 '주문 id'로 요청함
-          }
-        : null;
+    let body = {
+      orderIdList: selectedOrderIdList // 일반상품 & 구독상품 모두 '주문 id'로 요청함
+    };
+    // if(itemType === productType.GENERAL){
+    //   body = {
+    //     orderItemIdList: selectedIdList, // 주문 내에 속한 "상품의 id" List
+    //   }
+    // } else if(itemType === productType.SUBSCRIBE) {
+    //   body = {
+    //     orderIdList: selectedIdList, // "주문 id" list
+    //   }
+    // }
+    
+    // const body =
+    //   itemType === productType.GENERAL
+    //     ? {
+    //         orderItemIdList: selectedOrderIdList,
+    //       }
+    //     : itemType === productType.SUBSCRIBE
+    //     ? {
+    //         orderIdList: selectedOrderIdList, // 일반상품 & 구독상품 모두 '주문 id'로 요청함
+    //       }
+    //     : null;
     try {
       setIsLoading((prevState) => ({
         ...prevState,
         delivery: true,
       }));
-      const apiUrl = `/api/admin/orders/${itemType.toLowerCase()}/orderConfirm`; // 주문 발송 api에 필요한 배송 정보 조회
-      // const resFromServer = await postObjData(apiUrl, body); // ! PRODUCT CODE
-      const resFromServer = DUMMY_ADMIN_DELIVERY_INFO; // ! TEST CODE
-      console.log('onOrderConfirm: \n', body);
-      console.log('response: admin > sell > search > index.jsx\n', resFromServer);
+      const apiUrl = `/api/admin/deliveries/info`; // 주문 발송 api에 필요한 배송 정보 조회
+      const resFromServer = await postObjData(apiUrl, body); // ! PRODUCT CODE
+      console.log('resFromServer: ',resFromServer)
+      // const resFromServer = DUMMY_ADMIN_DELIVERY_INFO; // ! TEST CODE
       if (!resFromServer.isDone)
         return alert(`주문발송 처리 중 오류가 발생했습니다.\n${res.error}`);
       const deliveryItemInfoList = resFromServer.data.data._embedded.queryOrderInfoForDeliveryList;
-
+      console.log(deliveryItemInfoList)
       for (const info of deliveryItemInfoList) {
         // 주문 id에 대한 정보 Array
         const bodyForGoodsFlow = {
-          TEST: 'goodsflow data 전송 방지 key & value', // ! TEST CODE
+          TEST: '__________________goodsflow data 전송 방지 key & value', // ! TEST CODE
           transUniqueCd: info.transUniqueCd,
           sndName: info.sndName,
           sndZipCode: info.sndZipCode,
@@ -211,7 +230,7 @@ export default function OrderOnSellPage() {
           rcvAddr2: info.rcvAddr2,
           rcvTel1: info.rcvTel1,
           mallId: info.mallId,
-          msgToTrans: '', // ! 배송 메시지 > 서버에서 받은 값 있는지 확인필요
+          msgToTrans: info.request, // ! 배송 메시지 > 서버에서 받은 값 있는지 확인필요
           orderItems: info.orderItems.map((item) => ({
             uniqueCd: item.uniqueCd, // 고객 사용번호
             ordNo: item.ordNo, // 주문번호
@@ -241,7 +260,9 @@ export default function OrderOnSellPage() {
           );
         }
 
-        /// ! ---------------운송장 번호 등록과정 추가필요
+        /// ! ---------------운송장 번호 등록과정 추가필요 -----------------!
+        /// ! ---------------운송장 번호 등록과정 추가필요 -----------------!
+        /// ! ---------------운송장 번호 등록과정 추가필요 -----------------!
         const registerDeliveryNumberApiUrl = `/api/admin/deliveries/deliveryNumber`;
         const body = {
           deliveryNumberDtoList: [
@@ -268,7 +289,7 @@ export default function OrderOnSellPage() {
     }));
   };
 
-  const onStartCancelOrder = () => {
+  const onStartOrderCancel = () => {
     if (!selectedOrderIdList.length) {
       return alert('선택된 상품이 없습니다.');
     }
@@ -379,13 +400,13 @@ export default function OrderOnSellPage() {
                 {itemList.length > 0 && itemList[0] && productType.KOR[itemList[0].orderType]}
                 상품 목록</p>
               <div className="controls cont-left">
-                <button className="admin_btn line basic_m" onClick={onOrderConfirm}>
+                <button className="admin_btn line basic_m" onClick={onStartOrderConfirm}>
                   {isLoading.confirm ? <Spinner /> : '주문확인'}
                 </button>
                 <button className="admin_btn line basic_m" onClick={onStartRegisterDelivery}>
                   주문발송
                 </button>
-                <button className="admin_btn line basic_m" onClick={onStartCancelOrder}>
+                <button className="admin_btn line basic_m" onClick={onStartOrderCancel}>
                   {isLoading.orderCancel ? <Spinner /> : '판매취소'}
                 </button>
               </div>
@@ -441,8 +462,18 @@ export default function OrderOnSellPage() {
       {activeModal.orderCancel && (
         <Modal_orderCancleReason
           id={'orderCancel'}
+          orderType={searchBody.orderType}
           setActiveModal={setActiveModal}
           onConfirm={onCancelOrder}
+          selectedItemData={selectedItemList}
+        />
+      )}
+      {activeModal.orderConfirm && (
+        <Modal_orderConfirm
+          id={'orderConFirm'}
+          orderType={searchBody.orderType}
+          setActiveModal={setActiveModal}
+          onConfirm={onOrderConfirm}
           selectedItemData={selectedItemList}
         />
       )}

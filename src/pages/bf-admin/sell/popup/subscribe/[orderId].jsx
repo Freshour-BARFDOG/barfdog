@@ -9,6 +9,7 @@ import ProductInfo_payment from '/src/components/popup/admin_ProductInfo/Product
 import ProductInfo_delivery from '/src/components/popup/admin_ProductInfo/ProductInfo_delivery';
 import ProductInfo_orderStatusInfo from '/src/components/popup/admin_ProductInfo/ProductInfo_orderStatusInfo';
 import { orderStatus } from '/store/TYPE/orderStatusTYPE';
+import {getDataSSR} from "/src/pages/api/reqData";
 
 
 export default function Popup_SubscribeOrderDetailInfoPage({ data }) {
@@ -35,7 +36,7 @@ export default function Popup_SubscribeOrderDetailInfoPage({ data }) {
     }
   }, []);
 
-  // console.log(data);
+  console.log(data);
   return (
     <>
       <div id={s.popup}>
@@ -95,6 +96,82 @@ export default function Popup_SubscribeOrderDetailInfoPage({ data }) {
     </>
   );
 }
+
+
+export async function getServerSideProps({ req, query }) {
+  const { orderId } = query;
+  let DATA = null;
+  let orderStatus = null;
+  const apiUrl = `/api/admin/orders/${orderId}/subscribe`;
+  const res =DUMMY_RES;
+  // const res = await getDataSSR(req, apiUrl);
+  // console.log(res);
+  if (res.data) {
+    const data = res.data;
+
+    DATA = {
+      orderStatus: data.subscribePaymentDto?.orderStatus,
+      subscribeOrderInfoDto: {
+        id: data.subscribeOrderInfoDto.id, // 주문 id
+        merchantUid: data.subscribeOrderInfoDto.merchantUid, // 주문 번호
+        orderDate: data.subscribeOrderInfoDto.orderDate,
+        orderType: data.subscribeOrderInfoDto.orderType, // 주문 유형
+        memberName: data.subscribeOrderInfoDto.memberName,
+        phoneNumber: data.subscribeOrderInfoDto.phoneNumber,
+        cancelReason: data.subscribeOrderInfoDto.cancelReason, // 취소 이유 , 없으면 null
+        cancelDetailReason: data.subscribeOrderInfoDto.cancelDetailReason, // 취소 상세 이유 , 없으면 null
+        cancelRequestDate: data.subscribeOrderInfoDto.cancelRequestDate, // 취소 신청 일자 , 없으면 null
+        cancelConfirmDate: data.subscribeOrderInfoDto.cancelConfirmDate, // 취소 확인 일자 , 없으면 null
+        package: data.subscribeOrderInfoDto.package, // 묶음배송 여부 true/false
+        subscribe: data.subscribeOrderInfoDto.subscribe, // 구독 여부 true/false
+        email: data.subscribeOrderInfoDto.email, // 구매자 email
+      },
+      dogDto: {
+        name: data.dogDto.name,
+        inedibleFood: data.dogDto.inedibleFood,
+        inedibleFoodEtc: data.dogDto.inedibleFoodEtc,
+        caution: data.dogDto.caution,
+      },
+      subscribeDto: {
+        id: data.subscribeDto.id,
+        subscribeCount:data.subscribeDto.subscribeCount,
+        plan:data.subscribeDto.plan,
+        oneMealRecommendGram:data.subscribeDto.oneMealRecommendGram,
+        recipeName:data.subscribeDto.recipeName,
+      },
+      beforeSubscribeDto: {
+        id:data.beforeSubscribeDto.id, // ! 구독 id => 구독정보 바꾼 적 없으면 null
+        subscribeCount:data.beforeSubscribeDto.subscribeCount,
+        plan:data.beforeSubscribeDto.plan,
+        oneMealRecommendGram:data.beforeSubscribeDto.oneMealRecommendGram,
+        recipeName:data.beforeSubscribeDto.recipeName,
+      },
+      subscribePaymentDto: {
+        orderPrice:data.subscribePaymentDto.orderPrice, // 상품 총 금액
+        deliveryPrice:data.subscribePaymentDto.deliveryPrice,
+        discountReward:data.subscribePaymentDto.discountReward,
+        couponName:data.subscribePaymentDto.couponName,
+        discountCoupon:data.subscribePaymentDto.discountCoupon,
+        paymentPrice:data.subscribePaymentDto.paymentPrice, // 결제 금액
+        orderStatus:data.subscribePaymentDto.orderStatus,
+        orderConfirmDate:data.subscribePaymentDto.orderConfirmDate, // 구매 확정일
+      },
+      subscribeDeliveryDto: {
+        recipientName: data.subscribeDeliveryDto.recipientName,
+        recipientPhone: data.subscribeDeliveryDto.recipientPhone,
+        zipcode: data.subscribeDeliveryDto.zipcode,
+        street: data.subscribeDeliveryDto.street,
+        detailAddress: data.subscribeDeliveryDto.detailAddress,
+        departureDate: data.subscribeDeliveryDto.departureDate,
+        arrivalDate: data.subscribeDeliveryDto.arrivalDate,
+        deliveryNumber: data.subscribeDeliveryDto.deliveryNumber,
+      },
+    };
+  }
+  return { props: { data: DATA, orderStatus } };
+}
+
+
 
 const DUMMY_RES = {
   data: {
@@ -163,74 +240,3 @@ const DUMMY_RES = {
     },
   },
 };
-
-export async function getServerSideProps({ req, query }) {
-  const { orderId } = query;
-  let DATA = null;
-  let orderStatus = null;
-  const apiUrl = `/api/admin/orders/${orderId}/subscribe`;
-  const res =DUMMY_RES;
-  // const res = await getDataSSR(req, apiUrl);
-  if (res.data) {
-    const data = res.data;
-    DATA = {
-      orderStatus: data.subscribePaymentDto.orderStatus,
-      subscribeOrderInfoDto: {
-        id: data.subscribeOrderInfoDto.id, // 주문 id
-        merchantUid: data.subscribeOrderInfoDto.merchantUid, // 주문 번호
-        orderDate: data.subscribeOrderInfoDto.orderDate,
-        orderType: data.subscribeOrderInfoDto.orderType, // 주문 유형
-        memberName: data.subscribeOrderInfoDto.memberName,
-        phoneNumber: data.subscribeOrderInfoDto.phoneNumber,
-        cancelReason: data.subscribeOrderInfoDto.cancelReason, // 취소 이유 , 없으면 null
-        cancelDetailReason: data.subscribeOrderInfoDto.cancelDetailReason, // 취소 상세 이유 , 없으면 null
-        cancelRequestDate: data.subscribeOrderInfoDto.cancelRequestDate, // 취소 신청 일자 , 없으면 null
-        cancelConfirmDate: data.subscribeOrderInfoDto.cancelConfirmDate, // 취소 확인 일자 , 없으면 null
-        package: data.subscribeOrderInfoDto.package, // 묶음배송 여부 true/false
-        subscribe: data.subscribeOrderInfoDto.subscribe, // 구독 여부 true/false
-        email: data.subscribeOrderInfoDto.email, // 구매자 email
-      },
-      dogDto: {
-        name: data.dogDto.name,
-        inedibleFood: data.dogDto.inedibleFood,
-        inedibleFoodEtc: data.dogDto.inedibleFoodEtc,
-        caution: data.dogDto.caution,
-      },
-      subscribeDto: {
-        id: data.subscribeDto.id,
-        subscribeCount:data.subscribeDto.subscribeCount,
-        plan:data.subscribeDto.plan,
-        oneMealRecommendGram:data.subscribeDto.oneMealRecommendGram,
-        recipeName:data.subscribeDto.recipeName,
-      },
-      beforeSubscribeDto: {
-        id:data.beforeSubscribeDto.id, // ! 구독 id => 구독정보 바꾼 적 없으면 null
-        subscribeCount:data.beforeSubscribeDto.subscribeCount,
-        plan:data.beforeSubscribeDto.plan,
-        oneMealRecommendGram:data.beforeSubscribeDto.oneMealRecommendGram,
-        recipeName:data.beforeSubscribeDto.recipeName,
-      },
-      subscribePaymentDto: {
-        orderPrice:data.subscribePaymentDto.orderPrice, // 상품 총 금액
-        deliveryPrice:data.subscribePaymentDto.deliveryPrice,
-        discountReward:data.subscribePaymentDto.discountReward,
-        couponName:data.subscribePaymentDto.couponName,
-        discountCoupon:data.subscribePaymentDto.discountCoupon,
-        paymentPrice:data.subscribePaymentDto.paymentPrice, // 결제 금액
-        orderStatus:data.subscribePaymentDto.orderStatus,
-        orderConfirmDate:data.subscribePaymentDto.orderConfirmDate, // 구매 확정일
-      },
-      subscribeDeliveryDto: {
-        recipientName: data.subscribeDeliveryDto.recipientName,
-        recipientPhone: data.subscribeDeliveryDto.recipientPhone,
-        zipcode: data.subscribeDeliveryDto.zipcode,
-        street: data.subscribeDeliveryDto.street,
-        detailAddress: data.subscribeDeliveryDto.detailAddress,
-        departureDate: data.subscribeDeliveryDto.departureDate,
-        arrivalDate: data.subscribeDeliveryDto.arrivalDate,
-        deliveryNumber: data.subscribeDeliveryDto.deliveryNumber,
-      },
-    };
-  }
-  return { props: { data: DATA, orderStatus } };
-}

@@ -8,7 +8,7 @@ import Spinner from "/src/components/atoms/Spinner";
 import AmdinErrorMessage from "/src/components/atoms/AmdinErrorMessage";
 import {productType} from "/store/TYPE/itemType";
 
-export const Modal_orderCancleReason = ({
+export const Modal_orderConfirm = ({
   id,
   orderType,
   setActiveModal,
@@ -18,10 +18,8 @@ export const Modal_orderCancleReason = ({
 }) => {
   const [allData, setAllData] = useState(selectedItemData);
   const [selectedIdList, setSelectedIdList] = useState([]);
-  const [reason, setReason] = useState('');
   const [isLoading, setIsLoading] = useState({});
 
-  // console.log(selectedIdList)
   useEffect(() => {
     if(orderType !== productType.GENERAL) return; // 일반상품일 경우, orderItemIdList조회를 위해서만 사용함
     try {
@@ -64,20 +62,12 @@ export const Modal_orderCancleReason = ({
 
   const onConfirmHandler = () => {
     if (onConfirm && typeof onConfirm === 'function') {
-      onConfirm(reason, selectedIdList);
+      onConfirm(selectedIdList);
     }
   };
 
-  const onInputChange = (e) => {
-    const { value } = e.currentTarget;
-    setReason(value);
-  };
-  // console.log(selectedItemData);
-
   const onClickCheckbox = (id, checked) => {
-    // console.log(id, checked);
-    const seletedId = Number(id.split('-')[1]);
-    // console.log(seletedId);
+    const seletedId = Number(id.split('-')[1]); // 체크박스 클릭 시, 일반상품일 경우, orderItemId, 구독상품일 경우 orderId가 selectedId값으로 할당됨
     if (checked) {
       setSelectedIdList((prevState) => prevState.concat(seletedId));
     } else {
@@ -94,16 +84,12 @@ export const Modal_orderCancleReason = ({
     <ModalWrapper id={s['modal-cancle']} background positionCenter>
       <CloseButton onClick={onHideModal} className={s['close-button']} />
       <section className={s['title-section']}>
-        <h4 className={s.title}>판매취소</h4>
-        <span className={s.subtitle}>
-          판매사유가 입력된 상품이 포함된 주문은 전체주문취소가 됩니다. 판매취소사유는 체크박스
-          설정된 상품에 동일하게 적용되며, 현재 보이는 모달에서 체크된 상품이 판매취소처리됩니다.
-        </span>
+        <h4 className={s.title}>주문확인</h4>
       </section>
       {isLoading.fetching ? <AmdinErrorMessage><Spinner/></AmdinErrorMessage> : <section className={s['body-section']}>
         <ul className={s['item-wrap']}>
           {allData.map((data, i) => (
-            <li key={`item-to-be-canceled-${data.id}-${i}`}>
+            <li key={`item-to-be-confirmed-${data.id}-${i}`}>
               {orderType === productType.GENERAL && <><h5 className={s.itemTitle}>주문ID: {data.id}</h5>
                 <div className={s.itemList}>
                   {data.orderItemInfoList?.length > 0 &&
@@ -128,15 +114,6 @@ export const Modal_orderCancleReason = ({
             </li>
           ))}
         </ul>
-  
-        <div className={s['input-wrap']}>
-          <h4 className={s['input-title']}>판매 취소사유</h4>
-          <input
-            type={'text'}
-            placeholder={'판매 취소사유를 입력해주세요.'}
-            onChange={onInputChange}
-          />
-        </div>
       </section>}
       
       <section className={s['btn-section']}>

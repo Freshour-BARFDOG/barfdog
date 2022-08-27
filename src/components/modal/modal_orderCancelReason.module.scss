@@ -38,6 +38,8 @@
 
 .body-section {
   .item-wrap {
+    max-height: rem(400);
+    overflow-y: scroll;
     li {
       &:not(:last-child) {
         margin-bottom: rem(12);
