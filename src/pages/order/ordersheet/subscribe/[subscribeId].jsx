@@ -87,7 +87,7 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
         item: true,
       }));
       try {
-        // API: 구독 주문서에 필요한 내용 조회 ( ! Q. subscribeId는 매 구독 회차마다 생성 or 갱신 ?)
+        // API: 구독 주문서에 필요한 내용 조회 ( ! Q. subscribeId는 매 구독 회차마다 생성 or 갱신 ? ==> 유지됨
         const postItemInfoApiUrl = `/api/orders/sheet/subscribe/${subscribeId}`;
         const body = {
           id: subscribeId,
@@ -125,18 +125,18 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
             zipcode: info.address.zipcode, // 우편번호
           },
           deliveryPrice: 0, // 정기구독 배송비: 무료
-          reward: info.reward || 200000, // !  ------- TEST
+          reward: info.reward,
           brochure: info.brochure, // 브로슈어 받은 적 있는지 true/false => 브로슈어는 1번만 받을 수 있다.
         };
 
         // FormDatas
         const initForm = {
           selfInfo: {
-            reward: info.reward || 200000, //  ! ------- TEST
+            reward: info.reward,
           },
           // ! DUMMY DATA
           coupons:
-            DUMMY_MEMEBER_COUPON_LIST ||
+            // DUMMY_MEMEBER_COUPON_LIST ||
             info.coupons?.map((cp) => ({
               memberCouponId: cp.memberCouponId,
               name: cp.name,

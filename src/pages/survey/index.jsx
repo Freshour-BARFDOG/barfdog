@@ -33,46 +33,46 @@ import { postObjData } from '../api/reqData';
 import { useRouter } from 'next/router';
 
 
-
-const initialFormValues = {
-  name: 'dog-', // 강아지이름 str
-  gender: 'MALE', // 강아지 성별 str
-  birth: '202201', // 강아지 생월 str // [YYYYMM]
-  oldDog: false, // 노견 여부 boolean (checkbox type)
-  dogSize: 'MIDDLE', // 강아지 체급 str
-  dogType: '닥스훈트', // 강아지 종 str
-  weight: '2.7', // 강아지 몸무게 str // 몸무게 소수점 아래 1자리
-  neutralization: false, // 중성화여부 Boolean
-  activityLevel: dogActivityLevelType.NORMAL, // 활동량 레벨 str
-  walkingCountPerWeek: 1, // 주당 산책 횟수 num
-  walkingTimePerOneTime: 2, // 한 번 산책할 때 산책 시간 num
-  dogStatus: 'PREGNANT', // 강아지 건강/임신 등의 상태 str
-  snackCountLevel: 'LITTLE', //  간식먹는 정도 str
-  inedibleFood: dogInedibleFoodType.NONE, // 못 먹는 음식 str => get API 리스트 // 빈값('')일 경우, '있어요'선택됨)
-  inedibleFoodEtc: 'NONE', // 못 먹는 음식 > '기타' 일경우
-  recommendRecipeId: null, // 특별히 챙겨주고 싶은 부분에 해당하는 Recipe => get API 리스트
-  caution: dogCautionType.NONE, // 기타 특이사항 // 빈값('')일 경우, '있어요'선택됨)
-};
-
-// const initialFormValues = {
-//   name: '', // 강아지이름 str
-//   gender: '', // 강아지 성별 str
-//   birth: '', // 강아지 생월 str // [YYYYMM]
+//
+// const initialFormValues = { // ! TEST 용
+//   name: 'dog-', // 강아지이름 str
+//   gender: 'MALE', // 강아지 성별 str
+//   birth: '202201', // 강아지 생월 str // [YYYYMM]
 //   oldDog: false, // 노견 여부 boolean (checkbox type)
-//   dogSize: '', // 강아지 체급 str
-//   dogType: '', // 강아지 종 str
-//   weight: '', // 강아지 몸무게 str // 몸무게 소수점 아래 1자리
-//   neutralization: null, // 중성화여부 Boolean
+//   dogSize: 'MIDDLE', // 강아지 체급 str
+//   dogType: '닥스훈트', // 강아지 종 str
+//   weight: '2.7', // 강아지 몸무게 str // 몸무게 소수점 아래 1자리
+//   neutralization: false, // 중성화여부 Boolean
 //   activityLevel: dogActivityLevelType.NORMAL, // 활동량 레벨 str
-//   walkingCountPerWeek: null, // 주당 산책 횟수 num
-//   walkingTimePerOneTime: null, // 한 번 산책할 때 산책 시간 num
-//   dogStatus: '', // 강아지 건강/임신 등의 상태 str
-//   snackCountLevel: '', //  간식먹는 정도 str
+//   walkingCountPerWeek: 1, // 주당 산책 횟수 num
+//   walkingTimePerOneTime: 2, // 한 번 산책할 때 산책 시간 num
+//   dogStatus: 'PREGNANT', // 강아지 건강/임신 등의 상태 str
+//   snackCountLevel: 'LITTLE', //  간식먹는 정도 str
 //   inedibleFood: dogInedibleFoodType.NONE, // 못 먹는 음식 str => get API 리스트 // 빈값('')일 경우, '있어요'선택됨)
-//   inedibleFoodEtc: '', // 못 먹는 음식 > '기타' 일경우
+//   inedibleFoodEtc: 'NONE', // 못 먹는 음식 > '기타' 일경우
 //   recommendRecipeId: null, // 특별히 챙겨주고 싶은 부분에 해당하는 Recipe => get API 리스트
 //   caution: dogCautionType.NONE, // 기타 특이사항 // 빈값('')일 경우, '있어요'선택됨)
 // };
+
+const initialFormValues = {
+  name: '', // 강아지이름 str
+  gender: '', // 강아지 성별 str
+  birth: '', // 강아지 생월 str // [YYYYMM]
+  oldDog: false, // 노견 여부 boolean (checkbox type)
+  dogSize: '', // 강아지 체급 str
+  dogType: '', // 강아지 종 str
+  weight: '', // 강아지 몸무게 str // 몸무게 소수점 아래 1자리
+  neutralization: null, // 중성화여부 Boolean
+  activityLevel: dogActivityLevelType.NORMAL, // 활동량 레벨 str
+  walkingCountPerWeek: null, // 주당 산책 횟수 num
+  walkingTimePerOneTime: null, // 한 번 산책할 때 산책 시간 num
+  dogStatus: '', // 강아지 건강/임신 등의 상태 str
+  snackCountLevel: '', //  간식먹는 정도 str
+  inedibleFood: dogInedibleFoodType.NONE, // 못 먹는 음식 str => get API 리스트 // 빈값('')일 경우, '있어요'선택됨)
+  inedibleFoodEtc: '', // 못 먹는 음식 > '기타' 일경우
+  recommendRecipeId: null, // 특별히 챙겨주고 싶은 부분에 해당하는 Recipe => get API 리스트
+  caution: dogCautionType.NONE, // 기타 특이사항 // 빈값('')일 경우, '있어요'선택됨)
+};
 
 // ! 설문조사 수정인지 // 생성인지에 따라서 =>버튼이름 변경하
 
