@@ -50,6 +50,7 @@ export default function SearchOnSellPage() {
     setSearchValues(initialSearchValues);
   };
 
+  
   const onSearchHandler = () => {
     const body = {
       from: searchValues.from,
@@ -58,7 +59,7 @@ export default function SearchOnSellPage() {
       memberName: searchValues.memberName,
       memberEmail: searchValues.memberEmail,
       recipientName: searchValues.recipientName,
-      statusList: [searchValues.statusList], // ! 배열로 전송
+      statusList: searchValues.statusList === 'ALL' ? null : [searchValues.statusList], // ! 배열로 전송 // '전체 상태' 검색 시 null or 빈배열
       orderType: searchValues.orderType,
     };
     setSearchBody(body);

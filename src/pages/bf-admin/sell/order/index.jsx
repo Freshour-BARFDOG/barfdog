@@ -73,13 +73,13 @@ export default function OrderOnSellPage() {
 
   const onSearchHandler = () => {
     const body = {
-      from: searchValues.from,
-      to: searchValues.to,
-      merchantUid: searchValues.merchantUid,
-      memberName: searchValues.memberName,
-      memberEmail: searchValues.memberEmail,
-      recipientName: searchValues.recipientName,
-      statusList: [searchValues.statusList], // ! 배열로 전송
+      from: searchValues.from, // 검색날짜 from
+      to: searchValues.to, // // 검색날짜 from
+      merchantUid: searchValues.merchantUid, // 주문번호
+      memberName: searchValues.memberName, // 주문자 이름
+      memberEmail: searchValues.memberEmail, // 주문자 email
+      recipientName: searchValues.recipientName, // 수령자 이름
+      statusList: [searchValues.statusList], // ! 배열로 전송 //  전체 상태 검색 시 null
       orderType: searchValues.orderType,
     };
     setSearchBody(body);
@@ -104,7 +104,6 @@ export default function OrderOnSellPage() {
   };
 
   const onSelectedItem = (id, checked) => {
-    // console.log(id, checked);
     const seletedId = Number(id);
     if (checked) {
       setSelectedOrderIdList((prevState) => prevState.concat(seletedId));
@@ -124,7 +123,7 @@ export default function OrderOnSellPage() {
     }
     setActiveModal({ orderConfirm: true });
   };
-  // console.log(selectedOrderIdList);
+  
   const onOrderConfirm = async (selectedIdList) => {
     if (!selectedIdList.length) return alert('선택된 상품이 없습니다.');
     if (!confirm(`선택하신 ${selectedIdList.length}개의 상품을 주문확인 처리하시겠습니까?`))
@@ -177,30 +176,10 @@ export default function OrderOnSellPage() {
     if (!confirm(`선택하신 ${selectedOrderIdList.length}개의 상품을 발송처리 하시겠습니까?`))
       return;
 
-    const itemType = searchValues.orderType;
     let body = {
       orderIdList: selectedOrderIdList // 일반상품 & 구독상품 모두 '주문 id'로 요청함
-    };
-    // if(itemType === productType.GENERAL){
-    //   body = {
-    //     orderItemIdList: selectedIdList, // 주문 내에 속한 "상품의 id" List
-    //   }
-    // } else if(itemType === productType.SUBSCRIBE) {
-    //   body = {
-    //     orderIdList: selectedIdList, // "주문 id" list
-    //   }
-    // }
+    }
     
-    // const body =
-    //   itemType === productType.GENERAL
-    //     ? {
-    //         orderItemIdList: selectedOrderIdList,
-    //       }
-    //     : itemType === productType.SUBSCRIBE
-    //     ? {
-    //         orderIdList: selectedOrderIdList, // 일반상품 & 구독상품 모두 '주문 id'로 요청함
-    //       }
-    //     : null;
     try {
       setIsLoading((prevState) => ({
         ...prevState,
@@ -217,7 +196,7 @@ export default function OrderOnSellPage() {
       for (const info of deliveryItemInfoList) {
         // 주문 id에 대한 정보 Array
         const bodyForGoodsFlow = {
-          TEST: '__________________goodsflow data 전송 방지 key & value', // ! TEST CODE
+          TEST: '__________________goodsflow data 전송 방지 key & value', // ! TESTTESTTESTTESTTESTTESTTESTTEST CODE
           transUniqueCd: info.transUniqueCd,
           sndName: info.sndName,
           sndZipCode: info.sndZipCode,
@@ -347,8 +326,6 @@ export default function OrderOnSellPage() {
   };
 
   // console.log(itemList);
-  // console.log(searchBody)
-
   return (
     <>
       <MetaTitle title="주문 관리" admin={true} />
@@ -369,10 +346,10 @@ export default function OrderOnSellPage() {
                 name="content"
                 id="content"
                 options={[
-                  { label: '주문번호', value: 'orderIdx' },
-                  { label: '구매자 이름', value: 'buyerName' },
-                  { label: '구매자 ID', value: 'buyerId' },
-                  { label: '수령자 이름', value: 'receiverName' },
+                  { label: '주문번호', value: 'merchantUid' },
+                  { label: '구매자 이름', value: 'memberName' },
+                  { label: '구매자 ID', value: 'memberEmail' },
+                  { label: '수령자 이름', value: 'recipientName' },
                 ]}
               />
               <SearchRadio
