@@ -112,7 +112,6 @@ export default function SingleItem_OrderHistoryPage({ data }) {
   };
 
   // console.log(originItemList);
-
   return (
     <>
       <MetaTitle title="마이페이지 주문내역 일반상품" />
@@ -254,7 +253,6 @@ export default function SingleItem_OrderHistoryPage({ data }) {
                       <span>운송장번호</span> {data?.orderDto.deliveryNumber || '(발급 전)'}
                     </li>
                     <li className={s.deliveryStatus}>
-                      배송완료
                       {orderStatus.KOR[data?.orderDto.deliveryStatus]}
                     </li>
                     {data?.orderDto.deliveryNumber && <li>
