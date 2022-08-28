@@ -19,6 +19,7 @@ import Spinner from '/src/components/atoms/Spinner';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import { Modal_orderCancleReason } from '/src/components/modal/Modal_orderCancleReason';
 import {Modal_orderConfirm} from "/src/components/modal/Modal_orderConfirm";
+import Tooltip from "/src/components/atoms/Tooltip";
 
 const initialSearchValues = {
   from: transformToday(),
@@ -374,8 +375,7 @@ export default function OrderOnSellPage() {
           <section className="cont">
             <div className="cont_header clearfix">
               <p className="cont_title cont-left">
-                {itemList.length > 0 && itemList[0] && productType.KOR[itemList[0].orderType]}
-                상품 목록</p>
+                목록 <Tooltip message={'주문 단위 리스트'}/></p>
               <div className="controls cont-left">
                 <button className="admin_btn line basic_m" onClick={onStartOrderConfirm}>
                   {isLoading.confirm ? <Spinner /> : '주문확인'}

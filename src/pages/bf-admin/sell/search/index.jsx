@@ -15,9 +15,7 @@ import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import Spinner from '/src/components/atoms/Spinner';
 import { transformToday } from '/util/func/transformDate';
-import { valid_isTheSameArray } from '/util/func/validation/validationPackage';
-import PureCheckbox from '/src/components/atoms/PureCheckbox';
-import {postObjData} from "/src/pages/api/reqData";
+import Tooltip from "/src/components/atoms/Tooltip";
 
 
 const initialSearchValues = {
@@ -130,7 +128,7 @@ export default function SearchOnSellPage() {
           <section className="cont">
             <div className="cont_header clearfix">
               <p className="cont_title cont-left">
-                {itemList.length > 0 && itemList[0] && productType.KOR[itemList[0].orderType]+'상품 '}목록</p>
+                목록 <Tooltip message={'주문 단위 리스트'}/></p>
             </div>
             <div className={`${s.cont_viewer}`}>
               <div className={s.table}>

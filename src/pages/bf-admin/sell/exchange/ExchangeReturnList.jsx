@@ -1,4 +1,4 @@
-import s from './cancelExchangeReturnList.module.scss';
+import s from './ExchangeReturnList.module.scss';
 import transformDate from '/util/func/transformDate';
 import {orderStatus} from "/store/TYPE/orderStatusTYPE";
 import {transformPhoneNumber} from "/util/func/transformPhoneNumber";
@@ -73,16 +73,16 @@ const Item = ({ item, sortableItemRef, selectedIdList, onSelectedItem }) => {
       <span>
         <em className={'overflow-x-scroll'}>{DATA.id}</em>
       </span>
-      {/*<span>*/}
-      {/*  <em className={'overflow-x-scroll'}>{DATA.order}</em>*/}
-      {/*</span>*/}
+      <span>
+        <em className={'overflow-x-scroll'}>{DATA.orderItemId}</em>
+      </span>
       <span>
         <em className={'overflow-x-scroll'}>
           <p>{DATA.orderStatus}</p>
           <p>{DATA.orderDate}</p>
         </em>
       </span>
-      <span>{DATA.reason} __취소/반품/환불 Reason/DetailReason자리__</span>
+      {/*<span>{DATA.reason} __취소/반품/환불 사유</span>*/}
       <span>{DATA.buyerId}</span>
       <span className={s.flex_col}>
         <p>{DATA.buyerName}</p>

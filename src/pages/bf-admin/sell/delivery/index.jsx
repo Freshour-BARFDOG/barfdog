@@ -31,7 +31,7 @@ const initialSearchValues = {
 
 export default function DeliveryOnSellPage() {
   
-  const searchApiUrl = `/api/admin/orders/search`; // 주문 리스트 검색(페이징)
+  const searchApiUrl = `/api/admin/orders/cancelRequest`; // 주문 리스트 검색(페이징)
   const searchPageSize = 10;
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
@@ -77,7 +77,8 @@ export default function DeliveryOnSellPage() {
   };
   
   const pageInterceptor = (res) => {
-    res = DUMMY_DEFAULT_ITEMLIST_RESPONSE; //  ! TEST
+    // res = DUMMY_DEFAULT_ITEMLIST_RESPONSE; //  ! TEST
+    console.log(res)
     const pageData = res.data.page;
     const curItemList = res.data?._embedded?.queryAdminOrdersDtoList || [];
     let newPageInfo = {
@@ -110,10 +111,10 @@ export default function DeliveryOnSellPage() {
                 name="content"
                 id="content"
                 options={[
-                  { label: '주문번호', value: 'orderIdx' },
-                  { label: '구매자 이름', value: 'buyerName' },
-                  { label: '구매자 ID', value: 'buyerId' },
-                  { label: '수령자 이름', value: 'receiverName' },
+                  { label: '주문번호', value: 'merchantUid' },
+                  { label: '구매자 이름', value: 'memberName' },
+                  { label: '구매자 ID', value: 'memberEmail' },
+                  { label: '수령자 이름', value: 'recipientName' },
                 ]}
               />
               <SearchRadio

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import s from '../cancel/cancelExchangeReturnList.module.scss';
+import s from './ExchangeReturnList.module.scss';
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import AdminLayout from "/src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
@@ -16,7 +16,7 @@ import {postObjData} from "/src/pages/api/reqData";
 import Spinner from "/src/components/atoms/Spinner";
 import PureCheckbox from "/src/components/atoms/PureCheckbox";
 import {valid_isTheSameArray} from "/util/func/validation/validationPackage";
-import CancelList from "../cancel/CancelExchangeReturnList";
+import CancelExchangeReturnList from "./ExchangeReturnList";
 import PaginationWithAPI from "/src/components/atoms/PaginationWithAPI";
 
 
@@ -36,8 +36,7 @@ const initialSearchValues = {
 
 export default function ExchangeOnSellPage() {
   
-  // const searchApiUrl = `/api/admin/orders/cancelRequest`; // 취소 요청 주문 리스트 검색(페이징)
-  const searchApiUrl = `/api/admin/orders/search`; // 주문 리스트 검색(페이징)
+  const searchApiUrl = `/api/admin/orders/search`; // 상품단위 리스트 검색(페이징) ! 교환, 반품은 '상품'단위로 처리
   const searchPageSize = 10;
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
@@ -85,11 +84,10 @@ export default function ExchangeOnSellPage() {
   };
   
   const pageInterceptor = (res) => {
-    res = DUMMY_DEFAULT_ITEMLIST_RESPONSE; //  ! TEST
-    // res = DUMMY_ADMIN_RETURN_ITEMLIST_RES; //  ! TEST
+    // res = DUMMY_EXCHANGE_RESPONSE; //  ! TEST
+    console.log(res)
     const pageData = res.data.page;
     const curItemList = res.data?._embedded?.queryAdminOrdersDtoList || [];
-    // const curItemList = res.data?._embedded?.queryAdminCancelRequestDtoList || [];
     let newPageInfo = {
       totalPages: pageData.totalPages,
       size: pageData.size,
@@ -167,6 +165,7 @@ export default function ExchangeOnSellPage() {
     const body ={
       orderItemIdList: seletedOrderItemIdList, //  ! 개별 상품의 id 사용 (주문id 아님)
     }
+    
     try {
       setIsLoading((prevState) => ({
         ...prevState,
@@ -252,10 +251,10 @@ export default function ExchangeOnSellPage() {
                 name="content"
                 id="content"
                 options={[
-                  { label: '주문번호', value: 'orderIdx' },
-                  { label: '구매자 이름', value: 'buyerName' },
-                  { label: '구매자 ID', value: 'buyerId' },
-                  { label: '수령자 이름', value: 'receiverName' },
+                  { label: '주문번호', value: 'merchantUid' },
+                  { label: '구매자 이름', value: 'memberName' },
+                  { label: '구매자 ID', value: 'memberEmail' },
+                  { label: '수령자 이름', value: 'recipientName' },
                 ]}
               />
               <SearchRadio
@@ -272,7 +271,7 @@ export default function ExchangeOnSellPage() {
             <div className="cont_header clearfix">
               <p className="cont_title cont-left">
                 목록
-                <Tooltip message={'- 교환 가능한 일반상품 리스트만 존재합니다.\n- 구매자 귀책 택배비: 6,000원\n- 판매자 귀책: 택배비 없음\n- 교환불가: 교환불가처리된 상품은 배송완료상태가 됩니다.'} messagePosition={'left'} wordBreaking={true} width={'340px'}/>
+                <Tooltip message={`- 교환 가능한 일반상품 / "상품" 단위 리스트\n- 구매자 귀책 택배비: 6,000원\n- 판매자 귀책: 택배비 없음\n- 교환불가: 교환불가 처리된 상품은 배송완료 상태가 됩니다.`} messagePosition={'left'} wordBreaking={true} width={'340px'}/>
               </p>
               <div className="controls cont-left">
                 <button className="admin_btn line basic_m autoWidth" onClick={onConfirmingExhangeOrderBySeller}>
@@ -300,9 +299,9 @@ export default function ExchangeOnSellPage() {
                   </li>
                   <li className={s.table_th}>상세보기</li>
                   <li className={s.table_th}>주문번호</li>
-                  {/*<li className={s.table_th}>상품주문번호</li>*/}
+                  <li className={s.table_th}>주문한 상품번호</li>
                   <li className={s.table_th}>주문상태</li>
-                  <li className={s.table_th}>반품사유</li>
+                  {/*<li className={s.table_th}>반품사유</li>*/}
                   <li className={s.table_th}>구매자 ID</li>
                   <li className={s.table_th}>구매자</li>
                   <li className={s.table_th}>수령자</li>
@@ -313,7 +312,7 @@ export default function ExchangeOnSellPage() {
                 ) : itemList.length === 0 ? (
                   <AmdinErrorMessage text="조회된 데이터가 없습니다." />
                 ) : (
-                  <CancelList
+                  <CancelExchangeReturnList
                     items={itemList}
                     selectedIdList={selectedOrderIdList}
                     onSelectedItem={onSelectedItem}
@@ -340,7 +339,7 @@ export default function ExchangeOnSellPage() {
 }
 
 
-const DUMMY_DEFAULT_ITEMLIST_RESPONSE = {
+const DUMMY_EXCHANGE_RESPONSE = {
   data: {
     _embedded: {
       queryAdminOrdersDtoList: [

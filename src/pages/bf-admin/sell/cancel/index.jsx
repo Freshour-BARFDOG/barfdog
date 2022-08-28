@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import s from './cancelExchangeReturnList.module.scss';
+import s from '../order/order.module.scss';
+import OrderList from "../order/OrderList";
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
@@ -8,7 +9,6 @@ import SearchTerm from '/src/components/admin/form/searchBar/SearchTerm';
 import SearchTextWithCategory from '/src/components/admin/form/searchBar/SearchTextWithCategory';
 import SearchRadio from '/src/components/admin/form/searchBar/SearchRadio';
 import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
-import CancelList from './CancelExchangeReturnList';
 import { orderStatus } from '/store/TYPE/orderStatusTYPE';
 import { productType } from '/store/TYPE/itemType';
 import { transformToday } from '/util/func/transformDate';
@@ -17,6 +17,8 @@ import { valid_isTheSameArray } from '/util/func/validation/validationPackage';
 import PureCheckbox from '/src/components/atoms/PureCheckbox';
 import Spinner from '/src/components/atoms/Spinner';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
+import Tooltip from "/src/components/atoms/Tooltip";
+
 
 const initialSearchValues = {
   from: transformToday(),
@@ -30,7 +32,7 @@ const initialSearchValues = {
 };
 
 export default function CancelOnSellPage() {
-  const searchApiUrl = `/api/admin/orders/cancelRequest`;
+  const searchApiUrl = `/api/admin/orders/cancelRequest`; // ! 취소: "주문"단위 리스트
   const searchPageSize = 10;
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
@@ -77,7 +79,7 @@ export default function CancelOnSellPage() {
 
   const pageInterceptor = (res) => {
     res = DUMMY_ADMIN_CANCEL_ITEMLIST_RES; //  ! TEST
-    // console.log(res);
+    console.log(res);
     const pageData = res.data.page;
     const curItemList = res.data?._embedded?.queryAdminCancelRequestDtoList || [];
     let newPageInfo = {
@@ -106,22 +108,15 @@ export default function CancelOnSellPage() {
   };
 
   const onConfirmingCancelOrder = async () => {
-    if (!selectedOrderIdList.length) return alert('선택된 상품이 없습니다.');
-    if (!confirm(`${selectedOrderIdList.length}개 상품의 취소를 승인처리 하시겠습니까?`))
+    if (!selectedOrderIdList.length) return alert('선택된 주문이 없습니다.');
+    if (!confirm(`${selectedOrderIdList.length}개 주문의 취소를 승인처리 하시겠습니까?`))
       return;
 
     const itemType = searchValues.orderType;
-    const body =
-      itemType === productType.GENERAL
-        ? {
-            orderIdList: selectedOrderIdList, //  ! 주문(order) id 리스트 => why? =>  전체 취소
-          }
-        : itemType === productType.SUBSCRIBE
-        ? {
-            orderIdList: selectedOrderIdList, //  ! 주문(order) id 리스트 => why? =>  전체 취소
-          }
-        : null;
-
+    const body ={
+      orderIdList: selectedOrderIdList, //  ! 일반상품, 구독상품 모두 , 주문(orderId) 리스트로 전송함
+    }
+    
     try {
       setIsLoading((prevState) => ({
         ...prevState,
@@ -167,7 +162,7 @@ export default function CancelOnSellPage() {
       console.log('response: admin > sell > cancel > index.jsx\n', res);
       if (res.isDone) {
         alert('취소요청이 반려 처리되었습니다.');
-        // window.location.reload();
+        window.location.reload();
       } else {
         alert(`취소요청 반려 처리 중 오류가 발생했습니다.\n${res.error}`);
       }
@@ -201,10 +196,10 @@ export default function CancelOnSellPage() {
                 name="content"
                 id="content"
                 options={[
-                  { label: '주문번호', value: 'orderIdx' },
-                  { label: '구매자 이름', value: 'buyerName' },
-                  { label: '구매자 ID', value: 'buyerId' },
-                  { label: '수령자 이름', value: 'receiverName' },
+                  { label: '주문번호', value: 'merchantUid' },
+                  { label: '구매자 이름', value: 'memberName' },
+                  { label: '구매자 ID', value: 'memberEmail' },
+                  { label: '수령자 이름', value: 'recipientName' },
                 ]}
               />
               <SearchRadio
@@ -228,7 +223,9 @@ export default function CancelOnSellPage() {
           </section>
           <section className="cont">
             <div className="cont_header clearfix">
-              <p className="cont_title cont-left">목록</p>
+              <p className="cont_title cont-left">목록
+                <Tooltip message={'주문 단위 리스트'}/>
+              </p>
               <div className="controls cont-left">
                 <button className="admin_btn line basic_m" onClick={onConfirmingCancelOrder}>
                   {isLoading.confirmingCancelOrder ? <Spinner/> : '취소승인'}
@@ -255,7 +252,7 @@ export default function CancelOnSellPage() {
                   <li className={s.table_th}>주문번호</li>
                   {/*<li className={s.table_th}>상품주문번호</li>*/}
                   <li className={s.table_th}>주문상태</li>
-                  <li className={s.table_th}>취소사유</li>
+                  {/*<li className={s.table_th}>취소사유</li>*/}
                   <li className={s.table_th}>구매자 ID</li>
                   <li className={s.table_th}>구매자</li>
                   <li className={s.table_th}>수령자</li>
@@ -266,7 +263,7 @@ export default function CancelOnSellPage() {
                 ) : itemList.length === 0 ? (
                   <AmdinErrorMessage text="조회된 데이터가 없습니다." />
                 ) : (
-                  <CancelList
+                  <OrderList
                     items={itemList}
                     selectedIdList={selectedOrderIdList}
                     onSelectedItem={onSelectedItem}
