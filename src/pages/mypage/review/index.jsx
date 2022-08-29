@@ -18,7 +18,7 @@ import { EmptyContMessage } from '/src/components/atoms/emptyContMessage';
 import { global_reviewType } from '/store/TYPE/reviewType';
 import transformDate from '/util/func/transformDate';
 import { useRouter } from 'next/router';
-import { reviewStatusOnMemberPage } from '/store/TYPE/reviewStateType';
+import { reviewStatus } from '/store/TYPE/reviewStateType';
 import Modal_singleReviewImages from '/src/components/modal/Modal_singleReviewImages';
 import Modal_confirm from '/src/components/modal/Modal_confirm';
 import { deleteObjData } from '/src/pages/api/reqData';
@@ -281,7 +281,7 @@ export default function ReviewPage() {
                                 </figure>
                               )}
                               <div className={s.row_5}>{transformDate(item.createdDate)}</div>
-                              {item.status === reviewStatusOnMemberPage.RETURN && (
+                              {item.status === reviewStatus.RETURN && (
                                 <div className={`${s.returnMessage}`}>
                                   반려사유: {item.returnReason}
                                 </div>
@@ -290,7 +290,7 @@ export default function ReviewPage() {
 
                             <div className={s.mid_box}>
                               <div className={s.mid_box_text}>
-                                {reviewStatusOnMemberPage.KOR[item.status]}
+                                {reviewStatus.KOR[item.status]}
                               </div>
                             </div>
                             <div className={s.right_box}>
