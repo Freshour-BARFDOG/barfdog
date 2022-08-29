@@ -32,10 +32,10 @@ const ChannelTalkProvider = ({children}) => {
     const channelTalk = new ChannelTalkService();
   
     // TODO 유저로그인 기능 추가 후 , ChannelTalk 유저정보 연동기능 (채널톡에 유저정보를 넘겨준다)
-    if(isLoggedIn) {
+    if(false) {
       channelTalk.boot({
         pluginKey: process.env.NEXT_PUBLIC_CHANNEL_IO_KEY,
-        memberId: uid,
+        memberId: '',
         profile: {
           name: userInfo.name,
           mobileNumber: userInfo.phoneNumber,
