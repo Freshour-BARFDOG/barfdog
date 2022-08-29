@@ -188,6 +188,7 @@ export function Payment({
       buyer_email: 'a@gmail' || info.email, // 구매자 이메일
       buyer_addr: '센텀2로' || `${info.address.street},${info.address.detailAddress}`, // 구매자 주소
       buyer_postcode: '00000' || info.address.zipcode, // 구매자 우편번호
+      m_redirect_url: `http://localhost:4000/order/orderCompleted/${id}`
     };
     IMP.request_pay(data, callback);
     
@@ -250,6 +251,8 @@ export function Payment({
       buyer_email: 'a@gmail' || info.email, // 구매자 이메일
       buyer_addr: '센텀2로' || `${info.address.street},${info.address.detailAddress}`, // 구매자 주소
       buyer_postcode: '00000' || info.address.zipcode, // 구매자 우편번호
+      m_redirect_url: `http://localhost:4000/order/orderCompleted/subscribe/${id}`
+
     };
     IMP.request_pay(data, callback);
     
