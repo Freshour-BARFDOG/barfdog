@@ -41,7 +41,7 @@ module.exports = {
     domains: [
       'images.unsplash.com',
       '211.219.225.118',
-      'https://freshour.cafe24.com',
+      'https://barfdogserver.co.kr/',
       'shop-phinf.pstatic.net',
     ],
   },
