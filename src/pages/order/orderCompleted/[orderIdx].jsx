@@ -69,13 +69,13 @@ function OrderCompletedPage(props) {
               배송 주소
             </div>
             <div className={s.row_4}>
-             충북 충주시 번영대로 208 수빌딩 4층
+              충북 충주시 번영대로 208 수빌딩 4층
             </div>
             <div className={s.row_3}>
               발송예정일
             </div>
             <div className={s.row_4}>
-             협의필요
+              협의필요
             </div>
           </div>
           </section>
@@ -146,7 +146,7 @@ export async function getServerSideProps(ctx) {
     });
 
     console.log(r);
-  } else {
+  } else if(imp_success == 'false'){
      // 모바일 결제 실패
      const fail = await postDataSSR(req,`/api/orders/${orderIdx}/general/fail`);
      console.log(fail); 
