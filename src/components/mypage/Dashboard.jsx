@@ -57,10 +57,10 @@ function Dashboard({ className, ...props }) {
           <div className={s.info_row}>
             <div className={s.info_col}>
               <figure className={`${s.user_photo} img-wrap`}>
-                {data?.myDogthumbnailUrl && (
+                {data?.dog.thumbnailUrl && (
                   <Image
                     alt="대표 반려견 이미지"
-                    src={data?.myDogthumbnailUrl}
+                    src={data?.dog.thumbnailUrl}
                     objectFit="cover"
                     layout="fill"
                   />

@@ -14,41 +14,23 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import ArrowLeft from '/public/img/icon/swiper-arrow-large-l.svg';
 import ArrowRight from '/public/img/icon/swiper-arrow-large-r.svg';
-import Modal from '/src/components/modal/Modal';
 import { useModalContext } from '/store/modal-context';
 import Modal_alert, { Modal_innerForm } from '/src/components/modal/Modal_alert';
-import {getData, postObjData} from '/src/pages/api/reqData';
+import {getData, postObjData, putObjData} from '/src/pages/api/reqData';
 import { FullScreenLoading } from '/src/components/atoms/FullScreenLoading';
-import {global_reviewStateType} from "/store/TYPE/reviewStateType";
+import { reviewStatus } from '/store/TYPE/reviewStateType';
+
 
 
 
 export default function ReviewDetailPage({ reviewId }) {
-  
   const getReviewInfoApiUrl = `/api/admin/reviews/${reviewId}`;
-  const postRegisterBestReviewApiUrl = '/api/admin/reviews/best';
-  const apiDataQuery = 'reviewDto';
 
-  
-  
-  
   const [isLoading, setIsLoading] = useState({});
   const [modalMessage, setModalMessage] = useState('');
-  const [reviewStatus, setReviewStatus] = useState('요청');
-  // const [isBestReview, setIsBestReview] = useState(false);
   const [isRejectStart, setRejectStart] = useState(false);
-  const [itemValues, setItemValues] = useState({});
-  const modalInnerInputRef = useRef();
-  //
-  // console.log(itemValues);
-  // console.log(isBestReview);
-  // useEffect( () => {
-  //   (async ()=>{
-  //     const res = await getData('/api/admin/reviews/best');
-  //     console.log(res);
-  //   })();
-  // }, [itemValues.bestReview] );
-  
+  const [info, setInfo] = useState({});
+  const returnReasonInputRef = useRef();
 
   useEffect(() => {
     (async () => {
@@ -58,10 +40,11 @@ export default function ReviewDetailPage({ reviewId }) {
           fetching: true,
         }));
         const res = await getData(getReviewInfoApiUrl);
-        console.log(res)
-        if(res.data[apiDataQuery]){
-          const DATA = res.data[apiDataQuery];
-          const initialValues = {
+        // const res = DUMMY_RESPONSE;
+        console.log(res);
+        if (res.data?.reviewDto) {
+          const DATA = res.data.reviewDto;
+          const initInfo = {
             id: DATA.id,
             status: DATA.status,
             writtenDate: DATA.writtenDate,
@@ -69,21 +52,14 @@ export default function ReviewDetailPage({ reviewId }) {
             contents: DATA.contents,
             username: filter_blindingUserName(DATA.username),
             imageList: res.data.imageUrlList,
-            bestReview: res.bestReview
+            bestReview: res.data.bestReview,
           };
-          setItemValues(initialValues);
-          global_reviewStateType.forEach((type) => {
-            if (type.ENG === DATA.status) {
-              setReviewStatus(type.KOR);
-            }
-          });
-        }else{
+          setInfo(initInfo);
+        } else {
           alert('데이터를 가져올 수 없습니다.');
         }
-
-        
       } catch (err) {
-        console.error(err);
+        // console.error(err);
         console.error(err.response);
         // alert('데이터를 가져올 수 없습니다.');
       }
@@ -92,22 +68,18 @@ export default function ReviewDetailPage({ reviewId }) {
         fetching: false,
       }));
     })();
-  }, [getReviewInfoApiUrl, itemValues.bestReview]);
+  }, [getReviewInfoApiUrl, info.bestReview]);
 
   const navPrev_mainRef = useRef();
   const navNext_mainRef = useRef();
-
-  const mcx = useModalContext();
-  const MODAL_ACTIVE_STATE = mcx.isActive;
-
+  
+  
+  
   const onHideModal = () => {
-    mcx.onHide();
     setModalMessage('');
     setRejectStart(false);
   };
-  const onShowModal = () => {
-    mcx.onShow();
-  };
+
 
   const swiperSettings = {
     className: s.swiper,
@@ -123,80 +95,105 @@ export default function ReviewDetailPage({ reviewId }) {
     modules: [Navigation],
   };
 
-  const onConfirmHandler = () => {
-    console.log('리뷰 승인요청');
-    // API > 리뷰 승인하기
-    if (confirm(`리뷰를 승인하시겠습니까?`)) {
-      setReviewStatus('승인');
-      setModalMessage('리뷰가 승인되었습니다.');
-      onShowModal();
+  const onApprovalReview = async () => {
+    if (!confirm(`리뷰를 승인처리 하시겠습니까?`)) return;
+
+    try {
+      setIsLoading({ approval: true });
+      const body = {
+        reviewIdList: [reviewId],
+      };
+      const apiUrl = '/api/admin/reviews/approval';
+      const res = await putObjData(apiUrl, body);
+      console.log(res);
+      if (res.isDone) {
+        alert('선택된 리뷰가 승인처리 되었습니다.');
+        window.location.reload();
+      }
+    } catch (err) {
+      console.error(err);
     }
+    setIsLoading({ approval: false });
   };
 
   const onShowRejectModal = () => {
     setRejectStart(true);
     setModalMessage('리뷰 반려 사유를 입력해주세요.');
-    mcx.onShow();
   };
 
-  const onRejectHandler = () => {
-    console.log('리뷰 반려요청');
-    // API > 리뷰 반려하기
-    if (confirm(`선택된 리뷰를 반려하시겠습니까?`)) {
-      setReviewStatus('반려');
-      const value = modalInnerInputRef.current.value;
-      console.log(value);
-      setModalMessage('리뷰가 반려되었습니다.');
-      onShowModal();
-      setRejectStart(false);
-    }
-  };
-
-  const onSelectBestReview = async () => {
-    if (confirm(`베스트리뷰로 선정하시겠습니까?`)) {
-      const reviewIdList = [Number(reviewId)]; // - requerst body Param은 배열
+  const onRejectHandler = async () => {
+    const reason = returnReasonInputRef.current.value;
+    if(!reason)return alert('반려사유를 입력하세요.');
+    if (!confirm(`선택된 리뷰를 반려하시겠습니까?`)) return;
+    
+    try {
+      setIsLoading({return: true});
       const body = {
-        reviewIdList
+        returnReason: reason
       }
-      const res = await postObjData(postRegisterBestReviewApiUrl, body)
+      const apiUrl = `/api/admin/reviews/${reviewId}/return`;
+      const res = await putObjData(apiUrl, body);
       console.log(res);
-      if(res.isDone){
-        setItemValues(prevState => ({
-          ...prevState,
-          bestReview: true,
-        }))
-        setModalMessage(`선택하신 ${reviewId}번 리뷰가 \n베스트 리뷰로 선정되었습니다.`);
-        onShowModal();
+      if (res.isDone) {
+        alert('리뷰가 반려처리 되었습니다.');
+        setRejectStart(false);
+        window.location.reload();
       }
+    } catch (err) {
+      console.error(err)
     }
+    setIsLoading({return: false})
   };
   
- 
+  const onSetBestReview = async () => {
+    if(!confirm(`베스트리뷰로 등록하시겠습니까?`)) return;
+    
+    try {
+      setIsLoading({bestReview: true});
+      const body = {
+        reviewIdList: [reviewId]
+      }
+      const apiUrl = '/api/admin/reviews/best';
+      const res = await postObjData(apiUrl, body);
+      console.log(res);
+      if (res.isDone) {
+        alert(`베스트리뷰로 등록되었습니다.`);
+        window.location.reload();
+      }
+    } catch (err) {
+      console.error(err)
+    }
+    setIsLoading({bestReview: false})
+  };
   
   const filter_blindingUserName = (name) => {
     let blindingUserName;
-    if(!name)return console.error('Required Value');
-    if(typeof name !== 'string') return console.error('Required String Value');
+    if (!name) return console.error('Required Value');
+    if (typeof name !== 'string') return console.error('Required String Value');
     const letters = name.split('');
     const lastIndex = letters.length - 1;
     
-    
-    if(letters.length === 2){
-      letters.splice(1,1,'*').join('');
-    
-    } else  if(letters.length > 2){
-      blindingUserName = letters.map((letter, index)=> (index >= 1 && index !== lastIndex)  ? '*' : letter).join('');
+    if (letters.length === 2) {
+      blindingUserName = letters
+        .map((letter, index) => (index >= 1 ? '*' : letter))
+        .join('');
+    } else if (letters.length > 2) {
+      blindingUserName = letters
+        .map((letter, index) => (index >= 1 && index !== lastIndex ? '*' : letter))
+        .join('');
     }
     return blindingUserName;
-  }
-  
-  if(!reviewId) {
-    return <FullScreenLoading/>
   };
+  
+  if (isLoading.fetching) {
+    return <FullScreenLoading />;
+  }
+
+  // console.log(info);
 
   return (
     <>
-      <MetaTitle title="리뷰 상세내용 | 팝업" />
+      <MetaTitle title="리뷰 상세내용" admin={true} />
       <div id={s.popup}>
         <PopupWrapper style={{ width: 640 }}>
           <header className={s.header}>
@@ -208,7 +205,7 @@ export default function ReviewDetailPage({ reviewId }) {
             </div>
           </header>
           <main className={s.body}>
-            {itemValues.bestReview && (
+            {info.bestReview && (
               <ItemRecommendlabel
                 className={'animation-show'}
                 label={'BEST'}
@@ -223,38 +220,42 @@ export default function ReviewDetailPage({ reviewId }) {
               <div className={s['status-section']}>
                 <div className={`${s['col']} ${s['status-id-wrap']}`}>
                   <span className={s['status-title']}>리뷰고유번호:</span>
-                  <span className={s['review-id']}>{itemValues.id}</span>
+                  <span className={s['review-id']}>{info.id}</span>
                 </div>
                 <div className={`${s['col']} ${s['status-list']}`}>
                   <div>
                     <span className={s['status-title']}>처리상태:</span>
-                    <span className={`${s['status']} pointColor`}>{reviewStatus}</span>
+                    <span className={`${s['status']} pointColor`}>
+                      {reviewStatus.KOR[info.status]}
+                    </span>
                   </div>
                   <div>
                     <span className={s['status-title']}>베스트리뷰:</span>
                     <span className={`${s['isBestReview']} pointColor`}>
-                      {itemValues.bestReview ? 'Y' : 'N'}
+                      {info.bestReview ? 'Y' : 'N'}
                     </span>
                   </div>
                 </div>
               </div>
               <div className={s['controls-section']}>
-                {reviewStatus === '요청' && (
-                  <button className={`admin_btn line basic_m`} onClick={onConfirmHandler}>
+                {info.status === reviewStatus.REQUEST && (
+                  <button className={`admin_btn line basic_m`} onClick={onApprovalReview}>
                     리뷰승인
                   </button>
                 )}
-                {reviewStatus === '요청' && (
+                {info.status === reviewStatus.REQUEST && (
                   <button className={`admin_btn line basic_m`} onClick={onShowRejectModal}>
                     리뷰반려
                   </button>
                 )}
-                {!itemValues.bestReview && reviewStatus !== '반려' && (
+                {!info.bestReview && info.status !== reviewStatus.RETURN && (
                   <button
-                    className={`admin_btn line basic_m ${
-                      reviewStatus === ('요청' || '반려') ? 'disabled' : 'confirmed'
+                    className={`admin_btn line basic_m autoWidth ${
+                      info.status === (reviewStatus.REQUEST || reviewStatus.RETURN)
+                        ? 'disabled'
+                        : 'confirmed'
                     }`}
-                    onClick={onSelectBestReview}
+                    onClick={onSetBestReview}
                   >
                     베스트리뷰 선정
                   </button>
@@ -262,28 +263,28 @@ export default function ReviewDetailPage({ reviewId }) {
               </div>
               <div className={s['info-section']}>
                 <div className={s['info-row']}>
-                  <span className={s.date}>{itemValues.writtenDate || '작성된 날짜가 없습니다.'}</span>
+                  <span className={s.date}>{info.writtenDate || '작성된 날짜가 없습니다.'}</span>
                 </div>
                 <div className={s['info-row']}>
-                  <h3 className={s.title}>{itemValues.contents}</h3>
+                  <h3 className={s.title}>{info.contents}</h3>
                 </div>
                 <div className={s['info-row']}>
                   <span className={s.rating}>
                     <RatingStars
                       id={'star'}
-                      count={itemValues.star}
+                      count={info.star}
                       margin={4}
                       size={15}
                       disabled={true}
                     />
                   </span>
                   <p>
-                    작성자 : <span className={s.name}>{itemValues.username}</span>
+                    작성자 : <span className={s.name}>{info.username}</span>
                   </p>
                 </div>
               </div>
               <div className={s['cont-section']}>
-                <pre className={s.userText}>{itemValues.contents}</pre>
+                <pre className={s.userText}>{info.contents}</pre>
                 <Swiper
                   {...swiperSettings}
                   onInit={(swiper) => {
@@ -303,22 +304,23 @@ export default function ReviewDetailPage({ reviewId }) {
                       <ArrowRight />
                     </i>
                   </div>
-                  {itemValues.imageList?.length > 0 && itemValues.imageList.map((data, index) => {
-                    return (
-                      <SwiperSlide key={`image-${data.id}-${index}`}>
-                        <div className={s.userImages}>
-                          <figure className={s['img-wrap']}>
-                            <Image
-                              src={data.url}
-                              objectFit="contain"
-                              layout="fill"
-                              alt={`${data.filename}`}
-                            />
-                          </figure>
-                        </div>
-                      </SwiperSlide>
-                    );
-                  })}
+                  {info.imageList?.length > 0 &&
+                    info.imageList.map((data, index) => {
+                      return (
+                        <SwiperSlide key={`image-${data.id}-${index}`}>
+                          <div className={s.userImages}>
+                            <figure className={s['img-wrap']}>
+                              <Image
+                                src={data.url}
+                                objectFit="contain"
+                                layout="fill"
+                                alt={`${data.filename}`}
+                              />
+                            </figure>
+                          </div>
+                        </SwiperSlide>
+                      );
+                    })}
                 </Swiper>
               </div>
             </div>
@@ -328,32 +330,63 @@ export default function ReviewDetailPage({ reviewId }) {
           </section>
         </PopupWrapper>
       </div>
-      {MODAL_ACTIVE_STATE && (
-        <Modal background title={'유효성 처리'}>
-          <Modal_alert text={modalMessage} onClick={onHideModal}>
-            {isRejectStart && (
-              <>
-                <Modal_innerForm onCancle={onHideModal} onConfirm={onRejectHandler}>
-                  <label htmlFor={'reasonForRejection'}>
-                    <input
-                      id={'reasonForRejection'}
-                      placeholder={'반려사유'}
-                      type={'text'}
-                      ref={modalInnerInputRef}
-                    />
-                  </label>
-                </Modal_innerForm>
-              </>
-            )}
-          </Modal_alert>
-        </Modal>
+      {isRejectStart && (
+        <Modal_alert text={modalMessage}>
+          <Modal_innerForm onCancel={onHideModal} onConfirm={onRejectHandler}>
+            <label htmlFor={'reasonForRejection'}>
+              <input
+                id={'reasonForRejection'}
+                placeholder={'반려사유'}
+                type={'text'}
+                ref={returnReasonInputRef}
+              />
+            </label>
+          </Modal_innerForm>
+        </Modal_alert>
       )}
-      {isLoading.fetching && <FullScreenLoading />}
     </>
   );
 }
 
-ReviewDetailPage.getInitialProps = async ({ query }) => {
+export async function getServerSideProps({ query }) {
   const { reviewId } = query;
-  return { reviewId };
+
+  return { props: { reviewId } };
+}
+
+const DUMMY_RESPONSE = {
+  data: {
+    reviewDto: {
+      id: 523,
+      status: 'APPROVAL',
+      writtenDate: '2022-08-13',
+      star: 3,
+      username: '관리자',
+      contents: '열글자 이상의 구독 리뷰11',
+    },
+    imageUrlList: [
+      {
+        filename: 'filename1.jpg',
+        url: 'https://images.unsplash.com/photo-1661704107314-b603320832be?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80',
+      },
+    ],
+    bestReview: false,
+    _links: {
+      self: {
+        href: 'http://localhost:8080/api/admin/reviews/523',
+      },
+      create_best_reviews: {
+        href: 'http://localhost:8080/api/admin/reviews/best',
+      },
+      approve_reviews: {
+        href: 'http://localhost:8080/api/admin/reviews/approval',
+      },
+      return_review: {
+        href: 'http://localhost:8080/api/admin/reviews/523/return',
+      },
+      profile: {
+        href: '/docs/index.html#resources-admin-query-review',
+      },
+    },
+  },
 };

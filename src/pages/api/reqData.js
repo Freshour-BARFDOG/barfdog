@@ -107,7 +107,7 @@ export const deleteData = async (url,config={data: {}} ) => {
     data: null,
     status: null,
   };
-  const response = axios
+  const response = await axios
     .delete(url, {
       ...config, // delete에 body를 추가하기 위함
       ...axiosConfig(), // header
@@ -199,6 +199,7 @@ export const putObjData = async (url, data, contType) => {
     .then((res) => {
       console.log(res);
       result.data = res;
+      result.status = res.status;
       return res.status === 200 || res.status === 201;
     })
     .catch((err) => {
