@@ -5,6 +5,7 @@ import MetaTitle from "@src/components/atoms/MetaTitle";
 import s from 'src/pages/order/orderCompleted/index.module.scss';
 import Image from 'next/image';
 import Link from "next/link";
+import { postObjData, getDataSSR ,postDataSSR} from '/src/pages/api/reqData';
 
 
 function OrderCompletedPage(props) {
@@ -45,8 +46,27 @@ function OrderCompletedPage(props) {
 
 export default OrderCompletedPage;
 
-export async function getServerSideProps({ query }) {
-  const { orderIdx } = query;
+export async function getServerSideProps(ctx) {
+  const { query, req } = ctx;
+  const { params, imp_uid, merchant_uid, imp_success} = query;
   
+  console.log(query);
+  const [orderIdx,customUid] = params;
+
+  if(imp_success == 'true'){
+    console.log(merchant_uid);
+    console.log(imp_success);
+
+    const r = await postDataSSR(req,`/api/orders/${orderIdx}/subscribe/success`, {
+      impUid : imp_uid,
+      merchantUid : merchant_uid,
+      customerUid: customUid
+    });
+    
+  } else if(imp_success == 'false'){
+     // 모바일 결제 실패
+     const fail = await postDataSSR(req,`/api/orders/${orderIdx}/subscribe/fail`);
+     console.log(fail); 
+  }
   return { props: { orderIdx } };
 }
