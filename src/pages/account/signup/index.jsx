@@ -23,6 +23,7 @@ export default function SignupPage() {
   const userState = useSelector((s) => s.userState);
   // console.log(userState.snsInfo);
 
+  const convertedBirthday = userState.snsInfo.birthday.indexOf('-') >= 0 ? userState.snsInfo.birthday.replace(/-/gi,'') : null;
   const initialFormValues = {
     name: userState.snsInfo.name || '',
     email: userState.snsInfo.email || '',
@@ -36,7 +37,7 @@ export default function SignupPage() {
       detailAddress: '',
     },
     // ! 생년월일 셋팅 확인 필요
-    birthday: `${userState.snsInfo.birthyear}-${userState.snsInfo.birthday}` || '',
+    birthday: `${userState.snsInfo.birthyear}${convertedBirthday}` || '',
     // ! gender 셋팅 확인 필요
     gender: userState.snsInfo.provider == 'naver' ? naverGender(userState.snsInfo.gender) : 'NONE',
     // gender:'MALE',
@@ -105,13 +106,38 @@ export default function SignupPage() {
     }
   };
 
-
   const sendSignupData = async (formvalues) => {
     console.log('SUBMIT DATA:\n', formvalues);
     // data.providerId = "asdfasdf-asdfasdf"; // ! 참고: 임의의 providerID를 서버에 전송해도, 가입 됨
     // 단, providerID가 중복될 경우, 해당 providerId sns계정으로 가입불가능.
+    const body = {
+      provider: formvalues.provider || null,
+      providerId: formvalues.providerId || null,
+      name: formvalues.name,
+      email: formvalues.email,
+      password: formvalues.password,
+      confirmPassword: formvalues.confirmPassword,
+      phoneNumber: formvalues.phoneNumber,
+      address: {
+        zipcode: formvalues.address.zipcode,
+        city: formvalues.address.city,
+        street: formvalues.address.street,
+        detailAddress: formvalues.address.detailAddress,
+      },
+      birthday: formvalues.birthday,
+      gender: formvalues.gender,
+      recommendCode: formvalues.recommendCode || '',
+      agreement: {
+        servicePolicy:formvalues.agreement.servicePolicy,
+        privacyPolicy:formvalues.agreement.privacyPolicy,
+        receiveSms:formvalues.agreement.receiveSms,
+        receiveEmail:formvalues.agreement.receiveEmail,
+        over14YearsOld:formvalues.agreement.over14YearsOld,
+      },
+    };
+    // console.log(body);
     await axios
-      .post('/api/join', formvalues, {
+      .post('/api/join', body, {
         headers: {
           'content-Type': 'application/json',
         },
@@ -185,4 +211,3 @@ export default function SignupPage() {
     </>
   );
 }
-
