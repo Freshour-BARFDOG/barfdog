@@ -37,17 +37,18 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
   
   
   const naverLoginHandler = ()=> {
-    alert('바프독 Naver Dev Account > Client Id 변경필요');
+    // alert('바프독 Naver Dev Account > Client Id 변경필요');
     // => 추후 바프독 naver Client ID계정으로 변경해야함
     //request Boby
     // 1. 네이버 API > access token //
     // 2. tokenValidDays // 서버에서 발급될 token의 유효기간
-    const KAKAO_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize`;
-    const clientId= 'sEUSn5TmLc7I0bmI93Us'; // ! 개인개정 client Id => 추후 바프독 clienet Id 로 변경
-    const redirUri = 'http://localhost:4000/account/naver'
-    const state = 'testStateString'// state(상태 유지를 위한 임의의 문자열) 정보를 넣어 아래 예제와 같은 주소로 요청을 보낸다.
+    const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize`;
+    const clientId= process.env.NEXT_PUBLIC_NAVER_CLIENT_ID; // ! 개인개정 client Id => 추후 바프독 clienet Id 로 변경
+    const redirUri = process.env.NEXT_PUBLIC_NAVER_REDIRECT_URI;
+    
+    const state = 'testStateString'; // state(상태 유지를 위한 임의의 문자열) 정보를 넣어 아래 예제와 같은 주소로 요청을 보낸다.
     // ! state => 필수항목 / 상태토큰값은 어디에서 확인하는지 , API 가이드에서 추가 확인 필요함????
-    router.push(`${KAKAO_AUTH_URL}?response_type=code&client_id=${clientId}&redirect_uri=${redirUri}&state=${state}`);
+    router.push(`${NAVER_AUTH_URL}?response_type=code&client_id=${clientId}&redirect_uri=${redirUri}&state=${state}`);
     
     
     // ! 추후에 할 것
