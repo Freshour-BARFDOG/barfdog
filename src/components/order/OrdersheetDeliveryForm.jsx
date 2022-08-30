@@ -248,7 +248,7 @@ export const OrdersheetDeliveryForm = ({
                   <span>
                     {form.deliveryId
                       ? info.nextSubscribeDeliveryDate
-                      : '주문 후 1~2일 이내 배송예정(배송 후 카톡안내)'}
+                      : '주문 후 1~2일 이내 배송예정'}
                   </span>
                 )}
                 {orderType === 'subscribe' && <span>{form.nextDeliveryDate}&nbsp;</span>}
