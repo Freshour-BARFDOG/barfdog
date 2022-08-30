@@ -29,7 +29,7 @@ export default function NAVER_Auth({ data, err}) {
     
     // CASE : SUCCESS SNS LOGIN
     if (data.snsUserType === userType.NON_MEMBER) {
-      alert('REDUX에 정보를 담아서, 회원가입페이지로 이동');
+      // alert('REDUX에 정보를 담아서, 회원가입페이지로 이동');
       // console.log(userInfo)
       dispatch(userStateAction.setSnsInfo({ data: userSnsInfo }));
       router.push('/account/signup');
