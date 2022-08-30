@@ -2,15 +2,13 @@ import axios from "axios";
 
 export const getGoodsFlowOtp = async () => {
 
-    // axios.defaults.baseURL = 'http://localhost:4000/';
-
     const otp = await axios
     .post(
-      'http://localhost:4000/api/goodsFlow/getOtp',{},
+      `${window.location.origin}/api/goodsFlow/getOtp`,{},
 
-      {headers: {
+      {
+        headers: {
         'Content-Type': 'application/json',}}
-
     )
     .then((res) => {
        console.log(
@@ -36,12 +34,11 @@ export const getGoodsFlowOtp = async () => {
 }
 
 export const postGoodsFlowOrder = async (data)=>{ 
-// axios.defaults.baseURL = 'http://localhost:4000/';
 
     const id = await axios
       .post(
-        'http://localhost:4000/api/goodsFlow/orderRegister', 
-        JSON.stringify(data),
+        `${window.location.origin}/api/goodsFlow/orderRegister`, 
+        data,
         {headers: {
           'Content-Type': 'application/json',}}
       )
@@ -53,7 +50,7 @@ export const postGoodsFlowOrder = async (data)=>{
         );
         console.log(res.data.id);
 
-        return res.data.id;
+        return res;
       })
       .catch((err) => {
         console.error('goodsflow otp err: ', err);
@@ -67,11 +64,10 @@ export const postGoodsFlowOrder = async (data)=>{
 
 
 export const orderPrint = async (o,i) => {
-  // axios.defaults.baseURL = 'http://localhost:4000/';
 
     await axios
       .post(
-      'http://localhost:4000/api/goodsFlow/print',
+      `${window.location.origin}api/goodsFlow/print`,
   {
           otp:o,
           id:i
