@@ -1,5 +1,6 @@
 export const calcDogAge = (yyyymm, calcMethod = 'american') => {
   let age;
+  if(!yyyymm)return;
   const dogBirthYear = Number( yyyymm.slice( 0, 4 ) );
   const dogBirthMonth = Number( yyyymm.slice( 4, 6 ));
   const curYear = new Date().getFullYear();
