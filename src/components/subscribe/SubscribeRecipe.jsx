@@ -239,11 +239,11 @@ export const SubscribeRecipe = ({subscribeInfo}) => {
                 <span>&nbsp;잠깐!</span>
               </div>
               <div className={s.color_box_row_2}>
-                {true && (
-                  <>
-                    <em>{'TEST, TEST2'}</em>에 못먹는 음식으로 체크해 주셨네요!&nbsp;
-                  </>
-                )}
+                {/*{true && (*/}
+                {/*  <>*/}
+                {/*    <em>{'TEST, TEST2'}</em>에 못먹는 음식으로 체크해 주셨네요!&nbsp;*/}
+                {/*  </>*/}
+                {/*)}*/}
                 <br />
                 <em>{subscribeInfo.recipe.nameList.join(', ')}</em> 레시피에는 <em>&lsquo;{curIngredient}&rsquo;</em>
                 {checkStringUnderConsonant(curIngredient) ? '이' : '가'} 들어가 있습니다.
@@ -253,17 +253,17 @@ export const SubscribeRecipe = ({subscribeInfo}) => {
             </div>
           </div>
         )}
-        <h6 className={'pointColor'}>******SOLD OUT: 1번째 레시피 강제 적용. (테스트 이후 삭제)</h6>
+        {/*<h6 className={'pointColor'}>******SOLD OUT: 1번째 레시피 강제 적용. (테스트 이후 삭제)</h6>*/}
         <Swiper {...swiperSettings} watchOverflow={false}>
           {allRecipeInfoList.length > 0 &&
             allRecipeInfoList.map((rc, index) => (
               <SwiperSlide key={`recipe-${rc.id}-${index}`} className={s.slide}>
-                {(() => {
-                  // ! TEST
-                  if (index === 0) {
-                    rc.inStock = false;
-                  }
-                })()}
+                {/*{(() => {*/}
+                {/*  // ! TEST*/}
+                {/*  if (index === 0) {*/}
+                {/*    rc.inStock = false;*/}
+                {/*  }*/}
+                {/*})()}*/}
                 <SubscribeCustomInput
                   id={`${rc.name}-${rc.id}`}
                   selectedRadio={selectedRadio}
