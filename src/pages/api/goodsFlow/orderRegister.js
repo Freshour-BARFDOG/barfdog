@@ -8,23 +8,20 @@ const { validateHeaderName } = require('http');
 
 const OrderRegister = async (req, res) => {
   console.log(req);
-  axios.defaults.baseURL = 'https://test.goodsflow.com/';
-  //// 'https://test.goodsflow.com/delivery/api/v2/otps/partner/BARFDOG',
-console.log(req.body);
-// console.log(JSON.stringify(req.body));
+  console.log(req.body);
 
   try {
     const options = {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'goodsFLOW-Api-Key': 'c52a4671-40e2-409e-90c0-07759066145e',
+        'goodsFLOW-Api-Key': process.env.NEXT_PUBLIC_GOODSFLOW_API_KEY,
         'Access-Control-Allow-Origin': '*',
       },
     };
     const DATA = await axios
       .post(
-        'https://test.goodsflow.com/delivery/api/v2/orders/partner/BARFDOG/',
+        `${process.env.NEXT_PUBLIC_GOODSFLOW_API_URL}/orders/partner/BARFDOG/`,
         req.body,
         options
       )
@@ -51,15 +48,6 @@ console.log(req.body);
       "Accept": 'application/json',
       "Content-Type": "application/json"
     };
-    //
-    // const body = {
-    //   appVersion: DATA.appVersion,
-    //   id: DATA.id,
-    //   data: DATA.data,
-    //   success: DATA.success,
-    // }
-    // console.log('BODY: ', body);
-    
     
     res.writeHead(200, defaultCorsHeader);
     res.end(JSON.stringify(DATA)); // res body > JS obj를 JSON문자열로 전달해야함. (JSON.stringify())

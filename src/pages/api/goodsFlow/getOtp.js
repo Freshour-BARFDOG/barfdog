@@ -10,24 +10,24 @@ export default async function handler(req, res){
 
   if(req.method != 'POST'){
     res.status(401).end();
-}
-  axios.defaults.baseURL = 'https://test.goodsflow.com/';
-  //// 'https://test.goodsflow.com/delivery/api/v2/otps/partner/BARFDOG',
+  }
   console.log(req);
   console.log(req.body);
 
   try {
+    
     const options = {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'goodsFLOW-Api-Key': 'c52a4671-40e2-409e-90c0-07759066145e',
+        'goodsFLOW-Api-Key': process.env.NEXT_PUBLIC_GOODSFLOW_API_KEY,
         'Access-Control-Allow-Origin': '*',
       },
     };
+
     const DATA = await axios
       .post(
-        'https://test.goodsflow.com/delivery/api/v2/otps/partner/BARFDOG',
+      `${process.env.NEXT_PUBLIC_GOODSFLOW_API_URL}otps/partner/BARFDOG`,
         {},
         options
       )
@@ -66,7 +66,6 @@ export default async function handler(req, res){
     
     
     res.writeHead(200, defaultCorsHeader);
-    // res.json(DATA);
     res.end(JSON.stringify(DATA)); // res body > JS obj를 JSON문자열로 전달해야함. (JSON.stringify())
 
   } catch (err) {

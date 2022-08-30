@@ -20,6 +20,8 @@ import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import { Modal_orderCancleReason } from '/src/components/modal/Modal_orderCancleReason';
 import {Modal_orderConfirm} from "/src/components/modal/Modal_orderConfirm";
 import Tooltip from "/src/components/atoms/Tooltip";
+import popupWindow from '/util/func/popupWindow';
+import { getGoodsFlowOtp, postGoodsFlowOrder } from '../../../api/goodsFlow/service';
 
 const initialSearchValues = {
   from: transformToday(),
@@ -193,11 +195,14 @@ export default function OrderOnSellPage() {
       if (!resFromServer.isDone)
         return alert(`주문발송 처리 중 오류가 발생했습니다.\n${res.error}`);
       const deliveryItemInfoList = resFromServer.data.data._embedded.queryOrderInfoForDeliveryList;
-      console.log(deliveryItemInfoList)
+      console.log(deliveryItemInfoList);
+      
+      // GoodsFlow에 전송하는 배송리스트 (운송장 출력창에 보여지는 리스트)
+      const deliveryList = [];
       for (const info of deliveryItemInfoList) {
         // 주문 id에 대한 정보 Array
         const bodyForGoodsFlow = {
-          TEST: '__________________goodsflow data 전송 방지 key & value', // ! TESTTESTTESTTESTTESTTESTTESTTEST CODE
+          // TEST: '__________________goodsflow data 전송 방지 key & value', // ! TESTTESTTESTTESTTESTTESTTESTTEST CODE
           transUniqueCd: info.transUniqueCd,
           sndName: info.sndName,
           sndZipCode: info.sndZipCode,
@@ -221,28 +226,57 @@ export default function OrderOnSellPage() {
           status: 'N', // [[처리상태코드]] "N": 신규, "O": 미발송
           paymentTypeCode: 'SH', // [[지불방법코드]] "SH": 선불, "BH": 착불  // barfdog > 배송비 착불 CASE 없음
         };
+        deliveryList.push(bodyForGoodsFlow);
+      
+      } //
 
+      if(deliveryList.length > 0){
+      
         const goodsflowOrderRegisterApiUrl =
-          window.location.origin + '/api/goodsFlow/orderRegister';
-        const res = await postObjData(goodsflowOrderRegisterApiUrl, bodyForGoodsFlow);
-        // console.log(res);
-        const data = res.data.data;
-        if (!data.success) {
-          const error = data.error;
-          const errorMessage = error.message;
-          const errorCode = error.status;
-          console.error(
-            `${bodyForGoodsFlow.orderItems
-              .map((item) => item.itemName)
-              .join(
-                ', ',
-              )} 상품의 발송처리에 실패하였습니다.\nERROR: ${errorMessage}\nERROR STATUS: ${errorCode}`,
-          );
-        }
-
-        /// ! ---------------운송장 번호 등록과정 추가필요 -----------------!
-        /// ! ---------------운송장 번호 등록과정 추가필요 -----------------!
-        /// ! ---------------운송장 번호 등록과정 추가필요 -----------------!
+        window.location.origin + '/api/goodsFlow/orderRegister';
+      // const res = await postObjData(goodsflowOrderRegisterApiUrl, bodyForGoodsFlow);
+      // 주문 등록 후 id값 받아서 운송장 출력창 호출할때 보내야함
+      const res = await postGoodsFlowOrder({
+        data:{
+          items:deliveryList
+        }});
+      // console.log(res);
+      // console.log(res.data);
+  
+      const data = res.data;
+      if (!data.success) {
+        const error = data.error;
+        const errorMessage = error.message;
+        const errorCode = error.status;
+        // console.error(
+        //   `${bodyForGoodsFlow.orderItems
+        //     .map((item) => item.itemName)
+        //     .join(
+        //       ', ',
+        //     )} 상품의 발송처리에 실패하였습니다.\nERROR: ${errorMessage}\nERROR STATUS: ${errorCode}`,
+        // );
+        console.error(`상품의 발송처리에 실패하였습니다.\nERROR: ${errorMessage}\nERROR STATUS: ${errorCode}`);
+      } 
+      // goodsflow otp 발급(운송장 출력창 호출할때마다 발급 받아야함)
+      const otp = await getGoodsFlowOtp();
+      
+      // 운송장 출력창 호출
+      const goodsflowPrintUrl =
+      window.location.origin + '/api/goodsFlow/print';
+      await postObjData(goodsflowPrintUrl,
+        {
+          otp:otp,
+          id:res.data.id
+        },
+      );
+  
+      popupWindow(`/bf-admin/sell/delivery/print?otp=${otp}&id=${res.data.id}`); 
+      
+    
+  
+      /// ! ---------------운송장 번호 등록과정 추가필요 -----------------!
+      /// ! ---------------운송장 번호 등록과정 추가필요 -----------------!
+      /// ! ---------------운송장 번호 등록과정 추가필요 -----------------!
         const registerDeliveryNumberApiUrl = `/api/admin/deliveries/deliveryNumber`;
         const body = {
           deliveryNumberDtoList: [
@@ -259,7 +293,8 @@ export default function OrderOnSellPage() {
         } else {
           console.error('운송장번호 저장 실패');
         }
-      } //
+      }
+
     } catch (err) {
       console.log('API통신 오류 : ', err);
     }
