@@ -153,17 +153,11 @@ export const SubscribeShopRecipe = ({
           </div>
         </div>
       )}
-      <h6 className={'pointColor'}>******SOLD OUT: 1번째 레시피 강제 적용. (테스트 이후 삭제)</h6>
+      {/*<h6 className={'pointColor'}>******SOLD OUT: 1번째 레시피 강제 적용. (테스트 이후 삭제)</h6>*/}
       <Swiper {...swiperSettings} watchOverflow={false}>
         {info.recipeInfoList.length > 0 &&
           info.recipeInfoList.map((rc, index) => (
             <SwiperSlide key={`recipe-${rc.id}-${index}`} className={s.slide}>
-              {(() => {
-                // ! TEST
-                if (index === 0) {
-                  rc.inStock = false;
-                }
-              })()}
               <SubscribeCustomInput
                 id={`${rc.name}-${index}`}
                 selectedRadio={selectedRadio}

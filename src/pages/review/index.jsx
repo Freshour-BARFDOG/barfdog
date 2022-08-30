@@ -111,12 +111,10 @@ function Swiper_bestReview({ items }) {
     spaceBetween: 40,
     loop: true,
     breakpoints: {
-      //반응형 조건 속성
       300: {
         slidesPerView: 1,
       },
       600: {
-        //601 이상일 경우
         slidesPerView: 2, //레이아웃 2열
       },
       900: {
@@ -139,6 +137,7 @@ function Swiper_bestReview({ items }) {
     setIsActiveModal(true);
   };
 
+  // console.log(itemList);
   return (
     <div className={s.swiper_review_outerWrap}>
       <i className={s['swiper-button-prev']} ref={navPrevRef}>
@@ -161,27 +160,28 @@ function Swiper_bestReview({ items }) {
           swiper.navigation.update();
         }}
       >
-        {itemList?.length > 0 && itemList?.map((item) => (
-          <SwiperSlide
-            className={s.slide}
-            key={`bestReview-${item.id}`}
-            data-id={item.id}
-            onClick={onClickReviewItemHandler}
-          >
-            <div className={s.mid_box}>
-              <div className={`${s.image} img-wrap`}>
-                <Image
-                  src={item.imageUrl}
-                  objectFit="cover"
-                  layout="fill"
-                  alt="베스트 리뷰 이미지"
-                />
+        {itemList?.length > 0 &&
+          itemList?.map((item) => (
+            <SwiperSlide
+              className={s.slide}
+              key={`bestReview-${item.id}`}
+              data-id={item.id}
+              onClick={onClickReviewItemHandler}
+            >
+              <div className={s.mid_box}>
+                <div className={`${s.image} img-wrap`}>
+                  <Image
+                    src={item.imageUrl}
+                    objectFit="cover"
+                    layout="fill"
+                    alt="베스트 리뷰 이미지"
+                  />
+                </div>
               </div>
-            </div>
-            <p className={s.content_title}>{item.contents}</p>
-            <p>{item.contents}</p>
-          </SwiperSlide>
-        ))}
+              <p className={s.content_title}>{item.contents}</p>
+              <p>{item.contents}</p>
+            </SwiperSlide>
+          ))}
       </Swiper>
       {isActiveModal && (
         <Modal_bestReview
@@ -194,111 +194,39 @@ function Swiper_bestReview({ items }) {
   );
 }
 
-const reviewDUMMY_DATA = [
-  {
-    reviewDto: {
-      id: 47,
-      thumbnailUrl:
-        'https://images.unsplash.com/photo-1586671267731-da2cf3ceeb80?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=689&q=80',
-      star: 3,
-      contents: '열글자 이상의 구독 리뷰1',
-      username: '김회원1',
-      writtenDate: '2022-07-15',
-    },
-    reviewImageDtoList: [
-      {
-        filename: '파일이름1',
-        url: 'https://images.unsplash.com/photo-1537151625747-768eb6cf92b2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=685&q=80',
-      },
-      {
-        filename: '파일이름2',
-        url: 'https://images.unsplash.com/photo-1588943211346-0908a1fb0b01?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80',
-      },
-      {
-        filename: '파일이름3',
-        url: 'https://images.unsplash.com/photo-1576201836106-db1758fd1c97?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-      },
-    ],
-  },
-  {
-    reviewDto: {
-      id: 49,
-      thumbnailUrl:
-        'https://images.unsplash.com/photo-1587300003388-59208cc962cb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-      star: 3,
-      contents: '열글자 이상의 구독 리뷰2222',
-      username: '김회원2',
-      writtenDate: '2022-07-20',
-    },
-    reviewImageDtoList: [
-      {
-        filename: '파일이름1',
-        url: 'https://images.unsplash.com/photo-1537151625747-768eb6cf92b2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=685&q=80',
-      },
-      {
-        filename: '파일이름2',
-        url: 'https://images.unsplash.com/photo-1588943211346-0908a1fb0b01?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80',
-      },
-      {
-        filename: '파일이름3',
-        url: 'https://images.unsplash.com/photo-1576201836106-db1758fd1c97?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-      },
-    ],
-  },
-  {
-    reviewDto: {
-      id: 22,
-      thumbnailUrl:
-        'https://images.unsplash.com/photo-1587300003388-59208cc962cb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-      star: 5,
-      contents: '열글자 이상의 구독 리뷰2열글자 이상의 구독 리뷰2열글자 이상의 구독 리뷰2열글자 이상의 구독 리뷰2열글자 이상의 구독 리뷰2열글자 이상의 구독 리뷰2열글자 이상의 구독 리뷰2열글자 이상의 구독 리뷰2',
-      username: '김회원2',
-      writtenDate: '2022-07-20',
-    },
-    reviewImageDtoList: [
-      {
-        filename: '파일이름1',
-        url: 'https://images.unsplash.com/photo-1537151625747-768eb6cf92b2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=685&q=80',
-      },
-      {
-        filename: '파일이름2',
-        url: 'https://images.unsplash.com/photo-1588943211346-0908a1fb0b01?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80',
-      },
-      {
-        filename: '파일이름3',
-        url: 'https://images.unsplash.com/photo-1576201836106-db1758fd1c97?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-      },
-    ],
-  }
-];
-
 const ReviewBox = () => {
   const searchPageSize = 10;
   const getListApiUrl = '/api/reviews/community';
-  const apiDataQueryString = 'queryCommunityReviewsDtoList';
   const [itemList, setItemList] = useState([]);
-  const [originDataList, setOriginDataList] = useState([]);
   const [isLoading, setIsLoading] = useState({});
 
-  useEffect(() => {
-    // console.log(originDataList);
-    const newItemList = originDataList.map((data) => ({
-      id: data.reviewDto.id,
-      thumbnailUrl: data.reviewDto.thumbnailUrl,
-      star: data.reviewDto.star,
-      contents: data.reviewDto.contents,
-      username: data.reviewDto.username,
-      writtenDate: data.reviewDto.writtenDate,
-      imgList: data.reviewImageDtoList,
-    }));
+  const pageInterceptor = (res) => {
+    // res = DUMMY_REVIEW_LIST_RESPONSE; //  ! TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
+    console.log(res);
+    const pageData = res.data.page;
+    const newItemList =
+      res.data?._embedded?.queryCommunityReviewsDtoList.map((data) => ({
+        id: data.reviewDto.id,
+        thumbnailUrl: data.reviewDto.thumbnailUrl,
+        star: data.reviewDto.star,
+        contents: data.reviewDto.contents,
+        username: data.reviewDto.username,
+        writtenDate: data.reviewDto.writtenDate,
+        imgList: data.reviewImageDtoList,
+      })) || [];
+
     setItemList(newItemList);
-
-    // ! TEST TEST TEST TEST TEST TEST TEST
-    setOriginDataList(reviewDUMMY_DATA);
-    // ! TEST TEST TEST TEST TEST TEST TEST
-  }, [originDataList]);
-
-  // console.log(itemList);
+    // console.log(newItemList);
+    let newPageInfo = {
+      totalPages: pageData.totalPages,
+      size: pageData.size,
+      totalItems: pageData.totalElements,
+      currentPageIndex: pageData.number,
+      newPageNumber: pageData.number + 1,
+      newItemList,
+    };
+    return newPageInfo;
+  };
 
   return (
     <div className={s.tab_slide_box}>
@@ -327,9 +255,9 @@ const ReviewBox = () => {
         <PaginationWithAPI
           apiURL={getListApiUrl}
           size={searchPageSize}
-          setItemList={setOriginDataList}
-          queryItemList={apiDataQueryString}
+          setItemList={setItemList}
           setIsLoading={setIsLoading}
+          pageInterceptor={pageInterceptor}
         />
       </div>
     </div>
@@ -337,7 +265,6 @@ const ReviewBox = () => {
 };
 
 const ReviewItem = ({ item }) => {
-
   const [visible, setVisible] = useState(false);
   const boxRef = useRef(null);
   const onClickHandler = (e) => {
@@ -356,7 +283,9 @@ const ReviewItem = ({ item }) => {
         <span className={s.grid_num}>{item.id}</span>
         <div className={s.mid_box}>
           <i className={`${s.image_product} img-wrap`}>
-            <Image src={item.thumbnailUrl} objectFit="contain" layout="fill" alt="리뷰 썸네일" />
+            {item.thumbnailUrl && (
+              <Image src={item.thumbnailUrl} objectFit="contain" layout="fill" alt="리뷰 썸네일" />
+            )}
           </i>
         </div>
         <i className={s.star_box}>
@@ -380,18 +309,57 @@ const ReviewItem = ({ item }) => {
         <p className={s.text}>{item.contents}</p>
         <div className={s.images}>
           {item.imgList?.map((imgData, index) => (
-            <figure className={`${s['img-wrap']} img-wrap init-next-image`} key={`review-detail-images-${index}`}>
+            <figure
+              className={`${s['img-wrap']} img-wrap init-next-image`}
+              key={`review-detail-images-${index}`}
+            >
               <Image src={imgData.url} objectFit="cover" layout="fill" alt={imgData.filename} />
             </figure>
           ))}
         </div>
-
       </div>
     </li>
   );
 };
 
-const DUMMY_DATA = {
+export async function getServerSideProps(context) {
+  let bestReviewList = null;
+  const getbestReviewListApiUrl = '/api/reviews/best';
+  let res = await axios
+    .get(getbestReviewListApiUrl, {
+      headers: {
+        'content-Type': 'application/json',
+      },
+    })
+    .then((res) => {
+      // console.log(res);
+      return res;
+    })
+    .catch((err) => {
+      // console.log(err.response)
+      return err.response;
+    });
+  // res = DUMMY_REVIEW_RESPONSE; // ! TEST
+  // console.log(res)
+  if (res.data) {
+    bestReviewList =
+      res.data?._embedded?.queryBestReviewsDtoList.map((list) => ({
+        id: list.id,
+        imageUrl: list.imageUrl,
+        leakedOrder: list.leakedOrder,
+        contents: list.contens,
+      })) || [];
+  }
+
+  return { props: { bestReviewList } };
+}
+
+
+
+
+
+
+const DUMMY_BESTREVIEW_RESPONSE = {
   data: {
     _embedded: {
       queryBestReviewsDtoList: [
@@ -423,25 +391,73 @@ const DUMMY_DATA = {
   },
 };
 
-export async function getServerSideProps(context) {
-  const getbestReviewListApiUrl = '/api/reviews/best';
-  const res = await axios
-    .get(getbestReviewListApiUrl, {
-      headers: {
-        'content-Type': 'application/json',
+const DUMMY_REVIEW_LIST_RESPONSE = {
+  data: {
+    _embedded: {
+      queryCommunityReviewsDtoList: [
+        {
+          reviewDto: {
+            id: 343,
+            thumbnailUrl: 'https://images.unsplash.com/photo-1586671267731-da2cf3ceeb80?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=989&q=80',
+            star: 3,
+            contents: '열글자 이상의 구독 리뷰2',
+            username: '김회원',
+            writtenDate: '2022-08-24',
+          },
+          reviewImageDtoList: [
+            {
+              filename: 'filename1.jpg',
+              url: 'https://images.unsplash.com/photo-1537151625747-768eb6cf92b2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=985&q=80',
+            },
+            {
+              filename: 'filename2.jpg',
+              url: 'https://images.unsplash.com/photo-1583512603805-3cc6b41f3edb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80',
+            }
+          ],
+        },
+        {
+          reviewDto: {
+            id: 341,
+            thumbnailUrl: 'https://images.unsplash.com/photo-1588943211346-0908a1fb0b01?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1035&q=80',
+            star: 3,
+            contents: '열글자 이상의 구독 리뷰1',
+            username: '김회원',
+            writtenDate: '2022-08-24',
+          },
+          reviewImageDtoList: [
+            {
+              filename: 'filename1.jpg',
+              url: 'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80',
+            },
+          ],
+        }
+      ],
+    },
+    _links: {
+      first: {
+        href: 'http://localhost:8080/api/reviews/community?page=0&size=5',
       },
-    })
-    .then((res) => {
-      // console.log(res);
-      return res;
-    })
-    .catch((err) => {
-      // console.log(err.response)
-      return err.response;
-    });
-  const bestReviewList =
-    res.data?._embedded?.queryBestReviewsDtoList ||
-    DUMMY_DATA.data._embedded.queryBestReviewsDtoList;
-
-  return { props: { bestReviewList } };
-}
+      prev: {
+        href: 'http://localhost:8080/api/reviews/community?page=0&size=5',
+      },
+      self: {
+        href: 'http://localhost:8080/api/reviews/community?page=1&size=5',
+      },
+      next: {
+        href: 'http://localhost:8080/api/reviews/community?page=2&size=5',
+      },
+      last: {
+        href: 'http://localhost:8080/api/reviews/community?page=2&size=5',
+      },
+      profile: {
+        href: '/docs/index.html#resources-query-reviews-community',
+      },
+    },
+    page: {
+      size: 5,
+      totalElements: 14,
+      totalPages: 3,
+      number: 1,
+    },
+  },
+};
