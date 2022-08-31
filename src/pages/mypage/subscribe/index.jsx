@@ -87,7 +87,11 @@ export default function ManageSubscribePage() {
                             <span className={s.dogName}>{item.subscribeDto.dogName}</span>
                           </figure>
                           <div className={s.text}>
-                            {item.subscribeDto.skipCount > 0 && <em className={s.red_box_text}>1회 건너뛰기 </em>}
+                            {(item.subscribeDto.countSkipOneTime > 0 || item.subscribeDto.countSkipOneWeek > 0) && <p className={s.skipInfo}>
+                              {item.subscribeDto.countSkipOneTime > 0 && <em className={s.red_box_text}>1회 건너뛰기 </em>}
+                              {item.subscribeDto.countSkipOneWeek > 0 && <em className={s.red_box_text}>1주 건너뛰기 </em>}
+                            </p>}
+                            
                             <p>
                               {item.subscribeDto.plan && subscribePlanType[item.subscribeDto.plan].KOR}&nbsp;/
                               &nbsp;{item.recipeNames}
