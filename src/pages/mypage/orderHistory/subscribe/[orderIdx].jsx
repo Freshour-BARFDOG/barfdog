@@ -84,14 +84,6 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
                   >
                     주문취소
                   </button>
-                  <>
-                    <button type={'button'} className={`${s.btn}`}>
-                      반품신청
-                    </button>
-                    <button type={'button'} className={`${s.btn}`}>
-                      교환신청
-                    </button>
-                  </>
                 </div>
               </h1>
 
