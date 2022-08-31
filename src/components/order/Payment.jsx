@@ -29,7 +29,6 @@ export function Payment({
 
     document.head.appendChild(jquery);
     document.head.appendChild(iamport);
-
     
     return () => {
       document.head.removeChild(jquery);
@@ -42,7 +41,7 @@ export function Payment({
     // console.log(form);
     e.preventDefault();
     if (isSubmitted) return;
- 
+
     const valid_target = {
       name: form.deliveryDto.name,
       phone: form.deliveryDto.phone,
@@ -58,7 +57,6 @@ export function Payment({
     const errObj = validate(valid_target);
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
-
 
     if (!isPassed) return alert('유효하지 않은 항목이 있습니다.');
     // console.log(isPassed);
@@ -138,10 +136,10 @@ export function Payment({
         if( orderType === 'general'){ 
           // 일반 주문 결제
           // res.data.data.id = 주문번호 id
-          await generalPayment(body,res.data.data.id,res.data.data.merchantUid);
+          await generalPayment(body,res.data.data.id, res.data.data.merchantUid);
         }else{
           // 구독 주문 결제
-          await subscribePayment(body,res.data.data.id,res.data.data.merchantUid);
+          await subscribePayment(body,res.data.data.id, res.data.data.merchantUid);
         }
         // alert('결제완료 -> 이후 확인버튼 클릭 -> 결제완료페이지로 Redir');
         document.body.style.cssText = `
@@ -209,8 +207,8 @@ export function Payment({
         alert('결제 성공');
         setIsSubmitted(true);
         window.location.href= `/order/orderCompleted/${id}`;
-
       }
+
     } else {
        // 결제 실패 : 쿠폰null일때 500err -> 서버 오류 수정하셨다고 함 TODO 나중에 테스트하기
        const fail = await postObjData(`/api/orders/${id}/general/fail`);
@@ -222,8 +220,8 @@ export function Payment({
           document.body.style.cssText='';
           document.body.querySelector('.imp-dialog ').innerHTML='';
           document.body.querySelector('.imp-dialog ').style.cssText='display:none !important';
+          window.location.href= `/order/orderFailed`;
         }
-      
     }
   
     };
@@ -237,6 +235,7 @@ export function Payment({
 
     const randomStr = new Date().getTime().toString(36);
     const customUid = `customer_Uid_${randomStr}`;
+    
     /* 2. 결제 데이터 정의하기 */
     const data = {
       pg: 'kcp_billing', // PG사
@@ -250,7 +249,7 @@ export function Payment({
       buyer_email: 'a@gmail' || info.email, // 구매자 이메일
       buyer_addr: '센텀2로' || `${info.address.street},${info.address.detailAddress}`, // 구매자 주소
       buyer_postcode: '00000' || info.address.zipcode, // 구매자 우편번호
-      m_redirect_url: `http://localhost:4000/order/orderCompleted/subscribe/${id}/${customUid}`
+      m_redirect_url: `http://localhost:4000/order/orderCompleted/subscribe/${id}/${randomStr}`
     };
 
     IMP.request_pay(data, callback);
@@ -285,6 +284,7 @@ export function Payment({
           // 임시로 넣은 코드 :  결제취소시 , 전역에 import 결제 html이 잔류하여, 없애기위한 용도
           // window.location.href= '/';
           // startPayment();
+          window.location.href= `/order/orderFailed`;
         }
       
     }

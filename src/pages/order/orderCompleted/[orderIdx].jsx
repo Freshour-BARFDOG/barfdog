@@ -6,8 +6,20 @@ import s from 'src/pages/order/orderCompleted/index.module.scss';
 import Image from 'next/image';
 import Link from 'next/link';
 import { postObjData, getDataSSR ,postDataSSR} from '/src/pages/api/reqData';
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 function OrderCompletedPage(props) {
+  const router = useRouter();
+  const { imp_success } = router.query;
+  
+  // 모바일 결제 실패했을때 결제실패 페이지로 이동
+  useEffect(() => {
+    if(imp_success == 'false'){
+      router.push(`/order/orderFailed`);    
+    }
+  }, []);
+
   return (
     <>
       <MetaTitle title="일반상품 주문완료" />
@@ -63,13 +75,13 @@ function OrderCompletedPage(props) {
               배송 상품
             </div>
             <div className={s.row_4}>
-              스타터 프리미엄 풀 플랜 외 1개
+              {props.orderItemValue}
             </div>
             <div className={s.row_3}>
               배송 주소
             </div>
             <div className={s.row_4}>
-              충북 충주시 번영대로 208 수빌딩 4층
+              {props.address}
             </div>
             <div className={s.row_3}>
               발송예정일
@@ -135,7 +147,9 @@ export async function getServerSideProps(ctx) {
   const { orderIdx , imp_uid, merchant_uid, imp_success,error_msg} = query;
   
   console.log(query);
-  
+  let orderItemValue;
+  let address;
+
   if(imp_success == 'true'){
     console.log(merchant_uid);
     console.log(imp_success);
@@ -146,6 +160,18 @@ export async function getServerSideProps(ctx) {
     });
 
     console.log(r);
+  
+    const getApiUrl = `/api/orders/${orderIdx}/general`; // API 검색어: 일반 주문 하나 조회
+
+    let res = await getDataSSR(req, getApiUrl);
+    const data = res?.data;
+    const itemList = data.orderItemDtoList;
+
+    if (data) {
+      orderItemValue = `${itemList[0].itemName} ${itemList.length > 1 ? `외 ${itemList.length-1}개` :''}`;
+      address = `${data.orderDto.street} ${data.orderDto.detailAddress}`;  
+    }
+
   } else if(imp_success == 'false'){
      // 모바일 결제 실패
      const fail = await postDataSSR(req,`/api/orders/${orderIdx}/general/fail`);
@@ -156,6 +182,6 @@ export async function getServerSideProps(ctx) {
     }
     
   }
-
-  return { props: { orderIdx } };
+  
+  return { props: { orderIdx, orderItemValue, address } };
 }
