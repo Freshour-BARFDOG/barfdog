@@ -8,18 +8,17 @@ import Image from 'next/image';
 import { getDataSSR, postObjData } from '/src/pages/api/reqData';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import popupWindow from '/util/func/popupWindow';
-import {valid_deliveryCondition} from "/util/func/validation/valid_deliveryCondition";
-import {subscribePlanType} from "/store/TYPE/subscribePlanType";
-import transformDate from "/util/func/transformDate";
-import {orderStatus} from "/store/TYPE/orderStatusTYPE";
+import { valid_deliveryCondition } from '/util/func/validation/valid_deliveryCondition';
+import { subscribePlanType } from '/store/TYPE/subscribePlanType';
+import transformDate from '/util/func/transformDate';
+import { orderStatus } from '/store/TYPE/orderStatusTYPE';
 import { useState } from 'react';
 import Modal_confirm from '/src/components/modal/Modal_confirm';
 import { filter_availableReturnAndExchangeItemList } from '/util/func/filter_availableReturnAndExchangeItemList';
 import { valid_availableCancelOrder } from '/util/func/validation/valid_availableCancelOrder';
 
 export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
-
-  // console.log(data);
+  console.log(data);
 
   const [activeModal, setActiveModal] = useState(false);
   const [confirmMessage, setConfirmMessage] = useState('');
@@ -31,7 +30,7 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
     const href = e.currentTarget.href;
     popupWindow(href, { width: 540, height: 480, left: 200, top: 100 });
   };
-  
+
   const initializeModalState = () => {
     // setFilteredItemList(originItemList);
     setConfirmMessage('');
@@ -48,16 +47,15 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
   const onOrderCancle = async (confirm) => {
     if (!confirm) return initializeModalState();
     console.log('전체 주문취소 API 실행 // 부분 취소 불가');
-    
+
     const r = await postObjData(`/api/orders/${orderIdx}/subscribe/cancelRequest`);
     console.log(r);
-    if(r.isDone){
+    if (r.isDone) {
       alert('구독 주문 결제취소완료');
       window.location.reload();
     }
-    
+
     setActiveModal(null);
-    
   };
 
   const confirmBCallbackType = {
@@ -87,7 +85,6 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
                 </div>
               </h1>
 
-
               <span className={s.change}>
                 {data?.orderDto.beforePlan === null &&
                 data?.orderDto.beforeOneMealRecommendGram === null &&
@@ -100,13 +97,15 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
               <div className={s.body_content}>
                 <div className={s.left_box}>
                   <figure className={`${s.image} img-wrap`}>
-                    {data?.recipeDto.thumbnailUrl && <Image
-                      priority
-                      src={data?.recipeDto.thumbnailUrl}
-                      objectFit="cover"
-                      layout="fill"
-                      alt="레시피 썸네일"
-                    />}
+                    {data?.recipeDto.thumbnailUrl && (
+                      <Image
+                        priority
+                        src={data?.recipeDto.thumbnailUrl}
+                        objectFit="cover"
+                        layout="fill"
+                        alt="레시피 썸네일"
+                      />
+                    )}
                   </figure>
                 </div>
 
@@ -122,27 +121,33 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
                     <span>{data?.orderDto.dogName}</span>
 
                     <span>급여량</span>
-                    <span>{data?.orderDto.oneMealRecommendGram}g</span>
+                    <div>
+                      {data?.orderDto.beforeOneMealRecommendGram !== data?.orderDto.oneMealRecommendGram && <span className={s.beforeData}>{data?.orderDto.beforeOneMealRecommendGram}g</span>}
+                      <span>{data?.orderDto.oneMealRecommendGram}g</span>
+                    </div>
 
                     <span>플랜</span>
-                    <span>
-                      {/* 풀플랜(28개) */}
-                      {subscribePlanType[data?.orderDto.plan].KOR}
-                    </span>
+                    <div>
+                      {data?.orderDto.beforePlan !== data?.orderDto.plan && <span className={s.beforeData}>{subscribePlanType[data?.orderDto.beforePlan].KOR}</span>}
+                      <span>{subscribePlanType[data?.orderDto.plan].KOR}</span>
+                    </div>
 
                     <span>레시피</span>
-                    <span>
-                      {/* 믹스레시피(스타터프리미엄, 덕&amp;램) */}
-                      {data?.recipeDto.recipeName}
-                    </span>
+                    <div>
+                      {data?.orderDto.beforeRecipeName !== data?.recipeDto.recipeName && <span className={s.beforeData}>{data?.orderDto.beforeRecipeName}</span>}
+                      <span>{data?.recipeDto.recipeName}</span>
+                    </div>
 
                     <span>가격</span>
-                    <span>{transformLocalCurrency(data?.orderDto.orderPrice)}원</span>
+                    <div>
+                      {data?.orderDto.beforeOrderPrice !== data?.orderDto.orderPrice && <span className={s.beforeData}>{transformLocalCurrency(data?.orderDto.beforeOrderPrice)}원</span>}
+                      
+                      <span>{transformLocalCurrency(data?.orderDto.orderPrice)}원</span>
+                    </div>
                   </div>
                 </div>
               </div>
             </section>
-
 
             {/* 주문상품 결제정보 배송정보 */}
             <section className={s.body}>
@@ -153,7 +158,7 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
                   <span>주문번호</span>
                   <span>{data?.orderDto.merchantUid}</span>
                   <span>주문(결제)일시</span>
-                  <span>{transformDate(data?.orderDto.orderDate, 'time', {seperator: '/'})}</span>
+                  <span>{transformDate(data?.orderDto.orderDate, 'time', { seperator: '/' })}</span>
                   <span>배송정보</span>
                   <span>정기 구독 배송</span>
                 </div>
@@ -163,35 +168,36 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
             <section className={s.body}>
               <div className={s.body_title}>배송조회</div>
 
-
               {/* 주문상품 결제정보 배송정보 */}
-           
+
               <div className={s.body_content_3}>
-                {!valid_deliveryCondition(data?.orderDto.deliveryStatus) ? <ul className={s.content_grid}>
-                  <li>CJ대한통운</li>
-                  <li>
-                    운송장번호&nbsp;{data?.orderDto.deliveryNumber || '(발급 전)'}
-                  </li>
-                  <li className={s.deliveryStatus}>{orderStatus.KOR[data?.orderDto.deliveryStatus]}</li>
-                  <li>
-                    <a
-                      href={`http://nexs.cjgls.com/web/service02_01.jsp?slipno=${data?.orderDto.deliveryNumber}`}
-                      target="_blank"
-                      rel={'noreferrer'}
-                      onClick={onPopupHandler}
-                    >
-                      <button>배송조회</button>
-                    </a>
-                  </li>
-                </ul> : <p className={s.emptyCont}>배송 중 상태에서 조회 가능합니다.</p>}
-                
+                {!valid_deliveryCondition(data?.orderDto.deliveryStatus) ? (
+                  <ul className={s.content_grid}>
+                    <li>CJ대한통운</li>
+                    <li>운송장번호&nbsp;{data?.orderDto.deliveryNumber || '(발급 전)'}</li>
+                    <li className={s.deliveryStatus}>
+                      {orderStatus.KOR[data?.orderDto.deliveryStatus]}
+                    </li>
+                    <li>
+                      <a
+                        href={`http://nexs.cjgls.com/web/service02_01.jsp?slipno=${data?.orderDto.deliveryNumber}`}
+                        target="_blank"
+                        rel={'noreferrer'}
+                        onClick={onPopupHandler}
+                      >
+                        <button>배송조회</button>
+                      </a>
+                    </li>
+                  </ul>
+                ) : (
+                  <p className={s.emptyCont}>배송 중 상태에서 조회 가능합니다.</p>
+                )}
               </div>
             </section>
 
             {/* 주문상품 결제정보 배송정보 */}
             <section className={s.body}>
               <div className={s.body_title}>결제정보</div>
-
 
               <div className={s.body_content_2}>
                 <div className={s.grid_box}>
@@ -224,7 +230,6 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
 
             <section className={s.body}>
               <div className={s.body_title}>배송정보</div>
-
 
               <div className={s.body_content_2}>
                 <div className={s.grid_box}>
@@ -265,9 +270,7 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
   );
 }
 
-
 export async function getServerSideProps(ctx) {
-  
   const { query, req } = ctx;
   // console.log(query, req)
 
@@ -276,26 +279,26 @@ export async function getServerSideProps(ctx) {
 
   let DATA = null;
   const getApiUrl = `/api/orders/${orderIdx}/subscribe`;
-  
+
   const res = await getDataSSR(req, getApiUrl);
-  console.log('SERVER REPONSE: ',res);
+  console.log('SERVER REPONSE: ', res);
   const data = res?.data;
   console.log(data);
   if (data) {
     DATA = {
-      recipeDto:{
+      recipeDto: {
         thumbnailUrl: data.recipeDto.thumbnailUrl,
-        recipeName: data.recipeDto.recipeName
+        recipeName: data.recipeDto.recipeName,
       },
-      recipeNames:data.recipeNames,
-      orderDto:{
+      recipeNames: data.recipeNames,
+      orderDto: {
         subscribeCount: data.orderDto.subscribeCount,
         dogName: data.orderDto.dogName,
         oneMealRecommendGram: data.orderDto.oneMealRecommendGram,
         plan: data.orderDto.plan,
 
         // paymentDate: data.orderDto.paymentDate,
-        orderPrice:data.orderDto.orderPrice,
+        orderPrice: data.orderDto.orderPrice,
         beforeSubscribeCount: data.orderDto.beforeSubscribeCount,
         beforePlan: data.orderDto.beforePlan,
         beforeOneMealRecommendGram: data.orderDto.beforeOneMealRecommendGram,
@@ -326,5 +329,4 @@ export async function getServerSideProps(ctx) {
     console.log(DATA);
   }
   return { props: { orderIdx, data: DATA } };
-
 }
