@@ -4,7 +4,7 @@ import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import {orderStatus} from "/store/TYPE/orderStatusTYPE";
 
 const ProductInfo_normItem = ({ itemInfo }) => {
-  console.log(itemInfo);
+  // console.log(itemInfo);
   return (
     <>
       <ul className={`${s['t-body']} ${s['product-item-info']}`}>
