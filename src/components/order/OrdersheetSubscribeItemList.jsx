@@ -2,6 +2,8 @@ import s from '/src/pages/order/ordersheet/ordersheet.module.scss';
 import Spinner from '/src/components/atoms/Spinner';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import React from 'react';
+import {subscribePlanType} from "/store/TYPE/subscribePlanType";
+
 
 export const OrdersheetSubscribeItemList = ({
   info,
@@ -63,6 +65,7 @@ export const OrdersheetSubscribeItemList = ({
     btn.innerText = '적용됨';
   };
 
+  console.log(info)
   return (
     <>
       <section className={s.title_box}>
@@ -84,9 +87,9 @@ export const OrdersheetSubscribeItemList = ({
           ) : (
             <li className={s.flex_box}>
               <div className={s.info_col}>
-                <p className={s.subscribeName}>[정기구독] {info.subscribeDto?.plan}</p>
-                {info.recipeNames?.map((name, i) => (
-                  <p key={`info-recipeName-${i}`} className={s.recipeName}>{name}</p>
+                <p className={s.subscribeName}>[정기구독] {info.subscribeDto?.plan && subscribePlanType[info.subscribeDto?.plan].KOR}</p>
+                {info.recipeNameList?.map((name, i) => (
+                  <p key={`info-recipeName-${i}`} className={s.recipeName}>{name} 레시피</p>
                 ))}
               </div>
 
