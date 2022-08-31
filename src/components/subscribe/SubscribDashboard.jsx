@@ -32,7 +32,6 @@ const DUMMY_COUPON_DATA = [
 ];
 
 export const SubscribDashboard = ({ subscribeInfo }) => {
-  // console.log(subscribeInfo);
   // ! 구독정보 변경마감일자 체크 (google sheet);
   const info = {
     dogName: subscribeInfo.info.dogName,
@@ -40,10 +39,10 @@ export const SubscribDashboard = ({ subscribeInfo }) => {
     recipeNameList: subscribeInfo.info.recipeNames.split(','),
     oneMealRecommendGram: subscribeInfo.info.oneMealRecommendGram,
     nextPaymentDate: subscribeInfo.info.nextPaymentDate,
-    nextPaymentPrice: subscribeInfo.info.nextPaymentPrice,
+    nextPaymentPrice: subscribeInfo.info.nextPaymentPrice - (subscribeInfo.info.discountCoupon + subscribeInfo.info.discountGrade), // 다음결제금액 -(쿠폰할인+등급할인)
     nextDeliveryDate: subscribeInfo.info.nextDeliveryDate,
-    skipCount: 2, // ! SERVER에 요청할 데이터,
-    skipType: '1회 건너뛰기',
+    countSkipOneTime: subscribeInfo.info.countSkipOneTime,
+    countSkipOneWeek: subscribeInfo.info.countSkipOneWeek,
     subscribeCount: subscribeInfo.info.subscribeCount,
     coupon: {
       // 쿠폰은 상품 당, 하나만 적용됨
@@ -52,6 +51,7 @@ export const SubscribDashboard = ({ subscribeInfo }) => {
       // availableCouponList: DUMMY_COUPON_DATA, /////////////////// ! TEST TEST TEST TEST TEST TEST TEST TEST TEST
       availableCouponList: subscribeInfo.coupon || [],
       originPrice: subscribeInfo.info.nextPaymentPrice,
+      discountGrade: subscribeInfo.info.discountGrade,
     },
   };
   const mct = useModalContext();
@@ -77,6 +77,7 @@ export const SubscribDashboard = ({ subscribeInfo }) => {
       setActiveModal({ coupon: false, alert: false });
     }
   };
+  console.log(info);
 
   return (
     <>
@@ -134,11 +135,10 @@ export const SubscribDashboard = ({ subscribeInfo }) => {
                 <div className={s.row_2}>
                   {transformDate(info.nextPaymentDate, null, { seperator: '/' })}
                 </div>
-                {info.skipCount ? (
-                  <div className={s.row_3}>
-                    {info.skipType === '1회 건너뛰기' ? '1회' : '1주'} 건너뛰기 중
-                  </div>
-                ) : null}
+                <div className={s.row_3}>
+                  {info.countSkipOneTime ? <span>1회 건너뛰기</span> : null}
+                  {info.countSkipOneWeek ? <span>1주 건너뛰기</span> : null}
+                </div>
               </div>
 
               <div className={s.inner_mid_box}>
@@ -171,7 +171,6 @@ export const SubscribDashboard = ({ subscribeInfo }) => {
                 <div className={s.row_2}>
                   {transformDate(info.nextDeliveryDate, null, { seperator: '/' })}
                 </div>
-                {/*<div className={s.row_3}></div>*/}
               </div>
             </div>
           </div>
@@ -186,7 +185,7 @@ export const SubscribDashboard = ({ subscribeInfo }) => {
         />
       )}
       {activeModal.alert && (
-        <Modal_global_alert message={alertModalMessage} onClick={submitted && hideCouponModal}/>
+        <Modal_global_alert message={alertModalMessage} onClick={submitted && hideCouponModal} />
       )}
     </>
   );

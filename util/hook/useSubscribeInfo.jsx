@@ -77,20 +77,23 @@ export const useSubscribeInfo = (subscribeId) => {
           allPriceObj[key] = val;
         }
         
-        // console.log(data)
+        console.log(data)
         const DATA = {
           // 구독 기본 정보 + 구독정보의 Dashboard
           info: {
             subscribeId: Number(subscribeId)  === data.subscribeDto.id ? Number(subscribeId) : null, // validation 요청한 페이지의 구독id와 server에서 받은 값을 대조
-            dogId: 'DOG_ID_필요함',
+            dogId: data.subscribeDto.dogId,
             dogName: data.subscribeDto.dogName,
             subscribeCount: data.subscribeDto.subscribeCount,
             nextPaymentDate: data.subscribeDto.nextPaymentDate,
             nextPaymentPrice: data.subscribeDto.nextPaymentPrice,
             nextDeliveryDate: data.subscribeDto.nextDeliveryDate,
             usingMemberCouponId: data.subscribeDto.usingMemberCouponId, // 사용한 보유쿠폰 id,
+            countSkipOneTime: data.subscribeDto.countSkipOneTime,
+            countSkipOneWeek: data.subscribeDto.countSkipOneWeek,
             couponName: data.subscribeDto.couponName,
-            discount: data.subscribeDto.discount,
+            discountCoupon: data.subscribeDto.discountCoupon,
+            discountGrade: data.subscribeDto.discountGrade,
             planName: planName,
             recipeNames: data.subscribeRecipeDtoList.map((list) => list.recipeName).join(', '),
             oneMealRecommendGram: oneMealRecommendGram,
