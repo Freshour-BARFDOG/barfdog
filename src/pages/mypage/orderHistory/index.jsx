@@ -98,7 +98,7 @@ export default function OrderHistoryPage() {
     return newPageInfo;
   };
 
-  console.log(itemType, itemList);
+  // console.log(itemType, itemList);
 
   return (
     <>

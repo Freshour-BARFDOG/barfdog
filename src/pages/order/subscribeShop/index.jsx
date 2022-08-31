@@ -259,6 +259,8 @@ export default function RegisterSubscribeInfoPage({ data }) {
   if (isLoading?.fetching) {
     return <FullScreenRunningDog opacity={1} />;
   }
+  
+  console.log(info.subscribeStatus)
   return (
     <>
       <MetaTitle title="플랜 레시피 선택" />
@@ -344,20 +346,20 @@ export async function getServerSideProps({ req, query }) {
   };
 
   /// ! TESTTESTTESTTESTTESTTESTTESTTESTTESTTEST
-  if (data.surveyInfo) {
-    // CASE : 플랜 변경 (4주 => 2주)
-    // data.surveyInfo.plan= subscribePlanType.FULL.NAME';
-    // data.surveyInfo.recipeName= '스타터프리미엄, 터키&비프';
-    // data.surveyInfo.nextPaymentDate= '2022-08-10T10:44:01.179';
-    // data.surveyInfo.nextPaymentPrice= 120000;
-    // data.surveyInfo.nextDeliveryDate= '2022-08-24';
-    // CASE : 플랜 변경 (2주 => 4주)
-    data.surveyInfo.plan = subscribePlanType.HALF.NAME;
-    data.surveyInfo.recipeName = '터키&비프';
-    data.surveyInfo.nextPaymentDate = '2022-08-10T10:44:01.179';
-    data.surveyInfo.nextPaymentPrice = 112000;
-    data.surveyInfo.nextDeliveryDate = '2022-08-24';
-  }
+  // if (data.surveyInfo) {
+  //   // CASE : 플랜 변경 (4주 => 2주)
+  //   // data.surveyInfo.plan= subscribePlanType.FULL.NAME';
+  //   // data.surveyInfo.recipeName= '스타터프리미엄, 터키&비프';
+  //   // data.surveyInfo.nextPaymentDate= '2022-08-10T10:44:01.179';
+  //   // data.surveyInfo.nextPaymentPrice= 120000;
+  //   // data.surveyInfo.nextDeliveryDate= '2022-08-24';
+  //   // CASE : 플랜 변경 (2주 => 4주)
+  //   data.surveyInfo.plan = subscribePlanType.HALF.NAME;
+  //   data.surveyInfo.recipeName = '터키&비프';
+  //   data.surveyInfo.nextPaymentDate = '2022-08-10T10:44:01.179';
+  //   data.surveyInfo.nextPaymentPrice = 112000;
+  //   data.surveyInfo.nextDeliveryDate = '2022-08-24';
+  // }
 
   /// ! TESTTESTTESTTESTTESTTESTTESTTESTTESTTEST
 

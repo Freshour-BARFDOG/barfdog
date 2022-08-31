@@ -19,7 +19,7 @@ export default function ManageSubscribePage() {
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
 
-  console.log(itemList);
+  // console.log(itemList);
 
   const pageInterCeptor = async (res) => {
     console.log(res);
