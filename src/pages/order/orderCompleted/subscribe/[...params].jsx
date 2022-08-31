@@ -60,7 +60,7 @@ export async function getServerSideProps(ctx) {
     const r = await postDataSSR(req,`/api/orders/${orderIdx}/subscribe/success`, {
       impUid : imp_uid,
       merchantUid : merchant_uid,
-      customerUid: customUid
+      customerUid: `customer_Uid_${customUid}`
     });
     
   } else if(imp_success == 'false'){
