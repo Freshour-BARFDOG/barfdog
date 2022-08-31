@@ -2,6 +2,7 @@ export const orderStatus = {
   ALL: 'ALL', // * 배송상태 미포함 (검색결과 조회 시에 사용)
   HOLD: 'HOLD',
   BEFORE_PAYMENT: 'BEFORE_PAYMENT',
+  RESERVED_PAYMENT: 'RESERVED_PAYMENT',
   PAYMENT_DONE: 'PAYMENT_DONE',
   PRUDUCING: 'PRUDUCING', // 구독상품 (상품 준비중)
   DELIVERY_READY: 'DELIVERY_READY', // 일반상품 (상품 준비 중)
@@ -23,6 +24,7 @@ export const orderStatus = {
     ALL: '전체', // * 배송상태 미포함 (검색결과 조회 시에 사용)
     HOLD: '구독 보류',
     BEFORE_PAYMENT: '결제 전',
+    RESERVED_PAYMENT: '예약됨',
     PAYMENT_DONE: '결제 완료',
     PRUDUCING: '생산 중', // 구독 상품
     DELIVERY_READY: '배송 준비 중', // 일반상품
