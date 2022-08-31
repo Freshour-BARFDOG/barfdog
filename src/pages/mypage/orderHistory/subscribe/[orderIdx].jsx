@@ -46,14 +46,20 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
 
   const onOrderCancle = async (confirm) => {
     if (!confirm) return initializeModalState();
-    console.log('전체 주문취소 API 실행 // 부분 취소 불가');
-
-    const r = await postObjData(`/api/orders/${orderIdx}/subscribe/cancelRequest`);
-    console.log(r);
-    if (r.isDone) {
-      alert('구독 주문 결제취소완료');
-      window.location.reload();
+    // console.log('전체 주문취소 API 실행 // 부분 취소 불가');
+    try {
+      const r = await postObjData(`/api/orders/${orderIdx}/subscribe/cancelRequest`);
+      console.log(r);
+      if (r.isDone) {
+        alert('구독 주문 결제취소완료');
+        window.location.reload();
+      } else {
+        alert(`주문취소 실패\n${r.error}`);
+      }
+    } catch (err) {
+        console.error(err)
     }
+    
 
     setActiveModal(null);
   };
