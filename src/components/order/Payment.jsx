@@ -20,8 +20,6 @@ export function Payment({
   const router = useRouter();
 
   useEffect(() => {
-    // console.log(router);
-    // console.log(router.query.subscribeId);
 
     const jquery = document.createElement('script');
     jquery.src = 'https://code.jquery.com/jquery-1.12.4.min.js';
@@ -237,29 +235,30 @@ export function Payment({
     const IMP = window.IMP;
     IMP.init(process.env.NEXT_PUBLIC_IAMPORT_CODE);
 
-    const randomStr= new Date().getTime().toString(36);
+    const randomStr = new Date().getTime().toString(36);
+    const customUid = `customer_Uid_${randomStr}`;
     /* 2. 결제 데이터 정의하기 */
     const data = {
       pg: 'kcp_billing', // PG사
       pay_method: 'card', // 결제수단
       merchant_uid: merchantUid, // 주문번호
       amount: 1 || body.paymentPrice, // 결제금액
-      customer_uid : `customer_Uid_${randomStr}`,
+      customer_uid : customUid,
       name: '바프독 아임포트 결제 테스트', // 주문명
       buyer_name: 'username' || info.name, // 구매자 이름
       buyer_tel: '01000000000' || info.phone, // 구매자 전화번호
       buyer_email: 'a@gmail' || info.email, // 구매자 이메일
       buyer_addr: '센텀2로' || `${info.address.street},${info.address.detailAddress}`, // 구매자 주소
       buyer_postcode: '00000' || info.address.zipcode, // 구매자 우편번호
-      m_redirect_url: `http://localhost:4000/order/orderCompleted/subscribe/${id}`
-
+      m_redirect_url: `http://localhost:4000/order/orderCompleted/subscribe/${id}/${customUid}`
     };
+
     IMP.request_pay(data, callback);
     
     /* 4. 결제 창 호출하기 */
     async function callback(response) {
       console.log(response);
-      const { success,customer_uid, imp_uid, merchant_uid,card_name,card_number, error_msg } = response;
+      const { success, customer_uid, imp_uid, merchant_uid, card_name, card_number, error_msg } = response;
       
     /* 3. 콜백 함수 정의하기 */
     if (success) {
@@ -269,8 +268,6 @@ export function Payment({
         impUid : imp_uid,
         merchantUid : merchant_uid,
         customerUid : customer_uid,
-        cardName : card_name,
-        cardNumber :card_number
       });
       console.log(r);
       if(r.isDone){
@@ -287,8 +284,7 @@ export function Payment({
           alert(`결제 실패: ${error_msg}`);
           // 임시로 넣은 코드 :  결제취소시 , 전역에 import 결제 html이 잔류하여, 없애기위한 용도
           // window.location.href= '/';
-          startPayment();
-
+          // startPayment();
         }
       
     }
