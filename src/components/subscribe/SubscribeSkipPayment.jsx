@@ -9,14 +9,15 @@ import Modal_confirm from "/src/components/modal/Modal_confirm";
 import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 import CustomRadio from "/src/components/admin/form/CustomRadio";
 import {subscribePlanType} from "/store/TYPE/subscribePlanType";
-import transformDate from "/util/func/transformDate";
+import transformDate, {transformToday} from "/util/func/transformDate";
 import {calcChangedSubscribeDeliveryDate} from "/util/func/calcNextSubscribeDeliveryDate";
 import {subscribeSkipType} from "/store/TYPE/subscribeSkipType";
+import {getDiffDateNumber} from "../../../util/func/getDiffDate";
 
 
 
 export const SubscribeSkipPayment = ({subscribeInfo}) => {
-  // console.log(subscribeInfo);
+  
   const curPlan = subscribeInfo.plan.name;
   const curPlanWeeklyPaymentCycle = subscribePlanType[curPlan].weeklyPaymentCycle;
   const inputIdKey = 'weeklySkipCount';
@@ -81,8 +82,19 @@ export const SubscribeSkipPayment = ({subscribeInfo}) => {
     window.location.reload();
   };
   
+  console.log(subscribeInfo);
+  // 다음 결제예정일과 오늘을 비교한다 ==> 5일이내일 경우 구독버튼 나타나게한다 //
+
   
   
+  function isAvailableSubscribeSkipping(nextPaymentDate) {
+    // TEST : nextPaymentDate '2022-09-01T23:00:10.466'
+    const today = transformToday();
+    const getDiffDate = getDiffDateNumber(nextPaymentDate, today);
+    console.log(getDiffDate)
+    const availableSkipDate = 5;
+    return getDiffDate <= availableSkipDate;
+  }
   return (
     <>
       {isLoading.reload && <FullScreenLoading />}
@@ -124,9 +136,9 @@ export const SubscribeSkipPayment = ({subscribeInfo}) => {
         </div>
 
         <div className={s.btn_box}>
-          <button type={'button'} className={s.btn} onClick={()=>{
+          {isAvailableSubscribeSkipping(subscribeInfo.info.nextPaymentDate) ? <button type={'button'} className={s.btn} onClick={()=>{
             setActiveConfirmModal(true);
-          }}>건너뛰기 적용하기</button>
+          }}>건너뛰기 적용하기</button> : <span className={'pointColor'}>건너뛰기는 다음 결제 5일 전부터 가능합니다.</span>}
         </div>
       </div>
       {activeConfirmModal && (
