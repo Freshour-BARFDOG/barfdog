@@ -8,18 +8,19 @@ import ProductInfo_normItem from '/src/components/popup/admin_ProductInfo/Produc
 import ProductInfo_payment from '/src/components/popup/admin_ProductInfo/ProductInfo_payment';
 import ProductInfo_delivery from '/src/components/popup/admin_ProductInfo/ProductInfo_delivery';
 import { orderStatus } from '/store/TYPE/orderStatusTYPE';
+import {getDataSSR} from "/src/pages/api/reqData";
 
 export default function Popup_GeneralOrderDetailInfoPage({ data }) {
   const canceldOrderStatusList = [
     { boxLabel: '취소', value: orderStatus.CANCEL_REQUEST },
     { boxLabel: '취소', value: orderStatus.CANCEL_DONE_BUYER },
     { boxLabel: '취소', value: orderStatus.CANCEL_DONE_SELLER },
-    { boxLabel: '취소', value: orderStatus.RETURN_REQUEST },
-    { boxLabel: '취소', value: orderStatus.RETURN_DONE_SELLER },
-    { boxLabel: '취소', value: orderStatus.RETURN_DONE_BUYER },
-    { boxLabel: '취소', value: orderStatus.EXCHANGE_REQUEST },
-    { boxLabel: '취소', value: orderStatus.EXCHANGE_DONE_SELLER },
-    { boxLabel: '취소', value: orderStatus.EXCHANGE_DONE_BUYER },
+    { boxLabel: '반품', value: orderStatus.RETURN_REQUEST },
+    { boxLabel: '반품', value: orderStatus.RETURN_DONE_SELLER },
+    { boxLabel: '반품', value: orderStatus.RETURN_DONE_BUYER },
+    { boxLabel: '교환', value: orderStatus.EXCHANGE_REQUEST },
+    { boxLabel: '교환', value: orderStatus.EXCHANGE_DONE_SELLER },
+    { boxLabel: '교환', value: orderStatus.EXCHANGE_DONE_BUYER },
   ];
 
   let isCanceledOrderStatus = false;
@@ -31,7 +32,7 @@ export default function Popup_GeneralOrderDetailInfoPage({ data }) {
       break;
     }
   }
-
+  
   console.log(data);
 
   return (
@@ -83,7 +84,6 @@ export default function Popup_GeneralOrderDetailInfoPage({ data }) {
                   <li className={s['table-list']}>
                     <ProductInfo_payment paymentInfo={data.paymentDto} />
                   </li>
-                  {/* --- OK ----- */}
                   <li className={s['table-list']}>
                     <ProductInfo_delivery
                       deliveryInfo={{
@@ -104,6 +104,99 @@ export default function Popup_GeneralOrderDetailInfoPage({ data }) {
     </>
   );
 }
+
+
+const isCancelOrderStatus = (status)=>{
+  const canceldOrderStatusList = [
+    orderStatus.CANCEL_REQUEST,
+    orderStatus.CANCEL_DONE_BUYER,
+    orderStatus.CANCEL_DONE_SELLER,
+    orderStatus.RETURN_REQUEST,
+    orderStatus.RETURN_DONE_SELLER,
+    orderStatus.RETURN_DONE_BUYER,
+    orderStatus.EXCHANGE_REQUEST,
+    orderStatus.EXCHANGE_DONE_SELLER,
+    orderStatus.EXCHANGE_DONE_BUYER,
+  ];
+  const isCanceledOrderStatus = canceldOrderStatusList.indexOf(status) >= 0;
+  return isCanceledOrderStatus;
+}
+
+export async function getServerSideProps({ req, query }) {
+  const { orderId } = query;
+  let DATA = null;
+  let orderStatus = null;
+  const apiUrl = `api/admin/orders/${orderId}/general`;
+  const res = await getDataSSR(req, apiUrl);
+  // console.log(res);
+  // const res = DUMMY_DEFAULT_RES;
+  if (res.data) {
+    const data = res.data;
+    DATA = {
+      orderStatus: data.paymentDto.orderStatus,
+      orderInfoDto: {
+        id: data.orderInfoDto.id,
+        merchantUid: data.orderInfoDto.merchantUid,
+        orderDate: data.orderInfoDto.orderDate,
+        orderType: data.orderInfoDto.orderType,
+        memberName: data.orderInfoDto.memberName,
+        phoneNumber: data.orderInfoDto.phoneNumber,
+        package: data.orderInfoDto.package,
+        subscribe: data.orderInfoDto.subscribe,
+        email: data.orderInfoDto.email,
+      },
+      orderItemAndOptionDtoList: data.orderItemAndOptionDtoList.map((info) => ({
+        orderItemDto: {
+          orderItemId: info.orderItemDto.orderItemId,
+          itemName: info.orderItemDto.itemName,
+          amount: info.orderItemDto.amount,
+          finalPrice: info.orderItemDto.finalPrice,
+          couponName: info.orderItemDto.couponName,
+          discountAmount: info.orderItemDto.discountAmount,
+          status: info.orderItemDto.status,
+        },
+        selectOptionDtoList: info.selectOptionDtoList.map((op) => ({
+          optionName: op.optionName,
+          price: op.price,
+          amount: op.amount,
+        })),
+      })),
+      paymentDto: {
+        orderPrice: data.paymentDto.orderPrice,
+        deliveryPrice: data.paymentDto.deliveryPrice,
+        discountReward: data.paymentDto.discountReward,
+        paymentPrice: data.paymentDto.paymentPrice,
+        couponName: data.paymentDto?.couponName || null, // ! 서버에서 데이터 추가필요
+        discountCoupon: data.paymentDto?.discountCoupon|| data.orderItemAndOptionDtoList?.map((info)=>info.orderItemDto.discountAmount).reduce((acc, cur)=> acc+ cur) || null , // ! 서버에서 데이터 추가 필요
+        orderStatus: data.paymentDto.orderStatus,
+        orderConfirmDate: data.paymentDto.orderConfirmDate,
+      },
+      deliveryDto: {
+        recipientName: data.deliveryDto.recipientName,
+        recipientPhone: data.deliveryDto.recipientPhone,
+        zipcode: data.deliveryDto.zipcode,
+        street: data.deliveryDto.street,
+        detailAddress: data.deliveryDto.detailAddress,
+        departureDate: data.deliveryDto.departureDate,
+        arrivalDate: data.deliveryDto.arrivalDate,
+        deliveryNumber: data.deliveryDto.deliveryNumber,
+      },
+    };
+    
+    if(isCancelOrderStatus(DATA.orderStatus)){
+      // 취소상태일 경우 추가정보
+      const cancelApiUrl = `/api/admin/orders/orderItem/${orderId}`;
+      const r = await getDataSSR(req, cancelApiUrl);
+      console.log('CANCEL RESPONSE: ',r)
+    }
+  
+  }
+  return { props: { data: DATA, orderStatus } };
+}
+
+
+
+
 
 const DUMMY_DEFAULT_RES = {
   data: {
@@ -268,78 +361,3 @@ const DUMMY_CANCEL_EXCHANGE_RETURN_RES = {
     },
   },
 };
-
-// ! 취소/반품/교환 관련 일반 주문 하나 조회 .... 를 추가적으로 조회한다.....
-// ! 취소/반품/교환 관련 일반 주문 하나 조회 .... 를 추가적으로 조회한다.....
-// ! 취소/반품/교환 관련 일반 주문 하나 조회 .... 를 추가적으로 조회한다.....
-// ! 취소/반품/교환 관련 일반 주문 하나 조회 .... 를 추가적으로 조회한다.....
-// ! 취소/반품/교환 관련 일반 주문 하나 조회 .... 를 추가적으로 조회한다.....
-// ! 취소/반품/교환 관련 일반 주문 하나 조회 .... 를 추가적으로 조회한다.....
-
-export async function getServerSideProps({ req, query }) {
-  const { orderId } = query;
-  let DATA = null;
-  let orderStatus = null;
-  const apiUrl = `api/admin/orders/${orderId}/general`;
-  // const res = await getDataSSR(req, apiUrl);
-  const res = DUMMY_DEFAULT_RES;
-  if (res.data) {
-    const data = res.data;
-    // ! 여기서 만약.,..... 주문상태가........... 취소, 반품, 교환이라면,,,,,, 추가적으로 API요청을 넣는다.
-    // ! 여기서 만약.,..... 주문상태가........... 취소, 반품, 교환이라면,,,,,, 추가적으로 API요청을 넣는다.
-    // ! 여기서 만약.,..... 주문상태가........... 취소, 반품, 교환이라면,,,,,, 추가적으로 API요청을 넣는다.
-    // ! 여기서 만약.,..... 주문상태가........... 취소, 반품, 교환이라면,,,,,, 추가적으로 API요청을 넣는다.
-    // ! 여기서 만약.,..... 주문상태가........... 취소, 반품, 교환이라면,,,,,, 추가적으로 API요청을 넣는다.
-    DATA = {
-      orderStatus: data.paymentDto.orderStatus,
-      orderInfoDto: {
-        id: data.orderInfoDto.id,
-        merchantUid: data.orderInfoDto.merchantUid,
-        orderDate: data.orderInfoDto.orderDate,
-        orderType: data.orderInfoDto.orderType,
-        memberName: data.orderInfoDto.memberName,
-        phoneNumber: data.orderInfoDto.phoneNumber,
-        package: data.orderInfoDto.package,
-        subscribe: data.orderInfoDto.subscribe,
-        email: data.orderInfoDto.email,
-      },
-      orderItemAndOptionDtoList: data.orderItemAndOptionDtoList.map((info) => ({
-        orderItemDto: {
-          orderItemId: info.orderItemDto.orderItemId,
-          itemName: info.orderItemDto.itemName,
-          amount: info.orderItemDto.amount,
-          finalPrice: info.orderItemDto.finalPrice,
-          couponName: info.orderItemDto.couponName,
-          discountAmount: info.orderItemDto.discountAmount,
-          status: info.orderItemDto.status,
-        },
-        selectOptionDtoList: info.selectOptionDtoList.map((op) => ({
-          optionName: op.optionName,
-          price: op.price,
-          amount: op.amount,
-        })),
-      })),
-      paymentDto: {
-        orderPrice: data.paymentDto.orderPrice,
-        deliveryPrice: data.paymentDto.deliveryPrice,
-        discountReward: data.paymentDto.discountReward,
-        paymentPrice: data.paymentDto.paymentPrice,
-        couponName: data.paymentDto?.couponName, // ! 서버에서 데이터 추가필요
-        discountCoupon: data.paymentDto?.discountCoupon, // ! 서버에서 데이터 추가 필요
-        orderStatus: data.paymentDto.orderStatus,
-        orderConfirmDate: data.paymentDto.orderConfirmDate,
-      },
-      deliveryDto: {
-        recipientName: data.deliveryDto.recipientName,
-        recipientPhone: data.deliveryDto.recipientPhone,
-        zipcode: data.deliveryDto.zipcode,
-        street: data.deliveryDto.street,
-        detailAddress: data.deliveryDto.detailAddress,
-        departureDate: data.deliveryDto.departureDate,
-        arrivalDate: data.deliveryDto.arrivalDate,
-        deliveryNumber: data.deliveryDto.deliveryNumber,
-      },
-    };
-  }
-  return { props: { data: DATA, orderStatus } };
-}
