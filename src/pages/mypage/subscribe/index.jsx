@@ -25,7 +25,23 @@ export default function ManageSubscribePage() {
     console.log(res);
     // res = DUMMY_SUBSCRIBE_LIST_RESPONSE; // ! TEST
     const pageData = res.data.page;
-    const curItemList = res.data?._embedded?.querySubscribesDtoList || [];
+    const curItemList = res.data?._embedded?.querySubscribesDtoList.map((l)=>({
+      recipeNames:l.recipeNames,
+      subscribeDto:{
+        countSkipOneTime: l.subscribeDto.countSkipOneTime,
+        countSkipOneWeek: l.subscribeDto.countSkipOneWeek,
+        discountCoupon: l.subscribeDto.discountCoupon,
+        discountGrade: l.subscribeDto.discountGrade,
+        dogName: l.subscribeDto.dogName,
+        nextPaymentDate: l.subscribeDto.nextPaymentDate,
+        nextPaymentPrice: l.subscribeDto.nextPaymentPrice,
+        pictureUrl: l.subscribeDto.pictureUrl,
+        plan: l.subscribeDto.plan,
+        subscribeId: l.subscribeDto.subscribeId,
+      }
+      
+    })) || [];
+    console.log(res.data?._embedded)
 
     let newPageInfo = {
       totalPages: pageData.totalPages,
@@ -73,11 +89,11 @@ export default function ManageSubscribePage() {
                           <div className={s.text}>
                             {item.subscribeDto.skipCount > 0 && <em className={s.red_box_text}>1회 건너뛰기 </em>}
                             <p>
-                              {subscribePlanType[item.subscribeDto.plan].KOR}&nbsp;/
+                              {item.subscribeDto.plan && subscribePlanType[item.subscribeDto.plan].KOR}&nbsp;/
                               &nbsp;{item.recipeNames}
                             </p>
                             <span className={s.text2}>
-                              총 {subscribePlanType[item.subscribeDto.plan].totalNumberOfPacks}팩&nbsp;/&nbsp;{subscribePlanType[item.subscribeDto.plan].weeklyPaymentCycle}주 정기결제
+                              총 {item.subscribeDto.plan && subscribePlanType[item.subscribeDto.plan].totalNumberOfPacks}팩&nbsp;/&nbsp;{item.subscribeDto.plan && subscribePlanType[item.subscribeDto.plan].weeklyPaymentCycle}주 정기결제
                             </span>
                           </div>
                         </div>
@@ -87,10 +103,9 @@ export default function ManageSubscribePage() {
                             <span className={s.text2}>다음 결제일</span>
                             <span className={s.text3}>{transformDate(item.subscribeDto?.nextPaymentDate)}</span>
                           </div>
-
                           <div className={s.col_3}>
                             <span className={s.text2}>다음 결제금액</span>
-                            <span className={s.text3}>{transformLocalCurrency(item.subscribeDto.nextPaymentPrice)}원</span>
+                            <span className={s.text3}>{transformLocalCurrency(item.subscribeDto.nextPaymentPrice - (item.subscribeDto.discountCoupon + item.subscribeDto.discountGrade))}원</span>
                           </div>
 
                           <div className={s.col_4}>

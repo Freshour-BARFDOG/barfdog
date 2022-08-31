@@ -22,6 +22,7 @@ export const Modal_couponWithSubscribeApi = ({
   const info = {
     subscribeId: data.subscribeId,
     originPrice: data.originPrice,
+    discountGrade: data.discountGrade,
     usingMemberCouponId: data.usingMemberCouponId,
     availableCouponList:
       data.availableCouponList.map((coupon) => ({
@@ -49,9 +50,9 @@ export const Modal_couponWithSubscribeApi = ({
   const initialRadioInfo = {
     couponId: info.usingMemberCouponId,
     discountAmount: transformClearLocalCurrency(calcedCouponInfo.saleAmount),
-    salePrice: transformClearLocalCurrency(calcedCouponInfo.salePrice),
+    salePrice: transformClearLocalCurrency(calcedCouponInfo.salePrice) - info.discountGrade,
   };
-
+  
   const mct = useModalContext();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedRadioInfo, setSelectedRadioInfo] = useState(initialRadioInfo);
@@ -61,12 +62,13 @@ export const Modal_couponWithSubscribeApi = ({
   const onChangeHandler = (e) => {
     const radio = e.currentTarget;
     const couponId = Number(radio.dataset.couponId);
-    const discountAmount = Number(radio.dataset.discountAmount);
-    const salePrice = Number(info.originPrice - discountAmount);
+    const couponDiscountAmount = Number(radio.dataset.discountAmount);
+    const gradeDiscountAmount = info.discountGrade;
+    const salePrice = Number(info.originPrice - couponDiscountAmount - gradeDiscountAmount);
 
     setSelectedRadioInfo({
       couponId,
-      discountAmount,
+      discountAmount: couponDiscountAmount,
       salePrice,
     });
   };
@@ -99,7 +101,8 @@ export const Modal_couponWithSubscribeApi = ({
       console.error('err: ', err);
     }
     setIsLoading(false);
-  };
+  }
+  
 
   return (
     <>
@@ -195,6 +198,13 @@ export const Modal_couponWithSubscribeApi = ({
               <p>할인금액</p>
               <span className={s.text_price}>
                 {transformLocalCurrency(selectedRadioInfo.discountAmount)}원
+              </span>
+            </div>
+            <i className={s.line}></i>
+            <div className={s.col_2}>
+              <p>등급할인금액</p>
+              <span className={s.text_price}>
+                {transformLocalCurrency(info.discountGrade)}원
               </span>
             </div>
             <i className={s.vertical_line}></i>

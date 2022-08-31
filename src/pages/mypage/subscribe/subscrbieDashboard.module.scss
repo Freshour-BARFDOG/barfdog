@@ -90,7 +90,18 @@
           display: flex;
           justify-content: center;
           align-items: center;
-          height: rem(25);
+          flex-direction: column;
+          gap:rem(4);
+          span{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--color-line-04);
+            color: var(--color-font-sub);
+            width: rem(100);
+            height: rem(25);
+            border-radius: rem(4);
+          }
         }
 
         .inner_left_box {
@@ -100,10 +111,6 @@
           flex-direction: column;
 
           .row_3 {
-            background-color: var(--color-line-04);
-            color: var(--color-font-sub);
-            width: rem(100);
-            border-radius: rem(4);
             cursor: default;
           }
         }
