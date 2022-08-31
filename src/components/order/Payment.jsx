@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { validate } from '/util/func/validation/validation_ordersheet';
+import {validate, validateInBundleDelivery} from '/util/func/validation/validation_ordersheet';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
 import { postObjData } from '/src/pages/api/reqData';
 import s from '/src/pages/order/ordersheet/ordersheet.module.scss';
@@ -54,7 +54,14 @@ export function Payment({
     };
     // console.log(valid_target)
     // console.log(info)
-    const errObj = validate(valid_target);
+    // ! bundle일 경우, validation항목 다르게 변경해주기.
+    let errObj;
+    if(form.bundle){
+      errObj = validateInBundleDelivery(valid_target);
+    } else {
+      errObj = validate(valid_target);
+    }
+    
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
 
