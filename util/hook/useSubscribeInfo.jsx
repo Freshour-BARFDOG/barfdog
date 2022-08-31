@@ -14,7 +14,8 @@ export const useSubscribeInfo = (subscribeId) => {
         console.log('useSubscribeInfo: ',res)
         /// ! TEST TEST TEST TEST TEST
         if(res.status === 404 ) {
-          res = DUMMY_RESPONSE(subscribeId);
+          alert('구독정보를 불러오는데 실패했습니다.')
+          // res = DUMMY_RESPONSE(subscribeId);
         }
         /// ! TEST TEST TEST TEST TEST
         const data = res.data;
@@ -77,7 +78,7 @@ export const useSubscribeInfo = (subscribeId) => {
           allPriceObj[key] = val;
         }
         
-        console.log(data)
+        // console.log(data)
         const DATA = {
           // 구독 기본 정보 + 구독정보의 Dashboard
           info: {
