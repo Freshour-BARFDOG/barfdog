@@ -1,4 +1,4 @@
-import s from '../../pages/mypage/subscribe/[subscribeId].module.scss';
+import s from '/src/pages/mypage/subscribe/[subscribeId].module.scss';
 import Image from 'next/image';
 import React, {useContext, useEffect, useState} from 'react';
 import {useModalContext} from "/store/modal-context";
@@ -11,12 +11,12 @@ import CustomRadio from "/src/components/admin/form/CustomRadio";
 import {subscribePlanType} from "/store/TYPE/subscribePlanType";
 import transformDate from "/util/func/transformDate";
 import {calcChangedSubscribeDeliveryDate} from "/util/func/calcNextSubscribeDeliveryDate";
+import {subscribeSkipType} from "/store/TYPE/subscribeSkipType";
 
 
 
 export const SubscribeSkipPayment = ({subscribeInfo}) => {
   // console.log(subscribeInfo);
-  
   const curPlan = subscribeInfo.plan.name;
   const curPlanWeeklyPaymentCycle = subscribePlanType[curPlan].weeklyPaymentCycle;
   const inputIdKey = 'weeklySkipCount';
@@ -34,32 +34,30 @@ export const SubscribeSkipPayment = ({subscribeInfo}) => {
   const [activeConfirmModal, setActiveConfirmModal] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   
-  
   useEffect( () => {
     const periodInWeeks = Number(skipCount.split('-')[1]);
     const result = calcChangedSubscribeDeliveryDate(initialDelvieryDate, periodInWeeks);
+    // console.log(initialDelvieryDate)
+    // console.log(periodInWeeks)
     setChangedDelvieryDate(result);
   }, [skipCount] );
-  
   
   const onSubmit = async (confirm) => {
     if (!confirm) {
       return setActiveConfirmModal(false);
     }
     if (submitted) return console.error('이미 제출된 양식입니다.');
-    
-    const selectedSkipCount = skipCount.split('-')[1];
-    
-    // console.log(selectedSkipCount);
+    const selectedSkipCount = Number(skipCount.split('-')[1]);
+    const skipType = selectedSkipCount === 1 ? subscribeSkipType.WEEK : subscribeSkipType.ONCE; // 건너뛰기 타입
     
     const body = {
       id: subscribeInfo.info.subscribeId,
-      count: selectedSkipCount,
+      type: skipType,
     }
     
     try {
       setIsLoading(true);
-      const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/${selectedSkipCount}`;
+      const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/skip/${skipType}`;
       const res = await postObjData(url, body);
       console.log(res);
       // if (!res.isDone) {
@@ -107,7 +105,7 @@ export const SubscribeSkipPayment = ({subscribeInfo}) => {
         </div>
 
         <p className={s.d_day_text}>
-          기존 발송 예정일은<span>{transformDate(initialDelvieryDate, '월일') || 'EMPTY DATA'}</span>입니다
+          기존 발송 예정일은<span>{transformDate(initialDelvieryDate, '월일') || '정보없음'}</span>입니다
         </p>
         <p className={s.d_day_text2}>
           변경 발송 예정일은<span className={s.red_span}>{transformDate(changedDelvieryDate, '월일')}</span>입니다
@@ -134,12 +132,10 @@ export const SubscribeSkipPayment = ({subscribeInfo}) => {
       {activeConfirmModal && (
         <Modal_confirm text={`${(()=>{
           const selectedIndex =  inputIdList.indexOf(skipCount);
-          const skipOnePaymentCyle = selectedIndex === 1;
           const skipMethodName = inputLabelList.filter((label,index)=>index === selectedIndex)[0];
           const skipWeeklyCount = inputIdList[selectedIndex].split('-')[1];
-          console.log(skipOnePaymentCyle);
-          return `${skipMethodName}(${skipWeeklyCount}주)를 적용하시겠습니까?`;
-        })()}`} isConfirm={onSubmit} positionCenter />
+          return `건너뛰기 해지는 구독취소&재결제해야합니다.\n정말 ${skipMethodName}(${skipWeeklyCount}주)를 적용하시겠습니까?`;
+        })()}`} isConfirm={onSubmit} positionCenter option={{wordBreak: true}} />
       )}
       {tbContext.visible && (
         <Modal_global_alert
