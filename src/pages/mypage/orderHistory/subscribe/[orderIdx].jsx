@@ -128,13 +128,13 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
 
                     <span>급여량</span>
                     <div>
-                      {data?.orderDto.beforeOneMealRecommendGram !== data?.orderDto.oneMealRecommendGram && <span className={s.beforeData}>{data?.orderDto.beforeOneMealRecommendGram}g</span>}
+                      {(data?.orderDto.beforeOneMealRecommendGram && data?.orderDto.beforeOneMealRecommendGram !== data?.orderDto.oneMealRecommendGram )&& <span className={s.beforeData}>{data?.orderDto.beforeOneMealRecommendGram}g</span>}
                       <span>{data?.orderDto.oneMealRecommendGram}g</span>
                     </div>
 
                     <span>플랜</span>
                     <div>
-                      {data?.orderDto.beforePlan !== data?.orderDto.plan && <span className={s.beforeData}>{subscribePlanType[data?.orderDto.beforePlan].KOR}</span>}
+                      {(data?.orderDto.beforePlan && data?.orderDto.plan && data?.orderDto.beforePlan !== data?.orderDto.plan) && <span className={s.beforeData}>{subscribePlanType[data?.orderDto.beforePlan].KOR}</span>}
                       <span>{subscribePlanType[data?.orderDto.plan].KOR}</span>
                     </div>
 
@@ -146,7 +146,7 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
 
                     <span>가격</span>
                     <div>
-                      {data?.orderDto.beforeOrderPrice !== data?.orderDto.orderPrice && <span className={s.beforeData}>{transformLocalCurrency(data?.orderDto.beforeOrderPrice)}원</span>}
+                      {(data?.orderDto.beforeOrderPrice > 0 && data?.orderDto.beforeOrderPrice !== data?.orderDto.orderPrice) && <span className={s.beforeData}>{transformLocalCurrency(data?.orderDto.beforeOrderPrice)}원</span>}
                       
                       <span>{transformLocalCurrency(data?.orderDto.orderPrice)}원</span>
                     </div>
