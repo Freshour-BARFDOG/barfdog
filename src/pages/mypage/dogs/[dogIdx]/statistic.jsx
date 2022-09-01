@@ -8,12 +8,12 @@ import s from '/src/components/survey/surveyStatistics(mypageVersion).module.scs
 import Link from 'next/link';
 import Image from 'next/image';
 import { SurveyStatistics } from '/src/components/survey/SurveyStatistics';
-import { getDataSSR } from '../../../api/reqData';
-import {subscribeStatus} from "../../../../../store";
+import { getDataSSR } from '/src/pages/api/reqData';
+import {subscribeStatus} from "/store";
 
 
 export default function MypageSubscribe_statisticPage({ data }) {
-  // console.log(data);
+  console.log(data);
   const router = useRouter();
   const onPrevPage = () => {
     router.push('/mypage/dogs');
@@ -32,23 +32,28 @@ export default function MypageSubscribe_statisticPage({ data }) {
                 ※ 해당 결과지는 바프독 고객을 대상으로한 참고용 결과이니, <br />
                 자세한 반려견의 건강상태는 수의사와 상담해 주세요.
               </p>
-              {true && (
-                <p className={s['notice-message']}>
-                  *반려견 정보가 수정되어 권장 식사량이 변경되었습니다.
-                  <br />
-                  변경된 정보로 플랜을 재설정 하시겠습니까?
-                  <br/>
-                  <br/>
-                  <br/>
-                  <br/>
-                  ( -  TEST : 반려견 정보 수정 이후, 권장식사량 변동에 대한 데이터를 불러올 수 있을 경우 , 적용가능한 기능)
-                  <br/>
-                  ( - 현재는 비구독 상태일 경우에 나타남 )
-                </p>
-              )}
+              {/*{true && (*/}
+              {/*  <p className={s['notice-message']}>*/}
+              {/*    *반려견 정보가 수정되어 권장 식사량이 변경되었습니다.*/}
+              {/*    <br />*/}
+              {/*    변경된 정보로 플랜을 재설정 하시겠습니까?*/}
+              {/*    <br/>*/}
+              {/*    <br/>*/}
+              {/*    <br/>*/}
+              {/*    <br/>*/}
+              {/*    ( -  TEST : 반려견 정보 수정 이후, 권장식사량 변동에 대한 데이터를 불러올 수 있을 경우 , 적용가능한 기능)*/}
+              {/*    <br/>*/}
+              {/*    ( - 현재는 비구독 상태일 경우에 나타남 )*/}
+              {/*  </p>*/}
+              {/*)}*/}
             </section>
             <section className={s.btn_box}>
-              {data.subscribeStatus === subscribeStatus.BEFORE_PAYMENT && (
+              {/*{data.subscribeStatus === subscribeStatus.BEFORE_PAYMENT && (*/}
+              {/*  <Link href={`/order/subscribeShop?dogId=${data.dogId}`} passHref>*/}
+              {/*    <a>맞춤 플랜 확인하기</a>*/}
+              {/*  </Link>*/}
+              {/*)}*/}
+              {data.subscribeStatus && (
                 <Link href={`/order/subscribeShop?dogId=${data.dogId}`} passHref>
                   <a>맞춤 플랜 확인하기</a>
                 </Link>

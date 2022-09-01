@@ -26,7 +26,7 @@ import transformDate from '/util/func/transformDate';
 // - 2-2. => 구독 정보 생성
 
 export default function RegisterSubscribeInfoPage({ data }) {
-  console.log(data);
+  // console.log(data);
   let info;
   if (data) {
     info = {
@@ -51,10 +51,10 @@ export default function RegisterSubscribeInfoPage({ data }) {
       recipeInfoList: data.recipesDetailInfo, // 레시피의 모든 정보 (초기화)
     };
   }
-
+  
   const initialForm = {
-    plan: '',
-    recipeIdList: [],
+    plan: data.surveyInfo.plan || null,
+    recipeIdList: data.surveyInfo.recipeDtoList.filter((rc)=>data.surveyInfo.recipeName?.split(',').indexOf(rc.name) >= 0).map(rc=>rc.id) || [],
     nextPaymentPrice: null,
   };
 
@@ -67,6 +67,7 @@ export default function RegisterSubscribeInfoPage({ data }) {
   const [submitted, setSubmitted] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const [form, setForm] = useState(initialForm);
+
 
   useEffect(() => {
     setIsLoading((prevState) => ({
@@ -171,6 +172,7 @@ export default function RegisterSubscribeInfoPage({ data }) {
 
   const onChangeSubscribeOrder = async () => {
     // 맞춤레시피 변경하기 (CONDITION: 구독 중 or 구독 보류)
+    // ! 기존에 플랜, 레시피 정보 그대로, 맞춤플랜 변경하기 실행했을 경우: nextPaymentPrice가 없으므로, 에러발생시킴
     if (submitted === true) return console.error('The form has already been sumitted');
     setIsLoading((prevState) => ({
       ...prevState,
@@ -187,13 +189,14 @@ export default function RegisterSubscribeInfoPage({ data }) {
       recipeIdList: form.recipeIdList,
       nextPaymentPrice: nextPaymentPrice, // 최종 계산된 가격
     };
+    console.log('onChangeSubscribeOrder:\n', body)
 
     const errObj = validate(body);
     const isPassed = valid_hasFormErrors(errObj);
     if (!isPassed) {
       return onShowModal('유효하지 않은 항목이 있습니다.\n선택한 레시피 및 플랜을 확인해주세요.');
     }
-
+    
     const prevInfo = data.surveyInfo;
     const prevDATA = {
       plan: prevInfo.plan, // 기존 주문 정보
@@ -259,8 +262,8 @@ export default function RegisterSubscribeInfoPage({ data }) {
   if (isLoading?.fetching) {
     return <FullScreenRunningDog opacity={1} />;
   }
+  // console.log(form, info)
   
-  console.log(info.subscribeStatus)
   return (
     <>
       <MetaTitle title="플랜 레시피 선택" />
@@ -289,7 +292,7 @@ export default function RegisterSubscribeInfoPage({ data }) {
             {/* ! PRODUCT CODE */}
             {(info.subscribeStatus === subscribeStatus.SUBSCRIBING ||
               info.subscribeStatus === subscribeStatus.SUBSCRIBE_PENDING) && (
-              <button className={s.nextPage} onClick={onSubmit}>
+              <button className={s.nextPage} onClick={onChangeSubscribeOrder}>
                 {isLoading?.submit ? <Spinner style={{ color: '#fff' }} /> : '맞춤플랜 변경하기'}
               </button>
             )}

@@ -65,6 +65,9 @@ export const valid_isEmptyArray = (arr) =>{
   let error;
   if(Array.isArray(arr)){
     error = arr.length ? '' : '항목이 비어있습니다.';
+    if(arr.length > 0 && !arr[0]){
+      error = '배열의 항목이 비어있습니다;'
+    }
   } else if(typeof arr !== 'object'){
     alert('데이터 처리 중 에러가 발생했습니다. 개발사에게 문의하세요.')
     return console.error('ERROR: Parameter type must be array');
