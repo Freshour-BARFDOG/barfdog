@@ -81,19 +81,24 @@ section.pagination_box{ padding: rem(80) 0 0}
         flex-direction: column;
         padding-left: rem(30);
 
+        .skipInfo{
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          gap:rem(10);
+        }
+
         .red_box_text{
           display: inline-flex;
           background-color : var(--color-main);
-          text-align: center;
           color: #fff;
-          //width: rem(94);
-          min-width: rem(94);
+          width: rem(95);
+          //min-width: rem(94);
           box-sizing: border-box;
           border-radius: rem(4);
           padding: rem(5) rem(10) rem(5);
           @include char(l15);
           font-weight: 600;
-          margin-bottom: rem(9);
         }
 
         > p {

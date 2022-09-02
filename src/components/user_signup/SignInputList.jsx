@@ -1,51 +1,54 @@
-import React, {useEffect, useState} from 'react';
-import s from "/src/pages/account/signup/signup.module.scss";
-import ErrorMessage from "/src/components/atoms/ErrorMessage";
-import Spinner from "/src/components/atoms/Spinner";
-import SignupInput from "./SignupInput";
-import SignInput_address from "./SignInput_address";
-import CustomRadio from "/src/components/atoms/CustomRadio";
-import getAuthNumberForPhoneNumber from "/util/func/getAuthNumberForPhoneNumber";
-import {valid_authNumber, valid_confirmPassword, valid_email, valid_email_duplication, valid_password, valid_phoneNumber} from "/util/func/validation/validationPackage";
-import rem from "/util/func/rem";
-import {genderType} from "/store/TYPE/genderType";
+import React, { useEffect, useState } from 'react';
+import s from '/src/pages/account/signup/signup.module.scss';
+import ErrorMessage from '/src/components/atoms/ErrorMessage';
+import Spinner from '/src/components/atoms/Spinner';
+import SignupInput from './SignupInput';
+import SignInput_address from './SignInput_address';
+import CustomRadio from '/src/components/atoms/CustomRadio';
+import getAuthNumberForPhoneNumber from '/util/func/getAuthNumberForPhoneNumber';
+import {
+  valid_authNumber,
+  valid_confirmPassword,
+  valid_email,
+  valid_email_duplication,
+  valid_password,
+  valid_phoneNumber,
+} from '/util/func/validation/validationPackage';
+import rem from '/util/func/rem';
+import { genderType } from '/store/TYPE/genderType';
 
 let isFirstRendering = true;
 
-export default function SignInpuList({formValues, setFormValues, formErrors, setFormErrors}) {
-
-
+export default function SignInpuList({ formValues, setFormValues, formErrors, setFormErrors }) {
+  const snsSignupMode = !!formValues.providerId;
   const initialLoadingState = {
     email: false,
     phoneNumber: false,
-    address: false
-  }
+    address: false,
+  };
 
   const [isLoading, setIsLoading] = useState(initialLoadingState);
   const [authPhoneNumber, setAuthPhoneNumber] = useState({
     authNumber: '',
-    authNumberEnteredByTheUser:'',
+    authNumberEnteredByTheUser: '',
     authenticated: false,
     messageOnPhoneNumberInput: '',
-    messageOnAuthNumberInput: ''
+    messageOnAuthNumberInput: '',
   });
 
-  const [confirmPasswordMessage, setConfirmPasswordMessage ] = useState('');
-  const [emailPassedValdationMessage, setEmailPassedValidationMessage ] = useState('');
+  const [confirmPasswordMessage, setConfirmPasswordMessage] = useState('');
+  const [emailPassedValdationMessage, setEmailPassedValidationMessage] = useState('');
 
-  useEffect( () => {
-    (async ()=>{
-      const response = !valid_email(formValues.email) && (await valid_email_duplication(formValues.email))
+  useEffect(() => {
+    (async () => {
+      const response =
+        !valid_email(formValues.email) && (await valid_email_duplication(formValues.email));
       const message = response.message;
       const error = response.error;
 
-      setEmailPassedValidationMessage(error ? "" : message)
+      setEmailPassedValidationMessage(error ? '' : message);
     })();
-
   }, [formErrors.isEmailDuplicated]);
-
-
-
 
   useEffect(() => {
     if (!isFirstRendering) {
@@ -59,35 +62,27 @@ export default function SignInpuList({formValues, setFormValues, formErrors, set
         ...prevState,
         password: validPassword,
         confirmPassword: validConfirmPassword.error,
-
       }));
-      setConfirmPasswordMessage(validConfirmPassword.message)
+      setConfirmPasswordMessage(validConfirmPassword.message);
     }
     isFirstRendering = false;
   }, [formValues.password, formValues.confirmPassword, setFormErrors]);
 
-
-
-
-
   const onCheckEmailDuplication = async () => {
-
-    const error =  valid_email(formValues.email);
-    if(error || isLoading.email){
+    const error = valid_email(formValues.email);
+    if (error || isLoading.email) {
       return setFormErrors((prevState) => ({
         ...prevState,
         email: error,
-        messageOnEmail:'',
-        isEmailDuplicated: '이메일 중복확인 초기화'
+        messageOnEmail: '',
+        isEmailDuplicated: '이메일 중복확인 초기화',
       }));
     }
 
-
-    setIsLoading(prevState => ({
+    setIsLoading((prevState) => ({
       ...prevState,
-      email: '이메일 중복확인 중입니다.'
+      email: '이메일 중복확인 중입니다.',
     }));
-
 
     try {
       const response = await valid_email_duplication(formValues.email);
@@ -96,25 +91,21 @@ export default function SignInpuList({formValues, setFormValues, formErrors, set
         ...prevState,
         email: response.error,
         isEmailDuplicated: response.error,
-        _messageOnEmail: response.message
-    }));
+        _messageOnEmail: response.message,
+      }));
     } catch (err) {
       setFormErrors((prevState) => ({
         ...prevState,
         isEmailDuplicated: !!err,
       }));
-      console.error('SignInputList > Email 중복확인: ',err);
+      console.error('SignInputList > Email 중복확인: ', err);
     }
 
-    setIsLoading(prevState => ({
+    setIsLoading((prevState) => ({
       ...prevState,
-      email: false
+      email: false,
     }));
-
   };
-
-
-
 
   const onGetAuthNumberHandler = async () => {
     const error = valid_phoneNumber(formValues.phoneNumber);
@@ -122,66 +113,68 @@ export default function SignInpuList({formValues, setFormValues, formErrors, set
       ...prevState,
       phoneNumber: error,
       authNumber: error,
-      isValidPhoneNumber: '휴대전화 인증상태 초기화'
+      isValidPhoneNumber: '휴대전화 인증상태 초기화',
     }));
-    setAuthPhoneNumber((prevState)=>( {
+    setAuthPhoneNumber((prevState) => ({
       ...prevState,
-      authNumber:'',
+      authNumber: '',
       authenticated: false,
-    }))
-    if(error) {
-      setAuthPhoneNumber((prevState)=>( {
+    }));
+    if (error) {
+      setAuthPhoneNumber((prevState) => ({
         ...prevState,
         messageOnPhoneNumberInput: error,
         messageOnAuthNumberInput: error && '',
-      }))
+      }));
       return;
     }
 
-    setIsLoading(prevState => ({
+    setIsLoading((prevState) => ({
       ...prevState,
-      phoneNumber: true
-    }))
+      phoneNumber: true,
+    }));
 
     const response = await getAuthNumberForPhoneNumber(formValues.phoneNumber);
     console.log(response);
-    setAuthPhoneNumber((prevState)=> ({
+    setAuthPhoneNumber((prevState) => ({
       ...prevState,
       authNumber: response.authNumber,
-      messageOnPhoneNumberInput: response.error || response.message
-    }))
-    setIsLoading(prevState => ({
+      messageOnPhoneNumberInput: response.error || response.message,
+    }));
+    setIsLoading((prevState) => ({
       ...prevState,
-      phoneNumber: false
-    }))
+      phoneNumber: false,
+    }));
   };
 
-
-
-
-
-
   const onCheckAuthNumberHandler = () => {
-    console.log('인증번호 검증: ',authPhoneNumber.authNumberEnteredByTheUser, ' (유저입력)  ===  ', authPhoneNumber.authNumber, ' (인증번호)')
-    const result = valid_authNumber(authPhoneNumber.authNumberEnteredByTheUser, authPhoneNumber.authNumber);
+    console.log(
+      '인증번호 검증: ',
+      authPhoneNumber.authNumberEnteredByTheUser,
+      ' (유저입력)  ===  ',
+      authPhoneNumber.authNumber,
+      ' (인증번호)',
+    );
+    const result = valid_authNumber(
+      authPhoneNumber.authNumberEnteredByTheUser,
+      authPhoneNumber.authNumber,
+    );
     const error = result.error;
     const isMatched = result.isMatched;
     // console.log(isMatched, '<---매치드 // --> 에러: ', error)
     setFormErrors((prevState) => ({
       ...prevState,
       authNumber: error,
-      isValidPhoneNumber: isMatched ? "" : error
+      isValidPhoneNumber: isMatched ? '' : error,
     }));
-    setAuthPhoneNumber((prevState)=>({
+    setAuthPhoneNumber((prevState) => ({
       ...prevState,
       authenticated: true,
-      messageOnAuthNumberInput: isMatched || error
+      messageOnAuthNumberInput: isMatched || error,
     }));
-  }
+  };
 
-// console.log(formErrors)
-
-
+  // console.log(formErrors)
 
   return (
     <>
@@ -235,47 +228,53 @@ export default function SignInpuList({formValues, setFormValues, formErrors, set
           )}
         </button>
       </SignupInput>
-      <SignupInput
-        type={'password'}
-        required={true}
-        id={'password'}
-        title={'비밀번호'}
-        setFormValues={setFormValues}
-        errorMessage={
-          formErrors.password && (
-            <>
-              {valid_password(formValues.password).message.map((msg, index) => (
-                <ErrorMessage
-                  key={`pw-msg-${index}`}
-                  className={`${s.msg} ${msg.valid ? s.valid : ''} ${index !== 0 && s.siblings}`}
-                >
-                  {msg.label}
-                </ErrorMessage>
-              ))}
-            </>
-          )
-        }
-      />
-      <SignupInput
-        type={'password'}
-        required={true}
-        id={'confirmPassword'}
-        title={'비밀번호 확인'}
-        setFormValues={setFormValues}
-        errorMessage={
-          (formErrors.confirmPassword || confirmPasswordMessage) && (
-            <>
-              <ErrorMessage
-                className={`${s.msg} ${
-                  (!formErrors.confirmPassword || confirmPasswordMessage.isValid) && s.valid
-                }`}
-              >
-                {formErrors.confirmPassword || confirmPasswordMessage.label}
-              </ErrorMessage>
-            </>
-          )
-        }
-      />
+      {!snsSignupMode && (
+        <>
+          <SignupInput
+            type={'password'}
+            required={true}
+            id={'password'}
+            title={'비밀번호'}
+            setFormValues={setFormValues}
+            errorMessage={
+              formErrors.password && (
+                <>
+                  {valid_password(formValues.password).message.map((msg, index) => (
+                    <ErrorMessage
+                      key={`pw-msg-${index}`}
+                      className={`${s.msg} ${msg.valid ? s.valid : ''} ${
+                        index !== 0 && s.siblings
+                      }`}
+                    >
+                      {msg.label}
+                    </ErrorMessage>
+                  ))}
+                </>
+              )
+            }
+          />
+          <SignupInput
+            type={'password'}
+            required={true}
+            id={'confirmPassword'}
+            title={'비밀번호 확인'}
+            setFormValues={setFormValues}
+            errorMessage={
+              (formErrors.confirmPassword || confirmPasswordMessage) && (
+                <>
+                  <ErrorMessage
+                    className={`${s.msg} ${
+                      (!formErrors.confirmPassword || confirmPasswordMessage.isValid) && s.valid
+                    }`}
+                  >
+                    {formErrors.confirmPassword || confirmPasswordMessage.label}
+                  </ErrorMessage>
+                </>
+              )
+            }
+          />
+        </>
+      )}
       <SignupInput
         type={'text'}
         filteredType={'number'}
@@ -289,7 +288,7 @@ export default function SignInpuList({formValues, setFormValues, formErrors, set
           (formErrors.phoneNumber ||
             authPhoneNumber.authNumber ||
             authPhoneNumber.messageOnPhoneNumberInput ||
-            (formValues.phoneNumber &&formErrors.isValidPhoneNumber)) && (
+            (formValues.phoneNumber && formErrors.isValidPhoneNumber)) && (
             <ErrorMessage
               style={{ maxWidth: `${rem(200)}` }}
               className={`${s.msg} ${
@@ -303,11 +302,7 @@ export default function SignInpuList({formValues, setFormValues, formErrors, set
           )
         }
       >
-        <button
-          type={'button'}
-          className={`${s.btn}`}
-          onClick={onGetAuthNumberHandler}
-        >
+        <button type={'button'} className={`${s.btn}`} onClick={onGetAuthNumberHandler}>
           {isLoading.phoneNumber ? (
             <Spinner
               style={{ color: 'var(--color-main)', width: '15', height: '15' }}

@@ -103,9 +103,9 @@ export async function getServerSideProps({ req, query }) {
   let DATA = null;
   let orderStatus = null;
   const apiUrl = `/api/admin/orders/${orderId}/subscribe`;
-  const res =DUMMY_RES;
-  // const res = await getDataSSR(req, apiUrl);
-  // console.log(res);
+  // const res =DUMMY_RES;
+  const res = await getDataSSR(req, apiUrl);
+  console.log(res);
   if (res.data) {
     const data = res.data;
 
@@ -153,6 +153,7 @@ export async function getServerSideProps({ req, query }) {
         couponName:data.subscribePaymentDto.couponName,
         discountCoupon:data.subscribePaymentDto.discountCoupon,
         paymentPrice:data.subscribePaymentDto.paymentPrice, // 결제 금액
+        paymentMethod:data.subscribePaymentDto.paymentMethod,
         orderStatus:data.subscribePaymentDto.orderStatus,
         orderConfirmDate:data.subscribePaymentDto.orderConfirmDate, // 구매 확정일
       },
@@ -165,6 +166,7 @@ export async function getServerSideProps({ req, query }) {
         departureDate: data.subscribeDeliveryDto.departureDate,
         arrivalDate: data.subscribeDeliveryDto.arrivalDate,
         deliveryNumber: data.subscribeDeliveryDto.deliveryNumber,
+        request:data.subscribeDeliveryDto.request,
       },
     };
   }

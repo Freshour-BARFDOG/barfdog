@@ -143,6 +143,8 @@ export const SubscribeCancle = ({ subscribeInfo }) => {
           정기구독을 중단하고 싶으신가요?
           <br />
           바프독이 더 나은 서비스를 제공할 수 있도록 중단하시는 이유를 알려주세요.
+          <br />
+          (현재 정기구독 상품이 마지막으로 배송되며, 예약된 정기구독 서비스는 즉시 중지됩니다.)
         </p>
         <ul className={`${s['checkbox-container']} animation-show-all-child`}>
           {checkboxList.map((checkbox, index) => (

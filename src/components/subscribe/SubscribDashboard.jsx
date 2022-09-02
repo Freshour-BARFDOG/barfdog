@@ -7,29 +7,9 @@ import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import { Modal_couponWithSubscribeApi } from '../modal/Modal_couponWithSubscribeApi';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import { useModalContext } from '/store/modal-context';
+import Tooltip from "../atoms/Tooltip";
 
-const DUMMY_COUPON_DATA = [
-  {
-    memberCouponId: 3133,
-    name: '테스트 쿠폰1',
-    discountType: 'FIXED_RATE',
-    discountDegree: 10,
-    availableMaxDiscount: 10000,
-    availableMinPrice: 5000,
-    remaining: 3,
-    expiredDate: '2022-08-12T16:01:46.853',
-  },
-  {
-    memberCouponId: 3000,
-    name: '테스트 쿠폰2',
-    discountType: 'FIXED_RATE',
-    discountDegree: 40,
-    availableMaxDiscount: 10000,
-    availableMinPrice: 300,
-    remaining: 3,
-    expiredDate: '2022-08-17T16:01:46.853',
-  },
-];
+
 
 export const SubscribDashboard = ({ subscribeInfo }) => {
   // ! 구독정보 변경마감일자 체크 (google sheet);
@@ -77,12 +57,14 @@ export const SubscribDashboard = ({ subscribeInfo }) => {
       setActiveModal({ coupon: false, alert: false });
     }
   };
-  console.log(info);
 
   return (
     <>
       <section className={s.title}>
-        <div className={s.title_text}>{info.dogName}의 구독정보</div>
+        <div className={s.title_text}>
+          {info.dogName}의 구독정보
+          <Tooltip message={'모든 구독정보 변경 사항은 다음 회차부터 적용됩니다.'}/>
+        </div>
         {/* ! 아래 코드는 디자인 단에는 존재하는 UI지만, 기획서에 없는 내용 */}
         {/*<div className={s.flex_box}>*/}
         {/*  <div className={s.text}>*/}
@@ -167,7 +149,7 @@ export const SubscribDashboard = ({ subscribeInfo }) => {
                     alt="카드 이미지"
                   />
                 </div>
-                <div className={s.row_1}>발송 예정일</div>
+                <div className={s.row_1}>다음 발송 예정일</div>
                 <div className={s.row_2}>
                   {transformDate(info.nextDeliveryDate, null, { seperator: '/' })}
                 </div>
@@ -190,3 +172,27 @@ export const SubscribDashboard = ({ subscribeInfo }) => {
     </>
   );
 };
+
+
+const DUMMY_COUPON_DATA = [
+  {
+    memberCouponId: 3133,
+    name: '테스트 쿠폰1',
+    discountType: 'FIXED_RATE',
+    discountDegree: 10,
+    availableMaxDiscount: 10000,
+    availableMinPrice: 5000,
+    remaining: 3,
+    expiredDate: '2022-08-12T16:01:46.853',
+  },
+  {
+    memberCouponId: 3000,
+    name: '테스트 쿠폰2',
+    discountType: 'FIXED_RATE',
+    discountDegree: 40,
+    availableMaxDiscount: 10000,
+    availableMinPrice: 300,
+    remaining: 3,
+    expiredDate: '2022-08-17T16:01:46.853',
+  },
+];

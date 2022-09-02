@@ -106,11 +106,6 @@ function OrderCompletedPage(props) {
               </Link>
             </div>
           </section>
-
-
-
-
-
           {/* 기존 코드 */}
 
           {/* <section className={s.text_box}>
@@ -146,20 +141,30 @@ export async function getServerSideProps(ctx) {
 
   const { orderIdx , imp_uid, merchant_uid, imp_success,error_msg} = query;
   
-  console.log(query);
-  let orderItemValue='';
-  let address='';
+  // console.log(query);
+  let orderItemValue = null;
+  let address = null;
 
   if(imp_success == 'true'){
     console.log(merchant_uid);
     console.log(imp_success);
-    
     const r = await postDataSSR(req,`/api/orders/${orderIdx}/general/success`, {
       impUid : imp_uid,
       merchantUid : merchant_uid
     });
 
     console.log(r);
+  
+    // const getApiUrl = `/api/orders/${orderIdx}/general`; // API 검색어: 일반 주문 하나 조회
+    //
+    // let res = await getDataSSR(req, getApiUrl);
+    // const data = res?.data;
+    // const itemList = data.orderItemDtoList;
+    //
+    // if (data) {
+    //   orderItemValue = `${itemList[0].itemName} ${itemList.length > 1 ? `외 ${itemList.length-1}개` : null}`;
+    //   address = `${data.orderDto.street} ${data.orderDto.detailAddress}`;
+    // }
 
   } else if(imp_success == 'false'){
      // 모바일 결제 실패
@@ -171,16 +176,13 @@ export async function getServerSideProps(ctx) {
     }
   }
 
-  const getApiUrl = `/api/orders/${orderIdx}/general`; // API 검색어: 일반 주문 하나 조회
-
+  const getApiUrl = `/api/orders/${orderIdx}/general`;
   let res = await getDataSSR(req, getApiUrl);
-  console.log(res);
-  const data = res?.data;
-  const itemList = data.orderItemDtoList;
-  
+  const data = res?.data || null;
   if (data) {
-    orderItemValue = `${itemList[0].itemName} ${itemList.length > 1 ? `외 ${itemList.length-1}개` :''}`;
-    address = `${data.orderDto.street} ${data.orderDto.detailAddress}`;  
+    const itemList = data.orderItemDtoList || [];
+    orderItemValue = `${itemList[0].itemName} ${itemList.length > 1 ? `외 ${itemList.length-1}개` : ''}`;
+    address = `${data.orderDto.street} ${data.orderDto.detailAddress}`;
   }
   
   return { props: { orderIdx, orderItemValue, address } };

@@ -36,6 +36,12 @@
       width: 100%;
     }
   }
+
+  .beforeData{
+    text-decoration: line-through;
+    color: var(--color-disabled);
+    margin-right: rem(8);
+  }
 }
 // SUBSCRIBE ORDERSHEET - 주문정보
 .body_content_2 {

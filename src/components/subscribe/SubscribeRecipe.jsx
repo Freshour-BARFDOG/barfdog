@@ -134,9 +134,11 @@ export const SubscribeRecipe = ({subscribeInfo}) => {
   
   useEffect(() => {
     if(!selectedRadio)return;
+    const selectedIdList = [];
     const selectedId = allRecipeInfoList.filter(
       (rc, index) => rc.name === selectedRadio.toString().split('-')[0])[0]?.id;
-    setSelectedIdList(selectedId);
+    selectedIdList.push(selectedId);
+    setSelectedIdList(selectedIdList);
   }, [selectedRadio]);
   
   
@@ -148,6 +150,9 @@ export const SubscribeRecipe = ({subscribeInfo}) => {
   };
   
   const onActiveConfirmModal = () => {
+    // console.log(selectedIdList)
+    // console.log(subscribeInfo.recipe.idList)
+    // console.log(subscribeInfo.recipe)
     const isTheSameArray = valid_isTheSameArray(selectedIdList, subscribeInfo.recipe.idList)
     if(subscribeInfo.recipe.soldOut) {
       onShowModal('품절된 레시피가 존재합니다.');

@@ -23,7 +23,8 @@ export default function SignupPage() {
   const userState = useSelector((s) => s.userState);
   // console.log(userState.snsInfo);
 
-  const convertedBirthday = userState.snsInfo.birthday.indexOf('-') >= 0 ? userState.snsInfo.birthday.replace(/-/gi,'') : null;
+  const snsSignupMode = !!userState.snsInfo.providerId;
+  const convertedBirthday = (snsSignupMode && userState.snsInfo.birthday?.indexOf('-') >= 0) ? userState.snsInfo.birthday.replace(/-/gi,'') : null;
   const initialFormValues = {
     name: userState.snsInfo.name || '',
     email: userState.snsInfo.email || '',
@@ -56,6 +57,7 @@ export default function SignupPage() {
 
   // console.log('userState: ',userState)
   // console.log('initialFormValues: ',initialFormValues)
+  // console.log('snsSignupMode: ',snsSignupMode)
 
   const initialFormErrors = {
     isEmailDuplicated: null,
@@ -73,7 +75,8 @@ export default function SignupPage() {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const validFormResultObj = await validate(formValues, formErrors);
+      const validateMode = snsSignupMode ? 'sns' : 'normal';
+      const validFormResultObj = await validate(formValues, formErrors, {mode:validateMode});
       const validPolicyResultObj = valid_policyCheckbox(formValues.agreement, policy_KEYS);
       setFormErrors((prevState) => ({
         ...prevState,

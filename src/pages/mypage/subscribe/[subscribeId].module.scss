@@ -57,6 +57,9 @@ section.title{ padding : rem(8) 0 rem(17);}
   align-items: flex-start;
 
   .title_text {
+    display: flex;
+    align-items: center;
+    gap:rem(4);
     @include char(t24);
   }
 

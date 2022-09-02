@@ -1,9 +1,10 @@
 import s from './popup_sell.module.scss';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import { orderStatus } from '/store/TYPE/orderStatusTYPE';
+import {paymentMethodType} from "/store/TYPE/paymentMethodType";
 
 const ProductInfo_payment = ({ paymentInfo }) => {
-  // console.log(paymentInfo);
+  console.log(paymentInfo);
   return (
     <>
       <div className={s['t-header']}>
@@ -66,7 +67,7 @@ const ProductInfo_payment = ({ paymentInfo }) => {
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
               <span>
-                <span>***MEMO_서버측 데이터 필요**</span>
+                <span>{paymentMethodType.KOR[paymentInfo.paymentMethod]}</span>
               </span>
             </div>
           </div>
