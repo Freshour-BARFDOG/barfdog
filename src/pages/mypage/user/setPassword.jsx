@@ -107,15 +107,16 @@ export default function SetPasswordPage() {
     <>
       <MetaTitle title="마이페이지 비밀번호 생성" />
       <Layout>
-        <Wrapper>
+        <Wrapper className={s['set-password-page']}>
           <MypageWrapper>
             <section className={s.title}>
               <h1>비밀번호 생성</h1>
-              <h5 className={s['subtitle']}>
-                간편 로그인으로 회원가입한 경우, 회원정보 수정을 위해 비밀번호를 생성합니다.
-              </h5>
             </section>
+            <h5 className={s['subtitle']}>
+              간편 로그인으로 회원가입한 경우,{isMobile && <br/>}&nbsp;회원정보 수정을 위해 비밀번호를 생성합니다.
+            </h5>
             <section className={s.content}>
+             
               <div className={s.pass_box}>
                 <label htmlFor="newPassword" className={s.label_box}>
                   <div className={s.label_text}>비밀번호</div>
