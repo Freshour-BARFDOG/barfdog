@@ -3,7 +3,7 @@ import checkCharactorSamenessAndContinuity from '../checkCharactorSamenessAndCon
 import transformClearLocalCurrency from '../transformClearLocalCurrency';
 import convertFileSizeToMegabyte from '../convertFileSizeToMegabyte';
 import { discountUnitType } from '../../../store/TYPE/discountUnitType';
-import { transformToday } from '../transformDate';
+import transformDate, { transformToday } from '../transformDate';
 import deleteHypenOnDate from '../deleteHypenOnDate';
 import {isArray} from "util";
 
@@ -518,12 +518,18 @@ export const valid_maxLength = (val, maxLength)=>{
 
 export const valid_dogBirthYearAndMonth = (val)=>{
   let error= '';
+  const curDate = transformDate(transformToday(), null, {separator:null});
+  const curYear = curDate.slice(0,4);
+  const curMonth = curDate.slice(4,6);
+  const limitedYearAndMonth = Number(`${curYear}${curMonth}`);
   if(!val){
-    error = '항목이 비어있습니다.'
+    error = '항목이 비어있습니다.';
   } else if (val.length === 2){
-    error = '년도 항목이 비어있습니다.'
+    error = '년도 항목이 비어있습니다.';
   } else if (val.length === 4){
-    error = '생월 항목이 비어있습니다.'
+    error = '생월 항목이 비어있습니다.';
+  } else if(val > limitedYearAndMonth){
+    error = '항목은 현재보다 미래일 수 없습니다.';
   }
   return error;
 }
@@ -532,14 +538,14 @@ export const valid_dogBirthYearAndMonth = (val)=>{
 
 export const valid_dogWeight = (val, limitIntCount = 2)=>{
   let error= '';
-  if(!val){
+  if(!val || Number(val) === 0){
     error = '항목이 비어있습니다.'
   }
   
   const isOnlyIntValue = val.indexOf('.') < 0;
   if(isOnlyIntValue && val.length > limitIntCount){
     error = '항목의 정수값은 최대 2자리입니다.'
-  };
+  }
   
   return error;
 }
