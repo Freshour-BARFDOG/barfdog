@@ -174,9 +174,8 @@ export async function getServerSideProps(ctx) {
       // 임시로 넣은 코드 :  결제취소시 , 전역에 import 결제 html이 잔류하여, 없애기위한 용도
       // window.location.href= '/';
     }
-    
   }
-  
+
   const getApiUrl = `/api/orders/${orderIdx}/general`;
   let res = await getDataSSR(req, getApiUrl);
   const data = res?.data || null;
