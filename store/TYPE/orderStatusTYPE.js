@@ -4,7 +4,7 @@ export const orderStatus = {
   BEFORE_PAYMENT: 'BEFORE_PAYMENT',
   RESERVED_PAYMENT: 'RESERVED_PAYMENT',
   PAYMENT_DONE: 'PAYMENT_DONE',
-  PRUDUCING: 'PRUDUCING', // 구독상품 (상품 준비중)
+  PRODUCING: 'PRODUCING', // 구독상품 (상품 준비중)
   DELIVERY_READY: 'DELIVERY_READY', // 일반상품 (상품 준비 중)
   DELIVERY_START: 'DELIVERY_START',
   DELIVERY_DONE: 'DELIVERY_DONE',
@@ -26,7 +26,7 @@ export const orderStatus = {
     BEFORE_PAYMENT: '결제 전',
     RESERVED_PAYMENT: '예약됨',
     PAYMENT_DONE: '결제 완료',
-    PRUDUCING: '생산 중', // 구독 상품
+    PRODUCING: '생산 중', // 구독 상품
     DELIVERY_READY: '배송 준비 중', // 일반상품
     DELIVERY_START: '배송 시작',
     DELIVERY_DONE: '배송 완료',

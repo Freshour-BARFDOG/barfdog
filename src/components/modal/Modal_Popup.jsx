@@ -4,6 +4,7 @@ import s from './modal_popup.module.scss';
 import Image from 'next/image';
 import useDeviceState from '/util/hook/useDeviceState';
 import { getCookie, setCookie } from '/util/func/cookie';
+import Link from 'next/link';
 export const Modal_Popup = ({ popupData }) => {
   const isMobile = useDeviceState().isMobile;
   popupData.map((data) => ({ ...data, isActive: true }));
@@ -74,9 +75,11 @@ export const Modal_Popup = ({ popupData }) => {
         convertedPos = 'right';
         break;
     }
-    
+
     return convertedPos;
   };
+
+  console.log(DATA);
 
   return (
     <>
@@ -89,16 +92,20 @@ export const Modal_Popup = ({ popupData }) => {
             key={`popup-${i}-${data.id}`}
             data-desc={`popup-${isMobile ? 'mobile' : 'pc'}-${data.id}`}
           >
-            <figure className={s.image}>
-              {(data.mobileImageUrl || data.pcImageUrl) && (
-                <Image
-                  src={isMobile ? data.mobileImageUrl : data.pcImageUrl}
-                  objectFit="cover"
-                  layout="fill"
-                  alt={isMobile ? data.mobileFileName : data.pcFilename}
-                />
-              )}
-            </figure>
+            {(data.mobileImageUrl || data.pcImageUrl) && (
+              <Link href={isMobile ? data.mobileLinkUrl : data.pcLinkUrl} passHref>
+                <a>
+                  <figure className={s.image}>
+                    <Image
+                      src={isMobile ? data.mobileImageUrl : data.pcImageUrl}
+                      objectFit="cover"
+                      layout="fill"
+                      alt={isMobile ? data.mobileFileName : data.pcFilename}
+                    />
+                  </figure>
+                </a>
+              </Link>
+            )}
             <div className={s['btn-section']}>
               <button
                 type={'button'}

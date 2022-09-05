@@ -50,7 +50,6 @@ export default function MainPage({ data }) {
 
   return (
     <>
-      <Modal_Popup popupData={data.popupDtoList}></Modal_Popup>
       <MetaTitle title="바프독" />
       <Layout>
         {activeTempPasswordModal && <Modal_tempPasswrod isConfirm={onClickModalButtons} />}
@@ -432,6 +431,7 @@ export default function MainPage({ data }) {
           </section>
         </Wrapper>
       </Layout>
+      {data?.popupDtoList.length > 0 && <Modal_Popup popupData={data?.popupDtoList}></Modal_Popup>}
     </>
   );
 }

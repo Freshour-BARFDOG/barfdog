@@ -11,7 +11,7 @@ import EditUserInfoPolicyList from '/src/components/user_signup/EditUserInfoPoli
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import { validate } from '/util/func/validation/validation_editUserInfo';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
-import { putObjData } from '/src/pages/api/reqData';
+import {getDataSSR, putObjData} from '/src/pages/api/reqData';
 import Spinner from '/src/components/atoms/Spinner';
 import { useRouter } from 'next/router';
 
@@ -168,4 +168,34 @@ export default function UserInfoPage() {
       />
     </>
   );
+}
+
+
+export async function getServerSideProps ({req}) {
+  // 간편로그인 sns로 회원가입한 유저일 경우 => 비밀번호 설정해야하는 유저인지 확인 => 비밀번호 미설정 시, 마이페이지 > 계정정보 수정페이지 접근불가 (sns 간편로그인 정책으로 인하여, 회원가입단계에서 비밀번호 설정불가함으로 인함)
+  /*
+  - 비밀번호 설정해야하는 유저일 경우, 결과값: true → 회원정보 수정하기 전, sns 유저 비밀번호 설정 api로 이동
+  - 비밀번호 설정하지 않아도 될 유저일 경우 경우, 결과값: false → 회원정보 수정하기 api로 이동
+  * */
+  const url = '/api/members/sns/password'; // api이름: 비밀번호 설정해야하는 유저인지 확인
+  const res = await getDataSSR(req, url);
+  if(res.data){
+    const needToSetPassword = res.data.needToSetPassword;
+    // console.log('needToSetPassword: ',needToSetPassword);
+    // if(!needToSetPassword){ // ! TEST
+    if(needToSetPassword){ // ! PROD
+      return {
+        redirect:{
+          destination:'/mypage/user/setPassword',
+          permanent: false,
+        },
+        props: {}
+      }
+    }
+  }
+  
+  return {
+    props: {}
+  }
+  
 }
