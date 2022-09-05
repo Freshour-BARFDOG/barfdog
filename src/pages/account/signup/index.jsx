@@ -108,18 +108,27 @@ export default function SignupPage() {
       setAlertModalMessage(`데이터 처리 중 오류가 발생했습니다.\n${err}`);
     }
   };
-
+  
+  const generateRandomString = (num) => {
+    const characters ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    let result = '';
+    const charactersLength = characters.length;
+    for (let i = 0; i < num; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    
+    return result;
+  }
+  
   const sendSignupData = async (formvalues) => {
-    console.log('SUBMIT DATA:\n', formvalues);
-    // data.providerId = "asdfasdf-asdfasdf"; // ! 참고: 임의의 providerID를 서버에 전송해도, 가입 됨
-    // 단, providerID가 중복될 경우, 해당 providerId sns계정으로 가입불가능.
+    const randomPW = generateRandomString(12);
     const body = {
       provider: formvalues.provider || null,
       providerId: formvalues.providerId || null,
       name: formvalues.name,
       email: formvalues.email,
-      password: formvalues.password,
-      confirmPassword: formvalues.confirmPassword,
+      password: snsSignupMode ?  randomPW: formvalues.password,
+      confirmPassword: snsSignupMode ? randomPW : formvalues.confirmPassword,
       phoneNumber: formvalues.phoneNumber,
       address: {
         zipcode: formvalues.address.zipcode,
@@ -138,7 +147,8 @@ export default function SignupPage() {
         over14YearsOld:formvalues.agreement.over14YearsOld,
       },
     };
-    // console.log(body);
+    console.log('SUBMIT BODY:\n', body);
+    
     await axios
       .post('/api/join', body, {
         headers: {
