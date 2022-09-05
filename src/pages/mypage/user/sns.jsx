@@ -10,7 +10,7 @@ import Image from "next/image";
 import {useModalContext} from "/store/modal-context";
 import Modal_confirm from "/src/components/modal/Modal_confirm";
 import Spinner from "/src/components/atoms/Spinner";
-import {deleteObjData} from "/src/pages/api/reqData";
+import {deleteObjData, getDataSSR} from "/src/pages/api/reqData";
 import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 
 export default function SNSManagementPage() {
@@ -127,4 +127,30 @@ export default function SNSManagementPage() {
       <Modal_global_alert onClick={isSubmitted && onSuccessCallback}/>
     </>
   );
+}
+
+
+
+
+
+export async function getServerSideProps ({req}) {
+  const url = '/api/members/sns/password'; // api이름: 비밀번호 설정해야하는 유저인지 확인
+  const res = await getDataSSR(req, url);
+  if(res.data){
+    const needToSetPassword = res.data.needToSetPassword;
+    if(needToSetPassword){
+      return {
+        redirect:{
+          destination:'/mypage/user/setPassword',
+          permanent: false,
+        },
+        props: {}
+      }
+    }
+  }
+  
+  return {
+    props: {}
+  }
+  
 }

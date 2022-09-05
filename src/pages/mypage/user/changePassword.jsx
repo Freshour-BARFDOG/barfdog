@@ -14,7 +14,7 @@ import {
   valid_hasFormErrors,
   valid_password,
 } from '/util/func/validation/validationPackage';
-import { putObjData } from '/src/pages/api/reqData';
+import {getDataSSR, putObjData} from '/src/pages/api/reqData';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import {useRouter} from "next/router";
 import useDeviceState from "/util/hook/useDeviceState";
@@ -198,4 +198,29 @@ export default function ChangePasswordPage() {
       />
     </>
   );
+}
+
+
+
+export async function getServerSideProps ({req}) {
+
+  const url = '/api/members/sns/password'; // api이름: 비밀번호 설정해야하는 유저인지 확인
+  const res = await getDataSSR(req, url);
+  if(res.data){
+    const needToSetPassword = res.data.needToSetPassword;
+    if(needToSetPassword){
+      return {
+        redirect:{
+          destination:'/mypage/user/setPassword',
+          permanent: false,
+        },
+        props: {}
+      }
+    }
+  }
+  
+  return {
+    props: {}
+  }
+  
 }

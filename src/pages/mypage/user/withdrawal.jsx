@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import filter_emptyValue from '/util/func/filter_emptyValue';
 import useDeviceState from '/util/hook/useDeviceState';
 import { valid_isEmpty } from '/util/func/validation/validationPackage';
-import { deleteData } from '/src/pages/api/reqData';
+import {deleteData, getDataSSR} from '/src/pages/api/reqData';
 import Spinner from '/src/components/atoms/Spinner';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import enterKey from '/util/func/enterKey';
@@ -131,4 +131,29 @@ export default function WithDrawalPage() {
       />
     </>
   );
+}
+
+
+
+
+export async function getServerSideProps ({req}) {
+  const url = '/api/members/sns/password'; // api이름: 비밀번호 설정해야하는 유저인지 확인
+  const res = await getDataSSR(req, url);
+  if(res.data){
+    const needToSetPassword = res.data.needToSetPassword;
+    if(needToSetPassword){
+      return {
+        redirect:{
+          destination:'/mypage/user/setPassword',
+          permanent: false,
+        },
+        props: {}
+      }
+    }
+  }
+  
+  return {
+    props: {}
+  }
+  
 }
