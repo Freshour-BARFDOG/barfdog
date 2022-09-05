@@ -22,7 +22,7 @@ export default function NAVER_Auth({ data, err}) {
     if (!window || typeof window === 'undefined') return;
     if (err) {
       const redirUrl = '/account/login';
-      return alert(err+'\n로그인페이지로 redir예정');
+      return alert(err+'\n로그인페이지로 redir');
       // return window.location.href = redirUrl; // !  PRODUCT CODE
     }
     
@@ -146,7 +146,12 @@ export async function getServerSideProps({ query }) {
 
   // let token = await axios.post(`https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&client_id=${process.env.NEXT_PUBLIC_NAVER_CLIENT_ID}&client_secret=${process.env.NEXT_PUBLIC_NAVER_CLIENT_SECRET}&code=${code}`,
   try{
-    let tokenData = await axios.post(`https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&client_id=V3rQRVaRHmNC2v_9RF76&client_secret=ItgUL9cVR4&code=${code}`,
+    const NAVER_CLIENT_ID = process.env.NEXT_PUBLIC_NAVER_CLIENT_ID;
+    const NAVER_CLIENT_SECRET = process.env.NEXT_PUBLIC_NAVER_CLIENT_SECRET;
+    const NAVER_REDIRECT_URI = encodeURI(process.env.NEXT_PUBLIC_NAVER_REDIRECT_URI);
+    const GRANT_TYPE = 'authorization_code'
+    console.log('NAVER_REDIRECT_URI: ',NAVER_REDIRECT_URI)
+    let tokenData = await axios.post(`https://nid.naver.com/oauth2.0/token?grant_type=${GRANT_TYPE}&client_id=${NAVER_CLIENT_ID}&client_secret=${NAVER_CLIENT_SECRET}&code=${code}`,
     {
     },
     {
@@ -155,10 +160,10 @@ export async function getServerSideProps({ query }) {
       },
     }
     );
-    console.log(tokenData);
+    console.log('tokenData: ',tokenData);
     token = tokenData.data.access_token;
-  }catch(e){
-    console.log(e);
+  }catch(err){
+    console.log('error:',err.response);
   }
   
   // console.log('code::::: ',code)
