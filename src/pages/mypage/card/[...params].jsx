@@ -5,16 +5,45 @@ import MypageWrapper from '/src/components/mypage/MypageWrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import s from './card.module.scss';
 import Image from 'next/image';
-import { getDataSSR, postObjData } from '/src/pages/api/reqData';
+import { getDataSSR, postObjData, postDataSSR } from '/src/pages/api/reqData';
 import Spinner from '/src/components/atoms/Spinner';
 import { EmptyContMessage } from '/src/components/atoms/emptyContMessage';
 import {subscribePlanType} from "/store/TYPE/subscribePlanType";
 import transformDate from "/util/func/transformDate";
 import transformLocalCurrency from "/util/func/transformLocalCurrency";
 import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 
 
 export default function MypageCardPage({ data }) {
+  const router = useRouter();
+  const { imp_success, params, error_msg } = router.query;
+  const [orderIdx,customUid] = params;
+  console.log(router.query);
+  console.log(params);
+
+  // 모바일 결제 실패했을때 결제실패 페이지로 이동
+  useEffect(() => {
+    async function changeCardData() {
+      if(imp_success == 'true'){
+        const apiUrl = `/api/cards/subscribes/${orderIdx}`;
+        const res = await postObjData(apiUrl, 
+          {
+            customerUid: `customer_Uid_${customUid}`,
+          });
+        if(res.isDone){
+          alert('카드변경 성공');    
+        }
+        console.log(res);
+      }
+      else if(imp_success == 'false'){
+        alert(`카드변경 실패 ${error_msg}`);
+      }
+    }
+    changeCardData();
+    window.location = '/mypage/card';
+  }, []);
+
   
   // !  CARD NAME => '알수없음' 조건 ?
   const [cardList, setCardList] = useState(data || []);
@@ -71,13 +100,12 @@ export default function MypageCardPage({ data }) {
       const r = await postObjData(`/api/cards/subscribes/${id}`, {
         customerUid : customer_uid,
       });
-      console.log(r);
+      // console.log(r);
       if(r.isDone){
         alert('카드변경 성공');
       }
     } else {
-        alert(`카드변경 실패 ${error_msg}`);
-        window.location.reload();
+        alert('카드변경 실패');
     } 
     }
   }
@@ -175,6 +203,7 @@ export async function getServerSideProps({ req }) {
       recipeNameList: data.recipeNameList,
     }));
   }
+
   return { props: { data: DATA } };
 }
 
