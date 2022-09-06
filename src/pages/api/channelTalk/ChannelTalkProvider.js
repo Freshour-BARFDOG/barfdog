@@ -46,6 +46,8 @@ const ChannelTalkProvider = ({children}) => {
     } else {
       channelTalk.boot({
         pluginKey: process.env.NEXT_PUBLIC_CHANNEL_IO_KEY,
+        customLauncherSelector: ".ch-open-button, .ch-open",
+        // customLauncherSelector: ".ch-open",
       });
     }
 
