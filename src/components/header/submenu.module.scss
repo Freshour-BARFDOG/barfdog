@@ -1,9 +1,6 @@
 
+@import '/styles/global/rem';
 
-$browser-context:16; // html font-size
-@function rem($px, $context: $browser-context){
-  @return #{$px / $context}rem;
-}
 
 $parentHeight: rem(32);
 $parentWidth : rem(150);
@@ -15,27 +12,32 @@ $parentWidth : rem(150);
   position: relative;
   box-sizing: border-box;
 
+
   a.submenu_title{cursor: pointer !important;}
   .submenu_title{
     height: $parentHeight;
     font-size:rem(18);
-    //font-family: "Roboto";
     font-weight: bold;
     padding: rem(15) rem(20) ;
     cursor: default;
   }
 
   img{transition: transform 0.3s ease-out .1s;}
+
+
   &:hover{
     .submenu{
       opacity: 1;
-      pointer-events: none;
+      pointer-events: all;
     }
     img{transform:rotate(180deg)}
-    
   }
 
   .submenu{
+    &:hover{
+      opacity: 1;
+      pointer-events: all;
+    }
     position: absolute;
     z-index: 10;
     left: 50%;
@@ -43,15 +45,11 @@ $parentWidth : rem(150);
     transform: translate(-50%,100%);
     background-color: #fff;
     box-shadow: 0 0 0.9375rem rgb(0 0 0 / 15%);
-    min-width: 9.375rem;
-    padding: 0.625rem 0;
+    min-width: rem(150);
+    padding: rem(10) 0 !important;
     transition: opacity var(--ani-default);
     opacity: 0;
     pointer-events: none;
-    
-     &.open {
-      pointer-events: all;
-      }
      li {
         &:hover > *{
           background-color: #f3f4f5;
@@ -69,7 +67,7 @@ $parentWidth : rem(150);
         letter-spacing: rem(0.2);
         cursor: pointer;
         transition: background-color var(--ani-default);
-      }      
+      }
      }
   }
  
