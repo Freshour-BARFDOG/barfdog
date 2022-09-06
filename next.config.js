@@ -42,7 +42,7 @@ module.exports = {
       'images.unsplash.com',
       '211.219.225.118',
       '192.168.100.13',
-      'https://barfdogserver.co.kr/',
+      'barfdogserver.co.kr',
       'shop-phinf.pstatic.net',
     ],
   },
