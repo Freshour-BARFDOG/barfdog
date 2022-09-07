@@ -69,7 +69,24 @@ export default function ShopPage() {
     }
     setSearchQuery(newQueryArr.join('&'));
   }, [searchValues]);
-
+  
+  const pageInterCeptor = async (res) => {
+    // res = DUMMY_DATA; // ! TEST
+    const newItemList = res.data?._embedded?.queryItemsDtoList;
+    const pageData = res.data.page;
+    console.log(pageData)
+    console.log(newItemList)
+    const newPageInfo = {
+      totalPages: pageData.totalPages,
+      size: pageData.size,
+      totalItems: pageData.totalElements,
+      currentPageIndex: pageData.number,
+      newPageNumber: pageData.number + 1,
+      newItemList: newItemList || [],
+    };
+    return newPageInfo;
+  };
+  
   const onChagneItemType = (e) => {
     const button = e.currentTarget;
     const itemType = button.dataset.itemType;
@@ -258,7 +275,7 @@ export default function ShopPage() {
               setItemList={setItemList}
               queryItemList={apiDataQueryString}
               urlQuery={searchQuery}
-            />
+              pageInterceptor={pageInterCeptor}/>
           </section>
         </Wrapper>
       </Layout>
