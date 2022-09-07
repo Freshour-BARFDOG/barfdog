@@ -71,11 +71,8 @@ export default function ShopPage() {
   }, [searchValues]);
   
   const pageInterCeptor = async (res) => {
-    // res = DUMMY_DATA; // ! TEST
     const newItemList = res.data?._embedded?.queryItemsDtoList;
     const pageData = res.data.page;
-    console.log(pageData)
-    console.log(newItemList)
     const newPageInfo = {
       totalPages: pageData.totalPages,
       size: pageData.size,
