@@ -43,11 +43,15 @@ class ChannelTalkService {
   }
 
   boot(settings) {
-    window.ChannelIO('boot', settings);
+    ChannelIO('boot', settings);
+  }
+  
+  track (eventName , eventProperty={}) {
+    ChannelIO('track', eventName, eventProperty);
   }
 
   shutdown() {
-    window.ChannelIO('shutdown');
+    ChannelIO('shutdown');
   }
 }
 

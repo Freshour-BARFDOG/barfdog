@@ -30,28 +30,35 @@ const ChannelTalkProvider = ({children}) => {
     // MEMO ChannelTalk: 사용자 Path에 설치  (Admin페이지: 적용 안 함)
     if (isAdminPath || isDisabledPath) return;
     const channelTalk = new ChannelTalkService();
+    channelTalk.boot({
+      pluginKey: process.env.NEXT_PUBLIC_CHANNEL_IO_KEY,
+      customLauncherSelector: ".ch-open-button, .ch-open",
+    });
   
-    // TODO 유저로그인 기능 추가 후 , ChannelTalk 유저정보 연동기능 (채널톡에 유저정보를 넘겨준다)
-    if(false) {
-      channelTalk.boot({
-        pluginKey: process.env.NEXT_PUBLIC_CHANNEL_IO_KEY,
-        memberId: '',
-        profile: {
-          name: userInfo.name,
-          mobileNumber: userInfo.phoneNumber,
-          email: userInfo.email,
-          // avatarUrl,
-        },
-      });
-    } else {
-      channelTalk.boot({
-        pluginKey: process.env.NEXT_PUBLIC_CHANNEL_IO_KEY,
-        customLauncherSelector: ".ch-open-button, .ch-open",
-        // customLauncherSelector: ".ch-open",
-      });
-    }
+  
+    channelTalk.track('traceForm', { userName:'test'});
+    // // TODO 유저로그인 기능 추가 후 , ChannelTalk 유저정보 연동기능 (채널톡에 유저정보를 넘겨준다)
+    // if(false) {
+    //   channelTalk.boot({
+    //     pluginKey: process.env.NEXT_PUBLIC_CHANNEL_IO_KEY,
+    //     memberId: '',
+    //     profile: {
+    //       name: userInfo.name,
+    //       mobileNumber: userInfo.phoneNumber,
+    //       email: userInfo.email,
+    //       // avatarUrl,
+    //     },
+    //   });
+    // } else {
+    //   channelTalk.boot({
+    //     pluginKey: process.env.NEXT_PUBLIC_CHANNEL_IO_KEY,
+    //     customLauncherSelector: ".ch-open-button, .ch-open",
+    //     // customLauncherSelector: ".ch-open",
+    //   });
+    // }
 
     return () => {
+      console.log('셧다운');
       channelTalk.shutdown();
     };
 
@@ -69,19 +76,3 @@ const ChannelTalkProvider = ({children}) => {
 export default ChannelTalkProvider;
 
 
-
-
-const getApiData = async (userId) => {
-  const apiUrl = `https://api.channel.io/open/v5/users/${userId}/user-chats?sortOrder=desc&limit=25`
-  const accessKey = '621f1bbdc6f9d0337bcc';
-  const accessSecretKey = '6ef92b0a1c50f27ee7008255e5b23685';
-  const config = {
-    headers:{
-      'Content-Type': 'application/json',
-      'x-access-key': accessKey,
-      'x-access-secret': accessSecretKey
-    }
-  }
-  const res = await axios.get(apiUrl,config);
-  console.log(res);
-}
