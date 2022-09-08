@@ -625,11 +625,12 @@ section.payment {
   .flex_box4 {
     display: flex;
     justify-content: space-between;
-    padding: rem(25) 0 rem(25);
+    padding: rem(25) 0 0;
   }
   .flex_box5 {
     display: flex;
     justify-content: space-between;
+    padding: rem(25) 0 0;
   }
   .flex_box6 {
     display: flex;

@@ -215,12 +215,17 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
 
                   <span>할인금액</span>
                   <span>{transformLocalCurrency(data?.orderDto.discountTotal)}원</span>
-
-                  <span>적립금 사용</span>
-                  <span>{transformLocalCurrency(data?.orderDto.discountReward)}원</span>
-
+  
+  
+                  <span>등급할인</span>
+                  <span>{transformLocalCurrency(data?.orderDto.discountGrade)}원</span>
+  
+  
                   <span>쿠폰사용</span>
                   <span>{transformLocalCurrency(data?.orderDto.discountCoupon)}원</span>
+  
+                  <span>적립금 사용</span>
+                  <span>{transformLocalCurrency(data?.orderDto.discountReward)}원</span>
 
                   <span>결제 금액</span>
                   <span>{transformLocalCurrency(data?.orderDto.paymentPrice)}원</span>
@@ -302,7 +307,6 @@ export async function getServerSideProps(ctx) {
         dogName: data.orderDto.dogName,
         oneMealRecommendGram: data.orderDto.oneMealRecommendGram,
         plan: data.orderDto.plan,
-
         // paymentDate: data.orderDto.paymentDate,
         orderPrice: data.orderDto.orderPrice,
         beforeSubscribeCount: data.orderDto.beforeSubscribeCount,
@@ -316,7 +320,7 @@ export async function getServerSideProps(ctx) {
         deliveryNumber: data.orderDto.deliveryNumber,
         deliveryStatus: data.orderDto.deliveryStatus,
         deliveryPrice: data.orderDto.deliveryPrice,
-
+        discountGrade: data.orderDto.discountGrade || 0, // 등급할인 (0908 신규 추가)
         discountTotal: data.orderDto.discountTotal,
         discountReward: data.orderDto.discountReward,
         discountCoupon: data.orderDto.discountCoupon,
