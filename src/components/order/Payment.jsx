@@ -94,6 +94,7 @@ export function Payment({
         detailAddress: form.deliveryDto.detailAddress, // 상세주소
         request: form.deliveryDto.request, // 배송 요청사항
       },
+      deliveryId:form.deliveryId || null, // 묶음 배송 할 배송 id . 묶음배송 아닐 경우 null
       orderPrice: form.orderPrice, //  주문 상품 총 가격 (할인 적용 전)
       deliveryPrice: form.deliveryPrice, // 배송비
       discountTotal: calcOrdersheetPrices(form, 'general').discountTotal, // 총 할인 합계    ! 쿠폰할인금 적용
