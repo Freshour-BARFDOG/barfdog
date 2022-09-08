@@ -41,7 +41,7 @@ module.exports = {
     domains: [
       'images.unsplash.com',
       '211.219.225.118',
-      '192.168.100.13',
+      '192.168.0.4',
       'barfdogserver.co.kr',
       'shop-phinf.pstatic.net',
     ],
