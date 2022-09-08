@@ -3,6 +3,7 @@ export const orderStatus = {
   HOLD: 'HOLD',
   BEFORE_PAYMENT: 'BEFORE_PAYMENT',
   RESERVED_PAYMENT: 'RESERVED_PAYMENT',
+  CANCEL_PAYMENT: 'CANCEL_PAYMENT',
   PAYMENT_DONE: 'PAYMENT_DONE',
   PRODUCING: 'PRODUCING', // 구독상품 (상품 준비중)
   DELIVERY_READY: 'DELIVERY_READY', // 일반상품 (상품 준비 중)
@@ -25,6 +26,7 @@ export const orderStatus = {
     HOLD: '구독 보류',
     BEFORE_PAYMENT: '결제 전',
     RESERVED_PAYMENT: '예약됨',
+    CANCEL_PAYMENT: '결제 취소',
     PAYMENT_DONE: '결제 완료',
     PRODUCING: '생산 중', // 구독 상품
     DELIVERY_READY: '배송 준비 중', // 일반상품
@@ -44,8 +46,6 @@ export const orderStatus = {
     CONFIRM: '구매 확정',
   },
 };
-
-
 
 /* - 구매확정
 <구독상품>
