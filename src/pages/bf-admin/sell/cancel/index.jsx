@@ -78,7 +78,7 @@ export default function CancelOnSellPage() {
 
 
   const pageInterceptor = (res) => {
-    res = DUMMY_ADMIN_CANCEL_ITEMLIST_RES; //  ! TEST
+    // res = DUMMY_ADMIN_CANCEL_ITEMLIST_RES; //  ! TEST
     console.log(res);
     const pageData = res.data.page;
     const curItemList = res.data?._embedded?.queryAdminCancelRequestDtoList || [];
