@@ -79,7 +79,6 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
     // if (!Object.keys(curItem).length || !subscribeId) {
     //   return window.location.href='/';
     // }
-
     // ! surveyReportID가 곧 subscribeId가 되는것인지?????
     (async () => {
       setIsLoading((prevState) => ({
