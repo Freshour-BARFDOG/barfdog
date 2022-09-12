@@ -1,28 +1,38 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from '/src/components/mypage/MypageWrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import s from 'src/pages/mypage/orderHistory/orderHistoryOrdersheet.module.scss';
 import Image from 'next/image';
-import { getDataSSR, postObjData } from '/src/pages/api/reqData';
+import {getDataSSR, postObjData} from '/src/pages/api/reqData';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import popupWindow from '/util/func/popupWindow';
-import { valid_deliveryCondition } from '/util/func/validation/valid_deliveryCondition';
-import { subscribePlanType } from '/store/TYPE/subscribePlanType';
+import {valid_deliveryCondition} from '/util/func/validation/valid_deliveryCondition';
+import {subscribePlanType} from '/store/TYPE/subscribePlanType';
 import transformDate from '/util/func/transformDate';
-import { orderStatus } from '/store/TYPE/orderStatusTYPE';
-import { useState } from 'react';
+import {orderStatus} from '/store/TYPE/orderStatusTYPE';
 import Modal_confirm from '/src/components/modal/Modal_confirm';
-import { filter_availableReturnAndExchangeItemList } from '/util/func/filter_availableReturnAndExchangeItemList';
-import { valid_availableCancelOrder } from '/util/func/validation/valid_availableCancelOrder';
+import {Modal_subscribeCancel} from "/src/components/modal/Modal_subscribeCancel";
+
+/*! 참고)
+   구독상품: 교환 및 환불 불가
+   주문상태에 따른 구독 취소의 reason / detailReason
+   PAYMENT_DONE => 이미 입력된 값으로 전달
+   PRODUCING => Modal활성화 => 사용자가 입력한 값으로 전달
+*/
+
 
 export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
   console.log(data);
+  // data.orderDto.deliveryStatus = orderStatus.PAYMENT_DONE; // ! TEST CODE TEST CODE TEST CODE TEST CODE
+  // data.orderDto.deliveryStatus = orderStatus.PRODUCING; // ! TEST CODE TEST CODE TEST CODE TEST CODE
+  const currentOrderStatus = data.orderDto.deliveryStatus;
+  const availableCancelStatusList = [orderStatus.PAYMENT_DONE, orderStatus.PRODUCING];
+  const availableCancleStatus = availableCancelStatusList.indexOf(currentOrderStatus) >= 0;
 
   const [activeModal, setActiveModal] = useState(false);
   const [confirmMessage, setConfirmMessage] = useState('');
-  const [confirmType, setConfirmType] = useState('');
 
   const onPopupHandler = (e) => {
     e.preventDefault();
@@ -35,38 +45,40 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
     // setFilteredItemList(originItemList);
     setConfirmMessage('');
     setActiveModal(null);
-    setConfirmType(null);
   };
 
-  const onStartCancel = () => {
+  const onStartCancelBeforeProducing = () => {
     setActiveModal({ cancle: true });
     setConfirmMessage(`구독 상품이 주문 취소됩니다.`);
-    setConfirmType(orderStatus.CANCEL_REQUEST);
   };
 
-  const onOrderCancle = async (confirm) => {
+  const onOrderCancleBeforeProducing = async (confirm) => {
+    
     if (!confirm) return initializeModalState();
-    // console.log('전체 주문취소 API 실행 // 부분 취소 불가');
+
+    const body = {
+      reason: '생산 전, 구독 즉시 취소',
+      detailReason: '',
+    };
+    console.log(body);
     try {
-      const r = await postObjData(`/api/orders/${orderIdx}/subscribe/cancelRequest`);
+      const r = await postObjData(`/api/orders/${orderIdx}/subscribe/cancelRequest`, body);
       console.log(r);
       if (r.isDone) {
-        alert('구독 주문 결제취소완료');
+        alert('구독 주문 결제취소 완료');
         window.location.reload();
       } else {
         alert(`주문취소 실패\n${r.error}`);
       }
     } catch (err) {
-        console.error(err)
+      console.error(err);
     }
-    
 
     setActiveModal(null);
   };
 
-  const confirmBCallbackType = {
-    [orderStatus.CANCEL_REQUEST]: onOrderCancle,
-    // [orderStatus.CONFIRM]: addSomeFunction, // 필요한 function을 추가하면 됨
+  const onStartCancel = () => {
+    setActiveModal({ cancleRequest: true });
   };
 
   return (
@@ -81,13 +93,19 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
               <h1 className={s.body_title}>
                 <p>주문상품</p>
                 <div className={s['order-button-controller']}>
-                  <button
-                    type={'button'}
-                    className={`${s.btn} ${s.cancel}`}
-                    onClick={onStartCancel}
-                  >
-                    주문취소
-                  </button>
+                  {availableCancleStatus && (
+                    <button
+                      type={'button'}
+                      className={`${s.btn} ${s.cancel}`}
+                      onClick={
+                        currentOrderStatus === orderStatus.PRODUCING
+                          ? onStartCancel
+                          : onStartCancelBeforeProducing
+                      }
+                    >
+                      주문취소
+                    </button>
+                  )}
                 </div>
               </h1>
 
@@ -128,26 +146,45 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
 
                     <span>급여량</span>
                     <div>
-                      {(data?.orderDto.beforeOneMealRecommendGram && data?.orderDto.beforeOneMealRecommendGram !== data?.orderDto.oneMealRecommendGram )&& <span className={s.beforeData}>{data?.orderDto.beforeOneMealRecommendGram}g</span>}
+                      {data?.orderDto.beforeOneMealRecommendGram &&
+                        data?.orderDto.beforeOneMealRecommendGram !==
+                          data?.orderDto.oneMealRecommendGram && (
+                          <span className={s.beforeData}>
+                            {data?.orderDto.beforeOneMealRecommendGram}g
+                          </span>
+                        )}
                       <span>{data?.orderDto.oneMealRecommendGram}g</span>
                     </div>
 
                     <span>플랜</span>
                     <div>
-                      {(data?.orderDto.beforePlan && data?.orderDto.plan && data?.orderDto.beforePlan !== data?.orderDto.plan) && <span className={s.beforeData}>{subscribePlanType[data?.orderDto.beforePlan].KOR}</span>}
+                      {data?.orderDto.beforePlan &&
+                        data?.orderDto.plan &&
+                        data?.orderDto.beforePlan !== data?.orderDto.plan && (
+                          <span className={s.beforeData}>
+                            {subscribePlanType[data?.orderDto.beforePlan].KOR}
+                          </span>
+                        )}
                       <span>{subscribePlanType[data?.orderDto.plan].KOR}</span>
                     </div>
 
                     <span>레시피</span>
                     <div>
-                      {data?.orderDto.beforeRecipeName !== data?.recipeDto.recipeName && <span className={s.beforeData}>{data?.orderDto.beforeRecipeName}</span>}
+                      {data?.orderDto.beforeRecipeName !== data?.recipeDto.recipeName && (
+                        <span className={s.beforeData}>{data?.orderDto.beforeRecipeName}</span>
+                      )}
                       <span>{data?.recipeDto.recipeName}</span>
                     </div>
 
                     <span>가격</span>
                     <div>
-                      {(data?.orderDto.beforeOrderPrice > 0 && data?.orderDto.beforeOrderPrice !== data?.orderDto.orderPrice) && <span className={s.beforeData}>{transformLocalCurrency(data?.orderDto.beforeOrderPrice)}원</span>}
-                      
+                      {data?.orderDto.beforeOrderPrice > 0 &&
+                        data?.orderDto.beforeOrderPrice !== data?.orderDto.orderPrice && (
+                          <span className={s.beforeData}>
+                            {transformLocalCurrency(data?.orderDto.beforeOrderPrice)}원
+                          </span>
+                        )}
+
                       <span>{transformLocalCurrency(data?.orderDto.orderPrice)}원</span>
                     </div>
                   </div>
@@ -161,6 +198,8 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
 
               <div className={s.body_content_2}>
                 <div className={s.grid_box}>
+                  <span>주문상태</span>
+                  <span>{orderStatus.KOR[currentOrderStatus]}</span>
                   <span>주문번호</span>
                   <span>{data?.orderDto.merchantUid}</span>
                   <span>주문(결제)일시</span>
@@ -177,7 +216,7 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
               {/* 주문상품 결제정보 배송정보 */}
 
               <div className={s.body_content_3}>
-                {!valid_deliveryCondition(data?.orderDto.deliveryStatus) ? (
+                {valid_deliveryCondition(data?.orderDto.deliveryStatus) ? (
                   <ul className={s.content_grid}>
                     <li>CJ대한통운</li>
                     <li>운송장번호&nbsp;{data?.orderDto.deliveryNumber || '(발급 전)'}</li>
@@ -196,7 +235,7 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
                     </li>
                   </ul>
                 ) : (
-                  <p className={s.emptyCont}>배송 중 상태에서 조회 가능합니다.</p>
+                  <p className={s.emptyCont}>배송 시작 후 조회 가능합니다.</p>
                 )}
               </div>
             </section>
@@ -215,15 +254,13 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
 
                   <span>할인금액</span>
                   <span>{transformLocalCurrency(data?.orderDto.discountTotal)}원</span>
-  
-  
+
                   <span>등급할인</span>
                   <span>{transformLocalCurrency(data?.orderDto.discountGrade)}원</span>
-  
-  
+
                   <span>쿠폰사용</span>
                   <span>{transformLocalCurrency(data?.orderDto.discountCoupon)}원</span>
-  
+
                   <span>적립금 사용</span>
                   <span>{transformLocalCurrency(data?.orderDto.discountReward)}원</span>
 
@@ -272,29 +309,28 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
       {activeModal?.cancle && (
         <Modal_confirm
           text={confirmMessage}
-          isConfirm={confirmBCallbackType[confirmType]}
+          isConfirm={onOrderCancleBeforeProducing}
           positionCenter
           option={{ wordBreak: true }}
         />
       )}
+      {activeModal?.cancleRequest && <Modal_subscribeCancel onHideModal={initializeModalState} subscribeId={data.orderDto.subscribeId}/>}
     </>
   );
 }
 
+
 export async function getServerSideProps(ctx) {
   const { query, req } = ctx;
-  // console.log(query, req)
-
-  // const { orderIdx } = query;
   const orderIdx = query.orderIdx;
 
   let DATA = null;
   const getApiUrl = `/api/orders/${orderIdx}/subscribe`;
 
   const res = await getDataSSR(req, getApiUrl);
-  console.log('SERVER REPONSE: ', res);
+  // console.log('SERVER REPONSE: ', res);
   const data = res?.data;
-  console.log(data);
+  console.log('REPONSE DATA:',data);
   if (data) {
     DATA = {
       recipeDto: {
@@ -303,6 +339,7 @@ export async function getServerSideProps(ctx) {
       },
       recipeNames: data.recipeNames,
       orderDto: {
+        subscribeId: orderIdx,
         subscribeCount: data.orderDto.subscribeCount,
         dogName: data.orderDto.dogName,
         oneMealRecommendGram: data.orderDto.oneMealRecommendGram,
