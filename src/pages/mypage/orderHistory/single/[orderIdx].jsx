@@ -7,7 +7,7 @@ import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from '/src/components/mypage/MypageWrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import Image from 'next/image';
-import { getDataSSR, postData, postObjData } from '/src/pages/api/reqData';
+import {getData, getDataSSR, postData, postObjData} from '/src/pages/api/reqData';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import popupWindow from '/util/func/popupWindow';
 import { valid_deliveryCondition } from '/util/func/validation/valid_deliveryCondition';
@@ -17,7 +17,8 @@ import { transformPhoneNumber } from '/util/func/transformPhoneNumber';
 import { Modal_changeItemOrderState } from '/src/components/modal/Modal_changeItemOrderState';
 import { filter_availableReturnAndExchangeItemList } from '/util/func/filter_availableReturnAndExchangeItemList';
 import { valid_availableCancelOrder } from '/util/func/validation/valid_availableCancelOrder';
-import {valid_availableReturnAndExchangelOrder} from "../../../../../util/func/valid_availableReturnAndExchangelOrder";
+import {valid_availableReturnAndExchangelOrder} from "/util/func/valid_availableReturnAndExchangelOrder";
+import axios from "axios";
 
 // ! =====> 상품정보란 보완필요
 // ! =====> 배송완료 시점필요
@@ -29,17 +30,27 @@ export default function SingleItem_OrderHistoryPage({ data }) {
   const [activeModal, setActiveModal] = useState(false);
   const [confirmMessage, setConfirmMessage] = useState('');
   const [confirmType, setConfirmType] = useState('');
-  const [filteredItemList, setFilteredItemList] = useState({});
-  let isAvailableCancleState = true;
+  const [filteredItemList, setFilteredItemList] = useState([]);
+  
+  let availableImmediatelyCancle = true;
+  let availableCancleState = true;
+  
   for (const objInArr of originItemList) {
-    // ! 전체취소만 가능 => 아이템 각각 조회하여, 취소불가능한 상태가 하나라도 존재일 경우 , 취소 불가
     const itemStatus = objInArr.status;
+  
+    // ! 전체취소만 가능 => 아이템 각각 조회하여, 취소불가능한 상태가 하나라도 존재일 경우 , 취소 불가
     const valid = valid_availableCancelOrder(itemStatus);
     if (!valid) {
-      isAvailableCancleState = false;
-      break;
+      availableCancleState = false;
+    }
+    // ! 모든 상품의 주문상태가 결제 완료일 경우, 전체 취소 가능
+    if(itemStatus !== orderStatus.PAYMENT_DONE){
+      availableImmediatelyCancle = false;
     }
   }
+  
+  console.log('전체취소 가능여부: ',availableImmediatelyCancle)
+  console.log('취소기능 활성여부: ',availableCancleState)
   // 교환 반품 조건 // 배송완료 & 배송완료 7일 이내
   const isAvailableReturnAndExchangeState = valid_availableReturnAndExchangelOrder(originItemList[0].status, data.orderDto.arrivalDate);
   
@@ -86,45 +97,93 @@ export default function SingleItem_OrderHistoryPage({ data }) {
     setActiveModal({ exchange: true });
     setConfirmType(orderStatus.EXCHANGE_REQUEST);
   };
+  
+  
   const onStartCancel = () => {
-    setActiveModal({ cancle: true });
-    setConfirmMessage(`전체 상품이 주문 취소됩니다.`);
-    setConfirmType(orderStatus.CANCEL_REQUEST);
+    
+    if(availableImmediatelyCancle){
+      setActiveModal({ cancle: true });
+      setConfirmMessage(`전체 상품이 즉시 주문취소됩니다.`);
+      setConfirmType(orderStatus.CANCEL_REQUEST);
+    } else {
+      setActiveModal({ cancelRequest: true });
+      setConfirmType(orderStatus.CANCEL_REQUEST);
+    
+    }
+    
   };
-
+  
+ 
   const onOrderCancle = async (confirm) => {
     if (!confirm) return initializeModalState();
-    console.log('전체 주문취소 API 실행 // 부분 취소 불가');
-
-    const r = await postObjData(`/api/orders/${data?.orderDto.orderId}/general/cancelRequest`);
-    console.log(r);
-    if (r.isDone) {
-      alert('전체 주문 결제취소완료');
-      window.location.reload();
+  
+    const body = {
+      reason: '배송 전, 일반결제 즉시 취소',
+      detailReason: '',
+    };
+    try {
+      const r = await postObjData(`/api/orders/${data?.orderDto.orderId}/general/cancelRequest`, body);
+      console.log(r);
+      if (r.isDone) {
+        alert('전체 주문 결제취소완료');
+        window.location.reload();
+      } else {
+        alert('전체 주문 결제취소 요청 중 오류가 발생했습니다.');
+      }
+    } catch (err) {
+        console.error(err);
+        alert(`데이터 처리 중 오류가 발생했습니다.\n${err}`);
     }
-
+    
     setActiveModal(null);
   };
 
-  const confirmBCallbackType = {
-    [orderStatus.CANCEL_REQUEST]: onOrderCancle,
-    // [orderStatus.CONFIRM]: addSomeFunction, // 필요한 function을 추가하면 됨
-  };
-
-  // console.log(originItemList);
+  
+  
+  const testFunc = async () => {
+    try {
+      const url = 'http://api.channel.io/open/v5/user-chats?state=opened&sortOrder=desc&since=eyJjaGF0S2V5IjoiZ3Jvn0=&limit=40'
+      const res = await axios.get(url,{
+        headers:{
+        }
+      });
+      console.log(res);
+    
+    } catch (err) {
+        console.error(err)
+    
+    }
+  }
   return (
     <>
+      {activeModal?.cancle && (
+        <Modal_confirm
+          text={confirmMessage}
+          isConfirm={onOrderCancle}
+          positionCenter
+          option={{ wordBreak: true }}
+        />
+      )}
+      {(activeModal?.exchange || activeModal?.return || activeModal?.confirm || activeModal?.cancelRequest) && (
+        <Modal_changeItemOrderState
+          onHideModal={initializeModalState}
+          confirmType={confirmType}
+          items={filteredItemList}
+          hasForm={!activeModal?.confirm}
+        />
+      )}
       <MetaTitle title="마이페이지 주문내역 일반상품" />
       <Layout>
         <Wrapper>
           <MypageWrapper>
             <section className={s.title}>주문상세정보</section>
 
+            {/*<button type={'button'} className={`${s.btn} ${s.cancel}`} onClick={testFunc}>채널톡 테스트버튼</button>*/}
             <section>
               <h1 className={s.body_title}>
                 <p>주문상품</p>
                 <div className={s['order-button-controller']}>
-                  {isAvailableCancleState && (
+                  {availableCancleState && (
                     <button
                       type={'button'}
                       className={`${s.btn} ${s.cancel}`}
@@ -236,7 +295,7 @@ export default function SingleItem_OrderHistoryPage({ data }) {
                   <span>
                     {data?.orderDto.package ? `묶음 배송` : '일반 배송'}&nbsp;
                     {data.orderDto.package && (
-                      <em className={s.desc}>(다음 정기구독 배송 시, 함께 배송)</em>
+                      <em className={s.desc}>(정기구독 배송 시, 함께 배송)</em>
                     )}
                   </span>
                 </div>
@@ -363,22 +422,7 @@ export default function SingleItem_OrderHistoryPage({ data }) {
           </MypageWrapper>
         </Wrapper>
       </Layout>
-      {activeModal?.cancle && (
-        <Modal_confirm
-          text={confirmMessage}
-          isConfirm={confirmBCallbackType[confirmType]}
-          positionCenter
-          option={{ wordBreak: true }}
-        />
-      )}
-      {(activeModal?.exchange || activeModal?.return || activeModal?.confirm) && (
-        <Modal_changeItemOrderState
-          onHideModal={initializeModalState}
-          confirmType={confirmType}
-          items={filteredItemList}
-          hasForm={!activeModal?.confirm}
-        />
-      )}
+     
     </>
   );
 }
@@ -481,7 +525,7 @@ export async function getServerSideProps(ctx) {
   const orderIdx = query.orderIdx;
 
   let DATA = null;
-  const getApiUrl = `/api/orders/${orderIdx}/general`; // API 검색어: 일반 주문 하나 조회
+  const getApiUrl = `/api/orders/${orderIdx}/general`; // 일반 주문 하나 조회
 
   let res = await getDataSSR(req, getApiUrl);
   // res = DUMMY_RESPONSE; // ! TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST

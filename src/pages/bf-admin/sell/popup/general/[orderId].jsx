@@ -126,12 +126,13 @@ export async function getServerSideProps({ req, query }) {
   const { orderId } = query;
   let DATA = null;
   let orderStatus = null;
-  const apiUrl = `api/admin/orders/${orderId}/general`;
+  const apiUrl = `/api/admin/orders/${orderId}/general`;
   const res = await getDataSSR(req, apiUrl);
-  // console.log(res);
+  // console.log('RESONSE: ',res);
   // const res = DUMMY_DEFAULT_RES;
   if (res.data) {
     const data = res.data;
+    console.log('________RESONSE: ',data);
     DATA = {
       orderStatus: data.paymentDto.orderStatus,
       orderInfoDto: {
@@ -165,9 +166,10 @@ export async function getServerSideProps({ req, query }) {
         orderPrice: data.paymentDto.orderPrice,
         deliveryPrice: data.paymentDto.deliveryPrice,
         discountReward: data.paymentDto.discountReward,
-        paymentPrice: data.paymentDto.paymentPrice,
         couponName: data.paymentDto?.couponName || null, // ! 서버에서 데이터 추가필요
         discountCoupon: data.paymentDto?.discountCoupon|| data.orderItemAndOptionDtoList?.map((info)=>info.orderItemDto.discountAmount).reduce((acc, cur)=> acc+ cur) || null , // ! 서버에서 데이터 추가 필요
+        paymentPrice: data.paymentDto.paymentPrice,
+        paymentMethod: data.paymentDto.paymentMethod,
         orderStatus: data.paymentDto.orderStatus,
         orderConfirmDate: data.paymentDto.orderConfirmDate,
       },
@@ -180,14 +182,27 @@ export async function getServerSideProps({ req, query }) {
         departureDate: data.deliveryDto.departureDate,
         arrivalDate: data.deliveryDto.arrivalDate,
         deliveryNumber: data.deliveryDto.deliveryNumber,
+        request: data.deliveryDto.request,
       },
     };
     
     if(isCancelOrderStatus(DATA.orderStatus)){
-      // 취소상태일 경우 추가정보
-      const cancelApiUrl = `/api/admin/orders/orderItem/${orderId}`;
-      const r = await getDataSSR(req, cancelApiUrl);
-      console.log('CANCEL RESPONSE: ',r)
+      // 취소상태일 경우 > 취소정보
+      const orderItemIdList = DATA.orderItemAndOptionDtoList.map(list=>list.orderItemDto.orderItemId);
+      // console.log('orderItemIdList', orderItemIdList);
+      for (const orderItemId in orderItemIdList) {
+        const cancelApiUrl = `/api/admin/orders/orderItem/${orderItemId}`;
+        const r = await getDataSSR(req, cancelApiUrl);
+        console.log(r)
+        if(r.data){
+          const data = r.data;
+          // console.log('CANCEL RESPONSE DATA: ',data)
+          const cancleInfo = data.orderItemAndOptionDto;
+    
+        }
+      }
+     
+      
     }
   
   }
