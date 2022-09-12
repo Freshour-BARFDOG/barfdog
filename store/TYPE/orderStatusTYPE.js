@@ -9,6 +9,7 @@ export const orderStatus = {
   DELIVERY_READY: 'DELIVERY_READY', // 일반상품 (상품 준비 중)
   DELIVERY_START: 'DELIVERY_START',
   DELIVERY_DONE: 'DELIVERY_DONE',
+  DELIVERY_CANCEL: 'DELIVERY_CANCEL',
   SELLING_CANCLE: 'SELLING_CANCLE',
   CANCEL_REQUEST: 'CANCEL_REQUEST',
   CANCEL_DONE_SELLER: 'CANCEL_DONE_SELLER',
@@ -32,6 +33,7 @@ export const orderStatus = {
     DELIVERY_READY: '배송 준비 중', // 일반상품
     DELIVERY_START: '배송 시작',
     DELIVERY_DONE: '배송 완료',
+    DELIVERY_CANCEL: '구독결제 취소',
     SELLING_CANCLE: '판매 취소',
     CANCEL_REQUEST: '취소 요청',
     CANCEL_DONE_SELLER: '취소 완료 (판매자 귀책)',
