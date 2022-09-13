@@ -5,8 +5,9 @@ import { useDispatch } from 'react-redux';
 import { userType } from '/store/TYPE/userAuthType';
 import { snsProviderType } from '/store/TYPE/snsProviderType';
 import {userStateAction} from "/store/userState-slice";
+import { authAction } from '/store/auth-slice';
 
-export default function NAVER_Auth({ data, err}) {
+export default function NAVER_Auth({ data, err, token}) {
   console.log(data, err)
   const router = useRouter();
   const dispatch = useDispatch();
@@ -42,6 +43,16 @@ export default function NAVER_Auth({ data, err}) {
       data.snsUserType === userType.MEMBER_WITH_SNS.NAVER
     ) {
       alert('이미 SNS연동완료된 회원입니다 => 로그인처리');
+
+      const payload = {
+        token,
+        expiredDate: 10,
+      };
+
+      dispatch(authAction.naverLogin(payload));
+      
+      // router.push('/');
+
     }
   }, [data, err]);
   // const getNaverToken = () => {
@@ -142,6 +153,7 @@ export async function getServerSideProps({ query }) {
 
   let snsUserType = null;
   let userInfo = null;
+  let naverToken = null;
   let token = null;
 
   // let token = await axios.post(`https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&client_id=${process.env.NEXT_PUBLIC_NAVER_CLIENT_ID}&client_secret=${process.env.NEXT_PUBLIC_NAVER_CLIENT_SECRET}&code=${code}`,
@@ -161,15 +173,15 @@ export async function getServerSideProps({ query }) {
     }
     );
     console.log('tokenData: ',tokenData);
-    token = tokenData.data.access_token;
+    naverToken = tokenData.data.access_token;
   }catch(err){
     console.log('error:',err.response);
   }
   
   // console.log('code::::: ',code)
   const body = {
-    accessToken: token, // Naver Api Access Token
-    tokenValidDays: null, // null일경우 2시간 유효 ( 회원검증을 위해서 , 최소한의 시간만 로그인 State을 유지시킴)
+    accessToken: naverToken, // Naver Api Access Token
+    tokenValidDays: 10, // null일경우 2시간 유효 ( 회원검증을 위해서 , 최소한의 시간만 로그인 State을 유지시킴)
   };
 
   try {
@@ -194,11 +206,10 @@ export async function getServerSideProps({ query }) {
     console.log('BARFDOG API SERVER res::::: ',res);
     // res = DUMMY_NEW_MEMBER_RESPONSE; ////////  ! TEST
     // res = DUMMY_MEMBER_RESPONSE; ////////  ! TEST
-
+    
     if(res.data){
       const resultCode = Number(res.data.resultcode) || null;
       const resultMessage = res.data.message;
-
       if (resultCode === 251) {
         snsUserType = userType.NON_MEMBER; // 비회원
         const serverRes = res.data.response;
@@ -235,10 +246,24 @@ export async function getServerSideProps({ query }) {
       } else if (resultCode === 253) {
         snsUserType = userType.MEMBER_WITH_SNS.KAKAO; // 이미 카카오로 연동되어있는 계정
         // 로그인 처리시킴
-      } else if (resultCode === 254) {
-        snsUserType = userType.MEMBER_WITH_SNS.NAVER; // 이미 네이버로 연동되어있는 계정
-      } else if (resultCode === 200) {
+      } else if (resultCode === 254 || resultCode === 200) {
         // 이미 연동되어있는 회원 => 메인페이지로 이동
+        snsUserType = userType.MEMBER_WITH_SNS.NAVER; // 이미 네이버로 연동되어있는 계정
+
+        token = res.headers.authorization;
+        const serverRes = res.data.response;
+        userInfo = {
+          accessToken: body.accessToken, // Naver Api Access Token
+          tokenValidDays: body.tokenValidDays, // 토큰 지속시간
+          id: serverRes.id,
+          gender: serverRes.gender,
+          email: serverRes.email,
+          mobile: serverRes.mobile,
+          mobile_e164: serverRes.mobile_e164,
+          name: serverRes.name,
+          birthday: serverRes.birthday,
+          birthyear: serverRes.birthyear,
+        };
       }
       if (
         resultCode === 24 ||
@@ -262,7 +287,7 @@ export async function getServerSideProps({ query }) {
     provider: snsProviderType.NAVER, // ! IMPORTANT:  PROVIDER > NAVER
     userInfo: userInfo,
   };
-  return { props: { data: serverSideData, err } };
+  return { props: { data: serverSideData, err, token } };
 }
 
 /*
