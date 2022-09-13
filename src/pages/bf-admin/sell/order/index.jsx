@@ -263,13 +263,15 @@ export default function OrderOnSellPage() {
       // 운송장 출력창 호출
       const goodsflowPrintUrl =
       window.location.origin + '/api/goodsFlow/print';
-      await postObjData(goodsflowPrintUrl,
+      const printRes = await postObjData(goodsflowPrintUrl,
         {
           otp:otp,
           id:res.data.id
         },
       );
-  
+        
+      console.log(printRes);
+      
       popupWindow(`/bf-admin/sell/delivery/print?otp=${otp}&id=${res.data.id}`); 
       
     
@@ -286,13 +288,13 @@ export default function OrderOnSellPage() {
             },
           ],
         };
-        const r = await postObjData(registerDeliveryNumberApiUrl, body);
-        console.log('server RESPONSE:\n', r);
-        if (r.isDone) {
-          alert('운송장번호 저장 완료');
-        } else {
-          console.error('운송장번호 저장 실패');
-        }
+        // const r = await postObjData(registerDeliveryNumberApiUrl, body);
+        // console.log('server RESPONSE:\n', r);
+        // if (r.isDone) {
+        //   alert('운송장번호 저장 완료');
+        // } else {
+        //   console.error('운송장번호 저장 실패');
+        // }
       }
 
     } catch (err) {

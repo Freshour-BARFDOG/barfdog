@@ -25,7 +25,7 @@ const GoodsFlowPrint = async (req, res,) => {
       `${process.env.NEXT_PUBLIC_GOODSFLOW_PRINT_URL}dlvmgr.aspx`,
         qs.stringify({
           'OTP':req.body.otp,
-          'responseURL':'http://localhost:4000',
+          'responseURL':'https://barfdog.vercel.app',
           'id':req.body.id
         }),
         
