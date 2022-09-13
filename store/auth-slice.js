@@ -47,6 +47,20 @@ const authSlice = createSlice({
       );
       window.location.href = action.payload.redirect || temporaryPassword ? '/?tempPw=true' : '/';
     },
+    naverLogin(state, action) {
+      state.isAdmin = false;
+      state.isAuth = true;
+      state.userType = true;
+      const accessToken = action.payload.token;
+      
+      setCookie(
+        cookieType.LOGIN_COOKIE,
+        accessToken,
+        cookieType.AUTO_LOGIN_EXPIRED_PERIOD.UNIT,
+        { path: '/' },
+      );
+      window.location.href =  '/';
+    },
     autoLogin(state, action) {
       state.isAdmin = false;
       state.isAuth = true;
