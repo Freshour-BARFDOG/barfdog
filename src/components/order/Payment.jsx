@@ -115,14 +115,15 @@ export function Payment({
         detailAddress: form.deliveryDto.detailAddress, // 상세주소
         request: form.deliveryDto.request, // 배송 요청사항
       },
-      orderPrice: form.orderPrice, //  주문 상품 총 가격 (할인 적용 전)
+      orderPrice: form.orderPrice, //  ! 주문 상품 원가 = nextPaymentPrice (등급 할인 적용x / 플랜변경, 레시피, 레시피 그램 등이 반영된 "제품원가"에 해당함)
       deliveryPrice: form.deliveryPrice, // 배송비
-      discountTotal: calcOrdersheetPrices(form, 'subscribe').discountTotal, // 총 할인 합계    ! 쿠폰할인금 적용
+      discountTotal: calcOrdersheetPrices(form, 'subscribe').discountTotal, // 총 할인 합계    ! 쿠폰할인금 , 적립금, 등급할인
       discountReward: Number(form.discountReward), // 사용할 적립금
-      discountCoupon: calcOrdersheetPrices(form, 'subscribe').discountCoupon, // 쿠폰 적용으로 인한 할인금 ! coupon할인금 적용
-      paymentPrice: calcOrdersheetPrices(form, 'subscribe').paymentPrice, // 최종 결제 금액 ! coupon할인금 적용
+      discountCoupon: calcOrdersheetPrices(form, 'subscribe').discountCoupon, // 쿠폰 적용으로 인한 할인금
+      discountGrade: calcOrdersheetPrices(form, 'subscribe').discountGrade, // 등급할인
+      paymentPrice: calcOrdersheetPrices(form, 'subscribe').paymentPrice, // 최종 결제 금액
       paymentMethod: form.paymentMethod, // 결제방법  [CREDIT_CARD, NAVER_PAY, KAKAO_PAY]
-      nextDeliveryDate: form.nextDeliveryDate,
+      nextDeliveryDate: form.nextDeliveryDate, // 할인이 적용되지 않은 가격
       agreePrivacy: form.agreePrivacy, // 개인정보 제공 동의
       brochure: form.brochure, // 브로슈어 수령여부
     };

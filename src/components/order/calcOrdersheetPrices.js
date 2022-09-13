@@ -32,6 +32,7 @@ export const calcOrdersheetPrices = (form, orderType='general') => {
   return {
     discountReward,
     discountCoupon,
+    discountGrade,
     discountTotal,
     paymentPrice,
     availableMaxReward: availableMaxReward
