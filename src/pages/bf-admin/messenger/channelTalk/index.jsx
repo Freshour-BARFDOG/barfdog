@@ -9,6 +9,7 @@ import ChannelTalkMemberList from './ChannelTalkMemberList';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import Spinner from '/src/components/atoms/Spinner';
 import { getData } from '../../../api/reqData';
+import ChannelTalkService from "../../../api/channelTalk/ChannelTalkService";
 
 export default function ChannelTalkPage() {
   const searchApiUrl = `/api/admin/guests`;
@@ -18,25 +19,6 @@ export default function ChannelTalkPage() {
   const [searchBody, setSearchBody] = useState(null);
   const [itemList, setItemList] = useState([]);
 
-  useEffect(() => {
-    (async () => {
-      setIsLoading((prevState) => ({
-        ...prevState,
-        fetching: true,
-      }));
-      try {
-        const url = window.location.origin + `/api/channelTalk/getUserList`;
-        const res = await getData(url);
-        console.log(res);
-      } catch (err) {
-        console.error(err);
-      }
-      setIsLoading((prevState) => ({
-        ...prevState,
-        fetching: false,
-      }));
-    })();
-  }, []);
 
   const pageInterceptor = (res) => {
     // res = DUMMY_RES; //  ! TEST

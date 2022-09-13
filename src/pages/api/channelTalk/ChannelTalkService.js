@@ -42,8 +42,13 @@ class ChannelTalkService {
     }
   }
 
-  boot(settings) {
-    ChannelIO('boot', settings);
+  boot(settings={
+  }, cb) {
+    const callback = (err, user)=>{
+      cb(err, user);
+    }
+    ChannelIO('boot', settings, callback);
+    
   }
   
   track (eventName , eventProperty={}) {
