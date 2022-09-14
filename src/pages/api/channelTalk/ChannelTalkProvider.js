@@ -10,7 +10,7 @@ export default function ChannelTalkProvider ({ children }) {
   const dispatch = useDispatch();
   const auth = useSelector((s) => s.auth);
   const userInfo = auth.userInfo;
-  console.log(userInfo);
+  // console.log(userInfo);
 
 
   
@@ -50,7 +50,7 @@ export default function ChannelTalkProvider ({ children }) {
 
     ch.boot(settings, callback);
 
-    console.log(ch);
+    // console.log(ch);
     ch.track('traceForm', { userName: 'test' });
 
     return () => {
