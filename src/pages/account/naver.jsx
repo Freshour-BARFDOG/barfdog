@@ -6,6 +6,7 @@ import { userType } from '/store/TYPE/userAuthType';
 import { snsProviderType } from '/store/TYPE/snsProviderType';
 import {userStateAction} from "/store/userState-slice";
 import { authAction } from '/store/auth-slice';
+import { FullScreenRunningDog} from '/src/components/atoms/FullScreenLoading';
 
 export default function NAVER_Auth({ data, err, token}) {
   console.log(data, err)
@@ -42,7 +43,7 @@ export default function NAVER_Auth({ data, err, token}) {
       data.snsUserType === userType.MEMBER_WITH_SNS.KAKAO ||
       data.snsUserType === userType.MEMBER_WITH_SNS.NAVER
     ) {
-      alert('이미 SNS연동완료된 회원입니다 => 로그인처리');
+      // alert('이미 SNS연동완료된 회원입니다 => 로그인처리');
 
       const payload = {
         token,
@@ -105,7 +106,8 @@ export default function NAVER_Auth({ data, err, token}) {
 
   return (
     <div>
-      <h1>NAVER login &gt; valid Login State...</h1>
+      {/* <h1>NAVER login &gt; valid Login State...</h1> */}
+      <FullScreenRunningDog opacity={1} />
     </div>
   );
 }
