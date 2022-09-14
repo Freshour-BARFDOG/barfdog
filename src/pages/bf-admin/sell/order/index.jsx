@@ -61,7 +61,7 @@ export default function OrderOnSellPage() {
     .filter(
       (key) =>
         key === orderStatus.PAYMENT_DONE ||
-        key === orderStatus.PRUDUCING ||
+        key === orderStatus.PRODUCING ||
         key === orderStatus.DELIVERY_READY ||
         key === orderStatus.FAILED,
     )
@@ -69,6 +69,7 @@ export default function OrderOnSellPage() {
       id: key,
       label: orderStatus.KOR[key],
     }));
+  
 
   const onResetSearchValues = () => {
     setSearchValues(initialSearchValues);
@@ -363,7 +364,6 @@ export default function OrderOnSellPage() {
     }));
   };
 
-  // console.log(itemList);
   return (
     <>
       <MetaTitle title="주문 관리" admin={true} />
