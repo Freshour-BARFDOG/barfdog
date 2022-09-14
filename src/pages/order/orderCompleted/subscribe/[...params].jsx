@@ -48,7 +48,7 @@ export default OrderCompletedPage;
 
 export async function getServerSideProps(ctx) {
   const { query, req } = ctx;
-  const { params, imp_uid, merchant_uid, imp_success} = query;
+  const { params, imp_uid, merchant_uid, imp_success, error_msg} = query;
   
   console.log(query);
   const [orderIdx,customUid] = params;
@@ -64,9 +64,15 @@ export async function getServerSideProps(ctx) {
     });
     
   } else if(imp_success == 'false'){
-     // 모바일 결제 실패
-     const fail = await postDataSSR(req,`/api/orders/${orderIdx}/subscribe/fail`);
-     console.log(fail); 
+      if(error_msg.includes('결제포기')){
+        const cancel = await postObjData(`/api/orders/${orderIdx}/subscribe/cancel`);
+        console.log(cancel);
+      }else{
+      // 모바일 결제 실패
+      const fail = await postDataSSR(req,`/api/orders/${orderIdx}/subscribe/fail`);
+      console.log(fail); 
+      }
+    
   }
   return { props: { orderIdx } };
 }
