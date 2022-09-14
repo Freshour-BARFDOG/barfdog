@@ -194,7 +194,7 @@ export function Payment({
       buyer_email: 'a@gmail' || info.email, // 구매자 이메일
       buyer_addr: '센텀2로' || `${info.address.street},${info.address.detailAddress}`, // 구매자 주소
       buyer_postcode: '00000' || info.address.zipcode, // 구매자 우편번호
-      m_redirect_url: `http://localhost:4000/order/orderCompleted/${id}`
+      m_redirect_url: `${window.location.origin}/order/orderCompleted/${id}`
     };
     IMP.request_pay(data, callback);
     
@@ -219,17 +219,25 @@ export function Payment({
         window.location.href= `/order/orderCompleted/${id}`;
       }
     } else {
-       // 결제 실패 : 쿠폰null일때 500err -> 서버 오류 수정하셨다고 함 TODO 나중에 테스트하기
-       const fail = await postObjData(`/api/orders/${id}/general/fail`);
-       console.log(fail);
+        // 사용자가 결제 취소(결제포기)했을때
+        if(error_msg.includes('결제포기')){
+          const cancel = await postObjData(`/api/orders/${id}/general/cancel`);
+          // console.log(cancel);
+          // window.location.href= `/order/orderFailed`;
+          
+        }else{
+        // 결제 실패
+        const fail = await postObjData(`/api/orders/${id}/general/fail`);    
+        console.log(fail);
         if(fail.isDone){
-          // startPayment();
+           // startPayment();
           alert(`결제 실패: ${error_msg}`);
-          // 결제 취소 시 , 전역에 import 결제 html이 잔류하여, 없앰
-          document.body.style.cssText='';
-          document.body.querySelector('.imp-dialog ').innerHTML='';
-          document.body.querySelector('.imp-dialog ').style.cssText='display:none !important';
-          window.location.href= `/order/orderFailed`;
+           // 결제 취소 시 , 전역에 import 결제 html이 잔류하여, 없앰
+           document.body.style.cssText='';
+           document.body.querySelector('.imp-dialog ').innerHTML='';
+           document.body.querySelector('.imp-dialog ').style.cssText='display:none !important';
+          //  window.location.href= `/order/orderFailed`;
+         }
         }
     }
   
@@ -258,7 +266,7 @@ export function Payment({
       buyer_email: 'a@gmail' || info.email, // 구매자 이메일
       buyer_addr: '센텀2로' || `${info.address.street},${info.address.detailAddress}`, // 구매자 주소
       buyer_postcode: '00000' || info.address.zipcode, // 구매자 우편번호
-      m_redirect_url: `http://localhost:4000/order/orderCompleted/subscribe/${id}/${randomStr}`
+      m_redirect_url: `${window.location.origin}/order/orderCompleted/subscribe/${id}/${randomStr}`
     };
 
     IMP.request_pay(data, callback);
