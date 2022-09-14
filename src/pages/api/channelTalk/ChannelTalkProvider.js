@@ -4,18 +4,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import ChannelTalkService from './ChannelTalkService';
 import axios from 'axios';
 
-const ChannelTalkProvider = ({ children }) => {
-  const [loading, setLoading] = useState(false);
+export default function ChannelTalkProvider ({ children }) {
 
   const router = useRouter();
   const dispatch = useDispatch();
   const auth = useSelector((s) => s.auth);
   const userInfo = auth.userInfo;
-  console.log(userInfo)
+  console.log(userInfo);
 
-  const callback = (err, user) => {
-    console.log(err, user);
-  };
+
+  
   useEffect(() => {
     const ADMIN_BASE_PATH_KEY = 'bf-admin';
     const DISABLED_PATH = ['/popup'];
@@ -38,6 +36,7 @@ const ChannelTalkProvider = ({ children }) => {
         mobileNumber: userInfo?.phoneNumber || null,
         email: userInfo?.email || null,
       },
+      memberId: 'bf-12893128937' || null
       // language: 'en',
       // unsubscribed: false,
       // hidePopup: false,
@@ -63,4 +62,8 @@ const ChannelTalkProvider = ({ children }) => {
   return <>{children}</>;
 };
 
-export default ChannelTalkProvider;
+
+
+const callback = (err, user) => {
+  // console.log(err, user);
+};
