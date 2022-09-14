@@ -7,6 +7,7 @@ import Spinner from '/src/components/atoms/Spinner';
 import { calcOrdersheetPrices } from './calcOrdersheetPrices';
 import ErrorMessage from '../atoms/ErrorMessage';
 import { useRouter } from 'next/router';
+import axios from 'axios';
 
 export function Payment({
   info,
@@ -140,7 +141,7 @@ export function Payment({
       // send DATA to api server after successful payment
       const apiUrl = orderType === 'general' ? `/api/orders/general` : `/api/orders/subscribe/${router.query.subscribeId}`
       const res = await postObjData(apiUrl, body);
-      console.log(res);
+      // console.log(res);
       
       if (res.isDone) {
         if( orderType === 'general'){
@@ -187,13 +188,13 @@ export function Payment({
       pg: 'kcp', // PG사
       pay_method: 'card', // 결제수단
       merchant_uid: merchantUid, // 주문번호
-      amount: 100 || body.paymentPrice, // 결제금액
+      amount: body.paymentPrice, // 결제금액
       name: '바프독 아임포트 결제 테스트', // 주문명
-      buyer_name: 'username' || info.name, // 구매자 이름
-      buyer_tel: '01000000000' || info.phone, // 구매자 전화번호
-      buyer_email: 'a@gmail' || info.email, // 구매자 이메일
-      buyer_addr: '센텀2로' || `${info.address.street},${info.address.detailAddress}`, // 구매자 주소
-      buyer_postcode: '00000' || info.address.zipcode, // 구매자 우편번호
+      buyer_name:  info.name, // 구매자 이름
+      buyer_tel: info.phone, // 구매자 전화번호
+      buyer_email: info.email, // 구매자 이메일
+      buyer_addr: `${info.address.street},${info.address.detailAddress}`, // 구매자 주소
+      buyer_postcode: info.address.zipcode, // 구매자 우편번호
       m_redirect_url: `${window.location.origin}/order/orderCompleted/${id}`
     };
     IMP.request_pay(data, callback);
@@ -223,7 +224,7 @@ export function Payment({
         if(error_msg.includes('결제포기')){
           const cancel = await postObjData(`/api/orders/${id}/general/cancel`);
           // console.log(cancel);
-          // window.location.href= `/order/orderFailed`;
+          window.location.href= `/order/orderFailed`;
           
         }else{
         // 결제 실패
@@ -236,7 +237,7 @@ export function Payment({
            document.body.style.cssText='';
            document.body.querySelector('.imp-dialog ').innerHTML='';
            document.body.querySelector('.imp-dialog ').style.cssText='display:none !important';
-          //  window.location.href= `/order/orderFailed`;
+           window.location.href= `/order/orderFailed`;
          }
         }
     }
@@ -257,16 +258,12 @@ export function Payment({
     const data = {
       pg: 'kcp_billing', // PG사
       pay_method: 'card', // 결제수단
-      merchant_uid: merchantUid, // 주문번호
-      amount: body.paymentPrice, // 결제금액
+      merchant_uid: new Date().getTime().toString(36), // 주문번호
+      // amount: body.paymentPrice, // 결제금액
+      amount:0,
       customer_uid : customUid,
-      name: '바프독 아임포트 결제 테스트', // 주문명
-      buyer_name: 'username' || info.name, // 구매자 이름
-      buyer_tel: '01000000000' || info.phone, // 구매자 전화번호
-      buyer_email: 'a@gmail' || info.email, // 구매자 이메일
-      buyer_addr: '센텀2로' || `${info.address.street},${info.address.detailAddress}`, // 구매자 주소
-      buyer_postcode: '00000' || info.address.zipcode, // 구매자 우편번호
-      m_redirect_url: `${window.location.origin}/order/orderCompleted/subscribe/${id}/${randomStr}`
+      name: 'test바프독정기결제', // 주문명
+      m_redirect_url: `${window.location.origin}/order/orderCompleted/subscribe/${id}/${randomStr}/${body.paymentPrice}/${merchantUid}/test바프독결제`
     };
 
     IMP.request_pay(data, callback);
@@ -280,19 +277,64 @@ export function Payment({
       console.log(IMPORT_PAYMENT_CANCEL)
     /* 3. 콜백 함수 정의하기 */
     if (success) {
-      // 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우
-      // TODO: 결제 정보 전달
+      // 인증 토큰 발급 받기
+      const getToken = await axios({
+        url: "https://api.iamport.kr/users/getToken",
+        method: "post", // POST method
+        headers: { "Content-Type": "application/json" }, // "Content-Type": "application/json"
+        data: {
+          imp_key: "8722322371707106", // REST API 키
+          imp_secret: "eb961888a719002923f107e1024bb45d177b8d92279ad7843a35be08c107c4ab01033597b2c21968" // REST API Secret
+        }
+      });
+      const { access_token } = getToken.data.response;
+
+      const paymentResult = await axios({
+        url: `https://api.iamport.kr/subscribe/payments/again`,
+        method: "post",
+        headers: { "Authorization": access_token }, // 인증 토큰을 Authorization header에 추가
+        data: {
+          customer_uid: customer_uid,
+          merchant_uid: merchantUid, // 새로 생성한 결제(재결제)용 주문 번호
+          amount: body.paymentPrice,
+          name: "test바프독정기결제"
+        }
+      });
+      const { code, message, response } = paymentResult.data;
+
+      if (code === 0) { // 카드사 통신에 성공(실제 승인 성공 여부는 추가 판단이 필요함)
+        if ( response.status === "paid" ) { //카드 정상 승인
       const r = await postObjData(`/api/orders/${id}/subscribe/success`, {
         impUid : imp_uid,
-        merchantUid : merchant_uid,
+        merchantUid : merchantUid,
         customerUid : customer_uid,
       });
       console.log(r);
       if(r.isDone){
-        alert('결제 성공');
+        // alert('결제 성공');
         setIsSubmitted(true);
         window.location.href = `/order/orderCompleted/subscribe/${id}`;
       }
+        } else if(response.status === 'failed'){ //카드 승인 실패 (예: 고객 카드 한도초과, 거래정지카드, 잔액부족 등)
+          //paymentResult.status : failed 로 수신됨
+          const fail = await postObjData(`/api/orders/${id}/subscribe/fail`);
+          console.log(fail);
+           if(fail.isDone){
+             alert(`결제 실패: ${error_msg}`);
+             // startPayment();
+             window.location.href= `/order/orderFailed`;
+           }
+        }
+      } else if(paymentResult==null){ // 카드사 요청에 실패 (paymentResult is null)
+        const fail = await postObjData(`/api/orders/${id}/subscribe/fail`);
+        console.log(fail);
+         if(fail.isDone){
+           alert(`결제 실패: ${error_msg}`);
+           // startPayment();
+           window.location.href= `/order/orderFailed`;
+         }
+      }
+      
       
     } else if(IMPORT_PAYMENT_CANCEL) {
       const res = await postObjData(`/api/orders/${id}/subscribe/cancel`);
@@ -305,13 +347,13 @@ export function Payment({
       window.location.reload();
     } else {
        // 결제 실패 : 쿠폰null일때 500err -> 서버 오류 수정하셨다고 함 TODO 나중에 테스트하기
-       const fail = await postObjData(`/api/orders/${id}/subscribe/fail`);
-       console.log(fail);
-        if(fail.isDone){
-          alert(`결제 실패: ${error_msg}`);
-          // startPayment();
-          window.location.href= `/order/orderFailed`;
-        }
+      //  const fail = await postObjData(`/api/orders/${id}/subscribe/fail`);
+      //  console.log(fail);
+      //   if(fail.isDone){
+      //     alert(`결제 실패: ${error_msg}`);
+      //     // startPayment();
+      //     window.location.href= `/order/orderFailed`;
+      //   }
     }
   
     };
