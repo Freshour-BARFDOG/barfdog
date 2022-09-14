@@ -250,7 +250,7 @@ export function Payment({
       pg: 'kcp_billing', // PG사
       pay_method: 'card', // 결제수단
       merchant_uid: merchantUid, // 주문번호
-      amount: 1 || body.paymentPrice, // 결제금액
+      amount: body.paymentPrice, // 결제금액
       customer_uid : customUid,
       name: '바프독 아임포트 결제 테스트', // 주문명
       buyer_name: 'username' || info.name, // 구매자 이름
