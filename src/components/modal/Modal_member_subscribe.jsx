@@ -36,7 +36,7 @@ export default function Modal_member_subscribe({ memberId, onClick, setIsLoading
       onClick();
     }
   };
-
+ 
   useEffect(() => {
     (async () => {
       try {
@@ -44,7 +44,8 @@ export default function Modal_member_subscribe({ memberId, onClick, setIsLoading
           ...prevState,
           subsribeFetching: true,
         }));
-        const getSubscribeInfoApiUrl = `/api/admin/members/${memberId}/subscribes?page=1&size=10`;
+        const query = '?page=0&size=100';
+        const getSubscribeInfoApiUrl = `/api/admin/members/${memberId}/subscribes${query}`;
         const res = await getData(getSubscribeInfoApiUrl);   // ------- ! 서버에서 받기
         console.log('RESPONSE DATA: ', res);
         // const res = DUMMY_RESPONSE;
