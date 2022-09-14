@@ -68,10 +68,6 @@ module.exports = {
     if (process.env.NODE_ENV === 'development') {
       return [
         {
-          source: '/recipes',
-          destination: '/shop'
-        },
-        {
           source: process.env.SOURCE_PATH,
           destination: process.env.NEXT_PUBLIC_API_URL_DEV
         },
