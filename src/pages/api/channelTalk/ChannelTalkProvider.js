@@ -10,8 +10,9 @@ export default function ChannelTalkProvider ({ children }) {
   const dispatch = useDispatch();
   const auth = useSelector((s) => s.auth);
   const userInfo = auth.userInfo;
-  // console.log(userInfo);
+  console.log(userInfo);
 
+  console.log('memeber:',!!userInfo)
 
   
   useEffect(() => {
@@ -36,25 +37,14 @@ export default function ChannelTalkProvider ({ children }) {
         mobileNumber: userInfo?.phoneNumber || null,
         email: userInfo?.email || null,
       },
-      memberId: 'bf-12893128937' || null
-      // language: 'en',
-      // unsubscribed: false,
-      // hidePopup: false,
-      // hideChannelButtonOnBoot: true,
-      // trackDefaultEvent: false,
-      // trackUtmSource: false,
-      // openChatDirectlyAsPossible: true,
-      // mobileMessengerMode: 'newTab',
-      // zIndex: 1,
+      // memberId: !!userInfo ? 'bf-user_index' : null,
+      memberId: !!userInfo ? null : null,
+      member: !!userInfo,
     };
-
-    ch.boot(settings, callback);
-
-    // console.log(ch);
-    ch.track('traceForm', { userName: 'test' });
+    
+    // ch.boot(settings, callback);
 
     return () => {
-      console.log('셧다운');
       ch.shutdown();
     };
   }, [dispatch, router, userInfo]);
