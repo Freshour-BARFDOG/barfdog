@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
@@ -8,6 +8,8 @@ import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
 import ChannelTalkMemberList from './ChannelTalkMemberList';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import Spinner from '/src/components/atoms/Spinner';
+import { getData } from '../../../api/reqData';
+import ChannelTalkService from "../../../api/channelTalk/ChannelTalkService";
 
 export default function ChannelTalkPage() {
   const searchApiUrl = `/api/admin/guests`;
@@ -16,25 +18,32 @@ export default function ChannelTalkPage() {
   const [searchValues, setSearchValues] = useState({});
   const [searchBody, setSearchBody] = useState(null);
   const [itemList, setItemList] = useState([]);
-  
-  
-  
+
+
   const pageInterceptor = (res) => {
-    res = DUMMY_RES; //  ! TEST
+    // res = DUMMY_RES; //  ! TEST
     console.log(res);
-    const pageData = res.data.page;
-    const curItemList = res.data?._embedded?.queryAdminGuestDtoList || [];
-    let newPageInfo = {
-      totalPages: pageData.totalPages,
-      size: pageData.size,
-      totalItems: pageData.totalElements,
-      currentPageIndex: pageData.number,
-      newPageNumber: pageData.number + 1,
-      newItemList: curItemList,
+    let newPageInfo;
+    let pageData;
+    let curItemList;
+    
+    if(res){
+      pageData = res?.data?.page;
+      curItemList = res.data?._embedded?.queryAdminGuestDtoList || [];
+    }
+    
+    newPageInfo = {
+      totalPages: pageData?.totalPages,
+      size: pageData?.size,
+      totalItems: pageData?.totalElements,
+      currentPageIndex: pageData?.number,
+      newPageNumber: pageData?.number + 1,
+      newItemList: curItemList || [],
     };
+    console.log('newPageInfo: ',newPageInfo)
     return newPageInfo;
   };
-  
+
   const onSearchHandler = () => {
     const body = {
       name: searchValues.memberName,
@@ -43,14 +52,11 @@ export default function ChannelTalkPage() {
     };
     setSearchBody(body);
   };
-  
-  
+
   const onResetSearchValues = (e) => {
     setSearchValues('');
     console.log('초기화 실행');
   };
-
-
 
   return (
     <>
@@ -126,7 +132,6 @@ export default function ChannelTalkPage() {
     </>
   );
 }
-
 
 const DUMMY_RES = {
   data: {

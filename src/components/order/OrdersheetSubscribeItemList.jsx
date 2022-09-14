@@ -65,7 +65,6 @@ export const OrdersheetSubscribeItemList = ({
     btn.innerText = '적용됨';
   };
 
-  console.log(info)
   return (
     <>
       <section className={s.title_box}>

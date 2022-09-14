@@ -19,6 +19,7 @@ import { useRouter } from 'next/router';
 import Modal_confirm from '/src/components/modal/Modal_confirm';
 import { filter_apiHostname } from '../../../../util/func/filter_api_hostname';
 import { paymentMethodType } from '../../../../store/TYPE/paymentMethodType';
+import {orderStatus} from "../../../../store/TYPE/orderStatusTYPE";
 
 export default function MypageDogInfoPage({ data }) {
   // console.log(data);
@@ -51,6 +52,8 @@ export default function MypageDogInfoPage({ data }) {
     mct.alertHide();
     setActiveUploadDogProfileModal(false);
   };
+  
+  // console.log(itemList);
 
   return (
     <>
@@ -58,7 +61,7 @@ export default function MypageDogInfoPage({ data }) {
       <Layout>
         <Wrapper>
           <MypageWrapper>
-            <section className={s.title}>반려견정보</section>
+            <section className={s.title}>반려견 정보</section>
             <ul>
               {itemList?.length > 0 ? (
                 itemList.map((item, index) => (
@@ -165,48 +168,56 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
     onEditImage(data);
   };
 
-  const onDeleteItem = (confirm) => {
-    const isRepDog = data.representative;
+  const onDeleteItem = async (confirm) => {
     if (!confirm) {
       setActiveConfirmModal(false);
       return onShowModalHandler('취소되었습니다.');
     }
-    if (confirm && isRepDog) {
+  
+  
+    const subscribeStatus = data.subscribeStatus;
+    if(subscribeStatus !== orderStatus.BEFORE_PAYMENT){
+      onShowModalHandler('구독 중인 반려견은 삭제할 수 없습니다.');
+      setActiveConfirmModal(false);
+      return;
+    }
+    
+    const isRepDog = data.representative;
+    if (isRepDog) {
       onShowModalHandler('대표 반려견은 삭제할 수 없습니다.');
       setActiveConfirmModal(false);
       return;
     }
-
-    (async () => {
-      try {
-        setIsLoading((prevState) => ({
-          ...prevState,
-          rep: true,
-        }));
-        const apiUrl = `/api/dogs/${dogId}`;
-        const res = await deleteObjData(apiUrl);
-        console.log(res);
-        if (res.isDone) {
-          onShowModalHandler('선택하신 반려견이 삭제되었습니다.');
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
-        } else if (res.status === 400) {
-          onShowModalHandler('대표 반려견은 삭제할 수 없습니다.');
-        } else if (res.status === 404) {
-          onShowModalHandler('삭제할 반려견 정보가 존재하지 않습니다.');
-        } else {
-          onShowModalHandler('강아지를 삭제하는데 실패하였습니다.');
-        }
-        setActiveConfirmModal(false);
-      } catch (err) {
-        console.error(err);
-      }
+   
+    
+    try {
       setIsLoading((prevState) => ({
         ...prevState,
-        rep: false,
+        rep: true,
       }));
-    })();
+      const apiUrl = `/api/dogs/${dogId}`;
+      const res = await deleteObjData(apiUrl);
+      console.log(res);
+      if (res.isDone) {
+        onShowModalHandler('선택하신 반려견이 삭제되었습니다.');
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
+      } else if (res.status === 400) {
+        onShowModalHandler('대표 반려견은 삭제할 수 없습니다.');
+      } else if (res.status === 404) {
+        onShowModalHandler('삭제할 반려견 정보가 존재하지 않습니다.');
+      } else {
+        onShowModalHandler('강아지를 삭제하는데 실패하였습니다.');
+      }
+      setActiveConfirmModal(false);
+    } catch (err) {
+      console.error(err);
+    }
+    setIsLoading((prevState) => ({
+      ...prevState,
+      rep: false,
+    }));
   };
 
   const beforePaymentStatus =

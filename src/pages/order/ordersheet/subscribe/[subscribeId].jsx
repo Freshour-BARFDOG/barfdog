@@ -79,7 +79,6 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
     // if (!Object.keys(curItem).length || !subscribeId) {
     //   return window.location.href='/';
     // }
-
     // ! surveyReportID가 곧 subscribeId가 되는것인지?????
     (async () => {
       setIsLoading((prevState) => ({
@@ -111,6 +110,7 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
               info.subscribeDto.plan,
               info.subscribeDto.nextPaymentPrice,
             ).originPrice,
+            discountGrade: info.subscribeDto.discountGrade, // 등급할인 (할인표기에 사용)
           },
           recipeNameList: info.recipeNameList, // [] 구독으로 선택한 레시피 이름 리스트 // FULL-PLAN일 경우, 최대 2개
           name: info.name, // 구매자
@@ -133,6 +133,7 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
         const initForm = {
           selfInfo: {
             reward: info.reward,
+            discountGrade: info.subscribeDto?.discountGrade || null, // 등급할인 // 정기구독 할인금액 산출 시 사용
           },
           // ! DUMMY DATA
           coupons:

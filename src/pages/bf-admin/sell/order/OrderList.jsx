@@ -83,8 +83,8 @@ const Item = ({ item, sortableItemRef, selectedIdList, onSelectedItem }) => {
       {/*</span>*/}
       <span>
         <em className={'overflow-x-scroll'}>
-          <p>{DATA.orderStatus}</p>
-          <p>{DATA.orderDate}</p>
+          <div>{DATA.orderStatus}</div>
+          <div>{DATA.orderDate}</div>
         </em>
       </span>
       <span>{DATA.buyerId}</span>

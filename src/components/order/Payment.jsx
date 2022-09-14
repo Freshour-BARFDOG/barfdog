@@ -16,7 +16,7 @@ export function Payment({
   setFormErrors,
   orderType = 'general',
 }) {
-  const [isSubmitted, setIsSubmitted] = useState(false); 
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -94,6 +94,7 @@ export function Payment({
         detailAddress: form.deliveryDto.detailAddress, // 상세주소
         request: form.deliveryDto.request, // 배송 요청사항
       },
+      deliveryId:form.deliveryId || null, // 묶음 배송 할 배송 id . 묶음배송 아닐 경우 null
       orderPrice: form.orderPrice, //  주문 상품 총 가격 (할인 적용 전)
       deliveryPrice: form.deliveryPrice, // 배송비
       discountTotal: calcOrdersheetPrices(form, 'general').discountTotal, // 총 할인 합계    ! 쿠폰할인금 적용
@@ -114,19 +115,21 @@ export function Payment({
         detailAddress: form.deliveryDto.detailAddress, // 상세주소
         request: form.deliveryDto.request, // 배송 요청사항
       },
-      orderPrice: form.orderPrice, //  주문 상품 총 가격 (할인 적용 전)
+      orderPrice: form.orderPrice, //  ! 주문 상품 원가 = nextPaymentPrice (등급 할인 적용x / 플랜변경, 레시피, 레시피 그램 등이 반영된 "제품원가"에 해당함)
       deliveryPrice: form.deliveryPrice, // 배송비
-      discountTotal: calcOrdersheetPrices(form, 'subscribe').discountTotal, // 총 할인 합계    ! 쿠폰할인금 적용
+      discountTotal: calcOrdersheetPrices(form, 'subscribe').discountTotal, // 총 할인 합계    ! 쿠폰할인금 , 적립금, 등급할인
       discountReward: Number(form.discountReward), // 사용할 적립금
-      discountCoupon: calcOrdersheetPrices(form, 'subscribe').discountCoupon, // 쿠폰 적용으로 인한 할인금 ! coupon할인금 적용
-      paymentPrice: calcOrdersheetPrices(form, 'subscribe').paymentPrice, // 최종 결제 금액 ! coupon할인금 적용
+      discountCoupon: calcOrdersheetPrices(form, 'subscribe').discountCoupon, // 쿠폰 적용으로 인한 할인금
+      discountGrade: calcOrdersheetPrices(form, 'subscribe').discountGrade, // 등급할인
+      paymentPrice: calcOrdersheetPrices(form, 'subscribe').paymentPrice, // 최종 결제 금액
       paymentMethod: form.paymentMethod, // 결제방법  [CREDIT_CARD, NAVER_PAY, KAKAO_PAY]
-      nextDeliveryDate: form.nextDeliveryDate,
+      nextDeliveryDate: form.nextDeliveryDate, // 할인이 적용되지 않은 가격
       agreePrivacy: form.agreePrivacy, // 개인정보 제공 동의
       brochure: form.brochure, // 브로슈어 수령여부
     };
 
-    console.log(body)
+    console.log('request body: ',body);
+    
     try {
       setIsLoading((prevState) => ({
         ...prevState,
@@ -140,7 +143,7 @@ export function Payment({
       console.log(res);
       
       if (res.isDone) {
-        if( orderType === 'general'){ 
+        if( orderType === 'general'){
           // 일반 주문 결제
           // res.data.data.id = 주문번호 id
           await generalPayment(body,res.data.data.id, res.data.data.merchantUid);
@@ -149,17 +152,17 @@ export function Payment({
           await subscribePayment(body,res.data.data.id, res.data.data.merchantUid);
         }
         // alert('결제완료 -> 이후 확인버튼 클릭 -> 결제완료페이지로 Redir');
+        const scrollTopPos = document.documentElement.scrollTop;
         document.body.style.cssText = `
         overflow-y:scroll;
-        height:100%;
         position:fixed;
-        width:100%;
+        top: -${scrollTopPos}px;
       `;
         // return () => {
         //   document.body.style.cssText = ``;
         //   window?.scrollTo(0, parseInt(-mcx.event.scrollY || 10) * -1);
         // };
-        // 결제 시작 
+        // 결제 시작
       } else {
         alert(res.error, '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.');
       }
@@ -215,7 +218,6 @@ export function Payment({
         setIsSubmitted(true);
         window.location.href= `/order/orderCompleted/${id}`;
       }
-
     } else {
        // 결제 실패 : 쿠폰null일때 500err -> 서버 오류 수정하셨다고 함 TODO 나중에 테스트하기
        const fail = await postObjData(`/api/orders/${id}/general/fail`);
@@ -265,11 +267,13 @@ export function Payment({
     async function callback(response) {
       console.log(response);
       const { success, customer_uid, imp_uid, merchant_uid, card_name, card_number, error_msg } = response;
-      
+     
+      const IMPORT_PAYMENT_CANCEL = response.error_msg?.indexOf('[결제포기]') >= 0;
+      console.log(IMPORT_PAYMENT_CANCEL)
     /* 3. 콜백 함수 정의하기 */
     if (success) {
       // 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우
-      // TODO: 결제 정보 전달 
+      // TODO: 결제 정보 전달
       const r = await postObjData(`/api/orders/${id}/subscribe/success`, {
         impUid : imp_uid,
         merchantUid : merchant_uid,
@@ -279,21 +283,27 @@ export function Payment({
       if(r.isDone){
         alert('결제 성공');
         setIsSubmitted(true);
-
         window.location.href = `/order/orderCompleted/subscribe/${id}`;
       }
+      
+    } else if(IMPORT_PAYMENT_CANCEL) {
+      const res = await postObjData(`/api/orders/${id}/subscribe/cancel`);
+      console.log('IMPORT_PAYMENT_CANCEL REPONSE:',res);
+      if(res.isDone){
+        alert(`결제 취소: ${error_msg}`);
+      } else {
+        alert(`결제 취소처리 중 오류가 발생하였습니다.`);
+      }
+      window.location.reload();
     } else {
        // 결제 실패 : 쿠폰null일때 500err -> 서버 오류 수정하셨다고 함 TODO 나중에 테스트하기
        const fail = await postObjData(`/api/orders/${id}/subscribe/fail`);
        console.log(fail);
         if(fail.isDone){
           alert(`결제 실패: ${error_msg}`);
-          // 임시로 넣은 코드 :  결제취소시 , 전역에 import 결제 html이 잔류하여, 없애기위한 용도
-          // window.location.href= '/';
           // startPayment();
           window.location.href= `/order/orderFailed`;
         }
-      
     }
   
     };

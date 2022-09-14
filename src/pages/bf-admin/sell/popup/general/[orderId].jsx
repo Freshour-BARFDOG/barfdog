@@ -106,7 +106,7 @@ export default function Popup_GeneralOrderDetailInfoPage({ data }) {
 }
 
 
-const isCancelOrderStatus = (status)=>{
+const isCancelReturnExchangeStatus = (status)=>{
   const canceldOrderStatusList = [
     orderStatus.CANCEL_REQUEST,
     orderStatus.CANCEL_DONE_BUYER,
@@ -126,12 +126,13 @@ export async function getServerSideProps({ req, query }) {
   const { orderId } = query;
   let DATA = null;
   let orderStatus = null;
-  const apiUrl = `api/admin/orders/${orderId}/general`;
+  const apiUrl = `/api/admin/orders/${orderId}/general`;
   const res = await getDataSSR(req, apiUrl);
-  // console.log(res);
+  // console.log('RESONSE: ',res);
   // const res = DUMMY_DEFAULT_RES;
   if (res.data) {
     const data = res.data;
+    console.log('________RESONSE: ',data);
     DATA = {
       orderStatus: data.paymentDto.orderStatus,
       orderInfoDto: {
@@ -165,9 +166,10 @@ export async function getServerSideProps({ req, query }) {
         orderPrice: data.paymentDto.orderPrice,
         deliveryPrice: data.paymentDto.deliveryPrice,
         discountReward: data.paymentDto.discountReward,
-        paymentPrice: data.paymentDto.paymentPrice,
         couponName: data.paymentDto?.couponName || null, // ! 서버에서 데이터 추가필요
         discountCoupon: data.paymentDto?.discountCoupon|| data.orderItemAndOptionDtoList?.map((info)=>info.orderItemDto.discountAmount).reduce((acc, cur)=> acc+ cur) || null , // ! 서버에서 데이터 추가 필요
+        paymentPrice: data.paymentDto.paymentPrice,
+        paymentMethod: data.paymentDto.paymentMethod,
         orderStatus: data.paymentDto.orderStatus,
         orderConfirmDate: data.paymentDto.orderConfirmDate,
       },
@@ -180,14 +182,63 @@ export async function getServerSideProps({ req, query }) {
         departureDate: data.deliveryDto.departureDate,
         arrivalDate: data.deliveryDto.arrivalDate,
         deliveryNumber: data.deliveryDto.deliveryNumber,
+        request: data.deliveryDto.request,
       },
     };
     
-    if(isCancelOrderStatus(DATA.orderStatus)){
-      // 취소상태일 경우 추가정보
-      const cancelApiUrl = `/api/admin/orders/orderItem/${orderId}`;
-      const r = await getDataSSR(req, cancelApiUrl);
-      console.log('CANCEL RESPONSE: ',r)
+    if(isCancelReturnExchangeStatus(DATA.orderStatus)){
+      // ! 취소/반품/교환 상태일 경우 ===> 취소반품교환 정보 표기
+      const orderItemIdList = DATA.orderItemAndOptionDtoList.map(list=>list.orderItemDto.orderItemId);
+      for (const orderItemId in orderItemIdList) {
+        const cancelApiUrl = `/api/admin/orders/orderItem/${orderItemId}`;
+        const r = await getDataSSR(req, cancelApiUrl);
+        console.log(r)
+        if(r.data){ // ! PRODUCT CODE
+          const data = r.data;
+          // console.log('CANCEL RESPONSE DATA: ',data)
+          const cancleInfo = data?.orderItemAndOptionDto[0] || {}; // 취소 사유는, 모든 아이템이 "공통적"으로 입력되므로, 아이템을 특정해도 무방함
+          DATA = {
+            ...DATA,
+            orderInfoDto: {
+              ...DATA.orderInfoDto,
+              cancelRequestDate: cancleInfo.cancelRequestDate,
+              cancelConfirmDate: cancleInfo.cancelConfirmDate,
+              cancelReason: cancleInfo.cancelReason,
+              cancelDetailReason: cancleInfo.cancelDetailReason,
+              returnRequestDate: cancleInfo.returnRequestDate,
+              returnConfirmDate: cancleInfo.returnConfirmDate,
+              returnReason: cancleInfo.returnReason,
+              returnDetailReason: cancleInfo.returnDetailReason,
+              exchangeRequestDate: cancleInfo.exchangeRequestDate,
+              exchangeConfirmDate: cancleInfo.exchangeConfirmDate,
+              exchangeReason: cancleInfo.exchangeReason,
+              exchangeDetailReason: cancleInfo.exchangeDetailReason,
+            },
+          }
+        // }else { // ! else문 전부 , TEST 코드
+        //   //'2022-09-13T21:14:27.98',
+        //   DATA = {
+        //     ...DATA,
+        //     orderInfoDto: {
+        //       ...DATA.orderInfoDto,
+        //       cancelRequestDate: '2022-09-13T21:14:27.98',
+        //       cancelConfirmDate: '2022-09-13T21:14:27.98',
+        //       cancelReason: '유저입력 취소사유',
+        //       cancelDetailReason: '유저입력 취소상세사유',
+        //       returnRequestDate: '2022-09-13T21:14:27.98',
+        //       returnConfirmDate: '2022-09-13T21:14:27.98',
+        //       returnReason: '유저입력 교환사유',
+        //       returnDetailReason: '유저입력 교환상세사유',
+        //       exchangeRequestDate: '2022-09-13T21:14:27.98',
+        //       exchangeConfirmDate: '2022-09-13T21:14:27.98',
+        //       exchangeReason: '유저입력 반품사유',
+        //       exchangeDetailReason: '유저입력 반품상세사유',
+        //     },
+        //   }
+        }
+      }
+     
+      
     }
   
   }

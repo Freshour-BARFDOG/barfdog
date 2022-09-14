@@ -4,7 +4,10 @@ import {orderStatus} from "/store/TYPE/orderStatusTYPE";
 import transformDate from "/util/func/transformDate";
 
 const ProductInfo_orderStatusInfo = ({ basicOrderInfo, boxLabel }) => {
-  // console.log(basicOrderInfo)
+  
+  const queryHeader = basicOrderInfo.orderStatus.indexOf('CANCEL') >= 0 ? 'cancel' : basicOrderInfo.orderStatus.indexOf('RETURN') >= 0 ? 'return' : basicOrderInfo.orderStatus.indexOf('EXCHANGE') >= 0 ? 'exchange' : null;
+  console.log('basicOrderInfo: ',basicOrderInfo);
+  console.log(queryHeader);
   return (
     <>
       <div className={s["t-header"]}>
@@ -27,7 +30,7 @@ const ProductInfo_orderStatusInfo = ({ basicOrderInfo, boxLabel }) => {
               <span>{boxLabel}요청일</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
-              <span>{transformDate(basicOrderInfo.cancelRequestDate, 'time', {seperator: '/'}) || '-'}</span>
+              <span>{transformDate(basicOrderInfo[`${queryHeader}RequestDate`], 'time', {seperator: '/'}) || '-'}</span>
               
             </div>
           </div>
@@ -36,7 +39,7 @@ const ProductInfo_orderStatusInfo = ({ basicOrderInfo, boxLabel }) => {
               <span>{boxLabel}승인일</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
-              <span>{transformDate(basicOrderInfo.cancelConfirmDate, 'time', {seperator: '/'}) || '-'}</span>
+              <span>{transformDate(basicOrderInfo[`${queryHeader}ConfirmDate`], 'time', {seperator: '/'}) || '-'}</span>
             </div>
           </div>
         </li>
@@ -47,7 +50,7 @@ const ProductInfo_orderStatusInfo = ({ basicOrderInfo, boxLabel }) => {
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
               <span>
-                {basicOrderInfo.cancelReason || '-'}
+                {basicOrderInfo[`${queryHeader}Reason`] || '-'}
               </span>
             </div>
           </div>
@@ -59,7 +62,7 @@ const ProductInfo_orderStatusInfo = ({ basicOrderInfo, boxLabel }) => {
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
               <span>
-                {basicOrderInfo.cancelDetailReason || '-'}
+                {basicOrderInfo[`${queryHeader}DetailReason`] || '-'}
               </span>
             </div>
           </div>
