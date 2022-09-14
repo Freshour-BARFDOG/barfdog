@@ -12,7 +12,9 @@ import { getData } from '../../../api/reqData';
 import ChannelTalkService from '../../../api/channelTalk/ChannelTalkService';
 import axios from 'axios';
 
-export default function ChannelTalkPage() {
+export default function ChannelTalkPage({data}) {
+  console.log(data);
+  console.log(data.users);
   const searchApiUrl = `/api/admin/guests`;
   const searchPageSize = 10;
   const [isLoading, setIsLoading] = useState({});
@@ -20,24 +22,27 @@ export default function ChannelTalkPage() {
   const [searchBody, setSearchBody] = useState(null);
   const [itemList, setItemList] = useState([]);
 
-  const getUSerInfo = async () => {
-    try {
-      const res = await axios({
-        method: 'GET',
-        url: 'https://api.channel.io/open/v5/users/' + 'bf-12893128937',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-access-key': process.env.NEXT_PUBLIC_CHANNEL_ACCESS_KEY,
-          'x-access-secret': process.env.NEXT_PUBLIC_CHANNEL_ACCESS_SECRET,
-        },
-      });
-      
-
-      console.log(res);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  // const getUSerInfo = async () => {
+  //   axios.defaults.baseURL = 'https://api.channel.io/';
+  //   console.log(axios.defaults)
+  //   try {
+  //     const res = await axios({
+  //       method: 'GET',
+  //       url: 'https://api.channel.io/open/v5/users/' + 'bf-12893128937',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'x-access-key': process.env.NEXT_PUBLIC_CHANNEL_ACCESS_KEY,
+  //         'x-access-secret': process.env.NEXT_PUBLIC_CHANNEL_ACCESS_SECRET,
+  //       },
+  //     });
+  //     console.log(res);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
+  
+  const testDAta = new Date(1663134029356);
+  console.log(testDAta)
 
   const pageInterceptor = (res) => {
     // res = DUMMY_RES; //  ! TEST
@@ -109,7 +114,7 @@ export default function ChannelTalkPage() {
             <div className="cont_header clearfix">
               <p className="cont_title cont-left">상담 고객 목록</p>
               <div className="controls cont-left">
-                <button className="admin_btn line basic_m autoWidth" onClick={getUSerInfo}>
+                <button className="admin_btn line basic_m autoWidth">
                   목록새로고침
                 </button>
               </div>
@@ -242,3 +247,33 @@ const DUMMY_RES = {
     },
   },
 };
+
+
+export async function getServerSideProps () {
+  let DATA = null;
+  
+  try {
+    const res = await axios({
+      method: 'GET',
+      url: 'https://api.channel.io/open/v5/user-chats?state=opened&sortOrder=desc&limit=25',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-key': process.env.NEXT_PUBLIC_CHANNEL_ACCESS_KEY,
+        'x-access-secret': process.env.NEXT_PUBLIC_CHANNEL_ACCESS_SECRET,
+      },
+    });
+    console.log(res);
+    if(res.status === 200){
+      DATA = res.data
+    }
+  } catch (err) {
+    console.error(err);
+  }
+  
+  
+  return {
+    props:{
+      data: DATA
+    }
+  }
+}
