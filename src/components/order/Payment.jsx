@@ -137,7 +137,6 @@ export function Payment({
         submit: true,
       }));
 
-
       // send DATA to api server after successful payment
       const apiUrl = orderType === 'general' ? `/api/orders/general` : `/api/orders/subscribe/${router.query.subscribeId}`
       const res = await postObjData(apiUrl, body);
@@ -277,29 +276,38 @@ export function Payment({
       console.log(IMPORT_PAYMENT_CANCEL)
     /* 3. 콜백 함수 정의하기 */
     if (success) {
-      // 인증 토큰 발급 받기
-      const getToken = await axios({
-        url: "https://api.iamport.kr/users/getToken",
-        method: "post", // POST method
-        headers: { "Content-Type": "application/json" }, // "Content-Type": "application/json"
-        data: {
-          imp_key: "8722322371707106", // REST API 키
-          imp_secret: "eb961888a719002923f107e1024bb45d177b8d92279ad7843a35be08c107c4ab01033597b2c21968" // REST API Secret
-        }
-      });
-      const { access_token } = getToken.data.response;
+      
+      const data = {
+        customer_uid: customer_uid,
+        merchant_uid: merchantUid, // 서버로부터 받은 주문번호
+        amount: body.paymentPrice,
+        name: "test바프독정기결제"
+      };
+    
+      const paymentResult = await axios
+      .post(
+        `${window.location.origin}/api/iamportSubscribe`, 
+        data,
+        {headers: {
+          'Content-Type': 'application/json',}}
+      )
+      .then((res) => { 
+        console.log(res.data);
+        console.log(
+          '------------------------------------------------------------------ AXIOS > RESPONSE ------------------------------------------------------------------ ',
+          res,
+        );
 
-      const paymentResult = await axios({
-        url: `https://api.iamport.kr/subscribe/payments/again`,
-        method: "post",
-        headers: { "Authorization": access_token }, // 인증 토큰을 Authorization header에 추가
-        data: {
-          customer_uid: customer_uid,
-          merchant_uid: merchantUid, // 새로 생성한 결제(재결제)용 주문 번호
-          amount: body.paymentPrice,
-          name: "test바프독정기결제"
-        }
+        return res;
+      })
+      .catch((err) => {
+        console.error('goodsflow otp err: ', err);
+
+        return err.response;
       });
+      console.log(paymentResult);
+      console.log(paymentResult.data);
+
       const { code, message, response } = paymentResult.data;
 
       if (code === 0) { // 카드사 통신에 성공(실제 승인 성공 여부는 추가 판단이 필요함)
@@ -322,10 +330,10 @@ export function Payment({
            if(fail.isDone){
              alert(`결제 실패: ${error_msg}`);
              // startPayment();
-             window.location.href= `/order/orderFailed`;
+             window.location.href = `/order/orderFailed`;
            }
         }
-      } else if(paymentResult==null){ // 카드사 요청에 실패 (paymentResult is null)
+      } else if(paymentResult == null){ // 카드사 요청에 실패 (paymentResult is null)
         const fail = await postObjData(`/api/orders/${id}/subscribe/fail`);
         console.log(fail);
          if(fail.isDone){
