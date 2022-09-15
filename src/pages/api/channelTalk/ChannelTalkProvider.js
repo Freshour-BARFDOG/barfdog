@@ -10,9 +10,9 @@ export default function ChannelTalkProvider ({ children }) {
   const dispatch = useDispatch();
   const auth = useSelector((s) => s.auth);
   const userInfo = auth.userInfo;
-  console.log(userInfo);
-
-  console.log('memeber:',!!userInfo)
+  
+  // console.log(userInfo);
+  // console.log('memeber:',!!userInfo)
 
   
   useEffect(() => {
@@ -25,7 +25,7 @@ export default function ChannelTalkProvider ({ children }) {
       // isDisabledPath = router.asPath.indexOf(path) >= 0 ;
     });
 
-    // MEMO ChannelTalk: 사용자 Path에 설치  (Admin페이지: 적용 안 함)
+    // - ChannelTalk: 사용자 Path에 설치  (Admin페이지: 적용 안 함)
     if (isAdminPath || isDisabledPath) return;
     const ch = new ChannelTalkService();
 
@@ -42,7 +42,8 @@ export default function ChannelTalkProvider ({ children }) {
       member: !!userInfo,
     };
     
-    // ch.boot(settings, callback);
+    // 채널톡 Booting
+    ch.boot(settings, channelTalkBootCallback);
 
     return () => {
       ch.shutdown();
@@ -54,6 +55,6 @@ export default function ChannelTalkProvider ({ children }) {
 
 
 
-const callback = (err, user) => {
+const channelTalkBootCallback = (err, user) => {
   // console.log(err, user);
 };

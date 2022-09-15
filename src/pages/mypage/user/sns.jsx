@@ -22,6 +22,9 @@ export default function SNSManagementPage() {
   const [isSubmitted, setIsSubmitted] = useState( false);
   // console.log(userInfo);
   
+  const onStartDisconnectSns = ()=>{
+    setActiveModal(true);
+  }
   
   const disconnectSnsHandler = async (confirm)=>{
     if(!confirm){
@@ -35,7 +38,7 @@ export default function SNSManagementPage() {
         submit: true,
       }));
       const url = `/api/members/sns`;
-      const res = await deleteObjData(url, null);
+      const res = await deleteObjData(url);
       console.log(res);
       if(res.isDone){
         mct.alertShow('SNS연동이 해제되었습니다.');
@@ -71,7 +74,6 @@ export default function SNSManagementPage() {
                   연동SNS
                 </div>
             </section>
-
             <section className={s.content}>
               <div className={s.gray_box}>
 
@@ -107,9 +109,7 @@ export default function SNSManagementPage() {
             
             <section className={s.btn}>
               <div className={s.btn_box}>
-                <button className={`${s.red_btn } ${!userInfo.provider ? 'disabled' : ''}`} disabled={!userInfo.provider} onClick={()=>{
-                  setActiveModal(true);
-                }}>
+                <button className={`${s.red_btn } ${!userInfo.provider ? 'disabled' : ''}`} disabled={!userInfo.provider} onClick={onStartDisconnectSns}>
                   {isLoading.submit ? <Spinner style={{color:'#fff'}} /> : '연동 해제하기'}
                 </button>
               </div>

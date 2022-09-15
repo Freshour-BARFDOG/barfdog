@@ -8,13 +8,10 @@ import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
 import ChannelTalkMemberList from './ChannelTalkMemberList';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import Spinner from '/src/components/atoms/Spinner';
-import { getData } from '../../../api/reqData';
-import ChannelTalkService from '../../../api/channelTalk/ChannelTalkService';
-import axios from 'axios';
+import enterKey from "/util/func/enterKey";
 
-export default function ChannelTalkPage({data}) {
-  console.log(data);
-  console.log(data.users);
+export default function ChannelTalkPage() {
+  
   const searchApiUrl = `/api/admin/guests`;
   const searchPageSize = 10;
   const [isLoading, setIsLoading] = useState({});
@@ -22,27 +19,6 @@ export default function ChannelTalkPage({data}) {
   const [searchBody, setSearchBody] = useState(null);
   const [itemList, setItemList] = useState([]);
 
-  // const getUSerInfo = async () => {
-  //   axios.defaults.baseURL = 'https://api.channel.io/';
-  //   console.log(axios.defaults)
-  //   try {
-  //     const res = await axios({
-  //       method: 'GET',
-  //       url: 'https://api.channel.io/open/v5/users/' + 'bf-12893128937',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         'x-access-key': process.env.NEXT_PUBLIC_CHANNEL_ACCESS_KEY,
-  //         'x-access-secret': process.env.NEXT_PUBLIC_CHANNEL_ACCESS_SECRET,
-  //       },
-  //     });
-  //     console.log(res);
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
-  
-  const testDAta = new Date(1663134029356);
-  console.log(testDAta)
 
   const pageInterceptor = (res) => {
     // res = DUMMY_RES; //  ! TEST
@@ -50,7 +26,6 @@ export default function ChannelTalkPage({data}) {
     let newPageInfo;
     let pageData;
     let curItemList;
-
     if (res) {
       pageData = res?.data?.page;
       curItemList = res.data?._embedded?.queryAdminGuestDtoList || [];
@@ -70,9 +45,9 @@ export default function ChannelTalkPage({data}) {
 
   const onSearchHandler = () => {
     const body = {
-      name: searchValues.memberName,
-      email: searchValues.memberEmail,
-      phoneNumber: searchValues.recipientName,
+      name: searchValues.name,
+      email: searchValues.email,
+      phoneNumber: searchValues.phoneNumber,
     };
     setSearchBody(body);
   };
@@ -81,7 +56,12 @@ export default function ChannelTalkPage({data}) {
     setSearchValues('');
     console.log('초기화 실행');
   };
-
+  
+  const onEnterKeyHandler = (e)=>{
+    enterKey(e, onSearchHandler)
+  }
+  
+  
   return (
     <>
       <MetaTitle title="친구톡" admin={true} />
@@ -91,6 +71,8 @@ export default function ChannelTalkPage({data}) {
           <section className="cont">
             <SearchTextWithCategory
               searchValue={searchValues}
+              setSearchValue={setSearchValues}
+              onSearch={onEnterKeyHandler}
               title="회원검색"
               name="content"
               className={'fullWidth'}
@@ -158,6 +140,40 @@ export default function ChannelTalkPage({data}) {
     </>
   );
 }
+
+
+//
+// export async function getServerSideProps () {
+//   let DATA = null;
+//
+//   try {
+//     const res = await axios({
+//       method: 'GET',
+//       url: 'https://api.channel.io/open/v5/user-chats?state=opened&sortOrder=desc&limit=25',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'x-access-key': process.env.NEXT_PUBLIC_CHANNEL_ACCESS_KEY,
+//         'x-access-secret': process.env.NEXT_PUBLIC_CHANNEL_ACCESS_SECRET,
+//       },
+//     });
+//     console.log(res);
+//     if(res.status === 200){
+//       DATA = res.data
+//     }
+//   } catch (err) {
+//     console.error(err);
+//   }
+//
+//
+//   return {
+//     props:{
+//       data: DATA
+//     }
+//   }
+// }
+
+
+
 
 const DUMMY_RES = {
   data: {
@@ -247,33 +263,3 @@ const DUMMY_RES = {
     },
   },
 };
-
-
-export async function getServerSideProps () {
-  let DATA = null;
-  
-  try {
-    const res = await axios({
-      method: 'GET',
-      url: 'https://api.channel.io/open/v5/user-chats?state=opened&sortOrder=desc&limit=25',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-access-key': process.env.NEXT_PUBLIC_CHANNEL_ACCESS_KEY,
-        'x-access-secret': process.env.NEXT_PUBLIC_CHANNEL_ACCESS_SECRET,
-      },
-    });
-    console.log(res);
-    if(res.status === 200){
-      DATA = res.data
-    }
-  } catch (err) {
-    console.error(err);
-  }
-  
-  
-  return {
-    props:{
-      data: DATA
-    }
-  }
-}

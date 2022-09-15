@@ -1,4 +1,3 @@
-
 import axios from 'axios';
 import axiosConfig, { axiosUserConfig } from './axios.config';
 import { cookieType } from '/store/TYPE/cookieType';
@@ -11,13 +10,13 @@ import { cookieType } from '/store/TYPE/cookieType';
 
 /*
 axios.request(config)
-axios.get(url[, config])
-axios.delete(url[, config])
-axios.head(url[, config])
-axios.options(url[, config])
-axios.post(url[, data[, config]])
-axios.put(url[, data[, config]])
-axios.patch(url[, data[, config]])
+axios.get(url, {...config})
+axios.delete(url, {...config}) // ! headers > config에 포함
+axios.head(url, {...config})
+axios.options(url, {...config})
+axios.post(url,data, {...config})
+axios.put(url, data, {...config})
+axios.patch(url, data, {...config})
 */
 
 
@@ -100,7 +99,7 @@ export const putData = async (url, data) => {
   return response;
 };
 
-export const deleteData = async (url,config={data: {}} ) => {
+export const deleteData = async (url, config = { data: {} }) => {
   const result = {
     isDone: false,
     error: '',
@@ -113,7 +112,7 @@ export const deleteData = async (url,config={data: {}} ) => {
       ...axiosConfig(), // header
     })
     .then((res) => {
-      console.log('postObjDataResponse:\n',res);
+      console.log('postObjDataResponse:\n', res);
       result.data = res;
       result.status = res.status;
       return res.status === 200 || res.status === 201;
@@ -122,28 +121,27 @@ export const deleteData = async (url,config={data: {}} ) => {
       // console.error('postObjDataResponseError:\n',err.response);
       const error = err.response;
       // console.log('ERROR내용: ', err.response);
-      if(!error.data){
+      if (!error.data) {
         result.error = '요청에 대응하는 데이터가 서버에 없습니다.';
       } else if (error.data?.error) {
         result.error = error.data.error;
-        if(error.data?.errors?.length > 0){
+        if (error.data?.errors?.length > 0) {
           result.error = error.data.errors[0].defaultMessage;
-        } else if(error?.data?.error?.error){
+        } else if (error?.data?.error?.error) {
           result.error = '서버와 통신오류가 발생했습니다.';
         }
       } else if (error.data.reason === 'EXPIRED_TOKEN') {
         result.error = '관리자 로그인 토큰이 만료되었습니다.';
       } else {
-        result.error = '서버측의 정의되지않은 Reponse Error 발생'
+        result.error = '서버측의 정의되지않은 Reponse Error 발생';
       }
       result.status = err.response.status;
       return !error?.status >= 400;
     });
-  
+
   result.isDone = response;
   return result;
 };
-
 
 export const postObjData = async (url, data, contType) => {
   const result = {
@@ -156,7 +154,7 @@ export const postObjData = async (url, data, contType) => {
   const response = await axios
     .post(url, data, axiosConfig(contType))
     .then((res) => {
-      console.log('postObjDataResponse:\n',res);
+      console.log('postObjDataResponse:\n', res);
       result.data = res;
       result.status = res.status;
       return res.status === 200 || res.status === 201;
@@ -165,19 +163,19 @@ export const postObjData = async (url, data, contType) => {
       // console.error('postObjDataResponseError:\n',err.response);
       const error = err.response;
       // console.log('ERROR내용: ', err.response);
-      if(!error.data){
+      if (!error.data) {
         result.error = '요청에 대응하는 데이터가 서버에 없습니다.';
       } else if (error.data?.error) {
         result.error = error.data.error;
-        if(error.data?.errors?.length > 0){
+        if (error.data?.errors?.length > 0) {
           result.error = error.data.errors[0].defaultMessage;
-        } else if(error?.data?.error?.error){
+        } else if (error?.data?.error?.error) {
           result.error = '서버와 통신오류가 발생했습니다.';
         }
       } else if (error.data.reason === 'EXPIRED_TOKEN') {
         result.error = '관리자 로그인 토큰이 만료되었습니다.';
       } else {
-        result.error = '서버측의 정의되지않은 Reponse Error 발생'
+        result.error = '서버측의 정의되지않은 Reponse Error 발생';
       }
       result.status = err.response.status;
       return !error?.status >= 400;
@@ -216,7 +214,7 @@ export const putObjData = async (url, data, contType) => {
   return result;
 };
 
-export const deleteObjData = async (url, data,) => {
+export const deleteObjData = async (url, data) => {
   const result = {
     isDone: false,
     error: '',
@@ -224,7 +222,7 @@ export const deleteObjData = async (url, data,) => {
     status: null,
   };
   const response = await axios
-    .delete(url, data, axiosConfig())
+    .delete(url, { ...data, ...axiosConfig() })
     .then((res) => {
       console.log(res);
       result.data = res;
@@ -294,7 +292,6 @@ export const postUserObjData = async (url, data, contType) => {
   return result;
 };
 
-
 // -------- SSR DATA FETCHING -------- //
 /* - EXAMPLE
 
@@ -358,7 +355,8 @@ export const getTokenFromServerSide = (req) => {
 export const getDataSSR = async (req, url, tokenFromSSR) => {
   let result;
   const token = tokenFromSSR || getTokenFromServerSide(req);
-  try { // ! TOKEN이 없을 경우 , axios 실행되지 않아야 함
+  try {
+    // ! TOKEN이 없을 경우 , axios 실행되지 않아야 함
     // console.log('여기 --- ', token);
     result = await axios
       .get(url, {
@@ -380,25 +378,23 @@ export const getDataSSR = async (req, url, tokenFromSSR) => {
     // console.error(err)
     return err.response;
   }
-  
 
   return result;
 };
 
-export const postDataSSR = async (req, url,data, tokenFromSSR) => {
+export const postDataSSR = async (req, url, data, tokenFromSSR) => {
   let result;
   const token = tokenFromSSR || getTokenFromServerSide(req);
-  try { // ! TOKEN이 없을 경우 , axios 실행되지 않아야 함
+  try {
+    // ! TOKEN이 없을 경우 , axios 실행되지 않아야 함
     // console.log('여기 --- ', token);
     result = await axios
-      .post(url, data,
-      {
+      .post(url, data, {
         headers: {
           authorization: token,
           'content-Type': 'application/json',
         },
-      }
-      )
+      })
       .then((res) => {
         // console.log('SSR RESPONSE: ',res);
         return res;
@@ -412,7 +408,6 @@ export const postDataSSR = async (req, url,data, tokenFromSSR) => {
     // console.error(err)
     return err.response;
   }
-  
 
   return result;
 };
