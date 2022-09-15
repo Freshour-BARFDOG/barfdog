@@ -17,12 +17,10 @@ import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import { useModalContext } from '/store/modal-context';
 import { useRouter } from 'next/router';
 import Modal_confirm from '/src/components/modal/Modal_confirm';
-import { filter_apiHostname } from '../../../../util/func/filter_api_hostname';
-import { paymentMethodType } from '../../../../store/TYPE/paymentMethodType';
-import {orderStatus} from "../../../../store/TYPE/orderStatusTYPE";
+import {orderStatus} from "/store/TYPE/orderStatusTYPE";
 
 export default function MypageDogInfoPage({ data }) {
-  // console.log(data);
+  console.log(data);
   const mct = useModalContext();
   const [activeUploadDogProfileModal, setActiveUploadDogProfileModal] = useState(false);
   const [itemList, setItemList] = useState(data);
@@ -34,7 +32,6 @@ export default function MypageDogInfoPage({ data }) {
     mct.alertHide();
   }, []);
 
-  // console.log(itemList);
   const onUploadImageModalHandler = (selectedItemData) => {
     setSelectedItemData(selectedItemData);
     onActiveModal();
@@ -53,7 +50,6 @@ export default function MypageDogInfoPage({ data }) {
     setActiveUploadDogProfileModal(false);
   };
   
-  // console.log(itemList);
 
   return (
     <>
@@ -331,7 +327,7 @@ export async function getServerSideProps({ req }) {
       gender: data.gender, // 반려견 성별
       representative: data.representative, // 대표견 여부
       subscribeStatus: data.subscribeStatus, // 구독상태
-      subscribeCount: data.subscribeCount || 0, // 구독 횟수 ! ( 0914목 메모 ) 바프독서버에서 구독횟수값이 넘어오는지 확인필요
+      subscribeCount: data.subscribeCount, // 구독 횟수
       _links: {
         update_picture: {
           href: data._links.update_picture.href,
