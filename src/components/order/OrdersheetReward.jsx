@@ -23,10 +23,13 @@ export const OrdersheetReward = ({ id, info, form, setForm, formErrors, setFormE
     }
     
     
-    const paymentPrice = calcOrdersheetPrices(form,orderType).paymentPrice;
-    const subscribeLimitedPrice = info.subscribeDto.nextPaymentPrice - form.selfInfo?.discountGrade;
-    const limitedPrice = orderType === 'general' ? paymentPrice : subscribeLimitedPrice;
+    const generalLimitedPrice = form.orderPrice - form.discountCoupon;
+    const subscribeLimitedPrice = info.subscribeDto?.nextPaymentPrice - form.selfInfo?.discountGrade;
+    const minPaymentPrice = 100;
+    const limitedPrice =( orderType === 'general' ? generalLimitedPrice : subscribeLimitedPrice) - minPaymentPrice;
   
+    console.log(generalLimitedPrice)
+    console.log(limitedPrice)
     let error='';
     if(enteredReward > limitedPrice) {
       enteredReward = 0;
