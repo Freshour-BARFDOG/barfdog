@@ -10,6 +10,8 @@ import ErrorMessage from "/src/components/atoms/ErrorMessage";
 import filter_emptyValue from "/util/func/filter_emptyValue";
 import filter_onlyNumber from "/util/func/filter_onlyNumber";
 import ToolTip from "/src/components/atoms/Tooltip";
+import { postObjData, getDataSSR ,postDataSSR} from '/src/pages/api/reqData';
+import { gradeTransferFilter } from '/util/func/filter_gradeTransfer';
 
 
 
@@ -52,6 +54,95 @@ function FriendTalkPage() {
     popupWindow(href, {width:1000, height:716});
   }
   
+  const sendFriendTalk = async() => {
+    if(formValues.template=== undefined){
+      alert('템플릿 번호를 선택해주세요');
+      return;
+    }
+
+    // console.log(formValues);
+
+    if(formValues?.exposedTarget === 'GROUP'){
+
+    if(formValues.gradeStart.value === undefined){
+      alert('회원등급을 선택해주세요');
+      return;
+
+    }else if(formValues.ageStart.value === undefined){
+      alert('연령을 선택해주세요');
+      return;
+    }
+      const ageEnd = formValues.ageEnd === undefined ? formValues.ageStart.value:formValues.ageEnd.value;
+      // const gradeList = formValues.gradeEnd === undefined ? [formValues.gradeStart.value] : [formValues.gradeStart.value, formValues.gradeEnd.value];
+      const gradeList = [...new Set(formValues.gradeEnd === undefined ? [gradeTransferFilter(formValues.gradeStart.value)] : [gradeTransferFilter(formValues.gradeStart.value), gradeTransferFilter(formValues.gradeEnd.value)])];
+// 브론즈, 실버, 골드, 플래티넘, 다이아몬드, 더바프
+
+      const body = {
+        templateNum : formValues.template,
+        gradeList : gradeList,
+        subscribe : formValues.subscribeYN === 'subscrib-N' ? false:true,
+        birthYearFrom : formValues.ageStart.value,
+        birthYearTo : ageEnd,
+        area : formValues.area === undefined?'ALL':formValues.area,
+        longUnconnected : formValues.unconnectedTerm === 'term-NO' ? false : true,
+        };
+
+      // console.log(formValues.unconnectedTerm);
+      // console.log(body);
+
+      const res = await postObjData(`/api/admin/friendTalk/group`,body);
+      // console.log(res);
+      
+      if(res.isDone){
+        // console.log(res.data.data);
+
+        // 다이렉트 센드 responseCode, 200이 아니면 다이렉트센드 내부 문제
+        const responseCode = res.data.data.responseCode;
+        // 다이렉트센드 status
+        const status = res.data.data.status;
+        
+        if(responseCode != 200){
+          alert('다이렉트 센드 내부문제');
+        }else if(status === 1 && responseCode === 200){
+          alert('성공');
+        }
+
+        if(res.data.data.message!=null){
+          alert(res.data.data.message);        
+        }
+        
+      }
+
+    }else{
+      
+      const res = await postObjData(`/api/admin/friendTalk/all`,{
+        templateNum: formValues.template
+      });
+      // console.log(res);
+      
+      if(res.isDone){
+      console.log(res.data.data);
+
+        // 다이렉트 센드 responseCode, 200이 아니면 다이렉트센드 내부 문제
+        const responseCode = res.data.data.responseCode;
+        // 다이렉트센드 status
+        const status = res.data.data.status;
+  
+        if(responseCode != 200){
+          alert('다이렉트 센드 내부문제');
+        }else if(status === 1 && responseCode === 200){
+          alert('성공');
+        }
+        
+        if(res.data.data.message!=null){
+          alert(res.data.data.message);        
+        }
+        
+      }
+      
+    }
+  }
+
   return (
     <>
       <MetaTitle title="친구톡" admin={true} />
@@ -121,7 +212,8 @@ function FriendTalkPage() {
                     템플릿 확인
                   </a>
                 </Link>
-                <button type="submit" id="btn-create" className="admin_btn confirm_l solid">
+                <button type="submit" id="btn-create" className="admin_btn confirm_l solid"
+                  onClick={sendFriendTalk}>
                   전송하기
                 </button>
               </div>

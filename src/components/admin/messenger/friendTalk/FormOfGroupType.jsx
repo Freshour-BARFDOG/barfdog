@@ -20,8 +20,8 @@ const FormOfGroupType = ({ setFormValues }) => {
               <CustomSelectGroup
                 setFormValues={setFormValues}
                 groupOptions={{
-                  startName: 'grade-start',
-                  endName: 'grade-end',
+                  startName: 'gradeStart',
+                  endName: 'gradeEnd',
                   options: [
                     { label: '선택', value: '' },
                     { label: '브론즈', value: 'BRONZE' },
@@ -47,7 +47,7 @@ const FormOfGroupType = ({ setFormValues }) => {
               <div className="inp_box">
                 <CustomRadio
                   setValue={setFormValues}
-                  name="subscribe-yn"
+                  name="subscribeYN"
                   idList={['subscribe-Y', 'subscrib-N']}
                   labelList={['Y', 'N']}
                 />
@@ -70,8 +70,8 @@ const FormOfGroupType = ({ setFormValues }) => {
                 <CustomSelectGroup
                   setFormValues={setFormValues}
                   groupOptions={{
-                    startName: 'age-start',
-                    endName: 'age-end',
+                    startName: 'ageStart',
+                    endName: 'ageEnd',
                     options: calcedAgeList(),
                   }}
                 />
@@ -98,7 +98,7 @@ const FormOfGroupType = ({ setFormValues }) => {
                   setValue={setFormValues}
                   name="area"
                   // value={formValues?.area}
-                  idList={[global_areaType.ALL, global_areaType.ALL, global_areaType.NON_METRO]}
+                  idList={[global_areaType.ALL, global_areaType.METRO, global_areaType.NON_METRO]}
                   labelList={['전체', '수도권', '비수도권']}
                 />
               </div>
@@ -116,7 +116,7 @@ const FormOfGroupType = ({ setFormValues }) => {
               <div className="inp_box">
                 <CustomRadio
                   setValue={setFormValues}
-                  name="unconnected-term"
+                  name="unconnectedTerm"
                   idList={['term-YES', 'term-NO']}
                   labelList={['Y', 'N']}
                 />
