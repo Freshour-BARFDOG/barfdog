@@ -58,6 +58,7 @@ section.body { padding : rem(120) 0 0 }
       max-width: rem(120) ;
       aspect-ratio : 1/1;
       border-radius: 50%;
+      overflow: hidden;
       &:not(.hasImage){
         background-color: var(--color-bg-ghostWhite);
         background-image: url("../../../.././public/img/mypage/Dog_basic.png");
