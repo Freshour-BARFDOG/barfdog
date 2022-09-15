@@ -145,7 +145,7 @@ const Modal_sendPhoneMessage = ({ setModalState, data, setModalMessage }) => {
                   placeholder={'친구이름'}
                 />
               </span>
-              님에게 바프독 적립금을
+              님에게 바프독 적립금을 선물했습니다.
             </p>
             <p>가입 후 마이페이지에서 추천코드를 입력해주세요!</p>
             <p>
