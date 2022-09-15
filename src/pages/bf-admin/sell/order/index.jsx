@@ -239,7 +239,7 @@ export default function OrderOnSellPage() {
       // 주문 등록 후 id값 받아서 운송장 출력창 호출할때 보내야함
       const res = await postGoodsFlowOrder({
         data:{
-          items:deliveryList
+          items: deliveryList
         }});
       // console.log(res);
       // console.log(res.data);
@@ -270,13 +270,15 @@ export default function OrderOnSellPage() {
           id:res.data.id
         },
       );
-        
-      console.log(printRes);
+      console.log('=================');
+      if(printRes.isDone){
       
-      popupWindow(`/bf-admin/sell/delivery/print?otp=${otp}&id=${res.data.id}`); 
-      
-    
+        console.log(printRes);
+        console.log(printRes.data.data);
+        popupWindow(`/bf-admin/sell/delivery/print?data=${printRes.data.data}`); 
   
+      }  
+    
       /// ! ---------------운송장 번호 등록과정 추가필요 -----------------!
       /// ! ---------------운송장 번호 등록과정 추가필요 -----------------!
       /// ! ---------------운송장 번호 등록과정 추가필요 -----------------!
@@ -289,6 +291,7 @@ export default function OrderOnSellPage() {
             },
           ],
         };
+        // TODO:운송장
         // const r = await postObjData(registerDeliveryNumberApiUrl, body);
         // console.log('server RESPONSE:\n', r);
         // if (r.isDone) {
