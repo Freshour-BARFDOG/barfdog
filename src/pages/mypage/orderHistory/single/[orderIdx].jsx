@@ -7,7 +7,7 @@ import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from '/src/components/mypage/MypageWrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import Image from 'next/image';
-import { getDataSSR, postObjData } from '/src/pages/api/reqData';
+import {getData, getDataSSR, postData, postObjData} from '/src/pages/api/reqData';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import popupWindow from '/util/func/popupWindow';
 import { valid_deliveryCondition } from '/util/func/validation/valid_deliveryCondition';
@@ -299,18 +299,16 @@ export default function SingleItem_OrderHistoryPage({ data }) {
                     <li className={s.deliveryStatus}>
                       {orderStatus.KOR[data?.orderDto.deliveryStatus]}
                     </li>
-                    {data?.orderDto.deliveryNumber && (
-                      <li>
-                        <a
-                          href={`http://nexs.cjgls.com/web/service02_01.jsp?slipno=${data?.orderDto.deliveryNumber}`}
-                          target="_blank"
-                          rel={'noreferrer'}
-                          onClick={onPopupHandler}
-                        >
-                          <button>배송조회</button>
-                        </a>
-                      </li>
-                    )}
+                    {data?.orderDto.deliveryNumber && <li>
+                      <a
+                        href={`https://trace.goodsflow.com/VIEW/V1/whereis/BARFDOG/CJGLS/${data?.orderDto.deliveryNumber}`}
+                        target="_blank"
+                        rel={'noreferrer'}
+                        onClick={onPopupHandler}
+                      >
+                        <button>배송조회</button>
+                      </a>
+                    </li>}
                   </ul>
                 ) : (
                   <p className={s.emptyCont}>배송 중 상태에서 조회 가능합니다.</p>

@@ -1,49 +1,26 @@
 import axios from 'axios';
 
-/* - /src/pages/api/:path* 에서 작성한 코드는
-    nextjs에서 serverSide 코드로 작동한다..
-* */
-// TODO: 주문정보 업데이트하기
 export default async function handler(req, res){
- 
-  axios.defaults.baseURL = 'https://test.goodsflow.com/';
-  //// 'https://test.goodsflow.com/delivery/api/v2/otps/partner/BARFDOG',
+
     console.log('trace result');
     console.log(req.body);
-// console.log(JSON.stringify(req.body));
+    // console.log(JSON.stringify(req.body));
 
   try {
-    const options = {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept': 'application/json',
-        'goodsFLOW-Api-Key': 'c52a4671-40e2-409e-90c0-07759066145e',
-        'Access-Control-Allow-Origin': '*',
-      },
-    };
-    
     const qs = require('qs');
 
     const DATA = await axios
     .get(
-        'https://test.goodsflow.com/delivery/api/v2/orders/traceresults/',
+      `${process.env.NEXT_PUBLIC_GOODSFLOW_API_URL}orders/traceresults/`,
         {
-        
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
             'Accept': 'application/json',
-            'goodsFLOW-Api-Key': 'c52a4671-40e2-409e-90c0-07759066145e',
+            'goodsFLOW-Api-Key': process.env.NEXT_PUBLIC_GOODSFLOW_API_KEY,
             'Access-Control-Allow-Origin': '*',
           },
-        data:{
-            OTP:req.body.otp,
-            responseURL:'http://localhost:4000',
-            id:req.body.id
+        data:{},
         },
-          },
-          
-        
-        
       )
       .then((res) => {
         console.log(
@@ -53,7 +30,7 @@ export default async function handler(req, res){
         return res.data;
       })
       .catch((err) => {
-        console.error('goodsflow otp err: ', err);
+        console.error('goodsflow getTraceResult err: ', err);
 
         return err.response;
       });
@@ -68,15 +45,6 @@ export default async function handler(req, res){
       "Accept": 'application/json',
       'Content-Type': 'application/x-www-form-urlencoded',
     };
-    //
-    // const body = {
-    //   appVersion: DATA.appVersion,
-    //   id: DATA.id,
-    //   data: DATA.data,
-    //   success: DATA.success,
-    // }
-    // console.log('BODY: ', body);
-    
     
     res.writeHead(200, defaultCorsHeader);
     res.end(JSON.stringify(DATA)); // res body > JS obj를 JSON문자열로 전달해야함. (JSON.stringify())
