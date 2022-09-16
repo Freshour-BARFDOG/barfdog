@@ -276,6 +276,10 @@ export default function OrderOnSellPage() {
         console.log(printRes.data.data);
         popupWindow(`/bf-admin/sell/delivery/print?data=${printRes.data.data}`); 
   
+        const goodsFlowTraceRes =
+        window.location.origin + '/api/goodsFlow/postTraceResult';
+        const r = await postObjData(goodsFlowTraceRes);
+        console.log(r);
       }  
       }
 

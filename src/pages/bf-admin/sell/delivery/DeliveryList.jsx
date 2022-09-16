@@ -71,7 +71,7 @@ const ItemList = ({ item, sortableItemRef }) => {
       <span>
         <a
           className={'overflow-x-scroll btn_link'}
-          href={`http://nexs.cjgls.com/web/service02_01.jsp?slipno=${DATA.deliveryNumber}`}
+          href={`https://trace.goodsflow.com/VIEW/V1/whereis/BARFDOG/CJGLS/${DATA.deliveryNumber}`}
           target="_blank"
           rel={'noreferrer'}
           onClick={onDeliveryPopupHandler}
