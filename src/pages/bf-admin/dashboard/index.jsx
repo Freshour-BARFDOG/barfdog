@@ -10,6 +10,9 @@ import Spinner from '/src/components/atoms/Spinner';
 import { getData } from '/src/pages/api/reqData';
 import transformDate, { transformToday } from '/util/func/transformDate';
 import { orderStatus } from '/store/TYPE/orderStatusTYPE';
+import axios from "axios";
+
+
 
 export default function DashboardPage() {
 
@@ -22,6 +25,24 @@ export default function DashboardPage() {
   const [term, setTerm] = useState(initialTerm);
   const [isLoading, setIsLoading] = useState(false);
   const [info, setInfo] = useState({});
+  
+  console.log(info)
+  
+  useEffect(()=>{
+    //구글 analytics 방문자정보 가져오기
+    (async ()=>{
+      
+      try {
+      
+      } catch (err) {
+          console.error(err)
+      }
+      setIsLoading((prevState) => ({
+        ...prevState,
+        ga: false,
+      }));
+    })();
+  },[])
 
   useEffect(() => { // 기간에 따른 통계 update
     (async () => {
@@ -32,10 +53,11 @@ export default function DashboardPage() {
       try {
         const url = `/api/admin/dashBoard?from=${term.from}&to=${term.to}`;
         const res = await getData(url);
+        let DATA;
         // const res = DUMMY_RESPONSE; // TEST
         if (res.data) {
           const data = res.data;
-          const DATA = {
+          DATA = {
             statistics: {
               newOrderCount: data.newOrderCount,
               newMemberCount: data.newMemberCount,
@@ -105,9 +127,26 @@ export default function DashboardPage() {
               })),
             },
           };
-          console.log(url, DATA)
-          setInfo(DATA);
+          
         }
+  
+  
+        setIsLoading((prevState) => ({
+          ...prevState,
+          ga: true,
+        }));
+        const visitorCount = 100;
+        DATA = {
+          ...DATA,
+          statistics: {
+            ...info.statistics,
+            visitorCount: visitorCount
+          }
+        }
+        
+        
+        setInfo(DATA);
+  
       } catch (err) {
         console.error(err);
       }
@@ -239,15 +278,10 @@ export default function DashboardPage() {
                 </li>
                 <li>
                   <span>방문자수
-                    <ToolTip
-                      message={'GA 기반 데이터'}
-                      theme={'white'}
-                      className={s.tooltip}
-                    />
                   </span>
                   <div>
                     <span>
-                      <b>{info.statistics?.visitorCount}</b>건
+                      <b>{isLoading.fetching ? <Spinner /> : `${info.statistics?.visitorCount}`}</b>건
                     </span>
                   </div>
                 </li>
