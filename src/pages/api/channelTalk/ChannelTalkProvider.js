@@ -11,8 +11,7 @@ export default function ChannelTalkProvider ({ children }) {
   const auth = useSelector((s) => s.auth);
   const userInfo = auth.userInfo;
   
-  // console.log(userInfo);
-  // console.log('memeber:',!!userInfo)
+  console.log(userInfo);
 
   
   useEffect(() => {
@@ -37,8 +36,7 @@ export default function ChannelTalkProvider ({ children }) {
         mobileNumber: userInfo?.phoneNumber || null,
         email: userInfo?.email || null,
       },
-      // memberId: !!userInfo ? 'bf-user_index' : null,
-      memberId: !!userInfo ? null : null,
+      memberId: !!userInfo ? `bf-${userInfo.memberId}` : null,
       member: !!userInfo,
     };
     
