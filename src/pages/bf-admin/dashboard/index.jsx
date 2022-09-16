@@ -23,6 +23,16 @@ export default function DashboardPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [info, setInfo] = useState({});
 
+  useEffect(()=>{
+    const GA_init = document.createElement('script');
+    GA_init.src='https://apis.google.com/js/api.js';
+    GA_init.type='text/javascript';
+  
+    const GA_Oauth = document.createElement('script');
+    GA_Oauth.src='https://apis.google.com/js/client.js?onload=authorize';
+    GA_Oauth.type='text/javascript';
+    
+  },[])
   
 
   useEffect(() => { // 기간에 따른 통계 update
@@ -158,8 +168,6 @@ export default function DashboardPage() {
 
   return (
     <>
-      <script src="https://apis.google.com/js/api.js" type='text/javascript'></script>
-      <script src="https://apis.google.com/js/client.js?onload=authorize" type='text/javascript'></script>
       <MetaTitle title="대시보드" admin={true} />
       <AdminLayout>
         <AdminContentWrapper className={s.wrapper}>
