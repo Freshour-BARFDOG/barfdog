@@ -24,22 +24,6 @@ export default function DashboardPage() {
   const [info, setInfo] = useState({});
 
   
-  useEffect(()=>{
-    //구글 analytics 방문자정보 가져오기
-    
-    (async ()=>{
-      try {
-        const res = await getData('http://localhost:4000/api/getSelfCookie2');
-        console.log('res:' ,res)
-      } catch (err) {
-          console.error(err)
-      }
-      setIsLoading((prevState) => ({
-        ...prevState,
-        ga: false,
-      }));
-    })();
-  },[])
 
   useEffect(() => { // 기간에 따른 통계 update
     (async () => {
