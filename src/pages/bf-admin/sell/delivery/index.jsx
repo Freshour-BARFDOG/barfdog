@@ -80,7 +80,7 @@ export default function DeliveryOnSellPage() {
     // res = DUMMY_DEFAULT_ITEMLIST_RESPONSE; //  ! TEST
     console.log(res)
     const pageData = res.data.page;
-    const curItemList = res.data?._embedded?.queryAdminOrdersDtoList || [];
+    const curItemList = res.data?._embedded?.queryAdminCancelRequestDtoList || [];
     let newPageInfo = {
       totalPages: pageData.totalPages,
       size: pageData.size,
@@ -89,6 +89,7 @@ export default function DeliveryOnSellPage() {
       newPageNumber: pageData.number + 1,
       newItemList: curItemList,
     };
+    console.log(curItemList)
     return newPageInfo;
   };
   return (

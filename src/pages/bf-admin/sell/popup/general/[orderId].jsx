@@ -132,7 +132,7 @@ export async function getServerSideProps({ req, query }) {
   // const res = DUMMY_DEFAULT_RES;
   if (res.data) {
     const data = res.data;
-    console.log('________RESONSE: ',data);
+    // console.log('________RESONSE: ',data);
     DATA = {
       orderStatus: data.paymentDto.orderStatus,
       orderInfoDto: {
@@ -142,9 +142,13 @@ export async function getServerSideProps({ req, query }) {
         orderType: data.orderInfoDto.orderType,
         memberName: data.orderInfoDto.memberName,
         phoneNumber: data.orderInfoDto.phoneNumber,
-        package: data.orderInfoDto.package,
-        subscribe: data.orderInfoDto.subscribe,
         email: data.orderInfoDto.email,
+        subscribe: data.orderInfoDto.subscribe,
+        package: data.orderInfoDto.package,
+        cancelRequestDate: data.orderInfoDto.cancelRequestDate,
+        cancelConfirmDate: data.orderInfoDto.cancelConfirmDate,
+        cancelReason: data.orderInfoDto.cancelReason,
+        cancelDetailReason: data.orderInfoDto.cancelDetailReason,
       },
       orderItemAndOptionDtoList: data.orderItemAndOptionDtoList.map((info) => ({
         orderItemDto: {
@@ -189,30 +193,30 @@ export async function getServerSideProps({ req, query }) {
     if(isCancelReturnExchangeStatus(DATA.orderStatus)){
       // ! 취소/반품/교환 상태일 경우 ===> 취소반품교환 정보 표기
       const orderItemIdList = DATA.orderItemAndOptionDtoList.map(list=>list.orderItemDto.orderItemId);
-      for (const orderItemId in orderItemIdList) {
+      for (const orderItemId of orderItemIdList) {
         const cancelApiUrl = `/api/admin/orders/orderItem/${orderItemId}`;
         const r = await getDataSSR(req, cancelApiUrl);
-        console.log(r)
+        // console.log('-----취소반품교환 정보--',r)
         if(r.data){ // ! PRODUCT CODE
           const data = r.data;
-          // console.log('CANCEL RESPONSE DATA: ',data)
-          const cancleInfo = data?.orderItemAndOptionDto[0] || {}; // 취소 사유는, 모든 아이템이 "공통적"으로 입력되므로, 아이템을 특정해도 무방함
+          console.log('CANCEL RESPONSE DATA: ',data)
+          const cancleInfo = data?.orderItemAndOptionDto.orderItemDto || {};
           DATA = {
             ...DATA,
             orderInfoDto: {
               ...DATA.orderInfoDto,
-              cancelRequestDate: cancleInfo.cancelRequestDate,
-              cancelConfirmDate: cancleInfo.cancelConfirmDate,
-              cancelReason: cancleInfo.cancelReason,
-              cancelDetailReason: cancleInfo.cancelDetailReason,
-              returnRequestDate: cancleInfo.returnRequestDate,
-              returnConfirmDate: cancleInfo.returnConfirmDate,
-              returnReason: cancleInfo.returnReason,
-              returnDetailReason: cancleInfo.returnDetailReason,
-              exchangeRequestDate: cancleInfo.exchangeRequestDate,
-              exchangeConfirmDate: cancleInfo.exchangeConfirmDate,
-              exchangeReason: cancleInfo.exchangeReason,
-              exchangeDetailReason: cancleInfo.exchangeDetailReason,
+              cancelRequestDate: cancleInfo.cancelRequestDate || null,
+              cancelConfirmDate: cancleInfo.cancelConfirmDate || null,
+              cancelReason: cancleInfo.cancelReason || null,
+              cancelDetailReason: cancleInfo.cancelDetailReason || null,
+              returnRequestDate: cancleInfo.returnRequestDate || null,
+              returnConfirmDate: cancleInfo.returnConfirmDate || null,
+              returnReason: cancleInfo.returnReason || null,
+              returnDetailReason: cancleInfo.returnDetailReason || null,
+              exchangeRequestDate: cancleInfo.exchangeRequestDate || null,
+              exchangeConfirmDate: cancleInfo.exchangeConfirmDate || null,
+              exchangeReason: cancleInfo.exchangeReason || null,
+              exchangeDetailReason: cancleInfo.exchangeDetailReason || null,
             },
           }
         // }else { // ! else문 전부 , TEST 코드

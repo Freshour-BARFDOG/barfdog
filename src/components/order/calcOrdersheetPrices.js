@@ -6,6 +6,7 @@ export const calcOrdersheetPrices = (form, orderType='general') => {
   if(orderType === 'general'){
     discountCoupon = form.orderItemDtoList?.length ? form.orderItemDtoList.map( item => item.discountAmount ).reduce( (acc, cur) => acc + cur ) : 0;
     discountReward = Number(form.discountReward);
+    // discountGrade = Number(form.selfInfo?.discountGrade); // 일반결제는 등급할인 없음
   } else if ( orderType === 'subscribe') {
     discountCoupon = Number(form.discountCoupon);
     discountReward = Number(form.discountReward);
@@ -15,10 +16,12 @@ export const calcOrdersheetPrices = (form, orderType='general') => {
   
   const calc = Number(form.orderPrice) - discountCoupon - discountReward - discountGrade + form.deliveryPrice;
   const paymentPrice = calc ? calc : 0;
+
   const reward = form.selfInfo?.reward;
   let availableMaxReward;
   if(reward > paymentPrice && paymentPrice >= 0){
-    availableMaxReward = paymentPrice
+    availableMaxReward = paymentPrice;
+    
   } else if (paymentPrice <= 0){
     availableMaxReward = 0;
   } else {
@@ -26,8 +29,7 @@ export const calcOrdersheetPrices = (form, orderType='general') => {
   }
   
   const discountTotal = discountCoupon + discountReward + discountGrade;
-
-  // console.log('쿠폰할인 ',discountCoupon, '할인총합', discountTotal, 'paymentPrice: ', paymentPrice)
+  // console.log('쿠폰할인 ',discountCoupon,'적립금할인',discountReward, '등급할인',discountGrade,  '할인총합', discountTotal, '결제금액: ', paymentPrice)
   
   return {
     discountReward,
@@ -35,7 +37,7 @@ export const calcOrdersheetPrices = (form, orderType='general') => {
     discountGrade,
     discountTotal,
     paymentPrice,
-    availableMaxReward: availableMaxReward
+    availableMaxReward
   }
   
 }

@@ -14,6 +14,7 @@ import transformDate from '/util/func/transformDate';
 import {orderStatus} from '/store/TYPE/orderStatusTYPE';
 import Modal_confirm from '/src/components/modal/Modal_confirm';
 import {Modal_subscribeCancel} from "/src/components/modal/Modal_subscribeCancel";
+import {paymentMethodType} from "/store/TYPE/paymentMethodType";
 
 /*! 참고)
    구독상품: 교환 및 환불 불가
@@ -27,7 +28,7 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
   console.log(data);
   // data.orderDto.deliveryStatus = orderStatus.PAYMENT_DONE; // ! TEST CODE TEST CODE TEST CODE TEST CODE
   // data.orderDto.deliveryStatus = orderStatus.PRODUCING; // ! TEST CODE TEST CODE TEST CODE TEST CODE
-  const currentOrderStatus = data.orderDto.deliveryStatus;
+  const currentOrderStatus = data.orderDto.orderStatus;
   const availableCancelStatusList = [orderStatus.PAYMENT_DONE, orderStatus.PRODUCING];
   const availableCancleStatus = availableCancelStatusList.indexOf(currentOrderStatus) >= 0;
 
@@ -81,6 +82,7 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
     setActiveModal({ cancleRequest: true });
   };
 
+  console.log(data)
   return (
     <>
       <MetaTitle title="마이페이지 주문내역 정기구독" />
@@ -251,27 +253,27 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
 
                   <span>배송비</span>
                   <span>정기구독 무료</span>
+  
+                  <span>총 할인금액</span>
+                  <span>{data?.orderDto.discountTotal > 0 && '-'}{transformLocalCurrency(data?.orderDto.discountTotal)}원</span>
 
-                  <span>할인금액</span>
-                  <span>{transformLocalCurrency(data?.orderDto.discountTotal)}원</span>
-
-                  <span>등급할인</span>
-                  <span>{transformLocalCurrency(data?.orderDto.discountGrade)}원</span>
-
-                  <span>쿠폰사용</span>
-                  <span>{transformLocalCurrency(data?.orderDto.discountCoupon)}원</span>
-
-                  <span>적립금 사용</span>
-                  <span>{transformLocalCurrency(data?.orderDto.discountReward)}원</span>
+                  <span>ㄴ 등급할인</span>
+                  <span>{data?.orderDto.discountGrade > 0 && '-'}{transformLocalCurrency(data?.orderDto.discountGrade)}원</span>
+  
+                  <span>ㄴ 쿠폰사용</span>
+                  <span>{data?.orderDto.discountCoupon > 0 && '-'}{transformLocalCurrency(data?.orderDto.discountCoupon)}원</span>
+  
+                  <span>ㄴ 적립금 사용</span>
+                  <span>{data?.orderDto.discountReward > 0 && '-'}{transformLocalCurrency(data?.orderDto.discountReward)}원</span>
 
                   <span>결제 금액</span>
                   <span>{transformLocalCurrency(data?.orderDto.paymentPrice)}원</span>
                   {/* TODO: */}
                   <span>적립예정금액</span>
-                  <span>3,000원</span>
+                  <span>{transformLocalCurrency(data?.orderDto.saveReward)}원</span>
 
                   <span>결제방법</span>
-                  <span>카드결제</span>
+                  <span>{paymentMethodType.KOR[data.orderDto.paymentMethod]}</span>
                 </div>
               </div>
             </section>
@@ -303,6 +305,27 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
                 </div>
               </div>
             </section>
+            {(currentOrderStatus === orderStatus.CANCEL_DONE_SELLER ||
+              currentOrderStatus === orderStatus.CANCEL_DONE_BUYER) && <section className={`${s['additional-info-section']}`}>
+                <h6 className={s.body_title}>환불 정보</h6>
+                <ul className={s.body_content_2}>
+                  <li className={s.grid_box}>
+                    <span>취소 요청일자</span>
+                    <span>{transformDate(data.orderDto.cancelRequestDate, 'time',{ seperator: '/' })}</span>
+                    <span>취소 승인일자</span>
+                    <span>{transformDate(data.orderDto.cancelConfirmDate, 'time',{ seperator: '/' })}</span>
+                    <span>환불 사유</span>
+                    <span>{data.orderDto.cancelReason || '-'}</span>
+                    <span>환불 상세사유</span>
+                    <span>{data.orderDto.cancelDetailReason || '-'}</span>
+                    <span>총 환불 금액</span>
+                    <span>{data.orderDto.paymentPrice}원</span>
+                    <span>환불 수단</span>
+                    <span>{paymentMethodType.KOR[data.orderDto.paymentMethod]}</span>
+                    
+                  </li>
+                </ul>
+              </section>}
           </MypageWrapper>
         </Wrapper>
       </Layout>
@@ -351,11 +374,16 @@ export async function getServerSideProps(ctx) {
         beforeOneMealRecommendGram: data.orderDto.beforeOneMealRecommendGram,
         beforeRecipeName: data.orderDto.beforeRecipeName,
         beforeOrderPrice: data.orderDto.beforeOrderPrice,
+        orderStatus: data.orderDto.orderStatus, // ! 주문상태
+        cancelRequestDate: data.orderDto.cancelRequestDate,
+        cancelConfirmDate: data.orderDto.cancelConfirmDate,
+        cancelReason: data.orderDto.cancelReason,
+        cancelDetailReason: data.orderDto.cancelDetailReason,
         merchantUid: data.orderDto.merchantUid,
         orderType: data.orderDto.orderType,
         orderDate: data.orderDto.orderDate,
         deliveryNumber: data.orderDto.deliveryNumber,
-        deliveryStatus: data.orderDto.deliveryStatus,
+        deliveryStatus: data.orderDto.deliveryStatus, // ! 배송상태
         deliveryPrice: data.orderDto.deliveryPrice,
         discountGrade: data.orderDto.discountGrade || 0, // 등급할인 (0908 신규 추가)
         discountTotal: data.orderDto.discountTotal,
@@ -370,6 +398,7 @@ export async function getServerSideProps(ctx) {
         detailAddress: data.orderDto.detailAddress,
         request: data.orderDto.request,
         // package: data.orderDto.package
+        saveReward: data.orderDto.saveReward || 0, // ! 0915목 : 서버 데이터필요
       },
       // savedRewardTotal:data.savedRewardTotal
     };

@@ -48,9 +48,7 @@ export default function OrderOnSellPage() {
   const [selectedItemList, setSelectedItemList] = useState([]);
   
   useEffect( () => {
-    // 최초 검색
     setSearchBody(initialSearchValues);
-    
   }, [] );
   
   useEffect(() => {
@@ -414,28 +412,28 @@ export default function OrderOnSellPage() {
   const onCancelOrder = async (enteredDetailReason, selectedIdList) => {
     if (!enteredDetailReason) return alert('판매취소사유를 입력해주세요.');
     if(selectedIdList.length <= 0) return alert('판매취소할 상품을 선택해주세요.')
-    if (!confirm(`선택하신 ${selectedIdList.length} 개의 상품을 판매취소 처리하시겠습니까?\n선택된 상품이 포함된 주문은 전체취소처리됩니다.`))
+    if (!confirm(`선택하신 ${selectedIdList.length} 개의 상품을 판매취소 처리하시겠습니까?\n선택된 상품이 포함된 주문은 '전체취소'처리됩니다.`))
       return;
 
-    const seletedOrderItemIdList = itemList
-      .filter((item) => selectedIdList.indexOf(item.id) >= 0)
-      .map((item) => item.orderItemId);
+    // const seletedOrderItemIdList = itemList
+    //   .filter((item) => selectedIdList.indexOf(item.id) >= 0)
+    //   .map((item) => item.orderItemId);
     const itemType = searchValues.orderType;
     const body =
       itemType === productType.GENERAL
         ? {
-            orderItemIdList: seletedOrderItemIdList, // 주문한 "상품의 id" List
+            orderItemIdList: selectedIdList, // 취소 컨펌 처리 할 주문한상품(orderItem) id 리스트
             reason: enteredDetailReason,
             detailReason: enteredDetailReason,
           }
         : itemType === productType.SUBSCRIBE
         ? {
             orderIdList: selectedOrderIdList, // "주문 id" list
-            reason: '판매자 취소',
+            reason: '판매자 판매취소',
             detailReason: enteredDetailReason,
           }
         : null;
-
+    console.log(body);
     
     try {
       setIsLoading((prevState) => ({

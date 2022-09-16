@@ -70,10 +70,11 @@ export const validateInBundleDelivery = (obj) => {
 
 const valid_paymentPrice = (val) =>{
   let error='';
+  const minPaymentPrice = 100; // ! 결제금액이 100원보다 작을 경우 > iamport api 결제 에러 발생함.
   if(typeof val !== 'number') {
     error = '결제금액의 타입은 Number를 사용해야 합니다.'
-  } else if( val < 0 ){
-    error = '결제금액은 0원보다 적을 수 없습니다.'
+  } else if( val < minPaymentPrice ){
+    error = `최소결제금액 ${minPaymentPrice}원보다 적을 수 없습니다.`
   }
   
   return error;

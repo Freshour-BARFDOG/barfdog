@@ -26,7 +26,7 @@ function OrderCompletedPage(props) {
           console.log(cancel);
         }else{
         // 모바일 결제 실패
-        const fail = await postDataSSR(req,`/api/orders/${orderIdx}/subscribe/fail`);
+        const fail = await postObjData(`/api/orders/${orderIdx}/subscribe/fail`);
         console.log(fail);
         } 
         router.push(`/order/orderFailed`);    
