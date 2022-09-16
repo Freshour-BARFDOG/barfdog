@@ -210,19 +210,17 @@ section.content_title {
         }
       }
     }
-
-    //.col_7 {
-    //  color: var(--color-main);
-    //}
-    //.col_8 {
-    //  color: var(--color-font-sub);
-    //}
-    //.col_9 {
-    //  width: 100%;
-    //  display: grid;
-    //  grid-template-columns: 1fr 1.5fr;
-    //}
   }
+}
+
+
+.additional-info-section{
+  .itemNameList {
+    display: flex;
+    flex-direction: column;
+    gap:rem(8);
+  }
+
 }
 
 @media (max-width: rem(900)) {
