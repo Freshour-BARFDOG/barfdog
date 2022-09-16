@@ -26,6 +26,7 @@ const GoodsFlowPrint = async (req, res,) => {
         qs.stringify({
           'OTP':req.body.otp,
           'responseURL':'https://barfdog.vercel.app/api/goodsFlow/postTraceResult',
+          // 'responseURL':'https://8e71-115-90-40-244.jp.ngrok.io/api/goodsFlow/postTraceResult', 
           'id':req.body.id
         }),
         

@@ -49,6 +49,19 @@ export default function OrderOnSellPage() {
   
   useEffect( () => {
     setSearchBody(initialSearchValues);
+    (async ()=>{
+      console.log('시작')
+      try {
+        const res = await getData('http://localhost:4000/api/goodsFlow/postTraceResult');
+        console.log('res:' ,res)
+      } catch (err) {
+          console.error(err)
+      }
+      setIsLoading((prevState) => ({
+        ...prevState,
+        ga: false,
+      }));
+    })();
   }, [] );
   
   useEffect(() => {
@@ -270,6 +283,7 @@ export default function OrderOnSellPage() {
         },
       );
       console.log('=================');
+
       if(printRes.isDone){
       
         console.log(printRes);
@@ -278,8 +292,8 @@ export default function OrderOnSellPage() {
   
         const goodsFlowTraceRes =
         window.location.origin + '/api/goodsFlow/postTraceResult';
-        const r = await postObjData(goodsFlowTraceRes);
-        console.log(r);
+        // const r = await postObjData(goodsFlowTraceRes);
+        // console.log(r);
       }  
       }
 
@@ -403,7 +417,6 @@ export default function OrderOnSellPage() {
       }
 
     
-      
   };
 
   const onStartOrderCancel = () => {
@@ -519,9 +532,9 @@ export default function OrderOnSellPage() {
                 <button className="admin_btn line basic_m" onClick={onStartRegisterDelivery}>
                   주문발송
                 </button>
-                <button className="admin_btn line basic_m" onClick={postDeliveryNo}>
+                {/* <button className="admin_btn line basic_m" onClick={postDeliveryNo}>
                   운송장전송
-                </button>
+                </button> */}
                 <button className="admin_btn line basic_m" onClick={onStartOrderCancel}>
                   {isLoading.orderCancel ? <Spinner /> : '판매취소'}
                 </button>
