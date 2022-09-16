@@ -60,7 +60,7 @@ const ItemList = ({ item, sortableItemRef }) => {
         </button>
       </span>
       <span>
-        <em className={'overflow-x-scroll'}>{DATA.orderItemId}</em>
+        <em className={'overflow-x-scroll'}>{DATA.id}</em>
       </span>
       <span>
         <em className={'overflow-x-scroll'}>
