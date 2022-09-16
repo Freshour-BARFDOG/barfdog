@@ -225,7 +225,7 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
                     </li>
                     <li>
                       <a
-                        href={`http://nexs.cjgls.com/web/service02_01.jsp?slipno=${data?.orderDto.deliveryNumber}`}
+                        href={`https://trace.goodsflow.com/VIEW/V1/whereis/BARFDOG/CJGLS/${data?.orderDto.deliveryNumber}`}
                         target="_blank"
                         rel={'noreferrer'}
                         onClick={onPopupHandler}
