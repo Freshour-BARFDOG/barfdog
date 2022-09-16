@@ -22,6 +22,7 @@ import {Modal_orderConfirm} from "/src/components/modal/Modal_orderConfirm";
 import Tooltip from "/src/components/atoms/Tooltip";
 import popupWindow from '/util/func/popupWindow';
 import { getGoodsFlowOtp, postGoodsFlowOrder } from '../../../api/goodsFlow/service';
+import axios from 'axios';
 
 const initialSearchValues = {
   from: transformToday(),
@@ -278,27 +279,6 @@ export default function OrderOnSellPage() {
         popupWindow(`/bf-admin/sell/delivery/print?data=${printRes.data.data}`); 
   
       }  
-    
-      /// ! ---------------운송장 번호 등록과정 추가필요 -----------------!
-      /// ! ---------------운송장 번호 등록과정 추가필요 -----------------!
-      /// ! ---------------운송장 번호 등록과정 추가필요 -----------------!
-        const registerDeliveryNumberApiUrl = `/api/admin/deliveries/deliveryNumber`;
-        const body = {
-          deliveryNumberDtoList: [
-            {
-              transUniqueCd: ' _____',
-              deliveryNumber: '________',
-            },
-          ],
-        };
-        // TODO:운송장
-        // const r = await postObjData(registerDeliveryNumberApiUrl, body);
-        // console.log('server RESPONSE:\n', r);
-        // if (r.isDone) {
-        //   alert('운송장번호 저장 완료');
-        // } else {
-        //   console.error('운송장번호 저장 실패');
-        // }
       }
 
     } catch (err) {
@@ -308,6 +288,120 @@ export default function OrderOnSellPage() {
       ...prevState,
       confirm: false,
     }));
+  };
+  const postDeliveryNo = async () => {
+    
+    /// ! ---------------운송장 번호 등록과정 추가필요 -----------------!
+      /// ! ---------------운송장 번호 등록과정 추가필요 -----------------!
+      /// ! ---------------운송장 번호 등록과정 추가필요 -----------------!
+      const registerDeliveryNumberApiUrl = `/api/admin/deliveries/deliveryNumber`;
+      // const body = {
+      //   deliveryNumberDtoList: [
+      //     {
+      //       transUniqueCd: ' _____',
+      //       deliveryNumber: '________',
+      //     },
+      //   ],
+      // };
+
+      // TODO:운송장
+      const traceRes = await axios
+      .post(
+        `${window.location.origin}/api/goodsFlow/getTraceResult`, 
+        {},
+        {headers: {
+          'Content-Type': 'application/json',}}
+      )
+      .then((res) => { 
+        console.log(res.data);
+        console.log(
+          '------------------------------------------------------------------ AXIOS > RESPONSE ------------------------------------------------------------------ ',
+          res,
+        );
+
+        return res;
+      })
+      .catch((err) => {
+        console.error('goodsflow traceresult err: ', err);
+
+        return err.response;
+      });
+      console.log('============');
+      console.log(traceRes.data);
+      
+      // 결과보고 조회 성공
+      if(traceRes.data.success){
+       
+      if(traceRes.data.data != ''){
+
+      const items = traceRes.data.data.items;
+
+      //       const items = [ {
+      //         transUniqueCd: "KGbAZJOXEQixMGh",
+      //         uniqueCd: "o0001-001",
+      //         seq: 1,
+      //         partnerCode: "goods0001",
+      //         ordNo: "o0001",
+      //         ordLineNo: 1,
+      //         itemQty: 1,
+      //         deliverCode: "EPOST",
+      //         sheetNo: "608773401921",
+      //         dlvStatCode: "30",
+      //         procDateTime: "20220101120200",
+      //         errorCode: "",
+      //         exceptionCode: ""
+      // }, 
+      // {
+      //   transUniqueCd: "jTRgjwRspCAVCg4",
+        
+      //   uniqueCd: "o0001-001",
+      // seq: 2,
+      // partnerCode: "goods0001",
+      // ordNo: "o0001",
+      // ordLineNo: 1,
+      // itemQty: 1,
+      // deliverCode: "EPOST",
+      // sheetNo: "608773401921",
+      // dlvStatCode: "70",
+      // procDateTime: "20220101120200",
+      // errorCode: "",
+      // exceptionCode: ""
+      // } 
+      // ];
+      console.log(items);
+        const itemFilter = items.map( i => {
+          return { transUniqueCd : i.transUniqueCd , deliveryNumber : i.sheetNo}
+        });
+        
+        const body = {
+          deliveryNumberDtoList: itemFilter
+        };
+        
+        console.log(body);
+        const r = await postObjData(registerDeliveryNumberApiUrl, body);
+        console.log('server RESPONSE:\n', r);
+        if (r.isDone) {
+          alert('운송장번호 저장 완료');
+        } else {
+          console.error('운송장번호 저장 실패');
+        }
+        }else{
+      
+          alert('배송 리스트가 없습니다.\n다시 시도해주세요');
+        
+        }
+
+      }else{
+        const traceErrMsg = traceRes.data.error.message;
+        if(traceErrMsg!=null){
+          alert(traceErrMsg);
+        }
+        alert('다시 시도해주세요');
+      
+      }
+
+    
+      
   };
 
   const onStartOrderCancel = () => {
@@ -422,6 +516,9 @@ export default function OrderOnSellPage() {
                 </button>
                 <button className="admin_btn line basic_m" onClick={onStartRegisterDelivery}>
                   주문발송
+                </button>
+                <button className="admin_btn line basic_m" onClick={postDeliveryNo}>
+                  운송장전송
                 </button>
                 <button className="admin_btn line basic_m" onClick={onStartOrderCancel}>
                   {isLoading.orderCancel ? <Spinner /> : '판매취소'}
