@@ -1,20 +1,22 @@
 export function googleOauth() {
   // Handles the authorization flow.
   // `immediate` should be false when invoked from the button click.
-  const CLIENT_ID = '977291702808-drjsc474igbigifrjsq2kbm0endo7o6p.apps.googleusercontent.com'; // <-- 발급받은 Client ID 입력 (ClientID발급: https://console.cloud.google.com/)
+  // 발급받은 Client ID 입력 (https://console.cloud.google.com/)
+  // const CLIENT_ID = '977291702808-drjsc474igbigifrjsq2kbm0endo7o6p.apps.googleusercontent.com'; // PRODUCT
+  const CLIENT_ID = '271713214565-ldvb7jiv7ckp42u2fvdi9qek1e76l9iu.apps.googleusercontent.com'; // ! TEST account (bm)
 
   // Set authorized scope.
   const SCOPES = ['https://www.googleapis.com/auth/analytics.readonly'];
 
   const authData = {
     client_id: CLIENT_ID,
-    scope: SCOPES,
+    scope: 'email',
     immediate: false,
   };
 
   gapi.auth.authorize(authData, function (response) {
     console.log(response);
-
+  
     if (response.error) {
       alert('로그인 에러가 있습니다.');
     } else {
@@ -25,7 +27,7 @@ export function googleOauth() {
 
 function queryAccounts() {
   // Load the Google Analytics client library.
-  gapi.client.load('analytics', 'v3').then(function () {
+  gapi.client.load('analytics', 'v3').then(function (res) {
     // Get a list of all Google Analytics accounts for this user
     gapi.client.analytics.management.accounts.list().then(handleAccounts);
   });

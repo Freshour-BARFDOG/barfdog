@@ -12,7 +12,6 @@ import transformDate, { transformToday } from '/util/func/transformDate';
 import { orderStatus } from '/store/TYPE/orderStatusTYPE';
 import { googleOauth } from '/src/pages/api/googleAnalytics/googleOAuth';
 
-
 export default function DashboardPage() {
   const initialTerm = {
     from: transformToday(),
@@ -40,8 +39,8 @@ export default function DashboardPage() {
           const data = res.data;
           DATA = {
             statistics: {
-              newOrderCount: data.newOrderCount,
-              newMemberCount: data.newMemberCount,
+              newOrderCount: data.newOrderCount || 0,
+              newMemberCount: data.newMemberCount || 0,
               visitorCount: 0, // ! ------------------- GOOGLE ANALYTICS 연결필요 -------------------
             },
             orderCount: {
@@ -110,21 +109,21 @@ export default function DashboardPage() {
           };
         }
 
+        // ! init Google Analytics
         setIsLoading((prevState) => ({
           ...prevState,
           ga: true,
         }));
-        const visitorCount = 30;
+        const visitorCount = 0;
         DATA = {
           ...DATA,
           statistics: {
-            ...info.statistics,
+            ...DATA.statistics,
             visitorCount: visitorCount,
           },
         };
 
         setInfo(DATA);
-        
       } catch (err) {
         console.error(err);
       }
@@ -146,28 +145,34 @@ export default function DashboardPage() {
       diffDate: diffDate,
     });
   };
-  
-  
-  
+
   useEffect(() => {
     // init google Oauth : GA를 사용하기 위한 Oauth
     const GA_init = document.createElement('script');
     GA_init.src = 'https://apis.google.com/js/api.js';
     GA_init.type = 'text/javascript';
-    
+
     const GA_Oauth = document.createElement('script');
     GA_Oauth.src = 'https://apis.google.com/js/client.js?onload=authorize';
     GA_Oauth.type = 'text/javascript';
-    
+
     document.head.appendChild(GA_init);
     document.head.appendChild(GA_Oauth);
   }, []);
 
+
   const googleLogin = () => {
+    // function start() {
+    //   console.log('실행');
+    //   gapi.client.init({
+    //     clientId: '271713214565-ldvb7jiv7ckp42u2fvdi9qek1e76l9iu.apps.googleusercontent.com',
+    //     scope: 'email',
+    //   });
+    // }
+    // gapi.load('client:auth2', start);
     googleOauth();
-  }
-  
-  
+  };
+
   return (
     <>
       <MetaTitle title="대시보드" admin={true} />
@@ -328,13 +333,10 @@ export default function DashboardPage() {
   );
 }
 
-
-export async function getServerSideProps () {
-  
-  
+export async function getServerSideProps() {
   return {
-    props:{}
-  }
+    props: {},
+  };
 }
 
 // const DUMMY_RESPONSE = {
@@ -409,5 +411,3 @@ export async function getServerSideProps () {
 //
 //
 //
-
-
