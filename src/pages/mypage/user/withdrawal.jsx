@@ -8,16 +8,17 @@ import { useRouter } from 'next/router';
 import filter_emptyValue from '/util/func/filter_emptyValue';
 import useDeviceState from '/util/hook/useDeviceState';
 import { valid_isEmpty } from '/util/func/validation/validationPackage';
-import {deleteData, getDataSSR} from '/src/pages/api/reqData';
+import {deleteData, deleteObjData, getDataSSR} from '/src/pages/api/reqData';
 import Spinner from '/src/components/atoms/Spinner';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import enterKey from '/util/func/enterKey';
 import { authAction } from '/store/auth-slice';
-import { useDispatch } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 export default function WithDrawalPage() {
   const mct = useModalContext();
   const router = useRouter();
+  const auth = useSelector((s) => s.auth);
   const dispatch = useDispatch();
   const deviceState = useDeviceState();
   const isMobile = deviceState.isMobile;
@@ -50,8 +51,8 @@ export default function WithDrawalPage() {
         submit: true,
       }));
 
-      const url = process.env.NEXT_PUBLIC_API_URL_DEV + '/api/members';
-      const res = await deleteData(url, {
+      const url = '/api/members';
+      const res = await deleteObjData(url, {
         data: { password: pw },
       });
       console.log(res);
@@ -103,7 +104,6 @@ export default function WithDrawalPage() {
 
             <label id="hi" className={s.labe_box}>
               <div className={s.label_text}>비밀번호 확인</div>
-
               <input
                 className={s.input_box}
                 type="password"

@@ -263,6 +263,7 @@ export default function SingleItem_OrderHistoryPage({ data }) {
                     </li>
                   ))}
                 </ul>
+                <div className={`${s.info_autoConfirmation} ${s.general}`}>일반상품은 배송완료 7일 후, 자동으로 구매확정됩니다.</div>
               </section>
             </section>
 
@@ -285,6 +286,7 @@ export default function SingleItem_OrderHistoryPage({ data }) {
                   </span>
                 </div>
               </div>
+
             </section>
 
             <section className={s.body}>

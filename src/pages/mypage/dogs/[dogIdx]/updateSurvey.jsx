@@ -233,7 +233,7 @@ export default function UpdateSurveyPage({ data }) {
           theme={'userPage'}
           isConfirm={onSubmit}
           positionCenter
-          text={'반려견 정보를 수정하시겠습니까?'}
+          text={'반려견 정보를 수정하시겠습니까?\n정기구독 중인 결제금액이 변동될 수 있습니다.'}
         />
       )}
       <Modal_global_alert message={modalMessage} onClick={onHideModal} background />

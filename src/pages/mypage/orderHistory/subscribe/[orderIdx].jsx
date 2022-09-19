@@ -120,8 +120,8 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
                   : '* 구독 정보 변경으로 주문 변경 내용이 있습니다. '}
               </span>
 
-              <div className={s.body_content}>
-                <div className={s.left_box}>
+              <ul className={s.body_content}>
+                <li className={s.left_box}>
                   <figure className={`${s.image} img-wrap`}>
                     {data?.recipeDto.thumbnailUrl && (
                       <Image
@@ -133,9 +133,9 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
                       />
                     )}
                   </figure>
-                </div>
+                </li>
 
-                <div className={s.right_box}>
+                <li className={s.right_box}>
                   {/* 2가지로 나눔 */}
                   <div className={s.grid_box}>
                     <span>구독정보</span>
@@ -190,8 +190,9 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
                       <span>{transformLocalCurrency(data?.orderDto.orderPrice)}원</span>
                     </div>
                   </div>
-                </div>
-              </div>
+                  <div className={s.info_autoConfirmation}>구독상품은 배송완료 후, 자동으로 구매확정됩니다.</div>
+                </li>
+              </ul>
             </section>
 
             {/* 주문상품 결제정보 배송정보 */}
@@ -201,7 +202,9 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
               <div className={s.body_content_2}>
                 <div className={s.grid_box}>
                   <span>주문상태</span>
-                  <span>{orderStatus.KOR[currentOrderStatus]}</span>
+                  <span>
+                    {orderStatus.KOR[currentOrderStatus]}
+                  </span>
                   <span>주문번호</span>
                   <span>{data?.orderDto.merchantUid}</span>
                   <span>주문(결제)일시</span>
