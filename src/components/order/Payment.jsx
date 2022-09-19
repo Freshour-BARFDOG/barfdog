@@ -21,7 +21,6 @@ export function Payment({
   const router = useRouter();
 
   useEffect(() => {
-
     const jquery = document.createElement('script');
     jquery.src = 'https://code.jquery.com/jquery-1.12.4.min.js';
 
@@ -138,7 +137,7 @@ export function Payment({
       }));
 
       // send DATA to api server after successful payment
-      const apiUrl = orderType === 'general' ? `/api/orders/general` : `/api/orders/subscribe/${router.query.subscribeId}`
+      const apiUrl = orderType === 'general' ? `/api/orders/general` : `/api/orders/subscribe/${router.query.subscribeId}`;
       const res = await postObjData(apiUrl, body);
       // console.log(res);
       
@@ -181,14 +180,18 @@ export function Payment({
     /* 1. 가맹점 식별하기 */
     const IMP = window.IMP;
     IMP.init(process.env.NEXT_PUBLIC_IAMPORT_CODE);
+    // 주문명
+    const itemList = form.orderItemDtoList;
+    const paymentName = `${itemList[0].name} ${itemList.length > 1 ? `외 ${itemList.length-1}개` : ''}`;
 
     /* 2. 결제 데이터 정의하기  1원 결제 -> 실패 , 100원 결제 -> 성공 */
+    // TODO: name(주문명) test 지우기
     const data = {
       pg: 'kcp', // PG사
       pay_method: 'card', // 결제수단
       merchant_uid: merchantUid, // 주문번호
       amount: body.paymentPrice, // 결제금액
-      name: '바프독 아임포트 결제 테스트', // 주문명
+      name: `Test ${paymentName}`, // 주문명
       buyer_name:  info.name, // 구매자 이름
       buyer_tel: info.phone, // 구매자 전화번호
       buyer_email: info.email, // 구매자 이메일
