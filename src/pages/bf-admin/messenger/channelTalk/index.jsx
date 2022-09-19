@@ -131,7 +131,7 @@ export default function ChannelTalkPage() {
                 pageInterceptor={pageInterceptor}
                 setItemList={setItemList}
                 setIsLoading={setIsLoading}
-                option={{ apiMethod: 'POST', body: searchBody }}
+                option={{ apiMethod: 'GET', body: searchBody }}
               />
             </div>
           </section>
