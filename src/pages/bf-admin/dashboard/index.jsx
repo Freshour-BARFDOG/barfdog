@@ -11,6 +11,9 @@ import { getData } from '/src/pages/api/reqData';
 import transformDate, { transformToday } from '/util/func/transformDate';
 import { orderStatus } from '/store/TYPE/orderStatusTYPE';
 import { googleOauth } from '/src/pages/api/googleAnalytics/googleOAuth';
+import axios from "axios";
+
+
 
 export default function DashboardPage() {
   const initialTerm = {
@@ -18,11 +21,11 @@ export default function DashboardPage() {
     to: transformToday(),
     diffDate: 1, // 통계 검색 기간: 1, 7, 30 , 365일
   };
-
+  
   const [term, setTerm] = useState(initialTerm);
   const [isLoading, setIsLoading] = useState(false);
   const [info, setInfo] = useState({});
-
+  
   useEffect(() => {
     // 기간에 따른 통계 update
     (async () => {
@@ -109,7 +112,9 @@ export default function DashboardPage() {
           };
         }
 
-        // ! init Google Analytics
+  
+  
+  
         setIsLoading((prevState) => ({
           ...prevState,
           ga: true,
@@ -124,6 +129,17 @@ export default function DashboardPage() {
         };
 
         setInfo(DATA);
+  
+  
+        // ! ------------------------------------------------------------------------------------------------
+        // ! init Google Analytics
+  
+  
+        await GA_analyticsAuth();
+  
+  
+        // ! ------------------------------------------------------------------------------------------------
+        // ! init Google Analytics
       } catch (err) {
         console.error(err);
       }
@@ -147,40 +163,109 @@ export default function DashboardPage() {
   };
 
   useEffect(() => {
+    // ! GA: Analytics > Reporting > Reporting API v4 > Reporting API v4
     // init google Oauth : GA를 사용하기 위한 Oauth
-    const GA_init = document.createElement('script');
-    GA_init.src = 'https://apis.google.com/js/api.js';
-    GA_init.type = 'text/javascript';
+    // const GA_init = document.createElement('script');
+    // GA_init.src = 'https://apis.google.com/js/api.js';
+    // GA_init.type = 'text/javascript';
+    //
+    // const GA_Oauth = document.createElement('script');
+    // GA_Oauth.src = 'https://apis.google.com/js/client.js?onload=authorize';
+    // GA_Oauth.type = 'text/javascript';
+    //
+    // document.head.appendChild(GA_init);
+    // document.head.appendChild(GA_Oauth);
+ 
+    //
+    // (async ()=>{
+    //   try {
+    //     const res = await axios({
+    //       method: 'GET',
+    //       url: 'https://www.googleapis.com/analytics/v3/data/ga?access_token=ya29.a0Aa4xrXOXHKivaWkRIMFAM7_X54p5jdRZhiq3-CGLeWIXOThwTsDdf2pZ8wQampD_OpsACLEFHuPUh6c4F5eX5-32GmVGsxrC-bDcz9QiIA3oti1QZaIt0idowOhdsnEbIZh0eCjQf0JoL-D1IK2Uu_5S33YdEgaCgYKATASARESFQEjDvL9iIhdt6p4yPYDV609wlnXsw0165&ids=ga%3A268912152&metrics=ga%3Ausers&start-date=111daysAgo&end-date=yesterday',
+    //     })
+    //     console.log(res);
+    //   } catch (err) {
+    //       console.error(err)
+    //   }
+    // })();
+  
+   
+    
+  }, [isLoading.fetching]);
 
-    const GA_Oauth = document.createElement('script');
-    GA_Oauth.src = 'https://apis.google.com/js/client.js?onload=authorize';
-    GA_Oauth.type = 'text/javascript';
-
-    document.head.appendChild(GA_init);
-    document.head.appendChild(GA_Oauth);
-  }, []);
-
-
+  const GA_analyticsAuth = async ()=>{
+    // ! Oauth 실행하기 ==>
+    gapi.analytics.auth.authorize({
+      container: 'auth-button',
+      clientid: '614732998882-qdvb0g5nuptdpd2c5nftfh4v4ac2mnp9.apps.googleusercontent.com',
+    });
+    
+  }
+  
+  function queryReports() {
+    const VIEW_ID = '268912152'; // ! TEST => 바프독 viewId로 변경하기
+    console.log('queryReports 실행')
+    gapi.client.request({
+      path: '/v4/reports:batchGet',
+      root: 'https://analyticsreporting.googleapis.com/',
+      method: 'POST',
+      body: {
+        reportRequests: [
+          {
+            viewId: VIEW_ID,
+            dateRanges: [
+              {
+                startDate: '7daysAgo',
+                endDate: 'today'
+              }
+            ],
+            metrics: [
+              {
+                name: "activeUsers",
+                expression: 'ga:sessions'
+              }
+            ]
+          }
+        ]
+      }
+    }).then(displayResults, console.error.bind(console));
+  }
+  
+  function displayResults(response) {
+    console.log(response)
+    const formattedJson = JSON.stringify(response.result, null, 2);
+    console.log('formattedJson: ',formattedJson)
+    document.getElementById('query-output').value = formattedJson;
+  }
+  
   const googleLogin = () => {
-    // function start() {
-    //   console.log('실행');
-    //   gapi.client.init({
-    //     clientId: '271713214565-ldvb7jiv7ckp42u2fvdi9qek1e76l9iu.apps.googleusercontent.com',
-    //     scope: 'email',
-    //   });
-    // }
-    // gapi.load('client:auth2', start);
     googleOauth();
   };
 
   return (
     <>
+      
+      <meta name="google-signin-client_id" content="614732998882-qdvb0g5nuptdpd2c5nftfh4v4ac2mnp9.apps.googleusercontent.com"/>
+      <meta name="google-signin-scope" content="https://www.googleapis.com/auth/analytics.readonly"/>
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+            (function(w,d,s,g,js,fjs){
+              g=w.gapi||(w.gapi={});g.analytics={q:[],ready:function(cb){this.q.push(cb)}};
+              js=d.createElement(s);fjs=d.getElementsByTagName(s)[0];
+              js.src='https://apis.google.com/js/platform.js';
+              fjs.parentNode.insertBefore(js,fjs);js.onload=function(){g.load('analytics')};
+            }(window,document,'script'));
+          `,
+        }}
+      />
       <MetaTitle title="대시보드" admin={true} />
       <AdminLayout>
         <AdminContentWrapper className={s.wrapper}>
           <h1 className={`${s['title']} title_main`}>
             {isLoading.fetching ? <Spinner /> : '대시보드'}
           </h1>
+          
           <section className={`${s['cont-top']} cont`}>
             <div className={s['title-section']}>
               <h2 className={s.title}>
@@ -191,10 +276,10 @@ export default function DashboardPage() {
                   messagePosition={'left'}
                   className={s.tooltip}
                 />
-                <button type={'button'} className={'admin_btn basic_m solid'} onClick={googleLogin}>
-                  구글로그인
-                </button>
               </h2>
+              {/* ! --------TEST-------TEST*/}
+              <p id="auth-button" data-onsuccess="googleLogin"></p>
+              <p className="g-signin2" data-onsuccess="queryReports"></p>
             </div>
             <div className={s['cont-section']}>
               <ul className={s.box}>
@@ -333,7 +418,7 @@ export default function DashboardPage() {
   );
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps(ctx) {
   return {
     props: {},
   };
