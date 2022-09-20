@@ -57,15 +57,17 @@ export default function WithDrawalPage() {
       });
       console.log(res);
       if (res.isDone) {
-        mct.alertShow();
         setIsSubmitted(true);
         setAlertModalMessage('회원 탈퇴되었습니다.\n그 동안 바프독을 이용해주셔서 감사합니다.');
         dispatch(authAction.logout());
       } else if (res.status === 400) {
-        mct.alertShow();
-        const errorMessage = `비밀번호가 올바르지 않습니다.`;
-        setAlertModalMessage(errorMessage);
+        
+        const errorArr = res.data.data.errors;
+        const errMessage = errorArr.map(err=>err.defaultMessage).join(', '); // 서버에서 보낸 에러 사유
+        setAlertModalMessage(errMessage);
       }
+  
+      mct.alertShow();
     } catch (err) {
       console.error('통신에러: ', err);
       setAlertModalMessage(`데이터 처리 중 오류가 발생했습니다.\n${err}`);
