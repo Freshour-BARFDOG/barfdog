@@ -1,24 +1,79 @@
-export function googleOauth() {
-  // Handles the authorization flow.
-  // `immediate` should be false when invoked from the button click.
-  // 발급받은 Client ID 입력 (https://console.cloud.google.com/)
-  // const CLIENT_ID = '977291702808-drjsc474igbigifrjsq2kbm0endo7o6p.apps.googleusercontent.com'; // PRODUCT
-  const CLIENT_ID = '271713214565-ldvb7jiv7ckp42u2fvdi9qek1e76l9iu.apps.googleusercontent.com'; // ! TEST account (bm)
+import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
+import React, { useEffect, useState } from 'react';
 
+
+/* OAUTH 사용방법 https://github.com/MomenSherif/react-oauth#authorization-code-flow
+*
+* */
+export default function GoogleLoginButton() {
+  const [isLogin, setIsLogin] = useState(false);
+  
+  
+  const onLogin = (credentialResponse) => {
+    console.log(credentialResponse);
+    const isSuccess = !!credentialResponse.clientId;
+    setIsLogin(isSuccess);
+    if (!isSuccess) {
+      console.error('구글 로그인에 실패하였습니다.');
+    } else {
+      googleOauth();
+    }
+  };
+
+  return (
+    <>
+      <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLINET_ID}>
+        {!isLogin && (
+          <GoogleLogin
+            buttonText="구글로그인"
+            onSuccess={onLogin}
+            onError={() => {
+              console.log('Login Failed');
+            }}
+            cookiePolicy={'single_host_origin'}
+          />
+        )}
+      </GoogleOAuthProvider>
+      {/*<button type={'button'} className="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></button>*/}
+      {/*<div id="g_id_onload"*/}
+      {/*     data-client_id={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}*/}
+      {/*     data-callback="handleCredentialResponse">*/}
+      {/*</div>*/}
+      {/*<button type={'button'} className="g-signin2" data-onsuccess="onSignIn"></button>*/}
+      {/*<div className="g_id_signin" data-type="standard"></div>*/}
+      <div
+        id="g_id_onload"
+        data-client_id={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}
+        data-callback="handleCredentialResponse"
+      ></div>
+      <button
+        type={'button'}
+        className="g_id_signin"
+        data-type="standard"
+        data-size="large"
+        data-theme="outline"
+        data-text="sign_in_with"
+        data-shape="rectangular"
+      ></button>
+    </>
+  );
+}
+
+function googleOauth() {
+  // Handles the authorization flow.
   // Set authorized scope.
   const SCOPES = ['https://www.googleapis.com/auth/analytics.readonly'];
-
   const authData = {
-    client_id: CLIENT_ID,
-    scope: 'email',
-    immediate: false,
+    client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+    scope: SCOPES,
+    immediate: true,
   };
 
   gapi.auth.authorize(authData, function (response) {
     console.log(response);
-  
+
     if (response.error) {
-      alert('로그인 에러가 있습니다.');
+      console.error('로그인 에러가 있습니다.');
     } else {
       queryAccounts();
     }
@@ -27,8 +82,9 @@ export function googleOauth() {
 
 function queryAccounts() {
   // Load the Google Analytics client library.
-  gapi.client.load('analytics', 'v3').then(function (res) {
+  gapi.client.load('analytics', 'v3').then(() => {
     // Get a list of all Google Analytics accounts for this user
+    console.log(gapi.client.analytics.management.accounts.list());
     gapi.client.analytics.management.accounts.list().then(handleAccounts);
   });
 }
