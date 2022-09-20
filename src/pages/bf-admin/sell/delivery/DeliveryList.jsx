@@ -18,7 +18,7 @@ export default function SearchResultList({ items }) {
 }
 
 const ItemList = ({ item, sortableItemRef }) => {
-  // console.log(item);
+  console.log(item);
   const DATA = {
     id: item.id, // 주문 id => ! 주문 id로 주문정보를 조회가능
     orderItemId: item.orderItemId, // 주문한 상품의 id
@@ -26,7 +26,7 @@ const ItemList = ({ item, sortableItemRef }) => {
     orderDate: transformDate(item.orderDate, 'time', { seperator: '/' }),
     orderType: item.orderType,
     deliveryNumber: item.deliveryNumber,
-    deliveryStatus: item.deliveryStatus || '__데이터 없음__', // ! 배송상태 추가 필요
+    deliveryStatus: orderStatus.KOR[item.orderStatus] || '-',
     buyerId: item.memberEmail,
     buyerName: item.memberName,
     buyerPhone: transformPhoneNumber(item.memberPhoneNumber),
@@ -64,7 +64,8 @@ const ItemList = ({ item, sortableItemRef }) => {
       </span>
       <span>
         <em className={'overflow-x-scroll'}>
-          {DATA.orderStatus} {DATA.orderDate}
+          <p>{DATA.orderStatus}</p>
+          <p>{DATA.orderDate}</p>
         </em>
       </span>
       <span>{DATA.deliveryStatus}</span>
