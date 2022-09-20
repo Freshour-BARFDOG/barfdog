@@ -35,7 +35,6 @@ export default function GoogleLoginPage (props) {
     // document.head.appendChild(GA_init);
     // document.head.appendChild(GA_Oauth);
     
-    
   }, [authorize, authorizeCalled, error, ready]);
   
   

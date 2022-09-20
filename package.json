@@ -12,6 +12,7 @@
   "dependencies": {
     "@nivo/core": "^0.79.0",
     "@nivo/line": "^0.79.1",
+    "@react-oauth/google": "^0.2.8",
     "@reduxjs/toolkit": "^1.8.1",
     "axios": "^0.26.1",
     "express": "^4.17.3",
@@ -25,6 +26,7 @@
     "react-icons": "^4.3.1",
     "react-quill": "^1.3.5",
     "react-redux": "^8.0.1",
+    "react-use-analytics-api": "^1.4.17",
     "styled-components": "^5.3.5",
     "swiper": "^8.1.1"
   },
