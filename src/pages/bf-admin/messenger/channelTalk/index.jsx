@@ -9,6 +9,7 @@ import ChannelTalkMemberList from './ChannelTalkMemberList';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import Spinner from '/src/components/atoms/Spinner';
 import enterKey from "/util/func/enterKey";
+import Tooltip from "../../../../components/atoms/Tooltip";
 
 export default function ChannelTalkPage() {
   
@@ -94,12 +95,9 @@ export default function ChannelTalkPage() {
           </section>
           <section className="cont">
             <div className="cont_header clearfix">
-              <p className="cont_title cont-left">상담 고객 목록</p>
-              <div className="controls cont-left">
-                <button className="admin_btn line basic_m autoWidth">
-                  목록새로고침
-                </button>
-              </div>
+              <h3 className="cont_title cont-left">상담 고객 목록
+                <Tooltip message={'비회원 시 입력한 "이메일, 연락처"가 회원가입 후 하나라도 일치할 경우, 회원매칭됩니다.'} messagePosition={'left'} />
+              </h3>
             </div>
             <div className={`${s.cont_viewer}`}>
               <div className={s.table}>
