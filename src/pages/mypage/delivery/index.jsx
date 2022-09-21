@@ -179,10 +179,9 @@ export default function DeliverInfoPage() {
                           </div>
 
                           <div className={s.col_5}>
-                            {/* TODO 운송장번호 연결 */}
-
+                            {/* 운송장번호 연결 */}
                             <a
-                              href="http://nexs.cjgls.com/web/service02_01.jsp?slipno"
+                              href={`https://trace.goodsflow.com/VIEW/V1/whereis/BARFDOG/CJGLS/${item.deliveryDto.deliveryNumber}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               onClick={onPopupHandler}
@@ -250,7 +249,7 @@ export default function DeliverInfoPage() {
                           <div className={`${s.col_5} ${s['btn-section']}`}>
                             {/* TODO 운송장번호 연결 */}
                             <a
-                              href="http://nexs.cjgls.com/web/service02_01.jsp?slipno"
+                              href={`https://trace.goodsflow.com/VIEW/V1/whereis/BARFDOG/CJGLS/${item.orderDeliveryDto.deliveryNumber}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               onClick={onPopupHandler}
