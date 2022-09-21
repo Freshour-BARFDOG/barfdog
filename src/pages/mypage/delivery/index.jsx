@@ -45,52 +45,61 @@ export default function DeliverInfoPage() {
   
 
   const pageInterCeptor = async (res) => {
-    // console.log(res);
-    // res = activeMenu === 'left' ? DUMMY_SUBSCRIBE_DELVIERY_RESPONSE : DUMMY_GENERAL_DELVIERY_RESPONSE; // ! TEST
-    const pageData = res.data.page;
-    const newItemList =
-      res.data?._embedded[
-        activeMenu === 'left' ? 'querySubscribeDeliveriesDtoList' : 'queryGeneralDeliveriesDtoList'
-      ] || [];
-
-    const subscribeItemList =
-      activeMenu === 'left' &&
-      newItemList.map((item) => ({
-        recipeName: item.recipeName,
-        deliveryDto: {
-          orderId: item.deliveryDto.orderId,
-          orderInfoUrl: item.deliveryDto.orderInfoUrl,
-          orderDate: item.deliveryDto.orderDate,
-          subscribeCount: item.deliveryDto.subscribeCount,
-          dogName: item.deliveryDto.dogName,
-          produceDate: item.deliveryDto.produceDate,
-          nextDeliveryDate: item.deliveryDto.nextDeliveryDate,
-          deliveryStatus: item.deliveryDto.deliveryStatus,
-          deliveryNumber: item.deliveryDto.deliveryNumber,
-        },
-      }));
-    const generalItemList =
-      activeMenu === 'right' &&
-      newItemList.map((item) => ({
-        orderDeliveryDto: {
-          orderId: item.orderDeliveryDto.orderId,
-          orderInfoUrl: item.orderDeliveryDto.orderInfoUrl,
-          orderDate: item.orderDeliveryDto.orderDate, //
-          deliveryStatus: item.orderDeliveryDto.deliveryStatus, ///
-          deliveryNumber: item.orderDeliveryDto.deliveryNumber,
-        },
-        itemNameList: item.itemNameList,
-      }));
-
-    let newPageInfo = {
-      totalPages: pageData.totalPages,
-      size: pageData.size,
-      totalItems: pageData.totalElements,
-      currentPageIndex: pageData.number,
-      newPageNumber: pageData.number + 1,
-      newItemList: activeMenu === 'left' ? subscribeItemList : generalItemList,
-    };
     setItemType(activeMenu === 'left' ? productType.SUBSCRIBE : productType.GENERAL);
+    console.log(res);
+    // res = activeMenu === 'left' ? DUMMY_SUBSCRIBE_DELVIERY_RESPONSE : DUMMY_GENERAL_DELVIERY_RESPONSE; // ! TEST
+    let newPageInfo = {
+      totalPages:0,
+      size: 0,
+      totalItems: 0,
+      currentPageIndex: null,
+      newPageNumber: null,
+      newItemList: [],
+    };
+    if(res?.data){
+      const pageData = res.data.page;
+      const newItemList =
+        res.data?._embedded[
+          activeMenu === 'left' ? 'querySubscribeDeliveriesDtoList' : 'queryGeneralDeliveriesDtoList'
+          ] || [];
+  
+      const subscribeItemList =
+        activeMenu === 'left' &&
+        newItemList.map((item) => ({
+          recipeName: item.recipeName,
+          deliveryDto: {
+            orderId: item.deliveryDto.orderId,
+            orderInfoUrl: item.deliveryDto.orderInfoUrl,
+            orderDate: item.deliveryDto.orderDate,
+            subscribeCount: item.deliveryDto.subscribeCount,
+            dogName: item.deliveryDto.dogName,
+            produceDate: item.deliveryDto.produceDate,
+            nextDeliveryDate: item.deliveryDto.nextDeliveryDate,
+            deliveryStatus: item.deliveryDto.deliveryStatus,
+            deliveryNumber: item.deliveryDto.deliveryNumber,
+          },
+        }));
+      const generalItemList =
+        activeMenu === 'right' &&
+        newItemList.map((item) => ({
+          orderDeliveryDto: {
+            orderId: item.orderDeliveryDto.orderId,
+            orderInfoUrl: item.orderDeliveryDto.orderInfoUrl,
+            orderDate: item.orderDeliveryDto.orderDate, //
+            deliveryStatus: item.orderDeliveryDto.deliveryStatus, ///
+            deliveryNumber: item.orderDeliveryDto.deliveryNumber,
+          },
+          itemNameList: item.itemNameList,
+        }));
+      newPageInfo = {
+        totalPages: pageData.totalPages,
+        size: pageData.size,
+        totalItems: pageData.totalElements,
+        currentPageIndex: pageData.number,
+        newPageNumber: pageData.number + 1,
+        newItemList: activeMenu === 'left' ? subscribeItemList : generalItemList,
+      };
+    }
     return newPageInfo;
   };
 
@@ -105,7 +114,7 @@ export default function DeliverInfoPage() {
     popupWindow(href, { width: 540, height: 480, left: 200, top: 100 });
   };
 
-  console.log(activeMenu,itemList);
+  // console.log('activeMenu:',activeMenu, 'itemType: ', itemType,'itemList: ',itemList);
 
   return (
     <>
@@ -122,7 +131,7 @@ export default function DeliverInfoPage() {
             <TabContentContainer>
               <LeftContainer activeMenu={activeMenu}>
                 {isLoading.fetching ? (
-                  <EmptyContMessage> <Spinner/></EmptyContMessage>
+                  <EmptyContMessage><Spinner/></EmptyContMessage>
                 ) : itemType === productType.SUBSCRIBE && itemList.length === 0 ? (
                   <EmptyContMessage message={'배송 중인 정기구독 상품이 없습니다.'} />
                 ) : (
@@ -201,7 +210,6 @@ export default function DeliverInfoPage() {
               <RightContainer activeMenu={activeMenu}>
                 {isLoading.fetching ? (
                   <EmptyContMessage> <Spinner/></EmptyContMessage>
-                 
                 ) : itemType === productType.GENERAL && itemList.length === 0 ? (
                   <EmptyContMessage message={'배송 중인 일반 상품이 없습니다.'} />
                 ) : (
