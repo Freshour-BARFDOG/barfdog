@@ -4,23 +4,31 @@ import transformDate from '/util/func/transformDate';
 import { orderStatus } from '/store/TYPE/orderStatusTYPE';
 import { transformPhoneNumber } from '/util/func/transformPhoneNumber';
 import popupWindow from '/util/func/popupWindow';
+import PureCheckbox from '/src/components/atoms/PureCheckbox';
 
-export default function SearchResultList({ items }) {
+export default function SearchResultList({ items, selectedIdList, onSelectedItem }) {
   if (!items || !items.length) return;
 
   return (
     <ul className="table_body">
       {items.map((item, i) => (
-        <ItemList key={`item-${item.id}-${i}`} index={i} item={item} />
+        <ItemList
+          key={`item-${item.id}-${i}`}
+          index={i}
+          item={item}
+          selectedIdList={selectedIdList}
+          onSelectedItem={onSelectedItem}
+        />
       ))}
     </ul>
   );
 }
 
-const ItemList = ({ item, sortableItemRef }) => {
-  console.log(item);
+const ItemList = ({ item, sortableItemRef, selectedIdList, onSelectedItem }) => {
+  // console.log(item);
   const DATA = {
     id: item.id, // 주문 id => ! 주문 id로 주문정보를 조회가능
+    merchantUid: item.merchantUid, // 상품 주문 번호
     orderItemId: item.orderItemId, // 주문한 상품의 id
     orderStatus: orderStatus.KOR[item.orderStatus],
     orderDate: transformDate(item.orderDate, 'time', { seperator: '/' }),
@@ -51,6 +59,13 @@ const ItemList = ({ item, sortableItemRef }) => {
   return (
     <li className={s.item} key={`item-${DATA.id}`} ref={sortableItemRef} data-idx={DATA.id}>
       <span>
+        <PureCheckbox
+          id={item.id}
+          onClick={onSelectedItem}
+          value={selectedIdList.indexOf(item.id) >= 0 || ''}
+        />
+      </span>
+      <span>
         <button
           className="admin_btn basic_s solid"
           data-order-id={DATA.id}
@@ -60,7 +75,7 @@ const ItemList = ({ item, sortableItemRef }) => {
         </button>
       </span>
       <span>
-        <em className={'overflow-x-scroll'}>{DATA.id}</em>
+        <em className={'overflow-x-scroll'}>{DATA.merchantUid}</em>
       </span>
       <span>
         <em className={'overflow-x-scroll'}>
@@ -82,10 +97,16 @@ const ItemList = ({ item, sortableItemRef }) => {
       </span>
       <span>{DATA.buyerId}</span>
       <span>
-        {DATA.buyerName} {DATA.buyerPhone}
+        <em className={'overflow-x-scroll'}>
+          <p>{DATA.buyerName}</p>
+          <p>{DATA.buyerPhone}</p>
+        </em>
       </span>
       <span>
-        {DATA.recipientName} {DATA.recipientPhoneNumber}
+        <em className={'overflow-x-scroll'}>
+          <p>{DATA.recipientName}</p>
+          <p>{DATA.recipientPhoneNumber}</p>
+        </em>
       </span>
       <span>{DATA.bundleStatus}</span>
     </li>

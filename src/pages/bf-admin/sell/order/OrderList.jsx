@@ -33,7 +33,7 @@ const Item = ({ item, sortableItemRef, selectedIdList, onSelectedItem }) => {
   const DATA = {
     id: item.id, // 주문 id => ! 주문 id로 주문정보를 조회가능
     orderItemId: item.orderItemId, // 주문한 상품의 id
-    // merchantUid: item.merchantUid, // 상품 주문 번호 // ! 개별 상품 취소 기능 삭제로 인하여, 해당 column 미노출
+    merchantUid: item.merchantUid, // 상품 주문 번호
     orderStatus: orderStatus.KOR[item.orderStatus],
     orderDate: transformDate(item.orderDate, 'time', { seperator: '/' }),
     orderType: item.orderType,
@@ -76,7 +76,7 @@ const Item = ({ item, sortableItemRef, selectedIdList, onSelectedItem }) => {
         </button>
       </span>
       <span>
-        <em className={'overflow-x-scroll'}>{DATA.id}</em>
+        <em className={'overflow-x-scroll'}>{DATA.merchantUid}</em>
       </span>
       {/*<span>*/}
       {/*  <em className={'overflow-x-scroll'}>{DATA.orderItemId}</em>*/}

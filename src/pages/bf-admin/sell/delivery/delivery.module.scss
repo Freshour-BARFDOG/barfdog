@@ -5,8 +5,9 @@
     .table_header,
     .item {
       grid-template-columns:
+        rem(60)
         rem(95)
-        rem(100)
+        rem(240)
         rem(240)
         rem(120)
         rem(180)
