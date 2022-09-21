@@ -10,9 +10,13 @@ import Spinner from '/src/components/atoms/Spinner';
 import { getData } from '/src/pages/api/reqData';
 import transformDate, { transformToday } from '/util/func/transformDate';
 import { orderStatus } from '/store/TYPE/orderStatusTYPE';
+import {url} from "inspector";
+import {google} from "googleapis";
+import { useGoogleAnalytics } from '../../api/googleAnalytics/useGAData';
 
 
 export default function DashboardPage() {
+
   const initialTerm = {
     from: transformToday(),
     to: transformToday(),
@@ -22,7 +26,9 @@ export default function DashboardPage() {
   const [term, setTerm] = useState(initialTerm);
   const [isLoading, setIsLoading] = useState(false);
   const [info, setInfo] = useState({});
+  const gaData = useGoogleAnalytics();
   
+  console.log(gaData);
 
   useEffect(() => {
     // 기간에 따른 통계 update
@@ -316,7 +322,19 @@ export default function DashboardPage() {
   );
 }
 
-export async function getServerSideProps(ctx) {
+export async function getServerSideProps({req, res}) {
+  console.log(req.url);
+
+// Receive the callback from Google's OAuth 2.0 server.
+  if (req.url.startsWith('/oauth2callback')) {
+    // Handle the OAuth 2.0 server response
+    let q = url.parse(req.url, true).query;
+    const oauth2Client = new google.auth.OAuth2(clientId, client_secret, redir_URL);
+    // Get access and refresh tokens (if access_type is offline)
+    let { tokens } = await oauth2Client.getToken(q.code);
+    console.log('tokens: ',tokens)
+    oauth2Client.setCredentials(tokens);
+  }
   return {
     props: {},
   };
