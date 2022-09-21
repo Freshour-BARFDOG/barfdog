@@ -7,6 +7,7 @@ export const orderStatus = {
   PAYMENT_DONE: 'PAYMENT_DONE', // 결제완료
   PRODUCING: 'PRODUCING', // 구독상품 (상품 준비중)
   DELIVERY_READY: 'DELIVERY_READY', // 일반상품 (상품 준비 중)
+  DELIVERY_BEFORE_COLLECTION: 'DELIVERY_BEFORE_COLLECTION', // 운송장출력 후 ~ 집하 전 상태 //0921 어드민 운송장 재출력을 위해 추가
   DELIVERY_START: 'DELIVERY_START', // 배송시작
   DELIVERY_DONE: 'DELIVERY_DONE',
   DELIVERY_CANCEL: 'DELIVERY_CANCEL',
@@ -31,6 +32,7 @@ export const orderStatus = {
     PAYMENT_DONE: '결제 완료',
     PRODUCING: '생산 중', // 구독 상품
     DELIVERY_READY: '배송 준비 중', // 일반상품
+    DELIVERY_BEFORE_COLLECTION: '배송 예정',
     DELIVERY_START: '배송 시작',
     DELIVERY_DONE: '배송 완료',
     DELIVERY_CANCEL: '구독결제 취소',
