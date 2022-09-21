@@ -117,11 +117,12 @@ export default function DeliveryOnSellPage() {
   };
 
   const onReprintInvoice = async () => {
-    
+    // validation:  선택된 항목이 없을 경우
+    if(selectedOrderIdList.length === 0) return;
     // validation: 배송에정이 아닌 상품이 선택된 경우, 실행불가
     const incorrectItem =
       itemList.filter((item) => selectedOrderIdList.indexOf(item.id) >= 0 && item.orderStatus !== orderStatus.DELIVERY_BEFORE_COLLECTION);
-    if (incorrectItem.length > 0) return alert('"배송예정"이 아닌 상품이 존재합니다.');
+    // if (incorrectItem.length > 0) return alert('"배송예정"이 아닌 상품이 존재합니다.');
     if(!confirm(`선택된 ${selectedOrderIdList.length}개의 항목을 재출력하시겠습니까?`)) return;
     
     try {
