@@ -243,7 +243,6 @@ export default function CancelOnSellPage() {
                 <ul className={s.table_header}>
                   <li className={s.table_th}>
                     <PureCheckbox
-                      className={s.inner}
                       eventHandler={onSelectAllItems}
                       value={valid_isTheSameArray(allItemIdList, selectedOrderIdList)}
                     />

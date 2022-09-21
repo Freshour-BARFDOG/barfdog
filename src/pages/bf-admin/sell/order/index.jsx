@@ -18,10 +18,10 @@ import PureCheckbox from '/src/components/atoms/PureCheckbox';
 import Spinner from '/src/components/atoms/Spinner';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import { Modal_orderCancleReason } from '/src/components/modal/Modal_orderCancleReason';
-import {Modal_orderConfirm} from "/src/components/modal/Modal_orderConfirm";
-import Tooltip from "/src/components/atoms/Tooltip";
+import { Modal_orderConfirm } from '/src/components/modal/Modal_orderConfirm';
+import Tooltip from '/src/components/atoms/Tooltip';
 import popupWindow from '/util/func/popupWindow';
-import { getGoodsFlowOtp, postGoodsFlowOrder } from '../../../api/goodsFlow/service';
+import { getGoodsFlowOtp, postGoodsFlowOrder } from '/src/pages/api/goodsFlow/service';
 import axios from 'axios';
 
 const initialSearchValues = {
@@ -46,29 +46,29 @@ export default function OrderOnSellPage() {
   const [activeModal, setActiveModal] = useState({});
   const allItemIdList = itemList.map((item) => item.id); // 주문 id
   const [selectedItemList, setSelectedItemList] = useState([]);
-  
-  useEffect( () => {
+
+  useEffect(() => {
     setSearchBody(initialSearchValues);
-    (async ()=>{
-      console.log('시작')
+    (async () => {
+      console.log('시작');
       try {
         const res = await getData('http://localhost:4000/api/goodsFlow/postTraceResult');
-        console.log('res:' ,res)
+        console.log('res:', res);
       } catch (err) {
-          console.error(err)
+        console.error(err);
       }
       setIsLoading((prevState) => ({
         ...prevState,
         ga: false,
       }));
     })();
-  }, [] );
-  
+  }, []);
+
   useEffect(() => {
-    const selectedList = itemList.filter((data)=>selectedOrderIdList.indexOf(data.id) >= 0);
+    const selectedList = itemList.filter((data) => selectedOrderIdList.indexOf(data.id) >= 0);
     setSelectedItemList(selectedList);
   }, [selectedOrderIdList]);
-  
+
   const searchOption = Object.keys(orderStatus)
     .filter(
       (key) =>
@@ -81,7 +81,6 @@ export default function OrderOnSellPage() {
       id: key,
       label: orderStatus.KOR[key],
     }));
-  
 
   const onResetSearchValues = () => {
     setSearchValues(initialSearchValues);
@@ -132,32 +131,30 @@ export default function OrderOnSellPage() {
     const allItemsIdList = itemList.map((item) => item.id);
     setSelectedOrderIdList(checked ? allItemsIdList : []);
   };
-  
+
   const onStartOrderConfirm = () => {
     if (!selectedOrderIdList.length) {
       return alert('선택된 상품이 없습니다.');
     }
     setActiveModal({ orderConfirm: true });
   };
-  
+
   const onOrderConfirm = async (selectedIdList) => {
     if (!selectedIdList.length) return alert('선택된 상품이 없습니다.');
-    if (!confirm(`선택하신 ${selectedIdList.length}개의 상품을 주문확인 처리하시겠습니까?`))
-      return;
+    if (!confirm(`선택하신 ${selectedIdList.length}개의 상품을 주문확인 처리하시겠습니까?`)) return;
 
     // console.log(selectedIdList)
     const itemType = searchValues.orderType;
     let body;
-    if(itemType === productType.GENERAL){
+    if (itemType === productType.GENERAL) {
       body = {
         orderItemIdList: selectedIdList, // 주문 내에 속한 "상품의 id" List
-      }
-    } else if(itemType === productType.SUBSCRIBE) {
+      };
+    } else if (itemType === productType.SUBSCRIBE) {
       body = {
         orderIdList: selectedIdList, // "주문 id" list
-      }
+      };
     }
-    
 
     try {
       setIsLoading((prevState) => ({
@@ -193,9 +190,9 @@ export default function OrderOnSellPage() {
       return;
 
     let body = {
-      orderIdList: selectedOrderIdList // 일반상품 & 구독상품 모두 '주문 id'로 요청함
-    }
-    
+      orderIdList: selectedOrderIdList, // 일반상품 & 구독상품 모두 '주문 id'로 요청함
+    };
+
     try {
       setIsLoading((prevState) => ({
         ...prevState,
@@ -203,13 +200,13 @@ export default function OrderOnSellPage() {
       }));
       const apiUrl = `/api/admin/deliveries/info`; // 주문 발송 api에 필요한 배송 정보 조회
       const resFromServer = await postObjData(apiUrl, body); // ! PRODUCT CODE
-      console.log('resFromServer: ',resFromServer)
+      console.log('resFromServer: ', resFromServer);
       // const resFromServer = DUMMY_ADMIN_DELIVERY_INFO; // ! TEST CODE
       if (!resFromServer.isDone)
         return alert(`주문발송 처리 중 오류가 발생했습니다.\n${res.error}`);
       const deliveryItemInfoList = resFromServer.data.data._embedded.queryOrderInfoForDeliveryList;
       console.log(deliveryItemInfoList);
-      
+
       // GoodsFlow에 전송하는 배송리스트 (운송장 출력창에 보여지는 리스트)
       const deliveryList = [];
       for (const info of deliveryItemInfoList) {
@@ -240,63 +237,58 @@ export default function OrderOnSellPage() {
           paymentTypeCode: 'SH', // [[지불방법코드]] "SH": 선불, "BH": 착불  // barfdog > 배송비 착불 CASE 없음
         };
         deliveryList.push(bodyForGoodsFlow);
-      
       } //
 
-      if(deliveryList.length > 0){
-      
+      if (deliveryList.length > 0) {
         const goodsflowOrderRegisterApiUrl =
-        window.location.origin + '/api/goodsFlow/orderRegister';
-      // const res = await postObjData(goodsflowOrderRegisterApiUrl, bodyForGoodsFlow);
-      // 주문 등록 후 id값 받아서 운송장 출력창 호출할때 보내야함
-      const res = await postGoodsFlowOrder({
-        data:{
-          items: deliveryList
-        }});
-      // console.log(res);
-      // console.log(res.data);
-  
-      const data = res.data;
-      if (!data.success) {
-        const error = data.error;
-        const errorMessage = error.message;
-        const errorCode = error.status;
-        // console.error(
-        //   `${bodyForGoodsFlow.orderItems
-        //     .map((item) => item.itemName)
-        //     .join(
-        //       ', ',
-        //     )} 상품의 발송처리에 실패하였습니다.\nERROR: ${errorMessage}\nERROR STATUS: ${errorCode}`,
-        // );
-        console.error(`상품의 발송처리에 실패하였습니다.\nERROR: ${errorMessage}\nERROR STATUS: ${errorCode}`);
-      } 
-      // goodsflow otp 발급(운송장 출력창 호출할때마다 발급 받아야함)
-      const otp = await getGoodsFlowOtp();
-      
-      // 운송장 출력창 호출
-      const goodsflowPrintUrl =
-      window.location.origin + '/api/goodsFlow/print';
-      const printRes = await postObjData(goodsflowPrintUrl,
-        {
-          otp:otp,
-          id:res.data.id
-        },
-      );
-      console.log('=================');
+          window.location.origin + '/api/goodsFlow/orderRegister';
+        // const res = await postObjData(goodsflowOrderRegisterApiUrl, bodyForGoodsFlow);
+        // 주문 등록 후 id값 받아서 운송장 출력창 호출할때 보내야함
+        const res = await postGoodsFlowOrder({
+          data: {
+            items: deliveryList,
+          },
+        });
+        // console.log(res);
+        // console.log(res.data);
 
-      if(printRes.isDone){
-      
-        console.log(printRes);
-        console.log(printRes.data.data);
-        popupWindow(`/bf-admin/sell/delivery/print?data=${printRes.data.data}`); 
-  
-        const goodsFlowTraceRes =
-        window.location.origin + '/api/goodsFlow/postTraceResult';
-        // const r = await postObjData(goodsFlowTraceRes);
-        // console.log(r);
-      }  
+        const data = res.data;
+        if (!data.success) {
+          const error = data.error;
+          const errorMessage = error.message;
+          const errorCode = error.status;
+          // console.error(
+          //   `${bodyForGoodsFlow.orderItems
+          //     .map((item) => item.itemName)
+          //     .join(
+          //       ', ',
+          //     )} 상품의 발송처리에 실패하였습니다.\nERROR: ${errorMessage}\nERROR STATUS: ${errorCode}`,
+          // );
+          console.error(
+            `상품의 발송처리에 실패하였습니다.\nERROR: ${errorMessage}\nERROR STATUS: ${errorCode}`,
+          );
+        }
+        // goodsflow otp 발급(운송장 출력창 호출할때마다 발급 받아야함)
+        const otp = await getGoodsFlowOtp();
+
+        // 운송장 출력창 호출
+        const goodsflowPrintUrl = window.location.origin + '/api/goodsFlow/print';
+        const printRes = await postObjData(goodsflowPrintUrl, {
+          otp: otp,
+          id: res.data.id,
+        });
+        console.log('=================');
+
+        if (printRes.isDone) {
+          console.log(printRes);
+          console.log(printRes.data.data);
+          popupWindow(`/bf-admin/sell/delivery/print?data=${printRes.data.data}`);
+
+          const goodsFlowTraceRes = window.location.origin + '/api/goodsFlow/postTraceResult';
+          // const r = await postObjData(goodsFlowTraceRes);
+          // console.log(r);
+        }
       }
-
     } catch (err) {
       console.log('API통신 오류 : ', err);
     }
@@ -306,29 +298,31 @@ export default function OrderOnSellPage() {
     }));
   };
   const postDeliveryNo = async () => {
-    
     /// ! ---------------운송장 번호 등록과정 추가필요 -----------------!
-      /// ! ---------------운송장 번호 등록과정 추가필요 -----------------!
-      /// ! ---------------운송장 번호 등록과정 추가필요 -----------------!
-      const registerDeliveryNumberApiUrl = `/api/admin/deliveries/deliveryNumber`;
-      // const body = {
-      //   deliveryNumberDtoList: [
-      //     {
-      //       transUniqueCd: ' _____',
-      //       deliveryNumber: '________',
-      //     },
-      //   ],
-      // };
+    /// ! ---------------운송장 번호 등록과정 추가필요 -----------------!
+    /// ! ---------------운송장 번호 등록과정 추가필요 -----------------!
+    const registerDeliveryNumberApiUrl = `/api/admin/deliveries/deliveryNumber`;
+    // const body = {
+    //   deliveryNumberDtoList: [
+    //     {
+    //       transUniqueCd: ' _____',
+    //       deliveryNumber: '________',
+    //     },
+    //   ],
+    // };
 
-      // TODO:운송장
-      const traceRes = await axios
+    // TODO:운송장
+    const traceRes = await axios
       .post(
-        `${window.location.origin}/api/goodsFlow/getTraceResult`, 
+        `${window.location.origin}/api/goodsFlow/getTraceResult`,
         {},
-        {headers: {
-          'Content-Type': 'application/json',}}
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
       )
-      .then((res) => { 
+      .then((res) => {
         console.log(res.data);
         console.log(
           '------------------------------------------------------------------ AXIOS > RESPONSE ------------------------------------------------------------------ ',
@@ -342,57 +336,55 @@ export default function OrderOnSellPage() {
 
         return err.response;
       });
-      console.log('============');
-      console.log(traceRes.data);
-      
-      // 결과보고 조회 성공
-      if(traceRes.data.success){
-       
-      if(traceRes.data.data != ''){
+    console.log('============');
+    console.log(traceRes.data);
 
-      const items = traceRes.data.data.items;
+    // 결과보고 조회 성공
+    if (traceRes.data.success) {
+      if (traceRes.data.data != '') {
+        const items = traceRes.data.data.items;
 
-      //       const items = [ {
-      //         transUniqueCd: "KGbAZJOXEQixMGh",
-      //         uniqueCd: "o0001-001",
-      //         seq: 1,
-      //         partnerCode: "goods0001",
-      //         ordNo: "o0001",
-      //         ordLineNo: 1,
-      //         itemQty: 1,
-      //         deliverCode: "EPOST",
-      //         sheetNo: "608773401921",
-      //         dlvStatCode: "30",
-      //         procDateTime: "20220101120200",
-      //         errorCode: "",
-      //         exceptionCode: ""
-      // }, 
-      // {
-      //   transUniqueCd: "jTRgjwRspCAVCg4",
-        
-      //   uniqueCd: "o0001-001",
-      // seq: 2,
-      // partnerCode: "goods0001",
-      // ordNo: "o0001",
-      // ordLineNo: 1,
-      // itemQty: 1,
-      // deliverCode: "EPOST",
-      // sheetNo: "608773401921",
-      // dlvStatCode: "70",
-      // procDateTime: "20220101120200",
-      // errorCode: "",
-      // exceptionCode: ""
-      // } 
-      // ];
-      console.log(items);
-        const itemFilter = items.map( i => {
-          return { transUniqueCd : i.transUniqueCd , deliveryNumber : i.sheetNo}
+        //       const items = [ {
+        //         transUniqueCd: "KGbAZJOXEQixMGh",
+        //         uniqueCd: "o0001-001",
+        //         seq: 1,
+        //         partnerCode: "goods0001",
+        //         ordNo: "o0001",
+        //         ordLineNo: 1,
+        //         itemQty: 1,
+        //         deliverCode: "EPOST",
+        //         sheetNo: "608773401921",
+        //         dlvStatCode: "30",
+        //         procDateTime: "20220101120200",
+        //         errorCode: "",
+        //         exceptionCode: ""
+        // },
+        // {
+        //   transUniqueCd: "jTRgjwRspCAVCg4",
+
+        //   uniqueCd: "o0001-001",
+        // seq: 2,
+        // partnerCode: "goods0001",
+        // ordNo: "o0001",
+        // ordLineNo: 1,
+        // itemQty: 1,
+        // deliverCode: "EPOST",
+        // sheetNo: "608773401921",
+        // dlvStatCode: "70",
+        // procDateTime: "20220101120200",
+        // errorCode: "",
+        // exceptionCode: ""
+        // }
+        // ];
+        console.log(items);
+        const itemFilter = items.map((i) => {
+          return { transUniqueCd: i.transUniqueCd, deliveryNumber: i.sheetNo };
         });
-        
+
         const body = {
-          deliveryNumberDtoList: itemFilter
+          deliveryNumberDtoList: itemFilter,
         };
-        
+
         console.log(body);
         const r = await postObjData(registerDeliveryNumberApiUrl, body);
         console.log('server RESPONSE:\n', r);
@@ -401,22 +393,16 @@ export default function OrderOnSellPage() {
         } else {
           console.error('운송장번호 저장 실패');
         }
-        }else{
-      
-          alert('배송 리스트가 없습니다.\n다시 시도해주세요');
-        
-        }
-
-      }else{
-        const traceErrMsg = traceRes.data.error.message;
-        if(traceErrMsg!=null){
-          alert(traceErrMsg);
-        }
-        alert('다시 시도해주세요');
-      
+      } else {
+        alert('배송 리스트가 없습니다.\n다시 시도해주세요');
       }
-
-    
+    } else {
+      const traceErrMsg = traceRes.data.error.message;
+      if (traceErrMsg != null) {
+        alert(traceErrMsg);
+      }
+      alert('다시 시도해주세요');
+    }
   };
 
   const onStartOrderCancel = () => {
@@ -428,8 +414,12 @@ export default function OrderOnSellPage() {
 
   const onCancelOrder = async (enteredDetailReason, selectedIdList) => {
     if (!enteredDetailReason) return alert('판매취소사유를 입력해주세요.');
-    if(selectedIdList.length <= 0) return alert('판매취소할 상품을 선택해주세요.')
-    if (!confirm(`선택하신 ${selectedIdList.length} 개의 상품을 판매취소 처리하시겠습니까?\n선택된 상품이 포함된 주문은 '전체취소'처리됩니다.`))
+    if (selectedIdList.length <= 0) return alert('판매취소할 상품을 선택해주세요.');
+    if (
+      !confirm(
+        `선택하신 ${selectedIdList.length} 개의 상품을 판매취소 처리하시겠습니까?\n선택된 상품이 포함된 주문은 '전체취소'처리됩니다.`,
+      )
+    )
       return;
 
     // const seletedOrderItemIdList = itemList
@@ -451,7 +441,7 @@ export default function OrderOnSellPage() {
           }
         : null;
     console.log(body);
-    
+
     try {
       setIsLoading((prevState) => ({
         ...prevState,
@@ -524,7 +514,8 @@ export default function OrderOnSellPage() {
           <section className="cont">
             <div className="cont_header clearfix">
               <p className="cont_title cont-left">
-                목록 <Tooltip message={'주문 단위 리스트'}/></p>
+                목록 <Tooltip message={'주문 단위 리스트'} />
+              </p>
               <div className="controls cont-left">
                 <button className="admin_btn line basic_m" onClick={onStartOrderConfirm}>
                   {isLoading.confirm ? <Spinner /> : '주문확인'}
@@ -819,7 +810,6 @@ const DUMMY__ADMIN_ORDER_ITEMS_SUBSCRIBE_RESPONSE = {
     },
   },
 };
-
 
 const DUMMY_ADMIN_DELIVERY_INFO = {
   isDone: true,
