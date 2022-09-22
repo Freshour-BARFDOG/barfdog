@@ -97,7 +97,6 @@ export default function DeliveryOnSellPage() {
         newItemList: curItemList,
       };
     }
-    console.log(newPageInfo.newItemList);
 
     return newPageInfo;
   };
@@ -206,7 +205,6 @@ export default function DeliveryOnSellPage() {
     // STEP 2: 송장 재출력
   };
 
-  console.log(isLoading)
   return (
     <>
       <MetaTitle title="배송 관리" admin={true} />
