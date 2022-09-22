@@ -25,7 +25,7 @@ export default function SearchResultList({ items, selectedIdList, onSelectedItem
 }
 
 const ItemList = ({ item, sortableItemRef, selectedIdList, onSelectedItem }) => {
-  // console.log(item);
+  console.log(item);
   const DATA = {
     id: item.id, // 주문 id => ! 주문 id로 주문정보를 조회가능
     merchantUid: item.merchantUid, // 상품 주문 번호
@@ -34,7 +34,7 @@ const ItemList = ({ item, sortableItemRef, selectedIdList, onSelectedItem }) => 
     orderDate: transformDate(item.orderDate, 'time', { seperator: '/' }),
     orderType: item.orderType,
     deliveryNumber: item.deliveryNumber,
-    deliveryStatus: orderStatus.KOR[item.orderStatus] || '-',
+    deliveryStatus: orderStatus.KOR[item.deliveryStatus] || '-',
     buyerId: item.memberEmail,
     buyerName: item.memberName,
     buyerPhone: transformPhoneNumber(item.memberPhoneNumber),
