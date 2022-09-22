@@ -20,7 +20,6 @@ export const ShopReviewBox = ({ data }) => {
   const [itemList, setItemList] = useState([]);
   const [isLoading, setIsLoading] = useState({});
 
-  // console.log(itemList);
 
   return (
     <section className={s.tab_slide_box2}>
@@ -60,7 +59,7 @@ export const ShopReviewBox = ({ data }) => {
         <ul className="reviewBox">
           {isLoading.fetching && <Spinner />}
           {itemList.length > 0 ? (
-            itemList?.map((data, index) => <ReviewList key={`review-list-${index}`} data={data} />)
+            itemList?.map((data, index) => <ShopSingleItem_ReviewList key={`review-list-${index}`} data={data} />)
           ) : (
             <EmptyContMessage message={'등록된 댓글이 없습니다.'} />
           )}
@@ -80,7 +79,7 @@ export const ShopReviewBox = ({ data }) => {
   );
 };
 
-const ReviewList = ({ data }) => {
+const ShopSingleItem_ReviewList = ({ data }) => {
   const DATA = {
     id: data.reviewDto.id,
     star: data.reviewDto.star,
@@ -89,6 +88,7 @@ const ReviewList = ({ data }) => {
     createdDate: data.reviewDto.createdDate,
     itemImages: data.reviewImageDtoList,
   };
+  
   const [visible, setVisible] = useState(false);
   const boxRef = useRef(null);
   const onClickHandler = (e) => {

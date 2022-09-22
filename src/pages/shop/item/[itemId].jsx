@@ -20,18 +20,7 @@ import { cartAction } from '/store/cart-slice';
 import axios from "axios";
 import {useModalContext} from "/store/modal-context";
 import Modal_global_alert from "/src/components/modal/Modal_global_alert";
-//
-// ! 일반 주문 주문하기
-// const initialValue_BUY = { // 일반 주문 시 , 데이터는 queryDAta에 시
-//   itemId: null,
-//   amount: null,
-//   selectOptionDtoList: [
-//     {
-//       itemOptionId: null,
-//       amount: null,
-//     },
-//   ]
-// };
+
 
 export default function SingleItemDetailPage({data}) {
   const mct = useModalContext();
@@ -264,6 +253,7 @@ export async function getServerSideProps(ctx) {
         return err.response;
       });
     const data = res?.data;
+    console.log(data)
     if (data) {
       DATA = {
         item: {
