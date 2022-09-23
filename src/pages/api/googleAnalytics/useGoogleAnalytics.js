@@ -15,8 +15,6 @@ export function useGoogleAnalytics(token, diffDate = 0) {
   const [authorizeCalled, setAuthorizeCalled] = useState(false);
   
   
-  if(!token) return data; // *important : Token없을 경우 , 실행막음 =>  API 에러 방지
-  
   const authorize = useAuthorize(gapi, {
     serverAuth:{
       access_token: token || '',
@@ -55,7 +53,7 @@ export function useGoogleAnalytics(token, diffDate = 0) {
   
   useEffect(() => {
     // INIT
-    if (ready && !error && !authorizeCalled) {
+    if (token && ready && !error && !authorizeCalled) { // ! important 토큰이 있는 경우에만 실행
       authorize();
       setAuthorizeCalled(true);
       
