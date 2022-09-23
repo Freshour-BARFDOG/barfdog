@@ -33,7 +33,7 @@ const authSlice = createSlice({
     login(state, action) {
       state.isAdmin = false;
       state.isAuth = true;
-      state.userType = true;
+      state.userType = userType.MEMBER;
       const accessToken = action.payload.token;
       const expiredDate = action.payload.expiredDate && cookieType.LOGIN_EXPIRED_PERIOD.VALUE; // 서버 token지속 기본값: 2시간
       const { temporaryPassword, email, name, roleList } = action.payload.data;
@@ -47,10 +47,24 @@ const authSlice = createSlice({
       );
       window.location.href = action.payload.redirect || temporaryPassword ? '/?tempPw=true' : '/';
     },
+    kakaoLogin(state, action) {
+      state.isAdmin = false;
+      state.isAuth = true;
+      state.userType = userType.MEMBER_WITH_SNS.KAKAO;
+      const accessToken = action.payload.token;
+      setCookie(
+        cookieType.LOGIN_COOKIE,
+        accessToken,
+        cookieType.AUTO_LOGIN_EXPIRED_PERIOD.UNIT,
+        { path: '/' },
+      );
+      alert('카카오 로그인')
+      window.location.href =  '/';
+    },
     naverLogin(state, action) {
       state.isAdmin = false;
       state.isAuth = true;
-      state.userType = true;
+      state.userType = userType.MEMBER_WITH_SNS.NAVER;
       const accessToken = action.payload.token;
       
       setCookie(
@@ -59,7 +73,9 @@ const authSlice = createSlice({
         cookieType.AUTO_LOGIN_EXPIRED_PERIOD.UNIT,
         { path: '/' },
       );
+      alert('네이버 로그인');
       window.location.href =  '/';
+      
     },
     autoLogin(state, action) {
       state.isAdmin = false;
