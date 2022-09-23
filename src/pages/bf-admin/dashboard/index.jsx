@@ -10,13 +10,12 @@ import Spinner from '/src/components/atoms/Spinner';
 import { getData } from '/src/pages/api/reqData';
 import transformDate, { transformToday } from '/util/func/transformDate';
 import { orderStatus } from '/store/TYPE/orderStatusTYPE';
-import {url} from "inspector";
-import {google} from "googleapis";
-import { useGoogleAnalytics } from '../../api/googleAnalytics/useGAData';
+import { useGoogleAnalytics } from '/src/pages/api/googleAnalytics/useGoogleAnalytics';
+import { getGoogleAuthUrl } from '../../api/googleAnalytics/getGoogleAuthUrl';
+import { useRouter } from 'next/router';
+import axios from 'axios';
 
-
-export default function DashboardPage() {
-
+export default function DashboardPage({ token }) {
   const initialTerm = {
     from: transformToday(),
     to: transformToday(),
@@ -26,9 +25,23 @@ export default function DashboardPage() {
   const [term, setTerm] = useState(initialTerm);
   const [isLoading, setIsLoading] = useState(false);
   const [info, setInfo] = useState({});
-  const gaData = useGoogleAnalytics();
-  
-  console.log(gaData);
+  const GoogleAnalyticsData = (token && useGoogleAnalytics(token, term.diffDate)) || {
+    totalUsers: 0, // 초기값
+  };
+
+  useEffect(() => {
+    // Google Analytics DATA
+    if (!token) return;
+    setInfo((data) => ({
+      ...data,
+      statistics: {
+        ...data.statistics,
+        visitorCount: GoogleAnalyticsData?.totalUsers || 0,
+      },
+    }));
+
+    // console.log(GoogleAnalyticsData)
+  }, [GoogleAnalyticsData]);
 
   useEffect(() => {
     // 기간에 따른 통계 update
@@ -36,6 +49,7 @@ export default function DashboardPage() {
       setIsLoading((prevState) => ({
         ...prevState,
         fetching: true,
+        ga: true,
       }));
       try {
         const url = `/api/admin/dashBoard?from=${term.from}&to=${term.to}`;
@@ -48,7 +62,7 @@ export default function DashboardPage() {
             statistics: {
               newOrderCount: data.newOrderCount || 0,
               newMemberCount: data.newMemberCount || 0,
-              visitorCount: 0, // ! ------------------- GOOGLE ANALYTICS 연결필요 -------------------
+              visitorCount: GoogleAnalyticsData?.totalUsers || 0,
             },
             orderCount: {
               PAYMENT_DONE:
@@ -116,30 +130,7 @@ export default function DashboardPage() {
           };
         }
 
-        setIsLoading((prevState) => ({
-          ...prevState,
-          ga: true,
-        }));
-        const visitorCount = 0;
-        DATA = {
-          ...DATA,
-          statistics: {
-            ...DATA.statistics,
-            visitorCount: visitorCount,
-          },
-        };
-
         setInfo(DATA);
-
-        // ! ------------------------------------------------------------------------------------------------
-        // ! init Google Analytics
-
-        //
-        // await GA_analyticsAuth();
-        //
-
-        // ! ------------------------------------------------------------------------------------------------
-        // ! init Google Analytics
       } catch (err) {
         console.error(err);
       }
@@ -161,18 +152,61 @@ export default function DashboardPage() {
       diffDate: diffDate,
     });
   };
-  
-  
-  
-  
+
+  const activeGoogleAuth = () => {
+    const searchForActivatingGoogleOauth = '?activeGoogleOauth=true';
+    window.location.search = searchForActivatingGoogleOauth;
+  };
+
+  const deleteGoogleOauthToken = async () => {
+    if(!confirm('구글연동을 해지하시겠습니까?')) return;
+    const origin = window.location.origin;
+    await fetch(origin + '/api/googleAnalytics/deleteToken', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ token: token }),
+    })
+      .then((res) => {
+        console.log(res)
+        alert('구글 연동해제');
+        window.location.search='';
+      })
+      .catch((err) => {
+        if (err) {
+          alert('구글 연동해제에 실패하였습니다.');
+        }
+      });
+  };
+
   return (
     <>
       <MetaTitle title="대시보드" admin={true} />
       <AdminLayout>
         <AdminContentWrapper className={s.wrapper}>
-          <h1 className={`${s['title']} title_main`}>
+          <h1 className={`${s['title']} ${s['main']} title_main`}>
             {isLoading.fetching ? <Spinner /> : '대시보드'}
+            {!token && (
+              <button
+                className={`admin_btn solid basic_m ${s.google}`}
+                type={'button'}
+                onClick={activeGoogleAuth}
+              >
+                GA활성화
+              </button>
+            )}
+            {token && (
+              <button
+                className={`admin_btn line basic_m ${s.google}`}
+                type={'button'}
+                onClick={deleteGoogleOauthToken}
+              >
+                GA 비활성
+              </button>
+            )}
           </h1>
+
           <section className={`${s['cont-top']} cont`}>
             <div className={s['title-section']}>
               <h2 className={s.title}>
@@ -251,7 +285,7 @@ export default function DashboardPage() {
                   { label: '최근 30일', value: 30 },
                   { label: '최근 1년', value: 365 },
                 ]}
-                style={{ width: '90px', minWidth: 'auto' }}
+                style={{ width: '100px', minWidth: 'auto' }}
               />
             </div>
             <div className={s['cont-section']}>
@@ -277,7 +311,7 @@ export default function DashboardPage() {
                   <div>
                     <span>
                       <b>{isLoading.fetching ? <Spinner /> : `${info.statistics?.visitorCount}`}</b>
-                      건
+                      명
                     </span>
                   </div>
                 </li>
@@ -322,21 +356,22 @@ export default function DashboardPage() {
   );
 }
 
-export async function getServerSideProps({req, res}) {
-  console.log(req.url);
+export async function getServerSideProps({ query }) {
+  const token = (query.token !== 'undefined' && query.token) || null;
+  const activeGoogleOauth = query.activeGoogleOauth === 'true';
 
-// Receive the callback from Google's OAuth 2.0 server.
-  if (req.url.startsWith('/oauth2callback')) {
-    // Handle the OAuth 2.0 server response
-    let q = url.parse(req.url, true).query;
-    const oauth2Client = new google.auth.OAuth2(clientId, client_secret, redir_URL);
-    // Get access and refresh tokens (if access_type is offline)
-    let { tokens } = await oauth2Client.getToken(q.code);
-    console.log('tokens: ',tokens)
-    oauth2Client.setCredentials(tokens);
+  if (activeGoogleOauth) {
+    const googleAuthUrl = getGoogleAuthUrl();
+    return {
+      redirect: {
+        destination: googleAuthUrl,
+        permanent: false,
+      },
+    };
   }
+
   return {
-    props: {},
+    props: { token },
   };
 }
 
