@@ -17,7 +17,7 @@ export function useGoogleAnalytics(token, diffDate = 0) {
   
   const authorize = useAuthorize(gapi, {
     serverAuth:{
-      access_token: token || '',
+      access_token: token,
     }
   });
   
