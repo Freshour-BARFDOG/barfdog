@@ -189,11 +189,68 @@ export default function DeliveryOnSellPage() {
       // ! 추가예정: goodsflow 송장취소 API
       // ! 추가예정: goodsflow 송장취소 API
       // ! 추가예정: goodsflow 송장취소 API
+    deliveryList.forEach(async function(item) {
+      // console.log(item);
+      // console.log(item.transUniqueCd);
       
+      const cancelRes = await goodsFlowOrderCancel(item.transUniqueCd);
+      const success = cancelRes.data.success;
+      
+      // console.log(cancelRes.data);
+      
+      if(!success){
+        alert(cancelRes.data.error.message);
+      }
+    })
+
       // ! 추가예정: 송장재등록 API
       // ! 추가예정: 송장재등록 API
       // ! 추가예정: 송장재등록 API
       // ! 추가예정: 송장재등록 API
+      // TODO 백엔드 주문발송 api 수정 후 test
+
+     // 주문 등록 후 id값 받아서 운송장 출력창 호출할때 보내야함
+     const orderRes = await postGoodsFlowOrder({
+      data: {
+        items: deliveryList,
+      },
+    });
+    // console.log(orderRes);
+    // console.log(orderRes.data);
+
+    const orderResData = orderRes.data;
+    if (!orderResData.success) {
+      const error = orderResData.error;
+      const errorMessage = error.message;
+      const errorCode = error.status;
+      // console.error(
+      //   `${bodyForGoodsFlow.orderItems
+      //     .map((item) => item.itemName)
+      //     .join(
+      //       ', ',
+      //     )} 상품의 발송처리에 실패하였습니다.\nERROR: ${errorMessage}\nERROR STATUS: ${errorCode}`,
+      // );
+      console.error(
+        `상품의 발송처리에 실패하였습니다.\nERROR: ${errorMessage}\nERROR STATUS: ${errorCode}`,
+      );
+    }
+    // goodsflow otp 발급(운송장 출력창 호출할때마다 발급 받아야함)
+    const otp = await getGoodsFlowOtp();
+    
+    // STEP 2: 송장 재출력
+    // 운송장 출력창 호출
+    const goodsflowPrintUrl = window.location.origin + '/api/goodsFlow/print';
+    const printRes = await postObjData(goodsflowPrintUrl, {
+      otp: otp,
+      id: res.data.id,
+    });
+    console.log('=================');
+
+    if (printRes.isDone) {
+      // console.log(printRes);
+      // console.log(printRes.data.data);
+      popupWindow(`/bf-admin/sell/delivery/print?data=${printRes.data.data}`);
+    }
     } catch (err) {
         console.error(err)
     }
@@ -202,7 +259,8 @@ export default function DeliveryOnSellPage() {
       reprint: false,
     }));
     
-    // STEP 2: 송장 재출력
+
+  
   };
 
   return (
