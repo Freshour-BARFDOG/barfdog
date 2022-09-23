@@ -117,9 +117,7 @@ export async function getServerSideProps({ query }) {
   let snsUserType = null;
 
   const data = {
-    accessToken: code,
-    tokenValidDays: null, // null일경우 2시간 유효 ( 회원검증을 위해서 , 최소한의 시간만 로그인 State을 유지시킴)
-    userInfo: null,
+    code: code,
   };
   try {
     let res = await axios({
@@ -137,7 +135,7 @@ export async function getServerSideProps({ query }) {
         return err;
       });
 
-    res = DUMMY_NEW_MEMBER_RESPONSE; ////////  ! TEST
+    // res = DUMMY_NEW_MEMBER_RESPONSE; ////////  ! TEST
     // res = DUMMY_MEMBER_RESPONSE; ////////  ! TEST
 
     const resultCode = Number(res.data.resultcode) || null;
