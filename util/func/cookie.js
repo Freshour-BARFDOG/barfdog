@@ -15,6 +15,9 @@ export const setCookie = function (name, value, dateUnit, expNumber, option={pat
     case 'min':
       expiryTime = expNumber * 60 * 1000;
       break;
+    case 'sec':
+      expiryTime = expNumber * 1000;
+      break;
     default:
       expiryTime = 24 * 60 * 60 * 1000; // 만료시간  기본 1일 후
   }
@@ -31,6 +34,6 @@ export const getCookie = function (name) {
 };
 
 
-export const deleteCookie = function (name) {
-  document.cookie = name + '=; expires=Thu, 01 Jan 1999 00:00:10 GMT;';
+export const deleteCookie = function (name,option={path:'/'}) {
+  document.cookie = `${name}=; expires=2022-09-23T03:12:21.000Z; path=${option.path};`;
 };
