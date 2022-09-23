@@ -81,8 +81,40 @@ export const orderPrint = async (o,i) => {
          '------------------------------------------------------------------ AXIOS > RESPONSE ------------------------------------------------------------------ ',
          res,
        );
-       console.log(res.data.data);
+       console.log(res.data);
        
-       return res.data.data;
+       return res.data;
    });
    }
+
+
+
+export const goodsFlowOrderCancel = async (transUniqueCd) => {
+  const cancelRes = await axios
+  .post(
+    `${window.location.origin}/api/goodsFlow/cancelOrder`,
+    {transUniqueCd},
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  )
+  .then((res) => {
+    // console.log(res.data);
+    // console.log(
+    //   '---------------------------------GoodsFlow Cancel AXIOS > RESPONSE ------------------------------------------------------------------ ',
+    //   res,
+    // );
+
+    return res;
+    
+  })
+  .catch((err) => {
+    console.error('goodsflow cancel err: ', err);
+
+    return err.response;
+  });
+  console.log(`=======cancel res${cancelRes}`);
+  return cancelRes;
+}
