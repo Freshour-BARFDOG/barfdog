@@ -14,22 +14,10 @@ export function useGoogleAnalytics(token, diffDate = 0) {
   const [data, setData] = useState({});
   const [authorizeCalled, setAuthorizeCalled] = useState(false);
   
-  const onSuccess = (res)=>{
-    // console.log('Data query response:', res);
-    const allDatas = res.rows;
-    const todayIndex = res.rows.length -1;
-    const totalUsers = allDatas.filter((data, index)=> index !== todayIndex).map((data)=>Number(data[1])).reduce((acc,cur)=>acc+cur);
-    const result = {
-      totalUsers,
-      originData: res,
-    }
-    setData(result);
-  }
-  
   
   const authorize = useAuthorize(gapi, {
     serverAuth:{
-      access_token:token,
+      access_token: token,
     }
   });
   
@@ -41,6 +29,18 @@ export function useGoogleAnalytics(token, diffDate = 0) {
     'end-date': 'today',
     ids: 'ga:'+process.env.NEXT_PUBLIC_GOOGLE_VIEWID,
   };
+  
+  const onSuccess = (res)=>{
+    console.log('Data query response:', res);
+    const allDatas = res.rows;
+    const todayIndex = res.rows.length -1;
+    const totalUsers = allDatas.length > 0 && allDatas.filter((data, index)=> index !== todayIndex).map((data)=>Number(data[1])).reduce((acc,cur)=>acc+cur);
+    const result = {
+      totalUsers,
+      originData: res,
+    }
+    setData(result);
+  }
   
   const execute = useData(
     gapi,
