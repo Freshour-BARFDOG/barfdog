@@ -10,7 +10,7 @@ import { FullScreenRunningDog } from '/src/components/atoms/FullScreenLoading';
 import { authAction } from '/store/auth-slice';
 
 export default function KAKAO_Auth({ data, err, token }) {
-  console.log('DATA: ',data, err);
+  // console.log('DATA: ',data, err);
   const router = useRouter();
   const dispatch = useDispatch();
   const userSnsInfo = {
@@ -24,8 +24,8 @@ export default function KAKAO_Auth({ data, err, token }) {
     if (!window || typeof window === 'undefined') return;
     if (err) {
       const redirUrl = '/account/login';
-      // return alert(err+'\n로그인페이지로 redir');
-      return (window.location.href = redirUrl); // !  PRODUCT CODE
+      return alert(err);
+      // return (window.location.href = redirUrl); // !  PRODUCT CODE
     }
 
     (async () => {
@@ -99,9 +99,12 @@ export async function getServerSideProps({ query }) {
         return err;
       });
 
-    console.log(res)
+    // console.log('Server RES: ',res)
     // res = DUMMY_NEW_MEMBER_RESPONSE; ////////  ! TEST
     // res = DUMMY_MEMBER_RESPONSE; ////////  ! TEST
+    
+    const hasError = res.response.data.error;
+ 
     if(res.data){
       const resultCode = Number(res.data.resultcode) || null;
       const resultMessage = res.data.message || null;
@@ -150,11 +153,14 @@ export async function getServerSideProps({ query }) {
       ) {
         err = resultMessage;
       }
+    } else if(hasError) {
+      console.log('res.data: ', res.response)
+      err = res.response.statusText;
     }
-
     
   } catch (err) {
-    console.error(err);
+    
+    console.error('catch Error: ', err);
   }
 
   const serverSideData = {
