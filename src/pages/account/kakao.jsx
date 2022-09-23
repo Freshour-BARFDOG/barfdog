@@ -6,7 +6,6 @@ import { useDispatch } from 'react-redux';
 import { userStateAction } from '/store/userState-slice';
 import { snsProviderType } from '/store/TYPE/snsProviderType';
 
-
 export default function KAKAO_Auth({ data, err }) {
   // ! 현재 KAKAO API 개발되지 않음 => USERTYPE을 확인할 수 없음.
   // ! 현재 KAKAO API 개발되지 않음 => USERTYPE을 확인할 수 없음.
@@ -19,10 +18,8 @@ export default function KAKAO_Auth({ data, err }) {
   const userSnsInfo = {
     provider: data.provider,
     providerId: data.providerId,
-    ...data.userInfo // 그외 provider에게서 제공받은 데이터 추가 (ex. email 등)
-    
+    ...data.userInfo, // 그외 provider에게서 제공받은 데이터 추가 (ex. email 등)
   };
-  
 
   useEffect(() => {
     // CASE : ERROR
@@ -115,6 +112,7 @@ export async function getServerSideProps({ query }) {
   const { code } = query;
   let err = null;
   let snsUserType = null;
+  let userInfo = null;
 
   const data = {
     code: code,
@@ -147,7 +145,7 @@ export async function getServerSideProps({ query }) {
       snsUserType = userType.NON_MEMBER; // 비회원
     } else if (resultCode === 252) {
       snsUserType = userType.MEMBER; // 회원 & SNS연동 아직 안 한 CASE
-      data.userInfo = res.data.response;
+      userInfo = res.data.response;
     } else if (resultCode === 253) {
       snsUserType = userType.MEMBER_WITH_SNS.KAKAO; // 이미 카카오로 연동되어있는 계정
       // 로그인 처리시킴
@@ -169,7 +167,12 @@ export async function getServerSideProps({ query }) {
     console.error(err);
   }
 
-  const serverSideData = { snsUserType, providerId: code, provider: snsProviderType.KAKAO, userInfo: data.userInfo };
+  const serverSideData = {
+    snsUserType,
+    providerId: code,
+    provider: snsProviderType.KAKAO,
+    userInfo,
+  };
   return { props: { data: serverSideData, err } };
 }
 
