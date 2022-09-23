@@ -25,9 +25,7 @@ export default function DashboardPage({ token }) {
   const [term, setTerm] = useState(initialTerm);
   const [isLoading, setIsLoading] = useState(false);
   const [info, setInfo] = useState({});
-  const GoogleAnalyticsData = (token && useGoogleAnalytics(token, term.diffDate)) || {
-    totalUsers: 0, // 초기값
-  };
+  const GoogleAnalyticsData = useGoogleAnalytics(token, term.diffDate)
 
   useEffect(() => {
     // Google Analytics DATA
