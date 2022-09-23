@@ -511,7 +511,7 @@ export async function getServerSideProps({}) {
     return err.response;
   }
   
-  console.log('MAIN DATA :', DATA);
+  // console.log('MAIN DATA :', DATA);
 
   return { props: { data: DATA } };
 }
