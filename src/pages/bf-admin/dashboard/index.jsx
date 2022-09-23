@@ -32,7 +32,7 @@ export default function DashboardPage({ ga }) {
   const [isLoading, setIsLoading] = useState({});
   const [info, setInfo] = useState({});
   const googleApiToken = ga?.token;
-  const gaData = googleApiToken && useGoogleAnalytics(googleApiToken, term.diffDate);
+  const gaData = useGoogleAnalytics(googleApiToken, term.diffDate);
 
   useEffect(() => {
     // Google Analytics DATA

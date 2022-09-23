@@ -15,9 +15,11 @@ export function useGoogleAnalytics(token, diffDate = 0) {
   const [authorizeCalled, setAuthorizeCalled] = useState(false);
   
   
+  if(!token) return data; // *important : Token없을 경우 , 실행막음 =>  API 에러 방지
+  
   const authorize = useAuthorize(gapi, {
     serverAuth:{
-      access_token: token,
+      access_token: token || '',
     }
   });
   
