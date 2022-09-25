@@ -27,12 +27,18 @@
 }
 
 
-
+.main.title{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap:rem(10);
+}
 
 .title-section  {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap:rem(10);
   padding-bottom: rem(20);
   .title{
     display: flex;
@@ -43,6 +49,7 @@
       margin-left:rem(8);
     }
   }
+
   border-bottom: rem(1) solid var(--color-line-03);
   margin-bottom:rem(20);
 }
@@ -148,4 +155,10 @@
       gap:rem(16);
     }
   }
+}
+
+
+button.google{
+  font-size: rem(12) !important;
+  cursor: pointer !important;
 }

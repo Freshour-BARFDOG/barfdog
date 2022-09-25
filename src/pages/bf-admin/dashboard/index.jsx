@@ -7,35 +7,67 @@ import s from './dashboard.module.scss';
 import ToolTip from '/src/components/atoms/Tooltip';
 import SelectTag from '/src/components/atoms/SelectTag';
 import Spinner from '/src/components/atoms/Spinner';
-import { getData } from '/src/pages/api/reqData';
+import { getCookieSSR, getData } from '/src/pages/api/reqData';
 import transformDate, { transformToday } from '/util/func/transformDate';
 import { orderStatus } from '/store/TYPE/orderStatusTYPE';
-import {url} from "inspector";
-import {google} from "googleapis";
-import { useGoogleAnalytics } from '../../api/googleAnalytics/useGAData';
+import { useGoogleAnalytics } from '/src/pages/api/googleAnalytics/useGoogleAnalytics';
+import { getGoogleAuthUrl } from '/src/pages/api/googleAnalytics/getGoogleAuthUrl';
+import { cookieType } from '/store/TYPE/cookieType';
+import {deleteCookie, getCookie, setCookie} from "/util/func/cookie";
+import {useRouter} from "next/router";
+import {getDiffDate} from "/util/func/getDiffDate";
 
-
-export default function DashboardPage() {
-
+export default function DashboardPage({ ga }) {
   const initialTerm = {
-    from: transformToday(),
-    to: transformToday(),
+    from: getDiffDate(-1), // 1일 전
+    to: transformToday(), // 오늘
     diffDate: 1, // 통계 검색 기간: 1, 7, 30 , 365일
   };
+  
+  
+  const router = useRouter();
+
 
   const [term, setTerm] = useState(initialTerm);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState({});
   const [info, setInfo] = useState({});
-  const gaData = useGoogleAnalytics();
+  const googleApiToken = ga?.token;
+  const gaData = useGoogleAnalytics(googleApiToken, term.diffDate);
+
+  useEffect(() => {
+    // Google Analytics DATA
+    // URL에 TOKEN있을 경우, Cookie 저장 => 쿠키 숨김처리
+    const googleApiTokenInUrl = router.query?.token;
+    if(googleApiTokenInUrl){
+      setCookie(cookieType.GOOGLE_ANALYTICS_TOKEN, googleApiToken,'sec', ga.expires_in || 3600);
+      window.location.search= '';
+    }
+    // 토큰있을 경우에만 > info > googla analytics TotalUser 업데이트
+    if (!googleApiToken) return;
+    
   
-  console.log(gaData);
+    setInfo((data) => ({
+      ...data,
+      statistics: {
+        ...data.statistics,
+        visitorCount: gaData?.totalUsers || '-',
+      },
+    }));
+  
+    setIsLoading((prev)=>({
+      ...prev,
+      ga: false
+    }))
+ 
+  }, [router, gaData]);
 
   useEffect(() => {
     // 기간에 따른 통계 update
     (async () => {
-      setIsLoading((prevState) => ({
+        setIsLoading((prevState) => ({
         ...prevState,
         fetching: true,
+        ga: !!googleApiToken, // 토큰이 있을 경우에만 loading 활성
       }));
       try {
         const url = `/api/admin/dashBoard?from=${term.from}&to=${term.to}`;
@@ -44,11 +76,12 @@ export default function DashboardPage() {
         // const res = DUMMY_RESPONSE; // TEST
         if (res.data) {
           const data = res.data;
+          console.log(data)
           DATA = {
             statistics: {
               newOrderCount: data.newOrderCount || 0,
               newMemberCount: data.newMemberCount || 0,
-              visitorCount: 0, // ! ------------------- GOOGLE ANALYTICS 연결필요 -------------------
+              visitorCount: gaData?.totalUsers || '-',
             },
             orderCount: {
               PAYMENT_DONE:
@@ -116,30 +149,7 @@ export default function DashboardPage() {
           };
         }
 
-        setIsLoading((prevState) => ({
-          ...prevState,
-          ga: true,
-        }));
-        const visitorCount = 0;
-        DATA = {
-          ...DATA,
-          statistics: {
-            ...DATA.statistics,
-            visitorCount: visitorCount,
-          },
-        };
-
         setInfo(DATA);
-
-        // ! ------------------------------------------------------------------------------------------------
-        // ! init Google Analytics
-
-        //
-        // await GA_analyticsAuth();
-        //
-
-        // ! ------------------------------------------------------------------------------------------------
-        // ! init Google Analytics
       } catch (err) {
         console.error(err);
       }
@@ -148,7 +158,7 @@ export default function DashboardPage() {
         fetching: false,
       }));
     })();
-  }, [term]);
+  }, [term, router]);
 
   const onChangeSelectHandler = (value) => {
     const today = new Date(transformToday());
@@ -161,18 +171,62 @@ export default function DashboardPage() {
       diffDate: diffDate,
     });
   };
-  
-  
-  
-  
+
+  const activeGoogleAuth = () => {
+    const searchForActivatingGoogleOauth = '?activeGoogleOauth=true';
+    window.location.search = searchForActivatingGoogleOauth;
+  };
+
+  const deleteGoogleOauthToken = async () => {
+    if (!confirm('구글연동을 해지하시겠습니까?')) return;
+    const origin = window.location.origin;
+    await fetch(origin + '/api/googleAnalytics/deleteToken', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ token: googleApiToken }),
+    })
+      .then((res) => {
+        console.log(res);
+        alert('구글 연동해제');
+        deleteCookie(cookieType.GOOGLE_ANALYTICS_TOKEN);
+        window.location.reload();
+      })
+      .catch((err) => {
+        if (err) {
+          alert('구글 연동해제에 실패하였습니다.');
+        }
+      });
+  };
+
   return (
     <>
       <MetaTitle title="대시보드" admin={true} />
       <AdminLayout>
         <AdminContentWrapper className={s.wrapper}>
-          <h1 className={`${s['title']} title_main`}>
-            {isLoading.fetching ? <Spinner /> : '대시보드'}
+          <h1 className={`${s['title']} ${s['main']} title_main`}>
+            대시보드
+            {!googleApiToken && (
+              <button
+                className={`admin_btn solid basic_m ${s.google}`}
+                type={'button'}
+                onClick={activeGoogleAuth}
+              >
+                GA활성화
+              </button>
+            )}
+            {googleApiToken && (
+              <button
+                className={`admin_btn line basic_m ${s.google}`}
+                type={'button'}
+                onClick={deleteGoogleOauthToken}
+              >
+                GA 비활성
+              </button>
+            )}
           </h1>
+
           <section className={`${s['cont-top']} cont`}>
             <div className={s['title-section']}>
               <h2 className={s.title}>
@@ -251,7 +305,7 @@ export default function DashboardPage() {
                   { label: '최근 30일', value: 30 },
                   { label: '최근 1년', value: 365 },
                 ]}
-                style={{ width: '90px', minWidth: 'auto' }}
+                style={{ width: '100px', minWidth: 'auto' }}
               />
             </div>
             <div className={s['cont-section']}>
@@ -260,7 +314,7 @@ export default function DashboardPage() {
                   <span>신규주문</span>
                   <div>
                     <span>
-                      <b>{info.statistics?.newOrderCount}</b>건
+                      <b>{isLoading.fetching ? <Spinner /> : info.statistics ? `${info.statistics?.newOrderCount}` : 0}</b>건
                     </span>
                   </div>
                 </li>
@@ -268,7 +322,7 @@ export default function DashboardPage() {
                   <span>신규가입</span>
                   <div>
                     <span>
-                      <b>{info.statistics?.newMemberCount}</b>건
+                      <b> {isLoading.fetching ? <Spinner /> : info.statistics ? `${info.statistics?.newMemberCount}` : 0}</b>건
                     </span>
                   </div>
                 </li>
@@ -276,8 +330,8 @@ export default function DashboardPage() {
                   <span>방문자수</span>
                   <div>
                     <span>
-                      <b>{isLoading.fetching ? <Spinner /> : `${info.statistics?.visitorCount}`}</b>
-                      건
+                      <b>{isLoading.ga ? <Spinner /> : `${info.statistics?.visitorCount}`}</b>
+                      명
                     </span>
                   </div>
                 </li>
@@ -322,21 +376,38 @@ export default function DashboardPage() {
   );
 }
 
-export async function getServerSideProps({req, res}) {
-  console.log(req.url);
+export async function getServerSideProps({ req, query }) {
+  let token = getCookieSSR(req, cookieType.GOOGLE_ANALYTICS_TOKEN) || null; // 구글 API 토큰
+  let expires_in = null; // 구글 API 토큰 만료시간
 
-// Receive the callback from Google's OAuth 2.0 server.
-  if (req.url.startsWith('/oauth2callback')) {
-    // Handle the OAuth 2.0 server response
-    let q = url.parse(req.url, true).query;
-    const oauth2Client = new google.auth.OAuth2(clientId, client_secret, redir_URL);
-    // Get access and refresh tokens (if access_type is offline)
-    let { tokens } = await oauth2Client.getToken(q.code);
-    console.log('tokens: ',tokens)
-    oauth2Client.setCredentials(tokens);
+  // console.log('query: ',query)
+  if (query.token && query.token !== 'undefined') {
+    token = query.token || null;
   }
+
+  if (query.expires_in && query?.expires_in !== 'undefined') {
+    expires_in = query.expires_in || null;
+  }
+
+  const activeGoogleOauth = query.activeGoogleOauth === 'true';
+
+  if (activeGoogleOauth) {
+    const googleAuthUrl = getGoogleAuthUrl();
+    return {
+      redirect: {
+        destination: googleAuthUrl,
+        permanent: false,
+      },
+    };
+  }
+
   return {
-    props: {},
+    props: {
+      ga: {
+        token,
+        expires_in,
+      },
+    },
   };
 }
 

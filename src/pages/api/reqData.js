@@ -352,6 +352,22 @@ export const getTokenFromServerSide = (req) => {
   return token;
 };
 
+export const getCookieSSR = (req, CookieName) => {
+  // *주의: SSR에서만 실행
+  let result = null;
+  // console.log(req.headers);
+  const cookies = req.headers.cookie.split(';');
+  if (cookies && CookieName) {
+    for (const key of cookies) {
+      if (key.indexOf(CookieName) >= 0) {
+        result = key.split('=')[1];
+        break;
+      }
+    }
+  }
+  return result;
+};
+
 export const getDataSSR = async (req, url, tokenFromSSR) => {
   let result;
   const token = tokenFromSSR || getTokenFromServerSide(req);
