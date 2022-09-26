@@ -36,8 +36,8 @@ const authSlice = createSlice({
       state.userType = userType.MEMBER;
       const accessToken = action.payload.token;
       const expiredDate = action.payload.expiredDate && cookieType.LOGIN_EXPIRED_PERIOD.VALUE; // 서버 token지속 기본값: 2시간
-      const { temporaryPassword, email, name, roleList } = action.payload.data;
-      // state.temporaryPassword = temporaryPassword;
+      // const { temporaryPassword, email, name, roleList } = action.payload.data; // ! 0926 삭제
+      const temporaryPassword = action.payload.data.temporaryPassword || null; // - 0926 추가
       setCookie(
         cookieType.LOGIN_COOKIE,
         accessToken,
