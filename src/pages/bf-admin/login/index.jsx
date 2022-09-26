@@ -13,13 +13,13 @@ import Spinner from '/src/components/atoms/Spinner';
 import { validate } from '/util/func/validation/validation_adminLogin';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
 import Link from "next/link";
-import {postObjData} from "/src/pages/api/reqData";
+import {getDataSSR, getTokenFromServerSide, postObjData} from "/src/pages/api/reqData";
 import {cookieType} from "/store/TYPE/cookieType";
 import {userType} from "/store/TYPE/userAuthType";
 
 
 
-export default function AdminLoginPage({ autoLoginAccount }) {
+export default function AdminLoginPage () {
   const dispatch = useDispatch();
   const mct = useModalContext();
   const [modalMessage, setModalMessage] = useState('');
@@ -28,18 +28,7 @@ export default function AdminLoginPage({ autoLoginAccount }) {
   const [formValues, setFormValues] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [autoLogin, setAutoLogin] = useState(false);
-
-  useEffect(() => {
-    mct.alertHide();
-    if (autoLoginAccount) {
-      setAutoLogin(true);
-      setFormValues((prevState) => ({
-        ...prevState,
-        email: autoLoginAccount,
-      }));
-    }
-  }, [autoLoginAccount]);
-
+  
 
   const onInputChangeHandler = (e) => {
     const input = e.currentTarget;
@@ -97,21 +86,13 @@ export default function AdminLoginPage({ autoLoginAccount }) {
         );
       }
     } catch (err) {
-      alert('로그인할 수 없습니다. 오류가 발생했습니다. 관리자에게 문의하세요.');
+      alert ('로그인할 수 없습니다. 오류가 발생했습니다. 관리자에게 문의하세요.');
       console.error('API통신 오류 : ', err);
     }
     setIsLoading((prevState) => ({
       ...prevState,
       submit: false,
     }));
-  };
-
-  const onShowResetPasswordModal = () => {
-    mct.onShow();
-  };
-
-  const onHideResetPasswordModal = () => {
-    mct.onHide();
   };
 
   const onAutoLogin = (checked) => {
@@ -226,10 +207,30 @@ export default function AdminLoginPage({ autoLoginAccount }) {
 }
 
 
-export async function getServerSideProps(context) {
-  const { req } = context;
-  const cookie = req.headers.cookie;
-  let autoLoginAccount = null;
-  // console.log(cookie)
-  return { props: { autoLoginAccount: autoLoginAccount } };
+export async function getServerSideProps({ req }) {
+  let token = null;
+  let USER_TYPE = null;
+  if (req?.headers?.cookie) {
+    token = getTokenFromServerSide( req );
+    console.log('token: ', token)
+    const getApiUrl = `/api/admin/setting`;
+    const res = await getDataSSR( req, getApiUrl, token );
+    console.log('res: ', res)
+    if ( res && res.status === 200 ) {
+      USER_TYPE = userType.ADMIN;
+    }
+  }
+  
+  if(USER_TYPE && USER_TYPE === userType.ADMIN){
+    return {
+      redirect:{
+        permanent: false,
+        destination: '/bf-admin/dashboard'
+      }
+    }
+  } else {
+    return { props: { } };
+  }
+  
+  
 }
