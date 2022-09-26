@@ -17,6 +17,7 @@ import { valid_policyCheckbox } from '/util/func/validation/validationPackage';
 import { transformPhoneNumber } from '/util/func/transformPhoneNumber';
 import { naverGender } from '/util/func/naverGender';
 import { kakaoGender } from '/util/func/kakaoGender';
+import {getDataSSR, getTokenFromServerSide} from "../../api/reqData";
 
 String.prototype.insertAt = function(index,str){
   return this.slice(0,index) + str + this.slice(index);
@@ -234,4 +235,31 @@ export default function SignupPage() {
       {hasAlert && <Modal_global_alert message={alertModalMessage} />}
     </>
   );
+}
+
+
+
+
+export async function getServerSideProps({ req }) {
+  let token = null;
+  let isMember = false;
+  if (req?.headers?.cookie) {
+    token = getTokenFromServerSide( req );
+    const getApiUrl = `/api/mypage`;
+    const res = await getDataSSR( req, getApiUrl, token );
+    if ( res && res.status === 200 ) {
+      isMember = true;
+    }
+  }
+  
+  if(isMember){
+    return {
+      redirect:{
+        permanent: false,
+        destination: '/'
+      }
+    }
+  } else {
+    return { props: { } };
+  }
 }

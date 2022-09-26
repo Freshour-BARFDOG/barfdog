@@ -231,6 +231,4 @@ export async function getServerSideProps({ req }) {
   } else {
     return { props: { } };
   }
-  
-  
 }
