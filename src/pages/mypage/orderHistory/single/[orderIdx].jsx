@@ -488,10 +488,15 @@ export async function getServerSideProps(ctx) {
   let res = await getDataSSR(req, getApiUrl);
   // res = DUMMY_RESPONSE; // ! TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
   const data = res?.data;
-  console.log('------data: ',data);
+  console.log('------singleItem Data: ',data);
   // console.log('SERVER REPONSE: ', res);
-
-  if (data) {
+  if(data.status === 500){
+    return {
+      redirect:{
+        destination: '/mypage/orderHistory'
+      }
+    }
+  } else if (data) {
     DATA = {
       orderItemDtoList: data.orderItemDtoList?.map((item) => ({
         arrivalDate: data.orderDto.arrivalDate || null, // ! 확인필요 => 전체 배송완료상태를, 상품 각각에 부여하는것 (예외가 없다면 그대로 진행)

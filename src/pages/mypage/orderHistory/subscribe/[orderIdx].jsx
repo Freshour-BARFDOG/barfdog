@@ -357,10 +357,16 @@ export async function getServerSideProps(ctx) {
   // console.log('SERVER REPONSE: ', res);
   const data = res?.data;
   console.log('REPONSE DATA:',data);
-  if (data) {
+  if(data.status === 500){
+    return {
+      redirect:{
+        destination: '/mypage/orderHistory'
+      }
+    }
+  } else if (data) {
     DATA = {
       recipeDto: {
-        thumbnailUrl: data.recipeDto.thumbnailUrl,
+        thumbnailUrl: data.recipeDto.thumbnailUrl || null,
         recipeName: data.recipeDto.recipeName,
       },
       recipeNames: data.recipeNames,
@@ -405,7 +411,7 @@ export async function getServerSideProps(ctx) {
       },
       // savedRewardTotal:data.savedRewardTotal
     };
-    console.log(DATA);
+    // console.log(DATA);
   }
   return { props: { orderIdx, data: DATA } };
 }
