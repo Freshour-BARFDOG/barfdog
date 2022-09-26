@@ -32,6 +32,7 @@ initialFormValues = { // TEST ACCOUNT
 
 export default function Mypage() {
   const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
   const router = useRouter();
   const dispatch = useDispatch();
   const [form, setForm] = useState(initialFormValues);
@@ -139,7 +140,8 @@ export default function Mypage() {
           </div>
         </Wrapper>
       </Layout>
-      <Modal_global_alert message={modalMessage} onClick={onClickModalButton} />
+      {hasAlert && <Modal_global_alert message={modalMessage} onClick={onClickModalButton} />}
+      
     </>
   );
 }

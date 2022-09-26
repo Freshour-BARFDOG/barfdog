@@ -20,8 +20,9 @@ import Modal_confirm from '/src/components/modal/Modal_confirm';
 import {orderStatus} from "/store/TYPE/orderStatusTYPE";
 
 export default function MypageDogInfoPage({ data }) {
-  console.log(data);
+  // console.log(data);
   const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
   const [activeUploadDogProfileModal, setActiveUploadDogProfileModal] = useState(false);
   const [itemList, setItemList] = useState(data);
   const [selectedItemData, setSelectedItemData] = useState(null);
@@ -88,7 +89,7 @@ export default function MypageDogInfoPage({ data }) {
           setModalMessage={setModalMessage}
         />
       )}
-      <Modal_global_alert message={modalMessage} onClick={onHideModalHandler} background />
+      {hasAlert && <Modal_global_alert message={modalMessage} onClick={onHideModalHandler} background />}
     </>
   );
 }

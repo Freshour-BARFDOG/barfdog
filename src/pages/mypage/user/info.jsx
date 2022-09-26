@@ -17,6 +17,7 @@ import { useRouter } from 'next/router';
 
 export default function UserInfoPage() {
   const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
   const router = useRouter();
   const auth = useSelector((s) => s.auth);
   const userInfo = auth.userInfo;
@@ -162,10 +163,10 @@ export default function UserInfoPage() {
           </MypageWrapper>
         </Wrapper>
       </Layout>
-      <Modal_global_alert
+      {hasAlert && <Modal_global_alert
         message={alertModalMessage}
         onClick={isSubmitted && onModalConfirmButtonClick}
-      />
+      />}
     </>
   );
 }

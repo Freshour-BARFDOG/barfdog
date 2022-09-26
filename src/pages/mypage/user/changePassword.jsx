@@ -28,6 +28,7 @@ const initialValues = {
 }
 export default function ChangePasswordPage() {
   const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
   const router = useRouter();
   const deviceState = useDeviceState();
   const isMobile = deviceState.isMobile;
@@ -192,10 +193,11 @@ export default function ChangePasswordPage() {
           </MypageWrapper>
         </Wrapper>
       </Layout>
-      <Modal_global_alert
+      {hasAlert && <Modal_global_alert
         message={alertModalMessage}
         onClick={isSubmitted && onModalConfirmButtonClick}
-      />
+      />}
+      
     </>
   );
 }

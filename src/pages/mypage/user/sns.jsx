@@ -15,6 +15,7 @@ import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 
 export default function SNSManagementPage() {
   const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
   const auth = useSelector(s=>s.auth);
   const userInfo = auth.userInfo;
   const [activeModal, setActiveModal] = useState( false );
@@ -124,7 +125,7 @@ export default function SNSManagementPage() {
           positionCenter
         />
       )}
-      <Modal_global_alert onClick={isSubmitted && onSuccessCallback}/>
+      {hasAlert && <Modal_global_alert onClick={isSubmitted && onSuccessCallback}/>}
     </>
   );
 }
