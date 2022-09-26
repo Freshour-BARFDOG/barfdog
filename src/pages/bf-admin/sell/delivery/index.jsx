@@ -18,6 +18,8 @@ import Tooltip from '/src/components/atoms/Tooltip';
 import PureCheckbox from '/src/components/atoms/PureCheckbox';
 import { valid_isTheSameArray } from '/util/func/validation/validationPackage';
 import {postObjData} from "/src/pages/api/reqData";
+import { goodsFlowOrderCancel, postGoodsFlowOrder, getGoodsFlowOtp } from '/src/pages/api/goodsFlow/service';
+import popupWindow from '/util/func/popupWindow';
 
 const initialSearchValues = {
   from: transformToday(),
@@ -199,9 +201,9 @@ export default function DeliveryOnSellPage() {
       // console.log(cancelRes.data);
       
       if(!success){
-        alert(cancelRes.data.error.message);
+        console.error(cancelRes.data.error.message);
       }
-    })
+    });
 
       // ! 추가예정: 송장재등록 API
       // ! 추가예정: 송장재등록 API
@@ -242,7 +244,7 @@ export default function DeliveryOnSellPage() {
     const goodsflowPrintUrl = window.location.origin + '/api/goodsFlow/print';
     const printRes = await postObjData(goodsflowPrintUrl, {
       otp: otp,
-      id: res.data.id,
+      id: orderResData.id,
     });
     console.log('=================');
 
