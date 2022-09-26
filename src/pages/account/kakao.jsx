@@ -10,7 +10,7 @@ import { FullScreenRunningDog } from '/src/components/atoms/FullScreenLoading';
 import { authAction } from '/store/auth-slice';
 
 export default function KAKAO_Auth({ data, err, token }) {
-  // console.log('DATA: ',data, err);
+  // console.log('DATA: ', data, err);
   const router = useRouter();
   const dispatch = useDispatch();
   const userSnsInfo = {
@@ -24,8 +24,8 @@ export default function KAKAO_Auth({ data, err, token }) {
     if (!window || typeof window === 'undefined') return;
     if (err) {
       const redirUrl = '/account/login';
-      return alert(err);
-      // return (window.location.href = redirUrl); // !  PRODUCT CODE
+      // return alert(err); // ! TEST CODE
+      return (window.location.href = redirUrl); // ! PRODUCT CODE
     }
 
     (async () => {
@@ -59,7 +59,6 @@ export default function KAKAO_Auth({ data, err, token }) {
   );
 }
 
-
 export async function getServerSideProps({ query }) {
   const { code } = query;
 
@@ -78,19 +77,17 @@ export async function getServerSideProps({ query }) {
     };
   }
 
-
   try {
-  
-    const body = {
+    const data = {
       code: code,
     };
     let res = await axios({
       url: '/api/login/kakao',
       method: 'post',
+      data,
       headers: {
         'content-Type': 'application/json',
       },
-      body,
     })
       .then((res) => {
         return res;
@@ -99,29 +96,41 @@ export async function getServerSideProps({ query }) {
         return err;
       });
 
-    // console.log('Server RES: ',res)
+    console.log('Server RES: ', res);
+    // console.log('Server RESPONSE DATA: ',res.data)
     // res = DUMMY_NEW_MEMBER_RESPONSE; ////////  ! TEST
     // res = DUMMY_MEMBER_RESPONSE; ////////  ! TEST
-    
-    const hasError = res.response.data.error;
- 
-    if(res.data){
-      const resultCode = Number(res.data.resultcode) || null;
-      const resultMessage = res.data.message || null;
-      const data = res.data;
+
+
+    if (res.status === 500) { // 서버응답이 없을 경우, Redir
+      return {
+        redirect: {
+          permanent: false,
+          destination: '/account/login',
+        },
+      };
+    } else if (res.data) {
+      const resData = res.data;
+      const resultCode = Number(resData.resultcode) || null;
+      const resultMessage = resData.message || null;
       const internationalAreaCodeOfKorea = '+82';
-      const transformedPhoneNumber = data.kakao_account?.phone_number.indexOf(internationalAreaCodeOfKorea) >= 0 ? data.kakao_account?.phone_number.replace(internationalAreaCodeOfKorea, '0').replace(' ','') : data.kakao_account?.phone_number;
+      const transformedPhoneNumber =
+        resData.kakao_account?.phone_number.indexOf(internationalAreaCodeOfKorea) >= 0
+          ? resData.kakao_account?.phone_number
+              .replace(internationalAreaCodeOfKorea, '0')
+              .replace(' ', '')
+          : resData.kakao_account?.phone_number;
       userInfo = {
-        code: body.code, // kakao Api Access Token
+        code: code, // kakao Api Access Token
         tokenValidDays: null, // ! 카카오톡에서 토큰 만료시간을 할당 => 바프독 서버에서 설정불가
-        id: data.id,
-        gender: data.kakao_account?.gender || null,
-        email: data.kakao_account?.email || null,
+        id: resData.id,
+        gender: resData.kakao_account?.gender || null,
+        email: resData.kakao_account?.email || null,
         mobile: transformedPhoneNumber || null,
-        mobile_e164: data.kakao_account?.phone_number || null,
-        name: data.kakao_account?.name || null,
-        birthday: data.kakao_account?.birthday || null,
-        birthyear: data.kakao_account?.birthyear || null,
+        mobile_e164: resData.kakao_account?.phone_number || null,
+        name: resData.kakao_account?.name || null,
+        birthday: resData.kakao_account?.birthday || null,
+        birthyear: resData.kakao_account?.birthyear || null,
       };
       if (resultCode === 251) {
         // 비회원
@@ -135,14 +144,14 @@ export async function getServerSideProps({ query }) {
       } else if (resultCode === 254) {
         snsUserType = userType.MEMBER_WITH_SNS.NAVER; // 이미 네이버로 연동되어있는 계정
       }
-      
+
       /*  error Code Validation 필요
           error code -101 카카오 연결 도중 실패한 경우
           error code -102 이미 카카오로 연결된 경우
           error code -103 존재하지 않는 계정
           error code -406 회읜 나이가 14세 미만인 경우
       * */
-      
+
       if (
         resultCode === 24 ||
         resultCode === 28 ||
@@ -153,23 +162,21 @@ export async function getServerSideProps({ query }) {
       ) {
         err = resultMessage;
       }
-    } else if(hasError) {
-      console.log('res.data: ', res.response)
+    } else if (res.response.data?.error) {
+      // console.log('ERROR REPONSE >  ', res.response)
       err = res.response.statusText;
     }
-    
   } catch (err) {
-    
     console.error('catch Error: ', err);
   }
 
-  const serverSideData = {
+  const DATA = {
     snsUserType,
     providerId: code,
     provider: snsProviderType.KAKAO,
     userInfo,
   };
-  return { props: { data: serverSideData, err, token } };
+  return { props: { data: DATA, err, token } };
 }
 
 /*
@@ -192,10 +199,6 @@ export async function getServerSideProps({ query }) {
   error code -406 회읜 나이가 14세 미만인 경우
   
 */
-
-
-
-
 
 const DUMMY_NEW_MEMBER_RESPONSE = {
   // 신규 멤버일 경우
