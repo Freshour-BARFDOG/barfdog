@@ -1,8 +1,5 @@
-$browser-context:16; // html font-size
-@function rem($px, $context: $browser-context){
-  @return #{$px / $context}rem;
-}
-@import '../../../../styles/global/guide';
+@import '/styles/global/rem';
+@import '/styles/global/guide';
 
 section.title { padding : rem(5) 0 rem(20) }
 section.coupon_state_section { padding: rem(78) 0 0 0}
@@ -136,9 +133,19 @@ section.pageline { padding: rem(40) 0 0 0}
   .right_bot {
     display: flex;
     justify-content: right;
+    button.useCoupon{
+      font-size: rem(15);
+      color: #fff;
+      background-color: #000;
+      border-radius: rem(100);
+      width: rem(106);
+      padding: rem(5) 0;
+    }
   }
 
 }
+
+
 
 .pagination_box{
   margin-top:rem(40);
