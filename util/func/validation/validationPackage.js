@@ -131,8 +131,10 @@ export const valid_email = (value) => {
   let error='';
 
   const email = value;
-  const RegExp = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
-
+  // const RegExp_before = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
+  const RegExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ // ! 0926 validation update ver.
+  // console.log('RegExp_before: ',RegExp_before.test(email))
+  // console.log('RexExp: ',RexExp_advanced.test(email))
   if(!email ){
     error = '항목이 비었습니다.'
   } else if (!RegExp.test(email)) {
