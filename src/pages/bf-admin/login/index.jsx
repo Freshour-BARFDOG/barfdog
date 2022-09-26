@@ -41,7 +41,7 @@ export default function AdminLoginPage () {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (isSubmitted) return;
+    if (isSubmitted) return onShowModalHandler('이미 제출된 양식입니다.');
     const errObj = validate(formValues);
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
@@ -73,12 +73,16 @@ export default function AdminLoginPage () {
         }
         if(autoLogin){
           dispatch(authAction.adminAutoLogin(payload));
-          onShowModalHandler(`관리자 로그인에 성공하였습니다.\n자동로그인 유지기간: ${autoLoginPeriod}일`);
         } else{
           dispatch(authAction.adminLogin(payload));
-          onShowModalHandler('관리자 로그인에 성공하였습니다.');
         }
+        
         setIsSubmitted(true);
+        setIsLoading((prevState) => ({
+          ...prevState,
+          movePage: true,
+        }));
+        window.location.href='/bf-admin/dashboard';
       }else {
         setIsSubmitted(false);
         onShowModalHandler(
@@ -97,7 +101,8 @@ export default function AdminLoginPage () {
 
   const onAutoLogin = (checked) => {
     if (checked) {
-      setModalMessage('개인정보보호를 위해\n반드시 본인 기기에서만 이용해 주세요.');
+      const autoLoginPeriod = cookieType.AUTO_LOGIN_EXPIRED_PERIOD.VALUE; // 변경가능
+      setModalMessage(`개인정보보호를 위해\n반드시 본인 기기에서만 이용해 주세요.\n(자동로그인 유지기간: ${autoLoginPeriod}일)`);
       mct.alertShow();
     }
     setAutoLogin(checked);
@@ -108,21 +113,13 @@ export default function AdminLoginPage () {
     setModalMessage(message);
   };
 
-  const onGlobalModalCallback = () => {
-    if (isSubmitted) {
-      window.location.href = '/bf-admin/dashboard';
-      // Router.push('/bf-admin/dashboard');
-    }
-      mct.alertHide();
-  };
-  
-
-  
   
   return (
     <>
       <MetaTitle title="관리자 로그인" admin={true} />
-      <Modal_global_alert message={modalMessage} background onClick={onGlobalModalCallback} />
+      <Modal_global_alert message={modalMessage} background onClick={()=>{
+        mct.alertHide();
+      }} />
       {mct.isActive && (
         <Modal onClick={mct.alertHide} background title="비밀번호 재설정">
           <Modal_AdminResetPassword />
@@ -192,7 +189,7 @@ export default function AdminLoginPage () {
                         className="admin_btn solid confirm_l"
                         onClick={onSubmit}
                       >
-                        {isLoading.submit ? <Spinner style={{ color: '#fff' }} /> : '로그인'}
+                        {(isLoading.submit || isLoading.movePage) ? <Spinner style={{ color: '#fff' }} /> : '로그인'}
                       </button>
                     </div>
                   </div>
