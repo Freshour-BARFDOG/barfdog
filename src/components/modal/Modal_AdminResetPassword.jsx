@@ -11,6 +11,7 @@ import filter_onlyNumber from '@util/func/filter_onlyNumber';
 import CloseButton from '@src/components/atoms/CloseButton';
 import Modal_alert from './Modal_alert';
 import enterKey from "/util/func/enterKey";
+import {valid_email} from "../../../util/func/validation/validationPackage";
 
 
 
@@ -33,10 +34,16 @@ export default function AdminResetPassword() {
   const onSendEmailHandler = (e) => {
     e.preventDefault();
     const val = email?.trim(); // test account: 'develope07@binter.co.kr'
-    if (!val) {
-      mct.alertShow('이메일을 입력해주세요.');
-      return;
+    // if (!val) {
+    //   mct.alertShow('이메일을 입력해주세요.');
+    //   return;
+    // }
+    const error = valid_email(val);
+    console.log(error);
+    if(error){
+      mct.alertShow(error);
     }
+    
 
     (async () => {
       // 관리자 비밀번호 변경을 위해 이메일 인증번호 보내기
@@ -68,11 +75,11 @@ export default function AdminResetPassword() {
           setAuthNum(authNumber);
         } else {
           mct.alertShow(
-            '관리자 이메일이 아닌 경우 발송되지 않습니다. 지속적으로 에러가 발생할 경우 서버 관리자에게 문의하세요.',
+            '관리자 이메일이 아닌 경우 발송되지 않습니다.\n지속적으로 에러가 발생할 경우 서버 관리자에게 문의하세요.',
           );
         }
       } catch (err) {
-        console.error(err);
+        console.error('ERROR: ',err);
         alert(err);
       }
     })();
