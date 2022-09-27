@@ -55,7 +55,7 @@ export const ReviewItem = ({item}) => {
               className={`${s['img-wrap']} img-wrap init-next-image`}
               key={`review-detail-images-${i}`}
             >
-              {/*<Image src={d.url} objectFit="cover" layout="fill" alt={d.filename} />*/}
+              <Image src={d.url} objectFit="cover" layout="fill" alt={d.filename} />
             </figure>
           })}
         </div>
