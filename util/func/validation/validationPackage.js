@@ -319,6 +319,31 @@ export const valid_URL = (value)=>{
 
 
 
+export const valid_link = (value) => {
+  let errorsMessage;
+  
+  const regexURL = new RegExp(
+    "^(https?:\\/\\/)?" + // protocol
+    "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|" + // domain name
+    "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
+    "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
+    "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
+    "(\\#[-a-z\\d_]*)?$",
+    "gi"
+  ); // fragment locator
+  
+  const valid = regexURL.test(value);
+  
+  if (value && !valid) {
+    errorsMessage = "유효하지 않은 링크입니다.";
+  } else {
+    errorsMessage = "";
+  }
+  
+  return errorsMessage;
+};
+
+
 
 export const valid_currency = (value, options ={mode:'',unit:''}, availableMaxDiscount)=>{
   let error ='';
@@ -361,6 +386,7 @@ export const valid_arrayErrorCount = (arr) => {
   }
   return errorCount;
 };
+
 const valid_singleItemOptionObj = (optionObj) => {
   let error = {};
 
@@ -512,8 +538,6 @@ export const valid_maxLength = (val, maxLength)=>{
   
   return error;
 }
-
-
 
 
 
