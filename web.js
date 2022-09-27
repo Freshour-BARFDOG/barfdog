@@ -13,10 +13,6 @@ const ports = {
   // https: 4001,
 };
 
-// const httpsOptions = {
-//   key: fs.readFileSync('./certificates/localhost.key'),
-//   cert: fs.readFileSync('./certificates/localhost.crt'),
-// };
 
 nextApp
   .prepare()
@@ -39,11 +35,6 @@ nextApp
       if (err) throw err;
       console.log(`> HTTP Server Running on http://localhost:${ports.http}`);
     });
-
-    // https(httpsOptions, server).listen(ports.https, (err) => {
-    //   if (err) throw err;
-    //   console.log(`> HTTPS Server Running on https://localhost:${ports.https}`);
-    // });
   })
   .catch((err) => {
     console.error('ERROR:::', err.stack);
