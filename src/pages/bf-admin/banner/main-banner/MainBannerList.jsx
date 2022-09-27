@@ -5,6 +5,7 @@ import Ascend from '/public/img/icon/btn_ascend.svg';
 import Descend from '/public/img/icon/btn_descend.svg';
 import getElemIdx from "@util/func/getElemIdx.js";
 import changeArrayOrder from '@util/func/changeArrayOrder'
+import {exposeTargetTYPE} from "@store/TYPE/exposeTargetTYPE";
 
 
 
@@ -122,7 +123,7 @@ export default function MainBannerList({
             ></Image>
           </figure>
         </span>
-        <span>{DATA.exp_target}</span>
+        <span>{exposeTargetTYPE.KOR[DATA.exp_target]}</span>
         <span>{DATA.reg_date}</span>
         <span>
           <Link
