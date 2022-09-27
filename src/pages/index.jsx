@@ -28,6 +28,7 @@ import { Modal_Popup } from '/src/components/modal/Modal_Popup';
 import useDeviceState from "/util/hook/useDeviceState";
 
 export default function MainPage({ data }) {
+  // console.log(data)
   const router = useRouter();
   const isMobile = useDeviceState().isMobile;
   const [activeTempPasswordModal, setActiveTempPasswordModal] = useState(false);
@@ -39,9 +40,9 @@ export default function MainPage({ data }) {
     // 임시비밀번호 조회
   }, []);
 
-  const onClickModalButtons = (confirm) => {
+  const onClickModalButtons = async (confirm) => {
     if (confirm) {
-      router.push('/mypage/user/changePassword');
+      await router.push('/mypage/user/changePassword');
     } else {
       setActiveTempPasswordModal(false);
     }
@@ -475,6 +476,7 @@ export async function getServerSideProps({}) {
                 mobileFilename: list.mobileFilename,
                 mobileImageUrl: list.mobileImageUrl,
                 mobileLinkUrl: list.mobileLinkUrl,
+                targets:list.targets
               }))
             : [],
         recipeDtoList:
@@ -510,9 +512,7 @@ export async function getServerSideProps({}) {
     console.error(err);
     return err.response;
   }
-  
   // console.log('MAIN DATA :', DATA);
-
   return { props: { data: DATA } };
 }
 
