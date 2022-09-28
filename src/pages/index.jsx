@@ -26,6 +26,7 @@ import { useRouter } from 'next/router';
 import { Modal_tempPasswrod } from '/src/components/modal/Modal_tempPasswrod';
 import { Modal_Popup } from '/src/components/modal/Modal_Popup';
 import useDeviceState from "/util/hook/useDeviceState";
+import { getTokenFromServerSide } from "/src/pages/api/reqData";
 
 export default function MainPage({ data }) {
   // console.log(data)
@@ -437,16 +438,17 @@ export default function MainPage({ data }) {
   );
 }
 
-export async function getServerSideProps({}) {
+export async function getServerSideProps({req}) {
   let DATA = null;
   const apiUrl = '/api/home';
   let homeApi_res = null;
+  const token = getTokenFromServerSide(req, apiUrl) || null;
   
   try {
     homeApi_res = await axios
       .get(apiUrl, {
         headers: {
-          authorization: null,
+          authorization: token,
           'content-Type': 'application/json',
         },
       })
@@ -454,7 +456,7 @@ export async function getServerSideProps({}) {
         // console.log(res);
         return res;
       })
-      .catch((err) => {
+      .catch ((err) => {
         // console.log(err.response)
         return err.response;
       });
