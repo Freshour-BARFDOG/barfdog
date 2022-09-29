@@ -28,8 +28,8 @@ export const ShopReviewBox = ({ data }) => {
       newPageNumber: 1,
       newItemList: [],
     };
-    const pageData = res.data.page;
-    if (res.data._embedded) {
+    if (res?.data?._embedded) {
+      const pageData = res.data.page;
       const newItemList = res.data._embedded.itemReviewsDtoList || [];
 
       newPageInfo = {
