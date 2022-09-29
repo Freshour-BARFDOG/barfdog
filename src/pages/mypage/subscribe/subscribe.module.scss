@@ -126,13 +126,17 @@ section.pagination_box{ padding: rem(80) 0 0}
       .col_4 {
         .btn {
           width: rem(120);
+          height: rem(45);
+          box-sizing: border-box;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           background-color: #fff;
           color: var(--color-main);
           border: rem(1) solid var(--color-main);
-          text-align: center;
           @include char(l15);
-          padding: rem(14) 0;
           border-radius: rem(4);
+
         }
       }
     }
