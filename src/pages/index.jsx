@@ -442,7 +442,7 @@ export async function getServerSideProps({req}) {
   let DATA = null;
   const apiUrl = '/api/home';
   let homeApi_res = null;
-  const token = getTokenFromServerSide(req, apiUrl) || null;
+  const token = getTokenFromServerSide(req) || null;
   
   try {
     homeApi_res = await axios
