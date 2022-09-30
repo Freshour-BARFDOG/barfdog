@@ -199,12 +199,18 @@ section.body {padding : 0 0 rem(55)}
 
 @media (max-width: rem(600)) {
 
-.title{
-  display: none;
-}
+  .title{
+    display: none;
+  }
 
-.line{
-  display: none;
-}
+  .line{
+    display: none;
+  }
+
+  .second_body {
+    .text {
+      padding-bottom: rem(200);
+    }
+  }
 
 }

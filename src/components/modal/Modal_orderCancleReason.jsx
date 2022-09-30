@@ -96,7 +96,9 @@ export const Modal_orderCancleReason = ({
       <section className={s['title-section']}>
         <h4 className={s.title}>판매취소</h4>
         <span className={s.subtitle}>
-          판매사유가 입력된 상품이 포함된 주문은 전체주문취소가 됩니다. 판매취소사유는 체크박스
+          판매사유가 입력된 상품이 포함된 주문은 전체주문취소가 됩니다.
+          <br /> 
+          판매취소사유는 체크박스
           설정된 상품에 동일하게 적용되며, 현재 보이는 모달에서 체크된 상품이 판매취소처리됩니다.
         </span>
       </section>
@@ -131,7 +133,7 @@ export const Modal_orderCancleReason = ({
   
         <div className={s['input-wrap']}>
           <h4 className={s['input-title']}>판매 취소사유</h4>
-          <input
+          <textarea
             type={'text'}
             placeholder={'판매 취소사유를 입력해주세요.'}
             onChange={onInputChange}

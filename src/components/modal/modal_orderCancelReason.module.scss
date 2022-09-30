@@ -20,12 +20,17 @@
   align-items: center;
   text-align: left;
   line-height: 1.2;
+  display: flex;
+  column-gap: rem(10);
+
   .title {
-    font-size: rem(22) !important;
+    font-size: rem(33) !important;
+    font-weight: 700;
     margin-bottom: rem(4);
+    min-width: rem(120);
   }
   .subtitle {
-    font-size: rem(14);
+    font-size: rem(12);
     color: var(--gray30);
   }
 
@@ -47,34 +52,39 @@
         border-bottom: rem(1) solid var(--color-line-04);
       }
       .itemTitle {
-        font-size:rem(16);
+        font-size:rem(20);
+        font-weight: 700;
         margin-bottom: rem(4);
       }
       .itemList{
-        padding-left: rem(8);
+        //padding-left: rem(8);
       }
     }
-    margin-bottom: rem(40);
+    margin-bottom: rem(20);
   }
   .input-wrap{
+    border-top: rem(1) solid #000 ;
+    padding-top: rem(20);
     .input-title{
+      font-size: rem(20);
+      font-weight: 700;
       margin-bottom:rem(4)
     }
-    input {
-      font-size: rem(14);
+    textarea {
+      //font-size: rem(14);
       width: 100%;
-      border: {
-        top: 0;
-        left: 0;
-        right: 0;
-        radius: 0;
-      }
+      background-color: #F5F5F5;
+      min-height: rem(100);
+      overflow-y: scroll;
+      border-radius: 0;
+      font-size: rem(16);
+      // border: {
+      //   top: 0;
+      //   left: 0;
+      //   right: 0;
+      //   radius: 0;
+      // }
       &:focus {
-        border: {
-          top: 0 !important;
-          left: 0 !important;
-          right: 0 !important;
-        }
       }
       &::placeholder {
         font-size: rem(14);
