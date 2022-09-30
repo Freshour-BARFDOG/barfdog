@@ -4,9 +4,9 @@ import CloseButton from '../atoms/CloseButton';
 import React, { useEffect, useState } from 'react';
 import PureCheckbox from '/src/components/atoms/PureCheckbox';
 import { getData } from '/src/pages/api/reqData';
-import Spinner from "/src/components/atoms/Spinner";
-import AmdinErrorMessage from "/src/components/atoms/AmdinErrorMessage";
-import {productType} from "/store/TYPE/itemType";
+import Spinner from '/src/components/atoms/Spinner';
+import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
+import { productType } from '/store/TYPE/itemType';
 
 export const Modal_orderConfirm = ({
   id,
@@ -21,7 +21,7 @@ export const Modal_orderConfirm = ({
   const [isLoading, setIsLoading] = useState({});
 
   useEffect(() => {
-    if(orderType !== productType.GENERAL) return; // 일반상품일 경우, orderItemIdList조회를 위해서만 사용함
+    if (orderType !== productType.GENERAL) return; // 일반상품일 경우, orderItemIdList조회를 위해서만 사용함
     try {
       (async () => {
         setIsLoading((prevState) => ({
@@ -86,36 +86,45 @@ export const Modal_orderConfirm = ({
       <section className={s['title-section']}>
         <h4 className={s.title}>주문확인</h4>
       </section>
-      {isLoading.fetching ? <AmdinErrorMessage><Spinner/></AmdinErrorMessage> : <section className={s['body-section']}>
-        <ul className={s['item-wrap']}>
-          {allData.map((data, i) => (
-            <li key={`item-to-be-confirmed-${data.id}-${i}`}>
-              {orderType === productType.GENERAL && <><h5 className={s.itemTitle}>주문ID: {data.id}</h5>
-                <div className={s.itemList}>
-                  {data.orderItemInfoList?.length > 0 &&
-                    data.orderItemInfoList.map((orderIteminfo, i) => (
-                      <div key={`${orderIteminfo.orderItemId}-${i}`}>
-                        <PureCheckbox
-                          id={`orderItemId-${orderIteminfo.orderItemId}`}
-                          onClick={onClickCheckbox}
-                        >
-                          (상품번호: {orderIteminfo.orderItemId}) 상품명: {orderIteminfo.itemName}
-                        </PureCheckbox>
-                      </div>
-                    ))}
-                </div></>}
-              {orderType === productType.SUBSCRIBE &&
-                (<PureCheckbox
-                id={`orderId-${data.id}`}
-                onClick={onClickCheckbox}
-                >
-                  <p>주문ID: {data.id}</p>
-                </PureCheckbox>)}
-            </li>
-          ))}
-        </ul>
-      </section>}
-      
+      {isLoading.fetching ? (
+        <AmdinErrorMessage>
+          <Spinner />
+        </AmdinErrorMessage>
+      ) : (
+        <section className={s['body-section']}>
+          <ul className={s['item-wrap']}>
+            {allData.map((data, i) => (
+              <li key={`item-to-be-confirmed-${data.id}-${i}`}>
+                {orderType === productType.GENERAL && (
+                  <>
+                    <h5 className={s.itemTitle}>주문번호: {data.merchantUid}</h5>
+                    <div className={s.itemList}>
+                      {data.orderItemInfoList?.length > 0 &&
+                        data.orderItemInfoList.map((orderIteminfo, i) => (
+                          <div key={`${orderIteminfo.orderItemId}-${i}`}>
+                            <PureCheckbox
+                              id={`orderItemId-${orderIteminfo.orderItemId}`}
+                              onClick={onClickCheckbox}
+                            >
+                              (상품번호: {orderIteminfo.orderItemId}) 상품명:{' '}
+                              {orderIteminfo.itemName}
+                            </PureCheckbox>
+                          </div>
+                        ))}
+                    </div>
+                  </>
+                )}
+                {orderType === productType.SUBSCRIBE && (
+                  <PureCheckbox id={`orderId-${data.id}`} onClick={onClickCheckbox}>
+                    <p>주문ID: {data.id}</p>
+                  </PureCheckbox>
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       <section className={s['btn-section']}>
         <button type={'button'} className={'admin_btn line popup'} onClick={onHideModal}>
           취소

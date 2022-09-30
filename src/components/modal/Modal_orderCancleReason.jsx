@@ -104,7 +104,7 @@ export const Modal_orderCancleReason = ({
         <ul className={s['item-wrap']}>
           {allData.map((data, i) => (
             <li key={`item-to-be-canceled-${data.id}-${i}`}>
-              {orderType === productType.GENERAL && <><h5 className={s.itemTitle}>주문ID: {data.id}</h5>
+              {orderType === productType.GENERAL && <><h5 className={s.itemTitle}>주문번호: {data.merchantUid}</h5>
                 <div className={s.itemList}>
                   {data.orderItemInfoList?.length > 0 &&
                     data.orderItemInfoList.map((orderIteminfo, i) => (
