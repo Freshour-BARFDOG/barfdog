@@ -1,0 +1,11 @@
+User-agent: Googlebot
+Disallow: /api
+Disallow: /bf-admin
+Disallow: /mypage
+Disallow: /order
+Disallow: /popup
+
+User-agent: *
+Allow: /
+
+Sitemap: ''
