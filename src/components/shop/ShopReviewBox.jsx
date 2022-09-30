@@ -11,7 +11,6 @@ import MiniImageIcon from '/public/img/icon/icon-mini-image.svg';
 import Image from 'next/image';
 
 export const ShopReviewBox = ({ data }) => {
-  // console.log(data);
   const auth = useSelector((state) => state.auth);
   const isAdmin = auth.isAdmin;
   const getListApiUrl = `/api/items/${data?.itemId}/reviews`;
@@ -20,7 +19,30 @@ export const ShopReviewBox = ({ data }) => {
   const [itemList, setItemList] = useState([]);
   const [isLoading, setIsLoading] = useState({});
 
-  // console.log(itemList);
+  const pageInterCeptor = async (res) => {
+    let newPageInfo = {
+      totalPages: 0,
+      size: 0,
+      totalItems: 0,
+      currentPageIndex: 1,
+      newPageNumber: 1,
+      newItemList: [],
+    };
+    if (res?.data?._embedded) {
+      const pageData = res.data.page;
+      const newItemList = res.data._embedded.itemReviewsDtoList || [];
+
+      newPageInfo = {
+        totalPages: pageData.totalPages,
+        size: pageData.size,
+        totalItems: pageData.totalElements,
+        currentPageIndex: pageData.number,
+        newPageNumber: pageData.number + 1,
+        newItemList: newItemList,
+      };
+    }
+    return newPageInfo;
+  };
 
   return (
     <section className={s.tab_slide_box2}>
@@ -44,7 +66,7 @@ export const ShopReviewBox = ({ data }) => {
             target={'_blank'}
             rel={'noreferrer'}
           >
-            후기 작성하기
+            관리자 후기생성
           </a>
         </div>
       )}
@@ -60,7 +82,9 @@ export const ShopReviewBox = ({ data }) => {
         <ul className="reviewBox">
           {isLoading.fetching && <Spinner />}
           {itemList.length > 0 ? (
-            itemList?.map((data, index) => <ReviewList key={`review-list-${index}`} data={data} />)
+            itemList?.map((data, index) => (
+              <ShopSingleItem_ReviewList key={`review-list-${index}`} data={data} />
+            ))
           ) : (
             <EmptyContMessage message={'등록된 댓글이 없습니다.'} />
           )}
@@ -74,13 +98,14 @@ export const ShopReviewBox = ({ data }) => {
           queryItemList={apiDataQueryString}
           setIsLoading={setIsLoading}
           routerDisabled={true}
+          pageInterceptor={pageInterCeptor}
         />
       </section>
     </section>
   );
 };
 
-const ReviewList = ({ data }) => {
+const ShopSingleItem_ReviewList = ({ data }) => {
   const DATA = {
     id: data.reviewDto.id,
     star: data.reviewDto.star,
@@ -89,9 +114,10 @@ const ReviewList = ({ data }) => {
     createdDate: data.reviewDto.createdDate,
     itemImages: data.reviewImageDtoList,
   };
+
   const [visible, setVisible] = useState(false);
   const boxRef = useRef(null);
-  const onClickHandler = (e) => {
+  const onClickHandler = () => {
     visible ? setVisible(false) : setVisible(true);
   };
 

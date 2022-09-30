@@ -23,14 +23,13 @@ export const OrdersheetDeliveryForm = ({
     detailAddress: null, // 상세주소 (묶음 배송일 경우, null)
     request: null, // 배송 요청사항 (묶음 배송일 경우, null)
   };
-  // 묶음배송여부 ! Client ONLY  (cf. 묶음배송아닐 경우, form.deliveryId = null)
+  // 묶음배송여부 ! Client ONLY  (cf. 묶음배송아닐 경우, form.deliveryId = null) // 정기구독중이지 않을 경우, 묶음배송기능 아예 작동하지 않게함
   const [bundle, setBundle] = useState(false);
   const [sameUserInfo, setSameUserInfo] = useState(false);
   // 배송정보
   const [deliveryInfo, setDeliveryInfo] = useState(initialDeliveryInfos);
-  // console.log(deliveryInfo)
-  // console.log(sameUserInfo)
-
+  
+  
   useEffect(() => {
     const deliveryDto = {};
     for (const key in deliveryInfo) {
@@ -50,6 +49,11 @@ export const OrdersheetDeliveryForm = ({
     // !bundle && form.sameUserInfo ? info.phoneNumber : deliveryInfo.phone || ''
     // console.log('배송정버 뱐걍 ')
     // {!bundle && form.sameUserInfo ? info.name : deliveryInfo.name || ''}
+    if(!info.nextSubscribeDeliveryDate && bundle){
+      alert('묶음배송은 정기배송 중인 상품이 있을 경우에만 가능합니다.');
+      setBundle(false);
+    }
+    
     setDeliveryInfo((prevState) => ({
       ...prevState,
       name: bundle ? null : sameUserInfo ? info.name : '',
@@ -244,7 +248,7 @@ export const OrdersheetDeliveryForm = ({
                   <span>
                     {form.deliveryId
                       ? info.nextSubscribeDeliveryDate
-                      : '***TEST_일반배송일 경우, 배송예정일시***'}
+                      : '주문 후 1~2일 이내 배송예정'}
                   </span>
                 )}
                 {orderType === 'subscribe' && <span>{form.nextDeliveryDate}&nbsp;</span>}
@@ -263,7 +267,7 @@ export const OrdersheetDeliveryForm = ({
             className={`${s.bundleShipping} ${bundle ? s.active : s.inActive}`}
             components={[
               <div className={s.text} key={'delivery-message-subscribe'}>
-                정기구독 배송시 묶음 배송 신청
+                정기구독 배송 시 묶음 배송 신청
                 <p>배송비가 추가 되지 않아요</p>
               </div>,
               <div className={s.text} key={'delivery-message-general'}>

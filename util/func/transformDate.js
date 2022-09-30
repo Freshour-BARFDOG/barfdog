@@ -16,7 +16,8 @@ const transformDate = (d, unit, option={seperator:'-'}) => {
   const yy = d.slice(0,4);
   const mm = d.slice(5,7);
   const dd = d.slice(8,10);
-  yymmdd = `${yy}${option.seperator}${mm}${option.seperator}${dd}`;
+  const seperator = option.seperator || '';
+  yymmdd = `${yy}${seperator}${mm}${seperator}${dd}`;
   result = yymmdd;
   
   if(unit === '년월일'){
@@ -41,8 +42,8 @@ const transformDate = (d, unit, option={seperator:'-'}) => {
   
   if(unit === 'time'){
     result = `${yy}년 ${mm}월 ${dd}일 ${hour}시 ${min}분 ${sec}초`;
-    if(option.seperator){
-      result = `${yy}${option.seperator}${mm}${option.seperator}${dd} ${hour}:${min}:${sec}`;
+    if(seperator){
+      result = `${yy}${seperator}${mm}${seperator}${dd} ${hour}:${min}:${sec}`;
     }
   }
   

@@ -15,9 +15,7 @@ import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import Spinner from '/src/components/atoms/Spinner';
 import { transformToday } from '/util/func/transformDate';
-import { valid_isTheSameArray } from '/util/func/validation/validationPackage';
-import PureCheckbox from '/src/components/atoms/PureCheckbox';
-import {postObjData} from "/src/pages/api/reqData";
+import Tooltip from "/src/components/atoms/Tooltip";
 
 
 const initialSearchValues = {
@@ -32,7 +30,7 @@ const initialSearchValues = {
 };
 
 export default function SearchOnSellPage() {
-  const searchApiUrl = `/api/admin/orders/search`;
+  const searchApiUrl = `/api/admin/orders/cancelRequest`; // api 이름과 관계없이, '주문단위'조회에 사용가능함
   const searchPageSize = 10;
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
@@ -50,6 +48,7 @@ export default function SearchOnSellPage() {
     setSearchValues(initialSearchValues);
   };
 
+  
   const onSearchHandler = () => {
     const body = {
       from: searchValues.from,
@@ -58,17 +57,17 @@ export default function SearchOnSellPage() {
       memberName: searchValues.memberName,
       memberEmail: searchValues.memberEmail,
       recipientName: searchValues.recipientName,
-      statusList: [searchValues.statusList], // ! 배열로 전송
+      statusList: searchValues.statusList === 'ALL' ? null : [searchValues.statusList], // ! 배열로 전송 // '전체 상태' 검색 시 null or 빈배열
       orderType: searchValues.orderType,
     };
     setSearchBody(body);
   };
 
   const pageInterceptor = (res) => {
-    // console.log(res);
-    res = DUMMY_RESPONSE; //  ! TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
+    console.log(res);
+    // res = DUMMY_RESPONSE; //  ! TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
     const pageData = res.data.page;
-    const curItemList = res.data?._embedded?.queryAdminOrdersDtoList || [];
+    const curItemList = res.data?._embedded?.queryAdminCancelRequestDtoList || [];
     let newPageInfo = {
       totalPages: pageData.totalPages,
       size: pageData.size,
@@ -128,7 +127,8 @@ export default function SearchOnSellPage() {
           </section>
           <section className="cont">
             <div className="cont_header clearfix">
-              <p className="cont_title cont-left">목록</p>
+              <p className="cont_title cont-left">
+                목록 <Tooltip message={'주문 단위 리스트'}/></p>
             </div>
             <div className={`${s.cont_viewer}`}>
               <div className={s.table}>

@@ -9,6 +9,7 @@ import { FullScreenLoading } from '/src/components/atoms/FullScreenLoading';
 import { transformBirthDay } from '/util/func/transformBirthDay';
 import { transformPhoneNumber } from '/util/func/transformPhoneNumber';
 import transformDate from "../../../../../util/func/transformDate";
+import transformLocalCurrency from "../../../../../util/func/transformLocalCurrency";
 export default function Popup_MemberDetailPage({ id }) {
   const getReviewInfoApiUrl = `/api/admin/members/${id}`;
   const apiDataQuery = 'memberDto';
@@ -47,7 +48,7 @@ export default function Popup_MemberDetailPage({ id }) {
             },
             phoneNumber: transformPhoneNumber(DATA.phoneNumber),
             birthday: transformBirthDay(DATA.birthday),
-            accumulatedAmount: DATA.accumulatedAmount + '원',
+            accumulatedAmount: transformLocalCurrency(DATA.accumulatedAmount) + '원',
             grade: DATA.grade,
             subscribe: DATA.subscribe === false ? 'N' : 'Y',
             accumulatedSubscribe: DATA.accumulatedSubscribe + '회',

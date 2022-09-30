@@ -4,7 +4,7 @@ import {deleteData} from "../../../api/reqData";
 
 
 
-export default function NoticeList({ items, onDeleteItem }) {
+export default function NoticeList({ items }) {
   if (!items || !items.length) return;
 
   return (
@@ -28,7 +28,7 @@ const SingleItems = ({ item }) => {
   const DATA = {
     id: item.id || 0,
     title: item.title || "제목이 없습니다.",
-    createdDate: transformDate(item.createdDate || "22-05-11"),
+    createdDate: transformDate(item.createdDate),
     status: item.status === "LEAKED" ? 'Y' : 'N',
     apiurl: {
       query_blog: item._links.query_notice?.href,
@@ -42,10 +42,10 @@ const SingleItems = ({ item }) => {
     if (confirm(`${DATA.id}번 글을 정말 삭제하시겠습니까?`)) {
       const res = await deleteData(apiURL);
       console.log(res)
-      if(res.status === 200 || res.status === 201 ){
+      if(res.isDone){
         window.location.reload();
       } else {
-        alert('삭제할 수 없습니다. 새로고침 후 , 다시 시도해보세요.')
+        alert('삭제에 실패하였습니다.');
       }
     }
   };

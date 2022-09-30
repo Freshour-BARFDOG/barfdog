@@ -12,9 +12,8 @@ import transformDate from '/util/func/transformDate';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import Spinner from "/src/components/atoms/Spinner";
 import {subscribePlanType} from "/store/TYPE/subscribePlanType";
-import {useRouter} from "next/router";
 import {useModalContext} from "/store/modal-context";
-import Modal_confirm from "../../../../components/modal/Modal_confirm";
+import Modal_confirm from "/src/components/modal/Modal_confirm";
 
 
 /* ! 플랜 주기가 변경될 경우 (2주 => 4주 또는 4주 => 2주 )
@@ -28,6 +27,7 @@ export default function SubscribeOrderChangedPage({ data }) {
   const mct = useModalContext();
   const cart = useSelector((s) => s.cart);
   const info = cart.subscribeOrder;
+  const subscribeId = cart.subscribeOrder.subscribeId;
   const [isLoading, setIsLoading] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
@@ -51,7 +51,6 @@ export default function SubscribeOrderChangedPage({ data }) {
   
   
   const onChangeSubscribeOrder = async (confirm) => {
-    // ! 추가 테스트 필요  // 실제 구독 결제해야, 500 error 가 안 뜸.
     if (submitted === true) return;
     if(!confirm){
       return setActiveConfirmModal(false);
@@ -70,13 +69,12 @@ export default function SubscribeOrderChangedPage({ data }) {
         ...prevState,
         submit: true,
       }));
-      const apiUrl = `/api/subscribes/${data.subscribeId}`;
+      const apiUrl = `/api/subscribes/${subscribeId}`;
       const res = await putObjData(apiUrl, body);
       console.log(res);
-      if (!res.isDone) { //! TEST CODE //
-        // if(res.isDone){  // ! PRODUCT CODE
+      // if (!res.isDone) { //! TEST CODE //
+        if(res.isDone){  // ! PRODUCT CODE
         setSubmitted(true);
-        
         onShowModal('맞춤레시피 변경이 완료되었습니다.');
       } else {
         onShowModal(`데이터를 전송하는데 실패했습니다.\n${res.error}`);
@@ -264,20 +262,23 @@ export async function getServerSideProps({ req, query }) {
   let data = null;
   const getSurveyReportApiUrl = `/api/dogs/${dogId}/surveyReport`;
   const surveyResportInfoRes = await getDataSSR(req, getSurveyReportApiUrl);
+  if(surveyResportInfoRes.data){
+    data = {
+      surveyReportInfo: surveyResportInfoRes.data,
+    };
+  }
 
-  data = {
-    surveyReportInfo: surveyResportInfoRes.data,
-  };
+  
 
-  // if(!data){
-  //   return {
-  //     redirect: {
-  //       permanent: false,
-  //       destination: "/account/login",
-  //     },
-  //     props:{},
-  //   }
-  // }
+  if(!data){
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/account/login",
+      },
+      props:{},
+    }
+  }
 
   return { props: { data } };
 }

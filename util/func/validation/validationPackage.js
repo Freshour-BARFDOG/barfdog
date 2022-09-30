@@ -3,7 +3,7 @@ import checkCharactorSamenessAndContinuity from '../checkCharactorSamenessAndCon
 import transformClearLocalCurrency from '../transformClearLocalCurrency';
 import convertFileSizeToMegabyte from '../convertFileSizeToMegabyte';
 import { discountUnitType } from '../../../store/TYPE/discountUnitType';
-import { transformToday } from '../transformDate';
+import transformDate, { transformToday } from '../transformDate';
 import deleteHypenOnDate from '../deleteHypenOnDate';
 import {isArray} from "util";
 
@@ -65,6 +65,9 @@ export const valid_isEmptyArray = (arr) =>{
   let error;
   if(Array.isArray(arr)){
     error = arr.length ? '' : '항목이 비어있습니다.';
+    if(arr.length > 0 && !arr[0]){
+      error = '배열의 항목이 비어있습니다;'
+    }
   } else if(typeof arr !== 'object'){
     alert('데이터 처리 중 에러가 발생했습니다. 개발사에게 문의하세요.')
     return console.error('ERROR: Parameter type must be array');
@@ -128,8 +131,10 @@ export const valid_email = (value) => {
   let error='';
 
   const email = value;
-  const RegExp = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
-
+  // const RegExp_before = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
+  const RegExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ // ! 0926 validation update ver.
+  // console.log('RegExp_before: ',RegExp_before.test(email))
+  // console.log('RexExp: ',RexExp_advanced.test(email))
   if(!email ){
     error = '항목이 비었습니다.'
   } else if (!RegExp.test(email)) {
@@ -299,7 +304,7 @@ export const valid_URL = (value)=>{
   let error='';
 
   const url = value;
-  const regExp = /(http|https):\/\/((\w+)[.])+(asia|biz|cc|cn|com|de|eu|in|info|jobs|jp|kr|mobi|mx|name|net|nz|org|travel|tv|tw|uk|us)(\/(\w*))*$/i;
+  const regExp = /(http|https):\/\/((\w+)[.])+(asia|biz|cc|cn|com|de|eu|in|info|jobs|jp|kr|mobi|mx|name|net|nz|org|travel|tv|tw|uk|us|app)(\/(\w*))*$/i;
 
   const result = regExp.test(url);
 
@@ -312,6 +317,31 @@ export const valid_URL = (value)=>{
   return error;
 }
 
+
+
+export const valid_link = (value) => {
+  let errorsMessage;
+  
+  const regexURL = new RegExp(
+    "^(https?:\\/\\/)?" + // protocol
+    "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|" + // domain name
+    "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
+    "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
+    "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
+    "(\\#[-a-z\\d_]*)?$",
+    "gi"
+  ); // fragment locator
+  
+  const valid = regexURL.test(value);
+  
+  if (value && !valid) {
+    errorsMessage = "유효하지 않은 링크입니다.";
+  } else {
+    errorsMessage = "";
+  }
+  
+  return errorsMessage;
+};
 
 
 
@@ -356,6 +386,7 @@ export const valid_arrayErrorCount = (arr) => {
   }
   return errorCount;
 };
+
 const valid_singleItemOptionObj = (optionObj) => {
   let error = {};
 
@@ -511,16 +542,20 @@ export const valid_maxLength = (val, maxLength)=>{
 
 
 
-
-
 export const valid_dogBirthYearAndMonth = (val)=>{
   let error= '';
+  const curDate = transformDate(transformToday(), null, {separator:null});
+  const curYear = curDate.slice(0,4);
+  const curMonth = curDate.slice(4,6);
+  const limitedYearAndMonth = Number(`${curYear}${curMonth}`);
   if(!val){
-    error = '항목이 비어있습니다.'
+    error = '항목이 비어있습니다.';
   } else if (val.length === 2){
-    error = '년도 항목이 비어있습니다.'
+    error = '년도 항목이 비어있습니다.';
   } else if (val.length === 4){
-    error = '생월 항목이 비어있습니다.'
+    error = '생월 항목이 비어있습니다.';
+  } else if(val > limitedYearAndMonth){
+    error = '항목은 현재보다 미래일 수 없습니다.';
   }
   return error;
 }
@@ -529,14 +564,14 @@ export const valid_dogBirthYearAndMonth = (val)=>{
 
 export const valid_dogWeight = (val, limitIntCount = 2)=>{
   let error= '';
-  if(!val){
+  if(!val || Number(val) === 0){
     error = '항목이 비어있습니다.'
   }
   
   const isOnlyIntValue = val.indexOf('.') < 0;
   if(isOnlyIntValue && val.length > limitIntCount){
     error = '항목의 정수값은 최대 2자리입니다.'
-  };
+  }
   
   return error;
 }

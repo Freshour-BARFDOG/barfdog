@@ -160,7 +160,6 @@ export const SubscribePlan = ({ subscribeInfo }) => {
 
   const onSuccessChangeSubscribeOrder = () => {
     setIsLoading({ reload: true });
-    onHideModal();
     window.location.reload();
   };
   return (

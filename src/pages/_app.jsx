@@ -106,6 +106,7 @@ MyApp.getInitialProps = async (initialProps) => {
       // console.log(mypageData);
       memberDATA = {
         userType: USER_TYPE,
+        memberId: data.memberId,
         name: data.name,
         email: data.email,
         phoneNumber: data.phoneNumber,

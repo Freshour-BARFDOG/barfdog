@@ -18,7 +18,7 @@ import { EmptyContMessage } from '/src/components/atoms/emptyContMessage';
 import { global_reviewType } from '/store/TYPE/reviewType';
 import transformDate from '/util/func/transformDate';
 import { useRouter } from 'next/router';
-import { reviewStatusOnMemberPage } from '/store/TYPE/reviewStateType';
+import { reviewStatus } from '/store/TYPE/reviewStateType';
 import Modal_singleReviewImages from '/src/components/modal/Modal_singleReviewImages';
 import Modal_confirm from '/src/components/modal/Modal_confirm';
 import { deleteObjData } from '/src/pages/api/reqData';
@@ -29,8 +29,8 @@ import userStateSlice, { userStateAction } from '/store/userState-slice';
 
 
 export default function ReviewPage() {
-  const searchWritableReivewApiUrl = '/api/reviews/writeable'; // 작성 가능한 후기
-  const searchMyReivewApiUrl = '/api/reviews'; // 작성한 후기
+  const searchWritableReivewApiUrl = '/api/reviews/writeable'; // 작성 가능한 리뷰 리스트 조회(페이징)
+  const searchMyReivewApiUrl = '/api/reviews'; // 작성한 리뷰 리스트 조회(페이징)
   const searchPageSize = 10;
 
   const dispatch = useDispatch();
@@ -47,9 +47,8 @@ export default function ReviewPage() {
   // console.log(writableReviewList)
   // console.log(reviewList)
   const writableReviewListPageInterCeptor = (res) => {
-    // SERVER pagination query가 변경되었을 경우 사용하는 function;
-    res = DUMMY_RESPONSE_DATA_writableReview;
-    // console.log(res);
+    // res = DUMMY_RESPONSE_DATA_writableReview; // ! TEST
+    console.log(res);
     const pageData = res.data.page;
     let newPageInfo = {
       totalPages: pageData.totalPages,
@@ -154,9 +153,9 @@ export default function ReviewPage() {
       <Layout>
         <Wrapper>
           <MypageWrapper>
-            <section className={s.title}>상품후기</section>
+            <section className={s.title}>상품 후기</section>
             <Tabmenu_TwoButton
-              leftMenuName={'후기작성'}
+              leftMenuName={'후기 작성'}
               rightMenuName={'작성한 후기'}
               getPositionHandler={setActiveMenu}
             />
@@ -282,7 +281,7 @@ export default function ReviewPage() {
                                 </figure>
                               )}
                               <div className={s.row_5}>{transformDate(item.createdDate)}</div>
-                              {item.status === reviewStatusOnMemberPage.RETURN && (
+                              {item.status === reviewStatus.RETURN && (
                                 <div className={`${s.returnMessage}`}>
                                   반려사유: {item.returnReason}
                                 </div>
@@ -291,7 +290,7 @@ export default function ReviewPage() {
 
                             <div className={s.mid_box}>
                               <div className={s.mid_box_text}>
-                                {reviewStatusOnMemberPage.KOR[item.status]}
+                                {reviewStatus.KOR[item.status]}
                               </div>
                             </div>
                             <div className={s.right_box}>
@@ -357,7 +356,13 @@ export default function ReviewPage() {
     </>
   );
 }
+//
 
+/*
+* imageUrl:'https://images.unsplash.com/photo-1657299156653-d3c0147ba3ee?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
+* imageUrl:'https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2053&q=80',
+* imageUrl:'https://images.unsplash.com/photo-1563865436874-9aef32095fad?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80',
+* */
 const DUMMY_RESPONSE_DATA_writableReview = {
   data: {
     _embedded: {

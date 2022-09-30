@@ -1,29 +1,68 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
 import SearchTextWithCategory from '/src/components/admin/form/searchBar/SearchTextWithCategory';
-import s from "./channelTalk.module.scss";
-import Pagination from "/src/components/atoms/Pagination";
-import AmdinErrorMessage from "/src/components/atoms/AmdinErrorMessage";
-import ChannelTalkMemberList from "./ChannelTalkMemberList";
+import s from './channelTalk.module.scss';
+import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
+import ChannelTalkMemberList from './ChannelTalkMemberList';
+import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
+import Spinner from '/src/components/atoms/Spinner';
+import enterKey from "/util/func/enterKey";
+import Tooltip from "../../../../components/atoms/Tooltip";
+
+export default function ChannelTalkPage() {
+  
+  const searchApiUrl = `/api/admin/guests`;
+  const searchPageSize = 10;
+  const [isLoading, setIsLoading] = useState({});
+  const [searchValues, setSearchValues] = useState({});
+  const [searchBody, setSearchBody] = useState(null);
+  const [itemList, setItemList] = useState([]);
 
 
-const TEST_ITEM = [1,2,3,4,5];
+  const pageInterceptor = (res) => {
+    // res = DUMMY_RES; //  ! TEST
+    console.log(res);
+    let newPageInfo;
+    let pageData;
+    let curItemList;
+    if (res) {
+      pageData = res?.data?.page;
+      curItemList = res.data?._embedded?.queryAdminGuestDtoList || [];
+    }
 
+    newPageInfo = {
+      totalPages: pageData?.totalPages,
+      size: pageData?.size,
+      totalItems: pageData?.totalElements,
+      currentPageIndex: pageData?.number,
+      newPageNumber: pageData?.number + 1,
+      newItemList: curItemList || [],
+    };
+    console.log('newPageInfo: ', newPageInfo);
+    return newPageInfo;
+  };
 
-function ChannelTalkPage() {
-  const [searchValue, setSearchValue] = useState({});
-  const [itemList, setItemList] = useState(TEST_ITEM);
+  const onSearchHandler = () => {
+    const body = {
+      name: searchValues.name,
+      email: searchValues.email,
+      phoneNumber: searchValues.phoneNumber,
+    };
+    setSearchBody(body);
+  };
+
   const onResetSearchValues = (e) => {
-    setSearchValue("");
-    console.log("초기화 실행");
+    setSearchValues('');
+    console.log('초기화 실행');
   };
-
-  const onSearchHandler = (e) => {
-    console.log("검색 실행");
-  };
-
+  
+  const onEnterKeyHandler = (e)=>{
+    enterKey(e, onSearchHandler)
+  }
+  
+  
   return (
     <>
       <MetaTitle title="친구톡" admin={true} />
@@ -32,15 +71,17 @@ function ChannelTalkPage() {
           <h1 className="title_main">채널톡</h1>
           <section className="cont">
             <SearchTextWithCategory
-              searchValue={searchValue}
+              searchValue={searchValues}
+              setSearchValue={setSearchValues}
+              onSearch={onEnterKeyHandler}
               title="회원검색"
               name="content"
               className={'fullWidth'}
               id="content"
               options={[
                 { label: '이름', value: 'name' },
-                { label: '아이디', value: 'id' },
-                { label: '휴대폰 번호', value: 'phone' },
+                { label: '아이디', value: 'email' },
+                { label: '휴대폰 번호', value: 'phoneNumber' },
               ]}
             />
             <div className={'btn_section mt-20'}>
@@ -54,38 +95,41 @@ function ChannelTalkPage() {
           </section>
           <section className="cont">
             <div className="cont_header clearfix">
-              <p className="cont_title cont-left">상담 고객 목록</p>
-              <div className="controls cont-left">
-                <button className="admin_btn line basic_m">목록새로고침</button>
-              </div>
+              <h3 className="cont_title cont-left">상담 고객 목록
+                <Tooltip message={'비회원 시 입력한 "이메일, 연락처"가 회원가입 후 하나라도 일치할 경우, 회원매칭됩니다.'} messagePosition={'left'} />
+              </h3>
             </div>
             <div className={`${s.cont_viewer}`}>
               <div className={s.table}>
                 <ul className={s.table_header}>
-                  <li className={s.table_th}>이름</li>
-                  <li className={s.table_th}>아이디</li>
-                  <li className={s.table_th}>연락처</li>
-                  <li className={s.table_th}>회원여부</li>
-                  <li className={s.table_th}>회원가입일</li>
-                  <li className={s.table_th}>주문여부</li>
-                  <li className={s.table_th}>최초결제일</li>
+                  <li className={s.table_th}>최초 상담일</li>
+                  <li className={s.table_th}>상담 이름</li>
+                  <li className={s.table_th}>상담 이메일</li>
+                  <li className={s.table_th}>상담 연락처</li>
+                  <li className={s.table_th}>회원 가입일</li>
+                  <li className={s.table_th}>회원 이름</li>
+                  <li className={s.table_th}>회원 이메일</li>
+                  <li className={s.table_th}>회원 연락처</li>
+                  <li className={s.table_th}>최초 결제일</li>
                   <li className={s.table_th}>상세보기</li>
                 </ul>
-                {itemList.length ? (
-                  <ChannelTalkMemberList
-                    items={itemList}
-                    // onDeleteItem={onDeleteItem}
-                  />
-                ) : (
+                {isLoading.fetching ? (
+                  <AmdinErrorMessage loading={<Spinner />} />
+                ) : itemList.length === 0 ? (
                   <AmdinErrorMessage text="조회된 데이터가 없습니다." />
+                ) : (
+                  <ChannelTalkMemberList items={itemList} />
                 )}
               </div>
             </div>
-            <div className={s["pagination-section"]}>
-              <Pagination
-                itemCountPerGroup={10}
-                itemTotalCount={100}
-                className={"square"}
+            <div className={s['pagination-section']}>
+              <PaginationWithAPI
+                apiURL={searchApiUrl}
+                size={searchPageSize}
+                pageInterceptor={pageInterceptor}
+                setItemList={setItemList}
+                setIsLoading={setIsLoading}
+                option={{ apiMethod: 'GET', body: searchBody }}
               />
             </div>
           </section>
@@ -95,4 +139,125 @@ function ChannelTalkPage() {
   );
 }
 
-export default ChannelTalkPage;
+
+//
+// export async function getServerSideProps () {
+//   let DATA = null;
+//
+//   try {
+//     const res = await axios({
+//       method: 'GET',
+//       url: 'https://api.channel.io/open/v5/user-chats?state=opened&sortOrder=desc&limit=25',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'x-access-key': process.env.NEXT_PUBLIC_CHANNEL_ACCESS_KEY,
+//         'x-access-secret': process.env.NEXT_PUBLIC_CHANNEL_ACCESS_SECRET,
+//       },
+//     });
+//     console.log(res);
+//     if(res.status === 200){
+//       DATA = res.data
+//     }
+//   } catch (err) {
+//     console.error(err);
+//   }
+//
+//
+//   return {
+//     props:{
+//       data: DATA
+//     }
+//   }
+// }
+
+
+
+
+const DUMMY_RES = {
+  data: {
+    _embedded: {
+      queryAdminGuestDtoList: [
+        {
+          guestName: '나관리',
+          guestEmail: 'admin@gmail.com',
+          guestPhoneNumber: '01098761234',
+          createdDate: '2022-08-24T10:05:44.308',
+          memberId: 8,
+          memberName: '관리자',
+          memberEmail: 'admin@gmail.com',
+          memberPhoneNumber: '01056785678',
+          joinDate: '2022-08-24T10:05:42.562',
+          firstPaymentDate: '2022-08-24T10:05:44.293',
+          paid: true,
+          _links: {
+            query_member: {
+              href: 'http://localhost:8080/api/admin/members/8',
+            },
+          },
+        },
+        {
+          guestName: '나유저',
+          guestEmail: 'user@gmail.com',
+          guestPhoneNumber: '01011112222',
+          createdDate: '2022-08-24T10:05:44.307',
+          memberId: 10,
+          memberName: '김회원',
+          memberEmail: 'user@gmail.com',
+          memberPhoneNumber: '01099038544',
+          joinDate: '2022-08-24T10:05:42.718',
+          firstPaymentDate: '2022-08-24T10:05:44.293',
+          paid: true,
+          _links: {
+            query_member: {
+              href: 'http://localhost:8080/api/admin/members/10',
+            },
+          },
+        },
+        {
+          guestName: '나그네',
+          guestEmail: 'nagne@gmail.com',
+          guestPhoneNumber: null,
+          createdDate: '2022-08-24T10:05:44.307',
+          memberId: null,
+          memberName: null,
+          memberEmail: null,
+          memberPhoneNumber: null,
+          joinDate: null,
+          firstPaymentDate: null,
+          paid: false,
+          _links: {
+            query_member: {
+              href: 'http://localhost:8080/api/admin/members/10',
+            },
+          },
+        },
+      ],
+    },
+    _links: {
+      first: {
+        href: 'http://localhost:8080/api/admin/guests?page=0&size=2',
+      },
+      prev: {
+        href: 'http://localhost:8080/api/admin/guests?page=0&size=2',
+      },
+      self: {
+        href: 'http://localhost:8080/api/admin/guests?page=1&size=2',
+      },
+      next: {
+        href: 'http://localhost:8080/api/admin/guests?page=2&size=2',
+      },
+      last: {
+        href: 'http://localhost:8080/api/admin/guests?page=3&size=2',
+      },
+      profile: {
+        href: '/docs/index.html#resources-query-admin-guests',
+      },
+    },
+    page: {
+      size: 10,
+      totalElements: 3,
+      totalPages: 1,
+      number: 1,
+    },
+  },
+};

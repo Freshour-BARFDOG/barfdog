@@ -21,6 +21,9 @@ import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
 import Spinner from '/src/components/atoms/Spinner';
 import { cookieType } from '/store/TYPE/cookieType';
 import enterKey from '/util/func/enterKey';
+import {FullScreenLoading} from "../../../components/atoms/FullScreenLoading";
+import {getDataSSR, getTokenFromServerSide} from "../../api/reqData";
+import {userType} from "../../../../store/TYPE/userAuthType";
 
 const initialValues = {
   email: '',
@@ -31,6 +34,7 @@ export default function LoginPage() {
   const router = useRouter();
   const dispatch = useDispatch();
   const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
   const [modalMessage, setModalMessage] = useState('');
   const [isLoading, setIsLoading] = useState({});
   const [autoLogin, setAutoLogin] = useState(false);
@@ -64,13 +68,13 @@ export default function LoginPage() {
 
   function naverLoginFunc() {
     // naverRef.current.children[0].click();
-    const KAKAO_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize`;
-    const clientId = process.env.NEXT_PUBLIC_NAVER_CLIENT_ID; // ! 개인개정 client Id => 추후 바프독 clienet Id 로 변경
-    const redirUri = 'http://localhost:4000/account/naver';
-    const state = 'testStateString'; // state(상태 유지를 위한 임의의 문자열) 정보를 넣어 아래 예제와 같은 주소로 요청을 보낸다.
-    // ! state => 필수항목 / 상태토큰값은 어디에서 확인하는지 , API 가이드에서 추가 확인 필요함????
+    const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize`;
+    const clientId = process.env.NEXT_PUBLIC_NAVER_CLIENT_ID;
+    const redirUri = process.env.NEXT_PUBLIC_NAVER_REDIRECT_URI;
+    const state = 'barfdogNaverLogin'; // state(상태 유지를 위한 임의의 문자열) 정보를 넣어 아래 예제와 같은 주소로 요청을 보낸다.
+    // ! state => 필수항목 / 상태토큰값은 어디에서 확인하는지 , API 가이드에서 추가 확인 필요????
     router.push(
-      `${KAKAO_AUTH_URL}?response_type=code&client_id=${clientId}&redirect_uri=${redirUri}&state=${state}`,
+      `${NAVER_AUTH_URL}?response_type=code&client_id=${clientId}&redirect_uri=${redirUri}&state=${state}`,
     );
   }
 
@@ -132,8 +136,11 @@ export default function LoginPage() {
           } else {
             alert('로그인에 실패하였습니다.');
           }
-
           setIsSubmitted(true);
+          setIsLoading((prevState) => ({
+            ...prevState,
+            movePage: true,
+          }));
         })
         .catch((err) => {
           if (!err) return;
@@ -170,7 +177,6 @@ export default function LoginPage() {
     mct.alertHide();
   };
 
-  
   
   return (
     <>
@@ -222,7 +228,7 @@ export default function LoginPage() {
               </div>
               <div className={s.btnbox}>
                 <button type={'button'} className={`${s.btn} ${s.btn_login}`} onClick={onSubmit}>
-                  {isLoading.submit ? <Spinner style={{ color: '#fff' }} /> : '로그인'}
+                  {(isLoading.submit || isLoading.movePage) ? <Spinner style={{ color: '#fff' }} /> : '로그인'}
                 </button>
                 <Link href={'/account/signup'} passHref>
                   <a>
@@ -261,7 +267,7 @@ export default function LoginPage() {
           </div>
         </Wrapper>
       </Layout>
-      <Modal_global_alert message={modalMessage} onClick={onGlobalModalCallback} />
+      {hasAlert && <Modal_global_alert message={modalMessage} onClick={onGlobalModalCallback} />}
     </>
   );
 }
@@ -310,3 +316,30 @@ const InputBox = ({
     </div>
   );
 };
+
+
+
+
+export async function getServerSideProps({ req }) {
+  let token = null;
+  let isMember = false;
+  if (req?.headers?.cookie) {
+    token = getTokenFromServerSide( req );
+    const getApiUrl = `/api/mypage`;
+    const res = await getDataSSR( req, getApiUrl, token );
+    if ( res && res.status === 200 ) {
+      isMember = true;
+    }
+  }
+  
+  if(isMember){
+    return {
+      redirect:{
+        permanent: false,
+        destination: '/'
+      }
+    }
+  } else {
+    return { props: { } };
+  }
+}

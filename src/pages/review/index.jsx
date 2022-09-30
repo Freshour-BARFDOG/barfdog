@@ -1,26 +1,16 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React from 'react';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import s from '/src/pages/review/review.module.scss';
 import Image from 'next/image';
-import RatingStars from '/src/components/atoms/RatingStars';
-import ArrowLeft from '/public/img/icon/swiper-arrow-large-l.svg';
-import ArrowRight from '/public/img/icon/swiper-arrow-large-r.svg';
-import Modal_bestReview from '/src/components/modal/Modal_bestReview';
-import { slideUp, slideDown } from '/util/func/slideToggle';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import 'swiper/css/effect-fade';
 import axios from 'axios';
-import Spinner from '/src/components/atoms/Spinner';
-import sorting from '/util/func/sorting';
-import { EmptyContMessage } from '/src/components/atoms/emptyContMessage';
-import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
-import { filter_blindingUserName } from '/util/func/filter_blindingUserName';
+import { ReviewBox } from '/src/components/review/ReviewBox';
+import { Swiper_bestReview } from '/src/components/review/Swiper_bestReview';
 
 export default function ReviewPage({ bestReviewList }) {
   return (
@@ -36,7 +26,7 @@ export default function ReviewPage({ bestReviewList }) {
           </section>
 
           <section className={s.swiper_box}>
-            <Swiper_bestReview items={bestReviewList} />
+            {bestReviewList.length > 0 && <Swiper_bestReview items={bestReviewList} />}
           </section>
 
           <section className={s.review_write_ad}>
@@ -88,310 +78,44 @@ export default function ReviewPage({ bestReviewList }) {
   );
 }
 
-function Swiper_bestReview({ items }) {
-  const navPrevRef = useRef(null);
-  const navNextRef = useRef(null);
-  const [isMobile, setIsMobile] = useState(false);
-  const [isActiveModal, setIsActiveModal] = useState(false);
-  const [itemList, setItemList] = useState([]);
-  const [selectedItemId, setSelectedItemId] = useState({});
-
-  useEffect(() => {
-    window.innerWidth <= 600 ? setIsMobile(true) : setIsMobile(false);
-  }, [isMobile]);
-
-  useEffect(() => {
-    const sortedItemList = sorting(items, 'leakedOrder', 'descend');
-    setItemList(sortedItemList);
-  }, [items]);
-
-  const swiperSettings_review = {
-    className: `${s.swiper_review}`,
-    slidesPerView: 'auto',
-    spaceBetween: 40,
-    loop: true,
-    breakpoints: {
-      //반응형 조건 속성
-      300: {
-        slidesPerView: 1,
+export async function getServerSideProps() {
+  let bestReviewList = null;
+  const getbestReviewListApiUrl = '/api/reviews/best';
+  let res = await axios
+    .get(getbestReviewListApiUrl, {
+      headers: {
+        'content-Type': 'application/json',
       },
-      600: {
-        //601 이상일 경우
-        slidesPerView: 2, //레이아웃 2열
-      },
-      900: {
-        slidesPerView: 3,
-      },
-    },
-    pagination: {
-      clickable: true,
-    },
-    navigation: {
-      prevEl: navPrevRef.current,
-      nextEl: navNextRef.current,
-    },
-    modules: [Navigation],
-  };
+    })
+    .then((res) => {
+      // console.log(res);
+      return res;
+    })
+    .catch((err) => {
+      // console.log(err.response)
+      return err.response;
+    });
+  // res = DUMMY_BESTREVIEW_RESPONSE; // ! TEST
+  // console.log(res)
+  if (res.data) {
+    bestReviewList =
+      res.data._embedded?.queryBestReviewsDtoList.map((list) => ({
+        id: list.id || null,
+        imageUrl: list.imageUrl || null,
+        leakedOrder: list.leakedOrder || null,
+        contents: list.contents || null,
+      })) || [];
+  }
 
-  const onClickReviewItemHandler = (e) => {
-    const selectedReviewId = Number(e.currentTarget.dataset.id);
-    setSelectedItemId(selectedReviewId);
-    setIsActiveModal(true);
-  };
-
-  return (
-    <div className={s.swiper_review_outerWrap}>
-      <i className={s['swiper-button-prev']} ref={navPrevRef}>
-        <svg viewBox="0 0 50 50">
-          <ArrowLeft className={s.arrow_left} />
-        </svg>
-      </i>
-      <i className={s['swiper-button-next']} ref={navNextRef}>
-        <svg viewBox="0 0 50 50">
-          <ArrowRight className={s.arrow_right} />
-        </svg>
-      </i>
-      <Swiper
-        {...swiperSettings_review}
-        onInit={(swiper) => {
-          swiper.params.navigation.prevEl = navPrevRef.current;
-          swiper.params.navigation.nextEl = navNextRef.current;
-          swiper.navigation.destroy();
-          swiper.navigation.init();
-          swiper.navigation.update();
-        }}
-      >
-        {itemList?.length > 0 && itemList?.map((item) => (
-          <SwiperSlide
-            className={s.slide}
-            key={`bestReview-${item.id}`}
-            data-id={item.id}
-            onClick={onClickReviewItemHandler}
-          >
-            <div className={s.mid_box}>
-              <div className={`${s.image} img-wrap`}>
-                <Image
-                  src={item.imageUrl}
-                  objectFit="cover"
-                  layout="fill"
-                  alt="베스트 리뷰 이미지"
-                />
-              </div>
-            </div>
-            <p className={s.content_title}>{item.contents}</p>
-            <p>{item.contents}</p>
-          </SwiperSlide>
-        ))}
-      </Swiper>
-      {isActiveModal && (
-        <Modal_bestReview
-          isActiveModal={isActiveModal}
-          setIsActiveModal={setIsActiveModal}
-          reviewId={selectedItemId}
-        />
-      )}
-    </div>
-  );
+  return { props: { bestReviewList } };
 }
 
-const reviewDUMMY_DATA = [
-  {
-    reviewDto: {
-      id: 47,
-      thumbnailUrl:
-        'https://images.unsplash.com/photo-1586671267731-da2cf3ceeb80?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=689&q=80',
-      star: 3,
-      contents: '열글자 이상의 구독 리뷰1',
-      username: '김회원1',
-      writtenDate: '2022-07-15',
-    },
-    reviewImageDtoList: [
-      {
-        filename: '파일이름1',
-        url: 'https://images.unsplash.com/photo-1537151625747-768eb6cf92b2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=685&q=80',
-      },
-      {
-        filename: '파일이름2',
-        url: 'https://images.unsplash.com/photo-1588943211346-0908a1fb0b01?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80',
-      },
-      {
-        filename: '파일이름3',
-        url: 'https://images.unsplash.com/photo-1576201836106-db1758fd1c97?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-      },
-    ],
-  },
-  {
-    reviewDto: {
-      id: 49,
-      thumbnailUrl:
-        'https://images.unsplash.com/photo-1587300003388-59208cc962cb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-      star: 3,
-      contents: '열글자 이상의 구독 리뷰2222',
-      username: '김회원2',
-      writtenDate: '2022-07-20',
-    },
-    reviewImageDtoList: [
-      {
-        filename: '파일이름1',
-        url: 'https://images.unsplash.com/photo-1537151625747-768eb6cf92b2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=685&q=80',
-      },
-      {
-        filename: '파일이름2',
-        url: 'https://images.unsplash.com/photo-1588943211346-0908a1fb0b01?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80',
-      },
-      {
-        filename: '파일이름3',
-        url: 'https://images.unsplash.com/photo-1576201836106-db1758fd1c97?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-      },
-    ],
-  },
-  {
-    reviewDto: {
-      id: 22,
-      thumbnailUrl:
-        'https://images.unsplash.com/photo-1587300003388-59208cc962cb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-      star: 5,
-      contents: '열글자 이상의 구독 리뷰2열글자 이상의 구독 리뷰2열글자 이상의 구독 리뷰2열글자 이상의 구독 리뷰2열글자 이상의 구독 리뷰2열글자 이상의 구독 리뷰2열글자 이상의 구독 리뷰2열글자 이상의 구독 리뷰2',
-      username: '김회원2',
-      writtenDate: '2022-07-20',
-    },
-    reviewImageDtoList: [
-      {
-        filename: '파일이름1',
-        url: 'https://images.unsplash.com/photo-1537151625747-768eb6cf92b2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=685&q=80',
-      },
-      {
-        filename: '파일이름2',
-        url: 'https://images.unsplash.com/photo-1588943211346-0908a1fb0b01?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80',
-      },
-      {
-        filename: '파일이름3',
-        url: 'https://images.unsplash.com/photo-1576201836106-db1758fd1c97?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-      },
-    ],
-  }
-];
 
-const ReviewBox = () => {
-  const searchPageSize = 10;
-  const getListApiUrl = '/api/reviews/community';
-  const apiDataQueryString = 'queryCommunityReviewsDtoList';
-  const [itemList, setItemList] = useState([]);
-  const [originDataList, setOriginDataList] = useState([]);
-  const [isLoading, setIsLoading] = useState({});
 
-  useEffect(() => {
-    // console.log(originDataList);
-    const newItemList = originDataList.map((data) => ({
-      id: data.reviewDto.id,
-      thumbnailUrl: data.reviewDto.thumbnailUrl,
-      star: data.reviewDto.star,
-      contents: data.reviewDto.contents,
-      username: data.reviewDto.username,
-      writtenDate: data.reviewDto.writtenDate,
-      imgList: data.reviewImageDtoList,
-    }));
-    setItemList(newItemList);
 
-    // ! TEST TEST TEST TEST TEST TEST TEST
-    setOriginDataList(reviewDUMMY_DATA);
-    // ! TEST TEST TEST TEST TEST TEST TEST
-  }, [originDataList]);
 
-  // console.log(itemList);
 
-  return (
-    <div className={s.tab_slide_box}>
-      <div className={s.notice_board}>
-        <div className={s.flex_title}>
-          <div>No</div>
-          <div>상품</div>
-          <div>별점</div>
-          <div className={s.px16_title_content}>제목</div>
-          <div></div>
-          <div>등록일</div>
-        </div>
-        <ul className="reviewBox">
-          {isLoading.fetching ? (
-            <Spinner />
-          ) : itemList?.length > 0 ? (
-            itemList?.map((item, index) => (
-              <ReviewItem key={`review-${item.id}-${index}`} item={item} />
-            ))
-          ) : (
-            <EmptyContMessage message={'작성된 리뷰가 없습니다.'} />
-          )}
-        </ul>
-      </div>
-      <div className={s.pagination_box}>
-        <PaginationWithAPI
-          apiURL={getListApiUrl}
-          size={searchPageSize}
-          setItemList={setOriginDataList}
-          queryItemList={apiDataQueryString}
-          setIsLoading={setIsLoading}
-        />
-      </div>
-    </div>
-  );
-};
-
-const ReviewItem = ({ item }) => {
-
-  const [visible, setVisible] = useState(false);
-  const boxRef = useRef(null);
-  const onClickHandler = (e) => {
-    visible ? setVisible(false) : setVisible(true);
-  };
-
-  useEffect(() => {
-    const selectedElem = boxRef.current;
-    if (!selectedElem) return;
-    visible ? slideDown(selectedElem) : slideUp(selectedElem);
-  }, [visible]);
-
-  return (
-    <li>
-      <figure className={s.grid_box} onClick={onClickHandler}>
-        <span className={s.grid_num}>{item.id}</span>
-        <div className={s.mid_box}>
-          <i className={`${s.image_product} img-wrap`}>
-            <Image src={item.thumbnailUrl} objectFit="contain" layout="fill" alt="리뷰 썸네일" />
-          </i>
-        </div>
-        <i className={s.star_box}>
-          <RatingStars count={item.star} margin={0} disabled />
-        </i>
-        <p className={s.content}>
-          <i className={`${s.image} img-wrap`}>
-            <Image
-              src={require('/public/img/shop/single/shop_main_slide_picture.png')}
-              objectFit="contain"
-              layout="fill"
-              alt="카드 이미지"
-            />
-          </i>
-          {item.contents}
-        </p>
-        <span className={s.grid_name}>{filter_blindingUserName(item?.username)}</span>
-        <span className={s.grid_date}>{item.writtenDate}</span>
-      </figure>
-      <div className={s.text_box} ref={boxRef}>
-        <p className={s.text}>{item.contents}</p>
-        <div className={s.images}>
-          {item.imgList?.map((imgData, index) => (
-            <figure className={`${s['img-wrap']} img-wrap init-next-image`} key={`review-detail-images-${index}`}>
-              <Image src={imgData.url} objectFit="cover" layout="fill" alt={imgData.filename} />
-            </figure>
-          ))}
-        </div>
-
-      </div>
-    </li>
-  );
-};
-
-const DUMMY_DATA = {
+const DUMMY_BESTREVIEW_RESPONSE = {
   data: {
     _embedded: {
       queryBestReviewsDtoList: [
@@ -422,26 +146,3 @@ const DUMMY_DATA = {
     },
   },
 };
-
-export async function getServerSideProps(context) {
-  const getbestReviewListApiUrl = '/api/reviews/best';
-  const res = await axios
-    .get(getbestReviewListApiUrl, {
-      headers: {
-        'content-Type': 'application/json',
-      },
-    })
-    .then((res) => {
-      // console.log(res);
-      return res;
-    })
-    .catch((err) => {
-      // console.log(err.response)
-      return err.response;
-    });
-  const bestReviewList =
-    res.data?._embedded?.queryBestReviewsDtoList ||
-    DUMMY_DATA.data._embedded.queryBestReviewsDtoList;
-
-  return { props: { bestReviewList } };
-}

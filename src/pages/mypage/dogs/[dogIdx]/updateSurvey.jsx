@@ -47,17 +47,24 @@ export default function UpdateSurveyPage({ data }) {
     caution: data.dogDto.caution, // 기타 특이사항 [없으면 'NONE']
   };
 
-  // ! 못먹는음식 => 기타 & 직접입력란에 미리 입력되도록
-  // ! 기타 특이사항 => 직접입력란에 미리 입력된것 && 있어요 checked
 
   const loadingDuration = 1200; // ms
-  const router = useRouter();
   const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
   const [formValues, setFormValues] = useState(initialFormValues);
-  const [isLoading, setIsLoading] = useState({}); // obj
+  const [isLoading, setIsLoading] = useState({});
   const [modalMessage, setModalMessage] = useState('');
   const [activeConfirmModal, setActiveConfirmModal] = useState(false);
   const [submitState, setSubmitState] = useState(null);
+  const [isChangedOneMealRecommendGram, setIsChangedOneMealRecommendGram] = useState( false );
+  
+  
+  useEffect(() => {
+    if (!data && window && typeof window !== 'undefined') {
+      window.location.href = '/mypage/dogs';
+    }
+  }, [data]);
+  
   
   useEffect( () => {
     setIsLoading(() => ({ animation : true }));
@@ -93,7 +100,7 @@ export default function UpdateSurveyPage({ data }) {
       }
     }
 
-    setFormValues((prevState) => ({
+    setFormValues ((prevState) => ({
       ...prevState,
       [id]: filteredValue,
     }));
@@ -121,7 +128,6 @@ export default function UpdateSurveyPage({ data }) {
   }
 
   const onSubmit = async (confirm) => {
-    console.log(confirm)
     if (!confirm || submitState === true) {
       return setActiveConfirmModal(false)
     }
@@ -135,34 +141,35 @@ export default function UpdateSurveyPage({ data }) {
       const apiUrl = `/api/dogs/${data.dogIdx}`;
       const res = await putObjData(apiUrl, formValues);
       console.log(res);
+      const resData = res.data.data;
+      
       if (res.isDone) {
-        modalMessage = '설문조사가 성공적으로 수정되었습니다.';
-        onShowModal(modalMessage);
-        setTimeout(()=>{
-          window.location.reload();
-        }, 1000);
-        setIsLoading({reload:true});
-        console.log(res.data.data)
-        // const slicedReportApiLink = res.data.data._links.query_surveyReport.href.split('/');
-        // const linkLength = slicedReportApiLink.length;
-        // const endPoint = slicedReportApiLink[linkLength - 1];
-        // const surveyReportsId = endPoint;
-        // const curPath = router.pathname;
-        // await router.push(`${curPath}?surveyReportsId=${surveyReportsId}`);
-
+        
+        modalMessage = '설문조사가 성공적으로 수정되었습니다.'; // 추천그램수 변경여부와 관계없이 설문조사 성공
+        const beforeOneMealRecommendGram = data.dogDto.oneMealRecommendGram;
+        const afterOneMealRecommendGram = resData.oneMealRecommendGram;
+        const isChangedOneMealRecommendGram = beforeOneMealRecommendGram !== afterOneMealRecommendGram;
+        setIsChangedOneMealRecommendGram(isChangedOneMealRecommendGram); // 추천그램수 변경되지 않음
+        setSubmitState('UPDATED');
+        
+      } else if(resData?.errors?.length > 0){
+        const errorArr = resData?.errors || [];
+        modalMessage = errorArr.map(err=> err.defaultMessage).join(', ');
+        setSubmitState(false);
       } else {
         modalMessage = '내부 통신장애입니다. 잠시 후 다시 시도해주세요.';
-        onShowModal(modalMessage);
         setSubmitState(false);
       }
+      onShowModal(modalMessage);
       setActiveConfirmModal(false)
     } catch (err) {
       console.error('API통신 오류 : ', err);
       onShowModal('API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.');
-      // setTimeout(()=>{
-      //   window.location.reload();
-      // }, 1000);
+      setTimeout(()=>{
+        window.location.reload();
+      }, 1000);
     }
+    
     setIsLoading((prevState) => ({
       ...prevState,
       submit: false,
@@ -176,18 +183,30 @@ export default function UpdateSurveyPage({ data }) {
     setModalMessage('');
   };
 
+
   const onShowModal = (message) => {
     mct.alertShow();
     setModalMessage(message);
   };
-
-  useEffect(() => {
-    if (!data && window && typeof window !== 'undefined') {
-      window.location.href = '/mypage/dogs';
+  
+  const onRedirectByChangingOneMealRecommendGram = (confirm)=>{
+    if(confirm){
+      setIsLoading({redir:true});
+      const dogId = data.dogIdx;
+      window.location.href = `/order/subscribeShop?dogId=${dogId}`
+    } else{
+      console.log('추천그램수 변경되고, 취소')
+      setIsChangedOneMealRecommendGram(false);
+      onFinishUpdateSurvey();
     }
-  }, [data]);
+  }
   
   
+  const onFinishUpdateSurvey = ()=>{
+    window.location.reload();
+  }
+  
+
   // ANIMATION
   if(isLoading.animation){
     return <FullScreenRunningDog opacity={1} />
@@ -196,6 +215,7 @@ export default function UpdateSurveyPage({ data }) {
   if(isLoading.reload){
     return <FullScreenLoading opacity={0.5}/>
   }
+  
   
   return (
     <>
@@ -236,19 +256,27 @@ export default function UpdateSurveyPage({ data }) {
           text={'반려견 정보를 수정하시겠습니까?'}
         />
       )}
-      <Modal_global_alert message={modalMessage} onClick={onHideModal} background />
+      {(hasAlert && !isChangedOneMealRecommendGram) && <Modal_global_alert message={modalMessage} onClick={submitState === 'UPDATED' ? onFinishUpdateSurvey : onHideModal} background/>}
+      {isChangedOneMealRecommendGram && (
+        <Modal_confirm
+          theme={'userPage'}
+          isConfirm={onRedirectByChangingOneMealRecommendGram}
+          positionCenter
+          text={'추천 그램수 변경내역이 존재합니다.\n맞춤플랜을 확인하러 가시겠습니까?'}
+        />
+      )}
     </>
   );
 }
 
 export async function getServerSideProps({ req, query }) {
   const { dogIdx } = query;
-  console.log(dogIdx)
+
 
   const getDogInfoApiUrl = `/api/dogs/${dogIdx}`;
   const dogInfoRes = await getDataSSR(req, getDogInfoApiUrl);
   const data = dogInfoRes.data || null;
-  
+  // console.log('data:: ',data)
   if (!data) {
     return {
       redirect: {

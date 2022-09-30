@@ -1,4 +1,5 @@
 /* ADMIN COMMON STYLE */
+@import '/styles/global/rem';
 
 :root {
   --gray0: #202020;
@@ -12,11 +13,6 @@
   --gray-v20: #f8f8ff;
   --gray-v30: #f8f8f9;
   --highlight: #ed3333;
-}
-
-$browser-context: 16;
-@function rem($px, $context: $browser-context) {
-  @return #{$px / $context}rem;
 }
 
 $aniDefault: 0.15s ease;
@@ -95,6 +91,8 @@ $inputDefaultHeight: rem(38);
     }
     &:hover {
       border-color: #ababab;
+      position: relative;
+      z-index: 10;
     }
   }
 

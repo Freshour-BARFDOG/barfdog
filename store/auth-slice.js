@@ -33,11 +33,11 @@ const authSlice = createSlice({
     login(state, action) {
       state.isAdmin = false;
       state.isAuth = true;
-      state.userType = true;
+      state.userType = userType.MEMBER;
       const accessToken = action.payload.token;
       const expiredDate = action.payload.expiredDate && cookieType.LOGIN_EXPIRED_PERIOD.VALUE; // 서버 token지속 기본값: 2시간
-      const { temporaryPassword, email, name, roleList } = action.payload.data;
-      // state.temporaryPassword = temporaryPassword;
+      // const { temporaryPassword, email, name, roleList } = action.payload.data; // ! 0926 삭제
+      const temporaryPassword = action.payload.data.temporaryPassword || null; // - 0926 추가
       setCookie(
         cookieType.LOGIN_COOKIE,
         accessToken,
@@ -46,6 +46,36 @@ const authSlice = createSlice({
         { path: '/' },
       );
       window.location.href = action.payload.redirect || temporaryPassword ? '/?tempPw=true' : '/';
+    },
+    kakaoLogin(state, action) {
+      state.isAdmin = false;
+      state.isAuth = true;
+      state.userType = userType.MEMBER_WITH_SNS.KAKAO;
+      const accessToken = action.payload.token;
+      setCookie(
+        cookieType.LOGIN_COOKIE,
+        accessToken,
+        cookieType.AUTO_LOGIN_EXPIRED_PERIOD.UNIT,
+        { path: '/' },
+      );
+      alert('카카오 로그인')
+      window.location.href =  '/';
+    },
+    naverLogin(state, action) {
+      state.isAdmin = false;
+      state.isAuth = true;
+      state.userType = userType.MEMBER_WITH_SNS.NAVER;
+      const accessToken = action.payload.token;
+      
+      setCookie(
+        cookieType.LOGIN_COOKIE,
+        accessToken,
+        cookieType.AUTO_LOGIN_EXPIRED_PERIOD.UNIT,
+        { path: '/' },
+      );
+      alert('네이버 로그인');
+      window.location.href =  '/';
+      
     },
     autoLogin(state, action) {
       state.isAdmin = false;
@@ -64,7 +94,7 @@ const authSlice = createSlice({
     logout(state) {
       state.isAdmin = false;
       state.isAuth = false;
-      alert('로그아웃');
+      // alert('로그아웃'); // ! TEST 시 사용
       setCookie(cookieType.LOGIN_COOKIE, null, 'date', 0, { path: '/' });
       window.location.href = '/';
     },
@@ -98,7 +128,7 @@ const authSlice = createSlice({
       state.isAdmin = false;
       state.isAuth = false;
       setCookie(cookieType.LOGIN_COOKIE, null, 'date', 0, { path: '/' });
-      alert('관리자 로그아웃 처리되었습니다.');
+      // alert('관리자 로그아웃 처리되었습니다.'); // ! TEST 시 사용
       window.location.href = '/bf-admin/login';
     },
     adminResetPassword(state, action) {

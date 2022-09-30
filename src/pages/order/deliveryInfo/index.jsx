@@ -61,7 +61,7 @@ export default function DeliveryInfoPage() {
                 <span>{calcNextSubscribeDeliveryDate(transformToday(), '월일')}</span> 입니다.
               </div>
               <div className={s.text_row3}>
-                (선택하신 <em>{subscribePlanType[info?.plan]?.KOR} 플랜</em>은 하루
+                (선택하신 <em>{subscribePlanType[info?.plan]?.KOR}</em>은 하루
                 <em>
                   {subscribePlanType[info?.plan]?.numberOfPacksPerDay === 1
                     ? '한'

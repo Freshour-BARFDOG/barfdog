@@ -41,10 +41,11 @@ const ItemList = ({ item }) => {
     const apiURL = e.currentTarget.dataset.apiurl;
     if (confirm(`선택된 항목(${item.name || ''})을 정말 삭제하시겠습니까?`)) {
       const res = await deleteData(apiURL);
-      if(res.status === 200 || res.status === 201 ){
+      console.log(res)
+      if(res.isDone){
         window.location.reload();
       } else {
-        alert('삭제할 수 없습니다. 새로고침 후 , 다시 시도해보세요.')
+        alert('삭제에 실패하였습니다.');
       }
     }
   };

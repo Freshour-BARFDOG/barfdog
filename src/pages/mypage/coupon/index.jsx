@@ -4,7 +4,6 @@ import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from '/src/components/mypage/MypageWrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
-import styled from 'styled-components';
 import Modal_useCoupon from '/src/components/modal/modal_mypage_coupon';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import transformDate from '/util/func/transformDate';
@@ -12,22 +11,13 @@ import { EmptyContMessage } from '/src/components/atoms/emptyContMessage';
 import Spinner from '/src/components/atoms/Spinner';
 import { Modal_registerCoupon } from '/src/components/modal/Modal_registerCoupon';
 import {putObjData} from "/src/pages/api/reqData";
+import Modal_global_alert from "/src/components/modal/Modal_global_alert";
+import {useModalContext} from "/store/modal-context";
 
-const Temp_button = styled.button`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  background-color: #000;
-  border-radius: 100px;
-  color: #fff;
-  font-size: 15px;
-  padding: 5px 26px;
-  font-weight: 500;
-  cursor: pointer;
-`;
 
 export default function CouponPage() {
+  const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
   const searchApiUrl = 'api/coupons';
   const searchPageSize = 10;
   const apiDataQueryString = 'queryCouponsDtoList';
@@ -65,7 +55,7 @@ export default function CouponPage() {
   
   const onActiveCouponRegisterModal = () => {
     if(!form.code){
-      return alert('쿠폰코드를 입력해주세요.');
+      return mct.alertShow('쿠폰코드를 입력해주세요.');
     }
     
     setActiveRegisterCouponModal(true);
@@ -75,7 +65,7 @@ export default function CouponPage() {
   const onRegisterCouponByCode = async () => {
     // 유저 쿠폰 > 쿠폰코드를 입력하여 쿠폰받는 방식/
     if(!form.pw){
-      return alert('비밀번호를 입력해주세요.');
+      return mct.alertShow('비밀번호를 입력해주세요.');
     }
     const apiUrl = '/api/coupons/code';
     try {
@@ -93,14 +83,17 @@ export default function CouponPage() {
       let resultMessage;
       if (res.isDone) {
         setActiveRegisterCouponModal(false);
-        alert('쿠폰이 등록되었습니다.');
-        window.location.reload();
+        mct.alertShow('쿠폰이 등록되었습니다.');
+        setTimeout(()=>{
+          window.location.reload();
+        },1000)
+        
       } else if (res.status === 400 && res.status < 500) {
         let defErrorMessage = '쿠폰코드를 등록할 수 없습니다.';
         let errorMessage = res.data.data.errors[0].defaultMessage;
         console.log(errorMessage);
         errorMessage = errorMessage === "이미 사용된 쿠폰 입니다." ? '이미 등록되었거나, 사용된 쿠폰입니다.' : errorMessage;
-        alert(errorMessage || defErrorMessage);
+        mct.alertShow(errorMessage || defErrorMessage);
       }
       console.log(res);
     } catch (err) {
@@ -128,7 +121,7 @@ export default function CouponPage() {
                     className={s.input_box}
                     id={'code'}
                     type="text"
-                    placeholder="쿠폰코드를 입력해주세요"
+                    placeholder="쿠폰코드를 입력해주세요."
                     ref={couponCodeRef}
                     value={form.code || ''}
                     onChange={onInputChangeHandler}
@@ -146,13 +139,6 @@ export default function CouponPage() {
                 <div className={s.left_box}>
                   사용 가능한 쿠폰 : <span>{itemList.filter(cp=>cp.status === 'ACTIVE')?.length}</span>개
                 </div>
-                {/*<div className={s.line}>*/}
-                {/*<hr />*/}
-                {/*</div>*/}
-                {/*<div className={s.right_box}>*/}
-                {/*  사용가능 쿠폰 : <span>{itemList?.length > 0 && itemList.filter(i=>i.status === 'ACTIVE').length}</span>개*/}
-                {/*</div>*/}
-                {/* 사용가능 쿠폰 개수 표시하지 않음*/}
               </div>
 
               <div className={s.horizon}>
@@ -183,7 +169,7 @@ export default function CouponPage() {
                           </div>
                         </div>
                         <div className={s.right_bot}>
-                          <Temp_button onClick={onActiveModalHandler}>쿠폰 사용</Temp_button>
+                          <button type={'button'} className={s.useCoupon} onClick={onActiveModalHandler}>쿠폰 사용</button>
                         </div>
                       </li>
                     ))}
@@ -219,6 +205,7 @@ export default function CouponPage() {
           isLoading={isLoading}
         />
       )}
+      {hasAlert && <Modal_global_alert background/>}
     </>
   );
 }

@@ -3,7 +3,7 @@ import MenuLayout, { SubmenuList } from "/src/components/header/MenuLayout";
 import s from './header.module.scss';
 
 
-function ServiceCenter() {
+export default function ServiceCenter() {
   const IconInfo = {
     src: '/img/icon/triangle.svg',
     width: '12px',
@@ -14,10 +14,8 @@ function ServiceCenter() {
     <>
       <MenuLayout title="고객센터" titleClassName={s['service-center']} icon={IconInfo}>
         <SubmenuList title="자주 묻는 질문" link="/faq" />
-        <SubmenuList title="1:1문의" link="" />
+        <SubmenuList title="1:1 문의" className={'ch-open'} />
       </MenuLayout>
     </>
   );
 }
-
-export default ServiceCenter

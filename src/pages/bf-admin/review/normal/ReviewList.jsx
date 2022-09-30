@@ -51,10 +51,11 @@ const ItemList = ({ item, selectedItems, setSelectedItems }) => {
     const apiURL = e.currentTarget.dataset.apiurl;
     if (confirm(`선택된 회원(${item.name || ''})님의 리뷰를 정말 삭제하시겠습니까?`)) {
       const res = await deleteData(apiURL);
-      if (res.status === 200 || res.status === 201) {
+      console.log(res)
+      if(res.isDone){
         window.location.reload();
       } else {
-        alert('삭제할 수 없습니다. 새로고침 후 , 다시 시도해보세요.');
+        alert('삭제에 실패하였습니다.');
       }
     }
   };

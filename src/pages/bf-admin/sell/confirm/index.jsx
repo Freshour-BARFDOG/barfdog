@@ -31,7 +31,7 @@ const initialSearchValues = {
 
 function ConfirmOnSellPage() {
   
-  const searchApiUrl = `/api/admin/orders/search`;
+  const searchApiUrl = `/api/admin/orders/cancelRequest`; // 주문단위 리스트
   const searchPageSize = 10;
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
@@ -58,7 +58,7 @@ function ConfirmOnSellPage() {
   
   const pageInterceptor = (res) => {
     console.log(res);
-    res = DUMMY_RESPONSE; //  ! TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
+    // res = DUMMY_RESPONSE; //  ! TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
     const pageData = res.data.page;
     const curItemList = res.data?._embedded?.queryAdminOrdersDtoList || [];
     let newPageInfo = {

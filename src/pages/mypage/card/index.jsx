@@ -51,15 +51,18 @@ export default function MypageCardPage({ data }) {
     const data = {
       pg: 'kcp_billing', // PG사
       pay_method: 'card', // 결제수단
+      name: '바프독 정기결제 카드변경',
       amount:0,
-      customer_uid : `customer_Uid_${randomStr}`,   
+      customer_uid : `customer_Uid_${randomStr}`,
+      m_redirect_url: `http://localhost:4000/mypage/card/${id}/${randomStr}`
+
       };
     IMP.request_pay(data, callback);
     
     /* 4. 결제 창 호출하기 */
     async function callback(response) {
       console.log(response);
-      const { success,customer_uid, imp_uid, merchant_uid,card_name,card_number, error_msg } = response;
+      const { success,customer_uid, error_msg } = response;
       
     /* 3. 콜백 함수 정의하기 */
     if (success) {
@@ -67,15 +70,14 @@ export default function MypageCardPage({ data }) {
       // TODO: 결제 정보 전달 
       const r = await postObjData(`/api/cards/subscribes/${id}`, {
         customerUid : customer_uid,
-        cardName : card_name,
-        cardNumber :card_number
       });
       console.log(r);
       if(r.isDone){
         alert('카드변경 성공');
       }
     } else {
-        alert('카드변경 실패');
+        alert(`카드변경 실패 ${error_msg}`);
+        window.location.reload();
     } 
     }
   }
@@ -152,8 +154,8 @@ export default function MypageCardPage({ data }) {
 
 export async function getServerSideProps({ req }) {
   const getApiUrl = '/api/cards';
-  const res = DUMMY_RESPONSE  // ! TSET
-  // const res =await getDataSSR(req, getApiUrl);
+  // const res = DUMMY_RESPONSE  // ! TSET
+  const res = await getDataSSR(req, getApiUrl);
   let DATA = null;
   const embeddedData = res?.data._embedded;
   if (embeddedData) {

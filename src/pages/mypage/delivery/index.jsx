@@ -21,7 +21,7 @@ import { productType} from "/store/TYPE/itemType";
 
 export default function DeliverInfoPage() {
   
-  // ! SERVER => 조리예정일(토일월) , 발송예정일자(수요일) 확인필요
+  const initialItemType = productType.SUBSCRIBE
   
   const subscribeApiUrl = '/api/deliveries/subscribe';
   const generalItemApiUrl = '/api/deliveries/general';
@@ -30,13 +30,11 @@ export default function DeliverInfoPage() {
   const [isLoading, setIsLoading] = useState({});
   const [activeMenu, setActiveMenu] = useState('left');
   const [itemList, setItemList] = useState([]);
-  const [itemType, setItemType] = useState( productType.SUBSCRIBE );
+  const [itemType, setItemType] = useState(initialItemType);
   
   
   useEffect( () => {
-    // set Scroll Position
-    // 정기구독과 일반상품 => 각각 페이징이 존재하면서, 2개의 API를 사용해야하기 때문에,
-    // 페이지 최상단으로 scroll 위치 초기화를 보완
+    // set Scroll Position: 정기구독과 일반상품 => 탭전환 시, 스크롤위치 초기화 blocking
     if(window && typeof window !== "undefined" ){
       const Y = window.scrollY;
       animateWindow(Y);
@@ -45,57 +43,70 @@ export default function DeliverInfoPage() {
   
 
   const pageInterCeptor = async (res) => {
-    // console.log(res);
-    // res = activeMenu === 'left' ? DUMMY_SUBSCRIBE_DELVIERY_RESPONSE : DUMMY_GENERAL_DELVIERY_RESPONSE; // ! TEST
-    const pageData = res.data.page;
-    const newItemList =
-      res.data?._embedded[
-        activeMenu === 'left' ? 'querySubscribeDeliveriesDtoList' : 'queryGeneralDeliveriesDtoList'
-      ] || [];
-
-    const subscribeItemList =
-      activeMenu === 'left' &&
-      newItemList.map((item) => ({
-        recipeName: item.recipeName,
-        deliveryDto: {
-          orderId: item.deliveryDto.orderId,
-          orderInfoUrl: item.deliveryDto.orderInfoUrl,
-          orderDate: item.deliveryDto.orderDate,
-          subscribeCount: item.deliveryDto.subscribeCount,
-          dogName: item.deliveryDto.dogName,
-          produceDate: item.deliveryDto.produceDate,
-          nextDeliveryDate: item.deliveryDto.nextDeliveryDate,
-          deliveryStatus: item.deliveryDto.deliveryStatus,
-          deliveryNumber: item.deliveryDto.deliveryNumber,
-        },
-      }));
-    const generalItemList =
-      activeMenu === 'right' &&
-      newItemList.map((item) => ({
-        orderDeliveryDto: {
-          orderId: item.orderDeliveryDto.orderId,
-          orderInfoUrl: item.orderDeliveryDto.orderInfoUrl,
-          orderDate: item.orderDeliveryDto.orderDate, //
-          deliveryStatus: item.orderDeliveryDto.deliveryStatus, ///
-          deliveryNumber: item.orderDeliveryDto.deliveryNumber,
-        },
-        itemNameList: item.itemNameList,
-      }));
-
-    let newPageInfo = {
-      totalPages: pageData.totalPages,
-      size: pageData.size,
-      totalItems: pageData.totalElements,
-      currentPageIndex: pageData.number,
-      newPageNumber: pageData.number + 1,
-      newItemList: activeMenu === 'left' ? subscribeItemList : generalItemList,
-    };
     setItemType(activeMenu === 'left' ? productType.SUBSCRIBE : productType.GENERAL);
+    console.log(res);
+    // res = activeMenu === 'left' ? DUMMY_SUBSCRIBE_DELVIERY_RESPONSE : DUMMY_GENERAL_DELVIERY_RESPONSE; // ! TEST
+    let newPageInfo = {
+      totalPages:0,
+      size: 0,
+      totalItems: 0,
+      currentPageIndex: null,
+      newPageNumber: null,
+      newItemList: [],
+    };
+    if(res?.data._embedded){
+      const pageData = res.data.page;
+      const newItemList =
+        res.data?._embedded[
+          activeMenu === 'left' ? 'querySubscribeDeliveriesDtoList' : 'queryGeneralDeliveriesDtoList'
+          ];
+  
+      const subscribeItemList =
+        activeMenu === 'left' &&
+        newItemList.map((item) => ({
+          recipeName: item.recipeName,
+          deliveryDto: {
+            orderId: item.deliveryDto.orderId,
+            orderInfoUrl: item.deliveryDto.orderInfoUrl,
+            orderDate: item.deliveryDto.orderDate,
+            subscribeCount: item.deliveryDto.subscribeCount,
+            dogName: item.deliveryDto.dogName,
+            produceDate: item.deliveryDto.produceDate,
+            nextDeliveryDate: item.deliveryDto.nextDeliveryDate,
+            deliveryStatus: item.deliveryDto.deliveryStatus,
+            deliveryNumber: item.deliveryDto.deliveryNumber,
+          },
+        }));
+      const generalItemList =
+        activeMenu === 'right' &&
+        newItemList.map((item) => ({
+          orderDeliveryDto: {
+            orderId: item.orderDeliveryDto.orderId,
+            orderInfoUrl: item.orderDeliveryDto.orderInfoUrl,
+            orderDate: item.orderDeliveryDto.orderDate, //
+            deliveryStatus: item.orderDeliveryDto.deliveryStatus, ///
+            deliveryNumber: item.orderDeliveryDto.deliveryNumber,
+          },
+          itemNameList: item.itemNameList,
+        }));
+      newPageInfo = {
+        totalPages: pageData.totalPages,
+        size: pageData.size,
+        totalItems: pageData.totalElements,
+        currentPageIndex: pageData.number,
+        newPageNumber: pageData.number + 1,
+        newItemList: activeMenu === 'left' ? subscribeItemList : generalItemList,
+      };
+    }
     return newPageInfo;
   };
 
-  const onCheckOrderInfo = () => {
-    alert('주문정보 조회 모달');
+  const onCheckOrderInfo = (e) => {
+    const orderId = e.currentTarget.dataset.orderId;
+    console.log(orderId);
+    const path = itemType === productType.SUBSCRIBE ? 'subscribe' : 'single';
+    const url =`/mypage/orderHistory/${path}/${orderId}`;
+    window.location.href = url;
   };
 
   const onPopupHandler = (e) => {
@@ -105,7 +116,7 @@ export default function DeliverInfoPage() {
     popupWindow(href, { width: 540, height: 480, left: 200, top: 100 });
   };
 
-  console.log(activeMenu,itemList);
+  // console.log('activeMenu:',activeMenu, 'itemType: ', itemType,'itemList: ',itemList);
 
   return (
     <>
@@ -122,26 +133,26 @@ export default function DeliverInfoPage() {
             <TabContentContainer>
               <LeftContainer activeMenu={activeMenu}>
                 {isLoading.fetching ? (
-                  <EmptyContMessage> <Spinner/></EmptyContMessage>
+                  <EmptyContMessage><Spinner/></EmptyContMessage>
                 ) : itemType === productType.SUBSCRIBE && itemList.length === 0 ? (
                   <EmptyContMessage message={'배송 중인 정기구독 상품이 없습니다.'} />
                 ) : (
                   itemType === productType.SUBSCRIBE && (
                     <ul className={`${s.content_body} content_body`}>
-                      {itemList.map((item, index) => (
-                        <li key={`subscribe-item-list-${index}`} className={s.grid_box}>
+                      {itemList.map((item, i) => (
+                        <li key={`subscribe-item-list-${i}`} className={s.grid_box}>
                           <div className={s.col_1}>
                             <p>
-                              {transformDate(item.deliveryDto.orderDate, null, {
+                              {transformDate(item.deliveryDto?.orderDate, null, {
                                 seperator: '.',
                               })}
                             </p>
                             <div></div>
                             <div>
-                              {item.recipeName} ({item.deliveryDto.subscribeCount}
-                              회차)&nbsp;&middot;&nbsp;{item.deliveryDto.dogName}
+                              {item.recipeName} ({item.deliveryDto?.subscribeCount}
+                              회차)&nbsp;&middot;&nbsp;{item.deliveryDto?.dogName}
                             </div>
-                            <button className={s.text} type={'button'} onClick={onCheckOrderInfo}>
+                            <button className={s.text} type={'button'} data-order-id={item.deliveryDto?.orderId} onClick={onCheckOrderInfo}>
                               <div>
                                 <div className={`${s.image} img-wrap`}>
                                   <Image
@@ -157,23 +168,22 @@ export default function DeliverInfoPage() {
                           </div>
                           <div className={s.col_2}>
                             <p>조리예정일</p>
-                            <span>{transformDate(item.deliveryDto.produceDate, '월일')}</span>
+                            <span>{transformDate(item.deliveryDto?.produceDate, '월일')}</span>
                           </div>
 
                           <div className={s.col_3}>
                             <p>발송예정일</p>
-                            <span>{transformDate(item.deliveryDto.nextDeliveryDate, '월일')}</span>
+                            <span>{transformDate(item.deliveryDto?.nextDeliveryDate, '월일')}</span>
                           </div>
 
                           <div className={s.col_4}>
-                            {orderStatus.KOR[item.deliveryDto.deliveryStatus]}
+                            {orderStatus.KOR[item.deliveryDto?.deliveryStatus]}
                           </div>
 
                           <div className={s.col_5}>
-                            {/* TODO 운송장번호 연결 */}
-
+                            {/* 운송장번호 연결 */}
                             <a
-                              href="http://nexs.cjgls.com/web/service02_01.jsp?slipno"
+                              href={`https://trace.goodsflow.com/VIEW/V1/whereis/BARFDOG/CJGLS/${item.deliveryDto?.deliveryNumber}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               onClick={onPopupHandler}
@@ -201,7 +211,6 @@ export default function DeliverInfoPage() {
               <RightContainer activeMenu={activeMenu}>
                 {isLoading.fetching ? (
                   <EmptyContMessage> <Spinner/></EmptyContMessage>
-                 
                 ) : itemType === productType.GENERAL && itemList.length === 0 ? (
                   <EmptyContMessage message={'배송 중인 일반 상품이 없습니다.'} />
                 ) : (
@@ -220,7 +229,7 @@ export default function DeliverInfoPage() {
                               {item.itemNameList[0]}&nbsp;{item.itemNameList?.length > 1 &&
                                 `외 ${item.itemNameList.length - 1}건`}
                             </div>
-                            <button className={s.text} type={'button'} onClick={onCheckOrderInfo}>
+                            <button className={s.text} type={'button'} data-order-id={item.orderDeliveryDto.orderId} onClick={onCheckOrderInfo}>
                               <div>
                                 <div className={`${s.image} img-wrap`}>
                                   <Image
@@ -242,7 +251,7 @@ export default function DeliverInfoPage() {
                           <div className={`${s.col_5} ${s['btn-section']}`}>
                             {/* TODO 운송장번호 연결 */}
                             <a
-                              href="http://nexs.cjgls.com/web/service02_01.jsp?slipno"
+                              href={`https://trace.goodsflow.com/VIEW/V1/whereis/BARFDOG/CJGLS/${item.orderDeliveryDto.deliveryNumber}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               onClick={onPopupHandler}

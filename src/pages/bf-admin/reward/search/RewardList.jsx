@@ -1,6 +1,7 @@
 import s from "../reward.module.scss";
 import transformLocalCurrency from "/util/func/transformLocalCurrency";
 import transformDate from "/util/func/transformDate";
+import {rewardStatusType} from "../../../../../store/TYPE/rewardStatusType";
 
 
 
@@ -16,6 +17,7 @@ import transformDate from "/util/func/transformDate";
       amount: transformLocalCurrency(item.amount) + '원' , // 발행 금액
       memberName: item.memberName, // 회원명
       email: item.email,
+      rewardStatus: item.rewardStatus,
     };
 
 
@@ -23,7 +25,7 @@ import transformDate from "/util/func/transformDate";
       <li className={s.item} key={`item-${DATA.id}`}>
         <span>{DATA.createdDate}</span>
         <span>{DATA.name}</span>
-        <span>{DATA.amount}</span>
+        <span>{item.rewardStatus === rewardStatusType.SAVED ? '+' : '-'}{DATA.amount}</span>
         <span>{DATA.memberName}</span>
         <span>{DATA.email}</span>
       </li>

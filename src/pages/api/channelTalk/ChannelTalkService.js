@@ -42,12 +42,21 @@ class ChannelTalkService {
     }
   }
 
-  boot(settings) {
-    window.ChannelIO('boot', settings);
+  boot(settings={
+  }, cb) {
+    const callback = (err, user)=>{
+      cb(err, user);
+    }
+    ChannelIO('boot', settings, callback);
+    
+  }
+  
+  track (eventName , eventProperty={}) {
+    ChannelIO('track', eventName, eventProperty);
   }
 
   shutdown() {
-    window.ChannelIO('shutdown');
+    ChannelIO('shutdown');
   }
 }
 

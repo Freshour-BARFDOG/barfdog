@@ -18,7 +18,7 @@ export const SubscribeItems = ({ itemList }) => {
         {itemList?.length > 0 &&
           itemList.map((item, index) => (
             <li key={`subscribe-item-${index}`}>
-              <div className={s.day}>{transformDate(item.subscribeOrderDto.orderDate)}</div>
+              <div className={s.day}>{transformDate(item.subscribeOrderDto.orderDate, 'total')}</div>
               <div className={s.content_body}>
                 <div className={s.left_box}>
                   <figure className={`${s.image} img-wrap`}>

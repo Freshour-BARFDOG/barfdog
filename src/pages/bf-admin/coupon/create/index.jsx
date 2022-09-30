@@ -264,7 +264,7 @@ function CreateCouponPage() {
                     <label className="title" htmlFor="code">
                       쿠폰코드
                       <Tooltip
-                        message={`- 쿠폰코드 규칙\n1. 문자열 15자 이내 (영문 대소문자, 숫자)\n2. 회원 마이페이지에서 쿠폰코드 후 사용가능\n3. 동일한 쿠폰에 대하여 1회 사용가능.`}
+                        message={`- 쿠폰코드 규칙\n1. 문자열 15자 이내 (영문 대소문자)\n2. 회원 마이페이지에서 쿠폰코드 후 사용가능\n3. 동일한 쿠폰에 대하여 1회 사용가능.`}
                         messagePosition={'left'}
                         width={'280px'} wordBreaking={true}/>
                     </label>

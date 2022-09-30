@@ -14,16 +14,17 @@ export default function BestReviewList({
 }) {
   if (!items || !items.length) return;
 
+  const lastIndex = items.length;
   return (
     <ul className="table_body">
-      {items.map((item) => (
+      {items.map((item, i) => (
         <SortableItem
-          key={`item-${item.id}`}
-          index={item.id}
+          key={`item-${item.id}-${i}`}
           item={item}
           onLeakedOrderUp={onLeakedOrderUp}
           onLeakedOrderDown={onLeakedOrderDown}
           editListOrder={editListOrder}
+          lastIndex={lastIndex}
         />
       ))}
     </ul>
@@ -36,6 +37,7 @@ const SortableItem = ({
   onLeakedOrderUp,
   onLeakedOrderDown,
   editListOrder,
+  lastIndex
 }) => {
   const DATA = {
     id: item.id, // 베스트리뷰 id
@@ -53,37 +55,40 @@ const SortableItem = ({
   };
 
   const onDeleteItem = async (e) => {
-    const apiURL = e.currentTarget.dataset.apiurl;
-    if (confirm(`선택된 회원(${item.name || ''})님의 베스트 리뷰를 정말 삭제하시겠습니까?`)) {
+    if (!confirm(`선택된 회원(${item.name || ''})님의 베스트 리뷰를 삭제하시겠습니까?`)) return;
+    const bestReviewId = e.currentTarget.dataset.id;
+    const apiURL = `/api/admin/reviews/${bestReviewId}/best`;
+    
+    try {
       const res = await deleteData(apiURL);
-      if (res.status === 200 || res.status === 201) {
+      console.log(res);
+      if (res.isDone) {
+        alert('성공적으로 베스트리뷰에서 삭제되었습니다.')
         window.location.reload();
       } else {
-        alert('삭제할 수 없습니다. 새로고침 후 , 다시 시도해보세요.');
+        alert('삭제에 실패하였습니다.');
       }
+    } catch (err) {
+        console.error(err)
     }
+    
   };
 
   const SortHandle = ({ apiurl }) => {
-    const onOrderUpHandler = (e) => {
-      // param: Best 리뷰의 id / 변경 시킬 노출 순서
-      const target = e.currentTarget.closest('li');
-      const targetViewIdx = getElemIdx(target);
-      const apiURL = e.currentTarget.dataset.apiurl;
-      const newItemList = changeArrayOrder(items, targetViewIdx, -1);
-      if (newItemList) {
-        onLeakedOrderUp(apiURL);
-      }
+    
+    const onOrderUpHandler = () => {
+      const curleakedOrder = item.leakedOrder;
+      const bestReviewId = item.id;
+      if(curleakedOrder === 1) return console.error('이미 첫 번째 순서입니다.');
+      onLeakedOrderUp(bestReviewId, curleakedOrder);
+     
     };
 
-    const onOrderDownHandler = (e) => {
-      const target = e.currentTarget.closest('li');
-      const targetViewIdx = getElemIdx(target);
-      const apiURL = e.currentTarget.dataset.apiurl;
-      const newItemList = changeArrayOrder(items, targetViewIdx, +1);
-      if (newItemList) {
-        onLeakedOrderDown(apiURL);
-      }
+    const onOrderDownHandler = () => {
+      const curleakedOrder = item.leakedOrder;
+      const bestReviewId = item.id;
+      if(curleakedOrder === lastIndex) return console.error('이미 마지막 순서입니다.');
+      onLeakedOrderDown(bestReviewId, curleakedOrder);
     };
 
     return (
@@ -118,6 +123,7 @@ const SortableItem = ({
     >
       {editListOrder ? <SortHandle apiurl={DATA.apiurl} /> : <span>{DATA.leakedOrder}</span>}
       <span>{DATA.reviewId}</span>
+      <span>{DATA.id}</span>
       <span>{DATA.title}</span>
       <span>
         <p className={'overflow-x-scroll'}>{DATA.contents}</p>
@@ -127,11 +133,7 @@ const SortableItem = ({
       <span>{DATA.email}</span>
       <span>{DATA.createdDate}</span>
       <span>
-        <button
-          className="admin_btn basic_s solid"
-          onClick={onDeleteItem}
-          data-apiurl={DATA.apiurl.delete}
-        >
+        <button className="admin_btn basic_s solid" onClick={onDeleteItem} data-id={DATA.id}>
           삭제
         </button>
       </span>

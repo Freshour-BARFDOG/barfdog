@@ -7,32 +7,11 @@ import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import { Modal_couponWithSubscribeApi } from '../modal/Modal_couponWithSubscribeApi';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import { useModalContext } from '/store/modal-context';
+import Tooltip from "../atoms/Tooltip";
 
-const DUMMY_COUPON_DATA = [
-  {
-    memberCouponId: 3133,
-    name: '테스트 쿠폰1',
-    discountType: 'FIXED_RATE',
-    discountDegree: 10,
-    availableMaxDiscount: 10000,
-    availableMinPrice: 5000,
-    remaining: 3,
-    expiredDate: '2022-08-12T16:01:46.853',
-  },
-  {
-    memberCouponId: 3000,
-    name: '테스트 쿠폰2',
-    discountType: 'FIXED_RATE',
-    discountDegree: 40,
-    availableMaxDiscount: 10000,
-    availableMinPrice: 300,
-    remaining: 3,
-    expiredDate: '2022-08-17T16:01:46.853',
-  },
-];
+
 
 export const SubscribDashboard = ({ subscribeInfo }) => {
-  // console.log(subscribeInfo);
   // ! 구독정보 변경마감일자 체크 (google sheet);
   const info = {
     dogName: subscribeInfo.info.dogName,
@@ -40,10 +19,10 @@ export const SubscribDashboard = ({ subscribeInfo }) => {
     recipeNameList: subscribeInfo.info.recipeNames.split(','),
     oneMealRecommendGram: subscribeInfo.info.oneMealRecommendGram,
     nextPaymentDate: subscribeInfo.info.nextPaymentDate,
-    nextPaymentPrice: subscribeInfo.info.nextPaymentPrice,
+    nextPaymentPrice: subscribeInfo.info.nextPaymentPrice - (subscribeInfo.info.discountCoupon + subscribeInfo.info.discountGrade), // 다음결제금액 -(쿠폰할인+등급할인)
     nextDeliveryDate: subscribeInfo.info.nextDeliveryDate,
-    skipCount: 2, // ! SERVER에 요청할 데이터,
-    skipType: '1회 건너뛰기',
+    countSkipOneTime: subscribeInfo.info.countSkipOneTime,
+    countSkipOneWeek: subscribeInfo.info.countSkipOneWeek,
     subscribeCount: subscribeInfo.info.subscribeCount,
     coupon: {
       // 쿠폰은 상품 당, 하나만 적용됨
@@ -52,6 +31,7 @@ export const SubscribDashboard = ({ subscribeInfo }) => {
       // availableCouponList: DUMMY_COUPON_DATA, /////////////////// ! TEST TEST TEST TEST TEST TEST TEST TEST TEST
       availableCouponList: subscribeInfo.coupon || [],
       originPrice: subscribeInfo.info.nextPaymentPrice,
+      discountGrade: subscribeInfo.info.discountGrade,
     },
   };
   const mct = useModalContext();
@@ -81,7 +61,10 @@ export const SubscribDashboard = ({ subscribeInfo }) => {
   return (
     <>
       <section className={s.title}>
-        <div className={s.title_text}>{info.dogName}의 구독정보</div>
+        <div className={s.title_text}>
+          {info.dogName}의 구독정보
+          <Tooltip message={'모든 구독정보 변경 사항은 다음 회차부터 적용됩니다.'}/>
+        </div>
         {/* ! 아래 코드는 디자인 단에는 존재하는 UI지만, 기획서에 없는 내용 */}
         {/*<div className={s.flex_box}>*/}
         {/*  <div className={s.text}>*/}
@@ -134,11 +117,10 @@ export const SubscribDashboard = ({ subscribeInfo }) => {
                 <div className={s.row_2}>
                   {transformDate(info.nextPaymentDate, null, { seperator: '/' })}
                 </div>
-                {info.skipCount ? (
-                  <div className={s.row_3}>
-                    {info.skipType === '1회 건너뛰기' ? '1회' : '1주'} 건너뛰기 중
-                  </div>
-                ) : null}
+                <div className={s.row_3}>
+                  {info.countSkipOneTime ? <span>1회 건너뛰기</span> : null}
+                  {info.countSkipOneWeek ? <span>1주 건너뛰기</span> : null}
+                </div>
               </div>
 
               <div className={s.inner_mid_box}>
@@ -167,11 +149,10 @@ export const SubscribDashboard = ({ subscribeInfo }) => {
                     alt="카드 이미지"
                   />
                 </div>
-                <div className={s.row_1}>발송 예정일</div>
+                <div className={s.row_1}>다음 발송 예정일</div>
                 <div className={s.row_2}>
                   {transformDate(info.nextDeliveryDate, null, { seperator: '/' })}
                 </div>
-                {/*<div className={s.row_3}></div>*/}
               </div>
             </div>
           </div>
@@ -186,8 +167,32 @@ export const SubscribDashboard = ({ subscribeInfo }) => {
         />
       )}
       {activeModal.alert && (
-        <Modal_global_alert message={alertModalMessage} onClick={submitted && hideCouponModal}/>
+        <Modal_global_alert message={alertModalMessage} onClick={submitted && hideCouponModal} />
       )}
     </>
   );
 };
+
+
+const DUMMY_COUPON_DATA = [
+  {
+    memberCouponId: 3133,
+    name: '테스트 쿠폰1',
+    discountType: 'FIXED_RATE',
+    discountDegree: 10,
+    availableMaxDiscount: 10000,
+    availableMinPrice: 5000,
+    remaining: 3,
+    expiredDate: '2022-08-12T16:01:46.853',
+  },
+  {
+    memberCouponId: 3000,
+    name: '테스트 쿠폰2',
+    discountType: 'FIXED_RATE',
+    discountDegree: 40,
+    availableMaxDiscount: 10000,
+    availableMinPrice: 300,
+    remaining: 3,
+    expiredDate: '2022-08-17T16:01:46.853',
+  },
+];

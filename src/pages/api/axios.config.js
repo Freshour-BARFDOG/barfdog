@@ -18,7 +18,6 @@ console.log('axios.defaults.baseURL: ',axios.defaults.baseURL);
 // 아래 코드 중에서 아무거나 골라써도 무방하다.
 
 export default function axiosConfig(contType = 'application/json') {
-  // const accessToken = JSON.parse(localStorage.getItem("admin"))?.token; // PAST VERSION.
   const accessToken = getCookie(cookieType.LOGIN_COOKIE);
   return {
     headers: {

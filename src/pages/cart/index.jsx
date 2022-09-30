@@ -330,8 +330,10 @@ export default function CartPage({ data, error }) {
   
   
   if (error) {
-    return console.error('데이터를 가져올 수 없습니다.');
+    alert('데이터를 가져올 수 없습니다.');
+    return ;
   }
+  
 
   return (
     <>
@@ -501,12 +503,12 @@ export default function CartPage({ data, error }) {
               </i>
               <div className={s.shipping}>
                 <p className={s.up_text}>배송비</p>
-                <p className={s.down_text}>{transformLocalCurrency(DATA.total?.deliveryFee)}원</p>
+                <p className={s.down_text}>{selectedItemBasketIds.length > 0 ? transformLocalCurrency(DATA.total?.deliveryFee) : 0}원</p>
               </div>
   
               <div className={s.flex_text_box}>
                 <div className={s.total}>총 주문 금액</div>
-                <p>{transformLocalCurrency(DATA.total?.finalPrice)}원</p>
+                <p>{selectedItemBasketIds.length > 0 ? transformLocalCurrency(DATA.total?.finalPrice) : 0}원</p>
               </div>
             </div>
           </section>

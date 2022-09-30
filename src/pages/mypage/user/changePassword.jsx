@@ -14,7 +14,7 @@ import {
   valid_hasFormErrors,
   valid_password,
 } from '/util/func/validation/validationPackage';
-import { putObjData } from '/src/pages/api/reqData';
+import {getDataSSR, putObjData} from '/src/pages/api/reqData';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import {useRouter} from "next/router";
 import useDeviceState from "/util/hook/useDeviceState";
@@ -28,6 +28,7 @@ const initialValues = {
 }
 export default function ChangePasswordPage() {
   const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
   const router = useRouter();
   const deviceState = useDeviceState();
   const isMobile = deviceState.isMobile;
@@ -192,10 +193,36 @@ export default function ChangePasswordPage() {
           </MypageWrapper>
         </Wrapper>
       </Layout>
-      <Modal_global_alert
+      {hasAlert && <Modal_global_alert
         message={alertModalMessage}
         onClick={isSubmitted && onModalConfirmButtonClick}
-      />
+      />}
+      
     </>
   );
+}
+
+
+
+export async function getServerSideProps ({req}) {
+
+  const url = '/api/members/sns/password'; // api이름: 비밀번호 설정해야하는 유저인지 확인
+  const res = await getDataSSR(req, url);
+  if(res.data){
+    const needToSetPassword = res.data.needToSetPassword;
+    if(needToSetPassword){
+      return {
+        redirect:{
+          destination:'/mypage/user/setPassword',
+          permanent: false,
+        },
+        props: {}
+      }
+    }
+  }
+  
+  return {
+    props: {}
+  }
+  
 }

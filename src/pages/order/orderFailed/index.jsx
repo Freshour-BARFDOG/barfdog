@@ -16,7 +16,7 @@ export default function OrderFailedPage (props) {
               <div className={s.box_text}>!</div>
             </div>
             <div className={s.row_1}>
-              <span>일반상품 결제</span> 주문이 정상적으로
+              <span>상품 결제</span>가 정상적으로
               <br />
               완료되지 않았습니다.
             </div>

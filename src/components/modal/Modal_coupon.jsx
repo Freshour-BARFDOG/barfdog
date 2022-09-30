@@ -5,6 +5,7 @@ import transformDate from '/util/func/transformDate';
 import { discountUnitType } from '/store/TYPE/discountUnitType';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import {calcOrdersheetPrices} from "../order/calcOrdersheetPrices";
+import EmptyMessage from "../atoms/AmdinErrorMessage";
 
 /* availableMaxDiscount: 적용가능 최대 할인 금액
  * availableMinPrice : 사용가능한 최소 물품 가격
@@ -176,7 +177,7 @@ export const Modal_coupon = ({ onModalActive, data, setForm, orderType ='general
                       </span>
                 </label>
               ))
-              : '사용가능한 쿠폰이 없습니다.'}
+              : <EmptyMessage text={'사용가능한 쿠폰이 없습니다.'} />}
           </div>
 
           <div className={s.btn_box}>

@@ -6,7 +6,7 @@ import {
   valid_phoneNumber,
 } from './validationPackage';
 
-export const validate = async (obj, formErrors) => {
+export const validate = async (obj, formErrors, option={mode:'normal'}) => {
   let errors = {};
 
   const keys = Object.keys(obj);
@@ -23,12 +23,16 @@ export const validate = async (obj, formErrors) => {
         errors[key] = valid_isEmpty(val) || valid_email(val) || formErrors.isEmailDuplicated === null ? '이메일 중복확인을 하지 않았습니다.' : '';
         break;
       case 'password':
-        errors[key] = valid_password(val).error;
+        if(option.mode === 'normal'){
+          errors[key] = valid_password(val).error;
+        }
         break;
       case 'confirmPassword':
         const pw1 = obj['password'];
         const pw2 = val;
-        errors[key] = valid_confirmPassword(pw1, pw2).error;
+        if(option.mode === 'normal'){
+          errors[key] = valid_confirmPassword(pw1, pw2).error;
+        }
         break;
       case 'phoneNumber':
         errors[key] = valid_isEmpty(val) || valid_phoneNumber(val);
@@ -76,7 +80,7 @@ const valid_minAge = (birthDay, limitedAge=14)=>{
   const minAge = limitedAge;
   if(!birthDay){
     error = '항목이 비어있습니다.'
-  } else if(birthDay.length !== 8){
+  } else if(birthDay.replace(/-/gi,'').length !== 8){
     error=`생년월일 형식이 올바르지 않습니다.`
   } else if(age < minAge){
     error=`${minAge}세 미만입니다.`

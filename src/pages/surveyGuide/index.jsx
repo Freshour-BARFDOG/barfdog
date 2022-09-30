@@ -18,26 +18,13 @@ export default function SurveyGuidePage() {
   const userInfo = auth.userInfo;
 
   
-  const onMovePage = (e) => {
+  const onMovePage = async (e) => {
     e.preventDefault();
     if (!userInfo) {
       return mct.alertShow('로그인 후 이용가능합니다.');
     }
-    router.push('/survey');
+    await router.push('/survey');
   };
-  
-  
-  const buttonStyle = {
-    padding: '10px 20px',
-    maxWidth: '280px',
-    height: '44px',
-    backgroundColor: 'var(--color-main)',
-    borderRadius: '4px',
-    color: '#fff',
-    boxSizing: 'border-box',
-    textAlign: 'center',
-  };
-  
   
   return (
     <>
@@ -63,7 +50,7 @@ export default function SurveyGuidePage() {
             </div>
           </div>
           <div className={s.btn_box}>
-            <button style={buttonStyle} onClick={onMovePage}>
+            <button onClick={onMovePage}>
               반려견 정보작성 시작하기
             </button>
           </div>

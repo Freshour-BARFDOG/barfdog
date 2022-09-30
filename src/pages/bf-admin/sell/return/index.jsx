@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import s from '../cancel/cancelExchangeReturnList.module.scss';
+import s from '../exchange/ExchangeReturnList.module.scss';
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import AdminLayout from "/src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
@@ -16,7 +16,7 @@ import {postObjData} from "/src/pages/api/reqData";
 import PureCheckbox from "/src/components/atoms/PureCheckbox";
 import {valid_isTheSameArray} from "/util/func/validation/validationPackage";
 import Spinner from "/src/components/atoms/Spinner";
-import CancelList from "../cancel/CancelExchangeReturnList";
+import CancelExchangeReturnList from "../exchange/ExchangeReturnList";
 import PaginationWithAPI from "/src/components/atoms/PaginationWithAPI";
 
 
@@ -34,8 +34,7 @@ const initialSearchValues = {
 
 export default function ReturnOnSellPage() {
   
-  // const searchApiUrl = `/api/admin/orders/cancelRequest`; // 취소 요청 주문 리스트 검색(페이징)
-  const searchApiUrl = `/api/admin/orders/search`; // 주문 리스트 검색(페이징)
+  const searchApiUrl = `/api/admin/orders/search`; // 상품단위 리스트 검색(페이징) ! 교환, 반품은 '상품'단위로 처리
   const searchPageSize = 10;
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
@@ -83,11 +82,10 @@ export default function ReturnOnSellPage() {
   };
   
   const pageInterceptor = (res) => {
-    res = DUMMY_DEFAULT_ITEMLIST_RESPONSE; //  ! TEST
-    // res = DUMMY_ADMIN_RETURN_ITEMLIST_RES; //  ! TEST
+    res = DUMMY_RETURN_RESPONSE; //  ! TEST
+    console.log(res)
     const pageData = res.data.page;
     const curItemList = res.data?._embedded?.queryAdminOrdersDtoList || [];
-    // const curItemList = res.data?._embedded?.queryAdminCancelRequestDtoList || [];
     let newPageInfo = {
       totalPages: pageData.totalPages,
       size: pageData.size,
@@ -212,7 +210,7 @@ export default function ReturnOnSellPage() {
       console.log('response: admin > sell > return > index.jsx\n', res);
       if (res.isDone) {
         alert(`반품요청을 반려하였습니다.`);
-        // window.location.reload();
+        window.location.reload();
       } else {
         alert(`반품요청을 반려 처리 중에 오류가 발생했습니다.\n${res.error}`);
       }
@@ -251,10 +249,10 @@ export default function ReturnOnSellPage() {
                 name="content"
                 id="content"
                 options={[
-                  { label: '주문번호', value: 'orderIdx' },
-                  { label: '구매자 이름', value: 'buyerName' },
-                  { label: '구매자 ID', value: 'buyerId' },
-                  { label: '수령자 이름', value: 'receiverName' },
+                  { label: '주문번호', value: 'merchantUid' },
+                  { label: '구매자 이름', value: 'memberName' },
+                  { label: '구매자 ID', value: 'memberEmail' },
+                  { label: '수령자 이름', value: 'recipientName' },
                 ]}
               />
               <SearchRadio
@@ -269,10 +267,10 @@ export default function ReturnOnSellPage() {
           </section>
           <section className="cont">
             <div className="cont_header clearfix">
-              <p className="cont_title cont-left">
+              <div className="cont_title cont-left">
                 목록
-                <Tooltip message={'- 반품 가능한 일반상품 리스트만 존재합니다.\n- 구매자 귀책 택배비: 6,000원\n- 판매자 귀책: 택배비 없음\n- 반품불가: 반품불가처리된 상품은 배송완료상태가 됩니다.'} messagePosition={'left'} wordBreaking={true} width={'340px'}/>
-              </p>
+                <Tooltip message={`- 반품 가능한 일반상품 / "상품"단위 리스트\n- 구매자 귀책 택배비: 6,000원\n- 판매자 귀책: 택배비 없음\n- 반품불가: 반품불가 처리된 상품은 배송완료 상태가 됩니다.`} messagePosition={'left'} wordBreaking={true} width={'340px'}/>
+              </div>
               <div className="controls cont-left">
                 <button className="admin_btn line basic_m autoWidth" onClick={onConfirmingReturnOrderBySeller}>
                   {isLoading.returnBySeller ? <Spinner/> : '반품승인 (판매자 귀책)'}
@@ -301,7 +299,7 @@ export default function ReturnOnSellPage() {
                   <li className={s.table_th}>주문번호</li>
                   {/*<li className={s.table_th}>상품주문번호</li>*/}
                   <li className={s.table_th}>주문상태</li>
-                  <li className={s.table_th}>반품사유</li>
+                  {/*<li className={s.table_th}>반품사유</li>*/}
                   <li className={s.table_th}>구매자 ID</li>
                   <li className={s.table_th}>구매자</li>
                   <li className={s.table_th}>수령자</li>
@@ -312,7 +310,7 @@ export default function ReturnOnSellPage() {
                 ) : itemList.length === 0 ? (
                   <AmdinErrorMessage text="조회된 데이터가 없습니다." />
                 ) : (
-                  <CancelList
+                  <CancelExchangeReturnList
                     items={itemList}
                     selectedIdList={selectedOrderIdList}
                     onSelectedItem={onSelectedItem}
@@ -342,150 +340,16 @@ export default function ReturnOnSellPage() {
 
 
 
-const DUMMY_DEFAULT_ITEMLIST_RESPONSE = {
+
+const DUMMY_RETURN_RESPONSE = {
   data: {
     _embedded: {
       queryAdminOrdersDtoList: [
         {
-          id: 7819,
-          orderType: 'general',
-          merchantUid: 'merchant_uid15',
-          orderItemId: 7816,
-          orderStatus: 'PAYMENT_DONE',
-          deliveryNumber: 'cj02392342315',
-          memberEmail: 'admin@gmail.com',
-          memberName: '관리자',
-          memberPhoneNumber: '01056785678',
-          recipientName: '관리자',
-          recipientPhoneNumber: '01056785678',
-          packageDelivery: false,
-          orderDate: '2022-08-12T11:19:51.139',
-          _links: {
-            query_order: {
-              href: 'http://localhost:8080/api/admin/orders/7819/general',
-            },
-          },
-        },
-        {
-          id: 7789,
-          orderType: 'subscribe',
-          merchantUid: 'merchant_uid13',
-          orderItemId: 7780,
-          orderStatus: 'PAYMENT_DONE',
-          deliveryNumber: 'cj02392342313',
-          memberEmail: 'admin@gmail.com',
-          memberName: '관리자',
-          memberPhoneNumber: '01056785678',
-          recipientName: '관리자',
-          recipientPhoneNumber: '01056785678',
-          packageDelivery: false,
-          orderDate: '2022-08-12T11:19:51.139',
-          _links: {
-            query_order: {
-              href: 'http://localhost:8080/api/admin/orders/7789/general',
-            },
-          },
-        },
-        {
-          id: 7834,
-          orderType: 'general',
-          merchantUid: 'merchant_uid16',
-          orderItemId: 7825,
-          orderStatus: 'PAYMENT_DONE',
-          deliveryNumber: 'cj02392342316',
-          memberEmail: 'admin@gmail.com',
-          memberName: '관리자',
-          memberPhoneNumber: '01056785678',
-          recipientName: '관리자',
-          recipientPhoneNumber: '01056785678',
-          packageDelivery: false,
-          orderDate: '2022-08-12T11:19:51.139',
-          _links: {
-            query_order: {
-              href: 'http://localhost:8080/api/admin/orders/7834/general',
-            },
-          },
-        },
-        {
-          id: 7735,
-          orderType: 'general',
-          merchantUid: 'merchant_uid7',
-          orderItemId: 7726,
-          orderStatus: 'PAYMENT_DONE',
-          deliveryNumber: 'cj0239234237',
-          memberEmail: 'user@gmail.com',
-          memberName: '김회원',
-          memberPhoneNumber: '01099038544',
-          recipientName: '김회원',
-          recipientPhoneNumber: '01099038544',
-          packageDelivery: false,
-          orderDate: '2022-08-12T11:19:51.137',
-          _links: {
-            query_order: {
-              href: 'http://localhost:8080/api/admin/orders/7735/general',
-            },
-          },
-        },
-        {
-          id: 7720,
-          orderType: 'general',
-          merchantUid: 'merchant_uid6',
-          orderItemId: 7711,
-          orderStatus: 'PAYMENT_DONE',
-          deliveryNumber: 'cj0239234236',
-          memberEmail: 'user@gmail.com',
-          memberName: '김회원',
-          memberPhoneNumber: '01099038544',
-          recipientName: '김회원',
-          recipientPhoneNumber: '01099038544',
-          packageDelivery: false,
-          orderDate: '2022-08-12T11:19:51.137',
-          _links: {
-            query_order: {
-              href: 'http://localhost:8080/api/admin/orders/7720/general',
-            },
-          },
-        },
-      ],
-    },
-    _links: {
-      first: {
-        href: 'http://localhost:8080/api/admin/orders/search?page=0&size=5',
-      },
-      prev: {
-        href: 'http://localhost:8080/api/admin/orders/search?page=0&size=5',
-      },
-      self: {
-        href: 'http://localhost:8080/api/admin/orders/search?page=1&size=5',
-      },
-      next: {
-        href: 'http://localhost:8080/api/admin/orders/search?page=2&size=5',
-      },
-      last: {
-        href: 'http://localhost:8080/api/admin/orders/search?page=2&size=5',
-      },
-      profile: {
-        href: '/docs/index.html#resources-query-admin-orders',
-      },
-    },
-    page: {
-      size: 5,
-      totalElements: 14,
-      totalPages: 3,
-      number: 1,
-    },
-  },
-};
-
-
-const DUMMY_ADMIN_RETURN_ITEMLIST_RES = {
-  data: {
-    _embedded: {
-      queryAdminCancelRequestDtoList: [
-        {
           id: 6011,
           orderType: 'general',
           merchantUid: 'merchant_uid5',
+          orderItemId: 60110,
           orderStatus: 'RETURN_REQUEST',
           deliveryNumber: 'cj0239234235',
           memberEmail: 'user@gmail.com',
@@ -503,6 +367,7 @@ const DUMMY_ADMIN_RETURN_ITEMLIST_RES = {
         },
         {
           id: 5966,
+          orderItemId: 59660,
           orderType: 'general',
           merchantUid: 'merchant_uid4',
           orderStatus: 'RETURN_DONE_BUYER',
@@ -522,6 +387,7 @@ const DUMMY_ADMIN_RETURN_ITEMLIST_RES = {
         },
         {
           id: 5981,
+          orderItemId: 59810,
           orderType: 'general',
           merchantUid: 'merchant_uid4',
           orderStatus: 'RETURN_DONE_BUYER',
@@ -538,45 +404,7 @@ const DUMMY_ADMIN_RETURN_ITEMLIST_RES = {
               href: 'http://localhost:8080/api/admin/orders/5981/general',
             },
           },
-        },
-        {
-          id: 5936,
-          orderType: 'general',
-          merchantUid: 'merchant_uid3',
-          orderStatus: 'RETURN_DONE_SELLER',
-          deliveryNumber: 'cj0239234233',
-          memberEmail: 'admin@gmail.com',
-          memberName: '관리자',
-          memberPhoneNumber: '01056785678',
-          recipientName: '관리자',
-          recipientPhoneNumber: '01056785678',
-          packageDelivery: false,
-          orderDate: '2022-08-12T11:19:46.142',
-          _links: {
-            query_order: {
-              href: 'http://localhost:8080/api/admin/orders/5936/general',
-            },
-          },
-        },
-        {
-          id: 5921,
-          orderType: 'general',
-          merchantUid: 'merchant_uid3',
-          orderStatus: 'RETURN_DONE_SELLER',
-          deliveryNumber: 'cj0239234233',
-          memberEmail: 'user@gmail.com',
-          memberName: '김회원',
-          memberPhoneNumber: '01099038544',
-          recipientName: '김회원',
-          recipientPhoneNumber: '01099038544',
-          packageDelivery: false,
-          orderDate: '2022-08-12T11:19:46.141',
-          _links: {
-            query_order: {
-              href: 'http://localhost:8080/api/admin/orders/5921/general',
-            },
-          },
-        },
+        }
       ],
     },
     _links: {

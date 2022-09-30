@@ -13,13 +13,13 @@ import Spinner from '/src/components/atoms/Spinner';
 import { validate } from '/util/func/validation/validation_adminLogin';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
 import Link from "next/link";
-import {postObjData} from "/src/pages/api/reqData";
+import {getDataSSR, getTokenFromServerSide, postObjData} from "/src/pages/api/reqData";
 import {cookieType} from "/store/TYPE/cookieType";
 import {userType} from "/store/TYPE/userAuthType";
 
 
 
-export default function AdminLoginPage({ autoLoginAccount }) {
+export default function AdminLoginPage () {
   const dispatch = useDispatch();
   const mct = useModalContext();
   const [modalMessage, setModalMessage] = useState('');
@@ -28,18 +28,7 @@ export default function AdminLoginPage({ autoLoginAccount }) {
   const [formValues, setFormValues] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [autoLogin, setAutoLogin] = useState(false);
-
-  useEffect(() => {
-    mct.alertHide();
-    if (autoLoginAccount) {
-      setAutoLogin(true);
-      setFormValues((prevState) => ({
-        ...prevState,
-        email: autoLoginAccount,
-      }));
-    }
-  }, [autoLoginAccount]);
-
+  
 
   const onInputChangeHandler = (e) => {
     const input = e.currentTarget;
@@ -52,7 +41,7 @@ export default function AdminLoginPage({ autoLoginAccount }) {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (isSubmitted) return;
+    if (isSubmitted) return onShowModalHandler('이미 제출된 양식입니다.');
     const errObj = validate(formValues);
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
@@ -84,12 +73,16 @@ export default function AdminLoginPage({ autoLoginAccount }) {
         }
         if(autoLogin){
           dispatch(authAction.adminAutoLogin(payload));
-          onShowModalHandler(`관리자 로그인에 성공하였습니다.\n자동로그인 유지기간: ${autoLoginPeriod}일`);
         } else{
           dispatch(authAction.adminLogin(payload));
-          onShowModalHandler('관리자 로그인에 성공하였습니다.');
         }
+        
         setIsSubmitted(true);
+        setIsLoading((prevState) => ({
+          ...prevState,
+          movePage: true,
+        }));
+        window.location.href='/bf-admin/dashboard';
       }else {
         setIsSubmitted(false);
         onShowModalHandler(
@@ -97,7 +90,7 @@ export default function AdminLoginPage({ autoLoginAccount }) {
         );
       }
     } catch (err) {
-      alert('로그인할 수 없습니다. 오류가 발생했습니다. 관리자에게 문의하세요.');
+      alert ('로그인할 수 없습니다. 오류가 발생했습니다. 관리자에게 문의하세요.');
       console.error('API통신 오류 : ', err);
     }
     setIsLoading((prevState) => ({
@@ -106,17 +99,10 @@ export default function AdminLoginPage({ autoLoginAccount }) {
     }));
   };
 
-  const onShowResetPasswordModal = () => {
-    mct.onShow();
-  };
-
-  const onHideResetPasswordModal = () => {
-    mct.onHide();
-  };
-
   const onAutoLogin = (checked) => {
     if (checked) {
-      setModalMessage('개인정보보호를 위해\n반드시 본인 기기에서만 이용해 주세요.');
+      const autoLoginPeriod = cookieType.AUTO_LOGIN_EXPIRED_PERIOD.VALUE; // 변경가능
+      setModalMessage(`개인정보보호를 위해\n반드시 본인 기기에서만 이용해 주세요.\n(자동로그인 유지기간: ${autoLoginPeriod}일)`);
       mct.alertShow();
     }
     setAutoLogin(checked);
@@ -127,21 +113,13 @@ export default function AdminLoginPage({ autoLoginAccount }) {
     setModalMessage(message);
   };
 
-  const onGlobalModalCallback = () => {
-    if (isSubmitted) {
-      window.location.href = '/bf-admin/dashboard';
-      // Router.push('/bf-admin/dashboard');
-    }
-      mct.alertHide();
-  };
-  
-
-  
   
   return (
     <>
       <MetaTitle title="관리자 로그인" admin={true} />
-      <Modal_global_alert message={modalMessage} background onClick={onGlobalModalCallback} />
+      <Modal_global_alert message={modalMessage} background onClick={()=>{
+        mct.alertHide();
+      }} />
       {mct.isActive && (
         <Modal onClick={mct.alertHide} background title="비밀번호 재설정">
           <Modal_AdminResetPassword />
@@ -211,7 +189,7 @@ export default function AdminLoginPage({ autoLoginAccount }) {
                         className="admin_btn solid confirm_l"
                         onClick={onSubmit}
                       >
-                        {isLoading.submit ? <Spinner style={{ color: '#fff' }} /> : '로그인'}
+                        {(isLoading.submit || isLoading.movePage) ? <Spinner style={{ color: '#fff' }} /> : '로그인'}
                       </button>
                     </div>
                   </div>
@@ -226,10 +204,28 @@ export default function AdminLoginPage({ autoLoginAccount }) {
 }
 
 
-export async function getServerSideProps(context) {
-  const { req } = context;
-  const cookie = req.headers.cookie;
-  let autoLoginAccount = null;
-  // console.log(cookie)
-  return { props: { autoLoginAccount: autoLoginAccount } };
+export async function getServerSideProps({ req }) {
+  let token = null;
+  let USER_TYPE = null;
+  if (req?.headers?.cookie) {
+    token = getTokenFromServerSide( req );
+    console.log('token: ', token)
+    const getApiUrl = `/api/admin/setting`;
+    const res = await getDataSSR( req, getApiUrl, token );
+    console.log('res: ', res)
+    if ( res && res.status === 200 ) {
+      USER_TYPE = userType.ADMIN;
+    }
+  }
+  
+  if(USER_TYPE && USER_TYPE === userType.ADMIN){
+    return {
+      redirect:{
+        permanent: false,
+        destination: '/bf-admin/dashboard'
+      }
+    }
+  } else {
+    return { props: { } };
+  }
 }

@@ -327,7 +327,7 @@ function CreatePopupPage() {
                 className="admin_btn confirm_l solid"
                 onClick={onSubmit}
               >
-                {isLoading.submit ? <Spinner /> :'등록'}
+                {isLoading.submit ? <Spinner style={{ color: '#fff' }}/> :'등록'}
               </button>
             </div>
           </div>

@@ -17,7 +17,7 @@ export const SingleItemList = ({ itemList }) => {
       {itemList?.length > 0 &&
         itemList.map((item, index) => (
           <li key={`general-item-${index}`}>
-            <div className={s.day}>{item.orderDto.orderDate && transformDate(item.orderDto.orderDate)}</div>
+            <div className={s.day}>{item.orderDto.orderDate && transformDate(item.orderDto.orderDate, 'total')}</div>
             <hr className={s.hr1} />
             <div className={s['item-container']}>
               <div className={s.left_box}>

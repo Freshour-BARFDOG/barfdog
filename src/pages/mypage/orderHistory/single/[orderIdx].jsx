@@ -7,7 +7,7 @@ import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from '/src/components/mypage/MypageWrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import Image from 'next/image';
-import {getDataSSR, postData, postObjData} from '/src/pages/api/reqData';
+import {getData, getDataSSR, postData, postObjData} from '/src/pages/api/reqData';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import popupWindow from '/util/func/popupWindow';
 import { valid_deliveryCondition } from '/util/func/validation/valid_deliveryCondition';
@@ -17,33 +17,41 @@ import { transformPhoneNumber } from '/util/func/transformPhoneNumber';
 import { Modal_changeItemOrderState } from '/src/components/modal/Modal_changeItemOrderState';
 import { filter_availableReturnAndExchangeItemList } from '/util/func/filter_availableReturnAndExchangeItemList';
 import { valid_availableCancelOrder } from '/util/func/validation/valid_availableCancelOrder';
-
-// ! =====> 상품정보란 보완필요
-// ! =====> 배송완료 시점필요
-// ! =====> 환불금액 총합 , 환불배송비 계산
+import { valid_availableReturnAndExchangelOrder } from '/util/func/valid_availableReturnAndExchangelOrder';
+import axios from 'axios';
 
 export default function SingleItem_OrderHistoryPage({ data }) {
-  // console.log(data)
+  console.log(data);
   const originItemList = data.orderItemDtoList;
   const [activeModal, setActiveModal] = useState(false);
   const [confirmMessage, setConfirmMessage] = useState('');
   const [confirmType, setConfirmType] = useState('');
-  const [filteredItemList, setFilteredItemList] = useState({});
-  let isAvailableCancleState = true;
+  const [filteredItemList, setFilteredItemList] = useState([]);
+
+  let availableImmediatelyCancle = true;
+  let availableCancleState = true;
+
   for (const objInArr of originItemList) {
-    // ! 전체취소만 가능 => 아이템 각각 조회하여, 취소불가능한 상태가 하나라도 존재일 경우 , 취소 불가
     const itemStatus = objInArr.status;
+
+    // ! 전체취소만 가능 => 아이템 각각 조회하여, 취소불가능한 상태가 하나라도 존재일 경우 , 취소 불가
     const valid = valid_availableCancelOrder(itemStatus);
     if (!valid) {
-      isAvailableCancleState = false;
-      break;
+      availableCancleState = false;
+    }
+    // ! 모든 상품의 주문상태가 결제 완료일 경우, 전체 취소 가능
+    if (itemStatus !== orderStatus.PAYMENT_DONE) {
+      availableImmediatelyCancle = false;
     }
   }
-  /////////////////////////////////////////// ! TEST 임시 추가 => filter_availableReturnAndExchangeItemList 내부에 , TEST코드 들어있음
-  const isAvailableReturnAndExchangeState =
-    filter_availableReturnAndExchangeItemList(originItemList);
-  /////////////////////////////////////////// ! TEST 임시 추가 => filter_availableReturnAndExchangeItemList 내부에 , TEST코드 들어있음
-  // console.log(isAvailableReturnAndExchangeState);
+
+  
+  // 교환 반품 조건 // 배송완료 & 배송완료 7일 이내
+  const isAvailableReturnAndExchangeState = valid_availableReturnAndExchangelOrder(
+    originItemList[0].status,
+    data.orderDto.arrivalDate,
+  );
+
   const onPopupHandler = (e) => {
     e.preventDefault();
     if (typeof window === 'undefined') return console.error('window is not defined');
@@ -87,47 +95,80 @@ export default function SingleItem_OrderHistoryPage({ data }) {
     setActiveModal({ exchange: true });
     setConfirmType(orderStatus.EXCHANGE_REQUEST);
   };
+
   const onStartCancel = () => {
-    setActiveModal({ cancle: true });
-    setConfirmMessage(`전체 상품이 주문 취소됩니다.`);
-    setConfirmType(orderStatus.CANCEL_REQUEST);
+    if (availableImmediatelyCancle) {
+      setActiveModal({ cancle: true });
+      setConfirmMessage(`전체 상품이 즉시 주문취소됩니다.`);
+      setConfirmType(orderStatus.CANCEL_REQUEST);
+    } else {
+      setActiveModal({ cancelRequest: true });
+      setConfirmType(orderStatus.CANCEL_REQUEST);
+    }
   };
-  
+
   const onOrderCancle = async (confirm) => {
     if (!confirm) return initializeModalState();
-    console.log('전체 주문취소 API 실행 // 부분 취소 불가');
-    
-    const r = await postObjData(`/api/orders/${data?.orderDto.orderId}/general/cancelRequest`);
-    console.log(r);
-    if(r.isDone){
-      alert('전체 주문 결제취소완료');
-      window.location.reload();
+
+    const body = {
+      reason: '구매자 일반결제 즉시 취소',
+      detailReason: '',
+    };
+    try {
+      const r = await postObjData(
+        `/api/orders/${data?.orderDto.orderId}/general/cancelRequest`,
+        body,
+      ); // 어드민에서 주문확인 여부에 관계없이 cancelRequest를 사용하고, 서버에서 주문상태를 확인해서, 주문취소를 처리함
+      console.log(r);
+      if (r.isDone) {
+        alert('전체 주문 결제취소완료');
+        window.location.reload();
+      } else {
+        alert('전체 주문 결제취소 요청 중 오류가 발생했습니다.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert(`데이터 처리 중 오류가 발생했습니다.\n${err}`);
     }
-    
+
     setActiveModal(null);
-    
   };
 
-  const confirmBCallbackType = {
-    [orderStatus.CANCEL_REQUEST]: onOrderCancle,
-    // [orderStatus.CONFIRM]: addSomeFunction, // 필요한 function을 추가하면 됨
-  };
-
-  console.log(originItemList);
-
+  
+  // console.log('전체취소 가능여부: ', availableImmediatelyCancle);
+  // console.log('취소기능 활성여부: ', availableCancleState);
+  
   return (
     <>
+      {activeModal?.cancle && (
+        <Modal_confirm
+          text={confirmMessage}
+          isConfirm={onOrderCancle}
+          positionCenter
+          option={{ wordBreak: true }}
+        />
+      )}
+      {(activeModal?.exchange ||
+        activeModal?.return ||
+        activeModal?.confirm ||
+        activeModal?.cancelRequest) && (
+        <Modal_changeItemOrderState
+          onHideModal={initializeModalState}
+          confirmType={confirmType}
+          items={filteredItemList}
+          hasForm={!activeModal?.confirm}
+        />
+      )}
       <MetaTitle title="마이페이지 주문내역 일반상품" />
       <Layout>
         <Wrapper>
           <MypageWrapper>
             <section className={s.title}>주문상세정보</section>
-
             <section>
               <h1 className={s.body_title}>
                 <p>주문상품</p>
                 <div className={s['order-button-controller']}>
-                  {isAvailableCancleState && (
+                  {availableCancleState && (
                     <button
                       type={'button'}
                       className={`${s.btn} ${s.cancel}`}
@@ -222,6 +263,7 @@ export default function SingleItem_OrderHistoryPage({ data }) {
                     </li>
                   ))}
                 </ul>
+                <div className={`${s.info_autoConfirmation} ${s.general}`}>일반상품은 배송완료 7일 후, 자동으로 구매확정됩니다.</div>
               </section>
             </section>
 
@@ -239,11 +281,12 @@ export default function SingleItem_OrderHistoryPage({ data }) {
                   <span>
                     {data?.orderDto.package ? `묶음 배송` : '일반 배송'}&nbsp;
                     {data.orderDto.package && (
-                      <em className={s.desc}>(다음 정기구독 배송 시, 함께 배송)</em>
+                      <em className={s.desc}>(정기구독 배송 시, 함께 배송)</em>
                     )}
                   </span>
                 </div>
               </div>
+
             </section>
 
             <section className={s.body}>
@@ -252,21 +295,22 @@ export default function SingleItem_OrderHistoryPage({ data }) {
                 {!valid_deliveryCondition(data?.orderDto.deliveryStatus) ? (
                   <ul className={s.content_grid}>
                     <li>CJ대한통운</li>
-                    <li><span>운송장번호</span> {data?.orderDto.deliveryNumber || '(발급 전)'}</li>
+                    <li>
+                      <span>운송장번호</span> {data?.orderDto.deliveryNumber || '(발급 전)'}
+                    </li>
                     <li className={s.deliveryStatus}>
-                      배송완료
                       {orderStatus.KOR[data?.orderDto.deliveryStatus]}
                     </li>
-                    <li>
+                    {data?.orderDto.deliveryNumber && <li>
                       <a
-                        href={`http://nexs.cjgls.com/web/service02_01.jsp?slipno=${data?.orderDto.deliveryNumber}`}
+                        href={`https://trace.goodsflow.com/VIEW/V1/whereis/BARFDOG/CJGLS/${data?.orderDto.deliveryNumber}`}
                         target="_blank"
                         rel={'noreferrer'}
                         onClick={onPopupHandler}
                       >
                         <button>배송조회</button>
                       </a>
-                    </li>
+                    </li>}
                   </ul>
                 ) : (
                   <p className={s.emptyCont}>배송 중 상태에서 조회 가능합니다.</p>
@@ -285,15 +329,17 @@ export default function SingleItem_OrderHistoryPage({ data }) {
                   <span>배송비</span>
                   <span>{transformLocalCurrency(data?.orderDto.deliveryPrice)}원</span>
 
-                  <span>할인금액</span>
-                  <span>{transformLocalCurrency(data?.orderDto.discountTotal)}원</span>
+                  <span>총 할인금액</span>
+                  <span>{data?.orderDto.discountTotal > 0 && '-'}{transformLocalCurrency(data?.orderDto.discountTotal)}원</span>
 
-                  <span>적립금 사용</span>
-                  <span>{transformLocalCurrency(data?.orderDto.discountReward)}원</span>
-
-                  <span>쿠폰사용</span>
-                  <span>{transformLocalCurrency(data?.orderDto.discountCoupon)}원</span>
-
+                  <span>ㄴ 쿠폰사용</span>
+                  <span>{data?.orderDto.discountCoupon > 0 && '-'}{transformLocalCurrency(data?.orderDto.discountCoupon)}원</span>
+  
+  
+                  <span>ㄴ 적립금 사용</span>
+                  <span>{data?.orderDto.discountReward > 0 && '-'}{transformLocalCurrency(data?.orderDto.discountReward)}원</span>
+  
+                  
                   <span>결제 금액</span>
                   <span>{transformLocalCurrency(data?.orderDto.paymentPrice)}원</span>
 
@@ -341,46 +387,11 @@ export default function SingleItem_OrderHistoryPage({ data }) {
               ]}
               paymentMethod={paymentMethodType.KOR[data.orderDto.paymentMethod]}
               orderQuery={'orderCancel'}
+              option={{ data: data }}
             />
-            {/*<AdditionalOrderStatusInfo*/}
-            {/*  orderTypeAsLabel={'교환'}*/}
-            {/*  originItemList={originItemList}*/}
-            {/*  targetOrderStatusList={[*/}
-            {/*    orderStatus.EXCHANGE_DONE_BUYER,*/}
-            {/*    orderStatus.EXCHANGE_DONE_SELLER,*/}
-            {/*  ]}*/}
-            {/*  paymentMethod={paymentMethodType.KOR[data.orderDto.paymentMethod]}*/}
-            {/*  orderQuery={'orderExchange'}*/}
-            {/*/>*/}
-            {/*<AdditionalOrderStatusInfo*/}
-            {/*  orderTypeAsLabel={'반품'}*/}
-            {/*  originItemList={originItemList}*/}
-            {/*  targetOrderStatusList={[*/}
-            {/*    orderStatus.RETURN_DONE_BUYER,*/}
-            {/*    orderStatus.RETURN_DONE_SELLER,*/}
-            {/*  ]}*/}
-            {/*  paymentMethod={paymentMethodType.KOR[data.orderDto.paymentMethod]}*/}
-            {/*  orderQuery={'orderReturn'}*/}
-            {/*/>*/}
           </MypageWrapper>
         </Wrapper>
       </Layout>
-      {activeModal?.cancle && (
-        <Modal_confirm
-          text={confirmMessage}
-          isConfirm={confirmBCallbackType[confirmType]}
-          positionCenter
-          option={{ wordBreak: true }}
-        />
-      )}
-      {(activeModal?.exchange || activeModal?.return || activeModal?.confirm) && (
-        <Modal_changeItemOrderState
-          onHideModal={initializeModalState}
-          confirmType={confirmType}
-          items={filteredItemList}
-          hasForm={!activeModal?.confirm}
-        />
-      )}
     </>
   );
 }
@@ -390,87 +401,76 @@ const AdditionalOrderStatusInfo = ({
   originItemList,
   targetOrderStatusList = [],
   paymentMethod,
+  option = {},
 }) => {
+  const repItem = originItemList[0]; // 모든 아이템의 공통적인 상태(ex.환불상태, 환불수단 등) 사용을 위해 임의로 1가지 아이템을 선택.
+  let orderQuery = 'orderCancel';
+  if (
+    repItem.status === orderStatus.CANCEL_DONE_SELLER ||
+    repItem.status === orderStatus.CANCEL_DONE_BUYER
+  ) {
+    orderQuery = 'orderCancel';
+  } else if (
+    repItem.status === orderStatus.RETURN_DONE_SELLER ||
+    repItem.status === orderStatus.RETURN_DONE_BUYER
+  ) {
+    orderQuery = 'orderReturn';
+  }
+  if (
+    repItem.status === orderStatus.EXCHANGE_DONE_SELLER ||
+    repItem.status === orderStatus.EXCHANGE_DONE_BUYER
+  ) {
+    orderQuery = 'orderExchange';
+  }
+  console.log(option.data);
+  const data = option.data;
+  const deliveryPrice = data.orderDto.deliveryPrice;
+  const responsibility = repItem.status === orderStatus.CANCEL_DONE_BUYER ? 'BUYER' : 'SELLER';
+  const totalReturnPrice = option.data.orderDto.paymentPrice; //
   return (
     <>
       {originItemList.filter((item) => targetOrderStatusList.indexOf(item.status) >= 0).length >
         0 && (
-        <section className={`${s['additional-info-section']}`}>
+        <section className={`${s['additional-info-section']} ${s.body_content_2}`}>
           <h6 className={s.body_title}>{orderTypeAsLabel} 정보</h6>
-          <ul>
-            {originItemList
-              .filter((item) => targetOrderStatusList.indexOf(item.status) >= 0)
-              .map((item, i) => {
-                 let orderQuery = 'orderCancel';
-                if (
-                  item.status === orderStatus.CANCEL_DONE_SELLER ||
-                  item.status === orderStatus.CANCEL_DONE_BUYER
-                ) {
-                  orderQuery = 'orderCancel';
-                } else if (
-                  item.status === orderStatus.RETURN_DONE_SELLER ||
-                  item.status === orderStatus.RETURN_DONE_BUYER
-                ) {
-                  orderQuery = 'orderReturn';
-                }
-                if (
-                  item.status === orderStatus.EXCHANGE_DONE_SELLER ||
-                  item.status === orderStatus.EXCHANGE_DONE_BUYER
-                ) {
-                  orderQuery = 'orderExchange';
-                }
-
-                console.log(orderQuery)
-                return (
-                  <li key={`cancel-state-item-${i}`} className={s.body_content_2}>
-                    <span>{orderTypeAsLabel} 상태</span>
-                    <span>
-                      {orderStatus.KOR[item.status].indexOf('(') >= 0
-                        ? orderStatus.KOR[item.status].split('(').map((str, i) => (
-                            <em className={s.orderStatus} key={`addition-orderStatus-${i}`}>
-                              {i === 1 && '('}
-                              {str}
-                            </em>
-                          ))
-                        : orderStatus.KOR[item.status]}
-                    </span>
-
-                    <span>{orderTypeAsLabel} 상품명</span>
-                    <span>{item.itemName}</span>
-                    <span>{orderTypeAsLabel} 요청일자</span>
-                    <span>
-                      {transformDate(item[orderQuery].requestDate, 'time', {
-                        seperator: '.',
-                      })}
-                    </span>
-                    <span>{orderTypeAsLabel} 처리일자</span>
-                    <span>
-                      {transformDate(item[orderQuery].confirmDate, 'time', {
-                        seperator: '.',
-                      })}
-                    </span>
-
-                    <span>{orderTypeAsLabel} 사유</span>
-                    <span>{item[orderQuery].reason}</span>
-
-                    <span>{orderTypeAsLabel} 상세사유</span>
-                    <span>{item[orderQuery].detailReason}</span>
-
-                    <span>상품 금액</span>
-                    <span>{transformLocalCurrency(item.finalPrice)}원</span>
-
-                    <span>상품 할인금액</span>
-                    <span>{transformLocalCurrency(item.discountAmount)}원</span>
-
-                    <span>총 환불금액</span>
-                    <span>{transformLocalCurrency(item.finalPrice - item.discountAmount)}원</span>
-
-                    <span>환불 수단</span>
-                    <span>{paymentMethod}</span>
-                  </li>
-                );
+          <div className={s.grid_box}>
+            <span>{orderTypeAsLabel} 상태</span>
+            <span>
+              {orderStatus.KOR[repItem.status].indexOf('(') >= 0
+                ? orderStatus.KOR[repItem.status].split('(').map((str, i) => (
+                    <em className={s.orderStatus} key={`addition-orderStatus-${i}`}>
+                      {i === 1 && '('}
+                      {str}
+                    </em>
+                  ))
+                : orderStatus.KOR[repItem.status]}
+            </span>
+          
+            <span>{orderTypeAsLabel} 요청일자</span>
+            <span>
+              {transformDate(repItem[orderQuery].requestDate, 'time', {
+                seperator: '.',
               })}
-          </ul>
+            </span>
+            <span>{orderTypeAsLabel} 처리일자</span>
+            <span>
+              {transformDate(repItem[orderQuery].confirmDate, 'time', {
+                seperator: '.',
+              })}
+            </span>
+            <span>{orderTypeAsLabel} 사유</span>
+            <span>{repItem[orderQuery].reason || '-'}</span>
+            <span>{orderTypeAsLabel} 상세사유</span>
+            <span>{repItem[orderQuery].detailReason || '-'}</span>
+            {/*<span>{orderTypeAsLabel} 상품명</span>*/}
+            {/*<div className={s.itemNameList}>*/}
+            {/*  {originItemList.map((item, i) => <span key={`cancel-state-item-${i}`}>{item.itemName}</span>)}*/}
+            {/*</div>*/}
+            <span>총 환불금액</span>
+            <span>{transformLocalCurrency(totalReturnPrice)}원</span> {/* ____  */}
+            <span>환불 수단</span>
+            <span>{paymentMethod}</span>
+          </div>
         </section>
       )}
     </>
@@ -483,20 +483,29 @@ export async function getServerSideProps(ctx) {
   const orderIdx = query.orderIdx;
 
   let DATA = null;
-  const getApiUrl = `/api/orders/${orderIdx}/general`;
+  const getApiUrl = `/api/orders/${orderIdx}/general`; // 일반 주문 하나 조회
 
   let res = await getDataSSR(req, getApiUrl);
   // res = DUMMY_RESPONSE; // ! TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
-  // console.log('SERVER REPONSE: ', res);
   const data = res?.data;
-  console.log(data);
-
-  if (data) {
+  console.log('------singleItem Data: ',data);
+  // console.log('SERVER REPONSE: ', res);
+  if(data.status === 500){
+    return {
+      redirect:{
+        destination: '/mypage/orderHistory'
+      }
+    }
+  } else if (data) {
     DATA = {
       orderItemDtoList: data.orderItemDtoList?.map((item) => ({
+        arrivalDate: data.orderDto.arrivalDate || null, // ! 확인필요 => 전체 배송완료상태를, 상품 각각에 부여하는것 (예외가 없다면 그대로 진행)
         orderItemId: item.orderItemId, // 주문한 상품 id
         thumbnailUrl: item.thumbnailUrl,
-        selectOptionDtoList: item.selectOptionDtoList,
+        selectOptionDtoList: item.selectOptionDtoList.map((op) => ({
+          optionName: op.optionName,
+          optionAmount: op.optionAmount,
+        })),
         itemName: item.itemName,
         amount: item.amount,
         finalPrice: item.finalPrice,
@@ -527,6 +536,7 @@ export async function getServerSideProps(ctx) {
         merchantUid: data.orderDto.merchantUid,
         paymentDate: data.orderDto.paymentDate,
         deliveryNumber: data.orderDto.deliveryNumber,
+        arrivalDate: data.orderDto.arrivalDate || null,
         orderPrice: data.orderDto.orderPrice,
         deliveryPrice: data.orderDto.deliveryPrice,
         discountTotal: data.orderDto.discountTotal,
@@ -544,7 +554,7 @@ export async function getServerSideProps(ctx) {
       },
       savedRewardTotal: data.savedRewardTotal,
     };
-    console.log(DATA);
+    // console.log(DATA);
   }
   return { props: { orderIdx, data: DATA } };
 }

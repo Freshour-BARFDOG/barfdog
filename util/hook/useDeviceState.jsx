@@ -11,7 +11,7 @@ export default function useDeviceState() {
 
     if(window && typeof window !=='undefined'){
       const windowWidth = window.innerWidth;
-      const mobileState = windowWidth < 600;
+      const mobileState = windowWidth <= 600;
       setIsMobile(mobileState);
       setDeviceWidth(windowWidth);
       window.addEventListener('resize', ()=>{

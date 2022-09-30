@@ -1,91 +1,104 @@
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
-import axios from "axios";
-import axiosConfig from "/src/pages/api/axios.config";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useRouter } from 'next/router';
+import axiosConfig from '/src/pages/api/axios.config';
+import MetaTitle from '/src/components/atoms/MetaTitle';
+import AdminLayout from '/src/components/admin/AdminLayout';
+import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
+import Fake_input from '/src/components/atoms/fake_input';
+import PreviewImage from '/src/components/atoms/PreviewImage';
+import ErrorMessage from '/src/components/atoms/ErrorMessage';
+import { validate } from '/util/func/validation/validation_mainBanner';
+import { useModalContext } from '/store/modal-context';
+import Modal_global_alert from '/src/components/modal/Modal_global_alert';
+import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
+import Spinner from '/src/components/atoms/Spinner';
+import { postObjData } from '/src/pages/api/reqData';
+import CustomRadio from "/src/components/admin/form/CustomRadio";
+import {exposeTargetTYPE} from "/store/TYPE/exposeTargetTYPE";
 
-import MetaTitle from "@src/components/atoms/MetaTitle";
-import AdminLayout from "@src/components/admin/AdminLayout";
-import { AdminContentWrapper } from "@src/components/admin/AdminWrapper";
-import InputRadio_status, {
-  InputRadio_exposedTarget,
-} from "@src/components/admin/form/InputRadioPackage";
-import Fake_input from "@src/components/atoms/fake_input";
-import PreviewImage from "@src/components/atoms/PreviewImage";
-import ErrorMessage from "/src/components/atoms/ErrorMessage";
-import Modal from "@src/components/modal/Modal";
-import Modal_alert from "@src/components/modal/Modal_alert";
 
-
-function UpdateMainBannerPage() {
-
+export default function UpdateMainBannerPage() {
+  const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
   const router = useRouter();
   const { id } = router.query;
-  const REQUEST_URL = `/api/banners/main/${id}`;
 
-  const [modalMessage, setModalMessage] = useState('');
   const [initialValues, setInitialValues] = useState({});
   const [formValues, setFormValues] = useState({});
   const [imageFile, setImageFile] = useState({});
   const [formErrors, setFormErrors] = useState({});
-  // const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState({});
+  const targetIdList = Object.keys(exposeTargetTYPE).filter(key=>key !== 'KOR');
+  const targetLabelList = Object.values(exposeTargetTYPE.KOR).map(label=>label);
 
   useEffect(() => {
     if (!id) return;
     (async () => {
-      const response = await axios
-        .get(REQUEST_URL, axiosConfig())
-        .then((res) => {
-          console.log(res.data);
-          return res.data;
-        })
-        .catch((err) => {
-          console.error(err);
-          alert("데이터를 불러올 수 없습니다.");
-          router.back();
-          // setModalMessage("데이터를 불러올 수 없습니다.");
-        });
-      const formData = {
-        name: response.name,
-        targets: response.targets,
-        status: response.status,
-        pcLinkUrl: response.pcLinkUrl,
-        mobileLinkUrl: response.mobileLinkUrl,
-      };
-      const fileData = {
-        pc: {
-          file: "",
-          filename: response.filenamePc,
-          thumbLink: response._links?.thumbnail_pc.href,
-        },
-        mobile: {
-          file: "",
-          filename: response.filenameMobile,
-          thumbLink: response._links?.thumbnail_mobile.href,
-        },
-      };
-      setInitialValues({ ...formData, ...fileData });
-      setFormValues(formData);
-      setImageFile(fileData);
+      setIsLoading((prevState) => ({
+        ...prevState,
+        fetching: true,
+      }));
+
+      try {
+        const apiUrl = `/api/banners/main/${id}`;
+        const data = await axios
+          .get(apiUrl, axiosConfig())
+          .then((res) => {
+            return res.data;
+          })
+          .catch((err) => {
+            console.error(err);
+            alert('데이터를 불러올 수 없습니다.');
+            router.back();
+          });
+        console.log(data)
+        const formData = {
+          name: data.name,
+          targets: data.targets,
+          status: data.status,
+          pcLinkUrl: data.pcLinkUrl,
+          mobileLinkUrl: data.mobileLinkUrl,
+        };
+        const fileData = {
+          pc: {
+            file: '',
+            filename: data.filenamePc,
+            thumbLink: data._links?.thumbnail_pc.href,
+          },
+          mobile: {
+            file: '',
+            filename: data.filenameMobile,
+            thumbLink: data._links?.thumbnail_mobile.href,
+          },
+        };
+        setInitialValues({ ...formData, ...fileData });
+        setFormValues(formData);
+        setImageFile(fileData);
+      } catch (err) {
+        console.error(err);
+      }
+      setIsLoading((prevState) => ({
+        ...prevState,
+        fetching: false,
+      }));
     })();
-  }, [id, router, REQUEST_URL]);
-
-
-  
-
+  }, [id, router]);
 
   const onInputChangeHandler = (e) => {
     const input = e.currentTarget;
     const value = input.value;
     const type = input.type && input.dataset.type;
     const name = input.name;
-    if (type === "link") {
-      const device = input.dataset.device === "pc" ? "pc" : "mobile";
+    if (type === 'link') {
+      const device = input.dataset.device === 'pc' ? 'pc' : 'mobile';
       const query = `${device}LinkUrl`;
       setFormValues({
         ...formValues,
         [query]: value,
       });
-    } else if (name === "name") {
+    } else if (name === 'name') {
       setFormValues({
         ...formValues,
         name: value,
@@ -93,155 +106,88 @@ function UpdateMainBannerPage() {
     }
   };
 
-
-
-
   const onRadioButtonHandler = (data) => {
-    const { key, value }= data;
+    const { key, value } = data;
     setFormValues({
       ...formValues,
-      [key]:value
+      [key]: value,
     });
   };
-
-
 
   const imageFileChangeHandler = (e) => {
     const thisInput = e.currentTarget;
     const file = thisInput.files[0];
-    const filename = file ? file.name : "";
-    const device = thisInput.dataset.device === "pc" ? 'pc' : "mobile";
+    const filename = file ? file.name : '';
+    const device = thisInput.dataset.device === 'pc' ? 'pc' : 'mobile';
     setImageFile({
       ...imageFile,
       [device]: {
         file,
         filename: file ? filename : initialValues[device].filename,
-        thumbLink: file ? "" : initialValues[device].thumbLink,//파일이 없을 경우 : 기존파일 링크 유지
+        thumbLink: file ? '' : initialValues[device].thumbLink, //파일이 없을 경우 : 기존파일 링크 유지
       },
     });
   };
 
-
-
-
-
-
-  const valid_isEmpty = (value) => {
-    let errors;
-
-    if (!value) {
-      errors = "항목이 비어있습니다.";
-    } else {
-      errors = "";
-    }
-
-    return errors;
-  };
-
-
-  const valid_link = (value) => {
-    let errorsMessage;
-
-    const regexURL = new RegExp(
-      "^(https?:\\/\\/)?" + // protocol
-        "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|" + // domain name
-        "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
-        "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
-        "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
-        "(\\#[-a-z\\d_]*)?$",
-      "gi"
-    ); // fragment locator
-
-    const RESULT = regexURL.test(value);
-
-    if (value && !RESULT) {
-      errorsMessage = "유효하지 않은 링크입니다.";
-    } else {
-      errorsMessage = "";
-    }
-
-    return errorsMessage;
-  };
-
-
-   const validate = (obj) => {
-     let errors = {};
-     const keys = Object.keys(obj);
-
-     keys.forEach((key) => {
-       const val = obj[key];
-
-       switch (key) {
-         case "name":
-           valid_isEmpty(val) && (errors[key] = "필수항목입니다.");
-           break;
-         case "pcLinkUrl":
-           valid_link(val) && (errors[key] = valid_link(val));
-           break;
-         case "mobileLinkUrl":
-           valid_link(val) && (errors[key] = valid_link(val));
-           break;
-
-         default:
-           break;
-       }
-     });
-
-     // * 파일 유효성검사 불필요
-     // * 파일 empty: 기존 파일 유지 (파일 전송 X)
-     // * 파일 exist: 파일 전송
-     console.log("Validation Result: ", errors);
-
-     return errors;
-   };
-
-
-
-  const onSubmitHandler = (e) => {
+  const onSubmitHandler = async (e) => {
     e.preventDefault();
-    setFormErrors(validate(formValues));
-    if (Object.keys(formErrors).length) return console.error(formErrors);
-    postDataToServer();
-  };
-
-
-
-  const postDataToServer = async () => {
+    if (submitted) {
+      alert('이미 제출된 양식입니다.');
+      window.location.reload();
+    }
+    const errObj = validate(formValues);
+    const isPassed = valid_hasFormErrors(errObj);
+    setFormErrors(errObj);
+    if (!isPassed) return mct.alertShow('유효하지 않은 항목이 있습니다.');
     // * POST LIST:  1.JSON  2.파일(이미지) 3. 파일(이미지 모바일)
     // * 파일이 없을경우 , 기존 파일 그대로 유지 처리 요청
     const jsonData = JSON.stringify(formValues);
-    const blob = new Blob([jsonData], { type: "application/json" });
+    const blob = new Blob([jsonData], { type: 'application/json' });
     const formData = new FormData();
-    formData.append("requestDto", blob);
-    formData.append("pcFile", imageFile.pc?.file);
-    formData.append("mobileFile", imageFile.mobile?.file);
+    formData.append('requestDto', blob);
+    formData.append('pcFile', imageFile.pc?.file);
+    formData.append('mobileFile', imageFile.mobile?.file);
 
-    
-    axios
-      .post(REQUEST_URL, formData, axiosConfig("multipart/form-data"))
-      .then((res) => {
-        console.log(res);
-        setModalMessage("배너등록이 완료되었습니다.");
-        setTimeout(() => {
-          router.back();
-        }, 2000);
-      })
-      .catch((err) => {
-        console.log(err);
-        setModalMessage("데이터 전송에 실패하였습니다.");
-      });
+    try {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        submit: true,
+      }));
+      const apiUrl = `/api/banners/main/${id}`;
+      const res = await postObjData(apiUrl, formData, 'multipart/form-data');
+      if (res.isDone) {
+        setSubmitted(true);
+        mct.alertShow('배너등록이 완료되었습니다.');
+        setTimeout(() =>{
+          onSuccessCallback();
+        },1000)
+      } else {
+        mct.alertShow('데이터 전송에 실패하였습니다.');
+      }
+    } catch (err) {
+      alert('데이터 전송실패\nERROR STATUS:',err.response.status);
+    }
+    setIsLoading((prevState) => ({
+      ...prevState,
+      submit: false,
+    }));
   };
+
   const onModalHide = () => {
-    setModalMessage(false);
+    mct.alertHide(null);
   };
-
 
   const returnToPrevPage = () => {
-    if (confirm("이전 페이지로 돌아가시겠습니까?")) {
+    if (confirm('이전 페이지로 돌아가시겠습니까?')) {
       router.back();
     }
   };
-
+  
+  const onSuccessCallback = ()=>{
+    window.location.href = '/bf-admin/banner/main-banner';
+  }
+  
+  console.log(formValues)
   
 
   return (
@@ -250,7 +196,10 @@ function UpdateMainBannerPage() {
       <AdminLayout>
         <AdminContentWrapper>
           <div className="title_main">
-            <h1>메인배너 수정</h1>
+            <h1>
+              메인배너 수정
+              {isLoading.fetching && <Spinner />}
+            </h1>
           </div>
           <form
             action="/"
@@ -274,11 +223,9 @@ function UpdateMainBannerPage() {
                         name="name"
                         className="fullWidth"
                         onChange={onInputChangeHandler}
-                        value={formValues.name || ""}
+                        value={formValues.name || ''}
                       />
-                      {formErrors.name && (
-                        <ErrorMessage>{formErrors.name}</ErrorMessage>
-                      )}
+                      {formErrors.name && <ErrorMessage>{formErrors.name}</ErrorMessage>}
                     </div>
                   </div>
                 </div>
@@ -290,11 +237,15 @@ function UpdateMainBannerPage() {
                     <p className="title">노출대상</p>
                   </div>
                   <div className="inp_section">
-                    <InputRadio_exposedTarget
-                      name="exposedTarget"
-                      exposedTarget={formValues.targets}
-                      onRadioButtonHandler={onRadioButtonHandler}
-                    />
+                    <div className="inp_box">
+                      <CustomRadio
+                        name="targets"
+                        idList={targetIdList}
+                        labelList={targetLabelList}
+                        value={formValues.targets}
+                        setValue={setFormValues}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -305,11 +256,15 @@ function UpdateMainBannerPage() {
                     <p className="title">노출여부</p>
                   </div>
                   <div className="inp_section">
-                    <InputRadio_status
-                      name="exposedStatus"
-                      exposedStatus={formValues.status}
-                      onRadioButtonHandler={onRadioButtonHandler}
-                    />
+                    <div className="inp_box">
+                      <CustomRadio
+                        name="status"
+                        idList={['LEAKED', 'HIDDEN']}
+                        labelList={['노출','숨김']}
+                        value={formValues.status}
+                        setValue={setFormValues}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -341,9 +296,7 @@ function UpdateMainBannerPage() {
                           onChange={imageFileChangeHandler}
                         />
                         <Fake_input filename={imageFile.pc?.filename} />
-                        {formErrors.file_pc && (
-                          <ErrorMessage>{formErrors.file_pc}</ErrorMessage>
-                        )}
+                        {formErrors.file_pc && <ErrorMessage>{formErrors.file_pc}</ErrorMessage>}
                       </span>
                     </label>
                   </div>
@@ -362,7 +315,7 @@ function UpdateMainBannerPage() {
                         data-type="link"
                         className="halfWidth"
                         data-device="pc"
-                        value={formValues.pcLinkUrl || ""}
+                        value={formValues.pcLinkUrl || ''}
                         placeholder="ex. https://barfdog.co.kr/event/1"
                         onChange={onInputChangeHandler}
                       />
@@ -370,9 +323,7 @@ function UpdateMainBannerPage() {
                     <div className="desc">
                       *링크가 없을 경우, 배너 클릭 이벤트가 발생하지 않습니다.
                     </div>
-                    {formErrors.pcLinkUrl && (
-                      <ErrorMessage>{formErrors.pcLinkUrl}</ErrorMessage>
-                    )}
+                    {formErrors.pcLinkUrl && <ErrorMessage>{formErrors.pcLinkUrl}</ErrorMessage>}
                   </div>
                 </div>
               </div>
@@ -388,10 +339,7 @@ function UpdateMainBannerPage() {
                     </p>
                   </div>
                   <div className="inp_section">
-                    <label
-                      className="inp_wrap file"
-                      htmlFor="upload-image-mobile"
-                    >
+                    <label className="inp_wrap file" htmlFor="upload-image-mobile">
                       <PreviewImage
                         file={imageFile.mobile?.file}
                         thumbLink={imageFile.mobile?.thumbLink}
@@ -432,7 +380,7 @@ function UpdateMainBannerPage() {
                         className="halfWidth"
                         data-device="mobile"
                         onChange={onInputChangeHandler}
-                        value={formValues.mobileLinkUrl || ""}
+                        value={formValues.mobileLinkUrl || ''}
                         placeholder="ex. https://barfdog.co.kr/event/2"
                       />
                     </div>
@@ -457,12 +405,8 @@ function UpdateMainBannerPage() {
                 >
                   취소
                 </button>
-                <button
-                  type="submit"
-                  id="btn-update"
-                  className="admin_btn confirm_l solid"
-                >
-                  수정
+                <button type="submit" id="btn-update" className="admin_btn confirm_l solid">
+                  {isLoading.submit ? <Spinner style={{ color: '#fff' }} /> : '수정'}
                 </button>
               </div>
             </div>
@@ -470,13 +414,7 @@ function UpdateMainBannerPage() {
           {/* cont */}
         </AdminContentWrapper>
       </AdminLayout>
-      {modalMessage && (
-        <Modal title="모달 메시지">
-          <Modal_alert text={modalMessage} isConfirm={onModalHide} />
-        </Modal>
-      )}
+      {hasAlert && <Modal_global_alert onClick={submitted ? onSuccessCallback : onModalHide} background />}
     </>
   );
 }
-
-export default UpdateMainBannerPage;

@@ -16,13 +16,26 @@ import { validate } from '/util/func/validation/validation_signup';
 import { valid_policyCheckbox } from '/util/func/validation/validationPackage';
 import { transformPhoneNumber } from '/util/func/transformPhoneNumber';
 import { naverGender } from '/util/func/naverGender';
+import { kakaoGender } from '/util/func/kakaoGender';
+import {getDataSSR, getTokenFromServerSide} from "../../api/reqData";
+
+String.prototype.insertAt = function(index,str){
+  return this.slice(0,index) + str + this.slice(index);
+}
 
 export default function SignupPage() {
   const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
   const router = useRouter();
   const userState = useSelector((s) => s.userState);
   // console.log(userState.snsInfo);
 
+  const snsSignupMode = !!userState.snsInfo.providerId;
+  const convertedBirthday =
+    snsSignupMode && userState.snsInfo?.birthday?.indexOf('-') < 0
+      ? userState.snsInfo.birthday?.insertAt(2, '-')
+      : userState.snsInfo?.birthday; // 생일: 하이픈없을 경우 중간에 하이픈 넣는다.
+  
   const initialFormValues = {
     name: userState.snsInfo.name || '',
     email: userState.snsInfo.email || '',
@@ -35,12 +48,13 @@ export default function SignupPage() {
       city: '',
       detailAddress: '',
     },
-    // ! 생년월일 셋팅 확인 필요
-    birthday: `${userState.snsInfo.birthyear}-${userState.snsInfo.birthday}` || '',
-    // ! gender 셋팅 확인 필요
-    gender: userState.snsInfo.provider == 'naver' ? naverGender(userState.snsInfo.gender) : 'NONE',
-    // gender:'MALE',
-
+    birthday: `${userState.snsInfo.birthyear}-${convertedBirthday}` || '', // date형식: yyyy-mm-dd
+    gender:
+      userState.snsInfo.provider == 'naver'
+        ? naverGender(userState.snsInfo.gender)
+        : userState.snsInfo.provider == 'kakao'
+        ? kakaoGender(userState.snsInfo.gender)
+        : 'NONE',
     recommendCode: '',
     agreement: {
       servicePolicy: false,
@@ -54,7 +68,8 @@ export default function SignupPage() {
   };
 
   // console.log('userState: ',userState)
-  // console.log('initialFormValues: ',initialFormValues)
+  // console.log('initialFormValues: ', initialFormValues);
+  // console.log('snsSignupMode: ', snsSignupMode);
 
   const initialFormErrors = {
     isEmailDuplicated: null,
@@ -72,7 +87,8 @@ export default function SignupPage() {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const validFormResultObj = await validate(formValues, formErrors);
+      const validateMode = snsSignupMode ? 'sns' : 'normal';
+      const validFormResultObj = await validate(formValues, formErrors, { mode: validateMode });
       const validPolicyResultObj = valid_policyCheckbox(formValues.agreement, policy_KEYS);
       setFormErrors((prevState) => ({
         ...prevState,
@@ -105,13 +121,48 @@ export default function SignupPage() {
     }
   };
 
+  const generateRandomString = (num) => {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    let result = '';
+    const charactersLength = characters.length;
+    for (let i = 0; i < num; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+
+    return result;
+  };
 
   const sendSignupData = async (formvalues) => {
-    console.log('SUBMIT DATA:\n', formvalues);
-    // data.providerId = "asdfasdf-asdfasdf"; // ! 참고: 임의의 providerID를 서버에 전송해도, 가입 됨
-    // 단, providerID가 중복될 경우, 해당 providerId sns계정으로 가입불가능.
+    const randomPW = generateRandomString(12);
+    const body = {
+      provider: formvalues.provider || null,
+      providerId: formvalues.providerId || null,
+      name: formvalues.name,
+      email: formvalues.email,
+      password: snsSignupMode ? randomPW : formvalues.password,
+      confirmPassword: snsSignupMode ? randomPW : formvalues.confirmPassword,
+      phoneNumber: formvalues.phoneNumber,
+      address: {
+        zipcode: formvalues.address.zipcode,
+        city: formvalues.address.city,
+        street: formvalues.address.street,
+        detailAddress: formvalues.address.detailAddress,
+      },
+      birthday: formvalues.birthday,
+      gender: formvalues.gender,
+      recommendCode: formvalues.recommendCode || '',
+      agreement: {
+        servicePolicy: formvalues.agreement.servicePolicy,
+        privacyPolicy: formvalues.agreement.privacyPolicy,
+        receiveSms: formvalues.agreement.receiveSms,
+        receiveEmail: formvalues.agreement.receiveEmail,
+        over14YearsOld: formvalues.agreement.over14YearsOld,
+      },
+    };
+    console.log('SUBMIT BODY:\n', body);
+
     await axios
-      .post('/api/join', formvalues, {
+      .post('/api/join', body, {
         headers: {
           'content-Type': 'application/json',
         },
@@ -181,8 +232,34 @@ export default function SignupPage() {
       {isModalActive.privacy && (
         <Modal_privacy modalState={isModalActive.privacy} setModalState={setIsModalActive} />
       )}
-      <Modal_global_alert message={alertModalMessage} />
+      {hasAlert && <Modal_global_alert message={alertModalMessage} />}
     </>
   );
 }
 
+
+
+
+export async function getServerSideProps({ req }) {
+  let token = null;
+  let isMember = false;
+  if (req?.headers?.cookie) {
+    token = getTokenFromServerSide( req );
+    const getApiUrl = `/api/mypage`;
+    const res = await getDataSSR( req, getApiUrl, token );
+    if ( res && res.status === 200 ) {
+      isMember = true;
+    }
+  }
+  
+  if(isMember){
+    return {
+      redirect:{
+        permanent: false,
+        destination: '/'
+      }
+    }
+  } else {
+    return { props: { } };
+  }
+}

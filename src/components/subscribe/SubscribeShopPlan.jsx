@@ -8,8 +8,8 @@ import transformLocalCurrency from '/util/func/transformLocalCurrency';
 
 export const SubscribeShopPlan = ({ name, info, form, setForm, calcPrice }) => {
   
-  const [selectedPlan, setSelectedPlan] = useState(null);
-
+  const initialPlan = form.plan || null
+  const [selectedPlan, setSelectedPlan] = useState(initialPlan);
   useEffect(() => {
     setForm((prevState) => ({
       ...prevState,

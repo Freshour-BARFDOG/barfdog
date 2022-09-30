@@ -31,7 +31,7 @@ export default function MypageMenu({ ...props }) {
             title="비밀번호 변경"
             link="/mypage/user/changePassword"
           />
-          <SubmenuList title="SNS 연동" link="/mypage/user/sns" />
+          <SubmenuList title="SNS 연동정보" link="/mypage/user/sns" />
         </List>
         <List title="상품 후기" link="/mypage/review" />
         <List title="친구 초대" link="/mypage/invite" />

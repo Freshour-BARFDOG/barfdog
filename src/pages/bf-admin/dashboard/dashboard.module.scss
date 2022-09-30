@@ -1,14 +1,9 @@
-
-$browser-context: 16;
-@function rem($px, $context: $browser-context) {
-  @return #{$px / $context}rem;
-}
+@import '/styles/global/rem';
 
 
 .wrapper{
   display: grid;
   gap: rem(10);
-  //grid-template-columns: repeat(1, 1fr 1fr 1fr 1fr 1fr 1fr);
   grid-template-areas:
           "m m m m m m"
           "t t t t t t"
@@ -32,12 +27,18 @@ $browser-context: 16;
 }
 
 
-
+.main.title{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap:rem(10);
+}
 
 .title-section  {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap:rem(10);
   padding-bottom: rem(20);
   .title{
     display: flex;
@@ -48,6 +49,7 @@ $browser-context: 16;
       margin-left:rem(8);
     }
   }
+
   border-bottom: rem(1) solid var(--color-line-03);
   margin-bottom:rem(20);
 }
@@ -153,4 +155,10 @@ $browser-context: 16;
       gap:rem(16);
     }
   }
+}
+
+
+button.google{
+  font-size: rem(12) !important;
+  cursor: pointer !important;
 }

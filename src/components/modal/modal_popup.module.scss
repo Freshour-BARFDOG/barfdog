@@ -1,0 +1,81 @@
+@import '/styles/global/rem';
+$popupHoverZindex : 99999; // 팝업에 마우스 올렸을 경우, 다른 모든 zIndex와 관계없이 zIndex 최대치 설정 //
+#modal_popup {
+  // ! z-index: ''; // global zindex에서 관리
+  $defaultTop : rem(100);
+  position: fixed;
+  top: rem(102);
+  background-color: #fff;
+  box-sizing: border-box;
+  overflow: hidden;
+  transition-property: top, opacity, height;
+  transition-duration: 0.3s;
+  transition-timing-function: ease-out;
+  padding: 0;
+  border-radius: rem(8);
+  width: 100%;
+  max-width: rem(600);
+  box-shadow: 0 0 rem(20) rgba(0, 0, 0, 0.15);
+  &:hover{
+    z-index: $popupHoverZindex !important;
+  }
+  @for $i from 1 through 20 {
+    &.leakedOrder-#{$i}{
+      z-index: 2000 - $i;
+      top: calc($defaultTop + rem($i*40));
+    }
+  }
+  &.left {
+    left: rem(20);
+  }
+  &.center {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  &.right {
+    right: rem(20);
+  }
+}
+
+.image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+}
+
+.btn-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  height: rem(50);
+  font-size:rem(16);
+  color: var(--color-font-sub);
+  background-color: #fff;
+  button:not(:last-child) {
+    border-right: rem(1) solid var(--color-line-04);
+  }
+}
+
+
+@media (max-width: rem(1800)) {
+  #modal_popup {
+    width: calc(33.333% - #{rem(10)});
+  }
+}
+
+
+
+@media (max-width: rem(600)) {
+  #modal_popup {
+    width: calc(100% - #{rem(40)});
+    &.left, &.center, &.right {
+      left: 50%;
+      right:auto;
+      transform: translateX(-50%);
+    }
+  }
+  .btn-section {
+  }
+}

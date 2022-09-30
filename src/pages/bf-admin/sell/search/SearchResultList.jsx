@@ -25,8 +25,8 @@ export default function SearchResultList({ items }) {
 const Item = ({ item, sortableItemRef}) => {
   const DATA = {
     id: item.id, // 주문 id => ! 주문 id로 주문정보를 조회가능
-    orderItemId: item.orderItemId, // 주문한 상품의 id
-    // merchantUid: item.merchantUid, // 상품 주문 번호 // ! 개별 상품 취소 기능 삭제로 인하여, 해당 column 미노출
+    // orderItemId: item.orderItemId, // 주문한 상품의 id // 주문단위 조회로 변경(220827) > 그 로인하여 해당 orderItemId(상품id) 불필요.
+    merchantUid: item.merchantUid, // 상품 주문 번호
     orderStatus: orderStatus.KOR[item.orderStatus],
     orderDate: transformDate(item.orderDate, 'time', { seperator: '/' }),
     orderType: item.orderType,
@@ -57,7 +57,7 @@ const Item = ({ item, sortableItemRef}) => {
         </button>
       </span>
       <span>
-        <em className={'overflow-x-scroll'}>{DATA.orderItemId}</em>
+        <em className={'overflow-x-scroll'}>{DATA.merchantUid}</em>
       </span>
       {/*<span>*/}
       {/*  <em className={'overflow-x-scroll'}>{DATA.merchantUid}</em>*/}

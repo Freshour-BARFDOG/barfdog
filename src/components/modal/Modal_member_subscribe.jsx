@@ -11,52 +11,7 @@ import { getData } from '../../pages/api/reqData';
 import { dogInedibleFoodType } from '../../../store/TYPE/dogInedibleFoodType';
 import { dogCautionType } from '../../../store/TYPE/dogCautionType';
 
-const res = {
-  data: {
-    _embedded: {
-      memberSubscribeAdminDtoList: [
-        {
-          querySubscribeAdminDto: {
-            id: 10680,
-            dogName: '김바프',
-            subscribeStartDate: '2022-07-18T13:48:31.244',
-            subscribeCount: 14,
-            plan: 'FULL',
-            amount: 101.0,
-            paymentPrice: 120000,
-            deliveryDate: '2022-07-26',
-            inedibleFood: '닭',
-            inedibleFoodEtc: 'NONE',
-            caution: '특이사항내용',
-          },
-          recipeNames: ['스타터프리미엄', '덕&램'],
-        },
-        {
-          querySubscribeAdminDto: {
-            id: 10650,
-            dogName: '김바프',
-            subscribeStartDate: '2022-07-18T13:48:31.201',
-            subscribeCount: 11,
-            plan: 'FULL',
-            amount: 101.0,
-            paymentPrice: 120000,
-            deliveryDate: '2022-07-26',
-            inedibleFood: 'NONE',
-            inedibleFoodEtc: 'NONE',
-            caution: 'NONE',
-          },
-          recipeNames: ['코끼리&칠면조'],
-        },
-      ],
-    },
-    page: {
-      size: 3,
-      totalElements: 13,
-      totalPages: 5,
-      number: 1,
-    },
-  },
-};
+
 
 const initialSubscribeInfoData = {
   id: null,
@@ -72,8 +27,8 @@ const initialSubscribeInfoData = {
   significant: null,
 };
 
-function Modal_member_subscribe({ memberId, onClick, setIsLoading }) {
-  const getSubscribeInfoApiUrl = `/api/admin/members/${memberId}/subscribes?page=1&size=10`;
+export default function Modal_member_subscribe({ memberId, onClick, setIsLoading }) {
+  
   const [subscribeInfoList, setSubscribeInfoList] = useState([initialSubscribeInfoData]);
 
   const onHideModalHandler = () => {
@@ -81,7 +36,7 @@ function Modal_member_subscribe({ memberId, onClick, setIsLoading }) {
       onClick();
     }
   };
-
+ 
   useEffect(() => {
     (async () => {
       try {
@@ -89,10 +44,12 @@ function Modal_member_subscribe({ memberId, onClick, setIsLoading }) {
           ...prevState,
           subsribeFetching: true,
         }));
-        // const res = await getData(getSubscribeInfoApiUrl);   // ------- ! 서버에서 받기
-        console.log('GET DATA: ', res);
-        const hasData = res.data?._embedded;
-        if (hasData) {
+        const query = '?page=0&size=100';
+        const getSubscribeInfoApiUrl = `/api/admin/members/${memberId}/subscribes${query}`;
+        const res = await getData(getSubscribeInfoApiUrl);   // ------- ! 서버에서 받기
+        console.log('RESPONSE DATA: ', res);
+        // const res = DUMMY_RESPONSE;
+        if (res.data) {
           const subscribeList = res.data._embedded.memberSubscribeAdminDtoList;
           const infoList = subscribeList.map((list) => {
             const DATA = list.querySubscribeAdminDto;
@@ -286,4 +243,53 @@ function Modal_member_subscribe({ memberId, onClick, setIsLoading }) {
   );
 }
 
-export default Modal_member_subscribe;
+
+
+
+const DUMMY_RESPONSE = {
+  data: {
+    _embedded: {
+      memberSubscribeAdminDtoList: [
+        {
+          querySubscribeAdminDto: {
+            id: 10680,
+            dogName: '김바프',
+            subscribeStartDate: '2022-07-18T13:48:31.244',
+            subscribeCount: 14,
+            plan: 'FULL',
+            amount: 101.0,
+            paymentPrice: 120000,
+            deliveryDate: '2022-07-26',
+            inedibleFood: '닭',
+            inedibleFoodEtc: 'NONE',
+            caution: '특이사항내용',
+          },
+          recipeNames: ['스타터프리미엄', '덕&램'],
+        },
+        {
+          querySubscribeAdminDto: {
+            id: 10650,
+            dogName: '김바프',
+            subscribeStartDate: '2022-07-18T13:48:31.201',
+            subscribeCount: 11,
+            plan: 'FULL',
+            amount: 101.0,
+            paymentPrice: 120000,
+            deliveryDate: '2022-07-26',
+            inedibleFood: 'NONE',
+            inedibleFoodEtc: 'NONE',
+            caution: 'NONE',
+          },
+          recipeNames: ['코끼리&칠면조'],
+        },
+      ],
+    },
+    page: {
+      size: 3,
+      totalElements: 13,
+      totalPages: 5,
+      number: 1,
+    },
+  },
+};
+

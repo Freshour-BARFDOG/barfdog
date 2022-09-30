@@ -20,9 +20,8 @@ export const Title = ( {children, link, className} ) => {
 
 
 
-export const SubmenuList = ( {link, title}) => {
-  const URL = link ? link : '#';
-  return <li><Link href={URL} passHref>{title}</Link></li>;
+export const SubmenuList = ( {link, title, className}) => {
+  return <li>{link ? <Link href={link || '#'} passHref className={className}>{title}</Link> : <p  className={className}>{title}</p>}</li>;
 }
 
 
@@ -38,11 +37,11 @@ function MenuLayout({title, titleClassName ,className, link, icon,  children}) {
   const [submenuOpen, setSubmenuOpen] = useState(false);
 
   const mouseEnterEvent = (e) => {
-    setSubmenuOpen(true);
+    // setSubmenuOpen(true);
   };
 
    const mouseLeaveEvent = (e) => {
-    setSubmenuOpen(false);
+    // setSubmenuOpen(false);
   };
 
  

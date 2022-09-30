@@ -7,9 +7,10 @@
     .table_header, .item {
       grid-template-columns:
         rem(80)
-        rem(160)
+        rem(120)
+        rem(120)
         rem(180)
-        minmax(rem(300), rem(400))
+        rem(400)
         rem(80)
         rem(120)
         rem(160)

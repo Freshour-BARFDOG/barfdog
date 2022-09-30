@@ -1,4 +1,4 @@
-import s from './cancelExchangeReturnList.module.scss';
+import s from './ExchangeReturnList.module.scss';
 import transformDate from '/util/func/transformDate';
 import {orderStatus} from "/store/TYPE/orderStatusTYPE";
 import {transformPhoneNumber} from "/util/func/transformPhoneNumber";
@@ -28,9 +28,9 @@ export default function SearchResultList({ items, selectedIdList, onSelectedItem
 
 const Item = ({ item, sortableItemRef, selectedIdList, onSelectedItem }) => {
   const DATA = {
-    id: item.id, // 주문 id => ! 주문 id로 주문정보를 조회가능
+    id: item.id, // 주문 id
     orderItemId: item.orderItemId, // 주문한 상품의 id // 구독상품일 경우, 구독 id
-    // merchantUid: item.merchantUid, // 상품 주문 번호 // ! 개별 상품 취소 기능 삭제로 인하여, 해당 column 미노출
+    merchantUid: item.merchantUid, // 주문마다 고유하게 부여되는 번호 ex. 20220921_aC5kIb3YxCRIV0n
     orderStatus: orderStatus.KOR[item.orderStatus],
     orderDate: transformDate(item.orderDate, 'time', { seperator: '/' }),
     orderType: item.orderType,
@@ -71,18 +71,18 @@ const Item = ({ item, sortableItemRef, selectedIdList, onSelectedItem }) => {
         </button>
       </span>
       <span>
-        <em className={'overflow-x-scroll'}>{DATA.id}</em>
+        <em className={'overflow-x-scroll'}>{DATA.merchantUid}</em>
       </span>
-      {/*<span>*/}
-      {/*  <em className={'overflow-x-scroll'}>{DATA.order}</em>*/}
-      {/*</span>*/}
+      <span>
+        <em className={'overflow-x-scroll'}>{DATA.orderItemId}</em>
+      </span>
       <span>
         <em className={'overflow-x-scroll'}>
           <p>{DATA.orderStatus}</p>
           <p>{DATA.orderDate}</p>
         </em>
       </span>
-      <span>{DATA.reason} __취소/반품/환불 Reason/DetailReason자리__</span>
+      {/*<span>{DATA.reason} __취소/반품/환불 사유</span>*/}
       <span>{DATA.buyerId}</span>
       <span className={s.flex_col}>
         <p>{DATA.buyerName}</p>

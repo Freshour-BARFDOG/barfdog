@@ -69,7 +69,21 @@ export default function ShopPage() {
     }
     setSearchQuery(newQueryArr.join('&'));
   }, [searchValues]);
-
+  
+  const pageInterCeptor = async (res) => {
+    const newItemList = res.data?._embedded?.queryItemsDtoList;
+    const pageData = res.data.page;
+    const newPageInfo = {
+      totalPages: pageData.totalPages,
+      size: pageData.size,
+      totalItems: pageData.totalElements,
+      currentPageIndex: pageData.number,
+      newPageNumber: pageData.number + 1,
+      newItemList: newItemList || [],
+    };
+    return newPageInfo;
+  };
+  
   const onChagneItemType = (e) => {
     const button = e.currentTarget;
     const itemType = button.dataset.itemType;
@@ -90,11 +104,14 @@ export default function ShopPage() {
   };
   const onClickItem = (e)=>{
     e.preventDefault();
+    const link = e.currentTarget.href;
+    const inStock = e.currentTarget.dataset.stock === 'true';
     const thisUserType = auth.userType;
     if(thisUserType === userType.NON_MEMBER){
       alert('회원가입 후 이용가능합니다.')
+    }else if (!inStock){
+      alert('품절된 상품입니다.');
     }else{
-      const link = e.currentTarget.href;
       router.push(link);
     }
   }
@@ -178,7 +195,7 @@ export default function ShopPage() {
               {itemList.map((item, index) => (
                   <li className={`${s.shop_list} animation-show`} key={`item-${item.id}-${index}`}>
                     <Link href={`/shop/item/${item.id}`} passHref>
-                      <a onClick={onClickItem}>
+                      <a onClick={onClickItem} data-stock={item.inStock}>
                         <figure className={s.shop_image}>
                           {item.itemIcons &&
                             (item.itemIcons?.indexOf(',') >= 0 ? (
@@ -255,7 +272,7 @@ export default function ShopPage() {
               setItemList={setItemList}
               queryItemList={apiDataQueryString}
               urlQuery={searchQuery}
-            />
+              pageInterceptor={pageInterCeptor}/>
           </section>
         </Wrapper>
       </Layout>

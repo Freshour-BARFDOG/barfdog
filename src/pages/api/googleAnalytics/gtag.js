@@ -1,9 +1,9 @@
 
 
-// googleAnalytics/gtag.js
-
-export const GA_TRACKING_ID = "G-KSDQQJ3C0H";
-export const UA_TRACKING_ID = "UA-230911569-1";
+export const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GOOGLE_GA_TRACKING_ID;
+export const UA_TRACKING_ID = process.env.NEXT_PUBLIC_GOOGLE_UA_TRACKING_ID;
+export const TAGMANAGER_CONTAINER = process.env.NEXT_PUBLIC_GOOGLE_TAGMANAGER_CONTAINER;
+// GTM-WZRTSML
 
 // https://developers.google.com/analytics/devguides/collection/gtagjs/pages
 export const pageview = (url) => {

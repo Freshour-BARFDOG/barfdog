@@ -79,7 +79,6 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
     // if (!Object.keys(curItem).length || !subscribeId) {
     //   return window.location.href='/';
     // }
-
     // ! surveyReportID가 곧 subscribeId가 되는것인지?????
     (async () => {
       setIsLoading((prevState) => ({
@@ -87,7 +86,7 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
         item: true,
       }));
       try {
-        // API: 구독 주문서에 필요한 내용 조회 ( ! Q. subscribeId는 매 구독 회차마다 생성 or 갱신 ?)
+        // API: 구독 주문서에 필요한 내용 조회 ( ! Q. subscribeId는 매 구독 회차마다 생성 or 갱신 ? ==> 유지됨
         const postItemInfoApiUrl = `/api/orders/sheet/subscribe/${subscribeId}`;
         const body = {
           id: subscribeId,
@@ -111,6 +110,7 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
               info.subscribeDto.plan,
               info.subscribeDto.nextPaymentPrice,
             ).originPrice,
+            discountGrade: info.subscribeDto.discountGrade, // 등급할인 (할인표기에 사용)
           },
           recipeNameList: info.recipeNameList, // [] 구독으로 선택한 레시피 이름 리스트 // FULL-PLAN일 경우, 최대 2개
           name: info.name, // 구매자
@@ -125,18 +125,19 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
             zipcode: info.address.zipcode, // 우편번호
           },
           deliveryPrice: 0, // 정기구독 배송비: 무료
-          reward: info.reward || 200000, // !  ------- TEST
+          reward: info.reward,
           brochure: info.brochure, // 브로슈어 받은 적 있는지 true/false => 브로슈어는 1번만 받을 수 있다.
         };
 
         // FormDatas
         const initForm = {
           selfInfo: {
-            reward: info.reward || 200000, //  ! ------- TEST
+            reward: info.reward,
+            discountGrade: info.subscribeDto?.discountGrade || null, // 등급할인 // 정기구독 할인금액 산출 시 사용
           },
           // ! DUMMY DATA
           coupons:
-            DUMMY_MEMEBER_COUPON_LIST ||
+            // DUMMY_MEMEBER_COUPON_LIST ||
             info.coupons?.map((cp) => ({
               memberCouponId: cp.memberCouponId,
               name: cp.name,

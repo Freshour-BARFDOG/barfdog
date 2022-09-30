@@ -1,46 +1,46 @@
 import s from '../../pages/order/ordersheet/ordersheet.module.scss';
 import React, { useState } from 'react';
-import filter_emptyValue from '../../../util/func/filter_emptyValue';
-import filter_onlyNumber from '../../../util/func/filter_onlyNumber';
+import filter_emptyValue from '/util/func/filter_emptyValue';
+import filter_onlyNumber from '/util/func/filter_onlyNumber';
 import ErrorMessage from '../atoms/ErrorMessage';
-import transformLocalCurrency from '../../../util/func/transformLocalCurrency';
-import transformClearLocalCurrency from "../../../util/func/transformClearLocalCurrency";
+import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import {calcOrdersheetPrices} from "./calcOrdersheetPrices";
 
 export const OrdersheetReward = ({ id, info, form, setForm, formErrors, setFormErrors, orderType='general' }) => {
   
-  let availableMaxReward
-  if(orderType === 'general'){
-    availableMaxReward = info.reward > form.orderPrice ? form.orderPrice: info.reward
-  }else if (orderType === 'subscribe') {
-    availableMaxReward = info.reward > form.orderPrice ? form.orderPrice : info.reward
-  }
-  
+
   const onInputChangeHandler = (e) => {
-    const currentItemPrice = orderType === 'general' ? info.orderPrice : info.subscribeDto.nextPaymentPrice;
     
     const input = e.currentTarget;
     const { value } = input;
     const filteredType = input.dataset.inputType;
-    let filteredValue = value;
+    let enteredReward = value;
     if (filteredType) {
-      filteredValue = filter_emptyValue(value);
+      enteredReward = filter_emptyValue(value);
       if (filteredType.indexOf('number') >= 0) {
-        filteredValue = filter_onlyNumber(filteredValue);
+        enteredReward = filter_onlyNumber(enteredReward);
       }
     }
     
-    let error='';
-    if(filteredValue > currentItemPrice) {
-      filteredValue = 0;
-      error = '주문금액을 초과하여 사용할 수 없습니다.'
-    } else if (filteredValue > availableMaxReward ) {
-      filteredValue = 0;
-      error = '사용가능한 포인트를 초과하였습니다.'
-    } else {
-      error = ''
-    }
+    
+    // ! 0916금 적립금 사용금액 제한 해제 => 최종 결제 시에 최소결제금액 100원만 validation처리
+    
+    // const generalLimitedPrice = form.orderPrice - form.discountCoupon;
+    // const subscribeLimitedPrice = info.subscribeDto?.nextPaymentPrice - form.selfInfo?.discountGrade;
+    // const minPaymentPrice = 100;
+    // const limitedPrice =( orderType === 'general' ? generalLimitedPrice : subscribeLimitedPrice) - minPaymentPrice;
+    //
+    // console.log(generalLimitedPrice)
+    // console.log(limitedPrice)
 
+    // if(enteredReward > limitedPrice) {
+    //   enteredReward = 0;
+    //   error = '사용가능한 금액을 초과였습니다.'
+    // } else {
+    //   error = ''
+    // }
+    
+    let error='';
     setFormErrors(prevState=>({
         ...prevState,
         [id] : error
@@ -50,14 +50,15 @@ export const OrdersheetReward = ({ id, info, form, setForm, formErrors, setFormE
     
     setForm((prevState) => ({
       ...prevState,
-      [id]: filteredValue,
+      [id]: enteredReward,
     }));
   };
 
   const onClickDisCountReward = () => {
+    console.log('전체 사용')
     setForm((prevState) => ({
       ...prevState,
-      [id]: calcOrdersheetPrices(form).availableMaxReward,
+      [id]: calcOrdersheetPrices(form, orderType).availableMaxReward,
     }));
   };
   

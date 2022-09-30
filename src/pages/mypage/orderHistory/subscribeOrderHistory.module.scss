@@ -9,6 +9,14 @@
   color: var(--color-main);
 }
 
+.info_autoConfirmation{
+  color: var(--color-font-sub2);
+  font-size: rem(14);
+  margin-top:rem(10);
+  &.general{
+    text-align: right;
+  }
+}
 
 // SUBSCRIBE ORDERSHEET - 주문상품
 .body_content {
@@ -35,6 +43,12 @@
       row-gap: rem(18);
       width: 100%;
     }
+  }
+
+  .beforeData{
+    text-decoration: line-through;
+    color: var(--color-disabled);
+    margin-right: rem(8);
   }
 }
 // SUBSCRIBE ORDERSHEET - 주문정보
