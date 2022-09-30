@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import s from '@src/pages/mainPage.module.scss';
-import { Navigation, Pagination } from 'swiper';
+import { Navigation, Pagination, Lazy } from 'swiper';
 import ArrowRight_m from '@public/img/icon/swiper-arrow-medium-style2.svg';
 import Link from 'next/link';
 import ArrowLeft_m from '@public/img/icon/swiper-arrow-medium.svg';
@@ -21,8 +21,8 @@ const swiperSettings_review = {
   pagination: {
     clickable: true,
   },
-  
-  modules: [Pagination, Navigation],
+  lazy: true,
+  modules: [Pagination, Navigation, Lazy],
   breakpoints: {
     //반응형 조건 속성
     
