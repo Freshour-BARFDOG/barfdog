@@ -1,38 +1,20 @@
-import React, {useEffect, useState } from 'react';
-import s from "./modal.module.scss";
-import { useModalContext } from "/store/modal-context";
+import React, { useEffect, useState } from 'react';
+import s from './modal.module.scss';
+import { useModalContext } from '/store/modal-context';
 import ModalWrapper from './ModalWrapper';
 
-
-
-function Modal_global_alert({
-  message,
-  onClick,
-  background,
-  ...props
-}) {
+export default function Modal_global_alert({ message, onClick, background, ...props }) {
   const mct = useModalContext();
-  const activeGlobalAlertModal = mct.hasAlert;
+  const hasAlert = mct.hasAlert;
   const modalContextMessage = mct.message;
   const [style, setStyle] = useState({});
   const [targetScrollYPos, setTargetScrollYPos] = useState(null);
-  
-  useEffect( () => {
-    if(window && typeof window !== 'undefined') {
-      document.documentElement.addEventListener('keydown',(e)=>{
-        const escKey = e.keyCode === 27;
-        if(escKey){
-          mct.alertHide();
-        }
-      })
-    }
-    
-  }, [] );
-  
+ 
+
   useEffect(() => {
-    callbackAfterAnimation(activeGlobalAlertModal);
+    callbackAfterAnimation(hasAlert);
     const scrollYPos = window.scrollY;
-    if (activeGlobalAlertModal) {
+    if (hasAlert) {
       document.body.style.cssText = `
       position:fixed;
       top : -${scrollYPos}px;
@@ -44,7 +26,7 @@ function Modal_global_alert({
       document.body.style.cssText = ``;
       window.scrollTo(0, parseInt(scrollYPos || targetScrollYPos)); // alert가 unmounted 되고,  body의 fixed styled이 사라지면서, scrollY position이 화면 최상단으로 변경되는 것을 막음
     };
-  }, [activeGlobalAlertModal]);
+  }, [hasAlert]);
 
   const callbackAfterAnimation = (modalState) => {
     const delay = modalState ? 0 : 500;
@@ -52,6 +34,7 @@ function Modal_global_alert({
       setStyle({ display: modalState ? 'block' : 'none' });
     }, delay);
   };
+  
 
   const onClickHandler = () => {
     if (onClick && typeof onClick === 'function') {
@@ -60,15 +43,47 @@ function Modal_global_alert({
       mct.alertHide();
     }
   };
+  
+  
+  
+  // KEYBOARD EVENT
+  useEffect(() => {
+    if (window && typeof window !== 'undefined') {
+      document.documentElement.addEventListener('keydown', keyDownHandler);
+    }
+    return ()=>{
+      console.log('Unmounted global alert && Delete keydown Event');
+      document.documentElement.removeEventListener('keydown', keyDownHandler);
+    }
+  }, []);
+  
+  const keyDownHandler = (event) => {
+    // console.log('event.keyCode: ', event.keyCode);
+    const escKey = event.keyCode === 27;
+    
+    if (escKey) {
+      onClickHandler();
+    }
+  
+    // ! onClick function이 존재할 때에만, 아래의 enterKey이벤트가 실행되도록 함
+    // ! alert외에 다른 elem의 enterKey 이벤트와 겹치지 않기 위함
+    const enterKey = event.keyCode === 13;
+    // console.log(onClick)
+    if (enterKey && onClick && typeof onClick === 'function') {
+      onClickHandler();
+      document.documentElement.removeEventListener('keydown', keyDownHandler);
+    }
+  };
+
 
   return (
     <>
       <ModalWrapper
-        className={`${s['modal_wrap']} ${s['global']} ${activeGlobalAlertModal ? 'active' : 'inactive'}`}
+        className={`${s['modal_wrap']} ${s['global']} ${hasAlert ? 'active' : 'inactive'}`}
         label="Modal Global Alert"
         {...props}
       >
-        <div className={s['body']} style={activeGlobalAlertModal ? { display: 'flex' } : style}>
+        <div className={s['body']} style={hasAlert ? { display: 'flex' } : style}>
           <header className={s['title-section']}>
             <pre className={`${s.text} ${s.only}`}>{message || modalContextMessage}</pre>
           </header>
@@ -77,9 +92,7 @@ function Modal_global_alert({
           </div>
         </div>
       </ModalWrapper>
-      {activeGlobalAlertModal && background && <section className={s.background} />}
+      {hasAlert && background && <section className={s.background} />}
     </>
   );
 }
-
-export default Modal_global_alert;
