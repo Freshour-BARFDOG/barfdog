@@ -170,7 +170,6 @@ export default function LoginPage() {
   };
 
   const onEnterKeyHandler = (e) => {
-    console.log('제출')
     enterKey(e, onSubmit);
   };
 
