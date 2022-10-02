@@ -16,7 +16,19 @@ function Modal_global_alert({
   const modalContextMessage = mct.message;
   const [style, setStyle] = useState({});
   const [targetScrollYPos, setTargetScrollYPos] = useState(null);
-
+  
+  useEffect( () => {
+    if(window && typeof window !== 'undefined') {
+      document.documentElement.addEventListener('keydown',(e)=>{
+        const escKey = e.keyCode === 27;
+        if(escKey){
+          mct.alertHide();
+        }
+      })
+    }
+    
+  }, [] );
+  
   useEffect(() => {
     callbackAfterAnimation(activeGlobalAlertModal);
     const scrollYPos = window.scrollY;
