@@ -77,10 +77,11 @@ export function Swiper_sns() {
             <div className={Styles.swiper_sns_img}>
               <Image
                 src={require('/public/img/pages/home/instagram-beef.png')}
-                objectFit="fit"
+                objectFit="cover"
                 width={244}
                 height={244}
                 alt="카드 이미지"
+                priority
               />
             </div>
           </a>
@@ -94,10 +95,11 @@ export function Swiper_sns() {
             <div className={Styles.swiper_sns_img}>
               <Image
                 src={require('/public/img/pages/home/instagram-duck.png')}
-                objectFit="fit"
+                objectFit="cover"
                 width={244}
                 height={244}
                 alt="카드 이미지"
+                priority
               />
             </div>
           </a>
@@ -111,10 +113,11 @@ export function Swiper_sns() {
             <div className={Styles.swiper_sns_img}>
               <Image
                 src={require('/public/img/pages/home/instagram-lamb.png')}
-                objectFit="fit"
+                objectFit="cover"
                 width={244}
                 height={244}
                 alt="카드 이미지"
+                priority
               />
             </div>
           </a>
@@ -128,10 +131,11 @@ export function Swiper_sns() {
             <div className={Styles.swiper_sns_img}>
               <Image
                 src={require('/public/img/pages/home/instagram-turkey.png')}
-                objectFit="fit"
+                objectFit="cover"
                 width={244}
                 height={244}
                 alt="카드 이미지"
+                priority
               />
             </div>
           </a>

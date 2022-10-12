@@ -50,16 +50,19 @@ export function Swiper_recipe({ data, isMobile }) {
                 width: '260',
                 height: 'inherit',
               }}
+              className={s.swiper_slide}
             >
               <div className={s.recipe_a}>
-                <div className={s.recipe_box}>
-                  <div className={s.img_wrap}>
-                    <Image src={d.imageUrl1} objectFit="fit" layout="fill" alt="레시피 이미지" />
+                <Link passHref href={'/recipes'}>
+                  <div className={s.recipe_box}>
+                    <div className={s.img_wrap}>
+                      <Image src={d.imageUrl1} objectFit="fit" layout="fill" alt="레시피 이미지" priority />
+                    </div>
+                    <p className={s.uiNameKorean}>{d.uiNameKorean}</p>
+                    <p className={s.desc}>{d.description}</p>
+                    <a className={s.recipe_btn}>+ 더보기</a>
                   </div>
-                  <p className={s.uiNameKorean}>{d.uiNameKorean}</p>
-                  <p className={s.desc}>{d.description}</p>
-                  <Link passHref href={'/recipes'}><a className={s.recipe_btn}>+ 더보기</a></Link>
-                </div>
+                </Link>
               </div>
             </SwiperSlide>
           ))}
