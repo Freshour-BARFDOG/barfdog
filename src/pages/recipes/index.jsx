@@ -68,6 +68,13 @@ const DATA = {
 
 
 export default function RecipePage() {
+
+  //GIF 재생
+  const [isShown, setIsShown] = useState(false);
+  const [isShown1, setIsShown1] = useState(false);
+  const [isShown2, setIsShown2] = useState(false);
+  const [isShown3, setIsShown3] = useState(false);
+
   
   const mcx = useModalContext();
   const [isActiveModal, setIsActiveModal] = useState(false);
@@ -140,9 +147,23 @@ export default function RecipePage() {
             <div className={s.recipe_grid_box}>
               <div className={s.left_top}>
 
-              {/* hover gif실행, scss: 182 opacity: 0; */}
-                <div className={s.image_box}>
+              {/* hover gif실행 */}
+                <div className={s.image_box}
+                  onMouseEnter={() => setIsShown(true)}
+                  onMouseLeave={() => setIsShown(false)}
+                  onClick={onShowModal} data-selected-idx={0}>
                   <div className={`${s.image} img-wrap`}>
+                    {/* 기본 이미지 */}
+                    <Image
+                      priority
+                      src={require("public/img/recipe_left_top.png")}
+                      objectFit="cover"
+                      layout="fill"
+                      alt="브랜드 소개 이미지"
+                    />
+                  </div>
+                  {isShown && (
+                  <div className={`${s.gif} img-wrap`}>
                     {/* gif 이미지 */}
                     <Image
                       priority
@@ -151,17 +172,8 @@ export default function RecipePage() {
                       layout="fill"
                       alt="브랜드 소개 이미지"
                     />
-                    <div className={`${s.image} img-wrap`}>
-                      {/* 기본 이미지 */}
-                      <Image
-                        priority
-                        src={require("public/img/recipe_left_top.png")}
-                        objectFit="cover"
-                        layout="fill"
-                        alt="브랜드 소개 이미지"
-                      />
-                    </div>
                   </div>
+                  )}
                 </div>
 
                 <p>
@@ -180,8 +192,23 @@ export default function RecipePage() {
 
               <div className={s.right_top}>
 
-                <div className={s.image_box}>
+              <div className={s.image_box}
+                  onMouseEnter={() => setIsShown1(true)}
+                  onMouseLeave={() => setIsShown1(false)}
+                  onClick={onShowModal} data-selected-idx={1}>
                   <div className={`${s.image} img-wrap`}>
+                    {/* 기본 이미지 */}
+                    <Image
+                      priority
+                      src={require("public/img/recipe_right_top.png")}
+                      objectFit="cover"
+                      layout="fill"
+                      alt="브랜드 소개 이미지"
+                    />
+                  </div>
+                  {isShown1 && (
+                  <div className={`${s.gif} img-wrap`}>
+                    {/* gif 이미지 */}
                     <Image
                       priority
                       src={require("public/img/recipes/recipe_right_top.gif")}
@@ -189,16 +216,8 @@ export default function RecipePage() {
                       layout="fill"
                       alt="브랜드 소개 이미지"
                     />
-                    <div className={`${s.image} img-wrap`}>
-                      <Image
-                        priority
-                        src={require("public/img/recipe_right_top.png")}
-                        objectFit="cover"
-                        layout="fill"
-                        alt="브랜드 소개 이미지"
-                      />
-                    </div>
                   </div>
+                  )}
                 </div>
 
                 <p>
@@ -216,8 +235,23 @@ export default function RecipePage() {
 
               <div className={s.left_bot}>
 
-                <div className={s.image_box}>
+              <div className={s.image_box}
+                  onMouseEnter={() => setIsShown2(true)}
+                  onMouseLeave={() => setIsShown2(false)}
+                  onClick={onShowModal} data-selected-idx={2}>
                   <div className={`${s.image} img-wrap`}>
+                    {/* 기본 이미지 */}
+                    <Image
+                      priority
+                      src={require("public/img/recipe_left_bot.png")}
+                      objectFit="cover"
+                      layout="fill"
+                      alt="브랜드 소개 이미지"
+                    />
+                  </div>
+                  {isShown2 && (
+                  <div className={`${s.gif} img-wrap`}>
+                    {/* gif 이미지 */}
                     <Image
                       priority
                       src={require("public/img/recipes/recipe_left_bot.gif")}
@@ -225,16 +259,8 @@ export default function RecipePage() {
                       layout="fill"
                       alt="브랜드 소개 이미지"
                     />
-                    <div className={`${s.image} img-wrap`}>
-                      <Image
-                        priority
-                        src={require("public/img/recipe_left_bot.png")}
-                        objectFit="cover"
-                        layout="fill"
-                        alt="브랜드 소개 이미지"
-                      />
-                    </div>
                   </div>
+                  )}
                 </div>
 
                 <p>
@@ -252,8 +278,23 @@ export default function RecipePage() {
 
               <div className={s.right_bot}>
 
-                <div className={s.image_box}>
+                <div className={s.image_box}
+                  onMouseEnter={() => setIsShown3(true)}
+                  onMouseLeave={() => setIsShown3(false)}
+                  onClick={onShowModal} data-selected-idx={3}>
                   <div className={`${s.image} img-wrap`}>
+                    {/* 기본 이미지 */}
+                    <Image
+                      priority
+                      src={require("public/img/recipe_right_bot.png")}
+                      objectFit="cover"
+                      layout="fill"
+                      alt="브랜드 소개 이미지"
+                    />
+                  </div>
+                  {isShown3 && (
+                  <div className={`${s.gif} img-wrap`}>
+                    {/* gif 이미지 */}
                     <Image
                       priority
                       src={require("public/img/recipes/recipe_right_bot.gif")}
@@ -261,16 +302,8 @@ export default function RecipePage() {
                       layout="fill"
                       alt="브랜드 소개 이미지"
                     />
-                    <div className={`${s.image} img-wrap`}>
-                      <Image
-                        priority
-                        src={require("public/img/recipe_right_bot.png")}
-                        objectFit="cover"
-                        layout="fill"
-                        alt="브랜드 소개 이미지"
-                      />
-                    </div>
                   </div>
+                  )}
                 </div>
 
                 <p>
@@ -437,14 +470,12 @@ export default function RecipePage() {
             <div className={s.btn_box}>
               <div className={s.image_box}>
                 <div className={`${s.image} img-wrap`}>
-                  <Link href={'/surveyGuide'} passHref>
                     <Image
                       src={require("public/img/recipe_subscribe.png")}
                       objectFit="cover"
                       layout="fill"
                       alt="브랜드 소개 이미지"
                     />
-                  </Link>
                 </div>
               </div>
             </div>
