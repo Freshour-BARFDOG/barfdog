@@ -16,7 +16,9 @@ section.barfgood {
 }
 
 section.difference {
-  padding: rem(150) 0 rem(100)
+  padding: rem(150) 0 rem(100);
+  position: relative;
+  // min-height: rem(600);
 }
 
 section.difference2 {
@@ -153,10 +155,6 @@ section.sns {
         }
       }
 
-      .recipe_btn{
-        color: #f9edec;
-        background-color: #ca1010;
-      }
     }
   }
 
@@ -169,7 +167,6 @@ section.sns {
     padding: rem(10);
     box-sizing: border-box;
     text-align: center;
-    cursor: pointer;
   }
 
   .img_wrap{
@@ -260,6 +257,12 @@ section.sns {
     height: rem(35);
     border-radius: rem(32);
     background-color: #f9edec;
+    cursor: pointer;
+
+    &:hover{
+      color: #f9edec;
+      background-color: #ca1010;
+    }
   }
 }
 
@@ -378,16 +381,63 @@ section.sns {
   .inner {
     font-size: rem(15);
     text-align: center;
+    position: relative;
 
     p {
       color: var(--color-main);
       font-weight: bold;
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%) !important;
     }
 
     h1 {
       font-size: rem(32);
       font-weight: bold;
       margin-bottom: rem(80);
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%) !important;
+    }
+
+    .image_wrap{
+      width: 100%;
+      position: absolute;
+      top: rem(155);
+      left: 50%;
+      transform: translateX(-50%);
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%) !important;
+    }
+
+    .scroll {
+      // position: absolute;
+      // left: 50%;
+      // transform: translateX(-50%);
+
+      // &::after{
+      //   content: "";
+      //   position: absolute;
+      //   bottom: 0;
+      //   right: 50%;
+      //   width: 100%;
+      //   height: 100%;
+      //   background-color: #fff;
+      // }
+      padding-bottom: rem(520);
+
+      > p {
+        overflow: visible;
+      }
+
+      .magicbox{
+        position: absolute;
+        top: rem(155);
+        left: 50%;
+        transform: translateX(-50%);
+        aspect-ratio: 1.009615384615385/1;
+        max-width: rem(525);
+        width: 100%;
+        margin: 0 auto;
+        background-image: url("../.././public/img/halftest_harf.png");
+        background-repeat: no-repeat;
+        background-size: 50%;
+      }
     }
   }
 }
@@ -775,13 +825,14 @@ section.sns {
     transition: opacity .25s;
 
     &:hover{
-      filter: brightness(1.05);
+
       .swiper_sns_img{
         position: relative;
         margin-top: rem(2);
   
-        &:before{
-          border-color: var(--color-main);
+        img {
+          border: rem(1) solid var(--color-main) !important;
+          filter: brightness(1.05);
         }
       }
     }
@@ -790,15 +841,9 @@ section.sns {
       position: relative;
       margin-top: rem(2);
 
-      &:before{
-        content: "";
-        position: absolute;
-        top: rem(-1);
-        left: 50%;
-        transform: translateX(-50%);
-        width: rem(244);
-        height: rem(244);
-        border: rem(1) solid #fff;
+      img {
+        border: rem(1) solid #fff !important;
+        transition: filter .25s;
       }
     }
   }
@@ -1349,6 +1394,13 @@ section.sns {
     .inner {
       h1 {
         font-size: rem(28);
+      }
+
+      .scroll {
+        padding-bottom: 100vw;
+        .magicbox{
+          background-size: 50%;
+        }
       }
     }
   }

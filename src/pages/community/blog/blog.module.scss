@@ -159,6 +159,11 @@ section.content_box {
           @include char(b16);
           color: var(--color-font-sub2);
           margin-bottom: rem(20);
+          > h3 {
+            > strong {
+              font-weight: normal;
+            }
+          }
         }
         .day {
           @include char(l15);
@@ -382,6 +387,6 @@ section.content_box {
     font-size: var(--reset-font-size) !important;
   }
   > * {
-    margin-right: rem(4);
+    //margin-right: rem(4);
   }
 }

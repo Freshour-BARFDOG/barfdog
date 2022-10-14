@@ -166,6 +166,14 @@ section.subscribe_discount { margin-bottom: rem(80);}
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      .image_box {
+      overflow-y: hidden;
+
+        .gif{
+          transform: translateY(rem(-0.5));
+        }
+      }
+
       p {
         color: #FF8C16;
       }

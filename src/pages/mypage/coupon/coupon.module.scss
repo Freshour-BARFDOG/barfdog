@@ -88,18 +88,21 @@ section.pageline { padding: rem(40) 0 0 0}
     justify-content: space-between;
     align-items: center;
     grid-template-columns: 1fr rem(150);
-    border: rem(1) solid #c4c4c4;
+    border: rem(1) solid  var(--color-line-04);
     padding: rem(20) rem(30) rem(30) rem(30);
     row-gap: rem(10);
+    border-radius: rem(10);
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.08);
+    word-break: keep-all;
 
     .left_top {
       @include char(t24);
-      font-weight: 500;
-
+      font-weight: 600;
+      color: var(--color-main);
     }
     .right_top {
       font-size: rem(36);
-      font-weight: 700;
+      font-weight: 800;
       color: var(--color-main);
       line-height: 140%;
       text-align: right;
@@ -140,6 +143,10 @@ section.pageline { padding: rem(40) 0 0 0}
       border-radius: rem(100);
       width: rem(106);
       padding: rem(5) 0;
+
+      &:hover, &:active{
+        background-color: var(--color-main);
+      }
     }
   }
 
@@ -151,7 +158,7 @@ section.pageline { padding: rem(40) 0 0 0}
   margin-top:rem(40);
 }
 
-@media (max-width: rem(1100)) {
+@media (max-width: rem(1000)) {
   .coupon_content_grid_box {
     grid-template-columns: 1fr;
   }
@@ -160,10 +167,9 @@ section.pageline { padding: rem(40) 0 0 0}
 @media (max-width: rem(700)) {
 
   .coupon_content_grid_box {
-  
     .grid_box {
       grid-template-columns: 1fr rem(120);
-      padding: rem(20) rem(10) rem(30) rem(10);
+      padding: rem(20) rem(20) rem(30) rem(20);
 
       .left_top {
         font-size: rem(20);
@@ -203,5 +209,48 @@ section.pageline { padding: rem(40) 0 0 0}
     } 
   }
 
+  .coupon_content_grid_box {
+    .grid_box {
+      grid-template-columns: 1fr rem(150);
+      padding: rem(20) rem(30) rem(30) rem(30);
+
+      .left_top {
+        @include char(t24);
+      }
+
+      
+      .right_top {
+        font-size: rem(36);
+      }
+    }
+
+    .left_bot {
+      @include char(l15);
+    }
+  }
   
+}
+
+@media (max-width: rem(450)) {
+
+  .coupon_content_grid_box {
+    .grid_box {
+      grid-template-columns: 1fr rem(120);
+      padding: rem(20) rem(20) rem(30) rem(20);
+
+      .left_top {
+        font-size: rem(20);
+      }
+
+      
+      .right_top {
+        font-size: rem(22);
+      }
+    }
+
+    .left_bot {
+      font-size: rem(14);
+    }
+  }
+
 }

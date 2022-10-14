@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import MetaTitle from '../components/atoms/MetaTitle';
 import s from './mainPage.module.scss';
 import Image from 'next/image';
@@ -27,6 +27,8 @@ import { Modal_tempPasswrod } from '/src/components/modal/Modal_tempPasswrod';
 import { Modal_Popup } from '/src/components/modal/Modal_Popup';
 import useDeviceState from "/util/hook/useDeviceState";
 import { getTokenFromServerSide } from "/src/pages/api/reqData";
+import { Tween } from 'react-gsap';
+import { Controller, Scene } from "react-scrollmagic";
 
 export default function MainPage({ data }) {
   // console.log(data)
@@ -48,7 +50,6 @@ export default function MainPage({ data }) {
       setActiveTempPasswordModal(false);
     }
   };
-
 
   return (
     <>
@@ -143,15 +144,33 @@ export default function MainPage({ data }) {
         <Wrapper>
           <section className={s.difference}>
             <div className={s.inner}>
-              <p>CEHCK POINT</p>
-              <h1>바프독을 선택해야 하는 이유</h1>
-              <Image
-                src={Halftest}
-                objectFit="fit"
-                width={525}
-                height={520}
-                alt="카드 이미지"
-              ></Image>
+              <div className={s.scroll}>
+              <Controller>
+                <Scene duration={2000} pin offset={350}>
+                  <Tween
+                  from={{
+                    "clip-path": "polygon(50% 0%, 50% 0%, 50% 100%, 50% 100%)"
+                  }}
+                  to={{
+                    "clip-path": "polygon(50% 0%, 0% 0%, 0% 100%, 50% 100%)"
+                  }}
+                  >
+                    <p>CEHCK POINT</p>
+                    <h1>바프독을 선택해야 하는 이유</h1>
+                    <div className={s.image_wrap}>
+                      <Image
+                        src={Halftest}
+                        objectFit="fit"
+                        width={525}
+                        height={520}
+                        alt="카드 이미지"
+                      ></Image>
+                    </div>
+                    <div className={s.magicbox} />
+                  </Tween>
+                </Scene>
+              </Controller>
+              </div>
             </div>
           </section>
         </Wrapper>
