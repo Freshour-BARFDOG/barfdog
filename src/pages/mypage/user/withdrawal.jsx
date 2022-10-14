@@ -17,7 +17,6 @@ import {useDispatch, useSelector} from 'react-redux';
 
 export default function WithDrawalPage() {
   const mct = useModalContext();
-  const router = useRouter();
   const auth = useSelector((s) => s.auth);
   const dispatch = useDispatch();
   const deviceState = useDeviceState();
@@ -26,7 +25,6 @@ export default function WithDrawalPage() {
   const [pw, setPw] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState({});
-  const [alertModalMessage, setAlertModalMessage] = useState('');
 
   const onInputChangeHandler = (e) => {
     const input = e.currentTarget;
@@ -38,10 +36,9 @@ export default function WithDrawalPage() {
   const onSubmit = async (e) => {
     e.preventDefault();
     if (isSubmitted) return console.error('이미 제출된 양식입니다.');
-    const errorMessage = valid_isEmpty(pw);
-    if (errorMessage) {
-      mct.alertShow();
-      setAlertModalMessage('비밀번호를 입력해주세요.');
+    const isEmpty = valid_isEmpty(pw);
+    if (isEmpty) {
+      mct.alertShow('비밀번호를 입력해주세요.');
       return;
     }
 
@@ -56,21 +53,24 @@ export default function WithDrawalPage() {
         data: { password: pw },
       });
       console.log(res);
+      let message;
       if (res.isDone) {
         setIsSubmitted(true);
-        setAlertModalMessage('회원 탈퇴되었습니다.\n그 동안 바프독을 이용해주셔서 감사합니다.');
-        dispatch(authAction.logout());
+        message = '회원 탈퇴되었습니다.\n그 동안 바프독을 이용해주셔서 감사합니다.';
+        setTimeout(()=>{
+          dispatch(authAction.logout());
+        },3000)
+        
       } else if (res.status === 400) {
         
         const errorArr = res.data.data.errors;
-        const errMessage = errorArr.map(err=>err.defaultMessage).join(', '); // 서버에서 보낸 에러 사유
-        setAlertModalMessage(errMessage);
+        message = errorArr.map(err=>err.defaultMessage).join(', '); // 서버에서 보낸 에러 사유
       }
   
-      mct.alertShow();
+      mct.alertShow(message);
     } catch (err) {
       console.error('통신에러: ', err);
-      setAlertModalMessage(`데이터 처리 중 오류가 발생했습니다.\n${err}`);
+      mct.alertShow(`데이터 처리 중 오류가 발생했습니다.\n${err}`);
     }
     setIsLoading((prevState) => ({
       ...prevState,
@@ -86,8 +86,8 @@ export default function WithDrawalPage() {
     window.location.href = isMobile ? '/mypage/user' : '/mypage/user/info';
   };
 
-  const onModalConfirmButtonClick = () => {
-    window.location.href = '/account/login';
+  const onSuccessModalCallback = () => {
+    dispatch(authAction.logout());
   };
 
   return (
@@ -128,8 +128,8 @@ export default function WithDrawalPage() {
         </Wrapper>
       </Layout>
       <Modal_global_alert
-        message={alertModalMessage}
-        onClick={isSubmitted && onModalConfirmButtonClick}
+        onClick={isSubmitted && onSuccessModalCallback}
+        background
       />
     </>
   );

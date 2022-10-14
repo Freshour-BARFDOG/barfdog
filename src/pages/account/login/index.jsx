@@ -210,7 +210,7 @@ export default function LoginPage() {
                   placeholder={'비밀번호를 입력해주세요.'}
                   setFormValues={setFormValues}
                   autoComplete={'current-password'}
-                  onKeydown={onEnterKeyHandler}
+                  onKeyDown={onEnterKeyHandler}
                   errorMessage={
                     formErrors?.password && <ErrorMessage>{formErrors?.password}</ErrorMessage>
                   }
@@ -280,7 +280,7 @@ const InputBox = ({
   setFormValues,
   errorMessage,
   autoComplete,
-  onKeydown,
+  onKeyDown,
 }) => {
   const [value, setValue] = useState('');
 
@@ -309,7 +309,7 @@ const InputBox = ({
           type={type || 'text'}
           placeholder={placeholder}
           autoComplete={autoComplete}
-          onKeyDown={onKeydown}
+          onKeyDown={onKeyDown}
         />
         {errorMessage}
       </label>
