@@ -123,7 +123,7 @@ export function Payment({
       discountGrade: calcOrdersheetPrices(form, 'subscribe').discountGrade, // 등급할인
       paymentPrice: calcOrdersheetPrices(form, 'subscribe').paymentPrice, // 최종 결제 금액
       paymentMethod: form.paymentMethod, // 결제방법  [CREDIT_CARD, NAVER_PAY, KAKAO_PAY]
-      nextDeliveryDate: form.nextDeliveryDate, // 할인이 적용되지 않은 가격
+      nextDeliveryDate: form.nextDeliveryDate, // 배송 예정일 'yyyy-MM-dd', 첫 결제 배송날짜는 프론트에서 넘어온 값으로 저장함
       agreePrivacy: form.agreePrivacy, // 개인정보 제공 동의
       brochure: form.brochure, // 브로슈어 수령여부
     };
