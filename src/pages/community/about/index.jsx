@@ -3,20 +3,19 @@ import MetaTitle from "@src/components/atoms/MetaTitle";
 
 import Layout from '@src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
-import Styles from './about.module.scss';
+import s from './about.module.scss';
 import Image from 'next/image';
 
 
-function Index() {
+export default function AboutPage() {
   return (
     <>
-      {" "}
       <MetaTitle title="어바웃" />
       <Layout>
         <Wrapper>
-          <section className={Styles.top}>
-            <div className={Styles.back_image}>
-              <div className={`${Styles.img_wrap} img-wrap`}>
+          <section className={s.top}>
+            <div className={s.back_image}>
+              <div className={`${s.img_wrap} img-wrap`}>
                 <Image
                   src={require("/public/img/pages/community/community_1.png")}
                   objectFit="cover"
@@ -26,7 +25,7 @@ function Index() {
                 />
               </div>
 
-              <div className={`${Styles.img_wrap2} img-wrap`}>
+              <div className={`${s.img_wrap2} img-wrap`}>
                 <Image
                   src={require("/public/img/pages/community/community_2.png")}
                   objectFit="cover"
@@ -37,9 +36,9 @@ function Index() {
               </div>
             </div>
 
-            <div className={Styles.inner}>
-              <div className={Styles.letter_box}>
-                <div className={`${Styles.title} img-wrap`}>
+            <div className={s.inner}>
+              <div className={s.letter_box}>
+                <div className={`${s.title} img-wrap`}>
                   <Image
                     src={require("/public/img/pages/community/community_title.png")}
                     objectFit="contain"
@@ -49,9 +48,9 @@ function Index() {
                   />
                 </div>
 
-                <div className={Styles.content1}>Fresh Life! fresh our</div>
+                <div className={s.content1}>Fresh Life! fresh our</div>
 
-                <div className={Styles.content2}>
+                <div className={s.content2}>
                   우리는 반려동물과 아주 긴 시간을 함께 합니다.
                   <br />
                   때로는 이 여정이 고되고 지칠 때도 있지만 충분히 가치가 있는
@@ -116,9 +115,9 @@ function Index() {
                   <br />그 긴 여정을 응원합니다.
                 </div>
 
-                <div className={Styles.sign}>
-                  <div className={Styles.ceo}>바프독 CEO 임경호</div>
-                  <div className={`${Styles.img_sign} img-wrap`}>
+                <div className={s.sign}>
+                  <div className={s.ceo}>바프독 CEO 임경호</div>
+                  <div className={`${s.img_sign} img-wrap`}>
                     <Image
                       src={require("/public/img/pages/community/community_sign.png")}
                       objectFit="cover"
@@ -130,9 +129,9 @@ function Index() {
                 </div>
               </div>
 
-              <div className={Styles.letter_box2}>
-                <div className={Styles.inner2}>
-                  <div className={`${Styles.title} img-wrap`}>
+              <div className={s.letter_box2}>
+                <div className={s.inner2}>
+                  <div className={`${s.title} img-wrap`}>
                     <Image
                       src={require("/public/img/pages/community/community_title2.png")}
                       objectFit="contain"
@@ -142,10 +141,10 @@ function Index() {
                     />
                   </div>
 
-                  <div className={Styles.ulbox}>
+                  <div className={s.ulbox}>
                     <ul>
                       <li>
-                        <div className={Styles.content3}>
+                        <div className={s.content3}>
                           휴먼그레이드 등급의 원재료 소싱
                         </div>
                         <p>
@@ -159,7 +158,7 @@ function Index() {
                       </li>
 
                       <li>
-                        <div className={Styles.content3}>
+                        <div className={s.content3}>
                           차별화된 맞춤형 1:1 생산
                         </div>
                         <p>
@@ -171,7 +170,7 @@ function Index() {
                       </li>
 
                       <li>
-                        <div className={Styles.content3}>
+                        <div className={s.content3}>
                           철저한 위생과 품질 관리
                         </div>
                         <p>
@@ -184,7 +183,7 @@ function Index() {
                       </li>
 
                       <li>
-                        <div className={Styles.content3}>
+                        <div className={s.content3}>
                           믿을 수 있는 안전성
                         </div>
                         <p>
@@ -201,7 +200,7 @@ function Index() {
                       </li>
 
                       <li>
-                        <div className={Styles.content3}>환경을 위한 포장</div>
+                        <div className={s.content3}>환경을 위한 포장</div>
                         <p>
                           친환경 아이스팩 사용, 종이 아이스박스 사용 등, 바프독
                           뿐 아니라
@@ -223,9 +222,9 @@ function Index() {
         </Wrapper>
 
         <Wrapper>
-          <section className={Styles.mid}>
-            <div className={Styles.inner}>
-              <div className={`${Styles.img_wrap4} img-wrap`}>
+          <section className={s.mid}>
+            <div className={s.inner}>
+              <div className={`${s.img_wrap4} img-wrap`}>
                 <Image
                   src={require("/public/img/pages/community/community_welcome.png")}
                   objectFit="cover"
@@ -233,7 +232,7 @@ function Index() {
                   alt="Welcom"
                 />
               </div>
-              <div className={`${Styles.img_quotation} img-wrap`}>
+              <div className={`${s.img_quotation} img-wrap`}>
                 <Image
                   src={require("/public/img/pages/community/community_quotation.png")}
                   objectFit="cover"
@@ -242,9 +241,9 @@ function Index() {
                 />
               </div>
 
-              <div className={Styles.title}>반갑습니다, 견주님!</div>
+              <div className={s.title}>반갑습니다, 견주님!</div>
 
-              <div className={Styles.text}>
+              <div className={s.text}>
                 더 나은 견생을 위해 헌신해 주시는
                 <br />
                 훌륭한 반려인이 되어 주셔서 감사합니다
@@ -254,16 +253,21 @@ function Index() {
         </Wrapper>
 
         <Wrapper>
-          <section className={Styles.bottom}>
-            <div className={Styles.inner}>
-              <div className={Styles.left}>
-                <div className={Styles.title}>INSTAGRAM</div>
+          <section className={s.bottom}>
+            <div className={s.inner}>
+              <div className={s.left}>
+                <div className={s.title}>INSTAGRAM</div>
                 <p>인스타그램에서 바프독의 최신 소식을 확인해보세요</p>
               </div>
 
-              <div className={Styles.right}>
-                <div className={Styles.button}>
-                  <p>인스타그램 구경하기</p>
+              <div className={s.right}>
+                <div className={s.button}>
+                  <a
+                    href="https://www.instagram.com/barfdog_official/"
+                    target={'_blank'}
+                    rel={'noreferrer'}
+                  >인스타그램 구경하기
+                  </a>
                 </div>
               </div>
             </div>
@@ -273,4 +277,5 @@ function Index() {
     </>
   );
 }
-export default Index;
+
+// "https://www.instagram.com/barfdog_official/"

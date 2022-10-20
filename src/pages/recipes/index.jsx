@@ -469,14 +469,18 @@ export default function RecipePage() {
 
             <div className={s.btn_box}>
               <div className={s.image_box}>
-                <div className={`${s.image} img-wrap`}>
-                    <Image
-                      src={require("public/img/recipe_subscribe.png")}
-                      objectFit="cover"
-                      layout="fill"
-                      alt="브랜드 소개 이미지"
-                    />
-                </div>
+                <Link href="/surveyGuide" passHref>
+                  <a className="flex-wrap">
+                    <div className={`${s.image} img-wrap`}>
+                      <Image
+                        src={require("public/img/recipe_subscribe.png")}
+                        objectFit="cover"
+                        layout="fill"
+                        alt="아이콘 정기구독 시작하기"
+                      />
+                    </div>
+                  </a>
+                </Link>
               </div>
             </div>
           </section>
@@ -554,16 +558,20 @@ export default function RecipePage() {
             <div className={s.sub_row_2}>
               첫 구매 시 50% 할인 혜택을 <br />받을 수 있습니다!
             </div>
+            
             <div className={s.image_box}>
-              <div className={`${s.image} img-wrap`}>
-                <Image
-                  priority
-                  src={require("public/img/recipe_subsctibe_coupon.png")}
-                  objectFit="cover"
-                  layout="fill"
-                  alt="브랜드 소개 이미지"
-                />
-              </div>
+              <Link href="/surveyGuide" passHref>
+                <a className="flex-wrap">
+                  <div className={`${s.image} img-wrap`}>
+                    <Image
+                      src={require("public/img/recipe_subsctibe_coupon.png")}
+                      objectFit="cover"
+                      layout="fill"
+                      alt="아이콘 정기구독 시작하기"
+                    />
+                  </div>
+                </a>
+              </Link>
             </div>
           </section>
         </Wrapper>
