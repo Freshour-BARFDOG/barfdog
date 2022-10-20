@@ -17,6 +17,7 @@ import { OrdersheetMethodOfPayment } from '/src/components/order/OrdersheetMetho
 import { OrdersheetAmountOfPayment } from '/src/components/order/OrdersheetAmountOfPayment';
 import { calcNextSubscribeDeliveryDate } from '/util/func/calcNextSubscribeDeliveryDate';
 import { subscribePlanType } from '/store/TYPE/subscribePlanType';
+import {getDiffDate} from "../../../../../util/func/getDiffDate";
 
 const DUMMY_MEMEBER_COUPON_LIST = [
   {
@@ -52,9 +53,7 @@ const DUMMY_MEMEBER_COUPON_LIST = [
 ];
 
 export default function SubscribeOrderSheetPage({ subscribeId }) {
-  const router = useRouter();
   const auth = useSelector((s) => s.auth);
-  const USER_TYPE = auth.userType;
 
   const cart = useSelector((state) => state.cart);
   const [isLoading, setIsLoading] = useState({ fetching: true });
@@ -79,7 +78,6 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
     // if (!Object.keys(curItem).length || !subscribeId) {
     //   return window.location.href='/';
     // }
-    // ! surveyReportID가 곧 subscribeId가 되는것인지?????
     (async () => {
       setIsLoading((prevState) => ({
         ...prevState,
@@ -98,7 +96,7 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
           return (window.location.href = '/');
         }
         const info = res.data;
-        console.log(info);
+        // console.log(info);
 
         // 주문에 대한 모든 데이터
         const initInfo = {
@@ -164,7 +162,10 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
           discountCoupon: 0, // 쿠폰 적용으로 인한 할인금
           paymentPrice: info.subscribeDto.nextPaymentPrice, // 최종 결제 금액
           paymentMethod: null, // 결제방법  [CREDIT_CARD, NAVER_PAY, KAKAO_PAY]
-          nextDeliveryDate: calcNextSubscribeDeliveryDate(transformToday(), null), // 배송 예정일 'yyyy-MM-dd'
+          // ! TEST CODE
+          nextDeliveryDate: getDiffDate(1), // !테스트로,  1일 이후 배송이 시작되는 것으로 설정함 (221020)
+          // ! PRODUCT CODE
+          // nextDeliveryDate: calcNextSubscribeDeliveryDate(transformToday(), null), // 배송 예정일 'yyyy-MM-dd', 첫 결제 배송날짜는 프론트에서 넘어온 값으로 저장함
           agreePrivacy: false, // 개인정보 제공 동의
           brochure: false, // 브로슈어 수령여부
         };
@@ -180,6 +181,8 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
       }));
     })();
   }, [cart]);
+  
+  
 
   const onActivleModalHandler = (e) => {
     const button = e.currentTarget;
