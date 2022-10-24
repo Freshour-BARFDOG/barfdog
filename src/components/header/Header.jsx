@@ -156,16 +156,13 @@ export default function Header() {
 
 export const Gnb_my = ({ isMobile, setSidrOpen, authData }) => {
   const userInfo = authData?.userInfo;
-  const mct = useModalContext();
-  const activeGlobalAlertModal = mct.hasAlert;
   const cart = useSelector((s) => s.cart);
   const router = useRouter();
 
-  console.log('userInfo on gnb my:',userInfo)
   const onShowMobileSideMenu = () => {
     setSidrOpen(true);
   };
-  const onMovePage = (e) => {
+  const onMovePage = async (e) => {
     e.preventDefault();
     if (!userInfo) {
       return alert('로그인 후 이용가능합니다.');
@@ -173,7 +170,7 @@ export const Gnb_my = ({ isMobile, setSidrOpen, authData }) => {
 
     const btn = e.currentTarget;
     const link = btn.dataset.link;
-    router.push(link);
+    await router.push(link);
   };
 
   return (

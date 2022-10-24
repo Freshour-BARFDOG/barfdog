@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import PopupWrapper from '/src/components/popup/PopupWrapper';
 import { PopupCloseButton_typeX } from '/src/components/popup/PopupCloseButton';
@@ -12,7 +12,6 @@ import { transformDateWithHyphen, transformToday } from '/util/func/transformDat
 import {valid_isTheSameArray} from "/util/func/validation/validationPackage";
 import AmdinErrorMessage from "/src/components/atoms/AmdinErrorMessage";
 import Spinner from "/src/components/atoms/Spinner";
-import {useMemberList} from "/public/data/test/user"; //  ! TESTTESTTESTTESTTESTTESTTEST
 
 
 
