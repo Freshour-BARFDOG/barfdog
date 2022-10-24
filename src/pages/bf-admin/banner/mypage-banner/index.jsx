@@ -34,12 +34,12 @@ const initialFormValues = {
 
 const initialImageFiles = {
   pcFile: {
-    file: '',
+    file: null,
     filename:'',
     url:''
   },
   mobileFile: {
-    file: '',
+    file: null,
     filename:'',
     url: ''
   },
@@ -49,47 +49,35 @@ const initialImageFiles = {
 
 
 export default function UpdateMypageBanner() {
-
+  
   const router = useRouter();
-  const { id } = router.query;
-
-  const postFormValuesApiUrl = `/api/banners/myPage/${id}`; // post
-  const getFormValuesApiUrl = `/api/banners/myPage`;
-  const currentPagePath = '/bf-admin/banner/mypage-banner';
-
-
   const mct = useModalContext();
-  const [modalMessage, setModalMessage] = useState('');
+  const hasAlert = mct.hasAlert;
   const [isLoading, setIsLoading] = useState({});
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState({});
   const [fileValues, setFileValues] = useState(initialImageFiles);
   const [isSubmitted, setIsSubmitted] = useState(false);
-
-  // console.log(formValues);
-  // console.log(fileValues);
-
+  
+  
   useEffect(() => {
-    if(id)return;
-
     (async () => {
       try {
         setIsLoading((prevState) => ({
           ...prevState,
           fetching: true,
         }));
-        const res = await getData(getFormValuesApiUrl);
+        const apiUrl = `/api/banners/myPage`;
+        const res = await getData(apiUrl);
         const data = res.data;
-        console.log(res);
-        const thisBannerId = data.id;
-        await router.push(`${currentPagePath}?id=${thisBannerId}`)
-        const initialFormValues = {
+        console.log('mypageBanner RESPONSE : ',res);
+        const initVal = {
+          id: data.id, // post Api 요청 시, 사용
           name : data.name,
           status: data.status,
           pcLinkUrl : data.pcLinkUrl,
           mobileLinkUrl : data.mobileLinkUrl,
         };
-        setFormValues(initialFormValues);
         const initialFileValues = {
           pcFile: {
             file: '',
@@ -102,20 +90,22 @@ export default function UpdateMypageBanner() {
             url:data._links.thumbnail_mobile?.href
           },
         }
+        
+        setFormValues(initVal);
         setFileValues(initialFileValues)
       } catch (err) {
-          console.error(err);
-          alert('데이터를 가져올 수 없습니다.');
+        console.error(err);
+        alert('데이터를 가져올 수 없습니다.');
       }
       setIsLoading((prevState) => ({
         ...prevState,
         fetching: false,
       }));
     })();
-  }, [id]);
-
-
-
+  }, []);
+  
+  
+  
   const onInputChangeHandler = (e) => {
     const { id, value } = e.currentTarget;
     setFormValues({
@@ -123,7 +113,7 @@ export default function UpdateMypageBanner() {
       [id]: value,
     });
   };
-
+  
   const onFileChangeHandler = (e) => {
     const thisInput = e.currentTarget;
     const id = thisInput.id;
@@ -137,16 +127,22 @@ export default function UpdateMypageBanner() {
       }
     }))
   };
-
-
-
-
+  
+  
+  
+  
   const onSubmit = async (e) => {
     e.preventDefault();
-    console.log('formValues: ',formValues)
-    console.log('fileValues: ',fileValues)
-    if (isSubmitted) return;
-    const errObj = validate(formValues, fileValues);
+    if (isSubmitted) return console.error('이미 제출된 양식입니다.');
+    const form = {
+      name : formValues.name,
+      status: formValues.status,
+      pcLinkUrl : formValues.pcLinkUrl,
+      mobileLinkUrl : formValues.mobileLinkUrl,
+    }
+    console.log('formValues: ',form);
+    console.log('fileValues: ',fileValues);
+    const errObj = validate(form, fileValues);
     const isPassed = valid_hasFormErrors(errObj);
     setFormErrors(errObj);
     try {
@@ -155,24 +151,28 @@ export default function UpdateMypageBanner() {
         submit: true,
       }));
       if (isPassed) {
-        const jsonData = JSON.stringify(formValues);
+        const jsonData = JSON.stringify(form);
         const blob = new Blob([jsonData], { type: 'application/json' });
         const formData = new FormData();
         formData.append('requestDto', blob);
         formData.append('pcFile', fileValues.pcFile.file);
         formData.append('mobileFile', fileValues.mobileFile.file);
-        const res = await postObjData(postFormValuesApiUrl, formData, 'multipart/form-data');
+        
+        const id = formValues.id;
+        const apiUrl = `/api/banners/myPage/${id}`;
+        const res = await postObjData(apiUrl, formData, 'multipart/form-data');
         console.log(res);
         if (res.isDone) {
-          onShowModalHandler('마이페이지 배너 수정되었습니다.');
+          mct.alertShow('마이페이지 배너 수정되었습니다.');
+          // onShowModalHandler('마이페이지 배너 수정되었습니다.');
           setIsSubmitted(true);
         } else {
-          alert(res.error, '\n내부 통신장애입니다. 시도해주세요.');
+          mct.alertShow(`내부 통신장애입니다. 다시 시도해주세요.\n${res.error}`);
           console.error(res.error)
         }
       }
     } catch (err) {
-      alert('ERROR');
+      alert('ERROR\n', err);
       console.error(err);
     }
     setIsLoading((prevState) => ({
@@ -180,23 +180,24 @@ export default function UpdateMypageBanner() {
       submit: false,
     }));
   };
-
-
+  
+  
   const returnToPrevPage = () => {
     if (confirm('이전 페이지로 돌아가시겠습니까?')) {
       router.back();
     }
   };
-
-  const onShowModalHandler = (message) => {
-    mct.alertShow();
-    setModalMessage(message);
-  };
+  
+  // const onShowModalHandler = (message) => {
+  //   mct.alertShow();
+  //   setModalMessage(message);
+  // };
+  
   const onGlobalModalCallback = async () => {
     mct.alertHide();
-    await router.push(`${currentPagePath}`);
+    window.location.reload();
   };
-
+  
   return (
     <>
       <MetaTitle title="마이페이지 배너 관리" admin={true} />
@@ -400,8 +401,7 @@ export default function UpdateMypageBanner() {
           </div>
         </AdminContentWrapper>
       </AdminLayout>
-      <Modal_global_alert message={modalMessage} onClick={onGlobalModalCallback} background />
+      {hasAlert && <Modal_global_alert onClick={isSubmitted && onGlobalModalCallback} background />}
     </>
   );
 }
-
