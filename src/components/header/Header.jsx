@@ -102,7 +102,7 @@ export default function Header() {
               </span>
               <span className={s['title-wrap']}>{pageTitle}</span>
               <span className={s['gbn-my-wrap']}>
-                <Gnb_my isMobile={isMobile} setSidrOpen={setIsSidrOpen} />
+                <Gnb_my isMobile={isMobile} setSidrOpen={setIsSidrOpen} authData={auth}/>
               </span>
             </section>
           ) : (
@@ -161,6 +161,7 @@ export const Gnb_my = ({ isMobile, setSidrOpen, authData }) => {
   const cart = useSelector((s) => s.cart);
   const router = useRouter();
 
+  console.log('userInfo on gnb my:',userInfo)
   const onShowMobileSideMenu = () => {
     setSidrOpen(true);
   };
