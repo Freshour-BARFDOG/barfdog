@@ -136,7 +136,6 @@ export default function InvitePage() {
           <MypageWrapper>
             <section className={s.title}>
               <p>친구초대</p>
-              <p style={{fontSize:'13px'}}>(*****친구추천을 한적이 있고, 본아이디가 결제를 한 경우, 추천친구에게 적립금 적용여부 확인필요)</p>
               {isLoading.fetching && <Spinner />}
             </section>
 
