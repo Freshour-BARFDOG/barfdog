@@ -24,7 +24,7 @@ import { exposeType } from "/store/TYPE/exposeType";
 
 const initialFormValues = {
   name : "",
-  status: 'LEAKED',
+  status: exposeType.LEAKED,
   pcLinkUrl : "",
   mobileLinkUrl : "",
 };
@@ -268,7 +268,7 @@ export default function UpdateMypageBanner() {
                           file={fileValues.pcFile?.file}
                           thumbLink={fileValues.pcFile?.url}
                           objectFit={'cover'}
-                          className={s["upload-image"]}
+                          className={`${s["admin-preview-image"]} ${s['pc']}`}
                         />
                       )}
                       <span className="inp_box">
@@ -328,9 +328,8 @@ export default function UpdateMypageBanner() {
                         <PreviewImage
                           file={fileValues.mobileFile?.file}
                           thumbLink={fileValues.mobileFile?.url}
-                          style={{maxWidth:'375px'}}
                           objectFit={'cover'}
-                          className={s["upload-image"]}
+                          className={`${s["admin-preview-image"]} ${s['mobile']}`}
                         />
                       )}
                       <span className="inp_box">

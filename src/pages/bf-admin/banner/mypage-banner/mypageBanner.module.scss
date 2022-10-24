@@ -1,13 +1,33 @@
-$browser-context:16;
-// convert px to rem
-@function rem($px, $context: $browser-context){
-  @return #{$px / $context}rem;
+@import '/styles/global/rem';
+
+$mobileHeight: rem(50);
+$pcHeight: rem(60);
+
+#banner {
+  a {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: inherit;
+    text-align: center;
+    font-size: rem(20);
+    &[data-device='pc'] {
+      height: $pcHeight;
+    }
+    &[data-device='mobile'] {
+      height: $mobileHeight;
+    }
+  }
 }
 
-
-
-.upload-image{
-  height: rem(36) !important;
+.admin-preview-image {
+  &.pc {
+    height: $pcHeight;
+  }
+  &.mobile {
+    height: $mobileHeight;
+    max-width: rem(375);
+  }
 }
-
-.upload-image.mobile {max-width: rem(375);}

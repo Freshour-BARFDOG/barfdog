@@ -1,26 +1,12 @@
 import Link from 'next/link';
+import s from '/src/pages/bf-admin/banner/mypage-banner/mypageBanner.module.scss'
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import rem from '/util/func/rem';
 import { getData } from '/src/pages/api/reqData';
 import Spinner from './Spinner';
 import Image from 'next/image';
 import useDeviceState from '/util/hook/useDeviceState';
 import { exposeType } from '/store/TYPE/exposeType';
 
-const ATag = styled.a`
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: ${(props) => {
-    return props['data-device'] === 'pc' ? rem(60) : rem(50);
-  }};
-  color: inherit;
-  text-align: center;
-  font-size: ${rem(20)};
-`;
 
 export default function MypageBanner() {
   const isMobile = useDeviceState().isMobile;
@@ -73,9 +59,9 @@ export default function MypageBanner() {
         <>
           {DATA?.status === exposeType.LEAKED &&
             ((!isMobile && DATA.imageUrl.pc) || (isMobile && DATA.imageUrl.mobile)) && (
-              <div id={'MypageBanner'}>
+              <div id={s['banner']}>
                 <Link href={isMobile ? DATA.mobileLinkUrl : DATA.pcLinkUrl || '/'} passHref>
-                  <ATag data-device={isMobile ? 'mobile' : 'pc'}>
+                  <a data-device={isMobile ? 'mobile' : 'pc'}>
                     <Image
                       priority
                       src={isMobile ? DATA.imageUrl.mobile : DATA.imageUrl.pc}
@@ -83,7 +69,7 @@ export default function MypageBanner() {
                       layout="fill"
                       alt={isMobile ? DATA.filenameMobile : DATA.filenamePc}
                     />
-                  </ATag>
+                  </a>
                 </Link>
               </div>
             )}
