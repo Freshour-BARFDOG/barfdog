@@ -60,7 +60,7 @@ export default function MypageBanner() {
           {DATA?.status === exposeType.LEAKED &&
             ((!isMobile && DATA.imageUrl.pc) || (isMobile && DATA.imageUrl.mobile)) && (
               <div id={s['banner']}>
-                <Link href={isMobile ? DATA.mobileLinkUrl : DATA.pcLinkUrl || '/'} passHref>
+                <Link href={isMobile ? DATA.mobileLinkUrl : DATA.pcLinkUrl || 'javascript:void(0)'} passHref>
                   <a data-device={isMobile ? 'mobile' : 'pc'}>
                     <Image
                       priority
