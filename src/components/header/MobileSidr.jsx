@@ -19,8 +19,8 @@ import IconMypageReview from '/public/img/icon/icon-mypage-review.svg';
 import useDeviceState from '/util/hook/useDeviceState';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import { userType } from '/store/TYPE/userAuthType';
-import {useRouter} from "next/router";
-
+import { useRouter } from 'next/router';
+import MypageBanner from '../atoms/MypageBanner';
 
 export default function MobileSidr({ isOpen, setSidrOpen }) {
   const dispatch = useDispatch();
@@ -29,37 +29,22 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
   const data = auth.userInfo;
   const isMobile = useDeviceState().isMobile;
   const isLogin = data?.userType && data?.userType !== userType.NON_MEMBER;
-  
-  const kakaoLoginHandler = ()=> {
+
+  const kakaoLoginHandler = async () => {
     const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}&response_type=code`;
-    router.push(KAKAO_AUTH_URL);
-  }
-  
-  
-  const naverLoginHandler = ()=> {
-    // alert('바프독 Naver Dev Account > Client Id 변경필요');
-    // => 추후 바프독 naver Client ID계정으로 변경해야함
-    //request Boby
-    // 1. 네이버 API > access token //
-    // 2. tokenValidDays // 서버에서 발급될 token의 유효기간
+    await router.push(KAKAO_AUTH_URL);
+  };
+
+  const naverLoginHandler = async () => {
     const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize`;
-    const clientId= process.env.NEXT_PUBLIC_NAVER_CLIENT_ID; // ! 개인개정 client Id => 추후 바프독 clienet Id 로 변경
+    const clientId = process.env.NEXT_PUBLIC_NAVER_CLIENT_ID;
     const redirUri = process.env.NEXT_PUBLIC_NAVER_REDIRECT_URI;
-    
-    const state = 'testStateString'; // state(상태 유지를 위한 임의의 문자열) 정보를 넣어 아래 예제와 같은 주소로 요청을 보낸다.
-    // ! state => 필수항목 / 상태토큰값은 어디에서 확인하는지 , API 가이드에서 추가 확인 필요함????
-    router.push(`${NAVER_AUTH_URL}?response_type=code&client_id=${clientId}&redirect_uri=${redirUri}&state=${state}`);
-    
-    
-    // ! 추후에 할 것
-    // 네이버 인증 후, 성공했을 경우 redir된다 => redir URL 에서 URL param중
-    // 1. code => 네이버 로그인 인증에 성공하면 반환받는 인증 코드, 접근 토큰(access token) 발급에 사용
-    // 2. state => 위에서 임의로 입력한 state
-    //위의 두 가지 값을 돌려받는다.
-    
-    // dlwp
-  }
-  
+    const state = 'tempString'; // 상태 유지를 위한 "임의의 문자열"
+    await router.push(
+      `${NAVER_AUTH_URL}?response_type=code&client_id=${clientId}&redirect_uri=${redirUri}&state=${state}`,
+    );
+  };
+
   useEffect(() => {
     // 모바일 sidr mount => 스크롤 기능: INACTIVE
     if (isOpen) {
@@ -69,26 +54,22 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
         width:100%;
         // top : -${0}px;
       `;
-      
       // document.head.insertBefore('')
     }
-    
+
     // unmount => 스크롤 기능: ACTIVE
     return () => {
       document.body.style.cssText = ``;
       window?.scrollTo(0, parseInt(10 * -1));
     };
   }, [isOpen]);
-  
- 
-  
+
   const onCloseSidr = () => {
     setSidrOpen(false);
   };
   const onLogout = () => {
     dispatch(authAction.logout());
   };
-
 
   if (!isMobile) return;
 
@@ -247,20 +228,7 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                 </div>
               </section>
             )}
-
-            {isLogin && (
-              <section className={s['banner-section']}>
-                {/*/ ! 어드민에서 생성한 이미지 사용될 예정 /*/}
-                <div className={s.row}>
-                  <span>
-                    친구초대할 때마다 <b> 5천원 무한적립!</b>
-                  </span>
-                  <span>
-                    <IoIosArrowForward />
-                  </span>
-                </div>
-              </section>
-            )}
+            {isLogin && <MypageBanner />}
             <section className={s['bottom-menu-section']}>
               <div className={s.row}>
                 <ul>
@@ -268,7 +236,11 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                   <MenuList title={'공지사항'} link={'/community/notice'} />
                   <MenuList title={'이벤트'} link={'/community/event'} />
                   <MenuList title={'자주묻는 질문'} link={'/faq'} />
-                  <MenuList title={'1:1 문의'} contClassName={'ch-open-button'} onClick={onCloseSidr} />
+                  <MenuList
+                    title={'1:1 문의'}
+                    contClassName={'ch-open-button'}
+                    onClick={onCloseSidr}
+                  />
                   {isLogin && <MenuList title={'로그아웃'} onClick={onLogout} />}
                 </ul>
               </div>
@@ -314,32 +286,29 @@ const MypageMenuList = ({ title, link, icon }) => {
   );
 };
 
-
-
-
-const DUMMY_DATA = {
-  data: {
-    mypageMemberDto: {
-      id: 10,
-      memberName: '김회원',
-      grade: '더바프',
-      myRecommendationCode: '2BngT6yMM',
-      reward: 50000,
-    },
-    mypageDogDto: {
-      thumbnailUrl:
-        'https://images.unsplash.com/photo-1422565096762-bdb997a56a84?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
-      dogName: '강아지1',
-    },
-    deliveryCount: 4,
-    couponCount: 4,
-    _links: {
-      self: {
-        href: 'http://localhost:8080/api/mypage',
-      },
-      profile: {
-        href: '/docs/index.html#resources-my-page',
-      },
-    },
-  },
-};
+// const DUMMY_DATA = {
+//   data: {
+//     mypageMemberDto: {
+//       id: 10,
+//       memberName: '김회원',
+//       grade: '더바프',
+//       myRecommendationCode: '2BngT6yMM',
+//       reward: 50000,
+//     },
+//     mypageDogDto: {
+//       thumbnailUrl:
+//         'https://images.unsplash.com/photo-1422565096762-bdb997a56a84?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
+//       dogName: '강아지1',
+//     },
+//     deliveryCount: 4,
+//     couponCount: 4,
+//     _links: {
+//       self: {
+//         href: 'http://localhost:8080/api/mypage',
+//       },
+//       profile: {
+//         href: '/docs/index.html#resources-my-page',
+//       },
+//     },
+//   },
+// };
