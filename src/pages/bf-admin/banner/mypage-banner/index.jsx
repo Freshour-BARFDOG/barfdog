@@ -15,6 +15,7 @@ import {getData, postObjData} from "/src/pages/api/reqData";
 import Spinner from "/src/components/atoms/Spinner";
 import {valid_hasFormErrors} from "/util/func/validation/validationPackage";
 import Tooltip from "/src/components/atoms/Tooltip";
+import { exposeType } from "/store/TYPE/exposeType";
 
 
 
@@ -47,14 +48,14 @@ const initialImageFiles = {
 
 
 
-function UpdateMypageBanner() {
+export default function UpdateMypageBanner() {
 
   const router = useRouter();
   const { id } = router.query;
 
   const postFormValuesApiUrl = `/api/banners/myPage/${id}`; // post
   const getFormValuesApiUrl = `/api/banners/myPage`;
-  const currentPagePath = '/bf-admin/banner/mypage-banner'
+  const currentPagePath = '/bf-admin/banner/mypage-banner';
 
 
   const mct = useModalContext();
@@ -191,9 +192,9 @@ function UpdateMypageBanner() {
     mct.alertShow();
     setModalMessage(message);
   };
-  const onGlobalModalCallback = () => {
+  const onGlobalModalCallback = async () => {
     mct.alertHide();
-    router.push(`${currentPagePath}`);
+    await router.push(`${currentPagePath}`);
   };
 
   return (
@@ -244,7 +245,7 @@ function UpdateMypageBanner() {
                     <CustomRadio
                       setValue={setFormValues}
                       name="status"
-                      idList={['LEAKED', 'HIDDEN']}
+                      idList={[exposeType.LEAKED, exposeType.HIDDEN]}
                       labelList={['Y', 'N']}
                       value={formValues.status}
                     />
@@ -405,4 +406,3 @@ function UpdateMypageBanner() {
   );
 }
 
-export default UpdateMypageBanner;
