@@ -1,7 +1,7 @@
 import s from "./blog.module.scss";
 import Link from 'next/link';
-import getElemIdx from "../../../../../util/func/getElemIdx";
-import {deleteData} from "../../../api/reqData";
+import {deleteData} from "/src/pages/api/reqData";
+import transformDate from "/util/func/transformDate";
 
 
 export default function BlogList({ items, setItemList }) {
@@ -15,15 +15,6 @@ export default function BlogList({ items, setItemList }) {
     </ul>
   );
 }
-
-
-const transformDate = (d) => {
-  const yy = d.split("-")[0];
-  const mm = d.split("-")[1];
-  const dd = d.split("-")[2].split("T")[0];
-  return `${yy}-${mm}-${dd}`;
-};
-
 
 
 
@@ -41,7 +32,8 @@ const SingleItems = ({ item }) => {
   };
 
   const onDeleteItemHandler = async (e) => {
-    const apiURL = e.currentTarget.dataset.apiurl;
+    const blogId = e.currentTarget.dataset.id;
+    const apiURL = `/api/admin/blogs/${blogId}`;
     if (confirm(`${DATA.id}번 글을 정말 삭제하시겠습니까?`)) {
       const res = await deleteData(apiURL);
       console.log(res)
@@ -69,9 +61,9 @@ const SingleItems = ({ item }) => {
       </span>
       <span>
         <button
+          data-id={DATA.id}
           className="admin_btn basic_s solid"
           onClick={onDeleteItemHandler}
-          data-apiurl={DATA.apiurl.delete}
         >
           삭제
         </button>
