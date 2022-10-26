@@ -11,8 +11,6 @@ import Button_acceptClickEvent from '/src/components/atoms/Button_acceptClickEve
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import Spinner from '/src/components/atoms/Spinner';
 
-
-
 function BlogIndexPage() {
   const pageSize = 10;
   const getListApiUrl = '/api/admin/blogs';
@@ -20,12 +18,10 @@ function BlogIndexPage() {
   const [isLoading, setIsLoading] = useState({});
   const [activeModal, setActiveModal] = useState(false);
 
-  console.log(isLoading)
-
   const onShowRecommendArticleModal = async (returnVal) => {
     setActiveModal(returnVal);
   };
-  // console.log(itemList);
+
   return (
     <>
       <MetaTitle title="블로그 관리" admin={true} />
@@ -74,10 +70,10 @@ function BlogIndexPage() {
                   <li className={s.table_th}>수정</li>
                   <li className={s.table_th}>삭제</li>
                 </ul>
-                {itemList.length ? (
-                  <BannerList items={itemList} setItemList={setItemList} />
-                ) : (
+                {itemList.length === 0 ? (
                   <AmdinErrorMessage text="조회된 데이터가 없습니다." />
+                ) : (
+                  <BannerList items={itemList} setItemList={setItemList} />
                 )}
               </div>
             </div>
