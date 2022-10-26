@@ -261,14 +261,12 @@ export default function AboutPage() {
               </div>
 
               <div className={s.right}>
-                <div className={s.button}>
-                  <a
-                    href="https://www.instagram.com/barfdog_official/"
-                    target={'_blank'}
-                    rel={'noreferrer'}
-                  >인스타그램 구경하기
-                  </a>
-                </div>
+                <a
+                  href="https://www.instagram.com/barfdog_official/"
+                  target={'_blank'}
+                  rel={'noreferrer'}
+                >인스타그램 구경하기
+                </a>
               </div>
             </div>
           </section>

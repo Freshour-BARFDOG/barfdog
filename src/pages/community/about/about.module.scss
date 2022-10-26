@@ -1,7 +1,4 @@
-$browser-context:16; // html font-size
-@function rem($px, $context: $browser-context){
-  @return #{$px / $context}rem;
-}
+@import 'styles/global/rem';
 
 
 .top {
@@ -22,11 +19,11 @@ $browser-context:16; // html font-size
       width: rem(660);
       height: rem(778);
       border-radius: rem(300) 0 0 0;
-      left : calc(50% - rem(660) /2 - rem(270) );
+      left : calc(50% - #{rem(660)} /2 - #{rem(270)} );
       top: rem(1192);
       z-index: -3;
     }
-  } 
+  }
 }
 
 .title{
@@ -83,7 +80,7 @@ $browser-context:16; // html font-size
       }
     }
   }
-} 
+}
 
 .letter_box2{
   margin-top: rem(160);
@@ -99,15 +96,13 @@ $browser-context:16; // html font-size
       width: rem(164);
       height: rem(96);
     }
-    
+
     .ulbox {
       margin-top: rem(15);
       >ul {
         >li {
           margin-bottom: rem(29);
           .content3 {
-            font-family: 'Pretendard Variable';
-            font-style: normal;
             font-weight: 700;
             font-size: rem(18);
             line-height: 140%;
@@ -116,10 +111,8 @@ $browser-context:16; // html font-size
           }
 
           p {
-            font-family: 'Pretendard Variable';
-            font-style: normal;
             font-weight: 400;
-            font-size: 16;
+            font-size: rem(16);
             line-height: 140%;
             letter-spacing: -0.02em;
           }
@@ -159,21 +152,14 @@ $browser-context:16; // html font-size
     }
     .title {
       display: inline;
-      text-align: center;
-      font-family: 'NEXON Lv2 Gothic';
-      font-style: normal;
       font-weight: 700;
-      font-size: rem(33.7766);
-      line-height: rem(38);
+      font-size: rem(34);
       color: #262626;
     }
     .text {
       padding-top: rem(30);
-      font-family: 'Pretendard Variable';
-      font-style: normal;
-      font-weight: 400;
       font-size: rem(18);
-      line-height: rem(22);
+      line-height: 140%;
       text-align: center;
       letter-spacing: -0.02em;
       color: #4D4D4D;
@@ -188,14 +174,15 @@ $browser-context:16; // html font-size
   padding-bottom: rem(132);
   display: flex;
   justify-content: center;
+
   .inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap:rem(82);
     .left{
-      float: left;
-      
       .title {
         display: inline;
-        font-family: 'Pretendard Variable';
-        font-style: normal;
         font-weight: 700;
         font-size: rem(32);
         line-height: 120%;
@@ -204,7 +191,6 @@ $browser-context:16; // html font-size
       }
       p {
         margin-top: rem(10);
-        font-family: 'Pretendard Variable';
         font-style: normal;
         font-weight: 500;
         font-size: rem(16);
@@ -216,12 +202,7 @@ $browser-context:16; // html font-size
     }
     .right {
       margin-top: rem(7);
-      margin-left:rem(84);
-      display: flex;
-      justify-items: center;
-      float: right;
-
-      .button {
+      a{
         display: flex;
         align-items: center;
         justify-content: center;
@@ -229,23 +210,10 @@ $browser-context:16; // html font-size
         height: rem(50);
         background: #CA1010;
         border-radius: rem(4);
-        &:hover {
-          cursor: pointer;
-        }
-        a{
-          font-family: 'Pretendard Variable';
-          font-style: normal;
-          font-weight: 400;
-          font-size: rem(15);
-          line-height: rem(18);
-          display: flex;
-          align-items: center;
-          text-align: center;
-          letter-spacing: -0.02em;
-          color: #FFFFFF;
-        }
-        
+        font-size: rem(15);
+        color: #FFFFFF;
       }
+
     }
   }
 }
@@ -278,10 +246,10 @@ $browser-context:16; // html font-size
       padding:rem(227) 0 0 0;
 
       .letter_box{
-        width: calc(100% - rem(80));
+        width: calc(100% - #{rem(80)});
         padding : rem(60) rem(0) rem(45) rem(80);
         position: relative;
-        
+
         .content2 {
           margin-right: rem(50);
         }
@@ -302,9 +270,11 @@ $browser-context:16; // html font-size
   }
 
 
-  
+
   .bottom {
     .inner {
+      flex-direction: column;
+      gap: 0;
       .left{
         float: none;
         text-align: center;
@@ -314,6 +284,7 @@ $browser-context:16; // html font-size
         margin-top: rem(30);
         margin-left:rem(0);
         float: none;
+
       }
     }
   }
@@ -340,25 +311,25 @@ $browser-context:16; // html font-size
         left : 0;
         top: rem(1392);
       }
-    } 
+    }
 
     .inner {
       padding:rem(210) 0 0 0;
 
       .letter_box{
         border-radius: 0;
-        width: calc(100% - rem(20));
+        width: calc(100% - #{rem(20)});
         padding : rem(60) rem(0) rem(35) rem(20);
 
         .title{
           left: 50%;
           transform: translateX(-50%);
         }
-        
+
         .content1 {
           text-align: center;
         }
-        
+
         .content2 {
           margin-right: rem(20);
         }
@@ -394,7 +365,7 @@ $browser-context:16; // html font-size
     }
   }
 
-  
+
   .mid {
     width: 100%;
     padding-top: 0;
@@ -425,7 +396,7 @@ $browser-context:16; // html font-size
     }
   }
 
-  
+
   .bottom {
     padding-top: rem(60);
     padding-bottom: rem(100);
@@ -455,6 +426,10 @@ $browser-context:16; // html font-size
           font-size: rem(14);
         }
       }
+      .right {width:100%; padding: 0 rem(10);
+        a{width:100%;}
+      }
+
     }
   }
 }
