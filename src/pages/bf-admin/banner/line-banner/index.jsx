@@ -14,95 +14,60 @@ import filter_emptyValue from '/util/func/filter_emptyValue';
 import { SketchPicker } from 'react-color';
 import { validate } from '/util/func/validation/validation_lineBanner';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
-import { getData, postObjData, putObjData } from '/src/pages/api/reqData';
+import {getDataSSR, postObjData, putObjData} from '/src/pages/api/reqData';
 import PreviewInnerHTML from '/src/components/atoms/PreviewInnerHTML';
 
 
 
-const initialValues = {
-  name: '',
-  status: 'LEAKED',
-  backgroundColor: '',
-  fontColor: '',
-  pcLinkUrl: '',
-  mobileLinkUrl: '',
-};
 
-function LineBanner(props) {
-  console.log(props)
-  const router = useRouter();
-  const { id } = router.query;
-  const getFormValuesApiUrl = `/api/banners/top`;
-  const postFormValuesApiUrl = `/api/banners/top`;
-  const putFormValuesApiUrl = `/api/banners/top/${id}`;
+export default function LineBanner({data}) {
+
+ 
+  const mct = useModalContext();
   const [modalMessage, setModalMessage] = useState('');
   const [isLoading, setIsLoading] = useState({});
-  const mct = useModalContext();
   const miniEditorFormRef = useRef(null);
-  const [formValues, setFormValues] = useState(initialValues);
+  const [formValues, setFormValues] = useState(data);
   const [formErrors, setFormErrors] = useState({});
   const [activeColorPick, setActiveColorPick] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  // console.log(formValues);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        setIsLoading((prevState) => ({
-          ...prevState,
-          fetching: true,
-        }));
-        const res = await getData(getFormValuesApiUrl);
-        console.log(res);
-        const DATA = res?.data;
-        const thisItemId = DATA?.id;
-        if (thisItemId) {
-          await router.push(`/bf-admin/banner/line-banner?id=${thisItemId}`);
-          const initialFormValues = {
-            name: DATA.name,
-            status: DATA.status,
-            backgroundColor: DATA.backgroundColor,
-            fontColor: DATA.fontColor,
-            pcLinkUrl: DATA.pcLinkUrl,
-            mobileLinkUrl: DATA.mobileLinkUrl,
-          };
-          setFormValues(initialFormValues);
-          textField.document.querySelector('body').innerHTML = DATA.name;
-        }
-      } catch (err) {
-        console.error('Failed Get Data:',err);
-        alert(err);
-      }
-      setIsLoading((prevState) => ({
-        ...prevState,
-        fetching: false,
-      }));
-    })();
-  }, []);
-
+  console.log(formValues)
   useEffect(() => {
     const miniEditor = miniEditorFormRef.current;
     if (document && miniEditor) {
       textField.document.designMode = 'On';
       const buttons = miniEditor.querySelectorAll('button');
+      const nameInput = textField.document.querySelector('body');
+      nameInput.innerHTML = data.name;
+      nameInput.addEventListener('keyup', (e) => {
+        const innerHTML = e.currentTarget.innerHTML;
+        setFormValues((prevState) => ({
+          ...prevState,
+          name: innerHTML,
+        }));
+      });
+      
       buttons.forEach((btn) => {
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
           const cmd = btn.dataset.cmd;
+          const nameInput = textField.document.querySelector('body');
+          console.log(nameInput);
           if (cmd === 'insertImage' || cmd === 'createLink') {
             let url = prompt('Enter Link Here:', '');
             textField.document.execCommand(cmd, false, url);
           } else {
             textField.document.execCommand(cmd, false, null);
           }
-        });
-        textField.document.querySelector('body').addEventListener('keyup', (e) => {
-          const innerHTML = e.currentTarget.innerHTML;
           setFormValues((prevState) => ({
             ...prevState,
-            name: innerHTML,
+            name: nameInput.innerHTML,
           }));
+          
         });
+       
       });
     }
   }, [miniEditorFormRef]);
@@ -128,6 +93,7 @@ function LineBanner(props) {
       fontColor: hexColor,
     }));
   };
+  
   const onChangeBackgroundColorComplete = (color) => {
     const hexColor = color.hex;
     setFormValues((prevState) => ({
@@ -151,9 +117,16 @@ function LineBanner(props) {
   const onSubmit = async (e) => {
     e.preventDefault();
     if (isSubmitted) return;
-    // ! IMPORTANT : create Event후, 사용자가 enter를 쳤을 경우, 똑같은 요청이 전송되지 않게 하기 위해서 필요함.
     console.log(formValues);
-    const errObj = validate(formValues);
+    const body = {
+        name: formValues.name,
+        status: formValues.status,
+        backgroundColor: insertSharpForHexColor(formValues.backgroundColor),
+        fontColor: insertSharpForHexColor(formValues.fontColor),
+        pcLinkUrl: formValues.pcLinkUrl,
+        mobileLinkUrl: formValues.mobileLinkUrl,
+    }
+    const errObj = validate(body);
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
     try {
@@ -162,9 +135,12 @@ function LineBanner(props) {
         submit: true,
       }));
       if (isPassed) {
-        const res = id
-          ? await putObjData(putFormValuesApiUrl, formValues)
-          : await postObjData(postFormValuesApiUrl, formValues);
+        const lineBannerId = data.id;
+        const putFormValuesApiUrl = `/api/banners/top/${lineBannerId}`;
+        const postFormValuesApiUrl = `/api/banners/top`;
+        const res = lineBannerId
+          ? await putObjData(putFormValuesApiUrl, body)
+          : await postObjData(postFormValuesApiUrl, body);
         if (res.isDone) {
           mct.alertShow();
           setModalMessage('상단배너가 등록되었습니다.');
@@ -191,10 +167,27 @@ function LineBanner(props) {
 
   const onGlobalModalCallback = () => {
     mct.alertHide();
-    router.push('/bf-admin/banner/line-banner');
-    //169 번 아이디
+    window.location.reload();
   };
-
+  
+  
+  const insertSharpForHexColor = (string) => {
+    
+    let hexCode = string;
+    
+    if(string.indexOf('#') !== 0){
+      hexCode = '#' + hexCode;
+    }
+    
+    
+    const originCode = string.replace('#', '');
+    if(originCode.length !== 6){
+      hexCode = originCode.slice(0,6);
+    }
+    
+    return hexCode;
+  }
+  
   return (
     <>
       <MetaTitle title="상단 띠배너 관리" admin={true} />
@@ -248,7 +241,6 @@ function LineBanner(props) {
                           I
                         </button>
                       </form>
-
                       {formErrors.name && <ErrorMessage>{formErrors.name}</ErrorMessage>}
                     </div>
                   </div>
@@ -463,25 +455,29 @@ function LineBanner(props) {
   );
 }
 
-export default LineBanner;
 
 
-//
-//
-// export async function getStaticProps(context) {
-//
-//   const data = context;
-//
-//   // if (!params) {
-//   //   return {
-//   //     redirect: { destination: "/no-data" },
-//   //   };
-//   // }
-//
-//
-//   return {
-//     props: {
-//       id: data,
-//     },
-//   };
-// }
+
+export async function getServerSideProps ( { req }) {
+  let DATA = null;
+  const apiUrl = '/api/banners/top';
+  const res = await getDataSSR(req, apiUrl);
+  if(res.data){
+    const data = res.data;
+    console.log(res.data);
+    DATA ={
+      id: data.id,
+      name: data.name,
+      status: data.status || 'LEAKED',
+      backgroundColor: data.backgroundColor || '#CA1010',
+      fontColor: data.fontColor || '#FFF',
+      pcLinkUrl: data.pcLinkUrl,
+      mobileLinkUrl: data.mobileLinkUrl,
+    }
+  }
+  
+  return {
+    props: { data: DATA }
+  }
+  
+}

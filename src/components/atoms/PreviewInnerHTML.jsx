@@ -4,9 +4,9 @@ import rem from '/util/func/rem';
 
 const Wrap = Styled.article`
   height: ${rem(38)};
-  border: ${rem(1)} solid #ddd;
   display: flex;align-items: center;justify-content: center;
   *{color: inherit}
+  i{font-style: italic}
 `;
 
 
