@@ -146,7 +146,7 @@ export default function MainPage({ data }) {
             <div className={s.inner}>
               <div className={s.scroll}>
               <Controller>
-                <Scene duration={1000} offset={-100}>
+                <Scene duration={500} offset={-100}>
                   <Tween
                   from={{
                     "clip-path": "polygon(50% 0%, 50% 0%, 50% 100%, 50% 100%)"
@@ -164,6 +164,7 @@ export default function MainPage({ data }) {
                         width={525}
                         height={520}
                         alt="카드 이미지"
+                        priority
                       ></Image>
                     </div>
                     <div className={s.magicbox} />
