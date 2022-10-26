@@ -76,9 +76,17 @@ const Pagination = ({
           if (routerDisabled === false) {
             let defSearchQuery = `?page=${Number(calcedPageIndex) + 1}&size=${size}`;
             let searchKeywords = urlQuery ? `${defSearchQuery}&${urlQuery}` : defQuery;
-            await router.push({
-              search: searchKeywords, // ! important > def url query는 pagination 내에서만 관리
-            });
+            
+            // ! new Ver. (window scroll Y position 유지를 위함)
+            window.history.replaceState(
+              window.history.state,
+              '',
+              `${window.location.pathname}?${searchKeywords}`,
+            );
+            // ! oldVer => router.push사용할 경우, scroll Y position 유지 안 됨
+            // await router.push({
+            //   search: searchKeywords, // ! important > def url query는 pagination 내에서만 관리
+            // });
           }
         } else {
           setItemList([]); // ! TEST 끝난 뒤, 주석 해제
