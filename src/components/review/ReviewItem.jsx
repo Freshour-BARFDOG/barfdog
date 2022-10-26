@@ -6,10 +6,10 @@ import RatingStars from '../atoms/RatingStars';
 import {filter_blindingUserName} from '../../../util/func/filter_blindingUserName';
 
 export const ReviewItem = ({item}) => {
-  console.log(item)
+  // console.log(item)
   const [visible, setVisible] = useState( false );
   const boxRef = useRef( null );
-  const onClickHandler = (e) => {
+  const onClickHandler = () => {
     visible ? setVisible( false ) : setVisible( true );
   };
   
@@ -34,15 +34,16 @@ export const ReviewItem = ({item}) => {
           <RatingStars count={item.star} margin={0} disabled/>
         </i>
         <p className={s.content}>
-          <i className={`${s.image} img-wrap`}>
+          {item.imgList.length > 0 && <i className={`${s.image} img-wrap`}>
             <Image
               src={require( '/public/img/shop/single/shop_main_slide_picture.png' )}
               objectFit="contain"
               layout="fill"
               alt="카드 이미지"
             />
-          </i>
-          {item.contents}
+          </i>}
+          <span className={s.text}>{item.contents}</span>
+          
         </p>
         <span className={s.grid_name}>{filter_blindingUserName( item?.username )}</span>
         <span className={s.grid_date}>{item.writtenDate}</span>

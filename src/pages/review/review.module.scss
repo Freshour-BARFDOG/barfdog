@@ -215,6 +215,7 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
       display: grid;
       grid-template-columns : rem(60) rem(60) rem(100) 1fr rem(130) rem(100);
       cursor: pointer;
+      border-bottom: rem(1) solid var(--color-line-04);
       .mid_box {
         display: flex;
         justify-content: center;
@@ -227,7 +228,7 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
       > * {
         text-align: center;
         display: inline-grid;
-        border-bottom: rem(1) solid var(--color-line-04);
+        //border-bottom: rem(1) solid var(--color-line-04);
         align-items: center;
         height: auto;
         min-height: rem(72);
@@ -267,6 +268,12 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
           aspect-ratio: 1.25/1;
           margin-bottom: rem(2);
           margin-right: rem(4);
+        }
+        .text{
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp:1;
+          overflow:hidden;
         }
       }
     }
