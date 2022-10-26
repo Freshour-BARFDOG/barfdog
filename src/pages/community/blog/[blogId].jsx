@@ -14,7 +14,6 @@ import 'react-quill/dist/quill.snow.css';
 
 
 export default function BlogPostPage({blogId}) {
-  // const curPageCategory  = router.query.category;
   const [curPageId, setCurPageId] = useState( Number(blogId ));
   const [isLoading, setIsLoading] = useState({});
   const [itemInfo, setItemInfo] = useState({});
@@ -22,8 +21,6 @@ export default function BlogPostPage({blogId}) {
   
   
   useEffect(() => {
-    const getFormValuesApiUrl = `/api/blogs/${curPageId}`;
-    const getIemListApiUrl = `/api/blogs`;
     const itemListQuery = 'queryBlogsDtoList';
     (async () => {
       try {
@@ -31,7 +28,8 @@ export default function BlogPostPage({blogId}) {
           ...prevState,
           fetching: true,
         }));
-        const res = await getData(getFormValuesApiUrl);
+        const apiUrl = `/api/blogs/${curPageId}`;
+        const res = await getData(apiUrl);
         console.log(res);
         let DATA;
         if (res.data) {
@@ -61,7 +59,8 @@ export default function BlogPostPage({blogId}) {
           ...prevState,
           fetching: true,
         }));
-        const res = await getData(getIemListApiUrl);
+        const apiUrl = `/api/blogs`;
+        const res = await getData(apiUrl);
         console.log(res);
         if (res.data) {
           const itemListInfo = res.data._embedded[itemListQuery];
@@ -132,14 +131,6 @@ export default function BlogPostPage({blogId}) {
     </>
   );
 }
-
-
-// // CF) _app.jsx SSR 적용 후 , getinitialProps에서 query가져올 수 없음
-// BlogPostPage.getInitialProps = async ({ query }) => {
-//   const { blogId } = query;
-//   return { blogId };
-// };
-
 
 
 export async function getServerSideProps({ query }) {
