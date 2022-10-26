@@ -33,7 +33,8 @@ export default function LineBanner({data}) {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
 
-  console.log(formValues)
+  // console.log(formValues);
+  
   useEffect(() => {
     const miniEditor = miniEditorFormRef.current;
     if (document && miniEditor) {
@@ -54,7 +55,6 @@ export default function LineBanner({data}) {
           e.preventDefault();
           const cmd = btn.dataset.cmd;
           const nameInput = textField.document.querySelector('body');
-          console.log(nameInput);
           if (cmd === 'insertImage' || cmd === 'createLink') {
             let url = prompt('Enter Link Here:', '');
             textField.document.execCommand(cmd, false, url);
@@ -65,9 +65,7 @@ export default function LineBanner({data}) {
             ...prevState,
             name: nameInput.innerHTML,
           }));
-          
         });
-       
       });
     }
   }, [miniEditorFormRef]);
