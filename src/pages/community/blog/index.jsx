@@ -13,81 +13,32 @@ import { blogCategoryType } from '/store/TYPE/blogCategoryType';
 import { filter_HTMLStrings } from '/util/func/filter_HTMLStrings';
 import { useRouter } from 'next/router';
 import { getData } from '/src/pages/api/reqData';
-import sorting from '/util/func/sorting';
 
 export default function BlogIndexPage() {
   const router = useRouter();
   const searchPageSize = 10;
   const getListApiUrl = '/api/blogs';
   const apiDataQueryString = 'queryBlogsDtoList';
-  const getArticleListApiUrl = `/api/blogs/articles`;
+
   const [isLoading, setIsLoading] = useState({});
-  const [itemList, setItemList] = useState([]);
-  const [originItemList, setOriginItemList] = useState([]);
-  // const [isInitialized, setIsInitialized] = useState( false );
+  const [blogList, setBlogList] = useState([]);
   const [searchApiUrl, setSearchApiUrl] = useState(getListApiUrl);
   const [selectedCategory, setSelectedCategory] = useState('ALL');
   const [articles, setArticles] = useState([]);
 
-  // console.log(articles);
-
-  // useEffect( () => {
-  // ! 카테고리로 api 요청하기 전 Ver.
-  //   if(!isInitialized && itemList.length > 0){
-  //
-  //     setOriginItemList(itemList)
-  //     setIsInitialized(true);
-  //   }
-  // }, [itemList] );
-
-  const onFilteringItemList = (e) => {
-    const button = e.currentTarget;
-    const thiscategory = button.dataset.filterCategory;
-    setSelectedCategory(thiscategory);
-    const endPoint = thiscategory === 'ALL' ? '' : thiscategory.toLowerCase();
-    const url = `${getListApiUrl}/category/${endPoint}`;
-    
-    setSearchApiUrl(url);
-
-    // Change query
-    const query = router.query;
-    const allQuery = { ...query, category: thiscategory };
-    let newQuery = [];
-    for (const key in allQuery) {
-      const val = allQuery[key];
-      const tempObj = `${key}=${val}`;
-      newQuery.push(tempObj);
-    }
-    window.history.replaceState(
-      window.history.state,
-      '',
-      `${window.location.pathname}?${newQuery.join('&')}`,
-    );
-
-    //// ! 카테고리로 api 요청하기 전 Ver.
-    // UI Rendering
-    // const filtredItemList = originItemList.filter((list)=>{
-    //   if(thiscategory === 'ALL'){
-    //     return list;
-    //   } else{
-    //     return list.category === thiscategory && list;
-    //   }
-    // });
-    // setItemList(filtredItemList)
-  };
-
   useEffect(() => {
     (async () => {
-      const dataQuery = 'articlesDtoList';
       try {
         setIsLoading((prevState) => ({
           ...prevState,
           fetching: true,
         }));
+        const getArticleListApiUrl = `/api/blogs/articles`;
         const res = await getData(getArticleListApiUrl);
         console.log(res);
         let DATAList;
         if (res.data._embedded) {
+          const dataQuery = 'articlesDtoList';
           const tempDataList = res.data._embedded[dataQuery];
           DATAList = tempDataList.map((data) => ({
             id: data.id,
@@ -110,6 +61,59 @@ export default function BlogIndexPage() {
     })();
   }, []);
 
+  useEffect(() => {
+    changeQuery(selectedCategory);
+  }, [blogList]);
+
+  const changeQuery = (category) => {
+    const query = router.query;
+    const allQuery = { ...query, category: category };
+    let newQuery = [];
+    for (const key in allQuery) {
+      const val = allQuery[key];
+      const tempObj = `${key}=${val}`;
+      newQuery.push(tempObj);
+    }
+    window.history.replaceState(
+      window.history.state,
+      '',
+      `${window.location.pathname}?${newQuery.join('&')}`,
+    );
+  };
+
+  const pageInterCeptor = async (res) => {
+    console.log(res);
+    let newPageInfo = {
+      totalPages: 0,
+      size: 0,
+      totalItems: 0,
+      currentPageIndex: null,
+      newPageNumber: null,
+      newItemList: [],
+    };
+    if (res?.data?._embedded) {
+      const pageData = res.data.page;
+      const newItemList = res.data._embedded[apiDataQueryString];
+      newPageInfo = {
+        totalPages: pageData.totalPages,
+        size: pageData.size,
+        totalItems: pageData.totalElements,
+        currentPageIndex: pageData.number,
+        newPageNumber: pageData.number + 1,
+        newItemList: newItemList || [],
+      };
+    }
+    return newPageInfo;
+  };
+
+  const onFilteringItemList = (e) => {
+    const button = e.currentTarget;
+    const selected = button.dataset.filterCategory;
+    const endPoint = selected.toLowerCase();
+    const url = selected === blogCategoryType.ALL ? `${getListApiUrl}` :`${getListApiUrl}/category/${endPoint}`;
+    setSearchApiUrl(url); // api 요청
+    setSelectedCategory(selected); // for url update
+  };
 
   return (
     <>
@@ -167,9 +171,12 @@ export default function BlogIndexPage() {
         <Wrapper className={'animation-show-all-child'}>
           <section className={s.menu_box}>
             <ul className={s.menu}>
-              <li className={`${(selectedCategory === 'ALL') ? s.active : ''}`}>
-                <button type={'button'} data-filter-category={'ALL'} onClick={onFilteringItemList}>
-                  전체
+              <li className={`${selectedCategory === blogCategoryType.ALL ? s.active : ''}`}>
+                <button
+                  type={'button'}
+                  data-filter-category={blogCategoryType.ALL}
+                  onClick={onFilteringItemList}>
+                  {blogCategoryType.KOR.ALL}
                 </button>
               </li>
               <li className={`${selectedCategory === blogCategoryType.NUTRITION ? s.active : ''}`}>
@@ -204,8 +211,8 @@ export default function BlogIndexPage() {
 
           <section className={s.content_box}>
             <ul className="cont_list">
-              {itemList?.length > 0 ? (
-                itemList.map((item, index) => {
+              {blogList?.length > 0 ? (
+                blogList.map((item, index) => {
                   return (
                     <li key={`blog-${item.id}-${index}`}>
                       <Link href={`/community/blog/${item.id}?category=${item.category}`} passHref>
@@ -249,9 +256,11 @@ export default function BlogIndexPage() {
             <PaginationWithAPI
               apiURL={searchApiUrl}
               size={searchPageSize}
-              setItemList={setItemList}
+              setItemList={setBlogList}
               queryItemList={apiDataQueryString}
               setIsLoading={setIsLoading}
+              pageInterceptor={pageInterCeptor}
+              // routerDisabled={true}
             />
           </div>
         </Wrapper>
