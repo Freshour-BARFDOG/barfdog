@@ -81,7 +81,7 @@ const Pagination = ({
             window.history.replaceState(
               window.history.state,
               '',
-              `${window.location.pathname}?${searchKeywords}`,
+              `${window.location.pathname}${searchKeywords}`,
             );
             // ! oldVer => router.push사용할 경우, scroll Y position 유지 안 됨
             // await router.push({
