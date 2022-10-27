@@ -10,14 +10,14 @@ const ProductInfo_basicOrderInfo = ({basicOrderInfo}) => {
       <div className={s["t-header"]}>
         <h4 className={s.title}>주문정보</h4>
       </div>
-      <ul className={s["t-body"]}>
+      <ul className={s["t-body"]} data-order-idx={basicOrderInfo.id}>
         <li className={`${s["t-row"]}`}>
           <div className={s["t-box"]}>
             <div className={`${s.innerBox} ${s.label}`}>
               <span>주문번호</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
-              <span>{basicOrderInfo.id}</span>
+              <span>{basicOrderInfo.merchantUid}</span>
             </div>
           </div>
           <div className={s["t-box"]}>
