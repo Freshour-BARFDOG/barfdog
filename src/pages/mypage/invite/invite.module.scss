@@ -161,6 +161,7 @@ section.pageline { padding-top : rem(40)}
 }
 
 
+
 @media (max-width: rem(800)) {
 
   .count_box {
@@ -252,5 +253,11 @@ section.pageline { padding-top : rem(40)}
       }
     }
   }
+
+  
+.pagination_box {
+  padding-top: rem(40);
+  padding-bottom : rem(50);
+}
 
 }

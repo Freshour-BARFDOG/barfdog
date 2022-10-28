@@ -156,8 +156,6 @@ section.content_title2 {
 .pagination_box {
   display: flex;
   justify-content: center;
-  padding-top: rem(40);
-  padding-bottom: rem(44);
   .content5 {
     width: 23%;
     display: flex;
@@ -443,5 +441,10 @@ section.content_title5 {
 @media (max-width: rem(600)) {
   .title {
     display: none;
+  }
+
+  .pagination_box {
+    padding-top: rem(40);
+    padding-bottom : rem(50);
   }
 }

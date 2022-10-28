@@ -20,8 +20,7 @@
       width: 100%;
       display: flex;
       justify-content: flex-start;
-
-      @include char(t20);
+      font-weight: 600;
       span {
         @include char(l14);
         color: var(--color-font-sub);
