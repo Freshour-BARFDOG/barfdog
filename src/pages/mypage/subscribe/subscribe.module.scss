@@ -192,8 +192,11 @@ section.pagination_box{ padding: rem(80) 0 0}
 
 @media (max-width: rem(600)) {
   section.content:last-child{ padding : 0 0 rem(100);}
-  section.pagination_box{ padding: rem(50) 0}
   
+  .pagination_box {
+    padding-top: rem(40);
+    padding-bottom : rem(50);
+  }
 
   .title{
     display: none;

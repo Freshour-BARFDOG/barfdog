@@ -160,6 +160,9 @@ section.content_body { padding : rem(18) 0 0}
 }
 
 
+
+
+
 @media (max-width: rem(900)) {
   .content_body {
     padding-top: rem(10);
@@ -267,5 +270,10 @@ section.content_body { padding : rem(18) 0 rem(100)}
         }
       }
     }
+  }
+
+  .pagination_box {
+    padding-top: rem(40);
+    padding-bottom : rem(50);
   }
 }

@@ -41,14 +41,20 @@ section.title{ padding : rem(8) 0 rem(30);}
 
 
 .generalItem-container{
-  padding-top: rem(32);
+  padding: rem(30) 0;
 
   li {
-    padding-top: rem(21);
+    padding-top: rem(20);
+
+    &:first-child{
+      padding-top: 0;
+    }
   }
 
   .day{
     border-bottom: rem(1) solid var(--color-line-04);
+    font-weight: 600; 
+    padding-bottom: rem(3);
   }
 
   hr{display: none;}
@@ -129,13 +135,25 @@ section.title{ padding : rem(8) 0 rem(30);}
 
 
 .subscribeItem-container {
-  padding: rem(30) 0 ;
+  padding: rem(30) 0;
+
+  li {
+    padding-top: rem(15);
+
+    &:first-child{
+      padding-top: 0;
+
+      .day{
+        padding-top: rem(5);
+      }
+    }
+  }
+
   .day {
     @include char(l16);
     font-weight: 600; 
     padding-bottom: rem(7);
     border-bottom: rem(1) solid var(--color-line-04);
-
   }
   .hr1{
     display: block;
@@ -242,8 +260,6 @@ section.title{ padding : rem(8) 0 rem(30);}
 .pagination_box {
   display: flex;
   justify-content: center;
-  padding-top: rem(40);
-  padding-bottom : rem(44);
   .content {
     width: 23%;
     display: flex;
@@ -274,7 +290,7 @@ section.title{ padding : rem(8) 0 rem(30);}
         top: 0;
         left: 0;
         position: absolute;
-        transform: translate(rem(165), rem(-27))
+        transform: translate(rem(167), rem(-30))
       }
 
       .right_box {
@@ -374,7 +390,10 @@ section.title{ padding : rem(8) 0 rem(30);}
     }
   }
 
-
+  .pagination_box {
+    padding-top: rem(40);
+    padding-bottom : rem(50);
+  }
   
   .subscribeItem-container {
     .content_body {
