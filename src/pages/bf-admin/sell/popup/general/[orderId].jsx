@@ -156,7 +156,7 @@ export async function getServerSideProps({ req, query }) {
           itemName: info.orderItemDto.itemName,
           amount: info.orderItemDto.amount,
           finalPrice: info.orderItemDto.finalPrice,
-          couponName: info.orderItemDto.couponName,
+          couponName: info.orderItemDto.couponName || '-',
           discountAmount: info.orderItemDto.discountAmount,
           status: info.orderItemDto.status,
         },
@@ -170,8 +170,8 @@ export async function getServerSideProps({ req, query }) {
         orderPrice: data.paymentDto.orderPrice,
         deliveryPrice: data.paymentDto.deliveryPrice,
         discountReward: data.paymentDto.discountReward,
-        couponName: data.paymentDto?.couponName || null, // ! 서버에서 데이터 추가필요
-        discountCoupon: data.paymentDto?.discountCoupon|| data.orderItemAndOptionDtoList?.map((info)=>info.orderItemDto.discountAmount).reduce((acc, cur)=> acc+ cur) || null , // ! 서버에서 데이터 추가 필요
+        couponName: data.paymentDto?.couponName || '-',
+        discountCoupon: data.paymentDto?.discountCoupon|| data.orderItemAndOptionDtoList?.map((info)=>info.orderItemDto.discountAmount).reduce((acc, cur)=> acc+ cur) || null,
         paymentPrice: data.paymentDto.paymentPrice,
         paymentMethod: data.paymentDto.paymentMethod,
         orderStatus: data.paymentDto.orderStatus,
