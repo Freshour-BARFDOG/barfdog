@@ -3,8 +3,8 @@ import s from './popup_sell.module.scss';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import {orderStatus} from "/store/TYPE/orderStatusTYPE";
 
-const ProductInfo_normItem = ({ itemInfo }) => {
-  // console.log(itemInfo);
+export default function ProductInfo_normItem ({ itemInfo }) {
+  console.log(itemInfo);
   return (
     <>
       <ul className={`${s['t-body']} ${s['product-item-info']}`}>
@@ -22,6 +22,24 @@ const ProductInfo_normItem = ({ itemInfo }) => {
             </div>
           </div>
         </li>
+        <li className={`${s['t-row']} ${s['fullWidth']} ${s.autoHeight}`}>
+          <div className={s['t-box']}>
+            <div className={`${s.innerBox} ${s.label}`}>
+              <span>옵션</span>
+            </div>
+            <div className={`${s.innerBox} ${s.cont}`}>
+              {itemInfo.selectOptionDtoList?.length === 0 ? '-' : itemInfo.selectOptionDtoList.map((opt,i) => (
+                <p key={`item-option-${opt.i}`} className={s.option}>
+                  <span>{opt.optionName} ({transformLocalCurrency(opt.price)}원)&nbsp;&nbsp;/</span>
+                  <span>{opt.amount}개&nbsp;&nbsp;/</span>
+                  <span>
+                  {transformLocalCurrency(opt.price * opt.amount)}원
+                </span>
+                </p>
+              ))}
+            </div>
+          </div>
+        </li>
         <li className={`${s['t-row']}`}>
           <div className={s['t-box']}>
             <div className={`${s.innerBox} ${s.label}`}>
@@ -33,28 +51,10 @@ const ProductInfo_normItem = ({ itemInfo }) => {
           </div>
           <div className={s['t-box']}>
             <div className={`${s.innerBox} ${s.label}`}>
-              <span>상품가격</span>
+              <span>주문금액</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
-              <span>{itemInfo.orderItemDto.itemName}</span>
-            </div>
-          </div>
-        </li>
-        <li className={`${s['t-row']} ${s['fullWidth']} ${s.autoHeight}`}>
-          <div className={s['t-box']}>
-            <div className={`${s.innerBox} ${s.label}`}>
-              <span>옵션</span>
-            </div>
-            <div className={`${s.innerBox} ${s.cont}`}>
-              {itemInfo.selectOptionDtoList?.length === 0 ? '-' : itemInfo.selectOptionDtoList.map((opt,i) => (
-              <p key={`item-option-${opt.i}`} className={s.option}>
-                <span>{opt.optionName} ({transformLocalCurrency(opt.price)}원)&nbsp;&nbsp;/</span>
-                <span>{opt.amount}개&nbsp;&nbsp;/</span>
-                <span>
-                  {transformLocalCurrency(opt.price * opt.amount)}원
-                </span>
-              </p>
-              ))}
+              <span>{transformLocalCurrency(itemInfo.orderItemDto.finalPrice)}원</span>
             </div>
           </div>
         </li>
@@ -76,7 +76,7 @@ const ProductInfo_normItem = ({ itemInfo }) => {
             </div>
           </div>
         </li>
-        <li className={`${s['t-row']}`}>
+        <li className={`${s['t-row']} ${s['fullWidth']}`}>
           <div className={s['t-box']}>
             <div className={`${s.innerBox} ${s.label}`}>
               <span>처리상태</span>
@@ -85,18 +85,9 @@ const ProductInfo_normItem = ({ itemInfo }) => {
               <span>{orderStatus.KOR[itemInfo.orderItemDto.status]}</span>
             </div>
           </div>
-          <div className={s['t-box']}>
-            <div className={`${s.innerBox} ${s.label}`}>
-              <span>주문금액</span>
-            </div>
-            <div className={`${s.innerBox} ${s.cont}`}>
-              <span>{transformLocalCurrency(itemInfo.orderItemDto.finalPrice)}원</span>
-            </div>
-          </div>
         </li>
       </ul>
     </>
   );
 };
 
-export default ProductInfo_normItem;
