@@ -2,15 +2,15 @@
 
 
 const transformDate = (d, unit, option={seperator:'-'}) => {
+  if(!d) return;
+  
   if(d?.indexOf('-') < 0)return;
   let result;
   let yymmdd;
   let time;
   let hour, min, sec
   
-  if(!d){
-    return console.error('required Date')
-  }
+  
 
   // YYMMDD
   const yy = d.slice(0,4);
