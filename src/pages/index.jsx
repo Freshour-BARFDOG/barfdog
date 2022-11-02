@@ -184,6 +184,24 @@ export default function MainPage({ data }) {
                         alt="카드 이미지"
                         priority
                       ></Image>
+                      <ul>
+                        <li>
+                          <div className={s.image_title}>스타터프리미엄</div>
+                          <div className={s.image_sub}>닭고기 & 칠면조</div>
+                        </li>
+                        <li>
+                          <div className={s.image_title}>덕앤램</div>
+                          <div className={s.image_sub}>오리 & 양</div>
+                        </li>
+                        <li>
+                          <div className={s.image_title}>터키앤비프</div>
+                          <div className={s.image_sub}>칠면조 & 소</div>
+                        </li>
+                        <li>
+                          <div className={s.image_title}>램앤비프</div>
+                          <div className={s.image_sub}>양 & 소</div>
+                        </li>
+                      </ul>
                     </div>
                     <div className={s.magicbox} />
                   </Tween>

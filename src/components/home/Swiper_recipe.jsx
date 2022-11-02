@@ -38,12 +38,18 @@ const swiperSettings_recipe = {
 
 export function Swiper_recipe({ data, isMobile }) {
   // console.log(data);
+  const [recipeDatas, setRecipeDatas] = useState( [] );
+  
+  useEffect(() => {
+    const arrangedData = data.reverse();
+    setRecipeDatas(arrangedData);
+  },[])
 
   return (
     <div className={s.swiper_recipe_outerWrap}>
       <Swiper {...swiperSettings_recipe}>
-        {data?.length > 0 &&
-          data.map((d, index) => (
+        {recipeDatas?.length > 0 &&
+          recipeDatas?.map((d, index) => (
             <SwiperSlide
               key={`recipe-${d.id}-${index}`}
               style={{

@@ -437,6 +437,109 @@ section.sns {
       left: 50%;
       transform: translateX(-50%);
       clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%) !important;
+
+      ul {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        row-gap: rem(200);
+        width: 100%;
+        max-width: rem(800);
+
+        li {
+          display: grid;
+          position: relative;
+          &::after{
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: rem(120);
+            height: rem(1);
+          }
+          &::before{
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: rem(10);
+            height: rem(10);
+            border-radius: 100%;
+          }
+
+          &:nth-child(odd) {
+            text-align: right;
+            justify-content: flex-start;
+
+            &::after{
+              right: 0;
+              transform: translate(-120%, -50%);
+            }
+            &::before{
+              right: rem(130);
+              transform: translate(-50%, -50%);
+            }
+          }
+          &:nth-child(even) {
+            text-align: left;
+            justify-content: flex-end;
+            &::after{
+              left: 0;
+              transform: translate(120%, -50%);
+            }
+            &::before{
+              left: rem(130);
+              transform: translate(50%, -50%);
+            }
+          }
+
+          .image_title{
+            font-size: rem(20);
+            font-weight: 800;
+          }
+
+          .image_sub{
+            font-size: rem(16);
+          }
+
+          &:first-child{
+            &::after, &:before{
+              background-color: var(--color-main);
+            }
+            .image_title{
+              color: var(--color-main);
+            }
+          }
+          &:nth-child(2){
+            margin-right: rem(65);
+            &::after, &:before{
+              background-color: #FF4921;
+            }
+            .image_title{
+              color: #FF4921;
+            }
+          }
+          &:nth-child(3){
+            margin-left: rem(35);
+            &::after, &:before{
+              background-color: #FF3232;
+            }
+            .image_title{
+              color: #FF3232
+            }
+          }
+          &:last-child{
+            margin-right: rem(55);
+            &::after, &:before{
+              background-color: #FF8C16;
+            }
+            .image_title{
+              color: #FF8C16;
+            }
+          }
+        }
+      }
     }
 
     .scroll {
@@ -1378,6 +1481,84 @@ section.sns {
     }
   }
 
+  .difference{
+    .inner{
+      .scroll{
+        .image_wrap{
+          ul {
+            row-gap: rem(400);
+            li{
+              &::after{
+                height: rem(70);
+                top: 50%;
+                border-style: solid;
+                background-color: transparent;
+              }
+              &::before{
+                transform: translate(0, 0);
+              }
+
+              &:first-child{
+                &::after{
+                  left: rem(135);
+                  border-color: var(--color-main);
+                  border-width: rem(1) rem(1) 0 0;
+                  transform: translate(0%, 0%);
+                }
+                &::before{
+                  top: rem(100);
+                  left: rem(250);
+                }
+              }
+              &:nth-child(2){
+                &::after{
+                  right: rem(130);
+                  border-color: #FF4921;
+                  border-width: rem(1) 0 0 rem(1);
+                  transform: translate(50%, 0%);
+                  left: auto;
+                }
+                &::before{
+                  top: rem(100);
+                  right: rem(185);
+                  left: auto;
+                }
+              }
+              &:nth-child(3){
+                &::after{
+                  left: rem(100);
+                  border-color: #FF3232;
+                  border-width: 0 rem(1) rem(1) 0;
+                  transform: translate(0%, -100%);
+                }
+                &::before{
+                  top: auto;
+                  bottom: rem(100);
+                  left: rem(215);
+                }
+              }
+              &:last-child{
+                &::after{
+                  right: rem(140);
+                  border-color: #FF8C16;
+                  border-width: 0 0 rem(1) rem(1);
+                  transform: translate(50%, -100%);
+                  left: auto;
+                }
+                &::before{
+                  top: auto;
+                  bottom: rem(100);
+                  right: rem(195);
+                  left: auto;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
 
 
 //리뷰 후기
@@ -1478,10 +1659,41 @@ section.sns {
       h1 {
         font-size: rem(28);
       }
-
       .scroll {
         padding-bottom: 100vw;
         height: rem(600);
+        .image_wrap{
+
+          ul {
+            row-gap: rem(20);
+            column-gap: rem(20);
+            li{
+              &:nth-child(odd) {
+                justify-content: flex-end;
+              }
+              &:nth-child(even) {
+                justify-content: flex-start;
+              }
+              &::after{
+                display: none;
+              }
+              &::before{
+                display: none;
+              }
+              .image_title{
+                background-color: #fff;
+                padding: 0 rem(10);
+                font-size: rem(16);
+              }
+              .image_sub{
+                color: #fff;
+                font-size: rem(12);
+                padding: 0 rem(10);
+              }
+            }
+          }
+        }
+
         .magicbox{
           background-size: 50%;
         }

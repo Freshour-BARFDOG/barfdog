@@ -59,6 +59,17 @@ section.subscribe_discount { margin-bottom: rem(80);}
     pointer-events: none;
     user-select: none;
   }
+  
+  .swiper_card_outerWrap{
+    transform: rotate(2deg);
+    padding: rem(50) 0;
+
+    .swiper_card_box{
+      display: flex;
+      justify-content: center;
+    }
+  }
+
   .image_box {
     width: 100%;
     display: flex;
