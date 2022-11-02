@@ -602,7 +602,7 @@ export function Swiper_card() {
     className: `${s.swiper_card}`,
     loop: true,
     spaceBetween: 0,
-    centeredSlides: false, // 가운데 갈지 말지 고민
+    centeredSlides: false,
     slidesPerView: 'auto',
     cardsEffect: {
       slideShadows: false,

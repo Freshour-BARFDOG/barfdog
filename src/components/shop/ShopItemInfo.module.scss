@@ -3,7 +3,13 @@
 
 .contents-wrap{
   padding: rem(120) 0 rem(140);
-  .ql-editor{padding:0;}
+  .ql-editor{
+    padding:0;
+
+    p{
+      cursor: default;
+    }
+  }
 }
 
 

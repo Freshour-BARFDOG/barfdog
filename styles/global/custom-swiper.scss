@@ -26,3 +26,10 @@ $browser-context:16;
   pointer-events: none;
 
 }
+
+
+.swiper-button-disabled {
+  opacity: 0 !important;
+  cursor: auto;
+  pointer-events: none;
+}

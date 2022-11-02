@@ -3,13 +3,15 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import s from '@src/pages/mainPage.module.scss';
 import { Navigation, Pagination, Lazy } from 'swiper';
-import ArrowRight_m from '@public/img/icon/swiper-arrow-medium-style2.svg';
+import ArrowRight_m2 from '@public/img/icon/swiper-arrow-medium-style2.svg';
 import Link from 'next/link';
 import ArrowLeft_m from '@public/img/icon/swiper-arrow-medium.svg';
+import ArrowRight_m from '@public/img/icon/swiper-arrow-medium2.svg';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import Image from 'next/image';
 import sorting from "@util/func/sorting";
 import popupWindow from "@util/func/popupWindow";
+// import { ArrowRight_m } from '@public/img/icon/swiper-arrow-medium-style2.svg';
 
 
 const swiperSettings_review = {
@@ -80,7 +82,7 @@ export function Swiper_review({ data }) {
         <ArrowLeft_m />
       </i>
       <i className={s['swiper-button-next']} ref={navNextRef}>
-        <ArrowRight_withLink />
+        <ArrowRight_m />
       </i>
       <Swiper
         navigation={{
@@ -130,6 +132,17 @@ export function Swiper_review({ data }) {
               </figure>
             </SwiperSlide>
           ))}
+          <SwiperSlide className={s.swiper_review_more}>
+            <Link href="/review" passHref>
+              <a>
+                <div className={s.image_wrap}>
+                  <ArrowRight_m2 />
+                </div>
+                <div className={s.more}>더보기</div>
+              </a>
+            </Link>
+          </SwiperSlide>
+
       </Swiper>
     </div>
   );
@@ -150,14 +163,7 @@ const ArrowRight_withLink = () => {
   
   return (
     <>
-      <ArrowRight_m />
-      <Link href="/review" passHref>
-        <a
-          onClick={onClickHandler}
-        >
-          더보기
-        </a>
-      </Link>
+      {/* <ArrowRight_m /> */}
     </>
   );
 };
