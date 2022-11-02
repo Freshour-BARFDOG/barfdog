@@ -141,7 +141,7 @@ export default function ReviewPage() {
       const res = await postObjData(apiUrl, body);
       console.log(res);
       if (res.isDone) {
-        alert(`${setSelectedItemList.length}개의 리뷰가 베스트리뷰로 등록되었습니다.`);
+        alert(`${selectedItemList.length}개의 리뷰가 베스트리뷰로 등록되었습니다.`);
         setSelectedItemList([]); // 초기화 시킴
         // window.location.reload();
       }
