@@ -127,10 +127,20 @@ section.content_box {
 .content_box {
   width: 100%;
 
+  ul{
+    li {
+      &:last-child {
+        .line{
+        border-bottom: rem(1) solid var(--color-line-04);
+        }
+      }
+    }
+  }
+
   .line {
     border-top: rem(1) solid var(--color-line-04);
-    border-bottom: rem(1) solid var(--color-line-04);
-    margin-bottom: rem(20);
+    //border-bottom: rem(1) solid var(--color-line-04);
+    //margin-bottom: rem(20);
     cursor: pointer;
 
     .flex_box {
@@ -216,7 +226,7 @@ section.content_box {
 
     .line {
       border: rem(1) solid var(--color-line-04);
-
+      margin-bottom: rem(20);
       .flex_box {
         grid-template-columns: 1fr rem(160);
         grid-gap: rem(20);

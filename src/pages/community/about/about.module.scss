@@ -53,7 +53,7 @@
         font-size: rem(16);
         line-height: 140%;
         letter-spacing: -.02em;
-
+        word-break: keep-all;
       }
       .sign {
         display: flex;
@@ -63,12 +63,12 @@
         height: rem(106);
         .ceo {
           position: absolute;
-          width: rem(104);
+          width: rem(130);
           color:#202020;
           font-size: rem(13);
           height: rem(10);
           top: rem(34);
-          left: rem(67);
+          left: rem(45);
         }
         .img_sign {
           position: absolute;
@@ -115,6 +115,7 @@
             font-size: rem(16);
             line-height: 140%;
             letter-spacing: -0.02em;
+            word-break: keep-all;
           }
           &:last-child {
             margin-bottom: rem(0);
@@ -412,8 +413,8 @@
     .inner {
       .letter_box{
         .sign {
-          float: none;
-          transform: translateX(rem(-50));
+          //float: none;
+         transform: translateX(rem(-80));
         }
       }
     }

@@ -10,9 +10,14 @@ import {
 } from "react-icons/fa";
 import Image from 'next/image';
 
-import FooterLogo from "/public/img/logo_footer.png";
-import FooterLogo_2x from "/public/img/logo_footer@2x.png";
+// import FooterLogo from "/public/img/logo_footer.png";
+// import FooterLogo_2x from "/public/img/logo_footer@2x.png";
 
+import FooterLogo from '/public/img/logo(HQ).png';
+// import Logo from '/public/img/logo.png';
+import FooterLogo_2x from '/public/img/logo@2x.png';
+import MobileLogo from '/public/img/mobile_logo.png';
+import MobileLogo_2x from '/public/img/mobile_logo@2x.png';
 
 function Footer() {
   return (
@@ -101,7 +106,6 @@ function Footer() {
               <span className={s.info_title}>Office.</span>
               <span className={s.info_cont}>
                 4F, 208, Beonyeong daero, Chungju si,
-                <br />
                 Chungcheongbukdo, Republic of Korea
               </span>
             </li>
@@ -109,7 +113,6 @@ function Footer() {
               <span className={s.info_title}>Factory.</span>
               <span className={s.info_cont}>
                 1F, 214, Beonyeong daero, Chungju si,
-                <br />
                 Chungcheongbukdo, Republic of Korea
               </span>
             </li>

@@ -116,7 +116,7 @@ export default function AboutPage() {
                 </div>
 
                 <div className={s.sign}>
-                  <div className={s.ceo}>바프독 CEO 임경호</div>
+                  <div className={s.ceo}>프레쉬아워 CEO 임경호</div>
                   <div className={`${s.img_sign} img-wrap`}>
                     <Image
                       src={require("/public/img/pages/community/community_sign.png")}

@@ -25,7 +25,7 @@ export const ShopReturnExchageGuideBox = () => {
           요청 가능 기간
         </div>
         <div className={Styles.right}>
-          선식품, 맞춤제작식품: 불가 / 일반상품: 7일
+          신선식품, 맞춤제작식품: 불가 / 일반상품: 7일
           <br/>
           단, 주문이 생산되기 전 컷오프(다음 주문의 배송 전 금요일 24시) 전 까지 고객님이 직접 취소
           가능.

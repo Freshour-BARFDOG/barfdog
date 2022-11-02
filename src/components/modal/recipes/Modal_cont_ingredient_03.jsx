@@ -9,7 +9,7 @@ export const Modal_cont_ingredient_03 = () => {
         
         <div className={s.grid_box}>
           <div className={s.left_side}>
-            <div className={s.left_title}>Nutrients Facts</div>
+            <div className={s.left_title3}>Nutrients Facts</div>
             
             <div className={s.flex_box}>
               <div className={s.first_text}>수분</div>
@@ -49,7 +49,7 @@ export const Modal_cont_ingredient_03 = () => {
           </div>
           
           <div className={s.right_side}>
-            <div className={s.right_title}>Dry Matter</div>
+            <div className={s.right_title3}>Dry Matter</div>
             
             <div className={s.flex_box}>
               <div className={s.last_text}>65.73</div>

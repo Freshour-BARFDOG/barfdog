@@ -29,6 +29,8 @@ import useDeviceState from "/util/hook/useDeviceState";
 import { getTokenFromServerSide } from "/src/pages/api/reqData";
 import { Tween } from 'react-gsap';
 import { Controller, Scene } from "react-scrollmagic";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 export default function MainPage({ data }) {
   // console.log(data)
@@ -50,6 +52,16 @@ export default function MainPage({ data }) {
       setActiveTempPasswordModal(false);
     }
   };
+
+  useEffect(() => {
+    // AOS.init({
+    //   disable: function() {
+    //     var maxWidth = 1200;
+    //     return window.innerWidth < maxWidth;
+    //   }
+    // });
+    AOS.init();
+  })
 
   return (
     <>
@@ -78,16 +90,22 @@ export default function MainPage({ data }) {
           <section className={s.barfraw}>
             <div className={s.inner}>
               <div className={s.leftbox}>
+                <div className={s.image_wrap}>
                 <Image src={Barfraw} objectFit="cover" layout="fill" alt="바프 생식 이미지" />
+                </div>
               </div>
               <div className={s.rightbox}>
                 <p>ABOUT BARF</p>
-                <h1>바프생식이란?</h1>
+                <h1>바프식이란?</h1>
                 <h3 className="font-NotoSans">
-                  &nbsp;BARF(Biologi cally Appropriate Raw Food)는 생물학적으로 적절한 생식이라는
+                  &nbsp;B.A.R.F.(Biologi cally Appropriate Raw Food)는 생물학적으로 적절한 생식이라는
                   뜻으로, 생고기와 뼈, 야채를 적절히 배합하여 반려동물에게 단백질과 지방을 신선한
-                  상태에서 섭취할 수 있도록 돕습니다. 바프독은 70%의 두 종류 고기와 칼슘이 풍부한
-                  뼈, 내장, 신선한 야채를 배합해 완벽한 비율의 영양을 공급합니다.
+                  상태에서 섭취할 수 있도록 돕는 식단을 뜻합니다. 
+                  {/* 바프독은 70%의 두 종류 고기와 칼슘이 풍부한 */}
+                  <br />
+                  바프독의 모든 레시피는
+                  고기와 뼈, 내장, 신선한 야채를 완벽한 비율로 배합하여 건강한 영양을 공급합니다.
+                  {/* 뼈, 내장, 신선한 야채를 배합해 완벽한 비율의 영양을 공급합니다. */}
                 </h3>
               </div>
             </div>
@@ -146,7 +164,7 @@ export default function MainPage({ data }) {
             <div className={s.inner}>
               <div className={s.scroll}>
               <Controller>
-                <Scene duration={500} offset={-100}>
+                <Scene duration={500} offset={400} pin>
                   <Tween
                   from={{
                     "clip-path": "polygon(50% 0%, 50% 0%, 50% 100%, 50% 100%)"
@@ -166,6 +184,24 @@ export default function MainPage({ data }) {
                         alt="카드 이미지"
                         priority
                       ></Image>
+                      <ul>
+                        <li>
+                          <div className={s.image_title}>스타터프리미엄</div>
+                          <div className={s.image_sub}>닭고기 & 칠면조</div>
+                        </li>
+                        <li>
+                          <div className={s.image_title}>덕앤램</div>
+                          <div className={s.image_sub}>오리 & 양</div>
+                        </li>
+                        <li>
+                          <div className={s.image_title}>터키앤비프</div>
+                          <div className={s.image_sub}>칠면조 & 소</div>
+                        </li>
+                        <li>
+                          <div className={s.image_title}>램앤비프</div>
+                          <div className={s.image_sub}>양 & 소</div>
+                        </li>
+                      </ul>
                     </div>
                     <div className={s.magicbox} />
                   </Tween>
@@ -185,12 +221,13 @@ export default function MainPage({ data }) {
                 <p className={s.title}>
                   완벽한 영양구성
                   <br />
-                  real BARF
+                  Real B.A.R.F.
                 </p>
                 <Image src={LeftPic} objectFit="fit" width={260} height={260} alt="카드 이미지" />
                 <p className={s.text}>
-                  생고기, 칼슘이 풍부한 뼈, 신선한 야채를 완벽한 비율로 구성해 반려견이 필요한
-                  영양분을 골고루 섭취 할 수 있습니다.
+                  생고기, 뼈, 내장, 채소와 과일을
+                  <br />
+                  완벽한 비율로 구성한 건강한 한끼
                 </p>
               </li>
 
@@ -198,12 +235,13 @@ export default function MainPage({ data }) {
                 <p className={s.title}>
                   국내최초 국내유일
                   <br />
-                  double meats
+                  Double meats
                 </p>
                 <Image src={midPic} objectFit="fit" width={260} height={260} alt="카드 이미지" />
                 <p className={s.text}>
-                  전문가들은 균형잡힌 식사를 위해 한끼에 두가지 이상의 고기를 섭취하도록 권장합니다.
-                  바프독은 모든 레시피에 두가지 고기를 풍부하게 담았습니다.
+                  모든 레시피에 두 가지 고기를
+                  <br />
+                  풍부하게 담은 균형잡힌 한끼
                 </p>
               </li>
 
@@ -215,8 +253,9 @@ export default function MainPage({ data }) {
                 </p>
                 <Image src={rightPic} objectFit="fit" width={260} height={260} alt="카드 이미지" />
                 <p className={s.text}>
-                  미국 사료협회 AAFCO에서 제시한 펫푸드 영양성분 가이드라인을 충족하며 고단백,
-                  고영양의 프리미엄 맞춤형 생식을 제공합니다.
+                  국제 기준(AAFCO)부터 NRC, fediaf까지
+                  <br />
+                  모든 영양 가이드라인을 준수
                 </p>
               </li>
             </ul>
@@ -231,14 +270,17 @@ export default function MainPage({ data }) {
               PREMIUM <br />
               REAL BARF
             </h2>
-            <div className={s.image}>
-              <Image src={barfPack} alt="인공 조미료" />
-              <div className={s.textbox}>
+            <div className={s.grid}>
+              <div className={s.image}>
+                <Image src={barfPack} alt="인공 조미료" />
+              </div>
+              <div className={s.textbox} id="trigger">
                 <ul className={s.text}>
-                  <li>영양보존 100%</li>
-                  <li>100% 휴먼그레이드</li>
-                  <li>인공화학물 FREE</li>
-                  <li>인공감미료 FREE</li>
+                  <li data-aos="fade-up" data-aos-delay="0" data-aos-anchor="#trigger">영양보존 100%</li>
+                  <li data-aos="fade-up" data-aos-delay="50" data-aos-anchor="#trigger">100% 휴먼그레이드</li>
+                  <li data-aos="fade-up" data-aos-delay="100" data-aos-anchor="#trigger">NO 유전자 변형 완료 (NON-GMO)</li>
+                  <li data-aos="fade-up" data-aos-delay="150" data-aos-anchor="#trigger">NO 방부제·보존제</li>
+                  <li data-aos="fade-up" data-aos-delay="200" data-aos-anchor="#trigger">NO 중국산재료</li>
                 </ul>
               </div>
             </div>
@@ -257,9 +299,15 @@ export default function MainPage({ data }) {
                     해본적 있으신가요?
                   </h2>
                   <p className={s.subtitle}>
-                    생고기, 칼슘이 풍부한 뼈, 신선한 야채를 완벽한 비율으로 구성해 반려견이 필요한
+                    {/* 생고기, 칼슘이 풍부한 뼈, 신선한 야채를 완벽한 비율으로 구성해 반려견이 필요한
                     영양분을 골고루 섭취할 수 있습니다.완벽한 비율으로 구성해 반려견이 필요한
-                    영양분을 골고루섭취할 수 있습니다. 완벽한 비율으로
+                    영양분을 골고루섭취할 수 있습니다. 완벽한 비율으로 */}
+                    반려견이 평생 다양한 '사료'만 먹는다는 것은
+                    인스턴트 음식만 평생 먹는다는 것과 같습니다.
+                    <br />
+                    <br />
+                    반려견과 행복하고 건강하게 지낼 수 있도록
+                    바프독이 도와드릴게요!
                   </p>
                   <button type="button" className={`${s.btn_worry}`}>
                     바프생식 둘러보기
@@ -283,20 +331,16 @@ export default function MainPage({ data }) {
                         <div className={s.details}>
                           <ul>
                             <li>
-                              생식을 시도하고 싶지만 공부해야할 것이 많아 확신이 서지 않고, 반려견의
-                              적응이 두려워요
+                              생식을 시도하고 싶지만 공부해야할 것이 많고 반려견이 잘 적응할 수 있을지 걱정이 돼요
                             </li>
                             <li>
-                              기존 화식이나 건식사료를 급여 중 건강이 나빠진 반려견을 위해서 생식을
-                              시도해보고싶어요
+                              기존에 건사료 등을 급여하던 중 건강이 나빠진 반려견을 위해 생식을 급여하고 싶어요
                             </li>
                             <li>
-                              생식을 시도하고 싶지만 공부해야할 것이 많아 확신이 서지 않고, 반려견의
-                              적응이 두려워요
+                              반려견 입맛이 까다로워서 매번 새로운 사료를 찾아야해요
                             </li>
                             <li>
-                              생식을 시도하고 싶지만 공부해야할 것이 많아 확신이 서지 않고, 반려견의
-                              적응이 두려워요
+                              생식에 대해서는 잘 알지만 매번 집에서 만들고 소분하는 것이 힘들어졌어요
                             </li>
                           </ul>
                         </div>
@@ -312,7 +356,7 @@ export default function MainPage({ data }) {
                             alt="카드 이미지"
                           />
                         </div>
-                        <p className={s.card_title}>견주님의 고민</p>
+                        <p className={s.card_title}>반려견의 건강 상태</p>
                         <div className={s.details}>
                           <ul>
                             <li>눈물과 눈곱이 많고 눈물자국이 짙어져요</li>
@@ -359,14 +403,13 @@ export default function MainPage({ data }) {
             <div className={s.inner}>
               <h2 className={s.title}>바프독 이용방법</h2>
               <p>
-                Start now 버튼을 통해 간편하게 반려동물 정보를 입력하고 계정에서 최신상태로 업데이트
-                할 수 있습니다
+                정기구독신청 버튼을 통해 간편하게 반려동물 정보를 입력하고 계정에서 최신상태로 업데이트 할 수 있습니다
                 <br />
-                간편하지만 완벽한 식단을 매달 원하는 날짜에 맞춰 받아보세요
+                집에서 간편하게 내 반려동물을 위한 완벽한 식단을 규칙적으로 받아보세요
               </p>
               <div className={s.cont_body}>
                 <ul className={s.howtouse_box}>
-                  <li>
+                  <li data-aos="fade-up" data-aos-delay="0">
                     <figure className={s.card}>
                       <div className={`${s['img-wrap']} img-wrap`}>
                         <Image
@@ -386,7 +429,7 @@ export default function MainPage({ data }) {
                       </div>
                     </figure>
                   </li>
-                  <li>
+                  <li data-aos="fade-up" data-aos-delay="100">
                     <figure className={s.card}>
                       <div className={`${s['img-wrap']} img-wrap`}>
                         <Image
@@ -407,7 +450,7 @@ export default function MainPage({ data }) {
                       </div>
                     </figure>
                   </li>
-                  <li>
+                  <li data-aos="fade-up" data-aos-delay="200">
                     <figure className={s.card}>
                       <div className={`${s['img-wrap']} img-wrap`}>
                         <Image

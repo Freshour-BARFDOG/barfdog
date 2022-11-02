@@ -6,7 +6,7 @@ $browser-context: 16;
 
 
 #site_footer {
-  padding: rem(50) 0 rem(60);
+  padding: rem(70) 0 rem(60);
   font-size: rem(15);
   background-color: var(--color-bg-ghostWhite);
  
@@ -14,6 +14,8 @@ $browser-context: 16;
 
 .logo_area {
   margin-bottom: rem(20);
+  filter: grayscale(100);
+  opacity: .6;
   a {
     max-width: rem(204);
     margin: 0 auto;
@@ -87,13 +89,18 @@ $browser-context: 16;
     margin:0 auto;
     li{
       display:flex;
-      justify-content:center;
+      justify-content:flex-start;
       overflow:hidden;
       margin-bottom: rem(9);
       line-height:1.5;
       cursor: default;
-      & > *:nth-child(1){float:left;margin-right:rem(9)}
-      & > *:nth-child(2){float:left;}
+      & > *:nth-child(1){float:left;margin-right:rem(9);text-align: left;}
+      & > *:nth-child(2){float:left;text-align: left;}
+      &:nth-child(2) {
+        .info_title {
+          min-width: rem(106);
+        }
+      }
     }
   }
  

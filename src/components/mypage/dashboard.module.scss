@@ -10,6 +10,7 @@ $counterBoxWidth: rem(200);
   display: grid;
   grid-template-columns: rem(450) 1fr;
   grid-gap: 0;
+  overflow-y: hidden;
   *:not(button) {
     cursor: default;
   }
@@ -169,13 +170,33 @@ $counterBoxWidth: rem(200);
       display: grid;
       grid-template-columns: 0.8fr 1fr 0.8fr;
       grid-gap: 0;
-      overflow: hidden;
 
       li {
         //width: $counterBoxWidth;
+        position: relative;
         width: 100%;
         padding-right: 0;
         padding-left: 0;
+
+        // &:hover{
+        //   color: #fff;
+
+        //   &::after{
+        //     content: "";
+        //     position: absolute;
+        //     top: 50%;
+        //     left: 0;
+        //     transform: translateY(-50%);
+        //     width: 100%;
+        //     height: 200%;
+        //     background-color: var(--color-main);
+        //     z-index: -1;
+        //   }
+        // }
+
+        i {
+        cursor: pointer;
+        }
       }
     }
   }

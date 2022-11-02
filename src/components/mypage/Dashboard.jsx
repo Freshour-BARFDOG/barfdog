@@ -8,7 +8,7 @@ import transformLocalCurrency from "@util/func/transformLocalCurrency";
 import {useSelector} from "react-redux";
 import Modal_global_alert from "@src/components/modal/Modal_global_alert";
 import {useModalContext} from "@store/modal-context";
-
+import Link from 'next/link';
 
 
 function Dashboard({ className, ...props }) {
@@ -107,13 +107,25 @@ function Dashboard({ className, ...props }) {
 
         <div className={s.user_counter}>
           <ul>
-            <Dashboard_countViewer title="배송예정" counter={data.deliveryCount} unit="건" />
+            <Link href="/mypage/delivery">
+              <a>
+              <Dashboard_countViewer title="배송예정" counter={data.deliveryCount} unit="건" />
+              </a>
+            </Link>
+            <Link href="/mypage/reward">
+              <a>
             <Dashboard_countViewer
               title="적립금"
               counter={transformLocalCurrency(data.reward)}
               unit="원"
             />
+            </a>
+            </Link>
+            <Link href="/mypage/coupon">
+              <a>
             <Dashboard_countViewer title="보유쿠폰" counter={data.couponCount} unit="개" />
+            </a>
+            </Link>
           </ul>
         </div>
         {/* user_counter */}
