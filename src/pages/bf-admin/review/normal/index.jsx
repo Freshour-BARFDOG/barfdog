@@ -51,16 +51,27 @@ export default function ReviewPage() {
   const pageInterceptor = (res) => {
     // res = DUMMY_REVIEW_RESPONSE; // ! TEST
     // console.log(res)
-    const newItemList = res.data?._embedded.queryAdminReviewsDtoList || [];
-    const pageData = res.data.page;
     let newPageInfo = {
-      totalPages: pageData.totalPages,
-      size: pageData.size,
-      totalItems: pageData.totalElements,
-      currentPageIndex: pageData.number,
-      newPageNumber: pageData.number + 1,
-      newItemList,
+      totalPages: 0,
+      size: 0,
+      totalItems: 0,
+      currentPageIndex: 0,
+      newPageNumber: 0,
+      newItemList: [],
     };
+    if(res.data?._embedded){
+      const newItemList = res.data?._embedded.queryAdminReviewsDtoList || [];
+      const pageData = res.data.page;
+      newPageInfo = {
+        totalPages: pageData.totalPages,
+        size: pageData.size,
+        totalItems: pageData.totalElements,
+        currentPageIndex: pageData.number,
+        newPageNumber: pageData.number + 1,
+        newItemList,
+      };
+    }
+    
     return newPageInfo;
   };
 
@@ -118,8 +129,9 @@ export default function ReviewPage() {
   };
   
   const onSetBestReview = async () => {
-    if(!confirm(`선택된 ${setSelectedItemList.length}개의 리뷰를 베스트리뷰로 등록하시겠습니까?`)) return;
-    
+    if(!selectedItemList.length) return;
+    if(!confirm(`선택된 ${selectedItemList.length}개의 리뷰를 베스트리뷰로 등록하시겠습니까?`)) return;
+    console.log(selectedItemList)
     try {
       setIsLoading({bestReview: true});
       const body = {
@@ -131,7 +143,7 @@ export default function ReviewPage() {
       if (res.isDone) {
         alert(`${setSelectedItemList.length}개의 리뷰가 베스트리뷰로 등록되었습니다.`);
         setSelectedItemList([]); // 초기화 시킴
-        window.location.reload();
+        // window.location.reload();
       }
     } catch (err) {
       console.error(err)
