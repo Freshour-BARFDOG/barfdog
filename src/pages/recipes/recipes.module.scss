@@ -63,10 +63,12 @@ section.subscribe_discount { margin-bottom: rem(80);}
   .swiper_card_outerWrap{
     transform: rotate(2deg);
     padding: rem(50) 0;
+    cursor: pointer;
 
     .swiper_card_box{
       display: flex;
       justify-content: center;
+      cursor: pointer;
     }
   }
 
@@ -181,7 +183,7 @@ section.subscribe_discount { margin-bottom: rem(80);}
       overflow-y: hidden;
 
         .gif{
-          transform: translateY(rem(-0.5));
+          transform: translateY(rem(0.2));
         }
       }
 
