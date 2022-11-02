@@ -1,5 +1,5 @@
 import s from "../coupon.module.scss";
-import {global_couponType} from "/store/TYPE/couponType";
+import {couponUseType, global_couponType} from "/store/TYPE/couponType";
 import {putObjData} from "/src/pages/api/reqData";
 
 
@@ -10,21 +10,21 @@ import {putObjData} from "/src/pages/api/reqData";
     // console.log(item);
     
     let couponTarget= '';
-    if(item.couponTarget === 'ALL'){
-      couponTarget = '전체'
-    } else  if(item.couponTarget === 'SUBSCRIBE'){
-      couponTarget = '정기구독'
-    } else if (item.couponTarget === 'GENERAL') {
-      couponTarget = '일반상품'
+    if(item.couponTarget === couponUseType.ALL){
+      couponTarget = couponUseType.KOR.ALL
+    } else  if(item.couponTarget === couponUseType.SUBSCRIBE){
+      couponTarget = couponUseType.KOR.SUBSCRIBE;
+    } else if (item.couponTarget === couponUseType.GENERAL) {
+      couponTarget = couponUseType.KOR.GENERAL;
     }
     
     let couponType;
     if(item.couponType === global_couponType.AUTO_PUBLISHED){
-      couponType = '자동발행';
+      couponType = global_couponType.KOR.AUTO_PUBLISHED;
     } else  if(item.couponType === global_couponType.CODE_PUBLISHED){
-      couponType = '코드발행';
+      couponType = global_couponType.KOR.CODE_PUBLISHED;
     } else if (item.couponType === global_couponType.GENERAL_PUBLISHED) {
-      couponType = '일반발행';
+      couponType = global_couponType.KOR.GENERAL_PUBLISHED;
     }
   
     
@@ -73,7 +73,7 @@ import {putObjData} from "/src/pages/api/reqData";
         <span>{DATA.couponTarget}</span>
         <span>{DATA.amount}</span>
         <span>
-          {couponType === '자동발행' ? <em className={'errorMSG'}>삭제불가</em> : <button
+          {couponType === global_couponType.KOR.AUTO_PUBLISHED ? <em className={'errorMSG'}>삭제불가</em> : <button
             className="admin_btn basic_s solid"
             onClick={onInactiveItemHandler}
             data-api-url={DATA.apiurl.delete}

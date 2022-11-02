@@ -21,7 +21,7 @@ import {useModalContext} from "/store/modal-context";
 import transformClearLocalCurrencyInEveryObject from "/util/func/transformClearLocalCurrencyInEveryObject";
 import ErrorMessage from "/src/components/atoms/ErrorMessage";
 import {discountUnitType} from "/store/TYPE/discountUnitType";
-import errorMessage from "/src/components/atoms/ErrorMessage";
+import {couponUseType} from "/store/TYPE/couponType";
 
 const initialFormValues = {
   name: '', // str
@@ -247,8 +247,8 @@ function CreateCouponPage() {
                       <CustomRadio
                         setValue={setFormValues}
                         name="couponTarget"
-                        idList={['ALL', 'SUBSCRIBE', 'GENERAL']}
-                        labelList={['전체', '정기구독', '일반상품']}
+                        idList={[couponUseType.ALL, couponUseType.SUBSCRIBE,couponUseType.GENERAL]}
+                        labelList={[couponUseType.KOR.ALL, couponUseType.KOR.SUBSCRIBE,couponUseType.KOR.GENERAL]}
                       />
                       {formErrors.couponTarget && (
                         <ErrorMessage>{formErrors.couponTarget}</ErrorMessage>
