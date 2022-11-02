@@ -57,6 +57,7 @@ export default function UpdateRecipePage( { id }) {
   // - cf.) 파일 업로드 : post할 때, JSON파일과  IMAGE파일을 한 번에 전송 ( REST API 초기: 이미지를 업로드하는 시점에 upload하는 방식을 도입하기 전이었음)
   const router = useRouter();
   const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
   const [modalMessage, setModalMessage] = useState('');
   const [isLoading, setIsLoading] = useState({});
   const [activePreviewModal, setActivePreviewModal] = useState(false);
@@ -234,7 +235,7 @@ export default function UpdateRecipePage( { id }) {
           </div>
           <section className="cont">
             <div className="cont_body">
-              <form action="/" encType="multipart/form-data" method="post">
+              <div id={'form'}>
                 <div className="cont_divider">
                   <div className="input_row">
                     <div className="title_section fixedHeight">
@@ -578,7 +579,7 @@ export default function UpdateRecipePage( { id }) {
                   </div>
                 </div>
                 {/* cont_divider */}
-              </form>
+              </div>
             </div>
           </section>
           <div className="cont_bottom">
@@ -617,7 +618,8 @@ export default function UpdateRecipePage( { id }) {
           onModalHide={onHidePreviewModalHandler}
         />
       )}
-      <Modal_global_alert message={modalMessage} onClick={onGlobalModalCallback} background />
+      {hasAlert && <Modal_global_alert message={modalMessage} onClick={onGlobalModalCallback} background />}
+      
     </>
   );
 }

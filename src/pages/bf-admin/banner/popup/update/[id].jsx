@@ -43,6 +43,7 @@ function UpdatePopupPage() {
   const getFormValuesApiUrl = `/api/banners/popup/${id}`;
   const postFormValuesApiUrl = `/api/banners/popup/${id}`;
   const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
   const [modalMessage, setModalMessage] = useState('');
   const [isLoading, setIsLoading] = useState({});
   const [formValues, setFormValues] = useState(initialFormValues);
@@ -382,7 +383,7 @@ function UpdatePopupPage() {
           {/* cont */}
         </AdminContentWrapper>
       </AdminLayout>
-      <Modal_global_alert message={modalMessage} onClick={onGlobalModalCallback} background />
+      {hasAlert && <Modal_global_alert message={modalMessage} onClick={onGlobalModalCallback} background />}
     </>
   );
 }
