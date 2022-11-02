@@ -79,15 +79,6 @@ export default function DeliveryInfoPage() {
                 </div>
               </div>
             </section>
-            
-            {/* ! ----------------TEST CODE -------------! */}
-            <h1 style={{ color: 'red' }}>
-              *** 이미지 변경 필요 (배송요일변경: 수 -> 화)
-            </h1>
-            {/* ! ----------------TEST CODE -------------! */}
-            
-            
-            
             <section className={s.image_box}>
               <div className={`${s.image} img-wrap`}>
                 <Image
@@ -224,5 +215,3 @@ export default function DeliveryInfoPage() {
     </>
   );
 }
-
-// ㅁㄴ이라ㅓㅁㄴㅇㄹ
