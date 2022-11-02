@@ -33,6 +33,7 @@ const CreateBlogPage = () => {
   const blogDetailImageUploadApiURL = '/api/admin/blogs/image/upload';
   const router = useRouter();
   const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
   const [modalMessage, setModalMessage] = useState('');
   const [isLoading, setIsLoading] = useState({});
   const [thumbFile, setThumbFile] = useState({});

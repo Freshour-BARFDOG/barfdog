@@ -45,10 +45,9 @@ export default function Modal_global_alert({ message, onClick, background, ...pr
   };
   
   
-  
   // KEYBOARD EVENT
   useEffect(() => {
-    if (window && typeof window !== 'undefined') {
+    if (window && typeof window !== 'undefined' && hasAlert) {
       document.documentElement.addEventListener('keydown', keyDownHandler);
     }
     return ()=>{

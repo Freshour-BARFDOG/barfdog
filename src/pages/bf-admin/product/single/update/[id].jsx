@@ -23,8 +23,8 @@ import FileInput from '/src/components/admin/form/FileInput';
 import Tooltip from '/src/components/atoms/Tooltip';
 import CheckboxGroup from '/src/components/atoms/CheckboxGroup';
 import transformClearLocalCurrencyInEveryObject from '/util/func/transformClearLocalCurrencyInEveryObject';
-import SingleItemOptions from '../../../../../components/admin/product/SingleItemOptions';
-import SingleItemDiscountOptions from '../../../../../components/admin/product/SingleItemDiscountOptions';
+import SingleItemOptions from '/src/components/admin/product/SingleItemOptions';
+import SingleItemDiscountOptions from '/src/components/admin/product/SingleItemDiscountOptions';
 import {general_itemType} from "/store/TYPE/itemType";
 
 
@@ -33,12 +33,14 @@ import {general_itemType} from "/store/TYPE/itemType";
 
 
 export default function UpdateSingleItemPage({ id }) {
+  
   const getFormValuesApiUrl = `/api/admin/items/${id}`;
   const putFormValuesApiUrl = `/api/admin/items/${id}`;
   const postThumbFileApiUrl = '/api/admin/items/image/upload';
   const postContentImageApiUrl = '/api/admin/items/contentImage/upload';
   const router = useRouter();
   const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
 
   const [modalMessage, setModalMessage] = useState('');
   const [isLoading, setIsLoading] = useState({});
@@ -601,7 +603,7 @@ export default function UpdateSingleItemPage({ id }) {
           </div>
         </AdminContentWrapper>
       </AdminLayout>
-      <Modal_global_alert message={modalMessage} onClick={onGlobalModalCallback} background />
+      {hasAlert && <Modal_global_alert message={modalMessage} onClick={onGlobalModalCallback} background />}
     </>
   );
 }

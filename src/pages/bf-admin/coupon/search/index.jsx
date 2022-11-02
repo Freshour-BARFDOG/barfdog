@@ -23,7 +23,7 @@ import { global_couponType } from '/store/TYPE/couponType';
 
 const initialSearchValue = {
   keyword: '',
-  couponType: 'AUTO_PUBLISHED', // AUTO_PUBLISHED,  CODE_PUBLISHED
+  couponType: global_couponType.AUTO_PUBLISHED, // AUTO_PUBLISHED,  CODE_PUBLISHED
 };
 
 const initialApiUrlWithQuery = {
@@ -60,9 +60,9 @@ function CouponListPage() {
           queryArr.push(`${key}=${val}`);
           break;
         case 'couponType':
-          if (val === 'AUTO_PUBLISHED') {
+          if (val === global_couponType.AUTO_PUBLISHED) {
             url = apiURL.auto;
-          } else if (val === 'CODE_PUBLISHED') {
+          } else if (val === global_couponType.CODE_PUBLISHED) {
             url = apiURL.direct;
           }
           break;

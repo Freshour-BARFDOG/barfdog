@@ -24,6 +24,7 @@ export default function LineBanner({data}) {
 
  
   const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
   const [modalMessage, setModalMessage] = useState('');
   const [isLoading, setIsLoading] = useState({});
   const miniEditorFormRef = useRef(null);
@@ -448,7 +449,7 @@ export default function LineBanner({data}) {
           </div>
         </AdminContentWrapper>
       </AdminLayout>
-      <Modal_global_alert message={modalMessage} onClick={onGlobalModalCallback} background />
+      {hasAlert && <Modal_global_alert message={modalMessage} onClick={onGlobalModalCallback} background />}
     </>
   );
 }

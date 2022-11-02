@@ -271,13 +271,23 @@ export default function UpdateSurveyPage({ data }) {
 
 export async function getServerSideProps({ req, query }) {
   const { dogIdx } = query;
+  
+  let isMyDog = true;
+  const getAllDogsApiUrl = '/api/dogs';
+  const allDogRes = await getDataSSR(req, getAllDogsApiUrl);
+  if(allDogRes.data){
+    const allDogIds = allDogRes.data._embedded.queryDogsDtoList.map(data=>data.id.toString()) || [];
+    isMyDog = allDogIds.indexOf(dogIdx) >= 0;
+    console.log('allDogIds: ',allDogIds);
+  }
+  
+  
 
 
-  const getDogInfoApiUrl = `/api/dogs/${dogIdx}`;
-  const dogInfoRes = await getDataSSR(req, getDogInfoApiUrl);
+  const getOneDogInfoApiUrl = `/api/dogs/${dogIdx}`;
+  const dogInfoRes = await getDataSSR(req, getOneDogInfoApiUrl);
   const data = dogInfoRes.data || null;
-  // console.log('data:: ',data)
-  if (!data) {
+  if (!data || !isMyDog) {
     return {
       redirect: {
         permanent: false,
