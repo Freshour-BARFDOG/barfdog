@@ -1,31 +1,34 @@
 import transformDate, {transformToday} from './transformDate';
 
+const WEEK = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+const TARGET_DAY = 'TUE'; // 매주 정기구독 발송되는 요일 // ! 고객사 측에서 정기구독 발송 요일 변경 ( 수 -> 화)
+
 export const calcNextSubscribeDeliveryDate = (d = transformToday(), unit = '월일') => {
-  // WEEK = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-  const FRI = 5; // 금
-  const next_WED = 10;
-  const theWeekAfterNext_WED = 17;
+ 
+  
+  const ONEWEEK = 7;
+  const NEXT_TARGET_DAY = WEEK.indexOf(TARGET_DAY) + ONEWEEK;
+  const THEWEEKAFTERNEXT_TARGET_DAY = NEXT_TARGET_DAY + ONEWEEK;
   const today = new Date( d ); // YYYY-MM-DD
   const dayOfWeek = today.getDay(); // num // 0 ~ 6
   const sundayOfWeek = today.getDate() - dayOfWeek; // 이번 주의 첫 번째 일 (SUN)
-  const diff = sundayOfWeek + (dayOfWeek <= FRI ? next_WED : theWeekAfterNext_WED);
+  const FRI = 5; // 금
+  const diff = sundayOfWeek + (dayOfWeek <= FRI ? NEXT_TARGET_DAY : THEWEEKAFTERNEXT_TARGET_DAY);
   const nextDeliveryDate = new Date( today.setDate( diff ) ).toISOString().substring( 0, 10 );
-  // console.log(new Date(today.setDate(diff)).toISOString().substring(0,10));
+  console.log('다음 정기구독 발송 예정일: ',new Date(today.setDate(diff)).toISOString().substring(0,10));
   return transformDate( nextDeliveryDate, unit );
   // unit: null  > 'YYYY-MM-DD'
   // unit: 년월일 > 'YYYY년 MM월 DD일'
 };
 
-const getThisWednesDay = (d = 'YYYY-MM-DD')=>{
-  const FRI = 5; // 금
-  const next_WED = 10;
-  const theWeekAfterNext_WED = 17;
+const getThisTuesDay = (d = 'YYYY-MM-DD')=>{
   const today = new Date( d ); // YYYY-MM-DD
   const dayOfWeek = today.getDay(); // num // 0 ~ 6
   const sundayOfWeek = today.getDate() - dayOfWeek; // 이번 주의 첫 번째 일 (SUN)
-  const WED = sundayOfWeek + 3
-  const thisWED = new Date(today.setDate(WED)).toISOString().substring(0, 10);
-  return thisWED;
+  // const WED = sundayOfWeek + 3;
+  const TUES = sundayOfWeek + WEEK.indexOf(TARGET_DAY);
+  const thisTUES = new Date(today.setDate(TUES)).toISOString().substring(0, 10);
+  return thisTUES;
 }
 
 
@@ -33,7 +36,7 @@ const getThisWednesDay = (d = 'YYYY-MM-DD')=>{
 export const calcChangedSubscribeDeliveryDate = (originDate='YYYY-MM-DD', periodInWeeks)=>{
   
   // const convertingOriginDate = transformDate(originDate);
-  const convertingOriginDate = getThisWednesDay(originDate); // 그 주의 수요일.
+  const convertingOriginDate = getThisTuesDay(originDate); // 그 주의 수요일.
   const weeks = periodInWeeks * 7;
   const prevDate =  new Date(convertingOriginDate);
   const nextDate = new Date(prevDate.setDate(prevDate.getDate() + weeks)); // 그 주의 수요일 + n주
