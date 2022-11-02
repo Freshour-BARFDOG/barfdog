@@ -113,9 +113,9 @@ export default function RecipePage() {
               <span>더블 미트 레시피</span>를 소개합니다
             </div>
 
-            <div className={s.btn}>
+            {/* <div className={s.btn}>
               브랜드 소개
-            </div>
+            </div> */}
             <div className={s.image_box}>
               <div className={`${s.image} img-wrap`}>
                 <Image
@@ -229,7 +229,7 @@ export default function RecipePage() {
                 </div>
   
                 <button className={s['showModal_btn']} type={'button'} onClick={onShowModal} data-selected-idx={1}>
-                  터키앤 비프 더보기
+                  터키앤비프 더보기
                 </button>
               </div>
 
@@ -332,7 +332,7 @@ export default function RecipePage() {
             </div>
 
             <div className={s.recipe_title2}>
-              진짜 펫푸드에 대한 바프독의 생각. 바프독이 생각하는 본질을 그대로 담았습니다.
+              사료가 아닌 음식을 만든다는 바프독의 철학대로, 올바른 가치를 그대로 담았습니다
             </div>
 
 
@@ -373,7 +373,6 @@ export default function RecipePage() {
               </div>
               
               <div className={s.pic_box2}>
-
                 <div className={s.text_box}>
                   <div className={s.image_box}>
                     <div className={`${s.image} img-wrap`}>
@@ -386,7 +385,7 @@ export default function RecipePage() {
                       />
                     </div>
                   </div>
-                  100% HUMAN <br />GRADE
+                  100%<br />휴먼그레이드
                 </div>
                
                 <div className={s.text_box}>
@@ -416,7 +415,7 @@ export default function RecipePage() {
                       />
                     </div>
                   </div>
-                  ORGANIC<br />VEGETABLE
+                  유기농<br />채소·과일
                 </div>
 
                 <div className={s.text_box}>
@@ -431,7 +430,7 @@ export default function RecipePage() {
                       />
                     </div>
                   </div>
-                  GLUTEN<br />FREE
+                  글루텐<br />무첨가
                 </div>
 
                 <div className={s.text_box}>
@@ -446,7 +445,7 @@ export default function RecipePage() {
                       />
                     </div>
                   </div>
-                  GRAIN<br />FREE
+                  곡물류<br />무첨가
                 </div>
 
                 <div className={s.text_box}>
@@ -461,7 +460,7 @@ export default function RecipePage() {
                       />
                     </div>
                   </div>
-                  NO<br />합성첨가물
+                  합성첨가물<br />무첨가
                 </div>
               </div>
             </div>

@@ -6,6 +6,7 @@ import Image from "next/image";
 import getElemIdx from "/util/func/getElemIdx.js";
 import rem from "/util/func/rem";
 import styled from "styled-components";
+import CloseButton from "/src/components/atoms/CloseButton";
 
 const indicatorAniDirection = "left"; // 이동 기준
 const initialActiveMenuIdx = 0; // 최초 활성화 탭
@@ -20,7 +21,7 @@ const Indicator = styled.i`
 `;
 
 
-const Modal_recipes = ({ data, selectedIndex, onHideModal, isActiveModal }) => {
+const Modal_recipes = ({ data, selectedIndex, onHideModal, isActiveModal, setIsActiveModal }) => {
 
 
   const detailsRef = useRef();
@@ -130,7 +131,6 @@ const Modal_recipes = ({ data, selectedIndex, onHideModal, isActiveModal }) => {
   const Tab3Component = data.component.tab3[selectedIndex];
   const Tab4Component = data.component.tab4[selectedIndex];
 
-
   return (
     <>
       <ModalWrapper
@@ -144,6 +144,9 @@ const Modal_recipes = ({ data, selectedIndex, onHideModal, isActiveModal }) => {
             <section className={s["title-section"]}>
               <h2 className={s["title-ko"]}>{TITLE_KO}</h2>
               <h3 className={s["title-en"]}>{TITLE_EN}</h3>
+              <i className={s.btn_close_modal} onClick={onHideModal}>
+                <CloseButton className={s['closeButton']} />
+              </i>
             </section>
             <section className={s["tabmenu-section"]}>
               <nav className={s.tabmenu}>

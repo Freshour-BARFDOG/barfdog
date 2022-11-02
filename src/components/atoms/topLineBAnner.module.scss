@@ -13,6 +13,9 @@ $bannerHeight : rem(40);
   &.invisible{
     animation: moveToTop .3s ease-in-out 1s forwards;
     height: 0;
+    a{
+      display: none;
+    }
   }
 
 

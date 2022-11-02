@@ -29,6 +29,7 @@ $topLinkBannerHeight: rem(38);
 
 .title-section{
   margin-bottom:rem(-2);
+  position: relative;
   .title-ko{
     text-transform: uppercase;
     font-family: var(--font-Gmarket-bold);
@@ -40,6 +41,16 @@ $topLinkBannerHeight: rem(38);
   .title-en{
     font-size: rem(24);
     font-weight: 500;
+  }
+
+  .btn_close_modal{
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    .closeButton{
+      width: rem(40);
+    }
   }
 }
 
@@ -130,6 +141,13 @@ $topLinkBannerHeight: rem(38);
 
     .title-en{
       font-size: rem(18);
+    }
+
+    .btn_close_modal{
+  
+      .closeButton{
+        width: rem(20);
+      }
     }
   }
 

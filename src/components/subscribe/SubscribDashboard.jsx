@@ -7,7 +7,7 @@ import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import { Modal_couponWithSubscribeApi } from '../modal/Modal_couponWithSubscribeApi';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import { useModalContext } from '/store/modal-context';
-import Tooltip from "../atoms/Tooltip";
+import Tooltip from "../atoms/TooltipSubscrib";
 
 
 

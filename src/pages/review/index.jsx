@@ -11,6 +11,7 @@ import 'swiper/css/effect-fade';
 import axios from 'axios';
 import { ReviewBox } from '/src/components/review/ReviewBox';
 import { Swiper_bestReview } from '/src/components/review/Swiper_bestReview';
+import Link from 'next/link';
 
 export default function ReviewPage({ bestReviewList }) {
   return (
@@ -30,6 +31,8 @@ export default function ReviewPage({ bestReviewList }) {
           </section>
 
           <section className={s.review_write_ad}>
+            <Link href={'/mypage/review'} passHref>
+            <a>
             <div className={s.red_box}>
               <div className={s.content_box}>
                 <div className={`${s.image_left} img-wrap`}>
@@ -58,6 +61,8 @@ export default function ReviewPage({ bestReviewList }) {
                 </div>
               </div>
             </div>
+            </a>
+            </Link>
           </section>
 
           <section className={s.notice_text}>

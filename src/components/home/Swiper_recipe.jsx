@@ -12,8 +12,8 @@ import Styles from "@src/pages/mainPage.module.scss";
 const swiperSettings_recipe = {
   className: `${s.swiper_recipe}`,
   slidesPerView: 'auto',
-  centeredSlides: false, // 가운데 갈지 말지 고민
-  modules: [Navigation], //존재하면 쓸수있음
+  centeredSlides: false,
+  modules: [Navigation],
   breakpoints: {
     //반응형 조건 속성
     300: {
@@ -21,7 +21,7 @@ const swiperSettings_recipe = {
       spaceBetween: 0,
     },
     651: {
-      //601 이상일 경우
+      //651 이상일 경우
       slidesPerView: 2, //레이아웃 2열
       spaceBetween: 20,
     },

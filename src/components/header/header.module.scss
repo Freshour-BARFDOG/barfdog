@@ -4,7 +4,7 @@
 #site_header {
   position: relative;
   z-index: $site_header;
-  border-bottom: rem(1) solid var(--color-line-03);
+  //border-bottom: rem(1) solid var(--color-line-03);
   svg {
     display: block;
   }
@@ -19,14 +19,20 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
+
+    > button {
+      font-size: rem(14);
+      margin-left: rem(10);
+    }
+
     > li {
-      font-size: rem(16);
+      font-size: rem(14);
       position: relative;
       display: flex;
       align-items: center;
       &:not(:last-child) {
-        margin-right: rem(23);
-        padding-right: rem(23);
+        margin-right: rem(20);
+        padding-right: rem(20);
       }
 
       &:not(:last-child):after {
@@ -86,7 +92,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: rem(125) 0 rem(90);
+  padding: rem(50) 0 rem(30);
   a{
     max-width: rem(280);
     aspect-ratio: 279/48;
