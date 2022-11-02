@@ -13,12 +13,14 @@ import { Modal_registerCoupon } from '/src/components/modal/Modal_registerCoupon
 import {putObjData} from "/src/pages/api/reqData";
 import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 import {useModalContext} from "/store/modal-context";
+import {couponActiveType, couponUseType} from "/store/TYPE/couponType";
 
 
 export default function CouponPage() {
+  
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
-  const searchApiUrl = 'api/coupons';
+  const searchApiUrl = '/api/coupons';
   const searchPageSize = 10;
   const apiDataQueryString = 'queryCouponsDtoList';
   const [isLoading, setIsLoading] = useState({});
@@ -28,20 +30,46 @@ export default function CouponPage() {
   const [form, setForm] = useState({});
   const couponCodeRef = useRef(null);
   
+  const initInfo = {
+    availableCount: 0,
+    totalCount: 0,
+  }
+  
+  const [info, setInfo] = useState( initInfo );
+  
   const onActiveModalHandler = () => {
     setActiveUseCouponModal(true);
   };
 
   const pageInterCeptor = (res) => {
-    const pageData = res.data.couponsPageDto.page;
+    // console.log(res.data);
     let newPageInfo = {
-      totalPages: pageData.totalPages,
-      size: pageData.size,
-      totalItems: pageData.totalElements,
-      currentPageIndex: pageData.number,
-      newPageNumber: pageData.number + 1,
-      newItemList: res.data.couponsPageDto._embedded.queryCouponsDtoList || {},
+      totalPages: 0,
+      size: 0,
+      totalItems: 0,
+      currentPageIndex: 0,
+      newPageNumber: 0,
+      newItemList: [],
     };
+    const data = res.data?.couponsPageDto?._embedded;
+    if(data){
+      const pageData = res.data.couponsPageDto.page;
+      newPageInfo = {
+        totalPages: pageData.totalPages,
+        size: pageData.size,
+        totalItems: pageData.totalElements,
+        currentPageIndex: pageData.number,
+        newPageNumber: pageData.number + 1,
+        newItemList: data.queryCouponsDtoList || {},
+      };
+      
+      const newInfo = {
+        availableCount:  res.data.availableCount,
+        totalCount:  res.data.totalCount,
+      }
+      setInfo(newInfo);
+    }
+   
     return newPageInfo;
   };
 
@@ -91,13 +119,13 @@ export default function CouponPage() {
       } else if (res.status === 400 && res.status < 500) {
         let defErrorMessage = '쿠폰코드를 등록할 수 없습니다.';
         let errorMessage = res.data.data.errors[0].defaultMessage;
-        console.log(errorMessage);
+        // console.log(errorMessage);
         errorMessage = errorMessage === "이미 사용된 쿠폰 입니다." ? '이미 등록되었거나, 사용된 쿠폰입니다.' : errorMessage;
         mct.alertShow(errorMessage || defErrorMessage);
       }
-      console.log(res);
+      // console.log(res);
     } catch (err) {
-      console.error(err);
+      alert(err);console.error(err);
     }
     setIsLoading((prevState) => ({
       ...prevState,
@@ -105,6 +133,7 @@ export default function CouponPage() {
     }));
   };
 
+  
   return (
     <>
       <MetaTitle title="마이페이지 쿠폰조회" />
@@ -137,7 +166,7 @@ export default function CouponPage() {
             <section className={s.coupon_state_section}>
               <div className={s.coupon_state_flex_box}>
                 <div className={s.left_box}>
-                  사용 가능한 쿠폰 : <span>{itemList.filter(cp=>cp.status === 'ACTIVE')?.length}</span>개
+                  사용 가능한 쿠폰 : <span>{info.availableCount || 0}</span>개
                 </div>
               </div>
 
@@ -151,14 +180,15 @@ export default function CouponPage() {
               ) : (
                 <ul className={s.coupon_content_grid_box}>
                   {itemList
-                    .filter((item) => item.status === 'ACTIVE')
+                    .filter((item) => item.status === couponActiveType.ACTIVE)
                     .map((item, index) => (
                       <li key={`coupon-${item.id}`} className={s.grid_box}>
                         <div className={s.left_top}>{item.name}</div>
                         <div className={s.right_top}>{item.discount}</div>
                         <div className={s.left_bot}>
                           <div className={s.left_bot_text}>
-                            {item.description}
+                            <p>{item.description}</p>
+                            <p>사용처: {couponUseType.KOR[item.couponTarget]}</p>
                             <div className={s.inner_flex_box}>
                               <div className={s.left_text}>사용기한</div>
                               <div className={s.line}>

@@ -114,8 +114,13 @@ section.pageline { padding: rem(40) 0 0 0}
     @include char(l15);
     color: var(--color-font-sub);
 
+    .left_bot_text{
+      display: flex;
+      flex-direction: column;
+      gap:rem(9);
+    }
     .inner_flex_box {
-      padding-top: rem(9);
+      //padding-top: rem(9);
       display: flex;
       align-items : center;
 
