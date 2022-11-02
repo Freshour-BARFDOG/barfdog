@@ -11,10 +11,10 @@ export const useSubscribeInfo = (subscribeId) => {
       try {
         const url = `/api/subscribes/${subscribeId}`;
         let res = await getData(url);
-        console.log('useSubscribeInfo: ',res)
+        // console.log('useSubscribeInfo: ',res)
         /// ! TEST TEST TEST TEST TEST
         if(res.status === 404 ) {
-          alert('구독정보를 불러오는데 실패했습니다.')
+          alert('구독정보를 불러오는데 실패했습니다.');
           // res = DUMMY_RESPONSE(subscribeId);
         }
         /// ! TEST TEST TEST TEST TEST
@@ -22,7 +22,7 @@ export const useSubscribeInfo = (subscribeId) => {
         if (!data) return;
         const curRecipeIdList = data.subscribeRecipeDtoList.map((list) => list.recipeId);
 
-        const getAllRecipeInfoUrl = 'api/recipes';
+        const getAllRecipeInfoUrl = '/api/recipes';
         const recipe_res = await getData(getAllRecipeInfoUrl);
         if(!recipe_res.data) return;
         const allRecipes = recipe_res.data._embedded.recipeListResponseDtoList;
