@@ -156,7 +156,7 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                   <div className={s.dashboard}>
                     <ul>
                       <li>
-                        <Link href="/mypage/delivery">
+                        <Link href="/mypage/delivery" passHref>
                           <a>
                             <em className={s.num}>{data.deliveryCount}</em>
                             <span className={s.text}>배송현황</span>
@@ -164,7 +164,7 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                         </Link>
                       </li>
                       <li>
-                        <Link href="/mypage/reward">
+                        <Link href="/mypage/reward" passHref>
                           <a>
                             <em className={s.num}>{transformLocalCurrency(data.reward)}</em>
                             <span className={s.text}>적립금</span>
@@ -172,7 +172,7 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                         </Link>
                       </li>
                       <li>
-                        <Link href="/mypage/coupon">
+                        <Link href="/mypage/coupon" passHref>
                           <a>
                             <em className={s.num}>{data.couponCount}</em>
                             <span className={s.text}>쿠폰</span>

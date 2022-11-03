@@ -3,32 +3,33 @@ import s from './dashboard.module.scss';
 import Dashboard_countViewer from './Dashboard_countViewer';
 import Image from 'next/image';
 import { IoMdLink, IoMdMail } from 'react-icons/io';
-import Modal_sendPhoneMessage from '@src/components/modal/Modal_sendPhoneMessage';
-import transformLocalCurrency from "@util/func/transformLocalCurrency";
-import {useSelector} from "react-redux";
-import Modal_global_alert from "@src/components/modal/Modal_global_alert";
-import {useModalContext} from "@store/modal-context";
-import Link from 'next/link';
+import Modal_sendPhoneMessage from '/src/components/modal/Modal_sendPhoneMessage';
+import transformLocalCurrency from '/util/func/transformLocalCurrency';
+import { useSelector } from 'react-redux';
+import Modal_global_alert from '/src/components/modal/Modal_global_alert';
+import { useModalContext } from '/store/modal-context';
+import popupWindow from '/util/func/popupWindow';
+import useDeviceState from '/util/hook/useDeviceState';
 
-
-function Dashboard({ className, ...props }) {
+ export default function Dashboard({ className, ...props }) {
   const mct = useModalContext();
-  const auth = useSelector(s=>s.auth);
+  const hasAlert = mct.hasAlert;
+  const isMobile = useDeviceState().isMobile;
+  const auth = useSelector((s) => s.auth);
   const data = auth.userInfo;
-  const [modalMessage, setModalMessage] = useState('');
   const [isModalActive, setIsModalActive] = useState(false);
-  const onCopyToClipboard = () => {
+  
+  const onCopyToClipboard = (value) => {
     let hostname;
     if (typeof window !== 'undefined') {
       hostname = window.location.hostname;
     }
-    const copiedValue = hostname;
+    const copiedValue = value || hostname;
     const tempElem = document.createElement('textarea');
     tempElem.value = copiedValue;
     tempElem.setAttribute('readonly', '');
     tempElem.style.position = 'absolute';
     tempElem.style.left = '-9999px';
-    // tempElem.style.opacity = '0';
     document.body.append(tempElem);
     tempElem.select();
     const returnValue = document.execCommand('copy');
@@ -36,17 +37,30 @@ function Dashboard({ className, ...props }) {
       throw new Error('copied nothing');
     }
     document.body.removeChild(tempElem);
-    alert(`클립보드에 링크가 복사되었습니다. \n링크: ${copiedValue}`);
+    mct.alertShow(`클립보드에 추천코드가 복사되었습니다. \n추천코드: ${copiedValue}`);
+    // alert(`클립보드에 추천코드가 복사되었습니다. \n링크: ${copiedValue}`);
   };
-
+  
+  const onCopyUserRecommendCode = ()=>{
+    const userRecommendCode = data.recommendCode;
+    onCopyToClipboard(userRecommendCode);
+  }
   const onModalShow = ()=>{
     setIsModalActive(true);
   }
-  const onHideAlertModal = ()=>{
-    mct.alertHide();
-  }
 
-  if(!data){
+
+  const openGradePopupHandler = () => {
+    const href = '/popup/gradePolicy';
+    
+    const pcConfig = { width: 1120, height: 730, left: 200, top: 100 };
+    const mobileConfig = { width: 320, height: 200, left: 200, top: 100 };
+    const options = isMobile ? mobileConfig : pcConfig;
+    
+    popupWindow(href, options);
+  };
+
+  if (!data) {
     return;
   }
 
@@ -68,7 +82,8 @@ function Dashboard({ className, ...props }) {
               </figure>
               <figcaption className={s.user_names}>
                 <em className={s.dog_name}>
-                  {data.dog.dogName ? <><span>{data.dog.dogName}</span>&nbsp;견주</> : <span>대표반려견 없음</span>}
+                  <span>{data.dog.dogName ? data.dog.dogName : '대표반려견 없음'}</span>
+                  {data.dog.dogName && ' 견주'}
                 </em>
                 <em className={s.user_name}>
                   <span>{data.name}</span>&nbsp;님
@@ -78,9 +93,9 @@ function Dashboard({ className, ...props }) {
             <div className={`${s.info_col}`}>
               <div className={s.user_class}>
                 <p>회원님은</p>
-                <p>
-                  <span>{data.grade} </span>등급 입니다.
-                </p>
+                <button type={'button'} onClick={openGradePopupHandler}>
+                  <span className={s.grade}>{data.grade} </span>등급 입니다.
+                </button>
               </div>
             </div>
           </div>
@@ -96,9 +111,9 @@ function Dashboard({ className, ...props }) {
               </button>
             </div>
             <div className={`${s.copyLink} ${s.info_col} flex-wrap`}>
-              <button type="button" onClick={onCopyToClipboard}>
+              <button type="button" onClick={onCopyUserRecommendCode}>
                 <IoMdLink />
-                링크복사
+                코드복사
               </button>
             </div>
           </div>
@@ -107,35 +122,38 @@ function Dashboard({ className, ...props }) {
 
         <div className={s.user_counter}>
           <ul>
-            <Link href="/mypage/delivery">
-              <a>
-              <Dashboard_countViewer title="배송예정" counter={data.deliveryCount} unit="건" />
-              </a>
-            </Link>
-            <Link href="/mypage/reward">
-              <a>
+            <Dashboard_countViewer
+              title="배송예정"
+              counter={data.deliveryCount}
+              unit="건"
+              url="/mypage/delivery"
+            />
             <Dashboard_countViewer
               title="적립금"
               counter={transformLocalCurrency(data.reward)}
               unit="원"
+              url="/mypage/reward"
             />
-            </a>
-            </Link>
-            <Link href="/mypage/coupon">
-              <a>
-            <Dashboard_countViewer title="보유쿠폰" counter={data.couponCount} unit="개" />
-            </a>
-            </Link>
+            <Dashboard_countViewer
+              title="보유쿠폰"
+              counter={data.couponCount}
+              unit="개"
+              url="/mypage/coupon"
+            />
           </ul>
         </div>
         {/* user_counter */}
       </section>
-      {isModalActive && <Modal_sendPhoneMessage setModalState={setIsModalActive} data={data} setModalMessage={setModalMessage} />}
-      {modalMessage && (
-        <Modal_global_alert message={modalMessage} onClick={onHideAlertModal} background />
+      {isModalActive && (
+        <Modal_sendPhoneMessage
+          setModalState={setIsModalActive}
+          data={data}
+        />
+      )}
+      {hasAlert && (
+        <Modal_global_alert background/>
       )}
     </>
   );
 }
 
-export default Dashboard;
