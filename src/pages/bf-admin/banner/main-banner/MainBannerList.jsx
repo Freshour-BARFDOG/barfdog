@@ -82,6 +82,7 @@ export default function MainBannerList({
   );
 
   const SortableItem = ({ item, sortableItemRef }) => {
+    
     const DATA = {
       id: item.id,
       leakedOrder: item.leakedOrder,
@@ -91,11 +92,10 @@ export default function MainBannerList({
         item.createdDate ? item.createdDate : item.modifiedDate
       ),
       url: item._links.thumbnail_pc.href,
-      apiurl: {
-        self: item._links.query_banner.href,
-        orderUp: item._links.mainBanner_leakedOrder_up.href,
-        orderDown: item._links.mainBanner_leakedOrder_down.href,
-        delete: item._links.delete_banner.href,
+      apiurl: { // ! 서버에서 받은 api url사용 시, 프로토콜이 맞지 않는 오류 발생힘
+        orderUp: `api/banners/main/${item.id}/up`,
+        orderDown: `api/banners/main/${item.id}/down`,
+        delete: `api/banners/main/${item.id}`,
       },
     };
 
