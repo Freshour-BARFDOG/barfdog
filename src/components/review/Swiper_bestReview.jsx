@@ -21,7 +21,7 @@ export function Swiper_bestReview ({items}) {
   }, [isMobile] );
   
   useEffect( () => {
-    const sortedItemList = sorting( items, 'leakedOrder', 'descend' );
+    const sortedItemList = sorting( items, 'leakedOrder', 'ascend' ); // 노출순서
     setItemList( sortedItemList );
   }, [items] );
   
