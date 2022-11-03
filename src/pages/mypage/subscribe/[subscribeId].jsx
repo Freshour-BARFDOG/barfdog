@@ -13,10 +13,10 @@ import { SubscribeRecipe } from '/src/components/subscribe/SubscribeRecipe';
 import { useSubscribeInfo } from '/util/hook/useSubscribeInfo';
 import { FullScreenLoading } from '/src/components/atoms/FullScreenLoading';
 
+
 export default function SubscribeInfoPage({ data }) {
   const { subscribeId } = data;
   const subscribeInfo = useSubscribeInfo(subscribeId);
-  const boxStyle = { boxShadow: '0 5px 1.25rem rgb(0 0 0 / 3%)' };
 
   
   if (!subscribeInfo) {
@@ -29,26 +29,27 @@ export default function SubscribeInfoPage({ data }) {
         <Wrapper>
           <MypageWrapper>
             <SubscribDashboard subscribeInfo={subscribeInfo} />
-
-            <ToggleBox title="구독 무게(g) 변경" style={boxStyle}>
+            
+            <ToggleBox title="구독 무게(g) 변경">
               <SubscribeGram subscribeInfo={subscribeInfo} />
             </ToggleBox>
 
-            <ToggleBox title="구독 플랜 변경" style={boxStyle}>
+            <ToggleBox title="구독 플랜 변경">
               <SubscribePlan subscribeInfo={subscribeInfo} />
             </ToggleBox>
 
-            <ToggleBox title="구독 레시피  변경" style={{ overflow: 'hidden', ...boxStyle }}>
-              <SubscribeRecipe subscribeInfo={subscribeInfo} />
+            <ToggleBox title="구독 레시피  변경" style={{ overflow: 'hidden'}}>
+              <SubscribeRecipe subscribeInfo={subscribeInfo}/>
             </ToggleBox>
 
-            <ToggleBox title="구독 건너뛰기" style={boxStyle}>
+            <ToggleBox title="구독 건너뛰기">
               <SubscribeSkipPayment subscribeInfo={subscribeInfo} />
             </ToggleBox>
 
-            <ToggleBox title="구독 취소" style={boxStyle}>
+            <ToggleBox title="구독 취소">
               <SubscribeCancle subscribeInfo={subscribeInfo} />
             </ToggleBox>
+            
           </MypageWrapper>
         </Wrapper>
       </Layout>
