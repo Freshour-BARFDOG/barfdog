@@ -14,7 +14,7 @@ import Spinner from "@src/components/atoms/Spinner";
 import {useModalContext} from "@store/modal-context";
 
 
-const Modal_sendPhoneMessage = ({ setModalState, data, setModalMessage }) => {
+const Modal_sendPhoneMessage = ({ setModalState, data }) => {
   const mct = useModalContext();
   const [siteLink, setSiteLink] = useState(null);
   
@@ -70,8 +70,7 @@ const Modal_sendPhoneMessage = ({ setModalState, data, setModalMessage }) => {
         ////////////////////////////////////////////////////////
         //// - TEST : 성공했다고 가정하고, 이후 CLIENT TEST상태 진행
         if (res.isDone) {
-          await setModalMessage('친구에게 메시지를 성공적으로 전송했습니다.')
-          mct.alertShow();
+          mct.alertShow('친구에게 메시지를 성공적으로 전송했습니다.');
           onModalHide();
         }
         ////////////////////////////////////////////////////////
@@ -79,8 +78,8 @@ const Modal_sendPhoneMessage = ({ setModalState, data, setModalMessage }) => {
         const smsStatus = res.data.data.responseCode;
         // 전송 SUCCESS
         if (smsStatus === 0) {
-          setModalMessage('친구에게 메시지를 성공적으로 전송했습니다.')
-          mct.alertShow();
+          mct.alertShow('친구에게 메시지를 성공적으로 전송했습니다.');
+          onModalHide();
         }
      
         // 전송 FAIL
