@@ -1,6 +1,7 @@
 /* 전역에서 사용될 CSS */
 @import './reset.css';
 @import './font.css';
+@import './common.scss';
 @import './custom-swiper.scss';
 @import './custom-quill-editor.scss';
 @import '../module/reset-ckEditor.module';
