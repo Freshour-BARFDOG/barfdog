@@ -142,10 +142,12 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                         </span>
                       </p>
                       <p className={s.innerRow}>
-                        <span className={s.userName}>
-                          {data.name}
-                          <em className={s.unit}>님</em>
-                        </span>
+                        <Link href={'/mypage/orderHistory/'} passHref>
+                          <a className={s.userName}>
+                            {data.name}
+                            <em className={s.unit}>님</em>
+                          </a>
+                        </Link>
                         <i className={s.grade}>{data.grade}</i>
                       </p>
                       <p className={s.innerRow}>

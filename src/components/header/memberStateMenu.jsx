@@ -2,14 +2,16 @@ import Link from 'next/link';
 import React from 'react';
 import s from './header.module.scss';
 
-export const MemberMemu = ({data}) => {
+export const MemberMemu = ({ data }) => {
   const isAdmin = data.name === '관리자';
   return (
     <li>
       {!isAdmin && <span className={s.userClass}>{data.grade}</span>}
-      <span className={s.username}>
-        <em>{data.name}</em>님
-      </span>
+      <Link href={'/mypage/orderHistory'} passHref>
+        <a className={s.username}>
+          <em>{data.name}</em>님
+        </a>
+      </Link>
     </li>
   );
 };

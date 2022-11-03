@@ -39,7 +39,7 @@ export default function OrderHistoryPage() {
   }, [activeMenu]);
 
   const pageInterCeptor = async (res) => {
-    // console.log(res);
+    console.log(res);
     // res = activeMenu === 'left' ? DUMMY_SUBSCRIBE_DELVIERY_RESPONSE : DUMMY_GENERAL_DELVIERY_RESPONSE; // ! TEST
     // res = activeMenu === 'left' ? res : DUMMY_GENERAL_DELVIERY_RESPONSE; // ! TEST
     const pageData = res.data.page;
