@@ -62,8 +62,12 @@ section.subscribe_discount { margin-bottom: rem(80);}
   
   .swiper_card_outerWrap{
     transform: rotate(2deg);
-    padding: rem(50) 0;
+    padding: rem(50);
     cursor: pointer;
+
+    > div {
+      overflow: visible;
+    }
 
     .swiper_card_box{
       display: flex;

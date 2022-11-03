@@ -1692,7 +1692,10 @@ section.sns {
       }
       .scroll {
         padding-bottom: 100vw;
-        height: rem(600);
+
+        // scroll 이벤트시 Scene duration과 같이 조절 
+        // ex) duration={500}, height: rem(600)
+        height: rem(1200);
         .image_wrap{
 
           ul {

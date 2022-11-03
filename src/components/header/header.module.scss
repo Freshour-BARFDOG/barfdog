@@ -202,6 +202,51 @@
     height: rem(30);
   }
 }
+
+
+
+@media (hover: hover) {
+  section.tobox{
+    position: fixed;
+    bottom: rem(100);
+    right: rem(34);
+    width: rem(42);
+    height: rem(52);
+    opacity: 0;
+    -webkit-tap-highlight-color : transparent !important;
+    animation: top .4s ease-in-out 0s 1 forwards;
+    transition: bottom .25s;
+    &:hover {
+      bottom: rem(110);
+    }
+  }
+}
+
+@media (hover: none) {
+  section.tobox{
+    position: fixed;
+    bottom: rem(76);
+    right: rem(20);
+    width: rem(32);
+    height: rem(40);
+    opacity: 0;
+    -webkit-tap-highlight-color : transparent !important;
+    animation: top .25s ease-in-out 0s 1 forwards;
+  }
+}
+@keyframes top {
+  0% {
+    transform: translateY(rem(10));
+    opacity: 0;
+  }
+  40% {
+    transform: translateY(rem(-20));
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
 @media (max-width: rem(900)) {
   .gnb_area .gnb_nav > ul > li:not(:last-child) {
     margin-right: rem(0);

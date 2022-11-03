@@ -164,7 +164,7 @@ export default function MainPage({ data }) {
             <div className={s.inner}>
               <div className={s.scroll}>
               <Controller>
-                <Scene duration={500} offset={400} pin>
+                <Scene duration={1000} offset={400} pin>
                   <Tween
                   from={{
                     "clip-path": "polygon(50% 0%, 50% 0%, 50% 100%, 50% 100%)"

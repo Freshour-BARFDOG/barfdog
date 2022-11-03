@@ -178,7 +178,7 @@ section.content_box {
         .day {
           @include char(l15);
           color: var(--color-font-sub2);
-          padding-bottom: rem(30);
+          // padding-bottom: rem(30);
         }
       }
 
@@ -388,13 +388,19 @@ section.content_box {
 
 .HTML-container {
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   overflow: hidden;
   -webkit-box-orient: vertical;
-
+  max-height: rem(127);
   * {
     display: inline-block;
     font-size: var(--reset-font-size) !important;
+    width: 100%;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
   > * {
     //margin-right: rem(4);
