@@ -6,18 +6,20 @@ import {IoIosArrowForward} from 'react-icons/io';
 
 export const ToggleBoxContext = createContext(()=>({
   setVisible: ()=>{},
+  setId: ()=>{},
 }))
 
 
 export function ToggleBox ({title, className, children,  ...props}) {
-  const [visible, setVisible] = useState( false ); // ! 또는 useState(false) --> 토글박스 초기상태 설정
+  const isVisibleState = false;
+  const [visible, setVisible] = useState( isVisibleState );
   const value = useMemo( () => ({
     visible
   }), [visible] );
   const boxRef = useRef( null );
   
-  const onClickHandler = (e) => {
-    visible ? setVisible( false ) : setVisible( true );
+  const onClickHandler = () => {
+    setVisible( !visible );
   };
   
   useEffect( () => {
