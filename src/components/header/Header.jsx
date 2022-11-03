@@ -226,21 +226,21 @@ function TopButton() {
   }
 
   // 스크롤 0이상일때 나타남
-  useEffect(() => {
-    const handleShowButton = () => {
-        if (window.scrollY > 0) {
-            setShowButton(true)
-        } else {
-            setShowButton(false)
-        }
-    }
+  // useEffect(() => {
+  //   const handleShowButton = () => {
+  //       if (window.scrollY > 0) {
+  //           setShowButton(true)
+  //       } else {
+  //           setShowButton(false)
+  //       }
+  //   }
 
-    console.log(window.scrollY)
-    window.addEventListener("scroll", handleShowButton)
-    return () => {
-        window.removeEventListener("scroll", handleShowButton)
-    }
-  }, [])
+  //   console.log(window.scrollY)
+  //   window.addEventListener("scroll", handleShowButton)
+  //   return () => {
+  //       window.removeEventListener("scroll", handleShowButton)
+  //   }
+  // }, [])
 
   // 스크롤 올릴때 나타남
   useEffect(() => {
@@ -248,6 +248,7 @@ function TopButton() {
     const { pageYOffset } = window;
     const deltaY = pageYOffset - pageY;
     const showButton = pageYOffset !== 0 && deltaY <= 0;
+    //const showButton = pageYOffset > 200 && deltaY <= 0;
     setShowButton(showButton);
     setPageY(pageYOffset);
   };

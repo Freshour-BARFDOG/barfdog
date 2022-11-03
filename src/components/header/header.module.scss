@@ -214,10 +214,14 @@
     height: rem(52);
     opacity: 0;
     -webkit-tap-highlight-color : transparent !important;
-    animation: top .4s ease-in-out 0s 1 forwards;
+    animation: top .4s ease-in-out .25s 1 forwards;
     transition: bottom .25s;
     &:hover {
       bottom: rem(110);
+    }
+
+    &:active {
+      bottom: rem(100);
     }
   }
 }
@@ -231,7 +235,12 @@
     height: rem(40);
     opacity: 0;
     -webkit-tap-highlight-color : transparent !important;
-    animation: top .25s ease-in-out 0s 1 forwards;
+    animation: top .25s ease-in-out .25s 1 forwards;
+    transition: bottom .25s;
+
+    &:active {
+      bottom: rem(66);
+    }
   }
 }
 @keyframes top {
