@@ -11,7 +11,7 @@ import Favicon from '/public/img/icon/favicon.svg'
 
 const Rect = styled.i`
   position: absolute;
-  right: calc(${rem(40)} + ${rem(5)});
+  left: calc(${rem(54)} + ${rem(5)});
   bottom: ${rem(4)};
   transform: translate(0, 100%);
   border-top: ${rem(15)} solid #FFCEBA;
@@ -57,9 +57,9 @@ const IconWrap = styled.i`
 const Wrap = styled.div`
   position: absolute;
   // ! z-index: 100;
-  right: 0;
+  left: 0;
   top: 0;
-  transform: translate(${rem(40)}, calc(-100% - ${rem(24)}));
+  transform: translate(${rem(0)}, calc(-100% - ${rem(24)}));
   text-align: center;
   color: #000;
   font-size: ${rem(16)};
@@ -192,14 +192,16 @@ Date.prototype.deliveryDeadline = function () {
   const hour = Math.floor((gap % (60 * 60 * 24)) / (60 * 60));
   const min = Math.floor((gap % (60 * 60)) / 60);
   const sec = Math.floor(gap % 60);
-
-  function convertNum(num) {
-    let convertedNum = num < 10 ? '0' + num.toString() : num.toString();
-    return convertedNum;
-  }
-
+  
   DEADLINE = `${day}일 ${convertNum(hour)}:${convertNum(min)}:${convertNum(sec)}`;
   return DEADLINE;
 };
+
+
+function convertNum(num) {
+  let result = num < 10 ? '0' + num.toString() : num.toString();
+  return result;
+}
+
 
 
