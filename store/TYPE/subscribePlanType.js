@@ -5,7 +5,8 @@ export const subscribePlanType = {
     numberOfPacksPerDay: 2,
     weeklyPaymentCycle: 2,
     totalNumberOfPacks: 28,
-    discountPercent: 5
+    discountPercent: 5,
+    description: ''
   },
   HALF: {
     NAME:'HALF',
@@ -13,7 +14,8 @@ export const subscribePlanType = {
     numberOfPacksPerDay: 1,
     weeklyPaymentCycle: 4,
     totalNumberOfPacks: 14,
-    discountPercent: 2
+    discountPercent: 2,
+    description: ''
   },
   TOPPING: {
     NAME:'TOPPING',
@@ -21,6 +23,7 @@ export const subscribePlanType = {
     numberOfPacksPerDay: 1,
     weeklyPaymentCycle: 4,
     totalNumberOfPacks: 10,
-    discountPercent: 1
+    discountPercent: 1,
+    description: '토핑'
   },
 }
