@@ -19,9 +19,12 @@ import { filter_availableReturnAndExchangeItemList } from '/util/func/filter_ava
 import { valid_availableCancelOrder } from '/util/func/validation/valid_availableCancelOrder';
 import { valid_availableReturnAndExchangelOrder } from '/util/func/valid_availableReturnAndExchangelOrder';
 import axios from 'axios';
+import {useRouter} from "next/router";
 
 export default function SingleItem_OrderHistoryPage({ data }) {
-  console.log(data);
+  // console.log(data);
+  
+  const router = useRouter();
   const originItemList = data.orderItemDtoList;
   const [activeModal, setActiveModal] = useState(false);
   const [confirmMessage, setConfirmMessage] = useState('');
@@ -133,8 +136,10 @@ export default function SingleItem_OrderHistoryPage({ data }) {
 
     setActiveModal(null);
   };
-
   
+  const onPrevPage = async () => {
+    await router.back();
+  }
   // console.log('전체취소 가능여부: ', availableImmediatelyCancle);
   // console.log('취소기능 활성여부: ', availableCancleState);
   
@@ -389,6 +394,9 @@ export default function SingleItem_OrderHistoryPage({ data }) {
               orderQuery={'orderCancel'}
               option={{ data: data }}
             />
+            <section className={'btn-section'}>
+              <button type={'button'} className={'custom_btn solid basic_l'} onClick={onPrevPage}>돌아가기</button>
+            </section>
           </MypageWrapper>
         </Wrapper>
       </Layout>
