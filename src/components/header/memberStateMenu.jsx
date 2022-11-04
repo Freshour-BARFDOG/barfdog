@@ -7,9 +7,13 @@ export const MemberMemu = ({data}) => {
   return (
     <li>
       {!isAdmin && <span className={s.userClass}>{data.grade}</span>}
-      <span className={s.username}>
-        <em>{data.name}</em>님
-      </span>
+      <Link href="/mypage/orderHistory" passHref>
+        <a>
+          <span className={s.username}>
+            <em>{data.name}</em>님
+          </span>
+        </a>
+      </Link>
     </li>
   );
 };

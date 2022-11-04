@@ -4,7 +4,7 @@
 #site_header {
   position: relative;
   z-index: $site_header;
-  //border-bottom: rem(1) solid var(--color-line-03);
+  border-bottom: rem(1) solid var(--color-line-03);
   svg {
     display: block;
   }
@@ -74,7 +74,6 @@
         top: rem(-1);
       }
       .username {
-        cursor: default;
         em {
           font-weight: 500;
           margin-right: rem(3);
@@ -216,12 +215,12 @@
     -webkit-tap-highlight-color : transparent !important;
     animation: top .4s ease-in-out .25s 1 forwards;
     transition: bottom .25s;
-    &:hover {
-      bottom: rem(110);
-    }
+    // &:hover {
+    //   bottom: rem(110);
+    // }
 
     &:active {
-      bottom: rem(100);
+      bottom: rem(90);
     }
   }
 }
