@@ -81,7 +81,7 @@ export default function CartPage({ data, error }) {
   const [selectedItemBasketIds, setSelectedItemBasketIds] = useState([]);
   const [isLoading, setIsLoading] = useState({});
   
-  
+  console.log(DATA);
   
   useEffect(() => {
     // 체크박스 항목이 변경되엇을 떄 =>update Calculator (상품금액, 배송비, 할인금액, 총주문금액)
@@ -123,7 +123,7 @@ export default function CartPage({ data, error }) {
     
       const sumOfTotalPrice = calcTotalPriceOfTargetKey('totalPrice', nextBasketDtoList); // 기본할인이 적용된 가격
       const nextSubtractedPrice = calcTotalPriceOfTargetKey('subtractedPrice', nextBasketDtoList) // 할인정도
-      const ntextDeliveryFee = sumOfTotalPrice >= deliveryConstant.freeCondition ? 0 : deliveryConstant.price;
+      const nextDeliveryPrice = sumOfTotalPrice >= deliveryConstant.freeCondition ? 0 : deliveryConstant.price;
       // console.log(nextSubtractedPrice)
       // console.log(sumOfTotalPrice)
       
@@ -133,8 +133,8 @@ export default function CartPage({ data, error }) {
         total: {
           originPrice: sumOfTotalPrice + nextSubtractedPrice, // 상품 원금 총합
           subtractedPrice: nextSubtractedPrice, // 할인금액 총합
-          deliveryFee: ntextDeliveryFee, // 배송비 총합
-          finalPrice: sumOfTotalPrice + ntextDeliveryFee, // 총 주문금액 총합
+          deliveryFee: nextDeliveryPrice, // 배송비 총합
+          finalPrice: sumOfTotalPrice + nextDeliveryPrice, // 총 주문금액 총합
           // ! important '전체 상품'합계가 무료배송 조건에 부합할 시, 모든 상품 배송비 무료
         },
       };
@@ -443,7 +443,7 @@ export default function CartPage({ data, error }) {
                           +
                         </button>
                       </em>
-                      <span className={s.price}>{transformLocalCurrency(item.finalPrice)}원</span>
+                      <span className={s.price}>{transformLocalCurrency(item.totalPrice)}원</span>
                     </span>
                     <CloseButton
                       onClick={onDeleteItem}
