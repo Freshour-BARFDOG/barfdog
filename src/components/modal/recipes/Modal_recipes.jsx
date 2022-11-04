@@ -7,7 +7,6 @@ import getElemIdx from "/util/func/getElemIdx.js";
 import rem from "/util/func/rem";
 import styled from "styled-components";
 import CloseButton from "/src/components/atoms/CloseButton";
-
 const indicatorAniDirection = "left"; // 이동 기준
 const initialActiveMenuIdx = 0; // 최초 활성화 탭
 const Indicator = styled.i`
@@ -15,11 +14,31 @@ const Indicator = styled.i`
   bottom: 0;
   ${indicatorAniDirection}:0; // 초기 위치
   width: ${rem(107)};
-  background-color: var(--color-main);
+  background-color: ${(props) => props.MENU_BAR.MENU_BAR};
   height: ${rem(3)};
   transition: ${indicatorAniDirection} 0.3s ease;
 `;
+// background-color: ${props => props.MENU_BAR || 0};
+// background-color: ${(props) => props.MENU_BAR.MENU_BAR};
 
+// background-color: ${function(MENU_BAR){
+//   console.log(MENU_BAR);
+//   const [background, setBackground] = useState(MENU_BAR);
+//   return 
+//   'style.MENU_BAR'
+// }};
+
+// background-color: ${function(background){
+//   console.log(background);
+//   return 'background';
+// }};
+
+// background-color: ${function(MENU_BAR){
+//   console.log(MENU_BAR);
+//   const [background, setBackground] = useState(MENU_BAR);
+//   return 
+//   style: {MENU_BAR()}
+// }};
 
 const Modal_recipes = ({ data, selectedIndex, onHideModal, isActiveModal, setIsActiveModal }) => {
 
@@ -92,8 +111,8 @@ const Modal_recipes = ({ data, selectedIndex, onHideModal, isActiveModal, setIsA
     // setContHeightInScrollContainer(contHeight);
   }
 
-
-
+ 
+  const [background, setBackground] = useState(MENU_BAR);
 
   const indicatorMove = (index) => {
     if (!indicatorRef.current) return;
@@ -123,6 +142,8 @@ const Modal_recipes = ({ data, selectedIndex, onHideModal, isActiveModal, setIsA
 
   const TITLE_KO = data.title_ko[selectedIndex];
   const TITLE_EN = data.title_en[selectedIndex];
+  
+  const MENU_BAR = data.menu_bar[selectedIndex];
 
   const IMAGE_MODULE = data.imagelink[selectedIndex];
 
@@ -131,6 +152,10 @@ const Modal_recipes = ({ data, selectedIndex, onHideModal, isActiveModal, setIsA
   const Tab3Component = data.component.tab3[selectedIndex];
   const Tab4Component = data.component.tab4[selectedIndex];
 
+  // const [background, setBackground] = useState(MENU_BAR);
+  // console.log(TITLE_KO)
+  // console.log(MENU_BAR)
+  // console.log(selectedIndex)
   return (
     <>
       <ModalWrapper
@@ -150,7 +175,7 @@ const Modal_recipes = ({ data, selectedIndex, onHideModal, isActiveModal, setIsA
             </section>
             <section className={s["tabmenu-section"]}>
               <nav className={s.tabmenu}>
-                <Indicator ref={indicatorRef} data-title="indicator" />
+                <Indicator MENU_BAR={{MENU_BAR}} ref={indicatorRef} data-title="indicator" />
                 <ul ref={menuRef}>
                   <li className={s.active} onClick={onClickHandler}>
                     영양포인트

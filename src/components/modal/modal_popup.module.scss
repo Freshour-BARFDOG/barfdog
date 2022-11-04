@@ -61,7 +61,8 @@ $popupHoverZindex : 99999; // 팝업에 마우스 올렸을 경우, 다른 모�
 
 @media (max-width: rem(1800)) {
   #modal_popup {
-    width: calc(33.333% - #{rem(10)});
+    // width: calc(33.333% - #{rem(10)});
+    width: 80%;
   }
 }
 

@@ -35,9 +35,9 @@ const MessageBody = styled.pre`
   border: ${(props) => (props.theme === 'white' ? `${rem(1)} solid var(--color-line-04)` : 'none')};
   position: absolute;
   z-index: 10;
-  right: -${rem(30)};
+  left: 50%;
   bottom: -${rem(10)};
-  transform: translate(0, 100%);
+  transform: translate(-50%, 100%);
   border-radius: ${rem(4)};
   box-sizing: border-box;
   //min-width: ${rem(200)};
@@ -101,9 +101,7 @@ const ToolTip = ({
   };
 
   const onClickHandler = () => {
-    if (onClick && typeof onClick === 'function') {
-      onClick();
-    }
+    setIsActive(true);
   };
 
   const functionOne = event =>{
@@ -115,9 +113,9 @@ const ToolTip = ({
       <Wrap {...props}>
         <Icon
           style={iconStyle}
-          onMouseEnter={onMouseEnterHandler}
-          onMouseLeave={onMouseLeaveHandler}
-          onClick={onClick && onClickHandler}
+          // onMouseEnter={onMouseEnterHandler}
+          // onMouseLeave={onMouseLeaveHandler}
+          onClick={onClickHandler}
         >
           {typeof onClick === 'function' ? '?' : 'i'}
         </Icon>

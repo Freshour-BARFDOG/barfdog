@@ -2,7 +2,7 @@
 @import '/styles/global/guide';
 
 section.title { padding : rem(5) 0 rem(20) }
-section.coupon_state_section { padding: rem(78) 0 0 0}
+section.coupon_state_section { padding: rem(78) 0 rem(50) 0}
 section.pageline { padding: rem(40) 0 0 0}
 
 
@@ -86,7 +86,6 @@ section.pageline { padding: rem(40) 0 0 0}
   .grid_box {
     display: grid;
     justify-content: space-between;
-    align-items: center;
     grid-template-columns: 1fr rem(150);
     border: rem(1) solid  var(--color-line-04);
     padding: rem(20) rem(30) rem(30) rem(30);
@@ -99,6 +98,8 @@ section.pageline { padding: rem(40) 0 0 0}
       @include char(t24);
       font-weight: 600;
       color: var(--color-main);
+      display: flex;
+      align-items: center;
     }
     .right_top {
       font-size: rem(36);
@@ -141,6 +142,7 @@ section.pageline { padding: rem(40) 0 0 0}
   .right_bot {
     display: flex;
     justify-content: right;
+    align-items: flex-end;
     button.useCoupon{
       font-size: rem(15);
       color: #fff;
@@ -158,9 +160,10 @@ section.pageline { padding: rem(40) 0 0 0}
 }
 
 
-@media (max-width: rem(1000)) {
+@media (max-width: rem(1100)) {
   .coupon_content_grid_box {
     grid-template-columns: 1fr;
+    max-width: rem(560);
   }
 }
 

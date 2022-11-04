@@ -36,6 +36,7 @@ import {Modal_cont_ingredient_total_04} from "/src/components/modal/recipes/Moda
 const DATA = {
   title_ko: ["STARTER PREMIUM", "TURKEY&BEEF", "DUCK&LAMB", "LAMB&BEEF"],
   title_en: ["스타터프리미엄", "터키앤비프", "덕앤램", "램앤비프"],
+  menu_bar: ['#ca1011', '#FF3232', '#FF4921', '#FF8C16'],
   imagelink: [
     // * require(): component 내부에서 data를 전달받을 경우 랜더링 오류 발생(Runtime Error)
     require("/public/img/recipes/starter.png"),
@@ -600,16 +601,22 @@ export function Swiper_card() {
 
   const swiperSettings_card = {
     className: `${s.swiper_card}`,
-    loop: true,
+    //loop: true,
     spaceBetween: 0,
-    centeredSlides: false,
+    centeredSlides: true,
+    loopAdditionalSlides: 5,
     slidesPerView: 'auto',
+    initialSlide: 1,
     cardsEffect: {
       slideShadows: false,
       perSlideOffset: 5,
-      perSlideRotate: 3,
+      //perSlideRotate: 3,
+
+      perSlideOffset: 10,
+      // rotate: false,
+      // perSlideRotate: 0
     },
-    autoplay: {delay: 2500, disableOnInteraction: false},
+    autoplay: {delay: 3500, disableOnInteraction: false},
     modules: [EffectCards, Autoplay],
   };
 
@@ -630,6 +637,7 @@ export function Swiper_card() {
         <SwiperSlide className={s.swiper_card_box}>
             <div className={s.swiper_sns_img}>
               <Image
+                //src={require('/public/img/testBanner3.png')}
                 src={require('/public/img/recipes_top1.png')}
                 objectFit="cover"
                 width={488}
@@ -654,6 +662,7 @@ export function Swiper_card() {
         <SwiperSlide className={s.swiper_card_box}>
             <div className={s.swiper_sns_img}>
               <Image
+                //src={require('/public/img/recipe_ingredients.png')}
                 src={require('/public/img/recipes_top1.png')}
                 objectFit="cover"
                 width={488}

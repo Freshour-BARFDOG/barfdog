@@ -21,6 +21,7 @@ import Logo from '/public/img/logo(HQ).png';
 import Logo_2x from '/public/img/logo@2x.png';
 import MobileLogo from '/public/img/mobile_logo.png';
 import MobileLogo_2x from '/public/img/mobile_logo@2x.png';
+import Topbutton from '/public/img/topbutton.png';
 import Icon_Home from '/public/img/icon/icon-home.svg';
 import Icon_mypage from '/public/img/icon/mypage.svg';
 import { authAction } from '/store/auth-slice';
@@ -139,6 +140,7 @@ export default function Header() {
                 </nav>
                 <Gnb_my isMobile={isMobile} setSidrOpen={setIsSidrOpen} authData={auth} />
               </section>
+              <TopButton />
             </div>
           )}
         </Wrapper>
@@ -146,6 +148,7 @@ export default function Header() {
       {isMobile && !mypageState.isMyPage && <MobileGnb />}
       {isMobile && <MobileSidr isOpen={isSidrOpen} setSidrOpen={setIsSidrOpen} />}
       <Modal_subscribeWidhSSR />
+     
     </>
   );
 }
@@ -200,3 +203,59 @@ export const Gnb_my = ({ isMobile, setSidrOpen, authData }) => {
     </>
   );
 };
+
+
+function TopButton() {
+  const [showButton, setShowButton] = useState(false);
+  const [pageY, setPageY] = useState(0);
+
+  // 스크롤 최상단 이동
+  const scrollToTop = () => {
+    window.scroll({
+        top: 0,
+        behavior: 'smooth'
+    })
+  }
+
+  // 스크롤 0이상일때 나타남
+  // useEffect(() => {
+  //   const handleShowButton = () => {
+  //       if (window.scrollY > 0) {
+  //           setShowButton(true)
+  //       } else {
+  //           setShowButton(false)
+  //       }
+  //   }
+
+  //   console.log(window.scrollY)
+  //   window.addEventListener("scroll", handleShowButton)
+  //   return () => {
+  //       window.removeEventListener("scroll", handleShowButton)
+  //   }
+  // }, [])
+
+  // 스크롤 올릴때 나타남
+  useEffect(() => {
+    const handleScroll = () => {
+    const { pageYOffset } = window;
+    const deltaY = pageYOffset - pageY;
+    const showButton = pageYOffset !== 0 && deltaY <= 0;
+    //const showButton = pageYOffset > 200 && deltaY <= 0;
+    setShowButton(showButton);
+    setPageY(pageYOffset);
+  };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [pageY]);
+
+  return showButton && (
+    <section className={s.tobox}>
+        <button className={s.topbutton} id="top" onClick={scrollToTop} type="button">
+          <div className={s.image_wrap}>
+          <Image src={Topbutton} width={42} height={52} alt="Tob" priority />
+          </div>
+        </button>
+    </section>
+  )
+}
