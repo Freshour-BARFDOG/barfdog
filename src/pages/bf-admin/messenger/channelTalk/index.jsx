@@ -9,7 +9,8 @@ import ChannelTalkMemberList from './ChannelTalkMemberList';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import Spinner from '/src/components/atoms/Spinner';
 import enterKey from "/util/func/enterKey";
-import Tooltip from "../../../../components/atoms/Tooltip";
+import Tooltip from "/src/components/atoms/Tooltip";
+import {useRouter} from "next/router";
 
 export default function ChannelTalkPage() {
   
@@ -17,7 +18,7 @@ export default function ChannelTalkPage() {
   const searchPageSize = 10;
   const [isLoading, setIsLoading] = useState({});
   const [searchValues, setSearchValues] = useState({});
-  const [searchBody, setSearchBody] = useState(null);
+  const [searchQuery, setSearchQuery] = useState(null);
   const [itemList, setItemList] = useState([]);
 
 
@@ -45,12 +46,18 @@ export default function ChannelTalkPage() {
   };
 
   const onSearchHandler = () => {
-    const body = {
-      name: searchValues.name,
-      email: searchValues.email,
-      phoneNumber: searchValues.phoneNumber,
-    };
-    setSearchBody(body);
+    let type = 'name';
+    let value = '';
+    for (const key in searchValues) {
+      const val = searchValues[key];
+      if(val){
+        type = key;
+        value = val;
+        break;
+      }
+    }
+    const query = `value=${value}&type=${type}`;
+    setSearchQuery(query);
   };
 
   const onResetSearchValues = (e) => {
@@ -129,7 +136,8 @@ export default function ChannelTalkPage() {
                 pageInterceptor={pageInterceptor}
                 setItemList={setItemList}
                 setIsLoading={setIsLoading}
-                option={{ apiMethod: 'GET', body: searchBody }}
+                option={{ apiMethod: 'GET', initialize: searchQueryInitialize }}
+                urlQuery={searchQuery}
               />
             </div>
           </section>
@@ -138,126 +146,3 @@ export default function ChannelTalkPage() {
     </>
   );
 }
-
-
-//
-// export async function getServerSideProps () {
-//   let DATA = null;
-//
-//   try {
-//     const res = await axios({
-//       method: 'GET',
-//       url: 'https://api.channel.io/open/v5/user-chats?state=opened&sortOrder=desc&limit=25',
-//       headers: {
-//         'Content-Type': 'application/json',
-//         'x-access-key': process.env.NEXT_PUBLIC_CHANNEL_ACCESS_KEY,
-//         'x-access-secret': process.env.NEXT_PUBLIC_CHANNEL_ACCESS_SECRET,
-//       },
-//     });
-//     console.log(res);
-//     if(res.status === 200){
-//       DATA = res.data
-//     }
-//   } catch (err) {
-//     console.error(err);
-//   }
-//
-//
-//   return {
-//     props:{
-//       data: DATA
-//     }
-//   }
-// }
-
-
-
-
-const DUMMY_RES = {
-  data: {
-    _embedded: {
-      queryAdminGuestDtoList: [
-        {
-          guestName: '나관리',
-          guestEmail: 'admin@gmail.com',
-          guestPhoneNumber: '01098761234',
-          createdDate: '2022-08-24T10:05:44.308',
-          memberId: 8,
-          memberName: '관리자',
-          memberEmail: 'admin@gmail.com',
-          memberPhoneNumber: '01056785678',
-          joinDate: '2022-08-24T10:05:42.562',
-          firstPaymentDate: '2022-08-24T10:05:44.293',
-          paid: true,
-          _links: {
-            query_member: {
-              href: 'http://localhost:8080/api/admin/members/8',
-            },
-          },
-        },
-        {
-          guestName: '나유저',
-          guestEmail: 'user@gmail.com',
-          guestPhoneNumber: '01011112222',
-          createdDate: '2022-08-24T10:05:44.307',
-          memberId: 10,
-          memberName: '김회원',
-          memberEmail: 'user@gmail.com',
-          memberPhoneNumber: '01099038544',
-          joinDate: '2022-08-24T10:05:42.718',
-          firstPaymentDate: '2022-08-24T10:05:44.293',
-          paid: true,
-          _links: {
-            query_member: {
-              href: 'http://localhost:8080/api/admin/members/10',
-            },
-          },
-        },
-        {
-          guestName: '나그네',
-          guestEmail: 'nagne@gmail.com',
-          guestPhoneNumber: null,
-          createdDate: '2022-08-24T10:05:44.307',
-          memberId: null,
-          memberName: null,
-          memberEmail: null,
-          memberPhoneNumber: null,
-          joinDate: null,
-          firstPaymentDate: null,
-          paid: false,
-          _links: {
-            query_member: {
-              href: 'http://localhost:8080/api/admin/members/10',
-            },
-          },
-        },
-      ],
-    },
-    _links: {
-      first: {
-        href: 'http://localhost:8080/api/admin/guests?page=0&size=2',
-      },
-      prev: {
-        href: 'http://localhost:8080/api/admin/guests?page=0&size=2',
-      },
-      self: {
-        href: 'http://localhost:8080/api/admin/guests?page=1&size=2',
-      },
-      next: {
-        href: 'http://localhost:8080/api/admin/guests?page=2&size=2',
-      },
-      last: {
-        href: 'http://localhost:8080/api/admin/guests?page=3&size=2',
-      },
-      profile: {
-        href: '/docs/index.html#resources-query-admin-guests',
-      },
-    },
-    page: {
-      size: 10,
-      totalElements: 3,
-      totalPages: 1,
-      number: 1,
-    },
-  },
-};
