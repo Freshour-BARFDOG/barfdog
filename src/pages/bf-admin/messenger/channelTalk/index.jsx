@@ -20,30 +20,44 @@ export default function ChannelTalkPage() {
   const [searchValues, setSearchValues] = useState({});
   const [searchQuery, setSearchQuery] = useState(null);
   const [itemList, setItemList] = useState([]);
-
-
+  const [searchQueryInitialize, setSearchQueryInitialize] = useState( false );
+  
+  
   const pageInterceptor = (res) => {
     // res = DUMMY_RES; //  ! TEST
     console.log(res);
-    let newPageInfo;
-    let pageData;
-    let curItemList;
-    if (res) {
-      pageData = res?.data?.page;
-      curItemList = res.data?._embedded?.queryAdminGuestDtoList || [];
-    }
-
-    newPageInfo = {
-      totalPages: pageData?.totalPages,
-      size: pageData?.size,
-      totalItems: pageData?.totalElements,
-      currentPageIndex: pageData?.number,
-      newPageNumber: pageData?.number + 1,
-      newItemList: curItemList || [],
+    let newPageInfo = {
+      totalPages:0,
+      size:0,
+      totalItems:0,
+      currentPageIndex:0,
+      newPageNumber: 0,
+      newItemList: [],
     };
-    console.log('newPageInfo: ', newPageInfo);
+  
+    const newItemList = res?.data._embedded?.queryAdminGuestDtoList || [];
+    const hasItem = newItemList.length > 0
+    if (hasItem) {
+      const pageData = res.data.page;
+      newPageInfo = {
+        totalPages: pageData?.totalPages,
+        size: pageData?.size,
+        totalItems: pageData?.totalElements,
+        currentPageIndex: pageData?.number,
+        newPageNumber: pageData?.number + 1,
+        newItemList: newItemList,
+      };
+    
+    }
+    
+    const active = !hasItem;
+    initSearchQuery(active);
     return newPageInfo;
   };
+  
+  const initSearchQuery = (active = false)=>{
+    setSearchQueryInitialize(active);
+  }
 
   const onSearchHandler = () => {
     let type = 'name';
