@@ -37,14 +37,12 @@ const checkboxList = [
 
 export const SubscribeCancle = ({ subscribeInfo }) => {
   // console.log(subscribeInfo);
-
   const initialFormValues = {
     reasonList: [],
     enteredReason: '',
   };
 
   const mct = useModalContext();
-  const tbContext = useContext(ToggleBoxContext);
   const [form, setForm] = useState(initialFormValues);
   const [isLoading, setIsLoading] = useState(false);
   const [activeConfirmModal, setActiveConfirmModal] = useState(false);
@@ -64,40 +62,6 @@ export const SubscribeCancle = ({ subscribeInfo }) => {
     }
   };
 
-  const onSubmit = async (confirm) => {
-    if (!confirm) return setActiveConfirmModal(false);
-    if (submitted) return console.error('이미 제출된 양식입니다.');
-
-    const body = {
-      reasonList: form.reasonList.map((reason) =>
-        reason === '기타' ? form.enteredReason : reason,
-      ),
-    };
-
-    try {
-      setIsLoading(true);
-      const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/stop`;
-      const res = await postObjData(url, body);
-      console.log(res);
-      // if (!res.isDone) { // ! TEST CODE //
-        if (res.isDone) {  // ! PRODUCT CODE //
-        setSubmitted(true);
-        mct.alertShow('구독이 취소되었습니다.');
-      } else {
-        mct.alertShow(`데이터 전송 실패\n${res.error}`);
-      }
-      setActiveConfirmModal(false);
-    } catch (err) {
-      console.error('err: ', err);
-    }
-    setIsLoading(false);
-  };
-
-  const onSuccessChangeSubscribeOrder = () => {
-    setIsLoading({ reload: true });
-    mct.alertHide();
-    window.location.reload();
-  };
 
   const onCheckboxValueChange = (checked, id) => {
     const selectedCheckbox = checkboxList.filter((checkbox) => checkbox.id === id)[0];
@@ -133,7 +97,44 @@ export const SubscribeCancle = ({ subscribeInfo }) => {
       [id]: value,
     }));
   };
-
+  
+  
+  
+  const onSubmit = async (confirm) => {
+    if (!confirm) return setActiveConfirmModal(false);
+    if (submitted) return console.error('이미 제출된 양식입니다.');
+    
+    const body = {
+      reasonList: form.reasonList.map((reason) =>
+        reason === '기타' ? form.enteredReason : reason,
+      ),
+    };
+    
+    try {
+      setIsLoading(true);
+      const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/stop`;
+      const res = await postObjData(url, body);
+      console.log(res);
+      // if (!res.isDone) { // ! TEST CODE //
+      if (res.isDone) {  // ! PRODUCT CODE //
+        setSubmitted(true);
+        mct.alertShow('구독이 취소되었습니다.', onSuccessChangeSubscribeOrder);
+      } else {
+        mct.alertShow(`데이터 전송 실패\n${res.error}`);
+      }
+      setActiveConfirmModal(false);
+    } catch (err) {
+      console.error('err: ', err);
+    }
+    setIsLoading(false);
+  };
+  
+  const onSuccessChangeSubscribeOrder = () => {
+    setIsLoading({ reload: true });
+    mct.alertHide();
+    window.location.reload();
+  };
+  
   return (
     <>
       {isLoading.reload && <FullScreenLoading />}
@@ -179,12 +180,12 @@ export const SubscribeCancle = ({ subscribeInfo }) => {
       {activeConfirmModal && (
         <Modal_confirm text={`구독을 취소하시겠습니까?`} isConfirm={onSubmit} positionCenter />
       )}
-      {tbContext.visible && (
-        <Modal_global_alert
-          onClick={submitted ? onSuccessChangeSubscribeOrder : mct.alertHide}
-          background
-        />
-      )}
+      {/*{tbContext.visible && (*/}
+      {/*  <Modal_global_alert*/}
+      {/*    onClick={submitted ? onSuccessChangeSubscribeOrder : mct.alertHide}*/}
+      {/*    background*/}
+      {/*  />*/}
+      {/*)}*/}
     </>
   );
 };

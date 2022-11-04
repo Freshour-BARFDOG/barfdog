@@ -101,18 +101,16 @@ export const SubscribePlan = ({ subscribeInfo }) => {
     },
   ];
   const mct = useModalContext();
-  const tbContext = useContext(ToggleBoxContext);
   const initialMemberPlanName = subscribeInfo.info.planName;
   const [selectedPlanName, setSelectedPlanName] = useState(initialMemberPlanName);
   const [submitted, setSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [activeConfirmModal, setActiveConfirmModal] = useState(false);
-  const [modalMessage, setModalMessage] = useState('');
 
   const onActiveConfirmModal = (e) => {
     // ! validation : 처음과 동일한 플랜일 경우
     if (selectedPlanName === initialMemberPlanName) {
-      onShowModal('기존과 동일한 플랜입니다.');
+      mct.alertShow('기존과 동일한 플랜입니다.');
     } else {
       setActiveConfirmModal(true);
     }
@@ -138,9 +136,9 @@ export const SubscribePlan = ({ subscribeInfo }) => {
       // if (!res.isDone) { // ! TEST CODE //
         if (res.isDone) {  // ! PRODUCT CODE //
         setSubmitted(true);
-        onShowModal('플랜 변경이 완료되었습니다.');
+          mct.alertShow('플랜 변경이 완료되었습니다.',onSuccessChangeSubscribeOrder);
       } else {
-        onShowModal(`데이터 전송 실패\n${res.error}`);
+          mct.alertShow(`데이터 전송 실패\n${res.error}`);
       }
       setActiveConfirmModal(false);
     } catch (err) {
@@ -149,14 +147,7 @@ export const SubscribePlan = ({ subscribeInfo }) => {
     setIsLoading(false);
   };
 
-  const onShowModal = (message) => {
-    if (message) mct.alertShow(message);
-    setModalMessage(message);
-  };
-  const onHideModal = () => {
-    setModalMessage('');
-    mct.alertHide();
-  };
+
 
   const onSuccessChangeSubscribeOrder = () => {
     setIsLoading({ reload: true });
@@ -238,13 +229,13 @@ export const SubscribePlan = ({ subscribeInfo }) => {
           positionCenter
         />
       )}
-      {tbContext.visible && (
-        <Modal_global_alert
-          message={modalMessage}
-          onClick={submitted ? onSuccessChangeSubscribeOrder : onHideModal}
-          background
-        />
-      )}
+      {/*{tbContext.visible && (*/}
+      {/*  <Modal_global_alert*/}
+      {/*    message={modalMessage}*/}
+      {/*    onClick={submitted ? onSuccessChangeSubscribeOrder : onHideModal}*/}
+      {/*    background*/}
+      {/*  />*/}
+      {/*)}*/}
     </>
   );
 };

@@ -60,12 +60,12 @@ export const SubscribeSkipPayment = ({subscribeInfo}) => {
       setIsLoading(true);
       const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/skip/${skipType}`;
       const res = await postObjData(url, body);
-      console.log(res);
+      // console.log(res);
       // if (!res.isDone) {
         // ! TEST CODE //
         if (res.isDone) {  // ! PRODUCT CODE //
         setSubmitted(true);
-        mct.alertShow('구독 건너뛰기가 적용되었습니다.');
+        mct.alertShow('구독 건너뛰기가 적용되었습니다.',onSuccessChangeSubscribeOrder);
       } else {
         mct.alertShow(`데이터 전송 실패\n${res.error}`);
       }
@@ -82,19 +82,10 @@ export const SubscribeSkipPayment = ({subscribeInfo}) => {
     window.location.reload();
   };
   
-  console.log(subscribeInfo);
-  // 다음 결제예정일과 오늘을 비교한다 ==> 5일이내일 경우 구독버튼 나타나게한다 //
+  // console.log(subscribeInfo);
+  
 
   
-  
-  function isAvailableSubscribeSkipping(nextPaymentDate) {
-    // TEST : nextPaymentDate '2022-09-01T23:00:10.466'
-    const today = transformToday();
-    const getDiffDate = getDiffDateNumber(nextPaymentDate, today);
-    console.log(getDiffDate)
-    const availableSkipDate = 5;
-    return getDiffDate <= availableSkipDate;
-  }
   return (
     <>
       {isLoading.reload && <FullScreenLoading />}
@@ -135,7 +126,9 @@ export const SubscribeSkipPayment = ({subscribeInfo}) => {
           </div>
         </div>
 
+        
         <div className={s.btn_box}>
+          {/*  오늘과 다음 결제예정일 비교 ==> 5일이내일 경우 구독버튼 나타남 */}
           {isAvailableSubscribeSkipping(subscribeInfo.info.nextPaymentDate) ? <button type={'button'} className={s.btn} onClick={()=>{
             setActiveConfirmModal(true);
           }}>건너뛰기 적용하기</button> : <span className={'pointColor'}>건너뛰기는 다음 결제 5일 전부터 가능합니다.</span>}
@@ -146,15 +139,25 @@ export const SubscribeSkipPayment = ({subscribeInfo}) => {
           const selectedIndex =  inputIdList.indexOf(skipCount);
           const skipMethodName = inputLabelList.filter((label,index)=>index === selectedIndex)[0];
           const skipWeeklyCount = inputIdList[selectedIndex].split('-')[1];
-          return `건너뛰기 해지는 구독취소&재결제해야합니다.\n정말 ${skipMethodName}(${skipWeeklyCount}주)를 적용하시겠습니까?`;
+          return `건너뛰기 해지는 구독취소후 재결제해야합니다.\n정말 ${skipMethodName}(${skipWeeklyCount}주)를 적용하시겠습니까?`;
         })()}`} isConfirm={onSubmit} positionCenter option={{wordBreak: true}} />
       )}
-      {tbContext.visible && (
-        <Modal_global_alert
-          onClick={submitted ? onSuccessChangeSubscribeOrder : mct.alertHide}
-          background
-        />
-      )}
+      {/*{tbContext.visible && (*/}
+      {/*  <Modal_global_alert*/}
+      {/*    onClick={submitted ? onSuccessChangeSubscribeOrder : mct.alertHide}*/}
+      {/*    background*/}
+      {/*  />*/}
+      {/*)}*/}
     </>
   );
 };
+
+
+
+function isAvailableSubscribeSkipping(nextPaymentDate) {
+  // TEST : nextPaymentDate '2022-09-01T23:00:10.466'
+  const today = transformToday();
+  const getDiffDate = getDiffDateNumber(nextPaymentDate, today);
+  const availableSkipDate = 5;
+  return getDiffDate <= availableSkipDate;
+}

@@ -64,6 +64,7 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
   // console.log(selectedRadio)
   // console.log(selectedCheckbox)
   // console.log(subscribeInfo);
+  // console.log(tbContext)
 
   async function getRecommendRecipe(dogId) {
     if (!dogId) return console.error('Required User Dog Id');
@@ -140,7 +141,7 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
     });
     const maxSelectedCheckboxCount = 2;
     if (selectedCheckboxCount > maxSelectedCheckboxCount) {
-      onShowModal('풀플랜은 최대 2개 레시피를 선택할 수 있습니다.');
+      mct.alertShow('풀플랜은 최대 2개 레시피를 선택할 수 있습니다.');
       setInitialize(true);
       setSelectedIdList([]);
     } else {
@@ -172,9 +173,9 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
     // console.log(subscribeInfo.recipe)
     const isTheSameArray = valid_isTheSameArray(selectedIdList, subscribeInfo.recipe.idList);
     if (subscribeInfo.recipe.soldOut) {
-      onShowModal('품절된 레시피가 존재합니다.');
+      mct.alertShow('품절된 레시피가 존재합니다.');
     } else if (isTheSameArray) {
-      onShowModal('기존과 동일한 레시피입니다.');
+      mct.alertShow('기존과 동일한 레시피입니다.');
     } else {
       setActiveConfirmModal(true);
     }
@@ -204,9 +205,9 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
       if (res.isDone) {
         // ! PRODUCT CODE //
         setSubmitted(true);
-        onShowModal('레시피 변경이 완료되었습니다.');
+        mct.alertShow('레시피 변경이 완료되었습니다.', onSuccessChangeSubscribeOrder);
       } else {
-        onShowModal(`데이터 전송 실패\n${res.error}`);
+        mct.alertShow(`데이터 전송 실패\n${res.error}`);
       }
       setActiveConfirmModal(false);
     } catch (err) {
@@ -216,12 +217,12 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
   };
 
   const onShowModal = (message) => {
-    if (message) mct.alertShow();
-    setModalMessage(message);
+    if (message) mct.alertShow(message);
+    // setModalMessage(message);
   };
   const onHideModal = () => {
-    setModalMessage('');
-    mct.alertHide();
+    // setModalMessage('');
+    mct.alertHide('');
   };
 
   const onSuccessChangeSubscribeOrder = () => {
@@ -345,13 +346,12 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
           positionCenter
         />
       )}
-      {tbContext.visible && (
-        <Modal_global_alert
-          message={modalMessage}
-          onClick={submitted ? onSuccessChangeSubscribeOrder : onHideModal}
-          background
-        />
-      )}
+      {/*{tbContext.visible && (*/}
+      {/*  <Modal_global_alert*/}
+      {/*    onClick={submitted ? onSuccessChangeSubscribeOrder : mct.alertHide}*/}
+      {/*    background*/}
+      {/*  />*/}
+      {/*)}*/}
     </>
   );
 };
