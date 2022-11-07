@@ -61,7 +61,7 @@ section.title{ padding : rem(8) 0 rem(30);}
 
   .item-container {
     display: grid;
-    grid-template-columns: 1fr rem(160) rem(140);
+    grid-template-columns: 1fr 15% rem(140);
     align-items: center;
     padding: rem(10) 0;
 
@@ -87,6 +87,7 @@ section.title{ padding : rem(8) 0 rem(30);}
           .last_text {
             @include char(l18);
             font-weight: 500;
+            word-break: keep-all;
           }
         }
 
@@ -108,6 +109,8 @@ section.title{ padding : rem(8) 0 rem(30);}
 
     .mid_box {
       text-align: center;
+      max-width: rem(100);
+      word-break: keep-all
     }
     .right_box {
       @include char(l15);
@@ -165,7 +168,7 @@ section.title{ padding : rem(8) 0 rem(30);}
 
   .content_body {
     display: grid;
-    grid-template-columns: 1fr rem(160) rem(140);
+    grid-template-columns: 1fr 15% rem(140);
     align-items: center;
     padding-bottom: rem(10);
 
@@ -210,6 +213,7 @@ section.title{ padding : rem(8) 0 rem(30);}
             margin-left: rem(6);
             @include char(l18);
             font-weight: 500;
+            word-break: keep-all;
           }
         }
 
@@ -230,6 +234,8 @@ section.title{ padding : rem(8) 0 rem(30);}
 
     .mid_box {
       text-align: center;
+      max-width: rem(100);
+      word-break: keep-all;
     }
 
     .right_box {
@@ -287,6 +293,8 @@ section.title{ padding : rem(8) 0 rem(30);}
     
       .mid_box {
         text-align: left;
+        width: 100%;
+        max-width: 100%;
         top: 0;
         left: 0;
         position: absolute;
@@ -334,6 +342,7 @@ section.title{ padding : rem(8) 0 rem(30);}
 
       .mid_box {
         width: 100%;
+        max-width: 100%;
         top: 0;
         left: 0;
         position: absolute;

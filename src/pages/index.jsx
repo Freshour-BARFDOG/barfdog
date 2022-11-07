@@ -299,9 +299,6 @@ export default function MainPage({ data }) {
                     해본적 있으신가요?
                   </h2>
                   <p className={s.subtitle}>
-                    {/* 생고기, 칼슘이 풍부한 뼈, 신선한 야채를 완벽한 비율으로 구성해 반려견이 필요한
-                    영양분을 골고루 섭취할 수 있습니다.완벽한 비율으로 구성해 반려견이 필요한
-                    영양분을 골고루섭취할 수 있습니다. 완벽한 비율으로 */}
                     반려견이 평생 다양한 '사료'만 먹는다는 것은
                     인스턴트 음식만 평생 먹는다는 것과 같습니다.
                     <br />
@@ -409,7 +406,7 @@ export default function MainPage({ data }) {
               </p>
               <div className={s.cont_body}>
                 <ul className={s.howtouse_box}>
-                  <li data-aos="fade-up" data-aos-delay="0">
+                  <li data-aos="fade-up" data-aos-delay="0" id="trigger2">
                     <figure className={s.card}>
                       <div className={`${s['img-wrap']} img-wrap`}>
                         <Image
@@ -417,6 +414,7 @@ export default function MainPage({ data }) {
                           objectFit="cover"
                           layout="fill"
                           alt="카드 이미지"
+                          priority
                         />
                       </div>
                       <div className={s.details}>
@@ -429,6 +427,28 @@ export default function MainPage({ data }) {
                       </div>
                     </figure>
                   </li>
+                  <li data-aos="fade-up" data-aos-delay="100" data-aos-anchor="#trigger2" >
+                    <figure className={s.card}>
+                      <div className={`${s['img-wrap']} img-wrap`}>
+                        <Image
+                          src={require('/public/img/pages/home/home_howtouse_2.png')}
+                          objectFit="cover"
+                          layout="fill"
+                          alt="카드 이미지"
+                          priority
+                        />
+                      </div>
+                      <div className={s.details}>
+                        <p className={s.title_1}>STEP 02</p>
+                        <p className={s.title_2}>맞춤형 신선사료 제작</p>
+                        <p className={s.main_text}>
+                          내 반려동물에 딱 맞는 레시피로 신선한 맞춤형 자연식(생식/화식)을
+                          제작합니다. 내 반려동물에 맞는 한끼 정량으로 끼니별 급여가 가능하도록
+                          포장합니다.
+                        </p>
+                      </div>
+                    </figure>
+                  </li>
                   <li data-aos="fade-up" data-aos-delay="100">
                     <figure className={s.card}>
                       <div className={`${s['img-wrap']} img-wrap`}>
@@ -437,6 +457,7 @@ export default function MainPage({ data }) {
                           objectFit="cover"
                           layout="fill"
                           alt="카드 이미지"
+                          priority
                         />
                       </div>
                       <div className={s.details}>
@@ -458,6 +479,7 @@ export default function MainPage({ data }) {
                           objectFit="cover"
                           layout="fill"
                           alt="카드 이미지"
+                          priority
                         />
                       </div>
                       <div className={s.details}>

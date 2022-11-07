@@ -156,3 +156,10 @@
     button:nth-child(1){ background-color: var(--color-line-02); color:#fff;}
   }
 }
+
+
+@media (max-width: rem(600)) {
+  .modal_wrap.global {
+    width: calc(100% - rem(40));
+  }
+}

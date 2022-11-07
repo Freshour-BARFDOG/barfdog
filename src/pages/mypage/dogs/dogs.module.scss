@@ -35,7 +35,7 @@ section.body { padding : rem(120) 0 0 }
 
 .dogInfo-wrap {
   box-sizing: border-box;
-  max-height: rem(180);
+  // max-height: rem(180);
   padding-right: rem(30);
   display: grid;
   grid-template-columns: rem(180) 1fr;
@@ -52,6 +52,9 @@ section.body { padding : rem(120) 0 0 }
     width:100%;
     max-width: rem(120);
     margin: rem(30);
+    grid-column: 1 / span 1;
+    grid-row: 1 / span 2;
+
     .image {
       position: relative;
       width: 100%;
@@ -71,6 +74,8 @@ section.body { padding : rem(120) 0 0 }
 
   .right_box {
     width: 100%;
+    grid-column: 2 / span 1;
+    grid-row: 1 / span 1;
 
     .dog-info {
       display: grid;
@@ -85,7 +90,7 @@ section.body { padding : rem(120) 0 0 }
           font-weight: 600;
           margin-right: rem(7);
           cursor: default;
-
+          word-break: keep-all;
         }
         .tags{
           i{display:inline-flex; align-items: center; justify-content: center;
@@ -126,7 +131,6 @@ section.body { padding : rem(120) 0 0 }
       display: flex;
       color: var(--color-font-sub);
       max-width: rem(290);
-      margin-bottom: rem(23);
       @include char(l15);
 
       button {
@@ -153,8 +157,9 @@ section.body { padding : rem(120) 0 0 }
 
   .select_box{
     width: 100%;
-    grid-column: 2 / span 2;
-    transform: translateY(rem(-80));
+    grid-column: 2 / span 1;
+    grid-row: 2 / span 1;
+    // transform: translateY(rem(-80));
 
     .btn-section {
       display: grid;
