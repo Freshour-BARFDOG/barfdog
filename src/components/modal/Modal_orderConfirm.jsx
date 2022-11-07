@@ -116,7 +116,7 @@ export const Modal_orderConfirm = ({
                 )}
                 {orderType === productType.SUBSCRIBE && (
                   <PureCheckbox id={`orderId-${data.id}`} onClick={onClickCheckbox}>
-                    <p>주문ID: {data.id}</p>
+                    <p>주문ID: {data.merchantUid}</p>
                   </PureCheckbox>
                 )}
               </li>

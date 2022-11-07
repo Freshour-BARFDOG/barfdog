@@ -4,9 +4,9 @@ import CloseButton from '../atoms/CloseButton';
 import React, { useEffect, useState } from 'react';
 import PureCheckbox from '/src/components/atoms/PureCheckbox';
 import { getData } from '/src/pages/api/reqData';
-import Spinner from "/src/components/atoms/Spinner";
-import AmdinErrorMessage from "/src/components/atoms/AmdinErrorMessage";
-import {productType} from "/store/TYPE/itemType";
+import Spinner from '/src/components/atoms/Spinner';
+import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
+import { productType } from '/store/TYPE/itemType';
 
 export const Modal_orderCancleReason = ({
   id,
@@ -14,16 +14,14 @@ export const Modal_orderCancleReason = ({
   setActiveModal,
   onConfirm,
   selectedItemData,
-  modaltype,
 }) => {
   const [allData, setAllData] = useState(selectedItemData);
   const [selectedIdList, setSelectedIdList] = useState([]);
   const [reason, setReason] = useState('');
   const [isLoading, setIsLoading] = useState({});
 
-  // console.log(selectedIdList)
   useEffect(() => {
-    if(orderType !== productType.GENERAL) return; // 일반상품일 경우, orderItemIdList조회를 위해서만 사용함
+    if (orderType !== productType.GENERAL) return; // 일반상품일 경우, orderItemIdList조회를 위해서만 사용함
     try {
       (async () => {
         setIsLoading((prevState) => ({
@@ -54,7 +52,6 @@ export const Modal_orderCancleReason = ({
     }));
   }, [selectedItemData]);
 
-  // console.log(allData);
 
   const onHideModal = () => {
     setActiveModal({
@@ -72,7 +69,7 @@ export const Modal_orderCancleReason = ({
     const { value } = e.currentTarget;
     setReason(value);
   };
-  // console.log(selectedItemData);
+  
 
   const onClickCheckbox = (id, checked) => {
     // console.log(id, checked);
@@ -84,11 +81,7 @@ export const Modal_orderCancleReason = ({
       setSelectedIdList((prevState) => prevState.filter((id) => id !== seletedId));
     }
   };
-
-  // console.log(selectedIdList)
-  // ! 영한씨 > 판매취소 로직 확인 > 이후에 작업 진행
-  // ! 한 주문 내에 상품에 대한 각각의 id가 필요할 경우,
-
+  
   // console.log(allData);
   return (
     <ModalWrapper id={s['modal-cancle']} background positionCenter>
@@ -97,50 +90,60 @@ export const Modal_orderCancleReason = ({
         <h4 className={s.title}>판매취소</h4>
         <span className={s.subtitle}>
           판매사유가 입력된 상품이 포함된 주문은 전체주문취소가 됩니다.
-          <br /> 
-          판매취소사유는 체크박스
-          설정된 상품에 동일하게 적용되며, 현재 보이는 모달에서 체크된 상품이 판매취소처리됩니다.
+          <br />
+          판매취소사유는 체크박스 설정된 상품에 동일하게 적용되며, 현재 보이는 모달에서 체크된
+          상품이 판매취소처리됩니다.
         </span>
       </section>
-      {isLoading.fetching ? <AmdinErrorMessage><Spinner/></AmdinErrorMessage> : <section className={s['body-section']}>
-        <ul className={s['item-wrap']}>
-          {allData.map((data, i) => (
-            <li key={`item-to-be-canceled-${data.id}-${i}`}>
-              {orderType === productType.GENERAL && <><h5 className={s.itemTitle}>주문번호: {data.merchantUid}</h5>
-                <div className={s.itemList}>
-                  {data.orderItemInfoList?.length > 0 &&
-                    data.orderItemInfoList.map((orderIteminfo, i) => (
-                      <div key={`${orderIteminfo.orderItemId}-${i}`}>
-                        <PureCheckbox
-                          id={`orderItemId-${orderIteminfo.orderItemId}`}
-                          onClick={onClickCheckbox}
-                        >
-                          (상품번호: {orderIteminfo.orderItemId}) 상품명: {orderIteminfo.itemName}
-                        </PureCheckbox>
-                      </div>
-                    ))}
-                </div></>}
-              {orderType === productType.SUBSCRIBE &&
-                (<PureCheckbox
-                id={`orderId-${data.id}`}
-                onClick={onClickCheckbox}
-                >
-                  <p>주문ID: {data.id}</p>
-                </PureCheckbox>)}
-            </li>
-          ))}
-        </ul>
-  
-        <div className={s['input-wrap']}>
-          <h4 className={s['input-title']}>판매 취소사유</h4>
-          <textarea
-            type={'text'}
-            placeholder={'판매 취소사유를 입력해주세요.'}
-            onChange={onInputChange}
-          />
-        </div>
-      </section>}
-      
+      {isLoading.fetching ? (
+        <AmdinErrorMessage>
+          <Spinner />
+        </AmdinErrorMessage>
+      ) : (
+        <section className={s['body-section']}>
+          <ul className={s['item-wrap']}>
+            {allData.map((data, i) => (
+              <li key={`item-to-be-canceled-${data.id}-${i}`}>
+                {orderType === productType.GENERAL && (
+                  <>
+                    <h5 className={s.itemTitle}>주문번호: {data.merchantUid}</h5>
+                    <div className={s.itemList}>
+                      {data.orderItemInfoList?.length > 0 &&
+                        data.orderItemInfoList.map((orderIteminfo, i) => (
+                          <div key={`${orderIteminfo.orderItemId}-${i}`}>
+                            <PureCheckbox
+                              id={`orderItemId-${orderIteminfo.orderItemId}`}
+                              onClick={onClickCheckbox}
+                            >
+                              (상품번호: {orderIteminfo.orderItemId}) 상품명:{' '}
+                              {orderIteminfo.itemName}
+                            </PureCheckbox>
+                          </div>
+                        ))}
+                    </div>
+                  </>
+                )}
+
+                {orderType === productType.SUBSCRIBE && (
+                  <PureCheckbox id={`orderId-${data.id}`} onClick={onClickCheckbox}>
+                    <p>주문ID: {data.merchantUid}</p>
+                  </PureCheckbox>
+                )}
+              </li>
+            ))}
+          </ul>
+
+          <div className={s['input-wrap']}>
+            <h4 className={s['input-title']}>판매 취소사유</h4>
+            <textarea
+              type={'text'}
+              placeholder={'판매 취소사유를 입력해주세요.'}
+              onChange={onInputChange}
+            />
+          </div>
+        </section>
+      )}
+
       <section className={s['btn-section']}>
         <button type={'button'} className={'admin_btn line popup'} onClick={onHideModal}>
           취소
