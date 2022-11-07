@@ -52,11 +52,12 @@ import useDeviceState from '/util/hook/useDeviceState';
 
   const openGradePopupHandler = () => {
     const href = '/popup/gradePolicy';
-    
-    const pcConfig = { width: 1120, height: 730, left: 200, top: 100 };
-    const mobileConfig = { width: 320, height: 200, left: 200, top: 100 };
-    const options = isMobile ? mobileConfig : pcConfig;
-    
+    const options = {
+      width: isMobile ? 320 : 1120,
+      height: isMobile ? 517 : 730,
+      left: 200,
+      top: 100
+    };
     popupWindow(href, options);
   };
 
