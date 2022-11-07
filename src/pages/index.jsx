@@ -98,7 +98,7 @@ export default function MainPage({ data }) {
                 <p>ABOUT BARF</p>
                 <h1>바프식이란?</h1>
                 <h3 className="font-NotoSans">
-                  &nbsp;B.A.R.F.(Biologi cally Appropriate Raw Food)는 생물학적으로 적절한 생식이라는
+                  &nbsp;B.A.R.F.(Biologically Appropriate Raw Food)는 생물학적으로 적절한 생식이라는
                   뜻으로, 생고기와 뼈, 야채를 적절히 배합하여 반려동물에게 단백질과 지방을 신선한
                   상태에서 섭취할 수 있도록 돕는 식단을 뜻합니다. 
                   {/* 바프독은 70%의 두 종류 고기와 칼슘이 풍부한 */}
@@ -125,7 +125,7 @@ export default function MainPage({ data }) {
                     어떤점이 바뀔까요?
                   </h1>
                   <p>
-                    &nbsp;BARF(Biologi cally Appropriate Raw Food)는 생물학적으로 적절한 생식이라는
+                    &nbsp;BARF(Biologically Appropriate Raw Food)는 생물학적으로 적절한 생식이라는
                     뜻으로, 생고기와 뼈, 야채를 적절히 배합하여 반려동물에게 단백질과 지방을 신선한
                     상태에서 섭취할 수 있도록 돕습니다. 바프독은 70%의 두 종류 고기와 칼슘이 풍부한
                     뼈, 내장, 신선한 야채를 배합해 완벽한 비율의 영양을 공급합니다.
