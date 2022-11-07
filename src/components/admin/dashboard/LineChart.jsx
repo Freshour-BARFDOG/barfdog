@@ -1,11 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Line } from '@nivo/line';
 
-import s from './chart.module.scss';
-import { Defs, linearGradientDef } from '@nivo/core';
-import { FullScreenLoading } from '../../atoms/FullScreenLoading';
-import Spinner from '../../atoms/Spinner';
-import AmdinErrorMessage from '../../atoms/AmdinErrorMessage';
+import Spinner from '/src/components/atoms/Spinner';
+import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
+import useDeviceState from "/util/hook/useDeviceState";
 
 // make sure parent container have a define height when using
 // responsive component, otherwise height will be 0 and
@@ -19,6 +17,9 @@ import AmdinErrorMessage from '../../atoms/AmdinErrorMessage';
 export default function LineChart({ chartData }) {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const { isMobile, deviceWidth } = useDeviceState();
+  
+  
 
   useEffect(() => {
     if (!chartData) return;
@@ -40,19 +41,33 @@ export default function LineChart({ chartData }) {
     setData(formData);
     setIsLoading(false)
   }, [chartData]);
+  
+  
+  
+  const calcChartWidth = ()=>{
+    let chartWidth = 0;
+    const maxWidth = 1200;
+    const wapper = document.querySelector('#chart-section');
+    const wapperPadding = 80;
+    const wapperInnerWidth = wapper.clientWidth - wapperPadding;
+    chartWidth = chartWidth >= maxWidth ? maxWidth : wapperInnerWidth;
+    return chartWidth;
+  }
+  
 
   if (!data) return;
 
   return (
     <>
-      <div className={s['chart-container']}>
+      <div data-title={'chart-container'}>
         {isLoading ? (
           <AmdinErrorMessage loading={<Spinner />}/>) : (
           <Line
             data={data}
-            width={700}
-            height={600}
-            margin={{ top: 50, right: 0, bottom: 100, left: 60 }}
+            width={calcChartWidth()}
+            height={500}
+            // padding={{ top: 50, right: 40, bottom: 10, left: 0 }}
+            margin={{ top: 50, right: 80, bottom: 20, left: 40 }}
             xScale={{
               type: 'time',
               format: '%Y-%m',

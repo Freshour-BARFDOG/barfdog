@@ -338,7 +338,7 @@ export default function DashboardPage({ ga }) {
               </ul>
             </div>
           </section>
-          <section className={`cont ${s['cont-right']}`}>
+          <section className={`cont ${s['cont-right']}`} id={'chart-section'}>
             <div className={s['title-section']}>
               <h2 className={s.title}>
                 주문량
