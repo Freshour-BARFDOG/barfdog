@@ -30,6 +30,8 @@
         .left {
           color: var(--color-font-sub);
           font-weight: 500;
+          word-break: keep-all;
+          margin-right: rem(10);
         }
         .right {
           font-weight: 600;

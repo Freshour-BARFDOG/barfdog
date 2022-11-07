@@ -394,7 +394,7 @@ export default function SingleItem_OrderHistoryPage({ data }) {
               orderQuery={'orderCancel'}
               option={{ data: data }}
             />
-            <section className={'btn-section'}>
+            <section className={s.btn_section}>
               <button type={'button'} className={'custom_btn solid basic_l'} onClick={onPrevPage}>돌아가기</button>
             </section>
           </MypageWrapper>

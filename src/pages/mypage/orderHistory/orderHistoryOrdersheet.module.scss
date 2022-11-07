@@ -25,6 +25,10 @@
   }
 }
 
+.btn_section{
+  padding-bottom: rem(100);
+}
+
 // 취소신청, 반품신청, 교환신청 버튼이 존재하는 controller
 .order-button-controller {
   display: flex;
@@ -222,6 +226,7 @@ section.content_title {
   }
 
 }
+
 
 @media (max-width: rem(900)) {
   //.flex_box {

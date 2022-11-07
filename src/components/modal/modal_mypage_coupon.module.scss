@@ -162,13 +162,13 @@ $topLinkBannerHeight: rem(38);
   }
 }
 
-@media (max-width: $containerSize) {
-  .container {
-    width: calc(100vw - #{rem(40)});
-  }
-}
+// @media (max-width: $containerSize) {
+//   .container {
+//     width: calc(100vw - #{rem(40)});
+//   }
+// }
 
-@media (max-width: rem(600)) {
+@media (max-width: rem(800)) {
   $marginForBackgroundTouch: rem(26);
 
   .body {

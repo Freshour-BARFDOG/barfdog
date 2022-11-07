@@ -213,13 +213,20 @@ section.subscribe_discount { margin-bottom: rem(80);}
       flex-direction: column;
       justify-content: center;
       align-items: center;
+
+      .image_box {
+        overflow-y: hidden;
+        .gif{
+          transform: translate(rem(-0.5), rem(0));
+        }
+      }
+  
       p {
         color: #FF4921;
       }
     }
 
     .right_bot {
-
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -228,7 +235,7 @@ section.subscribe_discount { margin-bottom: rem(80);}
       overflow-y: hidden;
 
         .gif{
-          transform: translateY(rem(0.2));
+          transform: translate(rem(-0.5), rem(0.2));
         }
       }
 
@@ -1045,6 +1052,13 @@ font-style: normal;
   .recipe_introduce {
     .recipe_grid_box {
       grid-template-columns: 1fr;
+      .left_top, .left_bot, .right_top, .right_bot{
+        .image_box{
+          .gif{
+            display: none;
+          }
+        }
+      }
     }
   }
 
