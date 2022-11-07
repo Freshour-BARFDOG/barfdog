@@ -12,6 +12,7 @@ import Link from 'next/link';
 import { subscribePlanType } from '/store/TYPE/subscribePlanType';
 import transformDate from '/util/func/transformDate';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
+import {subscribeStatus} from "/store/TYPE/subscribeStatus";
 
 export default function ManageSubscribePage() {
   const searchApiUrl = '/api/subscribes';
@@ -22,7 +23,7 @@ export default function ManageSubscribePage() {
   // console.log(itemList);
 
   const pageInterCeptor = async (res) => {
-    console.log(res);
+    // console.log(res);
     // res = DUMMY_SUBSCRIBE_LIST_RESPONSE; // ! TEST
     const pageData = res.data.page;
     const curItemList =
@@ -39,6 +40,7 @@ export default function ManageSubscribePage() {
           pictureUrl: l.subscribeDto.pictureUrl,
           plan: l.subscribeDto.plan,
           subscribeId: l.subscribeDto.subscribeId,
+          status: l.subscribeDto.status,
         },
       })) || [];
     console.log(res.data?._embedded);
@@ -64,6 +66,7 @@ export default function ManageSubscribePage() {
     }));
   };
 
+  console.log(itemList)
   return (
     <>
       <MetaTitle title="마이페이지 구독관리" />
@@ -145,22 +148,39 @@ export default function ManageSubscribePage() {
                           </div>
 
                           <div className={s.col_4}>
-                            <Link
-                              href={`/mypage/subscribe/${item.subscribeDto.subscribeId}`}
-                              passHref
-                            >
-                              <a
-                                className={s.btn}
-                                onClick={onMovePageLoading}
-                                data-subscribe-id={item.subscribeDto.subscribeId}
+                            {item.subscribeDto.status === subscribeStatus.SUBSCRIBING ? (
+                              <Link
+                                href={`/mypage/subscribe/${item.subscribeDto.subscribeId}`}
+                                passHref
                               >
-                                {isLoading[item.subscribeDto.subscribeId] ? (
-                                  <Spinner />
-                                ) : (
-                                  '관리하기'
-                                )}
-                              </a>
-                            </Link>
+                                <a
+                                  className={s.btn}
+                                  onClick={onMovePageLoading}
+                                  data-subscribe-id={item.subscribeDto.subscribeId}
+                                >
+                                  {isLoading[item.subscribeDto.subscribeId] ? (
+                                    <Spinner />
+                                  ) : (
+                                    '관리하기'
+                                  )}
+                                </a>
+                              </Link>
+                            ) : (
+                              <Link
+                                href={`/mypage/dogs`}
+                                passHref
+                              >
+                                <a
+                                  className={`${s.btn} pointColor`}
+                                >
+                                  {isLoading[item.subscribeDto.subscribeId] ? (
+                                    <Spinner />
+                                  ) : (
+                                    '구독하기'
+                                  )}
+                                </a>
+                              </Link>
+                            )}
                           </div>
                         </div>
                       </div>

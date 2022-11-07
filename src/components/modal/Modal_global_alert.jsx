@@ -4,12 +4,14 @@ import { useModalContext } from '/store/modal-context';
 import ModalWrapper from './ModalWrapper';
 
 export default function Modal_global_alert({ message, onClick, background, ...props }) {
+  
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
   const modalContextMessage = mct.message;
   const [style, setStyle] = useState({});
   const [targetScrollYPos, setTargetScrollYPos] = useState(null);
  
+  
 
   useEffect(() => {
     callbackAfterAnimation(hasAlert);
@@ -34,10 +36,49 @@ export default function Modal_global_alert({ message, onClick, background, ...pr
       setStyle({ display: modalState ? 'block' : 'none' });
     }, delay);
   };
+ 
+  // KEYBOARD EVENT
+  useEffect(() => {
+    if (window && typeof window !== 'undefined' && hasAlert) {
+      document.documentElement.addEventListener('keydown', keyDownHandler);
+    }
+    return ()=>{
+      // console.log('Unmounted global alert && Delete keydown Event');
+      document.documentElement.removeEventListener('keydown', keyDownHandler);
+    }
+  }, []);
   
+  
+  
+  const keyDownHandler = (event) => {
+    //////////////////////////////////
+    // ! esc key는 enterkey 이벤트와 달리, callback event발생이 안되므로, 삭제함 (221103목)
+    // const escKey = event.keyCode === 27;
+    //////////////////////////////////
+    const enterKey = event.keyCode === 13;
+  
+    // ! validation: alert외에 다른 elem의 enterKey 이벤트와 겹치지 않기 위함
+    const hasEventHandler = (onClick && typeof onClick === 'function');
+    const mctCallback = mctCallbackObj();
+  
+    
+    
+    if (enterKey) {
+      if(mctCallback.hasCallback || hasEventHandler) {
+        executeHandler();
+      }
+      document.documentElement.removeEventListener('keydown', keyDownHandler);
+    }
+    
+    
+  };
 
-  const onClickHandler = () => {
-    if (onClick && typeof onClick === 'function') {
+  
+  const executeHandler = () => {
+    const mctCallback = mctCallbackObj();
+    if(mctCallback.hasCallback){
+      mctCallback.callback();
+    } else if (onClick && typeof onClick === 'function') {
       onClick();
     } else {
       mct.alertHide();
@@ -45,36 +86,23 @@ export default function Modal_global_alert({ message, onClick, background, ...pr
   };
   
   
-  // KEYBOARD EVENT
-  useEffect(() => {
-    if (window && typeof window !== 'undefined' && hasAlert) {
-      document.documentElement.addEventListener('keydown', keyDownHandler);
+  const mctCallbackObj = ()=>{
+    let result = {
+      hasCallback: false,
+      callback: null,
+    };
+    for (const key in mct.callback) {
+      const cb = mct.callback[key];
+      if(cb && typeof cb ==='function'){
+        result.hasCallback = true;
+        result.callback = cb;
+      }
     }
-    return ()=>{
-      console.log('Unmounted global alert && Delete keydown Event');
-      document.documentElement.removeEventListener('keydown', keyDownHandler);
-    }
-  }, []);
+    return result;
+  }
   
-  const keyDownHandler = (event) => {
-    // console.log('event.keyCode: ', event.keyCode);
-    const escKey = event.keyCode === 27;
-    
-    if (escKey) {
-      onClickHandler();
-    }
   
-    // ! onClick function이 존재할 때에만, 아래의 enterKey이벤트가 실행되도록 함
-    // ! alert외에 다른 elem의 enterKey 이벤트와 겹치지 않기 위함
-    const enterKey = event.keyCode === 13;
-    // console.log(onClick)
-    if (enterKey && onClick && typeof onClick === 'function') {
-      onClickHandler();
-      document.documentElement.removeEventListener('keydown', keyDownHandler);
-    }
-  };
-
-
+  
   return (
     <>
       <ModalWrapper
@@ -87,7 +115,7 @@ export default function Modal_global_alert({ message, onClick, background, ...pr
             <pre className={`${s.text} ${s.only}`}>{message || modalContextMessage}</pre>
           </header>
           <div className={s['btn-section']}>
-            <button onClick={onClickHandler}>확인</button>
+            <button onClick={executeHandler}>확인</button>
           </div>
         </div>
       </ModalWrapper>

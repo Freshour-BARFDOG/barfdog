@@ -1,0 +1,189 @@
+@import '/styles/global/rem';
+
+$aniDefault: 0.15s ease;
+$aniType_Show: 0.3s ease-in;
+
+.btn-section{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+
+.overflow-x-scroll {
+  white-space: nowrap;
+  //text-overflow: ellipsis;
+  //overflow-x: hidden;
+  overflow-x: auto;
+  justify-content: flex-start !important;
+  &::-webkit-scrollbar {display:none;}
+}
+
+
+
+.btn_link {
+  cursor: pointer;
+  color: var(--color-link);
+}
+
+// * ---------- BUTTON ---------- */
+
+/*
+  *  Admin Button EXAMPLE
+  *  <button className="admin_btn line basic_s">버튼</button>
+  *  <button className="admin_btn line basic_m">버튼</button>
+  *  <button className="admin_btn line basic_l">버튼</button>
+  *  <button className="admin_btn line confirm_m">버튼</button>
+  *  <button className="admin_btn line confirm_l">버튼</button>
+  *  <button className="admin_btn point popup">버튼</button>
+  *  <button className="admin_btn solid popup">버튼</button>
+*/
+
+.admin_btn, .custom_btn {
+
+  &.autoWidth{
+    width: auto !important;
+  }
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border-radius: rem(2);
+  font-size: rem(14);
+  transition: background-color, border-color, color $aniDefault;
+  border: rem(1) solid transparent;
+  // transition-duration: 0.15s;
+  // transition-timing-function: ease;
+  pointer-events: all;
+  background-color: #fff;
+  cursor: pointer;
+  &[animation='show'] {
+    animation: show $aniType_Show forwards;
+  }
+
+  &.disabled {
+    pointer-events: none;
+  }
+
+  /* Type:line */
+  &.line {
+    border: rem(1) solid var(--gray40);
+    color: #202020;
+    &.disabled {
+      border-color: var(--gray50);
+      color: var(--color-disabled);
+      font-weight: 300;
+    }
+    &:hover {
+      border-color: #ababab;
+      position: relative;
+      z-index: 10;
+    }
+  }
+
+  /* Type:point */
+  &.point {
+    border: rem(1) solid var(--color-primary04);
+    color: var(--color-primary04);
+    &.disabled {
+      border-color: var(--color-point-disabled);
+      color: var(--color-point-disabled);
+    }
+    &:hover {
+      border-color: var(--color-primary01);
+      color: var(--color-primary01);
+    }
+  }
+
+  /* Type:solid */
+  &.solid {
+    background-color: var(--color-primary04);
+    color: #fff;
+    &.disabled {
+      background-color: var(--color-disabled);
+    }
+
+    &:hover {
+      background-color: var(--color-point-hover);
+    }
+  }
+
+  /* non-fixed size */
+  &.basic_s {
+    white-space: nowrap;
+    height: rem(26);
+    padding: 0 rem(12);
+  }
+  &.basic_m {
+    white-space: nowrap;
+    height: rem(30);
+    padding: 0 rem(12);
+    width: rem(75);
+  }
+  &.basic_l {
+    white-space: nowrap;
+    height: rem(38);
+    padding: 0 rem(30);
+    font-size: rem(15);
+  }
+
+  /* fixed-size: 160 x 38 */
+  &.confirm_m {
+    height: rem(38);
+    width: rem(160);
+    font-size: rem(15);
+  }
+  /* fixed-size: 180 x 44 */
+  &.confirm_l {
+    height: rem(44);
+    width: rem(180);
+    font-size: rem(15);
+  }
+
+  /* fixed-size: 120 x 38 */
+  &.popup {
+    height: rem(44);
+    width: rem(120);
+    font-size: rem(15);
+  }
+
+  &.fullWidth {
+    width: 100%;
+  }
+}
+
+
+
+
+
+
+.inline-flex{
+  display: inline-flex;
+}
+.inline-grid{
+  display: inline-grid;
+}
+
+
+.pointColor {
+  color: var(--color-primary04);
+}
+
+.errorMSG {
+  font-size: rem(13);
+  color: var(--color-main);
+}
+
+.required {
+  position:relative;
+  &:after{
+    content:'*';
+    position:absolute;
+    right:rem(-6);
+    top:rem(-1);
+    font-size:rem(10);
+    color:var(--color-main);
+  }
+}

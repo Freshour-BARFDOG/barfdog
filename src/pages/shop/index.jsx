@@ -115,6 +115,8 @@ export default function ShopPage() {
       router.push(link);
     }
   }
+  
+  console.log(itemList);
 
   return (
     <>
@@ -234,7 +236,7 @@ export default function ShopPage() {
                                 {!item.inStock && <span className={s.out_of_stock}>품절</span>}
                               </span>
                             </span>
-                            {item.salePrice !== 0 && (
+                            {(item.originalPrice !== item.salePrice) && item.salePrice !== 0 && (
                               <>
                                 <div className={s.discount_box}>
                                   <span className={s.originPrice}>

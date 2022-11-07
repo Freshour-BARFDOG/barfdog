@@ -17,7 +17,7 @@ const Pagination = ({
   setPageData,
   routerDisabled = false,
   pageInterceptor,
-  option = { apiMethod: 'GET', body: null },
+  option = { apiMethod: 'GET', body: null, initialize: false },
 }) => {
   const router = useRouter();
   const query = router.query;
@@ -25,6 +25,15 @@ const Pagination = ({
   const ButtonCounts = 5; // UI상으로 노출시킬 연속된 페이지네이션 수;
   const [pageInfo, setPageInfo] = useState({});
   const [curPage, setCurPage] = useState(pageFromQuery);
+  
+  
+  useEffect( () => {
+    if(option.initialize === true){
+      const initialPage = 1;
+      setCurPage(initialPage);
+    }
+  }, [option.initialize] );
+  //
 
   useEffect(() => {
     (async () => {
@@ -38,10 +47,13 @@ const Pagination = ({
         const calcedPageIndex = (curPage - 1).toString();
         const defQuery = `?${searchQueryType.PAGE}=${calcedPageIndex}&${searchQueryType.SIZE}=${size}`;
         let urlQueries = urlQuery ? `${defQuery}&${urlQuery}` : defQuery;
+        // console.log('urlQueries: ',urlQueries)
+        // console.log(option)
 
         let res;
         if (option.apiMethod === 'GET') {
           res = await getData(`${apiURL}${urlQueries}`);
+          
         } else if (option.apiMethod === 'POST' && option.body) {
           const body = option.body;
           res = await postObjData(`${apiURL}${defQuery}`, body);

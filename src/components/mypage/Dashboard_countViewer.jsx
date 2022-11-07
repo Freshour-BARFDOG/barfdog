@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from "styled-components";
 import rem from '@util/func/rem';
+import Link from "next/link";
 
 const Viewer = styled.li`
   border-left: 1px solid var(--color-line);
@@ -21,15 +22,17 @@ const Counter = styled.i`
 `;
 
 
-function Dashboard_countViewer({title, counter, unit}) {
+export default function Dashboard_countViewer({title, counter, unit, url}) {
   return (
     <Viewer>
-      <Title>{title}</Title>
-      <Counter>
-        {counter || 0} {unit}
-      </Counter>
+      <Link href={url} passHref>
+        <a>
+          <Title>{title}</Title>
+          <Counter>
+            {counter || 0} {unit}
+          </Counter>
+        </a>
+      </Link>
     </Viewer>
   );
 }
-
-export default Dashboard_countViewer;

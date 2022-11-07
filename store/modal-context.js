@@ -21,6 +21,7 @@ const ModalContextProvider = ({ children, ...props }) => {
   const [isActiveSubscribeModal, setIsActiveSubscribeModal] = useState(false);
   const [scrollY, setScrollY] = useState(0);
   const [activeChangePasswordModal, setActiveChangePasswordModal] = useState( false );
+  const [callback, setCallback] = useState({} );
   
   const onShowHandler = () => {
     setIsActive(true);
@@ -29,21 +30,22 @@ const ModalContextProvider = ({ children, ...props }) => {
     setIsActive(false);
   };
 
-  const onAlertShowHandler = (message) => {
+  const onAlertShow = (message, cb) => {
     setHasAlert(true);
     setAlertModalMessage(message);
+    setCallback({ alert: cb });
   };
 
-  const onAlertHideHandler = () => {
+  const onAlertHide = () => {
     setHasAlert(false);
     setAlertModalMessage('');
   };
 
-  const onSubScribeModalShowHandler = () => {
+  const onSubScribeModalShow = () => {
     setIsActiveSubscribeModal(true);
   };
 
-  const onSubScribeModalHideHandler = () => {
+  const onSubScribeModalHide = () => {
     setIsActiveSubscribeModal(false);
   };
 
@@ -60,6 +62,8 @@ const ModalContextProvider = ({ children, ...props }) => {
     setActiveChangePasswordModal(false)
   }
   
+  
+  
 
 
   return (
@@ -73,13 +77,14 @@ const ModalContextProvider = ({ children, ...props }) => {
         hasAlert: hasAlert,
         onShow: onShowHandler,
         onHide: onHideHandler,
-        alertShow: onAlertShowHandler,
-        alertHide: onAlertHideHandler,
+        alertShow: onAlertShow,
+        alertHide: onAlertHide,
         message: alertModalMessage,
+        callback: callback,
         subscribe: {
           isActive: isActiveSubscribeModal,
-          onShow: onSubScribeModalShowHandler,
-          onHide: onSubScribeModalHideHandler,
+          onShow: onSubScribeModalShow,
+          onHide: onSubScribeModalHide,
         },
         ChangePW:{
           onShow: onShowChagnePasswordModal,

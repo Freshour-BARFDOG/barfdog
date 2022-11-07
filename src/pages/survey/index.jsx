@@ -82,6 +82,7 @@ export default function Survey() {
   const lastStep = 3;
   const router = useRouter();
   const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
   const [formValues, setFormValues] = useState(initialFormValues);
   const [curStep, setCurStep] = useState(1); // num
   const [isLoading, setIsLoading] = useState({}); // obj
@@ -190,7 +191,8 @@ export default function Survey() {
       if (idx === 1) desc.innerText = '활동량 입력';
       if (idx === 2) desc.innerText = '추가정보 입력';
     });
-    initializeAlertModal();
+    mct.alertHide('');
+    // initializeAlertModal();
   };
 
   const onSwiperChangeIndex = (swiper) => {
@@ -240,22 +242,24 @@ export default function Survey() {
         const errorMessage = errObj[key];
         errorMessage && errorMessages.push(`${++count}. ${errorMessage}\n`);
       }
-      onShowModalHandler(errorMessages);
+      console.log(errorMessages)
+      
+      mct.alertShow(errorMessages);
       setSubmitState(null);
       // - prevent to the Next step when validation failed
       curBtn !== submitBtn && swiper.slidePrev();
     } else {
-      isSubmitButton && onShowModalHandler('설문조사를 제출하시겠습니까?');
+      // isSubmitButton && mct.alertShow('설문조사를 제출하시겠습니까?');
       setSubmitState('READY');
+      isSubmitButton && onSubmit();
     }
   };
+  
 
   const onSubmit = async () => {
-    console.log('제출버튼 클릭됐음');
     if (submitState === true) return;
   
     const errObj = validate(formValues, 3);
-    console.log(errObj )
     const isPassed = valid_hasFormErrors(errObj);
     if(!isPassed) return;
     const postFormValuesApiUrl = '/api/dogs';
@@ -268,25 +272,26 @@ export default function Survey() {
       const res = await postObjData(postFormValuesApiUrl, formValues);
       console.log(res);
       if (res.isDone) {
-        modalMessage = '설문조사가 성공적으로 등록되었습니다.';
         const slicedReportApiLink = res.data.data._links.query_surveyReport.href.split('/');
         const linkLength = slicedReportApiLink.length;
-        const endPoint = slicedReportApiLink[linkLength - 1];
-        const surveyReportsId = endPoint;
-        const curPath = router.pathname;
-        await router.push(`${curPath}?surveyReportsId=${surveyReportsId}`);
-        onShowModalHandler(modalMessage);
+        const surveyReportsId = slicedReportApiLink[linkLength - 1];;
+        // const curPath = router.pathname;
+        // await router.push(`${curPath}?surveyReportsId=${surveyReportsId}`);
+        // onShowModalHandler(modalMessage);
+        await router.push(`/survey/statistics/${surveyReportsId}`)
         setSubmitState(true);
       } else {
         modalMessage = '내부 통신장애입니다. 잠시 후 다시 시도해주세요.';
-        onShowModalHandler(modalMessage);
+        mct.alertShow(modalMessage);
         setSubmitState(false);
       }
     } catch (err) {
-      await onShowModalHandler(
+      await mct.alertShow(
         'API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.',
-        moveToPrevPage,
       );
+      setTimeout(() =>{
+        window.location.href='/surveyGuide';
+      },[1000])
       console.error('API통신 오류 : ', err);
     }
     setIsLoading((prevState) => ({
@@ -295,16 +300,15 @@ export default function Survey() {
     }));
   };
 
-  const onShowModalHandler = (message) => {
-    mct.alertShow();
-    setModalMessage(message);
-  };
+  // const onShowModalHandler = (message) => {
+  //   mct.alertShow();
+  //   setModalMessage(message);
+  // };
 
-  const moveToNextPage = () => {
-    const surveyReportsId = router.query.surveyReportsId || '';
-    console.log(surveyReportsId);
-    submitState && router.push(`/survey/statistics/${surveyReportsId}`);
-  };
+  // const moveToNextPage = () => {
+  //   const surveyReportsId = router.query.surveyReportsId || '';
+  //   submitState && router.push(`/survey/statistics/${surveyReportsId}`);
+  // };
 
   const moveToPrevPage = () => {
     router.back();
@@ -315,6 +319,7 @@ export default function Survey() {
     setModalMessage('');
   };
 // console.log(submitState)
+  
   return (
     <>
       {(isLoading.submit || isLoading.nextPage) && submitState !== true && <FullScreenRunningDog opacity={1} />}
@@ -357,15 +362,8 @@ export default function Survey() {
           </div>
         </Wrapper>
       </Layout>
-      {submitState === null && <Modal_global_alert message={modalMessage} background />}
-      {submitState === 'READY' && (
-        <Modal_global_alert message={modalMessage} onClick={onSubmit} background />
-      )}
-      {submitState === false && (
-        <Modal_global_alert message={modalMessage} onClick={moveToPrevPage} background />
-      )}
-      {submitState === true && (
-        <Modal_global_alert message={modalMessage} onClick={moveToNextPage} background />
+      {hasAlert && (
+        <Modal_global_alert message={modalMessage} onClick={submitState === 'READY' ? onSubmit : submitState === false ? moveToPrevPage : null} background />
       )}
     </>
   );

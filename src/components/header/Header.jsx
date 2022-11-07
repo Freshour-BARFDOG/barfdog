@@ -16,10 +16,8 @@ import MobileGnb from './MobileGnb';
 import MobileSidr from './MobileSidr';
 import DeadlineTimer from '/src/components/atoms/DeadlineTimer';
 import { IoIosArrowBack } from 'react-icons/io';
-
 import Icon_cart from '/public/img/icon/cart.svg';
 import Logo from '/public/img/logo(HQ).png';
-// import Logo from '/public/img/logo.png';
 import Logo_2x from '/public/img/logo@2x.png';
 import MobileLogo from '/public/img/mobile_logo.png';
 import MobileLogo_2x from '/public/img/mobile_logo@2x.png';
@@ -28,8 +26,6 @@ import Icon_Home from '/public/img/icon/icon-home.svg';
 import Icon_mypage from '/public/img/icon/mypage.svg';
 import { authAction } from '/store/auth-slice';
 import { userType } from '/store/TYPE/userAuthType';
-import { useModalContext } from '../../../store/modal-context';
-import Modal_global_alert from '../modal/Modal_global_alert';
 
 const Modal_subscribeWidhSSR = dynamic(() => import('/src/components/modal/Modal_subscribe'));
 
@@ -185,9 +181,6 @@ export const Gnb_my = ({ isMobile, setSidrOpen, authData }) => {
               <div className={s.shop_wrap}>
                 <Icon_cart />
                 <span className={s.gnb_shop_count}>{cart.itemCount || 0}</span>
-                <i className={'DeadlineTimer-wrapper pc'}>
-                  <DeadlineTimer />
-                </i>
               </div>
             </button>
           </li>
@@ -204,10 +197,9 @@ export const Gnb_my = ({ isMobile, setSidrOpen, authData }) => {
           </li>
         </ul>
       </div>
-      <i className={'mobile'}>
+      <i id={'DeadlineTimer-wrapper'} className={'mobile'}>
         <DeadlineTimer />
       </i>
-      {/*{activeGlobalAlertModal && <Modal_global_alert background />}*/}
     </>
   );
 };

@@ -13,12 +13,15 @@ function OrderCompletedPage(props) {
   const router = useRouter();
   const { imp_success } = router.query;
   // console.log(router.query);
+  
 
   // 모바일 결제 실패했을때 결제실패 페이지로 이동
   useEffect(() => {
-    if(imp_success == 'false'){
-      router.push(`/order/orderFailed`);    
-    }
+    (async ()=>{
+      if(imp_success == 'false'){
+        await router.push(`/order/orderFailed`);
+      }
+    })();
   }, []);
 
   return (
@@ -62,11 +65,7 @@ function OrderCompletedPage(props) {
               주문완료
             </div>
             <div className={s.row_2}>
-              주문 취소는 다음 배송예정일 전<br className={s.br} /> 금요일 오후 12시까지<br />
-              고객님이 직접 취소 가능합니다. 
-              <br />
-              <br />
-              (바프독은 항상 금,토,일요일에 생산되어<br className={s.br} /> 수요일에 주문이 발송 됩니다.)
+              <em>주문이 완료</em>되었습니다. 감사합니다!
             </div>
           </section>
 
@@ -88,7 +87,7 @@ function OrderCompletedPage(props) {
               발송예정일
             </div>
             <div className={s.row_4}>
-              {props.arrivalDate ?? '협의필요'}
+              {props.arrivalDate || '1 ~ 2일 내 발송'}
             </div>
           </div>
           </section>
@@ -107,28 +106,6 @@ function OrderCompletedPage(props) {
               </Link>
             </div>
           </section>
-          {/* 기존 코드 */}
-
-          {/* <section className={s.text_box}>
-            <div className={s.row_1}>
-              견주님,<br />
-              바프독과 함께해 주셔서 감사합니다
-            </div>
-            <div className={s.row_2}>
-              바프독은 주문 후 맞춤 생산되어 <span>가장 신선한 상태</span>로 전달됩니다.
-            </div>
-          </section>
-          <section className={s.btn_box}>
-            <div className={s.flex_box}>
-              <div className={s.left_btn}>
-                홈으로
-              </div>
-              <div className={s.right_btn}>
-                주문내역 보기
-              </div>
-            </div>
-          </section> */}
-
         </Wrapper>
       </Layout>
     </>

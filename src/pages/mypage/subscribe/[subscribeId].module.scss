@@ -17,6 +17,7 @@ section.title{ padding : rem(8) 0 rem(17);}
   border: rem(1) solid var(--color-line-04);
   padding: rem(16) rem(40);
   border-radius: rem(12);
+  box-shadow: 0 rem(6) rem(20) rgb(0 0 0 / 5%);
 
   &.active .clickTrigger .title i {
     transform: translateY(-50%) rotate(-90deg);

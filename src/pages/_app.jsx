@@ -48,7 +48,7 @@ MyApp.getInitialProps = async (initialProps) => {
   let EXPIRED_TOKEN_MEMBER = null;
   let cartDATA = null;
   let memberDATA = null;
-  let failedFetchingCartData = null;
+  let fetchingError = null;
 
   // console.log('RESPONSE: ', res);
   // ! SSR: request & response 존재
@@ -103,69 +103,74 @@ MyApp.getInitialProps = async (initialProps) => {
       const res_MEMBER_Dashboard = await getDataSSR(req, getMemberDashboardDataApiUrl, token);
       const mypageData = res_MEMBER_Dashboard.data;
       // console.log('/api/members => ',data);
-      // console.log(mypageData);
-      memberDATA = {
-        userType: USER_TYPE,
-        memberId: data.memberId,
-        name: data.name,
-        email: data.email,
-        phoneNumber: data.phoneNumber,
-        birthday: data.birthday,
-        gender: data.gender,
-        provider: data.provider,
-        providerId: data.providerId,
-        grade: mypageData.mypageMemberDto.grade,
-        receiveSms: data.receiveSms,
-        receiveEmail: data.receiveEmail,
-        address: {
-          zipcode: data.address.zipcode,
-          city: data.address.city,
-          street: data.address.street,
-          detailAddress: data.address.detailAddress,
-        },
-        recommendCode: mypageData.mypageMemberDto.myRecommendationCode,
-        reward: mypageData.mypageMemberDto.reward,
-        deliveryCount: mypageData.deliveryCount,
-        couponCount: mypageData.couponCount,
-        dog: {
-          dogName:mypageData.mypageDogDto?.dogName,
-          thumbnailUrl: mypageData.mypageDogDto?.thumbnailUrl || null,
-        },
-      };
+      if(mypageData){
+        memberDATA = {
+          userType: USER_TYPE,
+          memberId: data.memberId,
+          name: data.name,
+          email: data.email,
+          phoneNumber: data.phoneNumber,
+          birthday: data.birthday,
+          gender: data.gender,
+          provider: data.provider,
+          providerId: data.providerId,
+          grade: mypageData.mypageMemberDto.grade,
+          receiveSms: data.receiveSms,
+          receiveEmail: data.receiveEmail,
+          address: {
+            zipcode: data.address.zipcode,
+            city: data.address.city,
+            street: data.address.street,
+            detailAddress: data.address.detailAddress,
+          },
+          recommendCode: mypageData.mypageMemberDto.myRecommendationCode,
+          reward: mypageData.mypageMemberDto.reward,
+          deliveryCount: mypageData.deliveryCount,
+          couponCount: mypageData.couponCount,
+          dog: {
+            dogName:mypageData.mypageDogDto?.dogName,
+            thumbnailUrl: mypageData.mypageDogDto?.thumbnailUrl || null,
+          },
+        };
+      }
+      
 
       const cartData = res_CART?.data;
-      cartDATA = {
-        deliveryConstant: {
-          price: cartData.deliveryConstant.price,
-          freeCondition: cartData.deliveryConstant.freeCondition,
-        },
-        basketDtoList: cartData.basketDtoList.map((item) => ({
-          itemDto: {
-            basketId: item.itemDto.basketId,
-            itemId: item.itemDto.itemId,
-            thumbnailUrl: item.itemDto.thumbnailUrl,
-            name: item.itemDto.name,
-            originalPrice: item.itemDto.originalPrice,
-            salePrice: item.itemDto.salePrice,
-            amount: item.itemDto.amount,
-            deliveryFree: item.itemDto.deliveryFree,
+      if(cartData){
+        cartDATA = {
+          deliveryConstant: {
+            price: cartData.deliveryConstant.price,
+            freeCondition: cartData.deliveryConstant.freeCondition,
           },
-          itemOptionDtoList: item.itemOptionDtoList.map((opt) => ({
-            id: opt.id,
-            name: opt.name,
-            optionPrice: opt.optionPrice,
-            amount: opt.amount,
+          basketDtoList: cartData.basketDtoList.map((item) => ({
+            itemDto: {
+              basketId: item.itemDto.basketId,
+              itemId: item.itemDto.itemId,
+              thumbnailUrl: item.itemDto.thumbnailUrl,
+              name: item.itemDto.name,
+              originalPrice: item.itemDto.originalPrice,
+              salePrice: item.itemDto.salePrice,
+              amount: item.itemDto.amount,
+              deliveryFree: item.itemDto.deliveryFree,
+            },
+            itemOptionDtoList: item.itemOptionDtoList.map((opt) => ({
+              id: opt.id,
+              name: opt.name,
+              optionPrice: opt.optionPrice,
+              amount: opt.amount,
+            })),
+            totalPrice: item.totalPrice,
+            _links: {
+              increase_basket: item._links.increase_basket.href,
+              decrease_basket: item._links.decrease_basket.href,
+              delete_basket: item._links.delete_basket.href,
+            },
           })),
-          totalPrice: item.totalPrice,
-          _links: {
-            increase_basket: item._links.increase_basket.href,
-            decrease_basket: item._links.decrease_basket.href,
-            delete_basket: item._links.delete_basket.href,
-          },
-        })),
-      };
+        };
+      }
+      
     } else {
-      failedFetchingCartData = 'failed Fetching ServerSide CART DATA';
+      fetchingError = 'failed Fetching ServerSide CART DATA';
     }
   }
 
@@ -207,7 +212,7 @@ MyApp.getInitialProps = async (initialProps) => {
     Component,
     pageProps,
     CustomProps: {
-      data: { cart: cartDATA, member: memberDATA || null, error: failedFetchingCartData || null },
+      data: { cart: cartDATA, member: memberDATA, error: fetchingError},
       token: token,
       USERTYPE: USER_TYPE || null,
       EXPIRED_TOKEN: { ADMIN: EXPIRED_TOKEN_ADMIN, MEMBER: EXPIRED_TOKEN_MEMBER },

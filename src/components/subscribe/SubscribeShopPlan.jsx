@@ -79,9 +79,9 @@ export const SubscribeShopPlan = ({ name, info, form, setForm, calcPrice }) => {
             </li>
 
             <li>
-              {form.recipeIdList?.length > 0 && form.recipeIdList[0] && (
-                <div className={s.text1}>
-                  {subscribePlanType.FULL.discountPercent + '%'}&nbsp;
+              {/*{form.recipeIdList?.length > 0 && form.recipeIdList[0] && (*/}
+              <div className={s.text1}>
+                {subscribePlanType.FULL.discountPercent + '%'}&nbsp;
                   <span>
                     {transformLocalCurrency(
                       calcPrice(subscribePlanType.FULL.totalNumberOfPacks)
@@ -89,9 +89,10 @@ export const SubscribeShopPlan = ({ name, info, form, setForm, calcPrice }) => {
                     )}
                     원
                   </span>
-                </div>
-              )}
-              {form.recipeIdList?.length > 0 && form.recipeIdList[0] && (
+             
+              </div>
+              {/*)}*/}
+              {/*{form.recipeIdList?.length > 0 && form.recipeIdList[0] && (*/}
                 <div className={s.text2}>
                   {transformLocalCurrency(
                     calcPrice(
@@ -101,7 +102,7 @@ export const SubscribeShopPlan = ({ name, info, form, setForm, calcPrice }) => {
                   )}
                   원
                 </div>
-              )}
+              {/*)}*/}
             </li>
 
           </ul>
@@ -157,7 +158,7 @@ export const SubscribeShopPlan = ({ name, info, form, setForm, calcPrice }) => {
             </li>
 
             <li>
-              {form.recipeIdList?.length > 0 && form.recipeIdList[0] && (
+              {/*{form.recipeIdList?.length > 0 && form.recipeIdList[0] && (*/}
                 <div className={s.text1}>
                   {subscribePlanType.HALF.discountPercent + '%'}&nbsp;
                   <span>
@@ -168,8 +169,8 @@ export const SubscribeShopPlan = ({ name, info, form, setForm, calcPrice }) => {
                     원
                   </span>
                 </div>
-              )}
-              {form.recipeIdList?.length > 0 && form.recipeIdList[0] && (
+              {/*)}*/}
+              {/*{form.recipeIdList?.length > 0 && form.recipeIdList[0] && (*/}
                 <div className={s.text2}>
                   {transformLocalCurrency(
                     calcPrice(
@@ -179,7 +180,7 @@ export const SubscribeShopPlan = ({ name, info, form, setForm, calcPrice }) => {
                   )}
                   원
                 </div>
-              )}
+              {/*)}*/}
             </li>
             
           </ul>
@@ -224,10 +225,10 @@ export const SubscribeShopPlan = ({ name, info, form, setForm, calcPrice }) => {
             <li>
               <div className={s.grid_box}>
                 <div className={s.row_1}>
-                  하루에<span>&nbsp;{subscribePlanType.HALF.numberOfPacksPerDay}팩</span>
+                  <span>{subscribePlanType.TOPPING.description}</span>
                 </div>
                 <div className={s.row_2}>
-                  <span>{subscribePlanType.HALF.weeklyPaymentCycle}주</span>&nbsp;정기배송
+                  <span>{subscribePlanType.TOPPING.weeklyPaymentCycle}주</span>&nbsp;정기배송
                 </div>
                 <div className={s.row_3}>
                   <span>{info.foodAnalysis.oneMealRecommendGram}g</span>&nbsp;(1팩기준)
@@ -242,7 +243,7 @@ export const SubscribeShopPlan = ({ name, info, form, setForm, calcPrice }) => {
             </li>
 
             <li>
-              {form.recipeIdList?.length > 0 && form.recipeIdList[0] && (
+              {/*{form.recipeIdList?.length > 0 && form.recipeIdList[0] && (*/}
                 <div className={s.text1} style={{ opacity: `${!form.recipeIdList ? 0 : 1}` }}>
                   {subscribePlanType.TOPPING.discountPercent + '%'}&nbsp;
                   <span>
@@ -253,8 +254,8 @@ export const SubscribeShopPlan = ({ name, info, form, setForm, calcPrice }) => {
                     원
                   </span>
                 </div>
-              )}
-              {form.recipeIdList?.length > 0 && form.recipeIdList[0] && (
+              {/*)}*/}
+              {/*{form.recipeIdList?.length > 0 && form.recipeIdList[0] && (*/}
                 <div className={s.text2}>
                   {transformLocalCurrency(
                     calcPrice(
@@ -264,10 +265,8 @@ export const SubscribeShopPlan = ({ name, info, form, setForm, calcPrice }) => {
                   )}
                   원
                 </div>
-              )}
+              {/*)}*/}
             </li>
-
-            
           </ul>
         </CustomInput>
       </div>

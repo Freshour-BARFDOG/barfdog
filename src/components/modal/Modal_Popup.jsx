@@ -79,7 +79,7 @@ export const Modal_Popup = ({ popupData }) => {
     return convertedPos;
   };
 
-  console.log(DATA);
+  // console.log(DATA);
 
   return (
     <>

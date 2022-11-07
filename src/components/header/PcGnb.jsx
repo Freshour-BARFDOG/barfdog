@@ -4,6 +4,7 @@ import { useModalContext } from '@store/modal-context';
 import MenuLayout, { SubmenuList } from '/src/components/header/MenuLayout';
 import SVG_subscribe from '/public/img/icon/subscribe.svg';
 import {general_itemType} from "../../../store/TYPE/itemType";
+import DeadlineTimer from "../atoms/DeadlineTimer";
 
 
 const PcGnb = () => {
@@ -47,6 +48,9 @@ const Gnb_survey = () => {
         <span>
           <SVG_subscribe />
         </span>
+        <i id={'DeadlineTimer-wrapper'} className={'pc'}>
+          <DeadlineTimer />
+        </i>
       </li>
     </>
   );

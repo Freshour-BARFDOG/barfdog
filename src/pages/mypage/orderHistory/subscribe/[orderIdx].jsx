@@ -15,6 +15,7 @@ import {orderStatus} from '/store/TYPE/orderStatusTYPE';
 import Modal_confirm from '/src/components/modal/Modal_confirm';
 import {Modal_subscribeCancel} from "/src/components/modal/Modal_subscribeCancel";
 import {paymentMethodType} from "/store/TYPE/paymentMethodType";
+import {useRouter} from "next/router";
 
 /*! 참고)
    구독상품: 교환 및 환불 불가
@@ -25,7 +26,10 @@ import {paymentMethodType} from "/store/TYPE/paymentMethodType";
 
 
 export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
-  console.log(data);
+  // console.log(data);
+  
+  
+  const router = useRouter();
   // data.orderDto.deliveryStatus = orderStatus.PAYMENT_DONE; // ! TEST CODE TEST CODE TEST CODE TEST CODE
   // data.orderDto.deliveryStatus = orderStatus.PRODUCING; // ! TEST CODE TEST CODE TEST CODE TEST CODE
   const currentOrderStatus = data.orderDto.orderStatus;
@@ -81,8 +85,12 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
   const onStartCancel = () => {
     setActiveModal({ cancleRequest: true });
   };
-
-  console.log(data)
+  
+  
+  const onPrevPage = async () => {
+    await router.back();
+  }
+  // console.log(data)
   return (
     <>
       <MetaTitle title="마이페이지 주문내역 정기구독" />
@@ -329,6 +337,9 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
                   </li>
                 </ul>
               </section>}
+            <section className={'btn-section'}>
+              <button type={'button'} className={'custom_btn solid basic_l'} onClick={onPrevPage}>돌아가기</button>
+            </section>
           </MypageWrapper>
         </Wrapper>
       </Layout>

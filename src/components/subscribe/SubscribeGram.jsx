@@ -92,13 +92,15 @@ export const SubscribeGram = ({ subscribeInfo }) => {
       // if (!res.isDone) { // ! TEST CODE //
         if (res.isDone) {  // ! PRODUCT CODE //
         setSubmitted(true);
-        mct.alertShow('무게 변경 변경이 완료되었습니다.');
+        mct.alertShow('무게 변경 변경이 완료되었습니다.', onSuccessChangeSubscribeOrder);
       } else {
         mct.alertShow(`데이터 전송 실패\n${res.error}`);
       }
       setActiveConfirmModal(false);
     } catch (err) {
-      console.error('err: ', err);
+      console.error(err);
+      console.error(err.response);
+      
     }
     setIsLoading(false);
   };
@@ -211,12 +213,14 @@ export const SubscribeGram = ({ subscribeInfo }) => {
       {activeConfirmModal && (
         <Modal_confirm text={`무게 변경을 적용하시겠습니까?`} isConfirm={onSubmit} positionCenter />
       )}
-      {tbContext.visible && (
-        <Modal_global_alert
-          onClick={submitted ? onSuccessChangeSubscribeOrder : mct.alertHide}
-          background
-        />
-      )}
+      
+      {/* ! Header에 존재하는 Global Alert를 공통하는 방식으로 변경하여서,아래 코드 주석처리함 // 추후에 에러없을 경우 삭제해도 무방*/}
+      {/*{tbContext.visible && (*/}
+      {/*  <Modal_global_alert*/}
+      {/*    onClick={submitted ? onSuccessChangeSubscribeOrder : mct.alertHide}*/}
+      {/*    background*/}
+      {/*  />*/}
+      {/*)}*/}
     </>
   );
 };
