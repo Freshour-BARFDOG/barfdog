@@ -41,9 +41,16 @@ export function Swiper_recipe({ data, isMobile }) {
   const [recipeDatas, setRecipeDatas] = useState( [] );
   
   useEffect(() => {
-    const arrangedData = data.reverse();
-    setRecipeDatas(arrangedData);
+    if(data && Array.isArray(data)){
+      const arrangedData = data.reverse() || [];
+      setRecipeDatas(arrangedData);
+    }
+    
   },[])
+  
+  if(!data || !Array.isArray(data)){
+    return;
+  }
 
   return (
     <div className={s.swiper_recipe_outerWrap}>
