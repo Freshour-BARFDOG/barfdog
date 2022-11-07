@@ -902,6 +902,10 @@ section.sns {
         width: 100%;
         margin: 0 auto;
 
+        &:nth-child(3) {
+          display: none;
+        }
+
         &:nth-child(2) {
           margin-top: rem(100);
         }
@@ -1365,8 +1369,12 @@ section.sns {
         > li {
           margin-top: rem(50);
 
-
           &:nth-child(2) {
+            display: none;
+          }
+
+          &:nth-child(3) {
+            display: block;
             margin-top: rem(85);
           }
 

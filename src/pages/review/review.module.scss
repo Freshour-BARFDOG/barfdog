@@ -74,6 +74,7 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
       &::before{
         //width: 100%;
         clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+        transition: clip-path .25s;
       }
       .content_box{
         .text_box {
@@ -96,7 +97,7 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
       width: 100%;
       height: calc(100% - rem(2));
       background-color: var(--color-main);
-      transition: clip-path .25s;
+      transition: clip-path 0s 0s;
       z-index: -1;
       transition-timing-function: ease-in-out;
       clip-path: polygon(50% 0, 50% 0, 50% 100%, 50% 100%);
@@ -133,7 +134,7 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
       .text_box {
         margin : 0 rem(20) 0 0;
         text-align: center;
-        transition: color 0s .2s;
+        transition: color .5s 0s;
       }
       .top_text {
         font-weight: 700;
@@ -146,7 +147,7 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
         @include char(b15);
         color : var(--color-font-sub);
         padding-bottom: rem(10);
-        transition: color 0s .2s;
+        transition: color .5s 0s;
       }
 
       .image_right {

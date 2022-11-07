@@ -171,7 +171,7 @@ export default function ManageSubscribePage() {
                                 passHref
                               >
                                 <a
-                                  className={`${s.btn} pointColor`}
+                                  className={`${s.btn1} pointColor`}
                                 >
                                   {isLoading[item.subscribeDto.subscribeId] ? (
                                     <Spinner />
