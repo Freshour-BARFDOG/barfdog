@@ -15,7 +15,7 @@ export const calcNextSubscribeDeliveryDate = (d = transformToday(), unit = '월�
   const FRI = 5; // 금
   const diff = sundayOfWeek + (dayOfWeek <= FRI ? NEXT_TARGET_DAY : THEWEEKAFTERNEXT_TARGET_DAY);
   const nextDeliveryDate = new Date( today.setDate( diff ) ).toISOString().substring( 0, 10 );
-  console.log('다음 정기구독 발송 예정일: ',new Date(today.setDate(diff)).toISOString().substring(0,10));
+  // console.log('다음 정기구독 발송 예정일: ',new Date(today.setDate(diff)).toISOString().substring(0,10));
   return transformDate( nextDeliveryDate, unit );
   // unit: null  > 'YYYY-MM-DD'
   // unit: 년월일 > 'YYYY년 MM월 DD일'
@@ -35,11 +35,11 @@ const getThisTuesDay = (d = 'YYYY-MM-DD')=>{
 
 export const calcChangedSubscribeDeliveryDate = (originDate='YYYY-MM-DD', periodInWeeks)=>{
   
-  // const convertingOriginDate = transformDate(originDate);
-  const convertingOriginDate = getThisTuesDay(originDate); // 그 주의 수요일.
+  // const convertingOriginDate = tran sformDate(originDate);
+  const convertingOriginDate = getThisTuesDay(originDate);
   const weeks = periodInWeeks * 7;
   const prevDate =  new Date(convertingOriginDate);
-  const nextDate = new Date(prevDate.setDate(prevDate.getDate() + weeks)); // 그 주의 수요일 + n주
+  const nextDate = new Date(prevDate.setDate(prevDate.getDate() + weeks));
   return transformDate(nextDate.toISOString()); // YYYY-MM-DD;
 
 }
