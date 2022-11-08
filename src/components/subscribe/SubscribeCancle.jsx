@@ -132,7 +132,7 @@ export const SubscribeCancle = ({ subscribeInfo }) => {
   const onSuccessChangeSubscribeOrder = () => {
     setIsLoading({ reload: true });
     mct.alertHide();
-    window.location.reload();
+    window.location.href = '/mypage/subscribe';
   };
   
   return (
