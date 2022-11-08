@@ -7,7 +7,7 @@ import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from '/src/components/mypage/MypageWrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import Image from 'next/image';
-import {getData, getDataSSR, postData, postObjData} from '/src/pages/api/reqData';
+import { getDataSSR, postObjData} from '/src/pages/api/reqData';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import popupWindow from '/util/func/popupWindow';
 import { valid_deliveryCondition } from '/util/func/validation/valid_deliveryCondition';
@@ -18,13 +18,11 @@ import { Modal_changeItemOrderState } from '/src/components/modal/Modal_changeIt
 import { filter_availableReturnAndExchangeItemList } from '/util/func/filter_availableReturnAndExchangeItemList';
 import { valid_availableCancelOrder } from '/util/func/validation/valid_availableCancelOrder';
 import { valid_availableReturnAndExchangelOrder } from '/util/func/valid_availableReturnAndExchangelOrder';
-import axios from 'axios';
-import {useRouter} from "next/router";
+
 
 export default function SingleItem_OrderHistoryPage({ data }) {
   // console.log(data);
   
-  const router = useRouter();
   const originItemList = data.orderItemDtoList;
   const [activeModal, setActiveModal] = useState(false);
   const [confirmMessage, setConfirmMessage] = useState('');
@@ -138,7 +136,7 @@ export default function SingleItem_OrderHistoryPage({ data }) {
   };
   
   const onPrevPage = async () => {
-    await router.back();
+    window.location.href='/mypage/orderHistory'
   }
   // console.log('전체취소 가능여부: ', availableImmediatelyCancle);
   // console.log('취소기능 활성여부: ', availableCancleState);
