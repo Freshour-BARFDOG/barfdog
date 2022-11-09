@@ -90,7 +90,7 @@ section.btn_box {padding: 0 0 rem(217) ;}
 @media (max-width: rem(600)) {
 
   
-  section.text_box { padding: 0 0 rem(40); }
+  section.text_box { padding: rem(40) 0 rem(40); }
   section.btn_box {padding: 0 0 rem(217) ;}
 
   
@@ -110,11 +110,14 @@ section.btn_box {padding: 0 0 rem(217) ;}
       display: grid;
       grid-template-columns: 1fr;
       row-gap: rem(10);
-
-      .left_btn, .right_btn {
+      a {
         width: 100%;
         max-width: rem(335);
         margin: 0 auto;
+      }
+
+      .left_btn, .right_btn {
+        width: 100%;
       }
 
       .left_btn {

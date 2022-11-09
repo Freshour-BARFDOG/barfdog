@@ -85,7 +85,7 @@ export function Swiper_recipe({ data, isMobile }) {
         <div className={Styles.btn_box}>
           <Link href={'/surveyGuide'} passHref>
             <a type="button" className={Styles.btn_main}>
-              정기구독 신청하러 가기
+              정기구독 신청하기
             </a>
           </Link>
         </div>

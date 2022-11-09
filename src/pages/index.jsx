@@ -368,7 +368,7 @@ export default function MainPage({ data }) {
                     </li>
                   </ul>
 
-                  <button type="button" className={`${s.btn_main}`}>
+                  <button type="button" className={`${s.btn_worry2}`}>
                     바프생식 둘러보기
                   </button>
                 </div>
@@ -496,7 +496,7 @@ export default function MainPage({ data }) {
                 <div className={s.btn_box}>
                   <Link href={'/surveyGuide'} passHref>
                     <a type="button" className={s.btn_main}>
-                      정기구독 신청하러 가기
+                      정기구독 신청하기
                     </a>
                   </Link>
                 </div>

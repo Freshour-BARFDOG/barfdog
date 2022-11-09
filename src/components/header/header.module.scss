@@ -23,7 +23,7 @@
 
     > button {
       font-size: rem(14);
-      margin-left: rem(10);
+      // margin-left: rem(10);
     }
 
     > li {
@@ -31,12 +31,31 @@
       position: relative;
       display: flex;
       align-items: center;
-      &:not(:last-child) {
-        margin-right: rem(20);
-        padding-right: rem(20);
+      > span {
+        margin-left: rem(6) !important;
       }
 
-      &:not(:last-child):after {
+      &:not(:last-child) {
+        // margin-right: rem(25);
+        // padding-right: rem(25);
+      }
+
+      &:nth-child(2) {
+        margin: 0 rem(25);
+        padding: 0 rem(25);
+      }
+
+      // &:not(:last-child):after {
+      //   content: '';
+      //   position: absolute;
+      //   right: 0;
+      //   top: 50%;
+      //   transform: translateY(-50%);
+      //   width: rem(1);
+      //   height: rem(26);
+      //   background-color: var(--color-line-03);
+      // }
+      &:nth-child(2):after {
         content: '';
         position: absolute;
         right: 0;
@@ -46,30 +65,41 @@
         height: rem(26);
         background-color: var(--color-line-03);
       }
+      &:nth-child(2):before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: rem(1);
+        height: rem(26);
+        background-color: var(--color-line-03);
+      }
 
       > *:first-child {
         display: inline-block;
-        padding: rem(8) rem(15);
+        padding: rem(8) rem(0) rem(8) 0;
         height: auto;
         font-size: inherit;
         font-weight: 400;
         //margin-right:rem(31);
       }
       &:last-child > * {
-        padding-right: rem(6);
+        // padding-right: rem(6);
+      }
+      &:last-child {
       }
 
       .userClass {
-        font-size: rem(16);
+        font-size: rem(14);
         color: var(--color-font-sub);
-        padding: rem(4) rem(21);
+        padding: rem(2) rem(14);
         line-height: 1.5;
         box-sizing: border-box;
         border-radius: rem(30);
         border: rem(1) solid var(--color-line-02);
-        cursor: default;
-        height: rem(32);
-        margin-right: rem(30);
+        cursor: pointer;
+        margin-right: rem(20);
         overflow: hidden;
         position: relative;
         top: rem(-1);

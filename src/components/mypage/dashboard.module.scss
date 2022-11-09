@@ -6,7 +6,7 @@ $counterBoxWidth: rem(200);
 .dashboard {
   display: grid;
   grid-template-columns: rem(450) 1fr;
-  grid-gap: 0;
+  column-gap: rem(40);
   overflow-y: hidden;
   p, span, em{
     cursor: default;
@@ -84,10 +84,12 @@ $counterBoxWidth: rem(200);
         font-size: rem(14);
         font-weight: 500;
         max-width: rem(110);
+        word-break: keep-all;
         span {
           text-decoration: underline;
           font-weight: 700;
           color: #404040;
+          word-break: break-all;
         }
       }
       .user_name {
@@ -159,7 +161,7 @@ $counterBoxWidth: rem(200);
 
     ul {
       display: grid;
-      grid-template-columns: 0.8fr 1fr 0.8fr;
+      grid-template-columns: repeat(3, 1fr);
       grid-gap: 0;
 
       li {
@@ -168,6 +170,11 @@ $counterBoxWidth: rem(200);
         width: 100%;
         padding-right: 0;
         padding-left: 0;
+        border-left: rem(1) solid var(--color-line-03);
+
+        // &:last-child{
+        //   border: 0;
+        // }
 
         // &:hover{
         //   color: #fff;
@@ -205,22 +212,42 @@ $counterBoxWidth: rem(200);
   }
 }
 
-@media (max-width: rem(900)) {
+@media (max-width: rem(1000)) {
   .dashboard {
-    grid-template-columns: rem(250) 1fr;
+    //grid-template-columns: rem(250) 1fr;
+    grid-template-columns: 1fr;
+    // padding-bottom: rem(20);
     .user_info {
-      .info_row {
-        grid-template-columns: 1fr;
-      }
-      .info_row:first-child {
-        .info_col:nth-child(2) {
-          grid-column: auto;
-          margin-left: 0;
+      padding-right: rem(40);
+      // .info_row {
+      //   grid-template-columns: 1fr;
+      // }
+      // .info_row:first-child {
+      //   .info_col:nth-child(2) {
+      //     grid-column: auto;
+      //     margin-left: 0;
+      //   }
+      // }
+      // .info_row:not(:first-child) {
+      //   display: none;
+      // }
+    }
+    .user_counter{
+      padding-top: rem(40);
+      ul{
+        li{
+          &:first-child{
+            border: 0;
+          }
         }
-      }
-      .info_row:not(:first-child) {
-        display: none;
       }
     }
   }
+}
+
+@media (max-width: rem(700)) {
+  // .dashboard {
+  //   grid-template-columns: 1fr;
+  //   padding-bottom: rem(10);
+  // }
 }

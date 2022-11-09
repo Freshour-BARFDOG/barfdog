@@ -67,6 +67,10 @@ $parentWidth : rem(150);
         letter-spacing: rem(0.2);
         cursor: pointer;
         transition: background-color var(--ani-default);
+
+        &:hover{
+          color: var(--color-main);
+        }
       }
      }
   }

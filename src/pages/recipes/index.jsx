@@ -482,7 +482,8 @@ export default function RecipePage() {
                       <Image
                         src={require("public/img/recipe_subscribe.png")}
                         objectFit="cover"
-                        layout="fill"
+                        width={246}
+                        height={49}
                         alt="아이콘 정기구독 시작하기"
                       />
                     </div>
@@ -573,7 +574,8 @@ export default function RecipePage() {
                     <Image
                       src={require("public/img/recipe_subsctibe_coupon.png")}
                       objectFit="cover"
-                      layout="fill"
+                      width={300}
+                      height={71}
                       alt="아이콘 정기구독 시작하기"
                     />
                   </div>

@@ -224,6 +224,7 @@ export default function UpdateSurveyPage({ data }) {
         <Wrapper>
           <MypageWrapper>
             <div className={s['survey-page']}>
+              <div className={s.dog_title}>반려견 정보</div>
               <SurveyStep1
                 formValues={formValues}
                 setFormValues={setFormValues}

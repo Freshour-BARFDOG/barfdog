@@ -231,14 +231,16 @@ $bottom-menu-list-height: rem(50);
       $listGap: rem(10);
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
-      column-gap: $listGap;
+      // column-gap: $listGap;
+      
       li a{
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         position: relative;
-        padding: rem(17) rem(0);
+        margin: rem(17) rem(0);
+        border-right: rem(1) solid var(--color-line-03);
 
         &:not(:last-child):after{
           content: '';
@@ -253,6 +255,14 @@ $bottom-menu-list-height: rem(50);
         .num{font-size: rem(16); font-weight: 500;}
         .text{font-size: rem(12); color: var(--color-font-sub)}
 
+      }
+      
+      li{
+        &:last-child{
+          a{
+            border: 0;
+          }
+        }
       }
     }
 

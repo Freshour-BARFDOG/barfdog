@@ -92,11 +92,6 @@ section.content_title2 {
 }
 
 .content {
-  padding: rem(20) 0;
-  border-bottom: rem(1) solid var(--color-line-03);
-  &:last-child {
-    border-bottom: 0;
-  }
 
   .flex {
     display: grid;
@@ -218,6 +213,17 @@ section.content_title5 {
   // &:last-child {
   //   border-bottom: 0;
   // }
+
+  ul{
+    li{
+      border-bottom: rem(1) solid var(--color-line-03);
+      padding: rem(20) 0;
+
+      &:last-child {
+        border-bottom: 0;
+      }
+    }
+  }
   .flex_box5 {
     display: grid;
     grid-template-columns: 1fr rem(200) rem(140);

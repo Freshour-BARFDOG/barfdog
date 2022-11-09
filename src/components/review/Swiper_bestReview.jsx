@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import sorting from '../../../util/func/sorting';
 import s from '../../pages/review/review.module.scss';
-import {Navigation} from 'swiper';
+import {Navigation,Autoplay} from 'swiper';
 import ArrowLeft from '../../../public/img/icon/swiper-arrow-large-l.svg';
 import ArrowRight from '../../../public/img/icon/swiper-arrow-large-r.svg';
 import {Swiper, SwiperSlide} from 'swiper/react';
@@ -28,17 +28,21 @@ export function Swiper_bestReview ({items}) {
   const swiperSettings_review = {
     className: `${s.swiper_review}`,
     slidesPerView: 'auto',
+    autoplay: {delay: 2500},
     spaceBetween: 40,
     loop: true,
     breakpoints: {
       300: {
         slidesPerView: 1,
+        autoplay: {disableOnInteraction: true},
       },
       600: {
         slidesPerView: 2, //레이아웃 2열
+        autoplay: {disableOnInteraction: true},
       },
       900: {
         slidesPerView: 3,
+        autoplay: {disableOnInteraction: false},
       },
     },
     pagination: {
@@ -48,7 +52,7 @@ export function Swiper_bestReview ({items}) {
       prevEl: navPrevRef.current,
       nextEl: navNextRef.current,
     },
-    modules: [Navigation],
+    modules: [Navigation, Autoplay],
   };
   
   const onClickReviewItemHandler = (e) => {

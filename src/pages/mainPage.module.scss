@@ -109,7 +109,7 @@ section.sns {
 .swiper_recipe_outerWrap {
   position: relative;
   height: rem(538);
-  margin-top: rem(65);
+  margin-top: rem(40);
 
   .swiper_recipe{
     height: 100%;
@@ -777,20 +777,36 @@ section.sns {
   }
 }
 
-.btn_main, .btn_worry {
-  display: inline-block;
-  padding: rem(14) 0;
+// .btn_main, .btn_worry {
+//   display: inline-block;
+//   padding: rem(14) 0;
+//   color: #fff;
+//   font-size: rem(16);
+//   border-radius: rem(12);
+//   background-color: var(--color-main);
+//   width: rem(220);
+//   box-sizing: border-box;
+//   text-align: center;
+// }
+.btn_main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: rem(60);
+  width: rem(240);
   color: #fff;
   font-size: rem(16);
-  border-radius: rem(12);
-  background-color: var(--color-main);
-  width: rem(220);
+  font-weight: 600;
+  //border-radius: rem(12);
   box-sizing: border-box;
   text-align: center;
+  background-image: url("../.././public/img/subscribeBtn1.png") !important;
+  background-repeat: no-repeat;
+  background-size: rem(240) rem(60);
+  background-position: center;
 }
 
-.btn_worry {
-  display: inline-block;
+.btn_worry, .btn_worry2 {
   padding: rem(14) 0;
   color: #fff;
   font-size: rem(16);
@@ -799,7 +815,12 @@ section.sns {
   width: rem(220);
   box-sizing: border-box;
 }
-
+.btn_worry{
+  display: inline-block;
+}
+.btn_worry2{
+  display: none;
+}
 
 
 //리뷰 후기
@@ -1824,6 +1845,10 @@ section.clientWorry {
 
   .btn_worry {
     display: none;
+  }
+  .btn_worry2 {
+    display: block;
+    margin: rem(60) auto 0;
   }
 
   .clientWorry {

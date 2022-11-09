@@ -3,14 +3,21 @@
 // ------------ LAY-OUT
 .survey-page {
   margin-bottom: rem(150);
+
+  .dog_title{
+    margin-bottom: rem(40);
+    margin-top: rem(9);
+    @include char(t24);
+  }
+
   .step1Page {
-    padding: rem(130) 0 rem(80);
+    padding: rem(0) 0 rem(80);
   }
   .step2page {
-    padding: rem(130) 0 rem(80);
+    padding: rem(0) 0 rem(80);
   }
   .step3page {
-    padding: rem(130) 0 rem(80);
+    padding: rem(0) 0 rem(80);
   }
 }
 .input-row:not(:last-child) {
@@ -462,7 +469,7 @@
   justify-content: space-between;
   align-items: center;
   max-width: rem(560);
-  margin: 0 auto;
+  margin: 0 auto 0;
   button {
     display: flex;
     justify-content: center;
