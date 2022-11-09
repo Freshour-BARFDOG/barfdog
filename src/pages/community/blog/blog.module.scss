@@ -162,7 +162,11 @@ section.content_box {
         }
         .article_title {
           @include char(t20);
-          padding-bottom: rem(16);
+          margin-bottom: rem(16);
+          display: -webkit-box;
+          -webkit-line-clamp: 1;
+          overflow: hidden;
+          -webkit-box-orient: vertical;
         }
 
         .text {
@@ -237,7 +241,7 @@ section.content_box {
             padding-bottom: rem(8);
           }
           .article_title {
-            padding-bottom: rem(16);
+            // padding-bottom: rem(16);
           }
 
           .text {
@@ -362,7 +366,6 @@ section.content_box {
             font-size: rem(13);
           }
           .article_title {
-            padding-bottom: rem(16);
             font-size: rem(16);
           }
 

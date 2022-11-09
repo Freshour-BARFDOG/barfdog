@@ -22,15 +22,15 @@ $browser-context: 16;
   .swiper-pagination{
     $transitionAttr: .1s linear;
     $margin-bottom: rem(25);
-    position:relative;
+    position:absolute;
+    top: rem(50);
+    left: 50% !important;
     display: flex;
+    transform: translateX(-50%);
     justify-content: space-between;
     align-items: center;
-    bottom:0 !important;
+    bottom: auto !important;
     max-width: rem(364);
-    width: auto !important;
-    margin:0 auto;
-    margin-bottom:$margin-bottom !important;
 
 
     .swiper-pagination-bullet{

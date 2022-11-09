@@ -4,7 +4,8 @@
 #site_header {
   position: relative;
   z-index: $site_header;
-  border-bottom: rem(1) solid var(--color-line-03);
+  // border-bottom: rem(1) solid var(--color-line-03);
+  box-shadow: 0 rem(5) rem(15) rgb(0 0 0 / 8%);
   svg {
     display: block;
   }
@@ -266,6 +267,7 @@
 @media (max-width: rem(600)) {
   #site_header {
     border-bottom: none;
+    box-shadow: none;
   }
 
   .headerContainer {
