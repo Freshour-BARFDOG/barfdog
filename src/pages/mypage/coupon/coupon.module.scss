@@ -219,6 +219,7 @@ section.pageline { padding: rem(40) 0 0 0}
 
       .left_top {
         @include char(t24);
+        font-weight: 600;
       }
 
       
