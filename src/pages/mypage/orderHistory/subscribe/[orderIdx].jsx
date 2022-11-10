@@ -15,7 +15,7 @@ import {orderStatus} from '/store/TYPE/orderStatusTYPE';
 import Modal_confirm from '/src/components/modal/Modal_confirm';
 import {Modal_subscribeCancel} from "/src/components/modal/Modal_subscribeCancel";
 import {paymentMethodType} from "/store/TYPE/paymentMethodType";
-import {useRouter} from "next/router";
+
 
 /*! 참고)
    구독상품: 교환 및 환불 불가
@@ -29,7 +29,6 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
   // console.log(data);
   
   
-  const router = useRouter();
   // data.orderDto.deliveryStatus = orderStatus.PAYMENT_DONE; // ! TEST CODE TEST CODE TEST CODE TEST CODE
   // data.orderDto.deliveryStatus = orderStatus.PRODUCING; // ! TEST CODE TEST CODE TEST CODE TEST CODE
   const currentOrderStatus = data.orderDto.orderStatus;
@@ -88,8 +87,9 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
   
   
   const onPrevPage = async () => {
-    await router.back();
+    window.location.href='/mypage/orderHistory'
   }
+  
   // console.log(data)
   return (
     <>
