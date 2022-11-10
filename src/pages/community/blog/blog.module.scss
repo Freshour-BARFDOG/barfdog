@@ -25,6 +25,7 @@ section.content_box {
   .text2 {
     @include char(l18);
     color: var(--color-main);
+    font-weight: 500;
   }
 
   br {
@@ -61,7 +62,12 @@ section.content_box {
       }
       .article_title {
         @include char(t20);
-        padding-bottom: rem(10);
+        margin-bottom: rem(10);
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        word-break: keep-all;
       }
       .day {
         @include char(l15);

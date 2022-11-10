@@ -29,7 +29,8 @@ import {Modal_cont_ingredient_total_01} from "/src/components/modal/recipes/Moda
 import {Modal_cont_ingredient_total_02} from "/src/components/modal/recipes/Modal_cont_ingredient_total_02";
 import {Modal_cont_ingredient_total_03} from "/src/components/modal/recipes/Modal_cont_ingredient_total_03";
 import {Modal_cont_ingredient_total_04} from "/src/components/modal/recipes/Modal_cont_ingredient_total_04";
-
+import Btn_01 from '/public/img/recipe_subscribe.svg';
+import Btn_02 from '/public/img/recipe_subsctibe_coupon.svg';
 
 
 
@@ -479,13 +480,14 @@ export default function RecipePage() {
                 <Link href="/surveyGuide" passHref>
                   <a className="flex-wrap">
                     <div className={`${s.image} img-wrap`}>
-                      <Image
+                      {/* <Image
                         src={require("public/img/recipe_subscribe.png")}
                         objectFit="cover"
                         width={246}
                         height={49}
                         alt="아이콘 정기구독 시작하기"
-                      />
+                      /> */}
+                      <Btn_01 />
                     </div>
                   </a>
                 </Link>
@@ -571,13 +573,14 @@ export default function RecipePage() {
               <Link href="/surveyGuide" passHref>
                 <a className="flex-wrap">
                   <div className={`${s.image} img-wrap`}>
-                    <Image
+                    {/* <Image
                       src={require("public/img/recipe_subsctibe_coupon.png")}
                       objectFit="cover"
                       width={300}
                       height={71}
                       alt="아이콘 정기구독 시작하기"
-                    />
+                    /> */}
+                    <Btn_02 />
                   </div>
                 </a>
               </Link>

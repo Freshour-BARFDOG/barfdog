@@ -10,6 +10,7 @@ import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import { useModalContext } from '/store/modal-context';
 import popupWindow from '/util/func/popupWindow';
 import useDeviceState from '/util/hook/useDeviceState';
+import Link from "next/link";
 
  export default function Dashboard({ className, ...props }) {
   const mct = useModalContext();
@@ -71,25 +72,33 @@ import useDeviceState from '/util/hook/useDeviceState';
         <div className={s.user_info}>
           <div className={s.info_row}>
             <div className={s.info_col}>
-              <figure className={`${s.user_photo} img-wrap`}>
-                {data?.dog.thumbnailUrl && (
-                  <Image
-                    alt="대표 반려견 이미지"
-                    src={data?.dog.thumbnailUrl}
-                    objectFit="cover"
-                    layout="fill"
-                  />
-                )}
-              </figure>
-              <figcaption className={s.user_names}>
-                <em className={s.dog_name}>
-                  <span>{data.dog.dogName ? data.dog.dogName : '대표반려견 없음'}</span>
-                  {data.dog.dogName && ' 견주'}
-                </em>
-                <em className={s.user_name}>
-                  <span>{data.name}</span>&nbsp;님
-                </em>
-              </figcaption>
+              <Link passHref href={'/mypage/dogs'}>
+                <a>
+                <figure className={`${s.user_photo} img-wrap`}>
+                  {data?.dog.thumbnailUrl && (
+                    <Image
+                      alt="대표 반려견 이미지"
+                      src={data?.dog.thumbnailUrl}
+                      objectFit="cover"
+                      layout="fill"
+                    />
+                  )}
+                </figure>
+                </a>
+              </Link>
+              <Link passHref href={'/mypage/dogs'}>
+                <a>
+                <figcaption className={s.user_names}>
+                  <em className={s.dog_name}>
+                    <span>{data.dog.dogName ? data.dog.dogName : '대표반려견 없음'}</span>
+                    {data.dog.dogName && ' 견주'}
+                  </em>
+                  <em className={s.user_name}>
+                    <span>{data.name}</span>&nbsp;님
+                  </em>
+                </figcaption>
+              </a>
+              </Link>
             </div>
             <div className={`${s.info_col}`}>
               <div className={s.user_class}>

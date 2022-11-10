@@ -98,7 +98,7 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
       background-color: var(--color-main);
       z-index: -1;
       // clip-path: polygon(50% 0, 50% 0, 50% 100%, 50% 100%);
-      transition: opacity .1s ease;
+      transition: opacity .3s ease;
     }
 
     &::after {
@@ -139,11 +139,13 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
         line-height: 120%;
         letter-spacing: -0.02em;
         padding: rem(17) 0 rem(10);
+        transition: color .3s ease;
       }
       .bot_text {
         @include char(b15);
         color : var(--color-font-sub);
         padding-bottom: rem(10);
+        transition: color .3s ease;
       }
 
       .image_right {
@@ -421,6 +423,7 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
     border-radius: 100%;
     width: rem(40);
     height: rem(40);
+    transition: opacity .1s ease;
 
     &:hover{opacity: 1;}
 

@@ -234,6 +234,7 @@ section.sns {
     border-radius: rem(32);
     background-color: #f9edec;
     cursor: pointer;
+    transition: background-color .1s ease, color .1s ease;
 
     &:hover{
       color: #f9edec;

@@ -85,17 +85,23 @@ $counterBoxWidth: rem(200);
         font-weight: 500;
         max-width: rem(110);
         word-break: keep-all;
+
         span {
           text-decoration: underline;
           font-weight: 700;
           color: #404040;
           word-break: break-all;
+          cursor: pointer;
         }
       }
       .user_name {
         font-size: rem(24);
         font-weight: 500;
         min-height: rem(32);
+        
+        span {
+          cursor: pointer;
+        }
       }
     }
     .user_class {

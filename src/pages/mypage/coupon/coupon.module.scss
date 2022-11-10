@@ -150,6 +150,7 @@ section.pageline { padding: rem(40) 0 0 0}
       border-radius: rem(100);
       width: rem(106);
       padding: rem(5) 0;
+      transition: background-color .1s ease;
 
       &:hover, &:active{
         background-color: var(--color-main);

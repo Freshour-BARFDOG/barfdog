@@ -285,6 +285,7 @@ section.subscribe_discount { margin-bottom: rem(80);}
   font-size: 15px;
   padding: rem(5) rem(26);
   font-weight: 500;
+  transition: background-color .1s ease, color .1s ease, border .1s ease;
 
   &:hover{
     color: #fff;
