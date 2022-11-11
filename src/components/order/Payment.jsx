@@ -197,7 +197,8 @@ export function Payment({
       buyer_email: info.email, // 구매자 이메일
       buyer_addr: `${info.address.street},${info.address.detailAddress}`, // 구매자 주소
       buyer_postcode: info.address.zipcode, // 구매자 우편번호
-      m_redirect_url: `${window.location.origin}/order/orderCompleted/${id}`
+      m_redirect_url: `${window.location.origin}/order/loading/${id}`
+
     };
     IMP.request_pay(data, callback);
     
@@ -265,7 +266,8 @@ export function Payment({
       amount:0,
       customer_uid : customUid,
       name: 'test바프독정기결제', // 주문명
-      m_redirect_url: `${window.location.origin}/order/orderCompleted/subscribe/${id}/${randomStr}/${body.paymentPrice}/${merchantUid}/test바프독결제`
+      m_redirect_url: `${window.location.origin}/order/loading/subscribe/${id}/${randomStr}/${body.paymentPrice}/${merchantUid}/test바프독결제`
+
     };
 
     IMP.request_pay(data, callback);
