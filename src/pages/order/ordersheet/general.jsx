@@ -71,8 +71,9 @@ export default function GeneralOrderSheetPage() {
         }
         const info = res.data.data;
         // console.log(info);
-
         // 주문에 대한 모든 데이터
+        console.log('info:  ',info)
+        const calcedReward = (Number(info.reward) > 0 ? info.reward : 0);
         const initInfo = {
           name: info.name, // 구매자
           email: info.email, // 연락처
@@ -99,7 +100,7 @@ export default function GeneralOrderSheetPage() {
             })) ||
             [], //////////// ! DUMMY DATA
           orderPrice: info.orderPrice, //  장바구니 또는 결제 전 상품의 "최종 가격" (기본 어드민 설정할인율 적용 / 결제페이지의 쿠폰 및 적립금 적용 전 가격)
-          reward: info.reward, // 적립금
+          reward: calcedReward, // 적립금
           deliveryPrice: info.deliveryPrice, // 배송비 : 장바구니에서, 최종 배송비
           freeCondition: info.freeCondition, // 사이트 > 배송비 무료 조건
           brochure: info.brochure, // 브로슈어 받은 적 있는지 true/false => 브로슈어는 1번만 받을 수 있다.
@@ -112,7 +113,7 @@ export default function GeneralOrderSheetPage() {
         // FormDatas
         const initForm = {
           selfInfo:{
-            reward: info.reward,  // ! CLIENT ONLY
+            reward: calcedReward,  // ! CLIENT ONLY
           },
           coupons: //////////// ! DUMMY DATA
             // DUMMY_MEMEBER_COUPON_LIST ||
@@ -178,6 +179,7 @@ export default function GeneralOrderSheetPage() {
     })();
   }, [cart]);
 
+  console.log(info);
   const onActivleModalHandler = (e) => {
     const button = e.currentTarget;
     const modalType = button.dataset.modalType;

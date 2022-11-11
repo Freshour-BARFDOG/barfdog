@@ -10,19 +10,17 @@ export const OrdersheetReward = ({ id, info, form, setForm, formErrors, setFormE
   
 
   const onInputChangeHandler = (e) => {
-    
+    // 본인의 사용가능한 금액보다 큰지 확인한다.
     const input = e.currentTarget;
     const { value } = input;
-    const filteredType = input.dataset.inputType;
     let enteredReward = value;
-    if (filteredType) {
-      enteredReward = filter_emptyValue(value);
-      if (filteredType.indexOf('number') >= 0) {
-        enteredReward = filter_onlyNumber(enteredReward);
-      }
-    }
-    
-    
+    const availableReward = info.reward;
+  
+
+    enteredReward = filter_emptyValue(value);
+    enteredReward = filter_onlyNumber(enteredReward);
+  
+
     // ! 0916금 적립금 사용금액 제한 해제 => 최종 결제 시에 최소결제금액 100원만 validation처리
     
     // const generalLimitedPrice = form.orderPrice - form.discountCoupon;
@@ -39,8 +37,16 @@ export const OrdersheetReward = ({ id, info, form, setForm, formErrors, setFormE
     // } else {
     //   error = ''
     // }
+
     
     let error='';
+    const numberTypeReward = Number(filter_onlyNumber(enteredReward));
+
+  
+    if(availableReward < 0 || numberTypeReward > availableReward){
+      error ='사용가능 범위를 넘었습니다.';
+      enteredReward= 0;
+    }
     setFormErrors(prevState=>({
         ...prevState,
         [id] : error
@@ -55,7 +61,6 @@ export const OrdersheetReward = ({ id, info, form, setForm, formErrors, setFormE
   };
 
   const onClickDisCountReward = () => {
-    console.log('전체 사용')
     setForm((prevState) => ({
       ...prevState,
       [id]: calcOrdersheetPrices(form, orderType).availableMaxReward,

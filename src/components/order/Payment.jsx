@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {validate, validateInBundleDelivery} from '/util/func/validation/validation_ordersheet';
-import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
-import { postObjData } from '/src/pages/api/reqData';
+import {valid_hasFormErrors} from '/util/func/validation/validationPackage';
+import {postObjData} from '/src/pages/api/reqData';
 import s from '/src/pages/order/ordersheet/ordersheet.module.scss';
 import Spinner from '/src/components/atoms/Spinner';
-import { calcOrdersheetPrices } from './calcOrdersheetPrices';
-import ErrorMessage from '../atoms/ErrorMessage';
-import { useRouter } from 'next/router';
+import {calcOrdersheetPrices} from './calcOrdersheetPrices';
+import {useRouter} from 'next/router';
 import axios from 'axios';
+import {availablePaymentState} from "../../../util/func/availablePaymentState";
 
 export function Payment({
   info,
@@ -37,6 +37,12 @@ export function Payment({
   }, []);
 
   const onSubmit = async (e) => {
+  
+    if(!availablePaymentState( {reward: info.reward})){
+      alert('결제할 수 없는 상태입니다.\n적립금, 쿠폰 등 사용가능여부를 확인하시기 바랍니다.');
+      window.location.href = '/mypage/reward';
+      return;
+    }
     // console.log(info,'info');
     // console.log(form);
     e.preventDefault();
@@ -200,12 +206,26 @@ export function Payment({
       m_redirect_url: `${window.location.origin}/order/loading/${id}`
 
     };
-    IMP.request_pay(data, callback);
+    
+ 
+    // 결제 이슈를 보완하기 인하여 Api Request Data 추가를 위해 사용
+    const callbackData = {
+      discountReward: body.discountReward,
+      
+    }
+    IMP.request_pay(data, callback.bind(null, callbackData));
     
     /* 4. 결제 창 호출하기 */
-    async function callback(response) {
+    async function callback(callbackData, response) {
+      // 결제 이슈를 보완하기 인하여 Api Request Data 추가를 위해 사용
+      const data = {
+        discountReward: callbackData.discountReward
+      }
+      
       console.log(response);
       const { success, imp_uid, merchant_uid, error_msg } = response;
+  
+     
       
     /* 3. 콜백 함수 정의하기 */
     if (success) {
@@ -214,7 +234,8 @@ export function Payment({
       
       const r = await postObjData(`/api/orders/${id}/general/success`, {
         impUid : imp_uid,
-        merchantUid : merchant_uid
+        merchantUid : merchant_uid,
+        discountReward: data.discountReward,
       });
       console.log(r);
       if(r.isDone){
@@ -269,12 +290,21 @@ export function Payment({
       m_redirect_url: `${window.location.origin}/order/loading/subscribe/${id}/${randomStr}/${body.paymentPrice}/${merchantUid}/test바프독결제`
 
     };
-
-    IMP.request_pay(data, callback);
+  
+    // 결제 이슈를 보완하기 인하여 Api Request Data 추가를 위해 사용
+    const callbackData = {
+      discountReward: body.discountReward,
+    
+    }
+    IMP.request_pay(data, callback.bind(null, callbackData));
     
     /* 4. 결제 창 호출하기 */
     async function callback(response) {
       console.log(response);
+      const data = {
+        discountReward: body.discountReward,
+    
+      }
       const { success, customer_uid, imp_uid, merchant_uid, card_name, card_number, error_msg } = response;
      
       const IMPORT_PAYMENT_CANCEL = response.error_msg?.indexOf('[결제포기]') >= 0;
@@ -321,6 +351,7 @@ export function Payment({
         impUid : imp_uid,
         merchantUid : merchantUid,
         customerUid : customer_uid,
+        discountReward: data.discount
       });
       console.log(r);
       if(r.isDone){
@@ -369,7 +400,7 @@ export function Payment({
       //   }
     }
   
-    };
+    }
     
   }
 
