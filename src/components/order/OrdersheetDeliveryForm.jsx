@@ -28,6 +28,13 @@ export const OrdersheetDeliveryForm = ({
   const [sameUserInfo, setSameUserInfo] = useState(false);
   // 배송정보
   const [deliveryInfo, setDeliveryInfo] = useState(initialDeliveryInfos);
+  const [onMount, setOnMount] = useState( false );
+  
+  useEffect( () => {
+    if(!onMount) {
+      setOnMount(true);
+    }
+  }, [] );
   
   
   useEffect(() => {
@@ -162,7 +169,7 @@ export const OrdersheetDeliveryForm = ({
                 disabled
                 value={(!bundle && deliveryInfo.zipcode) || ''}
               />
-              <WindowOpener
+              {onMount && <WindowOpener
                 url={'/popup/searchAddress'}
                 bridge={onReceivePopupData}
                 disabled={(!bundle && !!form.sameUserInfo) || bundle}
@@ -174,7 +181,8 @@ export const OrdersheetDeliveryForm = ({
                 >
                   {deliveryInfo?.city ? '재검색' : '주소검색'}
                 </span>
-              </WindowOpener>
+              </WindowOpener>}
+              
             </li>
 
             <li className={s.input_col}>
