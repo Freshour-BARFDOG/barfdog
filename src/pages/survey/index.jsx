@@ -224,7 +224,6 @@ export default function Survey() {
       if (idx === 2) desc.innerText = '추가정보 입력';
     });
     mct.alertHide('');
-    // initializeAlertModal();
   };
 
   const onSwiperChangeIndex = (swiper) => {
@@ -336,15 +335,6 @@ export default function Survey() {
     }));
   };
 
-  // const onShowModalHandler = (message) => {
-  //   mct.alertShow();
-  //   setModalMessage(message);
-  // };
-
-  // const moveToNextPage = () => {
-  //   const surveyReportsId = router.query.surveyReportsId || '';
-  //   submitState && router.push(`/survey/statistics/${surveyReportsId}`);
-  // };
 
   const moveToPrevPage = () => {
     router.back();
