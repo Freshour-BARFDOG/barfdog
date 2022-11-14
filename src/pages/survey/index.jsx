@@ -1,17 +1,17 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import s from './survey.module.scss';
 import StyleSwiper from '/src/components/survey/surveySwiper.module.scss';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import {Swiper, SwiperSlide} from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import siblings from '/util/func/siblings';
-import { SurveyPagination } from '../../components/survey/SurveyPagination';
-import { FullScreenRunningDog} from '/src/components/atoms/FullScreenLoading';
-import { EffectFade, Navigation, Pagination } from 'swiper';
+import {SurveyPagination} from '../../components/survey/SurveyPagination';
+import {FullScreenRunningDog} from '/src/components/atoms/FullScreenLoading';
+import {EffectFade, Navigation, Pagination} from 'swiper';
 import SurveyStep1 from '/src/components/survey/SurveyStep1';
 import SurveyStep2 from '/src/components/survey/SurveyStep2';
 import SurveyStep3 from '/src/components/survey/SurveyStep3';
@@ -21,17 +21,18 @@ import filter_onlyNumber from '/util/func/filter_onlyNumber';
 import filter_extraIntegerNumberZero from '/util/func/filter_extraIntegerNumberZero';
 import filter_ints from '/util/func/filter_ints';
 import filter_demicals from '/util/func/filter_demicals';
-import { dogCautionType } from '/store/TYPE/dogCautionType';
+import {dogCautionType} from '/store/TYPE/dogCautionType';
 import rem from '/util/func/rem';
-import { dogActivityLevelType } from '/store/TYPE/dogActivityLevelType';
-import { dogInedibleFoodType } from '/store/TYPE/dogInedibleFoodType';
+import {dogActivityLevelType} from '/store/TYPE/dogActivityLevelType';
+import {dogInedibleFoodType} from '/store/TYPE/dogInedibleFoodType';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
-import { useModalContext } from '/store/modal-context';
-import { validate } from '/util/func/validation/validation_survey';
-import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
-import { postObjData } from '../api/reqData';
-import { useRouter } from 'next/router';
-
+import {useModalContext} from '/store/modal-context';
+import {validate} from '/util/func/validation/validation_survey';
+import {valid_hasFormErrors} from '/util/func/validation/validationPackage';
+import {postObjData} from '../api/reqData';
+import {useRouter} from 'next/router';
+import {SurveyDataClass} from "../../class/surveyDataClass";
+import useUserData from "../../../util/hook/useUserData";
 
 //
 // const initialFormValues = { // ! TEST 용
@@ -54,6 +55,9 @@ import { useRouter } from 'next/router';
 //   caution: dogCautionType.NONE, // 기타 특이사항 // 빈값('')일 경우, '있어요'선택됨)
 // };
 
+
+
+const svyData = new SurveyDataClass();
 const initialFormValues = {
   name: '', // 강아지이름 str
   gender: '', // 강아지 성별 str
@@ -64,8 +68,8 @@ const initialFormValues = {
   weight: '', // 강아지 몸무게 str // 몸무게 소수점 아래 1자리
   neutralization: null, // 중성화여부 Boolean
   activityLevel: dogActivityLevelType.NORMAL, // 활동량 레벨 str
-  walkingCountPerWeek: null, // 주당 산책 횟수 num
-  walkingTimePerOneTime: null, // 한 번 산책할 때 산책 시간 num
+  walkingCountPerWeek: '', // 주당 산책 횟수 string
+  walkingTimePerOneTime: '', // 한 번 산책할 때 산책 시간 string
   dogStatus: '', // 강아지 건강/임신 등의 상태 str
   snackCountLevel: '', //  간식먹는 정도 str
   inedibleFood: dogInedibleFoodType.NONE, // 못 먹는 음식 str => get API 리스트 // 빈값('')일 경우, '있어요'선택됨)
@@ -74,13 +78,12 @@ const initialFormValues = {
   caution: dogCautionType.NONE, // 기타 특이사항 // 빈값('')일 경우, '있어요'선택됨)
 };
 
-// ! 설문조사 수정인지 // 생성인지에 따라서 =>버튼이름 변경하
-
 export default function Survey() {
-  
   const loadingDuration = 1200; // ms
   const lastStep = 3;
   const router = useRouter();
+  const userData = useUserData();
+  const userId = userData?.memberId;
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
   const [formValues, setFormValues] = useState(initialFormValues);
@@ -92,10 +95,33 @@ export default function Survey() {
   const nextBtnRef = useRef(null);
   const submitBtnRef = useRef(null);
   const surveyPageRef = useRef(null);
-  // console.log(formValues)
+  
+  
 
+  // console.log(formValues);
+  useEffect(() => {
+    if(!userId) return;
+    const storedData = svyData.getSurveyCookie(userId);
+    storedData && setFormValues(JSON.parse(storedData));
+    
+  },[userId])
+  
+  
+  useEffect( () => {
+    // console.log(formValues);
+    // Storing information in cookies
+    
+    if(userId){
+      svyData.setSurveyCookie(userId, formValues);
+    }
+  }, [formValues] );
+  
+  
   // -------------------------------------------------------------------------------- //
-  const changeSwiperHeightDependencies = [formValues.inedibleFood, formValues.caution];
+  const changeSwiperHeightDependencies = [
+    formValues.inedibleFood,
+    formValues.caution,
+  ];
   useEffect(() => {
     // 코드의 역할: UI '짤림 현상'해결
     // (ex. 반려견 못먹는 음식 '있어요' / 기타 특이사항: '있어요')
@@ -104,7 +130,9 @@ export default function Survey() {
     // => swiper-wrapper의 style에 height값이 강제로 할당되어있어서,
     // => 증가된 height부분은  UI가 짤림현상이 발생함
     const swiperWrap = surveyPageRef.current;
-    const slideWithDependencyElem = swiperWrap.querySelector('.swiper-slide-active');
+    const slideWithDependencyElem = swiperWrap.querySelector(
+      '.swiper-slide-active',
+    );
     const activeSlideHeight = slideWithDependencyElem.offsetHeight;
     const targetSwiperElem = swiperWrap.querySelector('.swiper-wrapper');
     targetSwiperElem.style.height = rem(activeSlideHeight);
@@ -127,7 +155,9 @@ export default function Survey() {
           .split(',')
           .filter((type) => type.indexOf('ints') >= 0)[0];
         const intNum = Number(thisFilteredType.split('-')[1]);
-        filteredValue = intNum ? filter_ints(filteredValue, intNum) : filteredValue;
+        filteredValue = intNum
+          ? filter_ints(filteredValue, intNum)
+          : filteredValue;
       }
       if (filteredType.indexOf('demicals') >= 0) {
         filteredValue = filter_extraIntegerNumberZero(filteredValue);
@@ -135,7 +165,9 @@ export default function Survey() {
           .split(',')
           .filter((type) => type.indexOf('demicals') >= 0)[0];
         const demicalNum = Number(thisFilteredType.split('-')[1]);
-        filteredValue = demicalNum ? filter_demicals(filteredValue, demicalNum) : filteredValue;
+        filteredValue = demicalNum
+          ? filter_demicals(filteredValue, demicalNum)
+          : filteredValue;
       }
     }
 
@@ -206,9 +238,12 @@ export default function Survey() {
     siblings(bullets[idx]).forEach((sib) =>
       sib.classList.remove(StyleSwiper['swiper-pagination-bullet-active']),
     );
-    
+
     setIsLoading(() => ({ nextPage: true }));
-    setTimeout(() => setIsLoading(() => ({ nextPage: false })), loadingDuration);
+    setTimeout(
+      () => setIsLoading(() => ({ nextPage: false })),
+      loadingDuration,
+    );
     resetWindowPos();
   };
 
@@ -232,7 +267,10 @@ export default function Survey() {
     const submitBtn = submitBtnRef.current;
     const isSubmitButton = curBtn === submitBtn;
     const realCurStep = curStep - 1; // ! important : onSwiperChangeIndex => curStep +1 을 고려하여 -1 계산
-    const errObj = validate(formValues, isSubmitButton ? lastStep : realCurStep);
+    const errObj = validate(
+      formValues,
+      isSubmitButton ? lastStep : realCurStep,
+    );
     const isPassed = valid_hasFormErrors(errObj);
     const swiper = document.querySelector('.swiper').swiper;
     if (!isPassed) {
@@ -242,8 +280,8 @@ export default function Survey() {
         const errorMessage = errObj[key];
         errorMessage && errorMessages.push(`${++count}. ${errorMessage}\n`);
       }
-      console.log(errorMessages)
-      
+      console.log(errorMessages);
+
       mct.alertShow(errorMessages);
       setSubmitState(null);
       // - prevent to the Next step when validation failed
@@ -254,14 +292,13 @@ export default function Survey() {
       isSubmitButton && onSubmit();
     }
   };
-  
 
   const onSubmit = async () => {
     if (submitState === true) return;
-  
+
     const errObj = validate(formValues, 3);
     const isPassed = valid_hasFormErrors(errObj);
-    if(!isPassed) return;
+    if (!isPassed) return;
     const postFormValuesApiUrl = '/api/dogs';
     try {
       setIsLoading((prevState) => ({
@@ -272,13 +309,12 @@ export default function Survey() {
       const res = await postObjData(postFormValuesApiUrl, formValues);
       console.log(res);
       if (res.isDone) {
-        const slicedReportApiLink = res.data.data._links.query_surveyReport.href.split('/');
+        const slicedReportApiLink =
+          res.data.data._links.query_surveyReport.href.split('/');
         const linkLength = slicedReportApiLink.length;
-        const surveyReportsId = slicedReportApiLink[linkLength - 1];;
-        // const curPath = router.pathname;
-        // await router.push(`${curPath}?surveyReportsId=${surveyReportsId}`);
-        // onShowModalHandler(modalMessage);
-        await router.push(`/survey/statistics/${surveyReportsId}`)
+        const surveyReportsId = slicedReportApiLink[linkLength - 1];
+        svyData.deleteSurveyCookie(userId)
+        await router.push(`/survey/statistics/${surveyReportsId}`);
         setSubmitState(true);
       } else {
         modalMessage = '내부 통신장애입니다. 잠시 후 다시 시도해주세요.';
@@ -289,9 +325,9 @@ export default function Survey() {
       await mct.alertShow(
         'API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.',
       );
-      setTimeout(() =>{
-        window.location.href='/surveyGuide';
-      },[1000])
+      setTimeout(() => {
+        window.location.href = '/surveyGuide';
+      }, [1000]);
       console.error('API통신 오류 : ', err);
     }
     setIsLoading((prevState) => ({
@@ -314,15 +350,13 @@ export default function Survey() {
     router.back();
   };
 
-  const initializeAlertModal = () => {
-    mct.alertHide();
-    setModalMessage('');
-  };
-// console.log(submitState)
-  
+
+
   return (
     <>
-      {(isLoading.submit || isLoading.nextPage) && submitState !== true && <FullScreenRunningDog opacity={1} />}
+      {(isLoading.submit || isLoading.nextPage) && submitState !== true && (
+        <FullScreenRunningDog opacity={1} />
+      )}
       <MetaTitle title="설문조사" />
       <Layout>
         <Wrapper>
@@ -344,7 +378,6 @@ export default function Survey() {
                 <SurveyStep2
                   formValues={formValues}
                   setFormValues={setFormValues}
-                  onInputChangeHandler={onInputChangeHandler}
                 />
               </SwiperSlide>
               <SwiperSlide>
@@ -356,14 +389,28 @@ export default function Survey() {
               </SwiperSlide>
             </Swiper>
             <SurveyPagination
-              referrer={{ prevBtn: prevBtnRef, nextBtn: nextBtnRef, submitBtn: submitBtnRef }}
+              referrer={{
+                prevBtn: prevBtnRef,
+                nextBtn: nextBtnRef,
+                submitBtn: submitBtnRef,
+              }}
               onChangeStep={onNavButtonClick}
             />
           </div>
         </Wrapper>
       </Layout>
       {hasAlert && (
-        <Modal_global_alert message={modalMessage} onClick={submitState === 'READY' ? onSubmit : submitState === false ? moveToPrevPage : null} background />
+        <Modal_global_alert
+          message={modalMessage}
+          onClick={
+            submitState === 'READY'
+              ? onSubmit
+              : submitState === false
+              ? moveToPrevPage
+              : null
+          }
+          background
+        />
       )}
     </>
   );

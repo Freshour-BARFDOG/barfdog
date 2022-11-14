@@ -16,6 +16,14 @@ export const DogTypeCustomSelectWithCustomOptions = ({id, options, width, value,
   const inputRef = useRef( null );
   const searchInputRef = useRef( null );
   
+  useEffect( () => {
+    // cookie를 통하여, 기본 값이 존재할 경우
+    if(initialSelectedOption){
+      setSelectedOption( initialSelectedOption );
+    }
+    
+  }, [initialSelectedOption] );
+  
   
   useEffect( () => {
     // HIDE Option
