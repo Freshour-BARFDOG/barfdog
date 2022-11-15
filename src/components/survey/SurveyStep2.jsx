@@ -8,7 +8,7 @@ import {dogPhysicalStatusType} from "/store/TYPE/dogPhysicalStatusType";
 
 
 
-export default function SurveyStep2 ({formValues, setFormValues, onInputChangeHandler}) {
+export default function SurveyStep2 ({formValues, setFormValues}) {
   
   const defaultLabel = {label: '선택', value: ''};
   let walkingCountPerWeekOptions = new Array(7);
@@ -25,9 +25,8 @@ export default function SurveyStep2 ({formValues, setFormValues, onInputChangeHa
   walkingCountPerWeekOptions.unshift(defaultLabel);
   walkingTimePerOneTimeOptions.unshift(defaultLabel);
   
-  const walkingOption = ()=>{
-  
-  }
+
+  // console.log(formValues)
   
   return (
     <section className={s.step2page}>

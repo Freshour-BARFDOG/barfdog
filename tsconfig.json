@@ -25,7 +25,8 @@
     "removeComments": true, // 주석제거
     /* Type Checking */
     "strict": false,
-    "noUnusedLocals": true,
+    "noUnusedParameters": false, // 사용하지않는 함수 인자 에러표시
+    "noUnusedLocals": false, // 사용하지 않는 변수에 에러표시
   },
   "include": [
     "next-env.d.ts",
