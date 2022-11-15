@@ -1,5 +1,5 @@
 import React from 'react';
-import s from './algorithm.module.scss';
+import s from './adminSettings.module.scss';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import filter_emptyValue from '/util/func/filter_emptyValue';
 import filter_onlyNumber from '/util/func/filter_onlyNumber';
