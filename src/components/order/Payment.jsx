@@ -8,6 +8,7 @@ import {calcOrdersheetPrices} from './calcOrdersheetPrices';
 import {useRouter} from 'next/router';
 import axios from 'axios';
 import {availablePaymentState} from "../../../util/func/availablePaymentState";
+import { paymethodFilter } from '../../../util/filter_iamport_paymethod';
 
 export function Payment({
   info,
@@ -37,10 +38,14 @@ export function Payment({
   }, []);
 
   const onSubmit = async (e) => {
-  
+    
     if(!availablePaymentState( {reward: info.reward})){
       alert('결제할 수 없는 상태입니다.\n적립금, 쿠폰 등 사용가능여부를 확인하시기 바랍니다.');
       window.location.href = '/mypage/reward';
+      return;
+    }
+    if(form.paymentMethod=='KAKAO_PAY'){
+      alert(`카카오페이 결제 준비중입니다. 다른 결제수단을 선택해주세요.`);
       return;
     }
     // console.log(info,'info');
@@ -194,7 +199,7 @@ export function Payment({
     // TODO: name(주문명) test 지우기
     const data = {
       pg: 'kcp', // PG사
-      pay_method: 'card', // 결제수단
+      pay_method: paymethodFilter(body.paymentMethod), // 결제수단
       merchant_uid: merchantUid, // 주문번호
       amount: body.paymentPrice, // 결제금액
       name: `Test ${paymentName}`, // 주문명
