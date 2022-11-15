@@ -8,6 +8,7 @@ import {calcOrdersheetPrices} from './calcOrdersheetPrices';
 import {useRouter} from 'next/router';
 import axios from 'axios';
 import {availablePaymentState} from "../../../util/func/availablePaymentState";
+import { paymethodFilter } from '../../../util/filter_iamport_paymethod';
 
 export function Payment({
   info,
@@ -37,10 +38,18 @@ export function Payment({
   }, []);
 
   const onSubmit = async (e) => {
-  
+    
     if(!availablePaymentState( {reward: info.reward})){
       alert('결제할 수 없는 상태입니다.\n적립금, 쿠폰 등 사용가능여부를 확인하시기 바랍니다.');
       window.location.href = '/mypage/reward';
+      return;
+    }
+    if(form.paymentMethod === 'KAKAO_PAY'){
+      alert(`카카오페이 결제 준비중입니다. 다른 결제수단을 선택해주세요.`);
+      return;
+    }
+    if(orderType === 'subscribe' && form.paymentMethod ==='NAVER_PAY'){
+      alert(`정기구독 네이버페이 결제 준비중입니다. 다른 결제수단을 선택해주세요.`);
       return;
     }
     // console.log(info,'info');
@@ -194,7 +203,7 @@ export function Payment({
     // TODO: name(주문명) test 지우기
     const data = {
       pg: 'kcp', // PG사
-      pay_method: 'card', // 결제수단
+      pay_method: paymethodFilter(body.paymentMethod), // 결제수단
       merchant_uid: merchantUid, // 주문번호
       amount: body.paymentPrice, // 결제금액
       name: `Test ${paymentName}`, // 주문명
@@ -299,10 +308,11 @@ export function Payment({
     IMP.request_pay(data, callback.bind(null, callbackData));
     
     /* 4. 결제 창 호출하기 */
-    async function callback(response) {
+    async function callback(callbackData, response) {
+    
       console.log(response);
-      const data = {
-        discountReward: body.discountReward,
+      const discountData = {
+        discountReward: callbackData.discountReward,
     
       }
       const { success, customer_uid, imp_uid, merchant_uid, card_name, card_number, error_msg } = response;
@@ -351,7 +361,7 @@ export function Payment({
         impUid : imp_uid,
         merchantUid : merchantUid,
         customerUid : customer_uid,
-        discountReward: data.discount
+        discountReward: discountData.discountReward
       });
       console.log(r);
       if(r.isDone){
