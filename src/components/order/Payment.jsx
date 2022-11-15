@@ -44,8 +44,12 @@ export function Payment({
       window.location.href = '/mypage/reward';
       return;
     }
-    if(form.paymentMethod=='KAKAO_PAY'){
+    if(form.paymentMethod === 'KAKAO_PAY'){
       alert(`카카오페이 결제 준비중입니다. 다른 결제수단을 선택해주세요.`);
+      return;
+    }
+    if(orderType === 'subscribe' && form.paymentMethod ==='NAVER_PAY'){
+      alert(`정기구독 네이버페이 결제 준비중입니다. 다른 결제수단을 선택해주세요.`);
       return;
     }
     // console.log(info,'info');
