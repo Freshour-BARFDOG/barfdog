@@ -86,7 +86,12 @@ function PricePolicyPage({data}) {
           half:parseFloat(formValues[subscribePlanType.HALF.NAME]),
           topping: parseFloat(formValues[subscribePlanType.TOPPING.NAME]),
         };
-        const apiUrl = '/api/planDiscount/update'
+        const apiUrl = '/api/planDiscount/update';
+        // ! HTTP protocol Method 확인필요 (POST or PUT)
+        // ! HTTP protocol Method 확인필요 (POST or PUT)
+        // ! HTTP protocol Method 확인필요 (POST or PUT)
+        // ! HTTP protocol Method 확인필요 (POST or PUT)
+        // ! HTTP protocol Method 확인필요 (POST or PUT)
         const res = await putObjData(apiUrl, body);
         console.log(res);
         if (res.isDone) {
@@ -126,7 +131,7 @@ function PricePolicyPage({data}) {
         <AdminContentWrapper id={s.main}>
           <div className="title_main">
             <h1 className={s['main-title']}>
-              <span>플랜 할인율 설정
+              <span>가격 정책
                 {isLoading.fetching && <Spinner />}</span>
               <span className={s.date}>최종수정일: {info.createdDate}</span>
             </h1>
@@ -135,7 +140,7 @@ function PricePolicyPage({data}) {
             <div className="cont">
               <div className="cont_body">
                 <h2 className={`${s['title']} ${s['has-notice']}`}>
-                  플랜
+                  플랜 할인율
                   <span className={s.notice}>할인율 변동 시, 예약된 정기구독이 있는 유저의 '다음 정기구독 결제금액'이 즉시 변경됩니다.</span>
                 </h2>
                
@@ -238,8 +243,7 @@ export async function getServerSideProps ({ req }) {
   
   if(res.data){
     const data = res.data;
-    console.log(data)
-    console.log(data.createdDate, typeof data.createdDate)
+    // console.log(data)
     DATA = {
       full: data.full,
       half: data.half,
