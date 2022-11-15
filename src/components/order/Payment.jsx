@@ -299,10 +299,11 @@ export function Payment({
     IMP.request_pay(data, callback.bind(null, callbackData));
     
     /* 4. 결제 창 호출하기 */
-    async function callback(response) {
+    async function callback(callbackData, response) {
+    
       console.log(response);
-      const data = {
-        discountReward: body.discountReward,
+      const discountData = {
+        discountReward: callbackData.discountReward,
     
       }
       const { success, customer_uid, imp_uid, merchant_uid, card_name, card_number, error_msg } = response;
@@ -351,7 +352,7 @@ export function Payment({
         impUid : imp_uid,
         merchantUid : merchantUid,
         customerUid : customer_uid,
-        discountReward: data.discount
+        discountReward: discountData.discountReward
       });
       console.log(r);
       if(r.isDone){
