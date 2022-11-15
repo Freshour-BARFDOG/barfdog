@@ -7,7 +7,12 @@ export function validate(arr) {
     const innerError = {}
     for (const key in itemObj) {
       const val = itemObj[key];
-      innerError[key] = valid_isEmptyInCustom(val);
+      if (key === 'id') {
+        innerError[key] = val; // client에서 에러메시지 띄우기 위함
+      } else {
+        innerError[key] = valid_isEmptyInCustom(val);
+        
+      }
     }
     errors.push(innerError);
   })
@@ -18,7 +23,12 @@ export function validate(arr) {
 
 
 export const valid_isEmptyInCustom = (value) => {
-  const error = (value !== '0' && value !== 0 && value) ? '' : '항목이 비어있습니다.';
+  let error='';
+  
+  if(typeof value !== 'number') value = Number(value);
+  
+  error = value < 0 ? '적절하지 않은 값입니다.' : '';
+  
   return error;
 };
 

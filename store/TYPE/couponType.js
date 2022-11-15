@@ -25,4 +25,7 @@ export const couponActiveType = {
   INACTIVE: 'INACTIVE',
 }
 
-export const autoPublishedCouponType = ['정기구독할인쿠폰', '반려견생일쿠폰', '견주생일쿠폰'];
+
+// ! 어드민에서 자동발행쿠폰의 이름, 할인금액, 사용종류, 쿠폰종류 등의 모든 정보는 수정할 수 없음.
+export const gradeCouponNames = ['등급쿠폰1000원', '등급쿠폰2000원', '등급쿠폰2500원', '등급쿠폰3000원', '등급쿠폰4000원', '등급쿠폰5000원'];
+export const eventCouponNames = ['정기구독할인쿠폰', '반려견생일쿠폰', '견주생일쿠폰'];

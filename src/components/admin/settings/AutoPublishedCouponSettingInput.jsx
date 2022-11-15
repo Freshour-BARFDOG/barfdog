@@ -29,21 +29,12 @@ const AutoPublishedCouponSettingInput = ({
     const innerId = input.dataset.innerId;
     const filteredType = input.dataset.inputType;
     let filteredValue = value;
-    if (filteredType) {
-      filteredValue = filter_emptyValue(value);
-    }
-    if (filteredType && filteredType.indexOf('number') >= 0) {
-      filteredValue = filter_onlyNumber(filteredValue);
-    }
-    if (filteredType && filteredType.indexOf('currency') >= 0) {
-      filteredValue = transformLocalCurrency(filteredValue);
-    }
-    if (filteredType && filteredType.indexOf('percent') >= 0) {
-      filteredValue = transformClearLocalCurrency(filteredValue) > '100' ? '100' : filteredValue;
-      // - MEMO 100 : string이어야함.
-    }
-    
+    filteredValue = filter_emptyValue(value);
+    filteredValue = filter_onlyNumber(filteredValue);
+    filteredValue = transformClearLocalCurrency(filteredValue) > '100' ? '100' : filteredValue;
     filteredValue = filter_extraIntegerNumberZero(filteredValue);
+    // ! 소수점 적용을 위해, Number변환은 해당 component에서 진행하지 않음
+    
     setFormValues((items) => {
       const nextState = items.map((itemObj) => {
         let tempObj = {};
@@ -78,11 +69,11 @@ const AutoPublishedCouponSettingInput = ({
               type="text"
               data-align={'right'}
               data-input-type={'number, percent'}
-              value={formValues[index][innerId[0]] || '0'}
+              value={formValues.filter(item=>item.id === id)[0][innerId[0]] || '0'}
               onChange={onInputChangeHandler}
             />
             <em className="unit">%</em>
-            {formErrors[index] && formErrors[index][innerId[0]] && <ErrorMessage>{formErrors[index][innerId[0]]}</ErrorMessage>}
+            {formErrors.filter(item=>item.id === id)[0] && formErrors.filter(item=>item.id === id)[0][innerId[0]] && <ErrorMessage>{formErrors.filter(item=>item.id === id)[0][innerId[0]]}</ErrorMessage>}
           </div>
         </div>
       </div>
