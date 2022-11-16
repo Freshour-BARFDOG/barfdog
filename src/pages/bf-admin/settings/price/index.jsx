@@ -29,7 +29,7 @@ function PricePolicyPage({data}) {
   const info = {
     ...initFormValues,
     createdDate: data.createdDate,
-    updatedDate: data.updatedDate,
+    modifiedDate: data.modifiedDate,
   }
 
   const mct = useModalContext();
@@ -86,13 +86,9 @@ function PricePolicyPage({data}) {
           half:parseFloat(formValues[subscribePlanType.HALF.NAME]),
           topping: parseFloat(formValues[subscribePlanType.TOPPING.NAME]),
         };
-        const apiUrl = '/api/planDiscount/update';
-        // ! HTTP protocol Method 확인필요 (POST or PUT)
-        // ! HTTP protocol Method 확인필요 (POST or PUT)
-        // ! HTTP protocol Method 확인필요 (POST or PUT)
-        // ! HTTP protocol Method 확인필요 (POST or PUT)
-        // ! HTTP protocol Method 확인필요 (POST or PUT)
+        const apiUrl = '/api/admin/planDiscount';
         const res = await putObjData(apiUrl, body);
+        
         console.log(res);
         if (res.isDone) {
           setSubmitted(true);
@@ -133,7 +129,7 @@ function PricePolicyPage({data}) {
             <h1 className={s['main-title']}>
               <span>가격 정책
                 {isLoading.fetching && <Spinner />}</span>
-              <span className={s.date}>최종수정일: {info.createdDate}</span>
+              <span className={s.date}>최종수정일: {info.modifiedDate}</span>
             </h1>
           </div>
           <form action="/" method="post">
@@ -238,18 +234,17 @@ export default PricePolicyPage;
 export async function getServerSideProps ({ req }) {
   let DATA = null;
   const apiUrl = '/api/planDiscount';
-  // const res = await getDataSSR(req, apiUrl); // ! PROD
-  const res = DUMMY_RESPONSE; //  ! TEST
+  const res = await getDataSSR(req, apiUrl);
   
   if(res.data){
-    const data = res.data;
+    const data = res.data._embedded.planDiscountResponseDtoList[0];
     // console.log(data)
     DATA = {
       full: data.full,
       half: data.half,
       topping: data.topping,
       createdDate: transformDate(data.createdDate,'time'),
-      updatedDate: transformDate(data.updatedDate,'time'),
+      modifiedDate: transformDate(data.modifiedDate,'time'),
     }
   }
 
@@ -258,14 +253,14 @@ export async function getServerSideProps ({ req }) {
   }
 }
 
-
-
-const DUMMY_RESPONSE = {
-  data:{
-    full: 5,
-    half: 3,
-    topping: 1,
-    createdDate: "2022-11-15T16:10:42.927",
-    updatedDate: "2022-11-17T16:10:42.927",
-  }
-}
+//
+//
+// const DUMMY_RESPONSE = {
+//   data:{
+//     full: 5,
+//     half: 3,
+//     topping: 1,
+//     createdDate: "2022-11-15T16:10:42.927",
+//     updatedDate: "2022-11-17T16:10:42.927",
+//   }
+// }
