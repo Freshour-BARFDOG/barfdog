@@ -8,13 +8,15 @@ import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import Spinner from '/src/components/atoms/Spinner';
 import { postObjData } from '/src/pages/api/reqData';
 import Modal_confirm from '/src/components/modal/Modal_confirm';
-import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import { useModalContext } from '/store/modal-context';
-import { ToggleBoxContext } from '../atoms/ToggleBox';
 import { FullScreenLoading } from '../atoms/FullScreenLoading';
+import {useSubscribePlanInfo} from "/util/hook/useSubscribePlanInfo";
 
 export const SubscribePlan = ({ subscribeInfo }) => {
   // console.log(subscribeInfo )
+  const subscribePlanInfo = useSubscribePlanInfo();
+  // console.log(subscribePlanInfo);
+  
   const planInfoList = [
     {
       id: subscribePlanType.FULL.NAME,
@@ -28,7 +30,7 @@ export const SubscribePlan = ({ subscribeInfo }) => {
       numberOfPacksPerDay: subscribePlanType.FULL.numberOfPacksPerDay,
       totalNumberOfPacks: subscribePlanType.FULL.totalNumberOfPacks,
       weeklyPaymentCycle: subscribePlanType.FULL.weeklyPaymentCycle,
-      discountPercent: subscribePlanType.FULL.discountPercent,
+      discountPercent: subscribePlanInfo.discountPercent[subscribePlanType.FULL.NAME],
       onePackGram: subscribeInfo?.info.oneMealRecommendGram,
       price: {
         perPack: subscribeInfo.price[subscribePlanType.FULL.NAME].perPack,
@@ -58,7 +60,7 @@ export const SubscribePlan = ({ subscribeInfo }) => {
       numberOfPacksPerDay: subscribePlanType.HALF.numberOfPacksPerDay,
       totalNumberOfPacks: subscribePlanType.HALF.totalNumberOfPacks,
       weeklyPaymentCycle: subscribePlanType.HALF.weeklyPaymentCycle,
-      discountPercent: subscribePlanType.HALF.discountPercent,
+      discountPercent: subscribePlanInfo.discountPercent[subscribePlanType.HALF.NAME],
       onePackGram: subscribeInfo?.info.oneMealRecommendGram,
       price: {
         perPack: subscribeInfo.price[subscribePlanType.HALF.NAME].perPack,
@@ -81,7 +83,7 @@ export const SubscribePlan = ({ subscribeInfo }) => {
       numberOfPacksPerDay: subscribePlanType.TOPPING.numberOfPacksPerDay,
       totalNumberOfPacks: subscribePlanType.TOPPING.totalNumberOfPacks,
       weeklyPaymentCycle: subscribePlanType.TOPPING.weeklyPaymentCycle,
-      discountPercent: subscribePlanType.TOPPING.discountPercent,
+      discountPercent: subscribePlanInfo.discountPercent[subscribePlanType.TOPPING.NAME],
       onePackGram: subscribeInfo?.info.oneMealRecommendGram,
       price: {
         perPack: subscribeInfo.price[subscribePlanType.TOPPING.NAME].perPack,
@@ -100,6 +102,7 @@ export const SubscribePlan = ({ subscribeInfo }) => {
       },
     },
   ];
+  
   const mct = useModalContext();
   const initialMemberPlanName = subscribeInfo.info.planName;
   const [selectedPlanName, setSelectedPlanName] = useState(initialMemberPlanName);
@@ -153,9 +156,11 @@ export const SubscribePlan = ({ subscribeInfo }) => {
     setIsLoading({ reload: true });
     window.location.reload();
   };
+  if(isLoading.reload || subscribePlanInfo.isLoading){
+    return  <FullScreenLoading opacity={1} />
+  }
   return (
     <>
-      {isLoading.reload && <FullScreenLoading />}
       <div className={`${s.flex_box} ${s.subscribePlan}`}>
         {planInfoList.map((info, index) => (
           <CustomInput

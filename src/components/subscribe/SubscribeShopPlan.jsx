@@ -5,9 +5,12 @@ import ItemLabel from '/src/components/atoms/ItemLabel';
 import Image from 'next/image';
 import { subscribePlanType } from '/store/TYPE/subscribePlanType';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
+import {useSubscribePlanInfo} from "../../../util/hook/useSubscribePlanInfo";
+import {FullScreenLoading} from "../atoms/FullScreenLoading";
 
 export const SubscribeShopPlan = ({ name, info, form, setForm, calcPrice }) => {
   
+  const subscribePlanInfo = useSubscribePlanInfo();
   const initialPlan = form.plan || null
   const [selectedPlan, setSelectedPlan] = useState(initialPlan);
   useEffect(() => {
@@ -17,6 +20,10 @@ export const SubscribeShopPlan = ({ name, info, form, setForm, calcPrice }) => {
     }));
     // 선택된 플랜을 의존성으로 넣어서 계산한다.
   }, [selectedPlan]);
+  
+  if(subscribePlanInfo.isLoading){
+    return <FullScreenLoading opacity={1}/>
+  }
 
   return (
     <section className={s.regular_delivery}>
@@ -81,7 +88,7 @@ export const SubscribeShopPlan = ({ name, info, form, setForm, calcPrice }) => {
             <li>
               {/*{form.recipeIdList?.length > 0 && form.recipeIdList[0] && (*/}
               <div className={s.text1}>
-                {subscribePlanType.FULL.discountPercent + '%'}&nbsp;
+                {subscribePlanInfo.discountPercent[subscribePlanType.FULL.NAME] + '%'}&nbsp;
                   <span>
                     {transformLocalCurrency(
                       calcPrice(subscribePlanType.FULL.totalNumberOfPacks)
@@ -160,7 +167,7 @@ export const SubscribeShopPlan = ({ name, info, form, setForm, calcPrice }) => {
             <li>
               {/*{form.recipeIdList?.length > 0 && form.recipeIdList[0] && (*/}
                 <div className={s.text1}>
-                  {subscribePlanType.HALF.discountPercent + '%'}&nbsp;
+                  {subscribePlanInfo.discountPercent[subscribePlanType.HALF.NAME] + '%'}&nbsp;
                   <span>
                     {transformLocalCurrency(
                       calcPrice(subscribePlanType.HALF.totalNumberOfPacks)
@@ -245,7 +252,7 @@ export const SubscribeShopPlan = ({ name, info, form, setForm, calcPrice }) => {
             <li>
               {/*{form.recipeIdList?.length > 0 && form.recipeIdList[0] && (*/}
                 <div className={s.text1} style={{ opacity: `${!form.recipeIdList ? 0 : 1}` }}>
-                  {subscribePlanType.TOPPING.discountPercent + '%'}&nbsp;
+                  {subscribePlanInfo.discountPercent[subscribePlanType.TOPPING.NAME] + '%'}&nbsp;
                   <span>
                     {transformLocalCurrency(
                       calcPrice(subscribePlanType.TOPPING.totalNumberOfPacks)
