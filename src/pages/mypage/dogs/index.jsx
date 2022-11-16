@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import s from './dogs.module.scss';
 import { dogGenderType } from '/store/TYPE/dogGenderType';
-import { subscribeStatus } from '/store';
+import { subscribeStatus } from '/store/TYPE/subscribeStatus';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from '/src/components/mypage/MypageWrapper';
