@@ -1,14 +1,15 @@
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
 import store from '@store/index';
 import '/styles/global/global.scss';
 import AuthInterceptor from '/store/auth-interceptor';
 import '/src/pages/api/axios.config';
-import { ModalContextProvider } from '/store/modal-context';
+import {ModalContextProvider} from '/store/modal-context';
 import ChannelTalkProvider from '/src/pages/api/channelTalk/ChannelTalkProvider';
 import GAProvider from '/src/pages/api/googleAnalytics/GAProvider';
-import { getDataSSR, getTokenClientSide, getTokenFromServerSide } from '/src/pages/api/reqData';
-import { userType } from '/store/TYPE/userAuthType';
-import { cookieType } from '@store/TYPE/cookieType';
+import {getDataSSR, getTokenFromServerSide} from '/src/pages/api/reqData';
+import {userType} from '/store/TYPE/userAuthType';
+import React from "react";
+import {AlertLayer} from "@src/layers/AlertLayer";
 
 // Server Only File (client에서 사용하는 로직 사용불가)
 // Next JS : 최초실행
@@ -29,7 +30,9 @@ export default function MyApp({ Component, pageProps, CustomProps }) {
         <AuthInterceptor CustomProps={CustomProps}>
           <ChannelTalkProvider>
             <ModalContextProvider>
-              <Component {...pageProps} />
+                <AlertLayer props={CustomProps}>
+                  <Component {...pageProps} />
+                </AlertLayer>
             </ModalContextProvider>
           </ChannelTalkProvider>
         </AuthInterceptor>
@@ -96,32 +99,33 @@ MyApp.getInitialProps = async (initialProps) => {
       (USER_TYPE === userType.MEMBER && res_CART.status === 200) ||
       (USER_TYPE === userType.ADMIN && res_ADMIN.status === 200)
     ) {
-      const getMemberDataApiUrl = `/api/members`;
-      const getMemberDashboardDataApiUrl = `/api/mypage`; // 마이페이지 상단 내 정보 화면
-      const res_MEMBER = await getDataSSR(req, getMemberDataApiUrl, token);
-      const data = res_MEMBER.data;
-      const res_MEMBER_Dashboard = await getDataSSR(req, getMemberDashboardDataApiUrl, token);
+      const membersApiUrl = `/api/members`;
+      const res_MEMBER = await getDataSSR(req, membersApiUrl, token);
+      const memberData = res_MEMBER.data;
+      const mypageApiUrl = `/api/mypage`; // 마이페이지 상단 내 정보 화면
+      const res_MEMBER_Dashboard = await getDataSSR(req, mypageApiUrl, token);
       const mypageData = res_MEMBER_Dashboard.data;
-      // console.log('/api/members => ',data);
+      // console.log('/api/members => ',memberData);
+      console.log('/api/mypage => ',mypageData);
       if(mypageData){
         memberDATA = {
           userType: USER_TYPE,
-          memberId: data.memberId,
-          name: data.name,
-          email: data.email,
-          phoneNumber: data.phoneNumber,
-          birthday: data.birthday,
-          gender: data.gender,
-          provider: data.provider,
-          providerId: data.providerId,
+          memberId: memberData.memberId,
+          name: memberData.name,
+          email: memberData.email,
+          phoneNumber: memberData.phoneNumber,
+          birthday: memberData.birthday,
+          gender: memberData.gender,
+          provider: memberData.provider,
+          providerId: memberData.providerId,
           grade: mypageData.mypageMemberDto.grade,
-          receiveSms: data.receiveSms,
-          receiveEmail: data.receiveEmail,
+          receiveSms: memberData.receiveSms,
+          receiveEmail: memberData.receiveEmail,
           address: {
-            zipcode: data.address.zipcode,
-            city: data.address.city,
-            street: data.address.street,
-            detailAddress: data.address.detailAddress,
+            zipcode: memberData.address.zipcode,
+            city: memberData.address.city,
+            street: memberData.address.street,
+            detailAddress: memberData.address.detailAddress,
           },
           recommendCode: mypageData.mypageMemberDto.myRecommendationCode,
           reward: mypageData.mypageMemberDto.reward,
@@ -131,10 +135,19 @@ MyApp.getInitialProps = async (initialProps) => {
             dogName:mypageData.mypageDogDto?.dogName,
             thumbnailUrl: mypageData.mypageDogDto?.thumbnailUrl || null,
           },
+          subscribe:{
+            subscribedDogs: mypageData.mypageDogDtoList?.map((dog)=>({
+              dogName:dog.dogName,
+              inStock: dog.inStock, // ! 구독상품 레시피의 재고유무
+              recipeName: dog.recipeName
+            })) || [], // 마이페이지의 모든 강아지목록이 아닌, "현재 구독중인 강아지 목록" (api 객체명으로 인해 혼동할 필요 없음)
+          }
         };
       }
-      
 
+
+
+      // STEP 4. Add cart data
       const cartData = res_CART?.data;
       if(cartData){
         cartDATA = {
@@ -168,9 +181,6 @@ MyApp.getInitialProps = async (initialProps) => {
           })),
         };
       }
-      
-    } else {
-      fetchingError = 'failed Fetching ServerSide CART DATA';
     }
   }
 
@@ -219,3 +229,22 @@ MyApp.getInitialProps = async (initialProps) => {
     },
   };
 };
+
+
+const DUMMY_RES_OBJ = [{
+  dogname: 'dog1',
+  inStock: true,
+  recipeName: 'STARTER PREMIUM'
+},{
+  dogname: 'dog2',
+  inStock: true,
+  recipeName: 'STARTER PREMIUM'
+},{
+  dogname: 'dog3',
+  inStock: true,
+  recipeName: 'STARTER PREMIUM'
+},{
+  dogname: 'dog4',
+  inStock: true,
+  recipeName: 'STARTER PREMIUM'
+}]

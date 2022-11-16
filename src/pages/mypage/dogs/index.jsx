@@ -28,6 +28,7 @@ export default function MypageDogInfoPage({ data }) {
   const [selectedItemData, setSelectedItemData] = useState(null);
   const [modalMessage, setModalMessage] = useState('');
 
+  console.log(mct);
   useEffect(() => {
     // 반려견 등록 후 , 해당 페이지 최초 접근 시, 모달메시지 나타나는 버그에 대한 일시적인 해결
     mct.alertHide();
