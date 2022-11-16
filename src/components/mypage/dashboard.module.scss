@@ -58,6 +58,11 @@ $counterBoxWidth: rem(200);
         display: grid;
         grid-template-columns: rem(60) 1fr;
         column-gap: rem(24);
+        a{
+          span{
+            cursor: pointer;
+          }
+        }
       }
     }
 

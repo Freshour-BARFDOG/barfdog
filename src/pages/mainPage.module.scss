@@ -83,6 +83,7 @@ section.sns {
     height: rem(400);
     display: flex;
     position: relative;
+    // user-select: none;
 
     a {
       width: 100%;
@@ -815,6 +816,7 @@ section.sns {
   background-color: var(--color-main);
   width: rem(220);
   box-sizing: border-box;
+  text-align: center;
 }
 .btn_worry{
   display: inline-block;
@@ -886,6 +888,7 @@ section.sns {
 
     p {
       text-align: center;
+      word-break: keep-all;
     }
   }
 
@@ -1721,7 +1724,7 @@ section.sns {
 
         // scroll 이벤트시 Scene duration과 같이 조절 
         // ex) duration={500}, height: rem(600)
-        height: rem(1200);
+        height: rem(2200);
         .image_wrap{
 
           ul {
@@ -1850,6 +1853,7 @@ section.clientWorry {
   .btn_worry2 {
     display: block;
     margin: rem(60) auto 0;
+    text-align: center;
   }
 
   .clientWorry {

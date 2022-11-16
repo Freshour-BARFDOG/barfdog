@@ -82,6 +82,7 @@ $defaultColor: var(--color-font-sub);
   .arrow {
     display: flex;
     align-items: center;
+    opacity: .5;
     svg {
       cursor: pointer;
     }
@@ -89,13 +90,21 @@ $defaultColor: var(--color-font-sub);
       stroke: $defaultColor;
     }
   }
-  .arrow.fisrt-page,
+  .arrow.first-page,
   .arrow.prev-page {
     transform: rotate(0);
+    transition: transform .5s;
+    &:hover{
+      transform: rotate(0) translateX(rem(-2));
+    }
   }
 
   .arrow.next-page,
   .arrow.last-page {
     transform: rotate(180deg);
+    transition: transform .5s;
+    &:hover{
+      transform: rotate(180deg) translateX(rem(-2));
+    }
   }
 }

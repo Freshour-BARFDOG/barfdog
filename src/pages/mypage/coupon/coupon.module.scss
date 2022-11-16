@@ -162,6 +162,12 @@ section.pageline { padding: rem(40) 0 0 0}
 
 
 @media (max-width: rem(1100)) {
+  .horizon {
+    hr{
+      max-width: rem(560);
+      width: 100%;
+    }
+  }
   .coupon_content_grid_box {
     grid-template-columns: 1fr;
     max-width: rem(560);

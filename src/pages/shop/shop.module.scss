@@ -372,6 +372,19 @@ section.pagination-section{padding : rem(80) 0 rem(70) 0 }
             
           }
         }
+        .grade_box {
+          .star_box {
+            margin-right: rem(7);
+            div{
+              i{
+                margin-right: rem(2);
+              }
+            }
+          }
+          .avg_score {
+            margin-right: rem(5);
+          }
+        }
       }
     }
   }

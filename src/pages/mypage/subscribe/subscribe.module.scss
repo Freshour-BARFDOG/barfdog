@@ -74,6 +74,7 @@ section.pagination_box{ padding: rem(80) 0 0}
           opacity: 0;
           transition: opacity .2s var(--transition-cubic);
           text-align: center;
+          word-break: keep-all;
         }
       }
       .text {
