@@ -137,6 +137,7 @@ export default function RegisterSubscribeInfoPage({ data }) {
       recipeIdList: form.recipeIdList,
       nextPaymentPrice: nextPaymentPrice, // 최종계산된가격
     };
+    console.log(body);
 
     const errObj = validate(body);
     const isPassed = valid_hasFormErrors(errObj);
@@ -329,25 +330,42 @@ export async function getServerSideProps({ req, query }) {
   // DATA: this Dog
   const getDogInfoApiUrl = `/api/dogs/${thisDogId}`;
   const dogInfoRes = await getDataSSR(req, getDogInfoApiUrl);
+
   // DATA: Recipes
   const getRecipeInfoApiUrl = `/api/recipes`;
   const recipeInfoRes = await getDataSSR(req, getRecipeInfoApiUrl);
-  const recipeIdList =
-    recipeInfoRes?.data?._embedded?.recipeListResponseDtoList?.map((l) => l.id) || [];
-  const recipeInfoList = [];
-  for (const recipeId of recipeIdList) {
-    const apiUrl = `/api/recipes/${recipeId}`;
-    const res = await getDataSSR(req, apiUrl);
-    // console.log(res)
-    recipeInfoList.push(res.data);
+  
+  if(dogInfoRes?.data && dogInfoRes?.data && recipeInfoRes?.data) {
+    const recipeIdList =
+      recipeInfoRes?.data?._embedded?.recipeListResponseDtoList?.map((l) => l.id) || [];
+    const recipeInfoList = [];
+    for (const recipeId of recipeIdList) {
+      const apiUrl = `/api/recipes/${recipeId}`;
+      const res = await getDataSSR(req, apiUrl);
+      // console.log(res)
+      recipeInfoList.push(res.data);
+    }
+  
+    data = {
+      dogDto: dogInfoRes.data.dogDto || null,
+      surveyInfo: surveyInfoRes?.data || null,
+      recipesDetailInfo: recipeInfoList,
+    };
+   
+  } else {
+    
+    return {
+      props:{},
+      redirect:{
+        destination: '/'
+      }
+    }
   }
 
-  data = {
-    dogDto: dogInfoRes?.data.dogDto || null,
-    surveyInfo: surveyInfoRes?.data || null,
-    recipesDetailInfo: recipeInfoList,
-  };
+  
 
+
+ 
   /// ! TESTTESTTESTTESTTESTTESTTESTTESTTESTTEST
   // if (data.surveyInfo) {
   //   // CASE : 플랜 변경 (4주 => 2주)
