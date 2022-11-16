@@ -86,6 +86,7 @@ function PricePolicyPage({data}) {
           half:parseFloat(formValues[subscribePlanType.HALF.NAME]),
           topping: parseFloat(formValues[subscribePlanType.TOPPING.NAME]),
         };
+        // console.log(body);
         const apiUrl = '/api/admin/planDiscount';
         const res = await putObjData(apiUrl, body);
         
@@ -155,7 +156,7 @@ function PricePolicyPage({data}) {
                           className={'text-align-right'}
                           type="text"
                           data-input-type={'number'}
-                          value={formValues[subscribePlanType.FULL.NAME] || ''}
+                          value={formValues[subscribePlanType.FULL.NAME] || 0}
                           onChange={onInputChangeHandler}
                         />
                         <em className="unit">%</em>
@@ -179,7 +180,7 @@ function PricePolicyPage({data}) {
                           className={'text-align-right'}
                           type="text"
                           data-input-type={'number'}
-                          value={formValues[subscribePlanType.HALF.NAME] || ''}
+                          value={formValues[subscribePlanType.HALF.NAME] || 0}
                           onChange={onInputChangeHandler}
                         />
                         <em className="unit">%</em>
@@ -203,7 +204,7 @@ function PricePolicyPage({data}) {
                           className={'text-align-right'}
                           type="text"
                           data-input-type={'number'}
-                          value={formValues[subscribePlanType.TOPPING.NAME] || ''}
+                          value={formValues[subscribePlanType.TOPPING.NAME] || 0}
                           onChange={onInputChangeHandler}
                         />
                         <em className="unit">%</em>
