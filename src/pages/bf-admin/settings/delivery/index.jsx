@@ -16,6 +16,7 @@ import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 import transformClearLocalCurrency from "/util/func/transformClearLocalCurrency";
 import transformLocalCurrency from "/util/func/transformLocalCurrency";
 import Tooltip from "/src/components/atoms/Tooltip";
+import s from "/src/components/admin/settings/adminSettings.module.scss";
 
 
 
@@ -165,12 +166,12 @@ function DeliverySettingPage() {
     <>
       <MetaTitle title="배송정책 설정" admin={true} />
       <AdminLayout>
-        <AdminContentWrapper>
+        <AdminContentWrapper id={s.main}>
           <div className="title_main">
-            <h1>
-              배송정책 설정
-              <Tooltip message={`- 최종수정일: ${settingModifiedDate}\n- 알고리즘 수정일과 연동되어있습니다.`} wordBreaking={true} width={'300px'}/>
-              {isLoading.fetching && <Spinner />}
+            <h1 className={s['main-title']}>
+              <span>배송정책 설정<Tooltip message={`- 배송정책 수정일과 연동되어있습니다.`} wordBreaking={true} width={'300px'}/>
+                {isLoading.fetching && <Spinner />}</span>
+              <span className={s.date}>최종수정일: {settingModifiedDate}</span>
             </h1>
           </div>
           <form action="/" method="post">

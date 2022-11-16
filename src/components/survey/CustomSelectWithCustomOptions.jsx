@@ -11,12 +11,21 @@ export const CustomSelectWithCustomOptions = ({id, options, value, setValues, pl
   const optionBoxRef = useRef( null );
   const inputRef = useRef( null );
   
-  useEffect( () => {
   
-    let initValue = selectedOption;
+  
+  useEffect( () => {
+    // 초기값할당
+    if(initialSelectedOption) {
+      setSelectedOption(initialSelectedOption);
+    }
+  
+    let initValue = initialSelectedOption;
     if(dataType === 'number'){
       initValue = Number(initValue);
+    } else {
+      initValue = initValue.toString();
     }
+ 
   
     if(setValues && typeof setValues === 'function'){
       setValues( (prevState) => ({
@@ -26,6 +35,7 @@ export const CustomSelectWithCustomOptions = ({id, options, value, setValues, pl
     }
     
   }, [initialSelectedOption] );
+  
   
   
   useEffect( () => {

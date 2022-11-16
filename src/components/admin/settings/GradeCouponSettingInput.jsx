@@ -16,52 +16,30 @@ const GradeCouponSettingInput = ({
   setFormValues,
   formErrors,
 }) => {
-  // console.log(formValues);
-  // console.log(formErrors[index])
 
   const onInputChangeHandler = (e) => {
     const input = e.currentTarget;
     const value = input.value;
     const id = Number(input.dataset.id);
-    const innerId = input.dataset.innerId;
-    const filteredType = input.dataset.inputType;
-    let filteredValue = value;
-
-    if (filteredType) {
-      filteredValue = filter_emptyValue(value);
-    }
-
-    if (filteredType && filteredType.indexOf('number') >= 0) {
-      filteredValue = filter_onlyNumber(filteredValue);
-    }
-
-    if (filteredType && filteredType.indexOf('currency') >= 0) {
-      filteredValue = transformLocalCurrency(filteredValue);
-    }
-
-    if (filteredType && filteredType.indexOf('percent') >= 0) {
-      filteredValue = transformClearLocalCurrency(filteredValue) > '100' ? '100' : filteredValue;
-      // - MEMO 100 : string이어야함.
-    }
-
+    
+    let filteredValue = filter_emptyValue(value);
+    filteredValue = filter_onlyNumber(filteredValue);
     filteredValue = filter_extraIntegerNumberZero(filteredValue);
+    filteredValue = Number(filteredValue);
 
     setFormValues((items) => {
-      const nextState = items.map((itemObj) => {
-        let tempObj = {};
+      const nextItems = items.map((itemObj) => {
         if (itemObj.id === id) {
-          tempObj = {
+          const key = input.dataset.innerId;
+          return {
             ...itemObj,
-            [innerId]: filteredValue,
+            [key]: filteredValue,
           };
         } else {
-          tempObj = itemObj;
+          return itemObj;
         }
-        return tempObj;
       });
-      console.log(nextState);
-
-      return nextState;
+      return nextItems;
     });
   };
 
@@ -82,7 +60,7 @@ const GradeCouponSettingInput = ({
               data-align={'right'}
               data-input-type={'number, currency'}
               id={`${id}`}
-              value={formValues ? formValues[index][innerId[0]] : ''}
+              value={transformLocalCurrency(formValues.filter(item=>item.id === id)[0][innerId[0]]) || ''}
               onChange={onInputChangeHandler}
             />
             <em className="unit">원 할인</em>
@@ -97,7 +75,7 @@ const GradeCouponSettingInput = ({
               type="text"
               data-align={'right'}
               data-input-type={'number, currency'}
-              value={formValues[index][innerId[1]] || ''}
+              value={transformLocalCurrency(formValues.filter(item=>item.id === id)[0][innerId[1]]) || ''}
               onChange={onInputChangeHandler}
             />
             <em className="unit">원 이상 결제 시</em>

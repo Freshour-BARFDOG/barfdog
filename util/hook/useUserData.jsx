@@ -18,20 +18,23 @@ export default function useUserData() {
       let DATA = null;
       const url = '/api/members'
       const res = await getData(url);
+      // console.log('User Data : ',res)
       if (res?.status === 200){
+        const data = res.data;
         DATA = {
+          memberId: data.memberId,
           userType: auth.userType || userType.MEMBER,
-          birthday: res.data.birthday,
-          gender: res.data.gender,
-          name: res.data.name,
-          phoneNumber: res.data.phoneNumber,
-          email: res.data.email,
-          grade: res.data.grade || '웰컴',
+          birthday: data.birthday,
+          gender: data.gender,
+          name: data.name,
+          phoneNumber: data.phoneNumber,
+          email: data.email,
+          grade: data.grade || '웰컴',
           address: {
-            zipcode: res.data.address.zipcode,
-            city: res.data.address.city,
-            street: res.data.address.street,
-            detailAddress: res.data.address.detailAddress,
+            zipcode: data.address.zipcode,
+            city: data.address.city,
+            street: data.address.street,
+            detailAddress: data.address.detailAddress,
           },
         };
       }

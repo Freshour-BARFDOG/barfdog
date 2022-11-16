@@ -10,33 +10,55 @@ import { dogGenderType } from '/store/TYPE/dogGenderType';
 import { dogSizeType } from '/store/TYPE/dogSizeType';
 import yearOptionList from '/util/func/yearOptionList';
 
+
+const getSurveyBirthObject = (yyyymmObj)=>{
+  const result = {
+    yyyy: '',
+    mm: '',
+    yyyymm: ''
+  }
+  for (const key in yyyymmObj) {
+    const val = yyyymmObj[key];
+    switch (key) {
+      case 'yyyy':
+        result.yyyy = val;
+        result.yyyymm += val;
+        
+        break;
+      case 'mm':
+        result.mm = val;
+        result.yyyymm += val;
+        break;
+    }
+  }
+  return result;
+}
+
+
 export default function SurveyStep1({ formValues, setFormValues, onInputChangeHandler }) {
   
-  const initBirth = {yyyy: formValues.birth.slice(0,4), mm : formValues.birth.slice(4,6)}
-  const [birth, setBirth] = useState(initBirth);
+  const birthObj = {yyyy: formValues.birth.slice(0,4), mm : formValues.birth.slice(4,6)}
+  const [birth, setBirth] = useState(birthObj);
+  
 
   useEffect(() => {
-    const yyyymm = [];
-    for (const key in birth) {
-      const val = birth[key];
-      switch (key) {
-        case 'yyyy':
-          yyyymm[0] = val;
-          break;
-        case 'mm':
-          yyyymm[1] = val;
-          break;
-      }
+    const birthObj = getSurveyBirthObject(birth);
+    const hasValue = birthObj.yyyymm.length;
+    // 벌스데이도 업데이트 해줘야하네요.
+    if(hasValue){
+      const birthString = birthObj.yyyymm;
+      console.log(birthObj);
+      setFormValues((prevState) => ({
+        ...prevState,
+        birth: birthString,
+      }));
     }
-    
-    setFormValues((prevState) => ({
-      ...prevState,
-      birth: yyyymm.join(''),
-    }));
+ 
   }, [birth]);
 
   const yearOptions = yearOptionList(50, true).year;
   const monthOptions = yearOptionList(null, true).month;
+
 
 
   return (
@@ -73,7 +95,7 @@ export default function SurveyStep1({ formValues, setFormValues, onInputChangeHa
             <CustomSelectWithCustomOptions
               id={'yyyy'}
               options={yearOptions}
-              value={formValues.birth.length >= 4 && formValues.birth.slice(0,4)}
+              value={formValues.birth?.length >= 4 && formValues.birth.slice(0,4)}
               setValues={setBirth}
               unit={'년'}
               width={120}
@@ -84,7 +106,7 @@ export default function SurveyStep1({ formValues, setFormValues, onInputChangeHa
             <CustomSelectWithCustomOptions
               id={'mm'}
               options={monthOptions}
-              value={formValues.birth.slice(4,6)}
+              value={formValues.birth?.slice(4,6)}
               setValues={setBirth}
               unit={'월'}
               width={120}

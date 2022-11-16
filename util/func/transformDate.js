@@ -4,7 +4,7 @@
 const transformDate = (d, unit, option={seperator:'-'}) => {
   if(!d) return;
   
-  if(d?.indexOf('-') < 0)return;
+  if(d.indexOf('-') < 0)return;
   let result;
   let yymmdd;
   let time;

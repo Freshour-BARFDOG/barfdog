@@ -13,13 +13,14 @@ export const valid_hasFormErrors = (errorObj, type = 'array') => {
     const errorArray = errorObj;
     errorArray.map((innerObj) => {
       const result = valid_hasFormErrors(innerObj);
-      console.log(result);
-      // result중에 false가 하나라도 있으면 error로 취급한다.
+      // ! result중에 false가 하나라도 있으면 error로 취급
+      if(!result) return isPassed = false;
+      
     });
   } else {
     for (const key in errorObj) {
-      const val = errorObj[key];
-      if (val) {
+      const error = errorObj[key];
+      if (error) {
         isPassed = false;
         break;
       }
