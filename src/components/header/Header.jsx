@@ -217,7 +217,7 @@ function TopButton() {
     })
   }
 
-  // 스크롤 0이상일때 나타남
+  // 스크롤 0이상일때 항상 나타남
   // useEffect(() => {
   //   const handleShowButton = () => {
   //       if (window.scrollY > 0) {

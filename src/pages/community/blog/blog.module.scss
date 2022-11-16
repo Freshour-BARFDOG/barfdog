@@ -59,6 +59,7 @@ section.content_box {
         @include char(l18);
         font-weight: 600;
         color: var(--color-font-sub);
+        margin-bottom: rem(10);
       }
       .article_title {
         @include char(t20);
@@ -328,13 +329,16 @@ section.content_box {
           font-size: 3.5vw;
 
           p{
-            color: #fff;
+            color: rgba(255, 255, 255, 0.8);
             font-size: 4vw;
+            margin-bottom: rem(5);
+            opacity: .8;
           }
 
           .article_title {
             width: 80vw;
             font-size: 7vw;
+            line-height: 110%;
           }
           .day {
             color: #fff;

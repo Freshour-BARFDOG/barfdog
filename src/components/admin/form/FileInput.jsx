@@ -291,7 +291,7 @@ export default function FileInput({
           </p>
           <p>
             * 파일크기는 {convertFileSizeToMegabyte(maxFileSize)}MB이하 / jpg, jpeg, png, gif 형식만
-            등록가능합니다.
+            등록 가능합니다.
           </p>
         </div>
         {required && formErrors[id] && <ErrorMessage>{formErrors[id]}</ErrorMessage>}

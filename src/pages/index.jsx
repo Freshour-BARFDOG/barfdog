@@ -164,7 +164,7 @@ export default function MainPage({ data }) {
             <div className={s.inner}>
               <div className={s.scroll}>
               <Controller>
-                <Scene duration={1000} offset={400} pin>
+                <Scene duration={2000} offset={400} pin>
                   <Tween
                   from={{
                     "clip-path": "polygon(50% 0%, 50% 0%, 50% 100%, 50% 100%)"
@@ -299,16 +299,18 @@ export default function MainPage({ data }) {
                     해본적 있으신가요?
                   </h2>
                   <p className={s.subtitle}>
-                    반려견이 평생 다양한 '사료'만 먹는다는 것은
+                    반려견이 평생 다양한 ‘사료’만 먹는다는 것은
                     인스턴트 음식만 평생 먹는다는 것과 같습니다.
                     <br />
                     <br />
                     반려견과 행복하고 건강하게 지낼 수 있도록
                     바프독이 도와드릴게요!
                   </p>
-                  <button type="button" className={`${s.btn_worry}`}>
-                    바프생식 둘러보기
-                  </button>
+                  <Link passHref href={'/recipes'}>
+                      <a type="button" className={`${s.btn_worry}`}>
+                        바프생식 둘러보기
+                      </a>
+                  </Link>
                 </div>
               </div>
               <div className={`${s['cont-right']} cont-right`}>
@@ -367,10 +369,11 @@ export default function MainPage({ data }) {
                       </div>
                     </li>
                   </ul>
-
-                  <button type="button" className={`${s.btn_worry2}`}>
-                    바프생식 둘러보기
-                  </button>
+                  <Link passHref href={'/recipes'}>
+                      <a type="button" className={`${s.btn_worry2}`}>
+                        바프생식 둘러보기
+                      </a>
+                  </Link>
                 </div>
               </div>
             </div>
