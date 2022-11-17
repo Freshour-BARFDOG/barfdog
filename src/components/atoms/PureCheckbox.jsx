@@ -13,6 +13,9 @@ const PureCheckbox = ({
   theme,
   disabled,
   returnBoolean,
+  option={
+    position: 'right'
+  },
   ...props
 }) => {
   const inputRef = useRef();
@@ -44,13 +47,14 @@ const PureCheckbox = ({
 
   return (
     <>
-      <div className={`${s['checkbox-wrap']} ${theme ? s[theme] : ''} ${!children ? s.onlyCheckbox : ''}`}>
+      <div className={`${s['checkbox-wrap']} ${theme ? s[theme] : ''}${children ? '' : s.onlyCheckbox}`}>
         <label
           htmlFor={id}
-          className={`${s.checkbox} ${disabled ? s.disabled : ''} ${className || ''}`}
+          className={`${s.checkbox} ${option.position === 'right' ? s['position-right'] : ''} ${disabled ? s.disabled : ''} ${className || ''}`}
           {...props}
           onClick={onClickHandler}
         >
+          {option.position === 'right' && children}
           <input
             ref={inputRef}
             onChange={onChangeHandler}
@@ -60,7 +64,7 @@ const PureCheckbox = ({
             disabled={disabled}
           />
           <span className={s.fakeCheckBox} />
-          {children}
+          {option.position === 'left' && children}
         </label>
         {errorMessage}
       </div>
