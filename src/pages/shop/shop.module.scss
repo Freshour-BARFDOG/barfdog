@@ -216,6 +216,7 @@ section.pagination-section{padding : rem(80) 0 rem(70) 0 }
       .grade_box {
         display: flex;
         padding-top: rem(4);
+        position: relative;
 
         .star_box {
           display : flex;
@@ -232,7 +233,9 @@ section.pagination-section{padding : rem(80) 0 rem(70) 0 }
           color: #636363;
           font-size: rem(14);
           font-weight: 500;
-
+          position: absolute;
+          bottom: 0;
+          left: rem(120);
         }
       }
     }
@@ -383,6 +386,9 @@ section.pagination-section{padding : rem(80) 0 rem(70) 0 }
           }
           .avg_score {
             margin-right: rem(5);
+          }
+          .nuber_comment{
+            left: rem(113);
           }
         }
       }

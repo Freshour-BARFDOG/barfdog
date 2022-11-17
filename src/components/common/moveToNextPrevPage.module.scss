@@ -3,6 +3,7 @@
 
 .wrap {
   border-top: rem(1) solid var(--color-line-03);
+  padding-bottom: rem(110);
   .grid_box {
     display: grid;
     grid-template-rows: repeat(2, rem(50));
