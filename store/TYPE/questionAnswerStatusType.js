@@ -1,0 +1,6 @@
+export const QuestionAnswerStatusType = {
+  UNANSWERED: 'UNANSWERED',
+  ANSWERED: 'ANSWERED',
+  MULTIPLE_ANSWERED: 'MULTIPLE_ANSWERED',
+  
+}
