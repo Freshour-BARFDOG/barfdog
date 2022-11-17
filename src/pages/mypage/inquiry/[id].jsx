@@ -7,7 +7,7 @@ import React from "react";
 export default function InquiryArticlePage() {
   return (
     <>
-      <MetaTitle title="마이페이지 1:1문의 확인하기" />
+      <MetaTitle title="마이페이지 1:1 문의 확인" />
       <Layout>
         <Wrapper>
           <MypageWrapper>

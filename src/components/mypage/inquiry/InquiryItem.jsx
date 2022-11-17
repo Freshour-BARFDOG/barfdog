@@ -23,12 +23,15 @@ export const InquiryItem = ({ data }) => {
   };
 
   return (
-    <li className={s.tr}>
-      <span className={s.status}>{statusIcon[status]}</span>
-      <Link href={`/mypage/inquiry/${id}`} passHref>
-        <a className={s.title}><span>{title}</span></a>
-      </Link>
-      <span className={s.date}>{transformDate(createdDate,'time', {seperator:'.'})}</span>
-    </li>
+    <Link href={`/mypage/inquiry/${id}`} passHref>
+      <a>
+        <li className={s.tr}>
+          <span className={s.status}>{statusIcon[status]}</span>
+            <div className={s.title}><span>{title}</span></div>
+          <span className={s.date}>{transformDate(createdDate,'time', {seperator:'.'})}</span>
+        </li>
+      </a>
+    </Link>
+
   );
 };
