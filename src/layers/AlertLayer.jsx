@@ -7,18 +7,18 @@ export const AlertLayer = ({props, children}) => {
   
   useEffect(() => {
     if(!data.member) return;
-  
-    // console.log(data);
+    
     const curSubscribedDogs = data?.member?.subscribe?.subscribedDogs;
     if(!curSubscribedDogs) return;
     
     const info = subscribeItemOutOfStockInfo(curSubscribedDogs);
+    if(!info) return;
+    
     const cookieName ='bf-subscribeItem-outOfStock';
-    // console.log(info);
     
     
     // STEP 1. 품절된 상품이 없을 시, 기존에 존재할 수 있는 쿠키 삭제
-    if (!info?.outOfStock) {
+    if (info.outOfStock === false) {
       return deleteCookie(cookieName);
     }
     
@@ -68,13 +68,10 @@ const subscribeItemOutOfStockInfo = (subscribedDogs)=>{
   let outOfStockDogNames = '';
   
   if(outOfStock){
-    const outOfStockItemNamesObj = new Set(outOfStock && outOfStockItemList.map(item=> item.recipeName));
-    outOfStockItemNames = Array.from(outOfStockItemNamesObj).join(',') || '';
-    outOfStockDogNames = outOfStock && outOfStockItemList.map(item=> item.dogName).join(', ');
+    const outOfStockItemNamesObj = new Set(outOfStockItemList.map(item=> item.recipeName));
+    outOfStockItemNames = Array.from(outOfStockItemNamesObj).join(',') || ''; // 중복된 레시피명 제거
+    outOfStockDogNames = outOfStockItemList.map(item=> item.dogName).join(', ');
   }
-  
-  
-  
   
   
   return {
