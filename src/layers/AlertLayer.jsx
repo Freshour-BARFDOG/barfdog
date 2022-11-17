@@ -18,7 +18,7 @@ export const AlertLayer = ({props, children}) => {
     
     
     // STEP 1. 품절된 상품이 없을 시, 기존에 존재할 수 있는 쿠키 삭제
-    if (!info.outOfStock) {
+    if (!info?.outOfStock) {
       return deleteCookie(cookieName);
     }
     
