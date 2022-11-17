@@ -191,18 +191,18 @@ section.title{ padding : rem(8) 0 rem(30);}
 
       .flex_box {
         .text {
-          display: grid;
-          grid-template-columns: minmax(rem(34), auto) 1fr;
+          display: flex;
           margin-bottom: 0;
+          align-items: center;
 
           > p {
             @include char(l18);
             color : var(--color-main);
             font-weight: 500;
             padding-bottom: 0;
-            margin-right: rem(6);
-            width: 100%;
-            max-width: rem(104);
+            padding-right: rem(6);
+            //width: 100%;
+            max-width: rem(110);
             text-overflow: ellipsis;
             text-align: left;
             border-right: rem(1) solid #ABABAB;
@@ -417,12 +417,12 @@ section.title{ padding : rem(8) 0 rem(30);}
 
         .flex_box {
           .text {
-            display: grid;
-            grid-template-columns: minmax(rem(30), auto) 1fr;
+            // display: grid;
+            // grid-template-columns: minmax(rem(30), auto) 1fr;
             margin-bottom: 0;
 
             > p {
-              width: 100%;
+              // width: 100%;
               padding-bottom: 0;
               font-size: rem(16);
             }
