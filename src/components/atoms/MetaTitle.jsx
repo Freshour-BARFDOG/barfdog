@@ -15,7 +15,7 @@ function MetaTitle({title, admin}) {
   useEffect( () => {
   
     if(isCurPathMypage){
-      const mypageTitle = title.split(' ')[1];
+      const mypageTitle = title.split(' ').filter((t, index)=> index !== 0).join(' ');
       setMetaTitle(mypageTitle);
       dispatch(pageAction.saveCurrentPageInfo({pageTitle: mypageTitle}))
     }
