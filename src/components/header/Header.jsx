@@ -1,31 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import s from './header.module.scss';
 import Link from 'next/link';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
-import { useRouter } from 'next/router';
-import { useDispatch, useSelector } from 'react-redux';
+import {useRouter} from 'next/router';
+import {useDispatch, useSelector} from 'react-redux';
 
 import Wrapper from '/src/components/common/Wrapper';
 import useDeviceState from '/util/hook/useDeviceState';
 
-import { MemberMemu, Non_MemberMenu } from './memberStateMenu';
+import {MemberMemu, Non_MemberMenu} from './memberStateMenu';
 import ServiceCenter from '/src/components/header/ServiceCenter';
 import PcGnb from '/src/components/header/PcGnb';
 import MobileGnb from './MobileGnb';
 import MobileSidr from './MobileSidr';
-import DeadlineTimer from '/src/components/atoms/DeadlineTimer';
-import { IoIosArrowBack } from 'react-icons/io';
-import Icon_cart from '/public/img/icon/cart.svg';
+import {IoIosArrowBack} from 'react-icons/io';
 import Logo from '/public/img/logo(HQ).png';
 import Logo_2x from '/public/img/logo@2x.png';
 import MobileLogo from '/public/img/mobile_logo.png';
 import MobileLogo_2x from '/public/img/mobile_logo@2x.png';
 import Topbutton from '/public/img/topbutton.png';
 import Icon_Home from '/public/img/icon/icon-home.svg';
-import Icon_mypage from '/public/img/icon/mypage.svg';
-import { authAction } from '/store/auth-slice';
-import { userType } from '/store/TYPE/userAuthType';
+import {authAction} from '/store/auth-slice';
+import {userType} from '/store/TYPE/userAuthType';
+import {Gnb_my} from "./Gnb_my";
 
 const Modal_subscribeWidhSSR = dynamic(() => import('/src/components/modal/Modal_subscribe'));
 
@@ -107,7 +105,7 @@ export default function Header() {
               <section id="account" className={`${s.account_area} pc`}>
                 <ul>
                   {userData ? <MemberMemu data={userData} /> : <Non_MemberMenu />}
-                  {userData?.userType !== userType.ADMIN && <ServiceCenter />}
+                  {userData?.userType !== userType.ADMIN && <ServiceCenter data={{auth: userData}} />}
                   {userData && (
                     <button
                       type={'button'}
@@ -152,57 +150,6 @@ export default function Header() {
     </>
   );
 }
-
-export const Gnb_my = ({ isMobile, setSidrOpen, authData }) => {
-  const userInfo = authData?.userInfo;
-  const cart = useSelector((s) => s.cart);
-  const router = useRouter();
-
-  const onShowMobileSideMenu = () => {
-    setSidrOpen(true);
-  };
-  const onMovePage = async (e) => {
-    e.preventDefault();
-    if (!userInfo) {
-      return alert('로그인 후 이용가능합니다.');
-    }
-
-    const btn = e.currentTarget;
-    const link = btn.dataset.link;
-    await router.push(link);
-  };
-
-  return (
-    <>
-      <div className={s.gnb_my}>
-        <ul className="clearfix">
-          <li>
-            <button id="gnb_cart" data-link={'/cart'} onClick={onMovePage}>
-              <div className={s.shop_wrap}>
-                <Icon_cart />
-                <span className={s.gnb_shop_count}>{cart.itemCount || 0}</span>
-              </div>
-            </button>
-          </li>
-          <li>
-            {isMobile ? (
-              <button type={'button'} onClick={onShowMobileSideMenu}>
-                <Icon_mypage />
-              </button>
-            ) : (
-              <button data-link={'/mypage/orderHistory'} onClick={onMovePage}>
-                <Icon_mypage />
-              </button>
-            )}
-          </li>
-        </ul>
-      </div>
-      <i id={'DeadlineTimer-wrapper'} className={'mobile'}>
-        <DeadlineTimer />
-      </i>
-    </>
-  );
-};
 
 
 function TopButton() {
