@@ -1002,7 +1002,7 @@ section.sns {
 
       img {
         border: rem(1) solid #fff !important;
-        transition: filter .25s;
+        transition: filter .3s ease, border .3s ease;
       }
     }
   }

@@ -18,6 +18,7 @@ import { useModalContext } from '/store/modal-context';
 import FileInput from '/src/components/admin/form/FileInput';
 import { global_reviewType } from '/store/TYPE/reviewType';
 import { useSelector } from 'react-redux';
+import transformLocalCurrency from "/util/func/transformLocalCurrency";
 
 const DUMMY_DATA = {
   data: {
@@ -245,7 +246,7 @@ export default function CreateReviewPage() {
                       value={form.contents}
                     />
                     <span className={s['textLength-indicator']}>
-                      {form.contents.length}/{maxContentsLength}
+                      {form.contents.length} / {transformLocalCurrency(maxContentsLength)}
                     </span>
                   </div>
                   {formErrors.contents && <ErrorMessage>{formErrors.contents}</ErrorMessage>}
@@ -285,7 +286,7 @@ export default function CreateReviewPage() {
                 취소
               </button>
               <button type={'button'} className={s.save} onClick={onSubmit}>
-                {isLoading.submit ? <Spinner style={{ color: '#fff' }} /> : '등록'}
+                {isLoading.submit ? <Spinner style={{ color: '#fff' }} /> : '등록하기'}
               </button>
             </section>
           </MypageWrapper>

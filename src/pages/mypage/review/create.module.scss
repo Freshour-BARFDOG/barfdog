@@ -87,6 +87,7 @@ section.picture_attach {
   display: grid;
   grid-template-columns: rem(160) 1fr;
   justify-content: space-between;
+  gap: rem(15);
 
   .left_side {
     max-width: rem(160);
@@ -104,7 +105,7 @@ section.picture_attach {
       position:relative;
     }
     textarea {
-      padding: rem(20) rem(18) rem(18) rem(18);
+      padding: rem(10) rem(15);
       height: rem(260);
       box-sizing: border-box;
       border: rem(1) solid var(--color-line-03);
@@ -113,20 +114,21 @@ section.picture_attach {
       width: 100%;
       overflow: scroll;
       word-break: keep-all;
-
-      ::placeholder {
-        color: var(--color-placeholder);
-      }
+      border-radius: 0;
+      font-size: rem(16);
+    }
+    
+    ::placeholder {
+      color: var(--color-font-light);
+      font-size: rem(14);
     }
     .textLength-indicator {
       position: absolute;
-      right: rem(12);
-      bottom: rem(8);
-      color: var(--color-font-sub2);
-      background: #fff;
+      bottom: rem(10);
+      right: rem(15);
+      color: var(--color-font-light);
       border-radius: rem(8);
-      padding: 0 rem(8);
-
+      font-weight: 300;
     }
 
 
@@ -284,7 +286,11 @@ section.picture_attach {
 
 
 @media (max-width: rem(600)) {
-  
+  section.title_section {
+    .title{
+      display: none;
+    }
+  }
   .content_title {
     .title_flex_box {
       display: grid;

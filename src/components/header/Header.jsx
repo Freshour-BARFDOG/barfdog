@@ -138,10 +138,11 @@ export default function Header() {
                 </nav>
                 <Gnb_my isMobile={isMobile} setSidrOpen={setIsSidrOpen} authData={auth} />
               </section>
-              <TopButton />
             </div>
           )}
         </Wrapper>
+        <TopButton />
+
       </header>
       {isMobile && !mypageState.isMyPage && <MobileGnb />}
       {isMobile && <MobileSidr isOpen={isSidrOpen} setSidrOpen={setIsSidrOpen} />}
