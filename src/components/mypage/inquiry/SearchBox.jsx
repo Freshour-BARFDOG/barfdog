@@ -1,6 +1,7 @@
 import s from './searchBox.module.scss';
 import React from 'react';
 import { searchType } from '/store/TYPE/searchType';
+import Search from '/public/img/inquiry_search.svg';
 
 export const SearchBox = ({ value, setValue, onSearch }) => {
   const onChangeHandler = (e) => {
@@ -39,7 +40,10 @@ export const SearchBox = ({ value, setValue, onSearch }) => {
         onClick={onSearch}
         className={'custom_btn solid basic_m'}
       >
-        검색
+        <Search className={s.search_icon} />
+        <span>
+          검색
+        </span>
       </button>
     </div>
   );

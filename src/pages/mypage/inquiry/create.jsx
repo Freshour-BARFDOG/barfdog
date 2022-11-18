@@ -120,7 +120,7 @@ export default function CreateInquiryPage() {
 
   return (
     <>
-      <MetaTitle title="마이페이지 1:1문의 작성" />
+      <MetaTitle title="마이페이지 1:1 문의작성" />
       <Layout>
         <Wrapper>
           <MypageWrapper>

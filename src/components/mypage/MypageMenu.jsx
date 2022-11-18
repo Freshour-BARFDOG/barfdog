@@ -37,6 +37,7 @@ export default function MypageMenu({ ...props }) {
         <List title="친구 초대" link="/mypage/invite" />
         <List title="적립금 조회" link="/mypage/reward" />
         <List title="쿠폰함" link="/mypage/coupon" />
+        <List title="1:1 문의" link="/mypage/inquiry" />
         <List title="로그아웃" onFirstDepthClick={onLogout} />
       </ul>
     </nav>

@@ -257,7 +257,8 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                   <MenuList
                     title={'1:1 문의'}
                     contClassName={'ch-open-button'}
-                    onClick={onCloseSidr}
+                    //onClick={onCloseSidr}
+                    link={'/mypage/inquiry'}
                   />
                   {isLogin && <MenuList title={'로그아웃'} onClick={onLogout} />}
                 </ul>

@@ -69,28 +69,31 @@ export default function InquiryPage() {
 
   return (
     <>
-      <MetaTitle title="마이페이지 1:1문의내역" />
+      <MetaTitle title="마이페이지 1:1 문의내역" />
       <Layout>
         <Wrapper>
           <MypageWrapper>
-            <h1>1:1 문의내역</h1>
             <div className={s['title-section']}>
-              <div className={s['desc-box']}>
-                <h3 className={s.title}>문의답변시간</h3>
-                <p className={s.subtitle}>
-                  <span className={s.divider}>
-                    AM 09:00 - PM 17:30 (점심시간 11:30 - 12:30)
-                  </span>
-                  <span className={s.divider}>DAY OFF (토/일/공휴일 휴무)</span>
-                </p>
-              </div>
-              <div className={s['btn-section']}>
-                <Link href={'/mypage/inquiry/create'} passHref>
-                  <a className={`custom_btn solid basic_l ${s['inquiry-btn']}`}>
-                    문의작성하기
-                  </a>
-                </Link>
-              </div>
+              <h1 className={s.inquiry_title}>1:1 문의내역</h1>
+              
+              <ul>
+                <div className={s['desc-box']}>
+                  <h3 className={s.subtitle}>문의답변시간</h3>
+                  <p className={s.subtext}>
+                    <span className={s.divider}>
+                      AM 09:00 - PM 17:30 (점심시간 11:30 - 12:30)
+                    </span>
+                    <span className={s.divider}>DAY OFF (토/일/공휴일 휴무)</span>
+                  </p>
+                </div>
+                <div className={s['btn-section']}>
+                  <Link href={'/mypage/inquiry/create'} passHref>
+                    <a className={`custom_btn solid basic_l ${s['inquiry-btn']}`}>
+                      문의작성하기
+                    </a>
+                  </Link>
+                </div>
+              </ul>
             </div>
 
             <section className={s['item-section']}>
