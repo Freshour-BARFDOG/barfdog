@@ -9,16 +9,20 @@ import Spinner from '/src/components/atoms/Spinner';
 import { validate } from '/util/func/validation/validation_reply';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
 import { postObjData } from '/src/pages/api/reqData';
+import Tooltip from "../../../../../components/atoms/Tooltip";
+import popupWindow from "../../../../../../util/func/popupWindow";
 
 const initialFormValues = {
   title: '',
   content: '',
 };
 
-export default function ReplyInquiryPage() {
+export default function ReplyInquiryPage({id}) {
+  console.log(id)
   const mct = useModalContext();
 
   const router = useRouter();
+    const maxContentsLength = 1000;
   const [isLoading, setIsLoading] = useState({});
   const [form, setForm] = useState(initialFormValues);
   const [error, setError] = useState({});
@@ -32,11 +36,12 @@ export default function ReplyInquiryPage() {
     });
   };
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async () => {
     if (submitted) return;
 
-    const errObj = validate(form);
+    const errObj = validate(form, {
+        contents: { maxContentsLength: maxContentsLength },
+    });
     console.log(errObj);
     setError(errObj);
     const isPassed = valid_hasFormErrors(errObj);
@@ -76,6 +81,13 @@ export default function ReplyInquiryPage() {
       router.back();
     }
   };
+  
+  const onPopupHandler = (e) => {
+    e.preventDefault();
+    if (typeof window === 'undefined') return;
+    const href = e.currentTarget.href;
+    popupWindow(href, { width: 1000, height: 716 });
+  };
 
   return (
     <>
@@ -83,11 +95,32 @@ export default function ReplyInquiryPage() {
       <AdminLayout>
         <AdminContentWrapper>
           <div className="title_main">
-            <h1>1:1문의 답글 작성</h1>
+              <h1>1:1문의 답글 작성</h1>
+              <Tooltip wordBreaking={true} message={'- 작성된 답변 및 문의내용은 원문 보존을 위해 수정할 수 없습니다.\n- 답글 작성 시, 알림톡 수신에 동의한 유저에게 알림톡이 발송됩니다.'} width={400}/>
           </div>
           <main className="cont">
-            <ul className="cont_body">
-              <li className="cont_divider">
+            <section className="cont-top">
+              <div className="cont-row">
+                <div className="left-box">
+                  <p className="title">원글 제목</p>
+                </div>
+                <div className="right-box">
+                  <span>lorem ipsum dolor sit amet</span>
+                  <a href={`/bf-admin/popup/inquiry/${id}`} type={'button'} className={'admin_btn line basic_m'} onClick={onPopupHandler}>원글보기</a>
+                </div>
+              </div>
+              <div className="cont-row">
+                <div className="left-box">
+                  <p className="title">원글 작성자ID</p>
+                </div>
+                <div className="right-box">
+                  <span>user@email.com</span>
+                </div>
+              </div>
+            
+            </section>
+            <section className="cont_body">
+              <div className="cont_divider">
                 <div className="input_row">
                   <div className="title_section fixedHeight">
                     <label className="title" htmlFor={'title'}>
@@ -103,37 +136,39 @@ export default function ReplyInquiryPage() {
                         className="fullWidth"
                         onChange={onInputChangeHandler}
                       />
+                    </div>
                       {error.title && (
                         <ErrorMessage>{error.title}</ErrorMessage>
                       )}
-                    </div>
                   </div>
                 </div>
-              </li>
-              <li className="cont_divider">
+              </div>
+              {/* cont_divider */}
+              <div className="cont_divider">
                 <div className="input_row multipleLines">
                   <div className="title_section fixedHeight">
-                    <label className="title" htmlFor={'title'}>
+                    <label className="contents" htmlFor={'contents'}>
                       내용
                     </label>
                   </div>
                   <div className="inp_section">
                     <div className="inp_box">
                       <textarea
-                        id={'title'}
+                        id={'contents'}
                         name="title"
                         className="fullWidth"
-                        placeholder={''}
+                        placeholder={'문의글에 대한 답글을 10자 이상 적어주세요.'}
                         onChange={onInputChangeHandler}
                       />
-                      {error.title && (
-                        <ErrorMessage>{error.title}</ErrorMessage>
-                      )}
                     </div>
+                      {error.contents && (
+                        <ErrorMessage>{error.contents}</ErrorMessage>
+                      )}
                   </div>
                 </div>
-              </li>
-            </ul>
+              </div>
+              {/* cont_divider */}
+            </section>
             <div className="cont_bottom">
               <div className="btn_section">
                 <button
@@ -166,4 +201,22 @@ export default function ReplyInquiryPage() {
       </AdminLayout>
     </>
   );
+}
+
+
+export async function getServerSideProps ({query}) {
+  
+  const { id } = query;
+  const availableQuery = typeof Number(id) === 'number';
+  if(!availableQuery){
+    return {
+      redirect:{
+        destination: '/bf-admin/community/inquiry'
+      }
+    }
+  }
+  
+  return {
+    props: { id}
+  }
 }

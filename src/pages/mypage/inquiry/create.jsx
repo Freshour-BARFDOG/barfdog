@@ -13,7 +13,7 @@ import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import FileInput from '/src/components/admin/form/FileInput';
 import Spinner from '/src/components/atoms/Spinner';
 import Modal_global_alert from '../../../components/modal/Modal_global_alert';
-import { validate } from '/util/func/validation/valid_inquiry';
+import { validate } from '/util/func/validation/validation_inquiry';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
 import transformLocalCurrency from "/util/func/transformLocalCurrency";
 import {postObjData} from "/src/pages/api/reqData";

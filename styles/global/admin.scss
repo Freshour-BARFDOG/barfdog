@@ -54,8 +54,13 @@ $inputDefaultHeight: rem(38);
     color: #000;
     line-height: 1.4;
     margin-bottom: rem(10);
-    * {
-      display: flex;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap:rem(6);
+
+    > * {
+      display: inline-flex;
       font-size: inherit;
       align-items: center;
       gap: rem(10);
@@ -253,34 +258,36 @@ $inputDefaultHeight: rem(38);
           min-width: rem(100);
           height: $inputDefaultHeight;
         }
+        textarea{
+          min-height: rem(300);
+          &::placeholder{font-size:rem(14); color: var(--color-font-light)}
+        }
       }
     }
   }
 
+  .cont-top{
+    border-bottom: rem(1) solid var(--color-line-04);
+    padding-bottom: rem(20);
+    margin-bottom: rem(40);
+    display: grid;
+    gap: rem(10);
+  }
 
-  //label{cursor: pointer;}
-  //
-  //input.fullWidth {
-  //  width: 100%;
-  //}
-  //textarea.fullWidth {
-  //  width: 100%;
-  //  border: rem(1) solid var(--color-line-03);
-  //  padding: rem(10) rem(8);
-  //  min-height: rem(100);
-  //}
-  //input.halfWidth {
-  //  width: 50%;
-  //}
-  //input.text-align-right {
-  //  text-align: right;
-  //}
-  //input.text-align-center {
-  //  text-align: center;
-  //}
-  //input[data-align='right']{
-  //  text-align: right;
-  //}
+  .cont-row{
+    display: grid;
+    grid-template-columns: $titleSectionWidth 1fr;
+    align-items: center;
+    font-size: rem(15);
+    padding: rem(8) 0 ;
+    .left-box, .right-box{
+      display: flex; align-items: center;
+      justify-content: flex-start;
+      gap: rem(20);
+    }
+  }
+
+
 
   .unit-box-wrap {
     display: flex;
