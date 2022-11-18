@@ -124,39 +124,43 @@ export default function CreateInquiryPage() {
       <Layout>
         <Wrapper>
           <MypageWrapper>
-            <h1>1:1 문의 작성</h1>
             <section className={s['form-section']}>
-              <div className={s['form-row']}>
-                <div className={s['form-row-title']}>
-                  <span>알림</span>
+              <h1 className={s.create_title}>1:1 문의작성</h1>
+
+              <ul>
+                <div className={s['form-row']}>
+                  <div className={s['form-row-title']}>
+                    <span>알림</span>
+                  </div>
+                  <div className={s['form-row-cont']}>
+                    <PureCheckbox
+                      id={'receiveAlimTalk'}
+                      value={form['alram'] || ''}
+                      label={'알림톡 / SMS 답변받기'}
+                      setValue={setForm}
+                      option={{ position: 'right' }}
+                    >
+                      <div>알림톡 / SMS 답변받기</div>
+                    </PureCheckbox>
+                  </div>
                 </div>
-                <div className={s['form-row-cont']}>
-                  <PureCheckbox
-                    id={'receiveAlimTalk'}
-                    value={form['alram'] || ''}
-                    label={'알림톡 / SMS 답변받기'}
-                    setValue={setForm}
-                    option={{ position: 'right' }}
-                  >
-                    <div>알림톡 / SMS 답변받기</div>
-                  </PureCheckbox>
+                {/* form-row */}
+                <div className={s['form-row']}>
+                  <div className={s['form-row-title']}>
+                    <label htmlFor={'category'}>분류</label>
+                  </div>
+                  <div className={s['form-row-cont']}>
+                    <select id={'category'} onChange={onInputChangeHandler}>
+                      {inquiryCategoryOptions.map((op, i) => (
+                        <option key={`category-option-${i}`} value={op.value}>
+                          {op.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
-              </div>
-              {/* form-row */}
-              <div className={s['form-row']}>
-                <div className={s['form-row-title']}>
-                  <label htmlFor={'category'}>분류</label>
-                </div>
-                <div className={s['form-row-cont']}>
-                  <select id={'category'} onChange={onInputChangeHandler}>
-                    {inquiryCategoryOptions.map((op, i) => (
-                      <option key={`category-option-${i}`} value={op.value}>
-                        {op.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
+              </ul>
+              
               {/* form-row */}
               <div className={s['form-row']}>
                 <div className={s['form-row-title']}>
@@ -244,7 +248,7 @@ export default function CreateInquiryPage() {
                 {isLoading.submit ? (
                   <Spinner style={{ color: '#fff' }} />
                 ) : (
-                  '등록'
+                  '등록하기'
                 )}
               </button>
             </section>

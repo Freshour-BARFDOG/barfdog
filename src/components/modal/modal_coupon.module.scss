@@ -15,6 +15,17 @@
     padding-bottom: rem(20);
     display: flex;
     align-items: center;
+    position: relative;
+
+    &::after{
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: rem(1);
+      background-color: var(--color-line-01);
+    }
 
     .title {
       width: 100%;
@@ -42,7 +53,6 @@
       align-content: center;
       &.header {
         border: {
-          top: rem(1) solid var(--color-line-01);
           bottom: rem(1) solid var(--color-line-01);
         }
       }

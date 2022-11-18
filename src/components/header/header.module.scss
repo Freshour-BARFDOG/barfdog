@@ -252,8 +252,8 @@
     position: fixed;
     bottom: rem(100);
     right: rem(34);
-    width: rem(42);
-    height: rem(52);
+    width: rem(47);
+    height: rem(65);
     opacity: 0;
     -webkit-tap-highlight-color : transparent !important;
     animation: top .4s ease-in-out .25s 1 forwards;
@@ -263,7 +263,7 @@
     // }
 
     &:active {
-      bottom: rem(90);
+      bottom: rem(95);
     }
   }
 }
@@ -280,8 +280,19 @@
     animation: top .25s ease-in-out .25s 1 forwards;
     transition: bottom .25s;
 
+    button{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) translateX(rem(2));
+    }
+
+    svg {
+      transform: scale(.8);
+    }
+
     &:active {
-      bottom: rem(66);
+      bottom: rem(71);
     }
   }
 }
