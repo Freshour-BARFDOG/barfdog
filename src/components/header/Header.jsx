@@ -19,7 +19,7 @@ import Logo from '/public/img/logo(HQ).png';
 import Logo_2x from '/public/img/logo@2x.png';
 import MobileLogo from '/public/img/mobile_logo.png';
 import MobileLogo_2x from '/public/img/mobile_logo@2x.png';
-import Topbutton from '/public/img/topbutton.png';
+import Topbutton from '/public/img/topbutton.svg';
 import Icon_Home from '/public/img/icon/icon-home.svg';
 import {authAction} from '/store/auth-slice';
 import {userType} from '/store/TYPE/userAuthType';
@@ -200,7 +200,7 @@ function TopButton() {
     <section className={s.tobox}>
         <button className={s.topbutton} id="top" onClick={scrollToTop} type="button">
           <div className={s.image_wrap}>
-          <Image src={Topbutton} width={42} height={52} alt="Tob" priority />
+            <Topbutton />
           </div>
         </button>
     </section>

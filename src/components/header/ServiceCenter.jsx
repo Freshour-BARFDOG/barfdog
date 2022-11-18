@@ -16,7 +16,7 @@ export default function ServiceCenter({data}) {
     <>
       <MenuLayout title="고객센터" titleClassName={s['service-center']} icon={IconInfo}>
         <SubmenuList title="자주 묻는 질문" link="/faq" />
-        {isMemeber && <SubmenuList title="1:1 문의" className={'ch-open'} />}
+        {isMemeber && <SubmenuList title="1:1 문의" link="/mypage/inquiry" />}
       </MenuLayout>
     </>
   );

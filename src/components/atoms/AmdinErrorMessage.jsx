@@ -3,7 +3,7 @@ import rem from "@util/func/rem";
 
 
 const Wrap = Styled.div`
-  font-size:${rem(15)};
+  font-size:${rem(16)};
   background-color:#fff;
   padding: ${rem(30)};
   text-align:center;

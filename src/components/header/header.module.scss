@@ -263,7 +263,7 @@
     // }
 
     &:active {
-      bottom: rem(90);
+      bottom: rem(95);
     }
   }
 }
@@ -280,8 +280,19 @@
     animation: top .25s ease-in-out .25s 1 forwards;
     transition: bottom .25s;
 
+    button{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    svg {
+      transform: scale(.8);
+    }
+
     &:active {
-      bottom: rem(66);
+      bottom: rem(71);
     }
   }
 }
