@@ -9,6 +9,8 @@ import compareIdList from '/util/func/compareIdList';
 import uploadImageToApiServer from '/util/func/uploadImageToApiServer';
 import { valid_fileSize } from '/util/func/validation/validationPackage';
 
+
+
 export default function FileInput({
   id,
   apiUrl,
@@ -21,7 +23,11 @@ export default function FileInput({
   mode = 'create',
   required = true,
   theme = 'basic',
+  className,
+  option = { descriptionHTML: additionalDesriptionHTML },
+  ...props
 }) {
+  
   const [isFirstRendering, setIsFirstRendering] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -71,7 +77,7 @@ export default function FileInput({
         const curIdList = fileList.map((list) => list.id);
         setFormValues((prevState) => ({
           ...prevState,
-          [id]: prevState[id].filter((list) => curIdList.indexOf(list.id) >= 0),
+          [id]: prevState[id].length > 0 ? prevState[id].filter((list) => curIdList.indexOf(list.id) >= 0) : [],
         }));
       }
     }
@@ -85,8 +91,7 @@ export default function FileInput({
     if (curFileListCount + updatedFileListCount > maxImageCount) {
       return alert(`이미지는 최대 ${maxImageCount}장까지 등록할 수 있습니다.`);
     }
-  
-  
+
     /// ! TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
     /// ! TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
     // if (curFiles.length === 1) {
@@ -127,7 +132,6 @@ export default function FileInput({
     // return
     /// ! TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
     /// ! TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
-    
 
     try {
       if (curFiles.length === 1) {
@@ -147,7 +151,12 @@ export default function FileInput({
 
         setFileList((prevState) => [
           ...prevState,
-          { file: file, filename: file.name, id: response.id, url: response.url },
+          {
+            file: file,
+            filename: file.name,
+            id: response.id,
+            url: response.url,
+          },
         ]);
         setAllIdList((prevState) => [...prevState, response.id]);
       } else if (curFiles.length > 1) {
@@ -185,8 +194,6 @@ export default function FileInput({
       console.error('Error 발생: ', err);
     }
 
-
-    
     setIsLoading(false);
   };
 
@@ -194,13 +201,19 @@ export default function FileInput({
     const thumb = e.currentTarget;
     const tobeDeletedButtonId = Number(thumb.dataset.id);
     // console.log('삭제될 이미지 ID:', tobeDeletedButtonId);
-    const newFileList = fileList.filter((list) => list.id !== tobeDeletedButtonId);
+    const newFileList = fileList.filter(
+      (list) => list.id !== tobeDeletedButtonId,
+    );
     setFileList(newFileList);
   };
 
   return (
     <>
-      <div className={`inp_section multiImageBox ${theme}-theme`}>
+      <div
+        className={`inp_section multiImageBox ${theme}-theme ${
+          className || ''
+        }`}
+      >
         {theme === 'basic' && (
           <>
             {fileList?.length > 0 && (
@@ -257,7 +270,9 @@ export default function FileInput({
                 />
                 <Fake_input
                   filename={fileList.length && fileList[0].filename}
-                  loadingIcon={isLoading && <Spinner style={{color:'#fff'}}/>}
+                  loadingIcon={
+                    isLoading && <Spinner style={{ color: '#fff' }} />
+                  }
                   theme={theme}
                 />
               </label>
@@ -285,17 +300,27 @@ export default function FileInput({
         )}
 
         <div className="desc">
-          <p>* 첫 번째 이미지가 대표 이미지로 노출됩니다.</p>
+          {option.descriptionHTML}
           <p>
-            * 이미지는 {required ? '최소 1장,' : ''} 최대 {maxImageCount}장 이내로 등록 가능합니다.
+            * 이미지는 {required ? '최소 1장,' : ''} 최대 {maxImageCount}장
+            이내로 등록 가능합니다.
           </p>
           <p>
-            * 파일크기는 {convertFileSizeToMegabyte(maxFileSize)}MB이하 / jpg, jpeg, png, gif 형식만
-            등록 가능합니다.
+            * 파일크기는 {convertFileSizeToMegabyte(maxFileSize)}MB이하 / jpg,
+            jpeg, png, gif 형식만 등록 가능합니다.
           </p>
         </div>
-        {required && formErrors[id] && <ErrorMessage>{formErrors[id]}</ErrorMessage>}
+        {required && formErrors[id] && (
+          <ErrorMessage>{formErrors[id]}</ErrorMessage>
+        )}
       </div>
     </>
   );
 }
+
+
+const additionalDesriptionHTML = (
+  <>
+    <p>* 첫 번째 이미지가 대표 이미지로 노출됩니다.</p>
+  </>
+);
