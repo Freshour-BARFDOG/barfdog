@@ -1,6 +1,6 @@
 @import '/styles/global/rem';
 @import '/styles/global/guide';
-
+@import './inquiry[id].module.scss';
 // Layout
 section.title { padding : rem(5) 0 rem(20) }
 
