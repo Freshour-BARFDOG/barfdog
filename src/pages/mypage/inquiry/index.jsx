@@ -86,7 +86,7 @@ export default function InquiryPage() {
                     <span className={s.divider}>DAY OFF (토/일/공휴일 휴무)</span>
                   </p>
                 </div>
-                <div className={s['btn-section']}>
+                <div className={s['create-btn']}>
                   <Link href={'/mypage/inquiry/create'} passHref>
                     <a className={`custom_btn solid basic_l ${s['inquiry-btn']}`}>
                       문의작성하기

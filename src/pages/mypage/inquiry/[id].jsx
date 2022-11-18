@@ -83,30 +83,35 @@ export default function InquiryArticlePage({ data }) {
       <Layout>
         <Wrapper>
           <MypageWrapper>
-            <h1>1:1 문의</h1>
             <section className={s['body-section']}>
-              <div className={s['info-row']}>
-                <div className={s['info-row-title']}>답변</div>
-                <div className={s['info-row-cont']}>
-                  <span className={s['status-box']}>{inquiryStatusIcon[info.status]}</span>
+              <h1>1:1 문의</h1>
+             
+              <ul>
+                <div className={s['info-row']}>
+                  <div className={s['info-row-title']}>답변</div>
+                  <div className={s['info-row-cont']}>
+                    <span className={s['status-box']}>{inquiryStatusIcon[info.status]}</span>
+                  </div>
                 </div>
-              </div>
-              <div className={s['info-row']}>
-                <div className={s['info-row-title']}>제목</div>
-                <div className={s['info-row-cont']}>{info.title}</div>
-              </div>
-              <div className={s['info-row']}>
-                <div className={s['info-row-title']}>등록일</div>
-                <div className={s['info-row-cont']}>
-                  {transformDate(info.createdDate, 'time', { seperator: '.' })}
+
+                <div className={s['info-row']}>
+                  <div className={s['info-row-title']}>제목</div>
+                  <div className={s['info-row-cont']}>{info.title}</div>
                 </div>
-              </div>
+
+                <div className={s['info-row']}>
+                  <div className={s['info-row-title']}>등록일</div>
+                  <div className={s['info-row-cont']}>
+                    {transformDate(info.createdDate, 'time', { seperator: '.' })}
+                  </div>
+                </div>
+              </ul>
+              
               <div className={`${s['info-row']} ${s['contents']}`}>
                 <div className={s['info-row-title']}><span>문의내용</span></div>
                 <div className={s['info-row-cont']}>{info.contents}</div>
               </div>
-            </section>
-            {info.adminAnswer.length > 0 &&
+              {info.adminAnswer.length > 0 &&
               info.adminAnswer.map((answer) => (
                 <article className={`${s['answer-section']}`}>
                   <div className={s['info-row']}>
@@ -115,7 +120,7 @@ export default function InquiryArticlePage({ data }) {
                   </div>
                   <div className={s['info-row']}>
                     <div className={s['info-row-title']}>등록일</div>
-                    <div className={s['info-row-cont']}>{answer.createdDate}</div>
+                    <div className={s['info-row-cont']}>{transformDate(answer.createdDate,'time', { seperator: '.' })}</div>
                   </div>
                   <div className={`${s['info-row']} ${s['contents']}`}>
                     <div className={s['info-row-title']}>문의답변</div>
@@ -123,6 +128,8 @@ export default function InquiryArticlePage({ data }) {
                   </div>
                 </article>
               ))}
+            </section>
+            
             <section className={`${s['btn-section']}`}>
               <button
                 type={'button'}
