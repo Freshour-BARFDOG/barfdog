@@ -54,6 +54,7 @@ function AdminGnb() {
           <SubmenuList title="공지사항" link="/bf-admin/community/notice" />
           <SubmenuList title="이벤트" link="/bf-admin/community/event" />
           <SubmenuList title="블로그" link="/bf-admin/community/blog" />
+          <SubmenuList title="1:1문의" link="/bf-admin/community/inquiry" />
         </List>
         <List title="리뷰관리">
           <SubmenuList title="베스트 리뷰" link="/bf-admin/review/bestReview" />
