@@ -179,11 +179,14 @@
 @media (max-width: rem(600)) {
   .body-section {
     padding-top: rem(20);
+    margin-bottom: 0;
+    border-bottom: 0;
     > h1{
       display: none;
     }
   }
   .btn-section {
+    margin-top: 0;
     padding-bottom: rem(50);
     display: grid;
     grid-template-columns: 1fr;
