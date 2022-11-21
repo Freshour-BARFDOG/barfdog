@@ -14,7 +14,7 @@ const PureCheckbox = ({
   disabled,
   returnBoolean,
   option={
-    position: 'right'
+    position: ''
   },
   ...props
 }) => {
