@@ -1,0 +1,25 @@
+@import '/styles/module/itemList.module';
+
+.cont_viewer {
+  .table {
+    .table_header{min-width: 100%; width: auto;}
+    .table_header,
+    .item {
+      grid-template-columns:
+        rem(60)
+        rem(600)
+        rem(160)
+        rem(160)
+        rem(120)
+        rem(160);
+    }
+  }
+}
+
+.title{text-decoration: underline; color: var(--color-link)}
+
+.answerStatus{
+  display: flex;
+  flex-direction: column;
+  gap: rem(4);
+}
