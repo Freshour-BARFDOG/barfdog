@@ -334,6 +334,18 @@ section.picture_attach {
     }
   }
 
+  section.body{
+    .flex{
+      .right_side{
+        .input_wrap{
+          ::placeholder{
+            font-size: rem(12);
+          }
+        }
+      }
+    }
+  }
+
   section.picture_attach {
     margin-bottom: 0;
   }
