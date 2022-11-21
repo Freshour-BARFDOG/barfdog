@@ -10,7 +10,7 @@ import Spinner from '/src/components/atoms/Spinner';
 import { useModalContext } from '/store/modal-context';
 import Link from 'next/link';
 import { EmptyContMessage } from '/src/components/atoms/emptyContMessage';
-import { QuestionAnswerStatusType } from '/store/TYPE/questionAnswerStatusType';
+import { inquiryStatusType } from '/store/TYPE/inquiry/inquiryStatusType';
 import { InquiryItem } from '/src/components/mypage/inquiry/InquiryItem';
 import { SearchBox } from '/src/components/mypage/inquiry/SearchBox';
 import { searchType } from '/store/TYPE/searchType';
@@ -155,20 +155,20 @@ const DUMMY_RESPONSE = {
       itemQueryName: [
         {
           id: 1,
-          status: QuestionAnswerStatusType.UNANSWERED,
+          status: inquiryStatusType.UNANSWERED,
           title:
             '문의사항있습니다!문의사항있습니다!문의사항있습니다!문의사항있습니다!문의사항있습니다!문의사항있습니다!문의사항있습니다!문의사항있습니다!문의사항있습니다!문의사항있습니다!문의사항있습니다!문의사항있습니다!문의사항있습니다!',
           createdDate: '2022-11-17T14:10:40',
         },
         {
           id: 2,
-          status: QuestionAnswerStatusType.ANSWERED,
+          status: inquiryStatusType.ANSWERED,
           title: '문의사항있습니다2',
           createdDate: '2022-11-17T14:10:40',
         },
         {
           id: 3,
-          status: QuestionAnswerStatusType.MULTIPLE_ANSWERED,
+          status: inquiryStatusType.MULTIPLE_ANSWERED,
           title: '문의사항있습니다3',
           createdDate: '2022-11-17T14:10:40',
         },

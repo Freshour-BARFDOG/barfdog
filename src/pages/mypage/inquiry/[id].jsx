@@ -6,7 +6,7 @@ import MetaTitle from '/src/components/atoms/MetaTitle';
 import s from './inquiry.module.scss';
 import Spinner from '/src/components/atoms/Spinner';
 import { inquiryStatusIcon } from '/src/components/mypage/inquiry/InquiryItem';
-import { QuestionAnswerStatusType } from '/store/TYPE/questionAnswerStatusType';
+import { inquiryStatusType } from '/store/TYPE/inquiry/inquiryStatusType';
 import {getDataSSR, postObjData} from '../../api/reqData';
 import transformDate from '/util/func/transformDate';
 import Link from "next/link";
@@ -202,7 +202,7 @@ const DUMMY_RESPONSE = {
     _embedded: {
       userInquiryDto: {
         id: 1,
-        status: QuestionAnswerStatusType.MULTIPLE_ANSWERED,
+        status: inquiryStatusType.MULTIPLE_ANSWERED,
         title: '문의사항있습니다.',
         contents:
           'Lorem ipsum dolor sit amet \nLorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis, dolor esse et, explicabo facere hic illo in, nemo omnis quidem repudiandae vitae! Asperiores, delectus ducimus facilis harum porro quisquam voluptate?',
