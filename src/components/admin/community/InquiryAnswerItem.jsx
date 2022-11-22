@@ -16,7 +16,7 @@ export const InquiryAnswerItem = ({data, onSelectedItem, selectedIdList}) => {
       </span>
       <span className={`${s.title}`}>
         <a
-          href={`/bf-admin/community/inquiry/${id}`}
+          href={`/bf-admin/community/inquiry/${id}/answer`}
           className={'overflow-x-scroll'}
         >
           <InquiryAnswerIcon/>

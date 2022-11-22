@@ -8,18 +8,18 @@ import {getDtataSSR_inquiryAuthorType} from "/util/func/getDtataSSR_inquiryAutho
 import transformDate from "/util/func/transformDate";
 import {getDataSSR} from "/src/pages/api/reqData";
 
-export default function ReadInquiryPage({data}) {
+export default function InquiryQuestionPage({data}) {
   console.log(data);
   const [isLoading, setIsLoading] = useState({});
 
   return (
     <>
-      <MetaTitle title="1:1 문의 상세보기" admin={true} />
+      <MetaTitle title="1:1 문의내용 상세보기" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
           <div className="title_main">
             <h1>
-              1:1 문의 상세보기
+              1:1 문의내용 상세보기
               {isLoading.fetching && (
                 <Spinner
                   style={{

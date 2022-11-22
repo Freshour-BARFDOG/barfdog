@@ -36,7 +36,7 @@ export const InquiryItem = ({item, onSelectedItem, selectedIdList}) => {
         </span>
         <span className={`${s.title}`}>
           <a
-            href={`/bf-admin/community/inquiry/${DATA.id}`}
+            href={`/bf-admin/community/inquiry/${DATA.id}/question`}
             className={'overflow-x-scroll'}
           >
             <em className={`overflow-x-scroll`}>{DATA.title}</em>

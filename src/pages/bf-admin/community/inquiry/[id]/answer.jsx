@@ -14,12 +14,12 @@ export default function InquiryAnswerPage({data}) {
 
   return (
     <>
-      <MetaTitle title="1:1 문의 상세보기" admin={true} />
+      <MetaTitle title="1:1 문의내용 답글" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
           <div className="title_main">
             <h1>
-              1:1 문의 상세보기
+              1:1 문의내용 관리자 답글
               {isLoading.fetching && (
                 <Spinner
                   style={{
