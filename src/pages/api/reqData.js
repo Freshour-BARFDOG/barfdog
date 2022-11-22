@@ -32,7 +32,7 @@ export const getData = async (url, useType, optionalConfig= {}) => {
   }
   const res = await axios(config)
     .then((res) => {
-      console.log(res);
+      // console.log(res);
       return res;
     })
     .catch((err) => {
