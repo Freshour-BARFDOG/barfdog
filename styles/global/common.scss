@@ -170,7 +170,12 @@ $aniType_Show: 0.3s ease-in;
 
 
 .pointColor {
-  color: var(--color-primary04);
+  color: var(--color-primary04) !important;
+
+}
+
+button.pointColor {
+  border-color: var(--color-primary04) !important;
 }
 
 .errorMSG {
