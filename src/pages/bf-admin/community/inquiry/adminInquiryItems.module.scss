@@ -2,7 +2,10 @@
 
 .cont_viewer {
   .table {
-    .table_header{min-width: 100%; width: auto;}
+    .table_header {
+      min-width: 100%;
+      width: auto;
+    }
     .table_header,
     .item {
       grid-template-columns:
@@ -16,9 +19,30 @@
   }
 }
 
-.title{text-decoration: underline; color: var(--color-link)}
+.title {
+  justify-content: flex-start !important;
+  a {
+    display: flex;
+    align-items: center;
+    gap: rem(16);
+    width: 100%;
+    em {
+      text-decoration: underline;
+      font-weight: 300;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+}
+.icon.answer {
+  background-color: var(--color-main);
+  color: #fff;
+  padding: rem(1) rem(13);
+  border-radius: rem(20);
+}
 
-.answerStatus{
+.answerStatus {
   display: flex;
   flex-direction: column;
   gap: rem(4);

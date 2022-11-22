@@ -10,16 +10,18 @@ import SearchTextWithCategory from '/src/components/admin/form/searchBar/SearchT
 import SearchRadio from '/src/components/admin/form/searchBar/SearchRadio';
 import {useModalContext} from '/store/modal-context';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
-import { transformToday } from '/util/func/transformDate';
+import {transformToday} from '/util/func/transformDate';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
 import PureCheckbox from '/src/components/atoms/PureCheckbox';
 import {valid_isTheSameArray} from '/util/func/validation/validationPackage';
 import {inquiryStatusType} from '/store/TYPE/inquiry/inquiryStatusType';
 import {inquiryCategoryType} from '/store/TYPE/inquiry/inquiryCategoryType';
-import InquiryItemList from './InquiryItemList';
+import InquiryItemList from '/src/components/admin/community/InquiryItemList';
 import {SearchTypeClass} from "/src/class/SearchTypeClass";
 import enterKey from "/util/func/enterKey";
+import {getAllItemIdList} from "/util/func/getAllItemIdList";
+import {putObjData} from "/src/pages/api/reqData";
 
 
 const initialSearchValues = {
@@ -73,15 +75,12 @@ export default function InquiryListPage() {
   );
   const [searchQuery, setSearchQuery] = useState(getQueryString(getQueryObj(initialSearchValues, searchTypeClass.initialType)));
   const [selectedItemIds, setSelectedItemIds] = useState([]);
-  const allItemIdList = itemList?.map((item) => item.id);
+  const allItemIdList = getAllItemIdList(itemList);
+  
+ 
 
-  console.log(itemList);
-  console.log(allItemIdList);
-  console.log('searchQuery: ',searchQuery);
-  // console.log('searchValues: ',searchValues);
 
   const onSearch = useCallback(() => {
-
     const queryObj = getQueryObj(searchValues, selectedSearchType)
     const queryString = getQueryString(queryObj);
     setSearchQuery(queryString);
@@ -97,7 +96,7 @@ export default function InquiryListPage() {
 
   const pageInterceptor = useCallback((res) => {
     // res = DUMMY__RESPONSE; // ! TEST
-    console.log(res);
+    console.log('InquiryListPage: ',res);
     let newPageInfo = {
       totalPages: 0,
       size: 0,
@@ -135,12 +134,46 @@ export default function InquiryListPage() {
   };
 
   const onSelectAllItems = (checked) => {
-    const allItemsIdList = itemList.map((item) => item.id);
-    setSelectedItemIds(checked ? allItemsIdList : []);
+    setSelectedItemIds(checked ? allItemIdList : []);
   };
 
-  const onDeleteItem = () => {
-    console.log('선택된 아이템 삭제');
+  const onDeleteItem =async (id) => {
+    if(!selectedItemIds.length) return mct.alertShow('선택된 항목이 없습니다.');
+    if(!confirm(`선택하신 ${selectedItemIds.length}개의 항목을 삭제하시겠습니까?`)) return;
+    
+    try {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        delete: true,
+      }));
+      const url = `/api/admin/questions`;
+
+      let isDone = true;
+      for (const id of selectedItemIds) {
+        const body = {
+          id: id
+        }
+        const res = await putObjData(url, body)
+        if(!res.isDone){
+          return mct.alertShow(`삭제에 실패한 항목이 있습니다.`, onWindowReload);
+        }
+      }
+      
+      if(isDone){
+        mct.alertShow(`선택하신 ${selectedItemIds.length}개의 항목이 삭제되었습니다.`, onWindowReload);
+      }
+      
+      // console.log(res);
+    } catch (err) {
+      mct.alertShow('삭제에 실패하였습니다.', onWindowReload);
+        console.error(err)
+    } finally {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        delete: false,
+      }));
+    }
+    
   };
 
   const answerStatusOptionIdList = Object.keys(inquiryStatusType).filter(
@@ -150,6 +183,12 @@ export default function InquiryListPage() {
   
   const onEnterKey = (e)=>{
     enterKey(e, onSearch);
+  }
+  const onWindowReload = (e)=>{
+    if(typeof window !== 'undefined'){
+    
+    }
+    window.location.reload();
   }
 
   return (

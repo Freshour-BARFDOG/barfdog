@@ -207,8 +207,8 @@ export default function ReplyInquiryPage({id}) {
 export async function getServerSideProps ({query}) {
   
   const { id } = query;
-  const availableQuery = typeof Number(id) === 'number';
-  if(!availableQuery){
+  const inValid = isNaN(id);
+  if(inValid){
     return {
       redirect:{
         destination: '/bf-admin/community/inquiry'
@@ -217,6 +217,6 @@ export async function getServerSideProps ({query}) {
   }
   
   return {
-    props: { id}
+    props: { id }
   }
 }
