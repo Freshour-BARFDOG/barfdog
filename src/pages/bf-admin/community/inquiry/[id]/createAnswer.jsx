@@ -9,15 +9,15 @@ import Spinner from '/src/components/atoms/Spinner';
 import { validate } from '/util/func/validation/validation_reply';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
 import { postObjData } from '/src/pages/api/reqData';
-import Tooltip from "../../../../../components/atoms/Tooltip";
-import popupWindow from "../../../../../../util/func/popupWindow";
+import Tooltip from "/src/components/atoms/Tooltip";
+import popupWindow from "/util/func/popupWindow";
 
 const initialFormValues = {
   title: '',
   content: '',
 };
 
-export default function ReplyInquiryPage({id}) {
+export default function CreateInquiryAnswerPage({id}) {
   console.log(id)
   const mct = useModalContext();
 
