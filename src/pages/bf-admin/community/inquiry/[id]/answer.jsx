@@ -118,16 +118,24 @@ export default function InquiryAnswerPage({ data }) {
             <h1>
               1:1 문의내용 답글
             </h1>
-            <button
-              className={'admin_btn line pointColor basic_l'}
-              type={'button'}
-              onClick={onPopupHandler}
-            >
-              원문보기
-            </button>
           </div>
           <main className="cont">
             <div className={`cont_body ${s['body-section']}`}>
+              <div className={s['info-row']}>
+                <div className="left-box">
+                  <p className="title">원글 링크</p>
+                </div>
+                <div className="right-box">
+                  <a
+                    type={'button'}
+                    className={'admin_btn line basic_m pointColor'}
+                    onClick={onPopupHandler}
+                    target={'_blank'}
+                  >
+                    원글 보기
+                  </a>
+                </div>
+              </div>
               <div className={s['info-row']}>
                 <span className={s['info-row-title']}>제목</span>
                 <span className={s['info-row-cont']}>{info.title}</span>
