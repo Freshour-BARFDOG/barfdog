@@ -58,7 +58,7 @@ $aniType_Show: 0.3s ease-in;
   // transition-timing-function: ease;
   pointer-events: all;
   background-color: #fff;
-  cursor: pointer;
+  cursor: pointer !important;
   transition: border .3s ease;
   &[animation='show'] {
     animation: show $aniType_Show forwards;
@@ -131,6 +131,13 @@ $aniType_Show: 0.3s ease-in;
     font-size: rem(15);
   }
 
+  /* fixed-size: 124 x 42 */
+  &.confirm {
+    height: rem(42);
+    width: rem(124);
+    font-size: rem(15) !important;
+  }
+
   /* fixed-size: 160 x 38 */
   &.confirm_m {
     height: rem(38);
@@ -156,8 +163,15 @@ $aniType_Show: 0.3s ease-in;
   }
 }
 
+.flex-box{
+  display:flex;
+  align-items: center;
+  justify-content: center;
+}
 
-
+.space-between{
+  justify-content: space-between;
+}
 
 
 
@@ -174,7 +188,7 @@ $aniType_Show: 0.3s ease-in;
 
 }
 
-button.pointColor {
+a.pointColor, button.pointColor {
   border-color: var(--color-primary04) !important;
 }
 
