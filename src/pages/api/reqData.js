@@ -1,6 +1,7 @@
 import axios from 'axios';
 import axiosConfig, { axiosUserConfig } from './axios.config';
 import { cookieType } from '/store/TYPE/cookieType';
+import {responseErrorType} from "@store/TYPE/responseErrorType";
 
 /* - async / await 사용법
      아래 async await을 사용한 함수를 호출하는 함수도
@@ -20,53 +21,31 @@ axios.patch(url, data, {...config})
 */
 
 
-export const getData = async (url, type) => {
-  // console.log(url, type)
-  const response = await axios
-    .get(url, type === 'admin' ? axiosConfig() : axiosUserConfig())
-    // .get(url,axiosConfig())
+export const getData = async (url, useType, optionalConfig= {}) => {
+
+  const axiosHeaders = useType === 'admin' ? axiosConfig() : axiosUserConfig();
+  const config = {
+    ...axiosHeaders,
+    method: "GET",
+    url: url,
+    ...optionalConfig
+  }
+  const res = await axios(config)
     .then((res) => {
-      // console.log(res);
+      console.log(res);
       return res;
     })
     .catch((err) => {
       console.log(err.response);
-      let errorMessage;
       const errorObj = err?.response;
       const status = errorObj?.status;
-      let error = null;
-      switch (status) {
-        case 200:
-          error = ''; // 유효한 토큰 : 요청을 성공적으로 처리함
-          break;
-        case 201:
-          error = '';
-          // 새 리소스를 성공적으로 생성함. 응답의 Location 헤더에 해당 리소스의 URI가 담겨있다.
-          break;
-        case 400:
-          error = '잘못된 요청을 보냈습니다.';
-          break;
-        case 401:
-          error = '인증 토큰이 만료되었습니다';
-          break;
-        case 403:
-          error = '접근권한이 없는 페이지입니다.';
-          break;
-        case 404:
-          error = '요청한 리소스가 서버에 없습니다.';
-          break;
-        case 409:
-          error = '중복된 리소스가 이미 존재합니다.';
-          break;
-        case 500:
-          error = `${status}: 데이터를 조회할 수 없습니다.`;
-          break;
-      }
+      let error = responseErrorType[status];
+      console.error(errorObj); // 개발 시, Response Status 확인용
       console.error(error); // 개발 시, Response Status 확인용
-      return err.response;
+      return errorObj;
     });
 
-  return response;
+  return res;
 };
 
 export const postData = async (url, data, callback, contType) => {
