@@ -14,6 +14,10 @@ $default-padding: rem(20);
   }
 }
 
+.body-section.add-padding {
+  padding: rem(20) rem(40) rem(80);
+}
+
 // styles
 .info-row {
   display: grid;
