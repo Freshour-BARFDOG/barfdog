@@ -40,7 +40,10 @@ export default function CreateInquiryPage() {
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
   const router = useRouter();
-  const intiFormValues = {};
+  // textarea 글자수 0/1,000의 초기 0생성, 미설정시 /1,000으로 출력됨
+  const intiFormValues = {
+    contents: '',
+  };
   const [form, setForm] = useState(intiFormValues);
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
@@ -195,6 +198,7 @@ export default function CreateInquiryPage() {
                       placeholder={`문의내용을 작성해주세요.\n문의내용은 최대 ${transformLocalCurrency(maxContentsLength)}자 이내로 작성 가능할 수 있습니다.`}
                       onChange={onInputChangeHandler}
                       value={form['contents']}
+                      maxLength={1000}
                     />
                     <span className={s['length-indicator']}>
                       {form?.contents?.length} / {transformLocalCurrency(maxContentsLength)}

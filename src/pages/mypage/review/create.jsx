@@ -244,6 +244,7 @@ export default function CreateReviewPage() {
                       placeholder="50자 이상 작성시 300원이 적립됩니다.&#13;상품에 대한 견주님의 의견을 남겨주시면 큰 힘이 됩니다."
                       onChange={onInputChangeHandler}
                       value={form.contents}
+                      maxLength={1000}
                     />
                     <span className={s['textLength-indicator']}>
                       {form.contents.length} / {transformLocalCurrency(maxContentsLength)}

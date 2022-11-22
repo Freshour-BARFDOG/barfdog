@@ -21,7 +21,7 @@
 
   button{
     border-radius: rem(4);
-    width: rem(80);
+    width: rem(80) !important;
     .search_icon{
       display: none;
     }
