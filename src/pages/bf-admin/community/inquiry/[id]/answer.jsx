@@ -1,154 +1,234 @@
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import {AdminContentWrapper} from '/src/components/admin/AdminWrapper';
 import Spinner from '/src/components/atoms/Spinner';
-import {inquiryAuthorType} from "/store/TYPE/inquiry/inquiryAuthorType";
-import {getDtataSSR_inquiryAuthorType} from "/util/func/getDtataSSR_inquiryAuthorType";
-import transformDate from "/util/func/transformDate";
-import {getDataSSR} from "/src/pages/api/reqData";
+import {getDtataSSR_inquiryAuthorType} from '/util/func/getDtataSSR_inquiryAuthorType';
+import transformDate from '/util/func/transformDate';
+import {getDataSSR, putObjData} from '/src/pages/api/reqData';
+import s from './adminInquiry[id].module.scss';
+import {useModalContext} from '/store/modal-context';
+import popupWindow from '/util/func/popupWindow';
+import {InquiryFiles} from "../../../../../components/mypage/inquiry/InquiryFiles";
+import Modal_global_alert from "../../../../../components/modal/Modal_global_alert";
 
-export default function InquiryAnswerPage({data}) {
-  console.log(data);
+const testImageList = [
+  {
+    questionImageId: 6,
+    filename: 'asdkfljdasfl.jpg',
+    url: 'http://localhost:4000/test.jpg',
+  },
+  {
+    questionImageId: 7,
+    filename: '    filename: \'a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1..jpg',
+    url: 'http://localhost:4000/test.jpg',
+  },
+  {
+    questionImageId: 8,
+    filename: 'a3.jpg',
+    url: 'http://localhost:4000/test.jpg',
+  },
+]; // ! TEST
+
+export default function InquiryAnswerPage({ data }) {
+  const answerId = data.id;
+  const info = useMemo(() => {
+    return {
+      id: data.id,
+      targetId: data.targetId,
+      title: data.title,
+      contents: data.contents,
+      createdDate: data.createdDate,
+      questionImgDtoList: data.questionImgDtoList,
+      // questionImgDtoList: testImageList, // ! TEST
+    };
+  }, []);
+
+  const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
   const [isLoading, setIsLoading] = useState({});
+  const [submitted, setSubmitted] = useState( false );
+  
+  // console.log(info);
+
+  const onDeleteItem = async () => {
+    if(submitted) return onSuccessCallback();
+    if(!confirm('답글을 삭제하시겠습니까?')) return;
+    
+    try {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        delete: true,
+      }));
+      
+      
+      const url = `/api/admin/questions`;
+      const body = {
+        id: answerId
+      }
+      const res = await putObjData(url, body);
+      if (res.isDone) {
+        mct.alertShow(
+          `답글이 삭제되었습니다.`,
+          onSuccessCallback,
+        );
+        setSubmitted(true);
+      } else {
+        mct.alertShow(
+          `삭제에 실패하였습니다.`,
+          onFailCallback,
+        );
+      }
+      // console.log(res);
+    } catch (err) {
+      mct.alertShow('서버와 통신문제로 인하여, 삭제에 실패하였습니다.', onFailCallback);
+      console.error(err);
+    } finally {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        delete: false,
+      }));
+    }
+  };
+  
+  const onSuccessCallback = (e)=>{
+    window.location.href = '/bf-admin/community/inquiry';
+  }
+  
+  const onFailCallback = (e)=>{
+    window.location.reload();
+  }
+
+  const onPrevPage = () => {
+    window.location.href = '/bf-admin/community/inquiry';
+  };
+
+  const onPopupHandler = () => {
+    const questionId = info.targetId;
+    const href = `/bf-admin/popup/inquiry/${questionId}`;
+    popupWindow(href);
+  };
 
   return (
     <>
       <MetaTitle title="1:1 문의내용 답글" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
-          <div className="title_main">
+          <div className={`${s['header-section']} title_main`}>
             <h1>
-              1:1 문의내용 관리자 답글
-              {isLoading.fetching && (
-                <Spinner
-                  style={{
-                    color: 'var(--color-main)',
-                    width: '20',
-                    height: '20',
-                  }}
-                  speed={0.6}
-                />
-              )}
+              1:1 문의내용 답글
             </h1>
+            <button
+              className={'admin_btn line pointColor basic_l'}
+              type={'button'}
+              onClick={onPopupHandler}
+            >
+              원문보기
+            </button>
+          </div>
+          <main className="cont">
+            <div className={`cont_body ${s['body-section']}`}>
+              <div className={s['info-row']}>
+                <span className={s['info-row-title']}>제목</span>
+                <span className={s['info-row-cont']}>{info.title}</span>
+              </div>
+              {/* info-row */}
+              <div className={s['info-row']}>
+                <span className={s['info-row-title']}>등록일</span>
+                <span className={s['info-row-cont']}>{info.createdDate}</span>
+              </div>
+              {/* info-row */}
+              <div className={`${s['info-row']}`}>
+                <span className={s['info-row-title']}>
+                  첨부파일
+                  {info.questionImgDtoList.length > 0 && (
+                    <em className={s.fileCounter}>
+                      {info.questionImgDtoList.length}개
+                    </em>
+                  )}
+                </span>
+                <span className={s['info-row-cont']}>
+                  {info.questionImgDtoList.length > 0 ? (
+                    <InquiryFiles datas={info.questionImgDtoList} />
+                  ) : (
+                    <span className={s['viewer-section']}>첨부파일이 없습니다.</span>
+                  )}
+                </span>
+              </div>
+              {/* info-row */}
+              <div className={`${s['info-row']} ${s['contents']} ${s['answer']}`}>
+                <span className={s['info-row-title']}>답글</span>
+                <span className={s['info-row-cont']}>{info.contents}</span>
+              </div>
+            </div>
+          </main>
+          <div className="cont_bottom">
+            <div className="btn_section">
+              <button
+                type="button"
+                id="btn-cancle"
+                className="admin_btn confirm_l line pointColor"
+                onClick={onPrevPage}
+              >
+                목록보기
+              </button>
+              <button
+                type="button"
+                id="btn-create"
+                className="admin_btn confirm_l line"
+                onClick={onDeleteItem}
+              >
+                {isLoading.delete ? (
+                  <Spinner/>
+                ) : (
+                  '답글삭제'
+                )}
+              </button>
+            </div>
           </div>
         </AdminContentWrapper>
       </AdminLayout>
+      {hasAlert && <Modal_global_alert background />}
     </>
   );
 }
 
-
 export async function getServerSideProps({ req, query }) {
   const { id } = query;
-  let DATA = {
-    inquiry: null,
-    answer: []
-  };
-  
+  let DATA = null;
+
   const inValid = isNaN(id);
   let AUTHOR_TYPE = await getDtataSSR_inquiryAuthorType(req, id);
-  // if (inValid || !AUTHOR_TYPE) { ! PROD
-  if (false) { // ! TEST
+  console.log('inValid: ', inValid, 'AUTHOR_TYPE', AUTHOR_TYPE);
+  if (inValid || !AUTHOR_TYPE) { // !PROD;
     return {
       redirect: {
         destination: '/bf-admin/community/inquiry',
       },
     };
   }
-  
-  // # 유저 질문
-  const inquiryApiUrl = `/api/admin/questions/member/${id}`;
-  // const inquiry_res = await getDataSSR(req, inquiryApiUrl);
-  const inquiry_res = DUMMY_INQUIRY_RES; // ! TEST
-  if (inquiry_res?.status === 200 && inquiry_res?.data) {
-    const data = inquiry_res.data;
-    const answerIdList = data.answerIdList;
-    const inquiryData = {
+
+  const apiUrl = `/api/admin/questions/admin/${id}`;
+  const answer_res = await getDataSSR(req, apiUrl);
+  // const answer_res = DUMMY_ANSWER_RES; // ! TEST
+  // console.log('answer_res: ',answer_res);
+  if (answer_res?.status === 200 && answer_res?.data) {
+    const data = answer_res.data;
+    DATA = {
       id: data.id,
-      name: data.name,
-      email: data.email,
+      targetId: data.targetId,
       title: data.title,
       contents: data.contents,
       createdDate: transformDate(data.createdDate, 'time', { seperator: '.' }),
-      questionImgDtoList: data.questionImgDtoList?.map(q=> ({
-        filename: q.filename || null,
-        url: q.url || null,
-      })) || [],
-      answerIdList: answerIdList,
-    }
-    DATA.inquiry = inquiryData;
-    
-    
-    // # 관리자 답변
-    if(answerIdList.length) {
-      const answerList = [];
-      for (const answerId of answerIdList) {
-        const answerApiUrl = `/api/admin/questions/admin/${answerId}`;
-        // const answer_res = await getDataSSR(req, answerApiUrl);
-        const answer_res = DUMMY_ANSWER_RES;
-        console.log('answer_res: ',answer_res);
-        if (answer_res?.status === 200 && answer_res?.data) {
-          const data = answer_res.data;
-          const answerData = {
-            id: data.id,
-            targetId: data.targetId,
-            title: data.title,
-            contents: data.contents,
-            createdDate: transformDate(data.createdDate, 'time', { seperator: '.' }),
-            questionImgDtoList: data.questionImgDtoList?.map(q=> ({
-              filename: q.filename || null,
-              url: q.url || null,
-            })) || [],
-          }
-          // DATA.answer
-          console.log('answerId: ',answerId)
-          DATA.answer.push(answerData);
-        }
-      }
-    }
+      questionImgDtoList:
+        data.questionImgDtoList?.map((q) => ({
+          filename: q.filename || null,
+          url: q.url || null,
+        })) || [],
+    };
   }
-  
-
   return {
     props: { data: DATA },
   };
 }
 
-
-
-const DUMMY_INQUIRY_RES = {
-  data: {
-    id: 33,
-    name: '실버',
-    email: 'user@example.com',
-    title: 'title!',
-    contents: 'contentscontentscontents',
-    createdDate: '2022-11-21T11:19:46.141',
-    questionImgDtoList: [
-      {filename: 'filename.jpg', url: 'http://localhost:4000/_next/image?url=%2F_next%2Fs…ic%2Fmedia%2Flogo(admin).77a38725.png&w=1200&q=75'},
-      {filename: 'filename2.jpg', url: 'http://localhost:4000/_next/image?url=%2F_next%2Fs…ic%2Fmedia%2Flogo(admin).77a38725.png&w=1200&q=75'},
-    ],
-    answerIdList: [36,37,38]
-  },
-  _links: {},
-  status: 200,
-}
-
-
-
-const DUMMY_ANSWER_RES = {
-  data: {
-    id: 35,
-    targetId: 33,
-    title: 'title!',
-    contents: '관리자의 답변내용',
-    createdDate: '2022-11-22T11:19:46.141',
-    questionImgDtoList: [
-      {filename: 'filename.jpg', url: 'http://localhost:4000/_next/image?url=%2F_next%2Fs…ic%2Fmedia%2Flogo(admin).77a38725.png&w=1200&q=75'},
-      {filename: 'filename2.jpg', url: 'http://localhost:4000/_next/image?url=%2F_next%2Fs…ic%2Fmedia%2Flogo(admin).77a38725.png&w=1200&q=75'},
-    ],
-  },
-  _links: {},
-  status: 200,
-}

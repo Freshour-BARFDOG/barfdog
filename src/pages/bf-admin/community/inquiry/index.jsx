@@ -173,7 +173,6 @@ export default function InquiryListPage() {
         delete: false,
       }));
     }
-    
   };
 
   const answerStatusOptionIdList = Object.keys(inquiryStatusType).filter(

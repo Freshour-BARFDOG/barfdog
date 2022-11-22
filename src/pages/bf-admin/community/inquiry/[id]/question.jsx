@@ -1,17 +1,50 @@
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import {AdminContentWrapper} from '/src/components/admin/AdminWrapper';
 import Spinner from '/src/components/atoms/Spinner';
-import {inquiryAuthorType} from "/store/TYPE/inquiry/inquiryAuthorType";
 import {getDtataSSR_inquiryAuthorType} from "/util/func/getDtataSSR_inquiryAuthorType";
 import transformDate from "/util/func/transformDate";
 import {getDataSSR} from "/src/pages/api/reqData";
+import s from "./adminInquiry[id].module.scss";
+import {InquiryFiles} from "/src/components/mypage/inquiry/InquiryFiles";
+import {inquiryStatusIcon} from "/store/TYPE/inquiry/InquiryStatusIcon";
 
 export default function InquiryQuestionPage({data}) {
-  console.log(data);
+  
+  // console.log(data);
+  const info = useMemo(() => {
+    return {
+      id: data.id,
+      name: data.name,
+      email: data.email,
+      targetId: data.targetId,
+      title: data.title,
+      contents: data.contents,
+      createdDate: data.createdDate,
+      answerStatus: data.answerStatus,
+      category: data.category,
+      questionImgDtoList: data.questionImgDtoList,
+    };
+  }, []);
+  
   const [isLoading, setIsLoading] = useState({});
-
+  
+  
+  const onReplying = async () => {
+    setIsLoading((prevState) => ({
+      ...prevState,
+      routing: true,
+    }));
+    const questionId = data.id;
+    window.location.href=`/bf-admin/community/inquiry/${questionId}/createAnswer`;
+  }
+  const onPrevPage = () => {
+    window.location.href = '/bf-admin/community/inquiry';
+  };
+  
+  
+  
   return (
     <>
       <MetaTitle title="1:1 문의내용 상세보기" admin={true} />
@@ -20,17 +53,82 @@ export default function InquiryQuestionPage({data}) {
           <div className="title_main">
             <h1>
               1:1 문의내용 상세보기
-              {isLoading.fetching && (
-                <Spinner
-                  style={{
-                    color: 'var(--color-main)',
-                    width: '20',
-                    height: '20',
-                  }}
-                  speed={0.6}
-                />
-              )}
             </h1>
+          </div>
+          <main className="cont">
+            <div className={`cont_body ${s['body-section']}`}>
+              <div className={`${s['info-row']} ${s['status']}`}>
+                <span className={s['info-row-title']}>답변상태</span>
+                <span className={s['info-row-cont']}>{inquiryStatusIcon[info.answerStatus]}</span>
+              </div>
+              <div className={`${s['info-row']}`}>
+                <span className={s['info-row-title']}>작성자</span>
+                <span className={s['info-row-cont']}>{info.name}</span>
+              </div>
+              <div className={`${s['info-row']}`}>
+                <span className={s['info-row-title']}>이메일</span>
+                <span className={s['info-row-cont']}>{info.email}</span>
+              </div>
+              <div className={s['info-row']}>
+                <span className={s['info-row-title']}>제목</span>
+                <span className={s['info-row-cont']}>{info.title}</span>
+              </div>
+              {/* info-row */}
+              <div className={s['info-row']}>
+                <span className={s['info-row-title']}>등록일</span>
+                <span className={s['info-row-cont']}>{info.createdDate}</span>
+              </div>
+              {/* info-row */}
+              <div className={`${s['info-row']}`}>
+                <span className={s['info-row-title']}>
+                  첨부파일
+                  {info.questionImgDtoList.length > 0 && (
+                    <em className={s.fileCounter}>
+                      {info.questionImgDtoList.length}개
+                    </em>
+                  )}
+                </span>
+                <span className={s['info-row-cont']}>
+                  {info.questionImgDtoList.length > 0 ? (
+                    <InquiryFiles datas={info.questionImgDtoList} />
+                  ) : (
+                    <span className={s['viewer-section']}>첨부파일이 없습니다.</span>
+                  )}
+                </span>
+              </div>
+              {/* info-row */}
+              <div className={`${s['info-row']} ${s['contents']}`}>
+                <span className={s['info-row-title']}>문의내용</span>
+                <span className={s['info-row-cont']}>{info.contents}</span>
+              </div>
+            </div>
+          </main>
+          <div className="cont_bottom">
+            <div className="btn_section">
+              <button
+                type="button"
+                id="btn-cancle"
+                className="admin_btn confirm_l line pointColor"
+                onClick={onPrevPage}
+              >
+                목록보기
+              </button>
+              <button
+                type="button"
+                id="btn-create"
+                className="admin_btn confirm_l solid"
+                onClick={onReplying}
+              >
+                {isLoading.routing ? (
+                  <Spinner
+                    style={{ color: '#fff', width: '15', height: '15' }}
+                    speed={0.6}
+                  />
+                ) : (
+                  '답글작성'
+                )}
+              </button>
+            </div>
           </div>
         </AdminContentWrapper>
       </AdminLayout>
@@ -41,15 +139,12 @@ export default function InquiryQuestionPage({data}) {
 
 export async function getServerSideProps({ req, query }) {
   const { id } = query;
-  let DATA = {
-    inquiry: null,
-    answer: []
-  };
+  let DATA = null;
   
   const inValid = isNaN(id);
   let AUTHOR_TYPE = await getDtataSSR_inquiryAuthorType(req, id);
-  // if (inValid || !AUTHOR_TYPE) { ! PROD
-  if (false) { // ! TEST
+  if (inValid || !AUTHOR_TYPE) { ! PROD
+  // if (false) { // ! TEST
     return {
       redirect: {
         destination: '/bf-admin/community/inquiry',
@@ -58,56 +153,30 @@ export async function getServerSideProps({ req, query }) {
   }
   
   // # 유저 질문
-  const inquiryApiUrl = `/api/admin/questions/member/${id}`;
-  // const inquiry_res = await getDataSSR(req, inquiryApiUrl);
-  const inquiry_res = DUMMY_INQUIRY_RES; // ! TEST
+  const apiUrl = `/api/admin/questions/member/${id}`;
+  const inquiry_res = await getDataSSR(req, apiUrl);
+  // const inquiry_res = DUMMY_INQUIRY_RES; // ! TEST
+  // console.log(inquiry_res)
   if (inquiry_res?.status === 200 && inquiry_res?.data) {
     const data = inquiry_res.data;
     const answerIdList = data.answerIdList;
-    const inquiryData = {
+    DATA = {
       id: data.id,
       name: data.name,
       email: data.email,
       title: data.title,
       contents: data.contents,
       createdDate: transformDate(data.createdDate, 'time', { seperator: '.' }),
+      answerStatus: data.answerStatus,
+      category: data.category,
       questionImgDtoList: data.questionImgDtoList?.map(q=> ({
         filename: q.filename || null,
         url: q.url || null,
       })) || [],
       answerIdList: answerIdList,
     }
-    DATA.inquiry = inquiryData;
-    
-    
-    // # 관리자 답변
-    if(answerIdList.length) {
-      const answerList = [];
-      for (const answerId of answerIdList) {
-        const answerApiUrl = `/api/admin/questions/admin/${answerId}`;
-        // const answer_res = await getDataSSR(req, answerApiUrl);
-        const answer_res = DUMMY_ANSWER_RES;
-        console.log('answer_res: ',answer_res);
-        if (answer_res?.status === 200 && answer_res?.data) {
-          const data = answer_res.data;
-          const answerData = {
-            id: data.id,
-            targetId: data.targetId,
-            title: data.title,
-            contents: data.contents,
-            createdDate: transformDate(data.createdDate, 'time', { seperator: '.' }),
-            questionImgDtoList: data.questionImgDtoList?.map(q=> ({
-              filename: q.filename || null,
-              url: q.url || null,
-            })) || [],
-          }
-          // DATA.answer
-          console.log('answerId: ',answerId)
-          DATA.answer.push(answerData);
-        }
-      }
-    }
   }
+  
   
 
   return {
