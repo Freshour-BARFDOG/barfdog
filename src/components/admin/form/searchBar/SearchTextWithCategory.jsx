@@ -13,7 +13,10 @@ const SearchTextWithCategory = ({
   options = [],
   searchButton,
   onSearch,
-  onKeydown,
+  events={
+    onSelect: null,
+    onKeydown:null,
+  }
 }) => {
 
   const initialCategory = options[0].value || '';
@@ -22,9 +25,12 @@ const SearchTextWithCategory = ({
 
   const onSelectChangeHandler = (e) => {
     const thisSelect = e.currentTarget;
-    const value = thisSelect.value;
-    setSelectedCategory(value);
-    const searchQuery = value;
+    const selectedVal = thisSelect.value;
+    setSelectedCategory(selectedVal);
+    if(events.onSelect && typeof events.onSelect === 'function' ){
+      events.onSelect(selectedVal);
+    }
+    const searchQuery = selectedVal;
     setSearchValue((prevState) => {
       let tobeInitializedValueObj = {}
       options.forEach(option=> {
@@ -90,7 +96,7 @@ const SearchTextWithCategory = ({
             id={"popup-searchUser-keyword"}
             type="text"
             onChange={onInputChangeHandler}
-            onKeyDown={onSearch}
+            onKeyDown={events.onKeydown}
             value={searchValue[selectedCategory] || ''}
           />
           {searchButton}
@@ -98,6 +104,6 @@ const SearchTextWithCategory = ({
       </div>
     </>
   );
-};;
+};
 
 export default SearchTextWithCategory;
