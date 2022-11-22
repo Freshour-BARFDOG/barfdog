@@ -1,70 +1,102 @@
-import React, { useState, useCallback } from 'react';
+import React, {useCallback, useState} from 'react';
+import s from './adminInquiryItems.module.scss';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import Spinner from '/src/components/atoms/Spinner';
 import AdminLayout from '/src/components/admin/AdminLayout';
-import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
-import SearchBar from '../../../../components/admin/form/searchBar';
-import SearchTerm from '../../../../components/admin/form/searchBar/SearchTerm';
-import SearchTextWithCategory from '../../../../components/admin/form/searchBar/SearchTextWithCategory';
+import {AdminContentWrapper} from '/src/components/admin/AdminWrapper';
+import SearchBar from '/src/components/admin/form/searchBar';
+import SearchTerm from '/src/components/admin/form/searchBar/SearchTerm';
+import SearchTextWithCategory from '/src/components/admin/form/searchBar/SearchTextWithCategory';
+import SearchRadio from '/src/components/admin/form/searchBar/SearchRadio';
+import {useModalContext} from '/store/modal-context';
+import Modal_global_alert from '/src/components/modal/Modal_global_alert';
+import { transformToday } from '/util/func/transformDate';
+import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
+import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
+import PureCheckbox from '/src/components/atoms/PureCheckbox';
+import {valid_isTheSameArray} from '/util/func/validation/validationPackage';
+import {inquiryStatusType} from '/store/TYPE/inquiry/inquiryStatusType';
+import {inquiryCategoryType} from '/store/TYPE/inquiry/inquiryCategoryType';
+import InquiryItemList from './InquiryItemList';
+import {SearchTypeClass} from "/src/class/SearchTypeClass";
+import enterKey from "/util/func/enterKey";
 
-import SearchRadio from '../../../../components/admin/form/searchBar/SearchRadio';
-import { useModalContext } from '../../../../../store/modal-context';
-import Modal_global_alert from '../../../../components/modal/Modal_global_alert';
-import { transformToday } from '../../../../../util/func/transformDate';
-
-import s from './adminInquiryItems.module.scss';
-import PaginationWithAPI from '../../../../components/atoms/PaginationWithAPI';
-
-import AmdinErrorMessage from '../../../../components/atoms/AmdinErrorMessage';
-import PureCheckbox from '../../../../components/atoms/PureCheckbox';
-import { valid_isTheSameArray } from '../../../../../util/func/validation/validationPackage';
-import { inquiryStatusType } from '/store/TYPE/inquiry/inquiryStatusType';
-import { inquiryCategoryType } from '/store/TYPE/inquiry/inquiryCategoryType';
-import InquiryItemList from "./InquiryItemList";
 
 const initialSearchValues = {
   from: transformToday(),
   to: transformToday(),
-  name: null,
-  email: null,
-  answerStatus: null,
+  name: '',
+  email: '',
+  title: '',
+  answerStatus: inquiryStatusType.ALL,
+}
+
+const getQueryObj = (valueobj, type)=>{
+  const queryObj = {
+    type: type,
+    value: valueobj[type],
+    answerStatus: valueobj.answerStatus,
+    from: valueobj.from,
+    to: valueobj.to,
+  };
+  
+  return queryObj;
+}
+
+const getQueryString = (queryObj) => {
+  let queryString = '';
+  let arr = [];
+  for (const key in queryObj) {
+    const val = queryObj[key];
+    arr.push(`${key}=${val}`);
+  }
+  queryString = arr.join('&');
+  return queryString;
 };
 
+
 export default function InquiryListPage() {
+  
+  
+  const initialSearchType = 'title';
+  const searchTypeClass = new SearchTypeClass(initialSearchType);
   const searchApiUrl = `/api/admin/questions`;
   const searchPageSize = 10;
+  const searchDataQuery = 'questionListSideAdminList';
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
   const [itemList, setItemList] = useState([]);
   const [isLoading, setIsLoading] = useState({});
   const [searchValues, setSearchValues] = useState(initialSearchValues);
-  const [searchBody, setSearchBody] = useState({});
+  const [selectedSearchType, setSelectedSearchType] = useState(
+    searchTypeClass.initialType,
+  );
+  const [searchQuery, setSearchQuery] = useState(getQueryString(getQueryObj(initialSearchValues, searchTypeClass.initialType)));
   const [selectedItemIds, setSelectedItemIds] = useState([]);
-  const allItemIdList = itemList.map((item) => item.id);
+  const allItemIdList = itemList?.map((item) => item.id);
 
   console.log(itemList);
+  console.log(allItemIdList);
+  console.log('searchQuery: ',searchQuery);
+  // console.log('searchValues: ',searchValues);
+
+  const onSearch = useCallback(() => {
+
+    const queryObj = getQueryObj(searchValues, selectedSearchType)
+    const queryString = getQueryString(queryObj);
+    setSearchQuery(queryString);
+  }, [searchValues]);
+  
+ 
 
   const onResetSearchValues = () => {
     setSearchValues(initialSearchValues);
   };
 
-  const onSearch = useCallback(
-    () => {
-      const body = {
-        from: searchValues.from,
-        to: searchValues.to,
-        name: searchValues.name,
-        email: searchValues.email,
-        answerStatus: searchValues.answerStatus,
-      };
-      setSearchBody(body);
-    },
-    [],
-  );
   
 
   const pageInterceptor = useCallback((res) => {
-    res = DUMMY__RESPONSE; // ! TEST
+    // res = DUMMY__RESPONSE; // ! TEST
     console.log(res);
     let newPageInfo = {
       totalPages: 0,
@@ -76,20 +108,20 @@ export default function InquiryListPage() {
     };
     if (res.data._embedded) {
       const pageData = res.data.page;
-      const itemQuery = 'questionItemDtoList';
+      const itemQuery = 'questionListSideAdminList';
       const curItemList = res.data._embedded[itemQuery];
       newPageInfo = {
-        totalPages: pageData.totalPages,//
-        size: pageData.size,//
-        totalItems: pageData.totalElements,//
-        currentPageIndex: pageData.number,//
+        totalPages: pageData.totalPages, //
+        size: pageData.size, //
+        totalItems: pageData.totalElements, //
+        currentPageIndex: pageData.number, //
         newPageNumber: pageData.number + 1,
         newItemList: curItemList,
       };
     }
 
     return newPageInfo;
-  },[]);
+  }, []);
 
   const onSelectedItem = (id, checked) => {
     const seletedId = Number(id);
@@ -111,15 +143,14 @@ export default function InquiryListPage() {
     console.log('선택된 아이템 삭제');
   };
 
-  const searchAllObj = { id: 'ALL', label: '전체' };
-  const answerStatusOptionIdList = [
-    ...Object.keys(inquiryStatusType).filter((key) => key !== 'KOR'),
-    searchAllObj.id,
-  ];
-  const answerStatusOptionLabelList = [
-    ...Object.values(inquiryStatusType.KOR),
-    searchAllObj.label,
-  ];
+  const answerStatusOptionIdList = Object.keys(inquiryStatusType).filter(
+    (key) => key !== 'KOR',
+  );
+  const answerStatusOptionLabelList = Object.values(inquiryStatusType.KOR);
+  
+  const onEnterKey = (e)=>{
+    enterKey(e, onSearch);
+  }
 
   return (
     <>
@@ -142,11 +173,8 @@ export default function InquiryListPage() {
                 title="조건검색"
                 name="detail"
                 id="detail"
-                options={[
-                  { label: '제목', value: 'title' },
-                  { label: '이름', value: 'memberName' },
-                  { label: '아이디', value: 'email' },
-                ]}
+                options={searchTypeClass.options}
+                events={{ onSelect: setSelectedSearchType, onKeydown: onEnterKey }}
               />
               <SearchRadio
                 searchValue={searchValues}
@@ -177,12 +205,15 @@ export default function InquiryListPage() {
                   <li className={s.table_th}>
                     <PureCheckbox
                       eventHandler={onSelectAllItems}
-                      value={valid_isTheSameArray(allItemIdList, selectedItemIds)}
+                      value={valid_isTheSameArray(
+                        allItemIdList,
+                        selectedItemIds,
+                      )}
                     />
                   </li>
                   <li className={s.table_th}>제목</li>
                   <li className={s.table_th}>작성자</li>
-                  <li className={s.table_th}>아이디</li>
+                  <li className={s.table_th}>이메일</li>
                   <li className={s.table_th}>답변상태</li>
                   <li className={s.table_th}>작성일시</li>
                 </ul>
@@ -191,7 +222,11 @@ export default function InquiryListPage() {
                 ) : itemList.length === 0 ? (
                   <AmdinErrorMessage text="조회된 데이터가 없습니다." />
                 ) : (
-                  <InquiryItemList items={itemList} onSelectedItem={onSelectedItem} selectedIdList={selectedItemIds}/>
+                  <InquiryItemList
+                    items={itemList}
+                    onSelectedItem={onSelectedItem}
+                    selectedIdList={selectedItemIds}
+                  />
                 )}
               </div>
             </div>
@@ -199,11 +234,11 @@ export default function InquiryListPage() {
               <PaginationWithAPI
                 apiURL={searchApiUrl}
                 size={searchPageSize}
-                pageInterceptor={pageInterceptor}
-                queryItemList={'queryAdminOrdersDtoList'}
                 setItemList={setItemList}
+                urlQuery={searchQuery}
+                queryItemList={searchDataQuery}
+                pageInterceptor={pageInterceptor}
                 setIsLoading={setIsLoading}
-                option={{ apiMethod: 'POST', body: searchBody }}
               />
             </div>
           </section>
@@ -295,4 +330,3 @@ const DUMMY__RESPONSE = {
   },
   status: 200,
 };
-
