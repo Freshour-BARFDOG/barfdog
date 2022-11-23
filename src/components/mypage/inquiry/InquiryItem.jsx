@@ -6,13 +6,13 @@ import {inquiryStatusIcon} from "../../../../store/TYPE/inquiry/InquiryStatusIco
 
 
 export const InquiryItem = ({ data }) => {
-  const {id, status, title, createdDate } = data;
+  const {id, answerStatus, title, createdDate } = data;
 
   return (
     <Link href={`/mypage/inquiry/${id}`} passHref>
       <a>
         <li className={s.tr}>
-          <span className={s.status}>{inquiryStatusIcon[status]}</span>
+          <span className={s.status}>{inquiryStatusIcon[answerStatus]}</span>
             <div className={s.title}><span>{title}</span></div>
           <span className={s.date}>{transformDate(createdDate,'time', {seperator:'.'})}</span>
         </li>
