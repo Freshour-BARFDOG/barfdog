@@ -183,9 +183,15 @@ $list-height: rem(58);
         }
       }
     }
-
+    
+    // p:hover ~ ul{
+    //   transition: height .5s !important;
+    // }
     ul {
       background-color: #f4f4f4;
+      display: none;
+      transition: height 0s !important;
+
       a {
         padding-left: rem($menu-Padding + 30);
       }

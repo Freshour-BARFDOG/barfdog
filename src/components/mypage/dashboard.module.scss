@@ -146,6 +146,8 @@ $counterBoxWidth: rem(200);
       .code {
         color: #000;
         font-size: rem(15);
+        max-width: rem(100);
+        word-break: break-all;
       }
     }
 

@@ -36,7 +36,7 @@ export default function SurveyGuidePage() {
               <div className={`${s.image} img-wrap`}>
                 <Image
                   priority
-                  src={require('public/img/survey_guide.png')}
+                  src={require('public/img/survey/survey_guide.png')}
                   objectFit="cover"
                   layout="fill"
                   alt="카드 이미지"

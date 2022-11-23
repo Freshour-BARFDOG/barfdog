@@ -95,7 +95,7 @@ export default function InquiryPage() {
               
               <ul>
                 <div className={s['desc-box']}>
-                  <h3 className={s.subtitle}>문의답변시간</h3>
+                  <h3 className={s.subtitle}>문의 답변시간</h3>
                   <p className={s.subtext}>
                     <span className={s.divider}>
                       AM 09:00 - PM 17:30 (점심시간 11:30 - 12:30)
