@@ -15,6 +15,7 @@ import { InquiryItem } from '/src/components/mypage/inquiry/InquiryItem';
 import { SearchBox } from '/src/components/mypage/inquiry/SearchBox';
 import { searchType } from '/store/TYPE/searchType';
 import {getQueryString} from "/util/func/getQueryString";
+import enterKey from "../../../../util/func/enterKey";
 
 
 
@@ -41,12 +42,16 @@ export default function InquiryPage() {
   const [searchQuery, setSearchQuery] = useState(getQueryString(initialSearchValues));
   
   
-  useEffect (() => {
+  // useEffect (() => {
+  //   const queryString = getQueryString(searchValues);
+  //     setSearchQuery(queryString);
+  // }, [searchValues]);
+  //
+  const onSearch = useCallback(()=>{
     const queryString = getQueryString(searchValues);
     setSearchQuery(queryString);
-  }, [searchValues]);
+  },[searchValues])
  
-  
   
   const pageInterCeptor = useCallback(async (res) => {
     // console.log(res);
@@ -74,6 +79,10 @@ export default function InquiryPage() {
 
     return newPageInfo;
   }, []);
+  
+  const onEnterKey = (e)=>{
+    enterKey(e, onSearch);
+  }
 
   return (
     <>
@@ -135,7 +144,11 @@ export default function InquiryPage() {
             <section className={s['search-section']}>
               <SearchBox
                 value={searchValues}
-                onSearch={setSearchValues}
+                setValues={setSearchValues}
+                onSearch={ onSearch}
+                event={{
+                  onKeyDown: onEnterKey
+                }}
                 idMap={{
                   title: titleId,
                   category: categoryId,
