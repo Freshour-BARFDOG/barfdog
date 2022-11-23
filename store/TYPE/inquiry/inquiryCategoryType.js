@@ -3,19 +3,24 @@ export const inquiryCategoryType = {
   GENERAL: 'GENERAL',
   REFUND: 'REFUND',
   ERROR_REPORTING: 'ERROR_REPORTING',
+  KOR:{
+    GENERAL: '일반문의',
+    REFUND: '반품/환불',
+    ERROR_REPORTING: '오류보고',
+  }
 };
 
 export const inquiryCategoryOptions = [
   {
-    label: '일반문의',
+    label: inquiryCategoryType.KOR.GENERAL,
     value: inquiryCategoryType.GENERAL,
   },
   {
-    label: '반품/환불',
+    label: inquiryCategoryType.KOR.REFUND,
     value: inquiryCategoryType.REFUND,
   },
   {
-    label: '오류보고',
+    label: inquiryCategoryType.KOR.ERROR_REPORTING,
     value: inquiryCategoryType.ERROR_REPORTING,
   },
 ];

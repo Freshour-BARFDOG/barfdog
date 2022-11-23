@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import s from './inquiry.module.scss';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
@@ -14,28 +14,48 @@ import { inquiryStatusType } from '/store/TYPE/inquiry/inquiryStatusType';
 import { InquiryItem } from '/src/components/mypage/inquiry/InquiryItem';
 import { SearchBox } from '/src/components/mypage/inquiry/SearchBox';
 import { searchType } from '/store/TYPE/searchType';
+import {getQueryString} from "/util/func/getQueryString";
+import enterKey from "../../../../util/func/enterKey";
 
 
-const initSearchValue = {
-  [searchType.KEYWORD.NAME]: '',
-  [searchType.CATEGORY.NAME]: searchType.CATEGORY.options[0].value,
+
+
+const titleId = searchType.KEYWORD.NAME;
+const categoryId = searchType.CATEGORY.NAME;
+
+
+const initialSearchValues = {
+  [titleId]: '',
+  [categoryId]: searchType.CATEGORY.options[0].value,
 }
 
 export default function InquiryPage() {
 
-  const searchApiUrl = '/api/some_________apiUrl'; // 친구목록 조회 API url
+  const searchApiUrl = '/api/questions'; // 친구목록 조회 API url
   const searchPageSize = 10;
-
+  
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
-  const [searchValue, setSearchValue] = useState(initSearchValue);
-
-  console.log(searchValue);
+  const [searchValues, setSearchValues] = useState(initialSearchValues);
+  const [searchQuery, setSearchQuery] = useState(getQueryString(initialSearchValues));
+  
+  
+  // useEffect (() => {
+  //   const queryString = getQueryString(searchValues);
+  //     setSearchQuery(queryString);
+  // }, [searchValues]);
+  //
+  const onSearch = useCallback(()=>{
+    const queryString = getQueryString(searchValues);
+    setSearchQuery(queryString);
+  },[searchValues])
+ 
+  
   const pageInterCeptor = useCallback(async (res) => {
-    res = DUMMY_RESPONSE; // ! TEST
     // console.log(res);
+    // res = DUMMY_RESPONSE; // ! TEST
     let newPageInfo = {
       totalPages: 0,
       size: 0,
@@ -46,9 +66,7 @@ export default function InquiryPage() {
     };
     if (res?.data?._embedded) {
       const pageData = res.data.page;
-      const apiItemQuery = 'itemQueryName'; // ! 수정필요
-      const newItemList = res.data._embedded[apiItemQuery];
-      console.log(newItemList);
+      const newItemList = res.data._embedded['questionListSideMemberList'];
       newPageInfo = {
         totalPages: pageData.totalPages,
         size: pageData.size,
@@ -61,11 +79,10 @@ export default function InquiryPage() {
 
     return newPageInfo;
   }, []);
-
-  const onSearchHandler = (e) => {
-    const keyword = e.currentTarget.value;
-    console.log('검색어: ', keyword);
-  };
+  
+  const onEnterKey = (e)=>{
+    enterKey(e, onSearch);
+  }
 
   return (
     <>
@@ -107,7 +124,7 @@ export default function InquiryPage() {
                 </div>
                 <div className={s.tbody}>
                   <ul>
-                    {itemList.length > 0 ? (
+                    {itemList?.length > 0 ? (
                       itemList.map((p, i) => (
                         <InquiryItem key={`${p.title}-${i}`} data={p} />
                       ))
@@ -126,9 +143,16 @@ export default function InquiryPage() {
             </section>
             <section className={s['search-section']}>
               <SearchBox
-                value={searchValue}
-                setValue={setSearchValue}
-                onSearch={onSearchHandler}
+                value={searchValues}
+                setValues={setSearchValues}
+                onSearch={ onSearch}
+                event={{
+                  onKeyDown: onEnterKey
+                }}
+                idMap={{
+                  title: titleId,
+                  category: categoryId,
+                }}
               />
             </section>
 
@@ -137,6 +161,7 @@ export default function InquiryPage() {
                 apiURL={searchApiUrl}
                 size={searchPageSize}
                 setItemList={setItemList}
+                urlQuery={searchQuery}
                 setIsLoading={setIsLoading}
                 pageInterceptor={pageInterCeptor}
               />

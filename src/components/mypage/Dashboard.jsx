@@ -1,25 +1,33 @@
 import React, { useState } from 'react';
 import s from './dashboard.module.scss';
+import modal_s from '/src/components/modal/modal.module.scss';
+import Link from 'next/link';
 import Dashboard_countViewer from './Dashboard_countViewer';
 import Image from 'next/image';
 import { IoMdLink, IoMdMail } from 'react-icons/io';
 import Modal_sendPhoneMessage from '/src/components/modal/Modal_sendPhoneMessage';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import { useSelector } from 'react-redux';
-import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import { useModalContext } from '/store/modal-context';
 import popupWindow from '/util/func/popupWindow';
 import useDeviceState from '/util/hook/useDeviceState';
-import Link from "next/link";
+import Modal_alert from '@src/components/modal/Modal_alert';
 
- export default function Dashboard({ className, ...props }) {
+
+export default function Dashboard({ className, ...props }) {
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
   const isMobile = useDeviceState().isMobile;
   const auth = useSelector((s) => s.auth);
   const data = auth.userInfo;
-  const [isModalActive, setIsModalActive] = useState(false);
   
+  const [modalMessage, setModalMessage] = useState({});
+  const [activeModal, setActiveModal] = useState({
+    alert: false,
+    message: false,
+  });
+
+
   const onCopyToClipboard = (value) => {
     let hostname;
     if (typeof window !== 'undefined') {
@@ -38,18 +46,38 @@ import Link from "next/link";
       throw new Error('copied nothing');
     }
     document.body.removeChild(tempElem);
-    mct.alertShow(`클립보드에 추천코드가 복사되었습니다. \n추천코드: ${copiedValue}`);
-    // alert(`클립보드에 추천코드가 복사되었습니다. \n링크: ${copiedValue}`);
+    setActiveModal((prev) => ({
+      ...prev,
+      alert: true,
+    }));
+    setModalMessage((prevState) => ({
+      ...prevState,
+      alert: `클립보드에 추천코드가 복사되었습니다. \n추천코드: ${copiedValue}`,
+    }));
   };
-  
-  const onCopyUserRecommendCode = ()=>{
+
+  const onCopyUserRecommendCode = () => {
     const userRecommendCode = data.recommendCode;
     onCopyToClipboard(userRecommendCode);
-  }
-  const onModalShow = ()=>{
-    setIsModalActive(true);
-  }
+  };
 
+  const onShowSendMessageModal = () => {
+    setActiveModal((prev) => ({
+      ...prev,
+      message: true,
+    }));
+  };
+
+  const onHideGlobalAlert = () => {
+    setActiveModal((prev) => ({
+      ...prev,
+      alert: false,
+    }));
+    setModalMessage((prev) => ({
+      ...prev,
+      message: '',
+    }));
+  };
 
   const openGradePopupHandler = () => {
     const href = '/popup/gradePolicy';
@@ -57,7 +85,7 @@ import Link from "next/link";
       width: isMobile ? 320 : 1120,
       height: isMobile ? 517 : 730,
       left: 200,
-      top: 100
+      top: 100,
     };
     popupWindow(href, options);
   };
@@ -74,30 +102,34 @@ import Link from "next/link";
             <div className={s.info_col}>
               <Link passHref href={'/mypage/dogs'}>
                 <a>
-                <figure className={`${s.user_photo} img-wrap`}>
-                  {data?.dog.thumbnailUrl && (
-                    <Image
-                      alt="대표 반려견 이미지"
-                      src={data?.dog.thumbnailUrl}
-                      objectFit="cover"
-                      layout="fill"
-                    />
-                  )}
-                </figure>
+                  <figure className={`${s.user_photo} img-wrap`}>
+                    {data?.dog.thumbnailUrl && (
+                      <Image
+                        alt="대표 반려견 이미지"
+                        src={data?.dog.thumbnailUrl}
+                        objectFit="cover"
+                        layout="fill"
+                      />
+                    )}
+                  </figure>
                 </a>
               </Link>
               <Link passHref href={'/mypage/dogs'}>
                 <a>
-                <figcaption className={s.user_names}>
-                  <em className={s.dog_name}>
-                    <span>{data.dog.dogName ? data.dog.dogName : '대표반려견 없음'}</span>
-                    {data.dog.dogName && ' 견주'}
-                  </em>
-                  <em className={s.user_name}>
-                    <span>{data.name}</span>&nbsp;님
-                  </em>
-                </figcaption>
-              </a>
+                  <figcaption className={s.user_names}>
+                    <em className={s.dog_name}>
+                      <span>
+                        {data.dog.dogName
+                          ? data.dog.dogName
+                          : '대표반려견 없음'}
+                      </span>
+                      {data.dog.dogName && ' 견주'}
+                    </em>
+                    <em className={s.user_name}>
+                      <span>{data.name}</span>&nbsp;님
+                    </em>
+                  </figcaption>
+                </a>
               </Link>
             </div>
             <div className={`${s.info_col}`}>
@@ -115,7 +147,7 @@ import Link from "next/link";
               <span className={s.code}>{data.recommendCode}</span>
             </div>
             <div className={`${s.sendMessage} ${s.info_col} flex-wrap`}>
-              <button type="button" onClick={onModalShow}>
+              <button type="button" onClick={onShowSendMessageModal}>
                 <IoMdMail />
                 문자보내기
               </button>
@@ -154,16 +186,21 @@ import Link from "next/link";
         </div>
         {/* user_counter */}
       </section>
-      {isModalActive && (
+
+      {activeModal.message && (
         <Modal_sendPhoneMessage
-          setModalState={setIsModalActive}
+          id={'message'}
+          setModalState={setActiveModal}
           data={data}
         />
       )}
-      {hasAlert && (
-        <Modal_global_alert background/>
+      {activeModal.alert && (
+        <Modal_alert
+          onClick={onHideGlobalAlert}
+          text={modalMessage.alert}
+          className={modal_s['on-dashboard']}
+        />
       )}
     </>
   );
 }
-

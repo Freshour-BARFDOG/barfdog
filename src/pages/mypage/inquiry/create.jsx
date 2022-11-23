@@ -17,24 +17,14 @@ import { validate } from '/util/func/validation/validation_inquiry';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
 import transformLocalCurrency from "/util/func/transformLocalCurrency";
 import {postObjData} from "/src/pages/api/reqData";
+import Modal_confirm from "/src/components/modal/Modal_confirm";
 
 
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
-/*
-! TODO:
-  FILE첨부기능
-  submit 기능
- 
-*/
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
+
 
 
 export default function CreateInquiryPage() {
-  const postThumbFileApiUrl = '/api/reviews/upload';
+  const postThumbFileApiUrl = '/api/questions/file';
   const maxContentsLength = 1000;
 
   const mct = useModalContext();
@@ -42,13 +32,18 @@ export default function CreateInquiryPage() {
   const router = useRouter();
   // textarea 글자수 0/1,000의 초기 0생성, 미설정시 /1,000으로 출력됨
   const intiFormValues = {
+    receiveAlimTalk: false,
+    category: inquiryCategoryOptions[0].value,
+    title: '',
     contents: '',
+    questionImgIdList: [],
   };
   const [form, setForm] = useState(intiFormValues);
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState({});
-
+  const [confirmModal, setConfirmModal] = useState( {active:'', data:''} );
+  
   // console.log(form);
 
   const onInputChangeHandler = (e) => {
@@ -66,33 +61,55 @@ export default function CreateInquiryPage() {
       router.back();
     }
   };
-
-  const onSubmit = async () => {
-    if (submitted) return console.error('이미 제출된 양식입니다.');
+  
+  
+  
+  const onValidate = ()=>{
+    if (submitted) return window.location.reload();
     const body = {
       receiveAlimTalk: form.receiveAlimTalk,
-      inquiryType: form.category,
+      category: form.category,
       title: form.title,
       contents: form.contents,
-      // imageIdList: form.imageIdList.map((list) => list.id), // ! 현재 API 작업 중
+      questionImgIdList: form.questionImgIdList.map((list) => list.id),
     };
-
+  
     const errObj = validate(body, {
-      contents: { maxContentsLength: maxContentsLength },
+      contents: { maxLength: maxContentsLength },
     });
     setErrors(errObj);
-
+  
     const isPassed = valid_hasFormErrors(errObj);
     if (!isPassed) return mct.alertShow('유효하지 않은 항목이 존재합니다.');
-    const confirmMessage = '1:1 문의작성을 등록하시겠습니까?';
-    if (!confirm(confirmMessage)) return;
+    
+    setConfirmModal({
+      active: true,
+      data: body
+    });
+  }
+  
+  
+  const onConfirmSubmit = async (confirm) => {
+    // 데이터 소멸
+    setConfirmModal({
+      active: false,
+      data: ''
+    });
+  
+    if(confirm) {
+      const body = confirmModal.data;
+      await onSubmit(body);
+    }
+  }
+
+  const onSubmit = async (body) => {
+    // console.log(body);
     try {
       setIsLoading((prevState) => ({
         ...prevState,
         submit: true,
       }));
-      // console.log(body);
-      const apiUrl = '/api/____/____';
+      const apiUrl = '/api/questions';
       const res = await postObjData(apiUrl, body);
       
       if (res.isDone) {
@@ -138,7 +155,7 @@ export default function CreateInquiryPage() {
                   <div className={s['form-row-cont']}>
                     <PureCheckbox
                       id={'receiveAlimTalk'}
-                      value={form['alram'] || ''}
+                      value={form['receiveAlimTalk'] || ''}
                       label={'알림톡 / SMS 답변받기'}
                       setValue={setForm}
                       option={{ position: 'right' }}
@@ -218,7 +235,7 @@ export default function CreateInquiryPage() {
                 </div>
                 <div className={s['form-row-cont']}>
                   <FileInput
-                    id={'imageIdList'}
+                    id={'questionImgIdList'}
                     apiUrl={postThumbFileApiUrl}
                     setFormValues={setForm}
                     formErrors={errors}
@@ -247,7 +264,7 @@ export default function CreateInquiryPage() {
               <button
                 type={'button'}
                 className={`custom_btn solid confirm_m ${s.confirm}`}
-                onClick={onSubmit}
+                onClick={onValidate}
               >
                 {isLoading.submit ? (
                   <Spinner style={{ color: '#fff' }} />
@@ -259,7 +276,13 @@ export default function CreateInquiryPage() {
           </MypageWrapper>
         </Wrapper>
       </Layout>
-      {hasAlert && <Modal_global_alert background />}
+      {confirmModal.active && (
+        <Modal_confirm
+          text={`1:1문의를 등록하시겠습니까?`}
+          isConfirm={onConfirmSubmit}
+        />
+      )}
+      {hasAlert && <Modal_global_alert background/>}
     </>
   );
 }

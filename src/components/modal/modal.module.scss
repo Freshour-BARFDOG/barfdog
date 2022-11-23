@@ -2,6 +2,7 @@
 @import '/styles/module/zIndex.module';
 
 .modal-wrap {
+
   .btn_close_modal {
     position: absolute;
     right: rem(10);
@@ -123,6 +124,12 @@
   align-content: space-between;
   aspect-ratio: 1.618;
   grid-template-rows: 1fr 1fr;
+  &.position-default{
+    top: 10vh;
+  }
+  &.position-center{
+    top:50%;
+  }
 }
 
 .background {
@@ -158,8 +165,24 @@
 }
 
 
+.modal-wrap.on-dashboard{
+  width: rem(400);
+  aspect-ratio: 1.617;
+  display: grid;
+  grid-template-rows: 1fr rem(44);
+  .title-section{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+
 @media (max-width: rem(600)) {
   .modal_wrap.global {
-    width: calc(100% - rem(40));
+    width: calc(100% - #{rem(40)});
+  }
+  .modal-wrap.on-dashboard{
+    width: calc(100% - #{rem(40)});
   }
 }

@@ -5,7 +5,6 @@ export const validate = (obj, option) => {
   let errors = {};
   const keys = Object.keys(obj);
   
-  console.log(obj);
   for (const key of keys) {
     const val = obj[key];
     
@@ -14,8 +13,7 @@ export const validate = (obj, option) => {
         errors[key] = valid_isEmpty(val);
         break;
       case 'contents':
-        const maxLength = option[key].maxContentLength;
-        console.log(maxLength);
+        const maxLength = option[key].maxLength;
         errors[key] = valid_minLength(val, 10) || valid_maxLength(val, maxLength);
         break;
     }

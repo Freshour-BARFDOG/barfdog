@@ -22,6 +22,7 @@ import {SearchTypeClass} from "/src/class/SearchTypeClass";
 import enterKey from "/util/func/enterKey";
 import {getAllItemIdList} from "/util/func/getAllItemIdList";
 import {putObjData} from "/src/pages/api/reqData";
+import {getQueryString} from "/util/func/getQueryString";
 
 
 const initialSearchValues = {
@@ -44,17 +45,6 @@ const getQueryObj = (valueobj, type)=>{
   
   return queryObj;
 }
-
-const getQueryString = (queryObj) => {
-  let queryString = '';
-  let arr = [];
-  for (const key in queryObj) {
-    const val = queryObj[key];
-    arr.push(`${key}=${val}`);
-  }
-  queryString = arr.join('&');
-  return queryString;
-};
 
 
 export default function InquiryListPage() {

@@ -11,7 +11,7 @@ export default function ServiceCenter({data}) {
   }
 
   const isMemeber = !!data.auth;
-  console.log('isMemeber: ',isMemeber)
+  // console.log('isMemeber: ',isMemeber)
   return (
     <>
       <MenuLayout title="고객센터" titleClassName={s['service-center']} icon={IconInfo}>

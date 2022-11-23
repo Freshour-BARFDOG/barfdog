@@ -1,15 +1,19 @@
+import { inquiryCategoryOptions } from './inquiry/inquiryCategoryType';
+
+const onlySearch = {
+  ALL: {
+    label: '전체',
+    value: 'ALL',
+  },
+};
+
+
 export const searchType = {
   KEYWORD: {
-    NAME:'KEYWORD',
+    NAME: 'title',
   },
-  CATEGORY:{
-    NAME: 'CATEGORY',
-    options: [{
-      value: 'title',
-      label:'제목',
-    }, {
-      value: 'email',
-      label:'아이디',
-    }],
-  }
+  CATEGORY: {
+    NAME: 'category',
+    options: [onlySearch.ALL, ...inquiryCategoryOptions],
+  },
 };
