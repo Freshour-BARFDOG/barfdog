@@ -1,12 +1,11 @@
 import {useEffect, useState} from "react";
 import {getData} from "@src/pages/api/reqData";
-import {subscribePlanName} from "../../trash/SubscribePlanInfoClass";
-
+import {subscribePlanType} from '@store/TYPE/subscribePlanType';
 
 const initialDiscount = {
-  [subscribePlanName.FULL]: 5,
-  [subscribePlanName.HALF]: 2,
-  [subscribePlanName.TOPPING]: 1
+  [subscribePlanType.FULL.NAME]: 5,
+  [subscribePlanType.HALF.NAME]: 2,
+  [subscribePlanType.TOPPING.NAME]: 1
 }
 
 const initData = {
@@ -31,9 +30,9 @@ export const useSubscribePlanInfo = () => {
         if(res.data && res.status === 200){
           const data = res.data._embedded.planDiscountResponseDtoList[0];
           DATA = {
-            [subscribePlanName.FULL]: data.full,
-            [subscribePlanName.HALF]: data.half,
-            [subscribePlanName.TOPPING]: data.topping,
+            [subscribePlanType.FULL.NAME]: data.full,
+            [subscribePlanType.HALF.NAME]: data.half,
+            [subscribePlanType.TOPPING.NAME]: data.topping,
           }
           setAllData((prev)=>({
             ...prev,
