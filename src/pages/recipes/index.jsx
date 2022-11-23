@@ -29,8 +29,8 @@ import {Modal_cont_ingredient_total_01} from "/src/components/modal/recipes/Moda
 import {Modal_cont_ingredient_total_02} from "/src/components/modal/recipes/Modal_cont_ingredient_total_02";
 import {Modal_cont_ingredient_total_03} from "/src/components/modal/recipes/Modal_cont_ingredient_total_03";
 import {Modal_cont_ingredient_total_04} from "/src/components/modal/recipes/Modal_cont_ingredient_total_04";
-import Btn_01 from '/public/img/recipe_subscribe.svg';
-import Btn_02 from '/public/img/recipe_subsctibe_coupon.svg';
+import Btn_01 from '/public/img/recipes/recipe_subscribe.svg';
+import Btn_02 from '/public/img/recipes/recipe_subsctibe_coupon.svg';
 
 
 
@@ -165,7 +165,7 @@ export default function RecipePage() {
                     {/* 기본 이미지 */}
                     <Image
                       priority
-                      src={require("public/img/recipe_left_top.png")}
+                      src={require("public/img/recipes/recipe_left_top.png")}
                       objectFit="cover"
                       layout="fill"
                       alt="브랜드 소개 이미지"
@@ -209,7 +209,7 @@ export default function RecipePage() {
                     {/* 기본 이미지 */}
                     <Image
                       priority
-                      src={require("public/img/recipe_right_top.png")}
+                      src={require("public/img/recipes/recipe_right_top.png")}
                       objectFit="cover"
                       layout="fill"
                       alt="브랜드 소개 이미지"
@@ -252,7 +252,7 @@ export default function RecipePage() {
                     {/* 기본 이미지 */}
                     <Image
                       priority
-                      src={require("public/img/recipe_left_bot.png")}
+                      src={require("public/img/recipes/recipe_left_bot.png")}
                       objectFit="cover"
                       layout="fill"
                       alt="브랜드 소개 이미지"
@@ -295,7 +295,7 @@ export default function RecipePage() {
                     {/* 기본 이미지 */}
                     <Image
                       priority
-                      src={require("public/img/recipe_right_bot.png")}
+                      src={require("public/img/recipes/recipe_right_bot.png")}
                       objectFit="cover"
                       layout="fill"
                       alt="브랜드 소개 이미지"
@@ -355,7 +355,7 @@ export default function RecipePage() {
                   <div className={`${s.image} img-wrap`}>
                     <Image
                       priority
-                      src={require("public/img/recipe_note_left.png")}
+                      src={require("public/img/recipes/recipe_note_left.png")}
                       objectFit="cover"
                       layout="fill"
                       alt="브랜드 소개 이미지"
@@ -366,7 +366,7 @@ export default function RecipePage() {
                   <div className={`${s.image} img-wrap`}>
                     <Image
                       priority
-                      src={require("public/img/recipe_note_right.png")}
+                      src={require("public/img/recipes/recipe_note_right.png")}
                       objectFit="cover"
                       layout="fill"
                       alt="브랜드 소개 이미지"
@@ -387,7 +387,7 @@ export default function RecipePage() {
                     <div className={`${s.image} img-wrap`}>
                       <Image
                         priority
-                        src={require("public/img/recipe_content_1.png")}
+                        src={require("public/img/recipes/recipe_content_1.png")}
                         objectFit="cover"
                         layout="fill"
                         alt="브랜드 소개 이미지"
@@ -402,7 +402,7 @@ export default function RecipePage() {
                     <div className={`${s.image} img-wrap`}>
                       <Image
                         priority
-                        src={require("public/img/recipe_content_2.png")}
+                        src={require("public/img/recipes/recipe_content_2.png")}
                         objectFit="cover"
                         layout="fill"
                         alt="브랜드 소개 이미지"
@@ -417,7 +417,7 @@ export default function RecipePage() {
                     <div className={`${s.image} img-wrap`}>
                       <Image
                         priority
-                        src={require("public/img/recipe_content_3.png")}
+                        src={require("public/img/recipes/recipe_content_3.png")}
                         objectFit="cover"
                         layout="fill"
                         alt="브랜드 소개 이미지"
@@ -432,7 +432,7 @@ export default function RecipePage() {
                     <div className={`${s.image} img-wrap`}>
                       <Image
                         priority
-                        src={require("public/img/recipe_content_4.png")}
+                        src={require("public/img/recipes/recipe_content_4.png")}
                         objectFit="cover"
                         layout="fill"
                         alt="브랜드 소개 이미지"
@@ -447,7 +447,7 @@ export default function RecipePage() {
                     <div className={`${s.image} img-wrap`}>
                       <Image
                         priority
-                        src={require("public/img/recipe_content_5.png")}
+                        src={require("public/img/recipes/recipe_content_5.png")}
                         objectFit="cover"
                         layout="fill"
                         alt="브랜드 소개 이미지"
@@ -462,7 +462,7 @@ export default function RecipePage() {
                     <div className={`${s.image} img-wrap`}>
                       <Image
                         priority
-                        src={require("public/img/recipe_content_6.png")}
+                        src={require("public/img/recipes/recipe_content_6.png")}
                         objectFit="cover"
                         layout="fill"
                         alt="브랜드 소개 이미지"
@@ -481,7 +481,7 @@ export default function RecipePage() {
                   <a className="flex-wrap">
                     <div className={`${s.image} img-wrap`}>
                       {/* <Image
-                        src={require("public/img/recipe_subscribe.png")}
+                        src={require("public/img/recipes/recipe_subscribe.png")}
                         objectFit="cover"
                         width={246}
                         height={49}
@@ -515,7 +515,7 @@ export default function RecipePage() {
               <div className={`${s.image} img-wrap`}>
                 <Image
                   priority
-                  src={require("public/img/recipe_ingredients.png")}
+                  src={require("public/img/recipes/recipe_ingredients.png")}
                   objectFit="cover"
                   layout="fill"
                   alt="브랜드 소개 이미지"
@@ -550,7 +550,7 @@ export default function RecipePage() {
                   <div className={`${s.image} img-wrap`}>
                     <Image
                       priority
-                      src={require("public/img/recipe_health.png")}
+                      src={require("public/img/recipes/recipe_health.png")}
                       objectFit="cover"
                       layout="fill"
                       alt="브랜드 소개 이미지"
@@ -574,7 +574,7 @@ export default function RecipePage() {
                 <a className="flex-wrap">
                   <div className={`${s.image} img-wrap`}>
                     {/* <Image
-                      src={require("public/img/recipe_subsctibe_coupon.png")}
+                      src={require("public/img/recipes/recipe_subsctibe_coupon.png")}
                       objectFit="cover"
                       width={300}
                       height={71}
@@ -643,7 +643,7 @@ export function Swiper_card() {
             <div className={s.swiper_sns_img}>
               <Image
                 //src={require('/public/img/testBanner3.png')}
-                src={require('/public/img/recipes_top1.png')}
+                src={require('/public/img/recipes/recipes_top1.png')}
                 objectFit="cover"
                 width={488}
                 height={359}
@@ -655,7 +655,7 @@ export function Swiper_card() {
         <SwiperSlide className={s.swiper_card_box}>
             <div className={s.swiper_sns_img}>
               <Image
-                src={require('/public/img/recipes_top1.png')}
+                src={require('/public/img/recipes/recipes_top1.png')}
                 objectFit="cover"
                 width={488}
                 height={359}
@@ -668,7 +668,7 @@ export function Swiper_card() {
             <div className={s.swiper_sns_img}>
               <Image
                 //src={require('/public/img/recipe_ingredients.png')}
-                src={require('/public/img/recipes_top1.png')}
+                src={require('/public/img/recipes/recipes_top1.png')}
                 objectFit="cover"
                 width={488}
                 height={359}

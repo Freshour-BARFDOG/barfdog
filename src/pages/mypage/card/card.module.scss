@@ -49,14 +49,13 @@ section.body {padding : 0 0 rem(55)}
 .body {
   .table_box {
     @include char(l14);
-    font-weight: 600;
     .grid_title_box {
       display: grid;
       grid-template-columns:  rem(150) 1fr 13% 13% 13%;
       justify-items: center;
       align-items: center;
       padding: rem(15) 0;
-
+      font-weight: 600;
       
       .col_1 {
         justify-self: start;

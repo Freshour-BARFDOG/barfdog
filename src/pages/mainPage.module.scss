@@ -18,7 +18,6 @@ section.barfgood {
 section.difference {
   padding: rem(150) 0 rem(100);
   position: relative;
-  // min-height: rem(600);
 }
 
 section.difference2 {
@@ -44,6 +43,7 @@ section.Howtouse {
 section.sns {
   padding: rem(114) 0 rem(190)
 }
+
 
 
 .inner {
@@ -83,7 +83,6 @@ section.sns {
     height: rem(400);
     display: flex;
     position: relative;
-    // user-select: none;
 
     a {
       width: 100%;
@@ -171,7 +170,6 @@ section.sns {
   }
 
   .img_wrap{
-    //position: absolute;
     position: relative;
     height: rem(240);
     width: rem(240);
@@ -198,7 +196,6 @@ section.sns {
     -webkit-box-orient: vertical;
     -webkit-line-clamp:3;
     overflow: hidden;
-
   }
 
   .pbox {
@@ -209,6 +206,7 @@ section.sns {
     bottom: rem(-125);
     text-align: center;
     line-height: 1.35;
+
     .title_en {
       font-family: "GmarketSansbold";
       font-size: rem(20);
@@ -218,7 +216,6 @@ section.sns {
       font-family: var(--font-ink);
       font-size: rem(27);
     }
-
   }
     
   .recipe_btn{
@@ -430,6 +427,7 @@ section.sns {
         li {
           display: grid;
           position: relative;
+          
           &::after{
             content: "";
             position: absolute;
