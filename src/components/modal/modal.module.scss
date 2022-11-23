@@ -124,6 +124,12 @@
   align-content: space-between;
   aspect-ratio: 1.618;
   grid-template-rows: 1fr 1fr;
+  &.position-default{
+    top: 10vh;
+  }
+  &.position-center{
+    top:50%;
+  }
 }
 
 .background {
