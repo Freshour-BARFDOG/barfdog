@@ -24,7 +24,7 @@ export const AlertLayer = ({props, children}) => {
     
     // STEP 2. 쿠키 확인
     const cookie = getCookie(cookieName);
-    console.log('cookie: ',cookie)
+    // console.log('cookie: ',cookie)
     if(cookie) return;
 
     
