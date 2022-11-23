@@ -3,14 +3,15 @@ import React from 'react';
 import { searchType } from '/store/TYPE/searchType';
 import Search from '/public/img/inquiry_search.svg';
 
-export const SearchBox = ({ value, onSearch, idMap }) => {
+export const SearchBox = ({ value, onSearch, setValues, idMap, event }) => {
   const onChangeHandler = (e) => {
     const val = e.currentTarget.value;
     const key = e.currentTarget.id;
-    onSearch((prev) => ({
+    setValues((prev) => ({
       ...prev,
       [key]: val,
     }));
+    
   };
 
   return (
@@ -26,6 +27,7 @@ export const SearchBox = ({ value, onSearch, idMap }) => {
         placeholder="검색어를 입력해주세요"
         value={value[idMap.title] || ''}
         onChange={onChangeHandler}
+        onKeyDown={event.onKeyDown}
       />
       <button
         type={'button'}
