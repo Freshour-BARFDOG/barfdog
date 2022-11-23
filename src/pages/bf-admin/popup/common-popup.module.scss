@@ -1,0 +1,67 @@
+@import '/styles/global/rem';
+@import '/styles/module/itemList.module';
+
+// *  ------- COMMON ------- * //
+$backgroundColorDef: #f8f8ff;
+$popupMainHeaderHeight: rem(66);
+$popupCloseButtonSectionHeight: rem(88);
+$windowWidthForRightSideBorder: rem(850);
+
+#popup {
+  background-color: $backgroundColorDef;
+  position: relative;
+}
+
+.header {
+  background-color: #23242e;
+  color: #fff;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 10;
+
+  .cont {
+    height: $popupMainHeaderHeight;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .popup-title {
+    font-size: rem(24);
+    cursor: default;
+  }
+}
+
+.row {
+  padding: 0 rem(20);
+}
+
+
+
+// -- LAYOUT --
+.body {
+  padding-top: $popupMainHeaderHeight;
+  padding-bottom: $popupCloseButtonSectionHeight;
+  position: relative;
+  overflow: hidden;
+}
+
+
+.btn-section {
+  position: fixed;
+  z-index: 10;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  height: $popupCloseButtonSectionHeight;
+  box-sizing: border-box;
+  background-color: #fff;
+  padding: rem(20) 0 rem(30);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 rem(10) rem(30) 0 rgba(0, 0, 0, 0.1);
+}

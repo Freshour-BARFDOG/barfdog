@@ -1,24 +1,8 @@
 import React from 'react';
 import s from '/src/pages/mypage/inquiry/inquiry.module.scss';
-import { QuestionAnswerStatusType } from '/store/TYPE/questionAnswerStatusType';
 import Link from 'next/link';
 import transformDate from "/util/func/transformDate";
-
-
-export const inquiryStatusIcon = {
-  [QuestionAnswerStatusType.UNANSWERED]: (
-    <i className={`${s.icon} ${s.UNANSWERED}`}>답변대기</i>
-  ),
-  [QuestionAnswerStatusType.ANSWERED]: (
-    <i className={`${s.icon} ${s.ANSWERED}`}>답변완료</i>
-  ),
-  [QuestionAnswerStatusType.MULTIPLE_ANSWERED]: (
-    <>
-      <i className={`${s.icon} ${s.ANSWERED}`}>답변완료</i>
-      <i className={`${s.icon} ${s.MULTIPLE_ANSWERED}`}>추가답변</i>
-    </>
-  ),
-};
+import {inquiryStatusIcon} from "../../../../store/TYPE/inquiry/InquiryStatusIcon";
 
 
 export const InquiryItem = ({ data }) => {

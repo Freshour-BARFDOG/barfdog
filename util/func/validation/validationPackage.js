@@ -468,7 +468,7 @@ export const valid_couponCode = (val) => {
 
 
 export const valid_isTheSameArray = (beforeArr1, beforeArr2) => {
-  if(beforeArr1.length === 0 && beforeArr2.length === 0){
+  if(!beforeArr1 || !beforeArr2 || (beforeArr1?.length === 0 && beforeArr2?.length === 0)){
     return false;
   }
   const arr1 = JSON.stringify( beforeArr1.sort() );

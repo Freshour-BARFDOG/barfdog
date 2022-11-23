@@ -106,7 +106,7 @@ MyApp.getInitialProps = async (initialProps) => {
       const res_MEMBER_Dashboard = await getDataSSR(req, mypageApiUrl, token);
       const mypageData = res_MEMBER_Dashboard.data;
       // console.log('/api/members => ',memberData);
-      console.log('/api/mypage => ',mypageData);
+      // console.log('/api/mypage => ',mypageData);
       if(mypageData){
         memberDATA = {
           userType: USER_TYPE,
