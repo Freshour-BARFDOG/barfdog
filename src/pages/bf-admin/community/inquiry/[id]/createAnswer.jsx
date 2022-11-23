@@ -34,7 +34,7 @@ export default function CreateInquiryAnswerPage({ id }) {
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
 
-  console.log(form);
+  // console.log(form);
   const onInputChangeHandler = (e) => {
     const { id, value } = e.currentTarget;
     setForm({
@@ -49,7 +49,7 @@ export default function CreateInquiryAnswerPage({ id }) {
     const errObj = validate(form, {
       contents: { maxContentsLength: maxContentsLength },
     });
-    console.log(errObj);
+    // console.log(errObj);
     setErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
     try {
