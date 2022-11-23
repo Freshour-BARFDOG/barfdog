@@ -3,11 +3,11 @@ import React from 'react';
 import { searchType } from '/store/TYPE/searchType';
 import Search from '/public/img/inquiry_search.svg';
 
-export const SearchBox = ({ value, setValue, onSearch }) => {
+export const SearchBox = ({ value, onSearch, idMap }) => {
   const onChangeHandler = (e) => {
     const val = e.currentTarget.value;
     const key = e.currentTarget.id;
-    setValue((prev) => ({
+    onSearch((prev) => ({
       ...prev,
       [key]: val,
     }));
@@ -15,24 +15,16 @@ export const SearchBox = ({ value, setValue, onSearch }) => {
 
   return (
     <div className={s['search-box']}>
-      <select id={searchType.CATEGORY.NAME} onChange={onChangeHandler}>
-        {searchType.CATEGORY.options.map((op, i) =>
-          (value && value[searchType.CATEGORY.NAME] === op.value) ? (
-            <option key={`search-option-${i}`} value={op.title} selected>
-              {op.label}
-            </option>
-          ) : (
-            <option key={`search-option-${i}`} value={op.title}>
-              {op.label}
-            </option>
-          ),
-        )}
+      <select id={idMap.category} onChange={onChangeHandler}>
+        {searchType.CATEGORY.options.map((op, i) =>  <option key={`search-option-${i}`} value={op.value}>
+          {op.label}
+        </option>)}
       </select>
       <input
-        id={searchType.KEYWORD.NAME}
+        id={idMap.title}
         type="text"
         placeholder="검색어를 입력해주세요"
-        value={value[searchType.KEYWORD.NAME] || ''}
+        value={value[idMap.title] || ''}
         onChange={onChangeHandler}
       />
       <button
