@@ -230,6 +230,7 @@ export async function getServerSideProps({ req, query }) {
       createdDate: transformDate(data.createdDate, 'time', { seperator: '.' }),
       questionImgDtoList:
         data.questionImgDtoList?.map((q) => ({
+          id: q.questionImageId,
           filename: q.filename || null,
           url: q.url || null,
         })) || [],
