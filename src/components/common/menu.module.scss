@@ -23,8 +23,14 @@ $menuPadding: 20;
   .menu_title{
     color: #717171;
     &[data-current-page]{
-      > p ,> a, a[data-current-page] {color:var(--color-main);}
-      svg{fill: var(--color-main)}
+      > p ,> a, a[data-current-page] {color:var(--color-main);
+      &::before{
+        border-color:var(--color-main);
+      }}
+      svg{fill: var(--color-main); transition: transform 0s !important;}
+      > ul{
+      transition: height 0s !important;
+      }
     }
     
 
@@ -33,8 +39,20 @@ $menuPadding: 20;
     &:not(:last-child) a, &:not(:last-child) 
     p{border-bottom: rem(1) solid var(--color-line-04);}
 
+    p:hover ~ ul{
+      transition: height .5s !important;
+      
+    }
+    p:hover{
+      svg{
+        transition: transform .5s !important;
+      }
+    }
+
     > ul{
+      transition: height 0s !important;
       background-color:#f4f4f4;
+
       a {padding: rem(12) rem($menuPadding + 10);}
     }
 
@@ -65,7 +83,7 @@ $menuPadding: 20;
 
     }
     &.open{
-      svg{transform:rotate(90deg) !important}
+      svg{transform:rotate(90deg) !important;}
     }
 
 
@@ -80,20 +98,21 @@ $menuPadding: 20;
   // .submenu.open{display:block;}
   .submenu_title{
     font-size: rem(16);
-    font-weight: 500;
+    font-weight: 700;
+    color: #4d4d4d;
     & ~ li:not(.submenu_title){
       > * {
         position: relative;
         &:before{
           content: "";
           position: absolute;
-          left: rem($menuPadding + 30);
-          top: calc(50% - rem(2));
-          width: rem(5);
-          height: rem(5);
+          left: rem($menuPadding + 32);
+          top: calc(50% - rem(3));
+          width: rem(7);
+          height: rem(7);
           transform: translateY(-50%);
-          border-left: rem(2) solid #333;
-          border-bottom: rem(2) solid #333;
+          border-left: rem(1) solid #717171;
+          border-bottom: rem(1) solid #717171;
           transition: border-color var(--ani-short);
         }
 
@@ -118,6 +137,6 @@ $menuPadding: 20;
     a[data-current-page] {color:var(--color-main);}
   }
   .open{
-    p svg{transform:rotate(90deg) !important}
+    p svg{transform:rotate(90deg) !important;}
   }
 }
