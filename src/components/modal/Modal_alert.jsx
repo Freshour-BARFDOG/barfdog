@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import ModalWrapper from './ModalWrapper'
 import s from "./modal.module.scss";
 
@@ -20,17 +20,15 @@ export const Modal_innerForm = ({ children, onCancel, onConfirm }) => {
 };
 
 
-function Modal_alert({text, isConfirm, onClick, className,  children}) {
+export default function Modal_alert ({text, isConfirm, onClick, className,  children}) {
 
 
   const onClickHandler = () => {
     if (isConfirm && typeof isConfirm === "function") {
-      const value = true;
-      isConfirm(value);
+      isConfirm(true);
     }
     if (onClick && typeof onClick === "function") {
-      const value = true;
-      onClick(value);
+      onClick(true);
     }
   };
 
@@ -47,5 +45,3 @@ function Modal_alert({text, isConfirm, onClick, className,  children}) {
     </ModalWrapper>
   );
 }
-
-export default Modal_alert

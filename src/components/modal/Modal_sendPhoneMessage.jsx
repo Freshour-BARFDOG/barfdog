@@ -14,7 +14,7 @@ import Spinner from "@src/components/atoms/Spinner";
 import {useModalContext} from "@store/modal-context";
 
 
-const Modal_sendPhoneMessage = ({ setModalState, data }) => {
+const Modal_sendPhoneMessage = ({id, setModalState, data }) => {
   const mct = useModalContext();
   const [siteLink, setSiteLink] = useState(null);
   
@@ -31,7 +31,10 @@ const Modal_sendPhoneMessage = ({ setModalState, data }) => {
   }, []);
 
   const onModalHide = () => {
-    setModalState(false);
+    setModalState(prev=> ({
+      ...prev,
+      [id]: false,
+    }))
   };
 
   const onInputChangeHandler = (event) => {
