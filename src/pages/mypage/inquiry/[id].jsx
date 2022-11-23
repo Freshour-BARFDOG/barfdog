@@ -111,8 +111,8 @@ export default function InquiryArticlePage({ data }) {
                 <div className={s['info-row-cont']}>{info.contents}</div>
               </div>
               {info.adminAnswer.length > 0 &&
-              info.adminAnswer.map((answer) => (
-                <article className={`${s['answer-section']}`}>
+              info.adminAnswer.map((answer, i) => (
+                <article key={`adminAnswer-${i}`} className={`${s['answer-section']}`}>
                   <div className={s['info-row']}>
                     <div className={s['info-row-title']}>제목</div>
                     <div className={s['info-row-cont']}>{answer.title}</div>
