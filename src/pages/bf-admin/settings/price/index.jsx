@@ -138,7 +138,7 @@ function PricePolicyPage({data}) {
               <div className="cont_body">
                 <h2 className={`${s['title']} ${s['has-notice']}`}>
                   플랜 할인율
-                  <span className={s.notice}>할인율 변동 시, 예약된 정기구독이 있는 유저의 '다음 정기구독 결제금액'이 즉시 변경됩니다.</span>
+                  <span className={s.notice}>할인율 변동 시, 예약된 정기구독이 있는 유저의 &lsquo;다음 정기구독 결제금액&lsquo;이 즉시 변경됩니다.</span>
                 </h2>
                
                 
