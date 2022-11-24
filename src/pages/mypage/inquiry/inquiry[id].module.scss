@@ -5,15 +5,15 @@
 .body-section {
   margin-bottom: rem(20);
   padding-bottom: rem(20);
-  border-bottom: rem(1) solid var(--color-line-04);;
-  > h1{
+  border-bottom: rem(1) solid var(--color-line-04);
+  > h1 {
     @include char(t24);
-     padding : rem(5) 0 rem(20);
+    padding: rem(5) 0 rem(20);
   }
-  >.info-row {
+  > .info-row {
     border-bottom: 0;
   }
-  ul{
+  ul {
     .info-row {
       border-bottom: rem(1) solid var(--color-line-04);
 
@@ -31,7 +31,7 @@
 .answer-section {
   margin-top: rem(20);
   .info-row {
-    &:not(:last-child){
+    &:not(:last-child) {
       .info-row-title {
         margin-left: rem(10);
       }
@@ -52,14 +52,26 @@
   border-bottom: rem(1) solid var(--color-line-04);
   min-height: rem(54);
 
-  &:last-child{
+  &:last-child {
     border-bottom: 0;
   }
-  &.contents{
+  &.contents {
     margin-top: rem(16);
     min-height: rem(300);
-    .info-row-title{background-color: #F5F5F5;display: flex; height: 100%;align-items: center; justify-content: center}
-    .info-row-cont{color: #202020;padding: rem(20); height: 100%; box-sizing: border-box;}
+    .info-row-title {
+      background-color: #f5f5f5;
+      display: flex;
+      height: 100%;
+      align-items: center;
+      justify-content: center;
+    }
+    .info-row-cont {
+      color: #202020;
+      padding: rem(20);
+      height: 100%;
+      box-sizing: border-box;
+      word-break: break-all;
+    }
   }
 }
 .info-row-title {
@@ -70,25 +82,23 @@
   color: #333;
 }
 
-.status-box{
+.status-box {
   display: inline-flex;
   align-items: center;
   gap: rem(6);
-  * {cursor: default;}
-}
-
-
-.answer-section{
-  border: rem(1) solid var(--color-main);
-  padding: 0 rem(20) rem(20);
-  .info-row.contents .info-row-title{
-    background-color:  var(--color-main);
-    color: #fff;
+  * {
+    cursor: default;
   }
 }
 
-
-
+.answer-section {
+  border: rem(1) solid var(--color-main);
+  padding: 0 rem(20) rem(20);
+  .info-row.contents .info-row-title {
+    background-color: var(--color-main);
+    color: #fff;
+  }
+}
 
 .btn-section {
   margin-top: rem(40);
@@ -96,7 +106,7 @@
   align-items: center;
   justify-content: center;
   gap: rem(10);
-  a{
+  a {
     height: rem(50) !important;
     border-radius: rem(4);
   }
@@ -107,58 +117,57 @@
     height: rem(50) !important;
     border-radius: rem(4);
 
-    &:hover{
+    &:hover {
     }
   }
 }
 
-
 @media (max-width: rem(900)) {
   .body-section {
-    >.info-row {
-      background-color: #F5F5F5;
+    > .info-row {
+      background-color: #f5f5f5;
     }
-    .info-row{
+    .info-row {
       grid-template-columns: 1fr;
-      .info-row-title{
+      .info-row-title {
         display: none;
       }
-      &:last-child{
-        .info-row-cont{
-          background-color: #F5F5F5;
+      &:last-child {
+        .info-row-cont {
+          background-color: #f5f5f5;
         }
       }
     }
-    
-    ul{
+
+    ul {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      .info-row{
-        &:first-child{
+      .info-row {
+        &:first-child {
           grid-column: 2 / span 1;
           grid-row: 2 / span 1;
           justify-content: flex-end;
           display: flex;
           padding-right: rem(10);
-          .info-row-cont{
+          .info-row-cont {
             margin-left: 0;
           }
         }
-        &:nth-child(2){
+        &:nth-child(2) {
           grid-column: 1 / span 2;
           grid-row: 1 / span 1;
-          .info-row-cont{
+          .info-row-cont {
             margin-left: rem(10);
           }
         }
-        &:last-child{
+        &:last-child {
           grid-column: 1 / span 1;
           grid-row: 2 / span 1;
-          .info-row-cont{
+          .info-row-cont {
             margin-left: rem(10);
           }
         }
-        .info-row-cont{
+        .info-row-cont {
           background-color: #fff !important;
         }
       }
@@ -166,7 +175,7 @@
   }
   .answer-section {
     .info-row {
-      &:not(:last-child){
+      &:not(:last-child) {
         .info-row-cont {
           margin-left: 0;
         }
@@ -175,13 +184,12 @@
   }
 }
 
-
 @media (max-width: rem(600)) {
   .body-section {
     padding-top: rem(20);
     margin-bottom: 0;
     border-bottom: 0;
-    > h1{
+    > h1 {
       display: none;
     }
   }
@@ -191,7 +199,8 @@
     display: grid;
     grid-template-columns: 1fr;
 
-    a, button{
+    a,
+    button {
       width: 100% !important;
       max-width: 100%;
     }
@@ -199,5 +208,4 @@
       order: 2;
     }
   }
-
 }
