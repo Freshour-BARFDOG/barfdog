@@ -18,6 +18,7 @@ import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
 import transformLocalCurrency from "/util/func/transformLocalCurrency";
 import {postObjData} from "/src/pages/api/reqData";
 import Modal_confirm from "/src/components/modal/Modal_confirm";
+import Image from 'next/image';
 
 
 
@@ -278,7 +279,7 @@ export default function CreateInquiryPage() {
       </Layout>
       {confirmModal.active && (
         <Modal_confirm
-          text={`1:1문의를 등록하시겠습니까?`}
+          text={`1:1 문의를 등록하시겠습니까?`}
           isConfirm={onConfirmSubmit}
         />
       )}

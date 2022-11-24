@@ -28,21 +28,6 @@
   }
 }
 
-.answer-section {
-  margin-top: rem(20);
-  .info-row {
-    &:not(:last-child){
-      .info-row-title {
-        margin-left: rem(10);
-      }
-      .info-row-cont {
-        margin-left: rem(20);
-        padding: rem(14) 0;
-      }
-    }
-  }
-}
-
 // styles
 .info-row {
   display: grid;
@@ -59,7 +44,55 @@
     margin-top: rem(16);
     min-height: rem(300);
     .info-row-title{background-color: #F5F5F5;display: flex; height: 100%;align-items: center; justify-content: center}
-    .info-row-cont{color: #202020;padding: rem(20); height: 100%; box-sizing: border-box;}
+    .info-row-cont{
+      color: #202020;
+      padding: rem(20); 
+      height: 100%; 
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      row-gap: rem(30);
+    }
+    .info-row-flex{
+      display: flex;
+      flex-direction: column;
+      gap: rem(20);
+      .img-wrap{
+        max-width: 100%;
+        img{
+          max-width: 100% !important;
+        }
+      }
+    }
+    .info-row-grid{
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: rem(10);
+      box-sizing: border-box;
+      padding-top: rem(30);
+      position: relative;
+
+      &::after{
+        content: "[ 첨부 이미지 ]";
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+
+      a{
+        position: relative;
+        width: 100%;
+        aspect-ratio: 1/1;
+        background-color: #fff;
+
+        img{
+          min-height: auto !important;
+          max-height: none !important;
+          height: auto !important;
+        }
+      }
+    }
   }
 }
 .info-row-title {
@@ -77,16 +110,31 @@
   * {cursor: default;}
 }
 
-
-.answer-section{
+.answer-section {
   border: rem(1) solid var(--color-main);
   padding: 0 rem(20) rem(20);
+  margin-top: rem(20);
+  .info-row {
+    &:not(:last-child){
+      .info-row-title {
+        margin-left: rem(10);
+      }
+      .info-row-cont {
+        margin-left: rem(20);
+        padding: rem(14) 0;
+      }
+    }
+    .info-row-cont{
+      justify-content: flex-start;
+      row-gap: rem(20);
+    }
+  }
+
   .info-row.contents .info-row-title{
     background-color:  var(--color-main);
     color: #fff;
   }
 }
-
 
 
 
@@ -169,6 +217,12 @@
       &:not(:last-child){
         .info-row-cont {
           margin-left: 0;
+        }
+      }
+      &:last-child{
+        .info-row-cont {
+          background-color: #fff !important;
+          padding: 0;
         }
       }
     }

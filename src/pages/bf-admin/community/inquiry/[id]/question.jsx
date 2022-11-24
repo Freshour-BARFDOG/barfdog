@@ -9,6 +9,7 @@ import {getDataSSR} from "/src/pages/api/reqData";
 import s from "./adminInquiry[id].module.scss";
 import {InquiryFiles} from "/src/components/mypage/inquiry/InquiryFiles";
 import {inquiryStatusIcon} from "/store/TYPE/inquiry/InquiryStatusIcon";
+import Image from 'next/image';
 
 export default function InquiryQuestionPage({data}) {
   

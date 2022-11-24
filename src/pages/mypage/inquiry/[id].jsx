@@ -12,6 +12,7 @@ import Link from "next/link";
 import {useModalContext} from "/store/modal-context";
 import Modal_confirm from "/src/components/modal/Modal_confirm";
 import Modal_global_alert from "/src/components/modal/Modal_global_alert";
+import Image from 'next/image';
 
 export default function InquiryArticlePage({ data }) {
   // console.log(data);
@@ -108,7 +109,24 @@ export default function InquiryArticlePage({ data }) {
               
               <div className={`${s['info-row']} ${s['contents']}`}>
                 <div className={s['info-row-title']}><span>문의내용</span></div>
-                <div className={s['info-row-cont']}>{info.contents}</div>
+                <div className={s['info-row-cont']}>{info.contents}
+                {info.questionImgDtoList.length > 0 &&
+                  <div className={s['info-row-grid']}>
+                    {info.questionImgDtoList.length > 0 &&
+                    info.questionImgDtoList.map((img) => (
+                      <a href={img.url} target="_blank">
+                        <Image
+                          src={img.url}
+                          objectFit="cover"
+                          layout="fill"
+                          alt="카드 이미지"
+                        />
+                      </a>
+                      ))
+                    }
+                  </div>
+                }
+                </div>
               </div>
               {info.adminAnswer.length > 0 &&
               info.adminAnswer.map((answer) => (
@@ -123,7 +141,24 @@ export default function InquiryArticlePage({ data }) {
                   </div>
                   <div className={`${s['info-row']} ${s['contents']}`}>
                     <div className={s['info-row-title']}>문의답변</div>
-                    <div className={s['info-row-cont']}>{answer.contents}</div>
+                    <div className={s['info-row-cont']}>{answer.contents}
+                    {answer.questionImgDtoList.length > 0 &&
+                      <div className={s['info-row-flex']}>
+                        {answer.questionImgDtoList.length > 0 &&
+                        answer.questionImgDtoList.map((img) => (
+                          <div className={`${s['img-wrap']} img-wrap init-next-image`}>
+                            <Image
+                              src={img.url}
+                              objectFit="cover"
+                              layout="fill"
+                              alt="카드 이미지"
+                            />
+                          </div>
+                          ))
+                        }
+                      </div>
+                    }
+                    </div>
                   </div>
                 </article>
               ))}
@@ -186,7 +221,7 @@ export async function getServerSideProps({ req, query }) {
         title: item.title,
         contents: item.contents,
         createdDate: item.createdDate,
-        questionImgDtoList: data.question.questionImgDtoList?.map((img)=>({
+        questionImgDtoList: item.questionImgDtoList?.map((img)=>({
           questionImageId: img.questionImageId,
           filename: img.filename,
           url: img.url,
