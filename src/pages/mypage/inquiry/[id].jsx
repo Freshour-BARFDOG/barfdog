@@ -113,8 +113,8 @@ export default function InquiryArticlePage({ data }) {
                 {info.questionImgDtoList.length > 0 &&
                   <div className={s['info-row-grid']}>
                     {info.questionImgDtoList.length > 0 &&
-                    info.questionImgDtoList.map((img) => (
-                      <a href={img.url} target="_blank">
+                    info.questionImgDtoList.map((img, i) => (
+                      <a key={`questionImage-${i}`} href={img.url} target="_blank" rel="noreferrer">
                         <Image
                           src={img.url}
                           objectFit="cover"
@@ -144,9 +144,8 @@ export default function InquiryArticlePage({ data }) {
                     <div className={s['info-row-cont']}>{answer.contents}
                     {answer.questionImgDtoList.length > 0 &&
                       <div className={s['info-row-flex']}>
-                        {answer.questionImgDtoList.length > 0 &&
-                        answer.questionImgDtoList.map((img) => (
-                          <div className={`${s['img-wrap']} img-wrap init-next-image`}>
+                        {answer.questionImgDtoList.map((img, i) => (
+                          <div key={`answerImage-${i}`} className={`${s['img-wrap']} img-wrap init-next-image`}>
                             <Image
                               src={img.url}
                               objectFit="cover"
