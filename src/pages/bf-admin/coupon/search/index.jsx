@@ -32,9 +32,8 @@ const initialApiUrlWithQuery = {
   query: 'keyword=',
 };
 
-function CouponListPage() {
-  const apiDataQueryString = 'couponListResponseDtoList';
-
+export default function CouponListPage() {
+  
   const apiURL = {
     auto: '/api/admin/coupons/auto',
     direct: '/api/admin/coupons/direct',
@@ -74,6 +73,33 @@ function CouponListPage() {
       query,
       url,
     }));
+  };
+  
+  
+  const pageInterCeptor = (res) => {
+    // console.log(res);
+    let newPageInfo = {
+      totalPages: 0,
+      size: 0,
+      totalItems: 0,
+      currentPageIndex: 0,
+      newPageNumber: 0,
+      newItemList: [],
+    };
+    if(res?.data?._embedded){
+      const pageData = res.data.page;
+      const newItemList = res.data._embedded.couponListResponseDtoList
+      newPageInfo = {
+        totalPages: pageData.totalPages,
+        size: pageData.size,
+        totalItems: pageData.totalElements,
+        currentPageIndex: pageData.number,
+        newPageNumber: pageData.number + 1,
+        newItemList: newItemList,
+      };
+    }
+    
+    return newPageInfo;
   };
 
   const onSearchInputKeydown = (e) => {
@@ -146,9 +172,9 @@ function CouponListPage() {
                 apiURL={apiUrlWithQuery.url}
                 size={searchPageSize}
                 setItemList={setItemList}
-                queryItemList={apiDataQueryString}
                 urlQuery={apiUrlWithQuery.query}
                 setIsLoading={setIsLoading}
+                pageInterceptor={pageInterCeptor}
               />
             </div>
           </section>
@@ -158,4 +184,3 @@ function CouponListPage() {
   );
 }
 
-export default CouponListPage;
