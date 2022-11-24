@@ -83,7 +83,7 @@ export const OrdersheetItemList = ({form, setForm, isLoading, event = {onActiveM
   
                 <div
                   className={`${s.coupon_col_red}`}
-                  style={{color: !item.discountAmount && 'var(--color-disabled)'}}
+                  style={{color: item.discountAmount ? '' : 'var(--color-disabled)'}}
                 >
                   {item.discountAmount && '-' + transformLocalCurrency( item.discountAmount )}원
                 </div>

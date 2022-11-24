@@ -1,4 +1,5 @@
 import React, {useMemo, useState} from 'react';
+import s from './adminInquiry[id].module.scss';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import {AdminContentWrapper} from '/src/components/admin/AdminWrapper';
@@ -6,29 +7,10 @@ import Spinner from '/src/components/atoms/Spinner';
 import {getDtataSSR_inquiryAuthorType} from '/util/func/getDtataSSR_inquiryAuthorType';
 import transformDate from '/util/func/transformDate';
 import {getDataSSR, putObjData} from '/src/pages/api/reqData';
-import s from './adminInquiry[id].module.scss';
 import {useModalContext} from '/store/modal-context';
 import popupWindow from '/util/func/popupWindow';
-import {InquiryFiles} from "../../../../../components/mypage/inquiry/InquiryFiles";
-import Modal_global_alert from "../../../../../components/modal/Modal_global_alert";
-
-const testImageList = [
-  {
-    questionImageId: 6,
-    filename: 'asdkfljdasfl.jpg',
-    url: 'http://localhost:4000/test.jpg',
-  },
-  {
-    questionImageId: 7,
-    filename: '    filename: \'a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1..jpg',
-    url: 'http://localhost:4000/test.jpg',
-  },
-  {
-    questionImageId: 8,
-    filename: 'a3.jpg',
-    url: 'http://localhost:4000/test.jpg',
-  },
-]; // ! TEST
+import {InquiryFiles} from "/src/components/mypage/inquiry/InquiryFiles";
+import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 
 export default function InquiryAnswerPage({ data }) {
   const answerId = data.id;
@@ -230,6 +212,7 @@ export async function getServerSideProps({ req, query }) {
       createdDate: transformDate(data.createdDate, 'time', { seperator: '.' }),
       questionImgDtoList:
         data.questionImgDtoList?.map((q) => ({
+          id: q.questionImageId,
           filename: q.filename || null,
           url: q.url || null,
         })) || [],
@@ -239,4 +222,24 @@ export async function getServerSideProps({ req, query }) {
     props: { data: DATA },
   };
 }
+
+//
+// const testImageList = [
+//   {
+//     questionImageId: 6,
+//     filename: 'asdkfljdasfl.jpg',
+//     url: 'http://localhost:4000/test.jpg',
+//   },
+//   {
+//     questionImageId: 7,
+//     filename: '    filename: \'a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1..jpg',
+//     url: 'http://localhost:4000/test.jpg',
+//   },
+//   {
+//     questionImageId: 8,
+//     filename: 'a3.jpg',
+//     url: 'http://localhost:4000/test.jpg',
+//   },
+// ]; // ! TEST
+
 

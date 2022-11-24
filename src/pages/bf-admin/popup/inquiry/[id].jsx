@@ -130,6 +130,7 @@ export async function getServerSideProps({ req, query }) {
       category: data.category,
       questionImgDtoList:
         data.questionImgDtoList?.map((q) => ({
+          id: q.questionImageId,
           filename: q.filename || null,
           url: q.url || null,
         })) || [],

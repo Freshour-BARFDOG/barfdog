@@ -171,6 +171,7 @@ export async function getServerSideProps({ req, query }) {
       answerStatus: data.answerStatus,
       category: data.category,
       questionImgDtoList: data.questionImgDtoList?.map(q=> ({
+        id: q.questionImageId,
         filename: q.filename || null,
         url: q.url || null,
       })) || [],
@@ -185,40 +186,40 @@ export async function getServerSideProps({ req, query }) {
   };
 }
 
-
-
-const DUMMY_INQUIRY_RES = {
-  data: {
-    id: 33,
-    name: '실버',
-    email: 'user@example.com',
-    title: 'title!',
-    contents: 'contentscontentscontents',
-    createdDate: '2022-11-21T11:19:46.141',
-    questionImgDtoList: [
-      {filename: 'filename.jpg', url: 'http://localhost:4000/_next/image?url=%2F_next%2Fs…ic%2Fmedia%2Flogo(admin).77a38725.png&w=1200&q=75'},
-      {filename: 'filename2.jpg', url: 'http://localhost:4000/_next/image?url=%2F_next%2Fs…ic%2Fmedia%2Flogo(admin).77a38725.png&w=1200&q=75'},
-    ],
-    answerIdList: [36,37,38]
-  },
-  _links: {},
-  status: 200,
-}
-
-
-
-const DUMMY_ANSWER_RES = {
-  data: {
-    id: 35,
-    targetId: 33,
-    title: 'title!',
-    contents: '관리자의 답변내용',
-    createdDate: '2022-11-22T11:19:46.141',
-    questionImgDtoList: [
-      {filename: 'filename.jpg', url: 'http://localhost:4000/_next/image?url=%2F_next%2Fs…ic%2Fmedia%2Flogo(admin).77a38725.png&w=1200&q=75'},
-      {filename: 'filename2.jpg', url: 'http://localhost:4000/_next/image?url=%2F_next%2Fs…ic%2Fmedia%2Flogo(admin).77a38725.png&w=1200&q=75'},
-    ],
-  },
-  _links: {},
-  status: 200,
-}
+//
+//
+// const DUMMY_INQUIRY_RES = {
+//   data: {
+//     id: 33,
+//     name: '실버',
+//     email: 'user@example.com',
+//     title: 'title!',
+//     contents: 'contentscontentscontents',
+//     createdDate: '2022-11-21T11:19:46.141',
+//     questionImgDtoList: [
+//       {filename: 'filename.jpg', url: 'http://localhost:4000/_next/image?url=%2F_next%2Fs…ic%2Fmedia%2Flogo(admin).77a38725.png&w=1200&q=75'},
+//       {filename: 'filename2.jpg', url: 'http://localhost:4000/_next/image?url=%2F_next%2Fs…ic%2Fmedia%2Flogo(admin).77a38725.png&w=1200&q=75'},
+//     ],
+//     answerIdList: [36,37,38]
+//   },
+//   _links: {},
+//   status: 200,
+// }
+//
+//
+//
+// const DUMMY_ANSWER_RES = {
+//   data: {
+//     id: 35,
+//     targetId: 33,
+//     title: 'title!',
+//     contents: '관리자의 답변내용',
+//     createdDate: '2022-11-22T11:19:46.141',
+//     questionImgDtoList: [
+//       {filename: 'filename.jpg', url: 'http://localhost:4000/_next/image?url=%2F_next%2Fs…ic%2Fmedia%2Flogo(admin).77a38725.png&w=1200&q=75'},
+//       {filename: 'filename2.jpg', url: 'http://localhost:4000/_next/image?url=%2F_next%2Fs…ic%2Fmedia%2Flogo(admin).77a38725.png&w=1200&q=75'},
+//     ],
+//   },
+//   _links: {},
+//   status: 200,
+// }

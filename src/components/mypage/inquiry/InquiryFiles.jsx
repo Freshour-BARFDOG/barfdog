@@ -19,7 +19,7 @@ export const InquiryFiles = ({datas}) => {
     <section className={`${s['viewer-section']}`}>
       <div className={s['viewer-top']}>
         <InquiryFile file={datas[0]}/>
-        {datas.length > 0 && (
+        {datas.length >= 2 && (
           <button className={`${s['view-all-button']}`} onClick={onClickHandler}>
             전체보기
             <TiArrowSortedDown className={`${s['svg-icon']} ${visible ? s.rotate : ''}`}/>

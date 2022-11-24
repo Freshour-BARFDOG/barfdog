@@ -15,10 +15,11 @@ import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import FileInput from '/src/components/admin/form/FileInput';
 import s from '/src/pages/mypage/inquiry/createInquiry.module.scss';
 import { getDtataSSR_inquiryAuthorType } from '/util/func/getDtataSSR_inquiryAuthorType';
+import transformLocalCurrency from "/util/func/transformLocalCurrency";
 
 const initialFormValues = {
   title: '',
-  content: '',
+  contents: '',
   questionImgIdList: [],
 };
 
@@ -47,7 +48,7 @@ export default function CreateInquiryAnswerPage({ id }) {
     if (submitted) return;
 
     const errObj = validate(form, {
-      contents: { maxContentsLength: maxContentsLength },
+      contents: { maxLength: maxContentsLength },
     });
     // console.log(errObj);
     setErrors(errObj);
@@ -171,8 +172,8 @@ export default function CreateInquiryAnswerPage({ id }) {
                       내용
                     </label>
                   </div>
-                  <div className="inp_section">
-                    <div className="inp_box">
+                  <div className={`inp_section`}>
+                    <div className={`${s['input-wrap']} ${s['contents']} inp_box`}>
                       <textarea
                         id={'contents'}
                         name="title"
@@ -182,6 +183,9 @@ export default function CreateInquiryAnswerPage({ id }) {
                         }
                         onChange={onInputChangeHandler}
                       />
+                      <span className={s['length-indicator']}>
+                      {form?.contents?.length} / {transformLocalCurrency(maxContentsLength)}
+                      </span>
                     </div>
                     {errors.contents && (
                       <ErrorMessage>{errors.contents}</ErrorMessage>

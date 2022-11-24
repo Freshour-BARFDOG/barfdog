@@ -136,13 +136,13 @@ export const Modal_coupon = ({ onModalActive, data, setForm, orderType ='general
                   couponDiscountAmount = item.discountDegree;
                 } else if (item.discountType === discountUnitType.FIXED_RATE) {
                   couponDiscountInfo = item.discountDegree + discountUnitType.KOR.FIXED_RATE;
-                  couponDiscountAmount = (selectedItemPrice * item.discountDegree) / 100;
+                  couponDiscountAmount = Math.floor((selectedItemPrice * item.discountDegree) / 100); //쿠폰 할인 계산 시, 소수점 버림
                 }
                 item.couponDiscountInfo = couponDiscountInfo
                 item.couponDiscountAmount = couponDiscountAmount
                 // console.log(couponDiscountAmount)
                 
-                // STEP 2. ㅍalidation
+                // STEP 2. Validation
                 let valid = false;
                 if(item.remaining > 0 && selectedItemPrice >= item.availableMinPrice && couponDiscountAmount <= item.availableMaxDiscount) {
                   // 쿠폰 사용조건 : 1. 재고있음 2. 아이템가격이 최소사용금액보다 큼  3. 쿠폰할인가가 쿠폰에 설정된 최대 사용가능가격보다 낮음

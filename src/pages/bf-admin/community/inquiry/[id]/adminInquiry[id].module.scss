@@ -124,6 +124,11 @@ $default-padding: rem(20);
   .download{
     margin:0 !important;
   }
+  .download-button{
+    &:first-child{
+      margin-bottom: 0;
+    }
+  }
 }
 
 .viewer-added-files {
