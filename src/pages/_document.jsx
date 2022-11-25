@@ -1,14 +1,12 @@
-import Document, {
+import {
   Html,
   Head,
   Main,
   NextScript,
-  DocumentContext,
-  DocumentInitialProps,
 } from "next/document";
 import MetaTags from './_metaTags';
 // eslint-disable-next-line @next/next/no-script-in-document
-import {GA_TRACKING_ID, TAGMANAGER_CONTAINER, TAGMANAGER_KEY, UA_TRACKING_ID} from "/src/pages/api/googleAnalytics/gtag";
+import {GA_TRACKING_ID, TAGMANAGER_CONTAINER, UA_TRACKING_ID} from "/src/pages/api/googleAnalytics/gtag";
 
 // Server Only File (client에서 사용하는 로직 사용불가)
 // Next JS : _app.js 파일 이후 2번 째 실행
@@ -19,6 +17,9 @@ export default function CustomDocument () {
   return (
     <Html lang="ko">
       <Head>
+        <link rel="preconnect" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&family=Roboto:ital,wght@0,100;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"/>
+        <link rel="preconnect" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css"/>
+        <link rel="preconnect" href="https://webfontworld.github.io/gmarket/GmarketSans.css"/>
         <script
           script-title={'google-analytics'}
           async
