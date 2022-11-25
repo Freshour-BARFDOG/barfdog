@@ -79,7 +79,7 @@ export default function InquiryArticlePage({ data }) {
  
   return (
     <>
-      <MetaTitle title="마이페이지 1:1 문의 확인" />
+      <MetaTitle title="마이페이지 1:1 문의내용" />
       <Layout>
         <Wrapper>
           <MypageWrapper>

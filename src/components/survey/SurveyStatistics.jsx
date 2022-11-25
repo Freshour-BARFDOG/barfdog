@@ -6,6 +6,8 @@ import Loading from '/src/components/common/Loading';
 import { calcDogAgebyMonth } from '/util/func/calcDogAge';
 import { dogActivityLevelType } from '/store/TYPE/dogActivityLevelType';
 import {dogSizeType} from "/store/TYPE/dogSizeType";
+import Btn_01 from '/public/img/mypage/statistic_dog_walker.svg';
+import Btn_02 from '/public/img/mypage/statistic_dog_walker2.svg';
 
 export const SurveyStatistics = ({ id ,  mode = 'default' }) => {
   
@@ -316,13 +318,14 @@ export const SurveyStatistics = ({ id ,  mode = 'default' }) => {
               <div className={s.right_box}>
                 <div className={s.row_1}>
                   <div className={`${s.image} img-wrap`}>
-                    <Image
+                    <Btn_01/>
+                    {/* <Image
                       priority
                       src={require('public/img/mypage/statistic_dog_walker.png')}
                       objectFit="cover"
                       layout="fill"
                       alt="카드 이미지"
-                    />
+                    /> */}
                   </div>
                   일주일 산책 횟수
                 </div>
@@ -330,13 +333,14 @@ export const SurveyStatistics = ({ id ,  mode = 'default' }) => {
 
                 <div className={s.row_2}>
                   <div className={`${s.image} img-wrap`}>
-                    <Image
+                    <Btn_02/>
+                    {/* <Image
                       priority
                       src={require('public/img/mypage/statistic_dog_walker2.png')}
                       objectFit="cover"
                       layout="fill"
                       alt="카드 이미지"
-                    />
+                    /> */}
                   </div>
                   일주일 총 산책 시간
                 </div>

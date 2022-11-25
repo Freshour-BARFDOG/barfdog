@@ -18,6 +18,7 @@ import popupWindow from '/util/func/popupWindow';
 import animateWindow from "/util/func/animateWindow";
 import { orderStatus } from '/store/TYPE/orderStatusTYPE';
 import { productType} from "/store/TYPE/itemType";
+import Btn_01 from '/public/img/pages/delivery/delivery_icon_1.svg';
 
 export default function DeliverInfoPage() {
   
@@ -155,12 +156,13 @@ export default function DeliverInfoPage() {
                             <button className={s.text} type={'button'} data-order-id={item.deliveryDto?.orderId} onClick={onCheckOrderInfo}>
                               <div>
                                 <div className={`${s.image} img-wrap`}>
-                                  <Image
+                                  <Btn_01 />
+                                  {/* <Image
                                     src={require('public/img/pages/delivery/delivery_icon_1.png')}
                                     objectFit="cover"
                                     layout="fill"
                                     alt="주문정보 아이콘"
-                                  />
+                                  /> */}
                                 </div>
                                 주문정보
                               </div>
@@ -232,12 +234,13 @@ export default function DeliverInfoPage() {
                             <button className={s.text} type={'button'} data-order-id={item.orderDeliveryDto.orderId} onClick={onCheckOrderInfo}>
                               <div>
                                 <div className={`${s.image} img-wrap`}>
-                                  <Image
+                                  <Btn_01 />
+                                  {/* <Image
                                     src={require('public/img/pages/delivery/delivery_icon_1.png')}
                                     objectFit="cover"
                                     layout="fill"
                                     alt="주문정보 아이콘"
-                                  />
+                                  /> */}
                                 </div>
                                 주문정보
                               </div>

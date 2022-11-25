@@ -106,7 +106,7 @@ export default function InquiryPage() {
                 <div className={s['create-btn']}>
                   <Link href={'/mypage/inquiry/create'} passHref>
                     <a className={`custom_btn solid basic_l ${s['inquiry-btn']}`}>
-                      문의작성하기
+                      문의 작성하기
                     </a>
                   </Link>
                 </div>

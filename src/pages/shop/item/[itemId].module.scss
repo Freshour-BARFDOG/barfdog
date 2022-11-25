@@ -540,7 +540,7 @@ section.tab_slide_box2{padding: 0 0 rem(130)}
   @include char(b16);
   padding: rem(20) rem(60);
   //height: rem(66);
-  > *:not(:last-child){margin-bottom:rem(10)}
+  // > *:not(:last-child){margin-bottom:rem(10)}
   .text{
     width: 100%;
     color: #4d4d4d;
@@ -549,11 +549,12 @@ section.tab_slide_box2{padding: 0 0 rem(130)}
   .images{
     width: 100%;
     > li{
+      
       display: flex;
       justify-content: center;
       width: 100%;
       aspect-ratio: 1;
-      margin:0 auto;
+      margin: rem(10) auto 0;
       max-width: rem(720);
       &:not(:last-child){margin-bottom:rem(10)}
     }

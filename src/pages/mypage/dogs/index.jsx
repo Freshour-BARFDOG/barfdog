@@ -18,6 +18,7 @@ import { useModalContext } from '/store/modal-context';
 import { useRouter } from 'next/router';
 import Modal_confirm from '/src/components/modal/Modal_confirm';
 import {orderStatus} from "/store/TYPE/orderStatusTYPE";
+import DeleteIcon from '/public/img/mypage/dog_info_delete.svg';
 
 export default function MypageDogInfoPage({ data }) {
   // console.log(data);
@@ -256,13 +257,14 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
               data-button-type={'deleteItem'}
               onClick={onActiveConfirmModal}
             >
-              <Image
+              <DeleteIcon />
+              {/* <Image
                 priority
                 src={require('/public/img/mypage/dog_info_delete.png')}
                 objectFit="cover"
                 layout="fill"
                 alt="삭제 아이콘"
-              />
+              /> */}
             </div>
           </div>
 

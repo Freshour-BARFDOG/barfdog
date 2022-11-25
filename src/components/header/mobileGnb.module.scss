@@ -85,7 +85,8 @@ $mobileMenuHeight: rem(48);
 
     &.active {
       height: $mobileMenuHeight;
-      padding: rem(14) rem(16);
+      align-items: center;
+      padding-right: rem(16);
       .mobile-submenu {
         height: 100%;
       }
@@ -95,6 +96,9 @@ $mobileMenuHeight: rem(48);
     }
     &.widemode {
       height: auto;
+      padding: rem(14) rem(16);
+      align-items: flex-start;
+
       .mobile-submenu.active {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -115,14 +119,13 @@ $mobileMenuHeight: rem(48);
       }
     }
 
-
-
     .activeWidemodeButton {
       align-items: center;
       justify-content: center;
       transition: transform 0.3s ease;
       height: rem(24);
       display: none;
+      -webkit-tap-highlight-color : transparent;
       svg {
         fill: var(--color-line-02);
       }

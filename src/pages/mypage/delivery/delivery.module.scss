@@ -84,6 +84,7 @@ section.content_body { padding : rem(18) 0 0}
 
       div {
         @include char(l16);
+        word-break: keep-all;
       }
 
       .text {

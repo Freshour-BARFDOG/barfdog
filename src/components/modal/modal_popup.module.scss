@@ -1,5 +1,9 @@
 @import '/styles/global/rem';
 $popupHoverZindex : 99999; // 팝업에 마우스 올렸을 경우, 다른 모든 zIndex와 관계없이 zIndex 최대치 설정 //
+$defaultLeft : rem(20);
+$defaultRight : rem(20);
+$defaultCenter : 55%;
+
 #modal_popup {
   // ! z-index: ''; // global zindex에서 관리
   $defaultTop : rem(100);
@@ -19,21 +23,33 @@ $popupHoverZindex : 99999; // 팝업에 마우스 올렸을 경우, 다른 모�
   &:hover{
     z-index: $popupHoverZindex !important;
   }
-  @for $i from 1 through 20 {
-    &.leakedOrder-#{$i}{
-      z-index: 2000 - $i;
-      top: calc($defaultTop + rem($i*40));
-    }
-  }
   &.left {
+    $defaultLeft: rem(20);
     left: rem(20);
   }
   &.center {
+    $defaultCenter: 55%;
     left: 50%;
     transform: translateX(-50%);
   }
   &.right {
+    $defaultRight: rem(20);
     right: rem(20);
+  }
+  @for $i from 1 through 20 {
+    &.leakedOrder-#{$i}{
+      z-index: 2000 - $i;
+      top: calc($defaultTop + rem($i*20));
+      &.left{
+        left: calc($defaultLeft + rem($i*20));
+      }
+      &.center{
+        left: calc($defaultCenter - rem($i*20));
+      }
+      &.right{
+        right: calc($defaultRight + rem($i*20));
+      }
+    }
   }
 }
 
@@ -77,17 +93,29 @@ $popupHoverZindex : 99999; // 팝업에 마우스 올렸을 경우, 다른 모�
   }
 }
 
-
+@media (max-height: rem(850)) and (max-width: rem(1400)) {
+  #modal_popup {
+    // width: calc(33.333% - #{rem(10)});
+    width: 50vh;
+  }
+}
 
 @media (max-width: rem(600)) {
   #modal_popup {
     width: calc(100% - #{rem(40)});
+    box-shadow: none;
+
+    &:nth-child(2){
+      box-shadow: 0 0 rem(20) rgba(0, 0, 0, 0.15);
+    }
+
     &.left, &.center, &.right {
-      left: 50%;
-      right:auto;
+      top: rem(100);
+      left: 50% !important;
+      right: auto;
       transform: translateX(-50%);
     }
   }
-  .btn-section {
-  }
 }
+
+

@@ -17,8 +17,9 @@ import MobileSidr from './MobileSidr';
 import {IoIosArrowBack} from 'react-icons/io';
 import Logo from '/public/img/logo(HQ).png';
 import Logo_2x from '/public/img/logo@2x.png';
-import MobileLogo from '/public/img/mobile_logo.png';
-import MobileLogo_2x from '/public/img/mobile_logo@2x.png';
+import MobileLogo from '/public/img/mobile_logo.svg';
+// import MobileLogo from '/public/img/mobile_logo.png';
+// import MobileLogo_2x from '/public/img/mobile_logo@2x.png';
 import Topbutton from '/public/img/topbutton.svg';
 import Icon_Home from '/public/img/icon/icon-home.svg';
 import {authAction} from '/store/auth-slice';
@@ -123,7 +124,8 @@ export default function Header() {
                 <Link href="/" passHref>
                   <a>
                     {isMobile ? (
-                      <Image src={MobileLogo} srcSet={MobileLogo_2x} alt="사이트 로고" priority />
+                      // <Image src={MobileLogo} srcSet={MobileLogo_2x} alt="사이트 로고" priority />
+                      <MobileLogo />
                     ) : (
                       <Image src={Logo} srcSet={Logo_2x} alt="사이트 로고" priority />
                     )}
