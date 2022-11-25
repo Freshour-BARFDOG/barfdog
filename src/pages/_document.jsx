@@ -19,6 +19,11 @@ export default function CustomDocument () {
   return (
     <Html lang="ko">
       <Head>
+          <link
+            href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css"
+            rel="stylesheet"
+            type="text/css"
+          />
         <script
           script-title={'google-analytics'}
           async

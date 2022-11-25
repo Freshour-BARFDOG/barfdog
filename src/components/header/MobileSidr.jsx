@@ -261,6 +261,7 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                     link={'/mypage/inquiry'}
                   />
                   {isLogin && <MenuList title={'로그아웃'} onClick={onLogout} />}
+                  <MenuList  />
                 </ul>
               </div>
             </section>

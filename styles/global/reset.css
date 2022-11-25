@@ -49,11 +49,11 @@ font-family: 'GmarketSansBold'
 
   --reset-font-size: 16px;
   /* FONT-FAMILY */
+  --font-Pretendard: ' Pretendard Variable';
   --font-NotoSans: 'NotoSans KR';
   --font-Gmarket: 'GmarketSansMedium';
   --font-Gmarket-bold: 'GmarketSansBold';
   --font-ink: 'InkLipquid';
-  --font-Pretendard: ' Pretendard Variable';
   -webkit-font-smooting: antialiased;
 
   /* TRANSITION */

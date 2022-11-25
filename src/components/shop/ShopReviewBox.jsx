@@ -136,7 +136,7 @@ const ShopSingleItem_ReviewList = ({ data }) => {
           <RatingStars count={DATA.star} margin={0} disabled />
         </i>
         <p className={s.content}>
-          <i className={`${s.image} img-wrap`}>{DATA.itemImages.length > 0 && <MiniImageIcon />}</i>
+          {DATA.itemImages.length > 0 && <i className={`${s.image} img-wrap`}><MiniImageIcon /></i>}
           <em className={s.title}>{DATA.contents}</em>
         </p>
         <span className={s.name}>{filter_blindingUserName(DATA.username)}</span>

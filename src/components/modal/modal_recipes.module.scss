@@ -121,7 +121,7 @@ $topLinkBannerHeight: rem(38);
     overflow: scroll;
     scrollbar-color: transparent transparent;
     &::-webkit-scrollbar {
-      // display:none;
+      display:none;
       width: rem(10);
       height: 0;
     }

@@ -97,7 +97,7 @@ section.tab_slide_box2{padding: 0 0 rem(130)}
           width: 100%;
           padding-top : rem(20);
           padding-bottom: rem(28);
-          
+          word-break: keep-all;
           //팁
           >div:nth-child(1){
             @include char(l16);
