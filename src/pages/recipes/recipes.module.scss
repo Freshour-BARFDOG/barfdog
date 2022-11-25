@@ -155,6 +155,7 @@ section.subscribe_discount { margin-bottom: rem(80);}
 .recipe_title2 {
   @include char(l18);
   text-align: center;
+  word-break: keep-all;
 }
 
 

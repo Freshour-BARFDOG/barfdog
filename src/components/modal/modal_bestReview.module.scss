@@ -241,7 +241,7 @@ $topLinkBannerHeight: rem(38);
 @media (max-height: rem(800)) {
   
   .card {
-    height: 100vh;
+    height: calc(100vh - rem(100));
   }
 }
 

@@ -43,6 +43,7 @@ section.regular_delivery {
           .title_en {
             font-family: var(--font-ink);
             font-size: rem(27);
+            padding: 0 0 rem(10);
           }
           .title_ko {
             @include char(l20);

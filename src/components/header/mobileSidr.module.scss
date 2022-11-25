@@ -331,8 +331,25 @@ $bottom-menu-list-height: rem(50);
       &:not(:last-child) {
         border-bottom: rem(1) solid var(--color-line-04);
       }
+      &:nth-last-child(2){
+        border-bottom: 0;
+      }
       svg {
         fill: var(--color-line-02);
+      }
+      &:last-child{
+        position: relative;
+
+        &::after{
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 50%;
+          width: 100vw;
+          height: 100%;
+          transform: translateX(-50%);
+          background-color: var(--color-bg-ghostWhite);
+        }
       }
     }
   }
