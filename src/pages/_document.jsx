@@ -18,8 +18,8 @@ export default function CustomDocument () {
     <Html lang="ko">
       <Head>
         <link rel="preconnect" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&family=Roboto:ital,wght@0,100;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"/>
-        <link rel="preconnect" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css" crossorigin/>
-        <link rel="preconnect" href="https://webfontworld.github.io/gmarket/GmarketSans.css" crossorigin/>
+        <link rel="preconnect" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css" crossOrigin/>
+        <link rel="preconnect" href="https://webfontworld.github.io/gmarket/GmarketSans.css" crossOrigin/>
         <link
           href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap"
           rel="stylesheet"
