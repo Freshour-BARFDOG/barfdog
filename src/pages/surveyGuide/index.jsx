@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import {useModalContext} from "/store/modal-context";
 import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 import {useRouter} from "next/router";
+import SurveyGuid from '/public/img/survey/survey_guide.svg';
 
 
 export default function SurveyGuidePage() {
@@ -34,13 +35,14 @@ export default function SurveyGuidePage() {
           <div className={s.title_box}>
             <div className={s.inner_box}>
               <div className={`${s.image} img-wrap`}>
-                <Image
+                {/* <Image
                   priority
                   src={require('public/img/survey/survey_guide.png')}
                   objectFit="cover"
                   layout="fill"
                   alt="카드 이미지"
-                />
+                /> */}
+                <SurveyGuid />
               </div>
               <div className={s.text}>
                 내 반려견에게 꼭 맞는 맞춤 플랜을 위한

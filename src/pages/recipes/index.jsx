@@ -31,6 +31,12 @@ import {Modal_cont_ingredient_total_03} from "/src/components/modal/recipes/Moda
 import {Modal_cont_ingredient_total_04} from "/src/components/modal/recipes/Modal_cont_ingredient_total_04";
 import Btn_01 from '/public/img/recipes/recipe_subscribe.svg';
 import Btn_02 from '/public/img/recipes/recipe_subsctibe_coupon.svg';
+import Content_01 from '/public/img/recipes/recipe_content_1.svg';
+import Content_02 from '/public/img/recipes/recipe_content_2.svg';
+import Content_03 from '/public/img/recipes/recipe_content_3.svg';
+import Content_04 from '/public/img/recipes/recipe_content_4.svg';
+import Content_05 from '/public/img/recipes/recipe_content_5.svg';
+import Content_06 from '/public/img/recipes/recipe_content_6.svg';
 
 
 
@@ -385,13 +391,14 @@ export default function RecipePage() {
                 <div className={s.text_box}>
                   <div className={s.image_box}>
                     <div className={`${s.image} img-wrap`}>
-                      <Image
+                      {/* <Image
                         priority
                         src={require("public/img/recipes/recipe_content_1.png")}
                         objectFit="cover"
                         layout="fill"
                         alt="브랜드 소개 이미지"
-                      />
+                      /> */}
+                      <Content_01 />
                     </div>
                   </div>
                   100%<br />휴먼그레이드
@@ -400,13 +407,14 @@ export default function RecipePage() {
                 <div className={s.text_box}>
                   <div className={s.image_box}>
                     <div className={`${s.image} img-wrap`}>
-                      <Image
+                      {/* <Image
                         priority
                         src={require("public/img/recipes/recipe_content_2.png")}
                         objectFit="cover"
                         layout="fill"
                         alt="브랜드 소개 이미지"
-                      />
+                      /> */}
+                      <Content_02 />
                     </div>
                   </div>
                   무항생제<br />고기
@@ -415,13 +423,14 @@ export default function RecipePage() {
                 <div className={s.text_box}>
                   <div className={s.image_box}>
                     <div className={`${s.image} img-wrap`}>
-                      <Image
+                      {/* <Image
                         priority
                         src={require("public/img/recipes/recipe_content_3.png")}
                         objectFit="cover"
                         layout="fill"
                         alt="브랜드 소개 이미지"
-                      />
+                      /> */}
+                      <Content_03 />
                     </div>
                   </div>
                   유기농<br />채소·과일
@@ -430,13 +439,14 @@ export default function RecipePage() {
                 <div className={s.text_box}>
                   <div className={s.image_box}>
                     <div className={`${s.image} img-wrap`}>
-                      <Image
+                      {/* <Image
                         priority
                         src={require("public/img/recipes/recipe_content_4.png")}
                         objectFit="cover"
                         layout="fill"
                         alt="브랜드 소개 이미지"
-                      />
+                      /> */}
+                      <Content_04 />
                     </div>
                   </div>
                   글루텐<br />무첨가
@@ -445,13 +455,14 @@ export default function RecipePage() {
                 <div className={s.text_box}>
                   <div className={s.image_box}>
                     <div className={`${s.image} img-wrap`}>
-                      <Image
+                      {/* <Image
                         priority
                         src={require("public/img/recipes/recipe_content_5.png")}
                         objectFit="cover"
                         layout="fill"
                         alt="브랜드 소개 이미지"
-                      />
+                      /> */}
+                      <Content_05 />
                     </div>
                   </div>
                   곡물류<br />무첨가
@@ -460,13 +471,14 @@ export default function RecipePage() {
                 <div className={s.text_box}>
                   <div className={s.image_box}>
                     <div className={`${s.image} img-wrap`}>
-                      <Image
+                      {/* <Image
                         priority
                         src={require("public/img/recipes/recipe_content_6.png")}
                         objectFit="cover"
                         layout="fill"
                         alt="브랜드 소개 이미지"
-                      />
+                      /> */}
+                      <Content_06 />
                     </div>
                   </div>
                   합성첨가물<br />무첨가

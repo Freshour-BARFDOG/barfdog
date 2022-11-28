@@ -60,7 +60,7 @@ const PureCheckbox = ({
             onChange={onChangeHandler}
             type="checkbox"
             id={id}
-            // checked={value}
+            checked={value}
             disabled={disabled}
           />
           <span className={s.fakeCheckBox} />

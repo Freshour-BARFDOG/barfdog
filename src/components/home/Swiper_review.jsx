@@ -7,6 +7,7 @@ import ArrowRight_m2 from '@public/img/icon/swiper-arrow-medium-style2.svg';
 import Link from 'next/link';
 import ArrowLeft_m from '@public/img/icon/swiper-arrow-medium.svg';
 import ArrowRight_m from '@public/img/icon/swiper-arrow-medium2.svg';
+import Quotation from '@public/img/pages/home/home_review_quotation.svg';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import Image from 'next/image';
 import sorting from "@util/func/sorting";
@@ -120,13 +121,14 @@ export function Swiper_review({ data }) {
                   />
                 </div>
                 <div className={s.swiper_review_txt}>
-                  <Image
+                  {/* <Image
                     src={require('/public/img/pages/home/home_review_quotation.png')}
                     objectFit="fit"
                     width={14}
                     height={13}
                     alt="카드 이미지"
-                  />
+                  /> */}
+                  <Quotation />
                 </div>
                 <figcaption className={s.contents}>{d.contents}</figcaption>
               </figure>

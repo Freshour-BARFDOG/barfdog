@@ -28,7 +28,7 @@ export function Swiper_bestReview ({items}) {
   const swiperSettings_review = {
     className: `${s.swiper_review}`,
     slidesPerView: 'auto',
-    autoplay: {delay: 2500},
+    // autoplay: {delay: 2500},
     spaceBetween: 40,
     loop: true,
     breakpoints: {

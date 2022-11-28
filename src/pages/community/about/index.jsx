@@ -5,6 +5,9 @@ import Layout from '@src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import s from './about.module.scss';
 import Image from 'next/image';
+import Title_01 from '/public/img/pages/community/community_title.svg';
+import Title_02 from '/public/img/pages/community/community_title2.svg';
+import Sign from '/public/img/pages/community/community_sign.svg';
 
 
 export default function AboutPage() {
@@ -39,13 +42,14 @@ export default function AboutPage() {
             <div className={s.inner}>
               <div className={s.letter_box}>
                 <div className={`${s.title} img-wrap`}>
-                  <Image
+                  {/* <Image
                     src={require("/public/img/pages/community/community_title.png")}
                     objectFit="contain"
                     layout="fill"
                     alt="카드 이미지"
                     priority
-                  />
+                  /> */}
+                  <Title_01 />
                 </div>
 
                 <div className={s.content1}>Fresh Life! fresh our</div>
@@ -118,13 +122,14 @@ export default function AboutPage() {
                 <div className={s.sign}>
                   <div className={s.ceo}>프레쉬아워 CEO 임경호</div>
                   <div className={`${s.img_sign} img-wrap`}>
-                    <Image
+                    {/* <Image
                       src={require("/public/img/pages/community/community_sign.png")}
                       objectFit="cover"
                       layout="fill"
                       alt="카드 이미지"
                       priority
-                    />
+                    /> */}
+                    <Sign />
                   </div>
                 </div>
               </div>
@@ -132,13 +137,14 @@ export default function AboutPage() {
               <div className={s.letter_box2}>
                 <div className={s.inner2}>
                   <div className={`${s.title} img-wrap`}>
-                    <Image
+                    {/* <Image
                       src={require("/public/img/pages/community/community_title2.png")}
                       objectFit="contain"
                       layout="fill"
                       alt="카드 이미지"
                       priority
-                    />
+                    /> */}
+                    <Title_02 />
                   </div>
 
                   <div className={s.ulbox}>

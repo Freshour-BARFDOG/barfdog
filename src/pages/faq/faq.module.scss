@@ -147,10 +147,21 @@ $animationDuration : 0.2s;
   }
 
   .inner_box{
-    margin: 0 rem(20) 0;
+    // margin: 0 rem(20) 0;
     border-bottom : rem(1) solid var(--color-line-03); 
     cursor:pointer;
     transition: color, transform var(--ani-default);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: rem(20);
+    word-break: keep-all;
+
+    &::after, &::before{
+      display: none;
+    }
+    
     &:hover {
       cursor: pointer;
       font-weight: 700;
@@ -170,7 +181,8 @@ $animationDuration : 0.2s;
   .arrow {
       float:right;
       margin-right: rem(11);
-      padding-top: rem(28);
+      margin-top: rem(7);
+      // padding-top: rem(28);
       
       svg {
         transition: transform var(--ani-default);
@@ -183,12 +195,14 @@ $animationDuration : 0.2s;
   //   }
   .text_box {
     display:none;
-    margin: 0 rem(20) 0;
+    // margin: 0 rem(20) 0;
     border-bottom : rem(1) solid var(--color-line-03); 
+    width: 100%;
     // clear:both;
     padding: rem(15) rem(20) rem(15);
     // box-sizing: border-box;
     background-color:#F5F5F5 ;
+    word-break: keep-all;
     
     .text{
       font-size: rem(15);

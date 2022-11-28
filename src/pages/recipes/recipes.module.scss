@@ -71,7 +71,7 @@ section.subscribe_discount { margin-bottom: rem(80);}
 
 
   .top_title {
-    font-family: 'Gmarket Sans';
+    font-family: 'Gmarketsansbold';
     font-weight: 700;
     font-size: rem(32);
     line-height: rem(32);
@@ -677,8 +677,8 @@ section.subscribe_discount { margin-bottom: rem(80);}
 .text_box {
   text-align: center;
   @include char(l18);
-  font-family: 'Gmarket Sans';
-font-style: normal;
+  font-family: 'GmarketSansMedium';
+  font-style: normal;
 }
 
 .btn_box {

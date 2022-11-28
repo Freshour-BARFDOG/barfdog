@@ -3,8 +3,10 @@ import s from './mobileSidr.module.scss';
 import CloseButton from '/src/components/atoms/CloseButton';
 import ScrollContainer from '/src/components/atoms/ScrollContainer';
 import Image from 'next/image';
-import Kakao from '/public/img/icon/kakao.png';
-import Naver from '/public/img/icon/naver.png';
+// import Kakao from '/public/img/icon/kakao.png';
+// import Naver from '/public/img/icon/naver.png';
+import Kakao from '/public/img/icon/kakao.svg';
+import Naver from '/public/img/icon/naver.svg';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import { authAction } from '/store/auth-slice';
@@ -22,6 +24,7 @@ import { userType } from '/store/TYPE/userAuthType';
 import { useRouter } from 'next/router';
 import MypageBanner from '../atoms/MypageBanner';
 import popupWindow from "../../../util/func/popupWindow";
+
 
 export default function MobileSidr({ isOpen, setSidrOpen }) {
   const dispatch = useDispatch();
@@ -120,13 +123,15 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                   </div>
                   <div className={s['sns']}>
                     <button type={'button'} className={s.kakao} onClick={kakaoLoginHandler}>
-                      <Image src={Kakao} width={72} height={72} alt="카카오톡 아이콘" />
+                      {/* <Image src={Kakao} width={72} height={72} alt="카카오톡 아이콘" /> */}
+                      <Kakao />
                       <em className={s.desc}>
                         카카오로 <b> 3초만에 시작</b>하기
                       </em>
                     </button>
                     <button type={'button'} className={s.naver} onClick={naverLoginHandler}>
-                      <Image src={Naver} width="72" height="72" alt="네이버 아이콘" />
+                      {/* <Image src={Naver} width="72" height="72" alt="네이버 아이콘" /> */}
+                      <Naver />
                     </button>
                   </div>
                 </div>

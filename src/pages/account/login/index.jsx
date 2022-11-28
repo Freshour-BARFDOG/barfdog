@@ -7,8 +7,10 @@ import { useDispatch } from 'react-redux';
 import { useModalContext } from '/store/modal-context';
 import { authAction } from '/store/auth-slice';
 import { useRouter } from 'next/router';
-import Kakao from '/public/img/icon/kakao.png';
-import Naver from '/public/img/icon/naver.png';
+// import Kakao from '/public/img/icon/kakao.png';
+// import Naver from '/public/img/icon/naver.png';
+import Kakao from '/public/img/icon/kakao.svg';
+import Naver from '/public/img/icon/naver.svg';
 import Image from 'next/image';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
@@ -255,12 +257,14 @@ export default function LoginPage() {
               <h5 className={s.easylogin}>간편로그인</h5>
               <div className={s.login_sns}>
                 <button type={'button'} className={s.kakao} onClick={kakaoLoginFunc}>
-                  <Image src={Kakao} width={72} height={72} alt="카카오톡 아이콘" />
+                  {/* <Image src={Kakao} width={72} height={72} alt="카카오톡 아이콘" /> */}
+                  <Kakao />
                 </button>
                 {/* naver가 제공해주는 로그인 버튼*/}
                 <div ref={naverRef} id="naverIdLogin"></div>
                 <button className={s.naver} type={'buttom'} onClick={naverLoginFunc}>
-                  <Image src={Naver} width="72" height="72" alt="네이버 아이콘" />
+                  {/* <Image src={Naver} width="72" height="72" alt="네이버 아이콘" /> */}
+                  <Naver />
                 </button>
               </div>
             </div>

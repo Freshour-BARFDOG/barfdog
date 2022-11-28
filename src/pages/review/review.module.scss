@@ -35,6 +35,7 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
     .mid_box {
       padding: rem(20) rem(20) 0;
       text-align: center;
+      -webkit-tap-highlight-color: transparent;
       .image{
         display: inline-block;
         width: 100%;
@@ -47,6 +48,7 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
       padding: rem(20) rem(30) 0;
       margin-bottom: rem(10);
       color: var(--color-font-def);
+      -webkit-tap-highlight-color: transparent;
     }
     >p {
       @include char(b16);
@@ -58,7 +60,7 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
       -webkit-box-orient: vertical;
       text-overflow: ellipsis; // 말줄임표
       overflow: hidden; // 넘침 숨김
-
+      -webkit-tap-highlight-color: transparent;
       &:last-child{
         margin-bottom: rem(25);
       }
