@@ -213,7 +213,7 @@ export default function CreateInquiryPage() {
                     <textarea
                       id={'contents'}
                       className={'fullWidth'}
-                      placeholder={`문의내용을 작성해주세요.\n문의내용은 최대 ${transformLocalCurrency(maxContentsLength)}자 이내로 작성 가능할 수 있습니다.`}
+                      placeholder={`문의내용을 작성해주세요.\n문의내용은 최대 ${transformLocalCurrency(maxContentsLength)}자 이내로 작성할 수 있습니다.`}
                       onChange={onInputChangeHandler}
                       value={form['contents']}
                       maxLength={1000}
