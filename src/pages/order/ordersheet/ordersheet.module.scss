@@ -37,7 +37,12 @@ section.final_btn {
   display: flex;
   justify-content: center;
   align-items: center;
-  span, div, p{cursor:default;}
+  span, div, p{
+    cursor:default;
+  }
+  span{
+    height: 100%;
+  }
 
   .Wrapper {
     width: rem(760);
@@ -138,6 +143,7 @@ section.final_btn {
       padding: rem(18) 0;
       @include char(l14);
       font-weight: 500;
+      height: 100%;
 
       &:nth-child(1) {
         padding-left: rem(10);
@@ -150,7 +156,6 @@ section.final_btn {
     grid-template-columns: 1fr rem(60) repeat(3, rem(100));
     border-bottom: rem(1) solid var(--color-line-04);
     align-items: center;
-
     text-align: center;
     padding: rem(20) 0;
     @include char(l15);
@@ -167,6 +172,7 @@ section.final_btn {
       display: flex;
       flex-direction: column;
       gap: rem(10);
+
       .recipeName{font-weight:400; color: var(--color-font-sub2)}
       .info_inner {
         @include char(l14);

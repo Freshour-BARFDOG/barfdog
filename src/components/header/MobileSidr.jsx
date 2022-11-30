@@ -259,12 +259,12 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                   <MenuList title={'공지사항'} link={'/community/notice'} />
                   <MenuList title={'이벤트'} link={'/community/event'} />
                   <MenuList title={'자주묻는 질문'} link={'/faq'} />
-                  <MenuList
+                  {isLogin && <MenuList
                     title={'1:1 문의'}
                     contClassName={'ch-open-button'}
                     //onClick={onCloseSidr}
                     link={'/mypage/inquiry'}
-                  />
+                  />}
                   {isLogin && <MenuList title={'로그아웃'} onClick={onLogout} />}
                   <MenuList  />
                 </ul>

@@ -341,7 +341,7 @@ section.tab_slide_box2{padding: 0 0 rem(130)}
     }
   }
   .flex_box2 {
-    
+    height: 100%;
     display: grid;
     grid-template-columns: rem(150) 1fr;
     width: 100%;
@@ -364,7 +364,7 @@ section.tab_slide_box2{padding: 0 0 rem(130)}
     .right {
       @include char(b16);
       color : var(--color-font-sub);
-      
+      height: 100%;
     }
   }
 }

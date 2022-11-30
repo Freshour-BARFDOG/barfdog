@@ -13,6 +13,7 @@
   color: var(--color-font-sub2);
   font-size: rem(14);
   margin-top:rem(10);
+  height: 100%;
   &.general{
     text-align: right;
   }
@@ -61,7 +62,9 @@
     row-gap: rem(24);
     padding: rem(20) 0 rem(60);
     word-break: break-all;
-    
+    span{
+      height: 100%;
+    }
     .desc {
       color: var(--color-font-light);
     }

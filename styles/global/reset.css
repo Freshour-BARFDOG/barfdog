@@ -274,6 +274,10 @@ select {
   padding: 0 10px;
   border: 1px solid #ddd;
   color: #4d4d4d;
+  outline: none;
+}
+select:focus{
+  border-color: var(--color-main);
 }
 
 /* 버튼 초기화 */

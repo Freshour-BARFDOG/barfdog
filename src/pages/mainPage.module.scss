@@ -55,6 +55,7 @@ section.sns {
   font-weight: bold;
   font-size: rem(32);
   color: #000;
+  height: auto;
 }
 
 .subtitle {
@@ -311,6 +312,7 @@ section.sns {
         font-weight: bold;
         position: relative;
         z-index: 1;
+        height: 100%;
       }
 
       h1 {
@@ -319,12 +321,14 @@ section.sns {
         font-weight: bold;
         position: relative;
         z-index: 1;
+        height: 100%;
       }
 
       h3 {
         font-size: rem(16);
         position: relative;
         z-index: 1;
+        height: 100%;
       }
     }
   }
@@ -574,6 +578,7 @@ section.sns {
       font-size: rem(20);
       font-weight: bold;
       margin-bottom: rem(25);
+      height: 100%;
     }
 
     li {
@@ -802,7 +807,8 @@ section.sns {
   //border-radius: rem(12);
   box-sizing: border-box;
   text-align: center;
-  background-image: url("../.././public/img/subscribeBtn1.png") !important;
+  // background-image: url("../.././public/img/subscribeBtn1.png") !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='60' fill='none'%3E%3Cg clip-path='url(%23a)'%3E%3Cpath fill='%23CA1010' fill-rule='evenodd' d='M0 0h240v8c-2.2 0-4 1.8-4 4s1.8 4 4 4v4c-2.2 0-4 1.8-4 4s1.8 4 4 4v4c-2.2 0-4 1.8-4 4s1.8 4 4 4v4c-2.2 0-4 1.8-4 4s1.8 4 4 4v8H0v-8c2.2 0 4-1.8 4-4s-1.8-4-4-4v-4c2.2 0 4-1.8 4-4s-1.8-4-4-4v-4c2.2 0 4-1.8 4-4s-1.8-4-4-4v-4c2.2 0 4-1.8 4-4S2.2 8 0 8V0Z' clip-rule='evenodd'/%3E%3Cpath fill='%23fff' d='M211 40.5h-1v3h1v-3ZM211 34.5h-1v3h1v-3ZM211 28.5h-1v3h1v-3ZM211 46.5h-1v3h1v-3ZM211 22.5h-1v3h1v-3ZM211 10.5h-1v3h1v-3ZM211 16.5h-1v3h1v-3ZM210 52.5V54h1v-1.5h-1ZM210 6v1.5h1V6h-1ZM31 34.5h-1v3h1v-3ZM31 40.5h-1v3h1v-3ZM31 28.5h-1v3h1v-3ZM30 52.5V54h1v-1.5h-1ZM31 46.5h-1v3h1v-3ZM31 16.5h-1v3h1v-3ZM31 10.5h-1v3h1v-3ZM31 22.5h-1v3h1v-3ZM30 6v1.5h1V6h-1Z'/%3E%3C/g%3E%3Cdefs%3E%3CclipPath id='a'%3E%3Cpath fill='%23fff' d='M0 0h240v60H0z'/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-size: rem(240) rem(60);
   background-position: center;
@@ -884,11 +890,13 @@ section.sns {
     .title {
       text-align: center;
       margin-bottom: rem(20);
+      height: 100%;
     }
 
     p {
       text-align: center;
       word-break: keep-all;
+      height: 100%;
     }
   }
 
@@ -924,6 +932,10 @@ section.sns {
         .img-wrap {
           width: rem(375);
           height: rem(375);
+
+          .svg_m{
+            display: none;
+          }
         }
 
         .details {
@@ -2020,6 +2032,14 @@ section.Howtouse {
             .img-wrap {
               width: rem(280);
               height: rem(280);
+
+              .svg_pc{
+                display: none;
+              }
+
+              .svg_m{
+                display: block;
+              }
             }
           }
         }

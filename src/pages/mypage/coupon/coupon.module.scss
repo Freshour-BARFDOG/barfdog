@@ -127,11 +127,14 @@ section.pageline { padding: rem(40) 0 0 0}
 
       
       .line {
-        padding: 0 rem(4);
+        padding: 0 rem(4) rem(1);
         hr {
-          color: var(--color-line-02);
+          // color: var(--color-line-02);
           transform: rotate(90deg);
           width: rem(12);
+          height: rem(1);
+          border: 0;
+          border-top: rem(1) solid var(--color-line-02);
         }
       }
 

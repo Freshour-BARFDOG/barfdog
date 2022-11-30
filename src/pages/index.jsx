@@ -16,6 +16,12 @@ import LeftPic from '/public/img/leftPic.png';
 import midPic from '/public/img/midPic.png';
 import rightPic from '/public/img/rightPic.png';
 import barfPack from '/public/img/barfPack.png';
+import Use01 from '/public/img/pages/home/home_howtouse_1.svg';
+import Use02 from '/public/img/pages/home/home_howtouse_2.svg';
+import Use03 from '/public/img/pages/home/home_howtouse_3.svg';
+import Use01_m from '/public/img/pages/home/home_howtouse_1_m.svg';
+import Use02_m from '/public/img/pages/home/home_howtouse_2_m.svg';
+import Use03_m from '/public/img/pages/home/home_howtouse_3_m.svg';
 import { Swiper_sns } from '/src/components/home/Swiper_sns';
 import { Swiper_review } from '/src/components/home/Swiper_review';
 import { Swiper_recipe } from '/src/components/home/Swiper_recipe';
@@ -412,13 +418,15 @@ export default function MainPage({ data }) {
                   <li data-aos="fade-up" data-aos-delay="0" id="trigger2">
                     <figure className={s.card}>
                       <div className={`${s['img-wrap']} img-wrap`}>
-                        <Image
+                        {/* <Image
                           src={require('/public/img/pages/home/home_howtouse_1.png')}
                           objectFit="cover"
                           layout="fill"
                           alt="카드 이미지"
                           priority
-                        />
+                        /> */}
+                        <Use01 className={s.svg_pc} />
+                        <Use01_m className={s.svg_m} />
                       </div>
                       <div className={s.details}>
                         <p className={s.title_1}>STEP 01</p>
@@ -433,13 +441,16 @@ export default function MainPage({ data }) {
                   <li data-aos="fade-up" data-aos-delay="100" data-aos-anchor="#trigger2" >
                     <figure className={s.card}>
                       <div className={`${s['img-wrap']} img-wrap`}>
-                        <Image
+                        {/* <Image
                           src={require('/public/img/pages/home/home_howtouse_2.png')}
                           objectFit="cover"
                           layout="fill"
                           alt="카드 이미지"
                           priority
-                        />
+                        /> */}
+                        <Use02 className={s.svg_pc} />
+                        <Use02_m className={s.svg_m} />
+
                       </div>
                       <div className={s.details}>
                         <p className={s.title_1}>STEP 02</p>
@@ -455,13 +466,15 @@ export default function MainPage({ data }) {
                   <li data-aos="fade-up" data-aos-delay="100">
                     <figure className={s.card}>
                       <div className={`${s['img-wrap']} img-wrap`}>
-                        <Image
+                        {/* <Image
                           src={require('/public/img/pages/home/home_howtouse_2.png')}
                           objectFit="cover"
                           layout="fill"
                           alt="카드 이미지"
                           priority
-                        />
+                        /> */}
+                        <Use02 className={s.svg_pc} />
+                        <Use02_m className={s.svg_m} />
                       </div>
                       <div className={s.details}>
                         <p className={s.title_1}>STEP 02</p>
@@ -477,13 +490,15 @@ export default function MainPage({ data }) {
                   <li data-aos="fade-up" data-aos-delay="200">
                     <figure className={s.card}>
                       <div className={`${s['img-wrap']} img-wrap`}>
-                        <Image
+                        {/* <Image
                           src={require('/public/img/pages/home/home_howtouse_3.png')}
                           objectFit="cover"
                           layout="fill"
                           alt="카드 이미지"
                           priority
-                        />
+                        /> */}
+                        <Use03 className={s.svg_pc} />
+                        <Use03_m className={s.svg_m} />
                       </div>
                       <div className={s.details}>
                         <p className={s.title_1}>STEP 03</p>
