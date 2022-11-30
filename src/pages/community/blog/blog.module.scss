@@ -99,7 +99,8 @@ section.content_box {
       width: rem(120);
       text-align: center;
       cursor: pointer;
-
+      -webkit-tap-highlight-color: transparent;
+      
       button{
         @include char(l16);
         color: #4d4d4d;

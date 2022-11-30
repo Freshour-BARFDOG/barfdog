@@ -185,6 +185,7 @@ ul{
         select{
           padding: 0 rem(10);
           background-position-x: calc(100% - rem(4));
+          background-position-y: 50%;
           height: rem(44);
         }
         input{

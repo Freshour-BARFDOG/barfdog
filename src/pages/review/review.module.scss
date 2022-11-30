@@ -1,5 +1,5 @@
 @import '/styles/global/guide';
-@import '/styles/global/rem';
+@import '/styles/global/rem.scss';
 
 section.review_title {padding : rem(60) 0 rem(40);}
 .swiper_review_outerWrap {padding : 0 0 rem(70); }
@@ -265,15 +265,17 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
         display: inline-grid;
         //border-bottom: rem(1) solid var(--color-line-04);
         align-items: center;
-        height: auto;
+        // height: auto;
         min-height: rem(72);
-        padding: rem(4) 0;
+        // padding: rem(4) 0;
         @include char(l15);
+        height: 100%;
         
         .content {
           display: flex;
           text-align: start;
           font-size: rem(16);
+
           
           .image{
             width: rem(20);
@@ -485,10 +487,11 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
       }
 
       li{
-        margin-top: rem(10);
       }
 
       .grid_box{
+        padding-top: rem(10);
+
         grid: 
         "mid_box grid_name grid_name"
         "mid_box star_box grid_date"
@@ -537,7 +540,7 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
           grid-column: 1/span 3;
           min-height: rem(40);
           padding-left: 0;
-          border-bottom: rem(1) solid var(--color-line-04);
+          // border-bottom: rem(1) solid var(--color-line-04);
         }
       }
     }
