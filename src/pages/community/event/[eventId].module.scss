@@ -54,7 +54,13 @@ section.btn_box {
     justify-content: center;
     max-width: rem(760);
     width: 100%;
-    > * {width: 100% !important}
+    > * {
+      // width: 100% !important;
+      max-width: rem(760) !important;
+    }
+    img{
+      width: 100% !important;
+    }
   }
 }
 

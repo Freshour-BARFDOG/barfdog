@@ -60,8 +60,14 @@
       gap: rem(20);
       .img-wrap{
         max-width: 100%;
+        
+        display: flex !important;
+        justify-content: flex-start;
         img{
           max-width: 100% !important;
+          width: auto !important;
+          min-width: auto !important;
+          min-height: auto !important;
         }
       }
     }

@@ -186,6 +186,9 @@ section.content_box {
               font-weight: normal;
             }
           }
+          br{
+            display: none;
+          }
         }
         .day {
           @include char(l15);
@@ -212,7 +215,7 @@ section.content_box {
   display: flex;
   justify-content: center;
   padding-top: rem(40);
-  padding-bottom: rem(44);
+  padding-bottom: rem(40);
   .content {
     width: 23%;
     display: flex;

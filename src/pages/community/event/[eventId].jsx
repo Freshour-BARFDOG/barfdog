@@ -108,7 +108,7 @@ export default function EventPostPage({ eventId }) {
                   <Image
                     priority="true"
                     src={url}
-                    // objectFit="contain"
+                    objectFit="cover"
                     layout="fill"
                     alt={`이벤트 상세보기 이미지-${index + 1}`}
                   />

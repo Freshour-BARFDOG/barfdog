@@ -82,6 +82,7 @@ $defaultCenter : 55%;
 
   button:not(:last-child) {
     border-right: rem(1) solid var(--color-line-04);
+    word-break: keep-all;
   }
 }
 
@@ -97,6 +98,12 @@ $defaultCenter : 55%;
   #modal_popup {
     // width: calc(33.333% - #{rem(10)});
     width: 50vh;
+    
+    .btn-section{
+      button{
+        font-size: rem(12);
+      }
+    }
   }
 }
 
