@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { authAction } from '/store/auth-slice';
 import { setCookie } from '/util/func/cookie';
@@ -12,7 +12,12 @@ export default function AuthInterceptor({ CustomProps, children }) {
   const router = useRouter();
   const dispatch = useDispatch();
   const {data, token, EXPIRED_TOKEN, USERTYPE} = CustomProps; // DATA FROM SSR
-  const [DATA, setDATA] = useState( {data, token, EXPIRED_TOKEN, USERTYPE} ); // DATA FROM CLIENT SIDE // 새로고침 이전까지 유지되는 데이터
+  
+  // DATA FROM CLIENT SERVER // 새로고침 이전까지 유지되는 데이터
+  const DATA = useMemo( () => ({data, token, EXPIRED_TOKEN, USERTYPE}), [] );
+  // const [DATA, setDATA] = useState( {data, token, EXPIRED_TOKEN, USERTYPE} );
+  // console.log('DATA : ',  DATA)
+  
   // console.log('SSR >> auth-interceptor.js\n','USER_TYPE: ',data, '\nEXPIRED_TOKEN: ',!token, '\nDATA: ', data)
   // console.log('CRS >> auth-interceptor.js\n','USER_TYPE: ',DATA.USERTYPE, '\nEXPIRED_TOKEN: ',!DATA.EXPIRED_TOKEN, '\nDATA: ', DATA.data)
   //
