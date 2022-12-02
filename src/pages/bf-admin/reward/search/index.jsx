@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useCallback, useState} from 'react';
 import s from '../reward.module.scss';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
@@ -26,14 +26,40 @@ const initialSearchValues = {
 
 function RewardListPage() {
   const getListApiUrl = '/api/admin/rewards';
-  const apiDataQueryString = 'queryAdminRewardsDtoList';
   const searchPageSize = 10;
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
   const [searchValues, setSearchValues] = useState(initialSearchValues);
   const [searchQuery, setSearchQuery] = useState('');
-
-
+  
+  
+  const pageInterceptor = useCallback((res) => {
+    // res = DUMMY__RESPONSE; // ! TEST
+    let newPageInfo = {
+      totalPages: 0,
+      size: 0,
+      totalItems: 0,
+      currentPageIndex: 0,
+      newPageNumber: 1,
+      newItemList: [],
+    };
+    if (res.data._embedded) {
+      const pageData = res.data.page;
+      const itemQuery = 'queryAdminRewardsDtoList';
+      const curItemList = res.data._embedded[itemQuery];
+      newPageInfo = {
+        totalPages: pageData.totalPages, //
+        size: pageData.size, //
+        totalItems: pageData.totalElements, //
+        currentPageIndex: pageData.number, //
+        newPageNumber: pageData.number + 1,
+        newItemList: curItemList,
+      };
+    }
+    
+    return newPageInfo;
+  }, []);
+  
   const onResetSearchValues = () => {
     setSearchValues(initialSearchValue);
   };
@@ -74,7 +100,7 @@ function RewardListPage() {
                 title="조건검색"
                 name="keyword"
                 id="keyword"
-                onSearch={onSearchInputKeydown}
+                events={{onKeydown: onSearchInputKeydown}}
                 options={[
                   { label: '아이디', value: 'email' },
                   { label: '이름', value: 'name' },
@@ -117,9 +143,9 @@ function RewardListPage() {
                 apiURL={getListApiUrl}
                 size={searchPageSize}
                 setItemList={setItemList}
-                queryItemList={apiDataQueryString}
                 urlQuery={searchQuery}
                 setIsLoading={setIsLoading}
+                pageInterceptor={pageInterceptor}
               />
             </div>
           </section>

@@ -82,7 +82,7 @@ function ManageUserPage() {
                 title="회원검색"
                 name="keyword"
                 id="keyword"
-                onSearch={onSearchInputKeydown}
+                events={{onKeydown: onSearchInputKeydown}}
                 options={[
                   { label: '아이디', value: 'email' },
                   { label: '이름', value: 'name' },

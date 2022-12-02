@@ -38,18 +38,6 @@ export default function SearchUserPopup() {
   const [selectedMemberIdList, setSelectedMemberIdList] = useState([]);
   
   
-  console.log(searchQuery)
-  
-  // // ! TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST
-  // const TEST_MEMBERS = useMemberList();
-  
-  // useEffect( () => {
-  //   // setItemList(TEST_MEMBERS.concat(TEST_MEMBERS))
-  //   setItemList(TEST_MEMBERS)
-  // }, [TEST_MEMBERS] );
-  // // ! TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST
-  //
-  //
 
   const onSearchHandler = () => {
     const queryArr = [];
@@ -115,7 +103,7 @@ export default function SearchUserPopup() {
                   className={s.searchBar}
                   searchValue={searchValues}
                   setSearchValue={setSearchValues}
-                  onSearch={onSearchInputKeydown}
+                  events={{onKeydown: onSearchInputKeydown}}
                   title="회원검색"
                   name="keyword"
                   id="keyword"
