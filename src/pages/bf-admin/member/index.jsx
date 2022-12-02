@@ -1,5 +1,5 @@
 import s from './member.module.scss';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
@@ -9,43 +9,59 @@ import SearchTerm from '/src/components/admin/form/searchBar/SearchTerm';
 import SearchTextWithCategory from '/src/components/admin/form/searchBar/SearchTextWithCategory';
 import MemberList from './MemberList';
 import ToolTip from '/src/components/atoms/Tooltip';
-import PaginationWithAPI from "/src/components/atoms/PaginationWithAPI";
-import Spinner from "/src/components/atoms/Spinner";
-import {transformToday} from "/util/func/transformDate";
-import enterKey from "/util/func/enterKey";
-
-
+import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
+import Spinner from '/src/components/atoms/Spinner';
+import { transformToday } from '/util/func/transformDate';
+import enterKey from '/util/func/enterKey';
 
 const initialSearchValues = {
-  email:'',
-  name:'',
+  email: '',
+  name: '',
   from: transformToday(),
-  to:transformToday(),
-}
+  to: transformToday(),
+};
 
 const getListApiUrl = '/api/admin/members';
-const apiDataQueryString = 'queryMembersDtoList';
 const searchPageSize = 10;
 
-
-
-
 function ManageUserPage() {
-
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
   const [searchValue, setSearchValue] = useState(initialSearchValues);
   const [searchQuery, setSearchQuery] = useState('');
-  
-  // console.log(searchValue);
-  // console.log(searchQuery);
-  
+
+  const pageInterceptor = useCallback((res) => {
+    // res = DUMMY__RESPONSE; // ! TEST
+    // console.log('response:', res);
+    let newPageInfo = {
+      totalPages: 0,
+      size: 0,
+      totalItems: 0,
+      currentPageIndex: 0,
+      newPageNumber: 1,
+      newItemList: [],
+    };
+    if (res.data._embedded) {
+      const pageData = res.data.page;
+      const itemQuery = 'queryMembersDtoList';
+      const curItemList = res.data._embedded[itemQuery];
+      newPageInfo = {
+        totalPages: pageData.totalPages,
+        size: pageData.size,
+        totalItems: pageData.totalElements,
+        currentPageIndex: pageData.number,
+        newPageNumber: pageData.number + 1,
+        newItemList: curItemList,
+      };
+    }
+
+    return newPageInfo;
+  }, []);
 
   const onResetSearchValues = () => {
     setSearchValue(initialSearchValues);
   };
-  
-  
+
   const onSearchHandler = () => {
     const queryArr = [];
     for (const key in searchValue) {
@@ -55,13 +71,11 @@ function ManageUserPage() {
     const query = `${queryArr.join('&')}`;
     setSearchQuery(query);
   };
-  
-  
+
   const onSearchInputKeydown = (e) => {
     enterKey(e, onSearchHandler);
   };
-  
-  
+
   return (
     <>
       <MetaTitle title="회원 관리" admin={true} />
@@ -74,7 +88,14 @@ function ManageUserPage() {
                 title={'조회기간'}
                 searchValue={searchValue}
                 setSearchValue={setSearchValue}
-                tooltip={<ToolTip message={'좌측 조회기간은 우측 조회기간보다 과거시점이어야 합니다.'} messagePosition={'left'}/>}
+                tooltip={
+                  <ToolTip
+                    message={
+                      '좌측 조회기간은 우측 조회기간보다 과거시점이어야 합니다.'
+                    }
+                    messagePosition={'left'}
+                  />
+                }
               />
               <SearchTextWithCategory
                 searchValue={searchValue}
@@ -82,7 +103,7 @@ function ManageUserPage() {
                 title="회원검색"
                 name="keyword"
                 id="keyword"
-                events={{onKeydown: onSearchInputKeydown}}
+                events={{ onKeydown: onSearchInputKeydown }}
                 options={[
                   { label: '아이디', value: 'email' },
                   { label: '이름', value: 'name' },
@@ -107,13 +128,18 @@ function ManageUserPage() {
                   <li className={s.table_th}>누적구매금액</li>
                   <li className={s.table_th}>장기미접속</li>
                 </ul>
-                
-  
+
                 {(() => {
                   if (isLoading.fetching) {
-                    return (<><Spinner/></>);
+                    return (
+                      <>
+                        <Spinner />
+                      </>
+                    );
                   } else if (!itemList.length) {
-                    return <AmdinErrorMessage text="조회된 데이터가 없습니다." />;
+                    return (
+                      <AmdinErrorMessage text="조회된 데이터가 없습니다." />
+                    );
                   } else {
                     return (
                       <MemberList
@@ -131,9 +157,9 @@ function ManageUserPage() {
                 apiURL={getListApiUrl}
                 size={searchPageSize}
                 setItemList={setItemList}
-                queryItemList={apiDataQueryString}
                 urlQuery={searchQuery}
                 setIsLoading={setIsLoading}
+                pageInterceptor={pageInterceptor}
               />
             </div>
           </section>
@@ -143,8 +169,5 @@ function ManageUserPage() {
     </>
   );
 }
-
-
-
 
 export default ManageUserPage;
