@@ -9,6 +9,7 @@ import transformDate from '/util/func/transformDate';
 import Spinner from '/src/components/atoms/Spinner';
 import { MoveToNextPrevPage } from '/src/components/common/MoveToNextPrevPage';
 import Image from 'next/image';
+import Link from "next/link";
 
 export default function EventPostPage({ eventId }) {
   const [curPageId, setCurPageId] = useState(Number(eventId));
@@ -116,7 +117,9 @@ export default function EventPostPage({ eventId }) {
               ))}
           </section>
           <section className={s.btn_box}>
-            <div className={s.btn}>목록 보기</div>
+            <Link href={'/community/event'} passHref>
+              <a className={s.btn}>목록 보기</a>
+            </Link>
           </section>
           <MoveToNextPrevPage pageInfo={pageInfo} setCurPageId={setCurPageId} />
         </Wrapper>
