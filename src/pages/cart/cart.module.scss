@@ -26,7 +26,7 @@ section.btn_box { margin : 0 0 rem(206)}
   label {font-size: rem(15)};
   > *{  color: var(--gray10); }
   .inner span{
-
+    
     width: rem(24);
     height: rem(24);
     margin:0;
@@ -58,7 +58,7 @@ section.btn_box { margin : 0 0 rem(206)}
 
 .product_list {
 
-
+  
   .itemList {
     display: grid;
     grid-template-columns: rem(80) rem(120) 1fr rem(250) rem(40) ;
@@ -295,6 +295,10 @@ section.btn_box { margin : 0 0 rem(206)}
           font-size: rem(22);
           font-weight: bold;
         }
+      }
+
+      button{
+        justify-self: flex-end;
       }
     
       .delete_btn{

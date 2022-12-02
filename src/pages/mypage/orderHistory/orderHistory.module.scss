@@ -347,11 +347,13 @@ section.title{ padding : rem(8) 0 rem(30);}
       .mid_box {
         width: 100%;
         max-width: 100%;
+        height: auto;
         top: 0;
         left: 0;
         position: absolute;
         transform: translate(rem(165), rem(-29));
         text-align: left;
+        justify-content: flex-start;
       }
       .right_box {
         width: 100%;

@@ -31,15 +31,30 @@ section.btn_box { padding : 0 0 rem(76)}
 }
 
 .content_box {
-  display: grid;
-  place-items: center;
+  // display: grid;
+  // place-items: center;
   //.picture {
   //  width: 100%;
   //  max-width: rem(780);
   //  aspect-ratio: 0.92/1;
   //  background: rgba(0, 26, 255, 0.2);
   //}
-}
+  // height: 100%;
+
+  .content_text {
+    height: 100%;
+      
+    img{
+      max-width: 100%;
+      width: auto;
+    }
+
+    >p{
+      height: 100%;
+    }
+  }
+  }
+  
 
 .line_box2 {
   .line {

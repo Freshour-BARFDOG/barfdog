@@ -10,7 +10,9 @@
   margin-bottom: rem(10);
   text-align: center;
 }
-
+.upload{
+  -webkit-tap-highlight-color: transparent;
+}
 .preview-wrap {
   width: rem(100);
   margin: 0 auto rem(20);

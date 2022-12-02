@@ -75,9 +75,11 @@ export const OrdersheetItemList = ({form, setForm, isLoading, event = {onActiveM
   
                 <div className={s.title_col}>총 주문금액</div>
                 <div className={s.price_col}>
+                {(item.originalOrderLinePrice !== item.orderLinePrice) && item.orderLinePrice !== 0 && (
                   <div className={s.price_inner}>
                     {transformLocalCurrency( item.originalOrderLinePrice )}원
                   </div>
+                  )}
                   <span>{transformLocalCurrency( item.orderLinePrice )}원</span>
                 </div>
   

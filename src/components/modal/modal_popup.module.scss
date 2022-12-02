@@ -7,7 +7,7 @@ $defaultCenter : 55%;
 #modal_popup {
   // ! z-index: ''; // global zindex에서 관리
   $defaultTop : rem(100);
-  position: fixed;
+  position: absolute;
   top: rem(102);
   background-color: #fff;
   box-sizing: border-box;
@@ -82,6 +82,7 @@ $defaultCenter : 55%;
 
   button:not(:last-child) {
     border-right: rem(1) solid var(--color-line-04);
+    word-break: keep-all;
   }
 }
 
@@ -97,6 +98,12 @@ $defaultCenter : 55%;
   #modal_popup {
     // width: calc(33.333% - #{rem(10)});
     width: 50vh;
+    
+    .btn-section{
+      button{
+        font-size: rem(12);
+      }
+    }
   }
 }
 
@@ -104,6 +111,7 @@ $defaultCenter : 55%;
   #modal_popup {
     width: calc(100% - #{rem(40)});
     box-shadow: none;
+    position: fixed;
 
     &:nth-child(2){
       box-shadow: 0 0 rem(20) rgba(0, 0, 0, 0.15);

@@ -138,7 +138,7 @@ export const Modal_uploadDogProfileImage = ({
         <p className={s.title} data-title={fileObj.uploadMode}>
           프로필 사진 편집
         </p>
-        <label htmlFor="uploadFile">
+        <label className={s.upload} htmlFor="uploadFile">
           <div className={s['preview-wrap']}>
             <PreviewImage
               ratio={1}
