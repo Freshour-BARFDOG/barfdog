@@ -4,36 +4,34 @@ import {deleteCookie, getCookie, setCookie} from "@util/func/cookie";
 
 
 export class SurveyDataClass {
-  cookieName:string = '';
-  dogInfoCookie:string = '';
+  storedDataName:string = '';
   
   constructor () {}
   
   getSurveyCookie (id:number) {
     if(!id) return;
-    // 기존 쿠키에 저장된 설문조사 데이터를 가져온다.
-    const thisUserCookieName= `${'bf-survey'}-${id}`;
-    this.cookieName = thisUserCookieName;
-    const storedCookie = getCookie(thisUserCookieName);
-    if(storedCookie){
-      return this.dogInfoCookie = storedCookie
-    }
+    /*
+     ! 주의: Cookie 사용 & browser 새로고침 => JSON객체의 "String 누실" 이슈 있음.
+     ! ex. {"name":"safari_frd-dog","dogType":"  <---
+    */
+    const targetDataName= `bf-survey-${id}`;
+    this.storedDataName = targetDataName;
+    const storedData = localStorage.getItem(targetDataName) || null;
+    return storedData;
   }
   
   setSurveyCookie (id:number, formValues={}) {
-    // update browerser cookie
     if(id && Object.keys(formValues).length){
-      this.dogInfoCookie = JSON.stringify(formValues);
-      setCookie(this.cookieName, this.dogInfoCookie, 'date', 365);
+      const formStrings = JSON.stringify(formValues).replace(/\n/g,'');
+      localStorage.setItem(this.storedDataName, formStrings);
     }
   }
   
   deleteSurveyCookie (id:number) {
-    const targetCookieId = Number(this.cookieName?.split('-')[2]);
+    const targetCookieId = Number(this.storedDataName?.split('-')[2]);
     if(targetCookieId === id){
-      deleteCookie(this.cookieName);
+      localStorage.removeItem(this.storedDataName);
     }
-    
   }
   
 }
