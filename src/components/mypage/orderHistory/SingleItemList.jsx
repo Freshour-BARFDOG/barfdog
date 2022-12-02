@@ -41,7 +41,7 @@ export const SingleItemList = ({ itemList }) => {
                   </div>
                   <div className={s.text2}>
                     <span>주문번호</span>
-                      <span>{item.orderDto.merchantUid}asdklfjasdlkfjasdklfjasdlkfj</span>
+                      <span>{item.orderDto.merchantUid}</span>
                     <span>결제금액</span>
                       <span>{transformLocalCurrency(item.orderDto.paymentPrice)}원</span>
                   </div>
