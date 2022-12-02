@@ -106,7 +106,7 @@ MyApp.getInitialProps = async (initialProps) => {
       const res_MEMBER_Dashboard = await getDataSSR(req, mypageApiUrl, token);
       const mypageData = res_MEMBER_Dashboard.data;
       // console.log('/api/members => ',memberData);
-      // console.log('/api/mypage => ',mypageData);
+      console.log('/api/mypage => ',mypageData);
       if(mypageData){
         memberDATA = {
           userType: USER_TYPE,
@@ -132,8 +132,10 @@ MyApp.getInitialProps = async (initialProps) => {
           deliveryCount: mypageData.deliveryCount,
           couponCount: mypageData.couponCount,
           dog: {
-            dogName:mypageData.mypageDogDto?.dogName,
-            thumbnailUrl: mypageData.mypageDogDto?.thumbnailUrl || null,
+            dogName:mypageData.mypageRepresentiveDogDto?.dogName || null,
+            thumbnailUrl: mypageData.mypageRepresentiveDogDto?.thumbnailUrl || null,
+            inStock: mypageData.mypageRepresentiveDogDto?.inStock || null,
+            recipeName: mypageData.mypageRepresentiveDogDto?.recipeName || null,
           },
           subscribe:{
             subscribedDogs: mypageData.mypageDogDtoList?.map((dog)=>({

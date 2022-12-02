@@ -119,7 +119,7 @@ export default function Footer() {
           {/*  </li>*/}
           {/*</ul>*/}
           
-          {/* ! 221130 임시로 사용 => KSP 사이트키발급관련 검수로 인함   */}
+          {/* ! 221130 / 221201 임시 내용 추가 => KSP 사이트키발급관련 검수로 인함   */}
           <ul data-lang={'ko'}>
             <li>
               <span className={s.info_title}>상호:</span>
@@ -132,6 +132,10 @@ export default function Footer() {
             <li>
               <span className={s.info_title}>사업자번호:</span>
               <span className={s.info_cont}>486-18-01232</span>
+            </li>
+            <li>
+              <span className={s.info_title}>통신판매신고번호:</span>
+              <span className={s.info_cont}>2020-충북충주-0634</span>
             </li>
             <li>
               <span className={s.info_title}>Email.</span>
