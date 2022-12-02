@@ -163,21 +163,23 @@ export default function CartPage({ data, error }) {
     if (buttonType === 'decrease' && amount <= 1) {
       return alert('수량은 1개 미만으로 설정할 수 없습니다.');
     }
-    const links = curItemData._links;
-    const decreaseApiUrl = links.decrease_basket;
-    const increaseApiUrl = links.increase_basket;
-    const apiUrl = buttonType === 'decrease' ? decreaseApiUrl : increaseApiUrl;
     
+   
     
     try {
       setIsLoading((prevState) => ({
         ...prevState,
         [basketId]: true,
       }));
-      
+     
+      const decreaseApiUrl = `/api/baskets/${basketId}/decrease`;
+      const increaseApiUrl = `/api/baskets/${basketId}/increase`;
+      const apiUrl = buttonType === 'decrease' ? decreaseApiUrl : increaseApiUrl;
+  
       const body = {
         id: basketId,
       };
+  
       const res = await putObjData(apiUrl, body);
       if (res.isDone) {
         const amountUnit =  buttonType === 'decrease' ? 'decrease' : 'increase';
