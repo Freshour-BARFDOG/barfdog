@@ -20,39 +20,51 @@ export default function ManageSubscribePage() {
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
 
-  // console.log(itemList);
+  console.log(itemList);
 
   const pageInterCeptor = async (res) => {
-    // console.log(res);
+    console.log(res);
     // res = DUMMY_SUBSCRIBE_LIST_RESPONSE; // ! TEST
-    const pageData = res.data.page;
-    const curItemList =
-      res.data?._embedded?.querySubscribesDtoList.map((l) => ({
-        recipeNames: l.recipeNames,
-        subscribeDto: {
-          countSkipOneTime: l.subscribeDto.countSkipOneTime,
-          countSkipOneWeek: l.subscribeDto.countSkipOneWeek,
-          discountCoupon: l.subscribeDto.discountCoupon,
-          discountGrade: l.subscribeDto.discountGrade,
-          dogName: l.subscribeDto.dogName,
-          nextPaymentDate: l.subscribeDto.nextPaymentDate,
-          nextPaymentPrice: l.subscribeDto.nextPaymentPrice,
-          pictureUrl: l.subscribeDto.pictureUrl,
-          plan: l.subscribeDto.plan,
-          subscribeId: l.subscribeDto.subscribeId,
-          status: l.subscribeDto.status,
-        },
-      })) || [];
-    console.log(res.data?._embedded);
-
     let newPageInfo = {
-      totalPages: pageData.totalPages,
-      size: pageData.size,
-      totalItems: pageData.totalElements,
-      currentPageIndex: pageData.number,
-      newPageNumber: pageData.number + 1,
-      newItemList: curItemList,
+      totalPages: 0,
+      size: 0,
+      totalItems: 0,
+      currentPageIndex: 1,
+      newPageNumber: 1,
+      newItemList: [],
     };
+  
+    if(res?.data?._embedded){
+      const pageData = res.data.page;
+      const curItemList =
+        res.data?._embedded?.querySubscribesDtoList.map((l) => ({
+          recipeNames: l.recipeNames,
+          subscribeDto: {
+            countSkipOneTime: l.subscribeDto.countSkipOneTime,
+            countSkipOneWeek: l.subscribeDto.countSkipOneWeek,
+            discountCoupon: l.subscribeDto.discountCoupon,
+            discountGrade: l.subscribeDto.discountGrade,
+            dogName: l.subscribeDto.dogName,
+            nextPaymentDate: l.subscribeDto.nextPaymentDate,
+            nextPaymentPrice: l.subscribeDto.nextPaymentPrice,
+            pictureUrl: l.subscribeDto.pictureUrl,
+            plan: l.subscribeDto.plan,
+            subscribeId: l.subscribeDto.subscribeId,
+            status: l.subscribeDto.status,
+          },
+        })) || [];
+      
+  
+      newPageInfo = {
+        totalPages: pageData.totalPages,
+        size: pageData.size,
+        totalItems: pageData.totalElements,
+        currentPageIndex: pageData.number,
+        newPageNumber: pageData.number + 1,
+        newItemList: curItemList,
+      };
+    }
+   
     return newPageInfo;
   };
 
@@ -66,7 +78,6 @@ export default function ManageSubscribePage() {
     }));
   };
 
-  console.log(itemList)
   return (
     <>
       <MetaTitle title="마이페이지 구독관리" />
@@ -196,7 +207,6 @@ export default function ManageSubscribePage() {
                 setItemList={setItemList}
                 setIsLoading={setIsLoading}
                 pageInterceptor={pageInterCeptor}
-                queryItemList={'querySubscribeOrdersDtoList'}
               />
             </section>
           </MypageWrapper>
