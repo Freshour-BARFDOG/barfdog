@@ -1,10 +1,12 @@
 import Arrow from '@public/img/icon/pagination-arrow.svg';
 import DoubleArrow from '@public/img/icon/pagination-double-arrow.svg';
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 import s from './pagination.module.scss';
-import { useRouter } from 'next/router';
-import { getData, postObjData } from '/src/pages/api/reqData';
-import { searchQueryType } from '/store/TYPE/searchQueryType';
+import {useRouter} from 'next/router';
+import {getData, postObjData} from '/src/pages/api/reqData';
+import {searchQueryType} from '/store/TYPE/searchQueryType';
+import {convertSearchQueryPageIndexToPageNumber} from "../../../util/func/convertSearchQueryPageIndexToPageNumber";
+
 
 const Pagination = ({
   apiURL,
@@ -88,12 +90,13 @@ const Pagination = ({
           if (routerDisabled === false) {
             let defSearchQuery = `?page=${Number(calcedPageIndex) + 1}&size=${size}`;
             let searchKeywords = urlQuery ? `${defSearchQuery}&${urlQuery}` : defQuery;
+            const convertedSearchKeyword = convertSearchQueryPageIndexToPageNumber(searchKeywords);
             
             // ! new Ver. (window scroll Y position 유지를 위함)
             window.history.replaceState(
               window.history.state,
               '',
-              `${window.location.pathname}${searchKeywords}`,
+              `${window.location.pathname}${convertedSearchKeyword}`,
             );
             // ! oldVer => router.push사용할 경우, scroll Y position 유지 안 됨
             // await router.push({
