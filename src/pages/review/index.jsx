@@ -67,11 +67,10 @@ export default function ReviewPage({ bestReviewList }) {
 
           <section className={s.notice_text}>
             <div className={s.notice}>
-              상품에 대한 후기를 남기는 공간입니다. <br className={s.notice_br} /> 해당 게시판의
+              <span></span> 상품에 대한 후기를 남기는 공간입니다. <br className={s.notice_br} /> 해당 게시판의
               성격과 다른 글은 사전동의 없이 담당 게시판으로 이동될 수 있습니다.
               <br />
-              배송관련, 주문(취소/교환/환불)관련 문의 및 요청사항은 마이페이지 내 1:1 문의에
-              남겨주시면 빠른 상담이 가능합니다.
+              <span></span> 배송관련, 주문(취소/교환/환불)관련 문의 및 요청사항은 (모바일)마이페이지 내 1:1 문의, (PC) 우측 상단 고객센터에 남겨주시면 빠른 상담이 가능합니다.
             </div>
           </section>
           <section className={s.review_box}>

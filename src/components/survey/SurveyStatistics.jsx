@@ -312,7 +312,7 @@ export const SurveyStatistics = ({ id ,  mode = 'default' }) => {
               <div className={s.left_box}>
                 <p>산책 점수</p>
                 <div className={s.left_box_text}>
-                  상위 {info?.walkingAnalysis?.highRankPercent}%
+                  상위 <br /> {info?.walkingAnalysis?.highRankPercent}%
                 </div>
               </div>
               <div className={s.right_box}>

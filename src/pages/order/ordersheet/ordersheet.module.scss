@@ -514,11 +514,26 @@ section.final_btn {
         flex-direction: column;
         justify-content: center;
         gap: rem(10);
+        position: relative;
+
+        &::after{
+          content: "P";
+          position: absolute;
+          top: 50%;
+          right: rem(10);
+          transform: translateY(-50%);
+          font-size: rem(16);
+        }
 
         input {
           width: 100%;
           height: $inputHeight;
+          padding-right: rem(20);
+        }
 
+        pre {
+          position: absolute;
+          top: calc(100% + 10px);
         }
       }
 

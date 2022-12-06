@@ -166,6 +166,16 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
   .notice {
     @include char(b14);
     color : var(--color-font-sub2);
+    word-break: keep-all;
+
+    span{
+      color: transparent;
+      width: rem(8);
+      height: rem(1);
+      transform: translateY(rem(-5));
+      background-color: #909090;
+      display: inline-block;
+    }
 
     .notice_br {
       display: none;

@@ -170,48 +170,93 @@ export default function MainPage({ data }) {
             <div className={s.inner}>
               <div className={s.scroll}>
               <Controller>
-                <Scene duration={2000} offset={400} pin>
-                  <Tween
-                  from={{
-                    "clip-path": "polygon(50% 0%, 50% 0%, 50% 100%, 50% 100%)"
-                  }}
-                  to={{
-                    "clip-path": "polygon(50% 0%, 0% 0%, 0% 100%, 50% 100%)"
-                  }}
-                  >
-                    <p>CEHCK POINT</p>
-                    <h1>바프독을 선택해야 하는 이유</h1>
-                    <div className={s.image_wrap}>
-                      <Image
-                        src={Halftest}
-                        objectFit="fit"
-                        width={525}
-                        height={520}
-                        alt="카드 이미지"
-                        priority
-                      ></Image>
-                      <ul>
-                        <li>
-                          <div className={s.image_title}>스타터프리미엄</div>
-                          <div className={s.image_sub}>닭고기 & 칠면조</div>
-                        </li>
-                        <li>
-                          <div className={s.image_title}>덕앤램</div>
-                          <div className={s.image_sub}>오리 & 양</div>
-                        </li>
-                        <li>
-                          <div className={s.image_title}>터키앤비프</div>
-                          <div className={s.image_sub}>칠면조 & 소</div>
-                        </li>
-                        <li>
-                          <div className={s.image_title}>램앤비프</div>
-                          <div className={s.image_sub}>양 & 소</div>
-                        </li>
-                      </ul>
-                    </div>
-                    <div className={s.magicbox} />
-                  </Tween>
-                </Scene>
+                  {isMobile ? (
+                    <Scene duration={2000} offset={300} pin>
+                      <Tween
+                      from={{
+                        "clip-path": "polygon(50% 0%, 50% 0%, 50% 100%, 50% 100%)"
+                      }}
+                      to={{
+                        "clip-path": "polygon(50% 0%, 0% 0%, 0% 100%, 50% 100%)"
+                      }}
+                      >
+                        <p>CEHCK POINT</p>
+                        <h1>바프독을 선택해야 하는 이유</h1>
+                        <div className={s.image_wrap}>
+                          <Image
+                            src={Halftest}
+                            objectFit="fit"
+                            width={367}
+                            height={363.5}
+                            alt="카드 이미지"
+                            priority
+                          ></Image>
+                          <ul>
+                            <li>
+                              <div className={s.image_title}>스타터프리미엄</div>
+                              <div className={s.image_sub}>닭고기 & 칠면조</div>
+                            </li>
+                            <li>
+                              <div className={s.image_title}>덕앤램</div>
+                              <div className={s.image_sub}>오리 & 양</div>
+                            </li>
+                            <li>
+                              <div className={s.image_title}>터키앤비프</div>
+                              <div className={s.image_sub}>칠면조 & 소</div>
+                            </li>
+                            <li>
+                              <div className={s.image_title}>램앤비프</div>
+                              <div className={s.image_sub}>양 & 소</div>
+                            </li>
+                          </ul>
+                        </div>
+                        <div className={s.magicbox} />
+                      </Tween>
+                    </Scene>
+                  ) : (
+                    <Scene duration={2000} offset={400} pin>
+                      <Tween
+                      from={{
+                        "clip-path": "polygon(50% 0%, 50% 0%, 50% 100%, 50% 100%)"
+                      }}
+                      to={{
+                        "clip-path": "polygon(50% 0%, 0% 0%, 0% 100%, 50% 100%)"
+                      }}
+                      >
+                        <p>CEHCK POINT</p>
+                        <h1>바프독을 선택해야 하는 이유</h1>
+                        <div className={s.image_wrap}>
+                          <Image
+                            src={Halftest}
+                            objectFit="fit"
+                            width={525}
+                            height={520}
+                            alt="카드 이미지"
+                            priority
+                          ></Image>
+                          <ul>
+                            <li>
+                              <div className={s.image_title}>스타터프리미엄</div>
+                              <div className={s.image_sub}>닭고기 & 칠면조</div>
+                            </li>
+                            <li>
+                              <div className={s.image_title}>덕앤램</div>
+                              <div className={s.image_sub}>오리 & 양</div>
+                            </li>
+                            <li>
+                              <div className={s.image_title}>터키앤비프</div>
+                              <div className={s.image_sub}>칠면조 & 소</div>
+                            </li>
+                            <li>
+                              <div className={s.image_title}>램앤비프</div>
+                              <div className={s.image_sub}>양 & 소</div>
+                            </li>
+                          </ul>
+                        </div>
+                        <div className={s.magicbox} />
+                      </Tween>
+                    </Scene>
+                  )}
               </Controller>
               </div>
             </div>

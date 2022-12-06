@@ -143,7 +143,8 @@ export default function Header() {
             </div>
           )}
         </Wrapper>
-        {/* <TopButton /> */}
+        <TopButton />
+        <TopButtonM />
 
       </header>
       {isMobile && !mypageState.isMyPage && <MobileGnb />}
@@ -199,8 +200,47 @@ function TopButton() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [pageY]);
 
-  return showButton && (
+  return showButton && 
+  /win16|win32|win64|mac|macintel/i.test(navigator.userAgent) && (
     <section className={s.tobox}>
+        <button className={s.topbutton} id="top" onClick={scrollToTop} type="button">
+          <div className={s.image_wrap}>
+            <Topbutton />
+          </div>
+        </button>
+    </section>
+  )
+}
+
+function TopButtonM() {
+  const [showButton, setShowButton] = useState(false);
+  const [pageY, setPageY] = useState(0);
+
+  // 스크롤 최상단 이동
+  const scrollToTop = () => {
+    window.scroll({
+        top: 0,
+        behavior: 'smooth'
+    })
+  }
+
+  // 스크롤 올릴때 나타남
+  useEffect(() => {
+    const handleScroll = () => {
+    const { pageYOffset } = window;
+    const deltaY = pageYOffset - pageY;
+    const showButton = pageYOffset !== 0 && deltaY <= 0;
+    setShowButton(showButton);
+    setPageY(pageYOffset);
+  };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [pageY]);
+
+  return showButton && 
+  /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) && (
+    <section className={s.toboxm}>
         <button className={s.topbutton} id="top" onClick={scrollToTop} type="button">
           <div className={s.image_wrap}>
             <Topbutton />

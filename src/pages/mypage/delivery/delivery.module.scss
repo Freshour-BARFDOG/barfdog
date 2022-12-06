@@ -10,6 +10,10 @@ section.content_body { padding : rem(18) 0 0}
   @include char(t24);
 }
 
+.pagination_box {
+  padding-top: rem(40);
+  padding-bottom : rem(50);
+}
 
 .content_title {
   .flex_box {
