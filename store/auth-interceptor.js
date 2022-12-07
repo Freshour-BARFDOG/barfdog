@@ -14,8 +14,7 @@ export default function AuthInterceptor({ CustomProps, children }) {
   const {data, token, EXPIRED_TOKEN, USERTYPE} = CustomProps; // DATA FROM SSR
   
   // DATA FROM CLIENT SERVER // 새로고침 이전까지 유지되는 데이터
-  const DATA = useMemo( () => ({data, token, EXPIRED_TOKEN, USERTYPE}), [] );
-  // const [DATA, setDATA] = useState( {data, token, EXPIRED_TOKEN, USERTYPE} );
+  const [DATA, setDATA] = useState( {data, token, EXPIRED_TOKEN, USERTYPE} );
   // console.log('DATA : ',  DATA)
   
   // console.log('SSR >> auth-interceptor.js\n','USER_TYPE: ',data, '\nEXPIRED_TOKEN: ',!token, '\nDATA: ', data)

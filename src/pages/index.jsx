@@ -67,7 +67,7 @@ export default function MainPage({ data }) {
     //   }
     // });
     AOS.init();
-  })
+  },[]);
 
   return (
     <>
