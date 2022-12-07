@@ -25,6 +25,7 @@ import Icon_Home from '/public/img/icon/icon-home.svg';
 import {authAction} from '/store/auth-slice';
 import {userType} from '/store/TYPE/userAuthType';
 import {Gnb_my} from "./Gnb_my";
+import { BrowserView, MobileView, isBrowser, isMobile } from 'react-device-detect';
 
 const Modal_subscribeWidhSSR = dynamic(() => import('/src/components/modal/Modal_subscribe'));
 
@@ -144,7 +145,6 @@ export default function Header() {
           )}
         </Wrapper>
         <TopButton />
-        <TopButtonM />
 
       </header>
       {isMobile && !mypageState.isMyPage && <MobileGnb />}
@@ -154,6 +154,8 @@ export default function Header() {
     </>
   );
 }
+
+
 
 
 function TopButton() {
@@ -168,62 +170,6 @@ function TopButton() {
     })
   }
 
-  // 스크롤 0이상일때 항상 나타남
-  // useEffect(() => {
-  //   const handleShowButton = () => {
-  //       if (window.scrollY > 0) {
-  //           setShowButton(true)
-  //       } else {
-  //           setShowButton(false)
-  //       }
-  //   }
-
-  //   console.log(window.scrollY)
-  //   window.addEventListener("scroll", handleShowButton)
-  //   return () => {
-  //       window.removeEventListener("scroll", handleShowButton)
-  //   }
-  // }, [])
-
-  // 스크롤 올릴때 나타남
-  useEffect(() => {
-    const handleScroll = () => {
-    const { pageYOffset } = window;
-    const deltaY = pageYOffset - pageY;
-    const showButton = pageYOffset !== 0 && deltaY <= 0;
-    //const showButton = pageYOffset > 200 && deltaY <= 0;
-    setShowButton(showButton);
-    setPageY(pageYOffset);
-  };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [pageY]);
-
-  return showButton && 
-  /win16|win32|win64|mac|macintel/i.test(navigator.userAgent) && (
-    <section className={s.tobox}>
-        <button className={s.topbutton} id="top" onClick={scrollToTop} type="button">
-          <div className={s.image_wrap}>
-            <Topbutton />
-          </div>
-        </button>
-    </section>
-  )
-}
-
-function TopButtonM() {
-  const [showButton, setShowButton] = useState(false);
-  const [pageY, setPageY] = useState(0);
-
-  // 스크롤 최상단 이동
-  const scrollToTop = () => {
-    window.scroll({
-        top: 0,
-        behavior: 'smooth'
-    })
-  }
-
   // 스크롤 올릴때 나타남
   useEffect(() => {
     const handleScroll = () => {
@@ -238,14 +184,27 @@ function TopButtonM() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [pageY]);
 
-  return showButton && 
-  /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) && (
-    <section className={s.toboxm}>
-        <button className={s.topbutton} id="top" onClick={scrollToTop} type="button">
-          <div className={s.image_wrap}>
-            <Topbutton />
-          </div>
-        </button>
+  
+  return showButton && (
+    <section>
+        <MobileView>
+        <div className={s.toboxm}>
+          <button className={s.topbuttonm} id="top" onClick={scrollToTop} type="button">
+            <div className={s.image_wrap}>
+              <Topbutton />
+            </div>
+          </button>
+        </div>
+        </MobileView>
+        <BrowserView>
+        <div className={s.tobox}>
+          <button className={s.topbutton} id="top" onClick={scrollToTop} type="button">
+            <div className={s.image_wrap}>
+              <Topbutton />
+            </div>
+          </button>
+        </div>
+        </BrowserView>
     </section>
   )
 }
