@@ -80,10 +80,12 @@ export default function BestReviewPage() {
       }
       const apiUrl ='/api/admin/reviews/best/leakedOrder';
       const res = await putObjData(apiUrl, body);
-      if(res.done){
+      console.log('res= ',res);
+      
+      if(res.isDone){
         setItemList(changedOrderList);
       }else {
-        alert('순서를 변경할 수 없습니다.');
+        alert('통신오류: 순서를 변경할 수 없습니다.');
       }
     } catch (err) {
         console.error(err.response);
