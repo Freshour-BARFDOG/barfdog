@@ -25,61 +25,65 @@ import Icon_Home from '/public/img/icon/icon-home.svg';
 import {authAction} from '/store/auth-slice';
 import {userType} from '/store/TYPE/userAuthType';
 import {Gnb_my} from "./Gnb_my";
-import { BrowserView, MobileView, isBrowser, isMobile } from 'react-device-detect';
+import * as DeviceDetect from 'react-device-detect';
 
-const Modal_subscribeWidhSSR = dynamic(() => import('/src/components/modal/Modal_subscribe'));
+const Modal_subscribeWidhSSR = dynamic( () => import('/src/components/modal/Modal_subscribe') );
 
-export default function Header() {
-  const auth = useSelector((state) => state.auth);
+export default function Header () {
+  const auth = useSelector( (state) => state.auth );
   const userData = auth.userInfo;
-
+  
   const router = useRouter();
   const dispatch = useDispatch();
   const curPath = router.asPath;
-  const isMobile = useDeviceState().isMobile;
-
-  const pageInfo = useSelector((state) => state.page);
+  const ds = useDeviceState();
+  const isMobile = ds.isMobile;
+  const mobileDevice = ds.mobileDevice; // # 채널톡 아이콘은 MobileDevice 여부를 판별하여, 크기가 조절된다.
+  // console.log('isMobile',isMobile)
+  // console.log('mobileDevice: ',mobileDevice)
+  //
+  const pageInfo = useSelector( (state) => state.page );
   const pageTitle = pageInfo.pageTitle;
-
-  const [isSidrOpen, setIsSidrOpen] = useState(false);
-  const [mypageState, setMypageState] = useState({ isMyPage: undefined, depth: false });
-
-  useEffect(() => {
-    checkMypagePath(curPath);
-  }, [curPath]);
-
+  
+  const [isSidrOpen, setIsSidrOpen] = useState( false );
+  const [mypageState, setMypageState] = useState( {isMyPage: undefined, depth: false} );
+  
+  useEffect( () => {
+    checkMypagePath( curPath );
+  }, [curPath] );
+  
   const checkMypagePath = () => {
-    const isCurPathMypage = curPath.split('/')[1] === 'mypage';
-    setMypageState((prevState) => ({
+    const isCurPathMypage = curPath.split( '/' )[1] === 'mypage';
+    setMypageState( (prevState) => ({
       ...prevState,
       isMyPage: isCurPathMypage,
-    }));
-    if (isCurPathMypage) {
-      const mypageDepth1 = curPath.split('/')[2] && 1;
-      const mypageDepth2 = curPath.split('/')[3] && 2;
-      setMypageState((prevState) => ({
+    }) );
+    if ( isCurPathMypage ) {
+      const mypageDepth1 = curPath.split( '/' )[2] && 1;
+      const mypageDepth2 = curPath.split( '/' )[3] && 2;
+      setMypageState( (prevState) => ({
         ...prevState,
         depth: mypageDepth2 || mypageDepth1,
-      }));
+      }) );
     }
   };
   // console.log(userData)
-
+  
   const returnToPrevPage = () => {
     router.back();
   };
-
+  
   const onAdminLogout = () => {
-    dispatch(authAction.adminLogout());
+    dispatch( authAction.adminLogout() );
   };
-
+  
   const onMemberLogout = () => {
-    dispatch(authAction.logout());
+    dispatch( authAction.logout() );
   };
-
+  
   // ! 사용목적: isMobile상태로인해 , '랜더링 되었다가 사라지는 component'를 애초에 랜더링하지 않게하기 위함
-  if (isMobile === null) return;
-
+  if ( isMobile === null ) return;
+  
   return (
     <>
       <header id={s.site_header}>
@@ -90,11 +94,11 @@ export default function Header() {
                 {mypageState.depth === 1 ? (
                   <Link href="/" passHref>
                     <a>
-                      <Icon_Home />
+                      <Icon_Home/>
                     </a>
                   </Link>
                 ) : (
-                  <IoIosArrowBack size={26} onClick={returnToPrevPage} />
+                  <IoIosArrowBack size={26} onClick={returnToPrevPage}/>
                 )}
               </span>
               <span className={s['title-wrap']}>{pageTitle}</span>
@@ -106,8 +110,8 @@ export default function Header() {
             <div className={s.headerContainer}>
               <section id="account" className={`${s.account_area} pc`}>
                 <ul>
-                  {userData ? <MemberMemu data={userData} /> : <Non_MemberMenu />}
-                  {userData?.userType !== userType.ADMIN && <ServiceCenter data={{auth: userData}} />}
+                  {userData ? <MemberMemu data={userData}/> : <Non_MemberMenu/>}
+                  {userData?.userType !== userType.ADMIN && <ServiceCenter data={{auth: userData}}/>}
                   {userData && (
                     <button
                       type={'button'}
@@ -126,9 +130,9 @@ export default function Header() {
                   <a>
                     {isMobile ? (
                       // <Image src={MobileLogo} srcSet={MobileLogo_2x} alt="사이트 로고" priority />
-                      <MobileLogo />
+                      <MobileLogo/>
                     ) : (
-                      <Image src={Logo} srcSet={Logo_2x} alt="사이트 로고" priority />
+                      <Image src={Logo} srcSet={Logo_2x} alt="사이트 로고" priority/>
                     )}
                   </a>
                 </Link>
@@ -136,75 +140,89 @@ export default function Header() {
               <section className={`${s.gnb_area}`}>
                 <nav id="gnb" className={`${s.gnb_nav} pc`}>
                   <ul>
-                    <PcGnb />
+                    <PcGnb/>
                   </ul>
                 </nav>
-                <Gnb_my isMobile={isMobile} setSidrOpen={setIsSidrOpen} authData={auth} />
+                <Gnb_my isMobile={isMobile} setSidrOpen={setIsSidrOpen} authData={auth}/>
               </section>
             </div>
           )}
         </Wrapper>
-        <TopButton />
-
+        <TopButton mobileDevice={mobileDevice}/>
+      
       </header>
-      {isMobile && !mypageState.isMyPage && <MobileGnb />}
-      {isMobile && <MobileSidr isOpen={isSidrOpen} setSidrOpen={setIsSidrOpen} />}
-      <Modal_subscribeWidhSSR />
-     
+      {isMobile && !mypageState.isMyPage && <MobileGnb/>}
+      {isMobile && <MobileSidr isOpen={isSidrOpen} setSidrOpen={setIsSidrOpen}/>}
+      <Modal_subscribeWidhSSR/>
+    
     </>
   );
 }
 
 
-
-
-function TopButton() {
-  const [showButton, setShowButton] = useState(false);
-  const [pageY, setPageY] = useState(0);
-
+function TopButton ({mobileDevice}) {
+  const [showButton, setShowButton] = useState( false );
+  const [pageY, setPageY] = useState( 0 );
+  
+  // * 모바일 아이콘크키: iPad Air, iPad Mini, Surface Pro7  (820x1180)에서는 두 가지 방법모두 크기 싱크가 맞지 않음
+  // * react-device-detect: Nest Hub 상태에서 작동하지 않는 이슈있음
+  
+  // console.log( 'isMobileByWinWidth = ', DeviceDetect.isMobile )
+  // console.log( 'isMobileLib = ', isMobileDevice )
   // 스크롤 최상단 이동
   const scrollToTop = () => {
-    window.scroll({
-        top: 0,
-        behavior: 'smooth'
-    })
+    window.scroll( {
+      top: 0,
+      behavior: 'smooth'
+    } )
   }
-
-  // 스크롤 올릴때 나타남
-  useEffect(() => {
-    const handleScroll = () => {
-    const { pageYOffset } = window;
-    const deltaY = pageYOffset - pageY;
-    const showButton = pageYOffset !== 0 && deltaY <= 0;
-    setShowButton(showButton);
-    setPageY(pageYOffset);
-  };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [pageY]);
-
   
+  // 스크롤 올릴때 나타남
+  useEffect( () => {
+    const handleScroll = () => {
+      const {pageYOffset} = window;
+      const deltaY = pageYOffset - pageY;
+      const showButton = pageYOffset !== 0 && deltaY <= 0;
+      setShowButton( showButton );
+      setPageY( pageYOffset );
+      
+    };
+    
+    window.addEventListener( 'scroll', handleScroll );
+    return () => window.removeEventListener( 'scroll', handleScroll );
+  }, [pageY] );
+  
+  
+  /*BrowserView, MobileView, isBrowser, isMobile*/
   return showButton && (
     <section>
-        <MobileView>
+      <DeviceDetect.MobileView>
         <div className={s.toboxm}>
           <button className={s.topbuttonm} id="top" onClick={scrollToTop} type="button">
             <div className={s.image_wrap}>
-              <Topbutton />
+              <Topbutton/>
             </div>
           </button>
         </div>
-        </MobileView>
-        <BrowserView>
+      </DeviceDetect.MobileView>
+      <DeviceDetect.BrowserView>
         <div className={s.tobox}>
           <button className={s.topbutton} id="top" onClick={scrollToTop} type="button">
             <div className={s.image_wrap}>
-              <Topbutton />
+              <Topbutton/>
             </div>
           </button>
         </div>
-        </BrowserView>
+      </DeviceDetect.BrowserView>
+      
+      <div className={`${s.custom} ${mobileDevice ? s.toboxm : s.tobox}`}>
+        <button className={s.topbuttonm} id="top" onClick={scrollToTop} type="button">
+          <div className={s.image_wrap}>
+            <Topbutton/>
+          </div>
+        </button>
+      </div>
+    
     </section>
   )
 }
