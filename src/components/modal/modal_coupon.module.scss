@@ -245,6 +245,10 @@
 
   .modal {
     .title_box {
+      &::after{
+        display: none;
+      }
+
       .title {
         display: grid;
         grid-template-columns: 1fr;

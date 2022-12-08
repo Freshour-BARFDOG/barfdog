@@ -51,6 +51,7 @@ $bottom-menu-list-height: rem(50);
     height: calc(100vh - #{$main-padding}* 1 - #{$closeButtonSectionHeight});
     box-sizing: border-box;
     padding-bottom: $bottom-menu-list-height;
+    overflow-x: hidden;
   }
   .login-section{
     padding-top: rem(44);

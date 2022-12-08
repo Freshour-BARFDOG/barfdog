@@ -156,17 +156,20 @@ section.content_box {
       grid-template-columns: 1fr rem(240);
       align-items: flex-start;
       gap: rem(40);
-
       padding: rem(20) rem(20);
 
       .left_box {
         padding-top: rem(12);
+        height: 100%;
+        position: relative;
+
         > p {
           @include char(l15);
           font-weight: 600;
           color: var(--color-font-sub);
-
           padding-bottom: rem(8);
+          height: 100%;
+          display: inline;
         }
         .article_title {
           @include char(t20);
@@ -194,6 +197,8 @@ section.content_box {
           @include char(l15);
           color: var(--color-font-sub2);
           // padding-bottom: rem(30);
+          position: absolute;
+          bottom: rem(10);
         }
       }
 
@@ -389,6 +394,7 @@ section.content_box {
           .day {
             font-size: rem(14);
             padding-bottom: 0;
+            bottom: 0;
           }
         }
         .right_box {

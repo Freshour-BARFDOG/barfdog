@@ -362,17 +362,28 @@ $container-maxWidth: rem(960);
       display: flex;
       align-items: center;
       // padding: rem(9) 0;
-      > *:not(:last-child){margin-right:rem(10);}
+      > *:not(:last-child){margin-right:rem(10); word-break: keep-all;}
       span {
         @include char(l15);
         color: #4d4d4d;
       }
       em{
         max-width:rem(230);
+        word-break: keep-all;
         
         > br {
           display: none;
         }
+      }
+    
+    }
+    &:last-child{
+      .right_text{
+        display: grid;
+      }
+
+      p{
+        margin-right: rem(5) !important;
       }
     }
     .left_text {
@@ -547,6 +558,10 @@ $container-maxWidth: rem(960);
 
           .left_box_text {
             font-size: rem(20);
+
+            br{
+              display: none;
+            }
           }
         }
 
