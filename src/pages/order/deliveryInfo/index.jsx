@@ -1,59 +1,56 @@
-import React, { useEffect, useState } from 'react';
+import React, {useMemo, useEffect, useState} from 'react';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import s from './deliveryInfo.module.scss';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useSelector } from 'react-redux';
-import { subscribePlanType } from '/store/TYPE/subscribePlanType';
-import { useRouter } from 'next/router';
-import { calcNextSubscribeDeliveryDate } from '/util/func/calcNextSubscribeDeliveryDate';
-import { FullScreenRunningDog } from '/src/components/atoms/FullScreenLoading';
+import {useSelector} from 'react-redux';
+import {subscribePlanType} from '/store/TYPE/subscribePlanType';
+import {useRouter} from 'next/router';
+import {calcNextSubscribeDeliveryDate} from '/util/func/calcNextSubscribeDeliveryDate';
+import {FullScreenRunningDog} from '/src/components/atoms/FullScreenLoading';
 import {transformToday} from "/util/func/transformDate";
 
-export default function DeliveryInfoPage() {
+export default function DeliveryInfoPage () {
   const loadingDuration = 1800; // ms
   const router = useRouter();
-  const cart = useSelector((state) => state.cart);
-  const subscriberOrderInfo = cart.subscribeOrder;
-  const [isLoading, setIsLoading] = useState({ nextPage: true }); // boolean
-  const [info, setInfo] = useState(subscriberOrderInfo);
-  // console.log(info)
-
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoading({ nextPage: false });
-    }, loadingDuration);
-    if (!cart.subscribeOrder.subscribeId && typeof window !== 'undefined') {
+  const cart = useSelector( (state) => state.cart );
+  const info = useMemo( () => cart.subscribeOrder, [] );
+  const [isLoading, setIsLoading] = useState( {nextPage: true} ); // boolean
+  console.log( info );
+  
+  useEffect( () => {
+    // # validation : Has Subscribe Info.
+    if ( !info.subscribeId && typeof window !== 'undefined' ) {
+      alert( '주문정보를 확인할 수 없습니다.' );
       return (window.location.href = '/');
     }
-  }, [cart]);
-  /// 60
-
-  // console.log('Subscribe Order Information: ', cart.subscribeOrder);
-
+    
+    setTimeout( () => {
+      setIsLoading( {nextPage: false} );
+    }, loadingDuration );
+  }, [] );
+  
   const onNextPage = async () => {
-    setIsLoading({ nextPage: true });
-    setTimeout(() => {
-      if (info.subscribeId) {
-        router.push( `/order/ordersheet/subscribe/${info.subscribeId}`);
-        // - router.push() => 라우터 적용 시, '자동'으로 setIsLoading 초기화
-        // setIsLoading({ nextPage: false });
-     
+    setIsLoading( {nextPage: true} );
+    setTimeout( () => {
+      if ( info.subscribeId ) {
+        router.push( `/order/ordersheet/subscribe/${info.subscribeId}` );
       } else {
         // console.error('there is no Subscribe ID', info.subscribeId);
-        alert('주문정보를 확인할 수 없습니다.');
+        alert( '주문정보를 확인할 수 없습니다.' );
         window.location.href = '/';
       }
-    }, loadingDuration);
+    }, loadingDuration );
   };
-
+  
+  
   return (
     <>
-      <MetaTitle title={`정기구독 배송안내`} />
+      <MetaTitle title={`정기구독 배송안내`}/>
       {isLoading?.nextPage ? (
-        <FullScreenRunningDog opacity={1} />
+        <FullScreenRunningDog opacity={1}/>
       ) : (
         <Layout>
           <Wrapper>
@@ -62,35 +59,35 @@ export default function DeliveryInfoPage() {
                 <div className={s.title}>- 정기구독 배송안내 -</div>
                 <div className={s.text_row2}>고객님의 정기구독 발송 예정일은</div>
                 <div className={s.text_row2}>
-                  <span>{calcNextSubscribeDeliveryDate(transformToday(), '월일')}</span> 입니다.
+                  <span>{calcNextSubscribeDeliveryDate( transformToday(), '월일' )}</span> 입니다.
                 </div>
-                <div className={s.text_row3}>
-                  (선택하신 <em>{subscribePlanType[info?.plan]?.KOR}</em>은 하루
+                {info.plan && <div className={s.text_row3}>
+                  (선택하신 <em>{subscribePlanType[info.plan].KOR}</em>은 하루
                   <em>
-                    {subscribePlanType[info?.plan]?.numberOfPacksPerDay === 1
+                    {subscribePlanType[info.plan].numberOfPacksPerDay === 1
                       ? '한'
-                      : subscribePlanType[info?.plan]?.numberOfPacksPerDay === 2
-                      ? '두'
-                      : '세'}
+                      : subscribePlanType[info.plan].numberOfPacksPerDay === 2
+                        ? '두'
+                        : '세'}
                     끼
                   </em>
-                  기준, <em>{subscribePlanType[info?.plan]?.weeklyPaymentCycle}</em>주마다 정기
+                  기준, <em>{subscribePlanType[info.plan].weeklyPaymentCycle}</em>주마다 정기
                   배송됩니다.)
-                </div>
+                </div>}
               </div>
             </section>
             <section className={s.image_box}>
               <div className={`${s.image} img-wrap`}>
                 <Image
                   priority
-                  src={require('public/img/mypage/delivery_schedule.png')}
+                  src={require( 'public/img/mypage/delivery_schedule.png' )}
                   objectFit="cover"
                   layout="fill"
                   alt="카드 이미지"
                 />
               </div>
             </section>
-
+            
             <section className={s.mid_content}>
               <div className={s.mid_content_title}>- 주의사항 -</div>
               <div className={s.mid_content_box}>
@@ -98,7 +95,7 @@ export default function DeliveryInfoPage() {
                   <div className={`${s.image} img-wrap`}>
                     <Image
                       priority
-                      src={require('public/img/mypage/delivery_precautions_1.png')}
+                      src={require( 'public/img/mypage/delivery_precautions_1.png' )}
                       objectFit="cover"
                       layout="fill"
                       alt="카드 이미지"
@@ -106,37 +103,37 @@ export default function DeliveryInfoPage() {
                   </div>
                   <div className={s.mid_content_inner_box_text}>냉동보관</div>
                   <div className={s.mid_content_inner_box_text2}>
-                    식사는 도착 후 바로 <br />
+                    식사는 도착 후 바로 <br/>
                     냉동 보관해주세요
                   </div>
                 </div>
-
+                
                 <div className={s.mid_content_inner_box}>
                   <div className={`${s.image} img-wrap`}>
                     <Image
                       priority
-                      src={require('public/img/mypage/delivery_precautions_2.png')}
+                      src={require( 'public/img/mypage/delivery_precautions_2.png' )}
                       objectFit="cover"
                       layout="fill"
                       alt="카드 이미지"
                     />
                   </div>
-
+                  
                   <div className={s.mid_content_inner_box_text}>하루 전 해동</div>
                   <div className={s.mid_content_inner_box_text2}>
                     급여 하루 전 냉장실 해동
-                    <br />
+                    <br/>
                     또는 급여 전 미지근한 물로
-                    <br />
+                    <br/>
                     해동해주세요
                   </div>
                 </div>
-
+                
                 <div className={s.mid_content_inner_box}>
                   <div className={`${s.image} img-wrap`}>
                     <Image
                       priority
-                      src={require('public/img/mypage/delivery_precautions_3.png')}
+                      src={require( 'public/img/mypage/delivery_precautions_3.png' )}
                       objectFit="cover"
                       layout="fill"
                       alt="카드 이미지"
@@ -144,16 +141,16 @@ export default function DeliveryInfoPage() {
                   </div>
                   <div className={s.mid_content_inner_box_text}>재냉동 금지</div>
                   <div className={s.mid_content_inner_box_text2}>
-                    한번 해동된 식사는 <br />
+                    한번 해동된 식사는 <br/>
                     재냉동하지 말아주세요
                   </div>
                 </div>
-
+                
                 <div className={s.mid_content_inner_box}>
                   <div className={`${s.image} img-wrap`}>
                     <Image
                       priority
-                      src={require('public/img/mypage/delivery_precautions_4.png')}
+                      src={require( 'public/img/mypage/delivery_precautions_4.png' )}
                       objectFit="cover"
                       layout="fill"
                       alt="카드 이미지"
@@ -162,16 +159,16 @@ export default function DeliveryInfoPage() {
                   <div className={s.mid_content_inner_box_text}>보관시간</div>
                   <div className={s.mid_content_inner_box_text2}>
                     30시간 이상 지난제품은
-                    <br />
+                    <br/>
                     급여하지 마시고 폐기해주세요
                   </div>
                 </div>
-
+                
                 <div className={s.mid_content_inner_box}>
                   <div className={`${s.image} img-wrap`}>
                     <Image
                       priority
-                      src={require('public/img/mypage/delivery_precautions_5.png')}
+                      src={require( 'public/img/mypage/delivery_precautions_5.png' )}
                       objectFit="cover"
                       layout="fill"
                       alt="카드 이미지"
@@ -180,25 +177,25 @@ export default function DeliveryInfoPage() {
                   <div className={s.mid_content_inner_box_text}>유통기한</div>
                   <div className={s.mid_content_inner_box_text2}>
                     유통기한은 제조일로부터
-                    <br />
+                    <br/>
                     3개월입니다
                   </div>
                 </div>
               </div>
             </section>
-
+            
             <section className={s.image_box2}>
               <div className={`${s.image} img-wrap`}>
                 <Image
                   priority
-                  src={require('public/img/mypage/delivery_package.png')}
+                  src={require( 'public/img/mypage/delivery_package.png' )}
                   objectFit="cover"
                   layout="fill"
                   alt="카드 이미지"
                 />
               </div>
             </section>
-
+            
             <section className={s.btn_section}>
               <div className={s.box_btn}>
                 <Link href={'/'} passHref>
