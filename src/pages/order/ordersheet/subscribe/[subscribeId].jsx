@@ -162,10 +162,9 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
           discountCoupon: 0, // 쿠폰 적용으로 인한 할인금
           paymentPrice: info.subscribeDto.nextPaymentPrice, // 최종 결제 금액
           paymentMethod: null, // 결제방법  [CREDIT_CARD, NAVER_PAY, KAKAO_PAY]
-          // ! TEST CODE
-          nextDeliveryDate: getDiffDate(1), // !테스트로,  1일 이후 배송이 시작되는 것으로 설정함 (221020)
-          // ! PRODUCT CODE
-          // nextDeliveryDate: calcNextSubscribeDeliveryDate(transformToday(), null), // 배송 예정일 'yyyy-MM-dd', 첫 결제 배송날짜는 프론트에서 넘어온 값으로 저장함
+          // nextDeliveryDate: getDiffDate(1), // ! TEST CODE :  테스트로, 1일 이후 배송이 시작되는 것으로 설정함 (221020)
+          //   ! PRODUCT CODE
+          nextDeliveryDate: calcNextSubscribeDeliveryDate(transformToday(), null), // 배송 예정일 'yyyy-MM-dd', 첫 결제 배송날짜는 프론트에서 넘어온 값으로 저장함
           agreePrivacy: false, // 개인정보 제공 동의
           brochure: false, // 브로슈어 수령여부
         };
