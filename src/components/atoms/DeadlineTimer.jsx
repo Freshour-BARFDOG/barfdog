@@ -2,9 +2,52 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import rem from '/util/func/rem';
 import zIndex from '/styles/module/zIndex.module.scss';
-import CloseButton from './CloseButton';
 import useDeviceState from "/util/hook/useDeviceState";
 import Favicon from '/public/img/icon/favicon.svg'
+import {orderDeadLineTimeStamp} from "/util/func/setOrderDeadLineTimeStamp";
+
+
+const Dealine_timer = ({ className }) => {
+  const [message, setMessage] = useState(null);
+  const [isVisible, setIsVisible] = useState(true);
+  const deviceState = useDeviceState();
+  const isMobile = deviceState.isMobile;
+  const deviceWidth = deviceState.deviceWidth;
+  
+  useEffect( () => {
+    setTimeout( () => {
+      setMessage( orderDeadLineTimeStamp() )
+    }, 1000 );
+  } );
+  
+  
+
+  const onHideHandler = () => {
+    setIsVisible(false);
+  };
+
+  return (
+    <>
+      {isVisible && (
+        <Wrap
+          onClick={onHideHandler}
+          id="deadline_timer"
+          className={`${zIndex['gnb-subscribe-timer']} ${deviceWidth < 380 && 'scroll-container'} flex-wrap ${className ? className : ''}`}
+        >
+          {isMobile && <IconWrap><Favicon /></IconWrap>}
+          <Text>정기구독배송</Text>
+          <Timer id="deadline">
+            {message}
+          </Timer>
+          <NormalText> 이후 주문 마감!</NormalText>
+          {!isMobile &&<Rect className="rect" />}
+        </Wrap>
+      )}
+    </>
+  );
+};
+
+export default Dealine_timer;
 
 
 
@@ -38,13 +81,6 @@ const Timer = styled.span`
   font-weight: 400;
   width: ${rem(88)};
   text-align: left;
-`;
-
-const ButtonWrap = styled.span`
-  position: absolute;
-  left:${rem(20)};
-  top:50%;
-  transform:translateY(-50%);
 `;
 
 
@@ -98,110 +134,3 @@ const Wrap = styled.div`
     *{font-size: inherit;}
   }
 `;
-
-
-const Dealine_timer = ({ className }) => {
-  const [message, setMessage] = useState('');
-  const [isVisible, setIsVisible] = useState(true);
-  const deviceState = useDeviceState();
-  const isMobile = deviceState.isMobile;
-  const deviceWidth = deviceState.deviceWidth;
-
-
-  useEffect(() => {
-    setTimeout(() => {
-      setMessage(new Date().deliveryDeadline());
-    }, 1000);
-  });
-
-
-  const onHideHandler = () => {
-    setIsVisible(false);
-  };
-
-  return (
-    <>
-      {isVisible && (
-        <Wrap
-          onClick={onHideHandler}
-          id="deadline_timer"
-          className={`${zIndex['gnb-subscribe-timer']} ${deviceWidth < 380 && 'scroll-container'} flex-wrap ${className ? className : ''}`}
-        >
-          {/*{isMobile && <ButtonWrap><CloseButton lineColor={'#fff'}/></ButtonWrap>}*/}
-          {isMobile && <IconWrap><Favicon /></IconWrap>}
-          <Text>정기구독배송</Text>
-          <Timer id="deadline">{message}</Timer>
-          <NormalText> 이후 주문 마감!</NormalText>
-          {!isMobile &&<Rect className="rect" />}
-        </Wrap>
-      )}
-    </>
-  );
-};
-
-export default Dealine_timer;
-
-
-
-
-
-
-
-
-Date.prototype.deliveryDeadline = function () {
-  const today = new Date().getDay();
-  let d_Day;
-  switch (today) {
-    case 0: // 일
-      d_Day = 5;
-      break;
-    case 1: // 월
-      d_Day = 4;
-      break;
-    case 2:
-      d_Day = 3;
-      break;
-    case 3:
-      d_Day = 2;
-      break;
-    case 4:
-      d_Day = 1;
-      break;
-    case 5:
-      d_Day = 0; // 주문마감시간: 매주 금요일 23:59:59
-      break;
-    case 6:
-      d_Day = 6;
-      break;
-  }
-
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth();
-  const date = now.getDate();
-  const nextDate = date + d_Day + 1;
-  //279141초 = 3600*24 (일) + 3600 (시간)  + 60 (분) +
-
-  let DEADLINE = new Date(year, month, nextDate) || '';
-  const gap = Math.floor((DEADLINE.getTime() - now.getTime()) / 1000);
-
-  if (gap < 0) return;
-
-  // 나머지를 올림해서, 변환
-  const day = d_Day;
-  const hour = Math.floor((gap % (60 * 60 * 24)) / (60 * 60));
-  const min = Math.floor((gap % (60 * 60)) / 60);
-  const sec = Math.floor(gap % 60);
-  
-  DEADLINE = `${day}일 ${convertNum(hour)}:${convertNum(min)}:${convertNum(sec)}`;
-  return DEADLINE;
-};
-
-
-function convertNum(num) {
-  let result = num < 10 ? '0' + num.toString() : num.toString();
-  return result;
-}
-
-
-
