@@ -12,7 +12,7 @@ import {subscribePlanType} from "/store/TYPE/subscribePlanType";
 import transformDate, {transformToday} from "/util/func/transformDate";
 import {calcChangedSubscribeDeliveryDate} from "/util/func/calcNextSubscribeDeliveryDate";
 import {subscribeSkipType} from "/store/TYPE/subscribeSkipType";
-import {getDiffDateNumber} from "../../../util/func/getDiffDate";
+import {getDiffDateNumber} from "/util/func/getDiffDate";
 
 
 
@@ -118,7 +118,7 @@ export const SubscribeSkipPayment = ({subscribeInfo}) => {
           <div className={`${s.image} img-wrap`}>
             <Image
               priority={false}
-              src={require('public/img/mypage/subscribe/dogldx/subscribe_ldx_slide4.png')}
+              src={require('public/img/mypage/delivery_schedule.png')}
               objectFit="cover"
               layout="fill"
               alt="배송 안내 이미지"
@@ -128,7 +128,7 @@ export const SubscribeSkipPayment = ({subscribeInfo}) => {
 
         
         <div className={s.btn_box}>
-          {/*  오늘과 다음 결제예정일 비교 ==> 5일이내일 경우 구독버튼 나타남 */}
+          {/*  오늘과 다음 결제예정일 비교 ==> 5일 이내일 경우 구독 버튼 나타남 */}
           {isAvailableSubscribeSkipping(subscribeInfo.info.nextPaymentDate) ? <button type={'button'} className={s.btn} onClick={()=>{
             setActiveConfirmModal(true);
           }}>건너뛰기 적용하기</button> : <span className={'pointColor'}>건너뛰기는 다음 결제 5일 전부터 가능합니다.</span>}
@@ -139,7 +139,7 @@ export const SubscribeSkipPayment = ({subscribeInfo}) => {
           const selectedIndex =  inputIdList.indexOf(skipCount);
           const skipMethodName = inputLabelList.filter((label,index)=>index === selectedIndex)[0];
           const skipWeeklyCount = inputIdList[selectedIndex].split('-')[1];
-          return `건너뛰기 해지는 구독취소후 재결제해야합니다.\n정말 ${skipMethodName}(${skipWeeklyCount}주)를 적용하시겠습니까?`;
+          return `건너뛰기는 되돌리기 불가능한 서비스입니다.\n정말 ${skipMethodName}(${skipWeeklyCount}주)를 적용하시겠습니까?`;
         })()}`} isConfirm={onSubmit} positionCenter option={{wordBreak: true}} />
       )}
       {/*{tbContext.visible && (*/}
