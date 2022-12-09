@@ -213,14 +213,6 @@ export const SubscribeGram = ({ subscribeInfo }) => {
       {activeConfirmModal && (
         <Modal_confirm text={`무게 변경을 적용하시겠습니까?`} isConfirm={onSubmit} positionCenter />
       )}
-      
-      {/* ! Header에 존재하는 Global Alert를 공통하는 방식으로 변경하여서,아래 코드 주석처리함 // 추후에 에러없을 경우 삭제해도 무방*/}
-      {/*{tbContext.visible && (*/}
-      {/*  <Modal_global_alert*/}
-      {/*    onClick={submitted ? onSuccessChangeSubscribeOrder : mct.alertHide}*/}
-      {/*    background*/}
-      {/*  />*/}
-      {/*)}*/}
     </>
   );
 };
