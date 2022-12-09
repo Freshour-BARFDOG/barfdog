@@ -70,7 +70,13 @@ export const validateInBundleDelivery = (obj) => {
 
 const valid_paymentPrice = (val) =>{
   let error='';
-  const minPaymentPrice = 100; // ! 결제금액이 100원보다 작을 경우 > iamport api 결제 에러 발생함.
+  //
+  // * 결제금액 0원 가능 조건: "customer_uid" 필요
+  // ! => 아임포트 에러메시지: "결제요청금액이 0원입니다. 빌링키발급을 위해 customer_uid가 지정될 때에만 0원이 허용됩니다. 요청 amount :0"
+  // * TEST REPORT
+  // * => 정기결제: 100원 불가
+  // * => 일반결제: 불가 (customer Uid___ 존재하는지?)
+  const minPaymentPrice = 0;
   if(typeof val !== 'number') {
     error = '결제금액의 타입은 Number를 사용해야 합니다.'
   } else if( val < minPaymentPrice ){
@@ -79,4 +85,3 @@ const valid_paymentPrice = (val) =>{
   
   return error;
 }
-
