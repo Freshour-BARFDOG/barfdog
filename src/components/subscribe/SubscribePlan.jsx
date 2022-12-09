@@ -130,10 +130,11 @@ export const SubscribePlan = ({ subscribeInfo }) => {
       nextPaymentPrice: subscribeInfo.price[selectedPlanName].salePrice, // 선택된 플랜의 판매가격
       recipeIdList: subscribeInfo.recipe.idList,
     };
+    // console.log(body);
 
     try {
       setIsLoading(true);
-      const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/plan`;
+      const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/planRecipes`;
       const res = await postObjData(url, body);
       console.log(res);
       // if (!res.isDone) { // ! TEST CODE //
