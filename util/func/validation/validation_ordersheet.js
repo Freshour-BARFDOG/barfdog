@@ -76,7 +76,7 @@ const valid_paymentPrice = (val) =>{
   // * TEST REPORT
   // * => 정기결제: 100원 불가
   // * => 일반결제: 불가 (customer Uid___ 존재하는지?)
-  const minPaymentPrice = 0;
+  const minPaymentPrice = 100;
   if(typeof val !== 'number') {
     error = '결제금액의 타입은 Number를 사용해야 합니다.'
   } else if( val < minPaymentPrice ){
