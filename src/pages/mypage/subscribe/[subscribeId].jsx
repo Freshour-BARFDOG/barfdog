@@ -12,9 +12,13 @@ import { SubscribePlan } from '/src/components/subscribe/SubscribePlan';
 import { SubscribeRecipe } from '/src/components/subscribe/SubscribeRecipe';
 import { useSubscribeInfo } from '/util/hook/useSubscribeInfo';
 import { FullScreenLoading } from '/src/components/atoms/FullScreenLoading';
+import Modal_global_alert from "../../../components/modal/Modal_global_alert";
+import {useModalContext} from "../../../../store/modal-context";
 
 
 export default function SubscribeInfoPage({ data }) {
+  const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
   const { subscribeId } = data;
   const subscribeInfo = useSubscribeInfo(subscribeId);
 
@@ -53,6 +57,7 @@ export default function SubscribeInfoPage({ data }) {
           </MypageWrapper>
         </Wrapper>
       </Layout>
+      {hasAlert && <Modal_global_alert background />}
     </>
   );
 }
