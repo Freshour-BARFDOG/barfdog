@@ -25,7 +25,9 @@ import Icon_Home from '/public/img/icon/icon-home.svg';
 import {authAction} from '/store/auth-slice';
 import {userType} from '/store/TYPE/userAuthType';
 import {Gnb_my} from "./Gnb_my";
-import * as DeviceDetect from 'react-device-detect';
+// import * as DeviceDetect from 'react-device-detect';
+// import { BrowserView, MobileView } from 'react-device-detect';
+// import { isMobile  } from 'react-device-detect';
 
 const Modal_subscribeWidhSSR = dynamic( () => import('/src/components/modal/Modal_subscribe') );
 
@@ -160,12 +162,13 @@ export default function Header () {
 }
 
 
-function TopButton ({mobileDevice}) {
+// function TopButton ({mobileDevice}) {
+function TopButton () {
   const [showButton, setShowButton] = useState( false );
   const [pageY, setPageY] = useState( 0 );
   
-  // * 모바일 아이콘크키: iPad Air, iPad Mini, Surface Pro7  (820x1180)에서는 두 가지 방법모두 크기 싱크가 맞지 않음
-  // * react-device-detect: Nest Hub 상태에서 작동하지 않는 이슈있음
+  // * 버튼 위치 변경으로 PC/모바일 구분만 필요하게 변경
+  // * react-device-detect: 안드로이드 테블릿 미대응으로 삭제
   
   // console.log( 'isMobileByWinWidth = ', DeviceDetect.isMobile )
   // console.log( 'isMobileLib = ', isMobileDevice )
@@ -177,12 +180,13 @@ function TopButton ({mobileDevice}) {
     } )
   }
   
-  // 스크롤 올릴때 나타남
+  // ScrollYOffset > 200 이상일 경우 스크롤 올릴때 나타남
   useEffect( () => {
     const handleScroll = () => {
       const {pageYOffset} = window;
       const deltaY = pageYOffset - pageY;
-      const showButton = pageYOffset !== 0 && deltaY <= 0;
+      // const showButton = pageYOffset !== 0 && deltaY <= 0;
+      const showButton = pageYOffset > 200 && deltaY <= 0;
       setShowButton( showButton );
       setPageY( pageYOffset );
       
@@ -191,12 +195,72 @@ function TopButton ({mobileDevice}) {
     window.addEventListener( 'scroll', handleScroll );
     return () => window.removeEventListener( 'scroll', handleScroll );
   }, [pageY] );
+
+  // const isMobile  = () => {
+  //   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(window.navigator.userAgent)
+  // }
+
+  // const renderItems = () => {
+  //   if(isMobile) {
+  //     return showButton &&
+  //     <div className={s.toboxm}>
+  //       <button className={s.topbuttonm} id="top" onClick={scrollToTop} type="button">
+  //         <div className={s.image_wrap}>
+  //           <Topbutton/>
+  //         </div>
+  //       </button>
+  //     </div>
+  //   } else {
+  //     return showButton &&
+  //     <div className={s.tobox}>
+  //       <button className={s.topbutton} id="top" onClick={scrollToTop} type="button">
+  //         <div className={s.image_wrap}>
+  //           <Topbutton/>
+  //         </div>
+  //       </button>
+  //     </div>
+  //   }
+  // };
+  const isMobile = () => {
+    const user = navigator.userAgent;
+    const isCheck = false;
+    // const Mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(window.navigator.userAgent);
+    // /Mobi/i.test
+
+    if ( 
+      user.indexOf("iPhone") > -1 
+      || user.indexOf("Android") > -1 
+      // || user.indexOf("iPad") > -1
+      || user.indexOf("iPod") > -1 
+      // Mobile
+    ) {
+      return showButton &&
+      <div className={s.toboxm}>
+        <button className={s.topbuttonm} id="top" onClick={scrollToTop} type="button">
+          <div className={s.image_wrap}>
+            <Topbutton/>
+          </div>
+        </button>
+      </div>
+    }
+    return showButton &&
+      <div className={s.tobox}>
+        <button className={s.topbutton} id="top" onClick={scrollToTop} type="button">
+          <div className={s.image_wrap}>
+            <Topbutton/>
+          </div>
+        </button>
+      </div>
+  }
+
+
   
   
   /*BrowserView, MobileView, isBrowser, isMobile*/
   return showButton && (
     <section>
-      <DeviceDetect.MobileView>
+      {isMobile()}
+      {/* <DeviceDetect.MobileView>
         <div className={s.toboxm}>
           <button className={s.topbuttonm} id="top" onClick={scrollToTop} type="button">
             <div className={s.image_wrap}>
@@ -213,15 +277,35 @@ function TopButton ({mobileDevice}) {
             </div>
           </button>
         </div>
-      </DeviceDetect.BrowserView>
+      </DeviceDetect.BrowserView> */}
+
+
+      {/* <MobileView>
+        <div className={s.toboxm}>
+          <button className={s.topbuttonm} id="top" onClick={scrollToTop} type="button">
+            <div className={s.image_wrap}>
+              <Topbutton/>
+            </div>
+          </button>
+        </div>
+      </MobileView>
+      <BrowserView>
+        <div className={s.tobox}>
+          <button className={s.topbutton} id="top" onClick={scrollToTop} type="button">
+            <div className={s.image_wrap}>
+              <Topbutton/>
+            </div>
+          </button>
+        </div>
+      </BrowserView> */}
       
-      <div className={`${s.custom} ${mobileDevice ? s.toboxm : s.tobox}`}>
+      {/* <div className={`${s.custom} ${mobileDevice ? s.toboxm : s.tobox}`}>
         <button className={s.topbuttonm} id="top" onClick={scrollToTop} type="button">
           <div className={s.image_wrap}>
             <Topbutton/>
           </div>
         </button>
-      </div>
+      </div> */}
     
     </section>
   )
