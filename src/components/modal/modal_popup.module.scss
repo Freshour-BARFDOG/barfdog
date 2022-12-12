@@ -107,7 +107,7 @@ $defaultCenter : 55%;
   }
 }
 
-@media (max-width: rem(600)) {
+@media (max-width: rem(900)) {
   #modal_popup {
     width: calc(100% - #{rem(40)});
     box-shadow: none;
