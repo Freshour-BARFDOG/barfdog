@@ -1,7 +1,7 @@
 import React from 'react';
 import s from './delivery.module.scss';
 import transformDate from '/util/func/transformDate';
-import { orderStatus } from '/store/TYPE/orderStatusTYPE';
+import {deliveryStatus, orderStatus} from '/store/TYPE/orderStatusTYPE';
 import { transformPhoneNumber } from '/util/func/transformPhoneNumber';
 import popupWindow from '/util/func/popupWindow';
 import PureCheckbox from '/src/components/atoms/PureCheckbox';
@@ -34,7 +34,7 @@ const ItemList = ({ item, sortableItemRef, selectedIdList, onSelectedItem }) => 
     orderDate: transformDate(item.orderDate, 'time', { seperator: '/' }),
     orderType: item.orderType,
     deliveryNumber: item.deliveryNumber,
-    deliveryStatus: orderStatus.KOR[item.deliveryStatus] || '-',
+    deliveryStatus: deliveryStatus.KOR[item.deliveryStatus] || '-',
     buyerId: item.memberEmail,
     buyerName: item.memberName,
     buyerPhone: transformPhoneNumber(item.memberPhoneNumber),
