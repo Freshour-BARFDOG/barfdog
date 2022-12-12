@@ -238,7 +238,7 @@ function TopButton () {
       <div className={s.toboxm}>
         <button className={s.topbuttonm} id="top" onClick={scrollToTop} type="button">
           <div className={s.image_wrap}>
-            <Topbutton/>
+            <Topbutton />
           </div>
         </button>
       </div>
@@ -247,7 +247,7 @@ function TopButton () {
       <div className={s.tobox}>
         <button className={s.topbutton} id="top" onClick={scrollToTop} type="button">
           <div className={s.image_wrap}>
-            <Topbutton/>
+            <Topbutton />
           </div>
         </button>
       </div>

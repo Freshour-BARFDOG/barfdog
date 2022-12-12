@@ -261,6 +261,10 @@
   // &:hover {
   //   bottom: rem(110);
   // }
+  
+  svg {
+    filter: drop-shadow(0 0 rem(16) rgba(0, 0, 0, 0.16));
+  }
 
   &:active {
     top: rem(55);
@@ -297,6 +301,7 @@
 
   svg {
     transform: scale(.8);
+    filter: drop-shadow(0 0 rem(16) rgba(0, 0, 0, 0.16));
   }
 
   &:active {
