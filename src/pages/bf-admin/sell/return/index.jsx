@@ -82,7 +82,7 @@ export default function ReturnOnSellPage() {
   };
   
   const pageInterceptor = (res) => {
-    res = DUMMY_RETURN_RESPONSE; //  ! TEST
+    // res = DUMMY_RETURN_RESPONSE; //  ! TEST
     console.log(res)
     const pageData = res.data.page;
     const curItemList = res.data?._embedded?.queryAdminOrdersDtoList || [];
@@ -297,7 +297,7 @@ export default function ReturnOnSellPage() {
                   </li>
                   <li className={s.table_th}>상세보기</li>
                   <li className={s.table_th}>주문번호</li>
-                  {/*<li className={s.table_th}>상품주문번호</li>*/}
+                  <li className={s.table_th}>주문한 상품번호</li>
                   <li className={s.table_th}>주문상태</li>
                   {/*<li className={s.table_th}>반품사유</li>*/}
                   <li className={s.table_th}>구매자 ID</li>
