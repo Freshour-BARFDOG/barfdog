@@ -221,3 +221,12 @@ $topLinkBannerHeight: rem(38);
   }
 
 }
+
+
+
+
+@media (max-height: rem(800)) and (max-width: rem(900)) {
+  #modal_recipe{
+    height: calc(100% - rem(40));
+  }
+}
