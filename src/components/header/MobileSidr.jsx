@@ -23,7 +23,7 @@ import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import { userType } from '/store/TYPE/userAuthType';
 import { useRouter } from 'next/router';
 import MypageBanner from '../atoms/MypageBanner';
-import popupWindow from "../../../util/func/popupWindow";
+import {openGradePopupHandler} from "/src/pages/popup/gradePolicy";
 
 
 export default function MobileSidr({ isOpen, setSidrOpen }) {
@@ -75,16 +75,6 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
     dispatch(authAction.logout());
   };
   
-  const openGradePopupHandler = () => {
-    const href = '/popup/gradePolicy';
-    const options = {
-      width: isMobile ? 320 : 1120,
-      height: isMobile ? 517 : 730,
-      left: 200,
-      top: 100
-    };
-    popupWindow( href, options );
-  }
   
   if (!isMobile) return;
 
@@ -159,17 +149,14 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                         </span>
                       </p>
                       <p className={s.innerRow}>
-                        <button type={'button'} className={s.userName} onClick={openGradePopupHandler}>
-                          {data.name}
-                          <em className={s.unit}>님</em>
-                        </button>
-                        {/*<Link href={'/popup/gradePolicy'} passHref>*/}
-                          {/*<a className={s.userName}>*/}
-                          {/*  {data.name}*/}
-                          {/*  <em className={s.unit}>님</em>*/}
-                          {/*</a>*/}
-                        {/*</Link>*/}
-                        <i className={s.grade} onClick={openGradePopupHandler}>{data.grade}</i>
+                        <div className={'inline-flex-box gap-4'} onClick={() => openGradePopupHandler(isMobile)}>
+                          <button type={'button'} className={s.userName}>
+                            {data.name}
+                            <em className={s.unit}>님</em>
+                          </button>
+                          <i className={s.grade}>{data.grade}</i>
+                        </div>
+                       
                       </p>
                       <p className={s.innerRow}>
                         <span className={s.email}>{data.email}</span>

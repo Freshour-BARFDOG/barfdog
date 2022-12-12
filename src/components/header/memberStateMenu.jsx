@@ -2,26 +2,18 @@ import Link from 'next/link';
 import React from 'react';
 import s from './header.module.scss';
 import useDeviceState from '/util/hook/useDeviceState';
-import popupWindow from '/util/func/popupWindow';
+import {openGradePopupHandler} from "/src/pages/popup/gradePolicy";
+
 
 export const MemberMemu = ({ data }) => {
   const isAdmin = data.name === '관리자';
   const isMobile = useDeviceState().isMobile;
   
-  const openGradePopupHandler = () => {
-    const href = '/popup/gradePolicy';
-    const options = {
-      width: isMobile ? 320 : 1120,
-      height: isMobile ? 517 : 730,
-      left: 200,
-      top: 100
-    };
-    popupWindow(href, options);
-  };
+ 
 
   return (
     <li>
-      {!isAdmin && <button type={'button'} onClick={openGradePopupHandler} className={s.userClass}>{data.grade}</button>}
+      {!isAdmin && <button type={'button'} onClick={() => openGradePopupHandler(isMobile)} className={s.userClass}>{data.grade}</button>}
       <Link href={'/mypage/orderHistory'} passHref>
         <a className={s.username}>
           <em>{data.name}</em>님
