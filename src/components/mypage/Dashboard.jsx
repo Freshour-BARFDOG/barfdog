@@ -9,14 +9,13 @@ import Modal_sendPhoneMessage from '/src/components/modal/Modal_sendPhoneMessage
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import { useSelector } from 'react-redux';
 import { useModalContext } from '/store/modal-context';
-import popupWindow from '/util/func/popupWindow';
 import useDeviceState from '/util/hook/useDeviceState';
-import Modal_alert from '@src/components/modal/Modal_alert';
+import Modal_alert from '/src/components/modal/Modal_alert';
+import {openGradePopupHandler} from "/src/pages/popup/gradePolicy";
 
 
 export default function Dashboard({ className, ...props }) {
   const mct = useModalContext();
-  const hasAlert = mct.hasAlert;
   const isMobile = useDeviceState().isMobile;
   const auth = useSelector((s) => s.auth);
   const data = auth.userInfo;
@@ -79,16 +78,6 @@ export default function Dashboard({ className, ...props }) {
     }));
   };
 
-  const openGradePopupHandler = () => {
-    const href = '/popup/gradePolicy';
-    const options = {
-      width: isMobile ? 320 : 1120,
-      height: isMobile ? 517 : 730,
-      left: 200,
-      top: 100,
-    };
-    popupWindow(href, options);
-  };
 
   if (!data) {
     return;
@@ -135,7 +124,7 @@ export default function Dashboard({ className, ...props }) {
             <div className={`${s.info_col}`}>
               <div className={s.user_class}>
                 <p>회원님은</p>
-                <button type={'button'} onClick={openGradePopupHandler}>
+                <button type={'button'} onClick={() => openGradePopupHandler(isMobile)}>
                   <span className={s.grade}>{data.grade} </span>등급 입니다.
                 </button>
               </div>

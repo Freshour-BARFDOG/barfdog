@@ -4,7 +4,7 @@ import rem from '/util/func/rem';
 import zIndex from '/styles/module/zIndex.module.scss';
 import useDeviceState from "/util/hook/useDeviceState";
 import Favicon from '/public/img/icon/favicon.svg'
-import {orderDeadLineTimeStamp} from "/util/func/setOrderDeadLineTimeStamp";
+import {orderDeadLineTimeStamp} from "/util/func/orderDeadLineTimeStamp";
 
 
 const Dealine_timer = ({ className }) => {

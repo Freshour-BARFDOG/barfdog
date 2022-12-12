@@ -175,9 +175,18 @@ $aniType_Show: 0.3s ease-in;
 
 
 
-.inline-flex{
+.inline-flex-box{
   display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
+
+@for $i from 1 through 20 {
+  .gap-#{$i} {
+    gap: rem($i);
+  }
+}
+
 .inline-grid{
   display: inline-grid;
 }
