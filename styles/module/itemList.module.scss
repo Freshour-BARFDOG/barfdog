@@ -91,6 +91,9 @@ $color-tableHeader : #f1f2f4;
       overflow:hidden;
       text-align: center;
     }
+    .table_th.hasToolTip{
+      overflow: initial;
+    }
 
     .table_header, .item{
       display:grid;
@@ -148,5 +151,3 @@ $color-tableHeader : #f1f2f4;
 .pagination-section {
   margin-top: rem(20);
 }
-
-

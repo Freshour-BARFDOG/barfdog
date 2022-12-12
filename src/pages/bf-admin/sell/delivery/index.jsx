@@ -314,19 +314,18 @@ export default function DeliveryOnSellPage() {
             <div className="cont_header clearfix">
               <p className="cont_title cont-left">
                 목록
-                {searchBody?.statusList?.indexOf(orderStatus.DELIVERY_BEFORE_COLLECTION) >= 0 && (
-                  <Tooltip
-                    message={'배송예정 상품일 경우, 송장 재출력할 수 있습니다.'}
-                    width={'300'}
-                    messagePosition={'center'}
-                    theme={'white'}
-                  />
-                )}
               </p>
               <div className="controls cont-left">
                 <button className="admin_btn line basic_m" onClick={onReprintInvoice}>
                   {isLoading.reprint ? <Spinner /> : '송장 재출력'}
                 </button>
+                {searchBody?.statusList?.indexOf(orderStatus.DELIVERY_BEFORE_COLLECTION) >= 0 && (
+                  <Tooltip
+                    message={'배송예정 상품일 경우, 송장 재출력할 수 있습니다.'}
+                    width={'300'}
+                    messagePosition={'center'}
+                  />
+                )}
               </div>
             </div>
             <div className={`${s.cont_viewer}`}>
@@ -341,8 +340,8 @@ export default function DeliveryOnSellPage() {
                   <li className={s.table_th}>상세보기</li>
                   <li className={s.table_th}>주문번호</li>
                   {/*<li className={s.table_th}>상품주문번호</li>*/}
-                  <li className={s.table_th}>주문상태</li>
-                  <li className={s.table_th}>배송상태</li>
+                  <li className={`${s.table_th} ${s.hasToolTip}`}>주문상태</li>
+                  <li className={`${s.table_th} ${s.hasToolTip}`}>배송상태 <Tooltip style={{textAlign:'left'}} message={`- 배송상태 목록\n: 생산 중(구독상품), 배송 준비 중(일반상품), 배송예정, 배송시작, 배송완료, 구독결제 취소`} messagePosition={'left'} wordBreaking={true} width={'200px'}/></li>
                   <li className={s.table_th}>운송장번호</li>
                   <li className={s.table_th}>구매자 ID</li>
                   <li className={s.table_th}>구매자</li>
