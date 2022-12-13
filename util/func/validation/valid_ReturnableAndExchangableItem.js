@@ -19,14 +19,14 @@ export const valid_ReturnableAndExchangableItem = (
 
   /* # Step 1. 신선식품 포함여부 확인*/
   if (isReturnableOrExchangableItem(category)) {
-    // result.valid = false;
+    result.valid = false;
     result.message = '신선식품이 포함된 주문은 교환/반품할 수 없습니다.';
     return result;
   }
 
   /* # Step 2. 배송상태 확인 */
   if (!arrivalDate || status !== orderStatus.DELIVERY_DONE) {
-    // result.valid = false;
+    result.valid = false;
     result.message = '배송완료되지 않았습니다.';
 
     return result;

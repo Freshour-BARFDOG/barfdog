@@ -335,9 +335,10 @@ export const Modal_changeItemOrderState = ({items = [], onHideModal, confirmType
                 <textarea
                   id={'detailReason'}
                   name="detailReason"
-                  placeholder={'상세사유를 입력해주세요.'}
+                  placeholder={confirmType === orderStatus.CANCEL_REQUEST ? '' : '상세사유를 입력해주세요.'}
                   value={form.detailReason}
                   onChange={onInputChange}
+                  disabled={confirmType === orderStatus.CANCEL_REQUEST}
                 ></textarea>
               </div>
             </div>
