@@ -43,7 +43,7 @@ section.pageline { padding-top : rem(40)}
     .input_box, .fake_input {
       width: rem(280);
       border-radius: rem(4);
-      padding: rem(13) 0 rem(13) rem(20);
+      padding: rem(13);
       @include char(l15);
       margin-right: rem(5);
 
