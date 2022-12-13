@@ -36,7 +36,8 @@ const initialSearchValues = {
 
 export default function ExchangeOnSellPage() {
   
-  const searchApiUrl = `/api/admin/orders/search`; // 상품단위 리스트 검색(페이징) ! 교환, 반품은 '상품'단위로 처리
+  ////// const searchApiUrl = `/api/admin/orders/search`; // ! '상품'단위 검색
+  const searchApiUrl = `/api/admin/orders/cancelRequest`; // 주문단위 리스트 검색(페이징) ! 교환, 반품은 '주문' 단위로 변경 (221213)
   const searchPageSize = 10;
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
@@ -87,7 +88,8 @@ export default function ExchangeOnSellPage() {
     // res = DUMMY_EXCHANGE_RESPONSE; //  ! TEST
     console.log(res)
     const pageData = res.data.page;
-    const curItemList = res.data?._embedded?.queryAdminOrdersDtoList || [];
+    // const curItemList = res.data?._embedded?.queryAdminOrdersDtoList || []; // 상품단위 검색
+    const curItemList = res.data?._embedded?.queryAdminCancelRequestDtoList || []; // 주문단위 검색
     let newPageInfo = {
       totalPages: pageData.totalPages,
       size: pageData.size,
@@ -120,13 +122,15 @@ export default function ExchangeOnSellPage() {
     if (!selectedOrderIdList.length) return alert('선택된 상품이 없습니다.');
     if (!confirm(`${selectedOrderIdList.length}개 상품의 교환요청을 '판매자 귀책'으로 승인하시겠습니까?`))
       return;
-    
-    const seletedOrderItemIdList = itemList
-      .filter((item) => selectedOrderIdList.indexOf(item.id) >= 0)
-      .map((item) => item.orderItemId);
+  
+    // const seletedOrderItemIdList = itemList
+    //   .filter((item) => selectedOrderIdList.indexOf(item.id) >= 0)
+    //   .map((item) => item.orderItemId);
+  
     const body ={
-      orderItemIdList: seletedOrderItemIdList, //  ! 개별 상품의 id 사용 (주문id 아님)
+      orderIdList: selectedOrderIdList, //  ! 주문 id 사용 (221213 변경)
     }
+    
     try {
       setIsLoading((prevState) => ({
         ...prevState,
@@ -158,12 +162,13 @@ export default function ExchangeOnSellPage() {
     if (!selectedOrderIdList.length) return alert('선택된 상품이 없습니다.');
     if (!confirm(`${selectedOrderIdList.length}개 상품의 교환요청을 '구매자 귀책'으로 승인하시겠습니까?`))
       return;
-    
-    const seletedOrderItemIdList = itemList
-      .filter((item) => selectedOrderIdList.indexOf(item.id) >= 0)
-      .map((item) => item.orderItemId);
+  
+    // const seletedOrderItemIdList = itemList
+    //   .filter((item) => selectedOrderIdList.indexOf(item.id) >= 0)
+    //   .map((item) => item.orderItemId);
+  
     const body ={
-      orderItemIdList: seletedOrderItemIdList, //  ! 개별 상품의 id 사용 (주문id 아님)
+      orderIdList: selectedOrderIdList, //  ! 주문 id 사용 (221213 변경)
     }
     
     try {
@@ -195,12 +200,17 @@ export default function ExchangeOnSellPage() {
     if (!selectedOrderIdList.length) return alert('선택된 상품이 없습니다.');
     if (!confirm(`${selectedOrderIdList.length}개 상품의 교환요청을 반려하시겠습니까?`))
       return;
-    const seletedOrderItemIdList = itemList
-      .filter((item) => selectedOrderIdList.indexOf(item.id) >= 0)
-      .map((item) => item.orderItemId);
+    
+    
+    // const seletedOrderItemIdList = itemList
+    //   .filter((item) => selectedOrderIdList.indexOf(item.id) >= 0)
+    //   .map((item) => item.orderItemId);
+  
     const body ={
-      orderItemIdList: seletedOrderItemIdList, //  ! 개별 상품의 id 사용 (주문id 아님)
+      orderIdList: selectedOrderIdList, //  ! 주문 id 사용 (221213 변경)
     }
+    
+    
     try {
       setIsLoading((prevState) => ({
         ...prevState,
@@ -271,7 +281,7 @@ export default function ExchangeOnSellPage() {
             <div className="cont_header clearfix">
               <p className="cont_title cont-left">
                 목록
-                <Tooltip message={`- 교환 가능한 일반상품 / "상품" 단위 리스트\n- 구매자 귀책 택배비: 6,000원\n- 판매자 귀책: 택배비 없음\n- 교환불가: 교환불가 처리된 상품은 배송완료 상태가 됩니다.`} messagePosition={'left'} wordBreaking={true} width={'340px'}/>
+                <Tooltip message={`- 교환불가 조건: 정기구독상품,신선식품이 포함되지 않은 일반주문\n"주문" 단위로 반품처리됩니다.\n- 교환불가: 교환불가 처리된 주문은 배송완료 상태가 됩니다.`} messagePosition={'left'} wordBreaking={true} width={'340px'}/>
               </p>
               <div className="controls cont-left">
                 <button className="admin_btn line basic_m autoWidth" onClick={onConfirmingExhangeOrderBySeller}>

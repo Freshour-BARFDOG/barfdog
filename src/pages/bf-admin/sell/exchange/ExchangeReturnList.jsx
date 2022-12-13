@@ -27,6 +27,7 @@ export default function SearchResultList({ items, selectedIdList, onSelectedItem
 
 
 const Item = ({ item, sortableItemRef, selectedIdList, onSelectedItem }) => {
+  
   const DATA = {
     id: item.id, // 주문 id
     orderItemId: item.orderItemId, // 주문한 상품의 id // 구독상품일 경우, 구독 id
@@ -73,9 +74,9 @@ const Item = ({ item, sortableItemRef, selectedIdList, onSelectedItem }) => {
       <span>
         <em className={'overflow-x-scroll'}>{DATA.merchantUid}</em>
       </span>
-      <span>
-        <em className={'overflow-x-scroll'}>{DATA.orderItemId}</em>
-      </span>
+      {/*<span>*/}
+      {/*  <em className={'overflow-x-scroll'}>{DATA.orderItemId}</em>*/}
+      {/*</span>*/}
       <span>
         <em className={'overflow-x-scroll'}>
           <p>{DATA.orderStatus}</p>
