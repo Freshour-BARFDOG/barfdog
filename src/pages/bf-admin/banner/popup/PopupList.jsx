@@ -7,58 +7,38 @@ import Descend from '/public/img/icon/btn_descend.svg';
 import getElemIdx from '/util/func/getElemIdx.js';
 import changeArrayOrder from '/util/func/changeArrayOrder';
 import transformDate from '/util/func/transformDate';
-import { deleteData, putObjData } from '/src/pages/api/reqData';
+import {deleteData, putObjData} from '/src/pages/api/reqData';
 import extractPartOfURL from '/util/func/extractPartOfURL';
 
 
-
-export default function PopupList({ items, orderEditMode, onUpdateList }) {
-  if (!items || !items.length) return;
-
-  const onDeleteItemHandler = async (e) => {
-    const button = e.currentTarget;
-    const target = button.closest('li');
-    const apiURL = button.dataset.apiUrl;
-    const targetLeakedOrder = Number(target.dataset.order);
-    const targetIndex = targetLeakedOrder - 1;
-    const bannerName = items[targetIndex].name;
-    if (confirm(`정말 삭제하시겠습니까?\n배너명: ${bannerName}`)) {
-      const res = await deleteData(apiURL);
-      console.log(res)
-      if(res.isDone){
-        window.location.reload();
-      } else {
-        alert('삭제에 실패하였습니다.');
-      }
-    }
-  };
-
+export default function PopupList ({items, orderEditMode, onUpdateList}) {
+  if ( !items || !items.length ) return;
+  
+  
   return (
     <ul className="table_body">
-      {items.map((item) => (
+      {items.map( (item) => (
         <SortableItem
           key={`item-${item.id}`}
           index={item.id}
           item={item}
           items={items}
-          onDeleteHandler={onDeleteItemHandler}
           onUpdateList={onUpdateList}
           orderEditMode={orderEditMode}
         />
-      ))}
+      ) )}
     </ul>
   );
 }
 
 
-
-const SortableItem = ({ item, items,  sortableItemRef, onDeleteHandler, onUpdateList, orderEditMode }) => {
-
+const SortableItem = ({item, items, sortableItemRef, onUpdateList, orderEditMode}) => {
+  
   const DATA = {
-    id: item.id || Math.floor(Math.random() * 100),
+    id: item.id || Math.floor( Math.random() * 100 ),
     leakedOrder: item.leakedOrder,
     name: item.name || '',
-    reg_date: transformDate(item.createdDate ? item.createdDate : item.modifiedDate),
+    reg_date: transformDate( item.createdDate ? item.createdDate : item.modifiedDate ),
     url: item._links?.thumbnail_pc.href,
     apiurl: {
       orderUp: item._links?.update_popupBanner_order_up.href,
@@ -67,7 +47,20 @@ const SortableItem = ({ item, items,  sortableItemRef, onDeleteHandler, onUpdate
       update: item._links?.update_popupBanner.href,
     },
   };
-
+  
+  const onDelete = async (e) => {
+    if ( !confirm( `정말 삭제하시겠습니까?\n배너명: ${item.name}` ) ) return;
+    const apiUrl = `/api/banners/popup/${item.id}`;
+    const res = await deleteData( apiUrl );
+    console.log( res )
+    if ( res.isDone ) {
+      alert(`배너가 정상적으로 삭제되었습니다.`);
+      window.location.reload();
+    } else {
+      alert( '삭제에 실패하였습니다.' );
+    }
+  };
+  
   return (
     <li
       className={s.item}
@@ -76,7 +69,7 @@ const SortableItem = ({ item, items,  sortableItemRef, onDeleteHandler, onUpdate
       data-idx={DATA.id}
     >
       {orderEditMode ? (
-        <SortHandle items={items} onUpdateList={onUpdateList} apiurl={DATA.apiurl} />
+        <SortHandle items={items} onUpdateList={onUpdateList} apiurl={DATA.apiurl}/>
       ) : (
         <span>{DATA.leakedOrder}</span>
       )}
@@ -102,7 +95,7 @@ const SortableItem = ({ item, items,  sortableItemRef, onDeleteHandler, onUpdate
       <span>
         <button
           className="admin_btn basic_s solid"
-          onClick={onDeleteHandler}
+          onClick={onDelete}
           data-api-url={DATA.apiurl.delete}
         >
           삭제
@@ -113,45 +106,41 @@ const SortableItem = ({ item, items,  sortableItemRef, onDeleteHandler, onUpdate
 };
 
 
-
-
-
-
-const SortHandle = ({ items, apiurl, onUpdateList }) => {
-
+const SortHandle = ({items, apiurl, onUpdateList}) => {
+  
   const onOrderUpHandler = (e) => {
     const button = e.currentTarget;
-    changeOrder(button, 'up');
+    changeOrder( button, 'up' );
   };
-
+  
   const onOrderDownHandler = (e) => {
     const button = e.currentTarget;
-    changeOrder(button, 'down');
+    changeOrder( button, 'down' );
   };
-
-  const changeOrder = async (button, direction)=>{
-    onUpdateList(false);
+  
+  const changeOrder = async (button, direction) => {
+    onUpdateList( false );
     let dir;
-    if(direction === 'down') {
+    if ( direction === 'down' ) {
       dir = +1
-    }else if(direction === 'up'){
+    } else if ( direction === 'up' ) {
       dir = -1;
     }
-
-    const target = button.closest('li');
+    
+    const target = button.closest( 'li' );
     const url = button.dataset.apiurl;
-    const apiURL = extractPartOfURL(url).pathname;
-    const targetIndex = getElemIdx(target);
-    const newItemList = changeArrayOrder(items, targetIndex, dir);
-    console.log(newItemList)
-    if (newItemList) {
+    const apiURL = extractPartOfURL( url ).pathname;
+    const targetIndex = getElemIdx( target );
+    const newItemList = changeArrayOrder( items, targetIndex, dir );
+    console.log( newItemList )
+    if ( newItemList ) {
       const emptyData = '';
-      await putObjData(apiURL, emptyData);
-      onUpdateList(true);
+      await putObjData( apiURL, emptyData );
+      onUpdateList( true );
     }
   }
-
-
+  
+  
   return (
     <>
       <span className={`${s.sortHandle}`}>
@@ -161,7 +150,7 @@ const SortHandle = ({ items, apiurl, onUpdateList }) => {
           onClick={onOrderUpHandler}
           data-apiurl={apiurl.orderUp}
         >
-          <Ascend />
+          <Ascend/>
         </i>
         <i
           className="admin_btn"
@@ -169,10 +158,9 @@ const SortHandle = ({ items, apiurl, onUpdateList }) => {
           onClick={onOrderDownHandler}
           data-apiurl={apiurl.orderDown}
         >
-          <Descend />
+          <Descend/>
         </i>
       </span>
     </>
   );
 };
-
