@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import s from 'src/pages/mypage/orderHistory/orderHistoryOrdersheet.module.scss';
 import { orderStatus } from '/store/TYPE/orderStatusTYPE';
 import { paymentMethodType } from '/store/TYPE/paymentMethodType';
@@ -17,56 +17,69 @@ import { transformPhoneNumber } from '/util/func/transformPhoneNumber';
 import { Modal_changeItemOrderState } from '/src/components/modal/Modal_changeItemOrderState';
 import { filter_availableReturnAndExchangeItemList } from '/util/func/filter_availableReturnAndExchangeItemList';
 import { valid_availableCancelOrder } from '/util/func/validation/valid_availableCancelOrder';
-import { valid_availableReturnAndExchangelOrder } from '/util/func/valid_availableReturnAndExchangelOrder';
 import {general_itemType} from "/store/TYPE/itemType";
+import {validation_ReturnableAndExchangeableOrders} from "/util/func/validation/validation_ReturnableAndExchangeableOrders";
+import {useModalContext} from "/store/modal-context";
+import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 
 
 
 
-// ! 신선식품이 포함되어있을 경우, 교환 반품 불가능하도록
-// ! 신선식품이 포함되어있을 경우, 교환 반품 불가능하도록
-// ! 신선식품이 포함되어있을 경우, 교환 반품 불가능하도록
-// ! 신선식품이 포함되어있을 경우, 교환 반품 불가능하도록
-// ! 신선식품이 포함되어있을 경우, 교환 반품 불가능하도록
-// ! 신선식품이 포함되어있을 경우, 교환 반품 불가능하도록
+const valid_CancelableOrder = (itemList) => {
+  let result = {
+    totalCancel: true,
+    partialCancel: true,
+  };
+  for (const objInArr of itemList) {
+    const itemStatus = objInArr.status;
+    
+    // ! 전체취소만 가능 => 아이템 각각 조회하여, 취소불가능한 상태가 하나라도 존재일 경우 , 취소 불가
+    const valid = valid_availableCancelOrder(itemStatus);
+    if (!valid) {
+      result.partialCancel = false;
+    }
+    // ! 모든 상품의 주문상태가 결제 완료일 경우, 전체 취소 가능
+    if (itemStatus !== orderStatus.PAYMENT_DONE) {
+      result.totalCancel = false;
+    }
+  }
+  
+  return result
+};
+
+
+const filter_availableConfirmItemList = (itemList) => itemList.filter((item) => {
+  return item.status === orderStatus.DELIVERY_DONE && item.status !== orderStatus.CONFIRM;
+});
+
 
 export default function SingleItem_OrderHistoryPage({ data }) {
   // console.log(data);
   
+  const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
   const originItemList = data.orderItemDtoList;
   const [activeModal, setActiveModal] = useState(false);
   const [confirmMessage, setConfirmMessage] = useState('');
   const [confirmType, setConfirmType] = useState('');
-  const [filteredItemList, setFilteredItemList] = useState([]);
+  const [filteredItemList, setFilteredItemList] = useState([]); // 구매확정 시, 구매확정 대상에 사용됨
 
   
-  let availableImmediatelyCancle = true;
-  let availableCancleState = true;
+  const initializeModalState = () => {
+    setFilteredItemList(originItemList);
+    setConfirmMessage('');
+    setActiveModal(null);
+    setConfirmType(null);
+  };
+  const resultOfCancelableOrder = useMemo( () => valid_CancelableOrder(originItemList), [] );
+  const availableImmediatelyCancle = resultOfCancelableOrder.totalCancel;
+  const availableCancleState = resultOfCancelableOrder.partialCancel;
+  // console.log('전체취소 가능여부: ', availableImmediatelyCancle);
+  // console.log('취소기능 활성여부: ', availableCancleState);
 
-  for (const objInArr of originItemList) {
-    const itemStatus = objInArr.status;
-
-    // ! 전체취소만 가능 => 아이템 각각 조회하여, 취소불가능한 상태가 하나라도 존재일 경우 , 취소 불가
-    const valid = valid_availableCancelOrder(itemStatus);
-    if (!valid) {
-      availableCancleState = false;
-    }
-    // ! 모든 상품의 주문상태가 결제 완료일 경우, 전체 취소 가능
-    if (itemStatus !== orderStatus.PAYMENT_DONE) {
-      availableImmediatelyCancle = false;
-    }
-  }
-
+  const isAvailableReturnAndExchangeState = useMemo( () => validation_ReturnableAndExchangeableOrders(originItemList).valid, [] );
   
-  // 교환 반품 조건 // 배송완료 & 배송완료 7일 이내
-  const isAvailableReturnAndExchangeState = valid_availableReturnAndExchangelOrder(
-    originItemList[0].status,
-    
-    data.orderDto.arrivalDate,
-    //  TEST : 교환반품
-    // '2022-12-11T09:56:10.014'
-  );
-
+  
   const onPopupHandler = (e) => {
     e.preventDefault();
     if (typeof window === 'undefined') return console.error('window is not defined');
@@ -74,22 +87,12 @@ export default function SingleItem_OrderHistoryPage({ data }) {
     popupWindow(href, { width: 540, height: 480, left: 200, top: 100 });
   };
 
-  const initializeModalState = () => {
-    setFilteredItemList(originItemList);
-    setConfirmMessage('');
-    setActiveModal(null);
-    setConfirmType(null);
-  };
 
-  const filter_availableConfirmItemList = (itemList) => {
-    return itemList.filter((item) => {
-      return item.status === orderStatus.DELIVERY_DONE && item.status !== orderStatus.CONFIRM;
-    });
-  };
 
+  
   const onStartConfirm = () => {
     const availableItemList = filter_availableConfirmItemList(originItemList);
-    if (!availableItemList.length) return alert('구매확정 가능한 상품이 없습니다.');
+    if (!availableItemList.length) return mct.alertShow('구매확정 가능한 상품이 없습니다.');
     setFilteredItemList(availableItemList);
     setActiveModal({ confirm: true });
     setConfirmType(orderStatus.CONFIRM);
@@ -97,7 +100,15 @@ export default function SingleItem_OrderHistoryPage({ data }) {
 
   const onStartReturn = () => {
     const availableItemList = filter_availableReturnAndExchangeItemList(originItemList);
-    if (!availableItemList.length) return alert('반품 가능한 상품이 없습니다.');
+    if (!availableItemList.length) return mct.alertShow('반품 가능한 상품이 없습니다.');
+    //  ! 전체반품 Ver.
+    const result = validation_ReturnableAndExchangeableOrders(originItemList);
+    if(!result.valid){
+      const message = result.message.join(`\n`);
+      return mct.alertShow(message);
+    }
+    
+    
     setFilteredItemList(availableItemList);
     setActiveModal({ return: true });
     setConfirmType(orderStatus.RETURN_REQUEST);
@@ -105,7 +116,15 @@ export default function SingleItem_OrderHistoryPage({ data }) {
 
   const onStartExchange = () => {
     const availableItemList = filter_availableReturnAndExchangeItemList(originItemList);
-    if (!availableItemList.length) return alert('교환 가능한 상품이 없습니다.');
+    if (!availableItemList.length) return mct.alertShow('교환 가능한 상품이 없습니다.');
+    
+    //  ! 전체반품 Ver.
+    const result = validation_ReturnableAndExchangeableOrders(originItemList);
+    if(!result.valid){
+      const message = result.message.join(`\n`);
+      return mct.alertShow(message);
+    }
+
     setFilteredItemList(availableItemList);
     setActiveModal({ exchange: true });
     setConfirmType(orderStatus.EXCHANGE_REQUEST);
@@ -113,10 +132,12 @@ export default function SingleItem_OrderHistoryPage({ data }) {
 
   const onStartCancel = () => {
     if (availableImmediatelyCancle) {
+      // 즉시 취소
       setActiveModal({ cancle: true });
       setConfirmMessage(`전체 상품이 즉시 주문취소됩니다.`);
       setConfirmType(orderStatus.CANCEL_REQUEST);
     } else {
+      // 취소 요청 시작
       setActiveModal({ cancelRequest: true });
       setConfirmType(orderStatus.CANCEL_REQUEST);
     }
@@ -152,11 +173,10 @@ export default function SingleItem_OrderHistoryPage({ data }) {
   const onPrevPage = async () => {
     window.location.href='/mypage/orderHistory'
   }
-  // console.log('전체취소 가능여부: ', availableImmediatelyCancle);
-  // console.log('취소기능 활성여부: ', availableCancleState);
   
   return (
     <>
+      {hasAlert && <Modal_global_alert/>}
       {activeModal?.cancle && (
         <Modal_confirm
           text={confirmMessage}
@@ -172,7 +192,7 @@ export default function SingleItem_OrderHistoryPage({ data }) {
         <Modal_changeItemOrderState
           onHideModal={initializeModalState}
           confirmType={confirmType}
-          items={filteredItemList}
+          items={originItemList}
           hasForm={!activeModal?.confirm}
         />
       )}
@@ -499,6 +519,8 @@ const AdditionalOrderStatusInfo = ({
   );
 };
 
+
+
 export async function getServerSideProps(ctx) {
   const { query, req } = ctx;
 
@@ -508,7 +530,7 @@ export async function getServerSideProps(ctx) {
   const getApiUrl = `/api/orders/${orderIdx}/general`; // 일반 주문 하나 조회
 
   let res = await getDataSSR(req, getApiUrl);
-  // res = DUMMY_RESPONSE; // ! TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
+  // res = DUMMY_RESPONSE; // ! TEST
   const data = res?.data;
   console.log('------singleItem Data: ',data);
   // console.log('SERVER REPONSE: ', res);

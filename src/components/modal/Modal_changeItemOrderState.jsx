@@ -13,6 +13,7 @@ import {orderStatus} from '/store/TYPE/orderStatusTYPE';
 import {useModalContext} from '/store/modal-context';
 import animateWindow from '/util/func/animateWindow';
 import {useRouter} from 'next/router';
+import {validation_ReturnableAndExchangeableOrders} from "../../../util/func/validation/validation_ReturnableAndExchangeableOrders";
 
 const allConfirmTypes = [
   {
@@ -40,10 +41,40 @@ const config = {
   
 }
 
+const buyerFormIdList = ['구매의사 취소 (구매자 귀책)',
+  '다른 상품 잘못 주문 (구매자 귀책)',];
+const sellerFormIdList = ['택배사의 귀책으로 상품이 훼손됐을 때 (판매자 귀책)',
+  '고객이 주문한 제품과 다른 제품이 배송됐을 때 (판매자 귀책)',
+  '상품이 파손되었을 때 (판매자 귀책)',];
+
+
+const buyerReponsibleLabelList = [
+  <p className={s.reason} key={'form-label-01'}>
+    구매의사 취소&nbsp;<span className={s.responsibility}>(구매자 귀책)</span>
+  </p>,
+  <p className={s.reason} key={'form-label-02'}>
+    다른 상품 잘못 주문&nbsp;<span className={s.responsibility}>(구매자 귀책)</span>
+  </p>
+];
+const sellerReponsibleLabelList = [
+  <p className={s.reason} key={'form-label-03'}>
+    택배사의 귀책으로 상품이 훼손됐을 때&nbsp;
+    <span className={s.responsibility}>(판매자 귀책)</span>
+  </p>,
+  <p className={s.reason} key={'form-label-04'}>
+    고객이 주문한 제품과 다른 제품이 배송됐을 때&nbsp;
+    <span className={s.responsibility}>(판매자 귀책)</span>
+  </p>,
+  <p className={s.reason} key={'form-label-05'}>
+    상품이 파손됐을 때&nbsp;<span className={s.responsibility}>(판매자 귀책)</span>
+  </p>
+];
+
 
 export const Modal_changeItemOrderState = ({items = [], onHideModal, confirmType, hasForm = true}) => {
   const router = useRouter();
   const mct = useModalContext();
+  
   
   
   const orderId = items[0].orderId;
@@ -80,6 +111,10 @@ export const Modal_changeItemOrderState = ({items = [], onHideModal, confirmType
     BUTTON_NAME = '취소요청';
   }
   
+
+  const formLabelList = confirmType === orderStatus.CANCEL_REQUEST ? buyerReponsibleLabelList : [...buyerReponsibleLabelList, ...sellerReponsibleLabelList];
+  const formIdList = confirmType === orderStatus.CANCEL_REQUEST ? buyerFormIdList : [...buyerFormIdList, ...sellerFormIdList];
+
   
   const initialFormValues = {
     selectedItemIdList: [], // 주문한 상품orderItem Id List
@@ -164,6 +199,16 @@ export const Modal_changeItemOrderState = ({items = [], onHideModal, confirmType
     // }
     ////////////////////////////////////
     
+    const validationTargetTypes = [orderStatus.RETURN_REQUEST, orderStatus.EXCHANGE_REQUEST];
+    if ( validationTargetTypes.indexOf( confirmType ) >= 0 ) {
+      const result = validation_ReturnableAndExchangeableOrders( items );
+      if ( !result.valid ) {
+        const message = result.message.join( `\n` );
+        return mct.alertShow( message );
+      }
+    }
+    
+    
     try {
       setIsLoading( (prevState) => ({
         ...prevState,
@@ -191,7 +236,7 @@ export const Modal_changeItemOrderState = ({items = [], onHideModal, confirmType
       // console.log(res);
       if ( res.isDone ) {
         // if (!res.isDone) { //  ! TEST TEST
-        if(confirmType === orderStatus.CONFIRM){
+        if ( confirmType === orderStatus.CONFIRM ) {
           mct.alertShow( `구매확정 처리되었습니다.` );
         } else {
           mct.alertShow( `${COMFIRM_TYPE_KOR}신청이 접수되었습니다.` );
@@ -253,7 +298,7 @@ export const Modal_changeItemOrderState = ({items = [], onHideModal, confirmType
         </section>
         
         <section className={s['body-section']}>
-          {/*! 부분 반품 Ver. (221213 전체반품으로 변경하면서, 삭제*/}
+          {/* ! 부분 반품 Ver. (221213 전체반품으로 변경하면서, 삭제*/}
           {config.targetConfirmType.indexOf( confirmType ) >= 0 && (
             <>
               <SelectAllCheckBox
@@ -400,32 +445,3 @@ const SelectAllCheckBox = ({
     </div>
   );
 };
-
-
-const formIdList = [
-  '구매의사 취소 (구매자 귀책)',
-  '다른 상품 잘못 주문 (구매자 귀책)',
-  '택배사의 귀책으로 상품이 훼손됐을 때 (판매자 귀책)',
-  '고객이 주문한 제품과 다른 제품이 배송됐을 때 (판매자 귀책)',
-  '상품이 파손되었을 때 (판매자 귀책)',
-];
-
-const formLabelList = [
-  <p className={s.reason} key={'form-label-01'}>
-    구매의사 취소&nbsp;<span className={s.responsibility}>(구매자 귀책)</span>
-  </p>,
-  <p className={s.reason} key={'form-label-02'}>
-    다른 상품 잘못 주문&nbsp;<span className={s.responsibility}>(구매자 귀책)</span>
-  </p>,
-  <p className={s.reason} key={'form-label-03'}>
-    택배사의 귀책으로 상품이 훼손됐을 때&nbsp;
-    <span className={s.responsibility}>(판매자 귀책)</span>
-  </p>,
-  <p className={s.reason} key={'form-label-04'}>
-    고객이 주문한 제품과 다른 제품이 배송됐을 때&nbsp;
-    <span className={s.responsibility}>(판매자 귀책)</span>
-  </p>,
-  <p className={s.reason} key={'form-label-05'}>
-    상품이 파손됐을 때&nbsp;<span className={s.responsibility}>(판매자 귀책)</span>
-  </p>,
-];

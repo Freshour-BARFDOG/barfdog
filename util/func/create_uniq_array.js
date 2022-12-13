@@ -1,0 +1,1 @@
+export const createUniqArray = (arr) => Array.from( new Set( arr ) );
