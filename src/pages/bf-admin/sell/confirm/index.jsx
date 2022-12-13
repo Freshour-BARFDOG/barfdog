@@ -1,21 +1,20 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import s from '../search/search.module.scss';
 import SearchResultList from "../search/SearchResultList";
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import AdminLayout from "/src/components/admin/AdminLayout";
-import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
+import {AdminContentWrapper} from "/src/components/admin/AdminWrapper";
 import SearchBar from "/src/components/admin/form/searchBar";
 import SearchTerm from "/src/components/admin/form/searchBar/SearchTerm";
 import SearchTextWithCategory from "/src/components/admin/form/searchBar/SearchTextWithCategory";
 import SearchRadio from "/src/components/admin/form/searchBar/SearchRadio";
 import AmdinErrorMessage from "/src/components/atoms/AmdinErrorMessage";
+import PaginationWithAPI from "/src/components/atoms/PaginationWithAPI";
 import {transformToday} from "/util/func/transformDate";
 import {orderStatus} from "/store/TYPE/orderStatusTYPE";
 import {productType} from "/store/TYPE/itemType";
 import Spinner from "/src/components/atoms/Spinner";
-
-import PaginationWithAPI from "/src/components/atoms/PaginationWithAPI";
-
+import {getDefaultPagenationInfo} from "/util/func/getDefaultPagenationInfo";
 
 
 const initialSearchValues = {
@@ -56,22 +55,14 @@ function ConfirmOnSellPage() {
     setSearchBody(body);
   };
   
-  const pageInterceptor = (res) => {
+  
+  const pageInterceptor = (res, option={itemQuery: null}) => {
     console.log(res);
-    // res = DUMMY_RESPONSE; //  ! TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
-    const pageData = res.data.page;
-    const curItemList = res.data?._embedded?.queryAdminOrdersDtoList || [];
-    let newPageInfo = {
-      totalPages: pageData.totalPages,
-      size: pageData.size,
-      totalItems: pageData.totalElements,
-      currentPageIndex: pageData.number,
-      newPageNumber: pageData.number + 1,
-      newItemList: curItemList,
-    };
-    return newPageInfo;
+    return getDefaultPagenationInfo(res?.data, 'queryAdminCancelRequestDtoList', {pageSize: searchPageSize});
   };
-
+  
+  
+  
 
   return (
     <>
@@ -292,4 +283,3 @@ const DUMMY_RESPONSE = {
     },
   },
 };
-
