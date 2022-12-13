@@ -19,7 +19,7 @@ function OrderCompletedPage(props) {
             <div className={`${s.image} img-wrap`}>
               <Image
                 priority
-                src={require("public/img/survey/survey_loading_left.png")}
+                src={require("public/img/order/order_left.png")}
                 objectFit="cover"
                 layout="fill"
                 alt="브랜드 소개 이미지"
@@ -28,7 +28,7 @@ function OrderCompletedPage(props) {
             <div className={`${s.image} img-wrap`}>
               <Image
                 priority
-                src={require("public/img/survey/survey_loading_right.png")}
+                src={require("public/img/order/order_center.png")}
                 objectFit="cover"
                 layout="fill"
                 alt="브랜드 소개 이미지"
@@ -37,7 +37,7 @@ function OrderCompletedPage(props) {
             <div className={`${s.image} img-wrap`}>
               <Image
                 priority
-                src={require("public/img/survey/survey_loading_left.png")}
+                src={require("public/img/order/order_right.png")}
                 objectFit="cover"
                 layout="fill"
                 alt="브랜드 소개 이미지"
