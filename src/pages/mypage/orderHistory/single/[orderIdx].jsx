@@ -18,7 +18,17 @@ import { Modal_changeItemOrderState } from '/src/components/modal/Modal_changeIt
 import { filter_availableReturnAndExchangeItemList } from '/util/func/filter_availableReturnAndExchangeItemList';
 import { valid_availableCancelOrder } from '/util/func/validation/valid_availableCancelOrder';
 import { valid_availableReturnAndExchangelOrder } from '/util/func/valid_availableReturnAndExchangelOrder';
+import {general_itemType} from "/store/TYPE/itemType";
 
+
+
+
+// ! 신선식품이 포함되어있을 경우, 교환 반품 불가능하도록
+// ! 신선식품이 포함되어있을 경우, 교환 반품 불가능하도록
+// ! 신선식품이 포함되어있을 경우, 교환 반품 불가능하도록
+// ! 신선식품이 포함되어있을 경우, 교환 반품 불가능하도록
+// ! 신선식품이 포함되어있을 경우, 교환 반품 불가능하도록
+// ! 신선식품이 포함되어있을 경우, 교환 반품 불가능하도록
 
 export default function SingleItem_OrderHistoryPage({ data }) {
   // console.log(data);
@@ -29,6 +39,7 @@ export default function SingleItem_OrderHistoryPage({ data }) {
   const [confirmType, setConfirmType] = useState('');
   const [filteredItemList, setFilteredItemList] = useState([]);
 
+  
   let availableImmediatelyCancle = true;
   let availableCancleState = true;
 
@@ -50,7 +61,10 @@ export default function SingleItem_OrderHistoryPage({ data }) {
   // 교환 반품 조건 // 배송완료 & 배송완료 7일 이내
   const isAvailableReturnAndExchangeState = valid_availableReturnAndExchangelOrder(
     originItemList[0].status,
+    
     data.orderDto.arrivalDate,
+    //  TEST : 교환반품
+    // '2022-12-11T09:56:10.014'
   );
 
   const onPopupHandler = (e) => {
@@ -266,7 +280,10 @@ export default function SingleItem_OrderHistoryPage({ data }) {
                     </li>
                   ))}
                 </ul>
-                <div className={`${s.info_autoConfirmation} ${s.general}`}>일반상품은 배송완료 7일 후, 자동으로 구매확정됩니다.</div>
+                <div className={`${s.info_autoConfirmation} ${s.general}`}>
+                  <p>구매확정은 배송완료 후 아래 기간이 지나면 자동으로 처리됩니다.</p>
+                  <p>* 신선식품(생식, 토핑): 2일 / 비신선식품: 7일</p>
+                </div>
               </section>
             </section>
 
@@ -428,7 +445,6 @@ const AdditionalOrderStatusInfo = ({
   ) {
     orderQuery = 'orderExchange';
   }
-  console.log(option.data);
   const data = option.data;
   const deliveryPrice = data.orderDto.deliveryPrice;
   const responsibility = repItem.status === orderStatus.CANCEL_DONE_BUYER ? 'BUYER' : 'SELLER';
@@ -506,6 +522,7 @@ export async function getServerSideProps(ctx) {
     DATA = {
       orderItemDtoList: data.orderItemDtoList?.map((item) => ({
         arrivalDate: data.orderDto.arrivalDate || null, // ! 확인필요 => 전체 배송완료상태를, 상품 각각에 부여하는것 (예외가 없다면 그대로 진행)
+        orderId: data.orderDto.orderId, // 주문 id
         orderItemId: item.orderItemId, // 주문한 상품 id
         thumbnailUrl: item.thumbnailUrl,
         selectOptionDtoList: item.selectOptionDtoList.map((op) => ({
@@ -518,6 +535,7 @@ export async function getServerSideProps(ctx) {
         discountAmount: item.discountAmount,
         status: item.status,
         saveReward: item.saveReward,
+        category: general_itemType[item.category],
         orderCancel: {
           reason: item.orderCancel?.cancelReason || null,
           detailReason: item.orderCancel?.cancelDetailReason || null,

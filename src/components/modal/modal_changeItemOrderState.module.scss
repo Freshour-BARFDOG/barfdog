@@ -23,6 +23,9 @@
     width:rem(24);
     height:rem(24);
   }
+  .itemCounts{
+
+  }
 }
 
 .body-section {
@@ -41,19 +44,39 @@
       }
     }
   }
-  $item-height : rem(97);
-  $revealItemCount : 2;
+
   .item-list{
+    $item-height : rem(97);
+    $revealItemCount : 2;
     height: calc($item-height * $revealItemCount);
-    overflow-y: scroll;
+
+    &.overflowScroll{
+      overflow-y: scroll;
+      &::-webkit-scrollbar{
+        width: rem(4);
+        &-thumb{
+          background: #999;
+          border-radius: rem(10);
+        }
+        &-track{
+          background: #f1f2f3;
+        }
+      }
+    }
+
     margin-bottom: rem(30);
+
+
     li{
       border-bottom: rem(1) solid var(--color-line-04);
     }
     .item{
       padding: rem(18) 0;
       display: grid;
-      grid-template-columns: rem(60) 1fr rem(60);
+      grid-template-columns: 1fr rem(60);
+      &.selectable{
+        grid-template-columns: rem(60) 1fr rem(60);
+      }
       .col{
         display: flex;
         align-items: center;
