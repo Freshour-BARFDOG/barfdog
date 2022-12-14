@@ -78,6 +78,8 @@ export const Modal_changeItemOrderState = ({items = [], onHideModal, confirmType
   
   
   const orderId = items[0].orderId;
+  const allItemsIdList = items.map( (item) => item.orderItemId );
+  
   const itemList = useMemo( () => items.map( (item, i) => ({
     orderItemId: item.orderItemId, // 주문한 상품 id
     thumbnailUrl: item.thumbnailUrl,
@@ -106,14 +108,14 @@ export const Modal_changeItemOrderState = ({items = [], onHideModal, confirmType
     COMFIRM_TYPE_KOR = '구매확정';
     BUTTON_NAME = '구매확정';
   } else if ( confirmType === orderStatus.CANCEL_REQUEST ) {
-    CONFIRM_TYPE = 'cancel';
+    CONFIRM_TYPE = 'cancelRequest';
     COMFIRM_TYPE_KOR = '취소';
     BUTTON_NAME = '취소요청';
   }
   
 
-  const formLabelList = confirmType === orderStatus.CANCEL_REQUEST ? buyerReponsibleLabelList : [...buyerReponsibleLabelList, ...sellerReponsibleLabelList];
-  const formIdList = confirmType === orderStatus.CANCEL_REQUEST ? buyerFormIdList : [...buyerFormIdList, ...sellerFormIdList];
+  const formLabelList = [...buyerReponsibleLabelList, ...sellerReponsibleLabelList];
+  const formIdList = [...buyerFormIdList, ...sellerFormIdList];
 
   
   const initialFormValues = {
@@ -123,7 +125,7 @@ export const Modal_changeItemOrderState = ({items = [], onHideModal, confirmType
   };
   
   
-  const allItemsIdList = items.map( (item) => item.orderItemId );
+  
   
   const [form, setForm] = useState( initialFormValues );
   const [isSubmitted, setIsSubmitted] = useState( false );
@@ -131,6 +133,7 @@ export const Modal_changeItemOrderState = ({items = [], onHideModal, confirmType
   const [mounted, setMounted] = useState( false );
   
   useEffect( () => {
+    // Block scroll event
     if ( typeof window === 'undefined' ) return;
     
     const Y = window.scrollY || 0;
@@ -140,7 +143,6 @@ export const Modal_changeItemOrderState = ({items = [], onHideModal, confirmType
         width:100%;
         top : -${Y}px;
       `;
-    
     
     setMounted( true );
     return () => {
@@ -186,6 +188,7 @@ export const Modal_changeItemOrderState = ({items = [], onHideModal, confirmType
   };
   
   
+  
   const onSubmit = async (e) => {
     e.preventDefault();
     if ( isSubmitted ) return console.error( '이미 제출된 양식입니다.' );
@@ -229,9 +232,8 @@ export const Modal_changeItemOrderState = ({items = [], onHideModal, confirmType
         };
       }
       
-      
-      console.log( body );
       const url = `/api/orders/general/${CONFIRM_TYPE}`;
+      console.log( 'url:', url, 'body: ',body );
       const res = await postObjData( url, body );
       // console.log(res);
       if ( res.isDone ) {
@@ -270,10 +272,10 @@ export const Modal_changeItemOrderState = ({items = [], onHideModal, confirmType
       const r = await postObjData( `/api/orders/${orderIdx}/general/cancelRequest`, body );
       console.log( r );
       if ( r.isDone ) {
-        mct.alertShow( `${COMFIRM_TYPE_KOR}신청이 접수되었습니다.` );
+        mct.alertShow( `취소신청이 접수되었습니다.` );
         setIsSubmitted( true );
       } else {
-        mct.alertShow( `${COMFIRM_TYPE_KOR}신청에 실패하였습니다.` );
+        mct.alertShow( `취소신청에 실패하였습니다.` );
       }
     } catch (err) {
       console.error( err );
@@ -335,10 +337,9 @@ export const Modal_changeItemOrderState = ({items = [], onHideModal, confirmType
                 <textarea
                   id={'detailReason'}
                   name="detailReason"
-                  placeholder={confirmType === orderStatus.CANCEL_REQUEST ? '' : '상세사유를 입력해주세요.'}
+                  placeholder={'상세사유를 입력해주세요.'}
                   value={form.detailReason}
                   onChange={onInputChange}
-                  disabled={confirmType === orderStatus.CANCEL_REQUEST}
                 ></textarea>
               </div>
             </div>

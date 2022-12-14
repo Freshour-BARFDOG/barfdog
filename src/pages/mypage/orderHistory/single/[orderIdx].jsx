@@ -147,7 +147,7 @@ export default function SingleItem_OrderHistoryPage({ data }) {
     if (!confirm) return initializeModalState();
 
     const body = {
-      reason: '구매자 일반결제 즉시 취소',
+      reason: '',
       detailReason: '',
     };
     try {
