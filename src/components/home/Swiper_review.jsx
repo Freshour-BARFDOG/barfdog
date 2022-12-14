@@ -31,11 +31,11 @@ const swiperSettings_review = {
     
     100: {
       slidesPerView: 1,
-      spaceBetween: 40,
+      spaceBetween: 20,
     },
     601: {
       slidesPerView: 1,
-      spaceBetween: 40,
+      spaceBetween: 20,
     },
     901: {
       slidesPerView: 2,

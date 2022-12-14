@@ -50,13 +50,18 @@ $animationDuration : 0.2s;
         height: rem(60);
         background-color :#fff;
         border: rem(1) solid #EFEFEF;
+        border-right: 0;
         box-sizing: border-box;
-        margin-left: rem(-1);
+        // margin-left: rem(-1);
         transition-property: background-color, color;
         transition-timing-function: ease;
         transition-duration: $animationDuration;
         cursor: pointer;
-        transition: background-color .3s ease;
+        transition: background-color .3s ease, border-color .3s ease;
+
+        &:nth-child(5){
+          border-right: rem(1) solid #EFEFEF;;
+        }
 
         &:last-child {
           display: none;
@@ -65,6 +70,9 @@ $animationDuration : 0.2s;
         &.active{
           background-color: var(--color-main) !important;
           color: #fff;
+          border-color: var(--color-main);
+          // z-index: 9;
+
           &:hover{
             background-color: inherit;
           }
@@ -73,7 +81,7 @@ $animationDuration : 0.2s;
           width: rem(180);
           height: rem(60);
           background-color: #f4f5f6;
-          transition: background-color .3s ease;
+          transition: background-color .3s ease, border-color .3s ease;
         }
       }  
     }
@@ -241,18 +249,22 @@ $animationDuration : 0.2s;
         grid-gap: 0;
         .box {
           width: 100%;
-          border-top: 0;
-          border-right: 0;
-          &:first-child, &:nth-child(2) {
-            border-top: rem(1) solid #EFEFEF;
-          }
+
           &:nth-child(3) {
-            border-top: rem(1) solid #EFEFEF;
             border-right: rem(1) solid #EFEFEF;
+          }
+          &:nth-child(4){
+            border-right: 0;
+            margin-top: rem(-1);
+          }
+          &:nth-child(5){
+            border-right: 0;
+            margin-top: rem(-1);
           }
           &:last-child {
             display: block;
-            border-bottom: 0;
+            border: 0;
+            border-left: rem(1) solid #EFEFEF;
           }
 
           &.active{
