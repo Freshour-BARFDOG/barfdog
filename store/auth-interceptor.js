@@ -17,7 +17,7 @@ export default function AuthInterceptor({ CustomProps, children }) {
   const [DATA, setDATA] = useState( {data, token, EXPIRED_TOKEN, USERTYPE} );
   // console.log('DATA : ',  DATA)
   
-  console.log('SSR >> auth-interceptor.js', '\nDATA: ', DATA);
+  // console.log('SSR >> auth-interceptor.js', '\nDATA: ', DATA);
   // console.log('CRS >> auth-interceptor.js\n','USER_TYPE: ',DATA.USERTYPE, '\nEXPIRED_TOKEN: ',!DATA.EXPIRED_TOKEN, '\nDATA: ', DATA.data)
   //
   // STEP 1. CHECK USER TYPE UPDATE & stored DATA in REDUX (in NextJS SERVER)
