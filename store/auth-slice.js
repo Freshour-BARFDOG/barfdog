@@ -61,7 +61,6 @@ const authSlice = createSlice({
         expiredDate,
         { path: '/' },
       );
-      alert('카카오 로그인 토큰: ', accessToken);
       window.location.href =  '/';
     },
     naverLogin(state, action) {

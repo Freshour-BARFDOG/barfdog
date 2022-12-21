@@ -33,10 +33,12 @@ export default function NAVER_Auth({ data, err, token }) {
         // CASE: 비회원 > 회원가입 페이지로 이동
         dispatch(userStateAction.setSnsInfo({ data: userSnsInfo }));
         await router.push('/account/signup');
+        
       } else if (data.snsUserType === userType.MEMBER) {
         // CASE: 회원 > 연동되지 않았을 경우, 연동페이지로 이동
         dispatch(userStateAction.setSnsInfo({ data: userSnsInfo }));
         await router.push('/account/valid-sns');
+        
       } else if (
         data.snsUserType === userType.MEMBER_WITH_SNS.KAKAO ||
         data.snsUserType === userType.MEMBER_WITH_SNS.NAVER
@@ -125,7 +127,15 @@ export async function getServerSideProps({ query }) {
     console.log('BARFDOG API SERVER res::::: ', res);
     // res = DUMMY_NEW_MEMBER_RESPONSE; ////////  ! TEST
     // res = DUMMY_MEMBER_RESPONSE; ////////  ! TEST
-
+    if (res.status === 500) { // 서버응답이 없을 경우, Redir
+      return {
+        redirect: {
+          permanent: false,
+          destination: '/account/login',
+        },
+      };
+    }
+    
     if (res.data) {
       const resultCode = Number(res.data.resultcode) || null;
       const resultMessage = res.data.message || null;
@@ -150,8 +160,9 @@ export async function getServerSideProps({ query }) {
         // 회원 & SNS연동 아직 안 한 CASE
         snsUserType = userType.MEMBER;
       } else if (resultCode === 253) {
-        // 이미 카카오로 연동되어있는 계정 = 로그인 처리시킴
+        // 이미 연동되어있는 계정 = 로그인 처리시킴
         snsUserType = userType.MEMBER_WITH_SNS.KAKAO;
+        token = res.headers.authorization;
       } else if (resultCode === 254 || resultCode === 200) {
         // 이미 연동되어있는 회원 => 메인페이지로 이동
         snsUserType = userType.MEMBER_WITH_SNS.NAVER;
@@ -201,38 +212,41 @@ export async function getServerSideProps({ query }) {
   500, Internal Server Error / 데이터베이스 오류입니다. 서버 내부 에러가 발생하였습니다. 포럼에 올려주시면 신속히 조치하겠습니다.
 */
 
-const DUMMY_NEW_MEMBER_RESPONSE = {
-  // 신규 멤버일 경우
-  data: {
-    resultcode: '251',
-    message: 'new member',
-    response: {
-      id: 'p4N4jAY5Q0qszLDW8Wx2W30K3eKkRUlHEVivAHgR0XQ222', // SNS 고유 식별 ID
-      gender: 'F',
-      email: 'develope07@binter.co.kr',
-      mobile: '01056781234',
-      mobile_e164: '+821056781234',
-      name: '관리자계정',
-      birthday: '12-01',
-      birthyear: '1999',
-    },
-  },
-};
 
-const DUMMY_MEMBER_RESPONSE = {
-  // 기존에 회원가입된 멤버일 경우
-  data: {
-    resultcode: '252',
-    message: 'need to connect new sns',
-    response: {
-      id: 'p4N4jAY5Q0qszLDW8Wx2W30K3eKkRUlHEVivAHgR0XQ', // SNS 고유 식별 ID
-      gender: 'F',
-      email: 'develope07@binter.co.kr',
-      mobile: '01056781234',
-      mobile_e164: '+821056781234',
-      name: '관리자계정',
-      birthday: '12-01',
-      birthyear: '1999',
-    },
-  },
-};
+//
+//
+// const DUMMY_NEW_MEMBER_RESPONSE = {
+//   // 신규 멤버일 경우
+//   data: {
+//     resultcode: '251',
+//     message: 'new member',
+//     response: {
+//       id: 'p4N4jAY5Q0qszLDW8Wx2W30K3eKkRUlHEVivAHgR0XQ222', // SNS 고유 식별 ID
+//       gender: 'F',
+//       email: 'develope07@binter.co.kr',
+//       mobile: '01056781234',
+//       mobile_e164: '+821056781234',
+//       name: '관리자계정',
+//       birthday: '12-01',
+//       birthyear: '1999',
+//     },
+//   },
+// };
+//
+// const DUMMY_MEMBER_RESPONSE = {
+//   // 기존에 회원가입된 멤버일 경우
+//   data: {
+//     resultcode: '252',
+//     message: 'need to connect new sns',
+//     response: {
+//       id: 'p4N4jAY5Q0qszLDW8Wx2W30K3eKkRUlHEVivAHgR0XQ', // SNS 고유 식별 ID
+//       gender: 'F',
+//       email: 'develope07@binter.co.kr',
+//       mobile: '01056781234',
+//       mobile_e164: '+821056781234',
+//       name: '관리자계정',
+//       birthday: '12-01',
+//       birthyear: '1999',
+//     },
+//   },
+// };

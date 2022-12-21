@@ -109,9 +109,10 @@ export async function getServerSideProps({ query }) {
           destination: '/account/login',
         },
       };
-    } else if (res.data) {
-      token = res.headers.authorization;
-      console.log( 'kakao token after login: ', token );
+    }
+    
+    if (res.data) {
+      
       const resData = res.data;
       const resultCode = Number(resData.resultcode) || null;
       const resultMessage = resData.message || null;
@@ -143,8 +144,10 @@ export async function getServerSideProps({ query }) {
       } else if (resultCode === 253 || resultCode === 200) {
         // 이미 카카오로 연동되어있는 계정 > 로그인 처리시킴
         snsUserType = userType.MEMBER_WITH_SNS.KAKAO;
+        token = res.headers.authorization;
       } else if (resultCode === 254) {
         snsUserType = userType.MEMBER_WITH_SNS.NAVER; // 이미 네이버로 연동되어있는 계정
+        token = res.headers.authorization;
       }
 
       /*  error Code Validation 필요
@@ -202,88 +205,91 @@ export async function getServerSideProps({ query }) {
   
 */
 
-const DUMMY_NEW_MEMBER_RESPONSE = {
-  // 신규 멤버일 경우
-  data: {
-    resultcode: '251',
-    message: 'new member',
-    id: 2439726893,
-    connected_at: '2022-09-22T06:53:57Z',
-    kakao_account: {
-      name_needs_agreement: false,
-      name: '홍길순',
-      has_email: true,
-      email_needs_agreement: false,
-      email: 'solsol1203@naver.com',
-      has_phone_number: true,
-      phone_number_needs_agreement: false,
-      phone_number: '+82 10-9851-7017',
-      has_birthyear: true,
-      birthyear_needs_agreement: false,
-      birthyear: '2008',
-      has_birthday: true,
-      birthday_needs_agreement: false,
-      birthday: '10-12',
-      birthday_type: 'SOLAR',
-      has_gender: true,
-      gender_needs_agreement: false,
-      gender: 'female',
-      _email_valid: false,
-      _email_verified: false,
-    },
-    accessToken: null,
-    tokenValidDays: 21599,
-    resultCode: 200,
-    _links: {
-      self: {
-        href: 'http://localhost:8080/api/login/kakao',
-      },
-      profile: {
-        href: '/docs/index.html#resources-login-kakao',
-      },
-    },
-  },
-};
 
-const DUMMY_MEMBER_RESPONSE = {
-  // 기존에 회원가입된 멤버일 경우
-  data: {
-    resultcode: '253',
-    message: 'member',
-    id: 2439726893,
-    connected_at: '2022-09-22T06:53:57Z',
-    kakao_account: {
-      name_needs_agreement: false,
-      name: '홍길동',
-      has_email: true,
-      email_needs_agreement: false,
-      email: 'solsol1203@naver.com',
-      has_phone_number: true,
-      phone_number_needs_agreement: false,
-      phone_number: '+82 10-9851-7017',
-      has_birthyear: true,
-      birthyear_needs_agreement: false,
-      birthyear: '1991',
-      has_birthday: true,
-      birthday_needs_agreement: false,
-      birthday: '09-08',
-      birthday_type: 'SOLAR',
-      has_gender: true,
-      gender_needs_agreement: false,
-      gender: 'female',
-      _email_valid: false,
-      _email_verified: false,
-    },
-    accessToken: null,
-    tokenValidDays: 21599,
-    resultCode: 200,
-    _links: {
-      self: {
-        href: 'http://localhost:8080/api/login/kakao',
-      },
-      profile: {
-        href: '/docs/index.html#resources-login-kakao',
-      },
-    },
-  },
-};
+
+//
+// const DUMMY_NEW_MEMBER_RESPONSE = {
+//   // 신규 멤버일 경우
+//   data: {
+//     resultcode: '251',
+//     message: 'new member',
+//     id: 2439726893,
+//     connected_at: '2022-09-22T06:53:57Z',
+//     kakao_account: {
+//       name_needs_agreement: false,
+//       name: '홍길순',
+//       has_email: true,
+//       email_needs_agreement: false,
+//       email: 'solsol1203@naver.com',
+//       has_phone_number: true,
+//       phone_number_needs_agreement: false,
+//       phone_number: '+82 10-9851-7017',
+//       has_birthyear: true,
+//       birthyear_needs_agreement: false,
+//       birthyear: '2008',
+//       has_birthday: true,
+//       birthday_needs_agreement: false,
+//       birthday: '10-12',
+//       birthday_type: 'SOLAR',
+//       has_gender: true,
+//       gender_needs_agreement: false,
+//       gender: 'female',
+//       _email_valid: false,
+//       _email_verified: false,
+//     },
+//     accessToken: null,
+//     tokenValidDays: 21599,
+//     resultCode: 200,
+//     _links: {
+//       self: {
+//         href: 'http://localhost:8080/api/login/kakao',
+//       },
+//       profile: {
+//         href: '/docs/index.html#resources-login-kakao',
+//       },
+//     },
+//   },
+// };
+//
+// const DUMMY_MEMBER_RESPONSE = {
+//   // 기존에 회원가입된 멤버일 경우
+//   data: {
+//     resultcode: '253',
+//     message: 'member',
+//     id: 2439726893,
+//     connected_at: '2022-09-22T06:53:57Z',
+//     kakao_account: {
+//       name_needs_agreement: false,
+//       name: '홍길동',
+//       has_email: true,
+//       email_needs_agreement: false,
+//       email: 'solsol1203@naver.com',
+//       has_phone_number: true,
+//       phone_number_needs_agreement: false,
+//       phone_number: '+82 10-9851-7017',
+//       has_birthyear: true,
+//       birthyear_needs_agreement: false,
+//       birthyear: '1991',
+//       has_birthday: true,
+//       birthday_needs_agreement: false,
+//       birthday: '09-08',
+//       birthday_type: 'SOLAR',
+//       has_gender: true,
+//       gender_needs_agreement: false,
+//       gender: 'female',
+//       _email_valid: false,
+//       _email_verified: false,
+//     },
+//     accessToken: null,
+//     tokenValidDays: 21599,
+//     resultCode: 200,
+//     _links: {
+//       self: {
+//         href: 'http://localhost:8080/api/login/kakao',
+//       },
+//       profile: {
+//         href: '/docs/index.html#resources-login-kakao',
+//       },
+//     },
+//   },
+// };
