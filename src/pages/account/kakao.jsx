@@ -110,6 +110,8 @@ export async function getServerSideProps({ query }) {
         },
       };
     } else if (res.data) {
+      token = res.headers.authorization;
+      console.log( 'kakao token after login: ', token );
       const resData = res.data;
       const resultCode = Number(resData.resultcode) || null;
       const resultMessage = resData.message || null;

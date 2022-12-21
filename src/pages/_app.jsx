@@ -75,24 +75,27 @@ MyApp.getInitialProps = async (initialProps) => {
     } else {
       USER_TYPE = userType.NON_MEMBER;
     }
+    
 
     // STEP 2. EXPIRED TOKEN
     // 토큰 만료 확인 후 , login Page Redir한 경우 => 무한 redir을 방지하기 위해 토큰 만료 초기화
-    if (res_ADMIN && res_ADMIN.status === 401) {
-      // EXPIRED_TOKEN_ADMIN = req.headers.referer?.indexOf('/bf-admin/login') >= 0 ? true : null;
-      EXPIRED_TOKEN_ADMIN = true;
-    } else if (res_ADMIN) {
-      EXPIRED_TOKEN_ADMIN = false;
+    if(token){
+      if (res_ADMIN && res_ADMIN.status === 401) {
+        // EXPIRED_TOKEN_ADMIN = req.headers.referer?.indexOf('/bf-admin/login') >= 0 ? true : null;
+        EXPIRED_TOKEN_ADMIN = true;
+      } else if (res_ADMIN) {
+        EXPIRED_TOKEN_ADMIN = false;
+      }
+  
+      if (res_CART && res_CART.status === 401) {
+        // console.log('EXPIRED_TOKEN_MEMBER: ', EXPIRED_TOKEN_MEMBER);
+        // EXPIRED_TOKEN_MEMBER = req.headers.referer?.indexOf('/bf-admin/login') >= 0 ? true : null;
+        EXPIRED_TOKEN_MEMBER = true;
+      } else if (res_CART) {
+        EXPIRED_TOKEN_MEMBER = false;
+      }
     }
-
-    if (res_CART && res_CART.status === 401) {
-      // console.log('EXPIRED_TOKEN_MEMBER: ', EXPIRED_TOKEN_MEMBER);
-      // EXPIRED_TOKEN_MEMBER = req.headers.referer?.indexOf('/bf-admin/login') >= 0 ? true : null;
-      EXPIRED_TOKEN_MEMBER = true;
-    } else if (res_CART) {
-      EXPIRED_TOKEN_MEMBER = false;
-    }
-
+    
     // STEP 3. CART DATA
 
     if (

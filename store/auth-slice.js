@@ -34,10 +34,10 @@ const authSlice = createSlice({
       state.isAdmin = false;
       state.isAuth = true;
       state.userType = userType.MEMBER;
-      const accessToken = action.payload.token;
+      const accessToken = action.payload.token || "";
       const expiredDate = action.payload.expiredDate && cookieType.LOGIN_EXPIRED_PERIOD.VALUE; // 서버 token지속 기본값: 2시간
       // const { temporaryPassword, email, name, roleList } = action.payload.data; // ! 0926 삭제
-      const temporaryPassword = action.payload.data.temporaryPassword || null; // - 0926 추가
+      const temporaryPassword = action.payload.data?.temporaryPassword || null; // - 0926 추가
       setCookie(
         cookieType.LOGIN_COOKIE,
         accessToken,
@@ -50,22 +50,25 @@ const authSlice = createSlice({
     kakaoLogin(state, action) {
       state.isAdmin = false;
       state.isAuth = true;
-      state.userType = userType.MEMBER_WITH_SNS.KAKAO;
-      const accessToken = action.payload.token;
+      // state.userType = userType.MEMBER_WITH_SNS.KAKAO;
+      state.userType = userType.MEMBER;
+      const accessToken = action.payload.token || "";
+      const expiredDate = action.payload.expiredDate || cookieType.LOGIN_EXPIRED_PERIOD.VALUE; // 서버 token지속 기본값: 2시간
       setCookie(
         cookieType.LOGIN_COOKIE,
         accessToken,
         cookieType.AUTO_LOGIN_EXPIRED_PERIOD.UNIT,
+        expiredDate,
         { path: '/' },
       );
-      alert('카카오 로그인')
+      alert('카카오 로그인 토큰: ', accessToken);
       window.location.href =  '/';
     },
     naverLogin(state, action) {
       state.isAdmin = false;
       state.isAuth = true;
       state.userType = userType.MEMBER_WITH_SNS.NAVER;
-      const accessToken = action.payload.token;
+      const accessToken = action.payload.token || "";
       
       setCookie(
         cookieType.LOGIN_COOKIE,
@@ -80,7 +83,7 @@ const authSlice = createSlice({
     autoLogin(state, action) {
       state.isAdmin = false;
       state.isAuth = true;
-      const accessToken = action.payload.token;
+      const accessToken = action.payload.token || "";
       const expiredDate = action.payload.expiredDate && cookieType.AUTO_LOGIN_EXPIRED_PERIOD.VALUE; // 서버로 부터 전달받은 값을 그대로 cookie의 expiredDate로 사용.
       setCookie(
         cookieType.AUTO_LOGIN_COOKIE,
@@ -101,7 +104,7 @@ const authSlice = createSlice({
     adminLogin(state, action) {
       state.isAdmin = true;
       state.isAuth = true;
-      const accessToken = action.payload.token;
+      const accessToken = action.payload.token || "";
       const expiredDate = action.payload.expiredDate && cookieType.LOGIN_EXPIRED_PERIOD.VALUE; // 서버 token지속 기본값: 2시간
       setCookie(
         cookieType.LOGIN_COOKIE,
@@ -114,7 +117,7 @@ const authSlice = createSlice({
     adminAutoLogin(state, action) {
       state.isAdmin = true;
       state.isAuth = true;
-      const accessToken = action.payload.token;
+      const accessToken = action.payload.token || "";
       const expiredDate = action.payload.expiredDate && cookieType.AUTO_LOGIN_EXPIRED_PERIOD.VALUE; // 서버로 부터 전달받은 값을 그대로 cookie의 expiredDate로 사용.
       setCookie(
         cookieType.AUTO_LOGIN_COOKIE,
