@@ -325,7 +325,7 @@ export const getTokenFromServerSide = (req) => {
     if (cookie) {
       for (const key of cookie) {
         if (key.indexOf(tokenKey) >= 0) {
-          token = key.split('=')[1];
+          token = key.split( '=' )[1] === 'null' ? null : key.split( '=' )[1];
           break;
         }
       }
