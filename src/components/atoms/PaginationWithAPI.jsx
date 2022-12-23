@@ -5,7 +5,7 @@ import s from './pagination.module.scss';
 import {useRouter} from 'next/router';
 import {getData, postObjData} from '/src/pages/api/reqData';
 import {searchQueryType} from '/store/TYPE/searchQueryType';
-import {convertSearchQueryPageIndexToPageNumber} from "../../../util/func/convertSearchQueryPageIndexToPageNumber";
+import {convertSearchQueryStrings} from "../../../util/func/convertSearchQueryStrings";
 
 
 const Pagination = ({
@@ -85,13 +85,13 @@ const Pagination = ({
           
           // UPDATE browser URL Query
           if (routerDisabled === false) {
-            const indexToPageNumberQueries = convertSearchQueryPageIndexToPageNumber(urlQueries);
+            const convertedSearchQueryStrings = convertSearchQueryStrings(urlQueries);
   
             // # window scroll Y position 유지를 위해서는 window .history 사용해야힘)
             window.history.replaceState(
               window.history.state,
               '',
-              `${window.location.pathname}${indexToPageNumberQueries}`,
+              `${window.location.pathname}${convertedSearchQueryStrings}`,
             );
           }
         } else {

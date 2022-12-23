@@ -1,7 +1,7 @@
 
 
 
-export const convertSearchQueryPageIndexToPageNumber = (urlQueries) => {
+export const convertSearchQueryStrings = (urlQueries) => {
   
   if ( !urlQueries ) return;
   
