@@ -44,10 +44,10 @@ export function Payment({
       window.location.href = '/mypage/reward';
       return;
     }
-    if(form.paymentMethod === 'KAKAO_PAY'){
-      alert(`카카오페이 결제 준비중입니다. 다른 결제수단을 선택해주세요.`);
-      return;
-    }
+    // if(form.paymentMethod === 'KAKAO_PAY'){
+    //   alert(`카카오페이 결제 준비중입니다. 다른 결제수단을 선택해주세요.`);
+    //   return;
+    // }
     if(orderType === 'subscribe' && form.paymentMethod ==='NAVER_PAY'){
       alert(`정기구독 네이버페이 결제 준비중입니다. 다른 결제수단을 선택해주세요.`);
       return;
@@ -287,15 +287,17 @@ export function Payment({
     const randomStr = new Date().getTime().toString(36);
     const customUid = `customer_Uid_${randomStr}`;
     
-    /* 2. 결제 데이터 정의하기 */
+     /* 2. 결제 데이터 정의하기  TODO:kakaopay 실연동 가맹점코드(CID) 발급받으면 변경하기*/ 
     const data = {
-      pg: 'kcp_billing', // PG사
+      pg: form.paymentMethod === 'KAKAO_PAY'?'kakaopay.TCSUBSCRIP':'kcp_billing', // PG사
       pay_method: 'card', // 결제수단
       merchant_uid: new Date().getTime().toString(36), // 주문번호
       // amount: body.paymentPrice, // 결제금액
       amount:0,
       customer_uid : customUid,
       name: 'test바프독정기결제', // 주문명
+      buyer_name:form.deliveryDto.name,
+      buyer_tel: form.deliveryDto.phone,
       m_redirect_url: `${window.location.origin}/order/loading/subscribe/${id}/${randomStr}/${body.paymentPrice}/${merchantUid}/test바프독결제`
 
     };
