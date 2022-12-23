@@ -8,6 +8,8 @@ import {searchQueryType} from '/store/TYPE/searchQueryType';
 import {convertSearchQueryStrings} from "../../../util/func/convertSearchQueryStrings";
 
 
+
+
 const Pagination = ({
   apiURL,
   size = 10,
@@ -55,9 +57,12 @@ const Pagination = ({
           res = await getData(`${apiURL}${urlQueries}`);
           
         } else if (option.apiMethod === 'POST' && option.body) {
+          // URL Query의 복잡성으로인해, url query를 body로 받음
           const body = option.body;
           res = await postObjData(`${apiURL}${defQuery}`, body);
-          console.log(body, res)
+          const result = getUrlQueryFromBody(body);
+          // console.log(body, res)
+          urlQueries = `${urlQueries}&${result}`;
           res = res.data; // postObjData에서 data query하기 위함
         }
 
@@ -86,6 +91,8 @@ const Pagination = ({
           // UPDATE browser URL Query
           if (routerDisabled === false) {
             const convertedSearchQueryStrings = convertSearchQueryStrings(urlQueries);
+            // console.log(urlQueries)
+            // console.log(convertedSearchQueryStrings)
   
             // # window scroll Y position 유지를 위해서는 window .history 사용해야힘)
             window.history.replaceState(
@@ -250,3 +257,13 @@ const Pagination = ({
   );
 };
 export default Pagination;
+
+
+const getUrlQueryFromBody = (bodyObj) => {
+  const tempArr = [];
+  for (const key in bodyObj) {
+    const val = bodyObj[key];
+    tempArr.push(`${key}=${val || ''}`);
+  }
+  return tempArr.join( "&" );
+};

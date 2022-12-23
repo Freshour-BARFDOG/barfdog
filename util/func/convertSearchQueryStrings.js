@@ -17,7 +17,7 @@ export const convertSearchQueryStrings = (urlQueries) => {
     const updatedQuery = `${key}${sprt}${updatedVal}`;
     return updatedVal ? updatedQuery : q;
   });
-  return `${questionMark}${updatedQueries.join('')}`;
+  return `${questionMark}${updatedQueries.join('&')}`;
 }
 
 const processorMap = (val) =>({

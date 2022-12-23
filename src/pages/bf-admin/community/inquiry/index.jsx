@@ -23,6 +23,7 @@ import enterKey from "/util/func/enterKey";
 import {getAllItemIdList} from "/util/func/getAllItemIdList";
 import {putObjData} from "/src/pages/api/reqData";
 import {getQueryString} from "/util/func/getQueryString";
+import {getDefaultPagenationInfo} from "/util/func/getDefaultPagenationInfo";
 
 
 const initialSearchValues = {
@@ -81,36 +82,14 @@ export default function InquiryListPage() {
   const onResetSearchValues = () => {
     setSearchValues(initialSearchValues);
   };
-
   
-
-  const pageInterceptor = useCallback((res) => {
+  
+  const pageInterceptor = useCallback((res, option={itemQuery: null}) => {
     // res = DUMMY__RESPONSE; // ! TEST
-    console.log('InquiryListPage: ',res);
-    let newPageInfo = {
-      totalPages: 0,
-      size: 0,
-      totalItems: 0,
-      currentPageIndex: 0,
-      newPageNumber: 1,
-      newItemList: [],
-    };
-    if (res.data._embedded) {
-      const pageData = res.data.page;
-      const itemQuery = 'questionListSideAdminList';
-      const curItemList = res.data._embedded[itemQuery];
-      newPageInfo = {
-        totalPages: pageData.totalPages, //
-        size: pageData.size, //
-        totalItems: pageData.totalElements, //
-        currentPageIndex: pageData.number, //
-        newPageNumber: pageData.number + 1,
-        newItemList: curItemList,
-      };
-    }
-
-    return newPageInfo;
-  }, []);
+    console.log(res);
+    return getDefaultPagenationInfo(res?.data, 'questionListSideAdminList', {pageSize: searchPageSize});
+  },[]);
+  
 
   const onSelectedItem = (id, checked) => {
     const seletedId = Number(id);

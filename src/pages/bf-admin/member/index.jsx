@@ -13,6 +13,10 @@ import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import Spinner from '/src/components/atoms/Spinner';
 import { transformToday } from '/util/func/transformDate';
 import enterKey from '/util/func/enterKey';
+import {getDefaultPagenationInfo} from "../../../../util/func/getDefaultPagenationInfo";
+
+
+
 
 const initialSearchValues = {
   email: '',
@@ -29,34 +33,13 @@ function ManageUserPage() {
   const [itemList, setItemList] = useState([]);
   const [searchValue, setSearchValue] = useState(initialSearchValues);
   const [searchQuery, setSearchQuery] = useState('');
-
-  const pageInterceptor = useCallback((res) => {
+  const [searchQueryInitialize, setSearchQueryInitialize] = useState( false );
+  
+  const pageInterceptor = useCallback((res, option={itemQuery: null}) => {
     // res = DUMMY__RESPONSE; // ! TEST
-    // console.log('response:', res);
-    let newPageInfo = {
-      totalPages: 0,
-      size: 0,
-      totalItems: 0,
-      currentPageIndex: 0,
-      newPageNumber: 1,
-      newItemList: [],
-    };
-    if (res.data._embedded) {
-      const pageData = res.data.page;
-      const itemQuery = 'queryMembersDtoList';
-      const curItemList = res.data._embedded[itemQuery];
-      newPageInfo = {
-        totalPages: pageData.totalPages,
-        size: pageData.size,
-        totalItems: pageData.totalElements,
-        currentPageIndex: pageData.number,
-        newPageNumber: pageData.number + 1,
-        newItemList: curItemList,
-      };
-    }
-
-    return newPageInfo;
-  }, []);
+    console.log(res);
+    return getDefaultPagenationInfo(res?.data, 'queryMembersDtoList', {pageSize: searchPageSize, setInitialize: setSearchQueryInitialize});
+  },[]);
 
   const onResetSearchValues = () => {
     setSearchValue(initialSearchValues);
@@ -160,6 +143,7 @@ function ManageUserPage() {
                 urlQuery={searchQuery}
                 setIsLoading={setIsLoading}
                 pageInterceptor={pageInterceptor}
+                option={{apiMethod: 'GET', initialize: searchQueryInitialize}}
               />
             </div>
           </section>

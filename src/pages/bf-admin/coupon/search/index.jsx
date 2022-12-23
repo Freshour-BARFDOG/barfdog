@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import s from '../coupon.module.scss';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
@@ -13,6 +13,7 @@ import Spinner from '/src/components/atoms/Spinner';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import Tooltip from '/src/components/atoms/Tooltip';
 import { global_couponType } from '/store/TYPE/couponType';
+import {getDefaultPagenationInfo} from "../../../../../util/func/getDefaultPagenationInfo";
 
 /*-  auto: '/api/admin/coupons/auto', // 자동발행쿠폰
   - direct: '/api/admin/coupons/direct', // 직접발행쿠폰
@@ -43,6 +44,7 @@ export default function CouponListPage() {
   const [itemList, setItemList] = useState([]);
   const [searchValue, setSearchValue] = useState(initialSearchValue);
   const [apiUrlWithQuery, setApiUrlWithQuery] = useState(initialApiUrlWithQuery);
+  const [searchQueryInitialize, setSearchQueryInitialize] = useState( false );
   
 
   const onResetSearchValues = () => {
@@ -75,32 +77,12 @@ export default function CouponListPage() {
     }));
   };
   
-  
-  const pageInterCeptor = (res) => {
+  const pageInterceptor = useCallback((res, option={itemQuery: null}) => {
+    // res = DUMMY__RESPONSE; // ! TEST
     // console.log(res);
-    let newPageInfo = {
-      totalPages: 0,
-      size: 0,
-      totalItems: 0,
-      currentPageIndex: 0,
-      newPageNumber: 0,
-      newItemList: [],
-    };
-    if(res?.data?._embedded){
-      const pageData = res.data.page;
-      const newItemList = res.data._embedded.couponListResponseDtoList
-      newPageInfo = {
-        totalPages: pageData.totalPages,
-        size: pageData.size,
-        totalItems: pageData.totalElements,
-        currentPageIndex: pageData.number,
-        newPageNumber: pageData.number + 1,
-        newItemList: newItemList,
-      };
-    }
-    
-    return newPageInfo;
-  };
+    return getDefaultPagenationInfo(res?.data, 'couponListResponseDtoList', {pageSize: searchPageSize, setInitialize: setSearchQueryInitialize});
+  },[]);
+
 
   const onSearchInputKeydown = (e) => {
     enterKey(e, onSearchHandler);
@@ -174,7 +156,8 @@ export default function CouponListPage() {
                 setItemList={setItemList}
                 urlQuery={apiUrlWithQuery.query}
                 setIsLoading={setIsLoading}
-                pageInterceptor={pageInterCeptor}
+                pageInterceptor={pageInterceptor}
+                option={{apiMethod: 'GET', initialize: searchQueryInitialize}}
               />
             </div>
           </section>
@@ -183,4 +166,3 @@ export default function CouponListPage() {
     </>
   );
 }
-

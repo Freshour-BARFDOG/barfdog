@@ -9,10 +9,10 @@ import SearchTextWithCategory from '/src/components/admin/form/searchBar/SearchT
 import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
 import RewardList from './RewardList';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
-import ToolTip from "/src/components/atoms/Tooltip";
 import {transformToday} from "/util/func/transformDate";
 import Spinner from "/src/components/atoms/Spinner";
 import enterKey from "/util/func/enterKey";
+import {getDefaultPagenationInfo} from "/util/func/getDefaultPagenationInfo";
 
 
 
@@ -31,34 +31,14 @@ function RewardListPage() {
   const [itemList, setItemList] = useState([]);
   const [searchValues, setSearchValues] = useState(initialSearchValues);
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchQueryInitialize, setSearchQueryInitialize] = useState( false );
   
-  
-  const pageInterceptor = useCallback((res) => {
+  const pageInterceptor = useCallback((res, option={itemQuery: null}) => {
     // res = DUMMY__RESPONSE; // ! TEST
-    let newPageInfo = {
-      totalPages: 0,
-      size: 0,
-      totalItems: 0,
-      currentPageIndex: 0,
-      newPageNumber: 1,
-      newItemList: [],
-    };
-    if (res.data._embedded) {
-      const pageData = res.data.page;
-      const itemQuery = 'queryAdminRewardsDtoList';
-      const curItemList = res.data._embedded[itemQuery];
-      newPageInfo = {
-        totalPages: pageData.totalPages, //
-        size: pageData.size, //
-        totalItems: pageData.totalElements, //
-        currentPageIndex: pageData.number, //
-        newPageNumber: pageData.number + 1,
-        newItemList: curItemList,
-      };
-    }
-    
-    return newPageInfo;
-  }, []);
+    console.log(res);
+    return getDefaultPagenationInfo(res?.data, 'queryAdminRewardsDtoList', {pageSize: searchPageSize, setInitialize: setSearchQueryInitialize});
+  },[]);
+  
   
   const onResetSearchValues = () => {
     setSearchValues(initialSearchValue);
@@ -146,6 +126,7 @@ function RewardListPage() {
                 urlQuery={searchQuery}
                 setIsLoading={setIsLoading}
                 pageInterceptor={pageInterceptor}
+                option={{apiMethod: 'GET', initialize: searchQueryInitialize}}
               />
             </div>
           </section>
