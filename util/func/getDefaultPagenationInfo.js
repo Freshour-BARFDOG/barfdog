@@ -1,4 +1,6 @@
 export const getDefaultPagenationInfo = (data, itemQuery, option = {pageSize: null}) => {
+  if(!data)return;
+  
   let newPageInfo = {
     totalPages: 1,
     size: option.pageSize,

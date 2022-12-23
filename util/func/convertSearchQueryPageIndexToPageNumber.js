@@ -1,10 +1,30 @@
-export const convertSearchQueryPageIndexToPageNumber = (searchQuery) => {
-  const queryStr = '?page=';
-  const isValid = searchQuery.indexOf( queryStr ) !== -1;
-  if ( !searchQuery || !isValid ) return;
+
+
+
+export const convertSearchQueryPageIndexToPageNumber = (urlQueries) => {
   
-  const targetIndex = queryStr.length;
-  const pageNum = Number( searchQuery.substring( targetIndex, targetIndex + 1 ) ) + 1;
-  const restStr = searchQuery.substring( targetIndex + 1 );
-  return `${queryStr}${pageNum}${restStr}`;
+  if ( !urlQueries ) return;
+  
+  const questionMark = "?";
+  const queries = urlQueries.replace(questionMark, "").split("&");
+ 
+  const updatedQueries = queries.map(q=> {
+    const sprt = "=";
+    const qArr = q.split(sprt);
+    const key = qArr[0];
+    const val = qArr[1];
+    const updatedVal = processorMap(val)[key];
+    const updatedQuery = `${key}${sprt}${updatedVal}`;
+    return updatedVal ? updatedQuery : q;
+  });
+  return `${questionMark}${updatedQueries.join('')}`;
+}
+
+const processorMap = (val) =>({
+  page: pageIndexToPageNumber(val),
+  someKey: null, // 추가적인 로직이 필요할 경우 추가.
+})
+
+const pageIndexToPageNumber = (pageIndex) => {
+  return  Number(pageIndex) + 1;
 }

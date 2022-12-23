@@ -49,8 +49,6 @@ const Pagination = ({
         const calcedPageIndex = (curPage - 1).toString();
         const defQuery = `?${searchQueryType.PAGE}=${calcedPageIndex}&${searchQueryType.SIZE}=${size}`;
         let urlQueries = urlQuery ? `${defQuery}&${urlQuery}` : defQuery;
-        // console.log('urlQueries: ',urlQueries)
-        // console.log(option)
 
         let res;
         if (option.apiMethod === 'GET') {
@@ -65,14 +63,12 @@ const Pagination = ({
 
         const hasItems = pageData?.totalElements !== 0;
         const pageData = res?.data?.page;
-        console.log('API URL: ', apiURL, '\nSerach Query: ', urlQueries, '\nPagination res: ', res);
-        // console.log('API URL: ', apiURL, '\nSerach Query: ', urlQueries, '\nPagination res: ',res,'\nPOST BODY:', option.body);
-        if ((pageInterceptor && typeof pageInterceptor === 'function') || (pageData && hasItems)) {
-          const newPageInfo_InterCeptor =
-            pageInterceptor &&
-            typeof pageInterceptor === 'function' &&
-            (await pageInterceptor(res)); // SERVER API 쿼리가 변경되는 것에, 대응하기 위해 추가함
-          const newPageInfo = newPageInfo_InterCeptor || {
+        // console.log('API URL: ', apiURL, '\nSerach Query: ', urlQueries, '\nPagination res: ', res);
+        const hasInterceptor = pageInterceptor && typeof pageInterceptor === 'function';
+        if (hasInterceptor || (pageData && hasItems)) {
+          const newPageInfoFromInterCeptor = hasInterceptor && await pageInterceptor(res); // SERVER API 쿼리가 변경되는 것에, 대응하기 위해 추가함
+          
+          const newPageInfo = newPageInfoFromInterCeptor || {
             totalPages: pageData.totalPages,
             size: pageData.size,
             totalItems: pageData.totalElements,
@@ -86,22 +82,17 @@ const Pagination = ({
           if (setPageData && typeof setPageData === 'function') {
             setPageData(newPageInfo);
           }
-          // UPDATE URL Query For Client User (Not For Logic)
+          
+          // UPDATE browser URL Query
           if (routerDisabled === false) {
-            let defSearchQuery = `?page=${Number(calcedPageIndex) + 1}&size=${size}`;
-            let searchKeywords = urlQuery ? `${defSearchQuery}&${urlQuery}` : defQuery;
-            const convertedSearchKeyword = convertSearchQueryPageIndexToPageNumber(searchKeywords);
-            
-            // ! new Ver. (window scroll Y position 유지를 위함)
+            const indexToPageNumberQueries = convertSearchQueryPageIndexToPageNumber(urlQueries);
+  
+            // # window scroll Y position 유지를 위해서는 window .history 사용해야힘)
             window.history.replaceState(
               window.history.state,
               '',
-              `${window.location.pathname}${convertedSearchKeyword}`,
+              `${window.location.pathname}${indexToPageNumberQueries}`,
             );
-            // ! oldVer => router.push사용할 경우, scroll Y position 유지 안 됨
-            // await router.push({
-            //   search: searchKeywords, // ! important > def url query는 pagination 내에서만 관리
-            // });
           }
         } else {
           setItemList([]); // ! TEST 끝난 뒤, 주석 해제
