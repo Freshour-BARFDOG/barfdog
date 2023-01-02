@@ -18,7 +18,6 @@ export default function SearchResultList({ items }) {
 
 
 const ItemList = ({ item }) => {
-  console.log(item)
   const DATA = {
     id: item.id,
     name: item.name,

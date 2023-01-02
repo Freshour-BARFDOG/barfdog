@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import s from './recipe.module.scss';
-import AdminLayout from "@src/components/admin/AdminLayout";
-import { AdminContentWrapper } from "@src/components/admin/AdminWrapper";
-import MetaTitle from "@src/components/atoms/MetaTitle";
+import AdminLayout from "/src/components/admin/AdminLayout";
+import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
+import MetaTitle from "/src/components/atoms/MetaTitle";
 import AmdinErrorMessage from "/src/components/atoms/AmdinErrorMessage";
 import RecipeList from "./RecipeList";
 import Spinner from "/src/components/atoms/Spinner";
@@ -21,7 +21,6 @@ function RecipePage() {
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
 
-  console.log(itemList);
   useEffect( () => {
     (async () => {
       try {

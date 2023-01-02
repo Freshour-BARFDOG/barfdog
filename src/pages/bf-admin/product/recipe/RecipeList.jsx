@@ -16,7 +16,6 @@ export default function SearchResultList({ items, onDeleteItem }) {
 }
 
 const ItemList = ({ item, sortableItemRef }) => {
-  console.log(item)
   const DATA = {
     id: item.id,
     name: item.name,

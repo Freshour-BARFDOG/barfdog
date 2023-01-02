@@ -3,6 +3,7 @@ import Link from 'next/link';
 import transformDate from '/util/func/transformDate';
 import popupWindow from '/util/func/popupWindow';
 import {transformPhoneNumber} from "/util/func/transformPhoneNumber";
+import React from "react";
 
 
 export default function ChannelTalkMemberList({ items }) {
@@ -18,8 +19,9 @@ export default function ChannelTalkMemberList({ items }) {
 }
 
 
+
 const ItemList = ({ item, sortableItemRef }) => {
-  // console.log(item);
+
   const DATA = {
     memberId: item.memberId,
     guestName: item.guestName || '-', // 상담 시 입력한 이름
@@ -45,7 +47,7 @@ const ItemList = ({ item, sortableItemRef }) => {
     <li className={s.item} key={`item-${DATA.id}`} ref={sortableItemRef}>
       <span>{DATA.createdDate}</span>
       <span>{DATA.guestName}</span>
-      <span className={s.scrollBox}>{DATA.guestEmail}</span>
+      <span>{DATA.guestEmail}</span>
       <span>{DATA.guestPhoneNumber}</span>
       <span>{DATA.joinDate}</span>
       <span>{DATA.memberName}</span>
