@@ -15,11 +15,12 @@ import {orderStatus} from "/store/TYPE/orderStatusTYPE";
 import {productType} from "/store/TYPE/itemType";
 import Spinner from "/src/components/atoms/Spinner";
 import {getDefaultPagenationInfo} from "/util/func/getDefaultPagenationInfo";
-import enterKey from "../../../../../util/func/enterKey";
+import enterKey from "/util/func/enterKey";
+import {global_searchDateType} from "/store/TYPE/searchDateType";
 
 
 const initialSearchValues = {
-  from: transformToday(),
+  from: global_searchDateType.oldestDate,
   to: transformToday(),
   merchantUid: null,
   memberName: null,

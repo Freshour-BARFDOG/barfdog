@@ -22,9 +22,10 @@ import { goodsFlowOrderCancel, postGoodsFlowOrder, getGoodsFlowOtp } from '/src/
 import popupWindow from '/util/func/popupWindow';
 import {getDefaultPagenationInfo} from "/util/func/getDefaultPagenationInfo";
 import enterKey from "/util/func/enterKey";
+import {global_searchDateType} from "/store/TYPE/searchDateType";
 
 const initialSearchValues = {
-  from: transformToday(),
+  from: global_searchDateType.oldestDate,
   to: transformToday(),
   merchantUid: null,
   memberName: null,

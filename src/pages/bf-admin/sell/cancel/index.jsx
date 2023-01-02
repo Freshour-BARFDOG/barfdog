@@ -19,11 +19,12 @@ import Spinner from '/src/components/atoms/Spinner';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import Tooltip from "/src/components/atoms/Tooltip";
 import {getDefaultPagenationInfo} from "/util/func/getDefaultPagenationInfo";
-import enterKey from "../../../../../util/func/enterKey";
+import enterKey from "/util/func/enterKey";
+import {global_searchDateType} from "/store/TYPE/searchDateType";
 
 
 const initialSearchValues = {
-  from: transformToday(),
+  from: global_searchDateType.oldestDate,
   to: transformToday(),
   merchantUid: null,
   memberName: null,

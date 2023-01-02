@@ -16,11 +16,12 @@ import { valid_isTheSameArray } from '/util/func/validation/validationPackage';
 import ToolTip from '/src/components/atoms/Tooltip';
 import {postObjData, putObjData} from '/src/pages/api/reqData';
 import { transformToday } from '/util/func/transformDate';
+import {global_searchDateType} from "/store/TYPE/searchDateType";
 
 const initialSearchValue = {
-  status: 'ALL', // [ALL,REQUEST,RETURN,APPROVAL,ADMIN]
-  from: transformToday(),
+  from: global_searchDateType.oldestDate,
   to: transformToday(),
+  status: 'ALL', // [ALL,REQUEST,RETURN,APPROVAL,ADMIN]
 };
 
 const onSetSearchQueryHandler = (searchObj) => {

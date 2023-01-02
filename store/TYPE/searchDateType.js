@@ -33,7 +33,7 @@ const searchDateList = [
     diffDate: maxDiffDate,
     label: '전체',
   },
-];
+].reverse();
 
 export const global_searchDateType = {
   firstTime: transformToday(),

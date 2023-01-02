@@ -13,7 +13,8 @@ import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import Spinner from '/src/components/atoms/Spinner';
 import { transformToday } from '/util/func/transformDate';
 import enterKey from '/util/func/enterKey';
-import {getDefaultPagenationInfo} from "../../../../util/func/getDefaultPagenationInfo";
+import {getDefaultPagenationInfo} from "/util/func/getDefaultPagenationInfo";
+import {global_searchDateType} from "/store/TYPE/searchDateType";
 
 
 
@@ -21,7 +22,7 @@ import {getDefaultPagenationInfo} from "../../../../util/func/getDefaultPagenati
 const initialSearchValues = {
   email: '',
   name: '',
-  from: transformToday(),
+  from: global_searchDateType.oldestDate,
   to: transformToday(),
 };
 

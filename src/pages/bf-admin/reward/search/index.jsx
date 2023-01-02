@@ -13,13 +13,14 @@ import {transformToday} from "/util/func/transformDate";
 import Spinner from "/src/components/atoms/Spinner";
 import enterKey from "/util/func/enterKey";
 import {getDefaultPagenationInfo} from "/util/func/getDefaultPagenationInfo";
+import {global_searchDateType} from "/store/TYPE/searchDateType";
 
 
 
 const initialSearchValues = {
   email:'',
   name:'',
-  from: transformToday(),
+  from: global_searchDateType.oldestDate,
   to:transformToday(),
 }
 

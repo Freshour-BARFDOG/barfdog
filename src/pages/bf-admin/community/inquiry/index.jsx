@@ -24,10 +24,11 @@ import {getAllItemIdList} from "/util/func/getAllItemIdList";
 import {putObjData} from "/src/pages/api/reqData";
 import {getQueryString} from "/util/func/getQueryString";
 import {getDefaultPagenationInfo} from "/util/func/getDefaultPagenationInfo";
+import {global_searchDateType} from "/store/TYPE/searchDateType";
 
 
 const initialSearchValues = {
-  from: transformToday(),
+  from: global_searchDateType.oldestDate,
   to: transformToday(),
   name: '',
   email: '',
