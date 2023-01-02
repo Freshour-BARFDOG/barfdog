@@ -1,5 +1,5 @@
 import s from './member.module.scss';
-import React, { useCallback, useState } from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
@@ -15,6 +15,7 @@ import { transformToday } from '/util/func/transformDate';
 import enterKey from '/util/func/enterKey';
 import {getDefaultPagenationInfo} from "/util/func/getDefaultPagenationInfo";
 import {global_searchDateType} from "/store/TYPE/searchDateType";
+import {MirroredTextOnHoverEvent} from "../../../../util/func/mirroredTextOnHoverEvent";
 
 
 
@@ -35,6 +36,11 @@ function ManageUserPage() {
   const [searchValue, setSearchValue] = useState(initialSearchValues);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchQueryInitialize, setSearchQueryInitialize] = useState( false );
+  
+  
+  useEffect( () => {
+    MirroredTextOnHoverEvent( window );
+  }, [itemList] )
   
   const pageInterceptor = useCallback((res, option={itemQuery: null}) => {
     // res = DUMMY__RESPONSE; // ! TEST

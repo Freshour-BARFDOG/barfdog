@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import {AdminContentWrapper} from '/src/components/admin/AdminWrapper';
@@ -11,6 +11,8 @@ import Spinner from '/src/components/atoms/Spinner';
 import enterKey from "/util/func/enterKey";
 import Tooltip from "/src/components/atoms/Tooltip";
 import {getDefaultPagenationInfo} from "/util/func/getDefaultPagenationInfo";
+import {MirroredTextOnHoverEvent} from "/util/func/mirroredTextOnHoverEvent";
+
 
 export default function ChannelTalkPage () {
   
@@ -21,6 +23,10 @@ export default function ChannelTalkPage () {
   const [searchQuery, setSearchQuery] = useState( null );
   const [itemList, setItemList] = useState( [] );
   const [searchQueryInitialize, setSearchQueryInitialize] = useState( false );
+  
+  useEffect( () => {
+    MirroredTextOnHoverEvent( window );
+  }, [itemList] )
   
   
   const pageInterceptor = useCallback( (res, option = {itemQuery: null}) => {
@@ -120,7 +126,7 @@ export default function ChannelTalkPage () {
                 pageInterceptor={pageInterceptor}
                 setItemList={setItemList}
                 setIsLoading={setIsLoading}
-                option={{apiMethod: 'GET', body:null, initialize: searchQueryInitialize}}
+                option={{apiMethod: 'GET', body: null, initialize: searchQueryInitialize}}
                 urlQuery={searchQuery}
               />
             </div>
