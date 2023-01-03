@@ -66,7 +66,7 @@ function AdminGnb() {
           <SubmenuList title="채널톡" link="/bf-admin/messenger/channelTalk" />
         </List>
       </ul>
-      <div className={`${s.site_settings} ${s.menu_title} ${s['admin-site-setting']}`}>
+      <div className={`${s.site_settings} ${s.menu_title}`}>
         <List title="설정" iconOnLeftSide={<Icon_setting />}>
           <SubmenuList title="알고리즘" link="/bf-admin/settings/algorithm" />
           <SubmenuList title="배송정책" link="/bf-admin/settings/delivery" />

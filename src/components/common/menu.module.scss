@@ -1,10 +1,5 @@
 @import '/src/components/admin/adminMenu.module.scss';
-
-$browser-context:16;
-// convert px to rem
-@function rem($px, $context: $browser-context){
-  @return #{$px / $context}rem;
-}
+@import '/styles/global/rem';
 
 $menuPadding: 20;
 
@@ -20,123 +15,107 @@ $menuPadding: 20;
   box-sizing:border-box;
   width: rem(200);
   
-  .menu_title{
-    color: #717171;
-    &[data-current-page]{
-      > p ,> a, a[data-current-page] {color:var(--color-main);
+
+}
+
+.menu_title{
+  color: #717171;
+  &[data-current-page]{
+    > p ,> a, a[data-current-page] {color:var(--color-main);
       &::before{
         border-color:var(--color-main);
       }}
-      svg{fill: var(--color-main); transition: transform 0s !important;}
-      > ul{
-      transition: height 0s !important;
-      }
-    }
-    
-
-
-    
-    &:not(:last-child) a, &:not(:last-child) 
-    p{border-bottom: rem(1) solid var(--color-line-04);}
-
-    p:hover ~ ul{
-      transition: height .5s !important;
-      
-    }
-    p:hover{
-      svg{
-        transition: transform .5s !important;
-      }
-    }
-
+    svg{fill: var(--color-main); transition: transform 0s !important;}
     > ul{
       transition: height 0s !important;
-      background-color:#f4f4f4;
+    }
+  }
 
-      a {padding: rem(12) rem($menuPadding + 10);}
+
+
+
+  &:not(:last-child) a, &:not(:last-child)
+  p{border-bottom: rem(1) solid var(--color-line-04);}
+
+  p:hover ~ ul{
+    transition: height .5s !important;
+
+  }
+  p:hover{
+    svg{
+      transition: transform .5s !important;
+    }
+  }
+
+  > ul{
+    transition: height 0s !important;
+    background-color:#f4f4f4;
+
+    a {padding: rem(12) rem($menuPadding + 10);}
+  }
+
+  .submenu_title > *{ cursor: default;}
+
+  a, p{
+    cursor:pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: rem(12) rem(20);
+    font-size: rem(15);
+    color:inherit;
+    transition: color var(--ani-short);
+    svg{
+      float:right; fill:#ababab; width:rem(17); height:rem(17);
+      transition-duration: .3s;
+      transition-timing-function: ease-out;
+      transition-property: fill, transform;
+      transform:rotate(0)
     }
 
-    .submenu_title > *{ cursor: default;}
-
-    a, p{
-      cursor:pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: rem(12) rem(20);
-      font-size: rem(15);
-      color:inherit;
-      transition: color var(--ani-short);
-      svg{
-        float:right; fill:#ababab; width:rem(17); height:rem(17);
-        transition-duration: .3s;
-        transition-timing-function: ease-out;
-        transition-property: fill, transform;
-        transform:rotate(0)
-      }
-
-      &:not(.submenu_title > *):hover{
-        color: var(--color-main) !important;
-        svg{fill:var(--color-main)}
-      }
-
-
+    &:not(.submenu_title > *):hover{
+      color: var(--color-main) !important;
+      svg{fill:var(--color-main)}
     }
-    &.open{
-      svg{transform:rotate(90deg) !important;}
-    }
-
 
 
   }
-
-
-
-  .submenu{
-    display:none;
+  &.open{
+    svg{transform:rotate(90deg);}
   }
-  // .submenu.open{display:block;}
-  .submenu_title{
-    font-size: rem(16);
-    font-weight: 700;
-    color: #4d4d4d;
-    & ~ li:not(.submenu_title){
-      > * {
-        position: relative;
-        &:before{
-          content: "";
-          position: absolute;
-          left: rem($menuPadding + 32);
-          top: calc(50% - rem(3));
-          width: rem(7);
-          height: rem(7);
-          transform: translateY(-50%);
-          border-left: rem(1) solid #717171;
-          border-bottom: rem(1) solid #717171;
-          transition: border-color var(--ani-short);
-        }
 
-      }
-      & > *:hover:before{
-        border-color: var(--color-main);
-      }
-      
-    }
-  }
 }
 
 
 
+.submenu{
+  display:none;
+}
 
+.submenu_title{
+  font-size: rem(16);
+  font-weight: 700;
+  color: #4d4d4d;
+  & ~ li:not(.submenu_title){
+    > * {
+      position: relative;
+      &:before{
+        content: "";
+        position: absolute;
+        left: rem($menuPadding + 32);
+        top: calc(50% - #{rem(3)});
+        width: rem(7);
+        height: rem(7);
+        transform: translateY(-50%);
+        border-left: rem(1) solid #717171;
+        border-bottom: rem(1) solid #717171;
+        transition: border-color var(--ani-short);
+      }
 
-/* ADMIN */
-.admin-site-setting{
-  background-color: red;
-  .menu_title{
-    a svg, p svg{fill: #ababab;}
-    a[data-current-page] {color:var(--color-main);}
-  }
-  .open{
-    p svg{transform:rotate(90deg) !important;}
+    }
+    & > *:hover:before{
+      border-color: var(--color-main);
+    }
+
   }
 }
