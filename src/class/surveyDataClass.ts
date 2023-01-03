@@ -8,7 +8,7 @@ export class SurveyDataClass {
   
   constructor () {}
   
-  getSurveyCookie (id:number) {
+  getStoredSurveyData (id:number) {
     if(!id) return;
     /*
      ! 주의: Cookie 사용 & browser 새로고침 => JSON객체의 "String 누실" 이슈 있음.
@@ -20,14 +20,14 @@ export class SurveyDataClass {
     return storedData;
   }
   
-  setSurveyCookie (id:number, formValues={}) {
+  setStoredSurveyData (id:number, formValues={}) {
     if(id && Object.keys(formValues).length){
       const formStrings = JSON.stringify(formValues).replace(/\n/g,'');
       localStorage.setItem(this.storedDataName, formStrings);
     }
   }
   
-  deleteSurveyCookie (id:number) {
+  deleteStoredSurveyData (id:number) {
     const targetCookieId = Number(this.storedDataName?.split('-')[2]);
     if(targetCookieId === id){
       localStorage.removeItem(this.storedDataName);
@@ -35,4 +35,3 @@ export class SurveyDataClass {
   }
   
 }
-
