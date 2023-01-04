@@ -39,10 +39,7 @@ export default function AdminResetPassword() {
     //   return;
     // }
     const error = valid_email(val);
-    console.log(error);
-    if(error){
-      mct.alertShow(error);
-    }
+    if(error) return mct.alertShow(error);
     
 
     (async () => {
@@ -143,7 +140,7 @@ const EnterAuthNumSection = ({ displayedTime, authNum, data }) => {
 
   const onModalHandler = (isConfirm) => {
     if (isConfirm) setModalMessage('');
-    if (isAuth) router.push(`/bf-admin/login/password?authnum=${authNum}`);
+    if (isAuth) router.push(`/bf-admin/login/resetPassword?authnum=${authNum}`);
   };
 
   const onAuth = (e) => {

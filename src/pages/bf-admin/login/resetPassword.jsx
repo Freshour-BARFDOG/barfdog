@@ -34,7 +34,9 @@ function ResetPasswordPage() {
 
   useEffect(() => {
     // Redirection : 비밀번호 인증없이 접근한 경우
-    if (!isAdmin || !adminInfo.email) return router.push('/bf-admin/login');
+    if (!isAdmin || !adminInfo.email) {
+      window.location.href = '/bf-admin/login';
+    }
   }, [isAdmin]);
 
   const onInputChangeHandler = (event) => {
@@ -101,6 +103,8 @@ function ResetPasswordPage() {
   const onKeyDownHandler = (e)=>{
     enterKey(e, onSubmit)
   }
+  if (!isAdmin || !adminInfo.email) return;
+  
   return (
     <>
       <main id={s['loginPage']}>
