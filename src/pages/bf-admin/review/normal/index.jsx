@@ -17,7 +17,7 @@ import ToolTip from '/src/components/atoms/Tooltip';
 import {postObjData, putObjData} from '/src/pages/api/reqData';
 import { transformToday } from '/util/func/transformDate';
 import {global_searchDateType} from "/store/TYPE/searchDateType";
-import {MirroredTextOnHoverEvent} from "../../../../../util/func/mirroredTextOnHoverEvent";
+import {MirrorTextOnHoverEvent} from "../../../../../util/func/MirrorTextOnHoverEvent";
 
 const initialSearchValue = {
   from: global_searchDateType.oldestDate,
@@ -50,7 +50,7 @@ export default function ReviewPage() {
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
   
   useEffect( () => {
-    MirroredTextOnHoverEvent( window );
+    MirrorTextOnHoverEvent( window );
   }, [itemList] )
   
   

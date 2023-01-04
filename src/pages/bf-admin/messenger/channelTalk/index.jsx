@@ -11,7 +11,7 @@ import Spinner from '/src/components/atoms/Spinner';
 import enterKey from "/util/func/enterKey";
 import Tooltip from "/src/components/atoms/Tooltip";
 import {getDefaultPagenationInfo} from "/util/func/getDefaultPagenationInfo";
-import {MirroredTextOnHoverEvent} from "/util/func/mirroredTextOnHoverEvent";
+import {MirrorTextOnHoverEvent} from "/util/func/MirrorTextOnHoverEvent";
 
 
 export default function ChannelTalkPage () {
@@ -25,7 +25,7 @@ export default function ChannelTalkPage () {
   const [searchQueryInitialize, setSearchQueryInitialize] = useState( false );
   
   useEffect( () => {
-    MirroredTextOnHoverEvent( window );
+    MirrorTextOnHoverEvent( window );
   }, [itemList] )
   
   

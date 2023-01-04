@@ -15,7 +15,7 @@ import { transformToday } from '/util/func/transformDate';
 import enterKey from '/util/func/enterKey';
 import {getDefaultPagenationInfo} from "/util/func/getDefaultPagenationInfo";
 import {global_searchDateType} from "/store/TYPE/searchDateType";
-import {MirroredTextOnHoverEvent} from "../../../../util/func/mirroredTextOnHoverEvent";
+import {MirrorTextOnHoverEvent} from "../../../../util/func/MirrorTextOnHoverEvent";
 
 
 
@@ -39,7 +39,7 @@ function ManageUserPage() {
   
   
   useEffect( () => {
-    MirroredTextOnHoverEvent( window );
+    MirrorTextOnHoverEvent( window );
   }, [itemList] )
   
   const pageInterceptor = useCallback((res, option={itemQuery: null}) => {

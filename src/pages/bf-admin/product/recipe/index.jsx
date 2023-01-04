@@ -7,6 +7,7 @@ import AmdinErrorMessage from "/src/components/atoms/AmdinErrorMessage";
 import RecipeList from "./RecipeList";
 import Spinner from "/src/components/atoms/Spinner";
 import {getData} from "/src/pages/api/reqData";
+import {MirrorTextOnHoverEvent} from "/util/func/MirrorTextOnHoverEvent";
 
 
 
@@ -20,6 +21,11 @@ function RecipePage() {
   const apiDataQueryString = 'recipeListResponseDtoList';
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
+  
+  useEffect( () => {
+    MirrorTextOnHoverEvent(window);
+  }, [itemList] );
+  
 
   useEffect( () => {
     (async () => {
@@ -80,7 +86,6 @@ function RecipePage() {
                 {itemList.length ? (
                   <RecipeList
                     items={itemList}
-                    // onDeleteItem={onDeleteItem}
                   />
                 ) : (
                   <AmdinErrorMessage text="조회된 데이터가 없습니다." />
