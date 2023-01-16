@@ -332,8 +332,7 @@ export default function CartPage({ data, error }) {
   
   
   if (error) {
-    alert('데이터를 가져올 수 없습니다.');
-    return ;
+     return;
   }
   
 
@@ -537,9 +536,15 @@ export async function getServerSideProps({ req }) {
   } else {
     error = true;
   }
+  
+  if(error){
+    return {
+      redirect:{
+        permanent: false,
+        destination: '/account/login',
+      }
+    }
+  }
 
   return { props: { data, error } };
 }
-
-
-
