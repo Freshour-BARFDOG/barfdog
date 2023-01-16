@@ -103,7 +103,7 @@ export class URLPathClass {
   private validAdminPublicPath(curPath: string): boolean {
     let result = false;
     const filteredPath = this.filteredAdminPath(curPath);
-    const ADMIN_PUBLIC_PATH_LIST: string[] = ['/index', '/login'];
+    const ADMIN_PUBLIC_PATH_LIST: string[] = ['/index', '/login', '/login/resetPassword'];
     for (const path of ADMIN_PUBLIC_PATH_LIST) {
       if (filteredPath === path) {
         result = true;
@@ -126,14 +126,14 @@ export class URLPathClass {
   
   checkAuthAndRedirect(usertype: string) {
     
-    const REDIR_PATH = usertype === USERTYPE.ADMIN ? "/bf-admin/login" : "/account/login";
-    
     if (this.VALIDATION.MEMBER_PATH && usertype === USERTYPE.NON_MEMBER) {
+      document.documentElement.remove();
       alert('회원가입이 필요한 페이지입니다.');
-      window.location.href = REDIR_PATH;
+      window.location.href = '/accout/login';
     } else if (this.VALIDATION.ADMIN_PATH && !this.VALIDATION.ADMIN_PUBLIC_PATH && usertype !== USERTYPE.ADMIN) {
+      document.documentElement.remove();
       alert('일반 사용자에게 접근 권한이 없는 페이지입니다.');
-      window.location.href = REDIR_PATH;
+      window.location.href = '/bf-admin/login';
     }
   }
 }
