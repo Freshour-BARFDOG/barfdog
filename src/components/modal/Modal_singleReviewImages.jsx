@@ -19,26 +19,26 @@ import { FullScreenLoading } from '../atoms/FullScreenLoading';
 import { filter_blindingUserName } from '/util/func/filter_blindingUserName';
 import { getData } from '../../pages/api/reqData';
 
-const DUMMY_DATA_Reponse = {
-  data: {
-    _embedded: {
-      queryReviewImagesDtoList: [
-        {
-          filename: 'filename1.jpg',
-          url: 'https://images.unsplash.com/photo-1560713781-d00f6c18f388?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1981&q=80',
-        },
-        {
-          filename: 'filename2.jpg',
-          url: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
-        },
-        {
-          filename: 'filename3.jpg',
-          url: 'https://images.unsplash.com/photo-1505575967455-40e256f73376?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80',
-        },
-      ],
-    }
-  },
-};
+// const DUMMY_DATA_Reponse = {
+//   data: {
+//     _embedded: {
+//       queryReviewImagesDtoList: [
+//         {
+//           filename: 'filename1.jpg',
+//           url: 'https://images.unsplash.com/photo-1560713781-d00f6c18f388?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1981&q=80',
+//         },
+//         {
+//           filename: 'filename2.jpg',
+//           url: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
+//         },
+//         {
+//           filename: 'filename3.jpg',
+//           url: 'https://images.unsplash.com/photo-1505575967455-40e256f73376?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80',
+//         },
+//       ],
+//     }
+//   },
+// };
 
 export default function Modal_singleReviewImages({ isActiveModal, setIsActiveModal, reviewId }) {
   const [imageList, setImageList] = useState({});

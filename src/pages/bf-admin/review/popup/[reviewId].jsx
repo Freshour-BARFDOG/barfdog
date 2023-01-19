@@ -354,39 +354,40 @@ export async function getServerSideProps({ query }) {
   return { props: { reviewId } };
 }
 
-const DUMMY_RESPONSE = {
-  data: {
-    reviewDto: {
-      id: 523,
-      status: 'APPROVAL',
-      writtenDate: '2022-08-13',
-      star: 3,
-      username: '관리자',
-      contents: '열글자 이상의 구독 리뷰11',
-    },
-    imageUrlList: [
-      {
-        filename: 'filename1.jpg',
-        url: 'https://images.unsplash.com/photo-1661704107314-b603320832be?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80',
-      },
-    ],
-    bestReview: false,
-    _links: {
-      self: {
-        href: 'http://localhost:8080/api/admin/reviews/523',
-      },
-      create_best_reviews: {
-        href: 'http://localhost:8080/api/admin/reviews/best',
-      },
-      approve_reviews: {
-        href: 'http://localhost:8080/api/admin/reviews/approval',
-      },
-      return_review: {
-        href: 'http://localhost:8080/api/admin/reviews/523/return',
-      },
-      profile: {
-        href: '/docs/index.html#resources-admin-query-review',
-      },
-    },
-  },
-};
+
+// const DUMMY_RESPONSE = {
+//   data: {
+//     reviewDto: {
+//       id: 523,
+//       status: 'APPROVAL',
+//       writtenDate: '2022-08-13',
+//       star: 3,
+//       username: '관리자',
+//       contents: '열글자 이상의 구독 리뷰11',
+//     },
+//     imageUrlList: [
+//       {
+//         filename: 'filename1.jpg',
+//         url: 'https://images.unsplash.com/photo-1661704107314-b603320832be?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80',
+//       },
+//     ],
+//     bestReview: false,
+//     _links: {
+//       self: {
+//         href: 'http://localhost:8080/api/admin/reviews/523',
+//       },
+//       create_best_reviews: {
+//         href: 'http://localhost:8080/api/admin/reviews/best',
+//       },
+//       approve_reviews: {
+//         href: 'http://localhost:8080/api/admin/reviews/approval',
+//       },
+//       return_review: {
+//         href: 'http://localhost:8080/api/admin/reviews/523/return',
+//       },
+//       profile: {
+//         href: '/docs/index.html#resources-admin-query-review',
+//       },
+//     },
+//   },
+// };

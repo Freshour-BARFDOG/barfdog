@@ -100,7 +100,7 @@ export default function MainPage({ data }) {
                 <h3 className="font-NotoSans">
                   &nbsp;B.A.R.F.(Biologically Appropriate Raw Food)는 생물학적으로 적절한 생식이라는
                   뜻으로, 생고기와 뼈, 야채를 적절히 배합하여 반려동물에게 단백질과 지방을 신선한
-                  상태에서 섭취할 수 있도록 돕는 식단을 뜻합니다. 
+                  상태에서 섭취할 수 있도록 돕는 식단을 뜻합니다.
                   {/* 바프독은 70%의 두 종류 고기와 칼슘이 풍부한 */}
                   <br />
                   바프독의 모든 레시피는
@@ -660,236 +660,237 @@ export async function getServerSideProps({req}) {
   return { props: { data: DATA } };
 }
 
-const DUMMY_DATA = {
-  topBannerDto: {
-    name: 'top Banner name',
-    backgroundColor: 'red',
-    fontColor: 'write',
-    pcLinkUrl: 'pc link url',
-    mobileLinkUrl: 'mobile link url',
-  },
-  mainBannerDtoList: [
-    {
-      id: 1,
-      leakedOrder: 1,
-      name: '메인배너1',
-      pcFilename: 'aa402238-f0a7-43c0-a2a6-b297debf511c_mainBanner1.jpg',
-      pcImageUrl: 'https://shop-phinf.pstatic.net/20210930_23/16329707437275Bauq_PNG/pc.png',
-      pcLinkUrl: '/admin',
-      mobileFilename: '7292ae0e-bd45-4213-89ec-8733a8018a09_mainBanner1.jpg',
-      mobileImageUrl: 'https://shop-phinf.pstatic.net/20210930_23/16329707437275Bauq_PNG/pc.png',
-      mobileLinkUrl: '',
-    },
-    {
-      id: 2,
-      leakedOrder: 2,
-      name: '메인배너2',
-      pcFilename:
-        'https://shop-phinf.pstatic.net/20220218_290/1645167736891rKnQ7_PNG/B4EBC1F6_1_BBE7BABB_5150x.png',
-      pcLinkUrl: '',
-      mobileFilename: 'c9782799-f806-47bf-b146-992be5926c2e_mainBanner2.jpg',
-      pcImageUrl:
-        'https://shop-phinf.pstatic.net/20220218_290/1645167736891rKnQ7_PNG/B4EBC1F6_1_BBE7BABB_5150x.png',
-      mobileImageUrl:
-        'https://shop-phinf.pstatic.net/20220218_290/1645167736891rKnQ7_PNG/B4EBC1F6_1_BBE7BABB_5150x.png',
-      mobileLinkUrl: '',
-    },
-    {
-      id: 3,
-      leakedOrder: 3,
-      name: '메인배너3',
-      pcFilename: '882fa69b-1d10-4899-86f8-54a80fa717d9_mainBanner3.jpg',
-      pcImageUrl:
-        'https://shop-phinf.pstatic.net/20220126_205/1643164587468rOJb1_PNG/B4EBC1F6_1_BBE7BABB_4.png',
-      pcLinkUrl: '',
-      mobileFilename: 'b0d23f3c-9a8d-4051-a7c1-f24d452718be_mainBanner3.jpg',
-      mobileImageUrl:
-        'https://shop-phinf.pstatic.net/20220126_205/1643164587468rOJb1_PNG/B4EBC1F6_1_BBE7BABB_4.png',
-      mobileLinkUrl: '',
-    },
-    {
-      id: 4,
-      leakedOrder: 4,
-      name: '메인배너4',
-      pcFilename:
-        'https://images.unsplash.com/photo-1571562110290-08784605c218?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
-      pcImageUrl: 'https://shop-phinf.pstatic.net/20211019_115/16346276123656K9V0_PNG/PC.png',
-      pcLinkUrl: '',
-      mobileFilename:
-        'https://images.unsplash.com/photo-1571562110290-08784605c218?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
-      mobileImageUrl: 'https://shop-phinf.pstatic.net/20211019_115/16346276123656K9V0_PNG/PC.png',
-      mobileLinkUrl: '',
-    },
-  ],
-  recipeDtoList: [
-    {
-      id: 16,
-      name: '램비프',
-      description:
-        '레시피 설명레시피 설명레시피 설명레시피 설명레시피 설명레시피 설명레시피 설명레시피 설명레시피 설명레시피 설명레시피 설명레시피 설명레시피 설명레시피 설명레시피 설명레시피 설명레시피 설명레시피 설명',
-      uiNameKorean: '레시피 한글',
-      uiNameEnglish: 'RECIPE ENGLISH',
-      filename1: '램비프1.jpg',
-      imageUrl1:
-        'https://images.unsplash.com/photo-1466637574441-749b8f19452f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80',
-      filename2: '램비프2.jpg',
-      imageUrl2:
-        'https://images.unsplash.com/photo-1466637574441-749b8f19452f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80',
-    },
-    {
-      id: 15,
-      name: '덕램',
-      description: '레시피 설명',
-      uiNameKorean: '레시피 한글',
-      uiNameEnglish: 'RECIPE ENGLISH',
-      filename1: '덕램1.jpg',
-      imageUrl1:
-        'https://images.unsplash.com/photo-1556909211-36987daf7b4d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
-      filename2: '덕램2.jpg',
-      imageUrl2:
-        'hhttps://images.unsplash.com/photo-1556909211-36987daf7b4d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80g',
-    },
-    {
-      id: 14,
-      name: '터키비프',
-      description: '레시피 설명레시피 설명레시피 설명레시피 설명레시피 설명레시피 설명',
-      uiNameKorean: '레시피 한글',
-      uiNameEnglish: 'RECIPE ENGLISH',
-      filename1: '터키비프1.jpg',
-      imageUrl1:
-        'https://images.unsplash.com/photo-1556909211-36987daf7b4d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
-      filename2: '터키비프2.jpg',
-      imageUrl2:
-        'https://images.unsplash.com/photo-1556909211-36987daf7b4d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
-    },
-    {
-      id: 13,
-      name: '스타트',
-      description:
-        '레시피 설명222레시피 설명222레시피 설명222레시피 설명222레시피 설명222레시피 설명222',
-      uiNameKorean: '레시피 한글',
-      uiNameEnglish: 'RECIPE ENGLISH',
-      filename1: '스타트1.jpg',
-      imageUrl1:
-        'https://images.unsplash.com/photo-1542010589005-d1eacc3918f2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2092&q=80',
-      filename2: '스타트2.jpg',
-      imageUrl2:
-        'https://images.unsplash.com/photo-1542010589005-d1eacc3918f2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2092&q=80g',
-    },
-  ],
-  queryBestReviewsDtoList: [
-    {
-      id: 1,
-      imageUrl:
-        'https://images.unsplash.com/photo-1422565096762-bdb997a56a84?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
-      leakedOrder: 1,
-      contents:
-        '열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1',
-    },
-    {
-      id: 2,
-      imageUrl:
-        'https://images.unsplash.com/photo-1534361960057-19889db9621e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
-      leakedOrder: 2,
-      contents:
-        '열글자 이상의 내용2열글자 이상의 내용2열글자 이상의 내용2열글자 이상의 내용2열글자 이상의 내용2열글자 이상의 내용2열글자 이상의 내용2열글자 이상의 내용2열글자 이상의 내용2열글자 이상의 내용2열글자 이상의 내용2열글자 이상의 내용2열글자 이상의 내용2',
-    },
-    {
-      id: 3,
-      imageUrl:
-        'https://images.unsplash.com/photo-1503256207526-0d5d80fa2f47?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=986&q=80',
-      leakedOrder: 3,
-      contents: '열글자 이상의 내용3',
-    },
-    {
-      id: 4,
-      imageUrl:
-        'https://images.unsplash.com/photo-1503256207526-0d5d80fa2f47?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=986&q=80',
-      leakedOrder: 4,
-      contents: '열글자 이상의 구독 리뷰4',
-    },
-    {
-      id: 5,
-      imageUrl:
-        'https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1017&q=80',
-      leakedOrder: 5,
-      contents: '열글자 이상의 구독 리뷰5',
-    },
-  ],
-  popupBannerDtoList: [
-    {
-      id: 1,
-      position: 'left',
-      leakedOrder:1,
-      pcFilename: 'PC파일명1',
-      pcImageUrl: 'https://images.unsplash.com/photo-1647350650908-c78791bf8efd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80',
-      pcLinkUrl: '/recipes',
-      mobileFilename: '모바일 파일명1',
-      mobileImageUrl: 'https://images.unsplash.com/photo-1648139731984-56bcce3b86e9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80',
-      mobileLinkUrl: '/surveyGuide',
-    },
-    {
-      id: 2,
-      position: 'center',
-      leakedOrder:2,
-      pcFilename: 'PC파일명1',
-      pcImageUrl: 'https://images.unsplash.com/photo-1659787050050-d5aa2b1ec0dc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1009&q=80',
-      pcLinkUrl: '/recipes',
-      mobileFilename: '모바일 파일명1',
-      mobileImageUrl: 'https://images.unsplash.com/photo-1658246944434-04b7ec2cb7f7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80',
-      mobileLinkUrl: '/surveyGuide',
-    },
-    {
-      id: 3,
-      position: 'right',
-      leakedOrder:3,
-      pcFilename: 'PC파일명1',
-      pcImageUrl: 'https://images.unsplash.com/photo-1634832802370-164cf82ec82a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80',
-      pcLinkUrl: '/recipes',
-      mobileFilename: '모바일 파일명1',
-      mobileImageUrl: 'https://images.unsplash.com/photo-1656519966579-da21868b7ed7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2093&q=80',
-      mobileLinkUrl: '/surveyGuide',
-    },
-    {
-      id: 4,
-      position: 'left',
-      leakedOrder:4,
-      pcFilename: 'PC파일명1',
-      pcImageUrl: 'https://images.unsplash.com/photo-1647350650908-c78791bf8efd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80',
-      pcLinkUrl: '/recipes',
-      mobileFilename: '모바일 파일명1',
-      mobileImageUrl: 'https://images.unsplash.com/photo-1648139731984-56bcce3b86e9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80',
-      mobileLinkUrl: '/surveyGuide',
-    },
-    {
-      id: 5,
-      position: 'center',
-      leakedOrder:6,
-      pcFilename: 'PC파일명1',
-      pcImageUrl: 'https://images.unsplash.com/photo-1659787050050-d5aa2b1ec0dc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1009&q=80',
-      pcLinkUrl: '/recipes',
-      mobileFilename: '모바일 파일명1',
-      mobileImageUrl: 'https://images.unsplash.com/photo-1658246944434-04b7ec2cb7f7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80',
-      mobileLinkUrl: '/surveyGuide',
-    },
-    {
-      id: 6,
-      position: 'right',
-      leakedOrder:7,
-      pcFilename: 'PC파일명1',
-      pcImageUrl: 'https://images.unsplash.com/photo-1634832802370-164cf82ec82a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80',
-      pcLinkUrl: '/recipes',
-      mobileFilename: '모바일 파일명1',
-      mobileImageUrl: 'https://images.unsplash.com/photo-1656519966579-da21868b7ed7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2093&q=80',
-      mobileLinkUrl: '/surveyGuide',
-    },
-  ],
-  _links: {
-    self: {
-      href: 'http://localhost:8080/api/home',
-    },
-    profile: {
-      href: '/docs/index.html#resources-home-page',
-    },
-  },
-};
+//
+// const DUMMY_DATA = {
+//   topBannerDto: {
+//     name: 'top Banner name',
+//     backgroundColor: 'red',
+//     fontColor: 'write',
+//     pcLinkUrl: 'pc link url',
+//     mobileLinkUrl: 'mobile link url',
+//   },
+//   mainBannerDtoList: [
+//     {
+//       id: 1,
+//       leakedOrder: 1,
+//       name: '메인배너1',
+//       pcFilename: 'aa402238-f0a7-43c0-a2a6-b297debf511c_mainBanner1.jpg',
+//       pcImageUrl: 'https://shop-phinf.pstatic.net/20210930_23/16329707437275Bauq_PNG/pc.png',
+//       pcLinkUrl: '/admin',
+//       mobileFilename: '7292ae0e-bd45-4213-89ec-8733a8018a09_mainBanner1.jpg',
+//       mobileImageUrl: 'https://shop-phinf.pstatic.net/20210930_23/16329707437275Bauq_PNG/pc.png',
+//       mobileLinkUrl: '',
+//     },
+//     {
+//       id: 2,
+//       leakedOrder: 2,
+//       name: '메인배너2',
+//       pcFilename:
+//         'https://shop-phinf.pstatic.net/20220218_290/1645167736891rKnQ7_PNG/B4EBC1F6_1_BBE7BABB_5150x.png',
+//       pcLinkUrl: '',
+//       mobileFilename: 'c9782799-f806-47bf-b146-992be5926c2e_mainBanner2.jpg',
+//       pcImageUrl:
+//         'https://shop-phinf.pstatic.net/20220218_290/1645167736891rKnQ7_PNG/B4EBC1F6_1_BBE7BABB_5150x.png',
+//       mobileImageUrl:
+//         'https://shop-phinf.pstatic.net/20220218_290/1645167736891rKnQ7_PNG/B4EBC1F6_1_BBE7BABB_5150x.png',
+//       mobileLinkUrl: '',
+//     },
+//     {
+//       id: 3,
+//       leakedOrder: 3,
+//       name: '메인배너3',
+//       pcFilename: '882fa69b-1d10-4899-86f8-54a80fa717d9_mainBanner3.jpg',
+//       pcImageUrl:
+//         'https://shop-phinf.pstatic.net/20220126_205/1643164587468rOJb1_PNG/B4EBC1F6_1_BBE7BABB_4.png',
+//       pcLinkUrl: '',
+//       mobileFilename: 'b0d23f3c-9a8d-4051-a7c1-f24d452718be_mainBanner3.jpg',
+//       mobileImageUrl:
+//         'https://shop-phinf.pstatic.net/20220126_205/1643164587468rOJb1_PNG/B4EBC1F6_1_BBE7BABB_4.png',
+//       mobileLinkUrl: '',
+//     },
+//     {
+//       id: 4,
+//       leakedOrder: 4,
+//       name: '메인배너4',
+//       pcFilename:
+//         'https://images.unsplash.com/photo-1571562110290-08784605c218?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
+//       pcImageUrl: 'https://shop-phinf.pstatic.net/20211019_115/16346276123656K9V0_PNG/PC.png',
+//       pcLinkUrl: '',
+//       mobileFilename:
+//         'https://images.unsplash.com/photo-1571562110290-08784605c218?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
+//       mobileImageUrl: 'https://shop-phinf.pstatic.net/20211019_115/16346276123656K9V0_PNG/PC.png',
+//       mobileLinkUrl: '',
+//     },
+//   ],
+//   recipeDtoList: [
+//     {
+//       id: 16,
+//       name: '램비프',
+//       description:
+//         '레시피 설명레시피 설명레시피 설명레시피 설명레시피 설명레시피 설명레시피 설명레시피 설명레시피 설명레시피 설명레시피 설명레시피 설명레시피 설명레시피 설명레시피 설명레시피 설명레시피 설명레시피 설명',
+//       uiNameKorean: '레시피 한글',
+//       uiNameEnglish: 'RECIPE ENGLISH',
+//       filename1: '램비프1.jpg',
+//       imageUrl1:
+//         'https://images.unsplash.com/photo-1466637574441-749b8f19452f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80',
+//       filename2: '램비프2.jpg',
+//       imageUrl2:
+//         'https://images.unsplash.com/photo-1466637574441-749b8f19452f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80',
+//     },
+//     {
+//       id: 15,
+//       name: '덕램',
+//       description: '레시피 설명',
+//       uiNameKorean: '레시피 한글',
+//       uiNameEnglish: 'RECIPE ENGLISH',
+//       filename1: '덕램1.jpg',
+//       imageUrl1:
+//         'https://images.unsplash.com/photo-1556909211-36987daf7b4d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
+//       filename2: '덕램2.jpg',
+//       imageUrl2:
+//         'hhttps://images.unsplash.com/photo-1556909211-36987daf7b4d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80g',
+//     },
+//     {
+//       id: 14,
+//       name: '터키비프',
+//       description: '레시피 설명레시피 설명레시피 설명레시피 설명레시피 설명레시피 설명',
+//       uiNameKorean: '레시피 한글',
+//       uiNameEnglish: 'RECIPE ENGLISH',
+//       filename1: '터키비프1.jpg',
+//       imageUrl1:
+//         'https://images.unsplash.com/photo-1556909211-36987daf7b4d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
+//       filename2: '터키비프2.jpg',
+//       imageUrl2:
+//         'https://images.unsplash.com/photo-1556909211-36987daf7b4d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
+//     },
+//     {
+//       id: 13,
+//       name: '스타트',
+//       description:
+//         '레시피 설명222레시피 설명222레시피 설명222레시피 설명222레시피 설명222레시피 설명222',
+//       uiNameKorean: '레시피 한글',
+//       uiNameEnglish: 'RECIPE ENGLISH',
+//       filename1: '스타트1.jpg',
+//       imageUrl1:
+//         'https://images.unsplash.com/photo-1542010589005-d1eacc3918f2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2092&q=80',
+//       filename2: '스타트2.jpg',
+//       imageUrl2:
+//         'https://images.unsplash.com/photo-1542010589005-d1eacc3918f2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2092&q=80g',
+//     },
+//   ],
+//   queryBestReviewsDtoList: [
+//     {
+//       id: 1,
+//       imageUrl:
+//         'https://images.unsplash.com/photo-1422565096762-bdb997a56a84?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
+//       leakedOrder: 1,
+//       contents:
+//         '열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1',
+//     },
+//     {
+//       id: 2,
+//       imageUrl:
+//         'https://images.unsplash.com/photo-1534361960057-19889db9621e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
+//       leakedOrder: 2,
+//       contents:
+//         '열글자 이상의 내용2열글자 이상의 내용2열글자 이상의 내용2열글자 이상의 내용2열글자 이상의 내용2열글자 이상의 내용2열글자 이상의 내용2열글자 이상의 내용2열글자 이상의 내용2열글자 이상의 내용2열글자 이상의 내용2열글자 이상의 내용2열글자 이상의 내용2',
+//     },
+//     {
+//       id: 3,
+//       imageUrl:
+//         'https://images.unsplash.com/photo-1503256207526-0d5d80fa2f47?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=986&q=80',
+//       leakedOrder: 3,
+//       contents: '열글자 이상의 내용3',
+//     },
+//     {
+//       id: 4,
+//       imageUrl:
+//         'https://images.unsplash.com/photo-1503256207526-0d5d80fa2f47?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=986&q=80',
+//       leakedOrder: 4,
+//       contents: '열글자 이상의 구독 리뷰4',
+//     },
+//     {
+//       id: 5,
+//       imageUrl:
+//         'https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1017&q=80',
+//       leakedOrder: 5,
+//       contents: '열글자 이상의 구독 리뷰5',
+//     },
+//   ],
+//   popupBannerDtoList: [
+//     {
+//       id: 1,
+//       position: 'left',
+//       leakedOrder:1,
+//       pcFilename: 'PC파일명1',
+//       pcImageUrl: 'https://images.unsplash.com/photo-1647350650908-c78791bf8efd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80',
+//       pcLinkUrl: '/recipes',
+//       mobileFilename: '모바일 파일명1',
+//       mobileImageUrl: 'https://images.unsplash.com/photo-1648139731984-56bcce3b86e9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80',
+//       mobileLinkUrl: '/surveyGuide',
+//     },
+//     {
+//       id: 2,
+//       position: 'center',
+//       leakedOrder:2,
+//       pcFilename: 'PC파일명1',
+//       pcImageUrl: 'https://images.unsplash.com/photo-1659787050050-d5aa2b1ec0dc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1009&q=80',
+//       pcLinkUrl: '/recipes',
+//       mobileFilename: '모바일 파일명1',
+//       mobileImageUrl: 'https://images.unsplash.com/photo-1658246944434-04b7ec2cb7f7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80',
+//       mobileLinkUrl: '/surveyGuide',
+//     },
+//     {
+//       id: 3,
+//       position: 'right',
+//       leakedOrder:3,
+//       pcFilename: 'PC파일명1',
+//       pcImageUrl: 'https://images.unsplash.com/photo-1634832802370-164cf82ec82a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80',
+//       pcLinkUrl: '/recipes',
+//       mobileFilename: '모바일 파일명1',
+//       mobileImageUrl: 'https://images.unsplash.com/photo-1656519966579-da21868b7ed7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2093&q=80',
+//       mobileLinkUrl: '/surveyGuide',
+//     },
+//     {
+//       id: 4,
+//       position: 'left',
+//       leakedOrder:4,
+//       pcFilename: 'PC파일명1',
+//       pcImageUrl: 'https://images.unsplash.com/photo-1647350650908-c78791bf8efd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80',
+//       pcLinkUrl: '/recipes',
+//       mobileFilename: '모바일 파일명1',
+//       mobileImageUrl: 'https://images.unsplash.com/photo-1648139731984-56bcce3b86e9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80',
+//       mobileLinkUrl: '/surveyGuide',
+//     },
+//     {
+//       id: 5,
+//       position: 'center',
+//       leakedOrder:6,
+//       pcFilename: 'PC파일명1',
+//       pcImageUrl: 'https://images.unsplash.com/photo-1659787050050-d5aa2b1ec0dc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1009&q=80',
+//       pcLinkUrl: '/recipes',
+//       mobileFilename: '모바일 파일명1',
+//       mobileImageUrl: 'https://images.unsplash.com/photo-1658246944434-04b7ec2cb7f7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80',
+//       mobileLinkUrl: '/surveyGuide',
+//     },
+//     {
+//       id: 6,
+//       position: 'right',
+//       leakedOrder:7,
+//       pcFilename: 'PC파일명1',
+//       pcImageUrl: 'https://images.unsplash.com/photo-1634832802370-164cf82ec82a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80',
+//       pcLinkUrl: '/recipes',
+//       mobileFilename: '모바일 파일명1',
+//       mobileImageUrl: 'https://images.unsplash.com/photo-1656519966579-da21868b7ed7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2093&q=80',
+//       mobileLinkUrl: '/surveyGuide',
+//     },
+//   ],
+//   _links: {
+//     self: {
+//       href: 'http://localhost:8080/api/home',
+//     },
+//     profile: {
+//       href: '/docs/index.html#resources-home-page',
+//     },
+//   },
+// };

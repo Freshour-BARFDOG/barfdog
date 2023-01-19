@@ -39,11 +39,8 @@ module.exports = {
   },
   images: {
     domains: [
-      'images.unsplash.com',
-      '211.219.225.118',
-      '192.168.0.4',
+      'localhost',
       'barfdogserver.co.kr',
-      'shop-phinf.pstatic.net',
     ],
   },
   async headers() {

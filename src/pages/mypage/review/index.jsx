@@ -97,7 +97,7 @@ export default function ReviewPage() {
       title: info.title, // 상품 타이틀
       id: info.id, // 주문한 상품의 id 또는 구독 id
     };
-    dispatch(userStateAction.setReviewInfo({ data })); 
+    dispatch(userStateAction.setReviewInfo({ data }));
     router.push(`/mypage/review/${type}`);
   };
   
@@ -363,158 +363,158 @@ export default function ReviewPage() {
 * imageUrl:'https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2053&q=80',
 * imageUrl:'https://images.unsplash.com/photo-1563865436874-9aef32095fad?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80',
 * */
-const DUMMY_RESPONSE_DATA_writableReview = {
-  data: {
-    _embedded: {
-      queryWriteableReviewsDtoList: [
-        {
-          id: 3805,
-          targetId: 13,
-          reviewType: 'SUBSCRIBE',
-          imageUrl:
-            'https://images.unsplash.com/photo-1657299156653-d3c0147ba3ee?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
-          title: '구독상품',
-          orderedDate: '2022-07-22 09:56:44.07',
-          _links: {
-            write_review: {
-              href: 'http://localhost:8080/api/reviews',
-            },
-          },
-        },
-        {
-          id: 3801,
-          targetId: 3774,
-          reviewType: 'ITEM',
-          imageUrl:
-            'https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2053&q=80',
-          title: '상품4',
-          orderedDate: '2022-07-22 09:56:44.069',
-          _links: {
-            write_review: {
-              href: 'http://localhost:8080/api/reviews',
-            },
-          },
-        },
-        {
-          id: 3800,
-          targetId: 3773,
-          reviewType: 'ITEM',
-          imageUrl:
-            'https://images.unsplash.com/photo-1563865436874-9aef32095fad?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80',
-          title: '상품3',
-          orderedDate: '2022-07-22 09:56:44.069',
-          _links: {
-            write_review: {
-              href: 'http://localhost:8080/api/reviews',
-            },
-          },
-        },
-      ],
-    },
-    page: {
-      size: 5,
-      totalElements: 12,
-      totalPages: 3,
-      number: 1,
-    },
-  },
-};
-
-const DUMMY_RESPONSE_DATA_reviewList = {
-  data: {
-    _embedded: {
-      queryReviewsDtoList: [
-        {
-          id: 319,
-          thumbnailUrl:
-            'https://images.unsplash.com/photo-1657299156653-d3c0147ba3ee?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
-          title: '구독 상품',
-          star: 5,
-          contents: '열글자 이상의 구독 리뷰9열글자 이상의 구독 리뷰9열글자 이상의 구독 리뷰9',
-          createdDate: '2022-07-22',
-          imageUrl:
-            'https://images.unsplash.com/photo-1560713781-d00f6c18f388?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1981&q=80',
-          imageCount: 1,
-          status: 'RETURN',
-          returnReason: '상품에 맞지 않은 리뷰 내용9',
-          _links: {
-            query_review_images: {
-              href: 'http://localhost:8080/api/reviews/319/images',
-            },
-            query_review: {
-              href: 'http://localhost:8080/api/reviews/319',
-            },
-            delete_review: {
-              href: 'http://localhost:8080/api/reviews/319',
-            },
-            update_review: {
-              href: 'http://localhost:8080/api/reviews/319',
-            },
-          },
-        },
-        {
-          id: 321,
-          thumbnailUrl:
-            'https://images.unsplash.com/photo-1624462966581-bc6d768cbce5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80',
-          title: '구독 상품',
-          star: 1,
-          contents: '열글자 이상의 구독 리뷰10',
-          createdDate: '2022-07-22',
-          imageUrl:
-            'https://images.unsplash.com/photo-1624462966581-bc6d768cbce5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80',
-          imageCount: 3,
-          status: 'APPROVAL',
-          returnReason: '',
-          _links: {
-            query_review_images: {
-              href: 'http://localhost:8080/api/reviews/321/images',
-            },
-            query_review: {
-              href: 'http://localhost:8080/api/reviews/321',
-            },
-            delete_review: {
-              href: 'http://localhost:8080/api/reviews/321',
-            },
-            update_review: {
-              href: 'http://localhost:8080/api/reviews/321',
-            },
-          },
-        },
-        {
-          id: 317,
-          thumbnailUrl:
-            'https://images.unsplash.com/photo-1556761223-4c4282c73f77?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1065&q=80',
-          title: '구독 상품',
-          star: 4,
-          contents: '열글자 이상의 구독 리뷰8',
-          createdDate: '2022-07-22',
-          imageUrl:
-            'https://images.unsplash.com/photo-1556761223-4c4282c73f77?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1065&q=80',
-          imageCount: 13,
-          status: 'REQUEST',
-          returnReason: '상품에 맞지 않은 리뷰 내용8',
-          _links: {
-            query_review_images: {
-              href: 'http://localhost:8080/api/reviews/317/images',
-            },
-            query_review: {
-              href: 'http://localhost:8080/api/reviews/317',
-            },
-            delete_review: {
-              href: 'http://localhost:8080/api/reviews/317',
-            },
-            update_review: {
-              href: 'http://localhost:8080/api/reviews/317',
-            },
-          },
-        },
-      ],
-    },
-    page: {
-      size: 5,
-      totalElements: 14,
-      totalPages: 3,
-      number: 1,
-    },
-  },
-};
+// const DUMMY_RESPONSE_DATA_writableReview = {
+//   data: {
+//     _embedded: {
+//       queryWriteableReviewsDtoList: [
+//         {
+//           id: 3805,
+//           targetId: 13,
+//           reviewType: 'SUBSCRIBE',
+//           imageUrl:
+//             'https://images.unsplash.com/photo-1657299156653-d3c0147ba3ee?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
+//           title: '구독상품',
+//           orderedDate: '2022-07-22 09:56:44.07',
+//           _links: {
+//             write_review: {
+//               href: 'http://localhost:8080/api/reviews',
+//             },
+//           },
+//         },
+//         {
+//           id: 3801,
+//           targetId: 3774,
+//           reviewType: 'ITEM',
+//           imageUrl:
+//             'https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2053&q=80',
+//           title: '상품4',
+//           orderedDate: '2022-07-22 09:56:44.069',
+//           _links: {
+//             write_review: {
+//               href: 'http://localhost:8080/api/reviews',
+//             },
+//           },
+//         },
+//         {
+//           id: 3800,
+//           targetId: 3773,
+//           reviewType: 'ITEM',
+//           imageUrl:
+//             'https://images.unsplash.com/photo-1563865436874-9aef32095fad?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80',
+//           title: '상품3',
+//           orderedDate: '2022-07-22 09:56:44.069',
+//           _links: {
+//             write_review: {
+//               href: 'http://localhost:8080/api/reviews',
+//             },
+//           },
+//         },
+//       ],
+//     },
+//     page: {
+//       size: 5,
+//       totalElements: 12,
+//       totalPages: 3,
+//       number: 1,
+//     },
+//   },
+// };
+//
+// const DUMMY_RESPONSE_DATA_reviewList = {
+//   data: {
+//     _embedded: {
+//       queryReviewsDtoList: [
+//         {
+//           id: 319,
+//           thumbnailUrl:
+//             'https://images.unsplash.com/photo-1657299156653-d3c0147ba3ee?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
+//           title: '구독 상품',
+//           star: 5,
+//           contents: '열글자 이상의 구독 리뷰9열글자 이상의 구독 리뷰9열글자 이상의 구독 리뷰9',
+//           createdDate: '2022-07-22',
+//           imageUrl:
+//             'https://images.unsplash.com/photo-1560713781-d00f6c18f388?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1981&q=80',
+//           imageCount: 1,
+//           status: 'RETURN',
+//           returnReason: '상품에 맞지 않은 리뷰 내용9',
+//           _links: {
+//             query_review_images: {
+//               href: 'http://localhost:8080/api/reviews/319/images',
+//             },
+//             query_review: {
+//               href: 'http://localhost:8080/api/reviews/319',
+//             },
+//             delete_review: {
+//               href: 'http://localhost:8080/api/reviews/319',
+//             },
+//             update_review: {
+//               href: 'http://localhost:8080/api/reviews/319',
+//             },
+//           },
+//         },
+//         {
+//           id: 321,
+//           thumbnailUrl:
+//             'https://images.unsplash.com/photo-1624462966581-bc6d768cbce5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80',
+//           title: '구독 상품',
+//           star: 1,
+//           contents: '열글자 이상의 구독 리뷰10',
+//           createdDate: '2022-07-22',
+//           imageUrl:
+//             'https://images.unsplash.com/photo-1624462966581-bc6d768cbce5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80',
+//           imageCount: 3,
+//           status: 'APPROVAL',
+//           returnReason: '',
+//           _links: {
+//             query_review_images: {
+//               href: 'http://localhost:8080/api/reviews/321/images',
+//             },
+//             query_review: {
+//               href: 'http://localhost:8080/api/reviews/321',
+//             },
+//             delete_review: {
+//               href: 'http://localhost:8080/api/reviews/321',
+//             },
+//             update_review: {
+//               href: 'http://localhost:8080/api/reviews/321',
+//             },
+//           },
+//         },
+//         {
+//           id: 317,
+//           thumbnailUrl:
+//             'https://images.unsplash.com/photo-1556761223-4c4282c73f77?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1065&q=80',
+//           title: '구독 상품',
+//           star: 4,
+//           contents: '열글자 이상의 구독 리뷰8',
+//           createdDate: '2022-07-22',
+//           imageUrl:
+//             'https://images.unsplash.com/photo-1556761223-4c4282c73f77?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1065&q=80',
+//           imageCount: 13,
+//           status: 'REQUEST',
+//           returnReason: '상품에 맞지 않은 리뷰 내용8',
+//           _links: {
+//             query_review_images: {
+//               href: 'http://localhost:8080/api/reviews/317/images',
+//             },
+//             query_review: {
+//               href: 'http://localhost:8080/api/reviews/317',
+//             },
+//             delete_review: {
+//               href: 'http://localhost:8080/api/reviews/317',
+//             },
+//             update_review: {
+//               href: 'http://localhost:8080/api/reviews/317',
+//             },
+//           },
+//         },
+//       ],
+//     },
+//     page: {
+//       size: 5,
+//       totalElements: 14,
+//       totalPages: 3,
+//       number: 1,
+//     },
+//   },
+// };
