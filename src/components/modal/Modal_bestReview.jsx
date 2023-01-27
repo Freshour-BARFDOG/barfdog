@@ -18,30 +18,30 @@ import axios from 'axios';
 import { FullScreenLoading } from '../atoms/FullScreenLoading';
 import { filter_blindingUserName } from '/util/func/filter_blindingUserName';
 
-const DUMMY_DATA = {
-  reviewDto: {
-    id: 39,
-    writtenDate: '2022-07-19',
-    star: 1,
-    username: '세바스찬',
-    contents:
-      '열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자',
-  },
-  reviewImageDtoList: [
-    {
-      filename: 'filename1.jpg',
-      url: 'https://images.unsplash.com/photo-1517849845537-4d257902454a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80',
-    },
-    {
-      filename: 'filename2.jpg',
-      url: 'https://images.unsplash.com/photo-1552053831-71594a27632d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=662&q=80',
-    },
-    {
-      filename: 'filename3.jpg',
-      url: 'https://images.unsplash.com/photo-1561037404-61cd46aa615b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-    },
-  ],
-};
+// const DUMMY_DATA = {
+//   reviewDto: {
+//     id: 39,
+//     writtenDate: '2022-07-19',
+//     star: 1,
+//     username: '세바스찬',
+//     contents:
+//       '열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자',
+//   },
+//   reviewImageDtoList: [
+//     {
+//       filename: 'filename1.jpg',
+//       url: 'https://images.unsplash.com/photo-1517849845537-4d257902454a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80',
+//     },
+//     {
+//       filename: 'filename2.jpg',
+//       url: 'https://images.unsplash.com/photo-1552053831-71594a27632d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=662&q=80',
+//     },
+//     {
+//       filename: 'filename3.jpg',
+//       url: 'https://images.unsplash.com/photo-1561037404-61cd46aa615b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
+//     },
+//   ],
+// };
 
 export default function Modal_bestReview({ isActiveModal, setIsActiveModal, reviewId }) {
   const [info, setInfo] = useState({});
@@ -68,7 +68,7 @@ export default function Modal_bestReview({ isActiveModal, setIsActiveModal, revi
         .catch((err) => {
           return err.response;
         });
-      const data = res.data || DUMMY_DATA;
+      const data = res.data;
       console.log(data);
       if (!data) return;
       const DATA = {

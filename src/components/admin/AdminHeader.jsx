@@ -6,19 +6,17 @@ import Image from 'next/image';
 import s from "./adminHeader.module.scss";
 import Link from 'next/link';
 import {IoMenuSharp} from "react-icons/io5";
-import {userStateAction} from "@store/userState-slice";
 import useUserData from "@util/hook/useUserData";
 
-function AdminHeader({folded}) {
+function AdminHeader({setToogleMenuState}) {
   const userData = useUserData();
-  // console.log(userData)
   const dispatch = useDispatch();
   const onLogoutHandler = () => {
     dispatch(authAction.adminLogout());
   }
 
   const onChangeGnbMode = ()=>{
-    dispatch(folded ? userStateAction.unfold() : userStateAction.fold());
+    setToogleMenuState();
   }
 
   return (

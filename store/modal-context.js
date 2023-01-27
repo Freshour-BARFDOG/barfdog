@@ -3,13 +3,12 @@ import { Modal_changePassword } from '@src/components/modal/Modal_changePassword
 
 const ModalContext = createContext({
   // 컴포넌트를 포함한 객체가 될 예정이기 때문에, 첫 단어를 대문자로 지정
-  onShow: () => {
-    console.log('모달: 활성');
-    console.log(this);
-  },
-  onHide: () => {
-    console.log('모달: 비활성');
-  },
+  isActive: () => {}, // Modal 활성여부
+  onShow: () => {}, // Modal 활성
+  onHide: () => {}, // Modal 비활성
+  alertShow: () => {}, // AlertModal 활성
+  alertHide: () => {},// AlertModal 비활성
+  hasAlert:false,// AlertModal 활성 여부
 });
 
 const useModalContext = () => useContext(ModalContext);
@@ -100,6 +99,3 @@ const ModalContextProvider = ({ children, ...props }) => {
 
 export default ModalContext;
 export { useModalContext, ModalContextProvider };
-
-
-

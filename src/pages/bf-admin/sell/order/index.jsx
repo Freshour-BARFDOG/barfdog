@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import s from './order.module.scss';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
@@ -23,9 +23,12 @@ import Tooltip from '/src/components/atoms/Tooltip';
 import popupWindow from '/util/func/popupWindow';
 import { getGoodsFlowOtp, postGoodsFlowOrder } from '/src/pages/api/goodsFlow/service';
 import axios from 'axios';
+import {getDefaultPagenationInfo} from "/util/func/getDefaultPagenationInfo";
+import enterKey from "/util/func/enterKey";
+import {global_searchDateType} from "/store/TYPE/searchDateType";
 
 const initialSearchValues = {
-  from: transformToday(),
+  from: global_searchDateType.oldestDate,
   to: transformToday(),
   merchantUid: null,
   memberName: null,
@@ -44,25 +47,27 @@ export default function OrderOnSellPage() {
   const [searchBody, setSearchBody] = useState(null);
   const [selectedOrderIdList, setSelectedOrderIdList] = useState([]);
   const [activeModal, setActiveModal] = useState({});
+  const [searchQueryInitialize, setSearchQueryInitialize] = useState( false );
   const allItemIdList = itemList.map((item) => item.id); // 주문 id
   const [selectedItemList, setSelectedItemList] = useState([]);
-
-  useEffect(() => {
-    setSearchBody(initialSearchValues);
-    (async () => {
-      console.log('시작');
-      try {
-        const res = await getData('http://localhost:4000/api/goodsFlow/postTraceResult');
-        console.log('res:', res);
-      } catch (err) {
-        console.error(err);
-      }
-      setIsLoading((prevState) => ({
-        ...prevState,
-        ga: false,
-      }));
-    })();
-  }, []);
+  
+  /* 사용되지 않는코드로 확인되어 주석처리함 */
+  // useEffect(() => {
+  //   setSearchBody(initialSearchValues);
+  //   (async () => {
+  //     console.log('시작');
+  //     try {
+  //       const res = await getData('http://localhost:4000/api/goodsFlow/postTraceResult');
+  //       console.log('res:', res);
+  //     } catch (err) {
+  //       console.error(err);
+  //     }
+  //     setIsLoading((prevState) => ({
+  //       ...prevState,
+  //       ga: false,
+  //     }));
+  //   })();
+  // }, []);
 
   useEffect(() => {
     const selectedList = itemList.filter((data) => selectedOrderIdList.indexOf(data.id) >= 0);
@@ -100,23 +105,14 @@ export default function OrderOnSellPage() {
     setSearchBody(body);
     setSelectedOrderIdList([]); // 선택된 아이템 id 리스트 초기화
   };
-
-  const pageInterceptor = (res) => {
-    // console.log(res);
-    // res = searchValues.orderType === productType.GENERAL ? DUMMY__ADMIN_ORDER_ITEMS_GENERAL_RESPONSE :  DUMMY__ADMIN_ORDER_ITEMS_SUBSCRIBE_RESPONSE; //  ! TEST TEST TEST TEST TEST TEST
+  
+  
+  const pageInterceptor = useCallback((res, option={itemQuery: null}) => {
+    // res = searchValues.orderType === productType.GENERAL ? DUMMY__ADMIN_ORDER_ITEMS_GENERAL_RESPONSE :  DUMMY__ADMIN_ORDER_ITEMS_SUBSCRIBE_RESPONSE; //  ! TEST TEST TEST
     console.log(res);
-    const pageData = res.data.page;
-    const curItemList = res.data?._embedded?.queryAdminCancelRequestDtoList || [];
-    let newPageInfo = {
-      totalPages: pageData.totalPages,
-      size: pageData.size,
-      totalItems: pageData.totalElements,
-      currentPageIndex: pageData.number,
-      newPageNumber: pageData.number + 1,
-      newItemList: curItemList,
-    };
-    return newPageInfo;
-  };
+    return getDefaultPagenationInfo(res?.data, 'queryAdminCancelRequestDtoList', {pageSize: searchPageSize, setInitialize: setSearchQueryInitialize});
+  },[]);
+
 
   const onSelectedItem = (id, checked) => {
     const seletedId = Number(id);
@@ -465,6 +461,10 @@ export default function OrderOnSellPage() {
       orderCancel: false,
     }));
   };
+  
+  const onSearchInputKeydown = (e) => {
+    enterKey(e, onSearchHandler);
+  };
 
   return (
     <>
@@ -482,6 +482,7 @@ export default function OrderOnSellPage() {
               <SearchTextWithCategory
                 searchValue={searchValues}
                 setSearchValue={setSearchValues}
+                events={{ onKeydown: onSearchInputKeydown }}
                 title="조건검색"
                 name="content"
                 id="content"
@@ -572,7 +573,7 @@ export default function OrderOnSellPage() {
                 queryItemList={'queryAdminOrdersDtoList'}
                 setItemList={setItemList}
                 setIsLoading={setIsLoading}
-                option={{ apiMethod: 'POST', body: searchBody }}
+                option={{ apiMethod: 'POST', body: searchBody, initialize: searchQueryInitialize }}
               />
             </div>
           </section>
@@ -601,371 +602,373 @@ export default function OrderOnSellPage() {
   );
 }
 
-const DUMMY__ADMIN_ORDER_ITEMS_GENERAL_RESPONSE = {
-  data: {
-    _embedded: {
-      queryAdminOrdersDtoList: [
-        {
-          id: 7819,
-          orderType: 'general',
-          merchantUid: 'merchant_uid15',
-          orderItemId: 78190,
-          orderStatus: 'PAYMENT_DONE',
-          deliveryNumber: 'cj02392342315',
-          memberEmail: 'admin@gmail.com',
-          memberName: '관리자',
-          memberPhoneNumber: '01056785678',
-          recipientName: '관리자',
-          recipientPhoneNumber: '01056785678',
-          packageDelivery: false,
-          orderDate: '2022-08-12T11:19:51.139',
-          _links: {
-            query_order: {
-              href: 'http://localhost:8080/api/admin/orders/7819/general',
-            },
-          },
-        },
-        {
-          id: 7789,
-          orderType: 'general',
-          merchantUid: 'merchant_uid13',
-          orderItemId: 77890,
-          orderStatus: 'PAYMENT_DONE',
-          deliveryNumber: 'cj02392342313',
-          memberEmail: 'admin@gmail.com',
-          memberName: '관리자',
-          memberPhoneNumber: '01056785678',
-          recipientName: '관리자',
-          recipientPhoneNumber: '01056785678',
-          packageDelivery: false,
-          orderDate: '2022-08-12T11:19:51.139',
-          _links: {
-            query_order: {
-              href: 'http://localhost:8080/api/admin/orders/7789/general',
-            },
-          },
-        },
-        {
-          id: 7834,
-          orderType: 'general',
-          merchantUid: 'merchant_uid16',
-          orderItemId: 78340,
-          orderStatus: 'PAYMENT_DONE',
-          deliveryNumber: 'cj02392342316',
-          memberEmail: 'admin@gmail.com',
-          memberName: '관리자',
-          memberPhoneNumber: '01056785678',
-          recipientName: '관리자',
-          recipientPhoneNumber: '01056785678',
-          packageDelivery: false,
-          orderDate: '2022-08-12T11:19:51.139',
-          _links: {
-            query_order: {
-              href: 'http://localhost:8080/api/admin/orders/7834/general',
-            },
-          },
-        },
-      ],
-    },
-    _links: {
-      first: {
-        href: 'http://localhost:8080/api/admin/orders/search?page=0&size=5',
-      },
-      prev: {
-        href: 'http://localhost:8080/api/admin/orders/search?page=0&size=5',
-      },
-      self: {
-        href: 'http://localhost:8080/api/admin/orders/search?page=1&size=5',
-      },
-      next: {
-        href: 'http://localhost:8080/api/admin/orders/search?page=2&size=5',
-      },
-      last: {
-        href: 'http://localhost:8080/api/admin/orders/search?page=2&size=5',
-      },
-      profile: {
-        href: '/docs/index.html#resources-query-admin-orders',
-      },
-    },
-    page: {
-      size: 10,
-      totalElements: 14,
-      totalPages: 1,
-      number: 1,
-    },
-  },
-};
 
-const DUMMY__ADMIN_ORDER_ITEMS_SUBSCRIBE_RESPONSE = {
-  data: {
-    _embedded: {
-      queryAdminOrdersDtoList: [
-        {
-          id: 8000,
-          orderType: 'subscribe',
-          merchantUid: 'merchant_uid15',
-          orderItemId: 88000,
-          orderStatus: 'PAYMENT_DONE',
-          deliveryNumber: 'cj02392342315',
-          memberEmail: 'admin@gmail.com',
-          memberName: '관리자',
-          memberPhoneNumber: '01056785678',
-          recipientName: '관리자',
-          recipientPhoneNumber: '01056785678',
-          packageDelivery: false,
-          orderDate: '2022-08-12T11:19:51.139',
-          _links: {
-            query_order: {
-              href: 'http://localhost:8080/api/admin/orders/7819/general',
-            },
-          },
-        },
-        {
-          id: 8001,
-          orderType: 'subscribe',
-          merchantUid: 'merchant_uid13',
-          orderItemId: 88001,
-          orderStatus: 'PAYMENT_DONE',
-          deliveryNumber: 'cj02392342313',
-          memberEmail: 'admin@gmail.com',
-          memberName: '관리자',
-          memberPhoneNumber: '01056785678',
-          recipientName: '관리자',
-          recipientPhoneNumber: '01056785678',
-          packageDelivery: false,
-          orderDate: '2022-08-12T11:19:51.139',
-          _links: {
-            query_order: {
-              href: 'http://localhost:8080/api/admin/orders/7789/general',
-            },
-          },
-        },
-        {
-          id: 8002,
-          orderType: 'subscribe',
-          merchantUid: 'merchant_uid16',
-          orderItemId: 88002,
-          orderStatus: 'PAYMENT_DONE',
-          deliveryNumber: 'cj02392342316',
-          memberEmail: 'admin@gmail.com',
-          memberName: '관리자',
-          memberPhoneNumber: '01056785678',
-          recipientName: '관리자',
-          recipientPhoneNumber: '01056785678',
-          packageDelivery: false,
-          orderDate: '2022-08-12T11:19:51.139',
-          _links: {
-            query_order: {
-              href: 'http://localhost:8080/api/admin/orders/7834/general',
-            },
-          },
-        },
-        {
-          id: 8003,
-          orderType: 'subscribe',
-          merchantUid: 'merchant_uid7',
-          orderItemId: 88003,
-          orderStatus: 'PAYMENT_DONE',
-          deliveryNumber: 'cj0239234237',
-          memberEmail: 'user@gmail.com',
-          memberName: '김회원',
-          memberPhoneNumber: '01099038544',
-          recipientName: '김회원',
-          recipientPhoneNumber: '01099038544',
-          packageDelivery: false,
-          orderDate: '2022-08-12T11:19:51.137',
-          _links: {
-            query_order: {
-              href: 'http://localhost:8080/api/admin/orders/7735/general',
-            },
-          },
-        },
-      ],
-    },
-    _links: {
-      first: {
-        href: 'http://localhost:8080/api/admin/orders/search?page=0&size=5',
-      },
-      prev: {
-        href: 'http://localhost:8080/api/admin/orders/search?page=0&size=5',
-      },
-      self: {
-        href: 'http://localhost:8080/api/admin/orders/search?page=1&size=5',
-      },
-      next: {
-        href: 'http://localhost:8080/api/admin/orders/search?page=2&size=5',
-      },
-      last: {
-        href: 'http://localhost:8080/api/admin/orders/search?page=2&size=5',
-      },
-      profile: {
-        href: '/docs/index.html#resources-query-admin-orders',
-      },
-    },
-    page: {
-      size: 5,
-      totalElements: 14,
-      totalPages: 3,
-      number: 1,
-    },
-  },
-};
-
-const DUMMY_ADMIN_DELIVERY_INFO = {
-  isDone: true,
-  error: '',
-  status: 200,
-  data: {
-    data: {
-      _embedded: {
-        queryOrderInfoForDeliveryList: [
-          {
-            transUniqueCd: 'O5vhpwumbZ4wou8',
-            sndName: '바프독',
-            sndZipCode: '27352',
-            sndAddr1: '충청북도 충주시 번영대로 214',
-            sndAddr2: '1층 프레쉬아워',
-            sndTel1: '0438554995',
-            rcvName: '김회원',
-            rcvZipCode: '12345',
-            rcvAddr1: '부산광역시 해운대구 센텀2로 19',
-            rcvAddr2: '106호',
-            rcvTel1: '01099038544',
-            mallId: 'BARFDOG',
-            orderItems: [
-              {
-                uniqueCd: '5359-subs',
-                ordNo: '5359',
-                itemName: '구독상품',
-                itemQty: 1,
-                ordDate: '20220812111945',
-              },
-              {
-                uniqueCd: '5364-item',
-                ordNo: '5364',
-                itemName: '굿즈 상품1',
-                itemQty: 1,
-                ordDate: '20220812111945',
-              },
-              {
-                uniqueCd: '5370-item',
-                ordNo: '5370',
-                itemName: '굿즈 상품2',
-                itemQty: 2,
-                ordDate: '20220812111945',
-              },
-            ],
-          },
-          {
-            transUniqueCd: 'uNGHpdjujpIp3fr',
-            sndName: '바프독',
-            sndZipCode: '27352',
-            sndAddr1: '충청북도 충주시 번영대로 214',
-            sndAddr2: '1층 프레쉬아워',
-            sndTel1: '0438554995',
-            rcvName: '김회원',
-            rcvZipCode: '12345',
-            rcvAddr1: '부산광역시 해운대구 센텀2로 19',
-            rcvAddr2: '106호',
-            rcvTel1: '01099038544',
-            mallId: 'BARFDOG',
-            orderItems: [
-              {
-                uniqueCd: '5379-subs',
-                ordNo: '5379',
-                itemName: '구독상품',
-                itemQty: 1,
-                ordDate: '20220812111945',
-              },
-              {
-                uniqueCd: '5384-item',
-                ordNo: '5384',
-                itemName: '굿즈 상품1',
-                itemQty: 1,
-                ordDate: '20220812111945',
-              },
-              {
-                uniqueCd: '5390-item',
-                ordNo: '5390',
-                itemName: '굿즈 상품2',
-                itemQty: 2,
-                ordDate: '20220812111945',
-              },
-            ],
-          },
-          {
-            transUniqueCd: 'TdEgJaY6lbsYkuJ',
-            sndName: '바프독',
-            sndZipCode: '27352',
-            sndAddr1: '충청북도 충주시 번영대로 214',
-            sndAddr2: '1층 프레쉬아워',
-            sndTel1: '0438554995',
-            rcvName: '김회원',
-            rcvZipCode: '12345',
-            rcvAddr1: '부산광역시 해운대구 센텀2로 19',
-            rcvAddr2: '106호',
-            rcvTel1: '01099038544',
-            mallId: 'BARFDOG',
-            orderItems: [
-              {
-                uniqueCd: '5399-item',
-                ordNo: '5399',
-                itemName: '굿즈 상품1',
-                itemQty: 1,
-                ordDate: '20220812111945',
-              },
-              {
-                uniqueCd: '5405-item',
-                ordNo: '5405',
-                itemName: '굿즈 상품2',
-                itemQty: 2,
-                ordDate: '20220812111945',
-              },
-            ],
-          },
-          {
-            transUniqueCd: 'DsYizOMeUKEbrC2',
-            sndName: '바프독',
-            sndZipCode: '27352',
-            sndAddr1: '충청북도 충주시 번영대로 214',
-            sndAddr2: '1층 프레쉬아워',
-            sndTel1: '0438554995',
-            rcvName: '김회원',
-            rcvZipCode: '12345',
-            rcvAddr1: '부산광역시 해운대구 센텀2로 19',
-            rcvAddr2: '106호',
-            rcvTel1: '01099038544',
-            mallId: 'BARFDOG',
-            orderItems: [
-              {
-                uniqueCd: '5414-item',
-                ordNo: '5414',
-                itemName: '굿즈 상품1',
-                itemQty: 1,
-                ordDate: '20220812111945',
-              },
-              {
-                uniqueCd: '5420-item',
-                ordNo: '5420',
-                itemName: '굿즈 상품2',
-                itemQty: 2,
-                ordDate: '20220812111945',
-              },
-            ],
-          },
-        ],
-      },
-      _links: {
-        self: {
-          href: 'http://localhost:8080/api/admin/deliveries/info',
-        },
-        update_deliveryNumber: {
-          href: 'http://localhost:8080/api/admin/deliveries/deliveryNumber',
-        },
-        profile: {
-          href: '/docs/index.html#resources-admin-query-deliveries-info',
-        },
-      },
-    },
-  },
-};
+//
+// const DUMMY__ADMIN_ORDER_ITEMS_GENERAL_RESPONSE = {
+//   data: {
+//     _embedded: {
+//       queryAdminOrdersDtoList: [
+//         {
+//           id: 7819,
+//           orderType: 'general',
+//           merchantUid: 'merchant_uid15',
+//           orderItemId: 78190,
+//           orderStatus: 'PAYMENT_DONE',
+//           deliveryNumber: 'cj02392342315',
+//           memberEmail: 'admin@gmail.com',
+//           memberName: '관리자',
+//           memberPhoneNumber: '01056785678',
+//           recipientName: '관리자',
+//           recipientPhoneNumber: '01056785678',
+//           packageDelivery: false,
+//           orderDate: '2022-08-12T11:19:51.139',
+//           _links: {
+//             query_order: {
+//               href: 'http://localhost:8080/api/admin/orders/7819/general',
+//             },
+//           },
+//         },
+//         {
+//           id: 7789,
+//           orderType: 'general',
+//           merchantUid: 'merchant_uid13',
+//           orderItemId: 77890,
+//           orderStatus: 'PAYMENT_DONE',
+//           deliveryNumber: 'cj02392342313',
+//           memberEmail: 'admin@gmail.com',
+//           memberName: '관리자',
+//           memberPhoneNumber: '01056785678',
+//           recipientName: '관리자',
+//           recipientPhoneNumber: '01056785678',
+//           packageDelivery: false,
+//           orderDate: '2022-08-12T11:19:51.139',
+//           _links: {
+//             query_order: {
+//               href: 'http://localhost:8080/api/admin/orders/7789/general',
+//             },
+//           },
+//         },
+//         {
+//           id: 7834,
+//           orderType: 'general',
+//           merchantUid: 'merchant_uid16',
+//           orderItemId: 78340,
+//           orderStatus: 'PAYMENT_DONE',
+//           deliveryNumber: 'cj02392342316',
+//           memberEmail: 'admin@gmail.com',
+//           memberName: '관리자',
+//           memberPhoneNumber: '01056785678',
+//           recipientName: '관리자',
+//           recipientPhoneNumber: '01056785678',
+//           packageDelivery: false,
+//           orderDate: '2022-08-12T11:19:51.139',
+//           _links: {
+//             query_order: {
+//               href: 'http://localhost:8080/api/admin/orders/7834/general',
+//             },
+//           },
+//         },
+//       ],
+//     },
+//     _links: {
+//       first: {
+//         href: 'http://localhost:8080/api/admin/orders/search?page=0&size=5',
+//       },
+//       prev: {
+//         href: 'http://localhost:8080/api/admin/orders/search?page=0&size=5',
+//       },
+//       self: {
+//         href: 'http://localhost:8080/api/admin/orders/search?page=1&size=5',
+//       },
+//       next: {
+//         href: 'http://localhost:8080/api/admin/orders/search?page=2&size=5',
+//       },
+//       last: {
+//         href: 'http://localhost:8080/api/admin/orders/search?page=2&size=5',
+//       },
+//       profile: {
+//         href: '/docs/index.html#resources-query-admin-orders',
+//       },
+//     },
+//     page: {
+//       size: 10,
+//       totalElements: 14,
+//       totalPages: 1,
+//       number: 1,
+//     },
+//   },
+// };
+//
+// const DUMMY__ADMIN_ORDER_ITEMS_SUBSCRIBE_RESPONSE = {
+//   data: {
+//     _embedded: {
+//       queryAdminOrdersDtoList: [
+//         {
+//           id: 8000,
+//           orderType: 'subscribe',
+//           merchantUid: 'merchant_uid15',
+//           orderItemId: 88000,
+//           orderStatus: 'PAYMENT_DONE',
+//           deliveryNumber: 'cj02392342315',
+//           memberEmail: 'admin@gmail.com',
+//           memberName: '관리자',
+//           memberPhoneNumber: '01056785678',
+//           recipientName: '관리자',
+//           recipientPhoneNumber: '01056785678',
+//           packageDelivery: false,
+//           orderDate: '2022-08-12T11:19:51.139',
+//           _links: {
+//             query_order: {
+//               href: 'http://localhost:8080/api/admin/orders/7819/general',
+//             },
+//           },
+//         },
+//         {
+//           id: 8001,
+//           orderType: 'subscribe',
+//           merchantUid: 'merchant_uid13',
+//           orderItemId: 88001,
+//           orderStatus: 'PAYMENT_DONE',
+//           deliveryNumber: 'cj02392342313',
+//           memberEmail: 'admin@gmail.com',
+//           memberName: '관리자',
+//           memberPhoneNumber: '01056785678',
+//           recipientName: '관리자',
+//           recipientPhoneNumber: '01056785678',
+//           packageDelivery: false,
+//           orderDate: '2022-08-12T11:19:51.139',
+//           _links: {
+//             query_order: {
+//               href: 'http://localhost:8080/api/admin/orders/7789/general',
+//             },
+//           },
+//         },
+//         {
+//           id: 8002,
+//           orderType: 'subscribe',
+//           merchantUid: 'merchant_uid16',
+//           orderItemId: 88002,
+//           orderStatus: 'PAYMENT_DONE',
+//           deliveryNumber: 'cj02392342316',
+//           memberEmail: 'admin@gmail.com',
+//           memberName: '관리자',
+//           memberPhoneNumber: '01056785678',
+//           recipientName: '관리자',
+//           recipientPhoneNumber: '01056785678',
+//           packageDelivery: false,
+//           orderDate: '2022-08-12T11:19:51.139',
+//           _links: {
+//             query_order: {
+//               href: 'http://localhost:8080/api/admin/orders/7834/general',
+//             },
+//           },
+//         },
+//         {
+//           id: 8003,
+//           orderType: 'subscribe',
+//           merchantUid: 'merchant_uid7',
+//           orderItemId: 88003,
+//           orderStatus: 'PAYMENT_DONE',
+//           deliveryNumber: 'cj0239234237',
+//           memberEmail: 'user@gmail.com',
+//           memberName: '김회원',
+//           memberPhoneNumber: '01099038544',
+//           recipientName: '김회원',
+//           recipientPhoneNumber: '01099038544',
+//           packageDelivery: false,
+//           orderDate: '2022-08-12T11:19:51.137',
+//           _links: {
+//             query_order: {
+//               href: 'http://localhost:8080/api/admin/orders/7735/general',
+//             },
+//           },
+//         },
+//       ],
+//     },
+//     _links: {
+//       first: {
+//         href: 'http://localhost:8080/api/admin/orders/search?page=0&size=5',
+//       },
+//       prev: {
+//         href: 'http://localhost:8080/api/admin/orders/search?page=0&size=5',
+//       },
+//       self: {
+//         href: 'http://localhost:8080/api/admin/orders/search?page=1&size=5',
+//       },
+//       next: {
+//         href: 'http://localhost:8080/api/admin/orders/search?page=2&size=5',
+//       },
+//       last: {
+//         href: 'http://localhost:8080/api/admin/orders/search?page=2&size=5',
+//       },
+//       profile: {
+//         href: '/docs/index.html#resources-query-admin-orders',
+//       },
+//     },
+//     page: {
+//       size: 5,
+//       totalElements: 14,
+//       totalPages: 3,
+//       number: 1,
+//     },
+//   },
+// };
+//
+// const DUMMY_ADMIN_DELIVERY_INFO = {
+//   isDone: true,
+//   error: '',
+//   status: 200,
+//   data: {
+//     data: {
+//       _embedded: {
+//         queryOrderInfoForDeliveryList: [
+//           {
+//             transUniqueCd: 'O5vhpwumbZ4wou8',
+//             sndName: '바프독',
+//             sndZipCode: '27352',
+//             sndAddr1: '충청북도 충주시 번영대로 214',
+//             sndAddr2: '1층 프레쉬아워',
+//             sndTel1: '0438554995',
+//             rcvName: '김회원',
+//             rcvZipCode: '12345',
+//             rcvAddr1: '부산광역시 해운대구 센텀2로 19',
+//             rcvAddr2: '106호',
+//             rcvTel1: '01099038544',
+//             mallId: 'BARFDOG',
+//             orderItems: [
+//               {
+//                 uniqueCd: '5359-subs',
+//                 ordNo: '5359',
+//                 itemName: '구독상품',
+//                 itemQty: 1,
+//                 ordDate: '20220812111945',
+//               },
+//               {
+//                 uniqueCd: '5364-item',
+//                 ordNo: '5364',
+//                 itemName: '굿즈 상품1',
+//                 itemQty: 1,
+//                 ordDate: '20220812111945',
+//               },
+//               {
+//                 uniqueCd: '5370-item',
+//                 ordNo: '5370',
+//                 itemName: '굿즈 상품2',
+//                 itemQty: 2,
+//                 ordDate: '20220812111945',
+//               },
+//             ],
+//           },
+//           {
+//             transUniqueCd: 'uNGHpdjujpIp3fr',
+//             sndName: '바프독',
+//             sndZipCode: '27352',
+//             sndAddr1: '충청북도 충주시 번영대로 214',
+//             sndAddr2: '1층 프레쉬아워',
+//             sndTel1: '0438554995',
+//             rcvName: '김회원',
+//             rcvZipCode: '12345',
+//             rcvAddr1: '부산광역시 해운대구 센텀2로 19',
+//             rcvAddr2: '106호',
+//             rcvTel1: '01099038544',
+//             mallId: 'BARFDOG',
+//             orderItems: [
+//               {
+//                 uniqueCd: '5379-subs',
+//                 ordNo: '5379',
+//                 itemName: '구독상품',
+//                 itemQty: 1,
+//                 ordDate: '20220812111945',
+//               },
+//               {
+//                 uniqueCd: '5384-item',
+//                 ordNo: '5384',
+//                 itemName: '굿즈 상품1',
+//                 itemQty: 1,
+//                 ordDate: '20220812111945',
+//               },
+//               {
+//                 uniqueCd: '5390-item',
+//                 ordNo: '5390',
+//                 itemName: '굿즈 상품2',
+//                 itemQty: 2,
+//                 ordDate: '20220812111945',
+//               },
+//             ],
+//           },
+//           {
+//             transUniqueCd: 'TdEgJaY6lbsYkuJ',
+//             sndName: '바프독',
+//             sndZipCode: '27352',
+//             sndAddr1: '충청북도 충주시 번영대로 214',
+//             sndAddr2: '1층 프레쉬아워',
+//             sndTel1: '0438554995',
+//             rcvName: '김회원',
+//             rcvZipCode: '12345',
+//             rcvAddr1: '부산광역시 해운대구 센텀2로 19',
+//             rcvAddr2: '106호',
+//             rcvTel1: '01099038544',
+//             mallId: 'BARFDOG',
+//             orderItems: [
+//               {
+//                 uniqueCd: '5399-item',
+//                 ordNo: '5399',
+//                 itemName: '굿즈 상품1',
+//                 itemQty: 1,
+//                 ordDate: '20220812111945',
+//               },
+//               {
+//                 uniqueCd: '5405-item',
+//                 ordNo: '5405',
+//                 itemName: '굿즈 상품2',
+//                 itemQty: 2,
+//                 ordDate: '20220812111945',
+//               },
+//             ],
+//           },
+//           {
+//             transUniqueCd: 'DsYizOMeUKEbrC2',
+//             sndName: '바프독',
+//             sndZipCode: '27352',
+//             sndAddr1: '충청북도 충주시 번영대로 214',
+//             sndAddr2: '1층 프레쉬아워',
+//             sndTel1: '0438554995',
+//             rcvName: '김회원',
+//             rcvZipCode: '12345',
+//             rcvAddr1: '부산광역시 해운대구 센텀2로 19',
+//             rcvAddr2: '106호',
+//             rcvTel1: '01099038544',
+//             mallId: 'BARFDOG',
+//             orderItems: [
+//               {
+//                 uniqueCd: '5414-item',
+//                 ordNo: '5414',
+//                 itemName: '굿즈 상품1',
+//                 itemQty: 1,
+//                 ordDate: '20220812111945',
+//               },
+//               {
+//                 uniqueCd: '5420-item',
+//                 ordNo: '5420',
+//                 itemName: '굿즈 상품2',
+//                 itemQty: 2,
+//                 ordDate: '20220812111945',
+//               },
+//             ],
+//           },
+//         ],
+//       },
+//       _links: {
+//         self: {
+//           href: 'http://localhost:8080/api/admin/deliveries/info',
+//         },
+//         update_deliveryNumber: {
+//           href: 'http://localhost:8080/api/admin/deliveries/deliveryNumber',
+//         },
+//         profile: {
+//           href: '/docs/index.html#resources-admin-query-deliveries-info',
+//         },
+//       },
+//     },
+//   },
+// };

@@ -25,9 +25,7 @@ import Icon_Home from '/public/img/icon/icon-home.svg';
 import {authAction} from '/store/auth-slice';
 import {userType} from '/store/TYPE/userAuthType';
 import {Gnb_my} from "./Gnb_my";
-// import * as DeviceDetect from 'react-device-detect';
-// import { BrowserView, MobileView } from 'react-device-detect';
-// import { isMobile  } from 'react-device-detect';
+import {MoveToAdminPageButton} from "./MoveToAdminPageButton";
 
 const Modal_subscribeWidhSSR = dynamic( () => import('/src/components/modal/Modal_subscribe') );
 
@@ -41,9 +39,6 @@ export default function Header () {
   const ds = useDeviceState();
   const isMobile = ds.isMobile;
   const mobileDevice = ds.mobileDevice; // # 채널톡 아이콘은 MobileDevice 여부를 판별하여, 크기가 조절된다.
-  // console.log('isMobile',isMobile)
-  // console.log('mobileDevice: ',mobileDevice)
-  //
   const pageInfo = useSelector( (state) => state.page );
   const pageTitle = pageInfo.pageTitle;
   
@@ -112,6 +107,7 @@ export default function Header () {
             <div className={s.headerContainer}>
               <section id="account" className={`${s.account_area} pc`}>
                 <ul>
+                  {userData?.userType === userType.ADMIN && <MoveToAdminPageButton/> }
                   {userData ? <MemberMemu data={userData}/> : <Non_MemberMenu/>}
                   {userData?.userType !== userType.ADMIN && <ServiceCenter data={{auth: userData}}/>}
                   {userData && (
@@ -160,7 +156,6 @@ export default function Header () {
     </>
   );
 }
-
 
 // function TopButton ({mobileDevice}) {
 function TopButton () {

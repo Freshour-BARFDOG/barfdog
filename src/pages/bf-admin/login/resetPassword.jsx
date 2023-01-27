@@ -16,6 +16,7 @@ import ErrorMessage from "/src/components/atoms/ErrorMessage";
 import enterKey from "/util/func/enterKey";
 
 function ResetPasswordPage() {
+  
   const initialFormValues = {
     pw: '',
     pw2: '',
@@ -32,10 +33,6 @@ function ResetPasswordPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    // Redirection : 비밀번호 인증없이 접근한 경우
-    if (!isAdmin || !adminInfo.email) return router.push('/bf-admin/login');
-  }, [isAdmin]);
 
   const onInputChangeHandler = (event) => {
     const input = event.currentTarget;
@@ -92,15 +89,27 @@ function ResetPasswordPage() {
     }));
   };
   
-  const onModalButtonClick = () => {
+  
+  const onModalButtonClick = async() => {
     mct.alertHide();
-    router.push('/bf-admin/login');
+    await router.push('/bf-admin/login');
   };
   
+  
+  
+  useEffect(() => {
+    // Redirection : 비밀번호 인증없이 접근한 경우
+    if (!isAdmin || !adminInfo.email) {
+      window.location.href = '/bf-admin/login';
+    }
+  }, [isAdmin]);
   
   const onKeyDownHandler = (e)=>{
     enterKey(e, onSubmit)
   }
+  
+  if (!isAdmin || !adminInfo?.email) return; // auth-slice.js > adminResetPassword를 실행하여 해당 페이지 진입하지 않았을 경우, 빈페이지 로드
+  
   return (
     <>
       <main id={s['loginPage']}>
@@ -177,3 +186,26 @@ function ResetPasswordPage() {
 }
 
 export default ResetPasswordPage;
+
+
+export async function getServerSideProps (params) {
+  
+  const { query } = params;
+  let resetAuthNumber = query.authnum;
+  
+  if(!resetAuthNumber){
+    return {
+      redirect:{
+        permanent: false,
+        destination: '/bf-admin/login'
+      }
+    }
+  }
+  
+  return {
+    props: {
+    
+    }
+  }
+  
+}

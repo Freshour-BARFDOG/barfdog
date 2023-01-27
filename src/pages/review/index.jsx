@@ -117,36 +117,36 @@ export async function getServerSideProps() {
 
 
 
-
-
-const DUMMY_BESTREVIEW_RESPONSE = {
-  data: {
-    _embedded: {
-      queryBestReviewsDtoList: [
-        {
-          id: 34,
-          imageUrl:
-            'https://images.unsplash.com/photo-1517849845537-4d257902454a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80',
-          leakedOrder: 4,
-          contents:
-            '열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1',
-        },
-        {
-          id: 35,
-          imageUrl:
-            'https://images.unsplash.com/photo-1552053831-71594a27632d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=662&q=80',
-          leakedOrder: 9,
-          contents:
-            '열글자 이상의 내용2열글자 이상의 내용2열글자 이상의 내용2열글자 이상의 내용2열글자 이상의 내용2',
-        },
-        {
-          id: 36,
-          imageUrl:
-            'https://images.unsplash.com/photo-1561037404-61cd46aa615b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-          leakedOrder: 5,
-          contents: '열글자 이상의 내용3',
-        },
-      ],
-    },
-  },
-};
+//
+//
+// const DUMMY_BESTREVIEW_RESPONSE = {
+//   data: {
+//     _embedded: {
+//       queryBestReviewsDtoList: [
+//         {
+//           id: 34,
+//           imageUrl:
+//             'https://images.unsplash.com/photo-1517849845537-4d257902454a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80',
+//           leakedOrder: 4,
+//           contents:
+//             '열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1열글자 이상의 내용1',
+//         },
+//         {
+//           id: 35,
+//           imageUrl:
+//             'https://images.unsplash.com/photo-1552053831-71594a27632d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=662&q=80',
+//           leakedOrder: 9,
+//           contents:
+//             '열글자 이상의 내용2열글자 이상의 내용2열글자 이상의 내용2열글자 이상의 내용2열글자 이상의 내용2',
+//         },
+//         {
+//           id: 36,
+//           imageUrl:
+//             'https://images.unsplash.com/photo-1561037404-61cd46aa615b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
+//           leakedOrder: 5,
+//           contents: '열글자 이상의 내용3',
+//         },
+//       ],
+//     },
+//   },
+// };

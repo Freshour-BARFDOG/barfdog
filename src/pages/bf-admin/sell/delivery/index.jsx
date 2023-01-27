@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useCallback, useState} from 'react';
 import s from './delivery.module.scss';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
@@ -20,9 +20,12 @@ import { valid_isTheSameArray } from '/util/func/validation/validationPackage';
 import {postObjData} from "/src/pages/api/reqData";
 import { goodsFlowOrderCancel, postGoodsFlowOrder, getGoodsFlowOtp } from '/src/pages/api/goodsFlow/service';
 import popupWindow from '/util/func/popupWindow';
+import {getDefaultPagenationInfo} from "/util/func/getDefaultPagenationInfo";
+import enterKey from "/util/func/enterKey";
+import {global_searchDateType} from "/store/TYPE/searchDateType";
 
 const initialSearchValues = {
-  from: transformToday(),
+  from: global_searchDateType.oldestDate,
   to: transformToday(),
   merchantUid: null,
   memberName: null,
@@ -40,6 +43,8 @@ export default function DeliveryOnSellPage() {
   const [searchValues, setSearchValues] = useState(initialSearchValues);
   const [searchBody, setSearchBody] = useState(null);
   const [selectedOrderIdList, setSelectedOrderIdList] = useState([]);
+  const [searchQueryInitialize, setSearchQueryInitialize] = useState( false );
+  
   const allItemIdList = itemList.map((item) => item.id); // 주문 id
   const searchOption = Object.keys(orderStatus)
     .filter(
@@ -76,33 +81,16 @@ export default function DeliveryOnSellPage() {
     setSearchBody(body);
   };
 
-  const pageInterceptor = (res) => {
-    console.log(res);
+  
+  const pageInterceptor = useCallback((res, option={itemQuery: null}) => {
     // res = DUMMY_DEFAULT_ITEMLIST_RESPONSE; //  ! TEST
-    let newPageInfo = {
-      totalPages: 0,
-      size: 10,
-      totalItems: 0,
-      currentPageIndex: 0,
-      newPageNumber: 0,
-      newItemList: [],
-    };
-    if (res?.data) {
-      const pageData = res.data.page;
-      const curItemList = res.data?._embedded?.queryAdminCancelRequestDtoList || [];
-      newPageInfo = {
-        totalPages: pageData.totalPages,
-        size: pageData.size,
-        totalItems: pageData.totalElements,
-        currentPageIndex: pageData.number,
-        newPageNumber: pageData.number + 1,
-        newItemList: curItemList,
-      };
-    }
-
-    return newPageInfo;
-  };
-
+    console.log(res);
+    // queryAdminOrdersDtoList : 상품단위 검색
+    // queryAdminCancelRequestDtoList : 주문 단위 검색
+    return getDefaultPagenationInfo(res?.data, 'queryAdminCancelRequestDtoList', {pageSize: searchPageSize, setInitialize: setSearchQueryInitialize});
+  },[]);
+  
+  
   const onSelectedItem = (id, checked) => {
     const seletedId = Number(id);
     if (checked) {
@@ -264,6 +252,15 @@ export default function DeliveryOnSellPage() {
 
   
   };
+  
+  
+  
+  
+  const onSearchInputKeydown = (e) => {
+    enterKey(e, onSearchHandler);
+  };
+  
+  
 
   return (
     <>
@@ -281,6 +278,7 @@ export default function DeliveryOnSellPage() {
               <SearchTextWithCategory
                 searchValue={searchValues}
                 setSearchValue={setSearchValues}
+                events={{ onKeydown: onSearchInputKeydown }}
                 title="조건검색"
                 name="content"
                 id="content"
@@ -368,7 +366,7 @@ export default function DeliveryOnSellPage() {
                 pageInterceptor={pageInterceptor}
                 setItemList={setItemList}
                 setIsLoading={setIsLoading}
-                option={{ apiMethod: 'POST', body: searchBody }}
+                option={{ apiMethod: 'POST', body: searchBody, initialize: searchQueryInitialize }}
               />
             </div>
           </section>

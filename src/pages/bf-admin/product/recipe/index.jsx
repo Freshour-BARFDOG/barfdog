@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import s from './recipe.module.scss';
-import AdminLayout from "@src/components/admin/AdminLayout";
-import { AdminContentWrapper } from "@src/components/admin/AdminWrapper";
-import MetaTitle from "@src/components/atoms/MetaTitle";
+import AdminLayout from "/src/components/admin/AdminLayout";
+import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
+import MetaTitle from "/src/components/atoms/MetaTitle";
 import AmdinErrorMessage from "/src/components/atoms/AmdinErrorMessage";
 import RecipeList from "./RecipeList";
 import Spinner from "/src/components/atoms/Spinner";
 import {getData} from "/src/pages/api/reqData";
+import {MirrorTextOnHoverEvent} from "/util/func/MirrorTextOnHoverEvent";
 
 
 
@@ -20,8 +21,12 @@ function RecipePage() {
   const apiDataQueryString = 'recipeListResponseDtoList';
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
+  
+  useEffect( () => {
+    MirrorTextOnHoverEvent(window);
+  }, [itemList] );
+  
 
-  console.log(itemList);
   useEffect( () => {
     (async () => {
       try {
@@ -81,7 +86,6 @@ function RecipePage() {
                 {itemList.length ? (
                   <RecipeList
                     items={itemList}
-                    // onDeleteItem={onDeleteItem}
                   />
                 ) : (
                   <AmdinErrorMessage text="조회된 데이터가 없습니다." />

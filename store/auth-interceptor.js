@@ -6,6 +6,7 @@ import { setCookie } from '/util/func/cookie';
 import { cookieType } from '/store/TYPE/cookieType';
 import { userType } from '/store/TYPE/userAuthType';
 import { cartAction } from './cart-slice';
+import {URLPathClass} from "../src/class/URLPathClass";
 
 export default function AuthInterceptor({ CustomProps, children }) {
 
@@ -17,7 +18,7 @@ export default function AuthInterceptor({ CustomProps, children }) {
   const [DATA, setDATA] = useState( {data, token, EXPIRED_TOKEN, USERTYPE} );
   // console.log('DATA : ',  DATA)
   
-  console.log('SSR >> auth-interceptor.js', '\nDATA: ', DATA);
+  // console.log('SSR >> auth-interceptor.js', '\nDATA: ', DATA);
   // console.log('CRS >> auth-interceptor.js\n','USER_TYPE: ',DATA.USERTYPE, '\nEXPIRED_TOKEN: ',!DATA.EXPIRED_TOKEN, '\nDATA: ', DATA.data)
   //
   // STEP 1. CHECK USER TYPE UPDATE & stored DATA in REDUX (in NextJS SERVER)
@@ -38,51 +39,13 @@ export default function AuthInterceptor({ CustomProps, children }) {
       alert('사용자 인증 시간이 만료되었습니다. 다시 로그인해주세요.');
       dispatch(authAction.logout());
     }
+  
 
-
-
-    // LAYER : ADMIN LAYER (BASE) => MEMBER LAYER => SUBSCRIBER LAYER (TOP)
-    // STEP 3. MEMBER PATH > 권한에 따른 접근경로 설정
-    if (!window || typeof window === 'undefined') return; //validation
-    const ADMIN_BASE_PATH_KEY = 'bf-admin';
-    let MEMBER_PATH = false;
-    const memberPathList = ['cart', 'order', 'mypage', 'survey'];
-    router.asPath.split('/').forEach((path, index) => {
-      if (memberPathList.indexOf(path) >= 0 && index === 1 && path !== ADMIN_BASE_PATH_KEY) {
-        return (MEMBER_PATH = true);
-      }
-    });
-
-
-
-    // STEP 4. ADMIN PATH > 권한에 따른 접근경로 설정
-    let ADMIN_PATH = false;
-    const curPath = router.asPath;
-    const ADMIN_BASE_PATH = '/bf-admin';
-    const adminPublicPathList = ['/index', '/login'];
-    let ADMIN_PUBLIC_PATH = false;
-    adminPublicPathList.forEach((path) => {
-      const adminPath = curPath.replace(ADMIN_BASE_PATH, '');
-      if (adminPath.indexOf(`${path}`) >= 0) {
-        ADMIN_PUBLIC_PATH = true;
-      }
-    });
-    if (router.asPath.indexOf('bf-admin') >= 0 && !ADMIN_PUBLIC_PATH) {
-      ADMIN_PATH = true;
-    }
-
-    if (!MEMBER_PATH && !ADMIN_PATH) return;
-
-    const REDIR_PATH = ADMIN_PATH ? '/bf-admin/login' : '/account/login';
-    if (MEMBER_PATH && DATA.USERTYPE === userType.NON_MEMBER) {
-      alert('회원가입이 필요한 페이지입니다.');
-      router.push(REDIR_PATH);
-    } else if (ADMIN_PATH && DATA.USERTYPE !== userType.ADMIN) {
-      alert('일반 사용자에게 접근 권한이 없는 페이지입니다.');
-      router.push(REDIR_PATH);
-    }
-    // console.log('MEMBER_PATH', MEMBER_PATH)
-    // console.log('ADMIN_PATH', ADMIN_PATH)
+    
+    // REDIRECT (검증조건: 경로 & 권한)
+    const pathClass = new URLPathClass();
+    pathClass.checkAuthAndRedirect(DATA.USERTYPE);
+    
   }, [router]);
   
   

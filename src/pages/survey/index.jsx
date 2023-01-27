@@ -101,7 +101,7 @@ export default function Survey() {
   // console.log(formValues);
   useEffect(() => {
     if(!userId) return;
-    const storedData = svyData.getSurveyCookie(userId);
+    const storedData = svyData.getStoredSurveyData(userId);
     storedData && setFormValues(JSON.parse(storedData));
     
   },[userId])
@@ -112,7 +112,7 @@ export default function Survey() {
     // Storing information in cookies
     
     if(userId){
-      svyData.setSurveyCookie(userId, formValues);
+      svyData.setStoredSurveyData(userId, formValues);
     }
   }, [formValues] );
   
@@ -312,7 +312,7 @@ export default function Survey() {
           res.data.data._links.query_surveyReport.href.split('/');
         const linkLength = slicedReportApiLink.length;
         const surveyReportsId = slicedReportApiLink[linkLength - 1];
-        svyData.deleteSurveyCookie(userId)
+        svyData.deleteStoredSurveyData(userId)
         await router.push(`/survey/statistics/${surveyReportsId}`);
         setSubmitState(true);
       } else {

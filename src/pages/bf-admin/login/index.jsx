@@ -17,15 +17,19 @@ import {getDataSSR, getTokenFromServerSide, postObjData} from "/src/pages/api/re
 import {cookieType} from "/store/TYPE/cookieType";
 import {userType} from "/store/TYPE/userAuthType";
 
-
+const initialFormValues = {
+  email: '',
+  password: "",
+}
 
 export default function AdminLoginPage () {
   const dispatch = useDispatch();
   const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
   const [modalMessage, setModalMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [formErrors, setFormErrors] = useState({});
-  const [formValues, setFormValues] = useState('');
+  const [formValues, setFormValues] = useState(initialFormValues);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [autoLogin, setAutoLogin] = useState(false);
   
@@ -41,11 +45,14 @@ export default function AdminLoginPage () {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (isSubmitted) return onShowModalHandler('이미 제출된 양식입니다.');
+    
+    if (isSubmitted) return mct.alertShow('이미 제출된 양식입니다.');
     const errObj = validate(formValues);
     setFormErrors(errObj);
+    
     const isPassed = valid_hasFormErrors(errObj);
-    if (!isPassed) return alert('유효하지 않은 항목이 있습니다.');
+    if (!isPassed) return mct.alertShow('유효하지 않은 항목이 있습니다.');
+    
     try {
       setIsLoading((prevState) => ({
         ...prevState,
@@ -81,47 +88,41 @@ export default function AdminLoginPage () {
         setIsLoading((prevState) => ({
           ...prevState,
           movePage: true,
-        }));
-        window.location.href='/bf-admin/dashboard';
-      }else {
-        setIsSubmitted(false);
-        onShowModalHandler(
-          '로그인 실패: 아이디, 비밀번호를 확인해주세요.\n지속적으로 문제발생 시, 서버장애일 수 있습니다.',
-        );
+        }) );
+        window.location.href = '/bf-admin/dashboard';
+      } else {
+        setIsSubmitted( false );
+        mct.alertShow( '로그인 실패: 아이디, 비밀번호를 확인해주세요.\n지속적으로 문제발생 시, 서버장애일 수 있습니다.' );
+  
       }
     } catch (err) {
-      alert ('로그인할 수 없습니다. 오류가 발생했습니다. 관리자에게 문의하세요.');
-      console.error('API통신 오류 : ', err);
+      alert( '로그인할 수 없습니다. 오류가 발생했습니다. 관리자에게 문의하세요.' );
+      console.error( 'API통신 오류 : ', err );
+    } finally {
+      setIsLoading( (prevState) => ({
+        ...prevState,
+        submit: false,
+      }) );
     }
-    setIsLoading((prevState) => ({
-      ...prevState,
-      submit: false,
-    }));
+  
   };
 
   const onAutoLogin = (checked) => {
     if (checked) {
       const autoLoginPeriod = cookieType.AUTO_LOGIN_EXPIRED_PERIOD.VALUE; // 변경가능
-      setModalMessage(`개인정보보호를 위해\n반드시 본인 기기에서만 이용해 주세요.\n(자동로그인 유지기간: ${autoLoginPeriod}일)`);
-      mct.alertShow();
+      mct.alertShow( `개인정보보호를 위해\n반드시 본인 기기에서만 이용해 주세요.\n(자동로그인 유지기간: ${autoLoginPeriod}일)` );
     }
     setAutoLogin(checked);
   };
 
-  const onShowModalHandler = (message) => {
-    mct.alertShow();
-    setModalMessage(message);
-  };
 
   
   return (
     <>
       <MetaTitle title="관리자 로그인" admin={true} />
-      <Modal_global_alert message={modalMessage} background onClick={()=>{
-        mct.alertHide();
-      }} />
+      {hasAlert && <Modal_global_alert background />}
       {mct.isActive && (
-        <Modal onClick={mct.alertHide} background title="비밀번호 재설정">
+        <Modal onClick={() => null} background title="비밀번호 재설정">
           <Modal_AdminResetPassword />
         </Modal>
       )}

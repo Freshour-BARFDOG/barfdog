@@ -77,74 +77,74 @@ export const ReviewBox = () => {
 
 
 
-
-const DUMMY_REVIEW_LIST_RESPONSE = {
-  data: {
-    _embedded: {
-      queryCommunityReviewsDtoList: [
-        {
-          reviewDto: {
-            id: 343,
-            thumbnailUrl: 'https://images.unsplash.com/photo-1586671267731-da2cf3ceeb80?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=989&q=80',
-            star: 3,
-            contents: '열글자 이상의 구독 리뷰2',
-            username: '김회원',
-            writtenDate: '2022-08-24',
-          },
-          reviewImageDtoList: [
-            {
-              filename: 'filename1.jpg',
-              url: 'https://images.unsplash.com/photo-1537151625747-768eb6cf92b2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=985&q=80',
-            },
-            {
-              filename: 'filename2.jpg',
-              url: 'https://images.unsplash.com/photo-1583512603805-3cc6b41f3edb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80',
-            }
-          ],
-        },
-        {
-          reviewDto: {
-            id: 341,
-            thumbnailUrl: 'https://images.unsplash.com/photo-1588943211346-0908a1fb0b01?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1035&q=80',
-            star: 3,
-            contents: '열글자 이상의 구독 리뷰1',
-            username: '김회원',
-            writtenDate: '2022-08-24',
-          },
-          reviewImageDtoList: [
-            {
-              filename: 'filename1.jpg',
-              url: 'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80',
-            },
-          ],
-        }
-      ],
-    },
-    _links: {
-      first: {
-        href: 'http://localhost:8080/api/reviews/community?page=0&size=5',
-      },
-      prev: {
-        href: 'http://localhost:8080/api/reviews/community?page=0&size=5',
-      },
-      self: {
-        href: 'http://localhost:8080/api/reviews/community?page=1&size=5',
-      },
-      next: {
-        href: 'http://localhost:8080/api/reviews/community?page=2&size=5',
-      },
-      last: {
-        href: 'http://localhost:8080/api/reviews/community?page=2&size=5',
-      },
-      profile: {
-        href: '/docs/index.html#resources-query-reviews-community',
-      },
-    },
-    page: {
-      size: 5,
-      totalElements: 14,
-      totalPages: 3,
-      number: 1,
-    },
-  },
-};
+//
+// const DUMMY_REVIEW_LIST_RESPONSE = {
+//   data: {
+//     _embedded: {
+//       queryCommunityReviewsDtoList: [
+//         {
+//           reviewDto: {
+//             id: 343,
+//             thumbnailUrl: 'https://images.unsplash.com/photo-1586671267731-da2cf3ceeb80?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=989&q=80',
+//             star: 3,
+//             contents: '열글자 이상의 구독 리뷰2',
+//             username: '김회원',
+//             writtenDate: '2022-08-24',
+//           },
+//           reviewImageDtoList: [
+//             {
+//               filename: 'filename1.jpg',
+//               url: 'https://images.unsplash.com/photo-1537151625747-768eb6cf92b2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=985&q=80',
+//             },
+//             {
+//               filename: 'filename2.jpg',
+//               url: 'https://images.unsplash.com/photo-1583512603805-3cc6b41f3edb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80',
+//             }
+//           ],
+//         },
+//         {
+//           reviewDto: {
+//             id: 341,
+//             thumbnailUrl: 'https://images.unsplash.com/photo-1588943211346-0908a1fb0b01?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1035&q=80',
+//             star: 3,
+//             contents: '열글자 이상의 구독 리뷰1',
+//             username: '김회원',
+//             writtenDate: '2022-08-24',
+//           },
+//           reviewImageDtoList: [
+//             {
+//               filename: 'filename1.jpg',
+//               url: 'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80',
+//             },
+//           ],
+//         }
+//       ],
+//     },
+//     _links: {
+//       first: {
+//         href: 'http://localhost:8080/api/reviews/community?page=0&size=5',
+//       },
+//       prev: {
+//         href: 'http://localhost:8080/api/reviews/community?page=0&size=5',
+//       },
+//       self: {
+//         href: 'http://localhost:8080/api/reviews/community?page=1&size=5',
+//       },
+//       next: {
+//         href: 'http://localhost:8080/api/reviews/community?page=2&size=5',
+//       },
+//       last: {
+//         href: 'http://localhost:8080/api/reviews/community?page=2&size=5',
+//       },
+//       profile: {
+//         href: '/docs/index.html#resources-query-reviews-community',
+//       },
+//     },
+//     page: {
+//       size: 5,
+//       totalElements: 14,
+//       totalPages: 3,
+//       number: 1,
+//     },
+//   },
+// };

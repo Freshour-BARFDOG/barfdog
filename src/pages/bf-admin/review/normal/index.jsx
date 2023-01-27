@@ -16,11 +16,13 @@ import { valid_isTheSameArray } from '/util/func/validation/validationPackage';
 import ToolTip from '/src/components/atoms/Tooltip';
 import {postObjData, putObjData} from '/src/pages/api/reqData';
 import { transformToday } from '/util/func/transformDate';
+import {global_searchDateType} from "/store/TYPE/searchDateType";
+import {MirrorTextOnHoverEvent} from "../../../../../util/func/MirrorTextOnHoverEvent";
 
 const initialSearchValue = {
-  status: 'ALL', // [ALL,REQUEST,RETURN,APPROVAL,ADMIN]
-  from: transformToday(),
+  from: global_searchDateType.oldestDate,
   to: transformToday(),
+  status: 'ALL', // [ALL,REQUEST,RETURN,APPROVAL,ADMIN]
 };
 
 const onSetSearchQueryHandler = (searchObj) => {
@@ -46,8 +48,12 @@ export default function ReviewPage() {
   const [selectedItemList, setSelectedItemList] = useState([]);
   const [searchValue, setSearchValue] = useState(initialSearchValue);
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
-
-
+  
+  useEffect( () => {
+    MirrorTextOnHoverEvent( window );
+  }, [itemList] )
+  
+  
   const pageInterceptor = (res) => {
     // res = DUMMY_REVIEW_RESPONSE; // ! TEST
     // console.log(res)

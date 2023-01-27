@@ -1,9 +1,10 @@
+import React from "react";
 import s from './recipe.module.scss';
 import Link from 'next/link';
 import transformDate from '/util/func/transformDate';
 import { putObjData } from '/src/pages/api/reqData';
 
-export default function SearchResultList({ items, onDeleteItem }) {
+export default function SearchResultList({ items }) {
   if (!items || !items.length) return;
 
   return (
@@ -16,7 +17,6 @@ export default function SearchResultList({ items, onDeleteItem }) {
 }
 
 const ItemList = ({ item, sortableItemRef }) => {
-  console.log(item)
   const DATA = {
     id: item.id,
     name: item.name,
@@ -51,10 +51,10 @@ const ItemList = ({ item, sortableItemRef }) => {
   return (
     <li className={s.item} key={`item-${DATA.id}`} ref={sortableItemRef} data-idx={DATA.id}>
       <span>
-        <em className={'overflow-x-scroll'}>{DATA.name}</em>
+        {DATA.name}
       </span>
       <span>
-        <em className={'overflow-x-scroll'}>{DATA.description}</em>
+        {DATA.description}
       </span>
       <span>{DATA.pricePerGram}</span>
       <span>{DATA.gramPerKcal}</span>

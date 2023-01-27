@@ -1,5 +1,5 @@
 import s from './member.module.scss';
-import React, { useCallback, useState } from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
@@ -13,11 +13,17 @@ import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import Spinner from '/src/components/atoms/Spinner';
 import { transformToday } from '/util/func/transformDate';
 import enterKey from '/util/func/enterKey';
+import {getDefaultPagenationInfo} from "/util/func/getDefaultPagenationInfo";
+import {global_searchDateType} from "/store/TYPE/searchDateType";
+import {MirrorTextOnHoverEvent} from "../../../../util/func/MirrorTextOnHoverEvent";
+
+
+
 
 const initialSearchValues = {
   email: '',
   name: '',
-  from: transformToday(),
+  from: global_searchDateType.oldestDate,
   to: transformToday(),
 };
 
@@ -29,34 +35,18 @@ function ManageUserPage() {
   const [itemList, setItemList] = useState([]);
   const [searchValue, setSearchValue] = useState(initialSearchValues);
   const [searchQuery, setSearchQuery] = useState('');
-
-  const pageInterceptor = useCallback((res) => {
+  const [searchQueryInitialize, setSearchQueryInitialize] = useState( false );
+  
+  
+  useEffect( () => {
+    MirrorTextOnHoverEvent( window );
+  }, [itemList] )
+  
+  const pageInterceptor = useCallback((res, option={itemQuery: null}) => {
     // res = DUMMY__RESPONSE; // ! TEST
-    // console.log('response:', res);
-    let newPageInfo = {
-      totalPages: 0,
-      size: 0,
-      totalItems: 0,
-      currentPageIndex: 0,
-      newPageNumber: 1,
-      newItemList: [],
-    };
-    if (res.data._embedded) {
-      const pageData = res.data.page;
-      const itemQuery = 'queryMembersDtoList';
-      const curItemList = res.data._embedded[itemQuery];
-      newPageInfo = {
-        totalPages: pageData.totalPages,
-        size: pageData.size,
-        totalItems: pageData.totalElements,
-        currentPageIndex: pageData.number,
-        newPageNumber: pageData.number + 1,
-        newItemList: curItemList,
-      };
-    }
-
-    return newPageInfo;
-  }, []);
+    console.log(res);
+    return getDefaultPagenationInfo(res?.data, 'queryMembersDtoList', {pageSize: searchPageSize, setInitialize: setSearchQueryInitialize});
+  },[]);
 
   const onResetSearchValues = () => {
     setSearchValue(initialSearchValues);
@@ -160,6 +150,7 @@ function ManageUserPage() {
                 urlQuery={searchQuery}
                 setIsLoading={setIsLoading}
                 pageInterceptor={pageInterceptor}
+                option={{apiMethod: 'GET', initialize: searchQueryInitialize}}
               />
             </div>
           </section>

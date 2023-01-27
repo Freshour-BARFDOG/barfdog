@@ -11,7 +11,7 @@ import filter_onlyNumber from '@util/func/filter_onlyNumber';
 import CloseButton from '@src/components/atoms/CloseButton';
 import Modal_alert from './Modal_alert';
 import enterKey from "/util/func/enterKey";
-import {valid_email} from "../../../util/func/validation/validationPackage";
+import {valid_email} from "/util/func/validation/validationPackage";
 
 
 
@@ -39,10 +39,7 @@ export default function AdminResetPassword() {
     //   return;
     // }
     const error = valid_email(val);
-    console.log(error);
-    if(error){
-      mct.alertShow(error);
-    }
+    if(error) return mct.alertShow(error);
     
 
     (async () => {
@@ -66,7 +63,6 @@ export default function AdminResetPassword() {
             return err;
           });
  
-        console.log(res);
         if (res?.status === 200) {
           const authNumber = res.data.authNumber;
           setIsSendNumber(true);
@@ -127,40 +123,42 @@ export default function AdminResetPassword() {
             <p>2. 이메일, 비밀번호 모두가 기억나지 않을 경우, 개발사에게 문의하세요</p>
           </div>
         </div>
-        {isSendNumber && <EnterAuthNumSection displayedTime={displayedTime} authNum={authNum} data={{email}}/>}
+        {isSendNumber && <AuthNumber displayedTime={displayedTime} authNum={authNum} data={{email}}/>}
       </div>
     </>
   );
 }
 
-const EnterAuthNumSection = ({ displayedTime, authNum, data }) => {
-  
+const AuthNumber = ({ displayedTime, authNum, data }) => {
+  const mct = useModalContext();
   const [enteredNumber, setEnteredNumber] = useState('');
-  const [modalMessage, setModalMessage] = useState('');
-  const [isAuth, setAuth] = useState(false);
+  const [submit, setSubmit] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const onModalHandler = (isConfirm) => {
-    if (isConfirm) setModalMessage('');
-    if (isAuth) router.push(`/bf-admin/login/password?authnum=${authNum}`);
-  };
 
   const onAuth = (e) => {
     e.preventDefault();
-    if (!enteredNumber) return alert('인증번호를 입력해주세요.');
-    console.log('인증코드: ', authNum, 'enteredNumber:', enteredNumber); // ! TEST : 개발 끝난 후 삭제
+    if (!enteredNumber) return mct.alertShow('인증번호를 입력해주세요.');
+    if(submit) return mct.alertShow( '이미 제출된 양식입니다.' );
+     console.log('(*테스트 종류 후 삭제) 인증코드: ', authNum);
     if (authNum === enteredNumber) {
-      setModalMessage(`인증 완료: 페이지 새로고침 전까지\n비밀번호를 변경할 수 있습니다.`);
       const body = {
         email: data.email,
       }
       dispatch(authAction.adminResetPassword({data: body}));
-      setAuth(true);
+      setSubmit(true);
+      mct.alertShow(`인증 완료: 페이지 새로고침 전까지\n비밀번호를 변경할 수 있습니다.\n( 확인 버튼 클릭 후, 페이지 이동합니다.)`, onSuccessCallback); // 확인클릭 시, 비밀번호 재설정 modal Hide
     } else {
-      setModalMessage('인증실패: 인증번호를 확인해주세요.');
-      setAuth(false);
+      mct.alertShow('인증실패: 인증번호를 확인해주세요.');
+      setSubmit(false);
     }
+  };
+  
+  const onSuccessCallback = async () => {
+    mct.onHide();
+    mct.alertHide();
+    await router.push(`/bf-admin/login/resetPassword?authnum=${authNum}`);
   };
 
   const onChangeHandler = (e) => {
@@ -185,16 +183,17 @@ const EnterAuthNumSection = ({ displayedTime, authNum, data }) => {
             placeholder="인증번호 4자리를 입력해주세요."
             onChange={onChangeHandler}
             onKeyDown={onKeyDownHandler}
+            disabled={submit}
           />
-          <em className={s.displayedTime}>{transformTime(displayedTime)}</em>
+          {!submit && <em className={s.displayedTime}>{transformTime( displayedTime )}</em>}
         </label>
       </div>
       <div className={s['btn-section']}>
-        <button type="button" className="admin_btn solid fullWidth confirm_l" onClick={onAuth}>
+        <button type="button" className={`admin_btn solid fullWidth confirm_l ${submit ? 'disabled': ''}`} disabled={submit} onClick={onAuth}>
           인증하기
         </button>
       </div>
-      {modalMessage && <Modal_alert className={s.alertModal} text={modalMessage} isConfirm={onModalHandler} />}
+      {/*{modalMessage && <Modal_alert className={s.alertModal} text={modalMessage} isConfirm={onModalHandler} />}*/}
     </>
   );
 };

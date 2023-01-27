@@ -6,61 +6,61 @@ import MetaTitle from '/src/components/atoms/MetaTitle';
 import s from './create.module.scss';
 import Image from 'next/image';
 import RatingStars from '/src/components/atoms/RatingStars';
-import Spinner from '../../../components/atoms/Spinner';
+import Spinner from '/src/components/atoms/Spinner';
 import { validate } from '/util/func/validation/validation_review';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
-import {getData, postObjData, putObjData} from '/src/pages/api/reqData';
+import {getData, putObjData} from '/src/pages/api/reqData';
 import { useRouter } from 'next/router';
-import transformDate, { transformToday } from '/util/func/transformDate';
+import transformDate from '/util/func/transformDate';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import { useModalContext } from '/store/modal-context';
 import FileInput from '/src/components/admin/form/FileInput';
-import { global_reviewType } from '../../../../store/TYPE/reviewType';
+import { global_reviewType } from '/store/TYPE/reviewType';
 import { useSelector } from 'react-redux';
-import {userType} from "../../../../store/TYPE/userAuthType";
+import {userType} from "/store/TYPE/userAuthType";
 
-const DUMMY_DATA = {
-  data: {
-    reviewDto: {
-      id: 371,
-      title: '상품1',
-      name: '김회원',
-      thumbnailUrl: 'https://images.unsplash.com/photo-1537151625747-768eb6cf92b2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=685&q=80',
-      writtenDate: '2022-07-22',
-      star: 0,
-      contents: '열글자 이상의 내용 작성',
-    },
-    reviewImageDtoList: [
-      {
-        id: 4331,
-        filename: 'filename1.jpg',
-        url: 'https://images.unsplash.com/photo-1588943211346-0908a1fb0b01?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80',
-      },
-      {
-        id: 4332,
-        filename: 'filename2.jpg',
-        url: 'https://images.unsplash.com/photo-1576201836106-db1758fd1c97?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-      },
-      {
-        id: 4333,
-        filename: 'filename3.jpg',
-        url: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-      },
-    ],
-    _links: {
-      self: {
-        href: 'http://localhost:8080/api/reviews/371',
-      },
-      update_review: {
-        href: 'http://localhost:8080/api/reviews/371',
-      },
-      profile: {
-        href: '/docs/index.html#resources-query-review',
-      },
-    },
-  },
-};
+// const DUMMY_DATA = {
+//   data: {
+//     reviewDto: {
+//       id: 371,
+//       title: '상품1',
+//       name: '김회원',
+//       thumbnailUrl: 'https://images.unsplash.com/photo-1537151625747-768eb6cf92b2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=685&q=80',
+//       writtenDate: '2022-07-22',
+//       star: 0,
+//       contents: '열글자 이상의 내용 작성',
+//     },
+//     reviewImageDtoList: [
+//       {
+//         id: 4331,
+//         filename: 'filename1.jpg',
+//         url: 'https://images.unsplash.com/photo-1588943211346-0908a1fb0b01?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80',
+//       },
+//       {
+//         id: 4332,
+//         filename: 'filename2.jpg',
+//         url: 'https://images.unsplash.com/photo-1576201836106-db1758fd1c97?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
+//       },
+//       {
+//         id: 4333,
+//         filename: 'filename3.jpg',
+//         url: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
+//       },
+//     ],
+//     _links: {
+//       self: {
+//         href: 'http://localhost:8080/api/reviews/371',
+//       },
+//       update_review: {
+//         href: 'http://localhost:8080/api/reviews/371',
+//       },
+//       profile: {
+//         href: '/docs/index.html#resources-query-review',
+//       },
+//     },
+//   },
+// };
 
 const initialFormValues = {
   reviewType: null, // 리뷰타입

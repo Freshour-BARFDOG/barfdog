@@ -1,8 +1,10 @@
 import s from "./popup_sell.module.scss";
 import {subscribePlanType} from "/store/TYPE/subscribePlanType";
-import transformLocalCurrency from "../../../../util/func/transformLocalCurrency";
+import transformLocalCurrency from "/util/func/transformLocalCurrency";
 
 const ProductInfo_subscribe = ({subscribeInfo,  isChangedSubscribeInfo }) => {
+  console.log("subscribeInfo: ",subscribeInfo)
+  
   return (
     <>
       {isChangedSubscribeInfo ? (
@@ -32,7 +34,7 @@ const ProductInfo_subscribe = ({subscribeInfo,  isChangedSubscribeInfo }) => {
               <span>플랜</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
-              <span>{subscribePlanType[subscribeInfo.plan].KOR}</span>
+              <span>{subscribeInfo.plan ? subscribePlanType[subscribeInfo.plan].KOR : '-'}</span>
             </div>
           </div>
           <div className={s["t-box"]}>
@@ -50,7 +52,7 @@ const ProductInfo_subscribe = ({subscribeInfo,  isChangedSubscribeInfo }) => {
               <span>레시피</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
-              <span>{subscribeInfo.recipeName}</span>
+              <span>{subscribeInfo.recipeName || '-'}</span>
             </div>
           </div>
         </li>
