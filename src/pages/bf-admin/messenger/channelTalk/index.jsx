@@ -62,7 +62,7 @@ export default function ChannelTalkPage () {
   
   return (
     <>
-      <MetaTitle title="친구톡" admin={true}/>
+      <MetaTitle title="채널톡" admin={true}/>
       <AdminLayout>
         <AdminContentWrapper>
           <h1 className="title_main">채널톡</h1>
