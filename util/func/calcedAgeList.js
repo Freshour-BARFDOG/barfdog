@@ -1,4 +1,4 @@
-export default function calcedAgeList() {
+export default function calcedAgeList(option={typeofValue: 'number'}) {
   const ageList = [];
   const limitedUserAge = 14;
   const curYear = new Date().getFullYear();
@@ -6,8 +6,12 @@ export default function calcedAgeList() {
   const startYear = curYear - 100;
   for (let i = 0; i < endYear - startYear; i++) {
     const year = endYear - i;
+    let value;
+    if(option.typeofValue === 'string'){
+      value = year.toString();
+    }
     const label = `${year}년`;
-    ageList.push({label: label, value: year});
+    ageList.push({label: label, value: value});
   }
   ageList.reverse();
   const initialValue = {label: '선택', value: ''};

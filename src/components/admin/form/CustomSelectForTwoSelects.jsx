@@ -2,33 +2,33 @@ import React, { useEffect, useState } from 'react';
 import getElemIdx from '/util/func/getElemIdx';
 
 const CustomSelectForTwoSelects = ({ name, id, onChange, options = [], value, style, ...props }) => {
-  // const initialValue = options[0].value || '';
-  const [selectedValue, setSelectedValue] = useState('');
   
+  const [selectedValue, setSelectedValue] = useState('');
   useEffect( () => {
     setSelectedValue(value);
   }, [value] );
   
-
   const onChangeHandler = (e) => {
     const select = e.currentTarget;
     const value = select.value;
-    const options = Array.from(select.children);
+    setSelectedValue( value );
+    const options = Array.from( select.children );
     let selectedOptionIdx;
-    options.map((option) => {
+    options.map( (option) => {
       const thisOptionValue = option.value;
-      if (value === thisOptionValue) {
-        selectedOptionIdx = getElemIdx(option);
+      if ( value === thisOptionValue ) {
+        selectedOptionIdx = getElemIdx( option );
       }
     });
-    setSelectedValue(value);
-    if (onChange && typeof onChange === 'function') {
-      onChange((prevState) => ({
+    if ( onChange && typeof onChange === 'function' ) {
+      onChange( (prevState) => ({
         ...prevState,
-        [name]: { value, selectedIdx: selectedOptionIdx },
-      }));
+        [name]: {value, selectedIdx: selectedOptionIdx},
+      }) );
     }
   };
+  
+  
 
   if (!options.length) return;
 
@@ -54,17 +54,3 @@ const CustomSelectForTwoSelects = ({ name, id, onChange, options = [], value, st
 };
 
 export default CustomSelectForTwoSelects;
-
-/*        {options.map((option, i) => {
-          return i === 0 ? (
-            <option key={`${option.label}-${i}`} value={option.value} defaultValue>
-              {option.label}
-            </option>
-          ) : (
-            <option key={`${option}-${i}`} value={option.value}>
-              {option.label}
-            </option>
-          );
-        })}
-* 
-* */
