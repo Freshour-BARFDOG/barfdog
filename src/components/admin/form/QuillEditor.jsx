@@ -50,7 +50,7 @@ export default function QuillEditor({
 
   useEffect(() => {
     const isInnerHtmlEmpty = body === '<p><br></p>';
-    const resultIdList = analyze_ImageIdListCRUD(allImageIdList, body, originImageIdList);
+    const resultIdList = analyze_ImageIdListCRUD(allImageIdList, body, originImageIdList) || [];
     // console.log('::: Quill Editor Inner Image > CRUD RESULT :::', resultIdList);
     if (mode === 'create') {
       setFormValues((prevState) => ({
@@ -61,7 +61,7 @@ export default function QuillEditor({
     }
 
     if (mode === 'update') {
-      if (!resultIdList) return; // ! important validation: allImageIdList가 init되기 전에 실행될 경우, undefined가 반환되고, formvalue에 적절하지 않은 값들이 할당됨 => updatePage에서 정상작동하지 않게 됨.
+      // if (!resultIdList) return; // ! important validation: allImageIdList가 init되기 전에 실행될 경우, undefined가 반환되고, formvalue에 적절하지 않은 값들이 할당됨 => updatePage에서 정상작동하지 않게 됨.
       if (formValuesKey) {
         const { addImageKey, delImageKey } = formValuesKey;
         setFormValues((prevState) => ({

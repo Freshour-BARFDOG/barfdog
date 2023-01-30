@@ -19,12 +19,12 @@ import {useModalContext} from "/store/modal-context";
 const UpdateNoticePage = () => {
   const router = useRouter();
   const { id } = router.query;
-  const getDataApiUrl = `/api/admin/notices/${id}`;
-  const postDataApiUrl = `/api/admin/notices/${id}`;
+  
+  
   const imageUploadApiURL = '/api/admin/blogs/image/upload';
 
   const mct = useModalContext();
-  const [modalMessage, setModalMessage] = useState('');
+  const hasAlert = mct.hasAlert;
   const [isLoading, setIsLoading] = useState({});
   const [QuillEditor, setQuillEditor] = useState(null);
   const [originImageIdList, setOriginImageIdList] = useState([]);
@@ -33,12 +33,13 @@ const UpdateNoticePage = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
 
-
+console.log(formValues);
 
   //  INIT QUILL EDITOR
   useEffect(() => {
     if(!id)return;
     (async ()=>{
+      const getDataApiUrl = `/api/admin/notices/${id}`;
       const res = await getData(getDataApiUrl);
       console.log(res);
       const DATA = res.data.noticeAdminDto;
@@ -82,39 +83,48 @@ const UpdateNoticePage = () => {
 
 
   const onSubmit = async (e) => {
-    console.log(formValues)
     e.preventDefault();
-    if(isSubmitted)return; // ! IMPORTANT : create Event후, 사용자가 enter를 쳤을 경우, 똑같은 요청이 전송되지 않게 하기 위해서 필요함.
-
+    if(isSubmitted) return window.location.reload();
     const errObj = validate(formValues);
 
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
-    if(!isPassed) return;
+    if ( !isPassed ) return mct.alertShow( '유효하지 않은 항목이 존재합니다..' );
+    
     try {
       setIsLoading((prevState) => ({
         ...prevState,
         submit: true,
       }));
-      const objData = formValues;
-      const res = await putObjData(postDataApiUrl, objData);
+      
+      const body = {
+        title: formValues.title,
+        contents: formValues.contents,
+        status: formValues.status,
+        addImageIdList: formValues.addImageIdList,
+        deleteImageIdList: formValues.deleteImageIdList,
+      }
+      
+      const apiUrl = `/api/admin/notices/${id}`;
+      const res = await putObjData(apiUrl, body);
 
       if(res.isDone){
-        onShowModalHandler('공지사항이 수정되었습니다.');
+        mct.alertShow('공지사항이 수정되었습니다.', onGlobalModalCallback);
         setIsSubmitted(true);
       }else {
-        alert(`${res.error}`);
+        mct.alertShow(`${res.error}`);
       }
     } catch (err) {
-      console.log('API통신 오류 : ', err);
+      mct.alertShow('서버와의 통신 중 에러가 발생했습니다.');
+      console.log(err);
+    } finally {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        submit: false,
+      }));
     }
-
-    setIsLoading((prevState) => ({
-      ...prevState,
-      submit: false,
-    }));
+   
   };
-
 
   const returnToPrevPage = () => {
     if (confirm('이전 페이지로 돌아가시겠습니까?')) {
@@ -123,15 +133,8 @@ const UpdateNoticePage = () => {
   };
 
 
-  const onShowModalHandler = (message)=>{
-    mct.alertShow();
-    setModalMessage(message);
-  }
-
-
   const onGlobalModalCallback = ()=>{
-    mct.alertHide();
-    router.push('/bf-admin/community/notice');
+    window.location.href = '/bf-admin/community/notice';
   }
 
 
@@ -242,11 +245,9 @@ const UpdateNoticePage = () => {
           </form>
         </AdminContentWrapper>
       </AdminLayout>
-      <Modal_global_alert message={modalMessage} onClick={onGlobalModalCallback} background/>
+      {hasAlert && <Modal_global_alert background/>}
     </>
   );
 };;
 
 export default UpdateNoticePage;
-
-
