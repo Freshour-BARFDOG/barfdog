@@ -4,7 +4,7 @@ import MetaTitle from '/src/components/atoms/MetaTitle';
 import s from './ordersheet.module.scss';
 import Modal_termsOfSerivce from '/src/components/modal/Modal_termsOfSerivce';
 import { Modal_coupon } from '/src/components/modal/Modal_coupon';
-import { postUserObjData } from '/src/pages/api/reqData';
+import {postObjData, postUserObjData} from '/src/pages/api/reqData';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import transformDate, { transformToday } from '/util/func/transformDate';
@@ -16,11 +16,13 @@ import { OrdersheetReward } from '/src/components/order/OrdersheetReward';
 import { OrdersheetMethodOfPayment } from '/src/components/order/OrdersheetMethodOfPayment';
 import { OrdersheetAmountOfPayment } from '/src/components/order/OrdersheetAmountOfPayment';
 import { userType } from '/store/TYPE/userAuthType';
+import {ORDER_STATES} from "/store/order-slice";
 
 
 export default function GeneralOrderSheetPage() {
   const router = useRouter();
   const auth = useSelector((s) => s.auth);
+  const orderState = useSelector((state) => state.orderState);
   const USER_TYPE = auth.userType;
 
   const cart = useSelector((state) => state.cart);
@@ -33,7 +35,32 @@ export default function GeneralOrderSheetPage() {
     termsOfService: false,
     coupon: false,
   });
-
+  const [hasCanceled, setHasCanceled] = useState( false );
+  
+  
+  useEffect(() => {
+    
+    const cancelOrderWhenUserLeavesDuringPayment = () => { // Ex) 페이지 새로고침 , 뒤로가기
+      if(hasCanceled) return console.error( "Already Cancelled Order" );
+      try {
+        setHasCanceled(true);
+        const res = postObjData(`/api/orders/${orderState.orderId}/general/cancel`);
+        console.log(res);
+      } catch (err) {
+        console.error(err)
+      }
+    };
+    
+    if(orderState.orderState === ORDER_STATES.ORDERING){
+      window.addEventListener( 'beforeunload', cancelOrderWhenUserLeavesDuringPayment );
+    }
+    
+    return () => {
+      window.removeEventListener( 'beforeunload', cancelOrderWhenUserLeavesDuringPayment );
+    };
+  },[hasCanceled, orderState]);
+  
+  
   useEffect(() => {
     const curItem = cart.orderItemList;
     if (!curItem.length) {
@@ -273,36 +300,36 @@ export default function GeneralOrderSheetPage() {
 }
 
 
-
-const DUMMY_MEMEBER_COUPON_LIST = [
-  {
-    memberCouponId: 45,
-    name: '쿠폰1-최소사용가능아잍템가격 7천이상 ',
-    discountType: 'FIXED_RATE',
-    discountDegree: 10,
-    availableMaxDiscount: 2000,
-    availableMinPrice: 7000,
-    remaining: 1,
-    expiredDate: '2023-12-31T23:59:59',
-  },
-  {
-    memberCouponId: 46,
-    name: '쿠폰2-최대할인 금액 1만원 조건 ',
-    discountType: 'FLAT_RATE',
-    discountDegree: 2000,
-    availableMaxDiscount: 10000,
-    availableMinPrice: 0,
-    remaining: 3,
-    expiredDate: '2023-12-31T23:59:59',
-  },
-  {
-    memberCouponId: 47,
-    name: '쿠폰3-최대 할인가3천원',
-    discountType: 'FIXED_RATE',
-    discountDegree: 30,
-    availableMaxDiscount: 3000,
-    availableMinPrice: 0,
-    remaining: 3,
-    expiredDate: '2023-12-31T23:59:59',
-  },
-];
+//
+// const DUMMY_MEMEBER_COUPON_LIST = [
+//   {
+//     memberCouponId: 45,
+//     name: '쿠폰1-최소사용가능아잍템가격 7천이상 ',
+//     discountType: 'FIXED_RATE',
+//     discountDegree: 10,
+//     availableMaxDiscount: 2000,
+//     availableMinPrice: 7000,
+//     remaining: 1,
+//     expiredDate: '2023-12-31T23:59:59',
+//   },
+//   {
+//     memberCouponId: 46,
+//     name: '쿠폰2-최대할인 금액 1만원 조건 ',
+//     discountType: 'FLAT_RATE',
+//     discountDegree: 2000,
+//     availableMaxDiscount: 10000,
+//     availableMinPrice: 0,
+//     remaining: 3,
+//     expiredDate: '2023-12-31T23:59:59',
+//   },
+//   {
+//     memberCouponId: 47,
+//     name: '쿠폰3-최대 할인가3천원',
+//     discountType: 'FIXED_RATE',
+//     discountDegree: 30,
+//     availableMaxDiscount: 3000,
+//     availableMinPrice: 0,
+//     remaining: 3,
+//     expiredDate: '2023-12-31T23:59:59',
+//   },
+// ];

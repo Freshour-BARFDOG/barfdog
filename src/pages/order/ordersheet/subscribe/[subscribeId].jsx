@@ -4,9 +4,8 @@ import MetaTitle from '/src/components/atoms/MetaTitle';
 import s from '../ordersheet.module.scss';
 import Modal_termsOfSerivce from '/src/components/modal/Modal_termsOfSerivce';
 import { Modal_coupon } from '/src/components/modal/Modal_coupon';
-import { getData, postUserObjData } from '/src/pages/api/reqData';
-import { useSelector } from 'react-redux';
-import { useRouter } from 'next/router';
+import {getData, postObjData} from '/src/pages/api/reqData';
+import {useSelector} from 'react-redux';
 import transformDate, { transformToday } from '/util/func/transformDate';
 import { OrdersheetSubscribeItemList } from '/src/components/order/OrdersheetSubscribeItemList';
 import { OrdersheetMemberInfo } from '/src/components/order/OrdersheetMemberInfo';
@@ -17,45 +16,13 @@ import { OrdersheetMethodOfPayment } from '/src/components/order/OrdersheetMetho
 import { OrdersheetAmountOfPayment } from '/src/components/order/OrdersheetAmountOfPayment';
 import { calcNextSubscribeDeliveryDate } from '/util/func/calcNextSubscribeDeliveryDate';
 import { subscribePlanType } from '/store/TYPE/subscribePlanType';
-import {getDiffDate} from "../../../../../util/func/getDiffDate";
+import {orderAction, ORDER_STATES} from "/store/order-slice";
 
-const DUMMY_MEMEBER_COUPON_LIST = [
-  {
-    memberCouponId: 45,
-    name: '50%할인쿠폰 ',
-    discountType: 'FIXED_RATE',
-    discountDegree: 70,
-    availableMaxDiscount: 1000000,
-    availableMinPrice: 5000,
-    remaining: 1,
-    expiredDate: '2023-12-31T23:59:59',
-  },
-  {
-    memberCouponId: 46,
-    name: '쿠폰2-최대할인 금액 1만원 조건 ',
-    discountType: 'FLAT_RATE',
-    discountDegree: 2000,
-    availableMaxDiscount: 100000,
-    availableMinPrice: 0,
-    remaining: 3,
-    expiredDate: '2023-12-31T23:59:59',
-  },
-  {
-    memberCouponId: 47,
-    name: '쿠폰3-최대 할인가3천원',
-    discountType: 'FIXED_RATE',
-    discountDegree: 30,
-    availableMaxDiscount: 3000,
-    availableMinPrice: 0,
-    remaining: 3,
-    expiredDate: '2023-12-31T23:59:59',
-  },
-];
 
 export default function SubscribeOrderSheetPage({ subscribeId }) {
-  const auth = useSelector((s) => s.auth);
 
   const cart = useSelector((state) => state.cart);
+  const orderState = useSelector((state) => state.orderState);
   const [isLoading, setIsLoading] = useState({ fetching: true });
   const [isRendered, setIsRendered] = useState(false);
   const [info, setInfo] = useState({});
@@ -66,18 +33,42 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
     termsOfService: false,
     coupon: false,
   });
-
+  const [hasCanceled, setHasCanceled] = useState( false );
+  
+  
+  useEffect(() => {
+    const cancelOrderWhenUserLeavesDuringPayment = () => { // Ex) 페이지 새로고침 , 뒤로가기
+      if(hasCanceled) return console.error( "Already Cancelled Order" );
+      try {
+        setHasCanceled(true);
+        const res = postObjData(`/api/orders/${orderState.orderId}/subscribe/cancel`);
+        console.log(res);
+      } catch (err) {
+        console.error(err)
+      }
+    };
+    
+    if(orderState.orderState === ORDER_STATES.ORDERING){
+      window.addEventListener( 'beforeunload', cancelOrderWhenUserLeavesDuringPayment );
+    }
+    
+    return () => {
+      window.removeEventListener( 'beforeunload', cancelOrderWhenUserLeavesDuringPayment );
+    };
+  },[hasCanceled, orderState]);
+  
+  
+  
+  
   useEffect(() => {
     if (window && typeof window !== 'undefined') {
       setIsRendered(true);
     }
   }, []);
+  
 
   useEffect(() => {
-    // const curItem = cart.subscribeOrder; // ! subscribe Item
-    // if (!Object.keys(curItem).length || !subscribeId) {
-    //   return window.location.href='/';
-    // }
+    
     (async () => {
       setIsLoading((prevState) => ({
         ...prevState,
@@ -300,3 +291,40 @@ export async function getServerSideProps({ query }) {
   const { subscribeId } = query;
   return { props: { subscribeId: subscribeId || null } };
 }
+
+
+
+
+
+// const DUMMY_MEMEBER_COUPON_LIST = [
+//   {
+//     memberCouponId: 45,
+//     name: '50%할인쿠폰 ',
+//     discountType: 'FIXED_RATE',
+//     discountDegree: 70,
+//     availableMaxDiscount: 1000000,
+//     availableMinPrice: 5000,
+//     remaining: 1,
+//     expiredDate: '2023-12-31T23:59:59',
+//   },
+//   {
+//     memberCouponId: 46,
+//     name: '쿠폰2-최대할인 금액 1만원 조건 ',
+//     discountType: 'FLAT_RATE',
+//     discountDegree: 2000,
+//     availableMaxDiscount: 100000,
+//     availableMinPrice: 0,
+//     remaining: 3,
+//     expiredDate: '2023-12-31T23:59:59',
+//   },
+//   {
+//     memberCouponId: 47,
+//     name: '쿠폰3-최대 할인가3천원',
+//     discountType: 'FIXED_RATE',
+//     discountDegree: 30,
+//     availableMaxDiscount: 3000,
+//     availableMinPrice: 0,
+//     remaining: 3,
+//     expiredDate: '2023-12-31T23:59:59',
+//   },
+// ];
