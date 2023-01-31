@@ -1,21 +1,19 @@
-import ModalWrapper from '@src/components/modal/ModalWrapper';
-import CloseButton from '@src/components/atoms/CloseButton';
-import ScrollContainer from '@src/components/atoms/ScrollContainer';
+import ModalWrapper from '/src/components/modal/ModalWrapper';
+import CloseButton from '/src/components/atoms/CloseButton';
+import ScrollContainer from '/src/components/atoms/ScrollContainer';
 import React, { useEffect, useState } from 'react';
 import s from './modal_previewRecipeThumb.module.scss';
-import { postObjData } from '@src/pages/api/reqData';
-import filter_emptyValue from '@util/func/filter_emptyValue';
-import filter_onlyNumber from '@util/func/filter_onlyNumber';
-import filter_specialCharacter from '@util/func/filter_specialCharacter';
-import ErrorMessage from '@src/components/atoms/ErrorMessage';
-import { valid_hasFormErrors } from '@util/func/validation/validationPackage';
-import { validate } from '@util/func/validation/valid_sendSmsMessage';
-import Spinner from "@src/components/atoms/Spinner";
-import {useModalContext} from "@store/modal-context";
+import { postObjData } from '/src/pages/api/reqData';
+import filter_emptyValue from '/util/func/filter_emptyValue';
+import filter_onlyNumber from '/util/func/filter_onlyNumber';
+import filter_specialCharacter from '/util/func/filter_specialCharacter';
+import ErrorMessage from '/src/components/atoms/ErrorMessage';
+import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
+import { validate } from '/util/func/validation/valid_sendSmsMessage';
+import Spinner from "/src/components/atoms/Spinner";
 
 
 const Modal_sendPhoneMessage = ({id, setModalState, data }) => {
-  const mct = useModalContext();
   const [siteLink, setSiteLink] = useState(null);
   
   const [isLoading, setIsLoading] = useState(false); // boolean
@@ -68,59 +66,61 @@ const Modal_sendPhoneMessage = ({id, setModalState, data }) => {
       const url = '/api/mypage/inviteSms';
       const res = await postObjData(url, body);
       console.log(res);
-      if (res.isDone) {
+      if (!res.isDone) return mct.alertShow('메시지 발송 중 오류가 발생하였습니다.');
   
-        ////////////////////////////////////////////////////////
-        //// - TEST : 성공했다고 가정하고, 이후 CLIENT TEST상태 진행
-        if (res.isDone) {
-          mct.alertShow('친구에게 메시지를 성공적으로 전송했습니다.');
-          onModalHide();
-        }
-        ////////////////////////////////////////////////////////
-        
-        const smsStatus = res.data.data.responseCode;
-        // 전송 SUCCESS
-        if (smsStatus === 0) {
-          mct.alertShow('친구에게 메시지를 성공적으로 전송했습니다.');
-          onModalHide();
-        }
-     
-        // 전송 FAIL
-        const smsErrObj= {}
-        if (smsStatus === 100) {
-        } else if (smsStatus === 101) {
-          smsErrObj.sendResult = '전송자의 번호가 유효하지 않습니다.'
-        } else if (smsStatus === 102) {
-          smsErrObj.sendResult = '수신자의 번호가 유효하지 않습니다.'
-        } else if (smsStatus === 200 || smsStatus === 201 || smsStatus === 205 || smsStatus >= 500) {
-          smsErrObj.sendResult = `(ERROR: ${smsStatus}) 메시지를 전송할 수 없습니다. 관리자에게 문의하세요.`
-        }
-        setFormErrors(smsErrObj);
-        /* ! CF ) SENDMESSAGE API RESPONS STATUS & MESSAGE
-          - 100 : POST validation 실패
-          - 101 : sender 유효한 번호가 아님
-          - 102 : recipient 유효한 번호가 아님
-          - 103 : 회원정보가 일치하지 않음
-          - 104 : 받는 사람이 없습니다
-          - 105 : message length = 0, message length >= 2000, title >= 20
-          - 106 : message validation 실패
-          - 107 : 이미지 업로드 실패
-          - 108 : 이미지 갯수 초과
-          - 109 : return_url이 유효하지 않습니다
-          - 110 : 이미지 용량 300kb 초과
-          - 111 : 이미지 확장자 오류
-          - 112 : euckr 인코딩 에러 발생
-          - 114 : 예약정보가 유효하지 않습니다.
-          - 200 : 동일 예약시간으로는 200회 이상 API 호출을 할 수 없습니다.
-          - 201 : 분당 300회 이상 API 호출을 할 수 없습니다.
-          - 205 : 잔액부족
-          - 999 : Internal Error.
-        */
+      const smsStatus = res.data.data.responseCode;
+      let errorMessage;
+      if (smsStatus === 200) {
+        alert('친구에게 메시지를 성공적으로 전송했습니다.');
+        onModalHide();
+      } else if (smsStatus === 100) {
+        errorMessage = '전송 시 유효성 검사 실패';
+      } else if (smsStatus === 101) {
+        errorMessage = '전송자의 번호가 유효하지 않습니다.';
+      } else if (smsStatus === 102) {
+        errorMessage = '수신자의 번호가 유효하지 않습니다.';
+      } else if (smsStatus === 104) {
+        errorMessage = '받는 사람이 없습니다.';
+      } else if (smsStatus === 106) {
+        errorMessage = '메시지 유효성검사에 실패하였습니다.';
+      } else if (smsStatus === 201) {
+        errorMessage = '분당 300회 이상 API 호출을 할 수 없습니다.';
+      } else if (smsStatus === 205) {
+        errorMessage = '문자전송 잔액부족. 관리자에게 문의하세요.';
+      } else if (smsStatus >= 500) {
+        errorMessage = `메시지를 전송할 수 없습니다. 관리자에게 문의하세요.`;
       }
+  
+      setFormErrors( {sendResult: `(ERROR: ${smsStatus}) ${errorMessage}`});
+      /* ! CF ) SENDMESSAGE API RESPONS STATUS & MESSAGE
+        - 100 : POST validation 실패
+        - 101 : sender 유효한 번호가 아님
+        - 102 : recipient 유효한 번호가 아님
+        - 103 : 회원정보가 일치하지 않음
+        - 104 : 받는 사람이 없습니다
+        - 105 : message length = 0, message length >= 2000, title >= 20
+        - 106 : message validation 실패
+        - 107 : 이미지 업로드 실패
+        - 108 : 이미지 갯수 초과
+        - 109 : return_url이 유효하지 않습니다
+        - 110 : 이미지 용량 300kb 초과
+        - 111 : 이미지 확장자 오류
+        - 112 : euckr 인코딩 에러 발생
+        - 114 : 예약정보가 유효하지 않습니다.
+        - 200 : 동일 예약시간으로는 200회 이상 API 호출을 할 수 없습니다.
+        - 201 : 분당 300회 이상 API 호출을 할 수 없습니다.
+        - 205 : 잔액부족
+        - 999 : Internal Error.
+      */
+      
+      
     } catch (err) {
-        console.error(err)
+      alert("메시지를 전송할 수 없는 상태입니다. 관리자에게 문의하세요.");
+      console.error(err)
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false)
+    
     
   };
 
