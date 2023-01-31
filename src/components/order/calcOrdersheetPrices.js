@@ -19,11 +19,11 @@ export const calcOrdersheetPrices = (form, orderType='general') => {
 
   const reward = form.selfInfo?.reward;
   let availableMaxReward;
-  if(reward > paymentPrice && paymentPrice >= 0){
-    availableMaxReward = paymentPrice;
-    
-  } else if (paymentPrice <= 0){
+  const minimumPaymentPrice = 100; // 아임포트 최소 결제금액 100원.
+  if(paymentPrice <= minimumPaymentPrice){
     availableMaxReward = 0;
+  } else if (reward >= paymentPrice - minimumPaymentPrice)  {
+    availableMaxReward = paymentPrice - minimumPaymentPrice;
   } else {
     availableMaxReward = reward;
   }
