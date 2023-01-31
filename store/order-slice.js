@@ -5,7 +5,7 @@ import {createSlice} from '@reduxjs/toolkit';
 export const ORDER_STATES = {
   BEFORE_ORDER: 'BEFORE_ORDER',
   ORDERING: 'ORDERING',
-  ORDER_COMPLETE: 'ORDER_COMPLETE'
+  EXIT_ORDER: 'EXIT_ORDER'
 };
 
 const initialState = {
