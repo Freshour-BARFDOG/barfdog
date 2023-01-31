@@ -114,6 +114,10 @@ section.subscribe_discount { margin-bottom: rem(80);}
       display: flex;
       justify-content: center;
       cursor: pointer;
+      user-select: none;
+      .swiper_sns_img{
+        transition: transform .3s ease;
+      }
     }
   }
 
@@ -330,7 +334,7 @@ section.subscribe_discount { margin-bottom: rem(80);}
   border-radius: rem(100);
   border: rem(1) solid var(--color-line-03);
   color: var(--color-font-sub);
-  font-size: 15px;
+  font-size: rem(15);
   padding: rem(5) rem(26);
   font-weight: 500;
   transition: background-color .1s ease, color .1s ease, border .1s ease;

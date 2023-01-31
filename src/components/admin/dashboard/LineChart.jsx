@@ -67,7 +67,7 @@ export default function LineChart({ chartData }) {
             width={calcChartWidth()}
             height={500}
             // padding={{ top: 50, right: 40, bottom: 10, left: 0 }}
-            margin={{ top: 50, right: 80, bottom: 20, left: 40 }}
+            margin={{ top: 50, right: 90, bottom: 30, left: 30 }}
             xScale={{
               type: 'time',
               format: '%Y-%m',

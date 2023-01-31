@@ -15,6 +15,7 @@ import {getData, postObjData} from '/src/pages/api/reqData';
 import Spinner from '/src/components/atoms/Spinner';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import Tooltip from "/src/components/atoms/Tooltip";
+import s from "../popup.module.scss";
 
 const initialFormValues = {
   name: '',
@@ -240,7 +241,7 @@ function UpdatePopupPage() {
                           thumbLink={fileValues.pcFile?.url}
                           objectFit={'contain'}
                           ratio={1}
-                          style={{ maxWidth: '400px' }}
+                          style={{ maxWidth: '600px' }}
                         />
                       )}
                       <span className="inp_box">
@@ -255,6 +256,7 @@ function UpdatePopupPage() {
                       </span>
                     </label>
                     {formErrors.pcFile && <ErrorMessage>{formErrors.pcFile}</ErrorMessage>}
+                    <div className="desc">* PC 이미지 권장사이즈: 600 x 600</div>
                   </div>
                 </div>
                 <div className="input_row multipleLines">
@@ -296,7 +298,7 @@ function UpdatePopupPage() {
                           thumbLink={fileValues.mobileFile?.url}
                           objectFit={'contain'}
                           ratio={1}
-                          style={{ maxWidth: '400px' }}
+                          style={{ maxWidth: '560px' }}
                         />
                       )}
                       <span className="inp_box">
@@ -311,6 +313,7 @@ function UpdatePopupPage() {
                       </span>
                     </label>
                     {formErrors.mobileFile && <ErrorMessage>{formErrors.mobileFile}</ErrorMessage>}
+                    <div className="desc">* 모바일 이미지 권장사이즈: 560 x 560</div>
                   </div>
                 </div>
                 <div className="input_row multipleLines">

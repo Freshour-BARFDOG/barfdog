@@ -71,19 +71,27 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
 .review_write_ad {
   .red_box {
     position: relative;
+    overflow: hidden;
+    border-radius: rem(4);
 
     &:hover{
       &::before{
         //width: 100%;
         //clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
         opacity: 1;
+        transform: scale(2);
+        transition: opacity 1s ease, transform 1s ease;
       }
       .content_box{
         .text_box {
-          color: #fff;
+          .top_text{
+            color: #fff;
+            transition: color .2s ease;
+          }
   
           .bot_text{
             color: #fff;
+            transition: color .2s ease;
           }
         }
       }
@@ -96,11 +104,15 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
       left: 0;
       opacity: 0;
       width: 100%;
-      height: calc(100% - rem(2));
+      border-radius: 100%;
+      // height: calc(100% - rem(2));
+      aspect-ratio: 1/1;
+      transform: scale(0);
       background-color: var(--color-main);
       z-index: -1;
       // clip-path: polygon(50% 0, 50% 0, 50% 100%, 50% 100%);
-      transition: opacity .3s ease;
+      // transition: opacity .3s ease, height .3s ease, widht .3s ease;
+      transition: opacity 1s .2s ease, transform 1s .2s ease;
     }
 
     &::after {
@@ -109,8 +121,12 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
       top: 0;
       left: 0;
       width: 100%;
-      height: calc(100% - #{rem(3)});
-      outline: rem(2) solid var(--color-main);
+      // height: calc(100% - #{rem(3)});
+      height: 100%;
+      // outline: rem(2) solid var(--color-main);
+      box-sizing: border-box;
+      border: rem(2) solid var(--color-main);
+      border-radius: rem(4);
     }
 
     .content_box {
@@ -141,13 +157,13 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
         line-height: 120%;
         letter-spacing: -0.02em;
         padding: rem(17) 0 rem(10);
-        transition: color .3s ease;
+        transition: color .2s .3s ease;
       }
       .bot_text {
         @include char(b15);
         color : var(--color-font-sub);
         padding-bottom: rem(10);
-        transition: color .3s ease;
+        transition: color .2s .3s ease;
       }
 
       .image_right {
@@ -622,9 +638,9 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
   .review_write_ad {
     .red_box {
       &:hover{
-        &::before{
-          width: 0%;
-        }
+        // &::before{
+        //   width: 0%;
+        // }
         .content_box{
           .text_box {
             color: #000;
@@ -635,9 +651,9 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
         }
       }
   
-      &::after {
-        height: calc(100% - #{rem(2)});
-      }
+      // &::after {
+      //   height: calc(100% - #{rem(2)});
+      // }
 
       .content_box {
         grid-template-columns: rem(60) 1fr rem(60);

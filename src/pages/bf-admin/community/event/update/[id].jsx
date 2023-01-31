@@ -15,6 +15,7 @@ import Spinner from '/src/components/atoms/Spinner';
 import EventDetailImage from '../../../../../components/admin/community/EventDetailImage';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import {getData, postFileUpload, putObjData} from '/src/pages/api/reqData';
+import s from "../event.module.scss";
 
 const initialFormValues = {
   status: '',
@@ -247,12 +248,27 @@ const UpdateEventPage = () => {
                       style={{ display: 'inline-block' }}
                     >
                       {(thumbFile.file || thumbFile.thumbnailUrl) && (
+                        <div className="desc">* PC 화면</div>
+                      )}
+                      {(thumbFile.file || thumbFile.thumbnailUrl) && (
                         <PreviewImage
                           file={thumbFile.file}
-                          ratio={1}
                           objectFit={'contain'}
-                          style={{ width: `${rem(200)}` }}
+                          style={{ width: `${rem(1200)}` }}
                           thumbLink={thumbFile.thumbnailUrl} />
+                      )}
+                      {(thumbFile.file || thumbFile.thumbnailUrl) && (
+                      <div className="desc">* 모바일 화면</div>
+                      )}
+                      {(thumbFile.file || thumbFile.thumbnailUrl) && (
+                        <PreviewImage
+                          file={thumbFile.file}
+                          objectFit={'contain'}
+                          ratio={800 / 220}
+                          style={{ 'max-width': `${rem(800)}`, 'min-height': `${rem(220)}` }}
+                          thumbLink={thumbFile.thumbnailUrl}
+                          className={`${s["admin-preview-image"]} ${s['mobile']}`}
+                           />
                       )}
                       <span className="inp_box">
                         <input
@@ -278,6 +294,8 @@ const UpdateEventPage = () => {
                       {formErrors.thumbnailId && (
                         <ErrorMessage>{formErrors.thumbnailId}</ErrorMessage>
                       )}
+                      <div className="desc">* 이미지 권장사이즈: 1200 x 220</div>
+                      <div className="desc">* 이미지 내 텍스트 삽입 안전범위: 800px 이내(1200 x 220 기준, 좌우 여백 각 200)</div>
                     </label>
                   </div>
                 </div>

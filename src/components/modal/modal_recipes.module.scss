@@ -94,7 +94,12 @@ $topLinkBannerHeight: rem(38);
   display: grid;
   grid-template-columns: 41% 59%;
   
-  .img-wrap{aspect-ratio: 320/300;}
+  // .img-wrap{aspect-ratio: 320/300;}
+  .img-wrap{
+    width: rem(320);
+    height: rem(320);
+    aspect-ratio: 1/1;
+  }
   .details {
     padding-left:rem(32);
     height: rem(300);
@@ -201,7 +206,7 @@ $topLinkBannerHeight: rem(38);
     
     .img-wrap{
       width: rem(315);
-      height: rem(295);
+      height: rem(315);
     }
 
     .details {

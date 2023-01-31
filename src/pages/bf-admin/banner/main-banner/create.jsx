@@ -12,6 +12,7 @@ import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import getAdminToken from '@src/pages/api/getAdminToken';
 import {postData, postObjData} from '@src/pages/api/reqData';
 import {valid_hasFormErrors} from "@util/func/validation/validationPackage";
+import s from "./mainBanner.module.scss";
 
 function CreateMainBannerPage() {
   const router = useRouter();
@@ -289,7 +290,11 @@ function CreateMainBannerPage() {
                   </div>
                   <div className="inp_section">
                     <label className="inp_wrap file" htmlFor="upload-image-pc">
-                      <PreviewImage file={file_pc.file} ratio={1920 / 450} />
+                      <PreviewImage 
+                        file={file_pc.file} 
+                        ratio={1920 / 400} 
+                        className={`${s["admin-preview-image"]} ${s['pc']}`}
+                      />
                       <span className="inp_box">
                         <input
                           type="file"
@@ -306,7 +311,7 @@ function CreateMainBannerPage() {
                         {formErrors.file_pc && <ErrorMessage>{formErrors.file_pc}</ErrorMessage>}
                       </span>
                     </label>
-                    <div className="desc">* 권장사이즈: 1920 x 450</div>
+                    <div className="desc">* PC 이미지 권장사이즈: 1920 x 400</div>
                   </div>
                 </div>
                 <div className="input_row multipleLines">
@@ -347,7 +352,11 @@ function CreateMainBannerPage() {
                   </div>
                   <div className="inp_section">
                     <label className="inp_wrap file" htmlFor="upload-image-mobile">
-                      <PreviewImage file={file_mobile.file} ratio={1920 / 450} />
+                      <PreviewImage 
+                        file={file_mobile.file} 
+                        ratio={600 / 400} 
+                        className={`${s["admin-preview-image"]} ${s['mobile']}`}
+                      />
                       <div className="inp_box">
                         <input
                           type="file"
@@ -366,7 +375,7 @@ function CreateMainBannerPage() {
                         )}
                       </div>
                     </label>
-                    <div className="desc">* 권장사이즈: 1920 x 450</div>
+                    <div className="desc">* 모바일 이미지 권장사이즈: 600 x 400</div>
                   </div>
                 </div>
                 <div className="input_row multipleLines">

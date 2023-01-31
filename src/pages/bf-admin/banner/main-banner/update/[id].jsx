@@ -16,7 +16,7 @@ import Spinner from '/src/components/atoms/Spinner';
 import { postObjData } from '/src/pages/api/reqData';
 import CustomRadio from "/src/components/admin/form/CustomRadio";
 import {exposeTargetTYPE} from "/store/TYPE/exposeTargetTYPE";
-
+import s from "../mainBanner.module.scss";
 
 export default function UpdateMainBannerPage() {
   const mct = useModalContext();
@@ -282,7 +282,8 @@ export default function UpdateMainBannerPage() {
                       <PreviewImage
                         file={imageFile.pc?.file}
                         thumbLink={imageFile.pc?.thumbLink}
-                        ratio={1920 / 450}
+                        ratio={1920 / 400}
+                        className={`${s["admin-preview-image"]} ${s['pc']}`}
                       />
                       <span className="inp_box">
                         <input
@@ -299,6 +300,7 @@ export default function UpdateMainBannerPage() {
                         {formErrors.file_pc && <ErrorMessage>{formErrors.file_pc}</ErrorMessage>}
                       </span>
                     </label>
+                    <div className="desc">* PC 이미지 권장사이즈: 1920 x 400</div>
                   </div>
                 </div>
                 <div className="input_row multipleLines">
@@ -343,7 +345,8 @@ export default function UpdateMainBannerPage() {
                       <PreviewImage
                         file={imageFile.mobile?.file}
                         thumbLink={imageFile.mobile?.thumbLink}
-                        ratio={1920 / 450}
+                        ratio={600 / 400}
+                        className={`${s["admin-preview-image"]} ${s['mobile']}`}
                       />
                       <div className="inp_box">
                         <input
@@ -363,6 +366,7 @@ export default function UpdateMainBannerPage() {
                         )}
                       </div>
                     </label>
+                    <div className="desc">* 모바일 이미지 권장사이즈: 600 x 400</div>
                   </div>
                 </div>
                 <div className="input_row multipleLines">
