@@ -40,6 +40,7 @@ module.exports = {
   images: {
     domains: [
       'localhost',
+      '192.168.0.90',
       'barfdogserver.co.kr',
     ],
   },
