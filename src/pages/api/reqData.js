@@ -142,7 +142,9 @@ export const postObjData = async (url, data, contType) => {
       // console.error('postObjDataResponseError:\n',err.response);
       const error = err.response;
       // console.log('ERROR내용: ', err.response);
-      if (!error.data) {
+      if(!error) {
+        result.error = '서버의 에러 응답이 없습니다.';
+      } else if (!error.data) {
         result.error = '요청에 대응하는 데이터가 서버에 없습니다.';
       } else if (error.data?.error) {
         result.error = error.data.error;
