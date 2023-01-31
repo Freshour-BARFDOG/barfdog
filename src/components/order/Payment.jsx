@@ -224,12 +224,14 @@ export function Payment({
     // 결제 이슈를 보완하기 인하여 Api Request Data 추가를 위해 사용
     const callbackData = {
       discountReward: body.discountReward,
-      
+      orderId: id
     }
     IMP.request_pay(data, callback.bind(null, callbackData));
     
     /* 4. 결제 창 호출하기 */
     async function callback(callbackData, response) {
+  
+      await dispatch(orderAction.saveOrderState({orderState: ORDER_STATES.EXIT_ORDER, orderType: orderType, orderId: callbackData.orderId}));
       // 결제 이슈를 보완하기 인하여 Api Request Data 추가를 위해 사용
       const data = {
         discountReward: callbackData.discountReward
@@ -309,13 +311,15 @@ export function Payment({
     // 결제 이슈를 보완하기 인하여 Api Request Data 추가를 위해 사용
     const callbackData = {
       discountReward: body.discountReward,
+      orderId: id
     
     }
     IMP.request_pay(data, callback.bind(null, callbackData));
     
     /* 4. 결제 창 호출하기 */
     async function callback(callbackData, response) {
-    
+
+      await dispatch(orderAction.saveOrderState({orderState: ORDER_STATES.EXIT_ORDER, orderType: orderType, orderId: callbackData.orderId}));
       console.log(response);
       const discountData = {
         discountReward: callbackData.discountReward,

@@ -17,10 +17,12 @@ import { OrdersheetMethodOfPayment } from '/src/components/order/OrdersheetMetho
 import { OrdersheetAmountOfPayment } from '/src/components/order/OrdersheetAmountOfPayment';
 import { userType } from '/store/TYPE/userAuthType';
 import {ORDER_STATES} from "/store/order-slice";
+import useDeviceState from "../../../../util/hook/useDeviceState";
 
 
 export default function GeneralOrderSheetPage() {
   const router = useRouter();
+  const ds = useDeviceState();
   const auth = useSelector((s) => s.auth);
   const orderState = useSelector((state) => state.orderState);
   const USER_TYPE = auth.userType;
@@ -35,30 +37,41 @@ export default function GeneralOrderSheetPage() {
     termsOfService: false,
     coupon: false,
   });
-  const [hasCanceled, setHasCanceled] = useState( false );
   
   
   useEffect(() => {
     
-    const cancelOrderWhenUserLeavesDuringPayment = () => { // Ex) 페이지 새로고침 , 뒤로가기
-      if(hasCanceled) return console.error( "Already Cancelled Order" );
-      try {
-        setHasCanceled(true);
-        const res = postObjData(`/api/orders/${orderState.orderId}/general/cancel`);
-        console.log(res);
-      } catch (err) {
-        console.error(err)
-      }
-    };
+    if(ds.isMobile) return; // ! PC ONLY => MOBILE 결제 시, 무조건 PG사로 REDIRECT
     
-    if(orderState.orderState === ORDER_STATES.ORDERING){
-      window.addEventListener( 'beforeunload', cancelOrderWhenUserLeavesDuringPayment );
+    if(orderState.orderState === ORDER_STATES.ORDERING && orderState.orderId){
+      console.log("window.addEventListener( 'beforeunload', ...);");
+      window.addEventListener( 'beforeunload',
+        cancelOrderWhenUserLeavesDuringPayment
+        ,{once: true}
+      ); // ! {once: true} => 이벤트 단 한 번만 실행
     }
     
+    if(orderState.orderState === ORDER_STATES.EXIT_ORDER){
+      // ! 해당 IF문 내의 코드는 없어도 UNMOUNT 시점에 이벤트가 제거됨
+      //  그러나 불상사를 확실히 방지하기 위해, removeEventListener 중복 적용
+      console.log("window.removeEventListener( 'beforeunload', ...);");
+      window.removeEventListener( 'beforeunload', cancelOrderWhenUserLeavesDuringPayment)
+    }
     return () => {
-      window.removeEventListener( 'beforeunload', cancelOrderWhenUserLeavesDuringPayment );
+      console.log("[ UNMOUNT ] window.removeEventListener( 'beforeunload', ...);");
+      window.removeEventListener( 'beforeunload', cancelOrderWhenUserLeavesDuringPayment);
     };
-  },[hasCanceled, orderState]);
+  },[ds.isMobile, orderState]);
+  
+  
+  const cancelOrderWhenUserLeavesDuringPayment = () => {
+    // ! 목적: 아임포트 결제 창을 띄운 상태에서 '페이지 새로고침' , '페이지 뒤로가기'
+    // => BEFORE_PAYMENT로 인한 '적립금, 쿠폰'를 회수할 수 없게는 상태를 방지한다.
+    console.log("---------------- [결제포기 > 일반결제] ----------------");
+    postObjData(`/api/orders/${orderState.orderId}/general/cancel`);
+  };
+  
+  
   
   
   useEffect(() => {
