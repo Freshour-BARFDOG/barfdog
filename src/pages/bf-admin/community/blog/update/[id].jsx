@@ -21,12 +21,11 @@ import Tooltip from '/src/components/atoms/Tooltip';
 
 export default function UpdateBlogPage({ id }) {
   
-  const postContentimageApiURL = '/api/admin/blogs/image/upload';
+  const postContentImageApiURL = '/api/admin/blogs/image/upload';
 
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
   const router = useRouter();
-  const [modalMessage, setModalMessage] = useState('');
   const [isLoading, setIsLoading] = useState({});
   const [QuillEditor, setQuillEditor] = useState(null);
   const [originImageIdList, setOriginImageIdList] = useState([]);
@@ -35,7 +34,6 @@ export default function UpdateBlogPage({ id }) {
   const [thumbFile, setThumbFile] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  // console.log(formValues)
 
   //  INIT QUILL EDITOR
   useEffect(() => {
@@ -50,6 +48,7 @@ export default function UpdateBlogPage({ id }) {
         }
         const apiUrl = `/api/admin/blogs/${id}`;
         const res = await getData( apiUrl );
+        // console.log(res);
         const DATA = res.data.blogAdminDto;
         const initialFormValues = {
           title: DATA.title,
@@ -64,7 +63,7 @@ export default function UpdateBlogPage({ id }) {
 
         const editorImageDATA = res.data.adminBlogImageDtos;
         const originInnerHTMLImageIdList = editorImageDATA.map((list) => list.blogImageId);
-        console.log(res);
+        
         setOriginImageIdList(originInnerHTMLImageIdList);
 
         setThumbFile({
@@ -195,7 +194,7 @@ export default function UpdateBlogPage({ id }) {
       const apiUrl = `/api/admin/blogs/${id}`;
       const res = await putObjData( apiUrl, body );
       if ( res.isDone ) {
-        mct.alertShow( '블로그가 수정되었습니다.' );
+        mct.alertShow( '블로그가 수정되었습니다.', onGlobalModalCallback );
         setIsSubmitted( true );
       } else {
         mct.alertShow( res.error, '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.' );
@@ -352,7 +351,7 @@ export default function UpdateBlogPage({ id }) {
                         imageId={'blogImageIdList'}
                         originImageIdList={originImageIdList}
                         setFormValues={setFormValues}
-                        imageUploadApiURL={postContentimageApiURL}
+                        imageUploadApiURL={postContentImageApiURL}
                         initialValue={formValues.contents}
                       />
                     )}
@@ -406,7 +405,7 @@ export default function UpdateBlogPage({ id }) {
           </form>
         </AdminContentWrapper>
       </AdminLayout>
-      {hasAlert && <Modal_global_alert message={modalMessage} onClick={onGlobalModalCallback} background/>}
+      {hasAlert && <Modal_global_alert background/>}
     </>
   );
 }
