@@ -156,7 +156,9 @@ export default function EventDetailImage({
   return (
     <>
       <div className="inp_section multiImageBox">
-        <div className="col-5 grid-box grid-column col-5">
+        <div className="col-5 grid-box grid-column col-5"
+        style={{ display: 'flex', justifyContent: 'flex-start' }}
+        >
           {fileList?.map((file, index) => {
             return (
               <PreviewImage

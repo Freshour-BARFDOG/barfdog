@@ -27,7 +27,7 @@ $windowWidthForRightSideBorder: rem(1520);
         minmax(rem(70), rem(120))
         rem(70)
         rem(70);
-      overflow:hidden;
+        overflow:hidden;
 
       .table_th, span{
         display: flex;
@@ -66,7 +66,12 @@ $windowWidthForRightSideBorder: rem(1520);
 
 }
 
-
+.admin-preview-image{
+  img{
+    object-fit: cover !important;
+    position: absolute;
+  }
+}
 
 
 @media (max-width: ($windowWidthForRightSideBorder)) {

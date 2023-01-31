@@ -1,5 +1,20 @@
 @import '/styles/module/itemList.module';
 
+$mobileHeight: rem(400);
+$pcHeight: rem(400);
+
+.admin-preview-image {
+  &.pc {
+    max-width: 100%;
+    aspect-ratio: 1920/400;
+  }
+  &.mobile {
+    height: $mobileHeight;
+    max-width: rem(600);
+  }
+}
+
+
 .cont_viewer {
   .table{
     .table_header, .item{

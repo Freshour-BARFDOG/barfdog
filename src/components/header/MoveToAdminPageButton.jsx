@@ -11,5 +11,5 @@ export const MoveToAdminPageButton = () => {
     setAdminPath( path );
   }, [] );
   
-  return <li><a href={adminPath} style={{fontSize: "14px"}}>관리자페이지</a></li>;
+  return <li><a href={adminPath} style={{fontSize: "14px"}}>관리자 페이지</a></li>;
 }

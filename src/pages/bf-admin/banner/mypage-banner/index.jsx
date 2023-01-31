@@ -260,7 +260,9 @@ export default function UpdateMypageBanner() {
                 </h5>
                 <div className="input_row upload_image multipleLines">
                   <div className="title_section">
-                    <p className="title">이미지</p>
+                    <p className="title">
+                      이미지
+                    </p>
                   </div>
                   <div className="inp_section">
                     <label className="inp_wrap file" htmlFor="pcFile">
@@ -286,6 +288,7 @@ export default function UpdateMypageBanner() {
                     {formErrors.pcFile && (
                       <ErrorMessage>{formErrors.pcFile}</ErrorMessage>
                     )}
+                    <div className="desc">* PC 이미지 권장사이즈: 1200 x 60</div>
                   </div>
                 </div>
                 <div className="input_row">
@@ -347,6 +350,7 @@ export default function UpdateMypageBanner() {
                     {formErrors.mobileFile && (
                       <ErrorMessage>{formErrors.mobileFile}</ErrorMessage>
                     )}
+                    <div className="desc">* 모바일 이미지 권장사이즈: 600 x 50</div>
                   </div>
                 </div>
                 <div className="input_row multipleLines">

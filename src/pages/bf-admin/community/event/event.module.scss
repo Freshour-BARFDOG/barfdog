@@ -65,6 +65,15 @@ $windowWidthForRightSideBorder: rem(1520);
 }
 
 
+.admin-preview-image {
+  &.mobile {
+    img{
+      height: rem(220);
+      object-fit: cover !important;
+    }
+  }
+}
+
 @media (max-width: ($windowWidthForRightSideBorder)) {
   .cont_viewer{
     .table {
