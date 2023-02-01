@@ -253,9 +253,10 @@ const UpdateEventPage = () => {
                       {(thumbFile.file || thumbFile.thumbnailUrl) && (
                         <PreviewImage
                           file={thumbFile.file}
-                          objectFit={'contain'}
-                          style={{ width: `${rem(1200)}` }}
-                          thumbLink={thumbFile.thumbnailUrl} />
+                          objectFit={'cover'}
+                          style={{ width: `${rem(1200)}`, height: `${rem(220)}` }}
+                          thumbLink={thumbFile.thumbnailUrl}
+                          />
                       )}
                       {(thumbFile.file || thumbFile.thumbnailUrl) && (
                       <div className="desc">* 모바일 화면</div>
@@ -265,7 +266,7 @@ const UpdateEventPage = () => {
                           file={thumbFile.file}
                           objectFit={'contain'}
                           ratio={800 / 220}
-                          style={{ 'max-width': `${rem(800)}`, 'min-height': `${rem(220)}` }}
+                          style={{ width: `${rem(800)}`, height: `${rem(220)}` }}
                           thumbLink={thumbFile.thumbnailUrl}
                           className={`${s["admin-preview-image"]} ${s['mobile']}`}
                            />
