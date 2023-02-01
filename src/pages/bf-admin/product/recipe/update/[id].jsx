@@ -375,7 +375,7 @@ export default function UpdateRecipePage( { id }) {
                           value={formValues.gramPerKcal}
                           onChange={onInputChangeHandler}
                         />
-                        <em className="unit">g / Kcal</em>
+                        <em className="unit">Kcal / g</em>
                         {formErrors.uiNameEnglish && (
                           <ErrorMessage>{formErrors.uiNameEnglish}</ErrorMessage>
                         )}

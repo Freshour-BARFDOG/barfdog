@@ -75,7 +75,7 @@ function RecipePage() {
                   <li className={s.table_th}>레시피 이름</li>
                   <li className={s.table_th}>레시피 설명</li>
                   <li className={s.table_th}>가격 상수&#40;원/g&#41;</li>
-                  <li className={s.table_th}>무게 상수&#40;g/Kcal&#41;</li>
+                  <li className={s.table_th}>무게 상수&#40;Kcal/g&#41;</li>
                   <li className={s.table_th}>재료</li>
                   <li className={s.table_th}>노출 여부</li>
                   <li className={s.table_th}>판매 여부</li>
