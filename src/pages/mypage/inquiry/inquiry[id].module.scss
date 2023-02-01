@@ -79,6 +79,28 @@
       padding-top: rem(30);
       position: relative;
 
+      
+      .ImageModal{
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        max-width: 50vw;
+        height: 100%;
+        z-index: 9999990;
+
+        button{
+          position: absolute;
+          top: rem(50);
+          right: rem(0);
+          width: rem(50);
+          height: rem(50);
+          background-color: red;
+          z-index: 9999991;
+        }
+      }
+
       &::after{
         content: "[ 첨부 이미지 ]";
         position: absolute;
@@ -86,16 +108,62 @@
         left: 0;
       }
 
-      a{
+      button{
         position: relative;
         width: 100%;
         aspect-ratio: 1/1;
         background-color: #fff;
+        overflow: hidden;
+        font-size: 0;
+        
+        svg{
+          display: none;
+        }
+
+        >div{
+          >div{
+            >div{
+              >div{
+                >div{
+                  img{
+                    &::after{
+                      content: "";
+                      position: absolute;
+                      top: 0;
+                      left: 0;
+                      width: rem(200);
+                      height: rem(200);
+                      background-color: red;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
 
         img{
-          min-height: auto !important;
-          max-height: none !important;
-          height: auto !important;
+          width: auto;
+          max-width: calc(100% - rem(40));
+          // min-height: auto !important;
+          max-height: 80vh;
+          // height: auto !important;
+          background-color: transparent;
+        }
+        span{
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 100vw;
+          height: 100vw;
+          a{
+            width: 100vw;
+            height: 100vw;
+            svg{
+              display: none;
+            }
+          }
         }
       }
     }

@@ -210,8 +210,8 @@ const CreateEventPage = () => {
                       {(thumbFile.file || thumbFile.thumbnailUrl) && (
                         <PreviewImage
                           file={thumbFile.file}
-                          objectFit={'contain'}
-                          style={{ width: `${rem(1200)}` }}
+                          objectFit={'cover'}
+                          style={{ width: `${rem(1200)}`, height: `${rem(220)}` }}
                           thumbLink={thumbFile.thumbnailUrl}
                         />
                       )}
@@ -221,9 +221,9 @@ const CreateEventPage = () => {
                       {(thumbFile.file || thumbFile.thumbnailUrl) && (
                         <PreviewImage
                           file={thumbFile.file}
-                          objectFit={'contain'}
+                          objectFit={'cover'}
                           ratio={800 / 220}
-                          style={{ 'max-width': `${rem(800)}`, 'min-height': `${rem(220)}` }}
+                          style={{ width: `${rem(800)}`, height: `${rem(220)}` }}
                           thumbLink={thumbFile.thumbnailUrl}
                           className={`${s["admin-preview-image"]} ${s['mobile']}`}
                            />
