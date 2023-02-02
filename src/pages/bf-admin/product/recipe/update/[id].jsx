@@ -375,7 +375,7 @@ export default function UpdateRecipePage( { id }) {
                           value={formValues.gramPerKcal}
                           onChange={onInputChangeHandler}
                         />
-                        <em className="unit">g / Kcal</em>
+                        <em className="unit">Kcal / g</em>
                         {formErrors.uiNameEnglish && (
                           <ErrorMessage>{formErrors.uiNameEnglish}</ErrorMessage>
                         )}
@@ -478,6 +478,7 @@ export default function UpdateRecipePage( { id }) {
                             <ErrorMessage>{formErrors.surveyResult}</ErrorMessage>
                           )}
                         </div>
+                        <div className="desc">* 이미지 권장사이즈: 260 x 260(1:1 비율 권장)</div>
                       </label>
                     </div>
                   </div>
@@ -521,6 +522,7 @@ export default function UpdateRecipePage( { id }) {
                             <ErrorMessage>{formErrors.recipeThumb}</ErrorMessage>
                           )}
                         </div>
+                        <div className="desc">* 이미지 권장사이즈: 320 x 320(1:1 비율 권장)</div>
                       </label>
                     </div>
                   </div>

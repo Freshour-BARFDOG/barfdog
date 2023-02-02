@@ -18,17 +18,15 @@ import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import { useModalContext } from '/store/modal-context';
 import CustomRadio from '/src/components/admin/form/CustomRadio';
 import Tooltip from '/src/components/atoms/Tooltip';
+import s from "../blog.module.scss";
 
 export default function UpdateBlogPage({ id }) {
-  // console.log(id);
-  const getFormValuesApiUrl = `/api/admin/blogs/${id}`;
-  const putFormValuesApiUrl = `/api/admin/blogs/${id}`;
-  const postContentimageApiURL = '/api/admin/blogs/image/upload';
+  
+  const postContentImageApiURL = '/api/admin/blogs/image/upload';
 
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
   const router = useRouter();
-  const [modalMessage, setModalMessage] = useState('');
   const [isLoading, setIsLoading] = useState({});
   const [QuillEditor, setQuillEditor] = useState(null);
   const [originImageIdList, setOriginImageIdList] = useState([]);
@@ -37,20 +35,21 @@ export default function UpdateBlogPage({ id }) {
   const [thumbFile, setThumbFile] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  // console.log(formValues)
 
   //  INIT QUILL EDITOR
   useEffect(() => {
     if (!id) return;
     (async () => {
       try {
-        if (setIsLoading && typeof setIsLoading === 'function') {
-          setIsLoading((prevState) => ({
+        if ( setIsLoading && typeof setIsLoading === 'function' ) {
+          setIsLoading( (prevState) => ({
             ...prevState,
             fetching: true,
-          }));
+          }) );
         }
-        const res = await getData(getFormValuesApiUrl);
+        const apiUrl = `/api/admin/blogs/${id}`;
+        const res = await getData( apiUrl );
+        // console.log(res);
         const DATA = res.data.blogAdminDto;
         const initialFormValues = {
           title: DATA.title,
@@ -65,7 +64,7 @@ export default function UpdateBlogPage({ id }) {
 
         const editorImageDATA = res.data.adminBlogImageDtos;
         const originInnerHTMLImageIdList = editorImageDATA.map((list) => list.blogImageId);
-        console.log(res);
+        
         setOriginImageIdList(originInnerHTMLImageIdList);
 
         setThumbFile({
@@ -110,13 +109,6 @@ export default function UpdateBlogPage({ id }) {
     }
   };
 
-  const onRadioButtonHandler = (data) => {
-    const { key, value } = data;
-    setFormValues({
-      ...formValues,
-      [key]: value,
-    });
-  };
 
   const imageFileChangeHandler = async (e) => {
     // - 파일이 존재하지 않는 경우 -> 삭제 API는 따로 없음
@@ -165,48 +157,60 @@ export default function UpdateBlogPage({ id }) {
         ...prevState,
         file: !isFaild && file,
         filename: !isFaild && filename,
-      }));
+      }) );
     } catch (err) {
-      alert(`에러가 발생했습니다.\n${err}`);
+      alert( `에러가 발생했습니다.\n${err}` );
     }
-
-    setIsLoading((prevState) => ({
+  
+    setIsLoading( (prevState) => ({
       ...prevState,
       thumb: false,
-    }));
+    }) );
   };
-
+  
+  console.log( formValues );
   const onSubmit = async (e) => {
     e.preventDefault();
-
-    // ! IMPORTANT : create Event후, 사용자가 enter를 쳤을 경우, 똑같은 요청이 전송되지 않게 하기 위해서 필요함.
-    if (isSubmitted) return;
-    const errObj = validate(formValues, thumbFile);
-    setFormErrors(errObj);
-    const isPassed = valid_hasFormErrors(errObj);
-
+    if ( isSubmitted ) return window.location.reload();
+    const errObj = validate( formValues, thumbFile );
+    setFormErrors( errObj );
+    const isPassed = valid_hasFormErrors( errObj );
+    if ( !isPassed ) return mct.alertShow( '유효하지 않은 항목이 존재합니다..' );
+    
     try {
-      setIsLoading((prevState) => ({
+      setIsLoading( (prevState) => ({
         ...prevState,
         submit: true,
-      }));
-      if (isPassed) {
-        const objData = formValues;
-        const res = await putObjData(putFormValuesApiUrl, objData);
-        if (res.isDone) {
-          onShowModalHandler('블로그가 수정되었습니다.');
-          setIsSubmitted(true);
-        } else {
-          alert(res.error, '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.');
-        }
+      }) );
+      const body = {
+        title: formValues.title,
+        contents: formValues.contents,
+        status: formValues.status,
+        thumbnailId: formValues.thumbnailId,
+        category: formValues.category,
+        addImageIdList: formValues.addImageIdList,
+        deleteImageIdList: formValues.deleteImageIdList,
+      };
+      
+      const apiUrl = `/api/admin/blogs/${id}`;
+      const res = await putObjData( apiUrl, body );
+      if ( res.isDone ) {
+        mct.alertShow( '블로그가 수정되었습니다.', onGlobalModalCallback );
+        setIsSubmitted( true );
+      } else {
+        mct.alertShow( res.error, '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.' );
       }
+      
     } catch (err) {
-      console.log('API통신 오류 : ', err);
+      mct.alertShow( '서버와의 통신 중 에러가 발생했습니다.' );
+      console.log( err );
+    } finally {
+      setIsLoading( (prevState) => ({
+        ...prevState,
+        submit: false,
+      }) );
     }
-    setIsLoading((prevState) => ({
-      ...prevState,
-      submit: false,
-    }));
+    
   };
 
   const returnToPrevPage = () => {
@@ -215,17 +219,9 @@ export default function UpdateBlogPage({ id }) {
     }
   };
 
-  const moveToPage = (url) => {
-    router.push(url);
-  };
 
-  const onShowModalHandler = (message) => {
-    mct.alertShow();
-    setModalMessage(message);
-  };
   const onGlobalModalCallback = () => {
-    mct.alertHide();
-    moveToPage('/bf-admin/community/blog');
+    window.location.href = '/bf-admin/community/blog';
   };
 
   return (
@@ -311,12 +307,28 @@ export default function UpdateBlogPage({ id }) {
                       style={{ display: 'inline-block' }}
                     >
                       {(thumbFile.file || thumbFile.thumbnailUrl) && (
+                        <div className="desc">* 게시글 썸네일</div>
+                      )}
+                      {(thumbFile.file || thumbFile.thumbnailUrl) && (
+                        <PreviewImage
+                          file={thumbFile.file}
+                          ratio={1}
+                          thumbLink={thumbFile.thumbnailUrl}
+                          objectFit={'contain'}
+                          style={{ 'max-width': `${rem(400)}`, 'min-width': `${rem(400)}`,  'min-height': `${rem(400)}`}}
+                          className={`${s["admin-preview-image"]}`}
+                        />
+                      )}
+                      {(thumbFile.file || thumbFile.thumbnailUrl) && (
+                      <div className="desc">* 추천 아티클 썸네일</div>
+                      )}
+                      {(thumbFile.file || thumbFile.thumbnailUrl) && (
                         <PreviewImage
                           file={thumbFile.file}
                           thumbLink={thumbFile.thumbnailUrl}
-                          ratio={1}
                           objectFit={'contain'}
-                          style={{ width: `${rem(200)}` }}
+                          style={{ 'max-width': `${rem(700)}`, 'min-width': `${rem(400)}`,  'min-height': `${rem(400)}`}}
+                          className={`${s["admin-preview-image"]}`}
                         />
                       )}
                       <span className="inp_box">
@@ -336,6 +348,7 @@ export default function UpdateBlogPage({ id }) {
                       {formErrors.blogThumbnailId && (
                         <ErrorMessage>{formErrors.blogThumbnailId}</ErrorMessage>
                       )}
+                      <div className="desc">* [추천 아티클]에 등록할 블로그는 가로 700 x 세로 400 이상의 썸네일 이미지가 권장됩니다.</div>
                     </label>
                   </div>
                 </div>
@@ -356,7 +369,7 @@ export default function UpdateBlogPage({ id }) {
                         imageId={'blogImageIdList'}
                         originImageIdList={originImageIdList}
                         setFormValues={setFormValues}
-                        imageUploadApiURL={postContentimageApiURL}
+                        imageUploadApiURL={postContentImageApiURL}
                         initialValue={formValues.contents}
                       />
                     )}
@@ -410,7 +423,7 @@ export default function UpdateBlogPage({ id }) {
           </form>
         </AdminContentWrapper>
       </AdminLayout>
-      <Modal_global_alert message={modalMessage} onClick={onGlobalModalCallback} background />
+      {hasAlert && <Modal_global_alert background/>}
     </>
   );
 }

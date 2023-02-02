@@ -323,7 +323,7 @@ export default function MainPage({ data }) {
                 <ul className={s.text}>
                   <li data-aos="fade-up" data-aos-delay="0" data-aos-anchor="#trigger">영양보존 100%</li>
                   <li data-aos="fade-up" data-aos-delay="50" data-aos-anchor="#trigger">100% 휴먼그레이드</li>
-                  <li data-aos="fade-up" data-aos-delay="100" data-aos-anchor="#trigger">NO 유전자 변형 완료 (NON-GMO)</li>
+                  <li data-aos="fade-up" data-aos-delay="100" data-aos-anchor="#trigger">NO 유전자 변형 원료 (NON-GMO)</li>
                   <li data-aos="fade-up" data-aos-delay="150" data-aos-anchor="#trigger">NO 방부제·보존제</li>
                   <li data-aos="fade-up" data-aos-delay="200" data-aos-anchor="#trigger">NO 중국산재료</li>
                 </ul>

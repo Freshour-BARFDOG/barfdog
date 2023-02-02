@@ -4,7 +4,7 @@ import MetaTitle from '/src/components/atoms/MetaTitle';
 import s from './ordersheet.module.scss';
 import Modal_termsOfSerivce from '/src/components/modal/Modal_termsOfSerivce';
 import { Modal_coupon } from '/src/components/modal/Modal_coupon';
-import { postUserObjData } from '/src/pages/api/reqData';
+import {postObjData, postUserObjData} from '/src/pages/api/reqData';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import transformDate, { transformToday } from '/util/func/transformDate';
@@ -16,11 +16,15 @@ import { OrdersheetReward } from '/src/components/order/OrdersheetReward';
 import { OrdersheetMethodOfPayment } from '/src/components/order/OrdersheetMethodOfPayment';
 import { OrdersheetAmountOfPayment } from '/src/components/order/OrdersheetAmountOfPayment';
 import { userType } from '/store/TYPE/userAuthType';
+import {ORDER_STATES} from "/store/order-slice";
+import useDeviceState from "../../../../util/hook/useDeviceState";
 
 
 export default function GeneralOrderSheetPage() {
   const router = useRouter();
+  const ds = useDeviceState();
   const auth = useSelector((s) => s.auth);
+  const orderState = useSelector((state) => state.orderState);
   const USER_TYPE = auth.userType;
 
   const cart = useSelector((state) => state.cart);
@@ -33,7 +37,43 @@ export default function GeneralOrderSheetPage() {
     termsOfService: false,
     coupon: false,
   });
-
+  
+  
+  useEffect(() => {
+    
+    if(ds.isMobile) return; // ! PC ONLY => MOBILE 결제 시, 무조건 PG사로 REDIRECT
+    
+    if(orderState.orderState === ORDER_STATES.ORDERING && orderState.orderId){
+      console.log("window.addEventListener( 'beforeunload', ...);");
+      window.addEventListener( 'beforeunload',
+        cancelOrderWhenUserLeavesDuringPayment
+        ,{once: true}
+      ); // ! {once: true} => 이벤트 단 한 번만 실행
+    }
+    
+    if(orderState.orderState === ORDER_STATES.EXIT_ORDER){
+      // ! 해당 IF문 내의 코드는 없어도 UNMOUNT 시점에 이벤트가 제거됨
+      //  그러나 불상사를 확실히 방지하기 위해, removeEventListener 중복 적용
+      console.log("window.removeEventListener( 'beforeunload', ...);");
+      window.removeEventListener( 'beforeunload', cancelOrderWhenUserLeavesDuringPayment)
+    }
+    return () => {
+      console.log("[ UNMOUNT ] window.removeEventListener( 'beforeunload', ...);");
+      window.removeEventListener( 'beforeunload', cancelOrderWhenUserLeavesDuringPayment);
+    };
+  },[ds.isMobile, orderState]);
+  
+  
+  const cancelOrderWhenUserLeavesDuringPayment = () => {
+    // ! 목적: 아임포트 결제 창을 띄운 상태에서 '페이지 새로고침' , '페이지 뒤로가기'
+    // => BEFORE_PAYMENT로 인한 '적립금, 쿠폰'를 회수할 수 없게는 상태를 방지한다.
+    console.log("---------------- [결제포기 > 일반결제] ----------------");
+    postObjData(`/api/orders/${orderState.orderId}/general/cancel`);
+  };
+  
+  
+  
+  
   useEffect(() => {
     const curItem = cart.orderItemList;
     if (!curItem.length) {
@@ -273,36 +313,36 @@ export default function GeneralOrderSheetPage() {
 }
 
 
-
-const DUMMY_MEMEBER_COUPON_LIST = [
-  {
-    memberCouponId: 45,
-    name: '쿠폰1-최소사용가능아잍템가격 7천이상 ',
-    discountType: 'FIXED_RATE',
-    discountDegree: 10,
-    availableMaxDiscount: 2000,
-    availableMinPrice: 7000,
-    remaining: 1,
-    expiredDate: '2023-12-31T23:59:59',
-  },
-  {
-    memberCouponId: 46,
-    name: '쿠폰2-최대할인 금액 1만원 조건 ',
-    discountType: 'FLAT_RATE',
-    discountDegree: 2000,
-    availableMaxDiscount: 10000,
-    availableMinPrice: 0,
-    remaining: 3,
-    expiredDate: '2023-12-31T23:59:59',
-  },
-  {
-    memberCouponId: 47,
-    name: '쿠폰3-최대 할인가3천원',
-    discountType: 'FIXED_RATE',
-    discountDegree: 30,
-    availableMaxDiscount: 3000,
-    availableMinPrice: 0,
-    remaining: 3,
-    expiredDate: '2023-12-31T23:59:59',
-  },
-];
+//
+// const DUMMY_MEMEBER_COUPON_LIST = [
+//   {
+//     memberCouponId: 45,
+//     name: '쿠폰1-최소사용가능아잍템가격 7천이상 ',
+//     discountType: 'FIXED_RATE',
+//     discountDegree: 10,
+//     availableMaxDiscount: 2000,
+//     availableMinPrice: 7000,
+//     remaining: 1,
+//     expiredDate: '2023-12-31T23:59:59',
+//   },
+//   {
+//     memberCouponId: 46,
+//     name: '쿠폰2-최대할인 금액 1만원 조건 ',
+//     discountType: 'FLAT_RATE',
+//     discountDegree: 2000,
+//     availableMaxDiscount: 10000,
+//     availableMinPrice: 0,
+//     remaining: 3,
+//     expiredDate: '2023-12-31T23:59:59',
+//   },
+//   {
+//     memberCouponId: 47,
+//     name: '쿠폰3-최대 할인가3천원',
+//     discountType: 'FIXED_RATE',
+//     discountDegree: 30,
+//     availableMaxDiscount: 3000,
+//     availableMinPrice: 0,
+//     remaining: 3,
+//     expiredDate: '2023-12-31T23:59:59',
+//   },
+// ];

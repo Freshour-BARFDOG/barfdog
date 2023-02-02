@@ -129,7 +129,7 @@ export class URLPathClass {
     if (this.VALIDATION.MEMBER_PATH && usertype === USERTYPE.NON_MEMBER) {
       document.documentElement.remove();
       alert('회원가입이 필요한 페이지입니다.');
-      window.location.href = '/accout/login';
+      window.location.href = '/account/login';
     } else if (this.VALIDATION.ADMIN_PATH && !this.VALIDATION.ADMIN_PUBLIC_PATH && usertype !== USERTYPE.ADMIN) {
       document.documentElement.remove();
       alert('일반 사용자에게 접근 권한이 없는 페이지입니다.');

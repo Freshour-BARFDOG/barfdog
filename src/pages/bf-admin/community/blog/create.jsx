@@ -18,6 +18,7 @@ import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import { useModalContext } from '/store/modal-context';
 import CustomRadio from '/src/components/admin/form/CustomRadio';
 import {blogCategoryType} from "/store/TYPE/blogCategoryType";
+import s from "./blog.module.scss";
 
 const initialFormValues = {
   title: '',
@@ -249,12 +250,28 @@ const CreateBlogPage = () => {
                       style={{ display: 'inline-block' }}
                     >
                       {(thumbFile.file || thumbFile.thumbnailUrl) && (
+                        <div className="desc">* 게시글 썸네일</div>
+                      )}
+                      {(thumbFile.file || thumbFile.thumbnailUrl) && (
                         <PreviewImage
                           file={thumbFile.file}
                           ratio={1}
                           objectFit={'contain'}
-                          style={{ width: `${rem(200)}` }}
+                          style={{ 'max-width': `${rem(400)}`, 'min-width': `${rem(400)}`,  'min-height': `${rem(400)}`}}
                           thumbLink={thumbFile.thumbnailUrl}
+                          className={`${s["admin-preview-image"]}`}
+                        />
+                      )}
+                      {(thumbFile.file || thumbFile.thumbnailUrl) && (
+                      <div className="desc">* 추천 아티클 썸네일</div>
+                      )}
+                      {(thumbFile.file || thumbFile.thumbnailUrl) && (
+                        <PreviewImage
+                          file={thumbFile.file}
+                          objectFit={'contain'}
+                          style={{ 'max-width': `${rem(700)}`, 'min-width': `${rem(400)}`,  'min-height': `${rem(400)}`}}
+                          thumbLink={thumbFile.thumbnailUrl}
+                          className={`${s["admin-preview-image"]}`}
                         />
                       )}
                       <span className="inp_box">
@@ -281,6 +298,7 @@ const CreateBlogPage = () => {
                       {formErrors.thumbnailId && (
                         <ErrorMessage>{formErrors.thumbnailId}</ErrorMessage>
                       )}
+                      <div className="desc">* [추천 아티클]에 등록할 블로그는 가로 700 x 세로 400 이상의 썸네일 이미지가 권장됩니다.</div>
                     </label>
                   </div>
                 </div>

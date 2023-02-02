@@ -109,7 +109,7 @@ MyApp.getInitialProps = async (initialProps) => {
       const res_MEMBER_Dashboard = await getDataSSR(req, mypageApiUrl, token);
       const mypageData = res_MEMBER_Dashboard.data;
       // console.log('/api/members => ',memberData);
-      console.log('/api/mypage => ',mypageData);
+      // console.log('/api/mypage => ',mypageData);
       if(mypageData){
         memberDATA = {
           userType: USER_TYPE,
@@ -141,11 +141,13 @@ MyApp.getInitialProps = async (initialProps) => {
             recipeName: mypageData.mypageRepresentiveDogDto?.recipeName || null,
           },
           subscribe:{
+            // mypageDogDtoList => '구독 중인 반려견 레시피의 품절 알림'에 사용됨
+            // 마이페이지의 모든 강아지목록이 아닌, "현재 구독중인 강아지 목록" (api 객체명으로 인해 혼동할 필요 없음)
             subscribedDogs: mypageData.mypageDogDtoList?.map((dog)=>({
               dogName:dog.dogName,
               inStock: dog.inStock, // ! 구독상품 레시피의 재고유무
               recipeName: dog.recipeName
-            })) || [], // 마이페이지의 모든 강아지목록이 아닌, "현재 구독중인 강아지 목록" (api 객체명으로 인해 혼동할 필요 없음)
+            })) || [],
           }
         };
       }

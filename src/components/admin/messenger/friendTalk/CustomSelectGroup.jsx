@@ -1,42 +1,85 @@
-import React, { useEffect, useState } from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import CustomSelectForTwoSelects from '/src/components/admin/form/CustomSelectForTwoSelects';
+import {global_gradeType} from "/store/TYPE/gradeType";
+import calcedAgeList from "/util/func/calcedAgeList";
 
-const CustomSelectGroup = ({ setFormValues, groupOptions }) => {
-  const startName = groupOptions?.startName; // string
-  const endName = groupOptions?.endName; // string
-  const options = groupOptions?.options || [];
-
-  const [selectedGrade, setSelectedGrade] = useState();
-  const [gradeEndList, setGradeEndList] = useState(options);
-
-  useEffect(() => {
-    const start = selectedGrade && selectedGrade[startName].selectedIdx;
-    const end = options.length;
-    const filteredGradeOptions = options.splice(start, end);
-    setGradeEndList(filteredGradeOptions);
-    setFormValues((prevState) => ({
+const CustomSelectGroup = ({formValues, setFormValues, groupOptions}) => {
+  const {fromName, toName, options, optionType} = groupOptions;
+  
+  const [selectedFrom, setSelectedFrom] = useState( {[fromName]: {selectedIdx: null, value: null}} );
+  const [selectedTo, setSelectedTo] = useState( {[toName]: {selectedIdx: null, value: null}} );
+  const [selectedToOptions, setSelectedToOptions] = useState( options );
+  
+  useEffect( () => {
+    const fromValue = selectedFrom[fromName].value;
+    const toValue = selectedTo[toName].value;
+    regenerateSelectedToOptions();
+    setFormValues( (prevState) => ({
       ...prevState,
-      [startName]: { value: selectedGrade && selectedGrade[startName].value },
-    }));
-  }, [selectedGrade]);
-
-  if (!groupOptions || !gradeEndList.length) return;
-  // console.log(options)
-
+      [fromName]: fromValue,
+      [toName]: toValue || fromValue,
+    }) );
+    
+  }, [selectedFrom] );
+  
+  
+  const regenerateSelectedToOptions = () => {
+    const start = selectedFrom[fromName].selectedIdx;
+    const filteredToOptions = options.slice( start );
+    setSelectedToOptions( filteredToOptions );
+  
+    const originValue = selectedTo[toName].value;
+    const firstOptionIdxValue = filteredToOptions[0].value;
+  
+    updateSelectedToValue( originValue, firstOptionIdxValue );
+    
+  }
+  
+  
+  const updateSelectedToValue = useCallback(
+    (beforeValue, afterValue) => {
+      
+      const optionTypeArray = {
+        grade: global_gradeType,
+        birthYear: options.map( list => list.value )
+      }
+      
+      const optionArray = optionTypeArray[optionType];
+      
+      const beforeIdx = optionArray.indexOf( beforeValue );
+      const afterIdx = optionArray.indexOf( afterValue );
+      
+      const selectedValue = beforeIdx > afterIdx ? beforeValue : afterValue;
+      setSelectedTo( {[toName]: {selectedIdx: 0, value: selectedValue}} );
+    }, [] );
+  
+  
+  useEffect( () => {
+    setFormValues( prevState => ({
+      ...prevState,
+      [toName]: selectedTo[toName].value
+    }) );
+  }, [selectedTo] );
+  
+  
+  if ( !groupOptions || !selectedToOptions.length || !formValues ) return;
+  
   return (
     <>
       <CustomSelectForTwoSelects
-        name={startName}
-        id={startName}
+        value={formValues[fromName] || ''}
+        name={fromName}
+        id={fromName}
         options={options}
-        onChange={setSelectedGrade}
+        onChange={setSelectedFrom}
       />
-      <span style={{ margin: '0 10px' }}>~</span>
+      <span style={{margin: '0 10px'}}>~</span>
       <CustomSelectForTwoSelects
-        name={endName}
-        id={endName}
-        options={gradeEndList}
-        onChange={setFormValues}
+        value={formValues[toName] || formValues[fromName] || ''}
+        name={toName}
+        id={toName}
+        options={selectedToOptions}
+        onChange={setSelectedTo}
       />
     </>
   );

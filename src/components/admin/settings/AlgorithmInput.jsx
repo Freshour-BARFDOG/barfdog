@@ -52,7 +52,7 @@ const AlgorithmInput = ({ id, label, numberUnit, formValues, setFormValues, form
               value={formValues[id] === 0 ? '0' : formValues[id] || ''}
               onChange={onInputChangeHandler}
             />
-            <em className={s['numberUnit']}>{numberUnit}</em>
+            {/*<em className={s['numberUnit']}>{numberUnit}</em>*/}
             <em className="unit">%</em>
             {formErrors[id] && <ErrorMessage>{formErrors[id]}</ErrorMessage>}
           </div>

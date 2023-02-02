@@ -44,7 +44,10 @@
     }
   }
   input{
-    border:0; text-align: center;
+    border:0; 
+    text-align: center;
+    align-self: center;
+    display: flex;
     &::placeholder{color:var(--color-font-def)}
   }
 }

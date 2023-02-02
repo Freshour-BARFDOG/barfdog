@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import MypageWrapper from '/src/components/mypage/MypageWrapper';
 import Wrapper from '/src/components/common/Wrapper';
 import Layout from '/src/components/common/Layout';
@@ -13,6 +13,7 @@ import {useModalContext} from "/store/modal-context";
 import Modal_confirm from "/src/components/modal/Modal_confirm";
 import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 import Image from 'next/image';
+import ModalImage from "react-modal-image";
 
 export default function InquiryArticlePage({ data }) {
   // console.log(data);
@@ -23,7 +24,11 @@ export default function InquiryArticlePage({ data }) {
   const [isLoading, setIsLoading] = useState({});
   const [confirmModal, setConfirmModal] = useState( false );
   const [submitted, setSubmitted] = useState( false );
-  
+  const [showModal, setShowModal] = useState( false );
+
+  const handleShowModal = () => setShowModal(true);
+  const handleCloseModal = () => setShowModal(false);
+
   
   const onStartConfirm = ()=>{
     if(submitted) return onFailPostApiCallback();
@@ -114,18 +119,57 @@ export default function InquiryArticlePage({ data }) {
                   <div className={s['info-row-grid']}>
                     {info.questionImgDtoList.length > 0 &&
                     info.questionImgDtoList.map((img, i) => (
-                      <a key={`questionImage-${i}`} href={img.url} target="_blank" rel="noreferrer">
+                      // <a key={`questionImage-${i}`} href={img.url}>
+                      //   <Image
+                      //     src={img.url}
+                      //     objectFit="cover"
+                      //     layout="fill"
+                      //     alt="카드 이미지"
+                      //   />
+                      // </a>
+                      <button key={`questionImage-${i}`}>
+                        {/* <Image
+                          src={img.url}
+                          objectFit="cover"
+                          layout="fill"
+                          alt="카드 이미지"
+                        /> */}
+                        <ModalImage
+                          small={img.url}
+                          large={img.url}
+                          objectFit="contain"
+                          layout="fill"
+                          hideDownload={true}
+                          hideZoom={true}
+                        />;
+                      </button>
+                      ))
+                    }
+                    {showModal ? (info.questionImgDtoList.map((img, i) => (
+                      <button key={`questionImage-${i + 1}`}>
                         <Image
+                        onClick={()=> handleCloseModal(true)}
                           src={img.url}
                           objectFit="cover"
                           layout="fill"
                           alt="카드 이미지"
                         />
-                      </a>
-                      ))
-                    }
+                        {/* <div className={s.ImageModal} onClick={()=> handleCloseModal(true)}>
+                          <button onClick={()=> handleCloseModal(true)}>닫기</button>
+                          <Image
+                             src={img.url}
+                            objectFit="cover"
+                            layout="fill"
+                            // width={100}
+                            // height={100}
+                            alt="카드 이미지"
+                          />
+                        </div> */}
+                      </button>
+                      ))): null}
                   </div>
                 }
+                
                 </div>
               </div>
               {info.adminAnswer.length > 0 &&

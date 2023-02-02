@@ -56,7 +56,13 @@ $defaultCenter : 55%;
 .image {
   position: relative;
   width: 100%;
-  aspect-ratio: 1;
+  aspect-ratio: 1/1;
+}
+
+@supports not (aspect-ratio: 1/1) {
+  .image {
+    padding-top: 100%;
+  }
 }
 
 .btn-section {

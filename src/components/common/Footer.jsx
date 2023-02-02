@@ -123,7 +123,7 @@ export default function Footer() {
           <ul data-lang={'ko'}>
             <li>
               <span className={s.info_title}>상호:</span>
-              <span className={s.info_cont}>프레쉬아워</span>
+              <span className={s.info_cont}>주식회사 프레쉬아워</span>
             </li>
             <li>
               <span className={s.info_title}>대표:</span>
@@ -131,11 +131,11 @@ export default function Footer() {
             </li>
             <li>
               <span className={s.info_title}>사업자번호:</span>
-              <span className={s.info_cont}>486-18-01232</span>
+              <span className={s.info_cont}>351-87-02455</span>
             </li>
             <li>
               <span className={s.info_title}>통신판매신고번호:</span>
-              <span className={s.info_cont}>2020-충북충주-0634</span>
+              <span className={s.info_cont}>2022-충북충주-0578</span>
             </li>
             <li>
               <span className={s.info_title}>Email.</span>

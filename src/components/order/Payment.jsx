@@ -7,8 +7,10 @@ import Spinner from '/src/components/atoms/Spinner';
 import {calcOrdersheetPrices} from './calcOrdersheetPrices';
 import {useRouter} from 'next/router';
 import axios from 'axios';
-import {availablePaymentState} from "../../../util/func/availablePaymentState";
-import { paymethodFilter } from '../../../util/filter_iamport_paymethod';
+import {availablePaymentState} from "/util/func/availablePaymentState";
+import { paymethodFilter } from '/util/filter_iamport_paymethod';
+import {useDispatch} from "react-redux";
+import {orderAction, ORDER_STATES} from "/store/order-slice";
 
 export function Payment({
   info,
@@ -20,6 +22,7 @@ export function Payment({
 }) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const router = useRouter();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const jquery = document.createElement('script');
@@ -157,6 +160,7 @@ export function Payment({
       // console.log(res);
       
       if (res.isDone) {
+        await dispatch(orderAction.saveOrderState({orderState: ORDER_STATES.ORDERING, orderType: orderType, orderId: res.data.data.id}));
         if( orderType === 'general'){
           // 일반 주문 결제
           // res.data.data.id = 주문번호 id
@@ -220,12 +224,14 @@ export function Payment({
     // 결제 이슈를 보완하기 인하여 Api Request Data 추가를 위해 사용
     const callbackData = {
       discountReward: body.discountReward,
-      
+      orderId: id
     }
     IMP.request_pay(data, callback.bind(null, callbackData));
     
     /* 4. 결제 창 호출하기 */
     async function callback(callbackData, response) {
+  
+      await dispatch(orderAction.saveOrderState({orderState: ORDER_STATES.EXIT_ORDER, orderType: orderType, orderId: callbackData.orderId}));
       // 결제 이슈를 보완하기 인하여 Api Request Data 추가를 위해 사용
       const data = {
         discountReward: callbackData.discountReward
@@ -261,7 +267,7 @@ export function Payment({
           
         }else{
         // 결제 실패
-        const fail = await postObjData(`/api/orders/${id}/general/fail`);    
+        const fail = await postObjData(`/api/orders/${id}/general/fail`);
         console.log(fail);
         if(fail.isDone){
            // startPayment();
@@ -287,7 +293,7 @@ export function Payment({
     const randomStr = new Date().getTime().toString(36);
     const customUid = `customer_Uid_${randomStr}`;
     
-     /* 2. 결제 데이터 정의하기  TODO:kakaopay 실연동 가맹점코드(CID) 발급받으면 변경하기*/ 
+     /* 2. 결제 데이터 정의하기  TODO:kakaopay 실연동 가맹점코드(CID) 발급받으면 변경하기*/
     const data = {
       pg: form.paymentMethod === 'KAKAO_PAY'?'kakaopay.TCSUBSCRIP':'kcp_billing', // PG사
       pay_method: 'card', // 결제수단
@@ -305,13 +311,15 @@ export function Payment({
     // 결제 이슈를 보완하기 인하여 Api Request Data 추가를 위해 사용
     const callbackData = {
       discountReward: body.discountReward,
+      orderId: id
     
     }
     IMP.request_pay(data, callback.bind(null, callbackData));
     
     /* 4. 결제 창 호출하기 */
     async function callback(callbackData, response) {
-    
+
+      await dispatch(orderAction.saveOrderState({orderState: ORDER_STATES.EXIT_ORDER, orderType: orderType, orderId: callbackData.orderId}));
       console.log(response);
       const discountData = {
         discountReward: callbackData.discountReward,
@@ -333,12 +341,12 @@ export function Payment({
     
       const paymentResult = await axios
       .post(
-        `${window.location.origin}/api/iamportSubscribe`, 
+        `${window.location.origin}/api/iamportSubscribe`,
         data,
         {headers: {
           'Content-Type': 'application/json',}}
       )
-      .then((res) => { 
+      .then((res) => {
         console.log(res.data);
         console.log(
           '------------------------------------------------------------------ AXIOS > RESPONSE ------------------------------------------------------------------ ',

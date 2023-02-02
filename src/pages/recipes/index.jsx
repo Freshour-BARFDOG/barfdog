@@ -618,7 +618,7 @@ export function Swiper_card() {
 
   const swiperSettings_card = {
     className: `${s.swiper_card}`,
-    //loop: true,
+    loop: true,
     spaceBetween: 0,
     centeredSlides: true,
     loopAdditionalSlides: 5,
@@ -626,10 +626,10 @@ export function Swiper_card() {
     initialSlide: 1,
     cardsEffect: {
       slideShadows: false,
-      perSlideOffset: 5,
-      //perSlideRotate: 3,
+      perSlideOffset: 3,
+      perSlideRotate: 3,
 
-      perSlideOffset: 10,
+      // perSlideOffset: 10,
       // rotate: false,
       // perSlideRotate: 0
     },
@@ -652,20 +652,20 @@ export function Swiper_card() {
       modules={[EffectCards, Autoplay]}
       >
         <SwiperSlide className={s.swiper_card_box}>
-            <div className={s.swiper_sns_img}>
+            <i className={s.swiper_sns_img}>
               <Image
                 //src={require('/public/img/testBanner3.png')}
-                src={require('/public/img/recipes/recipes_top1.png')}
+                src={require('/public/img/recipes/recipes_top2.png')}
                 objectFit="cover"
                 width={488}
                 height={359}
                 alt="카드 이미지"
                 priority
               />
-            </div>
+            </i>
         </SwiperSlide>
         <SwiperSlide className={s.swiper_card_box}>
-            <div className={s.swiper_sns_img}>
+            <i className={s.swiper_sns_img}>
               <Image
                 src={require('/public/img/recipes/recipes_top1.png')}
                 objectFit="cover"
@@ -674,20 +674,20 @@ export function Swiper_card() {
                 alt="카드 이미지"
                 priority
               />
-            </div>
+            </i>
         </SwiperSlide>
         <SwiperSlide className={s.swiper_card_box}>
-            <div className={s.swiper_sns_img}>
+            <i className={s.swiper_sns_img}>
               <Image
                 //src={require('/public/img/recipe_ingredients.png')}
-                src={require('/public/img/recipes/recipes_top1.png')}
+                src={require('/public/img/recipes/recipes_top3.png')}
                 objectFit="cover"
                 width={488}
                 height={359}
                 alt="카드 이미지"
                 priority
               />
-            </div>
+            </i>
         </SwiperSlide>
       </Swiper>
     </div>

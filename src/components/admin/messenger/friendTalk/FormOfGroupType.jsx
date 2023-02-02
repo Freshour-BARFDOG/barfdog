@@ -1,11 +1,16 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import CustomSelectGroup from './CustomSelectGroup';
 import CustomRadio from '/src/components/admin/form/CustomRadio';
 import ToolTip from '/src/components/atoms/Tooltip';
 import calcedAgeList from '/util/func/calcedAgeList';
 import {global_areaType} from "/store/TYPE/areaType";
+import {gradeTypeOptions} from "/store/TYPE/gradeType";
+import ErrorMessage from "../../../atoms/ErrorMessage";
 
-const FormOfGroupType = ({ setFormValues }) => {
+
+
+
+const FormOfGroupType = ({formValues, setFormValues,formErrors}) => {
   return (
     <>
       <div className="cont_divider">
@@ -18,22 +23,19 @@ const FormOfGroupType = ({ setFormValues }) => {
           <div className="inp_section">
             <div className="inp_box">
               <CustomSelectGroup
+                formValues={formValues}
                 setFormValues={setFormValues}
                 groupOptions={{
-                  startName: 'gradeStart',
-                  endName: 'gradeEnd',
-                  options: [
-                    { label: '선택', value: '' },
-                    { label: '브론즈', value: 'BRONZE' },
-                    { label: '실버', value: 'SILVER' },
-                    { label: '골드', value: 'GOLD' },
-                    { label: '플래티넘', value: 'PLATINUM' },
-                    { label: '다이아', value: 'DIA' },
-                    { label: '더바프', value: 'THEBARF' },
-                  ],
+                  fromName: 'gradeStart',
+                  toName: 'gradeEnd',
+                  options: gradeTypeOptions(),
+                  optionType: 'grade'
                 }}
               />
             </div>
+            {(formErrors.gradeStart || formErrors.gradeEnd) && (
+              <ErrorMessage>{formErrors.gradeStart || formErrors.gradeEnd}</ErrorMessage>)
+            }
           </div>
         </div>
         <div className="cont_divider">
@@ -46,9 +48,10 @@ const FormOfGroupType = ({ setFormValues }) => {
             <div className="inp_section">
               <div className="inp_box">
                 <CustomRadio
+                  value={formValues.subscribe}
                   setValue={setFormValues}
-                  name="subscribeYN"
-                  idList={['subscribe-Y', 'subscrib-N']}
+                  name="subscribe"
+                  idList={['subscribe-Y', 'subscribe-N']}
                   labelList={['Y', 'N']}
                 />
               </div>
@@ -59,23 +62,25 @@ const FormOfGroupType = ({ setFormValues }) => {
           <div className="input_row">
             <div className="title_section fixedHeight">
               <label className="title" htmlFor="releaseTarget">
-                연령
+                출생연도
               </label>
-              <span style={{ marginLeft: '4px', position: 'relative', top: '-2px' }}>
-                <ToolTip message={'출생연도 기준'} />
-              </span>
             </div>
             <div className="inp_section">
               <div className="inp_box">
                 <CustomSelectGroup
+                  formValues={formValues}
                   setFormValues={setFormValues}
                   groupOptions={{
-                    startName: 'ageStart',
-                    endName: 'ageEnd',
-                    options: calcedAgeList(),
+                    fromName: 'birthYearFrom',
+                    toName: 'birthYearTo',
+                    options: calcedAgeList({typeofValue: 'string'}),
+                    optionType: 'birthYear'
                   }}
                 />
               </div>
+              {(formErrors.birthYearFrom || formErrors.birthYearTo) && (
+                <ErrorMessage>{formErrors.birthYearFrom || formErrors.birthYearTo}</ErrorMessage>)
+              }
             </div>
           </div>
         </div>
@@ -88,16 +93,10 @@ const FormOfGroupType = ({ setFormValues }) => {
             </div>
             <div className="inp_section">
               <div className="inp_box">
-                {/*<CustomRadio*/}
-                {/*  setValue={setFormValues}*/}
-                {/*  name="location"*/}
-                {/*  idList={['ALL', 'METRO', 'NON-METRO']}*/}
-                {/*  labelList={['전체', '수도권', '비수도권']}*/}
-                {/*/>*/}
                 <CustomRadio
                   setValue={setFormValues}
                   name="area"
-                  // value={formValues?.area}
+                  value={formValues.area}
                   idList={[global_areaType.ALL, global_areaType.METRO, global_areaType.NON_METRO]}
                   labelList={['전체', '수도권', '비수도권']}
                 />
@@ -115,8 +114,9 @@ const FormOfGroupType = ({ setFormValues }) => {
             <div className="inp_section">
               <div className="inp_box">
                 <CustomRadio
+                  value={formValues.longUnconnected}
                   setValue={setFormValues}
-                  name="unconnectedTerm"
+                  name="longUnconnected"
                   idList={['term-YES', 'term-NO']}
                   labelList={['Y', 'N']}
                 />

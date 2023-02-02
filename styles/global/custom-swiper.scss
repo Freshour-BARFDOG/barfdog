@@ -16,7 +16,6 @@ $browser-context:16;
   .swiper-pagination-bullet-active{
     opacity:1;
   }
-
 }
 
 
@@ -32,4 +31,15 @@ $browser-context:16;
   opacity: 0 !important;
   cursor: auto;
   pointer-events: none;
+}
+
+.swiper-slide-prev{
+  > i {
+    transform: translateX(-10%);
+  }
+}
+.swiper-slide-next{
+  > i {
+    transform: translateX(10%);
+  }
 }

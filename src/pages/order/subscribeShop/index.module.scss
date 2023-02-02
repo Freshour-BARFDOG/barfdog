@@ -36,7 +36,8 @@ section.regular_delivery {
         box-shadow: 0 0 rem(25) rgba(0, 0, 0, 0.15);
         .image {
           width: rem(260);
-          aspect-ratio: 0.928/1;
+          // aspect-ratio: 0.928/1;
+          aspect-ratio: 1/1;
         }
         .recipe_title {
           text-align: center;
@@ -194,11 +195,12 @@ section.regular_delivery {
   }
   .image {
     width: 100%;
-    padding: 0 rem(10);
+    // padding: 0 rem(10);
     box-sizing: border-box;
     > span{
       position:relative !important;
-      aspect-ratio:200/215 !important;
+      // aspect-ratio:200/215 !important;
+      aspect-ratio:1/1 !important;
     }
   }
   .row_1 {
