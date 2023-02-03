@@ -7,17 +7,17 @@ import popupWindow from "/util/func/popupWindow";
 
 export default function GradeInfoPopup() {
   const isMobile = useDeviceState().isMobile;
-
-  const imageLink = require(isMobile
-    ? '/public/img/gradePolicy_mobile.jpg'
-    : '/public/img/gradePolicy_pc.jpg');
-
+  
   return (
     <>
-      <MetaTitle title="등급정책" />
+      <MetaTitle title="등급정책"/>
       <main className={s.main}>
         <figure>
-          <Image alt={'등급정책'} objectFit={'contain'} layout={'fill'} src={imageLink} />
+          <Image alt={'등급정책'} objectFit={'contain'} layout={'fill'} src={
+            isMobile
+              ? '/img/gradePolicy_mobile.jpg'
+              : '/img/gradePolicy_pc.jpg'}
+          />
         </figure>
       </main>
     </>
