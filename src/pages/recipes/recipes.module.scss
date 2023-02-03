@@ -262,6 +262,11 @@ section.subscribe_discount { margin-bottom: rem(80);}
         max-width: rem(560);
         aspect-ratio: 1.333/1;
       }
+      @supports not (aspect-ratio: 1.333/1) {
+        .image {
+          padding-top: 73.206%;
+        }
+      }
       .gif {
         position: absolute;
         top: 0;
@@ -712,6 +717,11 @@ section.subscribe_discount { margin-bottom: rem(80);}
           max-width: rem(520);
           aspect-ratio: 1.498/1;
         }
+        @supports not (aspect-ratio: 1.498/1) {
+          .image {
+            padding-top: 64.798%;
+          }
+        }
       } 
     }
   }
@@ -839,6 +849,11 @@ section.subscribe_discount { margin-bottom: rem(80);}
       width: 100%;
       max-width: rem(760);
       aspect-ratio: 1.538/1;
+    }
+    @supports not (aspect-ratio: 1.538/1) {
+      .image {
+        padding-top: 42.32%;
+      }
     }
   }
 }

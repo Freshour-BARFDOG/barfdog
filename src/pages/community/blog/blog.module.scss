@@ -77,12 +77,22 @@ section.content_box {
       }
 
       //.box:nth-child(1) .image{aspect-ratio: 1}
-      .box:nth-child(2) .image{aspect-ratio: 1;}
+      .box:nth-child(2) .image{aspect-ratio: 1/1;}
+      @supports not (aspect-ratio: 1/1) {
+        .box:nth-child(2) .image {
+          padding-top: 100%;
+        }
+      }
       .image {
         width: 100%;
         aspect-ratio: 1.5/1;
         margin-bottom: rem(11);
         max-height: rem(420);
+      }
+      @supports not (aspect-ratio: 1.5/1) {
+        .image {
+          padding-top: 60.796%;
+        }
       }
     }
   }
@@ -210,6 +220,11 @@ section.content_box {
           aspect-ratio: 1/1;
           background-color: var(--color-bg);
           text-indent: rem(-9999);
+        }
+        @supports not (aspect-ratio: 1/1) {
+          .image {
+            padding-top: 100%;
+          }
         }
       }
     }

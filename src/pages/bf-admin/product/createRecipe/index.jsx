@@ -413,6 +413,7 @@ function CreateRecipePage() {
                             <ErrorMessage>{formErrors.surveyResult}</ErrorMessage>
                           )}
                         </div>
+                        <div className="desc">* 이미지 권장사이즈: 260 x 260(1:1 비율 권장)</div>
                       </label>
                     </div>
                   </div>
@@ -455,6 +456,7 @@ function CreateRecipePage() {
                             <ErrorMessage>{formErrors.recipeThumb}</ErrorMessage>
                           )}
                         </div>
+                        <div className="desc">* 이미지 권장사이즈: 320 x 320(1:1 비율 권장)</div>
                       </label>
                     </div>
                   </div>
