@@ -633,7 +633,7 @@ export function Swiper_card() {
       // rotate: false,
       // perSlideRotate: 0
     },
-    autoplay: {delay: 3500, disableOnInteraction: false},
+    autoplay: {delay: 2000, disableOnInteraction: false},
     modules: [EffectCards, Autoplay],
   };
 

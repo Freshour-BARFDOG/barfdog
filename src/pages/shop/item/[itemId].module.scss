@@ -36,7 +36,12 @@ section.tab_slide_box2{padding: 0 0 rem(130)}
       gap: rem(40);
       .left_box {
         .mainSwiper{
-          aspect-ratio: 1;
+          aspect-ratio: 1/1;
+        }
+        @supports not (aspect-ratio: 1/1) {
+          .mainSwiper {
+            padding-top: 100%;
+          }
         }
         position: relative;
         max-width: rem(560);
