@@ -12,8 +12,6 @@ import {MirrorTextOnHoverEvent} from "/util/func/MirrorTextOnHoverEvent";
 
 function RecipePage () {
   
-  const getListApiUrl = '/api/recipes';
-  const apiDataQueryString = 'recipeListResponseDtoList';
   const [isLoading, setIsLoading] = useState( {} );
   const [itemList, setItemList] = useState( [] );
   
@@ -29,8 +27,9 @@ function RecipePage () {
           ...prevState,
           fetching: true,
         }) );
-        const res = await getData( getListApiUrl );
-        const data = res.data._embedded[apiDataQueryString];
+        const apiUrl = '/api/recipes';
+        const res = await getData( apiUrl, 'admin' );
+        const data = res.data?._embedded?.recipeListResponseDtoList;
         setItemList( data );
       } catch (err) {
         console.error( err );
@@ -76,10 +75,10 @@ function RecipePage () {
                   <li className={s.table_th}>수정</li>
                   <li className={s.table_th}>삭제</li>
                 </ul>
-                {isLoading.fetching
-                  ? <Spinner/>
-                  : itemList.length
+                {itemList.length
                   ? <RecipeList items={itemList}/>
+                  : isLoading.fetching
+                  ? <AmdinErrorMessage loading={<Spinner/>}/>
                   : <AmdinErrorMessage text="조회된 데이터가 없습니다."/>
                 }
               </div>
