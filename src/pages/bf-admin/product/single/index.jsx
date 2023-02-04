@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import s from './singleItem.module.scss';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
@@ -9,6 +9,7 @@ import SearchSelect from '/src/components/admin/form/searchBar/SearchSelect';
 import SingleList from './SingleItemList';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import Spinner from '/src/components/atoms/Spinner';
+import {MirrorTextOnHoverEvent} from "/util/func/MirrorTextOnHoverEvent";
 
 const initalSearchValue = {
   itemType: 'ALL',
@@ -25,7 +26,11 @@ function SingleItemPage() {
   const [isLoading, setIsLoading] = useState({});
   const [searchValue, setSearchValue] = useState(initalSearchValue);
   const [pageInfo, setPageInfo] = useState({});
-
+  
+  useEffect( () => {
+    MirrorTextOnHoverEvent(window);
+  }, [itemList] );
+  
   const onResetSearchValues = () => {
     setSearchValue(initalSearchValue);
   };
@@ -97,7 +102,6 @@ function SingleItemPage() {
                 {itemList.length > 0 ? (
                   <SingleList
                     items={itemList}
-                    // onDeleteItem={onDeleteItem}
                   />
                 ) : (
                   <AmdinErrorMessage text="조회된 데이터가 없습니다." />

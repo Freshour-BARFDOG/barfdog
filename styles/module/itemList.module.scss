@@ -151,3 +151,19 @@ $color-tableHeader : #f1f2f4;
 .pagination-section {
   margin-top: rem(20);
 }
+
+
+
+.admin-preview-image{
+  img{
+    object-fit: cover !important;
+    position: absolute;
+  }
+
+  &.mobile {
+    img{
+      height: rem(220);
+      object-fit: cover !important;
+    }
+  }
+}

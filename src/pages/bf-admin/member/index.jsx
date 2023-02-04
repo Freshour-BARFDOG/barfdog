@@ -15,7 +15,7 @@ import { transformToday } from '/util/func/transformDate';
 import enterKey from '/util/func/enterKey';
 import {getDefaultPagenationInfo} from "/util/func/getDefaultPagenationInfo";
 import {global_searchDateType} from "/store/TYPE/searchDateType";
-import {MirrorTextOnHoverEvent} from "../../../../util/func/MirrorTextOnHoverEvent";
+import {MirrorTextOnHoverEvent} from "/util/func/MirrorTextOnHoverEvent";
 
 
 
@@ -27,10 +27,13 @@ const initialSearchValues = {
   to: transformToday(),
 };
 
-const getListApiUrl = '/api/admin/members';
-const searchPageSize = 10;
+
 
 function ManageUserPage() {
+  
+  const getListApiUrl = '/api/admin/members';
+  const searchPageSize = 10;
+  
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
   const [searchValue, setSearchValue] = useState(initialSearchValues);
@@ -40,7 +43,7 @@ function ManageUserPage() {
   
   useEffect( () => {
     MirrorTextOnHoverEvent( window );
-  }, [itemList] )
+  }, [itemList] );
   
   const pageInterceptor = useCallback((res, option={itemQuery: null}) => {
     // res = DUMMY__RESPONSE; // ! TEST
@@ -112,34 +115,18 @@ function ManageUserPage() {
                   <li className={s.table_th}>등급</li>
                   <li className={s.table_th}>이름</li>
                   <li className={s.table_th}>아이디</li>
-                  <li className={`${s.table_th}`}>연락처</li>
+                  <li className={s.table_th}>연락처</li>
                   <li className={s.table_th}>대표견명</li>
                   <li className={s.table_th}>정기구독여부</li>
                   <li className={s.table_th}>누적구매금액</li>
                   <li className={s.table_th}>장기미접속</li>
                 </ul>
-
-                {(() => {
-                  if (isLoading.fetching) {
-                    return (
-                      <>
-                        <Spinner />
-                      </>
-                    );
-                  } else if (!itemList.length) {
-                    return (
-                      <AmdinErrorMessage text="조회된 데이터가 없습니다." />
-                    );
-                  } else {
-                    return (
-                      <MemberList
-                        items={itemList}
-                        // setSelectedItems={setSelectedItemList}
-                        // selectedItems={selectedItemList}
-                      />
-                    );
-                  }
-                })()}
+                {itemList.length
+                  ? <MemberList items={itemList}/>
+                  : isLoading.fetching
+                  ? <AmdinErrorMessage loading={<Spinner />} />
+                  : <AmdinErrorMessage text="조회된 데이터가 없습니다." />
+                }
               </div>
             </div>
             <div className={s['pagination-section']}>

@@ -3,7 +3,7 @@
 
 
 
-export const Button_EditListOrder = ({ itemList, setEditListOrder }) => {
+export const Button_EditListOrder = ({ itemList, setEditListOrder, title = '순서편집' }) => {
   const onClickHandler = () => {
     if (itemList.length) {
       setEditListOrder(true);
@@ -16,7 +16,7 @@ export const Button_EditListOrder = ({ itemList, setEditListOrder }) => {
       className="admin_btn line basic_m"
       onClick={onClickHandler}
     >
-      순서편집
+      {title}
     </button>
   );
 };
