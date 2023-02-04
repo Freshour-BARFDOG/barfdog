@@ -16,3 +16,14 @@ export default function sorting(arr, key, dir = 'ascend') {
   
   return newArr;
 }
+export const sortByDate = (arr, dir = "asc") => {
+  if ( !Array.isArray( arr ) ) return null;
+  
+  return arr.sort( (a, b) => {
+    return dir === 'asc'
+      ? new Date( a ) - new Date( b )
+      : dir === 'desc'
+        ? new Date( b ) - new Date( a )
+        : arr;
+  } );
+};
