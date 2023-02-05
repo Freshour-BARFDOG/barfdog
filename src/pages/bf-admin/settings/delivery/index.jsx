@@ -205,7 +205,7 @@ function DeliverySettingPage() {
                         <input
                           id={`freeCondition`}
                           className={'text-align-right'}
-                     제     type="text"
+                          type="text"
                           data-input-type={'number, currency'}
                           value={formValues.freeCondition || ''}
                           onChange={onInputChangeHandler}
