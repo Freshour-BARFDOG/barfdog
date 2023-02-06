@@ -74,8 +74,10 @@ section.pagination-section{padding : rem(80) 0 rem(70) 0 }
     .select-box{
       select{
         width:rem(120);
+        height: rem(38);
         min-width: auto;
-
+        font-size: rem(16);
+        background-position-y: center;
       }
     }
   }

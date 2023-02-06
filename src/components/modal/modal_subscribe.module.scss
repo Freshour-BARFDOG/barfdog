@@ -125,6 +125,7 @@ $topLinkBannerHeight : rem(38);
       cursor:default;
     }
     .subtitle {
+      font-size: rem(18);
       font-weight: 500;
       margin-bottom:rem(21);
       letter-spacing: -0.02em;
@@ -132,6 +133,7 @@ $topLinkBannerHeight : rem(38);
        b{color: var(--color-primary04);}
     }
     .desc {
+      font-size: rem(16);
       font-weight: 400;
       color: var(--color-font-sub);
       cursor:default;

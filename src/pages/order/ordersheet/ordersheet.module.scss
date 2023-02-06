@@ -240,6 +240,7 @@ section.final_btn {
     grid-template-columns: rem(120) 1fr;
     // grid-template-rows: repeat(2, 1fr);
     row-gap: rem(10);
+    font-size: rem(16);
   }
 }
 
@@ -314,10 +315,14 @@ section.final_btn {
         button{
           height: 100%;
           display: flex; width: 100%;
-          .btn{width: 100%; padding:0;
-            height: 100%; display: flex;
+          .btn{
+            width: 100%; 
+            height: 100%; 
+            padding:0;
+            display: flex;
             align-items: center;
             justify-content: center;
+            font-size: rem(16);
           }
         }
       }
@@ -529,6 +534,7 @@ section.final_btn {
           width: 100%;
           height: $inputHeight;
           padding-right: rem(20);
+          font-size: rem(16);
         }
 
         pre {
@@ -539,6 +545,7 @@ section.final_btn {
 
       button{
         min-width: rem(105);
+        font-size: rem(16);
       }
     }
 

@@ -98,10 +98,12 @@ $input-height: rem(44);
       width: 100%;
       height: $input-height;
       padding: rem(8) rem(16);
+      font-size: rem(15);
       &[disabled]{
         background-color: var(--color-bg-02);
         color: var(--color-font-sub2);
         cursor: default;
+        font-size: rem(15);
       }
     }
     ::placeholder {

@@ -32,6 +32,7 @@
     input{width: 100% !important;}
   }
   input.focus-underline {
+    font-size: rem(16);
     border: {
       top: 0 !important;
       left: 0 !important;
@@ -155,6 +156,15 @@
   align-items: center;
   justify-content: space-between;
   gap: rem(20);
+  font-size: rem(16);
+
+  > li{
+    > div{
+      > input{
+        font-size: rem(16);
+      }
+    }
+  }
 }
 
 .dog_choice {
@@ -349,7 +359,10 @@
 // * ------- Custom Input 공통 ------ *
 .inputRadio-wrap {
   text-align: center;
-  label{cursor: pointer}
+  label{
+    cursor: pointer;
+    font-size: rem(16);
+  }
 }
 .inputRadio {
   cursor: pointer;

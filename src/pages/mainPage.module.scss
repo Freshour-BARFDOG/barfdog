@@ -193,6 +193,7 @@ section.sns {
   }
 
   .desc{color:#717171;
+    font-size: rem(16);
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp:3;
@@ -222,6 +223,7 @@ section.sns {
     
   .recipe_btn{
     color: #ca1010;
+    font-size: rem(14);
     font-weight: bold;
     text-align: center;
     line-height: rem(35);
@@ -347,18 +349,20 @@ section.sns {
 
     .leftbox {
       display: inline-block;
-
+      align-self: center;
     .barfgood_textbox{
-      margin-top: rem(40);
+      // margin-top: rem(40);
       width: 100%;
     }
 
       h1 {
+        font-size: rem(28);
         top: rem(45);
         font-weight: bold;
       }
 
       p {
+        font-size: rem(16);
         margin-top: rem(40);
         top: rem(165);
         width: rem(350);
@@ -376,7 +380,8 @@ section.sns {
       .barfood1 {
         width: rem(560);
         height: rem(456);
-        display: block;
+        display: flex;
+        align-items: center;
       }
       .barfood2 {
         width: rem(335);
@@ -548,7 +553,8 @@ section.sns {
         left: 50%;
         transform: translateX(-50%);
         aspect-ratio: 1.009615384615385/1;
-        max-width: rem(525);
+        // max-width: rem(525);
+        max-width: 525px;
         width: 100%;
         margin: 0 auto;
         background-image: url("../.././public/img/halftest_harf.png");
@@ -898,6 +904,7 @@ section.sns {
       text-align: center;
       word-break: keep-all;
       height: 100%;
+      font-size: rem(16);
     }
   }
 
@@ -988,9 +995,11 @@ section.sns {
     > p {
       padding: rem(12) 0 rem(77);
       color: #636363;
+      font-size: rem(16);
     }
   }
-
+  .swiper_sns_box{
+  }
   a {
     width: 100%;
     height: 100%;

@@ -91,7 +91,7 @@ export default function Header () {
                 {mypageState.depth === 1 ? (
                   <Link href="/" passHref>
                     <a>
-                      <Icon_Home/>
+                      <Icon_Home />
                     </a>
                   </Link>
                 ) : (

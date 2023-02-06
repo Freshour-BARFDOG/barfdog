@@ -145,7 +145,7 @@ export default function InvitePage() {
                 <br />
                 친구가 첫 주문하면 <span>나한테도 3,000 포인트</span> 선물을 드립니다!
                 <br/>
-                <em style={{fontSize:'12px'}}>( 추천코드는 계정 당 1회 입력할 수 있습니다. )</em>
+                <em>( 추천코드는 계정 당 1회 입력할 수 있습니다. )</em>
               </div>
             </section>
 

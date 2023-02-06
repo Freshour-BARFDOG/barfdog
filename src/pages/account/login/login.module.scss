@@ -60,6 +60,7 @@ $browser-context: 16;
   .input__title{
     padding-left: rem(2);
     margin-bottom: rem(5);
+    font-size: rem(16);
   }
   label{
     display: inline-block;
@@ -73,7 +74,7 @@ $browser-context: 16;
     height: rem(50);
     border: rem(1) solid #ddd;
     outline:none;
-
+    font-size: rem(16);
   }
 }
 
@@ -194,6 +195,7 @@ $browser-context: 16;
 .easylogin {
   text-align: center;
   color: var(--color-font-medium);
+  font-size: rem(15);
 }
 
 .login_sns {
