@@ -1,101 +1,132 @@
 import s from './popup.module.scss';
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
-import axios from 'axios';
-import axiosConfig from '/src/pages/api/axios.config';
 import PopupList from './PopupList';
-import AdminBtn_moveToPage from '@src/components/atoms/AdminBtn_moveToPage';
-import { getData } from '/src/pages/api/reqData';
+import AdminBtn_moveToPage from '/src/components/atoms/AdminBtn_moveToPage';
+import {deleteData, getData, putObjData} from '/src/pages/api/reqData';
 import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
 import Spinner from '/src/components/atoms/Spinner';
 import sorting from "/util/func/sorting";
+import {MirrorTextOnHoverEvent} from "/util/func/MirrorTextOnHoverEvent";
+import {useModalContext} from "/store/modal-context";
+import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 
 
 function PopupIndexPage() {
-  const getFormValuesApiUrl = `/api/banners/popup`;
+  
+  
+  const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
+  
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
   const [orderEditMode, setOrderEditMode] = useState(false);
-  const [fetchingData, setFetchingData] = useState(false);
 
-  // useEffect(() => {
-  //   let sortedList = sorting(itemList, 'leakedOrder');
-  //   setItemList(sortedList)
-  // }, [itemList]);
-
+  
+  useEffect( () => {
+    MirrorTextOnHoverEvent(window);
+  }, [itemList] );
 
   useEffect(() => {
-    (async () => {
-      try {
-        setIsLoading((prevState) => ({
-          ...prevState,
-          fetching: true,
-        }));
-        const res = await getData(getFormValuesApiUrl);
-        const DATA = res.data._embedded.popupBannerListResponseDtoList;
-        let sortedList = sorting(DATA, 'leakedOrder');
-        setItemList(sortedList)
-        console.log(res);
-      } catch (err) {
-        console.error(err);
-        alert('데이터를 가져올 수 없습니다.');
+    getItemList();
+  }, []);
+  
+  
+  const getItemList = useCallback( () => (async () => {
+    setIsLoading( (prevState) => ({
+      ...prevState,
+      fetching: true,
+    }) );
+    try {
+      const apiUrl = "/api/banners/popup";
+      const res = await getData( apiUrl, "admin" );
+      // console.log( res );
+      if ( res.status === 200 && res.data?._embedded ) {
+        const data = res.data._embedded.popupBannerListResponseDtoList;
+        const sortedList = data.length ? sorting( data, "leakedOrder" ) : [];
+        setItemList( sortedList );
       }
-      setIsLoading((prevState) => ({
+    } catch (err) {
+      mct.alertShow( "서버 통신장애 발생" );
+      console.error( err );
+    } finally {
+      setIsLoading( (prevState) => ({
         ...prevState,
         fetching: false,
+      }) );
+    }
+  })(), [] );
+  
+  
+  const updateLeakedOrderHandler = useCallback( async (url) => {
+    try {
+      setIsLoading( (prevState) => ({
+        ...prevState,
+        editOrder: true
+      }) );
+      const data = ""; // ! PutData : 빈값 보내기
+      const res = await putObjData( url, data );
+      // console.log( res );
+      if ( res.isDone ) {
+        await getItemList();
+      } else {
+        mct.alertShow( "순서 변경에 실패하였습니다.\n" + err );
+      }
+    } catch (err) {
+      mct.alertShow( "서버 통신장애 발생" );
+      console.error( err )
+    } finally {
+      setIsLoading( (prevState) => ({
+        ...prevState,
+        editOrder: false
+      }) );
+    }
+  }, [] );
+  
+  
+  
+  const onDeleteItem = useCallback(async (apiUrl) => {
+    try {
+      setIsLoading((prevState)=>({
+        ...prevState,
+        fetching: true
       }));
-    })();
-  }, [fetchingData]);
-
-
-  const onStartEditMode = () => {
-    setOrderEditMode(true);
+      const res = await deleteData( apiUrl );
+      console.log( res )
+      if ( res.isDone ) {
+        mct.alertShow(`배너가 정상적으로 삭제되었습니다.`, onSuccessCallback);
+      } else {
+        mct.alertShow( '삭제에 실패하였습니다.' );
+      }
+    } catch (err) {
+      mct.alertShow("서버 통신 장애 발생");
+      console.error(err);
+    } finally {
+      setIsLoading((prevState)=>({
+        ...prevState,
+        fetching: false
+      }));
+    }
+    
+    
+  },[] );
+  
+  const onSuccessCallback = () => {
+    window.location.reload();
   };
 
-  const onEndEditMode = () => {
-    setOrderEditMode(false);
-  };
-
-
-
-  const BtnEditListOrder = () => (
-    <button
-      type="button"
-      id="edit_order"
-      className="admin_btn line basic_m"
-      onClick={onStartEditMode}
-    >
-      순서편집
-    </button>
-  );
-
-  const BtnSave = () => (
-    <button
-      type="button"
-      id="set_order"
-      className="admin_btn line basic_m point"
-      onClick={onEndEditMode}
-    >
-      닫기
-    </button>
-  );
+  
 
   return (
     <>
-      <MetaTitle title="팝업 관리" admin={true} />
+      <MetaTitle title="팝업" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
           <div className="title_main">
             <h1>
-              팝업 관리
-              {isLoading.fetching && (
-                <Spinner
-                  style={{ color: 'var(--color-main)', width: '20', height: '20' }}
-                  speed={0.6}
-                />
-              )}
+              팝업
             </h1>
           </div>
           <section className="cont">
@@ -110,8 +141,23 @@ function PopupIndexPage() {
                 />
               </div>
               <div className="controls cont-left">
-                <BtnEditListOrder />
-                {orderEditMode && <BtnSave />}
+                <button
+                  type="button"
+                  id="edit_order"
+                  className="admin_btn line basic_m"
+                  onClick={() => setOrderEditMode(true)}
+                >
+                  {isLoading.fetching ? <Spinner/> : "순서편집"}
+                </button>
+                {orderEditMode &&
+                  <button
+                  type="button"
+                  id="set_order"
+                  className="admin_btn line basic_m point"
+                  onClick={() => setOrderEditMode(false)}
+                >
+                  닫기
+                </button>}
               </div>
             </div>
             <div className={`${s.cont_viewer}`}>
@@ -124,20 +170,23 @@ function PopupIndexPage() {
                   <li className={s.table_th}>수정</li>
                   <li className={s.table_th}>삭제</li>
                 </ul>
-                {itemList.length ? (
-                  <PopupList
+                {itemList.length
+                  ? <PopupList
                     items={itemList}
                     orderEditMode={orderEditMode}
-                    onUpdateList={setFetchingData}
+                    onEditLeakedOrder={updateLeakedOrderHandler}
+                    onDeleteItem={onDeleteItem}
                   />
-                ) : (
-                  <AmdinErrorMessage text="조회된 데이터가 없습니다." />
-                )}
+                  : isLoading.fetching
+                  ? <AmdinErrorMessage loading={<Spinner />} />
+                  : <AmdinErrorMessage text="조회된 데이터가 없습니다." />
+                }
               </div>
             </div>
           </section>
         </AdminContentWrapper>
       </AdminLayout>
+      {hasAlert && <Modal_global_alert background/>}
     </>
   );
 }

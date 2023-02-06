@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import s from './blog.module.scss';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
@@ -7,9 +7,9 @@ import BannerList from './BlogList';
 import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
 import AdminBtn_moveToPage from '/src/components/atoms/AdminBtn_moveToPage';
 import Modal_AdminRecommendArticle from '/src/components/modal/Modal_AdminRecommendArticle';
-import Button_acceptClickEvent from '/src/components/atoms/Button_acceptClickEvent';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import Spinner from '/src/components/atoms/Spinner';
+import {MirrorTextOnHoverEvent} from "/util/func/MirrorTextOnHoverEvent";
 
 function BlogIndexPage() {
   const pageSize = 10;
@@ -17,6 +17,10 @@ function BlogIndexPage() {
   const [itemList, setItemList] = useState([]);
   const [isLoading, setIsLoading] = useState({});
   const [activeModal, setActiveModal] = useState(false);
+  
+  useEffect( () => {
+    MirrorTextOnHoverEvent(window);
+  }, [itemList] );
 
   const onShowRecommendArticleModal = async (returnVal) => {
     setActiveModal(returnVal);
@@ -30,12 +34,6 @@ function BlogIndexPage() {
           <div className="title_main">
             <h1>
               블로그 관리
-              {isLoading.fetching && (
-                <Spinner
-                  style={{ color: 'var(--color-main)', width: '20', height: '20' }}
-                  speed={0.6}
-                />
-              )}
             </h1>
           </div>
           <section className="cont">
@@ -70,11 +68,12 @@ function BlogIndexPage() {
                   <li className={s.table_th}>수정</li>
                   <li className={s.table_th}>삭제</li>
                 </ul>
-                {itemList.length === 0 ? (
-                  <AmdinErrorMessage text="조회된 데이터가 없습니다." />
-                ) : (
-                  <BannerList items={itemList} setItemList={setItemList} />
-                )}
+                {itemList.length
+                  ? <BannerList items={itemList} setItemList={setItemList} />
+                  : isLoading.fetching
+                    ? <AmdinErrorMessage loading={<Spinner />} />
+                    : <AmdinErrorMessage text="조회된 데이터가 없습니다." />
+                }
               </div>
             </div>
             <div className={s['pagination-section']}>

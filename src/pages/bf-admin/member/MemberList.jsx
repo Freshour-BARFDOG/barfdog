@@ -1,11 +1,19 @@
 import Link from "next/link";
 import s from "./member.module.scss";
 import popupWindow from "@util/func/popupWindow";
-import transformLocalCurrency from "../../../../util/func/transformLocalCurrency";
+import transformLocalCurrency from "/util/func/transformLocalCurrency";
 
-
-
-
+export default function MemberList({items}) {
+  if (!items || !items.length) return;
+  
+  return (
+    <ul className="table_body">
+      {items.map((item) => (
+        <ItemList key={`item-${item.id}`} index={item.id} item={item} />
+      ))}
+    </ul>
+  );
+}
 
   const ItemList = ({ item }) => {
     
@@ -46,7 +54,7 @@ import transformLocalCurrency from "../../../../util/func/transformLocalCurrency
         </span>
         <span>{DATA.grade}</span>
         <span>{DATA.name}</span>
-        <span className={` ${s["text-transform-ellipsis"]}`}>{DATA.email}</span>
+        <span>{DATA.email}</span>
         <span>{DATA.phoneNumber}</span>
         <span>{DATA.dogName}</span>
         <span>{DATA.subscribe}</span>
@@ -55,17 +63,3 @@ import transformLocalCurrency from "../../../../util/func/transformLocalCurrency
       </li>
     );
   };
-
-
-
-export default function MemberList({items}) {
-  if (!items || !items.length) return;
-
-  return (
-    <ul className="table_body">
-      {items.map((item) => (
-        <ItemList key={`item-${item.id}`} index={item.id} item={item} />
-      ))}
-    </ul>
-  );
-}

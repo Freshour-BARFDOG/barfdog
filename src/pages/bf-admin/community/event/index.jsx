@@ -1,39 +1,32 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import s from "./event.module.scss";
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import AdminLayout from "/src/components/admin/AdminLayout";
-import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
-import AdminBtn_moveToPage from "@src/components/atoms/AdminBtn_moveToPage";
-import AmdinErrorMessage from "@src/components/atoms/AmdinErrorMessage";
-import Pagination from "@src/components/atoms/Pagination";
+import {AdminContentWrapper} from "/src/components/admin/AdminWrapper";
+import AdminBtn_moveToPage from "/src/components/atoms/AdminBtn_moveToPage";
+import AmdinErrorMessage from "/src/components/atoms/AmdinErrorMessage";
 import EventList from "./EventList";
 import PaginationWithAPI from "/src/components/atoms/PaginationWithAPI";
-import Spinner from "../../../../components/atoms/Spinner";
+import Spinner from "/src/components/atoms/Spinner";
+import {MirrorTextOnHoverEvent} from "/util/func/MirrorTextOnHoverEvent";
 
 
-
-
-
-
-function EventNoticePage() {
+function EventNoticePage () {
   const getListApiUrl = '/api/admin/events';
-  const [itemList, setItemList] = useState([]);
-  const [isLoading, setIsLoading] = useState({});
-  console.log(itemList);
+  const [itemList, setItemList] = useState( [] );
+  const [isLoading, setIsLoading] = useState( {} );
+  useEffect( () => {
+    MirrorTextOnHoverEvent( window );
+  }, [itemList] );
+  
   return (
     <>
-      <MetaTitle title="이벤트 관리" admin={true} />
+      <MetaTitle title="이벤트 관리" admin={true}/>
       <AdminLayout>
         <AdminContentWrapper>
           <div className="title_main">
             <h1>
               이벤트 관리
-              {isLoading.fetching && (
-                <Spinner
-                  style={{ color: 'var(--color-main)', width: '20', height: '20' }}
-                  speed={0.6}
-                />
-              )}
             </h1>
           </div>
           <div className="cont">
@@ -58,11 +51,12 @@ function EventNoticePage() {
                   <li className={s.table_th}>수정</li>
                   <li className={s.table_th}>삭제</li>
                 </ul>
-                {itemList.length ? (
-                  <EventList items={itemList} setItemList={setItemList} />
-                ) : (
-                  <AmdinErrorMessage text="조회된 데이터가 없습니다." />
-                )}
+                {itemList.length
+                  ? <EventList items={itemList} setItemList={setItemList}/>
+                  : isLoading.fetching
+                    ? <AmdinErrorMessage loading={<Spinner/>}/>
+                    : <AmdinErrorMessage text="조회된 데이터가 없습니다."/>
+                }
               </div>
             </div>
             <div className={s["pagination-section"]}>

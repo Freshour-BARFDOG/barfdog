@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import s from './recipe.module.scss';
 import AdminLayout from "/src/components/admin/AdminLayout";
-import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
+import {AdminContentWrapper} from "/src/components/admin/AdminWrapper";
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import AmdinErrorMessage from "/src/components/atoms/AmdinErrorMessage";
 import RecipeList from "./RecipeList";
@@ -10,55 +10,47 @@ import {getData} from "/src/pages/api/reqData";
 import {MirrorTextOnHoverEvent} from "/util/func/MirrorTextOnHoverEvent";
 
 
-
-
-
-
-
-function RecipePage() {
+function RecipePage () {
   
-  const getListApiUrl = '/api/recipes';
-  const apiDataQueryString = 'recipeListResponseDtoList';
-  const [isLoading, setIsLoading] = useState({});
-  const [itemList, setItemList] = useState([]);
+  const [isLoading, setIsLoading] = useState( {} );
+  const [itemList, setItemList] = useState( [] );
   
   useEffect( () => {
-    MirrorTextOnHoverEvent(window);
+    MirrorTextOnHoverEvent( window );
   }, [itemList] );
   
-
+  
   useEffect( () => {
     (async () => {
       try {
-        setIsLoading((prevState) => ({
+        setIsLoading( (prevState) => ({
           ...prevState,
           fetching: true,
-        }));
-        const res = await getData(getListApiUrl);
-        const data = res.data._embedded[apiDataQueryString];
-        setItemList(data);
+        }) );
+        const apiUrl = '/api/recipes';
+        const res = await getData( apiUrl, 'admin' );
+        const data = res.data?._embedded?.recipeListResponseDtoList;
+        setItemList( data );
       } catch (err) {
-        console.error(err);
-        alert('데이터를 가져올 수 없습니다.');
+        console.error( err );
+        alert( '데이터를 가져올 수 없습니다.' );
       }
-      setIsLoading((prevState) => ({
+      setIsLoading( (prevState) => ({
         ...prevState,
         fetching: false,
-      }));
+      }) );
     })();
   }, [] );
   
   
-
   return (
     <>
-      <MetaTitle title="레시피 관리" admin={true} />
+      <MetaTitle title="레시피 관리" admin={true}/>
       <AdminLayout>
         <AdminContentWrapper>
           <div className="title_main">
             <h1>
               레시피 관리
-              {isLoading.fetching && <Spinner />}
             </h1>
           </div>
           <section className="cont">
@@ -83,13 +75,12 @@ function RecipePage() {
                   <li className={s.table_th}>수정</li>
                   <li className={s.table_th}>삭제</li>
                 </ul>
-                {itemList.length ? (
-                  <RecipeList
-                    items={itemList}
-                  />
-                ) : (
-                  <AmdinErrorMessage text="조회된 데이터가 없습니다." />
-                )}
+                {itemList.length
+                  ? <RecipeList items={itemList}/>
+                  : isLoading.fetching
+                  ? <AmdinErrorMessage loading={<Spinner/>}/>
+                  : <AmdinErrorMessage text="조회된 데이터가 없습니다."/>
+                }
               </div>
             </div>
           </section>

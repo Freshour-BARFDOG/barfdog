@@ -1,9 +1,14 @@
-$browser-context: 16;
-@function rem($px, $context: $browser-context) {
-  @return #{$px / $context}rem;
-}
+@import '/styles/global/rem';
 
 #main {
+  .main-title{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .date{
+      font-size: rem(13)
+    }
+  }
   h2.title {
     font-size: rem(18);
     font-weight: 500;

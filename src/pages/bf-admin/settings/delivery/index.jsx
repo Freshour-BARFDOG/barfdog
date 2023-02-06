@@ -26,7 +26,7 @@ function DeliverySettingPage() {
   const getFormValuesApiUrl = `/api/admin/setting`;
   const postFormValuesApiUrl = `/api/admin/setting`;
   const mct = useModalContext();
-  const [modalMessage, setModalMessage] = useState('');
+  const hasAlert = mct.hasAlert;
   const [settingModifiedDate, setSettingModifiedDate] = useState('');
   const [isLoading, setIsLoading] = useState({});
   const [formValues, setFormValues] = useState({});
@@ -106,7 +106,7 @@ function DeliverySettingPage() {
   
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (isSubmitted) return; // ! IMPORTANT : submit 이후 enterKey event로 trigger되는 중복submit 방지
+    if (isSubmitted) return window.location.reload();
     let convertedFormValues = {};
     for (const key in formValues) {
       const val = formValues[key];
@@ -115,50 +115,43 @@ function DeliverySettingPage() {
         [key]: key === 'freeCondition' || key === 'price' ? transformClearLocalCurrency(val) : val,
       }
     }
-    console.log('formValues: ',formValues);
-    console.log('convertedFormValues: ',convertedFormValues);
     const errObj = validate(convertedFormValues);
     setFormErrors(errObj);
     
     const isPassed = valid_hasFormErrors(errObj);
-    const confirmMessage =
-      '사이트 전체 배송비 정책이 변경됩니다. 정말 변경하시겠습니까?';
-    if (!confirm(confirmMessage)) return;
+    if (!isPassed) return mct.alertShow('유효하지 않은 항목이 있습니다.');
+    
+    if (!confirm('사이트 배송비 정책이 변경됩니다. 정말 변경하시겠습니까?')) return;
     
     try {
       setIsLoading((prevState) => ({
         ...prevState,
         submit: true,
       }));
-      if (isPassed) {
-        const res = await putObjData(postFormValuesApiUrl, convertedFormValues);
-        console.log(res);
-        if (res.isDone) {
-          onShowModalHandler('사이트 설정이 성공적으로 저장되었습니다.');
-          setIsSubmitted(true);
-        } else {
-          alert(res.error, '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.');
-        }
+      
+      const res = await putObjData(postFormValuesApiUrl, convertedFormValues);
+      console.log(res);
+      if (res.isDone) {
+        mct.alertShow('사이트 설정이 성공적으로 저장되었습니다.', onSuccessCallback);
+        setIsSubmitted(true);
       } else {
-        alert('유효하지 않은 항목이 있습니다.');
+        mct.alertShow('데이터 전송에 실패하였습니다.');
       }
+      
     } catch (err) {
-      alert('API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.');
-      console.error('API통신 오류 : ', err);
+      mct.alertShow('API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.');
+      console.error(err);
+    } finally {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        submit: false,
+      }));
     }
-    setIsLoading((prevState) => ({
-      ...prevState,
-      submit: false,
-    }));
+    
   };
   
-  const onShowModalHandler = (message) => {
-    mct.alertShow();
-    setModalMessage(message);
-  };
   
-  const onGlobalModalCallback = () => {
-    mct.alertHide();
+  const onSuccessCallback = () => {
     window.location.reload();
   };
 
@@ -169,9 +162,8 @@ function DeliverySettingPage() {
         <AdminContentWrapper id={s.main}>
           <div className="title_main">
             <h1 className={s['main-title']}>
-              <span>배송정책 설정<Tooltip message={`- 배송정책 수정일과 연동되어있습니다.`} wordBreaking={true} width={'300px'}/>
-                {isLoading.fetching && <Spinner />}</span>
-              <span className={s.date}>최종수정일: {settingModifiedDate}</span>
+              배송정책 설정<Tooltip message={`- 배송정책 수정일과 연동되어있습니다.`} wordBreaking={true} width={'300px'}/>
+              {isLoading.fetching ? <Spinner /> : <span className={s.date}>최종수정일: {settingModifiedDate}</span>}
             </h1>
           </div>
           <form action="/" method="post">
@@ -234,7 +226,7 @@ function DeliverySettingPage() {
           </form>
         </AdminContentWrapper>
       </AdminLayout>
-      <Modal_global_alert message={modalMessage} onClick={onGlobalModalCallback} background />
+      {hasAlert && <Modal_global_alert background/>}
     </>
   );
 }

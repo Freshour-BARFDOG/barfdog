@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import s from "./notice.module.scss";
 import MetaTitle from "/src/components/atoms/MetaTitle";
 import AdminLayout from "/src/components/admin/AdminLayout";
 import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
-import AdminBtn_moveToPage from "@src/components/atoms/AdminBtn_moveToPage";
-import AmdinErrorMessage from "@src/components/atoms/AmdinErrorMessage";
+import AdminBtn_moveToPage from "/src/components/atoms/AdminBtn_moveToPage";
+import AmdinErrorMessage from "/src/components/atoms/AmdinErrorMessage";
 import NoticeList from "./NoticeList";
 import PaginationWithAPI from "/src/components/atoms/PaginationWithAPI";
 import Spinner from "/src/components/atoms/Spinner";
+import {MirrorTextOnHoverEvent} from "/util/func/MirrorTextOnHoverEvent";
 
 
 
@@ -17,20 +18,16 @@ function NoticeIndexPage() {
   const getListApiUrl = '/api/admin/notices';
   const [itemList, setItemList] = useState([]);
   const [isLoading, setIsLoading] = useState({});
-  // console.log(itemList);
+  useEffect( () => {
+    MirrorTextOnHoverEvent(window);
+  }, [itemList] );
   return (
     <>
       <MetaTitle title="공지사항 관리" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
           <div className="title_main">
-            <h1>공지사항 관리
-              {isLoading.fetching && (
-                <Spinner
-                  style={{ color: 'var(--color-main)', width: '20', height: '20' }}
-                  speed={0.6}
-                />
-              )}</h1>
+            <h1>공지사항 관리</h1>
           </div>
           <div className="cont">
             <div className="cont_header clearfix">
@@ -54,11 +51,12 @@ function NoticeIndexPage() {
                   <li className={s.table_th}>수정</li>
                   <li className={s.table_th}>삭제</li>
                 </ul>
-                {itemList.length ? (
-                  <NoticeList items={itemList} setItemList={setItemList} />
-                ) : (
-                  <AmdinErrorMessage text="조회된 데이터가 없습니다." />
-                )}
+                {itemList.length
+                  ? <NoticeList items={itemList} setItemList={setItemList} />
+                  : isLoading.fetching
+                    ? <AmdinErrorMessage loading={<Spinner />} />
+                    : <AmdinErrorMessage text="조회된 데이터가 없습니다." />
+                }
               </div>
             </div>
             <div className={s['pagination-section']}>
@@ -72,4 +70,3 @@ function NoticeIndexPage() {
 }
 
 export default NoticeIndexPage;
-

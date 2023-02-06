@@ -103,20 +103,12 @@ function RewardListPage() {
                   <li className={s.table_th}>회원이름</li>
                   <li className={s.table_th}>아이디</li>
                 </ul>
-  
-                {(() => {
-                  if (isLoading.fetching) {
-                    return (<><Spinner/></>);
-                  } else if (!itemList.length) {
-                    return <AmdinErrorMessage text="조회된 데이터가 없습니다." />;
-                  } else {
-                    return (
-                      <RewardList
-                        items={itemList}
-                      />
-                    );
-                  }
-                })()}
+                {itemList.length
+                  ? <RewardList items={itemList}/>
+                  : isLoading.fetching
+                  ? <AmdinErrorMessage loading={<Spinner />} />
+                  : <AmdinErrorMessage text="조회된 데이터가 없습니다." />
+                }
               </div>
             </div>
             <div className={s['pagination-section']}>

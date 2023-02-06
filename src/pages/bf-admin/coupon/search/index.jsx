@@ -13,7 +13,8 @@ import Spinner from '/src/components/atoms/Spinner';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import Tooltip from '/src/components/atoms/Tooltip';
 import { global_couponType } from '/store/TYPE/couponType';
-import {getDefaultPagenationInfo} from "../../../../../util/func/getDefaultPagenationInfo";
+import {getDefaultPagenationInfo} from "/util/func/getDefaultPagenationInfo";
+import {MirrorTextOnHoverEvent} from "/util/func/MirrorTextOnHoverEvent";
 
 /*-  auto: '/api/admin/coupons/auto', // 자동발행쿠폰
   - direct: '/api/admin/coupons/direct', // 직접발행쿠폰
@@ -46,6 +47,9 @@ export default function CouponListPage() {
   const [apiUrlWithQuery, setApiUrlWithQuery] = useState(initialApiUrlWithQuery);
   const [searchQueryInitialize, setSearchQueryInitialize] = useState( false );
   
+  useEffect( () => {
+    MirrorTextOnHoverEvent( window );
+  }, [itemList] );
 
   const onResetSearchValues = () => {
     setSearchValue(initialSearchValue);
@@ -126,7 +130,6 @@ export default function CouponListPage() {
                   wordBreaking={true}
                   width={'400px'}
                 />
-                {isLoading.fetching && <Spinner />}
               </div>
               <div className="controls cont-left"></div>
             </div>
@@ -142,11 +145,12 @@ export default function CouponListPage() {
                   <li className={s.table_th}>사용한도</li>
                   <li className={s.table_th}>삭제</li>
                 </ul>
-                {itemList.length ? (
-                  <CouponList items={itemList} />
-                ) : (
-                  <AmdinErrorMessage text="조회된 데이터가 없습니다." />
-                )}
+                {itemList.length
+                  ? <CouponList items={itemList}/>
+                  : isLoading.fetching
+                  ? <AmdinErrorMessage loading={<Spinner />} />
+                  : <AmdinErrorMessage text="조회된 데이터가 없습니다." />
+                }
               </div>
             </div>
             <div className={s['pagination-section']}>

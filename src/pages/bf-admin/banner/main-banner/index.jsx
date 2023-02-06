@@ -1,108 +1,128 @@
 import s from "./mainBanner.module.scss";
-import React, { useState, useEffect } from "react";
-import AdminLayout from "@src/components/admin/AdminLayout";
-import { AdminContentWrapper } from "@src/components/admin/AdminWrapper";
-import MetaTitle from "@src/components/atoms/MetaTitle";
-
-import Modal from "@src/components/modal/Modal";
-import ModalAlert from "@src/components/modal/Modal_alert";
+import React, {useState, useEffect, useCallback} from "react";
+import AdminLayout from "/src/components/admin/AdminLayout";
+import {AdminContentWrapper} from "/src/components/admin/AdminWrapper";
+import MetaTitle from "/src/components/atoms/MetaTitle";
 import MainBannerList from './MainBannerList';
-import AdminBtn_moveToPage from "@src/components/atoms/AdminBtn_moveToPage";
-import axios from "axios";
-import axiosConfig from "/src/pages/api/axios.config";
-import AmdinErrorMessage from '@src/components/atoms/AmdinErrorMessage';
-import sorting from '@util/func/sorting';
+import AdminBtn_moveToPage from "/src/components/atoms/AdminBtn_moveToPage";
+import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
+import sorting from '/util/func/sorting';
 import {
   Button_EditListOrder,
   Button_InactiveEditListOrder,
-} from "@src/components/atoms/Button_EditListOrder";
+} from "/src/components/atoms/Button_EditListOrder";
+import {useModalContext} from "/store/modal-context";
+import Modal_global_alert from "/src/components/modal/Modal_global_alert";
+import Spinner from "/src/components/atoms/Spinner";
+import {MirrorTextOnHoverEvent} from "@util/func/MirrorTextOnHoverEvent";
+import {deleteObjData, getData, putObjData} from "/src/pages/api/reqData";
 
 
 
-
-const getDataWithSettingState = (url, callback) => {
-  axios
-    .get(url, axiosConfig())
-    .then((res) => {
-      const allData = res.data._embedded.mainBannerListResponseDtoList;
-      const arrangedItems = sorting(allData, "leakedOrder");
-      if (arrangedItems) callback(arrangedItems);
-    })
-    .catch((err) => {
-      console.error(err);
-    });
-}
-
-
-
-
-
-function MainBannerIndexPage(props) {
-
-  const [modalMessage, setModalMessage] = useState('');
-  const [itemList, setItemList] = useState([]);
-  const [editListOrder, setEditListOrder] = useState(false);
-
-  useEffect(() => {
-    getDataWithSettingState("/api/banners/main", setItemList);
-  }, []);
-
-
-
-  const onLeakedOrderUp = (url) => {
-    const data = ""; // ! PutData : 빈값 보내기
-    axios
-      .put(url, data, axiosConfig())
-      .then(() => {
-        getDataWithSettingState("/api/banners/main", setItemList);
-      })
-      .catch((err) => {
-        alert('전송실패: ',err)
-      });
+function MainBannerIndexPage () {
+  
+  
+  const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
+  const [itemList, setItemList] = useState( [] );
+  const [editListOrder, setEditListOrder] = useState( false );
+  const [isLoading, setIsLoading] = useState( {} );
+  
+  
+  useEffect( () => {
+    MirrorTextOnHoverEvent( window );
+  }, [itemList] );
+  
+  useEffect( () => {
+    getItemList();
+  }, [] );
+  
+  const getItemList = useCallback( () => (async () => {
+    setIsLoading( (prevState) => ({
+      ...prevState,
+      fetching: true,
+    }) );
+    try {
+      const apiUrl = "/api/banners/main";
+      const res = await getData( apiUrl, "admin" );
+      // console.log( res );
+      if ( res.status === 200 && res.data?._embedded ) {
+        let data = res.data._embedded.mainBannerListResponseDtoList;
+        const sortedList = data.length ? sorting( data, "leakedOrder" ) : [];
+        setItemList( sortedList );
+      }
+    } catch (err) {
+      mct.alertShow( "서버 통신장애 발생" );
+      console.error( err );
+    } finally {
+      setIsLoading( (prevState) => ({
+        ...prevState,
+        fetching: false,
+      }) );
+    }
+  })(), [] );
+  
+  
+  const updateLeakedOrderHandler = useCallback( async (url) => {
+    try {
+      setIsLoading( (prevState) => ({
+        ...prevState,
+        editOrder: true
+      }) );
+      const data = ""; // ! PutData : 빈값 보내기
+      const res = await putObjData( url, data );
+      // console.log( res );
+      if ( res.isDone ) {
+        await getItemList();
+      } else {
+        mct.alertShow( "순서 변경에 실패하였습니다.\n" + err );
+      }
+    } catch (err) {
+      mct.alertShow( "서버 통신장애 발생" );
+      console.error( err )
+    } finally {
+      setIsLoading( (prevState) => ({
+        ...prevState,
+        editOrder: false
+      }) );
+    }
+  }, [] );
+  
+  
+  const onDeleteItem = useCallback(async (url) => {
+    try {
+      setIsLoading( (prevState) => ({
+        ...prevState,
+        delete: true
+      }) );
+      const res = await deleteObjData( url );
+      // console.log( res );
+      if ( res.isDone ) {
+        mct.alertShow( "삭제가 완료되었습니다.", sucecessCallback );
+      } else {
+        mct.alertShow( "삭제에 실패하였습니다." );
+      }
+      
+    } catch (err) {
+      mct.alertShow( "서버 통신장애 발생" );
+      console.error( err );
+    } finally {
+      setIsLoading( (prevState) => ({
+        ...prevState,
+        delete: false
+      }) );
+    }
+  },[]);
+  
+  
+  const sucecessCallback = () => {
+    window.location.reload();
   };
-
-
-
-
-  const onLeakedOrderDown = (url) => {
-    const data = ""; // ! PutData : 빈값 보내기
-    axios
-      .put(url, data, axiosConfig())
-      .then(() => {
-        getDataWithSettingState("/api/banners/main", setItemList);
-      })
-      .catch((err) => {
-        alert("전송실패: ", err);
-      });
-  };
-
-
-
-  const onDeleteItem = (url) => {
-    axios
-      .delete(url, axiosConfig())
-      .then((res) => {
-        console.log(res);
-        getDataWithSettingState("/api/banners/main", setItemList);
-        setModalMessage("배너가 삭제되었습니다.");
-      })
-      .catch((err) => {
-        setModalMessage("삭제 실패: ", err);
-      });
-  };
-
-
-
-  const onHideModalHandler = (isConfirm) => {
-    setModalMessage(false);
-  }
-
-
-
-
+  
+  
   return (
     <>
-      <MetaTitle title="메인 배너 관리" admin={true} />
+      <MetaTitle title="메인배너" admin={true}/>
       <AdminLayout>
         <AdminContentWrapper>
           <h1 className="title_main">메인배너</h1>
@@ -121,6 +141,7 @@ function MainBannerIndexPage(props) {
                 <Button_EditListOrder
                   itemList={itemList}
                   setEditListOrder={setEditListOrder}
+                  title={isLoading.editOrder ? <Spinner/> : "순서편집"}
                 />
                 {editListOrder && (
                   <Button_InactiveEditListOrder
@@ -141,60 +162,26 @@ function MainBannerIndexPage(props) {
                   <li className={s.table_th}>수정</li>
                   <li className={s.table_th}>삭제</li>
                 </ul>
-                {itemList.length ? (
-                  <MainBannerList
+                {itemList.length
+                  ? <MainBannerList
                     items={itemList}
-                    setItemList={setItemList}
-                    setEditListOrder={setEditListOrder}
                     orderEditMode={editListOrder}
-                    onLeakedOrderUp={onLeakedOrderUp}
-                    onLeakedOrderDown={onLeakedOrderDown}
+                    onEditLeakedOrder={updateLeakedOrderHandler}
                     onDeleteItem={onDeleteItem}
-                    getDataWithSettingState={getDataWithSettingState}
                   />
-                ) : (
-                  <AmdinErrorMessage text="조회된 데이터가 없습니다." />
-                )}
+                  : isLoading.fetching
+                  ? <AmdinErrorMessage loading={<Spinner/>}/>
+                  : <AmdinErrorMessage text="조회된 데이터가 없습니다."/>
+                }
               </div>
             </div>
           </section>
           {/* inner */}
         </AdminContentWrapper>
       </AdminLayout>
-      {modalMessage && (
-        <Modal onClick="" title="비밀번호 재설정">
-          <ModalAlert text={modalMessage} isConfirm={onHideModalHandler} />
-        </Modal>
-      )}
+      {hasAlert && <Modal_global_alert background/>}
     </>
   );
 }
 
 export default MainBannerIndexPage;
-
-
-
-
-
-
-
-
-MainBannerIndexPage.getInitialProps = async (ctx) => {
-  // console.log(ctx);
-  // const token = localStorage.getItem('admin');
-  // console.log(token);
-  // const res = await axios
-  //     .get("/api/banners/main", axiosConfig)
-  //     .then((res) => {
-  //       callback(res);
-  //       return res;
-  //     })
-  //     .catch((err) => {
-  //       console.log(err.response);
-  //       console.log(err.request);
-  //     });;
-  // const json = await res.json();
-  // console.log('SSR -> getInitialProps 테스트')
-  // console.log(json)
-  return { bannerlist: 'test' };
-};
