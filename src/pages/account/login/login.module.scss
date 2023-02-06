@@ -203,6 +203,9 @@ $browser-context: 16;
   justify-content: center;
   gap: rem(19);
   margin: rem(22) auto;
+  > button{
+    max-width: rem(72);
+  }
   .akakao {
     margin-right: rem(20);
   }

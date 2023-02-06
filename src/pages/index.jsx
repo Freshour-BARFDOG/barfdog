@@ -464,8 +464,8 @@ export default function MainPage({ data }) {
                           alt="카드 이미지"
                           priority
                         /> */}
-                        <Use01 className={s.svg_pc} />
-                        <Use01_m className={s.svg_m} />
+                        <Use01 className={s.svg_pc} width='100%' height='100%' viewBox="0 0 375 375" />
+                        <Use01_m className={s.svg_m} width='100%' height='100%' viewBox="0 0 280 280" />
                       </div>
                       <div className={s.details}>
                         <p className={s.title_1}>STEP 01</p>
@@ -487,8 +487,8 @@ export default function MainPage({ data }) {
                           alt="카드 이미지"
                           priority
                         /> */}
-                        <Use02 className={s.svg_pc} />
-                        <Use02_m className={s.svg_m} />
+                        <Use02 className={s.svg_pc} width='100%' height='100%' viewBox="0 0 375 375" />
+                        <Use02_m className={s.svg_m} width='100%' height='100%' viewBox="0 0 280 280" />
 
                       </div>
                       <div className={s.details}>
@@ -512,8 +512,8 @@ export default function MainPage({ data }) {
                           alt="카드 이미지"
                           priority
                         /> */}
-                        <Use02 className={s.svg_pc} />
-                        <Use02_m className={s.svg_m} />
+                        <Use02 className={s.svg_pc} width='100%' height='100%' viewBox="0 0 375 375" />
+                        <Use02_m className={s.svg_m} width='100%' height='100%' viewBox="0 0 280 280" />
                       </div>
                       <div className={s.details}>
                         <p className={s.title_1}>STEP 02</p>
@@ -536,8 +536,8 @@ export default function MainPage({ data }) {
                           alt="카드 이미지"
                           priority
                         /> */}
-                        <Use03 className={s.svg_pc} />
-                        <Use03_m className={s.svg_m} />
+                        <Use03 className={s.svg_pc} width='100%' height='100%' viewBox="0 0 375 375" />
+                        <Use03_m className={s.svg_m} width='100%' height='100%' viewBox="0 0 280 280" />
                       </div>
                       <div className={s.details}>
                         <p className={s.title_1}>STEP 03</p>

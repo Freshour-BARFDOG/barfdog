@@ -75,6 +75,7 @@ $input-height: rem(44);
   }
 
   .input-title-wrap {
+    font-size: rem(14);
     cursor: default;
     label {
       display: flex;
@@ -84,14 +85,14 @@ $input-height: rem(44);
     }
   }
 
+
+
   .input-cont-wrap {
     display: flex;
     align-items: center;
     .input-wrap {
       width: 100%;
       position: relative;
-
-
     }
 
     input:not([type="radio"]) {

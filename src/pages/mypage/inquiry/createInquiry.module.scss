@@ -69,6 +69,7 @@ ul{
     min-width: auto;
     padding: 0 rem(15);
     font-weight: 500;
+    height: rem(38);
 
     &:focus{
       outline: none;
@@ -78,6 +79,7 @@ ul{
   input{
     border-radius: 0;
     padding: rem(5) rem(15);
+    height: rem(38);
   }
   textarea{
     border-radius:0;

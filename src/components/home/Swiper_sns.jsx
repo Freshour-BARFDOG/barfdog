@@ -48,10 +48,10 @@ export function Swiper_sns() {
   return (
     <div className={Styles.swiper_sns_outerWrap}>
       <i className={Styles.swiper_button_prev_sns} ref={navPrevRef}>
-        <ArrowLeft_s />
+        <ArrowLeft_s width='100%' height='100%' viewBox="0 0 28 28" />
       </i>
       <i className={Styles.swiper_button_next_sns} ref={navNextRef}>
-        <ArrowRight_s />
+        <ArrowRight_s width='100%' height='100%' viewBox="0 0 28 28" />
       </i>
       <Swiper 
       navigation={{

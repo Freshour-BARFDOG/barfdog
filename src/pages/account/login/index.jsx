@@ -258,13 +258,13 @@ export default function LoginPage() {
               <div className={s.login_sns}>
                 <button type={'button'} className={s.kakao} onClick={kakaoLoginFunc}>
                   {/* <Image src={Kakao} width={72} height={72} alt="카카오톡 아이콘" /> */}
-                  <Kakao />
+                  <Kakao width='100%' height='100%' viewBox="0 0 72 72" />
                 </button>
                 {/* naver가 제공해주는 로그인 버튼*/}
                 <div ref={naverRef} id="naverIdLogin"></div>
                 <button className={s.naver} type={'buttom'} onClick={naverLoginFunc}>
                   {/* <Image src={Naver} width="72" height="72" alt="네이버 아이콘" /> */}
-                  <Naver />
+                  <Naver width='100%' height='100%' viewBox="0 0 72 72" />
                 </button>
               </div>
             </div>

@@ -355,7 +355,6 @@ export default function SignInpuList({ formValues, setFormValues, formErrors, se
         title={'생년월일(견주님)'}
         formValue={formValues.birthday}
         setFormValues={setFormValues}
-        style={{ fontSize: `${rem(15)}` }}
         errorMessage={formErrors.birthday && <ErrorMessage>{formErrors.birthday}</ErrorMessage>}
       />
       <div className={s['join__wrap']}>

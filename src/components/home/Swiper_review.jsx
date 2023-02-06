@@ -138,7 +138,7 @@ export function Swiper_review({ data }) {
             <Link href="/review" passHref>
               <a>
                 <div className={s.image_wrap}>
-                  <ArrowRight_m2 />
+                  <ArrowRight_m2 width='100%' height='100%' viewBox="0 0 39 39" />
                 </div>
                 <div className={s.more}>더보기</div>
               </a>

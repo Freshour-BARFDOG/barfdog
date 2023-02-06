@@ -560,7 +560,7 @@ section.sns {
         background-image: url("../.././public/img/halftest_harf.png");
         background-repeat: no-repeat;
         // background-size: 50%;
-        background-size: auto;
+        background-size: contain;
       }
     }
   }
@@ -1207,9 +1207,11 @@ section.sns {
     .image_wrap{
       opacity: .6;
       transition: opacity .5s;
+      max-width: rem(39);
     }
 
     .more{
+      font-size: rem(16);
       color: #fff;
       opacity: .6;
       transition: opacity .5s;
@@ -1775,7 +1777,8 @@ section.sns {
 
         .magicbox{
           background-size: 50%;
-          max-width: rem(367);
+          // max-width: rem(367);
+          max-width: 367px;
         }
       }
     }

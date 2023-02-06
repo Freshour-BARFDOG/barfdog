@@ -91,7 +91,7 @@ export default function Header () {
                 {mypageState.depth === 1 ? (
                   <Link href="/" passHref>
                     <a>
-                      <Icon_Home />
+                      <Icon_Home width='100%' height='100%' viewBox="0 0 30 30" />
                     </a>
                   </Link>
                 ) : (
@@ -128,7 +128,7 @@ export default function Header () {
                   <a>
                     {isMobile ? (
                       // <Image src={MobileLogo} srcSet={MobileLogo_2x} alt="사이트 로고" priority />
-                      <MobileLogo/>
+                      <MobileLogo width='100%' height='100%' viewBox="0 0 146 20" />
                     ) : (
                       <Image src={Logo} srcSet={Logo_2x} alt="사이트 로고" priority/>
                     )}
@@ -242,7 +242,7 @@ function TopButton () {
       <div className={s.tobox}>
         <button className={s.topbutton} id="top" onClick={scrollToTop} type="button">
           <div className={s.image_wrap}>
-            <Topbutton />
+            <Topbutton width='100%' height='100%' viewBox="0 0 50 50" />
           </div>
         </button>
       </div>
