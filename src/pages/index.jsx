@@ -180,12 +180,13 @@ export default function MainPage({ data }) {
                           <Image
                             src={Halftest}
                             objectFit="fit"
-                            width={367}
-                            height={363.5}
+                            layout="fill"
+
                             alt="카드 이미지"
                             priority
                           ></Image>
-                          <ul>
+                        </div>
+                        <ul>
                             <li>
                               <div className={s.image_title}>스타터프리미엄</div>
                               <div className={s.image_sub}>닭고기 & 칠면조</div>
@@ -203,7 +204,6 @@ export default function MainPage({ data }) {
                               <div className={s.image_sub}>양 & 소</div>
                             </li>
                           </ul>
-                        </div>
                         <div className={s.magicbox} />
                       </Tween>
                     </Scene>
@@ -223,12 +223,14 @@ export default function MainPage({ data }) {
                           <Image
                             src={Halftest}
                             objectFit="fit"
-                            width={525}
-                            height={520}
+                            // width={525}
+                            // height={520}
+                            layout="fill"
                             alt="카드 이미지"
                             priority
                           ></Image>
-                          <ul>
+                        </div>
+                        <ul>
                             <li>
                               <div className={s.image_title}>스타터프리미엄</div>
                               <div className={s.image_sub}>닭고기 & 칠면조</div>
@@ -246,7 +248,6 @@ export default function MainPage({ data }) {
                               <div className={s.image_sub}>양 & 소</div>
                             </li>
                           </ul>
-                        </div>
                         <div className={s.magicbox} />
                       </Tween>
                     </Scene>

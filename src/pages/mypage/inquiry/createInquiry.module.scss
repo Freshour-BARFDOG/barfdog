@@ -80,12 +80,14 @@ ul{
     border-radius: 0;
     padding: rem(5) rem(15);
     height: rem(38);
+    font-size: rem(16);
   }
   textarea{
     border-radius:0;
     min-height: rem(260);
     padding: rem(10) rem(15);
     overflow: scroll;
+    font-size: rem(16);
   }
   ::placeholder{
     font-size: rem(14);
