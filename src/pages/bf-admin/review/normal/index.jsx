@@ -14,10 +14,13 @@ import Spinner from '/src/components/atoms/Spinner';
 import { global_reviewStateType } from '/store/TYPE/reviewStateType';
 import { valid_isTheSameArray } from '/util/func/validation/validationPackage';
 import ToolTip from '/src/components/atoms/Tooltip';
-import {postObjData, putObjData} from '/src/pages/api/reqData';
+import {deleteData, postObjData, putObjData} from '/src/pages/api/reqData';
 import { transformToday } from '/util/func/transformDate';
 import {global_searchDateType} from "/store/TYPE/searchDateType";
-import {MirrorTextOnHoverEvent} from "../../../../../util/func/MirrorTextOnHoverEvent";
+import {MirrorTextOnHoverEvent} from "/util/func/MirrorTextOnHoverEvent";
+import {useModalContext} from "../../../../../store/modal-context";
+import Modal_global_alert from "../../../../components/modal/Modal_global_alert";
+import BestReviewList from "../bestReview/BestReviewList";
 
 const initialSearchValue = {
   from: global_searchDateType.oldestDate,
@@ -42,6 +45,8 @@ export default function ReviewPage() {
   const searchPageSize = 10;
   const apiDataQueryString = 'queryAdminReviewsDtoList';
   
+  const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
   const initialSearchQuery = onSetSearchQueryHandler(initialSearchValue);
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
@@ -56,7 +61,6 @@ export default function ReviewPage() {
   
   const pageInterceptor = (res) => {
     // res = DUMMY_REVIEW_RESPONSE; // ! TEST
-    // console.log(res)
     let newPageInfo = {
       totalPages: 0,
       size: 0,
@@ -157,7 +161,41 @@ export default function ReviewPage() {
     setIsLoading({bestReview: false})
   };
   
-
+  const onDeleteItem = async (apiUrl, targetId) => {
+    console.log(apiUrl, targetId);
+    try {
+      setIsLoading(prevState => ({
+        ...prevState,
+        delete:{
+          [targetId]: true
+        }
+      }));
+      const res = await deleteData(apiUrl);
+      console.log(res);
+      if(res.isDone){
+        mct.alertShow( "리뷰가 삭제되었습니다.", onSuccessCallback );
+      } else {
+        const serverErrorMessage =res.error;
+        mct.alertShow(serverErrorMessage || '삭제에 실패하였습니다.');
+      }
+    } catch (err) {
+      mct.alertShow('삭제 요청 중 에러가 발생하였습니다.');
+      console.error(err);
+    } finally {
+      setIsLoading(prevState => ({
+        ...prevState,
+        delete:{
+          [targetId]: false
+        }
+      }));
+    }
+  };
+  const onSuccessCallback = () => {
+    window.location.reload();
+  };
+  
+  
+  
   return (
     <>
       <MetaTitle title="리뷰 관리" admin={true} />
@@ -221,17 +259,18 @@ export default function ReviewPage() {
                   <li className={s.table_th}>작성일</li>
                   <li className={s.table_th}>삭제</li>
                 </ul>
-                {isLoading.fetching ? (
-                  <Spinner floating={true} />
-                ) : itemList.length === 0 ? (
-                  <AmdinErrorMessage text="조회된 데이터가 없습니다." />
-                ) : (
-                  <ReviewList
+                {itemList.length
+                  ?  <ReviewList
                     items={itemList}
+                    onDeleteItem={onDeleteItem}
+                    isLoading={isLoading}
                     setSelectedItems={setSelectedItemList}
                     selectedItems={selectedItemList}
                   />
-                )}
+                  : isLoading.fetching
+                    ? <AmdinErrorMessage loading={<Spinner />} />
+                    : <AmdinErrorMessage text="조회된 데이터가 없습니다." />
+                }
               </div>
             </div>
             <div className={s['pagination-section']}>
@@ -249,137 +288,138 @@ export default function ReviewPage() {
           {/* inner */}
         </AdminContentWrapper>
       </AdminLayout>
+      {hasAlert && <Modal_global_alert background/>}
     </>
   );
 }
 
-const DUMMY_REVIEW_RESPONSE = {
-  data: {
-    _embedded: {
-      queryAdminReviewsDtoList: [
-        {
-          id: 662,
-          status: 'ADMIN',
-          title: '구독 상품',
-          star: 3,
-          contents: '열글자 이상의 구독 리뷰3',
-          createdDate: '2022-08-21',
-          name: '관리자',
-          email: 'admin@gmail.com',
-          _links: {
-            query_review: {
-              href: 'http://localhost:8080/api/admin/reviews/662',
-            },
-            delete_review: {
-              href: 'http://localhost:8080/api/admin/reviews/662',
-            },
-          },
-        },
-        {
-          id: 663,
-          status: 'RETURN',
-          title: '구독 상품',
-          star: 3,
-          contents: '열글자 이상의 구독 리뷰4',
-          createdDate: '2022-08-20',
-          name: '김회원',
-          email: 'user@gmail.com',
-          _links: {
-            query_review: {
-              href: 'http://localhost:8080/api/admin/reviews/663',
-            },
-            delete_review: {
-              href: 'http://localhost:8080/api/admin/reviews/663',
-            },
-          },
-        },
-        {
-          id: 664,
-          status: 'ADMIN',
-          title: '구독 상품',
-          star: 3,
-          contents: '열글자 이상의 구독 리뷰4',
-          createdDate: '2022-08-20',
-          name: '관리자',
-          email: 'admin@gmail.com',
-          _links: {
-            query_review: {
-              href: 'http://localhost:8080/api/admin/reviews/664',
-            },
-            delete_review: {
-              href: 'http://localhost:8080/api/admin/reviews/664',
-            },
-          },
-        },
-        {
-          id: 666,
-          status: 'ADMIN',
-          title: '구독 상품',
-          star: 3,
-          contents: '열글자 이상의 구독 리뷰5',
-          createdDate: '2022-08-19',
-          name: '관리자',
-          email: 'admin@gmail.com',
-          _links: {
-            query_review: {
-              href: 'http://localhost:8080/api/admin/reviews/666',
-            },
-            delete_review: {
-              href: 'http://localhost:8080/api/admin/reviews/666',
-            },
-          },
-        },
-        {
-          id: 665,
-          status: 'RETURN',
-          title: '구독 상품',
-          star: 3,
-          contents: '열글자 이상의 구독 리뷰5',
-          createdDate: '2022-08-19',
-          name: '김회원',
-          email: 'user@gmail.com',
-          _links: {
-            query_review: {
-              href: 'http://localhost:8080/api/admin/reviews/665',
-            },
-            delete_review: {
-              href: 'http://localhost:8080/api/admin/reviews/665',
-            },
-          },
-        },
-      ],
-    },
-    _links: {
-      first: {
-        href: 'http://localhost:8080/api/admin/reviews?page=0&size=5',
-      },
-      prev: {
-        href: 'http://localhost:8080/api/admin/reviews?page=0&size=5',
-      },
-      self: {
-        href: 'http://localhost:8080/api/admin/reviews?page=1&size=5',
-      },
-      next: {
-        href: 'http://localhost:8080/api/admin/reviews?page=2&size=5',
-      },
-      last: {
-        href: 'http://localhost:8080/api/admin/reviews?page=7&size=5',
-      },
-      approve_reviews: {
-        href: 'http://localhost:8080/api/admin/reviews/approval',
-      },
-      create_best_reviews: {
-        href: 'http://localhost:8080/api/admin/reviews/best',
-      },
-      profile: {
-        href: '/docs/index.html#resources-admin-query-reviews',
-      },
-    },
-    page: {
-      size: 5,
-      totalElements: 40,
-      totalPages: 8,
-      number: 1,
-    },
-  },
-};
+// const DUMMY_REVIEW_RESPONSE = {
+//   data: {
+//     _embedded: {
+//       queryAdminReviewsDtoList: [
+//         {
+//           id: 662,
+//           status: 'ADMIN',
+//           title: '구독 상품',
+//           star: 3,
+//           contents: '열글자 이상의 구독 리뷰3',
+//           createdDate: '2022-08-21',
+//           name: '관리자',
+//           email: 'admin@gmail.com',
+//           _links: {
+//             query_review: {
+//               href: 'http://localhost:8080/api/admin/reviews/662',
+//             },
+//             delete_review: {
+//               href: 'http://localhost:8080/api/admin/reviews/662',
+//             },
+//           },
+//         },
+//         {
+//           id: 663,
+//           status: 'RETURN',
+//           title: '구독 상품',
+//           star: 3,
+//           contents: '열글자 이상의 구독 리뷰4',
+//           createdDate: '2022-08-20',
+//           name: '김회원',
+//           email: 'user@gmail.com',
+//           _links: {
+//             query_review: {
+//               href: 'http://localhost:8080/api/admin/reviews/663',
+//             },
+//             delete_review: {
+//               href: 'http://localhost:8080/api/admin/reviews/663',
+//             },
+//           },
+//         },
+//         {
+//           id: 664,
+//           status: 'ADMIN',
+//           title: '구독 상품',
+//           star: 3,
+//           contents: '열글자 이상의 구독 리뷰4',
+//           createdDate: '2022-08-20',
+//           name: '관리자',
+//           email: 'admin@gmail.com',
+//           _links: {
+//             query_review: {
+//               href: 'http://localhost:8080/api/admin/reviews/664',
+//             },
+//             delete_review: {
+//               href: 'http://localhost:8080/api/admin/reviews/664',
+//             },
+//           },
+//         },
+//         {
+//           id: 666,
+//           status: 'ADMIN',
+//           title: '구독 상품',
+//           star: 3,
+//           contents: '열글자 이상의 구독 리뷰5',
+//           createdDate: '2022-08-19',
+//           name: '관리자',
+//           email: 'admin@gmail.com',
+//           _links: {
+//             query_review: {
+//               href: 'http://localhost:8080/api/admin/reviews/666',
+//             },
+//             delete_review: {
+//               href: 'http://localhost:8080/api/admin/reviews/666',
+//             },
+//           },
+//         },
+//         {
+//           id: 665,
+//           status: 'RETURN',
+//           title: '구독 상품',
+//           star: 3,
+//           contents: '열글자 이상의 구독 리뷰5',
+//           createdDate: '2022-08-19',
+//           name: '김회원',
+//           email: 'user@gmail.com',
+//           _links: {
+//             query_review: {
+//               href: 'http://localhost:8080/api/admin/reviews/665',
+//             },
+//             delete_review: {
+//               href: 'http://localhost:8080/api/admin/reviews/665',
+//             },
+//           },
+//         },
+//       ],
+//     },
+//     _links: {
+//       first: {
+//         href: 'http://localhost:8080/api/admin/reviews?page=0&size=5',
+//       },
+//       prev: {
+//         href: 'http://localhost:8080/api/admin/reviews?page=0&size=5',
+//       },
+//       self: {
+//         href: 'http://localhost:8080/api/admin/reviews?page=1&size=5',
+//       },
+//       next: {
+//         href: 'http://localhost:8080/api/admin/reviews?page=2&size=5',
+//       },
+//       last: {
+//         href: 'http://localhost:8080/api/admin/reviews?page=7&size=5',
+//       },
+//       approve_reviews: {
+//         href: 'http://localhost:8080/api/admin/reviews/approval',
+//       },
+//       create_best_reviews: {
+//         href: 'http://localhost:8080/api/admin/reviews/best',
+//       },
+//       profile: {
+//         href: '/docs/index.html#resources-admin-query-reviews',
+//       },
+//     },
+//     page: {
+//       size: 5,
+//       totalElements: 40,
+//       totalPages: 8,
+//       number: 1,
+//     },
+//   },
+// };

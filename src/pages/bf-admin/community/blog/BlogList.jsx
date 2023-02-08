@@ -2,15 +2,18 @@ import s from "./blog.module.scss";
 import Link from 'next/link';
 import {deleteData} from "/src/pages/api/reqData";
 import transformDate from "/util/func/transformDate";
+import React, {useState} from "react";
+import extractPartOfURL from "/util/func/extractPartOfURL";
+import Spinner from "/src/components/atoms/Spinner";
 
 
-export default function BlogList({ items, setItemList }) {
+export default function BlogList({ items, onDeleteItem, isLoading }) {
   if (!items || !items.length) return;
 
   return (
     <ul className="table_body">
-      {items.map((item) => (
-        <SingleItems key={`item-${item.id}`} index={item.id} item={item} setItemList={setItemList} />
+      {items.map((item, i) => (
+        <ItemList key={`item-${item.id}-${i}`} item={item} onDeleteItem={onDeleteItem} isLoading={isLoading}/>
       ))}
     </ul>
   );
@@ -18,7 +21,10 @@ export default function BlogList({ items, setItemList }) {
 
 
 
-const SingleItems = ({ item }) => {
+const ItemList = ({ item, onDeleteItem, isLoading }) => {
+  
+  const [submittedDeleteApi, setSubmittedDeleteApi] = useState( false );
+  
   const DATA = {
     id: item.id,
     title: item.title || '제목이 없습니다.',
@@ -30,21 +36,15 @@ const SingleItems = ({ item }) => {
       delete: item._links.delete_blog?.href,
     },
   };
-
-  const onDeleteItemHandler = async (e) => {
-    const blogId = e.currentTarget.dataset.id;
-    const apiURL = `/api/admin/blogs/${blogId}`;
-    if (confirm(`${DATA.id}번 글을 정말 삭제하시겠습니까?`)) {
-      const res = await deleteData(apiURL);
-      console.log(res)
-      if(res.isDone){
-        window.location.reload();
-      } else {
-        alert('삭제에 실패하였습니다.');
-      }
-    }
+  
+  const onDelete = (e) => {
+    if ( submittedDeleteApi ) return console.error( "이미 제출된 양식입니다." );
+    if (!confirm(`선택된 게시글(${DATA.id + '번'})을 정말 삭제하시겠습니까?`)) return;
+    const apiUrl = e.currentTarget.dataset.apiUrl;
+    onDeleteItem( extractPartOfURL( apiUrl ).pathname, DATA.id );
+    setSubmittedDeleteApi( true );
   };
-
+  
 
   return (
     <li className={s.item} key={`item-${DATA.id}`} data-idx={DATA.id}>
@@ -60,18 +60,14 @@ const SingleItems = ({ item }) => {
         </Link>
       </span>
       <span>
-        <button
-          data-id={DATA.id}
-          className="admin_btn basic_s solid"
-          onClick={onDeleteItemHandler}
-        >
-          삭제
+         <button
+           className="admin_btn basic_s solid"
+           onClick={onDelete}
+           data-api-url={DATA.apiurl.delete}
+         >
+          {(isLoading?.delete && isLoading.delete[DATA.id]) ? <Spinner style={{color: "white"}}/> : "삭제"}
         </button>
       </span>
     </li>
   );
 };
-
-
-
-

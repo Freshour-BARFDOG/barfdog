@@ -9,7 +9,7 @@ import {
   Button_EditListOrder,
   Button_InactiveEditListOrder,
 } from '/src/components/atoms/Button_EditListOrder';
-import {getData, putObjData} from '/src/pages/api/reqData';
+import {deleteData, getData, putObjData} from '/src/pages/api/reqData';
 import Spinner from '/src/components/atoms/Spinner';
 import {MirrorTextOnHoverEvent} from "/util/func/MirrorTextOnHoverEvent";
 import Modal_global_alert from "/src/components/modal/Modal_global_alert";
@@ -26,7 +26,7 @@ export default function BestReviewPage() {
   useEffect( () => {
     MirrorTextOnHoverEvent(window);
   }, [itemList] );
-  // console.log(itemList);
+  
   useEffect(() => {
     (async () => {
       try {
@@ -51,17 +51,25 @@ export default function BestReviewPage() {
             createdDate:data.createdDate,
             name:data.name,
             email:data.email,
+            _links: {
+              query_review: {
+                href: data._links.query_review.href
+              },
+              delete_best_review: {
+                href: data._links.delete_best_review.href
+              }
+            }
           }));
         }
         setItemList(itemList);
       } catch (err) {
         console.error('Data Fetching Error: ', err);
+      } finally {
+        setIsLoading((prevState) => ({
+          ...prevState,
+          fetching: false,
+        }));
       }
-
-      setIsLoading((prevState) => ({
-        ...prevState,
-        fetching: false,
-      }));
     })();
   }, [isLoading.leakedOrderChange]);
   
@@ -103,7 +111,8 @@ export default function BestReviewPage() {
       if(res.isDone){
         setItemList(updatedItemList);
       }else {
-        mct.alertShow('통신오류: 순서를 변경할 수 없습니다.');
+        const serverErrorMessage =res.error;
+        mct.alertShow(serverErrorMessage || '순서를 변경에 실패하였습니다.');
       }
     } catch (err) {
       mct.alertShow( err );
@@ -112,16 +121,46 @@ export default function BestReviewPage() {
       setIsLoading({leakedOrderChange: false});
     }
   },[itemList]);
-
   
+  const onDeleteItem = async (apiUrl, targetId) => {
+    try {
+      setIsLoading(prevState => ({
+        ...prevState,
+        delete:{
+          [targetId]: true
+        }
+      }));
+      const res = await deleteData(apiUrl);
+      console.log(res);
+      if(res.isDone){
+        mct.alertShow( "베스트 리뷰에서 제외되었습니다.", onSuccessCallback );
+      } else {
+        const serverErrorMessage =res.error;
+        mct.alertShow(serverErrorMessage || '삭제에 실패하였습니다.');
+      }
+    } catch (err) {
+      mct.alertShow('삭제 요청 중 에러가 발생하였습니다.');
+      console.error(err);
+    } finally {
+      setIsLoading(prevState => ({
+        ...prevState,
+        delete:{
+          [targetId]: false
+        }
+      }));
+    }
+  };
+  const onSuccessCallback = () => {
+    window.location.reload();
+  };
 
 
   return (
     <>
-      <MetaTitle title="베스트리뷰 관리" admin={true} />
+      <MetaTitle title="베스트 리뷰" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
-          <h1 className="title_main">베스트리뷰 관리</h1>
+          <h1 className="title_main">베스트 리뷰</h1>
           <div className="cont">
             <div className="cont_header clearfix">
               <p className="cont_title cont-left">
@@ -154,8 +193,8 @@ export default function BestReviewPage() {
                 {itemList.length
                   ?  <BestReviewList
                     items={itemList}
-                    setItemList={setItemList}
-                    setEditListOrder={setEditListOrder}
+                    onDeleteItem={onDeleteItem}
+                    isLoading={isLoading}
                     editListOrder={editListOrder}
                     onUpdateLeakedOrder={updateLeakedOrderHandler}
                   />

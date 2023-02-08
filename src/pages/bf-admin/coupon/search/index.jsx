@@ -15,6 +15,9 @@ import Tooltip from '/src/components/atoms/Tooltip';
 import { global_couponType } from '/store/TYPE/couponType';
 import {getDefaultPagenationInfo} from "/util/func/getDefaultPagenationInfo";
 import {MirrorTextOnHoverEvent} from "/util/func/MirrorTextOnHoverEvent";
+import {useModalContext} from "../../../../../store/modal-context";
+import {deleteData, putObjData} from "../../../api/reqData";
+import Modal_global_alert from "../../../../components/modal/Modal_global_alert";
 
 /*-  auto: '/api/admin/coupons/auto', // 자동발행쿠폰
   - direct: '/api/admin/coupons/direct', // 직접발행쿠폰
@@ -36,11 +39,11 @@ const initialApiUrlWithQuery = {
 
 export default function CouponListPage() {
   
-  const apiURL = {
-    auto: '/api/admin/coupons/auto',
-    direct: '/api/admin/coupons/direct',
-  };
+  
   const searchPageSize = 10;
+  
+  const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
   const [searchValue, setSearchValue] = useState(initialSearchValue);
@@ -58,6 +61,10 @@ export default function CouponListPage() {
   const onSearchHandler = () => {
     const queryArr = [];
     let url = '';
+    const apiURL = {
+      auto: '/api/admin/coupons/auto',
+      direct: '/api/admin/coupons/direct',
+    };
     for (const key in searchValue) {
       const val = searchValue[key];
       switch (key) {
@@ -83,7 +90,6 @@ export default function CouponListPage() {
   
   const pageInterceptor = useCallback((res, option={itemQuery: null}) => {
     // res = DUMMY__RESPONSE; // ! TEST
-    // console.log(res);
     return getDefaultPagenationInfo(res?.data, 'couponListResponseDtoList', {pageSize: searchPageSize, setInitialize: setSearchQueryInitialize});
   },[]);
 
@@ -92,8 +98,44 @@ export default function CouponListPage() {
     enterKey(e, onSearchHandler);
   };
   
-
-
+  const onDeleteItem = async (apiUrl, targetId) => {
+    try {
+      setIsLoading(prevState => ({
+        ...prevState,
+        delete:{
+          [targetId]: true
+        }
+      }));
+      const body = {
+        id:targetId
+      }
+      console.log(apiUrl, body);
+      const res = await putObjData(apiUrl, body);
+      console.log(res);
+      if(res.isDone){
+        mct.alertShow( "쿠폰이 성공적으로 삭제되었습니다.", onSuccessCallback );
+      } else {
+        const serverErrorMessage =res.error;
+        mct.alertShow(serverErrorMessage || '삭제에 실패하였습니다.');
+      }
+    } catch (err) {
+      mct.alertShow('삭제 요청 중 에러가 발생하였습니다.');
+      console.error(err);
+    } finally {
+      setIsLoading(prevState => ({
+        ...prevState,
+        delete:{
+          [targetId]: false
+        }
+      }));
+    }
+  };
+  
+  const onSuccessCallback = () => {
+    window.location.reload();
+  };
+  
+  
   return (
     <>
       <MetaTitle title="쿠폰 조회" admin={true} />
@@ -146,7 +188,10 @@ export default function CouponListPage() {
                   <li className={s.table_th}>삭제</li>
                 </ul>
                 {itemList.length
-                  ? <CouponList items={itemList}/>
+                  ? <CouponList
+                    items={itemList}
+                    onDeleteItem={onDeleteItem}
+                    isLoading={isLoading}/>
                   : isLoading.fetching
                   ? <AmdinErrorMessage loading={<Spinner />} />
                   : <AmdinErrorMessage text="조회된 데이터가 없습니다." />
@@ -167,6 +212,7 @@ export default function CouponListPage() {
           </section>
         </AdminContentWrapper>
       </AdminLayout>
+      {hasAlert && <Modal_global_alert background/>}
     </>
   );
 }

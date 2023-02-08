@@ -10,6 +10,9 @@ import SingleList from './SingleItemList';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import Spinner from '/src/components/atoms/Spinner';
 import {MirrorTextOnHoverEvent} from "/util/func/MirrorTextOnHoverEvent";
+import {deleteData} from "../../../api/reqData";
+import {useModalContext} from "../../../../../store/modal-context";
+import Modal_global_alert from "../../../../components/modal/Modal_global_alert";
 
 const initalSearchValue = {
   itemType: 'ALL',
@@ -21,6 +24,9 @@ function SingleItemPage() {
   const apiDataQueryString = 'queryItemsAdminDtoList';
   const initialQuery = `&itemType=ALL`;
   const searchPageSize = 10;
+  
+  const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
   const [urlQuery, setUrlQuery] = useState(initialQuery);
   const [itemList, setItemList] = useState([]);
   const [isLoading, setIsLoading] = useState({});
@@ -46,6 +52,38 @@ function SingleItemPage() {
     }
     const resultSearchQuery = tempUrlQuery.join('&');
     setUrlQuery(resultSearchQuery);
+  };
+  
+  const onDeleteItem = async (apiUrl, targetId) => {
+    try {
+      setIsLoading(prevState => ({
+        ...prevState,
+        delete:{
+          [targetId]: true
+        }
+      }));
+      const res = await deleteData(apiUrl);
+      console.log(res);
+      if(res.isDone){
+        mct.alertShow( "일반상품을 삭제하였습니다.", onSuccessCallback );
+      } else {
+        const serverErrorMessage =res.error;
+        mct.alertShow(serverErrorMessage || '삭제에 실패하였습니다.');
+      }
+    } catch (err) {
+      mct.alertShow('삭제 요청 중 에러가 발생하였습니다.');
+      console.error(err);
+    } finally {
+      setIsLoading(prevState => ({
+        ...prevState,
+        delete:{
+          [targetId]: false
+        }
+      }));
+    }
+  };
+  const onSuccessCallback = () => {
+    window.location.reload();
   };
 
   return (
@@ -99,13 +137,12 @@ function SingleItemPage() {
                   <li className={s.table_th}>수정</li>
                   <li className={s.table_th}>삭제</li>
                 </ul>
-                {itemList.length > 0 ? (
-                  <SingleList
-                    items={itemList}
-                  />
-                ) : (
-                  <AmdinErrorMessage text="조회된 데이터가 없습니다." />
-                )}
+                {itemList.length
+                  ? <SingleList items={itemList} onDeleteItem={onDeleteItem} isLoading={isLoading}/>
+                  : isLoading.fetching
+                    ? <AmdinErrorMessage loading={<Spinner/>}/>
+                    : <AmdinErrorMessage text="조회된 데이터가 없습니다."/>
+                }
               </div>
             </div>
             <div className={s['pagination-section']}>
@@ -122,6 +159,7 @@ function SingleItemPage() {
           </section>
         </AdminContentWrapper>
       </AdminLayout>
+      {hasAlert && <Modal_global_alert background />}
     </>
   );
 }

@@ -1,13 +1,35 @@
+import React, {useState} from "react";
 import s from "../coupon.module.scss";
 import {couponUseType, global_couponType} from "/store/TYPE/couponType";
-import {putObjData} from "/src/pages/api/reqData";
+import Spinner from "/src/components/atoms/Spinner";
 
 
 
+export default function MemberList({
+                                     items,
+                                     onDeleteItem,
+                                     isLoading
+}) {
+  if (!items || !items.length) return;
+  
+  return (
+    <ul className="table_body">
+      {items.map((item, i) => (
+        <ItemList
+          key={`item-${item.id}-${i}`}
+          item={item}
+          onDeleteItem={onDeleteItem}
+          isLoading={isLoading}
+        />
+      ))}
+    </ul>
+  );
+}
 
 
-  const ItemList = ({ item }) => {
-    // console.log(item);
+  const ItemList = ({item, onDeleteItem, isLoading }) => {
+  
+    const [submittedDeleteApi, setSubmittedDeleteApi] = useState( false );
     
     let couponTarget= '';
     if(item.couponTarget === couponUseType.ALL){
@@ -28,6 +50,7 @@ import {putObjData} from "/src/pages/api/reqData";
     }
   
     
+    
     const DATA = {
       id: item.id,
       couponType: couponType,
@@ -40,27 +63,17 @@ import {putObjData} from "/src/pages/api/reqData";
       amount: item.amount,
       expiredDate: item.expiredDate || "-",
       apiurl: {
-          delete: `/api/admin/coupons/${item.id}/inactive`,
+          delete: `/api/admin/coupons/${item.id}/inactive`, // backend에서 전달되지 않
       },
     };
-  
-  
-    const onInactiveItemHandler = async (e) => {
-      const button = e.currentTarget;
-      const apiURL = button.dataset.apiUrl;
-      
-      if (confirm(`정말 삭제하시겠습니까?\n쿠폰명: ${DATA.name}`)) {
-        const res = await putObjData(apiURL, {id:DATA.id});// rl 'http://localhost:8080/api/admin/coupons/3550/inactive' -i -X PUT \
-        console.log('쿠폰삭제결과',res);
-        if(res.isDone){
-          window.location.reload();
-        } else{
-          alert('쿠폰 삭제에 실패하였습니다. 새로고침 후 다시 시도해주세요.');
-        }
-        
-      }
+    
+    const onDelete = (e) => {
+      if ( submittedDeleteApi ) return console.error( "이미 제출된 양식입니다." );
+      if ( !confirm( `선택된 쿠폰(${DATA.name})을 삭제하시겠습니까?` ) ) return;
+      const apiUrl = e.currentTarget.dataset.apiUrl;
+      onDeleteItem( apiUrl, DATA.id );
+      setSubmittedDeleteApi( true );
     };
-  
     
   
     return (
@@ -75,27 +88,13 @@ import {putObjData} from "/src/pages/api/reqData";
         <span>
           {couponType === global_couponType.KOR.AUTO_PUBLISHED ? <em className={'errorMSG'}>삭제불가</em> : <button
             className="admin_btn basic_s solid"
-            onClick={onInactiveItemHandler}
+            onClick={onDelete}
             data-api-url={DATA.apiurl.delete}
           >
-            삭제
+            {(isLoading?.delete && isLoading.delete[DATA.id]) ? <Spinner style={{color: "white"}}/> : "삭제"}
           </button>}
           
         </span>
       </li>
     );
   };
-
-
-
-export default function MemberList({items}) {
-  if (!items || !items.length) return;
-
-  return (
-    <ul className="table_body">
-      {items.map((item) => (
-        <ItemList key={`item-${item.id}`} index={item.id} item={item} />
-      ))}
-    </ul>
-  );
-}

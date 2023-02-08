@@ -9,11 +9,17 @@ import NoticeList from "./NoticeList";
 import PaginationWithAPI from "/src/components/atoms/PaginationWithAPI";
 import Spinner from "/src/components/atoms/Spinner";
 import {MirrorTextOnHoverEvent} from "/util/func/MirrorTextOnHoverEvent";
+import {useModalContext} from "../../../../../store/modal-context";
+import Modal_global_alert from "../../../../components/modal/Modal_global_alert";
+import {deleteData, putObjData} from "../../../api/reqData";
 
 
 
 
 function NoticeIndexPage() {
+  
+  const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
   const pageSize = 10;
   const getListApiUrl = '/api/admin/notices';
   const [itemList, setItemList] = useState([]);
@@ -21,13 +27,45 @@ function NoticeIndexPage() {
   useEffect( () => {
     MirrorTextOnHoverEvent(window);
   }, [itemList] );
+  
+  const onDeleteItem = async (apiUrl, targetId) => {
+    try {
+      setIsLoading(prevState => ({
+        ...prevState,
+        delete:{
+          [targetId]: true
+        }
+      }));
+      const res = await deleteData(apiUrl);
+      console.log(res);
+      if(res.isDone){
+        mct.alertShow( "게시글을 삭제하였습니다.", onSuccessCallback );
+      } else {
+        const serverErrorMessage =res.error;
+        mct.alertShow(serverErrorMessage || '삭제에 실패하였습니다.');
+      }
+    } catch (err) {
+      mct.alertShow('삭제 요청 중 에러가 발생하였습니다.');
+      console.error(err);
+    } finally {
+      setIsLoading(prevState => ({
+        ...prevState,
+        delete:{
+          [targetId]: false
+        }
+      }));
+    }
+  };
+  const onSuccessCallback = () => {
+    window.location.reload();
+  };
   return (
     <>
-      <MetaTitle title="공지사항 관리" admin={true} />
+      <MetaTitle title="공지사항" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
           <div className="title_main">
-            <h1>공지사항 관리</h1>
+            <h1>공지사항</h1>
           </div>
           <div className="cont">
             <div className="cont_header clearfix">
@@ -52,7 +90,7 @@ function NoticeIndexPage() {
                   <li className={s.table_th}>삭제</li>
                 </ul>
                 {itemList.length
-                  ? <NoticeList items={itemList} setItemList={setItemList} />
+                  ? <NoticeList items={itemList} onDeleteItem={onDeleteItem} isLoading={isLoading}/>
                   : isLoading.fetching
                     ? <AmdinErrorMessage loading={<Spinner />} />
                     : <AmdinErrorMessage text="조회된 데이터가 없습니다." />
@@ -65,6 +103,7 @@ function NoticeIndexPage() {
           </div>
         </AdminContentWrapper>
       </AdminLayout>
+      {hasAlert && <Modal_global_alert background />}
     </>
   );
 }

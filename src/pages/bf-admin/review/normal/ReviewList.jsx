@@ -1,13 +1,15 @@
-import React from 'react';
+import React, {useState} from 'react';
 import s from './review.module.scss';
 import Checkbox from '/src/components/atoms/Checkbox';
 import transformDate from '/util/func/transformDate';
 import popupWindow from '/util/func/popupWindow';
 import Link from 'next/link';
-import { deleteData } from '/src/pages/api/reqData';
 import { global_reviewStateType } from '/store/TYPE/reviewStateType';
+import Spinner from "/src/components/atoms/Spinner";
+import extractPartOfURL from "/util/func/extractPartOfURL";
 
-export default function ReviewList({ items, selectedItems, setSelectedItems }) {
+export default function ReviewList({ items,onDeleteItem,
+                                     isLoading, selectedItems, setSelectedItems }) {
   if (!items || !items.length) return;
 
   return (
@@ -15,8 +17,9 @@ export default function ReviewList({ items, selectedItems, setSelectedItems }) {
       {items.map((item, index) => (
         <ItemList
           key={`item-${item.id}`}
-          index={item.id}
           item={item}
+          onDeleteItem={onDeleteItem}
+          isLoading={isLoading}
           setSelectedItems={setSelectedItems}
           selectedItems={selectedItems}
         />
@@ -25,14 +28,22 @@ export default function ReviewList({ items, selectedItems, setSelectedItems }) {
   );
 }
 
-const ItemList = ({ item, selectedItems, setSelectedItems }) => {
-  // console.log(item);
+const ItemList = ({ item,
+                    onDeleteItem,
+                    isLoading,
+                    selectedItems,
+                    setSelectedItems
+}) => {
+
   let itemStatus;
   global_reviewStateType.forEach((type) => {
     if (type.ENG === item.status) {
       itemStatus = type.KOR;
     }
   });
+  
+  const [submittedDeleteApi, setSubmittedDeleteApi] = useState( false );
+  
   const DATA = {
     id: item.id,
     status: itemStatus,
@@ -46,19 +57,15 @@ const ItemList = ({ item, selectedItems, setSelectedItems }) => {
       delete: item._links?.delete_review.href,
     },
   };
-
-  const onDeleteItem = async (e) => {
-    const apiURL = e.currentTarget.dataset.apiurl;
-    if (confirm(`선택된 회원(${item.name || ''})님의 리뷰를 정말 삭제하시겠습니까?`)) {
-      const res = await deleteData(apiURL);
-      console.log(res)
-      if(res.isDone){
-        window.location.reload();
-      } else {
-        alert('삭제에 실패하였습니다.');
-      }
-    }
+  
+  const onDelete = async (e) => {
+    if ( submittedDeleteApi ) return console.error ( "이미 제출된 양식입니다." );
+    if ( !confirm( `선택된 회원(${item.name})님의 리뷰를 삭제하시겠습니까?` ) ) return;
+    const apiUrl = e.currentTarget.dataset.apiUrl;
+    onDeleteItem( extractPartOfURL( apiUrl ).pathname, DATA.id );
+    setSubmittedDeleteApi( true );
   };
+  
 
   const onPopupHandler = (e) => {
     e.preventDefault();
@@ -109,10 +116,10 @@ const ItemList = ({ item, selectedItems, setSelectedItems }) => {
       <span>
         <button
           className="admin_btn basic_s solid"
-          onClick={onDeleteItem}
-          data-apiurl={DATA.apiurl.delete}
+          onClick={onDelete}
+          data-api-url={DATA.apiurl.delete}
         >
-          삭제
+          {(isLoading?.delete && isLoading.delete[DATA.id]) ? <Spinner style={{color: "white"}}/> : "삭제"}
         </button>
       </span>
     </li>

@@ -1,22 +1,26 @@
-import React from "react";
+import React, {useState} from "react";
 import s from './recipe.module.scss';
 import Link from 'next/link';
 import transformDate from '/util/func/transformDate';
-import { putObjData } from '/src/pages/api/reqData';
+import extractPartOfURL from "/util/func/extractPartOfURL";
+import Spinner from "../../../../components/atoms/Spinner";
 
-export default function SearchResultList({ items }) {
+export default function RecipeList({ items, onDeleteItem, isLoading }) {
   if (!items || !items.length) return;
 
   return (
     <ul className="table_body">
-      {items.map((item, index) => (
-        <ItemList key={`item-${item.id}`} index={item.id} item={item} />
+      {items.map((item) => (
+        <ItemList key={`item-${item.id}`} item={item} onDeleteItem={onDeleteItem} isLoading={isLoading}/>
       ))}
     </ul>
   );
 }
 
-const ItemList = ({ item, sortableItemRef }) => {
+const ItemList = ({ item, sortableItemRef, onDeleteItem, isLoading }) => {
+  
+  const [submittedDeleteApi, setSubmittedDeleteApi] = useState( false );
+  
   const DATA = {
     id: item.id,
     name: item.name,
@@ -32,20 +36,14 @@ const ItemList = ({ item, sortableItemRef }) => {
       delete: item._links.inactive_recipe?.href,
     },
   };
-
-  const onDeleteItemHandler = async (e) => {
+  
+  const onDelete = (e) => {
     // ! 레시피는 REST API서버에서 실제 삭제되는 것이 아니라, admin단에서도 숨김처리가 된다 -> 실제 삭제가 될 경우, 결제 등의 데이터처리에 문제가 될 수 있음
-    const apiURL = e.currentTarget.dataset.apiurl;
-    const itemId = item.id;
-    if (confirm(`선택된 레시피(${item.name || ''})를 정말 삭제하시겠습니까?`)) {
-      const res = await putObjData(apiURL, itemId);
-      console.log(res);
-      if (res.data.status === 200 || res.data.status === 201) {
-        window.location.reload();
-      } else {
-        alert('삭제할 수 없습니다. 새로고침 후 , 다시 시도해보세요.');
-      }
-    }
+    if ( submittedDeleteApi ) return console.error( "이미 제출된 양식입니다." );
+    if (!confirm(`선택된 레시피(${item.name || ''})를 정말 삭제하시겠습니까?`)) return;
+    const apiUrl = e.currentTarget.dataset.apiUrl;
+    onDeleteItem( extractPartOfURL( apiUrl ).pathname, DATA.id );
+    setSubmittedDeleteApi( true );
   };
 
   return (
@@ -78,10 +76,10 @@ const ItemList = ({ item, sortableItemRef }) => {
       <span>
         <button
           className="admin_btn basic_s solid"
-          data-apiurl={DATA.apiurl.delete}
-          onClick={onDeleteItemHandler}
+          data-api-url={DATA.apiurl.delete}
+          onClick={onDelete}
         >
-          삭제
+          {(isLoading?.delete && isLoading.delete[DATA.id]) ? <Spinner style={{color: "white"}}/> : "삭제"}
         </button>
       </span>
     </li>

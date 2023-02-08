@@ -60,13 +60,12 @@ const initialFormValues = {
 const initialFormErrors = {};
 
 function CreateSingleItemPage() {
-  const postFormValuesApiUrl = '/api/admin/items';
+  
   const postThumbFileApiUrl = '/api/admin/items/image/upload';
   const postDetailImageFileApiUrl = '/api/admin/items/contentImage/upload';
   const router = useRouter();
   const mct = useModalContext();
-
-  const [modalMessage, setModalMessage] = useState('');
+  const hasAlert = mct.hasAlert;
   const [isLoading, setIsLoading] = useState({});
   // const [originImageIdList, setOriginImageIdList] = useState([]); // CREATE타이밍에는 불필요
   const [QuillEditor, setQuillEditor] = useState(null);
@@ -75,8 +74,6 @@ function CreateSingleItemPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [activeDiscountOption, setActiveDiscountOption] = useState(false);
 
-  
-  // console.log(formValues)
   
   // console.log(formValues)
   useEffect(() => {
@@ -140,7 +137,6 @@ function CreateSingleItemPage() {
     e.preventDefault();
     if (isSubmitted) return;
     // ! IMPORTANT : submit 이후 enterKey event로 trigger되는 중복submit 방지
-    console.log(formValues);
     const errObj = validate(formValues);
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
@@ -153,28 +149,29 @@ function CreateSingleItemPage() {
       discountDegree: 'discountDegree',
       itemOptionSaveDtoList: { price: 'price', remaining: 'remaining'},
     }
-    filteredFormValues = transformClearLocalCurrencyInEveryObject(filteredFormValues, filterStringObj);
     console.log(filteredFormValues);
+    filteredFormValues = transformClearLocalCurrencyInEveryObject(filteredFormValues, filterStringObj);
+    if (!isPassed) return mct.alertShow('유효하지 않은 항목이 있습니다.');
 
     try {
       setIsLoading((prevState) => ({
         ...prevState,
         submit: true,
       }));
-      if (isPassed) {
-        const res = await postObjData(postFormValuesApiUrl, filteredFormValues);
-        // console.log(res);
-        if (res.isDone) {
-          onShowModalHandler('일반상품이 생성되었습니다.');
-          setIsSubmitted(true);
-        } else {
-          alert(res.error, '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.');
-        }
-      }else{
-        alert('유효하지 않은 항목이 있습니다.');
+   
+      const apiUrl = '/api/admin/items';
+      const res = await postObjData(apiUrl, filteredFormValues);
+      console.log(res);
+      if (res.isDone) {
+        mct.alertShow('일반상품이 생성되었습니다.', onGlobalModalCallback);
+        setIsSubmitted(true);
+      } else {
+        mct.alertShow(res.error, '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.');
       }
+      
+      
     } catch (err) {
-      alert('API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.');
+      mct.alertShow('API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.');
       console.error('API통신 오류 : ', err);
     }
     setIsLoading((prevState) => ({
@@ -188,15 +185,10 @@ function CreateSingleItemPage() {
       router.back();
     }
   };
-
-  const onShowModalHandler = (message) => {
-    mct.alertShow();
-    setModalMessage(message);
-  };
+  
 
   const onGlobalModalCallback = () => {
-    mct.alertHide();
-    router.push('/bf-admin/product/single');
+    window.location.href = '/bf-admin/product/single';
   };
 
   return (
@@ -537,7 +529,7 @@ function CreateSingleItemPage() {
           </div>
         </AdminContentWrapper>
       </AdminLayout>
-      <Modal_global_alert message={modalMessage} onClick={onGlobalModalCallback} background />
+      {hasAlert && <Modal_global_alert background/>}
     </>
   );
 }
