@@ -439,6 +439,7 @@ section.content_box {
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    font-size: rem(16) !important;
   }
   > * {
     //margin-right: rem(4);

@@ -83,9 +83,13 @@ section.body {padding : 0 0 rem(55)}
           max-width: rem(24);
           aspect-ratio: 1/1;
         }
+        > span {
+          @include char(l14);
+        }
       }
       .col_1_m{
         display: none;
+        @include char(l14);
       }
       .col_2 {
         @include char(l16);

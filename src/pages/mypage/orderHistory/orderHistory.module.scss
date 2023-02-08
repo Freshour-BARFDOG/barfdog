@@ -227,7 +227,8 @@ section.title{ padding : rem(8) 0 rem(30);}
           column-gap: rem(20);
           padding-top: rem(10);
           color: var(--color-font-sub);
-
+          font-size: rem(16);
+          
           div {
             word-break: break-all;
           }
@@ -243,6 +244,7 @@ section.title{ padding : rem(8) 0 rem(30);}
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: rem(16);
     }
 
     .right_box {

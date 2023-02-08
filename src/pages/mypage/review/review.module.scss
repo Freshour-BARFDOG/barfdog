@@ -236,6 +236,9 @@ section.content_title5 {
         display: flex;
         align-items: center;
         padding-bottom: rem(14);
+        > span {
+          font-size: rem(16);
+        }
         .pic_box {
           padding-right: rem(16);
           .image {
