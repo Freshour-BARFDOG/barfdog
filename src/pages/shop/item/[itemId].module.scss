@@ -92,6 +92,10 @@ section.tab_slide_box2{padding: 0 0 rem(130)}
             }
           }
 
+          .discount{
+            font-size: rem(16);
+          }
+
         }
         .mid_box {
           border-top: rem(1) solid #EFEFEF;
@@ -507,6 +511,7 @@ section.tab_slide_box2{padding: 0 0 rem(130)}
           min-width: rem(24);
           margin-bottom: rem(2);
           margin-right: rem(4);
+          max-width: rem(24);
         }
       }
     }
