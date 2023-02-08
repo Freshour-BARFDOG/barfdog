@@ -55,11 +55,13 @@ export const ShopReturnExchageGuideBox = () => {
       <div className={Styles.flex_box2}>
         <div className={Styles.left}>판매자 정보</div>
         <div className={Styles.right}>
-          상호명 &#58; 프레쉬아워 &#47; 대표자 &#58; 임경호
+          상호명 &#58; 주식회사 프레쉬아워
           <br/>
-          사업자등록번호 &#58; 4861801232
+          대표자 &#58; 임경호
           <br/>
-          통신판매업번호 &#58; 2020-충북충주-0634
+          사업자등록번호 &#58; 351-87-02455
+          <br/>
+          통신판매업번호 &#58; 2022-충북충주-0578
           <br/>
           사업장 소재지 &#58; 충청북도 충주시 번영대로 214 1층 프레쉬아워 (우 &#58; 27352)
           <br/>
