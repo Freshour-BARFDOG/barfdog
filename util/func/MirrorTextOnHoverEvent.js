@@ -4,8 +4,9 @@ export const MirrorTextOnHoverEvent = (window) => {
   const targets = document.querySelectorAll('ul.table_body li span');
   
   targets.forEach((t) => {
-    const originalText = t.innerText;
+    if(hasATagChild(t)) return;
     if (isTextOverflowing(t)) return;
+    const originalText = t.innerText;
     createOriginalTextWrapper(t, originalText);
 
     let TIMER;
@@ -30,6 +31,9 @@ export const MirrorTextOnHoverEvent = (window) => {
   });
 };
 
+const hasATagChild = (parent) => {
+  return  parent.querySelector('a');
+};
 
 const createOriginalTextWrapper = (box, ogText) => {
   // Set wrapper props & CSS style
