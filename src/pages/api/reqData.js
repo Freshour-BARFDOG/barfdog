@@ -97,12 +97,13 @@ export const deleteData = async (url, config = { data: {} }) => {
       return res.status === 200 || res.status === 201;
     })
     .catch((err) => {
+      console.error(err.response);
       // console.error('postObjDataResponseError:\n',err.response);
       const error = err.response;
       // console.log('ERROR내용: ', err.response);
       if (!error.data) {
         result.error = '요청에 대응하는 데이터가 서버에 없습니다.';
-      } else if (error.data?.error) {
+      } else if (error.data.error) {
         result.error = error.data.error;
         if (error.data?.errors?.length > 0) {
           result.error = error.data.errors[0].defaultMessage;
@@ -111,6 +112,8 @@ export const deleteData = async (url, config = { data: {} }) => {
         }
       } else if (error.data.reason === 'EXPIRED_TOKEN') {
         result.error = '관리자 로그인 토큰이 만료되었습니다.';
+      } else if (error.data.reason) {
+        result.error = error.data.reason;
       } else {
         result.error = '서버측의 정의되지않은 Reponse Error 발생';
       }
