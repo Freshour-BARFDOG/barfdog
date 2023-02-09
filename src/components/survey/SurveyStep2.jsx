@@ -29,7 +29,7 @@ export default function SurveyStep2 ({formValues, setFormValues}) {
   // console.log(formValues)
   
   return (
-    <section className={s.step2page}>
+    <section id='surveyPage' className={s.step2page}>
       <div className={s.input_title}>반려견의 활동량은</div>
       <div className="input-row">
         <SurveyInputRadio
