@@ -9,13 +9,31 @@ $color-tableHeader : #f1f2f4;
 .cont_viewer {
   width: 100%;
   position: relative;
+
   &.fixedHeight .table {
     height: rem(380);
   }
 
-
-
   /* -------------------- border line -------------------- */
+
+  .table{
+    border: $border;
+    &:before {
+      border-bottom: $border;
+    }
+  }
+
+  .table_header{
+    border-bottom: $border;
+  }
+
+  .table_th:not(:last-child),
+  .item > span:not(:last-child),
+  .table_body > li > span:not(:last-child) {
+    border-right: $border;
+  }
+
+
   &:not(.fullWidth) .table{
     .table_th:last-child,
     .item > span:last-child,
@@ -24,23 +42,18 @@ $color-tableHeader : #f1f2f4;
     }
   }
 
-  .table{
-    border: $border;
-    &:before {
-      border-bottom: $border;
-    }
-  }
-  .table_header{
-    border-bottom: $border;
-  }
-  .table_th:not(:last-child),
-  .item > span:not(:last-child),
-  .table_body > li > span:not(:last-child) {
-    border-right: $border;
-  }
+
   .item:not(:last-child) > span{
     border-bottom: $border;
   }
+
+  &.fixedHeight .table {
+    height: rem(380);
+    .item:last-child > span{
+      border-bottom: $border;
+    }
+  }
+
   /* -------------------- border line -------------------- */
 
   .table:before {

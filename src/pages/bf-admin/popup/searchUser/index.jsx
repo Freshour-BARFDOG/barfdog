@@ -1,18 +1,18 @@
-import React, {useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import PopupWrapper from '/src/components/popup/PopupWrapper';
-import { PopupCloseButton_typeX } from '/src/components/popup/PopupCloseButton';
+import {PopupCloseButton_typeX} from '/src/components/popup/PopupCloseButton';
 import s from './searchUser.module.scss';
 import Checkbox from '/src/components/atoms/Checkbox';
 import UserList from './UserList';
 import SearchTextWithCategory from '/src/components/admin/form/searchBar/SearchTextWithCategory';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import enterKey from '/util/func/enterKey';
-import { transformDateWithHyphen, transformToday } from '/util/func/transformDate';
+import {transformDateWithHyphen, transformToday} from '/util/func/transformDate';
 import {valid_isTheSameArray} from "/util/func/validation/validationPackage";
 import AmdinErrorMessage from "/src/components/atoms/AmdinErrorMessage";
 import Spinner from "/src/components/atoms/Spinner";
-
+import {focusFirstLocatedInputInDocument} from "/util/func/focusFirstLocatedInputInDocument";
 
 
 let initialSearchValues = {
@@ -38,8 +38,14 @@ export default function SearchUserPopup() {
   const [selectedMemberIdList, setSelectedMemberIdList] = useState([]);
   
   
+  useEffect( () => {
+    focusFirstLocatedInputInDocument();
+  }, [] );
 
-  const onSearchHandler = () => {
+  
+  
+
+  const onSearchHandler = useCallback(() => {
     const queryArr = [];
     for (const key in searchValues) {
       const val = searchValues[key];
@@ -48,7 +54,7 @@ export default function SearchUserPopup() {
     }
     const query = `${queryArr.join('&')}`;
     setSearchQuery(query);
-  };
+  },[searchValues] );
 
   const onSearchInputKeydown = (e) => {
     enterKey(e, onSearchHandler);
@@ -122,7 +128,7 @@ export default function SearchUserPopup() {
                   }
                 />
               </div>
-              <div className={`${s.cont_viewer} ${s.fixedHeight}`}>
+              <div className={`${s.cont_viewer} ${s.fullWidth}`}>
                 <div className={s.table}>
                   <ul className={`${s.table_header}`}>
                     <li className={s.table_th}>
@@ -138,15 +144,12 @@ export default function SearchUserPopup() {
                     <li className={s.table_th}>구독여부</li>
                     <li className={s.table_th}>장기미접속</li>
                   </ul>
-                  {(() => {
-                    if (isLoading.fetching) {
-                      return <Spinner floating={true} />;
-                    } else if (!itemList.length) {
-                      return <AmdinErrorMessage text="검색결과가 존재하지 않습니다." />;
-                    } else {
-                      return <UserList items={itemList} setSelectedItems={setSelectedMemberIdList} selectedItems={selectedMemberIdList}/>;
-                    }
-                  })()}
+                  {itemList.length
+                    ? <UserList items={itemList} setSelectedItems={setSelectedMemberIdList} selectedItems={selectedMemberIdList}/>
+                    : isLoading.fetching
+                    ? <AmdinErrorMessage loading={<Spinner/>} />
+                      : <AmdinErrorMessage text="검색결과가 존재하지 않습니다." />
+                  }
                 </div>
                 <div className={s['pagination-section']}>
                   <PaginationWithAPI
