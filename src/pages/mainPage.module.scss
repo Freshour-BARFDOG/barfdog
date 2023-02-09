@@ -601,9 +601,12 @@ section.sns {
       // margin-right: rem(90);
       // width: calc(33.333% - #{rem(60)});
       text-align: center;
-
+      
       &:last-child {
         margin-right: 0;
+        >span{
+          max-width: 44vw !important;
+        }
       }
     }
 
@@ -1822,6 +1825,12 @@ section.sns {
       li {
         margin: 0;
         width: 100%;
+
+        &:last-child {
+        >span{
+          max-width: 100% !important;
+        }
+      }
       }
 
       .text {

@@ -32,7 +32,7 @@ function IndicatorUponMenu({target}) {
       const indicatorWidth = indicator.offsetWidth;
 
       const posX = menuWidth * menuIdx + menuWidth / 2 - indicatorWidth / 2;
-      indicator.style[`${indicatorAniDirection}`] = `${rem(posX)}`;
+      indicator.style[`${indicatorAniDirection}`] = `${posX}px`;
   }, [target]);
   
   // const indicatorMove = () => {

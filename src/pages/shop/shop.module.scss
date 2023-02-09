@@ -286,7 +286,7 @@ section.pagination-section{padding : rem(80) 0 rem(70) 0 }
           display: flex;
           justify-content: space-between;
           width: 100%;
-
+          align-items: center;
           // 신규 메뉴 추가시 max-width 넓이조절 필요
           max-width: rem(250);
 
