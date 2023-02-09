@@ -167,17 +167,17 @@ export default function CouponListPage() {
           <section className="cont">
             <div className="cont_header clearfix">
               <div className="cont_title cont-left">
-                쿠폰목록
+                쿠폰 목록
                 <Tooltip
-                  message={`1. 자동발행쿠폰은 생성 및 삭제할 수 없습니다.\n2. 직접발행 쿠폰은 유저에게 쿠폰을 발행하고 유효기간이 존재할 경우, 목록에 나타납니다.\n3. 등급별 쿠폰은 매달 1일, 생일 쿠폰은 해당월 1일에 자동발급`}
+                  message={`1. 자동발행쿠폰은 생성 및 삭제할 수 없습니다.\n2. 자동발행쿠폰 중 등급별 쿠폰은 매달 1일, 생일 쿠폰은 해당 월 1일에 자동발급됩니다.\n3. 직접발행 쿠폰은 유효기간이 존재하는 항목만 목록에 나타납니다.\n4. 직접발행 쿠폰의 만료일자는 동일한 쿠폰을 2회 이상 발급했을 시,\n    가장 늦은 만료일자를 기준으로 표기됩니다.`}
                   messagePosition={'left'}
                   wordBreaking={true}
-                  width={'400px'}
+                  width={'480px'}
                 />
               </div>
               <div className="controls cont-left"></div>
             </div>
-            <div className={`${s.cont_viewer}`}>
+            <div className={`${s.cont_viewer} ${s.fullWidth}`}>
               <div className={`${s.table} ${apiUrlWithQuery.url === apiURL.direct ? s.directCoupon : s.autoCoupon}`}>
                 <ul className={`${s.table_header}`}>
                   <li className={s.table_th}>쿠폰종류</li>
