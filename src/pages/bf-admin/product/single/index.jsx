@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import s from './singleItem.module.scss';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
@@ -10,9 +10,10 @@ import SingleList from './SingleItemList';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import Spinner from '/src/components/atoms/Spinner';
 import {MirrorTextOnHoverEvent} from "/util/func/MirrorTextOnHoverEvent";
-import {deleteData} from "../../../api/reqData";
-import {useModalContext} from "../../../../../store/modal-context";
-import Modal_global_alert from "../../../../components/modal/Modal_global_alert";
+import {deleteData} from "/src/pages/api/reqData";
+import {useModalContext} from "/store/modal-context";
+import Modal_global_alert from "/src/components/modal/Modal_global_alert";
+import {getDefaultPagenationInfo} from "/util/func/getDefaultPagenationInfo";
 
 const initalSearchValue = {
   itemType: 'ALL',
@@ -40,8 +41,14 @@ function SingleItemPage() {
   const onResetSearchValues = () => {
     setSearchValue(initalSearchValue);
   };
-
-  const onSearchHandler = () => {
+  
+  const pageInterceptor = useCallback( (res, option = {itemQuery: null}) => {
+    // res = DUMMY_RES; // ! TEST
+    console.log( res );
+    return getDefaultPagenationInfo( res?.data, apiDataQueryString, {pageSize: searchPageSize} );
+  }, [] );
+  
+  const onSearchHandler = useCallback(() => {
     const tempUrlQuery = [];
     for (const key in searchValue) {
       const val = searchValue[key];
@@ -52,7 +59,7 @@ function SingleItemPage() {
     }
     const resultSearchQuery = tempUrlQuery.join('&');
     setUrlQuery(resultSearchQuery);
-  };
+  },[searchValue]);
   
   const onDeleteItem = async (apiUrl, targetId) => {
     try {
@@ -149,9 +156,9 @@ function SingleItemPage() {
               <PaginationWithAPI
                 apiURL={getListApiUrl}
                 size={searchPageSize}
+                pageInterceptor={pageInterceptor}
                 theme={'square'}
                 setItemList={setItemList}
-                queryItemList={apiDataQueryString}
                 setIsLoading={setIsLoading}
                 urlQuery={urlQuery}
                 setPageData={setPageInfo}/>
