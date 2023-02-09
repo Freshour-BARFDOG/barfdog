@@ -1,4 +1,6 @@
 export const focusFirstLocatedInputInDocument = () => {
-  const firstInput = document.body.querySelector( 'input' );
-  firstInput.focus();
+  if(window && typeof window !== 'undefined') {
+    const firstInput = document.body.querySelector( 'input[type="text"]' );
+    firstInput && firstInput.focus();
+  };
 };

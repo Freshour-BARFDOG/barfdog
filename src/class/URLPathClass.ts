@@ -1,5 +1,5 @@
 import {userType as USERTYPE } from "@store/TYPE/userAuthType";
-
+import {focusFirstLocatedInputInDocument} from '@util/func/focusFirstLocatedInputInDocument'
 type PathValidationTYPE = {
   MEMBER_PATH: boolean
   ADMIN_PATH: boolean
@@ -42,17 +42,25 @@ export class URLPathClass {
   private pathDispatcher(path) {
     if (this.validAdminPath(path)) {
       this.saveAdminPath(path);
+      focusFirstLocatedInputInDocument();
     } else {
       this.saveUserPath((path));
     }
   }
   
+  
   saveAdminPath(curPath: string) {
+    if(this.isPopupPath(curPath)) return; // POPUP 경로 제외.
+    
     const maxCount = 5;
     const storedAdminPathArr = this.getStoredAdminPathArr();
     const jsonArr = this.jsonStringifiedArray(curPath, maxCount, storedAdminPathArr);
     localStorage.setItem(LOCALSTORAGE_NAME.ADMIN, jsonArr);
   }
+  
+  private isPopupPath = (path) => {
+     return path.indexOf('popup') >= 0;
+  };
   
   saveUserPath(curPath: string) {
     const maxCount = 5;

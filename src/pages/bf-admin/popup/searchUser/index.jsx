@@ -12,7 +12,6 @@ import {transformDateWithHyphen, transformToday} from '/util/func/transformDate'
 import {valid_isTheSameArray} from "/util/func/validation/validationPackage";
 import AmdinErrorMessage from "/src/components/atoms/AmdinErrorMessage";
 import Spinner from "/src/components/atoms/Spinner";
-import {focusFirstLocatedInputInDocument} from "/util/func/focusFirstLocatedInputInDocument";
 
 
 let initialSearchValues = {
@@ -28,22 +27,12 @@ const getListApiUrl = '/api/admin/members';
 const apiDataQueryString = 'queryMembersDtoList';
 
 export default function SearchUserPopup() {
-  
-
 
   const [isLoading, setIsLoading] = useState({});
   const [searchValues, setSearchValues] = useState(initialSearchValues);
   const [searchQuery, setSearchQuery] = useState('');
   const [itemList, setItemList] = useState([]);
   const [selectedMemberIdList, setSelectedMemberIdList] = useState([]);
-  
-  
-  useEffect( () => {
-    focusFirstLocatedInputInDocument();
-  }, [] );
-
-  
-  
 
   const onSearchHandler = useCallback(() => {
     const queryArr = [];
