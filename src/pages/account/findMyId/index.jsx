@@ -24,8 +24,8 @@ let initialFormValues = {
 };
 
 initialFormValues = { // TEST ACCOUNT
-  name:'김회원',
-  phoneNumber:'01099038544',
+  // name:'김회원',
+  // phoneNumber:'01099038544',
   // name: '관리자',
   // phoneNumber: '01056785678',
 }

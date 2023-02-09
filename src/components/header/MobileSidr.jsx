@@ -114,14 +114,14 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                   <div className={s['sns']}>
                     <button type={'button'} className={s.kakao} onClick={kakaoLoginHandler}>
                       {/* <Image src={Kakao} width={72} height={72} alt="카카오톡 아이콘" /> */}
-                      <Kakao />
+                      <Kakao width='100%' height='100%' viewBox="0 0 72 72" />
                       <em className={s.desc}>
                         카카오로 <b> 3초만에 시작</b>하기
                       </em>
                     </button>
                     <button type={'button'} className={s.naver} onClick={naverLoginHandler}>
                       {/* <Image src={Naver} width="72" height="72" alt="네이버 아이콘" /> */}
-                      <Naver />
+                      <Naver width='100%' height='100%' viewBox="0 0 72 72" />
                     </button>
                   </div>
                 </div>

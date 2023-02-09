@@ -33,8 +33,9 @@ $browser-context: 16;
   .title {
     margin-bottom: rem(33);
     text-align: center;
-    .h2 {
+    > h2 {
     font-weight: 500;
+    font-size: rem(24);
     }
   }
 
