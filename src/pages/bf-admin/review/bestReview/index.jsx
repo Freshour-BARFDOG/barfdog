@@ -176,7 +176,7 @@ export default function BestReviewPage() {
                 )}
               </div>
             </div>
-            <div className={`${s.cont_viewer}`}>
+            <div className={`${s.cont_viewer} ${s.fullWidth}`}>
               <div className={s.table}>
                 <ul className={s.table_header}>
                   <li className={s.table_th}>순서</li>

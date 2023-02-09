@@ -95,7 +95,7 @@ function RecipePage () {
               </p>
               <div className="controls cont-left"></div>
             </div>
-            <div className={`${s.cont_viewer}`}>
+            <div className={`${s.cont_viewer} ${s.fullWidth}`}>
               <div className={s.table}>
                 <ul className={s.table_header}>
                   <li className={s.table_th}>레시피 이름</li>

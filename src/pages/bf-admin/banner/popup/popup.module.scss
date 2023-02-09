@@ -5,11 +5,12 @@
     .table_header, .item{
       grid-template-columns:
         rem(80)
-        minmax(rem(300), rem(1200))
-        minmax(rem(120), rem(160))
+        fillTheRestOfTableWidth(300)
+        rem(300)
         rem(120)
-        rem(70)
-        rem(70);
+        rem(120)
+        rem(80)
+        rem(80);
 
     }
 

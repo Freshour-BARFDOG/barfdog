@@ -1,33 +1,22 @@
 @import '/styles/global/rem';
+@import '/styles/global/fillTheRestOfTableWidth';
 
 $border: rem(1) solid var(--color-line-03);
 $itemListHeight: rem(60);
 $color-tableHeader : #f1f2f4;
 
 
-
 .cont_viewer {
   width: 100%;
   position: relative;
-  //overflow-y: scroll;
-  &.fixedHeight .table{
+  &.fixedHeight .table {
     height: rem(380);
   }
-  &.fullWidth .table{
-    &:before{
-      content: "";
-      position: absolute;
-      width:calc(100% - #{rem(2)});
-      top:rem(1);
-      left:50%;
-      transform:translateX(-50%);
-      z-index: 1;
-      height: $itemListHeight;
-      background-color: $color-tableHeader;
-      border-bottom: $border;
-      box-sizing: border-box;
-    }
-    //.table_header{width: 100% !important}
+
+
+
+  /* -------------------- border line -------------------- */
+  &:not(.fullWidth) .table{
     .table_th:last-child,
     .item > span:last-child,
     .table_body > li > span:last-child{
@@ -35,25 +24,37 @@ $color-tableHeader : #f1f2f4;
     }
   }
 
-  /* -------------------- border line -------------------- */
-  .table{border: $border;}
-  .table_header{border-bottom: $border;}
+  .table{
+    border: $border;
+    &:before {
+      border-bottom: $border;
+    }
+  }
+  .table_header{
+    border-bottom: $border;
+  }
   .table_th:not(:last-child),
   .item > span:not(:last-child),
   .table_body > li > span:not(:last-child) {
     border-right: $border;
   }
-  .item:first-child,
   .item:not(:last-child) > span{
     border-bottom: $border;
   }
-
-  //@for $i from 1 through 5 {
-  //  .item:last-child:nth-child(#{$i}){
-  //    border-bottom: $border;
-  //  }
-  //}
   /* -------------------- border line -------------------- */
+
+  .table:before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    height: calc($itemListHeight + rem(1));
+    background-color: $color-tableHeader;
+    box-sizing: border-box;
+  }
 
   .table{
     overflow-x: scroll;

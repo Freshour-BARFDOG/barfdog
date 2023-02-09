@@ -108,7 +108,7 @@ function ManageUserPage() {
             <div className="cont_header clearfix">
               <p className="cont_title cont-left">회원목록</p>
             </div>
-            <div className={`${s.cont_viewer}`}>
+            <div className={`${s.cont_viewer} ${s.fullWidth}`}>
               <div className={s.table}>
                 <ul className={s.table_header}>
                   <li className={s.table_th}>상세보기</li>

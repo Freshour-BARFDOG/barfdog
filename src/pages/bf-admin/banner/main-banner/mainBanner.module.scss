@@ -20,10 +20,10 @@ $pcHeight: rem(400);
     .table_header, .item{
       grid-template-columns:
         rem(80)
-        minmax(rem(180), rem(300))
-        minmax(rem(200), rem(300))
+        fillTheRestOfTableWidth(300)
+        rem(300)
         rem(120)
-        rem(140)
+        rem(120)
         rem(80)
         rem(80);
     }
@@ -51,4 +51,3 @@ $pcHeight: rem(400);
   from{opacity:0; pointer-events: none;}
   to{opacity:1; pointer-events: all;}
 }
-

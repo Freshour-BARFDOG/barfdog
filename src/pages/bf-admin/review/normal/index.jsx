@@ -198,10 +198,10 @@ export default function ReviewPage() {
   
   return (
     <>
-      <MetaTitle title="리뷰 관리" admin={true} />
+      <MetaTitle title="리뷰" admin={true} />
       <AdminLayout>
         <AdminContentWrapper>
-          <h1 className="title_main">리뷰 관리</h1>
+          <h1 className="title_main">리뷰</h1>
           <section className="cont">
             <SearchBar onReset={onResetSearchValues} onSearch={onSearchHandler}>
               <SearchTerm
@@ -240,7 +240,7 @@ export default function ReviewPage() {
                   </button>
               </div>
             </div>
-            <div className={`${s.cont_viewer}`}>
+            <div className={`${s.cont_viewer}  ${s.fullWidth}`}>
               <div className={s.table}>
                 <ul className={s.table_header}>
                   <li className={s.table_th}>

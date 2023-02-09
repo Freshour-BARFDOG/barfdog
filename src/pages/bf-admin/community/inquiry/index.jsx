@@ -159,11 +159,11 @@ export default function InquiryListPage () {
   
   return (
     <>
-      <MetaTitle title="1:1 문의목록" admin={true}/>
+      <MetaTitle title="1:1 문의" admin={true}/>
       <AdminLayout>
         <AdminContentWrapper>
           <div className="title_main">
-            <h1>1:1 문의 목록</h1>
+            <h1>1:1 문의</h1>
           </div>
           <section className="cont">
             <SearchBar onReset={onResetSearchValues} onSearch={onSearch}>
@@ -204,7 +204,7 @@ export default function InquiryListPage () {
                 </button>
               </div>
             </div>
-            <div className={`${s.cont_viewer}`}>
+            <div className={`${s.cont_viewer} ${s.fullWidth}`}>
               <div className={s.table}>
                 <ul className={s.table_header}>
                   <li className={s.table_th}>

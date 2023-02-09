@@ -7,8 +7,8 @@ import Descend from '/public/img/icon/btn_descend.svg';
 import getElemIdx from '/util/func/getElemIdx.js';
 import changeArrayOrder from '/util/func/changeArrayOrder';
 import transformDate from '/util/func/transformDate';
-import {deleteData, putObjData} from '/src/pages/api/reqData';
 import extractPartOfURL from '/util/func/extractPartOfURL';
+import {popupPosition} from "../../../../../store/TYPE/popupPosition";
 
 
 export default function PopupList (
@@ -39,7 +39,6 @@ export default function PopupList (
   );
 }
 
-
 const SortableItem = ({item, items, sortableItemRef, orderEditMode, onDeleteItem, onEditLeakedOrder}) => {
   
   const [submittedDeleteApi, setSubmittedDeleteApi] = useState( false );
@@ -49,6 +48,7 @@ const SortableItem = ({item, items, sortableItemRef, orderEditMode, onDeleteItem
     leakedOrder: item.leakedOrder,
     name: item.name || '',
     reg_date: transformDate( item.createdDate || item.modifiedDate, '' ),
+    position: popupPosition.KOR[item.position],
     url: item._links?.thumbnail_pc.href,
     apiurl: {
       orderUp: item._links?.update_popupBanner_order_up.href,
@@ -89,6 +89,7 @@ const SortableItem = ({item, items, sortableItemRef, orderEditMode, onDeleteItem
           ></Image>
         </figure>
       </span>
+      <span>{DATA.position}</span>
       <span>{DATA.reg_date}</span>
       <span>
         <Link href={`/bf-admin/banner/popup/update/${DATA.id}`} passHref>

@@ -160,12 +160,13 @@ function PopupIndexPage() {
                 </button>}
               </div>
             </div>
-            <div className={`${s.cont_viewer}`}>
+            <div className={`${s.cont_viewer} ${s.fullWidth}`}>
               <div className={s.table}>
                 <ul className={s.table_header}>
                   <li className={s.table_th}>순서</li>
                   <li className={s.table_th}>팝업이름</li>
                   <li className={s.table_th}>이미지</li>
+                  <li className={s.table_th}>위치</li>
                   <li className={s.table_th}>등록일</li>
                   <li className={s.table_th}>수정</li>
                   <li className={s.table_th}>삭제</li>
