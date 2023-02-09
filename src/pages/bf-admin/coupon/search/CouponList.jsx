@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import s from "../coupon.module.scss";
 import {couponUseType, global_couponType} from "/store/TYPE/couponType";
 import Spinner from "/src/components/atoms/Spinner";
+import transformDate from "/util/func/transformDate";
 
 
 
@@ -61,7 +62,7 @@ export default function MemberList({
       discount: item.discount,
       couponTarget: couponTarget,
       amount: item.amount,
-      expiredDate: item.expiredDate || "-",
+      expiredDate: transformDate(item.expiredDate) || "-",
       apiurl: {
           delete: `/api/admin/coupons/${item.id}/inactive`, // backend에서 전달되지 않
       },
@@ -79,7 +80,8 @@ export default function MemberList({
     return (
       <li className={s.item} key={`item-${DATA.id}`}>
         <span>{DATA.couponType}</span>
-        <span>{DATA.code}</span>
+        {item.couponType === global_couponType.CODE_PUBLISHED && <span>{DATA.code}</span>}
+        {item.couponType === global_couponType.CODE_PUBLISHED && <span>{DATA.expiredDate}</span>}
         <span>{DATA.name}</span>
         <span><em className="overflow-x-scroll">{DATA.description}</em></span>
         <span>{DATA.discount}</span>

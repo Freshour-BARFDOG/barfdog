@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import s from '../coupon.module.scss';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
@@ -12,12 +12,12 @@ import enterKey from '/util/func/enterKey';
 import Spinner from '/src/components/atoms/Spinner';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import Tooltip from '/src/components/atoms/Tooltip';
-import { global_couponType } from '/store/TYPE/couponType';
+import {global_couponType} from '/store/TYPE/couponType';
 import {getDefaultPagenationInfo} from "/util/func/getDefaultPagenationInfo";
 import {MirrorTextOnHoverEvent} from "/util/func/MirrorTextOnHoverEvent";
-import {useModalContext} from "../../../../../store/modal-context";
-import {deleteData, putObjData} from "../../../api/reqData";
-import Modal_global_alert from "../../../../components/modal/Modal_global_alert";
+import {useModalContext} from "/store/modal-context";
+import {putObjData} from "/src/pages/api/reqData";
+import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 
 /*-  auto: '/api/admin/coupons/auto', // 자동발행쿠폰
   - direct: '/api/admin/coupons/direct', // 직접발행쿠폰
@@ -31,6 +31,8 @@ const initialSearchValue = {
   couponType: global_couponType.AUTO_PUBLISHED, // AUTO_PUBLISHED,  CODE_PUBLISHED
 };
 
+
+
 const initialApiUrlWithQuery = {
   keyword: '',
   url: '/api/admin/coupons/auto',
@@ -39,7 +41,11 @@ const initialApiUrlWithQuery = {
 
 export default function CouponListPage() {
   
-  
+  const apiURL = useMemo( () => ({
+    auto :'/api/admin/coupons/auto',
+    direct:'/api/admin/coupons/direct',
+  } ), [] );
+  console.log(apiURL);
   const searchPageSize = 10;
   
   const mct = useModalContext();
@@ -49,22 +55,17 @@ export default function CouponListPage() {
   const [searchValue, setSearchValue] = useState(initialSearchValue);
   const [apiUrlWithQuery, setApiUrlWithQuery] = useState(initialApiUrlWithQuery);
   const [searchQueryInitialize, setSearchQueryInitialize] = useState( false );
-  
   useEffect( () => {
     MirrorTextOnHoverEvent( window );
   }, [itemList] );
 
-  const onResetSearchValues = () => {
+  const onResetSearchValues = useCallback(() => {
     setSearchValue(initialSearchValue);
-  };
+  },[]);
 
-  const onSearchHandler = () => {
+  const onSearchHandler = useCallback(() => {
     const queryArr = [];
     let url = '';
-    const apiURL = {
-      auto: '/api/admin/coupons/auto',
-      direct: '/api/admin/coupons/direct',
-    };
     for (const key in searchValue) {
       const val = searchValue[key];
       switch (key) {
@@ -86,7 +87,7 @@ export default function CouponListPage() {
       query,
       url,
     }));
-  };
+  },[searchValue]);
   
   const pageInterceptor = useCallback((res, option={itemQuery: null}) => {
     // res = DUMMY__RESPONSE; // ! TEST
@@ -136,6 +137,7 @@ export default function CouponListPage() {
   };
   
   
+  
   return (
     <>
       <MetaTitle title="쿠폰 조회" admin={true} />
@@ -175,11 +177,12 @@ export default function CouponListPage() {
               </div>
               <div className="controls cont-left"></div>
             </div>
-            <div className={`${s.cont_viewer} ${s.fullWidth}`}>
-              <div className={s.table}>
-                <ul className={s.table_header}>
+            <div className={`${s.cont_viewer}`}>
+              <div className={`${s.table} ${apiUrlWithQuery.url === apiURL.direct ? s.directCoupon : s.autoCoupon}`}>
+                <ul className={`${s.table_header}`}>
                   <li className={s.table_th}>쿠폰종류</li>
-                  <li className={s.table_th}>쿠폰코드</li>
+                  {apiUrlWithQuery.url === apiURL.direct && <li className={s.table_th}>쿠폰코드</li>}
+                  {apiUrlWithQuery.url === apiURL.direct && <li className={s.table_th}>만료일자</li>}
                   <li className={s.table_th}>쿠폰이름</li>
                   <li className={s.table_th}>쿠폰설명</li>
                   <li className={s.table_th}>할인금액</li>

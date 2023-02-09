@@ -2,18 +2,33 @@
 
 .cont_viewer {
   .table{
-    .table_header, .item{
-      grid-template-columns:
+    &.autoCoupon{
+      .table_header, .item{
+        grid-template-columns:
         rem(120)
+        rem(400)
         rem(120)
-        rem(180)
-        minmax(rem(120), rem(300))
         rem(120)
         rem(90)
         rem(90)
         rem(70);
+      }
     }
+
+    &.directCoupon{
+      .table_header, .item{
+        grid-template-columns:
+        rem(120)
+        rem(160)
+        rem(120)
+        rem(400)
+        rem(120)
+        rem(120)
+        rem(90)
+        rem(90)
+        rem(70);
+      }
+    }
+
   }
 }
-
-
