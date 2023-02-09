@@ -115,7 +115,7 @@ export default function SurveyStep3({ formValues, setFormValues, onInputChangeHa
   
   
   return (
-    <section className={s.step3page}>
+    <section id='surveyPage' className={s.step3page}>
       <div className={s['input-row']}>
         <p className={s.input_title}>간식 급여 횟수는</p>
         <SurveyInputRadio

@@ -1300,6 +1300,7 @@ section.sns {
       transform: translateX(rem(-30));
       text-align: right;
       pointer-events: none;
+      font-size: rem(16);
     }
     
     .swiper-pagination__mainSection::before{
