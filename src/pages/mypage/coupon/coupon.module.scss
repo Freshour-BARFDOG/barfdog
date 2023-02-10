@@ -11,7 +11,7 @@ section.pageline { padding: rem(40) 0 0 0}
 }
 
 .coupon_code {
-  
+
   .coupon_code_row1 {
     @include char(l16);
     line-height: 120%;
@@ -45,7 +45,7 @@ section.pageline { padding: rem(40) 0 0 0}
 
       }
     }
-  } 
+  }
 }
 
 .coupon_state_flex_box {
@@ -95,8 +95,13 @@ section.pageline { padding: rem(40) 0 0 0}
     word-break: keep-all;
     transition: background-color .3s ease, color .3s ease;
     user-select: none;
-    
-    &:hover, &:active{
+
+    &.expiredCoupon {
+      background-color: #f1f2f3;
+      div{color: var(--color-disabled)}
+    }
+    &:not(.expiredCoupon):hover,
+    &:not(.expiredCoupon):active{
       background-color: var(--color-main);
       .left_top, .right_top, .left_bot {
         color: #fff;
@@ -108,7 +113,7 @@ section.pageline { padding: rem(40) 0 0 0}
               border-color: #fff;
             }
           }
-    
+
         }
       }
     }
@@ -144,7 +149,7 @@ section.pageline { padding: rem(40) 0 0 0}
       display: flex;
       align-items : center;
 
-      
+
       .line {
         padding: 0 rem(4) rem(1);
         hr {
@@ -210,7 +215,7 @@ section.pageline { padding: rem(40) 0 0 0}
         font-size: rem(20);
       }
 
-      
+
       .right_top {
         font-size: rem(22);
       }
@@ -235,13 +240,13 @@ section.pageline { padding: rem(40) 0 0 0}
   }
 
   .coupon_code {
-  
+
     .flex_box {
       .input_box {
         width: 100%;
         margin-right: rem(5);
       }
-    } 
+    }
   }
 
   .coupon_content_grid_box {
@@ -254,7 +259,7 @@ section.pageline { padding: rem(40) 0 0 0}
         font-weight: 600;
       }
 
-      
+
       .right_top {
         font-size: rem(36);
       }
@@ -265,12 +270,12 @@ section.pageline { padding: rem(40) 0 0 0}
     }
   }
 
-  
+
   .pagination_box {
     padding-top: rem(40);
     padding-bottom : rem(50);
   }
-  
+
 }
 
 @media (max-width: rem(450)) {
@@ -284,7 +289,7 @@ section.pageline { padding: rem(40) 0 0 0}
         font-size: rem(20);
       }
 
-      
+
       .right_top {
         font-size: rem(22);
       }
