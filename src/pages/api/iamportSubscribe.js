@@ -22,8 +22,8 @@ export default async function handler(req, res){
         method: "post", // POST method
         headers: { "Content-Type": "application/json" }, // "Content-Type": "application/json"
         data: {
-          imp_key: "8722322371707106", // REST API 키
-          imp_secret: "eb961888a719002923f107e1024bb45d177b8d92279ad7843a35be08c107c4ab01033597b2c21968" // REST API Secret
+          imp_key: process.env.NEXT_PUBLIC_IAMPORT_REST_API_KEY, // REST API 키
+          imp_secret: process.env.NEXT_PUBLIC_IAMPORT_REST_API_SECRET,  // REST API Secret
         }
       });
       
