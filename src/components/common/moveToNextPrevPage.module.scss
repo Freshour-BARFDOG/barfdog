@@ -27,6 +27,7 @@
 
       p {
         cursor: default;
+        font-size: rem(15);
 
         &:nth-child(2) {
           cursor: pointer;
@@ -43,6 +44,7 @@
         -webkit-line-clamp: 1;
         -webkit-box-orient: vertical;
         text-align: left;
+        font-size: rem(15);
       }
 
       .image{

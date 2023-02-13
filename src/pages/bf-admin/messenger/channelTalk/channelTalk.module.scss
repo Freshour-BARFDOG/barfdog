@@ -6,7 +6,7 @@
     .item {
       grid-template-columns:
       rem(120)
-      rem(160)
+      fillTheRestOfTableWidth(200)
       rem(160)
       rem(160)
       rem(120)

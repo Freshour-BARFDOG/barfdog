@@ -57,7 +57,7 @@ function ReleaseCouponPage() {
 
   const router = useRouter();
   const mct = useModalContext();
-  const [modalMessage, setModalMessage] = useState('');
+  const hasAlert = mct.hasAlert;
   const [isLoading, setIsLoading] = useState({});
   const [target, setTarget] = useState('ALL');
   const [formValues, setFormValues] = useState(initialFormValues['ALL']);
@@ -179,19 +179,20 @@ function ReleaseCouponPage() {
       const res = await postObjData(postFormValuesApiUrl, filteredFormValues);
       console.log(res);
       if (res.isDone) {
-        onShowModalHandler('쿠폰이 성공적으로 발행되었습니다.');
+        mct.alertShow('쿠폰이 성공적으로 발행되었습니다.', onSucessCallback);
         setIsSubmitted(true);
       } else {
-        alert(res.error, '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.');
+        mct.alertShow(res.error, '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.');
       }
     } catch (err) {
-      alert('API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.');
-      console.error('API통신 오류 : ', err);
+      mct.alertShow('API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.');
+      console.error( err);
+    } finally {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        submit: false,
+      }));
     }
-    setIsLoading((prevState) => ({
-      ...prevState,
-      submit: false,
-    }));
   };
 
   const returnToPrevPage = () => {
@@ -200,14 +201,9 @@ function ReleaseCouponPage() {
     }
   };
 
-  const onShowModalHandler = (message) => {
-    mct.alertShow();
-    setModalMessage(message);
-  };
 
-  const onGlobalModalCallback = () => {
-    mct.alertHide();
-    router.push('/bf-admin/coupon/search');
+  const onSucessCallback = () => {
+    window.location.href = '/bf-admin/coupon/search';
   };
 
   return (
@@ -336,7 +332,7 @@ function ReleaseCouponPage() {
           </div>
         </AdminContentWrapper>
       </AdminLayout>
-      <Modal_global_alert message={modalMessage} onClick={onGlobalModalCallback} background />
+      {hasAlert && <Modal_global_alert background/>}
     </>
   );
 }

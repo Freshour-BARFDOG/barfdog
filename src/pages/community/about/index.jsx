@@ -49,7 +49,7 @@ export default function AboutPage() {
                     alt="카드 이미지"
                     priority
                   /> */}
-                  <Title_01 />
+                  <Title_01 width='100%' height='100%' viewBox="0 0 119 84" />
                 </div>
 
                 <div className={s.content1}>Fresh Life! fresh our</div>
@@ -129,7 +129,7 @@ export default function AboutPage() {
                       alt="카드 이미지"
                       priority
                     /> */}
-                    <Sign />
+                    <Sign width='100%' height='100%' viewBox="0 0 115 120" />
                   </div>
                 </div>
               </div>
@@ -144,7 +144,7 @@ export default function AboutPage() {
                       alt="카드 이미지"
                       priority
                     /> */}
-                    <Title_02 />
+                    <Title_02 width='100%' height='100%' viewBox="0 0 165 77" />
                   </div>
 
                   <div className={s.ulbox}>

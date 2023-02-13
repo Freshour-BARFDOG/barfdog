@@ -5,7 +5,6 @@ import filter_emptyValue from '/util/func/filter_emptyValue';
 import filter_onlyNumber from '/util/func/filter_onlyNumber';
 import filter_extraIntegerNumberZero from '/util/func/filter_extraIntegerNumberZero';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
-import transformClearLocalCurrency from '/util/func/transformClearLocalCurrency';
 
 const GradeCouponSettingInput = ({
   label,
@@ -54,6 +53,8 @@ const GradeCouponSettingInput = ({
         <div className={`${s.inp_section} inp_section`}>
           <div className={`${s.inp_box} inp_box`}>
             <input
+              className={'disabled'}
+              disabled={true}
               data-id={id}
               data-inner-id={innerId[0]}
               type="text"

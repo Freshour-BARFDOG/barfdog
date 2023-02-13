@@ -32,6 +32,7 @@ $input-height: rem(44);
     .main-title {
       font-weight: 500;
       text-align: center;
+      font-size: rem(24) !important;
     }
   }
 }
@@ -75,6 +76,7 @@ $input-height: rem(44);
   }
 
   .input-title-wrap {
+    font-size: rem(14);
     cursor: default;
     label {
       display: flex;
@@ -84,24 +86,26 @@ $input-height: rem(44);
     }
   }
 
+
+
   .input-cont-wrap {
     display: flex;
     align-items: center;
     .input-wrap {
       width: 100%;
       position: relative;
-
-
     }
 
     input:not([type="radio"]) {
       width: 100%;
       height: $input-height;
       padding: rem(8) rem(16);
+      font-size: rem(15);
       &[disabled]{
         background-color: var(--color-bg-02);
         color: var(--color-font-sub2);
         cursor: default;
+        font-size: rem(15);
       }
     }
     ::placeholder {

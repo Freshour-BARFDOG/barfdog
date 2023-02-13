@@ -156,7 +156,7 @@ export default function DeliverInfoPage() {
                             <button className={s.text} type={'button'} data-order-id={item.deliveryDto?.orderId} onClick={onCheckOrderInfo}>
                               <div>
                                 <div className={`${s.image} img-wrap`}>
-                                  <Btn_01 />
+                                  <Btn_01 width='100%' height='100%' viewBox="0 0 16 16" />
                                   {/* <Image
                                     src={require('public/img/pages/delivery/delivery_icon_1.png')}
                                     objectFit="cover"
@@ -234,7 +234,7 @@ export default function DeliverInfoPage() {
                             <button className={s.text} type={'button'} data-order-id={item.orderDeliveryDto.orderId} onClick={onCheckOrderInfo}>
                               <div>
                                 <div className={`${s.image} img-wrap`}>
-                                  <Btn_01 />
+                                  <Btn_01 width='100%' height='100%' viewBox="0 0 16 16" />
                                   {/* <Image
                                     src={require('public/img/pages/delivery/delivery_icon_1.png')}
                                     objectFit="cover"

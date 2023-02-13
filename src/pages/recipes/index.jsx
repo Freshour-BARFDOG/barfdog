@@ -398,7 +398,7 @@ export default function RecipePage() {
                         layout="fill"
                         alt="브랜드 소개 이미지"
                       /> */}
-                      <Content_01 width='current' height='current' viewBox="0 0 120 120" />
+                      <Content_01 width='100%' height='100%' viewBox="0 0 120 120" />
                     </div>
                   </div>
                   100%<br />휴먼그레이드
@@ -414,7 +414,7 @@ export default function RecipePage() {
                         layout="fill"
                         alt="브랜드 소개 이미지"
                       /> */}
-                      <Content_02 width='current' height='current' viewBox="0 0 120 120" />
+                      <Content_02 width='100%' height='100%' viewBox="0 0 120 120" />
                     </div>
                   </div>
                   무항생제<br />고기
@@ -430,7 +430,7 @@ export default function RecipePage() {
                         layout="fill"
                         alt="브랜드 소개 이미지"
                       /> */}
-                      <Content_03 width='current' height='current' viewBox="0 0 120 120" />
+                      <Content_03 width='100%' height='100%' viewBox="0 0 120 120" />
                     </div>
                   </div>
                   유기농<br />채소·과일
@@ -446,7 +446,7 @@ export default function RecipePage() {
                         layout="fill"
                         alt="브랜드 소개 이미지"
                       /> */}
-                      <Content_04 width='current' height='current' viewBox="0 0 120 120" />
+                      <Content_04 width='100%' height='100%' viewBox="0 0 120 120" />
                     </div>
                   </div>
                   글루텐<br />무첨가
@@ -462,7 +462,7 @@ export default function RecipePage() {
                         layout="fill"
                         alt="브랜드 소개 이미지"
                       /> */}
-                      <Content_05 width='current' height='current' viewBox="0 0 120 120" />
+                      <Content_05 width='100%' height='100%' viewBox="0 0 120 120" />
                     </div>
                   </div>
                   곡물류<br />무첨가
@@ -478,7 +478,7 @@ export default function RecipePage() {
                         layout="fill"
                         alt="브랜드 소개 이미지"
                       /> */}
-                      <Content_06 width='current' height='current' viewBox="0 0 120 120" />
+                      <Content_06 width='100%' height='100%' viewBox="0 0 120 120" />
                     </div>
                   </div>
                   합성첨가물<br />무첨가
@@ -499,7 +499,7 @@ export default function RecipePage() {
                         height={49}
                         alt="아이콘 정기구독 시작하기"
                       /> */}
-                      <Btn_01 />
+                      <Btn_01 width='100%' height='100%' viewBox="0 0 238 40" />
                     </div>
                   </a>
                 </Link>
@@ -592,7 +592,7 @@ export default function RecipePage() {
                       height={71}
                       alt="아이콘 정기구독 시작하기"
                     /> */}
-                    <Btn_02 />
+                    <Btn_02  width='100%' height='100%' viewBox="0 0 300 71" />
                   </div>
                 </a>
               </Link>
@@ -633,7 +633,7 @@ export function Swiper_card() {
       // rotate: false,
       // perSlideRotate: 0
     },
-    autoplay: {delay: 3500, disableOnInteraction: false},
+    autoplay: {delay: 2000, disableOnInteraction: false},
     modules: [EffectCards, Autoplay],
   };
 

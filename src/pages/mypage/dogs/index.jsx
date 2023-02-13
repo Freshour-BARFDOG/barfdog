@@ -257,7 +257,7 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
               data-button-type={'deleteItem'}
               onClick={onActiveConfirmModal}
             >
-              <DeleteIcon />
+              <DeleteIcon width='100%' height='100%' viewBox="0 0 28 28" />
               {/* <Image
                 priority
                 src={require('/public/img/mypage/dog_info_delete.png')}

@@ -58,6 +58,7 @@ $animationDuration : 0.2s;
         transition-duration: $animationDuration;
         cursor: pointer;
         transition: background-color .3s ease, border-color .3s ease;
+        font-size: rem(15);
 
         &:nth-child(5){
           border-right: rem(1) solid #EFEFEF;;
@@ -71,6 +72,7 @@ $animationDuration : 0.2s;
           background-color: var(--color-main) !important;
           color: #fff;
           border-color: var(--color-main);
+          font-size: rem(15);
           // z-index: 9;
 
           &:hover{

@@ -1,22 +1,8 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: true,
-  crossOrigin: 'anonymous',
- 
-};
 
 module.exports = {
-  nextConfig,
-  entry: './web.js',
-  output: {
-    filename: 'compiled.js',
-  },
-  resolve: {
-    extensions: ['js', 'jsx', 'ts', 'tsx'],
-    fallback: {
-      fs: require.resolve('fs'),
-    },
-  },
+  // distDir: "build",
+  crossOrigin: "anonymous",
+  pageExtensions: ['js', 'jsx', 'ts', 'tsx'],
   trailingSlash: false,
   env: {
     SANITY_PROJECT_ID: '',
@@ -30,6 +16,8 @@ module.exports = {
     if (prod) {
       newConfig.devtool = 'hidden-source-map';
     }
+    config.entry = './web.js';
+    config.resolve.fallback = {fs: require.resolve('fs')}
     config.module.rules.push({
       test: /\.svg$/,
       use: ['@svgr/webpack'],

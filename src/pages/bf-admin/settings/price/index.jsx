@@ -39,8 +39,6 @@ function PricePolicyPage({data}) {
   const [formErrors, setFormErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
 
-  
-
 
   const onInputChangeHandler = (e) => {
     const input = e.currentTarget;
@@ -61,20 +59,17 @@ function PricePolicyPage({data}) {
   };
   
   
-  
-  
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (submitted) return; // ! IMPORTANT : submit 이후 enterKey event로 trigger되는 중복submit 방지
+    if (submitted) return window.location.reload();
 
     const errObj = validate(formValues);
     setFormErrors(errObj);
     
     const isPassed = valid_hasFormErrors(errObj);
     if(!isPassed) return mct.alertShow('유효하지 않은 항목이 존재합니다.');
-    const confirmMessage =
-      '사이트 할인율 변경 시,\n예약된 정기구독유저의 결제금액이 즉시 변경됩니다. 정말 변경하시겠습니까?';
-    if (!confirm(confirmMessage)) return;
+    
+    if (!confirm('사이트 할인율 변경 시,\n예약된 정기구독유저의 결제금액이 즉시 변경됩니다. 정말 변경하시겠습니까?')) return;
     
     try {
       setIsLoading((prevState) => ({
@@ -99,9 +94,8 @@ function PricePolicyPage({data}) {
         }
       
     } catch (err) {
-      mct.alertShow('API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.', onFailPostApiCallback);
-      
-      console.error('API통신 오류 : ', err);
+      mct.alertShow('API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.');
+      console.error(err);
     } finally {
       setIsLoading((prevState) => ({
         ...prevState,
@@ -112,10 +106,6 @@ function PricePolicyPage({data}) {
   };
   
   const onSuccessCallback = ()=>{
-    window.location.reload();
-  }
-  
-  const onFailPostApiCallback = ()=>{
     window.location.reload();
   }
   
@@ -253,15 +243,3 @@ export async function getServerSideProps ({ req }) {
     props: {data: DATA}
   }
 }
-
-//
-//
-// const DUMMY_RESPONSE = {
-//   data:{
-//     full: 5,
-//     half: 3,
-//     topping: 1,
-//     createdDate: "2022-11-15T16:10:42.927",
-//     updatedDate: "2022-11-17T16:10:42.927",
-//   }
-// }

@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import React from 'react';
+import React, {useState} from 'react';
 import s from './popup.module.scss';
 import Link from 'next/link';
 import Ascend from '/public/img/icon/btn_ascend.svg';
@@ -7,13 +7,20 @@ import Descend from '/public/img/icon/btn_descend.svg';
 import getElemIdx from '/util/func/getElemIdx.js';
 import changeArrayOrder from '/util/func/changeArrayOrder';
 import transformDate from '/util/func/transformDate';
-import {deleteData, putObjData} from '/src/pages/api/reqData';
 import extractPartOfURL from '/util/func/extractPartOfURL';
+import {popupPosition} from "../../../../../store/TYPE/popupPosition";
 
 
-export default function PopupList ({items, orderEditMode, onUpdateList}) {
-  if ( !items || !items.length ) return;
+export default function PopupList (
+  {
+    items,
+    orderEditMode,
+    onEditLeakedOrder,
+    onDeleteItem,
+  }
+) {
   
+  if ( !items || !items.length ) return;
   
   return (
     <ul className="table_body">
@@ -23,22 +30,25 @@ export default function PopupList ({items, orderEditMode, onUpdateList}) {
           index={item.id}
           item={item}
           items={items}
-          onUpdateList={onUpdateList}
           orderEditMode={orderEditMode}
+          onDeleteItem={onDeleteItem}
+          onEditLeakedOrder={onEditLeakedOrder}
         />
       ) )}
     </ul>
   );
 }
 
-
-const SortableItem = ({item, items, sortableItemRef, onUpdateList, orderEditMode}) => {
+const SortableItem = ({item, items, sortableItemRef, orderEditMode, onDeleteItem, onEditLeakedOrder}) => {
+  
+  const [submittedDeleteApi, setSubmittedDeleteApi] = useState( false );
   
   const DATA = {
     id: item.id || Math.floor( Math.random() * 100 ),
     leakedOrder: item.leakedOrder,
     name: item.name || '',
-    reg_date: transformDate( item.createdDate ? item.createdDate : item.modifiedDate ),
+    reg_date: transformDate( item.createdDate || item.modifiedDate, '' ),
+    position: popupPosition.KOR[item.position],
     url: item._links?.thumbnail_pc.href,
     apiurl: {
       orderUp: item._links?.update_popupBanner_order_up.href,
@@ -48,17 +58,12 @@ const SortableItem = ({item, items, sortableItemRef, onUpdateList, orderEditMode
     },
   };
   
-  const onDelete = async (e) => {
+  const onDelete = (e) => {
+    if ( submittedDeleteApi ) return console.error( "이미 제출된 양식입니다." );
     if ( !confirm( `정말 삭제하시겠습니까?\n배너명: ${item.name}` ) ) return;
-    const apiUrl = `/api/banners/popup/${item.id}`;
-    const res = await deleteData( apiUrl );
-    console.log( res )
-    if ( res.isDone ) {
-      alert(`배너가 정상적으로 삭제되었습니다.`);
-      window.location.reload();
-    } else {
-      alert( '삭제에 실패하였습니다.' );
-    }
+    const apiUrl = e.currentTarget.dataset.apiUrl;
+    onDeleteItem( extractPartOfURL( apiUrl ).pathname );
+    setSubmittedDeleteApi( true );
   };
   
   return (
@@ -69,7 +74,7 @@ const SortableItem = ({item, items, sortableItemRef, onUpdateList, orderEditMode
       data-idx={DATA.id}
     >
       {orderEditMode ? (
-        <SortHandle items={items} onUpdateList={onUpdateList} apiurl={DATA.apiurl}/>
+        <SortHandle items={items} apiurl={DATA.apiurl} onEditLeakedOrder={onEditLeakedOrder}/>
       ) : (
         <span>{DATA.leakedOrder}</span>
       )}
@@ -78,12 +83,13 @@ const SortableItem = ({item, items, sortableItemRef, onUpdateList, orderEditMode
         <figure className={s['img-wrap']}>
           <Image
             src={DATA.url}
-            alt={`메인배너 썸네일 ${DATA.id}`}
+            alt={`팝업배너 썸네일 ${DATA.id}`}
             objectFit="contain"
             layout="fill"
           ></Image>
         </figure>
       </span>
+      <span>{DATA.position}</span>
       <span>{DATA.reg_date}</span>
       <span>
         <Link href={`/bf-admin/banner/popup/update/${DATA.id}`} passHref>
@@ -106,39 +112,21 @@ const SortableItem = ({item, items, sortableItemRef, onUpdateList, orderEditMode
 };
 
 
-const SortHandle = ({items, apiurl, onUpdateList}) => {
+const SortHandle = ({items, apiurl, onEditLeakedOrder}) => {
   
-  const onOrderUpHandler = (e) => {
-    const button = e.currentTarget;
-    changeOrder( button, 'up' );
-  };
-  
-  const onOrderDownHandler = (e) => {
-    const button = e.currentTarget;
-    changeOrder( button, 'down' );
-  };
-  
-  const changeOrder = async (button, direction) => {
-    onUpdateList( false );
-    let dir;
-    if ( direction === 'down' ) {
-      dir = +1
-    } else if ( direction === 'up' ) {
-      dir = -1;
+  const onChangeOrderHandler = (e) => {
+    const btn = e.currentTarget;
+    const target = btn.closest( "li" );
+    const url = btn.dataset.apiurl;
+    const apiUrl = extractPartOfURL( url ).pathname;
+    const targetViewIdx = getElemIdx( target );
+    const dir = btn.dataset.direction;
+    const toBeDirection = dir === 'up' ? -1 : +1;
+    const isValid = !!changeArrayOrder( items, targetViewIdx, toBeDirection );
+    if ( isValid ) {
+      onEditLeakedOrder( apiUrl );
     }
-    
-    const target = button.closest( 'li' );
-    const url = button.dataset.apiurl;
-    const apiURL = extractPartOfURL( url ).pathname;
-    const targetIndex = getElemIdx( target );
-    const newItemList = changeArrayOrder( items, targetIndex, dir );
-    console.log( newItemList )
-    if ( newItemList ) {
-      const emptyData = '';
-      await putObjData( apiURL, emptyData );
-      onUpdateList( true );
-    }
-  }
+  };
   
   
   return (
@@ -147,7 +135,8 @@ const SortHandle = ({items, apiurl, onUpdateList}) => {
         <i
           className="admin_btn"
           animation="show"
-          onClick={onOrderUpHandler}
+          onClick={onChangeOrderHandler}
+          data-direction={"up"}
           data-apiurl={apiurl.orderUp}
         >
           <Ascend/>
@@ -155,7 +144,8 @@ const SortHandle = ({items, apiurl, onUpdateList}) => {
         <i
           className="admin_btn"
           animation="show"
-          onClick={onOrderDownHandler}
+          onClick={onChangeOrderHandler}
+          data-direction={"down"}
           data-apiurl={apiurl.orderDown}
         >
           <Descend/>

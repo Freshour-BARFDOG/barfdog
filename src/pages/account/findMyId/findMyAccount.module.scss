@@ -33,8 +33,9 @@ $browser-context: 16;
   .title {
     margin-bottom: rem(33);
     text-align: center;
-    .h2 {
+    > h2 {
     font-weight: 500;
+    font-size: rem(24);
     }
   }
 
@@ -42,6 +43,7 @@ $browser-context: 16;
   .input__title{
     padding-left: rem(4);
     margin-bottom: rem(5);
+    font-size: rem(16);
   }
 
   .input__box{

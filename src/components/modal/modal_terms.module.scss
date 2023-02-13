@@ -53,6 +53,7 @@ $browser-context:16;
     border: rem(1) solid var(--color-main);
     border-radius: rem(2);
     color:var(--color-main);
+    font-size: rem(16);
   }
 }
 
@@ -66,7 +67,10 @@ $browser-context:16;
   border-radius: rem(4);
   font-size: rem(14);
   color: var(--color-font-sub);
-  h6{font-weight: 600;}
+  h6{
+    font-size: rem(14);
+    font-weight: 600;
+  }
   overflow-y: scroll;
     &::-webkit-scrollbar {display: none;}
 }

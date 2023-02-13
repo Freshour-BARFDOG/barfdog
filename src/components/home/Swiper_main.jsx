@@ -37,11 +37,11 @@ export function Swiper_main ({data, isMobile}) {
     <div className={Styles.swiper_main_outerWrap}>
       <div className={Styles.swiper_navigation_container}>
         <i className={Styles['swiper-button-prev']} ref={navPrev_mainRef}>
-          <ArrowLeft/>
+          <ArrowLeft width='100%' height='100%' viewBox="0 0 50 50" />
         </i>
         
         <i className={Styles['swiper-button-next']} ref={navNext_mainRef}>
-          <ArrowRight/>
+          <ArrowRight width='100%' height='100%' viewBox="0 0 50 50" />
         </i>
       </div>
       

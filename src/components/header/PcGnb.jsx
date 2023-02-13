@@ -46,7 +46,7 @@ const Gnb_survey = () => {
     <>
       <li className={s.subscribe} onClick={onClickHandler}>
         <span>
-          <SVG_subscribe />
+          {/* <SVG_subscribe /> */}
         </span>
         <i id={'DeadlineTimer-wrapper'} className={'pc'}>
           <DeadlineTimer />

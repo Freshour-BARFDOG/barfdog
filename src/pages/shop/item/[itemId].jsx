@@ -230,7 +230,7 @@ const validation_itemPrice = (data) => {
 
 export async function getServerSideProps(ctx) {
   const { query, req } = ctx;
-  // console.log(query, req)
+  let isDeletedItem = false;
   const itemId = query.itemId;
   let DATA = null;
   const apiUrl = `/api/items/${itemId}`;
@@ -255,6 +255,9 @@ export async function getServerSideProps(ctx) {
     const data = res?.data;
     console.log(data)
     if (data) {
+      
+      isDeletedItem = data.itemDto.deleted; // 일반상품 삭제 여부 (by 관리자)
+      
       DATA = {
         item: {
           id: data.itemDto.id,
@@ -296,10 +299,16 @@ export async function getServerSideProps(ctx) {
     }
   } catch (err) {
       console.error(err)
-  
   }
-  // const res = await getDataSSR(req, getApiUrl);
-  // console.log('SERVER REPONSE: ',res);
+  
+  if ( isDeletedItem ) {
+    return {
+      redirect:{
+        destination: "/shop",
+        permanent: false,
+      }
+    }
+  }
   
   return { props: { data: DATA } };
 }

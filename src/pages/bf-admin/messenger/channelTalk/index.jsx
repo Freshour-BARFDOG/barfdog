@@ -96,7 +96,7 @@ export default function ChannelTalkPage () {
                 <Tooltip message={'비회원 시 입력한 "이메일, 연락처"가 회원가입 후 하나라도 일치할 경우, 회원매칭됩니다.'} messagePosition={'left'}/>
               </h3>
             </div>
-            <div className={`${s.cont_viewer}`}>
+            <div className={`${s.cont_viewer} ${s.fullWidth}`}>
               <div className={s.table}>
                 <ul className={s.table_header}>
                   <li className={s.table_th}>최초 상담일</li>

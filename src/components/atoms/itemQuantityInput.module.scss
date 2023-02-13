@@ -48,6 +48,7 @@
     text-align: center;
     align-self: center;
     display: flex;
+    font-size: rem(16);
     &::placeholder{color:var(--color-font-def)}
   }
 }

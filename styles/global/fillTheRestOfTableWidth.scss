@@ -1,0 +1,6 @@
+@import 'rem';
+
+$maxAdminBodyWidth: rem(1580);
+@function fillTheRestOfTableWidth($minPx){
+  @return minmax(rem($minPx), $maxAdminBodyWidth)
+}

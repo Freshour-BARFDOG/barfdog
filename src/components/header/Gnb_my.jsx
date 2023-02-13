@@ -32,7 +32,7 @@ export const Gnb_my = ({isMobile, setSidrOpen, authData}) => {
           <li>
             <button id="gnb_cart" data-link={'/cart'} onClick={onMovePage}>
               <div className={s.shop_wrap}>
-                <Icon_cart/>
+                {/* <Icon_cart/> */}
                 <span className={s.gnb_shop_count}>{cart.itemCount || 0}</span>
               </div>
             </button>
@@ -40,11 +40,15 @@ export const Gnb_my = ({isMobile, setSidrOpen, authData}) => {
           <li>
             {isMobile ? (
               <button type={'button'} onClick={onShowMobileSideMenu}>
-                <Icon_mypage/>
+                <div className={s.mypage_wrap}>
+                  {/* <Icon_mypage/> */}
+                </div>
               </button>
             ) : (
               <button data-link={'/mypage/orderHistory'} onClick={onMovePage}>
-                <Icon_mypage/>
+                <div className={s.mypage_wrap}>
+                  {/* <Icon_mypage/> */}
+                </div>
               </button>
             )}
           </li>

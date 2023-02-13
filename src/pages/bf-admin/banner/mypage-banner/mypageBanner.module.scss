@@ -25,10 +25,10 @@ $pcHeight: rem(60);
 .admin-preview-image {
   &.pc {
     height: $pcHeight;
-    max-width: rem(1200);
+    width: rem(1200);
   }
   &.mobile {
     height: $mobileHeight;
-    max-width: rem(600);
+    width: rem(600);
   }
 }

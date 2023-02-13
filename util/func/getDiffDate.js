@@ -1,4 +1,4 @@
-import {transformToday} from './transformDate';
+import transformDate, {transformToday} from './transformDate';
 
 export const getDiffDate = (diffNum) => {
   // diffNum: 양수 => 미래시점
@@ -21,3 +21,8 @@ export const getDiffDateNumber = (fromDate, toDate) => {
   return diffDateNum ;
 };
 
+
+export const getRemainingDaysNumberUntilExpired = (expiredDate) => {
+  //format : yyyy-mm-ddThh:mm:ss
+  return getDiffDateNumber(transformDate(expiredDate), transformToday());
+};

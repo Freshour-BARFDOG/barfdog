@@ -144,6 +144,7 @@ $bottom-menu-list-height: rem(50);
       display: flex;
       align-items: center;
       justify-content: center;
+      max-width: rem(72);
 
       &.kakao .desc b {
         color: #ffda2f;
@@ -216,7 +217,7 @@ $bottom-menu-list-height: rem(50);
       border: rem(1) solid var(--color-line-02);
       cursor: default;
       font-weight: 600;
-      height: rem(16);
+      // height: rem(16);
       line-height: 1.4;
     }
     .email{
@@ -328,6 +329,7 @@ $bottom-menu-list-height: rem(50);
         display: flex;
         align-items: center;
         text-align: left;
+        font-size: rem(15);
       }
       &:not(:last-child) {
         border-bottom: rem(1) solid var(--color-line-04);

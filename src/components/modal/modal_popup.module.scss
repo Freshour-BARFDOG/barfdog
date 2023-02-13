@@ -80,6 +80,7 @@ $defaultCenter : 55%;
     background-color: #FFFFFF;
     transition: background-color 0.3s ease;
     height: 100%;
+    font-size: rem(16);
 
     &:hover {
       background-color: var(--color-bg-02);
@@ -89,6 +90,7 @@ $defaultCenter : 55%;
   button:not(:last-child) {
     border-right: rem(1) solid var(--color-line-04);
     word-break: keep-all;
+    font-size: rem(16);
   }
 }
 

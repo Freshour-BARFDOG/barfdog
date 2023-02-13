@@ -19,7 +19,7 @@ export function Swiper_sns() {
     loop: true,
     centeredSlides: false, // 가운데 갈지 말지 고민
     slidesPerView: 'auto',
-    autoplay: {delay: 2500, disableOnInteraction: false},
+    // autoplay: {delay: 2500, disableOnInteraction: false},
     navigation: {
       prevEl: navPrevRef.current,
       nextEl: navNextRef.current,
@@ -48,10 +48,10 @@ export function Swiper_sns() {
   return (
     <div className={Styles.swiper_sns_outerWrap}>
       <i className={Styles.swiper_button_prev_sns} ref={navPrevRef}>
-        <ArrowLeft_s />
+        <ArrowLeft_s width='100%' height='100%' viewBox="0 0 28 28" />
       </i>
       <i className={Styles.swiper_button_next_sns} ref={navNextRef}>
-        <ArrowRight_s />
+        <ArrowRight_s width='100%' height='100%' viewBox="0 0 28 28" />
       </i>
       <Swiper 
       navigation={{

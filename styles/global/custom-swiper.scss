@@ -37,9 +37,17 @@ $browser-context:16;
   > i {
     transform: translateX(-10%);
   }
+
+  #surveyPage {
+    visibility: hidden;
+  }
 }
 .swiper-slide-next{
   > i {
     transform: translateX(10%);
+  }
+
+  #surveyPage {
+    visibility: hidden;
   }
 }

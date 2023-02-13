@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import s from './coupon.module.scss';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
@@ -7,87 +7,99 @@ import MetaTitle from '/src/components/atoms/MetaTitle';
 import Modal_useCoupon from '/src/components/modal/modal_mypage_coupon';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import transformDate from '/util/func/transformDate';
-import { EmptyContMessage } from '/src/components/atoms/emptyContMessage';
+import {EmptyContMessage} from '/src/components/atoms/emptyContMessage';
 import Spinner from '/src/components/atoms/Spinner';
-import { Modal_registerCoupon } from '/src/components/modal/Modal_registerCoupon';
+import {Modal_registerCoupon} from '/src/components/modal/Modal_registerCoupon';
 import {putObjData} from "/src/pages/api/reqData";
 import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 import {useModalContext} from "/store/modal-context";
 import {couponActiveType, couponUseType} from "/store/TYPE/couponType";
+import {getRemainingDaysNumberUntilExpired} from "/util/func/getDiffDate";
 
 
-export default function CouponPage() {
+const initInfo = {
+  availableCount: 0,
+  totalCount: 0,
+}
+
+
+export default function CouponPage () {
   
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
   const searchApiUrl = '/api/coupons';
   const searchPageSize = 10;
   const apiDataQueryString = 'queryCouponsDtoList';
-  const [isLoading, setIsLoading] = useState({});
+  const [isLoading, setIsLoading] = useState( {} );
   const [itemList, setItemList] = useState([]);
-  const [activeUseCouponModal, setActiveUseCouponModal] = useState(false);
-  const [activeRegisterCouponModal, setActiveRegisterCouponModal] = useState(false);
-  const [form, setForm] = useState({});
-  const couponCodeRef = useRef(null);
+  const [activeUseCouponModal, setActiveUseCouponModal] = useState( false );
+  const [activeRegisterCouponModal, setActiveRegisterCouponModal] = useState( false );
+  const [form, setForm] = useState( {} );
+  const couponCodeRef = useRef( null );
   
-  const initInfo = {
-    availableCount: 0,
-    totalCount: 0,
-  }
   
   const [info, setInfo] = useState( initInfo );
   
-  const onActiveModalHandler = () => {
-    setActiveUseCouponModal(true);
-  };
-
-  const pageInterCeptor = (res) => {
-    // console.log(res.data);
+  const onActiveModalHandler = useCallback( () => {
+    setActiveUseCouponModal( true );
+  }, [] );
+  
+  const pageInterceptor = useCallback( (res, option = {itemQuery: null}) => {
+    // res = DUMMY__RESPONSE; // ! TEST
+    console.log( res );
     let newPageInfo = {
-      totalPages: 0,
-      size: 0,
+      totalPages: 1,
+      size: searchPageSize,
       totalItems: 0,
       currentPageIndex: 0,
-      newPageNumber: 0,
+      newPageNumber: 1,
       newItemList: [],
-    };
-    const data = res.data?.couponsPageDto?._embedded;
-    if(data){
-      const pageData = res.data.couponsPageDto.page;
+    }
+    
+    const data = res?.data?.couponsPageDto;
+    if ( data ) {
+      
+      const pageData = data.page;
+      const curItemList = data._embedded.queryCouponsDtoList || [];
+      
+      const availableCouponList = curItemList.filter((item) =>
+        getRemainingDaysNumberUntilExpired( item.expiredDate ) >= 0 && item.status === couponActiveType.ACTIVE
+      );
+      
       newPageInfo = {
         totalPages: pageData.totalPages,
         size: pageData.size,
         totalItems: pageData.totalElements,
         currentPageIndex: pageData.number,
         newPageNumber: pageData.number + 1,
-        newItemList: data.queryCouponsDtoList || {},
+        newItemList: availableCouponList,
       };
       
-      const newInfo = {
-        availableCount:  res.data.availableCount,
-        totalCount:  res.data.totalCount,
-      }
-      setInfo(newInfo);
+      const newCouponInfo = {
+        availableCount: availableCouponList.length,
+        totalCount: res.data.totalCount,
+      };
+      setInfo( newCouponInfo );
     }
-   
+  
     return newPageInfo;
-  };
-
-  const onInputChangeHandler = (e) => {
-    const { id, value } = e.currentTarget;
-    setForm((prevState) => ({
+  }, [] );
+  
+  
+  const onInputChangeHandler = useCallback( (e) => {
+    const {id, value} = e.currentTarget;
+    setForm( (prevState) => ({
       ...prevState,
       [id]: value,
-    }));
-  };
+    }) );
+  }, [] );
   
-  const onActiveCouponRegisterModal = () => {
-    if(!form.code){
-      return mct.alertShow('쿠폰코드를 입력해주세요.');
+  const onActiveCouponRegisterModal = useCallback( () => {
+    if ( !form.code ) {
+      return mct.alertShow( '쿠폰코드를 입력해주세요.' );
     }
-    
-    setActiveRegisterCouponModal(true);
-  };
+    setActiveRegisterCouponModal( true );
+  }, [form] );
 
   
   const onRegisterCouponByCode = async () => {
@@ -95,48 +107,53 @@ export default function CouponPage() {
     if(!form.pw){
       return mct.alertShow('비밀번호를 입력해주세요.');
     }
-    const apiUrl = '/api/coupons/code';
+  
     try {
-      setIsLoading((prevState) => ({
+      setIsLoading( (prevState) => ({
         ...prevState,
         rep: true,
-      }));
+      }) );
       const body = {
-        code : form.code,
-        password : form.pw
+        code: form.code,
+        password: form.pw
       }
-      const res = await putObjData(apiUrl,body);
-      // console.log(res)
-   
-      let resultMessage;
-      if (res.isDone) {
-        setActiveRegisterCouponModal(false);
-        mct.alertShow('쿠폰이 등록되었습니다.');
-        setTimeout(()=>{
+    
+      const apiUrl = '/api/coupons/code';
+      const res = await putObjData( apiUrl, body );
+    
+      if ( res.isDone ) {
+        setActiveRegisterCouponModal( false );
+        mct.alertShow( '쿠폰이 등록되었습니다.', onSuccessCallback );
+        setTimeout( () => {
           window.location.reload();
-        },1000)
-        
-      } else if (res.status === 400 && res.status < 500) {
+        }, 1000 );
+      
+      } else if ( res.status === 400 && res.status < 500 ) {
         let defErrorMessage = '쿠폰코드를 등록할 수 없습니다.';
         let errorMessage = res.data.data.errors[0].defaultMessage;
-        // console.log(errorMessage);
         errorMessage = errorMessage === "이미 사용된 쿠폰 입니다." ? '이미 등록되었거나, 사용된 쿠폰입니다.' : errorMessage;
-        mct.alertShow(errorMessage || defErrorMessage);
+        mct.alertShow( errorMessage || defErrorMessage );
       }
-      // console.log(res);
     } catch (err) {
-      alert(err);console.error(err);
+      mct.alertShow( err );
+      console.error( err );
+    } finally {
+      setIsLoading( (prevState) => ({
+        ...prevState,
+        rep: false,
+      }) );
     }
-    setIsLoading((prevState) => ({
-      ...prevState,
-      rep: false,
-    }));
+  
   };
-
+  
+  const onSuccessCallback = useCallback( () => {
+    window.location.reload();
+  }, [] );
+  
   
   return (
     <>
-      <MetaTitle title="마이페이지 쿠폰조회" />
+      <MetaTitle title="마이페이지 쿠폰조회"/>
       <Layout>
         <Wrapper>
           <MypageWrapper>
@@ -169,20 +186,15 @@ export default function CouponPage() {
                   사용 가능한 쿠폰 : <span>{info.availableCount || 0}</span>개
                 </div>
               </div>
-
+              
               <div className={s.horizon}>
-                <hr />
+                <hr/>
               </div>
-              {isLoading.fetching ? (
-                <Spinner />
-              ) : itemList.length === 0 ? (
-                <EmptyContMessage message={'사용가능한 쿠폰이 없습니다.'} />
-              ) : (
-                <ul className={s.coupon_content_grid_box}>
-                  {itemList
-                    .filter((item) => item.status === couponActiveType.ACTIVE)
-                    .map((item, index) => (
-                      <li key={`coupon-${item.id}`} className={s.grid_box}>
+              {itemList.length
+                ? <ul className={s.coupon_content_grid_box}>
+                  {itemList.map( (item, i) => {
+                      const expired = getRemainingDaysNumberUntilExpired( item.expiredDate ) < 0;
+                      return <li key={`coupon-${item.id}-${i}`} className={`${s.grid_box} ${expired && s.expiredCoupon}`}>
                         <div className={s.left_top}>{item.name}</div>
                         <div className={s.right_top}>{item.discount}</div>
                         <div className={s.left_bot}>
@@ -192,28 +204,35 @@ export default function CouponPage() {
                             <div className={s.inner_flex_box}>
                               <div className={s.left_text}>사용기한</div>
                               <div className={s.line}>
-                                <hr />
+                                <hr/>
                               </div>
-                              <div>{transformDate(item.expiredDate)}</div>
+                              <div>{transformDate( item.expiredDate )}</div>
                             </div>
                           </div>
                         </div>
                         <div className={s.right_bot}>
-                          <button type={'button'} className={s.useCoupon} onClick={onActiveModalHandler}>쿠폰 사용</button>
+                          <button
+                            type={'button'}
+                            className={`${s.useCoupon} ${expired && 'disabled'}`}
+                            onClick={onActiveModalHandler}>
+                            {expired ? "사용기한 만료" : "쿠폰 사용"}
+                          </button>
                         </div>
                       </li>
-                    ))}
+                    } )}
                 </ul>
-              )}
+                : isLoading.fetching
+                  ? <Spinner/>
+                  : <EmptyContMessage message={'사용 가능한 쿠폰이 없습니다.'}/>
+              }
             </section>
             <div className={s.pagination_box}>
               <PaginationWithAPI
                 apiURL={searchApiUrl}
                 size={searchPageSize}
                 setItemList={setItemList}
-                queryItemList={apiDataQueryString}
                 setIsLoading={setIsLoading}
-                pageInterceptor={pageInterCeptor}
+                pageInterceptor={pageInterceptor}
               />
             </div>
           </MypageWrapper>

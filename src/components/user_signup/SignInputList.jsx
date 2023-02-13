@@ -347,6 +347,7 @@ export default function SignInpuList({ formValues, setFormValues, formErrors, se
       />
 
       <SignupInput
+        className={s['birthday']}
         type={'date'}
         required={true}
         id={'birthday'}

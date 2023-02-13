@@ -74,8 +74,10 @@ section.pagination-section{padding : rem(80) 0 rem(70) 0 }
     .select-box{
       select{
         width:rem(120);
+        height: rem(38);
         min-width: auto;
-
+        font-size: rem(16);
+        background-position-y: center;
       }
     }
   }
@@ -105,6 +107,11 @@ section.pagination-section{padding : rem(80) 0 rem(70) 0 }
           //max-width: rem(360);
           aspect-ratio: 1/1;
           margin-bottom:rem(8);
+        }
+        @supports not (aspect-ratio: 1/1) {
+          .img-main {
+            padding-top: 100%;
+          }
         }
         $iconWidth: rem(67);
         > i:nth-child(1){left:0;}
@@ -279,7 +286,7 @@ section.pagination-section{padding : rem(80) 0 rem(70) 0 }
           display: flex;
           justify-content: space-between;
           width: 100%;
-
+          align-items: center;
           // 신규 메뉴 추가시 max-width 넓이조절 필요
           max-width: rem(250);
 

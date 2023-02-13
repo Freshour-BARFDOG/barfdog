@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import Checkbox from '/src/components/atoms/Checkbox';
 import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
 import dynamic from 'next/dynamic';
@@ -9,57 +9,62 @@ import { valid_isTheSameArray } from '/util/func/validation/validationPackage';
 import Spinner from '/src/components/atoms/Spinner';
 import { getMemberList } from '/src/pages/api/getMemberList';
 import Tooltip from "../../atoms/Tooltip";
+import {useModalContext} from "/store/modal-context";
 
 const WindowOpener = dynamic(() => import('/util/func/window-opener'), { ssr: false });
 
-
 export default function SearchPersonalForm({ id, setFormValues, formErrors }) {
   
-  
-  const [errorMessage, setErrorMessage] = useState( '발급대상인 회원이 없습니다.');
-  const [isLoading, setIsLoading] = useState(false);
+  const mct = useModalContext();
+  const [isLoading, setIsLoading] = useState( false );
   const [itemList, setItemList] = useState([]);
-  const [selectedItemList, setSelectedItemList] = useState([]);
-
+  const [selectedItemList, setSelectedItemList] = useState( [] );
   
   
-  useEffect(() => {
-    // console.log('선택된 회원의 ID LIST',selectedItems);
-    setFormValues((prevState) => ({
+  useEffect( () => {
+    setFormValues( (prevState) => ({
       ...prevState,
-      memberIdList: itemList.map(item=>item.id),
-    }));
-  }, [itemList]);
-
-  const onReceivePopupData = async (err, idList) => {
-    // console.log('err: ', err, 'idList: ', idList);
+      memberIdList: itemList.map( item => item.id ),
+    }) );
+  }, [itemList] );
   
-    const targetMemberIdList = idList;
-    
-    if ( err ) {
-      return setErrorMessage( '회원검색 데이터를 불러오는데 실패했습니다.' );
-    } else if ( !Array.isArray( targetMemberIdList ) || !targetMemberIdList.length ) {
-      return setErrorMessage( '발행대상인 회원이 없습니다.' );
-    }
+  
+  
+  const onReceivePopupData = async (err, receivedIds) => {
+    // ! windowOpener로 전달되는 함수에선 다른 함수와 다르게
+    //  "itemList"값을 올바르게 받을 수 없는 이슈가 있다.
+    if ( err ) return mct.alertShow( '회원검색 데이터를 불러오는데 실패했습니다.' );
+    if ( !Array.isArray( receivedIds ) ) return ; // recievedIds
+  
   
     try {
       setIsLoading( true );
-      const newMemberList = await getMemberList( targetMemberIdList );
-      setItemList( prevState => prevState.concat( newMemberList ) )
+  
+      const receivedMembers = await getMemberList( receivedIds );
+      
+      setItemList( prevItems => {
+        const addedMembers = receivedMembers.filter( (member) => prevItems.map( item => item.id ).indexOf( member.id ) < 0 );
+        // console.log( "rcv: ", receivedIds, "\addedMembers: ", receivedMembers, "addedMembers: ", addedMembers );
+        if(!addedMembers.length) alert( "이미 발행 대상에 포함되어있습니다. 추가된 회원은 없습니다." );
+        return prevItems.concat( addedMembers );
+      } );
+      
     } catch (err) {
-        console.error(err)
-    }
-    setIsLoading( false );
-  }
-
-
-  const onAllSelectItemsList = (checked) => {
-    if (checked) {
-      setSelectedItemList(itemList.map((item) => item.id)); // 모두 선택
-    } else {
-      setSelectedItemList([]); //초기화
+      mct.alertShow( err );
+      console.error( err );
+    } finally {
+      setIsLoading( false );
     }
   };
+  
+  
+  const onAllSelectItemsList = useCallback( (checked) => {
+    if ( checked ) {
+      setSelectedItemList( itemList.map( (item) => item.id ) ); // 모두 선택
+    } else {
+      setSelectedItemList( [] ); //초기화
+    }
+  }, [itemList] );
   
   
   const onDeleteItemList = ()=>{
@@ -114,21 +119,16 @@ export default function SearchPersonalForm({ id, setFormValues, formErrors }) {
                 <li className={s.table_th}>구독여부</li>
                 <li className={s.table_th}>장기미접속</li>
               </ul>
-              {(() => {
-                if (isLoading) {
-                  return <Spinner floating={true} />;
-                } else if (!itemList.length) {
-                  return <AmdinErrorMessage text={errorMessage}/>;
-                } else {
-                  return (
-                    <UserList
-                      items={itemList}
-                      setSelectedItems={setSelectedItemList}
-                      selectedItems={selectedItemList}
-                    />
-                  );
-                }
-              })()}
+              {itemList?.length
+                ? <UserList
+                  items={itemList}
+                  setSelectedItems={setSelectedItemList}
+                  selectedItems={selectedItemList}
+                />
+                : isLoading
+                  ? <AmdinErrorMessage loading={<Spinner/>}/>
+                  : <AmdinErrorMessage text={'발급대상인 회원이 없습니다.'}/>
+              }
             </div>
           </div>
         </div>

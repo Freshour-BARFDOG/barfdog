@@ -15,7 +15,7 @@ import { InquiryItem } from '/src/components/mypage/inquiry/InquiryItem';
 import { SearchBox } from '/src/components/mypage/inquiry/SearchBox';
 import { searchType } from '/store/TYPE/searchType';
 import {getQueryString} from "/util/func/getQueryString";
-import enterKey from "../../../../util/func/enterKey";
+import enterKey from "/util/func/enterKey";
 
 
 
@@ -174,38 +174,38 @@ export default function InquiryPage() {
   );
 }
 
-const DUMMY_RESPONSE = {
-  data: {
-    _embedded: {
-      itemQueryName: [
-        {
-          id: 1,
-          status: inquiryStatusType.UNANSWERED,
-          title:
-            '문의사항있습니다!문의사항있습니다!문의사항있습니다!문의사항있습니다!문의사항있습니다!문의사항있습니다!문의사항있습니다!문의사항있습니다!문의사항있습니다!문의사항있습니다!문의사항있습니다!문의사항있습니다!문의사항있습니다!',
-          createdDate: '2022-11-17T14:10:40',
-        },
-        {
-          id: 2,
-          status: inquiryStatusType.ANSWERED,
-          title: '문의사항있습니다2',
-          createdDate: '2022-11-17T14:10:40',
-        },
-        {
-          id: 3,
-          status: inquiryStatusType.MULTIPLE_ANSWERED,
-          title: '문의사항있습니다3',
-          createdDate: '2022-11-17T14:10:40',
-        },
-      ],
-    },
-    page: {
-      totalPages: 10,
-      size: 10,
-      totalItems: 30,
-      currentPageIndex: 1,
-      newPageNumber: 1,
-    },
-  },
-  status: 200,
-};
+// const DUMMY_RESPONSE = {
+//   data: {
+//     _embedded: {
+//       itemQueryName: [
+//         {
+//           id: 1,
+//           status: inquiryStatusType.UNANSWERED,
+//           title:
+//             '문의사항있습니다!문의사항있습니다!문의사항있습니다!문의사항있습니다!문의사항있습니다!문의사항있습니다!문의사항있습니다!문의사항있습니다!문의사항있습니다!문의사항있습니다!문의사항있습니다!문의사항있습니다!문의사항있습니다!',
+//           createdDate: '2022-11-17T14:10:40',
+//         },
+//         {
+//           id: 2,
+//           status: inquiryStatusType.ANSWERED,
+//           title: '문의사항있습니다2',
+//           createdDate: '2022-11-17T14:10:40',
+//         },
+//         {
+//           id: 3,
+//           status: inquiryStatusType.MULTIPLE_ANSWERED,
+//           title: '문의사항있습니다3',
+//           createdDate: '2022-11-17T14:10:40',
+//         },
+//       ],
+//     },
+//     page: {
+//       totalPages: 10,
+//       size: 10,
+//       totalItems: 30,
+//       currentPageIndex: 1,
+//       newPageNumber: 1,
+//     },
+//   },
+//   status: 200,
+// };

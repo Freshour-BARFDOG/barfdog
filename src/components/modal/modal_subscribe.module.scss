@@ -84,7 +84,7 @@ $topLinkBannerHeight : rem(38);
 
 
 .card {
-  padding: rem(35) rem(50) rem(42);
+  padding: rem(35) rem(0) rem(42);
   box-sizing:border-box;
   text-align: center;
   .img-main {
@@ -94,6 +94,13 @@ $topLinkBannerHeight : rem(38);
     overflow: initial;
     margin-bottom: rem(15);
     z-index: 0;
+    min-width: auto;
+    min-height: auto;
+    @supports not (aspect-ratio: 180/150) {
+      .img-main {
+        padding-top: 53.766%;
+      }
+    }
     .img-sale {
       position: absolute;
       right: rem(-61);
@@ -105,6 +112,7 @@ $topLinkBannerHeight : rem(38);
       overflow: hidden;
     }
   }
+  
 
   .title-section{
     margin-bottom:rem(26);
@@ -117,6 +125,7 @@ $topLinkBannerHeight : rem(38);
       cursor:default;
     }
     .subtitle {
+      font-size: rem(18);
       font-weight: 500;
       margin-bottom:rem(21);
       letter-spacing: -0.02em;
@@ -124,6 +133,7 @@ $topLinkBannerHeight : rem(38);
        b{color: var(--color-primary04);}
     }
     .desc {
+      font-size: rem(16);
       font-weight: 400;
       color: var(--color-font-sub);
       cursor:default;
@@ -138,6 +148,8 @@ $topLinkBannerHeight : rem(38);
       font-size: rem(16);
       width: 100%;
       border-radius: rem(4);
+      max-width: rem(280);
+      margin: 0 auto;
     }
   }
 }
@@ -205,6 +217,11 @@ $topLinkBannerHeight : rem(38);
     .img-main {
       width: rem(150);
       margin-bottom: rem(-4);
+      @supports not (aspect-ratio: 180/150) {
+        .img-main {
+          padding-top: 44.805%;
+        }
+      }
       .img-sale {
         right: rem(-55);
         top: rem(-19);

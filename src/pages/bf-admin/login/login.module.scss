@@ -42,12 +42,14 @@ $browser-context: 16;
     p {
       margin-bottom: rem(4);
       font-weight: 300;
+      font-size: rem(16);
     }
     p,
     em {
       padding-left: rem(6);
     }
     input:not([type="checkbox"]) {
+      font-size: rem(16);
       display: block;
       width: 100%;
       padding: rem(10) rem(20);

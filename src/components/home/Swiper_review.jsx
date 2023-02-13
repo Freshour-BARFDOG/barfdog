@@ -80,10 +80,10 @@ export function Swiper_review({ data }) {
   return (
     <div className={s.swiper_review_outerWrap}>
       <i className={s['swiper-button-prev']} ref={navPrevRef}>
-        <ArrowLeft_m />
+        <ArrowLeft_m  width='100%' height='100%' viewBox="0 0 39 39" />
       </i>
       <i className={s['swiper-button-next']} ref={navNextRef}>
-        <ArrowRight_m />
+        <ArrowRight_m  width='100%' height='100%' viewBox="0 0 39 39" />
       </i>
       <Swiper
         navigation={{
@@ -128,7 +128,7 @@ export function Swiper_review({ data }) {
                     height={13}
                     alt="카드 이미지"
                   /> */}
-                  <Quotation />
+                  <Quotation width='100%' height='100%' viewBox="0 0 14 13" />
                 </div>
                 <figcaption className={s.contents}>{d.contents}</figcaption>
               </figure>
@@ -138,7 +138,7 @@ export function Swiper_review({ data }) {
             <Link href="/review" passHref>
               <a>
                 <div className={s.image_wrap}>
-                  <ArrowRight_m2 />
+                  <ArrowRight_m2 width='100%' height='100%' viewBox="0 0 39 39" />
                 </div>
                 <div className={s.more}>더보기</div>
               </a>

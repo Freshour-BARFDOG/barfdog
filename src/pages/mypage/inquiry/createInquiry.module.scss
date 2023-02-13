@@ -69,6 +69,7 @@ ul{
     min-width: auto;
     padding: 0 rem(15);
     font-weight: 500;
+    height: rem(38);
 
     &:focus{
       outline: none;
@@ -78,12 +79,15 @@ ul{
   input{
     border-radius: 0;
     padding: rem(5) rem(15);
+    height: rem(38);
+    font-size: rem(16);
   }
   textarea{
     border-radius:0;
     min-height: rem(260);
     padding: rem(10) rem(15);
     overflow: scroll;
+    font-size: rem(16);
   }
   ::placeholder{
     font-size: rem(14);
@@ -103,6 +107,7 @@ ul{
       color: var(--color-font-light);
       pointer-events: none;
       font-weight: 300;
+      font-size: rem(16);
     }
   }
 }

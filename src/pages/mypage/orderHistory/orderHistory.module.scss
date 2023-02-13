@@ -55,6 +55,7 @@ section.title{ padding : rem(8) 0 rem(30);}
     border-bottom: rem(1) solid var(--color-line-04);
     font-weight: 600; 
     padding-bottom: rem(3);
+    font-size: rem(16);
   }
 
   hr{display: none;}
@@ -98,7 +99,7 @@ section.title{ padding : rem(8) 0 rem(30);}
           column-gap: rem(20);
           padding-top: rem(10);
           color: var(--color-font-sub);
-
+          font-size: rem(16);
           span {
             word-break: break-all;
           }
@@ -110,7 +111,8 @@ section.title{ padding : rem(8) 0 rem(30);}
     .mid_box {
       text-align: center;
       max-width: rem(100);
-      word-break: keep-all
+      word-break: keep-all;
+      font-size: rem(16);
     }
     .right_box {
       @include char(l15);
@@ -225,7 +227,8 @@ section.title{ padding : rem(8) 0 rem(30);}
           column-gap: rem(20);
           padding-top: rem(10);
           color: var(--color-font-sub);
-
+          font-size: rem(16);
+          
           div {
             word-break: break-all;
           }
@@ -241,6 +244,7 @@ section.title{ padding : rem(8) 0 rem(30);}
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: rem(16);
     }
 
     .right_box {

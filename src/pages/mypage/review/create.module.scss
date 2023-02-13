@@ -129,6 +129,7 @@ section.picture_attach {
       color: var(--color-font-light);
       border-radius: rem(8);
       font-weight: 300;
+      font-size: rem(16);
     }
 
 
@@ -149,6 +150,7 @@ section.picture_attach {
     padding-top: rem(13);
     .red_text {
       color: var(--color-main);
+      font-size: rem(14);
     }
   }
   .square {
@@ -210,12 +212,14 @@ section.picture_attach {
   button.cancel {
     border: rem(1) solid var(--color-line-03);
     color: var(--color-font-def);
+    font-size: rem(16);
   }
   
   button.save {
     border: rem(1) solid transparent;
     color: #fff;
     background-color: var(--color-main);
+    font-size: rem(16);
   }
 }
 

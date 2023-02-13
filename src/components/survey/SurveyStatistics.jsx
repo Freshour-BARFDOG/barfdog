@@ -318,7 +318,7 @@ export const SurveyStatistics = ({ id ,  mode = 'default' }) => {
               <div className={s.right_box}>
                 <div className={s.row_1}>
                   <div className={`${s.image} img-wrap`}>
-                    <Btn_01/>
+                    <Btn_01 width='100%' height='100%' viewBox="0 0 24 24" />
                     {/* <Image
                       priority
                       src={require('public/img/mypage/statistic_dog_walker.png')}
@@ -333,7 +333,7 @@ export const SurveyStatistics = ({ id ,  mode = 'default' }) => {
 
                 <div className={s.row_2}>
                   <div className={`${s.image} img-wrap`}>
-                    <Btn_02/>
+                    <Btn_02 width='100%' height='100%' viewBox="0 0 24 24" />
                     {/* <Image
                       priority
                       src={require('public/img/mypage/statistic_dog_walker2.png')}

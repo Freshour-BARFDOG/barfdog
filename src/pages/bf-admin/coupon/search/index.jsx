@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import s from '../coupon.module.scss';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
@@ -12,8 +12,12 @@ import enterKey from '/util/func/enterKey';
 import Spinner from '/src/components/atoms/Spinner';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import Tooltip from '/src/components/atoms/Tooltip';
-import { global_couponType } from '/store/TYPE/couponType';
-import {getDefaultPagenationInfo} from "../../../../../util/func/getDefaultPagenationInfo";
+import {global_couponType} from '/store/TYPE/couponType';
+import {getDefaultPagenationInfo} from "/util/func/getDefaultPagenationInfo";
+import {MirrorTextOnHoverEvent} from "/util/func/MirrorTextOnHoverEvent";
+import {useModalContext} from "/store/modal-context";
+import {putObjData} from "/src/pages/api/reqData";
+import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 
 /*-  auto: '/api/admin/coupons/auto', // 자동발행쿠폰
   - direct: '/api/admin/coupons/direct', // 직접발행쿠폰
@@ -27,6 +31,8 @@ const initialSearchValue = {
   couponType: global_couponType.AUTO_PUBLISHED, // AUTO_PUBLISHED,  CODE_PUBLISHED
 };
 
+
+
 const initialApiUrlWithQuery = {
   keyword: '',
   url: '/api/admin/coupons/auto',
@@ -35,23 +41,29 @@ const initialApiUrlWithQuery = {
 
 export default function CouponListPage() {
   
-  const apiURL = {
-    auto: '/api/admin/coupons/auto',
-    direct: '/api/admin/coupons/direct',
-  };
+  const apiURL = useMemo( () => ({
+    auto :'/api/admin/coupons/auto',
+    direct:'/api/admin/coupons/direct',
+  } ), [] );
+  console.log(apiURL);
   const searchPageSize = 10;
+  
+  const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
   const [searchValue, setSearchValue] = useState(initialSearchValue);
   const [apiUrlWithQuery, setApiUrlWithQuery] = useState(initialApiUrlWithQuery);
   const [searchQueryInitialize, setSearchQueryInitialize] = useState( false );
-  
+  useEffect( () => {
+    MirrorTextOnHoverEvent( window );
+  }, [itemList] );
 
-  const onResetSearchValues = () => {
+  const onResetSearchValues = useCallback(() => {
     setSearchValue(initialSearchValue);
-  };
+  },[]);
 
-  const onSearchHandler = () => {
+  const onSearchHandler = useCallback(() => {
     const queryArr = [];
     let url = '';
     for (const key in searchValue) {
@@ -75,11 +87,10 @@ export default function CouponListPage() {
       query,
       url,
     }));
-  };
+  },[searchValue]);
   
   const pageInterceptor = useCallback((res, option={itemQuery: null}) => {
     // res = DUMMY__RESPONSE; // ! TEST
-    // console.log(res);
     return getDefaultPagenationInfo(res?.data, 'couponListResponseDtoList', {pageSize: searchPageSize, setInitialize: setSearchQueryInitialize});
   },[]);
 
@@ -88,8 +99,45 @@ export default function CouponListPage() {
     enterKey(e, onSearchHandler);
   };
   
-
-
+  const onDeleteItem = async (apiUrl, targetId) => {
+    try {
+      setIsLoading(prevState => ({
+        ...prevState,
+        delete:{
+          [targetId]: true
+        }
+      }));
+      const body = {
+        id:targetId
+      }
+      console.log(apiUrl, body);
+      const res = await putObjData(apiUrl, body);
+      console.log(res);
+      if(res.isDone){
+        mct.alertShow( "쿠폰이 성공적으로 삭제되었습니다.", onSuccessCallback );
+      } else {
+        const serverErrorMessage =res.error;
+        mct.alertShow(serverErrorMessage || '삭제에 실패하였습니다.');
+      }
+    } catch (err) {
+      mct.alertShow('삭제 요청 중 에러가 발생하였습니다.');
+      console.error(err);
+    } finally {
+      setIsLoading(prevState => ({
+        ...prevState,
+        delete:{
+          [targetId]: false
+        }
+      }));
+    }
+  };
+  
+  const onSuccessCallback = () => {
+    window.location.reload();
+  };
+  
+  
+  
   return (
     <>
       <MetaTitle title="쿠폰 조회" admin={true} />
@@ -119,22 +167,22 @@ export default function CouponListPage() {
           <section className="cont">
             <div className="cont_header clearfix">
               <div className="cont_title cont-left">
-                쿠폰목록
+                쿠폰 목록
                 <Tooltip
-                  message={`1. 자동발행쿠폰은 생성 및 삭제할 수 없습니다.\n2. 직접발행 쿠폰은 유저에게 쿠폰을 발행하고 유효기간이 존재할 경우, 목록에 나타납니다.\n3. 등급별 쿠폰은 매달 1일, 생일 쿠폰은 해당월 1일에 자동발급`}
+                  message={`1. 자동발행쿠폰은 생성 및 삭제할 수 없습니다.\n2. 자동발행쿠폰 중 등급별 쿠폰은 매달 1일, 생일 쿠폰은 해당 월 1일에 자동발급됩니다.\n3. 직접발행 쿠폰은 유효기간이 존재하는 항목만 목록에 나타납니다.\n4. 직접발행 쿠폰의 만료일자는 동일한 쿠폰을 2회 이상 발급했을 시,\n    가장 늦은 만료일자를 기준으로 표기됩니다.`}
                   messagePosition={'left'}
                   wordBreaking={true}
-                  width={'400px'}
+                  width={'480px'}
                 />
-                {isLoading.fetching && <Spinner />}
               </div>
               <div className="controls cont-left"></div>
             </div>
             <div className={`${s.cont_viewer} ${s.fullWidth}`}>
-              <div className={s.table}>
-                <ul className={s.table_header}>
+              <div className={`${s.table} ${apiUrlWithQuery.url === apiURL.direct ? s.directCoupon : s.autoCoupon}`}>
+                <ul className={`${s.table_header}`}>
                   <li className={s.table_th}>쿠폰종류</li>
-                  <li className={s.table_th}>쿠폰코드</li>
+                  {apiUrlWithQuery.url === apiURL.direct && <li className={s.table_th}>쿠폰코드</li>}
+                  {apiUrlWithQuery.url === apiURL.direct && <li className={s.table_th}>만료일자</li>}
                   <li className={s.table_th}>쿠폰이름</li>
                   <li className={s.table_th}>쿠폰설명</li>
                   <li className={s.table_th}>할인금액</li>
@@ -142,11 +190,15 @@ export default function CouponListPage() {
                   <li className={s.table_th}>사용한도</li>
                   <li className={s.table_th}>삭제</li>
                 </ul>
-                {itemList.length ? (
-                  <CouponList items={itemList} />
-                ) : (
-                  <AmdinErrorMessage text="조회된 데이터가 없습니다." />
-                )}
+                {itemList.length
+                  ? <CouponList
+                    items={itemList}
+                    onDeleteItem={onDeleteItem}
+                    isLoading={isLoading}/>
+                  : isLoading.fetching
+                  ? <AmdinErrorMessage loading={<Spinner />} />
+                  : <AmdinErrorMessage text="조회된 데이터가 없습니다." />
+                }
               </div>
             </div>
             <div className={s['pagination-section']}>
@@ -163,6 +215,7 @@ export default function CouponListPage() {
           </section>
         </AdminContentWrapper>
       </AdminLayout>
+      {hasAlert && <Modal_global_alert background/>}
     </>
   );
 }

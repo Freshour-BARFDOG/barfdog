@@ -24,7 +24,7 @@ const Indicator = styled.i`
 // background-color: ${function(MENU_BAR){
 //   console.log(MENU_BAR);
 //   const [background, setBackground] = useState(MENU_BAR);
-//   return 
+//   return
 //   'style.MENU_BAR'
 // }};
 
@@ -36,7 +36,7 @@ const Indicator = styled.i`
 // background-color: ${function(MENU_BAR){
 //   console.log(MENU_BAR);
 //   const [background, setBackground] = useState(MENU_BAR);
-//   return 
+//   return
 //   style: {MENU_BAR()}
 // }};
 
@@ -106,13 +106,9 @@ const Modal_recipes = ({ data, selectedIndex, onHideModal, isActiveModal, setIsA
     const ScrollContainerRef = scrollContainerRef.current;
     const contHeight = ScrollContainerRef.children[0].offsetHeight;
     setContHeightInScrollContainer(contHeight);
-    // console.log(scrollContainer_defaultHeight)
-    // console.log(contHeight);
-    // setContHeightInScrollContainer(contHeight);
   }
 
  
-  const [background, setBackground] = useState(MENU_BAR);
 
   const indicatorMove = (index) => {
     if (!indicatorRef.current) return;
@@ -129,9 +125,8 @@ const Modal_recipes = ({ data, selectedIndex, onHideModal, isActiveModal, setIsA
     const menuWrapPosX = menuRef.current.offsetLeft;
 
     const posX =
-      menuWidth * convertedIdx +
-      (indicatorAniDirection !== "right" && menuWrapPosX);
-    indicator.style[`${indicatorAniDirection}`] = `${rem(posX)}`;
+      menuWidth * convertedIdx + (indicatorAniDirection !== "right" && menuWrapPosX);
+    indicator.style[`${indicatorAniDirection}`] = `${posX}px`;
   };
 
   if (

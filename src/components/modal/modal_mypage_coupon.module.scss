@@ -76,7 +76,7 @@ $topLinkBannerHeight: rem(38);
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: flex-end;
+  // align-items: flex-end;
   align-content: stretch;
   height: 100%;
   .img-main {
@@ -104,10 +104,12 @@ $topLinkBannerHeight: rem(38);
     color: var(--color-font-def);
     cursor: default;
     margin-bottom: rem(33);
+    font-size: rem(16);
   }
 
   .btn-section {
     width: 100%;
+    align-self: flex-end;
     a {
       background-color: var(--color-font-strong);
       color: #fff;

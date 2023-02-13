@@ -34,6 +34,11 @@ section.title { padding : rem(40) 0 rem(30);}
       }
     }
   }
+  @supports not (aspect-ratio: 5.45/1) {
+    a {
+      padding-top: 18.349%;
+    }
+  }
 }
 .page_no{
   padding-top: rem(40);

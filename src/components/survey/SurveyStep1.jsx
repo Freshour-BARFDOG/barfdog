@@ -62,7 +62,7 @@ export default function SurveyStep1({ formValues, setFormValues, onInputChangeHa
 
 
   return (
-    <section className={s.step1Page}>
+    <section id='surveyPage' className={s.step1Page}>
       <div className={s['input-row']}>
         <label htmlFor={'name'}>
           <p className={s.input_title}>반려견 이름</p>

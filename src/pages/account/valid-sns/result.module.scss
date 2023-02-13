@@ -29,7 +29,11 @@
   .secondline {
     display: grid;
     grid-template-columns: rem(97) 1fr;
-    align-items: flex-start;
+    align-items: flex-end;
+    > span {
+      font-size: rem(15);
+    }
+
     &:not(:last-child) {
       margin-bottom: rem(28);
     }
@@ -40,13 +44,14 @@
       color: var(--color-font-medium);
     }
     .email {
-      font-size: rem(18);
+      font-size: rem(15);
       word-break: break-all;
     }
 
     &.pwline {
       display: flex;
       justify-content: center;
+      font-size: rem(16);
       //width:100%;
       //margin: rem(10) 0 rem(5);
     }
@@ -67,7 +72,7 @@
   margin: 0 auto;
   height: rem(50);
   border-radius: rem(4);
-  font-size: rem(15);
+  font-size: rem(16);
   align-items: center;
   justify-content: center;
   display: flex;
@@ -87,5 +92,8 @@
     border-color: var(--color-line-03);
     color: var(--color-disabled);
     cursor: not-allowed;
+  }
+  > button {
+    font-size: rem(16);
   }
 }
