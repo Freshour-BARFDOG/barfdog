@@ -37,7 +37,7 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
   });
   
   useEffect(() => {
-    postObjData(`/api/orders/${54}/subscribe/cancel`);
+    
     if(ds.isMobile) return; // ! PC ONLY => MOBILE 결제 시, 무조건 PG사로 REDIRECT
     
     if(orderState.orderState === ORDER_STATES.ORDERING && orderState.orderId){
