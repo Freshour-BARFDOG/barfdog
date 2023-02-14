@@ -58,7 +58,7 @@ export function Payment({
     // console.log(info,'info');
     // console.log(form);
     e.preventDefault();
-    if (isSubmitted) return;
+    if (isSubmitted) return console.error("이미 제출된 양식입니다.");
 
     const valid_target = {
       name: form.deliveryDto.name,
@@ -86,6 +86,7 @@ export function Payment({
     if (!isPassed) return alert('유효하지 않은 항목이 있습니다.');
     // console.log(isPassed);
     // 결제 로직을 시작한다.
+    setIsSubmitted(true);
     await startPayment();
   };
 
@@ -157,7 +158,6 @@ export function Payment({
       // send DATA to api server after successful payment
       const apiUrl = orderType === 'general' ? `/api/orders/general` : `/api/orders/subscribe/${router.query.subscribeId}`;
       const res = await postObjData(apiUrl, body);
-      // console.log(res);
       
       if (res.isDone) {
         await dispatch(orderAction.saveOrderState({orderState: ORDER_STATES.ORDERING, orderType: orderType, orderId: res.data.data.id}));
@@ -255,7 +255,6 @@ export function Payment({
       console.log(r);
       if(r.isDone){
         alert('결제 성공');
-        setIsSubmitted(true);
         window.location.href= `/order/orderCompleted/${id}`;
       }
     } else {
@@ -376,7 +375,6 @@ export function Payment({
       console.log(r);
       if(r.isDone){
         // alert('결제 성공');
-        setIsSubmitted(true);
         window.location.href = `/order/orderCompleted/subscribe/${id}`;
       }
         } else if(response.status === 'failed'){ //카드 승인 실패 (예: 고객 카드 한도초과, 거래정지카드, 잔액부족 등)
