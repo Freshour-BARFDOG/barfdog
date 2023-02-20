@@ -4,20 +4,16 @@ import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from '/src/components/mypage/MypageWrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
-import TabContentContainer, {
-  LeftContainer,
-  RightContainer,
-} from '/src/components/atoms/TabContentContainer';
+import TabContentContainer, {LeftContainer, RightContainer,} from '/src/components/atoms/TabContentContainer';
 import Tabmenu_TwoButton from '/src/components/atoms/Tabmenu_TwoButton';
 import { EmptyContMessage } from '/src/components/atoms/emptyContMessage';
 import animateWindow from '/util/func/animateWindow';
 import { productType } from '/store/TYPE/itemType';
 import Spinner from '/src/components/atoms/Spinner';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
-import { SubscribeItems } from '/src/components/mypage/orderHistory/SubscribeItems';
-import { SingleItemList } from '/src/components/mypage/orderHistory/SingleItemList';
-
-
+import {SubscribeItems} from '/src/components/mypage/orderHistory/SubscribeItems';
+import {SingleItemList} from '/src/components/mypage/orderHistory/SingleItemList';
+import {decodeUrlToMatchApiProtocolAndSearchQuery} from "/util/func/decodeUrlToMatchApiProtocolAndSearchQuery";
 
 
 export default function OrderHistoryPage() {
@@ -64,7 +60,7 @@ export default function OrderHistoryPage() {
         activeMenu === 'left' &&
         tmepItemList.map((item) => ({
           recipeDto: {
-            thumbnailUrl: item.recipeDto.thumbnailUrl,
+            thumbnailUrl: decodeUrlToMatchApiProtocolAndSearchQuery(item.recipeDto.thumbnailUrl),
             recipeName: item.recipeDto.recipeName,
           },
           subscribeOrderDto: {
@@ -83,7 +79,7 @@ export default function OrderHistoryPage() {
       const generalItemList =
         activeMenu === 'right' &&
         tmepItemList.map((item) => ({
-          thumbnailUrl: item.thumbnailUrl,
+          thumbnailUrl: decodeUrlToMatchApiProtocolAndSearchQuery(item.thumbnailUrl),
           orderDto: {
             id: item.orderDto.id,
             merchantUid: item.orderDto.merchantUid,
