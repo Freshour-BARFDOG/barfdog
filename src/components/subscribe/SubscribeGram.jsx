@@ -1,21 +1,17 @@
 import s from '/src/pages/mypage/subscribe/[subscribeId].module.scss';
-import React, { useContext, useState } from 'react';
+import React, {useState} from 'react';
 import Link from 'next/link';
-import { CustomSelectWithCustomOptions } from '/src/components/survey/CustomSelectWithCustomOptions';
+import {CustomSelectWithCustomOptions} from '/src/components/survey/CustomSelectWithCustomOptions';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
-import { subscribePlanType } from '/store/TYPE/subscribePlanType';
-import { calcSubscribePrice } from '/util/hook/useSubscribeInfo';
+import {subscribePlanType} from '/store/TYPE/subscribePlanType';
+import {calcSubscribePrice} from '/util/hook/useSubscribeInfo';
 import Spinner from '../atoms/Spinner';
 import Modal_confirm from '../modal/Modal_confirm';
-import Modal_global_alert from '/src/components/modal/Modal_global_alert';
-import { postObjData } from '/src/pages/api/reqData';
-import { useModalContext } from '/store/modal-context';
-import { ToggleBoxContext } from '/src/components/atoms/ToggleBox';
-import { FullScreenLoading } from '/src/components/atoms/FullScreenLoading';
+import {postObjData} from '/src/pages/api/reqData';
+import {useModalContext} from '/store/modal-context';
+import {FullScreenLoading} from '/src/components/atoms/FullScreenLoading';
 
 export const SubscribeGram = ({ subscribeInfo }) => {
-  const tbContext = useContext(ToggleBoxContext);
-
   // console.log(subscribeInfo);
 
   const planType = subscribeInfo.plan.name;
@@ -46,13 +42,15 @@ export const SubscribeGram = ({ subscribeInfo }) => {
   const onInputChange = (value) => {
     const nextAmount = value;
     const nextGram = Number((form.originGram * (1 + nextAmount / 100)).toFixed(4)); // ! 1팩 당 무게: 최대 소수점 '4'자리
-    const recipePricePerGramList = form.recipeInfo.pricePerGramList;
-    const planType = form.planInfo.planType;
-    const { perPack, originPrice, salePrice } = calcSubscribePrice(
-      planType,
-      recipePricePerGramList,
-      nextGram,
-    );
+    const recipePricePerGrams = form.recipeInfo.pricePerGramList;
+    const planTypeName = form.planInfo.planType;
+  
+    const { perPack, salePrice } = calcSubscribePrice( {
+      discountPercent: subscribeInfo.plan.discountPercent,
+      oneMealRecommendGram: nextGram,
+      planName: planTypeName,
+      pricePerGrams: recipePricePerGrams
+    });
 
     setForm((prevState) => ({
       ...prevState,
@@ -82,7 +80,7 @@ export const SubscribeGram = ({ subscribeInfo }) => {
       totalPrice: form.nextSalePrice,
     };
 
-    console.log('body: ', body);
+    // console.log('body: ', body);
 
     try {
       setIsLoading(true);
@@ -98,7 +96,7 @@ export const SubscribeGram = ({ subscribeInfo }) => {
       }
       setActiveConfirmModal(false);
     } catch (err) {
-      console.error(err);
+      alert(err);
       console.error(err.response);
       
     }
@@ -169,7 +167,7 @@ export const SubscribeGram = ({ subscribeInfo }) => {
                 <div className={s.bot_1}>
                   {transformLocalCurrency(form.nextPricePerPack)}원
                   <span>
-                    {transformLocalCurrency(form.nextPricePerPack - form.originPricePerPack)}원
+                    (팩당: {form.nextPricePerPack - form.originPricePerPack > 0 && "+"}{transformLocalCurrency(form.nextPricePerPack - form.originPricePerPack)}원)
                   </span>
                 </div>
               </div>
@@ -177,7 +175,9 @@ export const SubscribeGram = ({ subscribeInfo }) => {
                 <p className={s.top_text}>변경 후 결제 금액</p>
                 <div className={s.bot_1}>
                   {transformLocalCurrency(form.nextSalePrice)}원
-                  <span>{form.planInfo.planName}</span>
+                  <span>
+                    (차액: {form.nextSalePrice - form.originPrice > 0 && "+"}{transformLocalCurrency(form.nextSalePrice - form.originPrice)}원)
+                  </span>
                 </div>
               </div>
             </div>

@@ -1,23 +1,29 @@
-import { useEffect, useState } from 'react';
-import { getData } from '/src/pages/api/reqData';
-import { itemExposureType } from '/store/TYPE/itemExposureType';
-import { subscribePlanType } from '/store/TYPE/subscribePlanType';
+import {useEffect, useState} from 'react';
+import {getData} from '/src/pages/api/reqData';
+import {itemExposureType} from '/store/TYPE/itemExposureType';
+import {subscribePlanType} from '/store/TYPE/subscribePlanType';
+import {useSubscribePlanInfo} from "./useSubscribePlanInfo";
+
 
 export const useSubscribeInfo = (subscribeId) => {
-  const [info, setInfo] = useState(null);
-  useEffect(() => {
-    if(info) return;
+  const [info, setInfo] = useState( null );
+  const subscribePlanInfo = useSubscribePlanInfo();
+  
+  useEffect( () => {
+    // admin > setting > 가격 정책 > 플랜별 레시피 정보를 받지 못했을 경우, 실행하지 않음.
+    if(!subscribePlanInfo.planDiscountPercent.FULL) return;
+    
+    if ( info ) return;
+    
     (async () => {
       try {
         const url = `/api/subscribes/${subscribeId}`;
-        let res = await getData(url);
+        let res = await getData( url );
         // console.log('useSubscribeInfo: ',res)
-        /// ! TEST TEST TEST TEST TEST
-        if(res.status === 404 ) {
-          alert('구독정보를 불러오는데 실패했습니다.');
+        if ( res.status === 404 ) {
+          alert( '구독정보를 불러오는데 실패했습니다.' );
           // res = DUMMY_RESPONSE(subscribeId);
         }
-        /// ! TEST TEST TEST TEST TEST
         const data = res.data;
         if (!data) return;
         const curRecipeIdList = data.subscribeRecipeDtoList.map((list) => list.recipeId);
@@ -29,18 +35,6 @@ export const useSubscribeInfo = (subscribeId) => {
         const memberRecipes = allRecipes.filter(
           (recipe) => curRecipeIdList.indexOf(recipe.id) >= 0,
         );
-  
-        // //////// ! TEST : 2번째 상품 강제 품절처리 테스트
-        // const testRecipes = allRecipes.filter(
-        //   (recipe) => curRecipeIdList.indexOf(recipe.id) >= 0,
-        // );
-        //
-        // const memberRecipes = testRecipes.map((rc,index)=>({
-        //   ...rc,
-        //   inStock: false,
-        // }))
-        // console.log(memberRecipes)
-        // //////// ! TEST : 2번째 상품 강제 품절처리 테스트
 
         // 중복된 레시피 성분 제거
         const memberIngredientsOrigin = memberRecipes
@@ -53,25 +47,26 @@ export const useSubscribeInfo = (subscribeId) => {
         // 1.  레시피 중, 숨김상태(HIDDEN)의 상품이 있는가
         // 2. 레시피 중, 재고없음( inStock = false)인 상품이 있는가
         const isSoldOut =
-          !!memberRecipes.filter((list) => list.leaked === itemExposureType.HIDDEN).length ||
-          !!memberRecipes.filter((list) => list.inStock === false).length;
-
+          !!memberRecipes.filter( (list) => list.leaked === itemExposureType.HIDDEN ).length ||
+          !!memberRecipes.filter( (list) => list.inStock === false ).length;
         // 구독 가격 계산
         const planName = data.subscribeDto.plan;
         const oneMealRecommendGram = data.subscribeDto.oneMealRecommendGram;
+        const discountPercent = subscribePlanInfo.planDiscountPercent[planName];
+        const pricePerGrams = memberRecipes.map( recipe => recipe.pricePerGram );
+       
         
+        const allPlanNameList = Object.keys( subscribePlanType );
+        const allPriceList = allPlanNameList.map( planName =>
+          ({[planName]: calcSubscribePrice( {
+            discountPercent,
+            oneMealRecommendGram,
+            planName,
+            pricePerGrams
+          })
+        }));
         
-        const calcEveryPlanPrice = (plan)=>{
-          const calcPriceList = memberRecipes.map(recipe => {
-            const pricePerGram = recipe.pricePerGram;
-            return calcSubscribePrices(plan, {pricePerGram: pricePerGram, oneMealGram: oneMealRecommendGram });
-          });
-          return calcAvgSubscribePrices(calcPriceList);
-        }
-  
-        const allPlanNameList = Object.keys(subscribePlanType);
-        const allPriceList = allPlanNameList.map(planName=>({[planName]: calcEveryPlanPrice(planName)}));
-        let allPriceObj= {};
+        let allPriceObj = {};
         for (const obj of allPriceList) {
           const key = Object.keys(obj)[0];
           const val = Object.values(obj)[0];
@@ -115,7 +110,7 @@ export const useSubscribeInfo = (subscribeId) => {
             numberOfPacksPerDay: subscribePlanType[data.subscribeDto.plan].numberOfPacksPerDay,
             totalNumberOfPacks: subscribePlanType[data.subscribeDto.plan].totalNumberOfPacks,
             weeklyPaymentCycle: subscribePlanType[data.subscribeDto.plan].weeklyPaymentCycle,
-            discountPercent: subscribePlanType[data.subscribeDto.plan].discountPercent,
+            discountPercent: discountPercent,
           },
           price: allPriceObj,
           // 멤버가 보유힌 쿠폰 정보
@@ -138,7 +133,7 @@ export const useSubscribeInfo = (subscribeId) => {
         console.error(err);
       }
     })();
-  }, []);
+  }, [subscribePlanInfo.isLoading] );
   
   
   return info;
@@ -146,12 +141,30 @@ export const useSubscribeInfo = (subscribeId) => {
 
 
 
-const calcSubscribePrices = (planType, recipe={pricePerGram: 0, oneMealGram: 0}) => {
+
+export const subscribePriceCutOffUnit = 10; // 구독상품 > 10원 단위 절사.
+
+export const calcSubscribePrice = ({discountPercent=0, oneMealRecommendGram=0, planName="", pricePerGrams= []}) => {
+  const totalNumberOfPacks = subscribePlanType[planName].totalNumberOfPacks;
+  const calcPriceList = pricePerGrams.map( pricePerGram => {
+    return calcSubscribeItemPrice( {
+        plan: {totalNumberOfPacks, discountPercent},
+        recipe: {pricePerGram, oneMealRecommendGram}
+      }
+    );
+  } );
+  return calcSubscribeItemsAvgPrice( calcPriceList );
+}
+
+export const calcSubscribeItemPrice = ({
+                               plan = {totalNumberOfPacks: 0, discountPercent: 0},
+                               recipe = {pricePerGram: 0, oneMealRecommendGram: 0}
+                             }) => {
   const recipePricePerGram = recipe.pricePerGram; // 1g 당 가격 상수 ( 어드민에서 입력한 값 )
-  const recipeOneMealGram= recipe.oneMealGram; // 한 팩(한 끼) 무게
-  const perPack = Number((recipePricePerGram * recipeOneMealGram));
-  const totalNumberOfPacks = subscribePlanType[planType].totalNumberOfPacks;
-  const discountPercent = subscribePlanType[planType].discountPercent;
+  const recipeOneMealGram = recipe.oneMealRecommendGram; // 한 팩(한 끼) 무게
+  const perPack = Number( (recipePricePerGram * recipeOneMealGram) );
+  const totalNumberOfPacks = plan.totalNumberOfPacks;
+  const discountPercent = plan.discountPercent;
   return {
     perPack: perPack, // 팩당가격상수 * 무게
     originPrice: totalNumberOfPacks * perPack, // 할인 전 가격
@@ -159,14 +172,13 @@ const calcSubscribePrices = (planType, recipe={pricePerGram: 0, oneMealGram: 0})
   };
 };
 
-
-const calcAvgSubscribePrices= (subscribePriceList) => {
+export const calcSubscribeItemsAvgPrice= (subscribePriceList) => {
   if(!subscribePriceList.length) return console.error('ERROR: Required Array to calculate Average Subscribe Prices');
   let perPack = subscribePriceList.map((r) => r.perPack).reduce((acc, cur) => acc + cur) / subscribePriceList.length;
   let originPrice =
     subscribePriceList.map((r) => r.originPrice).reduce((acc, cur) => acc + cur) / subscribePriceList.length;
   let salePrice = subscribePriceList.map((r) => r.salePrice).reduce((acc, cur) => acc + cur) / subscribePriceList.length;
-  const cutOffUnit = 10; // ! '10'원단위로 절사 (= 1원단위 버림)
+  const cutOffUnit = subscribePriceCutOffUnit; // ! '10'원단위로 절사 (= 1원단위 버림)
   perPack = Math.floor(perPack);
   originPrice = Math.floor(originPrice / cutOffUnit) * cutOffUnit;
   salePrice = Math.floor(salePrice / cutOffUnit) * cutOffUnit;
@@ -179,119 +191,3 @@ const calcAvgSubscribePrices= (subscribePriceList) => {
     salePrice,  // ! 판매가: 1원 단위 절사
   };
 }
-
-
-export const calcSubscribePrice = (planType, pricePerGramList, oneMealGram ) => {
-  const calcPriceList = pricePerGramList.map((pricePerGram) => {
-    return calcSubscribePrices(planType, { pricePerGram, oneMealGram });
-  });
-  return calcAvgSubscribePrices(calcPriceList);
-};
-
-
-///////
-let DUMMY_RESPONSE = ( subscribeId) => ({
-  data: {
-    subscribeDto: {
-      id: subscribeId,
-      dogName: '김바프',
-      subscribeCount: 3,
-      plan: 'FULL',
-      oneMealRecommendGram: 101.0,
-      nextPaymentDate: '2022-08-14T09:56:38.693',
-      nextPaymentPrice: 120000,
-      nextDeliveryDate: '2022-08-30',
-      usingMemberCouponId: 3104,
-      couponName: '관리자 직접 발행 쿠폰2',
-      discount: 3000,
-    },
-    subscribeRecipeDtoList: [
-      {
-        recipeId: 13,
-        recipeName: '스타트',
-      },
-      {
-        recipeId: 14,
-        recipeName: '터키비프',
-      },
-    ],
-    memberCouponDtoList: [
-      {
-        memberCouponId: 49,
-        name: '관리자 직접 발행 쿠폰1',
-        discountType: 'FIXED_RATE',
-        discountDegree: 10,
-        availableMaxDiscount: 100000,
-        availableMinPrice: 5000,
-        remaining: 3,
-        expiredDate: '2022-07-25T09:56:38.693',
-      },
-      {
-        memberCouponId: 3200,
-        name: '관리자 직접 발행 쿠폰2',
-        discountType: 'FIXED_RATE',
-        discountDegree: 20,
-        availableMaxDiscount: 70000,
-        availableMinPrice: 50000,
-        remaining: 3,
-        expiredDate: '2022-08-25T09:56:38.693',
-      },
-      {
-        memberCouponId: 3104,
-        name: '쿠폰3',
-        discountType: 'FLAT_RATE',
-        discountDegree: 5000,
-        availableMaxDiscount: 1000000,
-        availableMinPrice: 5000,
-        remaining: 3,
-        expiredDate: '2022-09-25T09:56:38.693',
-      },
-    ],
-    recipeDtoList: [
-      {
-        id: 13,
-        name: '스타트',
-        description: '레시피 설명',
-        pricePerGram: 48.234,
-        gramPerKcal: 1.23456,
-        inStock: false,
-        imgUrl: 'http://localhost:8080/display/recipes?filename=스타트2.jpg',
-      },
-      {
-        id: 14,
-        name: '터키비프',
-        description: '레시피 설명',
-        pricePerGram: 48.234,
-        gramPerKcal: 1.23456,
-        inStock: false,
-        imgUrl: 'http://localhost:8080/display/recipes?filename=터키비프2.jpg',
-      },
-      {
-        id: 15,
-        name: '덕램',
-        description: '레시피 설명',
-        pricePerGram: 48.234,
-        gramPerKcal: 1.23456,
-        inStock: true,
-        imgUrl: 'http://localhost:8080/display/recipes?filename=덕램2.jpg',
-      },
-      {
-        id: 16,
-        name: '램비프',
-        description: '레시피 설명',
-        pricePerGram: 48.234,
-        gramPerKcal: 1.23456,
-        inStock: true,
-        imgUrl: 'http://localhost:8080/display/recipes?filename=램비프2.jpg',
-      },
-    ],
-    _links: {
-      self: {
-        href: 'http://localhost:8080/api/subscribes/3106',
-      },
-      profile: {
-        href: '/docs/index.html#resources-query-subscribe',
-      },
-    },
-  },
-});

@@ -1,11 +1,11 @@
-import React, {useEffect, useState, useCallback} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import Layout from '/src/components/common/Layout';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import s from '../ordersheet.module.scss';
 import Modal_termsOfSerivce from '/src/components/modal/Modal_termsOfSerivce';
 import {Modal_coupon} from '/src/components/modal/Modal_coupon';
 import {getData, postObjData} from '/src/pages/api/reqData';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import transformDate, {transformToday} from '/util/func/transformDate';
 import {OrdersheetSubscribeItemList} from '/src/components/order/OrdersheetSubscribeItemList';
 import {OrdersheetMemberInfo} from '/src/components/order/OrdersheetMemberInfo';
@@ -15,16 +15,17 @@ import {OrdersheetReward} from '/src/components/order/OrdersheetReward';
 import {OrdersheetMethodOfPayment} from '/src/components/order/OrdersheetMethodOfPayment';
 import {OrdersheetAmountOfPayment} from '/src/components/order/OrdersheetAmountOfPayment';
 import {calcNextSubscribeDeliveryDate} from '/util/func/calcNextSubscribeDeliveryDate';
-import {subscribePlanType} from '/store/TYPE/subscribePlanType';
 import {ORDER_STATES} from "/store/order-slice";
 import useDeviceState from "/util/hook/useDeviceState";
+import {subscribePriceCutOffUnit} from "/util/hook/useSubscribeInfo";
+import {useSubscribePlanInfo} from "/util/hook/useSubscribePlanInfo";
 
 
 export default function SubscribeOrderSheetPage({ subscribeId }) {
   
   const ds = useDeviceState();
+  const subscribePlanInfo = useSubscribePlanInfo();
   const orderState = useSelector((state) => state.orderState);
-  const cart = useSelector((state) => state.cart);
   const [isLoading, setIsLoading] = useState({ fetching: true });
   const [isRendered, setIsRendered] = useState(false);
   const [info, setInfo] = useState({});
@@ -77,67 +78,69 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
   }, []);
   
 
+  
+  
   useEffect(() => {
-    
-    (async () => {
-      setIsLoading((prevState) => ({
+    if ( Object.values(subscribePlanInfo.planDiscountPercent).filter(val=> val === null).length ) return console.error( "관리자에서 설정한 할인율을 받아올 수 없습니다." );
+
+    ( async () => {
+      setIsLoading( (prevState) => ({
         ...prevState,
         item: true,
-      }));
+      }) );
       try {
-        // API: 구독 주문서에 필요한 내용 조회 ( ! Q. subscribeId는 매 구독 회차마다 생성 or 갱신 ? ==> 유지됨
-        const postItemInfoApiUrl = `/api/orders/sheet/subscribe/${subscribeId}`;
+        const apiUrl = `/api/orders/sheet/subscribe/${subscribeId}`;
         const body = {
           id: subscribeId,
         };
-        const res = await getData(postItemInfoApiUrl, body);
+        const res = await getData( apiUrl, body );
         // console.log(res)
-        if (res.status !== 200) {
-          alert('주문 정보를 확인할 수 없습니다.');
+        if ( res.status !== 200 ) {
+          alert( '주문 정보를 확인할 수 없습니다.' );
           return (window.location.href = '/');
         }
-        const info = res.data;
-        // console.log(info);
-
+        const data = res.data;
+        console.log( data );
+    
         // 주문에 대한 모든 데이터
         const initInfo = {
           subscribeDto: {
-            id: info.subscribeDto.id,
-            plan: info.subscribeDto.plan,
-            nextPaymentPrice: info.subscribeDto.nextPaymentPrice,
-            originPrice: calcSubscribePlanOriginPrice(
-              info.subscribeDto.plan,
-              info.subscribeDto.nextPaymentPrice,
-            ).originPrice,
-            discountGrade: info.subscribeDto.discountGrade, // 등급할인 (할인표기에 사용)
+            id: data.subscribeDto.id,
+            plan: data.subscribeDto.plan,
+            nextPaymentPrice: data.subscribeDto.nextPaymentPrice,
+            originPrice: calcSubscribePlanOriginPrice( {
+              discountPercent: subscribePlanInfo.planDiscountPercent[data.subscribeDto.plan],
+              paymentPrice: data.subscribeDto.nextPaymentPrice
+            } ),
+            discountGrade: data.subscribeDto.discountGrade, // 등급할인 (할인표기에 사용)
           },
-          recipeNameList: info.recipeNameList, // [] 구독으로 선택한 레시피 이름 리스트 // FULL-PLAN일 경우, 최대 2개
-          name: info.name, // 구매자
-          email: info.email, // 연락처
-          phone: info.phoneNumber,
-          grade: info.grade, // ! SUBSCRIBE ONLY
-          gradeDiscountPercent: info.gradeDiscountPercent, // ! SUBSCRIBE ONLY
+          recipeNameList: data.recipeNameList, // [] 구독으로 선택한 레시피 이름 리스트 // FULL-PLAN일 경우, 최대 2개
+          name: data.name, // 구매자
+          email: data.email, // 연락처
+          phone: data.phoneNumber,
+          grade: data.grade, // ! SUBSCRIBE ONLY
+          gradeDiscountPercent: data.gradeDiscountPercent, // ! SUBSCRIBE ONLY
           address: {
-            city: info.address.city, // 시도
-            street: info.address.street, // 도로명 주소
-            detailAddress: info.address.detailAddress, // 상세주소
-            zipcode: info.address.zipcode, // 우편번호
+            city: data.address.city, // 시도
+            street: data.address.street, // 도로명 주소
+            detailAddress: data.address.detailAddress, // 상세주소
+            zipcode: data.address.zipcode, // 우편번호
           },
           deliveryPrice: 0, // 정기구독 배송비: 무료
-          reward: info.reward,
-          brochure: info.brochure, // 브로슈어 받은 적 있는지 true/false => 브로슈어는 1번만 받을 수 있다.
+          reward: data.reward,
+          brochure: data.brochure, // 브로슈어 받은 적 있는지 true/false => 브로슈어는 1번만 받을 수 있다.
         };
-
+    
         // FormDatas
         const initForm = {
           selfInfo: {
-            reward: info.reward,
-            discountGrade: info.subscribeDto?.discountGrade || null, // 등급할인 // 정기구독 할인금액 산출 시 사용
+            reward: data.reward,
+            discountGrade: data.subscribeDto?.discountGrade || null, // 등급할인 // 정기구독 할인금액 산출 시 사용
           },
           // ! DUMMY DATA
           coupons:
-            // DUMMY_MEMEBER_COUPON_LIST ||
-            info.coupons?.map((cp) => ({
+          // DUMMY_MEMEBER_COUPON_LIST ||
+            data.coupons?.map( (cp) => ({
               memberCouponId: cp.memberCouponId,
               name: cp.name,
               discountType: cp.discountType,
@@ -145,8 +148,8 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
               availableMaxDiscount: cp.availableMaxDiscount,
               availableMinPrice: cp.availableMinPrice,
               remaining: cp.remaining,
-              expiredDate: transformDate(cp.expiredDate),
-            })) ||
+              expiredDate: transformDate( cp.expiredDate ),
+            }) ) ||
             [],
           deliveryDto: {
             name: null, // 수령자 이름 ("정기배송과" 묶음 배송일 경우, null => 정기배송 수령자를 따름)
@@ -156,31 +159,36 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
             detailAddress: null, // 상세주소 (묶음 배송일 경우, null)
             request: null, // 배송 요청사항 (묶음 배송일 경우, null)
           },
-          orderPrice: info.subscribeDto.nextPaymentPrice,
+          orderPrice: data.subscribeDto.nextPaymentPrice,
           deliveryPrice: 0, // 배송비
           discountTotal: 0, // 총 할인 합계
           discountReward: 0, // 사용할 적립금
           discountCoupon: 0, // 쿠폰 적용으로 인한 할인금
-          paymentPrice: info.subscribeDto.nextPaymentPrice, // 최종 결제 금액
+          paymentPrice: data.subscribeDto.nextPaymentPrice, // 최종 결제 금액
           paymentMethod: null, // 결제방법  [CREDIT_CARD, NAVER_PAY, KAKAO_PAY]
           // nextDeliveryDate: getDiffDate(1), // ! TEST CODE :  테스트로, 1일 이후 배송이 시작되는 것으로 설정함 (221020)
           //   ! PRODUCT CODE
-          nextDeliveryDate: calcNextSubscribeDeliveryDate(transformToday(), null), // 배송 예정일 'yyyy-MM-dd', 첫 결제 배송날짜는 프론트에서 넘어온 값으로 저장함
+          nextDeliveryDate: calcNextSubscribeDeliveryDate( transformToday(), null ), // 배송 예정일 'yyyy-MM-dd', 첫 결제 배송날짜는 프론트에서 넘어온 값으로 저장함
           agreePrivacy: false, // 개인정보 제공 동의
           brochure: false, // 브로슈어 수령여부
         };
-        setInfo(initInfo);
-        setForm(initForm);
+        setInfo( initInfo );
+        setForm( initForm );
       } catch (err) {
-        console.error(err);
+        console.error( err );
+      } finally {
+        setIsLoading( (prevState) => ({
+          ...prevState,
+          item: false,
+        }) );
       }
-
-      setIsLoading((prevState) => ({
-        ...prevState,
-        item: false,
-      }));
-    })();
-  }, [cart]);
+    } )();
+  
+    const calcSubscribePlanOriginPrice =({discountPercent, paymentPrice}) => {
+      const originPrice = paymentPrice * (100 / (100 - discountPercent));
+      return Math.floor(originPrice / subscribePriceCutOffUnit) * subscribePriceCutOffUnit;
+    };
+  }, [subscribePlanInfo.isLoading]);
   
   
 
@@ -195,11 +203,6 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
     }));
   };
 
-  // validation
-  // - 1. 상품정보 없이 , 해당 페이지에 접근했을 경우
-  // - 2. 새로고침했을 경우 : REDUX정보 초기화됨
-  //    > 이때, Shop Item Detail페이지에서 가져온 정보 초기화되어, 서버에서 데이터 가져올 수 없음)
-  // if (!info || !USER_TYPE || USER_TYPE === userType.NON_MEMBER) return;
 
   return (
     <>
@@ -286,55 +289,10 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
   );
 }
 
-export const calcSubscribePlanOriginPrice = (planName, paymentPrice) => {
-  const discountPercent = subscribePlanType[planName].discountPercent; // 할인율 / 어드민설정이 아닌 고정값
-  let calcPrice = paymentPrice * (100 / (100 - discountPercent));
-  const cutOffUnit = 10;
-  const originPrice = Math.floor(calcPrice / cutOffUnit) * cutOffUnit;
 
-  return {
-    originPrice,
-  };
-};
+
 
 export async function getServerSideProps({ query }) {
   const { subscribeId } = query;
   return { props: { subscribeId: subscribeId || null } };
 }
-
-
-
-
-
-// const DUMMY_MEMEBER_COUPON_LIST = [
-//   {
-//     memberCouponId: 45,
-//     name: '50%할인쿠폰 ',
-//     discountType: 'FIXED_RATE',
-//     discountDegree: 70,
-//     availableMaxDiscount: 1000000,
-//     availableMinPrice: 5000,
-//     remaining: 1,
-//     expiredDate: '2023-12-31T23:59:59',
-//   },
-//   {
-//     memberCouponId: 46,
-//     name: '쿠폰2-최대할인 금액 1만원 조건 ',
-//     discountType: 'FLAT_RATE',
-//     discountDegree: 2000,
-//     availableMaxDiscount: 100000,
-//     availableMinPrice: 0,
-//     remaining: 3,
-//     expiredDate: '2023-12-31T23:59:59',
-//   },
-//   {
-//     memberCouponId: 47,
-//     name: '쿠폰3-최대 할인가3천원',
-//     discountType: 'FIXED_RATE',
-//     discountDegree: 30,
-//     availableMaxDiscount: 3000,
-//     availableMinPrice: 0,
-//     remaining: 3,
-//     expiredDate: '2023-12-31T23:59:59',
-//   },
-// ];
