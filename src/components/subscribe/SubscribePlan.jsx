@@ -13,7 +13,6 @@ import { FullScreenLoading } from '../atoms/FullScreenLoading';
 import {useSubscribePlanInfo} from "/util/hook/useSubscribePlanInfo";
 
 export const SubscribePlan = ({ subscribeInfo }) => {
-  // console.log(subscribeInfo )
   const subscribePlanInfo = useSubscribePlanInfo();
   // console.log(subscribePlanInfo);
   
@@ -30,7 +29,7 @@ export const SubscribePlan = ({ subscribeInfo }) => {
       numberOfPacksPerDay: subscribePlanType.FULL.numberOfPacksPerDay,
       totalNumberOfPacks: subscribePlanType.FULL.totalNumberOfPacks,
       weeklyPaymentCycle: subscribePlanType.FULL.weeklyPaymentCycle,
-      discountPercent: subscribePlanInfo.discountPercent[subscribePlanType.FULL.NAME],
+      discountPercent: subscribePlanInfo.planDiscountPercent[subscribePlanType.FULL.NAME],
       onePackGram: subscribeInfo?.info.oneMealRecommendGram,
       price: {
         perPack: subscribeInfo.price[subscribePlanType.FULL.NAME].perPack,
@@ -60,7 +59,7 @@ export const SubscribePlan = ({ subscribeInfo }) => {
       numberOfPacksPerDay: subscribePlanType.HALF.numberOfPacksPerDay,
       totalNumberOfPacks: subscribePlanType.HALF.totalNumberOfPacks,
       weeklyPaymentCycle: subscribePlanType.HALF.weeklyPaymentCycle,
-      discountPercent: subscribePlanInfo.discountPercent[subscribePlanType.HALF.NAME],
+      discountPercent: subscribePlanInfo.planDiscountPercent[subscribePlanType.HALF.NAME],
       onePackGram: subscribeInfo?.info.oneMealRecommendGram,
       price: {
         perPack: subscribeInfo.price[subscribePlanType.HALF.NAME].perPack,
@@ -83,7 +82,7 @@ export const SubscribePlan = ({ subscribeInfo }) => {
       numberOfPacksPerDay: subscribePlanType.TOPPING.numberOfPacksPerDay,
       totalNumberOfPacks: subscribePlanType.TOPPING.totalNumberOfPacks,
       weeklyPaymentCycle: subscribePlanType.TOPPING.weeklyPaymentCycle,
-      discountPercent: subscribePlanInfo.discountPercent[subscribePlanType.TOPPING.NAME],
+      discountPercent: subscribePlanInfo.planDiscountPercent[subscribePlanType.TOPPING.NAME],
       onePackGram: subscribeInfo?.info.oneMealRecommendGram,
       price: {
         perPack: subscribeInfo.price[subscribePlanType.TOPPING.NAME].perPack,
