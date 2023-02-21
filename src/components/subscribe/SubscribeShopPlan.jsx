@@ -78,7 +78,7 @@ export const SubscribeShopPlan = ({ name, info, form, setForm, calcPrice }) => {
       id: subscribePlanType.TOPPING.NAME,
       label: "new", // best, new, none
       imageSrc: require( "public/img/subscribe/subscribe_half_plan.png" ),
-      title: "풀플랜",
+      title: "토핑플랜",
       titleDescHTML: <p>토핑용으로 바프독으로 섞어서 먹어요</p>,
       bodyDescHTML: {
         row1:
