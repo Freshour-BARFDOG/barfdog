@@ -13,26 +13,28 @@
   .title_box {
     width: 100%;
     padding-bottom: rem(20);
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: rem(20);
     align-items: center;
     position: relative;
 
-    &::after{
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: rem(1);
-      background-color: var(--color-line-01);
-    }
-
+    //&::after{
+    //  content: "";
+    //  position: absolute;
+    //  bottom: 0;
+    //  left: 0;
+    //  width: 100%;
+    //  height: rem(1);
+    //  background-color: var(--color-line-01);
+    //}
     .title {
       font-size: rem(20);
       width: 100%;
       display: flex;
       justify-content: flex-start;
       font-weight: 600;
+
       span {
         @include char(l14);
         color: var(--color-font-sub);
@@ -41,7 +43,36 @@
         line-height: 200%;
       }
     }
+
+    .usedCouponBox {
+      display: flex;
+      //grid-template-columns: rem(45) 1fr rem(50) rem(75);
+      gap: rem(8);
+      align-items: center;
+      justify-content: right;
+      font-size: rem(15);
+      white-space: nowrap;
+      .status {
+        font-weight: 600;
+        font-size: inherit;
+      }
+
+      .couponName {
+        white-space: inherit;
+        max-width: rem(200);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: rem(14);
+        color: #333;
+      }
+      .discount {
+        color: var(--color-main);
+      }
+
+    }
   }
+
+
   .content_box {
     .flex_box {
       display: grid;
@@ -56,6 +87,7 @@
         font-size: rem(15);
         align-items: center;
         border: {
+          top: rem(1) solid var(--color-line-01);
           bottom: rem(1) solid var(--color-line-01);
         }
       }
@@ -192,11 +224,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
     span {
       padding-left: rem(18);
       color: var(--color-main);
       @include char(l20);
       font-weight: 600;
+    }
+    .unappliedDiscountAmount{
+      font-size: rem(12);
     }
   }
   .line {

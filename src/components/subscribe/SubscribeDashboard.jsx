@@ -1,17 +1,15 @@
 import s from '/src/pages/mypage/subscribe/[subscribeId].module.scss';
 import Image from 'next/image';
-import React, { useState } from 'react';
-import { subscribePlanType } from '/store/TYPE/subscribePlanType';
+import React, {useState} from 'react';
+import {subscribePlanType} from '/store/TYPE/subscribePlanType';
 import transformDate from '/util/func/transformDate';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
-import { Modal_couponWithSubscribeApi } from '../modal/Modal_couponWithSubscribeApi';
-import Modal_global_alert from '/src/components/modal/Modal_global_alert';
-import { useModalContext } from '/store/modal-context';
+import {Modal_couponWithSubscribeApi} from '../modal/Modal_couponWithSubscribeApi';
+import {useModalContext} from '/store/modal-context';
 import Tooltip from "../atoms/TooltipSubscrib";
 
 
-
-export const SubscribDashboard = ({ subscribeInfo }) => {
+export const SubscribeDashboard = ({ subscribeInfo }) => {
   // ! 구독정보 변경마감일자 체크 (google sheet);
   const info = {
     dogName: subscribeInfo.info.dogName,
@@ -27,7 +25,11 @@ export const SubscribDashboard = ({ subscribeInfo }) => {
     coupon: {
       // 쿠폰은 상품 당, 하나만 적용됨
       subscribeId: subscribeInfo.info.subscribeId,
-      usingMemberCouponId: subscribeInfo.info.usingMemberCouponId,
+      usedCoupon:{
+        usingMemberCouponId: subscribeInfo.info.usingMemberCouponId, // 사용된 쿠폰 id
+        couponName: subscribeInfo.info.couponName, // 쿠폰명
+        discountCoupon: subscribeInfo.info.discountCoupon, // 쿠폰 할인금액
+      },
       // availableCouponList: DUMMY_COUPON_DATA, /////////////////// ! TEST TEST TEST TEST TEST TEST TEST TEST TEST
       availableCouponList: subscribeInfo.coupon || [],
       originPrice: subscribeInfo.info.nextPaymentPrice,
@@ -36,17 +38,15 @@ export const SubscribDashboard = ({ subscribeInfo }) => {
   };
   const mct = useModalContext();
   const [submitted, setSubmitted] = useState(false);
-  const [alertModalMessage, setAlertModalMessage] = useState('');
   const [activeModal, setActiveModal] = useState(false);
 
   const onActiveCouponModal = () => {
     if (!info.coupon.availableCouponList.length) {
       mct.alertShow('적용가능한 쿠폰이 없습니다.');
-      setActiveModal({ alert: true });
       return;
     }
 
-    setActiveModal({ coupon: true, alert: true });
+    setActiveModal({ coupon: true });
   };
 
   const hideCouponModal = () => {
@@ -54,7 +54,7 @@ export const SubscribDashboard = ({ subscribeInfo }) => {
       window.location.reload();
     } else {
       mct.alertHide();
-      setActiveModal({ coupon: false, alert: false });
+      setActiveModal({ coupon: false});
     }
   };
 
@@ -162,37 +162,9 @@ export const SubscribDashboard = ({ subscribeInfo }) => {
         <Modal_couponWithSubscribeApi
           data={info.coupon}
           event={{ hideModal: hideCouponModal }}
-          setAlertModalMessage={setAlertModalMessage}
           setSubmitted={setSubmitted}
         />
-      )}
-      {activeModal.alert && (
-        <Modal_global_alert message={alertModalMessage} onClick={submitted && hideCouponModal} />
       )}
     </>
   );
 };
-
-
-const DUMMY_COUPON_DATA = [
-  {
-    memberCouponId: 3133,
-    name: '테스트 쿠폰1',
-    discountType: 'FIXED_RATE',
-    discountDegree: 10,
-    availableMaxDiscount: 10000,
-    availableMinPrice: 5000,
-    remaining: 3,
-    expiredDate: '2022-08-12T16:01:46.853',
-  },
-  {
-    memberCouponId: 3000,
-    name: '테스트 쿠폰2',
-    discountType: 'FIXED_RATE',
-    discountDegree: 40,
-    availableMaxDiscount: 10000,
-    availableMinPrice: 300,
-    remaining: 3,
-    expiredDate: '2022-08-17T16:01:46.853',
-  },
-];

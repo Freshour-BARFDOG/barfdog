@@ -85,6 +85,11 @@ export const useSubscribeInfo = (subscribeId) => {
             nextPaymentPrice: data.subscribeDto.nextPaymentPrice,
             nextDeliveryDate: data.subscribeDto.nextDeliveryDate,
             usingMemberCouponId: data.subscribeDto.usingMemberCouponId, // 사용한 보유쿠폰 id,
+            usedCoupon:{
+              usingMemberCouponId: data.subscribeDto.usingMemberCouponId, // 사용된 쿠폰 id
+              couponName: data.subscribeDto.couponName, // 쿠폰명
+              discountCoupon: data.subscribeDto.discountCoupon, // 쿠폰 할인금액
+            },
             countSkipOneTime: data.subscribeDto.countSkipOneTime,
             countSkipOneWeek: data.subscribeDto.countSkipOneWeek,
             couponName: data.subscribeDto.couponName,
