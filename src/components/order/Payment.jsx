@@ -214,7 +214,7 @@ export function Payment({
       pay_method: paymethodFilter(body.paymentMethod), // 결제수단
       merchant_uid: merchantUid, // 주문번호
       amount: body.paymentPrice, // 결제금액
-      name: `Test ${paymentName}`, // 주문명
+      name: `[일반상품] - ${paymentName}`, // 주문명
       buyer_name:  info.name, // 구매자 이름
       buyer_tel: info.phone, // 구매자 전화번호
       buyer_email: info.email, // 구매자 이메일
@@ -297,6 +297,7 @@ export function Payment({
     const customUid = `customer_Uid_${randomStr}`;
     
      /* 2. 결제 데이터 정의하기  TODO:kakaopay 실연동 가맹점코드(CID) 발급받으면 변경하기*/
+    const paymentName = info.recipeNameList.join(", ");
     const data = {
       pg: form.paymentMethod === 'KAKAO_PAY'?'kakaopay.TCSUBSCRIP':'kcp_billing', // PG사
       pay_method: 'card', // 결제수단
@@ -304,7 +305,7 @@ export function Payment({
       // amount: body.paymentPrice, // 결제금액
       amount:0,
       customer_uid : customUid,
-      name: 'test바프독정기결제', // 주문명
+      name: `[구독상품] - ${paymentName}`, // 주문명
       buyer_name:form.deliveryDto.name,
       buyer_tel: form.deliveryDto.phone,
       m_redirect_url: `${window.location.origin}/order/loading/subscribe/${id}/${randomStr}/${body.paymentPrice}/${merchantUid}/test바프독결제`
