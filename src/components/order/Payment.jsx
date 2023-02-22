@@ -308,14 +308,15 @@ export function Payment({
       name: `[구독상품] - ${paymentName}`, // 주문명
       buyer_name:form.deliveryDto.name,
       buyer_tel: form.deliveryDto.phone,
-      m_redirect_url: `${window.location.origin}/order/loading/subscribe/${id}/${randomStr}/${body.paymentPrice}/${merchantUid}/test바프독결제`
+      m_redirect_url: `${window.location.origin}/order/loading/subscribe/${id}/${randomStr}/${body.paymentPrice}/${merchantUid}/[구독상품]-${paymentName}`
 
     };
   
     // 결제 이슈를 보완하기 인하여 Api Request Data 추가를 위해 사용
     const callbackData = {
       discountReward: body.discountReward,
-      orderId: id
+      orderId: id,
+      paymentName: paymentName
     
     }
     IMP.request_pay(data, callback.bind(null, callbackData));
@@ -340,7 +341,7 @@ export function Payment({
         customer_uid: customer_uid,
         merchant_uid: merchantUid, // 서버로부터 받은 주문번호
         amount: body.paymentPrice,
-        name: "test바프독정기결제"
+        name: `[구독상품] - ${callbackData.paymentName}`
       };
     
       const paymentResult = await axios
