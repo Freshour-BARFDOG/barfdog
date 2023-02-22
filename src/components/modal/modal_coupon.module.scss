@@ -10,12 +10,18 @@
 .modal {
   width: 100%;
 
+  .coupon-section {
+    &:not(:last-child) {
+      padding-bottom: rem(30);
+      margin-bottom: rem(30);
+      border-bottom: rem(1) dashed var(--color-line-02);
+    }
+  }
+
   .title_box {
     width: 100%;
     padding-bottom: rem(20);
     display: grid;
-    grid-template-columns: 1fr 1.5fr;
-    gap: rem(20);
     align-items: center;
     position: relative;
 
@@ -28,6 +34,7 @@
     //  height: rem(1);
     //  background-color: var(--color-line-01);
     //}
+
     .title {
       font-size: rem(20);
       width: 100%;
@@ -43,36 +50,11 @@
         line-height: 200%;
       }
     }
-
-    .usedCouponBox {
-      display: flex;
-      //grid-template-columns: rem(45) 1fr rem(50) rem(75);
-      gap: rem(8);
-      align-items: center;
-      justify-content: right;
-      font-size: rem(15);
-      white-space: nowrap;
-      .status {
-        font-weight: 600;
-        font-size: inherit;
-      }
-
-      .couponName {
-        white-space: inherit;
-        max-width: rem(200);
-        overflow: hidden;
-        text-overflow: ellipsis;
-        font-size: rem(14);
-        color: #333;
-      }
-      .discount {
-        color: var(--color-main);
-      }
-
-    }
   }
 
-
+  .content_box.used-coupon .flex_box{
+    grid-template-columns: rem(25) 1fr rem(100);
+  }
   .content_box {
     .flex_box {
       display: grid;
