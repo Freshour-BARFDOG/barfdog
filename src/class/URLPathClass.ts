@@ -28,14 +28,16 @@ export class URLPathClass {
     ADMIN_PUBLIC_PATH: null,
   };
   
-  constructor() {
-    const p = location.pathname;
+  constructor(ssr:boolean = false, path:string = null) {
+    const p = path || location.pathname;
     this.curPath = p
-    this.lastVisitedAdminPath = this.getLastVisitedPath();
     this.VALIDATION.ADMIN_PATH = this.validAdminPath(p);
     this.VALIDATION.ADMIN_PUBLIC_PATH = this.validAdminPublicPath(p);
     this.VALIDATION.MEMBER_PATH = this.validMemberPath(p);
-    this.pathDispatcher(p);
+    if(ssr === false){
+      this.lastVisitedAdminPath = this.getLastVisitedPath();
+      this.pathDispatcher(p);
+    }
   }
   
   
@@ -49,7 +51,7 @@ export class URLPathClass {
   }
   
   
-  saveAdminPath(curPath: string) {
+  private saveAdminPath(curPath: string) {
     if(this.isPopupPath(curPath)) return; // POPUP 경로 제외.
     
     const maxCount = 5;
@@ -62,7 +64,7 @@ export class URLPathClass {
      return path.indexOf('popup') >= 0;
   };
   
-  saveUserPath(curPath: string) {
+  private saveUserPath(curPath: string) {
     const maxCount = 5;
     const storedAdminPathArr = this.getStoredUserPathArr();
     const jsonArr = this.jsonStringifiedArray(curPath, maxCount, storedAdminPathArr);
@@ -128,7 +130,7 @@ export class URLPathClass {
     return MEMBER_PATH_LIST_AT_FIRST_DEPTH.indexOf(curFIRST_DEPTH) >= 0;
   }
   
-  filteredAdminPath(curPath): string {
+  private filteredAdminPath(curPath): string {
     return curPath.replace(`/${ADMIN_BASE_PATH_KEY}`, '');
   }
   

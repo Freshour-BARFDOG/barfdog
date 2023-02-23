@@ -6,10 +6,13 @@ import '/src/pages/api/axios.config';
 import {ModalContextProvider} from '/store/modal-context';
 import ChannelTalkProvider from '/src/pages/api/channelTalk/ChannelTalkProvider';
 import GAProvider from '/src/pages/api/googleAnalytics/GAProvider';
-import {getDataSSR, getTokenFromServerSide} from '/src/pages/api/reqData';
+import {getCookieSSR, getDataSSR, getTokenFromServerSide} from '/src/pages/api/reqData';
 import {userType} from '/store/TYPE/userAuthType';
 import React from "react";
 import {AlertLayer} from "@src/layers/AlertLayer";
+import {cookieType} from "@store/TYPE/cookieType";
+import {current} from "@reduxjs/toolkit";
+import {URLPathClass} from "@src/class/URLPathClass";
 
 // Server Only File (client에서 사용하는 로직 사용불가)
 // Next JS : 최초실행
@@ -42,7 +45,6 @@ export default function MyApp({ Component, pageProps, CustomProps }) {
 }
 
 MyApp.getInitialProps = async (initialProps) => {
-  // console.log(origin);
   const { ctx, Component, pageProps } = initialProps;
   const { res, req } = ctx;
   let token = null;
@@ -52,64 +54,81 @@ MyApp.getInitialProps = async (initialProps) => {
   let cartDATA = null;
   let memberDATA = null;
   let fetchingError = null;
+  let res_ADMIN = null;
+  let res_CART = null;
 
-  // console.log('RESPONSE: ', res);
   // ! SSR: request & response 존재
   // ! CCR : request & response '없음' => _app.jsx가 실행될 때,  token, USER_TYPE이 위에 정의된 값으로 초기화됨.
   // ! 따라서, Login State을 유지하기 위해서는, Redux등으로, SSR이 안되었을 때를 대비하여, 상태관리를 해줘야함.
   // ! auth-interceptor에서, 토큰만료를 확인하는 조건 => null이 아닌 false일 때로, 구체적으로 명시하여 구분해야함.
-  // const SSR_cookie = req?.headers?.cookie || res?.headers?.cookie;
+  
   if (req?.headers?.cookie || res?.headers?.cookie) {
-    token = getTokenFromServerSide(req);
-    const valid_adminApiUrl = '/api/admin/setting';
-    const valid_memberApiUrl = `/api/baskets`;
-
-    const res_ADMIN = await getDataSSR(req, valid_adminApiUrl, token);
-    const res_CART = await getDataSSR(req, valid_memberApiUrl, token);
-
-    // STEP 1. USER TYPE
-    if (res_ADMIN && res_ADMIN.status === 200 && res_CART.status === 200) {
-      USER_TYPE = userType.ADMIN;
-    } else if (res_CART && res_CART.status === 200) {
-      USER_TYPE = userType.MEMBER;
-    } else {
-      USER_TYPE = userType.NON_MEMBER;
-    }
     
+    token = getTokenFromServerSide(req);
 
-    // STEP 2. EXPIRED TOKEN
-    // 토큰 만료 확인 후 , login Page Redir한 경우 => 무한 redir을 방지하기 위해 토큰 만료 초기화
-    if(token){
+  
+    const curPath = req.url;
+    const p = new URLPathClass(true, curPath);
+    const isAdminPath = p.VALIDATION.ADMIN_PATH; //
+    
+    if(!token){
+      
+      USER_TYPE = userType.NON_MEMBER;
+      
+    } else if(token){
+  
+      const valid_adminApiUrl = '/api/admin/setting';
+      const valid_memberApiUrl = `/api/baskets`;
+      
+  
+      
+      res_ADMIN = await getDataSSR(req, valid_adminApiUrl, token);
+      res_CART = await getDataSSR(req, valid_memberApiUrl, token);
+  
+      // console.log("/api/admin/setting =>", !!res_ADMIN);
+      // console.log("/api/baskets =>", !!res_CART);
+  
+      // STEP 1. USER TYPE
+      if (res_ADMIN && res_ADMIN.status === 200) {
+        USER_TYPE = userType.ADMIN;
+      } else if (res_CART && res_CART.status === 200) {
+        USER_TYPE = userType.MEMBER;
+      } else {
+        USER_TYPE = userType.NON_MEMBER; // 이상한 토큰을 강제로 넣었을 경우
+      }
+  
+  
+      // STEP 2. EXPIRED TOKEN
+      // 토큰 만료 확인 후 , login Page Redir한 경우 => 무한 redir을 방지하기 위해 토큰 만료 초기화
       if (res_ADMIN && res_ADMIN.status === 401) {
-        // EXPIRED_TOKEN_ADMIN = req.headers.referer?.indexOf('/bf-admin/login') >= 0 ? true : null;
         EXPIRED_TOKEN_ADMIN = true;
       } else if (res_ADMIN) {
         EXPIRED_TOKEN_ADMIN = false;
       }
   
       if (res_CART && res_CART.status === 401) {
-        // console.log('EXPIRED_TOKEN_MEMBER: ', EXPIRED_TOKEN_MEMBER);
-        // EXPIRED_TOKEN_MEMBER = req.headers.referer?.indexOf('/bf-admin/login') >= 0 ? true : null;
         EXPIRED_TOKEN_MEMBER = true;
       } else if (res_CART) {
         EXPIRED_TOKEN_MEMBER = false;
       }
     }
     
+    
     // STEP 3. CART DATA
-
-    if (
-      (USER_TYPE === userType.MEMBER && res_CART.status === 200) ||
-      (USER_TYPE === userType.ADMIN && res_ADMIN.status === 200)
-    ) {
+    if ( !isAdminPath && (USER_TYPE === userType.MEMBER || USER_TYPE === userType.ADMIN) ) {
+      
       const membersApiUrl = `/api/members`;
       const res_MEMBER = await getDataSSR(req, membersApiUrl, token);
       const memberData = res_MEMBER.data;
+      
       const mypageApiUrl = `/api/mypage`; // 마이페이지 상단 내 정보 화면
       const res_MEMBER_Dashboard = await getDataSSR(req, mypageApiUrl, token);
       const mypageData = res_MEMBER_Dashboard.data;
-      // console.log('/api/members => ',memberData);
-      // console.log('/api/mypage => ',mypageData);
+      
+      console.log('/api/members => ',!!memberData);
+      console.log('/api/mypage => ', !!mypageData);
+      
+      
       if(mypageData){
         memberDATA = {
           userType: USER_TYPE,
@@ -154,7 +173,7 @@ MyApp.getInitialProps = async (initialProps) => {
 
 
 
-      // STEP 4. Add cart data
+      // STEP 4. ADD CART DATA
       const cartData = res_CART?.data;
       if(cartData){
         cartDATA = {
@@ -190,40 +209,10 @@ MyApp.getInitialProps = async (initialProps) => {
       }
     }
   }
-
-  // ! 추후 작업 : 토큰 만료 시, Redir
-  // if (EXPIRED_TOKEN_MEMBER || EXPIRED_TOKEN_ADMIN) {
-  //   const redirectPath = EXPIRED_TOKEN_MEMBER
-  //     ? '/account/login'
-  //     : EXPIRED_TOKEN_ADMIN
-  //       ? '/bf-admin/login'
-  //       : null;
-  //
-  //   // res.setHeader("location", redirectPath);
-  //   return {
-  //     Component,
-  //     pageProps,
-  //     CustomProps: {
-  //       data: { cart: cart_DATA || null, error: failedFetchingCartData || null },
-  //       token: token,
-  //       USERTYPE: USER_TYPE || null,
-  //       EXPIRED_TOKEN: { ADMIN: EXPIRED_TOKEN_ADMIN, MEMBER: EXPIRED_TOKEN_MEMBER },
-  //     },
-  //     redirect: {
-  //       destination: redirectPath,
-  //       permanent: false,
-  //     },
-  //   }
-  //
-  // }
-  // ! 추후 작업 : 토큰 만료 시, Redir
-
-  // console.log('res_ADMIN: ',res_ADMIN)
-  // console.log('res_MEMBER: ',res_MEMBER)
-  // console.log('RESPONSE :::::: ',memberDATA);
-  // console.log('EXPIRED_TOKEN_ADMIN: ', EXPIRED_TOKEN_ADMIN);
-  // console.log('EXPIRED_TOKEN_MEMBER: ', EXPIRED_TOKEN_MEMBER);
-  // console.log('USER_TYPE:: ',USER_TYPE)
+  
+  
+  
+  
 
   return {
     Component,
@@ -236,22 +225,3 @@ MyApp.getInitialProps = async (initialProps) => {
     },
   };
 };
-
-
-const DUMMY_RES_OBJ = [{
-  dogname: 'dog1',
-  inStock: true,
-  recipeName: 'STARTER PREMIUM'
-},{
-  dogname: 'dog2',
-  inStock: true,
-  recipeName: 'STARTER PREMIUM'
-},{
-  dogname: 'dog3',
-  inStock: true,
-  recipeName: 'STARTER PREMIUM'
-},{
-  dogname: 'dog4',
-  inStock: true,
-  recipeName: 'STARTER PREMIUM'
-}]
