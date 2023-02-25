@@ -66,5 +66,14 @@ module.exports = {
         }
       ];
     }
+  },
+  async redirects(){
+    return [
+      {
+        source: '/kr/(.*)',
+        destination: '/',
+        permanent: true
+      }
+    ]
   }
 };
