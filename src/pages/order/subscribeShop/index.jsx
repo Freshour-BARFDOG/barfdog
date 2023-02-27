@@ -1,60 +1,58 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import s from 'src/pages/order/subscribeShop/index.module.scss';
-import { useDispatch } from 'react-redux';
-import { useRouter } from 'next/router';
+import {useDispatch} from 'react-redux';
+import {useRouter} from 'next/router';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
-import { SubscribeShopRecipe } from '/src/components/subscribe/SubscribeShopRecipe';
-import { SubscribeShopPlan } from '/src/components/subscribe/SubscribeShopPlan';
-import { getDataSSR, postObjData } from '/src/pages/api/reqData';
+import {SubscribeShopRecipe} from '/src/components/subscribe/SubscribeShopRecipe';
+import {SubscribeShopPlan} from '/src/components/subscribe/SubscribeShopPlan';
+import {getDataSSR, postObjData} from '/src/pages/api/reqData';
 import Spinner from '/src/components/atoms/Spinner';
-import { SubscribeRecommendResult } from '/src/components/subscribe/SubscribeRecommendResult';
-import { validate } from '/util/func/validation/validation_orderSubscribe';
-import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
-import { subscribePlanType } from '/store/TYPE/subscribePlanType';
-import { cartAction } from '/store/cart-slice';
-import { subscribeStatus } from '/store/TYPE/subscribeStatus';
-import { useModalContext } from '/store/modal-context';
+import {SubscribeRecommendResult} from '/src/components/subscribe/SubscribeRecommendResult';
+import {validate} from '/util/func/validation/validation_orderSubscribe';
+import {valid_hasFormErrors} from '/util/func/validation/validationPackage';
+import {subscribePlanType} from '/store/TYPE/subscribePlanType';
+import {cartAction} from '/store/cart-slice';
+import {subscribeStatus} from '/store/TYPE/subscribeStatus';
+import {useModalContext} from '/store/modal-context';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
-import { FullScreenRunningDog } from '/src/components/atoms/FullScreenLoading';
-import { calcChangedSubscribeDeliveryDate } from '/util/func/calcNextSubscribeDeliveryDate';
+import {FullScreenRunningDog} from '/src/components/atoms/FullScreenLoading';
+import {calcChangedSubscribeDeliveryDate} from '/util/func/calcNextSubscribeDeliveryDate';
 import transformDate from '/util/func/transformDate';
+import {useSubscribePlanInfo} from "/util/hook/useSubscribePlanInfo";
+import {calcSubscribePrice} from "/util/hook/useSubscribeInfo";
 
-// - 1.  설문조사 리포트 레시피 추천 결과 조회  못먹는 음식 조회 /api/dogs/14
-// - 2-1. Client에서 Redux로 데이터들고, 구독주문하기(주문서) 페이지로 이동
-// - 2-2. => 구독 정보 생성
 
 export default function RegisterSubscribeInfoPage({ data }) {
-  // console.log(data);
-  let info;
-  if (data) {
-    info = {
-      dogId: data.surveyInfo.dogId,
-      dogName: data.surveyInfo.dogName,
-      subscribeId: data.surveyInfo.subscribeId,
-      subscribeStatus: data.surveyInfo.subscribeStatus,
-      recommendRecipeId: data.surveyInfo.recommendRecipeId,
-      recommendRecipeName: data.surveyInfo.recommendRecipeName,
-      recommendRecipeDescription: data.surveyInfo.recommendRecipeDescription,
-      recommendRecipeImgUrl: data.surveyInfo.recommendRecipeImgUrl,
-      uiNameKorean: data.surveyInfo.uiNameKorean,
-      uiNameEnglish: data.surveyInfo.uiNameEnglish,
-      foodAnalysis: {
-        oneDayRecommendKcal: data.surveyInfo.foodAnalysis.oneDayRecommendKcal,
-        oneDayRecommendGram: data.surveyInfo.foodAnalysis.oneDayRecommendGram,
-        oneMealRecommendGram: data.surveyInfo.foodAnalysis.oneMealRecommendGram,
-      },
-      inedibleFood: data.dogDto.inedibleFood,
-      inedibleFoodEtc: data.dogDto.inedibleFoodEtc, // 못먹는 음식
-      caution: data.dogDto.caution,
-      recipeInfoList: data.recipesDetailInfo, // 레시피의 모든 정보 (초기화)
-    };
-  }
+  const subscribePlanInfo = useSubscribePlanInfo();
+  const info = {
+    dogId: data.surveyInfo.dogId,
+    dogName: data.surveyInfo.dogName,
+    subscribeId: data.surveyInfo.subscribeId,
+    subscribeStatus: data.surveyInfo.subscribeStatus,
+    recommendRecipeId: data.surveyInfo.recommendRecipeId,
+    recommendRecipeName: data.surveyInfo.recommendRecipeName,
+    recommendRecipeDescription: data.surveyInfo.recommendRecipeDescription,
+    recommendRecipeImgUrl: data.surveyInfo.recommendRecipeImgUrl,
+    uiNameKorean: data.surveyInfo.uiNameKorean,
+    uiNameEnglish: data.surveyInfo.uiNameEnglish,
+    foodAnalysis: {
+      oneDayRecommendKcal: data.surveyInfo.foodAnalysis.oneDayRecommendKcal,
+      oneDayRecommendGram: data.surveyInfo.foodAnalysis.oneDayRecommendGram,
+      oneMealRecommendGram: data.surveyInfo.foodAnalysis.oneMealRecommendGram,
+    },
+    inedibleFood: data.dogDto.inedibleFood,
+    inedibleFoodEtc: data.dogDto.inedibleFoodEtc, // 못먹는 음식
+    caution: data.dogDto.caution,
+    recipeInfoList: data.recipesDetailInfo, // 레시피의 모든 정보 (초기화)
+    planDiscountPercent: subscribePlanInfo.planDiscountPercent,
+  };
   
   const initialForm = {
     plan: data.surveyInfo.plan || null,
-    recipeIdList: data.surveyInfo.recipeDtoList.filter((rc)=>data.surveyInfo.recipeName?.split(',').indexOf(rc.name) >= 0).map(rc=>rc.id) || [],
+    recipeIdList: data.surveyInfo.recipeDtoList.filter((rc)=>
+      data.surveyInfo.recipeName?.split(',').indexOf(rc.name) >= 0).map(rc=>rc.id) || [],
     nextPaymentPrice: null,
   };
 
@@ -70,74 +68,55 @@ export default function RegisterSubscribeInfoPage({ data }) {
 
 
   useEffect(() => {
+    
     setIsLoading((prevState) => ({
       ...prevState,
       fetching: true,
     }));
+    
     setTimeout(() => {
       setIsLoading((prevState) => ({
         ...prevState,
         fetching: false,
       }));
     }, fullscreenLoadingDuration);
-  }, []);
+  }, [subscribePlanInfo.loading]);
 
-  const calcSubscribePlanPaymentPrice = (totalNumberOfPacks, discountPercent) => {
-    if (!form.recipeIdList[0]) {
+  const calcSubscribePlanPaymentPrice = (planName) => {
+    if (!form.recipeIdList[0] || !planName) {
       return {
         perPack: 0,
         originPrice: 0,
         salePrice: 0,
       };
     }
-
-    const selectedRecipes = info.recipeInfoList?.filter(
-      (rc) => form.recipeIdList.indexOf(rc.id) >= 0,
-    );
-    const result = selectedRecipes?.map((recipe) => {
-      const recipeGramConst = recipe.pricePerGram; // 1g 당 가격 상수 ( 어드민에서 입력한 값 )
-      const recipeGram = info?.foodAnalysis.oneMealRecommendGram; // 한끼(한팩) 무게g
-      const perPack = Number((recipeGramConst * recipeGram).toFixed(0));
-
-      return {
-        perPack: perPack, // 팩당가격상수 * 무게
-        originPrice: totalNumberOfPacks * perPack, // 할인 전 가격
-        salePrice: totalNumberOfPacks * perPack * (1 - discountPercent / 100), // 할인 후 가격 (판매가)
-      };
+    const discountPercent = subscribePlanInfo.planDiscountPercent[planName];
+    const oneMealRecommendGram = info.foodAnalysis.oneMealRecommendGram; // 한끼(한팩) 무게g
+    const pricePerGrams = info.recipeInfoList?.filter((recipe) => form.recipeIdList.indexOf(recipe.id) >= 0).map( recipe => recipe.pricePerGram );
+    
+    return calcSubscribePrice( {
+      discountPercent,
+      oneMealRecommendGram,
+      planName,
+      pricePerGrams
     });
-
-    // 평균
-    let perPack = result.map((r) => r.perPack).reduce((acc, cur) => acc + cur) / result.length;
-    let originPrice =
-      result.map((r) => r.originPrice).reduce((acc, cur) => acc + cur) / result.length;
-    let salePrice = result.map((r) => r.salePrice).reduce((acc, cur) => acc + cur) / result.length; // ! 1원 단위 절삭
-    // console.log(result)
-    const cutOffUnit = 10; // '10'원단위로 절사 (1원단위 버림)
-    perPack = Math.floor(perPack / cutOffUnit) * cutOffUnit;
-    originPrice = Math.floor(originPrice / cutOffUnit) * cutOffUnit;
-    salePrice = Math.floor(salePrice / cutOffUnit) * cutOffUnit;
-    return {
-      perPack,
-      originPrice,
-      salePrice,
-    };
   };
-
+  
+  
+  
+  
   const onStartSubscribeOrder = async () => {
     // 맞춤레시피 구매하기 (CONDITION: 결제 전)
     if (submitted) return;
-
-    const nextPaymentPrice = calcSubscribePlanPaymentPrice(
-      subscribePlanType[form.plan]?.totalNumberOfPacks,
-      subscribePlanType[form.plan]?.discountPercent,
-    ).salePrice;
+  
+    const nextPaymentPrice = calcSubscribePlanPaymentPrice(form.plan).salePrice;
 
     const body = {
       plan: form.plan,
       recipeIdList: form.recipeIdList,
       nextPaymentPrice: nextPaymentPrice, // 최종계산된가격
     };
-    console.log(body);
+    // console.log(body);
 
     const errObj = validate(body);
     const isPassed = valid_hasFormErrors(errObj);
@@ -179,12 +158,9 @@ export default function RegisterSubscribeInfoPage({ data }) {
       ...prevState,
       paging: true,
     }));
-
-    const nextPaymentPrice = calcSubscribePlanPaymentPrice(
-      subscribePlanType[form.plan]?.totalNumberOfPacks,
-      subscribePlanType[form.plan]?.discountPercent,
-    ).salePrice;
-
+  
+    const nextPaymentPrice = calcSubscribePlanPaymentPrice(form.plan).salePrice;
+  
     const body = {
       plan: form.plan,
       recipeIdList: form.recipeIdList,
@@ -351,9 +327,9 @@ export async function getServerSideProps({ req, query }) {
       surveyInfo: surveyInfoRes?.data || null,
       recipesDetailInfo: recipeInfoList,
     };
-   
-  } else {
-    
+  }
+  
+  if(!data){
     return {
       props:{},
       redirect:{
@@ -361,28 +337,6 @@ export async function getServerSideProps({ req, query }) {
       }
     }
   }
-
-  
-
-
- 
-  /// ! TESTTESTTESTTESTTESTTESTTESTTESTTESTTEST
-  // if (data.surveyInfo) {
-  //   // CASE : 플랜 변경 (4주 => 2주)
-  //   // data.surveyInfo.plan= subscribePlanType.FULL.NAME';
-  //   // data.surveyInfo.recipeName= '스타터프리미엄, 터키&비프';
-  //   // data.surveyInfo.nextPaymentDate= '2022-08-10T10:44:01.179';
-  //   // data.surveyInfo.nextPaymentPrice= 120000;
-  //   // data.surveyInfo.nextDeliveryDate= '2022-08-24';
-  //   // CASE : 플랜 변경 (2주 => 4주)
-  //   data.surveyInfo.plan = subscribePlanType.HALF.NAME;
-  //   data.surveyInfo.recipeName = '터키&비프';
-  //   data.surveyInfo.nextPaymentDate = '2022-08-10T10:44:01.179';
-  //   data.surveyInfo.nextPaymentPrice = 112000;
-  //   data.surveyInfo.nextDeliveryDate = '2022-08-24';
-  // }
-
-  /// ! TESTTESTTESTTESTTESTTESTTESTTESTTESTTEST
 
   return { props: { data } };
 }

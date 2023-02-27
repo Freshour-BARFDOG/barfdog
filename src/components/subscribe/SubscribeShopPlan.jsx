@@ -1,281 +1,183 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import s from '/src/pages/order/subscribeShop/index.module.scss';
 import CustomInput from '/src/components/atoms/CustomInput';
 import ItemLabel from '/src/components/atoms/ItemLabel';
 import Image from 'next/image';
-import { subscribePlanType } from '/store/TYPE/subscribePlanType';
+import {subscribePlanType} from '/store/TYPE/subscribePlanType';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
-import {useSubscribePlanInfo} from "../../../util/hook/useSubscribePlanInfo";
-import {FullScreenLoading} from "../atoms/FullScreenLoading";
 
 export const SubscribeShopPlan = ({ name, info, form, setForm, calcPrice }) => {
   
-  const subscribePlanInfo = useSubscribePlanInfo();
   const initialPlan = form.plan || null
-  const [selectedPlan, setSelectedPlan] = useState(initialPlan);
-  useEffect(() => {
-    setForm((prevState) => ({
+  const [selectedPlan, setSelectedPlan] = useState( initialPlan );
+  useEffect( () => {
+    setForm( (prevState) => ({
       ...prevState,
       plan: selectedPlan,
-    }));
-    // 선택된 플랜을 의존성으로 넣어서 계산한다.
-  }, [selectedPlan]);
+    }) );
+  }, [selectedPlan] );
   
-  if(subscribePlanInfo.isLoading){
-    return <FullScreenLoading opacity={1}/>
-  }
-
+  const subsribePlanItems = [
+    {
+      id: subscribePlanType.FULL.NAME,
+      label: "best", // best, new, none
+      imageSrc: require( "public/img/subscribe/subscribe_full_plan.png" ),
+      title: "풀플랜",
+      titleDescHTML: <p>하루에 <span>두 끼</span>를 바프독으로 먹어요</p>,
+      bodyDescHTML: {
+        row1:
+          <>하루에<span>&nbsp;{subscribePlanType.FULL.numberOfPacksPerDay}팩</span></>,
+        row2:
+          <><span>{subscribePlanType.FULL.weeklyPaymentCycle}주</span>&nbsp;정기배송</>,
+        row3:
+          <><span>{info.foodAnalysis.oneMealRecommendGram}g</span>&nbsp;(1팩기준)</>,
+        row4:
+          <>{subscribePlanType.FULL.totalNumberOfPacks}팩 x
+            <span>&nbsp;{transformLocalCurrency( calcPrice( subscribePlanType.FULL.NAME ).perPack ) + '원'}</span></>
+      },
+      price: {
+        discount: info.planDiscountPercent[subscribePlanType.FULL.NAME],
+        origin: transformLocalCurrency(
+          calcPrice( subscribePlanType.FULL.NAME )
+            .originPrice,
+        ),
+        sale: transformLocalCurrency(
+          calcPrice( subscribePlanType.FULL.NAME ).salePrice,
+        )
+      }
+    },
+    {
+      id: subscribePlanType.HALF.NAME,
+      label: "none", // best, new, none
+      imageSrc: require( "public/img/subscribe/subscribe_half_plan.png" ),
+      title: "하프플랜",
+      titleDescHTML: <p>하루에 <span>한 끼</span>를 바프독으로 먹어요</p>,
+      bodyDescHTML: {
+        row1:
+          <>하루에<span>&nbsp;{subscribePlanType.HALF.numberOfPacksPerDay}팩</span></>,
+        row2:
+          <><span>{subscribePlanType.HALF.weeklyPaymentCycle}주</span>&nbsp;정기배송</>,
+        row3:
+          <><span>{info.foodAnalysis.oneMealRecommendGram}g</span>&nbsp;(1팩기준)</>,
+        row4:
+          <>{subscribePlanType.HALF.totalNumberOfPacks}팩 x
+            <span>&nbsp;{transformLocalCurrency( calcPrice( subscribePlanType.HALF.NAME ).perPack ) + '원'}</span></>
+      },
+      price: {
+        discount: info.planDiscountPercent[subscribePlanType.HALF.NAME],
+        origin: transformLocalCurrency(
+          calcPrice( subscribePlanType.HALF.NAME )
+            .originPrice,
+        ),
+        sale: transformLocalCurrency(
+          calcPrice( subscribePlanType.HALF.NAME ).salePrice,
+        )
+      }
+    },
+    {
+      id: subscribePlanType.TOPPING.NAME,
+      label: "new", // best, new, none
+      imageSrc: require( "public/img/subscribe/subscribe_half_plan.png" ),
+      title: "토핑플랜",
+      titleDescHTML: <p>토핑용으로 바프독으로 섞어서 먹어요</p>,
+      bodyDescHTML: {
+        row1:
+          <><span>{"토핑"}</span></>,
+        row2:
+          <><span>{subscribePlanType.TOPPING.weeklyPaymentCycle}주</span>&nbsp;정기배송</>,
+        row3:
+          <><span>{info.foodAnalysis.oneMealRecommendGram}g</span>&nbsp;(1팩기준)</>,
+        row4:
+          <>{subscribePlanType.TOPPING.totalNumberOfPacks}팩 x
+            <span>&nbsp;{transformLocalCurrency( calcPrice( subscribePlanType.TOPPING.NAME ).perPack ) + '원'}</span></>
+      },
+      price: {
+        discount: info.planDiscountPercent[subscribePlanType.TOPPING.NAME],
+        origin: transformLocalCurrency(
+          calcPrice( subscribePlanType.TOPPING.NAME )
+            .originPrice,
+        ),
+        sale: transformLocalCurrency(
+          calcPrice( subscribePlanType.TOPPING.NAME ).salePrice,
+        )
+      }
+    }
+  ];
+  
+  
   return (
     <section className={s.regular_delivery}>
-      <div className={s.regular_delivery_title}>급여량에 따른 정기배송 수량을 선택해 주세요</div>
+      <div className={s.regular_delivery_title}>
+        <p>급여량에 따른 정기배송 수량을 선택해 주세요</p>
+        <h3 className={s.desc}>레시피를 선택하시면 가격이 노출됩니다.</h3>
+      </div>
       <div className={s.flex_box} data-input-title={name}>
-        <CustomInput
-          id={subscribePlanType.FULL.NAME}
+        {subsribePlanItems.map( (item, index) => <CustomInput
+          key={`${item.id}-${index}`}
+          id={item.id}
           type="radio"
           name={name}
           selectedRadio={selectedPlan}
           setSelectedRadio={setSelectedPlan}
-          option={{label:'플랜 선택'}}
+          option={{label: '플랜 선택'}}
         >
-          <ItemLabel
+          {item.label === "best" && <ItemLabel
             label="BEST"
             style={{
               backgroundColor: 'var(--color-main)',
             }}
-          />
-          <ul className={s.plan_box}>
-            <li className={s.plan_grid_1}>
-
-              <div className={s.img_box}>
-                <div className={`${s.image} img-wrap`}>
-                  <Image
-                    priority
-                    src={require('public/img/subscribe/subscribe_full_plan.png')}
-                    objectFit="cover"
-                    layout="fill"
-                    alt="카드 이미지"
-                  />
-                </div>
-              </div>
-
-              <h2>풀플랜</h2>
-            </li>
-
-            <li>
-              <p>하루에 <span>두 끼</span>를 바프독으로 먹어요</p>
-            </li>
-
-            <li>
-              <div className={s.grid_box}>
-                <div className={s.row_1}>
-                  하루에<span>&nbsp;{subscribePlanType.FULL.numberOfPacksPerDay}팩</span>
-                </div>
-                <div className={s.row_2}>
-                  <span>{subscribePlanType.FULL.weeklyPaymentCycle}주</span>&nbsp;정기배송
-                </div>
-                <div className={s.row_3}>
-                  <span>{info.foodAnalysis.oneMealRecommendGram}g</span>&nbsp;(1팩기준)
-                </div>
-                <div className={s.row_4}>
-                  {subscribePlanType.FULL.totalNumberOfPacks}팩 x
-                  <span>
-                    &nbsp;{transformLocalCurrency(calcPrice().perPack) + '원'}
-                  </span>
-                </div>
-              </div>
-            </li>
-
-            <li>
-              {/*{form.recipeIdList?.length > 0 && form.recipeIdList[0] && (*/}
-              <div className={s.text1}>
-                {subscribePlanInfo.discountPercent[subscribePlanType.FULL.NAME] + '%'}&nbsp;
-                  <span>
-                    {transformLocalCurrency(
-                      calcPrice(subscribePlanType.FULL.totalNumberOfPacks)
-                        .originPrice,
-                    )}
-                    원
-                  </span>
-             
-              </div>
-              {/*)}*/}
-              {/*{form.recipeIdList?.length > 0 && form.recipeIdList[0] && (*/}
-                <div className={s.text2}>
-                  {transformLocalCurrency(
-                    calcPrice(
-                      subscribePlanType.FULL.totalNumberOfPacks,
-                      subscribePlanType.FULL.discountPercent,
-                    ).salePrice,
-                  )}
-                  원
-                </div>
-              {/*)}*/}
-            </li>
-
-          </ul>
-        </CustomInput>
-
-        <CustomInput
-          id={subscribePlanType.HALF.NAME}
-          type="radio"
-          name={name}
-          selectedRadio={selectedPlan}
-          setSelectedRadio={setSelectedPlan}
-          option={{label:'플랜 선택'}}
-        >
-          <ul className={s.plan_box}>
-            <li className={s.plan_grid_1}>
-              <div className={s.img_box}>
-                <div className={`${s.image} img-wrap`}>
-                  <Image
-                    priority
-                    src={require('public/img/subscribe/subscribe_half_plan.png')}
-                    objectFit="cover"
-                    layout="fill"
-                    alt="카드 이미지"
-                  />
-                </div>
-              </div>
-
-              <h2>하프플랜</h2>
-            </li>
-
-            <li>
-              <p>하루에 <span>한 끼</span>를 바프독으로 먹어요</p>
-            </li>
-
-            <li>
-              <div className={s.grid_box}>
-                <div className={s.row_1}>
-                  하루에<span>&nbsp;{subscribePlanType.HALF.numberOfPacksPerDay}팩</span>
-                </div>
-                <div className={s.row_2}>
-                  <span>{subscribePlanType.HALF.weeklyPaymentCycle}주</span>&nbsp;정기배송
-                </div>
-                <div className={s.row_3}>
-                  <span>{info.foodAnalysis.oneMealRecommendGram}g</span>&nbsp;(1팩기준)
-                </div>
-                <div className={s.row_4}>
-                  {subscribePlanType.HALF.totalNumberOfPacks}팩 x
-                  <span>
-                    &nbsp;{transformLocalCurrency(calcPrice().perPack) + '원'}
-                  </span>
-                </div>
-              </div>
-            </li>
-
-            <li>
-              {/*{form.recipeIdList?.length > 0 && form.recipeIdList[0] && (*/}
-                <div className={s.text1}>
-                  {subscribePlanInfo.discountPercent[subscribePlanType.HALF.NAME] + '%'}&nbsp;
-                  <span>
-                    {transformLocalCurrency(
-                      calcPrice(subscribePlanType.HALF.totalNumberOfPacks)
-                        .originPrice,
-                    )}
-                    원
-                  </span>
-                </div>
-              {/*)}*/}
-              {/*{form.recipeIdList?.length > 0 && form.recipeIdList[0] && (*/}
-                <div className={s.text2}>
-                  {transformLocalCurrency(
-                    calcPrice(
-                      subscribePlanType.HALF.totalNumberOfPacks,
-                      subscribePlanType.HALF.discountPercent,
-                    ).salePrice,
-                  )}
-                  원
-                </div>
-              {/*)}*/}
-            </li>
-            
-          </ul>
-        </CustomInput>
-
-        <CustomInput
-          id={subscribePlanType.TOPPING.NAME}
-          type="radio"
-          name={name}
-          selectedRadio={selectedPlan}
-          setSelectedRadio={setSelectedPlan}
-          option={{label:'플랜 선택'}}
-        >
-          <ItemLabel
+          />}
+          {item.label === "new" && <ItemLabel
             label="NEW"
             style={{
               backgroundColor: '#FF8C16',
             }}
-          />
-
+          />}
           <ul className={s.plan_box}>
             <li className={s.plan_grid_1}>
               <div className={s.img_box}>
                 <div className={`${s.image} img-wrap`}>
                   <Image
                     priority
-                    src={require('public/img/subscribe/subscribe_half_plan.png')}
+                    src={item.imageSrc}
                     objectFit="cover"
                     layout="fill"
                     alt="카드 이미지"
                   />
                 </div>
               </div>
-
-              <h2>토핑플랜</h2>
+              <h2>{item.title}</h2>
             </li>
-
             <li>
-              <p>토핑용으로 바프독으로 섞어서 먹어요</p>
+              {item.titleDescHTML}
             </li>
-
             <li>
               <div className={s.grid_box}>
                 <div className={s.row_1}>
-                  <span>{subscribePlanType.TOPPING.description}</span>
+                  {item.bodyDescHTML.row1}
                 </div>
                 <div className={s.row_2}>
-                  <span>{subscribePlanType.TOPPING.weeklyPaymentCycle}주</span>&nbsp;정기배송
+                  {item.bodyDescHTML.row2}
                 </div>
                 <div className={s.row_3}>
-                  <span>{info.foodAnalysis.oneMealRecommendGram}g</span>&nbsp;(1팩기준)
+                  {item.bodyDescHTML.row3}
                 </div>
                 <div className={s.row_4}>
-                  {subscribePlanType.TOPPING.totalNumberOfPacks}팩 x
-                  <span>
-                    &nbsp;{transformLocalCurrency(calcPrice().perPack) + '원'}
-                  </span>
+                  {item.bodyDescHTML.row4}
                 </div>
               </div>
             </li>
-
             <li>
-              {/*{form.recipeIdList?.length > 0 && form.recipeIdList[0] && (*/}
-                <div className={s.text1} style={{ opacity: `${!form.recipeIdList ? 0 : 1}` }}>
-                  {subscribePlanInfo.discountPercent[subscribePlanType.TOPPING.NAME] + '%'}&nbsp;
-                  <span>
-                    {transformLocalCurrency(
-                      calcPrice(subscribePlanType.TOPPING.totalNumberOfPacks)
-                        .originPrice,
-                    )}
-                    원
-                  </span>
-                </div>
-              {/*)}*/}
-              {/*{form.recipeIdList?.length > 0 && form.recipeIdList[0] && (*/}
-                <div className={s.text2}>
-                  {transformLocalCurrency(
-                    calcPrice(
-                      subscribePlanType.TOPPING.totalNumberOfPacks,
-                      subscribePlanType.TOPPING.discountPercent,
-                    ).salePrice,
-                  )}
-                  원
-                </div>
-              {/*)}*/}
+              <div className={s.text1}>
+                {item.price.discount}%&nbsp;
+                <span>{item.price.origin}원</span>
+              </div>
+              <div className={s.text2}>
+                {item.price.sale}원
+              </div>
             </li>
           </ul>
-        </CustomInput>
+        </CustomInput> )}
       </div>
     </section>
   );

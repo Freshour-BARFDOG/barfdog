@@ -118,6 +118,16 @@ section.regular_delivery {
     font-weight: 600;
     padding-bottom: rem(60);
     text-align: center;
+
+
+    > *:not(:last-child){
+      padding-bottom: rem(9);
+    }
+    .desc {
+      @include char(l16);
+      color: var(--color-font-sub);
+    }
+
   }
 }
 
@@ -734,7 +744,7 @@ section.regular_delivery {
     }
   }
 
-  
+
   .swiper_recipes {
     margin: rem(10) auto 0;
   }

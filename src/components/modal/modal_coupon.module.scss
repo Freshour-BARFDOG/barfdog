@@ -10,22 +10,30 @@
 .modal {
   width: 100%;
 
+  .coupon-section {
+    &:not(:last-child) {
+      padding-bottom: rem(30);
+      margin-bottom: rem(30);
+      border-bottom: rem(1) dashed var(--color-line-02);
+    }
+  }
+
   .title_box {
     width: 100%;
     padding-bottom: rem(20);
-    display: flex;
+    display: grid;
     align-items: center;
     position: relative;
 
-    &::after{
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: rem(1);
-      background-color: var(--color-line-01);
-    }
+    //&::after{
+    //  content: "";
+    //  position: absolute;
+    //  bottom: 0;
+    //  left: 0;
+    //  width: 100%;
+    //  height: rem(1);
+    //  background-color: var(--color-line-01);
+    //}
 
     .title {
       font-size: rem(20);
@@ -33,6 +41,7 @@
       display: flex;
       justify-content: flex-start;
       font-weight: 600;
+
       span {
         @include char(l14);
         color: var(--color-font-sub);
@@ -41,6 +50,10 @@
         line-height: 200%;
       }
     }
+  }
+
+  .content_box.used-coupon .flex_box{
+    grid-template-columns: rem(25) 1fr rem(100);
   }
   .content_box {
     .flex_box {
@@ -56,6 +69,7 @@
         font-size: rem(15);
         align-items: center;
         border: {
+          top: rem(1) solid var(--color-line-01);
           bottom: rem(1) solid var(--color-line-01);
         }
       }
@@ -192,11 +206,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
     span {
       padding-left: rem(18);
       color: var(--color-main);
       @include char(l20);
       font-weight: 600;
+    }
+    .unappliedDiscountAmount{
+      font-size: rem(12);
     }
   }
   .line {

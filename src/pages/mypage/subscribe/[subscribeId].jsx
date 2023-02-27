@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from '/src/components/mypage/MypageWrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
-import { ToggleBox } from '/src/components/atoms/ToggleBox';
-import { SubscribDashboard } from '/src/components/subscribe/SubscribDashboard';
-import { SubscribeGram } from '/src/components/subscribe/SubscribeGram';
-import { SubscribeSkipPayment } from '/src/components/subscribe/SubscribeSkipPayment';
-import { SubscribeCancle } from '/src/components/subscribe/SubscribeCancle';
-import { SubscribePlan } from '/src/components/subscribe/SubscribePlan';
-import { SubscribeRecipe } from '/src/components/subscribe/SubscribeRecipe';
-import { useSubscribeInfo } from '/util/hook/useSubscribeInfo';
-import { FullScreenLoading } from '/src/components/atoms/FullScreenLoading';
+import {ToggleBox} from '/src/components/atoms/ToggleBox';
+import {SubscribeDashboard} from '/src/components/subscribe/SubscribeDashboard';
+import {SubscribeGram} from '/src/components/subscribe/SubscribeGram';
+import {SubscribeSkipPayment} from '/src/components/subscribe/SubscribeSkipPayment';
+import {SubscribeCancle} from '/src/components/subscribe/SubscribeCancle';
+import {SubscribePlan} from '/src/components/subscribe/SubscribePlan';
+import {SubscribeRecipe} from '/src/components/subscribe/SubscribeRecipe';
+import {useSubscribeInfo} from '/util/hook/useSubscribeInfo';
+import {FullScreenLoading} from '/src/components/atoms/FullScreenLoading';
 import Modal_global_alert from "../../../components/modal/Modal_global_alert";
-import {useModalContext} from "../../../../store/modal-context";
+import {useModalContext} from "/store/modal-context";
 
 
 export default function SubscribeInfoPage({ data }) {
@@ -32,7 +32,7 @@ export default function SubscribeInfoPage({ data }) {
       <Layout>
         <Wrapper>
           <MypageWrapper>
-            <SubscribDashboard subscribeInfo={subscribeInfo} />
+            <SubscribeDashboard subscribeInfo={subscribeInfo} />
             
             <ToggleBox title="구독 무게(g) 변경">
               <SubscribeGram subscribeInfo={subscribeInfo} />

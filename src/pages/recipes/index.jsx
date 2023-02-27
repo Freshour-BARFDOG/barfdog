@@ -49,7 +49,7 @@ const DATA = {
     require("/public/img/recipes/starter.png"),
     require("/public/img/recipes/turkey_beef.png"),
     require("/public/img/recipes/duck_lamb.png"),
-    require("/public/img/recipes/turkey_beef.png"),
+    require("/public/img/recipes/lamb_beef.png"),
   ],
   component: {
     tab1: [
@@ -240,7 +240,7 @@ export default function RecipePage() {
                 </p>
 
                 <div className={s.recipe_text}>
-                  터키앤비프  
+                  터키앤비프
                 </div>
   
                 <button className={s['showModal_btn']} type={'button'} onClick={onShowModal} data-selected-idx={1}>
@@ -520,7 +520,7 @@ export default function RecipePage() {
             <div className={s.recipe_title2}>
               바프독은 사료가 아닌 음식을 만든다는 생각으로 제조합니다<br />
               반려견들의 식사 시간은 그저 배만 채우는 시간이 아닌, 즐거운 경험을 축적하는 시간이어야 한다고 생각합니다<br />
-              그래서, 반려견에게 줄 수 있는 영양을 우선으로 생각해 사람이 먹을 수 있는 건강한 식재료들을 엄격히 선별하고 있습니다<br />              
+              그래서, 반려견에게 줄 수 있는 영양을 우선으로 생각해 사람이 먹을 수 있는 건강한 식재료들을 엄격히 선별하고 있습니다<br />
             </div>
 
             <div className={s.image_box}>
@@ -647,7 +647,7 @@ export function Swiper_card() {
       effect={"cards"}
       {...swiperSettings_card}
       onInit={(swiper) => {
-        
+      
       }}
       modules={[EffectCards, Autoplay]}
       >

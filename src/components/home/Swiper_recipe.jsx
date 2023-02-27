@@ -42,8 +42,7 @@ export function Swiper_recipe({ data, isMobile }) {
   
   useEffect(() => {
     if(data && Array.isArray(data)){
-      const arrangedData = data.reverse() || [];
-      setRecipeDatas(arrangedData);
+      setRecipeDatas(data || []);
     }
     
   },[])

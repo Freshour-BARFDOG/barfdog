@@ -191,12 +191,12 @@ export function Payment({
     } catch (err) {
       alert('API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.');
       console.error('API통신 오류 : ', err);
+    } finally {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        submit: false,
+      }));
     }
-    setIsLoading((prevState) => ({
-      ...prevState,
-      submit: false,
-    }));
-
   }
 
   async function generalPayment(body,id,merchantUid) {
@@ -214,7 +214,7 @@ export function Payment({
       pay_method: paymethodFilter(body.paymentMethod), // 결제수단
       merchant_uid: merchantUid, // 주문번호
       amount: body.paymentPrice, // 결제금액
-      name: `Test ${paymentName}`, // 주문명
+      name: `[일반상품] - ${paymentName}`, // 주문명
       buyer_name:  info.name, // 구매자 이름
       buyer_tel: info.phone, // 구매자 전화번호
       buyer_email: info.email, // 구매자 이메일
@@ -297,24 +297,26 @@ export function Payment({
     const customUid = `customer_Uid_${randomStr}`;
     
      /* 2. 결제 데이터 정의하기  TODO:kakaopay 실연동 가맹점코드(CID) 발급받으면 변경하기*/
+    const paymentName = info.recipeNameList.join(", ");
     const data = {
-      pg: form.paymentMethod === 'KAKAO_PAY'?'kakaopay.TCSUBSCRIP':'kcp_billing', // PG사
+      pg: form.paymentMethod === 'KAKAO_PAY'?'kakaopay.TCSUBSCRIP':`kcp_billing.${process.env.NEXT_PUBLIC_IAMPORT_SUBSCRIBE_SITECODE}`, // PG사 + 사이트키
       pay_method: 'card', // 결제수단
       merchant_uid: new Date().getTime().toString(36), // 주문번호
       // amount: body.paymentPrice, // 결제금액
       amount:0,
       customer_uid : customUid,
-      name: 'test바프독정기결제', // 주문명
+      name: `[구독상품] - ${paymentName}`, // 주문명
       buyer_name:form.deliveryDto.name,
       buyer_tel: form.deliveryDto.phone,
-      m_redirect_url: `${window.location.origin}/order/loading/subscribe/${id}/${randomStr}/${body.paymentPrice}/${merchantUid}/test바프독결제`
-
+      m_redirect_url: `${window.location.origin}/order/loading/subscribe/${id}/${randomStr}/${body.paymentPrice}/${merchantUid}/[구독상품]-${paymentName}`,
     };
   
     // 결제 이슈를 보완하기 인하여 Api Request Data 추가를 위해 사용
     const callbackData = {
       discountReward: body.discountReward,
-      orderId: id
+      orderId: id,
+      buyer_name:form.deliveryDto.name,
+      paymentName: paymentName
     
     }
     IMP.request_pay(data, callback.bind(null, callbackData));
@@ -339,7 +341,8 @@ export function Payment({
         customer_uid: customer_uid,
         merchant_uid: merchantUid, // 서버로부터 받은 주문번호
         amount: body.paymentPrice,
-        name: "test바프독정기결제"
+        name: `[구독상품] - ${callbackData.paymentName}`,
+        buyer_name:callbackData.buyer_name
       };
     
       const paymentResult = await axios
