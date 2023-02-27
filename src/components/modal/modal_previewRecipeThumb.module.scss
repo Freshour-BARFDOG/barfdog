@@ -202,6 +202,8 @@ $popupMainHeaderHeight:rem(66);
 .user-entered-input{
   width: rem(80);
   margin: 0 rem(10);
+  font-size: rem(16);
+
   &::placeholder{font-size:rem(14);}
   &.phoneNumber{
     width: rem(200);

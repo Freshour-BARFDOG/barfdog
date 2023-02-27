@@ -34,9 +34,9 @@ export const SubscribeRecommendResult = ({info}) => {
             <p>{info.dogName}에게는</p>
             <p>
               <em className={s.accent}>{recommendDescriptionForSurvey}</em>
-              <span>{hasRecipeNameUnderConsonant ? '이' : '가'} </span>필요한
-            </p>
-            <p>
+              {/* <span>{hasRecipeNameUnderConsonant ? '이' : '가'} </span>필요한
+              </p>
+              <p> */}
               <b>{info.recommendRecipeName}</b> 레시피를 추천합니다.
             </p>
           </div>

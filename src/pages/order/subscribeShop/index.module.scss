@@ -55,6 +55,7 @@ section.regular_delivery {
       }
 
       .result_title {
+        max-width: rem(380);
         @include char(t24);
         line-height: 120%;
         font-weight:300;

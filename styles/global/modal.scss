@@ -49,6 +49,8 @@
     border: rem(1) solid transparent;
     height: rem(44);
     min-width: rem(100);
+    font-size: rem(16);
+
     &.line{
       background-color: #fff;
       border-color: var(--color-line-03);

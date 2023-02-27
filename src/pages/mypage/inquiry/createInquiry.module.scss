@@ -158,7 +158,7 @@ ul{
         &:first-child{
           order: 2;
           > * {
-            width: rem(160);
+            min-width: rem(160);
           }
         }
         .form-row-cont{

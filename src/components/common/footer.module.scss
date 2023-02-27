@@ -138,4 +138,26 @@ $browser-context: 16;
   .info_cont {
     color: #b7b7b7;
   }
+  .info_cont_mobile {
+    color: #b7b7b7;
+    display: none;
+  }
+}
+
+
+@media (max-width: rem(600)) {
+  .companyInfo_area {
+    ul {
+      li {
+        &:nth-child(5), &:last-child{
+          .info_cont {
+            display: none;
+          }
+        }
+        .info_cont_mobile {
+          display: block;
+        }
+      }
+    }
+  }
 }
