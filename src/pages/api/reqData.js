@@ -1,7 +1,8 @@
 import axios from 'axios';
-import axiosConfig, { axiosUserConfig } from './axios.config';
-import { cookieType } from '/store/TYPE/cookieType';
+import axiosConfig, {axiosUserConfig} from './axios.config';
+import {cookieType} from '/store/TYPE/cookieType';
 import {responseErrorType} from "@store/TYPE/responseErrorType";
+import {errorResponseHandleMap} from "@util/func/error/errorResponseHandleMap";
 
 /* - async / await 사용법
      아래 async await을 사용한 함수를 호출하는 함수도
@@ -36,6 +37,7 @@ export const getData = async (url, useType, optionalConfig= {}) => {
       return res;
     })
     .catch((err) => {
+      errorResponseHandleMap( err );
       console.log(err.response);
       const errorObj = err?.response;
       const status = errorObj?.status;
@@ -57,26 +59,14 @@ export const postData = async (url, data, callback, contType) => {
       return res;
     })
     .catch((err) => {
+      errorResponseHandleMap( err );
       console.log(err);
       if (callback && typeof callback === 'function') callback(err);
       alert('데이터 전송에 실패하였습니다.');
     });
 };
 
-export const putData = async (url, data) => {
-  const response = axios
-    .put(url, data, axiosConfig())
-    .then((res) => {
-      console.log(res);
-      return res;
-    })
-    .catch((err) => {
-      console.log(err.response);
-      return err;
-    });
 
-  return response;
-};
 
 export const deleteData = async (url, config = { data: {} }) => {
   const result = {
@@ -97,6 +87,7 @@ export const deleteData = async (url, config = { data: {} }) => {
       return res.status === 200 || res.status === 201;
     })
     .catch((err) => {
+      errorResponseHandleMap( err );
       console.error(err.response);
       // console.error('postObjDataResponseError:\n',err.response);
       const error = err.response;
@@ -142,8 +133,7 @@ export const postObjData = async (url, data, contType) => {
       return res.status === 200 || res.status === 201;
     })
     .catch((err) => {
-      // console.error('postObjDataResponseError:\n',err.response);
-      // console.log('ERROR내용: ', err.response);
+      errorResponseHandleMap( err );
       if(!error) {
         result.error = '서버의 에러 응답이 없습니다.';
         result.status = 500;
@@ -188,6 +178,7 @@ export const putObjData = async (url, data, contType) => {
       return res.status === 200 || res.status === 201;
     })
     .catch((err) => {
+      errorResponseHandleMap( err );
       console.log(err.response);
       const errStatus = err.response?.status >= 400;
       const errorMessage = err.response?.data.error;
@@ -216,6 +207,7 @@ export const deleteObjData = async (url, data) => {
       return res.status === 200 || res.status === 201;
     })
     .catch((err) => {
+      errorResponseHandleMap( err );
       console.log(err.response);
       const errStatus = err.response?.status >= 400;
       const errorMessage = err.response?.data.error;
@@ -237,6 +229,7 @@ export const postFileUpload = async (url, formData) => {
       return res;
     })
     .catch((err) => {
+      errorResponseHandleMap( err );
       return err.response;
       console.log(err.response);
       console.log(err.request);
@@ -262,6 +255,7 @@ export const postUserObjData = async (url, data, contType) => {
       return res.status === 200 || res.status === 201;
     })
     .catch((err) => {
+      errorResponseHandleMap( err );
       const error = err.response;
       console.log('ERROR내용: ', err.response);
       if (error.data.error || error.data.errors[0].defaultMessage) {
@@ -279,30 +273,7 @@ export const postUserObjData = async (url, data, contType) => {
   return result;
 };
 
-// -------- SSR DATA FETCHING -------- //
-/* - EXAMPLE
 
-export async function getServerSideProps({req}) {
-  const getApiUrl = '/api/dogs'
-  const res = await getDataSSR(req , getApiUrl )
-  let DATA;
-  const hasData = res.data._embedded.queryDogsDtoList.length;
-  if(hasData){
-    const dataList = res.data._embedded.queryDogsDtoList;
-    DATA = dataList.map((data)=>({
-      id : data.id,
-      pictureUrl : data.pictureUrl, // 반려견 프로필 사진
-      name : data.name, // 반려견 이름
-      birth : data.birth, // 반려견 생년월 //YYYYMM
-      gender : data.gender, // 반려견 성별
-      representative : data.representative, // 대표견 여부
-      subscribeStatus : data.subscribeStatus, // 구독상태
-    }))
-  }
-  return { props: { data: DATA } };
-}
-
-*/
 
 export const getTokenClientSide = (req) => {
   // - MEMBER & ADMIN 모두 동일한 API에서 동일한 TOKEN을 발급받는다
@@ -419,31 +390,3 @@ export const postDataSSR = async (req, url, data, tokenFromSSR) => {
 
   return result;
 };
-//
-//
-// export const axiosServerSide = async (req, method, url, data) => {
-//   let result = {
-//     isDone: null,
-//     err: null,
-//     res: null,
-//     status: null,
-//   };
-//
-//   await axios({
-//     url: url,
-//     method: method,
-//     headers: {
-//       authorization: getTokenFromServerSide(req),
-//       'content-Type': 'application/json',
-//     },
-//     data: data,
-//   })
-//     .then((res) => {
-//       result.res = res;
-//     })
-//     .catch((err) => {
-//       result.err =  err;
-//     });
-//
-//   return result;
-// };
