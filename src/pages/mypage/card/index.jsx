@@ -1,28 +1,25 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from '/src/components/mypage/MypageWrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import s from './card.module.scss';
 import Image from 'next/image';
-import { getDataSSR, postObjData } from '/src/pages/api/reqData';
-import Spinner from '/src/components/atoms/Spinner';
-import { EmptyContMessage } from '/src/components/atoms/emptyContMessage';
+import {getDataSSR, postObjData} from '/src/pages/api/reqData';
+import {EmptyContMessage} from '/src/components/atoms/emptyContMessage';
 import {subscribePlanType} from "/store/TYPE/subscribePlanType";
 import transformDate from "/util/func/transformDate";
 import transformLocalCurrency from "/util/func/transformLocalCurrency";
-import { useEffect } from 'react';
 
 
 export default function MypageCardPage({ data }) {
   
   // !  CARD NAME => '알수없음' 조건 ?
   const [cardList, setCardList] = useState(data || []);
-  console.log(data);
+  // console.log(data);
+  // console.log(cardList);
 
   useEffect(() => {
-    // console.log(router);
-    // console.log(router.query.subscribeId);
 
     const jquery = document.createElement('script');
     jquery.src = 'https://code.jquery.com/jquery-1.12.4.min.js';
@@ -40,8 +37,16 @@ export default function MypageCardPage({ data }) {
 
   }, []);
 
-  const onChangeCard = async(id) => {
-    // alert('card 변경 로직 시작');
+  const onChangeCard = async(subscribeId) => {
+    
+    const currentCardDto = cardList.filter(dto=> dto.subscribeCardDto.subscribeId === subscribeId)[0];
+    if(!currentCardDto?.subscribeCardDto) return alert( "구독에 해당하는 카드를 찾을 수 없습니다." );
+    
+    // 아임포트 전달 데이터 세팅
+    const subscribeItemName = currentCardDto.recipeNameList.join(', ');
+    const {name} = currentCardDto.subscribeCardDto;
+    const CLIENT_ORIGIN = process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_CLIENT_URL_PRODUCT : process.env.NEXT_PUBLIC_CLIENT_URL_DEV;
+    
    /* 1. 가맹점 식별하기 */
     const IMP = window.IMP;
     IMP.init(process.env.NEXT_PUBLIC_IAMPORT_CODE);
@@ -49,14 +54,18 @@ export default function MypageCardPage({ data }) {
     const randomStr= new Date().getTime().toString(36);
     /* 2. 결제 데이터 정의하기 */
     const data = {
-      pg: 'kcp_billing', // PG사
+      pg: `kcp_billing.${process.env.NEXT_PUBLIC_IAMPORT_SUBSCRIBE_SITECODE}`, // PG사
       pay_method: 'card', // 결제수단
-      name: '바프독 정기결제 카드변경',
+      merchant_uid: new Date().getTime().toString(36),
       amount:0,
       customer_uid : `customer_Uid_${randomStr}`,
-      m_redirect_url: `http://localhost:4000/mypage/card/${id}/${randomStr}`
-
-      };
+      name: `[카드변경][구독상품]-${subscribeItemName}`,
+      buyer_name: name,
+      buyer_tel: "",
+      m_redirect_url: `${CLIENT_ORIGIN}/mypage/card/${subscribeId}/${randomStr}`
+    };
+    //
+    
     IMP.request_pay(data, callback);
     
     /* 4. 결제 창 호출하기 */
@@ -64,21 +73,24 @@ export default function MypageCardPage({ data }) {
       console.log(response);
       const { success,customer_uid, error_msg } = response;
       
-    /* 3. 콜백 함수 정의하기 */
-    if (success) {
-      // 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우
-      // TODO: 결제 정보 전달 
-      const r = await postObjData(`/api/cards/subscribes/${id}`, {
-        customerUid : customer_uid,
-      });
-      console.log(r);
-      if(r.isDone){
-        alert('카드변경 성공');
-      }
-    } else {
-        alert(`카드변경 실패 ${error_msg}`);
+      /* 3. 콜백 함수 정의하기 */
+      if (success) {
+        // 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우
+        // TODO: 결제 정보 전달
+        const r = await postObjData(`/api/cards/subscribes/${subscribeId}`, {
+          customerUid : customer_uid,
+        });
+        console.log(r);
+        if(r.isDone){
+          alert('카드변경 성공');
+        } else {
+          alert('카드변경은 성공하였으나, 서버에서 나머지 요청을 처리하는데 실패하였습니다. 관리자에게 문의해주세요.');
+        }
         window.location.reload();
-    } 
+      } else {
+          alert(`카드변경 실패 ${error_msg}`);
+          window.location.reload();
+      }
     }
   }
 
@@ -163,6 +175,7 @@ export async function getServerSideProps({ req }) {
     if (!dataList.length) return;
     DATA = dataList.map((data) => ({
       subscribeCardDto: {
+        name:data.subscribeCardDto.name || null, // 230302 신규 추가
         subscribeId: data.subscribeCardDto.subscribeId,
         cardId: data.subscribeCardDto.cardId,
         cardName: data.subscribeCardDto.cardName,
@@ -180,71 +193,70 @@ export async function getServerSideProps({ req }) {
 
 
 
-
-let DUMMY_RESPONSE = {
-  data: {
-    "_embedded" : {
-      "querySubscribeCardsDtoList" : [ {
-        "subscribeCardDto" : {
-          "subscribeId" : 121,
-          "cardId" : 120,
-          "cardName" : "카드이름1",
-          "cardNumber" : "카드번호1",
-          "dogName" : "김바프",
-          "plan" : "FULL",
-          "nextPaymentDate" : "2022-07-28T10:51:47.551",
-          "nextPaymentPrice" : 120000
-        },
-        "recipeNameList" : [ "스타트" ],
-        "_links" : {
-          "change_card" : {
-            "href" : "http://localhost:8080/api/cards/subscribe/121"
-          }
-        }
-      }, {
-        "subscribeCardDto" : {
-          "subscribeId" : 132,
-          "cardId" : 131,
-          "cardName" : "카드이름2",
-          "cardNumber" : "카드번호2",
-          "dogName" : "김바프2",
-          "plan" : "TOPPING",
-          "nextPaymentDate" : "2022-07-28T10:51:47.623",
-          "nextPaymentPrice" : 120000
-        },
-        "recipeNameList" : [ "스타트", "터키비프" ],
-        "_links" : {
-          "change_card" : {
-            "href" : "http://localhost:8080/api/cards/subscribe/132"
-          }
-        }
-      }, {
-        "subscribeCardDto" : {
-          "subscribeId" : 143,
-          "cardId" : 142,
-          "cardName" : "카드이름3",
-          "cardNumber" : "카드번호3",
-          "dogName" : "김바프3",
-          "plan" : "HALF",
-          "nextPaymentDate" : "2022-07-28T10:51:47.66",
-          "nextPaymentPrice" : 120000
-        },
-        "recipeNameList" : [ "스타트", "터키비프" ],
-        "_links" : {
-          "change_card" : {
-            "href" : "http://localhost:8080/api/cards/subscribe/143"
-          }
-        }
-      } ]
-    },
-    "_links" : {
-      "self" : {
-        "href" : "http://localhost:8080/api/cards"
-      },
-      "profile" : {
-        "href" : "/docs/index.html#resources-query-subscribeCards"
-      }
-    }
-  }
-  
-}
+//
+// let DUMMY_RESPONSE = {
+//   data: {
+//     "_embedded" : {
+//       "querySubscribeCardsDtoList" : [ {
+//         "subscribeCardDto" : {
+//           "subscribeId" : 121,
+//           "cardId" : 120,
+//           "cardName" : "카드이름1",
+//           "cardNumber" : "카드번호1",
+//           "dogName" : "김바프",
+//           "plan" : "FULL",
+//           "nextPaymentDate" : "2022-07-28T10:51:47.551",
+//           "nextPaymentPrice" : 120000
+//         },
+//         "recipeNameList" : [ "스타트" ],
+//         "_links" : {
+//           "change_card" : {
+//             "href" : "http://localhost:8080/api/cards/subscribe/121"
+//           }
+//         }
+//       }, {
+//         "subscribeCardDto" : {
+//           "subscribeId" : 132,
+//           "cardId" : 131,
+//           "cardName" : "카드이름2",
+//           "cardNumber" : "카드번호2",
+//           "dogName" : "김바프2",
+//           "plan" : "TOPPING",
+//           "nextPaymentDate" : "2022-07-28T10:51:47.623",
+//           "nextPaymentPrice" : 120000
+//         },
+//         "recipeNameList" : [ "스타트", "터키비프" ],
+//         "_links" : {
+//           "change_card" : {
+//             "href" : "http://localhost:8080/api/cards/subscribe/132"
+//           }
+//         }
+//       }, {
+//         "subscribeCardDto" : {
+//           "subscribeId" : 143,
+//           "cardId" : 142,
+//           "cardName" : "카드이름3",
+//           "cardNumber" : "카드번호3",
+//           "dogName" : "김바프3",
+//           "plan" : "HALF",
+//           "nextPaymentDate" : "2022-07-28T10:51:47.66",
+//           "nextPaymentPrice" : 120000
+//         },
+//         "recipeNameList" : [ "스타트", "터키비프" ],
+//         "_links" : {
+//           "change_card" : {
+//             "href" : "http://localhost:8080/api/cards/subscribe/143"
+//           }
+//         }
+//       } ]
+//     },
+//     "_links" : {
+//       "self" : {
+//         "href" : "http://localhost:8080/api/cards"
+//       },
+//       "profile" : {
+//         "href" : "/docs/index.html#resources-query-subscribeCards"
+//       }
+//     }
+//   }
+// }
