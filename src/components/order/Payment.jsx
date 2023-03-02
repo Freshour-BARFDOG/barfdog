@@ -210,11 +210,11 @@ export function Payment({
     /* 2. 결제 데이터 정의하기  1원 결제 -> 실패 , 100원 결제 -> 성공 */
     // TODO: name(주문명) test 지우기
     const data = {
-      pg: 'kcp', // PG사
+      pg: `kcp.${process.env.NEXT_PUBLIC_IAMPORT_GENERAL_ORDER_SITECODE}`, // PG사
       pay_method: paymethodFilter(body.paymentMethod), // 결제수단
       merchant_uid: merchantUid, // 주문번호
       amount: body.paymentPrice, // 결제금액
-      name: `[일반상품] - ${paymentName}`, // 주문명
+      name: `[일반상품]-${paymentName}`, // 주문명
       buyer_name:  info.name, // 구매자 이름
       buyer_tel: info.phone, // 구매자 전화번호
       buyer_email: info.email, // 구매자 이메일
@@ -228,7 +228,7 @@ export function Payment({
     // 결제 이슈를 보완하기 인하여 Api Request Data 추가를 위해 사용
     const callbackData = {
       discountReward: body.discountReward,
-      orderId: id
+      orderId: id,
     }
     IMP.request_pay(data, callback.bind(null, callbackData));
     
@@ -299,16 +299,16 @@ export function Payment({
      /* 2. 결제 데이터 정의하기  TODO:kakaopay 실연동 가맹점코드(CID) 발급받으면 변경하기*/
     const paymentName = info.recipeNameList.join(", ");
     const data = {
-      pg: form.paymentMethod === 'KAKAO_PAY'?'kakaopay.TCSUBSCRIP':`kcp_billing.${process.env.NEXT_PUBLIC_IAMPORT_SUBSCRIBE_SITECODE}`, // PG사 + 사이트키
+      pg: form.paymentMethod === 'KAKAO_PAY' ? 'kakaopay.TCSUBSCRIP':`kcp_billing.${process.env.NEXT_PUBLIC_IAMPORT_SUBSCRIBE_SITECODE}`, // PG사 + 사이트키
       pay_method: 'card', // 결제수단
       merchant_uid: new Date().getTime().toString(36), // 주문번호
       // amount: body.paymentPrice, // 결제금액
       amount:0,
       customer_uid : customUid,
-      name: `[구독상품] - ${paymentName}`, // 주문명
+      name: `[구독상품]-${paymentName}`, // 주문명
       buyer_name:form.deliveryDto.name,
       buyer_tel: form.deliveryDto.phone,
-      m_redirect_url: `${window.location.origin}/order/loading/subscribe/${id}/${randomStr}/${body.paymentPrice}/${merchantUid}/[구독상품]-${paymentName}`,
+      m_redirect_url: `${window.location.origin}/order/loading/subscribe/${id}/${randomStr}/${body.paymentPrice}/${merchantUid}/m_[구독상품]-${paymentName}`,
     };
   
     // 결제 이슈를 보완하기 인하여 Api Request Data 추가를 위해 사용
@@ -415,6 +415,7 @@ export function Payment({
       }
       window.location.reload();
     } else {
+      alert("결제 취소 처리 중 알수 없는 오류가 발생하였습니다. 관리자에게 문의해주세요.")
        // 결제 실패 : 쿠폰null일때 500err -> 서버 오류 수정하셨다고 함 TODO 나중에 테스트하기
       //  const fail = await postObjData(`/api/orders/${id}/subscribe/fail`);
       //  console.log(fail);
