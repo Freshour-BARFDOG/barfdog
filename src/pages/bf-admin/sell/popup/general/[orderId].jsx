@@ -168,6 +168,7 @@ export async function getServerSideProps({ req, query }) {
       })),
       paymentDto: {
         orderPrice: data.paymentDto.orderPrice,
+        discountGrade:data.paymentDto.discountGrade || null, // api-server 변경된 field 이름 대응 -> 추후 null 값 제외해도 됨
         deliveryPrice: data.paymentDto.deliveryPrice,
         discountReward: data.paymentDto.discountReward,
         couponName: data.paymentDto?.couponName || '-',
@@ -219,26 +220,6 @@ export async function getServerSideProps({ req, query }) {
               exchangeDetailReason: cancleInfo.exchangeDetailReason || null,
             },
           }
-        // }else { // ! else문 전부 , TEST 코드
-        //   //'2022-09-13T21:14:27.98',
-        //   DATA = {
-        //     ...DATA,
-        //     orderInfoDto: {
-        //       ...DATA.orderInfoDto,
-        //       cancelRequestDate: '2022-09-13T21:14:27.98',
-        //       cancelConfirmDate: '2022-09-13T21:14:27.98',
-        //       cancelReason: '유저입력 취소사유',
-        //       cancelDetailReason: '유저입력 취소상세사유',
-        //       returnRequestDate: '2022-09-13T21:14:27.98',
-        //       returnConfirmDate: '2022-09-13T21:14:27.98',
-        //       returnReason: '유저입력 교환사유',
-        //       returnDetailReason: '유저입력 교환상세사유',
-        //       exchangeRequestDate: '2022-09-13T21:14:27.98',
-        //       exchangeConfirmDate: '2022-09-13T21:14:27.98',
-        //       exchangeReason: '유저입력 반품사유',
-        //       exchangeDetailReason: '유저입력 반품상세사유',
-        //     },
-        //   }
         }
       }
      
@@ -252,167 +233,167 @@ export async function getServerSideProps({ req, query }) {
 
 
 
-
-const DUMMY_DEFAULT_RES = {
-  data: {
-    orderInfoDto: {
-      id: 7039,
-      merchantUid: 'merchant_uid1',
-      orderDate: '2022-08-18T11:19:49.783',
-      orderType: 'general',
-      memberName: '김회원',
-      phoneNumber: '01099038544',
-      package: false,
-      subscribe: true,
-      email: 'user@gmail.com',
-    },
-    orderItemAndOptionDtoList: [
-      {
-        orderItemDto: {
-          orderItemId: 7030,
-          itemName: '굿즈 상품1',
-          amount: 1,
-          finalPrice: 9000,
-          couponName: '관리자 직접 발행 쿠폰1',
-          discountAmount: 0,
-          status: 'CONFIRM',
-        },
-        selectOptionDtoList: [
-          {
-            optionName: '옵션1',
-            price: 1000,
-            amount: 1,
-          },
-        ],
-      },
-      {
-        orderItemDto: {
-          orderItemId: 7036,
-          itemName: '굿즈 상품2',
-          amount: 2,
-          finalPrice: 18000,
-          couponName: '관리자 직접 발행 쿠폰2',
-          discountAmount: 0,
-          status: 'CONFIRM',
-        },
-        selectOptionDtoList: [
-          {
-            optionName: '옵션1',
-            price: 1000,
-            amount: 1,
-          },
-          {
-            optionName: '옵션2',
-            price: 2000,
-            amount: 2,
-          },
-        ],
-      },
-    ],
-    paymentDto: {
-      orderPrice: 120000,
-      deliveryPrice: 3000,
-      discountReward: 7000,
-      couponName: '관리자 직접 발행 쿠폰1',
-      discountCoupon: 50000,
-      paymentPrice: 60000,
-      orderStatus: 'CONFIRM',
-      orderConfirmDate: '2022-08-20T08:19:49.782',
-    },
-    deliveryDto: {
-      recipientName: '김회원',
-      recipientPhone: '01099038544',
-      zipcode: '12345',
-      street: '부산광역시 해운대구 센텀2로 19',
-      detailAddress: '106호',
-      departureDate: '2022-08-19T11:19:49.782',
-      arrivalDate: '2022-08-21T11:19:49.782',
-      deliveryNumber: 'cj0239234231',
-    },
-    _links: {
-      self: {
-        href: 'http://localhost:8080/api/admin/orders/7039/general',
-      },
-      profile: {
-        href: '/docs/index.html#resources-query-admin-order-general',
-      },
-    },
-  },
-};
-
-const DUMMY_CANCEL_EXCHANGE_RETURN_RES = {
-  data: {
-    orderInfoDto: {
-      orderId: 7069,
-      merchantUid: 'merchant_uid1',
-      orderDate: '2022-08-12T11:19:50.638',
-      orderType: 'general',
-      memberName: '김회원',
-      phoneNumber: '01099038544',
-      package: false,
-      subscribe: true,
-      email: 'user@gmail.com',
-    },
-    orderItemAndOptionDto: {
-      orderItemDto: {
-        orderItemId: 7066,
-        itemName: '굿즈 상품2',
-        amount: 2,
-        finalPrice: 18000,
-        couponName: '관리자 직접 발행 쿠폰2',
-        discountAmount: 0,
-        status: 'CONFIRM',
-        cancelReason: '이유',
-        cancelDetailReason: '상세이유',
-        cancelRequestDate: '2022-08-09T11:19:50.637',
-        cancelConfirmDate: null,
-        returnReason: '이유',
-        returnDetailReason: '상세이유',
-        returnRequestDate: '2022-08-09T11:19:50.637',
-        returnConfirmDate: null,
-        exchangeReason: '이유',
-        exchangeDetailReason: '상세이유',
-        exchangeRequestDate: '2022-08-09T11:19:50.637',
-        exchangeConfirmDate: null,
-      },
-      selectOptionDtoList: [
-        {
-          optionName: '옵션1',
-          price: 1000,
-          amount: 1,
-        },
-        {
-          optionName: '옵션2',
-          price: 2000,
-          amount: 2,
-        },
-      ],
-    },
-    paymentDto: {
-      orderPrice: 120000,
-      deliveryPrice: 0,
-      discountReward: 10000,
-      paymentPrice: 110000,
-      orderStatus: 'CONFIRM',
-      orderConfirmDate: '2022-08-12T08:19:50.637',
-    },
-    deliveryDto: {
-      recipientName: '김회원',
-      recipientPhone: '01099038544',
-      zipcode: '12345',
-      street: '부산광역시 해운대구 센텀2로 19',
-      detailAddress: '106호',
-      departureDate: '2022-08-08T11:19:50.637',
-      arrivalDate: '2022-08-11T11:19:50.637',
-      deliveryNumber: 'cj0239234231',
-    },
-    _links: {
-      self: {
-        href: 'http://localhost:8080/api/admin/orders/orderItem/7066',
-      },
-      profile: {
-        href: '/docs/index.html#resources-query-admin-order-orderItem',
-      },
-    },
-  },
-};
+//
+// const DUMMY_DEFAULT_RES = {
+//   data: {
+//     orderInfoDto: {
+//       id: 7039,
+//       merchantUid: 'merchant_uid1',
+//       orderDate: '2022-08-18T11:19:49.783',
+//       orderType: 'general',
+//       memberName: '김회원',
+//       phoneNumber: '01099038544',
+//       package: false,
+//       subscribe: true,
+//       email: 'user@gmail.com',
+//     },
+//     orderItemAndOptionDtoList: [
+//       {
+//         orderItemDto: {
+//           orderItemId: 7030,
+//           itemName: '굿즈 상품1',
+//           amount: 1,
+//           finalPrice: 9000,
+//           couponName: '관리자 직접 발행 쿠폰1',
+//           discountAmount: 0,
+//           status: 'CONFIRM',
+//         },
+//         selectOptionDtoList: [
+//           {
+//             optionName: '옵션1',
+//             price: 1000,
+//             amount: 1,
+//           },
+//         ],
+//       },
+//       {
+//         orderItemDto: {
+//           orderItemId: 7036,
+//           itemName: '굿즈 상품2',
+//           amount: 2,
+//           finalPrice: 18000,
+//           couponName: '관리자 직접 발행 쿠폰2',
+//           discountAmount: 0,
+//           status: 'CONFIRM',
+//         },
+//         selectOptionDtoList: [
+//           {
+//             optionName: '옵션1',
+//             price: 1000,
+//             amount: 1,
+//           },
+//           {
+//             optionName: '옵션2',
+//             price: 2000,
+//             amount: 2,
+//           },
+//         ],
+//       },
+//     ],
+//     paymentDto: {
+//       orderPrice: 120000,
+//       deliveryPrice: 3000,
+//       discountReward: 7000,
+//       couponName: '관리자 직접 발행 쿠폰1',
+//       discountCoupon: 50000,
+//       paymentPrice: 60000,
+//       orderStatus: 'CONFIRM',
+//       orderConfirmDate: '2022-08-20T08:19:49.782',
+//     },
+//     deliveryDto: {
+//       recipientName: '김회원',
+//       recipientPhone: '01099038544',
+//       zipcode: '12345',
+//       street: '부산광역시 해운대구 센텀2로 19',
+//       detailAddress: '106호',
+//       departureDate: '2022-08-19T11:19:49.782',
+//       arrivalDate: '2022-08-21T11:19:49.782',
+//       deliveryNumber: 'cj0239234231',
+//     },
+//     _links: {
+//       self: {
+//         href: 'http://localhost:8080/api/admin/orders/7039/general',
+//       },
+//       profile: {
+//         href: '/docs/index.html#resources-query-admin-order-general',
+//       },
+//     },
+//   },
+// };
+//
+// const DUMMY_CANCEL_EXCHANGE_RETURN_RES = {
+//   data: {
+//     orderInfoDto: {
+//       orderId: 7069,
+//       merchantUid: 'merchant_uid1',
+//       orderDate: '2022-08-12T11:19:50.638',
+//       orderType: 'general',
+//       memberName: '김회원',
+//       phoneNumber: '01099038544',
+//       package: false,
+//       subscribe: true,
+//       email: 'user@gmail.com',
+//     },
+//     orderItemAndOptionDto: {
+//       orderItemDto: {
+//         orderItemId: 7066,
+//         itemName: '굿즈 상품2',
+//         amount: 2,
+//         finalPrice: 18000,
+//         couponName: '관리자 직접 발행 쿠폰2',
+//         discountAmount: 0,
+//         status: 'CONFIRM',
+//         cancelReason: '이유',
+//         cancelDetailReason: '상세이유',
+//         cancelRequestDate: '2022-08-09T11:19:50.637',
+//         cancelConfirmDate: null,
+//         returnReason: '이유',
+//         returnDetailReason: '상세이유',
+//         returnRequestDate: '2022-08-09T11:19:50.637',
+//         returnConfirmDate: null,
+//         exchangeReason: '이유',
+//         exchangeDetailReason: '상세이유',
+//         exchangeRequestDate: '2022-08-09T11:19:50.637',
+//         exchangeConfirmDate: null,
+//       },
+//       selectOptionDtoList: [
+//         {
+//           optionName: '옵션1',
+//           price: 1000,
+//           amount: 1,
+//         },
+//         {
+//           optionName: '옵션2',
+//           price: 2000,
+//           amount: 2,
+//         },
+//       ],
+//     },
+//     paymentDto: {
+//       orderPrice: 120000,
+//       deliveryPrice: 0,
+//       discountReward: 10000,
+//       paymentPrice: 110000,
+//       orderStatus: 'CONFIRM',
+//       orderConfirmDate: '2022-08-12T08:19:50.637',
+//     },
+//     deliveryDto: {
+//       recipientName: '김회원',
+//       recipientPhone: '01099038544',
+//       zipcode: '12345',
+//       street: '부산광역시 해운대구 센텀2로 19',
+//       detailAddress: '106호',
+//       departureDate: '2022-08-08T11:19:50.637',
+//       arrivalDate: '2022-08-11T11:19:50.637',
+//       deliveryNumber: 'cj0239234231',
+//     },
+//     _links: {
+//       self: {
+//         href: 'http://localhost:8080/api/admin/orders/orderItem/7066',
+//       },
+//       profile: {
+//         href: '/docs/index.html#resources-query-admin-order-orderItem',
+//       },
+//     },
+//   },
+// };
