@@ -10,7 +10,7 @@ import Spinner from "../../atoms/Spinner";
 
 
 export const SingleItemList = ({ itemList }) => {
-  const [isLoading, setIsLoading] = useState( {} );
+  const [isLoading, setIsLoading] = useState( {cancelOrder: {}} );
   
   // console.log(itemList);
   const onCancelGeneralOrder = useCallback(async (item) => {
@@ -22,7 +22,9 @@ export const SingleItemList = ({ itemList }) => {
     try {
       setIsLoading(prevState=> ({
         ...prevState,
-        cancelOrder: true
+        cancelOrder:{
+          [orderId]: true
+        }
       }));
   
       const res = await cancelGeneralOrder(orderId);
@@ -41,7 +43,9 @@ export const SingleItemList = ({ itemList }) => {
     } finally {
       setIsLoading(prevState=> ({
         ...prevState,
-        cancelOrder: false
+        cancelOrder:{
+          [orderId]: false
+        }
       }))
     }
   },[itemList]);
@@ -85,7 +89,7 @@ export const SingleItemList = ({ itemList }) => {
               <div className={s.right_box}>
                 {item.orderDto.orderStatus === orderStatus.BEFORE_PAYMENT &&
                   <button className={`${s.btn} ${s.cancelOrder}`} onClick={onCancelGeneralOrder.bind(null, item)}>
-                    {isLoading.cancelOrder ? <Spinner style={{color:"#fff"}}/> : "결제 취소"}
+                    {isLoading.cancelOrder[item.orderDto.id] ? <Spinner style={{color:"#fff"}}/> : "결제 취소"}
                 </button>}
                 <Link href={`/mypage/orderHistory/single/${item.orderDto.id}`} passHref>
                   <a className={s.btn}>주문상세</a>

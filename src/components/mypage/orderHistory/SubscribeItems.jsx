@@ -10,7 +10,7 @@ import Spinner from "../../atoms/Spinner";
 
 
 export const SubscribeItems = ({ itemList }) => {
-  const [isLoading, setIsLoading] = useState( {} );
+  const [isLoading, setIsLoading] = useState( {cancelOrder: {}} );
   // console.log(itemList);
 
   const onCancelSubscribeOrder = useCallback(async (item) => {
@@ -22,7 +22,9 @@ export const SubscribeItems = ({ itemList }) => {
     try {
       setIsLoading(prevState=> ({
         ...prevState,
-        cancelOrder: true
+        cancelOrder:{
+          [orderId]: true
+        }
       }));
       const res = await cancelSubscribeOrder(orderId);
       console.log(res);
@@ -39,7 +41,9 @@ export const SubscribeItems = ({ itemList }) => {
     } finally {
       setIsLoading(prevState=> ({
         ...prevState,
-        cancelOrder: false
+        cancelOrder:{
+          [orderId]: false
+        }
       }))
     }
   },[itemList]);
@@ -88,7 +92,7 @@ export const SubscribeItems = ({ itemList }) => {
                 <div className={s.right_box}>
                   {item.subscribeOrderDto.orderStatus === orderStatus.BEFORE_PAYMENT
                     ? <button className={`${s.btn} ${s.cancelOrder}`} onClick={onCancelSubscribeOrder.bind(null, item)}>
-                      {isLoading.cancelOrder ? <Spinner style={{color:"#fff"}}/> : "결제 취소"}
+                      {isLoading.cancelOrder[item.subscribeOrderDto.orderId] ? <Spinner style={{color:"#fff"}}/> : "결제 취소"}
                       </button>
                     :  <Link
                         href={`/mypage/orderHistory/subscribe/${item.subscribeOrderDto.orderId}`}
