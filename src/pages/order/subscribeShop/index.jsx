@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import s from 'src/pages/order/subscribeShop/index.module.scss';
 import {useDispatch} from 'react-redux';
 import {useRouter} from 'next/router';
@@ -11,7 +11,7 @@ import {getDataSSR, postObjData} from '/src/pages/api/reqData';
 import Spinner from '/src/components/atoms/Spinner';
 import {SubscribeRecommendResult} from '/src/components/subscribe/SubscribeRecommendResult';
 import {validate} from '/util/func/validation/validation_orderSubscribe';
-import {valid_hasFormErrors} from '/util/func/validation/validationPackage';
+import {valid_hasFormErrors, valid_isTheSameArray} from '/util/func/validation/validationPackage';
 import {subscribePlanType} from '/store/TYPE/subscribePlanType';
 import {cartAction} from '/store/cart-slice';
 import {subscribeStatus} from '/store/TYPE/subscribeStatus';
@@ -21,11 +21,15 @@ import {FullScreenRunningDog} from '/src/components/atoms/FullScreenLoading';
 import {calcChangedSubscribeDeliveryDate} from '/util/func/calcNextSubscribeDeliveryDate';
 import transformDate from '/util/func/transformDate';
 import {useSubscribePlanInfo} from "/util/hook/useSubscribePlanInfo";
-import {calcSubscribePrice} from "/util/hook/useSubscribeInfo";
+import {useSubscribeRecipeInfo} from "/util/hook/useSubscribeRecipeInfo";
+import {calcOneMealGramsWithRecipeInfo} from "/util/func/subscribe/calcOneMealGramsWithRecipeInfo";
+import {calcSubscribePrice} from "/util/func/subscribe/calcSubscribePrices";
 
 
 export default function RegisterSubscribeInfoPage({ data }) {
   const subscribePlanInfo = useSubscribePlanInfo();
+  const recipeInfo = useSubscribeRecipeInfo();
+  
   const info = {
     dogId: data.surveyInfo.dogId,
     dogName: data.surveyInfo.dogName,
@@ -49,10 +53,20 @@ export default function RegisterSubscribeInfoPage({ data }) {
     planDiscountPercent: subscribePlanInfo.planDiscountPercent,
   };
   
+  const currentRecipeIds = data.surveyInfo.recipeDtoList.filter((rc)=>
+    data.surveyInfo.recipeName.split(',').indexOf(rc.name) >= 0).map(rc=>rc.id) || [];
+  
+  const currentOneMealGrams = useCallback( calcOneMealGramsWithRecipeInfo({
+      selectedRecipeIds:currentRecipeIds,
+      allRecipeInfos: recipeInfo?.data || [],
+      oneDayRecommendKcal: info.foodAnalysis.oneDayRecommendKcal
+    }).map(recipe =>recipe.oneMealGram) ,
+    [recipeInfo, subscribePlanInfo, data],
+  );
+  
   const initialForm = {
     plan: data.surveyInfo.plan || null,
-    recipeIdList: data.surveyInfo.recipeDtoList.filter((rc)=>
-      data.surveyInfo.recipeName?.split(',').indexOf(rc.name) >= 0).map(rc=>rc.id) || [],
+    recipeIdList: currentRecipeIds,
     nextPaymentPrice: null,
   };
 
@@ -61,11 +75,21 @@ export default function RegisterSubscribeInfoPage({ data }) {
   const hasAlert = mct.hasAlert;
   const router = useRouter();
   const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState(); // boolean
+  const [isLoading, setIsLoading] = useState({}); // boolean
   const [submitted, setSubmitted] = useState(false);
-  const [modalMessage, setModalMessage] = useState('');
   const [form, setForm] = useState(initialForm);
-
+  const [oneMealGramsForm, setOneMealGramsForm] = useState( {
+    current: [],
+    next: []
+  } );
+  useEffect(() => {
+    if(oneMealGramsForm.current.length === 0) {
+      setOneMealGramsForm(prevState => ({
+        ...prevState,
+        current: currentOneMealGrams
+      }));
+    }
+  },[currentOneMealGrams])
 
   useEffect(() => {
     
@@ -81,9 +105,10 @@ export default function RegisterSubscribeInfoPage({ data }) {
       }));
     }, fullscreenLoadingDuration);
   }, [subscribePlanInfo.loading]);
-
-  const calcSubscribePlanPaymentPrice = (planName) => {
-    if (!form.recipeIdList[0] || !planName) {
+  
+  
+  const calcSubscribePlanPaymentPrice = useCallback((planName) => {
+    if (!form.recipeIdList[0] || !planName || !recipeInfo.data) {
       return {
         perPack: 0,
         originPrice: 0,
@@ -91,18 +116,33 @@ export default function RegisterSubscribeInfoPage({ data }) {
       };
     }
     const discountPercent = subscribePlanInfo.planDiscountPercent[planName];
-    const oneMealRecommendGram = info.foodAnalysis.oneMealRecommendGram; // 한끼(한팩) 무게g
+    const oneDayRecommendKcal = info.foodAnalysis.oneDayRecommendKcal;
     const pricePerGrams = info.recipeInfoList?.filter((recipe) => form.recipeIdList.indexOf(recipe.id) >= 0).map( recipe => recipe.pricePerGram );
-    
+    const nextOneMealGrams = calcOneMealGramsWithRecipeInfo({
+      selectedRecipeIds:form.recipeIdList,
+      allRecipeInfos: recipeInfo.data,
+      oneDayRecommendKcal: oneDayRecommendKcal
+    }).map(recipe =>recipe.oneMealGram);
+
+    const isSameArray = valid_isTheSameArray(oneMealGramsForm.next, nextOneMealGrams);
+      // console.log(oneMealGramsForm.next, nextOneMealGrams, "\n", isSameArray);
+    if ( !isSameArray ) {
+      setOneMealGramsForm((prevState) => ({
+        ...prevState,
+        next: nextOneMealGrams
+      }));
+    }
+ 
+
     return calcSubscribePrice( {
       discountPercent,
-      oneMealRecommendGram,
+      oneMealGrams: nextOneMealGrams,
       planName,
-      pricePerGrams
+      pricePerGrams,
     });
-  };
+  },[form.plan, form.recipeIdList, recipeInfo, subscribePlanInfo]);
   
-  
+  console.log(oneMealGramsForm);
   
   
   const onStartSubscribeOrder = async () => {
@@ -116,12 +156,11 @@ export default function RegisterSubscribeInfoPage({ data }) {
       recipeIdList: form.recipeIdList,
       nextPaymentPrice: nextPaymentPrice, // 최종계산된가격
     };
-    // console.log(body);
 
     const errObj = validate(body);
     const isPassed = valid_hasFormErrors(errObj);
     if (!isPassed)
-      return alert('유효하지 않은 항목이 있습니다.\n선택한 레시피 및 플랜을 확인해주세요. ');
+      return mct.alertShow('유효하지 않은 항목이 있습니다.\n선택한 레시피 및 플랜을 확인해주세요. ');
 
     const apiUrl = `/api/subscribes/${info.subscribeId}/planRecipes`;
     try {
@@ -139,10 +178,12 @@ export default function RegisterSubscribeInfoPage({ data }) {
         setSubmitted(true);
         await router.push(`/order/deliveryInfo`);
       } else {
-        alert('플랜,레시피 등록에 실패하였습니다.');
+        mct.alertShow('플랜,레시피 등록에 실패하였습니다.');
       }
     } catch (err) {
-      console.error('API통신 오류 : ', err);
+      alert('API통신 오류');
+      console.error(err);
+      
     }
     setIsLoading((prevState) => ({
       ...prevState,
@@ -150,96 +191,100 @@ export default function RegisterSubscribeInfoPage({ data }) {
     }));
   };
 
+  
   const onChangeSubscribeOrder = async () => {
-    // 맞춤레시피 변경하기 (CONDITION: 구독 중 or 구독 보류)
+    if (submitted) return;
+    // 구독 중 or 구독 보류 상태일 경우, 맞춤레시피 변경하기
     // ! 기존에 플랜, 레시피 정보 그대로, 맞춤플랜 변경하기 실행했을 경우: nextPaymentPrice가 없으므로, 에러발생시킴
-    if (submitted === true) return console.error('The form has already been sumitted');
-    setIsLoading((prevState) => ({
-      ...prevState,
-      paging: true,
-    }));
+    
+    try {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        paging: true,
+      }));
   
-    const nextPaymentPrice = calcSubscribePlanPaymentPrice(form.plan).salePrice;
+      const nextPaymentPrice = calcSubscribePlanPaymentPrice(form.plan).salePrice;
   
-    const body = {
-      plan: form.plan,
-      recipeIdList: form.recipeIdList,
-      nextPaymentPrice: nextPaymentPrice, // 최종 계산된 가격
-    };
-    console.log('onChangeSubscribeOrder:\n', body)
-
-    const errObj = validate(body);
-    const isPassed = valid_hasFormErrors(errObj);
-    if (!isPassed) {
-      return onShowModal('유효하지 않은 항목이 있습니다.\n선택한 레시피 및 플랜을 확인해주세요.');
+      const body = {
+        plan: form.plan,
+        recipeIdList: form.recipeIdList,
+        nextPaymentPrice: nextPaymentPrice, // 최종 계산된 가격
+      };
+      console.log('onChangeSubscribeOrder:\n', body)
+  
+      const errObj = validate(body);
+      const isPassed = valid_hasFormErrors(errObj);
+      if (!isPassed) {
+        return mct.alertShow('유효하지 않은 항목이 있습니다.\n선택한 레시피 및 플랜을 확인해주세요.');
+      }
+  
+      const prevInfo = data.surveyInfo;
+      const prevDATA = {
+        plan: prevInfo.plan, // 기존 주문 정보
+        recipeName: prevInfo.recipeName, // 기존 주문 정보
+        oneMealGrams: oneMealGramsForm.current, // 기존 주문 정보
+        nextPaymentPrice: prevInfo.nextPaymentPrice, // 기존 주문 정보
+        nextPaymentDate: transformDate(prevInfo.nextPaymentDate), // 기존 주문 정보
+        nextDeliveryDate: transformDate(prevInfo.nextDeliveryDate), // 기존 주문 정보
+      };
+  
+      const nextPlan = form.plan;
+      const nextPlanDeliveryPeriodInWeeks = subscribePlanType[nextPlan].weeklyPaymentCycle;
+  
+      const nextDATA = {
+        plan: nextPlan, // 유저가 선택한 플랜
+        recipeIdList: form.recipeIdList, // 다음 변경될 recipe의 ID List
+        recipeName: info.recipeInfoList
+          .filter((list) => form.recipeIdList.join(',').indexOf(list.id) >= 0)
+          .map((list) => list.name)
+          .join(', '), // 유저가 선택한 레시피 이름
+        oneMealGrams: oneMealGramsForm.next,
+        nextPaymentPrice: nextPaymentPrice, // 유저가 선택한 플랜&레시피에 따라서 계산된 값
+        nextPaymentDate: calcChangedSubscribeDeliveryDate(
+          prevInfo.nextPaymentDate,
+          nextPlanDeliveryPeriodInWeeks,
+        ), // prev SubscribeOrder 의 nextPayment 완료 후, 그 다음 Cylcle
+        nextDeliveryDate: calcChangedSubscribeDeliveryDate(
+          prevInfo.nextDeliveryDate,
+          nextPlanDeliveryPeriodInWeeks,
+        ), // prev SubscribeOrder 의 nextPayment 완료 후, 그 다음 Cylcle
+      };
+      
+      
+      const DATA = {
+        lastSurveyDate: prevInfo.lastSurveyDate,
+        subscribeId: prevInfo.subscribeId,
+        dogId: prevInfo.dogId,
+        prev: prevDATA,
+        next: nextDATA,
+      };
+  
+      // console.log('DATA:', DATA);
+      await setSubmitted(true);
+      await dispatch(cartAction.changeSubscribeOrder({ data: DATA }));
+      await router.push(`/order/orderChanged/subscribe?dogId=${info.dogId}`);
+      
+    } catch (err) {
+      console.error(err)
+    } finally {
+  
+      setIsLoading((prevState) => ({
+        ...prevState,
+        paging: false,
+      }));
     }
     
-    const prevInfo = data.surveyInfo;
-    const prevDATA = {
-      plan: prevInfo.plan, // 기존 주문 정보
-      recipeName: prevInfo.recipeName, // 기존 주문 정보
-      oneMealRecommendGram: info.foodAnalysis.oneMealRecommendGram, // 기존 주문 정보
-      nextPaymentPrice: prevInfo.nextPaymentPrice, // 기존 주문 정보
-      nextPaymentDate: transformDate(prevInfo.nextPaymentDate), // 기존 주문 정보
-      nextDeliveryDate: transformDate(prevInfo.nextDeliveryDate), // 기존 주문 정보
-    };
-
-    const nextPlan = form.plan;
-    const nextPlanDeliveryPeriodInWeeks = subscribePlanType[nextPlan].weeklyPaymentCycle;
-
-    const nextDATA = {
-      plan: nextPlan, // 유저가 선택한 플랜
-      recipeIdList: form.recipeIdList, // 다음 변경될 recipe의 ID List
-      recipeName: info.recipeInfoList
-        .filter((list) => form.recipeIdList.join(',').indexOf(list.id) >= 0)
-        .map((list) => list.name)
-        .join(', '), // 유저가 선택한 레시피 이름
-      oneMealRecommendGram: info.foodAnalysis.oneMealRecommendGram, // 기존 주문 정보 (변하지 않는 값)
-      nextPaymentPrice: nextPaymentPrice, // 유저가 선택한 플랜&레시피에 따라서 계산된 값
-      nextPaymentDate: calcChangedSubscribeDeliveryDate(
-        prevInfo.nextPaymentDate,
-        nextPlanDeliveryPeriodInWeeks,
-      ), // prev SubscribeOrder 의 nextPayment 완료 후, 그 다음 Cylcle
-      nextDeliveryDate: calcChangedSubscribeDeliveryDate(
-        prevInfo.nextDeliveryDate,
-        nextPlanDeliveryPeriodInWeeks,
-      ), // prev SubscribeOrder 의 nextPayment 완료 후, 그 다음 Cylcle
-    };
-    const DATA = {
-      lastSurveyDate: prevInfo.lastSurveyDate,
-      subscribeId: prevInfo.subscribeId,
-      dogId: prevInfo.dogId,
-      prev: prevDATA,
-      next: nextDATA,
-    };
-
-    // console.log('DATA:', DATA);
-    await setSubmitted(true);
-    await dispatch(cartAction.changeSubscribeOrder({ data: DATA }));
-    await router.push(`/order/orderChanged/subscribe?dogId=${info.dogId}`);
-    setIsLoading((prevState) => ({
-      ...prevState,
-      paging: false,
-    }));
+    
   };
 
   const onPrevPage = () => {
     if (confirm(`이전 페이지로 돌아가시겠습니까?`)) router.back();
   };
-  const onShowModal = (message) => {
-    if (message) mct.alertShow();
-    setModalMessage(message);
-  };
 
-  const onHideModal = () => {
-    setModalMessage('');
-    mct.alertHide();
-  };
 
   if (isLoading?.fetching) {
     return <FullScreenRunningDog opacity={1} />;
   }
-  // console.log(form, info)
   
   return (
     <>
@@ -254,7 +299,12 @@ export default function RegisterSubscribeInfoPage({ data }) {
             setForm={setForm}
             calcPrice={calcSubscribePlanPaymentPrice}
           />
-          <SubscribeShopRecipe name="recipeIdList" info={info} form={form} setForm={setForm} />
+          <SubscribeShopRecipe
+            name="recipeIdList"
+            info={info}
+            form={form}
+            setForm={setForm}
+          />
           <section className={s.btn_box}>
             <button className={s.prevPage} onClick={onPrevPage}>
               뒤로가기
@@ -266,22 +316,16 @@ export default function RegisterSubscribeInfoPage({ data }) {
               </button>
             )}
 
-            {/* ! PRODUCT CODE */}
             {(info.subscribeStatus === subscribeStatus.SUBSCRIBING ||
               info.subscribeStatus === subscribeStatus.SUBSCRIBE_PENDING) && (
               <button className={s.nextPage} onClick={onChangeSubscribeOrder}>
                 {isLoading?.submit ? <Spinner style={{ color: '#fff' }} /> : '맞춤플랜 변경하기'}
               </button>
             )}
-
-            {/* ! TEST CODE */}
-            {/*<button className={s.nextPage} onClick={onChangeSubscribeOrder}>*/}
-            {/*  {isLoading?.paging ? <Spinner style={{ color: '#fff' }} /> : '맞춤레피시 변경하기'}*/}
-            {/*</button>*/}
           </section>
         </Wrapper>
       </Layout>
-      {hasAlert && <Modal_global_alert message={modalMessage} onClick={onHideModal} background />}
+      {hasAlert && <Modal_global_alert background />}
     </>
   );
 }
@@ -301,31 +345,44 @@ export async function getServerSideProps({ req, query }) {
     ? `/api/dogs/${dogId}/surveyReportResult`
     : null;
   const surveyInfoRes = await getDataSSR(req, getSurveyReportResultApiUrl);
-  const thisDogId = dogId || surveyInfoRes.data.dogId;
+  const surveyInfoData = surveyInfoRes?.data || null;
+  const thisDogId = dogId || surveyInfoData?.dogId || null;
 
   // DATA: this Dog
   const getDogInfoApiUrl = `/api/dogs/${thisDogId}`;
   const dogInfoRes = await getDataSSR(req, getDogInfoApiUrl);
+  const dogData = dogInfoRes?.data || null;
+  const dogDto = dogData?.dogDto || null
 
   // DATA: Recipes
   const getRecipeInfoApiUrl = `/api/recipes`;
   const recipeInfoRes = await getDataSSR(req, getRecipeInfoApiUrl);
+  const recipeInfoData = recipeInfoRes?.data;
   
-  if(dogInfoRes?.data && dogInfoRes?.data && recipeInfoRes?.data) {
+  if(dogData && recipeInfoData) {
     const recipeIdList =
-      recipeInfoRes?.data?._embedded?.recipeListResponseDtoList?.map((l) => l.id) || [];
-    const recipeInfoList = [];
+      recipeInfoData._embedded?.recipeListResponseDtoList?.map((l) => l.id) || [];
+    const recipesDetailInfo = [];
     for (const recipeId of recipeIdList) {
       const apiUrl = `/api/recipes/${recipeId}`;
       const res = await getDataSSR(req, apiUrl);
-      // console.log(res)
-      recipeInfoList.push(res.data);
+      const data = res.data;
+      console.log("recipeDatas: ",data);
+      if ( data ) {
+        recipesDetailInfo.push({
+          ...data,
+          kcalPerGram: data.gramPerKcal // gramPerKcal(X) -> KcalPerGram(O) : 고객사에서 전달받은 무게상수의 단위를 그대로 사용하였으나, 오류가 있어서 수정함.
+        });
+      }
     }
   
+    console.log("dogDto: ",dogDto);
+    console.log("surveyInfoData: ",surveyInfoData);
+    console.log("recipesDetailInfo: ",recipesDetailInfo);
     data = {
-      dogDto: dogInfoRes.data.dogDto || null,
-      surveyInfo: surveyInfoRes?.data || null,
-      recipesDetailInfo: recipeInfoList,
+      dogDto: dogDto,
+      surveyInfo: surveyInfoData,
+      recipesDetailInfo: recipesDetailInfo,
     };
   }
   

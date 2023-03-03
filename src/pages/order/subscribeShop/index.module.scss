@@ -281,8 +281,6 @@ section.regular_delivery {
   }
   .grid_box {
     display: grid;
-    grid-template-rows: repeat(4, 1fr);
-
     background-color: #f9f9f9;
     border-top: rem(1) solid var(--color-disabled);
     border-bottom: rem(1) solid var(--color-disabled);
@@ -301,6 +299,18 @@ section.regular_delivery {
 
     * {
       @include char(l16);
+    }
+    .oneLine {
+      font-weight: normal;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      &:not(:last-child){
+       margin-bottom: rem(8);
+      }
+    }
+    .tinyText {
+      font-size: rem(12);
     }
     span {
       font-weight: 700;
@@ -550,7 +560,7 @@ section.regular_delivery {
     display: grid;
     grid-template-columns: 1fr 1fr;
     position: relative;
-    height: rem(226);
+    //height: rem(226); // 풀플랜 시, 레시피 2개 선택 시, 무게값도 2개의 태그로 표현되도록 변경됨.
 
     li:first-child{
       transform: translateY(rem(40));

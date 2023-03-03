@@ -2,6 +2,8 @@ import s from '../../pages/order/subscribeShop/index.module.scss';
 import Image from 'next/image';
 import React from 'react';
 import checkStringUnderConsonant from "/util/func/checkStringUnderConsonant";
+import transformLocalCurrency from "../../../util/func/transformLocalCurrency";
+import {calcSubscribeOneDayRecommendKcal} from "../../../util/func/subscribe/calcOneMealGramsWithRecipeInfo";
 
 export const SubscribeRecommendResult = ({info}) => {
   
@@ -45,7 +47,7 @@ export const SubscribeRecommendResult = ({info}) => {
             <div className={s.recommend_data_wrap}>
               <span className={s.title}>{info.dogName}의 하루 권장 칼로리</span>
               <span className={s.data}>
-                {info.foodAnalysis.oneDayRecommendKcal?.toFixed( 0 )}kcal
+                {transformLocalCurrency(calcSubscribeOneDayRecommendKcal( info.foodAnalysis.oneDayRecommendKcal ))}kcal
               </span>
               <span className={s.title}>하루 권장 식사량</span>
               <span className={s.data}>{info.foodAnalysis.oneDayRecommendGram?.toFixed( 0 )}g</span>
