@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, {useCallback, useContext, useEffect, useMemo, useState} from 'react';
 import s from '/src/pages/mypage/subscribe/[subscribeId].module.scss';
 import CustomInput from '../atoms/CustomInput';
 import Image from 'next/image';
@@ -11,20 +11,27 @@ import Modal_confirm from '/src/components/modal/Modal_confirm';
 import { useModalContext } from '/store/modal-context';
 import { FullScreenLoading } from '../atoms/FullScreenLoading';
 import {useSubscribePlanInfo} from "/util/hook/useSubscribePlanInfo";
+import {calcOneMealGramsWithRecipeInfo, ONEMEALGRAM_DEMICAL} from "../../../util/func/subscribe/calcOneMealGramsWithRecipeInfo";
+import {seperateStringViaComma} from "../../../util/func/seperateStringViaComma";
+import {valid_isTheSameArray} from "../../../util/func/validation/validationPackage";
+import {calcSubscribePrice} from "../../../util/func/subscribe/calcSubscribePrices";
 
 export const SubscribePlan = ({ subscribeInfo }) => {
   const subscribePlanInfo = useSubscribePlanInfo();
   // console.log(subscribePlanInfo);
+  // console.log(subscribeInfo);
+  const oneMealGramsPerRecipe = subscribeInfo.info.oneMealGramsPerRecipe;
   
   const planInfoList = [
     {
       id: subscribePlanType.FULL.NAME,
-      name: subscribePlanType.FULL.KOR,
+      label: "best", // best, new, none
       imageUrl: require('/public/img/subscribe/subscribe_full_plan.png'),
-      desc: (
-        <>
-          하루에 <em className={s.accent}>두 끼</em>를 바프독으로 섞어서 먹어요
-        </>
+      title: subscribePlanType.FULL.KOR,
+      titleDescHTML: (
+        <p>
+          하루에 <em className={s.accent}>두 끼</em>를 바프독으로 먹어요
+        </p>
       ),
       numberOfPacksPerDay: subscribePlanType.FULL.numberOfPacksPerDay,
       totalNumberOfPacks: subscribePlanType.FULL.totalNumberOfPacks,
@@ -36,26 +43,13 @@ export const SubscribePlan = ({ subscribeInfo }) => {
         originPrice: subscribeInfo.price[subscribePlanType.FULL.NAME].originPrice,
         salePrice: subscribeInfo.price[subscribePlanType.FULL.NAME].salePrice,
       },
-      option: {
-        itemLabel: (
-          <ItemLabel
-            label="BEST"
-            style={{
-              backgroundColor: 'var(--color-main)',
-            }}
-          />
-        ),
-      },
     },
     {
       id: subscribePlanType.HALF.NAME,
-      name: subscribePlanType.HALF.KOR,
+      label: "none", // best, new, none
       imageUrl: require('/public/img/subscribe/subscribe_half_plan.png'),
-      desc: (
-        <>
-          하루에 <em className={s.accent}>한 끼</em>를 바프독으로 섞어서 먹어요
-        </>
-      ),
+      title: subscribePlanType.HALF.KOR,
+      titleDescHTML: <p>하루에 <span>한 끼</span>를 바프독으로 먹어요</p>,
       numberOfPacksPerDay: subscribePlanType.HALF.numberOfPacksPerDay,
       totalNumberOfPacks: subscribePlanType.HALF.totalNumberOfPacks,
       weeklyPaymentCycle: subscribePlanType.HALF.weeklyPaymentCycle,
@@ -66,19 +60,13 @@ export const SubscribePlan = ({ subscribeInfo }) => {
         originPrice: subscribeInfo.price[subscribePlanType.HALF.NAME].originPrice,
         salePrice: subscribeInfo.price[subscribePlanType.HALF.NAME].salePrice,
       },
-      option: {
-        itemLabel: null,
-      },
     },
     {
       id: subscribePlanType.TOPPING.NAME,
-      name: subscribePlanType.TOPPING.KOR,
+      label: "new", // best, new, none
       imageUrl: require('/public/img/subscribe/subscribe_topping_plan.png'),
-      desc: (
-        <>
-          <em className={s.accent}>토핑용</em>으로 바프독을 섞어서 먹어요
-        </>
-      ),
+      title: subscribePlanType.TOPPING.KOR,
+      titleDescHTML: <p>토핑용으로 바프독으로 섞어서 먹어요</p>,
       numberOfPacksPerDay: subscribePlanType.TOPPING.numberOfPacksPerDay,
       totalNumberOfPacks: subscribePlanType.TOPPING.totalNumberOfPacks,
       weeklyPaymentCycle: subscribePlanType.TOPPING.weeklyPaymentCycle,
@@ -89,30 +77,23 @@ export const SubscribePlan = ({ subscribeInfo }) => {
         originPrice: subscribeInfo.price[subscribePlanType.TOPPING.NAME].originPrice,
         salePrice: subscribeInfo.price[subscribePlanType.TOPPING.NAME].salePrice,
       },
-      option: {
-        itemLabel: (
-          <ItemLabel
-            label="NEW"
-            style={{
-              backgroundColor: '#FF8C16',
-            }}
-          />
-        ),
-      },
     },
   ];
   
   const mct = useModalContext();
-  const initialMemberPlanName = subscribeInfo.info.planName;
-  const [selectedPlanName, setSelectedPlanName] = useState(initialMemberPlanName);
+  const currentPlanName = subscribeInfo.info.planName;
+  const [selectedPlanName, setSelectedPlanName] = useState(currentPlanName);
   const [submitted, setSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [activeConfirmModal, setActiveConfirmModal] = useState(false);
 
-  const onActiveConfirmModal = (e) => {
+  const onActiveConfirmModal = () => {
+    const currentRecipeCount = subscribeInfo.recipe.idList.length;
     // ! validation : 처음과 동일한 플랜일 경우
-    if (selectedPlanName === initialMemberPlanName) {
+    if (selectedPlanName === currentPlanName) {
       mct.alertShow('기존과 동일한 플랜입니다.');
+    } else if( subscribePlanType[selectedPlanName].maxRecipeCount < currentRecipeCount){
+      mct.alertShow("구독 중인 레시피 개수가 변경될 플랜의 최대 선택 가능한 레시피 개수보다 많습니다.");
     } else {
       setActiveConfirmModal(true);
     }
@@ -129,7 +110,6 @@ export const SubscribePlan = ({ subscribeInfo }) => {
       nextPaymentPrice: subscribeInfo.price[selectedPlanName].salePrice, // 선택된 플랜의 판매가격
       recipeIdList: subscribeInfo.recipe.idList,
     };
-    // console.log(body);
 
     try {
       setIsLoading(true);
@@ -146,8 +126,10 @@ export const SubscribePlan = ({ subscribeInfo }) => {
       setActiveConfirmModal(false);
     } catch (err) {
       console.error('err: ', err);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
+    
   };
 
 
@@ -162,10 +144,10 @@ export const SubscribePlan = ({ subscribeInfo }) => {
   return (
     <>
       <div className={`${s.flex_box} ${s.subscribePlan}`}>
-        {planInfoList.map((info, index) => (
+        {planInfoList.map((item, index) => (
           <CustomInput
             key={`subscribe-plan-input-${index}`}
-            id={info.id}
+            id={item.id}
             type="radio"
             name={'plan'}
             selectedRadio={selectedPlanName}
@@ -173,14 +155,25 @@ export const SubscribePlan = ({ subscribeInfo }) => {
             option={{ label: '플랜 선택' }}
             initialize={false}
           >
-            {info.option.itemLabel}
+            {item.label === "best" && <ItemLabel
+              label="BEST"
+              style={{
+                backgroundColor: 'var(--color-main)',
+              }}
+            />}
+            {item.label === "new" && <ItemLabel
+              label="NEW"
+              style={{
+                backgroundColor: '#FF8C16',
+              }}
+            />}
             <ul className={s.plan_box}>
               <li className={s.plan_grid_1}>
                 <div className={s.img_box}>
                   <figure className={`${s.image} img-wrap`}>
-                    {info.imageUrl && (
+                    {item.imageUrl && (
                       <Image
-                        src={info.imageUrl}
+                        src={item.imageUrl}
                         objectFit="cover"
                         layout="fill"
                         alt="플랜 아이콘"
@@ -188,35 +181,35 @@ export const SubscribePlan = ({ subscribeInfo }) => {
                     )}
                   </figure>
                 </div>
-                <h2>{info.name}</h2>
+                <h2>{item.title}</h2>
               </li>
               <li>
-                <p className={s.desc}>{info.desc}</p>
+                <p className={s.desc}>{item.titleDescHTML}</p>
               </li>
               <li>
                 <div className={s.grid_box}>
                   <div className={s.row_1}>
-                    하루에<span>&nbsp;{info.numberOfPacksPerDay}팩</span>
+                    하루에<span>&nbsp;{item.numberOfPacksPerDay}팩</span>
                   </div>
                   <div className={s.row_2}>
-                    <span>{info.weeklyPaymentCycle}주</span>&nbsp;정기배송
+                    <span>{item.weeklyPaymentCycle}주</span>&nbsp;정기배송
                   </div>
                   <div className={s.row_3}>
-                    <span>{info.onePackGram}g</span>&nbsp;(1팩기준)
+                    {oneMealGramsPerRecipe.map((oneMealGram, index) => <p key={`oneMealGram}-${index}`}><b>{oneMealGram}</b>g&nbsp;(1팩기준)</p>) || "-"}
                   </div>
                   <div className={s.row_4}>
-                    {info.totalNumberOfPacks}팩 x
-                    <span>&nbsp;{transformLocalCurrency(info.price.perPack)}원</span>
+                    {item.totalNumberOfPacks}팩 x
+                    <span>&nbsp;{transformLocalCurrency(item.price.perPack)}원</span>
                   </div>
                 </div>
               </li>
 
               <li className={s.price}>
                 <p className={s.text1}>
-                  {info.discountPercent}%&nbsp;
-                  <span>{transformLocalCurrency(info.price.originPrice)}원</span>
+                  {item.discountPercent}%&nbsp;
+                  <span>{transformLocalCurrency(item.price.originPrice)}원</span>
                 </p>
-                <p className={s.text2}>{transformLocalCurrency(info.price.salePrice)}원</p>
+                <p className={s.text2}>{transformLocalCurrency(item.price.salePrice)}원</p>
               </li>
             </ul>
           </CustomInput>
@@ -234,13 +227,6 @@ export const SubscribePlan = ({ subscribeInfo }) => {
           positionCenter
         />
       )}
-      {/*{tbContext.visible && (*/}
-      {/*  <Modal_global_alert*/}
-      {/*    message={modalMessage}*/}
-      {/*    onClick={submitted ? onSuccessChangeSubscribeOrder : onHideModal}*/}
-      {/*    background*/}
-      {/*  />*/}
-      {/*)}*/}
     </>
   );
 };

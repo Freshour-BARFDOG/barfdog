@@ -35,6 +35,7 @@
         }
         .right {
           font-weight: 600;
+          > *{text-align: right}
         }
 
         &.first {
@@ -275,7 +276,7 @@
 
 
 @media (max-width: rem(1000)) {
-  
+
   .content_box {
     .top_flex_box {
       grid-template-columns: 1fr;
@@ -312,4 +313,3 @@
     }
   }
 }
-

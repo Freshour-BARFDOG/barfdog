@@ -14,8 +14,8 @@ export const SubscribeDashboard = ({ subscribeInfo }) => {
   const info = {
     dogName: subscribeInfo.info.dogName,
     planName: subscribeInfo.info.planName,
-    recipeNameList: subscribeInfo.info.recipeNames.split(','),
-    oneMealRecommendGram: subscribeInfo.info.oneMealRecommendGram,
+    recipeNameList: subscribeInfo.info.recipeNames?.split(','),
+    oneMealGramsPerRecipe: subscribeInfo.info.oneMealGramsPerRecipe,
     nextPaymentDate: subscribeInfo.info.nextPaymentDate,
     nextPaymentPrice: subscribeInfo.info.nextPaymentPrice - (subscribeInfo.info.discountCoupon + subscribeInfo.info.discountGrade), // 다음결제금액 -(쿠폰할인+등급할인)
     nextDeliveryDate: subscribeInfo.info.nextDeliveryDate,
@@ -30,7 +30,6 @@ export const SubscribeDashboard = ({ subscribeInfo }) => {
         couponName: subscribeInfo.info.couponName, // 쿠폰명
         discountCoupon: subscribeInfo.info.discountCoupon, // 쿠폰 할인금액
       },
-      // availableCouponList: DUMMY_COUPON_DATA, /////////////////// ! TEST TEST TEST TEST TEST TEST TEST TEST TEST
       availableCouponList: subscribeInfo.coupon || [],
       originPrice: subscribeInfo.info.nextPaymentPrice,
       discountGrade: subscribeInfo.info.discountGrade,
@@ -98,7 +97,7 @@ export const SubscribeDashboard = ({ subscribeInfo }) => {
 
             <div className={`${s.top_flex_box2} ${s.third}`}>
               <div className={s.left}>급여량</div>
-              <div className={s.right}>{info.oneMealRecommendGram} g</div>
+              <div className={s.right}>{info.oneMealGramsPerRecipe?.map((oneMealGram, index) => <p key={`oneMealGram}-${index}`}>{oneMealGram}g</p>) || "-"}</div>
             </div>
           </div>
 

@@ -4,19 +4,21 @@ import Link from 'next/link';
 import {CustomSelectWithCustomOptions} from '/src/components/survey/CustomSelectWithCustomOptions';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import {subscribePlanType} from '/store/TYPE/subscribePlanType';
-import {calcSubscribePrice} from '/util/hook/useSubscribeInfo';
 import Spinner from '../atoms/Spinner';
 import Modal_confirm from '../modal/Modal_confirm';
 import {postObjData} from '/src/pages/api/reqData';
 import {useModalContext} from '/store/modal-context';
 import {FullScreenLoading} from '/src/components/atoms/FullScreenLoading';
+import {calcSubscribePrice} from "../../../util/func/subscribe/calcSubscribePrices";
+import {valid_isTheSameArray} from "../../../util/func/validation/validationPackage";
+import {ONEMEALGRAM_DEMICAL} from "../../../util/func/subscribe/calcOneMealGramsWithRecipeInfo";
 
 export const SubscribeGram = ({ subscribeInfo }) => {
-  // console.log(subscribeInfo);
-
+  
+  
   const planType = subscribeInfo.plan.name;
   const initForm = {
-    dogId: 377, /////// ! TEST /// 현재 구독중인 반려견의 ID필요
+    dogId: subscribeInfo.info.dogId,
     recipeInfo: {
       pricePerGramList: subscribeInfo.recipe.pricePerGram,
     },
@@ -25,8 +27,8 @@ export const SubscribeGram = ({ subscribeInfo }) => {
       planName: subscribePlanType[planType].KOR,
     },
     nextAmount: 0,
-    originGram: subscribeInfo.info.oneMealRecommendGram, // 기존 그람
-    nextGram: subscribeInfo.info.oneMealRecommendGram, // 변경 적용
+    originGrams: subscribeInfo.info.oneMealGramsPerRecipe, // 기존 무게 list
+    nextGrams: subscribeInfo.info.oneMealGramsPerRecipe, // 변경 적용
     originPricePerPack: subscribeInfo.price[planType].perPack,
     nextPricePerPack: subscribeInfo.price[planType].perPack,
     originPrice: subscribeInfo.price[planType].salePrice,
@@ -41,28 +43,29 @@ export const SubscribeGram = ({ subscribeInfo }) => {
 
   const onInputChange = (value) => {
     const nextAmount = value;
-    const nextGram = Number((form.originGram * (1 + nextAmount / 100)).toFixed(4)); // ! 1팩 당 무게: 최대 소수점 '4'자리
+    const nextGrams = form.originGrams.map(originGram => Number((originGram * (1 + nextAmount / 100)).toFixed(ONEMEALGRAM_DEMICAL))); // ! 1팩 당 무게: 최대 소수점 '4'자리
     const recipePricePerGrams = form.recipeInfo.pricePerGramList;
     const planTypeName = form.planInfo.planType;
-  
+    
     const { perPack, salePrice } = calcSubscribePrice( {
       discountPercent: subscribeInfo.plan.discountPercent,
-      oneMealRecommendGram: nextGram,
+      oneMealGrams: nextGrams,
       planName: planTypeName,
       pricePerGrams: recipePricePerGrams
     });
 
-    setForm((prevState) => ({
-      ...prevState,
-      nextAmount,
-      nextGram,
-      nextPricePerPack: perPack,
-      nextSalePrice: salePrice,
-    }));
+      // console.log(perPack, salePrice);
+      setForm((prevState) => ({
+        ...prevState,
+        nextAmount,
+        nextGrams,
+        nextPricePerPack: perPack,
+        nextSalePrice: salePrice,
+      }));
   };
 
   const onActiveConfirmModal = () => {
-    if (form.originGram === form.nextGram) {
+    if (valid_isTheSameArray(form.originGrams, form.nextGrams)) {
       mct.alertShow('기존과 동일한 무게입니다');
     } else {
       setActiveConfirmModal(true);
@@ -76,19 +79,15 @@ export const SubscribeGram = ({ subscribeInfo }) => {
     if (submitted) return console.error('이미 제출된 양식입니다.');
 
     const body = {
-      gram: form.nextGram,
+      stringGrams: form.nextGrams.join(", "), // 원래 Number 여야하지만,  Number[] 배열로 전달한다.
       totalPrice: form.nextSalePrice,
     };
-
-    // console.log('body: ', body);
-
     try {
       setIsLoading(true);
       const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/gram`;
       const res = await postObjData(url, body);
       console.log(res);
-      // if (!res.isDone) { // ! TEST CODE //
-        if (res.isDone) {  // ! PRODUCT CODE //
+      if (res.isDone) {
         setSubmitted(true);
         mct.alertShow('무게 변경 변경이 완료되었습니다.', onSuccessChangeSubscribeOrder);
       } else {
@@ -99,15 +98,17 @@ export const SubscribeGram = ({ subscribeInfo }) => {
       alert(err);
       console.error(err.response);
       
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
+    
   };
 
   const onSuccessChangeSubscribeOrder = () => {
     setIsLoading({ reload: true });
-    mct.alertHide();
     window.location.reload();
   };
+  
 
   return (
     <>
@@ -130,7 +131,9 @@ export const SubscribeGram = ({ subscribeInfo }) => {
             <div className={s.grid_box}>
               <div className={s.grid_1}>
                 <p className={s.top_text}>기존 무게(g)</p>
-                <div className={s.bot_1}>{form.originGram}g</div>
+                <div className={s.bot_1}>
+                  {form.originGrams.map(((gram, i)=><em key={`originGram-${i}`}>{gram}g {i < form.originGrams.length - 1 && ", "}</em>))}
+                </div>
               </div>
               <div className={s.selectBox}>
                 <p className={s.top_text}>변경할 무게</p>
@@ -156,7 +159,9 @@ export const SubscribeGram = ({ subscribeInfo }) => {
               </div>
               <div className={s.grid_3}>
                 <p className={s.top_text}>변경 후 무게(g)</p>
-                <div className={s.bot_1}>{form.nextGram}g</div>
+                <div className={s.bot_1}>
+                  {form.nextGrams.map(((gram, i)=><em key={`nextGram-${i}`}>{gram}g {i < form.originGrams.length - 1 && ", "}</em>))}
+                </div>
               </div>
               <div className={s.grid_4}>
                 <p className={s.top_text}>기존 한 팩 가격</p>
