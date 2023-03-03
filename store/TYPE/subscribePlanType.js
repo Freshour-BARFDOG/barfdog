@@ -5,6 +5,7 @@ export const subscribePlanType = {
     numberOfPacksPerDay: 2,
     weeklyPaymentCycle: 2,
     totalNumberOfPacks: 28,
+    maxRecipeCount: 2,
   },
   HALF: {
     NAME:'HALF',
@@ -12,6 +13,7 @@ export const subscribePlanType = {
     numberOfPacksPerDay: 1,
     weeklyPaymentCycle: 4,
     totalNumberOfPacks: 28,
+    maxRecipeCount: 1,
   },
   TOPPING: {
     NAME:'TOPPING',
@@ -19,5 +21,6 @@ export const subscribePlanType = {
     numberOfPacksPerDay: 1,
     weeklyPaymentCycle: 4,
     totalNumberOfPacks: 20,
+    maxRecipeCount: 1,
   },
 }

@@ -3,22 +3,26 @@ import {getData} from '/src/pages/api/reqData';
 import {itemExposureType} from '/store/TYPE/itemExposureType';
 import {subscribePlanType} from '/store/TYPE/subscribePlanType';
 import {useSubscribePlanInfo} from "./useSubscribePlanInfo";
+import {seperateStringViaComma} from "../func/seperateStringViaComma";
+import {useSubscribeRecipeInfo} from "./useSubscribeRecipeInfo";
+import {calcSubscribePrice} from "../func/subscribe/calcSubscribePrices";
+import {ONEMEALGRAM_DEMICAL} from "../func/subscribe/calcOneMealGramsWithRecipeInfo";
 
 
 export const useSubscribeInfo = (subscribeId) => {
   const [info, setInfo] = useState( null );
   const subscribePlanInfo = useSubscribePlanInfo();
+  const recipeInfo = useSubscribeRecipeInfo();
   
   useEffect( () => {
     // admin > setting > 가격 정책 > 플랜별 레시피 정보를 받지 못했을 경우, 실행하지 않음.
-    if(!subscribePlanInfo.planDiscountPercent.FULL) return;
-    
+    // console.log("info: ",info);
     if ( info ) return;
     
     (async () => {
       try {
-        const url = `/api/subscribes/${subscribeId}`;
-        let res = await getData( url );
+        const subscribeApiurl = `/api/subscribes/${subscribeId}`;
+        let res = await getData( subscribeApiurl );
         // console.log('useSubscribeInfo: ',res)
         if ( res.status === 404 ) {
           alert( '구독정보를 불러오는데 실패했습니다.' );
@@ -28,16 +32,15 @@ export const useSubscribeInfo = (subscribeId) => {
         if (!data) return;
         const curRecipeIdList = data.subscribeRecipeDtoList.map((list) => list.recipeId);
 
-        const getAllRecipeInfoUrl = '/api/recipes';
-        const recipe_res = await getData(getAllRecipeInfoUrl);
+        const recipeApiUrl = '/api/recipes';
+        const recipe_res = await getData(recipeApiUrl);
         if(!recipe_res.data) return;
-        const allRecipes = recipe_res.data._embedded.recipeListResponseDtoList;
-        const memberRecipes = allRecipes.filter(
+        const currentRecipes = recipeInfo.data.filter(
           (recipe) => curRecipeIdList.indexOf(recipe.id) >= 0,
         );
 
         // 중복된 레시피 성분 제거
-        const memberIngredientsOrigin = memberRecipes
+        const memberIngredientsOrigin = currentRecipes
           .map((recipe) => recipe.ingredients)
           .join(',')
           .split(',');
@@ -47,20 +50,24 @@ export const useSubscribeInfo = (subscribeId) => {
         // 1.  레시피 중, 숨김상태(HIDDEN)의 상품이 있는가
         // 2. 레시피 중, 재고없음( inStock = false)인 상품이 있는가
         const isSoldOut =
-          !!memberRecipes.filter( (list) => list.leaked === itemExposureType.HIDDEN ).length ||
-          !!memberRecipes.filter( (list) => list.inStock === false ).length;
+          !!currentRecipes.filter( (list) => list.leaked === itemExposureType.HIDDEN ).length ||
+          !!currentRecipes.filter( (list) => list.inStock === false ).length;
         // 구독 가격 계산
-        const planName = data.subscribeDto.plan;
-        const oneMealRecommendGram = data.subscribeDto.oneMealRecommendGram;
-        const discountPercent = subscribePlanInfo.planDiscountPercent[planName];
-        const pricePerGrams = memberRecipes.map( recipe => recipe.pricePerGram );
-       
+        const currentPlanName = data.subscribeDto.plan;
+        const oneMealGrams = seperateStringViaComma(data.subscribeDto.oneMealGramsPerRecipe)?.
+                map(oneMealGramString=>Number(parseFloat(oneMealGramString).toFixed(ONEMEALGRAM_DEMICAL))) || [];
+        const pricePerGrams = currentRecipes.map( recipe => recipe.pricePerGram );
+  
+        // console.log(oneMealGrams);
+        // console.log("currentRecipes: ", currentRecipes);
+        // console.log("pricePerGrams: ", pricePerGrams);
         
+        const discountPercent = subscribePlanInfo.planDiscountPercent[currentPlanName];
         const allPlanNameList = Object.keys( subscribePlanType );
-        const allPriceList = allPlanNameList.map( planName =>
+        const allPriceList = allPlanNameList.map( (planName) =>
           ({[planName]: calcSubscribePrice( {
-            discountPercent,
-            oneMealRecommendGram,
+            discountPercent: subscribePlanInfo.planDiscountPercent[planName],
+            oneMealGrams,
             planName,
             pricePerGrams
           })
@@ -95,20 +102,20 @@ export const useSubscribeInfo = (subscribeId) => {
             couponName: data.subscribeDto.couponName,
             discountCoupon: data.subscribeDto.discountCoupon,
             discountGrade: data.subscribeDto.discountGrade,
-            planName: planName,
+            planName: currentPlanName,
             recipeNames: data.subscribeRecipeDtoList.map((list) => list.recipeName).join(', '),
-            oneMealRecommendGram: oneMealRecommendGram,
+            oneMealGramsPerRecipe: oneMealGrams,
           },
           // 레시피 정보
           recipe: {
             idList: curRecipeIdList,
             nameList: data.subscribeRecipeDtoList.map((list) => list.recipeName),
             ingredients: memberIngredients,
-            pricePerGram : memberRecipes.map(list=>list.pricePerGram),
-            inStockInfoList: memberRecipes.map((list) => ({ [list.name]: list.inStock })),
-            leakedInfoList: memberRecipes.map((list) => ({ [list.name]: list.leaked })),
+            pricePerGram : currentRecipes.map(list=>list.pricePerGram),
+            inStockInfoList: currentRecipes.map((list) => ({ [list.name]: list.inStock })),
+            leakedInfoList: currentRecipes.map((list) => ({ [list.name]: list.leaked })),
             soldOut: isSoldOut, // 재고소진여부 -> 재고소진 시, 사이트 전역에서, 유저에게 알림메시지
-            allRecipeIdList: allRecipes.map(recipe=>recipe.id)
+            allRecipeIdList: recipeInfo.data.map(recipe=>recipe.id)
           },
           plan: {
             name: data.subscribeDto.plan,
@@ -138,61 +145,8 @@ export const useSubscribeInfo = (subscribeId) => {
         console.error(err);
       }
     })();
-  }, [subscribePlanInfo.isLoading] );
+  }, [subscribePlanInfo.isLoading, recipeInfo.loading] );
   
   
   return info;
 };
-
-
-
-
-export const subscribePriceCutOffUnit = 10; // 구독상품 > 10원 단위 절사.
-
-export const calcSubscribePrice = ({discountPercent=0, oneMealRecommendGram=0, planName="", pricePerGrams= []}) => {
-  const totalNumberOfPacks = subscribePlanType[planName].totalNumberOfPacks;
-  const calcPriceList = pricePerGrams.map( pricePerGram => {
-    return calcSubscribeItemPrice( {
-        plan: {totalNumberOfPacks, discountPercent},
-        recipe: {pricePerGram, oneMealRecommendGram}
-      }
-    );
-  } );
-  return calcSubscribeItemsAvgPrice( calcPriceList );
-}
-
-export const calcSubscribeItemPrice = ({
-                               plan = {totalNumberOfPacks: 0, discountPercent: 0},
-                               recipe = {pricePerGram: 0, oneMealRecommendGram: 0}
-                             }) => {
-  const recipePricePerGram = recipe.pricePerGram; // 1g 당 가격 상수 ( 어드민에서 입력한 값 )
-  const recipeOneMealGram = recipe.oneMealRecommendGram; // 한 팩(한 끼) 무게
-  const perPack = Number( (recipePricePerGram * recipeOneMealGram) );
-  const totalNumberOfPacks = plan.totalNumberOfPacks;
-  const discountPercent = plan.discountPercent;
-  return {
-    perPack: perPack, // 팩당가격상수 * 무게
-    originPrice: totalNumberOfPacks * perPack, // 할인 전 가격
-    salePrice: totalNumberOfPacks * perPack * (1 - discountPercent / 100), // 할인 후 가격 (판매가)
-  };
-};
-
-export const calcSubscribeItemsAvgPrice= (subscribePriceList) => {
-  if(!subscribePriceList.length) return console.error('ERROR: Required Array to calculate Average Subscribe Prices');
-  let perPack = subscribePriceList.map((r) => r.perPack).reduce((acc, cur) => acc + cur) / subscribePriceList.length;
-  let originPrice =
-    subscribePriceList.map((r) => r.originPrice).reduce((acc, cur) => acc + cur) / subscribePriceList.length;
-  let salePrice = subscribePriceList.map((r) => r.salePrice).reduce((acc, cur) => acc + cur) / subscribePriceList.length;
-  const cutOffUnit = subscribePriceCutOffUnit; // ! '10'원단위로 절사 (= 1원단위 버림)
-  perPack = Math.floor(perPack);
-  originPrice = Math.floor(originPrice / cutOffUnit) * cutOffUnit;
-  salePrice = Math.floor(salePrice / cutOffUnit) * cutOffUnit;
-  
-  // ! 참고) 만약 고객 측에서 UI상의 salePrice 결과가 몇 원 차이나는 것에 대해 문의할 경우,
-  //  => (숨김 처리한) 팩당 가격을 소수점 이하까지 계산해보면, 10원 단위로 절사한 가격임을 알 수 있음.
-  return {
-    perPack,  // ! 팩당가격 : 소수점 이하 버림
-    originPrice,  // ! 원가:  1원 단위 절사
-    salePrice,  // ! 판매가: 1원 단위 절사
-  };
-}
