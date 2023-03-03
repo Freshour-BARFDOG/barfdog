@@ -30,8 +30,8 @@ export default function SiteMaintenance () {
         <hr/>
         <h3 className={s['title']}>점검일시</h3>
         <p className={s['detail']}>
-          <span>2023년 03월 03일 (금) </span>
-          <span>오후 3시 - 6시 ( 3시간 )</span>
+          <span>2023년 03월 06일 (월) </span>
+          <span>오후 1시 - 4시 ( 3시간 )</span>
         </p>
       </section>
     </main>
