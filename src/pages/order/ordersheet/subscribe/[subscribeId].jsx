@@ -1,10 +1,10 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Layout from '/src/components/common/Layout';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import s from '../ordersheet.module.scss';
 import Modal_termsOfSerivce from '/src/components/modal/Modal_termsOfSerivce';
 import {Modal_coupon} from '/src/components/modal/Modal_coupon';
-import {getData, postObjData} from '/src/pages/api/reqData';
+import {getData} from '/src/pages/api/reqData';
 import {useSelector} from 'react-redux';
 import transformDate, {transformToday} from '/util/func/transformDate';
 import {OrdersheetSubscribeItemList} from '/src/components/order/OrdersheetSubscribeItemList';
@@ -17,8 +17,9 @@ import {OrdersheetAmountOfPayment} from '/src/components/order/OrdersheetAmountO
 import {calcNextSubscribeDeliveryDate} from '/util/func/calcNextSubscribeDeliveryDate';
 import {ORDER_STATES} from "/store/order-slice";
 import useDeviceState from "/util/hook/useDeviceState";
-import {subscribePriceCutOffUnit} from "/util/hook/useSubscribeInfo";
 import {useSubscribePlanInfo} from "/util/hook/useSubscribePlanInfo";
+import {subscribePriceCutOffUnit} from "/util/func/subscribe/calcSubscribePrices";
+import {cancelSubscribeOrder} from "/util/func/order/cancelOrder";
 
 
 export default function SubscribeOrderSheetPage({ subscribeId }) {
@@ -44,7 +45,7 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
     if(orderState.orderState === ORDER_STATES.ORDERING && orderState.orderId){
       console.log("window.addEventListener( 'beforeunload', ...);");
       window.addEventListener( 'beforeunload',
-        cancelOrderWhenUserLeavesDuringPayment
+        cancelSubscribeOrder.bind(null, orderState.orderId)
         ,{once: true}
       ); // ! {once: true} => 이벤트 단 한 번만 실행
     }
@@ -53,22 +54,15 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
       // ! 해당 IF문 내의 코드는 없어도 UNMOUNT 시점에 이벤트가 제거됨
       //  그러나 불상사를 확실히 방지하기 위해, removeEventListener 중복 적용
       console.log("window.removeEventListener( 'beforeunload', ...);");
-      window.removeEventListener( 'beforeunload', cancelOrderWhenUserLeavesDuringPayment)
+      window.removeEventListener( 'beforeunload', cancelSubscribeOrder.bind(null, orderState.orderId))
     }
     return () => {
       console.log("[ UNMOUNT ] window.removeEventListener( 'beforeunload', ...);");
-      window.removeEventListener( 'beforeunload', cancelOrderWhenUserLeavesDuringPayment);
+      window.removeEventListener( 'beforeunload', cancelSubscribeOrder.bind(null, orderState.orderId));
     };
   },[ds.isMobile, orderState]);
   
-  
-  const cancelOrderWhenUserLeavesDuringPayment = () => {
-    // ! 목적: 아임포트 결제 창을 띄운 상태에서 '페이지 새로고침' , '페이지 뒤로가기'
-    // => BEFORE_PAYMENT로 인한 '적립금, 쿠폰'를 회수할 수 없게는 상태를 방지한다.
-    console.log("---------------- [결제포기 > 정기구독] ----------------");
-    postObjData(`/api/orders/${orderState.orderId}/subscribe/cancel`);
-  };
-  
+
   
   
   useEffect(() => {

@@ -60,7 +60,7 @@
   }
   .grid_box {
     display: grid;
-    grid-template-rows: repeat(4, 1fr);
+    //grid-template-rows: repeat(4, 1fr);
 
     background-color: #f9f9f9;
     border-top: rem(1) solid var(--color-disabled);

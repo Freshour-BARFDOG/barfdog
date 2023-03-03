@@ -1,21 +1,57 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import s from '/src/pages/order/subscribeShop/index.module.scss';
 import CustomInput from '/src/components/atoms/CustomInput';
 import ItemLabel from '/src/components/atoms/ItemLabel';
 import Image from 'next/image';
 import {subscribePlanType} from '/store/TYPE/subscribePlanType';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
+import {calcOneMealGramsWithRecipeInfo} from "/util/func/subscribe/calcOneMealGramsWithRecipeInfo";
+
 
 export const SubscribeShopPlan = ({ name, info, form, setForm, calcPrice }) => {
   
   const initialPlan = form.plan || null
   const [selectedPlan, setSelectedPlan] = useState( initialPlan );
+  const [initialize, setInitialize] = useState(false);
+  const selectedRecipeIds = form.recipeIdList;
+  const maxSelectedRecipeCount = 2;
+  
   useEffect( () => {
+    // 최대 선택가능한 레시피개수가 많아졌을 경우, 초기화 시킴.
+    
+    const seletedRecipeCount = form.recipeIdList.length;
+    setInitialize( seletedRecipeCount > maxSelectedRecipeCount );
+  
+  }, [form.recipeIdList] );
+  
+  
+  useEffect( () => {
+    
     setForm( (prevState) => ({
       ...prevState,
       plan: selectedPlan,
     }) );
+    
+    setInitialize( null); // null : 플랜 선택된 상태는 유지, form값 초기화
+    
   }, [selectedPlan] );
+  
+  
+  
+  const oneMealGramsWithRecipeInfosWithTags = useMemo( () =>
+    // 초기화(initialize)되었을 경우, 기본 값이 나타나도록 함.
+        initialize === false && calcOneMealGramsWithRecipeInfo( {
+    selectedRecipeIds: selectedRecipeIds,
+    allRecipeInfos: info.recipeInfoList.map( (recipe) => ({id: recipe.id, kcalPerGram: recipe.kcalPerGram, name: recipe.name}) ),
+    oneDayRecommendKcal: info.foodAnalysis.oneDayRecommendKcal,
+  })?.map(
+    (recipeInfo, i) =>
+      <span className={s.oneLine} key={`oneMealGram-info-${i}`}><b>{recipeInfo.oneMealGram}g</b>&nbsp;<i className={s.tinyText}>(1팩 기준){selectedRecipeIds.length > 1 && ` (${recipeInfo.recipeName})`}</i></span> )
+      , [form, initialize] )
+    || <span className={s.oneLine}><b>0g</b>&nbsp;<i className={s.tinyText}>(1팩 기준)</i></span>;
+  
+  
+  
   
   const subsribePlanItems = [
     {
@@ -30,7 +66,9 @@ export const SubscribeShopPlan = ({ name, info, form, setForm, calcPrice }) => {
         row2:
           <><span>{subscribePlanType.FULL.weeklyPaymentCycle}주</span>&nbsp;정기배송</>,
         row3:
-          <><span>{info.foodAnalysis.oneMealRecommendGram}g</span>&nbsp;(1팩기준)</>,
+          <>
+            {oneMealGramsWithRecipeInfosWithTags}
+          </>,
         row4:
           <>{subscribePlanType.FULL.totalNumberOfPacks}팩 x
             <span>&nbsp;{transformLocalCurrency( calcPrice( subscribePlanType.FULL.NAME ).perPack ) + '원'}</span></>
@@ -58,7 +96,7 @@ export const SubscribeShopPlan = ({ name, info, form, setForm, calcPrice }) => {
         row2:
           <><span>{subscribePlanType.HALF.weeklyPaymentCycle}주</span>&nbsp;정기배송</>,
         row3:
-          <><span>{info.foodAnalysis.oneMealRecommendGram}g</span>&nbsp;(1팩기준)</>,
+          <>{oneMealGramsWithRecipeInfosWithTags}</>,
         row4:
           <>{subscribePlanType.HALF.totalNumberOfPacks}팩 x
             <span>&nbsp;{transformLocalCurrency( calcPrice( subscribePlanType.HALF.NAME ).perPack ) + '원'}</span></>
@@ -86,7 +124,7 @@ export const SubscribeShopPlan = ({ name, info, form, setForm, calcPrice }) => {
         row2:
           <><span>{subscribePlanType.TOPPING.weeklyPaymentCycle}주</span>&nbsp;정기배송</>,
         row3:
-          <><span>{info.foodAnalysis.oneMealRecommendGram}g</span>&nbsp;(1팩기준)</>,
+          <>{oneMealGramsWithRecipeInfosWithTags}</>,
         row4:
           <>{subscribePlanType.TOPPING.totalNumberOfPacks}팩 x
             <span>&nbsp;{transformLocalCurrency( calcPrice( subscribePlanType.TOPPING.NAME ).perPack ) + '원'}</span></>
@@ -120,6 +158,7 @@ export const SubscribeShopPlan = ({ name, info, form, setForm, calcPrice }) => {
           selectedRadio={selectedPlan}
           setSelectedRadio={setSelectedPlan}
           option={{label: '플랜 선택'}}
+          initialize={initialize}
         >
           {item.label === "best" && <ItemLabel
             label="BEST"
@@ -142,7 +181,7 @@ export const SubscribeShopPlan = ({ name, info, form, setForm, calcPrice }) => {
                     src={item.imageSrc}
                     objectFit="cover"
                     layout="fill"
-                    alt="카드 이미지"
+                    alt="플랜 아이콘"
                   />
                 </div>
               </div>

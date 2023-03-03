@@ -18,12 +18,12 @@ section.title{ padding : rem(8) 0 rem(30);}
 
   p {
     @include char(l16);
-    
+
     color : var(--color-font-sub);
     text-align: center;
     padding-bottom: rem(30);
   }
-  
+
   .btn_box {
     display: flex;
     justify-content: center;
@@ -53,7 +53,7 @@ section.title{ padding : rem(8) 0 rem(30);}
 
   .day{
     border-bottom: rem(1) solid var(--color-line-04);
-    font-weight: 600; 
+    font-weight: 600;
     padding-bottom: rem(3);
     font-size: rem(16);
   }
@@ -116,12 +116,26 @@ section.title{ padding : rem(8) 0 rem(30);}
     }
     .right_box {
       @include char(l15);
+      display: grid;
+      gap:rem(10);
       .btn {
+        display: grid;
+        width: 100%;
         padding: rem(14) 0;
         text-align: center;
         border: rem(1) solid var(--color-main);
         border-radius: rem(4);
         color: var(--color-main);
+        &.cancelOrder {
+          display: grid;
+          align-items: center;
+          height: rem(45);
+          background-color: var(--color-main);
+          color: #fff;
+          padding: 0;
+          font-weight: 200;
+
+        }
       }
       .btn2 {
         padding: rem(14) 0;
@@ -129,8 +143,8 @@ section.title{ padding : rem(8) 0 rem(30);}
         text-align: center;
         border: rem(1) solid var(--color-line-02);
         border-radius: rem(4);
-
       }
+
     }
   }
 
@@ -156,7 +170,7 @@ section.title{ padding : rem(8) 0 rem(30);}
 
   .day {
     @include char(l16);
-    font-weight: 600; 
+    font-weight: 600;
     padding-bottom: rem(7);
     border-bottom: rem(1) solid var(--color-line-04);
   }
@@ -211,7 +225,7 @@ section.title{ padding : rem(8) 0 rem(30);}
             word-break: keep-all;
           }
 
-          
+
           .last_text {
             margin-left: rem(6);
             @include char(l18);
@@ -228,7 +242,7 @@ section.title{ padding : rem(8) 0 rem(30);}
           padding-top: rem(10);
           color: var(--color-font-sub);
           font-size: rem(16);
-          
+
           div {
             word-break: break-all;
           }
@@ -254,11 +268,21 @@ section.title{ padding : rem(8) 0 rem(30);}
       box-sizing: border-box;
 
       .btn {
+        width: 100%;
         padding: rem(14) 0;
         text-align: center;
         border: rem(1) solid var(--color-main);
         border-radius: rem(4);
         color: var(--color-main);
+        &.cancelOrder {
+          display: grid;
+          align-items: center;
+          height: rem(45);
+          background-color: var(--color-main);
+          color: #fff;
+          padding: 0;
+          font-weight: 200;
+        }
       }
 
       .btn2 {
@@ -268,7 +292,7 @@ section.title{ padding : rem(8) 0 rem(30);}
         border: rem(1) solid var(--color-line-02);
         border-radius: rem(4);
       }
-    } 
+    }
   }
 }
 
@@ -287,7 +311,7 @@ section.title{ padding : rem(8) 0 rem(30);}
 
 @media (max-width: rem(900)) {
 
-  
+
   .title {
     display: none;
   }
@@ -299,7 +323,7 @@ section.title{ padding : rem(8) 0 rem(30);}
       grid-template-columns: 1fr;
       position: relative;
       padding: rem(10) 0;
-    
+
       .mid_box {
         text-align: left;
         width: 100%;
@@ -327,9 +351,9 @@ section.title{ padding : rem(8) 0 rem(30);}
           text-align: center;
           border: rem(1) solid var(--color-line-02);
           border-radius: rem(4);
-          
+
         }
-      } 
+      }
     }
   }
 
@@ -383,7 +407,7 @@ section.title{ padding : rem(8) 0 rem(30);}
       .left_box {
         grid-template-columns: rem(60) 1fr;
         column-gap: rem(10);
-    
+
         .image {
           width: rem(60);
           min-width: rem(60);
@@ -395,7 +419,7 @@ section.title{ padding : rem(8) 0 rem(30);}
               font-size: rem(16);
             }
           }
-          
+
           .text2 {
             grid-template-columns: rem(50) 1fr;
             column-gap: rem(20);
@@ -414,7 +438,7 @@ section.title{ padding : rem(8) 0 rem(30);}
     padding-top: rem(40);
     padding-bottom : rem(50);
   }
-  
+
   .subscribeItem-container {
     .content_body {
       .left_box {

@@ -51,25 +51,6 @@ export const SubscribeShopRecipe = ({ name, info, form, setForm }) => {
     ?.filter((ingr, i) => selectedIngredientList.indexOf(ingr) === i)
     .join(', ');
 
-  // let initInputType = null;
-  // let initSelectedRadio = null;
-  // let initSelectedCheckbox = {};
-  //
-  // for (const id of info.initialValues.recipeIdList) {
-  //   const curRecipe = selectedRecipe.filter((rc) => rc.id === id)[0];
-  //   if (!curRecipe) break;
-  //   const recipeName = `${curRecipe.name}-${curRecipe.id}`;
-  //   if (info.initialValues.plan === subscribePlanType.FULL.NAME) {
-  //     initInputType = 'checkbox';
-  //     initSelectedCheckbox = {
-  //       ...initSelectedCheckbox,
-  //       [recipeName]: true,
-  //     };
-  //   } else {
-  //     initInputType = 'radio';
-  //     initSelectedRadio = recipeName;
-  //   }
-  // }
   
   const [initialize, setInitialize] = useState(false);
   const [selectedCheckbox, setSelectedCheckbox] = useState({}); // * 풀플랜: 최대 2가지 레시피 선택 가능 (Checkbox Input) // ex.{터키비프: true}
@@ -113,17 +94,15 @@ export const SubscribeShopRecipe = ({ name, info, form, setForm }) => {
       val ? selectedIdList.push(selectedId) : selectedIdList?.filter((id) => id !== selectedId);
     });
     const maxSelectedCheckboxCount = 2;
-    if (selectedCheckboxCount > maxSelectedCheckboxCount) {
+    const isOverSelected = selectedCheckboxCount > maxSelectedCheckboxCount;
+    if (isOverSelected) {
       alert('풀플랜은 최대 2개 레시피까지 선택가능합니다.');
-      // setSelectedCheckbox([])
-      setInitialize(true);
-    } else {
-      setInitialize(false);
     }
 
+    setInitialize(isOverSelected);
     setForm((prevState) => ({
       ...prevState,
-      [name]: selectedIdList,
+      [name]: isOverSelected ? [] : selectedIdList,
     }));
   }, [selectedCheckbox]);
 

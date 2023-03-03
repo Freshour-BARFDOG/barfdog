@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import s from './subscribeOrderChanged.module.scss';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import Image from 'next/image';
-import { getDataSSR, putObjData } from '/src/pages/api/reqData';
-import { useSelector } from 'react-redux';
-import { FullScreenLoading } from '/src/components/atoms/FullScreenLoading';
+import {getDataSSR, putObjData} from '/src/pages/api/reqData';
+import {useSelector} from 'react-redux';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import transformDate from '/util/func/transformDate';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
@@ -14,6 +13,8 @@ import Spinner from "/src/components/atoms/Spinner";
 import {subscribePlanType} from "/store/TYPE/subscribePlanType";
 import {useModalContext} from "/store/modal-context";
 import Modal_confirm from "/src/components/modal/Modal_confirm";
+import {seperateStringViaComma} from "/util/func/seperateStringViaComma";
+import {FullScreenLoading} from "../../../../components/atoms/FullScreenLoading";
 
 
 /* ! 플랜 주기가 변경될 경우 (2주 => 4주 또는 4주 => 2주 )
@@ -33,6 +34,10 @@ export default function SubscribeOrderChangedPage({ data }) {
   const [modalMessage, setModalMessage] = useState('');
   const [activeConfirmModal, setActiveConfirmModal] = useState({});
 
+  useEffect(() => {
+    if(!data || !DATA.prev.plan || !DATA.next.plan) return onFailCallback();
+    
+  },[])
   const DATA = { // DATA Ref. ) order/subscribeShop => onChangeSubscribeOrder()
     lastSurveyDate: data.surveyReportInfo.lastSurveyDate,
     prev: {
@@ -112,10 +117,15 @@ export default function SubscribeOrderChangedPage({ data }) {
     onHideModal();
     window.location.href = `/mypage/dogs`;
   };
+  
+  const onFailCallback = () => {
+    window.location.href = `/mypage/dogs`;
+  };
 
-  if (!data) {
-    return <FullScreenLoading />;
+  if (!data || !DATA.prev.plan || !DATA.next.plan ) {
+    return <FullScreenLoading/>;
   }
+  
   return (
     <>
       <MetaTitle title={`정기구독 플랜레시피 변경`} />
@@ -140,13 +150,13 @@ export default function SubscribeOrderChangedPage({ data }) {
                 <div className={s.line_box}>
                   <span className={s.left_box}>레시피</span>
                   <span className={s.right_box}>
-                    <em>{DATA.prev.recipeName}</em>
+                    {seperateStringViaComma(DATA.prev.recipeName).map((recipeName, i)=><em key={`prev-recipeName-${i}`}>{recipeName}</em>)}
                   </span>
                 </div>
                 <div className={s.line_box}>
                   <span className={s.left_box}>급여량</span>
                   <span className={s.right_box}>
-                    {transformLocalCurrency(DATA.prev.oneMealRecommendGram)}g
+                       {DATA.prev.oneMealGrams.map((gram, i)=><em key={`prev-oneMealGrams-${i}`}>{transformLocalCurrency( gram ) + "g "}</em>)}
                   </span>
                 </div>
                 <div className={s.line_box}>
@@ -189,13 +199,13 @@ export default function SubscribeOrderChangedPage({ data }) {
                 <div className={s.line_box}>
                   <span className={s.left_box}>레시피</span>
                   <span className={s.right_box}>
-                    <em>{DATA.next.recipeName}</em>
+                     {seperateStringViaComma(DATA.next.recipeName).map((recipeName, i)=><em key={`next-recipeName-${i}`}>{recipeName}</em>)}
                   </span>
                 </div>
                 <div className={s.line_box}>
                   <span className={s.left_box}>급여량</span>
                   <span className={s.right_box}>
-                    {transformLocalCurrency(DATA.next.oneMealRecommendGram)}g
+                    {DATA.next.oneMealGrams.map((gram, i)=><em key={`next-oneMealGrams-${i}`}>{transformLocalCurrency( gram ) + "g "}</em>)}
                   </span>
                 </div>
                 <div className={s.line_box}>

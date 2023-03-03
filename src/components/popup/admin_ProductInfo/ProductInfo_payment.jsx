@@ -33,15 +33,15 @@ const ProductInfo_payment = ({ paymentInfo }) => {
         <li className={`${s['t-row']}`}>
           <div className={s['t-box']}>
             <div className={`${s.innerBox} ${s.label}`}>
-              <span>적립금사용</span>
+              <span>등급 할인</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
-              <span>{transformLocalCurrency(paymentInfo.discountReward)}원</span>
+              <span>{transformLocalCurrency(paymentInfo.discountGrade)}원</span>
             </div>
           </div>
           <div className={s['t-box']}>
             <div className={`${s.innerBox} ${s.label}`}>
-              <span>쿠폰할인금액</span>
+              <span>쿠폰 할인</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
               <span>{transformLocalCurrency(paymentInfo.discountCoupon)}원</span>
@@ -51,16 +51,24 @@ const ProductInfo_payment = ({ paymentInfo }) => {
         <li className={`${s['t-row']}`}>
           <div className={s['t-box']}>
             <div className={`${s.innerBox} ${s.label}`}>
+              <span>적립금 사용</span>
+            </div>
+            <div className={`${s.innerBox} ${s.cont}`}>
+              <span>{transformLocalCurrency(paymentInfo.discountReward)}원</span>
+            </div>
+          </div>
+          <div className={s['t-box']}>
+            <div className={`${s.innerBox} ${s.label}`}>
               <span>배송비</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
               <span>
-                {!paymentInfo.deliveryPrice
-                  ? '무료'
-                  : `${transformLocalCurrency(paymentInfo.deliveryPrice)}원`}
+                {paymentInfo.deliveryPrice ? `${transformLocalCurrency( paymentInfo.deliveryPrice )}원` : '무료'}
               </span>
             </div>
           </div>
+        </li>
+        <li className={`${s['t-row']}`}>
           <div className={s['t-box']}>
             <div className={`${s.innerBox} ${s.label}`}>
               <span>결제방법</span>
@@ -71,8 +79,6 @@ const ProductInfo_payment = ({ paymentInfo }) => {
               </span>
             </div>
           </div>
-        </li>
-        <li className={`${s['t-row']} ${s['fullWidth']}`}>
           <div className={s['t-box']}>
             <div className={`${s.innerBox} ${s.label}`}>
               <span>처리상태</span>
