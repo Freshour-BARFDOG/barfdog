@@ -1,9 +1,14 @@
 import s from "./popup_sell.module.scss";
 import {subscribePlanType} from "/store/TYPE/subscribePlanType";
-import transformLocalCurrency from "/util/func/transformLocalCurrency";
+import React, {useMemo} from "react";
+import {seperateStringViaComma} from "/util/func/seperateStringViaComma";
 
 const ProductInfo_subscribe = ({subscribeInfo,  isChangedSubscribeInfo }) => {
-  console.log("subscribeInfo: ",subscribeInfo)
+  // console.log("subscribeInfo: ",subscribeInfo)
+  
+  
+  const oneMealGramsPerRecipe = useMemo( () => seperateStringViaComma(subscribeInfo.oneMealGramsPerRecipe) || [], [subscribeInfo.oneMealGramsPerRecipe] );
+  const packCountPerRecipe = useMemo( () => subscribePlanType[subscribeInfo.plan].totalNumberOfPacks / oneMealGramsPerRecipe.length, [subscribeInfo.plan] );
   
   return (
     <>
@@ -28,7 +33,7 @@ const ProductInfo_subscribe = ({subscribeInfo,  isChangedSubscribeInfo }) => {
             </div>
           </div>
         </li>
-        <li className={`${s["t-row"]}`}>
+        <li className={`${s["t-row"]} ${s["fullWidth"]}`}>
           <div className={s["t-box"]}>
             <div className={`${s.innerBox} ${s.label}`}>
               <span>플랜</span>
@@ -37,25 +42,27 @@ const ProductInfo_subscribe = ({subscribeInfo,  isChangedSubscribeInfo }) => {
               <span>{subscribeInfo.plan ? subscribePlanType[subscribeInfo.plan].KOR : '-'}</span>
             </div>
           </div>
-          <div className={s["t-box"]}>
-            <div className={`${s.innerBox} ${s.label}`}>
-              <span>급여량</span>
-            </div>
-            <div className={`${s.innerBox} ${s.cont}`}>
-              <span>{transformLocalCurrency(subscribeInfo.oneMealRecommendGram)}g</span>
-            </div>
-          </div>
         </li>
-        <li className={`${s["t-row"]} ${s["fullWidth"]}`}>
-          <div className={s["t-box"]}>
-            <div className={`${s.innerBox} ${s.label}`}>
-              <span>레시피</span>
+        {seperateStringViaComma(subscribeInfo.recipeName)?.map((recipeName, index)=>(
+          <li className={`${s["t-row"]}`} key={`recipe-name-${index}`}>
+            <div className={s["t-box"]}>
+              <div className={`${s.innerBox} ${s.label}`}>
+                <span>레시피</span>
+              </div>
+              <div className={`${s.innerBox} ${s.cont}`}>
+                <span>{recipeName}</span>
+              </div>
             </div>
-            <div className={`${s.innerBox} ${s.cont}`}>
-              <span>{subscribeInfo.recipeName || '-'}</span>
+            <div className={s["t-box"]}>
+              <div className={`${s.innerBox} ${s.label}`}>
+                <span>급여량</span>
+              </div>
+              <div className={`${s.innerBox} ${s.cont}`}>
+                <span>{oneMealGramsPerRecipe[index]}g  <i className={s['recipePackCount']}>({packCountPerRecipe} 팩)</i></span>
+              </div>
             </div>
-          </div>
-        </li>
+          </li>
+        ))}
       </ul>
     </>
   );

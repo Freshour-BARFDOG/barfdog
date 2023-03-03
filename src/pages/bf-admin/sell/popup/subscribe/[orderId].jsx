@@ -105,8 +105,8 @@ export async function getServerSideProps({ req, query }) {
   const apiUrl = `/api/admin/orders/${orderId}/subscribe`;
   // const res =DUMMY_RES;
   const res = await getDataSSR(req, apiUrl);
-  console.log(res);
-  if (res.data) {
+  console.log(res?.data);
+  if (res?.data) {
     const data = res.data;
 
     DATA = {
@@ -136,18 +136,19 @@ export async function getServerSideProps({ req, query }) {
         id: data.subscribeDto.id,
         subscribeCount:data.subscribeDto.subscribeCount,
         plan:data.subscribeDto.plan,
-        oneMealRecommendGram:data.subscribeDto.oneMealRecommendGram,
+        oneMealGramsPerRecipe:data.subscribeDto.oneMealGramsPerRecipe || null, // api-server 변경된 field 이름 대응 -> 추후 null 값 제외해도 됨
         recipeName:data.subscribeDto.recipeName,
       },
       beforeSubscribeDto: {
         id:data.beforeSubscribeDto.id, // ! 구독 id => 구독정보 바꾼 적 없으면 null
         subscribeCount:data.beforeSubscribeDto.subscribeCount,
         plan:data.beforeSubscribeDto.plan,
-        oneMealRecommendGram:data.beforeSubscribeDto.oneMealRecommendGram,
+        oneMealGramsPerRecipe:data.beforeSubscribeDto.oneMealGramsPerRecipe  || null, // api-server 변경된 field 이름 대응 -> 추후 null 값 제외해도 됨
         recipeName:data.beforeSubscribeDto.recipeName,
       },
       subscribePaymentDto: {
         orderPrice:data.subscribePaymentDto.orderPrice, // 상품 총 금액
+        discountGrade:data.subscribePaymentDto.discountGrade  || null, // api-server 변경된 field 이름 대응 -> 추후 null 값 제외해도 됨
         deliveryPrice:data.subscribePaymentDto.deliveryPrice,
         discountReward:data.subscribePaymentDto.discountReward,
         couponName:data.subscribePaymentDto.couponName,
@@ -175,70 +176,70 @@ export async function getServerSideProps({ req, query }) {
 
 
 
-const DUMMY_RES = {
-  data: {
-    subscribeOrderInfoDto: {
-      id: 8691,
-      merchantUid: 'merchant_uid1',
-      orderDate: '2022-08-12T11:19:53.679',
-      orderType: 'subscribe',
-      memberName: '김회원',
-      phoneNumber: '01099038544',
-      cancelReason: '단순 변심',
-      cancelDetailReason: '반려견이 체해서 소화를 못해요',
-      cancelRequestDate: '2022-08-09T11:19:53.679',
-      cancelConfirmDate: '2022-08-11T11:19:53.679',
-      package: false,
-      subscribe: true,
-      email: 'user@gmail.com',
-    },
-    dogDto: {
-      name: '김바프',
-      inedibleFood: 'ETC',
-      inedibleFoodEtc: '단무지, 콩',
-      caution: '소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.',
-    },
-    subscribeDto: {
-      id: 8683,
-      subscribeCount: 2,
-      plan: 'FULL',
-      oneMealRecommendGram: 101.0,
-      recipeName: '스타트,터키비프',
-    },
-    beforeSubscribeDto: {
-      id: 8684,
-      subscribeCount: 1,
-      plan: 'HALF',
-      oneMealRecommendGram: 140.0,
-      recipeName: '덕램',
-    },
-    subscribePaymentDto: {
-      orderPrice: 120000,
-      deliveryPrice: 3000,
-      discountReward: 7000,
-      couponName: '관리자 직접 발행 쿠폰1',
-      discountCoupon: 50000,
-      paymentPrice: 60000,
-      orderStatus: 'CANCEL_DONE_SELLER',
-      orderConfirmDate: '2022-08-12T08:19:53.679',
-    },
-    subscribeDeliveryDto: {
-      recipientName: '김회원',
-      recipientPhone: '01099038544',
-      zipcode: '12345',
-      street: '부산광역시 해운대구 센텀2로 19',
-      detailAddress: '106호',
-      departureDate: '2022-08-08T11:19:53.667',
-      arrivalDate: '2022-08-11T11:19:53.667',
-      deliveryNumber: 'cj0239234231',
-    },
-    _links: {
-      self: {
-        href: 'http://localhost:8080/api/admin/orders/8691/subscribe',
-      },
-      profile: {
-        href: '/docs/index.html#resources-query-admin-order-subscribe',
-      },
-    },
-  },
-};
+// const DUMMY_RES = {
+//   data: {
+//     subscribeOrderInfoDto: {
+//       id: 8691,
+//       merchantUid: 'merchant_uid1',
+//       orderDate: '2022-08-12T11:19:53.679',
+//       orderType: 'subscribe',
+//       memberName: '김회원',
+//       phoneNumber: '01099038544',
+//       cancelReason: '단순 변심',
+//       cancelDetailReason: '반려견이 체해서 소화를 못해요',
+//       cancelRequestDate: '2022-08-09T11:19:53.679',
+//       cancelConfirmDate: '2022-08-11T11:19:53.679',
+//       package: false,
+//       subscribe: true,
+//       email: 'user@gmail.com',
+//     },
+//     dogDto: {
+//       name: '김바프',
+//       inedibleFood: 'ETC',
+//       inedibleFoodEtc: '단무지, 콩',
+//       caution: '소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.',
+//     },
+//     subscribeDto: {
+//       id: 8683,
+//       subscribeCount: 2,
+//       plan: 'FULL',
+//       oneMealRecommendGram: 101.0,
+//       recipeName: '스타트,터키비프',
+//     },
+//     beforeSubscribeDto: {
+//       id: 8684,
+//       subscribeCount: 1,
+//       plan: 'HALF',
+//       oneMealRecommendGram: 140.0,
+//       recipeName: '덕램',
+//     },
+//     subscribePaymentDto: {
+//       orderPrice: 120000,
+//       deliveryPrice: 3000,
+//       discountReward: 7000,
+//       couponName: '관리자 직접 발행 쿠폰1',
+//       discountCoupon: 50000,
+//       paymentPrice: 60000,
+//       orderStatus: 'CANCEL_DONE_SELLER',
+//       orderConfirmDate: '2022-08-12T08:19:53.679',
+//     },
+//     subscribeDeliveryDto: {
+//       recipientName: '김회원',
+//       recipientPhone: '01099038544',
+//       zipcode: '12345',
+//       street: '부산광역시 해운대구 센텀2로 19',
+//       detailAddress: '106호',
+//       departureDate: '2022-08-08T11:19:53.667',
+//       arrivalDate: '2022-08-11T11:19:53.667',
+//       deliveryNumber: 'cj0239234231',
+//     },
+//     _links: {
+//       self: {
+//         href: 'http://localhost:8080/api/admin/orders/8691/subscribe',
+//       },
+//       profile: {
+//         href: '/docs/index.html#resources-query-admin-order-subscribe',
+//       },
+//     },
+//   },
+// };
