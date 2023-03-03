@@ -112,7 +112,7 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
       z-index: -1;
       // clip-path: polygon(50% 0, 50% 0, 50% 100%, 50% 100%);
       // transition: opacity .3s ease, height .3s ease, widht .3s ease;
-      transition: opacity 1s .2s ease, transform 1s .2s ease;
+      transition: opacity .25s 0s ease, transform 0s .25s ease;
     }
 
     &::after {
@@ -157,13 +157,13 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
         line-height: 120%;
         letter-spacing: -0.02em;
         padding: rem(17) 0 rem(10);
-        transition: color .2s .3s ease;
+        transition: color .25s 0s ease;
       }
       .bot_text {
         @include char(b15);
         color : var(--color-font-sub);
         padding-bottom: rem(10);
-        transition: color .2s .3s ease;
+        transition: color .25s 0s ease;
       }
 
       .image_right {

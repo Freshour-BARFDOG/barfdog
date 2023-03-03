@@ -370,11 +370,13 @@ section.tab_slide_box2{padding: 0 0 rem(130)}
       font-weight: 600;
       font-size: rem(17);
       line-height: 152%;
+      word-break: keep-all;
     }
     .right {
       @include char(b16);
       color : var(--color-font-sub);
       height: 100%;
+      word-break: keep-all;
     }
   }
 }

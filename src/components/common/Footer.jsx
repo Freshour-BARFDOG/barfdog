@@ -140,6 +140,7 @@ export default function Footer() {
             <li>
               <span className={s.info_title}>Email.</span>
               <span className={s.info_cont}>info@freshour.co.kr</span>
+              <a href='mailto:MAIL_ADDRESS' className={s.info_cont_mobile}>info@freshour.co.kr</a>
             </li>
             <li>
               <span className={s.info_title}>주소:</span>
@@ -148,6 +149,7 @@ export default function Footer() {
             <li>
               <span className={s.info_title}>유선번호: </span>
               <span className={s.info_cont}>043-855-4995</span>
+              <a href='tel:070-7770-7916' className={s.info_cont_mobile}>043-855-4995</a>
             </li>
           </ul>
         </div>
