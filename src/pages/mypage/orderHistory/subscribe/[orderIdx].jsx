@@ -121,7 +121,7 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
 
               <span className={s.change}>
                 {data?.orderDto.beforePlan === null &&
-                data?.orderDto.beforeOneMealRecommendGram === null &&
+                data?.orderDto.beforeOneMealGramsPerRecipe === null &&
                 data?.orderDto.beforeRecipeName === null &&
                 data?.orderDto.beforeOrderPrice === 0
                   ? ''
@@ -150,22 +150,12 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
                     <span>
                       {data?.recipeNames} ({data?.orderDto.subscribeCount}회차)
                     </span>
-
+    
                     <span>반려견</span>
                     <span>{data?.orderDto.dogName}</span>
-
-                    <span>급여량</span>
-                    <div>
-                      {data?.orderDto.beforeOneMealRecommendGram &&
-                        data?.orderDto.beforeOneMealRecommendGram !==
-                          data?.orderDto.oneMealRecommendGram && (
-                          <span className={s.beforeData}>
-                            {data?.orderDto.beforeOneMealRecommendGram}g
-                          </span>
-                        )}
-                      <span>{data?.orderDto.oneMealRecommendGram}g</span>
-                    </div>
-
+    
+    
+    
                     <span>플랜</span>
                     <div>
                       {data?.orderDto.beforePlan &&
@@ -173,29 +163,52 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
                         data?.orderDto.beforePlan !== data?.orderDto.plan && (
                           <span className={s.beforeData}>
                             {subscribePlanType[data?.orderDto.beforePlan].KOR}
+                            &nbsp;
                           </span>
                         )}
                       <span>{subscribePlanType[data?.orderDto.plan].KOR}</span>
+                      {data?.orderDto.beforePlan &&
+                        data?.orderDto.plan &&
+                        data?.orderDto.beforePlan !== data?.orderDto.plan && (
+                          <span className={s.beforeData}>{subscribePlanType[data?.orderDto.beforePlan].KOR}</span>
+                        )}
                     </div>
-
+  
+                    
+  
                     <span>레시피</span>
                     <div>
+                      <span>{data?.recipeNames}</span>
                       {data?.orderDto.beforeRecipeName !== data?.recipeDto.recipeName && (
-                        <span className={s.beforeData}>{data?.orderDto.beforeRecipeName}</span>
+                        <span className={s.beforeData}>
+                        {data?.orderDto.beforeRecipeName}
+                      </span>
                       )}
-                      <span>{data?.recipeDto.recipeName}</span>
                     </div>
-
+                
+              
+    
+                    <span>급여량</span>
+                    <div>
+                      <span>{data?.orderDto.oneMealGramsPerRecipe}g</span>
+                      {data?.orderDto.beforeOneMealGramsPerRecipe &&
+                        data?.orderDto.beforeOneMealGramsPerRecipe !==
+                        data?.orderDto.oneMealGramsPerRecipe && (
+                          <span className={s.beforeData}>{data?.orderDto.beforeOneMealGramsPerRecipe}g</span>
+                        )}
+                    </div>
+  
+                    
+    
                     <span>가격</span>
                     <div>
+                      <span>{transformLocalCurrency(data?.orderDto.orderPrice)}원</span>
                       {data?.orderDto.beforeOrderPrice > 0 &&
                         data?.orderDto.beforeOrderPrice !== data?.orderDto.orderPrice && (
                           <span className={s.beforeData}>
-                            {transformLocalCurrency(data?.orderDto.beforeOrderPrice)}원
+                            {transformLocalCurrency( data?.orderDto.beforeOrderPrice )}원
                           </span>
-                        )}
-
-                      <span>{transformLocalCurrency(data?.orderDto.orderPrice)}원</span>
+                      )}
                     </div>
                   </div>
                   <div className={s.info_autoConfirmation}>구독상품은 배송완료 후, 자동으로 구매확정됩니다.</div>
@@ -385,13 +398,13 @@ export async function getServerSideProps(ctx) {
         subscribeId: orderIdx,
         subscribeCount: data.orderDto.subscribeCount,
         dogName: data.orderDto.dogName,
-        oneMealRecommendGram: data.orderDto.oneMealRecommendGram,
+        oneMealGramsPerRecipe: data.orderDto.oneMealGramsPerRecipe || null, // api-server field 변경에 대응 -> 추후 null 대응 제외해도 됨
         plan: data.orderDto.plan,
         // paymentDate: data.orderDto.paymentDate,
         orderPrice: data.orderDto.orderPrice,
         beforeSubscribeCount: data.orderDto.beforeSubscribeCount,
         beforePlan: data.orderDto.beforePlan,
-        beforeOneMealRecommendGram: data.orderDto.beforeOneMealRecommendGram,
+        beforeOneMealGramsPerRecipe: data.orderDto.beforeOneMealGramsPerRecipe || null, // api-server field 변경에 대응 -> 추후 null 대응 제외해도 됨
         beforeRecipeName: data.orderDto.beforeRecipeName,
         beforeOrderPrice: data.orderDto.beforeOrderPrice,
         orderStatus: data.orderDto.orderStatus, // ! 주문상태
@@ -418,7 +431,7 @@ export async function getServerSideProps(ctx) {
         detailAddress: data.orderDto.detailAddress,
         request: data.orderDto.request,
         // package: data.orderDto.package
-        saveReward: data.orderDto.saveReward || 0, // ! 0915목 : 서버 데이터필요
+        saveReward: data.orderDto.saveReward || 0,
       },
       // savedRewardTotal:data.savedRewardTotal
     };
