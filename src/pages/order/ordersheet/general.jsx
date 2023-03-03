@@ -16,16 +16,11 @@ import {OrdersheetReward} from '/src/components/order/OrdersheetReward';
 import {OrdersheetMethodOfPayment} from '/src/components/order/OrdersheetMethodOfPayment';
 import {OrdersheetAmountOfPayment} from '/src/components/order/OrdersheetAmountOfPayment';
 import {userType} from '/store/TYPE/userAuthType';
-import {ORDER_STATES} from "/store/order-slice";
-import useDeviceState from "/util/hook/useDeviceState";
-import {cancelGeneralOrder} from "/util/func/order/cancelOrder";
 
 
 export default function GeneralOrderSheetPage() {
   const router = useRouter();
-  const ds = useDeviceState();
   const auth = useSelector((s) => s.auth);
-  const orderState = useSelector((state) => state.orderState);
   const USER_TYPE = auth.userType;
 
   const cart = useSelector((state) => state.cart);
@@ -38,31 +33,6 @@ export default function GeneralOrderSheetPage() {
     termsOfService: false,
     coupon: false,
   });
-  
-  
-  useEffect(() => {
-    
-    if(ds.isMobile) return; // ! PC ONLY => MOBILE 결제 시, 무조건 PG사로 REDIRECT
-    
-    if(orderState.orderState === ORDER_STATES.ORDERING && orderState.orderId){
-      console.log("window.addEventListener( 'beforeunload', ...);");
-      window.addEventListener( 'beforeunload',
-        cancelGeneralOrder.bind(null, orderState.orderId)
-        ,{once: true}
-      ); // ! {once: true} => 이벤트 단 한 번만 실행
-    }
-    
-    if(orderState.orderState === ORDER_STATES.EXIT_ORDER){
-      // ! 해당 IF문 내의 코드는 없어도 UNMOUNT 시점에 이벤트가 제거됨
-      //  그러나 불상사를 확실히 방지하기 위해, removeEventListener 중복 적용
-      console.log("window.removeEventListener( 'beforeunload', ...);");
-      window.removeEventListener( 'beforeunload', cancelGeneralOrder.bind(null, orderState.orderId))
-    }
-    return () => {
-      console.log("[ UNMOUNT ] window.removeEventListener( 'beforeunload', ...);");
-      window.removeEventListener( 'beforeunload', cancelGeneralOrder.bind(null, orderState.orderId));
-    };
-  },[ds.isMobile, orderState]);
   
   
 
