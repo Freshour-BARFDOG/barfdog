@@ -11,11 +11,13 @@ import Spinner from "../../atoms/Spinner";
 
 export const SubscribeItems = ({ itemList }) => {
   const [isLoading, setIsLoading] = useState( {cancelOrder: {}} );
+  const [submitted, setSubmitted] = useState( false );
   // console.log(itemList);
 
   const onCancelSubscribeOrder = useCallback(async (item) => {
-    if(!confirm("결제 전 주문을 결제취소처리 하시겠습니까?")) return;
-    
+    if(submitted) return console.error("이미 제출된 양식입니다.");
+    if(!confirm("'결제 전' 주문을 결제취소처리 하시겠습니까?")) return;
+    setSubmitted( true );
     
     const merchantUid = item.subscribeOrderDto.merchantUid;
     const orderId = item.subscribeOrderDto.orderId;
@@ -30,10 +32,10 @@ export const SubscribeItems = ({ itemList }) => {
       console.log(res);
       if ( res.isDone ) {
         alert(`결제취소처리가 완료되었습니다. \n주문번호: ${merchantUid}`);
-        window.location.reload();
       } else{
         alert(`결제취소처리에 실패하였습니다.`);
       }
+      window.location.reload();
       
     } catch (err) {
         alert(`결제취소 처리 중 오류가 발생하였습니다.\n 지속적으로 에러가 발생할 경우, 관리자에게 문의바랍니다.`);
@@ -46,7 +48,7 @@ export const SubscribeItems = ({ itemList }) => {
         }
       }))
     }
-  },[itemList]);
+  },[itemList, submitted]);
   
   return (
     <>
