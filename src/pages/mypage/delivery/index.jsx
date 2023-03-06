@@ -185,7 +185,7 @@ export default function DeliverInfoPage() {
                           <div className={s.col_5}>
                             {/* 운송장번호 연결 */}
                             <a
-                              href={`https://trace.goodsflow.com/VIEW/V1/whereis/BARFDOG/CJGLS/${item.deliveryDto?.deliveryNumber}`}
+                              href={`https://trace.goodsflow.com/VIEW/V1/whereis/${process.env.NEXT_PUBLIC_GOODSFLOW_SITECODE}/CJGLS/${item.deliveryDto?.deliveryNumber}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               onClick={onPopupHandler}
@@ -254,7 +254,7 @@ export default function DeliverInfoPage() {
                           <div className={`${s.col_5} ${s['btn-section']}`}>
                             {/* TODO 운송장번호 연결 */}
                             <a
-                              href={`https://trace.goodsflow.com/VIEW/V1/whereis/BARFDOG/CJGLS/${item.orderDeliveryDto.deliveryNumber}`}
+                              href={`https://trace.goodsflow.com/VIEW/V1/whereis/${process.env.NEXT_PUBLIC_GOODSFLOW_SITECODE}/CJGLS/${item.orderDeliveryDto.deliveryNumber}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               onClick={onPopupHandler}
