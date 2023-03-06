@@ -87,7 +87,7 @@ const ItemList = ({ item, sortableItemRef, selectedIdList, onSelectedItem }) => 
       <span>
         <a
           className={'overflow-x-scroll btn_link'}
-          href={`https://trace.goodsflow.com/VIEW/V1/whereis/BARFDOG/CJGLS/${DATA.deliveryNumber}`}
+          href={`https://trace.goodsflow.com/VIEW/V1/whereis/${process.env.NEXT_PUBLIC_GOODSFLOW_SITECODE}/CJGLS/${DATA.deliveryNumber}`}
           target="_blank"
           rel={'noreferrer'}
           onClick={onDeliveryPopupHandler}

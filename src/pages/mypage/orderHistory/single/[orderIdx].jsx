@@ -345,7 +345,7 @@ export default function SingleItem_OrderHistoryPage({ data }) {
                     </li>
                     {data?.orderDto.deliveryNumber && <li>
                       <a
-                        href={`https://trace.goodsflow.com/VIEW/V1/whereis/BARFDOG/CJGLS/${data?.orderDto.deliveryNumber}`}
+                        href={`https://trace.goodsflow.com/VIEW/V1/whereis/${process.env.NEXT_PUBLIC_GOODSFLOW_SITECODE}/CJGLS/${data?.orderDto.deliveryNumber}`}
                         target="_blank"
                         rel={'noreferrer'}
                         onClick={onPopupHandler}
