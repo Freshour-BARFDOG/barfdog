@@ -233,6 +233,74 @@ section.pageline { padding-top : rem(40)}
 
 @media (max-width: rem(600)) {
 
+
+  .user_recommand{
+    margin-top: rem(20);
+    display: grid;
+    grid: 
+    "recommand_code recommand_code"
+    "sendMessage copyLink"/1fr 1fr
+    ;
+    border: rem(1) solid #ddd;
+    .recommand_code{
+      grid-column: 1/span 2;
+      grid-row: 1/span 1;
+      display: flex;
+      flex-direction: column;
+      row-gap: rem(12);
+      border-bottom: rem(1) solid #ddd;
+      height: rem(88);
+      background-color: #F5F5F5;
+      span{
+        font-size: rem(14);
+        color: rgba(99, 99, 99, 0.85);
+        font-weight: 600;
+        line-height: 100%;
+      }
+      .code{
+        font-size: rem(32);
+        color: #202020;
+        font-weight: 500;
+        line-height: 100%;
+      }
+    }
+
+    .sendMessage{
+      grid-column: 1/span 1;
+      grid-row: 2/span 1;
+      border-right: rem(1) solid #ddd;
+      height: rem(44);
+      button{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        column-gap: rem(4);
+        color: rgba(99, 99, 99, 0.85);
+        font-size: rem(14);
+        font-weight: 500;
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .copyLink{
+      grid-column: 2/span 1;
+      grid-row: 2/span 1;
+      height: rem(44);
+
+      button{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        column-gap: rem(4);
+        color: rgba(99, 99, 99, 0.85);
+        font-size: rem(14);
+        font-weight: 500;
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
   
   .title {
     display: none;

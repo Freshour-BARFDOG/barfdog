@@ -354,7 +354,7 @@ function CreateMainBannerPage() {
                     <label className="inp_wrap file" htmlFor="upload-image-mobile">
                       <PreviewImage 
                         file={file_mobile.file} 
-                        ratio={600 / 400} 
+                        ratio={600 / 600} 
                         className={`${s["admin-preview-image"]} ${s['mobile']}`}
                       />
                       <div className="inp_box">
@@ -375,7 +375,7 @@ function CreateMainBannerPage() {
                         )}
                       </div>
                     </label>
-                    <div className="desc">* 모바일 이미지 권장사이즈: 600 x 400</div>
+                    <div className="desc">* 모바일 이미지 권장사이즈: 600 x 600</div>
                   </div>
                 </div>
                 <div className="input_row multipleLines">

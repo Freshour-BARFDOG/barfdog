@@ -142,13 +142,13 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                       )}
                     </figure>
                     <figcaption className={s['cont-right']}>
-                      <p className={s.innerRow}>
+                      <div className={s.innerRow}>
                         <span className={s.dogName}>
                           {data.dog.dogName}
                           <em className={s.unit}>견주</em>
                         </span>
-                      </p>
-                      <p className={s.innerRow}>
+                      </div>
+                      <div className={s.innerRow}>
                         <div className={'inline-flex-box gap-4'} onClick={() => openGradePopupHandler(isMobile)}>
                           <button type={'button'} className={s.userName}>
                             {data.name}
@@ -157,10 +157,10 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                           <i className={s.grade}>{data.grade}</i>
                         </div>
                        
-                      </p>
-                      <p className={s.innerRow}>
+                      </div>
+                      <div className={s.innerRow}>
                         <span className={s.email}>{data.email}</span>
-                      </p>
+                      </div>
                     </figcaption>
                   </div>
                   <div className={s.dashboard}>

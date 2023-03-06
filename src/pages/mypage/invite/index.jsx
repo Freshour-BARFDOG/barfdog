@@ -15,7 +15,15 @@ import { rewardStatusType } from '/store/TYPE/rewardStatusType';
 import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 import {useModalContext} from "/store/modal-context";
 
-export default function InvitePage() {
+import modal_s from '/src/components/modal/modal.module.scss';
+import { IoMdLink, IoMdMail } from 'react-icons/io';
+import Modal_sendPhoneMessage from '/src/components/modal/Modal_sendPhoneMessage';
+import { useSelector } from 'react-redux';
+import useDeviceState from '/util/hook/useDeviceState';
+import Modal_alert from '/src/components/modal/Modal_alert';
+
+
+export default function InvitePage({ className, ...props }) {
   const searchApiUrl = '/api/rewards/invite'; // 친구추천 적립금 내역 조회
   const searchPageSize = 10;
   
@@ -29,6 +37,16 @@ export default function InvitePage() {
     joinedCount: null, // 본인의 추천코드로 친구가 가입한 수
     orderedCount: null, // 본인의 추천코드로 친구가 주문한 수
     totalRewards: null,
+  });
+
+  const isMobile = useDeviceState().isMobile;
+  const auth = useSelector((s) => s.auth);
+  const data = auth.userInfo;
+  
+  const [modalMessage, setModalMessage] = useState({});
+  const [activeModal, setActiveModal] = useState({
+    alert: false,
+    message: false,
   });
   
   
@@ -128,6 +146,58 @@ export default function InvitePage() {
   
   // console.log(itemList);
 
+  const onCopyToClipboard = (value) => {
+    let hostname;
+    if (typeof window !== 'undefined') {
+      hostname = window.location.hostname;
+    }
+    const copiedValue = value || hostname;
+    const tempElem = document.createElement('textarea');
+    tempElem.value = copiedValue;
+    tempElem.setAttribute('readonly', '');
+    tempElem.style.position = 'absolute';
+    tempElem.style.left = '-9999px';
+    document.body.append(tempElem);
+    tempElem.select();
+    const returnValue = document.execCommand('copy');
+    if (!returnValue) {
+      throw new Error('copied nothing');
+    }
+    document.body.removeChild(tempElem);
+    setActiveModal((prev) => ({
+      ...prev,
+      alert: true,
+    }));
+    setModalMessage((prevState) => ({
+      ...prevState,
+      alert: `클립보드에 추천코드가 복사되었습니다. \n추천코드: ${copiedValue}`,
+    }));
+  };
+
+  const onCopyUserRecommendCode = () => {
+    const userRecommendCode = data.recommendCode;
+    onCopyToClipboard(userRecommendCode);
+  };
+
+  const onShowSendMessageModal = () => {
+    setActiveModal((prev) => ({
+      ...prev,
+      message: true,
+    }));
+  };
+
+  const onHideGlobalAlert = () => {
+    setActiveModal((prev) => ({
+      ...prev,
+      alert: false,
+    }));
+    setModalMessage((prev) => ({
+      ...prev,
+      message: '',
+    }));
+  };
+
+
   return (
     <>
       <MetaTitle title="마이페이지 친구초대" />
@@ -138,6 +208,26 @@ export default function InvitePage() {
               <p>친구초대</p>
               {isLoading.fetching && <Spinner />}
             </section>
+            {isMobile && 
+            <div className={`${s.info_row} ${s.user_recommand}`}>
+              <div className={`${s.recommand_code} ${s.info_col} flex-wrap`}>
+                <span>나의 추천코드</span>
+                <span className={s.code}>{data.recommendCode}</span>
+              </div>
+              <div className={`${s.sendMessage} ${s.info_col} flex-wrap`}>
+                <button type="button" onClick={onShowSendMessageModal}>
+                  <IoMdMail />
+                  문자보내기
+                </button>
+              </div>
+              <div className={`${s.copyLink} ${s.info_col} flex-wrap`}>
+                <button type="button" onClick={onCopyUserRecommendCode}>
+                  <IoMdLink />
+                  코드복사
+                </button>
+              </div>
+            </div>
+            }
 
             <section className={s.text}>
               <div>
@@ -255,6 +345,22 @@ export default function InvitePage() {
         </Wrapper>
       </Layout>
       {hasAlert && <Modal_global_alert background />}
+
+      
+      {activeModal.message && (
+        <Modal_sendPhoneMessage
+          id={'message'}
+          setModalState={setActiveModal}
+          data={data}
+        />
+      )}
+      {activeModal.alert && (
+        <Modal_alert
+          onClick={onHideGlobalAlert}
+          text={modalMessage.alert}
+          className={modal_s['on-dashboard']}
+        />
+      )}
     </>
   );
 }
