@@ -10,6 +10,7 @@ import {getDataSSR, getTokenFromServerSide} from '/src/pages/api/reqData';
 import {userType} from '/store/TYPE/userAuthType';
 import React from "react";
 import {AlertLayer} from "@src/layers/AlertLayer";
+import SiteMaintenance from "/src/pages/siteMaintenance";
 
 // Server Only File (client에서 사용하는 로직 사용불가)
 // Next JS : 최초실행
@@ -26,15 +27,16 @@ export default function MyApp({ Component, pageProps, CustomProps }) {
   return (
     <GAProvider>
       <Provider store={store}>
-        <AuthInterceptor CustomProps={CustomProps}>
-          <ChannelTalkProvider>
-            <ModalContextProvider>
-                <AlertLayer props={CustomProps}>
-                  <Component {...pageProps} />
-                </AlertLayer>
-            </ModalContextProvider>
-          </ChannelTalkProvider>
-        </AuthInterceptor>
+        <SiteMaintenance/>
+        {/*<AuthInterceptor CustomProps={CustomProps}>*/}
+        {/*  <ChannelTalkProvider>*/}
+        {/*    <ModalContextProvider>*/}
+        {/*        <AlertLayer props={CustomProps}>*/}
+        {/*          <Component {...pageProps} />*/}
+        {/*        </AlertLayer>*/}
+        {/*    </ModalContextProvider>*/}
+        {/*  </ChannelTalkProvider>*/}
+        {/*</AuthInterceptor>*/}
       </Provider>
     </GAProvider>
   );
