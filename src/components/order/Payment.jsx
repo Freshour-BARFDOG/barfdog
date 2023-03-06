@@ -86,12 +86,15 @@ export function Payment({
 
     if (!isPassed) return alert('유효하지 않은 항목이 있습니다.');
     // console.log(isPassed);
-    // 결제 로직을 시작한다.
+    // 결제 로직 시작
+    
     setIsSubmitted(true);
     await startPayment();
   };
 
   async function startPayment(){
+    
+    const {discountTotal, discountCoupon, overDiscountCoupon, paymentPrice, discountGrade} = calcOrdersheetPrices(form, orderType);
 
     const body = orderType === 'general'?{
       orderItemDtoList: form.orderItemDtoList?.map((item) => ({
@@ -104,7 +107,7 @@ export function Payment({
           })) || [],
         memberCouponId: item.memberCouponId, // 사용한 쿠폰 ID // 데이터뿌릴떄
         discountAmount: item.discountAmount, // 쿠폰할인 총계
-        finalPrice: item.orderLinePrice,
+        finalPrice: item.orderLinePrice, // ! 주문금액 = (상품 원가-상품 기본할인)*상품수량-쿠폰할인금액
       })),
       deliveryDto: {
         name: form.deliveryDto.name, // 수령자 이름
@@ -117,10 +120,11 @@ export function Payment({
       deliveryId:form.deliveryId || null, // 묶음 배송 할 배송 id . 묶음배송 아닐 경우 null
       orderPrice: form.orderPrice, //  주문 상품 총 가격 (할인 적용 전)
       deliveryPrice: form.deliveryPrice, // 배송비
-      discountTotal: calcOrdersheetPrices(form, 'general').discountTotal, // 총 할인 합계    ! 쿠폰할인금 적용
+      discountTotal: discountTotal, // 총 할인 합계    ! 쿠폰할인금 적용
       discountReward: Number(form.discountReward), // 사용할 적립금
-      discountCoupon: calcOrdersheetPrices(form, 'general').discountCoupon, // 쿠폰 적용으로 인한 할인금 ! coupon할인금 적용
-      paymentPrice: calcOrdersheetPrices(form, 'general').paymentPrice, // 최종 결제 금액 ! coupon할인금 적용
+      discountCoupon: discountCoupon, // 쿠폰 적용으로 인한 할인금 ! coupon할인금 적용
+      overDiscount:  overDiscountCoupon, // 초과할인 금액
+      paymentPrice: paymentPrice, // 최종 결제 금액
       paymentMethod: form.paymentMethod, // 결제방법  [CREDIT_CARD, NAVER_PAY, KAKAO_PAY]
       // nextDeliveryDate: form.nextDeliveryDate, // ! 일반주문 시, request field에 없는 값.
       agreePrivacy: form.agreePrivacy, // 개인정보 제공 동의
@@ -137,19 +141,20 @@ export function Payment({
       },
       orderPrice: form.orderPrice, //  ! 주문 상품 원가 = nextPaymentPrice (등급 할인 적용x / 플랜변경, 레시피, 레시피 그램 등이 반영된 "제품원가"에 해당함)
       deliveryPrice: form.deliveryPrice, // 배송비
-      discountTotal: calcOrdersheetPrices(form, 'subscribe').discountTotal, // 총 할인 합계    ! 쿠폰할인금 , 적립금, 등급할인
+      discountTotal: discountTotal, // 총 할인 합계    ! 쿠폰할인금 적용
       discountReward: Number(form.discountReward), // 사용할 적립금
-      discountCoupon: calcOrdersheetPrices(form, 'subscribe').discountCoupon, // 쿠폰 적용으로 인한 할인금
-      discountGrade: calcOrdersheetPrices(form, 'subscribe').discountGrade, // 등급할인
-      paymentPrice: calcOrdersheetPrices(form, 'subscribe').paymentPrice, // 최종 결제 금액
+      discountCoupon: discountCoupon, // 쿠폰 적용으로 인한 할인금 ! coupon할인금 적용
+      discountGrade: discountGrade, // 등급할인
+      overDiscount:  overDiscountCoupon, // 초과할인 금액
+      paymentPrice: paymentPrice, // 최종 결제 금액
       paymentMethod: form.paymentMethod, // 결제방법  [CREDIT_CARD, NAVER_PAY, KAKAO_PAY]
       nextDeliveryDate: form.nextDeliveryDate, // 배송 예정일 'yyyy-MM-dd', 첫 결제 배송날짜는 프론트에서 넘어온 값으로 저장함
       agreePrivacy: form.agreePrivacy, // 개인정보 제공 동의
       brochure: form.brochure, // 브로슈어 수령여부
     };
 
-    console.log('request body: ',body);
-    
+    console.log('request body: ',body, calcOrdersheetPrices(form, orderType) );
+   
     try {
       setIsLoading((prevState) => ({
         ...prevState,
@@ -159,6 +164,8 @@ export function Payment({
       // send DATA to api server after successful payment
       const apiUrl = orderType === 'general' ? `/api/orders/general` : `/api/orders/subscribe/${router.query.subscribeId}`;
       const res = await postObjData(apiUrl, body);
+      console.log(res);
+  
       
       if (res.isDone) {
         if( orderType === 'general'){

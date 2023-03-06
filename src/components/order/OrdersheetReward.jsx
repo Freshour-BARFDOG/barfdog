@@ -1,69 +1,64 @@
 import s from '../../pages/order/ordersheet/ordersheet.module.scss';
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import filter_emptyValue from '/util/func/filter_emptyValue';
 import filter_onlyNumber from '/util/func/filter_onlyNumber';
 import ErrorMessage from '../atoms/ErrorMessage';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import {calcOrdersheetPrices} from "./calcOrdersheetPrices";
+import {IAMPORT_MIN_PAYMENT_PRICE} from "../../../store/TYPE/order/priceType";
 
 export const OrdersheetReward = ({ id, info, form, setForm, formErrors, setFormErrors, orderType='general' }) => {
   
-
-  const onInputChangeHandler = (e) => {
-    // 본인의 사용가능한 금액보다 큰지 확인한다.
-    const input = e.currentTarget;
-    const { value } = input;
-    let enteredReward = value;
-    const availableReward = info.reward;
-  
-
-    enteredReward = filter_emptyValue(value);
-    enteredReward = filter_onlyNumber(enteredReward);
-  
-
-    // ! 0916금 적립금 사용금액 제한 해제 => 최종 결제 시에 최소결제금액 100원만 validation처리
+  useEffect( () => {
+   
     
-    // const generalLimitedPrice = form.orderPrice - form.discountCoupon;
-    // const subscribeLimitedPrice = info.subscribeDto?.nextPaymentPrice - form.selfInfo?.discountGrade;
-    // const minPaymentPrice = 100;
-    // const limitedPrice =( orderType === 'general' ? generalLimitedPrice : subscribeLimitedPrice) - minPaymentPrice;
-    //
-    // console.log(generalLimitedPrice)
-    // console.log(limitedPrice)
-
-    // if(enteredReward > limitedPrice) {
-    //   enteredReward = 0;
-    //   error = '사용가능한 금액을 초과였습니다.'
-    // } else {
-    //   error = ''
-    // }
-
-    
-    let error='';
-    const numberTypeReward = Number(filter_onlyNumber(enteredReward));
-
+    let error= "";
+    const usedReward = Number(form[id]);
+    const availableMaxDiscount = calcOrdersheetPrices(form, orderType)?.availableMaxDiscount;
+    const userTotalReward = info.reward;
   
-    if(availableReward < 0 || numberTypeReward > availableReward){
-      error ='사용가능 범위를 넘었습니다.';
-      enteredReward= 0;
+    const hasRewardValue  = form[id] && form[id] !== 0;
+    const initializeRewardValue = availableMaxDiscount < 0 && hasRewardValue;
+    if(userTotalReward < 0 || usedReward > userTotalReward || initializeRewardValue ){
+      error = initializeRewardValue ? `최소 결제금액(${IAMPORT_MIN_PAYMENT_PRICE}원) 이상의 적립금 할인을 적용할 수 없습니다.` : "보유 적립금을 초과하여 사용할 수 없습니다.";
+      alert( error );
+      setForm((prevState) => ({
+        ...prevState,
+        [id]: 0,
+      }));
+    } else {
+      error ='';
     }
+    
+    
     setFormErrors(prevState=>({
         ...prevState,
         [id] : error
       })
-    )
+    );
+    // console.log("* rewardDiscount: ", form[id], "\n* availableMaxReward: ",availableMaxReward, "\nhasRewardValue: ", hasRewardValue) ;
     
+  }, [form[id]] );
+  
+  
+  
+  const onChangeRewardHandler = (e) => {
+    const { value } = e.currentTarget;
+    let enteredReward = filter_emptyValue(value);
+    enteredReward = filter_onlyNumber(enteredReward);
     
     setForm((prevState) => ({
       ...prevState,
       [id]: enteredReward,
     }));
+    
   };
 
   const onClickDisCountReward = () => {
+    const discountAmount = calcOrdersheetPrices( form, orderType )?.availableMaxDiscount;
     setForm((prevState) => ({
       ...prevState,
-      [id]: calcOrdersheetPrices(form, orderType).availableMaxReward,
+      [id]:  discountAmount > 0 ? discountAmount : 0,
     }));
   };
   
@@ -83,7 +78,7 @@ export const OrdersheetReward = ({ id, info, form, setForm, formErrors, setFormE
                 className={'text-align-right'}
                 data-input-type={'currency, number'}
                 value={transformLocalCurrency(form.discountReward) || 0}
-                onChange={onInputChangeHandler}
+                onChange={onChangeRewardHandler}
               />
               {formErrors.discountReward && <ErrorMessage>{formErrors.discountReward}</ErrorMessage>}
             </div>
@@ -91,7 +86,7 @@ export const OrdersheetReward = ({ id, info, form, setForm, formErrors, setFormE
               모두 사용
             </button>
             <span className={s.point}>
-              <p>보유 포인트</p> {transformLocalCurrency(info.reward)+' P'}
+              <p>보유 적립금</p> {transformLocalCurrency(info.reward)+' P'}
             </span>
           </div>
         </div>

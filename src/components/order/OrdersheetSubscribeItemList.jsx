@@ -3,6 +3,8 @@ import Spinner from '/src/components/atoms/Spinner';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import React from 'react';
 import {subscribePlanType} from "/store/TYPE/subscribePlanType";
+import ErrorMessage from "../atoms/ErrorMessage";
+import AmdinErrorMessage from "../atoms/AmdinErrorMessage";
 
 
 export const OrdersheetSubscribeItemList = ({
@@ -15,44 +17,21 @@ export const OrdersheetSubscribeItemList = ({
 }) => {
   const onCancleCoupon = (e) => {
     const btn = e.currentTarget;
-    const itemId = Number(btn.dataset.itemId);
     const appliedCouponId = Number(btn.dataset.appliedCouponId);
-
-    if (orderType === 'general') {
-      setForm((prevState) => ({
-        ...prevState,
-        orderItemDtoList: prevState.orderItemDtoList.map((itemObj) => {
-          const updatedState = {
-            ...itemObj,
-            memberCouponId: null,
-            discountAmount: 0,
-          };
-          return itemObj.itemId === Number(itemId) ? updatedState : itemObj;
-        }),
-        coupons: prevState.coupons.map((coupon) => {
-          return coupon.memberCouponId === appliedCouponId
-            ? {
-                ...coupon,
-                remaining: ++coupon.remaining,
-              }
-            : coupon;
-        }),
-      }));
-    } else if (orderType === 'subscribe') {
-      setForm((prevState) => ({
-        ...prevState,
-        memberCouponId: null,
-        discountCoupon: 0,
-        coupons: prevState.coupons.map((coupon) => {
-          return coupon.memberCouponId === appliedCouponId
-            ? {
-                ...coupon,
-                remaining: ++coupon.remaining,
-              }
-            : coupon;
-        }),
-      }));
-    }
+  
+    setForm((prevState) => ({
+      ...prevState,
+      memberCouponId: null,
+      discountCoupon: 0,
+      coupons: prevState.coupons.map((coupon) => {
+        return coupon.memberCouponId === appliedCouponId
+          ? {
+            ...coupon,
+            remaining: ++coupon.remaining,
+          }
+          : coupon;
+      }),
+    }));
   };
 
   const onMouseEnterHandler = (e) => {
@@ -82,7 +61,7 @@ export const OrdersheetSubscribeItemList = ({
         </div>
         <ul className={`${s['item-container']} ${s.subscribe}`}>
           {isLoading.item ? (
-            <Spinner />
+            <ErrorMessage loading={<Spinner />} fullWidth={true}/>
           ) : (
             <li className={s.flex_box}>
               <div className={s.info_col}>

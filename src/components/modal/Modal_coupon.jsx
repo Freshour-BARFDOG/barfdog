@@ -1,5 +1,5 @@
 import s from './modal_coupon.module.scss';
-import React, { useState } from 'react';
+import React, {useCallback, useState} from 'react';
 import ModalWrapper from './ModalWrapper';
 import transformDate from '/util/func/transformDate';
 import { discountUnitType } from '/store/TYPE/discountUnitType';
@@ -7,30 +7,77 @@ import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import {calcOrdersheetPrices} from "../order/calcOrdersheetPrices";
 import EmptyMessage from "../atoms/AmdinErrorMessage";
 
-/* availableMaxDiscount: 적용가능 최대 할인 금액
- * availableMinPrice : 사용가능한 최소 물품 가격
- *
- * */
-export const Modal_coupon = ({ onModalActive, data, setForm, orderType ='general' }) => {
+export const Modal_coupon = ({ onModalActive, itemInfo,  form, setForm, orderType ='general' }) => {
   
+  const [selectedRadioInfo, setSelectedRadioInfo] = useState(null);
   
   // Selected Item Info
   let selectedItemPrice;
-  let selectedItemId;
-  let selectedItemInfo;
+  const selectedItemId = Number(itemInfo.id);
+  
   if(orderType=== 'general'){
-    selectedItemId = Number(data.selectedItemId);
-    selectedItemInfo = data.orderItemDtoList.filter(
+    selectedItemPrice = form.orderItemDtoList.filter(
       (item) => item.itemId === selectedItemId,
-    )[0];
-    selectedItemPrice = selectedItemInfo.orderLinePrice;
+    )[0].orderLinePrice;
   }else if ( orderType === 'subscribe'){
-    selectedItemId = Number(data.selectedItemInfo.id);
-    selectedItemPrice = data.selectedItemInfo.nextPaymentPrice
+    selectedItemPrice = itemInfo.nextPaymentPrice
   }
   
-  const [selectedRadioInfo, setSelectedRadioInfo] = useState(null);
+  const onChangeHandler = useCallback((e) => {
+    const radio = e.currentTarget;
+    const radioId = radio.id;
+    const couponId = Number(radio.dataset.couponId);
+    const couponDiscountAmount = Number(radio.dataset.discountAmount);
+    const availableMaxDiscount = calcOrdersheetPrices(form, orderType)?.availableMaxDiscount;
+    if(availableMaxDiscount <= 0){
+      return alert("최소결제금액에 도달하여, 할인 쿠폰을 적용할 수 없습니다.")
+    }
+    setSelectedRadioInfo((prevState) => ({
+      ...prevState,
+      id: radioId,
+      couponId,
+      couponDiscountAmount
+    }));
+  },[form, orderType]);
 
+  const onApplyingCoupon = useCallback(
+    () => {
+      if(!selectedRadioInfo) return alert('선택된 쿠폰이 없습니다.');
+      const { couponId, couponDiscountAmount} = selectedRadioInfo;
+    
+      if(orderType=== 'general') {
+        setForm(prevState => ({
+          ...prevState,
+          orderItemDtoList: prevState.orderItemDtoList.map((item)=>{
+            const updatedState = {
+              ...item,
+              memberCouponId: couponId,
+              discountAmount: couponDiscountAmount,
+              orderLinePrice: item.orderLinePrice - couponDiscountAmount
+            }
+            return item.itemId ===  selectedItemId ? updatedState : item
+          }),
+          coupons: prevState.coupons.map((coupon)=>coupon.memberCouponId === couponId ? {
+            ...coupon,
+            remaining: --coupon.remaining
+          } : coupon)
+        }));
+      } else if (orderType === 'subscribe') {
+        setForm(prevState => ({
+          ...prevState,
+          memberCouponId: couponId,
+          discountCoupon: couponDiscountAmount,
+          coupons: prevState.coupons.map((coupon)=>coupon.memberCouponId === couponId ? {
+            ...coupon,
+            remaining: --coupon.remaining
+          } : coupon),
+        }))
+      }
+      onHideModal();
+    },
+    [selectedRadioInfo, orderType, selectedItemId],
+  );
+  
   
   const onHideModal = () => {
     onModalActive((prevState) => ({
@@ -39,66 +86,10 @@ export const Modal_coupon = ({ onModalActive, data, setForm, orderType ='general
     }));
   };
   
-  
-
-
-  const onChangeHandler = (e) => {
-    const radio = e.currentTarget;
-    const radioId = radio.id;
-    const couponId = radio.dataset.couponId;
-    const itemId = radio.dataset.itemId;
-    const discountAmount = radio.dataset.discountAmount;
-    setSelectedRadioInfo((prevState) => ({
-      ...prevState,
-      id: radioId,
-      couponId,
-      itemId,
-      discountAmount
-    }));
-  };
-
-  
-  const onApplyingCoupon = () => {
-    if(!selectedRadioInfo) return alert('선택된 쿠폰이 없습니다.');
-    const { couponId, itemId, discountAmount} = selectedRadioInfo;
-    // console.log(couponId, itemId)
-    if(orderType=== 'general') {
-      setForm(prevState => ({
-        ...prevState,
-        orderItemDtoList: prevState.orderItemDtoList.map((itemObj)=>{
-          const updatedState = {
-            ...itemObj,
-            memberCouponId: Number(couponId),
-            discountAmount: Number(discountAmount)
-          }
-          return itemObj.itemId ===  Number(itemId) ? updatedState : itemObj
-        }),
-        coupons: prevState.coupons.map((coupon)=>coupon.memberCouponId === Number(couponId) ? {
-          ...coupon,
-          remaining: --coupon.remaining
-        } : coupon)
-      }));
-    } else if (orderType === 'subscribe') {
-      console.log('쿠폰 할인 시작')
-      setForm(prevState => ({
-        ...prevState,
-        memberCouponId: Number(couponId),
-        discountCoupon: Number(discountAmount),
-        coupons: prevState.coupons.map((coupon)=>coupon.memberCouponId === Number(couponId) ? {
-          ...coupon,
-          remaining: --coupon.remaining
-        } : coupon),
-      }))
-    }
-
-    onHideModal();
-    
-    
-  };
-  
-
-  if (!Object.keys(data).length)
+  if (!Object.keys(form).length)
     return console.error('Faild to render because of empty data props');
+  
+  
 
   return (
     <>
@@ -123,9 +114,9 @@ export const Modal_coupon = ({ onModalActive, data, setForm, orderType ='general
             </div>
           </div>
           <div className={s.content_box}>
-            {data.coupons?.length > 0
-              ? data.coupons.filter(item=>{
-                
+            {form.coupons?.length === 0
+              ? <EmptyMessage text={'사용가능한 쿠폰이 없습니다.'} />
+              : form.coupons.filter(item=>{
                 // 1. SET Coupon Info
                 item.couponId = `coupon-${item.memberCouponId}`;
                 let couponDiscountAmount = 0;
@@ -141,7 +132,7 @@ export const Modal_coupon = ({ onModalActive, data, setForm, orderType ='general
                 item.couponDiscountInfo = couponDiscountInfo
                 item.couponDiscountAmount = couponDiscountAmount
                 // console.log(couponDiscountAmount)
-                
+    
                 // STEP 2. Validation
                 let valid = false;
                 if(item.remaining > 0 && selectedItemPrice >= item.availableMinPrice && couponDiscountAmount <= item.availableMaxDiscount) {
@@ -149,7 +140,7 @@ export const Modal_coupon = ({ onModalActive, data, setForm, orderType ='general
                   valid = true;
                 }
                 return valid && item;
-                
+    
               }).map((item) =>(
                 <label
                   key={item.couponId}
@@ -160,7 +151,6 @@ export const Modal_coupon = ({ onModalActive, data, setForm, orderType ='general
                         <input
                           id={item.couponId}
                           data-coupon-id={item.memberCouponId}
-                          data-item-id={selectedItemId}
                           data-discount-amount={item.couponDiscountAmount}
                           type="radio"
                           name={'coupon'}
@@ -168,7 +158,7 @@ export const Modal_coupon = ({ onModalActive, data, setForm, orderType ='general
                           checked={selectedRadioInfo?.id === item.couponId}
                         />
                       </span>
-                      
+      
                   <span className={s.name}>{`${item.name} (${item.couponDiscountInfo})`}</span>
                   <span className={s.count}>{item.remaining}개</span>
                   <span className={s.date}>{transformDate(item.expiredDate)}</span>
@@ -176,10 +166,8 @@ export const Modal_coupon = ({ onModalActive, data, setForm, orderType ='general
                         {transformLocalCurrency(item.couponDiscountAmount)}원 할인
                       </span>
                 </label>
-              ))
-              : <EmptyMessage text={'사용가능한 쿠폰이 없습니다.'} />}
+              ))}
           </div>
-
           <div className={s.btn_box}>
             <button type={'button'} className={s.cancle_btn} onClick={onHideModal}>
               취소

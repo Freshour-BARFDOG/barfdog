@@ -68,7 +68,7 @@ export default function GeneralOrderSheetPage() {
         const postItemInfoApiUrl = `/api/orders/sheet/general`;
         const res = await postUserObjData(postItemInfoApiUrl, requestBody);
         // 요청 파라미터가 복잡하여 GET이 아닌 POST 사용
-        console.log(res);
+        // console.log(res);
         if (res.status !== 200) {
           alert('상품 정보를 확인할 수 없습니다.');
           return window.location.href = '/cart';
@@ -118,6 +118,7 @@ export default function GeneralOrderSheetPage() {
         const initForm = {
           selfInfo:{
             reward: calcedReward,  // ! CLIENT ONLY
+            discountGrade: 0, // 일반주문일 경우, 등급할인 없음
           },
           coupons: //////////// ! DUMMY DATA
             // DUMMY_MEMEBER_COUPON_LIST ||
@@ -161,6 +162,7 @@ export default function GeneralOrderSheetPage() {
           discountTotal: 0, // 총 할인 합계
           discountReward: 0, // 사용할 적립금
           discountCoupon: 0, // 쿠폰 적용으로 인한 할인금
+          overDiscount: 0, // 초과할인금 (23.02 바프독측 요구사항: 초과할인존재 시, 최소금액 결제 기능)
           paymentPrice: 0, // 최종 결제 금액
           paymentMethod: null, // 결제방법  [CREDIT_CARD, NAVER_PAY, KAKAO_PAY]
           agreePrivacy: false, // 개인정보 제공 동의
@@ -169,7 +171,6 @@ export default function GeneralOrderSheetPage() {
             .map((item) => item.orderLinePrice)
             .reduce((acc, cur) => acc + cur), //  주문 상품 총 가격 ( 주문금액 -쿠폰할인 -적립금)
         };
-        console.log(initForm)
         setInfo(initInfo);
         setForm(initForm);
       } catch (err) {
@@ -183,7 +184,6 @@ export default function GeneralOrderSheetPage() {
     })();
   }, [cart]);
 
-  console.log(info);
   const onActivleModalHandler = (e) => {
     const button = e.currentTarget;
     const modalType = button.dataset.modalType;
@@ -201,7 +201,6 @@ export default function GeneralOrderSheetPage() {
   //    > 이때, Shop Item Detail페이지에서 가져온 정보 초기화되어, 서버에서 데이터 가져올 수 없음)
   if (!info || !USER_TYPE || USER_TYPE === userType.NON_MEMBER) return;
 
-  
 
   return (
     <>
@@ -267,8 +266,9 @@ export default function GeneralOrderSheetPage() {
       )}
       {activeModal.coupons && (
         <Modal_coupon
-          data={{ selectedItemId: selectedItemId, ...form }}
           onModalActive={setActiveModal}
+          itemInfo={{id: selectedItemId}}
+          form={form}
           setForm={setForm}
         />
       )}

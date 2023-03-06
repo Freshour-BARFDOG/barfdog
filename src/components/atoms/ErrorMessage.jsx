@@ -6,14 +6,17 @@ import rem from '/util/func/rem';
 const ErrorMessageWrap = styled.pre`
   font-size: ${(props) => props.fontSize ? props.fontSize : rem(13)} !important;
   color: ${(props) => props.valid ? `var(--color-checked)` : props.style?.color || `var(--color-main)`};
-  display:inline-block;
+  display:${props => props.fullWidth ? "grid" : "inline-block"};
+  padding: ${rem(30)};
   cursor: default;
 `;
 
 
 
-function ErrorMessage({ children, fontSize, valid, ...props }) {
-  return <ErrorMessageWrap className='errorMSG' fontSize={fontSize} valid={valid} {...props}>{children}</ErrorMessageWrap>;
+function ErrorMessage({ children, fontSize, valid, loading, fullWidth, ...props }) {
+  return <ErrorMessageWrap className='errorMSG' fontSize={fontSize} valid={valid} fullWidth={fullWidth} {...props}>
+    {loading || children}
+  </ErrorMessageWrap>;
 }
 
 export default ErrorMessage;

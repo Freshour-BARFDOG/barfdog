@@ -1,9 +1,10 @@
 import s from '/src/pages/order/ordersheet/ordersheet.module.scss';
-import React from 'react';
+import React, {useCallback, useMemo} from 'react';
 import PureCheckbox from '/src/components/atoms/PureCheckbox';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
-import { calcOrdersheetPrices } from './calcOrdersheetPrices';
+import {calcOrdersheetPrices} from './calcOrdersheetPrices';
+import transformClearLocalCurrency from "/util/func/transformClearLocalCurrency";
 
 export const OrdersheetAmountOfPayment = ({
   info,
@@ -13,6 +14,11 @@ export const OrdersheetAmountOfPayment = ({
   formErrors,
   orderType = 'general',
 }) => {
+  
+  const calcResult = useCallback(calcOrdersheetPrices(form, orderType), [form, orderType]);
+  const originalItemDiscount = useMemo(() => orderType === 'general'
+    ? info.totalOriginalPrice - info.totalOrderPrice
+    : info.subscribeDto?.originPrice - info.subscribeDto?.nextPaymentPrice,[info]);
   return (
     <>
       <section className={s.payment}>
@@ -42,8 +48,8 @@ export const OrdersheetAmountOfPayment = ({
 
         <div className={s.flex_box3}>
           <span>상품 할인</span>
-          <span className={'pointColor'}>
-            -
+          <span className={originalItemDiscount > 0 ? 'pointColor' : ''}>
+            { originalItemDiscount > 0 && "-"}&nbsp;
             {transformLocalCurrency(
               orderType === 'general'
                 ? info.totalOriginalPrice - info.totalOrderPrice
@@ -55,27 +61,42 @@ export const OrdersheetAmountOfPayment = ({
         </div>
 
         <hr />
-
-        <div className={s.flex_box4}>
-          <span>쿠폰할인금액</span>
-          <span>
-            {calcOrdersheetPrices(form, orderType).discountCoupon > 0 && '-'}
-            {transformLocalCurrency(calcOrdersheetPrices(form, orderType).discountCoupon)}원
-          </span>
-        </div>
-        {info.subscribeDto && (
+  
+  
+       
           <div className={s.flex_box4}>
-            <span>등급할인</span>
-            <span>
+            <span>등급 할인</span>
+            {orderType === 'general'
+              ? <span style={{fontSize: "11px"}}>일반결제 미적용</span>
+              : info.subscribeDto && <span>
               {info.subscribeDto?.discountGrade > 0 && '-'}
               {transformLocalCurrency(info.subscribeDto?.discountGrade)}원
-            </span>
+            </span>}
           </div>
-        )}
-        <div className={s.flex_box5}>
-          <span>적립금사용</span>
+        
+        <div className={s.flex_box4}>
+          <span>쿠폰 할인</span>
           <span>
-            {transformLocalCurrency(calcOrdersheetPrices(form, orderType).discountReward)}원
+            {calcResult?.discountCoupon > 0 && '- '}
+            {transformLocalCurrency(calcResult?.discountCoupon)}원
+          </span>
+        </div>
+        
+        
+        
+        {calcResult?.overDiscountCoupon > 0 && <div className={s.flex_box4}>
+          <span>쿠폰 할인 소멸</span>
+          <span className={"pointColor"}>
+            +{transformLocalCurrency(calcResult.overDiscountCoupon)}원
+          </span>
+        </div>}
+        
+        
+        <div className={s.flex_box5}>
+          <span>적립금 사용</span>
+          <span>
+            {transformClearLocalCurrency(calcResult?.discountReward) > 0 && '- '}
+            {transformLocalCurrency(calcResult?.discountReward)}원
           </span>
         </div>
 
@@ -95,9 +116,9 @@ export const OrdersheetAmountOfPayment = ({
 
         <div className={s.last_flex_box}>
           <div className={s.flex_box}>
-            <span>최종결제금액</span>
+            <span>최종 결제금액</span>
             <span>
-              {transformLocalCurrency(calcOrdersheetPrices(form, orderType).paymentPrice)}원
+              {transformLocalCurrency(calcResult?.paymentPrice)}원
             </span>
           </div>
           {formErrors.paymentPrice && <ErrorMessage>{formErrors.paymentPrice}</ErrorMessage>}

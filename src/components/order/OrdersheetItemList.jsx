@@ -2,6 +2,7 @@ import s from '/src/pages/order/ordersheet/ordersheet.module.scss';
 import Spinner from '/src/components/atoms/Spinner';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import React from 'react';
+import ErrorMessage from "../atoms/ErrorMessage";
 
 export const OrdersheetItemList = ({form, setForm, isLoading, event = {onActiveModal}}) => {
   
@@ -11,13 +12,15 @@ export const OrdersheetItemList = ({form, setForm, isLoading, event = {onActiveM
     const appliedCouponId = Number(btn.dataset.appliedCouponId);
     setForm(prevState => ({
       ...prevState,
-      orderItemDtoList: prevState.orderItemDtoList.map((itemObj)=>{
+      orderItemDtoList: prevState.orderItemDtoList.map((item)=>{
+        const restoredOrderLinePrice =  item.orderLinePrice + item.discountAmount;
         const updatedState = {
-          ...itemObj,
+          ...item,
           memberCouponId: null,
           discountAmount: 0,
+          // orderLinePrice: restoredOrderLinePrice
         }
-        return itemObj.itemId ===  Number(itemId) ? updatedState : itemObj
+        return item.itemId ===  itemId ? updatedState : item
       }),
       coupons: prevState.coupons.map((coupon)=>{
         return coupon.memberCouponId === appliedCouponId ? {
@@ -56,66 +59,61 @@ export const OrdersheetItemList = ({form, setForm, isLoading, event = {onActiveM
         </div>
         <ul className={s['item-container']}>
           {isLoading.item ? (
-            <Spinner/>
+            <ErrorMessage loading={<Spinner />} fullWidth={true}/>
           ) : (
-            form.orderItemDtoList?.map( (item, index) =>{
-            
-              
-              return (<li key={`item-${item.itemId}-${index}`} className={s.flex_box}>
-                <div className={s.info_col}>
-                  {item.name}
-                  {item.selectOptionDtoList?.map( (option) => (
-                    <div key={`item-option-${option.itemOptionId}`} className={s.info_inner}>
-                      옵션 : {option.name} {option.amount}개
-                    </div>
-                  ) )}
-                </div>
+            form.orderItemDtoList?.map( (item, index) =><li key={`item-${item.itemId}-${index}`} className={s.flex_box}>
+              <div className={s.info_col}>
+                {item.name}
+                {item.selectOptionDtoList?.map( (option) => (
+                  <div key={`item-option-${option.itemOptionId}`} className={s.info_inner}>
+                    옵션 : {option.name} {option.amount}개
+                  </div>
+                ) )}
+              </div>
   
-                <div className={s.count_col}>{item.amount} 개</div>
+              <div className={s.count_col}>{item.amount} 개</div>
   
-                <div className={s.title_col}>총 주문금액</div>
-                <div className={s.price_col}>
+              <div className={s.title_col}>총 주문금액</div>
+              <div className={s.price_col}>
                 {(item.originalOrderLinePrice !== item.orderLinePrice) && item.orderLinePrice !== 0 && (
                   <div className={s.price_inner}>
                     {transformLocalCurrency( item.originalOrderLinePrice )}원
                   </div>
-                  )}
-                  <span>{transformLocalCurrency( item.orderLinePrice )}원</span>
-                </div>
+                )}
+                <span>{transformLocalCurrency( item.orderLinePrice )}원</span>
+              </div>
   
-                <div
-                  className={`${s.coupon_col_red}`}
-                  style={{color: item.discountAmount ? '' : 'var(--color-disabled)'}}
+              <div
+                className={`${s.coupon_col_red}`}
+                style={{color: item.discountAmount ? '' : 'var(--color-disabled)'}}
+              >
+                {item.discountAmount && '-' + transformLocalCurrency( item.discountAmount )}원
+              </div>
+              <div className={s.apply_coupon_col}>
+    
+                {item.discountAmount ? <button
+                  type={'button'}
+                  className={`${s['btn']} ${s.applied}`}
+                  data-modal-type={'coupons'}
+                  data-item-id={item.itemId}
+                  data-applied-coupon-id={item.memberCouponId}
+                  onClick={onCancleCoupon}
+                  onMouseEnter={onMouseEnterHandler}
+                  onMouseLeave={onMouseLeaveHandler}
                 >
-                  {item.discountAmount && '-' + transformLocalCurrency( item.discountAmount )}원
-                </div>
-                <div className={s.apply_coupon_col}>
-                  
-                  {item.discountAmount ? <button
-                    type={'button'}
-                    className={`${s['btn']} ${s.applied}`}
-                    data-modal-type={'coupons'}
-                    data-item-id={item.itemId}
-                    data-applied-coupon-id={item.memberCouponId}
-                    onClick={onCancleCoupon}
-                    onMouseEnter={onMouseEnterHandler}
-                    onMouseLeave={onMouseLeaveHandler}
-                  >
-                    적용됨
-                  </button> : <button
-                    type={'button'}
-                    className={`${s['btn']}`}
-                    data-modal-type={'coupons'}
-                    data-item-id={item.itemId}
-                    onClick={event.onActiveModal}
-                  >
-                    쿠폰 선택
-                  </button>
-                  }
-                  
-                </div>
-              </li>)
-            })
+                  적용됨
+                </button> : <button
+                  type={'button'}
+                  className={`${s['btn']}`}
+                  data-modal-type={'coupons'}
+                  data-item-id={item.itemId}
+                  onClick={event.onActiveModal}
+                >
+                  쿠폰 선택
+                </button>
+                }
+              </div>
+            </li>)
           )}
         </ul>
       </section>
