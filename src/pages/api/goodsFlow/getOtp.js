@@ -27,7 +27,7 @@ export default async function handler(req, res){
 
     const DATA = await axios
       .post(
-      `${process.env.NEXT_PUBLIC_GOODSFLOW_API_URL}otps/partner/BARFDOG`,
+        `${process.env.NEXT_PUBLIC_GOODSFLOW_API_URL}otps/partner/${process.env.NEXT_PUBLIC_GOODSFLOW_SITECODE}`,
         {},
         options
       )
@@ -74,4 +74,3 @@ export default async function handler(req, res){
     res.status(405).end();
   }
 };
-
