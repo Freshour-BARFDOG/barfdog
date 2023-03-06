@@ -62,3 +62,11 @@
   }
 
 }
+
+
+@media (max-width: rem(600)) {
+  #modal {
+    max-width: rem(420);
+    width: calc(100% - rem(40));
+  }
+}

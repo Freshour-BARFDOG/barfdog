@@ -125,13 +125,13 @@ const Modal_sendPhoneMessage = ({id, setModalState, data }) => {
   };
 
   return (
-    <ModalWrapper background positionCenter className={'modal_sendPhoneMessage'} id={'modal'}>
+    <ModalWrapper background positionCenter className={s.modal_sendPhoneMessage} id={'modal'}>
       <CloseButton className={'top-close-button'} onClick={onModalHide} />
       <div className="row">
         <section className={'title-section'}>
           <h2>문자보내기</h2>
         </section>
-        <section className="cont-section">
+        <section className={`${s['cont-section']} cont-section`}>
           <ScrollContainer scrollBarWidth={'0'}>
             <p>[바프독]</p>
             <p>
