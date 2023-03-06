@@ -127,6 +127,7 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
           discountTotal: 0, // 총 할인 합계
           discountReward: 0, // 사용할 적립금
           discountCoupon: 0, // 쿠폰 적용으로 인한 할인금
+          overDiscount: 0, // 초과할인금 (23.02 바프독측 요구사항: 초과할인존재 시, 최소금액 결제 기능)
           paymentPrice: data.subscribeDto.nextPaymentPrice, // 최종 결제 금액
           paymentMethod: null, // 결제방법  [CREDIT_CARD, NAVER_PAY, KAKAO_PAY]
           // nextDeliveryDate: getDiffDate(1), // ! TEST CODE :  테스트로, 1일 이후 배송이 시작되는 것으로 설정함 (221020)
@@ -243,8 +244,9 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
       {activeModal.coupons && (
         <Modal_coupon
           orderType={'subscribe'}
-          data={{ selectedItemInfo: info.subscribeDto, ...form }}
           onModalActive={setActiveModal}
+          itemInfo={info.subscribeDto}
+          form={form}
           setForm={setForm}
         />
       )}

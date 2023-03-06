@@ -332,7 +332,9 @@ export default function SingleItem_OrderHistoryPage({ data }) {
             <section className={s.body}>
               <h6 className={s.body_title}>배송조회</h6>
               <div className={s.body_content_3}>
-                {!valid_deliveryCondition(data?.orderDto.deliveryStatus) ? (
+                {valid_deliveryCondition( data?.orderDto.deliveryStatus ) ? (
+                  <p className={s.emptyCont}>배송 중 상태에서 조회 가능합니다.</p>
+                ) : (
                   <ul className={s.content_grid}>
                     <li>CJ대한통운</li>
                     <li>
@@ -352,8 +354,6 @@ export default function SingleItem_OrderHistoryPage({ data }) {
                       </a>
                     </li>}
                   </ul>
-                ) : (
-                  <p className={s.emptyCont}>배송 중 상태에서 조회 가능합니다.</p>
                 )}
               </div>
             </section>
@@ -370,14 +370,19 @@ export default function SingleItem_OrderHistoryPage({ data }) {
                   <span>{transformLocalCurrency(data?.orderDto.deliveryPrice)}원</span>
 
                   <span>총 할인금액</span>
-                  <span>{data?.orderDto.discountTotal > 0 && '-'}{transformLocalCurrency(data?.orderDto.discountTotal)}원</span>
-
-                  <span>ㄴ 쿠폰사용</span>
-                  <span>{data?.orderDto.discountCoupon > 0 && '-'}{transformLocalCurrency(data?.orderDto.discountCoupon)}원</span>
-  
+                  <span>{data?.orderDto.discountTotal > 0 && '-'}{transformLocalCurrency(data?.orderDto.discountTotal - (data?.orderDto.overDiscount || 0) )}원</span>
   
                   <span>ㄴ 적립금 사용</span>
                   <span>{data?.orderDto.discountReward > 0 && '-'}{transformLocalCurrency(data?.orderDto.discountReward)}원</span>
+                  
+                  <span>ㄴ 쿠폰 할인</span>
+                  <span>{data?.orderDto.discountCoupon > 0 && '-'}{transformLocalCurrency(data?.orderDto.discountCoupon)}원</span>
+  
+                  {data?.orderDto.overDiscount > 0 && <>
+                    <span>ㄴ 쿠폰 할인 소멸 </span>
+                    <span className={"pointColor"}>+&nbsp;{transformLocalCurrency(data?.orderDto.overDiscount)}원</span>
+                  </>}
+                  
   
                   
                   <span>결제 금액</span>
@@ -588,6 +593,7 @@ export async function getServerSideProps(ctx) {
         discountTotal: data.orderDto.discountTotal,
         discountReward: data.orderDto.discountReward,
         discountCoupon: data.orderDto.discountCoupon,
+        overDiscount: data.orderDto.overDiscount || null, // 쿠폰 할인 소멸  // api-server field 변경에 대응 -> 추후 null 대응 제외해도 됨
         paymentPrice: data.orderDto.paymentPrice,
         paymentMethod: data.orderDto.paymentMethod,
         name: data.orderDto.name,

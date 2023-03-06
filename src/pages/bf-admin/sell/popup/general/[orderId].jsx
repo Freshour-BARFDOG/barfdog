@@ -1,14 +1,15 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import s from '/src/components/popup/admin_ProductInfo/popup_sell.module.scss';
 import PopupWrapper from '@src/components/popup/PopupWrapper';
 import { PopupCloseButton, PopupCloseButton_typeX } from '@src/components/popup/PopupCloseButton';
 import ProductInfo_basicOrderInfo from '/src/components/popup/admin_ProductInfo/ProductInfo_basicOrderInfo';
 import ProductInfo_orderStatusInfo from '/src/components/popup/admin_ProductInfo/ProductInfo_orderStatusInfo';
-import ProductInfo_normItem from '/src/components/popup/admin_ProductInfo/ProductInfo_normalItem';
+import ProductInfo_generalItem from '/src/components/popup/admin_ProductInfo/ProductInfo_generalItem';
 import ProductInfo_payment from '/src/components/popup/admin_ProductInfo/ProductInfo_payment';
 import ProductInfo_delivery from '/src/components/popup/admin_ProductInfo/ProductInfo_delivery';
 import { orderStatus } from '/store/TYPE/orderStatusTYPE';
 import {getDataSSR} from "/src/pages/api/reqData";
+import Tooltip from "../../../../../components/atoms/Tooltip";
 
 export default function Popup_GeneralOrderDetailInfoPage({ data }) {
   const canceldOrderStatusList = [
@@ -32,8 +33,6 @@ export default function Popup_GeneralOrderDetailInfoPage({ data }) {
       break;
     }
   }
-  
-  console.log(data);
 
   return (
     <>
@@ -71,10 +70,11 @@ export default function Popup_GeneralOrderDetailInfoPage({ data }) {
                     <div className={s['t-header']}>
                       <h4 className={s.title}>
                         <span>{canceledOrderStatusLabel || '주문'}</span>상품
+                        <Tooltip messagePosition={"center"} message={"주문금액 = (상품 원가 - 상품 기본할인) * 상품수량 - 쿠폰할인금액"}/>
                       </h4>
                     </div>
                     {data.orderItemAndOptionDtoList.map((itemInfo, index) => (
-                      <ProductInfo_normItem
+                      <ProductInfo_generalItem
                         key={`product-items-list-${index}`}
                         itemInfo={itemInfo}
                       />
@@ -159,6 +159,7 @@ export async function getServerSideProps({ req, query }) {
           couponName: info.orderItemDto.couponName || '-',
           discountAmount: info.orderItemDto.discountAmount,
           status: info.orderItemDto.status,
+          salePrice: info.orderItemDto.salePrice || null, // 초과할인금액이 존재하게되어, 일반상품 각각의 판매가 명시
         },
         selectOptionDtoList: info.selectOptionDtoList.map((op) => ({
           optionName: op.optionName,
@@ -171,8 +172,9 @@ export async function getServerSideProps({ req, query }) {
         discountGrade:data.paymentDto.discountGrade || null, // api-server 변경된 field 이름 대응 -> 추후 null 값 제외해도 됨
         deliveryPrice: data.paymentDto.deliveryPrice,
         discountReward: data.paymentDto.discountReward,
-        couponName: data.paymentDto?.couponName || '-',
-        discountCoupon: data.paymentDto?.discountCoupon|| data.orderItemAndOptionDtoList?.map((info)=>info.orderItemDto.discountAmount).reduce((acc, cur)=> acc+ cur) || null,
+        couponName: data.paymentDto.couponName || '-',
+        discountCoupon: data.paymentDto.discountCoupon|| data.orderItemAndOptionDtoList?.map((info)=>info.orderItemDto.discountAmount).reduce((acc, cur)=> acc+ cur) || null,
+        overDiscount:data.paymentDto.overDiscount || null, // 초과할인금액  // api-server 변경된 field 이름 대응 -> 추후 null 값 제외해도 됨
         paymentPrice: data.paymentDto.paymentPrice,
         paymentMethod: data.paymentDto.paymentMethod,
         orderStatus: data.paymentDto.orderStatus,

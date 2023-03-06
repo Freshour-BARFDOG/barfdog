@@ -1,10 +1,11 @@
+import React from 'react';
 import s from './popup_sell.module.scss';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import { orderStatus } from '/store/TYPE/orderStatusTYPE';
 import {paymentMethodType} from "/store/TYPE/paymentMethodType";
 
 const ProductInfo_payment = ({ paymentInfo }) => {
-  console.log(paymentInfo);
+  // console.log(paymentInfo);
   return (
     <>
       <div className={s['t-header']}>
@@ -33,18 +34,18 @@ const ProductInfo_payment = ({ paymentInfo }) => {
         <li className={`${s['t-row']}`}>
           <div className={s['t-box']}>
             <div className={`${s.innerBox} ${s.label}`}>
-              <span>등급 할인</span>
+              <span>등급할인</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
-              <span>{transformLocalCurrency(paymentInfo.discountGrade)}원</span>
+              <span>{paymentInfo.discountGrade > 0 && "-"}&nbsp;{transformLocalCurrency(paymentInfo.discountGrade)}원</span>
             </div>
           </div>
           <div className={s['t-box']}>
             <div className={`${s.innerBox} ${s.label}`}>
-              <span>쿠폰 할인</span>
+              <span>쿠폰할인</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
-              <span>{transformLocalCurrency(paymentInfo.discountCoupon)}원</span>
+              <span>{paymentInfo.discountCoupon > 0 && "-"}&nbsp;{transformLocalCurrency(paymentInfo.discountCoupon)}원</span>
             </div>
           </div>
         </li>
@@ -54,9 +55,21 @@ const ProductInfo_payment = ({ paymentInfo }) => {
               <span>적립금 사용</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
-              <span>{transformLocalCurrency(paymentInfo.discountReward)}원</span>
+              <span>{paymentInfo.discountReward > 0 && "-"}&nbsp;{transformLocalCurrency(paymentInfo.discountReward)}원</span>
             </div>
           </div>
+          <div className={s['t-box']}>
+            <div className={`${s.innerBox} ${s.label}`}>
+              <span>쿠폰 할인 소멸</span>
+            </div>
+            <div className={`${s.innerBox} ${s.cont}`}>
+              <span>
+                {paymentInfo.overDiscount > 0 && "+"}&nbsp;{transformLocalCurrency(paymentInfo.overDiscount)}원
+              </span>
+            </div>
+          </div>
+        </li>
+        <li className={`${s['t-row']}`}>
           <div className={s['t-box']}>
             <div className={`${s.innerBox} ${s.label}`}>
               <span>배송비</span>
@@ -67,8 +80,6 @@ const ProductInfo_payment = ({ paymentInfo }) => {
               </span>
             </div>
           </div>
-        </li>
-        <li className={`${s['t-row']}`}>
           <div className={s['t-box']}>
             <div className={`${s.innerBox} ${s.label}`}>
               <span>결제방법</span>
@@ -79,6 +90,8 @@ const ProductInfo_payment = ({ paymentInfo }) => {
               </span>
             </div>
           </div>
+        </li>
+        <li className={`${s['t-row']} ${s.fullWidth}`}>
           <div className={s['t-box']}>
             <div className={`${s.innerBox} ${s.label}`}>
               <span>처리상태</span>

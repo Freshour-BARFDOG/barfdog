@@ -90,6 +90,7 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
     window.location.href='/mypage/orderHistory'
   }
   
+  if(!data) return;
   // console.log(data)
   return (
     <>
@@ -279,17 +280,22 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
                   <span>정기구독 무료</span>
   
                   <span>총 할인금액</span>
-                  <span>{data?.orderDto.discountTotal > 0 && '-'}{transformLocalCurrency(data?.orderDto.discountTotal)}원</span>
+                  <span>{data?.orderDto.discountTotal > 0 && '-'}{transformLocalCurrency(data?.orderDto.discountTotal - (data?.orderDto.overDiscount || 0) )}원</span>
 
                   <span>ㄴ 등급할인</span>
                   <span>{data?.orderDto.discountGrade > 0 && '-'}{transformLocalCurrency(data?.orderDto.discountGrade)}원</span>
   
+                  <span>ㄴ 적립금 사용</span>
+                  <span>{data?.orderDto.discountReward > 0 && '-'}{transformLocalCurrency(data?.orderDto.discountReward)}원</span>
+  
                   <span>ㄴ 쿠폰사용</span>
                   <span>{data?.orderDto.discountCoupon > 0 && '-'}{transformLocalCurrency(data?.orderDto.discountCoupon)}원</span>
   
-                  <span>ㄴ 적립금 사용</span>
-                  <span>{data?.orderDto.discountReward > 0 && '-'}{transformLocalCurrency(data?.orderDto.discountReward)}원</span>
-
+                  {data?.orderDto.overDiscount > 0 && <>
+                    <span>ㄴ 쿠폰 할인 소멸 </span>
+                    <span className={"pointColor"}>+&nbsp;{transformLocalCurrency(data?.orderDto.overDiscount)}원</span>
+                  </>}
+                  
                   <span>결제 금액</span>
                   <span>{transformLocalCurrency(data?.orderDto.paymentPrice)}원</span>
                   {/* TODO: */}
@@ -422,6 +428,7 @@ export async function getServerSideProps(ctx) {
         discountTotal: data.orderDto.discountTotal,
         discountReward: data.orderDto.discountReward,
         discountCoupon: data.orderDto.discountCoupon,
+        overDiscount: data.orderDto.overDiscount || null, // 쿠폰 할인 소멸  // api-server field 변경에 대응 -> 추후 null 대응 제외해도 됨
         paymentPrice: data.orderDto.paymentPrice,
         paymentMethod: data.orderDto.paymentMethod,
         recipientName: data.orderDto.recipientName,

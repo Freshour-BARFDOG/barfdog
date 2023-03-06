@@ -36,7 +36,6 @@ export default function Popup_SubscribeOrderDetailInfoPage({ data }) {
     }
   }, []);
 
-  console.log(data);
   return (
     <>
       <div id={s.popup}>
@@ -153,6 +152,7 @@ export async function getServerSideProps({ req, query }) {
         discountReward:data.subscribePaymentDto.discountReward,
         couponName:data.subscribePaymentDto.couponName,
         discountCoupon:data.subscribePaymentDto.discountCoupon,
+        overDiscount:data.subscribePaymentDto.overDiscount || null, // 초과할인금액  // api-server 변경된 field 이름 대응 -> 추후 null 값 제외해도 됨
         paymentPrice:data.subscribePaymentDto.paymentPrice, // 결제 금액
         paymentMethod:data.subscribePaymentDto.paymentMethod,
         orderStatus:data.subscribePaymentDto.orderStatus,

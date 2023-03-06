@@ -48,6 +48,9 @@ $popupMainHeaderHeight:rem(66);
     color: var(--color-font-def);
     font-weight: 500;
     cursor: default;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
   }
   .t-body {
     // display: grid;
@@ -108,8 +111,8 @@ $popupMainHeaderHeight:rem(66);
         span {
           display: -webkit-box;
           -webkit-box-orient: vertical;
-          -webkit-line-clamp: 2;
-          overflow: hidden;
+          -webkit-line-clamp: 1;
+          overflow-y: scroll;
           &:not(:first-child) {
             margin-left: rem(10);
           }

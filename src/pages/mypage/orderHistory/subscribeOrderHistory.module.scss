@@ -13,7 +13,7 @@
 .info_autoConfirmation{
   color: var(--color-font-sub2);
   font-size: rem(14);
-  margin-top:rem(10);
+  margin-top:rem(16);
   height: 100%;
   &.general{
     text-align: right;
@@ -47,8 +47,11 @@
     }
   }
 
-  .beforeData{
+  .beforeData {
+    display: block;
+    margin-top: rem(4);
     text-decoration: line-through;
+    font-size: rem(14);
     color: var(--color-disabled);
     // margin-right: rem(8);
   }
