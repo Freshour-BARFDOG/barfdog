@@ -180,7 +180,6 @@ export const SubscribeShopRecipe = ({ name, info, form, setForm }) => {
                 {!rc.inStock && <ItemSoldOutLabel />}
                 <figure className={`${s.image} img-wrap`}>
                   <Image
-                    className={'init-next-image'}
                     src={rc.thumbnailUri2}
                     objectFit="cover"
                     layout="fill"
