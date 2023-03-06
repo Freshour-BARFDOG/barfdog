@@ -1729,12 +1729,16 @@ section.sns {
 //최상단 그림배너
   .banner {
     .inner {
-      height: rem(400);
+      aspect-ratio: 1/1;
+      width: 100%;
+    height: auto;
     }
   }
 
   .swiper_main_outerWrap {
-    height: rem(400);
+    aspect-ratio: 1/1;
+    width: 100%;
+    height: auto;
   }
 
 

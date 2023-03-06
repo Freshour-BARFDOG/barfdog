@@ -1,6 +1,6 @@
 @import '/styles/module/itemList.module';
 
-$mobileHeight: rem(400);
+$mobileHeight: rem(600);
 $pcHeight: rem(400);
 
 .admin-preview-image {
@@ -11,6 +11,9 @@ $pcHeight: rem(400);
   &.mobile {
     height: $mobileHeight;
     max-width: rem(600);
+    >img{
+      height: $mobileHeight;
+    }
   }
 }
 
