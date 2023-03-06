@@ -57,7 +57,7 @@ export const Modal_couponWithSubscribeApi = ({
     salePrice: transformClearLocalCurrency( calcedCouponInfo.salePrice ) - info.discountGrade,
     // 최초 info: server에서 전달받은 값 직관적으로 확인하기 위해 그대로 사용
     // salePrice: convertToMinimumSalePrice({originPrice:info.originPrice, discount:{coupon: transformClearLocalCurrency(calcedCouponInfo.saleAmount), grade: info.discountGrade}}).salePrice,
-    unappliedDiscountAmount: 0,
+    overDiscount: 0,
   };
   
   const mct = useModalContext();
@@ -70,13 +70,13 @@ export const Modal_couponWithSubscribeApi = ({
     const couponId = Number( radio.dataset.couponId );
     const couponDiscountAmount = Number( radio.dataset.discountAmount );
     const gradeDiscountAmount = info.discountGrade;
-    const {salePrice, unappliedDiscountAmount} = calculateAndConvertToMinimumSalePrice( {originPrice: info.originPrice, discount: {coupon: couponDiscountAmount, grade: gradeDiscountAmount}} );
+    const {salePrice, overDiscount} = calculateAndConvertToMinimumSalePrice( {originPrice: info.originPrice, discount: {coupon: couponDiscountAmount, grade: gradeDiscountAmount}} );
   
     setSelectedRadioInfo( {
       couponId,
       discountAmount: couponDiscountAmount,
       salePrice,
-      unappliedDiscountAmount // 최소결제를 위한 할인미적용금액
+      overDiscount // 최소결제를 위한 할인미적용금액
     } );
   };
   
@@ -84,12 +84,14 @@ export const Modal_couponWithSubscribeApi = ({
     if ( !selectedRadioInfo.couponId ) return mct.alertShow( '선택된 쿠폰이 없습니다.' );
     if ( selectedRadioInfo.couponId === info.usedCoupon.usingMemberCouponId )
       return mct.alertShow( '이미 적용된 쿠폰입니다.' );
+    
   
     try {
       setIsLoading( true );
       const body = {
         memberCouponId: selectedRadioInfo.couponId,
-        discount: null,
+        discount: selectedRadioInfo.discountAmount,
+        overDiscount: selectedRadioInfo.overDiscount
       };
       const url = `/api/subscribes/${info.subscribeId}/coupon`;
       const res = await postObjData( url, body );
@@ -277,9 +279,9 @@ export const Modal_couponWithSubscribeApi = ({
                 {info.discountGrade > 0 && "-"} {transformLocalCurrency( info.discountGrade )}원
               </span>
               </div>
-              {selectedRadioInfo.unappliedDiscountAmount > 0 && <div className={s.col_2}>
+              {selectedRadioInfo.overDiscount > 0 && <div className={s.col_2}>
                 <p>최소결제 적용금액</p>
-                <span className={s.text_price}>+ {transformLocalCurrency( selectedRadioInfo.unappliedDiscountAmount )}원</span>
+                <span className={s.text_price}>+ {transformLocalCurrency( selectedRadioInfo.overDiscount )}원</span>
               </div>}
               <i className={s.vertical_line}></i>
               <div className={s.col_3}>
