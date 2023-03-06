@@ -9,8 +9,6 @@ import {useRouter} from 'next/router';
 import axios from 'axios';
 import {availablePaymentState} from "/util/func/availablePaymentState";
 import { paymethodFilter } from '/util/filter_iamport_paymethod';
-import {useDispatch} from "react-redux";
-import {orderAction, ORDER_STATES} from "/store/order-slice";
 
 export function Payment({
   info,
@@ -22,7 +20,6 @@ export function Payment({
 }) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const router = useRouter();
-  const dispatch = useDispatch();
 
   useEffect(() => {
     const jquery = document.createElement('script');
@@ -164,7 +161,6 @@ export function Payment({
       const res = await postObjData(apiUrl, body);
       
       if (res.isDone) {
-        await dispatch(orderAction.saveOrderState({orderState: ORDER_STATES.ORDERING, orderType: orderType, orderId: res.data.data.id}));
         if( orderType === 'general'){
           // 일반 주문 결제
           // res.data.data.id = 주문번호 id
@@ -235,7 +231,6 @@ export function Payment({
     /* 4. 결제 창 호출하기 */
     async function callback(callbackData, response) {
   
-      await dispatch(orderAction.saveOrderState({orderState: ORDER_STATES.EXIT_ORDER, orderType: orderType, orderId: callbackData.orderId}));
       // 결제 이슈를 보완하기 인하여 Api Request Data 추가를 위해 사용
       const data = {
         discountReward: callbackData.discountReward
@@ -324,7 +319,6 @@ export function Payment({
     /* 4. 결제 창 호출하기 */
     async function callback(callbackData, response) {
 
-      await dispatch(orderAction.saveOrderState({orderState: ORDER_STATES.EXIT_ORDER, orderType: orderType, orderId: callbackData.orderId}));
       console.log(response);
       const discountData = {
         discountReward: callbackData.discountReward,

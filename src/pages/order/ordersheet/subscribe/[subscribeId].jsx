@@ -5,7 +5,6 @@ import s from '../ordersheet.module.scss';
 import Modal_termsOfSerivce from '/src/components/modal/Modal_termsOfSerivce';
 import {Modal_coupon} from '/src/components/modal/Modal_coupon';
 import {getData} from '/src/pages/api/reqData';
-import {useSelector} from 'react-redux';
 import transformDate, {transformToday} from '/util/func/transformDate';
 import {OrdersheetSubscribeItemList} from '/src/components/order/OrdersheetSubscribeItemList';
 import {OrdersheetMemberInfo} from '/src/components/order/OrdersheetMemberInfo';
@@ -15,18 +14,13 @@ import {OrdersheetReward} from '/src/components/order/OrdersheetReward';
 import {OrdersheetMethodOfPayment} from '/src/components/order/OrdersheetMethodOfPayment';
 import {OrdersheetAmountOfPayment} from '/src/components/order/OrdersheetAmountOfPayment';
 import {calcNextSubscribeDeliveryDate} from '/util/func/calcNextSubscribeDeliveryDate';
-import {ORDER_STATES} from "/store/order-slice";
-import useDeviceState from "/util/hook/useDeviceState";
 import {useSubscribePlanInfo} from "/util/hook/useSubscribePlanInfo";
 import {subscribePriceCutOffUnit} from "/util/func/subscribe/calcSubscribePrices";
-import {cancelSubscribeOrder} from "/util/func/order/cancelOrder";
 
 
 export default function SubscribeOrderSheetPage({ subscribeId }) {
   
-  const ds = useDeviceState();
   const subscribePlanInfo = useSubscribePlanInfo();
-  const orderState = useSelector((state) => state.orderState);
   const [isLoading, setIsLoading] = useState({ fetching: true });
   const [isRendered, setIsRendered] = useState(false);
   const [info, setInfo] = useState({});
@@ -38,31 +32,6 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
     coupon: false,
   });
   
-  useEffect(() => {
-    
-    if(ds.isMobile) return; // ! PC ONLY => MOBILE 결제 시, 무조건 PG사로 REDIRECT
-    
-    if(orderState.orderState === ORDER_STATES.ORDERING && orderState.orderId){
-      console.log("window.addEventListener( 'beforeunload', ...);");
-      window.addEventListener( 'beforeunload',
-        cancelSubscribeOrder.bind(null, orderState.orderId)
-        ,{once: true}
-      ); // ! {once: true} => 이벤트 단 한 번만 실행
-    }
-    
-    if(orderState.orderState === ORDER_STATES.EXIT_ORDER){
-      // ! 해당 IF문 내의 코드는 없어도 UNMOUNT 시점에 이벤트가 제거됨
-      //  그러나 불상사를 확실히 방지하기 위해, removeEventListener 중복 적용
-      console.log("window.removeEventListener( 'beforeunload', ...);");
-      window.removeEventListener( 'beforeunload', cancelSubscribeOrder.bind(null, orderState.orderId))
-    }
-    return () => {
-      console.log("[ UNMOUNT ] window.removeEventListener( 'beforeunload', ...);");
-      window.removeEventListener( 'beforeunload', cancelSubscribeOrder.bind(null, orderState.orderId));
-    };
-  },[ds.isMobile, orderState]);
-  
-
   
   
   useEffect(() => {
