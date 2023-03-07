@@ -42,7 +42,7 @@ function RewardListPage() {
   
   
   const onResetSearchValues = () => {
-    setSearchValues(initialSearchValue);
+    setSearchValues(initialSearchValues);
   };
 
   const onSearchHandler = () => {
