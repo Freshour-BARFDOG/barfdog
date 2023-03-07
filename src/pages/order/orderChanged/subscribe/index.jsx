@@ -156,18 +156,18 @@ export default function SubscribeOrderChangedPage({ data }) {
                 <div className={s.line_box}>
                   <span className={s.left_box}>급여량</span>
                   <span className={s.right_box}>
-                       {DATA.prev.oneMealGrams.map((gram, i)=><em key={`prev-oneMealGrams-${i}`}>{transformLocalCurrency( gram ) + "g "}</em>)}
+                       {DATA.prev.oneMealGrams.split(',').map((gram, i)=><em key={`prev-oneMealGrams-${i}`}>{transformLocalCurrency( gram ) + "g "}</em>)}
+                  </span>
+                </div>
+                <div className={s.line_box}>
+                  <span className={s.left_box}>결제 금액</span>
+                  <span className={s.right_box}>
+                    {transformLocalCurrency(DATA.prev.nextPaymentPrice)}원
                   </span>
                 </div>
                 <div className={s.line_box}>
                   <span className={s.left_box}>다음 결제일</span>
                   <span className={s.right_box}>{transformDate(DATA.prev.nextPaymentDate)}</span>
-                </div>
-                <div className={s.line_box}>
-                  <span className={s.left_box}>결제 예정 금액</span>
-                  <span className={s.right_box}>
-                    {transformLocalCurrency(DATA.prev.nextPaymentPrice)}원
-                  </span>
                 </div>
                 <div className={s.line_box}>
                   <span className={s.left_box}>발송 예정일</span>
@@ -209,17 +209,16 @@ export default function SubscribeOrderChangedPage({ data }) {
                   </span>
                 </div>
                 <div className={s.line_box}>
+                  <span className={s.left_box}>결제 금액</span>
+                  <span className={s.right_box}>
+                    <em>{transformLocalCurrency(DATA.next.nextPaymentPrice)}원</em>
+                  </span>
+                </div>
+                <div className={s.line_box}>
                   <span className={s.left_box}>다음 결제일</span>
                   <span className={s.right_box}>
                     <em>{transformDate(DATA.prev.nextPaymentDate)}</em>
                     <em>{transformDate(DATA.next.nextPaymentDate)}</em>
-                  </span>
-                </div>
-                <div className={s.line_box}>
-                  <span className={s.left_box}>결제 예정 금액</span>
-                  <span className={s.right_box}>
-                    <em>{transformLocalCurrency(DATA.prev.nextPaymentPrice)}원</em>
-                    <em>{transformLocalCurrency(DATA.next.nextPaymentPrice)}원</em>
                   </span>
                 </div>
                 <div className={s.line_box}>

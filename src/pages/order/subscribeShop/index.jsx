@@ -35,6 +35,7 @@ export default function RegisterSubscribeInfoPage({ data }) {
     dogName: data.surveyInfo.dogName,
     subscribeId: data.surveyInfo.subscribeId,
     subscribeStatus: data.surveyInfo.subscribeStatus,
+    oneMealGramsPerRecipe: data.surveyInfo.oneMealGramsPerRecipe || null,
     recommendRecipeId: data.surveyInfo.recommendRecipeId,
     recommendRecipeName: data.surveyInfo.recommendRecipeName,
     recommendRecipeDescription: data.surveyInfo.recommendRecipeDescription,
@@ -54,14 +55,13 @@ export default function RegisterSubscribeInfoPage({ data }) {
   };
   
   const currentRecipeIds = data.surveyInfo.recipeDtoList.filter((rc)=>
-    data.surveyInfo.recipeName.split(',').indexOf(rc.name) >= 0).map(rc=>rc.id) || [];
-  
+    data.surveyInfo.recipeName?.split(',').indexOf(rc.name) >= 0).map(rc=>rc.id) || [];
   const currentOneMealGrams = useCallback( calcOneMealGramsWithRecipeInfo({
       selectedRecipeIds:currentRecipeIds,
       allRecipeInfos: recipeInfo?.data || [],
       oneDayRecommendKcal: info.foodAnalysis.oneDayRecommendKcal
     }).map(recipe =>recipe.oneMealGram) ,
-    [recipeInfo, subscribePlanInfo, data],
+    [recipeInfo.loading, subscribePlanInfo.loading, data]
   );
   
   const initialForm = {
@@ -106,7 +106,6 @@ export default function RegisterSubscribeInfoPage({ data }) {
     }, fullscreenLoadingDuration);
   }, [subscribePlanInfo.loading]);
   
-  
   const calcSubscribePlanPaymentPrice = useCallback((planName) => {
     if (!form.recipeIdList[0] || !planName || !recipeInfo.data) {
       return {
@@ -142,7 +141,6 @@ export default function RegisterSubscribeInfoPage({ data }) {
     });
   },[form.plan, form.recipeIdList, recipeInfo, subscribePlanInfo]);
   
-  console.log(oneMealGramsForm);
   
   
   const onStartSubscribeOrder = async () => {
@@ -190,8 +188,8 @@ export default function RegisterSubscribeInfoPage({ data }) {
       submit: false,
     }));
   };
-
   
+
   const onChangeSubscribeOrder = async () => {
     if (submitted) return;
     // 구독 중 or 구독 보류 상태일 경우, 맞춤레시피 변경하기
@@ -222,7 +220,7 @@ export default function RegisterSubscribeInfoPage({ data }) {
       const prevDATA = {
         plan: prevInfo.plan, // 기존 주문 정보
         recipeName: prevInfo.recipeName, // 기존 주문 정보
-        oneMealGrams: oneMealGramsForm.current, // 기존 주문 정보
+        oneMealGrams: info.oneMealGramsPerRecipe, // 강아지 생성 후 > 맞춤레시피 구매하기 시 생성되는 값. / 쉼표(,) 구분으로 2개 이상의 레시피에 대응
         nextPaymentPrice: prevInfo.nextPaymentPrice, // 기존 주문 정보
         nextPaymentDate: transformDate(prevInfo.nextPaymentDate), // 기존 주문 정보
         nextDeliveryDate: transformDate(prevInfo.nextDeliveryDate), // 기존 주문 정보
@@ -273,8 +271,6 @@ export default function RegisterSubscribeInfoPage({ data }) {
         paging: false,
       }));
     }
-    
-    
   };
 
   const onPrevPage = () => {
@@ -340,9 +336,9 @@ export async function getServerSideProps({ req, query }) {
 
   // DATA: this Dog's Result of survey Report
   const getSurveyReportResultApiUrl = surveyReportsId
-    ? `/api/surveyReports/${surveyReportsId}/result`
+    ? `/api/surveyReports/${surveyReportsId}/result` // "설문조사 직후" 현재 페이지 진입
     : dogId
-    ? `/api/dogs/${dogId}/surveyReportResult`
+    ? `/api/dogs/${dogId}/surveyReportResult` // "설문조사 수정 후", "맞춤플랜 변경"으로 현재 페이지 진입
     : null;
   const surveyInfoRes = await getDataSSR(req, getSurveyReportResultApiUrl);
   const surveyInfoData = surveyInfoRes?.data || null;
