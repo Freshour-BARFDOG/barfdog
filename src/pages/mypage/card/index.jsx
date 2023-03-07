@@ -10,14 +10,12 @@ import {EmptyContMessage} from '/src/components/atoms/emptyContMessage';
 import {subscribePlanType} from "/store/TYPE/subscribePlanType";
 import transformDate from "/util/func/transformDate";
 import transformLocalCurrency from "/util/func/transformLocalCurrency";
+import {calcSubscribeNextPaymentPrice} from "../../../../util/func/subscribe/calcSubscribeNextPaymentPrice";
 
 
 export default function MypageCardPage({ data }) {
   
-  // !  CARD NAME => '알수없음' 조건 ?
   const [cardList, setCardList] = useState(data || []);
-  // console.log(data);
-  // console.log(cardList);
 
   useEffect(() => {
 
@@ -142,7 +140,15 @@ export default function MypageCardPage({ data }) {
 
                         <div>
                           <span className={s.col_1_m}>다음 결제금액</span>
-                          {transformLocalCurrency(card.subscribeCardDto.nextPaymentPrice)}원
+                          {transformLocalCurrency(
+                              calcSubscribeNextPaymentPrice(
+                            {
+                              originPrice: card.subscribeCardDto.nextPaymentPrice,
+                              discountCoupon: card.subscribeCardDto.discountCoupon,
+                              discountGrade:card.subscribeCardDto.discountGrade,
+                              overDiscount: card.subscribeCardDto.overDiscount
+                            }
+                          ))}원
                         </div>
                         <div className={s.btn_box}>
                           <button className={s.btn} type={'button'} onClick={()=>onChangeCard(card.subscribeCardDto.subscribeId)}>카드변경</button>
@@ -184,6 +190,9 @@ export async function getServerSideProps({ req }) {
         plan: data.subscribeCardDto.plan,
         nextPaymentDate: data.subscribeCardDto.nextPaymentDate,
         nextPaymentPrice: data.subscribeCardDto.nextPaymentPrice,
+        discountGrade: data.subscribeCardDto.discountGrade,
+        discountCoupon: data.subscribeCardDto.discountCoupon,
+        overDiscount: data.subscribeCardDto.overDiscount,
       },
       recipeNameList: data.recipeNameList,
     }));

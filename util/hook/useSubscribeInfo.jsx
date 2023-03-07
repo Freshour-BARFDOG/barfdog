@@ -102,6 +102,7 @@ export const useSubscribeInfo = (subscribeId) => {
             couponName: data.subscribeDto.couponName,
             discountCoupon: data.subscribeDto.discountCoupon,
             discountGrade: data.subscribeDto.discountGrade,
+            overDiscount: data.subscribeDto.overDiscount,
             planName: currentPlanName,
             recipeNames: data.subscribeRecipeDtoList.map((list) => list.recipeName).join(', '),
             oneMealGramsPerRecipe: oneMealGrams,

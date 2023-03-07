@@ -7,6 +7,7 @@ import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import {Modal_couponWithSubscribeApi} from '../modal/Modal_couponWithSubscribeApi';
 import {useModalContext} from '/store/modal-context';
 import Tooltip from "../atoms/TooltipSubscrib";
+import {calcSubscribeNextPaymentPrice} from "/util/func/subscribe/calcSubscribeNextPaymentPrice";
 
 
 export const SubscribeDashboard = ({ subscribeInfo }) => {
@@ -17,7 +18,8 @@ export const SubscribeDashboard = ({ subscribeInfo }) => {
     recipeNameList: subscribeInfo.info.recipeNames?.split(','),
     oneMealGramsPerRecipe: subscribeInfo.info.oneMealGramsPerRecipe,
     nextPaymentDate: subscribeInfo.info.nextPaymentDate,
-    nextPaymentPrice: subscribeInfo.info.nextPaymentPrice - (subscribeInfo.info.discountCoupon + subscribeInfo.info.discountGrade), // 다음결제금액 -(쿠폰할인+등급할인)
+    nextPaymentPrice: calcSubscribeNextPaymentPrice(
+      {originPrice: subscribeInfo.info.nextPaymentPrice, discountCoupon: subscribeInfo.info.discountCoupon, discountGrade:subscribeInfo.info.discountGrade, overDiscount: subscribeInfo.info.overDiscount}),
     nextDeliveryDate: subscribeInfo.info.nextDeliveryDate,
     countSkipOneTime: subscribeInfo.info.countSkipOneTime,
     countSkipOneWeek: subscribeInfo.info.countSkipOneWeek,
@@ -29,6 +31,7 @@ export const SubscribeDashboard = ({ subscribeInfo }) => {
         usingMemberCouponId: subscribeInfo.info.usingMemberCouponId, // 사용된 쿠폰 id
         couponName: subscribeInfo.info.couponName, // 쿠폰명
         discountCoupon: subscribeInfo.info.discountCoupon, // 쿠폰 할인금액
+        overDiscount: subscribeInfo.info.overDiscount, // 초과할인금액
       },
       availableCouponList: subscribeInfo.coupon || [],
       originPrice: subscribeInfo.info.nextPaymentPrice,
@@ -131,7 +134,7 @@ export const SubscribeDashboard = ({ subscribeInfo }) => {
                     alt="카드 이미지"
                   />
                 </div>
-                <div className={s.row_1}>결제 예정 금액</div>
+                <div className={s.row_1}>다음 결제금액</div>
                 <div className={s.row_2}>{transformLocalCurrency(info.nextPaymentPrice)}원</div>
                 <div className={s.row_3}>
                   <button type={'button'} className={s['coupon-btn']} onClick={onActiveCouponModal}>
@@ -148,7 +151,7 @@ export const SubscribeDashboard = ({ subscribeInfo }) => {
                     alt="카드 이미지"
                   />
                 </div>
-                <div className={s.row_1}>다음 발송 예정일</div>
+                <div className={s.row_1}>다음 발송예정일</div>
                 <div className={s.row_2}>
                   {transformDate(info.nextDeliveryDate, null, { seperator: '/' })}
                 </div>

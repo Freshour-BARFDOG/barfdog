@@ -177,7 +177,7 @@ export const SubscribeGram = ({ subscribeInfo }) => {
                 </div>
               </div>
               <div className={s.grid_6}>
-                <p className={s.top_text}>변경 후 결제 금액</p>
+                <p className={s.top_text}>변경 후 상품 금액</p>
                 <div className={s.bot_1}>
                   {transformLocalCurrency(form.nextSalePrice)}원
                   <span>
