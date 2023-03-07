@@ -29,6 +29,7 @@ export const Modal_couponWithSubscribeApi = ({
       usingMemberCouponId: data.usedCoupon.usingMemberCouponId, // 사용된 쿠폰 id
       couponName: data.usedCoupon.couponName, // 쿠폰명
       discountCoupon: data.usedCoupon.discountCoupon, // 쿠폰 할인금액
+      overDiscount: data.usedCoupon.overDiscount,
     },
     availableCouponList:
       data.availableCouponList.map( (coupon) => ({
@@ -51,13 +52,16 @@ export const Modal_couponWithSubscribeApi = ({
     initSelectedCoupon?.discountType,
     initSelectedCoupon?.discountDegree,
   );
+  
+  
+  const { salePrice: initSalePrice, overDiscount: initOverDiscount} = calculateAndConvertToMinimumSalePrice( {originPrice: info.originPrice, discount: {coupon: transformClearLocalCurrency( calcedCouponInfo.saleAmount ), grade: info.discountGrade}} )
+  
   const initialRadioInfo = {
     couponId: info.usedCoupon.usingMemberCouponId,
     discountAmount: transformClearLocalCurrency( calcedCouponInfo.saleAmount ),
-    salePrice: transformClearLocalCurrency( calcedCouponInfo.salePrice ) - info.discountGrade,
+    salePrice: initSalePrice,
     // 최초 info: server에서 전달받은 값 직관적으로 확인하기 위해 그대로 사용
-    // salePrice: convertToMinimumSalePrice({originPrice:info.originPrice, discount:{coupon: transformClearLocalCurrency(calcedCouponInfo.saleAmount), grade: info.discountGrade}}).salePrice,
-    overDiscount: 0,
+    overDiscount: initOverDiscount,
   };
   
   const mct = useModalContext();
@@ -280,7 +284,7 @@ export const Modal_couponWithSubscribeApi = ({
               </span>
               </div>
               {selectedRadioInfo.overDiscount > 0 && <div className={s.col_2}>
-                <p>최소결제 적용금액</p>
+                <p>초과 할인 소멸</p>
                 <span className={s.text_price}>+ {transformLocalCurrency( selectedRadioInfo.overDiscount )}원</span>
               </div>}
               <i className={s.vertical_line}></i>
