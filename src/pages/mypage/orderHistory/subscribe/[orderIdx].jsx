@@ -53,7 +53,7 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
 
   const onStartCancelBeforeProducing = () => {
     setActiveModal({ cancle: true });
-    setConfirmMessage(`구독 상품이 주문 취소됩니다.`);
+    setConfirmMessage(`정기구독 상품이 즉시 주문 취소 처리됩니다. (구독 중인 반려견 없이 묶음배송 요청한 상품이 있다면, 반드시 관리자에게 문의하세요.)`);
   };
 
   const onOrderCancleBeforeProducing = async (confirm) => {
