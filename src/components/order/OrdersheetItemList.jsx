@@ -18,7 +18,7 @@ export const OrdersheetItemList = ({form, setForm, isLoading, event = {onActiveM
           ...item,
           memberCouponId: null,
           discountAmount: 0,
-          // orderLinePrice: restoredOrderLinePrice
+          orderLinePrice: restoredOrderLinePrice
         }
         return item.itemId ===  itemId ? updatedState : item
       }),

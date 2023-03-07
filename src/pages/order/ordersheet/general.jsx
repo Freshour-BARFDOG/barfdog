@@ -275,38 +275,3 @@ export default function GeneralOrderSheetPage() {
     </>
   );
 }
-
-
-//
-// const DUMMY_MEMEBER_COUPON_LIST = [
-//   {
-//     memberCouponId: 45,
-//     name: '쿠폰1-최소사용가능아잍템가격 7천이상 ',
-//     discountType: 'FIXED_RATE',
-//     discountDegree: 10,
-//     availableMaxDiscount: 2000,
-//     availableMinPrice: 7000,
-//     remaining: 1,
-//     expiredDate: '2023-12-31T23:59:59',
-//   },
-//   {
-//     memberCouponId: 46,
-//     name: '쿠폰2-최대할인 금액 1만원 조건 ',
-//     discountType: 'FLAT_RATE',
-//     discountDegree: 2000,
-//     availableMaxDiscount: 10000,
-//     availableMinPrice: 0,
-//     remaining: 3,
-//     expiredDate: '2023-12-31T23:59:59',
-//   },
-//   {
-//     memberCouponId: 47,
-//     name: '쿠폰3-최대 할인가3천원',
-//     discountType: 'FIXED_RATE',
-//     discountDegree: 30,
-//     availableMaxDiscount: 3000,
-//     availableMinPrice: 0,
-//     remaining: 3,
-//     expiredDate: '2023-12-31T23:59:59',
-//   },
-// ];
