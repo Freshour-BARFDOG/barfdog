@@ -129,17 +129,21 @@ export default function OrderOnSellPage() {
   };
 
   const onStartOrderConfirm = () => {
+    const invalidItemList = filterInvalidOrderConfirmStatusItems(selectedItemList);
+    console.log(invalidItemList);
     if (!selectedOrderIdList.length) {
       return alert('선택된 상품이 없습니다.');
+    } else if(invalidItemList.length){
+      return alert("결제완료 상태가 아닌 상품이 포함되어있습니다.");
     }
     setActiveModal({ orderConfirm: true });
   };
+  
 
   const onOrderConfirm = async (selectedIdList) => {
     if (!selectedIdList.length) return alert('선택된 상품이 없습니다.');
     if (!confirm(`선택하신 ${selectedIdList.length}개의 상품을 주문확인 처리하시겠습니까?`)) return;
 
-    // console.log(selectedIdList)
     const itemType = searchValues.orderType;
     let body;
     if (itemType === productType.GENERAL) {
@@ -168,19 +172,29 @@ export default function OrderOnSellPage() {
         alert(`주문확인 처리하는데 오류가 발생했습니다.\n${res.error}`);
       }
     } catch (err) {
-      console.log('API통신 오류 : ', err);
+      console.log('API통신 오류가 발생하였습니다.');
+      alert( err );
+    } finally {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        confirm: false,
+      }));
     }
-    setIsLoading((prevState) => ({
-      ...prevState,
-      confirm: false,
-    }));
+    
   };
-
+  
+  
+  
   const onStartRegisterDelivery = async () => {
     // - API CYCLE
     // - 1. FE => BE : 발송처리할 상품의 id List 전달 (주문 발송 api에 필요한 배송 정보 reponse 받음)
     // - 2. FE => GoodFlow : 배송정보 전달 (송장번호 reponse받음)
     // - 3. FE => BE: GoodFlow에서 전달받은 운송장 번호 등록
+    const invalidItemList = filterInvalidDeliveryStatusItems( selectedItemList, searchValues.orderType );
+    if(invalidItemList.length){
+      return alert( `주문발송 처리에 부적당한 ${searchValues.orderType === "GENERAL" ? "일반" : "구독"}상품이 포함되어있습니다.` );
+    }
+    
     if (!selectedOrderIdList.length) return alert('선택된 상품이 없습니다.');
     if (!confirm(`선택하신 ${selectedOrderIdList.length}개의 상품을 발송처리 하시겠습니까?`))
       return;
@@ -199,7 +213,7 @@ export default function OrderOnSellPage() {
       console.log('resFromServer: ', resFromServer);
       // const resFromServer = DUMMY_ADMIN_DELIVERY_INFO; // ! TEST CODE
       if (!resFromServer.isDone)
-        return alert(`주문발송 처리 중 오류가 발생했습니다.\n${res.error}`);
+        return alert(`주문발송 처리 중 오류가 발생했습니다.\n${resFromServer.error}`);
       const deliveryItemInfoList = resFromServer.data.data._embedded.queryOrderInfoForDeliveryList;
       console.log(deliveryItemInfoList);
 
@@ -287,11 +301,13 @@ export default function OrderOnSellPage() {
       }
     } catch (err) {
       console.log('API통신 오류 : ', err);
+    } finally {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        confirm: false,
+      }));
     }
-    setIsLoading((prevState) => ({
-      ...prevState,
-      confirm: false,
-    }));
+  
   };
   const postDeliveryNo = async () => {
     /// ! ---------------운송장 번호 등록과정 추가필요 -----------------!
@@ -461,6 +477,21 @@ export default function OrderOnSellPage() {
       orderCancel: false,
     }));
   };
+  
+  const filterInvalidOrderConfirmStatusItems = (items) => {
+    return items.filter(item=>item.orderStatus !== orderStatus.PAYMENT_DONE);
+  }
+  
+  const filterInvalidDeliveryStatusItems = (items, orderType) => {
+    let invalidItemList = [];
+    if ( orderType === productType.GENERAL  ){
+      invalidItemList = items.filter(item=>item.orderStatus !== orderStatus.DELIVERY_READY);
+    } else if(orderType === productType.SUBSCRIBE ){
+      invalidItemList = items.filter(item=>item.orderStatus !== orderStatus.PRODUCING);
+    }
+    return invalidItemList;
+  }
+  
   
   const onSearchInputKeydown = (e) => {
     enterKey(e, onSearchHandler);
