@@ -17,7 +17,7 @@ function OrderCompletedPage(props) {
     (async ()=>{
     
       if(props.paymentSuccess==true){
-        router.push(`/order/orderCompleted/subscribe/${orderIdx}/${customUid}/${price}/${merchantUid}/test${name}`);    
+        router.push(`/order/orderCompleted/subscribe/${orderIdx}/${customUid}/${price}/${merchantUid}/test${name}`);
       }
       if(imp_success == 'false'|| props.paymentSuccess === false){
         if(error_msg?.includes('결제포기')){
@@ -27,8 +27,8 @@ function OrderCompletedPage(props) {
         // 모바일 결제 실패
         const fail = await postObjData(`/api/orders/${orderIdx}/subscribe/fail`);
         console.log(fail);
-        } 
-        router.push(`/order/orderFailed`);    
+        }
+        router.push(`/order/orderFailed`);
       }
     })();
 
@@ -47,7 +47,7 @@ export async function getServerSideProps(ctx) {
   const { params, imp_uid, imp_success, error_msg} = query;
   
   console.log(query);
-  const [orderIdx, customUid, price, merchantUid, name] = params;
+  const [orderIdx, customUid, price, merchantUid, itemName, buyerName, buyerPhoneNum] = params;
   // 결제성공여부
   let paymentSuccess = null;
 
@@ -75,11 +75,13 @@ export async function getServerSideProps(ctx) {
           customer_uid: `customer_Uid_${customUid}`,
           merchant_uid: merchantUid, // 새로 생성한 결제(재결제)용 주문 번호
           amount: price,
-          name: name
+          name: itemName,
+          buyer_name: buyerName,
+          buyer_tel: buyerPhoneNum,
         }
       });
       console.log(paymentResult);
-      const { code, message, response } = paymentResult.data; 
+      const { code, message, response } = paymentResult.data;
 
       if (code === 0) { // 카드사 통신에 성공(실제 승인 성공 여부는 추가 판단이 필요함)
         if(response.status==='paid'){//카드 정상 승인
@@ -89,12 +91,12 @@ export async function getServerSideProps(ctx) {
           merchantUid : merchantUid,
           customerUid : `customer_Uid_${customUid}`,
         });
-        console.log(r); 
+        console.log(r);
           if(r.status === 200){
             paymentSuccess=true;
           }
      
-        } else if(response.status === 'failed'||paymentResult==null){ 
+        } else if(response.status === 'failed'||paymentResult==null){
           //paymentResult.status : failed 로 수신됨
           paymentSuccess=false;
 
@@ -105,6 +107,6 @@ export async function getServerSideProps(ctx) {
       }
     
     
-  } 
+  }
   return { props: { orderIdx, paymentSuccess } };
 }
