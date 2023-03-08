@@ -27,16 +27,16 @@ export default function MyApp({ Component, pageProps, CustomProps }) {
   return (
     <GAProvider>
       <Provider store={store}>
-        {/*<SiteMaintenance/>*/}
-        <AuthInterceptor CustomProps={CustomProps}>
-          <ChannelTalkProvider>
-            <ModalContextProvider>
-                <AlertLayer props={CustomProps}>
-                  <Component {...pageProps} />
-                </AlertLayer>
-            </ModalContextProvider>
-          </ChannelTalkProvider>
-        </AuthInterceptor>
+        <SiteMaintenance/>
+        {/*<AuthInterceptor CustomProps={CustomProps}>*/}
+        {/*  <ChannelTalkProvider>*/}
+        {/*    <ModalContextProvider>*/}
+        {/*        <AlertLayer props={CustomProps}>*/}
+        {/*          <Component {...pageProps} />*/}
+        {/*        </AlertLayer>*/}
+        {/*    </ModalContextProvider>*/}
+        {/*  </ChannelTalkProvider>*/}
+        {/*</AuthInterceptor>*/}
       </Provider>
     </GAProvider>
   );
