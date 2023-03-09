@@ -1,14 +1,12 @@
 import s from "./popup_sell.module.scss";
 import {subscribePlanType} from "/store/TYPE/subscribePlanType";
-import React, {useMemo} from "react";
+import React from "react";
 import {seperateStringViaComma} from "/util/func/seperateStringViaComma";
 
 const ProductInfo_subscribe = ({subscribeInfo,  isChangedSubscribeInfo }) => {
-  // console.log("subscribeInfo: ",subscribeInfo)
   
-  
-  const oneMealGramsPerRecipe = useMemo( () => seperateStringViaComma(subscribeInfo.oneMealGramsPerRecipe) || [], [subscribeInfo.oneMealGramsPerRecipe] );
-  const packCountPerRecipe = useMemo( () => subscribePlanType[subscribeInfo.plan].totalNumberOfPacks / oneMealGramsPerRecipe.length, [subscribeInfo.plan] );
+  const oneMealGramsPerRecipe = seperateStringViaComma(subscribeInfo.oneMealGramsPerRecipe) || [];
+  const packCountPerRecipe = subscribeInfo.plan && (subscribePlanType[subscribeInfo.plan].totalNumberOfPacks / oneMealGramsPerRecipe.length);
   
   return (
     <>

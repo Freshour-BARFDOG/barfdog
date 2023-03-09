@@ -1,15 +1,16 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import s from '/src/components/popup/admin_ProductInfo/popup_sell.module.scss';
 import PopupWrapper from '/src/components/popup/PopupWrapper';
-import { PopupCloseButton, PopupCloseButton_typeX } from '/src/components/popup/PopupCloseButton';
+import {PopupCloseButton, PopupCloseButton_typeX} from '/src/components/popup/PopupCloseButton';
 import ProductInfo_basicOrderInfo from '/src/components/popup/admin_ProductInfo/ProductInfo_basicOrderInfo';
 import ProductInfo_dog from '/src/components/popup/admin_ProductInfo/ProductInfo_dog';
 import ProductInfo_subscribe from '/src/components/popup/admin_ProductInfo/ProductInfo_subscribe';
 import ProductInfo_payment from '/src/components/popup/admin_ProductInfo/ProductInfo_payment';
 import ProductInfo_delivery from '/src/components/popup/admin_ProductInfo/ProductInfo_delivery';
 import ProductInfo_orderStatusInfo from '/src/components/popup/admin_ProductInfo/ProductInfo_orderStatusInfo';
-import { orderStatus } from '/store/TYPE/orderStatusTYPE';
+import {orderStatus} from '/store/TYPE/orderStatusTYPE';
 import {getDataSSR} from "/src/pages/api/reqData";
+import {isChangedSubscribeInformation} from "/util/func/subscribe/isChangedSubscribeInformation";
 
 
 export default function Popup_SubscribeOrderDetailInfoPage({ data }) {
@@ -28,14 +29,13 @@ export default function Popup_SubscribeOrderDetailInfoPage({ data }) {
     }
   }
   
-  const isChangedSubscribeInfo = data.beforeSubscribeDto.id; // 구독내용을 바꾼적이 없다면 null;
 
   useEffect(() => {
     if (!data && window && typeof window !== 'undefined') {
       alert('데이터를 불러올 수 없습니다.');
     }
   }, []);
-
+  
   return (
     <>
       <div id={s.popup}>
@@ -71,8 +71,9 @@ export default function Popup_SubscribeOrderDetailInfoPage({ data }) {
                   </li>
                   <li className={s['table-list']}>
                     <ProductInfo_subscribe subscribeInfo={data.subscribeDto} />
-                    {isChangedSubscribeInfo && <ProductInfo_subscribe subscribeInfo={data.beforeSubscribeDto} isChangedSubscribeInfo={true} />}
-                    
+                    {isChangedSubscribeInformation({before:data.beforeSubscribeDto, after:data.subscribeDto})
+                      && <ProductInfo_subscribe subscribeInfo={data.beforeSubscribeDto} isChangedSubscribeInfo={true} />
+                    }
                   </li>
                   <li className={s['table-list']}>
                     <ProductInfo_payment paymentInfo={data.subscribePaymentDto} />
@@ -173,73 +174,3 @@ export async function getServerSideProps({ req, query }) {
   }
   return { props: { data: DATA, orderStatus } };
 }
-
-
-
-// const DUMMY_RES = {
-//   data: {
-//     subscribeOrderInfoDto: {
-//       id: 8691,
-//       merchantUid: 'merchant_uid1',
-//       orderDate: '2022-08-12T11:19:53.679',
-//       orderType: 'subscribe',
-//       memberName: '김회원',
-//       phoneNumber: '01099038544',
-//       cancelReason: '단순 변심',
-//       cancelDetailReason: '반려견이 체해서 소화를 못해요',
-//       cancelRequestDate: '2022-08-09T11:19:53.679',
-//       cancelConfirmDate: '2022-08-11T11:19:53.679',
-//       package: false,
-//       subscribe: true,
-//       email: 'user@gmail.com',
-//     },
-//     dogDto: {
-//       name: '김바프',
-//       inedibleFood: 'ETC',
-//       inedibleFoodEtc: '단무지, 콩',
-//       caution: '소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.소화불량이 있어요.',
-//     },
-//     subscribeDto: {
-//       id: 8683,
-//       subscribeCount: 2,
-//       plan: 'FULL',
-//       oneMealRecommendGram: 101.0,
-//       recipeName: '스타트,터키비프',
-//     },
-//     beforeSubscribeDto: {
-//       id: 8684,
-//       subscribeCount: 1,
-//       plan: 'HALF',
-//       oneMealRecommendGram: 140.0,
-//       recipeName: '덕램',
-//     },
-//     subscribePaymentDto: {
-//       orderPrice: 120000,
-//       deliveryPrice: 3000,
-//       discountReward: 7000,
-//       couponName: '관리자 직접 발행 쿠폰1',
-//       discountCoupon: 50000,
-//       paymentPrice: 60000,
-//       orderStatus: 'CANCEL_DONE_SELLER',
-//       orderConfirmDate: '2022-08-12T08:19:53.679',
-//     },
-//     subscribeDeliveryDto: {
-//       recipientName: '김회원',
-//       recipientPhone: '01099038544',
-//       zipcode: '12345',
-//       street: '부산광역시 해운대구 센텀2로 19',
-//       detailAddress: '106호',
-//       departureDate: '2022-08-08T11:19:53.667',
-//       arrivalDate: '2022-08-11T11:19:53.667',
-//       deliveryNumber: 'cj0239234231',
-//     },
-//     _links: {
-//       self: {
-//         href: 'http://localhost:8080/api/admin/orders/8691/subscribe',
-//       },
-//       profile: {
-//         href: '/docs/index.html#resources-query-admin-order-subscribe',
-//       },
-//     },
-//   },
-// };
