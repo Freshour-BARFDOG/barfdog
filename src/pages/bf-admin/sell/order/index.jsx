@@ -234,7 +234,8 @@ export default function OrderOnSellPage() {
           rcvAddr1: info.rcvAddr1,
           rcvAddr2: info.rcvAddr2,
           rcvTel1: info.rcvTel1,
-          mallId: process.env.NEXT_PUBLIC_GOODSFLOW_SITECODE,
+          mallId: info.mallId,
+
           msgToTrans: info.request, // ! 배송 메시지 > 서버에서 받은 값 있는지 확인필요
           orderItems: info.orderItems.map((item) => ({
             uniqueCd: item.uniqueCd, // 고객 사용번호
