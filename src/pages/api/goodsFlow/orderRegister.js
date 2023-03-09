@@ -21,7 +21,7 @@ const OrderRegister = async (req, res) => {
     };
     const DATA = await axios
       .post(
-        `${process.env.NEXT_PUBLIC_GOODSFLOW_API_URL}/orders/partner/${process.env.NEXT_PUBLIC_GOODSFLOW_SITECODE}`,
+        `${process.env.NEXT_PUBLIC_GOODSFLOW_API_URL}/orders/partner/${process.env.NEXT_PUBLIC_GOODSFLOW_PARTNERCODE}`,
         req.body,
         options
       )
