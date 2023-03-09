@@ -15,6 +15,7 @@ import {orderStatus} from '/store/TYPE/orderStatusTYPE';
 import Modal_confirm from '/src/components/modal/Modal_confirm';
 import {Modal_subscribeCancel} from "/src/components/modal/Modal_subscribeCancel";
 import {paymentMethodType} from "/store/TYPE/paymentMethodType";
+import {roundedOneMealGram} from "../../../../../util/func/subscribe/roundedOneMealGram";
 
 
 /*! 참고)
@@ -191,11 +192,11 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
     
                     <span>급여량</span>
                     <div>
-                      <span>{data?.orderDto.oneMealGramsPerRecipe}g</span>
+                      <span>{transformLocalCurrency(roundedOneMealGram(data?.orderDto.oneMealGramsPerRecipe))}g</span>
                       {data?.orderDto.beforeOneMealGramsPerRecipe &&
                         data?.orderDto.beforeOneMealGramsPerRecipe !==
                         data?.orderDto.oneMealGramsPerRecipe && (
-                          <span className={s.beforeData}>{data?.orderDto.beforeOneMealGramsPerRecipe}g</span>
+                          <span className={s.beforeData}>{transformLocalCurrency(roundedOneMealGram(data?.orderDto.beforeOneMealGramsPerRecipe))}g</span>
                         )}
                     </div>
   

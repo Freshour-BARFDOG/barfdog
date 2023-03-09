@@ -2,6 +2,8 @@ import s from "./popup_sell.module.scss";
 import {subscribePlanType} from "/store/TYPE/subscribePlanType";
 import React from "react";
 import {seperateStringViaComma} from "/util/func/seperateStringViaComma";
+import {roundedOneMealGram} from "../../../../util/func/subscribe/roundedOneMealGram";
+import transformLocalCurrency from "../../../../util/func/transformLocalCurrency";
 
 const ProductInfo_subscribe = ({subscribeInfo,  isChangedSubscribeInfo }) => {
   
@@ -56,7 +58,7 @@ const ProductInfo_subscribe = ({subscribeInfo,  isChangedSubscribeInfo }) => {
                 <span>급여량</span>
               </div>
               <div className={`${s.innerBox} ${s.cont}`}>
-                <span>{oneMealGramsPerRecipe[index]}g  <i className={s['recipePackCount']}>({packCountPerRecipe} 팩)</i></span>
+                <span>{transformLocalCurrency(roundedOneMealGram(oneMealGramsPerRecipe[index]))}g  <i className={s['recipePackCount']}>({packCountPerRecipe} 팩)</i></span>
               </div>
             </div>
           </li>

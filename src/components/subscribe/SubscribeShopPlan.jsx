@@ -46,7 +46,7 @@ export const SubscribeShopPlan = ({ name, info, form, setForm, calcPrice }) => {
     oneDayRecommendKcal: info.foodAnalysis.oneDayRecommendKcal,
   })?.map(
     (recipeInfo, i) =>
-      <span className={s.oneLine} key={`oneMealGram-info-${i}`}><b>{recipeInfo.oneMealGram}g</b>&nbsp;<i className={s.tinyText}>(1팩 기준){selectedRecipeIds.length > 1 && ` (${recipeInfo.recipeName})`}</i></span> )
+      <span className={s.oneLine} key={`oneMealGram-info-${i}`}><b>{transformLocalCurrency(recipeInfo.oneMealGram)}g</b>&nbsp;<i className={s.tinyText}>(1팩 기준){selectedRecipeIds.length > 1 && ` (${recipeInfo.recipeName})`}</i></span> )
       , [form, initialize] )
     || <span className={s.oneLine}><b>0g</b>&nbsp;<i className={s.tinyText}>(1팩 기준)</i></span>;
   

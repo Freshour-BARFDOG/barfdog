@@ -8,6 +8,7 @@ import {Modal_couponWithSubscribeApi} from '../modal/Modal_couponWithSubscribeAp
 import {useModalContext} from '/store/modal-context';
 import Tooltip from "../atoms/TooltipSubscrib";
 import {calcSubscribeNextPaymentPrice} from "/util/func/subscribe/calcSubscribeNextPaymentPrice";
+import {roundedOneMealGram} from "../../../util/func/subscribe/roundedOneMealGram";
 
 
 export const SubscribeDashboard = ({ subscribeInfo }) => {
@@ -100,7 +101,7 @@ export const SubscribeDashboard = ({ subscribeInfo }) => {
 
             <div className={`${s.top_flex_box2} ${s.third}`}>
               <div className={s.left}>급여량</div>
-              <div className={s.right}>{info.oneMealGramsPerRecipe?.map((oneMealGram, index) => <p key={`oneMealGram}-${index}`}>{oneMealGram}g</p>) || "-"}</div>
+              <div className={s.right}>{info.oneMealGramsPerRecipe?.map((oneMealGram, index) => <p key={`oneMealGram}-${index}`}>{transformLocalCurrency(roundedOneMealGram(oneMealGram))}g</p>) || "-"}</div>
             </div>
           </div>
 

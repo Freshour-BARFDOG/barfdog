@@ -15,6 +15,7 @@ import {useModalContext} from "/store/modal-context";
 import Modal_confirm from "/src/components/modal/Modal_confirm";
 import {seperateStringViaComma} from "/util/func/seperateStringViaComma";
 import {FullScreenLoading} from "../../../../components/atoms/FullScreenLoading";
+import {roundedOneMealGram} from "/util/func/subscribe/roundedOneMealGram";
 
 
 /* ! 플랜 주기가 변경될 경우 (2주 => 4주 또는 4주 => 2주 )
@@ -24,7 +25,6 @@ import {FullScreenLoading} from "../../../../components/atoms/FullScreenLoading"
 * */
 export default function SubscribeOrderChangedPage({ data }) {
 
-  
   const mct = useModalContext();
   const cart = useSelector((s) => s.cart);
   const info = cart.subscribeOrder;
@@ -156,7 +156,7 @@ export default function SubscribeOrderChangedPage({ data }) {
                 <div className={s.line_box}>
                   <span className={s.left_box}>급여량</span>
                   <span className={s.right_box}>
-                       {DATA.prev.oneMealGrams.split(',').map((gram, i)=><em key={`prev-oneMealGrams-${i}`}>{transformLocalCurrency( gram ) + "g "}</em>)}
+                       {DATA.prev.oneMealGrams.split(',').map((gram, i)=><em key={`prev-oneMealGrams-${i}`}>{transformLocalCurrency(roundedOneMealGram( gram )) + "g "}</em>)}
                   </span>
                 </div>
                 <div className={s.line_box}>
@@ -205,7 +205,7 @@ export default function SubscribeOrderChangedPage({ data }) {
                 <div className={s.line_box}>
                   <span className={s.left_box}>급여량</span>
                   <span className={s.right_box}>
-                    {DATA.next.oneMealGrams.map((gram, i)=><em key={`next-oneMealGrams-${i}`}>{transformLocalCurrency( gram ) + "g "}</em>)}
+                    {DATA.next.oneMealGrams.map((gram, i)=><em key={`next-oneMealGrams-${i}`}>{transformLocalCurrency(roundedOneMealGram( gram )) + "g "}</em>)}
                   </span>
                 </div>
                 <div className={s.line_box}>

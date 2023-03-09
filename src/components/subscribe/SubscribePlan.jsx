@@ -1,25 +1,20 @@
-import React, {useCallback, useContext, useEffect, useMemo, useState} from 'react';
+import React, {useState} from 'react';
 import s from '/src/pages/mypage/subscribe/[subscribeId].module.scss';
 import CustomInput from '../atoms/CustomInput';
 import Image from 'next/image';
-import { subscribePlanType } from '/store/TYPE/subscribePlanType';
+import {subscribePlanType} from '/store/TYPE/subscribePlanType';
 import ItemLabel from '/src/components/atoms/ItemLabel';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import Spinner from '/src/components/atoms/Spinner';
-import { postObjData } from '/src/pages/api/reqData';
+import {postObjData} from '/src/pages/api/reqData';
 import Modal_confirm from '/src/components/modal/Modal_confirm';
-import { useModalContext } from '/store/modal-context';
-import { FullScreenLoading } from '../atoms/FullScreenLoading';
+import {useModalContext} from '/store/modal-context';
+import {FullScreenLoading} from '../atoms/FullScreenLoading';
 import {useSubscribePlanInfo} from "/util/hook/useSubscribePlanInfo";
-import {calcOneMealGramsWithRecipeInfo, ONEMEALGRAM_DEMICAL} from "../../../util/func/subscribe/calcOneMealGramsWithRecipeInfo";
-import {seperateStringViaComma} from "../../../util/func/seperateStringViaComma";
-import {valid_isTheSameArray} from "../../../util/func/validation/validationPackage";
-import {calcSubscribePrice} from "../../../util/func/subscribe/calcSubscribePrices";
+import {roundedOneMealGram} from "/util/func/subscribe/roundedOneMealGram";
 
 export const SubscribePlan = ({ subscribeInfo }) => {
   const subscribePlanInfo = useSubscribePlanInfo();
-  // console.log(subscribePlanInfo);
-  // console.log(subscribeInfo);
   const oneMealGramsPerRecipe = subscribeInfo.info.oneMealGramsPerRecipe;
   
   const planInfoList = [
@@ -195,7 +190,7 @@ export const SubscribePlan = ({ subscribeInfo }) => {
                     <span>{item.weeklyPaymentCycle}주</span>&nbsp;정기배송
                   </div>
                   <div className={s.row_3}>
-                    {oneMealGramsPerRecipe.map((oneMealGram, index) => <p key={`oneMealGram}-${index}`}><b>{oneMealGram}</b>g&nbsp;(1팩기준)</p>) || "-"}
+                    {oneMealGramsPerRecipe.map((oneMealGram, index) => <p key={`oneMealGram}-${index}`}><b>{transformLocalCurrency(roundedOneMealGram(oneMealGram))}</b>g&nbsp;(1팩기준)</p>) || "-"}
                   </div>
                   <div className={s.row_4}>
                     {item.totalNumberOfPacks}팩 x

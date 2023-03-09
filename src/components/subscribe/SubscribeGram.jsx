@@ -12,6 +12,7 @@ import {FullScreenLoading} from '/src/components/atoms/FullScreenLoading';
 import {calcSubscribePrice} from "../../../util/func/subscribe/calcSubscribePrices";
 import {valid_isTheSameArray} from "../../../util/func/validation/validationPackage";
 import {ONEMEALGRAM_DEMICAL} from "../../../util/func/subscribe/calcOneMealGramsWithRecipeInfo";
+import {roundedOneMealGram} from "../../../util/func/subscribe/roundedOneMealGram";
 
 export const SubscribeGram = ({ subscribeInfo }) => {
   
@@ -132,7 +133,7 @@ export const SubscribeGram = ({ subscribeInfo }) => {
               <div className={s.grid_1}>
                 <p className={s.top_text}>기존 무게(g)</p>
                 <div className={s.bot_1}>
-                  {form.originGrams.map(((gram, i)=><em key={`originGram-${i}`}>{gram}g {i < form.originGrams.length - 1 && ", "}</em>))}
+                  {form.originGrams.map(((gram, i)=><em key={`originGram-${i}`}>{transformLocalCurrency(roundedOneMealGram(gram))}g {i < form.originGrams.length - 1 && ", "}</em>))}
                 </div>
               </div>
               <div className={s.selectBox}>
@@ -160,7 +161,7 @@ export const SubscribeGram = ({ subscribeInfo }) => {
               <div className={s.grid_3}>
                 <p className={s.top_text}>변경 후 무게(g)</p>
                 <div className={s.bot_1}>
-                  {form.nextGrams.map(((gram, i)=><em key={`nextGram-${i}`}>{gram}g {i < form.originGrams.length - 1 && ", "}</em>))}
+                  {form.nextGrams.map(((gram, i)=><em key={`nextGram-${i}`}>{transformLocalCurrency(roundedOneMealGram(gram))}g {i < form.originGrams.length - 1 && ", "}</em>))}
                 </div>
               </div>
               <div className={s.grid_4}>
