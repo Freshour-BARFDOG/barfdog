@@ -28,8 +28,8 @@ export const Modal_coupon = ({ onModalActive, itemInfo,  form, setForm, orderTyp
     const radioId = radio.id;
     const couponId = Number(radio.dataset.couponId);
     const couponDiscountAmount = Number(radio.dataset.discountAmount);
-    const availableMaxDiscount = calcOrdersheetPrices(form, orderType)?.availableMaxDiscount;
-    if(availableMaxDiscount <= 0){
+    const availableCouponMaxDiscount = calcOrdersheetPrices(form, orderType)?.availableMaxDiscount.coupon;
+    if(availableCouponMaxDiscount <= 0){
       return alert("최소결제금액에 도달하여, 할인 쿠폰을 적용할 수 없습니다.")
     }
     setSelectedRadioInfo((prevState) => ({

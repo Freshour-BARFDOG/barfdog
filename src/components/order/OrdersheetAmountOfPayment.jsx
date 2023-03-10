@@ -84,10 +84,10 @@ export const OrdersheetAmountOfPayment = ({
         
         
         
-        {calcResult?.overDiscountCoupon > 0 && <div className={s.flex_box4}>
-          <span>쿠폰 할인 소멸</span>
+        {calcResult?.overDiscount > 0 && <div className={s.flex_box4}>
+          <span>쿠폰 초과할인 소멸</span>
           <span className={"pointColor"}>
-            +{transformLocalCurrency(calcResult.overDiscountCoupon)}원
+            +{transformLocalCurrency(calcResult.overDiscount)}원
           </span>
         </div>}
         

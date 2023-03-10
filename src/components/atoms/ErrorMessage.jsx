@@ -7,7 +7,6 @@ const ErrorMessageWrap = styled.pre`
   font-size: ${(props) => props.fontSize ? props.fontSize : rem(13)} !important;
   color: ${(props) => props.valid ? `var(--color-checked)` : props.style?.color || `var(--color-main)`};
   display:${props => props.fullWidth ? "grid" : "inline-block"};
-  padding: ${rem(30)};
   cursor: default;
 `;
 
