@@ -47,7 +47,7 @@ export async function getServerSideProps(ctx) {
   const { params, imp_uid, imp_success, error_msg} = query;
   
   console.log(query);
-  const [orderIdx, customUid, price, merchantUid, itemName, buyerName, buyerPhoneNum] = params;
+  const [orderIdx, customUid, price, merchantUid, itemName, buyer_name, buyer_tel, buyer_email, buyer_addr] = params;
   // 결제성공여부
   let paymentSuccess = null;
 
@@ -72,12 +72,14 @@ export async function getServerSideProps(ctx) {
         method: "post",
         headers: { "Authorization": access_token }, // 인증 토큰을 Authorization header에 추가
         data: {
-          customer_uid: `customer_Uid_${customUid}`,
+          customer_uid: customUid,
           merchant_uid: merchantUid, // 새로 생성한 결제(재결제)용 주문 번호
           amount: price,
           name: itemName,
-          buyer_name: buyerName,
-          buyer_tel: buyerPhoneNum,
+          buyer_name: buyer_name,
+          buyer_tel: buyer_tel,
+          buyer_email: buyer_email,
+          buyer_addr: buyer_addr,
         }
       });
       console.log(paymentResult);
