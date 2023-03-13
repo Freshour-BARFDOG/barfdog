@@ -19,6 +19,7 @@ import { useRouter } from 'next/router';
 import Modal_confirm from '/src/components/modal/Modal_confirm';
 import {orderStatus} from "/store/TYPE/orderStatusTYPE";
 import DeleteIcon from '/public/img/mypage/dog_info_delete.svg';
+import {FullScreenRunningDog} from "../../../components/atoms/FullScreenLoading";
 
 export default function MypageDogInfoPage({ data }) {
   // console.log(data);
@@ -28,8 +29,7 @@ export default function MypageDogInfoPage({ data }) {
   const [itemList, setItemList] = useState(data);
   const [selectedItemData, setSelectedItemData] = useState(null);
   const [modalMessage, setModalMessage] = useState('');
-
-  console.log(mct);
+  
   useEffect(() => {
     // 반려견 등록 후 , 해당 페이지 최초 접근 시, 모달메시지 나타나는 버그에 대한 일시적인 해결
     mct.alertHide();
@@ -229,6 +229,13 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
     data.subscribeStatus === subscribeStatus.SUBSCRIBING ||
     data.subscribeStatus === subscribeStatus.ADMIN;
 
+  const nextPageHandler = (e) => {
+    const dogId = e.currentTarget.dataset.id;
+    setIsLoading(prevState => ({
+      ...prevState,
+      [dogId]: true
+    }));
+  };
   return (
     <>
       <li className={s['dogInfo-wrap']} data-id={dogId}>
@@ -258,13 +265,6 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
               onClick={onActiveConfirmModal}
             >
               <DeleteIcon width='100%' height='100%' viewBox="0 0 28 28" />
-              {/* <Image
-                priority
-                src={require('/public/img/mypage/dog_info_delete.png')}
-                objectFit="cover"
-                layout="fill"
-                alt="삭제 아이콘"
-              /> */}
             </div>
           </div>
 
@@ -291,7 +291,7 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
             {(data.subscribeStatus === subscribeStatus.BEFORE_PAYMENT ||
               data.subscribeStatus === subscribeStatus.SUBSCRIBE_PENDING) && (
               <Link href={`/order/subscribeShop?dogId=${dogId}`} passHref>
-                <a className={s.payment}>결제하기</a>
+                <a className={s.payment} data-id={dogId} onClick={nextPageHandler}>{isLoading[dogId] ? <Spinner style={{color:"#fff"}}/>: "결제하기"}</a>
               </Link>
             )}
           </div>
