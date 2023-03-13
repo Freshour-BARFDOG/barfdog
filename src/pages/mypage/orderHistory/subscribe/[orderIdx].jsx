@@ -16,6 +16,7 @@ import Modal_confirm from '/src/components/modal/Modal_confirm';
 import {Modal_subscribeCancel} from "/src/components/modal/Modal_subscribeCancel";
 import {paymentMethodType} from "/store/TYPE/paymentMethodType";
 import {roundedOneMealGram} from "../../../../../util/func/subscribe/roundedOneMealGram";
+import {seperateStringViaComma} from "../../../../../util/func/seperateStringViaComma";
 
 
 /*! 참고)
@@ -93,6 +94,8 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
   
   if(!data) return;
   // console.log(data)
+  console.log(data?.orderDto.oneMealGramsPerRecipe);
+  console.log(seperateStringViaComma(data?.orderDto.oneMealGramsPerRecipe).map(gram=> roundedOneMealGram(gram)));
   return (
     <>
       <MetaTitle title="마이페이지 주문내역 정기구독" />
@@ -192,7 +195,7 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
     
                     <span>급여량</span>
                     <div>
-                      <span>{transformLocalCurrency(roundedOneMealGram(data?.orderDto.oneMealGramsPerRecipe))}g</span>
+                      <span>{seperateStringViaComma(data?.orderDto.oneMealGramsPerRecipe).map(gram=> `${transformLocalCurrency(roundedOneMealGram(gram))}g`).join(", ")}</span>
                       {data?.orderDto.beforeOneMealGramsPerRecipe &&
                         data?.orderDto.beforeOneMealGramsPerRecipe !==
                         data?.orderDto.oneMealGramsPerRecipe && (
