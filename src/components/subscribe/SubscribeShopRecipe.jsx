@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import s from '/src/pages/order/subscribeShop/index.module.scss';
-import swiperStyle from './subscribeRecipe.module.scss';
-import { ItemRecommendlabel, ItemSoldOutLabel } from '/src/components/atoms/ItemLabel';
+import {ItemRecommendlabel, ItemSoldOutLabel} from '/src/components/atoms/ItemLabel';
 import Image from 'next/image';
 import { subscribePlanType } from '/store/TYPE/subscribePlanType';
 import 'swiper/css';
@@ -62,7 +61,12 @@ export const SubscribeShopRecipe = ({ name, info, form, setForm }) => {
     // Recipe Input 타입 변환
     const type = form.plan === subscribePlanType.FULL.NAME ? 'checkbox' : 'radio';
     setInputType(type);
+    // 플랜이 변경되었을 경우, Recipe Value And Input 초기화
     setInitialize(true);
+    setForm(prevState => ({
+      ...prevState,
+      [name]: []
+    }));
   }, [form.plan]);
 
   useEffect(() => {
