@@ -82,16 +82,16 @@ export async function getServerSideProps(ctx) {
           buyer_addr: buyer_addr,
         }
       });
-      console.log(paymentResult);
       const { code, message, response } = paymentResult.data;
 
+      console.log("code: ",code, "message: ",message, "response: ",response);
       if (code === 0) { // 카드사 통신에 성공(실제 승인 성공 여부는 추가 판단이 필요함)
         if(response.status==='paid'){//카드 정상 승인
         
         const r = await postDataSSR(req,`/api/orders/${orderIdx}/subscribe/success`, {
           impUid : imp_uid,
           merchantUid : merchantUid,
-          customerUid : `customer_Uid_${customUid}`,
+          customerUid : customUid,
         });
         console.log(r);
           if(r.status === 200){
@@ -107,8 +107,8 @@ export async function getServerSideProps(ctx) {
       } else { // 카드사 요청에 실패 (paymentResult is null)
         paymentSuccess=false;
       }
-    
-    
+  } else if(imp_success == 'false') {
+    paymentSuccess=false;
   }
   return { props: { orderIdx, paymentSuccess } };
 }
