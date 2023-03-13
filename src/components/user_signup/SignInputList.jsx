@@ -37,7 +37,7 @@ export default function SignInpuList({ formValues, setFormValues, formErrors, se
   });
 
   const [confirmPasswordMessage, setConfirmPasswordMessage] = useState('');
-  const [emailPassedValdationMessage, setEmailPassedValidationMessage] = useState('');
+  const [emailValdationMessage, setEmailPassedValidationMessage] = useState('');
 
   useEffect(() => {
     (async () => {
@@ -69,8 +69,10 @@ export default function SignInpuList({ formValues, setFormValues, formErrors, se
   }, [formValues.password, formValues.confirmPassword, setFormErrors]);
 
   const onCheckEmailDuplication = async () => {
+    console.log(isLoading.email);
+    if(isLoading.email) return console.error('Loading email duplicate check');
     const error = valid_email(formValues.email);
-    if (error || isLoading.email) {
+    if (error) {
       return setFormErrors((prevState) => ({
         ...prevState,
         email: error,
@@ -79,12 +81,14 @@ export default function SignInpuList({ formValues, setFormValues, formErrors, se
       }));
     }
 
-    setIsLoading((prevState) => ({
-      ...prevState,
-      email: '이메일 중복확인 중입니다.',
-    }));
 
     try {
+  
+      setIsLoading((prevState) => ({
+        ...prevState,
+        email: '이메일 중복확인 중입니다.',
+      }));
+      
       const response = await valid_email_duplication(formValues.email);
       // console.log(response);
       setFormErrors((prevState) => ({
@@ -93,18 +97,24 @@ export default function SignInpuList({ formValues, setFormValues, formErrors, se
         isEmailDuplicated: response.error,
         _messageOnEmail: response.message,
       }));
+      
     } catch (err) {
+      
       setFormErrors((prevState) => ({
         ...prevState,
         isEmailDuplicated: !!err,
       }));
-      console.error('SignInputList > Email 중복확인: ', err);
+      alert('이메일 중복확인 중 에러가 발생하였습니다.');
+      console.error(err);
+      
+    } finally {
+  
+      setIsLoading((prevState) => ({
+        ...prevState,
+        email: false,
+      }));
     }
 
-    setIsLoading((prevState) => ({
-      ...prevState,
-      email: false,
-    }));
   };
 
   const onGetAuthNumberHandler = async () => {
@@ -174,8 +184,6 @@ export default function SignInpuList({ formValues, setFormValues, formErrors, se
     }));
   };
 
-  // console.log(formErrors)
-
   return (
     <>
       <SignupInput
@@ -201,18 +209,18 @@ export default function SignInpuList({ formValues, setFormValues, formErrors, se
           (isLoading.email ||
             formErrors.email ||
             (formValues.email && formErrors.isEmailDuplicated) ||
-            emailPassedValdationMessage) && (
+            emailValdationMessage) && (
             <ErrorMessage
               className={`${s.msg} ${isLoading.email ? s.loading : ''} ${
-                ((!formErrors.email && !formErrors.isEmailDuplicated) ||
-                  emailPassedValdationMessage) &&
+                (formErrors.email !== "이메일 중복확인을 하지 않았습니다." && (!formErrors.email && !formErrors.isEmailDuplicated) ||
+                  emailValdationMessage) &&
                 s.valid
               }`}
             >
               {isLoading.email ||
                 formErrors.email ||
                 formErrors.isEmailDuplicated ||
-                emailPassedValdationMessage}
+                emailValdationMessage}
             </ErrorMessage>
           )
         }

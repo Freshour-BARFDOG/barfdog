@@ -80,7 +80,6 @@ export default function SignupPage() {
     termsOfService: false,
     privacy: false,
   });
-  const [alertModalMessage, setAlertModalMessage] = useState('');
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState(initialFormErrors);
 
@@ -96,43 +95,29 @@ export default function SignupPage() {
         ...validPolicyResultObj,
       }));
 
-      let isPassedValid = true;
+      let isPassed = true;
       for (const validFormResultObjKey in validFormResultObj) {
         const error = validFormResultObj[validFormResultObjKey];
-        if (error) isPassedValid = false;
+        if (error) isPassed = false;
       }
 
       for (const validPolicyResultObjKey in validPolicyResultObj) {
         const error = validPolicyResultObj[validPolicyResultObjKey];
-        if (error) isPassedValid = false;
+        if (error) isPassed = false;
       }
 
-      if (isPassedValid) {
-        mct.alertHide();
-        setAlertModalMessage('');
-        await sendSignupData(formValues);
-      } else {
-        mct.alertShow();
-        setAlertModalMessage('유효하지 않은 항목이 있습니다.');
-      }
+      if (!isPassed) return mct.alertShow('유효하지 않은 항목이 있습니다.');
+      
+      mct.alertHide('');
+      await postSignupData(formValues);
+      
     } catch (err) {
       console.error('통신에러: ', err);
-      setAlertModalMessage(`데이터 처리 중 오류가 발생했습니다.\n${err}`);
+      mct.alertShow(`데이터 처리 중 오류가 발생했습니다.\n${err}`);
     }
   };
 
-  const generateRandomString = (num) => {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-    let result = '';
-    const charactersLength = characters.length;
-    for (let i = 0; i < num; i++) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-
-    return result;
-  };
-
-  const sendSignupData = async (formvalues) => {
+  const postSignupData = async (formvalues) => {
     const randomPW = generateRandomString(12);
     const body = {
       provider: formvalues.provider || null,
@@ -177,10 +162,20 @@ export default function SignupPage() {
         }
       })
       .catch((err) => {
-        mct.alertHide();
-        setAlertModalMessage(`ERROR\n\n서버와 통신할 수 없습니다.`);
+        mct.alertHide(`ERROR\n\n서버와 통신할 수 없습니다.`);
         console.error('서버통신오류: ', err);
       });
+  };
+  
+  const generateRandomString = (num) => {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    let result = '';
+    const charactersLength = characters.length;
+    for (let i = 0; i < num; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    
+    return result;
   };
 
   return (
@@ -232,7 +227,7 @@ export default function SignupPage() {
       {isModalActive.privacy && (
         <Modal_privacy modalState={isModalActive.privacy} setModalState={setIsModalActive} />
       )}
-      {hasAlert && <Modal_global_alert message={alertModalMessage} />}
+      {hasAlert && <Modal_global_alert />}
     </>
   );
 }
