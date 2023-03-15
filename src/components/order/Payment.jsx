@@ -8,7 +8,8 @@ import {calcOrdersheetPrices} from './calcOrdersheetPrices';
 import {useRouter} from 'next/router';
 import axios from 'axios';
 import {availablePaymentState} from "/util/func/availablePaymentState";
-import { paymethodFilter } from '/util/filter_iamport_paymethod';
+import {paymethodFilter} from '/util/filter_iamport_paymethod';
+import {generateCustomerUid} from "/util/func/order/generateCustomerUid";
 
 export function Payment({
   info,
@@ -88,14 +89,17 @@ export function Payment({
     // console.log(isPassed);
     // 결제 로직 시작
     
-    setIsSubmitted(true);
     await startPayment();
   };
+  
+
 
   async function startPayment(){
     
-    const {discountTotal, discountCoupon, overDiscountCoupon, paymentPrice, discountGrade} = calcOrdersheetPrices(form, orderType);
-
+    const {discountTotal, discountCoupon, overDiscount, paymentPrice, discountGrade} = calcOrdersheetPrices(form, orderType);
+  
+    
+    const customerUid = generateCustomerUid(); // ! [client '결제실패' / Webhook 'paid'] CASE 처리를 위해, 주문서 생성 시에도 cutomerUid 전송.
     const body = orderType === 'general'?{
       orderItemDtoList: form.orderItemDtoList?.map((item) => ({
         itemId: item.itemId, // 상품 ID
@@ -123,13 +127,14 @@ export function Payment({
       discountTotal: discountTotal, // 총 할인 합계    ! 쿠폰할인금 적용
       discountReward: Number(form.discountReward), // 사용할 적립금
       discountCoupon: discountCoupon, // 쿠폰 적용으로 인한 할인금 ! coupon할인금 적용
-      overDiscount:  overDiscountCoupon, // 초과할인 금액
+      overDiscount:  overDiscount, // 초과할인 금액
       paymentPrice: paymentPrice, // 최종 결제 금액
       paymentMethod: form.paymentMethod, // 결제방법  [CREDIT_CARD, NAVER_PAY, KAKAO_PAY]
       // nextDeliveryDate: form.nextDeliveryDate, // ! 일반주문 시, request field에 없는 값.
       agreePrivacy: form.agreePrivacy, // 개인정보 제공 동의
       brochure: form.brochure, // 브로슈어 수령여부
     }:{
+      customerUid: customerUid, // ! 클라이언트 주문 실패 후, webhook 'paid' 대응하기 위한 필드
       memberCouponId: form.memberCouponId,
       deliveryDto: {
         name: form.deliveryDto.name, // 수령자 이름
@@ -145,7 +150,7 @@ export function Payment({
       discountReward: Number(form.discountReward), // 사용할 적립금
       discountCoupon: discountCoupon, // 쿠폰 적용으로 인한 할인금 ! coupon할인금 적용
       discountGrade: discountGrade, // 등급할인
-      overDiscount:  overDiscountCoupon, // 초과할인 금액
+      overDiscount:  overDiscount, // 초과할인 금액
       paymentPrice: paymentPrice, // 최종 결제 금액
       paymentMethod: form.paymentMethod, // 결제방법  [CREDIT_CARD, NAVER_PAY, KAKAO_PAY]
       nextDeliveryDate: form.nextDeliveryDate, // 배송 예정일 'yyyy-MM-dd', 첫 결제 배송날짜는 프론트에서 넘어온 값으로 저장함
@@ -153,8 +158,8 @@ export function Payment({
       brochure: form.brochure, // 브로슈어 수령여부
     };
 
-    console.log('request body: ',body, calcOrdersheetPrices(form, orderType) );
-   
+    console.log('----- request body:\n',body);
+  
     try {
       setIsLoading((prevState) => ({
         ...prevState,
@@ -174,20 +179,16 @@ export function Payment({
           await generalPayment(body,res.data.data.id, res.data.data.merchantUid);
         }else{
           // 구독 주문 결제
-          await subscribePayment(body,res.data.data.id, res.data.data.merchantUid);
+          await subscribePayment(body,res.data.data.id, res.data.data.merchantUid, customerUid); // ! 정기결제 시, 카드 저장을 위해 CustomerUid 필요
         }
         // alert('결제완료 -> 이후 확인버튼 클릭 -> 결제완료페이지로 Redir');
         const scrollTopPos = document.documentElement.scrollTop;
         document.body.style.cssText = `
         overflow-y:scroll;
         position:fixed;
-        top: -${scrollTopPos}px;
-      `;
-        // return () => {
-        //   document.body.style.cssText = ``;
-        //   window?.scrollTo(0, parseInt(-mcx.event.scrollY || 10) * -1);
-        // };
-        // 결제 시작
+        top: -${scrollTopPos}px;`;
+        
+        setIsSubmitted(true);
       } else {
         alert(res.error, '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.');
       }
@@ -271,32 +272,30 @@ export function Payment({
           window.location.href= `/order/orderFailed`;
           
         }else{
-        // 결제 실패
-        const fail = await postObjData(`/api/orders/${id}/general/fail`);
-        console.log(fail);
-        if(fail.isDone){
-           // startPayment();
-          alert(`결제 실패: ${error_msg}`);
-           // 결제 취소 시 , 전역에 import 결제 html이 잔류하여, 없앰
-           document.body.style.cssText='';
-           document.body.querySelector('.imp-dialog ').innerHTML='';
-           document.body.querySelector('.imp-dialog ').style.cssText='display:none !important';
-           window.location.href= `/order/orderFailed`;
-         }
+          // 결제 실패
+          const fail = await postObjData(`/api/orders/${id}/general/fail`);
+          console.log(fail);
+          if(fail.isDone){
+             // startPayment();
+            alert(`결제 실패: ${error_msg}`);
+             // 결제 취소 시 , 전역에 import 결제 html이 잔류하여, 없앰
+             document.body.style.cssText='';
+             document.body.querySelector('.imp-dialog ').innerHTML='';
+             document.body.querySelector('.imp-dialog ').style.cssText='display:none !important';
+             window.location.href= `/order/orderFailed`;
+          }
         }
     }
   
-    };
+    }
     
   }
 
-  async function subscribePayment(body,id,merchantUid) {
+  async function subscribePayment(body,id,merchantUid, customerUid) {
     /* 1. 가맹점 식별하기 */
     const IMP = window.IMP;
     IMP.init(process.env.NEXT_PUBLIC_IAMPORT_CODE);
-
-    const randomStr = new Date().getTime().toString(36);
-    const customUid = `customer_Uid_${randomStr}`;
+    
     
      /* 2. 결제 데이터 정의하기  TODO:kakaopay 실연동 가맹점코드(CID) 발급받으면 변경하기*/
     const itemName = `[구독상품]-${info.recipeNameList.join(", ")}`;
@@ -312,13 +311,13 @@ export function Payment({
       pay_method: 'card', // 결제수단
       merchant_uid: new Date().getTime().toString(36), // 주문번호
       amount:0, // 결제금액 0원 ( 구독결제 시, 첫 번째 결제는 예약과정)
-      customer_uid : customUid,
+      customer_uid : customerUid,
       name: itemName, // 주문명
       buyer_name:buyer_name,
       buyer_tel: buyer_tel,
       buyer_email: buyer_email, // 구매자 이메일
       buyer_addr: buyer_addr, // 구매자 주소
-      m_redirect_url: `${window.location.origin}/order/loading/subscribe/${id}/${customUid}/${body.paymentPrice}/${merchantUid}/${mobileItemName}/${buyer_name}/${buyer_tel}/${buyer_email}/${buyer_addr}`,
+      m_redirect_url: `${window.location.origin}/order/loading/subscribe/${id}/${customerUid}/${body.paymentPrice}/${merchantUid}/${mobileItemName}/${buyer_name}/${buyer_tel}/${buyer_email}/${buyer_addr}`,
     };
   
     // 결제 이슈를 보완하기 인하여 Api Request Data 추가를 위해 사용
@@ -343,10 +342,9 @@ export function Payment({
         discountReward: callbackData.discountReward,
     
       }
-      const { success, customer_uid, imp_uid, merchant_uid, card_name, card_number, error_msg } = response;
-     
+      const { success, customer_uid, imp_uid, merchant_uid, card_name, card_number, error_msg } = response; // ! 최초 정기구독 주문시 0원결제 사용되는 IMP UID
+  
       const IMPORT_PAYMENT_CANCEL = response.error_msg?.indexOf('[결제포기]') >= 0;
-      console.log(IMPORT_PAYMENT_CANCEL)
     /* 3. 콜백 함수 정의하기 */
     if (success) {
       
@@ -386,21 +384,26 @@ export function Payment({
       console.log(paymentResult);
       console.log(paymentResult.data);
 
-      const { code, message, response } = paymentResult.data;
+      const { code, message, response } = paymentResult.data; // 두 번째 전달받는 값.
 
       if (code === 0) { // 카드사 통신에 성공(실제 승인 성공 여부는 추가 판단이 필요함)
+  
+  
+        const {imp_uid: again_imp_uid} = response;
+        
         if ( response.status === "paid" ) { //카드 정상 승인
-      const r = await postObjData(`/api/orders/${id}/subscribe/success`, {
-        impUid : imp_uid,
-        merchantUid : merchantUid,
-        customerUid : customer_uid,
-        discountReward: discountData.discountReward
-      });
-      console.log(r);
-      if(r.isDone){
-        // alert('결제 성공');
-        window.location.href = `/order/orderCompleted/subscribe/${id}`;
-      }
+          
+          const r = await postObjData(`/api/orders/${id}/subscribe/success`, {
+            impUid : again_imp_uid, // impUid는 두 번째 결제에 값이 있어야, webhook에서 해당 주문을 찾을 수 있음.
+            merchantUid : merchantUid, // merchantUid는 첫 번째, 두 번째 결제 모두 동일
+            customerUid : customer_uid,
+            discountReward: discountData.discountReward
+          });
+          console.log(r);
+          if(r.isDone){
+            // alert('결제 성공');
+            window.location.href = `/order/orderCompleted/subscribe/${id}`;
+          }
         } else if(response.status === 'failed'){ //카드 승인 실패 (예: 고객 카드 한도초과, 거래정지카드, 잔액부족 등)
           //paymentResult.status : failed 로 수신됨
           const fail = await postObjData(`/api/orders/${id}/subscribe/fail`);
