@@ -201,7 +201,7 @@ export default function Modal_member_subscribe({ memberId, onClick, setIsLoading
                         </div>
                         <div className={s['t-box']}>
                           <div className={`${s.innerBox} ${s.label}`}>
-                            <span>최근 발송일</span>
+                            <span>다음 발송일자</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
                             <span>{info.deliveryDate}</span>
@@ -292,4 +292,3 @@ const DUMMY_RESPONSE = {
     },
   },
 };
-
