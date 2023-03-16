@@ -28,7 +28,7 @@ export default function CouponPage () {
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
   const searchApiUrl = '/api/coupons';
-  const searchPageSize = 10;
+  const searchPageSize = 100;
   const apiDataQueryString = 'queryCouponsDtoList';
   const [isLoading, setIsLoading] = useState( {} );
   const [itemList, setItemList] = useState([]);
