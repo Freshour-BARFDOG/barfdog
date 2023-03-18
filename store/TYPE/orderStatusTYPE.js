@@ -4,7 +4,7 @@
   ! 배송API조회를 위해 deliveryStatus를 추후에 분리함
 */
 
-/* 
+/*
   - 구매확정 Condition
   <구독상품>
     1. 정기결제 상품 > 배송완료 직후
@@ -41,6 +41,7 @@ export const orderStatus = {
   EXCHANGE_DONE_SELLER: 'EXCHANGE_DONE_SELLER',
   EXCHANGE_DONE_BUYER: 'EXCHANGE_DONE_BUYER',
   FAILED: 'FAILED',
+  FAILED_RESERVED_PAYMENT: 'FAILED_RESERVED_PAYMENT',
   CONFIRM: 'CONFIRM',
   KOR: {
     ALL: '전체', // * 배송상태 미포함 (검색결과 조회 시에 사용)
@@ -70,6 +71,7 @@ export const orderStatus = {
     EXCHANGE_DONE_SELLER: '교환 완료 (판매자 귀책)',
     EXCHANGE_DONE_BUYER: '교환 완료 (구매자 귀책)',
     FAILED: '실패함', // 고객이 결제 실패했을 때
+    FAILED_RESERVED_PAYMENT: '예약결제 실패',
     CONFIRM: '구매 확정',
   },
 };
