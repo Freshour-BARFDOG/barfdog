@@ -101,6 +101,7 @@ section.body { padding : rem(120) 0 0 }
             color: #fff;
             @include char(l14);
             cursor:default;
+            white-space: nowrap;
           }
           i:not(:last-child){margin-right: rem(8);}
         }

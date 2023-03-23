@@ -100,8 +100,14 @@ section.title{ padding : rem(8) 0 rem(30);}
           padding-top: rem(10);
           color: var(--color-font-sub);
           font-size: rem(16);
+          
           span {
-            word-break: break-all;
+            &:nth-child(odd){
+              white-space: nowrap;
+            }
+            &:nth-child(even){
+              word-break: break-all;
+            }
           }
         }
       }
@@ -244,7 +250,12 @@ section.title{ padding : rem(8) 0 rem(30);}
           font-size: rem(16);
 
           div {
-            word-break: break-all;
+            &:nth-child(odd){
+              white-space: nowrap;
+            }
+            &:nth-child(even){
+              word-break: break-all;
+            }
           }
         }
       }

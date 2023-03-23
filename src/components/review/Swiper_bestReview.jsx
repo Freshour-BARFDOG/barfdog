@@ -15,7 +15,8 @@ export function Swiper_bestReview ({items}) {
   const [isActiveModal, setIsActiveModal] = useState( false );
   const [itemList, setItemList] = useState( [] );
   const [selectedItemId, setSelectedItemId] = useState( {} );
-  
+  const [swiperInstance, setSwiperInstance] = useState(null);
+
   useEffect( () => {
     window.innerWidth <= 600 ? setIsMobile( true ) : setIsMobile( false );
   }, [isMobile] );
@@ -28,7 +29,7 @@ export function Swiper_bestReview ({items}) {
   const swiperSettings_review = {
     className: `${s.swiper_review}`,
     slidesPerView: 'auto',
-    // autoplay: {delay: 2500},
+    autoplay: {delay: 2500},
     spaceBetween: 40,
     loop: true,
     breakpoints: {
@@ -60,10 +61,26 @@ export function Swiper_bestReview ({items}) {
     setSelectedItemId( selectedReviewId );
     setIsActiveModal( true );
   };
+
+  const handleMouseEnter = () => {
+    if (swiperInstance) {
+      swiperInstance.autoplay.stop();
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (swiperInstance) {
+      swiperInstance.autoplay.start();
+    }
+  };
   
   // console.log(itemList);
   return (
-    <div className={s.swiper_review_outerWrap}>
+    <div 
+      className={s.swiper_review_outerWrap}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       <i className={s['swiper-button-prev']} ref={navPrevRef}>
         <svg viewBox="0 0 50 50">
           <ArrowLeft className={s.arrow_left}/>
@@ -77,6 +94,7 @@ export function Swiper_bestReview ({items}) {
       <Swiper
         {...swiperSettings_review}
         onInit={(swiper) => {
+          setSwiperInstance(swiper);
           swiper.params.navigation.prevEl = navPrevRef.current;
           swiper.params.navigation.nextEl = navNextRef.current;
           swiper.navigation.destroy();

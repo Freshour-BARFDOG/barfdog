@@ -49,6 +49,8 @@ export default function SignupPage() {
       detailAddress: '',
     },
     birthday: `${userState.snsInfo.birthyear}-${convertedBirthday}` || '', // date형식: yyyy-mm-dd
+    // birthday: new Date(userState.snsInfo.birthyear, (convertedBirthday && convertedBirthday.split('-')[1] - 1), (convertedBirthday && convertedBirthday.split('-')[2])) || '',
+
     gender:
       userState.snsInfo.provider == 'naver'
         ? naverGender(userState.snsInfo.gender)

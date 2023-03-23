@@ -199,7 +199,7 @@ export default function ShopPage() {
                     <Link href={`/shop/item/${item.id}`} passHref>
                       <a onClick={onClickItem} data-stock={item.inStock}>
                         <figure className={s.shop_image}>
-                          {item.itemIcons &&
+                          {/* {item.itemIcons &&
                             (item.itemIcons?.indexOf(',') >= 0 ? (
                               item.itemIcons
                                 .split(',')
@@ -215,7 +215,23 @@ export default function ShopPage() {
                                 label={item.itemIcons}
                                 className={item.itemIcons === 'NEW' ? s.new : s.best}
                               />
-                            ))}
+                            ))} */}
+                            {/* 일반상품 BEST, NEW label 각 개체의 최대 표시수 1개 */}
+                          {item.itemIcons &&
+                            item.itemIcons
+                              .split(",")
+                              .filter(
+                                (label, index, self) =>
+                                  (label === "NEW" && self.indexOf(label) === index) ||
+                                  (label === "BEST" && self.indexOf(label) === index)
+                              )
+                              .map((label, index) => (
+                                <Icon_Itemlabel
+                                  label={label}
+                                  key={`${label}-${index}`}
+                                  className={label === "NEW" ? s.new : s.best}
+                                />
+                              ))}
                           <div className={`${s['img-wrap']} img-wrap`}>
                             <Image
                               src={item.thumbnailUrl}
