@@ -253,7 +253,7 @@ $input-height: rem(44);
   .checkbox-wrap {
     display: grid;
     grid-template-columns: 1fr;
-    
+
     label {
       left: 50%;
       position: relative;
@@ -489,7 +489,6 @@ $input-height: rem(44);
     width: 100%;
     background-color: #fff;
     z-index: 2;
-    animation: name duration timing-function delay iteration-count direction fill-mode;
     animation: list .25s linear 0s 1 forwards;
     box-shadow: 0 0 rem(25) rgba(0, 0, 0, 0.1);
 
@@ -535,7 +534,7 @@ $input-height: rem(44);
       font-size: rem(17);
       font-weight: 700;
     }
-    
+
     .gender{
       > label {
         justify-content: center !important;
@@ -552,7 +551,7 @@ $input-height: rem(44);
 
 
 @media (max-width: rem(600)) {
-  
+
 .main {
   margin: rem(35) auto rem(111);
 
@@ -573,7 +572,7 @@ $input-height: rem(44);
 
   .input-section {
     border-bottom: rem(1) solid var(--color-line-03);
-    
+
     .join__wrap{
       display: grid;
       grid-template-columns: 1fr;
