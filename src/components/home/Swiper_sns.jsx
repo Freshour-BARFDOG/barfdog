@@ -17,9 +17,9 @@ export function Swiper_sns() {
     className: `${Styles.swiper_sns}`,
     spaceBetween: 0,
     loop: true,
-    centeredSlides: false, // 가운데 갈지 말지 고민
+    centeredSlides: false,
     slidesPerView: 'auto',
-    // autoplay: {delay: 2500, disableOnInteraction: false},
+    autoplay: {delay: 2500, disableOnInteraction: false},
     navigation: {
       prevEl: navPrevRef.current,
       nextEl: navNextRef.current,

@@ -194,11 +194,13 @@ section.content_box {
           @include char(b16);
           color: var(--color-font-sub2);
           margin-bottom: rem(20);
-          > h3 {
-            > strong {
-              font-weight: normal;
-            }
+          
+          * {
+            font-weight: normal;
+            font-size: rem(16);
+            text-decoration: none;
           }
+
           br{
             display: none;
           }

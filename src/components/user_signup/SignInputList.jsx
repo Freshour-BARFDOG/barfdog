@@ -3,6 +3,7 @@ import s from '/src/pages/account/signup/signup.module.scss';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import Spinner from '/src/components/atoms/Spinner';
 import SignupInput from './SignupInput';
+import SignInput_birthday from './SignInput_birthday';
 import SignInput_address from './SignInput_address';
 import CustomRadio from '/src/components/atoms/CustomRadio';
 import getAuthNumberForPhoneNumber from '/util/func/getAuthNumberForPhoneNumber';
@@ -25,6 +26,7 @@ export default function SignInpuList({ formValues, setFormValues, formErrors, se
     email: false,
     phoneNumber: false,
     address: false,
+    birthday: false,
   };
 
   const [isLoading, setIsLoading] = useState(initialLoadingState);
@@ -354,7 +356,19 @@ export default function SignInpuList({ formValues, setFormValues, formErrors, se
         setFormErrors={setFormErrors}
       />
 
-      <SignupInput
+      {/* <SignupInput
+        className={s['birthday']}
+        type={'date'}
+        required={true}
+        id={'birthday'}
+        filteredType={'date'}
+        title={'생년월일(견주님)'}
+        formValue={formValues.birthday}
+        setFormValues={setFormValues}
+        errorMessage={formErrors.birthday && <ErrorMessage>{formErrors.birthday}</ErrorMessage>}
+      /> */}
+
+      <SignInput_birthday
         className={s['birthday']}
         type={'date'}
         required={true}
@@ -365,6 +379,7 @@ export default function SignInpuList({ formValues, setFormValues, formErrors, se
         setFormValues={setFormValues}
         errorMessage={formErrors.birthday && <ErrorMessage>{formErrors.birthday}</ErrorMessage>}
       />
+     
       <div className={s['join__wrap']}>
         <div className={s['input-title-wrap']}>
           <label htmlFor={'radios-gender'}>

@@ -75,6 +75,17 @@ $input-height: rem(44);
     margin-bottom: rem(20);
   }
 
+  &:nth-last-child(3){
+    >div{
+      &:last-child{
+        z-index: 9;
+        >div{
+          // max-height: rem(44);
+        }
+      }
+    }
+  }
+
   .input-title-wrap {
     font-size: rem(14);
     cursor: default;
@@ -94,7 +105,90 @@ $input-height: rem(44);
     .input-wrap {
       width: 100%;
       position: relative;
+      .date_wrap{
+        max-height: rem(44);
+        position: relative;
+        > div{
+          > div{
+            > button{
+              top: 50%;
+              right: rem(10);
+              transform: translateY(-50%);
+              border-radius: 100%;
+              width: rem(20);
+              height: auto;
+              aspect-ratio: 1/1;
+              padding: 0;
+              background-color: var(--color-main);
+              &::after{
+                content:"";
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%) rotate(45deg);
+                width: rem(12);
+                height: rem(2);
+                display: block;
+                padding: 0;
+                background-color: #fff;
+                border-radius: rem(5);
+              }
+              &::before{
+                content:"";
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%) rotate(-45deg);
+                width: rem(12);
+                height: rem(2);
+                border-radius: rem(5);
+                display: block;
+                padding: 0;
+                background-color: #fff;
+              }
+            }
+          }
+        }
+      }
     }
+
+    .svg_wrap{
+      width: rem(16);
+      height: rem(16);
+      position: absolute;
+      top: 50%;
+      left: rem(10);
+      transform: translateY(-50%);
+    }
+
+    .icon{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      fill: var(--color-line-01);
+    }
+
+    .birthday{
+      cursor: pointer;
+      padding: rem(8) rem(16) rem(8) rem(32) !important;
+
+      &::placeholder{
+        color: #000;
+        font-size: rem(16);
+        font-weight: 400;
+        letter-spacing: rem(0.5);
+      }
+    }
+
+    .date_prev, .date_next{
+      > svg{
+        > polygon{
+          fill: var(--color-main);
+        }
+      }
+    }
+
 
     input:not([type="radio"]) {
       width: 100%;
@@ -364,6 +458,68 @@ $input-height: rem(44);
   font-size: rem(13);
   padding: 0;
   animation: show var(--ani-default);
+}
+
+
+
+
+
+.pic_box{
+  position: relative;
+  height: rem(40);
+  width: rem(200);
+  .pic_button{
+    height: rem(40);
+    width: 100%;
+    background-color: #fff;
+    border-radius: rem(5);
+    font-weight: 600;
+    font-size: rem(16);
+    color: #202020;
+  }
+  .pic_flex{
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    height: 0;
+    border-radius: rem(5);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    z-index: 2;
+    animation: name duration timing-function delay iteration-count direction fill-mode;
+    animation: list .25s linear 0s 1 forwards;
+    box-shadow: 0 0 rem(25) rgba(0, 0, 0, 0.1);
+
+    @keyframes list {
+      0%{
+        height: rem(0);
+      }
+      100%{
+        height: rem(320);
+      }
+    }
+
+    .pic_list{
+      height: rem(40);
+      min-height: rem(40);
+      font-size: rem(16);
+
+      &:hover{
+        background-color: var(--color-line-04) !important;
+      }
+    }
+  }
+}
+
+.day{
+  background-color: var(--color-main) !important;
+
+  &:hover{
+    background-color: var(--color-main) !important;
+  }
 }
 
 

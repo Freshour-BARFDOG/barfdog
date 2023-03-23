@@ -115,8 +115,6 @@ export function Swiper_review({ data }) {
                     src={d.imageUrl}
                     layout={'fill'}
                     objectFit="cover"
-                    width={240}
-                    height={240}
                     alt="카드 이미지"
                   />
                 </div>

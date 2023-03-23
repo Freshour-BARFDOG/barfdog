@@ -16,7 +16,7 @@ const swiperSettings_main = {
   loop: true,
   effect: 'fade',
   centeredSlides: true,
-  //autoplay: {delay: 2500, disableOnInteraction: false},
+  autoplay: {delay: 3500, disableOnInteraction: false},
   slidesPerView: 1,
   modules: [Pagination, Navigation, EffectFade, Autoplay],
   pagination: {

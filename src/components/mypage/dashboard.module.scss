@@ -11,6 +11,9 @@ $counterBoxWidth: rem(200);
   p, span, em{
     cursor: default;
   }
+  span{
+    white-space: nowrap;
+  }
 
   padding: rem(40) 0;
   border: rem(1) solid var(--color-line-03);
@@ -161,6 +164,7 @@ $counterBoxWidth: rem(200);
       align-items: center;
       font-size: rem(14);
       color: inherit;
+      white-space: nowrap;
       > *:first-child {
         margin-right: rem(4);
       }
