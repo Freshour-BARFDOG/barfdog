@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useState} from 'react';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from '/src/components/mypage/MypageWrapper';
@@ -6,24 +6,25 @@ import MetaTitle from '/src/components/atoms/MetaTitle';
 import s from './invite.module.scss';
 import filter_emptyValue from '/util/func/filter_emptyValue';
 import Spinner from '/src/components/atoms/Spinner';
-import { getData, putObjData } from '/src/pages/api/reqData';
+import {getData, putObjData} from '/src/pages/api/reqData';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
-import { EmptyContMessage } from '/src/components/atoms/emptyContMessage';
+import {EmptyContMessage} from '/src/components/atoms/emptyContMessage';
 import transformDate from '/util/func/transformDate';
-import { rewardStatusType } from '/store/TYPE/rewardStatusType';
+import {rewardStatusType} from '/store/TYPE/rewardStatusType';
 import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 import {useModalContext} from "/store/modal-context";
 
 import modal_s from '/src/components/modal/modal.module.scss';
-import { IoMdLink, IoMdMail } from 'react-icons/io';
+import {IoMdLink, IoMdMail} from 'react-icons/io';
 import Modal_sendPhoneMessage from '/src/components/modal/Modal_sendPhoneMessage';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 import useDeviceState from '/util/hook/useDeviceState';
 import Modal_alert from '/src/components/modal/Modal_alert';
+import {filter_userIndexOnRewardName} from "/util/func/filter_userIndexOnRewardName";
 
 
-export default function InvitePage({ className, ...props }) {
+export default function InvitePage() {
   const searchApiUrl = '/api/rewards/invite'; // 친구추천 적립금 내역 조회
   const searchPageSize = 10;
   
@@ -54,27 +55,42 @@ export default function InvitePage({ className, ...props }) {
 
   const pageInterCeptor = async (res) => {
     // res = DUMMY_DATA; // ! TEST
-    const recommendData = {
-      recommend: res.data.recommend,
-      joinedCount: res.data.joinedCount, // 본인의 추천코드로 친구가 가입한 수
-      orderedCount: res.data.orderedCount, // 본인의 추천코드로 친구가 주문한 수
-      totalRewards: res.data.totalRewards, // 그로 인한 총 적립 포인트
-    };
-    // console.log(recommendData)
-    setRecommendInfo(recommendData);
-    const pageData = res.data?.pagedModel?.page;
-    let newItemList = res.data?.pagedModel?._embedded?.queryRewardsDtoList || [];
-    if(!newItemList.length){
-      newItemList = await getAllRewardList();
+    console.log(res);
+    let newPageInfo = {
+      totalPages: 1,
+      size: searchPageSize,
+      totalItems: 0,
+      currentPageIndex: 0,
+      newPageNumber: 1,
+      newItemList: [],
     }
-    const newPageInfo = {
-      totalPages: pageData.totalPages,
-      size: pageData.size,
-      totalItems: pageData.totalElements,
-      currentPageIndex: pageData.number,
-      newPageNumber: pageData.number + 1,
-      newItemList: newItemList || [],
-    };
+    
+    if ( res.data ) {
+      const data = res.data;
+      const recommendData = {
+        recommend: data.recommend,
+        joinedCount: data.joinedCount, // 본인의 추천코드로 친구가 가입한 수
+        orderedCount: data.orderedCount, // 본인의 추천코드로 친구가 주문한 수
+        totalRewards: data.totalRewards, // 그로 인한 총 적립 포인트
+      };
+      // console.log(recommendData)
+      setRecommendInfo(recommendData);
+      const pageData = data.pagedModel?.page;
+      let newItemList = data.pagedModel?._embedded?.queryRewardsDtoList || [];
+      console.log("newItemList: ",newItemList);
+      if(!newItemList.length){
+        newItemList = await getAllRewardList();
+      }
+      newPageInfo = {
+        totalPages: pageData.totalPages,
+        size: pageData.size,
+        totalItems: pageData.totalElements,
+        currentPageIndex: pageData.number,
+        newPageNumber: pageData.number + 1,
+        newItemList: newItemList || [],
+      };
+    }
+    
     return newPageInfo;
   };
   
@@ -89,13 +105,16 @@ export default function InvitePage({ className, ...props }) {
       const res = await getData(url);
       console.log(res);
       newItemList = res.data?.pagedModel?._embedded?.queryRewardsDtoList?.filter(item=>item.name.indexOf('[친구추천]') >= 0);
+      console.log();
     } catch (err) {
         console.error(err)
+    } finally {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        fetching: false,
+      }));
     }
-    setIsLoading((prevState) => ({
-      ...prevState,
-      fetching: false,
-    }));
+    
     
     return newItemList;
   }
@@ -144,7 +163,6 @@ export default function InvitePage({ className, ...props }) {
     })();
   };
   
-  // console.log(itemList);
 
   const onCopyToClipboard = (value) => {
     let hostname;
@@ -208,7 +226,7 @@ export default function InvitePage({ className, ...props }) {
               <p>친구초대</p>
               {isLoading.fetching && <Spinner />}
             </section>
-            {isMobile && 
+            {isMobile &&
             <div className={`${s.info_row} ${s.user_recommand}`}>
               <div className={`${s.recommand_code} ${s.info_col} flex-wrap`}>
                 <span>나의 추천코드</span>
@@ -231,9 +249,9 @@ export default function InvitePage({ className, ...props }) {
 
             <section className={s.text}>
               <div>
-                친구가 내 추천코드로 가입하면 <span>친구에게 3000 포인트,</span>
+                친구가 내 추천코드로 가입하면 <span>친구와 나에게 3000 포인트,</span>
                 <br />
-                친구가 첫 주문하면 <span>나한테도 3,000 포인트</span> 선물을 드립니다!
+                친구가 첫 주문하면 <span>친구와 나에게 3,000 포인트</span>를 드립니다!
                 <br/>
                 <em>( 추천코드는 계정 당 1회 입력할 수 있습니다. )</em>
               </div>
@@ -303,17 +321,16 @@ export default function InvitePage({ className, ...props }) {
               <hr></hr>
             </section>
             <section className={s.content}>
-              {isLoading.fetching ? (
-                <Spinner />
-              ) : itemList?.length === 0 ? (
-                <EmptyContMessage message={'친구초대 적립내역이 없습니다.'} />
-              ) : (
-                <ul className={s.coupon_content_grid_box}>
-                  {itemList?.map((item, index) => (
+              {isLoading.fetching
+                ? <Spinner />
+                : itemList.length === 0
+                ? <EmptyContMessage message={'친구초대 적립내역이 없습니다.'} />
+                : <ul className={s.coupon_content_grid_box}>
+                  {itemList.map((item, index) => (
                     <li key={`invite-item-${index}`} className={s.grid_box}>
                       <div className={s.flex_box}>
                         <div className={s.day_text}>{transformDate(item.createdTime)}</div>
-                        <div className={s.content_text}>{item.name}</div>
+                        <div className={s.content_text}>{filter_userIndexOnRewardName(item.name)}</div>
                       </div>
                       <div
                         className={`${
@@ -327,8 +344,7 @@ export default function InvitePage({ className, ...props }) {
                       </div>
                     </li>
                   ))}
-                </ul>
-              )}
+                </ul>}
             </section>
 
             <div className={s.pagination_box}>
@@ -336,7 +352,6 @@ export default function InvitePage({ className, ...props }) {
                 apiURL={searchApiUrl}
                 size={searchPageSize}
                 setItemList={setItemList}
-                // queryItemList={apiDataQueryString}
                 setIsLoading={setIsLoading}
                 pageInterceptor={pageInterCeptor}
               />
@@ -367,67 +382,67 @@ export default function InvitePage({ className, ...props }) {
 
 
 
-
-const DUMMY_DATA = {
-  data: {
-    recommend: '2BoaXmwIA',
-    joinedCount: 24,
-    orderedCount: 13,
-    totalRewards: 39000,
-    pagedModel: {
-      _embedded: {
-        queryRewardsDtoList: [
-          {
-            createdTime: '2022-07-22T09:57:05.945',
-            name: '초대 적립금10',
-            rewardStatus: 'USED',
-            tradeReward: 3000,
-          },
-          {
-            createdTime: '2022-07-22T09:57:05.945',
-            name: '초대 적립금6',
-            rewardStatus: 'SAVED',
-            tradeReward: 7000,
-          },
-          {
-            createdTime: '2022-07-22T09:57:05.945',
-            name: '초대 적립금3',
-            rewardStatus: 'SAVED',
-            tradeReward: 3000,
-          },
-        ],
-      },
-      _links: {
-        first: {
-          href: 'http://localhost:8080/api/rewards/invite?page=0&size=5',
-        },
-        prev: {
-          href: 'http://localhost:8080/api/rewards/invite?page=0&size=5',
-        },
-        self: {
-          href: 'http://localhost:8080/api/rewards/invite?page=1&size=5',
-        },
-        next: {
-          href: 'http://localhost:8080/api/rewards/invite?page=2&size=5',
-        },
-        last: {
-          href: 'http://localhost:8080/api/rewards/invite?page=2&size=5',
-        },
-      },
-      page: {
-        size: 5,
-        totalElements: 13,
-        totalPages: 3,
-        number: 1,
-      },
-    },
-    _links: {
-      recommend_friend: {
-        href: 'http://localhost:8080/api/rewards/recommend',
-      },
-      profile: {
-        href: '/docs/index.html#resources-query-rewards-invite',
-      },
-    },
-  },
-};
+//
+// const DUMMY_DATA = {
+//   data: {
+//     recommend: '2BoaXmwIA',
+//     joinedCount: 24,
+//     orderedCount: 13,
+//     totalRewards: 39000,
+//     pagedModel: {
+//       _embedded: {
+//         queryRewardsDtoList: [
+//           {
+//             createdTime: '2022-07-22T09:57:05.945',
+//             name: '초대 적립금10',
+//             rewardStatus: 'USED',
+//             tradeReward: 3000,
+//           },
+//           {
+//             createdTime: '2022-07-22T09:57:05.945',
+//             name: '초대 적립금6',
+//             rewardStatus: 'SAVED',
+//             tradeReward: 7000,
+//           },
+//           {
+//             createdTime: '2022-07-22T09:57:05.945',
+//             name: '초대 적립금3',
+//             rewardStatus: 'SAVED',
+//             tradeReward: 3000,
+//           },
+//         ],
+//       },
+//       _links: {
+//         first: {
+//           href: 'http://localhost:8080/api/rewards/invite?page=0&size=5',
+//         },
+//         prev: {
+//           href: 'http://localhost:8080/api/rewards/invite?page=0&size=5',
+//         },
+//         self: {
+//           href: 'http://localhost:8080/api/rewards/invite?page=1&size=5',
+//         },
+//         next: {
+//           href: 'http://localhost:8080/api/rewards/invite?page=2&size=5',
+//         },
+//         last: {
+//           href: 'http://localhost:8080/api/rewards/invite?page=2&size=5',
+//         },
+//       },
+//       page: {
+//         size: 5,
+//         totalElements: 13,
+//         totalPages: 3,
+//         number: 1,
+//       },
+//     },
+//     _links: {
+//       recommend_friend: {
+//         href: 'http://localhost:8080/api/rewards/recommend',
+//       },
+//       profile: {
+//         href: '/docs/index.html#resources-query-rewards-invite',
+//       },
+//     },
+//   },
+// };

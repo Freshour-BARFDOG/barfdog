@@ -15,7 +15,8 @@ import {orderStatus} from '/store/TYPE/orderStatusTYPE';
 import Modal_confirm from '/src/components/modal/Modal_confirm';
 import {Modal_subscribeCancel} from "/src/components/modal/Modal_subscribeCancel";
 import {paymentMethodType} from "/store/TYPE/paymentMethodType";
-import {roundedOneMealGram} from "../../../../../util/func/subscribe/roundedOneMealGram";
+import {roundedOneMealGram} from "/util/func/subscribe/roundedOneMealGram";
+import {seperateStringViaComma} from "/util/func/seperateStringViaComma";
 
 
 /*! 참고)
@@ -92,7 +93,7 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
   }
   
   if(!data) return;
-  // console.log(data)
+  
   return (
     <>
       <MetaTitle title="마이페이지 주문내역 정기구독" />
@@ -160,15 +161,7 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
     
                     <span>플랜</span>
                     <div>
-                      {data?.orderDto.beforePlan &&
-                        data?.orderDto.plan &&
-                        data?.orderDto.beforePlan !== data?.orderDto.plan && (
-                          <span className={s.beforeData}>
-                            {subscribePlanType[data?.orderDto.beforePlan].KOR}
-                            &nbsp;
-                          </span>
-                        )}
-                      <span>{subscribePlanType[data?.orderDto.plan].KOR}</span>
+                      <span>{data?.orderDto.plan && subscribePlanType[data?.orderDto.plan].KOR}</span>
                       {data?.orderDto.beforePlan &&
                         data?.orderDto.plan &&
                         data?.orderDto.beforePlan !== data?.orderDto.plan && (
@@ -181,7 +174,7 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
                     <span>레시피</span>
                     <div>
                       <span>{data?.recipeNames}</span>
-                      {data?.orderDto.beforeRecipeName !== data?.recipeDto.recipeName && (
+                      {data?.orderDto.beforeRecipeName !== data?.recipeNames && (
                         <span className={s.beforeData}>
                         {data?.orderDto.beforeRecipeName}
                       </span>
@@ -192,11 +185,11 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
     
                     <span>급여량</span>
                     <div>
-                      <span>{transformLocalCurrency(roundedOneMealGram(data?.orderDto.oneMealGramsPerRecipe))}g</span>
+                      <span>{data?.orderDto.oneMealGramsPerRecipe && seperateStringViaComma(data?.orderDto.oneMealGramsPerRecipe).map(gram=> `${transformLocalCurrency(roundedOneMealGram(gram))}g`).join(", ")}</span>
                       {data?.orderDto.beforeOneMealGramsPerRecipe &&
                         data?.orderDto.beforeOneMealGramsPerRecipe !==
                         data?.orderDto.oneMealGramsPerRecipe && (
-                          <span className={s.beforeData}>{transformLocalCurrency(roundedOneMealGram(data?.orderDto.beforeOneMealGramsPerRecipe))}g</span>
+                          <span className={s.beforeData}>{seperateStringViaComma(data?.orderDto.beforeOneMealGramsPerRecipe).map(gram=> `${transformLocalCurrency(roundedOneMealGram(gram))}g`).join(", ")}</span>
                         )}
                     </div>
   

@@ -15,6 +15,7 @@ import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 import {useModalContext} from "/store/modal-context";
 import {couponActiveType, couponUseType} from "/store/TYPE/couponType";
 import {getRemainingDaysNumberUntilExpired} from "/util/func/getDiffDate";
+import enterKey from "../../../../util/func/enterKey";
 
 
 const initInfo = {
@@ -28,12 +29,11 @@ export default function CouponPage () {
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
   const searchApiUrl = '/api/coupons';
-  const searchPageSize = 10;
-  const apiDataQueryString = 'queryCouponsDtoList';
+  const searchPageSize = 100;
   const [isLoading, setIsLoading] = useState( {} );
   const [itemList, setItemList] = useState([]);
   const [activeUseCouponModal, setActiveUseCouponModal] = useState( false );
-  const [activeRegisterCouponModal, setActiveRegisterCouponModal] = useState( false );
+  const [submitted, setSubmitted] = useState( false );
   const [form, setForm] = useState( {} );
   const couponCodeRef = useRef( null );
   
@@ -94,18 +94,11 @@ export default function CouponPage () {
     }) );
   }, [] );
   
-  const onActiveCouponRegisterModal = useCallback( () => {
+  
+  const onRegisterCouponByCode = useCallback(async () => {
+    if(submitted) return console.error( "이제 제출된 양식입니다." );
     if ( !form.code ) {
       return mct.alertShow( '쿠폰코드를 입력해주세요.' );
-    }
-    setActiveRegisterCouponModal( true );
-  }, [form] );
-
-  
-  const onRegisterCouponByCode = async () => {
-    // 유저 쿠폰 > 쿠폰코드를 입력하여 쿠폰받는 방식/
-    if(!form.pw){
-      return mct.alertShow('비밀번호를 입력해주세요.');
     }
   
     try {
@@ -113,16 +106,16 @@ export default function CouponPage () {
         ...prevState,
         rep: true,
       }) );
+      
       const body = {
         code: form.code,
-        password: form.pw
       }
     
       const apiUrl = '/api/coupons/code';
       const res = await putObjData( apiUrl, body );
     
       if ( res.isDone ) {
-        setActiveRegisterCouponModal( false );
+        setSubmitted( true );
         mct.alertShow( '쿠폰이 등록되었습니다.', onSuccessCallback );
         setTimeout( () => {
           window.location.reload();
@@ -143,12 +136,16 @@ export default function CouponPage () {
         rep: false,
       }) );
     }
+  },[form.code]);
   
-  };
   
   const onSuccessCallback = useCallback( () => {
     window.location.reload();
   }, [] );
+  
+  const onKeyDownHandler = (e) => {
+    enterKey( e, onRegisterCouponByCode );
+  };
   
   
   return (
@@ -171,10 +168,11 @@ export default function CouponPage () {
                     ref={couponCodeRef}
                     value={form.code || ''}
                     onChange={onInputChangeHandler}
+                    onKeyDown={onKeyDownHandler}
                   />
                   <div className={s.btn_box}>
-                    <button className={s.btn} onClick={onActiveCouponRegisterModal}>
-                      등록
+                    <button className={s.btn} onClick={onRegisterCouponByCode}>
+                      {isLoading.rep ? <Spinner style={{color:"#fff"}}/> :"등록"}
                     </button>
                   </div>
                 </div>
@@ -242,16 +240,6 @@ export default function CouponPage () {
         <Modal_useCoupon
           isActiveModal={activeUseCouponModal}
           setIsActiveModal={setActiveUseCouponModal}
-        />
-      )}
-      {activeRegisterCouponModal && (
-        <Modal_registerCoupon
-          isActiveModal={activeUseCouponModal}
-          setIsActiveModal={setActiveRegisterCouponModal}
-          form={form}
-          onChange={onInputChangeHandler}
-          event={onRegisterCouponByCode}
-          isLoading={isLoading}
         />
       )}
       {hasAlert && <Modal_global_alert background/>}

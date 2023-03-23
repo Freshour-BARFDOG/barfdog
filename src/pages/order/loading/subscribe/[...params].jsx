@@ -86,14 +86,17 @@ export async function getServerSideProps(ctx) {
 
       console.log("code: ",code, "message: ",message, "response: ",response);
       if (code === 0) { // 카드사 통신에 성공(실제 승인 성공 여부는 추가 판단이 필요함)
+        
+        const {imp_uid: again_imp_uid} = response;
+        
         if(response.status==='paid'){//카드 정상 승인
         
-        const r = await postDataSSR(req,`/api/orders/${orderIdx}/subscribe/success`, {
-          impUid : imp_uid,
-          merchantUid : merchantUid,
-          customerUid : customUid,
-        });
-        console.log(r);
+          const r = await postDataSSR(req,`/api/orders/${orderIdx}/subscribe/success`, {
+            impUid : again_imp_uid, // ! "아임포트 webhook" 처리 시, "again" response의 imp_uid 필요.
+            merchantUid : merchantUid,
+            customerUid : customUid,
+          });
+          console.log(r);
           if(r.status === 200){
             paymentSuccess=true;
           }
