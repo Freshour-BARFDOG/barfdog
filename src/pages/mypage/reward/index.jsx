@@ -10,6 +10,7 @@ import {EmptyContMessage} from "/src/components/atoms/emptyContMessage";
 import transformDate from "/util/func/transformDate";
 import transformLocalCurrency from "/util/func/transformLocalCurrency";
 import {rewardStatusType} from "/store/TYPE/rewardStatusType";
+import {filter_userIndexOnRewardName} from "/util/func/filter_userIndexOnRewardName";
 
 
 
@@ -18,8 +19,7 @@ export default function RewardPage() {
   const searchPageSize = 10;
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
-  const [totalReward, setTotalReward] = useState( 0); // // ! 문제 있는 값임 // 수정 후 , 사용할 것
-   // console.log(totalReward)
+  const [totalReward, setTotalReward] = useState( 0);
   
   
   const pageInterCeptor = (res) => {// SERVER pagination query가 변경되었을 경우 사용하는 function
@@ -39,8 +39,6 @@ export default function RewardPage() {
     return newPageInfo;
   };
   
-  // console.log(itemList);
-  // const availableItems = itemList?.filter(item=>item.rewardStatus === rewardStatusType.SAVED).map(item=>item.tradeReward);
   return (
     <>
       <MetaTitle title="마이페이지 적립금" />
@@ -51,25 +49,14 @@ export default function RewardPage() {
               적립금 조회
             </section>
             <section className={s.reward_state}>
-              <div className={s.box}> 
+              <div className={s.box}>
                 <div className={s.flex_box}>
                   <div className={s.left_box}>
                     사용 가능 적립금
-                    {/* 적립금 => 직접계산 */}
-                    {/*<span>{transformLocalCurrency(availableItems.length > 0 ? availableItems.reduce((acc, cur)=>acc+cur) : 0)}원</span>*/}
-                    {/*적립금 => 서버에서 받은 값 (적립금 발행 후에도, 변하지 않음 22.07.29)*/}
                     <span>{transformLocalCurrency(totalReward)}원</span>
                   </div>
-                  {/* 소멸예정 적립금 : 삭제됨(3월 2주 문서)*/}
-                  {/*<div className={s.mid_box}>*/}
-                  {/*  <hr className={s.line} />*/}
-                  {/*</div>*/}
-                  {/*<div className={s.right_box}>*/}
-                  {/*  소멸 예정 적립금*/}
-                  {/*  <span>0 원</span>*/}
-                  {/*</div>*/}
                 </div>
-              </div>  
+              </div>
             </section>
 
             <section className={s.content}>
@@ -86,7 +73,7 @@ export default function RewardPage() {
                             {transformDate(item.createdTime)}
                           </div>
                           <div className={s.content_text}>
-                            {item.name}
+                            {filter_userIndexOnRewardName(item.name)}
                           </div>
                         </div>
                         <div className={`${item.rewardStatus === rewardStatusType.SAVED ? s.price_text : s.price_text_grey}`}>
@@ -114,4 +101,3 @@ export default function RewardPage() {
     </>
   );
 }
-

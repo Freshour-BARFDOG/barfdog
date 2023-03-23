@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useState} from 'react';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from '/src/components/mypage/MypageWrapper';
@@ -6,24 +6,25 @@ import MetaTitle from '/src/components/atoms/MetaTitle';
 import s from './invite.module.scss';
 import filter_emptyValue from '/util/func/filter_emptyValue';
 import Spinner from '/src/components/atoms/Spinner';
-import { getData, putObjData } from '/src/pages/api/reqData';
+import {getData, putObjData} from '/src/pages/api/reqData';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
-import { EmptyContMessage } from '/src/components/atoms/emptyContMessage';
+import {EmptyContMessage} from '/src/components/atoms/emptyContMessage';
 import transformDate from '/util/func/transformDate';
-import { rewardStatusType } from '/store/TYPE/rewardStatusType';
+import {rewardStatusType} from '/store/TYPE/rewardStatusType';
 import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 import {useModalContext} from "/store/modal-context";
 
 import modal_s from '/src/components/modal/modal.module.scss';
-import { IoMdLink, IoMdMail } from 'react-icons/io';
+import {IoMdLink, IoMdMail} from 'react-icons/io';
 import Modal_sendPhoneMessage from '/src/components/modal/Modal_sendPhoneMessage';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 import useDeviceState from '/util/hook/useDeviceState';
 import Modal_alert from '/src/components/modal/Modal_alert';
+import {filter_userIndexOnRewardName} from "/util/func/filter_userIndexOnRewardName";
 
 
-export default function InvitePage({ className }) {
+export default function InvitePage() {
   const searchApiUrl = '/api/rewards/invite'; // 친구추천 적립금 내역 조회
   const searchPageSize = 10;
   
@@ -162,7 +163,6 @@ export default function InvitePage({ className }) {
     })();
   };
   
-  // console.log(itemList);
 
   const onCopyToClipboard = (value) => {
     let hostname;
@@ -330,7 +330,7 @@ export default function InvitePage({ className }) {
                     <li key={`invite-item-${index}`} className={s.grid_box}>
                       <div className={s.flex_box}>
                         <div className={s.day_text}>{transformDate(item.createdTime)}</div>
-                        <div className={s.content_text}>{item.name}</div>
+                        <div className={s.content_text}>{filter_userIndexOnRewardName(item.name)}</div>
                       </div>
                       <div
                         className={`${
