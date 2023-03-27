@@ -224,6 +224,7 @@ section.pagination-section{padding : rem(80) 0 rem(70) 0 }
         display: flex;
         padding-top: rem(4);
         position: relative;
+        pointer-events: none;
 
         .star_box {
           display : flex;

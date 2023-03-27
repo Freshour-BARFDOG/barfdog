@@ -121,6 +121,9 @@ section.tab_slide_box2{padding: 0 0 rem(130)}
           //배송 정보
           >div{
             @include char(l16);
+           >input{
+            height: 100%;
+           } 
             .text {
               @include char(b14);
               color :#636363;
@@ -480,6 +483,7 @@ section.tab_slide_box2{padding: 0 0 rem(130)}
         min-height: rem(76);
         padding: rem(4) 0;
         @include char(l15);
+        line-height: normal;
         .content {
           display: flex;
           text-align: start;

@@ -80,7 +80,7 @@ export default function DeliveryInfoPage () {
                 {info.plan === subscribePlanType.TOPPING.NAME && <>일주일 5끼</>}
                 <span> 기준, </span>
                 <em>{subscribePlanType[info.plan].weeklyPaymentCycle}</em>주마다 정기
-                배송됩니다. ({subscribePlanType[info.plan].totalNumberOfPacks}팩, {subscribePlanType[info.plan].weeklyPaymentCycle}주)
+                배송됩니다. <br /> ({subscribePlanType[info.plan].totalNumberOfPacks}팩, {subscribePlanType[info.plan].weeklyPaymentCycle}주)
               </div>
             </div>
           </section>

@@ -57,34 +57,68 @@ const RatingStars = ({ count, size, margin,id,  setFormValues, disabled  = false
   };
   
   
-  const updateStarCount = (rating)=>{
+  const updateStarCount = (rating) => {
     const nextStars = [];
-    for (let i =0; i < Math.round(rating); i++) {
+    const roundedRating = Math.round(rating * 2) / 2; // Round to nearest 0.5
+    const hasHalfStar = roundedRating % 1 !== 0; // Check if rating has half star
+    const wholeStars = Math.floor(roundedRating); // Calculate number of whole stars
+    const emptyStars = maxStarCount - wholeStars - (hasHalfStar ? 1 : 0); // Calculate number of empty stars
+  
+    for (let i = 0; i < wholeStars; i++) {
       nextStars.push(true);
     }
-    for (let i =0; i < Math.round(maxStarCount - rating); i++) {
+  
+    if (hasHalfStar) {
+      nextStars.push('half');
+    }
+  
+    for (let i = 0; i < emptyStars; i++) {
       nextStars.push(false);
     }
+  
     setAllStars(nextStars);
   
-    if(setFormValues && typeof setFormValues === 'function') {
-      setFormValues(prevState => ({
+    if (setFormValues && typeof setFormValues === 'function') {
+      setFormValues((prevState) => ({
         ...prevState,
-        [id]: rating
-      }))
+        [id]: rating,
+      }));
     }
-  }
+  };
 
   return (
     <Wrap>
       {allStars.map((booleanValue, index) => (
-        <Star className={`${(isRenderingDone && booleanValue) ? 'animation-show' : ''} animation-delay-${index}`} size={size} margin={margin} key={`rating-star-${index}`} onClick={onClickHandler} data-index={index} disabled={ disabled }>
-          <Image
-            src={require(`/public/img/icon/${booleanValue ? 'star_yellow' : 'star_dark' }.png`)}
-            objectFit="cover"
-            layout="fill"
-            alt="별점 아이콘"
-          />
+        <Star
+          className={`${
+            isRenderingDone && typeof booleanValue === 'boolean'
+              ? 'animation-show'
+              : ''
+          } animation-delay-${index}`}
+          size={size}
+          margin={margin}
+          key={`rating-star-${index}`}
+          onClick={onClickHandler}
+          data-index={index}
+          disabled={disabled}
+        >
+          {typeof booleanValue === 'boolean' ? (
+            <Image
+              src={require(`/public/img/icon/${
+                booleanValue ? 'star_yellow' : 'star_dark'
+              }.png`)}
+              objectFit="cover"
+              layout="fill"
+              alt="별점 아이콘"
+            />
+          ) : (
+            <Image
+              src={require(`/public/img/icon/star_dark.png`)}
+              objectFit="cover"
+              layout="fill"
+              alt="별점 아이콘"
+            />
+          )}
         </Star>
       ))}
     </Wrap>
