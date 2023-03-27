@@ -15,7 +15,7 @@ export const OrdersheetAmountOfPayment = ({
   orderType = 'general',
 }) => {
   
-  const calcResult = useCallback(calcOrdersheetPrices(form, orderType), [form, orderType]);
+  const calcResult = useCallback(calcOrdersheetPrices(form, orderType, {deliveryFreeConditionPrice: info.freeCondition}), [form, orderType]);
   const originalItemDiscount = useMemo(() => orderType === 'general'
     ? info.totalOriginalPrice - info.totalOrderPrice
     : info.subscribeDto?.originPrice - info.subscribeDto?.nextPaymentPrice,[info]);
@@ -103,12 +103,7 @@ export const OrdersheetAmountOfPayment = ({
         <div className={s.flex_box6}>
           <span>배송비</span>
           <span>
-            {orderType === 'subscribe' || info.deliveryFree
-              ? 0
-              : info.orderPrice >= info.freeCondition
-              ? 0
-              : transformLocalCurrency(info.deliveryPrice)}
-            원
+            {transformLocalCurrency(calcResult?.deliveryPrice)}원
           </span>
         </div>
 

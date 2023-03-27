@@ -1,6 +1,6 @@
 import {IAMPORT_MIN_PAYMENT_PRICE} from "/store/TYPE/order/priceType";
 
-export const calcOrdersheetPrices = (form, orderType='general') => {
+export const calcOrdersheetPrices = (form, orderType='general', option={deliveryFreeConditionPrice:0}) => {
   
   const userTotalReward = form.selfInfo?.reward; // 유저 적립금 총액
   let discountReward = Number(form.discountReward); // 적립금 할인
@@ -17,6 +17,12 @@ export const calcOrdersheetPrices = (form, orderType='general') => {
   if(orderType === 'general'){
     discountCoupon = form.orderItemDtoList?.length ? form.orderItemDtoList.map( item => item.discountAmount ).reduce( (acc, cur) => acc + cur ) : 0;
     discountGrade = 0; // 일반결제는 등급할인 없음
+    
+    const deliveryFreeCondition = form.bundle // 묶음 배송일 경우
+      || orderPrice >= option.deliveryFreeConditionPrice // 상품 총 주문금액이, 사이트 무료배송 조건 이상일 경우
+      || !form.orderItemDtoList.filter(item => !item.deliveryFree).length; // 무료배송이 아닌 상품이 없을 경우
+    deliveryPrice = deliveryFreeCondition ? 0 : deliveryPrice;
+    
   } else if ( orderType === 'subscribe') {
     discountCoupon = Number(form.discountCoupon);
     deliveryPrice = 0; // 정기결제는 항상 무료배송
@@ -47,7 +53,8 @@ export const calcOrdersheetPrices = (form, orderType='general') => {
       reward:availableMaxReward,
       coupon:availableMaxCoupon
     },
-    overDiscount: overDiscountCoupon
+    overDiscount: overDiscountCoupon,
+    deliveryPrice: deliveryPrice, // 일반결제 페이지에서만 사용
   }
   
 }
