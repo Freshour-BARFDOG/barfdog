@@ -57,6 +57,8 @@ const RatingStars = ({ count, size, margin,id,  setFormValues, disabled  = false
   };
   
   
+  // 0.5점을 별도 확인
+  // 4점에서 4.74까지는 4점, 4.75이상은 5점으로 표시(4.5점 기준으로 반올림이 추가적으로 작동)
   const updateStarCount = (rating) => {
     const nextStars = [];
     const roundedRating = Math.round(rating * 2) / 2; // Round to nearest 0.5
@@ -112,6 +114,7 @@ const RatingStars = ({ count, size, margin,id,  setFormValues, disabled  = false
               alt="별점 아이콘"
             />
           ) : (
+            // 4.5점일 경우 표시되는 이미지 (4.26점 ~ 4.74점)
             <Image
               src={require(`/public/img/icon/star_dark.png`)}
               objectFit="cover"
