@@ -156,6 +156,7 @@ export const SubscribeSkipPayment = ({subscribeInfo}) => {
 
 function isAvailableSubscribeSkipping(nextPaymentDate) {
   // TEST : nextPaymentDate '2022-09-01T23:00:10.466'
+  if(!nextPaymentDate) return false;
   const today = transformToday();
   const getDiffDate = getDiffDateNumber(nextPaymentDate, today);
   const availableSkipDate = 5;

@@ -41,7 +41,7 @@ export default function GeneralOrderSheetPage() {
   useEffect(() => {
     const curItem = cart.orderItemList;
     if (!curItem.length) {
-      return router.push('/');
+      return router.push('/cart');
     }
 
     const requestBody = {
@@ -120,8 +120,7 @@ export default function GeneralOrderSheetPage() {
             reward: calcedReward,  // ! CLIENT ONLY
             discountGrade: 0, // 일반주문일 경우, 등급할인 없음
           },
-          coupons: //////////// ! DUMMY DATA
-            // DUMMY_MEMEBER_COUPON_LIST ||
+          coupons:
             info.coupons?.map((cp) => ({
               memberCouponId: cp.memberCouponId,
               name: cp.name,
@@ -148,6 +147,7 @@ export default function GeneralOrderSheetPage() {
             discountAmount: 0, // 쿠폰할인 총계
             originalOrderLinePrice: item.originalOrderLinePrice, // 관리자 페이지에서 설정한 '할인 전' "상품 + 옵션" 가격
             orderLinePrice: item.orderLinePrice, // 쿠폰 적용 후, 주문내역 내의 한 줄 "상품 + 옵션"에 대한 최종가격
+            deliveryFree: item.deliveryFree, // 무료 배송 여부
           })),
           deliveryDto: {
             name: null, // 수령자 이름 ("정기배송과" 묶음 배송일 경우, null => 정기배송 수령자를 따름)

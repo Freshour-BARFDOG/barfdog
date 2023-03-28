@@ -4,7 +4,6 @@ import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import Image from 'next/image';
-import Link from 'next/link';
 import { deleteObjData, getDataSSR, putObjData } from '/src/pages/api/reqData';
 import PureCheckbox from '/src/components/atoms/PureCheckbox';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
@@ -20,6 +19,12 @@ import {useRouter} from "next/router";
 
 
 
+const calculateCartDeliveryPrice = ({selectedItemDto, deliveryConstant={price:0, freeCondition:0}}) => {
+  if(!deliveryConstant || !Array.isArray(selectedItemDto) || selectedItemDto.length === 0) return null;
+  const allItemDeliveryFree = !selectedItemDto.filter(item => !item.deliveryFree).length; // 배송비 무료가 아닌 상품이 존재할경우, 배송비 부과
+  const totalPrice = selectedItemDto.map(item=> item.totalPrice)?.reduce((acc, cur)=> acc + cur);
+  return (totalPrice >= deliveryConstant.freeCondition || allItemDeliveryFree) ? 0 : deliveryConstant.price;
+};
 
 export default function CartPage({ data, error }) {
   
@@ -67,11 +72,10 @@ export default function CartPage({ data, error }) {
         },
       };
     }),
-    // ! Client Only Params
-    total: {
+    total: {// ! Client Only Params
       originPrice: 0, // 상품 원금 총합
       subtractedPrice: 0, // 할인 총합
-      deliveryFee: 0, // 배송비 총합
+      deliveryPrice: 0, // 배송비 총합
       finalPrice: 0, // 총 주문금액 총합
     },
   };
@@ -81,17 +85,17 @@ export default function CartPage({ data, error }) {
   const [selectedItemBasketIds, setSelectedItemBasketIds] = useState([]);
   const [isLoading, setIsLoading] = useState({});
   
-  console.log(DATA);
-  
   useEffect(() => {
     // 체크박스 항목이 변경되엇을 떄 =>update Calculator (상품금액, 배송비, 할인금액, 총주문금액)
-    updateDATAState();
+    updateDATA();
   }, [selectedItemBasketIds]);
   
   
-  const updateDATAState = (basketId, amountUnit) => {
+  const updateDATA = (basketId, amountUnit) => {
+    
     setDATA((prevState) => {
-      let nextBasketDtoList = prevState.basketDtoList?.map((item) => {
+      
+      const nextBasketDtoList = prevState.basketDtoList?.map((item) => {
         const nextItem = JSON.parse(JSON.stringify(item)); // ! important : 깊은 복사를 사용하여, 원본객체와의 참조를 끊어냄
   
         // 체크박스 클릭 Event 및 수량버튼 증가&감소버튼 Event를 구분지음
@@ -113,28 +117,27 @@ export default function CartPage({ data, error }) {
           ? {
             ...nextItem,
             amount: nextAmount, // 수량
-            totalPrice: nextItem.salePrice * nextAmount + optionPrice, // 상품 금액 (원금에서 할인 후 금액)
             subtractedPrice: (item.originalPrice - item.salePrice) * nextAmount, // 원금과 판매가의 차액 (할인된 금액)
             deliveryCharge: item.deliveryFree ? 0 : deliveryConstant.price, // 배송비
-            finalPrice: nextItem.salePrice * nextAmount + optionPrice, // 상품 목록 하나의 최종가 (= 판매가 * 수량 + 옵션가격총합)
+            totalPrice: nextItem.salePrice * nextAmount + optionPrice, // 현재 상품의 총결제 금액
+            finalPrice: nextItem.salePrice * nextAmount + optionPrice, // 현재 상품의 총결제 금액 + 배송비에 사용됨.
           }
           : item;
       });
+      
     
       const sumOfTotalPrice = calcTotalPriceOfTargetKey('totalPrice', nextBasketDtoList); // 기본할인이 적용된 가격
-      const nextSubtractedPrice = calcTotalPriceOfTargetKey('subtractedPrice', nextBasketDtoList) // 할인정도
-      const nextDeliveryPrice = sumOfTotalPrice >= deliveryConstant.freeCondition ? 0 : deliveryConstant.price;
-      // console.log(nextSubtractedPrice)
-      // console.log(sumOfTotalPrice)
+      const SubtractedPrice = calcTotalPriceOfTargetKey('subtractedPrice', nextBasketDtoList) // 할인정도
+      const deliveryPrice = calculateCartDeliveryPrice( {selectedItemDto: nextBasketDtoList.filter(item=> selectedItemBasketIds.indexOf(item.basketId) >= 0), deliveryConstant:deliveryConstant}); // 총 주문금액 총합;
       
       return {
         ...prevState,
         basketDtoList: nextBasketDtoList,
         total: {
-          originPrice: sumOfTotalPrice + nextSubtractedPrice, // 상품 원금 총합
-          subtractedPrice: nextSubtractedPrice, // 할인금액 총합
-          deliveryFee: nextDeliveryPrice, // 배송비 총합
-          finalPrice: sumOfTotalPrice + nextDeliveryPrice, // 총 주문금액 총합
+          originPrice: sumOfTotalPrice + SubtractedPrice, // 상품 원금 총합
+          subtractedPrice: SubtractedPrice, // 할인금액 총합
+          deliveryPrice: deliveryPrice, // 배송비
+          finalPrice: sumOfTotalPrice + deliveryPrice
           // ! important '전체 상품'합계가 무료배송 조건에 부합할 시, 모든 상품 배송비 무료
         },
       };
@@ -183,7 +186,7 @@ export default function CartPage({ data, error }) {
       const res = await putObjData(apiUrl, body);
       if (res.isDone) {
         const amountUnit =  buttonType === 'decrease' ? 'decrease' : 'increase';
-        updateDATAState(basketId, amountUnit);
+        updateDATA(basketId, amountUnit);
       }
     } catch (err) {
       console.error(err);
@@ -504,7 +507,7 @@ export default function CartPage({ data, error }) {
               </i>
               <div className={s.shipping}>
                 <p className={s.up_text}>배송비</p>
-                <p className={s.down_text}>{selectedItemBasketIds.length > 0 ? transformLocalCurrency(DATA.total?.deliveryFee) : 0}원</p>
+                <p className={s.down_text}>{transformLocalCurrency(DATA.total?.deliveryPrice)}원</p>
               </div>
   
               <div className={s.flex_text_box}>
@@ -524,6 +527,7 @@ export default function CartPage({ data, error }) {
     </>
   );
 }
+
 
 export async function getServerSideProps({ req }) {
   let data = null;
