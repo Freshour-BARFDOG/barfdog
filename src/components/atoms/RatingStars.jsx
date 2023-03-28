@@ -116,7 +116,7 @@ const RatingStars = ({ count, size, margin,id,  setFormValues, disabled  = false
           ) : (
             // 4.5점일 경우 표시되는 이미지 (4.26점 ~ 4.74점)
             <Image
-              src={require(`/public/img/icon/star_dark.png`)}
+              src={require(`/public/img/icon/star_half.png`)}
               objectFit="cover"
               layout="fill"
               alt="별점 아이콘"
