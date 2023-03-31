@@ -36,7 +36,8 @@ const initialSearchValues = {
 };
 
 export default function DeliveryOnSellPage() {
-  const searchApiUrl = `/api/admin/orders/cancelRequest`; // 주문 리스트 검색(페이징)
+  
+  const searchApiUrl = `/api/admin/orders/searchAll`;
   const searchPageSize = 10;
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
@@ -87,7 +88,7 @@ export default function DeliveryOnSellPage() {
     console.log(res);
     // queryAdminOrdersDtoList : 상품단위 검색
     // queryAdminCancelRequestDtoList : 주문 단위 검색
-    return getDefaultPagenationInfo(res?.data, 'queryAdminCancelRequestDtoList', {pageSize: searchPageSize, setInitialize: setSearchQueryInitialize});
+    return getDefaultPagenationInfo(res?.data, 'queryAdminOrdersAllInfoDtoList', {pageSize: searchPageSize, setInitialize: setSearchQueryInitialize});
   },[]);
   
   
@@ -337,7 +338,6 @@ export default function DeliveryOnSellPage() {
                   </li>
                   <li className={s.table_th}>상세보기</li>
                   <li className={s.table_th}>주문번호</li>
-                  {/*<li className={s.table_th}>상품주문번호</li>*/}
                   <li className={`${s.table_th} ${s.hasToolTip}`}>주문상태</li>
                   <li className={`${s.table_th} ${s.hasToolTip}`}>배송상태 <Tooltip style={{textAlign:'left'}} message={`- 배송상태 목록\n: 생산 중(구독상품), 배송 준비 중(일반상품), 배송예정, 배송시작, 배송완료, 구독결제 취소`} messagePosition={'left'} wordBreaking={true} width={'200px'}/></li>
                   <li className={s.table_th}>운송장번호</li>
@@ -376,141 +376,3 @@ export default function DeliveryOnSellPage() {
     </>
   );
 }
-
-
-
-
-const DUMMY_DEFAULT_ITEMLIST_RESPONSE = {
-  data: {
-    _embedded: {
-      queryAdminCancelRequestDtoList: [
-        {
-          id: 7819,
-          orderType: 'general',
-          merchantUid: 'merchant_uid15',
-          orderItemId: 7816,
-          orderStatus: 'DELIVERY_BEFORE_COLLECTION',
-          deliveryNumber: 'cj02392342315',
-          memberEmail: 'admin@gmail.com',
-          memberName: '관리자',
-          memberPhoneNumber: '01056785678',
-          recipientName: '관리자',
-          recipientPhoneNumber: '01056785678',
-          packageDelivery: false,
-          orderDate: '2022-08-12T11:19:51.139',
-          _links: {
-            query_order: {
-              href: 'http://localhost:8080/api/admin/orders/7819/general',
-            },
-          },
-        },
-        {
-          id: 7789,
-          orderType: 'general',
-          merchantUid: 'merchant_uid13',
-          orderItemId: 7780,
-          orderStatus: 'DELIVERY_START',
-          deliveryNumber: 'cj02392342313',
-          memberEmail: 'admin@gmail.com',
-          memberName: '관리자',
-          memberPhoneNumber: '01056785678',
-          recipientName: '관리자',
-          recipientPhoneNumber: '01056785678',
-          packageDelivery: false,
-          orderDate: '2022-08-12T11:19:51.139',
-          _links: {
-            query_order: {
-              href: 'http://localhost:8080/api/admin/orders/7789/general',
-            },
-          },
-        },
-        {
-          id: 7834,
-          orderType: 'general',
-          merchantUid: 'merchant_uid16',
-          orderItemId: 7825,
-          orderStatus: 'DELIVERY_BEFORE_COLLECTION',
-          deliveryNumber: 'cj02392342316',
-          memberEmail: 'admin@gmail.com',
-          memberName: '관리자',
-          memberPhoneNumber: '01056785678',
-          recipientName: '관리자',
-          recipientPhoneNumber: '01056785678',
-          packageDelivery: false,
-          orderDate: '2022-08-12T11:19:51.139',
-          _links: {
-            query_order: {
-              href: 'http://localhost:8080/api/admin/orders/7834/general',
-            },
-          },
-        },
-        {
-          id: 7735,
-          orderType: 'general',
-          merchantUid: 'merchant_uid7',
-          orderItemId: 7726,
-          orderStatus: 'DELIVERY_BEFORE_COLLECTION',
-          deliveryNumber: 'cj0239234237',
-          memberEmail: 'user@gmail.com',
-          memberName: '김회원',
-          memberPhoneNumber: '01099038544',
-          recipientName: '김회원',
-          recipientPhoneNumber: '01099038544',
-          packageDelivery: false,
-          orderDate: '2022-08-12T11:19:51.137',
-          _links: {
-            query_order: {
-              href: 'http://localhost:8080/api/admin/orders/7735/general',
-            },
-          },
-        },
-        {
-          id: 7720,
-          orderType: 'general',
-          merchantUid: 'merchant_uid6',
-          orderItemId: 7711,
-          orderStatus: 'DELIVERY_DONE',
-          deliveryNumber: 'cj0239234236',
-          memberEmail: 'user@gmail.com',
-          memberName: '김회원',
-          memberPhoneNumber: '01099038544',
-          recipientName: '김회원',
-          recipientPhoneNumber: '01099038544',
-          packageDelivery: false,
-          orderDate: '2022-08-12T11:19:51.137',
-          _links: {
-            query_order: {
-              href: 'http://localhost:8080/api/admin/orders/7720/general',
-            },
-          },
-        },
-      ],
-    },
-    _links: {
-      first: {
-        href: 'http://localhost:8080/api/admin/orders/search?page=0&size=5',
-      },
-      prev: {
-        href: 'http://localhost:8080/api/admin/orders/search?page=0&size=5',
-      },
-      self: {
-        href: 'http://localhost:8080/api/admin/orders/search?page=1&size=5',
-      },
-      next: {
-        href: 'http://localhost:8080/api/admin/orders/search?page=2&size=5',
-      },
-      last: {
-        href: 'http://localhost:8080/api/admin/orders/search?page=2&size=5',
-      },
-      profile: {
-        href: '/docs/index.html#resources-query-admin-orders',
-      },
-    },
-    page: {
-      size: 5,
-      totalElements: 14,
-      totalPages: 3,
-      number: 1,
-    },
-  },
-};

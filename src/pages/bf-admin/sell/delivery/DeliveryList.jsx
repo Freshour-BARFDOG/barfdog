@@ -25,12 +25,13 @@ export default function SearchResultList({ items, selectedIdList, onSelectedItem
 }
 
 const ItemList = ({ item, sortableItemRef, selectedIdList, onSelectedItem }) => {
-  console.log(item);
+  
   const DATA = {
     id: item.id, // 주문 id => ! 주문 id로 주문정보를 조회가능
     merchantUid: item.merchantUid, // 상품 주문 번호
     orderItemId: item.orderItemId, // 주문한 상품의 id
     orderStatus: orderStatus.KOR[item.orderStatus],
+    createdDate: transformDate(item.createdDate, 'time', { seperator: '/' }),
     orderDate: transformDate(item.orderDate, 'time', { seperator: '/' }),
     orderType: item.orderType,
     deliveryNumber: item.deliveryNumber,

@@ -35,7 +35,8 @@ const initialSearchValues = {
 };
 
 export default function CancelOnSellPage() {
-  const searchApiUrl = `/api/admin/orders/cancelRequest`; // ! 취소: "주문"단위 리스트
+  
+  const searchApiUrl = `/api/admin/orders/searchAll`;
   const searchPageSize = 10;
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
@@ -85,7 +86,7 @@ export default function CancelOnSellPage() {
     
     // res = searchValues.orderType === productType.GENERAL ? DUMMY__ADMIN_ORDER_ITEMS_GENERAL_RESPONSE :  DUMMY__ADMIN_ORDER_ITEMS_SUBSCRIBE_RESPONSE; //  ! TEST RESPONSE
     console.log(res);
-    return getDefaultPagenationInfo(res?.data, 'queryAdminCancelRequestDtoList', {pageSize: searchPageSize, setInitialize: setSearchQueryInitialize});
+    return getDefaultPagenationInfo(res?.data, 'queryAdminOrdersAllInfoDtoList', {pageSize: searchPageSize, setInitialize: setSearchQueryInitialize});
   },[]);
 
 
@@ -251,9 +252,7 @@ export default function CancelOnSellPage() {
                   </li>
                   <li className={s.table_th}>상세보기</li>
                   <li className={s.table_th}>주문번호</li>
-                  {/*<li className={s.table_th}>상품주문번호</li>*/}
                   <li className={s.table_th}>주문상태</li>
-                  {/*<li className={s.table_th}>취소사유</li>*/}
                   <li className={s.table_th}>구매자 ID</li>
                   <li className={s.table_th}>구매자</li>
                   <li className={s.table_th}>수령자</li>
@@ -289,139 +288,3 @@ export default function CancelOnSellPage() {
     </>
   );
 }
-
-// const DUMMY_ADMIN_CANCEL_ITEMLIST_RES = {
-//   data: {
-//     _embedded: {
-//       queryAdminCancelRequestDtoList: [
-//         {
-//           id: 6011,
-//           orderType: 'general',
-//           merchantUid: 'merchant_uid5',
-//           orderStatus: 'CANCEL_REQUEST',
-//           deliveryNumber: 'cj0239234235',
-//           memberEmail: 'user@gmail.com',
-//           memberName: '김회원',
-//           memberPhoneNumber: '01099038544',
-//           recipientName: '김회원',
-//           recipientPhoneNumber: '01099038544',
-//           packageDelivery: false,
-//           orderDate: '2022-08-12T11:19:46.145',
-//           _links: {
-//             query_order: {
-//               href: 'http://localhost:8080/api/admin/orders/6011/general',
-//             },
-//           },
-//         },
-//         {
-//           id: 5966,
-//           orderType: 'general',
-//           merchantUid: 'merchant_uid4',
-//           orderStatus: 'CANCEL_REQUEST',
-//           deliveryNumber: 'cj0239234234',
-//           memberEmail: 'user@gmail.com',
-//           memberName: '김회원',
-//           memberPhoneNumber: '01099038544',
-//           recipientName: '김회원',
-//           recipientPhoneNumber: '01099038544',
-//           packageDelivery: false,
-//           orderDate: '2022-08-12T11:19:46.143',
-//           _links: {
-//             query_order: {
-//               href: 'http://localhost:8080/api/admin/orders/5966/general',
-//             },
-//           },
-//         },
-//         {
-//           id: 5981,
-//           orderType: 'general',
-//           merchantUid: 'merchant_uid4',
-//           orderStatus: 'CANCEL_REQUEST',
-//           deliveryNumber: 'cj0239234234',
-//           memberEmail: 'admin@gmail.com',
-//           memberName: '관리자',
-//           memberPhoneNumber: '01056785678',
-//           recipientName: '관리자',
-//           recipientPhoneNumber: '01056785678',
-//           packageDelivery: false,
-//           orderDate: '2022-08-12T11:19:46.143',
-//           _links: {
-//             query_order: {
-//               href: 'http://localhost:8080/api/admin/orders/5981/general',
-//             },
-//           },
-//         },
-//         {
-//           id: 5936,
-//           orderType: 'general',
-//           merchantUid: 'merchant_uid3',
-//           orderStatus: 'CANCEL_REQUEST',
-//           deliveryNumber: 'cj0239234233',
-//           memberEmail: 'admin@gmail.com',
-//           memberName: '관리자',
-//           memberPhoneNumber: '01056785678',
-//           recipientName: '관리자',
-//           recipientPhoneNumber: '01056785678',
-//           packageDelivery: false,
-//           orderDate: '2022-08-12T11:19:46.142',
-//           _links: {
-//             query_order: {
-//               href: 'http://localhost:8080/api/admin/orders/5936/general',
-//             },
-//           },
-//         },
-//         {
-//           id: 5921,
-//           orderType: 'general',
-//           merchantUid: 'merchant_uid3',
-//           orderStatus: 'CANCEL_REQUEST',
-//           deliveryNumber: 'cj0239234233',
-//           memberEmail: 'user@gmail.com',
-//           memberName: '김회원',
-//           memberPhoneNumber: '01099038544',
-//           recipientName: '김회원',
-//           recipientPhoneNumber: '01099038544',
-//           packageDelivery: false,
-//           orderDate: '2022-08-12T11:19:46.141',
-//           _links: {
-//             query_order: {
-//               href: 'http://localhost:8080/api/admin/orders/5921/general',
-//             },
-//           },
-//         },
-//       ],
-//     },
-//     _links: {
-//       first: {
-//         href: 'http://localhost:8080/api/admin/orders/cancelRequest?page=0&size=5',
-//       },
-//       prev: {
-//         href: 'http://localhost:8080/api/admin/orders/cancelRequest?page=0&size=5',
-//       },
-//       self: {
-//         href: 'http://localhost:8080/api/admin/orders/cancelRequest?page=1&size=5',
-//       },
-//       next: {
-//         href: 'http://localhost:8080/api/admin/orders/cancelRequest?page=2&size=5',
-//       },
-//       last: {
-//         href: 'http://localhost:8080/api/admin/orders/cancelRequest?page=2&size=5',
-//       },
-//       confirm_cancel_general: {
-//         href: 'http://localhost:8080/api/admin/orders/general/cancelRequest',
-//       },
-//       confirm_cancel_subscribe: {
-//         href: 'http://localhost:8080/api/admin/orders/general/cancelRequest',
-//       },
-//       profile: {
-//         href: '/docs/index.html#resources-admin-query-cancelRequest',
-//       },
-//     },
-//     page: {
-//       size: 5,
-//       totalElements: 14,
-//       totalPages: 3,
-//       number: 1,
-//     },
-//   },
-// };

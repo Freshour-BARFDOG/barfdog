@@ -30,11 +30,13 @@ export default function SearchResultList({ items, selectedIdList, onSelectedItem
 
 
 const Item = ({ item, sortableItemRef, selectedIdList, onSelectedItem }) => {
+  
   const DATA = {
     id: item.id, // 주문 id => ! 주문 id로 주문정보를 조회가능
     orderItemId: item.orderItemId, // 주문한 상품의 id
     merchantUid: item.merchantUid, // 상품 주문 번호
     orderStatus: orderStatus.KOR[item.orderStatus],
+    createdDate: transformDate(item.createdDate, 'time', { seperator: '/' }),
     orderDate: transformDate(item.orderDate, 'time', { seperator: '/' }),
     orderType: item.orderType,
     buyerId: item.memberEmail,
@@ -78,9 +80,6 @@ const Item = ({ item, sortableItemRef, selectedIdList, onSelectedItem }) => {
       <span>
         <em className={'overflow-x-scroll'}>{DATA.merchantUid}</em>
       </span>
-      {/*<span>*/}
-      {/*  <em className={'overflow-x-scroll'}>{DATA.orderItemId}</em>*/}
-      {/*</span>*/}
       <span>
         <em className={'overflow-x-scroll'}>
           <div>{DATA.orderStatus}</div>

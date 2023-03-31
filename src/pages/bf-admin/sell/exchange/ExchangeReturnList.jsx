@@ -33,6 +33,7 @@ const Item = ({ item, sortableItemRef, selectedIdList, onSelectedItem }) => {
     orderItemId: item.orderItemId, // 주문한 상품의 id // 구독상품일 경우, 구독 id
     merchantUid: item.merchantUid, // 주문마다 고유하게 부여되는 번호 ex. 20220921_aC5kIb3YxCRIV0n
     orderStatus: orderStatus.KOR[item.orderStatus],
+    createdDate: transformDate(item.createdDate, 'time', { seperator: '/' }),
     orderDate: transformDate(item.orderDate, 'time', { seperator: '/' }),
     orderType: item.orderType,
     buyerId: item.memberEmail,

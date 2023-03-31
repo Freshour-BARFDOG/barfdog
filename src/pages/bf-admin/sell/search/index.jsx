@@ -33,7 +33,8 @@ const initialSearchValues = {
 };
 
 export default function SearchOnSellPage() {
-  const searchApiUrl = `/api/admin/orders/cancelRequest`; // api 이름과 관계없이, '주문단위'조회에 사용가능함
+  const searchApiUrl = `/api/admin/orders/searchAll`; // 모든 정보 조회 ('주문'단위 조회)
+  // const searchApiUrl = `/api/admin/orders/search`; // '상품'단위 조회 // @derprecated
   const searchPageSize = 10;
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
@@ -71,7 +72,7 @@ export default function SearchOnSellPage() {
     // res = DUMMY__RESPONSE; // ! TEST
     console.log(res);
     if(!res) return;
-    return getDefaultPagenationInfo(res?.data, 'queryAdminCancelRequestDtoList', {pageSize: searchPageSize, setInitialize: setSearchQueryInitialize});
+    return getDefaultPagenationInfo(res?.data, 'queryAdminOrdersAllInfoDtoList', {pageSize: searchPageSize, setInitialize: setSearchQueryInitialize});
   },[]);
   
   const onSearchInputKeydown = (e) => {
@@ -136,7 +137,6 @@ export default function SearchOnSellPage() {
                 <ul className={s.table_header}>
                   <li className={s.table_th}>상세보기</li>
                   <li className={s.table_th}>주문번호</li>
-                  {/*<li className={s.table_th}>상품주문번호</li>*/} {/* ! 개별 상품 취소 기능 삭제로 인하여, 해당 column 미노출*/}
                   <li className={s.table_th}>주문상태</li>
                   <li className={s.table_th}>구매자 ID</li>
                   <li className={s.table_th}>구매자</li>
@@ -170,138 +170,3 @@ export default function SearchOnSellPage() {
     </>
   );
 }
-
-// const DUMMY_RESPONSE = {
-//   data: {
-//     _embedded: {
-//       queryAdminOrdersDtoList: [
-//         {
-//           id: 7819,
-//           orderType: 'general',
-//           merchantUid: 'merchant_uid15',
-//           orderItemId: 7816,
-//           orderStatus: 'PAYMENT_DONE',
-//           deliveryNumber: 'cj02392342315',
-//           memberEmail: 'admin@gmail.com',
-//           memberName: '관리자',
-//           memberPhoneNumber: '01056785678',
-//           recipientName: '관리자',
-//           recipientPhoneNumber: '01056785678',
-//           packageDelivery: false,
-//           orderDate: '2022-08-12T11:19:51.139',
-//           _links: {
-//             query_order: {
-//               href: 'http://localhost:8080/api/admin/orders/7819/general',
-//             },
-//           },
-//         },
-//         {
-//           id: 7789,
-//           orderType: 'subscribe',
-//           merchantUid: 'merchant_uid13',
-//           orderItemId: 7780,
-//           orderStatus: 'PAYMENT_DONE',
-//           deliveryNumber: 'cj02392342313',
-//           memberEmail: 'admin@gmail.com',
-//           memberName: '관리자',
-//           memberPhoneNumber: '01056785678',
-//           recipientName: '관리자',
-//           recipientPhoneNumber: '01056785678',
-//           packageDelivery: false,
-//           orderDate: '2022-08-12T11:19:51.139',
-//           _links: {
-//             query_order: {
-//               href: 'http://localhost:8080/api/admin/orders/7789/general',
-//             },
-//           },
-//         },
-//         {
-//           id: 7834,
-//           orderType: 'general',
-//           merchantUid: 'merchant_uid16',
-//           orderItemId: 7825,
-//           orderStatus: 'PAYMENT_DONE',
-//           deliveryNumber: 'cj02392342316',
-//           memberEmail: 'admin@gmail.com',
-//           memberName: '관리자',
-//           memberPhoneNumber: '01056785678',
-//           recipientName: '관리자',
-//           recipientPhoneNumber: '01056785678',
-//           packageDelivery: false,
-//           orderDate: '2022-08-12T11:19:51.139',
-//           _links: {
-//             query_order: {
-//               href: 'http://localhost:8080/api/admin/orders/7834/general',
-//             },
-//           },
-//         },
-//         {
-//           id: 7735,
-//           orderType: 'general',
-//           merchantUid: 'merchant_uid7',
-//           orderItemId: 7726,
-//           orderStatus: 'PAYMENT_DONE',
-//           deliveryNumber: 'cj0239234237',
-//           memberEmail: 'user@gmail.com',
-//           memberName: '김회원',
-//           memberPhoneNumber: '01099038544',
-//           recipientName: '김회원',
-//           recipientPhoneNumber: '01099038544',
-//           packageDelivery: false,
-//           orderDate: '2022-08-12T11:19:51.137',
-//           _links: {
-//             query_order: {
-//               href: 'http://localhost:8080/api/admin/orders/7735/general',
-//             },
-//           },
-//         },
-//         {
-//           id: 7720,
-//           orderType: 'general',
-//           merchantUid: 'merchant_uid6',
-//           orderItemId: 7711,
-//           orderStatus: 'PAYMENT_DONE',
-//           deliveryNumber: 'cj0239234236',
-//           memberEmail: 'user@gmail.com',
-//           memberName: '김회원',
-//           memberPhoneNumber: '01099038544',
-//           recipientName: '김회원',
-//           recipientPhoneNumber: '01099038544',
-//           packageDelivery: false,
-//           orderDate: '2022-08-12T11:19:51.137',
-//           _links: {
-//             query_order: {
-//               href: 'http://localhost:8080/api/admin/orders/7720/general',
-//             },
-//           },
-//         },
-//       ],
-//     },
-//     _links: {
-//       first: {
-//         href: 'http://localhost:8080/api/admin/orders/search?page=0&size=5',
-//       },
-//       prev: {
-//         href: 'http://localhost:8080/api/admin/orders/search?page=0&size=5',
-//       },
-//       self: {
-//         href: 'http://localhost:8080/api/admin/orders/search?page=1&size=5',
-//       },
-//       next: {
-//         href: 'http://localhost:8080/api/admin/orders/search?page=2&size=5',
-//       },
-//       last: {
-//         href: 'http://localhost:8080/api/admin/orders/search?page=2&size=5',
-//       },
-//       profile: {
-//         href: '/docs/index.html#resources-query-admin-orders',
-//       },
-//     },
-//     page: {
-//       size: 5,
-//       totalElements: 14,
-//       totalPages: 3,
-//       number: 1,
-//     },
-//   },
-// };

@@ -25,7 +25,7 @@ const ProductInfo_basicOrderInfo = ({basicOrderInfo}) => {
               <span>주문&#40;결제&#41;일시</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
-              <span>{transformDate(basicOrderInfo.orderDate, 'time', {seperator: '/'})}</span>
+              <span>{transformDate(basicOrderInfo.orderDate, 'time', {seperator: '/'}) || "-"}</span>
             </div>
           </div>
         </li>
