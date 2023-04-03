@@ -5,7 +5,7 @@ export const filter_userIndexOnRewardName = (rewardName:string):string => {
   const n = rewardName.split( rewardNameDivider );
   const originRewardName = n[0];
   const userNameDivider = '/';
-  if (  n[1].indexOf( userNameDivider ) < 0 ) return;
+  if (  n[1].indexOf( userNameDivider ) < 0 ) return rewardName;
   const userName = n[1].split(userNameDivider)[0];
   return `${originRewardName} (${userName})`;
 };
