@@ -8,14 +8,14 @@
 ## Install
 
 > Next JS Package
-```powerShell
+```bash
 $ npx create-next-app .
 ```
 
 <br/>
 
 > Global Install
-```powerShell
+```bash
 $ npm i -g nodemon
 ```
 
@@ -77,7 +77,7 @@ if(res.isDone){  // ! PRODUCT CODE
 
 ### Prettier
 
-```bash
+```
 - 기본 설정 그대로 사용
 - 사용에 불필요할 경우 disabled
 - 공통된 코드 구성 Format 생겼을 경우 추가
@@ -122,7 +122,7 @@ if(res.isDone){  // ! PRODUCT CODE
 |   checkbox_3   |  checkbox-3   |
 
 
-```bash
+```
 1. 시작의 이름은 영문 소문자를 사용하되 두 번째 단어부터 첫 번째 문자를 대문자로 처리하는 기법(카멜 케이스)을 사용한다.
 2. 동일한 이름의 id는 문서에서 한번만 사용이 가능하다.
 3. 지정된 레이아웃을 제외한 스타일 지정을 위하여 id를 사용하지 않는다.
@@ -141,7 +141,7 @@ if(res.isDone){  // ! PRODUCT CODE
 | control_center | control-center |
 
 
-```js
+```
 1. 시작의 이름은 영문 소문자를 사용하며 두 번째 단어부터 하이픈(-)으로 연결하며 대문자는 사용하지 않는다.
 2. 영문 소문자, 숫자, 하이픈(-)만 사용할 수 있다.
 3. 하이픈(-)은 2개 이상의 단어를 조합할 때만 사용한다.
@@ -167,7 +167,7 @@ if(res.isDone){  // ! PRODUCT CODE
 |      barfWorry.png       |        home_barfWorry_01.png         |
 
 
-```js
+```
 1. 보통 directory 파일명은 소문자로 한다.
 2. CamelCase또는 하이픈을 사용한다.
 3. 불분명한 이름은 짓지않는다(ex. loginSection2). 어쩔 수 없이 이름이 길어지더라도 명확한 이름을 사용한다.
@@ -189,26 +189,26 @@ if(res.isDone){  // ! PRODUCT CODE
 
 
 ### /src/components
-```bash
-- 재사용이 가능한 컴포넌트
+```
+- 재사용 가능한 컴포넌트
 - 다양한 곳에 사용 가능한 범용컴포넌트
 ```
 
 <br/>
 
 ### /src/components/atoms
-```bash
+```
 - 더 이상 쪼갤 수 없는 가장 작은 단위의 컴포넌트
 ```
 <br/>
 
 ### /src/components/common
-```bash
+```
 - 페이지별 공통적으로 사용하는 컴포넌트
 ```
 ### /src/containers
-```bash
-- 재사용이 불가능한 컴포넌트
+```
+- 재사용 불가능한 컴포넌트
 - ex. 약관, 회사 소개 등의 정적 페이지
 ```
 
