@@ -1,3 +1,5 @@
+import {IAMPORT_MIN_PAYMENT_PRICE} from 'store/TYPE/order/priceType'
+
 type price ={
   originPrice: number,
   discountCoupon: number,
@@ -11,5 +13,6 @@ export const calcSubscribeNextPaymentPrice = ({originPrice, discountCoupon, disc
   const dCoupon = discountCoupon || 0;
   const dGrade = discountGrade || 0;
   const overD = overDiscount || 0;
-  return ogPrice - (dGrade + dCoupon) + overD;
+  const result = ogPrice - (dGrade + dCoupon) + overD;
+  return originPrice <= 0 ? 0 : Math.max(IAMPORT_MIN_PAYMENT_PRICE, result) ;
 };
