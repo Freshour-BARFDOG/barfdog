@@ -105,18 +105,22 @@ export const SubscribePlan = ({ subscribeInfo }) => {
       nextPaymentPrice: subscribeInfo.price[selectedPlanName].salePrice, // 선택된 플랜의 판매가격
       recipeIdList: subscribeInfo.recipe.idList,
     };
+    
+    // validation: Incorrect paymentPrice
+    if(!body.nextPaymentPrice) return mct.alertShow( "결제금액 계산오류가 발생하였습니다.");
+    
 
     try {
       setIsLoading(true);
+      setSubmitted(true);
       const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/planRecipes`;
       const res = await postObjData(url, body);
       console.log(res);
-      // if (!res.isDone) { // ! TEST CODE //
-        if (res.isDone) {  // ! PRODUCT CODE //
-        setSubmitted(true);
+        if (res.isDone) {
           mct.alertShow('플랜 변경이 완료되었습니다.',onSuccessChangeSubscribeOrder);
       } else {
           mct.alertShow(`데이터 전송 실패\n${res.error}`);
+          setSubmitted(false);
       }
       setActiveConfirmModal(false);
     } catch (err) {

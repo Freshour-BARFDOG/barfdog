@@ -57,7 +57,6 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
   const [selectedCheckbox, setSelectedCheckbox] = useState([]); // * 풀플랜: 최대 2가지 레시피 선택 가능 (Checkbox Input)
   const [selectedRadio, setSelectedRadio] = useState();
   const [activeConfirmModal, setActiveConfirmModal] = useState(false);
-  const [modalMessage, setModalMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [selectedIdList, setSelectedIdList] = useState([]);
 
@@ -193,35 +192,31 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
       nextPaymentPrice: subscribeInfo.price[curPlan].salePrice, // 선택된 플랜의 판매가격
       recipeIdList: selectedIdList,
     };
-
-    console.log('body: ', body);
+    
+    // validation: Incorrect paymentPrice
+    if(!body.nextPaymentPrice) return mct.alertShow( "결제금액 계산오류가 발생하였습니다.");
 
     try {
       setIsLoading(true);
+      setSubmitted(true);
       const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/planRecipes`;
       const res = await postObjData(url, body);
       console.log(res);
-      // if (!res.isDone) {  // ! TEST CODE //
       if (res.isDone) {
-        // ! PRODUCT CODE //
-        setSubmitted(true);
         mct.alertShow('레시피 변경이 완료되었습니다.', onSuccessChangeSubscribeOrder);
       } else {
         mct.alertShow(`데이터 전송 실패\n${res.error}`);
+        setSubmitted(false);
       }
       setActiveConfirmModal(false);
     } catch (err) {
       console.error('err: ', err);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
-  const onShowModal = (message) => {
-    if (message) mct.alertShow(message);
-    // setModalMessage(message);
-  };
   const onHideModal = () => {
-    // setModalMessage('');
     mct.alertHide('');
   };
 

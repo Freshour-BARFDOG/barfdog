@@ -74,25 +74,31 @@ export const SubscribeGram = ({ subscribeInfo }) => {
   };
 
   const onSubmit = async (confirm) => {
+    if (submitted) return console.error('이미 제출된 양식입니다.');
     if (!confirm) {
       return setActiveConfirmModal(false);
     }
-    if (submitted) return console.error('이미 제출된 양식입니다.');
-
+    
     const body = {
       stringGrams: form.nextGrams.join(", "), // 원래 Number 여야하지만,  Number[] 배열로 전달한다.
       totalPrice: form.nextSalePrice,
     };
+    
+    // validation: Incorrect paymentPrice
+    if(!body.totalPrice) return mct.alertShow( "결제금액 계산오류가 발생하였습니다.");
+    
+    
     try {
       setIsLoading(true);
+      setSubmitted(true);
       const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/gram`;
       const res = await postObjData(url, body);
       console.log(res);
       if (res.isDone) {
-        setSubmitted(true);
         mct.alertShow('무게 변경 변경이 완료되었습니다.', onSuccessChangeSubscribeOrder);
       } else {
         mct.alertShow(`데이터 전송 실패\n${res.error}`);
+        setSubmitted(false);
       }
       setActiveConfirmModal(false);
     } catch (err) {

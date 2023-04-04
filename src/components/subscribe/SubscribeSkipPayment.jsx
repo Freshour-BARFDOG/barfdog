@@ -44,10 +44,11 @@ export const SubscribeSkipPayment = ({subscribeInfo}) => {
   }, [skipCount] );
   
   const onSubmit = async (confirm) => {
+    if (submitted) return console.error('이미 제출된 양식입니다.');
     if (!confirm) {
       return setActiveConfirmModal(false);
     }
-    if (submitted) return console.error('이미 제출된 양식입니다.');
+    
     const selectedSkipCount = Number(skipCount.split('-')[1]);
     const skipType = selectedSkipCount === 1 ? subscribeSkipType.WEEK : subscribeSkipType.ONCE; // 건너뛰기 타입
     
@@ -58,16 +59,15 @@ export const SubscribeSkipPayment = ({subscribeInfo}) => {
     
     try {
       setIsLoading(true);
+      setSubmitted(true);
       const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/skip/${skipType}`;
       const res = await postObjData(url, body);
-      // console.log(res);
-      // if (!res.isDone) {
-        // ! TEST CODE //
-        if (res.isDone) {  // ! PRODUCT CODE //
-        setSubmitted(true);
+      console.log(res);
+      if (res.isDone) {
         mct.alertShow('구독 건너뛰기가 적용되었습니다.',onSuccessChangeSubscribeOrder);
       } else {
         mct.alertShow(`데이터 전송 실패\n${res.error}`);
+        setSubmitted(false);
       }
       setActiveConfirmModal(false);
     } catch (err) {
@@ -82,7 +82,6 @@ export const SubscribeSkipPayment = ({subscribeInfo}) => {
     window.location.reload();
   };
   
-  // console.log(subscribeInfo);
   
 
   

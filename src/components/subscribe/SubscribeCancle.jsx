@@ -101,8 +101,8 @@ export const SubscribeCancle = ({ subscribeInfo }) => {
   
   
   const onSubmit = async (confirm) => {
-    if (!confirm) return setActiveConfirmModal(false);
     if (submitted) return console.error('이미 제출된 양식입니다.');
+    if (!confirm) return setActiveConfirmModal(false);
     
     const body = {
       reasonList: form.reasonList.map((reason) =>
@@ -112,15 +112,15 @@ export const SubscribeCancle = ({ subscribeInfo }) => {
     
     try {
       setIsLoading(true);
+      setSubmitted(true);
       const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/stop`;
       const res = await postObjData(url, body);
       console.log(res);
-      // if (!res.isDone) { // ! TEST CODE //
-      if (res.isDone) {  // ! PRODUCT CODE //
-        setSubmitted(true);
+      if (res.isDone) {
         mct.alertShow('구독이 취소되었습니다.', onSuccessChangeSubscribeOrder);
       } else {
         mct.alertShow(`데이터 전송 실패\n${res.error}`);
+        setSubmitted(false);
       }
       setActiveConfirmModal(false);
     } catch (err) {
