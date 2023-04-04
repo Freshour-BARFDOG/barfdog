@@ -63,6 +63,12 @@ export const useSubscribeInfo = (subscribeId) => {
         // console.log("pricePerGrams: ", pricePerGrams);
         
         const discountPercent = subscribePlanInfo.planDiscountPercent[currentPlanName];
+        if(discountPercent === null){
+          alert("구독 할인정보를 불러오는데 실패했습니다. 잠시 후 다시 시도해주세요.");
+          window.location.href = '/mypage/subscribe';
+          return;
+        }
+        
         const allPlanNameList = Object.keys( subscribePlanType );
         const allPriceList = allPlanNameList.map( (planName) =>
           ({[planName]: calcSubscribePrice( {
