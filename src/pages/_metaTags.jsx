@@ -13,7 +13,7 @@ function MetaTags() {
         name="keywords"
         content="바프독, barfdog, 반려견 자연식, 강아지 자연식, 강아지 생식, 수제사료, 기호성 사료, 노령견 사료, 화식, 자연식"
       />
-      <meta property="og:title" content="Barf Dog" />
+      <meta property="og:title" content="BARFDOG" />
       <meta property="og:type" content="website" />
       <meta property="og:image" content="/favicon/logo(metatag).png" />
       <meta property="og:site_name" content="Barf Dog" />
@@ -104,7 +104,7 @@ function MetaTags() {
       <meta name="theme-color" content="#ffffff" />
       {/*
         모든페이지에 아래 메타테크가 head에 들어감
-        루트파일이기에 가능한 한 적은 코드만 넣어야함 
+        루트파일이기에 가능한 한 적은 코드만 넣어야함
         전역 파일을 엉망으로 만들면 안된다 */}
     </>
   );

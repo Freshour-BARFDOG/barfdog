@@ -26,7 +26,7 @@ function MetaTitle({title, admin}) {
 
   return (
     <Head>
-      <title>{`${metaTitle || "바프독"} | Barf Dog ${admin ? '관리자': ''}`}</title>
+      <title>{`${metaTitle || "바프독"} | BARFDOG ${admin ? '관리자': ''}`}</title>
     </Head>
   );
 }
