@@ -71,7 +71,7 @@ export default function Popup_SubscribeOrderDetailInfoPage({ data }) {
                   </li>
                   <li className={s['table-list']}>
                     <ProductInfo_subscribe subscribeInfo={data.subscribeDto} />
-                    {isChangedSubscribeInformation({before:data.beforeSubscribeDto, after:data.subscribeDto})
+                    {data.orderStatus === orderStatus.RESERVED_PAYMENT && isChangedSubscribeInformation({before:data.beforeSubscribeDto, after:data.subscribeDto})
                       && <ProductInfo_subscribe subscribeInfo={data.beforeSubscribeDto} isChangedSubscribeInfo={true} />
                     }
                   </li>
