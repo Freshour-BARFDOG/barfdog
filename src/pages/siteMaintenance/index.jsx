@@ -7,7 +7,7 @@ import MobileLogo from "../../../public/img/mobile_logo.svg";
 
 
 export default function SiteMaintenance () {
-  
+
   return <>
     <main className={s.main}>
       <header className={s.header}><MobileLogo width='100%' height='100%' viewBox="0 0 146 20" /></header>
@@ -23,14 +23,14 @@ export default function SiteMaintenance () {
           <p>보다 나은 서비스를 위해 노력하겠습니다.</p>
           <p>고객 여러분의 양해 부탁드립니다. 감사합니다.</p>
         </div>
-      
+
       </section>
-      
+
       <section className={s.infoSection}>
         <hr/>
         <h3 className={s['title']}>점검일시</h3>
         <p className={s['detail']}>
-          <span>2023년 04월 04일 (화) 오전 9시까지</span>
+          <span>2023년 04월 06일 (목) 오전 9시까지</span>
         </p>
       </section>
     </main>
