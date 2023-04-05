@@ -36,8 +36,7 @@ const authSlice = createSlice({
       state.userType = userType.MEMBER;
       const accessToken = action.payload.token || "";
       const expiredDate = action.payload.expiredDate && cookieType.LOGIN_EXPIRED_PERIOD.VALUE; // 서버 token지속 기본값: 2시간
-      // const { temporaryPassword, email, name, roleList } = action.payload.data; // ! 0926 삭제
-      const temporaryPassword = action.payload.data?.temporaryPassword || null; // - 0926 추가
+      const temporaryPassword = action.payload.data?.temporaryPassword || null;
       setCookie(
         cookieType.LOGIN_COOKIE,
         accessToken,
@@ -45,7 +44,24 @@ const authSlice = createSlice({
         expiredDate,
         { path: '/' },
       );
-      window.location.href = action.payload.redirect || temporaryPassword ? '/?tempPw=true' : '/';
+      const query = temporaryPassword ? '?tempPw=true' : '';
+      window.location.href = "/" + query;
+    },
+    autoLogin(state, action) {
+      state.isAdmin = false;
+      state.isAuth = true;
+      const accessToken = action.payload.token || "";
+      const expiredDate = action.payload.expiredDate && cookieType.AUTO_LOGIN_EXPIRED_PERIOD.VALUE; // 서버로 부터 전달받은 값을 그대로 cookie의 expiredDate로 사용.
+      const temporaryPassword = action.payload.data?.temporaryPassword || null;
+      setCookie(
+        cookieType.AUTO_LOGIN_COOKIE,
+        accessToken,
+        cookieType.AUTO_LOGIN_EXPIRED_PERIOD.UNIT,
+        expiredDate,
+        { path: '/' },
+      );
+      const query = temporaryPassword ? '?tempPw=true' : '';
+      window.location.href = "/" + query;
     },
     kakaoLogin(state, action) {
       state.isAdmin = false;
@@ -78,20 +94,6 @@ const authSlice = createSlice({
       alert('네이버 로그인');
       window.location.href =  '/';
       
-    },
-    autoLogin(state, action) {
-      state.isAdmin = false;
-      state.isAuth = true;
-      const accessToken = action.payload.token || "";
-      const expiredDate = action.payload.expiredDate && cookieType.AUTO_LOGIN_EXPIRED_PERIOD.VALUE; // 서버로 부터 전달받은 값을 그대로 cookie의 expiredDate로 사용.
-      setCookie(
-        cookieType.AUTO_LOGIN_COOKIE,
-        accessToken,
-        cookieType.AUTO_LOGIN_EXPIRED_PERIOD.UNIT,
-        expiredDate,
-        { path: '/' },
-      );
-      window.location.href = '/';
     },
     logout(state) {
       state.isAdmin = false;
