@@ -22,33 +22,40 @@ export default function NAVER_Auth({ data, err, token }) {
   useEffect(() => {
     // CASE : ERROR
     if (!window || typeof window === 'undefined') return;
+
+    const redirUrl = '/account/login';
     if (err) {
-      const redirUrl = '/account/login';
       // return alert(err+'\n로그인페이지로 redir');
       return (window.location.href = redirUrl); // !  PRODUCT CODE
     }
 
     (async () => {
       if (data.snsUserType === userType.NON_MEMBER) {
+
         // CASE: 비회원 > 회원가입 페이지로 이동
         dispatch(userStateAction.setSnsInfo({ data: userSnsInfo }));
         await router.push('/account/signup');
-        
+
       } else if (data.snsUserType === userType.MEMBER) {
+
         // CASE: 회원 > 연동되지 않았을 경우, 연동페이지로 이동
         dispatch(userStateAction.setSnsInfo({ data: userSnsInfo }));
         await router.push('/account/valid-sns');
-        
-      } else if (
-        data.snsUserType === userType.MEMBER_WITH_SNS.KAKAO ||
-        data.snsUserType === userType.MEMBER_WITH_SNS.NAVER
-      ) {
+
+      } else if (data.snsUserType === userType.MEMBER_WITH_SNS.KAKAO){
+
+        alert ("카카오 간편로그인이 연동되어있습니다. 다시 로그인해주세요.");
+        return (window.location.href = redirUrl);
+
+      } else if (data.snsUserType === userType.MEMBER_WITH_SNS.NAVER) {
+
         // CASE: SNS연동완료된 회원 => 로그인 처리
         const payload = {
           token,
           expiredDate: 10,
         };
         dispatch(authAction.naverLogin(payload));
+
       }
     })();
     // CASE : SUCCESS SNS LOGIN
@@ -105,7 +112,7 @@ export async function getServerSideProps({ query }) {
     console.log('error:', err.response);
   }
 
-  
+
   try {
     const body = {
       accessToken: naverToken, // Naver Api Access Token
@@ -135,12 +142,12 @@ export async function getServerSideProps({ query }) {
         },
       };
     }
-    
+
     if (res.data) {
       const resultCode = Number(res.data.resultcode) || null;
       const resultMessage = res.data.message || null;
       const serverRes = res.data.response;
-      
+
       userInfo = {
         accessToken: body.accessToken, // Naver Api Access Token
         tokenValidDays: body.tokenValidDays, // 토큰 지속시간
@@ -160,11 +167,11 @@ export async function getServerSideProps({ query }) {
         // 회원 & SNS연동 아직 안 한 CASE
         snsUserType = userType.MEMBER;
       } else if (resultCode === 253) {
-        // 이미 연동되어있는 계정 = 로그인 처리시킴
+        // 이미 카카오 연동되어있는 계정 => 연동 불가 처리
         snsUserType = userType.MEMBER_WITH_SNS.KAKAO;
-        token = res.headers.authorization;
+        token = null;
       } else if (resultCode === 254 || resultCode === 200) {
-        // 이미 연동되어있는 회원 => 메인페이지로 이동
+        // 기존 네이버 연동 계정 => 로그인 처리
         snsUserType = userType.MEMBER_WITH_SNS.NAVER;
         token = res.headers.authorization;
       }

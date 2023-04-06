@@ -22,31 +22,38 @@ export default function KAKAO_Auth({ data, err, token }) {
   useEffect(() => {
     // CASE : ERROR
     if (!window || typeof window === 'undefined') return;
+
+    const redirUrl = '/account/login';
     if (err) {
-      const redirUrl = '/account/login';
-      // return alert(err); // ! TEST CODE
-      return (window.location.href = redirUrl); // ! PRODUCT CODE
+      return (window.location.href = redirUrl);
     }
 
     (async () => {
       if (data.snsUserType === userType.NON_MEMBER) {
+
         // CASE: 비회원 > 회원가입 페이지로 이동
         dispatch(userStateAction.setSnsInfo({ data: userSnsInfo }));
         await router.push('/account/signup');
+
       } else if (data.snsUserType === userType.MEMBER) {
+
         // CASE: 회원 > 연동되지 않았을 경우, 연동페이지로 이동
         dispatch(userStateAction.setSnsInfo({ data: userSnsInfo }));
         await router.push('/account/valid-sns');
-      } else if (
-        data.snsUserType === userType.MEMBER_WITH_SNS.KAKAO ||
-        data.snsUserType === userType.MEMBER_WITH_SNS.NAVER
-      ) {
+
+      } else if (data.snsUserType === userType.MEMBER_WITH_SNS.NAVER) {
+
+        alert ("네이버 간편로그인이 연동되어있습니다. 다시 로그인해주세요.");
+        return (window.location.href = redirUrl);
+
+      } else if (data.snsUserType === userType.MEMBER_WITH_SNS.KAKAO) {
         // CASE: SNS연동완료된 회원 => 로그인 처리
         const payload = {
           token,
           expiredDate: 10,
         };
         dispatch(authAction.kakaoLogin(payload));
+
       }
     })();
   }, [data, err]);
@@ -110,9 +117,9 @@ export async function getServerSideProps({ query }) {
         },
       };
     }
-    
+
     if (res.data) {
-      
+
       const resData = res.data;
       const resultCode = Number(resData.resultcode) || null;
       const resultMessage = resData.message || null;
@@ -142,12 +149,13 @@ export async function getServerSideProps({ query }) {
         // 회원 & SNS연동 아직 안 한 CASE
         snsUserType = userType.MEMBER;
       } else if (resultCode === 253 || resultCode === 200) {
-        // 이미 카카오로 연동되어있는 계정 > 로그인 처리시킴
+        // 기존 카카오 연동 계정 > 로그인 처리
         snsUserType = userType.MEMBER_WITH_SNS.KAKAO;
         token = res.headers.authorization;
       } else if (resultCode === 254) {
-        snsUserType = userType.MEMBER_WITH_SNS.NAVER; // 이미 네이버로 연동되어있는 계정
-        token = res.headers.authorization;
+        // 이미 네이버로 연동되어있는 계정 => 연동 불가 처리
+        snsUserType = userType.MEMBER_WITH_SNS.NAVER;
+        token = null;
       }
 
       /*  error Code Validation 필요
@@ -202,7 +210,7 @@ export async function getServerSideProps({ query }) {
   error code -102 이미 카카오로 연결된 경우
   error code -103 존재하지 않는 계정
   error code -406 회읜 나이가 14세 미만인 경우
-  
+
 */
 
 
