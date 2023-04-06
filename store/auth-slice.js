@@ -84,16 +84,15 @@ const authSlice = createSlice({
       state.isAuth = true;
       state.userType = userType.MEMBER_WITH_SNS.NAVER;
       const accessToken = action.payload.token || "";
-      
+
       setCookie(
         cookieType.LOGIN_COOKIE,
         accessToken,
         cookieType.AUTO_LOGIN_EXPIRED_PERIOD.UNIT,
         { path: '/' },
       );
-      alert('네이버 로그인');
       window.location.href =  '/';
-      
+
     },
     logout(state) {
       state.isAdmin = false;
