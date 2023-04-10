@@ -8,15 +8,15 @@ import {calcOrdersheetPrices} from "./calcOrdersheetPrices";
 import {IAMPORT_MIN_PAYMENT_PRICE} from "/store/TYPE/order/priceType";
 
 export const OrdersheetReward = ({ id, info, form, setForm, formErrors, setFormErrors, orderType='general' }) => {
-  
+
   useEffect( () => {
-   
+
     const usedReward = Number(form[id]);
-    const calcResult = calcOrdersheetPrices(form, orderType);
+    const calcResult = calcOrdersheetPrices(form, orderType,{deliveryFreeConditionPrice: info.freeCondition});
     const availableMaxDiscount = calcResult?.availableMaxDiscount.reward;
     const overDiscount = calcResult?.overDiscount;
     const userTotalReward = info.reward;
-  
+
     console.log(usedReward, availableMaxDiscount, overDiscount);
     let error= "";
     if ( usedReward && userTotalReward === 0 ) {
@@ -26,8 +26,8 @@ export const OrdersheetReward = ({ id, info, form, setForm, formErrors, setFormE
     } else if(usedReward > userTotalReward) {
       error ="보유 적립금을 초과하여 사용할 수 없습니다.";
     }
-    
-    
+
+
     if ( error ) {
       alert( error );
       setForm((prevState) => ({
@@ -37,39 +37,39 @@ export const OrdersheetReward = ({ id, info, form, setForm, formErrors, setFormE
     } else {
       error = "";
     }
-    
-    
+
+
     setFormErrors(prevState=>({
         ...prevState,
         [id] : error
       })
     );
     // console.log("* rewardDiscount: ", form[id], "\n* availableMaxReward: ",availableMaxReward, "\nhasRewardValue: ", hasRewardValue) ;
-    
+
   }, [form[id]] );
-  
-  
-  
+
+
+
   const onChangeRewardHandler = (e) => {
     const { value } = e.currentTarget;
     let enteredReward = filter_emptyValue(value);
     enteredReward = filter_onlyNumber(enteredReward);
-    
+
     setForm((prevState) => ({
       ...prevState,
       [id]: enteredReward,
     }));
-    
+
   };
 
   const onClickDisCountReward = () => {
-    const discountAmount = calcOrdersheetPrices( form, orderType )?.availableMaxDiscount.reward;
+    const discountAmount = calcOrdersheetPrices( form, orderType, {deliveryFreeConditionPrice: info.freeCondition} )?.availableMaxDiscount.reward;
     setForm((prevState) => ({
       ...prevState,
       [id]:  discountAmount > 0 ? discountAmount : 0,
     }));
   };
-  
+
 
   return (
     <>

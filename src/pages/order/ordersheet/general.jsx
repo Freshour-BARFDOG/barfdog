@@ -33,11 +33,11 @@ export default function GeneralOrderSheetPage() {
     termsOfService: false,
     coupon: false,
   });
-  
-  
 
-  
-  
+
+
+
+
   useEffect(() => {
     const curItem = cart.orderItemList;
     if (!curItem.length) {
@@ -268,6 +268,7 @@ export default function GeneralOrderSheetPage() {
         <Modal_coupon
           onModalActive={setActiveModal}
           itemInfo={{id: selectedItemId}}
+          info={info}
           form={form}
           setForm={setForm}
         />

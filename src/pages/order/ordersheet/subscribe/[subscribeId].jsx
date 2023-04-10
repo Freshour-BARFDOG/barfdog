@@ -19,7 +19,7 @@ import {subscribePriceCutOffUnit} from "/util/func/subscribe/calcSubscribePrices
 
 
 export default function SubscribeOrderSheetPage({ subscribeId }) {
-  
+
   const subscribePlanInfo = useSubscribePlanInfo();
   const [isLoading, setIsLoading] = useState({ fetching: true });
   const [isRendered, setIsRendered] = useState(false);
@@ -31,18 +31,18 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
     termsOfService: false,
     coupon: false,
   });
-  
-  
-  
+
+
+
   useEffect(() => {
     if (window && typeof window !== 'undefined') {
       setIsRendered(true);
     }
   }, []);
-  
 
-  
-  
+
+
+
   useEffect(() => {
     if ( Object.values(subscribePlanInfo.planDiscountPercent).filter(val=> val === null).length ) return console.error( "관리자에서 설정한 할인율을 받아올 수 없습니다." );
 
@@ -64,7 +64,7 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
         }
         const data = res.data;
         console.log( data );
-    
+
         // 주문에 대한 모든 데이터
         const initInfo = {
           subscribeDto: {
@@ -93,7 +93,7 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
           reward: data.reward,
           brochure: data.brochure, // 브로슈어 받은 적 있는지 true/false => 브로슈어는 1번만 받을 수 있다.
         };
-    
+
         // FormDatas
         const initForm = {
           selfInfo: {
@@ -147,14 +147,14 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
         }) );
       }
     } )();
-  
+
     const calcSubscribePlanOriginPrice =({discountPercent, paymentPrice}) => {
       const originPrice = paymentPrice * (100 / (100 - discountPercent));
       return Math.floor(originPrice / subscribePriceCutOffUnit) * subscribePriceCutOffUnit;
     };
   }, [subscribePlanInfo.isLoading]);
-  
-  
+
+
 
   const onActivleModalHandler = (e) => {
     const button = e.currentTarget;
@@ -246,6 +246,7 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
           orderType={'subscribe'}
           onModalActive={setActiveModal}
           itemInfo={info.subscribeDto}
+          info={info}
           form={form}
           setForm={setForm}
         />

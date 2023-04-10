@@ -7,14 +7,14 @@ import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import {calcOrdersheetPrices} from "../order/calcOrdersheetPrices";
 import EmptyMessage from "../atoms/AmdinErrorMessage";
 
-export const Modal_coupon = ({ onModalActive, itemInfo,  form, setForm, orderType ='general' }) => {
-  
+export const Modal_coupon = ({ onModalActive, itemInfo, info,  form, setForm, orderType ='general' }) => {
+
   const [selectedRadioInfo, setSelectedRadioInfo] = useState(null);
-  
+
   // Selected Item Info
   let selectedItemPrice;
   const selectedItemId = Number(itemInfo.id);
-  
+
   if(orderType=== 'general'){
     selectedItemPrice = form.orderItemDtoList.filter(
       (item) => item.itemId === selectedItemId,
@@ -22,13 +22,13 @@ export const Modal_coupon = ({ onModalActive, itemInfo,  form, setForm, orderTyp
   }else if ( orderType === 'subscribe'){
     selectedItemPrice = itemInfo.nextPaymentPrice
   }
-  
+
   const onChangeHandler = useCallback((e) => {
     const radio = e.currentTarget;
     const radioId = radio.id;
     const couponId = Number(radio.dataset.couponId);
     const couponDiscountAmount = Number(radio.dataset.discountAmount);
-    const availableCouponMaxDiscount = calcOrdersheetPrices(form, orderType)?.availableMaxDiscount.coupon;
+    const availableCouponMaxDiscount = calcOrdersheetPrices(form, orderType, {deliveryFreeConditionPrice: info.freeCondition})?.availableMaxDiscount.coupon;
     if(availableCouponMaxDiscount <= 0){
       return alert("최소결제금액에 도달하여, 할인 쿠폰을 적용할 수 없습니다.")
     }
@@ -44,7 +44,7 @@ export const Modal_coupon = ({ onModalActive, itemInfo,  form, setForm, orderTyp
     () => {
       if(!selectedRadioInfo) return alert('선택된 쿠폰이 없습니다.');
       const { couponId, couponDiscountAmount} = selectedRadioInfo;
-    
+
       if(orderType=== 'general') {
         setForm(prevState => ({
           ...prevState,
@@ -77,19 +77,19 @@ export const Modal_coupon = ({ onModalActive, itemInfo,  form, setForm, orderTyp
     },
     [selectedRadioInfo, orderType, selectedItemId],
   );
-  
-  
+
+
   const onHideModal = () => {
     onModalActive((prevState) => ({
       ...prevState,
       coupons: false,
     }));
   };
-  
+
   if (!Object.keys(form).length)
     return console.error('Faild to render because of empty data props');
-  
-  
+
+
 
   return (
     <>
@@ -132,7 +132,7 @@ export const Modal_coupon = ({ onModalActive, itemInfo,  form, setForm, orderTyp
                 item.couponDiscountInfo = couponDiscountInfo
                 item.couponDiscountAmount = couponDiscountAmount
                 // console.log(couponDiscountAmount)
-    
+
                 // STEP 2. Validation
                 let valid = false;
                 if(item.remaining > 0 && selectedItemPrice >= item.availableMinPrice && couponDiscountAmount <= item.availableMaxDiscount) {
@@ -140,7 +140,7 @@ export const Modal_coupon = ({ onModalActive, itemInfo,  form, setForm, orderTyp
                   valid = true;
                 }
                 return valid && item;
-    
+
               }).map((item) =>(
                 <label
                   key={item.couponId}
@@ -158,7 +158,7 @@ export const Modal_coupon = ({ onModalActive, itemInfo,  form, setForm, orderTyp
                           checked={selectedRadioInfo?.id === item.couponId}
                         />
                       </span>
-      
+
                   <span className={s.name}>{`${item.name} (${item.couponDiscountInfo})`}</span>
                   <span className={s.count}>{item.remaining}개</span>
                   <span className={s.date}>{transformDate(item.expiredDate)}</span>
