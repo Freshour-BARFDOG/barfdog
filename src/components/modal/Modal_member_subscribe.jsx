@@ -28,7 +28,7 @@ const initialSubscribeInfoData = {
 };
 
 export default function Modal_member_subscribe({ memberId, onClick, setIsLoading }) {
-  
+
   const [subscribeInfoList, setSubscribeInfoList] = useState([initialSubscribeInfoData]);
 
   const onHideModalHandler = () => {
@@ -36,7 +36,7 @@ export default function Modal_member_subscribe({ memberId, onClick, setIsLoading
       onClick();
     }
   };
- 
+
   useEffect(() => {
     (async () => {
       try {
@@ -63,7 +63,10 @@ export default function Modal_member_subscribe({ memberId, onClick, setIsLoading
               paymentPrice:
                 (DATA.paymentPrice ? transformLocalCurrency(DATA.paymentPrice) : '0') + ' 원', // 결제금액
               subscribeStartDate: transformDate(DATA.subscribeStartDate), // 구독 시작일
-              deliveryDate: DATA.deliveryDate || '-', // 최근 발송일
+              nextPaymentDate: DATA.nextPaymentDate, // 최근 발송일
+              nextDeliveryDate: DATA.nextDeliveryDate, // 최근 발송일
+              countSkipOneTime: DATA.countSkipOneTime, // 최근 발송일
+              countSkipOneWeek: DATA.countSkipOneWeek, // 최근 발송일
               inedibleFood:
                 DATA.inedibleFood !== dogInedibleFoodType.NONE && DATA.inedibleFood
                   ? `${DATA.inedibleFood}`
@@ -193,24 +196,6 @@ export default function Modal_member_subscribe({ memberId, onClick, setIsLoading
                       <li className={`${s['t-row']}`}>
                         <div className={s['t-box']}>
                           <div className={`${s.innerBox} ${s.label}`}>
-                            <span>구독 시작일</span>
-                          </div>
-                          <div className={`${s.innerBox} ${s.cont}`}>
-                            <span>{info.subscribeStartDate}</span>
-                          </div>
-                        </div>
-                        <div className={s['t-box']}>
-                          <div className={`${s.innerBox} ${s.label}`}>
-                            <span>다음 발송일자</span>
-                          </div>
-                          <div className={`${s.innerBox} ${s.cont}`}>
-                            <span>{info.deliveryDate}</span>
-                          </div>
-                        </div>
-                      </li>
-                      <li className={`${s['t-row']}`}>
-                        <div className={s['t-box']}>
-                          <div className={`${s.innerBox} ${s.label}`}>
                             <span>못 먹는 음식</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
@@ -229,6 +214,44 @@ export default function Modal_member_subscribe({ memberId, onClick, setIsLoading
                           </div>
                         </div>
                       </li>
+                      <li className={`${s['t-row']}`}>
+                        <div className={s['t-box']}>
+                          <div className={`${s.innerBox} ${s.label}`}>
+                            <span>다음 결제일시</span>
+                          </div>
+                          <div className={`${s.innerBox} ${s.cont}`}>
+                            <span>{transformDate(info.nextPaymentDate, 'time', {seperator: "-"}) || "-"}</span>
+                          </div>
+                        </div>
+                        <div className={s['t-box']}>
+                          <div className={`${s.innerBox} ${s.label}`}>
+                            <span>다음 배송일자</span>
+                          </div>
+                          <div className={`${s.innerBox} ${s.cont}`}>
+                            <span>{transformDate(info.nextDeliveryDate) || "-"}</span>
+                          </div>
+                        </div>
+                      </li>
+                      {(info.countSkipOneTime > 0 || info.countSkipOneWeek > 0) && <li className={`${s['t-row']}`}>
+                        <div className={s['t-box']}>
+                          <div className={`${s.innerBox} ${s.label} ${s.alert}`}>
+                            <span>구독 건너뛰기 (1회)</span>
+                          </div>
+                          <div className={`${s.innerBox} ${s.cont}`}>
+                            <span>{info.countSkipOneTime} 회</span>
+                          </div>
+                        </div>
+                        <div className={s['t-box']}>
+                          <div className={`${s.innerBox} ${s.label} ${s.alert}`}>
+                            <span>구독 건너뛰기 (1주)</span>
+                          </div>
+                          <div className={`${s.innerBox} ${s.cont}`}>
+                            <span>{info.countSkipOneWeek} 회</span>
+                          </div>
+                        </div>
+                      </li>
+                      }
+
                     </ul>
                   </li>
                 ))}
@@ -242,53 +265,3 @@ export default function Modal_member_subscribe({ memberId, onClick, setIsLoading
     </ModalWrapper>
   );
 }
-
-
-
-
-const DUMMY_RESPONSE = {
-  data: {
-    _embedded: {
-      memberSubscribeAdminDtoList: [
-        {
-          querySubscribeAdminDto: {
-            id: 10680,
-            dogName: '김바프',
-            subscribeStartDate: '2022-07-18T13:48:31.244',
-            subscribeCount: 14,
-            plan: 'FULL',
-            amount: 101.0,
-            paymentPrice: 120000,
-            deliveryDate: '2022-07-26',
-            inedibleFood: '닭',
-            inedibleFoodEtc: 'NONE',
-            caution: '특이사항내용',
-          },
-          recipeNames: ['스타터프리미엄', '덕&램'],
-        },
-        {
-          querySubscribeAdminDto: {
-            id: 10650,
-            dogName: '김바프',
-            subscribeStartDate: '2022-07-18T13:48:31.201',
-            subscribeCount: 11,
-            plan: 'FULL',
-            amount: 101.0,
-            paymentPrice: 120000,
-            deliveryDate: '2022-07-26',
-            inedibleFood: 'NONE',
-            inedibleFoodEtc: 'NONE',
-            caution: 'NONE',
-          },
-          recipeNames: ['코끼리&칠면조'],
-        },
-      ],
-    },
-    page: {
-      size: 3,
-      totalElements: 13,
-      totalPages: 5,
-      number: 1,
-    },
-  },
-};

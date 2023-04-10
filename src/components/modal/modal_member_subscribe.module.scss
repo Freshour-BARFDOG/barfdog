@@ -68,7 +68,7 @@ $backgroundColorDef: #f8f8ff;
 
     .t-box {
       display: grid;
-      grid-template-columns: rem(180) calc(100% - rem(180));
+      grid-template-columns: rem(170) calc(100% - #{rem(170)});
       align-items: center;
       overflow: hidden;
 
@@ -103,6 +103,9 @@ $backgroundColorDef: #f8f8ff;
       .innerBox.cont {
         background-color: #fff;
         color: var(--gray20);
+      }
+      .innerBox.alert {
+        background-color: #fce4e4;
       }
     }
   }
