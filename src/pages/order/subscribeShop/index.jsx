@@ -29,7 +29,7 @@ import {calcSubscribePrice} from "/util/func/subscribe/calcSubscribePrices";
 export default function RegisterSubscribeInfoPage({ data }) {
   const subscribePlanInfo = useSubscribePlanInfo();
   const recipeInfo = useSubscribeRecipeInfo();
-  
+
   const info = {
     dogId: data.surveyInfo.dogId,
     dogName: data.surveyInfo.dogName,
@@ -53,7 +53,7 @@ export default function RegisterSubscribeInfoPage({ data }) {
     recipeInfoList: data.recipesDetailInfo, // 레시피의 모든 정보 (초기화)
     planDiscountPercent: subscribePlanInfo.planDiscountPercent,
   };
-  
+
   const currentRecipeIds = data.surveyInfo.recipeDtoList.filter((rc)=>
     data.surveyInfo.recipeName?.split(',').indexOf(rc.name) >= 0).map(rc=>rc.id) || [];
   const currentOneMealGrams = useCallback( calcOneMealGramsWithRecipeInfo({
@@ -63,7 +63,7 @@ export default function RegisterSubscribeInfoPage({ data }) {
     }).map(recipe =>recipe.oneMealGram) ,
     [recipeInfo.loading, subscribePlanInfo.loading, data]
   );
-  
+
   const initialForm = {
     plan: data.surveyInfo.plan || null,
     recipeIdList: currentRecipeIds,
@@ -92,12 +92,12 @@ export default function RegisterSubscribeInfoPage({ data }) {
   },[currentOneMealGrams])
 
   useEffect(() => {
-    
+
     setIsLoading((prevState) => ({
       ...prevState,
       fetching: true,
     }));
-    
+
     setTimeout(() => {
       setIsLoading((prevState) => ({
         ...prevState,
@@ -105,7 +105,7 @@ export default function RegisterSubscribeInfoPage({ data }) {
       }));
     }, fullscreenLoadingDuration);
   }, [subscribePlanInfo.loading]);
-  
+
   const calcSubscribePlanPaymentPrice = useCallback((planName) => {
     if (!form.recipeIdList[0] || !planName || !recipeInfo.data) {
       return {
@@ -131,7 +131,7 @@ export default function RegisterSubscribeInfoPage({ data }) {
         next: nextOneMealGrams
       }));
     }
- 
+
 
     return calcSubscribePrice( {
       discountPercent,
@@ -140,13 +140,13 @@ export default function RegisterSubscribeInfoPage({ data }) {
       pricePerGrams,
     });
   },[form.plan, form.recipeIdList, recipeInfo, subscribePlanInfo]);
-  
-  
-  
+
+
+
   const onStartSubscribeOrder = async () => {
     // 맞춤레시피 구매하기 (CONDITION: 결제 전)
     if (submitted) return;
-  
+
     const nextPaymentPrice = calcSubscribePlanPaymentPrice(form.plan).salePrice;
 
     const body = {
@@ -181,41 +181,41 @@ export default function RegisterSubscribeInfoPage({ data }) {
     } catch (err) {
       alert('API통신 오류');
       console.error(err);
-      
+
     }
     setIsLoading((prevState) => ({
       ...prevState,
       submit: false,
     }));
   };
-  
+
 
   const onChangeSubscribeOrder = async () => {
     if (submitted) return;
     // 구독 중 or 구독 보류 상태일 경우, 맞춤레시피 변경하기
     // ! 기존에 플랜, 레시피 정보 그대로, 맞춤플랜 변경하기 실행했을 경우: nextPaymentPrice가 없으므로, 에러발생시킴
-    
+
     try {
       setIsLoading((prevState) => ({
         ...prevState,
         paging: true,
       }));
-  
+
       const nextPaymentPrice = calcSubscribePlanPaymentPrice(form.plan).salePrice;
-  
+
       const body = {
         plan: form.plan,
         recipeIdList: form.recipeIdList,
         nextPaymentPrice: nextPaymentPrice, // 최종 계산된 가격
       };
       console.log('onChangeSubscribeOrder:\n', body)
-  
+
       const errObj = validate(body);
       const isPassed = valid_hasFormErrors(errObj);
       if (!isPassed) {
         return mct.alertShow('유효하지 않은 항목이 있습니다.\n선택한 레시피 및 플랜을 확인해주세요.');
       }
-  
+
       const prevInfo = data.surveyInfo;
       const prevDATA = {
         plan: prevInfo.plan, // 기존 주문 정보
@@ -225,10 +225,10 @@ export default function RegisterSubscribeInfoPage({ data }) {
         nextPaymentDate: transformDate(prevInfo.nextPaymentDate), // 기존 주문 정보
         nextDeliveryDate: transformDate(prevInfo.nextDeliveryDate), // 기존 주문 정보
       };
-  
+
       const nextPlan = form.plan;
       const nextPlanDeliveryPeriodInWeeks = subscribePlanType[nextPlan].weeklyPaymentCycle;
-  
+
       const nextDATA = {
         plan: nextPlan, // 유저가 선택한 플랜
         recipeIdList: form.recipeIdList, // 다음 변경될 recipe의 ID List
@@ -247,8 +247,8 @@ export default function RegisterSubscribeInfoPage({ data }) {
           nextPlanDeliveryPeriodInWeeks,
         ), // prev SubscribeOrder 의 nextPayment 완료 후, 그 다음 Cylcle
       };
-      
-      
+
+
       const DATA = {
         lastSurveyDate: prevInfo.lastSurveyDate,
         subscribeId: prevInfo.subscribeId,
@@ -256,16 +256,16 @@ export default function RegisterSubscribeInfoPage({ data }) {
         prev: prevDATA,
         next: nextDATA,
       };
-  
+
       // console.log('DATA:', DATA);
       await setSubmitted(true);
       await dispatch(cartAction.changeSubscribeOrder({ data: DATA }));
       await router.push(`/order/orderChanged/subscribe?dogId=${info.dogId}`);
-      
+
     } catch (err) {
       console.error(err)
     } finally {
-  
+
       setIsLoading((prevState) => ({
         ...prevState,
         paging: false,
@@ -281,7 +281,7 @@ export default function RegisterSubscribeInfoPage({ data }) {
   if (isLoading?.fetching) {
     return <FullScreenRunningDog opacity={1} />;
   }
-  
+
   return (
     <>
       <MetaTitle title="플랜 레시피 선택" />
@@ -306,14 +306,15 @@ export default function RegisterSubscribeInfoPage({ data }) {
               뒤로가기
             </button>
 
-            {info.subscribeStatus === subscribeStatus.BEFORE_PAYMENT && (
+            {(info.subscribeStatus === subscribeStatus.BEFORE_PAYMENT
+              || info.subscribeStatus === subscribeStatus.SUBSCRIBE_PENDING
+            ) && (
               <button className={s.nextPage} onClick={onStartSubscribeOrder}>
                 {isLoading?.submit ? <Spinner style={{ color: '#fff' }} /> : '맞춤레시피 구매하기'}
               </button>
             )}
 
-            {(info.subscribeStatus === subscribeStatus.SUBSCRIBING ||
-              info.subscribeStatus === subscribeStatus.SUBSCRIBE_PENDING) && (
+            {info.subscribeStatus === subscribeStatus.SUBSCRIBING && (
               <button className={s.nextPage} onClick={onChangeSubscribeOrder}>
                 {isLoading?.submit ? <Spinner style={{ color: '#fff' }} /> : '맞춤플랜 변경하기'}
               </button>
@@ -354,7 +355,7 @@ export async function getServerSideProps({ req, query }) {
   const getRecipeInfoApiUrl = `/api/recipes`;
   const recipeInfoRes = await getDataSSR(req, getRecipeInfoApiUrl);
   const recipeInfoData = recipeInfoRes?.data;
-  
+
   if(dogData && recipeInfoData) {
     const recipeIdList =
       recipeInfoData._embedded?.recipeListResponseDtoList?.map((l) => l.id) || [];
@@ -371,7 +372,7 @@ export async function getServerSideProps({ req, query }) {
         });
       }
     }
-  
+
     console.log("dogDto: ",dogDto);
     console.log("surveyInfoData: ",surveyInfoData);
     console.log("recipesDetailInfo: ",recipesDetailInfo);
@@ -381,7 +382,7 @@ export async function getServerSideProps({ req, query }) {
       recipesDetailInfo: recipesDetailInfo,
     };
   }
-  
+
   if(!data){
     return {
       props:{},
