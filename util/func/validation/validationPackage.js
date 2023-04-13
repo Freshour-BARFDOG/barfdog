@@ -15,7 +15,7 @@ export const valid_hasFormErrors = (errorObj, type = 'array') => {
       const result = valid_hasFormErrors(innerObj);
       // ! result중에 false가 하나라도 있으면 error로 취급
       if(!result) return isPassed = false;
-      
+
     });
   } else {
     for (const key in errorObj) {
@@ -73,8 +73,8 @@ export const valid_isEmptyArray = (arr) =>{
     alert('데이터 처리 중 에러가 발생했습니다. 개발사에게 문의하세요.')
     return console.error('ERROR: Parameter type must be array');
   }
-  
-  
+
+
   return error;
 }
 
@@ -322,7 +322,7 @@ export const valid_URL = (value)=>{
 
 export const valid_link = (value) => {
   let errorsMessage;
-  
+
   const regexURL = new RegExp(
     "^(https?:\\/\\/)?" + // protocol
     "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|" + // domain name
@@ -332,15 +332,15 @@ export const valid_link = (value) => {
     "(\\#[-a-z\\d_]*)?$",
     "gi"
   ); // fragment locator
-  
+
   const valid = regexURL.test(value);
-  
+
   if (value && !valid) {
     errorsMessage = "유효하지 않은 링크입니다.";
   } else {
     errorsMessage = "";
   }
-  
+
   return errorsMessage;
 };
 
@@ -354,22 +354,22 @@ export const valid_currency = (value, options ={mode:'',unit:''}, availableMaxDi
   if ( currency < 0 ) {
     error = '가격은 0보다 작을 수 없습니다.'
   }
-  
+
   if (options.unit === discountUnitType.FIXED_RATE && currency <= 0){
     error = '할인률은 0 이하로 설정할 수 없습니다.'
-    
+
   } else if (options.unit === discountUnitType.FIXED_RATE && currency >= 100){
     error = '할인률은 100 이상 설정할 수 없습니다.'
   } else if(options.mode==='strict' && currency <= 0) {
     error = '항목이 비어있습니다.'
   }
-  
-  
+
+
   if (maxDiscountNum < currency){
     error = '할인금액은 최대사용금액보다 높을 수 없습니다.'
   }
-  
-  
+
+
   return error;
 }
 
@@ -433,11 +433,11 @@ export const valid_couponCode = (val) => {
   - 어드민: 쿠폰 수정 불가 (수정이 필요할 경우, 쿠폰 삭제 후 재발행)
 */
   let error = '';
-  
+
   // PART 1
   const maxLength = 15;
   const codeLength = val.length;
-  
+
   // PART 2
   const pattern_num = /[0-9]/;
   const pattern_en = /[a-zA-Z]/;
@@ -448,7 +448,7 @@ export const valid_couponCode = (val) => {
   pattern_num.test(val) && mixedCharCount++;
   pattern_en.test(val) && mixedCharCount++;
   const pettern_mixedChar = mixedCharCount >= 2;
-  
+
   if (!val) {
     // 입력한 값이 없을 경우, 관리자 쿠폰으로 발행됨
     error = '쿠폰코드는 공란일 수 없습니다.';
@@ -461,7 +461,7 @@ export const valid_couponCode = (val) => {
   } else if (codeLength > maxLength) {
     error = '코드 글자 수는 15자 이내입니다.';
   }
-  
+
   return error;
 };
 
@@ -471,9 +471,9 @@ export const valid_isTheSameArray = (beforeArr1, beforeArr2) => {
   if(!beforeArr1 || !beforeArr2 || (beforeArr1?.length === 0 && beforeArr2?.length === 0)){
     return false;
   }
-  const arr1 = JSON.stringify( beforeArr1.sort() );
-  const arr2 = JSON.stringify( beforeArr2.sort() );
-  
+  const arr1 = JSON.stringify( Array.from(beforeArr1).sort() );
+  const arr2 = JSON.stringify( Array.from(beforeArr2).sort() );
+
   return arr1 === arr2;
 }
 
@@ -497,15 +497,15 @@ export const valid_date = (d, type='future') => {
   } else if(!d){
     error = '항목이 비었습니다.'
   }
-  
+
   if(type === 'future' && selectedDate < today){
     error = '오늘보다 과거일 수 없습니다.';
-    
+
   } else if(type === 'past' && selectedDate > today){
     error = '오늘보다 미래일 수 없습니다.';
   }
-  
-  
+
+
   return { error, expiredDate };
 }
 
@@ -515,12 +515,12 @@ export const valid_minLength = (val, minLength)=>{
   if(!minLength || typeof minLength !== 'number') {
     new Error('Required minLength of Number Type');
   }
-  
-  
+
+
   if(val.length < minLength){
     error = `최소 ${minLength} 글자 이상 작성해주세요.`;
   }
-  
+
   return error;
 }
 
@@ -531,12 +531,12 @@ export const valid_maxLength = (val, maxLength)=>{
   if(!maxLength || typeof maxLength !== 'number') {
     new Error('Required maxLength of Number Type');
   }
-  
-  
+
+
   if(val.length > maxLength){
     error = '작성 가능한 최대 글자수를 초과했습니다.';
   }
-  
+
   return error;
 }
 
@@ -568,12 +568,11 @@ export const valid_dogWeight = (val, limitIntCount = 2)=>{
   if(!val || Number(val) === 0){
     error = '항목이 비어있습니다.'
   }
-  
+
   const isOnlyIntValue = val.indexOf('.') < 0;
   if(isOnlyIntValue && val.length > limitIntCount){
     error = '항목의 정수값은 최대 2자리입니다.'
   }
-  
+
   return error;
 }
-
