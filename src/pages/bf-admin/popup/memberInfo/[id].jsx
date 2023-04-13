@@ -55,10 +55,8 @@ export default function Popup_MemberDetailPage({ id }) {
             lastLoginDate: DATA.lastLoginDate || '로그인 정보가 없습니다.',
             longUnconnected: DATA.longUnconnected ? 'Y' : 'N',
             withdrawal: DATA.withdrawal ? 'Y' : 'N',
-            dogNames:
-              res.data.dogNames
-                .map((dogname, index) => (index === 0 ? `${dogname} (대표견)` : dogname))
-                .join(',') || '등록된 반려견이 없습니다.',
+            dogNames: res.data.dogNames
+                .map((dogname, index) => (index === 0 ? `${dogname} (대표견)` : dogname)),
           };
         } else {
           alert('데이터를 가져올 수 없습니다.');
@@ -298,7 +296,7 @@ export default function Popup_MemberDetailPage({ id }) {
                             <span>반려견</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
-                            <span>{formValues.dogNames}</span>
+                            {formValues.dogNames?.length > 0 ? formValues.dogNames.map(name=> <span className={s.dogName}>{name}</span>) : '등록된 반려견이 없습니다.'}
                           </div>
                         </div>
                       </li>
@@ -371,7 +369,6 @@ export default function Popup_MemberDetailPage({ id }) {
 
 export async function getServerSideProps({ query }) {
   const { id } = query;
-  
+
   return { props: { id } };
 }
-

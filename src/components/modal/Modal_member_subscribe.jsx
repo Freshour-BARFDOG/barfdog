@@ -67,6 +67,7 @@ export default function Modal_member_subscribe({ memberId, onClick, setIsLoading
               nextDeliveryDate: DATA.nextDeliveryDate, // 최근 발송일
               countSkipOneTime: DATA.countSkipOneTime, // 최근 발송일
               countSkipOneWeek: DATA.countSkipOneWeek, // 최근 발송일
+              cancelReason: DATA.cancelReason, // 최근 발송일
               inedibleFood:
                 DATA.inedibleFood !== dogInedibleFoodType.NONE && DATA.inedibleFood
                   ? `${DATA.inedibleFood}`
@@ -97,7 +98,6 @@ export default function Modal_member_subscribe({ memberId, onClick, setIsLoading
     })();
   }, []);
 
-  console.log(subscribeInfoList[0].id);
   return (
     <ModalWrapper
       background
@@ -251,6 +251,16 @@ export default function Modal_member_subscribe({ memberId, onClick, setIsLoading
                         </div>
                       </li>
                       }
+                      {info.cancelReason && <li className={`${s['t-row']} ${s['fullWidth']}`}>
+                        <div className={s['t-box']}>
+                          <div className={`${s.innerBox} ${s.label} ${s.alert}`}>
+                            <span>예약구독 취소사유</span>
+                          </div>
+                          <div className={`${s.innerBox} ${s.cont}`}>
+                            <span>{info.cancelReason}</span>
+                          </div>
+                        </div>
+                      </li>}
 
                     </ul>
                   </li>
