@@ -1,7 +1,7 @@
-export const seperateStringViaComma = (stringWithComma) => {
+export const seperateStringViaComma = (stringWithComma, option= {convertType}) => {
   if (!stringWithComma) return;
   const comma = ",";
   return stringWithComma.indexOf( comma )
-    ? stringWithComma.split( comma )
+    ? stringWithComma.split( comma ).map(str => option.convertType === 'number' ? Number(str) : str)
     : [stringWithComma];
 }
