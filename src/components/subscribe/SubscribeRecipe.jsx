@@ -1,22 +1,24 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import s from './subscribeRecipe.module.scss';
 import 'swiper/css';
+import Link from 'next/link';
 import Image from 'next/image';
-import { getData, postObjData } from '/src/pages/api/reqData';
+import {getData, postObjData} from '/src/pages/api/reqData';
 import Spinner from '/src/components/atoms/Spinner';
 import checkStringUnderConsonant from '/util/func/checkStringUnderConsonant';
-import { subscribePlanType } from '/store/TYPE/subscribePlanType';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { SubscribeCustomInput } from './SubscribeCustomInput';
-import { ItemRecommendlabel, ItemSoldOutLabel } from '../atoms/ItemLabel';
+import {subscribePlanType} from '/store/TYPE/subscribePlanType';
+import {Swiper, SwiperSlide} from 'swiper/react';
+import {SubscribeCustomInput} from './SubscribeCustomInput';
+import {ItemRecommendlabel, ItemSoldOutLabel} from '../atoms/ItemLabel';
 import popupWindow from '/util/func/popupWindow';
-import { useModalContext } from '/store/modal-context';
+import {useModalContext} from '/store/modal-context';
 import Modal_confirm from '/src/components/modal/Modal_confirm';
-import Modal_global_alert from '/src/components/modal/Modal_global_alert';
-import { valid_isTheSameArray } from '/util/func/validation/validationPackage';
-import { ToggleBoxContext } from '../atoms/ToggleBox';
-import { FullScreenLoading } from '../atoms/FullScreenLoading';
-import Link from 'next/link';
+import {valid_isTheSameArray} from '/util/func/validation/validationPackage';
+import {ToggleBoxContext} from '../atoms/ToggleBox';
+import {FullScreenLoading} from '../atoms/FullScreenLoading';
+import {useSubscribeRecipeInfo} from "/util/hook/useSubscribeRecipeInfo";
+import {calcSubscribePrice} from "/util/func/subscribe/calcSubscribePrices";
+import {calcOneMealGramsWithRecipeInfo} from "/util/func/subscribe/calcOneMealGramsWithRecipeInfo";
 
 const swiperSettings = {
   className: `${s.swiper_recipes} ${s.inMypage}`,
@@ -51,6 +53,7 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
   const initialInputType =
     subscribeInfo.info.planName === subscribePlanType.FULL.NAME ? 'checkbox' : 'radio';
   const curIngredient = subscribeInfo.recipe.ingredients;
+  const recipeInfo = useSubscribeRecipeInfo();
   const [initialize, setInitialize] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [allRecipeInfoList, setAllRecipeInfoList] = useState([]);
@@ -180,21 +183,41 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
     }
   };
 
+  const calcSalePriceAfterChangingRecipe = ({plan: plan}) => {
+
+    const currentRecipeInfos = recipeInfo.data.filter((recipe) => selectedIdList.indexOf(recipe.id) >= 0);
+    const result = calcSubscribePrice( {
+      discountPercent: subscribeInfo.plan.discountPercent,
+      oneMealGrams: calcOneMealGramsWithRecipeInfo({
+        selectedRecipeIds: selectedIdList,
+        allRecipeInfos: currentRecipeInfos,
+        oneDayRecommendKcal: subscribeInfo.info.oneDayRecommendKcal
+      }).map(recipe => recipe.oneMealGram),
+      planName: plan,
+      pricePerGrams: currentRecipeInfos.map( recipe => recipe.pricePerGram )
+    })
+
+    return result.salePrice;
+
+  };
+
   const onChangeRecipe = async (confirm) => {
     if (submitted) return console.error('이미 제출된 양식입니다.');
     if (!confirm) {
       return setActiveConfirmModal(false);
     }
 
+
     const curPlan = subscribeInfo.info.planName;
+    const nextPaymentPrice = calcSalePriceAfterChangingRecipe({plan: curPlan});
+    // validation: Incorrect paymentPrice
+    if(!nextPaymentPrice) return mct.alertShow( "결제금액 계산오류가 발생하였습니다.");
+
     const body = {
       plan: curPlan,
-      nextPaymentPrice: subscribeInfo.price[curPlan].salePrice, // 선택된 플랜의 판매가격
+      nextPaymentPrice: nextPaymentPrice, // 선택된 플랜의 판매가격
       recipeIdList: selectedIdList,
     };
-    
-    // validation: Incorrect paymentPrice
-    if(!body.nextPaymentPrice) return mct.alertShow( "결제금액 계산오류가 발생하였습니다.");
 
     try {
       setIsLoading(true);

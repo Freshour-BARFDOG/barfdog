@@ -3,38 +3,46 @@ import {getData} from '/src/pages/api/reqData';
 import {itemExposureType} from '/store/TYPE/itemExposureType';
 import {subscribePlanType} from '/store/TYPE/subscribePlanType';
 import {useSubscribePlanInfo} from "./useSubscribePlanInfo";
-import {seperateStringViaComma} from "../func/seperateStringViaComma";
 import {useSubscribeRecipeInfo} from "./useSubscribeRecipeInfo";
 import {calcSubscribePrice} from "../func/subscribe/calcSubscribePrices";
-import {ONEMEALGRAM_DEMICAL} from "../func/subscribe/calcOneMealGramsWithRecipeInfo";
+import {calcOneMealGramsWithRecipeInfo} from "../func/subscribe/calcOneMealGramsWithRecipeInfo";
+import {seperateStringViaComma} from "../func/seperateStringViaComma";
+import {valid_isTheSameArray} from "../func/validation/validationPackage";
 
 
 export const useSubscribeInfo = (subscribeId) => {
   const [info, setInfo] = useState( null );
+  // get Subscribe Info in Admin settings
   const subscribePlanInfo = useSubscribePlanInfo();
+  // get Recipe Info in Admin setting
   const recipeInfo = useSubscribeRecipeInfo();
-  
+
   useEffect( () => {
-    // admin > setting > 가격 정책 > 플랜별 레시피 정보를 받지 못했을 경우, 실행하지 않음.
-    // console.log("info: ",info);
+
+    // validation: 이미 정보(info) 초기화되었을 경우, 실행하지 않음
     if ( info ) return;
-    
+    // validation: admmin > setting > 가격 정책 > 플랜별 레시피 정보
+    if(subscribePlanInfo.isLoading) return;
+    // validation:  admin > 상품관리 > 등록된 레시피 정보
+    if(!recipeInfo.data) return;
+
     (async () => {
+
       try {
+
+        // get SubscribeInfo
         const subscribeApiurl = `/api/subscribes/${subscribeId}`;
         let res = await getData( subscribeApiurl );
-        // console.log('useSubscribeInfo: ',res)
-        if ( res.status === 404 ) {
-          alert( '구독정보를 불러오는데 실패했습니다.' );
-          // res = DUMMY_RESPONSE(subscribeId);
-        }
         const data = res.data;
-        if (!data) return;
-        const curRecipeIdList = data.subscribeRecipeDtoList.map((list) => list.recipeId);
 
-        const recipeApiUrl = '/api/recipes';
-        const recipe_res = await getData(recipeApiUrl);
-        if(!recipe_res.data) return;
+        // validation: 현재 구독 정보
+        if ( !data || res.status === 404 ) {
+          return alert( '구독정보를 불러오는데 실패했습니다.' );
+        }
+
+
+        // 레시피 정보
+        const curRecipeIdList = data.subscribeRecipeDtoList.map((list) => list.recipeId);
         const currentRecipes = recipeInfo.data.filter(
           (recipe) => curRecipeIdList.indexOf(recipe.id) >= 0,
         );
@@ -52,25 +60,30 @@ export const useSubscribeInfo = (subscribeId) => {
         const isSoldOut =
           !!currentRecipes.filter( (list) => list.leaked === itemExposureType.HIDDEN ).length ||
           !!currentRecipes.filter( (list) => list.inStock === false ).length;
-        // 구독 가격 계산
+
+
+        // 구독가격 게산
         const currentPlanName = data.subscribeDto.plan;
-        const oneMealGrams = seperateStringViaComma(data.subscribeDto.oneMealGramsPerRecipe)?.
-                map(oneMealGramString=>Number(parseFloat(oneMealGramString).toFixed(ONEMEALGRAM_DEMICAL))) || [];
-        const pricePerGrams = currentRecipes.map( recipe => recipe.pricePerGram );
-  
-        // console.log(oneMealGrams);
-        // console.log("currentRecipes: ", currentRecipes);
-        // console.log("pricePerGrams: ", pricePerGrams);
-        
+        // 구독가격 게산에 필요한 validation
         const discountPercent = subscribePlanInfo.planDiscountPercent[currentPlanName];
         if(discountPercent === null){
           alert("구독 할인정보를 불러오는데 실패했습니다. 잠시 후 다시 시도해주세요.");
           window.location.href = '/mypage/subscribe';
           return;
         }
-        
-        const allPlanNameList = Object.keys( subscribePlanType );
-        const allPriceList = allPlanNameList.map( (planName) =>
+
+        const oneMealGramsAfterUserChanges = seperateStringViaComma(data.subscribeDto.oneMealGramsPerRecipe, {convertType: 'number'});
+        const oneMealGramsByCalculator = calcOneMealGramsWithRecipeInfo({
+          selectedRecipeIds: curRecipeIdList,
+          allRecipeInfos: currentRecipes,
+          oneDayRecommendKcal: data.subscribeDto.oneDayRecommendKcal
+        }).map(recipe => recipe.oneMealGram);
+
+
+        const oneMealGrams = selectOneMealGrams({origin: oneMealGramsByCalculator, current: oneMealGramsAfterUserChanges});
+        const pricePerGrams = currentRecipes.map( recipe => recipe.pricePerGram );
+        const allPlanNames = Object.keys( subscribePlanType );
+        const allPriceInfos = allPlanNames.map( (planName) =>
           ({[planName]: calcSubscribePrice( {
             discountPercent: subscribePlanInfo.planDiscountPercent[planName],
             oneMealGrams,
@@ -78,17 +91,11 @@ export const useSubscribeInfo = (subscribeId) => {
             pricePerGrams
           })
         }));
-        
-        let allPriceObj = {};
-        for (const obj of allPriceList) {
-          const key = Object.keys(obj)[0];
-          const val = Object.values(obj)[0];
-          allPriceObj[key] = val;
-        }
-        
-        // console.log(data)
+
+
+
         const DATA = {
-          // 구독 기본 정보 + 구독정보의 Dashboard
+          // 구독 기본 정보 + 구독정보 Dashboard
           info: {
             subscribeId: Number(subscribeId)  === data.subscribeDto.id ? Number(subscribeId) : null, // validation 요청한 페이지의 구독id와 server에서 받은 값을 대조
             dogId: data.subscribeDto.dogId,
@@ -109,11 +116,12 @@ export const useSubscribeInfo = (subscribeId) => {
             discountCoupon: data.subscribeDto.discountCoupon,
             discountGrade: data.subscribeDto.discountGrade,
             overDiscount: data.subscribeDto.overDiscount,
+            oneDayRecommendKcal: data.subscribeDto.oneDayRecommendKcal,
             planName: currentPlanName,
             recipeNames: data.subscribeRecipeDtoList.map((list) => list.recipeName).join(', '),
             oneMealGramsPerRecipe: oneMealGrams,
           },
-          // 레시피 정보
+          // 선택한 레시피 정보
           recipe: {
             idList: curRecipeIdList,
             nameList: data.subscribeRecipeDtoList.map((list) => list.recipeName),
@@ -124,6 +132,7 @@ export const useSubscribeInfo = (subscribeId) => {
             soldOut: isSoldOut, // 재고소진여부 -> 재고소진 시, 사이트 전역에서, 유저에게 알림메시지
             allRecipeIdList: recipeInfo.data.map(recipe=>recipe.id)
           },
+          // 선택한 플랜 정보
           plan: {
             name: data.subscribeDto.plan,
             numberOfPacksPerDay: subscribePlanType[data.subscribeDto.plan].numberOfPacksPerDay,
@@ -131,8 +140,8 @@ export const useSubscribeInfo = (subscribeId) => {
             weeklyPaymentCycle: subscribePlanType[data.subscribeDto.plan].weeklyPaymentCycle,
             discountPercent: discountPercent,
           },
-          price: allPriceObj,
-          // 멤버가 보유힌 쿠폰 정보
+          price: getAllPriceInfos({priceInfos: allPriceInfos}),
+          // 보유힌 쿠폰 정보
           coupon: data.memberCouponDtoList.map((coupon) => ({
             memberCouponId: coupon.memberCouponId,
             name: coupon.name,
@@ -146,14 +155,36 @@ export const useSubscribeInfo = (subscribeId) => {
           // 배송정보 => 추가 필요여부에 따라서, 추후 수정
           delivery: {},
         };
-        
+
         setInfo(DATA);
       } catch (err) {
         console.error(err);
       }
     })();
   }, [subscribePlanInfo.isLoading, recipeInfo.loading] );
-  
-  
+
+
   return info;
+};
+
+
+
+const getAllPriceInfos = ({priceInfos}) => {
+  let priceInfoMap= {}
+  for (const obj of priceInfos) {
+    const key = Object.keys(obj)[0];
+    const val = Object.values(obj)[0];
+    priceInfoMap[key] = val;
+  }
+
+  return priceInfoMap;
+};
+
+
+const selectOneMealGrams = ({origin, current}) => {
+  // origin: 기존 계산식을 토대로 도출한 한 팩 무게
+  // current: 유저의 구독 무게 변경으로 인한 한 팩 무게
+  console.log("origin === current ? ",origin, current);
+  return valid_isTheSameArray(origin, current) ? origin : current;
+
 };
