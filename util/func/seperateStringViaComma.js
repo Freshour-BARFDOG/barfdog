@@ -1,4 +1,4 @@
-export const seperateStringViaComma = (stringWithComma, option= {convertType}) => {
+export const seperateStringViaComma = (stringWithComma, option= {convertType: null}) => {
   if (!stringWithComma) return;
   const comma = ",";
   return stringWithComma.indexOf( comma )
