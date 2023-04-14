@@ -65,9 +65,9 @@ export default function Modal_member_subscribe({ memberId, onClick, setIsLoading
               subscribeStartDate: transformDate(DATA.subscribeStartDate), // 구독 시작일
               nextPaymentDate: DATA.nextPaymentDate, // 최근 발송일
               nextDeliveryDate: DATA.nextDeliveryDate, // 최근 발송일
-              countSkipOneTime: DATA.countSkipOneTime, // 최근 발송일
-              countSkipOneWeek: DATA.countSkipOneWeek, // 최근 발송일
-              cancelReason: DATA.cancelReason, // 최근 발송일
+              countSkipOneTime: DATA.countSkipOneTime, // 구독 건너뛰기 1회 (플랜 주기에 따름)
+              countSkipOneWeek: DATA.countSkipOneWeek, // 구독 건너뛰기 1주
+              cancelReason: DATA.cancelReason, // 예약구독 취소사유
               inedibleFood:
                 DATA.inedibleFood !== dogInedibleFoodType.NONE && DATA.inedibleFood
                   ? `${DATA.inedibleFood}`
@@ -260,8 +260,8 @@ export default function Modal_member_subscribe({ memberId, onClick, setIsLoading
                             <span>{info.cancelReason}</span>
                           </div>
                         </div>
-                      </li>}
-
+                      </li>
+                      }
                     </ul>
                   </li>
                 ))}

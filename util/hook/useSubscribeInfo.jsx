@@ -72,7 +72,7 @@ export const useSubscribeInfo = (subscribeId) => {
           return;
         }
 
-        const oneMealGramsAfterUserChanges = seperateStringViaComma(data.subscribeDto.oneMealGramsPerRecipe, {convertType: 'number'});
+        const oneMealGramsAfterUserChanges = seperateStringViaComma(data.subscribeDto.oneMealGramsPerRecipe, 'number');
         const oneMealGramsByCalculator = calcOneMealGramsWithRecipeInfo({
           selectedRecipeIds: curRecipeIdList,
           allRecipeInfos: currentRecipes,
