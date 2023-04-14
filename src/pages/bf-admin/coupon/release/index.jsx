@@ -49,11 +49,15 @@ const initialFormValues = {
   },
 };
 
+const convertTargetNameToString = {
+  PERSONAL: '개인회원',
+  GROUP: '그룹',
+  ALL: '전체 회원',
+}
+
+
+
 function ReleaseCouponPage() {
-  const getCouponList = '/api/admin/coupons/publication/code';
-  const postFormValuesApiUrlToAll = `/api/admin/coupons/all`;
-  const postFormValuesApiUrlToGroup = `/api/admin/coupons/group`;
-  const postFormValuesApiUrlToPersonal = `/api/admin/coupons/personal`;
 
   const router = useRouter();
   const mct = useModalContext();
@@ -78,7 +82,8 @@ function ReleaseCouponPage() {
           ...prevState,
           fetchingCouponList: true,
         }));
-        const res = await getData(getCouponList);
+        const apiUrl = '/api/admin/coupons/publication/code';
+        const res = await getData(apiUrl);
         const hasDATA = res.data._embedded;
         let newCouponOptions = [];
         const emptyOptions = [
@@ -87,19 +92,19 @@ function ReleaseCouponPage() {
             label: '선택',
           },
         ];
-  
+
         if(hasDATA){
           const DATA = res.data._embedded.publicationCouponDtoList;
           newCouponOptions = DATA.map((data) => ({
             value: data.couponId,
             label: `[ 할인: ${data.discount} ] ${data.name}`,
           }));
-  
+
 
         }
         emptyOptions.concat(newCouponOptions);
         setCouponOptions(emptyOptions.concat(newCouponOptions));
-       
+
       } catch (err) {
         console.error(err);
         console.error('데이터를 가져올 수 없습니다.');
@@ -111,8 +116,8 @@ function ReleaseCouponPage() {
     })();
   }, []);
 
-  
-  
+
+
   const onInputChangeHandler = (event) => {
     const input = event.currentTarget;
     const { id, value } = input;
@@ -134,32 +139,61 @@ function ReleaseCouponPage() {
     }));
   };
 
+
+
+
   const onSubmit = async (e) => {
-    e.preventDefault();
     if (isSubmitted) return console.error('이미 제출된 양식입니다.');
-    // console.log(formValues);
-    // ! IMPORTANT : submit 이후 enterKey event로 trigger되는 중복submit 방지
-    const filteredFormValues = {
-      ...formValues,
-      couponId: Number(formValues.couponId),
-    };
-    console.log(filteredFormValues);
-    const errObj = validate(filteredFormValues);
+
+    console.log("formValues : ",formValues);
+
+    let body;
+    let postFormValuesApiUrl;
+    if (target === 'ALL') {
+      postFormValuesApiUrl =  `/api/admin/coupons/all`;
+      body={
+        couponType:formValues.couponType,
+        couponId: Number(formValues.couponId),
+        expiredDate:formValues.expiredDate,
+        alimTalk:formValues.alimTalk,
+      }
+    } else if (target === 'PERSONAL') {
+      postFormValuesApiUrl = `/api/admin/coupons/personal`;
+      body = {
+        couponType: formValues.couponType,
+        couponId: Number(formValues.couponId),
+        expiredDate: formValues.expiredDate,
+        alimTalk: formValues.alimTalk,
+        memberIdList: formValues.memberIdList
+      }
+    } else if (target === 'GROUP') {
+      postFormValuesApiUrl = `/api/admin/coupons/group`;
+      body = {
+        couponType: formValues.couponType,
+        couponId: Number(formValues.couponId),
+        expiredDate: formValues.expiredDate,
+        alimTalk: formValues.alimTalk,
+        subscribe: formValues.subscribe,
+        longUnconnected: formValues.longUnconnected,
+        gradeList: formValues.gradeList,
+        area: formValues.area,
+        birthYearFrom: filterStringFromBirthYear(formValues.birthYearFrom),
+        birthYearTo: filterStringFromBirthYear(formValues.birthYearTo)
+      }
+    }
+
+    console.log(body);
+
+    const errObj = validate(body);
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
+
     if (!isPassed) {
       return alert('유효하지 않은 항목이 있습니다.');
     }
-    let targetInKorean;
-    if(target === 'PERSONAL'){
-      targetInKorean ='개인 회원'
-    } else if (target === 'GROUP') {
-      targetInKorean ='그룹'
-    } else if(target === 'ALL' ) {
-      targetInKorean ='전체 회원'
-    }
-    const expiredDate = valid_date(filteredFormValues.expiredDate).expiredDate;
-    const confirmMessage = `* 쿠폰을 정말 발행하시겠습니까?\n- 유효기간: ~${filteredFormValues.expiredDate}까지\n- 남은일수: ${expiredDate}일\n- 발급대상: ${targetInKorean}`;
+
+    const expiredDate = valid_date(body.expiredDate).expiredDate;
+    const confirmMessage = `* 쿠폰을 정말 발행하시겠습니까?\n- 유효기간: ~${body.expiredDate}까지\n- 남은일수: ${expiredDate}일\n- 발급대상: ${convertTargetNameToString[target]}`;
     if (!confirm(confirmMessage)) return;
 
     try {
@@ -167,16 +201,9 @@ function ReleaseCouponPage() {
         ...prevState,
         submit: true,
       }));
-      let postFormValuesApiUrl;
-      if (target === 'ALL') {
-        postFormValuesApiUrl = postFormValuesApiUrlToAll;
-      } else if (target === 'GROUP') {
-        postFormValuesApiUrl = postFormValuesApiUrlToGroup;
-      } else if (target === 'PERSONAL') {
-        postFormValuesApiUrl = postFormValuesApiUrlToPersonal;
-      }
 
-      const res = await postObjData(postFormValuesApiUrl, filteredFormValues);
+
+      const res = await postObjData(postFormValuesApiUrl, body);
       console.log(res);
       if (res.isDone) {
         mct.alertShow('쿠폰이 성공적으로 발행되었습니다.', onSucessCallback);
@@ -338,3 +365,9 @@ function ReleaseCouponPage() {
 }
 
 export default ReleaseCouponPage;
+
+
+const filterStringFromBirthYear = (birthString) => {
+  const targetString="년";
+  return birthString?.indexOf(targetString) >= 0 ? birthString.replace(targetString, '') : birthString;
+};
