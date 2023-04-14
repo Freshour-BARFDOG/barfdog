@@ -9,14 +9,14 @@ import Modal_confirm from '../modal/Modal_confirm';
 import {postObjData} from '/src/pages/api/reqData';
 import {useModalContext} from '/store/modal-context';
 import {FullScreenLoading} from '/src/components/atoms/FullScreenLoading';
-import {calcSubscribePrice} from "../../../util/func/subscribe/calcSubscribePrices";
-import {valid_isTheSameArray} from "../../../util/func/validation/validationPackage";
-import {ONEMEALGRAM_DEMICAL} from "../../../util/func/subscribe/calcOneMealGramsWithRecipeInfo";
-import {roundedOneMealGram} from "../../../util/func/subscribe/roundedOneMealGram";
+import {calcSubscribePrice} from "/util/func/subscribe/calcSubscribePrices";
+import {valid_isTheSameArray} from "/util/func/validation/validationPackage";
+import {ONEMEALGRAM_DEMICAL_IN_DB} from "/util/func/subscribe/calcOneMealGramsWithRecipeInfo";
+import {roundedOneMealGram} from "/util/func/subscribe/roundedOneMealGram";
 
 export const SubscribeGram = ({ subscribeInfo }) => {
-  
-  
+
+
   const planType = subscribeInfo.plan.name;
   const initForm = {
     dogId: subscribeInfo.info.dogId,
@@ -44,10 +44,10 @@ export const SubscribeGram = ({ subscribeInfo }) => {
 
   const onInputChange = (value) => {
     const nextAmount = value;
-    const nextGrams = form.originGrams.map(originGram => Number((originGram * (1 + nextAmount / 100)).toFixed(ONEMEALGRAM_DEMICAL))); // ! 1팩 당 무게: 최대 소수점 '4'자리
+    const nextGrams = form.originGrams.map(originGram => Number((originGram * (1 + nextAmount / 100)).toFixed(ONEMEALGRAM_DEMICAL_IN_DB))); // ! 1팩 당 무게: 최대 소수점 '4'자리
     const recipePricePerGrams = form.recipeInfo.pricePerGramList;
     const planTypeName = form.planInfo.planType;
-    
+
     const { perPack, salePrice } = calcSubscribePrice( {
       discountPercent: subscribeInfo.plan.discountPercent,
       oneMealGrams: nextGrams,
@@ -78,16 +78,17 @@ export const SubscribeGram = ({ subscribeInfo }) => {
     if (!confirm) {
       return setActiveConfirmModal(false);
     }
-    
+
     const body = {
       stringGrams: form.nextGrams.join(", "), // 원래 Number 여야하지만,  Number[] 배열로 전달한다.
       totalPrice: form.nextSalePrice,
     };
-    
+
+
     // validation: Incorrect paymentPrice
     if(!body.totalPrice) return mct.alertShow( "결제금액 계산오류가 발생하였습니다.");
-    
-    
+
+
     try {
       setIsLoading(true);
       setSubmitted(true);
@@ -104,18 +105,18 @@ export const SubscribeGram = ({ subscribeInfo }) => {
     } catch (err) {
       alert(err);
       console.error(err.response);
-      
+
     } finally {
       setIsLoading(false);
     }
-    
+
   };
 
   const onSuccessChangeSubscribeOrder = () => {
     setIsLoading({ reload: true });
     window.location.reload();
   };
-  
+
 
   return (
     <>
