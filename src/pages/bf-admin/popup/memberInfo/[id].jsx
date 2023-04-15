@@ -296,7 +296,7 @@ export default function Popup_MemberDetailPage({ id }) {
                             <span>반려견</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
-                            {formValues.dogNames.length ? formValues.dogNames.map( (name, i) => <span className={s.dogName} key={`dogName-${i}`}>{name}</span>) : '등록된 반려견이 없습니다.'}
+                            {formValues.dogNames?.length ? formValues.dogNames.map( (name, i) => <span className={s.dogName} key={`dogName-${i}`}>{name}</span>) : '등록된 반려견이 없습니다.'}
                           </div>
                         </div>
                       </li>
