@@ -290,7 +290,7 @@ export default function Popup_MemberDetailPage({ id }) {
                           </div>
                         </div>
                       </li>
-                      <li className={`${s['t-row']} ${s['fullWidth']}`}>
+                      <li className={`${s['t-row']} ${s['fullWidth']} ${s.multiLines}`}>
                         <div className={s['t-box']}>
                           <div className={`${s.innerBox} ${s.label}`}>
                             <span>반려견</span>

@@ -51,13 +51,21 @@ $backgroundColorDef: #f8f8ff;
     cursor: default;
   }
   .t-body {
-    // display: grid;
-    // grid-template-columns: 1fr 1fr;
     .t-row {
       display: grid;
       grid-template-columns: 50% 50%;
       &.fullWidth {
         grid-template-columns: 1fr;
+      }
+      &.multiLines{
+        .label, .innerBox{
+          padding: rem(10) rem(20) rem(2);
+          height: 100%;
+          display: inline-block;
+          > span {
+            margin-bottom: rem(8);
+          }
+        }
       }
     }
     .t-row:not(:first-child) {
@@ -85,22 +93,22 @@ $backgroundColorDef: #f8f8ff;
           -webkit-box-orient: vertical;
           -webkit-line-clamp: 2;
           overflow: hidden;
-          &:not(:first-child) {
-            margin-left: rem(10);
+          &:not(:last-child) {
+            margin-right: rem(10);
           }
         }
-      }
-      .innerBox:nth-child(2) {
-        margin-left: rem(-1);
-      }
-      .innerBox.label {
-        background-color: $backgroundColorDef;
-        color: var(--gray10);
-        cursor: default;
-      }
-      .innerBox.cont {
-        background-color: #fff;
-        color: var(--gray20);
+        &:nth-child(2) {
+          margin-left: rem(-1);
+        }
+        &.label {
+          background-color: $backgroundColorDef;
+          color: var(--gray10);
+          cursor: default;
+        }
+        &.cont {
+          background-color: #fff;
+          color: var(--gray20);
+        }
       }
     }
   }
@@ -136,6 +144,7 @@ $backgroundColorDef: #f8f8ff;
 
 
 .dogName{
+  display: inline-flex !important;
   background-color: #f1f2f3;
   border-radius: rem(50);
   padding: rem(2) rem(12);
