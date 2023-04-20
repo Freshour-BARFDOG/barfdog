@@ -49,14 +49,14 @@ export const SubscribeCancle = ({ subscribeInfo }) => {
   const [submitted, setSubmitted] = useState(false);
 
   const onSubmitButtonClick = () => {
-    const hasEmptyETCValue = form.reasonList
+    const emptyReasonCount = form.reasonList
       .map((reason) => (reason === '기타' ? form.enteredReason : reason))
-      .filter((reason) => !reason).length;
+      .filter(reason => reason.trim() === '').length;
 
     if (form.reasonList.length === 0) {
       mct.alertShow('중단 사유를 선택해주세요.');
-    } else if (hasEmptyETCValue) {
-      mct.alertShow('기타항목이 비어있습니다.');
+    } else if (emptyReasonCount) {
+      mct.alertShow('기타 항목이 비어있습니다.');
     } else {
       setActiveConfirmModal(true);
     }
@@ -106,7 +106,7 @@ export const SubscribeCancle = ({ subscribeInfo }) => {
     
     const body = {
       reasonList: form.reasonList.map((reason) =>
-        reason === '기타' ? form.enteredReason : reason,
+        reason === '기타' ? form.enteredReason.trim() : reason,
       ),
     };
     
