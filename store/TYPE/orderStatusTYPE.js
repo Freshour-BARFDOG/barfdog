@@ -19,6 +19,7 @@ export const orderStatus = {
   BEFORE_PAYMENT: 'BEFORE_PAYMENT', // 결제전 & 구독을 한 번도 한 적이 없는 경우
   RESERVED_PAYMENT: 'RESERVED_PAYMENT',
   CANCEL_PAYMENT: 'CANCEL_PAYMENT', // 구독주문서 페이지에서, 결제하지 않고, 결제 취소한 경우
+  CANCEL_RESERVED_PAYMENT: 'CANCEL_RESERVED_PAYMENT', // 예약된 결제 취소
   PAYMENT_DONE: 'PAYMENT_DONE', // 결제완료
   ////////////////////////////////////////////////////
   ////////////////////// 배송상태 //////////////////////
@@ -49,6 +50,7 @@ export const orderStatus = {
     BEFORE_PAYMENT: '결제 전',
     RESERVED_PAYMENT: '예약됨',
     CANCEL_PAYMENT: '결제 취소',
+    CANCEL_RESERVED_PAYMENT: '예약결제 취소',
     PAYMENT_DONE: '결제 완료',
     ////////////////////////////////////////////////////
     ////////////////////// 배송상태 //////////////////////
