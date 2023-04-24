@@ -8,8 +8,9 @@ import transformDate from '/util/func/transformDate';
 import transformDecimalNumber from '/util/func/transformDecimalNumber';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import { getData } from '../../pages/api/reqData';
-import { dogInedibleFoodType } from '../../../store/TYPE/dogInedibleFoodType';
-import { dogCautionType } from '../../../store/TYPE/dogCautionType';
+import { dogInedibleFoodType } from '/store/TYPE/dogInedibleFoodType';
+import { dogCautionType } from '/store/TYPE/dogCautionType';
+import {IAMPORT_MIN_PAYMENT_PRICE} from "/store/TYPE/order/priceType";
 
 
 
@@ -56,12 +57,14 @@ export default function Modal_member_subscribe({ memberId, onClick, setIsLoading
             return {
               id: DATA.id,
               dogName: DATA.dogName,
-              subscribeCount: (DATA.subscribeCount ? DATA.subscribeCount : '0') + ' 회차', // 구독회차
+              subscribeCount: DATA.subscribeCount ? DATA.subscribeCount + " 회차" : '결제 전', // 구독회차
               plan: DATA.plan, // 플랜
               recipeNameList: list.recipeNames.join(', '), // 레시피
               amount: transformDecimalNumber(DATA.amount, 0) + ' g', // 하루 권장 식사량
-              paymentPrice:
-                (DATA.paymentPrice ? transformLocalCurrency(DATA.paymentPrice) : '0') + ' 원', // 결제금액
+              nextPaymentPrice: transformLocalCurrency(DATA.nextPaymentPrice) + ' 원',
+              discountCoupon: (DATA.discountCoupon > 0 ? "- " : "") + transformLocalCurrency(DATA.discountCoupon) + ' 원',
+              discountGrade: (DATA.discountGrade > 0 ? "- " : "") + transformLocalCurrency(DATA.discountGrade)+ ' 원',
+              paymentPrice: DATA.nextPaymentPrice ? transformLocalCurrency(Math.max(DATA.nextPaymentPrice - DATA.discountCoupon - DATA.discountGrade, IAMPORT_MIN_PAYMENT_PRICE)) + ' 원' : '0' , // 결제금액
               subscribeStartDate: transformDate(DATA.subscribeStartDate), // 구독 시작일
               nextPaymentDate: DATA.nextPaymentDate, // 최근 발송일
               nextDeliveryDate: DATA.nextDeliveryDate, // 최근 발송일
@@ -168,10 +171,31 @@ export default function Modal_member_subscribe({ memberId, onClick, setIsLoading
                         </div>
                         <div className={s['t-box']}>
                           <div className={`${s.innerBox} ${s.label}`}>
+                            <span>생성일자</span>
+                          </div>
+                          <div className={`${s.innerBox} ${s.cont}`}>
+                            <span>{info.subscribeStartDate}</span>
+                          </div>
+                        </div>
+                      </li>
+                      <li className={`${s['t-row']}`}>
+                        <div className={s['t-box']}>
+                          <div className={`${s.innerBox} ${s.label}`}>
                             <span>레시피</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
                             <span>{info.recipeNameList}</span>
+                          </div>
+                        </div>
+                        <div className={s['t-box']}>
+                          <div className={`${s.innerBox} ${s.label}`}>
+                            <span>못 먹는 음식</span>
+                          </div>
+                          <div className={`${s.innerBox} ${s.cont}`}>
+                            <span>
+                              {info.inedibleFood}{' '}
+                              {info.inedibleFoodEtc && `(${info.inedibleFoodEtc})`}
+                            </span>
                           </div>
                         </div>
                       </li>
@@ -186,27 +210,6 @@ export default function Modal_member_subscribe({ memberId, onClick, setIsLoading
                         </div>
                         <div className={s['t-box']}>
                           <div className={`${s.innerBox} ${s.label}`}>
-                            <span>결제금액</span>
-                          </div>
-                          <div className={`${s.innerBox} ${s.cont}`}>
-                            <span>{info.paymentPrice}</span>
-                          </div>
-                        </div>
-                      </li>
-                      <li className={`${s['t-row']}`}>
-                        <div className={s['t-box']}>
-                          <div className={`${s.innerBox} ${s.label}`}>
-                            <span>못 먹는 음식</span>
-                          </div>
-                          <div className={`${s.innerBox} ${s.cont}`}>
-                            <span>
-                              {info.inedibleFood}{' '}
-                              {info.inedibleFoodEtc && `(${info.inedibleFoodEtc})`}
-                            </span>
-                          </div>
-                        </div>
-                        <div className={s['t-box']}>
-                          <div className={`${s.innerBox} ${s.label}`}>
                             <span>특이사항</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
@@ -217,7 +220,43 @@ export default function Modal_member_subscribe({ memberId, onClick, setIsLoading
                       <li className={`${s['t-row']}`}>
                         <div className={s['t-box']}>
                           <div className={`${s.innerBox} ${s.label}`}>
-                            <span>다음 결제일시</span>
+                            <span>예약결제 등급할인</span>
+                          </div>
+                          <div className={`${s.innerBox} ${s.cont}`}>
+                            <span>{info.discountGrade}</span>
+                          </div>
+                        </div>
+                        <div className={s['t-box']}>
+                          <div className={`${s.innerBox} ${s.label}`}>
+                            <span>예약결제 쿠폰할인</span>
+                          </div>
+                          <div className={`${s.innerBox} ${s.cont}`}>
+                            <span>{info.discountCoupon}</span>
+                          </div>
+                        </div>
+                      </li>
+                      <li className={`${s['t-row']}`}>
+                        <div className={s['t-box']}>
+                          <div className={`${s.innerBox} ${s.label}`}>
+                            <span>예약결제 결제원금</span>
+                          </div>
+                          <div className={`${s.innerBox} ${s.cont}`}>
+                            <span>{info.nextPaymentPrice}</span>
+                          </div>
+                        </div>
+                        <div className={s['t-box']}>
+                          <div className={`${s.innerBox} ${s.label}`}>
+                            <span>예약결제 결제금액</span>
+                          </div>
+                          <div className={`${s.innerBox} ${s.cont}`}>
+                            <span>{info.paymentPrice}</span>
+                          </div>
+                        </div>
+                      </li>
+                      <li className={`${s['t-row']}`}>
+                        <div className={s['t-box']}>
+                          <div className={`${s.innerBox} ${s.label}`}>
+                            <span>예약결제 예약일시</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
                             <span>{transformDate(info.nextPaymentDate, 'time', {seperator: "-"}) || "-"}</span>
@@ -225,7 +264,7 @@ export default function Modal_member_subscribe({ memberId, onClick, setIsLoading
                         </div>
                         <div className={s['t-box']}>
                           <div className={`${s.innerBox} ${s.label}`}>
-                            <span>다음 배송일자</span>
+                            <span>예약결제 배송일자</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
                             <span>{transformDate(info.nextDeliveryDate) || "-"}</span>
