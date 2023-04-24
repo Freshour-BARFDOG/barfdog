@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from '/src/components/mypage/MypageWrapper';
@@ -10,12 +10,19 @@ import {EmptyContMessage} from '/src/components/atoms/emptyContMessage';
 import {subscribePlanType} from "/store/TYPE/subscribePlanType";
 import transformDate from "/util/func/transformDate";
 import transformLocalCurrency from "/util/func/transformLocalCurrency";
-import {calcSubscribeNextPaymentPrice} from "../../../../util/func/subscribe/calcSubscribeNextPaymentPrice";
+import {calcSubscribeNextPaymentPrice} from "/util/func/subscribe/calcSubscribeNextPaymentPrice";
+import {generateCustomerUid} from "/util/func/order/generateCustomerUid";
+import Modal_paymentMethod from "../../../components/modal/Modal_paymentMethod";
+import {paymentMethodType, pgType} from "/store/TYPE/paymentMethodType";
 
 
 export default function MypageCardPage({ data }) {
-  
-  const [cardList, setCardList] = useState(data || []);
+
+  const cardList = useMemo(()=> data || [] , [data]);
+  const cardNumberUICount = 6;
+  const [activeModal, setActiveModal] = useState(false);
+  const [updatedCardData, setUpdatedCardData] = useState({});
+
 
   useEffect(() => {
 
@@ -35,48 +42,65 @@ export default function MypageCardPage({ data }) {
 
   }, []);
 
-  const onChangeCard = async(subscribeId) => {
-    
+  const onChangeCard = async({subscribeId, paymentMethod}) => {
+
+
+    // validation
+    if(!subscribeId || !paymentMethod) {
+      return alert(" 결제수단 처리 중 오류가 발생하여 카드 변경이 불가능합니다.");
+    }
     const currentCardDto = cardList.filter(dto=> dto.subscribeCardDto.subscribeId === subscribeId)[0];
     if(!currentCardDto?.subscribeCardDto) return alert( "구독에 해당하는 카드를 찾을 수 없습니다." );
-    
-    // 아임포트 전달 데이터 세팅
+
+
+    // Set Import data
     const subscribeItemName = currentCardDto.recipeNameList.join(', ');
-    const {name} = currentCardDto.subscribeCardDto;
+    const {name, phoneNumber, email, street, detailAddress } = currentCardDto.subscribeCardDto;
     const CLIENT_ORIGIN = process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_CLIENT_URL_PRODUCT : process.env.NEXT_PUBLIC_CLIENT_URL_DEV;
-    
+
    /* 1. 가맹점 식별하기 */
     const IMP = window.IMP;
     IMP.init(process.env.NEXT_PUBLIC_IAMPORT_CODE);
 
-    const randomStr= new Date().getTime().toString(36);
+    // const randomStr= new Date().getTime().toString(36);
+    const buyer_addr = `${street}, ${detailAddress}`;
+    const customerUid = generateCustomerUid()
     /* 2. 결제 데이터 정의하기 */
+    const m_redirect_url = `${CLIENT_ORIGIN}/mypage/card`;
+    const params = `${subscribeId}/${customerUid}/${paymentMethod}`;
     const data = {
-      pg: `kcp_billing.${process.env.NEXT_PUBLIC_IAMPORT_SUBSCRIBE_SITECODE}`, // PG사
+      pg: pgType.SUBSCRIBE[paymentMethod], // PG사 => TODO : 카카오페이, 네이버페이 대응필요
       pay_method: 'card', // 결제수단
       merchant_uid: new Date().getTime().toString(36),
       amount:0,
-      customer_uid : `customer_Uid_${randomStr}`,
+      customer_uid: customerUid,
       name: `[카드변경][구독상품]-${subscribeItemName}`,
       buyer_name: name,
-      buyer_tel: "",
-      m_redirect_url: `${CLIENT_ORIGIN}/mypage/card/${subscribeId}/${randomStr}`
+      buyer_tel: phoneNumber,
+      buyer_email: email, // 구매자 이메일
+      buyer_addr: buyer_addr, // 구매자 주소
+      m_redirect_url: `${m_redirect_url}/${params}`
     };
     //
-    
-    IMP.request_pay(data, callback);
-    
+    console.log(data, paymentMethod);
+    const callbackData = {
+      paymentMethod: paymentMethod
+    }
+
+    IMP.request_pay(data, callback.bind(null, callbackData));
+
     /* 4. 결제 창 호출하기 */
-    async function callback(response) {
-      console.log(response);
+    async function callback(callbackData, response) {
+      console.log("- callbackData: ",callbackData, "\n- response: ",response)
       const { success,customer_uid, error_msg } = response;
-      
+
       /* 3. 콜백 함수 정의하기 */
       if (success) {
         // 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우
         // TODO: 결제 정보 전달
         const r = await postObjData(`/api/cards/subscribes/${subscribeId}`, {
           customerUid : customer_uid,
+          paymentMethod: callbackData.paymentMethod // ! 신규 추가된 필드
         });
         console.log(r);
         if(r.isDone){
@@ -92,6 +116,11 @@ export default function MypageCardPage({ data }) {
     }
   }
 
+  const onSelectPaymentMethod = ({subscribeId, paymentMethod, info}) => {
+    setActiveModal(true);
+    setUpdatedCardData({subscribeId, paymentMethod, info});
+  };
+
 
   return (
     <>
@@ -105,9 +134,10 @@ export default function MypageCardPage({ data }) {
               <div className={s.table_box}>
                 <div className={s.grid_title_box}>
                   <div className={s.col_1}>카드명</div>
-                  <div>구독중인 플랜</div>
-                  <div>다음 결제일</div>
-                  <div>다음 결제 금액</div>
+                  <div>결제수단</div>
+                  <div>구독상품</div>
+                  <div>예약 결제일자</div>
+                  <div>예약 결제금액</div>
                   <div></div>
                 </div>
 
@@ -118,8 +148,11 @@ export default function MypageCardPage({ data }) {
                   <EmptyContMessage message={'구독 중인 카드가 없습니다.'} />
                 ) : (
                   <ul className={'card-list-container'}>
-                    {cardList.map((card, index) => (
-                      <li key={`subscribe-card-${index}`} className={s.grid_body_box}>
+                    {cardList.map((card, index) => {
+                      const cardName = card.subscribeCardDto.cardName || paymentMethodType.KOR[card.paymentMethod];
+                      const cardNumber = card.subscribeCardDto.cardNumber.slice(0, cardNumberUICount);
+
+                      return <li key={`subscribe-card-${index}`} className={s.grid_body_box}>
                         <div className={s.col_1}>
                           <div className={`${s.image} img-wrap`}>
                             <Image
@@ -129,42 +162,51 @@ export default function MypageCardPage({ data }) {
                               alt="카드 이미지"
                             />
                           </div>
-                          <span>{card.subscribeCardDto.cardName}&nbsp;{card.subscribeCardDto.cardNumber.slice(-4)}</span>
+                          <span>{cardName}&nbsp;{cardNumber}</span>
                         </div>
-                        <div className={s.col_2}>({card.subscribeCardDto.dogName}) {subscribePlanType[card.subscribeCardDto.plan].KOR} / {card.recipeNameList.join(', ')}</div>
+                        <div>
+                          <span className={s.col_title_m}>결제수단</span>
+                          {paymentMethodType.KOR[card.paymentMethod] || "-"}
+                        </div>
+                        <div className={s.col_plan}>
+                          <span className={s.col_title_m}>구독상품</span>
+                          ({card.subscribeCardDto.dogName}) {subscribePlanType[card.subscribeCardDto.plan].KOR} / {card.recipeNameList.join(', ')}
+                        </div>
 
                         <div>
-                          <span className={s.col_1_m}>다음 결제일</span>
-                          {transformDate(card.subscribeCardDto.nextPaymentDate, null, {seperator:'.'})}
+                          <span className={s.col_title_m}>예약 결제일자</span>
+                          {transformDate(card.subscribeCardDto.nextPaymentDate, null, {seperator:'.'}) || "-"}
                         </div>
 
                         <div>
-                          <span className={s.col_1_m}>다음 결제금액</span>
+                          <span className={s.col_title_m}>예약 결제금액</span>
                           {transformLocalCurrency(
-                              calcSubscribeNextPaymentPrice(
-                            {
-                              originPrice: card.subscribeCardDto.nextPaymentPrice,
-                              discountCoupon: card.subscribeCardDto.discountCoupon,
-                              discountGrade:card.subscribeCardDto.discountGrade,
-                              overDiscount: card.subscribeCardDto.overDiscount
-                            }
-                          ))}원
+                            calcSubscribeNextPaymentPrice(
+                              {
+                                originPrice: card.subscribeCardDto.nextPaymentPrice,
+                                discountCoupon: card.subscribeCardDto.discountCoupon,
+                                discountGrade:card.subscribeCardDto.discountGrade,
+                                overDiscount: card.subscribeCardDto.overDiscount
+                              }
+                            ))}원
                         </div>
                         <div className={s.btn_box}>
-                          <button className={s.btn} type={'button'} onClick={()=>onChangeCard(card.subscribeCardDto.subscribeId)}>카드변경</button>
+                          <button className={s.btn} type={'button'} onClick={()=> onSelectPaymentMethod({subscribeId: card.subscribeCardDto.subscribeId, paymentMethod: card.paymentMethod, info:card.subscribeCardDto})}>카드변경</button>
                         </div>
                       </li>
-                    ))}
+                    })}
                   </ul>
                 )}
               </div>
             </section>
             <section className={s.second_body}>
-              <div className={s.text}>정기구독 결제 카드가 여기에 표시됩니다.</div>
+              <div className={s.text}>* 정기구독 예약에 연동된 카드 및 카드번호 앞 {cardNumberUICount}자리가 표기됩니다.</div>
+              <div className={s.text}>* 간편결제(네이버&middot;카카오) 사용 시, 당사에서 카드명 확인 불가합니다.</div>
             </section>
           </MypageWrapper>
         </Wrapper>
       </Layout>
+      {activeModal && <Modal_paymentMethod data={updatedCardData} onChangeCard={onChangeCard} setActiveModal={setActiveModal} center/> }
     </>
   );
 }
@@ -182,6 +224,10 @@ export async function getServerSideProps({ req }) {
     DATA = dataList.map((data) => ({
       subscribeCardDto: {
         name:data.subscribeCardDto.name || null, // 230302 신규 추가
+        phoneNumber:data.subscribeCardDto.phoneNumber || null, // 230419 신규 추가
+        email:data.subscribeCardDto.email || null, // 230419 신규 추가
+        street:data.subscribeCardDto.street || null, // 230419 신규 추가
+        detailAddress:data.subscribeCardDto.detailAddress || null, // 230419 신규 추가
         subscribeId: data.subscribeCardDto.subscribeId,
         cardId: data.subscribeCardDto.cardId,
         cardName: data.subscribeCardDto.cardName,
@@ -195,77 +241,8 @@ export async function getServerSideProps({ req }) {
         overDiscount: data.subscribeCardDto.overDiscount,
       },
       recipeNameList: data.recipeNameList,
+      paymentMethod: data.paymentMethod || null, // 230421 신규추가
     }));
   }
   return { props: { data: DATA } };
 }
-
-
-
-//
-// let DUMMY_RESPONSE = {
-//   data: {
-//     "_embedded" : {
-//       "querySubscribeCardsDtoList" : [ {
-//         "subscribeCardDto" : {
-//           "subscribeId" : 121,
-//           "cardId" : 120,
-//           "cardName" : "카드이름1",
-//           "cardNumber" : "카드번호1",
-//           "dogName" : "김바프",
-//           "plan" : "FULL",
-//           "nextPaymentDate" : "2022-07-28T10:51:47.551",
-//           "nextPaymentPrice" : 120000
-//         },
-//         "recipeNameList" : [ "스타트" ],
-//         "_links" : {
-//           "change_card" : {
-//             "href" : "http://localhost:8080/api/cards/subscribe/121"
-//           }
-//         }
-//       }, {
-//         "subscribeCardDto" : {
-//           "subscribeId" : 132,
-//           "cardId" : 131,
-//           "cardName" : "카드이름2",
-//           "cardNumber" : "카드번호2",
-//           "dogName" : "김바프2",
-//           "plan" : "TOPPING",
-//           "nextPaymentDate" : "2022-07-28T10:51:47.623",
-//           "nextPaymentPrice" : 120000
-//         },
-//         "recipeNameList" : [ "스타트", "터키비프" ],
-//         "_links" : {
-//           "change_card" : {
-//             "href" : "http://localhost:8080/api/cards/subscribe/132"
-//           }
-//         }
-//       }, {
-//         "subscribeCardDto" : {
-//           "subscribeId" : 143,
-//           "cardId" : 142,
-//           "cardName" : "카드이름3",
-//           "cardNumber" : "카드번호3",
-//           "dogName" : "김바프3",
-//           "plan" : "HALF",
-//           "nextPaymentDate" : "2022-07-28T10:51:47.66",
-//           "nextPaymentPrice" : 120000
-//         },
-//         "recipeNameList" : [ "스타트", "터키비프" ],
-//         "_links" : {
-//           "change_card" : {
-//             "href" : "http://localhost:8080/api/cards/subscribe/143"
-//           }
-//         }
-//       } ]
-//     },
-//     "_links" : {
-//       "self" : {
-//         "href" : "http://localhost:8080/api/cards"
-//       },
-//       "profile" : {
-//         "href" : "/docs/index.html#resources-query-subscribeCards"
-//       }
-//     }
-//   }
-// }

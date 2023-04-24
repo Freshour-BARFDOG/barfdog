@@ -9,15 +9,16 @@ import {FullScreenRunningDog} from "../../../components/atoms/FullScreenLoading"
 export default function MypageCardPage() {
   const router = useRouter();
   const { imp_success, params, error_msg } = router.query;
-  const [orderIdx,customUid] = params;
-  
-
+  const [orderIdx, customUid, paymentMethod] = params;
   
   useEffect(() => {
     (async function changeCardData() {
       if(imp_success == 'true'){
         const apiUrl = `/api/cards/subscribes/${orderIdx}`;
-        const res = await postObjData(apiUrl, {customerUid: `customer_Uid_${customUid}`});
+        const res = await postObjData(apiUrl, {
+          customerUid: customUid,
+          paymentMethod: paymentMethod
+        });
         console.log(res);
         if(res.isDone){
           alert('카드변경 성공');
@@ -38,7 +39,7 @@ export default function MypageCardPage() {
 
   return (
     <>
-      <MetaTitle title="마이페이지 카드관리 > 카드변경 결과" />
+      <MetaTitle title="마이페이지 카드관리 > 카드변경 결과 (Mobile)" />
       <Layout>
         <FullScreenRunningDog/>
       </Layout>

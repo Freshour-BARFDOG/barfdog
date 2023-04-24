@@ -1,0 +1,84 @@
+@import '/styles/global/rem';
+
+$modal-padding-pc: rem(32);
+$modal-padding-mobile: rem(22);
+
+.modal_wrap{
+  display: inline-flex;
+  flex-direction: column;
+  width: auto !important;
+  gap: rem(16);
+}
+
+.info-section {
+  position: absolute;
+  right: $modal-padding-pc;
+  top: calc(#{$modal-padding-pc} + #{rem(4)});
+  max-width: rem(100);
+  display: flex;
+  justify-content: flex-end;
+  font-size: rem(14);
+  font-weight: 500;
+  color: var(--color-font-medium);
+
+  .dogName {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.body-section {
+
+  > section {
+    padding: 0 !important;
+
+    > div {
+      padding-bottom: rem(16) !important;
+    }
+
+    ul {
+      display: flex;
+    }
+  }
+}
+
+.btn-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: rem(6);
+}
+
+
+@media (max-width: rem(600)) {
+  .body-section > section ul {
+    display: flex !important;
+    flex-direction: column;
+  }
+
+}
+
+
+@media (max-width: rem(320)) {
+  $modal-gap-mobile: rem(8);
+
+  .modal_wrap {
+    padding: $modal-padding-mobile !important;
+    gap:$modal-gap-mobile;
+  }
+  .info-section {
+    top: calc(#{$modal-padding-mobile} + #{rem(2)});
+    right: $modal-padding-mobile;
+    max-width: calc(100% - #{rem(40)});
+
+  }
+  .body-section > section > div{
+    font-size: rem(18);
+    padding-bottom: $modal-gap-mobile !important;
+  }
+
+  .btn-section button { width: rem(80) !important;}
+}
