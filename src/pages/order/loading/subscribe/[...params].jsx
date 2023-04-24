@@ -47,8 +47,8 @@ export async function getServerSideProps(ctx) {
   const { params, imp_uid, imp_success, error_msg} = query;
   
   console.log(query);
-  const [orderIdx, customUid, price, merchantUid, itemName, buyer_name, buyer_tel, buyer_email, buyer_addr] = params;
-  // 결제성공여부
+  const [orderIdx, customUid, price, merchantUid, itemName, buyer_name, buyer_tel, buyer_email, buyer_addr, buyer_postcode] = params;
+// 결제성공여부
   let paymentSuccess = null;
 
   if(imp_success == 'true'){
@@ -80,6 +80,7 @@ export async function getServerSideProps(ctx) {
           buyer_tel: buyer_tel,
           buyer_email: buyer_email,
           buyer_addr: buyer_addr,
+          buyer_postcode: buyer_postcode,
         }
       });
       const { code, message, response } = paymentResult.data;

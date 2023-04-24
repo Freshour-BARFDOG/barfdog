@@ -10,6 +10,7 @@ import axios from 'axios';
 import {availablePaymentState} from "/util/func/availablePaymentState";
 import {paymethodFilter} from '/util/filter_iamport_paymethod';
 import {generateCustomerUid} from "/util/func/order/generateCustomerUid";
+import {pgType} from "/store/TYPE/paymentMethodType";
 
 export function Payment({
   info,
@@ -49,10 +50,10 @@ export function Payment({
       alert(`네이버페이 결제 준비중입니다. 다른 결제수단을 선택해주세요.`);
       return;
     }
-    if(form.paymentMethod === 'KAKAO_PAY'){
-      alert(`카카오페이 결제 준비중입니다. 다른 결제수단을 선택해주세요.`);
-      return;
-    }
+    // if(form.paymentMethod === 'KAKAO_PAY'){
+    //   alert(`카카오페이 결제 준비중입니다. 다른 결제수단을 선택해주세요.`);
+    //   return;
+    // }
     if(orderType === 'subscribe' && form.paymentMethod ==='NAVER_PAY'){
       alert(`정기구독 네이버페이 결제 준비중입니다. 다른 결제수단을 선택해주세요.`);
       return;
@@ -209,12 +210,12 @@ export function Payment({
     IMP.init(process.env.NEXT_PUBLIC_IAMPORT_CODE);
     // 주문명
     const itemList = form.orderItemDtoList;
-    const itemName = `${itemList[0].name} ${itemList.length > 1 ? `외 ${itemList.length-1}개` : ''}`;
+    const itemName = `${itemList[0].name} ${itemList.length > 1 ? `외 ${itemList.length-1}개` : ''}`; // 네이버일 경우, '외 1개' 삭제필요
 
     /* 2. 결제 데이터 정의하기  1원 결제 -> 실패 , 100원 결제 -> 성공 */
     // TODO: name(주문명) test 지우기
     const data = {
-      pg: `kcp.${process.env.NEXT_PUBLIC_IAMPORT_GENERAL_ORDER_SITECODE}`, // PG사
+      pg: pgType.GENERAL[body.paymentMethod], // PG사
       pay_method: paymethodFilter(body.paymentMethod), // 결제수단
       merchant_uid: merchantUid, // 주문번호
       amount: body.paymentPrice, // 결제금액
@@ -222,7 +223,7 @@ export function Payment({
       buyer_name:  info.name, // 구매자 이름
       buyer_tel: info.phone, // 구매자 전화번호
       buyer_email: info.email, // 구매자 이메일
-      buyer_addr: `${info.address.street},${info.address.detailAddress}`, // 구매자 주소
+      buyer_addr: `${info.address.street}, ${info.address.detailAddress}`, // 구매자 주소
       buyer_postcode: info.address.zipcode, // 구매자 우편번호
       m_redirect_url: `${window.location.origin}/order/loading/${id}`
 
@@ -300,14 +301,17 @@ export function Payment({
      /* 2. 결제 데이터 정의하기  TODO:kakaopay 실연동 가맹점코드(CID) 발급받으면 변경하기*/
     const itemName = `[구독상품]-${info.recipeNameList.join(", ")}`;
     const mobileItemName = `[m-구독상품]-${info.recipeNameList.join(", ")}`;
-    const buyer_name = form.deliveryDto.name;
-    const buyer_tel = form.deliveryDto.phone;
+    const buyer_name = info.name;
+    const buyer_tel = info.phone;
     const buyer_email = info.email;
-    const buyer_addr = `${info.address.street},${info.address.detailAddress}`;
+    const buyer_addr = `${info.address.street}, ${info.address.detailAddress}`;
+    const buyer_postcode = info.address.zipcode;
 
     // 아임포트 전송 데이터
+    const m_redirect_url = `${window.location.origin}/order/loading/subscribe`;
+    const params = `${id}/${customerUid}/${body.paymentPrice}/${merchantUid}/${mobileItemName}/${buyer_name}/${buyer_tel}/${buyer_email}/${buyer_addr}/${buyer_postcode}`;
     const data = {
-      pg: form.paymentMethod === 'KAKAO_PAY' ? 'kakaopay.TCSUBSCRIP':`kcp_billing.${process.env.NEXT_PUBLIC_IAMPORT_SUBSCRIBE_SITECODE}`, // PG사 + 사이트키
+      pg: pgType.SUBSCRIBE[body.paymentMethod], // PG사 + 사이트키
       pay_method: 'card', // 결제수단
       merchant_uid: new Date().getTime().toString(36), // 주문번호
       amount:0, // 결제금액 0원 ( 구독결제 시, 첫 번째 결제는 예약과정)
@@ -317,7 +321,8 @@ export function Payment({
       buyer_tel: buyer_tel,
       buyer_email: buyer_email, // 구매자 이메일
       buyer_addr: buyer_addr, // 구매자 주소
-      m_redirect_url: `${window.location.origin}/order/loading/subscribe/${id}/${customerUid}/${body.paymentPrice}/${merchantUid}/${mobileItemName}/${buyer_name}/${buyer_tel}/${buyer_email}/${buyer_addr}`,
+      buyer_postcode: buyer_postcode,
+      m_redirect_url: `${m_redirect_url}/${params}`,
     };
 
     // 결제 이슈를 보완하기 인하여 Api Request Data 추가를 위해 사용
@@ -329,6 +334,7 @@ export function Payment({
       buyer_tel: buyer_tel,
       buyer_email: buyer_email, // 구매자 이메일
       buyer_addr: buyer_addr, // 구매자 주소
+      buyer_postcode: buyer_postcode,
     }
 
     IMP.request_pay(data, callback.bind(null, callbackData));
@@ -358,6 +364,7 @@ export function Payment({
         buyer_tel: callbackData.buyer_tel,
         buyer_email: callbackData.buyer_email, // 구매자 이메일
         buyer_addr: callbackData.buyer_addr, // 구매자 주소
+        buyer_postcode: callbackData.buyer_postcode, // 구매자 우편번호
       };
 
       const paymentResult = await axios
