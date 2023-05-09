@@ -84,9 +84,10 @@ export default function SignupPage() {
   });
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState(initialFormErrors);
+  const [submitted, setSubmitted] = useState(false);
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async () => {
+    if(submitted) return console.error("Already Submitted!");
     try {
       const validateMode = snsSignupMode ? 'sns' : 'normal';
       const validFormResultObj = await validate(formValues, formErrors, { mode: validateMode });
@@ -111,11 +112,13 @@ export default function SignupPage() {
       if (!isPassed) return mct.alertShow('유효하지 않은 항목이 있습니다.');
       
       mct.alertHide('');
+      setSubmitted(true);
       await postSignupData(formValues);
       
     } catch (err) {
       console.error('통신에러: ', err);
       mct.alertShow(`데이터 처리 중 오류가 발생했습니다.\n${err}`);
+      setSubmitted(false);
     }
   };
 
@@ -159,15 +162,22 @@ export default function SignupPage() {
         console.log(res.data);
         if (res.status === 201) {
           const userName = formvalues.name;
-          alert('회원가입에 성공하였습니다.');
+          mct.alertHide(`회원가입에 성공하였습니다.`, onSuccessCallback);
           router.push(`/account/signup/success?username=${userName}`);
+        } else {
+          mct.alertHide(`회원가입에 실패하였습니다. 잠시 후 다시 시도해주세요.`);
         }
       })
       .catch((err) => {
         mct.alertHide(`ERROR\n\n서버와 통신할 수 없습니다.`);
         console.error('서버통신오류: ', err);
+        setSubmitted(false);
       });
   };
+
+  const onSuccessCallback = async () => {
+    await router.push(`/account/signup/success?username=${userName}`);
+  }
   
   const generateRandomString = (num) => {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
