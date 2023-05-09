@@ -44,6 +44,7 @@ export default function CreatePromotionPage({DATA}) {
   }, [DATA]);
 
   const mct = useModalContext();
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState({});
   const [form, setForm] = useState(initFormValues);
   const [formErrors, setFormErrors] = useState({});
@@ -121,7 +122,7 @@ export default function CreatePromotionPage({DATA}) {
   };
   const returnToPrevPage = () => {
     if (confirm('생성을 중단하고 이전 페이지로 이동하시겠습니까?')) {
-      useRouter().back();
+      router.back();
     }
   };
 
