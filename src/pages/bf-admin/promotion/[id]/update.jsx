@@ -31,7 +31,7 @@ export default function UpdatePromotionPage({DATA}) {
     startDate: DATA.startDate,
     expiredDate: DATA.expiredDate,
     couponId: DATA.coupon.couponId,
-    remaining: DATA.remaining,
+    quantity: DATA.quantity,
     status: DATA.status,
   }), [DATA]);
 
@@ -66,7 +66,7 @@ export default function UpdatePromotionPage({DATA}) {
       filteredValue = filter_onlyNumber(filteredValue);
     }
 
-    if (id === 'remaining') {
+    if (id === 'quantity') {
       filteredValue = filter_limitedNumber(filteredValue);
     }
 
@@ -85,7 +85,7 @@ export default function UpdatePromotionPage({DATA}) {
       startDate: form.startDate,
       expiredDate: form.expiredDate,
       couponId: form.couponId,
-      remaining: form.remaining,
+      quantity: form.quantity,
       status: form.status,
     }
     console.log("body: ",body);
@@ -122,7 +122,7 @@ export default function UpdatePromotionPage({DATA}) {
     }));
   };
   const returnToPrevPage = () => {
-    if (confirm('생성을 중단하고 이전 페이지로 이동하시겠습니까?')) {
+    if (confirm('이전 페이지로 이동하시겠습니까?')) {
       router.back();
     }
   };
@@ -251,17 +251,17 @@ export default function UpdatePromotionPage({DATA}) {
                 <section className="cont_divider">
                   <div className="input_row">
                     <div className="title_section fixedHeight">
-                      <label className="title" htmlFor="remaining">
-                        한정수량
+                      <label className="title" htmlFor="quantity">
+                        수량
                       </label>
                     </div>
                     <div className="inp_section">
                       <div className="inp_box">
                         <input
-                          id={'remaining'}
+                          id={'quantity'}
                           className={'text-align-right'}
                           data-input-type={'number, currency'}
-                          value={form.remaining || '0'}
+                          value={form.quantity || '0'}
                           type="text"
                           name="create-promotion"
                           disabled={false}
@@ -269,8 +269,8 @@ export default function UpdatePromotionPage({DATA}) {
                         />
                         <span>개</span>
                         <span>발행됨 <b className={'pointColor'}>{publishedCount}</b>개</span>
-                        {formErrors.remaining && (
-                          <ErrorMessage>{formErrors.remaining}</ErrorMessage>
+                        {formErrors.quantity && (
+                          <ErrorMessage>{formErrors.quantity}</ErrorMessage>
                         )}
                       </div>
                     </div>
@@ -370,7 +370,7 @@ const DUMMY_RES = {
     name: 'test프로모션', // str
     startDate: "2023-05-01 00:00", // str
     expiredDate: "2023-05-31 00:00", // str
-    remaining: 500, //
+    quantity: 500, //
     publishedCount: 3,
     status: promotionStatusType.ACTIVE,
     coupon: {

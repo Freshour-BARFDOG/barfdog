@@ -36,7 +36,7 @@ export const validate = (obj, method: Method, option = {limitedAmount: null}) =>
       case 'couponId':
         errors[key] = valid_isEmpty(val);
         break;
-      case 'remaining':
+      case 'quantity':
         errors[key] =
             valid_isNumberEmpty(val)
             || (method === "update" && valid_quantityForLimitedQuantity(val, option.limitedAmount));

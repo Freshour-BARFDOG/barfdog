@@ -20,6 +20,7 @@ import CustomSelect from "../../../components/admin/form/CustomSelect";
 import {emptyOption} from "/util/func/form/option/emtyOption";
 import {DateTimeInput} from "../../../components/admin/form/DateTimeInput";
 import {filter_multipleSpaces} from "/util/func/filter_multipleSpaces";
+import {filterObjectKeys, filterObjectValues} from "../../../../util/func/filter/filterTypeFromObejct";
 
 
 const initFormValues = {
@@ -28,7 +29,7 @@ const initFormValues = {
   startDate: "", // str
   expiredDate: "", // str
   couponId: null, // num
-  remaining: '0', //
+  quantity: '0', //
   status: promotionStatusType.ACTIVE
 };
 
@@ -66,7 +67,7 @@ export default function CreatePromotionPage({DATA}) {
       filteredValue = filter_onlyNumber(filteredValue);
     }
 
-    if (id === 'remaining') {
+    if (id === 'quantity') {
       filteredValue = filter_limitedNumber(filteredValue);
     }
 
@@ -85,7 +86,7 @@ export default function CreatePromotionPage({DATA}) {
       startDate: form.startDate,
       expiredDate: form.expiredDate,
       couponId: form.couponId,
-      remaining: form.remaining,
+      quantity: form.quantity,
       status: form.status,
     }
 
@@ -121,7 +122,7 @@ export default function CreatePromotionPage({DATA}) {
     }));
   };
   const returnToPrevPage = () => {
-    if (confirm('생성을 중단하고 이전 페이지로 이동하시겠습니까?')) {
+    if (confirm('이전 페이지로 이동하시겠습니까?')) {
       router.back();
     }
   };
@@ -151,8 +152,8 @@ export default function CreatePromotionPage({DATA}) {
                         <CustomRadio
                             setValue={setForm}
                             name="type"
-                            idList={Object.keys(promotionType).filter(type => type !== "KOR")}
-                            labelList={Object.values(promotionType.KOR)}
+                            idList={filterObjectKeys(promotionType)}
+                            labelList={filterObjectValues(promotionType.KOR)}
                         />
                         {formErrors.type && (
                             <ErrorMessage>{formErrors.type}</ErrorMessage>
@@ -250,25 +251,25 @@ export default function CreatePromotionPage({DATA}) {
                 <section className="cont_divider">
                   <div className="input_row">
                     <div className="title_section fixedHeight">
-                      <label className="title" htmlFor="remaining">
-                        한정수량
+                      <label className="title" htmlFor="quantity">
+                        수량
                       </label>
                     </div>
                     <div className="inp_section">
                       <div className="inp_box">
                         <input
-                            id={'remaining'}
+                            id={'quantity'}
                             className={'text-align-right'}
                             data-input-type={'number, currency'}
-                            value={form.remaining || '0'}
+                            value={form.quantity || '0'}
                             type="text"
                             name="create-promotion"
                             disabled={false}
                             onChange={onInputChangeHandler}
                         />
                         <span>개</span>
-                        {formErrors.remaining && (
-                            <ErrorMessage>{formErrors.remaining}</ErrorMessage>
+                        {formErrors.quantity && (
+                            <ErrorMessage>{formErrors.quantity}</ErrorMessage>
                         )}
                       </div>
                     </div>
