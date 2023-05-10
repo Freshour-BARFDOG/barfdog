@@ -23,7 +23,7 @@ function AdminGnb() {
           <SubmenuList title="적립금 조회" link="/bf-admin/reward/search" />
           <SubmenuList title="적립금 발행" link="/bf-admin/reward/release" />
           <SubmenuTitle title="프로모션" noLink />
-          <SubmenuList title="프로모션 관리" link="/bf-admin/promotion/search" />
+          <SubmenuList title="프로모션 관리" link="/bf-admin/promotion" />
           <SubmenuList title="프로모션 생성" link="/bf-admin/promotion/create" />
         </List>
         <List title="판매관리">
