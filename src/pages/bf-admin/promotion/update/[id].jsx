@@ -21,8 +21,10 @@ import {DateTimeInput} from "../../../../components/admin/form/DateTimeInput";
 import {filter_multipleSpaces} from "/util/func/filter_multipleSpaces";
 
 
-export default function UpdatePromotionPage({id, DATA}) {
 
+export default function UpdatePromotionPage({DATA}) {
+
+  const publishedCount = DATA.type === promotionType.COUPON ? DATA.publishedCount : null;
   const initFormValues = useMemo(() => ({
     type: DATA.type, // str
     name: DATA.name,
@@ -88,7 +90,7 @@ export default function UpdatePromotionPage({id, DATA}) {
     }
     console.log("body: ",body);
 
-    const errObj = validate(body);
+    const errObj = validate(body, "update", {limitedAmount: publishedCount});
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
 
@@ -256,18 +258,19 @@ export default function UpdatePromotionPage({id, DATA}) {
                     <div className="inp_section">
                       <div className="inp_box">
                         <input
-                            id={'remaining'}
-                            className={'text-align-right'}
-                            data-input-type={'number, currency'}
-                            value={form.remaining || '0'}
-                            type="text"
-                            name="create-promotion"
-                            disabled={false}
-                            onChange={onInputChangeHandler}
+                          id={'remaining'}
+                          className={'text-align-right'}
+                          data-input-type={'number, currency'}
+                          value={form.remaining || '0'}
+                          type="text"
+                          name="create-promotion"
+                          disabled={false}
+                          onChange={onInputChangeHandler}
                         />
                         <span>개</span>
+                        <span>발행됨 <b className={'pointColor'}>{publishedCount}</b>개</span>
                         {formErrors.remaining && (
-                            <ErrorMessage>{formErrors.remaining}</ErrorMessage>
+                          <ErrorMessage>{formErrors.remaining}</ErrorMessage>
                         )}
                       </div>
                     </div>
@@ -362,18 +365,19 @@ export async function getServerSideProps({req, query}) {
 
 
 const DUMMY_RES = {
-  data:{
+  data: {
     type: promotionType.COUPON, // str
     name: 'test프로모션', // str
     startDate: "2023-05-01 00:00", // str
     expiredDate: "2023-05-31 00:00", // str
     remaining: 500, //
+    publishedCount: 3,
     status: promotionStatusType.ACTIVE,
-    coupon:{
+    coupon: {
       couponId: 1,
       discount: "10%",
       name: "DUMMY COUPON"
-    }
+    },
   },
   status: 200
 }

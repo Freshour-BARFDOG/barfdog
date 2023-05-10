@@ -1,11 +1,11 @@
-import {
-  valid_isEmpty,
-  valid_isNumberEmpty,
-} from './validationPackage';
+import {valid_isEmpty, valid_isNumberEmpty,} from './validationPackage';
 import {valid_intervalBetweenDates} from "./valid_intervalBetweenDates";
 import {valid_isDateLaterThanToday} from "./valid_isDateLaterThanToday";
+import {valid_quantityForLimitedQuantity} from "@util/func/validation/valid_quantityForLimitedQuantity";
 
-export const validate = (obj) => {
+type Method = "update" | "create";
+
+export const validate = (obj, method: Method, option = {limitedAmount: null}) => {
   let errors = {};
 
   const keys = Object.keys(obj);
@@ -37,7 +37,9 @@ export const validate = (obj) => {
         errors[key] = valid_isEmpty(val);
         break;
       case 'remaining':
-        errors[key] = valid_isNumberEmpty(val);
+        errors[key] =
+            valid_isNumberEmpty(val)
+            || (method === "update" && valid_quantityForLimitedQuantity(val, option.limitedAmount));
         break;
       case 'status':
         errors[key] = valid_isEmpty(val);
