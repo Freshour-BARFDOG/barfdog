@@ -8,3 +8,12 @@ export const promotionStatusType = {
         INACTIVE:"종료"
     }
 }
+
+export const searchPromotionStatusType = {
+    ...promotionStatusType,
+    ALL: "ALL",
+    KOR: {
+        ALL: "전체",
+        ...promotionStatusType.KOR
+    }
+}

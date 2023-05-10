@@ -1,0 +1,65 @@
+@import '/styles/global/rem';
+@import '/styles/module/itemList.module';
+
+
+
+.cont_viewer {
+  .table{
+    .table_th:last-child,
+    .item > span:last-child,
+    .table_body > li > span:not(:last-child) {
+      border-right: $border;
+    }
+    .table_header, .item{
+      display:grid;
+      grid-gap:0;
+      grid-template-rows: minmax(rem(60), auto);
+      grid-template-columns:
+        rem(80)
+        rem(120)
+        rem(300)
+        rem(200)
+        rem(200)
+        minmax(rem(500), 1fr);
+
+
+      .status {
+        cursor: default;
+        font-weight: 500;
+        &.active {
+          color: var(--color-main);
+        }
+
+        &.paused {
+          color: var(--color-font-def);
+        }
+
+        &.inactive {
+          color: var(--color-font-light);
+        }
+      }
+
+      .period{
+        flex-direction: column;
+      }
+      .couponInfo{
+        flex-direction: column;
+        .detail {
+          color: var(--color-font-medium);
+        }
+      }
+    }
+  }
+}
+
+
+
+.moreview{
+  cursor:pointer;
+  position: relative;
+}
+
+.seperator{
+  color: var(--color-font-medium);
+  margin: rem(2);
+}

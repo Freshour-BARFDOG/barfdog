@@ -1,0 +1,27 @@
+@import '/styles/global/rem';
+
+
+.modal{
+  padding:0;
+  position: fixed;
+  left: rem(0);
+  top:0;
+  transform:translate(0, 0);
+  background-color: #fff;
+  box-shadow: rem(1) rem(1) rem(20) 0 rgba(0,0,0,0.25);
+  z-index: 1000;
+  > * {
+    &:hover {
+      background-color: var(--color-bg-02);
+    }
+    min-width: rem(120);
+    padding: rem(12) rem(20);
+    box-sizing: border-box;
+    text-align: center;
+
+  }
+}
+
+button.delete{
+  color: var(--color-main)
+}
