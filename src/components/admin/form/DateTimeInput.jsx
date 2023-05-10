@@ -1,26 +1,28 @@
 import React, {useEffect, useState} from "react";
+import {filter_dateAndTime} from "/util/func/filter_dateAndTime";
 
 
-export function DateTimeInput({id, form, setForm, setErrors, defaultStringValueOfSeconds="00"}) {
+export function DateTimeInput({id, form, setForm, setErrors, defaultStringValueOfSeconds = "00"}) {
 
 
-    const [dateTime, setDateTime] = useState({
-        date: '',
-        time: ''
-    });
+  const {date, time} = filter_dateAndTime(form[id]);
+  const [dateTime, setDateTime] = useState({
+    date: date,
+    time: time
+  });
 
-    useEffect(() => {
-        // validation:  Date 또는 Time 값이 비어있는 경우
-        const inValid = Object.values(dateTime).filter(value=> !value).length > 0;
-        if(inValid) return;
+  useEffect(() => {
+    // validation:  Date 또는 Time 값이 비어있는 경우
+    const inValid = Object.values(dateTime).filter(value => !value).length > 0;
+    if (inValid) return;
 
 
-        setForm(prev => ({
-            ...prev,
-            [id]: `${dateTime.date} ${timeWithSeconds(dateTime.time, defaultStringValueOfSeconds)}`
-        }))
+    setForm(prev => ({
+      ...prev,
+      [id]: `${dateTime.date} ${timeWithSeconds(dateTime.time, defaultStringValueOfSeconds)}`
+    }))
 
-    }, [dateTime]);
+  }, [dateTime]);
 
 
     const onChange = (e) => {

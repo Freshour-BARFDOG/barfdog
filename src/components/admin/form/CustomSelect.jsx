@@ -8,6 +8,7 @@ const CustomSelect = ({
   dataType = 'string',
   className,
   style,
+  disabled,
   ...props
 }) => {
   const onChangeHandler = (e) => {
@@ -40,6 +41,7 @@ const CustomSelect = ({
         onChange={onChangeHandler}
         value={value || ''} /* IMPORTANT: to set Initial Value */
         style={style}
+        disabled={disabled}
         {...props}
       >
         {options.map((option, i) => {

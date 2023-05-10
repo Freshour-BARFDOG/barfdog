@@ -16,9 +16,9 @@ import {useModalContext} from "/store/modal-context";
 import ErrorMessage from "/src/components/atoms/ErrorMessage";
 import {promotionStatusType} from "/store/TYPE/promotionStatusType";
 import {promotionType} from "/store/TYPE/promotionType";
-import CustomSelect from "../../../../components/admin/form/CustomSelect";
+import CustomSelect from "../../../components/admin/form/CustomSelect";
 import {emptyOption} from "/util/func/form/option/emtyOption";
-import {DateTimeInput} from "../../../../components/common/DateTimeInput";
+import {DateTimeInput} from "../../../components/admin/form/DateTimeInput";
 import {filter_multipleSpaces} from "/util/func/filter_multipleSpaces";
 
 
@@ -353,7 +353,7 @@ export async function getServerSideProps({req}) {
   } else {
     return {
       redirect: {
-        destination: "/bf-admin/promotion/search",
+        destination: "/bf-admin/promotion",
         permanent: false
       }
 
