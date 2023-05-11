@@ -1,5 +1,5 @@
 export const getDefaultPagenationInfo = (data, itemQuery, option = {pageSize: null, setInitialize: null}) => {
-  if(!data)return;
+
   let curItemList = [];
   
   let newPageInfo = {
@@ -10,6 +10,7 @@ export const getDefaultPagenationInfo = (data, itemQuery, option = {pageSize: nu
     newPageNumber: 1,
     newItemList: [],
   }
+  if(!data) return newPageInfo;
   
   if ( data._embedded ) {
     const pageData = data.page;
