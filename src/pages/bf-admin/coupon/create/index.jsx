@@ -21,9 +21,11 @@ import {useModalContext} from "/store/modal-context";
 import transformClearLocalCurrencyInEveryObject from "/util/func/transformClearLocalCurrencyInEveryObject";
 import ErrorMessage from "/src/components/atoms/ErrorMessage";
 import {discountUnitType} from "/store/TYPE/discountUnitType";
-import {couponUseType} from "/store/TYPE/couponType";
+import {couponUseType, global_couponType} from "/store/TYPE/couponType";
+import {filterObjectKeys, filterObjectValues} from "/util/func/filter/filterTypeFromObejct";
 
 const initialFormValues = {
+  couponType: global_couponType.CODE_PUBLISHED,
   name: '', // str
   description: '', // str
   couponTarget: 'ALL', //str // Radio Button
@@ -37,8 +39,8 @@ const initialFormValues = {
 
 
 
-function CreateCouponPage() {
-  const postFormValuesApiUrl = '/api/admin/coupons';
+export default function CreateCouponPage() {
+
   const couponLimitedAmount = 9999;
   const unitSettings = [
     { label: '%', value: discountUnitType.FIXED_RATE },
@@ -48,6 +50,7 @@ function CreateCouponPage() {
   
   const router = useRouter();
   const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
   const [modalMessage, setModalMessage] = useState('');
   const [isLoading, setIsLoading] = useState({});
   const [formValues, setFormValues] = useState(initialFormValues);
@@ -101,7 +104,7 @@ function CreateCouponPage() {
     if (filteredType && filteredType.indexOf('currency') >= 0) {
       filteredValue = transformLocalCurrency(filteredValue);
     }
-  
+
     if (filteredType && filteredType.indexOf('discountPercent') >= 0) {
       filteredValue = transformClearLocalCurrency(filteredValue) > '100' ? '100' : filteredValue;
       // - MEMO 100 : string이어야함.
@@ -112,69 +115,65 @@ function CreateCouponPage() {
       [id]: filteredValue,
     }));
   };
-  
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    const errObj = validate(formValues);
+
+  const onSubmit = async () => {
+    if (isSubmitted) return console.error("Already submitted!");
+    const body = {
+      name: formValues.name,
+      description: formValues.description,
+      couponTarget: formValues.couponTarget,
+      code: formValues.code,
+      couponType: formValues.couponType,
+      discountDegree: transformClearLocalCurrency(formValues.discountDegree),//
+      discountType: formValues.discountType,
+      availableMaxDiscount: transformClearLocalCurrency(formValues.availableMaxDiscount),//
+      availableMinPrice: transformClearLocalCurrency(formValues.availableMinPrice),//
+      amount: transformClearLocalCurrency(formValues.amount),//
+      type: formValues.type,
+    }
+    console.log(body);
+
+    const errObj = validate(body);
     setFormErrors(errObj);
+
     const isPassed = valid_hasFormErrors(errObj);
-    let filteredFormValues = formValues;
-    const filterStringObj = {
-      discountDegree: 'discountDegree',
-      availableMaxDiscount: 'availableMaxDiscount',
-      availableMinPrice : 'availableMinPrice',
-      amount: 'amount',
-    }
-    filteredFormValues = transformClearLocalCurrencyInEveryObject(filteredFormValues, filterStringObj);
-    console.log(formValues);
-    console.log(filteredFormValues);
-    
-    if(isSubmitted) {
-      console.error('이미 제출된 양식입니다.');
-      onGlobalModalCallback();
-      return;
-    } else if (!isPassed) {
-      return alert('유효하지 않은 항목이 있습니다.');
-    }
-    
-   
-    
+    if (!isPassed) return mct.alertShow('유효하지 않은 항목이 있습니다.');
+
+
     try {
+      setIsSubmitted(true);
       setIsLoading((prevState) => ({
         ...prevState,
         submit: true,
       }));
-      const res = await postObjData(postFormValuesApiUrl, filteredFormValues);
+      const apiUrl = '/api/admin/coupons';
+      const res = await postObjData(apiUrl, body);
       console.log(res);
       if (res.isDone) {
-        onShowModalHandler('쿠폰이 성공적으로 등록되었습니다.');
-        setIsSubmitted(true);
-      } else{
-        alert(`Error: ${res.error}`);
+        mct.alertShow('쿠폰이 성공적으로 등록되었습니다.', onGlobalModalCallback);
+      } else {
+        mct.alertShow(`쿠폰을 등록할 수 없습니다.\n (${res.error})`);
+        setIsSubmitted(false);
       }
     } catch (err) {
-      alert('API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.');
-      console.error('API통신 오류 : ', err);
+      console.error(err.response);
+      mct.alertShow('API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.');
+      setIsSubmitted(true);
+    } finally {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        submit: false,
+      }));
     }
-    setIsLoading((prevState) => ({
-      ...prevState,
-      submit: false,
-    }));
   };
   const returnToPrevPage = () => {
     if (confirm('이전 페이지로 돌아가시겠습니까?')) {
       router.back();
     }
   };
-  
-  const onShowModalHandler = (message) => {
-    mct.alertShow();
-    setModalMessage(message);
-  };
-  
+
   const onGlobalModalCallback = () => {
-    mct.alertHide();
-    router.push('/bf-admin/coupon/search');
+    window.location.href = '/bf-admin/coupon/search';
   };
   
   return (
@@ -187,11 +186,38 @@ function CreateCouponPage() {
           </div>
           <div className="cont">
             <div className="cont_body">
+              <section className="cont_divider">
+                <div className="input_row">
+                  <div className="title_section fixedHeight">
+                    <label className="title">
+                      쿠폰 타입
+                      <Tooltip
+                        message={`- '프로모션' 타입: 프로모션 생성 페이지에서 발급 가능`}
+                        messagePosition={'left'}
+                        width={'320px'} wordBreaking={true}/>
+                    </label>
+                  </div>
+                  <div className="inp_section">
+                    <div className="inp_box">
+                      <CustomRadio
+                        setValue={setFormValues}
+                        name="couponType"
+                        idList={[global_couponType.CODE_PUBLISHED, global_couponType.PROMOTION_PUBLISHED]}
+                        labelList={[global_couponType.KOR.CODE_PUBLISHED, global_couponType.KOR.PROMOTION_PUBLISHED]}
+                      />
+                      {formErrors.couponType && (
+                        <ErrorMessage>{formErrors.couponType}</ErrorMessage>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </section>
+              {/* cont_divider */}
               <div className="cont_divider">
                 <div className="input_row">
                   <div className="title_section fixedHeight">
                     <label className="title" htmlFor="name">
-                      쿠폰이름
+                      쿠폰 이름
                     </label>
                   </div>
                   <div className="inp_section">
@@ -215,8 +241,8 @@ function CreateCouponPage() {
               <section className="cont_divider">
                 <div className="input_row">
                   <div className="title_section fixedHeight">
-                    <label className="title" htmlFor="desc">
-                      쿠폰설명
+                    <label className="title" htmlFor="description">
+                      쿠폰 설명
                     </label>
                   </div>
                   <div className="inp_section">
@@ -247,8 +273,8 @@ function CreateCouponPage() {
                       <CustomRadio
                         setValue={setFormValues}
                         name="couponTarget"
-                        idList={[couponUseType.ALL, couponUseType.SUBSCRIBE,couponUseType.GENERAL]}
-                        labelList={[couponUseType.KOR.ALL, couponUseType.KOR.SUBSCRIBE,couponUseType.KOR.GENERAL]}
+                        idList={filterObjectKeys(couponUseType)}
+                        labelList={filterObjectValues(couponUseType.KOR)}
                       />
                       {formErrors.couponTarget && (
                         <ErrorMessage>{formErrors.couponTarget}</ErrorMessage>
@@ -262,7 +288,7 @@ function CreateCouponPage() {
                 <div className="input_row">
                   <div className="title_section fixedHeight">
                     <label className="title" htmlFor="code">
-                      쿠폰코드
+                      쿠폰 코드
                       <Tooltip
                         message={`- 쿠폰코드 규칙\n1. 문자열 15자 이내 (영문 대소문자)\n2. 회원 마이페이지에서 쿠폰코드 후 사용가능\n3. 동일한 쿠폰에 대하여 1회 사용가능.`}
                         messagePosition={'left'}
@@ -439,9 +465,7 @@ function CreateCouponPage() {
           </div>
         </AdminContentWrapper>
       </AdminLayout>
-      <Modal_global_alert message={modalMessage} onClick={onGlobalModalCallback} background />
+      {hasAlert && <Modal_global_alert background/>}
     </>
   );
 }
-
-export default CreateCouponPage;
