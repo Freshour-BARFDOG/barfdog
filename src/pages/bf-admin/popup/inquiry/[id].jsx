@@ -102,8 +102,6 @@ export async function getServerSideProps({ req, query }) {
   const inValid = isNaN(id);
   let AUTHOR_TYPE = await getDtataSSR_inquiryAuthorType(req, id);
   if (inValid || !AUTHOR_TYPE) {
-    !PROD;
-    // if (false) { // ! TEST
     return {
       redirect: {
         destination: '/bf-admin/community/inquiry',
