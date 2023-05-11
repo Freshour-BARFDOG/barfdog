@@ -1,6 +1,6 @@
 @import '/styles/global/rem';
 @import '/styles/module/itemList.module';
-
+@import './promotionStatus.module';
 
 
 .cont_viewer {
@@ -22,22 +22,6 @@
         rem(200)
         minmax(rem(500), 1fr);
 
-
-      .status {
-        cursor: default;
-        font-weight: 500;
-        &.active {
-          color: var(--color-main);
-        }
-
-        &.paused {
-          color: var(--color-font-def);
-        }
-
-        &.inactive {
-          color: var(--color-font-light);
-        }
-      }
 
       .period{
         flex-direction: column;

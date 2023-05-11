@@ -12,7 +12,7 @@ const SearchTextWithCategory = ({
   className,
   options = [],
   searchButton,
-  onSearch,
+  placeholder ="",
   events={
     onSelect: null,
     onKeydown:null,
@@ -63,11 +63,11 @@ const SearchTextWithCategory = ({
 
   return (
     <>
-      <div className={`${s["search-row"]} ${className}`}>
-        <label className={s["title"]} htmlFor={'popup-searchUser-keyword'}>
+      <div className={`${s["search-row"]} ${className || ''}`}>
+        {title && <label className={s["title"]} htmlFor={'popup-searchUser-keyword'}>
           {title}
           {tooltip && <span className={s["tooltip-wrap"]}>{tooltip}</span>}
-        </label>
+        </label>}
         <div className={`${s["inp-wrap"]} ${s["textWidhCategory"]}`}>
           <select
             className="admin_select"
@@ -98,6 +98,7 @@ const SearchTextWithCategory = ({
             onChange={onInputChangeHandler}
             onKeyDown={events.onKeydown}
             value={searchValue[selectedCategory] || ''}
+            placeholder={placeholder}
           />
           {searchButton}
         </div>

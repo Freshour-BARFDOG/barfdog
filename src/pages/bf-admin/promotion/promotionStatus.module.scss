@@ -1,0 +1,16 @@
+
+.status {
+  cursor: default;
+  font-weight: 500;
+  &.active {
+    color: var(--color-main);
+  }
+
+  &.paused {
+    color: var(--color-font-def);
+  }
+
+  &.inactive {
+    color: var(--color-font-light);
+  }
+}

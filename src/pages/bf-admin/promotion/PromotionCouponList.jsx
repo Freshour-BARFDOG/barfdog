@@ -8,6 +8,8 @@ import Spinner from "../../../components/atoms/Spinner";
 import {Modal_moreView} from "../../../components/modal/Modal_moreView";
 import {getHTMLElementInfo} from "/util/func/HTML/getHTMLElementInfo";
 import {useModalContext} from "/store/modal-context";
+import popupWindow from "../../../../util/func/popupWindow";
+import {PromotionStatus} from "./PromotionStatus";
 
 
 export default function PromotionCouponList({
@@ -34,6 +36,11 @@ export default function PromotionCouponList({
   };
 
 
+  const onPopupHandler = (href) => {
+    if(typeof window === 'undefined') return;
+    popupWindow(href, {width:900, height:900});
+  }
+
 
   const onModalHandler = (id, e) => {
 
@@ -48,9 +55,9 @@ export default function PromotionCouponList({
         y: elem.y,
       },
       url: {
-        edit: `/bf-admin/promotion/${id}/update`,
-        detail: `/bf-admin/popup/promotion/${id}`,
-        delete: `/bf-admin/promotion/${id}/delete`,
+        edit: `/bf-admin/promotion/${id}/update`, // Client PATH
+        detail: `/bf-admin/popup/promotion/${id}`, // Client PATH
+        delete: `/api/promotions/${id}/delete`, // SERVER API
       },
     }));
   };
@@ -74,6 +81,7 @@ export default function PromotionCouponList({
         }}
         url={modalState.url}
         onDelete={onDeleteHandler}
+        onPopup= {onPopupHandler}
       />}
   </div>;
 }
@@ -109,11 +117,8 @@ function ItemList({item, isLoading, onActiveModal}) {
           ? <Spinner/>
           : <ThreeDots/>}
       </span>
-      <span className={`${s.status} ${
-        DATA.status === promotionStatusType.ACTIVE ? s.active
-          : DATA.status === promotionStatusType.PAUSED ? s.paused
-            : s.inactive
-      }`}>{promotionStatusType.KOR[DATA.status]}</span>
+      <PromotionStatus status={DATA.status}/>
+
       <span>{DATA.name}</span>
       <span className={s.period}>
         <em>{DATA.startDate}</em>
