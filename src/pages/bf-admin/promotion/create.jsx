@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import {AdminContentWrapper} from '/src/components/admin/AdminWrapper';
@@ -20,11 +20,11 @@ import CustomSelect from "../../../components/admin/form/CustomSelect";
 import {emptyOption} from "/util/func/form/option/emtyOption";
 import {DateTimeInput} from "../../../components/admin/form/DateTimeInput";
 import {filter_multipleSpaces} from "/util/func/filter_multipleSpaces";
-import {filterObjectKeys, filterObjectValues} from "../../../../util/func/filter/filterTypeFromObejct";
+import {filterObjectKeys, filterObjectValues} from "/util/func/filter/filterTypeFromObejct";
 
 
 const initFormValues = {
-  type: promotionType.COUPON, // str
+  promotionType: promotionType.COUPON, // str
   name: '', // str
   startDate: "", // str
   expiredDate: "", // str
@@ -35,9 +35,9 @@ const initFormValues = {
 
 
 export default function CreatePromotionPage({DATA}) {
-
+  const {availableCouponList} = DATA;
   const couponOptions = useMemo(() => {
-    const options = DATA.map((data) => ({
+    const options = availableCouponList?.map((data) => ({
       value: data.couponId,
       label: `[ 할인: ${data.discount} ] ${data.name}`,
     }))
@@ -45,12 +45,17 @@ export default function CreatePromotionPage({DATA}) {
   }, [DATA]);
 
   const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
   const router = useRouter();
   const [isLoading, setIsLoading] = useState({});
   const [form, setForm] = useState(initFormValues);
   const [formErrors, setFormErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
 
+
+  useEffect(() => {
+    if(!availableCouponList.length) mct.alertShow("프로모션을 생성하기 위한 쿠폰이 없습니다.\n쿠폰 생성 페이지에서 프로모션 쿠폰을 생성해주세요.");
+  }, [DATA]);
 
   const onInputChangeHandler = (e) => {
     const input = e.currentTarget;
@@ -81,7 +86,7 @@ export default function CreatePromotionPage({DATA}) {
     if (submitted) return console.error("Already submitted!");
 
     const body = {
-      type: form.type,
+      promotionType: form.promotionType,
       name: filter_multipleSpaces(form.name),
       startDate: form.startDate,
       expiredDate: form.expiredDate,
@@ -102,24 +107,26 @@ export default function CreatePromotionPage({DATA}) {
         ...prevState,
         submit: true,
       }));
-      const apiURL = '/api/admin/promotion';
+      const apiURL = '/api/admin/promotions';
       const res = await postObjData(apiURL, body);
       console.log(res);
       if (res.isDone) {
         mct.alertShow('프로모션이 성공적으로 등록되었습니다.', onSuccessCallback);
       } else {
         mct.alertShow(`Error: ${res.error}`);
-        setSubmitted(true);
+        setSubmitted(false);
       }
     } catch (err) {
       console.error(err);
       setSubmitted(false);
       mct.alertShow('API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.');
+    } finally {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        submit: false,
+      }));
     }
-    setIsLoading((prevState) => ({
-      ...prevState,
-      submit: false,
-    }));
+
   };
   const returnToPrevPage = () => {
     if (confirm('이전 페이지로 이동하시겠습니까?')) {
@@ -128,7 +135,7 @@ export default function CreatePromotionPage({DATA}) {
   };
 
   const onSuccessCallback = () => {
-    window.location.herf = '/bf-admin/promotion/search';
+    window.location.href = '/bf-admin/promotion';
   };
 
 
@@ -150,13 +157,13 @@ export default function CreatePromotionPage({DATA}) {
                     <div className="inp_section">
                       <div className="inp_box">
                         <CustomRadio
-                            setValue={setForm}
-                            name="type"
-                            idList={filterObjectKeys(promotionType)}
-                            labelList={filterObjectValues(promotionType.KOR)}
+                          setValue={setForm}
+                          name="promotionType"
+                          idList={filterObjectKeys(promotionType)}
+                          labelList={filterObjectValues(promotionType.KOR)}
                         />
-                        {formErrors.type && (
-                            <ErrorMessage>{formErrors.type}</ErrorMessage>
+                        {formErrors.promotionType && (
+                          <ErrorMessage>{formErrors.promotionType}</ErrorMessage>
                         )}
                       </div>
                     </div>
@@ -189,7 +196,6 @@ export default function CreatePromotionPage({DATA}) {
                   </div>
                 </section>
                 {/* cont_divider */}
-
                 <section className="cont_divider">
                   <div className="input_row">
                     <div className="title_section fixedHeight">
@@ -206,7 +212,6 @@ export default function CreatePromotionPage({DATA}) {
                   </div>
                 </section>
                 {/* cont_divider */}
-
                 <section className="cont_divider">
                   <div className="input_row">
                     <div className="title_section fixedHeight">
@@ -310,17 +315,18 @@ export default function CreatePromotionPage({DATA}) {
                 목록
               </button>
               <button
-                  type="button"
-                  id="btn-create"
-                  className="admin_btn confirm_l solid"
-                  onClick={onSubmit}
+                type="button"
+                id="btn-create"
+                className="admin_btn confirm_l solid"
+                onClick={onSubmit}
               >
                 {isLoading.submit ? <Spinner style={{color: '#fff'}}/> : '생성'}
               </button>
             </div>
           </AdminContentWrapper>
         </AdminLayout>
-        <Modal_global_alert background/>
+        {hasAlert && <Modal_global_alert background/>}
+
       </>
   );
 }
@@ -328,40 +334,23 @@ export default function CreatePromotionPage({DATA}) {
 
 export async function getServerSideProps({req}) {
 
-  let DATA = null;
+  let DATA = {
+    availableCouponList: []
+  };
 
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-
-  // TODO 퍼블리싱 쿠폰으로 변경 예정
-
-  const apiUrl = "/api/admin/coupons/publication/code";
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
+  const apiUrl = "/api/admin/coupons/publication/promotion";
   const res = await getDataSSR(req, apiUrl);
-  console.log(res);
-  if (res && res.status === 200 && res.data) {
+  console.log(res.data);
+  if (res && res.status === 200 && res.data?._embedded) {
     const data = res.data._embedded.publicationCouponDtoList;
-    DATA = data.map(d => ({
+    DATA.availableCouponList = data.map(d => ({
       couponId: d.couponId,
       discount: d.discount,
       name: d.name,
-    }))
-  } else {
-    return {
-      redirect: {
-        destination: "/bf-admin/promotion",
-        permanent: false
-      }
-
-    }
+    }));
   }
 
   return {
-    props: {DATA: DATA}
+    props: {DATA}
   };
 }
