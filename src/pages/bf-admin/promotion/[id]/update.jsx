@@ -19,6 +19,7 @@ import {promotionType} from "/store/TYPE/promotionType";
 import CustomSelect from "../../../../components/admin/form/CustomSelect";
 import {DateTimeInput} from "../../../../components/admin/form/DateTimeInput";
 import {filter_multipleSpaces} from "/util/func/filter_multipleSpaces";
+import {filterObjectKeys, filterObjectValues} from "../../../../../util/func/filter/filterTypeFromObejct";
 
 
 
@@ -131,10 +132,9 @@ export default function UpdatePromotionPage({DATA}) {
     window.location.herf = '/bf-admin/promotion/search';
   };
 
-
   return (
       <>
-        <MetaTitle title="프로모션 생성" admin={true}/>
+        <MetaTitle title="프로모션 수정" admin={true}/>
         <AdminLayout>
           <AdminContentWrapper>
             <div className="title_main">
@@ -152,8 +152,8 @@ export default function UpdatePromotionPage({DATA}) {
                         <CustomRadio
                             setValue={setForm}
                             name="type"
-                            idList={Object.keys(promotionType).filter(type => type !== "KOR")}
-                            labelList={Object.values(promotionType.KOR)}
+                            idList={filterObjectKeys(promotionType)}
+                            labelList={filterObjectValues(promotionType.KOR)}
                         />
                         {formErrors.type && (
                             <ErrorMessage>{formErrors.type}</ErrorMessage>
@@ -288,8 +288,8 @@ export default function UpdatePromotionPage({DATA}) {
                             value={form.status}
                             setValue={setForm}
                             name="status"
-                            idList={Object.keys(promotionStatusType).filter(type => type !== "KOR")}
-                            labelList={Object.values(promotionStatusType.KOR)}
+                            idList={filterObjectKeys(promotionStatusType)}
+                            labelList={filterObjectValues(promotionStatusType.KOR)}
                         />
                         {formErrors.status && (
                             <ErrorMessage>{formErrors.status}</ErrorMessage>

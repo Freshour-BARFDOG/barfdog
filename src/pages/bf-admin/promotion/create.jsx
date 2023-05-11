@@ -287,8 +287,8 @@ export default function CreatePromotionPage({DATA}) {
                             value={form.status}
                             setValue={setForm}
                             name="status"
-                            idList={Object.keys(promotionStatusType).filter(type => type !== "KOR")}
-                            labelList={Object.values(promotionStatusType.KOR)}
+                            idList={filterObjectKeys(promotionStatusType)}
+                            labelList={filterObjectValues(promotionStatusType.KOR)}
                         />
                         {formErrors.status && (
                             <ErrorMessage>{formErrors.status}</ErrorMessage>
