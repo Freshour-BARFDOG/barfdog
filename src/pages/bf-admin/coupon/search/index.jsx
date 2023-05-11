@@ -19,33 +19,22 @@ import {useModalContext} from "/store/modal-context";
 import {putObjData} from "/src/pages/api/reqData";
 import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 
-/*-  auto: '/api/admin/coupons/auto', // 자동발행쿠폰
-  - direct: '/api/admin/coupons/direct', // 직접발행쿠폰
-  - directOnCode: '/api/admin/coupons/publication/code', // 직접발행 && 쿠폰코드로 생성한 쿠폰
-  - directOnGeneral: '/api/admin/coupons/publication/general', // 직접발행 && 쿠폰코드없이 (! 삭제된 기능)
-* */
-
 
 const initialSearchValue = {
   keyword: '',
-  couponType: global_couponType.AUTO_PUBLISHED, // AUTO_PUBLISHED,  CODE_PUBLISHED
+  couponType: global_couponType.AUTO_PUBLISHED,
 };
-
 
 
 const initialApiUrlWithQuery = {
-  keyword: '',
-  url: '/api/admin/coupons/auto',
-  query: 'keyword=',
+  couponType: global_couponType.AUTO_PUBLISHED,
+  query: `keyword=&couponType=${global_couponType.AUTO_PUBLISHED}`,
 };
 
 export default function CouponListPage() {
-  
-  const apiURL = useMemo( () => ({
-    auto :'/api/admin/coupons/auto',
-    direct:'/api/admin/coupons/direct',
-  } ), [] );
-  console.log(apiURL);
+
+
+  const searchApiUrl = '/api/admin/coupons/search';
   const searchPageSize = 10;
   
   const mct = useModalContext();
@@ -55,6 +44,7 @@ export default function CouponListPage() {
   const [searchValue, setSearchValue] = useState(initialSearchValue);
   const [apiUrlWithQuery, setApiUrlWithQuery] = useState(initialApiUrlWithQuery);
   const [searchQueryInitialize, setSearchQueryInitialize] = useState( false );
+
   useEffect( () => {
     MirrorTextOnHoverEvent( window );
   }, [itemList] );
@@ -65,7 +55,7 @@ export default function CouponListPage() {
 
   const onSearchHandler = useCallback(() => {
     const queryArr = [];
-    let url = '';
+    let couponType = '';
     for (const key in searchValue) {
       const val = searchValue[key];
       switch (key) {
@@ -73,11 +63,8 @@ export default function CouponListPage() {
           queryArr.push(`${key}=${val}`);
           break;
         case 'couponType':
-          if (val === global_couponType.AUTO_PUBLISHED) {
-            url = apiURL.auto;
-          } else if (val === global_couponType.CODE_PUBLISHED) {
-            url = apiURL.direct;
-          }
+          queryArr.push(`${key}=${val}`);
+          couponType = val;
           break;
       }
     }
@@ -85,12 +72,11 @@ export default function CouponListPage() {
     setApiUrlWithQuery((prevState) => ({
       ...prevState,
       query,
-      url,
+      couponType,
     }));
   },[searchValue]);
   
   const pageInterceptor = useCallback((res, option={itemQuery: null}) => {
-    // res = DUMMY__RESPONSE; // ! TEST
     return getDefaultPagenationInfo(res?.data, 'couponListResponseDtoList', {pageSize: searchPageSize, setInitialize: setSearchQueryInitialize});
   },[]);
 
@@ -110,14 +96,16 @@ export default function CouponListPage() {
       const body = {
         id:targetId
       }
-      console.log(apiUrl, body);
       const res = await putObjData(apiUrl, body);
       console.log(res);
       if(res.isDone){
-        mct.alertShow( "쿠폰이 성공적으로 삭제되었습니다.", onSuccessCallback );
+        mct.alertShow( "쿠폰이 성공적으로 삭제되었습니다.", onSubmitCallback );
+      } else if(res.status === 422){
+        const message = res.data.data;
+        mct.alertShow( `삭제할 수 없는 쿠폰입니다.\n(${message})`, onSubmitCallback );
       } else {
         const serverErrorMessage =res.error;
-        mct.alertShow(serverErrorMessage || '삭제에 실패하였습니다.');
+        mct.alertShow(serverErrorMessage || '삭제에 실패하였습니다.', onSubmitCallback);
       }
     } catch (err) {
       mct.alertShow('삭제 요청 중 에러가 발생하였습니다.');
@@ -132,7 +120,7 @@ export default function CouponListPage() {
     }
   };
   
-  const onSuccessCallback = () => {
+  const onSubmitCallback = () => {
     window.location.reload();
   };
   
@@ -147,7 +135,7 @@ export default function CouponListPage() {
           <section className="cont">
             <SearchBar onReset={onResetSearchValues} onSearch={onSearchHandler}>
               <SearchPlainInput
-                title="쿠폰이름"
+                title="쿠폰 이름"
                 name={'keyword'}
                 onChange={setSearchValue}
                 searchValue={searchValue || ''}
@@ -156,10 +144,10 @@ export default function CouponListPage() {
               <SearchRadio
                 searchValue={searchValue}
                 setSearchValue={setSearchValue}
-                title="종류"
+                title="쿠폰 타입"
                 name="couponType"
-                idList={[global_couponType.AUTO_PUBLISHED, global_couponType.CODE_PUBLISHED]}
-                labelList={['자동발행', '직접발행']}
+                idList={Object.keys(global_couponType).filter(key=> key != "KOR")}
+                labelList={Object.values(global_couponType.KOR)}
                 value={searchValue.couponType}
               />
             </SearchBar>
@@ -178,11 +166,12 @@ export default function CouponListPage() {
               <div className="controls cont-left"></div>
             </div>
             <div className={`${s.cont_viewer} ${s.fullWidth}`}>
-              <div className={`${s.table} ${apiUrlWithQuery.url === apiURL.direct ? s.directCoupon : s.autoCoupon}`}>
+              {/*<div className={`${s.table} ${apiUrlWithQuery.url === apiURL.direct ? s.directCoupon : s.autoCoupon}`}>*/}
+              <div className={`${s.table} ${s[apiUrlWithQuery.couponType]}`}>
                 <ul className={`${s.table_header}`}>
                   <li className={s.table_th}>쿠폰종류</li>
-                  {apiUrlWithQuery.url === apiURL.direct && <li className={s.table_th}>쿠폰코드</li>}
-                  {apiUrlWithQuery.url === apiURL.direct && <li className={s.table_th}>만료일자</li>}
+                  {apiUrlWithQuery.couponType !== global_couponType.AUTO_PUBLISHED && <li className={s.table_th}>쿠폰코드</li>}
+                  {apiUrlWithQuery.couponType !== global_couponType.AUTO_PUBLISHED && <li className={s.table_th}>만료일자</li>}
                   <li className={s.table_th}>쿠폰이름</li>
                   <li className={s.table_th}>쿠폰설명</li>
                   <li className={s.table_th}>할인금액</li>
@@ -203,7 +192,7 @@ export default function CouponListPage() {
             </div>
             <div className={s['pagination-section']}>
               <PaginationWithAPI
-                apiURL={apiUrlWithQuery.url}
+                apiURL={searchApiUrl}
                 size={searchPageSize}
                 setItemList={setItemList}
                 urlQuery={apiUrlWithQuery.query}
