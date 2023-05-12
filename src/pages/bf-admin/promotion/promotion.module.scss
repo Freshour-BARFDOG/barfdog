@@ -15,12 +15,12 @@
       grid-gap:0;
       grid-template-rows: minmax(rem(60), auto);
       grid-template-columns:
+        rem(60)
         rem(80)
-        rem(120)
         rem(300)
-        rem(200)
-        rem(200)
-        minmax(rem(500), 1fr);
+        rem(140)
+        rem(180)
+        minmax(rem(600), 1fr);
 
 
       .period{
@@ -46,4 +46,12 @@
 .seperator{
   color: var(--color-font-medium);
   margin: rem(2);
+}
+
+
+.subtitle {
+  font-size: rem(15);
+  font-weight: 400;
+  letter-spacing:  rem(0.4);
+
 }

@@ -18,21 +18,12 @@ import PromotionCouponList from "./PromotionCouponList";
 import {putObjData} from "../../api/reqData";
 import {useModalContext} from "/store/modal-context";
 import Modal_global_alert from "../../../components/modal/Modal_global_alert";
-
-
-
-
-// TODO : 프로모션 상태 클릭 시, 바로 조회 API 적용되도록.
-// TODO : 프로모션 상태 클릭 시, 바로 조회 API 적용되도록.
-
-
-
-
+import {generateSearchQuerybySearchValues} from "/util/func/search/generateSearchQuerybySearchValues";
 
 
 const initialSearchValues = {
-  type: promotionType.COUPON,
-  status: searchPromotionStatusType.ALL,
+  promotionType: promotionType.COUPON,
+  statusList: searchPromotionStatusType.ALL,
   name: "",
 }
 
@@ -46,13 +37,12 @@ export default function PromotionSearchPage() {
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
   const [searchValues, setSearchValues] = useState(initialSearchValues);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(generateSearchQuerybySearchValues(searchValues, promotionStatusType));
   const [searchQueryInitialize, setSearchQueryInitialize] = useState(false);
 
-  const pageInterceptor = useCallback((res, option = {itemQuery: null}) => {
-    res = DUMMY_RES; // ! TEST
+  const pageInterceptor = useCallback((res) => {
     console.log(res);
-    return getDefaultPagenationInfo(res?.data, 'queryAdminPromotionDtoList', {
+    return getDefaultPagenationInfo(res?.data, 'queryAdminPromotionsDtoList', {
       pageSize: searchPageSize,
       setInitialize: setSearchQueryInitialize
     });
@@ -65,15 +55,10 @@ export default function PromotionSearchPage() {
 
 
   const onSearchHandler = () => {
-    const queryArr = [];
-    for (const key in searchValues) {
-      const val = searchValues[key];
-      queryArr.push(`${key}=${val}`);
-    }
-
-    const query = `${queryArr.join('&')}`;
+    const query = generateSearchQuerybySearchValues(searchValues, promotionStatusType);
     setSearchQuery(query);
   };
+
 
   const onSearchInputKeydown = (e) => {
     enterKey(e, onSearchHandler);
@@ -97,7 +82,7 @@ export default function PromotionSearchPage() {
         mct.alertShow( "프로모션이 삭제되었습니다.", onAlertModalCallback );
       } else {
         const serverErrorMessage = res.error;
-        mct.alertShow(serverErrorMessage || '삭제에 실패하였습니다.');
+        mct.alertShow(serverErrorMessage || '삭제에 실패하였습니다.', onAlertModalCallback);
       }
     } catch (err) {
       mct.alertShow('삭제 요청 중 에러가 발생하였습니다.', onAlertModalCallback);
@@ -131,19 +116,19 @@ export default function PromotionSearchPage() {
               searchValue={searchValues}
               setSearchValue={setSearchValues}
               title="프로모션 타입"
-              name="type"
+              name="promotionType"
               idList={filterObjectKeys(promotionType)}
               labelList={filterObjectValues(promotionType.KOR)}
-              value={searchValues.type}
+              value={searchValues.promotionType}
             />
             <SearchRadio
               searchValue={searchValues}
               setSearchValue={setSearchValues}
               title="프로모션 상태"
-              name="status"
+              name="statusList"
               idList={filterObjectKeys(searchPromotionStatusType)}
               labelList={filterObjectValues(searchPromotionStatusType.KOR)}
-              value={searchValues.status}
+              value={searchValues.statusList}
             />
             <SearchTextWithCategory
               searchValue={searchValues}
@@ -169,9 +154,9 @@ export default function PromotionSearchPage() {
                 <li className={s.table_th}></li>
                 <li className={s.table_th}>상태</li>
                 <li className={s.table_th}>이름</li>
+                <li className={s.table_th}>사용/발행/수량</li>
                 <li className={s.table_th}>기간</li>
-                <li className={s.table_th}>사용 / 발행 / 수량</li>
-                <li className={s.table_th}>쿠폰정보 (코드 / 이름 / 사용처 / 혜택 / 한도)</li>
+                <li className={s.table_th}>쿠폰 정보&nbsp;<em className={s.subtitle}>(코드/이름/사용처/혜택/한도)</em></li>
               </ul>
               {itemList.length
                 ? <PromotionCouponList items={itemList} onDelete={onDeleteItem} isLoading={isLoading}/>
@@ -200,83 +185,76 @@ export default function PromotionSearchPage() {
 }
 
 
-const DUMMY_RES = {
-  data: {
-    _embedded: {
-      queryAdminPromotionDtoList: [
-        {
-          id:2,
-          type: promotionType.COUPON,
-          status: promotionStatusType.ACTIVE,
-          name: "2023 Summer Promotion",
-          startDate: "2023-05-04T07:00:00",
-          expiredDate: "2023-05-31T23:59:59",
-          coupon: {
-            id: 1,
-            quantity: 500,
-            remaining: 200,
-            used: 10,
-            code:"promo-2023",
-            name: "프로모션 10% 쿠폰",
-            couponTarget: "전체",
-            discount: "10%",
-            availableMinPrice: 1000,
-            availableMaxDiscount: 20000,
-            amount: 2
-          }
-        },
-        {
-          id:3,
-          type: promotionType.COUPON,
-          status: promotionStatusType.PAUSED,
-          name: "2024 Summer Promotion",
-          startDate: "2024-05-04T07:00:00",
-          expiredDate: "2024-05-31T23:59:59",
-          coupon: {
-            id: 1,
-            quantity: 100,
-            remaining: 40,
-            used: 10,
-            code:"promo-2024",
-            name: "프로모션 10000원 쿠폰",
-            couponTarget: "정기",
-            discount: "10000원",
-            availableMinPrice: 10000,
-            availableMaxDiscount: 20000,
-            amount: 1
-          }
-        },
-        {
-          id:1,
-          type: promotionType.COUPON,
-          status: promotionStatusType.INACTIVE,
-          name: "2022 Summer Promotion",
-          startDate: "2022-05-04T07:00:00",
-          expiredDate: "2022-05-31T23:59:59",
-          coupon: {
-            id: 1,
-            quantity: 10,
-            remaining: 10,
-            used: 10,
-            code:"promo-2022",
-            name: "프로모션 30% 쿠폰",
-            couponTarget: "일반",
-            discount: "30%",
-            availableMinPrice: 1000,
-            availableMaxDiscount: 20000,
-            amount: 1
-          }
-        }
-      ]
-    },
-    page: {
-      totalPages: 3,
-      size: 10,
-      totalItems: 30,
-      currentPageIndex: 0,
-      newPageNumber: 1,
-      newItemList: [],
-    }
-  },
-  status: 200
-}
+
+//
+// const DUUMY_RES = {
+//   "_embedded": {
+//     "queryAdminPromotionsDtoList": [
+//       {
+//         "promotionDto": {
+//           "promotionId": 1,
+//           "type": "COUPON",
+//           "status": "ACTIVE",
+//           "name": "test프로모션",
+//           "startDate": "2023-05-12T15:38:00",
+//           "expiredDate": "2023-05-12T17:38:59"
+//         },
+//         "promotionCouponDto": {
+//           "promotionCouponId": 1,
+//           "quantity": 100,
+//           "remaining": 100,
+//           "usedCount": 0,
+//           "couponId": 29,
+//           "code": "promo",
+//           "name": "promotion-coupon",
+//           "couponTarget": "ALL",
+//           "discountDegree": 100000,
+//           "discountType": "FLAT_RATE",
+//           "availableMinPrice": 10000,
+//           "availableMaxDiscount": 1000000,
+//           "amount": 99999
+//         }
+//       },
+//       {
+//         "promotionDto": {
+//           "promotionId": 2,
+//           "type": "COUPON",
+//           "status": "INACTIVE",
+//           "name": "promotion2",
+//           "startDate": "2023-05-11T20:10:00",
+//           "expiredDate": "2023-05-12T15:09:59"
+//         },
+//         "promotionCouponDto": {
+//           "promotionCouponId": 2,
+//           "quantity": 10,
+//           "remaining": 10,
+//           "usedCount": 0,
+//           "couponId": 30,
+//           "code": "p-2",
+//           "name": "프로모션쿠폰2",
+//           "couponTarget": "ALL",
+//           "discountDegree": 10,
+//           "discountType": "FIXED_RATE",
+//           "availableMinPrice": 10000,
+//           "availableMaxDiscount": 100000,
+//           "amount": 1
+//         }
+//       }
+//     ]
+//   },
+//   "_links": {
+//     "self": {
+//       "href": "http://192.168.0.90:8080/api/admin/promotions?promotionType=COUPON&statusList=PAUSED,ACTIVE,INACTIVE&name=&page=0&size=10"
+//     },
+//     "profile": {
+//       "href": "/docs/index.html#resources-admin-queryPromotions"
+//     }
+//   },
+//   "page": {
+//     "size": 10,
+//     "totalElements": 2,
+//     "totalPages": 1,
+//     "number": 0
+//   },
+//   status: 200
+// }

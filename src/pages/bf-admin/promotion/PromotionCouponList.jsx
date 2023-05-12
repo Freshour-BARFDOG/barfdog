@@ -8,8 +8,10 @@ import Spinner from "../../../components/atoms/Spinner";
 import {Modal_moreView} from "../../../components/modal/Modal_moreView";
 import {getHTMLElementInfo} from "/util/func/HTML/getHTMLElementInfo";
 import {useModalContext} from "/store/modal-context";
-import popupWindow from "../../../../util/func/popupWindow";
+import popupWindow from "/util/func/popupWindow";
 import {PromotionStatus} from "./PromotionStatus";
+import {discountUnitType} from "/store/TYPE/discountUnitType";
+import {couponUseType} from "/store/TYPE/couponType";
 
 
 export default function PromotionCouponList({
@@ -28,7 +30,11 @@ export default function PromotionCouponList({
 
   const onDeleteHandler = () => {
     if (submitted) return console.error("이미 제출된 양식입니다.");
-    const targetItem = items.filter(item => item.id === modalState.id)[0];
+    const targetItemObj = items.filter(item => item.promotionDto.promotionId === modalState.id)[0];
+    const targetItem = targetItemObj?.promotionDto;
+    if(!targetItem){
+      alert("프로모션 정보를 확인 중 오류가 발생하였습니다.")
+    }
     if(targetItem.status !== promotionStatusType.INACTIVE) return mct.alertShow(`프로모션 [${promotionStatusType.KOR.INACTIVE}] 상태에서만 삭제할 수 있습니다.`);
     if (!confirm(`선택된 프로모션을 삭제하시겠습니까? \n- 삭제 대상: ${targetItem.name}`)) return;
     onDelete(modalState.url.delete, modalState.id);
@@ -57,7 +63,7 @@ export default function PromotionCouponList({
       url: {
         edit: `/bf-admin/promotion/${id}/update`, // Client PATH
         detail: `/bf-admin/popup/promotion/${id}`, // Client PATH
-        delete: `/api/promotions/${id}/delete`, // SERVER API
+        delete: `/api/admin/promotions/${id}/delete`, // SERVER API
       },
     }));
   };
@@ -88,25 +94,30 @@ export default function PromotionCouponList({
 
 function ItemList({item, isLoading, onActiveModal}) {
 
+  const promotion = item.promotionDto;
+  const coupon = item.promotionCouponDto;
+
+
   const DATA = {
-    id: item.id,
-    type: item.type,
-    status: item.status,
-    name: item.name,
-    startDate: transformDate(item.startDate, "time", {seperator: "/"}),
-    expiredDate: transformDate(item.expiredDate, "time", {seperator: "/"}),
+    id: promotion.promotionId,
+    type: promotion.type,
+    status: promotion.status,
+    name: promotion.name,
+    startDate: transformDate(promotion.startDate, "time", {seperator: "/"}),
+    expiredDate: transformDate(promotion.expiredDate, "time", {seperator: "/"}),
     coupon: {
-      id: item.coupon.couponId,
-      used: item.coupon.used,
-      remaining: item.coupon.remaining,
-      quantity: item.coupon.quantity,
-      code: item.coupon.code,
-      name: item.coupon.name,
-      couponTarget: item.coupon.couponTarget,
-      discount: item.coupon.discount,
-      availableMinPrice: transformLocalCurrency(item.coupon.availableMaxDiscount),
-      availableMaxDiscount: transformLocalCurrency(item.coupon.availableMaxDiscount),
-      amount: item.coupon.amount,
+      id: coupon.promotionCouponId,
+      quantity: coupon.quantity,
+      remaining: coupon.remaining,
+      published: coupon.quantity - coupon.remaining,
+      used: coupon.usedCount,
+      code: coupon.code,
+      name: coupon.name,
+      couponTarget: couponUseType.KOR[coupon.couponTarget],
+      discount: `${transformLocalCurrency(coupon.discountDegree)}${discountUnitType.KOR[coupon.discountType]}`,
+      availableMinPrice: transformLocalCurrency(coupon.availableMaxDiscount),
+      availableMaxDiscount: transformLocalCurrency(coupon.availableMaxDiscount),
+      amount: transformLocalCurrency(coupon.amount),
     }
   };
 
@@ -118,18 +129,17 @@ function ItemList({item, isLoading, onActiveModal}) {
           : <ThreeDots/>}
       </span>
       <PromotionStatus status={DATA.status}/>
-
       <span>{DATA.name}</span>
-      <span className={s.period}>
-        <em>{DATA.startDate}</em>
-        <em>~ {DATA.expiredDate}</em>
-      </span>
       <span>
         {DATA.coupon.used}
         <i className={s.seperator}>/</i>
-        {DATA.coupon.remaining}
+        {DATA.coupon.published}
         <i className={s.seperator}>/</i>
         {DATA.coupon.quantity}
+      </span>
+      <span className={s.period}>
+        <em>{DATA.startDate}</em>
+        <em>~ {DATA.expiredDate}</em>
       </span>
       <span className={s.couponInfo}>
         <em>
@@ -144,8 +154,9 @@ function ItemList({item, isLoading, onActiveModal}) {
           ({DATA.coupon.availableMinPrice}원 이상 구매 시
           <i className={s.seperator}>/</i>
           최대 {DATA.coupon.availableMaxDiscount}원)
-          <i className={s.seperator}>/</i>
-          {DATA.coupon.amount}회
+        </em>
+        <em className={s.detail}>
+          한도: {DATA.coupon.amount}회
         </em>
       </span>
     </li>

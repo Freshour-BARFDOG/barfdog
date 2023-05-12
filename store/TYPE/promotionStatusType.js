@@ -10,8 +10,8 @@ export const promotionStatusType = {
 }
 
 export const searchPromotionStatusType = {
-    ...promotionStatusType,
     ALL: "ALL",
+    ...promotionStatusType,
     KOR: {
         ALL: "전체",
         ...promotionStatusType.KOR
