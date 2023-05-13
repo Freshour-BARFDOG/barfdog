@@ -7,13 +7,16 @@ import PaginationWithAPI from "../../../../components/atoms/PaginationWithAPI";
 import enterKey from "/util/func/enterKey";
 import {getDefaultPagenationInfo} from "/util/func/getDefaultPagenationInfo";
 import {promotionType} from "../../../../../store/TYPE/promotionType";
-import {promotionStatusType} from "../../../../../store/TYPE/promotionStatusType";
 import transformLocalCurrency from "../../../../../util/func/transformLocalCurrency";
 import SearchTextWithCategory from "../../../../components/admin/form/searchBar/SearchTextWithCategory";
 import AmdinErrorMessage from "../../../../components/atoms/AmdinErrorMessage";
 import Spinner from "../../../../components/atoms/Spinner";
 import {PromotionStatus} from "../../promotion/PromotionStatus";
 import PromotionMemberList from "./PromotionMemberList";
+import {filterDateTimeSeperator} from "/util/func/filter_dateAndTime";
+import {discountUnitType} from "../../../../../store/TYPE/discountUnitType";
+import {generateSearchQuerybySearchValues} from "../../../../../util/func/search/generateSearchQuerybySearchValues";
+
 
 
 const initialSearchValues = {
@@ -22,34 +25,27 @@ const initialSearchValues = {
 };
 
 
-export default function Popup_PromotionDetailPage({id, data}) {
-
-  const promotionStatus = promotionStatusType.ACTIVE;
+export default function Popup_PromotionDetailPage({id, DATA}) {
 
   const searchApiUrl = `/api/admin/promotions/${id}/members`;
   const searchPageSize = 10;
   const [isLoading, setIsLoading] = useState({});
   const [searchValues, setSearchValues] = useState(initialSearchValues);
   const [searchQuery, setSearchQuery] = useState('');
-  const [itemList, setItemList] = useState([]);
+  const [memberList, setMemberList] = useState([]);
 
-  const onSearchHandler = useCallback(() => {
-    const queryArr = [];
-    for (const key in searchValues) {
-      const val = searchValues[key];
-      const thisQuery = `${key}=${val}`;
-      queryArr.push(thisQuery);
-    }
-    const query = `${queryArr.join('&')}`;
-    setSearchQuery(query);
-  }, []);
+console.log(searchQuery);
 
   const pageInterceptor = useCallback((res, option = {itemQuery: null}) => {
-    res = DUMMY_RES; // ! TEST
+    // res = DUMMY_MEMBER_RES; // ! TEST
     console.log(res);
-    return getDefaultPagenationInfo(res?.data, 'queryAdminPromotionMemberDtoList', {pageSize: searchPageSize});
+    return getDefaultPagenationInfo(res?.data, 'queryAdminPromotionMembersDtoList', {pageSize: searchPageSize});
   }, []);
 
+  const onSearchHandler = useCallback(() => {
+    const query = generateSearchQuerybySearchValues(searchValues);
+    setSearchQuery(query);
+  }, [searchValues]);
 
   const onSearchInputKeydown = (e) => {
     enterKey(e, onSearchHandler);
@@ -63,7 +59,7 @@ export default function Popup_PromotionDetailPage({id, data}) {
           <header className={s.header}>
             <div className={s.row}>
               <div className={s.cont}>
-                <h1 className={s['popup-title']}>프로모션 상세보기 / 참여 회원 조회</h1>
+                <h1 className={s['popup-title']}>프로모션 상세보기 / 참여회원 정보</h1>
                 <PopupCloseButton_typeX/>
               </div>
             </div>
@@ -83,7 +79,7 @@ export default function Popup_PromotionDetailPage({id, data}) {
                             <span>이름</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
-                            <span>{"홍길동"}</span>
+                            <span>{DATA.name}</span>
                           </div>
                         </div>
                         <div className={s['t-box']}>
@@ -91,7 +87,7 @@ export default function Popup_PromotionDetailPage({id, data}) {
                             <span>상태</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
-                            <PromotionStatus status={promotionStatus}/>
+                            <PromotionStatus status={DATA.status}/>
                           </div>
                         </div>
                       </li>
@@ -101,8 +97,8 @@ export default function Popup_PromotionDetailPage({id, data}) {
                             <span>기간</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont} ${s.vertical}`}>
-                            <span>{"2023-05-04 07:00:00"}</span>
-                            <span>~ {"2023-05-31 23:59:59"}</span>
+                            <span>{DATA.startDate}</span>
+                            <span>~ {DATA.expiredDate}</span>
                           </div>
                         </div>
                         <div className={s['t-box']}>
@@ -110,7 +106,7 @@ export default function Popup_PromotionDetailPage({id, data}) {
                             <span>타입</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
-                            <span>{promotionType.KOR.COUPON}</span>
+                            <span>{promotionType.KOR[DATA.promotionType]}</span>
                           </div>
                         </div>
                       </li>
@@ -118,7 +114,7 @@ export default function Popup_PromotionDetailPage({id, data}) {
                   </li>
                   <li className={s['table-list']}>
                     <div className={s['t-header']}>
-                      <h4 className={s.title}>프로모션 정보</h4>
+                      <h4 className={s.title}>쿠폰 정보</h4>
                     </div>
                     <ul className={s['t-body']}>
                       <li className={`${s['t-row']}`}>
@@ -127,7 +123,7 @@ export default function Popup_PromotionDetailPage({id, data}) {
                             <span>이름</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
-                            <span>{"프로모션 10% 쿠폰"}</span>
+                            <span>{DATA.coupon.couponName}</span>
                           </div>
                         </div>
                         <div className={s['t-box']}>
@@ -135,7 +131,7 @@ export default function Popup_PromotionDetailPage({id, data}) {
                             <span>설명</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
-                            <span>{"쿠폰설명"}</span>
+                            <span>{DATA.coupon.description}</span>
                           </div>
                         </div>
                       </li>
@@ -145,7 +141,7 @@ export default function Popup_PromotionDetailPage({id, data}) {
                             <span>코드</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
-                            <span>{"promo - 2023"}</span>
+                            <span>{DATA.coupon.code}</span>
                           </div>
                         </div>
                         <div className={s['t-box']}>
@@ -153,7 +149,7 @@ export default function Popup_PromotionDetailPage({id, data}) {
                             <span>사용가능횟수</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
-                            <span>{1}회</span>
+                            <span>{DATA.coupon.amount}회</span>
                           </div>
                         </div>
                       </li>
@@ -163,7 +159,7 @@ export default function Popup_PromotionDetailPage({id, data}) {
                             <span>할인</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
-                            <span>{"10% 할인 "}</span>
+                            <span>{transformLocalCurrency(DATA.coupon.discountDegree)}{discountUnitType.KOR[DATA.coupon.discountType]}</span>
                           </div>
                         </div>
                         <div className={s['t-box']}>
@@ -171,7 +167,7 @@ export default function Popup_PromotionDetailPage({id, data}) {
                             <span>사용처</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
-                            <span>{"전체"}</span>
+                            <span>{DATA.coupon.couponTarget}</span>
                           </div>
                         </div>
                       </li>
@@ -181,7 +177,7 @@ export default function Popup_PromotionDetailPage({id, data}) {
                             <span>최소사용금액</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
-                            <span>{transformLocalCurrency(10000)}원</span>
+                            <span>{transformLocalCurrency(DATA.coupon.availableMinPrice)}원</span>
                           </div>
                         </div>
                         <div className={s['t-box']}>
@@ -189,7 +185,7 @@ export default function Popup_PromotionDetailPage({id, data}) {
                             <span>최대할인금액</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
-                            <span>{transformLocalCurrency(20000)}원</span>
+                            <span>{transformLocalCurrency(DATA.coupon.availableMaxDiscount)}원</span>
                           </div>
                         </div>
                       </li>
@@ -198,19 +194,19 @@ export default function Popup_PromotionDetailPage({id, data}) {
                 </ul>
               </section>
               <section className={s["usage-indicator-section"]}>
-                <h3 className={s.title}>사용현황</h3>
+                <h3 className={s.title}>참여회원 정보</h3>
                 <ul>
                   <li>
-                    <p className={s.label}>사용</p>
-                    <span className={s.value}>{7}</span>
+                    <p className={s.label}>사용됨</p>
+                    <span className={s.value}>{transformLocalCurrency(DATA.promotionCoupon.usedCount)}</span>
                   </li>
                   <li>
-                    <p className={s.label}>발행</p>
-                    <span className={s.value}>{7}</span>
+                    <p className={s.label}>발행됨</p>
+                    <span className={s.value}>{transformLocalCurrency(DATA.promotionCoupon.quantity - DATA.promotionCoupon.remaining)}</span>
                   </li>
                   <li>
-                    <p className={s.label}>전체수량</p>
-                    <span className={s.value}>{500}</span>
+                    <p className={s.label}>수량</p>
+                    <span className={s.value}>{transformLocalCurrency(DATA.promotionCoupon.quantity)}</span>
                   </li>
                 </ul>
               </section>
@@ -245,10 +241,10 @@ export default function Popup_PromotionDetailPage({id, data}) {
                       <li className={s.table_th}>이름</li>
                       <li className={s.table_th}>등록일</li>
                       <li className={s.table_th}>만료일</li>
-                      <li className={s.table_th}>사용한도</li>
+                      <li className={s.table_th}>쿠폰수량</li>
                     </ul>
-                    {itemList.length
-                      ? <PromotionMemberList items={itemList}/>
+                    {memberList.length
+                      ? <PromotionMemberList items={memberList}/>
                       : isLoading.fetching
                         ? <AmdinErrorMessage loading={<Spinner/>} />
                         : <AmdinErrorMessage text="검색결과가 존재하지 않습니다." />
@@ -259,7 +255,7 @@ export default function Popup_PromotionDetailPage({id, data}) {
                       apiURL={searchApiUrl}
                       size={searchPageSize}
                       pageInterceptor={pageInterceptor}
-                      setItemList={setItemList}
+                      setItemList={setMemberList}
                       setIsLoading={setIsLoading}
                       urlQuery={searchQuery}
                       routerDisabled={true}
@@ -280,73 +276,57 @@ export default function Popup_PromotionDetailPage({id, data}) {
 
 
 export async function getServerSideProps({req, query}) {
-  // 프로모션 데이터는 미리 가져옴
-  const {id} = query;
 
-  let DATA = null
+  const { id } = query;
 
-  const apiURL = `/api/promotions/${id}`;
-  const res = await getDataSSR(req, apiURL);
-  if (res?.status === 200 && res?.data) {
-    DATA = {}
+  let DATA = null;
+
+  const apiUrl = `/api/admin/promotions/${id}`;
+  const res = await getDataSSR(req, apiUrl); // PROD
+  console.log(res.data);
+  if (res && res.status === 200 && res.data) {
+    const data = res.data;
+    DATA = {
+      promotionId: data.promotionId,
+      promotionType: data.promotionType,
+      name: data.name,
+      startDate: filterDateTimeSeperator(data.startDate, "T",  " "),
+      expiredDate: filterDateTimeSeperator(data.expiredDate, "T",  " "),
+      status: data.status,
+      deleted: data.deleted,
+      coupon: {
+        couponId: data.couponId,
+        couponType: data.couponType,
+        couponName: data.couponName,
+        description: data.description,
+        code: data.code,
+        amount: data.amount,
+        discountDegree: data.discountDegree,
+        discountType: data.discountType,
+        couponTarget: data.couponTarget,
+        availableMinPrice: data.availableMinPrice,
+        availableMaxDiscount: data.availableMaxDiscount,
+      },
+      promotionCoupon:{
+        usedCount: data.usedCount,
+        quantity: data.quantity,
+        remaining: data.remaining,
+      }
+    }
+
 
   }
 
-  return {props: {id: id, data: DATA}};
-}
-
-
-const DUMMY_RES = {
-  data:{
-    _embedded:{
-      queryAdminPromotionMemberDtoList:[
-        {
-          id: 1,
-          email: "hong@gmail.com",
-          name: "홍길동",
-          createdDate: "2022-05-04T07:00:00",
-          expiredDate: "2022-05-31T07:00:00",
-          amount: 1,
-          isUsed: true,
-        },
-        {
-          id: 1,
-          email: "hong2@gmail.com",
-          name: "홍길동2",
-          createdDate: "2022-05-04T07:00:00",
-          expiredDate: "2022-05-31T07:00:00",
-          amount: 1,
-          isUsed: false,
-        },
-        {
-          id: 1,
-          email: "hong3@gmail.com",
-          name: "홍길동3",
-          createdDate: "2022-05-04T07:00:00",
-          expiredDate: "2022-05-31T07:00:00",
-          amount: 1,
-          isUsed: false,
-        },
-        {
-          id: 1,
-          email: "hong4@gmail.com",
-          name: "홍길동4",
-          createdDate: "2022-05-04T07:00:00",
-          expiredDate: "2022-05-31T07:00:00",
-          amount: 1,
-          isUsed: true,
-        },
-      ]
-    },
-    page: {
-      totalPages: 3,
-      size: 10,
-      totalItems: 30,
-      currentPageIndex: 0,
-      newPageNumber: 1,
-      newItemList: [],
+  if (DATA?.deleted || res.status === 500) {
+    return {
+      redirect: {
+        permenant: false,
+        destination: "/404"
+      }
     }
-  },
-  status: 200
+  }
 
+  return {
+    props: {id, DATA}
+  };
 }

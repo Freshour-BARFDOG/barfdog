@@ -4,7 +4,7 @@ export const generateSearchQuerybySearchValues = (searchValues:object, typeObjec
     const queryArr = [];
     for (const key in searchValues) {
         let val = searchValues[key];
-        if (val === "ALL") {
+        if (val === "ALL" && typeof typeObject === "object") {
             val = filterObjectValues(typeObject).join(",");
         }
         queryArr.push(`${key}=${val}`);

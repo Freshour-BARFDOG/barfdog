@@ -160,7 +160,7 @@ $bottom-menu-height : rem(88);
 
       grid-template-columns:
               rem(85)
-              rem(180)
+              fillTheRestOfTableWidth(180)
               rem(180)
               rem(180)
               rem(180)
