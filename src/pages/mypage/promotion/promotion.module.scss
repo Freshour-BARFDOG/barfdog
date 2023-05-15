@@ -1,0 +1,113 @@
+@import '/styles/global/rem';
+@import '/styles/global/guide';
+@import '../coupon/coupon.module.scss';
+
+
+.promotion {
+
+  display: grid;
+  border: rem(1) solid var(--color-line-04);
+  padding: rem(20) rem(30) rem(30) rem(30);
+  row-gap: rem(30);
+  border-radius: rem(10);
+  box-shadow: rem(3) rem(3) rem(8) rgba(0, 0, 0, 0.08);
+  word-break: keep-all;
+  transition: background-color .3s ease, color .3s ease;
+  user-select: none;
+
+  font-size: rem(12);
+
+  .col {
+    display: grid;
+    align-items: center;
+
+    &.top {
+      grid-template-rows: rem(16) rem(50) 1fr;
+    }
+
+    &.mid {
+      gap: rem(4);
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 120%;
+      color: var(--color-font-medium);
+    }
+
+    &.bottom {
+      grid-template-columns: 1fr 1fr;
+      justify-content: space-between;
+      text-align: right;
+      align-items: flex-end;
+
+      .left {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: rem(8)
+      }
+
+      .right {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        gap: rem(4);
+      }
+    }
+
+  }
+
+
+  .name {
+    font-weight: 500;
+    font-size: rem(14);
+  }
+
+  .discount {
+    font-weight: 700;
+    font-size: rem(36);
+    color: var(--color-main);
+  }
+
+  .availableMaxDiscount {
+    color: var(--color-main);
+    font-size: rem(12);
+  }
+
+  .couponCode {
+    display: flex;
+    align-items: center;
+    line-height: rem(24);
+
+    .code {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: rem(1) solid var(--color-main);
+      color: var(--color-main);
+      border-radius: rem(100);
+      font-weight: 500;
+      padding: rem(1) rem(14);
+    }
+  }
+
+  b {
+    font-weight: 600;
+  }
+
+  .divider {
+    margin: 0 rem(7);
+  }
+
+
+}
+
+
+.flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spaceBetween {
+  justify-content: space-between;
+}
