@@ -11,7 +11,7 @@ import transformLocalCurrency from "../../../../../util/func/transformLocalCurre
 import SearchTextWithCategory from "../../../../components/admin/form/searchBar/SearchTextWithCategory";
 import AmdinErrorMessage from "../../../../components/atoms/AmdinErrorMessage";
 import Spinner from "../../../../components/atoms/Spinner";
-import {PromotionStatus} from "../../promotion/PromotionStatus";
+import {PromotionStatus} from "../../../../components/admin/promotion/PromotionStatus";
 import PromotionMemberList from "./PromotionMemberList";
 import {filterDateTimeSeperator} from "/util/func/filter_dateAndTime";
 import {discountUnitType} from "../../../../../store/TYPE/discountUnitType";

@@ -4,8 +4,8 @@ import transformDate from "/util/func/transformDate";
 import ThreeDots from "/public/img/icon/threeDots.svg";
 import {promotionStatusType} from "/store/TYPE/promotionStatusType";
 import transformLocalCurrency from "/util/func/transformLocalCurrency";
-import Spinner from "../../../components/atoms/Spinner";
-import {Modal_moreView} from "../../../components/modal/Modal_moreView";
+import Spinner from "../../atoms/Spinner";
+import {Modal_moreView} from "../../modal/Modal_moreView";
 import {getHTMLElementInfo} from "/util/func/HTML/getHTMLElementInfo";
 import {useModalContext} from "/store/modal-context";
 import popupWindow from "/util/func/popupWindow";
@@ -19,7 +19,6 @@ export default function PromotionCouponList({
                                               onDelete,
                                               isLoading
                                             }) {
-  if (!items || !items.length) return;
 
   const mct = useModalContext();
   const [submitted, setSubmitted] = useState(false);
@@ -27,6 +26,8 @@ export default function PromotionCouponList({
     id: null,
     active: false,
   });
+
+  if (!items || !items.length) return;
 
   const onDeleteHandler = () => {
     if (submitted) return console.error("이미 제출된 양식입니다.");

@@ -1,5 +1,5 @@
 import React, {useCallback, useState} from "react";
-import s from "./promotion.module.scss";
+import s from "../../../components/admin/promotion/promotion.module.scss";
 import MetaTitle from "../../../components/atoms/MetaTitle";
 import {AdminContentWrapper} from "../../../components/admin/AdminWrapper";
 import AdminLayout from "../../../components/admin/AdminLayout";
@@ -14,7 +14,7 @@ import enterKey from "/util/func/enterKey";
 import {promotionStatusType, searchPromotionStatusType} from "/store/TYPE/promotionStatusType";
 import SearchRadio from "../../../components/admin/form/searchBar/SearchRadio";
 import {filterObjectKeys, filterObjectValues} from "/util/func/filter/filterTypeFromObejct";
-import PromotionCouponList from "./PromotionCouponList";
+import PromotionCouponList from "../../../components/admin/promotion/PromotionCouponList";
 import {putObjData} from "../../api/reqData";
 import {useModalContext} from "/store/modal-context";
 import Modal_global_alert from "../../../components/modal/Modal_global_alert";
