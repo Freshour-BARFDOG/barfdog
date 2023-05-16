@@ -239,8 +239,8 @@ console.log(searchQuery);
                       <li className={s.table_th}>사용여부</li>
                       <li className={s.table_th}>아이디</li>
                       <li className={s.table_th}>이름</li>
-                      <li className={s.table_th}>등록일</li>
-                      <li className={s.table_th}>만료일</li>
+                      <li className={s.table_th}>등록일시</li>
+                      <li className={s.table_th}>만료일시</li>
                       <li className={s.table_th}>쿠폰수량</li>
                     </ul>
                     {memberList.length

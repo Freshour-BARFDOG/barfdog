@@ -18,10 +18,10 @@ export const Modal_moreView = ({data = {id: null, pos:{x:null, y:null}}, url = {
 
   };
   return <div className={s.modal} style={{left: data.pos.x, top: data.pos.y}}>
+    <button onClick={onPopupHandler}>상세보기</button>
     <Link href={url.edit} passHref>
       <a>수정</a>
     </Link>
     <button className={s.delete} onClick={onDeleteHandler}>삭제</button>
-    <button onClick={onPopupHandler}>상세보기</button>
   </div>;
 }
