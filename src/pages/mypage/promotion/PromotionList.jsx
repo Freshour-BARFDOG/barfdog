@@ -47,7 +47,7 @@ function ItemList({item}) {
       createdDate: transformDate(coupon.createdDate, "", {seperator: "."}),
     }
   };
-  console.log(DATA);
+
   return (
     <li className={`${s.promotion}`}>
       <div className={`${s.col} ${s.top}`}>

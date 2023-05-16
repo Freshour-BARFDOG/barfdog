@@ -7,7 +7,7 @@ import MetaTitle from '/src/components/atoms/MetaTitle';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import {EmptyContMessage} from '/src/components/atoms/emptyContMessage';
 import Spinner from '/src/components/atoms/Spinner';
-import {putObjData} from "/src/pages/api/reqData";
+import {postObjData} from "/src/pages/api/reqData";
 import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 import {useModalContext} from "/store/modal-context";
 import enterKey from "/util/func/enterKey";
@@ -50,35 +50,37 @@ export default function PromotionPage () {
     }
   
     try {
+      setSubmitted( true );
       setIsLoading( (prevState) => ({
         ...prevState,
         rep: true,
       }) );
-      
       const body = {
-        code: form.code,
+        promotionCode: form.code,
       }
     
       const apiUrl = '/api/promotions/code';
-      const res = await putObjData( apiUrl, body );
-    
+      const res = await postObjData( apiUrl, body );
+      console.log(res);
       if ( res.isDone ) {
-        setSubmitted( true );
         mct.alertShow( '프로모션 참여 완료되었습니다.', onClickAPICallback );
         setTimeout( () => {
           window.location.reload();
         }, 1000 );
       
-      } else if ( res.status === 400 && res.status < 500 ) {
+      } else if(res.status === 404) {
+        mct.alertShow("프로모션 코드를 확인해주세요."); // 해당 프로모션 코드에 대응하는 쿠폰이 없을 경우.
+        setSubmitted( false );
+      } else {
         let defErrorMessage = '프로모션 코드를 등록할 수 없습니다.';
-        let errorMessage = res.data.data.errors[0].defaultMessage;
-        errorMessage = errorMessage === "이미 참여한 적이 있습니다." ? '이미 참여한 적이 있습니다.' : errorMessage;
+        let errorMessage = res.error || res.data?.data?.errors[0].defaultMessage;
+        mct.alertShow(errorMessage || defErrorMessage);
         setSubmitted( false );
       }
     } catch (err) {
-      setSubmitted( false );
-      mct.alertShow( err , onClickAPICallback);
       console.error( err );
+      mct.alertShow( err , onClickAPICallback);
+      setSubmitted( false );
     } finally {
       setIsLoading( (prevState) => ({
         ...prevState,
