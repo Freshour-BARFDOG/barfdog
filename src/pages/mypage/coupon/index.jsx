@@ -9,13 +9,14 @@ import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import transformDate from '/util/func/transformDate';
 import {EmptyContMessage} from '/src/components/atoms/emptyContMessage';
 import Spinner from '/src/components/atoms/Spinner';
-import {Modal_registerCoupon} from '/src/components/modal/Modal_registerCoupon';
 import {putObjData} from "/src/pages/api/reqData";
 import Modal_global_alert from "/src/components/modal/Modal_global_alert";
 import {useModalContext} from "/store/modal-context";
 import {couponActiveType, couponUseType} from "/store/TYPE/couponType";
 import {getRemainingDaysNumberUntilExpired} from "/util/func/getDiffDate";
-import enterKey from "../../../../util/func/enterKey";
+import enterKey from "/util/func/enterKey";
+import {discountUnitType} from "../../../../store/TYPE/discountUnitType";
+import transformLocalCurrency from "../../../../util/func/transformLocalCurrency";
 
 
 const initInfo = {
@@ -192,9 +193,29 @@ export default function CouponPage () {
                 ? <ul className={s.coupon_content_grid_box}>
                   {itemList.map( (item, i) => {
                       const expired = getRemainingDaysNumberUntilExpired( item.expiredDate ) < 0;
+                      const maxDiscountString = (item.discountType === discountUnitType.FIXED_RATE && item.availableMaxDiscount) >= 9999999 && "무제한";
                       return <li key={`coupon-${item.id}-${i}`} className={`${s.grid_box} ${expired && s.expiredCoupon}`}>
-                        <div className={s.left_top}>{item.name}</div>
-                        <div className={s.right_top}>{item.discount}</div>
+                        <div className={s.left_top}>
+                          <span className={s.name}>{item.name}</span>
+                          <span className={`${s.discount} ${s.pointColor}`}>
+                            {transformLocalCurrency(item.discountDegree)} {discountUnitType.KOR[item.discountType]}
+                          </span>
+                          {item.discountType === discountUnitType.FIXED_RATE &&
+                            <span className={`${s.availableMaxDiscount} ${s.pointColor}`}>{
+                              maxDiscountString
+                              || (`최대 ${transformLocalCurrency(item.availableMaxDiscount)}원`)} 할인
+                            </span>
+                            }
+
+                        </div>
+                        <div className={s.right_top}>
+                          <button
+                            type={'button'}
+                            className={`${s.useCoupon} ${expired && 'disabled'}`}
+                            onClick={onActiveModalHandler}>
+                            {expired ? "사용기한 만료" : "쿠폰 사용"}
+                          </button>
+                        </div>
                         <div className={s.left_bot}>
                           <div className={s.left_bot_text}>
                             <p>{item.description}</p>
@@ -209,12 +230,8 @@ export default function CouponPage () {
                           </div>
                         </div>
                         <div className={s.right_bot}>
-                          <button
-                            type={'button'}
-                            className={`${s.useCoupon} ${expired && 'disabled'}`}
-                            onClick={onActiveModalHandler}>
-                            {expired ? "사용기한 만료" : "쿠폰 사용"}
-                          </button>
+                          <em>사용한도<i className={s.divider}>|</i><b>{item.amount}회</b></em>
+                          <em>등록일<i className={s.divider}>|</i><b>{transformDate(item.expiredDate)}</b></em>
                         </div>
                       </li>
                     } )}

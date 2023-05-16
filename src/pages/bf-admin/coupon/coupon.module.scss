@@ -2,7 +2,7 @@
 
 .cont_viewer {
   .table{
-    &.autoCoupon{
+    &.AUTO_PUBLISHED{
       .table_header, .item{
         grid-template-columns:
         rem(120)
@@ -15,7 +15,8 @@
       }
     }
 
-    &.directCoupon{
+    &.CODE_PUBLISHED,
+    &.PROMOTION_PUBLISHED {
       .table_header, .item{
         grid-template-columns:
         rem(120)

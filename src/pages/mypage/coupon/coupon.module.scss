@@ -104,7 +104,7 @@ section.pageline { padding: rem(40) 0 0 0}
     &:not(.expiredCoupon):hover,
     &:not(.expiredCoupon):active{
       background-color: var(--color-main);
-      .left_top, .right_top, .left_bot {
+      .left_top, .right_top, .left_bot, .pointColor {
         color: #fff;
       }
       .left_bot{
@@ -119,17 +119,30 @@ section.pageline { padding: rem(40) 0 0 0}
       }
     }
 
+
     .left_top {
       @include char(t24);
-      font-weight: 600;
-      color: var(--color-main);
       display: flex;
-      align-items: center;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      margin-bottom:rem(30);
+      .name{
+        font-weight: 400;
+        font-size: rem(14);
+      }
+      .discount{
+        font-weight: 600;
+        font-size: rem(36);
+      }
+      .availableMaxDiscount{
+        font-weight: 400;
+        font-size: rem(14);
+      }
+
     }
     .right_top {
       font-size: rem(36);
-      font-weight: 800;
-      color: var(--color-main);
       line-height: 140%;
       text-align: right;
     }
@@ -170,25 +183,39 @@ section.pageline { padding: rem(40) 0 0 0}
 
   .right_bot {
     display: flex;
-    justify-content: right;
+    flex-direction: column;
+    justify-content: flex-end;
     align-items: flex-end;
-    button.useCoupon{
-      font-size: rem(15);
-      color: #fff;
-      background-color: #000;
-      border-radius: rem(100);
-      width: rem(106);
-      padding: rem(5) 0;
-      transition: background-color .3s ease, color .3s ease;
-
-      &:hover, &:active{
-        background-color: #fff;
-        color: #000;
-        font-weight: 600;
-      }
+    font-size:rem(14);
+    b {
+      font-weight: 600;
     }
   }
 
+  button.useCoupon{
+    font-size: rem(15);
+    color: #fff;
+    background-color: #000;
+    border-radius: rem(100);
+    width: rem(106);
+    padding: rem(5) 0;
+    transition: background-color .3s ease, color .3s ease;
+
+    &:hover, &:active{
+      background-color: #fff;
+      color: #000;
+      font-weight: 600;
+    }
+  }
+
+}
+
+.divider {
+  margin: 0 rem(7);
+}
+
+.pointColor{
+  color:var(--color-main);
 }
 
 

@@ -1,0 +1,171 @@
+@import '/styles/global/rem';
+@import '../common-popup.module';
+
+$bottom-menu-height : rem(88);
+
+.body{
+  padding: rem(80) 0 $bottom-menu-height !important;
+}
+
+.row {
+  padding: 0 rem(20);
+}
+
+
+// * ------- TABLE ------- * //
+.table {
+  .table-list:not(:last-child) {
+    margin-bottom: rem(20);
+  }
+
+  .t-header {
+    margin-bottom: rem(15);
+  }
+  .title {
+    font-size: rem(16);
+    color: var(--color-font-def);
+    font-weight: 500;
+    cursor: default;
+  }
+  .t-body {
+    .t-row {
+      display: grid;
+      grid-template-columns: 50% 50%;
+      &.fullWidth {
+        grid-template-columns: 1fr;
+      }
+      &.multiLines{
+        .label, .innerBox{
+          padding: rem(10) rem(20) rem(2);
+          height: 100%;
+          display: inline-block;
+          > span {
+            margin-bottom: rem(8);
+          }
+        }
+      }
+    }
+    .t-row:not(:first-child) {
+      margin-top: rem(-1);
+    }
+
+    .t-box {
+      display: grid;
+      grid-template-columns: rem(180) calc(100% - #{rem(180)});
+      align-items: center;
+      overflow: hidden;
+
+      &:nth-child(2n) {
+        margin-left: rem(-1);
+      }
+      .innerBox {
+        border: rem(1) solid var(--color-line-03);
+        height: rem(56);
+        display: flex;
+        align-items: center;
+        padding: 0 rem(20);
+        box-sizing: border-box;
+        span {
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          overflow: hidden;
+          &:not(:last-child) {
+            margin-right: rem(10);
+          }
+        }
+        &:nth-child(2) {
+          margin-left: rem(-1);
+        }
+        &.label {
+          background-color: $backgroundColorDef;
+          color: var(--gray10);
+          cursor: default;
+        }
+        &.cont {
+          background-color: #fff;
+          color: var(--gray20);
+        }
+        &.vertical{
+          flex-direction: column;
+          justify-content: center;
+          align-items: start;
+        }
+      }
+    }
+  }
+}
+
+
+.usage-indicator-section{
+  margin-top:rem(20);
+  padding: rem(20) 0 rem(20) ;
+  display: flex;
+  gap:rem(26);
+
+  .title {
+    font-size: rem(16);
+    font-weight:500;
+  }
+  ul{
+    display: flex;
+    gap:rem(14);
+
+    li{
+      display: flex;
+      align-items: center;
+      gap:rem(6);
+      font-weight: 500;
+      font-size:rem(14);
+      .label{}
+      .value{
+        color: var(--color-main);
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+
+
+// 멤버 검색 섹션
+.search-member-section{
+  .searchBar{
+    grid-template-columns: 1fr;
+
+    > div{
+      display: grid;
+      grid-template-columns: rem(140) 1fr rem(120);
+      gap:rem(10);
+      select{
+        width: rem(140) !important;
+        font-size: rem(14);
+      }
+      input::placeholder{
+        font-size: rem(14);
+
+      }
+      > * {
+        margin:0 !important;
+        width: 100% !important;
+      }
+    }
+  }
+
+  .cont_viewer{
+    .table_header, .table_header > li {
+      background: #f8f8ff;
+    }
+    .table_header, .table_body > li{
+
+      grid-template-columns:
+              rem(85)
+              fillTheRestOfTableWidth(180)
+              rem(180)
+              rem(180)
+              rem(180)
+              rem(100);
+    }
+
+  }
+}

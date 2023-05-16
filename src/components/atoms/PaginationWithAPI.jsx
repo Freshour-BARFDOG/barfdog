@@ -1,11 +1,11 @@
-import Arrow from '@public/img/icon/pagination-arrow.svg';
-import DoubleArrow from '@public/img/icon/pagination-double-arrow.svg';
+import Arrow from '/public/img/icon/pagination-arrow.svg';
+import DoubleArrow from '/public/img/icon/pagination-double-arrow.svg';
 import {useEffect, useState} from 'react';
 import s from './pagination.module.scss';
 import {useRouter} from 'next/router';
 import {getData, postObjData} from '/src/pages/api/reqData';
 import {searchQueryType} from '/store/TYPE/searchQueryType';
-import {convertSearchQueryStrings} from "../../../util/func/convertSearchQueryStrings";
+import {convertSearchQueryStrings} from "/util/func/convertSearchQueryStrings";
 
 
 
@@ -66,8 +66,9 @@ const Pagination = ({
           res = res.data; // postObjData에서 data query하기 위함
         }
 
-        const hasItems = pageData?.totalElements !== 0;
+
         const pageData = res?.data?.page;
+        const hasItems = pageData?.totalElements !== 0;
         // console.log('API URL: ', apiURL, '\nSerach Query: ', urlQueries, '\nPagination res: ', res);
         const hasInterceptor = pageInterceptor && typeof pageInterceptor === 'function';
         if (hasInterceptor || (pageData && hasItems)) {
@@ -106,14 +107,16 @@ const Pagination = ({
         }
       } catch (err) {
         console.error(err);
+      } finally {
+
+        if (setIsLoading && typeof setIsLoading === 'function') {
+          setIsLoading((prevState) => ({
+            ...prevState,
+            fetching: false,
+          }));
+        }
       }
 
-      if (setIsLoading && typeof setIsLoading === 'function') {
-        setIsLoading((prevState) => ({
-          ...prevState,
-          fetching: false,
-        }));
-      }
     })();
   }, [curPage, urlQuery, apiURL, option.body]);
 

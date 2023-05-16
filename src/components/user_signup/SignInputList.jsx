@@ -43,8 +43,9 @@ export default function SignInpuList({ formValues, setFormValues, formErrors, se
 
   useEffect(() => {
     (async () => {
+      const inValidEmailErrorMessage = valid_email(formValues.email);
       const response =
-        !valid_email(formValues.email) && (await valid_email_duplication(formValues.email));
+        !inValidEmailErrorMessage && (await valid_email_duplication(formValues.email));
       const message = response.message;
       const error = response.error;
 
@@ -71,7 +72,6 @@ export default function SignInpuList({ formValues, setFormValues, formErrors, se
   }, [formValues.password, formValues.confirmPassword, setFormErrors]);
 
   const onCheckEmailDuplication = async () => {
-    console.log(isLoading.email);
     if(isLoading.email) return console.error('Loading email duplicate check');
     const error = valid_email(formValues.email);
     if (error) {
@@ -85,7 +85,6 @@ export default function SignInpuList({ formValues, setFormValues, formErrors, se
 
 
     try {
-  
       setIsLoading((prevState) => ({
         ...prevState,
         email: '이메일 중복확인 중입니다.',
@@ -186,6 +185,8 @@ export default function SignInpuList({ formValues, setFormValues, formErrors, se
     }));
   };
 
+
+  // console.log("formErrors.email: ",formErrors, "\nemailValdationMessage: ",emailValdationMessage);
   return (
     <>
       <SignupInput
@@ -207,16 +208,17 @@ export default function SignInpuList({ formValues, setFormValues, formErrors, se
         addedClassName={['add-btn-section']}
         formValue={formValues.email}
         setFormValues={setFormValues}
+        setFormErrors={setFormErrors}
         errorMessage={
           (isLoading.email ||
             formErrors.email ||
             (formValues.email && formErrors.isEmailDuplicated) ||
-            emailValdationMessage) && (
+            emailValdationMessage)
+            && (
             <ErrorMessage
               className={`${s.msg} ${isLoading.email ? s.loading : ''} ${
-                (formErrors.email !== "이메일 중복확인을 하지 않았습니다." && (!formErrors.email && !formErrors.isEmailDuplicated) ||
-                  emailValdationMessage) &&
-                s.valid
+                (!formErrors.email && !formErrors.isEmailDuplicated && emailValdationMessage)
+                 ? s.valid : ""
               }`}
             >
               {isLoading.email ||

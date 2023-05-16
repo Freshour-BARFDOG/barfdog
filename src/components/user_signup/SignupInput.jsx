@@ -12,6 +12,7 @@ const SingupInput = ({
   id,
   formValue,
   setFormValues,
+  setFormErrors,
   title,
   children,
   addedClassName,
@@ -45,7 +46,13 @@ const SingupInput = ({
     if (filteredType === 'number') {
       filteredValue = filter_onlyNumber(filteredValue);
     }
-    // console.log('id:',id,' val:',filteredValue);
+
+    if (id === 'email') { // 이메일 변경 감지 추가 (230509)
+      setFormErrors(prev=> ({
+        ...prev,
+        isEmailDuplicated: "이메일 중복확인이 필요합니다."
+      }))
+    }
     setValue(filteredValue);
     if (setFormValues && typeof setFormValues === 'function') {
       filteredType === 'date' && (filteredValue =  filter_date(filteredValue));
@@ -105,4 +112,3 @@ const SingupInput = ({
 };
 
 export default SingupInput;
-

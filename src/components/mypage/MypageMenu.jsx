@@ -1,13 +1,12 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import s from "/src/components/common/menu.module.scss";
-import { IoIosArrowForward  } from "react-icons/io";
-import { slideUp , slideDown } from "/util/func/slideToggle";
+import {IoIosArrowForward} from "react-icons/io";
+import {slideDown, slideUp} from "/util/func/slideToggle";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import {useDispatch, useSelector} from "react-redux";
+import {useRouter} from "next/router";
+import {useDispatch} from "react-redux";
 import {authAction} from "/store/auth-slice";
-
-
+import {arrangeATagByURLPath} from "../../../util/func/arrage/arrangeATagByURLPath";
 
 
 export default function MypageMenu({ ...props }) {
@@ -37,13 +36,13 @@ export default function MypageMenu({ ...props }) {
         <List title="친구 초대" link="/mypage/invite" />
         <List title="적립금 조회" link="/mypage/reward" />
         <List title="쿠폰함" link="/mypage/coupon" />
+        <List title="프로모션" link="/mypage/promotion" />
         <List title="1:1 문의" link="/mypage/inquiry" />
         <List title="로그아웃" onFirstDepthClick={onLogout} />
       </ul>
     </nav>
   );
 }
-
 
 
 
@@ -65,11 +64,6 @@ export const SubmenuList = ({ link, title}) => {
     </li>
   );
 };
-
-
-
-
-
 
 
 
@@ -100,8 +94,6 @@ const MenuTitle = ({ link, title, curMenuRef, onClick, iconOnLeftSide, iconOnRig
     </p>
   );
 };
-
-
 
 
 
@@ -162,7 +154,7 @@ const currentPageIndicator = (ref, curPath, setThisMenuIsOpenWithDropdown) => {
   if (!ref) return;
   const thisMenu = ref;
   const menuPath = thisMenu.pathname;
-  const curPathDepth1 = curPath.indexOf(menuPath) >= 0 && thisMenu;
+  const depth1Path = curPath.indexOf(menuPath) >= 0 && thisMenu;
 
   const submenuList = Array.from(
     thisMenu
@@ -170,21 +162,21 @@ const currentPageIndicator = (ref, curPath, setThisMenuIsOpenWithDropdown) => {
       .querySelectorAll(`ul.${[s.submenu]} a`)
   );
 
-  const curPathInSubmenu =
+  const depth2Path =
     submenuList.length &&
-    submenuList.filter((thisSubmenu) => {
-      return curPath.indexOf(thisSubmenu.pathname) >= 0;
+    submenuList.filter(submenu => {
+      return curPath.indexOf(submenu.pathname) >= 0;
     });
 
-  const curPathDepth2 = curPathInSubmenu[0];
 
-  if (curPathDepth1) {
+  if (depth1Path) {
     const activeMenu = thisMenu.closest("." + `${s.menu_title}`);
     activeMenu.dataset.currentPage = true;
-  } else if (curPathDepth2) {
-    const activeMenu = curPathDepth2.closest("." + `${s.menu_title}`);
-    activeMenu.dataset.currentPage = true;
-    curPathDepth2.dataset.currentPage = true;
+  } else if (depth2Path.length) {
+    const arrangedDepth2Path = arrangeATagByURLPath(depth2Path, curPath); // submnenu
+    arrangedDepth2Path[0].dataset.currentPage = true;
+    const menuTitle = arrangedDepth2Path[0].closest("." + `${s.menu_title}`); // parent menu
+    menuTitle.dataset.currentPage = true;
 
     if (
       setThisMenuIsOpenWithDropdown &&
@@ -194,5 +186,3 @@ const currentPageIndicator = (ref, curPath, setThisMenuIsOpenWithDropdown) => {
     }
   }
 };
-
-

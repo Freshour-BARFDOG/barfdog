@@ -134,21 +134,25 @@ export const postObjData = async (url, data, contType) => {
     })
     .catch((err) => {
       errorResponseHandleMap( err );
+      console.log(err.response);
+      const error = err.response;
+
       if(!error) {
         result.error = '서버의 에러 응답이 없습니다.';
         result.status = 500;
         return
       }
       
-      const error = err.response;
+
       result.status = err.response.status;
       if (!error.data) {
         result.error = '요청에 대응하는 데이터가 서버에 없습니다.';
-      } else if (error.data?.error) {
+      } else if (error.data?.error || error.data?.errors.length) {
         result.error = error.data.error;
         if (error.data?.errors?.length > 0) {
           result.error = error.data.errors[0].defaultMessage;
-        } else if (error?.data?.error?.error) {
+        }
+        if (error?.data?.error?.error) {
           result.error = '서버와 통신오류가 발생했습니다.';
         }
       } else if (error.data.reason === 'EXPIRED_TOKEN') {
