@@ -1,35 +1,41 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
-import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
+import {AdminContentWrapper} from '/src/components/admin/AdminWrapper';
 import LineChart from '/src/components/admin/dashboard/LineChart';
 import s from './dashboard.module.scss';
 import ToolTip from '/src/components/atoms/Tooltip';
 import SelectTag from '/src/components/atoms/SelectTag';
 import Spinner from '/src/components/atoms/Spinner';
-import { getCookieSSR, getData } from '/src/pages/api/reqData';
-import transformDate, { transformToday } from '/util/func/transformDate';
-import { orderStatus } from '/store/TYPE/orderStatusTYPE';
-import { useGoogleAnalytics } from '/src/pages/api/googleAnalytics/useGoogleAnalytics';
-import { getGoogleAuthUrl } from '/src/pages/api/googleAnalytics/getGoogleAuthUrl';
-import { cookieType } from '/store/TYPE/cookieType';
-import {deleteCookie, getCookie, setCookie} from "/util/func/cookie";
+import {getCookieSSR, getData} from '/src/pages/api/reqData';
+import transformDate, {transformToday} from '/util/func/transformDate';
+import {orderStatus} from '/store/TYPE/orderStatusTYPE';
+import {useGoogleAnalytics} from '/src/pages/api/googleAnalytics/useGoogleAnalytics';
+import {getGoogleAuthUrl} from '/src/pages/api/googleAnalytics/getGoogleAuthUrl';
+import {cookieType} from '/store/TYPE/cookieType';
+import {deleteCookie, setCookie} from "/util/func/cookie";
 import {useRouter} from "next/router";
 import {getDiffDate} from "/util/func/getDiffDate";
+import {inquiryStatusType} from "/store/TYPE/inquiry/inquiryStatusType";
+import {filterObjectKeys} from "/util/func/filter/filterTypeFromObejct";
+import {IndicateDot} from "../../../components/icon/indicateDot";
 
-export default function DashboardPage({ ga }) {
+export default function DashboardPage({ga}) {
   const initialTerm = {
     from: getDiffDate(-1), // 1일 전
     to: transformToday(), // 오늘
     diffDate: 1, // 통계 검색 기간: 1, 7, 30 , 365일
   };
-  
-  
+
+
   const router = useRouter();
 
 
   const [term, setTerm] = useState(initialTerm);
-  const [isLoading, setIsLoading] = useState({});
+  const [isLoading, setIsLoading] = useState({
+    fetching: false,
+    ga: false
+  });
   const [info, setInfo] = useState({});
   const googleApiToken = ga?.token;
   const gaData = useGoogleAnalytics(googleApiToken, term.diffDate);
@@ -38,8 +44,8 @@ export default function DashboardPage({ ga }) {
     // Google Analytics DATA
     // URL에 TOKEN있을 경우, Cookie 저장 => 쿠키 숨김처리
     const googleApiTokenInUrl = router.query?.token;
-    if(googleApiTokenInUrl){
-      setCookie(cookieType.GOOGLE_ANALYTICS_TOKEN, googleApiToken,'sec', ga.expires_in || 3600);
+    if (googleApiTokenInUrl) {
+      setCookie(cookieType.GOOGLE_ANALYTICS_TOKEN, googleApiToken, 'sec', ga.expires_in || 3600);
       window.location.search= '';
     }
     // 토큰있을 경우에만 > info > googla analytics TotalUser 업데이트
@@ -76,12 +82,12 @@ export default function DashboardPage({ ga }) {
         // const res = DUMMY_RESPONSE; // TEST
         if (res.data) {
           const data = res.data;
-          console.log(data)
+          // console.log(data);
           DATA = {
             statistics: {
               newOrderCount: data.newOrderCount || 0,
               newMemberCount: data.newMemberCount || 0,
-              visitorCount: gaData?.totalUsers || '-',
+              visitorCount: gaData?.totalUsers || "-",
             },
             orderCount: {
               PAYMENT_DONE:
@@ -146,17 +152,23 @@ export default function DashboardPage({ ga }) {
                 y: list.subscribeCount,
               })),
             },
+            inquiry: {
+              [inquiryStatusType.UNANSWERED]: data.questionDto.unanswered,
+              [inquiryStatusType.ANSWERED]: data.questionDto.answered + data.questionDto.multipleAnswered,
+            }
           };
         }
-
         setInfo(DATA);
+
       } catch (err) {
         console.error(err);
+      } finally {
+        setIsLoading((prevState) => ({
+          ...prevState,
+          fetching: false,
+        }));
       }
-      setIsLoading((prevState) => ({
-        ...prevState,
-        fetching: false,
-      }));
+
     })();
   }, [term, router]);
 
@@ -330,11 +342,33 @@ export default function DashboardPage({ ga }) {
                   <span>방문자수</span>
                   <div>
                     <span>
-                      <b>{isLoading.ga ? <Spinner /> : `${info.statistics?.visitorCount}`}</b>
+                      <b>{isLoading.ga ? <Spinner/> : `${info.statistics?.visitorCount || "-"}`}</b>
                       명
                     </span>
                   </div>
                 </li>
+              </ul>
+            </div>
+            <div className={`${s['title-section']}`}>
+              <h2 className={s.title}>1:1 문의</h2>
+            </div>
+            <div className={s['cont-section']}>
+              <ul className={s.box}>
+                {info.inquiry && filterObjectKeys(info.inquiry).map((key, i) => (
+                  <li key={`inquiry-${key}`}>
+                    <span>{inquiryStatusType.KOR[key]}
+                    </span>
+                    <div>
+                      <span>
+                        <b>{`${info.inquiry[key]}`}</b>건
+                        {inquiryStatusType.KOR[key] === inquiryStatusType.KOR.UNANSWERED
+                          && info.inquiry[inquiryStatusType.UNANSWERED] > 0
+                          && <IndicateDot pos={{right: -2, top: 3}} size={5}/>
+                        }
+                      </span>
+                    </div>
+                  </li>
+                ))}
               </ul>
             </div>
           </section>
@@ -375,7 +409,6 @@ export default function DashboardPage({ ga }) {
     </>
   );
 }
-
 export async function getServerSideProps({ req, query }) {
   let token = getCookieSSR(req, cookieType.GOOGLE_ANALYTICS_TOKEN) || null; // 구글 API 토큰
   let expires_in = null; // 구글 API 토큰 만료시간
