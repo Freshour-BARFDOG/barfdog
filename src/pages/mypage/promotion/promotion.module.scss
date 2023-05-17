@@ -4,17 +4,14 @@
 
 
 .promotion {
-
   display: grid;
   border: rem(1) solid var(--color-line-04);
-  padding: rem(20) rem(30) rem(30) rem(30);
-  row-gap: rem(30);
+  padding: rem(20) rem(25);
   border-radius: rem(10);
   box-shadow: rem(3) rem(3) rem(8) rgba(0, 0, 0, 0.08);
   word-break: keep-all;
   transition: background-color .3s ease, color .3s ease;
   user-select: none;
-
   font-size: rem(12);
 
   .col {
@@ -22,40 +19,117 @@
     align-items: center;
 
     &.top {
-      grid-template-rows: rem(16) rem(50) 1fr;
+      @include char(t24);
+
+      .name{
+        line-height: 100%;
+        font-size: rem(15);
+        font-weight: 500;
+      }
+      .progress{
+        line-height: 100%;
+        font-size: rem(13);
+        font-weight: 600;
+        color: var(--color-main);
+        width: fit-content;
+        position: relative;
+        min-width: fit-content;
+
+        &::before{
+          content: "";
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 100%;
+          height: 100%;
+          padding: rem(4) rem(10);
+          border: rem(1) solid var(--color-main);
+          border-radius: rem(20);
+        }
+      }
+      .discount{
+        font-weight: 700;
+        font-size: rem(38);
+        letter-spacing: rem(-1);
+        line-height: rem(50);
+      }
+      .availableMaxDiscount{
+        font-weight: 400;
+        font-size: rem(13);
+        line-height: 100%;
+      }
     }
 
     &.mid {
-      gap: rem(4);
-      font-weight: 400;
-      font-size: 12px;
-      line-height: 120%;
-      color: var(--color-font-medium);
+      display: flex;
+      @include char(l15);
+      color: var(--color-font-sub);
+      align-items: flex-start;
+      flex-direction: column;
+      gap:rem(9);
+      line-height: 80%;
+      margin: rem(40) 0;
+
+      >span{
+        font-size: rem(13);
+      }
     }
 
     &.bottom {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr rem(150);
       justify-content: space-between;
-      text-align: right;
       align-items: flex-end;
 
       .left {
         display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        gap: rem(8)
+        flex-direction: column;
+        justify-content: flex-end;
+        gap: rem(4);
+        font-size: rem(13);
+        text-align: left;
+
+        .progress{
+          line-height: 100%;
+          font-size: rem(13);
+          font-weight: 600;
+          border: rem(1) solid var(--color-main);
+          color: var(--color-main);
+          border-radius: rem(20);
+          width: fit-content;
+          padding: rem(4) rem(10);
+          display: none;
+        }
       }
 
       .right {
         display: flex;
         flex-direction: column;
-        justify-content: flex-end;
         gap: rem(4);
+        font-size: rem(13);
+        font-weight: 400;
+        text-align: right;
+        
+        >em{
+          display: flex;
+          align-items : center;
+          justify-content: flex-end;
+        }
+      }
+
+      .line {
+        padding: 0 rem(2) rem(1);
+        hr {
+          transform: rotate(90deg);
+          width: rem(12);
+          height: rem(1);
+          border: 0;
+          border-top: rem(1) solid var(--color-line-02);
+          transition: border .3s ease;
+        }
       }
     }
-
   }
-
 
   .name {
     font-weight: 500;
@@ -75,37 +149,60 @@
 
   .couponCode {
     display: flex;
-    align-items: center;
-    line-height: rem(24);
 
     .code {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      border: rem(1) solid var(--color-main);
-      color: var(--color-main);
+      align-items: flex-start;
+      justify-content: flex-start;
       border-radius: rem(100);
-      font-weight: 500;
-      padding: rem(1) rem(14);
+      font-size: rem(13);
+
+      .title{
+        font-size: rem(13);
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        font-weight: 400;
+
+        > div{
+          min-width: max-content;
+        }
+      }
+
+
+      > b{
+        min-width: auto;
+        word-break: break-all;
+      }
     }
   }
 
   b {
     font-weight: 600;
   }
-
-
-
-
 }
 
 
 .flex {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
 }
 
 .spaceBetween {
   justify-content: space-between;
+  column-gap: rem(20);
+}
+
+
+@media (max-width: rem(700)) {
+  .promotion {
+    padding: rem(20);
+    .col {
+      &.bottom {
+        grid-template-columns: 1fr;
+        row-gap: rem(20);
+      }
+    }
+  }
 }

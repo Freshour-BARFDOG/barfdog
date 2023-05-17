@@ -53,24 +53,43 @@ function ItemList({item}) {
       <div className={`${s.col} ${s.top}`}>
         <div className={`${s.spaceBetween} ${s.flex}`}>
           <span className={s.name}>{DATA.name}</span>
-          <span>프로모션 {promotionStatusType.KOR[DATA.status]}</span>
+          <span className={s.progress}>프로모션 {promotionStatusType.KOR[DATA.status]}</span>
         </div>
-        <span className={s.discount}>프로모션 {DATA.coupon.discount}</span>
-        <span className={s.availableMaxDiscount}>(최대 {DATA.coupon.availableMaxDiscount}원 할인)</span>
+        <span className={s.discount}>{DATA.coupon.discount}</span>
+        <span className={s.availableMaxDiscount}>( 최대 {DATA.coupon.availableMaxDiscount}원 할인 )</span>
       </div>
       <div className={`${s.col} ${s.mid}`}>
         <span className={s.couponName}>{DATA.coupon.name}</span>
         <span className={s.couponTarget}>{DATA.coupon.couponTarget} 사용가능</span>
-        <span className={s.couponAvailableMinPrice}>{DATA.coupon.availableMinPrice}원 이상 구매 시 사용가능</span>
+        <span className={s.couponAvailableMinPrice}>{DATA.coupon.availableMinPrice}원 이상 구매 시</span>
       </div>
       <div className={`${s.col} ${s.bottom}`}>
         <span className={`${s.left} ${s.couponCode}`}>
-          프로모션 코드
-          <em className={s.code}>{DATA.coupon.code}</em>
+          <span className={s.progress}>프로모션 {promotionStatusType.KOR[DATA.status]}</span>
+          <em className={s.code}>
+            <div className={s.title}>
+              <div>프로모션 코드</div>
+              <div className={s.line}>
+                <hr/>
+              </div>
+            </div>
+            <b>{DATA.coupon.code}</b>
+          </em>
         </span>
+
         <span className={`${s.right}`}>
-          <em>사용한도<i className={s.divider}>|</i><b>{DATA.coupon.amount}회</b></em>
-          <em>등록일<i className={s.divider}>|</i><b>{DATA.coupon.createdDate}</b></em>
+          <em>사용한도
+            <div className={s.line}>
+              <hr/>
+            </div>
+            <b>{DATA.coupon.amount}회</b>
+          </em>
+          <em>등록일
+            <div className={s.line}>
+              <hr/>
+            </div>
+            <b>{DATA.coupon.createdDate}</b>
+          </em>
         </span>
 
 
