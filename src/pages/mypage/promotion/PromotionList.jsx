@@ -41,10 +41,10 @@ function ItemList({item}) {
       name: coupon.name,
       couponTarget: couponUseType.KOR[coupon.couponTarget],
       discount: `${transformLocalCurrency(coupon.discountDegree)}${discountUnitType.KOR[coupon.discountType]}`,
-      availableMinPrice: transformLocalCurrency(coupon.availableMaxDiscount),
+      availableMinPrice: transformLocalCurrency(coupon.availableMinPrice),
       availableMaxDiscount: transformLocalCurrency(coupon.availableMaxDiscount),
       amount: transformLocalCurrency(coupon.amount),
-      createdDate: transformDate(coupon.createdDate, "", {seperator: "."}),
+      createdDate: transformDate(coupon.createdDate, "", {seperator: ". "}),
     }
   };
 
