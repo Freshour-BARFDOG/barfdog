@@ -193,20 +193,20 @@ export default function CouponPage () {
                 ? <ul className={s.coupon_content_grid_box}>
                   {itemList.map( (item, i) => {
                       const expired = getRemainingDaysNumberUntilExpired( item.expiredDate ) < 0;
-                      const maxDiscountString = (item.discountType === discountUnitType.FIXED_RATE && item.availableMaxDiscount) >= 9999999 && "무제한";
+                      const maxDiscountString = (item.discountType === discountUnitType.FIXED_RATE && item.availableMaxDiscount) >= 9999999 && "최대 할인금액 제한없음";
+                      const minPriceString = (item.discountType === discountUnitType.FIXED_RATE && item.availableMinPrice) <= 0 && "최소 이용금액 없음";
                       return <li key={`coupon-${item.id}-${i}`} className={`${s.grid_box} ${expired && s.expiredCoupon}`}>
                         <div className={s.left_top}>
                           <span className={s.name}>{item.name}</span>
                           <span className={`${s.discount} ${s.pointColor}`}>
-                            {transformLocalCurrency(item.discountDegree)} {discountUnitType.KOR[item.discountType]}
+                            {transformLocalCurrency(item.discountDegree)}{discountUnitType.KOR[item.discountType]}
                           </span>
                           {item.discountType === discountUnitType.FIXED_RATE &&
-                            <span className={`${s.availableMaxDiscount} ${s.pointColor}`}>{
+                            <span className={`${s.availableMaxDiscount} ${s.pointColor}`}>&#40; {
                               maxDiscountString
-                              || (`최대 ${transformLocalCurrency(item.availableMaxDiscount)}원`)} 할인
+                              || (`최대 ${transformLocalCurrency(item.availableMaxDiscount)}원 할인`)} &#41;
                             </span>
                             }
-
                         </div>
                         <div className={s.right_top}>
                           <button
@@ -219,19 +219,33 @@ export default function CouponPage () {
                         <div className={s.left_bot}>
                           <div className={s.left_bot_text}>
                             <p>{item.description}</p>
-                            <p>사용처: {couponUseType.KOR[item.couponTarget]}</p>
-                            <div className={s.inner_flex_box}>
-                              <div className={s.left_text}>사용기한</div>
+                            <p>{couponUseType.KOR[item.couponTarget]} 사용가능</p>
+                            {item.discountType === discountUnitType.FIXED_RATE &&
+                            <span className={`${s.availableMinPrice} ${s.left_text}`}>{
+                              minPriceString
+                              || (`${transformLocalCurrency(item.availableMinPrice)}원 이상 구매시`)}
+                            </span>
+                            }
+                              {/* <div className={s.left_text}>사용기한</div>
                               <div className={s.line}>
                                 <hr/>
                               </div>
-                              <div>{transformDate( item.expiredDate )}</div>
-                            </div>
+                              <div>{transformDate( item.expiredDate )}</div> */}
                           </div>
                         </div>
                         <div className={s.right_bot}>
-                          <em>사용한도<i className={s.divider}>|</i><b>{item.amount}회</b></em>
-                          <em>등록일<i className={s.divider}>|</i><b>{transformDate(item.expiredDate)}</b></em>
+                          <em>사용한도
+                            <div className={s.line}>
+                                <hr/>
+                            </div>
+                            <b>{item.amount}회</b>
+                          </em>
+                          <em>사용기한
+                            <div className={s.line}>
+                                <hr/>
+                            </div>
+                            <b>{transformDate(item.expiredDate)}</b>
+                          </em>
                         </div>
                       </li>
                     } )}

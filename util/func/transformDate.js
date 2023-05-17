@@ -1,7 +1,7 @@
 
 
 
-const transformDate = (d, unit, option={seperator:'-'}) => {
+const transformDate = (d, unit, option={seperator:'. '}) => {
   if(!d) return;
   
   if(d.indexOf('-') < 0)return;

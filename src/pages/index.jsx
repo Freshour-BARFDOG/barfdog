@@ -97,7 +97,7 @@ export default function MainPage({ data }) {
               <div className={s.rightbox}>
                 <p>ABOUT BARF</p>
                 <h1>바프식이란?</h1>
-                <h3 className="font-NotoSans">
+                <h3>
                   &nbsp;B.A.R.F.(Biologically Appropriate Raw Food)는 생물학적으로 적절한 생식이라는
                   뜻으로, 생고기와 뼈, 야채를 적절히 배합하여 반려동물에게 단백질과 지방을 신선한
                   상태에서 섭취할 수 있도록 돕는 식단을 뜻합니다.
