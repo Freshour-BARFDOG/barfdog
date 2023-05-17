@@ -244,7 +244,7 @@ export default function CouponPage () {
                             <div className={s.line}>
                                 <hr/>
                             </div>
-                            <b>{transformDate(item.expiredDate)}</b>
+                            <b>{transformDate(item.expiredDate, null, {seperator: ". "})}</b>
                           </em>
                         </div>
                       </li>
