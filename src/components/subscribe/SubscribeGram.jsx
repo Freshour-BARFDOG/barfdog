@@ -11,7 +11,7 @@ import {useModalContext} from '/store/modal-context';
 import {FullScreenLoading} from '/src/components/atoms/FullScreenLoading';
 import {calcSubscribePrice} from "/util/func/subscribe/calcSubscribePrices";
 import {valid_isTheSameArray} from "/util/func/validation/validationPackage";
-import {ONEMEALGRAM_DEMICAL_IN_DB} from "/util/func/subscribe/calcOneMealGramsWithRecipeInfo";
+import {UnitOfDemicalPointOfOneMealGramInDatabase} from "/util/func/subscribe/calcOneMealGramsWithRecipeInfo";
 import {roundedOneMealGram} from "/util/func/subscribe/roundedOneMealGram";
 
 export const SubscribeGram = ({ subscribeInfo }) => {
@@ -44,7 +44,7 @@ export const SubscribeGram = ({ subscribeInfo }) => {
 
   const onInputChange = (value) => {
     const nextAmount = value;
-    const nextGrams = form.originGrams.map(originGram => Number((originGram * (1 + nextAmount / 100)).toFixed(ONEMEALGRAM_DEMICAL_IN_DB))); // ! 1팩 당 무게: 최대 소수점 '4'자리
+    const nextGrams = form.originGrams.map(originGram => Number((originGram * (1 + nextAmount / 100)).toFixed(UnitOfDemicalPointOfOneMealGramInDatabase))); // ! 1팩 당 무게: 최대 소수점 '4'자리
     const recipePricePerGrams = form.recipeInfo.pricePerGramList;
     const planTypeName = form.planInfo.planType;
 

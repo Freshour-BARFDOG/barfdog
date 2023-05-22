@@ -3,7 +3,10 @@ import Image from 'next/image';
 import React from 'react';
 import checkStringUnderConsonant from "/util/func/checkStringUnderConsonant";
 import transformLocalCurrency from "../../../util/func/transformLocalCurrency";
-import {calcSubscribeOneDayRecommendKcal} from "../../../util/func/subscribe/calcOneMealGramsWithRecipeInfo";
+import {
+  calcSubscribeOneDayRecommendKcal,
+  UnitOfDemicalPointOfOneMealGram
+} from "/util/func/subscribe/calcOneMealGramsWithRecipeInfo";
 
 export const SubscribeRecommendResult = ({info}) => {
   
@@ -50,13 +53,13 @@ export const SubscribeRecommendResult = ({info}) => {
                 {transformLocalCurrency(calcSubscribeOneDayRecommendKcal( info.foodAnalysis.oneDayRecommendKcal ))}kcal
               </span>
               <span className={s.title}>하루 권장 식사량</span>
-              <span className={s.data}>{info.foodAnalysis.oneDayRecommendGram?.toFixed( 0 )}g</span>
+              <span className={s.data}>{info.foodAnalysis.oneDayRecommendGram?.toFixed( UnitOfDemicalPointOfOneMealGram )}g</span>
               <span className={s.title}>
                 한끼 권장 식사량
                 <br/>
                 <span>&#40;하루 두 끼 기준&#41;</span>
               </span>
-              <span className={s.data}>{info.foodAnalysis.oneMealRecommendGram?.toFixed( 0 )}g</span>
+              <span className={s.data}>{info.foodAnalysis.oneMealRecommendGram?.toFixed( UnitOfDemicalPointOfOneMealGram )}g</span>
             </div>
             <div className={s.desc}>바프독 생식기준 결과</div>
           </div>

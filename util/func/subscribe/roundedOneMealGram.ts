@@ -1,4 +1,4 @@
-import {ONEMEALGRAM_DEMICAL} from "@util/func/subscribe/calcOneMealGramsWithRecipeInfo";
+import {UnitOfDemicalPointOfOneMealGram} from "@util/func/subscribe/calcOneMealGramsWithRecipeInfo";
 import transformLocalCurrency from "@util/func/transformLocalCurrency";
 
 
@@ -8,7 +8,7 @@ export const roundedOneMealGram = (gram:number) => {
   if(typeof gram !== 'number'){
     gram = Number(gram);
   }
-  // console.log("originNum: ", gram, "\nroundedNum: ", parseFloat(( gram ).toFixed( ONEMEALGRAM_DEMICAL )));
-  return parseFloat(( gram ).toFixed( ONEMEALGRAM_DEMICAL ));
+
+  return parseFloat(( gram ).toFixed( UnitOfDemicalPointOfOneMealGram ));
   
 };

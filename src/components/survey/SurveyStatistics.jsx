@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { getData } from '/src/pages/api/reqData';
+import React, {useEffect, useState} from 'react';
+import {getData} from '/src/pages/api/reqData';
 import s from './surveyStatistics.module.scss';
-import Image from 'next/image';
 import Loading from '/src/components/common/Loading';
-import { calcDogAgebyMonth } from '/util/func/calcDogAge';
-import { dogActivityLevelType } from '/store/TYPE/dogActivityLevelType';
+import {calcDogAgebyMonth} from '/util/func/calcDogAge';
+import {dogActivityLevelType} from '/store/TYPE/dogActivityLevelType';
 import {dogSizeType} from "/store/TYPE/dogSizeType";
 import Btn_01 from '/public/img/mypage/statistic_dog_walker.svg';
 import Btn_02 from '/public/img/mypage/statistic_dog_walker2.svg';
+import {UnitOfDemicalPointOfOneMealGram} from "/util/func/subscribe/calcOneMealGramsWithRecipeInfo";
 
 export const SurveyStatistics = ({ id ,  mode = 'default' }) => {
   
@@ -21,7 +21,7 @@ export const SurveyStatistics = ({ id ,  mode = 'default' }) => {
     // ! mypage => '강아지' id로 조회
     // ! survey => '설문조사' id로 조회
     const getSurveyReportsApiUrl = mode === 'mypage' ? `/api/dogs/${id}/surveyReport` : `/api/surveyReports/${id}`;
-    // console.log(getSurveyReportsApiUrl);
+
     (async () => {
       try {
         setIsLoading((prevState) => ({
@@ -455,12 +455,12 @@ export const SurveyStatistics = ({ id ,  mode = 'default' }) => {
                 {Number(info?.foodAnalysis?.oneDayRecommendKcal).toFixed(0)}kcal
               </div>
               <div className={s.right_text}>하루 권장 식사량</div>
-              <div className={s.left_text}>{info?.foodAnalysis?.oneDayRecommendGram}g</div>
+              <div className={s.left_text}>{info?.foodAnalysis?.oneDayRecommendGram.toFixed(UnitOfDemicalPointOfOneMealGram)}g</div>
               <div className={s.right_text}>
                 <p>한끼 권장 식사량</p>
                 <span>(하루 두끼 기준)</span>
               </div>
-              <div className={s.left_text}>{info?.foodAnalysis?.oneMealRecommendGram}g</div>
+              <div className={s.left_text}>{info?.foodAnalysis?.oneMealRecommendGram.toFixed(UnitOfDemicalPointOfOneMealGram)}g</div>
             </div>
           </section>
         </div>
