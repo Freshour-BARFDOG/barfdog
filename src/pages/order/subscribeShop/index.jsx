@@ -7,7 +7,7 @@ import Wrapper from '/src/components/common/Wrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import {SubscribeShopRecipe} from '/src/components/subscribe/SubscribeShopRecipe';
 import {SubscribeShopPlan} from '/src/components/subscribe/SubscribeShopPlan';
-import {getDataSSR, postObjData} from '/src/pages/api/reqData';
+import {getDataSSR, postObjData, putObjData} from '/src/pages/api/reqData';
 import Spinner from '/src/components/atoms/Spinner';
 import {SubscribeRecommendResult} from '/src/components/subscribe/SubscribeRecommendResult';
 import {validate} from '/util/func/validation/validation_orderSubscribe';
@@ -160,33 +160,35 @@ export default function RegisterSubscribeInfoPage({ data }) {
     if (!isPassed)
       return mct.alertShow('유효하지 않은 항목이 있습니다.\n선택한 레시피 및 플랜을 확인해주세요. ');
 
-    const apiUrl = `/api/subscribes/${info.subscribeId}/planRecipes`;
+    const apiUrl = `/api/subscribes/${info.subscribeId}`;
     try {
+      setSubmitted(true);
       setIsLoading((prevState) => ({
         ...prevState,
         submit: true,
       }));
 
-      const res = await postObjData(apiUrl, body);
+      const res = await putObjData(apiUrl, body);
       console.log(res);
       if (res.isDone) {
         await dispatch(
           cartAction.setSubscribeOrder({ data: { subscribeId: info.subscribeId, ...body } }),
         );
-        setSubmitted(true);
         await router.push(`/order/deliveryInfo`);
       } else {
         mct.alertShow('플랜,레시피 등록에 실패하였습니다.');
+        setSubmitted(false);
       }
     } catch (err) {
       alert('API통신 오류');
       console.error(err);
-
+      setSubmitted(false);
+    } finally {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        submit: false,
+      }));
     }
-    setIsLoading((prevState) => ({
-      ...prevState,
-      submit: false,
-    }));
   };
 
 
