@@ -128,9 +128,9 @@ export default function CreatePromotionPage({DATA}) {
     }
 
   };
-  const returnToPrevPage = () => {
-    if (confirm('이전 페이지로 이동하시겠습니까?')) {
-      router.back();
+  const returnToListPage = () => {
+    if (confirm('목록 페이지로 이동하시겠습니까?')) {
+      window.location.href = '/bf-admin/promotion';
     }
   };
 
@@ -310,7 +310,7 @@ export default function CreatePromotionPage({DATA}) {
                   type="button"
                   id="btn-cancle"
                   className="admin_btn confirm_l line"
-                  onClick={returnToPrevPage}
+                  onClick={returnToListPage}
               >
                 목록
               </button>
