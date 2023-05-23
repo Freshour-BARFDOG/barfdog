@@ -4,7 +4,7 @@ import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import React from 'react';
 import {subscribePlanType} from "/store/TYPE/subscribePlanType";
 import ErrorMessage from "../atoms/ErrorMessage";
-import AmdinErrorMessage from "../atoms/AmdinErrorMessage";
+import {UnitOfDemicalPointOfOneMealGram} from "/util/func/subscribe/calcOneMealGramsWithRecipeInfo";
 
 
 export const OrdersheetSubscribeItemList = ({
@@ -67,7 +67,7 @@ export const OrdersheetSubscribeItemList = ({
               <div className={s.info_col}>
                 <p className={s.subscribeName}>[정기구독] {info.subscribeDto?.plan && subscribePlanType[info.subscribeDto?.plan].KOR}</p>
                 {info.recipeNameList?.map((name, i) => (
-                  <p key={`info-recipeName-${i}`} className={s.recipeName}>{name} 레시피</p>
+                  <p key={`info-recipeName-${i}`} className={s.recipeName}>{name} 레시피 ({info.subscribeDto?.oneMealGramsPerRecipeList[i]?.toFixed( UnitOfDemicalPointOfOneMealGram )}g) </p>
                 ))}
               </div>
 

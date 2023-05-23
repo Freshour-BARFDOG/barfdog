@@ -16,6 +16,7 @@ import {OrdersheetAmountOfPayment} from '/src/components/order/OrdersheetAmountO
 import {calcNextSubscribeDeliveryDate} from '/util/func/calcNextSubscribeDeliveryDate';
 import {useSubscribePlanInfo} from "/util/hook/useSubscribePlanInfo";
 import {subscribePriceCutOffUnit} from "/util/func/subscribe/calcSubscribePrices";
+import {seperateStringViaComma} from "/util/func/seperateStringViaComma";
 
 
 export default function SubscribeOrderSheetPage({ subscribeId }) {
@@ -76,6 +77,7 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
               paymentPrice: data.subscribeDto.nextPaymentPrice
             } ),
             discountGrade: data.subscribeDto.discountGrade, // 등급할인 (할인표기에 사용)
+            oneMealGramsPerRecipeList: seperateStringViaComma(data.subscribeDto.oneMealGramsPerRecipe, 'number'), // 각 레시피별 한 팩 무게 (2개 이상 시, 콤마[(,]구분)
           },
           recipeNameList: data.recipeNameList, // [] 구독으로 선택한 레시피 이름 리스트 // FULL-PLAN일 경우, 최대 2개
           name: data.name, // 구매자
