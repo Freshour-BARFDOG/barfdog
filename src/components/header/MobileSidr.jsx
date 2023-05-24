@@ -18,6 +18,7 @@ import IconMypageInvite from '/public/img/icon/icon-mypage-invite.svg';
 import IconMypageDogs from '/public/img/icon/icon-mypage-dogs.svg';
 import IconMypageUser from '/public/img/icon/icon-mypage-user.svg';
 import IconMypageReview from '/public/img/icon/icon-mypage-review.svg';
+import IconMypagePromotion from '/public/img/icon/icon-mypage-promotion.svg';
 import useDeviceState from '/util/hook/useDeviceState';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import { userType } from '/store/TYPE/userAuthType';
@@ -233,6 +234,11 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                       title={'후기'}
                       link={'/mypage/review'}
                       icon={<IconMypageReview />}
+                    />
+                    <MypageMenuList
+                      title={'프로모션'}
+                      link={'/mypage/promotion'}
+                      icon={<IconMypagePromotion />}
                     />
                   </ul>
                 </div>
