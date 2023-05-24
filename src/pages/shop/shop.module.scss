@@ -327,6 +327,16 @@ section.pagination-section{padding : rem(80) 0 rem(70) 0 }
   .bot {
     .inner {
       .shop_list {
+        .shop_image{
+          $iconWidth: rem(46);
+          > i:nth-child(2){left: calc(#{$iconWidth} + #{rem(2)});}
+          > i{
+            font-size: rem(12);
+            height: rem(20);
+            max-width: $iconWidth;
+          }
+        }
+
         .text_box{
           .title{
             font-size: rem(15);

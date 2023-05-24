@@ -101,6 +101,17 @@ const SignInput_birthday = ({
       : null;
 
 
+  const handleInputFocus = (event) => {
+    const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    );
+
+    if (isMobileDevice) {
+      event.target.blur(); // 모바일 장치에서만 포커스 해제
+    }
+  };
+
+
   return (
     <>
       <div className={s["join__wrap"]}>
@@ -120,18 +131,20 @@ const SignInput_birthday = ({
 
             <DatePicker
               placeholderText="연도. 월. 일."
-              className={s["birthday"]}rea
+              className={s["birthday"]}
               id={id}
               selected={selectedDate}
               onChange={handleDateChange}
               dateFormat={"yyyy. MM. dd."}
-              // minDate={minDate}
               maxDate={maxDate}
               required={required}
               locale={ko}
               disabledKeyboardNavigation
               isClearable
-              onFocus={e => e.target.blur()}
+              // onFoucus 직접입력 막기-> MacOS Safari 정지 이슈발생
+              // PC환경 직접입력 허용(ex 2023. 05. 12. 폼으로 정확해야만 직접 입력됨, 달력에서 고를 수 없는 값은 입력불가, console 입력 확인완료)
+              // onFocus={e => e.target.blur()}
+              onFocus={handleInputFocus}
               dayClassName={selectedDayClassName}
               renderCustomHeader={({
                 date,

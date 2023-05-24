@@ -45,7 +45,9 @@ export const ReviewItem = ({item}) => {
           <span className={s.text}>{item.contents}</span>
           
         </p>
-        <span className={s.grid_name}>{filter_blindingUserName( item?.username )}</span>
+        <div>
+          <span className={s.grid_name}>{filter_blindingUserName( item?.username )}</span>
+        </div>
         <span className={s.grid_date}>{item.writtenDate}</span>
       </figure>
       <div className={s.text_box} ref={boxRef}>

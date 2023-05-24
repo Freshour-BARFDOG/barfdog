@@ -342,6 +342,15 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
           overflow:hidden;
         }
       }
+
+      .grid_name{
+        text-overflow: ellipsis;
+        -webkit-line-clamp: 1;  // 말줄임표 표시할 줄 수
+        -webkit-box-orient: vertical;
+        width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+      }
     }
   }
 
@@ -369,10 +378,8 @@ section.notice_text {padding : rem(43) 0 rem(14) 0}
     display:none;
     padding:rem(20) rem(100);
     background-color: var(--color-bg-02);
-    transition: all 0s;
+    // transition: all 0s !important;
     .text{
-      // width: 80%;
-      // margin:0 auto;
       color: #4d4d4d;
       height: 100%;
     }
