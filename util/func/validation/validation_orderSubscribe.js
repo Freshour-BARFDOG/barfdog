@@ -21,6 +21,9 @@ export const validate = (obj) => {
       case 'nextPaymentPrice':
         errors[key] = valid_isEmpty(val);
         break;
+      case 'oneDayRecommendKcal':
+        errors[key] = valid_isEmpty(val);
+        break;
     }
   }
   console.log('Valid Result (formValues) : ', errors);

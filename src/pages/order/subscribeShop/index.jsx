@@ -68,6 +68,7 @@ export default function RegisterSubscribeInfoPage({ data }) {
     plan: data.surveyInfo.plan || null,
     recipeIdList: currentRecipeIds,
     nextPaymentPrice: null,
+    oneMealGramList: []
   };
 
   const fullscreenLoadingDuration = 0; // ms
@@ -153,6 +154,7 @@ export default function RegisterSubscribeInfoPage({ data }) {
       plan: form.plan,
       recipeIdList: form.recipeIdList,
       nextPaymentPrice: nextPaymentPrice, // 최종계산된가격
+      oneDayRecommendKcal: info.foodAnalysis.oneDayRecommendKcal // 반려견 설문조사 변경여부 검증용
     };
 
     const errObj = validate(body);
@@ -160,7 +162,9 @@ export default function RegisterSubscribeInfoPage({ data }) {
     if (!isPassed)
       return mct.alertShow('유효하지 않은 항목이 있습니다.\n선택한 레시피 및 플랜을 확인해주세요. ');
 
-    const apiUrl = `/api/subscribes/${info.subscribeId}`;
+    console.log('--- onStartSubscribeOrder:\n', body)
+
+
     try {
       setSubmitted(true);
       setIsLoading((prevState) => ({
@@ -168,6 +172,7 @@ export default function RegisterSubscribeInfoPage({ data }) {
         submit: true,
       }));
 
+      const apiUrl = `/api/subscribes/${info.subscribeId}`;
       const res = await putObjData(apiUrl, body);
       console.log(res);
       if (res.isDone) {
@@ -176,7 +181,9 @@ export default function RegisterSubscribeInfoPage({ data }) {
         );
         await router.push(`/order/deliveryInfo`);
       } else {
-        mct.alertShow('플랜,레시피 등록에 실패하였습니다.');
+        const serverErrorMessage = res.data.data.message;
+        const defErrorMessage = '플랜,레시피 등록에 실패하였습니다.';
+        mct.alertShow((serverErrorMessage || defErrorMessage) + "\n페이지 새로고침 후, 다시 시도해주세요.");
         setSubmitted(false);
       }
     } catch (err) {
@@ -209,6 +216,7 @@ export default function RegisterSubscribeInfoPage({ data }) {
         plan: form.plan,
         recipeIdList: form.recipeIdList,
         nextPaymentPrice: nextPaymentPrice, // 최종 계산된 가격
+        oneDayRecommendKcal: info.foodAnalysis.oneDayRecommendKcal // 반려견 설문조사 변경여부 검증용
       };
       console.log('onChangeSubscribeOrder:\n', body)
 
@@ -254,6 +262,7 @@ export default function RegisterSubscribeInfoPage({ data }) {
       const DATA = {
         lastSurveyDate: prevInfo.lastSurveyDate,
         subscribeId: prevInfo.subscribeId,
+        oneDayRecommendKcal: data.surveyInfo.foodAnalysis.oneDayRecommendKcal, // 반려견 설문조사 변경여부 검증용
         dogId: prevInfo.dogId,
         prev: prevDATA,
         next: nextDATA,

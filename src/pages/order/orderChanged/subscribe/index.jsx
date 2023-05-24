@@ -26,18 +26,21 @@ import {roundedOneMealGram} from "/util/func/subscribe/roundedOneMealGram";
 export default function SubscribeOrderChangedPage({ data }) {
 
   const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
   const cart = useSelector((s) => s.cart);
   const info = cart.subscribeOrder;
   const subscribeId = cart.subscribeOrder.subscribeId;
+  const oneDayRecommendKcal = cart.subscribeOrder.oneDayRecommendKcal;
   const [isLoading, setIsLoading] = useState({});
   const [submitted, setSubmitted] = useState(false);
-  const [modalMessage, setModalMessage] = useState('');
+  // const [modalMessage, setModalMessage] = useState('');
   const [activeConfirmModal, setActiveConfirmModal] = useState({});
 
   useEffect(() => {
     if(!data || !DATA.prev.plan || !DATA.next.plan) return onFailCallback();
     
-  },[])
+  },[]);
+
   const DATA = { // DATA Ref. ) order/subscribeShop => onChangeSubscribeOrder()
     lastSurveyDate: data.surveyReportInfo.lastSurveyDate,
     prev: {
@@ -47,7 +50,7 @@ export default function SubscribeOrderChangedPage({ data }) {
       ...info.next,
     },
   };
-  
+  console.log(oneDayRecommendKcal);
   const onActiveConfirmModal = (e) => {
     const btn = e.currentTarget;
     const btnType = btn.dataset.buttonType;
@@ -61,15 +64,18 @@ export default function SubscribeOrderChangedPage({ data }) {
       return setActiveConfirmModal(false);
     }
     
-    
+
     const nextPaymentPrice = DATA.next.nextPaymentPrice;
     const body = {
       plan: DATA.next.plan,
       recipeIdList: DATA.next.recipeIdList,
       nextPaymentPrice: nextPaymentPrice, // 최종 계산된 가격
+      oneDayRecommendKcal: oneDayRecommendKcal
     };
 
+    console.log(body.oneDayRecommendKcal);
     try {
+      setSubmitted(true);
       setIsLoading((prevState) => ({
         ...prevState,
         submit: true,
@@ -77,22 +83,27 @@ export default function SubscribeOrderChangedPage({ data }) {
       const apiUrl = `/api/subscribes/${subscribeId}`;
       const res = await putObjData(apiUrl, body);
       console.log(res);
-      // if (!res.isDone) { //! TEST CODE //
-        if(res.isDone){  // ! PRODUCT CODE
-        setSubmitted(true);
-        onShowModal('맞춤레시피 변경이 완료되었습니다.');
+      if(res.isDone){
+          mct.alertShow('맞춤레시피 변경이 완료되었습니다.', onSuccessChangeSubscribeOrder);
       } else {
-        onShowModal(`데이터를 전송하는데 실패했습니다.\n${res.error}`);
+        const serverErrorMessage = res.data.data.message;
+        const defErrorMessage = '구독 정보 변경에 실패하였습니다.';
+        mct.alertShow((serverErrorMessage || defErrorMessage) + "\n페이지 새로고침 후, 다시 시도해주세요.");
+        setSubmitted(false);
       }
   
       setActiveConfirmModal(false);
     } catch (err) {
       console.error(err);
+      alert(err);
+      setSubmitted(false);
+    } finally {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        submit: false,
+      }));
     }
-    setIsLoading((prevState) => ({
-      ...prevState,
-      submit: false,
-    }));
+
   };
 
   const onPrevPage = (confirm) => {
@@ -103,18 +114,17 @@ export default function SubscribeOrderChangedPage({ data }) {
     }
   };
 
-  const onShowModal = (message) => {
-    if (message) mct.alertShow();
-    setModalMessage(message);
-  };
-
-  const onHideModal = () => {
-    setModalMessage('');
-    mct.alertHide();
-  };
+  // const onShowModal = (message) => {
+  //   if (message) mct.alertShow();
+  //   setModalMessage(message);
+  // };
+  //
+  // const onHideModal = () => {
+  //   setModalMessage('');
+  //   mct.alertHide();
+  // };
 
   const onSuccessChangeSubscribeOrder = () => {
-    onHideModal();
     window.location.href = `/mypage/dogs`;
   };
   
@@ -255,12 +265,7 @@ export default function SubscribeOrderChangedPage({ data }) {
           positionCenter
         />
       )}
-      <Modal_global_alert
-        message={modalMessage}
-        onClick={submitted ? onSuccessChangeSubscribeOrder : onHideModal}
-        background
-      />
-      
+      {hasAlert && <Modal_global_alert background/>}
     </>
   );
 }
