@@ -39,18 +39,18 @@ export const AlertLayer = ({props, children}) => {
     setCookie(cookieName, JSON.stringify(cookieCooltimeObj), cookieCooltimeObj.dateUnit, cookieCooltimeObj.expNumber);
     
     // ! PROD
-    // alert(`[ CAUTION ]\n- 구독 중인 상품 중, 품절된 레시피가 존재합니다.\n- 품절된 반려견: ${info.outOfStockDogNames}\n- 품절된 레시피: ${info.outOfStockItemNames}\n- 마이페이지에서 품절상태를 확인 후 문의하세요.`);
+    alert(`[ CAUTION ]\n- 구독 중인 상품 중, 품절된 레시피가 존재합니다.\n- 품절된 반려견: ${info.outOfStockDogNames}\n- 품절된 레시피: ${info.outOfStockItemNames}\n- 마이페이지에서 품절상태를 확인 후 문의하세요.`);
   
   
-    // ! FOR TEST
-    const dateKoreanUnit ={
-      date:'일',
-      hour:'시간',
-      min: '분',
-      sec: '초'
-    }
-    // // ! TEST
-    alert(`----------- [TEST] 현재 알림 주기 : ${cookieCooltimeObj.expNumber}${dateKoreanUnit[cookieCooltimeObj.dateUnit]} ------------\n[ CAUTION ]\n- 구독 중인 상품 중, 품절된 레시피가 존재합니다.\n- 품절된 반려견: ${info.outOfStockDogNames}\n- 품절된 레시피: ${info.outOfStockItemNames}\n- 마이페이지에서 품절상태를 확인 후 문의하세요.`);
+    // // ! FOR TEST
+    // const dateKoreanUnit ={
+    //   date:'일',
+    //   hour:'시간',
+    //   min: '분',
+    //   sec: '초'
+    // }
+    // // // ! TEST
+    // alert(`----------- [TEST] 현재 알림 주기 : ${cookieCooltimeObj.expNumber}${dateKoreanUnit[cookieCooltimeObj.dateUnit]} ------------\n[ CAUTION ]\n- 구독 중인 상품 중, 품절된 레시피가 존재합니다.\n- 품절된 반려견: ${info.outOfStockDogNames}\n- 품절된 레시피: ${info.outOfStockItemNames}\n- 마이페이지에서 품절상태를 확인 후 문의하세요.`);
     
   }, [data]);
   
