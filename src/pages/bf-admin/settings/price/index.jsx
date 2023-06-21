@@ -69,7 +69,7 @@ function PricePolicyPage({data}) {
     const isPassed = valid_hasFormErrors(errObj);
     if(!isPassed) return mct.alertShow('유효하지 않은 항목이 존재합니다.');
     
-    if (!confirm('사이트 할인율 변경 시,\n예약된 정기구독유저의 결제금액이 즉시 변경됩니다. 정말 변경하시겠습니까?')) return;
+    if (!confirm(`사이트 할인율은 '최초 정기결제' 및 '예약된 구독상품 정보 변경' 시 반영됩니다. \n정말 변경하시겠습니까?`)) return;
     
     try {
       setIsLoading((prevState) => ({
@@ -128,7 +128,10 @@ function PricePolicyPage({data}) {
               <div className="cont_body">
                 <h2 className={`${s['title']} ${s['has-notice']}`}>
                   플랜 할인율
-                  <span className={s.notice}>할인율 변동 시, 예약된 정기구독이 있는 유저의 &lsquo;다음 정기구독 결제금액&lsquo;이 즉시 변경됩니다.</span>
+                  <span className={s.notice}>
+                    1) 플랜 할인율 적용 시점: &lsquo;최초 정기결제&rsquo;, &lsquo;예약된 구독상품의 플랜&middot;레시피&middot;한 팩 무게 변경&rsquo;<br/>
+                    2) 플랜 할인율 변경 시, 구독 중인 구독상품의 결제원금은 변경되지 않으며, 위 시점(1)에 따릅니다.
+                  </span>
                 </h2>
                
                 
