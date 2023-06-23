@@ -1,11 +1,13 @@
-export const paymethodFilter = function (paymethod) { 
+import {paymentMethodType} from "../store/TYPE/paymentMethodType";
+
+export const paymethodFilter = function (paymethod) {
     // CREDIT_CARD, NAVER_PAY, KAKAO_PAY
     switch (paymethod) {
-      case 'CREDIT_CARD':
+      case paymentMethodType.CREDIT_CARD:
         return 'card';
-      case 'NAVER_PAY':
+      case paymentMethodType.NAVER_PAY:
         return 'naverpay';
-      case 'KAKAO_PAY':
+      case paymentMethodType.KAKAO_PAY:
         return 'kakaopay';
             
       default:
