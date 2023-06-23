@@ -6,7 +6,7 @@ export interface IamportTokenResponseInterface {
   expired_at: number;
 }
 
-export default async function POST(req:Request, res:Response) {
+export default async function POST(req:Request, res:any | Response) {
 
   const tokenRes:AxiosResponse = await axiosOfIamport.post('/users/getToken', {
     imp_key: `${process.env.NEXT_PUBLIC_IAMPORT_REST_API_KEY}`,
@@ -17,6 +17,7 @@ export default async function POST(req:Request, res:Response) {
     access_token, expired_at
   }
 
+  console.log("access_token = ",access_token);
   if (!access_token) {
     res.status(500).json({
       message: "Failed to get Iamport access token."

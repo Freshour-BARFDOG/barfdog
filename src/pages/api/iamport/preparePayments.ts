@@ -19,7 +19,7 @@ interface IamportPrepareResponseInterface {
 }
 
 // 아임포트 결제정보 사전 등록 => 결제 위변조 방지
-export default async function POST(req: Request, res: Response) {
+export default async function POST(req: {body: IamportPrepareRequestInterface}, res: any | Response) {
 
 
   const {merchant_uid, amount}:IamportPrepareRequestInterface = req.body;
