@@ -10,18 +10,30 @@ import axios from 'axios';
 import {availablePaymentState} from "/util/func/availablePaymentState";
 import {paymethodFilter} from '/util/filter_iamport_paymethod';
 import {generateCustomerUid} from "/util/func/order/generateCustomerUid";
-import {pgType} from "/store/TYPE/paymentMethodType";
+import {paymentMethodType, pgType} from "/store/TYPE/paymentMethodType";
+import {
+  getNaverPayGeneralPaymentData,
+  getNaverPaySubscribePaymentData
+} from "../../../store/TYPE/NaverPayPaymentPamType";
+import useDeviceState from "../../../util/hook/useDeviceState";
+import {removeIamportPaymentWindow} from "../../../util/func/removeIamportPaymentWindow";
+import {axiosOfLocalServer} from "../../pages/api/axios/axiosOfLocalServer";
+
+
+
 
 export function Payment({
-  info,
-  form,
-  isLoading,
-  setIsLoading,
-  setFormErrors,
-  orderType = 'general',
-}) {
+                          info,
+                          form,
+                          isLoading,
+                          setIsLoading,
+                          setFormErrors,
+                          orderType = 'general',
+                        }) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const router = useRouter();
+  const ds = useDeviceState();
+  const isMobile = ds.isMobile;
 
   useEffect(() => {
     const jquery = document.createElement('script');
@@ -39,29 +51,18 @@ export function Payment({
     };
   }, []);
 
-  const onSubmit = async (e) => {
+  const onSubmit = async () => {
 
-    if(!availablePaymentState( {reward: info.reward})){
+
+    if (isSubmitted) return console.error("이미 제출된 양식입니다.");
+    setIsSubmitted(true);
+
+    if (!availablePaymentState({reward: info.reward})) {
       alert('결제할 수 없는 상태입니다.\n적립금, 쿠폰 등 사용가능여부를 확인하시기 바랍니다.');
       window.location.href = '/mypage/reward';
       return;
     }
-    if(form.paymentMethod === 'NAVER_PAY'){
-      alert(`네이버페이 결제 준비중입니다. 다른 결제수단을 선택해주세요.`);
-      return;
-    }
-    // if(form.paymentMethod === 'KAKAO_PAY'){
-    //   alert(`카카오페이 결제 준비중입니다. 다른 결제수단을 선택해주세요.`);
-    //   return;
-    // }
-    if(orderType === 'subscribe' && form.paymentMethod ==='NAVER_PAY'){
-      alert(`정기구독 네이버페이 결제 준비중입니다. 다른 결제수단을 선택해주세요.`);
-      return;
-    }
-    // console.log(info,'info');
-    // console.log(form);
-    e.preventDefault();
-    if (isSubmitted) return console.error("이미 제출된 양식입니다.");
+
 
     const valid_target = {
       name: form.deliveryDto.name,
@@ -77,7 +78,7 @@ export function Payment({
     // console.log(info)
     // ! bundle일 경우, validation항목 다르게 변경해주기.
     let errObj;
-    if(form.bundle){
+    if (form.bundle) {
       errObj = validateInBundleDelivery(valid_target);
     } else {
       errObj = validate(valid_target);
@@ -86,10 +87,11 @@ export function Payment({
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
 
-    if (!isPassed) return alert('유효하지 않은 항목이 있습니다.');
-    // console.log(isPassed);
+    if (!isPassed) {
+      setIsSubmitted(false);
+      return alert('유효하지 않은 항목이 있습니다.')
+    };
     // 결제 로직 시작
-
     await startPayment();
   };
 
@@ -97,7 +99,13 @@ export function Payment({
 
   async function startPayment(){
 
-    const {discountTotal, discountCoupon, overDiscount, paymentPrice, discountGrade} = calcOrdersheetPrices(form, orderType, {deliveryFreeConditionPrice: info.freeCondition});
+    const {
+      discountTotal,
+      discountCoupon,
+      overDiscount,
+      paymentPrice,
+      discountGrade
+    } = calcOrdersheetPrices(form, orderType, {deliveryFreeConditionPrice: info.freeCondition});
 
 
     const customerUid = generateCustomerUid(); // ! [client '결제실패' / Webhook 'paid'] CASE 처리를 위해, 주문서 생성 시에도 cutomerUid 전송.
@@ -168,19 +176,45 @@ export function Payment({
       }));
 
       // send DATA to api server after successful payment
-      const apiUrl = orderType === 'general' ? `/api/orders/general` : `/api/orders/subscribe/${router.query.subscribeId}`;
+      const subscribeId = Number(router.query.subscribeId);
+      const apiUrl = orderType === 'general' ? `/api/orders/general` : `/api/orders/subscribe/${subscribeId}`;
       const res = await postObjData(apiUrl, body);
       console.log(res);
 
 
       if (res.isDone) {
-        if( orderType === 'general'){
+
+        // ################################################################## TEST
+        // const fakePrice = paymentPrice +100; // ############################# TEST
+        // ################################################################## TEST
+
+        // 아임포트 > 사전 결제금액 등록 => Client에서 결제금액 변조 방지 (네이버페이 사용됨)
+        const merchantUid = res.data.data.merchantUid;
+        const iamportResponse = await axiosOfLocalServer.post(`/api/iamport/preparePayments`,{
+          merchant_uid: merchantUid,
+          amount: paymentPrice
+        });
+
+        console.log(iamportResponse);
+         if(iamportResponse.status !== 200) {
+           return await faliedGeneralPayment(orderId, "결제 가격 위변조 검증준비 오류.");
+         }
+
+
+        const orderId = res.data.data.id;
+        if (orderType === 'general') {
           // 일반 주문 결제
-          // res.data.data.id = 주문번호 id
-          await generalPayment(body,res.data.data.id, res.data.data.merchantUid);
-        }else{
+          await generalPayment(body, orderId, merchantUid);
+
+        } else {
           // 구독 주문 결제
-          await subscribePayment(body,res.data.data.id, res.data.data.merchantUid, customerUid); // ! 정기결제 시, 카드 저장을 위해 CustomerUid 필요
+          await subscribePayment({
+            body: body,
+            id: orderId, // 주문 id
+            merchantUid: merchantUid,
+            customerUid: customerUid,
+            subscribeId: subscribeId
+          }) // ! 정기결제 시, 카드 저장을 위해 CustomerUid 필요
         }
         // alert('결제완료 -> 이후 확인버튼 클릭 -> 결제완료페이지로 Redir');
         const scrollTopPos = document.documentElement.scrollTop;
@@ -189,7 +223,6 @@ export function Payment({
         position:fixed;
         top: -${scrollTopPos}px;`;
 
-        setIsSubmitted(true);
       } else {
         alert(res.error, '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.');
       }
@@ -210,7 +243,8 @@ export function Payment({
     IMP.init(process.env.NEXT_PUBLIC_IAMPORT_CODE);
     // 주문명
     const itemList = form.orderItemDtoList;
-    const itemName = `${itemList[0].name} ${itemList.length > 1 ? `외 ${itemList.length-1}개` : ''}`; // 네이버일 경우, '외 1개' 삭제필요
+    const firstItemName = `${itemList[0].name}`;
+    const itemName = `${firstItemName} ${itemList.length > 1 ? `외 ${itemList.length - 1}개` : ''}`; // 네이버일 경우, '외 1개' 삭제필요
 
     /* 2. 결제 데이터 정의하기  1원 결제 -> 실패 , 100원 결제 -> 성공 */
     // TODO: name(주문명) test 지우기
@@ -229,6 +263,12 @@ export function Payment({
 
     };
 
+    // 네이버 페이 추가
+    if (body.paymentMethod === paymentMethodType.NAVER_PAY) {
+      Object.assign(data, getNaverPayGeneralPaymentData({items: itemList, isMobile: isMobile})); // 네이버페이 데이터 합침
+    }
+
+    console.log(" - IMP.request_pay(data)\n", data);
 
     // 결제 이슈를 보완하기 인하여 Api Request Data 추가를 위해 사용
     const callbackData = {
@@ -245,60 +285,45 @@ export function Payment({
         discountReward: callbackData.discountReward
       }
 
-      console.log(response);
+      console.log(response); // callback response => error_code 미포함.
       const { success, imp_uid, merchant_uid, error_msg } = response;
 
+      /* 3. 콜백 함수 정의하기 */
+      if (success) {
+        // 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우
+        // TODO: 결제 정보 전달
 
-
-    /* 3. 콜백 함수 정의하기 */
-    if (success) {
-      // 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우
-      // TODO: 결제 정보 전달
-
-      const r = await postObjData(`/api/orders/${id}/general/success`, {
-        impUid : imp_uid,
-        merchantUid : merchant_uid,
-        discountReward: data.discountReward,
-      });
-      console.log(r);
-      if(r.isDone){
-        alert('결제 성공');
-        window.location.href= `/order/orderCompleted/${id}`;
-      }
-    } else {
-        // 사용자가 결제 취소(결제포기)했을때
-        if(error_msg.includes('결제포기')){
-          const cancel = await postObjData(`/api/orders/${id}/general/cancel`);
-          // console.log(cancel);
-          window.location.href= `/order/orderFailed`;
-
-        }else{
-          // 결제 실패
-          const fail = await postObjData(`/api/orders/${id}/general/fail`);
-          console.log(fail);
-          if(fail.isDone){
-             // startPayment();
-            alert(`결제 실패: ${error_msg}`);
-             // 결제 취소 시 , 전역에 import 결제 html이 잔류하여, 없앰
-             document.body.style.cssText='';
-             document.body.querySelector('.imp-dialog ').innerHTML='';
-             document.body.querySelector('.imp-dialog ').style.cssText='display:none !important';
-             window.location.href= `/order/orderFailed`;
-          }
+        const r = await postObjData(`/api/orders/${id}/general/success`, {
+          impUid: imp_uid,
+          merchantUid: merchant_uid,
+          discountReward: data.discountReward,
+        });
+        console.log(r);
+        if (r.isDone) {
+          alert('결제 성공');
+          window.location.href = `/order/orderCompleted/${id}`;
         }
-    }
+      } else if (error_msg.includes('결제포기')) {
+        // 사용자가 결제 취소(결제포기)했을때
+        await postObjData(`/api/orders/${id}/general/cancel`);
+        window.location.href = `/order/orderFailed`;
+      } else {
+        // 결제 실패
+        await faliedGeneralPayment(id, error_msg);
+        alert(`[결제오류]\n- error_msg:${error_msg}`);
+      }
 
     }
 
   }
 
-  async function subscribePayment(body,id,merchantUid, customerUid) {
+  async function subscribePayment({body, id, merchantUid, customerUid, subscribeId}) {
     /* 1. 가맹점 식별하기 */
     const IMP = window.IMP;
     IMP.init(process.env.NEXT_PUBLIC_IAMPORT_CODE);
 
 
-     /* 2. 결제 데이터 정의하기  TODO:kakaopay 실연동 가맹점코드(CID) 발급받으면 변경하기*/
+    /* 2. 결제 데이터 정의하기  TODO:kakaopay 실연동 가맹점코드(CID) 발급받으면 변경하기*/
     const itemName = `[구독상품]-${info.recipeNameList.join(", ")}`;
     const mobileItemName = `[m-구독상품]-${info.recipeNameList.join(", ")}`;
     const buyer_name = info.name;
@@ -325,6 +350,15 @@ export function Payment({
       m_redirect_url: `${m_redirect_url}/${params}`,
     };
 
+
+    // 네이버 페이 추가
+    if (body.paymentMethod === paymentMethodType.NAVER_PAY) {
+      Object.assign(data, getNaverPaySubscribePaymentData({subscribeId, isMobile: isMobile})); // 네이버페이 데이터 합침
+    }
+
+    console.log(" - IMP.request_pay(data)\n", data);
+
+
     // 결제 이슈를 보완하기 인하여 Api Request Data 추가를 위해 사용
     const callbackData = {
       discountReward: body.discountReward,
@@ -348,110 +382,94 @@ export function Payment({
         discountReward: callbackData.discountReward,
 
       }
-      const { success, customer_uid, imp_uid, merchant_uid, card_name, card_number, error_msg } = response; // ! 최초 정기구독 주문시 0원결제 사용되는 IMP UID
+      const { success, customer_uid, imp_uid, merchant_uid, card_name, card_number,error_code, error_msg } = response; // ! 최초 정기구독 주문시 0원결제 사용되는 IMP UID
 
       const IMPORT_PAYMENT_CANCEL = response.error_msg?.indexOf('[결제포기]') >= 0;
-    /* 3. 콜백 함수 정의하기 */
-    if (success) {
+      /* 3. 콜백 함수 정의하기 */
+      if (success) {
 
-      // 아임포트 전송데이터
-      const data = {
-        customer_uid: customer_uid,
-        merchant_uid: merchantUid, // 서버로부터 받은 주문번호
-        amount: body.paymentPrice,
-        name: callbackData.itemName,
-        buyer_name:callbackData.buyer_name,
-        buyer_tel: callbackData.buyer_tel,
-        buyer_email: callbackData.buyer_email, // 구매자 이메일
-        buyer_addr: callbackData.buyer_addr, // 구매자 주소
-        buyer_postcode: callbackData.buyer_postcode, // 구매자 우편번호
-      };
+        // 아임포트 전송데이터
+        const data = {
+          customer_uid: customer_uid,
+          merchant_uid: merchantUid, // 서버로부터 받은 주문번호
+          amount: body.paymentPrice,
+          name: callbackData.itemName,
+          buyer_name: callbackData.buyer_name,
+          buyer_tel: callbackData.buyer_tel,
+          buyer_email: callbackData.buyer_email, // 구매자 이메일
+          buyer_addr: callbackData.buyer_addr, // 구매자 주소
+          buyer_postcode: callbackData.buyer_postcode, // 구매자 우편번호
+        };
 
-      const paymentResult = await axios
-      .post(
-        `${window.location.origin}/api/iamportSubscribe`,
-        data,
-        {headers: {
-          'Content-Type': 'application/json',}}
-      )
-      .then((res) => {
-        console.log(res.data);
-        console.log(
-          '------------------------------------------------------------------ AXIOS > RESPONSE ------------------------------------------------------------------ ',
-          res,
-        );
+        const paymentResult = await axios
+          .post(
+            `${window.location.origin}/api/iamportSubscribe`,
+            data,
+            {
+              headers: {
+                'Content-Type': 'application/json',
+              }
+            }
+          )
+          .then((res) => {
+            console.log(res.data);
+            return res;
+          })
+          .catch((err) => {
+            console.error('err: ', err);
 
-        return res;
-      })
-      .catch((err) => {
-        console.error('goodsflow otp err: ', err);
-
-        return err.response;
-      });
-      console.log(paymentResult);
-      console.log(paymentResult.data);
-
-      const { code, message, response } = paymentResult.data; // 두 번째 전달받는 값.
-
-      if (code === 0) { // 카드사 통신에 성공(실제 승인 성공 여부는 추가 판단이 필요함)
-
-
-        const {imp_uid: again_imp_uid} = response;
-
-        if ( response.status === "paid" ) { //카드 정상 승인
-
-          const r = await postObjData(`/api/orders/${id}/subscribe/success`, {
-            impUid : again_imp_uid, // impUid는 두 번째 결제에 값이 있어야, webhook에서 해당 주문을 찾을 수 있음.
-            merchantUid : merchantUid, // merchantUid는 첫 번째, 두 번째 결제 모두 동일
-            customerUid : customer_uid,
-            discountReward: discountData.discountReward
+            return err.response;
           });
-          console.log(r);
-          if(r.isDone){
-            // alert('결제 성공');
-            window.location.href = `/order/orderCompleted/subscribe/${id}`;
+        console.log(paymentResult);
+        console.log(paymentResult.data);
+
+        const {code, response} = paymentResult.data; // 두 번째 전달받는 값.
+
+        if (code === 0) { // 카드사 통신에 성공(실제 승인 성공 여부는 추가 판단이 필요함)
+
+
+          const {imp_uid: again_imp_uid, status} = response;
+
+          if (status === "paid") { //카드 정상 승인
+
+            const r = await postObjData(`/api/orders/${id}/subscribe/success`, {
+              impUid: again_imp_uid, // impUid는 두 번째 결제에 값이 있어야, webhook에서 해당 주문을 찾을 수 있음.
+              merchantUid: merchantUid, // merchantUid는 첫 번째, 두 번째 결제 모두 동일
+              customerUid: customer_uid,
+              discountReward: discountData.discountReward
+            });
+            console.log(r);
+            if (r.isDone) {
+              alert('결제 성공');
+              window.location.href = `/order/orderCompleted/subscribe/${id}`;
+            }
+          } else if (status === 'failed') { //카드 승인 실패 (예: 고객 카드 한도초과, 거래정지카드, 잔액부족 등)
+            //paymentResult.status : failed 로 수신됨
+            const fail = await postObjData(`/api/orders/${id}/subscribe/fail`);
+            console.log(fail);
+            if (fail.isDone) {
+              alert(`결제 실패: ${error_msg}`);
+              window.location.href = `/order/orderFailed`;
+            }
           }
-        } else if(response.status === 'failed'){ //카드 승인 실패 (예: 고객 카드 한도초과, 거래정지카드, 잔액부족 등)
-          //paymentResult.status : failed 로 수신됨
-          const fail = await postObjData(`/api/orders/${id}/subscribe/fail`);
-          console.log(fail);
-           if(fail.isDone){
-             alert(`결제 실패: ${error_msg}`);
-             // startPayment();
-             window.location.href = `/order/orderFailed`;
-           }
+        } else if (paymentResult == null) { // 카드사 요청에 실패 (paymentResult is null)
+          await failedSubscribePayment(id, error_msg);
         }
-      } else if(paymentResult == null){ // 카드사 요청에 실패 (paymentResult is null)
-        const fail = await postObjData(`/api/orders/${id}/subscribe/fail`);
-        console.log(fail);
-         if(fail.isDone){
-           alert(`결제 실패: ${error_msg}`);
-           // startPayment();
-           window.location.href= `/order/orderFailed`;
-         }
-      }
 
 
-    } else if(IMPORT_PAYMENT_CANCEL) {
-      const res = await postObjData(`/api/orders/${id}/subscribe/cancel`);
-      console.log('IMPORT_PAYMENT_CANCEL REPONSE:',res);
-      if(res.isDone){
-        alert(`결제 취소: ${error_msg}`);
+      } else if (IMPORT_PAYMENT_CANCEL) {
+        const res = await postObjData(`/api/orders/${id}/subscribe/cancel`);
+        console.log(res);
+        if (res.isDone) {
+          alert(`결제 취소: ${error_msg}`);
+        } else {
+          alert(`결제 취소처리 중 오류가 발생하였습니다.`);
+        }
+        window.location.reload();
       } else {
-        alert(`결제 취소처리 중 오류가 발생하였습니다.`);
+        await failedSubscribePayment(id, error_msg);
+        alert(`[결제오류]\n- error_code: ${error_code}\n- error_msg:${error_msg}`);
       }
-      window.location.reload();
-    } else {
-      alert("결제 취소 처리 중 알수 없는 오류가 발생하였습니다. 관리자에게 문의해주세요.")
-       // 결제 실패 : 쿠폰null일때 500err -> 서버 오류 수정하셨다고 함 TODO 나중에 테스트하기
-      //  const fail = await postObjData(`/api/orders/${id}/subscribe/fail`);
-      //  console.log(fail);
-      //   if(fail.isDone){
-      //     alert(`결제 실패: ${error_msg}`);
-      //     // startPayment();
-      //     window.location.href= `/order/orderFailed`;
-      //   }
-    }
 
     }
 
@@ -460,8 +478,29 @@ export function Payment({
   return (
     <>
       <button onClick={onSubmit} className={s.btn_box} type={'button'}>
-        {isLoading.submit ? <Spinner style={{ color: '#fff' }} /> : '결제하기'}
+        {isLoading.submit ? <Spinner style={{color: '#fff'}}/> : '결제하기'}
       </button>
     </>
   );
+}
+
+
+async function faliedGeneralPayment(id, error_msg) {
+  const fail = await postObjData(`/api/orders/${id}/general/fail`);
+  console.log(fail);
+  if (fail.isDone) {
+    // 결제 취소 시 , 전역에 import 결제 html이 잔류하여, 없앰
+    removeIamportPaymentWindow();
+    window.location.href = `/order/orderFailed`;
+  }
+}
+
+
+async function failedSubscribePayment(id, error_msg) {
+  const fail = await postObjData(`/api/orders/${id}/subscribe/fail`);
+  console.log(fail);
+  if (fail.isDone) {
+    removeIamportPaymentWindow();
+    window.location.href = `/order/orderFailed`;
+  }
 }
