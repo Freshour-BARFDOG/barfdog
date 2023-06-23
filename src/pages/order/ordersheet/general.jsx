@@ -136,6 +136,7 @@ export default function GeneralOrderSheetPage() {
             itemId: item.itemId, // 상품 ID
             amount: item.amount, // 상품 수량
             name: item.name, // 상품명
+            itemType: item.itemType, // 상품 카테고리 [ RAW, TOPPING, GOODS ]
             selectOptionDtoList:
               item.optionDtoList.map((op) => ({
                 itemOptionId: op.optionId, // 옵션 ID
