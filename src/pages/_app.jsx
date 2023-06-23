@@ -2,7 +2,7 @@ import {Provider} from 'react-redux';
 import store from '@store/index';
 import '/styles/global/global.scss';
 import AuthInterceptor from '/store/auth-interceptor';
-import '/src/pages/api/axios.config';
+import '/src/pages/api/axios/axios.config';
 import {ModalContextProvider} from '/store/modal-context';
 import ChannelTalkProvider from '/src/pages/api/channelTalk/ChannelTalkProvider';
 import GAProvider from '/src/pages/api/googleAnalytics/GAProvider';

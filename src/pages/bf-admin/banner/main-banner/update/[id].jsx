@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import axiosConfig from '/src/pages/api/axios.config';
+import axiosConfig from '/src/pages/api/axios/axios.config';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';

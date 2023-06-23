@@ -1,5 +1,5 @@
 import axios from 'axios';
-import axiosConfig, {axiosUserConfig} from './axios.config';
+import axiosConfig, {axiosUserConfig} from './axios/axios.config';
 import {cookieType} from '/store/TYPE/cookieType';
 import {responseErrorType} from "@store/TYPE/responseErrorType";
 import {errorResponseHandleMap} from "@util/func/error/errorResponseHandleMap";

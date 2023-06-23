@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import axios from 'axios';
-import { axiosUserConfig } from '/src/pages/api/axios.config';
+import React, {useEffect, useState} from 'react';
+import {useSelector} from 'react-redux';
 import {userType} from "@store/TYPE/userAuthType";
 import {getData} from "@src/pages/api/reqData";
 
@@ -47,4 +45,3 @@ export default function useUserData() {
 
   return userData;
 }
-
