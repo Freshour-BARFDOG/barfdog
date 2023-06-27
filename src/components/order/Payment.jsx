@@ -448,7 +448,7 @@ export function Payment({
         window.location.reload();
       } else {
         await failedSubscribePayment(id, error_msg);
-        alert(`[결제오류]\n- error_code: ${error_code}\n- error_msg:${error_msg}`);
+        alert(`[결제오류]\n- error_code: ${error_code || ''}\n- error_msg:${error_msg}`);
       }
 
     }
