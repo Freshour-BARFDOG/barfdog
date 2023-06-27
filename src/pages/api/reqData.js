@@ -124,13 +124,13 @@ export const postObjData = async (url, data, contType) => {
     status: null,
   };
 
-  const response = await axios
+  await axios
     .post(url, data, axiosConfig(contType))
     .then((res) => {
       console.log('postObjDataResponse:\n', res);
       result.data = res;
       result.status = res.status;
-      return res.status === 200 || res.status === 201;
+      result.isDone = res.status === 200 || res.status === 201;
     })
     .catch((err) => {
       errorResponseHandleMap( err );
@@ -140,7 +140,8 @@ export const postObjData = async (url, data, contType) => {
       if(!error) {
         result.error = '서버의 에러 응답이 없습니다.';
         result.status = 500;
-        return
+        result.isDone = false;
+        return;
       }
       
 
@@ -160,9 +161,9 @@ export const postObjData = async (url, data, contType) => {
       } else {
         result.error = '서버측의 정의되지않은 Reponse Error 발생';
       }
+      result.isDone = false;
     });
 
-  result.isDone = response;
   return result;
 };
 

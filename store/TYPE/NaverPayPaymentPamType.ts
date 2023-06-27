@@ -88,9 +88,10 @@ export const getNaverPaySubscribePaymentData = ({
                                                 }: SubscribePaymentPropsInterface): SubsribePaymentParam | null => {
   // Doc: https://github.com/iamport/iamport-manual/blob/master/NAVERPAY/sample/naverpay-recurring.md
   if (!subscribeId) return null;
+  const prefix = process.env.NODE_ENV ===  "development" ? `test-${new Date().getTime() }-` : "";
   return {
     naverPopupMode: !isMobile,
     naverChainId: process.env.NEXT_PUBLIC_NAVERPAY_SUBSCRIBE_CHAIN_ID,
-    naverProductCode: `subscribe-item-${subscribeId}`
+    naverProductCode: prefix + `subscribe-item-${subscribeId}`
   };
 }

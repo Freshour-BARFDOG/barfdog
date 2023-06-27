@@ -5,7 +5,7 @@ export const axiosOfLocalServer:AxiosInstance = axios.create({
     ? process.env.NEXT_PUBLIC_CLIENT_URL_PRODUCT
     : process.env.NEXT_PUBLIC_CLIENT_URL_DEV
   ,
-  timeout: 1000,
+  timeout: 60000, // request header 정보를 읽는데 설정된 timeout 시간
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
