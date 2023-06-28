@@ -24,7 +24,17 @@ const Wrap = styledComponents.i`
     }
   `;
 
-const Spinner = ({ style, speed = '0.6', floating, ...props }) => {
+interface PropsInterface {
+  style?: {
+    width?: string;
+    height?: string;
+    color?: string;
+  };
+  speed?: string;
+  floating?: boolean;
+}
+
+const Spinner = ({ style, speed = '0.6', floating, ...props }:PropsInterface) => {
   const defaultStyle = {
     ...style,
     width: style?.width || '20',
