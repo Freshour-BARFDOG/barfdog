@@ -45,7 +45,7 @@ interface GeneralPaymentPropsInterface {
   isMobile: boolean;
 }
 
-export const getNaverPayGeneralPaymentData = ({
+export const getNaverpayGeneralPaymentParam = ({
                                                 items,
                                                 isMobile
                                               }: GeneralPaymentPropsInterface): GeneralPaymentParam | null => {
@@ -82,7 +82,7 @@ interface SubscribePaymentPropsInterface {
   isMobile: boolean;
 }
 
-export const getNaverPaySubscribePaymentData = ({
+export const getNaverpaySubscribePaymentParam = ({
                                                   subscribeId,
                                                   isMobile
                                                 }: SubscribePaymentPropsInterface): SubsribePaymentParam | null => {

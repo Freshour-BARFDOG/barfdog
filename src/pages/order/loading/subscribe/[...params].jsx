@@ -1,8 +1,12 @@
-import React, { useEffect } from "react";
-import { postObjData ,postDataSSR} from '/src/pages/api/reqData';
+import React, {useEffect} from "react";
+import {postDataSSR, postObjData} from '/src/pages/api/reqData';
 import axios from 'axios';
-import { useRouter } from "next/router";
-import { FullScreenRunningDog } from '/src/components/atoms/FullScreenLoading';
+import {useRouter} from "next/router";
+import {FullScreenRunningDog} from '/src/components/atoms/FullScreenLoading';
+import {
+  invalidSuccessSubscribePaymentSSR,
+  validPaymentSSR
+} from "util/func/order/paymentCallback";
 
 function OrderCompletedPage(props) {
   
@@ -45,9 +49,12 @@ export default OrderCompletedPage;
 export async function getServerSideProps(ctx) {
   const { query, req } = ctx;
   const { params, imp_uid, imp_success, error_msg} = query;
-  
+
+  let invalidPayment = false;
+  let redirectUrl = null;
+
   console.log(query);
-  const [orderIdx, customUid, price, merchantUid, itemName, buyer_name, buyer_tel, buyer_email, buyer_addr, buyer_postcode] = params;
+  const [orderId, customUid, paymentPrice, merchantUid, itemName, buyer_name, buyer_tel, buyer_email, buyer_addr, buyer_postcode, discountReward] = params;
 // 결제성공여부
   let paymentSuccess = null;
 
@@ -74,7 +81,7 @@ export async function getServerSideProps(ctx) {
         data: {
           customer_uid: customUid,
           merchant_uid: merchantUid, // 새로 생성한 결제(재결제)용 주문 번호
-          amount: price,
+          amount: Number(paymentPrice), //  ! [중요] 결제금액 변경(변조) 여부 검증 대상.
           name: itemName,
           buyer_name: buyer_name,
           buyer_tel: buyer_tel,
@@ -87,21 +94,43 @@ export async function getServerSideProps(ctx) {
 
       console.log("code: ",code, "message: ",message, "response: ",response);
       if (code === 0) { // 카드사 통신에 성공(실제 승인 성공 여부는 추가 판단이 필요함)
-        
+
         const {imp_uid: again_imp_uid} = response;
-        
+
         if(response.status==='paid'){//카드 정상 승인
-        
-          const r = await postDataSSR(req,`/api/orders/${orderIdx}/subscribe/success`, {
-            impUid : again_imp_uid, // ! "아임포트 webhook" 처리 시, "again" response의 imp_uid 필요.
-            merchantUid : merchantUid,
-            customerUid : customUid,
-          });
-          console.log(r);
-          if(r.status === 200){
-            paymentSuccess=true;
+
+          // validation - 결제 금액 검증
+          const isValid = await validPaymentSSR(req,{orderId: orderId, impUid: again_imp_uid}); // 두 번째 결제 imp_uid 검증 (첫 번째 imp_uid는 '결제등록')
+          if (!isValid) {
+            const data = {
+              impUid: again_imp_uid, // API SERVER webhook에서 해당 주문을 찾기 위해, impUid 사용됨
+              merchantUid: merchantUid,
+              customerUid: customUid,
+              discountReward: discountReward
+            }
+            // 주문 금액 검증 기능 - 자체 구현
+            const fail = await invalidSuccessSubscribePaymentSSR(req, {orderId: orderId, data: data });
+            if (fail.status === 200) {
+              const data = fail.data;
+              const subscribeId = data.subscribeId;
+              const dogId = data.dogId;
+              invalidPayment = true;
+              redirectUrl = `/order/orderFailed/invalidPayment/subscribe?subscribeId=${subscribeId}&dogId=${dogId}`;
+            }
+
+          } else {
+
+            const r = await postDataSSR(req,`/api/orders/${orderId}/subscribe/success`, {
+              impUid : again_imp_uid, // ! "아임포트 webhook" 처리 시, "again" response의 imp_uid 필요.
+              merchantUid : merchantUid,
+              customerUid : customUid,
+            });
+            console.log(r);
+            if(r.status === 200){
+              paymentSuccess=true;
+            }
           }
-     
+
         } else if(response.status === 'failed'||paymentResult==null){
           //paymentResult.status : failed 로 수신됨
           paymentSuccess=false;
@@ -114,5 +143,17 @@ export async function getServerSideProps(ctx) {
   } else if(imp_success == 'false') {
     paymentSuccess=false;
   }
-  return { props: { orderIdx, paymentSuccess } };
+
+
+  // 결제금액 변조되었을 경우, 해당 페이지로 이동
+  if(invalidPayment){
+    return {
+      redirect:{
+        permanent: false,
+        destination: redirectUrl,
+      }
+    }
+
+  }
+  return { props: { paymentSuccess } };
 }
