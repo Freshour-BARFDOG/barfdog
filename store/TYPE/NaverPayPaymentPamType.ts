@@ -88,10 +88,10 @@ export const getNaverPaySubscribePaymentData = ({
                                                 }: SubscribePaymentPropsInterface): SubsribePaymentParam | null => {
   // Doc: https://github.com/iamport/iamport-manual/blob/master/NAVERPAY/sample/naverpay-recurring.md
   if (!subscribeId) return null;
-  const prefix = process.env.NODE_ENV ===  "development" ? `test-${new Date().getTime() }-` : "";
+  const suffix = `-orderTime-${new Date().getTime()}`;
   return {
     naverPopupMode: !isMobile,
     naverChainId: process.env.NEXT_PUBLIC_NAVERPAY_SUBSCRIBE_CHAIN_ID,
-    naverProductCode: prefix + `subscribe-item-${subscribeId}`
+    naverProductCode: `subscribe-item-${subscribeId}` + suffix // 항상 고유한 값이어야 함 (동일한 값 설정 시, 오류 발생함)
   };
 }
