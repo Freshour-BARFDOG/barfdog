@@ -1,13 +1,18 @@
 import {axiosOfIamport} from "./axiosOfIamport";
-import {axiosOfLocalServer} from "../axios/axiosOfLocalServer";
 import {IamportTokenResponseInterface} from "@src/pages/api/iamport/getAccessToken";
+import {AxiosInstance} from "axios";
+import {NextApiRequest, NextApiResponse} from "next";
+import {axiosOfBaseURL} from "@src/pages/api/axios/axiosOfBaseURL";
 
-export default async function POST(req, res) {
+export default async function POST(req:NextApiRequest, res:NextApiResponse) {
   console.log("--req body", req.body);
+  // Set the Axios base URL dynamically
+
+  const localApi:AxiosInstance = axiosOfBaseURL(req);
 
   try {
 
-    const tokenRes = await axiosOfLocalServer(`/api/iamport/getAccessToken`);
+    const tokenRes = await localApi.post(`/api/iamport/getAccessToken`);
     if (tokenRes.status !== 200) {
       res.status(tokenRes.status).json({
         status: tokenRes.status,
@@ -25,21 +30,12 @@ export default async function POST(req, res) {
       headers: {"Authorization": access_token}, // 인증 토큰을 Authorization header에 추가
       data: req.body,
     })
-      .then((res) => {
-        console.log(
-          '---------------------------- AXIOS > RESPONSE ----------------------------',
-          res,
-        );
-        return res.data;
-      })
-      .catch((err) => {
-        console.error('iamport subscribe err: ', err);
+      .then((res) => res.data)
+      .catch((err) => err.response);
 
-        return err.response;
-      });
+    const jsonDataAsString = JSON.stringify(DATA);
+
     console.log('---------- AXIOS > RESPONSE: ', DATA);
-    console.log('---------- AXIOS > RESPONSE: ', JSON.stringify(DATA));
-    // res.json(DATA);
 
     const defaultCorsHeader = {
       "Access-Control-Allow-Origin": "*", // 다 받거나, 하나만 받거나만 가능
@@ -50,17 +46,9 @@ export default async function POST(req, res) {
       "Content-Type": "application/json"
     };
 
-    const body = {
-      appVersion: DATA.appVersion,
-      id: DATA.id,
-      data: DATA.data,
-      success: DATA.success,
-    }
-    console.log('BODY: ', body);
-
 
     res.writeHead(200, defaultCorsHeader);
-    res.end(JSON.stringify(DATA)); // res body > JS obj를 JSON문자열로 전달해야함. (JSON.stringify())
+    res.end(jsonDataAsString); // res body > JS obj를 JSON문자열로 전달해야함. (JSON.stringify())
 
   } catch (err) {
     console.error(err);
