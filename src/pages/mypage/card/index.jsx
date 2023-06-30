@@ -149,8 +149,9 @@ export default function MypageCardPage({ data }) {
                 ) : (
                   <ul className={'card-list-container'}>
                     {cardList.map((card, index) => {
+                      console.log(card);
                       const cardName = card.subscribeCardDto.cardName || paymentMethodType.KOR[card.paymentMethod];
-                      const cardNumber = card.subscribeCardDto.cardNumber.slice(0, cardNumberUICount);
+                      const cardNumber = card.subscribeCardDto.cardNumber?.slice(0, cardNumberUICount) || " - ";
 
                       return <li key={`subscribe-card-${index}`} className={s.grid_body_box}>
                         <div className={s.col_1}>
@@ -162,7 +163,7 @@ export default function MypageCardPage({ data }) {
                               alt="카드 이미지"
                             />
                           </div>
-                          <span>{cardName}&nbsp;{cardNumber}</span>
+                          <span>{cardName}&nbsp;({cardNumber})</span>
                         </div>
                         <div>
                           <span className={s.col_title_m}>결제수단</span>
