@@ -7,7 +7,8 @@ import {dogActivityLevelType} from '/store/TYPE/dogActivityLevelType';
 import {dogSizeType} from "/store/TYPE/dogSizeType";
 import Btn_01 from '/public/img/mypage/statistic_dog_walker.svg';
 import Btn_02 from '/public/img/mypage/statistic_dog_walker2.svg';
-import {UnitOfDemicalPointOfOneMealGram} from "/util/func/subscribe/calcOneMealGramsWithRecipeInfo";
+
+import {UnitOfDemicalPointOfOneMealGram} from "../../../util/func/subscribe/finalVar";
 
 export const SurveyStatistics = ({ id ,  mode = 'default' }) => {
   

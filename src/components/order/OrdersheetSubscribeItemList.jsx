@@ -4,7 +4,8 @@ import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import React from 'react';
 import {subscribePlanType} from "/store/TYPE/subscribePlanType";
 import ErrorMessage from "../atoms/ErrorMessage";
-import {UnitOfDemicalPointOfOneMealGram} from "/util/func/subscribe/calcOneMealGramsWithRecipeInfo";
+
+import {UnitOfDemicalPointOfOneMealGram} from "../../../util/func/subscribe/finalVar";
 
 
 export const OrdersheetSubscribeItemList = ({
