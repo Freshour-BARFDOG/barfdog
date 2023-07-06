@@ -11,8 +11,8 @@ import {useModalContext} from '/store/modal-context';
 import {FullScreenLoading} from '/src/components/atoms/FullScreenLoading';
 import {calcSubscribePrice} from "/util/func/subscribe/calcSubscribePrices";
 import {valid_isTheSameArray} from "/util/func/validation/validationPackage";
-import {UnitOfDemicalPointOfOneMealGramInDatabase} from "/util/func/subscribe/calcOneMealGramsWithRecipeInfo";
 import {roundedOneMealGram} from "/util/func/subscribe/roundedOneMealGram";
+import {UnitOfDemicalPointOfOneMealGramInDatabase} from "../../../util/func/subscribe/finalVar";
 
 export const SubscribeGram = ({ subscribeInfo }) => {
 

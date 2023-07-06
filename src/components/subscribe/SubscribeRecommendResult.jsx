@@ -4,9 +4,9 @@ import React from 'react';
 import checkStringUnderConsonant from "/util/func/checkStringUnderConsonant";
 import transformLocalCurrency from "../../../util/func/transformLocalCurrency";
 import {
-  calcSubscribeOneDayRecommendKcal,
-  UnitOfDemicalPointOfOneMealGram
+  calcSubscribeOneDayRecommendKcal
 } from "/util/func/subscribe/calcOneMealGramsWithRecipeInfo";
+import {UnitOfDemicalPointOfOneMealGram} from "../../../util/func/subscribe/finalVar";
 
 export const SubscribeRecommendResult = ({info}) => {
   

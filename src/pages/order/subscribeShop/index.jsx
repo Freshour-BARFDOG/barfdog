@@ -7,7 +7,7 @@ import Wrapper from '/src/components/common/Wrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import {SubscribeShopRecipe} from '/src/components/subscribe/SubscribeShopRecipe';
 import {SubscribeShopPlan} from '/src/components/subscribe/SubscribeShopPlan';
-import {getDataSSR, postObjData, putObjData} from '/src/pages/api/reqData';
+import {getDataSSR, putObjData} from '/src/pages/api/reqData';
 import Spinner from '/src/components/atoms/Spinner';
 import {SubscribeRecommendResult} from '/src/components/subscribe/SubscribeRecommendResult';
 import {validate} from '/util/func/validation/validation_orderSubscribe';
@@ -24,6 +24,9 @@ import {useSubscribePlanInfo} from "/util/hook/useSubscribePlanInfo";
 import {useSubscribeRecipeInfo} from "/util/hook/useSubscribeRecipeInfo";
 import {calcOneMealGramsWithRecipeInfo} from "/util/func/subscribe/calcOneMealGramsWithRecipeInfo";
 import {calcSubscribePrice} from "/util/func/subscribe/calcSubscribePrices";
+import {
+  convertFixedNumberByOneDayRecommendKcal
+} from "../../../../util/func/subscribe/convertFixedNumberByOneDayRecommendKcal";
 
 
 export default function RegisterSubscribeInfoPage({ data }) {
@@ -154,7 +157,7 @@ export default function RegisterSubscribeInfoPage({ data }) {
       plan: form.plan,
       recipeIdList: form.recipeIdList,
       nextPaymentPrice: nextPaymentPrice, // 최종계산된가격
-      oneDayRecommendKcal: info.foodAnalysis.oneDayRecommendKcal // 반려견 설문조사 변경여부 검증용
+      oneDayRecommendKcal: convertFixedNumberByOneDayRecommendKcal(info.foodAnalysis.oneDayRecommendKcal) // 반려견 설문조사 변경여부 검증용
     };
 
     const errObj = validate(body);

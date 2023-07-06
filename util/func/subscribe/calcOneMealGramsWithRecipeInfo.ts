@@ -1,3 +1,7 @@
+import {
+  UnitOfDemicalPointOfOneDayRecommendKcalByUI,
+  UnitOfDemicalPointOfOneMealGram
+} from "@util/func/subscribe/finalVar";
 
 type SubscribeRecipeInfo = {
   selectedRecipeIds: number[],
@@ -8,10 +12,6 @@ type SubscribeRecipeInfo = {
   }[],
   oneDayRecommendKcal: number
 };
-
-export const UnitOfDemicalPointOfOneMealGram = 1; // 소수점 1번쨰 까지 (2번째 자리에서 반올림)
-export const UnitOfDemicalPointOfOneMealGramInDatabase = 2; // 소수점 1번쨰 까지 (2번째 자리에서 반올림)
-export const UnitOfDemicalPointOfOneDayRecommendKcal:number = 1;
 
 
 /**
@@ -43,5 +43,5 @@ export const calcOneMealGramsWithRecipeInfo = ({selectedRecipeIds, allRecipeInfo
 
 
 export const calcSubscribeOneDayRecommendKcal = (kcal:number) => {
-  return kcal.toFixed(UnitOfDemicalPointOfOneDayRecommendKcal) || 0;  // 하루 권장칼로리: 소수점 둘째자리에서 반올림 (웹개발기획서 22년 4월 2주)
+  return kcal.toFixed(UnitOfDemicalPointOfOneDayRecommendKcalByUI) || 0;  // 하루 권장칼로리: 소수점 둘째자리에서 반올림 (웹개발기획서 22년 4월 2주)
 };
