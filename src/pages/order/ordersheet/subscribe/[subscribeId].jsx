@@ -14,14 +14,18 @@ import {OrdersheetReward} from '/src/components/order/OrdersheetReward';
 import {OrdersheetMethodOfPayment} from '/src/components/order/OrdersheetMethodOfPayment';
 import {OrdersheetAmountOfPayment} from '/src/components/order/OrdersheetAmountOfPayment';
 import {calcNextSubscribeDeliveryDate} from '/util/func/calcNextSubscribeDeliveryDate';
-import {useSubscribePlanInfo} from "/util/hook/useSubscribePlanInfo";
 import {subscribePriceCutOffUnit} from "/util/func/subscribe/calcSubscribePrices";
 import {seperateStringViaComma} from "/util/func/seperateStringViaComma";
+import {subscribePlanType} from "../../../../../store/TYPE/subscribePlanType";
+import {FullScreenRunningDog} from "../../../../components/atoms/FullScreenLoading";
+import {useRouter} from "next/router";
 
 
-export default function SubscribeOrderSheetPage({ subscribeId }) {
+export default function SubscribeOrderSheetPage() {
 
-  const subscribePlanInfo = useSubscribePlanInfo();
+
+  // const subscribePlanInfo = useSubscribePlanInfo();
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState({ fetching: true });
   const [isRendered, setIsRendered] = useState(false);
   const [info, setInfo] = useState({});
@@ -34,7 +38,6 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
   });
 
 
-
   useEffect(() => {
     if (window && typeof window !== 'undefined') {
       setIsRendered(true);
@@ -45,20 +48,36 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
 
 
   useEffect(() => {
-    if ( Object.values(subscribePlanInfo.planDiscountPercent).filter(val=> val === null).length ) return console.error( "관리자에서 설정한 할인율을 받아올 수 없습니다." );
+    // router를 통해서, 해당 페이지에 진입한 경우, subscribePlanInfo 값이 받아와지지 않는다.
+    // ! 데이터 있으면, 다시 시도 안함
+    // ! 있으면, 실행 안함
+
 
     ( async () => {
-      setIsLoading( (prevState) => ({
-        ...prevState,
-        item: true,
-      }) );
       try {
+        setIsLoading( (prevState) => ({
+          ...prevState,
+          fetching: true,
+        }));
+
+        const url = `/api/planDiscount`;
+        const planDiscountRes = await getData(url);
+        console.log('----- planDiscountRes: ', planDiscountRes);
+        let subscribePlanInfo = {};
+        if(planDiscountRes.data && planDiscountRes.status === 200) {
+          const data = planDiscountRes.data._embedded.planDiscountResponseDtoList[0];
+          subscribePlanInfo[subscribePlanType.FULL.NAME] =  data.full;
+          subscribePlanInfo[subscribePlanType.HALF.NAME] =  data.half;
+          subscribePlanInfo[subscribePlanType.TOPPING.NAME] =  data.topping;
+        }
+
+        const subscribeId = router.query.subscribeId
         const apiUrl = `/api/orders/sheet/subscribe/${subscribeId}`;
         const body = {
           id: subscribeId,
         };
         const res = await getData( apiUrl, body );
-        // console.log(res)
+        console.log("/api/orders/sheet/subscribe/${subscribeId} = ",res.data)
         if ( res.status !== 200 ) {
           alert( '주문 정보를 확인할 수 없습니다.' );
           return (window.location.href = '/');
@@ -73,7 +92,7 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
             plan: data.subscribeDto.plan,
             nextPaymentPrice: data.subscribeDto.nextPaymentPrice,
             originPrice: calcSubscribePlanOriginPrice( {
-              discountPercent: subscribePlanInfo.planDiscountPercent[data.subscribeDto.plan],
+              discountPercent: subscribePlanInfo[data.subscribeDto.plan],
               paymentPrice: data.subscribeDto.nextPaymentPrice
             } ),
             discountGrade: data.subscribeDto.discountGrade, // 등급할인 (할인표기에 사용)
@@ -102,9 +121,7 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
             reward: data.reward,
             discountGrade: data.subscribeDto?.discountGrade || null, // 등급할인 // 정기구독 할인금액 산출 시 사용
           },
-          // ! DUMMY DATA
           coupons:
-          // DUMMY_MEMEBER_COUPON_LIST ||
             data.coupons?.map( (cp) => ({
               memberCouponId: cp.memberCouponId,
               name: cp.name,
@@ -145,7 +162,7 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
       } finally {
         setIsLoading( (prevState) => ({
           ...prevState,
-          item: false,
+          fetching: false,
         }) );
       }
     } )();
@@ -154,7 +171,7 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
       const originPrice = paymentPrice * (100 / (100 - discountPercent));
       return Math.floor(originPrice / subscribePriceCutOffUnit) * subscribePriceCutOffUnit;
     };
-  }, [subscribePlanInfo.isLoading]);
+  }, []);
 
 
 
@@ -168,6 +185,11 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
       [modalType]: !prevState[modalType],
     }));
   };
+
+
+  if (isLoading.fetching) {
+    return <FullScreenRunningDog/>
+  }
 
 
   return (
@@ -255,12 +277,4 @@ export default function SubscribeOrderSheetPage({ subscribeId }) {
       )}
     </>
   );
-}
-
-
-
-
-export async function getServerSideProps({ query }) {
-  const { subscribeId } = query;
-  return { props: { subscribeId: subscribeId || null } };
 }
