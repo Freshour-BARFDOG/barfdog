@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import s from './modal.module.scss';
-import { useModalContext } from '/store/modal-context';
+import { useModalContext } from '@store/modal-context';
 import ModalWrapper from './ModalWrapper';
 
-export default function Modal_global_alert({ message, onClick, background, ...props }) {
+
+interface PropsInterface {
+  message?: string;
+  onClick?: Function;
+  background?: boolean;
+}
+export default function Modal_global_alert({ message, onClick, background, ...props }:PropsInterface) {
   
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;

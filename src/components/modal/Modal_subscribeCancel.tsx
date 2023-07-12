@@ -4,10 +4,10 @@ import CloseButton from '../atoms/CloseButton';
 import CustomRadio from '../admin/form/CustomRadio';
 import Spinner from '../atoms/Spinner';
 import React, {useEffect, useState} from 'react';
-import Modal_global_alert from "/src/components/modal/Modal_global_alert";
-import {postObjData} from "/src/pages/api/reqData";
-import {useModalContext} from "/store/modal-context";
-import animateWindow from "/util/func/animateWindow";
+import Modal_global_alert from "@src/components/modal/Modal_global_alert";
+import {useModalContext} from "@store/modal-context";
+import animateWindow from "@util/func/animateWindow";
+import {postPaymentDataToApiServer} from "../../pages/api/postPaymentDataToApiServer";
 
 const formIdList = [
   '구매의사 취소 (구매자 귀책)',
@@ -46,7 +46,7 @@ export const Modal_subscribeCancel = ({onHideModal, subscribeId}) => {
   const mct = useModalContext();
   const [form, setForm] = useState(initialFormValues);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isLoading, setIsLoading] = useState({});
+  const [isLoading, setIsLoading] = useState({submit: false});
   const [mounted, setMounted] = useState(false);
   
   useEffect(() => {
@@ -80,40 +80,40 @@ export const Modal_subscribeCancel = ({onHideModal, subscribeId}) => {
     onHideModal( null );
   };
   
-  const onSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async () => {
     if (isSubmitted) return console.error('이미 제출된 양식입니다.');
     const body = {
       reason: form.reason,
       detailReason: form.detailReason,
     };
     console.log('RESPONSE subscribe Cancle body:\n',body);
-    
+
     try {
+      setIsSubmitted(true);
       setIsLoading((prevState) => ({
         ...prevState,
         submit: true,
       }));
-      
+
       const url = `/api/orders/${subscribeId}/subscribe/cancelRequest`;
-      const res = await postObjData(url, body);
+      const res = await postPaymentDataToApiServer(url, body); // timeout(요청대기시간): 네이버페이 검수
       console.log('RESPONSE subscribe Cancle',res);
       if (res.isDone) {
-        // if (!res.isDone) { //  ! TEST TEST
         mct.alertShow(`구독 취소요청이 접수되었습니다.`);
-        setIsSubmitted(true);
       } else {
-        mct.alertShow(`구독 취소요청이 접수되었습니다.`);
+        setIsSubmitted(false);
         mct.alertShow(`구독 취소요청에 실패하였습니다.`);
       }
     } catch (err) {
       console.error('통신에러: ', err);
-      mct.alertShow(`데이터 처리 중 오류가 발생했습니다.\n${err}`);
+      mct.alertShow(`[데이터 처리 오류] \n${err}`);
+      setIsSubmitted(false);
+    } finally {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        submit: false,
+      }));
     }
-    setIsLoading((prevState) => ({
-      ...prevState,
-      submit: false,
-    }));
   };
   
   

@@ -60,7 +60,17 @@ const ModalBackground = styled.div`
   cursor: ${(props) => (props.onClick && "pointer")};
 `;
 
-
+interface PropsInterface{
+  children: any;
+  id?: string;
+  className?: string;
+  style?: object;
+  label?: string;
+  background?: boolean;
+  onBackgroundClick?: Function
+  positionCenter?: boolean;
+  animation?: boolean;
+}
 
 
 function ModalWrapper({
@@ -74,7 +84,7 @@ function ModalWrapper({
   positionCenter,
   animation,
   ...props
-}) {
+}:PropsInterface) {
   return (
     <>
       {background && (

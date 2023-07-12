@@ -1,4 +1,4 @@
-import {postDataSSR, postObjData} from "../../../src/pages/api/reqData";
+import {postDataSSR, postObjData} from "@src/pages/api/reqData";
 import {removeIamportPaymentWindow} from "../removeIamportPaymentWindow";
 
 export async function faliedGeneralPayment(id, error_msg?: string) {
@@ -57,6 +57,7 @@ export async function successSubscribePayment(orderId, data) {
 }
 
 export async function invalidSuccessSubscribePayment({orderId, data, error_msg, error_code}) {
+  //  API FLOW:  API SERVER 위변조 취소 요청 => API SERVER 내에서 포트원 결제정보 위변조 여부 재검증 => 위변조된 주문일 경우 즉시 결제취소
   const body = {
     impUid: data.impUid, // impUid는 두 번째 결제에 값이 있어야, webhook에서 해당 주문을 찾을 수 있음.
     merchantUid: data.merchantUid, // merchantUid는 첫 번째, 두 번째 결제 모두 동일

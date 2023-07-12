@@ -1,5 +1,17 @@
-import React, {useEffect, useState} from 'react';
+import React, {Dispatch, useEffect, useState} from 'react';
 import s from './customRadio.module.scss';
+
+
+interface PropsInterface {
+  setValue: Dispatch<any>;
+  value: string;
+  name?: string;
+  className?: string;
+  idList: string[];
+  labelList: (string | object)[];
+  initIndex?: number;
+  getDirValue?: boolean;
+}
 
 const CustomRadio = ({
   setValue,
@@ -11,7 +23,7 @@ const CustomRadio = ({
   initIndex,
   getDirValue,
   ...props
-}) => {
+}:PropsInterface) => {
 
 
   const initialValue = value || idList[initIndex || 0] ;
@@ -63,4 +75,3 @@ const CustomRadio = ({
 };
 
 export default CustomRadio;
-

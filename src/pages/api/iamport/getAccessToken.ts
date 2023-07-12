@@ -1,4 +1,4 @@
-import {axiosOfIamport} from "@src/pages/api/iamport/axiosOfIamport";
+import {axiosIamport} from "@src/pages/api/axios/axiosIamport";
 import {AxiosResponse} from "axios";
 
 export interface IamportTokenResponseInterface {
@@ -8,7 +8,7 @@ export interface IamportTokenResponseInterface {
 
 export default async function POST(req:Request, res:any | Response) {
 
-  const tokenRes:AxiosResponse = await axiosOfIamport.post('/users/getToken', {
+  const tokenRes:AxiosResponse = await axiosIamport.post('/users/getToken', {
     imp_key: `${process.env.NEXT_PUBLIC_IAMPORT_REST_API_KEY}`,
     imp_secret: `${process.env.NEXT_PUBLIC_IAMPORT_REST_API_SECRET}`
   });
@@ -17,9 +17,9 @@ export default async function POST(req:Request, res:any | Response) {
     access_token, expired_at
   }
 
-  console.log("access_token = ",access_token);
+  console.log("----- getAccessToken > access_token = ",access_token);
   if (!access_token) {
-    res.status(500).json({
+    return res.status(500).json({
       message: "Failed to get Iamport access token."
     });
   }

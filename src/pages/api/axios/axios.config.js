@@ -7,6 +7,7 @@ axios.defaults.baseURL =
   process.env.NODE_ENV === 'production'
     ? process.env.NEXT_PUBLIC_API_URL_PRODUCT
     : process.env.NEXT_PUBLIC_API_URL_DEV;
+axios.defaults.timeout = 10000;
 
 console.log('axios.defaults.baseURL: ',axios.defaults.baseURL);
 

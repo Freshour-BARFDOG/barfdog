@@ -1,14 +1,17 @@
-import {axiosOfIamport} from "./axiosOfIamport";
+import {axiosIamport} from "../axios/axiosIamport";
 import {IamportTokenResponseInterface} from "@src/pages/api/iamport/getAccessToken";
 import {AxiosInstance} from "axios";
 import {NextApiRequest, NextApiResponse} from "next";
-import {axiosOfBaseURL} from "@src/pages/api/axios/axiosOfBaseURL";
+import {axiosBaseURLBySSR} from "@src/pages/api/axios/axiosBaseURLBySSR";
 
 export default async function POST(req:NextApiRequest, res:NextApiResponse) {
   console.log("--req body", req.body);
+  // timeout - 네이버페이 검수 조건
+  // ※ 정기결제 승인 / 취소 API : 60초
+  // ※ 그 외 API : 10초
+  const timeout:number = 60000;
   // Set the Axios base URL dynamically
-
-  const localApi:AxiosInstance = axiosOfBaseURL(req);
+  const localApi:AxiosInstance = axiosBaseURLBySSR(req, {timeout: timeout});
 
   try {
 
@@ -24,11 +27,12 @@ export default async function POST(req:NextApiRequest, res:NextApiResponse) {
     const {access_token}: IamportTokenResponseInterface = tokenRes.data;
 
 
-    const DATA = await axiosOfIamport({
+    const DATA = await axiosIamport({
       url: `/subscribe/payments/again`,
       method: "post",
       headers: {"Authorization": access_token}, // 인증 토큰을 Authorization header에 추가
       data: req.body,
+      timeout: timeout
     })
       .then((res) => res.data)
       .catch((err) => err.response);

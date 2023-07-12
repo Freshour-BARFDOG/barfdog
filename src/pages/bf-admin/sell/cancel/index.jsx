@@ -21,6 +21,7 @@ import Tooltip from "/src/components/atoms/Tooltip";
 import {getDefaultPagenationInfo} from "/util/func/getDefaultPagenationInfo";
 import enterKey from "/util/func/enterKey";
 import {global_searchDateType} from "/store/TYPE/searchDateType";
+import {postPaymentDataToApiServer} from "../../../api/postPaymentDataToApiServer";
 
 
 const initialSearchValues = {
@@ -120,7 +121,7 @@ export default function CancelOnSellPage() {
         confirmingCancelOrder: true,
       }));
       const apiUrl = `/api/admin/orders/${itemType.toLowerCase()}/cancelConfirm`; // ! check path endPoint
-      const res = await postObjData(apiUrl, body);
+      const res = await postPaymentDataToApiServer(apiUrl, body);
       console.log('onConfirmingCancelOrder: \n', body);
       console.log('response: admin > sell > cancel > index.jsx\n', res);
       if (res.isDone) {

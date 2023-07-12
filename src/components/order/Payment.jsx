@@ -22,6 +22,7 @@ import {
   validPayment
 } from "util/func/order/paymentCallback";
 import {isAbandondPayment} from "util/func/order/paymentUtils";
+import {createRandomMerchantUidByDateTime} from "../../../util/func/subscribe/createRandomMerchantUidByDateTime";
 
 
 export function Payment({
@@ -303,7 +304,7 @@ export function Payment({
     IMP.init(process.env.NEXT_PUBLIC_IAMPORT_CODE);
 
 
-    /* 2. 결제 데이터 정의하기  TODO:kakaopay 실연동 가맹점코드(CID) 발급받으면 변경하기*/
+    /* 2. [결제등록] 결제 데이터 정의하기 */
     const itemName = `[최초결제][구독상품]-${info.recipeNameList.join(", ")}`;
     const mobileItemName = `[최초결제][m-구독상품]-${info.recipeNameList.join(", ")}`;
     const buyer_name = info.name;
@@ -311,15 +312,15 @@ export function Payment({
     const buyer_email = info.email;
     const buyer_addr = `${info.address.street}, ${info.address.detailAddress}`;
     const buyer_postcode = info.address.zipcode;
-
-    // 아임포트 전송 데이터
     const m_redirect_url = `${window.location.origin}/order/loading/subscribe`;
     const discountReward = body.discountReward;
     const params = `${id}/${customerUid}/${body.paymentPrice}/${merchantUid}/${mobileItemName}/${buyer_name}/${buyer_tel}/${buyer_email}/${buyer_addr}/${buyer_postcode}/${discountReward}`;
+
+
     const data = {
       pg: pgType.SUBSCRIBE[body.paymentMethod], // PG사 + 사이트키
       pay_method: 'card', // 결제수단
-      merchant_uid: new Date().getTime().toString(36), // 주문번호
+      merchant_uid: createRandomMerchantUidByDateTime(), // 주문번호
       amount: 0, // 결제금액 0원 ( 구독결제 시, 첫 번째 결제는 예약과정)
       customer_uid: customerUid,
       name: `[결제등록]${itemName}`, // 첫 번째 결제는 결제등록 (`KCP` 결제 시에만 해당 name 표시됨)
@@ -332,7 +333,7 @@ export function Payment({
     };
 
 
-    // 네이버 페이 추가
+    // 결제 데이터 - 네이버 페이 추가
     if (body.paymentMethod === paymentMethodType.NAVER_PAY) {
       Object.assign(data, getNaverpaySubscribePaymentParam({subscribeId, isMobile: isMobile})); // 네이버페이 데이터 합침
     }
@@ -352,9 +353,10 @@ export function Payment({
       buyer_postcode: buyer_postcode,
     }
 
+    /* 3. 결제 창 호출하기 */
     IMP.request_pay(data, callback.bind(null, callbackData));
 
-    /* 4. 결제 창 호출하기 */
+
     async function callback(callbackData, response) {
 
       console.log(response);
@@ -369,10 +371,10 @@ export function Payment({
       }
 
 
-      /* 3. 콜백 함수 정의하기 */
       if (success) {
 
 
+        /* 4. [실결제] 결제 데이터 정의하기 */
         const data = {
           customer_uid: customer_uid,
           merchant_uid: merchantUid, // 서버로부터 받은 주문번호
@@ -386,11 +388,20 @@ export function Payment({
         };
 
         // 아임포트 전송데이터
-        const paymentResult = await axios.post(`${window.location.origin}/api/iamport/iamportSubscribe`, data)
+        const localOrigin = window.location.origin;
+        const paymentResult = await axios({
+          method:"POST",
+          url:`${localOrigin}/api/iamport/iamportSubscribe`,
+          data:data,
+          timeout: 60000
+        })
           .then(res => res)
           .catch(err => err.response);
 
         console.log(paymentResult.data);
+
+
+        /* 5. 결제결과 처리하기 */
 
         // validation - 카드사 요청에 실패
         if (!paymentResult?.data) {
@@ -398,20 +409,20 @@ export function Payment({
           return;
         }
 
-        const {code, response: paymentAgainResponse, error_code, error_msg} = paymentResult.data; // 실제 결제 결과 (첫 번째 결제: 결제등록/ 두 번째 결제: 실제 결제).
+        const {code, response: paymentAgainResponse} = paymentResult.data; // 실제 결제 결과 (첫 번째 결제: 결제등록/ 두 번째 결제: 실제 결제).
 
-        const {imp_uid: again_imp_uid, status} = paymentAgainResponse;
+        const {imp_uid: again_imp_uid, status, fail_reason: error_msg} = paymentAgainResponse;
 
 
         // validation - 카드사 통신 실패
         if (code !== 0) {
-          await failedSubscribePayment(id, error_msg, error_code);
+          await failedSubscribePayment(id, error_msg);
           return;
         }
 
         // validation - 카드 승인 실패 (예: 고객 카드 한도초과, 거래정지카드, 잔액부족 등)
         if (status === 'failed') {
-          await failedSubscribePayment(id, error_msg, error_code);
+          await failedSubscribePayment(id, error_msg);
           return;
         }
 
@@ -429,7 +440,6 @@ export function Payment({
 
           // validation - 결제 금액 검증
           const isValid = await validPayment({orderId: id, impUid: again_imp_uid}); // 두 번째 결제 imp_uid 검증 (첫 번째 imp_uid는 '결제등록')
-          console.log(isValid);
           if (!isValid) {
             // 주문 금액 검증 기능 - 자체 구현
             const errorMsg = "[결제실패] 주문금액과 결제금액이 일치하지 않습니다. 결제가 즉시 취소됩니다.";

@@ -26,6 +26,7 @@ import axios from 'axios';
 import {getDefaultPagenationInfo} from "/util/func/getDefaultPagenationInfo";
 import enterKey from "/util/func/enterKey";
 import {global_searchDateType} from "/store/TYPE/searchDateType";
+import {postPaymentDataToApiServer} from "../../../api/postPaymentDataToApiServer";
 
 const initialSearchValues = {
   from: global_searchDateType.oldestDate,
@@ -39,7 +40,7 @@ const initialSearchValues = {
 };
 
 export default function OrderOnSellPage() {
-  
+
   const searchApiUrl = `/api/admin/orders/searchAll`;
   const searchPageSize = 10;
   const [isLoading, setIsLoading] = useState({});
@@ -51,7 +52,7 @@ export default function OrderOnSellPage() {
   const [searchQueryInitialize, setSearchQueryInitialize] = useState( false );
   const allItemIdList = itemList.map((item) => item.id); // 주문 id
   const [selectedItemList, setSelectedItemList] = useState([]);
-  
+
 
   useEffect(() => {
     const selectedList = itemList.filter((data) => selectedOrderIdList.indexOf(data.id) >= 0);
@@ -89,8 +90,8 @@ export default function OrderOnSellPage() {
     setSearchBody(body);
     setSelectedOrderIdList([]); // 선택된 아이템 id 리스트 초기화
   };
-  
-  
+
+
   const pageInterceptor = useCallback((res, option={itemQuery: null}) => {
     // res = searchValues.orderType === productType.GENERAL ? DUMMY__ADMIN_ORDER_ITEMS_GENERAL_RESPONSE :  DUMMY__ADMIN_ORDER_ITEMS_SUBSCRIBE_RESPONSE; //  ! TEST TEST TEST
     console.log(res);
@@ -122,7 +123,7 @@ export default function OrderOnSellPage() {
     }
     setActiveModal({ orderConfirm: true });
   };
-  
+
 
   const onOrderConfirm = async (selectedIdList) => {
     if (!selectedIdList.length) return alert('선택된 상품이 없습니다.');
@@ -146,7 +147,7 @@ export default function OrderOnSellPage() {
         confirm: true,
       }));
       const apiUrl = `/api/admin/orders/${itemType.toLowerCase()}/orderConfirm`;
-      const res = await postObjData(apiUrl, body);
+      const res = await postPaymentDataToApiServer(apiUrl, body);
       console.log('onOrderConfirm: \n', body);
       console.log('response: admin > sell > search > index.jsx\n', res);
       if (res.isDone) {
@@ -164,11 +165,11 @@ export default function OrderOnSellPage() {
         confirm: false,
       }));
     }
-    
+
   };
-  
-  
-  
+
+
+
   const onStartRegisterDelivery = async () => {
     // - API CYCLE
     // - 1. FE => BE : 발송처리할 상품의 id List 전달 (주문 발송 api에 필요한 배송 정보 reponse 받음)
@@ -178,7 +179,7 @@ export default function OrderOnSellPage() {
     if(invalidItemList.length){
       return alert( `주문발송 처리에 부적당한 ${searchValues.orderType === "GENERAL" ? "일반" : "구독"}상품이 포함되어있습니다.` );
     }
-    
+
     if (!selectedOrderIdList.length) return alert('선택된 상품이 없습니다.');
     if (!confirm(`선택하신 ${selectedOrderIdList.length}개의 상품을 발송처리 하시겠습니까?`))
       return;
@@ -292,7 +293,7 @@ export default function OrderOnSellPage() {
         confirm: false,
       }));
     }
-  
+
   };
   const postDeliveryNo = async () => {
     /// ! ---------------운송장 번호 등록과정 추가필요 -----------------!
@@ -412,12 +413,7 @@ export default function OrderOnSellPage() {
   const onCancelOrder = async (enteredDetailReason, selectedIdList) => {
     if (!enteredDetailReason) return alert('판매취소사유를 입력해주세요.');
     if (selectedIdList.length <= 0) return alert('판매취소할 상품을 선택해주세요.');
-    if (
-      !confirm(
-        `선택하신 ${selectedIdList.length} 개의 상품을 판매취소 처리하시겠습니까?\n선택된 상품이 포함된 주문은 '전체취소'처리됩니다.`,
-      )
-    )
-      return;
+    if (!confirm(`선택하신 ${selectedIdList.length} 개의 상품을 판매취소 처리하시겠습니까?\n선택된 상품이 포함된 주문은 '전체취소'처리됩니다.`,)) return;
 
     // const seletedOrderItemIdList = itemList
     //   .filter((item) => selectedIdList.indexOf(item.id) >= 0)
@@ -445,7 +441,7 @@ export default function OrderOnSellPage() {
         orderCancel: true,
       }));
       const apiUrl = `/api/admin/orders/${itemType.toLowerCase()}/orderCancel`;
-      const res = await postObjData(apiUrl, body);
+      const res = await postPaymentDataToApiServer(apiUrl, body); // 네이버페이 검수 대상 (결제취소: timeout 60초)
       console.log('onOrderCancel: \n', 'apiUrl:', apiUrl, '\nbody:', body);
       console.log('response: admin > sell > search > index.jsx\n', res);
       if (res.isDone) {
@@ -462,11 +458,11 @@ export default function OrderOnSellPage() {
       orderCancel: false,
     }));
   };
-  
+
   const filterInvalidOrderConfirmStatusItems = (items) => {
     return items.filter(item=>item.orderStatus !== orderStatus.PAYMENT_DONE);
   }
-  
+
   const filterInvalidDeliveryStatusItems = (items, orderType) => {
     let invalidItemList = [];
     if ( orderType === productType.GENERAL  ){
@@ -476,8 +472,8 @@ export default function OrderOnSellPage() {
     }
     return invalidItemList;
   }
-  
-  
+
+
   const onSearchInputKeydown = (e) => {
     enterKey(e, onSearchHandler);
   };

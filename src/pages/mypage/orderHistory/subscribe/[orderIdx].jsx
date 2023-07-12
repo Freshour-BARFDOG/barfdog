@@ -5,7 +5,7 @@ import MypageWrapper from '/src/components/mypage/MypageWrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import s from 'src/pages/mypage/orderHistory/orderHistoryOrdersheet.module.scss';
 import Image from 'next/image';
-import {getDataSSR, postObjData} from '/src/pages/api/reqData';
+import {getDataSSR} from '/src/pages/api/reqData';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import popupWindow from '/util/func/popupWindow';
 import {valid_deliveryCondition} from '/util/func/validation/valid_deliveryCondition';
@@ -17,6 +17,8 @@ import {Modal_subscribeCancel} from "/src/components/modal/Modal_subscribeCancel
 import {paymentMethodType} from "/store/TYPE/paymentMethodType";
 import {roundedOneMealGram} from "/util/func/subscribe/roundedOneMealGram";
 import {seperateStringViaComma} from "/util/func/seperateStringViaComma";
+import {postPaymentDataToApiServer} from "../../../api/postPaymentDataToApiServer";
+import {redirectBySSR} from "../../../../../util/func/redirectBySSR";
 
 
 /*! 참고)
@@ -62,13 +64,13 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
     
     if (!confirm) return initializeModalState();
 
-    const body = {
+    const data = {
       reason: '생산 전, 구독 즉시 취소',
       detailReason: '',
     };
-    console.log(body);
+    console.log(data);
     try {
-      const r = await postObjData(`/api/orders/${orderIdx}/subscribe/cancelRequest`, body);
+      const r = await postPaymentDataToApiServer(`/api/orders/${orderIdx}/subscribe/cancelRequest`, data);
       console.log(r);
       if (r.isDone) {
         alert('구독 주문 결제취소 완료');
@@ -78,9 +80,10 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
       }
     } catch (err) {
       console.error(err);
+    } finally {
+      setActiveModal(null);
     }
 
-    setActiveModal(null);
   };
 
   const onStartCancel = () => {
@@ -381,12 +384,8 @@ export async function getServerSideProps(ctx) {
   // console.log('SERVER REPONSE: ', res);
   const data = res?.data;
   console.log('REPONSE DATA:',data);
-  if(data.status === 500){
-    return {
-      redirect:{
-        destination: '/mypage/orderHistory'
-      }
-    }
+  if(!data || data.status === 500){
+    return redirectBySSR('/mypage/orderHistory');
   } else if (data) {
     DATA = {
       recipeDto: {

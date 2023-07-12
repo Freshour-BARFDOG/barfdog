@@ -1,14 +1,33 @@
 import React, { createContext, useContext, useState } from 'react';
 import { Modal_changePassword } from '@src/components/modal/Modal_changePassword';
 
+interface ModelValueInterface{
+
+}
+
 const ModalContext = createContext({
   // 컴포넌트를 포함한 객체가 될 예정이기 때문에, 첫 단어를 대문자로 지정
-  isActive: () => {}, // Modal 활성여부
+  event: {
+    scrollY: 0,
+    setScrollY: ()=> {},
+  },
+  isActive: false,
+  message: null,
+  callback: {},
   onShow: () => {}, // Modal 활성
   onHide: () => {}, // Modal 비활성
-  alertShow: () => {}, // AlertModal 활성
+  alertShow: (message?:string, cb?:Function) => {}, // AlertModal 활성
   alertHide: () => {},// AlertModal 비활성
   hasAlert:false,// AlertModal 활성 여부
+  subscribe: {
+    isActive: false,
+    onShow: ()=>{},
+    onHide: ()=>{},
+  },
+  ChangePW:{
+    onShow: ()=>{},
+    onHide: ()=>{},
+  }
 });
 
 const useModalContext = () => useContext(ModalContext);
@@ -60,9 +79,8 @@ const ModalContextProvider = ({ children, ...props }) => {
   const onHideChagnePasswordModal  = ()=>{
     setActiveChangePasswordModal(false)
   }
-  
-  
-  
+
+
 
 
   return (
