@@ -23,7 +23,7 @@ export default function CustomDocument () {
             href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css"
             rel="stylesheet"
             type="text/css"
-            crossOrigin
+            crossOrigin={"true"}
           />
         <script
           script-title={'google-analytics'}
