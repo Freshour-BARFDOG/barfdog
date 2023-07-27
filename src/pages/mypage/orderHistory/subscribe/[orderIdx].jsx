@@ -19,6 +19,7 @@ import {roundedOneMealGram} from "/util/func/subscribe/roundedOneMealGram";
 import {seperateStringViaComma} from "/util/func/seperateStringViaComma";
 import {postPaymentDataToApiServer} from "../../../api/postPaymentDataToApiServer";
 import {redirectBySSR} from "../../../../../util/func/redirectBySSR";
+import {CancelReasonName} from "../../../../../store/TYPE/order/CancelReasonName";
 
 
 /*! 참고)
@@ -65,15 +66,15 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
     if (!confirm) return initializeModalState();
 
     const data = {
-      reason: '생산 전, 구독 즉시 취소',
-      detailReason: '',
+      reason: CancelReasonName.cancelNowOfSubscribeOrderByBuyer,
+      detailReason: CancelReasonName.cancelNowOfSubscribeOrderByBuyerAsDetailReason,
     };
     console.log(data);
     try {
       const r = await postPaymentDataToApiServer(`/api/orders/${orderIdx}/subscribe/cancelRequest`, data);
       console.log(r);
       if (r.isDone) {
-        alert('구독 주문 결제취소 완료');
+        alert(CancelReasonName.cancelNowOfSubscribeOrderByBuyer,);
         window.location.reload();
       } else {
         alert(`주문취소 실패\n${r.error}`);

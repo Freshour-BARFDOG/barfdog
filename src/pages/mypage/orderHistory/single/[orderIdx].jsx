@@ -21,6 +21,7 @@ import {general_itemType} from "/store/TYPE/itemType";
 import {validation_ReturnableAndExchangeableOrders} from "/util/func/validation/validation_ReturnableAndExchangeableOrders";
 import {useModalContext} from "/store/modal-context";
 import Modal_global_alert from "/src/components/modal/Modal_global_alert";
+import {CancelReasonName} from "../../../../../store/TYPE/order/CancelReasonName";
 
 
 
@@ -147,17 +148,17 @@ export default function SingleItem_OrderHistoryPage({ data }) {
     if (!confirm) return initializeModalState();
 
     const body = {
-      reason: '구매자에 의한 즉시 주문취소',
-      detailReason: '',
+      reason: CancelReasonName.cancelNowOfGeneralOrderByBuyer,
+      detailReason: CancelReasonName.cancelNowOfGeneralOrderByBuyerAsDetailReason,
     };
     try {
       const r = await postObjData(
         `/api/orders/${data?.orderDto.orderId}/general/cancelRequest`,
         body,
-      ); // 어드민에서 주문확인 여부에 관계없이 cancelRequest를 사용하고, 서버에서 주문상태를 확인해서, 주문취소를 처리함
+      );
       console.log(r);
       if (r.isDone) {
-        alert('전체 주문 결제취소완료');
+        alert(CancelReasonName.cancelNowOfGeneralOrderByBuyer);
         window.location.reload();
       } else {
         alert('전체 주문 결제취소 요청 중 오류가 발생했습니다.');

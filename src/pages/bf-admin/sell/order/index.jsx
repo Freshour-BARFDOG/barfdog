@@ -27,6 +27,7 @@ import {getDefaultPagenationInfo} from "/util/func/getDefaultPagenationInfo";
 import enterKey from "/util/func/enterKey";
 import {global_searchDateType} from "/store/TYPE/searchDateType";
 import {postPaymentDataToApiServer} from "../../../api/postPaymentDataToApiServer";
+import {CancelReasonName} from "../../../../../store/TYPE/order/CancelReasonName";
 
 const initialSearchValues = {
   from: global_searchDateType.oldestDate,
@@ -403,14 +404,14 @@ export default function OrderOnSellPage() {
     }
   };
 
-  const onStartOrderCancel = () => {
+  const onValidOrderBeforeCancelOrderBySeller = () => {
     if (!selectedOrderIdList.length) {
       return alert('선택된 상품이 없습니다.');
     }
     setActiveModal({ orderCancel: true });
   };
 
-  const onCancelOrder = async (enteredDetailReason, selectedIdList) => {
+  const onCancelOrderBySeller = async (enteredDetailReason, selectedIdList) => {
     if (!enteredDetailReason) return alert('판매취소사유를 입력해주세요.');
     if (selectedIdList.length <= 0) return alert('판매취소할 상품을 선택해주세요.');
     if (!confirm(`선택하신 ${selectedIdList.length} 개의 상품을 판매취소 처리하시겠습니까?\n선택된 상품이 포함된 주문은 '전체취소'처리됩니다.`,)) return;
@@ -423,13 +424,13 @@ export default function OrderOnSellPage() {
       itemType === productType.GENERAL
         ? {
             orderItemIdList: selectedIdList, // 취소 컨펌 처리 할 주문한상품(orderItem) id 리스트
-            reason: enteredDetailReason,
+            reason: CancelReasonName.cancelNowOfGeneralOrderBySeller, // 포트원에 전달되는 사유 (일반결제)
             detailReason: enteredDetailReason,
           }
         : itemType === productType.SUBSCRIBE
         ? {
             orderIdList: selectedOrderIdList, // "주문 id" list
-            reason: '판매자 판매취소',
+            reason: CancelReasonName.cancelNowOfSubscribeOrderBySeller, // 포트원에 전달되는 사유 (정기결제)
             detailReason: enteredDetailReason,
           }
         : null;
@@ -445,10 +446,15 @@ export default function OrderOnSellPage() {
       console.log('onOrderCancel: \n', 'apiUrl:', apiUrl, '\nbody:', body);
       console.log('response: admin > sell > search > index.jsx\n', res);
       if (res.isDone) {
-        alert('주문취소 처리되었습니다.');
+        alert(
+          itemType === productType.GENERAL
+            ? CancelReasonName.cancelNowOfGeneralOrderBySeller
+            : CancelReasonName.cancelNowOfSubscribeOrderBySeller
+        );
+
         window.location.reload();
       } else {
-        alert(`주문취소 중 오류가 발생했습니다.\n${res.error}`);
+        alert(`판매자 주문취소 처리 중 오류가 발생했습니다.\n${res.error}`);
       }
     } catch (err) {
       console.log('API통신 오류 : ', err);
@@ -539,7 +545,7 @@ export default function OrderOnSellPage() {
                 {/* <button className="admin_btn line basic_m" onClick={postDeliveryNo}>
                   운송장전송
                 </button> */}
-                <button className="admin_btn line basic_m" onClick={onStartOrderCancel}>
+                <button className="admin_btn line basic_m" onClick={onValidOrderBeforeCancelOrderBySeller}>
                   {isLoading.orderCancel ? <Spinner /> : '판매취소'}
                 </button>
               </div>
@@ -595,7 +601,7 @@ export default function OrderOnSellPage() {
           id={'orderCancel'}
           orderType={searchBody.orderType}
           setActiveModal={setActiveModal}
-          onConfirm={onCancelOrder}
+          onConfirm={onCancelOrderBySeller}
           selectedItemData={selectedItemList}
         />
       )}
