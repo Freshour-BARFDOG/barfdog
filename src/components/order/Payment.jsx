@@ -57,7 +57,12 @@ export function Payment({
   const onSubmit = async () => {
 
     if (isSubmitted) return console.error("이미 제출된 양식입니다.");
-    setIsSubmitted(true);
+
+    if(form.paymentMethod === paymentMethodType.NAVER_PAY){
+      alert(`네이버페이 결제 준비중입니다. 다른 결제수단을 선택해주세요.`);
+      return;
+    }
+
 
     if (!availablePaymentState({reward: info.reward})) {
       alert('결제할 수 없는 상태입니다.\n적립금, 쿠폰 등 사용가능여부를 확인하시기 바랍니다.');
@@ -65,6 +70,8 @@ export function Payment({
       return;
     }
 
+
+    setIsSubmitted(true);
 
     const valid_target = {
       name: form.deliveryDto.name,
