@@ -21,9 +21,10 @@ import {
   successSubscribePayment,
   validPayment
 } from "util/func/order/paymentCallback";
-import {isAbandondPayment} from "util/func/order/paymentUtils";
-import {createRandomMerchantUidByDateTime} from "../../../util/func/subscribe/createRandomMerchantUidByDateTime";
-
+import {isAbandonedPayment} from "util/func/order/paymentUtils";
+import {
+  getAmountOfPaymentRegisterationByPaymentMethod
+} from "../../../util/func/subscribe/getAmountOfPaymentRegisterationByPaymentMethod";
 
 export function Payment({
                           info,
@@ -58,10 +59,10 @@ export function Payment({
 
     if (isSubmitted) return console.error("이미 제출된 양식입니다.");
 
-    if(form.paymentMethod === paymentMethodType.NAVER_PAY){
-      alert(`네이버페이 결제 준비중입니다. 다른 결제수단을 선택해주세요.`);
-      return;
-    }
+    // if(form.paymentMethod === paymentMethodType.NAVER_PAY){
+    //   alert(`네이버페이 결제 준비중입니다. 다른 결제수단을 선택해주세요.`);
+    //   return;
+    // }
 
 
     if (!availablePaymentState({reward: info.reward})) {
@@ -70,8 +71,6 @@ export function Payment({
       return;
     }
 
-
-    setIsSubmitted(true);
 
     const valid_target = {
       name: form.deliveryDto.name,
@@ -101,6 +100,7 @@ export function Payment({
       return alert('유효하지 않은 항목이 있습니다.')
     };
     // 결제 로직 시작
+    setIsSubmitted(true);
     await startPayment();
   };
 
@@ -246,7 +246,7 @@ export function Payment({
       pay_method: paymethodFilter(body.paymentMethod), // 결제수단
       merchant_uid: merchantUid, // 주문번호
       amount: body.paymentPrice, // 결제금액
-      name: `[일반상품]-${itemName}`, // 주문명
+      name: `${itemName}`, // 주문명
       buyer_name: info.name, // 구매자 이름
       buyer_tel: info.phone, // 구매자 전화번호
       buyer_email: info.email, // 구매자 이메일
@@ -312,8 +312,8 @@ export function Payment({
 
 
     /* 2. [결제등록] 결제 데이터 정의하기 */
-    const itemName = `[최초결제][구독상품]-${info.recipeNameList.join(", ")}`;
-    const mobileItemName = `[최초결제][m-구독상품]-${info.recipeNameList.join(", ")}`;
+    const itemName = `${info.recipeNameList.join(", ")}`;
+    const mobileItemName = `${info.recipeNameList.join(", ")}`;
     const buyer_name = info.name;
     const buyer_tel = info.phone;
     const buyer_email = info.email;
@@ -324,13 +324,18 @@ export function Payment({
     const params = `${id}/${customerUid}/${body.paymentPrice}/${merchantUid}/${mobileItemName}/${buyer_name}/${buyer_tel}/${buyer_email}/${buyer_addr}/${buyer_postcode}/${discountReward}`;
 
 
+    // 결제등록 DATA
     const data = {
       pg: pgType.SUBSCRIBE[body.paymentMethod], // PG사 + 사이트키
       pay_method: 'card', // 결제수단
-      merchant_uid: createRandomMerchantUidByDateTime(), // 주문번호
-      amount: 0, // 결제금액 0원 ( 구독결제 시, 첫 번째 결제는 예약과정)
+      // merchant_uid: createRandomMerchantUidByDateTime(), // 주문번호
+      merchant_uid: null, // 주문번호
+      amount: getAmountOfPaymentRegisterationByPaymentMethod({
+        method: body.paymentMethod,
+        originAmount: body.paymentPrice
+      }),
       customer_uid: customerUid,
-      name: `[결제등록]${itemName}`, // 첫 번째 결제는 결제등록 (`KCP` 결제 시에만 해당 name 표시됨)
+      name: `${itemName}`, // 네이버페이 검수 조건: 상품명 그대로 노출
       buyer_name: buyer_name,
       buyer_tel: buyer_tel,
       buyer_email: buyer_email, // 구매자 이메일
@@ -364,18 +369,25 @@ export function Payment({
     IMP.request_pay(data, callback.bind(null, callbackData));
 
 
-    async function callback(callbackData, response) {
+    async function callback(callbackData, paymentRegistrationResponse) {
 
-      console.log(response);
+      console.log(paymentRegistrationResponse);
 
-      const {success, customer_uid, error_code, error_msg} = response; // ! 최초 정기구독 주문시 0원결제 사용되는 IMP UID
+      const {success, customer_uid, error_code, error_msg} = paymentRegistrationResponse; // [정기구독 등록] API Response
+      // paymentRegistrationResponse > customer_uid: 결제 성공, 실패 시 나타남 (cf. 네이버페이: 정기결제 등록됨 / billingKey 삭제 시, 정기결제 등록해제 됨)
+
+
+
 
 
       // 결제 포기
-      if (isAbandondPayment(response?.error_msg)) {
-        await cancelSubscribeOrder(id, error_msg);
+      if (isAbandonedPayment(paymentRegistrationResponse?.error_msg)) {
+        await cancelSubscribeOrder({orderId:id, error_msg, error_code});
         return;
       }
+
+
+
 
 
       if (success) {
@@ -396,7 +408,7 @@ export function Payment({
 
         // 아임포트 전송데이터
         const localOrigin = window.location.origin;
-        const paymentResult = await axios({
+        const paymentResponse = await axios({
           method:"POST",
           url:`${localOrigin}/api/iamport/iamportSubscribe`,
           data:data,
@@ -405,31 +417,36 @@ export function Payment({
           .then(res => res)
           .catch(err => err.response);
 
-        console.log(paymentResult.data);
+        console.log(paymentResponse.data);
 
 
         /* 5. 결제결과 처리하기 */
+        // 빌링키삭제를 위한 DATA (실제 결제 요청 후에 포트운 -> billing가 등록되므로, 실결제 후에만 사용)
+        const deleteBillingKeyData = {
+          customer_uid: customer_uid
+        }
+
 
         // validation - 카드사 요청에 실패
-        if (!paymentResult?.data) {
-          await failedSubscribePayment(id, error_msg, error_code);
+        if (!paymentResponse?.data) {
+          await failedSubscribePayment({orderId:id, error_msg, error_code, data: deleteBillingKeyData});
           return;
         }
 
-        const {code, response: paymentAgainResponse} = paymentResult.data; // 실제 결제 결과 (첫 번째 결제: 결제등록/ 두 번째 결제: 실제 결제).
+        const {code, response: paymentAgainResponse} = paymentResponse.data; // 실제 결제 결과 (첫 번째 결제: 결제등록/ 두 번째 결제: 실제 결제).
 
         const {imp_uid: again_imp_uid, status, fail_reason: error_msg} = paymentAgainResponse;
 
 
         // validation - 카드사 통신 실패
         if (code !== 0) {
-          await failedSubscribePayment(id, error_msg);
+          await failedSubscribePayment({orderId:id, error_msg, error_code, data:deleteBillingKeyData});
           return;
         }
 
         // validation - 카드 승인 실패 (예: 고객 카드 한도초과, 거래정지카드, 잔액부족 등)
         if (status === 'failed') {
-          await failedSubscribePayment(id, error_msg);
+          await failedSubscribePayment({orderId:id, error_msg, error_code, data:deleteBillingKeyData});
           return;
         }
 
@@ -459,8 +476,9 @@ export function Payment({
         }
 
       } else {
-
-        await failedSubscribePayment(id, error_msg, error_code);
+        // 결제 등록 시, [결제실패, 결제 포기] CASE 에서는 customer Uid 넘어오지 않음
+        // 따라서 아래 결제실패 시, 빌링키 삭제 로직 적용 X
+        await failedSubscribePayment({orderId:id, error_msg, error_code});
 
       }
 
