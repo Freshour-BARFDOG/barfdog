@@ -9,7 +9,7 @@ import {
 } from "util/func/order/paymentCallback";
 import {axiosBaseURLBySSR} from "../../../api/axios/axiosBaseURLBySSR";
 
-function OrderCompletedPage(props) {
+function OrderCompletedPage({paymentSuccess, errorMessage}) {
 
   const router = useRouter();
   const { imp_success,error_msg, params } = router.query;
@@ -21,19 +21,22 @@ function OrderCompletedPage(props) {
   useEffect(() => {
     (async ()=>{
 
-      if(props.paymentSuccess==true){
+      if(paymentSuccess==true){
 
         await router.push(`/order/orderCompleted/subscribe/${orderIdx}/${customUid}/${price}/${merchantUid}/${name}`);
 
-      } else if(imp_success == 'false'|| props.paymentSuccess === false){
+      } else if(imp_success == 'false'|| paymentSuccess === false){
 
         if(error_msg?.includes('결제포기')){
           const cancel = await postObjData(`/api/orders/${orderIdx}/subscribe/cancel`);
           console.log(cancel);
         }else{
-        // 모바일 결제 실패
-        const fail = await postObjData(`/api/orders/${orderIdx}/subscribe/fail`);
-        console.log(fail);
+          // 모바일 결제 실패
+          const failData = {
+            customer_uid: customUid
+          }
+          const availableErrorMessage = errorMessage || error_msg;
+          await failedSubscribePayment({orderId:orderIdx, error_msg: availableErrorMessage, error_code:null, data: failData, redirect: false});
         }
 
         await router.push(`/order/orderFailed`);
@@ -57,8 +60,9 @@ export async function getServerSideProps({ query, req }) {
   let redirectUrl = null;
 
   const [orderId, customUid, paymentPrice, merchantUid, itemName, buyer_name, buyer_tel, buyer_email, buyer_addr, buyer_postcode, discountReward] = params;
-// 결제성공여부
+  // 결제성공여부
   let paymentSuccess = null;
+  let errorMessage = null;
 
   if(imp_success == 'true'){
 
@@ -81,11 +85,15 @@ export async function getServerSideProps({ query, req }) {
 
       // validation - 카드사 요청에 실패
       if (!paymentResult?.data) {
-        await failedSubscribePayment(orderId, error_msg, error_code);
+
+        const failData = {
+          customer_uid: customUid
+        }
+        await failedSubscribePayment({orderId:orderId, error_msg, error_code, data: failData});
         return;
       }
 
-      console.log(paymentResult.data);
+      console.log("--- paymentResult.data = \n",paymentResult.data);
 
       const {code, message, response } = paymentResult.data; // 실제 결제 결과 (첫 번째 결제: 결제등록/ 두 번째 결제: 실제 결제).
 
@@ -129,9 +137,12 @@ export async function getServerSideProps({ query, req }) {
           }
 
         } else if(response.status === 'failed'||paymentResponse==null){
+          // ex. 한도초과 잔액부족 등
           //paymentResponse.status : failed 로 수신됨
+          errorMessage = response.fail_reason || "결제가 완료되었으나, 알 수 없는 이유로 결제완료 되지 않았습니다.";
           paymentSuccess=false;
         }
+
       } else { // 카드사 요청에 실패 (paymentResponse is null)
         paymentSuccess=false;
       }
@@ -150,5 +161,5 @@ export async function getServerSideProps({ query, req }) {
     }
 
   }
-  return { props: { paymentSuccess } };
+  return { props: { paymentSuccess, errorMessage } };
 }
