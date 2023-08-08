@@ -59,10 +59,10 @@ export function Payment({
 
     if (isSubmitted) return console.error("이미 제출된 양식입니다.");
 
-    // if(form.paymentMethod === paymentMethodType.NAVER_PAY){
-    //   alert(`네이버페이 결제 준비중입니다. 다른 결제수단을 선택해주세요.`);
-    //   return;
-    // }
+    if(form.paymentMethod === paymentMethodType.NAVER_PAY){
+      alert(`네이버페이 결제 준비중입니다. 다른 결제수단을 선택해주세요.`);
+      return;
+    }
 
 
     if (!availablePaymentState({reward: info.reward})) {
