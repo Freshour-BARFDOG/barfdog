@@ -304,12 +304,14 @@ export const getTokenFromServerSide = (req) => {
   if(!req.headers.cookie){
     token = null; // window 첫 load 시, cookie가 없는 경우
   } else {
-    const cookie = req.headers.cookie.split(';');
-    const tokenKey = cookieType.LOGIN_COOKIE;
-    if (cookie) {
-      for (const key of cookie) {
-        if (key.indexOf(tokenKey) >= 0) {
-          token = key.split( '=' )[1] === 'null' ? null : key.split( '=' )[1];
+    const cookies = req.headers.cookie.split(';');
+    const loginTokenKey = cookieType.LOGIN_COOKIE;
+    if (cookies) {
+      for (const cookie of cookies) {
+        const key = cookie.split('=')[0].trim();
+        const val = cookie.split('=')[1];
+        if (key === loginTokenKey) {
+          token = val === 'null' ? null : val;
           break;
         }
       }
