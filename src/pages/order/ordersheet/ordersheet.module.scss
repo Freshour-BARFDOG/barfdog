@@ -594,6 +594,8 @@ section.final_btn {
       display: flex;
       justify-content: center;
       align-items: center;
+      height: 100%;
+      box-sizing: border-box;
       padding: rem(18) 0;
 
       border: rem(1) solid var(--color-line-03);
@@ -604,10 +606,18 @@ section.final_btn {
 
       .image {
         width: rem(24);
-        aspect-ratio: 1/1;
+        margin-right:rem(4);
+        overflow: initial !important;
+        height: 100%;
+        //aspect-ratio: 1/1; // 구버전 호환이슈
+
         border: 0;
+        span{
+          overflow: initial !important;
+        }
         &.naverPay{
-          aspect-ratio: 61/24;
+          //aspect-ratio: 61/24; // IOS 구버전 호환이슈
+          height: rem(22.81);
           width: rem(58); // 참조) 로고타입 사용 가이드 https://developer.pay.naver.com/design/logo
           position: relative;
           top:rem(-1);
@@ -931,4 +941,23 @@ section.payment {
       width: 100%;
     }
   }
+}
+
+
+
+@media (max-width: rem(390)) {
+
+  .method {
+    .grid_box {
+      display: flex;
+      flex-direction: column;
+      //justify-content: flex-start;
+      align-items: center;
+      grid-template-columns: initial;
+      .inner_box{
+        width: 100%;
+      }
+    }
+  }
+
 }

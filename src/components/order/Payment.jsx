@@ -11,7 +11,7 @@ import {availablePaymentState} from "util/func/availablePaymentState";
 import {paymethodFilter} from 'util/filter_iamport_paymethod';
 import {generateCustomerUid} from "util/func/order/generateCustomerUid";
 import {paymentMethodType, pgType} from "store/TYPE/paymentMethodType";
-import {getNaverpayGeneralPaymentParam, getNaverpaySubscribePaymentParam} from "store/TYPE/NaverpayPaymentPrams";
+import {getNaverpayGeneralPaymentParam, getNaverpaySubscribePaymentParam} from "store/TYPE/NaverpayPaymentParams";
 import useDeviceState from "util/hook/useDeviceState";
 import {
   cancelSubscribeOrder,

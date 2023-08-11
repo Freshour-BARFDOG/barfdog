@@ -60,8 +60,8 @@ export const getNaverpayGeneralPaymentParam = ({
     // ####################################################
     naverChainId: process.env.NEXT_PUBLIC_NAVERPAY_GENERAL_CHAIN_ID,
     naverProducts: items.map((item, index) => ({
-      categoryType: item.itemType === general_itemType.GOODS ? "PRODUCT" : "FOOD",
-      categoryId: item.itemType === general_itemType.GOODS ? "GENERAL" : "DELIVERY",
+      categoryType: "PRODUCT", // 네이버페 검수 결과 -> 가맹점 취급 상품이 모두 일반상품으로 분류됨 -> `PRODUCT` 적용
+      categoryId: "GENERAL", // 네이버페 검수 결과 -> 가맹점 취급 상품이 모두 일반상품으로 분류됨 -> `GENERAL` 적용
       count: item.amount,
       name: item.name,
       uid: `general-item-${item.itemId}`, // 상품 고유 ID
