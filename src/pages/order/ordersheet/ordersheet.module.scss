@@ -609,6 +609,7 @@ section.final_btn {
         margin-right:rem(4);
         overflow: initial !important;
         height: 100%;
+        min-height: rem(20);
         //aspect-ratio: 1/1; // 구버전 호환이슈
 
         border: 0;

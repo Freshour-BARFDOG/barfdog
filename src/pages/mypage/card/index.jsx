@@ -142,7 +142,7 @@ export default function MypageCardPage({data}) {
           if (r.isDone) {
             mct.alertShow('카드변경 성공', onSuccessCallback);
           } else {
-            mct.alertShow('카드변경은 성공하였으나, 서버에서 나머지 요청을 처리하는데 실패하였습니다. \n관리자에게 문의해주세요.', onSuccessCallback);
+            mct.alertShow(`카드변경 실패\n데이터 처리 중 오류가 발생하였습니다.\n사이트 관리자에게 문의해주세요.\nerror_msg: ${r.error}`, onSuccessCallback);
           }
         } else {
           mct.alertShow(`카드변경 실패 \nerror_msg: ${error_msg}`, onFailCallback);
@@ -203,7 +203,6 @@ export default function MypageCardPage({data}) {
                 ) : (
                   <ul className={'card-list-container'}>
                     {cardList.map((card, index) => {
-                      console.log(card);
                       const cardName = card.subscribeCardDto.cardName || paymentMethodType.KOR[card.paymentMethod];
                       const cardNumber = card.subscribeCardDto.cardNumber?.slice(0, cardNumberUICount) || " - ";
 
