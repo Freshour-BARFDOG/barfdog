@@ -2,9 +2,9 @@ import ModalWrapper from "./ModalWrapper";
 import s from "./modal_paymentMethod.module.scss";
 import React, {useCallback, useEffect, useMemo, useState} from "react";
 import {OrdersheetMethodOfPayment} from "../order/OrdersheetMethodOfPayment";
-import {paymentMethodType} from "../../../store/TYPE/paymentMethodType";
+import Spinner from "../atoms/Spinner";
 
-export default function Modal_paymentMethod({data, onChangeCard, setActiveModal, ...props}) {
+export default function Modal_paymentMethod({data, onChangeCard, setActiveModal, isSubmitted,isLoading,...props}) {
 
   const cardInfo = useMemo(() => data, [data]);
   const [targetScrollYPos, setTargetScrollYPos] = useState(null);
@@ -25,19 +25,14 @@ export default function Modal_paymentMethod({data, onChangeCard, setActiveModal,
     };
   }, []);
 
-  const executeHandler = useCallback(() => {
-    // 벨리데이션 추가하고.
+  const executeHandler = useCallback(async () => {
     const {paymentMethod} = form;
     const subscribeId = cardInfo.subscribeId;
 
-    // Validation
-    if (paymentMethod === paymentMethodType.NAVER_PAY) {
-      return alert("네이버페이는 연동 준비 중입니다.")
-    }
-
-    if(!subscribeId || !paymentMethod) {
-      return alert(" 결제수단 처리 중 오류가 발생하여 카드 변경이 불가능합니다.");
-    }
+    // ! Validation - 네이버페이
+    // if (paymentMethod === paymentMethodType.NAVER_PAY) {
+    //   return alert("네이버페이는 연동 준비 중입니다.")
+    // }
 
     // Data setting
     const data = {
@@ -47,9 +42,7 @@ export default function Modal_paymentMethod({data, onChangeCard, setActiveModal,
 
     onChangeCard(data);
 
-    // 성공했을 경우, 카드변경 실행
-
-  }, [form]);
+  }, [form, isSubmitted, isLoading.submit]);
 
   const onHideModal = () => {
     setActiveModal(false)
@@ -74,7 +67,7 @@ export default function Modal_paymentMethod({data, onChangeCard, setActiveModal,
         <OrdersheetMethodOfPayment id={"paymentMethod"} form={form} setForm={setForm} formErrors={{}}/>
       </div>
       <div className={s['btn-section']}>
-        <button className={'custom_btn solid popup'} onClick={executeHandler}>확인</button>
+        <button className={'custom_btn solid popup'} onClick={executeHandler}>{isLoading.submit ? <Spinner style={{color: '#fff'}}/> : "확인"}</button>
         <button className={'custom_btn line popup'} onClick={onHideModal}>취소</button>
       </div>
     </ModalWrapper>

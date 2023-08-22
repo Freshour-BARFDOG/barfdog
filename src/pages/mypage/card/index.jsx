@@ -1,27 +1,45 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import Layout from '/src/components/common/Layout';
-import Wrapper from '/src/components/common/Wrapper';
-import MypageWrapper from '/src/components/mypage/MypageWrapper';
-import MetaTitle from '/src/components/atoms/MetaTitle';
+import Layout from '@src/components/common/Layout';
+import Wrapper from '@src/components/common/Wrapper';
+import MypageWrapper from '@src/components/mypage/MypageWrapper';
+import MetaTitle from '@src/components/atoms/MetaTitle';
 import s from './card.module.scss';
 import Image from 'next/image';
-import {getDataSSR, postObjData} from '/src/pages/api/reqData';
-import {EmptyContMessage} from '/src/components/atoms/emptyContMessage';
-import {subscribePlanType} from "/store/TYPE/subscribePlanType";
-import transformDate from "/util/func/transformDate";
-import transformLocalCurrency from "/util/func/transformLocalCurrency";
-import {calcSubscribeNextPaymentPrice} from "/util/func/subscribe/calcSubscribeNextPaymentPrice";
-import {generateCustomerUid} from "/util/func/order/generateCustomerUid";
+import {getDataSSR, postObjData} from '@src/pages/api/reqData';
+import {EmptyContMessage} from '@src/components/atoms/emptyContMessage';
+import {subscribePlanType} from "@store/TYPE/subscribePlanType";
+import transformDate from "@util/func/transformDate";
+import transformLocalCurrency from "@util/func/transformLocalCurrency";
+import {calcSubscribeNextPaymentPrice} from "@util/func/subscribe/calcSubscribeNextPaymentPrice";
+import {generateCustomerUid} from "@util/func/order/generateCustomerUid";
 import Modal_paymentMethod from "../../../components/modal/Modal_paymentMethod";
-import {paymentMethodType, pgType} from "/store/TYPE/paymentMethodType";
+import {paymentMethodType, pgType} from "@store/TYPE/paymentMethodType";
+import Modal_global_alert from "../../../components/modal/Modal_global_alert";
+import {useModalContext} from "@store/modal-context";
+import {
+  getAmountOfPaymentRegisterationByPaymentMethod
+} from "/util/func/subscribe/getAmountOfPaymentRegisterationByPaymentMethod";
+import {getNaverpaySubscribePaymentParam} from "/store/TYPE/NaverpayPaymentParams";
+import useDeviceState from "../../../../util/hook/useDeviceState";
+import {
+  getItemNameWithPrefixByPaymentMethod
+} from "util/func/subscribe/getItemNameWithPrefixByPaymentMethod";
 
 
-export default function MypageCardPage({ data }) {
+export default function MypageCardPage({data}) {
 
-  const cardList = useMemo(()=> data || [] , [data]);
+  const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
+
+  const ds = useDeviceState();
+  const isMobile = ds.isMobile;
+
+  const cardList = useMemo(() => data || [], [data]);
   const cardNumberUICount = 6;
   const [activeModal, setActiveModal] = useState(false);
   const [updatedCardData, setUpdatedCardData] = useState({});
+  const [isLoading, setIsLoading] = useState({submit: false});
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
 
   useEffect(() => {
@@ -34,7 +52,7 @@ export default function MypageCardPage({ data }) {
 
     document.head.appendChild(jquery);
     document.head.appendChild(iamport);
-    
+
     return () => {
       document.head.removeChild(jquery);
       document.head.removeChild(iamport);
@@ -42,79 +60,115 @@ export default function MypageCardPage({ data }) {
 
   }, []);
 
-  const onChangeCard = async({subscribeId, paymentMethod}) => {
 
+  const onChangeCard = async ({subscribeId, paymentMethod}) => {
+
+    if (isSubmitted) return console.error("이미 제출된 양식입니다.");
 
     // validation
-    if(!subscribeId || !paymentMethod) {
-      return alert(" 결제수단 처리 중 오류가 발생하여 카드 변경이 불가능합니다.");
-    }
-    const currentCardDto = cardList.filter(dto=> dto.subscribeCardDto.subscribeId === subscribeId)[0];
-    if(!currentCardDto?.subscribeCardDto) return alert( "구독에 해당하는 카드를 찾을 수 없습니다." );
+    if (!subscribeId || !paymentMethod) return mct.alertShow(`결제수단 처리 중 오류가 발생하여 카드 변경을 할 수 없는 상태입니다.`);
+
+    // validation: 구독 정보
+    const currentCardDto = cardList.filter(dto => dto.subscribeCardDto.subscribeId === subscribeId)[0];
+    if (!currentCardDto?.subscribeCardDto) return mct.alertShow("구독에 연동된 카드정보조회 중 오류가 발생하였습니다.");
 
 
-    // Set Import data
-    const subscribeItemName = currentCardDto.recipeNameList.join(', ');
-    const {name, phoneNumber, email, street, detailAddress } = currentCardDto.subscribeCardDto;
-    const CLIENT_ORIGIN = process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_CLIENT_URL_PRODUCT : process.env.NEXT_PUBLIC_CLIENT_URL_DEV;
+    try {
 
-   /* 1. 가맹점 식별하기 */
-    const IMP = window.IMP;
-    IMP.init(process.env.NEXT_PUBLIC_IAMPORT_CODE);
+      // 카드 변경: 신규 결제 등록 시작
+      // + API Server 기존 아임포트 빌링키 등록 해지 (네이버페이 = 정기등록해지)
+      setIsSubmitted(true);
+      setIsLoading((prevState) =>
+        ({...prevState, submit: true})
+      );
 
-    // const randomStr= new Date().getTime().toString(36);
-    const buyer_addr = `${street}, ${detailAddress}`;
-    const customerUid = generateCustomerUid()
-    /* 2. 결제 데이터 정의하기 */
-    const m_redirect_url = `${CLIENT_ORIGIN}/mypage/card`;
-    const params = `${subscribeId}/${customerUid}/${paymentMethod}`;
-    const data = {
-      pg: pgType.SUBSCRIBE[paymentMethod], // PG사 => TODO : 카카오페이, 네이버페이 대응필요
-      pay_method: 'card', // 결제수단
-      merchant_uid: new Date().getTime().toString(36),
-      amount:0,
-      customer_uid: customerUid,
-      name: `[카드변경][구독상품]-${subscribeItemName}`,
-      buyer_name: name,
-      buyer_tel: phoneNumber,
-      buyer_email: email, // 구매자 이메일
-      buyer_addr: buyer_addr, // 구매자 주소
-      m_redirect_url: `${m_redirect_url}/${params}`
-    };
-    //
-    console.log(data, paymentMethod);
-    const callbackData = {
-      paymentMethod: paymentMethod
-    }
+      // Set DATA
+      const itemName = currentCardDto.recipeNameList.join(', ');
+      const {name, phoneNumber, email, street, detailAddress, nextPaymentPrice} = currentCardDto.subscribeCardDto;
 
-    IMP.request_pay(data, callback.bind(null, callbackData));
+      /* 1. 가맹점 식별하기 */
+      const IMP = window.IMP;
+      IMP.init(process.env.NEXT_PUBLIC_IAMPORT_CODE);
 
-    /* 4. 결제 창 호출하기 */
-    async function callback(callbackData, response) {
-      console.log("- callbackData: ",callbackData, "\n- response: ",response)
-      const { success,customer_uid, error_msg } = response;
+      const buyer_addr = `${street}, ${detailAddress}`;
+      const customerUid = generateCustomerUid()
+      /* 2. 결제 데이터 정의하기 */
+      const localOrigin = window.location.origin;
+      const m_redirect_url = `${localOrigin}/mypage/card`;
+      const params = `${subscribeId}/${customerUid}/${paymentMethod}`;
+      const data = {
+        pg: pgType.SUBSCRIBE[paymentMethod], // PG사 => TODO : 카카오페이, 네이버페이 대응필요
+        pay_method: 'card', // 결제수단
+        merchant_uid: null,
+        amount: getAmountOfPaymentRegisterationByPaymentMethod({
+          method: paymentMethod,
+          originAmount: nextPaymentPrice
+        }),
+        customer_uid: customerUid,
+        name: getItemNameWithPrefixByPaymentMethod({paymentMethod, itemName: itemName, prefix: "[카드변경]"}),
+        buyer_name: name,
+        buyer_tel: phoneNumber,
+        buyer_email: email, // 구매자 이메일
+        buyer_addr: buyer_addr, // 구매자 주소
+        m_redirect_url: `${m_redirect_url}/${params}`
+      };
 
-      /* 3. 콜백 함수 정의하기 */
-      if (success) {
-        // 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우
-        // TODO: 결제 정보 전달
-        const r = await postObjData(`/api/cards/subscribes/${subscribeId}`, {
-          customerUid : customer_uid,
-          paymentMethod: callbackData.paymentMethod // ! 신규 추가된 필드
-        });
-        console.log(r);
-        if(r.isDone){
-          alert('카드변경 성공');
-        } else {
-          alert('카드변경은 성공하였으나, 서버에서 나머지 요청을 처리하는데 실패하였습니다. 관리자에게 문의해주세요.');
-        }
-        window.location.reload();
-      } else {
-          alert(`카드변경 실패 ${error_msg}`);
-          window.location.reload();
+      if (paymentMethod === paymentMethodType.NAVER_PAY) {
+        Object.assign(data, getNaverpaySubscribePaymentParam({subscribeId, isMobile: isMobile})); // 네이버페이 데이터 합침
       }
+
+
+      const callbackData = {
+        paymentMethod: paymentMethod
+      }
+
+
+      IMP.request_pay(data, callback.bind(null, callbackData));
+
+      /* 4. 결제 창 호출하기 */
+      async function callback(callbackData, response) {
+        console.log("- callbackData: ", callbackData, "\n- response: ", response)
+        const {success, customer_uid, error_msg} = response;
+
+        /* 3. 콜백 함수 정의하기 */
+        if (success) {
+          // 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우
+          // TODO: 결제 정보 전달
+          const r = await postObjData(`/api/cards/subscribes/${subscribeId}`, {
+            customerUid: customer_uid,
+            paymentMethod: callbackData.paymentMethod
+          });
+          console.log(r);
+          if (r.isDone) {
+            mct.alertShow('카드변경 성공', onSuccessCallback);
+          } else {
+            mct.alertShow('카드변경은 성공하였으나, 서버에서 나머지 요청을 처리하는데 실패하였습니다. \n관리자에게 문의해주세요.', onSuccessCallback);
+          }
+        } else {
+          mct.alertShow(`카드변경 실패 \nerror_msg: ${error_msg}`, onFailCallback);
+          setIsSubmitted(false);
+        }
+      }
+
+    } catch (err) {
+      console.error(err);
+      mct.alertShow(`데이터 처리 중 오류가 발생했습니다.\n${err.response}`);
+      setIsSubmitted(false);
+    } finally {
+      setIsLoading((prevState) => ({...prevState, submit: false}));
     }
+
+
+
   }
+
+  const onSuccessCallback = () => {
+    window.location.reload();
+  };
+
+  const onFailCallback = () => {
+    window.location.reload();
+  };
 
   const onSelectPaymentMethod = ({subscribeId, paymentMethod, info}) => {
     setActiveModal(true);
@@ -176,7 +230,7 @@ export default function MypageCardPage({ data }) {
 
                         <div>
                           <span className={s.col_title_m}>예약 결제일자</span>
-                          {transformDate(card.subscribeCardDto.nextPaymentDate, null, {seperator:'.'}) || "-"}
+                          {transformDate(card.subscribeCardDto.nextPaymentDate, null, {seperator: '.'}) || "-"}
                         </div>
 
                         <div>
@@ -186,13 +240,18 @@ export default function MypageCardPage({ data }) {
                               {
                                 originPrice: card.subscribeCardDto.nextPaymentPrice,
                                 discountCoupon: card.subscribeCardDto.discountCoupon,
-                                discountGrade:card.subscribeCardDto.discountGrade,
+                                discountGrade: card.subscribeCardDto.discountGrade,
                                 overDiscount: card.subscribeCardDto.overDiscount
                               }
                             ))}원
                         </div>
                         <div className={s.btn_box}>
-                          <button className={s.btn} type={'button'} onClick={()=> onSelectPaymentMethod({subscribeId: card.subscribeCardDto.subscribeId, paymentMethod: card.paymentMethod, info:card.subscribeCardDto})}>카드변경</button>
+                          <button className={s.btn} type={'button'} onClick={() => onSelectPaymentMethod({
+                            subscribeId: card.subscribeCardDto.subscribeId,
+                            paymentMethod: card.paymentMethod,
+                            info: card.subscribeCardDto
+                          })}>카드변경
+                          </button>
                         </div>
                       </li>
                     })}
@@ -207,13 +266,23 @@ export default function MypageCardPage({ data }) {
           </MypageWrapper>
         </Wrapper>
       </Layout>
-      {activeModal && <Modal_paymentMethod data={updatedCardData} onChangeCard={onChangeCard} setActiveModal={setActiveModal} center/> }
+      {activeModal &&
+        <Modal_paymentMethod
+          center
+          data={updatedCardData}
+          onChangeCard={onChangeCard}
+          setActiveModal={setActiveModal}
+          isSubmitted={isSubmitted}
+          isLoading={isLoading}
+        />
+      }
+      {hasAlert && <Modal_global_alert background={true}/>}
     </>
   );
 }
 
 
-export async function getServerSideProps({ req }) {
+export async function getServerSideProps({req}) {
   const getApiUrl = '/api/cards';
   // const res = DUMMY_RESPONSE  // ! TSET
   const res = await getDataSSR(req, getApiUrl);
@@ -224,11 +293,11 @@ export async function getServerSideProps({ req }) {
     if (!dataList.length) return;
     DATA = dataList.map((data) => ({
       subscribeCardDto: {
-        name:data.subscribeCardDto.name || null, // 230302 신규 추가
-        phoneNumber:data.subscribeCardDto.phoneNumber || null, // 230419 신규 추가
-        email:data.subscribeCardDto.email || null, // 230419 신규 추가
-        street:data.subscribeCardDto.street || null, // 230419 신규 추가
-        detailAddress:data.subscribeCardDto.detailAddress || null, // 230419 신규 추가
+        name: data.subscribeCardDto.name || null, // 230302 신규 추가
+        phoneNumber: data.subscribeCardDto.phoneNumber || null, // 230419 신규 추가
+        email: data.subscribeCardDto.email || null, // 230419 신규 추가
+        street: data.subscribeCardDto.street || null, // 230419 신규 추가
+        detailAddress: data.subscribeCardDto.detailAddress || null, // 230419 신규 추가
         subscribeId: data.subscribeCardDto.subscribeId,
         cardId: data.subscribeCardDto.cardId,
         cardName: data.subscribeCardDto.cardName,
@@ -245,5 +314,5 @@ export async function getServerSideProps({ req }) {
       paymentMethod: data.paymentMethod || null, // 230421 신규추가
     }));
   }
-  return { props: { data: DATA } };
+  return {props: {data: DATA}};
 }

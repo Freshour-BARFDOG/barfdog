@@ -179,7 +179,7 @@ button.disabled {
 // *  MOBILE , WEB > Show & Hide
 
 .mobile{display:none !important;}
-.pc{display:block !important;}
+.pc:not(.imp-dialog){display:block !important;}
 
 @media (max-width:rem(1200)){
 
