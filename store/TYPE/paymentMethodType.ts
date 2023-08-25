@@ -9,6 +9,12 @@ export const paymentMethodType = {
   }
 }
 
+export enum PaymentMethod {
+  CREDIT_CARD= 'CREDIT_CARD',
+  NAVER_PAY= 'NAVER_PAY',
+  KAKAO_PAY= 'KAKAO_PAY',
+}
+
 
 /**
  * 포트원 연동가이드

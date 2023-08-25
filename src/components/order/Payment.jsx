@@ -423,7 +423,8 @@ export function Payment({
         /* 5. 결제결과 처리하기 */
         // 빌링키삭제를 위한 DATA (실제 결제 요청 후에 포트운 -> billing가 등록되므로, 실결제 후에만 사용)
         const deleteBillingKeyData = {
-          customer_uid: customer_uid
+          customer_uid: customer_uid,
+          paymentMethod: body.paymentMethod
         }
 
 

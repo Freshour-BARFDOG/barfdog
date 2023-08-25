@@ -2,6 +2,7 @@ import {postDataSSR, postObjData} from "@src/pages/api/reqData";
 import {removeIamportPaymentWindow} from "../removeIamportPaymentWindow";
 import axios from "axios";
 import {DeleteCustomerRequest} from "@src/pages/api/iamport/subscribeCustomers";
+import { PaymentMethod } from "@store/TYPE/paymentMethodType";
 
 export async function faliedGeneralPayment(id:number, error_msg?: string) {
   const fail = await postObjData(`/api/orders/${id}/general/fail`);
@@ -19,6 +20,7 @@ export async function faliedGeneralPayment(id:number, error_msg?: string) {
 
 export interface PortoneFailDataInterface{
   customer_uid: string;
+  paymentMethod: PaymentMethod;
 }
 
 
@@ -33,8 +35,11 @@ interface FailCallbackPropsInterface {
 export async function failedSubscribePayment({orderId, error_msg, error_code, data, redirect}:FailCallbackPropsInterface) {
 
   const customer_uid = data?.customer_uid;
-  if (customer_uid) {
-    // 빌링키 삭제 실행 (*네이버페이 정기결제 해제 시, 필수)
+  const paymentMethod:PaymentMethod = data?.paymentMethod;
+
+  if (customer_uid && paymentMethod === PaymentMethod.NAVER_PAY) {
+    // => 빌링키 삭제 = 네이버페이 정기결제 해제 (검수 필수내용)
+    // => 타 결제수단: 결제오류 대응(Rollback)을 위해, 빌링키 삭제 X
     const deleteBillingKeyRes = await deleteIamportCustomerBillingKey({customer_uid: customer_uid}, {tryCount:1});
     if (deleteBillingKeyRes.status !== 200) {
       alert(`
