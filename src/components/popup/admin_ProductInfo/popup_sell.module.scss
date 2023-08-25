@@ -3,7 +3,7 @@
 // *  ------- COMMON ------- * //
 $backgroundColorDef: #f8f8ff;
 $popupMainHeaderHeight:rem(66);
-
+$default-row-height: rem(48);
 #popup {
   background-color: $backgroundColorDef;
   position: relative;
@@ -166,6 +166,49 @@ $popupMainHeaderHeight:rem(66);
     &::-webkit-calendar-picker-indicator {
       display: none;
       // -webkit-appearance: none;
+    }
+  }
+
+
+
+  // 포트원(아임포트) 정보 추가
+  .iamport{
+
+    .title{
+      cursor: pointer;
+      display: flex;
+      gap:rem(20);
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .t-header{}
+
+    .t-body{
+      transition: height 0.2s ease-in-out;
+      height:rem(1);
+      overflow: hidden;
+    }
+
+    .icon-box{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: rem(4);
+      color: #555;
+      svg{
+        fill: #555;
+      }
+    }
+
+    &.on{
+      .t-body{
+        height: calc($default-row-height * 4);
+      }
+
+      .icon-box svg{
+        transform: rotate(180deg);
+      }
     }
   }
 }

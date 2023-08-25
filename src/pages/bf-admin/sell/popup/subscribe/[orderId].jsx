@@ -11,6 +11,7 @@ import ProductInfo_orderStatusInfo from '/src/components/popup/admin_ProductInfo
 import {orderStatus} from '/store/TYPE/orderStatusTYPE';
 import {getDataSSR} from "/src/pages/api/reqData";
 import {isChangedSubscribeInformation} from "/util/func/subscribe/isChangedSubscribeInformation";
+import {ProductInfo_iamport} from "/src/components/popup/admin_ProductInfo/ProductInfo_iamport";
 
 
 export default function Popup_SubscribeOrderDetailInfoPage({ data }) {
@@ -52,6 +53,9 @@ export default function Popup_SubscribeOrderDetailInfoPage({ data }) {
             <div className={s.row}>
               <section className={s.table}>
                 <ul>
+                  <li className={s['table-list']}>
+                    <ProductInfo_iamport data={{impUid: data.subscribePaymentDto.impUid}}/>
+                  </li>
                   <li className={s['table-list']}>
                     <ProductInfo_basicOrderInfo basicOrderInfo={data.subscribeOrderInfoDto} />
                   </li>
@@ -158,6 +162,7 @@ export async function getServerSideProps({ req, query }) {
         paymentMethod:data.subscribePaymentDto.paymentMethod,
         orderStatus:data.subscribePaymentDto.orderStatus,
         orderConfirmDate:data.subscribePaymentDto.orderConfirmDate, // 구매 확정일
+        impUid:data.subscribePaymentDto.impUid || null, // 포트원 고유번호
       },
       subscribeDeliveryDto: {
         recipientName: data.subscribeDeliveryDto.recipientName,
