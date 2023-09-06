@@ -3,6 +3,7 @@ import s from "./modal_paymentMethod.module.scss";
 import React, {useCallback, useEffect, useMemo, useState} from "react";
 import {OrdersheetMethodOfPayment} from "../order/OrdersheetMethodOfPayment";
 import Spinner from "../atoms/Spinner";
+import {paymentMethodType} from "../../../store/TYPE/paymentMethodType";
 
 export default function Modal_paymentMethod({data, onChangeCard, setActiveModal, isSubmitted,isLoading,...props}) {
 
@@ -30,9 +31,9 @@ export default function Modal_paymentMethod({data, onChangeCard, setActiveModal,
     const subscribeId = cardInfo.subscribeId;
 
     // ! Validation - 네이버페이
-    // if (paymentMethod === paymentMethodType.NAVER_PAY) {
-    //   return alert("네이버페이는 연동 준비 중입니다.")
-    // }
+    if (paymentMethod === paymentMethodType.NAVER_PAY) {
+      return alert("네이버페이는 연동 준비 중입니다.")
+    }
 
     // Data setting
     const data = {
@@ -42,10 +43,10 @@ export default function Modal_paymentMethod({data, onChangeCard, setActiveModal,
 
     onChangeCard(data);
 
-  }, [form, isSubmitted, isLoading.submit]);
+  }, [form, cardInfo, isSubmitted, isLoading.submit]);
 
   const onHideModal = () => {
-    setActiveModal(false)
+    setActiveModal(false);
   }
 
   if (!data) {
@@ -60,9 +61,10 @@ export default function Modal_paymentMethod({data, onChangeCard, setActiveModal,
       positionCenter
       {...props}
     >
-      <div className={s['info-section']}>
+      {cardInfo?.info?.dogName && <div className={s['info-section']}>
         (<span className={s.dogName}>{cardInfo?.info?.dogName}</span>)
-      </div>
+      </div>}
+
       <div className={s['body-section']}>
         <OrdersheetMethodOfPayment id={"paymentMethod"} form={form} setForm={setForm} formErrors={{}}/>
       </div>
