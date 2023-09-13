@@ -48,6 +48,7 @@ export const OrdersheetDeliveryForm = ({
       ...prevState,
       deliveryDto,
       deliveryId: bundle ? info.deliveryId : null,
+      deliveryPrice: bundle ? 0 : info.deliveryPrice,
       bundle,
     }));
   }, [deliveryInfo]);
