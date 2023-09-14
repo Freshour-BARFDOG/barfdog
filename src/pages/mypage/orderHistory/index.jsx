@@ -14,6 +14,7 @@ import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import {SubscribeItems} from '/src/components/mypage/orderHistory/SubscribeItems';
 import {SingleItemList} from '/src/components/mypage/orderHistory/SingleItemList';
 import {decodeUrlToMatchApiProtocolAndSearchQuery} from "/util/func/decodeUrlToMatchApiProtocolAndSearchQuery";
+import {checkNeedToCancelNaverpaySubscribe} from "../../../../util/func/order/checkNeedToCancelNaverpaySubscribe";
 
 
 export default function OrderHistoryPage() {
@@ -26,7 +27,6 @@ export default function OrderHistoryPage() {
   const [itemList, setItemList] = useState([]);
   const [itemType, setItemType] = useState(productType.SUBSCRIBE);
 
-  console.log(itemList);
   useEffect(() => {
     // set Scroll Position: 페이지 최상단으로 scroll 위치 초기화 보완
     if (window && typeof window !== 'undefined') {
@@ -37,9 +37,7 @@ export default function OrderHistoryPage() {
 
   const pageInterCeptor = async (res) => {
     console.log(res);
-    // res = activeMenu === 'left' ? DUMMY_SUBSCRIBE_DELVIERY_RESPONSE : DUMMY_GENERAL_DELVIERY_RESPONSE; // ! TEST
-    // res = activeMenu === 'left' ? res : DUMMY_GENERAL_DELVIERY_RESPONSE; // ! TEST
-    
+
     let newPageInfo = {
       totalPages: 0,
       size: 0,
@@ -72,10 +70,29 @@ export default function OrderHistoryPage() {
             merchantUid: item.subscribeOrderDto.merchantUid, // 주문번호
             paymentPrice: item.subscribeOrderDto.paymentPrice, // 결제금액
             orderStatus: item.subscribeOrderDto.orderStatus, // 주문상태
+            paid: item.subscribeOrderDto.paid, // 결제여부
+            paymentMethod: item.subscribeOrderDto.paymentMethod, // 결제수단
+            customerUid: item.subscribeOrderDto.customerUid || null , // 빌링키
+            needToCancelNaverpaySubscribe: null, // 아래 과정에서 업데이트 필요
           },
           link: item._links.query_subscribeOrder.href, // 구독상세보기 Link
         }));
-      
+
+      // validation: 네이버페이 정기결제 해제 필요여부
+      if (Array.isArray(subscribeItemList)) {
+        for (const item of subscribeItemList) {
+          const subscribeOrderDto = item.subscribeOrderDto;
+          const needToCancelNaverpaySubscribe = await checkNeedToCancelNaverpaySubscribe({
+            paymentMethod: subscribeOrderDto.paymentMethod,
+            orderStatus: subscribeOrderDto.orderStatus,
+            paid: subscribeOrderDto.paid,
+            customerUid: subscribeOrderDto.customerUid,
+          });
+          // 검증결과 추가
+          subscribeOrderDto.needToCancelNaverpaySubscribe = needToCancelNaverpaySubscribe;
+        }
+      }
+
       const generalItemList =
         activeMenu === 'right' &&
         tmepItemList.map((item) => ({

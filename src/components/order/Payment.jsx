@@ -25,6 +25,7 @@ import {isAbandonedPayment} from "util/func/order/paymentUtils";
 import {
   getAmountOfPaymentRegisterationByPaymentMethod
 } from "../../../util/func/subscribe/getAmountOfPaymentRegisterationByPaymentMethod";
+import {FullScreenLoading} from "../atoms/FullScreenLoading";
 
 export function Payment({
                           info,
@@ -214,6 +215,9 @@ export function Payment({
         position:fixed;
         top: -${scrollTopPos}px;`;
 
+      } else if(res.error) {
+        alert(`[결제 준비 오류]\n${res.error}`);
+        setIsSubmitted(false);
       } else {
         alert(`${res.error} \n내부 통신장애입니다. 잠시 후 다시 시도해주세요.`);
         setIsSubmitted(false);
@@ -245,7 +249,7 @@ export function Payment({
       pg: pgType.GENERAL[body.paymentMethod], // PG사
       pay_method: paymethodFilter(body.paymentMethod), // 결제수단
       merchant_uid: merchantUid, // 주문번호
-      amount: body.paymentPrice, // 결제금액
+      amount: body.paymentPrice, // 결제금액 // ! [중요] 결제금액 변경(변조) 여부 검증 대상.
       name: `${itemName}`, // 주문명
       buyer_name: info.name, // 구매자 이름
       buyer_tel: info.phone, // 구매자 전화번호
@@ -382,7 +386,7 @@ export function Payment({
 
       // 결제 포기
       if (isAbandonedPayment(paymentRegistrationResponse?.error_msg)) {
-        await cancelSubscribeOrder({orderId:id, error_msg, error_code});
+        await cancelSubscribeOrder({orderId: id, error_msg, error_code});
         return;
       }
 
@@ -430,7 +434,7 @@ export function Payment({
 
         // validation - 카드사 요청에 실패
         if (!paymentResponse?.data) {
-          await failedSubscribePayment({orderId:id, error_msg, error_code, data: deleteBillingKeyData});
+          await failedSubscribePayment({orderId: id, error_msg, error_code});
           return;
         }
 
@@ -441,13 +445,13 @@ export function Payment({
 
         // validation - 카드사 통신 실패
         if (code !== 0) {
-          await failedSubscribePayment({orderId:id, error_msg, error_code, data:deleteBillingKeyData});
+          await failedSubscribePayment({orderId: id, error_msg, error_code});
           return;
         }
 
         // validation - 카드 승인 실패 (예: 고객 카드 한도초과, 거래정지카드, 잔액부족 등)
         if (status === 'failed') {
-          await failedSubscribePayment({orderId:id, error_msg, error_code, data:deleteBillingKeyData});
+          await failedSubscribePayment({orderId: id, error_msg, error_code});
           return;
         }
 
@@ -468,7 +472,12 @@ export function Payment({
           if (!isValid) {
             // 주문 금액 검증 기능 - 자체 구현
             const errorMsg = "[결제실패] 주문금액과 결제금액이 일치하지 않습니다. 결제가 즉시 취소됩니다.";
-            await invalidSuccessSubscribePayment({orderId: id, data:data, error_msg: errorMsg, error_code:error_code});
+            await invalidSuccessSubscribePayment({
+              orderId: id,
+              data: data,
+              error_msg: errorMsg,
+              error_code: error_code
+            });
             return;
           }
 
@@ -479,7 +488,7 @@ export function Payment({
       } else {
         // 결제 등록 시, [결제실패, 결제 포기] CASE 에서는 customer Uid 넘어오지 않음
         // 따라서 아래 결제실패 시, 빌링키 삭제 로직 적용 X
-        await failedSubscribePayment({orderId:id, error_msg, error_code});
+        await failedSubscribePayment({orderId: id, error_msg, error_code});
 
       }
 
@@ -489,6 +498,7 @@ export function Payment({
 
   return (
     <>
+      {isSubmitted && <FullScreenLoading opacity={0.5}/> }
       <button onClick={onSubmit} className={s.btn_box} type={'button'}>
         {isLoading.submit ? <Spinner style={{color: '#fff'}}/> : '결제하기'}
       </button>
