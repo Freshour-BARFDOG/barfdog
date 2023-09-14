@@ -143,7 +143,7 @@ export const postObjData = async (url, data, contType) => {
         result.isDone = false;
         return;
       }
-      
+
 
       result.status = err.response.status;
       if (!error.data) {
@@ -151,7 +151,7 @@ export const postObjData = async (url, data, contType) => {
       } else if (error.data?.error || error.data?.errors.length) {
         result.error = error.data.error;
         if (error.data?.errors?.length > 0) {
-          result.error = error.data.errors[0].defaultMessage;
+          result.error = getErrorMessageFromApiServer(error.data.errors);
         }
         if (error?.data?.error?.error) {
           result.error = '서버와 통신오류가 발생했습니다.';
@@ -278,8 +278,6 @@ export const postUserObjData = async (url, data, contType) => {
   return result;
 };
 
-
-
 export const getTokenClientSide = (req) => {
   // - MEMBER & ADMIN 모두 동일한 API에서 동일한 TOKEN을 발급받는다
   // - SERVER에서 TOKEN 속에 권한에 대한 값을 설정하여 검증한다.
@@ -296,6 +294,8 @@ export const getTokenClientSide = (req) => {
   }
   return token;
 };
+
+
 
 export const getTokenFromServerSide = (req) => {
   // - MEMBER & ADMIN 모두 동일한 API에서 동일한 TOKEN을 발급받는다
@@ -316,9 +316,9 @@ export const getTokenFromServerSide = (req) => {
         }
       }
     }
-    
+
   }
-  
+
   return token;
 };
 
@@ -397,3 +397,11 @@ export const postDataSSR = async (req, url, data, tokenFromSSR) => {
 
   return result;
 };
+
+function getErrorMessageFromApiServer(errors=[]) {
+  let errorMessage = "데이터 처리 중 오류가 발생하였습니다.";
+  if (Array.isArray(errors)) {
+    errorMessage = errors.map(err => `- error_message: ${err.defaultMessage}`).join("\n")
+  }
+  return errorMessage;
+}

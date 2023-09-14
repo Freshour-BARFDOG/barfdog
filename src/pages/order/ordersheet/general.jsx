@@ -105,7 +105,7 @@ export default function GeneralOrderSheetPage() {
             [], //////////// ! DUMMY DATA
           orderPrice: info.orderPrice, //  장바구니 또는 결제 전 상품의 "최종 가격" (기본 어드민 설정할인율 적용 / 결제페이지의 쿠폰 및 적립금 적용 전 가격)
           reward: calcedReward, // 적립금
-          deliveryPrice: info.deliveryPrice, // 배송비 : 장바구니에서, 최종 배송비
+          deliveryPrice: getDeliveryPrice(info), // 배송비 : 장바구니에서, 최종 배송비
           freeCondition: info.freeCondition, // 사이트 > 배송비 무료 조건
           brochure: info.brochure, // 브로슈어 받은 적 있는지 true/false => 브로슈어는 1번만 받을 수 있다.
           totalOrderPrice: info.orderPrice,
@@ -159,7 +159,7 @@ export default function GeneralOrderSheetPage() {
             request: null, // 배송 요청사항 (묶음 배송일 경우, null)
           },
           deliveryId: info.deliveryId, // ! IMPORTANT : 묶음 배송일 경우 , info.deliveryId값 추가/ 일반배송: null)
-          deliveryPrice: info.orderPrice >= info.freeCondition ? 0 : info.deliveryPrice, // 배송비
+          deliveryPrice: getDeliveryPrice(info), // 배송비
           discountTotal: 0, // 총 할인 합계
           discountReward: 0, // 사용할 적립금
           discountCoupon: 0, // 쿠폰 적용으로 인한 할인금
@@ -276,4 +276,10 @@ export default function GeneralOrderSheetPage() {
       )}
     </>
   );
+}
+
+function getDeliveryPrice(info) {
+  const isAllItemDeliveryFree = info.orderItemDtoList.filter(item => !item.deliveryFree).length === 0;
+  const isPaymentPriceFreeCondition = info.orderPrice >= info.freeCondition;
+  return (isAllItemDeliveryFree || isPaymentPriceFreeCondition) ? 0 : info.deliveryPrice;
 }

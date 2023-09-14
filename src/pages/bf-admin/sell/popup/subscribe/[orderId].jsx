@@ -12,6 +12,7 @@ import {orderStatus} from '/store/TYPE/orderStatusTYPE';
 import {getDataSSR} from "/src/pages/api/reqData";
 import {isChangedSubscribeInformation} from "/util/func/subscribe/isChangedSubscribeInformation";
 import {ProductInfo_iamport} from "/src/components/popup/admin_ProductInfo/ProductInfo_iamport";
+import {ProductInfo_naverpay} from "../../../../../components/popup/admin_ProductInfo/ProductInfo_naverpay";
 
 
 export default function Popup_SubscribeOrderDetailInfoPage({ data }) {
@@ -20,7 +21,7 @@ export default function Popup_SubscribeOrderDetailInfoPage({ data }) {
     { boxLabel: '취소', value: orderStatus.CANCEL_DONE_BUYER },
     { boxLabel: '취소', value: orderStatus.CANCEL_DONE_SELLER },
   ];
-  
+
   let isCanceledOrderStatus = false;
   let canceledOrderStatusLabel = '취소';
   for (let i = 0; i < canceldOrderStatusList.length; i++) {
@@ -29,14 +30,14 @@ export default function Popup_SubscribeOrderDetailInfoPage({ data }) {
       break;
     }
   }
-  
+
 
   useEffect(() => {
     if (!data && window && typeof window !== 'undefined') {
       alert('데이터를 불러올 수 없습니다.');
     }
   }, []);
-  
+
   return (
     <>
       <div id={s.popup}>
@@ -53,6 +54,9 @@ export default function Popup_SubscribeOrderDetailInfoPage({ data }) {
             <div className={s.row}>
               <section className={s.table}>
                 <ul>
+                  <li className={s['table-list']}>
+                    <ProductInfo_naverpay data={{...data.subscribePaymentDto, memberName: data.subscribeOrderInfoDto.memberName}}/>
+                  </li>
                   <li className={s['table-list']}>
                     <ProductInfo_iamport data={{impUid: data.subscribePaymentDto.impUid}}/>
                   </li>
@@ -163,6 +167,7 @@ export async function getServerSideProps({ req, query }) {
         orderStatus:data.subscribePaymentDto.orderStatus,
         orderConfirmDate:data.subscribePaymentDto.orderConfirmDate, // 구매 확정일
         impUid:data.subscribePaymentDto.impUid || null, // 포트원 고유번호
+        customerUid:data.subscribePaymentDto.customerUid || null, // 포트원 빌링키 ( 추가 이유: 최초결제 실패 시, 네이버페이 정기결제 해지 = 빌링키 삭제) => 추후 API SERVER 업데이트 이후 null 값 삭제해도 됨
       },
       subscribeDeliveryDto: {
         recipientName: data.subscribeDeliveryDto.recipientName,

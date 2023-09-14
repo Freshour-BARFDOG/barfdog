@@ -37,7 +37,10 @@ $default-row-height: rem(48);
 // * ------- TABLE ------- * //
 .table {
   .table-list:not(:last-child) {
-    margin-bottom: rem(20);
+    > *:last-child{
+      margin-bottom: rem(20);
+    }
+
   }
 
   .t-header {
@@ -107,6 +110,10 @@ $default-row-height: rem(48);
         align-items: center;
         padding: rem(12) rem(20);
         box-sizing: border-box;
+
+        &.button-container{
+          padding: 0 rem(20);
+        }
 
         span {
           display: -webkit-box;
@@ -180,6 +187,17 @@ $default-row-height: rem(48);
       gap:rem(20);
       align-items: center;
       justify-content: space-between;
+      .title-innerText{
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: rem(8);
+      }
+
+      .alert{
+        color: var(--color-warning);
+        font-size: rem(12);
+      }
     }
 
     .t-header{}
@@ -204,6 +222,12 @@ $default-row-height: rem(48);
     &.on{
       .t-body{
         height: calc($default-row-height * 4);
+      }
+
+      @for $i from 1 through 10 {
+        .has-row-#{$i}{
+          height: calc($default-row-height * $i);
+        }
       }
 
       .icon-box svg{

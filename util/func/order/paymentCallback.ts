@@ -18,40 +18,14 @@ export async function faliedGeneralPayment(id:number, error_msg?: string) {
   }
 }
 
-export interface PortoneFailDataInterface{
-  customer_uid: string;
-  paymentMethod: PaymentMethod;
-}
-
-
 interface FailCallbackPropsInterface {
   orderId: number;
   error_msg: string;
   error_code?: string;
-  data?:PortoneFailDataInterface // 아임포트의 경우, 결제 등록 시에는 customer_uid 넘어오지 않음.
   redirect?:boolean;
 }
 
-export async function failedSubscribePayment({orderId, error_msg, error_code, data, redirect}:FailCallbackPropsInterface) {
-
-  const customer_uid = data?.customer_uid;
-  const paymentMethod:PaymentMethod = data?.paymentMethod;
-
-  if (customer_uid && paymentMethod === PaymentMethod.NAVER_PAY) {
-    // => 빌링키 삭제 = 네이버페이 정기결제 해제 (검수 필수내용)
-    // => 타 결제수단: 결제오류 대응(Rollback)을 위해, 빌링키 삭제 X
-    const deleteBillingKeyRes = await deleteIamportCustomerBillingKey({customer_uid: customer_uid}, {tryCount:1});
-    if (deleteBillingKeyRes.status !== 200) {
-      alert(`
-    [빌링키 삭제 실패]\n
-    - error_status: ${deleteBillingKeyRes.status}\n
-    - error_message: failed to delete customer billing key
-    `);
-      return;
-    }
-  }
-
-
+export async function failedSubscribePayment({orderId, error_msg, error_code, redirect}:FailCallbackPropsInterface) {
 
   const fail = await postObjData(`/api/orders/${orderId}/subscribe/fail`);
   console.log(fail);

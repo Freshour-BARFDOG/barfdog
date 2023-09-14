@@ -32,11 +32,8 @@ function OrderCompletedPage({paymentSuccess, errorMessage}) {
           console.log(cancel);
         }else{
           // 모바일 결제 실패
-          const failData = {
-            customer_uid: customUid
-          }
           const availableErrorMessage = errorMessage || error_msg;
-          await failedSubscribePayment({orderId:orderIdx, error_msg: availableErrorMessage, error_code:null, data: failData, redirect: false});
+          await failedSubscribePayment({orderId:orderIdx, error_msg: availableErrorMessage, error_code:null, redirect: false});
         }
 
         await router.push(`/order/orderFailed`);
@@ -85,11 +82,7 @@ export async function getServerSideProps({ query, req }) {
 
       // validation - 카드사 요청에 실패
       if (!paymentResult?.data) {
-
-        const failData = {
-          customer_uid: customUid
-        }
-        await failedSubscribePayment({orderId:orderId, error_msg, error_code, data: failData});
+        await failedSubscribePayment({orderId:orderId, error_msg, error_code});
         return;
       }
 

@@ -277,6 +277,10 @@ section.title{ padding : rem(8) 0 rem(30);}
 
       @include char(l15);
       box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      gap: rem(10);
+      padding: rem(8) 0;
 
       .btn {
         width: 100%;
@@ -298,10 +302,21 @@ section.title{ padding : rem(8) 0 rem(30);}
 
       .btn2 {
         padding: rem(14) 0;
-        margin-top: rem(8);
         text-align: center;
         border: rem(1) solid var(--color-line-02);
         border-radius: rem(4);
+      }
+
+      .naverPay-btn{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: rem(4);
+        background-color: var(--color-main);
+        padding: 0 0 !important;
+        height:  rem(48);
+        color: #fff;
+        > * {color: inherit};
       }
     }
   }
