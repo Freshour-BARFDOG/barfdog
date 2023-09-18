@@ -40,7 +40,7 @@ export const OrdersheetMethodOfPayment = ({id, form, setForm, formErrors}) => {
           <li className={`${s.inner_box} ${form[id] === paymentMethodType.NAVER_PAY ? s.selected : ''}`} data-payment-method={paymentMethodType.NAVER_PAY} onClick={onClickHandler}>
             <div className={`${s.image} ${s.naverPay} img-wrap`}>
               <Image
-                src={require( '/public/img/cart/order_naver.png' )}
+                src={require( '/public/img/cart/order_naver(2023).png' )}
                 objectFit="cover"
                 layout="fill"
                 alt="네이버 아이콘"
