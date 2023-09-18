@@ -31,9 +31,9 @@ export default function Modal_paymentMethod({data, onChangeCard, setActiveModal,
     const subscribeId = cardInfo.subscribeId;
 
     // ! Validation - 네이버페이
-    if (paymentMethod === paymentMethodType.NAVER_PAY) {
-      return alert("네이버페이는 연동 준비 중입니다.")
-    }
+    // if (paymentMethod === paymentMethodType.NAVER_PAY) {
+    //   return alert("네이버페이는 연동 준비 중입니다.")
+    // }
 
     // Data setting
     const data = {
