@@ -151,7 +151,7 @@ export const SubscribeItems = ({itemList}) => {
                   <button className={`${s.btn} ${s["naverPay-btn"]}`}
                           onClick={onDeleteBillingKey.bind(null, {customerUid: item.subscribeOrderDto.customerUid, orderId: item.subscribeOrderDto.orderId})}>
                     {isLoading.deleteBillingKey[item.subscribeOrderDto.orderId] ?
-                      <Spinner style={{color: "#fff"}}/> : <span>NPay 구독 해지</span>
+                      <Spinner style={{color: "#fff"}}/> : <span>네이버페이 구독 해지</span>
                     }
                   </button>}
                 {item.subscribeOrderDto.orderStatus === orderStatus.BEFORE_PAYMENT

@@ -312,10 +312,15 @@ section.title{ padding : rem(8) 0 rem(30);}
         align-items: center;
         justify-content: center;
         gap: rem(4);
+        font-size: rem(13);
         background-color: var(--color-main);
         padding: 0 0 !important;
         height:  rem(48);
         color: #fff;
+        span{
+          display: flex;
+          padding: rem(0) rem(10);
+        }
         > * {color: inherit};
       }
     }
