@@ -7,8 +7,10 @@ import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import {orderStatus} from '/store/TYPE/orderStatusTYPE';
 import {cancelSubscribeOrder} from "/util/func/order/cancelOrder";
 import Spinner from "../../atoms/Spinner";
-import axios from "axios";
 import {iamportBillingKeyResponseCode} from "../../../pages/api/iamport/getCustomerBillingKey";
+import {IamportExtraRequester} from "../../../../type/naverpay/IamportExtraRequester";
+import {CancelReasonName} from "../../../../store/TYPE/order/CancelReasonName";
+import {deleteIamportCustomerBillingKey} from "../../../../util/func/order/iamport/deleteIamportCustomerBillingKey";
 
 
 export const SubscribeItems = ({itemList}) => {
@@ -64,17 +66,12 @@ export const SubscribeItems = ({itemList}) => {
       }
     }));
     try {
-      const localOrigin = window.location.origin;
-      const res = await axios({
-        method: "DELETE",
-        url: `${localOrigin}/api/iamport/deleteCustomerBillingKey`,
-        data: {
-          customerUid: customerUid
-        },
-        timeout: 60000
-      })
-        .then(res => res)
-        .catch(err => err.response);
+      const res = await deleteIamportCustomerBillingKey({
+        customerUid,
+        reason: CancelReasonName.unsubscribeNaverpayByCustomer,
+        requester: IamportExtraRequester.CUSTOMER
+      });
+
 
       console.log(res);
       if (res.status === 200) {

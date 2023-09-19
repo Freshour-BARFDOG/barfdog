@@ -5,9 +5,11 @@ import ErrorMessage from "@src/components/atoms/ErrorMessage";
 import Spinner from "@src/components/atoms/Spinner";
 import {checkNeedToCancelNaverpaySubscribe} from "@util/func/order/checkNeedToCancelNaverpaySubscribe";
 import {PaymentMethod} from "@store/TYPE/paymentMethodType";
-import axios from "axios";
 import {iamportBillingKeyResponseCode} from "@src/pages/api/iamport/getCustomerBillingKey";
 import {LoadingInterface} from "../../../../type/LoadingInterface";
+import {IamportExtraRequester} from "../../../../type/naverpay/IamportExtraRequester";
+import {deleteIamportCustomerBillingKey} from "@util/func/order/iamport/deleteIamportCustomerBillingKey";
+import {CancelReasonName} from "@store/TYPE/order/CancelReasonName";
 
 
 interface PropsInterface {
@@ -78,18 +80,11 @@ export const ProductInfo_naverpay = ({data}: PropsInterface) => {
       delete: true
     }));
     try {
-      const localOrigin = window.location.origin;
-      const res = await axios({
-        method: "DELETE",
-        url: `${localOrigin}/api/iamport/deleteCustomerBillingKey`,
-        data: {
-          customerUid: customerUid
-        },
-        timeout: 10000
-      })
-        .then(res => res)
-        .catch(err => err.response);
-
+      const res = await deleteIamportCustomerBillingKey({
+        customerUid,
+        reason: CancelReasonName.unsubscribeNaverpayByAdmin,
+        requester: IamportExtraRequester.ADMIN
+      });
       console.log(res);
       if (res.status === 200) {
         const d = res.data;

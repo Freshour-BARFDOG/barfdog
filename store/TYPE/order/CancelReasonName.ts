@@ -12,4 +12,8 @@ export enum CancelReasonName {
 
   cancelNowOfSubscribeOrderBySeller = "[정기결제] 관리자에 의한 결제 취소 (관리자 판매 취소)",
 
+  // 네이버페이
+  unsubscribeNaverpayByAdmin = "[정기결제] 관리자에 의한 네이버페이 정기결제 해지 (결제 실패)",
+  unsubscribeNaverpayByCustomer = "[정기결제] 구매자에 의한 네이버페이 정기결제 해지 (결제 실패)",
+
 }

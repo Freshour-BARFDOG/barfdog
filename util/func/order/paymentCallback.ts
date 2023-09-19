@@ -1,8 +1,5 @@
 import {postDataSSR, postObjData} from "@src/pages/api/reqData";
 import {removeIamportPaymentWindow} from "../removeIamportPaymentWindow";
-import axios from "axios";
-import {DeleteCustomerRequest} from "@src/pages/api/iamport/subscribeCustomers";
-import { PaymentMethod } from "@store/TYPE/paymentMethodType";
 
 export async function faliedGeneralPayment(id:number, error_msg?: string) {
   const fail = await postObjData(`/api/orders/${id}/general/fail`);
@@ -141,35 +138,6 @@ export async function validPaymentSSR(req, {orderId, impUid}) {
   console.log(res, "\n- isValid = ", isValid);
 
   return isValid;
-}
-
-async function deleteIamportCustomerBillingKey({customer_uid}:DeleteCustomerRequest, {tryCount}) {
-  const localOrigin:string = window.location.origin;
-  if(!localOrigin) throw new Error("WINDOW MUST BE EXIST");
-
-  const data: DeleteCustomerRequest = {
-    customer_uid
-  }
-
-  const res = await axios({
-    method: "POST",
-    url: `${localOrigin}/api/iamport/subscribeCustomers`,
-    data: data,
-    timeout: 60000
-  })
-    .then(res => res)
-    .catch(err => err.response);
-
-  console.log("--- deleteIamportCustomerBillingKey RES = ",res);
-
-  if (res.status !== 200 && tryCount <= 3) {
-    await deleteIamportCustomerBillingKey({customer_uid}, {tryCount: tryCount+1});
-
-  } else {
-    console.log("deleteIamportCustomerBillingKey > Canceled billing key")
-    return res;
-  }
-
 }
 
 export function getErrorMessage(error_code?: string, error_msg?: string) {
