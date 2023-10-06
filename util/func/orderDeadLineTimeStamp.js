@@ -23,13 +23,14 @@ export const orderDeadLineTimeStamp = () => {
   const month = now.getMonth();
   const date = now.getDate();
 
-  // 목요일로 변경
-  if (todayIndex !== 4) { // 4는 목요일을 나타냅니다 (일요일부터 0으로 시작)
-    diffDate += (4 - todayIndex + 7) % 7;
-  }
+  // // 목요일로 변경
+  // if (todayIndex !== 4) { // 4는 목요일을 나타냅니다 (일요일부터 0으로 시작)
+  //   diffDate += (4 - todayIndex + 7) % 7;
+  // }
+  const nextDate = date + diffDate + 1;
 
   // 6시로 변경
-  const DEADLINE = new Date(year, month, date, 18, 0, 0);
+  const DEADLINE = new Date(year, month, nextDate, 18, 0, 0);
 
   const gap = Math.floor((DEADLINE.getTime() - now.getTime()) / 1000);
 
