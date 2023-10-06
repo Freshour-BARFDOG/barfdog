@@ -5,6 +5,14 @@ import useDeviceState from '/util/hook/useDeviceState';
 import {openGradePopupHandler} from "/src/pages/popup/gradePolicy";
 
 
+
+export const Title = ( {children, link, className} ) => {
+
+  return link ? <Link href={link}><a className={`${s.submenu_title} flex-box ${className}`}>{children}</a></Link> : <p className={`${s.submenu_title} flex-box ${className}`}>{children}</p>;
+}
+
+
+
 export const MemberMemu = ({ data }) => {
   const isAdmin = data.name === '관리자';
   const isMobile = useDeviceState().isMobile;
@@ -27,14 +35,17 @@ export const Non_MemberMenu = () => {
   return (
     <>
       <li>
-        <Link href="/account/signup" as="/account/signup">
+        
+        <Title link={"/account/signup"} className="hover:text-bf-red">회원가입</Title>
+        {/* <Link className="hover:text-bf-red" href="/account/signup" as="/account/signup">
           회원가입
-        </Link>
+        </Link> */}
       </li>
       <li>
-        <Link href="/account/login" as="/account/login">
+        <Title link={"/account/login"} className="hover:text-bf-red">로그인</Title>
+        {/* <Link href="/account/login" as="/account/login">
           로그인
-        </Link>
+        </Link> */}
       </li>
     </>
   );

@@ -61,7 +61,8 @@ function MenuLayout({title, titleClassName ,className, link, icon,  children}) {
       onMouseEnter={mouseEnterEvent}
       // onMouseLeave={mouseLeaveEvent}
     >
-      <Title link={link} className={titleClassName}>{title}</Title>
+      {/* <Title link={link} className={titleClassName}>{title}</Title> */}
+      <Title link={link} className="hover:text-bf-red">{title}</Title>
       {icon &&
         <Image
           src={icon.src}

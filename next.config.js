@@ -30,6 +30,8 @@ module.exports = {
       'localhost',
       '192.168.0.90',
       'barfdogserver.co.kr',
+      '175.126.73.68',
+      'barfdogtest.cafe24.com',
     ],
   },
   async headers() {

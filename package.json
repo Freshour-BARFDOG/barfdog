@@ -4,22 +4,27 @@
   "private": true,
   "scripts": {
     "dev": "NODE_ENV='development' nodemon --watch src/ web.js",
+    "devMem": "NODE_ENV='development' nodemon --inspect --watch src/ web.js",
     "nextDev": "next dev -p 4000",
     "build": "NODE_ENV='production' next build",
-    "start": "next start",
+    "start": "next start -p 4000",
     "lint": "next lint"
   },
   "dependencies": {
     "@nivo/core": "^0.79.0",
     "@nivo/line": "^0.79.1",
     "@reduxjs/toolkit": "^1.8.1",
+    "antd": "^5.9.4",
     "aos": "^2.3.4",
+    "autoprefixer": "^10.4.16",
     "axios": "^0.26.1",
     "build": "^0.1.4",
     "date-fns": "^2.29.3",
+    "dotenv": "^16.3.1",
     "express": "^4.17.3",
     "googleapis": "^108.0.0",
     "gsap": "^3.11.3",
+    "heapdump": "^0.3.15",
     "http": "0.0.1-security",
     "next": "^12.3.1",
     "react": "18.0.0",
@@ -34,8 +39,11 @@
     "react-redux": "^8.0.1",
     "react-scrollmagic": "^2.3.0",
     "react-use-analytics-api": "^1.4.17",
-    "styled-components": "^5.3.5",
-    "swiper": "^8.1.1"
+    "recharts": "^2.8.0",
+    "styled-components": "^5.3.11",
+    "swiper": "^8.1.1",
+    "tailwindcss": "^3.3.3",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@svgr/webpack": "^6.2.1",
