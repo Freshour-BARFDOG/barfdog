@@ -30,7 +30,7 @@ export const orderDeadLineTimeStamp = () => {
   const nextDate = date + diffDate + 1;
 
   // 6시로 변경
-  const DEADLINE = new Date(year, month, nextDate, 18, 0, 0);
+  const DEADLINE = new Date(year, month, nextDate, 23, 59, 59);
 
   const gap = Math.floor((DEADLINE.getTime() - now.getTime()) / 1000);
 
