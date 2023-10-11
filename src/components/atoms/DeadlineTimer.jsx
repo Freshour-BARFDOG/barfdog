@@ -17,7 +17,7 @@ const Dealine_timer = ({ className }) => {
   useEffect( () => {
     setTimeout( () => {
       setMessage( orderDeadLineTimeStamp() )
-    }, 1000 );
+    }, 100 );
   } );
   
   

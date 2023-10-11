@@ -23,17 +23,17 @@ function getItem(label, key, icon, path, children) {
 }
 const menuItems = [
   getItem("대시보드", "dashboard", <FundOutlined />, "/dash_board"),
-  getItem("조회", "manager", <FileSearchOutlined />, "/", [
+  getItem("DB관리", "manager", <FileSearchOutlined />, "/", [
     getItem("주문조회", "ordermanager", <ShopOutlined />, "/order_manager"),
     getItem("회원조회", "membermanager", <UserOutlined />, "/"),
     getItem("상품조회", "productmanager", <ShoppingCartOutlined />, "/"),
     getItem("알고리즘 변수", "algorithmmanager", <ShoppingCartOutlined />, "/"),
-    getItem("구독 임의생성", "subscribecreate", <ShoppingCartOutlined />, "/"),
+    //getItem("구독 임의생성", "subscribecreate", <ShoppingCartOutlined />, "/"),
   ]),
-  getItem("수정", "modifier", <FileSearchOutlined />, "/", [
-    getItem("구독정보수정", "orderModifier", <ShopOutlined />, "/"),
-    getItem("회원정보수정", "memberModifier", <UserOutlined />, "/"),
-  ]),
+  //getItem("수정", "modifier", <FileSearchOutlined />, "/", [
+    //getItem("구독정보수정", "orderModifier", <ShopOutlined />, "/"),
+    //getItem("회원정보수정", "memberModifier", <UserOutlined />, "/"),
+  //]),
 ];
 
 export default function SideBar() {

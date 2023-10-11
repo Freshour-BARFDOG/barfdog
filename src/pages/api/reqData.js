@@ -51,10 +51,10 @@ export const getData = async (url, useType, optionalConfig= {}) => {
 };
 
 export const postData = async (url, data, callback, contType) => {
-  axios
+  return axios
     .post(url, data, axiosConfig(contType))
     .then((res) => {
-      console.log(res);
+      //console.log(res);
       if (callback && typeof callback === 'function') callback(res);
       return res;
     })

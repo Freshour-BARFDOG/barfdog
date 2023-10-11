@@ -79,7 +79,7 @@ const valid_minAge = (birthDay, limitedAge=14)=>{
   const age = curYear - birthYear + koreanAgeUnit;
   const minAge = limitedAge;
   if(!birthDay){
-    error = '항목이 비어있습니다.'
+    error = '생년월일 항목이 비어있습니다.'
   } else if(birthDay.replace(/-/gi,'').length !== 8){
     error=`생년월일 형식이 올바르지 않습니다.`
   } else if(age < minAge){

@@ -56,6 +56,10 @@ export const DogTypeCustomSelectWithCustomOptions = ({id, options, width, value,
         } );
         // console.log(isBoxClicked)
         setIsActive( isBoxClicked );
+        //console.log(viewer, clickedTarget, searchInput)
+        if(isBoxClicked && clickedTarget !== viewer){
+          setIsActive(false);
+        }
       } );
     }
   }, [optionBoxRef.current] );

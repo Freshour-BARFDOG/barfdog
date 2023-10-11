@@ -159,7 +159,7 @@ const DetailsPage = () => {
   
   const confirm = () => {
 
-    console.log(dataBase)
+    //console.log(dataBase)
     
     let data = dataBase;
 
@@ -182,7 +182,7 @@ const DetailsPage = () => {
           const url = `api/admin/new/orders/generalOrderPost/${id}`;
           const res = await postData(url, data);
   
-          if(res.status === 200){
+          if(res?.request.status === 200){
             const dataToAssign = res.data ?? []; // 주어진 데이터
             setDataBase(dataToAssign); // 데이터베이스에 할당
             setIsLoading(false);
@@ -216,7 +216,7 @@ const DetailsPage = () => {
     )
   }
 
-  console.log(dataBase["orderCancel"]);
+  //console.log(dataBase["orderCancel"]);
 
 
 

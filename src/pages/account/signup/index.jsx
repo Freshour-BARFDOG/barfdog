@@ -104,12 +104,46 @@ export default function SignupPage() {
         if (error) isPassed = false;
       }
 
+      if (!isPassed) {
+        if(validFormResultObj.name){
+          return mct.alertShow('이름을 확인해주세요.');
+        }
+        if(validFormResultObj.email){
+          return mct.alertShow('이메일을 확인해주세요.');
+        }
+        if(validFormResultObj.isEmailDuplicated){
+          return mct.alertShow('이메일 중복확인이 필요합니다.');
+        }
+        if(validFormResultObj.password){
+          return mct.alertShow('비밀번호를 확인해주세요.');
+        }
+        if(validFormResultObj.confirmPassword){
+          return mct.alertShow('비밀번호를 확인해주세요.');
+        }
+        if(validFormResultObj.phoneNumber){
+          return mct.alertShow('휴대폰번호를 확인해주세요.');
+        }
+        if(validFormResultObj.isValidPhoneNumber){
+          return mct.alertShow('휴대폰번호 인증이 필요합니다.');
+        }
+        if(validFormResultObj.detailAddress){
+          return mct.alertShow('주소를 확인해주세요.');
+        }
+        if(validFormResultObj.street){
+          return mct.alertShow('주소를 확인해주세요.');
+        }
+        if(validFormResultObj.birthday){
+          return mct.alertShow('생년월일을 확인해주세요.');
+        }
+
+        return mct.alertShow('유효하지 않은 항목이 있습니다.');
+      }
+
       for (const validPolicyResultObjKey in validPolicyResultObj) {
         const error = validPolicyResultObj[validPolicyResultObjKey];
         if (error) isPassed = false;
       }
-
-      if (!isPassed) return mct.alertShow('유효하지 않은 항목이 있습니다.');
+      if (!isPassed) return mct.alertShow('이용약관을 확인해주세요.');
       
       mct.alertHide('');
       setSubmitted(true);

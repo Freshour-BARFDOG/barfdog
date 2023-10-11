@@ -153,7 +153,7 @@ const DetailsPage = () => {
   
   const confirm = () => {
 
-    console.log(dataBase)
+    //console.log(dataBase)
     
     let data = dataBase;
     // let data = 
@@ -192,7 +192,7 @@ const DetailsPage = () => {
       try {
         (async () => {
           const url = `api/admin/setting`;
-          console.log(url,data)
+          //console.log(url,data)
           const res = await putObjData(url, data);
   
           if(res.status === 200){
@@ -227,7 +227,7 @@ const DetailsPage = () => {
     )
   }
 
-  console.log(dataBase);
+  //console.log(dataBase);
 
 
 

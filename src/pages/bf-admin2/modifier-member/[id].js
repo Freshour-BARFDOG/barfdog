@@ -167,8 +167,10 @@ const DetailsPage = () => {
       (async () => {
         const url = `api/admin/new/orders/memberGet/${id}`;
         const res = await getData(url);
+        
+        //console.log(res.request.status)
 
-        if(res.status === 200){
+        if(res.request.status === 200){
           const dataToAssign = res.data ?? []; // 주어진 데이터
           setDataBase(dataToAssign); // 데이터베이스에 할당
           setIsLoading(false);
@@ -184,7 +186,7 @@ const DetailsPage = () => {
   
   const confirm = () => {
 
-    console.log(dataBase)
+    //console.log(dataBase)
     
     let data = dataBase;
 
@@ -206,8 +208,10 @@ const DetailsPage = () => {
         (async () => {
           const url = `api/admin/new/orders/memberPost/${id}`;
           const res = await postData(url, data);
+
+          //console.log(res)
   
-          if(res.status === 200){
+          if(res?.request.status === 200){
             message.success('수정되었습니다.');
           } else {
             message.error('수정에 실패하였습니다. 1');
@@ -239,7 +243,7 @@ const DetailsPage = () => {
     )
   }
 
-  console.log(dataBase);
+  //console.log(dataBase);
 
 
 

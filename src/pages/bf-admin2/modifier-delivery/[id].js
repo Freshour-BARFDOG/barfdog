@@ -125,7 +125,7 @@ const DetailsPage = () => {
   
   const confirm = () => {
 
-    console.log(dataBase)
+    //console.log(dataBase)
     
     let data = dataBase;
 
@@ -146,7 +146,7 @@ const DetailsPage = () => {
           const url = `api/admin/new/orders/deliveryGet/${id}`;
           const res = await postData(url, data);
   
-          if(res.status === 200){
+          if(res?.request.status === 200){
             message.success('수정되었습니다.');
           } else {
             message.error('수정에 실패하였습니다. 1');
@@ -176,7 +176,7 @@ const DetailsPage = () => {
     )
   }
 
-  console.log(dataBase);
+  //console.log(dataBase);
 
 
 

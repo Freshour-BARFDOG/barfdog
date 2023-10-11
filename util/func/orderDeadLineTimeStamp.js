@@ -32,16 +32,27 @@ export const orderDeadLineTimeStamp = () => {
   // 6시로 변경
   const DEADLINE = new Date(year, month, nextDate, 23, 59, 59);
 
-  const gap = Math.floor((DEADLINE.getTime() - now.getTime()) / 1000);
+  //const gap = Math.floor((DEADLINE.getTime() - now.getTime()) / 1000);
+  //if (gap < 0) return;
+  // 나머지를 올림해서, 변환
+  //const hour = Math.floor((gap % (60 * 60 * 24)) / (60 * 60));
+  //const min = Math.floor((gap % (60 * 60)) / 60);
+  //const sec = Math.floor(gap % 60);
 
+  //return `${diffDate}일 ${convertNum(hour)}:${convertNum(min)}:${convertNum(sec)}`;
+
+  // (23-10-11) 밀리초 추가
+  const gap = Math.floor((DEADLINE.getTime() - now.getTime()) / 100); // 0.1초 단위로 변경 (100으로 나누기)
   if (gap < 0) return;
 
-  // 나머지를 올림해서, 변환
-  const hour = Math.floor((gap % (60 * 60 * 24)) / (60 * 60));
-  const min = Math.floor((gap % (60 * 60)) / 60);
-  const sec = Math.floor(gap % 60);
+  const tenths = gap % 10;
+  const seconds = gap / 10;
 
-  return `${diffDate}일 ${convertNum(hour)}:${convertNum(min)}:${convertNum(sec)}`;
+  const hour = Math.floor((seconds % 86400) / (3600));
+  const min = Math.floor((seconds % 3600) / 60);
+  const sec = Math.floor(seconds % 60);
+  
+  return `${diffDate}일 ${convertNum(hour)}:${convertNum(min)}:${convertNum(sec)}.${tenths.toString()}`;
 };
 
 const convertNum = (num) => {
