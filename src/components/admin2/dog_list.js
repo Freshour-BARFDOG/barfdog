@@ -36,47 +36,32 @@ const columns = [
       <Space size="middle">
       <a href="#" onClick={(e) => {
           e.preventDefault();
-          openNewWindow("modifier-member",record.memberId);
-        }} > {record.memberId} 수정 </a>
+          openNewWindow("modifier-dog",record.dogId);
+        }} > {record.dogId} 수정 </a>
       </Space>
     ),
   },
   { title: "생성날짜", dataIndex: "createdDate", key: "createdDate", },
   { title: "수정날짜", dataIndex: "modifiedDate", key: "modifiedDate", },
-  { title: "마지막 로그인 날짜", dataIndex: "lastLoginDate", key: "lastLoginDate", },
-  { title: "구독 유무", dataIndex: "subscribe", key: "subscribe", },
   { title: "이름", dataIndex: "name", key: "name", },
-  { title: "이메일", dataIndex: "email", key: "email", },
-  { title: "전화번호", dataIndex: "phoneNumber", key: "phoneNumber", },
-  { title: "우편번호", dataIndex: "zipcode", key: "zipcode", },
-  { title: "도시", dataIndex: "city", key: "city", },
-  { title: "거리", dataIndex: "street", key: "street", },
-  { title: "상세주소", dataIndex: "detailAddress", key: "detailAddress", },
-  { title: "생년월일", dataIndex: "birthday", key: "birthday", },
   { title: "성별", dataIndex: "gender", key: "gender", },
-  { title: "서비스 이용약관", dataIndex: "servicePolicy", key: "servicePolicy", },
-  { title: "개인정보 수집 및 이용", dataIndex: "privacyPolicy", key: "privacyPolicy", },
-  { title: "SMS 수신동의", dataIndex: "receiveSms", key: "receiveSms", },
-  { title: "이메일 수신동의", dataIndex: "receiveEmail", key: "receiveEmail", },
-  { title: "만 14세 이상", dataIndex: "over14yearsOld", key: "over14yearsOld", },
-  { title: "추천인 코드", dataIndex: "recommendCode", key: "recommendCode", },
-  { title: "내 추천 코드", dataIndex: "myRecommendationCode", key: "myRecommendationCode", },
-  { title: "등급", dataIndex: "grade", key: "grade", },
-  { title: "리워드", dataIndex: "reward", key: "reward", },
-  { title: "첫 결제일", dataIndex: "firstPaymentDate", key: "firstPaymentDate", },
-  { title: "누적 금액", dataIndex: "accumulatedAmount", key: "accumulatedAmount", },
-  { title: "누적 구독", dataIndex: "accumulatedSubscribe", key: "accumulatedSubscribe", },
-  { title: "비밀번호 설정 필요", dataIndex: "needToSetPassword", key: "needToSetPassword", },
-  { title: "다른사람 추천 유무", dataIndex: "recommend", key: "recommend", },
-  { title: "SNS/이메일 수신동의", dataIndex: "receiveAgree", key: "receiveAgree", },
-  { title: "권한", dataIndex: "roles", key: "roles", },
-  { title: "가입 포털", dataIndex: "provider", key: "provider", },
-  { title: "가입 포털 코드", dataIndex: "providerId", key: "providerId", },
-  { title: "임시 비밀번호 유무", dataIndex: "temporaryPassword", key: "temporaryPassword", },
-  { title: "구매유무", dataIndex: "paid", key: "paid", },
-  { title: "브로셔", dataIndex: "brochure", key: "brochure", },
-  { title: "탈퇴여부", dataIndex: "withdrawal", key: "withdrawal", },
-  { title: "관리자 수정 유무", dataIndex: "fixedGrade", key: "fixedGrade", },
+  { title: "생일", dataIndex: "birth", key: "birth", },
+  { title: "견종", dataIndex: "dogType", key: "dogType", },
+  { title: "무게", dataIndex: "weight", key: "weight", },
+  { title: "사이즈", dataIndex: "dogSize", key: "dogSize", },
+  { title: "상태", dataIndex: "dogStatus", key: "dogStatus", },
+  { title: "바프독 등록 시점시, 강아지 나이(개월 수)", dataIndex: "startAgeMonth", key: "startAgeMonth", },
+  { title: "대표견여부", dataIndex: "representative", key: "representative", },
+  { title: "노령견 여부", dataIndex: "oldDog", key: "oldDog", },
+  { title: "중성화 여부", dataIndex: "neutralization", key: "neutralization", },
+  { title: "활동량", dataIndex: "activityLevel", key: "activityLevel", },
+  { title: "산책 횟수", dataIndex: "walkingCountPerWeek", key: "walkingCountPerWeek", },
+  { title: "산책 시간", dataIndex: "walkingTimePerOneTime", key: "walkingTimePerOneTime", },
+  { title: "간식 횟수", dataIndex: "snackCountLevel", key: "snackCountLevel", },
+  { title: "못 먹는 음식", dataIndex: "inedibleFood", key: "inedibleFood", },
+  { title: "못 먹는 음식 기타", dataIndex: "inedibleFoodEtc", key: "inedibleFoodEtc", },
+  { title: "질병 및 주의사항", dataIndex: "caution", key: "caution", },
+  { title: "삭제여부", dataIndex: "deleted", key: "deleted", },
 ];
 
 
@@ -117,13 +102,13 @@ export default function MemberList({ search }) {
 
           try {
             (async () => {
-              const url = `api/admin/new/members/searchBetween/${tmp_strDate}/${tmp_endDate}`;
+              const url = `api/admin/new/dog/searchBetween/${tmp_strDate}/${tmp_endDate}`;
               const res = await getData(url);
 
               console.log(res)
   
               if(res?.status === 200){
-                const dataToAssign = res.data._embedded?.memberAdminDtoList ?? []; // 주어진 데이터
+                const dataToAssign = res.data._embedded?.dogAdminDtoList ?? []; // 주어진 데이터
 
                 setDataBase(dataToAssign); // 데이터베이스에 할당
                 setIsLoading(false);
@@ -168,43 +153,29 @@ export default function MemberList({ search }) {
       const data_tmp = data[i];
       defaultData.push({
         key: i.toString(),
-        memberId: data_tmp.memberId,
+
+        dogId: data_tmp.dogId,
         createdDate: data_tmp.createdDate,
         modifiedDate: data_tmp.modifiedDate,
-        lastLoginDate: data_tmp.lastLoginDate,
-        subscribe: data_tmp.subscribe=== true ? "YES" : "NO",
+        deleted: data_tmp.deleted=== true ? "YES" : "NO",
+        representative: data_tmp.representative=== true ? "YES" : "NO",
         name: data_tmp.name,
-        email: data_tmp.email,
-        phoneNumber: data_tmp.phoneNumber,
-        zipcode: data_tmp.zipcode,
-        city: data_tmp.city,
-        street: data_tmp.street,
-        detailAddress: data_tmp.detailAddress,
-        birthday: data_tmp.birthday,
         gender: data_tmp.gender,
-        servicePolicy: data_tmp.servicePolicy=== true ? "YES" : "NO",
-        privacyPolicy: data_tmp.privacyPolicy=== true ? "YES" : "NO",
-        receiveSms: data_tmp.receiveSms=== true ? "YES" : "NO",
-        receiveEmail: data_tmp.receiveEmail=== true ? "YES" : "NO",
-        over14yearsOld: data_tmp.over14yearsOld=== true ? "YES" : "NO",
-        recommendCode: data_tmp.recommendCode,
-        myRecommendationCode: data_tmp.myRecommendationCode,
-        grade: data_tmp.grade,
-        reward: data_tmp.reward,
-        firstPaymentDate: data_tmp.firstPaymentDate,
-        accumulatedAmount: data_tmp.accumulatedAmount,
-        accumulatedSubscribe: data_tmp.accumulatedSubscribe,
-        needToSetPassword: data_tmp.needToSetPassword=== true ? "YES" : "NO",
-        recommend: data_tmp.recommend=== true ? "YES" : "NO",
-        receiveAgree: data_tmp.receiveAgree=== true ? "YES" : "NO",
-        roles: data_tmp.roles,
-        provider: data_tmp.provider,
-        //providerId: data_tmp.providerId,
-        temporaryPassword: data_tmp.temporaryPassword=== true ? "YES" : "NO",
-        paid: data_tmp.paid=== true ? "YES" : "NO",
-        brochure: data_tmp.brochure=== true ? "YES" : "NO",
-        withdrawal: data_tmp.withdrawal=== true ? "YES" : "NO",
-        fixedGrade: data_tmp.fixedGrade=== true ? "YES" : "NO",
+        birth: data_tmp.birth,
+        startAgeMonth: data_tmp.startAgeMonth,
+        oldDog: data_tmp.oldDog=== true ? "YES" : "NO",
+        dogType: data_tmp.dogType,
+        dogSize: data_tmp.dogSize,
+        weight: data_tmp.weight,
+        neutralization: data_tmp.neutralization=== true ? "YES" : "NO",
+        activityLevel: data_tmp.activityLevel,
+        walkingCountPerWeek: data_tmp.walkingCountPerWeek,
+        walkingTimePerOneTime: data_tmp.walkingTimePerOneTime,
+        dogStatus: data_tmp.dogStatus,
+        snackCountLevel: data_tmp.snackCountLevel,
+        inedibleFood: data_tmp.inedibleFood,
+        inedibleFoodEtc: data_tmp.inedibleFoodEtc,
+        caution: data_tmp.caution,
       });
   
     }
@@ -255,10 +226,7 @@ export default function MemberList({ search }) {
 
 
   
-        if (
-          grade_result &&
-          search_result &&
-          subscribe_result) return item;
+        return item;
       })
     );
   
@@ -279,40 +247,25 @@ export default function MemberList({ search }) {
               
         "생성날짜" : item.createdDate,
         "수정날짜" : item.modifiedDate,
-        "마지막 로그인 날짜" : item.lastLoginDate,
-        "구독 유무" : item.subscribe,
         "이름" : item.name,
-        "이메일" : item.email,
-        "전화번호" : item.phoneNumber,
-        "우편번호" : item.zipcode,
-        "도시" : item.city,
-        "거리" : item.street,
-        "상세주소" : item.detailAddress,
-        "생년월일" : item.birthday,
         "성별" : item.gender,
-        "서비스 이용약관" : item.servicePolicy,
-        "개인정보 수집 및 이용" : item.privacyPolicy,
-        "SMS 수신동의" : item.receiveSms,
-        "이메일 수신동의" : item.receiveEmail,
-        "만 14세 이상" : item.over14yearsOld,
-        "추천인 코드" : item.recommendCode,
-        "내 추천 코드" : item.myRecommendationCode,
-        "등급" : item.grade,
-        "리워드" : item.reward,
-        "첫 결제일" : item.firstPaymentDate,
-        "누적 금액" : item.accumulatedAmount,
-        "누적 구독" : item.accumulatedSubscribe,
-        "비밀번호 설정 필요" : item.needToSetPassword,
-        "다른사람 추천 유무" : item.recommend,
-        "SNS/이메일 수신동의" : item.receiveAgree,
-        "권한" : item.roles,
-        "가입 포털" : item.provider,
-        "가입 포털 코드" : item.providerId,
-        "임시 비밀번호 유무" : item.temporaryPassword,
-        "구매유무" : item.paid,
-        "브로셔" : item.brochure,
-        "탈퇴여부" : item.withdrawal,
-        "관리자 수정 유무" : item.fixedGrade,
+        "생일" : item.birth,
+        "견종" : item.dogType,
+        "무게" : item.weight,
+        "사이즈" : item.dogSize,
+        "상태" : item.dogStatus,
+        "바프독 등록 시점시, 강아지 나이(개월 수)" : item.startAgeMonth,
+        "대표견여부" : item.representative,
+        "노령견 여부" : item.oldDog,
+        "중성화 여부" : item.neutralization,
+        "활동량" : item.activityLevel,
+        "산책 횟수" : item.walkingCountPerWeek,
+        "산책 시간" : item.walkingTimePerOneTime,
+        "간식 횟수" : item.snackCountLevel,
+        "못 먹는 음식" : item.inedibleFood,
+        "못 먹는 음식 기타" : item.inedibleFoodEtc,
+        "질병 및 주의사항" : item.caution,
+        "삭제여부" : item.deleted,
 
 
       }

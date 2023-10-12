@@ -4,6 +4,7 @@ import {
   ShopOutlined,
   FundOutlined,
   ShoppingCartOutlined,
+  FileOutlined, 
 } from "@ant-design/icons";
 import { Layout, theme, Menu } from "antd";
 import Link from "next/link";
@@ -12,6 +13,7 @@ import DashBoard from "./dash_board";
 import OrderManager from "./order_manager";
 import ProductManager from "./product_manager";
 import MemberManager from "./member_manager";
+import DogManager from "./dog_manager";
 import MemberModifier from "./member_modifier";
 import OrderModifier from "./order_modifier";
 import AlgorithmManager from "./algorithm_manager";
@@ -26,7 +28,8 @@ const menuItems = [
   getItem("DB관리", "manager", <FileSearchOutlined />, "/", [
     getItem("주문조회", "ordermanager", <ShopOutlined />, "/order_manager"),
     getItem("회원조회", "membermanager", <UserOutlined />, "/"),
-    getItem("상품조회", "productmanager", <ShoppingCartOutlined />, "/"),
+    getItem("견 조회", "dogmanager", <FileOutlined />, "/"),
+    //getItem("상품조회", "productmanager", <ShoppingCartOutlined />, "/"),
     getItem("알고리즘 변수", "algorithmmanager", <ShoppingCartOutlined />, "/"),
     //getItem("구독 임의생성", "subscribecreate", <ShoppingCartOutlined />, "/"),
   ]),
@@ -55,6 +58,8 @@ export default function SideBar() {
       return <OrderManager />;
     } else if (selectedKey === "membermanager") {
       return <MemberManager />;
+    } else if (selectedKey === "dogmanager") {
+      return <DogManager />;
     } else if (selectedKey === "productmanager") {
       return <ProductManager />;
     } else if (selectedKey === "orderModifier") {

@@ -120,7 +120,7 @@ const DetailsPage = () => {
         const url = `api/admin/new/orders/dogGet/${id}`;
         const res = await getData(url);
 
-        if(res.status === 200){
+        if(res?.status === 200){
           const dataToAssign = res.data ?? []; // 주어진 데이터
           setDataBase(dataToAssign); // 데이터베이스에 할당
           setIsLoading(false);

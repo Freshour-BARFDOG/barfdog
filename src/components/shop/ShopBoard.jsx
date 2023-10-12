@@ -99,7 +99,8 @@ export const ShopBoard = ({
                 )}
 
                 <br />
-                <p className={Style.text}>제주 및 도서산간 지역은 배송이 불가능합니다</p>
+                {/* <p className={Style.text}>제주 및 도서산간 지역은 배송이 불가능합니다</p> */}
+                <p className={Style.text}>제주 및 도서산간 지역도 배송비 추가 없이 보내드립니다</p>
               </div>
 
               <div>
