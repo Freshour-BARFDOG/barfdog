@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {URLPathClass} from "../../class/URLPathClass";
+import Link from "next/link";
 
 
 export const MoveToAdminPageButton = () => {
@@ -20,9 +21,9 @@ export const MoveToAdminPageButton = () => {
   
   return (
     <>
-      <li><a href="/bf-admin/dashboard">관리자 페이지</a></li>
+      <li><Link href="/bf-admin/dashboard">관리자 페이지</Link></li>
       <li> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; </li>
-      <li><a href="/bf-admin2">관리자 페이지2</a></li>
+      <li><Link href="/bf-admin2">관리자 페이지2</Link></li>
     </>
   );
 }
