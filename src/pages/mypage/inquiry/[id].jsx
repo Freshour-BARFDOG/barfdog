@@ -114,7 +114,9 @@ export default function InquiryArticlePage({ data }) {
               
               <div className={`${s['info-row']} ${s['contents']}`}>
                 <div className={s['info-row-title']}><span>문의내용</span></div>
-                <div className={s['info-row-cont']}>{info.contents}
+                <div className={s['info-row-cont']} 
+                style={{ whiteSpace: 'pre-line' }}>
+                  {info.contents}
                 {info.questionImgDtoList.length > 0 &&
                   <div className={s['info-row-grid']}>
                     {info.questionImgDtoList.length > 0 &&

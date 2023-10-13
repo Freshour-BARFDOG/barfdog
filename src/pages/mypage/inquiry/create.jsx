@@ -57,6 +57,8 @@ export default function CreateInquiryPage() {
     }));
   };
 
+  //console.log(form);
+
   const returnToPrevPage = () => {
     if (confirm('이전 페이지로 돌아가시겠습니까?')) {
       router.back();
@@ -189,6 +191,10 @@ export default function CreateInquiryPage() {
                     <span>제목</span>
                   </label>
                 </div>
+
+
+
+
                 <div className={s['form-row-cont']}>
                   <input
                     id={'title'}
@@ -200,7 +206,15 @@ export default function CreateInquiryPage() {
                   />
                   {errors.title && <ErrorMessage>{errors.title}</ErrorMessage>}
                 </div>
+
+
+
+
               </div>
+
+
+
+
               {/* form-row */}
               <div className={s['form-row']}>
                 <div className={s['form-row-title']}>
@@ -208,16 +222,24 @@ export default function CreateInquiryPage() {
                     <span>문의내용</span>
                   </label>
                 </div>
+
+
+
+
+
                 <div className={s['form-row-cont']}>
-                  <div className={`${s['input-wrap']} ${s.contents}`}>
+                  {/* <div className={`${s['input-wrap']} ${s.contents}`}> */}
+                  <div >
+
                     <textarea
                       id={'contents'}
                       className={'fullWidth'}
-                      placeholder={`문의내용을 작성해주세요.\n문의내용은 최대 ${transformLocalCurrency(maxContentsLength)}자 이내로 작성할 수 있습니다.`}
+                      placeholder={`문의내용을 작성해주세요. 문의내용은 최대 ${transformLocalCurrency(maxContentsLength)}자 이내로 작성할 수 있습니다.`}
                       onChange={onInputChangeHandler}
                       value={form['contents']}
                       maxLength={1000}
                     />
+
                     <span className={s['length-indicator']}>
                       {form?.contents?.length} / {transformLocalCurrency(maxContentsLength)}
                     </span>
