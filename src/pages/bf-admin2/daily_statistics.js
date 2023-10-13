@@ -111,8 +111,9 @@ export default function DailyStatistics() {
       <div className="flex flex-row gap-4">
         <div className="w-1/2 bg-white p-4 rounded-lg shadow-md">
           <p className="text-lg font-bold">그래프</p>
-          <ResponsiveContainer width="100%" height={400}>
+          <ResponsiveContainer key="repon1" width="100%" height={400}>
             <LineChart
+              key="unique_key_for_line_chart"
               data={data}
               margin={{
                 top: 5,

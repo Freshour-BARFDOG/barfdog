@@ -18,7 +18,14 @@ import MemberModifier from "./member_modifier";
 import OrderModifier from "./order_modifier";
 import AlgorithmManager from "./algorithm_manager";
 import SubscribeCreate from "./subscribe_create";
+
+import { userType } from '/store/TYPE/userAuthType';
+import { getDataSSR, getTokenFromServerSide } from '../api/reqData';
+
+
+
 const { Sider, Content } = Layout;
+
 
 function getItem(label, key, icon, path, children) {
   return { key, icon, children, label, path };
@@ -39,7 +46,7 @@ const menuItems = [
   //]),
 ];
 
-export default function SideBar() {
+export default function SideBar({userTypeInput}) {
   const [collapsed, setCollapsed] = useState(false);
   const [selectedKey, setSelectedKey] = useState("dashboard");
   const {
@@ -109,4 +116,38 @@ export default function SideBar() {
       </Layout>
     </Layout>
   );
+
+
+}
+
+
+
+export async function getServerSideProps({ req }) {
+  let token = null;
+  let USER_TYPE = null;
+  if (req?.headers?.cookie) {
+    token = getTokenFromServerSide(req);
+    const getApiUrl = `/api/admin/setting`;
+    const res = await getDataSSR(req, getApiUrl, token);
+    if (res && res.status === 200) {
+      USER_TYPE = userType.ADMIN;
+    }
+  }
+
+  if (USER_TYPE !== userType.ADMIN) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/'
+      },
+      props:null
+    }
+  }
+
+  return {
+    props: {
+      userTypeInput: USER_TYPE,
+    },
+  };
+  
 }
