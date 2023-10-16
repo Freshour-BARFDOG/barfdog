@@ -326,8 +326,8 @@ export default function RegisterSubscribeInfoPage({ data }) {
               </button>
             )}
 
-            {info.subscribeStatus === subscribeStatus.SUBSCRIBING
-              || info.subscribeStatus === subscribeStatus.SUBSCRIBE_PENDING
+            {(info.subscribeStatus === subscribeStatus.SUBSCRIBING
+              || info.subscribeStatus === subscribeStatus.SUBSCRIBE_PENDING)
               && (
               <button className={s.nextPage} onClick={onChangeSubscribeOrder}>
                 {isLoading?.submit ? <Spinner style={{ color: '#fff' }} /> : '맞춤플랜 변경하기'}
