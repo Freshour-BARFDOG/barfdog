@@ -98,6 +98,7 @@ export const useSubscribeInfo = (subscribeId) => {
           // 구독 기본 정보 + 구독정보 Dashboard
           info: {
             subscribeId: Number(subscribeId)  === data.subscribeDto.id ? Number(subscribeId) : null, // validation 요청한 페이지의 구독id와 server에서 받은 값을 대조
+            subscribeStatus: data.subscribeDto.subscribeStatus,
             dogId: data.subscribeDto.dogId,
             dogName: data.subscribeDto.dogName,
             subscribeCount: data.subscribeDto.subscribeCount,
