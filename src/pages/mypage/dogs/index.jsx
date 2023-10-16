@@ -288,8 +288,7 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
               <a>설문수정</a>
             </Link>
             {/* 버튼 생성 조건 :  결제전 또는 구독 보류일 경우*/}
-            {(data.subscribeStatus === subscribeStatus.BEFORE_PAYMENT ||
-              data.subscribeStatus === subscribeStatus.SUBSCRIBE_PENDING) && (
+            {(data.subscribeStatus === subscribeStatus.BEFORE_PAYMENT) && (
               <Link href={`/order/subscribeShop?dogId=${dogId}`} passHref>
                 <a className={s.payment} data-id={dogId} onClick={nextPageHandler}>{isLoading[dogId] ? <Spinner style={{color:"#fff"}}/>: "결제하기"}</a>
               </Link>

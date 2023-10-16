@@ -119,7 +119,7 @@ export default function ManageSubscribePage() {
                           </div>
 
                           <div className={s.col_4}>
-                            {item.subscribeDto.status === subscribeStatus.SUBSCRIBING ? (
+                            {item.subscribeDto.status === subscribeStatus.SUBSCRIBING || item.subscribeDto.status === subscribeStatus.SUBSCRIBE_PENDING ? (
                               <Link
                                 href={`/mypage/subscribe/${item.subscribeDto.subscribeId}`}
                                 passHref

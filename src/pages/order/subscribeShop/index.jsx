@@ -320,15 +320,15 @@ export default function RegisterSubscribeInfoPage({ data }) {
               뒤로가기
             </button>
 
-            {(info.subscribeStatus === subscribeStatus.BEFORE_PAYMENT
-              || info.subscribeStatus === subscribeStatus.SUBSCRIBE_PENDING
-            ) && (
+            {info.subscribeStatus === subscribeStatus.BEFORE_PAYMENT&& (
               <button className={s.nextPage} onClick={onStartSubscribeOrder}>
                 {isLoading?.submit ? <Spinner style={{ color: '#fff' }} /> : '맞춤레시피 구매하기'}
               </button>
             )}
 
-            {info.subscribeStatus === subscribeStatus.SUBSCRIBING && (
+            {info.subscribeStatus === subscribeStatus.SUBSCRIBING
+              || info.subscribeStatus === subscribeStatus.SUBSCRIBE_PENDING
+              && (
               <button className={s.nextPage} onClick={onChangeSubscribeOrder}>
                 {isLoading?.submit ? <Spinner style={{ color: '#fff' }} /> : '맞춤플랜 변경하기'}
               </button>
