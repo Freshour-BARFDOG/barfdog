@@ -153,7 +153,7 @@ export default function SingleItemDetailPage({data}) {
   
   useEffect( () => {
     if(!data){
-      alert('데이터를 불러올 수 없ㅅ브니다.')
+      alert('데이터를 불러올 수 없습니다.')
       window.history.back();
     }
   }, [data] );
