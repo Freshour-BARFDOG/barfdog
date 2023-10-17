@@ -1,0 +1,28 @@
+@import "/styles/global/rem";
+@import "/styles/global/guide";
+
+
+.tag{
+  display:inline-flex; align-items: center; justify-content: center;
+  font-weight: 500;
+  border-radius: rem(30);
+  padding: rem(5) rem(8) !important;
+  width: initial !important;
+  box-sizing: border-box;
+  color: #fff;
+  @include char(l14);
+  cursor:default;
+  white-space: nowrap;
+  background-color: #333;
+
+  &.SUBSCRIBING {
+    background-color: #219F94;
+  }
+  &.BEFORE_PAYMENT {
+    background-color: #ababab;
+  }
+  &.SUBSCRIBE_PENDING {
+    background-color: #6f6ac9;
+  }
+
+}

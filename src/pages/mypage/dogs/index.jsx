@@ -19,7 +19,7 @@ import { useRouter } from 'next/router';
 import Modal_confirm from '/src/components/modal/Modal_confirm';
 import {orderStatus} from "/store/TYPE/orderStatusTYPE";
 import DeleteIcon from '/public/img/mypage/dog_info_delete.svg';
-import {FullScreenRunningDog} from "../../../components/atoms/FullScreenLoading";
+import {SubscribeStatusTag} from "../../../components/subscribe/SubscribeStatusTag";
 
 export default function MypageDogInfoPage({ data }) {
   // console.log(data);
@@ -219,15 +219,6 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
     }));
   };
 
-  // 상태에 따른 UI
-  const beforePaymentStatus =
-    data.subscribeStatus === subscribeStatus.BEFORE_PAYMENT && data.subscribeCount === 0;
-  const pendingStatus =
-    (data.subscribeStatus === subscribeStatus.BEFORE_PAYMENT && data.subscribeCount > 0) ||
-    data.subscribeStatus === subscribeStatus.SUBSCRIBE_PENDING;
-  const subscribingStatus =
-    data.subscribeStatus === subscribeStatus.SUBSCRIBING ||
-    data.subscribeStatus === subscribeStatus.ADMIN;
 
   const nextPageHandler = (e) => {
     const dogId = e.currentTarget.dataset.id;
@@ -253,9 +244,7 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
                 {data.name} ( {dogAge} / {gender} )
               </h5>
               <div className={s.tags}>
-                {beforePaymentStatus && <i className={s.before_pay}>결제 전</i>}
-                {pendingStatus && <i className={s.pending}>구독보류</i>}
-                {subscribingStatus && <i className={s.subscribe}>구독 중</i>}
+                <SubscribeStatusTag status={data.subscribeStatus} subscribeCount={data.subscribeCount}/>
                 {data.representative && <i className={s.representative}>대표견</i>}
               </div>
             </div>
@@ -288,8 +277,7 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
               <a>설문수정</a>
             </Link>
             {/* 버튼 생성 조건 :  결제전 또는 구독 보류일 경우*/}
-            {(data.subscribeStatus === subscribeStatus.BEFORE_PAYMENT ||
-              data.subscribeStatus === subscribeStatus.SUBSCRIBE_PENDING) && (
+            {(data.subscribeStatus === subscribeStatus.BEFORE_PAYMENT) && (
               <Link href={`/order/subscribeShop?dogId=${dogId}`} passHref>
                 <a className={s.payment} data-id={dogId} onClick={nextPageHandler}>{isLoading[dogId] ? <Spinner style={{color:"#fff"}}/>: "결제하기"}</a>
               </Link>

@@ -9,11 +9,13 @@ import {useModalContext} from '/store/modal-context';
 import Tooltip from "../atoms/TooltipSubscrib";
 import {calcSubscribeNextPaymentPrice} from "/util/func/subscribe/calcSubscribeNextPaymentPrice";
 import {roundedOneMealGram} from "../../../util/func/subscribe/roundedOneMealGram";
+import {SubscribeStatusTag} from "./SubscribeStatusTag";
 
 
 export const SubscribeDashboard = ({ subscribeInfo }) => {
   // ! 구독정보 변경마감일자 체크 (google sheet);
   const info = {
+    subscribeStatus: subscribeInfo.info.subscribeStatus,
     dogName: subscribeInfo.info.dogName,
     planName: subscribeInfo.info.planName,
     recipeNameList: subscribeInfo.info.recipeNames?.split(','),
@@ -66,6 +68,7 @@ export const SubscribeDashboard = ({ subscribeInfo }) => {
       <section className={s.title}>
         <div className={s.title_text}>
           {info.dogName}의 구독정보
+          <SubscribeStatusTag status={info.subscribeStatus} subscribeCount={info.subscribeCount}/>
           <Tooltip message={'모든 구독정보 변경 사항은 다음 회차부터 적용됩니다.'}/>
         </div>
         {/* ! 아래 코드는 디자인 단에는 존재하는 UI지만, 기획서에 없는 내용 */}

@@ -10,3 +10,9 @@ export const subscribeStatus = {
     ADMIN: '관리자 구독',
   }
 }
+
+export enum subscribeStatusEnum {
+  BEFORE_PAYMENT = "BEFORE_PAYMENT",
+  SUBSCRIBING = "SUBSCRIBING",
+  SUBSCRIBE_PENDING = "SUBSCRIBE_PENDING",
+}
