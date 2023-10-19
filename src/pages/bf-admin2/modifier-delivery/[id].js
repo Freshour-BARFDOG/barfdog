@@ -143,7 +143,7 @@ const DetailsPage = () => {
 
       try {
         (async () => {
-          const url = `api/admin/new/orders/deliveryGet/${id}`;
+          const url = `api/admin/new/orders/deliveryPost/${id}`;
           const res = await postData(url, data);
   
           if(res?.request.status === 200){
