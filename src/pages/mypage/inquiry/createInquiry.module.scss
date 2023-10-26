@@ -98,7 +98,7 @@ ul{
 
 .input-wrap{
   position: relative;
-  line-height: 0;
+  line-height: initial;
   &.contents{
     .length-indicator{
       position: absolute;
