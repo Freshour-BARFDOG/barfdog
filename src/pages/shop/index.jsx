@@ -30,7 +30,7 @@ export default function ShopPage() {
   const router = useRouter();
   const [itemList, setItemList] = useState([]);
   const [searchValues, setSearchValues] = useState(initialSearchValues);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState('sortBy=recent&itemType=ALL');
   const auth = useSelector(state=>state.auth);
   
 
