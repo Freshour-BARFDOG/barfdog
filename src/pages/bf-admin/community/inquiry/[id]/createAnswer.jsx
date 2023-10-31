@@ -179,7 +179,7 @@ export default function CreateInquiryAnswerPage({ id }) {
                         name="title"
                         className="fullWidth"
                         placeholder={
-                          '답글을 10자 이상 입력해주세요주세요.'
+                          '답글을 10자 이상 입력해주세요.'
                         }
                         onChange={onInputChangeHandler}
                       />
