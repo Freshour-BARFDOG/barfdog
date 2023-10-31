@@ -73,7 +73,7 @@ export default function ProductSearch({ onSearch }) {
                             <Select.Option value="updated">수정일</Select.Option>
                         </Select> */}
                         </Form.Item>
-                        <Form.Item name="rangeDate" initialValue={[dayjs(), dayjs()]}>
+                        <Form.Item name="rangeDate" initialValue={[dayjs('2000-01-01T00:00:00'), dayjs()]}>
                         <DateRangeField />
                         </Form.Item>
                     </Space>

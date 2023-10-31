@@ -47,7 +47,7 @@ export default function MemberSearch({ onSearch }) {
                         <Form.Item name="rangeDateChoice" initialValue="created" 
                         label="데이터 로드, 기간(등록일): ">
                         </Form.Item>
-                        <Form.Item name="rangeDate" initialValue={[dayjs(), dayjs()]}>
+                        <Form.Item name="rangeDate" initialValue={[dayjs('2000-01-01T00:00:00'), dayjs()]}>
                             <DateRangeField />
                         </Form.Item>
                     </Space>

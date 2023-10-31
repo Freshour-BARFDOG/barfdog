@@ -5,12 +5,13 @@ const { RangePicker } = DatePicker;
 
 
 const dateRangeOptions = [
-  { label: "오늘", value: "today" },
-  { label: "1주일", value: "1week" },
-  { label: "1개월", value: "1month" },
-  { label: "3개월", value: "3months" },
-  { label: "6개월", value: "6months" },
+  { label: "전체", value: "total" },
   { label: "1년", value: "1year" },
+  { label: "6개월", value: "6months" },
+  { label: "3개월", value: "3months" },
+  { label: "1개월", value: "1month" },
+  { label: "1주일", value: "1week" },
+  { label: "오늘", value: "today" },
 ];
 
 
@@ -21,7 +22,7 @@ const onChange = (value, dateString) => {
 const DateRangeField = (props) => {
     //// console.log(props)
   //const [dateStart, setDateStart] = useState(dayjs().subtract(1, "year"));
-  const [dateStart, setDateStart] = useState(dayjs());
+  const [dateStart, setDateStart] = useState(dayjs('2000-01-01T00:00:00'));
   const [dateEnd, setDateEnd] = useState(dayjs());
 
   const handleButtonClick = (value) => {
@@ -50,6 +51,10 @@ const DateRangeField = (props) => {
         break;
       case "1year":
         startDate = dayjs().subtract(1, "year");
+        endDate = dayjs();
+        break;
+      case "total":
+        startDate = dayjs('2000-01-01T00:00:00');
         endDate = dayjs();
         break;
       default:
@@ -123,7 +128,7 @@ const DateRangeField = (props) => {
           optionType="button"
           buttonStyle="solid"
           onChange={(e) => handleButtonClick(e.target.value)}
-          defaultValue={"today"}
+          defaultValue={"total"}
         />
       </div>
     </div>
