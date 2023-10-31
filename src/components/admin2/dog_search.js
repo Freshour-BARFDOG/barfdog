@@ -51,19 +51,27 @@ export default function MemberSearch({ onSearch }) {
                             <DateRangeField />
                         </Form.Item>
                     </Space>
-                    <Space direction="horizontal" >
+                    {/* <Space direction="horizontal" >
                         <Form.Item className="mx-5"
                         name="gradeState" 
                         initialValue={gradeState.map((e)=>(e.value))} 
                         label="등급: ">
                         <Checkbox.Group options={gradeState} />
                         </Form.Item>
-                    </Space>
-                    <Space direction="horizontal" >
+                    </Space> */}
+                    {/* <Space direction="horizontal" >
                         <Form.Item className="mx-5"
                         name="subscribeState" 
                         initialValue={subscribeState.map((e)=>(e.value))} 
                         label="구독유무: ">
+                        <Checkbox.Group options={subscribeState} />
+                        </Form.Item>
+                    </Space> */}
+                    <Space direction="horizontal" >
+                        <Form.Item className="mx-5"
+                        name="deleteState" 
+                        initialValue={subscribeState.map((e)=>(e.value))} 
+                        label="삭제여부: ">
                         <Checkbox.Group options={subscribeState} />
                         </Form.Item>
                     </Space>

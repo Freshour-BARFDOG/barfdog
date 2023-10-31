@@ -54,7 +54,12 @@ export default function RegisterSubscribeInfoPage({ data }) {
     inedibleFoodEtc: data.dogDto.inedibleFoodEtc, // 못먹는 음식
     caution: data.dogDto.caution,
     recipeInfoList: data.recipesDetailInfo, // 레시피의 모든 정보 (초기화)
+
+    
+    // 콕뱅크 할인율 할때 이부분 수정하면됨
     planDiscountPercent: subscribePlanInfo.planDiscountPercent,
+
+    
   };
 
   const currentRecipeIds = data.surveyInfo.recipeDtoList.filter((rc)=>

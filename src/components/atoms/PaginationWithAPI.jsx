@@ -3,7 +3,7 @@ import DoubleArrow from '/public/img/icon/pagination-double-arrow.svg';
 import {useEffect, useState} from 'react';
 import s from './pagination.module.scss';
 import {useRouter} from 'next/router';
-import {getData, postObjData} from '/src/pages/api/reqData';
+import {getData, getDataWithCookies, postObjData} from '/src/pages/api/reqData';
 import {searchQueryType} from '/store/TYPE/searchQueryType';
 import {convertSearchQueryStrings} from "/util/func/convertSearchQueryStrings";
 
@@ -55,6 +55,8 @@ const Pagination = ({
         let res;
         if (option.apiMethod === 'GET') {
           res = await getData(`${apiURL}${urlQueries}`);
+
+          //res = await getDataWithCookies(`${apiURL}${urlQueries}`, document.cookie);
           
         } else if (option.apiMethod === 'POST' && option.body) {
           // URL Query의 복잡성으로인해, url query를 body로 받음
@@ -65,6 +67,8 @@ const Pagination = ({
           urlQueries = `${urlQueries}&${result}`;
           res = res.data; // postObjData에서 data query하기 위함
         }
+
+        //console.log(res);
 
 
         const pageData = res?.data?.page;

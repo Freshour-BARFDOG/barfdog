@@ -6,11 +6,13 @@
     "dev": "NODE_ENV='development' nodemon --watch src/ web.js",
     "devMem": "NODE_ENV='development' nodemon --inspect --watch src/ web.js",
     "nextDev": "next dev -p 4000",
-    "build": "NODE_ENV='production' next build",
+    "build": "GENERATE_SOURCEMAP=false NODE_ENV='production' next build",
     "start": "next start -p 4000",
+    "analyze": "cross-env ANALYZE=true next build",
     "lint": "next lint"
   },
   "dependencies": {
+    "@next/bundle-analyzer": "^14.0.0",
     "@nivo/core": "^0.79.0",
     "@nivo/line": "^0.79.1",
     "@reduxjs/toolkit": "^1.8.1",
@@ -19,6 +21,7 @@
     "autoprefixer": "^10.4.16",
     "axios": "^0.26.1",
     "build": "^0.1.4",
+    "cross-env": "^7.0.3",
     "date-fns": "^2.29.3",
     "dotenv": "^16.3.1",
     "express": "^4.17.3",

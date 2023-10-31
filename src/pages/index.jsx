@@ -38,6 +38,9 @@ import { Controller, Scene } from "react-scrollmagic";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
+import { getData, postData, postObjData, putObjData } from './api/reqData';
+import {deleteCookie, getCookie, setCookie} from "@util/func/cookie";
+
 export default function MainPage({ data }) {
   // console.log(data)
   const router = useRouter();
@@ -62,6 +65,57 @@ export default function MainPage({ data }) {
   useEffect(() => {
     AOS.init();
   });
+
+
+
+  // YYL 콕뱅크 쿠키 관련
+  useEffect(() => {
+
+    const alliance = router.query.alliance;
+
+    if(alliance === 'cb'){
+
+      setCookie('alliance', 'cb', 'hour', 1);
+
+      // 메인으로 리다이렉트
+      router.push('/');
+    
+      // (async () => {
+      //   try {
+      //     const url = '/api/planDiscountTest';
+      //     const res = await getData(url);
+  
+      //     if (res?.status === 200) {
+      //       const dataToAssign = res.data ?? {};
+      //       setDataBase(dataToAssign);
+      //     }
+      //   } catch (err) {
+      //     console.error(err);
+      //   } 
+      // })();
+  
+      // (async () => {
+      //   try {
+      //     const url = '/api/alliance?alliance=cb';
+      //     const res = await getData(url);
+  
+      //     console.log(res)
+  
+      //     console.log(document.cookie);
+  
+      //     if (res?.status === 200) {
+      //       const dataToAssign = res.data ?? {};
+      //       setDataBase(dataToAssign);
+      //     }
+      //   } catch (err) {
+      //     console.error(err);
+      //   } 
+      // })();
+    }
+  });
+  
+  
+
 
   return (
     <>

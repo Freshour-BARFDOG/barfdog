@@ -7,7 +7,7 @@ import { getData, postData, postObjData, putObjData } from '../../api/reqData';
 
 const inputNames = [
   "다음 결제일", // nextPaymentDate
-  "다음 배송일", // nextDeliveryDate
+  "다음 배송일(주의! 아임포트 날짜도 같이 변경됨)", // nextDeliveryDate
   "다음 구독상품 원가", // nextPaymentPrice
   "구독회차", // subscribeCount
   "쿠폰 할인량", // discountCoupon
@@ -73,7 +73,7 @@ const DetailsPage = () => {
     status: '',
     writeableReview: '',
   });
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleInputChange = (event, name) => {
     const { value } = event.target;
@@ -91,41 +91,65 @@ const DetailsPage = () => {
   const { id } = router.query;
 
 
+
   useEffect(() => {
-    setIsLoading(true);
-
-    // let link = `http://localhost:8080/api/admin/new/orders/subscribeGet/${id}`;
-    // axios
-    // .get(link)
-    // .then(response => {
-    //   setDataBase(response.data);
-    // })
-    // .catch(error => {
-    //   console.error(error);
-    // })
-    // .finally(() => {
-    //   setIsLoading(false);
-    // });
-
-    try {
+    if (id) {
+      // ID가 존재하는 경우에만 데이터를 로딩합니다.
       (async () => {
-        const url = `api/admin/new/orders/subscribeGet/${id}`;
-        const res = await getData(url);
+        try {
+          const url = `api/admin/new/orders/subscribeGet/${id}`;
+          const res = await getData(url);
 
-        if(res.status === 200){
-          const dataToAssign = res.data ?? []; // 주어진 데이터
-          setDataBase(dataToAssign); // 데이터베이스에 할당
-          setIsLoading(false);
+          if (res?.status === 200) {
+            const dataToAssign = res.data ?? {};
+            setDataBase(dataToAssign);
+          }
+        } catch (err) {
+          console.error(err);
+        } finally {
+          setIsLoading(false); // 데이터 로딩이 완료되면 로딩 상태를 false로 설정합니다.
         }
       })();
-    } catch (err) {
-      console.error(err);
     }
+  }, [id]);
+
+
+
+  // useEffect(() => {
+  //   setIsLoading(true);
+
+  //   // let link = `http://localhost:8080/api/admin/new/orders/subscribeGet/${id}`;
+  //   // axios
+  //   // .get(link)
+  //   // .then(response => {
+  //   //   setDataBase(response.data);
+  //   // })
+  //   // .catch(error => {
+  //   //   console.error(error);
+  //   // })
+  //   // .finally(() => {
+  //   //   setIsLoading(false);
+  //   // });
+
+  //   try {
+  //     (async () => {
+  //       const url = `api/admin/new/orders/subscribeGet/${id}`;
+  //       const res = await getData(url);
+
+  //       if(res.status === 200){
+  //         const dataToAssign = res.data ?? []; // 주어진 데이터
+  //         setDataBase(dataToAssign); // 데이터베이스에 할당
+  //         setIsLoading(false);
+  //       }
+  //     })();
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
 
 
     
 
-  }, [id]);
+  // }, [id]);
 
   
   const confirm = () => {

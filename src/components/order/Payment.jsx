@@ -27,6 +27,8 @@ import {
 } from "../../../util/func/subscribe/getAmountOfPaymentRegisterationByPaymentMethod";
 import {FullScreenLoading} from "../atoms/FullScreenLoading";
 
+import {getCookie} from "@util/func/cookie";
+
 export function Payment({
                           info,
                           form,
@@ -118,6 +120,11 @@ export function Payment({
 
 
     const customerUid = generateCustomerUid(); // ! [client '결제실패' / Webhook 'paid'] CASE 처리를 위해, 주문서 생성 시에도 cutomerUid 전송.
+
+    // @YYL 콕뱅크 주문인지 확인
+    let allianceType = "NONE"
+    if(getCookie("alliance") === "cb") allianceType = "COKBANK"
+
     const body = orderType === 'general' ? {
       orderItemDtoList: form.orderItemDtoList?.map((item) => ({
         itemId: item.itemId, // 상품 ID
@@ -151,6 +158,12 @@ export function Payment({
       // nextDeliveryDate: form.nextDeliveryDate, // ! 일반주문 시, request field에 없는 값.
       agreePrivacy: form.agreePrivacy, // 개인정보 제공 동의
       brochure: form.brochure, // 브로슈어 수령여부
+
+
+      allianceType: allianceType, // 콕뱅크 주문인지 확인
+
+
+
     } : {
       customerUid: customerUid, // ! 클라이언트 주문 실패 후, webhook 'paid' 대응하기 위한 필드
       memberCouponId: form.memberCouponId,
@@ -174,6 +187,10 @@ export function Payment({
       nextDeliveryDate: form.nextDeliveryDate, // 배송 예정일 'yyyy-MM-dd', 첫 결제 배송날짜는 프론트에서 넘어온 값으로 저장함
       agreePrivacy: form.agreePrivacy, // 개인정보 제공 동의
       brochure: form.brochure, // 브로슈어 수령여부
+
+
+      allianceType: allianceType, // 콕뱅크 주문인지 확인
+
     };
 
     console.log('----- request body:\n', body);
@@ -188,7 +205,10 @@ export function Payment({
       const subscribeId = router.query?.subscribeId;
       const apiUrl = orderType === 'general' ? `/api/orders/general` : `/api/orders/subscribe/${subscribeId}`;
       const res = await postObjData(apiUrl, body);
+      
       console.log(res);
+
+
       if (res.isDone) {
 
         const merchantUid = res.data.data.merchantUid;

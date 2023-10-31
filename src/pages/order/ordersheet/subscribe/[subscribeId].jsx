@@ -78,7 +78,10 @@ export default function SubscribeOrderSheetPage() {
         console.log('----- planDiscountRes: ', planDiscountRes);
         let subscribePlanInfo = {};
         if(planDiscountRes.data && planDiscountRes.status === 200) {
+
+          // plan_discount 테이블 정보를 data 에 저장
           const data = planDiscountRes.data._embedded.planDiscountResponseDtoList[0];
+          // 콕뱅크 할인율 할때 이부분 수정하면됨
           subscribePlanInfo[subscribePlanType.FULL.NAME] =  data.full;
           subscribePlanInfo[subscribePlanType.HALF.NAME] =  data.half;
           subscribePlanInfo[subscribePlanType.TOPPING.NAME] =  data.topping;

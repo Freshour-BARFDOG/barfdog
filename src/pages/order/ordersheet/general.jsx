@@ -17,6 +17,7 @@ import {OrdersheetMethodOfPayment} from '/src/components/order/OrdersheetMethodO
 import {OrdersheetAmountOfPayment} from '/src/components/order/OrdersheetAmountOfPayment';
 import {userType} from '/store/TYPE/userAuthType';
 
+import {deleteCookie, getCookie, setCookie} from "@util/func/cookie";
 
 export default function GeneralOrderSheetPage() {
   const router = useRouter();
@@ -44,6 +45,10 @@ export default function GeneralOrderSheetPage() {
       return router.push('/cart');
     }
 
+    // @YYL 콕뱅크 주문인지 확인
+    let allianceType = "NONE"
+    if(getCookie("alliance") === "cb") allianceType = "COKBANK"
+
     const requestBody = {
       orderItemDtoList: curItem.map((item) => ({
         itemDto: {
@@ -55,6 +60,8 @@ export default function GeneralOrderSheetPage() {
           amount: option.amount,
         })),
       })),
+
+      allianceType: allianceType,
     };
 
     if (Object.keys(info).length > 0) return; // 최초 data fetching 후 Re-rendering 방지

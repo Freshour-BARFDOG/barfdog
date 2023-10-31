@@ -29,7 +29,7 @@ export const getData = async (url, useType, optionalConfig= {}) => {
     ...axiosHeaders,
     method: "GET",
     url: url,
-    ...optionalConfig
+    ...optionalConfig,
   }
   const res = await axios(config)
     .then((res) => {
@@ -49,6 +49,82 @@ export const getData = async (url, useType, optionalConfig= {}) => {
 
   return res;
 };
+
+
+export const getDataWithCookies = async (url, cookies, useType, optionalConfig= {}) => {
+  let result;
+  //const token = tokenFromSSR || getTokenFromServerSide(req);
+
+  const axiosHeaders = useType === 'admin' ? axiosConfig() : axiosUserConfig();
+  const axiosHeadersWithCookie = {
+    ...axiosHeaders,
+    headers: {
+      ...axiosHeaders.headers,
+      Cookie: cookies,
+    }
+  }
+  const config = {
+    ...axiosHeadersWithCookie,
+    method: "GET",
+    url: url,
+    ...optionalConfig,
+    withCredentials: true,
+  }
+  //config.headers.Cookie = cookies;
+
+  //console.log(cookies)
+
+  try {
+    // ! TOKEN이 없을 경우 , axios 실행되지 않아야 함
+    // console.log('여기 --- ', token);
+    result = await axios
+      .get(url, config)
+      .then((res) => {
+        // console.log('SSR RESPONSE: ',res);
+        return res;
+      })
+      .catch((err) => {
+        // console.log(err.response)
+        return err.response;
+      });
+    // console.log('result:::', result)
+  } catch (err) {
+    // console.error(err)
+    return err.response;
+  }
+
+  return result;
+
+  // const axiosHeaders = useType === 'admin' ? axiosConfig() : axiosUserConfig();
+  // const config = {
+  //   ...axiosHeaders,
+  //   method: "GET",
+  //   url: url,
+  //   ...optionalConfig,
+  //   withCredentials: true,
+  // }
+  // console.log(cookies)
+  // config.headers.Cookie = cookies;
+
+  // const res = await axios(config)
+  //   .then((res) => {
+  //     // console.log(res);
+  //     return res;
+  //   })
+  //   .catch((err) => {
+  //     errorResponseHandleMap( err );
+  //     console.log(err.response);
+  //     const errorObj = err?.response;
+  //     const status = errorObj?.status;
+  //     let error = responseErrorType[status];
+  //     console.error(errorObj); // 개발 시, Response Status 확인용
+  //     console.error(error); // 개발 시, Response Status 확인용
+  //     return errorObj;
+  //   });
+
+  // return res;
+};
+
 
 export const postData = async (url, data, callback, contType) => {
   return axios
@@ -349,6 +425,37 @@ export const getDataSSR = async (req, url, tokenFromSSR) => {
         headers: {
           authorization: token,
           'content-Type': 'application/json',
+        },
+      })
+      .then((res) => {
+        // console.log('SSR RESPONSE: ',res);
+        return res;
+      })
+      .catch((err) => {
+        // console.log(err.response)
+        return err.response;
+      });
+    // console.log('result:::', result)
+  } catch (err) {
+    // console.error(err)
+    return err.response;
+  }
+
+  return result;
+};
+
+export const getDataSSRWithCookies = async (req, url, cookies, tokenFromSSR) => {
+  let result;
+  const token = tokenFromSSR || getTokenFromServerSide(req);
+  try {
+    // ! TOKEN이 없을 경우 , axios 실행되지 않아야 함
+    // console.log('여기 --- ', token);
+    result = await axios
+      .get(url, {
+        headers: {
+          authorization: token,
+          'content-Type': 'application/json',
+          'Cookie': cookies, // 클라이언트 쿠키를 서버 요청에 추가
         },
       })
       .then((res) => {

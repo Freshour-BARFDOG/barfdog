@@ -4,7 +4,7 @@ import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import Image from 'next/image';
-import { deleteObjData, getDataSSR, putObjData } from '/src/pages/api/reqData';
+import { deleteObjData, getDataSSR, putObjData, getDataSSRWithCookies } from '/src/pages/api/reqData';
 import PureCheckbox from '/src/components/atoms/PureCheckbox';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import CloseButton from '/src/components/atoms/CloseButton';
@@ -533,7 +533,9 @@ export async function getServerSideProps({ req }) {
   let data = null;
   let error = null;
   const getApiUrl = `/api/baskets`;
-  const res = await getDataSSR(req, getApiUrl);
+  //const res = await getDataSSR(req, getApiUrl);
+  const cookies = req.headers.cookie; // 클라이언트로부터 전달된 쿠키
+  const res = await getDataSSRWithCookies(req, getApiUrl, cookies);
   // console.log('SERVER REPONSE: ', res);
   if (res?.status === 200) {
     data = res.data;
