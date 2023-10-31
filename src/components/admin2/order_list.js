@@ -365,7 +365,7 @@ const filterDataSubscribe = (data, search) => {
       let totalGramRecipe3_seok_tmp = 0.0;
       let totalGramRecipe4_seok_tmp = 0.0;
 
-      // console.log(data_tmp.memberName,data_tmp.recipeName)
+      // // console.log(data_tmp.memberName,data_tmp.recipeName)
       // if(data_tmp.recipeName){
       //   const recipeName_seok = data_tmp.recipeName.split(", ");
       //   const oneMealGramsPerRecipe_seok = data_tmp.oneMealGramsPerRecipe.split(", ");
@@ -545,7 +545,7 @@ const filterDataSubscribe = (data, search) => {
         }
       });
       //
-      //console.log(item.state)
+      //// console.log(item.state)
 
 
       // 구독상태
@@ -726,7 +726,7 @@ const rowExpandable = (record) => record.children1?.length > 0;
 
 const ProductList = ({ search }) => {
 
-  console.log(search);
+  // console.log(search);
 
   const [dataBase, setDataBase] = useState([]);
   const [dateStart, setDateStart] = useState(dayjs().format("YYYYMMDDHHmm"));
@@ -750,7 +750,7 @@ const ProductList = ({ search }) => {
         // axios
         //   .get(link)
         //   .then(response => {
-        //     console.log(response.data._embedded.newOrderDtoList)
+        //     // console.log(response.data._embedded.newOrderDtoList)
         //     setDataBase(response.data._embedded.newOrderDtoList);
         //   })
         //   .catch(error => {
@@ -768,7 +768,7 @@ const ProductList = ({ search }) => {
 
             if(res.status === 200){
               const dataToAssign = res.data._embedded?.newOrderDtoList ?? []; // 주어진 데이터
-              //console.log(dataToAssign)
+              //// console.log(dataToAssign)
               setDataBase(dataToAssign); // 데이터베이스에 할당
               setIsLoading(false);
             }
@@ -808,7 +808,7 @@ const ProductList = ({ search }) => {
 
   //const filteredData = filterDataSubscribe(dataBase, search);
 
-  console.log(dataBase)
+  // console.log(dataBase)
 
 
   const datatmp_subscribe = (inputData) => {

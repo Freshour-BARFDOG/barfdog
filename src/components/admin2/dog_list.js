@@ -4,14 +4,14 @@ import {
   Table,
   Spin,
   Button,
-  Space,
+  Space, message, Popconfirm
 } from "antd";
 import { SearchOutlined, DownloadOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import * as xlsx from "xlsx";
 import axios from "axios";
 
-import { getData, postData, postObjData, putObjData } from '../../pages/api/reqData';
+import { getData, deleteObjData, postData, postObjData, putObjData } from "/src/pages/api/reqData";
 
 
 
@@ -26,7 +26,44 @@ const openNewWindow = (link,key) => {
   }
 };
 
+const confirm = (dogId) => {
 
+  try {
+    (async () => {
+      const url = `/api/dogs/${dogId}`;
+      const res = await deleteObjData(url);
+
+      //// console.log(res)
+        
+      if (res.isDone) {
+        message.success('선택하신 반려견이 삭제되었습니다.');
+        // setTimeout(() => {
+        //   window.location.reload();
+        // }, 500);
+      } else if (res.status === 400) {
+        message.error('대표 반려견은 삭제할 수 없습니다.');
+      } else if (res.status === 404) {
+        message.error('삭제할 반려견 정보가 존재하지 않습니다.');
+      } else {
+        message.error('강아지를 삭제하는데 실패하였습니다.');
+      }
+      // setActiveConfirmModal(false);
+
+      // if(res?.request.status === 200){
+      //   message.success('수정되었습니다.');
+      // } else {
+      //   message.error('수정에 실패하였습니다. 1');
+      // }
+    })();
+  } catch (err) {
+    console.error(err);
+  }
+
+};
+const cancel = (e) => {
+  // console.log(e);
+  message.error('취소하셨습니다');
+};
 
 const columns = [
   Table.SELECTION_COLUMN,
@@ -37,7 +74,21 @@ const columns = [
       <a href="#" onClick={(e) => {
           e.preventDefault();
           openNewWindow("modifier-dog",record.dogId);
-        }} > {record.dogId} 수정 </a>
+        }} > 
+        <Button>{record.dogId} 수정</Button> </a>
+        <>
+          <Popconfirm
+            title="주의"
+            description="삭제하시겠습니까?"
+            onConfirm={() => confirm(record.dogId)}
+            // onConfirm={confirm}
+            onCancel={cancel}
+            okText="네"
+            cancelText="아니오"
+          >
+            <Button danger>삭제</Button>
+          </Popconfirm>
+        </>
       </Space>
     ),
   },
@@ -68,7 +119,7 @@ const columns = [
 
 export default function MemberList({ search }) {
 
-  console.log(search);
+  // console.log(search);
 
   const [dataBase, setDataBase] = useState([]);
   const [dateStart, setDateStart] = useState(dayjs().format("YYYYMMDDHHmm"));
@@ -105,7 +156,7 @@ export default function MemberList({ search }) {
               const url = `api/admin/new/dog/searchBetween/${tmp_strDate}/${tmp_endDate}`;
               const res = await getData(url);
 
-              console.log(res)
+              // console.log(res)
   
               if(res?.status === 200){
                 const dataToAssign = res.data._embedded?.dogAdminDtoList ?? []; // 주어진 데이터
@@ -117,6 +168,7 @@ export default function MemberList({ search }) {
           } catch (err) {
             console.error(err);
           }
+
           
 
       }
@@ -189,22 +241,32 @@ export default function MemberList({ search }) {
       defaultData
       .filter((item) => {
   
-        // 등급
-        let grade_result = false;
-        const grad_array = ["브론즈","실버","골드","플래티넘","다이아몬드","더바프"];
-        grad_array.forEach((e) => {
-          if (search.gradeState.includes(e) && !grade_result && item.grade) {
-            grade_result = item.grade.includes(e);
-          }
-        });
+        // // 등급
+        // let grade_result = false;
+        // const grad_array = ["브론즈","실버","골드","플래티넘","다이아몬드","더바프"];
+        // grad_array.forEach((e) => {
+        //   if (search.gradeState.includes(e) && !grade_result && item.grade) {
+        //     // console.log(item.grade)
+        //     grade_result = item.grade.includes(e);
+        //   }
+        // });
         
-        // 등급
-        let subscribe_result = false;
-        if (search.subscribeState.includes("YES") && !subscribe_result) {
-          if(item.subscribe === "YES") subscribe_result = true;
+        // // 구독유무
+        // let subscribe_result = false;
+        // if (search.subscribeState.includes("YES") && !subscribe_result) {
+        //   if(item.subscribe === "YES") subscribe_result = true;
+        // }
+        // if (search.subscribeState.includes("NO") && !subscribe_result) {
+        //   if(item.subscribe === "NO") subscribe_result = true;
+        // }
+        
+        // 삭제여부
+        let delete_result = false;
+        if (search.deleteState.includes("YES") && !delete_result) {
+          if(item.deleted === "YES") delete_result = true;
         }
-        if (search.subscribeState.includes("NO") && !subscribe_result) {
-          if(item.subscribe === "NO") subscribe_result = true;
+        if (search.deleteState.includes("NO") && !delete_result) {
+          if(item.deleted === "NO") delete_result = true;
         }
         
       // 검색조건
@@ -224,9 +286,13 @@ export default function MemberList({ search }) {
         search_result = true; 
       }
 
+      // // console.log(grade_result, delete_result, search_result)
 
-  
-        return item;
+
+      if (
+        delete_result && 
+        search_result) return item;
+
       })
     );
   
@@ -289,7 +355,7 @@ export default function MemberList({ search }) {
 
 
 
-  console.log(dataBase)
+  // console.log(dataBase)
     
   let filteredData = filterData(dataBase, search);
 

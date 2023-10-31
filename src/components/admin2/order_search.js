@@ -21,9 +21,10 @@ const statusOptions = [
     { label: "판매자 취소 완료", value: "CANCEL_DONE_SELLER" },
     { label: "배송 시작", value: "DELIVERY_START" },
     { label: "수거 전 배송", value: "DELIVERY_BEFORE_COLLECTION" },
-    { label: "확인", value: "CONFIRM" },
+    { label: "구매확정", value: "CONFIRM" },
     { label: "배달완료", value: "DELIVERY_DONE" },
     { label: "배달준비", value: "DELIVERY_READY" },
+    { label: "예약결제 실패", value: "FAILED_RESERVED_PAYMENT" },
 ];
 
 const statusSubscribe = [
@@ -44,7 +45,7 @@ const statusGrade = [
 export default function ProductSearch({ onSearch }) {
 
     const router = useRouter();
-    //console.log("2222222")
+    //// console.log("2222222")
 
     const onFinish = (values) => {
         router.push({
