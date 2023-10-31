@@ -51,7 +51,7 @@ const initialFileValues = {
 
 
 export default function UpdateRecipePage( { id }) {
-  console.log(id);
+  // console.log(id);
   const getFormValuesApiUrl = `/api/recipes/${id}`;
   const postFormValuesApiUrl = `/api/recipes/${id}`;
   // - cf.) 파일 업로드 : post할 때, JSON파일과  IMAGE파일을 한 번에 전송 ( REST API 초기: 이미지를 업로드하는 시점에 upload하는 방식을 도입하기 전이었음)
@@ -66,8 +66,8 @@ export default function UpdateRecipePage( { id }) {
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   
-  // console.log(thumbFile)
-  // console.log(formValues);
+  // // console.log(thumbFile)
+  // // console.log(formValues);
   
   useEffect(() => {
     if (!id) return;
@@ -78,7 +78,7 @@ export default function UpdateRecipePage( { id }) {
           fetching: true,
         }));
         const res = await getData(getFormValuesApiUrl);
-        console.log(res);
+        // console.log(res);
  
        
         const DATA = res.data;
@@ -168,7 +168,7 @@ export default function UpdateRecipePage( { id }) {
     e.preventDefault();
     if (isSubmitted) return;
     // ! IMPORTANT : submit 이후 enterKey event로 trigger되는 중복submit 방지
-    console.log(formValues);
+    // console.log(formValues);
     const errObj = validate(formValues, thumbFile);
     setFormErrors(errObj);
     
@@ -187,7 +187,7 @@ export default function UpdateRecipePage( { id }) {
         formData.append('file1', thumbFile.surveyResult.file);
         formData.append('file2', thumbFile.recipeThumb.file);
         const res = await postObjData(postFormValuesApiUrl, formData, 'multipart/form-data');
-        console.log(res);
+        // console.log(res);
         if (res.isDone) {
           onShowModalHandler('레시피가 성공적으로 생성되었습니다.');
           setIsSubmitted(true);

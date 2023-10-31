@@ -26,7 +26,7 @@ import Spinner from "/src/components/atoms/Spinner";
 import Modal_confirm from "/src/components/modal/Modal_confirm";
 
 export default function UpdateSurveyPage({ data }) {
-  // console.log(data);
+  // // console.log(data);
   const initialFormValues = {
     name: data.dogDto.name, // 강아지이름 str
     gender: data.dogDto.gender, // str TYPE
@@ -140,7 +140,7 @@ export default function UpdateSurveyPage({ data }) {
       let modalMessage;
       const apiUrl = `/api/dogs/${data.dogIdx}`;
       const res = await putObjData(apiUrl, formValues);
-      console.log(res);
+      // console.log(res);
       const resData = res.data.data;
       
       if (res.isDone) {
@@ -195,7 +195,7 @@ export default function UpdateSurveyPage({ data }) {
       const dogId = data.dogIdx;
       window.location.href = `/order/subscribeShop?dogId=${dogId}`
     } else{
-      console.log('추천그램수 변경되고, 취소')
+      // console.log('추천그램수 변경되고, 취소')
       setIsChangedOneMealRecommendGram(false);
       onFinishUpdateSurvey();
     }
@@ -279,7 +279,7 @@ export async function getServerSideProps({ req, query }) {
   if(allDogRes.data){
     const allDogIds = allDogRes.data._embedded.queryDogsDtoList.map(data=>data.id.toString()) || [];
     isMyDog = allDogIds.indexOf(dogIdx) >= 0;
-    console.log('allDogIds: ',allDogIds);
+    // console.log('allDogIds: ',allDogIds);
   }
   
   

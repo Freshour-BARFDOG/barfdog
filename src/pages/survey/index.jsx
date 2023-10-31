@@ -98,7 +98,7 @@ export default function Survey() {
   
   
 
-  // console.log(formValues);
+  // // console.log(formValues);
   useEffect(() => {
     if(!userId) return;
     const storedData = svyData.getStoredSurveyData(userId);
@@ -108,7 +108,7 @@ export default function Survey() {
   
   
   useEffect( () => {
-    // console.log(formValues);
+    // // console.log(formValues);
     // Storing information in cookies
     
     if(userId){
@@ -279,7 +279,7 @@ export default function Survey() {
         const errorMessage = errObj[key];
         errorMessage && errorMessages.push(`${++count}. ${errorMessage}\n`);
       }
-      console.log(errorMessages);
+      // console.log(errorMessages);
 
       mct.alertShow(errorMessages);
       setSubmitState(null);
@@ -306,7 +306,7 @@ export default function Survey() {
       }));
       let modalMessage;
       const res = await postObjData(postFormValuesApiUrl, formValues);
-      console.log(res);
+      // console.log(res);
       if (res.isDone) {
         const slicedReportApiLink =
           res.data.data._links.query_surveyReport.href.split('/');

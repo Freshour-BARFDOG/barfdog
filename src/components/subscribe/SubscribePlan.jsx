@@ -115,7 +115,7 @@ export const SubscribePlan = ({ subscribeInfo }) => {
       setSubmitted(true);
       const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/planRecipes`;
       const res = await postObjData(url, body);
-      console.log(res);
+      // console.log(res);
         if (res.isDone) {
           mct.alertShow('플랜 변경이 완료되었습니다.',onSuccessChangeSubscribeOrder);
       } else {

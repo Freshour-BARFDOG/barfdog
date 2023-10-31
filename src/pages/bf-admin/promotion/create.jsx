@@ -109,7 +109,7 @@ export default function CreatePromotionPage({DATA}) {
       }));
       const apiURL = '/api/admin/promotions';
       const res = await postObjData(apiURL, body);
-      console.log(res);
+      // console.log(res);
       if (res.isDone) {
         mct.alertShow('프로모션이 성공적으로 등록되었습니다.', onSuccessCallback);
       } else {
@@ -340,7 +340,7 @@ export async function getServerSideProps({req}) {
 
   const apiUrl = "/api/admin/coupons/publication/promotion";
   const res = await getDataSSR(req, apiUrl);
-  console.log(res.data);
+  // console.log(res.data);
   if (res && res.status === 200 && res.data?._embedded) {
     const data = res.data._embedded.publicationCouponDtoList;
     DATA.availableCouponList = data.map(d => ({

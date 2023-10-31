@@ -55,7 +55,7 @@ const filter_availableConfirmItemList = (itemList) => itemList.filter((item) => 
 
 
 export default function SingleItem_OrderHistoryPage({ data }) {
-  // console.log(data);
+  // // console.log(data);
   
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
@@ -75,8 +75,8 @@ export default function SingleItem_OrderHistoryPage({ data }) {
   const resultOfCancelableOrder = useMemo( () => valid_CancelableOrder(originItemList), [] );
   const availableImmediatelyCancle = resultOfCancelableOrder.totalCancel;
   const availableCancleState = resultOfCancelableOrder.partialCancel;
-  // console.log('전체취소 가능여부: ', availableImmediatelyCancle);
-  // console.log('취소기능 활성여부: ', availableCancleState);
+  // // console.log('전체취소 가능여부: ', availableImmediatelyCancle);
+  // // console.log('취소기능 활성여부: ', availableCancleState);
 
   const isAvailableReturnAndExchangeState = useMemo( () => validation_ReturnableAndExchangeableOrders(originItemList).valid, [] );
   
@@ -156,7 +156,7 @@ export default function SingleItem_OrderHistoryPage({ data }) {
         `/api/orders/${data?.orderDto.orderId}/general/cancelRequest`,
         body,
       );
-      console.log(r);
+      // console.log(r);
       if (r.isDone) {
         alert(CancelReasonName.cancelNowOfGeneralOrderByBuyer);
         window.location.reload();
@@ -538,8 +538,8 @@ export async function getServerSideProps(ctx) {
   let res = await getDataSSR(req, getApiUrl);
   // res = DUMMY_RESPONSE; // ! TEST
   const data = res?.data;
-  console.log('------singleItem Data: ',data);
-  // console.log('SERVER REPONSE: ', res);
+  // console.log('------singleItem Data: ',data);
+  // // console.log('SERVER REPONSE: ', res);
   if(data.status === 500){
     return {
       redirect:{
@@ -607,7 +607,7 @@ export async function getServerSideProps(ctx) {
       },
       savedRewardTotal: data.savedRewardTotal,
     };
-    // console.log(DATA);
+    // // console.log(DATA);
   }
   return { props: { orderIdx, data: DATA } };
 }

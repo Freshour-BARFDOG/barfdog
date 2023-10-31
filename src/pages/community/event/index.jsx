@@ -17,7 +17,7 @@ function EventIndexPage() {
   const [itemList, setItemList] = useState([]);
   const [pageData, setPageData] = useState({});
 
-  console.log(itemList);
+  // // console.log(itemList);
 
   return (
     <>

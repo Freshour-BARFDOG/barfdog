@@ -15,7 +15,7 @@ function OrderCompletedPage({paymentSuccess, errorMessage}) {
   const { imp_success,error_msg, params } = router.query;
   const [orderIdx, customUid, price, merchantUid, name] = params;
 
-  // console.log(router.query);
+  // // console.log(router.query);
 
   // 모바일 결제 실패했을때 결제실패 페이지로 이동
   useEffect(() => {
@@ -29,7 +29,7 @@ function OrderCompletedPage({paymentSuccess, errorMessage}) {
 
         if(error_msg?.includes('결제포기')){
           const cancel = await postObjData(`/api/orders/${orderIdx}/subscribe/cancel`);
-          console.log(cancel);
+          // console.log(cancel);
         }else{
           // 모바일 결제 실패
           const availableErrorMessage = errorMessage || error_msg;
@@ -86,11 +86,11 @@ export async function getServerSideProps({ query, req }) {
         return;
       }
 
-      console.log("--- paymentResult.data = \n",paymentResult.data);
+      // console.log("--- paymentResult.data = \n",paymentResult.data);
 
       const {code, message, response } = paymentResult.data; // 실제 결제 결과 (첫 번째 결제: 결제등록/ 두 번째 결제: 실제 결제).
 
-      console.log("code: ",code, "----- [mobile] subscribe again -  response: ",response);
+      // console.log("code: ",code, "----- [mobile] subscribe again -  response: ",response);
       if (code === 0) { // 카드사 통신에 성공(실제 승인 성공 여부는 추가 판단이 필요함)
 
         const {imp_uid: again_imp_uid, fail_reason: error_msg} = response;
@@ -123,7 +123,7 @@ export async function getServerSideProps({ query, req }) {
               merchantUid : merchantUid,
               customerUid : customUid,
             });
-            console.log(r);
+            // console.log(r);
             if(r.status === 200){
               paymentSuccess=true;
             }

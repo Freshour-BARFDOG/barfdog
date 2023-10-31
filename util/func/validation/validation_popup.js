@@ -26,7 +26,7 @@ export const validate = (obj, fileObj) => {
   const fileKeys = Object.keys(fileObj);
   for (const key of fileKeys) {
     const val = fileObj[key];
-    console.log(val)
+    // console.log(val)
     switch (key) {
       case 'pcFile':
         errors[key] = valid_isEmptyFile(val, 'url');
@@ -36,7 +36,7 @@ export const validate = (obj, fileObj) => {
         break;
     }
   }
-  console.log('Valid Result (formValues) : ', errors);
+  // console.log('Valid Result (formValues) : ', errors);
   return errors;
 };
 

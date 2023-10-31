@@ -83,7 +83,7 @@ const columns = [
 
 export default function MemberList({ search }) {
 
-  console.log(search);
+  // console.log(search);
 
   const [dataBase, setDataBase] = useState([]);
   const [dateStart, setDateStart] = useState(dayjs().format("YYYYMMDDHHmm"));
@@ -120,7 +120,7 @@ export default function MemberList({ search }) {
               const url = `api/admin/new/members/searchBetween/${tmp_strDate}/${tmp_endDate}`;
               const res = await getData(url);
 
-              console.log(res)
+              // console.log(res)
   
               if(res?.status === 200){
                 const dataToAssign = res.data._embedded?.memberAdminDtoList ?? []; // 주어진 데이터
@@ -336,7 +336,7 @@ export default function MemberList({ search }) {
 
 
 
-  console.log(dataBase)
+  // console.log(dataBase)
     
   let filteredData = filterData(dataBase, search);
 

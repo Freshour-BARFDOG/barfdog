@@ -31,7 +31,7 @@ export function useGoogleAnalytics(token, diffDate = 0) {
   };
   
   const onSuccess = (res)=>{
-    console.log('Data query response:', res);
+    // console.log('Data query response:', res);
     const allDatas = res.rows;
     const todayIndex = res.rows.length -1;
     const totalUsers = allDatas.length > 0 && allDatas.filter((data, index)=> index !== todayIndex).map((data)=>Number(data[1])).reduce((acc,cur)=>acc+cur);

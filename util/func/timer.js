@@ -10,7 +10,7 @@ const timer = (time, callbackArray, callbackTimerRunning) => {
     if (currentTime === 0) {
       clearTimeout(t);
       callbackTimerRunning(false);
-      // console.log("타이머 종료");
+      // // console.log("타이머 종료");
     }
   }, 1000);
 };

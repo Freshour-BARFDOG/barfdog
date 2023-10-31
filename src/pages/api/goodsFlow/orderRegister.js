@@ -7,8 +7,8 @@ const { validateHeaderName } = require('http');
 // TODO: 주문정보 업데이트하기
 
 const OrderRegister = async (req, res) => {
-  console.log(req);
-  console.log(req.body);
+  // console.log(req);
+  // console.log(req.body);
 
   try {
     const options = {
@@ -26,7 +26,7 @@ const OrderRegister = async (req, res) => {
         options
       )
       .then((res) => {
-        console.log(
+         console.log(
           '---------------------------- AXIOS > RESPONSE ----------------------------',
           res,
         );
@@ -37,8 +37,8 @@ const OrderRegister = async (req, res) => {
 
         return err.response;
       });
-    console.log('---------- AXIOS > RESPONSE: ', DATA);
-    console.log('---------- AXIOS > RESPONSE: ', JSON.stringify(DATA));
+    // console.log('---------- AXIOS > RESPONSE: ', DATA);
+    // console.log('---------- AXIOS > RESPONSE: ', JSON.stringify(DATA));
    
     const defaultCorsHeader = {
       "Access-Control-Allow-Origin": "*", // 다 받거나, 하나만 받거나만 가능

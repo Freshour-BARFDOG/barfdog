@@ -2,7 +2,7 @@ import s from './popup_sell.module.scss';
 import { dogInedibleFoodType } from '/store/TYPE/dogInedibleFoodType';
 
 const ProductInfo_dog = ({ dogInfo }) => {
-  // console.log(dogInfo);
+  // // console.log(dogInfo);
   return (
     <>
       <div className={s['t-header']}>

@@ -51,7 +51,7 @@ export default function QuillEditor({
   useEffect(() => {
     const isInnerHtmlEmpty = body === '<p><br></p>';
     const resultIdList = analyze_ImageIdListCRUD(allImageIdList, body, originImageIdList) || [];
-    // console.log('::: Quill Editor Inner Image > CRUD RESULT :::', resultIdList);
+    // // console.log('::: Quill Editor Inner Image > CRUD RESULT :::', resultIdList);
     if (mode === 'create') {
       setFormValues((prevState) => ({
         ...prevState,
@@ -111,7 +111,7 @@ export default function QuillEditor({
         if (!imageId) return;
         setAllImageIdList((prevState) => [...prevState, id]);
       } catch (err) {
-        // console.log(err);
+        // // console.log(err);
         alert(`에러가 발생했습니다.\n${err}`);
       }
       setIsLoading(false);
@@ -194,7 +194,7 @@ const extractImageIdList = (html) => {
 };
 
 const compareImageList = (allArrBefore, curArrBefore, originArrBefore) => {
-  if (!allArrBefore.length) return console.log('There is no Image File.');
+  if (!allArrBefore.length) return // console.log('There is no Image File.');
 
   const originArr = originArrBefore.map((a) => Number(a));
   const allArr = allArrBefore.map((a) => Number(a));
@@ -213,8 +213,8 @@ const compareImageList = (allArrBefore, curArrBefore, originArrBefore) => {
     result[key] = arr.map((a) => Number(a));
   }
 
-  // console.log(allArrBefore);
-  // console.log(allArr);
+  // // console.log(allArrBefore);
+  // // console.log(allArr);
   allArr.map((id) => {
     const isCurArr = curArr.indexOf(id) >= 0;
     const isOriginArr = originArr.indexOf(id) >= 0;
@@ -237,13 +237,13 @@ const compareImageList = (allArrBefore, curArrBefore, originArrBefore) => {
 //   })
 //     .then(({ Quill, ImageResize }) => {
 //       Quill.register("modules/ImageResize", ImageResize);
-//       console.log(Quill);
+//       // console.log(Quill);
 //       return;
 //     })
 //     .then((value) => {
 //       setEnableEditor(true);
 //     })
 //     .catch((err) => {
-//       console.log(err);
+//       // console.log(err);
 //     });
 // };

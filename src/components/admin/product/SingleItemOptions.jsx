@@ -40,14 +40,14 @@ export default function SingleItemOptions({ id, formErrors, setFormValues, mode=
           curIdList,
           originIdList,
         );
-        // console.log('::: Array CRUD RESULT :::', resultIdList);
+        // // console.log('::: Array CRUD RESULT :::', resultIdList);
         const newOptionArray = []; // 새로 추가된 옵션
         const updatedOptionArray = []; // 기존 옵션
         options.forEach(option => {
           option.id ? updatedOptionArray.push(option) : newOptionArray.push(option);
         })
-        // console.log('newOptionArray: ',newOptionArray)
-        // console.log('updatedOptionArray: ',updatedOptionArray)
+        // // console.log('newOptionArray: ',newOptionArray)
+        // // console.log('updatedOptionArray: ',updatedOptionArray)
         setFormValues((prevState) => ({
           ...prevState,
           [id]: newOptionArray,

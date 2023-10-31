@@ -45,7 +45,7 @@ export default function CreateInquiryPage() {
   const [isLoading, setIsLoading] = useState({});
   const [confirmModal, setConfirmModal] = useState( {active:'', data:''} );
   
-  // console.log(form);
+  // // console.log(form);
 
   const onInputChangeHandler = (e) => {
     const elem = e.currentTarget;
@@ -57,7 +57,7 @@ export default function CreateInquiryPage() {
     }));
   };
 
-  //console.log(form);
+  //// console.log(form);
 
   const returnToPrevPage = () => {
     if (confirm('이전 페이지로 돌아가시겠습니까?')) {
@@ -106,7 +106,7 @@ export default function CreateInquiryPage() {
   }
 
   const onSubmit = async (body) => {
-    // console.log(body);
+    // // console.log(body);
     try {
       setIsLoading((prevState) => ({
         ...prevState,

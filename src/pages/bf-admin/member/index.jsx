@@ -47,7 +47,7 @@ function ManageUserPage() {
   
   const pageInterceptor = useCallback((res, option={itemQuery: null}) => {
     // res = DUMMY__RESPONSE; // ! TEST
-    console.log(res);
+    // console.log(res);
     return getDefaultPagenationInfo(res?.data, 'queryMembersDtoList', {pageSize: searchPageSize, setInitialize: setSearchQueryInitialize});
   },[]);
 

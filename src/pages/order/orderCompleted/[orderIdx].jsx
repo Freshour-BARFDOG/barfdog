@@ -104,14 +104,14 @@ export async function getServerSideProps(ctx) {
 
   const { orderIdx } = query;
   
-  console.log(query);
+  // console.log(query);
   let orderItemValue = null;
   let address = null;
   let arrivalDate = null; 
 
   const getApiUrl = `/api/orders/${orderIdx}/general`;
   let res = await getDataSSR(req, getApiUrl);
-  console.log(res);
+  // console.log(res);
   const data = res?.data || null;
   if (data) {
     const itemList = data.orderItemDtoList || [];

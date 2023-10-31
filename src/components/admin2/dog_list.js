@@ -33,7 +33,7 @@ const confirm = (dogId) => {
       const url = `/api/dogs/${dogId}`;
       const res = await deleteObjData(url);
 
-      //console.log(res)
+      //// console.log(res)
         
       if (res.isDone) {
         message.success('선택하신 반려견이 삭제되었습니다.');
@@ -61,7 +61,7 @@ const confirm = (dogId) => {
 
 };
 const cancel = (e) => {
-  console.log(e);
+  // console.log(e);
   message.error('취소하셨습니다');
 };
 
@@ -119,7 +119,7 @@ const columns = [
 
 export default function MemberList({ search }) {
 
-  console.log(search);
+  // console.log(search);
 
   const [dataBase, setDataBase] = useState([]);
   const [dateStart, setDateStart] = useState(dayjs().format("YYYYMMDDHHmm"));
@@ -156,7 +156,7 @@ export default function MemberList({ search }) {
               const url = `api/admin/new/dog/searchBetween/${tmp_strDate}/${tmp_endDate}`;
               const res = await getData(url);
 
-              console.log(res)
+              // console.log(res)
   
               if(res?.status === 200){
                 const dataToAssign = res.data._embedded?.dogAdminDtoList ?? []; // 주어진 데이터
@@ -246,7 +246,7 @@ export default function MemberList({ search }) {
         // const grad_array = ["브론즈","실버","골드","플래티넘","다이아몬드","더바프"];
         // grad_array.forEach((e) => {
         //   if (search.gradeState.includes(e) && !grade_result && item.grade) {
-        //     console.log(item.grade)
+        //     // console.log(item.grade)
         //     grade_result = item.grade.includes(e);
         //   }
         // });
@@ -286,7 +286,7 @@ export default function MemberList({ search }) {
         search_result = true; 
       }
 
-      // console.log(grade_result, delete_result, search_result)
+      // // console.log(grade_result, delete_result, search_result)
 
 
       if (
@@ -355,7 +355,7 @@ export default function MemberList({ search }) {
 
 
 
-  console.log(dataBase)
+  // console.log(dataBase)
     
   let filteredData = filterData(dataBase, search);
 

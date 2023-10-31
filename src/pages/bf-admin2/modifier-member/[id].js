@@ -118,7 +118,7 @@ const dataIsDisabled = [
 
 
 const cancel = (e) => {
-  console.log(e);
+  // console.log(e);
   message.error('취소되었습니다.');
 };
 
@@ -175,7 +175,7 @@ const DetailsPage = () => {
   //   // axios
   //   // .get(link)
   //   // .then(response => {
-  //   //   console.log(response.data);
+  //   //   // console.log(response.data);
   //   //   setDataBase(response.data);
   //   // })
   //   // .catch(error => {
@@ -192,7 +192,7 @@ const DetailsPage = () => {
   //       const url = `api/admin/new/orders/memberGet/${id}`;
   //       const res = await getData(url);
         
-  //       //console.log(res.request.status)
+  //       //// console.log(res.request.status)
 
   //       if(res.request.status === 200){
   //         const dataToAssign = res.data ?? []; // 주어진 데이터
@@ -210,7 +210,7 @@ const DetailsPage = () => {
   
   const confirm = () => {
 
-    //console.log(dataBase)
+    //// console.log(dataBase)
     
     let data = dataBase;
 
@@ -233,7 +233,7 @@ const DetailsPage = () => {
           const url = `api/admin/new/orders/memberPost/${id}`;
           const res = await postData(url, data);
 
-          //console.log(res)
+          //// console.log(res)
   
           if(res?.request.status === 200){
             message.success('수정되었습니다.');
@@ -267,7 +267,7 @@ const DetailsPage = () => {
     )
   }
 
-  //console.log(dataBase);
+  //// console.log(dataBase);
 
 
 

@@ -20,7 +20,7 @@ function watcher () {
     clearInterval(timer);
     // if popup is closed, then let's clean errthing.
   } else if (popup !== null && popup.closed) {
-    // console.log('브라우저 포커스')
+    // // console.log('브라우저 포커스')
     clearInterval(timer);
     browser.focus();
     // the onCloseEventHandler it notifies that the child has been closed.
@@ -46,14 +46,14 @@ export default class WindowOpener extends React.Component {
     // each time we send a message will use the `onSuccess`
 
     browser.onSuccess = (res) => {
-      // console.log('onSuccess!')
+      // // console.log('onSuccess!')
       props.bridge(null, res);
       // Because of an error, the first param is used as null
     }
 
     // each time we failed we will use the `onError`
     browser.onError = (error) => {
-      // console.log('onError!')
+      // // console.log('onError!')
       props.bridge(error);
     }
 
@@ -68,7 +68,7 @@ export default class WindowOpener extends React.Component {
   }
   // opens a child
   onClickHandler (evt) {
-    // console.log("onClickHandler", this.props)
+    // // console.log("onClickHandler", this.props)
     const { url, name, opts, optionsDefaultObj, options } = this.props;
 
     // if there is  already a child open, let's set focus on it
@@ -87,7 +87,7 @@ export default class WindowOpener extends React.Component {
         convertedOpts += `${key}=${newVal || val},`
       })
     }
-    // console.log(convertedOpts)
+    // // console.log(convertedOpts)
 
     popup = browser.open(url, name, convertedOpts || opts);
 
@@ -97,7 +97,7 @@ export default class WindowOpener extends React.Component {
     }, 0);
 
     if (timer === null) {
-      console.log('tilmer is null')
+      // console.log('tilmer is null')
       // each two seconds we check if the popup still open or not
       timer = setInterval(watcher, 2000);
     }

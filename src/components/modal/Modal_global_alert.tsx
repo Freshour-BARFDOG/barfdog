@@ -49,7 +49,7 @@ export default function Modal_global_alert({ message, onClick, background, ...pr
       document.documentElement.addEventListener('keydown', keyDownHandler);
     }
     return ()=>{
-      // console.log('Unmounted global alert && Delete keydown Event');
+      // // console.log('Unmounted global alert && Delete keydown Event');
       document.documentElement.removeEventListener('keydown', keyDownHandler);
     }
   }, []);

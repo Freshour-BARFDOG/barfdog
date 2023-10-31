@@ -5,7 +5,7 @@ import { orderStatus } from '/store/TYPE/orderStatusTYPE';
 import {paymentMethodType} from "/store/TYPE/paymentMethodType";
 
 const ProductInfo_payment = ({ paymentInfo }) => {
-  // console.log(paymentInfo);
+  // // console.log(paymentInfo);
   return (
     <>
       <div className={s['t-header']}>

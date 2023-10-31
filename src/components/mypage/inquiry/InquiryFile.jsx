@@ -24,7 +24,7 @@ async function handleFileDownload(apiUrl, filename = 'barfdog-files') {
   if (res?.status !== 200) return;
   const binaryImageString = res.data.imageData;
   const file = new Blob([binaryImageString], {type: 'image/png'});
-  console.log(file)
+  // console.log(file)
   // const downloadUrl = URL.createObjectURL(file); // 해당 file을 가리키는 url 생성
   const downloadUrl = `data:image/png;base64,${binaryImageString}`; // 중요
 

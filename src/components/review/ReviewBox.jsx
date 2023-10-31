@@ -13,7 +13,7 @@ export const ReviewBox = () => {
   
   const pageInterceptor = (res) => {
     // res = DUMMY_REVIEW_LIST_RESPONSE; //  ! TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST
-    console.log( res );
+    // // console.log( res );
     const pageData = res.data.page;
     const newItemList =
       res.data?._embedded?.queryCommunityReviewsDtoList.map( (data) => ({
@@ -27,7 +27,7 @@ export const ReviewBox = () => {
       }) ) || [];
     
     setItemList( newItemList );
-    // console.log(newItemList);
+    // // console.log(newItemList);
     let newPageInfo = {
       totalPages: pageData.totalPages,
       size: pageData.size,

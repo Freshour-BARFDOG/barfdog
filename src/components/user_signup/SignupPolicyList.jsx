@@ -138,7 +138,7 @@ function SignupPolicyList(props) {
 
   const onModalShow = (e)=>{
     const modalSort = e.currentTarget.dataset.modalSort;
-    // console.log(modalSort);
+    // // console.log(modalSort);
     setModalState(prevState => ({
       [modalSort]: true
     }))

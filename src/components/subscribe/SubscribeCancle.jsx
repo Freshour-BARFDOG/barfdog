@@ -36,7 +36,7 @@ const checkboxList = [
 ];
 
 export const SubscribeCancle = ({ subscribeInfo }) => {
-  // console.log(subscribeInfo);
+  // // console.log(subscribeInfo);
   const initialFormValues = {
     reasonList: [],
     enteredReason: '',
@@ -115,7 +115,7 @@ export const SubscribeCancle = ({ subscribeInfo }) => {
       setSubmitted(true);
       const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/stop`;
       const res = await postObjData(url, body);
-      console.log(res);
+      // console.log(res);
       if (res.isDone) {
         mct.alertShow('구독이 취소되었습니다.', onSuccessChangeSubscribeOrder);
       } else {

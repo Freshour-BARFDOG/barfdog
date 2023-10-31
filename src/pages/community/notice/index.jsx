@@ -18,7 +18,7 @@ export default function NoticeIndexPage() {
   const searchPageSize = 10;
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
-  // console.log(itemList);
+  // // console.log(itemList);
   return (
     <>
       <MetaTitle title="공지사항" />

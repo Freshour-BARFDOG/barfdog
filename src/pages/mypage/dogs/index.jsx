@@ -22,7 +22,7 @@ import DeleteIcon from '/public/img/mypage/dog_info_delete.svg';
 import {SubscribeStatusTag} from "../../../components/subscribe/SubscribeStatusTag";
 
 export default function MypageDogInfoPage({ data }) {
-  // console.log(data);
+  // // console.log(data);
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
   const [activeUploadDogProfileModal, setActiveUploadDogProfileModal] = useState(false);
@@ -97,7 +97,7 @@ export default function MypageDogInfoPage({ data }) {
 }
 
 const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
-  // console.log(data)
+  // // console.log(data)
 
   const router = useRouter();
   const mct = useModalContext();
@@ -146,7 +146,7 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
 
         onShowModalHandler(resultMessage);
         setActiveConfirmModal(false);
-        console.log(res);
+        // console.log(res);
       } catch (err) {
         console.error(err);
       }
@@ -196,7 +196,7 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
       }));
       const apiUrl = `/api/dogs/${dogId}`;
       const res = await deleteObjData(apiUrl);
-      console.log(res);
+      // console.log(res);
       if (res.isDone) {
         onShowModalHandler('선택하신 반려견이 삭제되었습니다.');
         setTimeout(() => {
@@ -305,10 +305,10 @@ export async function getServerSideProps({ req }) {
   const res = await getDataSSR(req, getApiUrl);
   let DATA = null;
   const embeddedData = res?.data._embedded;
-  console.log(embeddedData);
+  // console.log(embeddedData);
   if (embeddedData) {
     const dataList = embeddedData?.queryDogsDtoList || [];
-    // console.log(dataList)
+    // // console.log(dataList)
     if (!dataList.length) return;
     DATA = dataList.map((data) => ({
       id: data.id,

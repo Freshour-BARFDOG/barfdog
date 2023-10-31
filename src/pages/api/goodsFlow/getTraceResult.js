@@ -2,9 +2,9 @@ import axios from 'axios';
 
 export default async function handler(req, res){
 
-    console.log('trace result');
-    console.log(req.body);
-    // console.log(JSON.stringify(req.body));
+    // console.log('trace result');
+    // console.log(req.body);
+    // // console.log(JSON.stringify(req.body));
 
   try {
     const qs = require('qs');
@@ -23,7 +23,7 @@ export default async function handler(req, res){
         },
       )
       .then((res) => {
-        console.log(
+         console.log(
           '---------------------------- AXIOS > RESPONSE ----------------------------',
           res,
         );
@@ -34,8 +34,8 @@ export default async function handler(req, res){
 
         return err.response;
       });
-    console.log('---------- AXIOS > RESPONSE: ', DATA);
-    console.log('---------- AXIOS > RESPONSE: ', JSON.stringify(DATA));
+    // console.log('---------- AXIOS > RESPONSE: ', DATA);
+    // console.log('---------- AXIOS > RESPONSE: ', JSON.stringify(DATA));
    
     const defaultCorsHeader = {
       "Access-Control-Allow-Origin": "*", // 다 받거나, 하나만 받거나만 가능

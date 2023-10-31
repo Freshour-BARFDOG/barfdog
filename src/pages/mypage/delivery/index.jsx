@@ -45,7 +45,7 @@ export default function DeliverInfoPage() {
 
   const pageInterCeptor = async (res) => {
     setItemType(activeMenu === 'left' ? productType.SUBSCRIBE : productType.GENERAL);
-    console.log(res);
+    // console.log(res);
     // res = activeMenu === 'left' ? DUMMY_SUBSCRIBE_DELVIERY_RESPONSE : DUMMY_GENERAL_DELVIERY_RESPONSE; // ! TEST
     let newPageInfo = {
       totalPages:0,
@@ -104,7 +104,7 @@ export default function DeliverInfoPage() {
 
   const onCheckOrderInfo = (e) => {
     const orderId = e.currentTarget.dataset.orderId;
-    console.log(orderId);
+    // console.log(orderId);
     const path = itemType === productType.SUBSCRIBE ? 'subscribe' : 'single';
     const url =`/mypage/orderHistory/${path}/${orderId}`;
     window.location.href = url;
@@ -117,7 +117,7 @@ export default function DeliverInfoPage() {
     popupWindow(href, { width: 540, height: 480, left: 200, top: 100 });
   };
 
-  // console.log('activeMenu:',activeMenu, 'itemType: ', itemType,'itemList: ',itemList);
+  // // console.log('activeMenu:',activeMenu, 'itemType: ', itemType,'itemList: ',itemList);
 
   return (
     <>

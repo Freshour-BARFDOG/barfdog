@@ -12,7 +12,7 @@ export function ShopBotBox ({title, children}) {
   };
   
   useEffect( () => {
-    // console.log( visible );
+    // // console.log( visible );
     const selectedElem = boxRef.current;
     if ( !selectedElem ) return;
     visible ? slideDown( selectedElem ) : slideUp( selectedElem );

@@ -23,7 +23,7 @@ const PureCheckbox = ({
   const onChangeHandler = () => {
     const input = inputRef.current;
     const { id, checked } = input;
-    // console.log('id:', id, ' checked:', checked);
+    // // console.log('id:', id, ' checked:', checked);
     if(returnBoolean) {
       setValue(checked, id);
     } else if (eventHandler && typeof eventHandler === 'function') {
@@ -39,7 +39,7 @@ const PureCheckbox = ({
   const onClickHandler = () => {
     const input = inputRef.current;
     const { id, checked } = input;
-    // console.log('id:', id, ' checked:', checked);
+    // // console.log('id:', id, ' checked:', checked);
     if (onClick && typeof onClick === 'function') {
       onClick(id, checked);
     }

@@ -25,7 +25,7 @@ const CustomRadioTrueOrFalse = ({
 
   useEffect(() => {
     // init value
-    // console.log(value)
+    // // console.log(value)
     setSelectedRadio(initialValue);
   }, [initialValue]);
 

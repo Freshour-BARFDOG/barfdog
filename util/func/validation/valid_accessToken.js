@@ -10,7 +10,7 @@ export const valid_accessToken = async (type = userType.ADMIN) => {
     const checkTokenAPiUrl = type === userType.ADMIN ? '/api/admin/setting' : '/api/members';
     const response = await getData( checkTokenAPiUrl, type );
     status = response.status;
-    // console.log(type, checkTokenAPiUrl, response)
+    // // console.log(type, checkTokenAPiUrl, response)
     // const response = await testTokenStateWithOldToken(checkTokenAPiUrl);
     switch (status) {
       case 200:
@@ -46,7 +46,7 @@ export const valid_accessToken = async (type = userType.ADMIN) => {
         break;
     }
   } catch (err) {
-    console.log( err );
+    // console.log( err );
     console.error( 'TOKEN VALID > ERROR RESPONSE : ', err.response );
   }
   return {error, status};

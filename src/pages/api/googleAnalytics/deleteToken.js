@@ -5,7 +5,7 @@ export default async function getToken(req, res) {
   let data;
   const token = req.body.token;
   let postData = "token=" + token;
-  // console.log('Google OAuth 토큰삭제:', req)
+  // // console.log('Google OAuth 토큰삭제:', req)
 
   if (token) {
     // Options for POST request to Google's OAuth 2.0 server to revoke a token
@@ -23,16 +23,16 @@ export default async function getToken(req, res) {
     const postReq = https.request(postOptions, function (res) {
       res.setEncoding('utf8');
       res.on('data', d => {
-        console.log('Response:::: ' + d);
+        // console.log('Response:::: ' + d);
       });
     });
   
     postReq.on('error', error => {
-      console.log(error)
+      // console.log(error)
     });
   
   
-    console.log('전송한다.')
+    // console.log('전송한다.')
     postReq.write(postData);
     postReq.end();
     res.status(200).end();

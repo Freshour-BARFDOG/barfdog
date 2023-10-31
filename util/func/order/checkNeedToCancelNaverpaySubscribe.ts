@@ -39,10 +39,10 @@ export const checkNeedToCancelNaverpaySubscribe = async ({
                                                            orderId,
                                                            setIsLoading
                                                          }: PropsInterfae) => {
-  // console.log(paymentMethod);
-  // console.log(orderStatus);
-  // console.log(paid);
-  // console.log(customerUid);
+  // // console.log(paymentMethod);
+  // // console.log(orderStatus);
+  // // console.log(paid);
+  // // console.log(customerUid);
 
   let needToDeleteBillingkey: boolean = false;
   if (!paymentMethod || !orderStatus || paid === null || !customerUid) return needToDeleteBillingkey;
@@ -66,7 +66,7 @@ export const checkNeedToCancelNaverpaySubscribe = async ({
 
   // STEP 4
   const isNaverpaySubscriber = await getSubscribeCustomerBillingKey({customerUid, setIsLoading});
-  console.log("----- checkNeedToCancelNaverpaySubscribe > isNaverpaySubscriber = ", isNaverpaySubscriber, `customerUid = ${customerUid}`);
+  // console.log("----- checkNeedToCancelNaverpaySubscribe > isNaverpaySubscriber = ", isNaverpaySubscriber, `customerUid = ${customerUid}`);
 
   // 최종 검증
   needToDeleteBillingkey = paymentMethodCond && orderStatusCond && paidCond && isNaverpaySubscriber;
@@ -95,7 +95,7 @@ const getSubscribeCustomerBillingKey = async ({customerUid, setIsLoading}): Prom
       .then(res => res)
       .catch(err => err.response);
 
-    console.log(res);
+    // console.log(res);
     if (res.status === 200) {
       const d: GetCustomerBillingKeyResponse = res.data;
       const data = {

@@ -87,7 +87,7 @@ export const Modal_subscribeCancel = ({onHideModal, subscribeId}) => {
       reason: form.reason,
       detailReason: form.detailReason,
     };
-    console.log('RESPONSE subscribe Cancle body:\n',body);
+    // console.log('RESPONSE subscribe Cancle body:\n',body);
     
     try {
       setIsLoading((prevState) => ({
@@ -97,7 +97,7 @@ export const Modal_subscribeCancel = ({onHideModal, subscribeId}) => {
       
       const url = `/api/orders/${subscribeId}/subscribe/cancelRequest`;
       const res = await postObjData(url, body);
-      console.log('RESPONSE subscribe Cancle',res);
+      // console.log('RESPONSE subscribe Cancle',res);
       if (res.isDone) {
         // if (!res.isDone) { //  ! TEST TEST
         mct.alertShow(`구독 취소요청이 접수되었습니다.`);

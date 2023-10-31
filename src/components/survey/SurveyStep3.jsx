@@ -28,7 +28,7 @@ export default function SurveyStep3({ formValues, setFormValues, onInputChangeHa
         }));
 
         const res = await getData(getFormValuesApiUrl);
-        // console.log(res);
+        // // console.log(res);
         let data = res.data;
         const newItems = data ? data._embedded[dataQuery] : data;
         setIngredientList(newItems);
@@ -56,7 +56,7 @@ export default function SurveyStep3({ formValues, setFormValues, onInputChangeHa
         }));
 
         const res = await getData(getFormValuesApiUrl);
-        // console.log(res);
+        // // console.log(res);
         let newItems = [];
         let data = res.data?._embedded;
         if (data) {
@@ -83,9 +83,9 @@ export default function SurveyStep3({ formValues, setFormValues, onInputChangeHa
   
   useEffect( () => {
     // inedibleFoodEtc => inedibleFood의 formvalue가 'ETC'가 아닌 경우,
-    // console.log('inedibleFood',formValues.inedibleFood,'&& inedibleFoodETc',formValues.inedibleFoodEtc); // TEST
+    // // console.log('inedibleFood',formValues.inedibleFood,'&& inedibleFoodETc',formValues.inedibleFoodEtc); // TEST
     let inedibleFoodEtcValue = formValues.inedibleFood === dogInedibleFoodType.ETC ? formValues.inedibleFoodEtc :  dogInedibleFoodType.NONE ;
-    // console.log('inedibleFoodEtcValue: ',inedibleFoodEtcValue)
+    // // console.log('inedibleFoodEtcValue: ',inedibleFoodEtcValue)
     // 특별히 챙겨주고싶은부분: 기타항목 => value를 ''값으로 할당
     inedibleFoodEtcValue = (formValues.inedibleFood === dogInedibleFoodType.ETC && inedibleFoodEtcValue === dogInedibleFoodType.NONE) ? null : inedibleFoodEtcValue;
     setFormValues((prevState) => ({

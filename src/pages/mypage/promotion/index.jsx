@@ -29,7 +29,7 @@ export default function PromotionPage () {
 
 
   const pageInterceptor = useCallback((res) => {
-    console.log(res);
+    // console.log(res);
     return getDefaultPagenationInfo(res?.data, 'queryPromotionsDtoList');
   }, []);
 
@@ -61,7 +61,7 @@ export default function PromotionPage () {
     
       const apiUrl = '/api/promotions/code';
       const res = await postObjData( apiUrl, body );
-      console.log(res);
+      // console.log(res);
       if ( res.isDone ) {
         mct.alertShow( '프로모션 참여 완료되었습니다.', onClickAPICallback );
         setTimeout( () => {

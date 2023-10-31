@@ -70,7 +70,7 @@ const dataIsDisabled = [
 
 
 const cancel = (e) => {
-  console.log(e);
+  // console.log(e);
   message.error('취소되었습니다.');
 };
 
@@ -139,82 +139,6 @@ const DetailsPage = () => {
     }
   };
 
-  // useEffect(() => {
-  //   setIsLoading(true);
-
-  //   // let link = `http://localhost:8080/api/admin/new/orders/dogGet/${id}`;
-  //   // axios
-  //   // .get(link)
-  //   // .then(response => {
-  //   //   console.log(response.data);
-  //   //   setDataBase(response.data);
-  //   // })
-  //   // .catch(error => {
-  //   //   console.error(error);
-  //   // })
-  //   // .finally(() => {
-  //   //   setIsLoading(false);
-  //   // });
-
-    
-          
-  //   try {
-  //     (async () => {
-  //       const url = `api/admin/new/orders/dogGet/${id}`;
-  //       const res = await getData(url);
-
-  //       if(res?.status === 200){
-  //         const dataToAssign = res.data ?? []; // 주어진 데이터
-  //         setDataBase(dataToAssign); // 데이터베이스에 할당
-  //         setIsLoading(false);
-  //       }
-  //     })();
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-    
-
-  // }, [id]);
-
-
-
-  
-  // const confirm = () => {
-
-  //   //console.log(dataBase)
-    
-  //   let data = dataBase;
-
-  //   // let link = `http://localhost:8080/api/admin/new/orders/dogPost/${id}`;
-
-
-  //   // axios.post(link, data)
-  //   //   .then(response => {
-  //   //     message.success('수정되었습니다.');
-  //   //   })
-  //   //   .catch(error => {
-  //   //     console.error(error);
-  //   //     message.error('수정에 실패하였습니다.');
-  //   //   });
-
-  //     try {
-  //       (async () => {
-  //         const url = `api/admin/new/orders/dogPost/${id}`;
-  //         const res = await postData(url, data);
-  
-  //         if(res?.request.status === 200){
-  //           message.success('수정되었습니다.');
-  //         } else {
-  //           message.error('수정에 실패하였습니다. 1');
-  //         }
-  //       })();
-  //     } catch (err) {
-  //       console.error(err);
-  //       message.error('수정에 실패하였습니다. 2');
-  //     }
-
-
-  // };
 
   const cancel = () => {
     message.error('취소되었습니다.');
@@ -232,8 +156,8 @@ const DetailsPage = () => {
     )
   }
 
-  console.log(dataBase["orderCancel"]);
-  console.log(dataBase);
+  // console.log(dataBase["orderCancel"]);
+  // console.log(dataBase);
 
 
 
@@ -277,8 +201,6 @@ const DetailsPage = () => {
     <div>
       <h1>견(Dog) 상세 페이지</h1>
       <p>DB Dog ID: {id}</p>
-      
-      <p>DB Dog ID: DB Dog ID: DB Dog ID: {dataBase[0]}</p>
       
       {inputNames.map((name, index) => (
         <Input

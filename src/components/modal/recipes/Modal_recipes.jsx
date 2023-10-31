@@ -22,19 +22,19 @@ const Indicator = styled.i`
 // background-color: ${(props) => props.MENU_BAR.MENU_BAR};
 
 // background-color: ${function(MENU_BAR){
-//   console.log(MENU_BAR);
+//   // console.log(MENU_BAR);
 //   const [background, setBackground] = useState(MENU_BAR);
 //   return
 //   'style.MENU_BAR'
 // }};
 
 // background-color: ${function(background){
-//   console.log(background);
+//   // console.log(background);
 //   return 'background';
 // }};
 
 // background-color: ${function(MENU_BAR){
-//   console.log(MENU_BAR);
+//   // console.log(MENU_BAR);
 //   const [background, setBackground] = useState(MENU_BAR);
 //   return
 //   style: {MENU_BAR()}
@@ -148,9 +148,9 @@ const Modal_recipes = ({ data, selectedIndex, onHideModal, isActiveModal, setIsA
   const Tab4Component = data.component.tab4[selectedIndex];
 
   // const [background, setBackground] = useState(MENU_BAR);
-  // console.log(TITLE_KO)
-  // console.log(MENU_BAR)
-  // console.log(selectedIndex)
+  // // console.log(TITLE_KO)
+  // // console.log(MENU_BAR)
+  // // console.log(selectedIndex)
   return (
     <>
       <ModalWrapper

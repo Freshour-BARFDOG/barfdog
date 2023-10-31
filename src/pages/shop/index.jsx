@@ -30,12 +30,11 @@ export default function ShopPage() {
   const router = useRouter();
   const [itemList, setItemList] = useState([]);
   const [searchValues, setSearchValues] = useState(initialSearchValues);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState('sortBy=recent&itemType=ALL');
   const auth = useSelector(state=>state.auth);
   
-
-  // console.log(itemList);
-  // console.log(searchValues.itemType)
+  // // console.log(itemList);
+  // // console.log(searchValues.itemType)
   useEffect(() => {
     // - CASE: Nav GNB에서 shop > submenu Click event
     // - IMPORTANT : to prevent Inifinite Loop when router query is changed
@@ -46,13 +45,13 @@ export default function ShopPage() {
       }
     }
     if (readyToSetSearchValue) {
-      // console.log(readyToSetSearchValue);
-      // console.log(router.query);
+      // // console.log(readyToSetSearchValue);
+      // // console.log(router.query);
       for (const key in router.query) {
         if (key === searchQueryType.ITEMTYPE) {
           const val = router.query[key];
           setSearchValues((prevState) => {
-            console.log()
+            // console.log()
             return { ...prevState, [searchQueryType.ITEMTYPE]: val };
           });
         }
@@ -116,7 +115,8 @@ export default function ShopPage() {
     }
   }
   
-  console.log(itemList);
+  // // console.log(itemList);
+  
 
   return (
     <>

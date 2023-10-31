@@ -92,15 +92,15 @@ export async function getServerSideProps() {
       },
     })
     .then((res) => {
-      // console.log(res);
+      // // console.log(res);
       return res;
     })
     .catch((err) => {
-      // console.log(err.response)
+      // // console.log(err.response)
       return err.response;
     });
   // res = DUMMY_BESTREVIEW_RESPONSE; // ! TEST
-  // console.log(res)
+  // // console.log(res)
   if (res.data) {
     bestReviewList =
       res.data._embedded?.queryBestReviewsDtoList.map((list) => ({

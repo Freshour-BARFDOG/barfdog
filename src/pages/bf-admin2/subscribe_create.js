@@ -48,7 +48,7 @@ const dataIsDisabled = [
 
 
 const cancel = (e) => {
-  console.log(e);
+  // console.log(e);
   message.error('취소되었습니다.');
 };
 
@@ -152,7 +152,7 @@ const DetailsPage = () => {
   
   const confirm = () => {
 
-    console.log(dataBase)
+    // console.log(dataBase)
     
     let data = dataBase;
     // let data = 
@@ -223,7 +223,7 @@ const DetailsPage = () => {
     )
   }
 
-  console.log(dataBase);
+  // console.log(dataBase);
 
 
 

@@ -38,7 +38,7 @@ export const ShopBoard = ({
       [id]: false
     });
   };
-  // console.log(item);
+  // // console.log(item);
 
 
   return (

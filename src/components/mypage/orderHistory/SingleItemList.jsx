@@ -13,7 +13,7 @@ export const SingleItemList = ({ itemList }) => {
   const [isLoading, setIsLoading] = useState( {cancelOrder: {}} );
   const [submitted, setSubmitted] = useState( false );
   
-  // console.log(itemList);
+  // // console.log(itemList);
   const onCancelGeneralOrder = useCallback(async (item) => {
     if(submitted) return console.error("이미 제출된 양식입니다.");
     if(!confirm("'결제 전' 주문을 결제취소처리 하시겠습니까?")) return;
@@ -30,7 +30,7 @@ export const SingleItemList = ({ itemList }) => {
       }));
   
       const res = await cancelGeneralOrder(orderId);
-      console.log(res);
+      // console.log(res);
       if ( res.isDone ) {
         alert(`결제취소처리가 완료되었습니다. \n주문번호: ${merchantUid}`);
       } else{

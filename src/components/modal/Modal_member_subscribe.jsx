@@ -48,7 +48,7 @@ export default function Modal_member_subscribe({ memberId, onClick, setIsLoading
         const query = '?page=0&size=100';
         const getSubscribeInfoApiUrl = `/api/admin/members/${memberId}/subscribes${query}`;
         const res = await getData(getSubscribeInfoApiUrl);   // ------- ! 서버에서 받기
-        console.log('RESPONSE DATA: ', res);
+        // console.log('RESPONSE DATA: ', res);
         // const res = DUMMY_RESPONSE;
         if (res.data) {
           const subscribeList = res.data._embedded.memberSubscribeAdminDtoList;
@@ -83,7 +83,7 @@ export default function Modal_member_subscribe({ memberId, onClick, setIsLoading
               caution: (DATA.caution !== dogCautionType.NONE && DATA.caution) ? DATA.caution : 'N',
             };
           });
-          console.log(infoList);
+          // console.log(infoList);
           setSubscribeInfoList(infoList);
         } else {
           // console.error('구독중인 상품이 없습니다.');

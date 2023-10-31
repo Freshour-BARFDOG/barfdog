@@ -47,7 +47,7 @@ export default function CouponPage () {
   
   const pageInterceptor = useCallback( (res, option = {itemQuery: null}) => {
     // res = DUMMY__RESPONSE; // ! TEST
-    console.log( res );
+    // console.log( res );
     let newPageInfo = {
       totalPages: 1,
       size: searchPageSize,

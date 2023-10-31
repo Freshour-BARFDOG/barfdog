@@ -45,18 +45,18 @@ export const postPaymentDataToApiServer = async (
   }
 
 
-  // console.log("config.timeout= " + config.timeout);
+  // // console.log("config.timeout= " + config.timeout);
 
   await axiosAPIServer.post(url, data, config)
     .then((res: AxiosResponse) => {
-      console.log('postObjDataResponse:\n', res);
+      // console.log('postObjDataResponse:\n', res);
       result.data = res;
       result.status = res.status;
       result.isDone = res.status === 200 || res.status === 201;
     })
     .catch((err: AxiosError) => {
-      console.log(err);
-      console.log(err?.response);
+      // console.log(err);
+      // console.log(err?.response);
       const hasError = HttpResponseErrorHandler(err, result); // Error 있을 경우, true
       let errors = err.response?.data?.errors;
       const hasErrorMessage = errors?.length > 0;

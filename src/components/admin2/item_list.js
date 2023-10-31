@@ -77,7 +77,7 @@ const filterData = (data, search) => {
 
 export default function ItemList({ search }) {
 
-  console.log(search);
+  // console.log(search);
 
   const [dataBase, setDataBase] = useState([]);
   const [dateStart, setDateStart] = useState(dayjs().format("YYYYMMDDHHmm"));

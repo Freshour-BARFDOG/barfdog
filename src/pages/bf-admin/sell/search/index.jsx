@@ -70,7 +70,7 @@ export default function SearchOnSellPage() {
 
   const pageInterceptor = useCallback((res, option={itemQuery: null}) => {
     // res = DUMMY__RESPONSE; // ! TEST
-    console.log(res);
+    // console.log(res);
     if(!res) return;
     return getDefaultPagenationInfo(res?.data, 'queryAdminOrdersAllInfoDtoList', {pageSize: searchPageSize, setInitialize: setSearchQueryInitialize});
   },[]);

@@ -82,7 +82,7 @@ const Pagination = ({ itemCountPerGroup, itemTotalCount, theme }) => {
       }
     }
   } else if (numberOfPages <= NumberOfPaginations) {
-    console.log();
+    // console.log();
     for (let i = 0; i < lastPageNum; i++) {
       Paginations.push(<Num pagenum={i} key={i} />);
     }

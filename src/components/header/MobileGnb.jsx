@@ -123,7 +123,7 @@ const currentPageIndicator = (ref, curPath, setActivemenu) => {
       mainmenu.dataset.currentPage = 'depth1';
       if (thisMenuId) setActivemenu(thisMenuId); // - submenu active -> 태그 id가 필요함.
     }
-    // console.log('curPageDepth1',curPageDepth1, 'menuPath',menuPath);
+    // // console.log('curPageDepth1',curPageDepth1, 'menuPath',menuPath);
   });
 
   const subMenus = Array.from(
@@ -132,8 +132,8 @@ const currentPageIndicator = (ref, curPath, setActivemenu) => {
   subMenus.forEach((submenu) => {
     const menuPath = submenu.pathname || submenu.dataset.link;
     if (!menuPath && curPathArray) return;
-    // console.log(menuPath)
-    // console.log(curPageDepth2)
+    // // console.log(menuPath)
+    // // console.log(curPageDepth2)
     submenu.dataset.currentPage = menuPath.indexOf(curPageDepth2) >= 0 && 'depth2'
     
     if (curPath.indexOf('/shop') >= 0) {

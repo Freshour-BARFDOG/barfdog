@@ -32,14 +32,14 @@ const SurveyInputRadio = ({
   const [selectedRadio, setSelectedRadio] = useState(initialSelectedRadio); // * component 내부 value
 
   
-  console.log()
+  // console.log()
   useEffect( () => {
     // '기타' input의 입력값(value)와 연계한 UI의 변화
     // => input value에 SurveyInputRadio의 idList 중의 id를 입력했을 경우, 해당 id에 checked 표기하기 위함.
     // ex. 기타 특이사항 (질병) 등이 있어요 => 기타란에 'NONE'입력했을 경우 => '없어요 SurveyInputRadio'가 선택된다.
     idList.forEach((id)=>{
       if(formValues[formValueKey] === id){
-        // console.log('formValues[formValueKey]',formValues[formValueKey],'& id:', id)
+        // // console.log('formValues[formValueKey]',formValues[formValueKey],'& id:', id)
         setSelectedRadio(`${formValueKey}-${id}`); // 목적지고
       }
     })

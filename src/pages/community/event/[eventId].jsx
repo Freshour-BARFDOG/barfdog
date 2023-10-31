@@ -29,7 +29,7 @@ export default function EventPostPage({ eventId }) {
           fetching: true,
         }));
         const res = await getData(getFormValuesApiUrl);
-        console.log(res);
+        // console.log(res);
         let DATA;
         if (res.data) {
           const data = res.data[formValueQuery];
@@ -57,7 +57,7 @@ export default function EventPostPage({ eventId }) {
           fetching: true,
         }));
         const res = await getData(getIemListApiUrl);
-        console.log(res);
+        // console.log(res);
         if (res.data) {
           const itemListInfo = res.data._embedded[itemListQuery];
           let curItemIndex;
@@ -76,7 +76,7 @@ export default function EventPostPage({ eventId }) {
             cur: curItemListInfo,
             next: nextItemListInfo,
           });
-          // console.log(prevItemListInfo, nextItemListInfo)
+          // // console.log(prevItemListInfo, nextItemListInfo)
         }
       } catch (err) {
         console.error('데이터를 가져올 수 없습니다.');
@@ -88,7 +88,7 @@ export default function EventPostPage({ eventId }) {
     })();
   }, [curPageId]);
 
-  console.log(itemInfo);
+  // console.log(itemInfo);
   return (
     <>
       <MetaTitle title="이벤트" />

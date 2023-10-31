@@ -16,7 +16,7 @@ export default function useUserData() {
       let DATA = null;
       const url = '/api/members'
       const res = await getData(url);
-      // console.log('User Data : ',res)
+      // // console.log('User Data : ',res)
       if (res?.status === 200){
         const data = res.data;
         DATA = {

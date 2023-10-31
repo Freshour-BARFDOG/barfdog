@@ -74,7 +74,7 @@ export function Swiper_bestReview ({items}) {
     }
   };
   
-  // console.log(itemList);
+  // // console.log(itemList);
   return (
     <div 
       className={s.swiper_review_outerWrap}

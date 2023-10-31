@@ -28,7 +28,7 @@ export default function SignupPage() {
   const hasAlert = mct.hasAlert;
   const router = useRouter();
   const userState = useSelector((s) => s.userState);
-  // console.log(userState.snsInfo);
+  // // console.log(userState.snsInfo);
 
   const snsSignupMode = !!userState.snsInfo.providerId;
   const convertedBirthday =
@@ -69,9 +69,9 @@ export default function SignupPage() {
     providerId: userState.snsInfo.providerId || null,
   };
 
-  // console.log('userState: ',userState)
-  // console.log('initialFormValues: ', initialFormValues);
-  // console.log('snsSignupMode: ', snsSignupMode);
+  // // console.log('userState: ',userState)
+  // // console.log('initialFormValues: ', initialFormValues);
+  // // console.log('snsSignupMode: ', snsSignupMode);
 
   const initialFormErrors = {
     isEmailDuplicated: null,
@@ -183,7 +183,7 @@ export default function SignupPage() {
         over14YearsOld: formvalues.agreement.over14YearsOld,
       },
     };
-    console.log('SUBMIT BODY:\n', body);
+    // console.log('SUBMIT BODY:\n', body);
 
     await axios
       .post('/api/join', body, {
@@ -192,8 +192,8 @@ export default function SignupPage() {
         },
       })
       .then((res) => {
-        console.log(res);
-        console.log(res.data);
+        // console.log(res);
+        // console.log(res.data);
         if (res.status === 201) {
           const userName = formvalues.name;
           mct.alertHide(`회원가입에 성공하였습니다.`, onSuccessCallback);

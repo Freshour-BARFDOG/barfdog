@@ -86,7 +86,7 @@ export default function CancelOnSellPage() {
   const pageInterceptor = useCallback((res, option={itemQuery: null}) => {
     
     // res = searchValues.orderType === productType.GENERAL ? DUMMY__ADMIN_ORDER_ITEMS_GENERAL_RESPONSE :  DUMMY__ADMIN_ORDER_ITEMS_SUBSCRIBE_RESPONSE; //  ! TEST RESPONSE
-    console.log(res);
+    // console.log(res);
     return getDefaultPagenationInfo(res?.data, 'queryAdminOrdersAllInfoDtoList', {pageSize: searchPageSize, setInitialize: setSearchQueryInitialize});
   },[]);
 
@@ -122,8 +122,8 @@ export default function CancelOnSellPage() {
       }));
       const apiUrl = `/api/admin/orders/${itemType.toLowerCase()}/cancelConfirm`; // ! check path endPoint
       const res = await postPaymentDataToApiServer(apiUrl, body);
-      console.log('onConfirmingCancelOrder: \n', body);
-      console.log('response: admin > sell > cancel > index.jsx\n', res);
+      // console.log('onConfirmingCancelOrder: \n', body);
+      // console.log('response: admin > sell > cancel > index.jsx\n', res);
       if (res.isDone) {
         alert('취소 승인 처리되었습니다.');
         window.location.reload();
@@ -156,8 +156,8 @@ export default function CancelOnSellPage() {
       }));
       const apiUrl = `/api/admin/orders/cancelRequest/reject`; // ! 일반/구독 공용 API
       const res = await postObjData(apiUrl, body);
-      console.log('onRefusingCancelOrder: \n', body);
-      console.log('response: admin > sell > cancel > index.jsx\n', res);
+      // console.log('onRefusingCancelOrder: \n', body);
+      // console.log('response: admin > sell > cancel > index.jsx\n', res);
       if (res.isDone) {
         alert('취소요청이 반려 처리되었습니다.');
         window.location.reload();

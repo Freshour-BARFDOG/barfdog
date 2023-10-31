@@ -31,7 +31,7 @@ export default function ChannelTalkPage () {
   
   const pageInterceptor = useCallback( (res, option = {itemQuery: null}) => {
     // res = DUMMY_RES; // ! TEST
-    console.log( res );
+    // console.log( res );
     return getDefaultPagenationInfo( res?.data, 'queryAdminGuestDtoList', {pageSize: searchPageSize, setInitialize: setSearchQueryInitialize} );
   }, [] );
   

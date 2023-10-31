@@ -44,7 +44,7 @@ export default function SearchPersonalForm({ id, setFormValues, formErrors }) {
       
       setItemList( prevItems => {
         const addedMembers = receivedMembers.filter( (member) => prevItems.map( item => item.id ).indexOf( member.id ) < 0 );
-        // console.log( "rcv: ", receivedIds, "\addedMembers: ", receivedMembers, "addedMembers: ", addedMembers );
+        // // console.log( "rcv: ", receivedIds, "\addedMembers: ", receivedMembers, "addedMembers: ", addedMembers );
         if(!addedMembers.length) alert( "이미 발행 대상에 포함되어있습니다. 추가된 회원은 없습니다." );
         return prevItems.concat( addedMembers );
       } );

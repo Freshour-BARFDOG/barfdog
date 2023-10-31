@@ -33,9 +33,9 @@ export default function FileInput({
 
   const [allIdList, setAllIdList] = useState([]); // for Post update summit event;
   const [fileList, setFileList] = useState([]); // for Preview;
-  // console.log(allIdList);
-  // console.log(fileList);
-  // console.log(originImageDatas);
+  // // console.log(allIdList);
+  // // console.log(fileList);
+  // // console.log(originImageDatas);
 
   useEffect(() => {
     // ! important: 데이터fetching없이 useEffect의 dependency가 변화하지 않을 경우, 무한루프실행됨.
@@ -58,7 +58,7 @@ export default function FileInput({
         const curIdList = fileList.map((list) => list.id);
         const originIdList = originImageDatas.map((list) => list.id);
         const resultIdList = compareIdList(allIdList, curIdList, originIdList);
-        // console.log('::: File Upload To Server CRUD RESULT :::', resultIdList);
+        // // console.log('::: File Upload To Server CRUD RESULT :::', resultIdList);
         const newImageValues = resultIdList?.cur.map((imageId, index) => ({
           id: imageId,
           leakOrder: index + 1, // order 시작숫자: 1. (!== index 시작숫자: 0)
@@ -100,7 +100,7 @@ export default function FileInput({
     //   if (hasError) return;
     //   setIsLoading(true);
     //   const response = {id : Math.floor(Math.random() *100)}
-    //   console.log(response)
+    //   // console.log(response)
     //   setFileList((prevState) => [
     //     ...prevState,
     //     { file: file, filename: file.name, id: response.id, url: null },
@@ -177,7 +177,7 @@ export default function FileInput({
             apiUrl,
             leakOrder,
           );
-          // console.log(response);
+          // // console.log(response);
           newFileList.push({
             file: file,
             filename: file.name,
@@ -190,7 +190,7 @@ export default function FileInput({
         setAllIdList((prevState) => prevState.concat(newfileIdList));
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       console.error('Error 발생: ', err);
     }
 
@@ -200,7 +200,7 @@ export default function FileInput({
   const onDeleteThumbHandler = (e) => {
     const thumb = e.currentTarget;
     const tobeDeletedButtonId = Number(thumb.dataset.id);
-    // console.log('삭제될 이미지 ID:', tobeDeletedButtonId);
+    // // console.log('삭제될 이미지 ID:', tobeDeletedButtonId);
     const newFileList = fileList.filter(
       (list) => list.id !== tobeDeletedButtonId,
     );

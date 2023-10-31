@@ -49,7 +49,7 @@ export default function UpdateBlogPage({ id }) {
         }
         const apiUrl = `/api/admin/blogs/${id}`;
         const res = await getData( apiUrl );
-        // console.log(res);
+        // // console.log(res);
         const DATA = res.data.blogAdminDto;
         const initialFormValues = {
           title: DATA.title,
@@ -78,7 +78,7 @@ export default function UpdateBlogPage({ id }) {
         if (document) {
           const QuillEditor = dynamic(() => import('/src/components/admin/form/QuillEditor'));
           setQuillEditor(QuillEditor);
-          console.log('Editor init is complete.');
+          // console.log('Editor init is complete.');
         }
       } catch (err) {
         console.error(err);
@@ -168,7 +168,7 @@ export default function UpdateBlogPage({ id }) {
     }) );
   };
   
-  console.log( formValues );
+  // console.log( formValues );
   const onSubmit = async (e) => {
     e.preventDefault();
     if ( isSubmitted ) return window.location.reload();
@@ -203,7 +203,7 @@ export default function UpdateBlogPage({ id }) {
       
     } catch (err) {
       mct.alertShow( '서버와의 통신 중 에러가 발생했습니다.' );
-      console.log( err );
+      // console.log( err );
     } finally {
       setIsLoading( (prevState) => ({
         ...prevState,

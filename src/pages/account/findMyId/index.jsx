@@ -79,7 +79,7 @@ export default function Mypage() {
       const url = `/api/email?name=${form.name}&phoneNumber=${form.phoneNumber}`;
       const res = await getData(url);
       if (res.status === 200) {
-        // console.log(res);
+        // // console.log(res);
         const findInfo = {
           email: res.data.email,
           provider: res.data.provider,

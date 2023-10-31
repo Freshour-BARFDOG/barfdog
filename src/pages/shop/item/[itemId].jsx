@@ -50,7 +50,7 @@ export default function SingleItemDetailPage({data}) {
 
   const [activeCartShortcutModal, setActiveCartShortcutModal] = useState({});
 
-  // console.log('formValues', formValues);
+  // // console.log('formValues', formValues);
   useEffect(() => {
     if (!contentRef.current) return;
     const contentList = Array.from(contentRef.current?.children);
@@ -98,16 +98,16 @@ export default function SingleItemDetailPage({data}) {
         ...prevState,
         cart: true,
       }));
-      console.log(body);
+      // console.log(body);
       const res = await postUserObjData(postDataApiUrl, body);
-      console.log(res);
+      // console.log(res);
       if (res.isDone) {
         onActiveCartShortcutModal(thisButtonArea);
       } else {
         alert(`${res.error}`);
       }
     } catch (err) {
-      console.log('API통신 오류 : ', err);
+      // console.log('API통신 오류 : ', err);
     }
     setIsLoading((prevState) => ({
       ...prevState,
@@ -141,7 +141,7 @@ export default function SingleItemDetailPage({data}) {
       await dispatch(cartAction.setOrderItemList({ items }));
       await router.push(`/order/ordersheet/general`);
     } catch (err) {
-      console.log('API통신 오류 : ', err);
+      // console.log('API통신 오류 : ', err);
     }
     setIsLoading((prevState) => ({
       ...prevState,
@@ -217,12 +217,12 @@ const validation_itemPrice = (data) => {
   const result = calculateSalePrice(data.originalPrice, data.discountType, data.discountDegree);
   const salePricebyAdminPageCalcuator = transformClearLocalCurrency(result.salePrice);
 
-  console.log(itemPrice)
-  console.log(data.salePrice)
-  console.log(data?.originalPrice)
-  console.log(data?.discountType)
-  console.log(data?.discountDegree)
-  console.log(salePricebyAdminPageCalcuator)
+  // console.log(itemPrice)
+  // console.log(data.salePrice)
+  // console.log(data?.originalPrice)
+  // console.log(data?.discountType)
+  // console.log(data?.discountDegree)
+  // console.log(salePricebyAdminPageCalcuator)
 
   if (itemPrice !== salePricebyAdminPageCalcuator) {
     alert('세일가격에 이상이 있습니다. 관리자에게 문의하세요.');

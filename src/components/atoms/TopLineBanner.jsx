@@ -22,7 +22,7 @@ const TopLineBanner = () => {
       try {
         const url = `/api/banners/top`;
         const res = await getData(url);
-        // console.log('TopLineBanner RES: ', res);
+        // // console.log('TopLineBanner RES: ', res);
         if (res.data) {
           const data = res.data;
           const DATA = {

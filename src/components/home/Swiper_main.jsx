@@ -72,7 +72,7 @@ export function Swiper_main ({data, isMobile}) {
                   <Link href={isMobile ?  d.mobileLinkUrl : d.pcLinkUrl || '/'} passHref>
                     <a>
                       <Image
-                        priority
+                        priority={true}
                         src={isMobile ?  d.mobileImageUrl : d.pcImageUrl}
                         objectFit="cover"
                         objectPosition="50% 50%"

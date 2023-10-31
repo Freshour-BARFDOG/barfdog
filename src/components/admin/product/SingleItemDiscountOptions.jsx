@@ -27,7 +27,7 @@ export default function SingleItemDiscountOptions({id,  formValues, setFormValue
 
 
 
-  // console.log(formValues)
+  // // console.log(formValues)
 
   useEffect(() => {
     // discountType 이 퍼센트면 dgree를 100으로 반환해서 계산한다.
@@ -35,7 +35,7 @@ export default function SingleItemDiscountOptions({id,  formValues, setFormValue
     if(formValues.discountType === discountUnitType.FIXED_RATE &&transformClearLocalCurrency(formValues.discountDegree)  > 100){
       filteredDiscountDegree = 100;
     }
-    // console.log(filteredDiscountDegree)
+    // // console.log(filteredDiscountDegree)
     const result = calculateSalePrice(
       formValues.originalPrice,
       formValues.discountType,

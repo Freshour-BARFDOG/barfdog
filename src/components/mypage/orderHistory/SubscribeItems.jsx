@@ -35,7 +35,7 @@ export const SubscribeItems = ({itemList}) => {
         }
       }));
       const res = await cancelSubscribeOrder(orderId);
-      console.log(res);
+      // console.log(res);
       if (res.isDone) {
         alert(`결제취소처리가 완료되었습니다. \n주문번호: ${merchantUid}`);
         onSuccessCallback();
@@ -58,7 +58,7 @@ export const SubscribeItems = ({itemList}) => {
 
   const onDeleteBillingKey = async ({customerUid, orderId}) => {
     if (!customerUid) return alert("구독해지 불가능한 주문입니다. 관리자에게 문의하세요.");
-    if (!confirm("네이버페이 정기구독 해지를 진행하시겠습니까?")) return console.log("사용자가 네이버페이 정기구독 해지를 취소하였습니다.");
+    if (!confirm("네이버페이 정기구독 해지를 진행하시겠습니까?")) return // console.log("사용자가 네이버페이 정기구독 해지를 취소하였습니다.");
     setIsLoading((prevState) => ({
       ...prevState,
       deleteBillingKey: {
@@ -73,7 +73,7 @@ export const SubscribeItems = ({itemList}) => {
       });
 
 
-      console.log(res);
+      // console.log(res);
       if (res.status === 200) {
         const d = res.data;
         const data = {

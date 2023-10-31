@@ -69,7 +69,7 @@ export default function Modal_bestReview({ isActiveModal, setIsActiveModal, revi
           return err.response;
         });
       const data = res.data;
-      console.log(data);
+      // console.log(data);
       if (!data) return;
       const DATA = {
         id: data.reviewDto.id,
@@ -80,7 +80,7 @@ export default function Modal_bestReview({ isActiveModal, setIsActiveModal, revi
         imageList: data.reviewImageDtoList,
       };
       setInfo(DATA);
-      console.log(res);
+      // console.log(res);
       setIsLoading((prevState) => ({
         ...prevState,
         fetching: false,

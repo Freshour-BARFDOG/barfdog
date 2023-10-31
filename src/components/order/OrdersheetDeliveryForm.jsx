@@ -55,7 +55,7 @@ export const OrdersheetDeliveryForm = ({
 
   useEffect(() => {
     // !bundle && form.sameUserInfo ? info.phoneNumber : deliveryInfo.phone || ''
-    // console.log('배송정버 뱐걍 ')
+    // // console.log('배송정버 뱐걍 ')
     // {!bundle && form.sameUserInfo ? info.name : deliveryInfo.name || ''}
     if(!info.nextSubscribeDeliveryDate && bundle){
       alert('묶음배송은 정기배송 중인 상품이 있을 경우에만 가능합니다.');
@@ -83,7 +83,7 @@ export const OrdersheetDeliveryForm = ({
     if (typeof data === 'string' || !Object.keys(data).length) return;
     const { address, zonecode, sido } = data;
     if (err) {
-      console.log(err);
+      // console.log(err);
     }
     setDeliveryInfo((prevState) => ({
       ...prevState,

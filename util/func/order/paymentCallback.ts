@@ -3,7 +3,7 @@ import {removeIamportPaymentWindow} from "../removeIamportPaymentWindow";
 
 export async function faliedGeneralPayment(id:number, error_msg?: string) {
   const fail = await postObjData(`/api/orders/${id}/general/fail`);
-  console.log(fail);
+  // console.log(fail);
   if (error_msg) {
     alert(`[결제실패] \nerror_msg: ${error_msg}`);
   }
@@ -25,7 +25,7 @@ interface FailCallbackPropsInterface {
 export async function failedSubscribePayment({orderId, error_msg, error_code, redirect}:FailCallbackPropsInterface) {
 
   const fail = await postObjData(`/api/orders/${orderId}/subscribe/fail`);
-  console.log(fail);
+  // console.log(fail);
   let errorMesasge = getErrorMessage(error_code, error_msg);
   alert(errorMesasge);
 
@@ -46,7 +46,7 @@ export async function failedSubscribePayment({orderId, error_msg, error_code, re
 export async function cancelSubscribeOrder({orderId, error_msg, error_code}:FailCallbackPropsInterface) {
 
   const res = await postObjData(`/api/orders/${orderId}/subscribe/cancel`);
-  console.log(res);
+  // console.log(res);
 
 
 
@@ -71,7 +71,7 @@ export async function successSubscribePayment(orderId, data) {
     discountReward: data.discountReward
   }
   const r = await postObjData(`/api/orders/${orderId}/subscribe/success`, body);
-  console.log(r);
+  // console.log(r);
   if (r.isDone) {
     alert('결제 성공');
     window.location.href = `/order/orderCompleted/subscribe/${orderId}`;
@@ -87,7 +87,7 @@ export async function invalidSuccessSubscribePayment({orderId, data, error_msg, 
     discountReward: data.discountReward
   }
   const fail = await postObjData(`/api/orders/${orderId}/subscribe/success/invalidPayment`, body);
-  console.log(fail);
+  // console.log(fail);
   if (error_msg && error_code) {
     alert(`[결제실패]\n- error_code: ${error_code || ''}\n- error_msg:${error_msg}`);
   } else {
@@ -109,7 +109,7 @@ export async function invalidSuccessSubscribePaymentSSR(req, {orderId, data}) {
     discountReward: data.discountReward
   }
   const failRes = await postDataSSR(req, `/api/orders/${orderId}/subscribe/success/invalidPayment`, body);
-  console.log(failRes);
+  // console.log(failRes);
   return failRes;
 }
 
@@ -121,7 +121,7 @@ export async function validPayment({orderId, impUid}) {
   if (res.isDone) {
     isValid = res.data.data.valid;
   }
-  console.log(res, "\n- isValid = ", isValid);
+  // console.log(res, "\n- isValid = ", isValid);
 
   return isValid;
 }
@@ -131,11 +131,11 @@ export async function validPaymentSSR(req, {orderId, impUid}) {
   const res = await postDataSSR(req, `/api/orders/${orderId}/validation`, {
     impUid: impUid
   });
-  console.log("validPaymentSSR = res.data ", res.data);
+  // console.log("validPaymentSSR = res.data ", res.data);
   if (res.status === 200 && res?.data) {
     isValid = res.data.valid;
   }
-  console.log(res, "\n- isValid = ", isValid);
+  // console.log(res, "\n- isValid = ", isValid);
 
   return isValid;
 }

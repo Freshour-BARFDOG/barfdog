@@ -36,6 +36,6 @@ export const validate = (obj, option) => {
     }
   }
 
-  console.log('Valid Result (formValues) : ', errors);
+  // console.log('Valid Result (formValues) : ', errors);
   return errors;
 };

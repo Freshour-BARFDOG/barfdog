@@ -6,7 +6,7 @@ import RatingStars from '../atoms/RatingStars';
 import {filter_blindingUserName} from '../../../util/func/filter_blindingUserName';
 
 export const ReviewItem = ({item}) => {
-  // console.log(item)
+  // // console.log(item)
   const [visible, setVisible] = useState( false );
   const boxRef = useRef( null );
   const onClickHandler = () => {

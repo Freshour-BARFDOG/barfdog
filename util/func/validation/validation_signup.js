@@ -66,7 +66,7 @@ export const validate = async (obj, formErrors, option={mode:'normal'}) => {
   errors.isEmailDuplicated = formErrors.isEmailDuplicated;
   errors.isValidPhoneNumber = formErrors.isValidPhoneNumber;
 
-  console.log('Valid Result (formValues) : ', errors);
+  // console.log('Valid Result (formValues) : ', errors);
   return errors;
 };
 

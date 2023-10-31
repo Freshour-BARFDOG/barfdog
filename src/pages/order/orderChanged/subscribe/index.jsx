@@ -50,7 +50,7 @@ export default function SubscribeOrderChangedPage({ data }) {
       ...info.next,
     },
   };
-  console.log(oneDayRecommendKcal);
+  // console.log(oneDayRecommendKcal);
   const onActiveConfirmModal = (e) => {
     const btn = e.currentTarget;
     const btnType = btn.dataset.buttonType;
@@ -73,7 +73,7 @@ export default function SubscribeOrderChangedPage({ data }) {
       oneDayRecommendKcal: oneDayRecommendKcal
     };
 
-    console.log(body.oneDayRecommendKcal);
+    // console.log(body.oneDayRecommendKcal);
     try {
       setSubmitted(true);
       setIsLoading((prevState) => ({
@@ -82,7 +82,7 @@ export default function SubscribeOrderChangedPage({ data }) {
       }));
       const apiUrl = `/api/subscribes/${subscribeId}`;
       const res = await putObjData(apiUrl, body);
-      console.log(res);
+      // console.log(res);
       if(res.isDone){
           mct.alertShow('맞춤레시피 변경이 완료되었습니다.', onSuccessChangeSubscribeOrder);
       } else {

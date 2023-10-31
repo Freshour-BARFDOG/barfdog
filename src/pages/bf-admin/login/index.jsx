@@ -68,7 +68,7 @@ export default function AdminLoginPage () {
       const res = await postObjData("/api/login", body);
       if (res.status === 200) {
         const data = res.data.data;
-        console.log(res);
+        // console.log(res);
         const isAdmin = data.roleList?.indexOf(userType.ADMIN) >= 0;
         if(!isAdmin){
           return alert('관리자 계정을 정확히 입력해주세요.')
@@ -210,10 +210,10 @@ export async function getServerSideProps({ req }) {
   let USER_TYPE = null;
   if (req?.headers?.cookie) {
     token = getTokenFromServerSide( req );
-    console.log('token: ', token)
+    // console.log('token: ', token)
     const getApiUrl = `/api/admin/setting`;
     const res = await getDataSSR( req, getApiUrl, token );
-    console.log('res: ', res)
+    // console.log('res: ', res)
     if ( res && res.status === 200 ) {
       USER_TYPE = userType.ADMIN;
     }

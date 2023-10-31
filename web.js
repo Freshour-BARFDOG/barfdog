@@ -17,7 +17,7 @@ nextApp
   .then(() => {
     server.all('*', (req, res) => {
       // const barfdogApiUrl = dev ? process.env.NEXT_PUBLIC_API_URL_DEV : process.env.NEXT_PUBLIC_API_URL_PRODUCT
-      // console.log('BARFDOG API URL: ',barfdogApiUrl);
+      // // console.log('BARFDOG API URL: ',barfdogApiUrl);
       // res.setHeader("Access-Control-Allow-Credentials", true); // 쿠키 주고받기 허용
       // res.setHeader("Access-Control-Allow-Origin", barfdogApiUrl); // CORS 허용
       // res.setHeader("Access-Control-Allow-Methods", "GET,OPTIONS,PATCH,DELETE,POST,PUT"); // CORS 허용
@@ -30,7 +30,7 @@ nextApp
 
     http(server).listen(ports.http, (err) => {
       if (err) throw err;
-      console.log(`> HTTP Server Running on http://localhost:${ports.http}`);
+      // console.log(`> HTTP Server Running on http://localhost:${ports.http}`);
     });
   })
   .catch((err) => {

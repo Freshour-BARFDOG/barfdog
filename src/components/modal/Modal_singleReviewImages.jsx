@@ -54,7 +54,7 @@ export default function Modal_singleReviewImages({ isActiveModal, setIsActiveMod
       }));
       let res = await getData(url);
       // res = DUMMY_DATA_Reponse; // ! TEST
-      // console.log(res);
+      // // console.log(res);
       if (!res.data) return;
       const itemList = res.data._embedded.queryReviewImagesDtoList;
       setImageList(itemList);

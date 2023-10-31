@@ -100,7 +100,7 @@ const dataIsDisabled = [
 
 
 const cancel = (e) => {
-  console.log(e);
+  // console.log(e);
   message.error('취소되었습니다.');
 };
 
@@ -156,7 +156,7 @@ const DetailsPage = () => {
   //   // axios
   //   // .get(link)
   //   // .then(response => {
-  //   //   console.log(response.data);
+  //   //   // console.log(response.data);
   //   //   setDataBase(response.data);
   //   // })
   //   // .catch(error => {
@@ -191,7 +191,7 @@ const DetailsPage = () => {
   
   const confirm = () => {
 
-    console.log(dataBase)
+    // console.log(dataBase)
     
     let data = dataBase;
 
@@ -244,7 +244,7 @@ const DetailsPage = () => {
     )
   }
 
-  console.log(dataBase);
+  // console.log(dataBase);
 
 
 

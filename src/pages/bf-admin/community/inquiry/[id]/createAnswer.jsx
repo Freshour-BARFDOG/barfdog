@@ -35,7 +35,7 @@ export default function CreateInquiryAnswerPage({ id }) {
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
 
-  // console.log(form);
+  // // console.log(form);
   const onInputChangeHandler = (e) => {
     const { id, value } = e.currentTarget;
     setForm({
@@ -50,7 +50,7 @@ export default function CreateInquiryAnswerPage({ id }) {
     const errObj = validate(form, {
       contents: { maxLength: maxContentsLength },
     });
-    // console.log(errObj);
+    // // console.log(errObj);
     setErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
     try {
@@ -67,7 +67,7 @@ export default function CreateInquiryAnswerPage({ id }) {
         };
         const apiUrl = '/api/admin/questions';
         const res = await postObjData(apiUrl, body);
-        console.log(res);
+        // console.log(res);
         if (res.isDone) {
           mct.alertShow('답글이 생성되었습니다.', onSuccessCallback);
           setSubmitted(true);
@@ -265,7 +265,7 @@ export async function getServerSideProps({ req, query }) {
 
   const inValid = isNaN(id);
   let AUTHOR_TYPE = await getDtataSSR_inquiryAuthorType(req, id);
-  // console.log('inValid: ', inValid, 'AUTHOR_TYPE: ', AUTHOR_TYPE);
+  // // console.log('inValid: ', inValid, 'AUTHOR_TYPE: ', AUTHOR_TYPE);
   if (inValid || !AUTHOR_TYPE) {
     // !PROD;
     return {

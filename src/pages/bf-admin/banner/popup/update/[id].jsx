@@ -61,7 +61,7 @@ function UpdatePopupPage() {
         }));
         const res = await getData(getFormValuesApiUrl);
         const data = res.data;
-        console.log(res);
+        // console.log(res);
         const initialFormValues = {
           name : data.name,
           status: data.status,
@@ -118,8 +118,8 @@ function UpdatePopupPage() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    console.log('formValues: ', formValues);
-    console.log('fileValues: ', fileValues);
+    // console.log('formValues: ', formValues);
+    // console.log('fileValues: ', fileValues);
     if (isSubmitted) return;
     const errObj = validate(formValues, fileValues);
     const isPassed = valid_hasFormErrors(errObj);
@@ -140,7 +140,7 @@ function UpdatePopupPage() {
         formData.append('pcFile', fileValues.pcFile.file);
         formData.append('mobileFile', fileValues.mobileFile.file);
         const res = await postObjData(postFormValuesApiUrl, formData, 'multipart/form-data');
-        console.log(res);
+        // console.log(res);
         if (res.isDone) {
           onShowModalHandler('팝업이 수정되었습니다.');
           setIsSubmitted(true);

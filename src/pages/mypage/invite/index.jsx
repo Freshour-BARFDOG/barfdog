@@ -51,11 +51,11 @@ export default function InvitePage() {
   });
   
   
-  // console.log(itemList);
+  // // console.log(itemList);
 
   const pageInterCeptor = async (res) => {
     // res = DUMMY_DATA; // ! TEST
-    console.log(res);
+    // console.log(res);
     let newPageInfo = {
       totalPages: 1,
       size: searchPageSize,
@@ -73,11 +73,11 @@ export default function InvitePage() {
         orderedCount: data.orderedCount, // 본인의 추천코드로 친구가 주문한 수
         totalRewards: data.totalRewards, // 그로 인한 총 적립 포인트
       };
-      // console.log(recommendData)
+      // // console.log(recommendData)
       setRecommendInfo(recommendData);
       const pageData = data.pagedModel?.page;
       let newItemList = data.pagedModel?._embedded?.queryRewardsDtoList || [];
-      console.log("newItemList: ",newItemList);
+      // console.log("newItemList: ",newItemList);
       if(!newItemList.length){
         newItemList = await getAllRewardList();
       }
@@ -103,9 +103,9 @@ export default function InvitePage() {
     try {
       const url = `/api/rewards`;
       const res = await getData(url);
-      console.log(res);
+      // console.log(res);
       newItemList = res.data?.pagedModel?._embedded?.queryRewardsDtoList?.filter(item=>item.name.indexOf('[친구추천]') >= 0);
-      console.log();
+      // console.log();
     } catch (err) {
         console.error(err)
     } finally {
@@ -152,7 +152,7 @@ export default function InvitePage() {
         } else {
           mct.alertShow('추천코드가 정확하지 않습니다.');
         }
-        console.log(res);
+        // console.log(res);
       } catch (err) {
         console.error(err);
       }

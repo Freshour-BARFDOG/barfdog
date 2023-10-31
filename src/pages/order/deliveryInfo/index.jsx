@@ -58,8 +58,8 @@ export default function DeliveryInfoPage () {
     
     return result[stringKey];
   };
-  console.log(info.plan);
-  console.log(subscribePlanType[info.plan]);
+  // console.log(info.plan);
+  // console.log(subscribePlanType[info.plan]);
   return (
     <>
       <MetaTitle title={`정기구독 배송안내`}/>

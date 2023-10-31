@@ -10,7 +10,7 @@ import { FullScreenRunningDog } from '/src/components/atoms/FullScreenLoading';
 import { authAction } from '/store/auth-slice';
 
 export default function KAKAO_Auth({ data, err, token }) {
-  // console.log('DATA: ', data, err);
+  // // console.log('DATA: ', data, err);
   const router = useRouter();
   const dispatch = useDispatch();
   const userSnsInfo = {
@@ -103,8 +103,8 @@ export async function getServerSideProps({ query }) {
         return err;
       });
 
-    console.log('Server RES: ', res);
-    // console.log('Server RESPONSE DATA: ',res.data)
+    // console.log('Server RES: ', res);
+    // // console.log('Server RESPONSE DATA: ',res.data)
     // res = DUMMY_NEW_MEMBER_RESPONSE; ////////  ! TEST
     // res = DUMMY_MEMBER_RESPONSE; ////////  ! TEST
 
@@ -176,7 +176,7 @@ export async function getServerSideProps({ query }) {
         err = resultMessage;
       }
     } else if (res.response.data?.error) {
-      // console.log('ERROR REPONSE >  ', res.response)
+      // // console.log('ERROR REPONSE >  ', res.response)
       err = res.response.statusText;
     }
   } catch (err) {

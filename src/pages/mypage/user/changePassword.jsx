@@ -74,7 +74,7 @@ export default function ChangePasswordPage() {
       };
       const url = '/api/members/password';
       const res = await putObjData(url, body);
-      // console.log(res);
+      // // console.log(res);
       if (res.isDone) {
         mct.alertShow();
         setIsSubmitted(true);

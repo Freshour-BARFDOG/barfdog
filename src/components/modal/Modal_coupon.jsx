@@ -131,7 +131,7 @@ export const Modal_coupon = ({ onModalActive, itemInfo, info,  form, setForm, or
                 }
                 item.couponDiscountInfo = couponDiscountInfo
                 item.couponDiscountAmount = couponDiscountAmount
-                // console.log(couponDiscountAmount)
+                // // console.log(couponDiscountAmount)
 
                 // STEP 2. Validation
                 let valid = false;

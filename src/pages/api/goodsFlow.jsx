@@ -28,7 +28,7 @@ const GoodsFlowTest = async (req, res) => {
         options
       )
       .then((res) => {
-        console.log(
+         console.log(
           '---------------------------- AXIOS > RESPONSE ----------------------------',
           res,
         );
@@ -39,8 +39,8 @@ const GoodsFlowTest = async (req, res) => {
 
         return err.response;
       });
-    console.log('---------- AXIOS > RESPONSE: ', DATA);
-    console.log('---------- AXIOS > RESPONSE: ', JSON.stringify(DATA));
+    // console.log('---------- AXIOS > RESPONSE: ', DATA);
+    // console.log('---------- AXIOS > RESPONSE: ', JSON.stringify(DATA));
    
     const defaultCorsHeader = {
       "Access-Control-Allow-Origin": "*", // 다 받거나, 하나만 받거나만 가능
@@ -57,7 +57,7 @@ const GoodsFlowTest = async (req, res) => {
     //   data: DATA.data,
     //   success: DATA.success,
     // }
-    // console.log('BODY: ', body);
+    // // console.log('BODY: ', body);
     
     
     res.writeHead(200, defaultCorsHeader);

@@ -185,7 +185,7 @@ const getAllPriceInfos = ({priceInfos}) => {
 const selectOneMealGrams = ({origin, current}) => {
   // origin: 기존 계산식을 토대로 도출한 한 팩 무게
   // current: 유저의 구독 무게 변경으로 인한 한 팩 무게
-  console.log("origin === current ? ",origin, current);
+  // console.log("origin === current ? ",origin, current);
   return valid_isTheSameArray(origin, current) ? origin : current;
 
 };

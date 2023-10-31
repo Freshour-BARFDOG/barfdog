@@ -37,7 +37,7 @@ export const ShopOptionBar = ({ id, data, formValues, setFormValues, onAddToCart
   const [active, setActive] = useState(false); // boolean
   const [optionDataList, setOptionDataList] = useState(initialOptionDataList); // array
 
-  // console.log(optionDataList)
+  // // console.log(optionDataList)
   // CALCULATE TOTAL PRICE
   useEffect(() => {
     const originalItemPrice = formValues.itemPrice;
@@ -72,7 +72,7 @@ export const ShopOptionBar = ({ id, data, formValues, setFormValues, onAddToCart
   };
 
   const onChangeQuantityInputHandler = (optionId, quantity) => {
-    // console.log(optionId, quantity);
+    // // console.log(optionId, quantity);
     setOptionDataList((prevState) => {
       return prevState.map((optionObj) => {
         if (optionObj.id === optionId) {

@@ -85,7 +85,7 @@ export default function DeliveryOnSellPage() {
   
   const pageInterceptor = useCallback((res, option={itemQuery: null}) => {
     // res = DUMMY_DEFAULT_ITEMLIST_RESPONSE; //  ! TEST
-    console.log(res);
+    // console.log(res);
     // queryAdminOrdersDtoList : 상품단위 검색
     // queryAdminCancelRequestDtoList : 주문 단위 검색
     return getDefaultPagenationInfo(res?.data, 'queryAdminOrdersAllInfoDtoList', {pageSize: searchPageSize, setInitialize: setSearchQueryInitialize});
@@ -127,7 +127,7 @@ export default function DeliveryOnSellPage() {
       };
 
       const res = await postObjData(url, body);
-      console.log(res);
+      // console.log(res);
       const data = res.data?.data;
       const deliveryItemInfoList = data._embedded?.queryOrderInfoForDeliveryList || [];
       if (!res.isDone || !deliveryItemInfoList.length) {
@@ -181,13 +181,13 @@ export default function DeliveryOnSellPage() {
       // ! 추가예정: goodsflow 송장취소 API
       // ! 추가예정: goodsflow 송장취소 API
     deliveryList.forEach(async function(item) {
-      // console.log(item);
-      // console.log(item.transUniqueCd);
+      // // console.log(item);
+      // // console.log(item.transUniqueCd);
       
       const cancelRes = await goodsFlowOrderCancel(item.transUniqueCd);
       const success = cancelRes.data.success;
       
-      // console.log(cancelRes.data);
+      // // console.log(cancelRes.data);
       
       if(!success){
         console.error(cancelRes.data.error.message);
@@ -206,8 +206,8 @@ export default function DeliveryOnSellPage() {
         items: deliveryList,
       },
     });
-    // console.log(orderRes);
-    // console.log(orderRes.data);
+    // // console.log(orderRes);
+    // // console.log(orderRes.data);
 
     const orderResData = orderRes.data;
     if (!orderResData.success) {
@@ -235,11 +235,11 @@ export default function DeliveryOnSellPage() {
       otp: otp,
       id: orderResData.id,
     });
-    console.log('=================');
+    // console.log('=================');
 
     if (printRes.isDone) {
-      // console.log(printRes);
-      // console.log(printRes.data.data);
+      // // console.log(printRes);
+      // // console.log(printRes.data.data);
       popupWindow(`/bf-admin/sell/delivery/print?data=${printRes.data.data}`);
     }
     } catch (err) {

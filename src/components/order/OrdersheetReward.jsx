@@ -17,7 +17,7 @@ export const OrdersheetReward = ({ id, info, form, setForm, formErrors, setFormE
     const overDiscount = calcResult?.overDiscount;
     const userTotalReward = info.reward;
 
-    console.log(usedReward, availableMaxDiscount, overDiscount);
+    // console.log(usedReward, availableMaxDiscount, overDiscount);
     let error= "";
     if ( usedReward && userTotalReward === 0 ) {
       error = "사용가능한 적립금이 없습니다."
@@ -44,7 +44,7 @@ export const OrdersheetReward = ({ id, info, form, setForm, formErrors, setFormE
         [id] : error
       })
     );
-    // console.log("* rewardDiscount: ", form[id], "\n* availableMaxReward: ",availableMaxReward, "\nhasRewardValue: ", hasRewardValue) ;
+    // // console.log("* rewardDiscount: ", form[id], "\n* availableMaxReward: ",availableMaxReward, "\nhasRewardValue: ", hasRewardValue) ;
 
   }, [form[id]] );
 

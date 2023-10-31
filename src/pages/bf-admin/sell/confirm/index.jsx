@@ -60,7 +60,7 @@ export default function ConfirmOnSellPage() {
   
   
   const pageInterceptor = useCallback((res, option={itemQuery: null}) => {
-    console.log(res);
+    // console.log(res);
     return getDefaultPagenationInfo(res?.data, 'queryAdminOrdersAllInfoDtoList', {pageSize: searchPageSize, setInitialize: setSearchQueryInitialize});
   },[]);
   

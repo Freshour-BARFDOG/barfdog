@@ -9,8 +9,8 @@ import axios from 'axios';
 // 주문취소 처리된 {transUniqueCd}(배송고유번호)로 운송장출력이 가능하다. 운송장출력시 중복체크 기준: {transUniqueCd}(배송고유번호)
 
 export default async function handler(req, res){
-  console.log(req);
-  console.log(req.body);
+  // console.log(req);
+  // console.log(req.body);
 
   try {
     const options = {
@@ -28,7 +28,7 @@ export default async function handler(req, res){
         options
       )
       .then((res) => {
-        console.log(
+         console.log(
           '---------------------------- AXIOS > RESPONSE ----------------------------',
           res,
         );
@@ -39,8 +39,8 @@ export default async function handler(req, res){
 
         return err.response;
       });
-    // console.log('---------- AXIOS > RESPONSE: ', DATA);
-    // console.log('---------- AXIOS > RESPONSE: ', JSON.stringify(DATA));
+    // // console.log('---------- AXIOS > RESPONSE: ', DATA);
+    // // console.log('---------- AXIOS > RESPONSE: ', JSON.stringify(DATA));
    
     const defaultCorsHeader = {
       "Access-Control-Allow-Origin": "*", // 다 받거나, 하나만 받거나만 가능

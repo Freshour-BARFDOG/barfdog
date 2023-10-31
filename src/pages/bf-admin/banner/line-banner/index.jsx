@@ -34,7 +34,7 @@ export default function LineBanner({data}) {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
 
-  // console.log(formValues);
+  // // console.log(formValues);
   
   useEffect(() => {
     const miniEditor = miniEditorFormRef.current;
@@ -116,7 +116,7 @@ export default function LineBanner({data}) {
   const onSubmit = async (e) => {
     e.preventDefault();
     if (isSubmitted) return;
-    console.log(formValues);
+    // console.log(formValues);
     const body = {
         name: formValues.name,
         status: formValues.status,
@@ -463,7 +463,7 @@ export async function getServerSideProps ( { req }) {
   const res = await getDataSSR(req, apiUrl);
   if(res.data){
     const data = res.data;
-    console.log(res.data);
+    // console.log(res.data);
     DATA ={
       id: data.id,
       name: data.name,

@@ -131,7 +131,7 @@ const setInitCheckboxValue = (checkboxValueObj, checkboxId)=>{
     Object.entries(checkboxValueObj).forEach((arr)=>{
       const key = arr[0];
       const val = arr[1];
-      // console.log(key, val, checkboxId)
+      // // console.log(key, val, checkboxId)
       if(key.indexOf(checkboxId) >= 0 && val === true ){
         return checked = true;
       }

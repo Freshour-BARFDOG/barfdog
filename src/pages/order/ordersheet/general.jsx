@@ -75,15 +75,15 @@ export default function GeneralOrderSheetPage() {
         const postItemInfoApiUrl = `/api/orders/sheet/general`;
         const res = await postUserObjData(postItemInfoApiUrl, requestBody);
         // 요청 파라미터가 복잡하여 GET이 아닌 POST 사용
-        // console.log(res);
+        // // console.log(res);
         if (res.status !== 200) {
           alert('상품 정보를 확인할 수 없습니다.');
           return window.location.href = '/cart';
         }
         const info = res.data.data;
-        // console.log(info);
+        // // console.log(info);
         // 주문에 대한 모든 데이터
-        console.log('info:  ',info)
+        // console.log('info:  ',info)
         const calcedReward = (Number(info.reward) > 0 ? info.reward : 0);
         const initInfo = {
           name: info.name, // 구매자

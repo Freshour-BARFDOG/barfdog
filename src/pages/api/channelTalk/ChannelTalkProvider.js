@@ -11,7 +11,7 @@ export default function ChannelTalkProvider ({ children }) {
   const auth = useSelector((s) => s.auth);
   const userInfo = auth.userInfo;
   
-  // console.log(userInfo);
+  // // console.log(userInfo);
 
   
   useEffect(() => {
@@ -54,5 +54,5 @@ export default function ChannelTalkProvider ({ children }) {
 
 
 const channelTalkBootCallback = (err, user) => {
-  // console.log(err, user);
+  // // console.log(err, user);
 };

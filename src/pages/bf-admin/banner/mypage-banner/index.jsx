@@ -70,7 +70,7 @@ export default function UpdateMypageBanner() {
         const apiUrl = `/api/banners/myPage`;
         const res = await getData(apiUrl);
         const data = res.data;
-        console.log('mypageBanner RESPONSE : ',res);
+        // console.log('mypageBanner RESPONSE : ',res);
         const initVal = {
           id: data.id, // post Api 요청 시, 사용
           name : data.name,
@@ -140,8 +140,8 @@ export default function UpdateMypageBanner() {
       pcLinkUrl : formValues.pcLinkUrl,
       mobileLinkUrl : formValues.mobileLinkUrl,
     }
-    console.log('formValues: ',form);
-    console.log('fileValues: ',fileValues);
+    // console.log('formValues: ',form);
+    // console.log('fileValues: ',fileValues);
     const errObj = validate(form, fileValues);
     const isPassed = valid_hasFormErrors(errObj);
     setFormErrors(errObj);
@@ -161,7 +161,7 @@ export default function UpdateMypageBanner() {
         const id = formValues.id;
         const apiUrl = `/api/banners/myPage/${id}`;
         const res = await postObjData(apiUrl, formData, 'multipart/form-data');
-        console.log(res);
+        // console.log(res);
         if (res.isDone) {
           mct.alertShow('마이페이지 배너 수정되었습니다.');
           // onShowModalHandler('마이페이지 배너 수정되었습니다.');

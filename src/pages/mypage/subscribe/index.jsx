@@ -25,7 +25,7 @@ export default function ManageSubscribePage() {
   
   const pageInterceptor = useCallback((res, option={itemQuery: null}) => {
     // res = DUMMY__RESPONSE; // ! TEST
-    console.log(res);
+    // console.log(res);
     return getDefaultPagenationInfo(res?.data, 'querySubscribesDtoList', {pageSize: searchPageSize});
   },[]);
 

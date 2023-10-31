@@ -52,7 +52,7 @@ export default function SearchUserPopup() {
   
   
   const onCloseWindowHandler = () => {
-    console.log(window.opener)
+    // console.log(window.opener)
     if(selectedMemberIdList.length === 0 ){
       alert('선택된 회원이 없습니다.')
     }else if(selectedMemberIdList.length && confirm(`선택된 ${selectedMemberIdList.length}명의 회원을 추가 하시겠습니까?`) ){

@@ -44,7 +44,7 @@ function SingleItemPage() {
   
   const pageInterceptor = useCallback( (res, option = {itemQuery: null}) => {
     // res = DUMMY_RES; // ! TEST
-    console.log( res );
+    // console.log( res );
     return getDefaultPagenationInfo( res?.data, apiDataQueryString, {pageSize: searchPageSize} );
   }, [] );
   
@@ -70,7 +70,7 @@ function SingleItemPage() {
         }
       }));
       const res = await deleteData(apiUrl);
-      console.log(res);
+      // console.log(res);
       if(res.isDone){
         mct.alertShow( "일반상품을 삭제하였습니다.", onSuccessCallback );
       } else {

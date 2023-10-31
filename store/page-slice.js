@@ -12,7 +12,7 @@ const pageSlice = createSlice({
   initialState,
   reducers: {
     saveCurrentPageInfo(state, action){
-      // console.log(action.payload.pageTitle);
+      // // console.log(action.payload.pageTitle);
       state.pageTitle= action.payload.pageTitle;
     }
   }

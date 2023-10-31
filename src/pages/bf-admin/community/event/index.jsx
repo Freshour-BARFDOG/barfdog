@@ -34,7 +34,7 @@ function EventNoticePage () {
         }
       }));
       const res = await deleteData(apiUrl);
-      console.log(res);
+      // console.log(res);
       if(res.isDone){
         mct.alertShow( "게시글을 삭제하였습니다.", onSuccessCallback );
       } else {

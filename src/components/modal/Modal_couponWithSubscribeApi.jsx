@@ -124,7 +124,7 @@ export const Modal_couponWithSubscribeApi = ({
       const body = {
         memberCouponId: info.usedCoupon.usingMemberCouponId,
       };
-      console.log( "onCancelUsedCoupon > body", body );
+      // console.log( "onCancelUsedCoupon > body", body );
       const url = `/api/subscribes/${info.subscribeId}/coupon/cancel`;
       const res = await putObjData( url, body );
       if ( res.isDone ) {
@@ -144,7 +144,7 @@ export const Modal_couponWithSubscribeApi = ({
     window.location.reload();
   };
   
-  // console.log( info );
+  // // console.log( info );
   
   return (
     <>
@@ -223,7 +223,7 @@ export const Modal_couponWithSubscribeApi = ({
                     ) {
                       valid = true;
                     }
-                    // console.log(item, valid);
+                    // // console.log(item, valid);
                     return valid && item;
                   })
                   .map((item, index) => (

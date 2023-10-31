@@ -57,7 +57,7 @@ export default function CreateCouponPage() {
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   
-  // console.log(formValues)
+  // // console.log(formValues)
   
   useEffect( () => {
     setFormValues(prevState => ({
@@ -131,7 +131,7 @@ export default function CreateCouponPage() {
       amount: transformClearLocalCurrency(formValues.amount),//
       type: formValues.type,
     }
-    console.log(body);
+    // console.log(body);
 
     const errObj = validate(body);
     setFormErrors(errObj);
@@ -148,7 +148,7 @@ export default function CreateCouponPage() {
       }));
       const apiUrl = '/api/admin/coupons';
       const res = await postObjData(apiUrl, body);
-      console.log(res);
+      // console.log(res);
       if (res.isDone) {
         mct.alertShow('쿠폰이 성공적으로 등록되었습니다.', onGlobalModalCallback);
       } else {

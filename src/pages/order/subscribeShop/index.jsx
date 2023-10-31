@@ -133,7 +133,7 @@ export default function RegisterSubscribeInfoPage({ data }) {
     }).map(recipe =>recipe.oneMealGram);
 
     const isSameArray = valid_isTheSameArray(oneMealGramsForm.next, nextOneMealGrams);
-      // console.log(oneMealGramsForm.next, nextOneMealGrams, "\n", isSameArray);
+      // // console.log(oneMealGramsForm.next, nextOneMealGrams, "\n", isSameArray);
     if ( !isSameArray ) {
       setOneMealGramsForm((prevState) => ({
         ...prevState,
@@ -170,7 +170,7 @@ export default function RegisterSubscribeInfoPage({ data }) {
     if (!isPassed)
       return mct.alertShow('유효하지 않은 항목이 있습니다.\n선택한 레시피 및 플랜을 확인해주세요. ');
 
-    console.log('--- onStartSubscribeOrder:\n', body)
+    // console.log('--- onStartSubscribeOrder:\n', body)
 
 
     try {
@@ -182,7 +182,7 @@ export default function RegisterSubscribeInfoPage({ data }) {
 
       const apiUrl = `/api/subscribes/${info.subscribeId}`;
       const res = await putObjData(apiUrl, body);
-      console.log(res);
+      // console.log(res);
       if (res.isDone) {
         await dispatch(
           cartAction.setSubscribeOrder({ data: { subscribeId: info.subscribeId, ...body } }),
@@ -226,7 +226,7 @@ export default function RegisterSubscribeInfoPage({ data }) {
         nextPaymentPrice: nextPaymentPrice, // 최종 계산된 가격
         oneDayRecommendKcal: info.foodAnalysis.oneDayRecommendKcal // 반려견 설문조사 변경여부 검증용
       };
-      console.log('onChangeSubscribeOrder:\n', body)
+      // console.log('onChangeSubscribeOrder:\n', body)
 
       const errObj = validate(body);
       const isPassed = valid_hasFormErrors(errObj);
@@ -276,7 +276,7 @@ export default function RegisterSubscribeInfoPage({ data }) {
         next: nextDATA,
       };
 
-      // console.log('DATA:', DATA);
+      // // console.log('DATA:', DATA);
       await setSubmitted(true);
       await dispatch(cartAction.changeSubscribeOrder({ data: DATA }));
       await router.push(`/order/orderChanged/subscribe?dogId=${info.dogId}`);
@@ -383,7 +383,7 @@ export async function getServerSideProps({ req, query }) {
       const apiUrl = `/api/recipes/${recipeId}`;
       const res = await getDataSSR(req, apiUrl);
       const data = res.data;
-      console.log("recipeDatas: ",data);
+      // console.log("recipeDatas: ",data);
       if ( data ) {
         recipesDetailInfo.push({
           ...data,
@@ -392,9 +392,9 @@ export async function getServerSideProps({ req, query }) {
       }
     }
 
-    console.log("dogDto: ",dogDto);
-    console.log("surveyInfoData: ",surveyInfoData);
-    console.log("recipesDetailInfo: ",recipesDetailInfo);
+    // console.log("dogDto: ",dogDto);
+    // console.log("surveyInfoData: ",surveyInfoData);
+    // console.log("recipesDetailInfo: ",recipesDetailInfo);
     data = {
       dogDto: dogDto,
       surveyInfo: surveyInfoData,

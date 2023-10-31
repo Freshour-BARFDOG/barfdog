@@ -16,7 +16,7 @@ export default function useDeviceState () {
       setIsMobileWidth( mobileWidth );
       setDeviceWidth( windowWidth );
       
-      // console.log(window.navigator.userAgent)
+      // // console.log(window.navigator.userAgent)
       // # check by Device Info.
       const mobileDevice = /iPhone|iPad|iPod|Android/i.test( navigator.userAgent );
       setMobileDevice( mobileDevice )

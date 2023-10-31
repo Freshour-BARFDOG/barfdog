@@ -30,7 +30,7 @@ export default function BlogPostPage({blogId}) {
         }));
         const apiUrl = `/api/blogs/${curPageId}`;
         const res = await getData(apiUrl);
-        console.log(res);
+        // console.log(res);
         let DATA;
         if (res.data) {
           const data = res.data;
@@ -61,7 +61,7 @@ export default function BlogPostPage({blogId}) {
         }));
         const apiUrl = `/api/blogs`;
         const res = await getData(apiUrl);
-        console.log(res);
+        // console.log(res);
         if (res.data) {
           const itemListInfo = res.data._embedded[itemListQuery];
           let curItemIndex;
@@ -80,7 +80,7 @@ export default function BlogPostPage({blogId}) {
             cur: curItemListInfo,
             next: nextItemListInfo,
           });
-          // console.log(prevItemListInfo, nextItemListInfo)
+          // // console.log(prevItemListInfo, nextItemListInfo)
         }
       } catch (err) {
         console.error('데이터를 가져올 수 없습니다.');

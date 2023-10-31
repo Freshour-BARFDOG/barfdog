@@ -52,7 +52,7 @@ export const Modal_orderConfirm = ({
     }));
   }, [selectedItemData]);
 
-  // console.log(allData);
+  // // console.log(allData);
 
   const onHideModal = () => {
     setActiveModal({
@@ -75,11 +75,11 @@ export const Modal_orderConfirm = ({
     }
   };
 
-  // console.log(selectedIdList)
+  // // console.log(selectedIdList)
   // ! 영한씨 > 판매취소 로직 확인 > 이후에 작업 진행
   // ! 한 주문 내에 상품에 대한 각각의 id가 필요할 경우,
 
-  // console.log(allData);
+  // // console.log(allData);
   return (
     <ModalWrapper id={s['modal-cancle']} background positionCenter>
       <CloseButton onClick={onHideModal} className={s['close-button']} />

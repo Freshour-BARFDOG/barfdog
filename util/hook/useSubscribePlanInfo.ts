@@ -23,7 +23,7 @@ export const useSubscribePlanInfo = () => {
       try {
         const url = `/api/planDiscount`;
         const res = await getData(url);
-        // console.log('useSubscribePlanInfo: ',res);
+        // // console.log('useSubscribePlanInfo: ',res);
         if(res.data && res.status === 200) {
           const data = res.data._embedded.planDiscountResponseDtoList[0];
   

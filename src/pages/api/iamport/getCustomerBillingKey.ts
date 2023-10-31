@@ -23,7 +23,7 @@ export interface GetCustomerBillingKeyResponse {
 }
 
 export default async function POST(req: NextApiRequest, res: NextApiResponse) {
-  console.log("===========여기 ??????");
+  // console.log("===========여기 ??????");
 
   const timeout: number = 60000;
   // Set the Axios base URL dynamically
@@ -63,7 +63,7 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
 
     const jsonDataAsString = JSON.stringify(DATA);
 
-    console.log('---------- AXIOS > RESPONSE: ', DATA);
+    // console.log('---------- AXIOS > RESPONSE: ', DATA);
 
     const defaultCorsHeader = {
       "Access-Control-Allow-Origin": "*", // 다 받거나, 하나만 받거나만 가능

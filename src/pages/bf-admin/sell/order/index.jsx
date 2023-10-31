@@ -95,7 +95,7 @@ export default function OrderOnSellPage() {
 
   const pageInterceptor = useCallback((res, option={itemQuery: null}) => {
     // res = searchValues.orderType === productType.GENERAL ? DUMMY__ADMIN_ORDER_ITEMS_GENERAL_RESPONSE :  DUMMY__ADMIN_ORDER_ITEMS_SUBSCRIBE_RESPONSE; //  ! TEST TEST TEST
-    console.log(res);
+    // console.log(res);
     return getDefaultPagenationInfo(res?.data, 'queryAdminOrdersAllInfoDtoList', {pageSize: searchPageSize, setInitialize: setSearchQueryInitialize});
   },[]);
 
@@ -116,7 +116,7 @@ export default function OrderOnSellPage() {
 
   const onStartOrderConfirm = () => {
     const invalidItemList = filterInvalidOrderConfirmStatusItems(selectedItemList);
-    console.log(invalidItemList);
+    // console.log(invalidItemList);
     if (!selectedOrderIdList.length) {
       return alert('선택된 상품이 없습니다.');
     } else if(invalidItemList.length){
@@ -149,8 +149,8 @@ export default function OrderOnSellPage() {
       }));
       const apiUrl = `/api/admin/orders/${itemType.toLowerCase()}/orderConfirm`;
       const res = await postPaymentDataToApiServer(apiUrl, body);
-      console.log('onOrderConfirm: \n', body);
-      console.log('response: admin > sell > search > index.jsx\n', res);
+      // console.log('onOrderConfirm: \n', body);
+      // console.log('response: admin > sell > search > index.jsx\n', res);
       if (res.isDone) {
         alert('주문확인 처리되었습니다.');
         window.location.reload();
@@ -158,7 +158,7 @@ export default function OrderOnSellPage() {
         alert(`주문확인 처리하는데 오류가 발생했습니다.\n${res.error}`);
       }
     } catch (err) {
-      console.log('API통신 오류가 발생하였습니다.');
+      // console.log('API통신 오류가 발생하였습니다.');
       alert( err );
     } finally {
       setIsLoading((prevState) => ({
@@ -196,12 +196,12 @@ export default function OrderOnSellPage() {
       }));
       const apiUrl = `/api/admin/deliveries/info`; // 주문 발송 api에 필요한 배송 정보 조회
       const resFromServer = await postObjData(apiUrl, body); // ! PRODUCT CODE
-      console.log('resFromServer: ', resFromServer);
+      // console.log('resFromServer: ', resFromServer);
       // const resFromServer = DUMMY_ADMIN_DELIVERY_INFO; // ! TEST CODE
       if (!resFromServer.isDone)
         return alert(`주문발송 처리 중 오류가 발생했습니다.\n${resFromServer.error}`);
       const deliveryItemInfoList = resFromServer.data.data._embedded.queryOrderInfoForDeliveryList;
-      console.log(deliveryItemInfoList);
+      // console.log(deliveryItemInfoList);
 
       // GoodsFlow에 전송하는 배송리스트 (운송장 출력창에 보여지는 리스트)
       const deliveryList = [];
@@ -246,8 +246,8 @@ export default function OrderOnSellPage() {
             items: deliveryList,
           },
         });
-        // console.log(res);
-        // console.log(res.data);
+        // // console.log(res);
+        // // console.log(res.data);
 
         const data = res.data;
         if (!data.success) {
@@ -274,20 +274,20 @@ export default function OrderOnSellPage() {
           otp: otp,
           id: res.data.id,
         });
-        console.log('=================');
+        // console.log('=================');
 
         if (printRes.isDone) {
-          console.log(printRes);
-          console.log(printRes.data.data);
+          // console.log(printRes);
+          // console.log(printRes.data.data);
           popupWindow(`/bf-admin/sell/delivery/print?data=${printRes.data.data}`);
 
           const goodsFlowTraceRes = window.location.origin + '/api/goodsFlow/postTraceResult';
           // const r = await postObjData(goodsFlowTraceRes);
-          // console.log(r);
+          // // console.log(r);
         }
       }
     } catch (err) {
-      console.log('API통신 오류 : ', err);
+      // console.log('API통신 오류 : ', err);
     } finally {
       setIsLoading((prevState) => ({
         ...prevState,
@@ -322,8 +322,8 @@ export default function OrderOnSellPage() {
         },
       )
       .then((res) => {
-        console.log(res.data);
-        console.log(
+        // console.log(res.data);
+         console.log(
           '------------------------------------------------------------------ AXIOS > RESPONSE ------------------------------------------------------------------ ',
           res,
         );
@@ -335,8 +335,8 @@ export default function OrderOnSellPage() {
 
         return err.response;
       });
-    console.log('============');
-    console.log(traceRes.data);
+    // console.log('============');
+    // console.log(traceRes.data);
 
     // 결과보고 조회 성공
     if (traceRes.data.success) {
@@ -375,7 +375,7 @@ export default function OrderOnSellPage() {
         // exceptionCode: ""
         // }
         // ];
-        console.log(items);
+        // console.log(items);
         const itemFilter = items.map((i) => {
           return { transUniqueCd: i.transUniqueCd, deliveryNumber: i.sheetNo };
         });
@@ -384,9 +384,9 @@ export default function OrderOnSellPage() {
           deliveryNumberDtoList: itemFilter,
         };
 
-        console.log(body);
+        // console.log(body);
         const r = await postObjData(registerDeliveryNumberApiUrl, body);
-        console.log('server RESPONSE:\n', r);
+        // console.log('server RESPONSE:\n', r);
         if (r.isDone) {
           alert('운송장번호 저장 완료');
         } else {
@@ -434,7 +434,7 @@ export default function OrderOnSellPage() {
             detailReason: enteredDetailReason,
           }
         : null;
-    console.log(body);
+    // console.log(body);
 
     try {
       setIsLoading((prevState) => ({
@@ -443,8 +443,8 @@ export default function OrderOnSellPage() {
       }));
       const apiUrl = `/api/admin/orders/${itemType.toLowerCase()}/orderCancel`;
       const res = await postPaymentDataToApiServer(apiUrl, body); // 네이버페이 검수 대상 (결제취소: timeout 60초)
-      console.log('onOrderCancel: \n', 'apiUrl:', apiUrl, '\nbody:', body);
-      console.log('response: admin > sell > search > index.jsx\n', res);
+      // console.log('onOrderCancel: \n', 'apiUrl:', apiUrl, '\nbody:', body);
+      // console.log('response: admin > sell > search > index.jsx\n', res);
       if (res.isDone) {
         alert(
           itemType === productType.GENERAL
@@ -457,7 +457,7 @@ export default function OrderOnSellPage() {
         alert(`판매자 주문취소 처리 중 오류가 발생했습니다.\n${res.error}`);
       }
     } catch (err) {
-      console.log('API통신 오류 : ', err);
+      // console.log('API통신 오류 : ', err);
     }
     setIsLoading((prevState) => ({
       ...prevState,

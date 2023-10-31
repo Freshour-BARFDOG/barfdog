@@ -7,7 +7,7 @@ const { validateHeaderName } = require('http');
 
 const GoodsFlowPrint = async (req, res,) => {
   
-  console.log(req.body);
+  // console.log(req.body);
   try {
     const options = {
       headers: {
@@ -32,7 +32,7 @@ const GoodsFlowPrint = async (req, res,) => {
         options
       )
       .then((res) => {
-        console.log(
+         console.log(
           '---------------------------- AXIOS > RESPONSE ----------------------------',
           res,
         );
@@ -43,7 +43,7 @@ const GoodsFlowPrint = async (req, res,) => {
 
         return err.response;
       });
-    console.log('---------- AXIOS > RESPONSE: ', DATA);
+    // console.log('---------- AXIOS > RESPONSE: ', DATA);
   
     res.end(JSON.stringify(DATA)); // res body > JS obj를 JSON문자열로 전달해야함. (JSON.stringify())
 

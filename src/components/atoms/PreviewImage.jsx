@@ -37,8 +37,8 @@ function PreviewImage({ file, className, thumbLink, ratio, style, backgroundColo
   const [SRC, setSRC] = useState(null);
 
   useEffect(() => {
-    // console.log(file);
-    // console.log(thumbLink);
+    // // console.log(file);
+    // // console.log(thumbLink);
     if (file) {
       (async (blob) => {
         if (!blob) {
@@ -48,7 +48,7 @@ function PreviewImage({ file, className, thumbLink, ratio, style, backgroundColo
         setSRC(url);
       })(file);
     } else if (thumbLink) {
-      // console.log(SRC);
+      // // console.log(SRC);
       setSRC(thumbLink);
     } else {
       setSRC(''); // preview 이미지 초기화

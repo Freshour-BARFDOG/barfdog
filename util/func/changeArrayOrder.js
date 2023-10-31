@@ -11,13 +11,13 @@ const changeArrayOrder = function (arr, targetIdx, moveValue) {
   // 임의의 변수를 하나 만들고 배열 값 저장
   let tempArr = JSON.parse(JSON.stringify(arr));
 
-  // console.log('tempArr: ', tempArr)
+  // // console.log('tempArr: ', tempArr)
   // 옮길 대상을 기존 배열에서 분리 && 변수 target에 저장
   let target = tempArr.splice(targetIdx, 1)[0]; // splice (n번 째배열, n개 삭제
 
   // 새로운 위치에 옮길 대상을 추가하기
   tempArr.splice(newPos, 0, target);
-  // console.log('변경 후 배열: ',tempArr)
+  // // console.log('변경 후 배열: ',tempArr)
   return tempArr;
 };
 

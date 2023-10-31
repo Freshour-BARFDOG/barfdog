@@ -98,7 +98,7 @@ export default function UpdatePromotionPage({DATA}) {
       quantity: form.quantity,
       status: form.status,
     }
-    console.log("body: ",body);
+    // console.log("body: ",body);
 
     const errObj = validate(body, "update", originData);
     setFormErrors(errObj);
@@ -114,7 +114,7 @@ export default function UpdatePromotionPage({DATA}) {
       }));
       const apiURL = `/api/admin/promotions/${DATA.promotionId}/update`;
       const res = await putObjData(apiURL, body);
-      console.log(res);
+      // console.log(res);
       if (res.isDone) {
         mct.alertShow('프로모션이 수정되었습니다.', onSuccessCallback);
       } else {
@@ -347,7 +347,7 @@ export async function getServerSideProps({req, query}) {
 
   const apiUrl = `/api/admin/promotions/${id}`;
   const res = await getDataSSR(req, apiUrl); // PROD
-  console.log(res.data);
+  // console.log(res.data);
   if (res && res.status === 200 && res.data) {
     const data = res.data;
     DATA = {

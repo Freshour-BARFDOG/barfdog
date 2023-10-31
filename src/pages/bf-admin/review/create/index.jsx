@@ -73,11 +73,11 @@ export default function CreateRewardPage({itemId}) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   
   
-  // console.log(formValues);
-  // console.log(formErrors)
+  // // console.log(formValues);
+  // // console.log(formErrors)
   //
   
-  // console.log(itemOptionList)
+  // // console.log(itemOptionList)
   
   
 
@@ -105,11 +105,11 @@ export default function CreateRewardPage({itemId}) {
           ...prevState,
           fetching: true,
         }));
-        // console.log(apiUrl);
+        // // console.log(apiUrl);
         const res = await getData(apiUrl);
-        console.log(res);
+        // console.log(res);
         let newItemOptionList = []
-        // console.log(res.data);
+        // // console.log(res.data);
         if(res.data._embedded){
           const dataList = res.data._embedded[dataQuery];
           newItemOptionList = dataList.map((data) => ({
@@ -117,7 +117,7 @@ export default function CreateRewardPage({itemId}) {
             value: data.id,
           })) ;
         }
-        // console.log(newItemOptionList)
+        // // console.log(newItemOptionList)
         setItemOptionList(defaultItemOptionList.concat(newItemOptionList));
       } catch (err) {
         console.error('Data Fetching Error: ',err);
@@ -154,8 +154,8 @@ export default function CreateRewardPage({itemId}) {
     };
   
   
-    console.log(formValues);
-    console.log(convertedFormValues);
+    // console.log(formValues);
+    // console.log(convertedFormValues);
     const errObj = validate(convertedFormValues, { contents: maxContentsLength });
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
@@ -167,7 +167,7 @@ export default function CreateRewardPage({itemId}) {
         submit: true,
       }));
       const res = await postObjData(postFormValuesApiUrl, convertedFormValues);
-      console.log(res);
+      // console.log(res);
       if (res.isDone) {
         onShowModalHandler('리뷰가 성공적으로 생성되었습니다.');
         setIsSubmitted(true);

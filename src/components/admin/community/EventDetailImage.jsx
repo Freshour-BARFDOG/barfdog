@@ -24,8 +24,8 @@ export default function EventDetailImage({
   const [fileList, setFileList] = useState([]); // for Preview;
   const [fullImageIdList, setFullImageIdList] = useState([]); // for Post update summit event;
 
-  // console.log(fullImageIdList);
-  // console.log(fileList);
+  // // console.log(fullImageIdList);
+  // // console.log(fileList);
 
   useEffect(() => {
     // init values
@@ -53,7 +53,7 @@ export default function EventDetailImage({
           currentImageIdList,
           originImageIdList,
         );
-        console.log(resultImageIdList);
+        // console.log(resultImageIdList);
         const newImageValues = resultImageIdList?.cur.map((imageId, index)=>({
           id: imageId,
           leakOrder: (index+1) // order는 1부터 시작함.
@@ -126,7 +126,7 @@ export default function EventDetailImage({
             apiUrl,
             leakOrder,
           );
-          // console.log(response);
+          // // console.log(response);
           newFileList.push({
             file: file,
             filename: file.name,
@@ -139,7 +139,7 @@ export default function EventDetailImage({
         setFullImageIdList((prevState) => prevState.concat(newfileIdList));
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       alert('Error 발생: ', err);
     }
     setIsLoading(false);
@@ -148,7 +148,7 @@ export default function EventDetailImage({
   const onDeleteThumbHandler = (e) => {
     const thumb = e.currentTarget;
     const tobeDeletedButtonId = Number(thumb.dataset.id);
-    // console.log('삭제될 이미지 ID:', tobeDeletedButtonId);
+    // // console.log('삭제될 이미지 ID:', tobeDeletedButtonId);
     const newFileList = fileList.filter((list) => list.id !== tobeDeletedButtonId);
     setFileList(newFileList);
   };

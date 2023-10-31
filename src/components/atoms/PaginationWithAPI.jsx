@@ -3,7 +3,7 @@ import DoubleArrow from '/public/img/icon/pagination-double-arrow.svg';
 import {useEffect, useState} from 'react';
 import s from './pagination.module.scss';
 import {useRouter} from 'next/router';
-import {getData, getDataWithCookies, postObjData} from '/src/pages/api/reqData';
+import {getData, postObjData} from '/src/pages/api/reqData';
 import {searchQueryType} from '/store/TYPE/searchQueryType';
 import {convertSearchQueryStrings} from "/util/func/convertSearchQueryStrings";
 
@@ -24,105 +24,90 @@ const Pagination = ({
   option = { apiMethod: 'GET', body: null, initialize: false },
 }) => {
   const router = useRouter();
-  const query = router.query;
-  const pageFromQuery = Number(query?.page) || 1;
+  const pageFromQuery = Number(router.query.page) || 1;
   const ButtonCounts = 5; // UI상으로 노출시킬 연속된 페이지네이션 수;
   const [pageInfo, setPageInfo] = useState({});
-  const [curPage, setCurPage] = useState(pageFromQuery);
+  const [curPage, setCurPage] = useState(option.initialize === true ? 1 : pageFromQuery);
+
   
-  
-  useEffect( () => {
-    if(option.initialize === true){
-      const initialPage = 1;
-      setCurPage(initialPage);
+  useEffect(() => {
+    if (option.initialize === true) {
+      setCurPage(1);
     }
-  }, [option.initialize] );
+  }, [option.initialize]);
   //
 
-  useEffect(() => {
-    (async () => {
-      try {
-        if (setIsLoading && typeof setIsLoading === 'function') {
-          setIsLoading((prevState) => ({
-            ...prevState,
-            fetching: true,
-          }));
-        }
-        const calcedPageIndex = (curPage - 1).toString();
-        const defQuery = `?${searchQueryType.PAGE}=${calcedPageIndex}&${searchQueryType.SIZE}=${size}`;
-        let urlQueries = urlQuery ? `${defQuery}&${urlQuery}` : defQuery;
-
-        let res;
-        if (option.apiMethod === 'GET') {
-          res = await getData(`${apiURL}${urlQueries}`);
-
-          //res = await getDataWithCookies(`${apiURL}${urlQueries}`, document.cookie);
-          
-        } else if (option.apiMethod === 'POST' && option.body) {
-          // URL Query의 복잡성으로인해, url query를 body로 받음
-          const body = option.body;
-          res = await postObjData(`${apiURL}${defQuery}`, body);
-          const result = getUrlQueryFromBody(body);
-          // console.log(body, res)
-          urlQueries = `${urlQueries}&${result}`;
-          res = res.data; // postObjData에서 data query하기 위함
-        }
-
-        //console.log(res);
-
-
-        const pageData = res?.data?.page;
-        const hasItems = pageData?.totalElements !== 0;
-        // console.log('API URL: ', apiURL, '\nSerach Query: ', urlQueries, '\nPagination res: ', res);
-        const hasInterceptor = pageInterceptor && typeof pageInterceptor === 'function';
-        if (hasInterceptor || (pageData && hasItems)) {
-          const newPageInfoFromInterCeptor = hasInterceptor && await pageInterceptor(res); // SERVER API 쿼리가 변경되는 것에, 대응하기 위해 추가함
-          
-          const newPageInfo = newPageInfoFromInterCeptor || {
-            totalPages: pageData.totalPages,
-            size: pageData.size,
-            totalItems: pageData.totalElements,
-            currentPageIndex: pageData.number,
-            newPageNumber: pageData.number + 1,
-            newItemList: res.data._embedded[queryItemList] || [],
-          };
-
-          setPageInfo(newPageInfo); // ! 페이지네이션 버튼 나타나게 함
-          setItemList(newPageInfo.newItemList);
-          if (setPageData && typeof setPageData === 'function') {
-            setPageData(newPageInfo);
-          }
-          
-          // UPDATE browser URL Query
-          if (routerDisabled === false) {
-            const convertedSearchQueryStrings = convertSearchQueryStrings(urlQueries);
-            // console.log(urlQueries)
-            // console.log(convertedSearchQueryStrings)
   
-            // # window scroll Y position 유지를 위해서는 window .history 사용해야힘)
-            window.history.replaceState(
-              window.history.state,
-              '',
-              `${window.location.pathname}${convertedSearchQueryStrings}`,
-            );
-          }
-        } else {
-          setItemList([]); // ! TEST 끝난 뒤, 주석 해제
-        }
-      } catch (err) {
-        console.error(err);
-      } finally {
+const fetchData = async (url, method, query) => {
+  try {
+    if (setIsLoading && typeof setIsLoading === 'function') {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        fetching: true,
+      }));
+    }
+    const calcedPageIndex = (curPage - 1).toString();
+    const defQuery = `?${searchQueryType.PAGE}=${calcedPageIndex}&${searchQueryType.SIZE}=${size}`;
+    let urlQueries = urlQuery ? `${defQuery}&${urlQuery}` : defQuery;
 
-        if (setIsLoading && typeof setIsLoading === 'function') {
-          setIsLoading((prevState) => ({
-            ...prevState,
-            fetching: false,
-          }));
-        }
+    let res;
+    if (method === 'GET') {
+      res = await getData(`${url}${urlQueries}`);
+    } else if (method === 'POST' && option.body) {
+      const body = option.body;
+      res = await postObjData(`${url}${defQuery}`, body);
+      const result = getUrlQueryFromBody(body);
+      urlQueries = `${urlQueries}&${result}`;
+      res = res.data;
+    }
+
+    const pageData = res?.data?.page;
+    const hasItems = pageData?.totalElements !== 0;
+    const hasInterceptor = pageInterceptor && typeof pageInterceptor === 'function';
+    if (hasInterceptor || (pageData && hasItems)) {
+      const newPageInfoFromInterceptor = hasInterceptor && (await pageInterceptor(res));
+      const newPageInfo = newPageInfoFromInterceptor || {
+        totalPages: pageData.totalPages,
+        size: pageData.size,
+        totalItems: pageData.totalElements,
+        currentPageIndex: pageData.number,
+        newPageNumber: pageData.number + 1,
+        newItemList: res.data._embedded[queryItemList] || [],
+      };
+
+      setPageInfo(newPageInfo);
+      setItemList(newPageInfo.newItemList);
+      if (setPageData && typeof setPageData === 'function') {
+        setPageData(newPageInfo);
       }
 
-    })();
-  }, [curPage, urlQuery, apiURL, option.body]);
+      if (routerDisabled === false) {
+        const convertedSearchQueryStrings = convertSearchQueryStrings(urlQueries);
+        window.history.replaceState(
+          window.history.state,
+          '',
+          `${window.location.pathname}${convertedSearchQueryStrings}`,
+        );
+      }
+    } else {
+      setItemList([]);
+    }
+  } catch (err) {
+    console.error(err);
+  } finally {
+    if (setIsLoading && typeof setIsLoading === 'function') {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        fetching: false,
+      }));
+    }
+  }
+};
+
+  useEffect(() => {
+    fetchData(apiURL, option.apiMethod, option.body);
+  }, [curPage, urlQuery, apiURL, option.apiMethod, option.body]);
+
 
   const Num = ({ pagenum }) => {
     const calcedPageNum = pagenum + 1;

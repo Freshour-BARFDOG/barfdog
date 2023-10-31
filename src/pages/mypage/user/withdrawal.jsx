@@ -52,7 +52,7 @@ export default function WithDrawalPage() {
       const res = await deleteObjData(url, {
         data: { password: pw },
       });
-      console.log(res);
+      // console.log(res);
       let message;
       if (res.isDone) {
         setIsSubmitted(true);

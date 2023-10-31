@@ -69,7 +69,7 @@ function ReleaseCouponPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [couponOptions, setCouponOptions] = useState([]);
 
-  // console.log(formValues)
+  // // console.log(formValues)
   useEffect(() => {
     const selectedFormValues = initialFormValues[target];
     setFormValues(selectedFormValues);
@@ -145,7 +145,7 @@ function ReleaseCouponPage() {
   const onSubmit = async (e) => {
     if (isSubmitted) return console.error('이미 제출된 양식입니다.');
 
-    console.log("formValues : ",formValues);
+    // console.log("formValues : ",formValues);
 
     let body;
     let postFormValuesApiUrl;
@@ -182,7 +182,7 @@ function ReleaseCouponPage() {
       }
     }
 
-    console.log(body);
+    // console.log(body);
 
     const errObj = validate(body);
     setFormErrors(errObj);
@@ -204,7 +204,7 @@ function ReleaseCouponPage() {
 
 
       const res = await postObjData(postFormValuesApiUrl, body);
-      console.log(res);
+      // console.log(res);
       if (res.isDone) {
         mct.alertShow('쿠폰이 성공적으로 발행되었습니다.', onSucessCallback);
         setIsSubmitted(true);

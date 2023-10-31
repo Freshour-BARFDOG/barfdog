@@ -85,8 +85,8 @@ export function Payment({
       agreePrivacy: form.agreePrivacy,
       paymentPrice: calcOrdersheetPrices(form, orderType, {deliveryFreeConditionPrice: info.freeCondition}).paymentPrice,
     };
-    // console.log(valid_target)
-    // console.log(info)
+    // // console.log(valid_target)
+    // // console.log(info)
     // ! bundle일 경우, validation항목 다르게 변경해주기.
     let errObj;
     if (form.bundle) {
@@ -193,7 +193,7 @@ export function Payment({
 
     };
 
-    console.log('----- request body:\n', body);
+    // console.log('----- request body:\n', body);
 
     try {
       setIsLoading((prevState) => ({
@@ -206,7 +206,7 @@ export function Payment({
       const apiUrl = orderType === 'general' ? `/api/orders/general` : `/api/orders/subscribe/${subscribeId}`;
       const res = await postObjData(apiUrl, body);
       
-      console.log(res);
+      // console.log(res);
 
 
       if (res.isDone) {
@@ -285,7 +285,7 @@ export function Payment({
       Object.assign(data, getNaverpayGeneralPaymentParam({items: itemList, isMobile: isMobile})); // 네이버페이 데이터 합침
     }
 
-    console.log(" - IMP.request_pay(data)\n", data);
+    // console.log(" - IMP.request_pay(data)\n", data);
 
     // 결제 이슈를 보완하기 인하여 Api Request Data 추가를 위해 사용
     const callbackData = {
@@ -298,7 +298,7 @@ export function Payment({
     async function callback(callbackData, response) {
 
 
-      console.log(response); // callback response => error_code 미포함.
+      // console.log(response); // callback response => error_code 미포함.
       const {success, imp_uid, merchant_uid, error_msg} = response;
 
       /* 3. 콜백 함수 정의하기 */
@@ -311,7 +311,7 @@ export function Payment({
           merchantUid: merchant_uid,
           discountReward: callbackData.discountReward, // 결제 이슈를 보완하기 인하여 Api Request Data 추가를 위해 사용
         });
-        console.log(r);
+        // console.log(r);
         if (r.isDone) {
           alert('결제 성공');
           window.location.href = `/order/orderCompleted/${id}`;
@@ -374,7 +374,7 @@ export function Payment({
       Object.assign(data, getNaverpaySubscribePaymentParam({subscribeId, isMobile: isMobile})); // 네이버페이 데이터 합침
     }
 
-    console.log(" - IMP.request_pay(data)\n", data);
+    // console.log(" - IMP.request_pay(data)\n", data);
 
 
     // 결제 이슈를 보완하기 인하여 Api Request Data 추가를 위해 사용
@@ -395,7 +395,7 @@ export function Payment({
 
     async function callback(callbackData, paymentRegistrationResponse) {
 
-      console.log(paymentRegistrationResponse);
+      // console.log(paymentRegistrationResponse);
 
       const {success, customer_uid, error_code, error_msg} = paymentRegistrationResponse; // [정기구독 등록] API Response
       // paymentRegistrationResponse > customer_uid: 결제 성공, 실패 시 나타남 (cf. 네이버페이: 정기결제 등록됨 / billingKey 삭제 시, 정기결제 등록해제 됨)
@@ -441,7 +441,7 @@ export function Payment({
           .then(res => res)
           .catch(err => err.response);
 
-        console.log(paymentResponse.data);
+        // console.log(paymentResponse.data);
 
 
         /* 5. 결제결과 처리하기 */

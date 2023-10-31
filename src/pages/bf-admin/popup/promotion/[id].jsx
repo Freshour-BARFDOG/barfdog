@@ -34,11 +34,11 @@ export default function Popup_PromotionDetailPage({id, DATA}) {
   const [searchQuery, setSearchQuery] = useState('');
   const [memberList, setMemberList] = useState([]);
 
-console.log(searchQuery);
+// console.log(searchQuery);
 
   const pageInterceptor = useCallback((res, option = {itemQuery: null}) => {
     // res = DUMMY_MEMBER_RES; // ! TEST
-    console.log(res);
+    // console.log(res);
     return getDefaultPagenationInfo(res?.data, 'queryAdminPromotionMembersDtoList', {pageSize: searchPageSize});
   }, []);
 
@@ -283,7 +283,7 @@ export async function getServerSideProps({req, query}) {
 
   const apiUrl = `/api/admin/promotions/${id}`;
   const res = await getDataSSR(req, apiUrl); // PROD
-  console.log(res.data);
+  // console.log(res.data);
   if (res && res.status === 200 && res.data) {
     const data = res.data;
     DATA = {

@@ -54,7 +54,7 @@ export default function InquiryPage() {
  
   
   const pageInterCeptor = useCallback(async (res) => {
-    // console.log(res);
+    // // console.log(res);
     // res = DUMMY_RESPONSE; // ! TEST
     let newPageInfo = {
       totalPages: 0,

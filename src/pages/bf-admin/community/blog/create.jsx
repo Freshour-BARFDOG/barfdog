@@ -44,7 +44,7 @@ const CreateBlogPage = () => {
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   
-  // console.log(formValues)
+  // // console.log(formValues)
   
   
   
@@ -53,7 +53,7 @@ const CreateBlogPage = () => {
     if (document) {
       const QuillEditor = dynamic(() => import('/src/components/admin/form/QuillEditor'));
       setQuillEditor(QuillEditor);
-      console.log('Editor init is complete.');
+      // console.log('Editor init is complete.');
     }
   }, []);
 
@@ -156,7 +156,7 @@ const CreateBlogPage = () => {
         }
       }
     } catch (err) {
-      console.log('API통신 오류 : ', err);
+      // console.log('API통신 오류 : ', err);
     }
     setIsLoading((prevState) => ({
       ...prevState,

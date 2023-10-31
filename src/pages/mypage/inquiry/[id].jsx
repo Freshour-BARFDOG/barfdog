@@ -16,7 +16,7 @@ import Image from 'next/image';
 import ModalImage from "react-modal-image";
 
 export default function InquiryArticlePage({ data }) {
-  // console.log(data);
+  // // console.log(data);
   
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
@@ -244,7 +244,7 @@ export async function getServerSideProps({ req, query }) {
   const apiUrl = `/api/questions/${id}`;
   const res = await getDataSSR(req, apiUrl); // ! PROD
   // const res = DUMMY_RESPONSE; // ! TEST
-  console.log(res.data);
+  // console.log(res.data);
 
   if (res.data && res.status === 200) {
     const data = res.data;

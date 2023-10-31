@@ -42,7 +42,7 @@ import { getData, postData, postObjData, putObjData } from './api/reqData';
 import {deleteCookie, getCookie, setCookie} from "@util/func/cookie";
 
 export default function MainPage({ data }) {
-  // console.log(data)
+  // // console.log(data)
   const router = useRouter();
   const isMobile = useDeviceState().isMobile;
   const [activeTempPasswordModal, setActiveTempPasswordModal] = useState(false);
@@ -99,9 +99,9 @@ export default function MainPage({ data }) {
       //     const url = '/api/alliance?alliance=cb';
       //     const res = await getData(url);
   
-      //     console.log(res)
+      //     // console.log(res)
   
-      //     console.log(document.cookie);
+      //     // console.log(document.cookie);
   
       //     if (res?.status === 200) {
       //       const dataToAssign = res.data ?? {};
@@ -237,7 +237,7 @@ export default function MainPage({ data }) {
                             layout="fill"
 
                             alt="카드 이미지"
-                            priority
+                            priority={true}
                           ></Image>
                         </div>
                         <ul>
@@ -650,11 +650,11 @@ export async function getServerSideProps({req}) {
         },
       })
       .then((res) => {
-        // console.log(res);
+        // // console.log(res);
         return res;
       })
       .catch ((err) => {
-        // console.log(err.response)
+        // // console.log(err.response)
         return err.response;
       });
 
@@ -711,7 +711,7 @@ export async function getServerSideProps({req}) {
     console.error(err);
     return err.response;
   }
-  // console.log('MAIN DATA :', DATA);
+  // // console.log('MAIN DATA :', DATA);
   return { props: { data: DATA } };
 }
 

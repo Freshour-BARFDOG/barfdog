@@ -31,7 +31,7 @@ import {CancelReasonName} from "../../../../../store/TYPE/order/CancelReasonName
 
 
 export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
-  // console.log(data);
+  // // console.log(data);
   
   
   // data.orderDto.deliveryStatus = orderStatus.PAYMENT_DONE; // ! TEST CODE TEST CODE TEST CODE TEST CODE
@@ -69,10 +69,10 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
       reason: CancelReasonName.cancelNowOfSubscribeOrderByBuyer,
       detailReason: CancelReasonName.cancelNowOfSubscribeOrderByBuyerAsDetailReason,
     };
-    console.log(data);
+    // console.log(data);
     try {
       const r = await postPaymentDataToApiServer(`/api/orders/${orderIdx}/subscribe/cancelRequest`, data);
-      console.log(r);
+      // console.log(r);
       if (r.isDone) {
         alert(CancelReasonName.cancelNowOfSubscribeOrderByBuyer,);
         window.location.reload();
@@ -382,9 +382,9 @@ export async function getServerSideProps(ctx) {
   const getApiUrl = `/api/orders/${orderIdx}/subscribe`;
 
   const res = await getDataSSR(req, getApiUrl);
-  // console.log('SERVER REPONSE: ', res);
+  // // console.log('SERVER REPONSE: ', res);
   const data = res?.data;
-  console.log('REPONSE DATA:',data);
+  // console.log('REPONSE DATA:',data);
   if(!data || data.status === 500){
     return redirectBySSR('/mypage/orderHistory');
   } else if (data) {
@@ -436,7 +436,7 @@ export async function getServerSideProps(ctx) {
       },
       // savedRewardTotal:data.savedRewardTotal
     };
-    // console.log(DATA);
+    // // console.log(DATA);
   }
   return { props: { orderIdx, data: DATA } };
 }

@@ -15,11 +15,11 @@ const dateRangeOptions = [
 
 
 const onChange = (value, dateString) => {
-  console.log('Selected Time: ', value);
-  console.log('Formatted Selected Time: ', dateString);
+  // console.log('Selected Time: ', value);
+  // console.log('Formatted Selected Time: ', dateString);
 };
 const DateRangeField = (props) => {
-    //console.log(props)
+    //// console.log(props)
   //const [dateStart, setDateStart] = useState(dayjs().subtract(1, "year"));
   const [dateStart, setDateStart] = useState(dayjs());
   const [dateEnd, setDateEnd] = useState(dayjs());
@@ -66,15 +66,15 @@ const DateRangeField = (props) => {
 
   
   //const onOk = (value) => {
-    //console.log('onOk: ', value);
+    //// console.log('onOk: ', value);
   //};
   
   const onChange = (value, dateString) => {
     setDateStart(value[0]);
     setDateEnd(value[1]);
     props.onChange([value[0], value[1]])
-    //console.log('Selected Time: ', value);
-    //console.log('Formatted Selected Time: ', dateString);
+    //// console.log('Selected Time: ', value);
+    //// console.log('Formatted Selected Time: ', dateString);
   };
 
   return (

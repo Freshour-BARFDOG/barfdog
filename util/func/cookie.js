@@ -24,7 +24,7 @@ export const setCookie = function (
   document.cookie = `${name}=${value};expires=${today.toUTCString()};path=${
     option.path
   }`;
-  // console.log('쿠키 만료예정\n','CookieName:',name, '\nCookieDate: ',today, expNumber, dateUnit)
+  // // console.log('쿠키 만료예정\n','CookieName:',name, '\nCookieDate: ',today, expNumber, dateUnit)
 };
 
 export const getCookie = function (name) {

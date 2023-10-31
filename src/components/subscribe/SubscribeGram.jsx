@@ -55,7 +55,7 @@ export const SubscribeGram = ({ subscribeInfo }) => {
       pricePerGrams: recipePricePerGrams
     });
 
-      // console.log(perPack, salePrice);
+      // // console.log(perPack, salePrice);
       setForm((prevState) => ({
         ...prevState,
         nextAmount,
@@ -94,7 +94,7 @@ export const SubscribeGram = ({ subscribeInfo }) => {
       setSubmitted(true);
       const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/gram`;
       const res = await postObjData(url, body);
-      console.log(res);
+      // console.log(res);
       if (res.isDone) {
         mct.alertShow('무게 변경 변경이 완료되었습니다.', onSuccessChangeSubscribeOrder);
       } else {
