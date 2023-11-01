@@ -78,7 +78,7 @@ const DetailsPage = () => {
   const [confirmModalVisible, setConfirmModalVisible] = useState(false);
 
   const [dataBase, setDataBase] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleInputChange = (event, name) => {
     const { value } = event.target;
@@ -97,79 +97,124 @@ const DetailsPage = () => {
 
 
   useEffect(() => {
-    setIsLoading(true);
+    if (id) {
+      // ID가 존재하는 경우에만 데이터를 로딩합니다.
+      (async () => {
+        try {
+          const url = `api/admin/new/orders/dogGet/${id}`;
+          const res = await getData(url);
 
-    // let link = `http://localhost:8080/api/admin/new/orders/dogGet/${id}`;
-    // axios
-    // .get(link)
-    // .then(response => {
-    //   console.log(response.data);
-    //   setDataBase(response.data);
-    // })
-    // .catch(error => {
-    //   console.error(error);
-    // })
-    // .finally(() => {
-    //   setIsLoading(false);
-    // });
+          if (res?.status === 200) {
+            const dataToAssign = res.data ?? {};
+            setDataBase(dataToAssign);
+          }
+        } catch (err) {
+          console.error(err);
+        } finally {
+          setIsLoading(false); // 데이터 로딩이 완료되면 로딩 상태를 false로 설정합니다.
+        }
+      })();
+    }
+  }, [id]);
 
-    
-          
+
+  
+  const confirm = () => {
+    let data = dataBase;
+
     try {
       (async () => {
-        const url = `api/admin/new/orders/dogGet/${id}`;
-        const res = await getData(url);
+        const url = `api/admin/new/orders/dogPost/${id}`;
+        const res = await postData(url, data);
 
-        if(res?.status === 200){
-          const dataToAssign = res.data ?? []; // 주어진 데이터
-          setDataBase(dataToAssign); // 데이터베이스에 할당
-          setIsLoading(false);
+        if (res?.request.status === 200) {
+          message.success('수정되었습니다.');
+        } else {
+          message.error('수정에 실패하였습니다. 1');
         }
       })();
     } catch (err) {
       console.error(err);
+      message.error('수정에 실패하였습니다. 2');
     }
-    
-
-  }, [id]);
-
-  
-  const confirm = () => {
-
-    //console.log(dataBase)
-    
-    let data = dataBase;
-
-    // let link = `http://localhost:8080/api/admin/new/orders/dogPost/${id}`;
-
-
-    // axios.post(link, data)
-    //   .then(response => {
-    //     message.success('수정되었습니다.');
-    //   })
-    //   .catch(error => {
-    //     console.error(error);
-    //     message.error('수정에 실패하였습니다.');
-    //   });
-
-      try {
-        (async () => {
-          const url = `api/admin/new/orders/dogPost/${id}`;
-          const res = await postData(url, data);
-  
-          if(res?.request.status === 200){
-            message.success('수정되었습니다.');
-          } else {
-            message.error('수정에 실패하였습니다. 1');
-          }
-        })();
-      } catch (err) {
-        console.error(err);
-        message.error('수정에 실패하였습니다. 2');
-      }
-
-
   };
+
+  // useEffect(() => {
+  //   setIsLoading(true);
+
+  //   // let link = `http://localhost:8080/api/admin/new/orders/dogGet/${id}`;
+  //   // axios
+  //   // .get(link)
+  //   // .then(response => {
+  //   //   console.log(response.data);
+  //   //   setDataBase(response.data);
+  //   // })
+  //   // .catch(error => {
+  //   //   console.error(error);
+  //   // })
+  //   // .finally(() => {
+  //   //   setIsLoading(false);
+  //   // });
+
+    
+          
+  //   try {
+  //     (async () => {
+  //       const url = `api/admin/new/orders/dogGet/${id}`;
+  //       const res = await getData(url);
+
+  //       if(res?.status === 200){
+  //         const dataToAssign = res.data ?? []; // 주어진 데이터
+  //         setDataBase(dataToAssign); // 데이터베이스에 할당
+  //         setIsLoading(false);
+  //       }
+  //     })();
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+    
+
+  // }, [id]);
+
+
+
+  
+  // const confirm = () => {
+
+  //   //console.log(dataBase)
+    
+  //   let data = dataBase;
+
+  //   // let link = `http://localhost:8080/api/admin/new/orders/dogPost/${id}`;
+
+
+  //   // axios.post(link, data)
+  //   //   .then(response => {
+  //   //     message.success('수정되었습니다.');
+  //   //   })
+  //   //   .catch(error => {
+  //   //     console.error(error);
+  //   //     message.error('수정에 실패하였습니다.');
+  //   //   });
+
+  //     try {
+  //       (async () => {
+  //         const url = `api/admin/new/orders/dogPost/${id}`;
+  //         const res = await postData(url, data);
+  
+  //         if(res?.request.status === 200){
+  //           message.success('수정되었습니다.');
+  //         } else {
+  //           message.error('수정에 실패하였습니다. 1');
+  //         }
+  //       })();
+  //     } catch (err) {
+  //       console.error(err);
+  //       message.error('수정에 실패하였습니다. 2');
+  //     }
+
+
+  // };
 
   const cancel = () => {
     message.error('취소되었습니다.');
@@ -187,7 +232,8 @@ const DetailsPage = () => {
     )
   }
 
-  //console.log(dataBase["orderCancel"]);
+  console.log(dataBase["orderCancel"]);
+  console.log(dataBase);
 
 
 
@@ -207,6 +253,8 @@ const DetailsPage = () => {
       </div>
     )
   }
+
+
 
 
   return (
@@ -229,7 +277,9 @@ const DetailsPage = () => {
     <div>
       <h1>견(Dog) 상세 페이지</h1>
       <p>DB Dog ID: {id}</p>
-
+      
+      <p>DB Dog ID: DB Dog ID: DB Dog ID: {dataBase[0]}</p>
+      
       {inputNames.map((name, index) => (
         <Input
           key={index}

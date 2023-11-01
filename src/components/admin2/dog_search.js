@@ -79,7 +79,8 @@ export default function MemberSearch({ onSearch }) {
                         <Form.Item name="searchType" label="검색조건" initialValue="name" 
                             style={{width: 200,}}>
                             <Select dropdownMatchSelectWidth={false}>
-                                <Select.Option value="name">이름</Select.Option>
+                                <Select.Option value="memberName">주인이름</Select.Option>
+                                <Select.Option value="name">견이름</Select.Option>
                                 <Select.Option value="email">이메일</Select.Option>
                             </Select>
                         </Form.Item>

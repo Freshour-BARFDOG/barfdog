@@ -126,7 +126,7 @@ const DetailsPage = () => {
   const [confirmModalVisible, setConfirmModalVisible] = useState(false);
 
   const [dataBase, setDataBase] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleInputChange = (event, name) => {
     const { value } = event.target;
@@ -145,43 +145,67 @@ const DetailsPage = () => {
 
 
   useEffect(() => {
-    setIsLoading(true);
+    if (id) {
+      // ID가 존재하는 경우에만 데이터를 로딩합니다.
+      (async () => {
+        try {
+          const url = `api/admin/new/orders/memberGet/${id}`;
+          const res = await getData(url);
 
-    // let link = `http://localhost:8080/api/admin/new/orders/memberGet/${id}`;
-    // axios
-    // .get(link)
-    // .then(response => {
-    //   console.log(response.data);
-    //   setDataBase(response.data);
-    // })
-    // .catch(error => {
-    //   console.error(error);
-    // })
-    // .finally(() => {
-    //   setIsLoading(false);
-    // });
+          if (res?.status === 200) {
+            const dataToAssign = res.data ?? {};
+            setDataBase(dataToAssign);
+          }
+        } catch (err) {
+          console.error(err);
+        } finally {
+          setIsLoading(false); // 데이터 로딩이 완료되면 로딩 상태를 false로 설정합니다.
+        }
+      })();
+    }
+  }, [id]);
+
+
+
+
+  // useEffect(() => {
+  //   setIsLoading(true);
+
+  //   // let link = `http://localhost:8080/api/admin/new/orders/memberGet/${id}`;
+  //   // axios
+  //   // .get(link)
+  //   // .then(response => {
+  //   //   console.log(response.data);
+  //   //   setDataBase(response.data);
+  //   // })
+  //   // .catch(error => {
+  //   //   console.error(error);
+  //   // })
+  //   // .finally(() => {
+  //   //   setIsLoading(false);
+  //   // });
 
     
           
-    try {
-      (async () => {
-        const url = `api/admin/new/orders/memberGet/${id}`;
-        const res = await getData(url);
+  //   try {
+  //     (async () => {
+  //       const url = `api/admin/new/orders/memberGet/${id}`;
+  //       const res = await getData(url);
         
-        //console.log(res.request.status)
+  //       //console.log(res.request.status)
 
-        if(res.request.status === 200){
-          const dataToAssign = res.data ?? []; // 주어진 데이터
-          setDataBase(dataToAssign); // 데이터베이스에 할당
-          setIsLoading(false);
-        }
-      })();
-    } catch (err) {
-      console.error(err);
-    }
+  //       if(res.request.status === 200){
+  //         const dataToAssign = res.data ?? []; // 주어진 데이터
+  //         setDataBase(dataToAssign); // 데이터베이스에 할당
+  //         setIsLoading(false);
+  //       }
+  //     })();
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
     
 
-  }, [id]);
+  // }, [id]);
 
   
   const confirm = () => {

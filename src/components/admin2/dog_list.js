@@ -94,7 +94,8 @@ const columns = [
   },
   { title: "생성날짜", dataIndex: "createdDate", key: "createdDate", },
   { title: "수정날짜", dataIndex: "modifiedDate", key: "modifiedDate", },
-  { title: "이름", dataIndex: "name", key: "name", },
+  { title: "주인이름", dataIndex: "memberName", key: "memberName", },
+  { title: "견이름", dataIndex: "name", key: "name", },
   { title: "성별", dataIndex: "gender", key: "gender", },
   { title: "생일", dataIndex: "birth", key: "birth", },
   { title: "견종", dataIndex: "dogType", key: "dogType", },
@@ -206,6 +207,7 @@ export default function MemberList({ search }) {
       defaultData.push({
         key: i.toString(),
 
+        memberName: data_tmp.memberName,
         dogId: data_tmp.dogId,
         createdDate: data_tmp.createdDate,
         modifiedDate: data_tmp.modifiedDate,
@@ -273,6 +275,9 @@ export default function MemberList({ search }) {
 
       let search_result = false;
       if(search.searchText){
+        if (search.searchType.includes("memberName") && item.memberName) {
+          search_result = item.memberName.includes(search.searchText);
+        }
         if (search.searchType.includes("name") && item.name) {
           search_result = item.name.includes(search.searchText);
         }
@@ -313,7 +318,8 @@ export default function MemberList({ search }) {
               
         "생성날짜" : item.createdDate,
         "수정날짜" : item.modifiedDate,
-        "이름" : item.name,
+        "주인이름" : item.memberName,
+        "견이름" : item.name,
         "성별" : item.gender,
         "생일" : item.birth,
         "견종" : item.dogType,
