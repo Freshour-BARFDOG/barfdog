@@ -1,4 +1,5 @@
-import React , {useState} from 'react';
+import React , {useState, useEffect} from 'react';
+import { Form,  Checkbox as AntdCheckbox, } from "antd"
 import s from './checkbox.module.scss';
 
 export function Title (props) {
@@ -22,6 +23,41 @@ export function Btn (props) {
     </div>
   )
 }
+
+
+export function CustomCheck ({ value=[], options=[], onChange=()=>{} }) {
+    const { status, errors } = Form.Item.useStatus();
+    const [checkedList, setCheckedList] = useState(value);
+
+    useEffect(() => {
+        onChange(checkedList)
+    }, [checkedList]);
+
+    const checkAll = options.length === checkedList?.length;
+    const indeterminate = checkedList?.length > 0 && checkedList?.length < options.length;
+
+    const onChangeGroup = (list) => {
+        setCheckedList(list);
+        // onChange(list);
+    };
+
+    const onCheckAllChange = (e) => {
+        setCheckedList(e.target.checked ? 
+            (Array.isArray(options) && typeof options[0] === "object" ? 
+            options.map(e=>e.value) : options) 
+            : []);
+        // onChange(e.target.checked ? plainOptions : []);
+    };
+
+    return (
+        <>
+            <AntdCheckbox indeterminate={indeterminate} onChange={onCheckAllChange} checked={checkAll}>
+                Check all
+            </AntdCheckbox>
+            <AntdCheckbox.Group options={options} value={checkedList} onChange={onChangeGroup} />
+        </>
+    );
+  };
 
 
 

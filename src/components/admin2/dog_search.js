@@ -3,6 +3,8 @@ import { SearchOutlined } from '@ant-design/icons';
 import DateRangeField from "./date-range";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
+import { CustomCheck } from '/src/components/atoms/Checkbox';
+
 
 
 const gradeState = [
@@ -72,13 +74,13 @@ export default function MemberSearch({ onSearch }) {
                         name="deleteState" 
                         initialValue={subscribeState.map((e)=>(e.value))} 
                         label="삭제여부: ">
-                        <Checkbox.Group options={subscribeState} />
+                        <CustomCheck options={subscribeState} />
                         </Form.Item>
                     </Space>
                     <Space direction="horizontal">
                         <Form.Item name="searchType" label="검색조건" initialValue="name" 
                             style={{width: 200,}}>
-                            <Select dropdownMatchSelectWidth={false}>
+                            <Select popupMatchSelectWidth={false}>
                                 <Select.Option value="memberName">주인이름</Select.Option>
                                 <Select.Option value="name">견이름</Select.Option>
                                 <Select.Option value="email">이메일</Select.Option>

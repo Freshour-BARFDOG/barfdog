@@ -171,6 +171,41 @@ export default function OrderOnSellPage() {
 
 
 
+  const onStartManagerCompany = async () => {
+    try {
+      // goodsflow otp 발급(운송장 출력창 호출할때마다 발급 받아야함)
+      const otp = await getGoodsFlowOtp();
+
+      // 운송장 출력창 호출
+      const goodsflowPrintUrl = window.location.origin + '/api/goodsFlow/contractList';
+      const printRes = await postObjData(goodsflowPrintUrl, {
+        otp: otp,
+      });
+      console.log('=================');
+
+      if (printRes.isDone) {
+        console.log(printRes);
+        console.log(printRes.data.data);
+        // popupWindow(`/bf-admin/sell/delivery/print?data=${printRes.data.data}`);
+        const url = `https://ds.goodsflow.com/p1/printcc/contract/list.aspx`; // 예시 URL
+        // const url = `https://ds.goodsflow.com/p1/printcc/contract/detail.aspx`; // 예시 URL
+        const subWindow = window.open(url, '_blank', 'width=1000,height=1000');
+        if (subWindow) {
+          subWindow.focus();
+        } else {
+          alert('Subwindow blocked. Please allow pop-ups and try again.');
+        }
+      }
+    } catch (err) {
+      console.log('API통신 오류 : ', err);
+    } finally {
+      console.log('API통신 종료');
+    }
+
+  };
+
+
+
   const onStartRegisterDelivery = async () => {
     // - API CYCLE
     // - 1. FE => BE : 발송처리할 상품의 id List 전달 (주문 발송 api에 필요한 배송 정보 reponse 받음)
@@ -547,6 +582,9 @@ export default function OrderOnSellPage() {
                 </button> */}
                 <button className="admin_btn line basic_m" onClick={onValidOrderBeforeCancelOrderBySeller}>
                   {isLoading.orderCancel ? <Spinner /> : '판매취소'}
+                </button>
+                <button className="admin_btn line pl-3 pr-3 pt-1 pb-1" onClick={onStartManagerCompany}>
+                  굿스플로 택배사 관리
                 </button>
               </div>
             </div>

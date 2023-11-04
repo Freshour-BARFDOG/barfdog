@@ -242,9 +242,21 @@ const filterDataGeneral = (data, search) => {
 
       // 판매상태
       let orderState_result = false;
-      const orderState_array = ["CANCEL_PAYMENT", "CANCEL_DONE_BUYER","CANCEL_DONE_SELLER" ,
-      "DELIVERY_START" ,"DELIVERY_BEFORE_COLLECTION" ,"BEFORE_PAYMENT", "DELIVERY_DONE",
-      "CONFIRM","FAILED","DELIVERY_READY","PAYMENT_DONE"];
+      const orderState_array = [
+        "ALL",
+        "BEFORE_PAYMENT", "CANCEL_PAYMENT", // 결제전, 결제취소(카드정보 작성중 취소 누른경우)
+        "CANCEL_RESERVED_PAYMENT", // 예약된 주문 결제취소
+        "HOLD", "RESERVED_PAYMENT", // 보류, 예약결제(아임포트 스케쥴걸린상태)
+        "FAILED", "FAILED_RESERVED_PAYMENT", // 최초 결제 실패(카드결제 실패), 예약된 정기구독 결제 실패
+        "PAYMENT_DONE", // 결제완료
+        "DELIVERY_BEFORE_COLLECTION", "PRODUCING", "DELIVERY_READY", // 배송 확인, 생산중(구독주문), 배송준비(일반주문)
+        "DELIVERY_START", // 배송 출발
+        "DELIVERY_DONE", // 배송 도착 완료
+        "CANCEL_REQUEST", "CANCEL_DONE_SELLER", "CANCEL_DONE_BUYER", // 주문 취소 요청, 판매자귀책 취소완료, 구매자귀책 취소완료
+        "RETURN_REQUEST", "RETURN_DONE_SELLER", "RETURN_DONE_BUYER", // 주문 반품 요청, 판매자귀책 반품완료, 구매자귀책 반품완료
+        "EXCHANGE_REQUEST", "EXCHANGE_DONE_SELLER", "EXCHANGE_DONE_BUYER", // 주문 교환요청, 판매자귀책 교환완료, 구매자귀책 교환완료
+        "CONFIRM" // 구매확정
+      ];
       orderState_array.forEach((e) => {
         //if (search.orderState.includes(e) && !orderState_result) {
         if (search.orderState.indexOf(e) != -1 && !orderState_result) {
@@ -314,7 +326,6 @@ const filterDataSubscribe = (data, search) => {
 
     if(data_tmp.dtype == "subscribe"){
 
-
       let countPacks = 28;
       if(data_tmp.plan === "TOPPING"){
         countPacks = 20;
@@ -334,6 +345,8 @@ const filterDataSubscribe = (data, search) => {
       let totalGramRecipe4_tmp = 0.0;
   
       for(let j=0; j<data_tmp.recipeName.length; j++){
+
+
         const recipe_tmp = data_tmp.recipeName[j];
         const gramsRecipe = data_tmp.oneMealGramsPerRecipe[j];
         if(recipe_tmp === "STARTER PREMIUM"){
@@ -533,9 +546,21 @@ const filterDataSubscribe = (data, search) => {
 
       // 판매상태
       let orderState_result = false;
-      const orderState_array = ["RESERVED_PAYMENT", "BEFORE_PAYMENT","PRODUCING" ,
-      "CANCEL_DONE_BUYER" ,"CANCEL_RESERVED_PAYMENT" ,"FAILED", "PAYMENT_DONE",
-      "CANCEL_PAYMENT","CONFIRM","DELIVERY_DONE","DELIVERY_BEFORE_COLLECTION","DELIVERY_START"];
+      const orderState_array = [
+        "ALL",
+        "BEFORE_PAYMENT", "CANCEL_PAYMENT", // 결제전, 결제취소(카드정보 작성중 취소 누른경우)
+        "CANCEL_RESERVED_PAYMENT", // 예약된 주문 결제취소
+        "HOLD", "RESERVED_PAYMENT", // 보류, 예약결제(아임포트 스케쥴걸린상태)
+        "FAILED", "FAILED_RESERVED_PAYMENT", // 최초 결제 실패(카드결제 실패), 예약된 정기구독 결제 실패
+        "PAYMENT_DONE", // 결제완료
+        "DELIVERY_BEFORE_COLLECTION", "PRODUCING", "DELIVERY_READY", // 배송 확인, 생산중(구독주문), 배송준비(일반주문)
+        "DELIVERY_START", // 배송 출발
+        "DELIVERY_DONE", // 배송 도착 완료
+        "CANCEL_REQUEST", "CANCEL_DONE_SELLER", "CANCEL_DONE_BUYER", // 주문 취소 요청, 판매자귀책 취소완료, 구매자귀책 취소완료
+        "RETURN_REQUEST", "RETURN_DONE_SELLER", "RETURN_DONE_BUYER", // 주문 반품 요청, 판매자귀책 반품완료, 구매자귀책 반품완료
+        "EXCHANGE_REQUEST", "EXCHANGE_DONE_SELLER", "EXCHANGE_DONE_BUYER", // 주문 교환요청, 판매자귀책 교환완료, 구매자귀책 교환완료
+        "CONFIRM" // 구매확정
+      ];
       orderState_array.forEach((e) => {
         // if (search.orderState.includes(e) && !orderState_result) {
         //   orderState_result = item.state.includes(e);
@@ -550,7 +575,7 @@ const filterDataSubscribe = (data, search) => {
 
       // 구독상태
       let subscribe_result = false;
-      const subscribe_array = ["SUBSCRIBING", "BEFORE_PAYMENT"];
+      const subscribe_array = ["BEFORE_PAYMENT", "SUBSCRIBING", "SUBSCRIBE_PENDING", "ADMIN"];
       subscribe_array.forEach((e) => {
         if (search.subscribeState.includes(e) && !subscribe_result && item.subscription) {
           subscribe_result = item.subscription.includes(e);

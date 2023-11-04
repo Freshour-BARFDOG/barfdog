@@ -48,7 +48,7 @@ export default function ItemSearch({ onSearch }) {
                     <Space direction="horizontal">
                         <Form.Item name="searchType" label="검색조건" initialValue="orderMemberId" 
                             style={{width: 200,}}>
-                            <Select dropdownMatchSelectWidth={false}>
+                            <Select popupMatchSelectWidth={false}>
                                 <Select.Option value="orderMemberId">아이디</Select.Option>
                                 <Select.Option value="orderMemberName">이름</Select.Option>
                                 <Select.Option value="orderMemberEmail">이메일</Select.Option>

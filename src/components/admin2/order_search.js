@@ -4,32 +4,45 @@ import DateRangeField from "./date-range";
 import { useState } from 'react';
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
+import { CustomCheck } from '/src/components/atoms/Checkbox';
 
 const { RangePicker } = DatePicker;
 
 const statusOptions = [
-    { label: "결제대기중", value: "RESERVED_PAYMENT" },
-    { label: "결제 전", value: "BEFORE_PAYMENT" },
+    { label: "전체", value: "ALL" },
+    { label: "예약결제", value: "RESERVED_PAYMENT" },
+    { label: "결제전", value: "BEFORE_PAYMENT" },
     { label: "생산중", value: "PRODUCING" },
-    { label: "구매자 취소 완료", value: "CANCEL_DONE_BUYER" },
-    { label: "결제대기중 취소 완료", value: "CANCEL_RESERVED_PAYMENT" },
+    { label: "구매자귀책 취소완료", value: "CANCEL_DONE_BUYER" },
+    { label: "예약된 주문 결제취소", value: "CANCEL_RESERVED_PAYMENT" },
     { label: "결제실패", value: "FAILED" },
     { label: "결제완료", value: "PAYMENT_DONE" },
+    { label: "보류", value: "HOLD" },
+    { label: "주문 취소 요청", value: "CANCEL_REQUEST" },
+    { label: "주문 반품 요청", value: "RETURN_REQUEST" },
+    { label: "판매자귀책 반품완료", value: "RETURN_DONE_SELLER" },
+    { label: "구매자귀책 반품완료", value: "RETURN_DONE_BUYER" },
+    { label: "주문 교환요청", value: "EXCHANGE_REQUEST" },
+    { label: "판매자귀책 교환완료", value: "EXCHANGE_DONE_SELLER" },
+    { label: "구매자귀책 교환완료", value: "EXCHANGE_DONE_BUYER" },
     
     // 일반구매 관련
     { label: "결제취소", value: "CANCEL_PAYMENT" },
-    { label: "판매자 취소 완료", value: "CANCEL_DONE_SELLER" },
-    { label: "배송 시작", value: "DELIVERY_START" },
-    { label: "수거 전 배송", value: "DELIVERY_BEFORE_COLLECTION" },
+    { label: "판매자귀책 취소완료", value: "CANCEL_DONE_SELLER" },
+    { label: "배송출발", value: "DELIVERY_START" },
+    { label: "배송확인", value: "DELIVERY_BEFORE_COLLECTION" },
     { label: "구매확정", value: "CONFIRM" },
-    { label: "배달완료", value: "DELIVERY_DONE" },
-    { label: "배달준비", value: "DELIVERY_READY" },
-    { label: "예약결제 실패", value: "FAILED_RESERVED_PAYMENT" },
+    { label: "배송완료", value: "DELIVERY_DONE" },
+    { label: "배송준비", value: "DELIVERY_READY" },
+    { label: "최초결제실패", value: "FAILED_RESERVED_PAYMENT" },
 ];
+
 
 const statusSubscribe = [
     { label: "구독중", value: "SUBSCRIBING" },
     { label: "구독전(결제전)", value: "BEFORE_PAYMENT" },
+    { label: "구독보류", value: "SUBSCRIBE_PENDING" },
+    { label: "어드민", value: "ADMIN" },
 ];
 
 const statusGrade = [
@@ -40,6 +53,7 @@ const statusGrade = [
     { label: "다이아몬드", value: "다이아몬드" },
     { label: "더바프", value: "더바프" },
 ];
+
 
 
 export default function ProductSearch({ onSearch }) {
@@ -91,26 +105,26 @@ export default function ProductSearch({ onSearch }) {
                         <Form.Item name="orderState" 
                         initialValue={statusOptions.map((e)=>(e.value))}
                         label="판매상태: ">
-                        <Checkbox.Group options={statusOptions} />
+                        <CustomCheck options={statusOptions} />
                         </Form.Item>
                     </Space>
                     <Space direction="horizontal" >
                         <Form.Item name="subscribeState" 
                         initialValue={statusSubscribe.map((e)=>(e.value))} 
                         label="구독상태: ">
-                        <Checkbox.Group options={statusSubscribe} />
+                        <CustomCheck options={statusSubscribe} />
                         </Form.Item>
                         <Form.Item className="mx-5"
                         name="gradeState" 
                         initialValue={statusGrade.map((e)=>(e.value))} 
                         label="등급: ">
-                        <Checkbox.Group options={statusGrade} />
+                        <CustomCheck options={statusGrade} />
                         </Form.Item>
                     </Space>
                     <Space direction="horizontal">
                         <Form.Item name="searchType" label="검색조건" initialValue="orderMemberName" 
                             style={{width: 200,}}>
-                            <Select dropdownMatchSelectWidth={false}>
+                            <Select popupMatchSelectWidth={false}>
                                 <Select.Option value="orderMemberName">구매자</Select.Option>
                                 <Select.Option value="orderDeliveryName">수령자</Select.Option>
                                 <Select.Option value="orderDogName">견명</Select.Option>

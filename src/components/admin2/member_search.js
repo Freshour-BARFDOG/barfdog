@@ -1,8 +1,10 @@
-import { Space, Form, Input, Button, Checkbox, Select,  } from "antd"
+import { useState, useEffect } from "react";
+import { Space, Form, Input, Button, Checkbox, Select, Switch, } from "antd"
 import { SearchOutlined } from '@ant-design/icons';
 import DateRangeField from "./date-range";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
+import { CustomCheck } from '/src/components/atoms/Checkbox';
 
 
 const gradeState = [
@@ -24,7 +26,7 @@ const subscribeState = [
 export default function MemberSearch({ onSearch }) {
 
     const router = useRouter();
-
+  
     const onFinish = (values) => {
         router.push({
             pathname: router.pathname,
@@ -32,7 +34,9 @@ export default function MemberSearch({ onSearch }) {
         });
         onSearch(values);
     };
-
+    // const onFinish = (values) => {
+    //     console.log(values);
+    // };
 
     return(
         <Form onFinish={onFinish}>
@@ -56,21 +60,21 @@ export default function MemberSearch({ onSearch }) {
                         name="gradeState" 
                         initialValue={gradeState.map((e)=>(e.value))} 
                         label="등급: ">
-                        <Checkbox.Group options={gradeState} />
+                        <CustomCheck options={gradeState}/>
                         </Form.Item>
                     </Space>
                     <Space direction="horizontal" >
-                        <Form.Item className="mx-5"
+                        <Form.Item 
                         name="subscribeState" 
                         initialValue={subscribeState.map((e)=>(e.value))} 
                         label="구독유무: ">
-                        <Checkbox.Group options={subscribeState} />
+                        <CustomCheck options={subscribeState} />
                         </Form.Item>
                     </Space>
                     <Space direction="horizontal">
                         <Form.Item name="searchType" label="검색조건" initialValue="name" 
                             style={{width: 200,}}>
-                            <Select dropdownMatchSelectWidth={false}>
+                            <Select popupMatchSelectWidth={false}>
                                 <Select.Option value="name">이름</Select.Option>
                                 <Select.Option value="email">이메일</Select.Option>
                             </Select>
