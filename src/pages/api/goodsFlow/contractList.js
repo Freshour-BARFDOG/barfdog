@@ -22,8 +22,8 @@ const GoodsFlowContractList = async (req, res,) => {
     const DATA = await axios
       .post(
         // `${process.env.NEXT_PUBLIC_GOODSFLOW_PRINT_URL}contract/list.aspx`,
-        // `https://ds.goodsflow.com/print/contract/list.aspx`,
-        `https://ds.goodsflow.com/p1/printcc/contract/list.aspx`,
+        `https://ds.goodsflow.com/print/contract/List.aspx`,
+        // `https://ds.goodsflow.com/p1/printcc/contract/List.aspx`,
         // `https://ds.goodsflow.com/p1/printcc/contract/detail.aspx`,
         qs.stringify({
           'OTP':req.body.otp,

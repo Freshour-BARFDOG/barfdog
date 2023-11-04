@@ -186,15 +186,18 @@ export default function OrderOnSellPage() {
       if (printRes.isDone) {
         console.log(printRes);
         console.log(printRes.data.data);
-        // popupWindow(`/bf-admin/sell/delivery/print?data=${printRes.data.data}`);
-        const url = `https://ds.goodsflow.com/p1/printcc/contract/list.aspx`; // 예시 URL
-        // const url = `https://ds.goodsflow.com/p1/printcc/contract/detail.aspx`; // 예시 URL
-        const subWindow = window.open(url, '_blank', 'width=1000,height=1000');
-        if (subWindow) {
-          subWindow.focus();
-        } else {
-          alert('Subwindow blocked. Please allow pop-ups and try again.');
-        }
+
+        popupWindow(`/bf-admin/sell/delivery/print?data=${printRes.data.data}`);
+
+        // // popupWindow(`/bf-admin/sell/delivery/print?data=${printRes.data.data}`);
+        // const url = `https://ds.goodsflow.com/p1/printcc/contract/list.aspx`; // 예시 URL
+        // // const url = `https://ds.goodsflow.com/p1/printcc/contract/detail.aspx`; // 예시 URL
+        // const subWindow = window.open(url, '_blank', 'width=1000,height=1000');
+        // if (subWindow) {
+        //   subWindow.focus();
+        // } else {
+        //   alert('Subwindow blocked. Please allow pop-ups and try again.');
+        // }
       }
     } catch (err) {
       console.log('API통신 오류 : ', err);
