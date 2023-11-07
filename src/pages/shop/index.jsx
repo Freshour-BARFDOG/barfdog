@@ -14,8 +14,10 @@ import { EmptyContMessage } from '/src/components/atoms/emptyContMessage';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import Icon_Itemlabel from '/src/components/atoms/ItemLabel';
 import { searchQueryType } from '/store/TYPE/searchQueryType';
-import {useSelector} from "react-redux";
-import {userType} from "/store/TYPE/userAuthType";
+import { useSelector } from "react-redux";
+import { userType } from "/store/TYPE/userAuthType";
+import Spinner from '/src/components/atoms/Spinner';
+import ImageWithLoadingSpinner from '/src/components/atoms/ImageWithLoadingSpinner';
 
 const getListApiUrl = '/api/items';
 const apiDataQueryString = 'queryItemsDtoList';
@@ -26,13 +28,15 @@ const initialSearchValues = {
   itemType: general_itemType.ALL, // url Query is lowerCase
 };
 
+
+
 export default function ShopPage() {
   const router = useRouter();
-  const [itemList, setItemList] = useState([]);
+  const [itemList, setItemList] = useState(null);
   const [searchValues, setSearchValues] = useState(initialSearchValues);
   const [searchQuery, setSearchQuery] = useState('sortBy=recent&itemType=ALL');
-  const auth = useSelector(state=>state.auth);
-  
+  const auth = useSelector(state => state.auth);
+
 
   // console.log(itemList);
   // console.log(searchValues.itemType)
@@ -69,7 +73,7 @@ export default function ShopPage() {
     }
     setSearchQuery(newQueryArr.join('&'));
   }, [searchValues]);
-  
+
   const pageInterCeptor = async (res) => {
     const newItemList = res.data?._embedded?.queryItemsDtoList;
     const pageData = res.data.page;
@@ -83,7 +87,7 @@ export default function ShopPage() {
     };
     return newPageInfo;
   };
-  
+
   const onChagneItemType = (e) => {
     const button = e.currentTarget;
     const itemType = button.dataset.itemType;
@@ -102,20 +106,20 @@ export default function ShopPage() {
       [id]: value,
     }));
   };
-  const onClickItem = (e)=>{
+  const onClickItem = (e) => {
     e.preventDefault();
     const link = e.currentTarget.href;
     const inStock = e.currentTarget.dataset.stock === 'true';
     const thisUserType = auth.userType;
-    if(thisUserType === userType.NON_MEMBER){
+    if (thisUserType === userType.NON_MEMBER) {
       alert('회원가입 후 이용가능합니다.')
-    }else if (!inStock){
+    } else if (!inStock) {
       alert('품절된 상품입니다.');
-    }else{
+    } else {
       router.push(link);
     }
   }
-  
+
   console.log(itemList);
 
   return (
@@ -193,13 +197,21 @@ export default function ShopPage() {
             </div>
           </section>
           <section className={s.bot}>
-            {itemList.length === 0 ? <EmptyContMessage message={'등록된 상품이 없습니다.'} /> : <ul className={s.inner}>
-              {itemList.map((item, index) => (
-                  <li className={`${s.shop_list} animation-show`} key={`item-${item.id}-${index}`}>
-                    <Link href={`/shop/item/${item.id}`} passHref>
-                      <a onClick={onClickItem} data-stock={item.inStock}>
-                        <figure className={s.shop_image}>
-                          {/* {item.itemIcons &&
+
+            {!itemList ? (
+              <Spinner />
+            ) : (
+              itemList.length === 0 ? (
+                <EmptyContMessage message={'등록된 상품이 없습니다.'} />
+              ) : (
+                <ul className={s.inner}>
+
+                  {itemList.map((item, index) => (
+                    <li className={`${s.shop_list} animation-show`} key={`item-${item.id}-${index}`}>
+                      <Link href={`/shop/item/${item.id}`} passHref>
+                        <a onClick={onClickItem} data-stock={item.inStock}>
+                          <figure className={s.shop_image}>
+                            {/* {item.itemIcons &&
                             (item.itemIcons?.indexOf(',') >= 0 ? (
                               item.itemIcons
                                 .split(',')
@@ -217,71 +229,75 @@ export default function ShopPage() {
                               />
                             ))} */}
                             {/* 일반상품 BEST, NEW label 각 개체의 최대 표시수 1개 */}
-                          {item.itemIcons &&
-                            item.itemIcons
-                              .split(",")
-                              .filter(
-                                (label, index, self) =>
-                                  (label === "NEW" && self.indexOf(label) === index) ||
-                                  (label === "BEST" && self.indexOf(label) === index)
-                              )
-                              .map((label, index) => (
-                                <Icon_Itemlabel
-                                  label={label}
-                                  key={`${label}-${index}`}
-                                  className={label === "NEW" ? s.new : s.best}
-                                />
-                              ))}
-                          <div className={`${s['img-wrap']} img-wrap`}>
-                            <Image
-                              src={item.thumbnailUrl}
-                              objectFit="cover"
-                              layout="fill"
-                              alt={`상품 ${item.name}`}
-                            />
-                          </div>
-                        </figure>
-                        <figcaption className={s.text_box}>
-                          <p className={s.title}>{item.name}</p>
-                          <div className={s.price_box}>
-                            <span className={s.price}>
-                              {transformLocalCurrency(item.salePrice || item.originalPrice)}
-                              <span className={s.won}>&nbsp;원</span>
-                              
-                              <span className={s.position_mid}>
-                                {!item.inStock && <span className={s.out_of_stock}>품절</span>}
+                            {item.itemIcons &&
+                              item.itemIcons
+                                .split(",")
+                                .filter(
+                                  (label, index, self) =>
+                                    (label === "NEW" && self.indexOf(label) === index) ||
+                                    (label === "BEST" && self.indexOf(label) === index)
+                                )
+                                .map((label, index) => (
+                                  <Icon_Itemlabel
+                                    label={label}
+                                    key={`${label}-${index}`}
+                                    className={label === "NEW" ? s.new : s.best}
+                                  />
+                                ))}
+                            <div className={`${s['img-wrap']} img-wrap`}>
+                              <ImageWithLoadingSpinner
+                                src={item.thumbnailUrl}
+                                objectFit="cover"
+                                layout="fill"
+                                alt={`상품 ${item.name}`}
+                              />
+                            </div>
+                          </figure>
+                          <figcaption className={s.text_box}>
+                            <p className={s.title}>{item.name}</p>
+                            <div className={s.price_box}>
+                              <span className={s.price}>
+                                {transformLocalCurrency(item.salePrice || item.originalPrice)}
+                                <span className={s.won}>&nbsp;원</span>
+
+                                <span className={s.position_mid}>
+                                  {!item.inStock && <span className={s.out_of_stock}>품절</span>}
+                                </span>
                               </span>
-                            </span>
-                            {(item.originalPrice !== item.salePrice) && item.salePrice !== 0 && (
-                              <>
-                                <div className={s.discount_box}>
-                                  <span className={s.originPrice}>
-                                    {transformLocalCurrency(item.originalPrice)}원
-                                  </span>
-                                  <span className={s.discount}>
-                                    {Math.ceil(
-                                      ((1 - item.salePrice / item.originalPrice) * 100).toFixed(2),
-                                    )}
-                                    %
-                                  </span>
-                                </div>
-                              </>
-                            )}
+                              {(item.originalPrice !== item.salePrice) && item.salePrice !== 0 && (
+                                <>
+                                  <div className={s.discount_box}>
+                                    <span className={s.originPrice}>
+                                      {transformLocalCurrency(item.originalPrice)}원
+                                    </span>
+                                    <span className={s.discount}>
+                                      {Math.ceil(
+                                        ((1 - item.salePrice / item.originalPrice) * 100).toFixed(2),
+                                      )}
+                                      %
+                                    </span>
+                                  </div>
+                                </>
+                              )}
+                            </div>
+                          </figcaption>
+                          <div className={s.grade_box}>
+                            <div className={s.star_box}>
+                              <RatingStars count={item.star} margin={4} />
+                            </div>
+                            <p className={s.avg_score}>{item.star.toFixed(1).toString()}</p>
+                            <p className={s.nuber_comment}>({item.reviewCount})</p>
                           </div>
-                        </figcaption>
-                        <div className={s.grade_box}>
-                          <div className={s.star_box}>
-                            <RatingStars count={item.star} margin={4} />
-                          </div>
-                          <p className={s.avg_score}>{item.star.toFixed(1).toString()}</p>
-                          <p className={s.nuber_comment}>({item.reviewCount})</p>
-                        </div>
-                      </a>
-                    </Link>
-                  </li>
-                ))}
-            </ul>}
-            
+                        </a>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )
+            )}
+
+
+
           </section>
           <section className={s['pagination-section']}>
             <PaginationWithAPI
@@ -290,7 +306,7 @@ export default function ShopPage() {
               setItemList={setItemList}
               queryItemList={apiDataQueryString}
               urlQuery={searchQuery}
-              pageInterceptor={pageInterCeptor}/>
+              pageInterceptor={pageInterCeptor} />
           </section>
         </Wrapper>
       </Layout>

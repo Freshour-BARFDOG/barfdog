@@ -37,6 +37,7 @@ import { Tween } from 'react-gsap';
 import { Controller, Scene } from "react-scrollmagic";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import ImageWithLoadingSpinner from '/src/components/atoms/ImageWithLoadingSpinner';
 
 export default function MainPage({ data }) {
   // console.log(data)
@@ -91,7 +92,7 @@ export default function MainPage({ data }) {
             <div className={s.inner}>
               <div className={s.leftbox}>
                 <div className={s.image_wrap}>
-                <Image src={Barfraw} objectFit="cover" layout="fill" alt="바프 생식 이미지" />
+                <ImageWithLoadingSpinner src={Barfraw} objectFit="cover" layout="fill" alt="바프 생식 이미지" />
                 </div>
               </div>
               <div className={s.rightbox}>
@@ -135,7 +136,7 @@ export default function MainPage({ data }) {
               <li className={s.rightbox}>
                 <div className={s.barfgood_imgbox}>
                   <div className={s.barfood1}>
-                    <Image
+                    <ImageWithLoadingSpinner
                       src={Barfgood1}
                       objectFit="fit"
                       width={560}
@@ -144,7 +145,7 @@ export default function MainPage({ data }) {
                     />
                   </div>
                   <div className={s.barfood2}>
-                    <Image
+                    <ImageWithLoadingSpinner
                       src={Barfgood2}
                       objectFit="fit"
                       width={335}
@@ -177,14 +178,13 @@ export default function MainPage({ data }) {
                         <p>CEHCK POINT</p>
                         <h1>바프독을 선택해야 하는 이유</h1>
                         <div className={s.image_wrap}>
-                          <Image
+                          <ImageWithLoadingSpinner
                             src={Halftest}
                             objectFit="fit"
                             layout="fill"
 
                             alt="카드 이미지"
-                            priority
-                          ></Image>
+                            priority />
                         </div>
                         <ul>
                             <li>
@@ -220,15 +220,14 @@ export default function MainPage({ data }) {
                         <p>CEHCK POINT</p>
                         <h1>바프독을 선택해야 하는 이유</h1>
                         <div className={s.image_wrap}>
-                          <Image
+                          <ImageWithLoadingSpinner
                             src={Halftest}
                             objectFit="fit"
                             // width={525}
                             // height={520}
                             layout="fill"
                             alt="카드 이미지"
-                            priority
-                          ></Image>
+                            priority />
                         </div>
                         <ul>
                             <li>
@@ -269,7 +268,7 @@ export default function MainPage({ data }) {
                   <br />
                   Real B.A.R.F.
                 </p>
-                <Image src={LeftPic} objectFit="fit" width={260} height={260} alt="카드 이미지" />
+                <ImageWithLoadingSpinner src={LeftPic} objectFit="fit" width={260} height={260} alt="카드 이미지" />
                 <p className={s.text}>
                   생고기, 뼈, 내장, 채소와 과일을
                   <br />
@@ -283,7 +282,7 @@ export default function MainPage({ data }) {
                   <br />
                   Double meats
                 </p>
-                <Image src={midPic} objectFit="fit" width={260} height={260} alt="카드 이미지" />
+                <ImageWithLoadingSpinner src={midPic} objectFit="fit" width={260} height={260} alt="카드 이미지" />
                 <p className={s.text}>
                   모든 레시피에 두 가지 고기를
                   <br />
@@ -297,7 +296,7 @@ export default function MainPage({ data }) {
                   <br />
                   AAFCO
                 </p>
-                <Image src={rightPic} objectFit="fit" width={260} height={260} alt="카드 이미지" />
+                <ImageWithLoadingSpinner src={rightPic} objectFit="fit" width={260} height={260} alt="카드 이미지" />
                 <p className={s.text}>
                   국제 기준(AAFCO)부터 NRC, fediaf까지
                   <br />
@@ -318,7 +317,7 @@ export default function MainPage({ data }) {
             </h2>
             <div className={s.grid}>
               <div className={s.image}>
-                <Image src={barfPack} alt="인공 조미료" />
+                <ImageWithLoadingSpinner src={barfPack} alt="인공 조미료" />
               </div>
               <div className={s.textbox} id="trigger">
                 <ul className={s.text}>
@@ -365,7 +364,7 @@ export default function MainPage({ data }) {
                     <li>
                       <div className={s.card}>
                         <div className={`${s['img-wrap']} img-wrap`}>
-                          <Image
+                          <ImageWithLoadingSpinner
                             src={require('/public/img/pages/home/home_clientWorry.png')}
                             objectFit="cover"
                             layout="fill"
@@ -394,7 +393,7 @@ export default function MainPage({ data }) {
                     <li>
                       <div className={s.card}>
                         <div className={`${s['img-wrap']} img-wrap`}>
-                          <Image
+                          <ImageWithLoadingSpinner
                             src={require('/public/img/pages/home/home_clientWorry@2x.png')}
                             objectFit="cover"
                             layout="fill"

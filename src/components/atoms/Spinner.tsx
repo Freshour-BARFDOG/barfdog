@@ -3,26 +3,47 @@ import styledComponents from 'styled-components';
 import { ImSpinner2 } from 'react-icons/im';
 import { CgSpinner } from 'react-icons/cg';
 
-const Wrap = styledComponents.i`
-    display:flex;
-    align-items: center;
-    justify-content:center;
-    pointer-events:none;
-    // opacity:0;
-    animation: rotate ${(props) => props.speed}s linear infinite !important;
-    
-    &.floating{
-      position:absolute;
-      left:50%;
-      top:50%;
-      transform:translate(-50%,-50%);
+const Wrap = styledComponents.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: rotate ${(props) => props.speed}s linear infinite;
+
+  @keyframes rotate {
+    from {
+      transform: rotate(0);
     }
-    
-    @keyframes rotate {
-      from{transform:rotate(0);}
-      to{transform:rotate(360deg);}
+    to {
+      transform: rotate(360deg);
     }
-  `;
+  }
+`;
+
+// const Wrap = styledComponents.i`
+//     display:flex;
+//     align-items: center;
+//     justify-content:center;
+//     pointer-events:none;
+//     // opacity:0;
+//     animation: rotate ${(props) => props.speed}s linear infinite !important;
+    
+//     &.floating{
+//       position:absolute;
+//       left:50%;
+//       top:50%;
+//       transform:translate(-50%,-50%);
+//     }
+    
+//     @keyframes rotate {
+//       from{transform:rotate(0);}
+//       to{transform:rotate(360deg);}
+//     }
+//   `;
 
 interface PropsInterface {
   style?: {
