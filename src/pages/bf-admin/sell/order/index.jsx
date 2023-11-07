@@ -243,6 +243,7 @@ export default function OrderOnSellPage() {
 
       // GoodsFlow에 전송하는 배송리스트 (운송장 출력창에 보여지는 리스트)
       const deliveryList = [];
+
       for (const info of deliveryItemInfoList) {
         // 주문 id에 대한 정보 Array
         const bodyForGoodsFlow = {
