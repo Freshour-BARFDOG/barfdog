@@ -130,6 +130,66 @@ export default function OrderOnSellPage() {
     onOrderConfirm(selectedItemList.map(item => item.id));
   };
 
+  
+  const onStartOrderDeny = () => {
+    const invalidItemList = filterInvalidOrderDenyStatusItems(selectedItemList, searchValues.orderType);
+    console.log(invalidItemList);
+    if (!selectedOrderIdList.length) {
+      return alert('선택된 상품이 없습니다.');
+    } else if(invalidItemList.length){
+      return alert("주문확인 상태가 아닌 상품이 포함되어있습니다.");
+    }
+    // setActiveModal({ orderConfirm: true });
+
+    const selectedIdList = selectedItemList.map(item => item.id);
+
+    if (!selectedIdList.length) return alert('선택된 상품이 없습니다.');
+    if (!confirm(`선택하신 ${selectedIdList.length}개의 상품을 확인취소 처리하시겠습니까?`)) return;
+
+    const itemType = searchValues.orderType;
+    let body;
+    if (itemType === productType.GENERAL) {
+      body = {
+        orderItemIdList: selectedIdList, // 주문 내에 속한 "상품의 id" List
+      };
+    } else if (itemType === productType.SUBSCRIBE) {
+      body = {
+        orderIdList: selectedIdList, // "주문 id" list
+      };
+    }
+
+    (async () => {
+      try {
+        setIsLoading((prevState) => ({
+          ...prevState,
+          confirm: true,
+        }));
+        const apiUrl = `/api/admin/orders/${itemType.toLowerCase()}/orderDeny`;
+        const res = await postPaymentDataToApiServer(apiUrl, body);
+        console.log('onOrderConfirm: \n', body);
+        console.log('response: admin > sell > search > index.jsx\n', res);
+        if (res.isDone) {
+          alert('확인취소 처리되었습니다.');
+          window.location.reload();
+        } else {
+          alert(`확인취소 처리하는데 오류가 발생했습니다.\n${res.error}`);
+        }
+      } catch (err) {
+        console.log('API통신 오류가 발생하였습니다.');
+        alert(err);
+      } finally {
+        setIsLoading((prevState) => ({
+          ...prevState,
+          confirm: false,
+        }));
+      }
+    })();
+
+
+
+  };
+
+
 
   const onOrderConfirm = async (selectedIdList) => {
 
@@ -514,6 +574,14 @@ export default function OrderOnSellPage() {
   const filterInvalidOrderConfirmStatusItems = (items) => {
     return items.filter(item=>item.orderStatus !== orderStatus.PAYMENT_DONE);
   }
+  
+  const filterInvalidOrderDenyStatusItems = (items, orderType) => {
+    if ( orderType === productType.GENERAL  ){
+      return items.filter(item=>item.orderStatus !== orderStatus.DELIVERY_READY);
+    } else if(orderType === productType.SUBSCRIBE ){
+      return items.filter(item=>item.orderStatus !== orderStatus.PRODUCING);
+    }
+  }
 
   const filterInvalidDeliveryStatusItems = (items, orderType) => {
     let invalidItemList = [];
@@ -584,6 +652,9 @@ export default function OrderOnSellPage() {
               <div className="controls cont-left">
                 <button className="admin_btn line basic_m" onClick={onStartOrderConfirm}>
                   {isLoading.confirm ? <Spinner /> : '주문확인'}
+                </button>
+                <button className="admin_btn line basic_m" onClick={onStartOrderDeny}>
+                  확인취소
                 </button>
                 <button className="admin_btn line basic_m" onClick={onStartRegisterDelivery}>
                   주문발송
