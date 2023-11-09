@@ -582,18 +582,28 @@ export default function RecipePage() {
               {/* 첫 구매 시 50% 할인 혜택을 <br />받을 수 있습니다! */}
             </div>
             <div className={s.image_box}>
-              <Link href="/surveyGuide" passHref>
+              {/* <Link href="/surveyGuide" passHref>
                 <a className="flex-wrap">
-                  {/* <div className={`${s.image} img-wrap`}>
+                  <div className={`${s.image} img-wrap`}>
                     <Btn_02  width='100%' height='100%' viewBox="0 0 300 71" />
-                  </div> */}
+                  </div> 
+                </a>
+              </Link> */}
+              
+              <Link href="/surveyGuide" passHref>
                   <a className="flex-wrap">
                     <div className={`${s.image} img-wrap`}>
+                      {/* <Image
+                        src={require("public/img/recipes/recipe_subscribe.png")}
+                        objectFit="cover"
+                        width={246}
+                        height={49}
+                        alt="아이콘 정기구독 시작하기"
+                      /> */}
                       <Btn_01 width='100%' height='100%' viewBox="0 0 238 40" />
                     </div>
                   </a>
-                </a>
-              </Link>
+                </Link>
             </div>
           </section>
         </Wrapper>
