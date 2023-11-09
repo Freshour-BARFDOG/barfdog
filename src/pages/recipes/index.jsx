@@ -575,10 +575,10 @@ export default function RecipePage() {
 
           <section className={s.subscribe_discount}>
             <div className={s.sub_row_1}>
-            BARFDOG 구독을 처음 이용하시나요?
+            BARFDOG 구독이 처음이신가요?
             </div>
             <div className={s.sub_row_2}>
-            구독 시 특별한 혜택을 드립니다!
+            바프독 생식 샘플로 먼저 알러지 테스트와 기호성을 확인해보세요!
               {/* 첫 구매 시 50% 할인 혜택을 <br />받을 수 있습니다! */}
             </div>
             <div className={s.image_box}>
@@ -590,17 +590,15 @@ export default function RecipePage() {
                 </a>
               </Link> */}
               
-              <Link href="/surveyGuide" passHref>
-                  <a className="flex-wrap">
+              <Link href="https://smartstore.naver.com/barfdog/products/6314410723" passHref>
+                  <a target="_blank" className="flex-wrap">
                     <div className={`${s.image} img-wrap`}>
-                      {/* <Image
-                        src={require("public/img/recipes/recipe_subscribe.png")}
+                      <Image
+                        src={require("/public/img/recipes/fresh_sample_buy.png")}
                         objectFit="cover"
-                        width={246}
-                        height={49}
-                        alt="아이콘 정기구독 시작하기"
-                      /> */}
-                      <Btn_01 width='100%' height='100%' viewBox="0 0 238 40" />
+                        alt="바프독 생식 샘플" 
+                      />
+                      {/* <Btn_01 width='100%' height='100%' viewBox="0 0 238 40" /> */}
                     </div>
                   </a>
                 </Link>
