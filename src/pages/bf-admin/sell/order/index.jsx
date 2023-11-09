@@ -122,11 +122,18 @@ export default function OrderOnSellPage() {
     } else if(invalidItemList.length){
       return alert("결제완료 상태가 아닌 상품이 포함되어있습니다.");
     }
-    setActiveModal({ orderConfirm: true });
+    // setActiveModal({ orderConfirm: true });
+
+    // console.log(selectedItemList.map(item => item.id))
+  
+
+    onOrderConfirm(selectedItemList.map(item => item.id));
   };
 
 
   const onOrderConfirm = async (selectedIdList) => {
+
+
     if (!selectedIdList.length) return alert('선택된 상품이 없습니다.');
     if (!confirm(`선택하신 ${selectedIdList.length}개의 상품을 주문확인 처리하시겠습니까?`)) return;
 

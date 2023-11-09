@@ -35,6 +35,49 @@ const openNewWindow = (link,key) => {
 };
 
 
+const statusEngToKor = {
+  "ALL" : "전체",
+  "BEFORE_PAYMENT" : "결제전", "CANCEL_PAYMENT" : "결제취소", // 결제전, 결제취소(카드정보 작성중 취소 누른경우)
+  "CANCEL_RESERVED_PAYMENT" : "예약된주문결제취소", // 예약된 주문 결제취소
+  "HOLD" : "보류HOLD", "RESERVED_PAYMENT" : "예약결제", // 보류, 예약결제(아임포트 스케쥴걸린상태)
+  "FAILED" : "최초결제실패", "FAILED_RESERVED_PAYMENT" : "예약된정기구독결제실패", // 최초 결제 실패(카드결제 실패), 예약된 정기구독 결제 실패
+  "PAYMENT_DONE" : "결제완료", // 결제완료
+  "DELIVERY_BEFORE_COLLECTION" : "배송확인", "PRODUCING" : "생산중", "DELIVERY_READY" : "배송준비", // 배송 확인, 생산중(구독주문), 배송준비(일반주문)
+  "DELIVERY_START" : "배송출발", // 배송 출발
+  "DELIVERY_DONE" : "배송도착완료", // 배송 도착 완료
+  "CANCEL_REQUEST" : "주문취소요청", "CANCEL_DONE_SELLER" : "판매자귀책취소완료", "CANCEL_DONE_BUYER" : "구매자귀책취소완료", // 주문 취소 요청, 판매자귀책 취소완료, 구매자귀책 취소완료
+  "RETURN_REQUEST" : "주문반폼요청", "RETURN_DONE_SELLER" : "판매자귀책반품완료", "RETURN_DONE_BUYER" : "구매자귀책취반품료", // 주문 반품 요청, 판매자귀책 반품완료, 구매자귀책 반품완료
+  "EXCHANGE_REQUEST" : "주문교환요청", "EXCHANGE_DONE_SELLER" : "판매자귀책교환완료", "EXCHANGE_DONE_BUYER" : "구매자귀책교환완료", // 주문 교환요청, 판매자귀책 교환완료, 구매자귀책 교환완료
+  "CONFIRM" : "구매확정" // 구매확정
+};
+
+
+
+const subscribeEngToKor = {
+    "BEFORE_PAYMENT" : "구독전(결제전)",
+    "SUBSCRIBING" : "구독중",
+    "SUBSCRIBE_PENDING" : "구독보류",
+    "ADMIN" : "어드민",
+};
+
+
+const gradEngToKor = {
+  "브론즈" : "브론즈",
+  "실버" : "실버",
+  "골드" : "골드",
+  "플래티넘" : "플래티넘",
+  "다이아몬드" : "다이아몬드",
+  "더바프" : "더바프",
+};
+
+
+
+const orderState_array = Object.keys(statusEngToKor);
+const subscribe_array = Object.keys(subscribeEngToKor);
+const grad_array = Object.keys(gradEngToKor);
+
+
+
 
 const columns = [
   Table.EXPAND_COLUMN,
@@ -58,8 +101,9 @@ const columns = [
   //   ),
   // },
   { title: "주문번호", dataIndex: "orderNumber", key: "orderNumber", },
-  { title: "주문상태", dataIndex: "state", key: "state", },
-  { title: "구독상태", dataIndex: "subscription", key: "subscription", },
+  { title: "주문상태", dataIndex: "stateKor", key: "stateKor", },
+  // { title: "주문상태(DB)", dataIndex: "state", key: "state", },
+  { title: "구독상태", dataIndex: "subscriptionKor", key: "subscriptionKor", },
   { title: "묶음배송", dataIndex: "isPackage", key: "isPackage", },
   { title: "구매자", dataIndex: "orderMemberName", key: "orderMemberName", },
   { title: "수령자", dataIndex: "orderRecivedName", key: "orderRecivedName", },
@@ -161,7 +205,7 @@ const columns_general = [
     ),
   },
   { title: "주문번호", dataIndex: "orderNumber", key: "orderNumber", },
-  { title: "주문상태", dataIndex: "state", key: "state", },
+  { title: "주문상태", dataIndex: "stateKor", key: "stateKor", },
   { title: "묶음배송", dataIndex: "isPackage", key: "isPackage", },
   { title: "결제금액", dataIndex: "paymentPrice", key: "paymentPrice", },
   { title: "구매자", dataIndex: "orderMemberName", key: "orderMemberName", },
@@ -206,6 +250,7 @@ const filterDataGeneral = (data, search) => {
           key: i.toString(),
           orderNumber: data_tmp.merchantUid,
           state: data_tmp.orderStatus,
+          stateKor : statusEngToKor[data_tmp.orderStatus],
           isPackage: data_tmp.isPackage === true ? "YES" : "NO",
           paymentPrice: data_tmp.paymentPrice,
           orderMemberName: data_tmp.memberName,
@@ -242,21 +287,6 @@ const filterDataGeneral = (data, search) => {
 
       // 판매상태
       let orderState_result = false;
-      const orderState_array = [
-        "ALL",
-        "BEFORE_PAYMENT", "CANCEL_PAYMENT", // 결제전, 결제취소(카드정보 작성중 취소 누른경우)
-        "CANCEL_RESERVED_PAYMENT", // 예약된 주문 결제취소
-        "HOLD", "RESERVED_PAYMENT", // 보류, 예약결제(아임포트 스케쥴걸린상태)
-        "FAILED", "FAILED_RESERVED_PAYMENT", // 최초 결제 실패(카드결제 실패), 예약된 정기구독 결제 실패
-        "PAYMENT_DONE", // 결제완료
-        "DELIVERY_BEFORE_COLLECTION", "PRODUCING", "DELIVERY_READY", // 배송 확인, 생산중(구독주문), 배송준비(일반주문)
-        "DELIVERY_START", // 배송 출발
-        "DELIVERY_DONE", // 배송 도착 완료
-        "CANCEL_REQUEST", "CANCEL_DONE_SELLER", "CANCEL_DONE_BUYER", // 주문 취소 요청, 판매자귀책 취소완료, 구매자귀책 취소완료
-        "RETURN_REQUEST", "RETURN_DONE_SELLER", "RETURN_DONE_BUYER", // 주문 반품 요청, 판매자귀책 반품완료, 구매자귀책 반품완료
-        "EXCHANGE_REQUEST", "EXCHANGE_DONE_SELLER", "EXCHANGE_DONE_BUYER", // 주문 교환요청, 판매자귀책 교환완료, 구매자귀책 교환완료
-        "CONFIRM" // 구매확정
-      ];
       orderState_array.forEach((e) => {
         //if (search.orderState.includes(e) && !orderState_result) {
         if (search.orderState.indexOf(e) != -1 && !orderState_result) {
@@ -268,7 +298,6 @@ const filterDataGeneral = (data, search) => {
 
       // 등급
       let grade_result = true;
-      const grad_array = ["브론즈","실버","골드","플래티넘","다이아몬드","더바프"];
       grad_array.forEach((e) => {
         if (search.gradeState.includes(e) && !grade_result && item.memberGrade) {
           grade_result = item.memberGrade === e;
@@ -414,13 +443,16 @@ const filterDataSubscribe = (data, search) => {
       const arr_street = [data_tmp.deliveryStreet, data_tmp.deliveryDetailAddress, data_tmp.deliveryZipcode];
       const result_street = arr_street.join(", ");
 
+      // console.log(statusEngKor[data_tmp.orderStatus],data_tmp.orderStatus)
 
       defaultData.push(
         {
           key: i.toString(),
           orderNumber: data_tmp.merchantUid,
           state: data_tmp.orderStatus,
+          stateKor : statusEngToKor[data_tmp.orderStatus],
           subscription: data_tmp.status,
+          subscriptionKor: subscribeEngToKor[data_tmp.status],
           isPackage: data_tmp.isPackage === true ? "YES" : "NO",
           orderMemberName: data_tmp.memberName,
           orderRecivedName: data_tmp.deliveryName,
@@ -546,21 +578,6 @@ const filterDataSubscribe = (data, search) => {
 
       // 판매상태
       let orderState_result = false;
-      const orderState_array = [
-        "ALL",
-        "BEFORE_PAYMENT", "CANCEL_PAYMENT", // 결제전, 결제취소(카드정보 작성중 취소 누른경우)
-        "CANCEL_RESERVED_PAYMENT", // 예약된 주문 결제취소
-        "HOLD", "RESERVED_PAYMENT", // 보류, 예약결제(아임포트 스케쥴걸린상태)
-        "FAILED", "FAILED_RESERVED_PAYMENT", // 최초 결제 실패(카드결제 실패), 예약된 정기구독 결제 실패
-        "PAYMENT_DONE", // 결제완료
-        "DELIVERY_BEFORE_COLLECTION", "PRODUCING", "DELIVERY_READY", // 배송 확인, 생산중(구독주문), 배송준비(일반주문)
-        "DELIVERY_START", // 배송 출발
-        "DELIVERY_DONE", // 배송 도착 완료
-        "CANCEL_REQUEST", "CANCEL_DONE_SELLER", "CANCEL_DONE_BUYER", // 주문 취소 요청, 판매자귀책 취소완료, 구매자귀책 취소완료
-        "RETURN_REQUEST", "RETURN_DONE_SELLER", "RETURN_DONE_BUYER", // 주문 반품 요청, 판매자귀책 반품완료, 구매자귀책 반품완료
-        "EXCHANGE_REQUEST", "EXCHANGE_DONE_SELLER", "EXCHANGE_DONE_BUYER", // 주문 교환요청, 판매자귀책 교환완료, 구매자귀책 교환완료
-        "CONFIRM" // 구매확정
-      ];
       orderState_array.forEach((e) => {
         // if (search.orderState.includes(e) && !orderState_result) {
         //   orderState_result = item.state.includes(e);
@@ -575,7 +592,6 @@ const filterDataSubscribe = (data, search) => {
 
       // 구독상태
       let subscribe_result = false;
-      const subscribe_array = ["BEFORE_PAYMENT", "SUBSCRIBING", "SUBSCRIBE_PENDING", "ADMIN"];
       subscribe_array.forEach((e) => {
         if (search.subscribeState.includes(e) && !subscribe_result && item.subscription) {
           subscribe_result = item.subscription.includes(e);
@@ -584,7 +600,6 @@ const filterDataSubscribe = (data, search) => {
 
       // 등급
       let grade_result = false;
-      const grad_array = ["브론즈","실버","골드","플래티넘","다이아몬드","더바프"];
       grad_array.forEach((e) => {
         if (search.gradeState.includes(e) && !grade_result && item.memberGrade) {
           grade_result = item.memberGrade.includes(e);
@@ -841,8 +856,8 @@ const ProductList = ({ search }) => {
   return (inputData.map((item) => {
     return {
       "주문번호": item.orderNumber,
-      "주문상태": item.state,
-      "구독상태": item.subscription,
+      "주문상태": item.stateKor,
+      "구독상태": item.subscriptionKor,
       "묶음배송": item.isPackage,
       "구매자": item.orderMemberName,
       "수령자": item.orderRecivedName,
@@ -860,15 +875,15 @@ const ProductList = ({ search }) => {
       "레시피2 총량": item.children2[0].totalGramRecipe2,
       "레시피3 총량": item.children2[0].totalGramRecipe3,
       "레시피4 총량": item.children2[0].totalGramRecipe4,
-      "(석범)레시피 총량": item.children3[0].totalGramRecipes,
-      "(석범)레시피1 개당g": item.children3[0].gramRecipe1,
-      "(석범)레시피2 개당g": item.children3[0].gramRecipe2,
-      "(석범)레시피3 개당g": item.children3[0].gramRecipe3,
-      "(석범)레시피4 개당g": item.children3[0].gramRecipe4,
-      "(석범)레시피1 총량": item.children3[0].totalGramRecipe1,
-      "(석범)레시피2 총량": item.children3[0].totalGramRecipe2,
-      "(석범)레시피3 총량": item.children3[0].totalGramRecipe3,
-      "(석범)레시피4 총량": item.children3[0].totalGramRecipe4,
+      // "(석범)레시피 총량": item.children3[0].totalGramRecipes,
+      // "(석범)레시피1 개당g": item.children3[0].gramRecipe1,
+      // "(석범)레시피2 개당g": item.children3[0].gramRecipe2,
+      // "(석범)레시피3 개당g": item.children3[0].gramRecipe3,
+      // "(석범)레시피4 개당g": item.children3[0].gramRecipe4,
+      // "(석범)레시피1 총량": item.children3[0].totalGramRecipe1,
+      // "(석범)레시피2 총량": item.children3[0].totalGramRecipe2,
+      // "(석범)레시피3 총량": item.children3[0].totalGramRecipe3,
+      // "(석범)레시피4 총량": item.children3[0].totalGramRecipe4,
       "결제일": item.paymentDate,
       "개인정보수정일": item.memberModifiedDate,
       "배송주기(일)": item.deliveryInterval,
@@ -907,7 +922,7 @@ const ProductList = ({ search }) => {
     return (inputData.map((item) => {
       return {
         "주문번호": item.orderNumber,
-        "주문상태": item.state,
+        "주문상태": item.stateKor,
         "묶음배송": item.isPackage,
         "구매자": item.orderMemberName,
         "수령자": item.orderRecivedName,
@@ -946,8 +961,6 @@ const ProductList = ({ search }) => {
     xlsx.utils.book_append_sheet(wb, ws, "SheetJS");
     xlsx.writeFile(wb, "sheetjs.xlsx");
   };
-
-
 
 
 
