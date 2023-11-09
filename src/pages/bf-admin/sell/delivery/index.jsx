@@ -489,9 +489,6 @@ export default function DeliveryOnSellPage() {
                 <button className="admin_btn line basic_m" onClick={onReprintInvoice}>
                   {isLoading.reprint ? <Spinner /> : '송장 재출력'}
                 </button>
-                <button className="admin_btn line pl-3 pr-3 pt-1 pb-1" onClick={onForcedDeliveryComplete}>
-                  강제 배송완료
-                </button>
                 {searchBody?.statusList?.indexOf(orderStatus.DELIVERY_BEFORE_COLLECTION) >= 0 && (
                   <Tooltip
                     message={'배송예정 상품일 경우, 송장 재출력할 수 있습니다.'}
@@ -499,6 +496,9 @@ export default function DeliveryOnSellPage() {
                     messagePosition={'center'}
                   />
                 )}
+                <button className="admin_btn line pl-3 pr-3 pt-1 pb-1" onClick={onForcedDeliveryComplete}>
+                  강제 배송완료
+                </button>
               </div>
             </div>
             <div className={`${s.cont_viewer}`}>

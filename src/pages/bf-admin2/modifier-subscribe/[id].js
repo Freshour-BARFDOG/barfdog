@@ -6,8 +6,8 @@ import axios from "axios";
 import { getData, postData, postObjData, putObjData } from '../../api/reqData';
 
 const inputNames = [
-  "다음 결제일", // nextPaymentDate
-  "다음 배송일(주의! 아임포트 날짜도 같이 변경됨)", // nextDeliveryDate
+  "다음 결제일(주의! 아임포트 날짜도 같이 변경됨)", // nextPaymentDate
+  "다음 배송일", // nextDeliveryDate
   "다음 구독상품 원가", // nextPaymentPrice
   "구독회차", // subscribeCount
   "쿠폰 할인량", // discountCoupon

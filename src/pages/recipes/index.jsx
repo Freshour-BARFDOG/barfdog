@@ -575,25 +575,23 @@ export default function RecipePage() {
 
           <section className={s.subscribe_discount}>
             <div className={s.sub_row_1}>
-              BARFDOG 구독이 처음이신가요?
+            BARFDOG 구독을 처음 이용하시나요?
             </div>
             <div className={s.sub_row_2}>
-              첫 구매 시 50% 할인 혜택을 <br />받을 수 있습니다!
+            구독 시 특별한 혜택을 드립니다!
+              {/* 첫 구매 시 50% 할인 혜택을 <br />받을 수 있습니다! */}
             </div>
-            
             <div className={s.image_box}>
               <Link href="/surveyGuide" passHref>
                 <a className="flex-wrap">
-                  <div className={`${s.image} img-wrap`}>
-                    {/* <Image
-                      src={require("public/img/recipes/recipe_subsctibe_coupon.png")}
-                      objectFit="cover"
-                      width={300}
-                      height={71}
-                      alt="아이콘 정기구독 시작하기"
-                    /> */}
+                  {/* <div className={`${s.image} img-wrap`}>
                     <Btn_02  width='100%' height='100%' viewBox="0 0 300 71" />
-                  </div>
+                  </div> */}
+                  <a className="flex-wrap">
+                    <div className={`${s.image} img-wrap`}>
+                      <Btn_01 width='100%' height='100%' viewBox="0 0 238 40" />
+                    </div>
+                  </a>
                 </a>
               </Link>
             </div>

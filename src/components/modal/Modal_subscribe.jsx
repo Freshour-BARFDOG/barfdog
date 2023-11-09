@@ -99,14 +99,14 @@ const ModalCont = ({onCloseModalHandler}) => {
       <ul>
         <li className={s.card}>
           <figure className={`${s["img-main"]} img-wrap`}>
-            <i className={`${s["img-sale"]} img-wrap`}>
+            {/* <i className={`${s["img-sale"]} img-wrap`}>
               <Image
                 src={require("/public/img/modal-sale.png")}
                 objectFit="contain"
                 layout="fill"
                 alt="세일 아이콘"
               />
-            </i>
+            </i> */}
             <Image
               src={require("/public/img/modal-subscribeItem.png")}
               objectFit="cover"
