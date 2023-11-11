@@ -9,6 +9,7 @@ import Wrapper from '/src/components/common/Wrapper';
 import SignInputList from '/src/components/user_signup/SignInputList';
 import SignupPolicyList, { policy_KEYS } from '/src/components/user_signup/SignupPolicyList';
 import Modal_termsOfSerivce from '/src/components/modal/Modal_termsOfSerivce';
+import Modal_termsOfThird from '/src/components/modal/Modal_termsOfThird';
 import Modal_privacy from '/src/components/modal/Modal_privacy';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import { useModalContext } from '/store/modal-context';
@@ -18,6 +19,8 @@ import { transformPhoneNumber } from '/util/func/transformPhoneNumber';
 import { naverGender } from '/util/func/naverGender';
 import { kakaoGender } from '/util/func/kakaoGender';
 import {getDataSSR, getTokenFromServerSide} from "../../api/reqData";
+import {deleteCookie, getCookie, setCookie} from "@util/func/cookie";
+import { useEffect } from 'react';
 
 String.prototype.insertAt = function(index,str){
   return this.slice(0,index) + str + this.slice(index);
@@ -80,12 +83,21 @@ export default function SignupPage() {
 
   const [isModalActive, setIsModalActive] = useState({
     termsOfService: false,
+    termsOfThird: false,
     privacy: false,
   });
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState(initialFormErrors);
   const [submitted, setSubmitted] = useState(false);
+  
+  const [visibility, setVisibility] = useState(false);
 
+  
+  useEffect(() => {
+    setVisibility(getCookie("alliance") === "cb");
+  }, []);
+
+  
   const onSubmit = async () => {
     if(submitted) return console.error("Already Submitted!");
     try {
@@ -224,6 +236,8 @@ export default function SignupPage() {
     return result;
   };
 
+  
+
   return (
     <>
       <MetaTitle title="회원가입" />
@@ -253,6 +267,7 @@ export default function SignupPage() {
                   formErrors={formErrors}
                   setFormErrors={setFormErrors}
                   setModalState={setIsModalActive}
+                  setCokbank={visibility}
                 />
               </section>
               <section className={s['btn-section']}>
@@ -267,6 +282,12 @@ export default function SignupPage() {
       {isModalActive.termsOfService && (
         <Modal_termsOfSerivce
           modalState={isModalActive.termsOfService}
+          setModalState={setIsModalActive}
+        />
+      )}
+      {visibility && isModalActive.termsOfThird && (
+        <Modal_termsOfThird
+          modalState={isModalActive.termsOfThird}
           setModalState={setIsModalActive}
         />
       )}

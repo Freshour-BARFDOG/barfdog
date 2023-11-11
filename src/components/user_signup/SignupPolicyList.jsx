@@ -4,12 +4,14 @@ import PureCheckbox from "/src/components/atoms/PureCheckbox";
 import {IoChevronForwardOutline} from "react-icons/io5";
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import {plugin} from "next/dist/build/webpack/config/helpers";
+import {deleteCookie, getCookie, setCookie} from "@util/func/cookie";
 
 
 
 export const policy_KEYS = [
   { label: 'servicePolicy', required: true },
   { label: 'privacyPolicy', required: true },
+  { label: 'thirdPolicy', required: true },
   { label: 'receiveSms', required: false },
   { label: 'receiveEmail', required: false },
   { label: 'over14YearsOld', required: true },
@@ -22,10 +24,10 @@ const initialPolicyValues = {
   [policy_KEYS[2].label]: false,
   [policy_KEYS[3].label]: false,
   [policy_KEYS[4].label]: false,
+  [policy_KEYS[5].label]: false,
   _selectAllInReceiveChannel: false,
   _selectAllPolicies: false,
 };
-
 
 
 
@@ -34,6 +36,18 @@ function SignupPolicyList(props) {
 
   const {setFormValues, formErrors, setModalState} = props;
   const [policyValues, setPolicyValues] = useState(initialPolicyValues);
+
+  
+
+  const visibility = props.setCokbank;
+  
+  useEffect(() => {
+
+    const tempObj = initialPolicyValues;
+    tempObj.thirdPolicy = !visibility;
+    setPolicyValues(tempObj);
+
+  }, [visibility]);
 
   
   useEffect(() => {
@@ -201,6 +215,31 @@ function SignupPolicyList(props) {
           <IoChevronForwardOutline />
         </button>
       </div>
+
+      {/* 콕뱅크 제3자 수집 이용동의  */}
+      {visibility && (
+
+        <div className={`${s['checkbox-wrap']} ${s['space-between']}`}>
+          <PureCheckbox
+            id={policy_KEYS[2].label}
+            value={policyValues.thirdPolicy}
+            setValue={setPolicyValues}
+            errorMessage={
+              formErrors[policy_KEYS[2].label] && (
+                <ErrorMessage className={`${s.msg}`}>{formErrors[policy_KEYS[2].label]}</ErrorMessage>
+              )
+            }
+          >
+            <p className={s.title}>개인정보 제3자 제공 동의 (필수)</p>
+          </PureCheckbox>
+          <button className={s.terms__view} onClick={onModalShow} data-modal-sort={'termsOfThird'}>
+            약관보기
+            <IoChevronForwardOutline />
+          </button>
+        </div>
+
+      )}
+
       {/* 무료배송, 할인쿠폰 등 혜택 / 정보 수신 동의 */}
       <div className={`${s['checkbox-wrap']} ${s['receive-event']}`}>
         <PureCheckbox
@@ -213,14 +252,14 @@ function SignupPolicyList(props) {
         <div className={s['select-channel']}>
           <div className={s['flex-wrap']}>
             <PureCheckbox
-              id={policy_KEYS[2].label}
+              id={policy_KEYS[3].label}
               value={policyValues.receiveSms}
               setValue={setPolicyValues}
             >
               <p>SMS</p>
             </PureCheckbox>
             <PureCheckbox
-              id={policy_KEYS[3].label}
+              id={policy_KEYS[4].label}
               value={policyValues.receiveEmail}
               setValue={setPolicyValues}
             >
@@ -235,12 +274,12 @@ function SignupPolicyList(props) {
       </div>
       <div className={s['checkbox-wrap']}>
         <PureCheckbox
-          id={policy_KEYS[4].label}
+          id={policy_KEYS[5].label}
           value={policyValues.over14YearsOld}
           setValue={setPolicyValues}
           errorMessage={
             formErrors[policy_KEYS[4].label] && (
-              <ErrorMessage className={`${s.msg}`}>{formErrors[policy_KEYS[4].label]}</ErrorMessage>
+              <ErrorMessage className={`${s.msg}`}>{formErrors[policy_KEYS[5].label]}</ErrorMessage>
             )
           }
         >
