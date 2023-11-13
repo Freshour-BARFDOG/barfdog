@@ -66,7 +66,7 @@ const dataNames = [
 
 const dataIsDisabled = [
   true,
-  true,
+  false,
   false,
   false,
   false,
