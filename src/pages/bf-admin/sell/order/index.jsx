@@ -122,12 +122,12 @@ export default function OrderOnSellPage() {
     } else if(invalidItemList.length){
       return alert("결제완료 상태가 아닌 상품이 포함되어있습니다.");
     }
-    // setActiveModal({ orderConfirm: true });
+    setActiveModal({ orderConfirm: true });
 
     // console.log(selectedItemList.map(item => item.id))
   
 
-    onOrderConfirm(selectedItemList.map(item => item.id));
+    // onOrderConfirm(selectedItemList.map(item => item.id));
   };
 
   
