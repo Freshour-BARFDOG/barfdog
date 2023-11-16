@@ -121,9 +121,9 @@ export function Payment({
 
     const customerUid = generateCustomerUid(); // ! [client '결제실패' / Webhook 'paid'] CASE 처리를 위해, 주문서 생성 시에도 cutomerUid 전송.
 
-    // @YYL 콕뱅크 주문인지 확인
-    let allianceType = "NONE"
-    if(getCookie("alliance") === "cb") allianceType = "COKBANK"
+    // // @YYL 콕뱅크 주문인지 확인
+    // let allianceType = "NONE"
+    // if(getCookie("alliance") === "cb") allianceType = "COKBANK"
 
     const body = orderType === 'general' ? {
       orderItemDtoList: form.orderItemDtoList?.map((item) => ({
@@ -160,7 +160,7 @@ export function Payment({
       brochure: form.brochure, // 브로슈어 수령여부
 
 
-      allianceType: allianceType, // 콕뱅크 주문인지 확인
+      // allianceType: allianceType, // 콕뱅크 주문인지 확인
 
 
 
@@ -189,7 +189,7 @@ export function Payment({
       brochure: form.brochure, // 브로슈어 수령여부
 
 
-      allianceType: allianceType, // 콕뱅크 주문인지 확인
+      // allianceType: allianceType, // 콕뱅크 주문인지 확인
 
     };
 

@@ -45,9 +45,9 @@ export default function GeneralOrderSheetPage() {
       return router.push('/cart');
     }
 
-    // @YYL 콕뱅크 주문인지 확인
-    let allianceType = "NONE"
-    if(getCookie("alliance") === "cb") allianceType = "COKBANK"
+    // // @YYL 콕뱅크 주문인지 확인
+    // let allianceType = "NONE"
+    // if(getCookie("alliance") === "cb") allianceType = "COKBANK"
 
     const requestBody = {
       orderItemDtoList: curItem.map((item) => ({
@@ -61,7 +61,7 @@ export default function GeneralOrderSheetPage() {
         })),
       })),
 
-      allianceType: allianceType,
+      // allianceType: allianceType,
     };
 
     if (Object.keys(info).length > 0) return; // 최초 data fetching 후 Re-rendering 방지

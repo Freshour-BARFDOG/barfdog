@@ -44,8 +44,12 @@ function SignupPolicyList(props) {
   useEffect(() => {
 
     const tempObj = initialPolicyValues;
-    tempObj.thirdPolicy = !visibility;
+    tempObj.thirdPolicy = false;
+
     setPolicyValues(tempObj);
+    
+    console.log(visibility)
+    policy_KEYS[2].required = visibility;
 
   }, [visibility]);
 
@@ -105,6 +109,9 @@ function SignupPolicyList(props) {
 
       const keys = Object.keys(prevState);
       keys.forEach((key, index) => {
+
+        if(!visibility && index === 2) return;
+
         const realCheckBox = policy_KEYS[index]?.label?.indexOf(key) >= 0;
         const val = prevState[key];
         if (realCheckBox && !val) {
@@ -119,6 +126,7 @@ function SignupPolicyList(props) {
   }, [
     policyValues.privacyPolicy,
     policyValues.servicePolicy,
+    policyValues.thirdPolicy,
     policyValues.receiveSms,
     policyValues.receiveEmail,
     policyValues.over14YearsOld,
@@ -145,6 +153,9 @@ function SignupPolicyList(props) {
       for (const prevStateKey in prevState) {
         tempObj[prevStateKey] = checked;
       }
+      if(!visibility) tempObj.thirdPolicy = false;
+      setPolicyValues(tempObj);
+
       return tempObj;
     });
   };

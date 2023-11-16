@@ -159,13 +159,13 @@ export default function SignInpuList({ formValues, setFormValues, formErrors, se
   };
 
   const onCheckAuthNumberHandler = () => {
-     console.log(
-      '인증번호 검증: ',
-      authPhoneNumber.authNumberEnteredByTheUser,
-      ' (유저입력)  ===  ',
-      authPhoneNumber.authNumber,
-      ' (인증번호)',
-    );
+    //  console.log(
+    //   '인증번호 검증: ',
+    //   authPhoneNumber.authNumberEnteredByTheUser,
+    //   ' (유저입력)  ===  ',
+    //   authPhoneNumber.authNumber,
+    //   ' (인증번호)',
+    // );
     const result = valid_authNumber(
       authPhoneNumber.authNumberEnteredByTheUser,
       authPhoneNumber.authNumber,

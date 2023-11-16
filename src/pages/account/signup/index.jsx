@@ -91,10 +91,15 @@ export default function SignupPage() {
   const [submitted, setSubmitted] = useState(false);
   
   const [visibility, setVisibility] = useState(false);
+  const [alliance, setAlliance] = useState(null);
 
-  
+
   useEffect(() => {
-    setVisibility(getCookie("alliance") === "cb");
+    // @YYL 콕뱅크 회원인지 확인
+    if(getCookie("alliance") === "cb") {
+      setAlliance("cb");
+      setVisibility(true);
+    }
   }, []);
 
   
@@ -194,6 +199,14 @@ export default function SignupPage() {
         receiveEmail: formvalues.agreement.receiveEmail,
         over14YearsOld: formvalues.agreement.over14YearsOld,
       },
+
+
+    // @YYL 콕뱅크 회원인지 확인
+      allianceInfo: {
+        alliance : alliance,
+        alliancePolicy: formvalues.agreement.thirdPolicy,
+      }
+
     };
     // console.log('SUBMIT BODY:\n', body);
 

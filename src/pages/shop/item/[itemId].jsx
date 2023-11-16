@@ -20,6 +20,9 @@ import { cartAction } from '/store/cart-slice';
 import axios from "axios";
 import {useModalContext} from "/store/modal-context";
 import Modal_global_alert from "/src/components/modal/Modal_global_alert";
+import {getData} from "/src/pages/api/reqData";
+import {deleteCookie, getCookie, setCookie} from "@util/func/cookie";
+import { cookieType } from '@store/TYPE/cookieType';
 
 export default function SingleItemDetailPage({data}) {
   const mct = useModalContext();
@@ -224,15 +227,18 @@ const validation_itemPrice = (data) => {
   // console.log(data?.discountDegree)
   // console.log(salePricebyAdminPageCalcuator)
 
-  if (itemPrice !== salePricebyAdminPageCalcuator) {
-    alert('세일가격에 이상이 있습니다. 관리자에게 문의하세요.');
-    return null;
-  }
-  if (data.originalPrice < data.salePrice) {
-    // validation Price
-    alert('아이템 가격설정에 문제 발생하였습니다. 관리자에게 문의하세요.');
-    return null;
-  }
+  // @YYL 영린 수정
+  // 백엔드쪽에서 가격체크 하는데 굳이 필요없음
+  
+  // if (itemPrice !== salePricebyAdminPageCalcuator) {
+  //   alert('세일가격에 이상이 있습니다. 관리자에게 문의하세요.');
+  //   return null;
+  // }
+  // if (data.originalPrice < data.salePrice) {
+  //   // validation Price
+  //   alert('아이템 가격설정에 문제 발생하였습니다. 관리자에게 문의하세요.');
+  //   return null;
+  // }
 
   return itemPrice;
 };
@@ -246,17 +252,28 @@ export async function getServerSideProps(ctx) {
   let DATA = null;
   const apiUrl = `/api/items/${itemId}`;
   let res;
+  
+  console.log(apiUrl)
 
   try {
     // 서버 측에서 쿠키를 요청 헤더에 추가
     const cookies = req.headers.cookie; // 클라이언트로부터 전달된 쿠키
+    const name = cookieType.LOGIN_COOKIE;
+    const value = cookies.match(`(^|;) ?${name}=([^;]*)(;|$)`);
+    const accessToken = value ? value[2] : null;
+    
     res = await axios.get(apiUrl, {
       withCredentials: true,
       headers: {
+        authorization: accessToken,
         'content-Type': 'application/json',
         'Cookie': cookies, // 클라이언트 쿠키를 서버 요청에 추가
       },
     });
+
+    // console.log(apiUrl)
+      
+    // res = await getData(apiUrl);
 
     const data = res?.data;
 
