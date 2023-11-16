@@ -11,11 +11,11 @@ const inputNames = [
 ];
 
 const confirm = (e) => {
-  // console.log(e);
+  console.log(e);
   message.success('수정되었습니다.');
 };
 const cancel = (e) => {
-  // console.log(e);
+  console.log(e);
   message.error('취소되었습니다.');
 };
 

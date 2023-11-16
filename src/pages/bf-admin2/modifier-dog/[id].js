@@ -70,7 +70,7 @@ const dataIsDisabled = [
 
 
 const cancel = (e) => {
-  // console.log(e);
+  console.log(e);
   message.error('취소되었습니다.');
 };
 
