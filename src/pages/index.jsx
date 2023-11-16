@@ -37,10 +37,10 @@ import { Tween } from 'react-gsap';
 import { Controller, Scene } from "react-scrollmagic";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import ImageWithLoadingSpinner from '/src/components/atoms/ImageWithLoadingSpinner';
 
 import { getData, postData, postObjData, putObjData } from './api/reqData';
 import {deleteCookie, getCookie, setCookie} from "@util/func/cookie";
-import ImageWithLoadingSpinner from '/src/components/atoms/ImageWithLoadingSpinner';
 
 export default function MainPage({ data }) {
   // // console.log(data)
@@ -238,8 +238,7 @@ export default function MainPage({ data }) {
                             layout="fill"
 
                             alt="카드 이미지"
-                            priority={true}
-                          ></Image>
+                            priority />
                         </div>
                         <ul>
                             <li>
