@@ -25,12 +25,12 @@ const getAdminToken = async (payload, callback) => {
       headers,
     })
     .then((res) => {
-      console.log(res);
+      // console.log(res);
       if (callback && typeof callback === 'function ') callback(res);
       return (token = res.headers.authorization);
     })
     .catch((err) => {
-      console.log(err);
+      // console.log(err);
       if (callback && typeof callback === "function" ) callback(err);
       
       return null;

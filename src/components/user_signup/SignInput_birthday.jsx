@@ -40,7 +40,7 @@ const SignInput_birthday = ({
     }
 
     const formattedDate = format(date, "yyyy-MM-dd");
-    // console.log('id:',id,' val:',formattedDate);
+    // // console.log('id:',id,' val:',formattedDate);
 
     setSelectedDate(date);
     setFormValues((prevState) => {

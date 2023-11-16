@@ -38,8 +38,8 @@ export const SubscribeSkipPayment = ({subscribeInfo}) => {
   useEffect( () => {
     const periodInWeeks = Number(skipCount.split('-')[1]);
     const result = calcChangedSubscribeDeliveryDate(initialDelvieryDate, periodInWeeks);
-    // console.log(initialDelvieryDate)
-    // console.log(periodInWeeks)
+    // // console.log(initialDelvieryDate)
+    // // console.log(periodInWeeks)
     setChangedDelvieryDate(result);
   }, [skipCount] );
   
@@ -62,7 +62,7 @@ export const SubscribeSkipPayment = ({subscribeInfo}) => {
       setSubmitted(true);
       const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/skip/${skipType}`;
       const res = await postObjData(url, body);
-      console.log(res);
+      // console.log(res);
       if (res.isDone) {
         mct.alertShow('구독 건너뛰기가 적용되었습니다.',onSuccessChangeSubscribeOrder);
       } else {

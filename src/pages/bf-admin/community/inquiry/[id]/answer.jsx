@@ -31,7 +31,7 @@ export default function InquiryAnswerPage({ data }) {
   const [isLoading, setIsLoading] = useState({});
   const [submitted, setSubmitted] = useState( false );
   
-  // console.log(info);
+  // // console.log(info);
 
   const onDeleteItem = async () => {
     if(submitted) return onSuccessCallback();
@@ -61,7 +61,7 @@ export default function InquiryAnswerPage({ data }) {
           onFailCallback,
         );
       }
-      // console.log(res);
+      // // console.log(res);
     } catch (err) {
       mct.alertShow('서버와 통신문제로 인하여, 삭제에 실패하였습니다.', onFailCallback);
       console.error(err);
@@ -189,7 +189,7 @@ export async function getServerSideProps({ req, query }) {
 
   const inValid = isNaN(id);
   let AUTHOR_TYPE = await getDtataSSR_inquiryAuthorType(req, id);
-  console.log('inValid: ', inValid, 'AUTHOR_TYPE', AUTHOR_TYPE);
+  // console.log('inValid: ', inValid, 'AUTHOR_TYPE', AUTHOR_TYPE);
   if (inValid || !AUTHOR_TYPE) { // !PROD;
     return {
       redirect: {
@@ -201,7 +201,7 @@ export async function getServerSideProps({ req, query }) {
   const apiUrl = `/api/admin/questions/admin/${id}`;
   const answer_res = await getDataSSR(req, apiUrl);
   // const answer_res = DUMMY_ANSWER_RES; // ! TEST
-  // console.log('answer_res: ',answer_res);
+  // // console.log('answer_res: ',answer_res);
   if (answer_res?.status === 200 && answer_res?.data) {
     const data = answer_res.data;
     DATA = {

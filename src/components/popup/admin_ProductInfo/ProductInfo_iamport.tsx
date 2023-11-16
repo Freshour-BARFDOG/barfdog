@@ -50,7 +50,7 @@ export const ProductInfo_iamport = ({data}:PropsInterface) => {
           .then(res => res)
           .catch(err => err.response);
 
-        console.log(res);
+        // console.log(res);
         if (res.status === 200) {
           const d:GetPaymentsByImpUidResponse = res.data.response;
           const iamportData = {

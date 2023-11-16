@@ -21,7 +21,7 @@ export default function SNSManagementPage() {
   const [activeModal, setActiveModal] = useState( false );
   const [isLoading, setIsLoading] = useState( {} );
   const [isSubmitted, setIsSubmitted] = useState( false);
-  // console.log(userInfo);
+  // // console.log(userInfo);
   
   const onStartDisconnectSns = ()=>{
     setActiveModal(true);
@@ -40,7 +40,7 @@ export default function SNSManagementPage() {
       }));
       const url = `/api/members/sns`;
       const res = await deleteObjData(url);
-      console.log(res);
+      // console.log(res);
       if(res.isDone){
         mct.alertShow('SNS연동이 해제되었습니다.');
         setIsSubmitted(true)

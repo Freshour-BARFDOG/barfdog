@@ -33,7 +33,7 @@ function DeliverySettingPage() {
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  // console.log(formValues);
+  // // console.log(formValues);
   
   
   useEffect(() => {
@@ -44,7 +44,7 @@ function DeliverySettingPage() {
           fetching: true,
         }));
         const res = await getData(getFormValuesApiUrl);
-        console.log(res);
+        // console.log(res);
         const DATA = res.data;
         
         const initialFormValues = {
@@ -130,7 +130,7 @@ function DeliverySettingPage() {
       }));
       
       const res = await putObjData(postFormValuesApiUrl, convertedFormValues);
-      console.log(res);
+      // console.log(res);
       if (res.isDone) {
         mct.alertShow('사이트 설정이 성공적으로 저장되었습니다.', onSuccessCallback);
         setIsSubmitted(true);

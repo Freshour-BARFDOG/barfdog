@@ -9,7 +9,7 @@ axios.defaults.baseURL =
     : process.env.NEXT_PUBLIC_API_URL_DEV;
 axios.defaults.timeout = 10000;
 
-console.log('axios.defaults.baseURL: ',axios.defaults.baseURL);
+// console.log('axios.defaults.baseURL: ',axios.defaults.baseURL);
 
 
 
@@ -30,7 +30,7 @@ export default function axiosConfig(contType = 'application/json') {
 
 export function axiosUserConfig(contType = 'application/json') {
   const accessToken = getCookie(cookieType.LOGIN_COOKIE);
-  // console.log(accessToken)
+  // // console.log(accessToken)
   return {
     headers: {
       authorization: accessToken,

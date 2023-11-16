@@ -83,7 +83,7 @@ function ReleaseRewardPage() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    console.log(formValues);
+    // console.log(formValues);
     const errObj = validate(formValues);
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
@@ -107,11 +107,11 @@ function ReleaseRewardPage() {
       };
   
 
-      console.log(postFormValuesApiUrl)
-      console.log(filteredFormValues)
+      // console.log(postFormValuesApiUrl)
+      // console.log(filteredFormValues)
       
       const res = await postObjData(postFormValuesApiUrl, filteredFormValues);
-      console.log(res);
+      // console.log(res);
       if (res.isDone) {
         onShowModalHandler('적립금이 성공적으로 발행되었습니다.');
         setIsSubmitted(true);
@@ -288,9 +288,9 @@ export default ReleaseRewardPage;
 //
 // export async function getServerSideProps (context) {
 //   const {params, req, res} = context;
-//   console.log(params);
-//   console.log(req);
-//   console.log(res);
+//   // console.log(params);
+//   // console.log(req);
+//   // console.log(res);
 //   return {
 //     props: {
 //       data: 'zz'

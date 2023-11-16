@@ -29,7 +29,7 @@ export const validate = (obj, method: Method, originData = {
         break;
       case 'startDate':
         errors[key] = valid_isEmpty(val) || valid_isDateLaterThanToday(val, "min", minSlackTime);
-        console.log(isTheSameDateTime(val, originData.beforeStartDate));
+        // console.log(isTheSameDateTime(val, originData.beforeStartDate));
         if (method === "update" && isTheSameDateTime(val, originData.beforeStartDate)) {
           errors[key] = "";
         }
@@ -58,7 +58,7 @@ export const validate = (obj, method: Method, originData = {
         break;
     }
   }
-  console.log('Valid Result (formValues) : ', errors);
+  // console.log('Valid Result (formValues) : ', errors);
   return errors;
 };
 

@@ -13,7 +13,7 @@ export const useSubscribeRecipeInfo = () => {
         if ( recipeData ) return;
         const getAllRecipeInfoUrl = '/api/recipes';
         const res = await getData( getAllRecipeInfoUrl );
-        // console.log(res);
+        // // console.log(res);
         const data = res.data?._embedded.recipeListResponseDtoList;
         if ( data ) {
           const DATA = data.map( d => ({

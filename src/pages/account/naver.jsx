@@ -10,7 +10,7 @@ import { FullScreenRunningDog } from '/src/components/atoms/FullScreenLoading';
 import MetaTitle from '../../components/atoms/MetaTitle';
 
 export default function NAVER_Auth({ data, err, token }) {
-  console.log(data, err);
+  // console.log(data, err);
   const router = useRouter();
   const dispatch = useDispatch();
   const userSnsInfo = {
@@ -95,7 +95,7 @@ export async function getServerSideProps({ query }) {
     const NAVER_CLIENT_SECRET = process.env.NEXT_PUBLIC_NAVER_CLIENT_SECRET;
     const NAVER_REDIRECT_URI = encodeURI(process.env.NEXT_PUBLIC_NAVER_REDIRECT_URI);
     const GRANT_TYPE = 'authorization_code';
-    // console.log('NAVER_REDIRECT_URI: ',NAVER_REDIRECT_URI);
+    // // console.log('NAVER_REDIRECT_URI: ',NAVER_REDIRECT_URI);
 
     let naverResponse = await axios.post(
       `https://nid.naver.com/oauth2.0/token?grant_type=${GRANT_TYPE}&client_id=${NAVER_CLIENT_ID}&client_secret=${NAVER_CLIENT_SECRET}&code=${code}`,
@@ -106,10 +106,10 @@ export async function getServerSideProps({ query }) {
         },
       },
     );
-    console.log('naverResponse: ', naverResponse);
+    // console.log('naverResponse: ', naverResponse);
     naverToken = naverResponse.data.access_token;
   } catch (err) {
-    console.log('error:', err.response);
+    // console.log('error:', err.response);
   }
 
 
@@ -131,7 +131,7 @@ export async function getServerSideProps({ query }) {
         return err;
       });
 
-    console.log('BARFDOG API SERVER res::::: ', res);
+    // console.log('BARFDOG API SERVER res::::: ', res);
     // res = DUMMY_NEW_MEMBER_RESPONSE; ////////  ! TEST
     // res = DUMMY_MEMBER_RESPONSE; ////////  ! TEST
     if (res.status === 500) { // 서버응답이 없을 경우, Redir
@@ -175,7 +175,7 @@ export async function getServerSideProps({ query }) {
         snsUserType = userType.MEMBER_WITH_SNS.NAVER;
         token = res.headers.authorization;
       }
-      console.log(userInfo)
+      // console.log(userInfo)
       if (
         resultCode === 24 ||
         resultCode === 28 ||

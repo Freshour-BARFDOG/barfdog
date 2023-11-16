@@ -12,7 +12,7 @@ export default async function getGoogleOauthToken(req, res) {
     const client_secret = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET;
     const redirect_uri = process.env.NEXT_PUBLIC_GOOGLE_OAUTH_CALLBACK_URL;
     const grant_type = 'authorization_code'; // REQUIRED.  Value MUST be set to "authorization_code".
-    console.log(redirect_uri)
+    // console.log(redirect_uri)
     const data = await axios({
       method: 'POST',
       url: 'https://www.googleapis.com/oauth2/v4/token',
@@ -24,12 +24,12 @@ export default async function getGoogleOauthToken(req, res) {
         code: code
       },
     }).then(googleResonse => {
-      console.log('googleResonse: ', googleResonse);
+      // console.log('googleResonse: ', googleResonse);
       const token = googleResonse.data.access_token;
       const expires_in = googleResonse.data.expires_in;
       res.redirect(`/bf-admin/dashboard?token=${token}&expires_in=${expires_in}`);
     }).catch(err => {
-      console.log(err);
+      // console.log(err);
       if(err.status === 400){
         res.redirect(`/bf-admin/dashboard`);
       }

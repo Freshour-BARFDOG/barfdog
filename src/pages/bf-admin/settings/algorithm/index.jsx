@@ -35,7 +35,7 @@ export default function AlgorithmSettingPage() {
         }));
         const apiUrl = `/api/admin/setting`;
         const res = await getData(apiUrl, 'admin');
-        console.log(res);
+        // console.log(res);
         const DATA = res.data;
         
 
@@ -77,8 +77,8 @@ export default function AlgorithmSettingPage() {
         [key]:Number(val)
       }
     }
-    // console.log('formValues: ',formValues);
-    // console.log('convertedFormValues: ',convertedFormValues);
+    // // console.log('formValues: ',formValues);
+    // // console.log('convertedFormValues: ',convertedFormValues);
     const errObj = validate(convertedFormValues);
     setFormErrors(errObj);
 
@@ -94,7 +94,7 @@ export default function AlgorithmSettingPage() {
       }));
       const apiUrl = `/api/admin/setting`;
       const res = await putObjData(apiUrl, convertedFormValues);
-      console.log(res);
+      // console.log(res);
       if (res.isDone) {
         mct.alertShow('사이트 설정이 성공적으로 저장되었습니다.', onGlobalModalCallback);
         setIsSubmitted(true);

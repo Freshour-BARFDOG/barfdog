@@ -4,7 +4,7 @@ import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import Image from 'next/image';
-import { deleteObjData, getDataSSR, putObjData } from '/src/pages/api/reqData';
+import { deleteObjData, getDataSSR, putObjData, getDataSSRWithCookies } from '/src/pages/api/reqData';
 import PureCheckbox from '/src/components/atoms/PureCheckbox';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import CloseButton from '/src/components/atoms/CloseButton';
@@ -230,14 +230,14 @@ export default function CartPage({ data, error }) {
         id: selectedBasketId,
       };
       const res = await deleteObjData(deleteApiUrl, body);
-      console.log(res);
+      // console.log(res);
       
       if (res.isDone) {
         await setSelectedItemBasketIds((prevId) => prevId.filter((id) => id !== selectedBasketId));
         await setAllBasketIdList((prevId) => prevId.filter((id) => id !== selectedBasketId))
         await setDATA((prevState) => {
           const nextBasketDtoList = prevState.basketDtoList.filter( item => item.basketId !== selectedBasketId );
-          console.log(nextBasketDtoList);
+          // console.log(nextBasketDtoList);
           const nextCount = nextBasketDtoList.length;
           dispatch(cartAction.setItemCount({ count: nextCount}));
           return {
@@ -272,10 +272,10 @@ export default function CartPage({ data, error }) {
       const body = {
         deleteBasketIdList: selectedItemBasketIds,
       };
-      console.log(body);
+      // console.log(body);
 
       const res = await deleteObjData(deleteApiUrl, body);
-      console.log(res);
+      // console.log(res);
 
       if (res.isDone) {
         setSelectedItemBasketIds([]);
@@ -324,7 +324,7 @@ export default function CartPage({ data, error }) {
       await dispatch(cartAction.setOrderItemList({ items}));
       await router.push(`/order/ordersheet/general`);
     } catch (err) {
-      console.log('API통신 오류 : ', err);
+      // console.log('API통신 오류 : ', err);
     }
     setIsLoading((prevState) => ({
       ...prevState,
@@ -533,8 +533,10 @@ export async function getServerSideProps({ req }) {
   let data = null;
   let error = null;
   const getApiUrl = `/api/baskets`;
-  const res = await getDataSSR(req, getApiUrl);
-  // console.log('SERVER REPONSE: ', res);
+  //const res = await getDataSSR(req, getApiUrl);
+  const cookies = req.headers.cookie; // 클라이언트로부터 전달된 쿠키
+  const res = await getDataSSRWithCookies(req, getApiUrl, cookies);
+  // // console.log('SERVER REPONSE: ', res);
   if (res?.status === 200) {
     data = res.data;
   } else {

@@ -113,7 +113,7 @@ export async function getServerSideProps({ req, query }) {
   const apiUrl = `/api/admin/questions/member/${id}`;
   const inquiry_res = await getDataSSR(req, apiUrl);
   // const inquiry_res = DUMMY_INQUIRY_RES; // ! TEST
-  // console.log(inquiry_res)
+  // // console.log(inquiry_res)
   if (inquiry_res?.status === 200 && inquiry_res?.data) {
     const data = inquiry_res.data;
     const answerIdList = data.answerIdList;

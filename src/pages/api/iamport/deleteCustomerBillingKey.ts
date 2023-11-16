@@ -50,7 +50,7 @@ export default async function DELETE(req: NextApiRequest, res: NextApiResponse) 
     }
     const url = `/subscribe/customers/${customerUid}`;
     const encodedUrl:string = getDeleteBillingkeyEncodedURI(url, paramMap);
-    console.log("------ encodedUrl = ",encodedUrl);
+    // console.log("------ encodedUrl = ",encodedUrl);
     const DATA = await axiosIamport({
       url: encodedUrl,
       method: "DELETE",
@@ -62,7 +62,7 @@ export default async function DELETE(req: NextApiRequest, res: NextApiResponse) 
 
     const jsonDataAsString = JSON.stringify(DATA);
 
-    console.log('---------- AXIOS > RESPONSE: ', DATA);
+    // console.log('---------- AXIOS > RESPONSE: ', DATA);
 
     const defaultCorsHeader = {
       "Access-Control-Allow-Origin": "*", // 다 받거나, 하나만 받거나만 가능

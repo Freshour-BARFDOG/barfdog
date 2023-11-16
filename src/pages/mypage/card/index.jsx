@@ -127,7 +127,7 @@ export default function MypageCardPage({data}) {
 
       /* 4. 결제 창 호출하기 */
       async function callback(callbackData, response) {
-        console.log("- callbackData: ", callbackData, "\n- response: ", response)
+        // console.log("- callbackData: ", callbackData, "\n- response: ", response)
         const {success, customer_uid, error_msg} = response;
 
         /* 3. 콜백 함수 정의하기 */
@@ -138,7 +138,7 @@ export default function MypageCardPage({data}) {
             customerUid: customer_uid,
             paymentMethod: callbackData.paymentMethod
           });
-          console.log(r);
+          // console.log(r);
           if (r.isDone) {
             mct.alertShow('카드변경 성공', onSuccessCallback);
           } else {

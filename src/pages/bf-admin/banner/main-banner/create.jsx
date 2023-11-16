@@ -43,10 +43,10 @@ function CreateMainBannerPage() {
 
   // useEffect(() => {
   //   if (isSubmitting && !Object.keys(formErrors).length) {
-  //     console.log('데이터 전송');
+  //     // console.log('데이터 전송');
   //     postDataToServer();
   //   } else {
-  //     console.log(formErrors);
+  //     // console.log(formErrors);
   //   }
   // }, [formErrors, isSubmitting]);
   
@@ -118,7 +118,7 @@ function CreateMainBannerPage() {
     //   : "";
     valid_isEmpty(file_pc.file) && (errors['file_pc'] = valid_isEmpty(file_pc.file));
     valid_isEmpty(file_mobile.file) && (errors['file_mobile'] = valid_isEmpty(file_mobile.file));
-    console.log('Validation Result: ', errors);
+    // console.log('Validation Result: ', errors);
     
     return errors;
   };
@@ -150,7 +150,7 @@ function CreateMainBannerPage() {
 
   const onRadioButtonHandler = (data) => {
     const { key, value } = data;
-    console.log(key, value);
+    // console.log(key, value);
     if (key === 'targets') {
       setExposedTarget(value);
       setFormValues({
@@ -198,7 +198,7 @@ function CreateMainBannerPage() {
   
       const url = '/api/banners/main';
       const r = await postObjData(url, formData, 'multipart/form-data');
-      console.log(r);
+      // console.log(r);
       if(r.isDone){
         setIsSubmitting(true);
         alert('메인배너가 성공적으로 등록되었습니다.');

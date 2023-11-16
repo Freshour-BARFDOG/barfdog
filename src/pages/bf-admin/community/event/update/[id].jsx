@@ -44,12 +44,12 @@ const UpdateEventPage = () => {
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  console.log(formValues);
+  // console.log(formValues);
   useEffect(() => {
     if (!id) return;
     (async () => {
       const res = await getData(getFormValuesApiUrl);
-      console.log(res);
+      // console.log(res);
       const DATA = res.data.eventAdminDto;
       const detailImageData = res.data.eventImageDtoList;
       setOriginImageDatas(detailImageData);
@@ -149,7 +149,7 @@ const UpdateEventPage = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    console.log(formValues);
+    // console.log(formValues);
     // ! IMPORTANT : create Event후, 사용자가 enter를 쳤을 경우, 똑같은 요청이 전송되지 않게 하기 위해서 필요함.
     if (isSubmitted) return;
 
@@ -164,7 +164,7 @@ const UpdateEventPage = () => {
       if (isPassed) {
         const objData = formValues;
         const res = await putObjData(postFormValuesApiUrl, objData);
-        console.log(res);
+        // console.log(res);
         // const res = { // TESTTESTTESTTESTTESTTESTTESTTESTTEST
         //   isDone : true,
         //   error: ''

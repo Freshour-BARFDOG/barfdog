@@ -31,7 +31,7 @@ export default function IngredientsItemList({ id, formValues, setFormValues, mod
         }
         return convertedItem;
       });
-      // console.log(filteredLegacyList); ///  Check Init value on Update mode;
+      // // console.log(filteredLegacyList); ///  Check Init value on Update mode;
       return legacyItemList.length ? filteredLegacyList.concat(prevList) : prevList;
     });
     setIsImportingOriginItemListCompleted(true);
@@ -75,7 +75,7 @@ export default function IngredientsItemList({ id, formValues, setFormValues, mod
     
     const checkedValueArr= [];
     await setItemList((prevState) => {
-      console.log(prevState)
+      // console.log(prevState)
       return prevState.map(item=>{
         if(item.id === targetId && checkedOnThisCheckbox === false){
           checkedValueArr.push(item.id);

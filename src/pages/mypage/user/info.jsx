@@ -43,8 +43,8 @@ export default function UserInfoPage() {
     providerId: userInfo.providerId || null,
   };
 
-  // console.log('userState: ',userState)
-  // console.log('initialFormValues: ',initialFormValues)
+  // // console.log('userState: ',userState)
+  // // console.log('initialFormValues: ',initialFormValues)
   const [alertModalMessage, setAlertModalMessage] = useState('');
   const [form, setForm] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState({});
@@ -58,7 +58,7 @@ export default function UserInfoPage() {
     const errObj = validate(form, formErrors);
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
-    console.log(form);
+    // console.log(form);
     if (!isPassed) {
       mct.alertShow();
       setAlertModalMessage('유효하지 않은 항목이 있습니다.');
@@ -85,10 +85,10 @@ export default function UserInfoPage() {
         receiveSms: form.agreement.receiveSms,
         receiveEmail: form.agreement.receiveEmail,
       };
-      // console.log(body);
+      // // console.log(body);
       const url = '/api/members';
       const res = await putObjData(url, body);
-      // console.log(res);
+      // // console.log(res);
       if (res.isDone) {
         mct.alertShow();
         setIsSubmitted(true);
@@ -182,7 +182,7 @@ export async function getServerSideProps ({req}) {
   const res = await getDataSSR(req, url);
   if(res.data){
     const needToSetPassword = res.data.needToSetPassword;
-    // console.log('needToSetPassword: ',needToSetPassword);
+    // // console.log('needToSetPassword: ',needToSetPassword);
     // if(!needToSetPassword){ // ! TEST
     if(needToSetPassword){ // ! PROD
       return {

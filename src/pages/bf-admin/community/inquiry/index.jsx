@@ -84,7 +84,7 @@ export default function InquiryListPage () {
   
   const pageInterceptor = useCallback( (res, option = {itemQuery: null}) => {
     // res = DUMMY__RESPONSE; // ! TEST
-    console.log( res );
+    // console.log( res );
     return getDefaultPagenationInfo( res?.data, 'questionListSideAdminList', {pageSize: searchPageSize} );
   }, [] );
   
@@ -130,7 +130,7 @@ export default function InquiryListPage () {
         mct.alertShow( `선택하신 ${selectedItemIds.length}개의 항목이 삭제되었습니다.`, onWindowReload );
       }
       
-      // console.log(res);
+      // // console.log(res);
     } catch (err) {
       mct.alertShow( '삭제에 실패하였습니다.', onWindowReload );
       console.error( err )

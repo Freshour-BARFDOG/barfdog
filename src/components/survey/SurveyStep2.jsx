@@ -26,7 +26,7 @@ export default function SurveyStep2 ({formValues, setFormValues}) {
   walkingTimePerOneTimeOptions.unshift(defaultLabel);
   
 
-  // console.log(formValues)
+  // // console.log(formValues)
   
   return (
     <section id='surveyPage' className={s.step2page}>

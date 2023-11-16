@@ -6,8 +6,8 @@ import transformDate from "/util/func/transformDate";
 const ProductInfo_orderStatusInfo = ({ basicOrderInfo, boxLabel }) => {
   
   const queryHeader = basicOrderInfo.orderStatus.indexOf('CANCEL') >= 0 ? 'cancel' : basicOrderInfo.orderStatus.indexOf('RETURN') >= 0 ? 'return' : basicOrderInfo.orderStatus.indexOf('EXCHANGE') >= 0 ? 'exchange' : null;
-  console.log('basicOrderInfo: ',basicOrderInfo);
-  console.log(queryHeader);
+  // console.log('basicOrderInfo: ',basicOrderInfo);
+  // console.log(queryHeader);
   return (
     <>
       <div className={s["t-header"]}>

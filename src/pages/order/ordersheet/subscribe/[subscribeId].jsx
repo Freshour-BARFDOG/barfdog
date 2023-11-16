@@ -60,7 +60,7 @@ export default function SubscribeOrderSheetPage() {
     }
 
     // Validation - 결제정보를 정상적으로 받은 후, 데이터요청 X (최초 1회만 request 실행.)
-    if(afterInitialize) return console.log('[INFO] 구독결제 정보가 올바르게 설정되었습니다.');
+    if(afterInitialize) return // console.log('[INFO] 구독결제 정보가 올바르게 설정되었습니다.');
 
 
 
@@ -75,10 +75,13 @@ export default function SubscribeOrderSheetPage() {
 
         const url = `/api/planDiscount`;
         const planDiscountRes = await getData(url);
-        console.log('----- planDiscountRes: ', planDiscountRes);
+        // console.log('----- planDiscountRes: ', planDiscountRes);
         let subscribePlanInfo = {};
         if(planDiscountRes.data && planDiscountRes.status === 200) {
+
+          // plan_discount 테이블 정보를 data 에 저장
           const data = planDiscountRes.data._embedded.planDiscountResponseDtoList[0];
+          // 콕뱅크 할인율 할때 이부분 수정하면됨
           subscribePlanInfo[subscribePlanType.FULL.NAME] =  data.full;
           subscribePlanInfo[subscribePlanType.HALF.NAME] =  data.half;
           subscribePlanInfo[subscribePlanType.TOPPING.NAME] =  data.topping;
@@ -90,13 +93,13 @@ export default function SubscribeOrderSheetPage() {
           id: subscribeId,
         };
         const res = await getData( apiUrl, body );
-        console.log("/api/orders/sheet/subscribe/${subscribeId} = ",res.data)
+        // console.log("/api/orders/sheet/subscribe/${subscribeId} = ",res.data)
         if ( res.status !== 200 ) {
           alert( '주문 정보를 확인할 수 없습니다.' );
           return (window.location.href = '/');
         }
         const data = res.data;
-        console.log( data );
+        // console.log( data );
 
         // 주문에 대한 모든 데이터
         const initInfo = {

@@ -38,7 +38,7 @@ export const ShopBoard = ({
       [id]: false
     });
   };
-  // console.log(item);
+  // // console.log(item);
 
 
   return (
@@ -67,6 +67,7 @@ export const ShopBoard = ({
           <div className={`${Style.right_box}`}>
             <div className={Style.content_title}>{data?.item?.name}</div>
 
+            {/* 콕뱅크 할 때 수정해야됨  */}
             <div className={Style.price_box}>
               <span className={Style.price}>{transformLocalCurrency(formValues.itemPrice)}</span>
               <span className={Style.won}>원</span>
@@ -90,7 +91,7 @@ export const ShopBoard = ({
               <div>배송정보</div>
 
               <div>
-                {item.deliveryFree ? '무료' :  (
+                {item?.deliveryFree ? '무료' :  (
                   <>
                     택배배송 {transformLocalCurrency(data?.delivery?.price)}원
                     <p className={Style.del_br}></p> (

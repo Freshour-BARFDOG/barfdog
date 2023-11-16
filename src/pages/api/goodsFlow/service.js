@@ -11,14 +11,14 @@ export const getGoodsFlowOtp = async () => {
         'Content-Type': 'application/json',}}
     )
     .then((res) => {
-       console.log(
+        console.log(
         '------------------------------------------------------------------ AXIOS > RESPONSE ------------------------------------------------------------------ ',
         res,
       );
-      console.log(res.data.data);
+      // console.log(res.data.data);
       const otpValue = res.data.data; 
-      console.log('otpValue');
-      console.log(otpValue);
+      // console.log('otpValue');
+      // console.log(otpValue);
       return otpValue;
     })
     .catch((err) => {
@@ -26,8 +26,8 @@ export const getGoodsFlowOtp = async () => {
 
       return err.response;
     });
-  console.log('*****------------------- GET GOODSFLOW DATA OTP from NextJS Server Response:', otp);
-  console.log(otp);
+  // console.log('*****------------------- GET GOODSFLOW DATA OTP from NextJS Server Response:', otp);
+  // console.log(otp);
 
   return otp;
 
@@ -43,12 +43,12 @@ export const postGoodsFlowOrder = async (data)=>{
           'Content-Type': 'application/json',}}
       )
       .then((res) => { 
-        console.log(res.data.id);
-        console.log(
+        // console.log(res.data.id);
+         console.log(
           '------------------------------------------------------------------ AXIOS > RESPONSE ------------------------------------------------------------------ ',
           res,
         );
-        console.log(res.data.id);
+        // console.log(res.data.id);
 
         return res;
       })
@@ -58,7 +58,7 @@ export const postGoodsFlowOrder = async (data)=>{
         return err.response;
       });
 
-    console.log('*****------------------- GET GOODSFLOW DATA ID from NextJS Server Response:', id);
+    // console.log('*****------------------- GET GOODSFLOW DATA ID from NextJS Server Response:', id);
     return id;
 }
 
@@ -77,11 +77,11 @@ export const orderPrint = async (o,i) => {
       
     )
      .then((res) => {
-       console.log(
+        console.log(
          '------------------------------------------------------------------ AXIOS > RESPONSE ------------------------------------------------------------------ ',
          res,
        );
-       console.log(res.data);
+       // console.log(res.data);
        
        return res.data;
    });
@@ -101,8 +101,8 @@ export const goodsFlowOrderCancel = async (transUniqueCd) => {
     },
   )
   .then((res) => {
-    // console.log(res.data);
-    // console.log(
+    // // console.log(res.data);
+    //  console.log(
     //   '---------------------------------GoodsFlow Cancel AXIOS > RESPONSE ------------------------------------------------------------------ ',
     //   res,
     // );
@@ -115,6 +115,6 @@ export const goodsFlowOrderCancel = async (transUniqueCd) => {
 
     return err.response;
   });
-  console.log(`=======cancel res${cancelRes}`);
+  // console.log(`=======cancel res${cancelRes}`);
   return cancelRes;
 }

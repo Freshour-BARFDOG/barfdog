@@ -5,7 +5,7 @@ import {NextApiRequest, NextApiResponse} from "next";
 import {axiosBaseURLBySSR} from "@src/pages/api/axios/axiosBaseURLBySSR";
 
 export default async function POST(req:NextApiRequest, res:NextApiResponse) {
-  console.log("--req body", req.body);
+  // console.log("--req body", req.body);
   // timeout - 네이버페이 검수 조건
   // ※ 정기결제 승인 / 취소 API : 60초
   // ※ 그 외 API : 10초
@@ -39,7 +39,7 @@ export default async function POST(req:NextApiRequest, res:NextApiResponse) {
 
     const jsonDataAsString = JSON.stringify(DATA);
 
-    console.log('---------- AXIOS > RESPONSE: ', DATA);
+    // console.log('---------- AXIOS > RESPONSE: ', DATA);
 
     const defaultCorsHeader = {
       "Access-Control-Allow-Origin": "*", // 다 받거나, 하나만 받거나만 가능

@@ -16,7 +16,7 @@ export const calcNextSubscribeDeliveryDate = (d = transformToday(), unit = '월�
   const ORDER_DEADLINE_DAY_INDEX = orderDeadLineDayIndex();
   const diff = sundayOfWeek + (dayOfWeek <= ORDER_DEADLINE_DAY_INDEX ? NEXT_TARGET_DAY : THEWEEKAFTERNEXT_TARGET_DAY);
   const nextDeliveryDate = new Date( today.setDate( diff ) ).toISOString().substring( 0, 10 );
-  // console.log('다음 정기구독 발송 예정일: ',new Date(today.setDate(diff)).toISOString().substring(0,10));
+  // // console.log('다음 정기구독 발송 예정일: ',new Date(today.setDate(diff)).toISOString().substring(0,10));
   return transformDate( nextDeliveryDate, unit );
   // unit: null  > 'YYYY-MM-DD'
   // unit: 년월일 > 'YYYY년 MM월 DD일'

@@ -10,7 +10,7 @@ const filter_ints = (numString, intCount) => {
     return numString;
   }
   const convertedInt = int.substring( 0, digits );
-  // console.log(`${convertedInt}.${demical}`);
+  // // console.log(`${convertedInt}.${demical}`);
   return `${convertedInt}.${demical}`;
 };
 

@@ -31,7 +31,7 @@ export const validate = (obj, fileObj) => {
 
   const thumbnailKey = 'thumbnailId'
   errors[thumbnailKey] = valid_isEmptyFile(fileObj, 'thumbnailUrl');
-  console.log('Valid Result (formValues) : ', errors);
+  // console.log('Valid Result (formValues) : ', errors);
   return errors;
 };
 

@@ -141,7 +141,7 @@ const AuthNumber = ({ displayedTime, authNum, data }) => {
     e.preventDefault();
     if (!enteredNumber) return mct.alertShow('인증번호를 입력해주세요.');
     if(submit) return mct.alertShow( '이미 제출된 양식입니다.' );
-     console.log('(*테스트 종류 후 삭제) 인증코드: ', authNum);
+     // console.log('(*테스트 종류 후 삭제) 인증코드: ', authNum);
     if (authNum === enteredNumber) {
       const body = {
         email: data.email,

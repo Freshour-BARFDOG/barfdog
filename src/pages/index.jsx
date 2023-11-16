@@ -37,10 +37,13 @@ import { Tween } from 'react-gsap';
 import { Controller, Scene } from "react-scrollmagic";
 import AOS from "aos";
 import "aos/dist/aos.css";
+
+import { getData, postData, postObjData, putObjData } from './api/reqData';
+import {deleteCookie, getCookie, setCookie} from "@util/func/cookie";
 import ImageWithLoadingSpinner from '/src/components/atoms/ImageWithLoadingSpinner';
 
 export default function MainPage({ data }) {
-  // console.log(data)
+  // // console.log(data)
   const router = useRouter();
   const isMobile = useDeviceState().isMobile;
   const [activeTempPasswordModal, setActiveTempPasswordModal] = useState(false);
@@ -63,6 +66,57 @@ export default function MainPage({ data }) {
   useEffect(() => {
     AOS.init();
   });
+
+
+
+  // YYL 콕뱅크 쿠키 관련
+  useEffect(() => {
+
+    const alliance = router.query.alliance;
+
+    if(alliance === 'cb'){
+
+      setCookie('alliance', 'cb', 'hour', 1);
+
+      // 메인으로 리다이렉트
+      router.push('/');
+    
+      // (async () => {
+      //   try {
+      //     const url = '/api/planDiscountTest';
+      //     const res = await getData(url);
+  
+      //     if (res?.status === 200) {
+      //       const dataToAssign = res.data ?? {};
+      //       setDataBase(dataToAssign);
+      //     }
+      //   } catch (err) {
+      //     console.error(err);
+      //   } 
+      // })();
+  
+      // (async () => {
+      //   try {
+      //     const url = '/api/alliance?alliance=cb';
+      //     const res = await getData(url);
+  
+      //     // console.log(res)
+  
+      //     // console.log(document.cookie);
+  
+      //     if (res?.status === 200) {
+      //       const dataToAssign = res.data ?? {};
+      //       setDataBase(dataToAssign);
+      //     }
+      //   } catch (err) {
+      //     console.error(err);
+      //   } 
+      // })();
+    }
+  });
+  
+  
+
 
   return (
     <>
@@ -184,7 +238,8 @@ export default function MainPage({ data }) {
                             layout="fill"
 
                             alt="카드 이미지"
-                            priority />
+                            priority={true}
+                          ></Image>
                         </div>
                         <ul>
                             <li>
@@ -595,11 +650,11 @@ export async function getServerSideProps({req}) {
         },
       })
       .then((res) => {
-        // console.log(res);
+        // // console.log(res);
         return res;
       })
       .catch ((err) => {
-        // console.log(err.response)
+        // // console.log(err.response)
         return err.response;
       });
 
@@ -656,7 +711,7 @@ export async function getServerSideProps({req}) {
     console.error(err);
     return err.response;
   }
-  // console.log('MAIN DATA :', DATA);
+  // // console.log('MAIN DATA :', DATA);
   return { props: { data: DATA } };
 }
 

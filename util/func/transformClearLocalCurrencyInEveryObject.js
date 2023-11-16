@@ -17,17 +17,17 @@ const transformClearLocalCurrencyInEveryObject = (obj, filterStringObj) => {
           ...resultObj,
           [key]: transformClearLocalCurrency(val),
         };
-        // console.log('****** result obj: ',resultObj);
+        // // console.log('****** result obj: ',resultObj);
       } else if (isTarget && valid_isArray(val) && val.length > 0) {
         const innerValueArr = val;
         let isInnerTarget = false;
         const newInnerArray = [];
         const filterKeys = Object.keys(filterStringObj);
         let innerFilterStringObj = filterKeys.indexOf(key) && filterStringObj[key];
-        // console.log('callingCount:',callingCount,' && value :',val);
+        // // console.log('callingCount:',callingCount,' && value :',val);
         const innerFilterKeys = Object.keys(innerFilterStringObj);
         innerValueArr.forEach(objInInnerValueArr=>{
-          // console.log(objInInnerValueArr)
+          // // console.log(objInInnerValueArr)
           const keysOfobjInInnerValuearr =  Object.keys(objInInnerValueArr);
           keysOfobjInInnerValuearr.forEach(k=> {
             innerFilterKeys.forEach(f=>{
@@ -38,13 +38,13 @@ const transformClearLocalCurrencyInEveryObject = (obj, filterStringObj) => {
           });
           
           if (isInnerTarget && innerFilterKeys.length){
-            // console.log('Recursive Target > objInArray: ',objInInnerValueArr);
-            // console.log('innerFilterStringList: ',innerFilterStringObj);
+            // // console.log('Recursive Target > objInArray: ',objInInnerValueArr);
+            // // console.log('innerFilterStringList: ',innerFilterStringObj);
             const result = transformClearLocalCurrencyInEveryObject(
               objInInnerValueArr,
               innerFilterStringObj,
             );
-            // console.log('result :::::: ', result);
+            // // console.log('result :::::: ', result);
             newInnerArray.push(result);
             resultObj = {
               ...resultObj,

@@ -11,7 +11,7 @@ export function validate(obj) {
     }
   }
   
-  console.log('Valid Result (formValues) : ', errors);
+  // console.log('Valid Result (formValues) : ', errors);
   return errors;
 }
 

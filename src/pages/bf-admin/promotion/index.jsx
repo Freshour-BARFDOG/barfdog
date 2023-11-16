@@ -41,7 +41,7 @@ export default function PromotionSearchPage() {
   const [searchQueryInitialize, setSearchQueryInitialize] = useState(false);
 
   const pageInterceptor = useCallback((res) => {
-    console.log(res);
+    // console.log(res);
     return getDefaultPagenationInfo(res?.data, 'queryAdminPromotionsDtoList', {
       pageSize: searchPageSize,
       setInitialize: setSearchQueryInitialize
@@ -75,9 +75,9 @@ export default function PromotionSearchPage() {
       const body = {
         id:targetId
       }
-      console.log(apiUrl, body);
+      // console.log(apiUrl, body);
       const res = await putObjData(apiUrl, body);
-      console.log(res);
+      // console.log(res);
       if(res.isDone){
         mct.alertShow( "프로모션이 삭제되었습니다.", onAlertModalCallback );
       } else {

@@ -71,7 +71,7 @@ const SingupInput = ({
     if (!addedClassName?.length) return;
 
     addedClassName?.forEach((list) => {
-      // console.log('className: ',list)
+      // // console.log('className: ',list)
       if (!list) return;
       return (classNameList += ` ${s[list]} `);
     });

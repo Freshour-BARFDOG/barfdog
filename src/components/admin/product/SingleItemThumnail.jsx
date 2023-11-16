@@ -9,7 +9,7 @@ import {postFileUpload} from "../../../pages/api/reqData";
 
 export default function SingleItemThumbnail({fileList, setFileList, formErrors, setFormValues }) {
 
-  // console.log(fileList)
+  // // console.log(fileList)
 
 
   const imageFileChangeHandler = async (e) => {
@@ -77,7 +77,7 @@ export default function SingleItemThumbnail({fileList, setFileList, formErrors, 
     const tobeDeletedIndex = Number(thumb.dataset.index);
     const newFileList = fileList.filter((list, index)=> index !== tobeDeletedIndex);
     setFileList(newFileList);
-    // console.log(newFileList);
+    // // console.log(newFileList);
   };
 
 

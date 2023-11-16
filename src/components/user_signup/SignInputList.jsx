@@ -60,7 +60,7 @@ export default function SignInpuList({ formValues, setFormValues, formErrors, se
         formValues.password,
         formValues.confirmPassword,
       );
-      // console.log('Keyboardevent!: ',validConfirmPassword)
+      // // console.log('Keyboardevent!: ',validConfirmPassword)
       setFormErrors((prevState) => ({
         ...prevState,
         password: validPassword,
@@ -91,7 +91,7 @@ export default function SignInpuList({ formValues, setFormValues, formErrors, se
       }));
       
       const response = await valid_email_duplication(formValues.email);
-      // console.log(response);
+      // // console.log(response);
       setFormErrors((prevState) => ({
         ...prevState,
         email: response.error,
@@ -146,7 +146,7 @@ export default function SignInpuList({ formValues, setFormValues, formErrors, se
     }));
 
     const response = await getAuthNumberForPhoneNumber(formValues.phoneNumber);
-    console.log(response);
+    // console.log(response);
     setAuthPhoneNumber((prevState) => ({
       ...prevState,
       authNumber: response.authNumber,
@@ -159,20 +159,20 @@ export default function SignInpuList({ formValues, setFormValues, formErrors, se
   };
 
   const onCheckAuthNumberHandler = () => {
-    console.log(
-      '인증번호 검증: ',
-      authPhoneNumber.authNumberEnteredByTheUser,
-      ' (유저입력)  ===  ',
-      authPhoneNumber.authNumber,
-      ' (인증번호)',
-    );
+    //  console.log(
+    //   '인증번호 검증: ',
+    //   authPhoneNumber.authNumberEnteredByTheUser,
+    //   ' (유저입력)  ===  ',
+    //   authPhoneNumber.authNumber,
+    //   ' (인증번호)',
+    // );
     const result = valid_authNumber(
       authPhoneNumber.authNumberEnteredByTheUser,
       authPhoneNumber.authNumber,
     );
     const error = result.error;
     const isMatched = result.isMatched;
-    // console.log(isMatched, '<---매치드 // --> 에러: ', error)
+    // // console.log(isMatched, '<---매치드 // --> 에러: ', error)
     setFormErrors((prevState) => ({
       ...prevState,
       authNumber: error,
@@ -186,7 +186,7 @@ export default function SignInpuList({ formValues, setFormValues, formErrors, se
   };
 
 
-  // console.log("formErrors.email: ",formErrors, "\nemailValdationMessage: ",emailValdationMessage);
+  // // console.log("formErrors.email: ",formErrors, "\nemailValdationMessage: ",emailValdationMessage);
   return (
     <>
       <SignupInput

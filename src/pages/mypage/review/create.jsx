@@ -86,7 +86,7 @@ export default function CreateReviewPage() {
   const [form, setForm] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
-  console.log(form);
+  // console.log(form);
   useEffect(() => {
     const reviewInfo = userState.reviewInfo;
     const { reviewType, id, targetId, title, orderedDate, itemThumbnailUrl } = reviewInfo;
@@ -108,7 +108,7 @@ export default function CreateReviewPage() {
     }
   }, [formErrors]);
 
-  // console.log(formValues)
+  // // console.log(formValues)
   const onInputChangeHandler = (e) => {
     const input = e.currentTarget;
     const { id, value } = input;
@@ -134,7 +134,7 @@ export default function CreateReviewPage() {
       contents: form.contents,
       reviewImageIdList: form.reviewImageIdList.map((list) => list.id),
     };
-    // console.log(body);
+    // // console.log(body);
     const errObj = validate(body, { contents: maxContentsLength });
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
@@ -146,7 +146,7 @@ export default function CreateReviewPage() {
         submit: true,
       }));
       const res = await postObjData(postFormValuesApiUrl, body);
-      console.log(res);
+      // console.log(res);
       if (res.isDone) {
         onShowModalHandler('리뷰가 성공적으로 등록되었습니다.');
         setIsSubmitted(true);

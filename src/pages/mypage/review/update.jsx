@@ -89,7 +89,7 @@ export default function UpdateReviewPage( ) {
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  // console.log(form);
+  // // console.log(form);
 
   useEffect(() => {
     const reviewInfo = userState.reviewInfo;
@@ -121,7 +121,7 @@ export default function UpdateReviewPage( ) {
         } else {
           alert('데이터를 가져올 수 없습니다.');
         }
-        console.log(res);
+        // console.log(res);
       } catch (err) {
         console.error(err);
       }
@@ -140,7 +140,7 @@ export default function UpdateReviewPage( ) {
     }
   }, [formErrors]);
 
-  // console.log(formValues)
+  // // console.log(formValues)
   const onInputChangeHandler = (e) => {
     const input = e.currentTarget;
     const { id, value } = input;
@@ -164,7 +164,7 @@ export default function UpdateReviewPage( ) {
       addImageIdList: form.addImageIdList,
       deleteImageIdList: form.deleteImageIdList,
     };
-    console.log(body);
+    // console.log(body);
     const errObj = validate(body, { contents: maxContentsLength });
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
@@ -177,7 +177,7 @@ export default function UpdateReviewPage( ) {
       }));
       const apiUrl = `/api/reviews/${form.id}`;
       const res = await putObjData(apiUrl, body);
-      console.log(res);
+      // console.log(res);
       if (res.isDone) {
         
         onShowModalHandler('리뷰가 성공적으로 등록되었습니다.');

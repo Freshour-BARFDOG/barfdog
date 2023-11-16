@@ -62,7 +62,7 @@ function CreateRecipePage() {
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  // console.log(formValues);
+  // // console.log(formValues);
 
 
   
@@ -109,7 +109,7 @@ function CreateRecipePage() {
     e.preventDefault();
     if (isSubmitted) return;
     // ! IMPORTANT : submit 이후 enterKey event로 trigger되는 중복submit 방지
-    console.log(formValues);
+    // console.log(formValues);
     const errObj = validate(formValues, thumbFile);
     setFormErrors(errObj);
 
@@ -128,7 +128,7 @@ function CreateRecipePage() {
         formData.append('file1', thumbFile.surveyResult.file);
         formData.append('file2', thumbFile.recipeThumb.file);
         const res = await postObjData(postFormValuesApiUrl, formData, 'multipart/form-data');
-        console.log(res);
+        // console.log(res);
         if (res.isDone) {
           onShowModalHandler('레시피가 성공적으로 생성되었습니다.');
           setIsSubmitted(true);

@@ -37,7 +37,7 @@ const swiperSettings_recipe = {
 };
 
 export function Swiper_recipe({ data, isMobile }) {
-  // console.log(data);
+  // // console.log(data);
   const [recipeDatas, setRecipeDatas] = useState( [] );
   
   useEffect(() => {

@@ -70,7 +70,7 @@ function ResetPasswordPage() {
       }));
       const url = '/api/admin/password'
       const res = await putObjData(url, body);
-      // console.log(res);
+      // // console.log(res);
       if (res.isDone) {
         mct.alertShow();
         setModalMessage('비밀번호가 변경되었습니다.');

@@ -53,7 +53,7 @@ export default function UpdateMainBannerPage() {
             alert('데이터를 불러올 수 없습니다.');
             router.back();
           });
-        console.log(data)
+        // console.log(data)
         const formData = {
           name: data.name,
           targets: data.targets,
@@ -187,7 +187,7 @@ export default function UpdateMainBannerPage() {
     window.location.href = '/bf-admin/banner/main-banner';
   }
   
-  console.log(formValues)
+  // console.log(formValues)
   
 
   return (

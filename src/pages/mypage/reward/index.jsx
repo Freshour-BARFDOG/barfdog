@@ -23,10 +23,10 @@ export default function RewardPage() {
   
   
   const pageInterCeptor = (res) => {// SERVER pagination query가 변경되었을 경우 사용하는 function
-    // console.log(res)
+    // // console.log(res)
     setTotalReward(res.data.reward); // 서버에서 이미 rewardStatus.SAVED 값만 계산해서 나온 값 ==> 그대로 사용하면 됨
     const newItemList = res.data.pagedModel._embedded.queryRewardsDtoList || [];
-    console.log(newItemList)
+    // console.log(newItemList)
     const pageData = res.data.pagedModel.page;
     let newPageInfo = {
       totalPages: pageData.totalPages,

@@ -126,7 +126,7 @@ export default function ReviewPage() {
       }
       const apiUrl = '/api/admin/reviews/approval';
       const res = await putObjData(apiUrl, body);
-      console.log(res);
+      // console.log(res);
       if (res.isDone) {
         alert('선택된 리뷰가 승인처리 되었습니다.');
         setSelectedItemList([]); // 초기화 시킴
@@ -141,7 +141,7 @@ export default function ReviewPage() {
   const onSetBestReview = async () => {
     if(!selectedItemList.length) return;
     if(!confirm(`선택된 ${selectedItemList.length}개의 리뷰를 베스트리뷰로 등록하시겠습니까?`)) return;
-    console.log(selectedItemList)
+    // console.log(selectedItemList)
     try {
       setIsLoading({bestReview: true});
       const body = {
@@ -149,7 +149,7 @@ export default function ReviewPage() {
       }
       const apiUrl = '/api/admin/reviews/best';
       const res = await postObjData(apiUrl, body);
-      console.log(res);
+      // console.log(res);
       if (res.isDone) {
         alert(`${selectedItemList.length}개의 리뷰가 베스트리뷰로 등록되었습니다.`);
         setSelectedItemList([]); // 초기화 시킴
@@ -162,7 +162,7 @@ export default function ReviewPage() {
   };
   
   const onDeleteItem = async (apiUrl, targetId) => {
-    console.log(apiUrl, targetId);
+    // console.log(apiUrl, targetId);
     try {
       setIsLoading(prevState => ({
         ...prevState,
@@ -171,7 +171,7 @@ export default function ReviewPage() {
         }
       }));
       const res = await deleteData(apiUrl);
-      console.log(res);
+      // console.log(res);
       if(res.isDone){
         mct.alertShow( "리뷰가 삭제되었습니다.", onSuccessCallback );
       } else {

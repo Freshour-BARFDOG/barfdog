@@ -81,11 +81,11 @@ function PricePolicyPage({data}) {
           half:parseFloat(formValues[subscribePlanType.HALF.NAME]),
           topping: parseFloat(formValues[subscribePlanType.TOPPING.NAME]),
         };
-        // console.log(body);
+        // // console.log(body);
         const apiUrl = '/api/admin/planDiscount';
         const res = await putObjData(apiUrl, body);
         
-        console.log(res);
+        // console.log(res);
         if (res.isDone) {
           setSubmitted(true);
           mct.alertShow('성공적으로 할인율이 재설정되었습니다.', onSuccessCallback);
@@ -232,7 +232,7 @@ export async function getServerSideProps ({ req }) {
   
   if(res.data){
     const data = res.data._embedded.planDiscountResponseDtoList[0];
-    // console.log(data)
+    // // console.log(data)
     DATA = {
       full: data.full,
       half: data.half,

@@ -6,13 +6,13 @@ const { validateHeaderName } = require('http');
 */
 
 export default async function handler(req, res){
-  console.log(req.method);
+  // console.log(req.method);
 
   if(req.method != 'POST'){
     res.status(401).end();
   }
-  console.log(req);
-  console.log(req.body);
+  // console.log(req);
+  // console.log(req.body);
 
   try {
     
@@ -32,7 +32,7 @@ export default async function handler(req, res){
         options
       )
       .then((res) => {
-        console.log(
+         console.log(
           '---------------------------- AXIOS > RESPONSE ----------------------------',
           res,
         );
@@ -43,8 +43,8 @@ export default async function handler(req, res){
 
         return err.response;
       });
-    console.log('---------- AXIOS > RESPONSE: ', DATA);
-    console.log('---------- AXIOS > RESPONSE: ', JSON.stringify(DATA));
+    // console.log('---------- AXIOS > RESPONSE: ', DATA);
+    // console.log('---------- AXIOS > RESPONSE: ', JSON.stringify(DATA));
     // res.json(DATA);
   
     const defaultCorsHeader = {
@@ -62,7 +62,7 @@ export default async function handler(req, res){
       data: DATA.data,
       success: DATA.success,
     }
-    console.log('BODY: ', body);
+    // console.log('BODY: ', body);
     
     
     res.writeHead(200, defaultCorsHeader);

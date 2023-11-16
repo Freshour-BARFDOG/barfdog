@@ -79,8 +79,8 @@ MyApp.getInitialProps = async (initialProps) => {
       res_ADMIN = await getDataSSR(req, valid_adminApiUrl, token);
       res_CART = await getDataSSR(req, valid_memberApiUrl, token);
   
-      // console.log("/api/admin/setting =>", res_ADMIN.data);
-      // console.log("/api/baskets =>", res_CART.data);
+      // // console.log("/api/admin/setting =>", res_ADMIN.data);
+      // // console.log("/api/baskets =>", res_CART.data);
   
       // STEP 1. USER TYPE
       if (res_ADMIN && res_ADMIN.status === 200) {
@@ -107,7 +107,7 @@ MyApp.getInitialProps = async (initialProps) => {
       }
     }
     
-    // console.log("USER_TYPE: ",USER_TYPE, "\nisAdminPath: ", isAdminPath);
+    // // console.log("USER_TYPE: ",USER_TYPE, "\nisAdminPath: ", isAdminPath);
     
     // STEP 3. CART DATA
     if ( USER_TYPE === userType.MEMBER || USER_TYPE === userType.ADMIN ) {
@@ -120,8 +120,8 @@ MyApp.getInitialProps = async (initialProps) => {
       const res_MEMBER_Dashboard = await getDataSSR(req, mypageApiUrl, token);
       const mypageData = res_MEMBER_Dashboard.data;
       
-      // console.log('/api/members => ',memberData);
-      // console.log('/api/mypage => ', mypageData);
+      // // console.log('/api/members => ',memberData);
+      // // console.log('/api/mypage => ', mypageData);
       
       
       if(mypageData){

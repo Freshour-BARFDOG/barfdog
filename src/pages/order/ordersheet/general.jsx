@@ -17,6 +17,7 @@ import {OrdersheetMethodOfPayment} from '/src/components/order/OrdersheetMethodO
 import {OrdersheetAmountOfPayment} from '/src/components/order/OrdersheetAmountOfPayment';
 import {userType} from '/store/TYPE/userAuthType';
 
+import {deleteCookie, getCookie, setCookie} from "@util/func/cookie";
 
 export default function GeneralOrderSheetPage() {
   const router = useRouter();
@@ -44,6 +45,10 @@ export default function GeneralOrderSheetPage() {
       return router.push('/cart');
     }
 
+    // // @YYL 콕뱅크 주문인지 확인
+    // let allianceType = "NONE"
+    // if(getCookie("alliance") === "cb") allianceType = "COKBANK"
+
     const requestBody = {
       orderItemDtoList: curItem.map((item) => ({
         itemDto: {
@@ -55,6 +60,8 @@ export default function GeneralOrderSheetPage() {
           amount: option.amount,
         })),
       })),
+
+      // allianceType: allianceType,
     };
 
     if (Object.keys(info).length > 0) return; // 최초 data fetching 후 Re-rendering 방지
@@ -68,15 +75,15 @@ export default function GeneralOrderSheetPage() {
         const postItemInfoApiUrl = `/api/orders/sheet/general`;
         const res = await postUserObjData(postItemInfoApiUrl, requestBody);
         // 요청 파라미터가 복잡하여 GET이 아닌 POST 사용
-        // console.log(res);
+        // // console.log(res);
         if (res.status !== 200) {
           alert('상품 정보를 확인할 수 없습니다.');
           return window.location.href = '/cart';
         }
         const info = res.data.data;
-        // console.log(info);
+        // // console.log(info);
         // 주문에 대한 모든 데이터
-        console.log('info:  ',info)
+        // console.log('info:  ',info)
         const calcedReward = (Number(info.reward) > 0 ? info.reward : 0);
         const initInfo = {
           name: info.name, // 구매자

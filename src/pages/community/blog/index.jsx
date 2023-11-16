@@ -35,7 +35,7 @@ export default function BlogIndexPage() {
         }));
         const getArticleListApiUrl = `/api/blogs/articles`;
         const res = await getData(getArticleListApiUrl);
-        console.log(res);
+        // // console.log(res);
         let DATAList;
         if (res.data._embedded) {
           const dataQuery = 'articlesDtoList';
@@ -82,7 +82,7 @@ export default function BlogIndexPage() {
   };
 
   const pageInterCeptor = async (res) => {
-    console.log(res);
+    // // console.log(res);
     let newPageInfo = {
       totalPages: 0,
       size: 0,

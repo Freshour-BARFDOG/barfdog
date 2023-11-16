@@ -28,7 +28,7 @@ interface ErrorResponse<T = any, D = any> extends AxiosError{
 export const HttpResponseErrorHandler = (err:ErrorResponse | AxiosError, result?:HttpResultType):boolean => {
   const errorResponse = err?.response;
   const errorStatus = errorResponse?.status;
-  console.log("errorResponse = ",errorResponse);
+  // console.log("errorResponse = ",errorResponse);
   if ( window && typeof window !== 'undefined' && errorStatus === 401 && errorResponse.data ) {
     const errorType = errorResponse.data.reason;
     result.status = errorStatus;

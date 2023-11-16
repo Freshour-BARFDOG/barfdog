@@ -54,7 +54,7 @@ export default function SideBar({userTypeInput}) {
   } = theme.useToken();
 
   const onClick = (info) => {
-    console.log(info.key);
+    // console.log(info.key);
     setSelectedKey(info.key);
   };
 

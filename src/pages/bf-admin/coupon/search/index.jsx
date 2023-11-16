@@ -97,7 +97,7 @@ export default function CouponListPage() {
         id:targetId
       }
       const res = await putObjData(apiUrl, body);
-      console.log(res);
+      // console.log(res);
       if(res.isDone){
         mct.alertShow( "쿠폰이 성공적으로 삭제되었습니다.", onSubmitCallback );
       } else if(res.status === 422){

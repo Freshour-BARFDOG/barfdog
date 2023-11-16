@@ -74,7 +74,7 @@ export const ProductInfo_naverpay = ({data}: PropsInterface) => {
 
   const onDeleteBillingKey = async () => {
     if (!customerUid) return alert("구독해지 불가능한 주문입니다. 관리자에게 문의하세요.");
-    if (!confirm(`[ ${memberName} ]님의 네이버페이 정기구독 해지를 진행하시겠습니까?`)) return console.log("사용자가 네이버페이 정기구독 해지를 취소하였습니다.");
+    if (!confirm(`[ ${memberName} ]님의 네이버페이 정기구독 해지를 진행하시겠습니까?`)) return // console.log("사용자가 네이버페이 정기구독 해지를 취소하였습니다.");
     setIsLoading(prev => ({
       ...prev,
       delete: true
@@ -85,7 +85,7 @@ export const ProductInfo_naverpay = ({data}: PropsInterface) => {
         reason: CancelReasonName.unsubscribeNaverpayByAdmin,
         requester: IamportExtraRequester.ADMIN
       });
-      console.log(res);
+      // console.log(res);
       if (res.status === 200) {
         const d = res.data;
         const data = {

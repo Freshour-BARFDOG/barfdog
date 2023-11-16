@@ -54,12 +54,15 @@ export default function MemberSearch({ onSearch }) {
                         </Form.Item>
                     </Space>
                     {/* <Space direction="horizontal" >
+                    {/* <Space direction="horizontal" >
                         <Form.Item className="mx-5"
                         name="gradeState" 
                         initialValue={gradeState.map((e)=>(e.value))} 
                         label="등급: ">
                         <Checkbox.Group options={gradeState} />
                         </Form.Item>
+                    </Space> */}
+                    {/* <Space direction="horizontal" >
                     </Space> */}
                     {/* <Space direction="horizontal" >
                         <Form.Item className="mx-5"

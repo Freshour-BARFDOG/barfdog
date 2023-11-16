@@ -64,7 +64,7 @@ export default function UpdateSingleItemPage({ id }) {
           fetching: true,
         }));
         const res = await getData(getFormValuesApiUrl);
-        console.log(res);
+        // console.log(res);
         
         const originOptionDataListFromServer = res.data.itemOptionAdminDtoList; // 에디터 >  원본아이디리스트
         setOriginOptionList(originOptionDataListFromServer); // 원본 option list
@@ -116,7 +116,7 @@ export default function UpdateSingleItemPage({ id }) {
         if (document) {
           const QuillEditor = dynamic(() => import('/src/components/admin/form/QuillEditor'));
           setQuillEditor(QuillEditor);
-          console.log('Editor init is complete.');
+          // console.log('Editor init is complete.');
         }
       } catch (err) {
         console.error(err);
@@ -188,7 +188,7 @@ export default function UpdateSingleItemPage({ id }) {
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
   
-    console.log(formValues);
+    // console.log(formValues);
     
     let filteredFormValues = formValues;
     const filterStringObj = {
@@ -203,7 +203,7 @@ export default function UpdateSingleItemPage({ id }) {
       filteredFormValues,
       filterStringObj,
     );
-    console.log(filteredFormValues);
+    // console.log(filteredFormValues);
 
     
     
@@ -214,7 +214,7 @@ export default function UpdateSingleItemPage({ id }) {
       }));
       if (isPassed) {
         const res = await putObjData(putFormValuesApiUrl, filteredFormValues);
-        console.log(res);
+        // console.log(res);
         if (res.isDone) {
           onShowModalHandler('일반상품이 수정되었습니다.');
           setIsSubmitted(true);

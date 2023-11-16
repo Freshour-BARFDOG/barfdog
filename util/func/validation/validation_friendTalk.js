@@ -11,7 +11,7 @@ export const validateExposedAllTarget = (obj) => {
         break;
     }
   }
-  console.log('Valid Result (formValues) : ', errors);
+  // console.log('Valid Result (formValues) : ', errors);
   return errors;
 };
 
@@ -42,6 +42,6 @@ export const validateExposedGroupTarget = (obj) => {
         break;
     }
   }
-  console.log('Valid Result (formValues) : ', errors);
+  // console.log('Valid Result (formValues) : ', errors);
   return errors;
 };

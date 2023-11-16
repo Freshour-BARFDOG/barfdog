@@ -48,8 +48,8 @@ function CreatePopupPage() {
   const [formErrors, setFormErrors] = useState({});
   const [fileValues, setFileValues] = useState(initialImageFiles);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  console.log(formValues);
-  console.log(fileValues);
+  // console.log(formValues);
+  // console.log(fileValues);
 
   const onInputChangeHandler = (e) => {
     const { id, value } = e.currentTarget;
@@ -75,8 +75,8 @@ function CreatePopupPage() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    console.log('formValues: ', formValues);
-    console.log('fileValues: ', fileValues);
+    // console.log('formValues: ', formValues);
+    // console.log('fileValues: ', fileValues);
     if (isSubmitted) return;
     const errObj = validate(formValues, fileValues);
     const isPassed = valid_hasFormErrors(errObj);
@@ -97,7 +97,7 @@ function CreatePopupPage() {
         formData.append('pcFile', fileValues.pcFile.file);
         formData.append('mobileFile', fileValues.mobileFile.file);
         const res = await postObjData(postFormValuesApiUrl, formData, 'multipart/form-data');
-        console.log(res);
+        // console.log(res);
         if (res.isDone) {
           onShowModalHandler('팝업이 생성되었습니다.');
           setIsSubmitted(true);

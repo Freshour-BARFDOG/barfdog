@@ -33,7 +33,7 @@ function BlogIndexPage() {
   };
   
   const onDeleteItem = async (apiUrl, targetId) => {
-    console.log(apiUrl, targetId);
+    // console.log(apiUrl, targetId);
     try {
       setIsLoading(prevState => ({
         ...prevState,
@@ -42,7 +42,7 @@ function BlogIndexPage() {
         }
       }));
       const res = await deleteData(apiUrl);
-      console.log(res);
+      // console.log(res);
       if(res.isDone){
         mct.alertShow( "게시글을 삭제하였습니다.", onSuccessCallback );
       } else {

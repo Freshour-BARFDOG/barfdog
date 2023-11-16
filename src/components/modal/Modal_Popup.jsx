@@ -47,7 +47,7 @@ export const Modal_Popup = ({ popupData }) => {
   };
   const onCloseOneDay = (e) => {
     const targetId = Number(e.currentTarget.dataset.popupId);
-    // console.log(targetId);
+    // // console.log(targetId);
     setCookie(`bf-popup-${targetId}`, 'false', 'date', 1);
     setDATA((prevState) =>
       prevState.map((data) =>
@@ -61,7 +61,7 @@ export const Modal_Popup = ({ popupData }) => {
     );
   };
 
-  // console.log(DATA);
+  // // console.log(DATA);
   const popupPosition = (position) => {
     let convertedPos;
     switch (position) {
@@ -79,7 +79,7 @@ export const Modal_Popup = ({ popupData }) => {
     return convertedPos;
   };
 
-  // console.log(DATA);
+  // // console.log(DATA);
 
   return (
     <>
@@ -101,6 +101,7 @@ export const Modal_Popup = ({ popupData }) => {
                       objectFit="cover"
                       layout="fill"
                       alt={isMobile ? data.mobileFileName : data.pcFilename}
+                      priority={true}
                     />
                   </figure>
                 </a>

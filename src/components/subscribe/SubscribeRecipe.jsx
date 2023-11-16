@@ -63,10 +63,10 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
   const [submitted, setSubmitted] = useState(false);
   const [selectedIdList, setSelectedIdList] = useState([]);
 
-  // console.log(selectedRadio)
-  // console.log(selectedCheckbox)
-  // console.log(subscribeInfo);
-  // console.log(tbContext)
+  // // console.log(selectedRadio)
+  // // console.log(selectedCheckbox)
+  // // console.log(subscribeInfo);
+  // // console.log(tbContext)
 
   async function getRecommendRecipe(dogId) {
     if (!dogId) return console.error('Required User Dog Id');
@@ -170,9 +170,9 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
   };
 
   const onActiveConfirmModal = () => {
-    // console.log(selectedIdList)
-    // console.log(subscribeInfo.recipe.idList)
-    // console.log(subscribeInfo.recipe)
+    // // console.log(selectedIdList)
+    // // console.log(subscribeInfo.recipe.idList)
+    // // console.log(subscribeInfo.recipe)
     const isTheSameArray = valid_isTheSameArray(selectedIdList, subscribeInfo.recipe.idList);
     if (subscribeInfo.recipe.soldOut) {
       mct.alertShow('품절된 레시피가 존재합니다.');
@@ -224,7 +224,7 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
       setSubmitted(true);
       const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/planRecipes`;
       const res = await postObjData(url, body);
-      console.log(res);
+      // console.log(res);
       if (res.isDone) {
         mct.alertShow('레시피 변경이 완료되었습니다.', onSuccessChangeSubscribeOrder);
       } else {

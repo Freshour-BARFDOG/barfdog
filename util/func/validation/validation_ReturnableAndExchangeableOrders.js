@@ -30,6 +30,6 @@ export const validation_ReturnableAndExchangeableOrders = (allItems) => {
     .map((v) => v.message);
   result.message = createUniqArray(errorMessage);
 
-  console.log('Valid Result (formValues) : ', result);
+  // console.log('Valid Result (formValues) : ', result);
   return result;
 };

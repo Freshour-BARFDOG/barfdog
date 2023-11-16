@@ -37,7 +37,7 @@ export default function BestReviewPage() {
         const getApiUrl = '/api/admin/reviews/best';
         const res = await getData(getApiUrl, 'admin');
         // const res = DUMMY_RESPONSE; // ! TEST
-        console.log(res);
+        // console.log(res);
         let itemList = [];
         if (res.data._embedded) {
           const DATA = res.data._embedded.queryAdminBestReviewsDtoList;
@@ -107,7 +107,7 @@ export default function BestReviewPage() {
       }
       const apiUrl ='/api/admin/reviews/best/leakedOrder';
       const res = await putObjData(apiUrl, body);
-      // console.log(res);
+      // // console.log(res);
       if(res.isDone){
         setItemList(updatedItemList);
       }else {
@@ -131,7 +131,7 @@ export default function BestReviewPage() {
         }
       }));
       const res = await deleteData(apiUrl);
-      console.log(res);
+      // console.log(res);
       if(res.isDone){
         mct.alertShow( "베스트 리뷰에서 제외되었습니다.", onSuccessCallback );
       } else {

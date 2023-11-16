@@ -20,7 +20,9 @@ import { cartAction } from '/store/cart-slice';
 import axios from "axios";
 import {useModalContext} from "/store/modal-context";
 import Modal_global_alert from "/src/components/modal/Modal_global_alert";
-
+import {getData} from "/src/pages/api/reqData";
+import {deleteCookie, getCookie, setCookie} from "@util/func/cookie";
+import { cookieType } from '@store/TYPE/cookieType';
 
 export default function SingleItemDetailPage({data}) {
   const mct = useModalContext();
@@ -51,7 +53,7 @@ export default function SingleItemDetailPage({data}) {
 
   const [activeCartShortcutModal, setActiveCartShortcutModal] = useState({});
 
-  // console.log('formValues', formValues);
+  // // console.log('formValues', formValues);
   useEffect(() => {
     if (!contentRef.current) return;
     const contentList = Array.from(contentRef.current?.children);
@@ -99,16 +101,16 @@ export default function SingleItemDetailPage({data}) {
         ...prevState,
         cart: true,
       }));
-      console.log(body);
+      // console.log(body);
       const res = await postUserObjData(postDataApiUrl, body);
-      console.log(res);
+      // console.log(res);
       if (res.isDone) {
         onActiveCartShortcutModal(thisButtonArea);
       } else {
         alert(`${res.error}`);
       }
     } catch (err) {
-      console.log('API통신 오류 : ', err);
+      // console.log('API통신 오류 : ', err);
     }
     setIsLoading((prevState) => ({
       ...prevState,
@@ -142,7 +144,7 @@ export default function SingleItemDetailPage({data}) {
       await dispatch(cartAction.setOrderItemList({ items }));
       await router.push(`/order/ordersheet/general`);
     } catch (err) {
-      console.log('API통신 오류 : ', err);
+      // console.log('API통신 오류 : ', err);
     }
     setIsLoading((prevState) => ({
       ...prevState,
@@ -217,18 +219,31 @@ const validation_itemPrice = (data) => {
   let itemPrice = data.salePrice || data?.originalPrice;
   const result = calculateSalePrice(data.originalPrice, data.discountType, data.discountDegree);
   const salePricebyAdminPageCalcuator = transformClearLocalCurrency(result.salePrice);
-  if (itemPrice !== salePricebyAdminPageCalcuator) {
-    alert('세일가격에 이상이 있습니다. 관리자에게 문의하세요.');
-    return null;
-  }
-  if (data.originalPrice < data.salePrice) {
-    // validation Price
-    alert('아이템 가격설정에 문제 발생하였습니다. 관리자에게 문의하세요.');
-    return null;
-  }
+
+  // console.log(itemPrice)
+  // console.log(data.salePrice)
+  // console.log(data?.originalPrice)
+  // console.log(data?.discountType)
+  // console.log(data?.discountDegree)
+  // console.log(salePricebyAdminPageCalcuator)
+
+  // @YYL 영린 수정
+  // 백엔드쪽에서 가격체크 하는데 굳이 필요없음
+  
+  // if (itemPrice !== salePricebyAdminPageCalcuator) {
+  //   alert('세일가격에 이상이 있습니다. 관리자에게 문의하세요.');
+  //   return null;
+  // }
+  // if (data.originalPrice < data.salePrice) {
+  //   // validation Price
+  //   alert('아이템 가격설정에 문제 발생하였습니다. 관리자에게 문의하세요.');
+  //   return null;
+  // }
 
   return itemPrice;
 };
+
+
 
 export async function getServerSideProps(ctx) {
   const { query, req } = ctx;
@@ -237,26 +252,33 @@ export async function getServerSideProps(ctx) {
   let DATA = null;
   const apiUrl = `/api/items/${itemId}`;
   let res;
+  
+  console.log(apiUrl)
 
   try {
-    res = await axios
-      .get(apiUrl, {
-        headers: {
-          authorization: null,
-          'content-Type': 'application/json',
-        },
-      })
-      .then((res) => {
-        // console.log('shop singleItem > res: ',res);
-        return res;
-      })
-      .catch((err) => {
-        // console.log('shop singleItem > ERROR: ',err.response)
-        return err.response;
-      });
+    // 서버 측에서 쿠키를 요청 헤더에 추가
+    const cookies = req.headers.cookie; // 클라이언트로부터 전달된 쿠키
+    const name = cookieType.LOGIN_COOKIE;
+    const value = cookies.match(`(^|;) ?${name}=([^;]*)(;|$)`);
+    const accessToken = value ? value[2] : null;
+    
+    res = await axios.get(apiUrl, {
+      withCredentials: true,
+      headers: {
+        authorization: accessToken,
+        'content-Type': 'application/json',
+        'Cookie': cookies, // 클라이언트 쿠키를 서버 요청에 추가
+      },
+    });
+
+    // console.log(apiUrl)
+      
+    // res = await getData(apiUrl);
+
     const data = res?.data;
-    console.log(data)
+
     if (data) {
+      // 데이터 처리 코드
       
       isDeletedItem = data.itemDto.deleted; // 일반상품 삭제 여부 (by 관리자)
       
@@ -298,19 +320,21 @@ export async function getServerSideProps(ctx) {
           itemId: data.itemDto.id,
         },
       };
+
+
     }
   } catch (err) {
-      console.error(err)
+    console.error(err);
   }
-  
-  if ( isDeletedItem ) {
+
+  if (isDeletedItem) {
     return {
-      redirect:{
+      redirect: {
         destination: "/shop",
         permanent: false,
       }
-    }
+    };
   }
-  
+
   return { props: { data: DATA } };
 }

@@ -25,7 +25,7 @@ export const validate = (obj) => {
   // * 파일 유효성검사 불필요
   // * 파일 empty: 기존 파일 유지 (파일 전송 X)
   // * 파일 exist: 파일 전송
-  console.log("Validation Result: ", errors);
+  // console.log("Validation Result: ", errors);
   
   return errors;
 };

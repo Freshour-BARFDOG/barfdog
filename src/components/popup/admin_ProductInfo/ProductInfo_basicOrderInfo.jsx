@@ -4,7 +4,7 @@ import transformDate from "/util/func/transformDate";
 import {transformPhoneNumber} from "/util/func/transformPhoneNumber";
 
 const ProductInfo_basicOrderInfo = ({basicOrderInfo}) => {
-  // console.log(basicOrderInfo);
+  // // console.log(basicOrderInfo);
   return (
     <>
       <div className={s["t-header"]}>

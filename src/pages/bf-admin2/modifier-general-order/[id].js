@@ -92,7 +92,7 @@ const dataIsDisabled = [
 
 
 const cancel = (e) => {
-  console.log(e);
+  // console.log(e);
   message.error('취소되었습니다.');
 };
 
@@ -100,6 +100,7 @@ const DetailsPage = () => {
   const [confirmModalVisible, setConfirmModalVisible] = useState(false);
 
   const [dataBase, setDataBase] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
   const handleInputChange = (event, name) => {
@@ -121,11 +122,24 @@ const DetailsPage = () => {
   useEffect(() => {
     if (id) {
       // ID가 존재하는 경우에만 데이터를 로딩합니다.
+    if (id) {
+      // ID가 존재하는 경우에만 데이터를 로딩합니다.
       (async () => {
         try {
           const url = `api/admin/new/orders/generalOrderGet/${id}`;
           const res = await getData(url);
+        try {
+          const url = `api/admin/new/orders/generalOrderGet/${id}`;
+          const res = await getData(url);
 
+          if (res?.status === 200) {
+            const dataToAssign = res.data ?? {};
+            setDataBase(dataToAssign);
+          }
+        } catch (err) {
+          console.error(err);
+        } finally {
+          setIsLoading(false); // 데이터 로딩이 완료되면 로딩 상태를 false로 설정합니다.
           if (res?.status === 200) {
             const dataToAssign = res.data ?? {};
             setDataBase(dataToAssign);
@@ -182,7 +196,7 @@ const DetailsPage = () => {
   
   const confirm = () => {
 
-    //console.log(dataBase)
+    //// console.log(dataBase)
     
     let data = dataBase;
 
@@ -239,7 +253,7 @@ const DetailsPage = () => {
     )
   }
 
-  //console.log(dataBase["orderCancel"]);
+  //// console.log(dataBase["orderCancel"]);
 
 
 

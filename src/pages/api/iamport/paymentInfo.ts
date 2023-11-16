@@ -64,7 +64,7 @@ export default async function POST(req:NextApiRequest, res:NextApiResponse) {
 
     const jsonDataAsString = JSON.stringify(DATA);
 
-    console.log('---------- AXIOS > RESPONSE: ', DATA);
+    // console.log('---------- AXIOS > RESPONSE: ', DATA);
 
     const defaultCorsHeader = {
       "Access-Control-Allow-Origin": "*", // 다 받거나, 하나만 받거나만 가능

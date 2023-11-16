@@ -65,12 +65,12 @@ const scrollToY = (scrollTargetY, option = { speed, easing }) => {
 
     if (p < 1) {
       requestAnimFrame(tick);
-      // console.log('scrolling')
+      // // console.log('scrolling')
 
       window.scrollTo(0, scrollY + (targetY - scrollY) * t);
     } else {
       window.scrollTo(0, targetY);
-      // console.log('scroll done');
+      // // console.log('scroll done');
     }
   };
 

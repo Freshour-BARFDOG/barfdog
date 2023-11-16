@@ -44,11 +44,11 @@ export default function ReviewPage() {
   const [activeDeleteConfirmModal, setActiveDeleteConfirmModal] = useState(false);
   const [selectedReivewId, setSelectedReivewId] = useState(null); //
 
-  // console.log(writableReviewList)
-  // console.log(reviewList)
+  // // console.log(writableReviewList)
+  // // console.log(reviewList)
   const writableReviewListPageInterCeptor = (res) => {
     // res = DUMMY_RESPONSE_DATA_writableReview; // ! TEST
-    console.log(res);
+    // console.log(res);
     const pageData = res.data.page;
     let newPageInfo = {
       totalPages: pageData.totalPages,
@@ -64,7 +64,7 @@ export default function ReviewPage() {
   const reviewListPageInterCeptor = (res) => {
     // SERVER pagination query가 변경되었을 경우 사용하는 function;
     // res = DUMMY_RESPONSE_DATA_reviewList; // ! TEST
-    console.log(res);
+    // console.log(res);
     const pageData = res.data.page;
     let newPageInfo = {
       totalPages: pageData.totalPages,
@@ -126,7 +126,7 @@ export default function ReviewPage() {
     try {
       const url = `/api/reviews/${selectedReivewId}`;
       const res = await deleteObjData(url);
-      console.log(res);
+      // console.log(res);
       if (res.isDone) {
         alert('리뷰가 삭제되었습니다.');
       } else if (res.status === 403) {

@@ -9,6 +9,7 @@ import Wrapper from '/src/components/common/Wrapper';
 import SignInputList from '/src/components/user_signup/SignInputList';
 import SignupPolicyList, { policy_KEYS } from '/src/components/user_signup/SignupPolicyList';
 import Modal_termsOfSerivce from '/src/components/modal/Modal_termsOfSerivce';
+import Modal_termsOfThird from '/src/components/modal/Modal_termsOfThird';
 import Modal_privacy from '/src/components/modal/Modal_privacy';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import { useModalContext } from '/store/modal-context';
@@ -18,6 +19,8 @@ import { transformPhoneNumber } from '/util/func/transformPhoneNumber';
 import { naverGender } from '/util/func/naverGender';
 import { kakaoGender } from '/util/func/kakaoGender';
 import {getDataSSR, getTokenFromServerSide} from "../../api/reqData";
+import {deleteCookie, getCookie, setCookie} from "@util/func/cookie";
+import { useEffect } from 'react';
 
 String.prototype.insertAt = function(index,str){
   return this.slice(0,index) + str + this.slice(index);
@@ -28,7 +31,7 @@ export default function SignupPage() {
   const hasAlert = mct.hasAlert;
   const router = useRouter();
   const userState = useSelector((s) => s.userState);
-  // console.log(userState.snsInfo);
+  // // console.log(userState.snsInfo);
 
   const snsSignupMode = !!userState.snsInfo.providerId;
   const convertedBirthday =
@@ -69,9 +72,9 @@ export default function SignupPage() {
     providerId: userState.snsInfo.providerId || null,
   };
 
-  // console.log('userState: ',userState)
-  // console.log('initialFormValues: ', initialFormValues);
-  // console.log('snsSignupMode: ', snsSignupMode);
+  // // console.log('userState: ',userState)
+  // // console.log('initialFormValues: ', initialFormValues);
+  // // console.log('snsSignupMode: ', snsSignupMode);
 
   const initialFormErrors = {
     isEmailDuplicated: null,
@@ -80,12 +83,26 @@ export default function SignupPage() {
 
   const [isModalActive, setIsModalActive] = useState({
     termsOfService: false,
+    termsOfThird: false,
     privacy: false,
   });
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState(initialFormErrors);
   const [submitted, setSubmitted] = useState(false);
+  
+  const [visibility, setVisibility] = useState(false);
+  const [alliance, setAlliance] = useState(null);
 
+
+  useEffect(() => {
+    // @YYL 콕뱅크 회원인지 확인
+    if(getCookie("alliance") === "cb") {
+      setAlliance("cb");
+      setVisibility(true);
+    }
+  }, []);
+
+  
   const onSubmit = async () => {
     if(submitted) return console.error("Already Submitted!");
     try {
@@ -182,8 +199,16 @@ export default function SignupPage() {
         receiveEmail: formvalues.agreement.receiveEmail,
         over14YearsOld: formvalues.agreement.over14YearsOld,
       },
+
+
+    // @YYL 콕뱅크 회원인지 확인
+      allianceInfo: {
+        alliance : alliance,
+        alliancePolicy: formvalues.agreement.thirdPolicy,
+      }
+
     };
-    console.log('SUBMIT BODY:\n', body);
+    // console.log('SUBMIT BODY:\n', body);
 
     await axios
       .post('/api/join', body, {
@@ -192,8 +217,8 @@ export default function SignupPage() {
         },
       })
       .then((res) => {
-        console.log(res);
-        console.log(res.data);
+        // console.log(res);
+        // console.log(res.data);
         if (res.status === 201) {
           const userName = formvalues.name;
           mct.alertHide(`회원가입에 성공하였습니다.`, onSuccessCallback);
@@ -224,6 +249,8 @@ export default function SignupPage() {
     return result;
   };
 
+  
+
   return (
     <>
       <MetaTitle title="회원가입" />
@@ -253,6 +280,7 @@ export default function SignupPage() {
                   formErrors={formErrors}
                   setFormErrors={setFormErrors}
                   setModalState={setIsModalActive}
+                  setCokbank={visibility}
                 />
               </section>
               <section className={s['btn-section']}>
@@ -267,6 +295,12 @@ export default function SignupPage() {
       {isModalActive.termsOfService && (
         <Modal_termsOfSerivce
           modalState={isModalActive.termsOfService}
+          setModalState={setIsModalActive}
+        />
+      )}
+      {visibility && isModalActive.termsOfThird && (
+        <Modal_termsOfThird
+          modalState={isModalActive.termsOfThird}
           setModalState={setIsModalActive}
         />
       )}

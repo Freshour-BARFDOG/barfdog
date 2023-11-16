@@ -30,10 +30,10 @@ export const SurveyStatistics = ({ id ,  mode = 'default' }) => {
           fetching: true,
         }));
         const res = await getData(getSurveyReportsApiUrl);
-        console.log(res);
+        // console.log(res);
         const data = res.data;
         if (!data) return;
-        // console.log(data)
+        // // console.log(data)
         const DATA = {
           lastSurveyDate: data.lastSurveyDate,
           myDogName: data.myDogName,
@@ -175,8 +175,8 @@ export const SurveyStatistics = ({ id ,  mode = 'default' }) => {
           }
         }
 
-        // console.log('_percentDATA: ',_percentDATA);
-        // console.log(DATA);
+        // // console.log('_percentDATA: ',_percentDATA);
+        // // console.log(DATA);
         const allDATA = {
           ...DATA,
           _percentDATA,
@@ -482,8 +482,8 @@ const transformPercentUnitInGroup = (obj, targetString) => {
     for (const key in obj) {
       const val = obj[key];
       const percentUnit = Number((val / highestVal).toFixed(3)) * 100;
-      // console.log('percentUnit', percentUnit)
-      // console.log('KEY', key, '&',targetString ,key.indexOf(targetString))
+      // // console.log('percentUnit', percentUnit)
+      // // console.log('KEY', key, '&',targetString ,key.indexOf(targetString))
       obj[key] =
         typeof val === 'number' && key.indexOf(targetString) >= 0 ? percentUnit + '%' : val;
     }

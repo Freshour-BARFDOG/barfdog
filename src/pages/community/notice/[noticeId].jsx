@@ -23,7 +23,7 @@ export default function NoticePostPage({ noticeId }) {
     const formValueQuery = 'noticeDto'
     const getIemListApiUrl = `/api/notices`;
     const itemListQuery = 'queryNoticesDtoList';
-    console.log(getFormValuesApiUrl);
+    // console.log(getFormValuesApiUrl);
     (async () => {
       try {
         setIsLoading((prevState) => ({
@@ -42,7 +42,7 @@ export default function NoticePostPage({ noticeId }) {
           };
           setItemInfo(DATA);
         }
-        console.log(res);
+        // console.log(res);
       } catch (err) {
         console.error('데이터를 가져올 수 없습니다.');
       }
@@ -59,7 +59,7 @@ export default function NoticePostPage({ noticeId }) {
           fetching: true,
         }));
         const res = await getData(getIemListApiUrl);
-        console.log(res);
+        // console.log(res);
         if (res.data) {
           const itemListInfo = res.data._embedded[itemListQuery];
           let curItemIndex;
@@ -78,7 +78,7 @@ export default function NoticePostPage({ noticeId }) {
             cur: curItemListInfo,
             next: nextItemListInfo,
           });
-          // console.log(prevItemListInfo, nextItemListInfo)
+          // // console.log(prevItemListInfo, nextItemListInfo)
         }
       } catch (err) {
         console.error('데이터를 가져올 수 없습니다.');
@@ -126,7 +126,7 @@ export default function NoticePostPage({ noticeId }) {
 
 // CF) _app.jsx SSR 적용 후 , getinitialProps에서 query가져올 수 없음
 // NoticePostPage.getInitialProps = async (ctx) => {
-//   console.log(ctx)
+//   // console.log(ctx)
 //   const { noticeId } = query;
 //   return { noticeId };
 // };

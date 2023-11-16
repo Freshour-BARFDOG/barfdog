@@ -11,7 +11,7 @@ import { getDataSSR } from '/src/pages/api/reqData';
 
 
 export default function MypageSubscribe_statisticPage({ data }) {
-  console.log(data);
+  // console.log(data);
   const router = useRouter();
   const onPrevPage = () => {
     router.push('/mypage/dogs');

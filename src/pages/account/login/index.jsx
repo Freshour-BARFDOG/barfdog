@@ -115,7 +115,7 @@ export default function LoginPage() {
           },
         })
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           if (res.status === 200) {
             const token = res.headers.authorization;
             const { temporaryPassword, email, name, roleList} = res.data;

@@ -17,7 +17,7 @@ export default async function POST(req:Request, res:any | Response) {
     access_token, expired_at
   }
 
-  console.log("----- getAccessToken > access_token = ",access_token);
+  // console.log("----- getAccessToken > access_token = ",access_token);
   if (!access_token) {
     return res.status(500).json({
       message: "Failed to get Iamport access token."

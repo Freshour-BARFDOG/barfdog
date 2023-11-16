@@ -27,6 +27,8 @@ import {
 } from "../../../util/func/subscribe/getAmountOfPaymentRegisterationByPaymentMethod";
 import {FullScreenLoading} from "../atoms/FullScreenLoading";
 
+import {getCookie} from "@util/func/cookie";
+
 export function Payment({
                           info,
                           form,
@@ -83,8 +85,8 @@ export function Payment({
       agreePrivacy: form.agreePrivacy,
       paymentPrice: calcOrdersheetPrices(form, orderType, {deliveryFreeConditionPrice: info.freeCondition}).paymentPrice,
     };
-    // console.log(valid_target)
-    // console.log(info)
+    // // console.log(valid_target)
+    // // console.log(info)
     // ! bundle일 경우, validation항목 다르게 변경해주기.
     let errObj;
     if (form.bundle) {
@@ -118,6 +120,11 @@ export function Payment({
 
 
     const customerUid = generateCustomerUid(); // ! [client '결제실패' / Webhook 'paid'] CASE 처리를 위해, 주문서 생성 시에도 cutomerUid 전송.
+
+    // // @YYL 콕뱅크 주문인지 확인
+    // let allianceType = "NONE"
+    // if(getCookie("alliance") === "cb") allianceType = "COKBANK"
+
     const body = orderType === 'general' ? {
       orderItemDtoList: form.orderItemDtoList?.map((item) => ({
         itemId: item.itemId, // 상품 ID
@@ -151,6 +158,12 @@ export function Payment({
       // nextDeliveryDate: form.nextDeliveryDate, // ! 일반주문 시, request field에 없는 값.
       agreePrivacy: form.agreePrivacy, // 개인정보 제공 동의
       brochure: form.brochure, // 브로슈어 수령여부
+
+
+      // allianceType: allianceType, // 콕뱅크 주문인지 확인
+
+
+
     } : {
       customerUid: customerUid, // ! 클라이언트 주문 실패 후, webhook 'paid' 대응하기 위한 필드
       memberCouponId: form.memberCouponId,
@@ -174,9 +187,13 @@ export function Payment({
       nextDeliveryDate: form.nextDeliveryDate, // 배송 예정일 'yyyy-MM-dd', 첫 결제 배송날짜는 프론트에서 넘어온 값으로 저장함
       agreePrivacy: form.agreePrivacy, // 개인정보 제공 동의
       brochure: form.brochure, // 브로슈어 수령여부
+
+
+      // allianceType: allianceType, // 콕뱅크 주문인지 확인
+
     };
 
-    console.log('----- request body:\n', body);
+    // console.log('----- request body:\n', body);
 
     try {
       setIsLoading((prevState) => ({
@@ -188,7 +205,10 @@ export function Payment({
       const subscribeId = router.query?.subscribeId;
       const apiUrl = orderType === 'general' ? `/api/orders/general` : `/api/orders/subscribe/${subscribeId}`;
       const res = await postObjData(apiUrl, body);
-      console.log(res);
+      
+      // console.log(res);
+
+
       if (res.isDone) {
 
         const merchantUid = res.data.data.merchantUid;
@@ -265,7 +285,7 @@ export function Payment({
       Object.assign(data, getNaverpayGeneralPaymentParam({items: itemList, isMobile: isMobile})); // 네이버페이 데이터 합침
     }
 
-    console.log(" - IMP.request_pay(data)\n", data);
+    // console.log(" - IMP.request_pay(data)\n", data);
 
     // 결제 이슈를 보완하기 인하여 Api Request Data 추가를 위해 사용
     const callbackData = {
@@ -278,7 +298,7 @@ export function Payment({
     async function callback(callbackData, response) {
 
 
-      console.log(response); // callback response => error_code 미포함.
+      // console.log(response); // callback response => error_code 미포함.
       const {success, imp_uid, merchant_uid, error_msg} = response;
 
       /* 3. 콜백 함수 정의하기 */
@@ -291,7 +311,7 @@ export function Payment({
           merchantUid: merchant_uid,
           discountReward: callbackData.discountReward, // 결제 이슈를 보완하기 인하여 Api Request Data 추가를 위해 사용
         });
-        console.log(r);
+        // console.log(r);
         if (r.isDone) {
           alert('결제 성공');
           window.location.href = `/order/orderCompleted/${id}`;
@@ -354,7 +374,7 @@ export function Payment({
       Object.assign(data, getNaverpaySubscribePaymentParam({subscribeId, isMobile: isMobile})); // 네이버페이 데이터 합침
     }
 
-    console.log(" - IMP.request_pay(data)\n", data);
+    // console.log(" - IMP.request_pay(data)\n", data);
 
 
     // 결제 이슈를 보완하기 인하여 Api Request Data 추가를 위해 사용
@@ -375,7 +395,7 @@ export function Payment({
 
     async function callback(callbackData, paymentRegistrationResponse) {
 
-      console.log(paymentRegistrationResponse);
+      // console.log(paymentRegistrationResponse);
 
       const {success, customer_uid, error_code, error_msg} = paymentRegistrationResponse; // [정기구독 등록] API Response
       // paymentRegistrationResponse > customer_uid: 결제 성공, 실패 시 나타남 (cf. 네이버페이: 정기결제 등록됨 / billingKey 삭제 시, 정기결제 등록해제 됨)
@@ -421,7 +441,7 @@ export function Payment({
           .then(res => res)
           .catch(err => err.response);
 
-        console.log(paymentResponse.data);
+        // console.log(paymentResponse.data);
 
 
         /* 5. 결제결과 처리하기 */

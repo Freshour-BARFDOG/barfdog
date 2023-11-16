@@ -28,8 +28,8 @@ const getAuthNumberForPhoneNumber = async (phoneNumber) => {
     })
     .catch((err)=>{
       console.error(err);
-      // console.log(err.request);
-      // console.log(err.response);
+      // // console.log(err.request);
+      // // console.log(err.response);
       if(err.response.status === 409){
         const serverMessage = err.response.data.errors[0].defaultMessage;
         // console.error(serverMessage)

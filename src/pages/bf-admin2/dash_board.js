@@ -29,7 +29,7 @@ const { Header } = Layout;
 export default function DashBoard() {
   const [selectedKey, setSelectedKey] = useState("1");
   const onClick2 = (info) => {
-    console.log(info.key);
+    // console.log(info.key);
     setSelectedKey(info.key);
   };
   const returnContetns2 = (item) => {

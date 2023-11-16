@@ -25,7 +25,7 @@ export default function ValidSnsPage() {
   const [tokenFromServer, setTokenFromServer] = useState(null);
   const [isLoading, setIsLoading] = useState({});
 
-  // console.log(userState)
+  // // console.log(userState)
   useEffect(() => {
     if (!userState.snsInfo.provider || !userState.snsInfo.provider) {
       alert('연동할 SNS정보가 없습니다.');
@@ -60,7 +60,7 @@ export default function ValidSnsPage() {
     //   providerId: userState.snsInfo.providerId, // sns 고유값
     //   tokenValidDays: null, // null 일 경우, 서버 최소 토큰유지: 2시간
     // };
-    // console.log(body);
+    // // console.log(body);
 
     const body = {
       password: formValues.password,
@@ -69,7 +69,7 @@ export default function ValidSnsPage() {
       providerId: userState.snsInfo.providerId, // sns 고유값
       tokenValidDays: null, // null 일 경우, 서버 최소 토큰유지: 2시간
     };
-    console.log('valid_body:', body);
+    // console.log('valid_body:', body);
 
     try {
       setIsLoading((prevState) => ({
@@ -83,7 +83,7 @@ export default function ValidSnsPage() {
           },
         })
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           if (res.status === 200) {
             const token = res.headers.authorization;
             setAlertModalMessage(`SNS연동에 성공하였습니다.`);
@@ -94,7 +94,7 @@ export default function ValidSnsPage() {
         })
         .catch((err) => {
           mct.alertHide();
-          // console.log(err.response);
+          // // console.log(err.response);
           if (err.response.status === 400) {
             mct.alertShow();
             setAlertModalMessage(`비밀번호가 올바르지 않습니다.`);

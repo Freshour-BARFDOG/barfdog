@@ -55,8 +55,8 @@ export default function SelectUserGrades({ setFormValues, id }) {
     } else {
       result = gradeKo.slice(gradeStartIndex, calcEndIndex);
     }
-    // console.log('startIndex: ', gradeStartIndex, '& endIndex: ', gradeEndIndex, '& calcEndIndex' , calcEndIndex)
-    // console.log('Selected GradeList: ',result)
+    // // console.log('startIndex: ', gradeStartIndex, '& endIndex: ', gradeEndIndex, '& calcEndIndex' , calcEndIndex)
+    // // console.log('Selected GradeList: ',result)
     return result;
   }
   

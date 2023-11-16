@@ -89,7 +89,7 @@ export default function ReturnOnSellPage() {
   
   const pageInterceptor = useCallback((res, option={itemQuery: null}) => {
     // res = DUMMY_RETURN_RESPONSE; //  ! TEST
-    console.log(res);
+    // console.log(res);
     // queryAdminOrdersDtoList : 상품단위 검색
     // queryAdminCancelRequestDtoList : 주문 단위 검색
     return getDefaultPagenationInfo(res?.data, 'queryAdminOrdersAllInfoDtoList', {pageSize: searchPageSize, setInitialize: setSearchQueryInitialize});
@@ -133,8 +133,8 @@ export default function ReturnOnSellPage() {
       }));
       const apiUrl = `/api/admin/orders/general/confirmReturn/seller`; // ! 일반상품 반품 가능 (정기구독상품 교환/반품 불가)
       const res = await postObjData(apiUrl, body);
-      console.log('onConfirmingReturnOrderBySeller: \n', body);
-      console.log('response: admin > sell > return > index.jsx\n', res);
+      // console.log('onConfirmingReturnOrderBySeller: \n', body);
+      // console.log('response: admin > sell > return > index.jsx\n', res);
       if (res.isDone) {
         alert(`'판매자 귀책'으로 반품요청이 승인되었습니다.`);
         window.location.reload();
@@ -173,8 +173,8 @@ export default function ReturnOnSellPage() {
       }));
       const apiUrl = `/api/admin/orders/general/confirmReturn/buyer`;  // ! 일반상품 반품 가능 (정기구독상품 교환/반품 불가)
       const res = await postObjData(apiUrl, body);
-      console.log('onConfirmingReturnOrderByBuyer: \n', body);
-      console.log('response: admin > sell > return > index.jsx\n', res);
+      // console.log('onConfirmingReturnOrderByBuyer: \n', body);
+      // console.log('response: admin > sell > return > index.jsx\n', res);
       if (res.isDone) {
         alert(`'구매자 귀책'으로 반품요청이 승인되었습니다.`);
         window.location.reload();
@@ -212,8 +212,8 @@ export default function ReturnOnSellPage() {
       }));
       const apiUrl = `/api/admin/orders/general/denyReturn`; // ! 일반상품 반품 가능 (정기구독상품 교환/반품 불가)
       const res = await postObjData(apiUrl, body);
-      console.log('onRefusingReturnRequest: \n', body);
-      console.log('response: admin > sell > return > index.jsx\n', res);
+      // console.log('onRefusingReturnRequest: \n', body);
+      // console.log('response: admin > sell > return > index.jsx\n', res);
       if (res.isDone) {
         alert(`반품요청을 반려하였습니다.`);
         window.location.reload();

@@ -36,7 +36,7 @@ export default function OrderHistoryPage() {
   }, [activeMenu]);
 
   const pageInterCeptor = async (res) => {
-    console.log(res);
+    // console.log(res);
 
     let newPageInfo = {
       totalPages: 0,
@@ -124,7 +124,7 @@ export default function OrderHistoryPage() {
     return newPageInfo;
   };
 
-  // console.log(itemType, itemList);
+  // // console.log(itemType, itemList);
 
   return (
     <>

@@ -75,7 +75,7 @@ function CreateSingleItemPage() {
   const [activeDiscountOption, setActiveDiscountOption] = useState(false);
 
   
-  // console.log(formValues)
+  // // console.log(formValues)
   useEffect(() => {
     // - 품절일 경우, 재고수량 초기화
     if (formValues.inStock === false) {
@@ -99,7 +99,7 @@ function CreateSingleItemPage() {
     if (document) {
       const QuillEditor = dynamic(() => import('/src/components/admin/form/QuillEditor'));
       setQuillEditor(QuillEditor);
-      console.log('Editor init is complete.');
+      // console.log('Editor init is complete.');
     }
   }, []);
 
@@ -149,7 +149,7 @@ function CreateSingleItemPage() {
       discountDegree: 'discountDegree',
       itemOptionSaveDtoList: { price: 'price', remaining: 'remaining'},
     }
-    console.log(filteredFormValues);
+    // console.log(filteredFormValues);
     filteredFormValues = transformClearLocalCurrencyInEveryObject(filteredFormValues, filterStringObj);
     if (!isPassed) return mct.alertShow('유효하지 않은 항목이 있습니다.');
 
@@ -161,7 +161,7 @@ function CreateSingleItemPage() {
    
       const apiUrl = '/api/admin/items';
       const res = await postObjData(apiUrl, filteredFormValues);
-      console.log(res);
+      // console.log(res);
       if (res.isDone) {
         mct.alertShow('일반상품이 생성되었습니다.', onGlobalModalCallback);
         setIsSubmitted(true);

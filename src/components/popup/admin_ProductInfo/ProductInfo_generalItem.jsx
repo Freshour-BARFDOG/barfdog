@@ -4,7 +4,7 @@ import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import {orderStatus} from "/store/TYPE/orderStatusTYPE";
 
 export default function ProductInfo_generalItem ({ itemInfo }) {
-  // console.log(itemInfo);
+  // // console.log(itemInfo);
   return (
     <>
       <ul className={`popup_table_body ${s['t-body']} ${s['product-item-info']}`}>

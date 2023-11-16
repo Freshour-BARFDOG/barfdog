@@ -40,7 +40,7 @@ function CreateNoticePage() {
     if (document) {
       const QuillEditor = dynamic(() => import('/src/components/admin/form/QuillEditor'));
       setQuillEditor(QuillEditor);
-      console.log('Editor init is complete.');
+      // console.log('Editor init is complete.');
     }
   }, []);
 
@@ -60,7 +60,7 @@ function CreateNoticePage() {
 
   const onSubmit = async (e) => {
   const postURL = `/api/admin/notices`;
-  console.log(formValues)
+  // console.log(formValues)
     e.preventDefault();
     if(isSubmitted)return; // ! IMPORTANT : create Event후, 사용자가 enter를 쳤을 경우, 똑같은 요청이 전송되지 않게 하기 위해서 필요함.
 
@@ -84,7 +84,7 @@ function CreateNoticePage() {
         alert(`${res.error}`);
       }
     } catch (err) {
-      console.log('API통신 오류 : ', err);
+      // console.log('API통신 오류 : ', err);
     }
 
     setIsLoading((prevState) => ({

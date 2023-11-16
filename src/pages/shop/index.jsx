@@ -50,13 +50,13 @@ export default function ShopPage() {
       }
     }
     if (readyToSetSearchValue) {
-      // console.log(readyToSetSearchValue);
-      // console.log(router.query);
+      // // console.log(readyToSetSearchValue);
+      // // console.log(router.query);
       for (const key in router.query) {
         if (key === searchQueryType.ITEMTYPE) {
           const val = router.query[key];
           setSearchValues((prevState) => {
-            console.log()
+            // console.log()
             return { ...prevState, [searchQueryType.ITEMTYPE]: val };
           });
         }
@@ -119,8 +119,9 @@ export default function ShopPage() {
       router.push(link);
     }
   }
-
-  console.log(itemList);
+  
+  // // console.log(itemList);
+  
 
   return (
     <>

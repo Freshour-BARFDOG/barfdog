@@ -63,10 +63,10 @@ function CouponSettingPage({ data }) {
       const body = {
         updateAutoCouponRequestDtoList: convertedFormValues,
       };
-      console.log('body: ', body);
+      // console.log('body: ', body);
       const apiUrl = `/api/admin/coupons/auto/modification`;
       const res = await putObjData(apiUrl, body);
-      console.log(res);
+      // console.log(res);
       if (res.isDone) {
         mct.alertShow('사이트 설정이 성공적으로 저장되었습니다.', onGlobalModalCallback);
         setIsSubmitted(true);

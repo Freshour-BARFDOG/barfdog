@@ -6,7 +6,7 @@ export const valid_authState = async (type) => {
   let error;
   const res = await valid_accessToken( type );
   const status = res.status;
-  // console.log('RES:', res); //
+  // // console.log('RES:', res); //
   const availableToken = status === 200;
   const expiredToken = status === 401; // 추후 REFRESH TOKEN기능 개발 후 확인
   if ( availableToken ) {

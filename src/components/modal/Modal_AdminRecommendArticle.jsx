@@ -40,7 +40,7 @@ function Modal_AdminRecommendArticle({ setActiveModal }) {
   useEffect(() => {
     (async () => {
       const res = await getData('api/admin/articles');
-      console.log(res);
+      // console.log(res);
 
       const articles = res.data.articlesAdminDtos;
       const articleData = {
@@ -83,7 +83,7 @@ function Modal_AdminRecommendArticle({ setActiveModal }) {
       setIsLoading(true);
       await putObjData('/api/admin/articles', artricleIdObj)
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           if (!res.isDone) {
             setFormError(res.error);
             alert(`추천아티클을 설정할 수 없습니다.\nError Message: ${res.error}`);

@@ -109,7 +109,7 @@ const CreateEventPage = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    console.log(formValues);
+    // console.log(formValues);
     // ! IMPORTANT : create Event후, 사용자가 enter를 쳤을 경우, 똑같은 요청이 전송되지 않게 하기 위해서 필요함.
     if (isSubmitted) return;
 
@@ -124,7 +124,7 @@ const CreateEventPage = () => {
       if (isPassed) {
         const objData = formValues;
         const res = await postObjData(postFormValuesApiUrl, objData);
-        console.log(res);
+        // console.log(res);
         // const res = { // TESTTESTTESTTESTTESTTESTTESTTESTTEST
         //   isDone : true,
         //   error: ''

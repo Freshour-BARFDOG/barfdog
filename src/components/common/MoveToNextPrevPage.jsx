@@ -19,7 +19,7 @@ export const MoveToNextPrevPage = ({
     const newPath = path
       .map((p, index) => (index === endPointIndexOnPath ? targetPageId : p))
       .join('/');
-    console.log(newPath);
+    // console.log(newPath);
     router.push(newPath);
     setCurPageId(targetPageId);
   };

@@ -29,16 +29,16 @@ export const getData = async (url, useType, optionalConfig= {}) => {
     ...axiosHeaders,
     method: "GET",
     url: url,
-    ...optionalConfig
+    ...optionalConfig,
   }
   const res = await axios(config)
     .then((res) => {
-      // console.log(res);
+      // // console.log(res);
       return res;
     })
     .catch((err) => {
       errorResponseHandleMap( err );
-      console.log(err.response);
+      // console.log(err.response);
       const errorObj = err?.response;
       const status = errorObj?.status;
       let error = responseErrorType[status];
@@ -50,17 +50,93 @@ export const getData = async (url, useType, optionalConfig= {}) => {
   return res;
 };
 
+
+export const getDataWithCookies = async (url, cookies, useType, optionalConfig= {}) => {
+  let result;
+  //const token = tokenFromSSR || getTokenFromServerSide(req);
+
+  const axiosHeaders = useType === 'admin' ? axiosConfig() : axiosUserConfig();
+  const axiosHeadersWithCookie = {
+    ...axiosHeaders,
+    headers: {
+      ...axiosHeaders.headers,
+      Cookie: cookies,
+    }
+  }
+  const config = {
+    ...axiosHeadersWithCookie,
+    method: "GET",
+    url: url,
+    ...optionalConfig,
+    withCredentials: true,
+  }
+  //config.headers.Cookie = cookies;
+
+  //// console.log(cookies)
+
+  try {
+    // ! TOKEN이 없을 경우 , axios 실행되지 않아야 함
+    // // console.log('여기 --- ', token);
+    result = await axios
+      .get(url, config)
+      .then((res) => {
+        // // console.log('SSR RESPONSE: ',res);
+        return res;
+      })
+      .catch((err) => {
+        // // console.log(err.response)
+        return err.response;
+      });
+    // // console.log('result:::', result)
+  } catch (err) {
+    // console.error(err)
+    return err.response;
+  }
+
+  return result;
+
+  // const axiosHeaders = useType === 'admin' ? axiosConfig() : axiosUserConfig();
+  // const config = {
+  //   ...axiosHeaders,
+  //   method: "GET",
+  //   url: url,
+  //   ...optionalConfig,
+  //   withCredentials: true,
+  // }
+  // // console.log(cookies)
+  // config.headers.Cookie = cookies;
+
+  // const res = await axios(config)
+  //   .then((res) => {
+  //     // // console.log(res);
+  //     return res;
+  //   })
+  //   .catch((err) => {
+  //     errorResponseHandleMap( err );
+  //     // console.log(err.response);
+  //     const errorObj = err?.response;
+  //     const status = errorObj?.status;
+  //     let error = responseErrorType[status];
+  //     console.error(errorObj); // 개발 시, Response Status 확인용
+  //     console.error(error); // 개발 시, Response Status 확인용
+  //     return errorObj;
+  //   });
+
+  // return res;
+};
+
+
 export const postData = async (url, data, callback, contType) => {
   return axios
     .post(url, data, axiosConfig(contType))
     .then((res) => {
-      //console.log(res);
+      //// console.log(res);
       if (callback && typeof callback === 'function') callback(res);
       return res;
     })
     .catch((err) => {
       errorResponseHandleMap( err );
-      console.log(err);
+      // console.log(err);
       if (callback && typeof callback === 'function') callback(err);
       alert('데이터 전송에 실패하였습니다.');
     });
@@ -81,7 +157,7 @@ export const deleteData = async (url, config = { data: {} }) => {
       ...axiosConfig(), // header
     })
     .then((res) => {
-      console.log('postObjDataResponse:\n', res);
+      // console.log('postObjDataResponse:\n', res);
       result.data = res;
       result.status = res.status;
       return res.status === 200 || res.status === 201;
@@ -91,7 +167,7 @@ export const deleteData = async (url, config = { data: {} }) => {
       console.error(err.response);
       // console.error('postObjDataResponseError:\n',err.response);
       const error = err.response;
-      // console.log('ERROR내용: ', err.response);
+      // // console.log('ERROR내용: ', err.response);
       if (!error.data) {
         result.error = '요청에 대응하는 데이터가 서버에 없습니다.';
       } else if (error.data.error) {
@@ -127,14 +203,14 @@ export const postObjData = async (url, data, contType) => {
   await axios
     .post(url, data, axiosConfig(contType))
     .then((res) => {
-      console.log('postObjDataResponse:\n', res);
+      // console.log('postObjDataResponse:\n', res);
       result.data = res;
       result.status = res.status;
       result.isDone = res.status === 200 || res.status === 201;
     })
     .catch((err) => {
       errorResponseHandleMap( err );
-      console.log(err.response);
+      // console.log(err.response);
       const error = err.response;
 
       if(!error) {
@@ -177,14 +253,14 @@ export const putObjData = async (url, data, contType) => {
   const response = await axios
     .put(url, data, axiosConfig(contType))
     .then((res) => {
-      console.log(res);
+      // console.log(res);
       result.data = res;
       result.status = res.status;
       return res.status === 200 || res.status === 201;
     })
     .catch((err) => {
       errorResponseHandleMap( err );
-      console.log(err.response);
+      // console.log(err.response);
       const errStatus = err.response?.status >= 400;
       const errorMessage = err.response?.data.error;
       result.status = err.response.status;
@@ -207,13 +283,13 @@ export const deleteObjData = async (url, data) => {
   const response = await axios
     .delete(url, { ...data, ...axiosConfig() })
     .then((res) => {
-      console.log(res);
+      // console.log(res);
       result.data = res;
       return res.status === 200 || res.status === 201;
     })
     .catch((err) => {
       errorResponseHandleMap( err );
-      console.log(err.response);
+      // console.log(err.response);
       const errStatus = err.response?.status >= 400;
       const errorMessage = err.response?.data.error;
       result.status = err.response.status;
@@ -230,14 +306,14 @@ export const postFileUpload = async (url, formData) => {
   const response = await axios
     .post(url, formData, axiosConfig('multipart/fomdata'))
     .then((res) => {
-      // console.log(res);
+      // // console.log(res);
       return res;
     })
     .catch((err) => {
       errorResponseHandleMap( err );
       return err.response;
-      console.log(err.response);
-      console.log(err.request);
+      // console.log(err.response);
+      // console.log(err.request);
     });
 
   return response;
@@ -254,7 +330,7 @@ export const postUserObjData = async (url, data, contType) => {
   const response = await axios
     .post(url, data, axiosUserConfig(contType))
     .then((res) => {
-      console.log(res);
+      // console.log(res);
       result.data = res;
       result.status = res.status;
       return res.status === 200 || res.status === 201;
@@ -262,7 +338,7 @@ export const postUserObjData = async (url, data, contType) => {
     .catch((err) => {
       errorResponseHandleMap( err );
       const error = err.response;
-      console.log('ERROR내용: ', err.response);
+      // console.log('ERROR내용: ', err.response);
       if (error.data.error || error.data.errors[0].defaultMessage) {
         result.error = error.data.error || error.data.errors[0].defaultMessage;
       } else if (error?.data.error.error) {
@@ -325,7 +401,7 @@ export const getTokenFromServerSide = (req) => {
 export const getCookieSSR = (req, CookieName) => {
   // *주의: SSR에서만 실행
   let result = null;
-  // console.log(req.headers);
+  // // console.log(req.headers);
   const cookies = req.headers.cookie.split(';');
   if (cookies && CookieName) {
     for (const key of cookies) {
@@ -343,7 +419,7 @@ export const getDataSSR = async (req, url, tokenFromSSR) => {
   const token = tokenFromSSR || getTokenFromServerSide(req);
   try {
     // ! TOKEN이 없을 경우 , axios 실행되지 않아야 함
-    // console.log('여기 --- ', token);
+    // // console.log('여기 --- ', token);
     result = await axios
       .get(url, {
         headers: {
@@ -352,14 +428,45 @@ export const getDataSSR = async (req, url, tokenFromSSR) => {
         },
       })
       .then((res) => {
-        // console.log('SSR RESPONSE: ',res);
+        // // console.log('SSR RESPONSE: ',res);
         return res;
       })
       .catch((err) => {
-        // console.log(err.response)
+        // // console.log(err.response)
         return err.response;
       });
-    // console.log('result:::', result)
+    // // console.log('result:::', result)
+  } catch (err) {
+    // console.error(err)
+    return err.response;
+  }
+
+  return result;
+};
+
+export const getDataSSRWithCookies = async (req, url, cookies, tokenFromSSR) => {
+  let result;
+  const token = tokenFromSSR || getTokenFromServerSide(req);
+  try {
+    // ! TOKEN이 없을 경우 , axios 실행되지 않아야 함
+    // // console.log('여기 --- ', token);
+    result = await axios
+      .get(url, {
+        headers: {
+          authorization: token,
+          'content-Type': 'application/json',
+          'Cookie': cookies, // 클라이언트 쿠키를 서버 요청에 추가
+        },
+      })
+      .then((res) => {
+        // // console.log('SSR RESPONSE: ',res);
+        return res;
+      })
+      .catch((err) => {
+        // // console.log(err.response)
+        return err.response;
+      });
+    // // console.log('result:::', result)
   } catch (err) {
     // console.error(err)
     return err.response;
@@ -373,7 +480,7 @@ export const postDataSSR = async (req, url, data, tokenFromSSR) => {
   const token = tokenFromSSR || getTokenFromServerSide(req);
   try {
     // ! TOKEN이 없을 경우 , axios 실행되지 않아야 함
-    // console.log('여기 --- ', token);
+    // // console.log('여기 --- ', token);
     result = await axios
       .post(url, data, {
         headers: {
@@ -382,14 +489,14 @@ export const postDataSSR = async (req, url, data, tokenFromSSR) => {
         },
       })
       .then((res) => {
-        // console.log('SSR RESPONSE: ',res);
+        // // console.log('SSR RESPONSE: ',res);
         return res;
       })
       .catch((err) => {
-        // console.log(err.response)
+        // // console.log(err.response)
         return err.response;
       });
-    // console.log('result:::', result)
+    // // console.log('result:::', result)
   } catch (err) {
     // console.error(err)
     return err.response;

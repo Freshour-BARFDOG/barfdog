@@ -82,7 +82,7 @@ export default function DashboardPage({ga}) {
         // const res = DUMMY_RESPONSE; // TEST
         if (res.data) {
           const data = res.data;
-          // console.log(data);
+          // // console.log(data);
           DATA = {
             statistics: {
               newOrderCount: data.newOrderCount || 0,
@@ -200,7 +200,7 @@ export default function DashboardPage({ga}) {
       body: JSON.stringify({ token: googleApiToken }),
     })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         alert('구글 연동해제');
         deleteCookie(cookieType.GOOGLE_ANALYTICS_TOKEN);
         window.location.reload();
@@ -413,7 +413,7 @@ export async function getServerSideProps({ req, query }) {
   let token = getCookieSSR(req, cookieType.GOOGLE_ANALYTICS_TOKEN) || null; // 구글 API 토큰
   let expires_in = null; // 구글 API 토큰 만료시간
 
-  // console.log('query: ',query)
+  // // console.log('query: ',query)
   if (query.token && query.token !== 'undefined') {
     token = query.token || null;
   }

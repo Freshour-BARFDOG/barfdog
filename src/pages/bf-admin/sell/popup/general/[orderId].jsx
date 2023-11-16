@@ -128,11 +128,11 @@ export async function getServerSideProps({ req, query }) {
   let orderStatus = null;
   const apiUrl = `/api/admin/orders/${orderId}/general`;
   const res = await getDataSSR(req, apiUrl);
-  // console.log('RESONSE: ',res);
+  // // console.log('RESONSE: ',res);
   // const res = DUMMY_DEFAULT_RES;
   if (res.data) {
     const data = res.data;
-    // console.log('________RESONSE: ',data);
+    // // console.log('________RESONSE: ',data);
     DATA = {
       orderStatus: data.paymentDto.orderStatus,
       orderInfoDto: {
@@ -199,10 +199,10 @@ export async function getServerSideProps({ req, query }) {
       for (const orderItemId of orderItemIdList) {
         const cancelApiUrl = `/api/admin/orders/orderItem/${orderItemId}`;
         const r = await getDataSSR(req, cancelApiUrl);
-        // console.log('-----취소반품교환 정보--',r)
+        // // console.log('-----취소반품교환 정보--',r)
         if(r.data){ // ! PRODUCT CODE
           const data = r.data;
-          console.log('CANCEL RESPONSE DATA: ',data)
+          // console.log('CANCEL RESPONSE DATA: ',data)
           const cancleInfo = data?.orderItemAndOptionDto.orderItemDto || {};
           DATA = {
             ...DATA,

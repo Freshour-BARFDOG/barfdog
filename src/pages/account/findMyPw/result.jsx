@@ -62,7 +62,7 @@ export default function FindMyPasswordPage() {
         name: userInfo.name,
         phoneNumber: userInfo.phoneNumber,
       };
-      console.log(body);
+      // console.log(body);
       const url = `/api/temporaryPassword`; // 임시 비밀번호 발급
       const res = await putObjData(url, body);
       if (res.isDone) {

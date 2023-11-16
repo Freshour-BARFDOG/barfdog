@@ -36,7 +36,7 @@ export const calculateAndConvertToMinimumSalePrice = ({originPrice, discount = {
   const deliveryPrice = discount.deliveryPrice || 0;
   const calc = originPrice - coupon - grade - reward + deliveryPrice; // 배송비는 더한다.
   const overDiscount = calc < minPaymentPrice ? minPaymentPrice - calc : 0; // 최소결제금액보다 할인금액이 클 경우, 할인 미적용 금액
-  // console.log(coupon, grade, reward, unappliedDiscountAmount);
+  // // console.log(coupon, grade, reward, unappliedDiscountAmount);
   return {
     salePrice: calc >= minPaymentPrice ? calc : minPaymentPrice,
     overDiscount: overDiscount

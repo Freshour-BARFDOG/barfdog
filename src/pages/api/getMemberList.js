@@ -7,7 +7,7 @@ export const getMemberList = async (idList) => {
   try {
     for (const id of idList) {
       const res = await getData( `/api/admin/members/${id}` );
-      console.log( res );
+      // console.log( res );
       if ( res.status === 200 ) {
         const DATA = res.data.memberDto;
         const newItem = {

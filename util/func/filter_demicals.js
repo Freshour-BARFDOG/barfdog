@@ -8,7 +8,7 @@ const filter_demicals = (numString, demicalCount) => {
   }
   
   const demical = val.split( '.' )[1].substring( 0, digits );
-  // console.log(`${int}.${demical}`);
+  // // console.log(`${int}.${demical}`);
   return `${int}.${demical}`;
 };
 

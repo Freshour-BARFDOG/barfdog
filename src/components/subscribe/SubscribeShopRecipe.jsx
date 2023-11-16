@@ -75,7 +75,7 @@ export const SubscribeShopRecipe = ({ name, info, form, setForm }) => {
       (rc) => rc.name === `${selectedRadio && selectedRadio.split('-')[0]}`,
     )[0]?.id;
 
-    // console.log(selectedId)
+    // // console.log(selectedId)
     setForm((prevState) => ({
       ...prevState,
       [name]: [selectedId],

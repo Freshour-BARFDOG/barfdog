@@ -22,7 +22,7 @@ export default function MypageBanner() {
       try {
         const url = `/api/banners/myPage`;
         const res = await getData(url);
-        // console.log('MypageBanner RES: ', res);
+        // // console.log('MypageBanner RES: ', res);
         if (res.status === 200) {
           const data = res.data;
           const initData = {

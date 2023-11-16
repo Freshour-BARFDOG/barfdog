@@ -48,7 +48,7 @@ export const validate = (obj) => {
         break;
     }
   }
-  console.log('Valid Result (formValues) : ', errors);
+  // console.log('Valid Result (formValues) : ', errors);
   return errors;
 };
 

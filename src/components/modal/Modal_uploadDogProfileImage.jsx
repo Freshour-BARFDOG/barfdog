@@ -21,7 +21,7 @@ export const Modal_uploadDogProfileImage = ({
   const maxFileSize = 10000000;
   const mct = useModalContext();
 
-  // console.log(data);
+  // // console.log(data);
 
   const initialFileValues = {
     file: '',
@@ -31,7 +31,7 @@ export const Modal_uploadDogProfileImage = ({
     uploadMode: data.pictureUrl ? 'update' : 'create',
     ...data,
   };
-  // console.log(initialFileValues)
+  // // console.log(initialFileValues)
 
   const [fileObj, setFileObj] = useState(initialFileValues);
   const [isLoading, setIsLoading] = useState(false);

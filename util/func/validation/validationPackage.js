@@ -115,7 +115,7 @@ export const valid_isEmptyObject = (obj) => {
   let error;
   for ( const key in obj ) {
     const val = obj[key];
-    console.log(val)
+    // console.log(val)
     if(!val){
       error = `빈 항목이 있습니다.`;
       break
@@ -134,8 +134,8 @@ export const valid_email = (value) => {
   const email = value;
   // const RegExp_before = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
   const RegExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ // ! 0926 validation update ver.
-  // console.log('RegExp_before: ',RegExp_before.test(email))
-  // console.log('RexExp: ',RexExp_advanced.test(email))
+  // // console.log('RegExp_before: ',RegExp_before.test(email))
+  // // console.log('RexExp: ',RexExp_advanced.test(email))
   if(!email ){
     error = '항목이 비었습니다.'
   } else if (!RegExp.test(email)) {
@@ -163,7 +163,7 @@ export const valid_email_duplication = async (value) => {
     .then((res) => {
       error = '';
       message = res.data && '사용가능한 계정입니다.';
-      // console.log('계정 중복검사: ',res.data && '사용가능한 계정입니다.')
+      // // console.log('계정 중복검사: ',res.data && '사용가능한 계정입니다.')
 
     })
     .catch((err) => {
@@ -173,7 +173,7 @@ export const valid_email_duplication = async (value) => {
         error = '서버와 통신할 수 없습니다. \n관리자에게 문의하세요.';
       }
     });
-  // console.log('err:', error, '& msg:', message)
+  // // console.log('err:', error, '& msg:', message)
   return {error, message};
 };
 
@@ -405,7 +405,7 @@ const valid_singleItemOptionObj = (optionObj) => {
         break;
     }
   }
-  // console.log('singleOptions Error:', error)
+  // // console.log('singleOptions Error:', error)
   return error;
 };
 

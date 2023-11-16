@@ -45,7 +45,7 @@ function MainBannerIndexPage () {
     try {
       const apiUrl = "/api/banners/main";
       const res = await getData( apiUrl, "admin" );
-      // console.log( res );
+      // // console.log( res );
       if ( res.status === 200 && res.data?._embedded ) {
         let data = res.data._embedded.mainBannerListResponseDtoList;
         const sortedList = data.length ? sorting( data, "leakedOrder" ) : [];
@@ -71,7 +71,7 @@ function MainBannerIndexPage () {
       }) );
       const data = ""; // ! PutData : 빈값 보내기
       const res = await putObjData( url, data );
-      // console.log( res );
+      // // console.log( res );
       if ( res.isDone ) {
         await getItemList();
       } else {
@@ -96,7 +96,7 @@ function MainBannerIndexPage () {
         delete: true
       }) );
       const res = await deleteObjData( url );
-      // console.log( res );
+      // // console.log( res );
       if ( res.isDone ) {
         mct.alertShow( "삭제가 완료되었습니다.", sucecessCallback );
       } else {

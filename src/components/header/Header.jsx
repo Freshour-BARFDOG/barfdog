@@ -64,7 +64,7 @@ export default function Header () {
       }) );
     }
   };
-  // console.log(userData)
+  // // console.log(userData)
   
   const returnToPrevPage = () => {
     router.back();
@@ -165,8 +165,8 @@ function TopButton () {
   // * 버튼 위치 변경으로 PC/모바일 구분만 필요하게 변경
   // * react-device-detect: 안드로이드 테블릿 미대응으로 삭제
   
-  // console.log( 'isMobileByWinWidth = ', DeviceDetect.isMobile )
-  // console.log( 'isMobileLib = ', isMobileDevice )
+  // // console.log( 'isMobileByWinWidth = ', DeviceDetect.isMobile )
+  // // console.log( 'isMobileLib = ', isMobileDevice )
   // 스크롤 최상단 이동
   const scrollToTop = () => {
     window.scroll( {

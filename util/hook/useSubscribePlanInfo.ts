@@ -3,6 +3,8 @@ import {getData} from "@src/pages/api/reqData";
 import {subscribePlanType} from '@store/TYPE/subscribePlanType';
 
 
+// 콕뱅크 할인율 할때 이부분 수정하면됨
+// plan_discount 테이블 데이터 불러오는 곳
 export const useSubscribePlanInfo = () => {
   
   
@@ -21,7 +23,7 @@ export const useSubscribePlanInfo = () => {
       try {
         const url = `/api/planDiscount`;
         const res = await getData(url);
-        // console.log('useSubscribePlanInfo: ',res);
+        // // console.log('useSubscribePlanInfo: ',res);
         if(res.data && res.status === 200) {
           const data = res.data._embedded.planDiscountResponseDtoList[0];
   

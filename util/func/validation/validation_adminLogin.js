@@ -21,7 +21,7 @@ export const validate = (obj, fileObj) => {
   }
   
   
-  console.log('Valid Result (formValues) : ', errors);
+  // console.log('Valid Result (formValues) : ', errors);
   return errors;
 };
 

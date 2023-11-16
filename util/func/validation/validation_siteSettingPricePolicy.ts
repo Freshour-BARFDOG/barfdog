@@ -9,7 +9,7 @@ export function validate(obj) {
         errors[key] = valid_limitedNum(val);
     }
   }
-  console.log('Valid Result (formValues) : ', errors);
+  // console.log('Valid Result (formValues) : ', errors);
   return errors;
 }
 

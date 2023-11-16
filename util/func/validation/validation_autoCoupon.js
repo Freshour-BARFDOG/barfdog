@@ -16,7 +16,7 @@ export function validate(arr) {
     }
     errors.push(innerError);
   })
-  console.log('Valid Result (formValues) : ', errors);
+  // console.log('Valid Result (formValues) : ', errors);
   return errors;
 }
 

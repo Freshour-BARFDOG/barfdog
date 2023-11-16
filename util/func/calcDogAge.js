@@ -9,8 +9,8 @@ export const calcDogAge = (yyyymm, calcMethod = 'american') => {
   
   const calcedYear = curYear - dogBirthYear;
   const calcedMonth = curMonth - dogBirthMonth + (calcedYear * 12);
-  // console.log('caledY: ', calcedYear);
-  // console.log('caledMonth: ', calcedMonth);
+  // // console.log('caledY: ', calcedYear);
+  // // console.log('caledMonth: ', calcedMonth);
   
   if(calcedMonth < 0){
     console.error('계산된 나이가 음수입니다. 계산할 수 없습니다.');

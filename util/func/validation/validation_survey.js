@@ -18,7 +18,7 @@ export const validate = (obj, targetStep) => {
     errors = validate_surveyAllSteps(obj);
   }
   
-  console.log('Valid Result (formValues) : ', errors);
+  // console.log('Valid Result (formValues) : ', errors);
   return errors;
 };
 
@@ -61,7 +61,7 @@ const validate_surveyStep1 = (obj) => {
         break;
     }
   }
-  // console.log('Valid Result > STEP 1 : ', errors);
+  // // console.log('Valid Result > STEP 1 : ', errors);
   return errors;
 };
 
@@ -91,7 +91,7 @@ const validate_surveyStep2 = (obj) => {
     }
   }
   
-  // console.log('Valid Result > STEP 2 : ', errors);
+  // // console.log('Valid Result > STEP 2 : ', errors);
   return errors;
 };
 
@@ -124,7 +124,7 @@ const validate_surveyStep3 = (obj) => {
     }
   }
   
-  // console.log('Valid Result > STEP 3 : ', errors);
+  // // console.log('Valid Result > STEP 3 : ', errors);
   return errors;
 };
 

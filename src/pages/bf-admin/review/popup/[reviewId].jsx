@@ -41,7 +41,7 @@ export default function ReviewDetailPage({ reviewId }) {
         }));
         const res = await getData(getReviewInfoApiUrl);
         // const res = DUMMY_RESPONSE;
-        console.log(res);
+        // console.log(res);
         if (res.data?.reviewDto) {
           const DATA = res.data.reviewDto;
           const initInfo = {
@@ -105,7 +105,7 @@ export default function ReviewDetailPage({ reviewId }) {
       };
       const apiUrl = '/api/admin/reviews/approval';
       const res = await putObjData(apiUrl, body);
-      console.log(res);
+      // console.log(res);
       if (res.isDone) {
         alert('선택된 리뷰가 승인처리 되었습니다.');
         window.location.reload();
@@ -133,7 +133,7 @@ export default function ReviewDetailPage({ reviewId }) {
       }
       const apiUrl = `/api/admin/reviews/${reviewId}/return`;
       const res = await putObjData(apiUrl, body);
-      console.log(res);
+      // console.log(res);
       if (res.isDone) {
         alert('리뷰가 반려처리 되었습니다.');
         setRejectStart(false);
@@ -155,7 +155,7 @@ export default function ReviewDetailPage({ reviewId }) {
       }
       const apiUrl = '/api/admin/reviews/best';
       const res = await postObjData(apiUrl, body);
-      console.log(res);
+      // console.log(res);
       if (res.isDone) {
         alert(`베스트리뷰로 등록되었습니다.`);
         window.location.reload();
@@ -189,7 +189,7 @@ export default function ReviewDetailPage({ reviewId }) {
     return <FullScreenLoading />;
   }
 
-  // console.log(info);
+  // // console.log(info);
 
   return (
     <>

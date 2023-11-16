@@ -65,7 +65,7 @@ const Modal_sendPhoneMessage = ({id, setModalState, data }) => {
       setIsLoading(true);
       const url = '/api/mypage/inviteSms';
       const res = await postObjData(url, body);
-      console.log(res);
+      // console.log(res);
       if (!res.isDone) return mct.alertShow('메시지 발송 중 오류가 발생하였습니다.');
   
       const smsStatus = res.data.data.responseCode;

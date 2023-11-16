@@ -47,7 +47,7 @@ export default function SurveyStep1({ formValues, setFormValues, onInputChangeHa
     // 벌스데이도 업데이트 해줘야하네요.
     if(hasValue){
       const birthString = birthObj.yyyymm;
-      console.log(birthObj);
+      // console.log(birthObj);
       setFormValues((prevState) => ({
         ...prevState,
         birth: birthString,

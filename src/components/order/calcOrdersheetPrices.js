@@ -11,7 +11,7 @@ export const calcOrdersheetPrices = (form, orderType='general', deliveryInfo={de
   const minPaymentPrice = IAMPORT_MIN_PAYMENT_PRICE; // 최소 결제 금액
   let overDiscountCoupon = 0; // 쿠폰의 초과할인금
 
-  // console.log(discountReward, discountGrade, orderPrice);
+  // // console.log(discountReward, discountGrade, orderPrice);
   if(isNaN(discountReward) || isNaN(discountGrade) || isNaN(orderPrice) || isNaN(deliveryPrice)) return null;
 
   if(orderType === 'general'){
@@ -40,7 +40,7 @@ export const calcOrdersheetPrices = (form, orderType='general', deliveryInfo={de
   const availableMaxReward = Math.min(availableMaxDiscount, userTotalReward - discountReward);
   const availableMaxCoupon = availableMaxDiscount;
 
-  // console.log("---------------",'\n적립금할인: ',discountReward, '\n쿠폰할인: ',discountCoupon, '\n등급할인: ',discountGrade, '\n할인총합:', discountTotal, '\n배송비:',deliveryPrice, "\nORIGIN-결제금액: ",orderPrice, "\nCALCED-주문금액: ",calcedPaymentPrice,  '\nFINAL-결제금액: ', paymentPrice, "\n쿠폰 초과할인금액:",overDiscountCoupon, "\n------ availableMaxDiscount: ", availableMaxDiscount,  "\navailableMaxReward:",availableMaxReward,  "\navailableMaxCoupon:",availableMaxCoupon);
+  // // console.log("---------------",'\n적립금할인: ',discountReward, '\n쿠폰할인: ',discountCoupon, '\n등급할인: ',discountGrade, '\n할인총합:', discountTotal, '\n배송비:',deliveryPrice, "\nORIGIN-결제금액: ",orderPrice, "\nCALCED-주문금액: ",calcedPaymentPrice,  '\nFINAL-결제금액: ', paymentPrice, "\n쿠폰 초과할인금액:",overDiscountCoupon, "\n------ availableMaxDiscount: ", availableMaxDiscount,  "\navailableMaxReward:",availableMaxReward,  "\navailableMaxCoupon:",availableMaxCoupon);
 
   return {
     discountReward,

@@ -233,9 +233,9 @@ export const Modal_changeItemOrderState = ({items = [], onHideModal, confirmType
       }
       
       const url = `/api/orders/general/${CONFIRM_TYPE}`;
-      console.log( 'url:', url, 'body: ',body );
+      // console.log( 'url:', url, 'body: ',body );
       const res = await postObjData( url, body );
-      // console.log(res);
+      // // console.log(res);
       if ( res.isDone ) {
         // if (!res.isDone) { //  ! TEST TEST
         if ( confirmType === orderStatus.CONFIRM ) {
@@ -270,7 +270,7 @@ export const Modal_changeItemOrderState = ({items = [], onHideModal, confirmType
       };
       const orderIdx = router.query.orderIdx; // 주문 ID
       const r = await postObjData( `/api/orders/${orderIdx}/general/cancelRequest`, body );
-      console.log( r );
+      // console.log( r );
       if ( r.isDone ) {
         mct.alertShow( `취소신청이 접수되었습니다.` );
         setIsSubmitted( true );

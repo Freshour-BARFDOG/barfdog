@@ -24,7 +24,7 @@ export default function MypageCardPage() {
           customerUid: customUid,
           paymentMethod: paymentMethod
         });
-        console.log(r);
+        // console.log(r);
         if (r.isDone) {
           mct.alertShow('카드변경 성공', onSuccessCallback);
         } else {

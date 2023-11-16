@@ -72,9 +72,9 @@ export const Modal_orderCancleReason = ({
   
 
   const onClickCheckbox = (id, checked) => {
-    // console.log(id, checked);
+    // // console.log(id, checked);
     const seletedId = Number(id.split('-')[1]);
-    // console.log(seletedId);
+    // // console.log(seletedId);
     if (checked) {
       setSelectedIdList((prevState) => prevState.concat(seletedId));
     } else {
@@ -82,7 +82,7 @@ export const Modal_orderCancleReason = ({
     }
   };
   
-  // console.log(allData);
+  // // console.log(allData);
   return (
     <ModalWrapper id={s['modal-cancle']} background positionCenter>
       <CloseButton onClick={onHideModal} className={s['close-button']} />

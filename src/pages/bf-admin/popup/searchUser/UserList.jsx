@@ -23,7 +23,7 @@ export default function UserList({ items,selectedItems, setSelectedItems }) {
 
 
 const Item = ({ item, selectedItems,   setSelectedItems }) => {
-  // console.log(item)
+  // // console.log(item)
   
   const DATA = {
     id: item.id,

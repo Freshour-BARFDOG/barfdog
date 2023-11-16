@@ -22,8 +22,8 @@ export default function Popup_MemberDetailPage({ id }) {
   const [activeGradeModal, setActiveGradeModal] = useState(false);
   const [activeSubscribeModal, setActiveSubscribeModal] = useState(false);
 
-  // console.log(tempValues)
-  // console.log(formValues)
+  // // console.log(tempValues)
+  // // console.log(formValues)
   useEffect(() => {
     (async () => {
       try {
@@ -32,7 +32,7 @@ export default function Popup_MemberDetailPage({ id }) {
           fetching: true,
         }));
         const res = await getData(getReviewInfoApiUrl);
-        console.log('GET DATA: ', res);
+        // console.log('GET DATA: ', res);
         let initialValues = [];
         if (res.data[apiDataQuery]) {
           const DATA = res.data[apiDataQuery];
@@ -92,7 +92,7 @@ export default function Popup_MemberDetailPage({ id }) {
           birthday: newBirthday,
         };
         const res = await putObjData(putMemberBirthdayApiUrl, data);
-        console.log(res);
+        // console.log(res);
         if (res.isDone) {
           alert('회원 생일 변경이 완료되었습니다.');
           setFormValues((prevState) => ({

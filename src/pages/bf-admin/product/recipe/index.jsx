@@ -54,7 +54,7 @@ function RecipePage () {
         }
       }));
       const res = await putObjData(apiUrl, targetId);
-      console.log(res);
+      // console.log(res);
       if(res.isDone){
         mct.alertShow( "레시피를 삭제하였습니다.", onSuccessCallback );
       } else {

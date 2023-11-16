@@ -44,6 +44,6 @@ export const validate = (obj, formErrors) => {
   }
   errors.isValidPhoneNumber = formErrors.isValidPhoneNumber;
 
-  console.log('Valid Result (formValues) : ', errors);
+  // console.log('Valid Result (formValues) : ', errors);
   return errors;
 };
