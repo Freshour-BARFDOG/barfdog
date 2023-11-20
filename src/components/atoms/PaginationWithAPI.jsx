@@ -3,7 +3,7 @@ import DoubleArrow from '/public/img/icon/pagination-double-arrow.svg';
 import {useEffect, useState} from 'react';
 import s from './pagination.module.scss';
 import {useRouter} from 'next/router';
-import {getData, postObjData} from '/src/pages/api/reqData';
+import {getData, postObjData, getDataWithCookies} from '/src/pages/api/reqData';
 import {searchQueryType} from '/store/TYPE/searchQueryType';
 import {convertSearchQueryStrings} from "/util/func/convertSearchQueryStrings";
 
@@ -52,7 +52,32 @@ const fetchData = async (url, method, query) => {
 
     let res;
     if (method === 'GET') {
-      res = await getData(`${url}${urlQueries}`);
+
+
+      //res = await getData(`${url}${urlQueries}`);
+
+      const cookies = document.cookie;
+      res = await getDataWithCookies(`${url}${urlQueries}`,cookies);
+
+
+    // // 서버 측에서 쿠키를 요청 헤더에 추가
+    // const cookies = req.headers.cookie; // 클라이언트로부터 전달된 쿠키
+    // const name = cookieType.LOGIN_COOKIE;
+    // const value = cookies.match(`(^|;) ?${name}=([^;]*)(;|$)`);
+    // const accessToken = value ? value[2] : null;
+    
+    // res = await axios.get(apiUrl, {
+    //   withCredentials: true,
+    //   headers: {
+    //     authorization: accessToken,
+    //     'content-Type': 'application/json',
+    //     'Cookie': cookies, // 클라이언트 쿠키를 서버 요청에 추가
+    //   },
+    // });
+
+
+
+
     } else if (method === 'POST' && option.body) {
       const body = option.body;
       res = await postObjData(`${url}${defQuery}`, body);
