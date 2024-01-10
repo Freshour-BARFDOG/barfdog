@@ -12,7 +12,7 @@ interface axiosOptions {
 export const axiosBaseURLBySSR = (req: Request, axiosOptions?: axiosOptions): AxiosInstance => {
   const defaultTimeout: number = 10000;
   return axios.create({
-    baseURL: `${req.protocol}://${req.headers.host}`,  // Append '/api' to the base UR
+    baseURL: `${req.protocol || 'https'}://${req.headers.host}`,  // Append '/api' to the base UR
     timeout: axiosOptions?.timeout || defaultTimeout
   });
 }

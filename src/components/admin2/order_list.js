@@ -884,6 +884,7 @@ const ProductList = ({ search }) => {
       // "(석범)레시피2 총량": item.children3[0].totalGramRecipe2,
       // "(석범)레시피3 총량": item.children3[0].totalGramRecipe3,
       // "(석범)레시피4 총량": item.children3[0].totalGramRecipe4,
+      "결제액": item.paymentPrice,
       "결제일": item.paymentDate,
       "개인정보수정일": item.memberModifiedDate,
       "배송주기(일)": item.deliveryInterval,
