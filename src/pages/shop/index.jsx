@@ -24,7 +24,7 @@ const apiDataQueryString = 'queryItemsDtoList';
 const searchPageSize = 6; // 화면에 뿌릴 상품수
 
 const initialSearchValues = {
-  sortBy: itemSortQueryType.RECENT,
+  sortBy: itemSortQueryType.REGISTRATION,
   itemType: general_itemType.ALL, // url Query is lowerCase
 };
 
@@ -34,7 +34,7 @@ export default function ShopPage() {
   const router = useRouter();
   const [itemList, setItemList] = useState(null);
   const [searchValues, setSearchValues] = useState(initialSearchValues);
-  const [searchQuery, setSearchQuery] = useState('sortBy=recent&itemType=ALL');
+  const [searchQuery, setSearchQuery] = useState('sortBy=registration&itemType=ALL');
   const auth = useSelector(state => state.auth);
 
 

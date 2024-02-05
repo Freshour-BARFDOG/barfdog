@@ -11,14 +11,14 @@ const PcGnb = () => {
   return (
     <>
       <Gnb_survey/>
-      <MenuLayout title="샵">
+      <MenuLayout title="샵" link={`/shop?itemType=${general_itemType.ALL}`}>
         <SubmenuList title="ALL" link={`/shop?itemType=${general_itemType.ALL}`} />
         <SubmenuList title="생식" link={`/shop?itemType=${general_itemType.RAW}`}/>
         <SubmenuList title="토핑" link={`/shop?itemType=${general_itemType.TOPPING}`}/>
         <SubmenuList title="굿즈" link={`/shop?itemType=${general_itemType.GOODS}`}/>
       </MenuLayout>
       <MenuLayout title="레시피" link="/recipes"/>
-      <MenuLayout title="커뮤니티">
+      <MenuLayout title="커뮤니티" link="/community/notice">
         <SubmenuList title="공지사항" link="/community/notice" />
         <SubmenuList title="이벤트" link="/community/event" />
         <SubmenuList title="블로그" link="/community/blog" />
