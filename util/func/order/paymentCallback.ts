@@ -73,7 +73,7 @@ export async function successSubscribePayment(orderId, data) {
   const r = await postObjData(`/api/orders/${orderId}/subscribe/success`, body);
   // console.log(r);
   if (r.isDone) {
-    alert('결제 성공');
+    // alert('결제 성공');
     window.location.href = `/order/orderCompleted/subscribe/${orderId}`;
   }
 }

@@ -113,13 +113,13 @@ export default function SetPasswordPage() {
               <h1>비밀번호 생성</h1>
             </section>
             <h5 className={s['subtitle']}>
-              간편 로그인으로 회원가입한 경우,{isMobile && <br/>}&nbsp;회원정보 수정을 위해 비밀번호를 생성합니다.
+              간편 로그인으로 회원가입한 경우,{isMobile && <br/>}&nbsp;회원정보 수정을 위해 비밀번호를 생성해야 합니다.
             </h5>
             <section className={s.content}>
              
               <div className={s.pass_box}>
                 <label htmlFor="newPassword" className={s.label_box}>
-                  <div className={s.label_text}>비밀번호</div>
+                  <div className={s.label_text}>새 비밀번호</div>
                   <input
                     id="newPassword"
                     className={s.input_box}
@@ -144,7 +144,7 @@ export default function SetPasswordPage() {
                     ))
                   : formErrors.newPassword && <ErrorMessage>{formErrors.newPassword}</ErrorMessage>}
                 <label htmlFor="newPasswordConfirm" className={s.label_box}>
-                  <div className={s.label_text}>비밀번호 확인</div>
+                  <div className={s.label_text}>새 비밀번호 확인</div>
                   <input
                     id="newPasswordConfirm"
                     className={s.input_box}

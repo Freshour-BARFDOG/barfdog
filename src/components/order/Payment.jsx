@@ -313,7 +313,7 @@ export function Payment({
         });
         // console.log(r);
         if (r.isDone) {
-          alert('결제 성공');
+          // alert('결제 성공');
           window.location.href = `/order/orderCompleted/${id}`;
         }
       } else if (error_msg.includes('결제포기')) {
