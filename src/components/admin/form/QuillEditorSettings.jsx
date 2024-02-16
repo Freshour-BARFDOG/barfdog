@@ -29,6 +29,6 @@ export const toolbarOptions = [
   ['bold', 'italic', 'underline', 'strike', 'blockquote'],
   [{align: []}],
   [{indent: '-1'}, {indent: '+1'}, {list: 'ordered'}, {list: 'bullet'}],
-  ['link', 'image'],
+  ['link', 'image', 'video'],
   ['clean'],
 ];
