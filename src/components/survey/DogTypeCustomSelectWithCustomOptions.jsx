@@ -47,19 +47,12 @@ export const DogTypeCustomSelectWithCustomOptions = ({id, options, width, value,
         targetList.forEach( (target) => {
           const targetClassName = target.className;
           const exceptClassNameList = exceptList.map( (list) => list.className );
-          // // console.log( targetClassName );
-          // // console.log( exceptClassNameList );
-          if ( exceptClassNameList.indexOf( targetClassName ) >= 0 ) {
+          if ( exceptClassNameList.indexOf( targetClassName ) == 1 || exceptClassNameList.indexOf( targetClassName ) == 0 ) {
             isBoxClicked = true;
             return;
           }
         } );
-        // // console.log(isBoxClicked)
         setIsActive( isBoxClicked );
-        //// console.log(viewer, clickedTarget, searchInput)
-        if(isBoxClicked && clickedTarget !== viewer){
-          setIsActive(false);
-        }
       } );
     }
   }, [optionBoxRef.current] );
