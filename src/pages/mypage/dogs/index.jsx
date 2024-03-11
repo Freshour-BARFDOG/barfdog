@@ -29,7 +29,7 @@ export default function MypageDogInfoPage({ data }) {
   const [itemList, setItemList] = useState(data);
   const [selectedItemData, setSelectedItemData] = useState(null);
   const [modalMessage, setModalMessage] = useState('');
-  
+
   useEffect(() => {
     // 반려견 등록 후 , 해당 페이지 최초 접근 시, 모달메시지 나타나는 버그에 대한 일시적인 해결
     mct.alertHide();
@@ -102,7 +102,7 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
   const router = useRouter();
   const mct = useModalContext();
   const dogId = data.id;
-  const subscribeId = null; //  ! 값 확인하기
+  let subscribeId = null; //  ! 값 확인하기
   const dogAge = calcDogAge(data.birth);
   const gender =
     data.gender === dogGenderType.MALE ? dogGenderType.KOR.MALE : dogGenderType.KOR.FEMALE;
@@ -222,11 +222,32 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
 
   const nextPageHandler = (e) => {
     const dogId = e.currentTarget.dataset.id;
-    setIsLoading(prevState => ({
+    const apiUrl = `api/orders/sheet/subscribe/dog/${dogId}`;
+
+    (async () => {
+      try {
+        setIsLoading(prevState => ({
       ...prevState,
       [dogId]: true
     }));
-  };
+  
+    const res = await getData( apiUrl );
+    subscribeId = res.data.subscribeDto.id;
+
+    if ( subscribeId ) {
+      router.push( `/order/ordersheet/subscribe/${subscribeId}` );
+    } else {
+      // console.error('there is no Subscribe ID', info.subscribeId);
+      alert( '주문정보를 확인할 수 없습니다.' );
+      window.location.href = '/';
+    }
+  }
+  catch (err) {
+    console.error(err);
+  }
+})();
+};
+
   return (
     <>
       <li className={s['dogInfo-wrap']} data-id={dogId}>
@@ -277,10 +298,15 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
               <a>설문수정</a>
             </Link>
             {/* 버튼 생성 조건 :  결제전 또는 구독 보류일 경우*/}
+            {/* 1. 결제 전 */}
             {(data.subscribeStatus === subscribeStatus.BEFORE_PAYMENT) && (
               <Link href={`/order/subscribeShop?dogId=${dogId}`} passHref>
                 <a className={s.payment} data-id={dogId} onClick={nextPageHandler}>{isLoading[dogId] ? <Spinner style={{color:"#fff"}}/>: "결제하기"}</a>
               </Link>
+            )}
+            {/* 2. 구독 보류 */}
+            {(data.subscribeStatus === subscribeStatus.SUBSCRIBE_PENDING) && (
+              <button type={'button'} className={s.payment} data-id={dogId} onClick={nextPageHandler}>{isLoading[dogId] ? <Spinner style={{color:"#fff"}}/>: "재구독하기"}</button>
             )}
           </div>
         </div>
