@@ -3,8 +3,7 @@
 
 $border: rem(1) solid var(--color-line-03);
 $itemListHeight: rem(60);
-$color-tableHeader : #f1f2f4;
-
+$color-tableHeader: #f1f2f4;
 
 .cont_viewer {
   width: 100%;
@@ -16,14 +15,14 @@ $color-tableHeader : #f1f2f4;
 
   /* -------------------- border line -------------------- */
 
-  .table{
+  .table {
     border: $border;
     &:before {
       border-bottom: $border;
     }
   }
 
-  .table_header{
+  .table_header {
     border-bottom: $border;
   }
 
@@ -33,23 +32,21 @@ $color-tableHeader : #f1f2f4;
     border-right: $border;
   }
 
-
-  &:not(.fullWidth) .table{
+  &:not(.fullWidth) .table {
     .table_th:last-child,
     .item > span:last-child,
-    .table_body > li > span:last-child{
+    .table_body > li > span:last-child {
       border-right: $border;
     }
   }
 
-
-  .item:not(:last-child) > span{
+  .item:not(:last-child) > span {
     border-bottom: $border;
   }
 
   &.fixedHeight .table {
     height: rem(380);
-    .item:last-child > span{
+    .item:last-child > span {
       border-bottom: $border;
     }
   }
@@ -57,7 +54,7 @@ $color-tableHeader : #f1f2f4;
   /* -------------------- border line -------------------- */
 
   .table:before {
-    content: "";
+    content: '';
     position: absolute;
     width: 100%;
     top: 0;
@@ -69,7 +66,7 @@ $color-tableHeader : #f1f2f4;
     box-sizing: border-box;
   }
 
-  .table{
+  .table {
     overflow-x: scroll;
     overflow-y: initial;
     position: relative;
@@ -78,22 +75,23 @@ $color-tableHeader : #f1f2f4;
     box-sizing: border-box;
     background: #fff;
 
-
-    .table_header, .table_body, .item{
+    .table_header,
+    .table_body,
+    .item {
       width: fit-content;
     }
 
-    .table_header{
+    .table_header {
       height: calc(#{$itemListHeight} + #{rem(1)});
       position: absolute !important;
-      top:0;
-      left:0;
+      top: 0;
+      left: 0;
       z-index: 1;
       background-color: $color-tableHeader;
       box-sizing: border-box;
     }
 
-    .table_body{
+    .table_body {
       z-index: 0;
       position: relative;
       overflow-x: initial;
@@ -101,17 +99,19 @@ $color-tableHeader : #f1f2f4;
     }
 
     .table_body > li > span,
-    .table_th, .item > span{
-      overflow:hidden;
+    .table_th,
+    .item > span {
+      overflow: hidden;
       text-align: center;
     }
-    .table_th.hasToolTip{
+    .table_th.hasToolTip {
       overflow: initial;
     }
 
-    .table_header, .item{
-      display:grid;
-      grid-gap:0;
+    .table_header,
+    .item {
+      display: grid;
+      grid-gap: 0;
 
       grid-template-rows: minmax(#{$itemListHeight}, auto);
       grid-template-columns:
@@ -127,55 +127,53 @@ $color-tableHeader : #f1f2f4;
         rem(70)
         rem(70);
 
-
-      .table_th, > span{
+      .table_th,
+      > span {
         display: flex;
         align-items: center;
         justify-content: center;
         padding: 0 rem(16);
-        &.flex_col{
+        &.flex_col {
           flex-direction: column;
         }
       }
-      .table_th{
+      .table_th {
         font-weight: 600;
         height: 100%;
       }
-      > span{
+      > span {
         padding: rem(5) rem(10);
-        button{font-size: inherit; }
+        button {
+          font-size: inherit;
+        }
       }
     }
 
-    .item{
+    .item {
       background-color: #fff;
-      margin-top:rem(-1);
+      margin-top: rem(-1);
     }
 
-    .img-wrap{
+    .img-wrap {
       position: relative;
-      width:100%;
+      width: 100%;
       height: 100%;
     }
   }
 }
 
-
-
 .pagination-section {
   margin-top: rem(20);
 }
 
-
-
-.admin-preview-image{
-  img{
+.admin-preview-image {
+  img {
     object-fit: cover !important;
     position: absolute;
   }
 
   &.mobile {
-    img{
+    img {
       height: rem(220);
       object-fit: cover !important;
     }

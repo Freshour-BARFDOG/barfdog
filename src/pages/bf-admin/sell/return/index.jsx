@@ -1,27 +1,26 @@
-import React, {useCallback, useState} from "react";
+import React, { useCallback, useState } from 'react';
 import s from '../exchange/ExchangeReturnList.module.scss';
-import MetaTitle from "/src/components/atoms/MetaTitle";
-import AdminLayout from "/src/components/admin/AdminLayout";
-import { AdminContentWrapper } from "/src/components/admin/AdminWrapper";
-import SearchBar from "/src/components/admin/form/searchBar";
-import SearchTerm from "/src/components/admin/form/searchBar/SearchTerm";
-import SearchTextWithCategory from "/src/components/admin/form/searchBar/SearchTextWithCategory";
-import SearchRadio from "/src/components/admin/form/searchBar/SearchRadio";
-import AmdinErrorMessage from "/src/components/atoms/AmdinErrorMessage";
-import Tooltip from "/src/components/atoms/Tooltip";
-import {transformToday} from "/util/func/transformDate";
-import {productType} from "/store/TYPE/itemType";
-import {orderStatus} from "/store/TYPE/orderStatusTYPE";
-import {postObjData} from "/src/pages/api/reqData";
-import PureCheckbox from "/src/components/atoms/PureCheckbox";
-import {valid_isTheSameArray} from "/util/func/validation/validationPackage";
-import Spinner from "/src/components/atoms/Spinner";
-import CancelExchangeReturnList from "../exchange/ExchangeReturnList";
-import PaginationWithAPI from "/src/components/atoms/PaginationWithAPI";
-import {getDefaultPagenationInfo} from "/util/func/getDefaultPagenationInfo";
-import enterKey from "/util/func/enterKey";
-import {global_searchDateType} from "/store/TYPE/searchDateType";
-
+import MetaTitle from '/src/components/atoms/MetaTitle';
+import AdminLayout from '/src/components/admin/AdminLayout';
+import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
+import SearchBar from '/src/components/admin/form/searchBar';
+import SearchTerm from '/src/components/admin/form/searchBar/SearchTerm';
+import SearchTextWithCategory from '/src/components/admin/form/searchBar/SearchTextWithCategory';
+import SearchRadio from '/src/components/admin/form/searchBar/SearchRadio';
+import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
+import Tooltip from '/src/components/atoms/Tooltip';
+import { transformToday } from '/util/func/transformDate';
+import { productType } from '/store/TYPE/itemType';
+import { orderStatus } from '/store/TYPE/orderStatusTYPE';
+import { postObjData } from '/src/pages/api/reqData';
+import PureCheckbox from '/src/components/atoms/PureCheckbox';
+import { valid_isTheSameArray } from '/util/func/validation/validationPackage';
+import Spinner from '/src/components/atoms/Spinner';
+import CancelExchangeReturnList from '../exchange/ExchangeReturnList';
+import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
+import { getDefaultPagenationInfo } from '/util/func/getDefaultPagenationInfo';
+import enterKey from '/util/func/enterKey';
+import { global_searchDateType } from '/store/TYPE/searchDateType';
 
 const initialSearchValues = {
   from: global_searchDateType.oldestDate,
@@ -30,13 +29,12 @@ const initialSearchValues = {
   memberName: null,
   memberEmail: null,
   recipientName: null,
+  dogName: null,
   statusList: 'ALL',
   orderType: productType.GENERAL, // 주문타입 1가지: GENERAL(일반상품) / 정기구독: 교환반품 불가
 };
 
-
 export default function ReturnOnSellPage() {
-  
   const searchApiUrl = `/api/admin/orders/searchAll`;
   const searchPageSize = 10;
   const [isLoading, setIsLoading] = useState({});
@@ -44,29 +42,26 @@ export default function ReturnOnSellPage() {
   const [searchValues, setSearchValues] = useState(initialSearchValues);
   const [searchBody, setSearchBody] = useState(null);
   const [selectedOrderIdList, setSelectedOrderIdList] = useState([]);
-  const [searchQueryInitialize, setSearchQueryInitialize] = useState( false );
+  const [searchQueryInitialize, setSearchQueryInitialize] = useState(false);
   const allItemIdList = itemList.map((item) => item.id); // 주문 id
-  
-  
+
   const searchOption = Object.keys(orderStatus)
     .filter(
       (key) =>
         key === orderStatus.RETURN_REQUEST ||
         key === orderStatus.RETURN_DONE_SELLER ||
-        key === orderStatus.RETURN_DONE_BUYER
+        key === orderStatus.RETURN_DONE_BUYER,
     )
     .map((key) => ({
       id: key,
       label: orderStatus.KOR[key],
     }));
   searchOption.unshift({ id: 'ALL', label: '반품 전체' }); // 검색에서만 사용하는 TYPE
-  
-  
+
   const onResetSearchValues = () => {
     setSearchValues(initialSearchValues);
   };
-  
-  
+
   const onSearchHandler = () => {
     const searchStatusList =
       searchValues.statusList === 'ALL'
@@ -79,53 +74,60 @@ export default function ReturnOnSellPage() {
       memberName: searchValues.memberName,
       memberEmail: searchValues.memberEmail,
       recipientName: searchValues.recipientName,
+      dogName: searchValues.dogName,
       statusList: searchStatusList, // ! 배열로 전송
       orderType: searchValues.orderType,
     };
-    
+
     setSearchBody(body);
-    
   };
-  
-  const pageInterceptor = useCallback((res, option={itemQuery: null}) => {
+
+  const pageInterceptor = useCallback((res, option = { itemQuery: null }) => {
     // res = DUMMY_RETURN_RESPONSE; //  ! TEST
     // console.log(res);
     // queryAdminOrdersDtoList : 상품단위 검색
     // queryAdminCancelRequestDtoList : 주문 단위 검색
-    return getDefaultPagenationInfo(res?.data, 'queryAdminOrdersAllInfoDtoList', {pageSize: searchPageSize, setInitialize: setSearchQueryInitialize});
-  },[]);
-  
-  
+    return getDefaultPagenationInfo(
+      res?.data,
+      'queryAdminOrdersAllInfoDtoList',
+      { pageSize: searchPageSize, setInitialize: setSearchQueryInitialize },
+    );
+  }, []);
+
   const onSelectedItem = (id, checked) => {
     const seletedId = Number(id);
     if (checked) {
       setSelectedOrderIdList((prevState) => prevState.concat(seletedId));
     } else {
-      setSelectedOrderIdList((prevState) => prevState.filter((id) => id !== seletedId));
+      setSelectedOrderIdList((prevState) =>
+        prevState.filter((id) => id !== seletedId),
+      );
     }
   };
-  
+
   const onSelectAllItems = (checked) => {
     const allItemsIdList = itemList.map((item) => item.id);
     setSelectedOrderIdList(checked ? allItemsIdList : []);
   };
-  
-  
-  
+
   const onConfirmingReturnOrderBySeller = async () => {
     // 일반 주문 반품요청을 판매자 귀책으로 컨펌 처리
     if (!selectedOrderIdList.length) return alert('선택된 상품이 없습니다.');
-    if (!confirm(`${selectedOrderIdList.length}개 상품의 반품요청을 '판매자 귀책'으로 승인하시겠습니까?`))
+    if (
+      !confirm(
+        `${selectedOrderIdList.length}개 상품의 반품요청을 '판매자 귀책'으로 승인하시겠습니까?`,
+      )
+    )
       return;
-    
+
     // const seletedOrderItemIdList = itemList
     //   .filter((item) => selectedOrderIdList.indexOf(item.id) >= 0)
     //   .map((item) => item.orderItemId);
-    
-    const body ={
+
+    const body = {
       orderIdList: selectedOrderIdList, //  ! 주문 id 사용 (221213 변경)
-    }
-    
+    };
+
     try {
       setIsLoading((prevState) => ({
         ...prevState,
@@ -139,7 +141,9 @@ export default function ReturnOnSellPage() {
         alert(`'판매자 귀책'으로 반품요청이 승인되었습니다.`);
         window.location.reload();
       } else {
-        alert(`'판매자 귀책'으로 반품요청 처리 중에 오류가 발생했습니다.\n${res.error}`);
+        alert(
+          `'판매자 귀책'으로 반품요청 처리 중에 오류가 발생했습니다.\n${res.error}`,
+        );
       }
     } catch (err) {
       alert('API통신 오류 : ', err);
@@ -150,28 +154,30 @@ export default function ReturnOnSellPage() {
       returnBySeller: false,
     }));
   };
-  
-  
-  
+
   const onConfirmingReturnOrderByBuyer = async () => {
     // 일반 주문 반품요청을 구매자 귀책으로 컨펌 처리
     if (!selectedOrderIdList.length) return alert('선택된 상품이 없습니다.');
-    if (!confirm(`${selectedOrderIdList.length}개 상품의 반품요청을 '구매자 귀책'으로 승인하시겠습니까?`))
+    if (
+      !confirm(
+        `${selectedOrderIdList.length}개 상품의 반품요청을 '구매자 귀책'으로 승인하시겠습니까?`,
+      )
+    )
       return;
-  
+
     // const seletedOrderItemIdList = itemList
     //   .filter((item) => selectedOrderIdList.indexOf(item.id) >= 0)
     //   .map((item) => item.orderItemId);
-  
-    const body ={
+
+    const body = {
       orderIdList: selectedOrderIdList, //  ! 주문 id 사용 (221213 변경)
-    }
+    };
     try {
       setIsLoading((prevState) => ({
         ...prevState,
         returnByBuyer: true,
       }));
-      const apiUrl = `/api/admin/orders/general/confirmReturn/buyer`;  // ! 일반상품 반품 가능 (정기구독상품 교환/반품 불가)
+      const apiUrl = `/api/admin/orders/general/confirmReturn/buyer`; // ! 일반상품 반품 가능 (정기구독상품 교환/반품 불가)
       const res = await postObjData(apiUrl, body);
       // console.log('onConfirmingReturnOrderByBuyer: \n', body);
       // console.log('response: admin > sell > return > index.jsx\n', res);
@@ -179,7 +185,9 @@ export default function ReturnOnSellPage() {
         alert(`'구매자 귀책'으로 반품요청이 승인되었습니다.`);
         window.location.reload();
       } else {
-        alert(`'구매자 귀책'으로 반품요청 처리 중에 오류가 발생했습니다.\n${res.error}`);
+        alert(
+          `'구매자 귀책'으로 반품요청 처리 중에 오류가 발생했습니다.\n${res.error}`,
+        );
       }
     } catch (err) {
       alert('API통신 오류 : ', err);
@@ -190,21 +198,25 @@ export default function ReturnOnSellPage() {
       returnByBuyer: false,
     }));
   };
-  
-  const onRefusingReturnRequest = async () => { // 일반 주문 반품요청 거절 처리
+
+  const onRefusingReturnRequest = async () => {
+    // 일반 주문 반품요청 거절 처리
     if (!selectedOrderIdList.length) return alert('선택된 상품이 없습니다.');
-    if (!confirm(`${selectedOrderIdList.length}개 상품의 반품요청을 반려하시겠습니까?`))
+    if (
+      !confirm(
+        `${selectedOrderIdList.length}개 상품의 반품요청을 반려하시겠습니까?`,
+      )
+    )
       return;
-  
+
     // const seletedOrderItemIdList = itemList
     //   .filter((item) => selectedOrderIdList.indexOf(item.id) >= 0)
     //   .map((item) => item.orderItemId);
-  
-    const body ={
+
+    const body = {
       orderIdList: selectedOrderIdList, //  ! 주문 id 사용 (221213 변경)
-    }
-    
-    
+    };
+
     try {
       setIsLoading((prevState) => ({
         ...prevState,
@@ -229,8 +241,7 @@ export default function ReturnOnSellPage() {
       refusingReturnRequest: false,
     }));
   };
-  
-  
+
   const onSearchInputKeydown = (e) => {
     enterKey(e, onSearchHandler);
   };
@@ -241,8 +252,7 @@ export default function ReturnOnSellPage() {
       <AdminLayout>
         <AdminContentWrapper>
           <div className="title_main">
-            <h1>반품 관리
-            </h1>
+            <h1>반품 관리</h1>
           </div>
           <section className="cont">
             <SearchBar onReset={onResetSearchValues} onSearch={onSearchHandler}>
@@ -263,6 +273,7 @@ export default function ReturnOnSellPage() {
                   { label: '구매자 이름', value: 'memberName' },
                   { label: '구매자 ID', value: 'memberEmail' },
                   { label: '수령자 이름', value: 'recipientName' },
+                  { label: '반려견명', value: 'dogName' },
                 ]}
               />
               <SearchRadio
@@ -279,19 +290,39 @@ export default function ReturnOnSellPage() {
             <div className="cont_header clearfix">
               <div className="cont_title cont-left">
                 목록
-                <Tooltip message={`- 반품불가 조건: 정기구독상품,신선식품이 포함되지 않은 일반주문\n"주문" 단위로 반품처리됩니다.\n- 반품불가: 반품불가 처리된 주문은 배송완료 상태가 됩니다.`} messagePosition={'left'} wordBreaking={true} width={'340px'}/>
+                <Tooltip
+                  message={`- 반품불가 조건: 정기구독상품,신선식품이 포함되지 않은 일반주문\n"주문" 단위로 반품처리됩니다.\n- 반품불가: 반품불가 처리된 주문은 배송완료 상태가 됩니다.`}
+                  messagePosition={'left'}
+                  wordBreaking={true}
+                  width={'340px'}
+                />
               </div>
               <div className="controls cont-left">
-                <button className="admin_btn line basic_m autoWidth" onClick={onConfirmingReturnOrderBySeller}>
-                  {isLoading.returnBySeller ? <Spinner/> : '반품승인 (판매자 귀책)'}
-                  
+                <button
+                  className="admin_btn line basic_m autoWidth"
+                  onClick={onConfirmingReturnOrderBySeller}
+                >
+                  {isLoading.returnBySeller ? (
+                    <Spinner />
+                  ) : (
+                    '반품승인 (판매자 귀책)'
+                  )}
                 </button>
-                <button className="admin_btn line basic_m autoWidth" onClick={onConfirmingReturnOrderByBuyer}>
-                  {isLoading.returnByBuyer ? <Spinner/> : '반품승인 (구매자 귀책)'}
+                <button
+                  className="admin_btn line basic_m autoWidth"
+                  onClick={onConfirmingReturnOrderByBuyer}
+                >
+                  {isLoading.returnByBuyer ? (
+                    <Spinner />
+                  ) : (
+                    '반품승인 (구매자 귀책)'
+                  )}
                 </button>
-                <button className="admin_btn line basic_m" onClick={onRefusingReturnRequest}>
-                  
-                  {isLoading.refusingReturnRequest ? <Spinner/> : '반품불가'}
+                <button
+                  className="admin_btn line basic_m"
+                  onClick={onRefusingReturnRequest}
+                >
+                  {isLoading.refusingReturnRequest ? <Spinner /> : '반품불가'}
                 </button>
               </div>
             </div>
@@ -302,7 +333,10 @@ export default function ReturnOnSellPage() {
                     <PureCheckbox
                       className={s.inner}
                       eventHandler={onSelectAllItems}
-                      value={valid_isTheSameArray(allItemIdList, selectedOrderIdList)}
+                      value={valid_isTheSameArray(
+                        allItemIdList,
+                        selectedOrderIdList,
+                      )}
                     />
                   </li>
                   <li className={s.table_th}>상세보기</li>
@@ -311,6 +345,7 @@ export default function ReturnOnSellPage() {
                   <li className={s.table_th}>구매자 ID</li>
                   <li className={s.table_th}>구매자</li>
                   <li className={s.table_th}>수령자</li>
+                  <li className={s.table_th}>반려견명</li>
                   <li className={s.table_th}>묶음배송 여부</li>
                 </ul>
                 {isLoading.fetching ? (
@@ -333,7 +368,11 @@ export default function ReturnOnSellPage() {
                 pageInterceptor={pageInterceptor}
                 setItemList={setItemList}
                 setIsLoading={setIsLoading}
-                option={{ apiMethod: 'POST', body: searchBody, initialize: searchQueryInitialize }}
+                option={{
+                  apiMethod: 'POST',
+                  body: searchBody,
+                  initialize: searchQueryInitialize,
+                }}
               />
             </div>
           </section>

@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, { useCallback, useState } from 'react';
 import s from './search.module.scss';
 import SearchResultList from './SearchResultList';
 import { orderStatus } from '/store/TYPE/orderStatusTYPE';
@@ -15,11 +15,10 @@ import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import Spinner from '/src/components/atoms/Spinner';
 import { transformToday } from '/util/func/transformDate';
-import Tooltip from "/src/components/atoms/Tooltip";
-import {getDefaultPagenationInfo} from "/util/func/getDefaultPagenationInfo";
-import enterKey from "/util/func/enterKey";
-import {global_searchDateType} from "/store/TYPE/searchDateType";
-
+import Tooltip from '/src/components/atoms/Tooltip';
+import { getDefaultPagenationInfo } from '/util/func/getDefaultPagenationInfo';
+import enterKey from '/util/func/enterKey';
+import { global_searchDateType } from '/store/TYPE/searchDateType';
 
 const initialSearchValues = {
   from: global_searchDateType.oldestDate,
@@ -28,6 +27,7 @@ const initialSearchValues = {
   memberName: null,
   memberEmail: null,
   recipientName: null,
+  dogName: null,
   statusList: orderStatus.ALL,
   orderType: productType.GENERAL,
 };
@@ -40,7 +40,7 @@ export default function SearchOnSellPage() {
   const [itemList, setItemList] = useState([]);
   const [searchValues, setSearchValues] = useState(initialSearchValues);
   const [searchBody, setSearchBody] = useState(null);
-  const [searchQueryInitialize, setSearchQueryInitialize] = useState( false );
+  const [searchQueryInitialize, setSearchQueryInitialize] = useState(false);
 
   const searchOption = Object.keys(orderStatus)
     .filter((key) => key !== orderStatus.BEFORE_PAYMENT && key !== 'KOR')
@@ -53,7 +53,6 @@ export default function SearchOnSellPage() {
     setSearchValues(initialSearchValues);
   };
 
-  
   const onSearchHandler = () => {
     const body = {
       from: searchValues.from,
@@ -62,24 +61,29 @@ export default function SearchOnSellPage() {
       memberName: searchValues.memberName,
       memberEmail: searchValues.memberEmail,
       recipientName: searchValues.recipientName,
-      statusList: searchValues.statusList === 'ALL' ? null : [searchValues.statusList], // ! 배열로 전송 // '전체 상태' 검색 시 null or 빈배열
+      dogName: searchValues.dogName,
+      statusList:
+        searchValues.statusList === 'ALL' ? null : [searchValues.statusList], // ! 배열로 전송 // '전체 상태' 검색 시 null or 빈배열
       orderType: searchValues.orderType,
     };
     setSearchBody(body);
   };
 
-  const pageInterceptor = useCallback((res, option={itemQuery: null}) => {
+  const pageInterceptor = useCallback((res, option = { itemQuery: null }) => {
     // res = DUMMY__RESPONSE; // ! TEST
     // console.log(res);
-    if(!res) return;
-    return getDefaultPagenationInfo(res?.data, 'queryAdminOrdersAllInfoDtoList', {pageSize: searchPageSize, setInitialize: setSearchQueryInitialize});
-  },[]);
-  
+    if (!res) return;
+    return getDefaultPagenationInfo(
+      res?.data,
+      'queryAdminOrdersAllInfoDtoList',
+      { pageSize: searchPageSize, setInitialize: setSearchQueryInitialize },
+    );
+  }, []);
+
   const onSearchInputKeydown = (e) => {
     enterKey(e, onSearchHandler);
   };
-  
-  
+
   return (
     <>
       <MetaTitle title="주문 통합검색" admin={true} />
@@ -102,11 +106,10 @@ export default function SearchOnSellPage() {
                 id="detail"
                 options={[
                   { label: '주문번호', value: 'merchantUid' },
-                  { label: '구매자 이름', value: 'memberName' },
                   { label: '구매자 ID', value: 'memberEmail' },
                   { label: '수령자 이름', value: 'recipientName' },
+                  { label: '반려견명', value: 'dogName' },
                 ]}
-                
               />
               <SearchSelect
                 title="주문상태"
@@ -130,7 +133,8 @@ export default function SearchOnSellPage() {
           <section className="cont">
             <div className="cont_header clearfix">
               <p className="cont_title cont-left">
-                목록 <Tooltip message={'주문 단위 리스트'}/></p>
+                목록 <Tooltip message={'주문 단위 리스트'} />
+              </p>
             </div>
             <div className={`${s.cont_viewer}`}>
               <div className={s.table}>
@@ -141,6 +145,7 @@ export default function SearchOnSellPage() {
                   <li className={s.table_th}>구매자 ID</li>
                   <li className={s.table_th}>구매자</li>
                   <li className={s.table_th}>수령자</li>
+                  <li className={s.table_th}>반려견명</li>
                   <li className={s.table_th}>묶음배송 여부</li>
                 </ul>
                 {isLoading.fetching ? (
@@ -160,7 +165,11 @@ export default function SearchOnSellPage() {
                 queryItemList={'queryAdminOrdersDtoList'}
                 setItemList={setItemList}
                 setIsLoading={setIsLoading}
-                option={{ apiMethod: 'POST', body: searchBody, initialize: searchQueryInitialize }}
+                option={{
+                  apiMethod: 'POST',
+                  body: searchBody,
+                  initialize: searchQueryInitialize,
+                }}
               />
             </div>
           </section>

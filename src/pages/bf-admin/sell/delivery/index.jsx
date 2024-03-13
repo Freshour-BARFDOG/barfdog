@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, { useCallback, useState } from 'react';
 import s from './delivery.module.scss';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
@@ -17,12 +17,16 @@ import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import Tooltip from '/src/components/atoms/Tooltip';
 import PureCheckbox from '/src/components/atoms/PureCheckbox';
 import { valid_isTheSameArray } from '/util/func/validation/validationPackage';
-import {postObjData} from "/src/pages/api/reqData";
-import { goodsFlowOrderCancel, postGoodsFlowOrder, getGoodsFlowOtp } from '/src/pages/api/goodsFlow/service';
+import { postObjData } from '/src/pages/api/reqData';
+import {
+  goodsFlowOrderCancel,
+  postGoodsFlowOrder,
+  getGoodsFlowOtp,
+} from '/src/pages/api/goodsFlow/service';
 import popupWindow from '/util/func/popupWindow';
-import {getDefaultPagenationInfo} from "/util/func/getDefaultPagenationInfo";
-import enterKey from "/util/func/enterKey";
-import {global_searchDateType} from "/store/TYPE/searchDateType";
+import { getDefaultPagenationInfo } from '/util/func/getDefaultPagenationInfo';
+import enterKey from '/util/func/enterKey';
+import { global_searchDateType } from '/store/TYPE/searchDateType';
 
 const initialSearchValues = {
   from: global_searchDateType.oldestDate,
@@ -31,12 +35,12 @@ const initialSearchValues = {
   memberName: null,
   memberEmail: null,
   recipientName: null,
+  dogName: null,
   statusList: 'ALL',
   orderType: productType.GENERAL,
 };
 
 export default function DeliveryOnSellPage() {
-  
   const searchApiUrl = `/api/admin/orders/searchAll`;
   const searchPageSize = 10;
   const [isLoading, setIsLoading] = useState({});
@@ -44,8 +48,8 @@ export default function DeliveryOnSellPage() {
   const [searchValues, setSearchValues] = useState(initialSearchValues);
   const [searchBody, setSearchBody] = useState(null);
   const [selectedOrderIdList, setSelectedOrderIdList] = useState([]);
-  const [searchQueryInitialize, setSearchQueryInitialize] = useState( false );
-  
+  const [searchQueryInitialize, setSearchQueryInitialize] = useState(false);
+
   const allItemIdList = itemList.map((item) => item.id); // 주문 id
   const searchOption = Object.keys(orderStatus)
     .filter(
@@ -76,28 +80,33 @@ export default function DeliveryOnSellPage() {
       memberName: searchValues.memberName,
       memberEmail: searchValues.memberEmail,
       recipientName: searchValues.recipientName,
+      dogName: searchValues.dogName,
       statusList: searchStatusList, // ! 배열로 전송
       orderType: searchValues.orderType,
     };
     setSearchBody(body);
   };
 
-  
-  const pageInterceptor = useCallback((res, option={itemQuery: null}) => {
+  const pageInterceptor = useCallback((res, option = { itemQuery: null }) => {
     // res = DUMMY_DEFAULT_ITEMLIST_RESPONSE; //  ! TEST
     // console.log(res);
     // queryAdminOrdersDtoList : 상품단위 검색
     // queryAdminCancelRequestDtoList : 주문 단위 검색
-    return getDefaultPagenationInfo(res?.data, 'queryAdminOrdersAllInfoDtoList', {pageSize: searchPageSize, setInitialize: setSearchQueryInitialize});
-  },[]);
-  
-  
+    return getDefaultPagenationInfo(
+      res?.data,
+      'queryAdminOrdersAllInfoDtoList',
+      { pageSize: searchPageSize, setInitialize: setSearchQueryInitialize },
+    );
+  }, []);
+
   const onSelectedItem = (id, checked) => {
     const seletedId = Number(id);
     if (checked) {
       setSelectedOrderIdList((prevState) => prevState.concat(seletedId));
     } else {
-      setSelectedOrderIdList((prevState) => prevState.filter((id) => id !== seletedId));
+      setSelectedOrderIdList((prevState) =>
+        prevState.filter((id) => id !== seletedId),
+      );
     }
   };
 
@@ -108,13 +117,21 @@ export default function DeliveryOnSellPage() {
 
   const onReprintInvoice = async () => {
     // validation:  선택된 항목이 없을 경우
-    if(selectedOrderIdList.length === 0) return;
+    if (selectedOrderIdList.length === 0) return;
     // validation: 배송에정이 아닌 상품이 선택된 경우, 실행불가
-    const incorrectItem =
-      itemList.filter((item) => selectedOrderIdList.indexOf(item.id) >= 0 && item.orderStatus !== orderStatus.DELIVERY_BEFORE_COLLECTION);
+    const incorrectItem = itemList.filter(
+      (item) =>
+        selectedOrderIdList.indexOf(item.id) >= 0 &&
+        item.orderStatus !== orderStatus.DELIVERY_BEFORE_COLLECTION,
+    );
     // if (incorrectItem.length > 0) return alert('"배송예정"이 아닌 상품이 존재합니다.');
-    if(!confirm(`선택된 ${selectedOrderIdList.length}개의 항목을 재출력하시겠습니까?`)) return;
-    
+    if (
+      !confirm(
+        `선택된 ${selectedOrderIdList.length}개의 항목을 재출력하시겠습니까?`,
+      )
+    )
+      return;
+
     try {
       setIsLoading((prevState) => ({
         ...prevState,
@@ -129,7 +146,8 @@ export default function DeliveryOnSellPage() {
       const res = await postObjData(url, body);
       // console.log(res);
       const data = res.data?.data;
-      const deliveryItemInfoList = data._embedded?.queryOrderInfoForDeliveryList || [];
+      const deliveryItemInfoList =
+        data._embedded?.queryOrderInfoForDeliveryList || [];
       if (!res.isDone || !deliveryItemInfoList.length) {
         setIsLoading((prevState) => ({
           ...prevState,
@@ -175,24 +193,24 @@ export default function DeliveryOnSellPage() {
         }));
         return alert('조회된 항목이 없습니다.');
       }
-      
+
       // ! 추가예정: goodsflow 송장취소 API
       // ! 추가예정: goodsflow 송장취소 API
       // ! 추가예정: goodsflow 송장취소 API
       // ! 추가예정: goodsflow 송장취소 API
-    deliveryList.forEach(async function(item) {
-      // // console.log(item);
-      // // console.log(item.transUniqueCd);
-      
-      const cancelRes = await goodsFlowOrderCancel(item.transUniqueCd);
-      const success = cancelRes.data.success;
-      
-      // // console.log(cancelRes.data);
-      
-      if(!success){
-        console.error(cancelRes.data.error.message);
-      }
-    });
+      deliveryList.forEach(async function (item) {
+        // // console.log(item);
+        // // console.log(item.transUniqueCd);
+
+        const cancelRes = await goodsFlowOrderCancel(item.transUniqueCd);
+        const success = cancelRes.data.success;
+
+        // // console.log(cancelRes.data);
+
+        if (!success) {
+          console.error(cancelRes.data.error.message);
+        }
+      });
 
       // ! 추가예정: 송장재등록 API
       // ! 추가예정: 송장재등록 API
@@ -200,70 +218,69 @@ export default function DeliveryOnSellPage() {
       // ! 추가예정: 송장재등록 API
       // TODO 백엔드 주문발송 api 수정 후 test
 
-     // 주문 등록 후 id값 받아서 운송장 출력창 호출할때 보내야함
-     const orderRes = await postGoodsFlowOrder({
-      data: {
-        items: deliveryList,
-      },
-    });
-    // // console.log(orderRes);
-    // // console.log(orderRes.data);
+      // 주문 등록 후 id값 받아서 운송장 출력창 호출할때 보내야함
+      const orderRes = await postGoodsFlowOrder({
+        data: {
+          items: deliveryList,
+        },
+      });
+      // // console.log(orderRes);
+      // // console.log(orderRes.data);
 
-    const orderResData = orderRes.data;
-    if (!orderResData.success) {
-      const error = orderResData.error;
-      const errorMessage = error.message;
-      const errorCode = error.status;
-      // console.error(
-      //   `${bodyForGoodsFlow.orderItems
-      //     .map((item) => item.itemName)
-      //     .join(
-      //       ', ',
-      //     )} 상품의 발송처리에 실패하였습니다.\nERROR: ${errorMessage}\nERROR STATUS: ${errorCode}`,
-      // );
-      console.error(
-        `상품의 발송처리에 실패하였습니다.\nERROR: ${errorMessage}\nERROR STATUS: ${errorCode}`,
-      );
-    }
-    // goodsflow otp 발급(운송장 출력창 호출할때마다 발급 받아야함)
-    const otp = await getGoodsFlowOtp();
-    
-    // STEP 2: 송장 재출력
-    // 운송장 출력창 호출
-    const goodsflowPrintUrl = window.location.origin + '/api/goodsFlow/print';
-    const printRes = await postObjData(goodsflowPrintUrl, {
-      otp: otp,
-      id: orderResData.id,
-    });
-    // console.log('=================');
+      const orderResData = orderRes.data;
+      if (!orderResData.success) {
+        const error = orderResData.error;
+        const errorMessage = error.message;
+        const errorCode = error.status;
+        // console.error(
+        //   `${bodyForGoodsFlow.orderItems
+        //     .map((item) => item.itemName)
+        //     .join(
+        //       ', ',
+        //     )} 상품의 발송처리에 실패하였습니다.\nERROR: ${errorMessage}\nERROR STATUS: ${errorCode}`,
+        // );
+        console.error(
+          `상품의 발송처리에 실패하였습니다.\nERROR: ${errorMessage}\nERROR STATUS: ${errorCode}`,
+        );
+      }
+      // goodsflow otp 발급(운송장 출력창 호출할때마다 발급 받아야함)
+      const otp = await getGoodsFlowOtp();
 
-    if (printRes.isDone) {
-      // // console.log(printRes);
-      // // console.log(printRes.data.data);
-      popupWindow(`/bf-admin/sell/delivery/print?data=${printRes.data.data}`);
-    }
+      // STEP 2: 송장 재출력
+      // 운송장 출력창 호출
+      const goodsflowPrintUrl = window.location.origin + '/api/goodsFlow/print';
+      const printRes = await postObjData(goodsflowPrintUrl, {
+        otp: otp,
+        id: orderResData.id,
+      });
+      // console.log('=================');
+
+      if (printRes.isDone) {
+        // // console.log(printRes);
+        // // console.log(printRes.data.data);
+        popupWindow(`/bf-admin/sell/delivery/print?data=${printRes.data.data}`);
+      }
     } catch (err) {
-        console.error(err)
+      console.error(err);
     }
     setIsLoading((prevState) => ({
       ...prevState,
       reprint: false,
     }));
-    
-
-  
   };
-  
-  
-
 
   const onForcedDeliveryComplete = async () => {
     // validation:  선택된 항목이 없을 경우
-    if(selectedOrderIdList.length === 0) return;
+    if (selectedOrderIdList.length === 0) return;
     // validation: 배송에정이 아닌 상품이 선택된 경우, 실행불가
 
-    if(!confirm(`선택된 ${selectedOrderIdList.length}개의 항목을 배송완료 하시겠습니까?`)) return;
-    
+    if (
+      !confirm(
+        `선택된 ${selectedOrderIdList.length}개의 항목을 배송완료 하시겠습니까?`,
+      )
+    )
+      return;
+
     try {
       setIsLoading((prevState) => ({
         ...prevState,
@@ -276,17 +293,14 @@ export default function DeliveryOnSellPage() {
       };
       const res = await postObjData(url, body);
       console.log(res);
-
-
     } catch (err) {
-        console.error(err)
+      console.error(err);
     }
     setIsLoading((prevState) => ({
       ...prevState,
       reprint: false,
     }));
 
-    
     // try {
     //   setIsLoading((prevState) => ({
     //     ...prevState,
@@ -347,7 +361,7 @@ export default function DeliveryOnSellPage() {
     //     }));
     //     return alert('조회된 항목이 없습니다.');
     //   }
-      
+
     //   // ! 추가예정: goodsflow 송장취소 API
     //   // ! 추가예정: goodsflow 송장취소 API
     //   // ! 추가예정: goodsflow 송장취소 API
@@ -355,12 +369,12 @@ export default function DeliveryOnSellPage() {
     // deliveryList.forEach(async function(item) {
     //   // console.log(item);
     //   // console.log(item.transUniqueCd);
-      
+
     //   const cancelRes = await goodsFlowOrderCancel(item.transUniqueCd);
     //   const success = cancelRes.data.success;
-      
+
     //   // console.log(cancelRes.data);
-      
+
     //   if(!success){
     //     console.error(cancelRes.data.error.message);
     //   }
@@ -399,7 +413,7 @@ export default function DeliveryOnSellPage() {
     // }
     // // goodsflow otp 발급(운송장 출력창 호출할때마다 발급 받아야함)
     // const otp = await getGoodsFlowOtp();
-    
+
     // // STEP 2: 송장 재출력
     // // 운송장 출력창 호출
     // const goodsflowPrintUrl = window.location.origin + '/api/goodsFlow/print';
@@ -421,18 +435,11 @@ export default function DeliveryOnSellPage() {
     //   ...prevState,
     //   reprint: false,
     // }));
-    
-
-  
   };
 
-  
-  
   const onSearchInputKeydown = (e) => {
     enterKey(e, onSearchHandler);
   };
-  
-  
 
   return (
     <>
@@ -459,6 +466,7 @@ export default function DeliveryOnSellPage() {
                   { label: '구매자 이름', value: 'memberName' },
                   { label: '구매자 ID', value: 'memberEmail' },
                   { label: '수령자 이름', value: 'recipientName' },
+                  { label: '반려견명', value: 'dogName' },
                 ]}
               />
               <SearchRadio
@@ -482,21 +490,27 @@ export default function DeliveryOnSellPage() {
           </section>
           <section className="cont">
             <div className="cont_header clearfix">
-              <p className="cont_title cont-left">
-                목록
-              </p>
+              <p className="cont_title cont-left">목록</p>
               <div className="controls cont-left">
-                <button className="admin_btn line basic_m" onClick={onReprintInvoice}>
+                <button
+                  className="admin_btn line basic_m"
+                  onClick={onReprintInvoice}
+                >
                   {isLoading.reprint ? <Spinner /> : '송장 재출력'}
                 </button>
-                {searchBody?.statusList?.indexOf(orderStatus.DELIVERY_BEFORE_COLLECTION) >= 0 && (
+                {searchBody?.statusList?.indexOf(
+                  orderStatus.DELIVERY_BEFORE_COLLECTION,
+                ) >= 0 && (
                   <Tooltip
                     message={'배송예정 상품일 경우, 송장 재출력할 수 있습니다.'}
                     width={'300'}
                     messagePosition={'center'}
                   />
                 )}
-                <button className="admin_btn line pl-3 pr-3 pt-1 pb-1" onClick={onForcedDeliveryComplete}>
+                <button
+                  className="admin_btn line pl-3 pr-3 pt-1 pb-1"
+                  onClick={onForcedDeliveryComplete}
+                >
                   강제 배송완료
                 </button>
               </div>
@@ -507,17 +521,30 @@ export default function DeliveryOnSellPage() {
                   <li className={s.table_th}>
                     <PureCheckbox
                       eventHandler={onSelectAllItems}
-                      value={valid_isTheSameArray(allItemIdList, selectedOrderIdList)}
+                      value={valid_isTheSameArray(
+                        allItemIdList,
+                        selectedOrderIdList,
+                      )}
                     />
                   </li>
                   <li className={s.table_th}>상세보기</li>
                   <li className={s.table_th}>주문번호</li>
                   <li className={`${s.table_th} ${s.hasToolTip}`}>주문상태</li>
-                  <li className={`${s.table_th} ${s.hasToolTip}`}>배송상태 <Tooltip style={{textAlign:'left'}} message={`- 배송상태 목록\n: 생산 중(구독상품), 배송 준비 중(일반상품), 배송예정, 배송시작, 배송완료, 구독결제 취소`} messagePosition={'left'} wordBreaking={true} width={'200px'}/></li>
+                  <li className={`${s.table_th} ${s.hasToolTip}`}>
+                    배송상태{' '}
+                    <Tooltip
+                      style={{ textAlign: 'left' }}
+                      message={`- 배송상태 목록\n: 생산 중(구독상품), 배송 준비 중(일반상품), 배송예정, 배송시작, 배송완료, 구독결제 취소`}
+                      messagePosition={'left'}
+                      wordBreaking={true}
+                      width={'200px'}
+                    />
+                  </li>
                   <li className={s.table_th}>운송장번호</li>
                   <li className={s.table_th}>구매자 ID</li>
                   <li className={s.table_th}>구매자</li>
                   <li className={s.table_th}>수령자</li>
+                  <li className={s.table_th}>반려견명</li>
                   <li className={s.table_th}>묶음배송 여부</li>
                 </ul>
                 {isLoading.fetching ? (
@@ -540,7 +567,11 @@ export default function DeliveryOnSellPage() {
                 pageInterceptor={pageInterceptor}
                 setItemList={setItemList}
                 setIsLoading={setIsLoading}
-                option={{ apiMethod: 'POST', body: searchBody, initialize: searchQueryInitialize }}
+                option={{
+                  apiMethod: 'POST',
+                  body: searchBody,
+                  initialize: searchQueryInitialize,
+                }}
               />
             </div>
           </section>
