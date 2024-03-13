@@ -1,12 +1,16 @@
 import s from './ExchangeReturnList.module.scss';
 import transformDate from '/util/func/transformDate';
-import {orderStatus} from "/store/TYPE/orderStatusTYPE";
-import {transformPhoneNumber} from "/util/func/transformPhoneNumber";
-import popupWindow from "/util/func/popupWindow";
-import PureCheckbox from "/src/components/atoms/PureCheckbox";
-import React from "react";
+import { orderStatus } from '/store/TYPE/orderStatusTYPE';
+import { transformPhoneNumber } from '/util/func/transformPhoneNumber';
+import popupWindow from '/util/func/popupWindow';
+import PureCheckbox from '/src/components/atoms/PureCheckbox';
+import React from 'react';
 
-export default function SearchResultList({ items, selectedIdList, onSelectedItem }) {
+export default function SearchResultList({
+  items,
+  selectedIdList,
+  onSelectedItem,
+}) {
   if (!items || !items.length) return;
 
   return (
@@ -24,10 +28,7 @@ export default function SearchResultList({ items, selectedIdList, onSelectedItem
   );
 }
 
-
-
 const Item = ({ item, sortableItemRef, selectedIdList, onSelectedItem }) => {
-  
   const DATA = {
     id: item.id, // 주문 id
     orderItemId: item.orderItemId, // 주문한 상품의 id // 구독상품일 경우, 구독 id
@@ -41,18 +42,17 @@ const Item = ({ item, sortableItemRef, selectedIdList, onSelectedItem }) => {
     buyerPhone: transformPhoneNumber(item.memberPhoneNumber),
     recipientName: item.recipientName,
     recipientPhoneNumber: transformPhoneNumber(item.recipientPhoneNumber),
+    dogName: item.dogName,
     bundleStatus: item.packageDelivery ? 'Y' : 'N',
   };
-  
-  
+
   const onPopupHandler = (e) => {
     e.preventDefault();
     if (typeof window === 'undefined') return;
     const href = `/bf-admin/sell/popup/${DATA.orderType}/${DATA.id}`;
     popupWindow(href, { width: 1000, height: 716 });
   };
-  
-  
+
   return (
     <li className={s.item} ref={sortableItemRef} data-idx={DATA.id}>
       <span>
@@ -94,6 +94,7 @@ const Item = ({ item, sortableItemRef, selectedIdList, onSelectedItem }) => {
         <p>{DATA.recipientName}</p>
         <p>{DATA.recipientPhoneNumber}</p>
       </span>
+      <span>{DATA.dogName}</span>
       <span>{DATA.bundleStatus}</span>
     </li>
   );

@@ -12,18 +12,13 @@ export default function SearchResultList({ items }) {
   return (
     <ul className="table_body">
       {items.map((item, i) => (
-        <Item
-          key={`item-${item.id}-${i}`}
-          index={i}
-          item={item}
-        />
+        <Item key={`item-${item.id}-${i}`} index={i} item={item} />
       ))}
     </ul>
   );
 }
 
-const Item = ({ item, sortableItemRef}) => {
-  
+const Item = ({ item, sortableItemRef }) => {
   const DATA = {
     id: item.id, // 주문 id => ! 주문 id로 주문정보를 조회가능
     merchantUid: item.merchantUid, // 상품 주문 번호
@@ -36,6 +31,8 @@ const Item = ({ item, sortableItemRef}) => {
     buyerPhone: transformPhoneNumber(item.memberPhoneNumber),
     recipientName: item.recipientName,
     recipientPhoneNumber: transformPhoneNumber(item.recipientPhoneNumber),
+    dogName: item.dogName,
+    bundleStatus: item.packageDelivery ? 'Y' : 'N',
     bundleStatus: item.packageDelivery ? 'Y' : 'N',
   };
 
@@ -78,6 +75,7 @@ const Item = ({ item, sortableItemRef}) => {
         <p>{DATA.recipientName}</p>
         <p>{DATA.recipientPhoneNumber}</p>
       </span>
+      <span>{DATA.dogName}</span>
       <span>{DATA.bundleStatus}</span>
     </li>
   );

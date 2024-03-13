@@ -1,12 +1,16 @@
 import React from 'react';
 import s from './delivery.module.scss';
 import transformDate from '/util/func/transformDate';
-import {deliveryStatus, orderStatus} from '/store/TYPE/orderStatusTYPE';
+import { deliveryStatus, orderStatus } from '/store/TYPE/orderStatusTYPE';
 import { transformPhoneNumber } from '/util/func/transformPhoneNumber';
 import popupWindow from '/util/func/popupWindow';
 import PureCheckbox from '/src/components/atoms/PureCheckbox';
 
-export default function SearchResultList({ items, selectedIdList, onSelectedItem }) {
+export default function SearchResultList({
+  items,
+  selectedIdList,
+  onSelectedItem,
+}) {
   if (!items || !items.length) return;
 
   return (
@@ -24,8 +28,12 @@ export default function SearchResultList({ items, selectedIdList, onSelectedItem
   );
 }
 
-const ItemList = ({ item, sortableItemRef, selectedIdList, onSelectedItem }) => {
-  
+const ItemList = ({
+  item,
+  sortableItemRef,
+  selectedIdList,
+  onSelectedItem,
+}) => {
   const DATA = {
     id: item.id, // 주문 id => ! 주문 id로 주문정보를 조회가능
     merchantUid: item.merchantUid, // 상품 주문 번호
@@ -41,6 +49,7 @@ const ItemList = ({ item, sortableItemRef, selectedIdList, onSelectedItem }) => 
     buyerPhone: transformPhoneNumber(item.memberPhoneNumber),
     recipientName: item.recipientName,
     recipientPhoneNumber: transformPhoneNumber(item.recipientPhoneNumber),
+    dogName: item.dogName,
     bundleStatus: item.packageDelivery ? 'Y' : 'N',
   };
 
@@ -52,13 +61,19 @@ const ItemList = ({ item, sortableItemRef, selectedIdList, onSelectedItem }) => 
   };
   const onDeliveryPopupHandler = (e) => {
     e.preventDefault();
-    if (typeof window === 'undefined') return console.error('window is not defined');
+    if (typeof window === 'undefined')
+      return console.error('window is not defined');
     const href = e.currentTarget.href;
     popupWindow(href, { width: 540, height: 480, left: 200, top: 100 });
   };
 
   return (
-    <li className={s.item} key={`item-${DATA.id}`} ref={sortableItemRef} data-idx={DATA.id}>
+    <li
+      className={s.item}
+      key={`item-${DATA.id}`}
+      ref={sortableItemRef}
+      data-idx={DATA.id}
+    >
       <span>
         <PureCheckbox
           id={item.id}
@@ -109,6 +124,7 @@ const ItemList = ({ item, sortableItemRef, selectedIdList, onSelectedItem }) => 
           <p>{DATA.recipientPhoneNumber}</p>
         </em>
       </span>
+      <span>{DATA.dogName}</span>
       <span>{DATA.bundleStatus}</span>
     </li>
   );

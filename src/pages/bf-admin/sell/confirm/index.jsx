@@ -1,23 +1,22 @@
-import React, {useCallback, useState} from "react";
+import React, { useCallback, useState } from 'react';
 import s from '../search/search.module.scss';
-import SearchResultList from "../search/SearchResultList";
-import MetaTitle from "/src/components/atoms/MetaTitle";
-import AdminLayout from "/src/components/admin/AdminLayout";
-import {AdminContentWrapper} from "/src/components/admin/AdminWrapper";
-import SearchBar from "/src/components/admin/form/searchBar";
-import SearchTerm from "/src/components/admin/form/searchBar/SearchTerm";
-import SearchTextWithCategory from "/src/components/admin/form/searchBar/SearchTextWithCategory";
-import SearchRadio from "/src/components/admin/form/searchBar/SearchRadio";
-import AmdinErrorMessage from "/src/components/atoms/AmdinErrorMessage";
-import PaginationWithAPI from "/src/components/atoms/PaginationWithAPI";
-import {transformToday} from "/util/func/transformDate";
-import {orderStatus} from "/store/TYPE/orderStatusTYPE";
-import {productType} from "/store/TYPE/itemType";
-import Spinner from "/src/components/atoms/Spinner";
-import {getDefaultPagenationInfo} from "/util/func/getDefaultPagenationInfo";
-import enterKey from "/util/func/enterKey";
-import {global_searchDateType} from "/store/TYPE/searchDateType";
-
+import SearchResultList from '../search/SearchResultList';
+import MetaTitle from '/src/components/atoms/MetaTitle';
+import AdminLayout from '/src/components/admin/AdminLayout';
+import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
+import SearchBar from '/src/components/admin/form/searchBar';
+import SearchTerm from '/src/components/admin/form/searchBar/SearchTerm';
+import SearchTextWithCategory from '/src/components/admin/form/searchBar/SearchTextWithCategory';
+import SearchRadio from '/src/components/admin/form/searchBar/SearchRadio';
+import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
+import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
+import { transformToday } from '/util/func/transformDate';
+import { orderStatus } from '/store/TYPE/orderStatusTYPE';
+import { productType } from '/store/TYPE/itemType';
+import Spinner from '/src/components/atoms/Spinner';
+import { getDefaultPagenationInfo } from '/util/func/getDefaultPagenationInfo';
+import enterKey from '/util/func/enterKey';
+import { global_searchDateType } from '/store/TYPE/searchDateType';
 
 const initialSearchValues = {
   from: global_searchDateType.oldestDate,
@@ -26,24 +25,24 @@ const initialSearchValues = {
   memberName: null,
   memberEmail: null,
   recipientName: null,
+  dogName: null,
   statusList: orderStatus.CONFIRM, // 구매확정 상태만 조회함
   orderType: productType.GENERAL,
 };
 
 export default function ConfirmOnSellPage() {
-  
   const searchApiUrl = `/api/admin/orders/searchAll`;
   const searchPageSize = 10;
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
   const [searchValues, setSearchValues] = useState(initialSearchValues);
   const [searchBody, setSearchBody] = useState(null);
-  const [searchQueryInitialize, setSearchQueryInitialize] = useState( false );
-  
+  const [searchQueryInitialize, setSearchQueryInitialize] = useState(false);
+
   const onResetSearchValues = () => {
     setSearchValues(initialSearchValues);
   };
-  
+
   const onSearchHandler = () => {
     const body = {
       from: searchValues.from,
@@ -52,20 +51,22 @@ export default function ConfirmOnSellPage() {
       memberName: searchValues.memberName,
       memberEmail: searchValues.memberEmail,
       recipientName: searchValues.recipientName,
+      dogName: searchValues.dogName,
       statusList: [searchValues.statusList], // ! 배열로 전송
       orderType: searchValues.orderType,
     };
     setSearchBody(body);
   };
-  
-  
-  const pageInterceptor = useCallback((res, option={itemQuery: null}) => {
+
+  const pageInterceptor = useCallback((res, option = { itemQuery: null }) => {
     // console.log(res);
-    return getDefaultPagenationInfo(res?.data, 'queryAdminOrdersAllInfoDtoList', {pageSize: searchPageSize, setInitialize: setSearchQueryInitialize});
-  },[]);
-  
-  
-  
+    return getDefaultPagenationInfo(
+      res?.data,
+      'queryAdminOrdersAllInfoDtoList',
+      { pageSize: searchPageSize, setInitialize: setSearchQueryInitialize },
+    );
+  }, []);
+
   const onSearchInputKeydown = (e) => {
     enterKey(e, onSearchHandler);
   };
@@ -79,7 +80,7 @@ export default function ConfirmOnSellPage() {
           <section className="cont">
             <SearchBar onReset={onResetSearchValues} onSearch={onSearchHandler}>
               <SearchTerm
-                title={"조회기간"}
+                title={'조회기간'}
                 searchValue={searchValues}
                 setSearchValue={setSearchValues}
               />
@@ -95,6 +96,7 @@ export default function ConfirmOnSellPage() {
                   { label: '구매자 이름', value: 'memberName' },
                   { label: '구매자 ID', value: 'memberEmail' },
                   { label: '수령자 이름', value: 'recipientName' },
+                  { label: '반려견명', value: 'dogName' },
                 ]}
               />
               <SearchRadio
@@ -118,11 +120,13 @@ export default function ConfirmOnSellPage() {
                 <ul className={s.table_header}>
                   <li className={s.table_th}>상세보기</li>
                   <li className={s.table_th}>주문번호</li>
-                  {/*<li className={s.table_th}>상품주문번호</li>*/} {/* ! 개별 상품 취소 기능 삭제로 인하여, 해당 column 미노출*/}
+                  {/*<li className={s.table_th}>상품주문번호</li>*/}{' '}
+                  {/* ! 개별 상품 취소 기능 삭제로 인하여, 해당 column 미노출*/}
                   <li className={s.table_th}>주문상태</li>
                   <li className={s.table_th}>구매자 ID</li>
                   <li className={s.table_th}>구매자</li>
                   <li className={s.table_th}>수령자</li>
+                  <li className={s.table_th}>반려견명</li>
                   <li className={s.table_th}>묶음배송 여부</li>
                 </ul>
                 {isLoading.fetching ? (
@@ -142,7 +146,11 @@ export default function ConfirmOnSellPage() {
                 queryItemList={'queryAdminOrdersDtoList'}
                 setItemList={setItemList}
                 setIsLoading={setIsLoading}
-                option={{ apiMethod: 'POST', body: searchBody, initialize: searchQueryInitialize }}
+                option={{
+                  apiMethod: 'POST',
+                  body: searchBody,
+                  initialize: searchQueryInitialize,
+                }}
               />
             </div>
           </section>

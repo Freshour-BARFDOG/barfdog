@@ -1,6 +1,6 @@
-import React, {useCallback, useState} from 'react';
+import React, { useCallback, useState } from 'react';
 import s from '../order/order.module.scss';
-import OrderList from "../order/OrderList";
+import OrderList from '../order/OrderList';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
@@ -17,12 +17,11 @@ import { valid_isTheSameArray } from '/util/func/validation/validationPackage';
 import PureCheckbox from '/src/components/atoms/PureCheckbox';
 import Spinner from '/src/components/atoms/Spinner';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
-import Tooltip from "/src/components/atoms/Tooltip";
-import {getDefaultPagenationInfo} from "/util/func/getDefaultPagenationInfo";
-import enterKey from "/util/func/enterKey";
-import {global_searchDateType} from "/store/TYPE/searchDateType";
-import {postPaymentDataToApiServer} from "../../../api/postPaymentDataToApiServer";
-
+import Tooltip from '/src/components/atoms/Tooltip';
+import { getDefaultPagenationInfo } from '/util/func/getDefaultPagenationInfo';
+import enterKey from '/util/func/enterKey';
+import { global_searchDateType } from '/store/TYPE/searchDateType';
+import { postPaymentDataToApiServer } from '../../../api/postPaymentDataToApiServer';
 
 const initialSearchValues = {
   from: global_searchDateType.oldestDate,
@@ -31,12 +30,12 @@ const initialSearchValues = {
   memberName: null,
   memberEmail: null,
   recipientName: null,
+  dogName: null,
   statusList: 'ALL',
   orderType: productType.GENERAL,
 };
 
 export default function CancelOnSellPage() {
-  
   const searchApiUrl = `/api/admin/orders/searchAll`;
   const searchPageSize = 10;
   const [isLoading, setIsLoading] = useState({});
@@ -44,7 +43,7 @@ export default function CancelOnSellPage() {
   const [searchValues, setSearchValues] = useState(initialSearchValues);
   const [searchBody, setSearchBody] = useState(null);
   const [selectedOrderIdList, setSelectedOrderIdList] = useState([]);
-  const [searchQueryInitialize, setSearchQueryInitialize] = useState( false );
+  const [searchQueryInitialize, setSearchQueryInitialize] = useState(false);
   const allItemIdList = itemList.map((item) => item.id); // 주문 id
 
   const searchOption = Object.keys(orderStatus)
@@ -76,27 +75,31 @@ export default function CancelOnSellPage() {
       memberName: searchValues.memberName,
       memberEmail: searchValues.memberEmail,
       recipientName: searchValues.recipientName,
+      dogName: searchValues.dogName,
       statusList: searchStatusList, // ! 배열로 전송
       orderType: searchValues.orderType,
     };
     setSearchBody(body);
   };
-  
-  
-  const pageInterceptor = useCallback((res, option={itemQuery: null}) => {
-    
+
+  const pageInterceptor = useCallback((res, option = { itemQuery: null }) => {
     // res = searchValues.orderType === productType.GENERAL ? DUMMY__ADMIN_ORDER_ITEMS_GENERAL_RESPONSE :  DUMMY__ADMIN_ORDER_ITEMS_SUBSCRIBE_RESPONSE; //  ! TEST RESPONSE
     // console.log(res);
-    return getDefaultPagenationInfo(res?.data, 'queryAdminOrdersAllInfoDtoList', {pageSize: searchPageSize, setInitialize: setSearchQueryInitialize});
-  },[]);
-
+    return getDefaultPagenationInfo(
+      res?.data,
+      'queryAdminOrdersAllInfoDtoList',
+      { pageSize: searchPageSize, setInitialize: setSearchQueryInitialize },
+    );
+  }, []);
 
   const onSelectedItem = (id, checked) => {
     const seletedId = Number(id);
     if (checked) {
       setSelectedOrderIdList((prevState) => prevState.concat(seletedId));
     } else {
-      setSelectedOrderIdList((prevState) => prevState.filter((id) => id !== seletedId));
+      setSelectedOrderIdList((prevState) =>
+        prevState.filter((id) => id !== seletedId),
+      );
     }
   };
 
@@ -107,14 +110,18 @@ export default function CancelOnSellPage() {
 
   const onConfirmingCancelOrder = async () => {
     if (!selectedOrderIdList.length) return alert('선택된 주문이 없습니다.');
-    if (!confirm(`${selectedOrderIdList.length}개 주문의 취소를 승인처리 하시겠습니까?`))
+    if (
+      !confirm(
+        `${selectedOrderIdList.length}개 주문의 취소를 승인처리 하시겠습니까?`,
+      )
+    )
       return;
 
     const itemType = searchValues.orderType;
-    const body ={
+    const body = {
       orderIdList: selectedOrderIdList, //  ! 일반상품, 구독상품 모두 , 주문(orderId) 리스트로 전송함
-    }
-    
+    };
+
     try {
       setIsLoading((prevState) => ({
         ...prevState,
@@ -142,13 +149,17 @@ export default function CancelOnSellPage() {
 
   const onRefusingCancelOrder = async () => {
     if (!selectedOrderIdList.length) return alert('선택된 상품이 없습니다.');
-    if (!confirm(`${selectedOrderIdList.length}개 상품의 취소요청을 반려 하시겠습니까?`))
+    if (
+      !confirm(
+        `${selectedOrderIdList.length}개 상품의 취소요청을 반려 하시겠습니까?`,
+      )
+    )
       return;
-  
+
     const body = {
-      orderIdList: selectedOrderIdList
-    }
-    
+      orderIdList: selectedOrderIdList,
+    };
+
     try {
       setIsLoading((prevState) => ({
         ...prevState,
@@ -173,8 +184,7 @@ export default function CancelOnSellPage() {
       refusingCancelOrder: false,
     }));
   };
-  
-  
+
   const onSearchInputKeydown = (e) => {
     enterKey(e, onSearchHandler);
   };
@@ -204,6 +214,7 @@ export default function CancelOnSellPage() {
                   { label: '구매자 이름', value: 'memberName' },
                   { label: '구매자 ID', value: 'memberEmail' },
                   { label: '수령자 이름', value: 'recipientName' },
+                  { label: '반려견명', value: 'dogName' },
                 ]}
               />
               <SearchRadio
@@ -227,18 +238,26 @@ export default function CancelOnSellPage() {
           </section>
           <section className="cont">
             <div className="cont_header clearfix">
-              <p className="cont_title cont-left">목록
-                <Tooltip message={'주문 단위 리스트'}/>
+              <p className="cont_title cont-left">
+                목록
+                <Tooltip message={'주문 단위 리스트'} />
               </p>
               <div className="controls cont-left">
-                <button className="admin_btn line basic_m" onClick={onConfirmingCancelOrder}>
-                  {isLoading.confirmingCancelOrder ? <Spinner/> : '취소승인'}
+                <button
+                  className="admin_btn line basic_m"
+                  onClick={onConfirmingCancelOrder}
+                >
+                  {isLoading.confirmingCancelOrder ? <Spinner /> : '취소승인'}
                 </button>
                 <button
                   className="admin_btn line basic_m autoWidth"
                   onClick={onRefusingCancelOrder}
                 >
-                  {isLoading.refusingCancelOrder ? <Spinner/> : '취소요청 반려'}
+                  {isLoading.refusingCancelOrder ? (
+                    <Spinner />
+                  ) : (
+                    '취소요청 반려'
+                  )}
                 </button>
               </div>
             </div>
@@ -248,7 +267,10 @@ export default function CancelOnSellPage() {
                   <li className={s.table_th}>
                     <PureCheckbox
                       eventHandler={onSelectAllItems}
-                      value={valid_isTheSameArray(allItemIdList, selectedOrderIdList)}
+                      value={valid_isTheSameArray(
+                        allItemIdList,
+                        selectedOrderIdList,
+                      )}
                     />
                   </li>
                   <li className={s.table_th}>상세보기</li>
@@ -257,6 +279,7 @@ export default function CancelOnSellPage() {
                   <li className={s.table_th}>구매자 ID</li>
                   <li className={s.table_th}>구매자</li>
                   <li className={s.table_th}>수령자</li>
+                  <li className={s.table_th}>반려견명</li>
                   <li className={s.table_th}>묶음배송 여부</li>
                 </ul>
                 {isLoading.fetching ? (
@@ -279,7 +302,11 @@ export default function CancelOnSellPage() {
                 pageInterceptor={pageInterceptor}
                 setItemList={setItemList}
                 setIsLoading={setIsLoading}
-                option={{ apiMethod: 'POST', body: searchBody, initialize: searchQueryInitialize }}
+                option={{
+                  apiMethod: 'POST',
+                  body: searchBody,
+                  initialize: searchQueryInitialize,
+                }}
               />
             </div>
           </section>
