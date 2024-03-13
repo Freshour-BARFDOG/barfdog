@@ -106,6 +106,7 @@ export default function SearchOnSellPage() {
                 id="detail"
                 options={[
                   { label: '주문번호', value: 'merchantUid' },
+                  { label: '구매자 이름', value: 'memberName' },
                   { label: '구매자 ID', value: 'memberEmail' },
                   { label: '수령자 이름', value: 'recipientName' },
                   { label: '반려견명', value: 'dogName' },
