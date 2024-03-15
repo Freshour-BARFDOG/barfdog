@@ -16,8 +16,8 @@ export default function Modal_global_alert({ message, onClick, background, ...pr
   const modalContextMessage = mct.message;
   const [style, setStyle] = useState({});
   const [targetScrollYPos, setTargetScrollYPos] = useState(null);
- 
-  
+
+
 
   useEffect(() => {
     callbackAfterAnimation(hasAlert);
@@ -57,6 +57,7 @@ export default function Modal_global_alert({ message, onClick, background, ...pr
   
   
   const keyDownHandler = (event) => {
+    event.preventDefault();
     //////////////////////////////////
     // ! esc key는 enterkey 이벤트와 달리, callback event발생이 안되므로, 삭제함 (221103목)
     // const escKey = event.keyCode === 27;
