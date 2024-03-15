@@ -117,7 +117,7 @@ const SignInput_birthday = ({
       <div className={s["join__wrap"]}>
         <div className={s["input-title-wrap"]}>
           <label htmlFor={id}>
-            <span className={`${s["inp-title"]} ${required && s["required"]}`}>
+            <span className={`${s["inp-title"]} ${required && s["required"]}`} id={`${id}Title`}>
               {title}
             </span>
           </label>
