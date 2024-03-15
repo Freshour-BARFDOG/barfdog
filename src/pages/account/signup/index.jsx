@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import axios from 'axios';
 import s from './signup.module.scss';
 import { useRouter } from 'next/router';
@@ -31,7 +31,17 @@ export default function SignupPage() {
   const hasAlert = mct.hasAlert;
   const router = useRouter();
   const userState = useSelector((s) => s.userState);
-  // // console.log(userState.snsInfo);
+  const inputrefs = {
+    name: useRef(null),
+    email: useRef(null),
+    password: useRef(null),
+    passwordConfirm: useRef(null),
+    phoneNumber: useRef(null),
+    street: useRef(null),
+    detailAddress: useRef(null),
+    birthday: useRef(null),
+    empty: useRef(null),
+  };
 
   const snsSignupMode = !!userState.snsInfo.providerId;
   const convertedBirthday =
@@ -95,6 +105,7 @@ export default function SignupPage() {
 
 
   useEffect(() => {
+    inputrefs.name.current.focus();
     // @YYL 콕뱅크 회원인지 확인
     if(getCookie("alliance") === "cb") {
       setAlliance("cb");
@@ -123,44 +134,52 @@ export default function SignupPage() {
 
       if (!isPassed) {
         if(validFormResultObj.name){
-          return mct.alertShow('이름을 확인해주세요.');
+          return inputrefs.name.current.focus();
         }
         if(validFormResultObj.email){
-          return mct.alertShow('이메일을 확인해주세요.');
+          return inputrefs.email.current.focus();
         }
         if(validFormResultObj.isEmailDuplicated){
-          return mct.alertShow('이메일 중복확인이 필요합니다.');
+          return inputrefs.email.current.focus();
         }
         if(validFormResultObj.password){
-          return mct.alertShow('비밀번호를 확인해주세요.');
+          return inputrefs.password.current.focus();
         }
         if(validFormResultObj.confirmPassword){
-          return mct.alertShow('비밀번호를 확인해주세요.');
+          return inputrefs.passwordConfirm.current.focus();
         }
         if(validFormResultObj.phoneNumber){
-          return mct.alertShow('휴대폰번호를 확인해주세요.');
+          return inputrefs.phoneNumber.current.focus();
         }
         if(validFormResultObj.isValidPhoneNumber){
-          return mct.alertShow('휴대폰번호 인증이 필요합니다.');
-        }
-        if(validFormResultObj.detailAddress){
-          return mct.alertShow('주소를 확인해주세요.');
+          return inputrefs.phoneNumber.current.focus();
         }
         if(validFormResultObj.street){
-          return mct.alertShow('주소를 확인해주세요.');
+          let element = document.querySelector("#addressTitle");
+        return  element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        if(validFormResultObj.detailAddress){
+          return inputrefs.detailAddress.current.focus();
         }
         if(validFormResultObj.birthday){
-          return mct.alertShow('생년월일을 확인해주세요.');
+          let element = document.querySelector("#birthdayTitle");
+         return element.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
 
-        return mct.alertShow('유효하지 않은 항목이 있습니다.');
+        // return mct.alertShow('유효하지 않은 항목이 있습니다.');
       }
 
       for (const validPolicyResultObjKey in validPolicyResultObj) {
         const error = validPolicyResultObj[validPolicyResultObjKey];
         if (error) isPassed = false;
       }
-      if (!isPassed) return mct.alertShow('이용약관을 확인해주세요.');
+      // if (!isPassed) return mct.alertShow('이용약관을 확인해주세요.');
+      if (!isPassed) {
+        console.log("이용약관")
+        let element = document.querySelector("#signupTitle");
+        console.log(element)
+        return element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
       
       mct.alertHide('');
       setSubmitted(true);
@@ -268,11 +287,12 @@ export default function SignupPage() {
                   setFormValues={setFormValues}
                   formErrors={formErrors}
                   setFormErrors={setFormErrors}
+                  inputrefs={inputrefs} 
                 />
               </section>
               <section className={s['policy-section']}>
                 <div className={`${s['title-wrap']}`}>
-                  <h3 className={`${s['main-title']}`}>이용약관 동의</h3>
+                  <h3 className={`${s['main-title']}`} id="signupTitle">이용약관 동의</h3>
                 </div>
                 <SignupPolicyList
                   formValues={formValues}
@@ -281,6 +301,7 @@ export default function SignupPage() {
                   setFormErrors={setFormErrors}
                   setModalState={setIsModalActive}
                   setCokbank={visibility}
+                  inputrefs={inputrefs} 
                 />
               </section>
               <section className={s['btn-section']}>

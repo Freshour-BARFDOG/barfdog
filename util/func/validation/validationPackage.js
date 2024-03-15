@@ -193,7 +193,7 @@ export const valid_password = (value) => {
   const pw = value;
   const pattern_num = /[0-9]/;
   const pattern_en = /[a-zA-Z]/;
-  const pattern_spChar = /[~!@#$%^&*()<>+-]/;
+  const pattern_spChar = /[~!@#$%^&*()<>+\-₩_=.,?;:'"{}|\[\]]/;
 
   if(!value){
     error = '항목이 비었습니다.';

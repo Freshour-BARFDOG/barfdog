@@ -9,8 +9,7 @@ const WindowOpener = dynamic(() => import('/util/func/window-opener'), { ssr: fa
 
 function SignInput_address(props) {
   
-  const { formValues, setFormValues, formErrors, setFormErrors } = props;
-  // // console.log(formValues)
+  const { formValues, setFormValues, formErrors, setFormErrors, inputrefs, errorMessage } = props;
 
   const onReceivePopupData = (err, data) => {
     // MEMO DATA from POSTCODE API
@@ -25,7 +24,7 @@ function SignInput_address(props) {
     }
     setFormValues((prevState) => ({
       ...prevState,
-      address: { street:address, zipcode:zonecode, city:sido },
+      address: { street:address, zipcode:zonecode, city:sido, detailAddress:"" },
     }));
   };
 
@@ -51,6 +50,9 @@ function SignInput_address(props) {
         id={'address'}
         title={'주소 검색'}
         placeholder={'기본주소'}
+        errorMessage={errorMessage}
+        inputref={inputrefs.street}
+        addressStreet={formValues.address.street}
         addedClassName={[
           'add-btn-section',
           `${formValues.address.street ? 'active-address' : 'hide-input'}`,
@@ -84,8 +86,9 @@ function SignInput_address(props) {
               placeholder={'상세주소'}
               value={formValues.address.detailAddress || ""}
               onChange={onDetailAddressHandler}
+              ref={inputrefs.detailAddress}
             />
-            {formErrors.detailAddress && <ErrorMessage>{formErrors.detailAddress}</ErrorMessage>}
+            {(!formValues.address.detailAddress || formValues.address.detailAddress === "") && formErrors.detailAddress && <ErrorMessage>{formErrors.detailAddress}</ErrorMessage>}
           </label>
         )}
       </SignupInput>

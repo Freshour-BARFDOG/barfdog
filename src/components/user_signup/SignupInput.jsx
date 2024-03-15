@@ -3,10 +3,7 @@ import s from '/src/pages/account/signup/signup.module.scss';
 import filter_onlyNumber from '/util/func/filter_onlyNumber';
 import filter_emptyValue from '/util/func/filter_emptyValue';
 import filter_date from "/util/func/filter_date";
-
-
-
-const SingupInput = ({
+const SignupInput = ({
   type,
   required,
   id,
@@ -21,10 +18,18 @@ const SingupInput = ({
   errorMessage,
   filteredType,
   icon,
+  inputref,
+  addressStreet,
   ...props
 }) => {
   const initialValue = formValue || ''
   const [value, setValue] = useState(initialValue);
+
+  useEffect(() => {
+    if (!value && inputref.current) {
+      inputref.current.focus();
+    }
+  }, [value]);
 
   // useEffect(()=>{
   //   if(type === 'date'){
@@ -82,8 +87,8 @@ const SingupInput = ({
     <>
       <div className={s['join__wrap']}>
         <div className={s['input-title-wrap']}>
-          <label htmlFor={id}>
-            <span className={`${s['inp-title']} ${required && s['required']}`}>{title}</span>
+          <label htmlFor={id} >
+            <span className={`${s['inp-title']} ${required && s['required']}`} id={`${id}Title`}>{title}</span>
           </label>
         </div>
         <div className={`${s['input-cont-wrap']} ${addedClassNameList()}`}>
@@ -98,17 +103,20 @@ const SingupInput = ({
               onChange={onChangeHandler}
               onKeyDown={onKeyboardHandler}
               value={value}
+              ref={inputref}
               autoComplete="off"
               {...props}
             />
             {icon && icon}
-            {errorMessage}
+            {id === "name" && (!value || value === "") && errorMessage}
+            {id !== "address" && id !== "name" ? errorMessage : ""}
           </div>
           {children}
+          {id === "address" && !addressStreet ? errorMessage : ""}
         </div>
       </div>
     </>
   );
 };
 
-export default SingupInput;
+export default SignupInput;
