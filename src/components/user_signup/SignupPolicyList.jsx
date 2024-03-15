@@ -34,10 +34,8 @@ const initialPolicyValues = {
 
 function SignupPolicyList(props) {
 
-  const {setFormValues, formErrors, setModalState} = props;
+  const {setFormValues, formErrors, setModalState, inputrefs} = props;
   const [policyValues, setPolicyValues] = useState(initialPolicyValues);
-
-  
 
   const visibility = props.setCokbank;
   
@@ -199,7 +197,7 @@ function SignupPolicyList(props) {
             )
           }
         >
-          <p className={s['title']}>이용약관 동의 (필수)</p>
+          <p className={s['title']} >이용약관 동의 (필수)</p>
         </PureCheckbox>
         <button className={s.terms__view} onClick={onModalShow} data-modal-sort={'termsOfService'}>
           약관보기
@@ -289,7 +287,7 @@ function SignupPolicyList(props) {
           value={policyValues.over14YearsOld}
           setValue={setPolicyValues}
           errorMessage={
-            formErrors[policy_KEYS[4].label] && (
+            formErrors[policy_KEYS[5].label] && (
               <ErrorMessage className={`${s.msg}`}>{formErrors[policy_KEYS[5].label]}</ErrorMessage>
             )
           }

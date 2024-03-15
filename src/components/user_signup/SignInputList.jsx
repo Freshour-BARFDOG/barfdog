@@ -20,7 +20,7 @@ import { genderType } from '/store/TYPE/genderType';
 
 let isFirstRendering = true;
 
-export default function SignInpuList({ formValues, setFormValues, formErrors, setFormErrors }) {
+export default function SignInputList({ formValues, setFormValues, formErrors, setFormErrors, inputrefs }) {
   const snsSignupMode = !!formValues.providerId;
   const initialLoadingState = {
     email: false,
@@ -196,6 +196,7 @@ export default function SignInpuList({ formValues, setFormValues, formErrors, se
         title={'이름(견주님)'}
         formValue={formValues.name}
         setFormValues={setFormValues}
+        inputref={inputrefs.name} 
         errorMessage={
           formErrors.name && <ErrorMessage className={`${s.msg}`}>{formErrors.name}</ErrorMessage>
         }
@@ -209,6 +210,7 @@ export default function SignInpuList({ formValues, setFormValues, formErrors, se
         formValue={formValues.email}
         setFormValues={setFormValues}
         setFormErrors={setFormErrors}
+        inputref={inputrefs.email} 
         errorMessage={
           (isLoading.email ||
             formErrors.email ||
@@ -248,6 +250,7 @@ export default function SignInpuList({ formValues, setFormValues, formErrors, se
             id={'password'}
             title={'비밀번호'}
             setFormValues={setFormValues}
+            inputref={inputrefs.password} 
             errorMessage={
               formErrors.password && (
                 <>
@@ -271,6 +274,7 @@ export default function SignInpuList({ formValues, setFormValues, formErrors, se
             id={'confirmPassword'}
             title={'비밀번호 확인'}
             setFormValues={setFormValues}
+            inputref={inputrefs.passwordConfirm} 
             errorMessage={
               (formErrors.confirmPassword || confirmPasswordMessage) && (
                 <>
@@ -296,6 +300,7 @@ export default function SignInpuList({ formValues, setFormValues, formErrors, se
         addedClassName={['add-btn-section']}
         formValue={formValues.phoneNumber}
         setFormValues={setFormValues}
+        inputref={inputrefs.phoneNumber} 
         errorMessage={
           (formErrors.phoneNumber ||
             authPhoneNumber.authNumber ||
@@ -334,6 +339,7 @@ export default function SignInpuList({ formValues, setFormValues, formErrors, se
           title={'인증 번호'}
           addedClassName={['add-btn-section']}
           setFormValues={setAuthPhoneNumber}
+          inputref={inputrefs.phoneNumber} 
           errorMessage={
             (formErrors.phoneAuthNumber || authPhoneNumber.authenticated) && (
               <ErrorMessage
@@ -356,6 +362,10 @@ export default function SignInpuList({ formValues, setFormValues, formErrors, se
         setFormValues={setFormValues}
         formErrors={formErrors}
         setFormErrors={setFormErrors}
+        inputrefs={inputrefs} 
+        errorMessage={
+          formErrors.detailAddress && formErrors.street && <ErrorMessage className={`${s.msg}`}>{formErrors.detailAddress}</ErrorMessage>
+        }
       />
 
       {/* <SignupInput
@@ -379,6 +389,7 @@ export default function SignInpuList({ formValues, setFormValues, formErrors, se
         title={'생년월일(견주님)'}
         formValue={formValues.birthday}
         setFormValues={setFormValues}
+        inputrefs={inputrefs} 
         errorMessage={formErrors.birthday && <ErrorMessage>{formErrors.birthday}</ErrorMessage>}
       />
      
@@ -413,6 +424,7 @@ export default function SignInpuList({ formValues, setFormValues, formErrors, se
         title={'추천코드'}
         placeholder={'추천코드는 계정 당 한 번만 입력 가능합니다.'}
         setFormValues={setFormValues}
+        inputref={inputrefs.empty} 
       />
     </>
   );
