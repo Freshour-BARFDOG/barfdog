@@ -215,6 +215,10 @@ export default function InvitePage() {
     }));
   };
 
+  const onClickModalButton = () => {
+    mct.alertHide();
+  };
+
 
   return (
     <>
@@ -359,7 +363,7 @@ export default function InvitePage() {
           </MypageWrapper>
         </Wrapper>
       </Layout>
-      {hasAlert && <Modal_global_alert background />}
+      {hasAlert && <Modal_global_alert onClick={onClickModalButton} background />}
 
       
       {activeModal.message && (

@@ -296,6 +296,10 @@ export default function RegisterSubscribeInfoPage({ data }) {
     if (confirm(`이전 페이지로 돌아가시겠습니까?`)) router.back();
   };
 
+  const onClickModalButton = () => {
+    mct.alertHide();
+  };
+
 
   if (isLoading?.fetching) {
     return <FullScreenRunningDog opacity={1} />;
@@ -341,7 +345,7 @@ export default function RegisterSubscribeInfoPage({ data }) {
           </section>
         </Wrapper>
       </Layout>
-      {hasAlert && <Modal_global_alert background />}
+      {hasAlert && <Modal_global_alert onClick={onClickModalButton} background />}
     </>
   );
 }

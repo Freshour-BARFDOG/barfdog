@@ -176,6 +176,10 @@ export default function CreateCouponPage() {
   const onGlobalModalCallback = () => {
     window.location.href = '/bf-admin/coupon/search';
   };
+
+  const onClickModalButton = () => {
+    mct.alertHide();
+  };
   
   return (
     <>
@@ -466,7 +470,7 @@ export default function CreateCouponPage() {
           </div>
         </AdminContentWrapper>
       </AdminLayout>
-      {hasAlert && <Modal_global_alert background/>}
+      {hasAlert && <Modal_global_alert onClick={onClickModalButton} background/>}
     </>
   );
 }

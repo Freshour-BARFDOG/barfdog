@@ -27,6 +27,10 @@ export default function SurveyGuidePage() {
     }
     await router.push('/survey');
   };
+
+  const onClickModalButton = () => {
+    mct.alertHide();
+  };
   
   return (
     <>
@@ -59,7 +63,7 @@ export default function SurveyGuidePage() {
           </div>
         </Wrapper>
       </Layout>
-      {activeGlobalAlertModal && <Modal_global_alert background />}
+      {activeGlobalAlertModal && <Modal_global_alert onClick={onClickModalButton} background />}
     </>
   );
 }

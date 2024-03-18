@@ -155,6 +155,10 @@ function DeliverySettingPage() {
     window.location.reload();
   };
 
+  const onClickModalButton = () => {
+    mct.alertHide();
+  };
+
   return (
     <>
       <MetaTitle title="배송정책 설정" admin={true} />
@@ -226,7 +230,7 @@ function DeliverySettingPage() {
           </form>
         </AdminContentWrapper>
       </AdminLayout>
-      {hasAlert && <Modal_global_alert background/>}
+      {hasAlert && <Modal_global_alert onClick={onClickModalButton} background/>}
     </>
   );
 }

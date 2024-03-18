@@ -175,6 +175,10 @@ export default function MypageCardPage({data}) {
     setUpdatedCardData({subscribeId, paymentMethod, info});
   };
 
+  const onClickModalButton = () => {
+    mct.alertHide();
+  };
+
 
   return (
     <>
@@ -275,7 +279,7 @@ export default function MypageCardPage({data}) {
           isLoading={isLoading}
         />
       }
-      {hasAlert && <Modal_global_alert background={true}/>}
+      {hasAlert && <Modal_global_alert onClick={onClickModalButton} background={true}/>}
     </>
   );
 }

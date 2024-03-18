@@ -97,6 +97,10 @@ export default function PromotionPage () {
   const onKeyDownHandler = (e) => {
     enterKey( e, onRegister );
   };
+
+  const onClickModalButton = () => {
+    mct.alertHide();
+  };
   
   
   return (
@@ -157,7 +161,7 @@ export default function PromotionPage () {
           </MypageWrapper>
         </Wrapper>
       </Layout>
-      {hasAlert && <Modal_global_alert background/>}
+      {hasAlert && <Modal_global_alert onClick={onClickModalButton} background/>}
     </>
   );
 }

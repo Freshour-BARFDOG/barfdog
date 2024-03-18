@@ -156,6 +156,10 @@ export default function InquiryListPage () {
     }
     window.location.reload();
   }
+
+  const onClickModalButton = () => {
+    mct.alertHide();
+  };
   
   return (
     <>
@@ -248,7 +252,7 @@ export default function InquiryListPage () {
           </section>
         </AdminContentWrapper>
       </AdminLayout>
-      {hasAlert && <Modal_global_alert background/>}
+      {hasAlert && <Modal_global_alert onClick={onClickModalButton}  background/>}
     </>
   );
 }

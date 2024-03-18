@@ -224,6 +224,11 @@ export default function UpdateBlogPage({ id }) {
     window.location.href = '/bf-admin/community/blog';
   };
 
+  const onClickModalButton = () => {
+    mct.alertHide();
+  };
+
+
   return (
     <>
       <MetaTitle title="블로그 수정" admin={true} />
@@ -423,7 +428,7 @@ export default function UpdateBlogPage({ id }) {
           </form>
         </AdminContentWrapper>
       </AdminLayout>
-      {hasAlert && <Modal_global_alert background/>}
+      {hasAlert && <Modal_global_alert onClick={onClickModalButton} background/>}
     </>
   );
 }

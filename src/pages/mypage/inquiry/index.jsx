@@ -84,6 +84,10 @@ export default function InquiryPage() {
     enterKey(e, onSearch);
   }
 
+  const onClickModalButton = () => {
+    mct.alertHide();
+  };
+
   return (
     <>
       <MetaTitle title="마이페이지 1:1 문의내역" />
@@ -169,7 +173,7 @@ export default function InquiryPage() {
           </MypageWrapper>
         </Wrapper>
       </Layout>
-      {hasAlert && <Modal_global_alert background />}
+      {hasAlert && <Modal_global_alert onClick={onClickModalButton} background />}
     </>
   );
 }
