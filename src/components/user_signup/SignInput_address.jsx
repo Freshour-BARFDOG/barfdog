@@ -51,7 +51,7 @@ function SignInput_address(props) {
         title={'주소 검색'}
         placeholder={'기본주소'}
         errorMessage={errorMessage}
-        inputref={inputrefs.street}
+        ref={inputrefs?.street}
         addressStreet={formValues.address.street}
         addedClassName={[
           'add-btn-section',
@@ -86,7 +86,7 @@ function SignInput_address(props) {
               placeholder={'상세주소'}
               value={formValues.address.detailAddress || ""}
               onChange={onDetailAddressHandler}
-              ref={inputrefs.detailAddress}
+              ref={inputrefs?.detailAddress}
             />
             {(!formValues.address.detailAddress || formValues.address.detailAddress === "") && formErrors.detailAddress && <ErrorMessage>{formErrors.detailAddress}</ErrorMessage>}
           </label>
