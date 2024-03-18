@@ -141,6 +141,10 @@ export default function CreateInquiryPage() {
     window.location.href = '/mypage/inquiry';
   }
 
+  const onClickModalButton = () => {
+    mct.alertHide();
+  };
+
   return (
     <>
       <MetaTitle title="마이페이지 1:1 문의작성" />
@@ -305,7 +309,7 @@ export default function CreateInquiryPage() {
           isConfirm={onConfirmSubmit}
         />
       )}
-      {hasAlert && <Modal_global_alert background/>}
+      {hasAlert && <Modal_global_alert onClick={onClickModalButton} background/>}
     </>
   );
 }

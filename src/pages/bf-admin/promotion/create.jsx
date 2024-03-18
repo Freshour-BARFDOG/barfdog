@@ -138,6 +138,9 @@ export default function CreatePromotionPage({DATA}) {
     window.location.href = '/bf-admin/promotion';
   };
 
+  const onClickModalButton = () => {
+    mct.alertHide();
+  };
 
   return (
       <>
@@ -325,7 +328,7 @@ export default function CreatePromotionPage({DATA}) {
             </div>
           </AdminContentWrapper>
         </AdminLayout>
-        {hasAlert && <Modal_global_alert background/>}
+        {hasAlert && <Modal_global_alert onClick={onClickModalButton} background/>}
 
       </>
   );

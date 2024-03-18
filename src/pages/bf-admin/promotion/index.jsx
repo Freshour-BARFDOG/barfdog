@@ -101,7 +101,9 @@ export default function PromotionSearchPage() {
     window.location.reload();
   };
 
-
+  const onClickModalButton = () => {
+    mct.alertHide();
+  };
 
   return <>
     <MetaTitle title="프로모션 조회" admin={true}/>
@@ -180,7 +182,7 @@ export default function PromotionSearchPage() {
         </section>
       </AdminContentWrapper>
     </AdminLayout>
-    {hasAlert && <Modal_global_alert background/>}
+    {hasAlert && <Modal_global_alert onClick={onClickModalButton} background/>}
   </>;
 }
 

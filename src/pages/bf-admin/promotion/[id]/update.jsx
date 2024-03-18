@@ -143,6 +143,10 @@ export default function UpdatePromotionPage({DATA}) {
     window.location.href = '/bf-admin/promotion';
   };
 
+  const onClickModalButton = () => {
+    mct.alertHide();
+  };
+
   return (
       <>
         <MetaTitle title="프로모션 수정" admin={true}/>
@@ -333,7 +337,7 @@ export default function UpdatePromotionPage({DATA}) {
             </div>
           </AdminContentWrapper>
         </AdminLayout>
-        {hasAlert && <Modal_global_alert background/>}
+        {hasAlert && <Modal_global_alert onClick={onClickModalButton} background/>}
       </>
   );
 }

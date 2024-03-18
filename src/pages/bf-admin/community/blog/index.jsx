@@ -65,6 +65,10 @@ function BlogIndexPage() {
     window.location.reload();
   };
 
+  const onClickModalButton = () => {
+    mct.alertHide();
+  };
+
   return (
     <>
       <MetaTitle title="블로그" admin={true} />
@@ -129,7 +133,7 @@ function BlogIndexPage() {
         </AdminContentWrapper>
       </AdminLayout>
       {activeModal && <Modal_AdminRecommendArticle setActiveModal={setActiveModal} />}
-      {hasAlert && <Modal_global_alert background />}
+      {hasAlert && <Modal_global_alert onClick={onClickModalButton} background />}
     </>
   );
 }

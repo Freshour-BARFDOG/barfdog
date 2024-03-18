@@ -81,6 +81,9 @@ export default function InquiryArticlePage({ data }) {
     window.location.href='/mypage/inquiry';
   }
 
+  const onClickModalButton = () => {
+    mct.alertHide();
+  };
  
   return (
     <>
@@ -233,7 +236,7 @@ export default function InquiryArticlePage({ data }) {
         text={'작성한 문의글과 답글이 삭제됩니다.\n정말 삭제하시겠습니까?'}
         isConfirm={onDeleteItem}
       />}
-      {hasAlert && <Modal_global_alert background/>}
+      {hasAlert && <Modal_global_alert onClick={onClickModalButton} background/>}
     </>
   );
 }

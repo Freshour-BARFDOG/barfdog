@@ -37,7 +37,7 @@ export default function SignInpuList({formValues, setFormValues, formErrors, set
       ...prevState,
       phoneNumber: error,
       authNumber: error,
-      isValidPhoneNumber: '휴대전화 인증상태 초기화'
+      isValidPhoneNumber: ''
     }));
     setAuthPhoneNumber((prevState)=>( {
       ...prevState,

@@ -135,6 +135,10 @@ export default function SubscribeOrderChangedPage({ data }) {
   if (!data || !DATA.prev.plan || !DATA.next.plan ) {
     return <FullScreenLoading/>;
   }
+
+  const onClickModalButton = () => {
+    mct.alertHide();
+  };
   
   return (
     <>
@@ -265,7 +269,7 @@ export default function SubscribeOrderChangedPage({ data }) {
           positionCenter
         />
       )}
-      {hasAlert && <Modal_global_alert background/>}
+      {hasAlert && <Modal_global_alert onClick={onClickModalButton} background/>}
     </>
   );
 }

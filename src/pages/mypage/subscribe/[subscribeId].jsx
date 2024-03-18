@@ -26,6 +26,10 @@ export default function SubscribeInfoPage({ data }) {
   if (!subscribeInfo) {
     return <FullScreenLoading />;
   }
+
+  const onClickModalButton = () => {
+    mct.alertHide();
+  };
   return (
     <>
       <MetaTitle title="마이페이지 구독관리" />
@@ -57,7 +61,7 @@ export default function SubscribeInfoPage({ data }) {
           </MypageWrapper>
         </Wrapper>
       </Layout>
-      {hasAlert && <Modal_global_alert background />}
+      {hasAlert && <Modal_global_alert onClick={onClickModalButton} background />}
     </>
   );
 }

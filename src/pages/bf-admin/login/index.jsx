@@ -115,12 +115,14 @@ export default function AdminLoginPage () {
     setAutoLogin(checked);
   };
 
-
+  const onClickModalButton = () => {
+    mct.alertHide();
+  };
   
   return (
     <>
       <MetaTitle title="관리자 로그인" admin={true} />
-      {hasAlert && <Modal_global_alert background />}
+      {hasAlert && <Modal_global_alert onClick={onClickModalButton} background />}
       {mct.isActive && (
         <Modal onClick={() => null} background title="비밀번호 재설정">
           <Modal_AdminResetPassword />

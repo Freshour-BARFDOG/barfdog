@@ -152,6 +152,9 @@ export default function SingleItemDetailPage({data}) {
     }));
   };
   
+  const onClickModalButton = () => {
+    mct.alertHide();
+  };
   
   useEffect( () => {
     if(!data){
@@ -209,7 +212,7 @@ export default function SingleItemDetailPage({data}) {
           </ul>
         </Wrapper>
       </Layout>
-      {activeGlobalAlertModal && <Modal_global_alert background />}
+      {activeGlobalAlertModal && <Modal_global_alert onClick={onClickModalButton} background />}
     </>
   );
 }
