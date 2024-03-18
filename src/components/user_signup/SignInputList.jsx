@@ -124,7 +124,7 @@ export default function SignInputList({ formValues, setFormValues, formErrors, s
       ...prevState,
       phoneNumber: error,
       authNumber: error,
-      isValidPhoneNumber: '휴대전화 인증상태 초기화',
+      isValidPhoneNumber: '',
     }));
     setAuthPhoneNumber((prevState) => ({
       ...prevState,
