@@ -174,10 +174,14 @@ export default function SingleItem_OrderHistoryPage({ data }) {
   const onPrevPage = async () => {
     window.location.href='/mypage/orderHistory'
   }
+
+  const onClickModalButton = () => {
+    mct.alertHide();
+  };
   
   return (
     <>
-      {hasAlert && <Modal_global_alert/>}
+      {hasAlert && <Modal_global_alert onClick={onClickModalButton} />}
       {activeModal?.cancle && (
         <Modal_confirm
           text={confirmMessage}

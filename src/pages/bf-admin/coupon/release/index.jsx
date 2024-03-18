@@ -233,6 +233,10 @@ function ReleaseCouponPage() {
     window.location.href = '/bf-admin/coupon/search';
   };
 
+  const onClickModalButton = () => {
+    mct.alertHide();
+  };
+
   return (
     <>
       <MetaTitle title="쿠폰 발행" admin={true} />
@@ -359,7 +363,7 @@ function ReleaseCouponPage() {
           </div>
         </AdminContentWrapper>
       </AdminLayout>
-      {hasAlert && <Modal_global_alert background/>}
+      {hasAlert && <Modal_global_alert onClick={onClickModalButton} background/>}
     </>
   );
 }

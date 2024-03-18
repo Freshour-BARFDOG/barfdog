@@ -147,7 +147,10 @@ export default function CouponPage () {
   const onKeyDownHandler = (e) => {
     enterKey( e, onRegisterCouponByCode );
   };
-  
+
+  const onGlobalModalCallback = () => {
+    mct.alertHide();
+  };
   
   return (
     <>
@@ -273,7 +276,7 @@ export default function CouponPage () {
           setIsActiveModal={setActiveUseCouponModal}
         />
       )}
-      {hasAlert && <Modal_global_alert background/>}
+      {hasAlert && <Modal_global_alert onClick={onGlobalModalCallback} background/>}
     </>
   );
 }

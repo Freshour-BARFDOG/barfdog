@@ -153,7 +153,9 @@ export default function BestReviewPage() {
   const onSuccessCallback = () => {
     window.location.reload();
   };
-
+  const onClickModalButton = () => {
+    mct.alertHide();
+  };
 
   return (
     <>
@@ -207,7 +209,7 @@ export default function BestReviewPage() {
           </div>
         </AdminContentWrapper>
       </AdminLayout>
-      {hasAlert && <Modal_global_alert background/>}
+      {hasAlert && <Modal_global_alert onClick={onClickModalButton} background/>}
     </>
   );
 }

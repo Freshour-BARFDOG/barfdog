@@ -47,12 +47,16 @@ export default function MypageCardPage() {
     window.location = '/mypage/card';
   };
 
+  const onClickModalButton = () => {
+    mct.alertHide();
+  };
+  
 
   return (
     <>
       <MetaTitle title="마이페이지 카드관리 > 카드변경 결과 (Mobile)"/>
       <Layout>
-        {hasAlert ? <Modal_global_alert background={true}/> : <FullScreenRunningDog opacity={0.5}/>}
+        {hasAlert ? <Modal_global_alert onClick={onClickModalButton} background={true}/> : <FullScreenRunningDog opacity={0.5}/>}
       </Layout>
 
     </>

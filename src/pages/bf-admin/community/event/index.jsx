@@ -56,6 +56,10 @@ function EventNoticePage () {
   const onSuccessCallback = () => {
     window.location.reload();
   };
+
+  const onClickModalButton = () => {
+    mct.alertHide();
+  };
   
   return (
     <>
@@ -103,7 +107,7 @@ function EventNoticePage () {
           </div>
         </AdminContentWrapper>
       </AdminLayout>
-      {hasAlert && <Modal_global_alert background />}
+      {hasAlert && <Modal_global_alert onClick={onClickModalButton} background />}
     </>
   );
 }

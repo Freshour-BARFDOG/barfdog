@@ -191,6 +191,10 @@ function CreateSingleItemPage() {
     window.location.href = '/bf-admin/product/single';
   };
 
+  const onClickModalButton = () => {
+    mct.alertHide();
+  };
+  
   return (
     <>
       <MetaTitle title="일반상품 생성" admin={true} />
@@ -529,7 +533,7 @@ function CreateSingleItemPage() {
           </div>
         </AdminContentWrapper>
       </AdminLayout>
-      {hasAlert && <Modal_global_alert background/>}
+      {hasAlert && <Modal_global_alert onClick={onClickModalButton} background/>}
     </>
   );
 }

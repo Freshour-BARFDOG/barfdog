@@ -117,6 +117,10 @@ export default function AlgorithmSettingPage() {
     window.location.reload();
   };
 
+  const onClickModalButton = () => {
+    mct.alertHide();
+  };
+
   return (
     <>
       <MetaTitle title="알고리즘 설정" admin={true} />
@@ -220,7 +224,7 @@ export default function AlgorithmSettingPage() {
           </form>
         </AdminContentWrapper>
       </AdminLayout>
-      {hasAlert && <Modal_global_alert background/>}
+      {hasAlert && <Modal_global_alert onClick={onClickModalButton} background/>}
     </>
   );
 }

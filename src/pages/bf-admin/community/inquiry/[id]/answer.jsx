@@ -91,6 +91,10 @@ export default function InquiryAnswerPage({ data }) {
     popupWindow(href);
   };
 
+  const onClickModalButton = () => {
+    mct.alertHide();
+  };
+
   return (
     <>
       <MetaTitle title="1:1 문의내용 답글" admin={true} />
@@ -178,7 +182,7 @@ export default function InquiryAnswerPage({ data }) {
           </div>
         </AdminContentWrapper>
       </AdminLayout>
-      {hasAlert && <Modal_global_alert background />}
+      {hasAlert && <Modal_global_alert onClick={onClickModalButton} background />}
     </>
   );
 }

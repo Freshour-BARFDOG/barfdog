@@ -93,6 +93,10 @@ function SingleItemPage() {
     window.location.reload();
   };
 
+  const onClickModalButton = () => {
+    mct.alertHide();
+  };
+
   return (
     <>
       <MetaTitle title="일반상품 관리" admin={true} />
@@ -166,7 +170,7 @@ function SingleItemPage() {
           </section>
         </AdminContentWrapper>
       </AdminLayout>
-      {hasAlert && <Modal_global_alert background />}
+      {hasAlert && <Modal_global_alert onClick={onClickModalButton} background />}
     </>
   );
 }
