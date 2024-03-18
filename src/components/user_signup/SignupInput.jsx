@@ -6,7 +6,7 @@ import filter_date from "/util/func/filter_date";
 const SignupInput = ({
   type,
   required,
-  id,
+  id, 
   formValue,
   setFormValues,
   setFormErrors,
@@ -26,7 +26,7 @@ const SignupInput = ({
   const [value, setValue] = useState(initialValue);
 
   useEffect(() => {
-    if (!value && inputref.current) {
+    if (!value && inputref?.current) {
       inputref.current.focus();
     }
   }, [value]);
