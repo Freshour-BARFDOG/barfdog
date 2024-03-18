@@ -40,7 +40,6 @@ export default function SignupPage() {
     street: useRef(null),
     detailAddress: useRef(null),
     birthday: useRef(null),
-    empty: useRef(null),
   };
 
   const snsSignupMode = !!userState.snsInfo.providerId;
@@ -175,9 +174,7 @@ export default function SignupPage() {
       }
       // if (!isPassed) return mct.alertShow('이용약관을 확인해주세요.');
       if (!isPassed) {
-        console.log("이용약관")
         let element = document.querySelector("#signupTitle");
-        console.log(element)
         return element.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
       
@@ -268,7 +265,9 @@ export default function SignupPage() {
     return result;
   };
 
-  
+  const onClickModalButton = () => {
+    mct.alertHide();
+  };
 
   return (
     <>
@@ -328,7 +327,7 @@ export default function SignupPage() {
       {isModalActive.privacy && (
         <Modal_privacy modalState={isModalActive.privacy} setModalState={setIsModalActive} />
       )}
-      {hasAlert && <Modal_global_alert />}
+      {hasAlert && <Modal_global_alert onClick={onClickModalButton}/>}
     </>
   );
 }

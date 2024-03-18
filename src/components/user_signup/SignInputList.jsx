@@ -424,7 +424,7 @@ export default function SignInputList({ formValues, setFormValues, formErrors, s
         title={'추천코드'}
         placeholder={'추천코드는 계정 당 한 번만 입력 가능합니다.'}
         setFormValues={setFormValues}
-        inputref={inputrefs.empty} 
+        inputref={null} 
       />
     </>
   );

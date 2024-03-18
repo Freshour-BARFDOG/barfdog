@@ -46,7 +46,7 @@ function SignupPolicyList(props) {
 
     setPolicyValues(tempObj);
     
-    console.log(visibility)
+    // console.log(visibility)
     policy_KEYS[2].required = visibility;
 
   }, [visibility]);
