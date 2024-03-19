@@ -27,7 +27,33 @@ const SignInput_birthday = ({
   const initialValue = formValue || "";
   const [selectedDate, setSelectedDate] = useState(null);
 
+  const handleRawInput = (e) => {
+    const rawInput = e.target.value 
+    // 입력값이 'yyyyMMdd' 형식과 일치하는지 확인
+    const dateIsValid = rawInput?.match(/^(\d{4}).?(\d{2}).?(\d{2})$/);
+    if (dateIsValid) {
+      const formattedDate = `${dateIsValid[1]}-${dateIsValid[2]}-${dateIsValid[3]}`;
+      handleDateChange(new Date(formattedDate));
+    } 
+
+  }
+
   const handleDateChange = (date) => {
+
+    let formattedDate = ""
+
+    // date 값이 유효하면, 날짜 포맷 변경
+    if (date && !isNaN(date)) { 
+        formattedDate = format(date, "yyyy-MM-dd");
+        setSelectedDate(date);
+        setFormValues((prevState) => {
+          return {
+            ...prevState,
+            [id]: formattedDate,
+          };
+        });
+      }
+  
     if (date === null) {
       setSelectedDate(null);
       setFormValues((prevState) => {
@@ -38,8 +64,6 @@ const SignInput_birthday = ({
       });
       return;
     }
-
-    const formattedDate = format(date, "yyyy-MM-dd");
     // // console.log('id:',id,' val:',formattedDate);
 
     setSelectedDate(date);
@@ -135,6 +159,7 @@ const SignInput_birthday = ({
               id={id}
               selected={selectedDate}
               onChange={handleDateChange}
+              onChangeRaw={handleRawInput}
               dateFormat={"yyyy. MM. dd."}
               maxDate={maxDate}
               required={required}

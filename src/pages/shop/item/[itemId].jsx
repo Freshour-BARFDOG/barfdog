@@ -83,8 +83,8 @@ export default function SingleItemDetailPage({data}) {
 
   const onAddToCart = async (e) => {
     if(!userInfo){
-      await router.push('/account/login');
-      return mct.alertShow('로그인 후 이용가능합니다.');
+      return await router.push('/account/login');
+      // return mct.alertShow('로그인 후 이용가능합니다.');
     }
     
     const button = e.currentTarget;
@@ -121,8 +121,8 @@ export default function SingleItemDetailPage({data}) {
 
   const onClickBuyButton = async () => {
     if(!userInfo){
-      await router.push('/account/login');
-      return mct.alertShow('로그인 후 이용가능합니다.');
+      return await router.push('/account/login');
+      // return mct.alertShow('로그인 후 이용가능합니다.');
     }
     try {
       const items = [

@@ -27,6 +27,10 @@ export default function SNSManagementPage() {
     setActiveModal(true);
   }
   
+  const onSuccessCallback = () => {
+    window.location.reload();
+  }
+  
   const disconnectSnsHandler = async (confirm)=>{
     if(!confirm){
       return setActiveModal(false);
@@ -42,8 +46,9 @@ export default function SNSManagementPage() {
       const res = await deleteObjData(url);
       // console.log(res);
       if(res.isDone){
-        mct.alertShow('SNS연동이 해제되었습니다.');
+        // mct.alertShow('SNS연동이 해제되었습니다.');
         setIsSubmitted(true)
+        onSuccessCallback()
       }else{
         mct.alertShow('통신장애로 인해 SNS연동에 실패하였습니다.')
       }
@@ -60,9 +65,7 @@ export default function SNSManagementPage() {
     
   }
   
-  const onSuccessCallback = () => {
-    window.location.reload();
-  }
+
   
   return (
     <>

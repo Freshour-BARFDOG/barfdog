@@ -22,8 +22,8 @@ export default function SurveyGuidePage() {
   const onMovePage = async (e) => {
     e.preventDefault();
     if (!userInfo) {
-      await router.push('/account/login');
-      return mct.alertShow('로그인 후 이용가능합니다.');
+      return await router.push('/account/login');
+      //  mct.alertShow('로그인 후 이용가능합니다.');
     }
     await router.push('/survey');
   };
