@@ -88,7 +88,9 @@ export default function ValidSnsPage() {
             const token = res.headers.authorization;
             setIsSubmitted(true);
             setTokenFromServer(token);
-            window.location.href= '/';
+            location.replace('/')
+            // res.redirect(`/`);
+            // window.location.href= '/';
           }
         })
         .catch((err) => {
