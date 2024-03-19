@@ -13,7 +13,7 @@ import {transformBirthDay} from "/util/func/transformBirthDay";
 
 
 
-export default function SignInpuList({formValues, setFormValues, formErrors, setFormErrors}) {
+export default function SignInputList({formValues, setFormValues, formErrors, setFormErrors, inputRef}) {
 
   const initialLoadingState = {
     email: false,
@@ -129,6 +129,7 @@ export default function SignInpuList({formValues, setFormValues, formErrors, set
         placeholder={'현재 비밀번호를 입력하세요.'}
         setFormValues={setFormValues}
         errorMessage={formErrors.password && <ErrorMessage>{formErrors.password}</ErrorMessage>}
+        inputref={inputRef}
       />
       <SignupInput
         type={'text'}

@@ -86,10 +86,8 @@ export default function ValidSnsPage() {
           // console.log(res);
           if (res.status === 200) {
             const token = res.headers.authorization;
-            setAlertModalMessage(`SNS연동에 성공하였습니다.`);
             setIsSubmitted(true);
             setTokenFromServer(token);
-            mct.alertShow();
           }
         })
         .catch((err) => {

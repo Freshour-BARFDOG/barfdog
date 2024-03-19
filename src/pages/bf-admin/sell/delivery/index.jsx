@@ -117,7 +117,11 @@ export default function DeliveryOnSellPage() {
 
   const onReprintInvoice = async () => {
     // validation:  선택된 항목이 없을 경우
-    if (selectedOrderIdList.length === 0) return;
+    if (selectedOrderIdList.length === 0) {
+      alert("선택된 항목이 없습니다. ")
+      return;
+    }
+    
     // validation: 배송에정이 아닌 상품이 선택된 경우, 실행불가
     const incorrectItem = itemList.filter(
       (item) =>

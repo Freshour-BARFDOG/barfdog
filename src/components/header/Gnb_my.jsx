@@ -17,8 +17,7 @@ export const Gnb_my = ({isMobile, setSidrOpen, authData}) => {
   const onMovePage = async (e) => {
     e.preventDefault();
     if ( !userInfo ) {
-      await router.push('/account/login');
-      return alert( '로그인 후 이용가능합니다.' );
+      return await router.push('/account/login');
     }
     
     const btn = e.currentTarget;
