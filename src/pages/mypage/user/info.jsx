@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from '/src/components/mypage/MypageWrapper';
@@ -21,6 +21,7 @@ export default function UserInfoPage() {
   const router = useRouter();
   const auth = useSelector((s) => s.auth);
   const userInfo = auth.userInfo;
+  const inputRef = useRef(null)
 
   const initialFormValues = {
     name: userInfo.name,
@@ -60,6 +61,11 @@ export default function UserInfoPage() {
     const isPassed = valid_hasFormErrors(errObj);
     // console.log(form);
     if (!isPassed) {
+      if(form.password === "" || form.password === null) {
+        let element = document.querySelector("#password");
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return inputRef.current.focus();
+      }
       mct.alertShow();
       setAlertModalMessage('유효하지 않은 항목이 있습니다.');
       return;
@@ -136,6 +142,7 @@ export default function UserInfoPage() {
                 setFormValues={setForm}
                 formErrors={formErrors}
                 setFormErrors={setFormErrors}
+                inputRef={inputRef}
               />
               <em className={s.divider} />
               <EditUserInfoPolicyList
