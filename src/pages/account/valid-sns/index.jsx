@@ -89,12 +89,12 @@ export default function ValidSnsPage() {
             setIsSubmitted(true);
             setTokenFromServer(token);
             // location.replace('/')
-            // window.location.href= '/';
+            // res.redirect(`/`);
             setIsLoading((prevState) => ({
               ...prevState,
               submit: false,
             })); 
-            res.redirect(`/`);
+            window.location.href= '/';
           }
         })
         .catch((err) => {
