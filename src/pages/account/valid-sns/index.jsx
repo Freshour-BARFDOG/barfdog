@@ -88,9 +88,13 @@ export default function ValidSnsPage() {
             const token = res.headers.authorization;
             setIsSubmitted(true);
             setTokenFromServer(token);
-            location.replace('/')
-            // res.redirect(`/`);
+            // location.replace('/')
             // window.location.href= '/';
+            setIsLoading((prevState) => ({
+              ...prevState,
+              submit: false,
+            })); 
+            res.redirect(`/`);
           }
         })
         .catch((err) => {
@@ -101,14 +105,14 @@ export default function ValidSnsPage() {
             setAlertModalMessage(`비밀번호가 올바르지 않습니다.`);
           }
           console.error('서버통신오류: ', err);
+          setIsLoading((prevState) => ({
+            ...prevState,
+            submit: false,
+          }));
         });
     } catch (err) {
       console.error(err);
     }
-    setIsLoading((prevState) => ({
-      ...prevState,
-      submit: false,
-    }));
   };
 
   const onEnterKeyHandler = (e) => {
