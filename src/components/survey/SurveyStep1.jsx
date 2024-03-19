@@ -37,7 +37,7 @@ const getSurveyBirthObject = (yyyymmObj)=>{
 
 export default function SurveyStep1({ formValues, setFormValues, onInputChangeHandler }) {
   
-  const birthObj = {yyyy: formValues.birth.slice(0,4), mm : formValues.birth.slice(4,6)}
+  const birthObj = {yyyy: formValues.birth?.slice(0,4), mm : formValues.birth?.slice(4,6)}
   const [birth, setBirth] = useState(birthObj);
   
 
