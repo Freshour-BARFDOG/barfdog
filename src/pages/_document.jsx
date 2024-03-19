@@ -5,26 +5,44 @@ import Document, {
   NextScript,
   DocumentContext,
   DocumentInitialProps,
-} from "next/document";
+} from 'next/document';
 import MetaTags from './_metaTags';
 // eslint-disable-next-line @next/next/no-script-in-document
-import {GA_TRACKING_ID, TAGMANAGER_CONTAINER, TAGMANAGER_KEY, UA_TRACKING_ID} from "/src/pages/api/googleAnalytics/gtag";
+import {
+  GA_TRACKING_ID,
+  TAGMANAGER_CONTAINER,
+  TAGMANAGER_KEY,
+  UA_TRACKING_ID,
+} from '/src/pages/api/googleAnalytics/gtag';
 
 // Server Only File (client에서 사용하는 로직 사용불가)
 // Next JS : _app.js 파일 이후 2번 째 실행
 
-
-
-export default function CustomDocument () {
+export default function CustomDocument() {
   return (
     <Html lang="ko">
       <Head>
-          <link
-            href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css"
-            rel="stylesheet"
-            type="text/css"
-            crossOrigin={"true"}
-          />
+        {/* <!-- Google Tag Manager --> */}
+        <script
+          data-script-title={'GOOGLE-TAG-MANAGER'}
+          dangerouslySetInnerHTML={{
+            __html: `
+            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+             j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+             'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);  
+             })
+            (window,document,'script','dataLayer','GTM-PG8PX9K9');
+            `,
+          }}
+        ></script>
+        {/* <!-- End Google Tag Manager --> */}
+        <link
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css"
+          rel="stylesheet"
+          type="text/css"
+          crossOrigin={'true'}
+        />
         <script
           script-title={'google-analytics'}
           async
@@ -70,11 +88,20 @@ export default function CustomDocument () {
       <body>
         <Main />
       </body>
+      {/* <!-- Google Tag Manager (noscript) --> */}
+      <noscript>
+        <iframe
+          src="https://www.googletagmanager.com/ns.html?id=GTM-PG8PX9K9"
+          height="0"
+          width="0"
+          style={{ display: 'none', visibility: 'hidden' }}
+        ></iframe>
+      </noscript>
+      {/* <!-- End Google Tag Manager (noscript) --> */}
       <NextScript />
     </Html>
   );
 }
-
 
 // export default class CustomDocument extends Document {
 //   static getInitialProps({ renderPage }) {
@@ -86,15 +113,12 @@ export default function CustomDocument () {
 //   }
 // }
 
-
 //
 // CustomDocument.getInitialProps = async ({ renderPage }) => {
 //   const { html, head } = renderPage();
 //
 //   return { html, head };
 // };
-
-
 
 /*{
  - CF. < DOCUMENT param Obj >
