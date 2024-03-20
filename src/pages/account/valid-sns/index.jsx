@@ -44,16 +44,6 @@ export default function ValidSnsPage() {
     });
   };
   
-  const onSuccessHandler = () => {
-    mct.alertHide();
-    const token = tokenFromServer;
-    if (token) {
-      dispatch(authAction.login({ token, redirect: '/account/valid-sns/result' }));
-    } else {
-      alert('인증과정 중에 문제가 발생했습니다. 다시 시도해주세요.');
-      window.location.href = '/account/login';
-    }
-  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -101,12 +91,12 @@ export default function ValidSnsPage() {
             setTokenFromServer(token);
             // location.replace('/')
             // res.redirect(`/`);
+            // window.location.href= '/';
             setIsLoading((prevState) => ({
               ...prevState,
               submit: false,
             })); 
-            onSuccessHandler();
-            window.location.href= '/';
+            dispatch(authAction.login({ token, redirect: '/' }));
           }
         })
         .catch((err) => {
@@ -133,6 +123,18 @@ export default function ValidSnsPage() {
 
   const onConfirmHandler = () => {
     mct.alertHide();
+  };
+
+  const onSuccessHandler = () => {
+    mct.alertHide();
+    const token = tokenFromServer;
+    if (token) {
+      // dispatch(authAction.login({ token, redirect: '/account/valid-sns/result' }));
+      dispatch(authAction.login({ token, redirect: '/' }));
+    } else {
+      alert('인증과정 중에 문제가 발생했습니다. 다시 시도해주세요.');
+      window.location.href = '/account/login';
+    }
   };
 
   if (!userState.snsInfo.providerId || !userState.snsInfo.provider) {
