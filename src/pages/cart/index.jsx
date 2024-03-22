@@ -89,7 +89,13 @@ export default function CartPage({ data, error }) {
     // 체크박스 항목이 변경되엇을 떄 =>update Calculator (상품금액, 배송비, 할인금액, 총주문금액)
     updateDATA();
   }, [selectedItemBasketIds]);
-  
+
+  // 컴포넌트 마운트 시 default로 전체 선택 상태 적용
+  useEffect(()=> {
+    const items = DATA.basketDtoList;
+    const allItemsIdList = items.map((item) => item.basketId);
+    setSelectedItemBasketIds(allItemsIdList)
+  }, [])
   
   const updateDATA = (basketId, amountUnit) => {
     
@@ -350,9 +356,6 @@ export default function CartPage({ data, error }) {
           </section>
           <section className={s.cart_btn}>
             <div className={s.content_box}>
-              <p className={s.btn} onClick={onDeleteSelectedItem}>
-                선택삭제
-              </p>
               <span className={s.check_box}>
                 <PureCheckbox
                   className={s.inner}
@@ -362,6 +365,9 @@ export default function CartPage({ data, error }) {
                   전체 선택
                 </PureCheckbox>
               </span>
+              <p className={s.btn} onClick={onDeleteSelectedItem}>
+                선택삭제
+              </p>
             </div>
           </section>
           <section className={s.product_list}>

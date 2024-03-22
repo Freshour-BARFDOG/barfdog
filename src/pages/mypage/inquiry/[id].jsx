@@ -56,7 +56,8 @@ export default function InquiryArticlePage({ data }) {
     
       if (res.isDone) {
         setSubmitted(true);
-        mct.alertShow('성공적으로 1:1 문의등록 삭제되었습니다.', onSuccessCallback);
+        // mct.alertShow('성공적으로 1:1 문의등록 삭제되었습니다.', onSuccessCallback);
+        window.location.href='/mypage/inquiry';
       } else {
         mct.alertShow(res.error, '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.');
       }
