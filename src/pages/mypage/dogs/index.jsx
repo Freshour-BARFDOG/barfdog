@@ -22,7 +22,7 @@ import DeleteIcon from '/public/img/mypage/dog_info_delete.svg';
 import {SubscribeStatusTag} from "../../../components/subscribe/SubscribeStatusTag";
 
 export default function MypageDogInfoPage({ data }) {
-  // // console.log(data);
+// // console.log(data);
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
   const [activeUploadDogProfileModal, setActiveUploadDogProfileModal] = useState(false);
@@ -63,7 +63,7 @@ export default function MypageDogInfoPage({ data }) {
             <section className={s.title}>반려견 정보</section>
             <ul>
               {itemList?.length > 0 ? (
-                itemList.map((item, index) => (
+                itemList.sort((a, b) => b.id - a.id).map((item, index) => (
                   <ItemList
                     key={`${item.id}-${index}`}
                     data={item}
