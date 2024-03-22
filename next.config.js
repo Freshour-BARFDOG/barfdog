@@ -26,34 +26,19 @@ module.exports = {
     return newConfig;
   },
   images: {
-    // domains: [
-    //   'localhost',
-    //   '192.168.0.90',
-    //   'barfdogserver.co.kr',
-    //   '175.126.73.68',
-    //   'barfdogtest.cafe24.com',
-    // ],
     domains: [
       'localhost',
-      'barfdogserver.co.kr',
       'www.barfdogserver.com',
       'dev.barfdogserver.com'
-      // 'barfdogtest.cafe24.com',
     ],
 
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'www.barfdogserver.com',
+        hostname: '*.barfdogserver.com',
         // port: '8581',
         // pathname: '/*',
       },
-      // {
-      //   protocol: 'https',
-      //   hostname: 'barfdogtest.cafe24.com',
-      //   port: '8443',
-      //   // pathname: '/*',
-      // },
     ],
   },
   async headers() {
