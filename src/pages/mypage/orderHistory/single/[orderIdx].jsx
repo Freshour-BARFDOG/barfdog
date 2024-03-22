@@ -158,7 +158,7 @@ export default function SingleItem_OrderHistoryPage({ data }) {
       );
       // console.log(r);
       if (r.isDone) {
-        alert(CancelReasonName.cancelNowOfGeneralOrderByBuyer);
+        // alert(CancelReasonName.cancelNowOfGeneralOrderByBuyer);
         window.location.reload();
       } else {
         alert('전체 주문 결제취소 요청 중 오류가 발생했습니다.');

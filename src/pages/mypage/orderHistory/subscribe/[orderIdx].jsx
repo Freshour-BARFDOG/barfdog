@@ -74,7 +74,7 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
       const r = await postPaymentDataToApiServer(`/api/orders/${orderIdx}/subscribe/cancelRequest`, data);
       // console.log(r);
       if (r.isDone) {
-        alert(CancelReasonName.cancelNowOfSubscribeOrderByBuyer,);
+        // alert(CancelReasonName.cancelNowOfSubscribeOrderByBuyer,);
         window.location.reload();
       } else {
         alert(`주문취소 실패\n${r.error}`);
