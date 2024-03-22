@@ -36,13 +36,15 @@ module.exports = {
     domains: [
       'localhost',
       'barfdogserver.co.kr',
+      'www.barfdogserver.com',
+      'dev.barfdogserver.com'
       // 'barfdogtest.cafe24.com',
     ],
 
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'barfdogserver.co.kr',
+        hostname: 'www.barfdogserver.com',
         // port: '8581',
         // pathname: '/*',
       },
