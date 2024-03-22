@@ -44,7 +44,7 @@ module.exports = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'www.barfdogserver.com',
+        hostname: 'barfdogserver.co.kr',
         // port: '8581',
         // pathname: '/*',
       },

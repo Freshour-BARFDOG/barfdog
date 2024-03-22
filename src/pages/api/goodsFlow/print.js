@@ -25,7 +25,7 @@ const GoodsFlowPrint = async (req, res,) => {
       `${process.env.NEXT_PUBLIC_GOODSFLOW_PRINT_URL}dlvmgr.aspx`,
         qs.stringify({
           'OTP':req.body.otp,
-          'responseURL':'https://www.barfdogserver.com/api/goodsFlow/postTraceResult',
+          'responseURL':'https://barfdogserver.co.kr/api/goodsFlow/postTraceResult',
           'id':req.body.id
         }),
         
