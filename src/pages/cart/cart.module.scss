@@ -39,9 +39,9 @@ section.btn_box { margin : 0 0 rem(206)}
 .cart_btn {
   .content_box {
     display: flex;
-    flex-direction: row-reverse;
+    justify-content: space-between;
     border-bottom: rem(1) solid var(--color-line-01);
-    padding-bottom: rem(10);
+    padding: 0 rem(30) rem(12) rem(30);
 
     .btn {
       border: rem(1) solid var(--color-main);
