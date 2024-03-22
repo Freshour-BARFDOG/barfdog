@@ -180,7 +180,7 @@ export default function UpdateReviewPage( ) {
       // console.log(res);
       if (res.isDone) {
         
-        onShowModalHandler('리뷰가 성공적으로 등록되었습니다.');
+        // onShowModalHandler('리뷰가 성공적으로 등록되었습니다.');
         setIsSubmitted(true);
       } else if(res.status)  {
         if (auth.userType === userType.ADMIN) {
