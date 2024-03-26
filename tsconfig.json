@@ -41,6 +41,6 @@
     "src/pages/bf-admin/banner/main-banner/create.jsx",
     "src/pages/_app.jsx",
     "src/components/mypage/Dashboard.jsx"
-  ],
+, "src/components/atoms/NaverLoginBtn.jsx", "src/components/atoms/KakaoLoginBtn.jsx"  ],
   "exclude": ["node_modules", "trash"]
 }
