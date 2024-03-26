@@ -11,6 +11,8 @@ import {userType} from '/store/TYPE/userAuthType';
 import React from "react";
 import {AlertLayer} from "@src/layers/AlertLayer";
 import SiteMaintenance from "/src/pages/siteMaintenance";
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 // Server Only File (client에서 사용하는 로직 사용불가)
 // Next JS : 최초실행
@@ -32,6 +34,8 @@ export default function MyApp({ Component, pageProps, CustomProps }) {
             <ModalContextProvider>
                 <AlertLayer props={CustomProps}>
                   <Component {...pageProps} />
+                  <Analytics />
+                  <SpeedInsights />
                 </AlertLayer>
             </ModalContextProvider>
           </ChannelTalkProvider>
