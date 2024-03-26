@@ -1,17 +1,13 @@
-
-
 $browser-context: 16;
 @function rem($px) {
   @return #{$px / $browser-context}rem;
 }
 
-
-
 .flex__container {
   margin: rem(77) auto rem(81);
   width: rem(360);
   height: rem(700);
-  .title{
+  .title {
     font-weight: 500;
     text-align: center;
     > h2 {
@@ -19,21 +15,22 @@ $browser-context: 16;
     }
   }
 }
-.titlebox{
+.titlebox {
   margin-bottom: rem(28);
 }
 
-
-.inputbox{
+.inputbox {
   margin-bottom: rem(16);
 }
 
-
-.btnbox{
-  margin-bottom: rem(40);
+.btnbox {
+  margin: rem(30) rem(10);
   display: flex;
   flex-wrap: wrap;
-  > * {display: block; width:100%;}
+  > * {
+    display: block;
+    width: 100%;
+  }
   .btn {
     width: 100%;
     height: rem(50);
@@ -43,10 +40,12 @@ $browser-context: 16;
     font-weight: 400;
     align-items: center;
     justify-content: center;
-    cursor:pointer;
+    cursor: pointer;
     display: flex;
     box-sizing: border-box;
-    &:not(:last-child){margin-bottom:rem(10);}
+    &:not(:last-child) {
+      margin-bottom: rem(10);
+    }
     &.btn.btn_login {
       background-color: var(--color-main);
       color: #fff;
@@ -56,16 +55,17 @@ $browser-context: 16;
       color: var(--color-main);
     }
   }
-
 }
 
 .input__box {
-  .input__title{
+  padding: 0 rem(10);
+  gap: rem(10);
+  .input__title {
     padding-left: rem(2);
     margin-bottom: rem(5);
     font-size: rem(16);
   }
-  label{
+  label {
     display: inline-block;
     width: 100%;
     margin-bottom: rem(16);
@@ -76,74 +76,105 @@ $browser-context: 16;
     width: 100%;
     height: rem(50);
     border: rem(1) solid #ddd;
-    outline:none;
+    outline: none;
     font-size: rem(16);
   }
 }
 
+// * ----- sns 로그인 버튼 커스텀 ----- *
+.login_sns_btn {
+  display: flex;
+  flex-direction: column;
 
-.auto__login__check {
-  margin-top: rem(10);
-  margin-bottom: rem(25);
-  .chk__box {
-    display: inline-flex; 
-    cursor: pointer; 
-    font-size: rem(14); 
-    -webkit-user-select: none; 
-    -moz-user-select: none; 
-    -ms-user-select: none; 
-    user-select: none;
-    gap:rem(10);
-  } /* 기본 체크박스 숨기기 */ 
-  .chk__box input[type='checkbox'] { 
-    display: none; 
-  } /* 선택되지 않은 체크박스 스타일 꾸미기 */ 
-  .chk__box .on {
-    width: rem(20); 
-    height: rem(20);
-    margin-right: rem(8); 
-    background: #ddd; 
-    position: relative;
-    display: block;
-    top: 0; 
-    left: 0; 
-  } /* 선택된 체크박스 스타일 꾸미기 */ 
-  .chk__box input[type="checkbox"]:checked + .on {
-    background:var(--color-main); 
-  } 
-  .on:after { 
-    content: ""; 
-    position: absolute; 
-    display: none; 
-  } 
-  .chk__box input[type="checkbox"]:checked + .on:after {
-    display: block; 
-  } 
-  .on:after {
-    width: rem(6); 
-    height: rem(10); 
-    border: solid #fff; 
-    border-width: 0 rem(2) rem(2) 0; 
-    -webkit-transform: rotate(45deg); 
-    -ms-transform: rotate(45deg); 
-    transform: rotate(45deg); 
-    position: absolute; 
-    left: rem(6); 
-    top: rem(2); 
-  }
-  .autologin {
-    display: block;
-    letter-spacing: rem(-.8);
+  .loginBtn {
+    div {
+      width: 70%;
+    }
   }
 }
 
-.login_id{
+// 구분선 (소셜, 이메일)
+.line_box {
+  margin: rem(30) 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: rem(16);
+
+  .line {
+    background-color: var(--color-line-03);
+    height: rem(0.3);
+    width: 26%;
+  }
+
+  .line_text {
+    color: #c0c0c0;
+  }
+}
+
+button.naverLogin-btn > div > div:nth-child(2) .auto__login__check {
+  margin-top: rem(10);
+  margin-bottom: rem(25);
+  .chk__box {
+    display: inline-flex;
+    cursor: pointer;
+    font-size: rem(14);
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    gap: rem(10);
+  } /* 기본 체크박스 숨기기 */
+  .chk__box input[type='checkbox'] {
+    display: none;
+  } /* 선택되지 않은 체크박스 스타일 꾸미기 */
+  .chk__box .on {
+    width: rem(20);
+    height: rem(20);
+    margin-right: rem(8);
+    background: #ddd;
+    position: relative;
+    display: block;
+    top: 0;
+    left: 0;
+  } /* 선택된 체크박스 스타일 꾸미기 */
+  .chk__box input[type='checkbox']:checked + .on {
+    background: var(--color-main);
+  }
+  .on:after {
+    content: '';
+    position: absolute;
+    display: none;
+  }
+  .chk__box input[type='checkbox']:checked + .on:after {
+    display: block;
+  }
+  .on:after {
+    width: rem(6);
+    height: rem(10);
+    border: solid #fff;
+    border-width: 0 rem(2) rem(2) 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+    position: absolute;
+    left: rem(6);
+    top: rem(2);
+  }
+  .autologin {
+    display: block;
+    letter-spacing: rem(-0.8);
+  }
+}
+
+.login_id {
   margin-top: rem(28);
   height: rem(77);
   width: 100%;
 }
 
-.login_pw{
+.login_pw {
   margin-top: rem(20);
   width: 100%;
   h4 {
@@ -151,9 +182,9 @@ $browser-context: 16;
     margin: 0 0 rem(4) rem(3);
   }
   input {
-    padding:0 rem(20);
+    padding: 0 rem(20);
     box-sizing: border-box;
-    display:block;
+    display: block;
     width: 100%;
     height: rem(50);
     border-radius: rem(10);
@@ -163,14 +194,22 @@ $browser-context: 16;
   }
 }
 
+.auto__login__container {
+  display: flex;
+  flex-direction: column;
+  height: rem(30);
+
+  .auto__login__check {
+    display: flex;
+    justify-content: space-between;
+    height: rem(30);
+    align-items: center;
+  }
+}
+
 // 아이디 찾기 사이선 비밀번호 찾기
 .id__pw__search {
-  margin-bottom: rem(29) ;
-  padding-bottom: rem(47);
   display: flex;
-  justify-content: center;
-  border-bottom: rem(1) solid var(--color-line-03);
-  
   ul.list {
     display: flex;
     li {
@@ -178,22 +217,21 @@ $browser-context: 16;
       a {
         font-size: rem(15);
         display: block;
-        padding : 0 rem(10);
+        padding: 0 rem(10);
       }
     }
     li:last-child::before {
-      content:"";
+      content: '';
       width: rem(1);
       height: rem(14);
       background-color: #000;
       position: absolute;
-      top:0;
+      top: 0;
       bottom: 0;
       margin: auto;
     }
   }
 }
-
 
 .easylogin {
   text-align: center;
@@ -207,10 +245,10 @@ $browser-context: 16;
   gap: rem(19);
   margin: rem(22) auto;
   width: 100%;
-  > button{
+  > button {
     max-width: rem(72);
   }
-  .naverId{
+  .naverId {
     width: 0;
   }
   .akakao {
@@ -218,26 +256,22 @@ $browser-context: 16;
   }
 }
 
-
-
 @media (max-width: rem(400)) {
-
   .flex__container {
     margin: rem(35) auto;
     width: 100%;
   }
 
-  
-  .inputbox{
+  .inputbox {
     margin-bottom: 0;
   }
 
-  .btnbox{
+  .btnbox {
     margin-bottom: rem(20);
   }
 
   .input__box {
-    .input__title{
+    .input__title {
       display: none;
     }
   }

@@ -7,10 +7,8 @@ import { useDispatch } from 'react-redux';
 import { useModalContext } from '/store/modal-context';
 import { authAction } from '/store/auth-slice';
 import { useRouter } from 'next/router';
-// import Kakao from '/public/img/icon/kakao.png';
-// import Naver from '/public/img/icon/naver.png';
-import Kakao from '/public/img/icon/kakao.svg';
-import Naver from '/public/img/icon/naver.svg';
+import KakaoLoginBtn from '/src/components/atoms/KakaoLoginBtn';
+import NaverLoginBtn from '/src/components/atoms/NaverLoginBtn';
 import Image from 'next/image';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
@@ -23,9 +21,9 @@ import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
 import Spinner from '/src/components/atoms/Spinner';
 import { cookieType } from '/store/TYPE/cookieType';
 import enterKey from '/util/func/enterKey';
-import {FullScreenLoading} from "../../../components/atoms/FullScreenLoading";
-import {getDataSSR, getTokenFromServerSide} from "../../api/reqData";
-import {userType} from "../../../../store/TYPE/userAuthType";
+import { FullScreenLoading } from '../../../components/atoms/FullScreenLoading';
+import { getDataSSR, getTokenFromServerSide } from '../../api/reqData';
+import { userType } from '../../../../store/TYPE/userAuthType';
 
 const initialValues = {
   email: '',
@@ -47,7 +45,8 @@ export default function LoginPage() {
 
   useEffect(() => {
     const naverScript = document.createElement('script');
-    naverScript.src = 'https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js';
+    naverScript.src =
+      'https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js';
     naverScript.type = 'text/javascript';
     document.head.appendChild(naverScript);
 
@@ -118,7 +117,7 @@ export default function LoginPage() {
           // console.log(res);
           if (res.status === 200) {
             const token = res.headers.authorization;
-            const { temporaryPassword, email, name, roleList} = res.data;
+            const { temporaryPassword, email, name, roleList } = res.data;
 
             const payload = {
               token,
@@ -152,7 +151,8 @@ export default function LoginPage() {
           if (errorStatus === 400 || errorStatus === 404) {
             // status 400 잘못된 비밀번호
             // status 404 : 계정이 존재하지 않음
-            errorMessage = '아이디 또는 비밀번호가 정확하지 않습니다. \n계정정보를 확인해주세요.';
+            errorMessage =
+              '아이디 또는 비밀번호가 정확하지 않습니다. \n계정정보를 확인해주세요.';
           } else {
             errorMessage = '서버 장애입니다. 잠시 후 다시 시도해주세요.';
           }
@@ -179,7 +179,6 @@ export default function LoginPage() {
     mct.alertHide();
   };
 
-  
   return (
     <>
       <MetaTitle title="로그인" />
@@ -190,6 +189,23 @@ export default function LoginPage() {
               <header className={s.title}>
                 <h2>로그인</h2>
               </header>
+            </div>
+            <div className={s.login_sns_btn}>
+              <KakaoLoginBtn
+                align="right"
+                className={`${s.loginBtn}`}
+                onClick={naverLoginFunc}
+              />
+              <NaverLoginBtn
+                align="right"
+                className={`${s.loginBtn}`}
+                onClick={kakaoLoginFunc}
+              />
+            </div>
+            <div className={s.line_box}>
+              <div className={s.line}></div>
+              <div className={s.line_text}> 또는 이메일로 로그인 </div>
+              <div className={s.line}></div>
             </div>
             <div onSubmit={onSubmit}>
               <div className={s.inputbox}>
@@ -202,7 +218,9 @@ export default function LoginPage() {
                   autoComplete={'username'}
                   onKeyDown={onEnterKeyHandler}
                   errorMessage={
-                    formErrors?.email && <ErrorMessage>{formErrors?.email}</ErrorMessage>
+                    formErrors?.email && (
+                      <ErrorMessage>{formErrors?.email}</ErrorMessage>
+                    )
                   }
                 />
                 <InputBox
@@ -214,64 +232,87 @@ export default function LoginPage() {
                   autoComplete={'current-password'}
                   onKeyDown={onEnterKeyHandler}
                   errorMessage={
-                    formErrors?.password && <ErrorMessage>{formErrors?.password}</ErrorMessage>
+                    formErrors?.password && (
+                      <ErrorMessage>{formErrors?.password}</ErrorMessage>
+                    )
                   }
                 />
+                <div className={s.auto__login__container}>
+                  <div className={s.auto__login__check}>
+                    <label
+                      htmlFor="autoLogin"
+                      className={s.chk__box}
+                      style={{
+                        display: 'flex',
+                        gap: '0.7rem',
+                        marginLeft: '0.8rem',
+                      }}
+                    >
+                      <PureCheckbox
+                        id={'autoLogin'}
+                        value={autoLogin || ''}
+                        onClick={onAutoLoginHandler}
+                      />
+                      <div
+                        className={s.autologin}
+                        style={{
+                          fontSize: '0.9rem',
+                        }}
+                      >
+                        자동 로그인
+                      </div>
+                    </label>
+                    <div className={s.id__pw__search}>
+                      <ul className={s.list}>
+                        <li>
+                          <Link href={'/account/findMyId'} passHref>
+                            <a>아이디 찾기</a>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href={'/account/findMyPw'} passHref>
+                            <a>비밀번호찾기</a>
+                          </Link>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className={s.auto__login__check}>
-                <label htmlFor="autoLogin" className={s.chk__box}>
-                  <PureCheckbox
-                    id={'autoLogin'}
-                    value={autoLogin || ''}
-                    onClick={onAutoLoginHandler}
-                  />
-                  <div className={s.autologin}>자동 로그인</div>
-                </label>
-              </div>
+
               <div className={s.btnbox}>
-                <button type={'button'} className={`${s.btn} ${s.btn_login}`} onClick={onSubmit}>
-                  {(isLoading.submit || isLoading.movePage) ? <Spinner style={{ color: '#fff' }} /> : '로그인'}
+                <button
+                  type={'button'}
+                  className={`${s.btn} ${s.btn_login}`}
+                  onClick={onSubmit}
+                >
+                  {isLoading.submit || isLoading.movePage ? (
+                    <Spinner style={{ color: '#fff' }} />
+                  ) : (
+                    '로그인'
+                  )}
                 </button>
                 <Link href={'/account/signup'} passHref>
                   <a>
-                    <button type={'button'} className={`${s.btn} ${s.btn_signup}`}>
-                      회원가입
+                    <button
+                      type={'button'}
+                      className={`${s.btn} ${s.btn_signup}`}
+                    >
+                      이메일로 회원가입
                     </button>
                   </a>
                 </Link>
-              </div>
-              <div className={s.id__pw__search}>
-                <ul className={s.list}>
-                  <li>
-                    <Link href={'/account/findMyId'} passHref>
-                      <a>아이디 찾기</a>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href={'/account/findMyPw'} passHref>
-                      <a>비밀번호찾기</a>
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-              <h5 className={s.easylogin}>간편로그인</h5>
-              <div className={s.login_sns}>
-                <button type={'button'} className={s.kakao} onClick={kakaoLoginFunc}>
-                  {/* <Image src={Kakao} width={72} height={72} alt="카카오톡 아이콘" /> */}
-                  <Kakao width='100%' height='100%' viewBox="0 0 72 72" />
-                </button>
-                {/* naver가 제공해주는 로그인 버튼*/}
-                <div className={s.naverId} ref={naverRef} id="naverIdLogin"></div>
-                <button className={s.naver} type={'buttom'} onClick={naverLoginFunc}>
-                  {/* <Image src={Naver} width="72" height="72" alt="네이버 아이콘" /> */}
-                  <Naver width='100%' height='100%' viewBox="0 0 72 72" />
-                </button>
               </div>
             </div>
           </div>
         </Wrapper>
       </Layout>
-      {hasAlert && <Modal_global_alert message={modalMessage} onClick={onGlobalModalCallback} />}
+      {hasAlert && (
+        <Modal_global_alert
+          message={modalMessage}
+          onClick={onGlobalModalCallback}
+        />
+      )}
     </>
   );
 }
@@ -305,7 +346,6 @@ const InputBox = ({
   return (
     <div className={s.input__box}>
       <label htmlFor={id}>
-        <h4 className={s.input__title}>{name}</h4>
         <input
           id={id}
           value={value}
@@ -321,29 +361,26 @@ const InputBox = ({
   );
 };
 
-
-
-
 export async function getServerSideProps({ req }) {
   let token = null;
   let isMember = false;
   if (req?.headers?.cookie) {
-    token = getTokenFromServerSide( req );
+    token = getTokenFromServerSide(req);
     const getApiUrl = `/api/mypage`;
-    const res = await getDataSSR( req, getApiUrl, token );
-    if ( res && res.status === 200 ) {
+    const res = await getDataSSR(req, getApiUrl, token);
+    if (res && res.status === 200) {
       isMember = true;
     }
   }
-  
-  if(isMember){
+
+  if (isMember) {
     return {
-      redirect:{
+      redirect: {
         permanent: false,
-        destination: '/'
-      }
-    }
+        destination: '/',
+      },
+    };
   } else {
-    return { props: { } };
+    return { props: {} };
   }
 }
