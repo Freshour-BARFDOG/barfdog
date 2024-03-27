@@ -31,31 +31,23 @@ export default function NAVER_Auth({ data, err, token }) {
 
     (async () => {
       if (data.snsUserType === userType.NON_MEMBER) {
-
         // CASE: 비회원 > 회원가입 페이지로 이동
         dispatch(userStateAction.setSnsInfo({ data: userSnsInfo }));
         await router.push('/account/signup');
-
       } else if (data.snsUserType === userType.MEMBER) {
-
         // CASE: 회원 > 연동되지 않았을 경우, 연동페이지로 이동
         dispatch(userStateAction.setSnsInfo({ data: userSnsInfo }));
         await router.push('/account/valid-sns');
-
-      } else if (data.snsUserType === userType.MEMBER_WITH_SNS.KAKAO){
-
-        alert ("카카오 간편로그인이 연동되어있습니다. 다시 로그인해주세요.");
+      } else if (data.snsUserType === userType.MEMBER_WITH_SNS.KAKAO) {
+        alert('카카오 간편로그인이 연동되어있습니다. 카카오로 시작해주세요.');
         return (window.location.href = redirUrl);
-
       } else if (data.snsUserType === userType.MEMBER_WITH_SNS.NAVER) {
-
         // CASE: SNS연동완료된 회원 => 로그인 처리
         const payload = {
           token,
           expiredDate: 10,
         };
         dispatch(authAction.naverLogin(payload));
-
       }
     })();
     // CASE : SUCCESS SNS LOGIN
@@ -93,7 +85,9 @@ export async function getServerSideProps({ query }) {
   try {
     const NAVER_CLIENT_ID = process.env.NEXT_PUBLIC_NAVER_CLIENT_ID;
     const NAVER_CLIENT_SECRET = process.env.NEXT_PUBLIC_NAVER_CLIENT_SECRET;
-    const NAVER_REDIRECT_URI = encodeURI(process.env.NEXT_PUBLIC_NAVER_REDIRECT_URI);
+    const NAVER_REDIRECT_URI = encodeURI(
+      process.env.NEXT_PUBLIC_NAVER_REDIRECT_URI,
+    );
     const GRANT_TYPE = 'authorization_code';
     // // console.log('NAVER_REDIRECT_URI: ',NAVER_REDIRECT_URI);
 
@@ -111,7 +105,6 @@ export async function getServerSideProps({ query }) {
   } catch (err) {
     // console.log('error:', err.response);
   }
-
 
   try {
     const body = {
@@ -134,7 +127,8 @@ export async function getServerSideProps({ query }) {
     // console.log('BARFDOG API SERVER res::::: ', res);
     // res = DUMMY_NEW_MEMBER_RESPONSE; ////////  ! TEST
     // res = DUMMY_MEMBER_RESPONSE; ////////  ! TEST
-    if (res.status === 500) { // 서버응답이 없을 경우, Redir
+    if (res.status === 500) {
+      // 서버응답이 없을 경우, Redir
       return {
         redirect: {
           permanent: false,
@@ -218,7 +212,6 @@ export async function getServerSideProps({ query }) {
   404, Not Found / 검색 결과가 없습니다. -
   500, Internal Server Error / 데이터베이스 오류입니다. 서버 내부 에러가 발생하였습니다. 포럼에 올려주시면 신속히 조치하겠습니다.
 */
-
 
 //
 //
