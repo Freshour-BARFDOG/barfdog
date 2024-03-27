@@ -28,7 +28,6 @@ import filter_ints from '/util/func/filter_ints';
 import filter_demicals from '/util/func/filter_demicals';
 
 export default function Popup_DogDetailPage({ data, dogIdx }) {
-
   const getDogInfoApiUrl = `/api/dogs/${dogIdx}`;
   const apiDataQueryDog = 'dogDto';
 
@@ -41,8 +40,6 @@ export default function Popup_DogDetailPage({ data, dogIdx }) {
   const [tempValues, setTempValues] = useState({});
   const [modalMessage, setModalMessage] = useState('');
   const [submitState, setSubmitState] = useState(null);
- 
-  
 
   // * ------ MEMBER ------ *
   useEffect(() => {
@@ -104,7 +101,7 @@ export default function Popup_DogDetailPage({ data, dogIdx }) {
         fetching: false,
       }));
     })();
-  }, [dogIdx]); 
+  }, [dogIdx]);
 
   const onInputChange = (e) => {
     const { value } = e.currentTarget;
@@ -193,7 +190,16 @@ export default function Popup_DogDetailPage({ data, dogIdx }) {
       }));
       let modalMessage;
       const apiUrl = `/api/admin/update/dog/${dogIdx}`;
-      const { phoneNumber, email, address,birthday, id, memberName, oneMealRecommendGram, ...dataToSend } = formValues;
+      const {
+        phoneNumber,
+        email,
+        address,
+        birthday,
+        id,
+        memberName,
+        oneMealRecommendGram,
+        ...dataToSend
+      } = formValues;
 
       const res = await putObjData(apiUrl, dataToSend);
 
@@ -280,7 +286,7 @@ export default function Popup_DogDetailPage({ data, dogIdx }) {
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
                             <span>
-                            {tempValues.birthday || formValues.birthday}
+                              {tempValues.birthday || formValues.birthday}
                             </span>
                             <span></span>
                           </div>
@@ -372,6 +378,13 @@ export default function Popup_DogDetailPage({ data, dogIdx }) {
               isConfirm={onSubmit}
               positionCenter
               text={'반려견 정보를 수정하시겠습니까?'}
+              caution={
+                <>
+                  구독 중인 반려견의 한 끼당 g수가 변경되면,
+                  <br />
+                  다음 예약 결제금액이 자동으로 변경됩니다
+                </>
+              }
             />
           )}
           {hasAlert && (
