@@ -46,12 +46,14 @@ export default function SignupPage() {
 
   const snsSignupMode = !!userState.snsInfo.providerId;
   const convertedBirthday =
-    snsSignupMode && userState.snsInfo?.birthday?.indexOf('-') < 0
+    userState.snsInfo?.birthday?.indexOf('-') < 0
       ? `${userState.snsInfo.birthday.substring(
           0,
           2,
         )}-${userState.snsInfo.birthday.substring(2)}` // 생일: 하이픈없을 경우 중간에 하이픈 넣는다.
       : userState.snsInfo?.birthday;
+
+  console.log(convertedBirthday);
 
   const initialFormValues = {
     name: userState.snsInfo.name || '',
@@ -88,8 +90,6 @@ export default function SignupPage() {
   };
 
   // // console.log('userState: ',userState)
-  // // console.log('initialFormValues: ', initialFormValues);
-  // // console.log('snsSignupMode: ', snsSignupMode);
 
   const initialFormErrors = {
     isEmailDuplicated: null,
@@ -107,6 +107,10 @@ export default function SignupPage() {
 
   const [visibility, setVisibility] = useState(false);
   const [alliance, setAlliance] = useState(null);
+
+  console.log('initialFormValues: ', initialFormValues);
+  console.log('snsSignupMode: ', snsSignupMode);
+  console.log('formValues: ', formValues);
 
   useEffect(() => {
     inputrefs.name.current.focus();
