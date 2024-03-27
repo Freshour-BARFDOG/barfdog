@@ -30,22 +30,16 @@ export default function KAKAO_Auth({ data, err, token }) {
 
     (async () => {
       if (data.snsUserType === userType.NON_MEMBER) {
-
         // CASE: 비회원 > 회원가입 페이지로 이동
         dispatch(userStateAction.setSnsInfo({ data: userSnsInfo }));
         await router.push('/account/signup');
-
       } else if (data.snsUserType === userType.MEMBER) {
-
         // CASE: 회원 > 연동되지 않았을 경우, 연동페이지로 이동
         dispatch(userStateAction.setSnsInfo({ data: userSnsInfo }));
         await router.push('/account/valid-sns');
-
       } else if (data.snsUserType === userType.MEMBER_WITH_SNS.NAVER) {
-
-        alert ("네이버 간편로그인이 연동되어있습니다. 다시 로그인해주세요.");
+        alert('네이버 간편로그인이 연동되어있습니다. 네이버로 시작해주세요.');
         return (window.location.href = redirUrl);
-
       } else if (data.snsUserType === userType.MEMBER_WITH_SNS.KAKAO) {
         // CASE: SNS연동완료된 회원 => 로그인 처리
         const payload = {
@@ -53,7 +47,6 @@ export default function KAKAO_Auth({ data, err, token }) {
           expiredDate: 10,
         };
         dispatch(authAction.kakaoLogin(payload));
-
       }
     })();
   }, [data, err]);
@@ -108,8 +101,8 @@ export async function getServerSideProps({ query }) {
     // res = DUMMY_NEW_MEMBER_RESPONSE; ////////  ! TEST
     // res = DUMMY_MEMBER_RESPONSE; ////////  ! TEST
 
-
-    if (res.status === 500) { // 서버응답이 없을 경우, Redir
+    if (res.status === 500) {
+      // 서버응답이 없을 경우, Redir
       return {
         redirect: {
           permanent: false,
@@ -119,13 +112,14 @@ export async function getServerSideProps({ query }) {
     }
 
     if (res.data) {
-
       const resData = res.data;
       const resultCode = Number(resData.resultcode) || null;
       const resultMessage = resData.message || null;
       const internationalAreaCodeOfKorea = '+82';
       const transformedPhoneNumber =
-        resData.kakao_account?.phone_number.indexOf(internationalAreaCodeOfKorea) >= 0
+        resData.kakao_account?.phone_number.indexOf(
+          internationalAreaCodeOfKorea,
+        ) >= 0
           ? resData.kakao_account?.phone_number
               .replace(internationalAreaCodeOfKorea, '0')
               .replace(' ', '')
@@ -212,8 +206,6 @@ export async function getServerSideProps({ query }) {
   error code -406 회읜 나이가 14세 미만인 경우
 
 */
-
-
 
 //
 // const DUMMY_NEW_MEMBER_RESPONSE = {
