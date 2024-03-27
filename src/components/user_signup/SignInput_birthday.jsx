@@ -25,7 +25,7 @@ const SignInput_birthday = ({
   ...props
 }) => {
   const initialValue = formValue || '';
-  const [selectedDate, setSelectedDate] = useState(initialValue);
+  const [selectedDate, setSelectedDate] = useState(null);
 
   const handleRawInput = (e) => {
     const rawInput = e.target.value;
