@@ -194,12 +194,17 @@ export default function LoginPage() {
               <KakaoLoginBtn
                 align="right"
                 className={`${s.loginBtn}`}
-                onClick={naverLoginFunc}
+                onClick={kakaoLoginFunc}
               />
+              <div
+                className={s.naverId}
+                id="naverIdLogin"
+                style={{ display: 'none' }}
+              ></div>
               <NaverLoginBtn
                 align="right"
                 className={`${s.loginBtn}`}
-                onClick={kakaoLoginFunc}
+                onClick={naverLoginFunc}
               />
             </div>
             <div className={s.line_box}>
