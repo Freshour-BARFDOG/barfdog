@@ -75,9 +75,9 @@ function ManageDogPage() {
                 id="keyword"
                 events={{ onKeydown: onSearchInputKeydown }}
                 options={[
+                  { label: '반려견명', value: 'dogName' },
                   { label: '견주 이름', value: 'memberName' },
                   { label: '견주 ID', value: 'memberEmail' },
-                  { label: '반려견명', value: 'dogName' },
                 ]}
               />
             </SearchBar>
