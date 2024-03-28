@@ -31,6 +31,7 @@ import enterKey from '/util/func/enterKey';
 import { global_searchDateType } from '/store/TYPE/searchDateType';
 import { postPaymentDataToApiServer } from '../../../api/postPaymentDataToApiServer';
 import { CancelReasonName } from '../../../../../store/TYPE/order/CancelReasonName';
+import { getData } from '../../../api/reqData';
 
 const initialSearchValues = {
   from: global_searchDateType.oldestDate,
@@ -310,9 +311,97 @@ export default function OrderOnSellPage() {
     )
       return;
 
+    // ! [수정] 24.03.28
+    // - (BEFORE) body에 일반주문과 구독의 id만 보냄
+    // - (AFTER) body에 일반주문과 구독의 id + "일반주문의 itemOptionList"도 추가로 보냄
+    // [
+    //   {
+    //     "orderId": 3232,
+    //     "itemOptionList": [
+    //       {
+    //         "itemOptionId": 29,
+    //         "itemOptionCount": 2
+    //       }
+    //     ]
+    //   },
+    //   {
+    //     "orderId": 3236,
+    //     "itemOptionList": [
+    //       {
+    //         "itemOptionId": 28,
+    //         "itemOptionCount": 1
+    //       },
+    //       {
+    //         "itemOptionId": 30,
+    //         "itemOptionCount": 1
+    //       }
+    //     ]
+    //   }
+    // ]
+
+    let orderIdOptionList = [];
+
+    if (searchValues.orderType === 'GENERAL') {
+      for (const orderId of selectedOrderIdList) {
+        try {
+          const generalApiUrl = `/api/admin/orders/${orderId}/general`;
+          // 일반주문에 대한 요청 수행
+          const generalResponse = await getData(generalApiUrl);
+          if (generalResponse.data) {
+            // console.log(
+            //   generalResponse.data.orderItemAndOptionDtoList[0]
+            //     .selectOptionDtoList[0].optionId,
+            // );
+            const itemOptionList =
+              generalResponse.data.orderItemAndOptionDtoList.flatMap((item) =>
+                item.selectOptionDtoList.map((option) => ({
+                  itemOptionId: option.optionId,
+                  itemOptionCount: option.amount,
+                })),
+              );
+            // 주문 ID와 아이템 옵션 목록을 orderIdOptionList에 추가
+            orderIdOptionList.push({
+              orderId: orderId,
+              itemOptionList: itemOptionList,
+            });
+          }
+        } catch (error) {
+          console.error(
+            `Error fetching order details for orderId ${orderId}:`,
+            error,
+          );
+        }
+      }
+    } else if (searchValues.orderType === 'SUBSCRIBE') {
+      for (const orderId of selectedOrderIdList) {
+        try {
+          const subscribeApiUrl = `/api/admin/orders/${orderId}/subscribe`;
+          const subscribeResponse = await getData(subscribeApiUrl);
+          if (subscribeResponse.data) {
+            orderIdOptionList.push({
+              orderId: orderId,
+              itemOptionList: null,
+            });
+          }
+        } catch (error) {
+          console.error(
+            `Error fetching order details for orderId ${orderId}:`,
+            error,
+          );
+        }
+      }
+    }
+
+    console.log('최종 !', orderIdOptionList);
+
     let body = {
-      orderIdList: selectedOrderIdList, // 일반상품 & 구독상품 모두 '주문 id'로 요청함
+      // [수정 후]
+      orderList: orderIdOptionList,
+      // [수정 전]
+      // orderIdList: selectedOrderIdList, // 일반상품 & 구독상품 모두 '주문 id'로 요청함
     };
+
+    console.log('body', body);
 
     try {
       setIsLoading((prevState) => ({
