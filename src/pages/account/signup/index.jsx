@@ -7,7 +7,9 @@ import { useSelector } from 'react-redux';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import SignInputList from '/src/components/user_signup/SignInputList';
-import SignupPolicyList, { policy_KEYS } from '/src/components/user_signup/SignupPolicyList';
+import SignupPolicyList, {
+  policy_KEYS,
+} from '/src/components/user_signup/SignupPolicyList';
 import Modal_termsOfSerivce from '/src/components/modal/Modal_termsOfSerivce';
 import Modal_termsOfThird from '/src/components/modal/Modal_termsOfThird';
 import Modal_privacy from '/src/components/modal/Modal_privacy';
@@ -18,13 +20,13 @@ import { valid_policyCheckbox } from '/util/func/validation/validationPackage';
 import { transformPhoneNumber } from '/util/func/transformPhoneNumber';
 import { naverGender } from '/util/func/naverGender';
 import { kakaoGender } from '/util/func/kakaoGender';
-import {getDataSSR, getTokenFromServerSide} from "../../api/reqData";
-import {deleteCookie, getCookie, setCookie} from "@util/func/cookie";
+import { getDataSSR, getTokenFromServerSide } from '../../api/reqData';
+import { deleteCookie, getCookie, setCookie } from '@util/func/cookie';
 import { useEffect } from 'react';
 
-String.prototype.insertAt = function(index,str){
-  return this.slice(0,index) + str + this.slice(index);
-}
+String.prototype.insertAt = function (index, str) {
+  return this.slice(0, index) + str + this.slice(index);
+};
 
 export default function SignupPage() {
   const mct = useModalContext();
@@ -45,15 +47,19 @@ export default function SignupPage() {
   const snsSignupMode = !!userState.snsInfo.providerId;
   const convertedBirthday =
     snsSignupMode && userState.snsInfo?.birthday?.indexOf('-') < 0
-      ? userState.snsInfo.birthday?.insertAt(2, '-')
-      : userState.snsInfo?.birthday; // 생일: 하이픈없을 경우 중간에 하이픈 넣는다.
-  
+      ? `${userState.snsInfo.birthday.substring(
+          0,
+          2,
+        )}-${userState.snsInfo.birthday.substring(2)}` // 생일: 하이픈없을 경우 중간에 하이픈 넣는다.
+      : userState.snsInfo?.birthday;
+
   const initialFormValues = {
     name: userState.snsInfo.name || '',
     email: userState.snsInfo.email || '',
     password: '',
     confirmPassword: '',
-    phoneNumber: transformPhoneNumber(userState.snsInfo.mobile, { seperator: '' }) || '',
+    phoneNumber:
+      transformPhoneNumber(userState.snsInfo.mobile, { seperator: '' }) || '',
     address: {
       zipcode: '',
       street: '',
@@ -82,8 +88,6 @@ export default function SignupPage() {
   };
 
   // // console.log('userState: ',userState)
-  // // console.log('initialFormValues: ', initialFormValues);
-  // // console.log('snsSignupMode: ', snsSignupMode);
 
   const initialFormErrors = {
     isEmailDuplicated: null,
@@ -98,27 +102,34 @@ export default function SignupPage() {
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState(initialFormErrors);
   const [submitted, setSubmitted] = useState(false);
-  
+
   const [visibility, setVisibility] = useState(false);
   const [alliance, setAlliance] = useState(null);
 
+  // console.log('initialFormValues: ', initialFormValues);
+  // console.log('snsSignupMode: ', snsSignupMode);
+  // console.log('formValues: ', formValues);
 
   useEffect(() => {
     inputrefs.name.current.focus();
     // @YYL 콕뱅크 회원인지 확인
-    if(getCookie("alliance") === "cb") {
-      setAlliance("cb");
+    if (getCookie('alliance') === 'cb') {
+      setAlliance('cb');
       setVisibility(true);
     }
   }, []);
 
-  
   const onSubmit = async () => {
-    if(submitted) return console.error("Already Submitted!");
+    if (submitted) return console.error('Already Submitted!');
     try {
       const validateMode = snsSignupMode ? 'sns' : 'normal';
-      const validFormResultObj = await validate(formValues, formErrors, { mode: validateMode });
-      const validPolicyResultObj = valid_policyCheckbox(formValues.agreement, policy_KEYS);
+      const validFormResultObj = await validate(formValues, formErrors, {
+        mode: validateMode,
+      });
+      const validPolicyResultObj = valid_policyCheckbox(
+        formValues.agreement,
+        policy_KEYS,
+      );
       setFormErrors((prevState) => ({
         ...prevState,
         ...validFormResultObj,
@@ -132,37 +143,43 @@ export default function SignupPage() {
       }
 
       if (!isPassed) {
-        if(validFormResultObj.name){
+        if (validFormResultObj.name) {
           return inputrefs.name.current.focus();
         }
-        if(validFormResultObj.email){
+        if (validFormResultObj.email) {
           return inputrefs.email.current.focus();
         }
-        if(validFormResultObj.isEmailDuplicated){
+        if (validFormResultObj.isEmailDuplicated) {
           return inputrefs.email.current.focus();
         }
-        if(validFormResultObj.password){
+        if (validFormResultObj.password) {
           return inputrefs.password.current.focus();
         }
-        if(validFormResultObj.confirmPassword){
+        if (validFormResultObj.confirmPassword) {
           return inputrefs.passwordConfirm.current.focus();
         }
-        if(validFormResultObj.phoneNumber){
+        if (validFormResultObj.phoneNumber) {
           return inputrefs.phoneNumber.current.focus();
         }
-        if(validFormResultObj.isValidPhoneNumber){
+        if (validFormResultObj.isValidPhoneNumber) {
           return inputrefs.phoneNumber.current.focus();
         }
-        if(validFormResultObj.street){
-          let element = document.querySelector("#addressTitle");
-        return  element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (validFormResultObj.street) {
+          let element = document.querySelector('#addressTitle');
+          return element.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+          });
         }
-        if(validFormResultObj.detailAddress){
+        if (validFormResultObj.detailAddress) {
           return inputrefs.detailAddress.current.focus();
         }
-        if(validFormResultObj.birthday){
-          let element = document.querySelector("#birthdayTitle");
-         return element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (validFormResultObj.birthday) {
+          let element = document.querySelector('#birthdayTitle');
+          return element.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+          });
         }
 
         // return mct.alertShow('유효하지 않은 항목이 있습니다.');
@@ -174,14 +191,13 @@ export default function SignupPage() {
       }
       // if (!isPassed) return mct.alertShow('이용약관을 확인해주세요.');
       if (!isPassed) {
-        let element = document.querySelector("#signupTitle");
+        let element = document.querySelector('#signupTitle');
         return element.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
-      
+
       mct.alertHide('');
       setSubmitted(true);
       await postSignupData(formValues);
-      
     } catch (err) {
       console.error('통신에러: ', err);
       mct.alertShow(`데이터 처리 중 오류가 발생했습니다.\n${err}`);
@@ -216,13 +232,11 @@ export default function SignupPage() {
         over14YearsOld: formvalues.agreement.over14YearsOld,
       },
 
-
-    // @YYL 콕뱅크 회원인지 확인
+      // @YYL 콕뱅크 회원인지 확인
       allianceInfo: {
-        alliance : alliance,
+        alliance: alliance,
         alliancePolicy: formvalues.agreement.thirdPolicy,
-      }
-
+      },
     };
     // console.log('SUBMIT BODY:\n', body);
 
@@ -240,7 +254,9 @@ export default function SignupPage() {
           mct.alertHide(`회원가입에 성공하였습니다.`, onSuccessCallback);
           router.push(`/account/signup/success?username=${userName}`);
         } else {
-          mct.alertHide(`회원가입에 실패하였습니다. 잠시 후 다시 시도해주세요.`);
+          mct.alertHide(
+            `회원가입에 실패하였습니다. 잠시 후 다시 시도해주세요.`,
+          );
         }
       })
       .catch((err) => {
@@ -252,8 +268,8 @@ export default function SignupPage() {
 
   const onSuccessCallback = async () => {
     await router.push(`/account/signup/success?username=${userName}`);
-  }
-  
+  };
+
   const generateRandomString = (num) => {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
     let result = '';
@@ -261,7 +277,7 @@ export default function SignupPage() {
     for (let i = 0; i < num; i++) {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
-    
+
     return result;
   };
 
@@ -286,12 +302,14 @@ export default function SignupPage() {
                   setFormValues={setFormValues}
                   formErrors={formErrors}
                   setFormErrors={setFormErrors}
-                  inputrefs={inputrefs} 
+                  inputrefs={inputrefs}
                 />
               </section>
               <section className={s['policy-section']}>
                 <div className={`${s['title-wrap']}`}>
-                  <h3 className={`${s['main-title']}`} id="signupTitle">이용약관 동의</h3>
+                  <h3 className={`${s['main-title']}`} id="signupTitle">
+                    이용약관 동의
+                  </h3>
                 </div>
                 <SignupPolicyList
                   formValues={formValues}
@@ -300,11 +318,15 @@ export default function SignupPage() {
                   setFormErrors={setFormErrors}
                   setModalState={setIsModalActive}
                   setCokbank={visibility}
-                  inputrefs={inputrefs} 
+                  inputrefs={inputrefs}
                 />
               </section>
               <section className={s['btn-section']}>
-                <button type={'button'} className={`${s.btn} ${s.join}`} onClick={onSubmit}>
+                <button
+                  type={'button'}
+                  className={`${s.btn} ${s.join}`}
+                  onClick={onSubmit}
+                >
                   회원가입
                 </button>
               </section>
@@ -325,36 +347,36 @@ export default function SignupPage() {
         />
       )}
       {isModalActive.privacy && (
-        <Modal_privacy modalState={isModalActive.privacy} setModalState={setIsModalActive} />
+        <Modal_privacy
+          modalState={isModalActive.privacy}
+          setModalState={setIsModalActive}
+        />
       )}
-      {hasAlert && <Modal_global_alert onClick={onClickModalButton}/>}
+      {hasAlert && <Modal_global_alert onClick={onClickModalButton} />}
     </>
   );
 }
-
-
-
 
 export async function getServerSideProps({ req }) {
   let token = null;
   let isMember = false;
   if (req?.headers?.cookie) {
-    token = getTokenFromServerSide( req );
+    token = getTokenFromServerSide(req);
     const getApiUrl = `/api/mypage`;
-    const res = await getDataSSR( req, getApiUrl, token );
-    if ( res && res.status === 200 ) {
+    const res = await getDataSSR(req, getApiUrl, token);
+    if (res && res.status === 200) {
       isMember = true;
     }
   }
-  
-  if(isMember){
+
+  if (isMember) {
     return {
-      redirect:{
+      redirect: {
         permanent: false,
-        destination: '/'
-      }
-    }
+        destination: '/',
+      },
+    };
   } else {
-    return { props: { } };
+    return { props: {} };
   }
 }

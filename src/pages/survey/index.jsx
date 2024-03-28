@@ -1,17 +1,17 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import s from './survey.module.scss';
 import StyleSwiper from '/src/components/survey/surveySwiper.module.scss';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
-import {Swiper, SwiperSlide} from 'swiper/react';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import siblings from '/util/func/siblings';
-import {SurveyPagination} from '../../components/survey/SurveyPagination';
-import {FullScreenRunningDog} from '/src/components/atoms/FullScreenLoading';
-import {EffectFade, Navigation, Pagination} from 'swiper';
+import { SurveyPagination } from '../../components/survey/SurveyPagination';
+import { FullScreenRunningDog } from '/src/components/atoms/FullScreenLoading';
+import { EffectFade, Navigation, Pagination } from 'swiper';
 import SurveyStep1 from '/src/components/survey/SurveyStep1';
 import SurveyStep2 from '/src/components/survey/SurveyStep2';
 import SurveyStep3 from '/src/components/survey/SurveyStep3';
@@ -21,18 +21,18 @@ import filter_onlyNumber from '/util/func/filter_onlyNumber';
 import filter_extraIntegerNumberZero from '/util/func/filter_extraIntegerNumberZero';
 import filter_ints from '/util/func/filter_ints';
 import filter_demicals from '/util/func/filter_demicals';
-import {dogCautionType} from '/store/TYPE/dogCautionType';
+import { dogCautionType } from '/store/TYPE/dogCautionType';
 import rem from '/util/func/rem';
-import {dogActivityLevelType} from '/store/TYPE/dogActivityLevelType';
-import {dogInedibleFoodType} from '/store/TYPE/dogInedibleFoodType';
+import { dogActivityLevelType } from '/store/TYPE/dogActivityLevelType';
+import { dogInedibleFoodType } from '/store/TYPE/dogInedibleFoodType';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
-import {useModalContext} from '/store/modal-context';
-import {validate} from '/util/func/validation/validation_survey';
-import {valid_hasFormErrors} from '/util/func/validation/validationPackage';
-import {postObjData} from '../api/reqData';
-import {useRouter} from 'next/router';
-import {SurveyDataClass} from "../../class/surveyDataClass";
-import useUserData from "../../../util/hook/useUserData";
+import { useModalContext } from '/store/modal-context';
+import { validate } from '/util/func/validation/validation_survey';
+import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
+import { postObjData } from '../api/reqData';
+import { useRouter } from 'next/router';
+import { SurveyDataClass } from '../../class/surveyDataClass';
+import useUserData from '../../../util/hook/useUserData';
 
 //
 // const initialFormValues = { // ! TEST 용
@@ -54,8 +54,6 @@ import useUserData from "../../../util/hook/useUserData";
 //   recommendRecipeId: null, // 특별히 챙겨주고 싶은 부분에 해당하는 Recipe => get API 리스트
 //   caution: dogCautionType.NONE, // 기타 특이사항 // 빈값('')일 경우, '있어요'선택됨)
 // };
-
-
 
 const svyData = new SurveyDataClass();
 const initialFormValues = {
@@ -95,28 +93,23 @@ export default function Survey() {
   const nextBtnRef = useRef(null);
   const submitBtnRef = useRef(null);
   const surveyPageRef = useRef(null);
-  
-  
 
   // // console.log(formValues);
   useEffect(() => {
-    if(!userId) return;
+    if (!userId) return;
     const storedData = svyData.getStoredSurveyData(userId);
     storedData && setFormValues(JSON.parse(storedData));
-    
-  },[userId])
-  
-  
-  useEffect( () => {
+  }, [userId]);
+
+  useEffect(() => {
     // // console.log(formValues);
     // Storing information in cookies
-    
-    if(userId){
+
+    if (userId) {
       svyData.setStoredSurveyData(userId, formValues);
     }
-  }, [formValues] );
-  
-  
+  }, [formValues]);
+
   // -------------------------------------------------------------------------------- //
   const changeSwiperHeightDependencies = [
     formValues.inedibleFood,
@@ -312,7 +305,7 @@ export default function Survey() {
           res.data.data._links.query_surveyReport.href.split('/');
         const linkLength = slicedReportApiLink.length;
         const surveyReportsId = slicedReportApiLink[linkLength - 1];
-        svyData.deleteStoredSurveyData(userId)
+        svyData.deleteStoredSurveyData(userId);
         await router.push(`/survey/statistics/${surveyReportsId}`);
         setSubmitState(true);
       } else {
@@ -335,18 +328,15 @@ export default function Survey() {
     }));
   };
 
-
   const moveToPrevPage = () => {
     router.back();
   };
 
-
-
   return (
     <>
-      {(isLoading.submit || isLoading.nextPage) && submitState !== true && (
+      {/* {(isLoading.submit || isLoading.nextPage) && submitState !== true && (
         <FullScreenRunningDog opacity={1} />
-      )}
+      )} */}
       <MetaTitle title="설문조사" />
       <Layout>
         <Wrapper>

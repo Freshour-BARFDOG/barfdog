@@ -41,6 +41,7 @@ function AdminGnb() {
           <SubmenuList title="레시피 관리" link="/bf-admin/product/recipe" />
           <SubmenuList title="레시피 등록" link="/bf-admin/product/createRecipe" />
         </List>
+        <List title="반려견관리" link="/bf-admin/dog" />
         <List title="배너관리">
           <SubmenuList title="메인 배너" link="/bf-admin/banner/main-banner" />
           <SubmenuList
