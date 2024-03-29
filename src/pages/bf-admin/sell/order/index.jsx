@@ -167,7 +167,7 @@ export default function OrderOnSellPage() {
     let body;
     if (itemType === productType.GENERAL) {
       body = {
-        orderItemIdList: selectedIdList, // 주문 내에 속한 "상품의 id" List
+        orderIdList: selectedIdList, // 주문 내에 속한 "상품의 id" List
       };
     } else if (itemType === productType.SUBSCRIBE) {
       body = {
@@ -181,7 +181,7 @@ export default function OrderOnSellPage() {
           ...prevState,
           confirm: true,
         }));
-        const apiUrl = `/api/admin/orders/${itemType.toLowerCase()}/orderDeny`;
+        const apiUrl = `/api/admin/orders/${itemType.toLowerCase()}/orderConfirmCancel`;
         const res = await postPaymentDataToApiServer(apiUrl, body);
         console.log('onOrderConfirm: \n', body);
         console.log('response: admin > sell > search > index.jsx\n', res);
@@ -392,16 +392,12 @@ export default function OrderOnSellPage() {
       }
     }
 
-    // console.log('최종 !', orderIdOptionList);
-
     let body = {
       // [수정 후]
       orderList: orderIdOptionList,
       // [수정 전]
       // orderIdList: selectedOrderIdList, // 일반상품 & 구독상품 모두 '주문 id'로 요청함
     };
-
-    console.log('body', body);
 
     try {
       setIsLoading((prevState) => ({
