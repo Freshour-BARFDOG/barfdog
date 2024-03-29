@@ -89,7 +89,7 @@ export default function DeliverInfoPage() {
             orderDate: item.orderDeliveryDto.orderDate, //
             deliveryStatus: item.orderDeliveryDto.deliveryStatus, ///
             deliveryNumber: item.orderDeliveryDto.deliveryNumber,
-            deliveryCode: item.deliveryDto.deliveryCode,
+            deliveryCode: item.orderDeliveryDto.deliveryCode,
           },
           itemNameList: item.itemNameList,
         }));
