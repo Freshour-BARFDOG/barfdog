@@ -1,15 +1,18 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import s from '/src/components/popup/admin_ProductInfo/popup_sell.module.scss';
 import PopupWrapper from '@src/components/popup/PopupWrapper';
-import { PopupCloseButton, PopupCloseButton_typeX } from '@src/components/popup/PopupCloseButton';
+import {
+  PopupCloseButton,
+  PopupCloseButton_typeX,
+} from '@src/components/popup/PopupCloseButton';
 import ProductInfo_basicOrderInfo from '/src/components/popup/admin_ProductInfo/ProductInfo_basicOrderInfo';
 import ProductInfo_orderStatusInfo from '/src/components/popup/admin_ProductInfo/ProductInfo_orderStatusInfo';
 import ProductInfo_generalItem from '/src/components/popup/admin_ProductInfo/ProductInfo_generalItem';
 import ProductInfo_payment from '/src/components/popup/admin_ProductInfo/ProductInfo_payment';
 import ProductInfo_delivery from '/src/components/popup/admin_ProductInfo/ProductInfo_delivery';
 import { orderStatus } from '/store/TYPE/orderStatusTYPE';
-import {getDataSSR} from "/src/pages/api/reqData";
-import Tooltip from "../../../../../components/atoms/Tooltip";
+import { getDataSSR } from '/src/pages/api/reqData';
+import Tooltip from '../../../../../components/atoms/Tooltip';
 
 export default function Popup_GeneralOrderDetailInfoPage({ data }) {
   const canceldOrderStatusList = [
@@ -51,7 +54,9 @@ export default function Popup_GeneralOrderDetailInfoPage({ data }) {
               <section className={s.table}>
                 <ul>
                   <li className={s['table-list']}>
-                    <ProductInfo_basicOrderInfo basicOrderInfo={data.orderInfoDto} />
+                    <ProductInfo_basicOrderInfo
+                      basicOrderInfo={data.orderInfoDto}
+                    />
                   </li>
 
                   {/* ! CANCEL STATUS일 경우, cancelReason....등의 param 추가하기 */}
@@ -70,7 +75,12 @@ export default function Popup_GeneralOrderDetailInfoPage({ data }) {
                     <div className={s['t-header']}>
                       <h4 className={s.title}>
                         <span>{canceledOrderStatusLabel || '주문'}</span>상품
-                        <Tooltip messagePosition={"center"} message={"주문금액 = (상품 원가 - 상품 기본할인) * 상품수량 - 쿠폰할인금액"}/>
+                        <Tooltip
+                          messagePosition={'center'}
+                          message={
+                            '주문금액 = (상품 원가 - 상품 기본할인) * 상품수량 - 쿠폰할인금액'
+                          }
+                        />
                       </h4>
                     </div>
                     {data.orderItemAndOptionDtoList.map((itemInfo, index) => (
@@ -105,8 +115,7 @@ export default function Popup_GeneralOrderDetailInfoPage({ data }) {
   );
 }
 
-
-const isCancelReturnExchangeStatus = (status)=>{
+const isCancelReturnExchangeStatus = (status) => {
   const canceldOrderStatusList = [
     orderStatus.CANCEL_REQUEST,
     orderStatus.CANCEL_DONE_BUYER,
@@ -120,7 +129,7 @@ const isCancelReturnExchangeStatus = (status)=>{
   ];
   const isCanceledOrderStatus = canceldOrderStatusList.indexOf(status) >= 0;
   return isCanceledOrderStatus;
-}
+};
 
 export async function getServerSideProps({ req, query }) {
   const { orderId } = query;
@@ -132,7 +141,7 @@ export async function getServerSideProps({ req, query }) {
   // const res = DUMMY_DEFAULT_RES;
   if (res.data) {
     const data = res.data;
-    // // console.log('________RESONSE: ',data);
+    // // console.log('________RESONSE: ', data);
     DATA = {
       orderStatus: data.paymentDto.orderStatus,
       orderInfoDto: {
@@ -169,12 +178,17 @@ export async function getServerSideProps({ req, query }) {
       })),
       paymentDto: {
         orderPrice: data.paymentDto.orderPrice,
-        discountGrade:data.paymentDto.discountGrade || null, // api-server 변경된 field 이름 대응 -> 추후 null 값 제외해도 됨
+        discountGrade: data.paymentDto.discountGrade || null, // api-server 변경된 field 이름 대응 -> 추후 null 값 제외해도 됨
         deliveryPrice: data.paymentDto.deliveryPrice,
         discountReward: data.paymentDto.discountReward,
         couponName: data.paymentDto.couponName || '-',
-        discountCoupon: data.paymentDto.discountCoupon|| data.orderItemAndOptionDtoList?.map((info)=>info.orderItemDto.discountAmount).reduce((acc, cur)=> acc+ cur) || null,
-        overDiscount:data.paymentDto.overDiscount || null, // 초과할인금액  // api-server 변경된 field 이름 대응 -> 추후 null 값 제외해도 됨
+        discountCoupon:
+          data.paymentDto.discountCoupon ||
+          data.orderItemAndOptionDtoList
+            ?.map((info) => info.orderItemDto.discountAmount)
+            .reduce((acc, cur) => acc + cur) ||
+          null,
+        overDiscount: data.paymentDto.overDiscount || null, // 초과할인금액  // api-server 변경된 field 이름 대응 -> 추후 null 값 제외해도 됨
         paymentPrice: data.paymentDto.paymentPrice,
         paymentMethod: data.paymentDto.paymentMethod,
         orderStatus: data.paymentDto.orderStatus,
@@ -189,18 +203,22 @@ export async function getServerSideProps({ req, query }) {
         departureDate: data.deliveryDto.departureDate,
         arrivalDate: data.deliveryDto.arrivalDate,
         deliveryNumber: data.deliveryDto.deliveryNumber,
+        deliveryCode: data.deliveryDto.deliveryCode,
         request: data.deliveryDto.request,
       },
     };
-    
-    if(isCancelReturnExchangeStatus(DATA.orderStatus)){
+
+    if (isCancelReturnExchangeStatus(DATA.orderStatus)) {
       // ! 취소/반품/교환 상태일 경우 ===> 취소반품교환 정보 표기
-      const orderItemIdList = DATA.orderItemAndOptionDtoList.map(list=>list.orderItemDto.orderItemId);
+      const orderItemIdList = DATA.orderItemAndOptionDtoList.map(
+        (list) => list.orderItemDto.orderItemId,
+      );
       for (const orderItemId of orderItemIdList) {
         const cancelApiUrl = `/api/admin/orders/orderItem/${orderItemId}`;
         const r = await getDataSSR(req, cancelApiUrl);
         // // console.log('-----취소반품교환 정보--',r)
-        if(r.data){ // ! PRODUCT CODE
+        if (r.data) {
+          // ! PRODUCT CODE
           const data = r.data;
           // console.log('CANCEL RESPONSE DATA: ',data)
           const cancleInfo = data?.orderItemAndOptionDto.orderItemDto || {};
@@ -221,19 +239,13 @@ export async function getServerSideProps({ req, query }) {
               exchangeReason: cancleInfo.exchangeReason || null,
               exchangeDetailReason: cancleInfo.exchangeDetailReason || null,
             },
-          }
+          };
         }
       }
-     
-      
     }
-  
   }
   return { props: { data: DATA, orderStatus } };
 }
-
-
-
 
 //
 // const DUMMY_DEFAULT_RES = {

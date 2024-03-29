@@ -7,7 +7,7 @@ import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from '/src/components/mypage/MypageWrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import Image from 'next/image';
-import { getDataSSR, postObjData} from '/src/pages/api/reqData';
+import { getDataSSR, postObjData } from '/src/pages/api/reqData';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import popupWindow from '/util/func/popupWindow';
 import { valid_deliveryCondition } from '/util/func/validation/valid_deliveryCondition';
@@ -17,14 +17,11 @@ import { transformPhoneNumber } from '/util/func/transformPhoneNumber';
 import { Modal_changeItemOrderState } from '/src/components/modal/Modal_changeItemOrderState';
 import { filter_availableReturnAndExchangeItemList } from '/util/func/filter_availableReturnAndExchangeItemList';
 import { valid_availableCancelOrder } from '/util/func/validation/valid_availableCancelOrder';
-import {general_itemType} from "/store/TYPE/itemType";
-import {validation_ReturnableAndExchangeableOrders} from "/util/func/validation/validation_ReturnableAndExchangeableOrders";
-import {useModalContext} from "/store/modal-context";
-import Modal_global_alert from "/src/components/modal/Modal_global_alert";
-import {CancelReasonName} from "../../../../../store/TYPE/order/CancelReasonName";
-
-
-
+import { general_itemType } from '/store/TYPE/itemType';
+import { validation_ReturnableAndExchangeableOrders } from '/util/func/validation/validation_ReturnableAndExchangeableOrders';
+import { useModalContext } from '/store/modal-context';
+import Modal_global_alert from '/src/components/modal/Modal_global_alert';
+import { CancelReasonName } from '../../../../../store/TYPE/order/CancelReasonName';
 
 const valid_CancelableOrder = (itemList) => {
   let result = {
@@ -33,7 +30,7 @@ const valid_CancelableOrder = (itemList) => {
   };
   for (const objInArr of itemList) {
     const itemStatus = objInArr.status;
-    
+
     // ! 전체취소만 가능 => 아이템 각각 조회하여, 취소불가능한 상태가 하나라도 존재일 경우 , 취소 불가
     const valid = valid_availableCancelOrder(itemStatus);
     if (!valid) {
@@ -44,19 +41,21 @@ const valid_CancelableOrder = (itemList) => {
       result.totalCancel = false;
     }
   }
-  
-  return result
+
+  return result;
 };
 
-
-const filter_availableConfirmItemList = (itemList) => itemList.filter((item) => {
-  return item.status === orderStatus.DELIVERY_DONE && item.status !== orderStatus.CONFIRM;
-});
-
+const filter_availableConfirmItemList = (itemList) =>
+  itemList.filter((item) => {
+    return (
+      item.status === orderStatus.DELIVERY_DONE &&
+      item.status !== orderStatus.CONFIRM
+    );
+  });
 
 export default function SingleItem_OrderHistoryPage({ data }) {
   // // console.log(data);
-  
+
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
   const originItemList = data.orderItemDtoList;
@@ -65,63 +64,69 @@ export default function SingleItem_OrderHistoryPage({ data }) {
   const [confirmType, setConfirmType] = useState('');
   const [filteredItemList, setFilteredItemList] = useState([]); // 구매확정 시, 구매확정 대상에 사용됨
 
-  
   const initializeModalState = () => {
     setFilteredItemList(originItemList);
     setConfirmMessage('');
     setActiveModal(null);
     setConfirmType(null);
   };
-  const resultOfCancelableOrder = useMemo( () => valid_CancelableOrder(originItemList), [] );
+  const resultOfCancelableOrder = useMemo(
+    () => valid_CancelableOrder(originItemList),
+    [],
+  );
   const availableImmediatelyCancle = resultOfCancelableOrder.totalCancel;
   const availableCancleState = resultOfCancelableOrder.partialCancel;
   // // console.log('전체취소 가능여부: ', availableImmediatelyCancle);
   // // console.log('취소기능 활성여부: ', availableCancleState);
 
-  const isAvailableReturnAndExchangeState = useMemo( () => validation_ReturnableAndExchangeableOrders(originItemList).valid, [] );
-  
-  
+  const isAvailableReturnAndExchangeState = useMemo(
+    () => validation_ReturnableAndExchangeableOrders(originItemList).valid,
+    [],
+  );
+
   const onPopupHandler = (e) => {
     e.preventDefault();
-    if (typeof window === 'undefined') return console.error('window is not defined');
+    if (typeof window === 'undefined')
+      return console.error('window is not defined');
     const href = e.currentTarget.href;
     popupWindow(href, { width: 540, height: 480, left: 200, top: 100 });
   };
 
-
-
-  
   const onStartConfirm = () => {
     const availableItemList = filter_availableConfirmItemList(originItemList);
-    if (!availableItemList.length) return mct.alertShow('구매확정 가능한 상품이 없습니다.');
+    if (!availableItemList.length)
+      return mct.alertShow('구매확정 가능한 상품이 없습니다.');
     setFilteredItemList(availableItemList);
     setActiveModal({ confirm: true });
     setConfirmType(orderStatus.CONFIRM);
   };
 
   const onStartReturn = () => {
-    const availableItemList = filter_availableReturnAndExchangeItemList(originItemList);
-    if (!availableItemList.length) return mct.alertShow('반품 가능한 상품이 없습니다.');
+    const availableItemList =
+      filter_availableReturnAndExchangeItemList(originItemList);
+    if (!availableItemList.length)
+      return mct.alertShow('반품 가능한 상품이 없습니다.');
     //  ! 전체반품 Ver.
     const result = validation_ReturnableAndExchangeableOrders(originItemList);
-    if(!result.valid){
+    if (!result.valid) {
       const message = result.message.join(`\n`);
       return mct.alertShow(message);
     }
-    
-    
+
     setFilteredItemList(availableItemList);
     setActiveModal({ return: true });
     setConfirmType(orderStatus.RETURN_REQUEST);
   };
 
   const onStartExchange = () => {
-    const availableItemList = filter_availableReturnAndExchangeItemList(originItemList);
-    if (!availableItemList.length) return mct.alertShow('교환 가능한 상품이 없습니다.');
-    
+    const availableItemList =
+      filter_availableReturnAndExchangeItemList(originItemList);
+    if (!availableItemList.length)
+      return mct.alertShow('교환 가능한 상품이 없습니다.');
+
     //  ! 전체반품 Ver.
     const result = validation_ReturnableAndExchangeableOrders(originItemList);
-    if(!result.valid){
+    if (!result.valid) {
       const message = result.message.join(`\n`);
       return mct.alertShow(message);
     }
@@ -149,7 +154,8 @@ export default function SingleItem_OrderHistoryPage({ data }) {
 
     const body = {
       reason: CancelReasonName.cancelNowOfGeneralOrderByBuyer,
-      detailReason: CancelReasonName.cancelNowOfGeneralOrderByBuyerAsDetailReason,
+      detailReason:
+        CancelReasonName.cancelNowOfGeneralOrderByBuyerAsDetailReason,
     };
     try {
       const r = await postObjData(
@@ -170,15 +176,15 @@ export default function SingleItem_OrderHistoryPage({ data }) {
 
     setActiveModal(null);
   };
-  
+
   const onPrevPage = async () => {
-    window.location.href='/mypage/orderHistory'
-  }
+    window.location.href = '/mypage/orderHistory';
+  };
 
   const onClickModalButton = () => {
     mct.alertHide();
   };
-  
+
   return (
     <>
       {hasAlert && <Modal_global_alert onClick={onClickModalButton} />}
@@ -221,10 +227,18 @@ export default function SingleItem_OrderHistoryPage({ data }) {
                   )}
                   {isAvailableReturnAndExchangeState && (
                     <>
-                      <button type={'button'} className={`${s.btn}`} onClick={onStartReturn}>
+                      <button
+                        type={'button'}
+                        className={`${s.btn}`}
+                        onClick={onStartReturn}
+                      >
                         반품신청
                       </button>
-                      <button type={'button'} className={`${s.btn}`} onClick={onStartExchange}>
+                      <button
+                        type={'button'}
+                        className={`${s.btn}`}
+                        onClick={onStartExchange}
+                      >
                         교환신청
                       </button>
                     </>
@@ -232,7 +246,9 @@ export default function SingleItem_OrderHistoryPage({ data }) {
                 </div>
               </h1>
 
-              <section className={`${s.body_content_4} ${s.generalItemInfoBox}`}>
+              <section
+                className={`${s.body_content_4} ${s.generalItemInfoBox}`}
+              >
                 <div className={s.grid_title}>
                   <span className={s.col_1}>상품 정보</span>
                   <span className={s.col_2}>수량</span>
@@ -262,13 +278,19 @@ export default function SingleItem_OrderHistoryPage({ data }) {
                           <p className={s.top_text}>{item.itemName}</p>
                           {item.selectOptionDtoList.length > 0 &&
                             item.selectOptionDtoList?.map((opt, i) => (
-                              <p key={`order-item-option-${i}`} className={s.mid_text}>
-                                {opt.optionName}&nbsp;/&nbsp;{opt.optionAmount}개
+                              <p
+                                key={`order-item-option-${i}`}
+                                className={s.mid_text}
+                              >
+                                {opt.optionName}&nbsp;/&nbsp;{opt.optionAmount}
+                                개
                               </p>
                             ))}
                         </figcaption>
                       </span>
-                      <span className={`${s.col_2} ${s.count}`}>{item.amount}개</span>
+                      <span className={`${s.col_2} ${s.count}`}>
+                        {item.amount}개
+                      </span>
                       <span className={`${s.col_3} ${s.price}`}>
                         {transformLocalCurrency(item.finalPrice)}원
                       </span>
@@ -283,12 +305,17 @@ export default function SingleItem_OrderHistoryPage({ data }) {
                       <span className={`${s.col_5} ${s.orderStatus}`}>
                         <span className={s.text}>
                           {orderStatus.KOR[item.status].indexOf('(') >= 0
-                            ? orderStatus.KOR[item.status].split('(').map((str, i) => (
-                                <p className={s.orderStatus} key={`order-item-status-${i}`}>
-                                  {i === 1 && '('}
-                                  {str}
-                                </p>
-                              ))
+                            ? orderStatus.KOR[item.status]
+                                .split('(')
+                                .map((str, i) => (
+                                  <p
+                                    className={s.orderStatus}
+                                    key={`order-item-status-${i}`}
+                                  >
+                                    {i === 1 && '('}
+                                    {str}
+                                  </p>
+                                ))
                             : orderStatus.KOR[item.status]}
                         </span>
                         {item.status === orderStatus.DELIVERY_DONE && (
@@ -306,7 +333,10 @@ export default function SingleItem_OrderHistoryPage({ data }) {
                   ))}
                 </ul>
                 <div className={`${s.info_autoConfirmation} ${s.general}`}>
-                  <p>구매확정은 배송완료 후 아래 기간이 지나면 자동으로 처리됩니다.</p>
+                  <p>
+                    구매확정은 배송완료 후 아래 기간이 지나면 자동으로
+                    처리됩니다.
+                  </p>
                   <p>* 신선식품(생식, 토핑): 2일 / 비신선식품: 7일</p>
                 </div>
               </section>
@@ -320,7 +350,9 @@ export default function SingleItem_OrderHistoryPage({ data }) {
                   <span>{data?.orderDto.merchantUid}</span>
                   <span>주문(결제)일시</span>
                   <span>
-                    {transformDate(data?.orderDto.paymentDate, 'time', { seperator: '/' })}
+                    {transformDate(data?.orderDto.paymentDate, 'time', {
+                      seperator: '/',
+                    })}
                   </span>
                   <span>배송정보</span>
                   <span>
@@ -331,33 +363,41 @@ export default function SingleItem_OrderHistoryPage({ data }) {
                   </span>
                 </div>
               </div>
-
             </section>
 
             <section className={s.body}>
               <h6 className={s.body_title}>배송조회</h6>
               <div className={s.body_content_3}>
-                {valid_deliveryCondition( data?.orderDto.deliveryStatus ) ? (
-                  <p className={s.emptyCont}>배송 중 상태에서 조회 가능합니다.</p>
+                {valid_deliveryCondition(data?.orderDto.deliveryStatus) ? (
+                  <p className={s.emptyCont}>
+                    배송 중 상태에서 조회 가능합니다.
+                  </p>
                 ) : (
                   <ul className={s.content_grid}>
-                    <li>CJ대한통운</li>
                     <li>
-                      <span>운송장번호</span> {data?.orderDto.deliveryNumber || '(발급 전)'}
+                      {data?.orderDto.deliveryCode === 'EPOST'
+                        ? '우체국'
+                        : '대한통운'}
+                    </li>
+                    <li>
+                      <span>운송장번호</span>{' '}
+                      {data?.orderDto.deliveryNumber || '(발급 전)'}
                     </li>
                     <li className={s.deliveryStatus}>
                       {orderStatus.KOR[data?.orderDto.deliveryStatus]}
                     </li>
-                    {data?.orderDto.deliveryNumber && <li>
-                      <a
-                        href={`https://trace.goodsflow.com/VIEW/V1/whereis/${process.env.NEXT_PUBLIC_GOODSFLOW_SITECODE}/CJGLS/${data?.orderDto.deliveryNumber}`}
-                        target="_blank"
-                        rel={'noreferrer'}
-                        onClick={onPopupHandler}
-                      >
-                        <button>배송조회</button>
-                      </a>
-                    </li>}
+                    {data?.orderDto.deliveryNumber && (
+                      <li>
+                        <a
+                          href={`https://trace.goodsflow.com/VIEW/V1/whereis/${process.env.NEXT_PUBLIC_GOODSFLOW_SITECODE}/${data?.orderDto.deliveryCode}/${data?.orderDto.deliveryNumber}`}
+                          target="_blank"
+                          rel={'noreferrer'}
+                          onClick={onPopupHandler}
+                        >
+                          <button>배송조회</button>
+                        </a>
+                      </li>
+                    )}
                   </ul>
                 )}
               </div>
@@ -369,35 +409,61 @@ export default function SingleItem_OrderHistoryPage({ data }) {
               <div className={s.body_content_2}>
                 <div className={s.grid_box}>
                   <span>주문금액</span>
-                  <span>{transformLocalCurrency(data?.orderDto.orderPrice)}원</span>
+                  <span>
+                    {transformLocalCurrency(data?.orderDto.orderPrice)}원
+                  </span>
 
                   <span>배송비</span>
-                  <span>{transformLocalCurrency(data?.orderDto.deliveryPrice)}원</span>
+                  <span>
+                    {transformLocalCurrency(data?.orderDto.deliveryPrice)}원
+                  </span>
 
                   <span>총 할인금액</span>
-                  <span>{data?.orderDto.discountTotal > 0 && '-'}{transformLocalCurrency(data?.orderDto.discountTotal - (data?.orderDto.overDiscount || 0) )}원</span>
-  
+                  <span>
+                    {data?.orderDto.discountTotal > 0 && '-'}
+                    {transformLocalCurrency(
+                      data?.orderDto.discountTotal -
+                        (data?.orderDto.overDiscount || 0),
+                    )}
+                    원
+                  </span>
+
                   <span>ㄴ 적립금 사용</span>
-                  <span>{data?.orderDto.discountReward > 0 && '-'}{transformLocalCurrency(data?.orderDto.discountReward)}원</span>
-                  
+                  <span>
+                    {data?.orderDto.discountReward > 0 && '-'}
+                    {transformLocalCurrency(data?.orderDto.discountReward)}원
+                  </span>
+
                   <span>ㄴ 쿠폰 할인</span>
-                  <span>{data?.orderDto.discountCoupon > 0 && '-'}{transformLocalCurrency(data?.orderDto.discountCoupon)}원</span>
-  
-                  {data?.orderDto.overDiscount > 0 && <>
-                    <span>ㄴ 쿠폰 할인 소멸 </span>
-                    <span className={"pointColor"}>+&nbsp;{transformLocalCurrency(data?.orderDto.overDiscount)}원</span>
-                  </>}
-                  
-  
-                  
+                  <span>
+                    {data?.orderDto.discountCoupon > 0 && '-'}
+                    {transformLocalCurrency(data?.orderDto.discountCoupon)}원
+                  </span>
+
+                  {data?.orderDto.overDiscount > 0 && (
+                    <>
+                      <span>ㄴ 쿠폰 할인 소멸 </span>
+                      <span className={'pointColor'}>
+                        +&nbsp;
+                        {transformLocalCurrency(data?.orderDto.overDiscount)}원
+                      </span>
+                    </>
+                  )}
+
                   <span>결제 금액</span>
-                  <span>{transformLocalCurrency(data?.orderDto.paymentPrice)}원</span>
+                  <span>
+                    {transformLocalCurrency(data?.orderDto.paymentPrice)}원
+                  </span>
 
                   <span>적립예정금액</span>
-                  <span>{transformLocalCurrency(data?.savedRewardTotal)}원</span>
+                  <span>
+                    {transformLocalCurrency(data?.savedRewardTotal)}원
+                  </span>
 
                   <span>결제방법</span>
-                  <span>{paymentMethodType.KOR[data.orderDto.paymentMethod]}</span>
+                  <span>
+                    {paymentMethodType.KOR[data.orderDto.paymentMethod]}
+                  </span>
                 </div>
               </div>
             </section>
@@ -440,7 +506,13 @@ export default function SingleItem_OrderHistoryPage({ data }) {
               option={{ data: data }}
             />
             <section className={s.btn_section}>
-              <button type={'button'} className={'custom_btn solid basic_l'} onClick={onPrevPage}>돌아가기</button>
+              <button
+                type={'button'}
+                className={'custom_btn solid basic_l'}
+                onClick={onPrevPage}
+              >
+                돌아가기
+              </button>
             </section>
           </MypageWrapper>
         </Wrapper>
@@ -477,27 +549,33 @@ const AdditionalOrderStatusInfo = ({
   }
   const data = option.data;
   const deliveryPrice = data.orderDto.deliveryPrice;
-  const responsibility = repItem.status === orderStatus.CANCEL_DONE_BUYER ? 'BUYER' : 'SELLER';
+  const responsibility =
+    repItem.status === orderStatus.CANCEL_DONE_BUYER ? 'BUYER' : 'SELLER';
   const totalReturnPrice = option.data.orderDto.paymentPrice; //
   return (
     <>
-      {originItemList.filter((item) => targetOrderStatusList.indexOf(item.status) >= 0).length >
-        0 && (
-        <section className={`${s['additional-info-section']} ${s.body_content_2}`}>
+      {originItemList.filter(
+        (item) => targetOrderStatusList.indexOf(item.status) >= 0,
+      ).length > 0 && (
+        <section
+          className={`${s['additional-info-section']} ${s.body_content_2}`}
+        >
           <h6 className={s.body_title}>{orderTypeAsLabel} 정보</h6>
           <div className={s.grid_box}>
             <span>{orderTypeAsLabel} 상태</span>
             <span>
               {orderStatus.KOR[repItem.status].indexOf('(') >= 0
                 ? orderStatus.KOR[repItem.status].split('(').map((str, i) => (
-                    <em className={s.orderStatus} key={`addition-orderStatus-${i}`}>
+                    <em
+                      className={s.orderStatus}
+                      key={`addition-orderStatus-${i}`}
+                    >
                       {i === 1 && '('}
                       {str}
                     </em>
                   ))
                 : orderStatus.KOR[repItem.status]}
             </span>
-          
             <span>{orderTypeAsLabel} 요청일자</span>
             <span>
               {transformDate(repItem[orderQuery].requestDate, 'time', {
@@ -519,7 +597,8 @@ const AdditionalOrderStatusInfo = ({
             {/*  {originItemList.map((item, i) => <span key={`cancel-state-item-${i}`}>{item.itemName}</span>)}*/}
             {/*</div>*/}
             <span>총 환불금액</span>
-            <span>{transformLocalCurrency(totalReturnPrice)}원</span> {/* ____  */}
+            <span>{transformLocalCurrency(totalReturnPrice)}원</span>{' '}
+            {/* ____  */}
             <span>환불 수단</span>
             <span>{paymentMethod}</span>
           </div>
@@ -528,8 +607,6 @@ const AdditionalOrderStatusInfo = ({
     </>
   );
 };
-
-
 
 export async function getServerSideProps(ctx) {
   const { query, req } = ctx;
@@ -544,12 +621,12 @@ export async function getServerSideProps(ctx) {
   const data = res?.data;
   // console.log('------singleItem Data: ',data);
   // // console.log('SERVER REPONSE: ', res);
-  if(data.status === 500){
+  if (data.status === 500) {
     return {
-      redirect:{
-        destination: '/mypage/orderHistory'
-      }
-    }
+      redirect: {
+        destination: '/mypage/orderHistory',
+      },
+    };
   } else if (data) {
     DATA = {
       orderItemDtoList: data.orderItemDtoList?.map((item) => ({
@@ -592,6 +669,7 @@ export async function getServerSideProps(ctx) {
         merchantUid: data.orderDto.merchantUid,
         paymentDate: data.orderDto.paymentDate,
         deliveryNumber: data.orderDto.deliveryNumber,
+        deliveryCode: data.orderDto.deliveryCode,
         arrivalDate: data.orderDto.arrivalDate || null,
         orderPrice: data.orderDto.orderPrice,
         deliveryPrice: data.orderDto.deliveryPrice,

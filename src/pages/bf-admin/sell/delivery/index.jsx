@@ -118,10 +118,10 @@ export default function DeliveryOnSellPage() {
   const onReprintInvoice = async () => {
     // validation:  선택된 항목이 없을 경우
     if (selectedOrderIdList.length === 0) {
-      alert("선택된 항목이 없습니다. ")
+      alert('선택된 항목이 없습니다. ');
       return;
     }
-    
+
     // validation: 배송에정이 아닌 상품이 선택된 경우, 실행불가
     const incorrectItem = itemList.filter(
       (item) =>
@@ -544,6 +544,7 @@ export default function DeliveryOnSellPage() {
                       width={'200px'}
                     />
                   </li>
+                  <li className={s.table_th}>택배사</li>
                   <li className={s.table_th}>운송장번호</li>
                   <li className={s.table_th}>구매자 ID</li>
                   <li className={s.table_th}>구매자</li>
