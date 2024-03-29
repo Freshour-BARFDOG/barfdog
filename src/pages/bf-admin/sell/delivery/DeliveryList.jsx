@@ -43,6 +43,7 @@ const ItemList = ({
     orderDate: transformDate(item.orderDate, 'time', { seperator: '/' }),
     orderType: item.orderType,
     deliveryNumber: item.deliveryNumber,
+    deliveryCode: item.deliveryCode,
     deliveryStatus: deliveryStatus.KOR[item.deliveryStatus] || '-',
     buyerId: item.memberEmail,
     buyerName: item.memberName,
@@ -100,10 +101,11 @@ const ItemList = ({
         </em>
       </span>
       <span>{DATA.deliveryStatus}</span>
+      <span>{DATA.deliveryCode === 'EPOST' ? '우체국' : '대한통운'}</span>
       <span>
         <a
           className={'overflow-x-scroll btn_link'}
-          href={`https://trace.goodsflow.com/VIEW/V1/whereis/${process.env.NEXT_PUBLIC_GOODSFLOW_SITECODE}/CJGLS/${DATA.deliveryNumber}`}
+          href={`https://trace.goodsflow.com/VIEW/V1/whereis/${process.env.NEXT_PUBLIC_GOODSFLOW_SITECODE}/${DATA.deliveryCode}/${DATA.deliveryNumber}`}
           target="_blank"
           rel={'noreferrer'}
           onClick={onDeliveryPopupHandler}
