@@ -98,13 +98,15 @@ const ProductInfo_delivery = ({ deliveryInfo }) => {
                 <>
                   <span>
                     {deliveryInfo.deliveryCode === 'EPOST'
-                      ? '우체국'
-                      : '대한통운'}
+                      ? '우체국 '
+                      : '대한통운 '}
                     {deliveryInfo.deliveryNumber}
                   </span>
                   <span>
                     <a
-                      href={`http://nexs.cjgls.com/web/service02_01.jsp?slipno=${deliveryInfo.deliveryNumber}`}
+                      // 배송지키미
+                      href={`https://trace.goodsflow.com/VIEW/V1/whereis/${process.env.NEXT_PUBLIC_GOODSFLOW_SITECODE}/${deliveryInfo.deliveryCode}/${deliveryInfo.deliveryNumber}`}
+                      // href={`http://nexs.cjgls.com/web/service02_01.jsp?slipno=${deliveryInfo.deliveryNumber}`}
                       target="_blank"
                       className="admin_btn line basic_s"
                       rel={'noreferrer'}
