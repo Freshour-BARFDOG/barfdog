@@ -7,7 +7,8 @@ import popupWindow from '../../../../util/func/popupWindow';
 const ProductInfo_delivery = ({ deliveryInfo }) => {
   const onPopupHandler = (e) => {
     e.preventDefault();
-    if (typeof window === 'undefined') return console.error('window is not defined');
+    if (typeof window === 'undefined')
+      return console.error('window is not defined');
     const href = e.currentTarget.href;
     popupWindow(href, { width: 540, height: 480, left: 200, top: 100 });
   };
@@ -64,7 +65,9 @@ const ProductInfo_delivery = ({ deliveryInfo }) => {
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
               <span>
-                {transformDate(deliveryInfo.departureDate, 'time', { seperator: '/' }) || '-'}
+                {transformDate(deliveryInfo.departureDate, 'time', {
+                  seperator: '/',
+                }) || '-'}
               </span>
             </div>
           </div>
@@ -75,7 +78,9 @@ const ProductInfo_delivery = ({ deliveryInfo }) => {
             <div className={`${s.innerBox} ${s.cont}`}>
               <span>
                 <span>
-                  {transformDate(deliveryInfo.arrivalDate, 'time', { seperator: '/' }) || '-'}
+                  {transformDate(deliveryInfo.arrivalDate, 'time', {
+                    seperator: '/',
+                  }) || '-'}
                 </span>
               </span>
             </div>
@@ -91,7 +96,12 @@ const ProductInfo_delivery = ({ deliveryInfo }) => {
                 '-'
               ) : (
                 <>
-                  <span>대한통운 {deliveryInfo.deliveryNumber}</span>
+                  <span>
+                    {deliveryInfo.deliveryCode === 'EPOST'
+                      ? '우체국'
+                      : '대한통운'}
+                    {deliveryInfo.deliveryNumber}
+                  </span>
                   <span>
                     <a
                       href={`http://nexs.cjgls.com/web/service02_01.jsp?slipno=${deliveryInfo.deliveryNumber}`}
@@ -113,7 +123,9 @@ const ProductInfo_delivery = ({ deliveryInfo }) => {
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
               <span>
-                {transformDate(deliveryInfo.orderConfirmDate, 'time', { seperator: '/' }) || '-'}
+                {transformDate(deliveryInfo.orderConfirmDate, 'time', {
+                  seperator: '/',
+                }) || '-'}
               </span>
             </div>
           </div>

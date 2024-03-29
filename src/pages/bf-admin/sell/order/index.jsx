@@ -392,7 +392,7 @@ export default function OrderOnSellPage() {
       }
     }
 
-    console.log('최종 !', orderIdOptionList);
+    // console.log('최종 !', orderIdOptionList);
 
     let body = {
       // [수정 후]
@@ -598,7 +598,11 @@ export default function OrderOnSellPage() {
         // ];
         // console.log(items);
         const itemFilter = items.map((i) => {
-          return { transUniqueCd: i.transUniqueCd, deliveryNumber: i.sheetNo };
+          return {
+            transUniqueCd: i.transUniqueCd,
+            deliveryNumber: i.sheetNo,
+            deliveryCode: i.deliveryCode,
+          };
         });
 
         const body = {
@@ -797,7 +801,10 @@ export default function OrderOnSellPage() {
                 >
                   주문발송
                 </button>
-                {/* <button className="admin_btn line basic_m" onClick={postDeliveryNo}>
+                {/* <button
+                  className="admin_btn line basic_m"
+                  onClick={postDeliveryNo}
+                >
                   운송장전송
                 </button> */}
                 <button
