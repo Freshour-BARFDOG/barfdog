@@ -3,9 +3,11 @@
 
 $mobileMenuHeight: rem(48);
 .mobileNav {
-  position: relative;
+  position: fixed; // [수정] 하단바 고정
   z-index: $mobileNav;
-  top: 0;
+  // position: relative;
+  // top: 0;
+  bottom: 0;
   right: 0;
   left: 0;
   .scroll-container {
@@ -33,13 +35,13 @@ $mobileMenuHeight: rem(48);
 
   .mobile-menu,
   .mobile-submenu {
+    box-shadow: 0 rem(5) rem(12) 0 rgba(0, 0, 0, 0.5);
     font-size: rem(15);
     gap: rem(20);
     color: var(--color-font-light);
     * {
       font-size: inherit;
     }
-
   }
 
   .mobile-menu-wrap {
@@ -51,10 +53,32 @@ $mobileMenuHeight: rem(48);
       display: flex;
       justify-content: space-around;
       align-items: center;
-      padding: 0 rem(10);
-      li a, li button{
-        height: $mobileMenuHeight;
-        display: flex;align-items: center;
+      padding: rem(15) rem(5);
+
+      li {
+        text-align: center;
+        cursor: pointer;
+
+        a {
+          display: flex;
+          flex-direction: column;
+        }
+
+        button {
+          text-align: center;
+        }
+      }
+
+      li a,
+      li button {
+        // height: $mobileMenuHeight;
+        // height: rem(20);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #535353;
+        gap: rem(10);
+
         // padding: 0 rem(10);
         white-space: nowrap;
       }
@@ -69,7 +93,7 @@ $mobileMenuHeight: rem(48);
     width: 100%;
     background-color: var(--color-bg-02);
     transition-property: height, padding-top;
-    transition-duration: .2s;
+    transition-duration: 0.2s;
     transition-timing-function: ease-out;
     box-sizing: border-box;
     padding: 0;
@@ -127,33 +151,30 @@ $mobileMenuHeight: rem(48);
       transition: transform 0.3s ease;
       height: rem(24);
       display: none;
-      -webkit-tap-highlight-color : transparent;
+      -webkit-tap-highlight-color: transparent;
       svg {
         fill: var(--color-line-02);
       }
     }
   }
 
-  *[data-current-page='depth1']{
+  *[data-current-page='depth1'] {
     color: var(--color-main);
     font-weight: 500;
-    position:relative;
-    &:before{
-      content: "";
+    position: relative;
+    &:before {
+      content: '';
       position: absolute;
-      bottom:0;
-      left:50%;
-      transform:translateX(-50%);
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
       width: 100%;
       height: rem(3);
       background-color: var(--color-main);
-
     }
   }
-  *[data-current-page='depth2']{
+  *[data-current-page='depth2'] {
     color: var(--color-main);
     font-weight: 500;
   }
-
 }
-
