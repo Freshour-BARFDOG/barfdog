@@ -1,14 +1,26 @@
 @import '/styles/global/rem';
-$popupHoverZindex : 99999; // 팝업에 마우스 올렸을 경우, 다른 모든 zIndex와 관계없이 zIndex 최대치 설정 //
-$defaultLeft : rem(20);
-$defaultRight : rem(20);
-$defaultCenter : 55%;
+$popupHoverZindex: 9999;
+$defaultLeft: rem(20);
+$defaultRight: rem(20);
+$defaultCenter: 55%;
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9000;
+}
 
 #modal_popup {
   // ! z-index: ''; // global zindex에서 관리
-  $defaultTop : rem(100);
-  position: absolute;
-  top: rem(102);
+  position: fixed;
+
+  $defaultTop: rem(100);
+  // position: absolute;
+  // top: rem(102);
   background-color: #fff;
   box-sizing: border-box;
   overflow: hidden;
@@ -20,9 +32,7 @@ $defaultCenter : 55%;
   width: 100%;
   max-width: rem(600);
   box-shadow: 0 0 rem(20) rgba(0, 0, 0, 0.15);
-  &:hover{
-    z-index: $popupHoverZindex !important;
-  }
+  z-index: $popupHoverZindex !important;
   &.left {
     $defaultLeft: rem(20);
     left: rem(20);
@@ -37,17 +47,17 @@ $defaultCenter : 55%;
     right: rem(20);
   }
   @for $i from 1 through 20 {
-    &.leakedOrder-#{$i}{
+    &.leakedOrder-#{$i} {
       z-index: 2000 - $i;
-      top: calc($defaultTop + rem($i*20));
-      &.left{
-        left: calc($defaultLeft + rem($i*20));
+      top: calc($defaultTop + rem($i * 20));
+      &.left {
+        left: calc($defaultLeft + rem($i * 20));
       }
-      &.center{
-        left: calc($defaultCenter - rem($i*20));
+      &.center {
+        left: calc($defaultCenter - rem($i * 20));
       }
-      &.right{
-        right: calc($defaultRight + rem($i*20));
+      &.right {
+        right: calc($defaultRight + rem($i * 20));
       }
     }
   }
@@ -72,12 +82,12 @@ $defaultCenter : 55%;
   justify-content: center;
   gap: 0;
   height: rem(50);
-  font-size:rem(16);
+  font-size: rem(16);
   color: var(--color-font-sub);
-  background-color: #FFFFFF;
+  background-color: #ffffff;
 
   button {
-    background-color: #FFFFFF;
+    background-color: #ffffff;
     transition: background-color 0.3s ease;
     height: 100%;
     font-size: rem(16);
@@ -94,7 +104,6 @@ $defaultCenter : 55%;
   }
 }
 
-
 @media (max-width: rem(1800)) {
   #modal_popup {
     // width: calc(33.333% - #{rem(10)});
@@ -106,9 +115,9 @@ $defaultCenter : 55%;
   #modal_popup {
     // width: calc(33.333% - #{rem(10)});
     width: 50vh;
-    
-    .btn-section{
-      button{
+
+    .btn-section {
+      button {
         font-size: rem(12);
       }
     }
@@ -121,11 +130,13 @@ $defaultCenter : 55%;
     box-shadow: none;
     position: fixed;
 
-    &:nth-child(2){
+    &:nth-child(2) {
       box-shadow: 0 0 rem(20) rgba(0, 0, 0, 0.15);
     }
 
-    &.left, &.center, &.right {
+    &.left,
+    &.center,
+    &.right {
       top: rem(100);
       left: 50% !important;
       right: auto;
@@ -133,5 +144,3 @@ $defaultCenter : 55%;
     }
   }
 }
-
-

@@ -74,7 +74,11 @@ const TopLineBanner = () => {
                 />
               </a>
             </Link>
-            <CloseButton onClick={onHideHandler} className={s['close-button']} lineColor={'#fff'} />
+            <CloseButton
+              onClick={onHideHandler}
+              className={s['close-button']}
+              lineColor={'#fff'}
+            />
           </Wrapper>
         </div>
       )}

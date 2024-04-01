@@ -54,9 +54,10 @@ export const Gnb_my = ({isMobile, setSidrOpen, authData}) => {
           </li>
         </ul>
       </div>
-      <i id={'DeadlineTimer-wrapper'} className={'mobile'}>
+      {/* ! [추후] 추가할 수도 있음 */}
+      {/* <i id={'DeadlineTimer-wrapper'} className={'mobile'}>
         <DeadlineTimer/>
-      </i>
+      </i> */}
     </>
   );
 };

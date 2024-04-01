@@ -1,0 +1,13 @@
+.top_line_header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1999;
+  // 모달창 (1001) > 헤더 (1999) > 메인 기본 팝업창 (1997)
+  background-color: white;
+}
+
+.layout_children {
+  margin-top: 9rem;
+}

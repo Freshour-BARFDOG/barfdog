@@ -35,7 +35,7 @@ const Dealine_timer = ({ className }) => {
           className={`${zIndex['gnb-subscribe-timer']} ${deviceWidth < 380 && 'scroll-container'} flex-wrap ${className ? className : ''}`}
         >
           {isMobile && <IconWrap><Favicon /></IconWrap>}
-          <Text>정기구독배송</Text>
+          {/* <Text>정기구독배송</Text> */}
           <Timer id="deadline">
             {message}
           </Timer>
@@ -54,9 +54,9 @@ export default Dealine_timer;
 
 const Rect = styled.i`
   position: absolute;
-  left: calc(${rem(54)} + ${rem(5)});
-  bottom: ${rem(4)};
-  transform: translate(0, 100%);
+  left: calc(${rem(60)} + ${rem(5)});
+  bottom: ${rem(78)};
+  transform: translate(0, 100%) rotate(180deg);
   border-top: ${rem(15)} solid #FFCEBA;
   border-left: ${rem(9)} solid transparent;
   border-right: ${rem(9)} solid transparent;
@@ -73,14 +73,16 @@ const NormalText = styled.span`
   font-size: ${rem(16)};
   color: #000;
   white-space: nowrap;
+  font-weight: normal;
 `;
 
 const Timer = styled.span`
   margin: 0 ${rem(8)};
   white-space: nowrap;
-  font-weight: 400;
-  width: ${rem(88)};
-  text-align: left;
+  font-weight: bold;
+  color: #cb1010;
+  ${'' /* width: ${rem(88)}; */}
+  ${'' /* text-align: left; */}
 `;
 
 
@@ -93,8 +95,10 @@ const IconWrap = styled.i`
 const Wrap = styled.div`
   position: absolute;
   // ! z-index: 100;
-  left: 0;
-  top: 0;
+  left: ${rem(28)};
+  top: ${rem(156)};
+  display: grid;
+  width: ${rem(150)};
   transform: translate(${rem(0)}, calc(-100% - ${rem(24)}));
   text-align: center;
   color: #000;

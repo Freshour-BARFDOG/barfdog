@@ -1,28 +1,26 @@
 @import '/styles/global/rem';
 
-
-$bannerHeight : rem(40);
-.topLineBanner{
+$bannerHeight: rem(40);
+.topLineBanner {
   position: relative;
   height: $bannerHeight;
   background-color: var(--color-main);
   transition-property: height, top;
   transition-timing-function: ease-out;
-  transition-duration: .3s;
+  transition-duration: 0.3s;
 
-  &.invisible{
-    animation: moveToTop .3s ease-in-out 1s forwards;
+  &.invisible {
+    animation: moveToTop 0.3s ease-in-out 1s forwards;
     height: 0;
-    a, button{
+    a,
+    button {
       display: none;
     }
   }
 
-
-
-  .close-button{
+  .close-button {
     position: absolute;
-    transition: right .3s ease;
+    transition: right 0.3s ease;
     right: rem(0);
     top: 50%;
     transform: translateY(-50%);
@@ -30,40 +28,41 @@ $bannerHeight : rem(40);
     height: rem(20);
   }
 
-
-  a{
+  a {
     height: rem(40);
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: rem(18);
     color: #fff;
-    padding: rem(6) 0 ;
+    padding: rem(6) 0;
     white-space: nowrap;
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
   }
 }
 
-
 @keyframes moveToTop {
-  from {top:0;}
-  to{top: -$bannerHeight;}
+  from {
+    top: 0;
+  }
+  to {
+    top: -$bannerHeight;
+  }
 }
-
-
 
 @media (max-width: rem(1200)) {
-  .topLineBanner .close-button{right: rem(20);}
+  .topLineBanner .close-button {
+    right: rem(20);
+  }
 }
 
-
 @media (max-width: rem(600)) {
-
-  .topLineBanner a{font-size: rem(14)}
-  .topLineBanner .close-button{
+  .topLineBanner a {
+    font-size: rem(14);
+  }
+  .topLineBanner .close-button {
     width: rem(16);
     height: rem(16);
   }
-
 }
