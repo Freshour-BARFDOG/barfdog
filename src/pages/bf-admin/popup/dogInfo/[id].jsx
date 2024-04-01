@@ -56,6 +56,16 @@ export default function Popup_DogDetailPage({ data, dogIdx }) {
 
           console.log('DATA', DATA);
 
+          // 다음 결제일 포맷변환 (0000년 0월 0일)
+          const nextPaymentDate = new Date(DATA.nextPaymentDate);
+          const year = nextPaymentDate.getFullYear();
+          const month = (nextPaymentDate.getMonth() + 1)
+            .toString()
+            .padStart(2, '0');
+          const day = nextPaymentDate.getDate().toString().padStart(2, '0');
+
+          const formattedNextPaymentDate = `${year}-${month}-${day}`;
+
           initialValues = {
             id: DATA.id,
             address: {
@@ -67,6 +77,12 @@ export default function Popup_DogDetailPage({ data, dogIdx }) {
             phoneNumber: transformPhoneNumber(DATA.phoneNumber),
             birthday: transformBirthDay(DATA.memberBirthday),
             memberName: DATA.memberName,
+            subscribeId: DATA.subscribeId,
+            subscribeCount: DATA.subscribeCount,
+            subscribeStatus: DATA.subscribeStatus,
+            subscribeCount: DATA.subscribeCount,
+            nextPaymentDate: DATA.nextPaymentDate && formattedNextPaymentDate,
+            nextPaymentPrice: DATA.nextPaymentPrice,
             email: DATA.email,
             name: DATA.name,
             gender: DATA.gender,
@@ -107,7 +123,8 @@ export default function Popup_DogDetailPage({ data, dogIdx }) {
     const { value } = e.currentTarget;
     setTempValues((prevState) => ({
       ...prevState,
-      birthday: value,
+      // birthday: value,
+      nextPaymentDate: value,
     }));
   };
 
@@ -174,6 +191,63 @@ export default function Popup_DogDetailPage({ data, dogIdx }) {
     } else {
       setActiveConfirmModal(true);
       setSubmitState('READY');
+    }
+  };
+
+  // 다음 결제일 변경 버튼
+  const onChangeNextPaymentDate = () => {
+    // console.log('newNextPaymentDate', tempValues.nextPaymentDate);
+
+    if (
+      !tempValues.nextPaymentDate ||
+      formValues.nextPaymentDate === tempValues.nextPaymentDate
+    ) {
+      alert('기존 구독 결제일과 동일합니다.');
+    } else if (confirm('구독 결제일을 정말 변경하시겠습니까?')) {
+      (async () => {
+        try {
+          const apiUrl = `/api/admin/nextPaymentDate/${formValues.subscribeId}`;
+          const newNextPaymentDate = tempValues.nextPaymentDate;
+
+          // 다음 결제일 포맷변환 (0000년 0월 0일)
+          const match = newNextPaymentDate.match(/(\d{4})-(\d{2})-(\d{2})/);
+          let yyyymmdd = '';
+          if (match) {
+            const year = match[1];
+            const month = match[2];
+            const day = match[3];
+            yyyymmdd = `${year}${month}${day}`;
+          } else {
+            console.log('날짜 형식이 올바르지 않습니다.');
+          }
+          const data = {
+            nextPaymentDate: yyyymmdd,
+          };
+          console.log('PUT 요청 !', data);
+          const res = await putObjData(apiUrl, data);
+          console.log(res);
+          // const resData = res.data.data;
+          if (res.isDone) {
+            alert('구독 결제일 변경이 완료되었습니다.');
+            setFormValues((prevState) => ({
+              ...prevState,
+              nextPaymentDate: newNextPaymentDate,
+            }));
+            setTempValues((prevState) => ({
+              ...prevState,
+              nextPaymentDate: null,
+            }));
+          }
+        } catch (err) {
+          console.error('API통신 오류 : ', err);
+          onShowModal(
+            'API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.',
+          );
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 1000);
+        }
+      })();
     }
   };
 
@@ -322,14 +396,102 @@ export default function Popup_DogDetailPage({ data, dogIdx }) {
                       </li>
                     </ul>
                   </li>
+                  <br />
+
+                  {/* ------ SUBSCRIBE------ */}
+                  <li className={s['table-list']}>
+                    <div className={s['t-header']}>
+                      <h4 className={s.title}>구독 정보</h4>
+                    </div>
+                    <ul className={s['t-body']}>
+                      <li className={`${s['t-row']}`}>
+                        <div className={s['t-box']}>
+                          <div className={`${s.innerBox} ${s.label}`}>
+                            <span>구독 상태</span>
+                          </div>
+                          <div className={`${s.innerBox} ${s.cont}`}>
+                            <span>
+                              {formValues.subscribeStatus === 'BEFORE_PAYMENT'
+                                ? '결제 전'
+                                : 'SUBSCRIBING'
+                                ? '구독 중'
+                                : 'SUBSCRIBE_PENDING'
+                                ? '구독 보류'
+                                : '관리자 구독'}
+                            </span>
+                          </div>
+                        </div>
+                        <div className={s['t-box']}>
+                          <div className={`${s.innerBox} ${s.label}`}>
+                            <span>구독 회차</span>
+                          </div>
+                          <div className={`${s.innerBox} ${s.cont}`}>
+                            <span>{formValues.subscribeCount} 회</span>
+                          </div>
+                        </div>
+                      </li>
+                      <li className={`${s['t-row']}`}>
+                        <div className={s['t-box']}>
+                          <div className={`${s.innerBox} ${s.label}`}>
+                            <span>다음 결제일</span>
+                          </div>
+                          <div className={`${s.innerBox} ${s.cont}`}>
+                            {formValues.nextPaymentDate && (
+                              <>
+                                <span>
+                                  <input
+                                    type="date"
+                                    value={
+                                      tempValues.nextPaymentDate ||
+                                      formValues.nextPaymentDate
+                                    }
+                                    onChange={onInputChange}
+                                  />
+                                </span>
+
+                                <button
+                                  className="admin_btn line point basic_s"
+                                  onClick={() => {
+                                    onChangeNextPaymentDate(
+                                      formValues.nextPaymentDate,
+                                    );
+                                  }}
+                                >
+                                  변경
+                                </button>
+                              </>
+                            )}
+                          </div>
+                        </div>
+                        <div className={s['t-box']}>
+                          <div className={`${s.innerBox} ${s.label}`}>
+                            <span>다음 결제 금액</span>
+                          </div>
+                          <div className={`${s.innerBox} ${s.cont}`}>
+                            <span>{formValues.nextPaymentPrice} 원</span>
+                          </div>
+                        </div>
+                      </li>
+                      <li className={`${s['t-row']} ${s['fullWidth']}`}>
+                        <div className={s['t-box']}>
+                          <div className={`${s.innerBox} ${s.label}`}>
+                            <span>추천 그램수</span>
+                          </div>
+                          <div className={`${s.innerBox} ${s.cont}`}>
+                            <span>{formValues.oneMealRecommendGram} g</span>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </li>
 
                   {/* ------ SURVEY ------ */}
-                  <div className={s['t-gram']}>
+                  {/* <div className={s['t-gram']}>
                     <h4 className={s.title}>추천 그램수 :</h4>
-                    <div className={s.gram}>
-                      {formValues.oneMealRecommendGram} g
-                    </div>
-                  </div>
+                    <div className={s.gram}></div>
+                  </div> */}
+
+                  <br />
                   <li>
                     <div className={s['t-header']}>
                       <h4 className={s.title}>반려견 정보</h4>
