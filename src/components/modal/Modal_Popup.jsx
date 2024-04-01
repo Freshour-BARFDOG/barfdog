@@ -17,7 +17,11 @@ export const Modal_Popup = ({ popupData }) => {
     const addedCookiePopupData = popupData.map((data) => {
       let popupActiveStatus = getCookie(`bf-popup-${data.id}`);
       let isActive =
-        popupActiveStatus === 'false' ? false : popupActiveStatus === 'true' ? true : null;
+        popupActiveStatus === 'false'
+          ? false
+          : popupActiveStatus === 'true'
+          ? true
+          : null;
       if (isActive === null) {
         // 팝업 cookie 없을 경우, 초기화
         setCookie(`bf-popup-${data.id}`, 'true', 'date', 100);
@@ -86,46 +90,54 @@ export const Modal_Popup = ({ popupData }) => {
       {!isLoading &&
         DATA?.length > 0 &&
         DATA.filter((data) => data.isActive).map((data, i) => (
-          <div
-            id={s.modal_popup}
-            className={`${s[popupPosition(data.position)]} ${s[`leakedOrder-${data.leakedOrder}`]}`}
-            key={`popup-${i}-${data.id}`}
-            data-desc={`popup-${isMobile ? 'mobile' : 'pc'}-${data.id}`}
-          >
-            {(data.mobileImageUrl || data.pcImageUrl) && (
-              <Link href={isMobile ? data.mobileLinkUrl : data.pcLinkUrl} passHref>
-                <a>
-                  <figure className={s.image}>
-                    <Image
-                      src={isMobile ? data.mobileImageUrl : data.pcImageUrl}
-                      objectFit="cover"
-                      layout="fill"
-                      alt={isMobile ? data.mobileFileName : data.pcFilename}
-                      priority={true}
-                    />
-                  </figure>
-                </a>
-              </Link>
-            )}
-            <div className={s['btn-section']}>
-              <button
-                type={'button'}
-                data-popup-id={data.id}
-                className={s.skip}
-                onClick={onCloseOneDay}
-              >
-                하루 동안 보지 않기
-              </button>
-              <button
-                type={'button'}
-                data-popup-id={data.id}
-                className={s.close}
-                onClick={onClosePopup}
-              >
-                닫기
-              </button>
+          <>
+            <div className={s.overlay}></div>
+            <div
+              id={s.modal_popup}
+              className={`${s[popupPosition(data.position)]} ${
+                s[`leakedOrder-${data.leakedOrder}`]
+              }`}
+              key={`popup-${i}-${data.id}`}
+              data-desc={`popup-${isMobile ? 'mobile' : 'pc'}-${data.id}`}
+            >
+              {(data.mobileImageUrl || data.pcImageUrl) && (
+                <Link
+                  href={isMobile ? data.mobileLinkUrl : data.pcLinkUrl}
+                  passHref
+                >
+                  <a>
+                    <figure className={s.image}>
+                      <Image
+                        src={isMobile ? data.mobileImageUrl : data.pcImageUrl}
+                        objectFit="cover"
+                        layout="fill"
+                        alt={isMobile ? data.mobileFileName : data.pcFilename}
+                        priority={true}
+                      />
+                    </figure>
+                  </a>
+                </Link>
+              )}
+              <div className={s['btn-section']}>
+                <button
+                  type={'button'}
+                  data-popup-id={data.id}
+                  className={s.skip}
+                  onClick={onCloseOneDay}
+                >
+                  하루 동안 보지 않기
+                </button>
+                <button
+                  type={'button'}
+                  data-popup-id={data.id}
+                  className={s.close}
+                  onClick={onClosePopup}
+                >
+                  닫기
+                </button>
+              </div>
             </div>
-          </div>
+          </>
         ))}
     </>
   );

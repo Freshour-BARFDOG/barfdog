@@ -3,7 +3,7 @@
 
 $menuPadding: 20;
 
-.title{
+.title {
   color: #000;
   font-size: rem(28);
   font-weight: 600;
@@ -12,95 +12,105 @@ $menuPadding: 20;
 
 .menu {
   border: rem(1) solid var(--color-line-04);
-  box-sizing:border-box;
+  box-sizing: border-box;
   width: rem(200);
-  
-
 }
 
-.menu_title{
+.menu_title {
   color: #717171;
-  &[data-current-page]{
-    > p ,> a, a[data-current-page] {color:var(--color-main);
-      &::before{
-        border-color:var(--color-main);
-      }}
-    svg{fill: var(--color-main); transition: transform 0s !important;}
-    > ul{
+  &[data-current-page] {
+    > p,
+    > a,
+    a[data-current-page] {
+      color: var(--color-main);
+      &::before {
+        border-color: var(--color-main);
+      }
+    }
+    svg {
+      fill: var(--color-main);
+      transition: transform 0s !important;
+    }
+    > ul {
       transition: height 0s !important;
     }
   }
 
-
-
-
-  &:not(:last-child) a, &:not(:last-child)
-  p{border-bottom: rem(1) solid var(--color-line-04);}
-
-  p:hover ~ ul{
-    transition: height .5s !important;
-
+  &:not(:last-child) a,
+  &:not(:last-child) p {
+    border-bottom: rem(1) solid var(--color-line-04);
   }
-  p:hover{
-    svg{
-      transition: transform .5s !important;
+
+  p:hover ~ ul {
+    transition: height 0.5s !important;
+  }
+  p:hover {
+    svg {
+      transition: transform 0.5s !important;
     }
   }
 
-  > ul{
+  > ul {
     transition: height 0s !important;
-    background-color:#f4f4f4;
+    background-color: #f4f4f4;
 
-    a {padding: rem(12) rem($menuPadding + 10);}
+    a {
+      padding: rem(12) rem($menuPadding + 10);
+    }
   }
 
-  .submenu_title > *{ cursor: default;}
+  .submenu_title > * {
+    cursor: default;
+  }
 
-  a, p{
-    cursor:pointer;
+  a,
+  p {
+    cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: rem(12) rem(20);
     font-size: rem(15);
-    color:inherit;
+    color: inherit;
     transition: color var(--ani-short);
-    svg{
-      float:right; fill:#ababab; width:rem(17); height:rem(17);
-      transition-duration: .3s;
+    svg {
+      float: right;
+      fill: #ababab;
+      width: rem(17);
+      height: rem(17);
+      transition-duration: 0.3s;
       transition-timing-function: ease-out;
       transition-property: fill, transform;
-      transform:rotate(0)
+      transform: rotate(0);
     }
 
-    &:not(.submenu_title > *):hover{
+    &:not(.submenu_title > *):hover {
       color: var(--color-main) !important;
-      svg{fill:var(--color-main)}
+      svg {
+        fill: var(--color-main);
+      }
     }
-
-
   }
-  &.open{
-    svg{transform:rotate(90deg);}
+  &.open {
+    svg {
+      transform: rotate(90deg);
+    }
   }
-
 }
 
-
-
-.submenu{
-  display:none;
+.submenu {
+  display: none;
 }
 
-.submenu_title{
+.submenu_title {
   font-size: rem(16);
   font-weight: 700;
   color: #4d4d4d;
-  & ~ li:not(.submenu_title){
+  & ~ li:not(.submenu_title) {
     > * {
       position: relative;
-      &:before{
-        content: "";
+      &:before {
+        content: '';
         position: absolute;
         left: rem($menuPadding + 32);
         top: calc(50% - #{rem(3)});
@@ -111,11 +121,9 @@ $menuPadding: 20;
         border-bottom: rem(1) solid #717171;
         transition: border-color var(--ani-short);
       }
-
     }
-    & > *:hover:before{
+    & > *:hover:before {
       border-color: var(--color-main);
     }
-
   }
 }

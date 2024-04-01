@@ -1,6 +1,5 @@
 // *  ------- Global - Z-INDEX 관리
 
-
 $mobileSidr: 10000002 !important; // ChannelTalk보다 상위 위치
 $shopOptionBar: 10000001 !important; // ChannelTalk보다 상위 위치
 
@@ -8,19 +7,28 @@ $shopOptionBar: 10000001 !important; // ChannelTalk보다 상위 위치
 $mobileSidrBackground: 2001;
 $defaultPopupZindex: 2000; // 팝업 노출순서에 따라서 (2000 - 노출순서) 로 설정
 
+.modal-wrapper {
+  z-index: 2001 !important;
+} // * 사용처: Global Alert
+.modal-wrapper-background {
+  z-index: 1001 !important;
+} // * 사용처: Modal 공통 Component, recipe페이지 Modal
+$globalModal-background: 1000;
 
-.modal-wrapper{z-index:1001 !important;} // * 사용처: Global Alert
-.modal-wrapper-background{z-index:1001 !important;} // * 사용처: Modal 공통 Component, recipe페이지 Modal
-$globalModal-background:1000;
+.modal-withBackground {
+  z-index: 1000 !important;
+} // * 사용처: Modal Component
 
-
-.modal-withBackground{z-index:1000 !important;} // * 사용처: Modal Component
-
-.modal-subscribe{z-index : 10000003 !important;}
-.modal-bestReview{z-index : 999 !important;}
-.gnb-subscribe-timer{z-index:100 !important;}
-$adminNav : 100;
-$mobileNav : 100;
-$mobileGnbSubmenuZindex : 99;
-$site_header : 10;
-
+.modal-subscribe {
+  z-index: 10000003 !important;
+}
+.modal-bestReview {
+  z-index: 999 !important;
+}
+.gnb-subscribe-timer {
+  z-index: 100 !important;
+}
+$adminNav: 100;
+$mobileNav: 100;
+$mobileGnbSubmenuZindex: 99;
+$site_header: 10;

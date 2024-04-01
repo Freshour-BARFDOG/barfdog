@@ -230,49 +230,55 @@ const Pagination = ({
   return (
     <>
       {pageInfo.totalItems > 0 && (
-        <div
-          className={`${s['pagination']} ${
-            hasMultiPages ? s.multiPages : s.singlePage
-          }`}
-          page-counter-per-gourp={size}
-          data-cur-page={curPage}
-        >
-          {hasMultiPages && (
-            <>
-              <span
-                className={`${s['arrow']} ${s['first-page']}`}
-                onClick={onFirstPage}
-              >
-                <DoubleArrow />
-              </span>
-              <span
-                className={`${s['arrow']} ${s['prev-page']}`}
-                onClick={onPrevPage}
-              >
-                <Arrow />
-              </span>
-            </>
-          )}
+        <>
+          {apiURL === 'api/notices?size=5&page=0' ? (
+            <></>
+          ) : (
+            <div
+              className={`${s['pagination']} ${
+                hasMultiPages ? s.multiPages : s.singlePage
+              }`}
+              page-counter-per-gourp={size}
+              data-cur-page={curPage}
+            >
+              {hasMultiPages && (
+                <>
+                  <span
+                    className={`${s['arrow']} ${s['first-page']}`}
+                    onClick={onFirstPage}
+                  >
+                    <DoubleArrow />
+                  </span>
+                  <span
+                    className={`${s['arrow']} ${s['prev-page']}`}
+                    onClick={onPrevPage}
+                  >
+                    <Arrow />
+                  </span>
+                </>
+              )}
 
-          <ul className={s.pages}>{Paginations}</ul>
+              <ul className={s.pages}>{Paginations}</ul>
 
-          {hasMultiPages && (
-            <>
-              <span
-                className={`${s['arrow']} ${s['next-page']}`}
-                onClick={onNextPage}
-              >
-                <Arrow />
-              </span>
-              <span
-                className={`${s['arrow']} ${s['last-page']}`}
-                onClick={onLastPage}
-              >
-                <DoubleArrow />
-              </span>
-            </>
+              {hasMultiPages && (
+                <>
+                  <span
+                    className={`${s['arrow']} ${s['next-page']}`}
+                    onClick={onNextPage}
+                  >
+                    <Arrow />
+                  </span>
+                  <span
+                    className={`${s['arrow']} ${s['last-page']}`}
+                    onClick={onLastPage}
+                  >
+                    <DoubleArrow />
+                  </span>
+                </>
+              )}
+            </div>
           )}
-        </div>
+        </>
       )}
     </>
   );

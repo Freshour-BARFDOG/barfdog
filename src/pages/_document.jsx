@@ -43,6 +43,12 @@ export default function CustomDocument() {
           type="text/css"
           crossOrigin={'true'}
         />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"
+          rel="stylesheet"
+        />
         <script
           script-title={'google-analytics'}
           async

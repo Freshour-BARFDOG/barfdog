@@ -3,16 +3,24 @@ $browser-context: 16; // html font-size
   @return #{$px / $context}rem;
 }
 
+section.step_main {
+  padding: rem(30) 0 rem(30);
+}
+
 section.recipe_info {
-  padding: rem(120) 0 rem(170)
+  padding: rem(120) 0 rem(170);
+}
+
+section.question {
+  padding: rem(120) 0 rem(80);
 }
 
 section.barfraw {
-  padding: rem(120) 0 rem(120)
+  padding: rem(120) 0 rem(120);
 }
 
 section.barfgood {
-  padding: rem(150) 0 rem(135)
+  padding: rem(150) 0 rem(135);
 }
 
 section.difference {
@@ -20,34 +28,128 @@ section.difference {
   position: relative;
 }
 
-section.difference2 {
-  padding: rem(100) 0 rem(100)
-}
-
 section.difference3 {
-  padding: rem(120) 0 rem(150)
+  padding: rem(120) 0 rem(150);
 }
 
 section.clientWorry {
-  padding: rem(120) 0 rem(120)
+  padding: rem(120) 0 rem(120);
 }
 
 section.review {
-  padding: rem(150) 0 rem(200)
+  padding: rem(150) 0 rem(200);
 }
 
 section.Howtouse {
-  padding: rem(120) 0 rem(120)
+  padding: rem(120) 0 rem(120);
 }
 
 section.sns {
-  padding: rem(114) 0 rem(190)
+  padding: rem(114) 0 rem(190);
 }
 
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    top: 0;
+  }
+  to {
+    opacity: 0;
+    top: -rem(50);
+  }
+}
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    top: rem(50);
+  }
+  to {
+    opacity: 1;
+    top: 0;
+  }
+}
+section.notice {
+  padding: rem(40) 7%;
+
+  .inner {
+    display: flex;
+    gap: rem(100);
+    font-size: rem(20);
+    align-items: center;
+
+    .title {
+      font-size: rem(24);
+    }
+
+    .content {
+      position: relative;
+      overflow: hidden;
+      height: rem(50);
+      width: rem(400);
+
+      .content ul {
+        position: absolute;
+        top: 0;
+        transition: top 1s ease, opacity 0.5s ease;
+      }
+
+      .notice_title {
+        margin: rem(10) 0;
+        opacity: 1;
+        transition: opacity 0.5s ease;
+      }
+    }
+
+    .content ul.fadeOut {
+      animation: fadeOut 1s ease forwards;
+    }
+
+    .content ul.fadeIn {
+      animation: fadeIn 1s ease forwards;
+    }
+  }
+}
+
+.banner_wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: rem(40);
+}
+
+.banner_swiper {
+  position: relative;
+}
+
+section.banner_text {
+  background-color: white;
+  border: rem(1) solid #fd8888;
+  border-radius: rem(10);
+  width: rem(400);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: rem(10) rem(20);
+  position: absolute;
+  z-index: 1;
+  bottom: rem(-20);
+  left: 50%;
+  transform: translateX(-50%);
+
+  p {
+    font-weight: bold;
+    color: #ca1010;
+  }
+
+  .banner_text_plain {
+    color: #000;
+    font-weight: normal;
+  }
+}
 
 .inner {
-  margin: 0 auto; 
+  margin: 0 auto;
   position: relative;
 }
 
@@ -76,12 +178,10 @@ section.sns {
   background-color: rosybrown;
 }
 
-
-
-//최상위 그림배너
+// *---- 최상위 그림 배너 ----*
 .banner {
   .inner {
-    height: rem(400);
+    height: rem(800);
     display: flex;
     position: relative;
 
@@ -97,51 +197,424 @@ section.sns {
   }
 }
 
-
-
 //최상위 그림배너 모바일 이미지 테스트
-.main_img{
+.main_img {
   display: none;
 }
 
+// * ---- 정기구독 마감 배너 ---- *
+section.deadline_main {
+  box-sizing: border-box;
+  position: relative;
+  // background-color: #faefef;
 
+  .deadline_main_img {
+    filter: brightness(70%);
+  }
 
-//레시피
+  .deadline_container {
+    color: white;
+
+    .deadline_text {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      padding: 0 5%;
+
+      .deadline_title {
+        font-size: rem(24);
+        font-weight: bold;
+      }
+    }
+
+    .deadline_time_wrapper {
+      padding: 0 5%;
+      position: absolute;
+      top: 50%;
+      right: 0%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      gap: rem(20);
+
+      // 일 시간 분 초
+      ul {
+        display: flex;
+        gap: rem(20);
+        padding: 0 rem(16);
+        // justify-content: center;
+
+        li {
+          .deadline_time_text {
+            font-size: rem(16);
+          }
+
+          .deadline_time_sub_text {
+            font-size: rem(13);
+          }
+        }
+      }
+
+      .deadline_time_number {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: rem(21);
+        padding: 0 rem(30);
+
+        // 숫자
+        p {
+          font-size: rem(36);
+          font-weight: bold;
+        }
+
+        // :
+        span {
+        }
+      }
+
+      button {
+        background-color: white;
+        border-radius: rem(20);
+        color: black;
+        font-weight: bold;
+        width: rem(100);
+        height: rem(40);
+      }
+      button:hover {
+        background-color: #ca1010;
+        color: white;
+      }
+    }
+  }
+}
+
+// * ---- 단계별 방법 ---- *
+.step_box {
+  background-color: #faefef;
+  transition: max-height 0.4s ease, opacity 0.4s ease;
+  overflow: hidden;
+  max-height: 0;
+}
+
+.step_box.active {
+  opacity: 1;
+  max-height: 500px;
+  transition-delay: 0s;
+  animation: formopen 0.5s ease-out forwards;
+  display: block;
+}
+
+.step_main {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  gap: rem(30);
+  padding-top: rem(10);
+
+  .title_wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: rem(18);
+
+    h2 {
+      color: #ca1010;
+      font-size: rem(24);
+    }
+
+    .arrow_icon {
+      cursor: pointer;
+      transition: transform 0.5s ease;
+    }
+  }
+
+  @keyframes formopen {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  .step_title {
+    font-size: rem(30);
+    font-weight: bold;
+    margin: rem(20) 0;
+  }
+
+  .step_text {
+    font-size: rem(20);
+    padding-bottom: rem(50);
+  }
+
+  ul {
+    display: flex;
+    justify-content: center;
+    gap: rem(80);
+
+    li {
+      color: #ca1010;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      padding-top: rem(140);
+      width: rem(220);
+
+      // .white_ellipse {
+      //   position: absolute;
+      //   top: 0.8%;
+      //   left: 26%;
+      //   right: 0;
+      //   width: rem(115);
+      //   height: rem(115);
+      //   border-radius: 50%;
+      //   display: flex;
+      //   justify-content: center;
+      //   background-color: white;
+      //   z-index: 5;
+      // }
+
+      .step_ellipse {
+        position: absolute;
+        top: 0;
+        left: 25%;
+        border: rem(3) solid #ca1010;
+        width: rem(120);
+        height: rem(120);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        background-color: #faefef;
+        z-index: 2;
+      }
+
+      .number_wrapper {
+        z-index: 10;
+        position: absolute;
+        top: 9%;
+        left: 50%;
+        transform: translateX(-40%);
+      }
+
+      .step_line {
+        position: absolute;
+        margin-left: rem(100);
+        top: 18%;
+        border: rem(1.4) solid #ca1010;
+        width: rem(900);
+      }
+    }
+  }
+}
+
+// * ----- 빅데이터 기반 ----- *
+.barfgood {
+  // height: rem(800);
+  position: relative;
+  display: flex;
+  // width: 100%;
+
+  .empty {
+    width: rem(800);
+  }
+
+  .inner {
+    display: flex;
+    width: rem(500);
+    // display: grid;
+    // grid-template-columns: 1fr 1fr;
+
+    .leftbox {
+      // display: inline-block;
+      // align-self: center;
+      .barfgood_textbox {
+        width: 100%;
+      }
+
+      h1 {
+        font-size: rem(40);
+        top: rem(45);
+        font-weight: bold;
+
+        span {
+          color: #ca1010;
+        }
+      }
+
+      p {
+        font-size: rem(16);
+        margin-top: rem(40);
+        top: rem(165);
+        width: rem(350);
+        word-break: keep-all;
+
+        .ref_text {
+          font-size: rem(12);
+          color: gray;
+        }
+      }
+
+      .btn_box {
+        .btn_text {
+          border-radius: rem(20);
+          background-color: #ca1010;
+          width: rem(160);
+          height: rem(30);
+          text-align: center;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: rem(30) 0;
+          color: white;
+        }
+      }
+    }
+  }
+}
+
+// * ----- 빅데이터 기반 (스와이퍼 data)----- *
+.swiper_bigdata_container {
+  position: relative;
+  .swiper_bigdata_outerWrap {
+    position: absolute;
+    top: rem(50);
+    left: 50%;
+    width: 100%;
+    // width: rem(400);
+    // height: rem(300);
+
+    .swiper_bigdata {
+      // width: rem(800);
+      // height: rem(800);
+      width: 100%;
+
+      span {
+        overflow: visible !important;
+      }
+
+      .swiper_bigdata_box {
+        // width: rem(200);
+
+        .swiper_bigdata_img {
+          position: relative;
+          // width: rem(800);
+          // height: rem(500);
+          // width: 100%;
+          // display: flex;
+          // display: block;
+          // padding: 0 rem(20);
+
+          // position: absolute;
+          // top: 50%;
+          // left: 20%;
+          z-index: 1;
+
+          .swiper_data_img {
+            // position: absolute;
+            // width: 100%;
+            height: rem(500) !important;
+            width: rem(500) !important;
+
+            top: -20% !important;
+            // bottom: rem(500);
+            // margin-bottom: rem(200);
+            // right: rem(-100);
+            right: -50% !important;
+            // transform: translate(-50%, -50%);
+            border-radius: rem(10);
+            z-index: 2 !important;
+
+            img {
+              z-index: 2 !important;
+            }
+          }
+
+          .swiper_dog_img {
+            // width: 100%;
+            // position: absolute;
+            // top: 50%;
+            // left: 20%;
+            width: rem(800);
+            height: rem(500);
+            border-radius: rem(20);
+            // transform: translate(-50%, -50%);
+
+            img {
+              z-index: 1 !important;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// [삭제 예정]
+// * --- 레시피 --- *
+.recipe_info {
+  display: flex;
+  flex-direction: column;
+
+  ul {
+    display: flex;
+    gap: rem(100);
+
+    li {
+      display: flex;
+      flex-direction: column;
+
+      .title {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: rem(46);
+        margin-top: rem(40);
+      }
+
+      .text {
+        width: rem(370);
+      }
+    }
+  }
+}
+
 .swiper_recipe_outerWrap {
   position: relative;
   height: rem(538);
   margin-top: rem(40);
 
-  .swiper_recipe{
+  .swiper_recipe {
     height: 100%;
     padding: rem(20) rem(20) 0;
-    
-    .swiper_slide{
-      &:first-child{
-        .img_wrap{
-          &::after{
-            background-image: url("../.././public/img/recipes/duck_lamb.png");
+
+    .swiper_slide {
+      &:first-child {
+        .img_wrap {
+          &::after {
+            background-image: url('../.././public/img/recipes/duck_lamb.png');
           }
         }
       }
-      &:nth-child(2){
-        .img_wrap{
-          &::after{
-            background-image: url("../.././public/img/recipes/lamb_beef.png");
+      &:nth-child(2) {
+        .img_wrap {
+          &::after {
+            background-image: url('../.././public/img/recipes/lamb_beef.png');
           }
         }
       }
-      &:nth-child(3){
-        .img_wrap{
-          &::after{
-            background-image: url("../.././public/img/recipes/duck_lamb.png");
+      &:nth-child(3) {
+        .img_wrap {
+          &::after {
+            background-image: url('../.././public/img/recipes/duck_lamb.png');
           }
         }
       }
-      &:last-child{
-        .img_wrap{
-          &::after{
-            background-image: url("../.././public/img/recipes/duck_lamb.png");
+      &:last-child {
+        .img_wrap {
+          &::after {
+            background-image: url('../.././public/img/recipes/duck_lamb.png');
           }
         }
       }
@@ -150,53 +623,54 @@ section.sns {
 
   .btn_box {
     display: flex;
-    justify-content: center;;
+    justify-content: center;
   }
 }
 
-.recipe_a{
+.recipe_a {
   height: rem(456);
   width: rem(240);
   position: relative;
 
-  .recipe_box{
+  .recipe_box {
     position: relative;
     width: rem(260);
     height: rem(456);
     background-color: #fff;
-    box-shadow: rem(10) rem(10) rem(30) rgba(0, 0, 0, .1);
+    box-shadow: rem(10) rem(10) rem(30) rgba(0, 0, 0, 0.1);
     padding: rem(10);
     box-sizing: border-box;
     text-align: center;
   }
 
-  .img_wrap{
+  .img_wrap {
     position: relative;
     height: rem(240);
     width: rem(240);
     background-color: #fff;
     overflow: hidden;
 
-    img{
+    img {
       transform: scale(1.1);
-      transition: transform .5s;
+      transition: transform 0.5s;
     }
   }
 
   .uiNameKorean {
-    margin-top:rem(8);
-    margin-bottom:rem(10);
+    margin-top: rem(8);
+    margin-bottom: rem(10);
     left: 50%;
     font-size: rem(24);
     font-weight: bold;
     text-align: center;
   }
 
-  .desc{color:#717171;
+  .desc {
+    color: #717171;
     font-size: rem(16);
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp:3;
+    -webkit-line-clamp: 3;
     overflow: hidden;
     word-break: keep-all;
   }
@@ -211,7 +685,7 @@ section.sns {
     line-height: 1.35;
 
     .title_en {
-      font-family: "GmarketSansbold";
+      font-family: 'GmarketSansbold';
       font-size: rem(20);
       margin-bottom: rem(20);
     }
@@ -220,8 +694,8 @@ section.sns {
       font-size: rem(27);
     }
   }
-    
-  .recipe_btn{
+
+  .recipe_btn {
     color: #ca1010;
     font-size: rem(14);
     font-weight: bold;
@@ -236,37 +710,120 @@ section.sns {
     border-radius: rem(32);
     background-color: #f9edec;
     cursor: pointer;
-    transition: background-color .1s ease, color .1s ease;
+    transition: background-color 0.1s ease, color 0.1s ease;
 
-    &:hover{
+    &:hover {
       color: #f9edec;
       background-color: #ca1010;
     }
   }
 }
 
-.recipe_title{
+.recipe_title {
   text-align: center;
   font-weight: bold;
   font-size: rem(32);
   line-height: 120%;
 }
 
+// * ---- QUESTION ---- *
+.question {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
+  .title {
+    p {
+      font-weight: normal;
+      font-size: rem(16);
+      text-align: center;
+      padding: rem(6) 0 rem(50) 0;
+    }
+  }
+
+  .content {
+    ul {
+      .line {
+        height: rem(1);
+        background-color: black;
+        margin-bottom: rem(20);
+      }
+    }
+
+    li {
+      .line {
+        height: rem(1);
+        background-color: black;
+        margin-bottom: rem(20);
+      }
+
+      .question_title {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 2%;
+        align-items: center;
+
+        h2 {
+          font-size: rem(24);
+          font-weight: bold;
+          padding: rem(10);
+        }
+
+        .question_icon {
+          cursor: pointer;
+          height: rem(20);
+        }
+
+        .plus_icon,
+        .minus_icon {
+          transition: transform 0.5s ease;
+        }
+      }
+
+      .question_answer {
+        transition: max-height 0.4s ease, opacity 0.4s ease;
+        overflow: hidden;
+        max-height: 0;
+        padding: rem(10) rem(32) rem(10) rem(32);
+        opacity: 0;
+      }
+
+      .question_answer.active {
+        opacity: 1; /* 활성 상태에서는 완전 불투명 */
+        max-height: 500px;
+        transition-delay: 0s; /* 활성화될 때는 지연 없이 즉시 효과 적용 */
+        animation: formopen 0.5s ease-out forwards;
+        display: block;
+        margin: rem(10) 0 rem(30) 0;
+      }
+
+      @keyframes formopen {
+        from {
+          opacity: 0;
+        }
+
+        to {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
 
 //바프생식이란?
 .barfraw {
   position: relative;
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 50%;
     transform: translateX(-50%);
     width: 100vw;
     height: 100%;
-    background-image: url("../.././public/img/barfraw.png");
+    background-image: url('../.././public/img/main/bottom.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -283,7 +840,7 @@ section.sns {
       width: 100%;
       height: rem(360);
 
-      .image_wrap{
+      .image_wrap {
         display: none;
       }
     }
@@ -296,7 +853,7 @@ section.sns {
       padding: rem(50) 0 rem(50) rem(40);
 
       &::before {
-        content: "";
+        content: '';
         position: absolute;
         top: 50%;
         left: 0;
@@ -305,7 +862,7 @@ section.sns {
         height: 100%;
         background-color: #fff;
         border-radius: rem(20) 0 0 rem(20);
-        opacity: .9;
+        opacity: 0.9;
       }
 
       p {
@@ -336,65 +893,6 @@ section.sns {
   }
 }
 
-
-
-//바프생식 바뀌는 점
-.barfgood {
-  height: rem(500);
-
-  .inner {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: rem(20);
-
-    .leftbox {
-      display: inline-block;
-      align-self: center;
-    .barfgood_textbox{
-      // margin-top: rem(40);
-      width: 100%;
-    }
-
-      h1 {
-        font-size: rem(28);
-        top: rem(45);
-        font-weight: bold;
-      }
-
-      p {
-        font-size: rem(16);
-        margin-top: rem(40);
-        top: rem(165);
-        width: rem(350);
-        word-break: keep-all;
-      }
-    }
-
-    .rightbox {
-      display: inline-block;
-    }
-
-    .barfgood_imgbox{
-      width: 100%;
-
-      .barfood1 {
-        width: rem(560);
-        height: rem(456);
-        display: flex;
-        align-items: center;
-      }
-      .barfood2 {
-        width: rem(335);
-        height: rem(635);
-        display: none;
-        margin-top: rem(-50);
-      }
-    }
-  }
-}
-
-
-
 //바프독 선택
 .difference {
   .inner {
@@ -415,7 +913,7 @@ section.sns {
       clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%) !important;
     }
 
-    .image_wrap{
+    .image_wrap {
       width: 100%;
       // max-width: 525px;
       // width: rem(525);
@@ -429,7 +927,7 @@ section.sns {
       transform: translateX(-50%);
       clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%) !important;
     }
-    
+
     ul {
       position: absolute;
       top: rem(256);
@@ -445,16 +943,16 @@ section.sns {
       li {
         display: grid;
         position: relative;
-        
-        &::after{
-          content: "";
+
+        &::after {
+          content: '';
           position: absolute;
           top: 50%;
           width: rem(120);
           height: rem(1);
         }
-        &::before{
-          content: "";
+        &::before {
+          content: '';
           position: absolute;
           top: 50%;
           width: rem(10);
@@ -466,11 +964,11 @@ section.sns {
           text-align: right;
           justify-content: flex-start;
 
-          &::after{
+          &::after {
             right: 0;
             transform: translate(-120%, -50%);
           }
-          &::before{
+          &::before {
             right: rem(130);
             transform: translate(-50%, -50%);
           }
@@ -478,58 +976,62 @@ section.sns {
         &:nth-child(even) {
           text-align: left;
           justify-content: flex-end;
-          &::after{
+          &::after {
             left: 0;
             transform: translate(120%, -50%);
           }
-          &::before{
+          &::before {
             left: rem(130);
             transform: translate(50%, -50%);
           }
         }
 
-        .image_title{
+        .image_title {
           font-size: rem(20);
           font-weight: 800;
         }
 
-        .image_sub{
+        .image_sub {
           font-size: rem(16);
         }
 
-        &:first-child{
-          &::after, &:before{
+        &:first-child {
+          &::after,
+          &:before {
             background-color: var(--color-main);
           }
-          .image_title{
+          .image_title {
             color: var(--color-main);
           }
         }
-        &:nth-child(2){
+        &:nth-child(2) {
           margin-right: rem(65);
-          &::after, &:before{
-            background-color: #FF4921;
+          &::after,
+          &:before {
+            background-color: #ff4921;
           }
-          .image_title{
-            color: #FF4921;
+          .image_title {
+            color: #ff4921;
           }
         }
-        &:nth-child(3){
+        &:nth-child(3) {
           margin-left: rem(35);
-          &::after, &:before{
-            background-color: #FF3232;
+          &::after,
+          &:before {
+            background-color: #ff3232;
           }
-          .image_title{
-            color: #FF3232
+          .image_title {
+            color: #ff3232;
           }
         }
-        &:last-child{
+        &:last-child {
           margin-right: rem(55);
-          &::after, &:before{
-            background-color: #FF8C16;
+          &::after,
+          &:before {
+            background-color: #ff8c16;
           }
-          .image_title{
-            color: #FF8C16;
+          .image_title {
+            color: #ff8c16;
           }
         }
       }
@@ -554,7 +1056,7 @@ section.sns {
         overflow: visible;
       }
 
-      .magicbox{
+      .magicbox {
         position: absolute;
         top: rem(155);
         left: 50%;
@@ -565,7 +1067,7 @@ section.sns {
         width: 100%;
         max-width: rem(525);
         margin: 0 auto;
-        background-image: url("../.././public/img/halftest_harf.png");
+        background-image: url('../.././public/img/halftest_harf.png');
         background-repeat: no-repeat;
         // background-size: 50%;
         background-size: contain;
@@ -573,8 +1075,6 @@ section.sns {
     }
   }
 }
-
-
 
 //차별점 그림 3개
 .difference2 {
@@ -601,26 +1101,24 @@ section.sns {
       // margin-right: rem(90);
       // width: calc(33.333% - #{rem(60)});
       text-align: center;
-      
+
       &:last-child {
         margin-right: 0;
-        >span{
+        > span {
           max-width: 44vw !important;
         }
       }
     }
 
     .text {
-      padding: rem(40) 0;
+      // padding: rem(40) 0;
       font-size: rem(16);
       font-weight: 500;
-      height: rem(80);
+      // height: rem(80);
       word-break: keep-all;
     }
   }
 }
-
-
 
 //프리미엄바프
 .difference3 {
@@ -636,11 +1134,11 @@ section.sns {
     width: 100%;
   }
 
-  br{
+  br {
     display: none;
   }
 
-  .grid{
+  .grid {
     display: grid;
     grid-template-columns: 1fr;
     position: relative;
@@ -656,7 +1154,7 @@ section.sns {
       margin: 0 auto;
       transform: translateX(rem(-200));
     }
-  
+
     .textbox {
       // position: absolute;
       // top: rem(-5);
@@ -666,7 +1164,7 @@ section.sns {
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%) translate(rem(230), rem(22.5));
-  
+
       .text {
         //padding-left: rem(130);
         width: 100%;
@@ -678,11 +1176,11 @@ section.sns {
           display: block;
           position: relative;
           margin-bottom: rem(35);
-          &:last-child{
+          &:last-child {
             margin-bottom: 0;
           }
         }
-  
+
         // li::before {
         //   content: "";
         //   width: rem(120);
@@ -694,9 +1192,9 @@ section.sns {
         //   bottom: 0;
         //   margin: auto;
         // }
-  
+
         li::after {
-          content: "";
+          content: '';
           width: rem(25);
           height: rem(24);
           // background-image: url("../.././public/img/check.png");
@@ -712,8 +1210,6 @@ section.sns {
     }
   }
 }
-
-
 
 ///@at-root
 //고민
@@ -751,9 +1247,9 @@ section.sns {
     text-align: center;
     padding: rem(40) rem(30);
     box-sizing: border-box;
-    background-color: #fff;;
+    background-color: #fff;
     border-radius: rem(16);
-    box-shadow: rem(20) rem(20) rem(20) rgba(0, 0, 0, .1);
+    box-shadow: rem(20) rem(20) rem(20) rgba(0, 0, 0, 0.1);
     max-width: rem(360);
 
     .img-wrap {
@@ -783,13 +1279,13 @@ section.sns {
           word-break: keep-all;
 
           &:before {
-            content: "";
+            content: '';
             position: absolute;
             left: rem(0);
             top: rem(8);
             width: rem(8);
             height: rem(8);
-            background-color: #F2994C;
+            background-color: #f2994c;
             transform: rotate(45deg);
           }
 
@@ -832,7 +1328,8 @@ section.sns {
   background-position: center;
 }
 
-.btn_worry, .btn_worry2 {
+.btn_worry,
+.btn_worry2 {
   padding: rem(14) 0;
   color: #fff;
   font-size: rem(16);
@@ -842,13 +1339,12 @@ section.sns {
   box-sizing: border-box;
   text-align: center;
 }
-.btn_worry{
+.btn_worry {
   display: inline-block;
 }
-.btn_worry2{
+.btn_worry2 {
   display: none;
 }
-
 
 //리뷰 후기
 .review {
@@ -868,7 +1364,7 @@ section.sns {
     height: rem(462);
     background-color: #fff;
     border-radius: rem(8);
-    box-shadow: rem(5) rem(5) rem(20) rgba(0, 0, 0, .1);
+    box-shadow: rem(5) rem(5) rem(20) rgba(0, 0, 0, 0.1);
 
     .img-wrap {
       margin-top: rem(40);
@@ -891,16 +1387,14 @@ section.sns {
 
   .redbox {
     position: absolute;
-    background-color: var(--color-main);
+    background-color: #faf4ef;
     left: rem(-39);
-    top: rem(324);
+    top: rem(100);
     border-radius: rem(28) rem(0) rem(0) rem(28);
     width: rem(1649);
-    height: rem(380);
+    height: rem(720);
   }
 }
-
-
 
 //이용방법
 .Howtouse {
@@ -925,7 +1419,7 @@ section.sns {
       display: grid;
       grid-template-columns: repeat(3, rem(380));
       grid-gap: rem(30);
-      
+
       > li {
         width: 100%;
         margin: 0 auto;
@@ -952,14 +1446,14 @@ section.sns {
           width: rem(375);
           height: rem(375);
 
-          .svg_m{
+          .svg_m {
             display: none;
           }
         }
 
         .details {
           .title_1 {
-            color: #D81D1D;
+            color: #d81d1d;
             font-size: rem(14);
             font-weight: bold;
             text-align: left;
@@ -989,13 +1483,14 @@ section.sns {
   }
 }
 
-
-
-//SNS
+// *--- REVIWE ---*
 .swiper_sns {
   width: 100%;
+  .swiper-wrapper {
+    transition-timing-function: linear !important;
+  }
   .swiper-button-next {
-    content: ">";
+    content: '>';
   }
 }
 
@@ -1009,46 +1504,102 @@ section.sns {
       font-size: rem(16);
     }
   }
-  .swiper_sns_box{
+
+  .review_header {
+    display: flex;
+    justify-content: center;
+    margin: rem(30);
+    gap: rem(30);
+    font-size: rem(20);
+
+    .sales .number,
+    .star .number {
+      color: #ca1010;
+      font-weight: bold;
+    }
+
+    .line {
+      width: rem(1);
+      height: rem(60);
+      background-color: gray;
+    }
+  }
+
+  // sns - 내 반려견도 건강해지기
+  .btn_box {
+    padding: rem(40);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+
+    .btn_worry {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: rem(16);
+      width: rem(200);
+      height: rem(40);
+      border-radius: rem(20);
+    }
+
+    // sns - 더 많은 후기 보러가기
+    .btn_insta {
+      width: rem(200);
+      height: rem(30);
+      text-decoration: underline;
+      text-underline-offset: rem(6);
+      font-weight: bold;
+      color: #808080;
+      margin-bottom: rem(20);
+    }
+  }
+
+  .swiper_sns_box {
+    // display: grid;
+    // grid-template-rows: repeat(2, 1fr); /* 이미지를 두 줄로 나열합니다. */
+    // align-items: center; /* 이미지를 중앙 정렬합니다. */
+    // justify-items: center; /* 이미지를 수평 방향으로 중앙 정렬합니다. */
   }
   a {
     width: 100%;
     height: 100%;
-    transition: opacity .25s;
+    transition: opacity 0.25s;
 
-    &:hover{
+    // &:hover {
+    //   .swiper_sns_img {
+    //     position: relative;
+    //     // margin-top: rem(2);
 
-      .swiper_sns_img{
-        position: relative;
-        margin-top: rem(2);
-  
-        img {
-          border: rem(1) solid var(--color-main) !important;
-          filter: brightness(1.05);
-        }
+    //     img {
+    //       border: rem(1) solid var(--color-main) !important;
+    //       filter: brightness(1.05);
+    //     }
+    //   }
+    // }
+
+    .swiper_sns_img {
+      // position: relative;
+      // margin-top: rem(2);
+      // margin-bottom: rem(2);
+      // aspect-ratio: 1/1;
+
+      span {
+        display: block !important;
       }
-    }
-
-    .swiper_sns_img{
-      position: relative;
-      margin-top: rem(2);
-      margin-bottom: rem(2);
-      aspect-ratio: 1/1;
 
       img {
-        border: rem(1) solid #fff !important;
-        transition: filter .3s ease, border .3s ease;
-      aspect-ratio: 1/1;
+        // transition: filter 0.3s ease, border 0.3s ease;
+        // aspect-ratio: 1/1;
       }
     }
   }
 }
 
-
-
-/* // * SWIPER - Main */
-
-.swiper-button-next, .swiper-button-prev {
+/* // * ----- SWIPER - Main ------ */
+.swiper-button-next,
+.swiper-button-prev {
   cursor: pointer;
   position: absolute;
   border-radius: 100%;
@@ -1062,9 +1613,9 @@ section.sns {
   transition-timing-function: ease;
   transition-duration: 0.2s;
   opacity: 0.2;
-  &:hover{
+  &:hover {
     opacity: 0.9;
-    box-shadow: 0 0 rem(20) 0 rgba(0,0,0,0.2);
+    box-shadow: 0 0 rem(20) 0 rgba(0, 0, 0, 0.2);
   }
 }
 
@@ -1078,7 +1629,7 @@ section.sns {
 
 .swiper_main_outerWrap {
   position: relative;
-  height: rem(400);
+  // height: rem(400);
   width: 100%;
 
   .swiper_navigation_container {
@@ -1091,69 +1642,164 @@ section.sns {
     z-index: 2;
   }
 
+  .swiper-pagination__mainSection {
+    margin-bottom: rem(10);
+    padding-right: rem(50);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: rem(6);
+    height: rem(50);
+    width: rem(50);
 
-  .swiper-pagination__mainSection{
-    display: none;
+    // bullet 크기
+    span {
+      width: rem(14);
+      height: rem(14);
+      background-color: white;
+    }
+
+    span.swiper-pagination-bullet {
+      background-color: white;
+    }
+
+    span.swiper-pagination-bullet.swiper-pagination-bullet-active {
+      background-color: white !important;
+    }
   }
 }
 
-
-
-//리뷰 후기 swiper
+// * ------ SWIPER - Recipe ------ * /
 .swiper_review_outerWrap {
-  padding: 0 rem(50) 0;
+  padding: rem(60) rem(50);
   position: relative;
-  height: rem(600);
+  height: rem(740);
 
   .swiper_review {
-    padding: rem(60) 0 rem(80);
+    padding: rem(30) 0 rem(80);
     position: relative;
+    height: rem(690);
+
+    .title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: rem(46);
+      margin-top: rem(40);
+      text-align: left;
+    }
   }
-  
-  .swiper_review_bg{
+
+  .swiper_review_bg {
     position: absolute;
     top: 0;
     left: 0;
     width: rem(340);
-    height: rem(460);
+    height: rem(580);
     border-radius: rem(8);
     background-color: #fff;
     box-shadow: 0.3125rem 0.3125rem 1.25rem rgb(0 0 0 / 10%);
     padding: rem(40) rem(30);
+    margin: rem(10) 0;
     box-sizing: border-box;
   }
 
-  .swiper_review_box{
+  .swiper_review_bg_end {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: rem(340);
+    height: rem(580);
+    border-radius: rem(8);
+    background-color: #ffffff23;
+    box-shadow: 0.3125rem 0.3125rem 1.25rem rgb(0 0 0 / 10%);
+    padding: rem(40) rem(30);
+    margin: rem(10) 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .title_end {
+      font-size: rem(30);
+      margin-top: rem(20);
+      text-align: left;
+      font-weight: bold;
+      padding-bottom: rem(10);
+    }
+
+    .contents_end {
+      font-size: rem(16);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: rem(40);
+    }
+
+    .recipe_more_btn {
+      background-color: #ca1010;
+      color: white;
+      padding: rem(5);
+      border-radius: rem(30);
+      width: rem(150);
+      font-weight: bold;
+    }
+  }
+
+  .swiper_review_box {
     width: rem(240);
     height: rem(500);
   }
 
-  .swiper_review_img{
-    //margin: rem(40) auto 0;
-    position:relative;
-    padding: 0 rem(20);
-    box-sizing: border-box;
+  .swiper_review_img {
+    position: relative;
+    display: flex;
+    align-items: center;
+    // box-sizing: border-box;
     margin: 0 auto;
-    width: rem(240);
-    height: rem(240);
-    border-radius:50%;
-    overflow: hidden;
+    width: rem(260);
+    height: rem(260);
+    // overflow: hidden;
   }
 
-  .swiper_review_txt{
+  .swiper_review_txt {
     margin: rem(20) auto;
-    text-align: center;
     max-width: rem(14);
   }
 
-  .contents{
-    margin: rem(20) auto;
-    text-align: center;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
-    overflow: hidden;
+  .contents {
+    // margin: rem(20) auto;
+    // text-align: center;
+    // display: -webkit-box;
+    // -webkit-box-orient: vertical;
+    // -webkit-line-clamp: 3;
+    // overflow: hidden;
     font-size: rem(16);
+    // text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: rem(140);
+  }
+
+  .meat {
+    background-color: white;
+    border: rem(1) solid #ca1010;
+    padding: rem(1) rem(6);
+    width: rem(156);
+    display: flex;
+    justify-content: center;
+    border-radius: rem(3);
+    margin-top: rem(10);
+
+    .meat_title {
+      font-weight: bold;
+    }
+
+    .meat_line {
+      height: rem(20);
+      width: rem(0.1);
+      margin: rem(2) rem(8);
+      background-color: black;
+    }
   }
 
   .swiper-button-prev,
@@ -1162,6 +1808,7 @@ section.sns {
     width: rem(38);
     height: rem(38);
     box-shadow: rem(1) rem(1) rem(10) rgba(0, 0, 0, 0.15);
+    background-color: #ca1010;
     &:hover {
       opacity: 0.9;
     }
@@ -1188,17 +1835,26 @@ section.sns {
   }
 
   .swiper-pagination__reviewSection {
-    bottom: rem(70) !important;
+    // bottom: rem(70) !important;
+    height: rem(30);
 
     span {
-      width: rem(25);
-      height: rem(3);
+      width: rem(200);
+      height: rem(4);
       margin: 0 !important;
       border-radius: 0;
     }
+
+    span.swiper-pagination-bullet {
+      background-color: #ca1010;
+    }
+
+    span.swiper-pagination-bullet.swiper-pagination-bullet-active {
+      background-color: #ca1010;
+    }
   }
 
-  .swiper_review_more{
+  .swiper_review_more {
     width: 100%;
     height: 100%;
     min-height: rem(500);
@@ -1210,32 +1866,32 @@ section.sns {
       left: 50%;
       transform: translate(-50%, -50%) translateY(rem(8));
 
-      &:hover{
-        .image_wrap, .more{
-          opacity: .9;
+      &:hover {
+        .image_wrap,
+        .more {
+          opacity: 0.9;
         }
       }
     }
 
-    .image_wrap{
-      opacity: .6;
-      transition: opacity .5s;
+    .image_wrap {
+      opacity: 0.6;
+      transition: opacity 0.5s;
       max-width: rem(39);
     }
 
-    .more{
+    .more {
       font-size: rem(16);
       color: #fff;
-      opacity: .6;
-      transition: opacity .5s;
+      opacity: 0.6;
+      transition: opacity 0.5s;
     }
   }
 }
 
-
-
 //SNS swiper
-.swiper_button_prev_sns, .swiper_button_next_sns {
+.swiper_button_prev_sns,
+.swiper_button_next_sns {
   cursor: pointer;
   position: absolute;
   border-radius: 100%;
@@ -1249,14 +1905,18 @@ section.sns {
   transition-timing-function: ease;
   transition-duration: 0.2s;
   opacity: 0.2;
-  &:hover{
+  &:hover {
     opacity: 0.9;
-    box-shadow: 0 0 rem(20) 0 rgba(0,0,0,0.2);
+    box-shadow: 0 0 rem(20) 0 rgba(0, 0, 0, 0.2);
   }
 }
-  
+
 .swiper_sns_outerWrap {
   position: relative;
+
+  .swiper-wrapper {
+    transition-timing-function: linear !important;
+  }
 
   .swiper_button_prev_sns {
     transform: translate(-50%, -50%) translateX(rem(-595));
@@ -1267,14 +1927,17 @@ section.sns {
   }
 }
 
+/* ===== RESPONSIVE ===== */
+@media (max-width: rem(1400)) {
+  .swiper_bigdata_container {
+    .swiper_bigdata_outerWrap {
+      left: 40%;
+    }
+  }
+}
 
-
-
-/* RESPONSIVE */
 @media (max-width: rem(1200)) {
-
-  
-//최상단 그림배너
+  //최상단 그림배너
   .banner {
     .inner {
       height: rem(300);
@@ -1289,11 +1952,59 @@ section.sns {
     }
   }
 
+  // 정기구독 마감 배너
+  section.deadline_main {
+    .deadline_container {
+      .deadline_text {
+        .deadline_title {
+          font-size: rem(18);
+        }
+      }
 
-  
+      .deadline_time_wrapper {
+        gap: rem(10);
+
+        // 일 시간 분 초
+        ul {
+          display: flex;
+          gap: rem(5);
+          padding: 0 rem(10);
+
+          li {
+            .deadline_time_text {
+              font-size: rem(14);
+            }
+
+            .deadline_time_sub_text {
+              font-size: rem(12);
+            }
+          }
+        }
+
+        .deadline_time_number {
+          display: flex;
+          align-items: center;
+          gap: rem(16);
+          padding: 0 rem(30);
+
+          // 숫자
+          p {
+            font-size: rem(24);
+          }
+        }
+
+        button {
+          width: rem(80);
+          height: rem(30);
+          font-size: rem(14);
+        }
+      }
+    }
+  }
+
   //최상단 swiper pagination
   .swiper_main_outerWrap {
-    .swiper-pagination__mainSection{
+    .swiper-pagination__mainSection {
       display: block;
       color: white;
       font-weight: 300;
@@ -1302,9 +2013,9 @@ section.sns {
       pointer-events: none;
       font-size: rem(16);
     }
-    
-    .swiper-pagination__mainSection::before{
-      content: "";
+
+    .swiper-pagination__mainSection::before {
+      content: '';
       position: absolute;
       top: 50%;
       right: rem(-34);
@@ -1313,36 +2024,41 @@ section.sns {
       height: rem(25);
       border-radius: rem(30);
       background-color: black;
-      opacity: .2;
+      opacity: 0.2;
       z-index: -1;
     }
   }
 
-  .swiper_recipe_outerWrap {
-    .swiper_recipe{
-      overflow: visible !important;
-      width: rem(864);
-      left: rem(20);
+  //*----- Swiper : bigdata -----*//
+  .swiper_bigdata_container {
+    .swiper_bigdata_outerWrap {
+      left: 35%;
     }
   }
 
+  // .swiper_recipe_outerWrap {
+  //   .swiper_recipe {
+  //     overflow: visible !important;
+  //     width: rem(864);
+  //     left: rem(20);
+  //   }
+  // }
 
-    
-//고민
+  //고민
   .clientWorry {
     .cont_section {
-      .clearfix{
+      .clearfix {
         display: grid;
         grid-template-columns: 1fr 1fr;
         width: 100%;
         column-gap: rem(20);
-        > li{
+        > li {
           float: none;
           width: 100%;
         }
       }
     }
-    
+
     .card {
       margin-top: rem(30);
       padding: rem(40) rem(30);
@@ -1351,58 +2067,49 @@ section.sns {
     }
   }
 
-  
-    
   .cont-right {
     float: none;
   }
 
-    
-
-//리뷰 후기
+  //리뷰 후기
   .swiper_review_outerWrap {
-    padding: 0 rem(50) 0;
-    position: relative;
+    padding: 0 rem(80) 0;
 
     .swiper-button-next {
-      margin-right: rem(20);
+      margin-right: rem(90);
     }
 
     .swiper-button-prev {
-      margin-left: rem(20);
+      margin-left: rem(90);
     }
 
     .swiper_review {
       padding: rem(60) 0 rem(80);
       position: relative;
       width: rem(720);
+      height: rem(730);
     }
-    
-    .swiper_review_bg{
+
+    .swiper_review_bg {
+      top: rem(30);
+    }
+
+    .swiper_review_bg_end {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: rem(340);
-      height: rem(460);
-      border-radius: rem(8);
-      background-color: #fff;
-      box-shadow: 0.3125rem 0.3125rem 1.25rem rgb(0 0 0 / 10%);
+      top: rem(30);
     }
-    .swiper_review_box{
-      width: rem(240);
-      height: rem(500);
+
+    .swiper-pagination__reviewSection {
+      height: rem(30);
     }
-  }  
+  }
 
-
-
-//이용방법
-  .Howtouse{
+  //이용방법
+  .Howtouse {
     .cont_body {
-
       > ul {
         grid-template-columns: repeat(1, 100%);
-        
+
         > li {
           margin-top: rem(50);
 
@@ -1415,18 +2122,18 @@ section.sns {
             margin-top: rem(85);
           }
 
-          .card{
+          .card {
             .details {
               margin: rem(50) auto 0;
               width: 50%;
               .title_1 {
                 text-align: center;
               }
-    
+
               .title_2 {
                 text-align: center;
               }
-    
+
               .main_text {
                 text-align: center;
               }
@@ -1437,17 +2144,12 @@ section.sns {
     }
   }
 
-
-
-//SNS
-  .swiper_sns {
-    width: rem(500);
-  }
-
   .swiper_sns_outerWrap {
+    .swiper-wrapper {
+      transition-timing-function: linear !important;
+    }
     .swiper_button_prev_sns {
       transform: translate(-50%, -50%) translateX(rem(-250));
-
     }
 
     .swiper_button_next_sns {
@@ -1457,10 +2159,9 @@ section.sns {
 }
 
 @media (max-width: rem(1000)) {
-  
   //레시피 설명 4가지 사진
   .swiper_recipe_outerWrap {
-    .swiper_recipe{
+    .swiper_recipe {
       width: rem(570);
       left: 0;
     }
@@ -1479,24 +2180,73 @@ section.sns {
         //   grid-column: span 1 / 2;
         //   grid-row: span 1 / 1;
         // }
-        &:last-child{
+        &:last-child {
           grid-column: span 2;
         }
       }
     }
   }
-
 }
 
 @media (max-width: rem(900)) {
-  
-//최상단 그림배너
+  //최상단 그림배너
   .banner {
     .inner {
       height: rem(220);
     }
   }
-  
+
+  // 정기구독 마감 배너
+  section.deadline_main {
+    .deadline_container {
+      .deadline_text {
+        font-size: rem(14);
+
+        .deadline_title {
+          font-size: rem(16);
+        }
+      }
+
+      .deadline_time_wrapper {
+        gap: rem(20);
+        transform: translateY(-55%);
+
+        // 일 시간 분 초
+        ul {
+          gap: rem(30);
+          padding: 0;
+
+          li {
+            .deadline_time_text {
+              font-size: rem(12);
+              // display: none;
+            }
+
+            .deadline_time_sub_text {
+              display: none;
+            }
+          }
+        }
+
+        .deadline_time_number {
+          gap: rem(14);
+          padding: 0;
+
+          // 숫자
+          p {
+            font-size: rem(18);
+            font-weight: bold;
+          }
+        }
+
+        button {
+          width: rem(80);
+          height: rem(30);
+          font-size: rem(14);
+        }
+      }
+    }
+  }
 
   .swiper_main_outerWrap {
     height: rem(220);
@@ -1514,7 +2264,7 @@ section.sns {
         width: 100%;
         height: rem(335);
 
-        .image_wrap{
+        .image_wrap {
           display: block;
         }
       }
@@ -1528,7 +2278,9 @@ section.sns {
           display: none;
         }
 
-        p, h1, h3 {
+        p,
+        h1,
+        h3 {
           position: relative;
           top: initial;
           text-align: center;
@@ -1542,17 +2294,18 @@ section.sns {
     }
   }
 
-//바프생식 바뀌는 점
+  //바프생식 바뀌는 점
   .barfgood {
-    height: rem(700); 
+    height: rem(700);
 
     .inner {
       grid-template-columns: 1fr;
       grid-gap: rem(100);
 
-      .barfgood_imgbox{
+      .barfgood_imgbox {
         .barfood1 {
           display: none;
+          border-radius: rem(100);
         }
         .barfood2 {
           display: block;
@@ -1562,7 +2315,7 @@ section.sns {
       .leftbox {
         margin: 0 auto;
         width: 100%;
-        .barfgood_textbox{
+        .barfgood_textbox {
           margin-top: 0;
         }
 
@@ -1570,87 +2323,86 @@ section.sns {
           width: 100%;
         }
       }
-      
+
       .rightbox {
         margin: 0 auto;
       }
     }
   }
 
-  .difference{
-    .inner{
-      .scroll{
-        .image_wrap{
-
+  .difference {
+    .inner {
+      .scroll {
+        .image_wrap {
         }
         ul {
           top: rem(160);
           row-gap: rem(400);
-          li{
-            &::after{
+          li {
+            &::after {
               height: rem(70);
               top: 50%;
               border-style: solid;
               background-color: transparent;
             }
-            &::before{
+            &::before {
               transform: translate(0, 0);
             }
 
-            &:first-child{
-              &::after{
+            &:first-child {
+              &::after {
                 left: rem(135);
                 border-color: var(--color-main);
                 border-width: rem(1) rem(1) 0 0;
                 transform: translate(0%, 0%);
                 width: 14.5vw;
               }
-              &::before{
+              &::before {
                 top: rem(100);
                 // left: rem(250);
                 left: calc(14.5vw + rem(130));
               }
             }
-            &:nth-child(2){
-              &::after{
+            &:nth-child(2) {
+              &::after {
                 right: rem(70);
-                border-color: #FF4921;
+                border-color: #ff4921;
                 border-width: rem(1) 0 0 rem(1);
                 transform: translate(0%, 0%);
                 left: auto;
                 width: 14.5vw;
               }
-              &::before{
+              &::before {
                 top: rem(100);
                 // right: rem(185);
                 left: auto;
                 right: calc(14.5vw + rem(65));
               }
             }
-            &:nth-child(3){
-              &::after{
+            &:nth-child(3) {
+              &::after {
                 left: rem(100);
-                border-color: #FF3232;
+                border-color: #ff3232;
                 border-width: 0 rem(1) rem(1) 0;
                 transform: translate(0%, -100%);
                 width: 14.5vw;
               }
-              &::before{
+              &::before {
                 top: auto;
                 bottom: rem(100);
                 left: calc(14.5vw + rem(95));
               }
             }
-            &:last-child{
-              &::after{
+            &:last-child {
+              &::after {
                 right: rem(80);
-                border-color: #FF8C16;
+                border-color: #ff8c16;
                 border-width: 0 0 rem(1) rem(1);
                 transform: translate(0%, -100%);
                 left: auto;
                 width: 14.5vw;
               }
-              &::before{
+              &::before {
                 top: auto;
                 bottom: rem(100);
                 right: calc(14.5vw + rem(75));
@@ -1663,9 +2415,7 @@ section.sns {
     }
   }
 
-
-
-//리뷰 후기
+  //리뷰 후기
   .swiper_review_outerWrap {
     width: 100%;
     max-width: rem(600);
@@ -1694,44 +2444,92 @@ section.sns {
     }
   }
 
-
-
   section.barfgood {
-    padding: rem(120) 0 rem(315)
+    padding: rem(120) 0 rem(315);
   }
 }
 
+@media (max-width: rem(750)) {
+  // 정기구독 마감 배너
+  section.deadline_main {
+    .deadline_container {
+      .deadline_text {
+        font-size: rem(12);
+
+        .deadline_title {
+          font-size: rem(16);
+          font-weight: normal !important;
+        }
+
+        .deadline_content {
+          display: none;
+        }
+      }
+
+      .deadline_time_wrapper {
+        gap: rem(20);
+
+        // 일 시간 분 초
+        ul {
+          gap: rem(38);
+          padding: 0;
+
+          li {
+            .deadline_time_text {
+              font-size: rem(12);
+              display: none;
+            }
+
+            .deadline_time_sub_text {
+              display: none;
+            }
+          }
+        }
+
+        .deadline_time_number {
+          gap: rem(14);
+          padding: 0;
+
+          // 숫자
+          p {
+            font-size: rem(18);
+          }
+        }
+
+        button {
+          width: rem(70);
+          height: rem(26);
+          font-size: rem(12);
+        }
+      }
+    }
+  }
+}
 
 @media (max-width: rem(650)) {
-  
   //레시피 설명 4가지 사진
   .swiper_recipe_outerWrap {
     margin-top: rem(20);
     height: rem(520);
 
-    .swiper_recipe{
+    .swiper_recipe {
       width: rem(295);
       left: rem(20);
     }
   }
-
 }
 
-
 @media (max-width: rem(600)) {
-
-
   section.recipe_info {
-    padding: rem(60) 0 rem(140)
+    padding: rem(60) 0 rem(140);
   }
 
-  
-//최상단 그림배너
+  //최상단 그림배너
   .banner {
     .inner {
       aspect-ratio: 1/1;
       width: 100%;
-    height: auto;
+      height: auto;
     }
   }
 
@@ -1741,14 +2539,73 @@ section.sns {
     height: auto;
   }
 
-
-//최상위 그림배너 모바일 이미지 테스트
-  .main_img{
+  //최상위 그림배너 모바일 이미지 테스트
+  .main_img {
     display: block;
     width: 100%;
     height: 100%;
   }
-  
+
+  // 정기구독 마감 배너
+  section.deadline_main {
+    // .deadline_main_img {
+    //   height: rem(1000);
+    // }
+
+    .deadline_container {
+      .deadline_text {
+        font-size: rem(12);
+
+        .deadline_title {
+          font-weight: normal !important;
+          font-size: rem(16);
+        }
+
+        .deadline_content {
+          display: none;
+        }
+      }
+
+      .deadline_time_wrapper {
+        gap: rem(20);
+
+        // 일 시간 분 초
+        ul {
+          gap: rem(38);
+          padding: 0;
+
+          li {
+            .deadline_time_text {
+              font-size: rem(12);
+              display: none;
+            }
+
+            .deadline_time_sub_text {
+              display: none;
+            }
+          }
+        }
+
+        .deadline_time_number {
+          gap: rem(14);
+          padding: 0;
+
+          // 숫자
+          p {
+            font-size: rem(18);
+            font-weight: bold;
+          }
+        }
+
+        button {
+          width: rem(70);
+          height: rem(24);
+          font-size: rem(12);
+        }
+      }
+    }
+  }
+
   .difference {
     .inner {
       h1 {
@@ -1757,10 +2614,10 @@ section.sns {
       .scroll {
         padding-bottom: 100vw;
 
-        // scroll 이벤트시 Scene duration과 같이 조절 
+        // scroll 이벤트시 Scene duration과 같이 조절
         // ex) duration={500}, height: rem(600)
         height: rem(2200);
-        .image_wrap{
+        .image_wrap {
           max-width: rem(367);
         }
         ul {
@@ -1769,7 +2626,7 @@ section.sns {
           // row-gap: rem(20);
           // row-gap: 70vw;
           // column-gap: rem(20);
-          li{
+          li {
             // &:first-child{
             //   margin-left: rem(0);
             // }
@@ -1806,7 +2663,7 @@ section.sns {
             // }
           }
         }
-        .magicbox{
+        .magicbox {
           background-size: 50%;
           max-width: rem(367);
           // max-width: 367px;
@@ -1815,16 +2672,14 @@ section.sns {
     }
   }
 
-
-
-//차별점 그림 3개
+  //차별점 그림 3개
   .difference2 {
     ul {
       display: block;
       width: 100%;
 
       .title {
-        font-size: rem(24)
+        font-size: rem(24);
       }
 
       li {
@@ -1832,10 +2687,10 @@ section.sns {
         width: 100%;
 
         &:last-child {
-        >span{
-          max-width: 100% !important;
+          > span {
+            max-width: 100% !important;
+          }
         }
-      }
       }
 
       .text {
@@ -1846,9 +2701,7 @@ section.sns {
     }
   }
 
-
-
-//프리미엄바프
+  //프리미엄바프
   .difference3 {
     height: 100%;
     .title {
@@ -1857,14 +2710,14 @@ section.sns {
       letter-spacing: rem(1);
     }
 
-    br{
+    br {
       display: inline-block;
     }
 
-    .grid{
+    .grid {
       position: static;
       row-gap: rem(20);
-      .image{
+      .image {
         display: flex;
         transform: translateX(rem(-25));
         max-width: rem(303.5);
@@ -1876,12 +2729,12 @@ section.sns {
         transform: translate(0, 0);
         margin: 0 auto;
 
-        .text{
+        .text {
           li {
             padding-left: rem(30);
             font-size: rem(14);
 
-            &::after{
+            &::after {
               left: 0;
               top: rem(-5);
             }
@@ -1891,19 +2744,15 @@ section.sns {
     }
   }
 
+  section.clientWorry {
+    padding: rem(85) 0 rem(185);
+  }
 
-
-
-section.clientWorry {
-  padding: rem(85) 0 rem(185)
-}
-
-//고민
+  //고민
 
   .subtitle {
     display: none;
   }
-
 
   .btn_worry {
     display: none;
@@ -1948,13 +2797,12 @@ section.clientWorry {
         display: block;
         margin: rem(60) auto 0;
       }
-      
-      .clearfix{
+
+      .clearfix {
         grid-template-columns: 1fr;
         row-gap: rem(40);
       }
     }
-
 
     .card {
       width: 100%;
@@ -1981,20 +2829,18 @@ section.clientWorry {
     }
   }
 
+  //리뷰 후기
+  section.review {
+    padding: rem(120) 0 rem(110);
+  }
 
-
-//리뷰 후기
-section.review {
-  padding: rem(120) 0 rem(110)
-}
-
-.review {
-  .inner {
-    .title {
-      font-size: rem(28);
+  .review {
+    .inner {
+      .title {
+        font-size: rem(28);
+      }
     }
   }
-}
 
   .swiper_review_outerWrap {
     height: rem(600);
@@ -2019,13 +2865,13 @@ section.review {
       // white-space: nowrap;
     }
 
-    .swiper_review_bg{
+    .swiper_review_bg {
       width: rem(280);
       height: rem(430);
       border-radius: rem(8);
     }
 
-    .swiper_review{
+    .swiper_review {
       position: absolute;
       top: rem(40);
       left: 50%;
@@ -2033,12 +2879,12 @@ section.review {
       width: rem(280);
       overflow: visible;
     }
-    
-    .swiper_box{
+
+    .swiper_box {
       width: 100%;
     }
 
-    .swiper_review_img{
+    .swiper_review_img {
       margin: rem(40) auto 0;
       width: rem(180);
       height: rem(180);
@@ -2046,38 +2892,39 @@ section.review {
 
     .swiper-pagination__reviewSection {
       bottom: rem(100) !important;
+      background-color: #ca1010;
+
+      span.swiper-pagination-bullet-active {
+      }
     }
 
-    .swiper_review_more{
+    .swiper_review_more {
       a {
         transform: translate(-50%, -50%) translateY(rem(-33));
       }
     }
   }
 
+  //이용방법
+  section.Howtouse {
+    padding: rem(65) 0 rem(60);
+  }
 
-
-//이용방법
-section.Howtouse {
-  padding: rem(65) 0 rem(60)
-}
-
-  .Howtouse{
+  .Howtouse {
     .inner {
       .title {
         font-size: rem(28);
       }
     }
 
-    .cont_body{
+    .cont_body {
       > ul {
         grid-template-columns: repeat(1, 100%);
         margin-top: 0;
 
-        
         > li {
           margin-top: rem(65);
-          .card{
+          .card {
             .details {
               width: 70%;
               margin-top: rem(35);
@@ -2087,11 +2934,11 @@ section.Howtouse {
               width: rem(280);
               height: rem(280);
 
-              .svg_pc{
+              .svg_pc {
                 display: none;
               }
 
-              .svg_m{
+              .svg_m {
                 display: block;
               }
             }
@@ -2105,9 +2952,7 @@ section.Howtouse {
     }
   }
 
-
-
-//SNS
+  //SNS
   .title {
     font-size: rem(28);
   }
@@ -2121,9 +2966,13 @@ section.Howtouse {
   }
 
   .swiper_sns_outerWrap {
-    max-width: rem(340);
+    // max-width: rem(340);
     width: 100%;
     margin: 0 auto;
+
+    .swiper-wrapper {
+      transition-timing-function: linear !important;
+    }
 
     .swiper_button_prev_sns {
       left: 0;
@@ -2135,25 +2984,26 @@ section.Howtouse {
       right: 0;
       transform: translate(50%, -50%) translateX(rem(0));
     }
-    .swiper_sns{
-      max-width: rem(340);
+    .swiper_sns {
+      // max-width: rem(340);
       width: 100%;
     }
-    .swiper_sns_img{
-      max-width: rem(160);
-      width: 100%;
+    .swiper_sns_img {
+      // max-width: rem(160);
+      // width: 100%;
       // height: rem(160);
+      span {
+        display: block !important;
+      }
     }
   }
 
-
-
   section.barfraw {
-    padding: rem(40) 0 rem(80)
+    padding: rem(40) 0 rem(80);
   }
 
   section.difference2 {
-    padding: rem(45) 0 rem(50)
+    padding: rem(45) 0 rem(50);
   }
 }
 
@@ -2161,7 +3011,7 @@ section.Howtouse {
   .difference {
     .inner {
       .scroll {
-        .image_wrap{
+        .image_wrap {
         }
         ul {
           // height: rem(370);
@@ -2169,12 +3019,12 @@ section.Howtouse {
           max-width: rem(367);
           width: 100%;
           aspect-ratio: 1/1;
-          li{
+          li {
             display: flex;
             flex-direction: column;
-            &:first-child{
+            &:first-child {
               align-items: flex-start;
-              &::after{
+              &::after {
                 top: rem(45);
                 left: rem(10);
                 right: 0;
@@ -2183,16 +3033,16 @@ section.Howtouse {
                 height: rem(50);
                 width: 25vw;
               }
-              &::before{
+              &::before {
                 top: rem(90);
                 left: calc(25vw + rem(5));
               }
             }
-            &:nth-child(2){
+            &:nth-child(2) {
               align-items: flex-end;
               margin-right: 0;
               justify-content: flex-start;
-              &::after{
+              &::after {
                 top: rem(45);
                 right: rem(10);
                 transform: translate(0%, 0%);
@@ -2200,16 +3050,16 @@ section.Howtouse {
                 height: rem(50);
                 width: 25vw;
               }
-              &::before{
+              &::before {
                 top: rem(90);
                 right: calc(25vw + rem(5));
               }
             }
-            &:nth-child(3){
+            &:nth-child(3) {
               align-items: flex-start;
               margin-left: 0;
               justify-content: flex-end;
-              &::after{
+              &::after {
                 top: auto;
                 bottom: rem(45);
                 left: rem(10);
@@ -2219,16 +3069,16 @@ section.Howtouse {
                 height: rem(50);
                 width: 25vw;
               }
-              &::before{
+              &::before {
                 top: auto;
                 bottom: rem(90);
                 left: calc(25vw + rem(5));
               }
             }
-            &:last-child{
+            &:last-child {
               align-items: flex-end;
               margin-right: 0;
-              &::after{
+              &::after {
                 top: auto;
                 bottom: rem(45);
                 right: rem(10);
@@ -2237,17 +3087,17 @@ section.Howtouse {
                 height: rem(50);
                 width: 25vw;
               }
-              &::before{
+              &::before {
                 top: auto;
                 bottom: rem(90);
                 right: calc(25vw + rem(5));
               }
             }
 
-            .image_title{
+            .image_title {
               font-size: rem(14);
             }
-            .image_sub{
+            .image_sub {
               font-size: rem(12);
             }
           }
@@ -2260,9 +3110,8 @@ section.Howtouse {
 @media (max-width: rem(370)) {
   //레시피 설명 4가지 사진
   .swiper_recipe_outerWrap {
-    .swiper_recipe{
+    .swiper_recipe {
       left: 0;
     }
   }
 }
-

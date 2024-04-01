@@ -183,7 +183,10 @@ button.disabled {
 // *  MOBILE , WEB > Show & Hide
 
 .mobile{display:none !important;}
-.pc:not(.imp-dialog){display:block !important;}
+// ! [변경] 240322 웹리뉴얼 과정에서 header flex 적용되지 않는 이슈로 인해 !important 제외
+// ---> "pc" 클래스를 가지고 있지만 "imp-dialog" 클래스를 가지고 있지 않은 요소
+// .pc:not(.imp-dialog){display:block !important;}
+
 
 @media (max-width:rem(1200)){
 
