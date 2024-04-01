@@ -181,7 +181,7 @@ section.banner_text {
 // *---- 최상위 그림 배너 ----*
 .banner {
   .inner {
-    height: rem(800);
+    height: rem(600);
     display: flex;
     position: relative;
 
@@ -210,6 +210,8 @@ section.deadline_main {
 
   .deadline_main_img {
     filter: brightness(70%);
+    // width: rem(2000) !important;
+    // height: rem(600) !important;
   }
 
   .deadline_container {
@@ -462,14 +464,15 @@ section.deadline_main {
         .btn_text {
           border-radius: rem(20);
           background-color: #ca1010;
-          width: rem(160);
-          height: rem(30);
+          width: rem(170);
+          height: rem(40);
           text-align: center;
           display: flex;
           align-items: center;
           justify-content: center;
           margin: rem(30) 0;
           color: white;
+          font-size: rem(17);
         }
       }
     }
@@ -2023,7 +2026,7 @@ section.deadline_main {
       width: rem(50);
       height: rem(25);
       border-radius: rem(30);
-      background-color: black;
+      // background-color: black;
       opacity: 0.2;
       z-index: -1;
     }
@@ -2158,7 +2161,31 @@ section.deadline_main {
   }
 }
 
+@media (max-width: rem(1030)) {
+  .step_line {
+    width: rem(800) !important;
+  }
+
+  .number_wrapper {
+    left: 52% !important;
+  }
+}
+
 @media (max-width: rem(1000)) {
+  .number_wrapper {
+    left: 55% !important;
+  }
+
+  .swiper_review_outerWrap {
+    .swiper-button-prev {
+      margin-left: rem(40);
+    }
+
+    .swiper-button-next {
+      margin-right: rem(40);
+    }
+  }
+
   //레시피 설명 4가지 사진
   .swiper_recipe_outerWrap {
     .swiper_recipe {
@@ -2548,9 +2575,13 @@ section.deadline_main {
 
   // 정기구독 마감 배너
   section.deadline_main {
-    // .deadline_main_img {
-    //   height: rem(1000);
-    // }
+    .deadline_main_img {
+      height: rem(500) !important;
+
+      img {
+        height: rem(500) !important;
+      }
+    }
 
     .deadline_container {
       .deadline_text {

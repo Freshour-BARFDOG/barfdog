@@ -5,11 +5,10 @@ import MetaTitle from '/src/components/atoms/MetaTitle';
 import s from './surveyGuide.module.scss';
 import Image from 'next/image';
 import { useSelector } from 'react-redux';
-import {useModalContext} from "/store/modal-context";
-import Modal_global_alert from "/src/components/modal/Modal_global_alert";
-import {useRouter} from "next/router";
+import { useModalContext } from '/store/modal-context';
+import Modal_global_alert from '/src/components/modal/Modal_global_alert';
+import { useRouter } from 'next/router';
 import SurveyGuid from '/public/img/survey/survey_guide.svg';
-
 
 export default function SurveyGuidePage() {
   const mct = useModalContext();
@@ -18,20 +17,20 @@ export default function SurveyGuidePage() {
   const auth = useSelector((s) => s.auth);
   const userInfo = auth.userInfo;
 
-  
   const onMovePage = async (e) => {
     e.preventDefault();
-    if (!userInfo) {
-      return await router.push('/account/login');
-      //  mct.alertShow('로그인 후 이용가능합니다.');
-    }
+    // ! [수정 24.04.01] 회원가입 안해도 설문조사 가능
+    // if (!userInfo) {
+    //   return await router.push('/account/login');
+    //   //  mct.alertShow('로그인 후 이용가능합니다.');
+    // }
     await router.push('/survey');
   };
 
   const onClickModalButton = () => {
     mct.alertHide();
   };
-  
+
   return (
     <>
       <MetaTitle title="설문조사 안내" />
@@ -57,13 +56,13 @@ export default function SurveyGuidePage() {
             </div>
           </div>
           <div className={s.btn_box}>
-            <button onClick={onMovePage}>
-              반려견 정보작성 시작하기
-            </button>
+            <button onClick={onMovePage}>반려견 정보작성 시작하기</button>
           </div>
         </Wrapper>
       </Layout>
-      {activeGlobalAlertModal && <Modal_global_alert onClick={onClickModalButton} background />}
+      {activeGlobalAlertModal && (
+        <Modal_global_alert onClick={onClickModalButton} background />
+      )}
     </>
   );
 }
