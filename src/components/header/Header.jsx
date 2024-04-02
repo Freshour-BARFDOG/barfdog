@@ -98,11 +98,15 @@ export default function Header() {
               <Link href="/" passHref>
                 <a>
                   {isMobile ? (
-                    // <Image src={MobileLogo} srcSet={MobileLogo_2x} alt="사이트 로고" priority />
-                    <MobileLogo
-                      width="100%"
-                      height="100%"
-                      viewBox="0 0 146 20"
+                    <Image
+                      src={Logo}
+                      // srcSet={Logo_2x}
+                      alt="사이트 로고"
+                      // priority
+                      // layout="fill"
+                      width={140 * 1.5}
+                      height={25 * 1.5}
+                      // className={s.logo_img}
                     />
                   ) : (
                     <Image
@@ -117,9 +121,12 @@ export default function Header() {
                   )}
                 </a>
               </Link>
+
+              {/* ---- 메뉴바 ---- */}
+              {/* pc (O)  ,  mobile (X) */}
               <nav id="gnb" className={`${s.gnb_nav} pc`}>
                 <ul>
-                  <MenuLayout title="건강케어" link="/review" />
+                  <MenuLayout title="건강케어" link="/healthcare" />
                   <MenuLayout
                     title="스토어"
                     link={`/shop?itemType=${general_itemType.ALL}`}
@@ -141,6 +148,7 @@ export default function Header() {
                       link={`/shop?itemType=${general_itemType.GOODS}`}
                     />
                   </MenuLayout>
+                  {/* ! [추후] 멤버십 링크변경 */}
                   <MenuLayout title="멤버십" link="/review" />
                   <MenuLayout title="커뮤니티" link="/community/notice">
                     <SubmenuList title="공지사항" link="/community/notice" />
@@ -154,9 +162,32 @@ export default function Header() {
               </nav>
             </section>
 
-            {isMobile && mypageState.isMyPage ? (
+            {/* ----- MOBILE ----- */}
+            {isMobile && (
+              <div className={s.mob_sub_logout}>
+                {/* Mobile - AI 추천식단 */}
+                <PcGnb />
+                {userData ? (
+                  <button
+                    type={'button'}
+                    onClick={
+                      userData.userType === userType.ADMIN
+                        ? onAdminLogout
+                        : onMemberLogout
+                    }
+                    data-desc={'admin-logout'}
+                    className={s.admin_logout}
+                  >
+                    로그아웃
+                  </button>
+                ) : (
+                  <Non_MemberMenu />
+                )}
+              </div>
+            )}
+
+            {/* {isMobile && mypageState.isMyPage ? (
               <section className={s['mobile-container-onMyapge']}>
-                {/* ? 모바일 버전 확인 */}
                 <span className={s['movepage-wrap']}>
                   {mypageState.depth === 1 ? (
                     <Link href="/" passHref>
@@ -181,20 +212,10 @@ export default function Header() {
                   />
                 </span>
               </section>
-            ) : (
+            ) : ( */}
+
+            {!isMobile && (
               <>
-                {/* <div className={s.headerContainer}> */}
-
-                {/* 2. PcGnb : 정기구독 + 메뉴바 */}
-                {/* <section className={`${s.gnb_area}`}>
-                <nav id="gnb" className={`${s.gnb_nav} pc`}>
-                  <ul>
-                    <PcGnb/>
-                  </ul>
-                </nav>
-              </section> */}
-
-                {/* 2. PcGnb : 정기구독 + 메뉴바 */}
                 <section className={`${s.gnb_area}`}>
                   {userData?.userType === userType.ADMIN && (
                     <MoveToAdminPageButton />
@@ -204,17 +225,11 @@ export default function Header() {
                       <PcGnb />
                     </ul>
                   </nav>
+
                   {/* 3. 회원가입, 로그인 */}
                   <section id="account" className={`${s.account_area} pc`}>
                     <ul>
                       {userData ? (
-                        <MemberMemu data={userData} />
-                      ) : (
-                        <Non_MemberMenu />
-                      )}
-
-                      {/* {userData?.userType !== userType.ADMIN && <ServiceCenter data={{auth: userData}}/>} */}
-                      {userData && (
                         <button
                           type={'button'}
                           onClick={
@@ -227,7 +242,11 @@ export default function Header() {
                         >
                           로그아웃
                         </button>
+                      ) : (
+                        <Non_MemberMenu />
                       )}
+
+                      {/* {userData?.userType !== userType.ADMIN && <ServiceCenter data={{auth: userData}}/>} */}
 
                       {/* 4. 장바구니, 마이페이지 */}
                       <Gnb_my
@@ -245,7 +264,10 @@ export default function Header() {
         <TopButton mobileDevice={mobileDevice} />
       </header>
 
+      {/* 모바일 - 하단 고정바 */}
       {isMobile && !mypageState.isMyPage && <MobileGnb />}
+
+      {/* 모바일 -사이드바  */}
       {isMobile && (
         <MobileSidr isOpen={isSidrOpen} setSidrOpen={setIsSidrOpen} />
       )}

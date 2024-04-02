@@ -80,13 +80,17 @@ export function Swiper_main({ data, isMobile }) {
                     >
                       <a>
                         <Image
-                          priority={true}
+                          // priority={true}
                           src={isMobile ? d.mobileImageUrl : d.pcImageUrl}
                           objectFit="cover"
                           objectPosition="50% 50%"
-                          layout="fill"
+                          // layout="fill"
+                          width={1393}
+                          height={736}
                           alt={d.name}
-                          style={{ borderRadius: '10px' }}
+                          style={{
+                            borderRadius: '10px',
+                          }}
                         ></Image>
                         {/* <Image
                           // ! [ TEST ] 변경

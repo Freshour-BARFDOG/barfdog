@@ -52,16 +52,25 @@ $mobileMenuHeight: rem(48);
       width: 100%;
       display: flex;
       justify-content: space-around;
-      align-items: center;
+      align-items: end;
       padding: rem(15) rem(5);
+      height: rem(100);
 
       li {
         text-align: center;
         cursor: pointer;
+        display: flex;
+        align-items: stretch;
+        height: rem(70);
 
         a {
           display: flex;
           flex-direction: column;
+
+          li {
+            margin-top: rem(5);
+            height: rem(22);
+          }
         }
 
         button {
@@ -77,9 +86,9 @@ $mobileMenuHeight: rem(48);
         align-items: center;
         justify-content: center;
         color: #535353;
-        gap: rem(10);
+        justify-content: space-around;
+        // gap: rem(10);
 
-        // padding: 0 rem(10);
         white-space: nowrap;
       }
     }
@@ -158,23 +167,23 @@ $mobileMenuHeight: rem(48);
     }
   }
 
-  *[data-current-page='depth1'] {
-    color: var(--color-main);
-    font-weight: 500;
-    position: relative;
-    &:before {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      height: rem(3);
-      background-color: var(--color-main);
-    }
-  }
-  *[data-current-page='depth2'] {
-    color: var(--color-main);
-    font-weight: 500;
-  }
+  //   *[data-current-page='depth1'] {
+  //     color: var(--color-main);
+  //     font-weight: 500;
+  //     position: relative;
+  //     // &:before {
+  //     //   content: '';
+  //     //   position: absolute;
+  //     //   bottom: 0;
+  //     //   left: 50%;
+  //     //   transform: translateX(-50%);
+  //     //   width: 100%;
+  //     //   height: rem(3);
+  //     //   background-color: var(--color-main);
+  //     // }
+  //   }
+  //   *[data-current-page='depth2'] {
+  //     color: var(--color-main);
+  //     font-weight: 500;
+  //   }
 }

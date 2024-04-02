@@ -218,6 +218,15 @@ export default function MainPage({ data }) {
             alt="정기구독 배송마감"
             width={4000}
             height={300}
+            objectFit="contain"
+            // layout="responsive"
+            // layout="fill"
+            // style={{
+            //   display: 'block',
+            //   marginLeft: 'auto',
+            //   marginRight: 'auto',
+            // }}
+            objectPosition="50% 50%"
             className={s.deadline_main_img}
           />
           <div className={s.deadline_container}>
@@ -270,42 +279,42 @@ export default function MainPage({ data }) {
 
         {/* ------- 빅데이터 기반 ------ */}
         <div className={s.swiper_bigdata_container}>
-          <Swiper_bigdata />
-        </div>
-        <Wrapper>
-          <section className={s.barfgood}>
-            <div className={s.inner}>
-              <div className={s.leftbox}>
-                <div className={s.barfgood_textbox}>
-                  <h1>
-                    빅데이터 기반의
-                    <br />
-                    <span>과학적 맞춤 레시피</span>
-                  </h1>
-                  <p>
-                    같은 견종이어도 다 같은 강아지가 아니기에 <br />
-                    우리 아이만을 위한 맞춤형 한 끼가 필요합니다. <br />
-                    <br />
-                    바프독은 아이의 건강 데이터를 기반으로 <br />
-                    플랜별 맞춤형 한 끼를 조리하여 전달드립니다.
-                    <br />
-                    <span className={s.ref_text}>
-                      *건강데이터를 분석하여 맞춤형 한 끼로 제공
-                    </span>
-                  </p>
-                </div>
-                <div className={s.btn_box}>
-                  <Link href={'/surveyGuide'} passHref>
-                    <a type="button" className={s.btn_text}>
-                      내 반려견도 시작하기
-                    </a>
-                  </Link>
+          {!isMobile && <Swiper_bigdata />}
+          <Wrapper>
+            <section className={s.barfgood}>
+              <div className={s.inner}>
+                <div className={s.leftbox}>
+                  <div className={s.barfgood_textbox}>
+                    <h1>
+                      빅데이터 기반의
+                      <br />
+                      <span>과학적 맞춤 레시피</span>
+                    </h1>
+                    <p>
+                      같은 견종이어도 다 같은 강아지가 아니기에 <br />
+                      우리 아이만을 위한 맞춤형 한 끼가 필요합니다. <br />
+                      <br />
+                      바프독은 아이의 건강 데이터를 기반으로 <br />
+                      플랜별 맞춤형 한 끼를 조리하여 전달드립니다.
+                      <br />
+                      <span className={s.ref_text}>
+                        *건강데이터를 분석하여 맞춤형 한 끼로 제공
+                      </span>
+                    </p>
+                  </div>
+                  <div className={s.btn_box}>
+                    <Link href={'/surveyGuide'} passHref>
+                      <a type="button" className={s.btn_text}>
+                        내 반려견도 시작하기
+                      </a>
+                    </Link>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className={s.empty}></div>
-          </section>
-        </Wrapper>
+            </section>
+          </Wrapper>
+          {isMobile && <Swiper_bigdata />}
+        </div>
 
         {/* ----- 단계별 방법 -----  */}
         <Wrapper bgColor="#FAEFEF">
@@ -328,92 +337,179 @@ export default function MainPage({ data }) {
         </Wrapper>
         <div className={`${s.step_box} ${isArrowActive ? s.active : ''}`}>
           <div className={s.step_main}>
-            <ul>
-              <li className={s.firstbox}>
-                <div className={s.circle_wrapper}>
-                  <div className={s.step_ellipse}></div>
-                  <div className={s.number_wrapper}>
-                    <Image
-                      src="/img/main/1.svg"
-                      alt="1"
-                      width={55}
-                      height={55}
-                      className={s.icon_number}
-                    />
+            {/* MOBILE - 단계별 */}
+            {isMobile ? (
+              <ul>
+                <li className={s.firstbox}>
+                  <div className={s.firstbox_left}>
+                    <div className={s.step_ellipse}>
+                      <div className={s.number_wrapper}>
+                        <Image
+                          src="/img/main/1.svg"
+                          alt="1"
+                          width={40}
+                          height={40}
+                          className={s.icon_number}
+                        />
+                      </div>
+                    </div>
+                    <div className={s.step_line}></div>
                   </div>
-                </div>
-                <div className={s.step_line}></div>
-                <p className={s.step_title}>반려견 정보입력</p>
-                <p className={s.step_text}>
-                  자체 보유 딥러닝 기반
-                  <br />
-                  알고리즘 분석-맞춤 레시피 도출
-                </p>
-              </li>
 
-              <li className={s.firstbox}>
-                <div className={s.circle_wrapper}>
-                  <div className={s.step_ellipse}></div>
-                  <div className={s.number_wrapper}>
-                    <Image
-                      src="/img/main/2.svg"
-                      alt="2"
-                      width={50}
-                      height={50}
-                      className={s.icon_number}
-                    />
+                  <div className={s.firstbox_right}>
+                    <p className={s.step_title}>반려견 정보입력</p>
+                    <p className={s.step_text}>
+                      자체 보유 딥러닝 기반
+                      <br />
+                      알고리즘 분석-맞춤 레시피 도출
+                    </p>
                   </div>
-                </div>
-                <p className={s.step_title}>1:1 맞춤 제조</p>
-                <p className={s.step_text}>
-                  우리 아이만을 위한
-                  <br />
-                  일대일 맞춤형 레시피 제조
-                </p>
-              </li>
+                </li>
 
-              <li className={s.firstbox}>
-                <div className={s.circle_wrapper}>
-                  <div className={s.step_ellipse}></div>
-                  <div className={s.number_wrapper}>
-                    <Image
-                      src="/img/main/3.svg"
-                      alt="3"
-                      width={50}
-                      height={50}
-                      className={s.icon_number}
-                    />
+                <li className={s.firstbox}>
+                  <div className={s.step_ellipse}>
+                    <div className={s.number_wrapper}>
+                      <Image
+                        src="/img/main/2.svg"
+                        alt="2"
+                        width={40}
+                        height={40}
+                        className={s.icon_number}
+                      />
+                    </div>
                   </div>
-                </div>
-                <p className={s.step_title}>정기구독</p>
-                <p className={s.step_text}>
-                  정기구독 서비스
-                  <br />
-                  반려견 맞춤 신선 배송
-                </p>
-              </li>
+                  <p className={s.step_title}>1:1 맞춤 제조</p>
+                  <p className={s.step_text}>
+                    우리 아이만을 위한
+                    <br />
+                    일대일 맞춤형 레시피 제조
+                  </p>
+                </li>
 
-              <li className={s.firstbox}>
-                <div className={s.circle_wrapper}>
-                  <div className={s.step_ellipse}></div>
-                  <div className={s.number_wrapper}>
-                    <Image
-                      src="/img/main/4.svg"
-                      alt="3"
-                      width={50}
-                      height={50}
-                      className={s.icon_number}
-                    />
+                <li className={s.firstbox}>
+                  <div className={s.step_ellipse}>
+                    <div className={s.number_wrapper}>
+                      <Image
+                        src="/img/main/3.svg"
+                        alt="3"
+                        width={40}
+                        height={40}
+                        className={s.icon_number}
+                      />
+                    </div>
                   </div>
-                </div>
-                <p className={s.step_title}>건강 사후 관리</p>
-                <p className={s.step_text}>
-                  맞춤 영양 급여
-                  <br />
-                  건강 변화 데이터 수집 및 관리
-                </p>
-              </li>
-            </ul>
+                  <p className={s.step_title}>정기구독</p>
+                  <p className={s.step_text}>
+                    정기구독 서비스
+                    <br />
+                    반려견 맞춤 신선 배송
+                  </p>
+                </li>
+
+                <li className={s.firstbox}>
+                  <div className={s.step_ellipse}>
+                    <div className={s.number_wrapper}>
+                      <Image
+                        src="/img/main/4.svg"
+                        alt="4"
+                        width={40}
+                        height={40}
+                        className={s.icon_number}
+                      />
+                    </div>
+                  </div>
+                  <p className={s.step_title}>건강 사후 관리</p>
+                  <p className={s.step_text}>
+                    맞춤 영양 급여
+                    <br />
+                    건강 변화 데이터 수집 및 관리
+                  </p>
+                </li>
+              </ul>
+            ) : (
+              <ul>
+                <li className={s.firstbox}>
+                  <div className={s.step_ellipse}>
+                    <div className={s.number_wrapper}>
+                      <Image
+                        src="/img/main/1.svg"
+                        alt="1"
+                        width={40}
+                        height={40}
+                        className={s.icon_number}
+                      />
+                    </div>
+                  </div>
+                  <div className={s.step_line}></div>
+                  <p className={s.step_title}>반려견 정보입력</p>
+                  <p className={s.step_text}>
+                    자체 보유 딥러닝 기반
+                    <br />
+                    알고리즘 분석-맞춤 레시피 도출
+                  </p>
+                </li>
+
+                <li className={s.firstbox}>
+                  <div className={s.step_ellipse}>
+                    <div className={s.number_wrapper}>
+                      <Image
+                        src="/img/main/2.svg"
+                        alt="2"
+                        width={40}
+                        height={40}
+                        className={s.icon_number}
+                      />
+                    </div>
+                  </div>
+                  <p className={s.step_title}>1:1 맞춤 제조</p>
+                  <p className={s.step_text}>
+                    우리 아이만을 위한
+                    <br />
+                    일대일 맞춤형 레시피 제조
+                  </p>
+                </li>
+
+                <li className={s.firstbox}>
+                  <div className={s.step_ellipse}>
+                    <div className={s.number_wrapper}>
+                      <Image
+                        src="/img/main/3.svg"
+                        alt="3"
+                        width={40}
+                        height={40}
+                        className={s.icon_number}
+                      />
+                    </div>
+                  </div>
+                  <p className={s.step_title}>정기구독</p>
+                  <p className={s.step_text}>
+                    정기구독 서비스
+                    <br />
+                    반려견 맞춤 신선 배송
+                  </p>
+                </li>
+
+                <li className={s.firstbox}>
+                  <div className={s.step_ellipse}>
+                    <div className={s.number_wrapper}>
+                      <Image
+                        src="/img/main/4.svg"
+                        alt="4"
+                        width={40}
+                        height={40}
+                        className={s.icon_number}
+                      />
+                    </div>
+                  </div>
+                  <p className={s.step_title}>건강 사후 관리</p>
+                  <p className={s.step_text}>
+                    맞춤 영양 급여
+                    <br />
+                    건강 변화 데이터 수집 및 관리
+                  </p>
+                </li>
+              </ul>
+            )}
           </div>
         </div>
 
@@ -577,15 +673,37 @@ export default function MainPage({ data }) {
         <Wrapper bgColor="#F5F3F3">
           <section className={s.question}>
             <div className={s.title}>
-              <h2>
-                보호자님들께서{' '}
-                <span style={{ color: '#ca1010' }}>자주 하시는 질문들</span>을
-                모아봤어요 !
-              </h2>
-              <p>
-                이곳에 궁금하신 질문이 없다면 우측 하단의 상담 아이콘을 통해
-                실시간 상담 받아보세요
-              </p>
+              {isMobile ? (
+                <>
+                  <h2>
+                    보호자님들께서
+                    <span style={{ color: '#ca1010' }}>
+                      <br />
+                      자주 하시는 질문들
+                    </span>
+                    을 <br />
+                    모아봤어요 !
+                  </h2>
+                  <p>
+                    이곳에 궁금하신 질문이 없다면 <br />
+                    우측 하단의 상담 아이콘을 통해
+                    <br />
+                    실시간 상담 받아보세요
+                  </p>
+                </>
+              ) : (
+                <>
+                  <h2>
+                    보호자님들께서{' '}
+                    <span style={{ color: '#ca1010' }}>자주 하시는 질문들</span>
+                    을 모아봤어요 !
+                  </h2>
+                  <p>
+                    이곳에 궁금하신 질문이 없다면 우측 하단의 상담 아이콘을 통해
+                    실시간 상담 받아보세요
+                  </p>
+                </>
+              )}
             </div>
             <div className={s.content}>
               <ul>
@@ -627,7 +745,6 @@ export default function MainPage({ data }) {
           </section>
         </Wrapper>
 
-        {/* 바프생식이란? */}
         <Wrapper bgColor="#F9F2EC">
           <section className={s.barfraw}>
             <div className={s.inner}>
