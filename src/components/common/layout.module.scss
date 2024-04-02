@@ -1,3 +1,5 @@
+@import '/styles/global/rem';
+
 .top_line_header {
   position: fixed;
   top: 0;
@@ -10,4 +12,10 @@
 
 .layout_children {
   margin-top: 9rem;
+}
+
+@media (max-width: rem(600)) {
+  .layout_children {
+    margin-top: 7.5rem;
+  }
 }

@@ -37,16 +37,16 @@ export function Swiper_sns() {
     modules: [Navigation, Autoplay],
     breakpoints: {
       100: {
-        // slidesPerView: 2,
+        slidesPerView: 4,
         spaceBetween: 0,
       },
       601: {
-        // slidesPerView: 2,
-        spaceBetween: 0,
+        //   slidesPerView: 3,
+        //   spaceBetween: 0,
       },
       1201: {
-        // slidesPerView: 5,
-        spaceBetween: 0,
+        //   slidesPerView: 6,
+        //   spaceBetween: 0,
       },
     },
   };

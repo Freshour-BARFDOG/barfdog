@@ -14,6 +14,8 @@ export const Title = ({ children, link, className }) => {
   );
 };
 
+// ! [수정] 리뉴얼에서 제외
+// 로그인 시 - 성함
 export const MemberMemu = ({ data }) => {
   const isAdmin = data.name === '관리자';
   const isMobile = useDeviceState().isMobile;
@@ -30,6 +32,7 @@ export const MemberMemu = ({ data }) => {
   );
 };
 
+// 비로그인 시 - 로그인 버튼
 export const Non_MemberMenu = () => {
   return (
     <>

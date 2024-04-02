@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import s from './footer.module.scss';
 import Wrapper from '/src/components/common/Wrapper';
 import Link from 'next/link';
@@ -8,6 +8,7 @@ import {
   FaInstagramSquare,
   FaFacebookSquare,
 } from 'react-icons/fa';
+import { RiKakaoTalkFill } from 'react-icons/ri';
 import Image from 'next/image';
 
 // import FooterLogo from "/public/img/logo_footer.png";
@@ -24,6 +25,11 @@ import { general_itemType } from '../../../store/TYPE/itemType';
 export default function Footer() {
   const [isArrowActive, setIsArrowActive] = useState(true);
   const [rotation, setRotation] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    window.innerWidth <= 600 ? setIsMobile(true) : setIsMobile(false);
+  }, [isMobile]);
 
   const onClickArrowIcon = (e) => {
     e.preventDefault();
@@ -54,20 +60,11 @@ export default function Footer() {
               <ul>
                 <li>
                   <a
-                    href="https://www.youtube.com/channel/UCf_VpnXwfLu6wQ1ADcXSphA/featured"
+                    href="https://www.facebook.com/BARFDOG_official-100623948688775"
                     rel="noreferrer"
                     target="_blank"
                   >
-                    <FaYoutube />
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://blog.naver.com/barfdog"
-                    rel="noreferrer"
-                    target="_blank"
-                  >
-                    <FaBlogger />
+                    <RiKakaoTalkFill />
                   </a>
                 </li>
                 <li>
@@ -79,106 +76,199 @@ export default function Footer() {
                     <FaInstagramSquare />
                   </a>
                 </li>
-                {/* <li>
+
+                <li>
                   <a
-                    href="https://www.facebook.com/BARFDOG_official-100623948688775"
+                    href="https://blog.naver.com/barfdog"
                     rel="noreferrer"
                     target="_blank"
                   >
-                    <FaFacebookSquare />
+                    <FaBlogger />
                   </a>
-                </li> */}
+                </li>
+                <li>
+                  <a
+                    href="https://www.youtube.com/channel/UCf_VpnXwfLu6wQ1ADcXSphA/featured"
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    <FaYoutube />
+                  </a>
+                </li>
               </ul>
             </div>
           </div>
 
           <div className={s.main_footer_right}>
-            <nav id="gnb" className={`${s.gnb_nav} pc`}>
-              <ul>
-                <li>
-                  <Link href="/healthcare">
-                    <a className={s.menu_title}>건강케어</a>
-                  </Link>
-                  <ul>
-                    <li>
-                      <Link href={`/shop?itemType=${general_itemType.ALL}`}>
-                        <a className={s.menu_sub_title}>AI 추천 식단</a>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href={`/shop?itemType=${general_itemType.RAW}`}>
-                        진단 기기
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href={`/shop?itemType=${general_itemType.RAW}`}>
-                        AI 수의사
-                      </Link>
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  <Link href={`/shop?itemType=${general_itemType.ALL}`}>
-                    <a className={s.menu_title}>스토어</a>
-                  </Link>
-                  <ul>
-                    <li>
-                      <Link href={`/shop?itemType=${general_itemType.ALL}`}>
-                        <a className={s.menu_sub_title}>ALL</a>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href={`/shop?itemType=${general_itemType.RAW}`}>
-                        생식
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href={`/shop?itemType=${general_itemType.TOPPING}`}>
-                        토핑
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href={`/shop?itemType=${general_itemType.GOODS}`}>
-                        굿즈
-                      </Link>
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  <Link href="/membership">
-                    <a className={s.menu_title}>멤버십</a>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/community/notice">
-                    <a className={s.menu_title}>커뮤니티</a>
-                  </Link>
-                  <ul>
-                    <li>
-                      <Link href="/community/notice">
-                        <a className={s.menu_sub_title}>공지사항</a>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href="/community/event">이벤트</Link>
-                    </li>
-                    <li>
-                      <Link href="/community/blog">블로그</Link>
-                    </li>
-                    <li>
-                      <Link href="/community/about">어바웃</Link>
-                    </li>
-                    <li>
-                      <Link href="/faq">FAQ</Link>
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  <Link href="/review">
-                    <a className={s.menu_title}>리뷰</a>
-                  </Link>
-                </li>
-              </ul>
+            <nav id="gnb" className={`${s.gnb_nav}`}>
+              {isMobile ? (
+                <ul>
+                  <li>
+                    <Link href="/healthcare">
+                      <a className={s.menu_title}>건강케어</a>
+                    </Link>
+                    <ul>
+                      <li>
+                        <Link href="/healthcare">
+                          <a className={s.menu_sub_title}>AI 추천 식단</a>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/healthcare">진단 기기</Link>
+                      </li>
+                      <li>
+                        <Link href="/healthcare">AI 수의사</Link>
+                      </li>
+                    </ul>
+                  </li>
+                  <li>
+                    <Link href={`/shop?itemType=${general_itemType.ALL}`}>
+                      <a className={s.menu_title}>스토어</a>
+                    </Link>
+                    <ul>
+                      <li>
+                        <Link href={`/shop?itemType=${general_itemType.ALL}`}>
+                          <a className={s.menu_sub_title}>ALL</a>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href={`/shop?itemType=${general_itemType.RAW}`}>
+                          생식
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href={`/shop?itemType=${general_itemType.TOPPING}`}
+                        >
+                          토핑
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href={`/shop?itemType=${general_itemType.GOODS}`}>
+                          굿즈
+                        </Link>
+                      </li>
+                    </ul>
+                  </li>
+
+                  <li>
+                    <Link href="/community/notice">
+                      <a className={s.menu_title}>커뮤니티</a>
+                    </Link>
+                    <ul>
+                      <li>
+                        <Link href="/community/notice">
+                          <a className={s.menu_sub_title}>공지사항</a>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/community/event">이벤트</Link>
+                      </li>
+                      <li>
+                        <Link href="/community/blog">블로그</Link>
+                      </li>
+                      <li>
+                        <Link href="/community/about">어바웃</Link>
+                      </li>
+                      <li>
+                        <Link href="/faq">FAQ</Link>
+                      </li>
+                    </ul>
+                  </li>
+                  <li>
+                    <Link href="/membership">
+                      <a className={s.menu_title}>멤버십</a>
+                    </Link>
+                    <Link href="/review">
+                      <a className={s.menu_title}>리뷰</a>
+                    </Link>
+                  </li>
+                </ul>
+              ) : (
+                <ul>
+                  <li>
+                    <Link href="/healthcare">
+                      <a className={s.menu_title}>건강케어</a>
+                    </Link>
+                    <ul>
+                      <li>
+                        <Link href="/surveyGuide">
+                          <a className={s.menu_sub_title}>AI 추천 식단</a>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/healthcare">진단 기기</Link>
+                      </li>
+                      <li>
+                        <Link href="/healthcare">AI 수의사</Link>
+                      </li>
+                    </ul>
+                  </li>
+                  <li>
+                    <Link href={`/shop?itemType=${general_itemType.ALL}`}>
+                      <a className={s.menu_title}>스토어</a>
+                    </Link>
+                    <ul>
+                      <li>
+                        <Link href={`/shop?itemType=${general_itemType.ALL}`}>
+                          <a className={s.menu_sub_title}>ALL</a>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href={`/shop?itemType=${general_itemType.RAW}`}>
+                          생식
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href={`/shop?itemType=${general_itemType.TOPPING}`}
+                        >
+                          토핑
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href={`/shop?itemType=${general_itemType.GOODS}`}>
+                          굿즈
+                        </Link>
+                      </li>
+                    </ul>
+                  </li>
+                  <li>
+                    <Link href="/membership">
+                      <a className={s.menu_title}>멤버십</a>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/community/notice">
+                      <a className={s.menu_title}>커뮤니티</a>
+                    </Link>
+                    <ul>
+                      <li>
+                        <Link href="/community/notice">
+                          <a className={s.menu_sub_title}>공지사항</a>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/community/event">이벤트</Link>
+                      </li>
+                      <li>
+                        <Link href="/community/blog">블로그</Link>
+                      </li>
+                      <li>
+                        <Link href="/community/about">어바웃</Link>
+                      </li>
+                      <li>
+                        <Link href="/faq">FAQ</Link>
+                      </li>
+                    </ul>
+                  </li>
+                  <li>
+                    <Link href="/review">
+                      <a className={s.menu_title}>리뷰</a>
+                    </Link>
+                  </li>
+                </ul>
+              )}
             </nav>
           </div>
         </section>

@@ -68,8 +68,8 @@ export default function MobileGnb() {
                         : '/img/icon/mobile-home.svg'
                     }
                     alt="home"
-                    width={30}
-                    height={30}
+                    width={35}
+                    height={35}
                   />
                   <MobileMenu
                     title={'홈'}
@@ -89,8 +89,8 @@ export default function MobileGnb() {
                         : '/img/icon/mobile-subscribe.svg'
                     }
                     alt="subscribe"
-                    width={40}
-                    height={40}
+                    width={50}
+                    height={150}
                   />
                   <MobileMenu
                     title={'AI 추천식단'}
@@ -99,6 +99,27 @@ export default function MobileGnb() {
                   />
                 </a>
               </Link>
+            </li>
+            <li>
+              {/* <Link href="/survey" passHref> */}
+              <a onClick={() => setActiveMenuId('카테고리')}>
+                <Image
+                  src={
+                    activeMenuId === '카테고리'
+                      ? '/img/icon/mobile-sidebar.svg'
+                      : '/img/icon/mobile-sidebar.svg'
+                  }
+                  alt="subscribe"
+                  width={30}
+                  height={30}
+                />
+                <MobileMenu
+                  title={'카테고리'}
+                  link="/survey"
+                  activeMenuId={activeMenuId}
+                />
+              </a>
+              {/* </Link> */}
             </li>
             <li>
               <Link href={`/shop?itemType=${general_itemType.ALL}`} passHref>
@@ -110,8 +131,8 @@ export default function MobileGnb() {
                         : '/img/icon/mobile-store.svg'
                     }
                     alt="store"
-                    width={30}
-                    height={30}
+                    width={35}
+                    height={35}
                   />
                   <MobileMenu
                     title={'스토어'}
@@ -125,13 +146,29 @@ export default function MobileGnb() {
               </Link>
             </li>
             <li>
-              <Image
-                src="/img/icon/mobile-mypage.svg"
-                alt="shop"
-                width={30}
-                height={30}
-              />
-              <MobileMenu title={'MY'} link="/mypage" />
+              <Link href={'/mypage'} passHref>
+                <a onClick={() => setActiveMenuId('MY')}>
+                  <Image
+                    src={
+                      activeMenuId === 'MY'
+                        ? '/img/icon/mobile-mypage-active.svg'
+                        : '/img/icon/mobile-mypage.svg'
+                    }
+                    alt="mypage"
+                    width={35}
+                    height={35}
+                  />
+
+                  <MobileMenu
+                    title={'MY'}
+                    link="/mypage"
+                    // fakeLink="/shop"
+                    // id={menuNameObj.shop}
+                    onClick={onActiveSubmenuHandler}
+                    activeMenuId={activeMenuId}
+                  />
+                </a>
+              </Link>
             </li>
             {/* <MobileMenu title={'레시피'} link={'/recipes'} /> */}
             {/* <MobileMenu

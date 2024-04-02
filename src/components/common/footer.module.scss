@@ -288,19 +288,70 @@ $browser-context: 16;
 }
 
 @media (max-width: rem(600)) {
-  .companyInfo_area {
-    ul {
+  .main_footer_area {
+    padding: rem(40) rem(20) rem(30) rem(20);
+    display: flex;
+    flex-direction: column;
+
+    .main_footer_left {
+      display: flex;
+      .contact_container {
+        margin-bottom: rem(60);
+      }
+    }
+
+    .sns_area {
+      position: absolute;
+      top: 10%;
+      right: 3%;
+      width: rem(120);
+
       li {
-        &:nth-child(5),
-        &:last-child {
-          .info_cont {
-            display: none;
-          }
-        }
-        .info_cont_mobile {
-          display: block;
+        margin: rem(5) rem(2);
+      }
+    }
+
+    .main_footer_right {
+      ul {
+        gap: rem(44);
+
+        .menu_title {
+          font-size: rem(18) !important;
+          width: rem(70);
         }
       }
     }
   }
+
+  .sub_footer_area {
+    padding: rem(30) rem(20) rem(70) rem(20);
+
+    .sub_footer_left {
+      .info_cont {
+      }
+    }
+
+    .sub_footer_right {
+      width: rem(100);
+      position: absolute;
+      bottom: 32%;
+      right: 10%;
+    }
+  }
+
+  // .companyInfo_area {
+  //   ul {
+  //     li {
+  //       &:nth-child(5),
+  //       &:last-child {
+  //         .info_cont {
+  //           display: none;
+  //         }
+  //       }
+  //       .info_cont_mobile {
+  //         display: block;
+  //       }
+  //     }
+  //   }
+  // }
 }
