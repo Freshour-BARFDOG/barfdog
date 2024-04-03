@@ -297,10 +297,10 @@ export default function MainPage({ data }) {
                       바프독은 아이의 건강 데이터를 기반으로 <br />
                       플랜별 맞춤형 한 끼를 조리하여 전달드립니다.
                       <br />
-                      <span className={s.ref_text}>
-                        *건강데이터를 분석하여 맞춤형 한 끼로 제공
-                      </span>
                     </p>
+                    <span className={s.ref_text}>
+                      *건강데이터를 분석하여 맞춤형 한 끼로 제공
+                    </span>
                   </div>
                   <div className={s.btn_box}>
                     <Link href={'/surveyGuide'} passHref>

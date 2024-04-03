@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import s from './mobileGnb.module.scss';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -7,6 +8,7 @@ import useDeviceState from '/util/hook/useDeviceState';
 import { IoIosArrowDown } from 'react-icons/io';
 import { useRouter } from 'next/router';
 import { general_itemType } from '/store/TYPE/itemType';
+import MobileSidr from './MobileSidr';
 
 const menuNameObj = {
   shop: 'shop',
@@ -14,21 +16,20 @@ const menuNameObj = {
 };
 
 export default function MobileGnb() {
+  const auth = useSelector((state) => state.auth);
+  const userData = auth.userInfo;
+
   const mcx = useModalContext();
 
   const deviceState = useDeviceState();
-  const [activeMenuId, setActiveMenuId] = useState('홈');
+  const [activeMenuId, setActiveMenuId] = useState('');
   const [isWideMode, setIsWideMode] = useState(false);
+  const [isSidrOpen, setIsSidrOpen] = useState(false);
   const deviceWidth = deviceState.deviceWidth;
 
   const router = useRouter();
   const curPath = router.asPath;
   const curMenuRef = useRef();
-
-  useEffect(() => {
-    if (!curMenuRef.current) return;
-    currentPageIndicator(curMenuRef.current, curPath, setActiveMenuId);
-  }, [curPath]);
 
   const onActiveSubmenuHandler = (menuId) => {
     if (menuId) {
@@ -45,13 +46,96 @@ export default function MobileGnb() {
     setIsWideMode(!isWideMode);
   };
 
+  const currentPageIndicator = (ref, curPath, setActivemenu) => {
+    if (!ref) return;
+    const nav = ref;
+    const curPathArray = curPath.split('/');
+
+    // '?' 앞에가 curPageDepth1 인데,
+    // '/' 포함되어 있으면 제거
+    const curPageDepth1 =
+      curPath.indexOf('?') >= 0
+        ? curPath?.split('?')[0].includes('/')
+          ? curPath?.split('?')[0].replace('/', '')
+          : curPath?.split('?')[0]
+        : curPathArray[1];
+
+    const curPageDepth2 = curPathArray[2];
+
+    setActiveMenuId(curPageDepth1);
+
+    const mainMenus = Array.from(
+      nav.querySelectorAll(`.mobile-menu-wrap a, .mobile-menu-wrap button`),
+    );
+
+    mainMenus.forEach((mainmenu) => {
+      const thisMenuId = mainmenu.id;
+      const menuPath = mainmenu.pathname || mainmenu.dataset.link;
+      if (!menuPath || !curPageDepth1) return;
+
+      // console.log('thisMenuId', thisMenuId);
+      // console.log('mainmenu', mainmenu);
+      // console.log('curPageDepth1', curPageDepth1);
+
+      if (menuPath.indexOf(curPageDepth1) >= 0) {
+        mainmenu.dataset.currentPage = 'depth1';
+        if (thisMenuId) setActivemenu(thisMenuId); // - submenu active -> 태그 id가 필요함.
+      }
+      // // console.log('curPageDepth1',curPageDepth1, 'menuPath',menuPath);
+    });
+
+    const subMenus = Array.from(
+      nav.querySelectorAll(
+        `.mobile-submenu-wrap a, .mobile-submenu-wrap button`,
+      ),
+    );
+    subMenus.forEach((submenu) => {
+      const menuPath = submenu.pathname || submenu.dataset.link;
+      if (!menuPath && curPathArray) return;
+      // // console.log(menuPath)
+      // // console.log(curPageDepth2)
+      submenu.dataset.currentPage =
+        menuPath.indexOf(curPageDepth2) >= 0 && 'depth2';
+
+      if (curPath.indexOf('/shop') >= 0) {
+        const keyword = 'itemType=';
+        let submenuSearch = submenu.search.split(keyword)[1];
+        let curUrlSearch = window.location.search.split(keyword)[1];
+        if (curUrlSearch?.indexOf('&') >= 0) {
+          submenuSearch = curUrlSearch?.split('&')[0];
+          curUrlSearch = curUrlSearch?.split('&')[0];
+        }
+        submenu.dataset.currentPage =
+          curUrlSearch?.indexOf(submenuSearch) >= 0 && 'depth2';
+      }
+    });
+  };
+
   useEffect(() => {
-    console.log(setActiveMenuId);
-  }, []);
+    if (!curMenuRef.current) return;
+    currentPageIndicator(curMenuRef.current, curPath, setActiveMenuId);
+  }, [curPath]);
+
+  // useEffect(() => {
+  //   console.log('activeMenuId >>>', activeMenuId);
+  //   console.log(curPath);
+  // }, [activeMenuId]);
+
+  const onShowMobileSideMenu = (activeMenuId) => {
+    setActiveMenuId(activeMenuId);
+    setIsSidrOpen(!isSidrOpen);
+  };
+
+  const onActiveMenuId = (menuId) => {
+    isSidrOpen && setIsSidrOpen(false);
+    setActiveMenuId(menuId);
+  };
 
   return (
     <>
-      <nav className={`${s.mobileNav} mobile`} ref={curMenuRef}>
+      {/* [수정] mobile 클래스명 제거 - 모바일 600이 아닌, 1080 미만부터 보이게 변경 */}
+      {/* <nav className={`${s.mobileNav} mobile`} ref={curMenuRef}> */}
+      <nav className={`${s.mobileNav}`} ref={curMenuRef}>
         <section
           className={`${s['mobile-menu-wrap']} mobile-menu-wrap ${
             deviceWidth < 300 ? s['scroll-container'] : ''
@@ -60,10 +144,10 @@ export default function MobileGnb() {
           <ul className={`${s['mobile-menu']} `}>
             <li>
               <Link href="/" passHref>
-                <a onClick={() => setActiveMenuId('홈')}>
+                <a onClick={() => onActiveMenuId('홈')}>
                   <Image
                     src={
-                      activeMenuId === '홈'
+                      !isSidrOpen && (curPath === '/' || activeMenuId === '홈')
                         ? '/img/icon/mobile-home-active.svg'
                         : '/img/icon/mobile-home.svg'
                     }
@@ -75,38 +159,55 @@ export default function MobileGnb() {
                     title={'홈'}
                     link="/"
                     activeMenuId={activeMenuId}
+                    color={
+                      !isSidrOpen && (curPath === '/' || activeMenuId === '홈')
+                        ? true
+                        : false
+                    }
                   />
                 </a>
               </Link>
             </li>
             <li>
-              <Link href="/survey" passHref>
-                <a onClick={() => setActiveMenuId('AI 추천식단')}>
+              <Link href="/surveyGuide" passHref>
+                <a onClick={() => onActiveMenuId('surveyGuide')}>
                   <Image
                     src={
-                      activeMenuId === 'AI 추천식단'
+                      !isSidrOpen &&
+                      (activeMenuId === 'surveyGuide' ||
+                        activeMenuId === 'survey' ||
+                        curPath === '/surveyGuide' ||
+                        curPath === '/survey')
                         ? '/img/icon/mobile-subscribe-active.svg'
                         : '/img/icon/mobile-subscribe.svg'
                     }
-                    alt="subscribe"
+                    alt="c"
                     width={50}
                     height={150}
                   />
                   <MobileMenu
                     title={'AI 추천식단'}
-                    link="/survey"
+                    link="/surveyGuide"
                     activeMenuId={activeMenuId}
+                    color={
+                      !isSidrOpen &&
+                      (activeMenuId === 'surveyGuide' ||
+                        activeMenuId === 'survey' ||
+                        curPath === '/surveyGuide' ||
+                        curPath === '/survey')
+                        ? true
+                        : false
+                    }
                   />
                 </a>
               </Link>
             </li>
             <li>
-              {/* <Link href="/survey" passHref> */}
-              <a onClick={() => setActiveMenuId('카테고리')}>
+              <a onClick={() => onShowMobileSideMenu('카테고리')}>
                 <Image
                   src={
-                    activeMenuId === '카테고리'
-                      ? '/img/icon/mobile-sidebar.svg'
+                    isSidrOpen
+                      ? '/img/icon/mobile-sidebar-active.svg'
                       : '/img/icon/mobile-sidebar.svg'
                   }
                   alt="subscribe"
@@ -115,18 +216,20 @@ export default function MobileGnb() {
                 />
                 <MobileMenu
                   title={'카테고리'}
-                  link="/survey"
-                  activeMenuId={activeMenuId}
+                  // activeMenuId={activeMenuId}
+                  color={isSidrOpen}
                 />
               </a>
-              {/* </Link> */}
             </li>
             <li>
               <Link href={`/shop?itemType=${general_itemType.ALL}`} passHref>
-                <a onClick={() => setActiveMenuId('스토어')}>
+                <a onClick={() => onActiveMenuId('스토어')}>
                   <Image
                     src={
-                      activeMenuId === '스토어'
+                      !isSidrOpen &&
+                      (activeMenuId === 'shop' ||
+                        activeMenuId === '스토어' ||
+                        curPath.startsWith('/shop'))
                         ? '/img/icon/mobile-store-active.svg'
                         : '/img/icon/mobile-store.svg'
                     }
@@ -141,16 +244,35 @@ export default function MobileGnb() {
                     // id={menuNameObj.shop}
                     onClick={onActiveSubmenuHandler}
                     activeMenuId={activeMenuId}
+                    color={
+                      !isSidrOpen &&
+                      (activeMenuId === 'shop' ||
+                        activeMenuId === '스토어' ||
+                        curPath.startsWith('/shop'))
+                        ? true
+                        : false
+                    }
                   />
                 </a>
               </Link>
             </li>
             <li>
-              <Link href={'/mypage'} passHref>
-                <a onClick={() => setActiveMenuId('MY')}>
+              {/* 비로그인 > 로그인 페이지 */}
+              {/* 로그인 > 마이 페이지 */}
+              <Link
+                href={userData ? '/mypage/orderHistory' : '/account/login'}
+                passHref
+              >
+                <a
+                  onClick={() =>
+                    onActiveMenuId(userData ? 'mypage' : 'account')
+                  }
+                >
                   <Image
                     src={
-                      activeMenuId === 'MY'
+                      !isSidrOpen &&
+                      (activeMenuId === 'mypage' ||
+                        curPath === '/mypage/orderHistory')
                         ? '/img/icon/mobile-mypage-active.svg'
                         : '/img/icon/mobile-mypage.svg'
                     }
@@ -161,16 +283,21 @@ export default function MobileGnb() {
 
                   <MobileMenu
                     title={'MY'}
-                    link="/mypage"
-                    // fakeLink="/shop"
-                    // id={menuNameObj.shop}
+                    link={userData ? '/mypage/orderHistory' : '/account/login'}
                     onClick={onActiveSubmenuHandler}
                     activeMenuId={activeMenuId}
+                    color={
+                      !isSidrOpen &&
+                      (activeMenuId === 'mypage' ||
+                        curPath === '/mypage/orderHistory')
+                        ? true
+                        : false
+                    }
                   />
                 </a>
               </Link>
             </li>
-            {/* <MobileMenu title={'레시피'} link={'/recipes'} /> */}
+
             {/* <MobileMenu
               title={'커뮤니티'}
               fakeLink="/community"
@@ -180,6 +307,10 @@ export default function MobileGnb() {
             {/* <MobileMenu title={'리뷰'} link="/review" /> */}
           </ul>
         </section>
+        {/* 모바일 - 사이드바  */}
+        {isSidrOpen && (
+          <MobileSidr isOpen={isSidrOpen} setSidrOpen={setIsSidrOpen} />
+        )}
         <section
           className={`${s['mobile-submenu-wrap']} mobile-submenu-wrap ${
             activeMenuId ? s.active : ''
@@ -228,54 +359,6 @@ export default function MobileGnb() {
   );
 }
 
-const currentPageIndicator = (ref, curPath, setActivemenu) => {
-  if (!ref) return;
-  const nav = ref;
-  const curPathArray = curPath.split('/');
-  const curPageDepth1 =
-    curPath.indexOf('?') >= 0 ? curPath?.split('?')[0] : curPathArray[1];
-  const curPageDepth2 = curPathArray[2];
-
-  const mainMenus = Array.from(
-    nav.querySelectorAll(`.mobile-menu-wrap a, .mobile-menu-wrap button`),
-  );
-
-  mainMenus.forEach((mainmenu) => {
-    const thisMenuId = mainmenu.id;
-    const menuPath = mainmenu.pathname || mainmenu.dataset.link;
-    if (!menuPath || !curPageDepth1) return;
-    if (menuPath.indexOf(curPageDepth1) >= 0) {
-      mainmenu.dataset.currentPage = 'depth1';
-      if (thisMenuId) setActivemenu(thisMenuId); // - submenu active -> 태그 id가 필요함.
-    }
-    // // console.log('curPageDepth1',curPageDepth1, 'menuPath',menuPath);
-  });
-
-  const subMenus = Array.from(
-    nav.querySelectorAll(`.mobile-submenu-wrap a, .mobile-submenu-wrap button`),
-  );
-  subMenus.forEach((submenu) => {
-    const menuPath = submenu.pathname || submenu.dataset.link;
-    if (!menuPath && curPathArray) return;
-    // // console.log(menuPath)
-    // // console.log(curPageDepth2)
-    submenu.dataset.currentPage =
-      menuPath.indexOf(curPageDepth2) >= 0 && 'depth2';
-
-    if (curPath.indexOf('/shop') >= 0) {
-      const keyword = 'itemType=';
-      let submenuSearch = submenu.search.split(keyword)[1];
-      let curUrlSearch = window.location.search.split(keyword)[1];
-      if (curUrlSearch?.indexOf('&') >= 0) {
-        submenuSearch = curUrlSearch?.split('&')[0];
-        curUrlSearch = curUrlSearch?.split('&')[0];
-      }
-      submenu.dataset.currentPage =
-        curUrlSearch?.indexOf(submenuSearch) >= 0 && 'depth2';
-    }
-  });
-};
-
 const MobileMenu = ({
   onClick,
   link,
@@ -291,10 +374,11 @@ const MobileMenu = ({
     }
   };
 
-  useEffect(() => {
-    console.log('activeMenuId', activeMenuId);
-    console.log('title', title);
-  }, []);
+  // useEffect(() => {
+  //   console.log('activeMenuId >>>>', activeMenuId);
+  //   console.log('title >>>>', title);
+  //   console.log('color >>>>', color);
+  // }, []);
 
   return (
     <li onClick={onClick && onClickHandler}>
@@ -302,13 +386,22 @@ const MobileMenu = ({
         <Link href={link} passHref>
           <a
             id={id}
-            style={{ color: activeMenuId === title ? '#cb1010' : '#535353' }}
+            style={{
+              color: activeMenuId === title || color ? '#cb1010' : '#535353',
+            }}
           >
             {title}
           </a>
         </Link>
       ) : (
-        <button id={id} data-link={fakeLink} type={'button'}>
+        <button
+          id={id}
+          data-link={fakeLink}
+          type={'button'}
+          style={{
+            color: activeMenuId === title || color ? '#cb1010' : '#535353',
+          }}
+        >
           {title}
         </button>
       )}

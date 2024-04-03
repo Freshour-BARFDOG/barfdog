@@ -17,7 +17,8 @@ $defaultCenter: 55%;
 #modal_popup {
   // ! z-index: ''; // global zindex에서 관리
   position: fixed;
-
+  left: 50%;
+  transform: translate(-50%, 0%);
   $defaultTop: rem(100);
   // position: absolute;
   // top: rem(102);

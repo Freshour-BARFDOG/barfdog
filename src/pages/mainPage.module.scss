@@ -440,15 +440,14 @@ section.deadline_main {
 
       p {
         font-size: rem(16);
-        margin-top: rem(40);
+        margin: rem(30) 0 rem(10) 0;
         top: rem(165);
         width: rem(350);
         word-break: keep-all;
-
-        .ref_text {
-          font-size: rem(12);
-          color: gray;
-        }
+      }
+      .ref_text {
+        font-size: rem(12);
+        color: gray;
       }
 
       .btn_box {
@@ -821,6 +820,7 @@ section.deadline_main {
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
+    filter: brightness(70%);
   }
   .inner {
     display: grid;
@@ -2034,7 +2034,8 @@ section.deadline_main {
   //*----- Swiper : bigdata -----*//
   .swiper_bigdata_container {
     .swiper_bigdata_outerWrap {
-      left: 35%;
+      left: 45%;
+      top: 15%;
     }
   }
 
@@ -2168,6 +2169,14 @@ section.deadline_main {
   .number_wrapper {
     left: 52% !important;
   }
+
+  //*----- Swiper : bigdata -----*//
+  .swiper_bigdata_container {
+    .swiper_bigdata_outerWrap {
+      left: 48%;
+      top: 20%;
+    }
+  }
 }
 
 @media (max-width: rem(1000)) {
@@ -2289,6 +2298,10 @@ section.deadline_main {
         position: relative;
         width: 100%;
         height: rem(335);
+
+        img {
+          filter: brightness(70%);
+        }
 
         .image_wrap {
           display: block;
@@ -2475,6 +2488,16 @@ section.deadline_main {
   }
 }
 
+@media (max-width: rem(800)) {
+  //*----- Swiper : bigdata -----*//
+  .swiper_bigdata_container {
+    .swiper_bigdata_outerWrap {
+      left: 50%;
+      top: 28%;
+    }
+  }
+}
+
 @media (max-width: rem(750)) {
   // 정기구독 마감 배너
   section.deadline_main {
@@ -2658,39 +2681,6 @@ section.deadline_main {
     }
   }
 
-  //*----- Swiper : bigdata -----*//
-
-  .barfgood {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    // padding-top: rem(100);
-    .inner {
-      .btn_box {
-      }
-
-      .leftbox {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-    }
-  }
-
-  .swiper_bigdata_container {
-    .swiper_bigdata_outerWrap {
-      // left: 0;
-      // margin-top: rem(500);
-
-      // img {
-      //   width: rem(300) !important;
-      //   height: rem(300) !important;
-      // }
-    }
-  }
-
   //*----- Step -----*//
   .step_box {
     // flex-direction: column;
@@ -2718,6 +2708,20 @@ section.deadline_main {
         }
       }
     }
+  }
+
+  //*----- Swiper : bigdata -----*//
+
+  .swiper_bigdata_container {
+    .swiper_bigdata_outerWrap {
+      top: rem(430);
+      width: rem(1000);
+      left: -10%;
+    }
+  }
+
+  .cont_body {
+    display: contents;
   }
 
   // * ---- QUESTION ---- *
@@ -2750,6 +2754,26 @@ section.deadline_main {
           font-size: rem(18);
           font-weight: normal;
         }
+      }
+    }
+  }
+
+  .barfgood {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-bottom: rem(140);
+    // padding-top: rem(100);
+    .inner {
+      .btn_box {
+      }
+
+      .leftbox {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
       }
     }
   }

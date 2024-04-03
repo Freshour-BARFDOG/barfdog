@@ -1,30 +1,30 @@
-import {useSelector} from "react-redux";
-import {useRouter} from "next/router";
-import s from "./header.module.scss";
-import Icon_cart from "../../../public/img/icon/cart.svg";
-import Icon_mypage from "../../../public/img/icon/mypage.svg";
-import DeadlineTimer from "../atoms/DeadlineTimer";
-import React from "react";
+import { useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
+import s from './header.module.scss';
+import Icon_cart from '../../../public/img/icon/cart.svg';
+import Icon_mypage from '../../../public/img/icon/mypage.svg';
+import DeadlineTimer from '../atoms/DeadlineTimer';
+import React from 'react';
 
-export const Gnb_my = ({isMobile, setSidrOpen, authData}) => {
+export const Gnb_my = ({ isMobile, setSidrOpen, authData }) => {
   const userInfo = authData?.userInfo;
-  const cart = useSelector( (s) => s.cart );
+  const cart = useSelector((s) => s.cart);
   const router = useRouter();
-  
+
   const onShowMobileSideMenu = () => {
-    setSidrOpen( true );
+    setSidrOpen(true);
   };
   const onMovePage = async (e) => {
     e.preventDefault();
-    if ( !userInfo ) {
+    if (!userInfo) {
       return await router.push('/account/login');
     }
-    
+
     const btn = e.currentTarget;
     const link = btn.dataset.link;
-    await router.push( link );
+    await router.push(link);
   };
-  
+
   return (
     <>
       <div className={s.gnb_my}>
@@ -40,15 +40,11 @@ export const Gnb_my = ({isMobile, setSidrOpen, authData}) => {
           <li>
             {isMobile ? (
               <button type={'button'} onClick={onShowMobileSideMenu}>
-                <div className={s.mypage_wrap}>
-                  {/* <Icon_mypage/> */}
-                </div>
+                <div className={s.mypage_wrap}>{/* <Icon_mypage/> */}</div>
               </button>
             ) : (
               <button data-link={'/mypage/orderHistory'} onClick={onMovePage}>
-                <div className={s.mypage_wrap}>
-                  {/* <Icon_mypage/> */}
-                </div>
+                <div className={s.mypage_wrap}>{/* <Icon_mypage/> */}</div>
               </button>
             )}
           </li>
@@ -56,7 +52,7 @@ export const Gnb_my = ({isMobile, setSidrOpen, authData}) => {
       </div>
       {/* ! [추후] 추가할 수도 있음 */}
       {/* <i id={'DeadlineTimer-wrapper'} className={'mobile'}>
-        <DeadlineTimer/>
+        <DeadlineTimer />
       </i> */}
     </>
   );

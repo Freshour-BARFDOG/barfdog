@@ -29,6 +29,12 @@ const Gnb_survey = () => {
       <Link href="/surveyGuide" passHref>
         <a className={s.subscribe_btn}>AI 추천 식단</a>
       </Link>
+      {/* ! [추후] 추가할 수도 있음 */}
+      <i id={'DeadlineTimer-wrapper'}>
+        <DeadlineTimer />
+      </i>
+      {/* [선택] 모바일에서 안보이길 원할경우 */}
+      {/* <i id={'DeadlineTimer-wrapper'} className={'mobile'}> */}
     </>
   );
 };

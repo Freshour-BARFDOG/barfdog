@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import rem from '/util/func/rem';
 import zIndex from '/styles/module/zIndex.module.scss';
-import useDeviceState from "/util/hook/useDeviceState";
-import Favicon from '/public/img/icon/favicon.svg'
-import {orderDeadLineTimeStamp} from "/util/func/orderDeadLineTimeStamp";
-
+import useDeviceState from '/util/hook/useDeviceState';
+import Favicon from '/public/img/icon/favicon.svg';
+import { orderDeadLineTimeStamp } from '/util/func/orderDeadLineTimeStamp';
 
 const Dealine_timer = ({ className }) => {
   const [message, setMessage] = useState(null);
@@ -13,14 +12,12 @@ const Dealine_timer = ({ className }) => {
   const deviceState = useDeviceState();
   const isMobile = deviceState.isMobile;
   const deviceWidth = deviceState.deviceWidth;
-  
-  useEffect( () => {
-    setTimeout( () => {
-      setMessage( orderDeadLineTimeStamp() )
-    }, 100 );
-  } );
-  
-  
+
+  useEffect(() => {
+    setTimeout(() => {
+      setMessage(orderDeadLineTimeStamp());
+    }, 100);
+  });
 
   const onHideHandler = () => {
     setIsVisible(false);
@@ -32,15 +29,19 @@ const Dealine_timer = ({ className }) => {
         <Wrap
           onClick={onHideHandler}
           id="deadline_timer"
-          className={`${zIndex['gnb-subscribe-timer']} ${deviceWidth < 380 && 'scroll-container'} flex-wrap ${className ? className : ''}`}
+          className={`${zIndex['gnb-subscribe-timer']} ${
+            deviceWidth < 380 && 'scroll-container'
+          } flex-wrap ${className ? className : ''}`}
         >
-          {isMobile && <IconWrap><Favicon /></IconWrap>}
+          {isMobile && (
+            <IconWrap>
+              <Favicon />
+            </IconWrap>
+          )}
           {/* <Text>정기구독배송</Text> */}
-          <Timer id="deadline">
-            {message}
-          </Timer>
+          <Timer id="deadline">{message}</Timer>
           <NormalText> 이후 주문 마감!</NormalText>
-          {!isMobile &&<Rect className="rect" />}
+          {!isMobile && <Rect className="rect" />}
         </Wrap>
       )}
     </>
@@ -49,15 +50,12 @@ const Dealine_timer = ({ className }) => {
 
 export default Dealine_timer;
 
-
-
-
 const Rect = styled.i`
   position: absolute;
   left: calc(${rem(60)} + ${rem(5)});
   bottom: ${rem(78)};
   transform: translate(0, 100%) rotate(180deg);
-  border-top: ${rem(15)} solid #FFCEBA;
+  border-top: ${rem(15)} solid #ffceba;
   border-left: ${rem(9)} solid transparent;
   border-right: ${rem(9)} solid transparent;
 `;
@@ -85,7 +83,6 @@ const Timer = styled.span`
   ${'' /* text-align: left; */}
 `;
 
-
 const IconWrap = styled.i`
   display: flex;
   align-content: center;
@@ -95,8 +92,9 @@ const IconWrap = styled.i`
 const Wrap = styled.div`
   position: absolute;
   // ! z-index: 100;
-  left: ${rem(28)};
-  top: ${rem(156)};
+  ${'' /* left: ${rem(28)}; */}
+  left: ${rem(-10)};
+  top: ${rem(146)};
   display: grid;
   width: ${rem(150)};
   transform: translate(${rem(0)}, calc(-100% - ${rem(24)}));
@@ -105,7 +103,7 @@ const Wrap = styled.div`
   font-size: ${rem(16)};
   padding: ${rem(10)} ${rem(20)} ${rem(8)};
   box-sizing: border-box;
-  background-color: #FFCEBA;
+  background-color: #ffceba;
   border-radius: ${rem(8)};
   @media (max-width: ${rem(600)}) {
     position: fixed;
@@ -133,8 +131,12 @@ const Wrap = styled.div`
         height: 0;
       }
     }
-    
-    span {color: #fff;}
-    *{font-size: inherit;}
+
+    span {
+      color: #fff;
+    }
+    * {
+      font-size: inherit;
+    }
   }
 `;

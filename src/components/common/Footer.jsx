@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 import s from './footer.module.scss';
 import Wrapper from '/src/components/common/Wrapper';
 import Link from 'next/link';
@@ -21,15 +23,41 @@ import MobileLogo from '/public/img/mobile_logo.png';
 import MobileLogo_2x from '/public/img/mobile_logo@2x.png';
 import MenuLayout, { SubmenuList } from '../header/MenuLayout';
 import { general_itemType } from '../../../store/TYPE/itemType';
+import { userType } from '/store/TYPE/userAuthType';
 
 export default function Footer() {
-  const [isArrowActive, setIsArrowActive] = useState(true);
+  const auth = useSelector((state) => state.auth);
+  const userData = auth.userInfo;
+  const [isArrowActive, setIsArrowActive] = useState(false);
   const [rotation, setRotation] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [isBottombar, setIsBottombar] = useState(false);
 
   useEffect(() => {
     window.innerWidth <= 600 ? setIsMobile(true) : setIsMobile(false);
   }, [isMobile]);
+
+  // [일반유저] 너비 1080 이하 시, 하단바 생성
+  // [관리자] 너비 1200 이하 시, 하단바 생성
+  useEffect(() => {
+    // 화면 크기를 체크하여 isMobile 상태를 업데이트하는 함수
+    let size = userData?.userType === userType.ADMIN ? 1200 : 1080;
+
+    const updateMobileStatus = () => {
+      setIsBottombar(window.innerWidth < size);
+    };
+
+    // 컴포넌트 마운트 시 화면 크기를 체크
+    updateMobileStatus();
+
+    // 화면 크기 변경 시 isMobile 상태를 업데이트하기 위해 이벤트 리스너 등록
+    window.addEventListener('resize', updateMobileStatus);
+
+    // 컴포넌트 언마운트 시 이벤트 리스너 제거
+    return () => {
+      window.removeEventListener('resize', updateMobileStatus);
+    };
+  }, []);
 
   const onClickArrowIcon = (e) => {
     e.preventDefault();
@@ -38,7 +66,11 @@ export default function Footer() {
   };
 
   return (
-    <footer id={s.site_footer}>
+    <footer
+      id={s.site_footer}
+      // 하단바 생성 시, footer도 올라오게
+      style={isBottombar ? { marginBottom: '6rem' } : {}}
+    >
       {/* ---- 상단 Footer ----- */}
       <Wrapper bgColor="#7b1616">
         <section className={s.main_footer_area}>
@@ -60,7 +92,7 @@ export default function Footer() {
               <ul>
                 <li>
                   <a
-                    href="https://www.facebook.com/BARFDOG_official-100623948688775"
+                    href="https://pf.kakao.com/_WixbrK"
                     rel="noreferrer"
                     target="_blank"
                   >
@@ -109,15 +141,15 @@ export default function Footer() {
                     </Link>
                     <ul>
                       <li>
-                        <Link href="/healthcare">
+                        <Link href="/surveyGuide">
                           <a className={s.menu_sub_title}>AI 추천 식단</a>
                         </Link>
                       </li>
                       <li>
-                        <Link href="/healthcare">진단 기기</Link>
+                        <Link href="/healthcare/kit">진단 기기</Link>
                       </li>
                       <li>
-                        <Link href="/healthcare">AI 수의사</Link>
+                        <Link href="/healthcare/vet">AI 수의사</Link>
                       </li>
                     </ul>
                   </li>
