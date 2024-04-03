@@ -287,7 +287,7 @@ $browser-context: 16;
   }
 }
 
-@media (max-width: rem(600)) {
+@media (max-width: rem(860)) {
   .main_footer_area {
     padding: rem(40) rem(20) rem(30) rem(20);
     display: flex;
@@ -324,34 +324,45 @@ $browser-context: 16;
   }
 
   .sub_footer_area {
-    padding: rem(30) rem(20) rem(70) rem(20);
+    padding: rem(30) rem(20) rem(0) rem(20);
 
-    .sub_footer_left {
-      .info_cont {
+    .sub_footer_container {
+      margin-bottom: rem(20);
+
+      .sub_footer_right {
+        margin-right: rem(40);
+        // position: absolute;
+        // bottom: 32%;
+        // right: 10%;
+      }
+    }
+  }
+}
+
+@media (max-width: rem(680)) {
+  .sub_footer_area {
+    padding: rem(30) rem(20) rem(70) rem(20);
+  }
+
+  .sub_footer_area {
+    padding: rem(30) rem(20) rem(0) rem(20);
+
+    .sub_footer_container {
+      margin-bottom: rem(10);
+      display: flex;
+      flex-direction: column;
+      .sub_footer_left {
+        .info_cont {
+        }
       }
     }
 
     .sub_footer_right {
       width: rem(100);
-      position: absolute;
-      bottom: 32%;
-      right: 10%;
+      margin-bottom: rem(20);
+      // position: absolute;
+      // bottom: 32%;
+      // right: 10%;
     }
   }
-
-  // .companyInfo_area {
-  //   ul {
-  //     li {
-  //       &:nth-child(5),
-  //       &:last-child {
-  //         .info_cont {
-  //           display: none;
-  //         }
-  //       }
-  //       .info_cont_mobile {
-  //         display: block;
-  //       }
-  //     }
-  //   }
-  // }
 }

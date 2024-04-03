@@ -47,10 +47,33 @@ export default function Header() {
   const pageTitle = pageInfo.pageTitle;
 
   const [isSidrOpen, setIsSidrOpen] = useState(false);
+  const [isBottombar, setIsBottombar] = useState(false);
   const [mypageState, setMypageState] = useState({
     isMyPage: undefined,
     depth: false,
   });
+
+  // [일반유저] 너비 1080 이하 시, 하단바 생성
+  // [관리자] 너비 1200 이하 시, 하단바 생성
+  useEffect(() => {
+    // 화면 크기를 체크하여 isMobile 상태를 업데이트하는 함수
+    let size = userData?.userType === userType.ADMIN ? 1200 : 1080;
+
+    const updateMobileStatus = () => {
+      setIsBottombar(window.innerWidth < size);
+    };
+
+    // 컴포넌트 마운트 시 화면 크기를 체크
+    updateMobileStatus();
+
+    // 화면 크기 변경 시 isMobile 상태를 업데이트하기 위해 이벤트 리스너 등록
+    window.addEventListener('resize', updateMobileStatus);
+
+    // 컴포넌트 언마운트 시 이벤트 리스너 제거
+    return () => {
+      window.removeEventListener('resize', updateMobileStatus);
+    };
+  }, []);
 
   useEffect(() => {
     checkMypagePath(curPath);
@@ -124,42 +147,49 @@ export default function Header() {
 
               {/* ---- 메뉴바 ---- */}
               {/* pc (O)  ,  mobile (X) */}
-              <nav id="gnb" className={`${s.gnb_nav} pc`}>
-                <ul>
-                  <MenuLayout title="건강케어" link="/healthcare" />
-                  <MenuLayout
-                    title="스토어"
-                    link={`/shop?itemType=${general_itemType.ALL}`}
-                  >
-                    <SubmenuList
-                      title="ALL"
+              {/* <nav id="gnb" className={`${s.gnb_nav} pc`}> */}
+              {!isBottombar && (
+                <nav id="gnb" className={`${s.gnb_nav}`}>
+                  <ul>
+                    <MenuLayout title="건강케어" link="/healthcare">
+                      <SubmenuList title="AI 추천 식단" link="/surveyGuide" />
+                      <SubmenuList title="진단기기" link="/healthcare/kit" />
+                      <SubmenuList title="AI 수의사" link="/healthcare/vet" />
+                    </MenuLayout>
+                    <MenuLayout
+                      title="스토어"
                       link={`/shop?itemType=${general_itemType.ALL}`}
-                    />
-                    <SubmenuList
-                      title="생식"
-                      link={`/shop?itemType=${general_itemType.RAW}`}
-                    />
-                    <SubmenuList
-                      title="토핑"
-                      link={`/shop?itemType=${general_itemType.TOPPING}`}
-                    />
-                    <SubmenuList
-                      title="굿즈"
-                      link={`/shop?itemType=${general_itemType.GOODS}`}
-                    />
-                  </MenuLayout>
-                  {/* ! [추후] 멤버십 링크변경 */}
-                  <MenuLayout title="멤버십" link="/review" />
-                  <MenuLayout title="커뮤니티" link="/community/notice">
-                    <SubmenuList title="공지사항" link="/community/notice" />
-                    <SubmenuList title="이벤트" link="/community/event" />
-                    <SubmenuList title="블로그" link="/community/blog" />
-                    <SubmenuList title="어바웃" link="/community/about" />
-                  </MenuLayout>
-                  <MenuLayout title="리뷰" link="/review" />
-                  {/* <MenuLayout title="레시피" link="/recipes" /> */}
-                </ul>
-              </nav>
+                    >
+                      <SubmenuList
+                        title="ALL"
+                        link={`/shop?itemType=${general_itemType.ALL}`}
+                      />
+                      <SubmenuList
+                        title="생식"
+                        link={`/shop?itemType=${general_itemType.RAW}`}
+                      />
+                      <SubmenuList
+                        title="토핑"
+                        link={`/shop?itemType=${general_itemType.TOPPING}`}
+                      />
+                      <SubmenuList
+                        title="굿즈"
+                        link={`/shop?itemType=${general_itemType.GOODS}`}
+                      />
+                    </MenuLayout>
+                    {/* ! [추후] 멤버십 링크변경 */}
+                    <MenuLayout title="멤버십" link="/review" />
+                    <MenuLayout title="커뮤니티" link="/community/notice">
+                      <SubmenuList title="공지사항" link="/community/notice" />
+                      <SubmenuList title="이벤트" link="/community/event" />
+                      <SubmenuList title="블로그" link="/community/blog" />
+                      <SubmenuList title="어바웃" link="/community/about" />
+                    </MenuLayout>
+                    <MenuLayout title="리뷰" link="/review" />
+                    {/* <MenuLayout title="레시피" link="/recipes" /> */}
+                  </ul>
+                </nav>
+              )}
             </section>
 
             {/* ----- MOBILE ----- */}
@@ -265,12 +295,14 @@ export default function Header() {
       </header>
 
       {/* 모바일 - 하단 고정바 */}
-      {isMobile && !mypageState.isMyPage && <MobileGnb />}
+      {/* {isMobile && !mypageState.isMyPage && <MobileGnb />} */}
+      {/* {isBottombar && !mypageState.isMyPage && <MobileGnb />} */}
+      {isBottombar && <MobileGnb />}
 
-      {/* 모바일 -사이드바  */}
-      {isMobile && (
+      {/* [삭제예정] 모바일 - 사이드바  */}
+      {/* {isMobile && (
         <MobileSidr isOpen={isSidrOpen} setSidrOpen={setIsSidrOpen} />
-      )}
+      )} */}
       <Modal_subscribeWidhSSR />
     </>
   );
@@ -280,6 +312,32 @@ export default function Header() {
 function TopButton() {
   // const [showButton, setShowButton] = useState(false);
   const [pageY, setPageY] = useState(0);
+  const [isBottombar, setIsBottombar] = useState(false);
+
+  const auth = useSelector((state) => state.auth);
+  const userData = auth.userInfo;
+
+  // [일반유저] 너비 1080 이하 시, 하단바 생성
+  // [관리자] 너비 1200 이하 시, 하단바 생성
+  useEffect(() => {
+    // 화면 크기를 체크하여 isMobile 상태를 업데이트하는 함수
+    let size = userData?.userType === userType.ADMIN ? 1200 : 1080;
+
+    const updateMobileStatus = () => {
+      setIsBottombar(window.innerWidth < size);
+    };
+
+    // 컴포넌트 마운트 시 화면 크기를 체크
+    updateMobileStatus();
+
+    // 화면 크기 변경 시 isMobile 상태를 업데이트하기 위해 이벤트 리스너 등록
+    window.addEventListener('resize', updateMobileStatus);
+
+    // 컴포넌트 언마운트 시 이벤트 리스너 제거
+    return () => {
+      window.removeEventListener('resize', updateMobileStatus);
+    };
+  }, []);
 
   // * 버튼 위치 변경으로 PC/모바일 구분만 필요하게 변경
   // * react-device-detect: 안드로이드 테블릿 미대응으로 삭제
@@ -288,11 +346,12 @@ function TopButton() {
   // // console.log( 'isMobileLib = ', isMobileDevice )
   // 스크롤 최상단 이동
   const scrollToTop = () => {
-    window.scroll({
-      top: 0,
-      behavior: 'smooth',
+    requestAnimationFrame(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
     });
-    // document.documentElement.scrollIntoView({ behavior: 'smooth' });
   };
 
   // [24.03.31 - 기능 제거] ScrollYOffset > 200 이상일 경우 스크롤 올릴때 나타남
@@ -379,7 +438,12 @@ function TopButton() {
     return (
       // [수정] 항상 보이게 설정
       // showButton && (
-      <div className={s.tobox}>
+      <div
+        className={s.tobox}
+        // [수정] 항상 위치 고정
+        // 하단바 생성 시, 최상단 버튼도 올라오게
+        // style={isBottombar ? { marginBottom: '6rem' } : {}}
+      >
         <button
           className={s.topbutton}
           id="top"

@@ -11,33 +11,20 @@ import Image from 'next/image';
 // import axios from 'axios';
 import Link from 'next/link';
 
-export default function HealthcarePage() {
+export default function DiagnosticKitPage() {
   return (
     <>
-      <MetaTitle title="건강케어" />
+      <MetaTitle title="진단기기" />
       <Layout>
         <Wrapper>
           <section className={s.review_title}>
-            <div>건강케어 서비스</div>
+            <div>반려견 장내 미생물 진단분석 서비스</div>
           </section>
 
           <section className={s.swiper_box}>
             {/* {bestReviewList.length > 0 && (
               <Swiper_bestReview items={bestReviewList} />
             )} */}
-            <ul>
-              <li>
-                <Link href="/surveyGuide">
-                  <a className={s.menu_sub_title}>AI 추천 식단</a>
-                </Link>
-              </li>
-              <li>
-                <Link href="/healthcare/kit">진단 기기</Link>
-              </li>
-              <li>
-                <Link href="/healthcare/vet">AI 수의사</Link>
-              </li>
-            </ul>
           </section>
 
           <section className={s.review_write_ad}>
@@ -56,7 +43,7 @@ export default function HealthcarePage() {
 
                     <div className={s.text_box}>
                       <p className={s.top_text}>
-                        건강케어건강케어건강케어건강케어 간단한 배변 채취로 장내
+                        진단기기진단기기진단기기진단기기 간단한 배변 채취로 장내
                         환경 및 질병 유발 유해균 파악이 가능합니다!
                       </p>
                       <p className={s.bot_text}>곧 만나요 !</p>

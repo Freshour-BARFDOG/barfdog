@@ -171,7 +171,7 @@
   width: rem(80);
   height: rem(40);
   border-radius: rem(20);
-  // margin: 0 rem(10);
+  margin-left: rem(20);
   font-size: rem(16) !important;
 }
 
@@ -219,7 +219,7 @@
   align-items: center;
   // justify-content: space-between;
   // padding-left: rem(30);
-  gap: rem(5);
+  // gap: rem(10);
 
   .gnb_nav {
     display: flex;
@@ -231,6 +231,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      position: relative;
       > a {
         &.subscribe_btn {
           cursor: pointer;
@@ -399,7 +400,8 @@
 .tobox {
   position: fixed;
   // top: rem(50);
-  bottom: rem(100);
+  bottom: rem(200);
+  // bottom: rem(100);  // [수정] 채널톡과 함께 항상 올라오게 설정
   // left: 50%;
   right: rem(13);
   width: rem(47);
@@ -523,14 +525,14 @@
         cursor: pointer;
         border: rem(1) solid #cb1010;
         width: rem(94);
-        height: rem(30);
+        height: rem(40);
         border-radius: rem(20);
         color: #cb1010;
         // font-weight: bold;
         display: flex;
         justify-content: center;
         align-items: center;
-        font-size: rem(14);
+        font-size: rem(15);
       }
       .subscribe_btn:hover {
         background-color: #cb1010;
@@ -555,8 +557,4 @@
   //     z-index: 1;
   //   }
   // }
-
-  .tobox {
-    bottom: rem(200);
-  }
 }

@@ -31,6 +31,8 @@ $mobileMenuHeight: rem(48);
     align-items: center;
     //height: $mobileMenuHeight;
     background-color: #fff;
+    z-index: $mobileNav;
+    position: relative;
   }
 
   .mobile-menu,
