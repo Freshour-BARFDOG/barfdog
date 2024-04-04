@@ -366,7 +366,16 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                         href={`/shop?itemType=${general_itemType.TOPPING}`}
                         passHref
                       >
-                        <a>토핑</a>
+                        <a>토퍼</a>
+                      </Link>
+                    </li>
+                    {/* [추후간식] 링크수정 */}
+                    <li>
+                      <Link
+                        href={`/shop?itemType=${general_itemType.TOPPING}`}
+                        passHref
+                      >
+                        <a>간식</a>
                       </Link>
                     </li>
                     <li>
@@ -374,7 +383,7 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                         href={`/shop?itemType=${general_itemType.GOODS}`}
                         passHref
                       >
-                        <a>굿즈</a>
+                        <a>용품</a>
                       </Link>
                     </li>
                   </ul>

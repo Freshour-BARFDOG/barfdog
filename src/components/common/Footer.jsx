@@ -172,12 +172,20 @@ export default function Footer() {
                         <Link
                           href={`/shop?itemType=${general_itemType.TOPPING}`}
                         >
-                          토핑
+                          토퍼
+                        </Link>
+                      </li>
+                      {/* [추후간식] 링크수정 */}
+                      <li>
+                        <Link
+                          href={`/shop?itemType=${general_itemType.TOPPING}`}
+                        >
+                          간식
                         </Link>
                       </li>
                       <li>
                         <Link href={`/shop?itemType=${general_itemType.GOODS}`}>
-                          굿즈
+                          용품
                         </Link>
                       </li>
                     </ul>
@@ -255,12 +263,20 @@ export default function Footer() {
                         <Link
                           href={`/shop?itemType=${general_itemType.TOPPING}`}
                         >
-                          토핑
+                          토퍼
+                        </Link>
+                      </li>
+                      {/* [추후간식] 링크수정  */}
+                      <li>
+                        <Link
+                          href={`/shop?itemType=${general_itemType.TOPPING}`}
+                        >
+                          간식
                         </Link>
                       </li>
                       <li>
                         <Link href={`/shop?itemType=${general_itemType.GOODS}`}>
-                          굿즈
+                          용품
                         </Link>
                       </li>
                     </ul>
