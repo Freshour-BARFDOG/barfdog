@@ -193,9 +193,9 @@ export default function Footer() {
                           <a className={s.menu_sub_title}>공지사항</a>
                         </Link>
                       </li>
-                      <li>
+                      {/* <li>
                         <Link href="/community/event">이벤트</Link>
-                      </li>
+                      </li> */}
                       <li>
                         <Link href="/community/blog">블로그</Link>
                       </li>
@@ -229,10 +229,10 @@ export default function Footer() {
                         </Link>
                       </li>
                       <li>
-                        <Link href="/healthcare">진단 기기</Link>
+                        <Link href="/healthcare/kit">진단 기기</Link>
                       </li>
                       <li>
-                        <Link href="/healthcare">AI 수의사</Link>
+                        <Link href="/healthcare/vet">AI 수의사</Link>
                       </li>
                     </ul>
                   </li>
@@ -280,9 +280,9 @@ export default function Footer() {
                           <a className={s.menu_sub_title}>공지사항</a>
                         </Link>
                       </li>
-                      <li>
+                      {/* <li>
                         <Link href="/community/event">이벤트</Link>
-                      </li>
+                      </li> */}
                       <li>
                         <Link href="/community/blog">블로그</Link>
                       </li>

@@ -37,7 +37,7 @@ section.clientWorry {
 }
 
 section.review {
-  padding: rem(150) 0 rem(200);
+  padding: 0 0 rem(40) 0;
 }
 
 section.Howtouse {
@@ -45,7 +45,7 @@ section.Howtouse {
 }
 
 section.sns {
-  padding: rem(114) 0 rem(190);
+  padding: rem(114) 0 rem(60);
 }
 
 @keyframes fadeOut {
@@ -181,6 +181,16 @@ section.banner_text {
 }
 
 // *---- 최상위 그림 배너 ----*
+.swiper_main_outerWrap {
+  width: 96% !important;
+  // margin-left: rem(18);
+  margin: auto;
+
+  img {
+    border-radius: 16px !important;
+  }
+}
+
 .banner {
   .inner {
     // height: rem(600);
@@ -326,6 +336,18 @@ section.deadline_main {
     h2 {
       color: #ca1010;
       font-size: rem(20);
+      cursor: pointer;
+    }
+
+    .step_arrow_wrapper {
+      display: flex;
+      align-items: center;
+      z-index: 10;
+      cursor: pointer !important;
+
+      span {
+        cursor: pointer !important;
+      }
     }
 
     .arrow_icon {
@@ -408,6 +430,7 @@ section.deadline_main {
 }
 
 // * ----- 빅데이터 기반 ----- *
+
 .barfgood {
   position: relative;
   display: flex;
@@ -469,7 +492,7 @@ section.deadline_main {
   }
 }
 
-// * ----- 빅데이터 기반 (스와이퍼 data)----- *
+// * ----- Swiper bigdata ----- *
 .swiper_bigdata_container {
   position: relative;
   .swiper_bigdata_outerWrap {
@@ -482,7 +505,7 @@ section.deadline_main {
 
     .swiper_bigdata {
       // width: rem(800);
-      // height: rem(800);
+      height: rem(600);
       width: 100%;
 
       span {
@@ -1345,8 +1368,12 @@ section.deadline_main {
   position: relative;
 
   .inner {
+    background-color: #faf4ef;
+    text-align: center;
     .title {
-      text-align: center;
+      padding-top: rem(40);
+    }
+    .title_sub {
     }
   }
 
@@ -1377,16 +1404,6 @@ section.deadline_main {
       -webkit-line-clamp: 4;
       overflow: hidden;
     }
-  }
-
-  .redbox {
-    position: absolute;
-    background-color: #faf4ef;
-    left: rem(-39);
-    top: rem(100);
-    border-radius: rem(28) rem(0) rem(0) rem(28);
-    width: rem(1649);
-    height: rem(720);
   }
 }
 
@@ -1670,15 +1687,14 @@ section.deadline_main {
   height: rem(740);
 
   .swiper_review {
-    padding: rem(30) 0 rem(80);
+    padding: 0 0 rem(80);
     position: relative;
     height: rem(690);
+    text-align: left;
 
     .title {
       font-family: 'Bebas Neue', sans-serif;
       font-size: rem(46);
-      margin-top: rem(40);
-      text-align: left;
       font-weight: normal;
     }
   }
@@ -1830,7 +1846,7 @@ section.deadline_main {
   }
 
   .swiper-pagination__reviewSection {
-    // bottom: rem(70) !important;
+    bottom: rem(-10);
     height: rem(30);
 
     span {
@@ -1951,13 +1967,21 @@ section.deadline_main {
   .swiper_main_outerWrap {
     height: rem(736);
 
-    .swiper_navigation_container {
-      // display: none;
+    .img-wrap {
+      width: 100%;
+
+      img {
+        height: rem(736) !important; // [추가]
+        // padding: 0 rem(20) !important;
+      }
     }
   }
 
   // 정기구독 마감 배너
   section.deadline_main {
+    img {
+      height: rem(100) !important; // [추가]
+    }
     .deadline_container {
       .deadline_text {
         .deadline_title {
@@ -1965,42 +1989,42 @@ section.deadline_main {
         }
       }
 
-      .deadline_time_wrapper {
-        // 일 시간 분 초
-        ul {
-          display: flex;
-          gap: rem(5);
-          padding: 0 rem(10);
+      // .deadline_time_wrapper {
+      //   // 일 시간 분 초
+      //   ul {
+      //     display: flex;
+      //     gap: rem(5);
+      //     padding: 0 rem(10);
 
-          li {
-            .deadline_time_text {
-              font-size: rem(14);
-            }
+      //     li {
+      //       .deadline_time_text {
+      //         font-size: rem(14);
+      //       }
 
-            .deadline_time_sub_text {
-              font-size: rem(12);
-            }
-          }
-        }
+      //       .deadline_time_sub_text {
+      //         font-size: rem(12);
+      //       }
+      //     }
+      //   }
 
-        .deadline_time_number {
-          display: flex;
-          align-items: center;
-          gap: rem(16);
-          padding: 0 rem(30);
+      //   .deadline_time_number {
+      //     display: flex;
+      //     align-items: center;
+      //     gap: rem(16);
+      //     padding: 0 rem(30);
 
-          // 숫자
-          p {
-            font-size: rem(24);
-          }
-        }
+      //     // 숫자
+      //     p {
+      //       font-size: rem(24);
+      //     }
+      //   }
 
-        button {
-          width: rem(80);
-          height: rem(30);
-          font-size: rem(14);
-        }
-      }
+      //   button {
+      //     width: rem(80);
+      //     height: rem(30);
+      //     font-size: rem(14);
+      //   }
+      // }
     }
   }
 
@@ -2227,8 +2251,12 @@ section.deadline_main {
   //최상단 그림배너
   .banner {
     .inner {
-      height: rem(220);
+      height: rem(736);
     }
+  }
+
+  .swiper_main_outerWrap {
+    height: rem(736) !important;
   }
 
   // 정기구독 마감 배너
@@ -2242,44 +2270,44 @@ section.deadline_main {
         }
       }
 
-      .deadline_time_wrapper {
-        gap: rem(20);
-        transform: translateY(-55%);
+      // .deadline_time_wrapper {
+      //   gap: rem(20);
+      //   transform: translateY(-55%);
 
-        // 일 시간 분 초
-        ul {
-          gap: rem(30);
-          padding: 0;
+      //   // 일 시간 분 초
+      //   ul {
+      //     gap: rem(30);
+      //     padding: 0;
 
-          li {
-            .deadline_time_text {
-              font-size: rem(12);
-              // display: none;
-            }
+      //     li {
+      //       .deadline_time_text {
+      //         font-size: rem(12);
+      //         // display: none;
+      //       }
 
-            .deadline_time_sub_text {
-              // display: none;
-            }
-          }
-        }
+      //       .deadline_time_sub_text {
+      //         // display: none;
+      //       }
+      //     }
+      //   }
 
-        .deadline_time_number {
-          gap: rem(14);
-          padding: 0;
+      //   .deadline_time_number {
+      //     gap: rem(14);
+      //     padding: 0;
 
-          // 숫자
-          p {
-            font-size: rem(18);
-            font-weight: bold;
-          }
-        }
+      //     // 숫자
+      //     p {
+      //       font-size: rem(18);
+      //       font-weight: bold;
+      //     }
+      //   }
 
-        button {
-          width: rem(80);
-          height: rem(30);
-          font-size: rem(14);
-        }
-      }
+      //   button {
+      //     width: rem(80);
+      //     height: rem(30);
+      //     font-size: rem(14);
+      //   }
+      // }
     }
   }
 
@@ -2369,92 +2397,92 @@ section.deadline_main {
     }
   }
 
-  .difference {
-    .inner {
-      .scroll {
-        .image_wrap {
-        }
-        ul {
-          top: rem(160);
-          row-gap: rem(400);
-          li {
-            &::after {
-              height: rem(70);
-              top: 50%;
-              border-style: solid;
-              background-color: transparent;
-            }
-            &::before {
-              transform: translate(0, 0);
-            }
+  // .difference {
+  //   .inner {
+  //     .scroll {
+  //       .image_wrap {
+  //       }
+  //       ul {
+  //         top: rem(160);
+  //         row-gap: rem(400);
+  //         li {
+  //           &::after {
+  //             height: rem(70);
+  //             top: 50%;
+  //             border-style: solid;
+  //             background-color: transparent;
+  //           }
+  //           &::before {
+  //             transform: translate(0, 0);
+  //           }
 
-            &:first-child {
-              &::after {
-                left: rem(135);
-                border-color: var(--color-main);
-                border-width: rem(1) rem(1) 0 0;
-                transform: translate(0%, 0%);
-                width: 14.5vw;
-              }
-              &::before {
-                top: rem(100);
-                // left: rem(250);
-                left: calc(14.5vw + rem(130));
-              }
-            }
-            &:nth-child(2) {
-              &::after {
-                right: rem(70);
-                border-color: #ff4921;
-                border-width: rem(1) 0 0 rem(1);
-                transform: translate(0%, 0%);
-                left: auto;
-                width: 14.5vw;
-              }
-              &::before {
-                top: rem(100);
-                // right: rem(185);
-                left: auto;
-                right: calc(14.5vw + rem(65));
-              }
-            }
-            &:nth-child(3) {
-              &::after {
-                left: rem(100);
-                border-color: #ff3232;
-                border-width: 0 rem(1) rem(1) 0;
-                transform: translate(0%, -100%);
-                width: 14.5vw;
-              }
-              &::before {
-                top: auto;
-                bottom: rem(100);
-                left: calc(14.5vw + rem(95));
-              }
-            }
-            &:last-child {
-              &::after {
-                right: rem(80);
-                border-color: #ff8c16;
-                border-width: 0 0 rem(1) rem(1);
-                transform: translate(0%, -100%);
-                left: auto;
-                width: 14.5vw;
-              }
-              &::before {
-                top: auto;
-                bottom: rem(100);
-                right: calc(14.5vw + rem(75));
-                left: auto;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+  //           &:first-child {
+  //             &::after {
+  //               left: rem(135);
+  //               border-color: var(--color-main);
+  //               border-width: rem(1) rem(1) 0 0;
+  //               transform: translate(0%, 0%);
+  //               width: 14.5vw;
+  //             }
+  //             &::before {
+  //               top: rem(100);
+  //               // left: rem(250);
+  //               left: calc(14.5vw + rem(130));
+  //             }
+  //           }
+  //           &:nth-child(2) {
+  //             &::after {
+  //               right: rem(70);
+  //               border-color: #ff4921;
+  //               border-width: rem(1) 0 0 rem(1);
+  //               transform: translate(0%, 0%);
+  //               left: auto;
+  //               width: 14.5vw;
+  //             }
+  //             &::before {
+  //               top: rem(100);
+  //               // right: rem(185);
+  //               left: auto;
+  //               right: calc(14.5vw + rem(65));
+  //             }
+  //           }
+  //           &:nth-child(3) {
+  //             &::after {
+  //               left: rem(100);
+  //               border-color: #ff3232;
+  //               border-width: 0 rem(1) rem(1) 0;
+  //               transform: translate(0%, -100%);
+  //               width: 14.5vw;
+  //             }
+  //             &::before {
+  //               top: auto;
+  //               bottom: rem(100);
+  //               left: calc(14.5vw + rem(95));
+  //             }
+  //           }
+  //           &:last-child {
+  //             &::after {
+  //               right: rem(80);
+  //               border-color: #ff8c16;
+  //               border-width: 0 0 rem(1) rem(1);
+  //               transform: translate(0%, -100%);
+  //               left: auto;
+  //               width: 14.5vw;
+  //             }
+  //             &::before {
+  //               top: auto;
+  //               bottom: rem(100);
+  //               right: calc(14.5vw + rem(75));
+  //               left: auto;
+  //             }
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
 
-  //리뷰 후기
+  //*---- RECIPE ----*
   .swiper_review_outerWrap {
     width: 100%;
     max-width: rem(600);
@@ -2475,11 +2503,13 @@ section.deadline_main {
     .swiper_review {
       padding: rem(60) 0 rem(80);
       position: relative;
-      width: rem(720);
+      width: rem(340);
     }
 
-    .swiper_review {
-      width: rem(340);
+    .swiper-pagination__reviewSection {
+      span {
+        width: rem(50);
+      }
     }
   }
 
@@ -2492,8 +2522,12 @@ section.deadline_main {
   //*----- Swiper : bigdata -----*//
   .swiper_bigdata_container {
     .swiper_bigdata_outerWrap {
-      left: 50%;
+      left: 56%;
       top: 28%;
+
+      .swiper_bigdata {
+        height: rem(300);
+      }
     }
   }
 }
@@ -2519,36 +2553,34 @@ section.deadline_main {
 
         // 일 시간 분 초
         ul {
-          gap: rem(38);
+          gap: rem(20);
           padding: 0;
 
           li {
             .deadline_time_text {
               font-size: rem(12);
-              // display: none;
             }
 
             .deadline_time_sub_text {
-              // display: none;
             }
           }
         }
 
         .deadline_time_number {
-          gap: rem(14);
+          gap: rem(20);
           padding: 0;
 
           // 숫자
           p {
-            font-size: rem(18);
+            font-size: rem(30);
           }
         }
 
-        button {
-          width: rem(70);
-          height: rem(26);
-          font-size: rem(12);
-        }
+        // button {
+        //   width: rem(70);
+        //   height: rem(26);
+        //   font-size: rem(12);
+        // }
       }
     }
   }
@@ -2584,19 +2616,19 @@ section.deadline_main {
 
       .img-wrap {
         width: 100%;
-        // padding: 0 rem(20);
 
         img {
           // width: rem(403) !important;
           height: rem(619) !important; // [추가]
+          padding: 0 rem(20) !important;
         }
       }
     }
   }
 
   .swiper_main_outerWrap {
-    aspect-ratio: 1/1;
-    width: 100%;
+    // aspect-ratio: 1/1;
+    // width: 100%;
     height: rem(619); // [추가]
   }
 
@@ -2682,29 +2714,83 @@ section.deadline_main {
   }
 
   //*----- Step -----*//
-  .step_box {
-    // flex-direction: column;
+  .step_main {
+    align-items: center;
 
+    .title_wrapper {
+      width: rem(310);
+
+      justify-content: space-between;
+
+      h2 {
+        color: #ca1010;
+        font-size: rem(20);
+        cursor: pointer;
+      }
+
+      button {
+        width: rem(40);
+      }
+
+      .step_arrow_wrapper {
+        justify-content: flex-end;
+      }
+
+      .arrow_icon {
+        cursor: pointer;
+        transition: transform 0.5s ease;
+      }
+    }
+  }
+
+  .step_box.active {
+    max-height: rem(1000);
+  }
+
+  .step_box {
+    padding: rem(30) 0;
     ul {
       flex-direction: column;
-
+      gap: rem(20);
       li {
-        flex-direction: row;
+        display: flex;
+        width: rem(700);
+        padding-top: 0;
 
-        .step_line {
-          position: absolute;
-          margin-left: rem(100);
-          top: 18%;
-          border: rem(1.4) solid #ca1010;
-          height: rem(900);
+        .number_wrapper {
+          left: 50% !important;
+        }
+
+        .step_title {
+          margin: 0 0 rem(4) 0;
+          width: rem(180);
+          text-align: left;
+        }
+
+        .step_text {
+          text-align: left;
+          width: rem(250);
+          padding-left: rem(30);
         }
 
         .firstbox_left {
+          .step_line {
+            // position: absolute;
+            // top: 18%;
+            border: none;
+            border-right: rem(3) solid #ca1010 !important;
+            margin: 0 !important;
+            height: rem(500) !important;
+            width: rem(230) !important;
+          }
         }
 
         .firstbox_right {
           display: flex;
           flex-direction: column;
+          width: rem(800);
+          // justify-content: center;
+          align-items: center;
         }
       }
     }
@@ -2717,6 +2803,9 @@ section.deadline_main {
       top: rem(430);
       width: rem(1000);
       left: -10%;
+      .swiper_bigdata {
+        height: rem(400);
+      }
     }
   }
 
@@ -3025,21 +3114,28 @@ section.deadline_main {
     }
   }
 
-  //리뷰 후기
+  //*---- RECIPE ----*
   section.review {
-    padding: rem(120) 0 rem(110);
+    padding: rem(20) 0 rem(110) 0;
   }
 
   .review {
     .inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       .title {
         font-size: rem(28);
+      }
+      .title_sub {
+        width: rem(300);
       }
     }
   }
 
   .swiper_review_outerWrap {
-    height: rem(600);
+    height: rem(630);
 
     .swiper-button-prev {
       display: none;
@@ -3062,18 +3158,37 @@ section.deadline_main {
     }
 
     .swiper_review_bg {
-      width: rem(280);
-      height: rem(430);
+      width: rem(370);
+      height: rem(630);
       border-radius: rem(8);
+
+      .swiper_review_img {
+        margin: 0;
+        width: auto;
+        height: auto;
+      }
+
+      .title {
+        font-size: rem(45) !important;
+      }
+
+      .contents {
+        height: rem(135);
+      }
     }
 
     .swiper_review {
       position: absolute;
-      top: rem(40);
+      top: rem(10);
       left: 50%;
       transform: translateX(-50%);
-      width: rem(280);
+      width: rem(380);
       overflow: visible;
+      padding: 0;
+
+      .swiper_review_bg_end {
+        height: rem(630);
+      }
     }
 
     .swiper_box {
@@ -3083,12 +3198,11 @@ section.deadline_main {
     .swiper_review_img {
       margin: rem(40) auto 0;
       width: rem(180);
-      height: rem(180);
+      height: rem(320) !important;
     }
 
     .swiper-pagination__reviewSection {
-      bottom: rem(100) !important;
-      background-color: #ca1010;
+      bottom: rem(16) !important;
 
       span.swiper-pagination-bullet-active {
       }
@@ -3151,6 +3265,7 @@ section.deadline_main {
   //*---- SNS ----*
 
   .sns {
+    margin-top: rem(100);
     .inner {
       > p {
         padding: rem(12) 0 rem(50);

@@ -346,7 +346,7 @@ export default function MobileGnb() {
             }`}
           >
             <MobileMenu title="공지사항" link="/community/notice" />
-            <MobileMenu title="이벤트" link="/community/event" />
+            {/* <MobileMenu title="이벤트" link="/community/event" /> */}
             <MobileMenu title="블로그" link="/community/blog" />
             <MobileMenu title="어바웃" link="/community/about" />
           </ul>

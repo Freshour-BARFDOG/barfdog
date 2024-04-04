@@ -177,16 +177,13 @@ export default function Header() {
                         link={`/shop?itemType=${general_itemType.GOODS}`}
                       />
                     </MenuLayout>
-                    {/* ! [추후] 멤버십 링크변경 */}
-                    <MenuLayout title="멤버십" link="/review" />
+                    <MenuLayout title="멤버십" link="/membership" />
                     <MenuLayout title="커뮤니티" link="/community/notice">
                       <SubmenuList title="공지사항" link="/community/notice" />
-                      <SubmenuList title="이벤트" link="/community/event" />
                       <SubmenuList title="블로그" link="/community/blog" />
                       <SubmenuList title="어바웃" link="/community/about" />
                     </MenuLayout>
                     <MenuLayout title="리뷰" link="/review" />
-                    {/* <MenuLayout title="레시피" link="/recipes" /> */}
                   </ul>
                 </nav>
               )}
