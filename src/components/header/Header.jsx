@@ -169,11 +169,16 @@ export default function Header() {
                         link={`/shop?itemType=${general_itemType.RAW}`}
                       />
                       <SubmenuList
-                        title="토핑"
+                        title="토퍼"
+                        link={`/shop?itemType=${general_itemType.TOPPING}`}
+                      />
+                      {/* [추후간식] 링크수정  */}
+                      <SubmenuList
+                        title="간식"
                         link={`/shop?itemType=${general_itemType.TOPPING}`}
                       />
                       <SubmenuList
-                        title="굿즈"
+                        title="용품"
                         link={`/shop?itemType=${general_itemType.GOODS}`}
                       />
                     </MenuLayout>

@@ -1833,18 +1833,6 @@ section.deadline_main {
     right: rem(-8);
   }
 
-  a {
-    // position: absolute;
-    // left: 50%;
-    // transform: translateX(-50%);
-    // bottom: calc(-100% + #{rem(8)});
-    // content: "더보기";
-    // color: #fff;
-    // font-size: rem(14);
-    // width: 100%;
-    // white-space: nowrap;
-  }
-
   .swiper-pagination__reviewSection {
     bottom: rem(-10);
     height: rem(30);
@@ -2185,13 +2173,27 @@ section.deadline_main {
   }
 }
 
-@media (max-width: rem(1030)) {
+@media (max-width: rem(1130)) {
+  .step_main {
+    ul {
+      gap: rem(10);
+
+      li {
+        .step_line {
+          width: rem(700) !important;
+        }
+      }
+    }
+  }
+
   .step_line {
     width: rem(800) !important;
   }
+}
 
-  .number_wrapper {
-    left: 52% !important;
+@media (max-width: rem(1030)) {
+  .step_line {
+    width: rem(800) !important;
   }
 
   //*----- Swiper : bigdata -----*//
@@ -2204,10 +2206,6 @@ section.deadline_main {
 }
 
 @media (max-width: rem(1000)) {
-  .number_wrapper {
-    left: 55% !important;
-  }
-
   .swiper_review_outerWrap {
     .swiper-button-prev {
       margin-left: rem(40);
@@ -2226,24 +2224,47 @@ section.deadline_main {
     }
   }
 
-  .difference2 {
+  // .difference2 {
+  //   ul {
+  //     grid-template-columns: 1fr 1fr;
+  //     width: 100%;
+  //     li {
+  //       // &:first-child{
+  //       //   grid-column: span 1 / 1;
+  //       //   grid-row: span 1 / 1;
+  //       // }
+  //       // &:nth-child(2){
+  //       //   grid-column: span 1 / 2;
+  //       //   grid-row: span 1 / 1;
+  //       // }
+  //       &:last-child {
+  //         grid-column: span 2;
+  //       }
+  //     }
+  //   }
+  // }
+}
+
+// *---- STEP ----*
+@media (max-width: rem(930)) {
+  .step_main {
     ul {
-      grid-template-columns: 1fr 1fr;
-      width: 100%;
+      gap: rem(0) !important;
+
       li {
-        // &:first-child{
-        //   grid-column: span 1 / 1;
-        //   grid-row: span 1 / 1;
-        // }
-        // &:nth-child(2){
-        //   grid-column: span 1 / 2;
-        //   grid-row: span 1 / 1;
-        // }
-        &:last-child {
-          grid-column: span 2;
+        width: rem(200);
+        .step_text {
+          font-size: rem(15);
+        }
+        .step_line {
+          width: rem(650) !important;
         }
       }
     }
+  }
+
+  .step_line {
+    width: rem(800) !important;
   }
 }
 
@@ -2518,6 +2539,36 @@ section.deadline_main {
   }
 }
 
+// *---- STEP ----*
+@media (max-width: rem(810)) {
+  .step_main {
+    ul {
+      gap: rem(0) !important;
+
+      li {
+        width: rem(170);
+        .step_title {
+          font-size: rem(22);
+          padding-bottom: rem(30);
+          width: rem(180);
+        }
+        .step_text {
+          // font-size: rem(14);
+          display: none;
+        }
+        .step_line {
+          top: 26% !important;
+          width: rem(520) !important;
+        }
+      }
+    }
+  }
+
+  .step_line {
+    width: rem(800) !important;
+  }
+}
+
 @media (max-width: rem(800)) {
   //*----- Swiper : bigdata -----*//
   .swiper_bigdata_container {
@@ -2748,10 +2799,10 @@ section.deadline_main {
   }
 
   .step_box {
-    padding: rem(30) 0;
+    // padding: rem(30) 0;
     ul {
       flex-direction: column;
-      gap: rem(20);
+      gap: rem(20) !important;
       li {
         display: flex;
         width: rem(700);
@@ -2765,12 +2816,15 @@ section.deadline_main {
           margin: 0 0 rem(4) 0;
           width: rem(180);
           text-align: left;
+          padding-bottom: 0;
         }
 
         .step_text {
           text-align: left;
           width: rem(250);
-          padding-left: rem(30);
+          padding-left: rem(35);
+          display: flex;
+          font-size: rem(16);
         }
 
         .firstbox_left {
@@ -2780,8 +2834,8 @@ section.deadline_main {
             border: none;
             border-right: rem(3) solid #ca1010 !important;
             margin: 0 !important;
-            height: rem(500) !important;
-            width: rem(230) !important;
+            height: rem(480) !important;
+            width: rem(227) !important;
           }
         }
 
@@ -3143,18 +3197,6 @@ section.deadline_main {
 
     .swiper-button-next {
       display: none;
-    }
-
-    a {
-      // position: absolute;
-      // left: 50%;
-      // transform: translateX(-50%);
-      // bottom: calc(-100% + #{rem(8)});
-      // content: "더보기";
-      // color: #fff;
-      // font-size: rem(14);
-      // width: 100%;
-      // white-space: nowrap;
     }
 
     .swiper_review_bg {
