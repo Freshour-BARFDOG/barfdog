@@ -218,7 +218,8 @@ export default function MainPage({ data }) {
             alt="정기구독 배송마감"
             width={4000}
             height={300}
-            objectFit="contain"
+            // objectFit="contain"
+            objectFit="cover"
             // layout="responsive"
             // layout="fill"
             // style={{
@@ -323,24 +324,29 @@ export default function MainPage({ data }) {
               <h2 className={s.title}>
                 맞춤형 펫 푸드부터 건강 관리까지, 단 3분! 아주 쉬운 방법
               </h2>
-              <Image
-                src="/img/icon/main-arrow.svg"
-                alt="arrow"
-                width={20}
-                height={20}
-                className={s.arrow_icon}
-                onClick={onClickArrowIcon}
-                style={{ transform: `rotate(${rotation}deg)` }}
-              />
+              <button className={s.step_arrow_wrapper}>
+                <Image
+                  src="/img/icon/main-arrow.svg"
+                  alt="arrow"
+                  width={20}
+                  height={20}
+                  className={s.arrow_icon}
+                  onClick={onClickArrowIcon}
+                  style={{
+                    transform: `rotate(${rotation}deg)`,
+                  }}
+                />
+              </button>
             </div>
           </section>
         </Wrapper>
-        <div className={`${s.step_box} ${isArrowActive ? s.active : ''}`}>
-          <div className={s.step_main}>
-            {/* MOBILE - 단계별 */}
-            {isMobile ? (
+        {/* MOBILE - 단계별 */}
+        {isMobile ? (
+          <div className={`${s.step_box} ${isArrowActive ? s.active : ''}`}>
+            <div className={s.step_main}>
               <ul>
                 <li className={s.firstbox}>
+                  {/* 원 */}
                   <div className={s.firstbox_left}>
                     <div className={s.step_ellipse}>
                       <div className={s.number_wrapper}>
@@ -357,7 +363,7 @@ export default function MainPage({ data }) {
                   </div>
 
                   <div className={s.firstbox_right}>
-                    <p className={s.step_title}>반려견 정보입력</p>
+                    <p className={s.step_title}>AI 추천 식단 확인</p>
                     <p className={s.step_text}>
                       자체 보유 딥러닝 기반
                       <br />
@@ -367,66 +373,82 @@ export default function MainPage({ data }) {
                 </li>
 
                 <li className={s.firstbox}>
-                  <div className={s.step_ellipse}>
-                    <div className={s.number_wrapper}>
-                      <Image
-                        src="/img/main/2.svg"
-                        alt="2"
-                        width={40}
-                        height={40}
-                        className={s.icon_number}
-                      />
+                  <div className={s.firstbox_left}>
+                    <div className={s.step_ellipse}>
+                      <div className={s.number_wrapper}>
+                        <Image
+                          src="/img/main/2.svg"
+                          alt="2"
+                          width={40}
+                          height={40}
+                          className={s.icon_number}
+                        />
+                      </div>
                     </div>
                   </div>
-                  <p className={s.step_title}>1:1 맞춤 제조</p>
-                  <p className={s.step_text}>
-                    우리 아이만을 위한
-                    <br />
-                    일대일 맞춤형 레시피 제조
-                  </p>
+                  <div className={s.firstbox_right}>
+                    <p className={s.step_title}>1:1 맞춤 제조</p>
+                    <p className={s.step_text}>
+                      우리 아이만을 위한
+                      <br />
+                      일대일 맞춤형 레시피 제조
+                    </p>
+                  </div>
                 </li>
 
                 <li className={s.firstbox}>
-                  <div className={s.step_ellipse}>
-                    <div className={s.number_wrapper}>
-                      <Image
-                        src="/img/main/3.svg"
-                        alt="3"
-                        width={40}
-                        height={40}
-                        className={s.icon_number}
-                      />
+                  <div className={s.firstbox_left}>
+                    <div className={s.step_ellipse}>
+                      <div className={s.number_wrapper}>
+                        <Image
+                          src="/img/main/3.svg"
+                          alt="3"
+                          width={40}
+                          height={40}
+                          className={s.icon_number}
+                        />
+                      </div>
                     </div>
                   </div>
-                  <p className={s.step_title}>정기구독</p>
-                  <p className={s.step_text}>
-                    정기구독 서비스
-                    <br />
-                    반려견 맞춤 신선 배송
-                  </p>
+                  <div className={s.firstbox_right}>
+                    <p className={s.step_title}>정기구독</p>
+                    <p className={s.step_text}>
+                      반려견 맞춤 식사
+                      <br />
+                      신선한 정기 배송 신청하기
+                    </p>
+                  </div>
                 </li>
 
                 <li className={s.firstbox}>
-                  <div className={s.step_ellipse}>
-                    <div className={s.number_wrapper}>
-                      <Image
-                        src="/img/main/4.svg"
-                        alt="4"
-                        width={40}
-                        height={40}
-                        className={s.icon_number}
-                      />
+                  <div className={s.firstbox_left}>
+                    <div className={s.step_ellipse}>
+                      <div className={s.number_wrapper}>
+                        <Image
+                          src="/img/main/4.svg"
+                          alt="4"
+                          width={40}
+                          height={40}
+                          className={s.icon_number}
+                        />
+                      </div>
                     </div>
                   </div>
-                  <p className={s.step_title}>건강 사후 관리</p>
-                  <p className={s.step_text}>
-                    맞춤 영양 급여
-                    <br />
-                    건강 변화 데이터 수집 및 관리
-                  </p>
+                  <div className={s.firstbox_right}>
+                    <p className={s.step_title}>건강 사후 관리</p>
+                    <p className={s.step_text}>
+                      맞춤 영양 급여
+                      <br />
+                      건강 변화 데이터 수집 및 관리
+                    </p>
+                  </div>
                 </li>
               </ul>
-            ) : (
+            </div>
+          </div>
+        ) : (
+          <div className={`${s.step_box} ${isArrowActive ? s.active : ''}`}>
+            <div className={s.step_main}>
               <ul>
                 <li className={s.firstbox}>
                   <div className={s.step_ellipse}>
@@ -441,7 +463,7 @@ export default function MainPage({ data }) {
                     </div>
                   </div>
                   <div className={s.step_line}></div>
-                  <p className={s.step_title}>반려견 정보입력</p>
+                  <p className={s.step_title}>AI 추천 식단 확인</p>
                   <p className={s.step_text}>
                     자체 보유 딥러닝 기반
                     <br />
@@ -483,9 +505,9 @@ export default function MainPage({ data }) {
                   </div>
                   <p className={s.step_title}>정기구독</p>
                   <p className={s.step_text}>
-                    정기구독 서비스
+                    반려견 맞춤 식사
                     <br />
-                    반려견 맞춤 신선 배송
+                    신선한 정기 배송 신청하기
                   </p>
                 </li>
 
@@ -509,127 +531,30 @@ export default function MainPage({ data }) {
                   </p>
                 </li>
               </ul>
-            )}
+            </div>
           </div>
-        </div>
+        )}
 
-        {/* ---- 레시피 4가지 소개 ---- */}
-
-        {/* <Wrapper bgColor="rgba(230, 199, 171, 0.2)">
-          <section className={s.recipe_info}>
-            <ul>
-              <li className={s.firstbox}>
-                <ImageWithLoadingSpinner
-                  src={Starter}
-                  objectFit="fit"
-                  width={260}
-                  height={260}
-                  alt="카드 이미지"
-                />
-                <p className={s.title}>STARTER PREMIUM+</p>
-                <p className={s.text}>
-                  흰살코기인 닭과 칠면조로 설계하여 질감이 부드러워요!
-                  <br />
-                  소화에 부담이 없어 생식을 처음 접하는 반려견들에게
-                  <br />
-                  추천하는 레시피랍니다.
-                </p>
-                <div className={s.meat}>
-                  <span className={s.meat_title}>메인 육류</span>
-                  <div className={s.meat_line}></div>
-                  <span className={s.content}>닭, 칠면조</span>
-                </div>
-              </li>
-
-              <li className={s.midbox}>
-                <ImageWithLoadingSpinner
-                  src={TurkeyBeef}
-                  objectFit="fit"
-                  width={260}
-                  height={260}
-                  alt="카드 이미지"
-                />
-                <p className={s.title}>turkey & beef+</p>
-                <p className={s.text}>
-                  성장 단계의 자견의 발육과 성견의 영양 보충에 도움을 주는
-                  <br />
-                  레시피로 면역 체계에 좋은 셀레늄이 다량 들어 노화 방지,
-                  <br />
-                  혈액순환 촉진, 항암력 증진 등에 도움을 준답니다!
-                </p>
-                <div className={s.meat}>
-                  <span className={s.meat_title}>메인 육류</span>
-                  <div className={s.meat_line}></div>
-                  <span className={s.content}>칠면조, 소</span>
-                </div>
-              </li>
-
-              <li className={s.firstbox}>
-                <ImageWithLoadingSpinner
-                  src={DuckLamb}
-                  objectFit="fit"
-                  width={260}
-                  height={260}
-                  alt="카드 이미지"
-                />
-                <p className={s.title}>DUCK & LAMB+</p>
-                <p className={s.text}>
-                  기력 회복이 필요한 반려견에게 추천하는 에너지 보충에
-                  <br />
-                  탁월한 레시피랍니다. 필수 아미노산과 레시틴 성분이
-                  <br />
-                  아주 풍부하여 피로 회복에 도움을 준답니다!
-                </p>
-                <div className={s.meat}>
-                  <span className={s.meat_title}>메인 육류</span>
-                  <div className={s.meat_line}></div>
-                  <span className={s.content}>오리, 양</span>
-                </div>
-              </li> */}
-
-        {/* <li className={s.firstbox}>
-                <ImageWithLoadingSpinner
-                  src="/img/main/lambBeef.png"
-                  objectFit="fit"
-                  width={260}
-                  height={260}
-                  alt="카드 이미지"
-                />
-                <p className={s.title}>LAMB & BEEF+</p>
-                <p className={s.text}>
-                  반려견이 적절한 체중과 윤기나는 피부, 모질을 가졌으면
-                  <br />
-                  좋겠다고 생각하셨나요? 질 좋은 단백질과 칼슘은 높여
-                  <br />
-                  건강과 미용을 위한 일석이조 프리미엄 식이요법 레시피!
-                </p>
-                  <div className={s.meat}>
-                  <span className={s.meat_title}>메인 육류</span>
-                  <div className={s.meat_line}></div>
-                  <span className={s.content}>양, 소</span>
-                </div>
-              </li> */}
-        {/* </ul>
-          </section>
-        </Wrapper> */}
-        {/* Swiper */}
-
-        <Wrapper>
+        <Wrapper bgColor="#faf4ef">
           <section className={s.review}>
             <div className={s.inner}>
-              <h2 className={s.title}>BARFDOG만의 레시피</h2>
+              <h2 className={s.title}>어떤 레시피들이 있나요 ?</h2>
+              <p className={s.title_sub}>
+                자체 저온 시설에서 건강한 식재료로 방부제 및 감미료 등 없이
+                정직하게 직접 조리합니다
+              </p>
               <div className={s.cont_body}>
                 <Swiper_review data={data?.queryBestReviewsDtoList} />
-                <div className={s.redbox}>
+                {/* <div className={s.redbox}>
                   <div className={s.red}></div>
-                </div>
+                </div> */}
               </div>
             </div>
           </section>
         </Wrapper>
 
         {/* ---- 리뷰 ----  */}
-        <Wrapper>
+        <Wrapper fullWidth={true}>
           <section className={s.sns}>
             <div className={s.inner}>
               <h2 className={s.title}>

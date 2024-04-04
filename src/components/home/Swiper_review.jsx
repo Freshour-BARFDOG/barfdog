@@ -2,7 +2,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import s from '@src/pages/mainPage.module.scss';
-import { Navigation, Pagination, Lazy } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, Pagination, Navigation, Lazy } from 'swiper';
 import ArrowRight_m2 from '@public/img/icon/swiper-arrow-medium-style2.svg';
 import Link from 'next/link';
 import ArrowLeft_m from '@public/img/icon/swiper-arrow-medium.svg';
@@ -12,7 +13,7 @@ import TurkeyBeef from '/public/img/main/turkeyBeef.png';
 import DuckLamb from '/public/img/main/duckLamb.png';
 import LambBeef from '/public/img/main/lambBeef.png';
 // import Quotation from '@public/img/pages/home/home_review_quotation.svg';
-import { Swiper, SwiperSlide } from 'swiper/react';
+
 import Image from 'next/image';
 import sorting from '@util/func/sorting';
 import popupWindow from '@util/func/popupWindow';
@@ -22,16 +23,16 @@ const swiperSettings_review = {
   className: `${s.swiper_review}`,
   spaceBetween: 0,
   slidesPerView: 'auto',
+  autoplay: { delay: 3000, disableOnInteraction: false },
   // loop: true,
   centeredSlides: false,
   pagination: {
     clickable: true,
   },
-  lazy: true,
-  modules: [Pagination, Navigation, Lazy],
+  navigation: true,
+  // lazy: true,
+  modules: [Autoplay, Pagination, Navigation, Lazy],
   breakpoints: {
-    //반응형 조건 속성
-
     100: {
       slidesPerView: 1,
       spaceBetween: 20,
@@ -135,9 +136,9 @@ export function Swiper_review({ data }) {
           <figure className={s.swiper_review_bg}>
             <div className={s.swiper_review_img}>
               <Image
-                // src={TurkeyBeef}
-                src="/img/main/turkeyBeef.png"
-                layout={'fill'}
+                src={TurkeyBeef}
+                // src="/img/main/turkeyBeef.png"
+                // layout={'fill'}
                 // width={996 / 2}
                 // height={900 / 2}
                 // objectFit="cover"

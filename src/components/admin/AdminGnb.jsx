@@ -1,12 +1,14 @@
-import React, {useRef} from "react";
-import s from "/src/components/common/menu.module.scss";
-import {List, SubmenuList, SubmenuTitle} from "/src/components/mypage/MypageMenu";
-import Icon_setting from "/public/img/icon/setting.svg";
-import { IoMenuSharp  } from "react-icons/io5";
-
+import React, { useRef } from 'react';
+import s from '/src/components/common/menu.module.scss';
+import {
+  List,
+  SubmenuList,
+  SubmenuTitle,
+} from '/src/components/mypage/MypageMenu';
+import Icon_setting from '/public/img/icon/setting.svg';
+import { IoMenuSharp } from 'react-icons/io5';
 
 function AdminGnb() {
-
   const curMenuRef = useRef(null);
 
   return (
@@ -24,7 +26,10 @@ function AdminGnb() {
           <SubmenuList title="적립금 발행" link="/bf-admin/reward/release" />
           <SubmenuTitle title="프로모션" noLink />
           <SubmenuList title="프로모션 관리" link="/bf-admin/promotion" />
-          <SubmenuList title="프로모션 생성" link="/bf-admin/promotion/create" />
+          <SubmenuList
+            title="프로모션 생성"
+            link="/bf-admin/promotion/create"
+          />
         </List>
         <List title="판매관리">
           <SubmenuList title="통합 검색" link="/bf-admin/sell/search" />
@@ -37,9 +42,15 @@ function AdminGnb() {
         </List>
         <List title="상품관리">
           <SubmenuList title="일반상품 관리" link="/bf-admin/product/single" />
-          <SubmenuList title="일반상품 등록" link="/bf-admin/product/createSingle" />
+          <SubmenuList
+            title="일반상품 등록"
+            link="/bf-admin/product/createSingle"
+          />
           <SubmenuList title="레시피 관리" link="/bf-admin/product/recipe" />
-          <SubmenuList title="레시피 등록" link="/bf-admin/product/createRecipe" />
+          <SubmenuList
+            title="레시피 등록"
+            link="/bf-admin/product/createRecipe"
+          />
         </List>
         <List title="반려견관리" link="/bf-admin/dog" />
         <List title="배너관리">
@@ -56,7 +67,7 @@ function AdminGnb() {
         </List>
         <List title="게시판관리">
           <SubmenuList title="공지사항" link="/bf-admin/community/notice" />
-          <SubmenuList title="이벤트" link="/bf-admin/community/event" />
+          {/* <SubmenuList title="이벤트" link="/bf-admin/community/event" /> */}
           <SubmenuList title="블로그" link="/bf-admin/community/blog" />
           <SubmenuList title="1:1 문의" link="/bf-admin/community/inquiry" />
         </List>
