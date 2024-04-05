@@ -352,17 +352,17 @@ export default function OrderOnSellPage() {
             //   generalResponse.data.orderItemAndOptionDtoList[0]
             //     .selectOptionDtoList[0].optionId,
             // );
-            const itemOptionList =
+            const selectOptionList =
               generalResponse.data.orderItemAndOptionDtoList.flatMap((item) =>
                 item.selectOptionDtoList.map((option) => ({
-                  itemOptionId: option.optionId,
-                  itemOptionCount: option.amount,
+                  selectOptionId: option.optionId,
+                  selectOptionAmount: option.amount,
                 })),
               );
             // 주문 ID와 아이템 옵션 목록을 orderIdOptionList에 추가
             orderIdOptionList.push({
               orderId: orderId,
-              itemOptionList: itemOptionList,
+              selectOptionList,
             });
           }
         } catch (error) {
@@ -380,7 +380,7 @@ export default function OrderOnSellPage() {
           if (subscribeResponse.data) {
             orderIdOptionList.push({
               orderId: orderId,
-              itemOptionList: null,
+              selectOptionList: null,
             });
           }
         } catch (error) {
