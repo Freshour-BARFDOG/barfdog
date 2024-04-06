@@ -1,12 +1,13 @@
-// 레시피 Swiper
+//! [삭제예정]
+// 레시피 Swiperm
 import React, { useEffect, useState } from 'react';
 import s from '/src/pages/mainPage.module.scss';
 import { Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import Image from 'next/image';
 import StartBanner from '@public/img/starterBanner.png';
-import Link from "next/link";
-import Styles from "@src/pages/mainPage.module.scss";
+import Link from 'next/link';
+import Styles from '@src/pages/mainPage.module.scss';
 // import s from "/src/components/modal/modal_previewRecipeThumb.module.scss";
 
 const swiperSettings_recipe = {
@@ -38,16 +39,15 @@ const swiperSettings_recipe = {
 
 export function Swiper_recipe({ data, isMobile }) {
   // // console.log(data);
-  const [recipeDatas, setRecipeDatas] = useState( [] );
-  
+  const [recipeDatas, setRecipeDatas] = useState([]);
+
   useEffect(() => {
-    if(data && Array.isArray(data)){
+    if (data && Array.isArray(data)) {
       setRecipeDatas(data || []);
     }
-    
-  },[])
-  
-  if(!data || !Array.isArray(data)){
+  }, []);
+
+  if (!data || !Array.isArray(data)) {
     return;
   }
 
@@ -65,16 +65,22 @@ export function Swiper_recipe({ data, isMobile }) {
               className={s.swiper_slide}
             >
               <div className={s.recipe_a}>
-                  <div className={s.recipe_box}>
-                    <div className={s.img_wrap}>
-                      <Image src={d.imageUrl1} objectFit="fit" layout="fill" alt="레시피 이미지" priority />
-                    </div>
-                    <p className={s.uiNameKorean}>{d.uiNameKorean}</p>
-                    <p className={s.desc}>{d.description}</p>
-                    <Link passHref href={'/recipes'}>
-                        <a className={s.recipe_btn}>+ 더보기</a>
-                    </Link>
+                <div className={s.recipe_box}>
+                  <div className={s.img_wrap}>
+                    <Image
+                      src={d.imageUrl1}
+                      objectFit="fit"
+                      layout="fill"
+                      alt="레시피 이미지"
+                      priority
+                    />
                   </div>
+                  <p className={s.uiNameKorean}>{d.uiNameKorean}</p>
+                  <p className={s.desc}>{d.description}</p>
+                  <Link passHref href={'/recipes'}>
+                    <a className={s.recipe_btn}>+ 더보기</a>
+                  </Link>
+                </div>
               </div>
             </SwiperSlide>
           ))}

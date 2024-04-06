@@ -3,7 +3,7 @@ import s from './mobileSidr.module.scss';
 import CloseButton from '/src/components/atoms/CloseButton';
 import ScrollContainer from '/src/components/atoms/ScrollContainer';
 import Image from 'next/image';
-import Logo from '/public/img/mobile_logo.svg';
+import Logo from '/public/img/logo_sidebar.png';
 import Icon_cart from '../../../public/img/icon/icon-sidebar-cart.svg';
 // import Kakao from '/public/img/icon/kakao.png';
 // import Naver from '/public/img/icon/naver.png';
@@ -113,7 +113,7 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
             <div className={s.row}>
               <div className={s.logo_img}>
                 <Image
-                  src={'/img/mobile_logo.svg'}
+                  src={Logo}
                   alt="사이트 로고"
                   width={140 * 1.3}
                   height={25 * 1.3}
@@ -132,6 +132,16 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
               </div>
             </div>
           </section>
+          {isLogin && (
+            <div className={s.user_name}>
+              <Link href={`/mypage/orderHistory`} passHref>
+                <a>
+                  <span>{data.name}</span>
+                </a>
+              </Link>
+              <p> &nbsp;님, 반갑습니다 !</p>
+            </div>
+          )}
           <ScrollContainer
             className={s['scroll-container']}
             scrollBarWidth={'0'}
@@ -180,7 +190,7 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                 </div>
               </section>
             )}
-            {isLogin && (
+            {/* {isLogin && (
               <section className={s['dashboard-section']}>
                 <div className={s.row}>
                   <div className={s.userInfo}>
@@ -250,9 +260,9 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                   </div>
                 </div>
               </section>
-            )}
+            )} */}
 
-            {isLogin && (
+            {/* {isLogin && (
               <section className={s['mypage-section']}>
                 <div className={s.row}>
                   <ul>
@@ -299,8 +309,9 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                   </ul>
                 </div>
               </section>
-            )}
-            {isLogin && <MypageBanner />}
+            )} */}
+            {/* 배너 - 친구 초대하면 적립금 3천원 */}
+            {/* {isLogin && <MypageBanner />} */}
             <section className={s['bottom-menu-section']}>
               <div className={s.row}>
                 <ul>
@@ -388,8 +399,11 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                     </li>
                   </ul>
 
-                  {/* ! [추후멤버십 링크 추가] */}
-                  <MenuList title={'멤버십'} link={'/'} removeIcon={true} />
+                  <MenuList
+                    title={'멤버십'}
+                    link={'/membership'}
+                    removeIcon={true}
+                  />
 
                   <MenuList
                     title={'커뮤니티'}
@@ -427,7 +441,7 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                   <MenuList title={'리뷰'} link={'/review'} removeIcon={true} />
 
                   {/* <MenuList title={'자주묻는 질문'} link={'/faq'} /> */}
-                  {isLogin && (
+                  {/* {isLogin && (
                     <MenuList
                       title={'1:1 문의'}
                       contClassName={'ch-open-button'}
@@ -437,12 +451,13 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                   )}
                   {isLogin && (
                     <MenuList title={'로그아웃'} onClick={onLogout} />
-                  )}
+                  )} */}
                 </ul>
               </div>
             </section>
 
             <div className={s.menu_end_line}></div>
+            {isLogin && <div className={s.menu_end_empty}></div>}
             <div className={s.contact_container}>
               <div className={s.contact_top}>
                 <p>소통가능 시간</p>
