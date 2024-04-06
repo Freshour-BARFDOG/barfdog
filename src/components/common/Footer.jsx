@@ -85,7 +85,7 @@ export default function Footer() {
               <div className={s.contact_box}>
                 <span>점심시간</span>
                 <div className={s.contact_line}></div>
-                <div>오전 12시-오후 1시</div>
+                <div>오전 12시 - 오후 1시</div>
               </div>
             </div>
             <div className={s.sns_area}>
@@ -351,7 +351,7 @@ export default function Footer() {
                     <span className={s.info_cont}>임경호</span>
                   </li>
                   <li>
-                    <span className={s.info_title}>사업자번호:</span>
+                    <span className={s.info_title}>사업자 등록번호:</span>
                     <span className={s.info_cont}>351-87-02455</span>
                     <a
                       href="https://www.ftc.go.kr/bizCommPop.do?wrkr_no=7038801843"
@@ -364,10 +364,10 @@ export default function Footer() {
                   </li>
                   <li>
                     <span className={s.info_title}>통신판매신고번호:</span>
-                    <span className={s.info_cont}>2022-충북충주-0578</span>
+                    <span className={s.info_cont}>제 2022-충북충주-0578호</span>
                   </li>
                   <li>
-                    <span className={s.info_title}>Email.</span>
+                    <span className={s.info_title}>사업제안 및 문의: </span>
                     <span className={s.info_cont}>info@freshour.co.kr</span>
                     <a
                       href="mailto:MAIL_ADDRESS"
@@ -377,16 +377,18 @@ export default function Footer() {
                     </a>
                   </li>
                   <li>
-                    <span className={s.info_title}>주소:</span>
+                    <span className={s.info_title}>본사: </span>
                     <span className={s.info_cont}>
                       충북 충주시 번영대로 214, 1층
                     </span>
                   </li>
                   <li>
-                    <span className={s.info_title}>유선번호: </span>
-                    <span className={s.info_cont}>043-855-4995</span>
+                    <span className={s.info_title}>연구소: </span>
+                    <span className={s.info_cont}>
+                      서울특별시 마포구 백범로31길 21, 607호
+                    </span>
                     <a href="tel:070-7770-7916" className={s.info_cont_mobile}>
-                      043-855-4995
+                      서울특별시 마포구 백범로31길 21, 607호
                     </a>
                   </li>
                 </ul>

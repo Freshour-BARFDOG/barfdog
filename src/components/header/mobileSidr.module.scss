@@ -17,7 +17,8 @@ $bottom-menu-list-height: rem(140);
     transition: right 0.3s ease;
   }
   &.member {
-    width: 100vw;
+    // width: 100vw;
+    width: 75vw;
   }
   &.non-member {
     width: 75vw;
@@ -33,15 +34,32 @@ $bottom-menu-list-height: rem(140);
 #sidr {
   background-color: #fff;
 
-  .main .row {
-    // background-color: #fff;
-  }
-  .main section {
-    // background-color: #fff;
-  }
+  // .main .row {
+  //   // background-color: #fff;
+  // }
+  // .main section {
+  //   // background-color: #fff;
+  // }
   .scroll-container {
     // background-color: var(--color-bg-ghostWhite);
     background-color: #fff;
+  }
+}
+
+.user_name {
+  color: white;
+  background-color: #cb1010;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 rem(30) rem(20);
+  span {
+    font-size: rem(22);
+    font-weight: bold;
+    text-decoration: underline;
+  }
+  p {
+    font-size: rem(18);
   }
 }
 
@@ -51,20 +69,10 @@ $bottom-menu-list-height: rem(140);
     background-color: #cb1010;
     padding-top: $main-padding;
     height: rem(80);
-    // ! [추후] 논의 후 수정
-    // 로그아웃 시 높이 작게
-    // 로그인 시 이름 높이 맞추기
 
     .row {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo_img {
-      background-color: #fff;
-      padding: rem(0) rem(7);
-      border-radius: rem(4);
     }
 
     .cart_close {
@@ -408,6 +416,10 @@ $bottom-menu-list-height: rem(140);
   b {
     margin-left: rem(8);
   }
+}
+
+.menu_end_empty {
+  height: rem(300);
 }
 
 .bottom-menu-section {

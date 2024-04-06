@@ -12,6 +12,10 @@ import Starter from '/public/img/main/starter.png';
 import TurkeyBeef from '/public/img/main/turkeyBeef.png';
 import DuckLamb from '/public/img/main/duckLamb.png';
 import LambBeef from '/public/img/main/lambBeef.png';
+import Chicken from '/public/img/main/chicken.png';
+import Lamb from '/public/img/main/lamb.png';
+import Turkey from '/public/img/main/turkey.png';
+import Beef from '/public/img/main/beef.png';
 // import Quotation from '@public/img/pages/home/home_review_quotation.svg';
 
 import Image from 'next/image';
@@ -41,7 +45,7 @@ const swiperSettings_review = {
       slidesPerView: 1,
       spaceBetween: 20,
     },
-    901: {
+    950: {
       slidesPerView: 2,
       spaceBetween: 40,
     },
@@ -187,6 +191,7 @@ export function Swiper_review({ data }) {
             </div>
           </figure>
         </SwiperSlide>
+
         <SwiperSlide className={s.swiper_review_box}>
           <figure className={s.swiper_review_bg}>
             <div className={s.swiper_review_img}>
@@ -208,6 +213,108 @@ export function Swiper_review({ data }) {
                 <span className={s.meat_title}>메인 육류</span>
                 <div className={s.meat_line}></div>
                 <span className={s.content}>양, 소</span>
+              </div>
+            </div>
+          </figure>
+        </SwiperSlide>
+
+        <SwiperSlide className={s.swiper_review_box}>
+          <figure className={s.swiper_review_bg}>
+            <div className={s.swiper_review_img}>
+              <Image
+                src={Chicken}
+                // layout={'fill'}
+                objectFit="cover"
+                alt="카드 이미지"
+              />
+            </div>
+            <p className={s.title}>PREMIUM CHICKEN</p>
+            <div className={s.contents}>
+              <p className={s.text}>
+                첫 생식인 친구들에게 추천하는 레시피 중 하나로, 다른 레시피에
+                비해 칼슘, 인 함량이 낮아 노령견에게도 아주 적합한 레시피입니다.
+              </p>
+              <div className={s.meat} style={{ width: '7rem' }}>
+                <span className={s.meat_title}>메인 육류</span>
+                <div className={s.meat_line}></div>
+                <span className={s.content}>닭</span>
+              </div>
+            </div>
+          </figure>
+        </SwiperSlide>
+
+        <SwiperSlide className={s.swiper_review_box}>
+          <figure className={s.swiper_review_bg}>
+            <div className={s.swiper_review_img}>
+              <Image
+                src={Lamb}
+                // layout={'fill'}
+                objectFit="cover"
+                alt="카드 이미지"
+              />
+            </div>
+            <p className={s.title}>PREMIUM LAMB</p>
+            <div className={s.contents}>
+              <p className={s.text}>
+                활동량이 많은 아이들에게 영양제 같은 레시피! 빠른 피로·근력
+                회복을 원한다면 최고 등급의 양고기를 사용한 램 레시피를
+                추천합니다.
+              </p>
+              <div className={s.meat} style={{ width: '7rem' }}>
+                <span className={s.meat_title}>메인 육류</span>
+                <div className={s.meat_line}></div>
+                <span className={s.content}>양</span>
+              </div>
+            </div>
+          </figure>
+        </SwiperSlide>
+
+        <SwiperSlide className={s.swiper_review_box}>
+          <figure className={s.swiper_review_bg}>
+            <div className={s.swiper_review_img}>
+              <Image
+                src={Turkey}
+                // layout={'fill'}
+                objectFit="cover"
+                alt="카드 이미지"
+              />
+            </div>
+            <p className={s.title}>PREMIUM TURKEY</p>
+            <div className={s.contents}>
+              <p className={s.text}>
+                슈퍼푸드 칠면조를 사용하여 혈액순환 촉진과 천연 칼슘, 인을 통해
+                성장기 자견에게 훌륭한 영양을 줄 수 있는 레시피랍니다.
+              </p>
+              <div className={s.meat} style={{ width: '8.5rem' }}>
+                <span className={s.meat_title}>메인 육류</span>
+                <div className={s.meat_line}></div>
+                <span className={s.content}>칠면조</span>
+              </div>
+            </div>
+          </figure>
+        </SwiperSlide>
+
+        <SwiperSlide className={s.swiper_review_box}>
+          <figure className={s.swiper_review_bg}>
+            <div className={s.swiper_review_img}>
+              <Image
+                src={Beef}
+                // layout={'fill'}
+                objectFit="cover"
+                alt="카드 이미지"
+              />
+            </div>
+            <p className={s.title}>PREMIUM BEEF</p>
+            <div className={s.contents}>
+              <p className={s.text}>
+                단 한끼라도 건강하고 알찬 진짜 음식을 주고 싶다면? 필수
+                아미노산이 풍부한 비프 레시피를 급여해보세요. 다른 레시피에 비해
+                칼슘, 인 함량이 낮아 노령견에게도 아주 적합한 레시피입니다.
+              </p>
+              <div className={s.meat} style={{ width: '7rem' }}>
+                <span className={s.meat_title}>메인 육류</span>
+                <div className={s.meat_line}></div>
+                <span className={s.content}>소</span>
               </div>
             </div>
           </figure>

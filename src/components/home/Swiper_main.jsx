@@ -85,8 +85,8 @@ export function Swiper_main({ data, isMobile }) {
                           objectFit="cover"
                           objectPosition="50% 50%"
                           // layout="fill"
-                          width={1393}
-                          height={736}
+                          width={1452}
+                          height={765}
                           alt={d.name}
                           style={{
                             borderRadius: '10px',

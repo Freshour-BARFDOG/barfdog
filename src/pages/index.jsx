@@ -213,23 +213,36 @@ export default function MainPage({ data }) {
 
         {/* 1. 정기구독 배송 */}
         <section className={s.deadline_main}>
-          <Image
-            src="/img/main/timebar.jpg"
-            alt="정기구독 배송마감"
-            width={4000}
-            height={300}
-            // objectFit="contain"
-            objectFit="cover"
-            // layout="responsive"
-            // layout="fill"
-            // style={{
-            //   display: 'block',
-            //   marginLeft: 'auto',
-            //   marginRight: 'auto',
-            // }}
-            objectPosition="50% 50%"
-            className={s.deadline_main_img}
-          />
+          {isMobile ? (
+            <Image
+              src="/img/main/timebar-mobile.jpg"
+              alt="정기구독 배송마감"
+              width={890 * 0.7}
+              height={150 * 0.7}
+              objectFit="cover"
+              objectPosition="50% 50%"
+              className={s.deadline_main_img}
+            />
+          ) : (
+            <Image
+              src="/img/main/timebar.jpg"
+              alt="정기구독 배송마감"
+              width={4000}
+              height={300}
+              // objectFit="contain"
+              objectFit="cover"
+              // layout="responsive"
+              // layout="fill"
+              // style={{
+              //   display: 'block',
+              //   marginLeft: 'auto',
+              //   marginRight: 'auto',
+              // }}
+              objectPosition="50% 50%"
+              className={s.deadline_main_img}
+            />
+          )}
+
           <div className={s.deadline_container}>
             <div className={s.deadline_text}>
               <h3 className={s.deadline_title}>정기구독배송 주문 마감</h3>
@@ -291,14 +304,16 @@ export default function MainPage({ data }) {
                       <br />
                       <span>과학적 맞춤 레시피</span>
                     </h1>
-                    <p>
-                      같은 견종이어도 다 같은 강아지가 아니기에 <br />
-                      우리 아이만을 위한 맞춤형 한 끼가 필요합니다. <br />
-                      <br />
-                      바프독은 아이의 건강 데이터를 기반으로 <br />
-                      플랜별 맞춤형 한 끼를 조리하여 전달드립니다.
-                      <br />
-                    </p>
+                    <div className={s.barfgood_text}>
+                      <div>
+                        같은 견종이어도 다 같은 강아지가 아니기에 <br />
+                        우리 아이만을 위한 맞춤형 한 끼가 필요합니다.
+                      </div>
+                      <div>
+                        바프독은 아이의 건강 데이터를 기반으로 <br />
+                        플랜별 맞춤형 한 끼를 조리하여 전달드립니다.
+                      </div>
+                    </div>
                     <span className={s.ref_text}>
                       *건강데이터를 분석하여 맞춤형 한 끼로 제공
                     </span>
@@ -538,7 +553,7 @@ export default function MainPage({ data }) {
         <Wrapper bgColor="#faf4ef">
           <section className={s.review}>
             <div className={s.inner}>
-              <h2 className={s.title}>어떤 레시피들이 있나요 ?</h2>
+              <h2 className={s.recipe_title}>어떤 레시피들이 있나요 ?</h2>
               <p className={s.title_sub}>
                 자체 저온 시설에서 건강한 식재료로 방부제 및 감미료 등 없이
                 정직하게 직접 조리합니다
@@ -670,7 +685,7 @@ export default function MainPage({ data }) {
           </section>
         </Wrapper>
 
-        <Wrapper bgColor="#F9F2EC">
+        <Wrapper bgColor="#F5F3F3">
           <section className={s.barfraw}>
             <div className={s.inner}>
               <div className={s.leftbox}>
