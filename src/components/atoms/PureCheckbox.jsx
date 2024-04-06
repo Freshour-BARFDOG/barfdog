@@ -13,8 +13,8 @@ const PureCheckbox = ({
   theme,
   disabled,
   returnBoolean,
-  option={
-    position: 'left'
+  option = {
+    position: 'left',
   },
   ...props
 }) => {
@@ -24,7 +24,7 @@ const PureCheckbox = ({
     const input = inputRef.current;
     const { id, checked } = input;
     // // console.log('id:', id, ' checked:', checked);
-    if(returnBoolean) {
+    if (returnBoolean) {
       setValue(checked, id);
     } else if (eventHandler && typeof eventHandler === 'function') {
       eventHandler(checked);
@@ -47,10 +47,16 @@ const PureCheckbox = ({
 
   return (
     <>
-      <div className={`${s['checkbox-wrap']} ${theme ? s[theme] : ''}${children ? '' : s.onlyCheckbox}`}>
+      <div
+        className={`${s['checkbox-wrap']} ${theme ? s[theme] : ''}${
+          children ? '' : s.onlyCheckbox
+        }`}
+      >
         <label
           htmlFor={id}
-          className={`${s.checkbox} ${option.position === 'right' ? s['position-right'] : ''} ${disabled ? s.disabled : ''} ${className || ''}`}
+          className={`${s.checkbox} ${
+            option.position === 'right' ? s['position-right'] : ''
+          } ${disabled ? s.disabled : ''} ${className || ''}`}
           {...props}
           onClick={onClickHandler}
         >
