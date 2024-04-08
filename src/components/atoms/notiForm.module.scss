@@ -1,0 +1,187 @@
+@import '/styles/global/guide';
+@import '/styles/global/rem.scss';
+
+.alarm_form {
+  width: rem(600);
+  background-color: white;
+  border-radius: rem(4);
+  border: rem(1) solid black;
+  padding: rem(40) rem(80);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: rem(30);
+}
+
+.input_title {
+  font-size: rem(20);
+  padding: rem(4);
+  position: relative;
+}
+
+.user_info {
+  display: flex;
+  gap: rem(30);
+
+  .input_title {
+    &:after {
+      content: '*';
+      color: red;
+      position: absolute;
+      right: rem(-8);
+      top: 0;
+      display: none;
+    }
+
+    &.required:after {
+      display: block;
+    }
+  }
+
+  .input_underLine {
+    text-align: center;
+    width: rem(200);
+    border: rem(0);
+    border-radius: rem(0);
+    border-bottom: rem(1) solid var(--color-disabled);
+  }
+
+  input.focus-underline {
+    font-size: rem(16);
+    border: {
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+    }
+    border-radius: 0;
+    border-bottom: rem(1) solid var(--color-line-02) !important;
+    cursor: pointer;
+    &:focus {
+      border: {
+        top: 0;
+        left: 0;
+        right: 0;
+        border-bottom: rem(1) solid;
+      }
+      border-color: var(--color-main) !important;
+    }
+    + .unit {
+      position: absolute;
+      cursor: default;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: rem(16);
+    }
+  }
+}
+
+.dog_info {
+  .dog_type {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.dog_size {
+  padding-bottom: rem(20);
+  ul {
+    display: flex;
+    gap: rem(20);
+    li {
+      width: rem(130);
+      label {
+        border-radius: rem(8);
+      }
+    }
+  }
+}
+
+.alarm_btn {
+  background-color: black;
+  color: white;
+  padding: rem(5) rem(20);
+  font-size: rem(18);
+  border-radius: rem(8);
+}
+
+.msg {
+  display: block !important;
+  position: relative;
+  color: var(--color-main);
+  margin-top: rem(8);
+
+  &.loading {
+    color: var(--color-checked);
+    &:before {
+      content: '';
+      color: inherit;
+    }
+  }
+
+  &.siblings {
+    margin-top: 0;
+  }
+
+  &:not(.loading) {
+    padding-left: rem(14);
+    &:before {
+      content: '✕';
+      color: inherit;
+      position: absolute;
+      left: 0;
+    }
+  }
+  &.valid {
+    color: var(--color-checked);
+    &:before {
+      content: '✓';
+    }
+  }
+}
+
+@media (max-width: rem(650)) {
+  .alarm_form {
+    width: rem(500);
+
+    .user_info {
+      flex-direction: column;
+      gap: rem(30);
+
+      .input_name,
+      .input_number {
+        display: flex;
+        flex-direction: column;
+        gap: rem(10);
+
+        .input_underLine {
+          width: rem(300);
+        }
+      }
+    }
+
+    .dog_info {
+      width: rem(300);
+      .input_title {
+        padding-bottom: rem(15);
+      }
+
+      .dog_size {
+        ul {
+          flex-direction: column;
+          display: flex;
+          gap: rem(10);
+          li {
+            width: rem(300);
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: rem(540)) {
+  .alarm_form {
+    width: rem(400);
+  }
+}

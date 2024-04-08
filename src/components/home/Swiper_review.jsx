@@ -247,6 +247,31 @@ export function Swiper_review({ data }) {
           <figure className={s.swiper_review_bg}>
             <div className={s.swiper_review_img}>
               <Image
+                src={Turkey}
+                // layout={'fill'}
+                objectFit="cover"
+                alt="카드 이미지"
+              />
+            </div>
+            <p className={s.title}>PREMIUM TURKEY</p>
+            <div className={s.contents}>
+              <p className={s.text}>
+                슈퍼푸드 칠면조를 사용하여 혈액순환 촉진과 천연 칼슘, 인을 통해
+                성장기 자견에게 훌륭한 영양을 줄 수 있는 레시피랍니다.
+              </p>
+              <div className={s.meat} style={{ width: '8.5rem' }}>
+                <span className={s.meat_title}>메인 육류</span>
+                <div className={s.meat_line}></div>
+                <span className={s.content}>칠면조</span>
+              </div>
+            </div>
+          </figure>
+        </SwiperSlide>
+
+        <SwiperSlide className={s.swiper_review_box}>
+          <figure className={s.swiper_review_bg}>
+            <div className={s.swiper_review_img}>
+              <Image
                 src={Lamb}
                 // layout={'fill'}
                 objectFit="cover"
@@ -264,31 +289,6 @@ export function Swiper_review({ data }) {
                 <span className={s.meat_title}>메인 육류</span>
                 <div className={s.meat_line}></div>
                 <span className={s.content}>양</span>
-              </div>
-            </div>
-          </figure>
-        </SwiperSlide>
-
-        <SwiperSlide className={s.swiper_review_box}>
-          <figure className={s.swiper_review_bg}>
-            <div className={s.swiper_review_img}>
-              <Image
-                src={Turkey}
-                // layout={'fill'}
-                objectFit="cover"
-                alt="카드 이미지"
-              />
-            </div>
-            <p className={s.title}>PREMIUM TURKEY</p>
-            <div className={s.contents}>
-              <p className={s.text}>
-                슈퍼푸드 칠면조를 사용하여 혈액순환 촉진과 천연 칼슘, 인을 통해
-                성장기 자견에게 훌륭한 영양을 줄 수 있는 레시피랍니다.
-              </p>
-              <div className={s.meat} style={{ width: '8.5rem' }}>
-                <span className={s.meat_title}>메인 육류</span>
-                <div className={s.meat_line}></div>
-                <span className={s.content}>칠면조</span>
               </div>
             </div>
           </figure>
