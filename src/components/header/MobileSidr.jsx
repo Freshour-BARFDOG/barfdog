@@ -315,7 +315,7 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
             <section className={s['bottom-menu-section']}>
               <div className={s.row}>
                 <ul>
-                  {isLogin && <MenuList title={'장바구니'} link={'/cart'} />}
+                  {/* {isLogin && <MenuList title={'장바구니'} link={'/cart'} />} */}
 
                   <MenuList
                     title={'건강케어'}
@@ -361,7 +361,7 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                         href={`/shop?itemType=${general_itemType.ALL}`}
                         passHref
                       >
-                        <a>ALL</a>
+                        <a onClick={() => setSidrOpen(false)}>ALL</a>
                       </Link>
                     </li>
                     <li>
@@ -369,7 +369,7 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                         href={`/shop?itemType=${general_itemType.RAW}`}
                         passHref
                       >
-                        <a>생식</a>
+                        <a onClick={() => setSidrOpen(false)}>생식</a>
                       </Link>
                     </li>
                     <li>
@@ -377,7 +377,7 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                         href={`/shop?itemType=${general_itemType.TOPPING}`}
                         passHref
                       >
-                        <a>토퍼</a>
+                        <a onClick={() => setSidrOpen(false)}>토퍼</a>
                       </Link>
                     </li>
                     {/* [추후간식] 링크수정 */}
@@ -386,7 +386,7 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                         href={`/shop?itemType=${general_itemType.TOPPING}`}
                         passHref
                       >
-                        <a>간식</a>
+                        <a onClick={() => setSidrOpen(false)}>간식</a>
                       </Link>
                     </li>
                     <li>
@@ -512,11 +512,13 @@ const MenuList = ({
     e.preventDefault();
     // setIsArrowActive(!isArrowActive);
 
-    const updatedList = isArrowActive.map((item, idx) =>
-      idx === index ? !item : false,
-    );
-    setIsArrowActive(updatedList);
-    setRotation((prevRotation) => (prevRotation + 180) % 360);
+    if (typeof setIsArrowActive === 'function') {
+      const updatedList = isArrowActive?.map((item, idx) =>
+        idx === index ? !item : false,
+      );
+      setIsArrowActive(updatedList);
+      setRotation((prevRotation) => (prevRotation + 180) % 360);
+    }
   };
 
   return (

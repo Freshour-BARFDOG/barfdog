@@ -5,10 +5,7 @@ import Wrapper from '/src/components/common/Wrapper';
 import s from '/src/pages/membership/membership.module.scss';
 import Image from 'next/image';
 import MembershipImg from '/public/img/membership.png';
-import Modal_global_alert from '/src/components/modal/Modal_global_alert';
-import { useModalContext } from '/store/modal-context';
-
-import ReleaseNotiForm from '../../components/atoms/ReleaseNotiForm';
+import NotiForm from '../../components/atoms/NotiForm';
 
 const initialFormValues = {
   name: '',
@@ -21,11 +18,9 @@ const initialFormValues = {
 const initialFormErrors = {};
 
 export default function MembershipPage() {
-  const mct = useModalContext();
-  const hasAlert = mct.hasAlert;
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState(initialFormErrors);
-  const [submitState, setSubmitState] = useState(null);
+  // const [submitState, setSubmitState] = useState(null);
 
   const onSubmit = () => {
     if (formValues.name === '') {
@@ -112,7 +107,7 @@ export default function MembershipPage() {
               바프독 서비스를 더 알차고 멋지게 즐길 수 있는 멤버십 서비스가
               <br /> 정식 론칭되면 가장 먼저 알려드릴게요!
             </div>
-            <ReleaseNotiForm
+            <NotiForm
               formValues={formValues}
               setFormValues={setFormValues}
               onSubmit={onSubmit}

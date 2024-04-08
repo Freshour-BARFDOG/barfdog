@@ -23,15 +23,6 @@ section.barfgood {
   padding: rem(150) 0 rem(135);
 }
 
-// section.difference {
-//   padding: rem(150) 0 rem(100);
-//   position: relative;
-// }
-
-// section.difference3 {
-//   padding: rem(120) 0 rem(150);
-// }
-
 section.clientWorry {
   padding: rem(120) 0 rem(120);
 }
@@ -39,10 +30,6 @@ section.clientWorry {
 section.review {
   padding: 0 0 rem(40) 0;
 }
-
-// section.Howtouse {
-//   padding: rem(120) 0 rem(120);
-// }
 
 section.sns {
   padding: rem(114) 0 rem(60);
@@ -2915,150 +2902,6 @@ section.deadline_main {
     }
   }
 
-  // .difference {
-  //   .inner {
-  //     h1 {
-  //       font-size: rem(28);
-  //     }
-  //     .scroll {
-  //       padding-bottom: 100vw;
-
-  //       // scroll 이벤트시 Scene duration과 같이 조절
-  //       // ex) duration={500}, height: rem(600)
-  //       height: rem(2200);
-  //       .image_wrap {
-  //         max-width: rem(367);
-  //       }
-  //       ul {
-  //         // top: rem(0);
-  //         row-gap: rem(250);
-  //         // row-gap: rem(20);
-  //         // row-gap: 70vw;
-  //         // column-gap: rem(20);
-  //         li {
-  //           // &:first-child{
-  //           //   margin-left: rem(0);
-  //           // }
-  //           // &:nth-child(2){
-  //           //   margin-right: rem(35);
-  //           // }
-  //           // &:nth-child(3){
-  //           //   margin-left: rem(5);
-  //           // }
-  //           // &:last-child{
-  //           //   margin-right: rem(25);
-  //           // }
-  //           // &:nth-child(odd) {
-  //           //   justify-content: flex-end;
-  //           // }
-  //           // &:nth-child(even) {
-  //           //   justify-content: flex-start;
-  //           // }
-  //           // &::after{
-  //           //   display: none;
-  //           // }
-  //           // &::before{
-  //           //   display: none;
-  //           // }
-  //           // .image_title{
-  //           //   background-color: #fff;
-  //           //   padding: 0 rem(10);
-  //           //   font-size: rem(16);
-  //           // }
-  //           // .image_sub{
-  //           //   color: #fff;
-  //           //   font-size: rem(12);
-  //           //   padding: 0 rem(10);
-  //           // }
-  //         }
-  //       }
-  //       .magicbox {
-  //         background-size: 50%;
-  //         max-width: rem(367);
-  //         // max-width: 367px;
-  //       }
-  //     }
-  //   }
-  // }
-
-  // //차별점 그림 3개
-  // .difference2 {
-  //   ul {
-  //     display: block;
-  //     width: 100%;
-
-  //     .title {
-  //       font-size: rem(24);
-  //     }
-
-  //     li {
-  //       margin: 0;
-  //       width: 100%;
-
-  //       &:last-child {
-  //         > span {
-  //           max-width: 100% !important;
-  //         }
-  //       }
-  //     }
-
-  //     .text {
-  //       padding: rem(40) rem(50) rem(90);
-  //       font-size: rem(16);
-  //       height: rem(80);
-  //     }
-  //   }
-  // }
-
-  // //프리미엄바프
-  // .difference3 {
-  //   height: 100%;
-  //   .title {
-  //     font-size: rem(28);
-  //     margin: 0 auto;
-  //     letter-spacing: rem(1);
-  //   }
-
-  //   br {
-  //     display: inline-block;
-  //   }
-
-  //   .grid {
-  //     position: static;
-  //     row-gap: rem(20);
-  //     .image {
-  //       display: flex;
-  //       transform: translateX(rem(-25));
-  //       max-width: rem(303.5);
-  //       width: 100%;
-  //       height: auto;
-  //     }
-  //     .textbox {
-  //       position: static;
-  //       transform: translate(0, 0);
-  //       margin: 0 auto;
-
-  //       .text {
-  //         li {
-  //           padding-left: rem(30);
-  //           font-size: rem(14);
-
-  //           &::after {
-  //             left: 0;
-  //             top: rem(-5);
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
-
-  // section.clientWorry {
-  //   padding: rem(85) 0 rem(185);
-  // }
-
-  //고민
-
   .subtitle {
     display: none;
   }
@@ -3171,6 +3014,7 @@ section.deadline_main {
 
     .swiper_review_bg {
       border-radius: rem(8);
+      height: rem(650 * 0.93) !important;
 
       .swiper_review_img {
         margin: 0;
