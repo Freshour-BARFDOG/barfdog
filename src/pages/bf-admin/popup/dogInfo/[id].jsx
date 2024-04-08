@@ -272,9 +272,15 @@ export default function Popup_DogDetailPage({ data, dogIdx }) {
         id,
         memberName,
         oneMealRecommendGram,
+        nextPaymentDate,
+        nextPaymentPrice,
+        subscribeCount,
+        subscribeId,
+        subscribeStatus,
         ...dataToSend
       } = formValues;
 
+      // console.log('dataToSend', dataToSend);
       const res = await putObjData(apiUrl, dataToSend);
 
       console.log(res);
@@ -322,7 +328,7 @@ export default function Popup_DogDetailPage({ data, dogIdx }) {
     setModalMessage('');
   };
 
-  console.log('formValues', formValues);
+  // console.log('formValues', formValues);
 
   return (
     <>
