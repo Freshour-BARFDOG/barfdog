@@ -47,7 +47,7 @@ const initialSearchValues = {
 
 export default function OrderOnSellPage() {
   const searchApiUrl = `/api/admin/orders/searchAll`;
-  const searchPageSize = 10;
+  const searchPageSize = 50;
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
   const [searchValues, setSearchValues] = useState(initialSearchValues);
