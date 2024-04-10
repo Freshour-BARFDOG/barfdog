@@ -7,6 +7,7 @@ $parentWidth: rem(150);
   display: inline-block;
   position: relative;
   box-sizing: border-box;
+  height: auto;
 
   a.submenu_title {
     cursor: pointer !important;
@@ -50,7 +51,7 @@ $parentWidth: rem(150);
     padding: rem(10) 0 !important;
     transition: opacity var(--ani-default);
     opacity: 0;
-    pointer-events: none;
+    // pointer-events: none;
     li {
       &:hover > * {
         background-color: #f3f4f5;

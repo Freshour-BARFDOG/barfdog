@@ -4,7 +4,7 @@
 .survey-page {
   margin-bottom: rem(150);
 
-  .dog_title{
+  .dog_title {
     margin-bottom: rem(40);
     margin-top: rem(9);
     @include char(t24);
@@ -24,12 +24,13 @@
   margin-bottom: rem(60);
 }
 
-
 // ----------- INPUT STYLE
 .survey-page {
-  .input-wrap{
+  .input-wrap {
     position: relative;
-    input{width: 100% !important;}
+    input {
+      width: 100% !important;
+    }
   }
   input.focus-underline {
     font-size: rem(16);
@@ -46,7 +47,7 @@
         top: 0;
         left: 0;
         right: 0;
-        border-bottom: rem(1) solid
+        border-bottom: rem(1) solid;
       }
       border-color: var(--color-main) !important;
     }
@@ -59,21 +60,19 @@
       font-size: rem(16);
     }
   }
-
 }
 
 .survey-page {
   .step3page {
     .input-row {
       .inputRadio {
-          span {
-            font-weight: 500;
-          }
+        span {
+          font-weight: 500;
+        }
       }
     }
   }
 }
-
 
 .input_title {
   text-align: center;
@@ -81,20 +80,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap:rem(10);
+  gap: rem(10);
   @include char(l20);
   font-weight: 600;
   padding-bottom: rem(30);
 }
 
-
-.display-flex-column{
+.display-flex-column {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: rem(30) !important;
 }
-
 
 // ---------- 1페이지
 .step1Page {
@@ -147,7 +144,7 @@
     font-size: rem(16);
     line-height: 1.2;
   }
-  > *{
+  > * {
     display: inline-flex !important;
   }
 }
@@ -159,9 +156,9 @@
   gap: rem(20);
   font-size: rem(16);
 
-  > li{
-    > div{
-      > input{
+  > li {
+    > div {
+      > input {
         font-size: rem(16);
       }
     }
@@ -190,14 +187,13 @@
   }
 }
 
-.dogStatus{
+.dogStatus {
   padding: 0 rem(60);
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: rem(26);
 }
-
 
 // * ------- 2페이지  ------- * //
 
@@ -230,7 +226,6 @@
       width: rem(80);
       text-align: center;
     }
-
   }
 }
 
@@ -260,15 +255,17 @@
   justify-content: center;
   row-gap: rem(12);
   @include char(l18);
-  label{
+  label {
     overflow-y: scroll;
     display: flex;
     align-items: flex-start;
     box-sizing: border-box;
     height: rem(42);
-    padding-top:rem(10);
-    padding-bottom:0;
-    &::-webkit-scrollbar {display: none;}
+    padding-top: rem(10);
+    padding-bottom: 0;
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 }
 
@@ -286,7 +283,7 @@
 
 .caution {
   width: rem(220);
-  margin:0 auto;
+  margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
   column-gap: rem(20);
@@ -294,8 +291,8 @@
   row-gap: rem(12);
   @include char(l18);
   // padding-bottom: rem(30);
-  label{
-   padding: 0;
+  label {
+    padding: 0;
   }
 }
 // * ------- 활동량  ------- * //
@@ -340,7 +337,7 @@
   display: inline-flex;
   flex-direction: row;
   gap: rem(14);
-  $descHeight : rem(40);
+  $descHeight: rem(40);
   $descBottomPos: rem(10);
   padding-bottom: calc(#{$descHeight} + #{$descBottomPos});
   .desc {
@@ -360,7 +357,7 @@
 // * ------- Custom Input 공통 ------ *
 .inputRadio-wrap {
   text-align: center;
-  label{
+  label {
     max-width: rem(320);
     cursor: pointer;
     font-size: rem(16);
@@ -478,17 +475,22 @@
   }
 }
 
-
-
-
-
 // * ------- Navigation Button  ------- * //
 .swiper-navigation-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+  background-color: white;
+  box-shadow: 0 rem(5) rem(15) rgb(0 0 0 / 8%);
+  height: rem(100);
+
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  max-width: rem(560);
-  margin: 0 auto 0;
+  gap: rem(40);
+  // margin: 0 auto 0;
   button {
     display: flex;
     justify-content: center;
@@ -537,7 +539,7 @@
     color: #fff;
     box-shadow: 0 rem(2) rem(10) 0 rgba(202, 16, 16, 0.6);
   }
-  .swiper-button-submit{
+  .swiper-button-submit {
     border-color: transparent;
     background-color: var(--color-main);
     color: #fff;
@@ -546,12 +548,11 @@
   }
 }
 
-
-.btn-section.in-mypage{
+.btn-section.in-mypage {
   display: flex;
   align-items: center;
   justify-content: center;
-  button.submit{
+  button.submit {
     background-color: var(--color-main);
     font-size: rem(16);
     color: #fff;
@@ -563,7 +564,6 @@
 }
 
 @media (max-width: rem(650)) {
-
   // * ------- Custom Input 공통 ------ *
   .inputRadio-wrap {
     width: auto;
@@ -585,20 +585,18 @@
     }
   }
 
-  
   .dog_choice {
     padding: 0;
     column-gap: rem(10);
     display: grid;
-    grid-template-columns:repeat(3, 1fr);
-    
-    li{
+    grid-template-columns: repeat(3, 1fr);
+
+    li {
       > .inputRadio {
         padding: rem(12) rem(20);
       }
     }
   }
-  
 
   .flex_box2 {
     display: grid;
@@ -610,14 +608,11 @@
     }
   }
 
-  
-  .dogStatus{
+  .dogStatus {
     gap: rem(14);
   }
-
 
   .inputRadio {
     padding: rem(10) rem(20);
   }
-
 }

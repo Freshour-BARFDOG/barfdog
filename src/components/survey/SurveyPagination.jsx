@@ -5,7 +5,6 @@ import React from 'react';
 export const SurveyPagination = ({ referrer, onChangeStep }) => {
   const { prevBtn, nextBtn, submitBtn } = referrer;
 
-
   return (
     <section className={s['swiper-navigation-container']}>
       <button className={s['swiper-button-prev']} ref={prevBtn}>
@@ -19,7 +18,11 @@ export const SurveyPagination = ({ referrer, onChangeStep }) => {
         </figure>
         이전
       </button>
-      <button className={s['swiper-button-next']} ref={nextBtn} onClick={onChangeStep}>
+      <button
+        className={s['swiper-button-next']}
+        ref={nextBtn}
+        onClick={onChangeStep}
+      >
         다음
         <figure className={s.image_box}>
           <Image
@@ -30,7 +33,11 @@ export const SurveyPagination = ({ referrer, onChangeStep }) => {
           />
         </figure>
       </button>
-      <button className={s['swiper-button-submit']} ref={submitBtn} onClick={onChangeStep}>
+      <button
+        className={s['swiper-button-submit']}
+        ref={submitBtn}
+        onClick={onChangeStep}
+      >
         제출하기
         <figure className={s.image_box}>
           <Image

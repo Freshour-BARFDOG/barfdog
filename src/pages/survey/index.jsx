@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import s from './survey.module.scss';
 import StyleSwiper from '/src/components/survey/surveySwiper.module.scss';
-import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -32,7 +31,10 @@ import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
 import { postObjData } from '../api/reqData';
 import { useRouter } from 'next/router';
 import { SurveyDataClass } from '../../class/surveyDataClass';
-import useUserData from '../../../util/hook/useUserData';
+import SurveyLayout from '../../components/common/SurveyLayout';
+import { SurveyActiveStep } from '../../components/survey/SurveyActiveStep';
+// ! [수정] 로그인 안해도 설문조사 가능하게
+// import useUserData from '../../../util/hook/useUserData';
 
 //
 // const initialFormValues = { // ! TEST 용
@@ -80,8 +82,8 @@ export default function Survey() {
   const loadingDuration = 1200; // ms
   const lastStep = 3;
   const router = useRouter();
-  const userData = useUserData();
-  const userId = userData?.memberId;
+  // const userData = useUserData();
+  // const userId = userData?.memberId;
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
   const [formValues, setFormValues] = useState(initialFormValues);
@@ -93,22 +95,32 @@ export default function Survey() {
   const nextBtnRef = useRef(null);
   const submitBtnRef = useRef(null);
   const surveyPageRef = useRef(null);
+  const progressbarRef = useRef(null);
+
+  // const handleSetFooterRef = (ref) => {
+  //   setFooterRef(ref);
+  // };
+
+  // let footerDiv = footerRef.current;
 
   // // console.log(formValues);
-  useEffect(() => {
-    if (!userId) return;
-    const storedData = svyData.getStoredSurveyData(userId);
-    storedData && setFormValues(JSON.parse(storedData));
-  }, [userId]);
 
-  useEffect(() => {
-    // // console.log(formValues);
-    // Storing information in cookies
+  // ! [수정] 로그인 안해도 설문조사 가능하게
+  // useEffect(() => {
+  //   // if (!userId) return;
+  //   const storedData = svyData.getStoredSurveyData(userId);
+  //   storedData && setFormValues(JSON.parse(storedData));
+  // }, [userId]);
 
-    if (userId) {
-      svyData.setStoredSurveyData(userId, formValues);
-    }
-  }, [formValues]);
+  // ! [수정] 로그인 안해도 설문조사 가능하게
+  // useEffect(() => {
+  //   // // console.log(formValues);
+  //   // Storing information in cookies
+
+  //   if (userId) {
+  //     svyData.setStoredSurveyData(userId, formValues);
+  //   }
+  // }, [formValues]);
 
   // -------------------------------------------------------------------------------- //
   const changeSwiperHeightDependencies = [
@@ -170,6 +182,23 @@ export default function Survey() {
     }));
   };
 
+  // const handleSwiperInit = (swiper) => {
+  //   const progressBar = progressBarRef.current; // Progressbar의 Ref를 가져옴
+  //   if (progressBar) {
+  //     const progressBarElement = progressBar.swiper.el.querySelector(
+  //       '.swiper-pagination-progressbar',
+  //     ); // Progressbar의 DOM 요소를 찾음
+  //     if (progressBarElement) {
+  //       // 원하는 위치에 삽입
+  //       // 예시: body 요소의 첫 번째 자식으로 삽입
+  //       document.body.insertBefore(
+  //         progressBarElement,
+  //         document.body.firstChild,
+  //       );
+  //     }
+  //   }
+  // };
+
   const surveySwiperSettings = {
     className: StyleSwiper.swiperSurvey,
     spaceBetween: 0,
@@ -182,6 +211,9 @@ export default function Survey() {
     slidesPerView: 1,
     pagination: {
       clickable: false,
+      type: 'progressbar',
+      // el: progressbarRef.current,
+      // el: '.swiper-pagination',
     },
     navigation: {
       prevEl: prevBtnRef.current,
@@ -201,35 +233,108 @@ export default function Survey() {
     swiper.pagination.init();
     swiper.pagination.update();
     const pagination = swiper.pagination.el;
-    const initIndex = swiper.activeIndex;
-    pagination.classList.add(`${StyleSwiper['swiper-pagination']}`);
-    const curerntStep = initIndex + 1;
-    pagination.dataset.step = curerntStep;
-    const bullets = Array.from(pagination.children);
-    bullets[0].classList.add(StyleSwiper['swiper-pagination-bullet-active']);
-    bullets.forEach((v, idx) => {
-      v.classList.add(`${StyleSwiper['swiper-pagination-bullet']}`);
-      const desc = document.createElement('span');
-      desc.classList.add(StyleSwiper['desc']);
-      v.append(desc);
-      if (idx === 0) desc.innerText = '기본정보 입력';
-      if (idx === 1) desc.innerText = '활동량 입력';
-      if (idx === 2) desc.innerText = '추가정보 입력';
-    });
+    // pagination.classList.add(`${StyleSwiper['swiper-pagination']}`);
+
+    // footer 안으로 progressbar 넣기
+    progressbarRef.current = pagination;
+    const progressBar = pagination;
+    const footer = document.querySelector('footer');
+    footer.appendChild(progressBar);
+    // progressbar 스타일링
+    progressBar.style.height = '0.6rem';
+    progressBar.style.backgroundColor = 'transparent';
+    const spanTag = progressBar.querySelector('span');
+    spanTag.style.backgroundColor = '#CA1010';
+
+    // console.log(pagination);
+    // console.log('progressBar', progressBar);
+
+    // const initIndex = swiper.activeIndex;
+    // const curerntStep = initIndex + 1;
+    // pagination.dataset.step = curerntStep;
+    // const bullets = Array.from(pagination.children);
+    // 초기 인덱스
+    // bullets[0].classList.add(StyleSwiper['swiper-pagination-bullet-active']);
+
+    // bullets.forEach((bullet, idx) => {
+    //   // 단계 표시 (1, 2, 3)
+    //   // const bulletContent = document.createElement('span');
+    //   // bulletContent.classList.add(StyleSwiper['bullet-content']);
+    //   // bulletContent.innerText = idx + 1;
+    //   // bullet.appendChild(bulletContent);
+    //   bullet.classList.add(`${StyleSwiper['swiper-pagination-bullet']}`);
+    //   const bulletContent = document.createElement('span');
+    //   bulletContent.classList.add(StyleSwiper['bullet-content']);
+    //   bulletContent.innerText = idx + 1;
+    //   bulletContent.style.color = 'white';
+    //   bulletContent.style.display = 'flex';
+    //   bulletContent.style.justifyContent = 'center';
+    //   bulletContent.style.alignContent = 'center';
+    //   bulletContent.style.textAlign = 'center';
+    //   bulletContent.style.fontSize = '0.8rem';
+    //   bulletContent.style.width = '1rem';
+    //   bulletContent.style.height = '1rem';
+    //   bulletContent.style.margin = '0.16rem 0.26rem';
+    //   bullet.append(bulletContent);
+
+    //   // 단계별 설명
+    //   bullet.classList.add(`${StyleSwiper['swiper-pagination-bullet']}`);
+    //   const desc = document.createElement('span');
+    //   desc.classList.add(StyleSwiper['desc']);
+    //   desc.style.color = '#BE1A21';
+    //   bullet.append(desc);
+    //   if (idx === 0) desc.innerText = '반려견 정보';
+    //   if (idx === 1) desc.innerText = '반려견 건강';
+    //   if (idx === 2) desc.innerText = '추가 사항';
+    // });
     mct.alertHide('');
   };
+
+  // console.log(progressBarRef);
 
   const onSwiperChangeIndex = (swiper) => {
     const el = swiper.pagination.el;
     const idx = swiper.activeIndex;
     const curSurveyStep = idx + 1;
+
     setCurStep(curSurveyStep);
     el.dataset.step = curSurveyStep;
-    const bullets = Array.from(el.children);
-    bullets[idx].classList.add(StyleSwiper['swiper-pagination-bullet-active']);
-    siblings(bullets[idx]).forEach((sib) =>
-      sib.classList.remove(StyleSwiper['swiper-pagination-bullet-active']),
-    );
+
+    // const bullets = Array.from(el.children);
+
+    // siblings(bullets[idx]).forEach((sib, index) => {
+    //   if (index === idx) {
+    //     //-- 작동안됨 --
+    //     // bullets[idx].classList.add(
+    //     //   StyleSwiper['swiper-pagination-bullet-active'],
+    //     // );
+    //     // bullets[idx].style.backgroundColor = 'red';
+    //     sib.classList.add(StyleSwiper['swiper-pagination-bullet-active']);
+    //     sib.style.backgroundColor = '#BE1A21';
+    //     // sib.style.color = 'white';
+    //     // sib.style.display = 'flex';
+    //     // sib.style.justifyContent = 'center';
+    //     // sib.style.alignContent = 'center';
+    //     // sib.style.textAlign = 'center';
+    //     // sib.style.fontSize = '0.8rem';
+    //     // sib.style.width = '1rem';
+    //     // sib.style.height = '1rem';
+    //     // sib.style.margin = '0.16rem 0.26rem';
+    //   } else {
+    //     sib.classList.remove(StyleSwiper['swiper-pagination-bullet-active']);
+    //     sib.style.backgroundColor = 'white';
+    //     sib.style.color = '#BE1A21';
+    //   }
+    // });
+    // bullets.forEach((bullet, index) => {
+    //   if (index !== idx) {
+    //     bullet.classList.remove(StyleSwiper['swiper-pagination-bullet-active']);
+    //     bullet.style.backgroundColor = 'red'; // 현재 스텝이 아닌 경우 빨간색으로 변경
+    //   } else {
+    //     bullet.classList.add(StyleSwiper['swiper-pagination-bullet-active']);
+    //     bullet.style.backgroundColor = 'white'; // 현재 스텝인 경우 하얀색으로 변경
+    //   }
+    // });
 
     setIsLoading(() => ({ nextPage: true }));
     setTimeout(
@@ -338,9 +443,16 @@ export default function Survey() {
         <FullScreenRunningDog opacity={1} />
       )} */}
       <MetaTitle title="설문조사" />
-      <Layout>
-        <Wrapper>
+      <SurveyLayout
+        progressbarRef={progressbarRef}
+        prevBtnRef={prevBtnRef}
+        nextBtnRef={nextBtnRef}
+        submitBtnRef={submitBtnRef}
+        onNavButtonClick={onNavButtonClick}
+      >
+        <Wrapper bgColor="#fffafa">
           <div className={s['survey-page']} ref={surveyPageRef}>
+            <SurveyActiveStep curStep={curStep} />
             <Swiper
               {...surveySwiperSettings}
               watchOverflow={false}
@@ -368,17 +480,18 @@ export default function Survey() {
                 />
               </SwiperSlide>
             </Swiper>
-            <SurveyPagination
+
+            {/* <SurveyPagination
               referrer={{
                 prevBtn: prevBtnRef,
                 nextBtn: nextBtnRef,
                 submitBtn: submitBtnRef,
               }}
               onChangeStep={onNavButtonClick}
-            />
+            /> */}
           </div>
         </Wrapper>
-      </Layout>
+      </SurveyLayout>
       {hasAlert && (
         <Modal_global_alert
           message={modalMessage}

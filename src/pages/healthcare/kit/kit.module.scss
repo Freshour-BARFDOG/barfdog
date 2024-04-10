@@ -104,12 +104,13 @@ section.kit_bottom {
       width: rem(200);
       height: rem(200);
       border-radius: 50%;
-      box-shadow: 15px 10px 0px 0px rgba(0, 0, 0, 0.3);
-      z-index: -1;
+      box-shadow: 15px 10px 0px 0px #d0cdcd;
+      z-index: 1;
     }
 
     .needs_text_box {
       border: rem(1) solid #cccccc;
+      background-color: rgba(255, 255, 255, 0.8);
       border-radius: rem(22);
       padding: rem(20) rem(40) rem(20) rem(150);
       width: rem(900);
