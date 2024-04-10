@@ -1,0 +1,11 @@
+@import '/styles/global/rem';
+
+// .layout_children {
+//   margin-top: 9rem;
+// }
+
+@media (max-width: rem(600)) {
+  .layout_children {
+    margin-top: 7.5rem;
+  }
+}

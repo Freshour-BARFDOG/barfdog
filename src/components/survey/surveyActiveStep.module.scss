@@ -1,0 +1,58 @@
+@import '/styles/global/guide.scss';
+@import '/styles/global/rem';
+
+.step_container {
+  margin: rem(130) auto 0 auto;
+  width: rem(600);
+  height: rem(100);
+  display: flex;
+  justify-content: center;
+  gap: rem(100);
+  color: #be1a21;
+  text-align: center;
+  position: relative;
+
+  .step_line {
+    position: absolute;
+    top: 30%;
+    height: rem(3);
+    width: 50%;
+    background-color: #be1a21;
+  }
+
+  .step_box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .step_circle {
+      border: rem(3) solid #be1a21;
+      background-color: #fffafa;
+      border-radius: 50%;
+      width: rem(60);
+      height: rem(60);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: rem(14);
+      z-index: 1;
+
+      .step_number {
+        font-size: rem(30);
+        font-weight: bold;
+      }
+    }
+  }
+
+  .step_circle.active {
+    background-color: #be1a21;
+
+    .step_number {
+      color: white;
+    }
+  }
+}
+
+@media (max-width: rem(600)) {
+}
