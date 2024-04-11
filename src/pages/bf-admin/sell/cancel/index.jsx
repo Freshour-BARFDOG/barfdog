@@ -22,6 +22,7 @@ import { getDefaultPagenationInfo } from '/util/func/getDefaultPagenationInfo';
 import enterKey from '/util/func/enterKey';
 import { global_searchDateType } from '/store/TYPE/searchDateType';
 import { postPaymentDataToApiServer } from '../../../api/postPaymentDataToApiServer';
+import { useRouter } from 'next/router';
 
 const initialSearchValues = {
   from: global_searchDateType.oldestDate,
@@ -45,6 +46,9 @@ export default function CancelOnSellPage() {
   const [selectedOrderIdList, setSelectedOrderIdList] = useState([]);
   const [searchQueryInitialize, setSearchQueryInitialize] = useState(false);
   const allItemIdList = itemList.map((item) => item.id); // 주문 id
+  const [currentPage, setCurrentPage] = useState(1);
+  const router = useRouter();
+  const { pathname } = router;
 
   const searchOption = Object.keys(orderStatus)
     .filter(
@@ -291,6 +295,8 @@ export default function CancelOnSellPage() {
                     items={itemList}
                     selectedIdList={selectedOrderIdList}
                     onSelectedItem={onSelectedItem}
+                    currentPage={currentPage}
+                    pathname={pathname}
                   />
                 )}
               </div>
@@ -307,6 +313,7 @@ export default function CancelOnSellPage() {
                   body: searchBody,
                   initialize: searchQueryInitialize,
                 }}
+                setCurrentPage={setCurrentPage}
               />
             </div>
           </section>

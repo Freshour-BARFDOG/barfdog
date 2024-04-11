@@ -2,19 +2,20 @@
 @import '/styles/module/itemList.module';
 @import 'promotionStatus.module';
 
-
 .cont_viewer {
-  .table{
+  .table {
     .table_th:last-child,
     .item > span:last-child,
     .table_body > li > span:not(:last-child) {
       border-right: $border;
     }
-    .table_header, .item{
-      display:grid;
-      grid-gap:0;
+    .table_header,
+    .item {
+      display: grid;
+      grid-gap: 0;
       grid-template-rows: minmax(rem(60), auto);
       grid-template-columns:
+        rem(60)
         rem(60)
         rem(80)
         rem(300)
@@ -22,11 +23,10 @@
         rem(180)
         minmax(rem(600), 1fr);
 
-
-      .period{
+      .period {
         flex-direction: column;
       }
-      .couponInfo{
+      .couponInfo {
         flex-direction: column;
         .detail {
           color: var(--color-font-medium);
@@ -36,22 +36,18 @@
   }
 }
 
-
-
-.moreview{
-  cursor:pointer;
+.moreview {
+  cursor: pointer;
   position: relative;
 }
 
-.seperator{
+.seperator {
   color: var(--color-font-medium);
   margin: rem(2);
 }
 
-
 .subtitle {
   font-size: rem(15);
   font-weight: 400;
-  letter-spacing:  rem(0.4);
-
+  letter-spacing: rem(0.4);
 }

@@ -1,5 +1,5 @@
 import s from './member.module.scss';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
@@ -13,12 +13,9 @@ import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import Spinner from '/src/components/atoms/Spinner';
 import { transformToday } from '/util/func/transformDate';
 import enterKey from '/util/func/enterKey';
-import {getDefaultPagenationInfo} from "/util/func/getDefaultPagenationInfo";
-import {global_searchDateType} from "/store/TYPE/searchDateType";
-import {MirrorTextOnHoverEvent} from "/util/func/MirrorTextOnHoverEvent";
-
-
-
+import { getDefaultPagenationInfo } from '/util/func/getDefaultPagenationInfo';
+import { global_searchDateType } from '/store/TYPE/searchDateType';
+import { MirrorTextOnHoverEvent } from '/util/func/MirrorTextOnHoverEvent';
 
 const initialSearchValues = {
   email: '',
@@ -27,29 +24,29 @@ const initialSearchValues = {
   to: transformToday(),
 };
 
-
-
 function ManageUserPage() {
-  
   const getListApiUrl = '/api/admin/members';
   const searchPageSize = 10;
-  
+
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
   const [searchValue, setSearchValue] = useState(initialSearchValues);
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchQueryInitialize, setSearchQueryInitialize] = useState( false );
-  
-  
-  useEffect( () => {
-    MirrorTextOnHoverEvent( window );
-  }, [itemList] );
-  
-  const pageInterceptor = useCallback((res, option={itemQuery: null}) => {
+  const [searchQueryInitialize, setSearchQueryInitialize] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    MirrorTextOnHoverEvent(window);
+  }, [itemList]);
+
+  const pageInterceptor = useCallback((res, option = { itemQuery: null }) => {
     // res = DUMMY__RESPONSE; // ! TEST
     // console.log(res);
-    return getDefaultPagenationInfo(res?.data, 'queryMembersDtoList', {pageSize: searchPageSize, setInitialize: setSearchQueryInitialize});
-  },[]);
+    return getDefaultPagenationInfo(res?.data, 'queryMembersDtoList', {
+      pageSize: searchPageSize,
+      setInitialize: setSearchQueryInitialize,
+    });
+  }, []);
 
   const onResetSearchValues = () => {
     setSearchValue(initialSearchValues);
@@ -111,6 +108,7 @@ function ManageUserPage() {
             <div className={`${s.cont_viewer} ${s.fullWidth}`}>
               <div className={s.table}>
                 <ul className={s.table_header}>
+                  <li className={s.table_th}>번호</li>
                   <li className={s.table_th}>상세보기</li>
                   <li className={s.table_th}>등급</li>
                   <li className={s.table_th}>이름</li>
@@ -121,12 +119,13 @@ function ManageUserPage() {
                   <li className={s.table_th}>누적구매금액</li>
                   <li className={s.table_th}>장기미접속</li>
                 </ul>
-                {itemList.length
-                  ? <MemberList items={itemList}/>
-                  : isLoading.fetching
-                  ? <AmdinErrorMessage loading={<Spinner />} />
-                  : <AmdinErrorMessage text="조회된 데이터가 없습니다." />
-                }
+                {itemList.length ? (
+                  <MemberList items={itemList} currentPage={currentPage} />
+                ) : isLoading.fetching ? (
+                  <AmdinErrorMessage loading={<Spinner />} />
+                ) : (
+                  <AmdinErrorMessage text="조회된 데이터가 없습니다." />
+                )}
               </div>
             </div>
             <div className={s['pagination-section']}>
@@ -137,7 +136,8 @@ function ManageUserPage() {
                 urlQuery={searchQuery}
                 setIsLoading={setIsLoading}
                 pageInterceptor={pageInterceptor}
-                option={{apiMethod: 'GET', initialize: searchQueryInitialize}}
+                option={{ apiMethod: 'GET', initialize: searchQueryInitialize }}
+                setCurrentPage={setCurrentPage}
               />
             </div>
           </section>

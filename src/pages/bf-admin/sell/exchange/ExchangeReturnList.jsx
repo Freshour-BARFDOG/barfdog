@@ -10,6 +10,7 @@ export default function SearchResultList({
   items,
   selectedIdList,
   onSelectedItem,
+  currentPage,
 }) {
   if (!items || !items.length) return;
 
@@ -19,6 +20,7 @@ export default function SearchResultList({
         <Item
           key={`item-${item.id}-${i}`}
           index={i}
+          number={i + 1 + (currentPage - 1) * 10}
           item={item}
           selectedIdList={selectedIdList}
           onSelectedItem={onSelectedItem}
@@ -28,9 +30,16 @@ export default function SearchResultList({
   );
 }
 
-const Item = ({ item, sortableItemRef, selectedIdList, onSelectedItem }) => {
+const Item = ({
+  item,
+  sortableItemRef,
+  selectedIdList,
+  onSelectedItem,
+  number,
+}) => {
   const DATA = {
     id: item.id, // 주문 id
+    number,
     orderItemId: item.orderItemId, // 주문한 상품의 id // 구독상품일 경우, 구독 id
     merchantUid: item.merchantUid, // 주문마다 고유하게 부여되는 번호 ex. 20220921_aC5kIb3YxCRIV0n
     orderStatus: orderStatus.KOR[item.orderStatus],
@@ -63,6 +72,7 @@ const Item = ({ item, sortableItemRef, selectedIdList, onSelectedItem }) => {
           value={selectedIdList.indexOf(item.id) >= 0 || ''}
         />
       </span>
+      <span>{DATA.number}</span>
       <span>
         <button
           className="admin_btn basic_s solid"

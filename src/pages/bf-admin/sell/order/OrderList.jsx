@@ -10,6 +10,8 @@ export default function SearchResultList({
   items,
   selectedIdList,
   onSelectedItem,
+  currentPage,
+  pathname, // '판매관리 > 주문관리' 구분 위함
 }) {
   if (!items || !items.length) return;
 
@@ -19,6 +21,11 @@ export default function SearchResultList({
         <Item
           key={`item-${item.id}-${i}`}
           index={i}
+          number={
+            pathname.includes('order')
+              ? i + 1 + (currentPage - 1) * 50 // '판매관리 > 주문관리'에서는 50개씩(size=50) 이므로, * 50
+              : i + 1 + (currentPage - 1) * 10
+          }
           item={item}
           selectedIdList={selectedIdList}
           onSelectedItem={onSelectedItem}
@@ -28,9 +35,16 @@ export default function SearchResultList({
   );
 }
 
-const Item = ({ item, sortableItemRef, selectedIdList, onSelectedItem }) => {
+const Item = ({
+  item,
+  number,
+  sortableItemRef,
+  selectedIdList,
+  onSelectedItem,
+}) => {
   const DATA = {
     id: item.id, // 주문 id => ! 주문 id로 주문정보를 조회가능
+    number,
     orderItemId: item.orderItemId, // 주문한 상품의 id
     merchantUid: item.merchantUid, // 상품 주문 번호
     orderStatus: orderStatus.KOR[item.orderStatus],
@@ -63,6 +77,7 @@ const Item = ({ item, sortableItemRef, selectedIdList, onSelectedItem }) => {
           value={selectedIdList.indexOf(item.id) >= 0 || ''}
         />
       </span>
+      <span>{number}</span>
       <span>
         <button
           className="admin_btn basic_s solid"
