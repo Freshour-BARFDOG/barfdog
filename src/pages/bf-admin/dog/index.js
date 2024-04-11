@@ -29,6 +29,7 @@ function ManageDogPage() {
   const [searchValue, setSearchValue] = useState(initialSearchValues);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchQueryInitialize, setSearchQueryInitialize] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     MirrorTextOnHoverEvent(window);
@@ -89,6 +90,7 @@ function ManageDogPage() {
             <div className={`${s.cont_viewer} ${s.fullWidth}`}>
               <div className={s.table}>
                 <ul className={s.table_header}>
+                  <li className={s.table_th}>번호</li>
                   <li className={s.table_th}>상세보기</li>
                   <li className={s.table_th}>견주 이름</li>
                   <li className={s.table_th}>견주 ID</li>
@@ -103,7 +105,7 @@ function ManageDogPage() {
                   <li className={s.table_th}>대표견 여부</li>
                 </ul>
                 {itemList.length ? (
-                  <DogList items={itemList} />
+                  <DogList items={itemList} currentPage={currentPage} />
                 ) : isLoading.fetching ? (
                   <AmdinErrorMessage loading={<Spinner />} />
                 ) : (
@@ -121,6 +123,7 @@ function ManageDogPage() {
                 pageInterceptor={pageInterceptor}
                 option={{ apiMethod: 'GET', initialize: searchQueryInitialize }}
                 queryItemList={apiDataQueryString}
+                setCurrentPage={setCurrentPage}
               />
             </div>
           </section>

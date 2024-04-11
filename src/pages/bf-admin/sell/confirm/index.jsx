@@ -38,6 +38,7 @@ export default function ConfirmOnSellPage() {
   const [searchValues, setSearchValues] = useState(initialSearchValues);
   const [searchBody, setSearchBody] = useState(null);
   const [searchQueryInitialize, setSearchQueryInitialize] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const onResetSearchValues = () => {
     setSearchValues(initialSearchValues);
@@ -118,6 +119,7 @@ export default function ConfirmOnSellPage() {
             <div className={`${s.cont_viewer}`}>
               <div className={s.table}>
                 <ul className={s.table_header}>
+                  <li className={s.table_th}>번호</li>
                   <li className={s.table_th}>상세보기</li>
                   <li className={s.table_th}>주문번호</li>
                   {/*<li className={s.table_th}>상품주문번호</li>*/}{' '}
@@ -134,7 +136,10 @@ export default function ConfirmOnSellPage() {
                 ) : itemList.length === 0 ? (
                   <AmdinErrorMessage text="조회된 데이터가 없습니다." />
                 ) : (
-                  <SearchResultList items={itemList} />
+                  <SearchResultList
+                    items={itemList}
+                    currentPage={currentPage}
+                  />
                 )}
               </div>
             </div>
@@ -151,6 +156,7 @@ export default function ConfirmOnSellPage() {
                   body: searchBody,
                   initialize: searchQueryInitialize,
                 }}
+                setCurrentPage={setCurrentPage}
               />
             </div>
           </section>

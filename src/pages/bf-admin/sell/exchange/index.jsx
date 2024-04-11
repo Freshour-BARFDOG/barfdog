@@ -44,6 +44,7 @@ export default function ExchangeOnSellPage() {
   const [selectedOrderIdList, setSelectedOrderIdList] = useState([]);
   const [searchQueryInitialize, setSearchQueryInitialize] = useState(false);
   const allItemIdList = itemList.map((item) => item.id); // 주문 id
+  const [currentPage, setCurrentPage] = useState(1);
 
   const searchOption = Object.keys(orderStatus)
     .filter(
@@ -339,6 +340,7 @@ export default function ExchangeOnSellPage() {
                       )}
                     />
                   </li>
+                  <li className={s.table_th}>번호</li>
                   <li className={s.table_th}>상세보기</li>
                   <li className={s.table_th}>주문번호</li>
                   <li className={s.table_th}>주문한 상품번호</li>
@@ -358,6 +360,7 @@ export default function ExchangeOnSellPage() {
                     items={itemList}
                     selectedIdList={selectedOrderIdList}
                     onSelectedItem={onSelectedItem}
+                    currentPage={currentPage}
                   />
                 )}
               </div>
@@ -374,6 +377,7 @@ export default function ExchangeOnSellPage() {
                   body: searchBody,
                   initialize: searchQueryInitialize,
                 }}
+                setCurrentPage={setCurrentPage}
               />
             </div>
           </section>

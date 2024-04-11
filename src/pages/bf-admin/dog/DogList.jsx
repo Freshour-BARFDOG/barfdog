@@ -3,20 +3,26 @@ import s from './dog.module.scss';
 import popupWindow from '@util/func/popupWindow';
 import { transformBirthDayYM } from '../../../../util/func/transformBirthDay';
 
-export default function DogList({ items }) {
+export default function DogList({ items, currentPage }) {
   if (!items || !items.length) return;
 
   return (
     <ul className="table_body">
-      {items.map((item) => (
-        <ItemList key={`item-${item.dogId}`} index={item.id} item={item} />
+      {items.map((item, index) => (
+        <ItemList
+          key={`item-${item.dogId}`}
+          number={index + 1 + (currentPage - 1) * 10}
+          index={item.id}
+          item={item}
+        />
       ))}
     </ul>
   );
 }
 
-const ItemList = ({ item }) => {
+const ItemList = ({ item, number }) => {
   const DATA = {
+    number,
     memberName: item.memberName,
     email: item.email,
     dogId: item.dogId,
@@ -50,6 +56,8 @@ const ItemList = ({ item }) => {
 
   return (
     <li className={s.item} key={`item-${DATA.dogId}`}>
+      <span>{DATA.number}</span>
+
       <span>
         <Link href={`/bf-admin/popup/dogInfo/${DATA.dogId}`} passHref>
           <a
