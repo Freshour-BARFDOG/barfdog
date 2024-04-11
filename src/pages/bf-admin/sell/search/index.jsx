@@ -41,6 +41,7 @@ export default function SearchOnSellPage() {
   const [searchValues, setSearchValues] = useState(initialSearchValues);
   const [searchBody, setSearchBody] = useState(null);
   const [searchQueryInitialize, setSearchQueryInitialize] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const searchOption = Object.keys(orderStatus)
     .filter((key) => key !== orderStatus.BEFORE_PAYMENT && key !== 'KOR')
@@ -140,6 +141,7 @@ export default function SearchOnSellPage() {
             <div className={`${s.cont_viewer}`}>
               <div className={s.table}>
                 <ul className={s.table_header}>
+                  <li className={s.table_th}>번호</li>
                   <li className={s.table_th}>상세보기</li>
                   <li className={s.table_th}>주문번호</li>
                   <li className={s.table_th}>주문상태</li>
@@ -154,7 +156,10 @@ export default function SearchOnSellPage() {
                 ) : itemList.length === 0 ? (
                   <AmdinErrorMessage text="조회된 데이터가 없습니다." />
                 ) : (
-                  <SearchResultList items={itemList} />
+                  <SearchResultList
+                    items={itemList}
+                    currentPage={currentPage}
+                  />
                 )}
               </div>
             </div>
@@ -171,6 +176,7 @@ export default function SearchOnSellPage() {
                   body: searchBody,
                   initialize: searchQueryInitialize,
                 }}
+                setCurrentPage={setCurrentPage}
               />
             </div>
           </section>

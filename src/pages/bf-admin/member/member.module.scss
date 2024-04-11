@@ -1,10 +1,11 @@
 @import '/styles/module/itemList.module';
 
-
 .cont_viewer {
-  .table{
-    .table_header, .item {
+  .table {
+    .table_header,
+    .item {
       grid-template-columns:
+        rem(60)
         rem(95)
         rem(160)
         rem(160)

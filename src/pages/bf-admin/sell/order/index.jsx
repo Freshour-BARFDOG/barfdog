@@ -32,6 +32,7 @@ import { global_searchDateType } from '/store/TYPE/searchDateType';
 import { postPaymentDataToApiServer } from '../../../api/postPaymentDataToApiServer';
 import { CancelReasonName } from '../../../../../store/TYPE/order/CancelReasonName';
 import { getData } from '../../../api/reqData';
+import { useRouter } from 'next/router';
 
 const initialSearchValues = {
   from: global_searchDateType.oldestDate,
@@ -57,6 +58,9 @@ export default function OrderOnSellPage() {
   const [searchQueryInitialize, setSearchQueryInitialize] = useState(false);
   const allItemIdList = itemList.map((item) => item.id); // 주문 id
   const [selectedItemList, setSelectedItemList] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const router = useRouter();
+  const { pathname } = router;
 
   useEffect(() => {
     const selectedList = itemList.filter(
@@ -830,6 +834,7 @@ export default function OrderOnSellPage() {
                       )}
                     />
                   </li>
+                  <li className={s.table_th}>번호</li>
                   <li className={s.table_th}>상세보기</li>
                   <li className={s.table_th}>주문번호</li>
                   <li className={s.table_th}>주문상태</li>
@@ -848,6 +853,8 @@ export default function OrderOnSellPage() {
                     items={itemList}
                     selectedIdList={selectedOrderIdList}
                     onSelectedItem={onSelectedItem}
+                    currentPage={currentPage}
+                    pathname={pathname}
                   />
                 )}
               </div>
@@ -865,6 +872,7 @@ export default function OrderOnSellPage() {
                   body: searchBody,
                   initialize: searchQueryInitialize,
                 }}
+                setCurrentPage={setCurrentPage}
               />
             </div>
           </section>
