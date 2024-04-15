@@ -25,7 +25,7 @@ export default function HealthcarePage() {
                   <div className={s.box_title}>
                     <p>AI 추천 식단</p>
 
-                    <Link href="/surveyGuide">
+                    <Link href="/survey">
                       <a className={s.menu_sub_title}>바로가기</a>
                     </Link>
                   </div>

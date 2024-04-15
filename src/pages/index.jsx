@@ -284,7 +284,7 @@ export default function MainPage({ data }) {
                   <p>{message[3]}</p>
                 </div>
               </div>
-              <Link href={'/surveyGuide'} passHref>
+              <Link href={'/survey'} passHref>
                 <button>주문하기</button>
               </Link>
             </div>
@@ -319,7 +319,7 @@ export default function MainPage({ data }) {
                     </span>
                   </div>
                   <div className={s.btn_box}>
-                    <Link href={'/surveyGuide'} passHref>
+                    <Link href={'/survey'} passHref>
                       <a type="button" className={s.btn_text}>
                         내 반려견도 시작하기
                       </a>
@@ -600,7 +600,7 @@ export default function MainPage({ data }) {
               >
                 더 많은 후기 보러가기
               </a>
-              <Link href={'/surveyGuide'} passHref>
+              <Link href={'/survey'} passHref>
                 <a type="button" className={s.btn_worry}>
                   내 반려견도 건강해지기
                 </a>

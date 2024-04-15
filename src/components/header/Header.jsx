@@ -152,7 +152,7 @@ export default function Header() {
                 <nav id="gnb" className={`${s.gnb_nav}`}>
                   <ul>
                     <MenuLayout title="건강케어" link="/healthcare">
-                      <SubmenuList title="AI 추천 식단" link="/surveyGuide" />
+                      <SubmenuList title="AI 추천 식단" link="/survey" />
                       <SubmenuList title="진단기기" link="/healthcare/kit" />
                       <SubmenuList title="AI 수의사" link="/healthcare/vet" />
                     </MenuLayout>
