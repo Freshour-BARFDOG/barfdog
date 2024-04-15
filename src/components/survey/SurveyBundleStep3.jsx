@@ -8,14 +8,16 @@ import Spinner from '../atoms/Spinner';
 import { useRouter } from 'next/router';
 import { dogCautionType } from '/store/TYPE/dogCautionType';
 
-export default function SurveyStep3({ formValues, setFormValues, onInputChangeHandler }) {
+export default function SurveyBundleStep3({
+  formValues,
+  setFormValues,
+  onInputChangeHandler,
+}) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState({});
   const [ingredientList, setIngredientList] = useState([]);
   const [recommendRecipeList, setRecommendRecipeList] = useState([]);
-  
 
-  
   useEffect(() => {
     // 설문조사에 필요한 재료 리스트 조회
     const getFormValuesApiUrl = '/api/recipes/ingredients';
@@ -77,45 +79,49 @@ export default function SurveyStep3({ formValues, setFormValues, onInputChangeHa
       }));
     })();
   }, []);
-  
-  
-  
-  
-  useEffect( () => {
+
+  useEffect(() => {
     // inedibleFoodEtc => inedibleFood의 formvalue가 'ETC'가 아닌 경우,
     // // console.log('inedibleFood',formValues.inedibleFood,'&& inedibleFoodETc',formValues.inedibleFoodEtc); // TEST
-    let inedibleFoodEtcValue = formValues.inedibleFood === dogInedibleFoodType.ETC ? formValues.inedibleFoodEtc :  dogInedibleFoodType.NONE ;
+    let inedibleFoodEtcValue =
+      formValues.inedibleFood === dogInedibleFoodType.ETC
+        ? formValues.inedibleFoodEtc
+        : dogInedibleFoodType.NONE;
     // // console.log('inedibleFoodEtcValue: ',inedibleFoodEtcValue)
     // 특별히 챙겨주고싶은부분: 기타항목 => value를 ''값으로 할당
-    inedibleFoodEtcValue = (formValues.inedibleFood === dogInedibleFoodType.ETC && inedibleFoodEtcValue === dogInedibleFoodType.NONE) ? null : inedibleFoodEtcValue;
+    inedibleFoodEtcValue =
+      formValues.inedibleFood === dogInedibleFoodType.ETC &&
+      inedibleFoodEtcValue === dogInedibleFoodType.NONE
+        ? null
+        : inedibleFoodEtcValue;
     setFormValues((prevState) => ({
       ...prevState,
-      inedibleFoodEtc: inedibleFoodEtcValue
-      
+      inedibleFoodEtc: inedibleFoodEtcValue,
     }));
-    
+
     // ETC 일경우에는 '기존입력값' 또는 ''
     // ETC가 아닐 경우에는 NONE
-  }, [formValues.inedibleFood] );
-  
-  
-  useEffect( () => {
+  }, [formValues.inedibleFood]);
+
+  useEffect(() => {
     // FORMVALUE.inedibleFoodEtc 초기화
-    if(formValues.inedibleFoodEtc === dogInedibleFoodType.NONE && formValues.inedibleFood === dogInedibleFoodType.ETC){
+    if (
+      formValues.inedibleFoodEtc === dogInedibleFoodType.NONE &&
+      formValues.inedibleFood === dogInedibleFoodType.ETC
+    ) {
       // ex. 반려견 못먹는 음식 '기타'항목이 선택돼있고, input에  'NONE'을 입력한 경우
       // => '반려견 못먹는 음식'이 '없어요' Radio가 Select되도록 UI변경시킴
-      setFormValues(prevState => ({
+      setFormValues((prevState) => ({
         ...prevState,
         inedibleFoodEtc: '',
         inedibleFood: dogInedibleFoodType.NONE,
-      }))
+      }));
     }
-  }, [formValues.inedibleFoodEtc] );
+  }, [formValues.inedibleFoodEtc]);
   // ! inediblefood 기타가 아닐 경우에 초기화
-  
-  
+
   return (
-    <section id='surveyPage' className={s.step3page}>
+    <section id="surveyPage" className={s.step3page}>
       <div className={s['input-row']}>
         <p className={s.input_title}>간식 급여 횟수는</p>
         <SurveyInputRadio
@@ -161,7 +167,10 @@ export default function SurveyStep3({ formValues, setFormValues, onInputChangeHa
             setFormValues={setFormValues}
             className={s.inedibleFood}
             idList={[dogInedibleFoodType.FAKE_TYPE, dogInedibleFoodType.NONE]}
-            labelList={[dogInedibleFoodType.KOR.FAKE_TYPE, dogInedibleFoodType.KOR.NONE]}
+            labelList={[
+              dogInedibleFoodType.KOR.FAKE_TYPE,
+              dogInedibleFoodType.KOR.NONE,
+            ]}
           />
         ) : (
           <SurveyInputRadio
@@ -185,7 +194,7 @@ export default function SurveyStep3({ formValues, setFormValues, onInputChangeHa
         )}
         {formValues.inedibleFood === dogInedibleFoodType.ETC && (
           <input
-            id={"inedibleFoodEtc"}
+            id={'inedibleFoodEtc'}
             className={`${s.input_underLine} ${s['focus-underline']} mt-30`}
             type="text"
             placeholder="직접 입력해주세요."
@@ -238,7 +247,11 @@ export default function SurveyStep3({ formValues, setFormValues, onInputChangeHa
               className={`${s.input_underLine} ${s['focus-underline']} mt-30`}
               type="text"
               placeholder="직접 입력해주세요."
-              value={formValues.caution === dogCautionType.NONE ? '' : formValues.caution || ''}
+              value={
+                formValues.caution === dogCautionType.NONE
+                  ? ''
+                  : formValues.caution || ''
+              }
               onChange={onInputChangeHandler}
             />
             <p className={`${s.red_text} mt-30`}>

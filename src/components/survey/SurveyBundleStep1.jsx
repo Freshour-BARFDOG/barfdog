@@ -33,7 +33,7 @@ const getSurveyBirthObject = (yyyymmObj) => {
   return result;
 };
 
-export default function SurveyStep1({
+export default function SurveyBundleStep1({
   formValues,
   setFormValues,
   onInputChangeHandler,

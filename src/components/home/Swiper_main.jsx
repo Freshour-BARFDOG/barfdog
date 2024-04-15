@@ -60,6 +60,7 @@ export function Swiper_main({ data, isMobile }) {
           swiper.params.pagination.el.classList.add(
             Styles['swiper-pagination__mainSection'],
           );
+          swiper.params.pagination.el.style.width = '100%';
           // swiper.navigation.destroy();
           // swiper.navigation.init();
           // swiper.navigation.update();

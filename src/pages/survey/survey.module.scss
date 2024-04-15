@@ -1,5 +1,6 @@
 @import '/styles/global/guide.scss';
 @import '/styles/global/rem';
+
 // ------------ LAY-OUT
 .survey-page {
   margin-bottom: rem(150);
@@ -24,8 +25,222 @@
   margin-bottom: rem(60);
 }
 
+//////////////////////////////////
+// ******** STEP 1. 견명 ********
+//////////////////////////////////
+
+.input_name_box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: rem(20);
+}
+
+.input_name {
+  background-color: white;
+  width: rem(400);
+  height: rem(50);
+  position: relative;
+}
+
+.input_add_btn {
+  background-color: white;
+  width: rem(400);
+  height: rem(50);
+  border: rem(1) solid #dddddd;
+  border-radius: rem(5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: rem(3);
+
+  svg {
+    width: rem(30);
+    height: rem(30);
+  }
+
+  &:hover {
+    border: rem(1) solid black;
+    transition: 0.4s all;
+  }
+}
+
+.input_remove_button {
+  position: absolute;
+  right: 34%;
+  font-size: rem(14);
+  margin-top: rem(10);
+  padding: rem(4) rem(12);
+
+  background-color: #f2f2f2;
+  border-radius: rem(30);
+  color: #999999;
+}
+
+.input_name_guide {
+  background-color: rgba(242, 242, 242, 0.6);
+  width: rem(400);
+  // height: rem(50);
+  color: #be1a21;
+  text-align: center;
+  padding: rem(10) 0;
+  border-radius: rem(10);
+}
+
+.input_line {
+  width: rem(400);
+  height: rem(2);
+  background-color: #ddd;
+  margin: rem(25) 0;
+}
+
+//////////////////////////////////
+// ******** STEP 2. 성별 & 중성화 ********
+//////////////////////////////////
+
+.gender_neutralization_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: rem(380);
+
+  .input_gender_container,
+  .input_neutralization_container {
+    margin-bottom: rem(40);
+  }
+
+  .input_gender_box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    ul {
+      li {
+        width: rem(180);
+      }
+    }
+  }
+
+  .input_neutralization_box {
+    label {
+      width: rem(180);
+    }
+  }
+}
+
+//////////////////////////////////
+// ******** STEP 3. 크기 & 견종 ********
+//////////////////////////////////
+.dogSize_dogType_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  .input_line {
+    position: fixed;
+    margin-top: rem(270);
+  }
+
+  .input_dogSize_dogType_box {
+    margin-bottom: rem(40);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.dogType_list {
+  height: rem(100);
+}
+
+//////////////////////////////////
+// ******** STEP 4. 생일 ********
+//////////////////////////////////
+
+.dogBirth_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: rem(400);
+
+  .input_dogBirth_box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    ul {
+      height: rem(50);
+    }
+
+    .date_label_wrap {
+      // display: none;
+      .date_label_span {
+        display: none;
+      }
+    }
+    input {
+      width: rem(400) !important;
+      height: rem(50) !important;
+      border-radius: rem(10) !important;
+    }
+
+    // 노령견 여부 label
+    .oldDog {
+      margin: rem(10) 0 rem(20) 0;
+      display: flex;
+      width: 100%;
+      justify-content: flex-start;
+      padding-left: rem(10);
+    }
+  }
+}
+
+.year_month_btn {
+  background-color: white;
+  width: rem(400);
+  height: rem(50);
+  border: rem(1) solid #dddddd;
+  border-radius: rem(10);
+}
+
+.year_month_btn:hover {
+  background-color: #ffe0e1;
+  color: #af3d3d;
+  border: rem(2) solid #852024;
+  transition: 0.3s all;
+  font-weight: bold;
+}
+
+.birth_text {
+  background-color: rgba(242, 242, 242, 0.6);
+  color: #be1a21;
+  padding: rem(10);
+  width: rem(400);
+  font-size: rem(14.3);
+  border-radius: rem(10);
+
+  span {
+    text-decoration: underline;
+    font-weight: bold;
+  }
+}
+
+///////////////////////////////
+
 // ----------- INPUT STYLE
+
 .survey-page {
+  input:hover {
+    background-color: #f2f2f2;
+    transition: 0.5s all;
+  }
+
   .input-wrap {
     position: relative;
     input {
@@ -42,6 +257,7 @@
     border-radius: 0;
     border-bottom: rem(1) solid var(--color-line-02) !important;
     cursor: pointer;
+
     &:focus {
       border: {
         top: 0;
@@ -80,10 +296,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: rem(10);
-  @include char(l20);
-  font-weight: 600;
-  padding-bottom: rem(30);
+  // @include char(l20);
+  // font-weight: 600;
+  font-size: rem(24);
+  padding: rem(20) 0;
 }
 
 .display-flex-column {
@@ -365,7 +581,7 @@
 }
 .inputRadio {
   cursor: pointer;
-  border-radius: rem(32.5);
+  border-radius: rem(10);
   background-color: #fff;
   width: 100%;
   min-height: rem(42);
@@ -385,6 +601,7 @@
   &.checked {
     border-color: var(--color-main);
     color: var(--color-main);
+    background-color: #ffe0e2;
   }
   input {
     position: absolute;
@@ -472,79 +689,6 @@
   }
   .scrollContainer {
     background-color: #fff;
-  }
-}
-
-// * ------- Navigation Button  ------- * //
-.swiper-navigation-container {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  z-index: 10;
-  background-color: white;
-  box-shadow: 0 rem(5) rem(15) rgb(0 0 0 / 8%);
-  height: rem(100);
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: rem(40);
-  // margin: 0 auto 0;
-  button {
-    display: flex;
-    justify-content: center;
-    column-gap: rem(4);
-    border: rem(1) solid var(--color-main);
-    width: rem(120);
-    @include char(l16);
-    font-weight: 600;
-    color: var(--color-main);
-    text-align: center;
-    padding: rem(19) 0;
-    border-radius: rem(4);
-
-    transition-timing-function: ease-out;
-    transition-duration: 0.4s;
-    transition-property: background-color, box-shadow;
-
-    .image_box {
-      position: relative;
-      width: rem(12);
-      aspect-ratio: 1/1;
-      img {
-        transition: inherit;
-      }
-    }
-  }
-  .swiper-button-prev {
-    border-color: var(--color-main);
-    background-color: #fff;
-    color: var(--color-main);
-    box-shadow: 0 rem(2) rem(10) 0 rgba(0, 0, 0, 0.1);
-    &[disabled] {
-      border-color: var(--color-disabled);
-      color: var(--color-disabled);
-      box-shadow: none;
-      img {
-        filter: grayscale(100);
-        opacity: 0.5;
-      }
-    }
-  }
-
-  .swiper-button-next {
-    border-color: transparent;
-    background-color: var(--color-main);
-    color: #fff;
-    box-shadow: 0 rem(2) rem(10) 0 rgba(202, 16, 16, 0.6);
-  }
-  .swiper-button-submit {
-    border-color: transparent;
-    background-color: var(--color-main);
-    color: #fff;
-    box-shadow: 0 rem(2) rem(10) 0 rgba(202, 16, 16, 0.6);
-    display: none;
   }
 }
 
