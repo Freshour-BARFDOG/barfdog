@@ -88,7 +88,7 @@ export function Swiper_recipe({ data, isMobile }) {
 
       <div className={s.btn_box}>
         <div className={Styles.btn_box}>
-          <Link href={'/surveyGuide'} passHref>
+          <Link href={'/survey'} passHref>
             <a type="button" className={Styles.btn_main}>
               정기구독 신청하기
             </a>

@@ -26,7 +26,7 @@ const Gnb_survey = () => {
   };
   return (
     <>
-      <Link href="/surveyGuide" passHref>
+      <Link href="/survey" passHref>
         <a className={s.subscribe_btn}>AI 추천 식단</a>
       </Link>
       {/* ! [추후] 추가할 수도 있음 */}

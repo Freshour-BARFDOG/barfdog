@@ -141,7 +141,7 @@ export default function Footer() {
                     </Link>
                     <ul>
                       <li>
-                        <Link href="/surveyGuide">
+                        <Link href="/survey">
                           <a className={s.menu_sub_title}>AI 추천 식단</a>
                         </Link>
                       </li>
@@ -232,7 +232,7 @@ export default function Footer() {
                     </Link>
                     <ul>
                       <li>
-                        <Link href="/surveyGuide">
+                        <Link href="/survey">
                           <a className={s.menu_sub_title}>AI 추천 식단</a>
                         </Link>
                       </li>

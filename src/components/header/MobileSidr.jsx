@@ -329,7 +329,7 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                     }`}
                   >
                     <li>
-                      <Link href={'/surveyGuide'} passHref>
+                      <Link href={'/survey'} passHref>
                         <a>AI 추천 식단</a>
                       </Link>
                     </li>

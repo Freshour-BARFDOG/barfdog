@@ -169,7 +169,7 @@ export default function MobileGnb() {
               </Link>
             </li>
             <li>
-              <Link href="/surveyGuide" passHref>
+              <Link href="/survey" passHref>
                 <a onClick={() => onActiveMenuId('surveyGuide')}>
                   <Image
                     src={
@@ -187,7 +187,7 @@ export default function MobileGnb() {
                   />
                   <MobileMenu
                     title={'AI 추천식단'}
-                    link="/surveyGuide"
+                    link="/survey"
                     activeMenuId={activeMenuId}
                     color={
                       !isSidrOpen &&
