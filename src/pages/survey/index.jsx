@@ -8,7 +8,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import siblings from '/util/func/siblings';
-import { SurveyPagination } from '../../components/survey/SurveyPagination';
+// import { SurveyPagination } from '../../components/survey/SurveyPagination';
 import { FullScreenRunningDog } from '/src/components/atoms/FullScreenLoading';
 import { EffectFade, Navigation, Pagination } from 'swiper';
 import getAbsoluteOffsetTop from '/util/func/getAbsoluteOffsetTop';
