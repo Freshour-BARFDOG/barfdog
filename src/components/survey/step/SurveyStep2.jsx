@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import s from '/src/pages/survey/survey.module.scss';
 import rem from '/util/func/rem';
 import SurveyInputRadio from '/src/components/survey/SurveyInputRadio';
-import CustomRadioTrueOrFalse from '/src/components/admin/form/CustomRadioTrueOrFalse';
+import SurveyCustomRadioTrueOrFalse from '/src/components/survey/SurveyCustomRadioTrueOrFalse';
 import { dogGenderType } from '/store/TYPE/dogGenderType';
 
 export default function SurveyStep2({
@@ -48,7 +48,7 @@ export default function SurveyStep2({
           <div className={s.input_neutralization_container}>
             <p className={s.input_title}>중성화 여부는 어떻게 되나요 ?</p>
             <div className={s.input_neutralization_box}>
-              <CustomRadioTrueOrFalse
+              <SurveyCustomRadioTrueOrFalse
                 title="neutralization"
                 value={formValues.neutralization}
                 setValue={setFormValues}

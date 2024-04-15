@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import s from './surveyCustomRadio.module.scss';
 
-const CustomRadioTrueOrFalse = ({
+const SurveyCustomRadioTrueOrFalse = ({
   title,
   labelList = [],
   value,
@@ -104,4 +104,4 @@ const CustomRadioTrueOrFalse = ({
   );
 };
 
-export default CustomRadioTrueOrFalse;
+export default SurveyCustomRadioTrueOrFalse;
