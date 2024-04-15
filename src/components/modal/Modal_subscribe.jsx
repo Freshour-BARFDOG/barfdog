@@ -1,25 +1,17 @@
-import s from "./modal_subscribe.module.scss";
-import React, {useEffect, useState} from "react";
-import { useModalContext } from "@store/modal-context";
-import Link from "next/link";
-import Image from "next/image";
-import zIndex from "/styles/module/zIndex.module.scss";
-import rem from "/util/func/rem";
-import CloseButton from "/src/components/atoms/CloseButton";
-
-
-
-
+import s from './modal_subscribe.module.scss';
+import React, { useEffect, useState } from 'react';
+import { useModalContext } from '@store/modal-context';
+import Link from 'next/link';
+import Image from 'next/image';
+import zIndex from '/styles/module/zIndex.module.scss';
+import rem from '/util/func/rem';
+import CloseButton from '/src/components/atoms/CloseButton';
 
 function Modal_subscribe() {
   const mcx = useModalContext();
   const MODAL_ACTIVE_STATE = mcx.subscribe?.isActive;
 
-
-  
-  
   useEffect(() => {
- 
     if (MODAL_ACTIVE_STATE) {
       const scrollYPos = mcx.event.scrollY;
       document.body.style.cssText = `
@@ -29,14 +21,13 @@ function Modal_subscribe() {
         top : -${scrollYPos}px;
       `;
     }
-   
+
     return () => {
       document.body.style.cssText = ``;
       window?.scrollTo(0, parseInt(-mcx.event.scrollY || 10) * -1);
     };
-
   }, [MODAL_ACTIVE_STATE, mcx.event.scrollY]);
-  
+
   const onCloseModalHandler = () => {
     mcx.subscribe.onHide();
   };
@@ -45,7 +36,7 @@ function Modal_subscribe() {
     <>
       {MODAL_ACTIVE_STATE && (
         <section
-          className={`${s["modal-subscribe"]} ${zIndex["modal-subscribe"]}`}
+          className={`${s['modal-subscribe']} ${zIndex['modal-subscribe']}`}
         >
           <div className={s.background} onClick={onCloseModalHandler}></div>
           <div className={s.body}>
@@ -61,14 +52,8 @@ function Modal_subscribe() {
 
 export default Modal_subscribe;
 
-
-
-
-
-
-
 const closeButtonStyles = (windowWidth) => {
-  if(!windowWidth) return;
+  if (!windowWidth) return;
 
   let style;
   const triggeredWindowWidth = 600;
@@ -81,15 +66,12 @@ const closeButtonStyles = (windowWidth) => {
   return style;
 };
 
-
-
-const ModalCont = ({onCloseModalHandler}) => {
+const ModalCont = ({ onCloseModalHandler }) => {
   const [btnStylesObj, setBtnStyleObj] = useState({});
 
   useEffect(() => {
     setBtnStyleObj(closeButtonStyles(window.innerWidth));
   }, []);
-
 
   return (
     <div className={s.cont}>
@@ -98,7 +80,7 @@ const ModalCont = ({onCloseModalHandler}) => {
       </i>
       <ul>
         <li className={s.card}>
-          <figure className={`${s["img-main"]} img-wrap`}>
+          <figure className={`${s['img-main']} img-wrap`}>
             {/* <i className={`${s["img-sale"]} img-wrap`}>
               <Image
                 src={require("/public/img/modal-sale.png")}
@@ -108,13 +90,13 @@ const ModalCont = ({onCloseModalHandler}) => {
               />
             </i> */}
             <Image
-              src={require("/public/img/modal-subscribeItem.png")}
+              src={require('/public/img/modal-subscribeItem.png')}
               objectFit="cover"
               layout="fill"
               alt="정기구독 이미지"
             />
           </figure>
-          <figcaption className={s["title-section"]}>
+          <figcaption className={s['title-section']}>
             <h3 className={s.title}>정기구독</h3>
             <p className={s.subtitle}>
               <b>정기구독</b>으로 더욱 저렴하고 간편하게!
@@ -124,8 +106,8 @@ const ModalCont = ({onCloseModalHandler}) => {
               <p>완벽 맞춤 생식을 정기구독 할 수 있습니다</p>
             </div>
           </figcaption>
-          <div className={s["btn-section"]}>
-            <Link href="/surveyGuide" passHref>
+          <div className={s['btn-section']}>
+            <Link href="/survey" passHref>
               <a className="flex-wrap" onClick={onCloseModalHandler}>
                 정기구독 시작하기
               </a>
@@ -133,15 +115,15 @@ const ModalCont = ({onCloseModalHandler}) => {
           </div>
         </li>
         <li className={s.card}>
-          <figure className={`${s["img-main"]} img-wrap`}>
+          <figure className={`${s['img-main']} img-wrap`}>
             <Image
-              src={require("/public/img/modal-singleItem.png")}
+              src={require('/public/img/modal-singleItem.png')}
               objectFit="cover"
               layout="fill"
               alt="정기구독 이미지"
             />
           </figure>
-          <figcaption className={s["title-section"]}>
+          <figcaption className={s['title-section']}>
             <h3 className={s.title}>단품구매</h3>
             <p className={s.subtitle}>
               바프독 <b>생식을 체험</b>하고 싶을 때!
@@ -151,7 +133,7 @@ const ModalCont = ({onCloseModalHandler}) => {
               <p>구입할 수 있습니다</p>
             </div>
           </figcaption>
-          <div className={s["btn-section"]}>
+          <div className={s['btn-section']}>
             <Link href="/shop?category=all" passHref>
               <a className="flex-wrap" onClick={onCloseModalHandler}>
                 상품 보러 가기
@@ -162,5 +144,4 @@ const ModalCont = ({onCloseModalHandler}) => {
       </ul>
     </div>
   );
-  
-}
+};

@@ -1,12 +1,5 @@
 import React, { useState } from 'react';
-
 import s from './surveyFooter.module.scss';
-import Wrapper from '/src/components/common/Wrapper';
-import Link from 'next/link';
-import Image from 'next/image';
-import { FaArrowLeft, FaArrowRight } from 'react-icons/fa6';
-import { userType } from '/store/TYPE/userAuthType';
-import { SurveyProgressbar } from '../survey/SurveyProgressbar';
 import { SurveyPagination } from '../survey/SurveyPagination';
 
 export default function SurveyFooter({

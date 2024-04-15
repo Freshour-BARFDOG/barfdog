@@ -16,65 +16,139 @@ $browser-context: 16;
   z-index: 10;
 }
 
-// .footer_area {
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   padding: rem(30);
-//   gap: rem(40);
-// }
+// * ------- Navigation Button  ------- * //
+.swiper-navigation-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+  background-color: white;
+  box-shadow: 0 rem(5) rem(15) rgb(0 0 0 / 8%);
+  height: rem(100);
 
-// .prev_btn {
-//   width: rem(50);
-//   height: rem(50);
-//   border: rem(2) solid rgba(194, 40, 47, 0.45);
-//   // box-shadow: rem(1) rem(1) rem(10) rgba(0, 0, 0, 0.15);
-//   // background-color: #ca1010;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   border-radius: 50%;
-//   &:hover {
-//     opacity: 0.9;
-//     transition: all 0.3s;
-//     background-color: #ca1010;
-//     border: rem(1) solid #ca1010;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: rem(40);
+  // margin: 0 auto 0;
 
-//     svg {
-//       fill: white;
-//     }
-//   }
-//   svg {
-//     width: rem(24);
-//     height: rem(24);
-//     fill: rgba(194, 40, 47, 0.45);
-//   }
-// }
+  // button {
+  //   display: flex;
+  //   justify-content: center;
+  //   column-gap: rem(4);
+  //   border: rem(1) solid var(--color-main);
+  //   width: rem(120);
+  //   // @include char(l16);
+  //   font-weight: 600;
+  //   color: var(--color-main);
+  //   text-align: center;
+  //   padding: rem(19) 0;
+  //   border-radius: rem(4);
 
-// .next_btn {
-//   width: rem(130);
-//   height: rem(50);
-//   background-color: rgba(194, 40, 47, 0.45);
-//   // box-shadow: rem(1) rem(1) rem(10) rgba(0, 0, 0, 0.15);
-//   // background-color: #ca1010;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   border-radius: rem(40);
-//   font-size: rem(20);
-//   gap: rem(10);
+  //   transition-timing-function: ease-out;
+  //   transition-duration: 0.4s;
+  //   transition-property: background-color, box-shadow;
 
-//   &:hover {
-//     opacity: 0.9;
-//     transition: all 0.3s;
-//     background-color: #ca1010;
-//     border: rem(1) solid #ca1010;
+  //   .image_box {
+  //     position: relative;
+  //     width: rem(12);
+  //     aspect-ratio: 1/1;
+  //     img {
+  //       transition: inherit;
+  //     }
+  //   }
+  // }
+  // .swiper-button-prev {
+  //   border-color: var(--color-main);
+  //   background-color: #fff;
+  //   color: var(--color-main);
+  //   box-shadow: 0 rem(2) rem(10) 0 rgba(0, 0, 0, 0.1);
+  //   &[disabled] {
+  //     border-color: var(--color-disabled);
+  //     color: var(--color-disabled);
+  //     box-shadow: none;
+  //     img {
+  //       filter: grayscale(100);
+  //       opacity: 0.5;
+  //     }
+  //   }
+  // }
 
-//     svg {
-//       fill: white;
-//     }
-//   }
-// }
+  // .swiper-button-next {
+  //   border-color: transparent;
+  //   background-color: var(--color-main);
+  //   color: #fff;
+  //   box-shadow: 0 rem(2) rem(10) 0 rgba(202, 16, 16, 0.6);
+  // }
+  // .swiper-button-submit {
+  //   border-color: transparent;
+  //   background-color: var(--color-main);
+  //   color: #fff;
+  //   box-shadow: 0 rem(2) rem(10) 0 rgba(202, 16, 16, 0.6);
+  //   display: none;
+  // }
+}
+
+.footer_area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: rem(30);
+  gap: rem(40);
+}
+
+.swiper-button-prev {
+  width: rem(50);
+  height: rem(50);
+  border: rem(2) solid rgba(194, 40, 47, 0.45);
+  // box-shadow: rem(1) rem(1) rem(10) rgba(0, 0, 0, 0.15);
+  // background-color: #ca1010;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  &:hover {
+    opacity: 0.9;
+    transition: all 0.3s;
+    background-color: #ca1010;
+    border: rem(1) solid #ca1010;
+
+    svg {
+      fill: white;
+    }
+  }
+  svg {
+    width: rem(24);
+    height: rem(24);
+    fill: rgba(194, 40, 47, 0.45);
+  }
+}
+
+.swiper-button-next {
+  width: rem(130);
+  height: rem(50);
+  background-color: rgba(194, 40, 47, 0.45);
+  // box-shadow: rem(1) rem(1) rem(10) rgba(0, 0, 0, 0.15);
+  // background-color: #ca1010;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: rem(40);
+  font-size: rem(20);
+  gap: rem(10);
+
+  &:hover {
+    opacity: 0.9;
+    transition: all 0.3s;
+    background-color: #ca1010;
+    border: rem(1) solid #ca1010;
+
+    svg {
+      fill: white;
+    }
+  }
+}
 
 //**------- RESONSIVE -------**//
 @media (max-width: rem(1350)) {

@@ -2,11 +2,19 @@ import React from 'react';
 import s from './wrapper.module.scss';
 
 // function Wrapper({ children, bgColor , fullWidth, rowStyle, ...props}) {
-function Wrapper({ children, className, bgColor, fullWidth, rowStyle }) {
+function Wrapper({
+  children,
+  className,
+  bgColor,
+  fullWidth,
+  rowStyle,
+  minHeight,
+  alignItems,
+}) {
   return (
     <div
       className={`${s.container_outer} ${className}`}
-      style={{ backgroundColor: bgColor }}
+      style={{ backgroundColor: bgColor, minHeight, alignItems }}
     >
       <div
         className={`${s.container} ${fullWidth ? s['fullWidth'] : ''}`}

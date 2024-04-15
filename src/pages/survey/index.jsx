@@ -11,19 +11,16 @@ import siblings from '/util/func/siblings';
 import { SurveyPagination } from '../../components/survey/SurveyPagination';
 import { FullScreenRunningDog } from '/src/components/atoms/FullScreenLoading';
 import { EffectFade, Navigation, Pagination } from 'swiper';
-import SurveyStep1 from '/src/components/survey/SurveyStep1';
-import SurveyStep2 from '/src/components/survey/SurveyStep2';
-import SurveyStep3 from '/src/components/survey/SurveyStep3';
 import getAbsoluteOffsetTop from '/util/func/getAbsoluteOffsetTop';
 import filter_emptyValue from '/util/func/filter_emptyValue';
 import filter_onlyNumber from '/util/func/filter_onlyNumber';
 import filter_extraIntegerNumberZero from '/util/func/filter_extraIntegerNumberZero';
 import filter_ints from '/util/func/filter_ints';
 import filter_demicals from '/util/func/filter_demicals';
-import { dogCautionType } from '/store/TYPE/dogCautionType';
 import rem from '/util/func/rem';
 import { dogActivityLevelType } from '/store/TYPE/dogActivityLevelType';
 import { dogInedibleFoodType } from '/store/TYPE/dogInedibleFoodType';
+import { dogCautionType } from '/store/TYPE/dogCautionType';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import { useModalContext } from '/store/modal-context';
 import { validate } from '/util/func/validation/validation_survey';
@@ -33,11 +30,19 @@ import { useRouter } from 'next/router';
 import { SurveyDataClass } from '../../class/surveyDataClass';
 import SurveyLayout from '../../components/common/SurveyLayout';
 import { SurveyActiveStep } from '../../components/survey/SurveyActiveStep';
+
+import SurveyStep1 from '/src/components/survey/step/SurveyStep1';
+import SurveyStep2 from '/src/components/survey/step/SurveyStep2';
+import SurveyStep3 from '/src/components/survey/step/SurveyStep3';
+import SurveyStep4 from '/src/components/survey/step/SurveyStep4';
+import SurveyStep5 from '../../components/survey/step/SurveyStep5';
+import SurveyStep6 from '../../components/survey/step/SurveyStep6';
+import SurveyStep7 from '../../components/survey/step/SurveyStep7';
 // ! [수정] 로그인 안해도 설문조사 가능하게
 // import useUserData from '../../../util/hook/useUserData';
 
-//
-// const initialFormValues = { // ! TEST 용
+// ! TEST 용
+// const initialFormValues = {
 //   name: 'dog-', // 강아지이름 str
 //   gender: 'MALE', // 강아지 성별 str
 //   birth: '202201', // 강아지 생월 str // [YYYYMM]
@@ -58,29 +63,68 @@ import { SurveyActiveStep } from '../../components/survey/SurveyActiveStep';
 // };
 
 const svyData = new SurveyDataClass();
-const initialFormValues = {
-  name: '', // 강아지이름 str
-  gender: '', // 강아지 성별 str
-  birth: '', // 강아지 생월 str // [YYYYMM]
-  oldDog: false, // 노견 여부 boolean (checkbox type)
-  dogSize: '', // 강아지 체급 str
-  dogType: '', // 강아지 종 str
-  weight: '', // 강아지 몸무게 str // 몸무게 소수점 아래 1자리
-  neutralization: null, // 중성화여부 Boolean
-  activityLevel: dogActivityLevelType.NORMAL, // 활동량 레벨 str
-  walkingCountPerWeek: '', // 주당 산책 횟수 string
-  walkingTimePerOneTime: '', // 한 번 산책할 때 산책 시간 string
-  dogStatus: '', // 강아지 건강/임신 등의 상태 str
-  snackCountLevel: '', //  간식먹는 정도 str
-  inedibleFood: dogInedibleFoodType.NONE, // 못 먹는 음식 str => get API 리스트 // 빈값('')일 경우, '있어요'선택됨)
-  inedibleFoodEtc: '', // 못 먹는 음식 > '기타' 일경우
-  recommendRecipeId: null, // 특별히 챙겨주고 싶은 부분에 해당하는 Recipe => get API 리스트
-  caution: dogCautionType.NONE, // 기타 특이사항 // 빈값('')일 경우, '있어요'선택됨)
-};
+
+// ! [기존] 단일견
+// const initialFormValues = {
+//   name: '', // 강아지이름 str
+//   gender: '', // 강아지 성별 str
+//   birth: '', // 강아지 생월 str // [YYYYMM]
+//   oldDog: false, // 노견 여부 boolean (checkbox type)
+//   dogSize: '', // 강아지 체급 str
+//   dogType: '', // 강아지 종 str
+//   weight: '', // 강아지 몸무게 str // 몸무게 소수점 아래 1자리
+//   neutralization: null, // 중성화여부 Boolean
+//   activityLevel: dogActivityLevelType.NORMAL, // 활동량 레벨 str
+//   walkingCountPerWeek: '', // 주당 산책 횟수 string
+//   walkingTimePerOneTime: '', // 한 번 산책할 때 산책 시간 string
+//   dogStatus: '', // 강아지 건강/임신 등의 상태 str
+//   snackCountLevel: '', //  간식먹는 정도 str
+//   inedibleFood: dogInedibleFoodType.NONE, // 못 먹는 음식 str => get API 리스트 // 빈값('')일 경우, '있어요'선택됨)
+//   inedibleFoodEtc: '', // 못 먹는 음식 > '기타' 일경우
+//   recommendRecipeId: null, // 특별히 챙겨주고 싶은 부분에 해당하는 Recipe => get API 리스트
+//   caution: dogCautionType.NONE, // 기타 특이사항 // 빈값('')일 경우, '있어요'선택됨)
+// };
+
+// ! [수정] 다견
+// const initialFormValues = [];
+
+const initialFormValues = [
+  {
+    name: '', // 강아지이름 str
+    gender: '', // 강아지 성별 str
+    neutralization: null, // 중성화여부 Boolean
+    dogSize: '', // 강아지 체급 str
+    dogType: '', // 강아지 종 str
+    birth: '', //! [변경] 강아지 생월 str // [YYYYMMDD]
+    oldDog: false, // 노견 여부 boolean (checkbox type)
+    weight: '', // 강아지 몸무게 str // 몸무게 소수점 아래 1자리
+    dogStatus: '', //! [변경] 강아지 상태 [HEALTHY, NEED_DIET, OBESITY, THIN]
+    targetWeight: '', //! [추가] 목표 체중 Number
+    specificDogStatus: '', //! [추가]  특별한 상태 [PREGNANT, LACTATING, NULL] 해당 사항이 없다면 NULL
+    expectedPregnancyDay: '', //! [추가] 특별한 상태 1) 임신일 경우,”임신예상일” 입력 'YYYYMMDD'
+    lactatingCount: '', //! [추가] 특별한 상태  2) 수유 ('LACTATING') 일 경우, ”마리수” 입력 Number
+    activityLevel: dogActivityLevelType.NORMAL, // 활동량 레벨 str [VERY_LITTLE, LITTLE, NORMAL, MUCH, VERY_MUCH]
+    walkingCountPerWeek: '', // 주당 산책 횟수 string
+    walkingTimePerOneTime: '', // 한 번 산책할 때 산책 시간 string
+    snackCountLevel: '', //  간식먹는 정도 str
+    waterCountLevel: '', //! [추가] 음수량 str [LITTLE, NORMAL, MUCH]
+    supplement: '', //! [추가] 영양제 str
+    supplementBrand: '', //! [추가] 영양제 브랜드명 str
+    currentMealType: '', //! [추가] 현재 먹고 있는 식사종류 str
+    currentMealTypeBrand: '', //! [추가] 현재 먹고 있는 식사 브랜드명 str
+    inedibleFood: dogInedibleFoodType.NONE, // 못 먹는 음식 str => get API 리스트 // 빈값('')일 경우, '있어요'선택됨)
+    inedibleFoodEtc: '', // 못 먹는 음식 > '기타' 일경우
+    caution: dogCautionType.NONE, // 기타 특이사항 // 빈값('')일 경우, '있어요'선택됨)
+    recommendRecipeId: null, // 특별히 챙겨주고 싶은 부분에 해당하는 Recipe => get API 리스트
+    mealCountPerOneDay: '', //! [추가] 하루 끼니 횟수 str (1,2,3)
+    favoriteIngredients: '', //! [추가] 좋아하는 재료 str
+    messageToBarfdog: '', //! [추가] 전하고 싶은 말 str
+  },
+];
 
 export default function Survey() {
   const loadingDuration = 1200; // ms
-  const lastStep = 3;
+  const lastStep = 18; // 마지막 설문조사 페이지
   const router = useRouter();
   // const userData = useUserData();
   // const userId = userData?.memberId;
@@ -127,6 +171,7 @@ export default function Survey() {
     formValues.inedibleFood,
     formValues.caution,
   ];
+
   useEffect(() => {
     // 코드의 역할: UI '짤림 현상'해결
     // (ex. 반려견 못먹는 음식 '있어요' / 기타 특이사항: '있어요')
@@ -144,11 +189,24 @@ export default function Survey() {
   }, changeSwiperHeightDependencies);
   // -------------------------------------------------------------------------------- //
 
-  const onInputChangeHandler = (e) => {
+  const onInputChangeHandler = (e, index) => {
     const input = e.currentTarget;
     const { id, value } = input;
+    // console.log('????????', index);
+    // console.log('input', input);
+    // console.log('id', id);
+    // console.log('value', value);
+
     const filteredType = input.dataset.inputType;
     let filteredValue = value;
+
+    // string -> boolean
+    if (filteredValue === 'true') {
+      filteredValue = true;
+    } else if (filteredValue === 'false') {
+      filteredValue = false;
+    }
+
     if (filteredType) {
       filteredValue = filter_emptyValue(value);
       if (filteredType.indexOf('number') >= 0) {
@@ -176,10 +234,55 @@ export default function Survey() {
       }
     }
 
-    setFormValues((prevState) => ({
-      ...prevState,
-      [id]: filteredValue,
-    }));
+    if (Array.isArray(formValues)) {
+      const newFormValues = formValues.map((item, idx) => {
+        if (idx === index) {
+          return {
+            ...item,
+            [id]: filteredValue,
+          };
+        }
+        return item;
+      });
+      setFormValues(newFormValues);
+    }
+
+    //////////////////////////////
+
+    // const input = e.currentTarget;
+    // const { id, value } = input;
+    // const filteredType = input.dataset.inputType;
+    // let filteredValue = value;
+    // if (filteredType) {
+    //   filteredValue = filter_emptyValue(value);
+    //   if (filteredType.indexOf('number') >= 0) {
+    //     filteredValue = filter_onlyNumber(filteredValue);
+    //   }
+    //   if (filteredType.indexOf('ints') >= 0) {
+    //     filteredValue = filter_extraIntegerNumberZero(filteredValue);
+    //     const thisFilteredType = filteredType
+    //       .split(',')
+    //       .filter((type) => type.indexOf('ints') >= 0)[0];
+    //     const intNum = Number(thisFilteredType.split('-')[1]);
+    //     filteredValue = intNum
+    //       ? filter_ints(filteredValue, intNum)
+    //       : filteredValue;
+    //   }
+    //   if (filteredType.indexOf('demicals') >= 0) {
+    //     filteredValue = filter_extraIntegerNumberZero(filteredValue);
+    //     const thisFilteredType = filteredType
+    //       .split(',')
+    //       .filter((type) => type.indexOf('demicals') >= 0)[0];
+    //     const demicalNum = Number(thisFilteredType.split('-')[1]);
+    //     filteredValue = demicalNum
+    //       ? filter_demicals(filteredValue, demicalNum)
+    //       : filteredValue;
+    //   }
+    // }
+    // setFormValues((prevState) => ({
+    //   ...prevState,
+    //   [id]: filteredValue,
+    // }));
   };
 
   // const handleSwiperInit = (swiper) => {
@@ -212,8 +315,6 @@ export default function Survey() {
     pagination: {
       clickable: false,
       type: 'progressbar',
-      // el: progressbarRef.current,
-      // el: '.swiper-pagination',
     },
     navigation: {
       prevEl: prevBtnRef.current,
@@ -244,7 +345,11 @@ export default function Survey() {
     progressBar.style.height = '0.6rem';
     progressBar.style.backgroundColor = 'transparent';
     const spanTag = progressBar.querySelector('span');
+    const filledBar = progressBar.querySelector(
+      '.swiper-pagination-progressbar-fill',
+    );
     spanTag.style.backgroundColor = '#CA1010';
+    filledBar.style.backgroundColor = '#CA1010';
 
     // console.log(pagination);
     // console.log('progressBar', progressBar);
@@ -341,15 +446,15 @@ export default function Survey() {
       () => setIsLoading(() => ({ nextPage: false })),
       loadingDuration,
     );
-    resetWindowPos();
+    // resetWindowPos();
   };
 
-  const resetWindowPos = () => {
-    if (!surveyPageRef.current) return;
-    const surveyPageEl = surveyPageRef.current;
-    const scrollYPos = getAbsoluteOffsetTop(surveyPageEl);
-    window?.scrollTo(0, scrollYPos);
-  };
+  // const resetWindowPos = () => {
+  //   if (!surveyPageRef.current) return;
+  //   const surveyPageEl = surveyPageRef.current;
+  //   const scrollYPos = getAbsoluteOffsetTop(surveyPageEl);
+  //   window?.scrollTo(0, scrollYPos);
+  // };
 
   useEffect(() => {
     // navigation Button > Hide & Show
@@ -370,24 +475,30 @@ export default function Survey() {
     );
     const isPassed = valid_hasFormErrors(errObj);
     const swiper = document.querySelector('.swiper').swiper;
-    if (!isPassed) {
-      let errorMessages = ['- 오류 안내 -\n'];
-      let count = 0;
-      for (const key in errObj) {
-        const errorMessage = errObj[key];
-        errorMessage && errorMessages.push(`${++count}. ${errorMessage}\n`);
-      }
-      // console.log(errorMessages);
 
-      mct.alertShow(errorMessages);
-      setSubmitState(null);
-      // - prevent to the Next step when validation failed
-      curBtn !== submitBtn && swiper.slidePrev();
-    } else {
-      // isSubmitButton && mct.alertShow('설문조사를 제출하시겠습니까?');
-      setSubmitState('READY');
-      isSubmitButton && onSubmit();
-    }
+    console.log('curBtn', curBtn);
+    console.log('submitBtn', submitBtn);
+    console.log('realCurStep', realCurStep);
+    // console.log('errObj', errObj);
+
+    //   if (!isPassed) {
+    //     let errorMessages = ['- 오류 안내 -\n'];
+    //     let count = 0;
+    //     for (const key in errObj) {
+    //       const errorMessage = errObj[key];
+    //       errorMessage && errorMessages.push(`${++count}. ${errorMessage}\n`);
+    //     }
+    //     // console.log(errorMessages);
+
+    //     mct.alertShow(errorMessages);
+    //     setSubmitState(null);
+    // - prevent to the Next step when validation failed
+    //     curBtn !== submitBtn && swiper.slidePrev();
+    //   } else {
+    // isSubmitButton && mct.alertShow('설문조사를 제출하시겠습니까?');
+    //     setSubmitState('READY');
+    //     isSubmitButton && onSubmit();
+    //   }
   };
 
   const onSubmit = async () => {
@@ -423,7 +534,8 @@ export default function Survey() {
         'API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.',
       );
       setTimeout(() => {
-        window.location.href = '/surveyGuide';
+        // window.location.href = '/surveyGuide';
+        window.location.href = '/survey';
       }, [1000]);
       console.error('API통신 오류 : ', err);
     }
@@ -436,6 +548,8 @@ export default function Survey() {
   const moveToPrevPage = () => {
     router.back();
   };
+
+  console.log(formValues);
 
   return (
     <>
@@ -450,7 +564,7 @@ export default function Survey() {
         submitBtnRef={submitBtnRef}
         onNavButtonClick={onNavButtonClick}
       >
-        <Wrapper bgColor="#fffafa">
+        <Wrapper bgColor="#fffafa" minHeight="100vh" alignItems="flex-start">
           <div className={s['survey-page']} ref={surveyPageRef}>
             <SurveyActiveStep curStep={curStep} />
             <Swiper
@@ -459,36 +573,195 @@ export default function Survey() {
               onInit={onSwiperInit}
               onRealIndexChange={onSwiperChangeIndex}
             >
+              {/* 1. 견명 */}
               <SwiperSlide>
                 <SurveyStep1
+                  surveyPageRef={surveyPageRef}
                   formValues={formValues}
                   setFormValues={setFormValues}
                   onInputChangeHandler={onInputChangeHandler}
                 />
               </SwiperSlide>
+              {/* 2. 성별, 중성화여부 */}
               <SwiperSlide>
                 <SurveyStep2
+                  surveyPageRef={surveyPageRef}
                   formValues={formValues}
                   setFormValues={setFormValues}
+                  onInputChangeHandler={onInputChangeHandler}
                 />
               </SwiperSlide>
+
+              {/* 3. 사이즈, 견종 */}
               <SwiperSlide>
                 <SurveyStep3
+                  surveyPageRef={surveyPageRef}
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                  onInputChangeHandler={onInputChangeHandler}
+                />
+              </SwiperSlide>
+
+              {/* 4. 생일 */}
+              <SwiperSlide>
+                <SurveyStep4
+                  surveyPageRef={surveyPageRef}
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                  onInputChangeHandler={onInputChangeHandler}
+                />
+              </SwiperSlide>
+
+              {/* 5. 몸무게 */}
+              <SwiperSlide>
+                <SurveyStep5
+                  surveyPageRef={surveyPageRef}
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                  onInputChangeHandler={onInputChangeHandler}
+                />
+              </SwiperSlide>
+
+              {/* 6. 현재 상태 */}
+              <SwiperSlide>
+                <SurveyStep6
+                  surveyPageRef={surveyPageRef}
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                  onInputChangeHandler={onInputChangeHandler}
+                />
+              </SwiperSlide>
+
+              {/* 7. 활동량 */}
+              <SwiperSlide>
+                <SurveyStep7
+                  surveyPageRef={surveyPageRef}
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                  onInputChangeHandler={onInputChangeHandler}
+                />
+              </SwiperSlide>
+
+              {/* 8. 산책량 */}
+              <SwiperSlide>
+                <SurveyStep6
+                  surveyPageRef={surveyPageRef}
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                  onInputChangeHandler={onInputChangeHandler}
+                />
+              </SwiperSlide>
+
+              {/* 9. 간식량 */}
+              <SwiperSlide>
+                <SurveyStep6
+                  surveyPageRef={surveyPageRef}
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                  onInputChangeHandler={onInputChangeHandler}
+                />
+              </SwiperSlide>
+
+              {/* 10. 음수량 */}
+              <SwiperSlide>
+                <SurveyStep6
+                  surveyPageRef={surveyPageRef}
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                  onInputChangeHandler={onInputChangeHandler}
+                />
+              </SwiperSlide>
+
+              {/* 11. 영양제 */}
+              <SwiperSlide>
+                <SurveyStep6
+                  surveyPageRef={surveyPageRef}
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                  onInputChangeHandler={onInputChangeHandler}
+                />
+              </SwiperSlide>
+
+              {/* 12. 현재 식사 */}
+              <SwiperSlide>
+                <SurveyStep6
+                  surveyPageRef={surveyPageRef}
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                  onInputChangeHandler={onInputChangeHandler}
+                />
+              </SwiperSlide>
+
+              {/* 13. 못먹는 재료 */}
+              <SwiperSlide>
+                <SurveyStep6
+                  surveyPageRef={surveyPageRef}
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                  onInputChangeHandler={onInputChangeHandler}
+                />
+              </SwiperSlide>
+
+              {/* 14. 건강적 특이사항, 질병 */}
+              <SwiperSlide>
+                <SurveyStep6
+                  surveyPageRef={surveyPageRef}
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                  onInputChangeHandler={onInputChangeHandler}
+                />
+              </SwiperSlide>
+
+              {/* 15. 특별히 챙겨주고 싶은 것 (고민)  */}
+              <SwiperSlide>
+                <SurveyStep6
+                  surveyPageRef={surveyPageRef}
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                  onInputChangeHandler={onInputChangeHandler}
+                />
+              </SwiperSlide>
+
+              {/* 16. 하루 끼니 */}
+              <SwiperSlide>
+                <SurveyStep6
+                  surveyPageRef={surveyPageRef}
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                  onInputChangeHandler={onInputChangeHandler}
+                />
+              </SwiperSlide>
+
+              {/* 17. 좋아하는 재료 */}
+              <SwiperSlide>
+                <SurveyStep6
+                  surveyPageRef={surveyPageRef}
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                  onInputChangeHandler={onInputChangeHandler}
+                />
+              </SwiperSlide>
+
+              {/* 18. 전하고 싶은 말 */}
+              <SwiperSlide>
+                <SurveyStep6
+                  surveyPageRef={surveyPageRef}
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                  onInputChangeHandler={onInputChangeHandler}
+                />
+              </SwiperSlide>
+
+              {/* 19. [최종] 결과확인 */}
+              <SwiperSlide>
+                <SurveyStep6
+                  surveyPageRef={surveyPageRef}
                   formValues={formValues}
                   setFormValues={setFormValues}
                   onInputChangeHandler={onInputChangeHandler}
                 />
               </SwiperSlide>
             </Swiper>
-
-            {/* <SurveyPagination
-              referrer={{
-                prevBtn: prevBtnRef,
-                nextBtn: nextBtnRef,
-                submitBtn: submitBtnRef,
-              }}
-              onChangeStep={onNavButtonClick}
-            /> */}
           </div>
         </Wrapper>
       </SurveyLayout>
