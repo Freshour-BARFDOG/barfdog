@@ -192,7 +192,6 @@ export default function Survey() {
   const onInputChangeHandler = (e, index) => {
     const input = e.currentTarget;
     const { id, value } = input;
-    // console.log('????????', index);
     // console.log('input', input);
     // console.log('id', id);
     // console.log('value', value);
@@ -564,7 +563,12 @@ export default function Survey() {
         submitBtnRef={submitBtnRef}
         onNavButtonClick={onNavButtonClick}
       >
-        <Wrapper bgColor="#fffafa" minHeight="100vh" alignItems="flex-start">
+        <Wrapper
+          fullWidth={true}
+          bgColor="#fffafa"
+          minHeight="100vh"
+          alignItems="flex-start"
+        >
           <div className={s['survey-page']} ref={surveyPageRef}>
             <SurveyActiveStep curStep={curStep} />
             <Swiper
