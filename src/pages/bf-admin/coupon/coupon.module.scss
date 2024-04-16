@@ -1,35 +1,37 @@
 @import '/styles/module/itemList.module';
 
 .cont_viewer {
-  .table{
-    &.AUTO_PUBLISHED{
-      .table_header, .item{
+  .table {
+    &.AUTO_PUBLISHED {
+      .table_header,
+      .item {
         grid-template-columns:
-        rem(120)
-        rem(400)
-        fillTheRestOfTableWidth(120)
-        rem(120)
-        rem(90)
-        rem(90)
-        rem(70);
+          rem(60)
+          rem(120)
+          rem(400)
+          fillTheRestOfTableWidth(120)
+          rem(120)
+          rem(90)
+          rem(90)
+          rem(70);
       }
     }
 
     &.CODE_PUBLISHED,
     &.PROMOTION_PUBLISHED {
-      .table_header, .item{
+      .table_header,
+      .item {
         grid-template-columns:
-        rem(120)
-        rem(160)
-        rem(120)
-        rem(400)
-        fillTheRestOfTableWidth(120)
-        rem(120)
-        rem(90)
-        rem(90)
-        rem(70);
+          rem(120)
+          rem(160)
+          rem(120)
+          rem(400)
+          fillTheRestOfTableWidth(120)
+          rem(120)
+          rem(90)
+          rem(90)
+          rem(70);
       }
     }
-
   }
 }

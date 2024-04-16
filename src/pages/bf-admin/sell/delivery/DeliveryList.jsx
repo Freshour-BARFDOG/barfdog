@@ -10,6 +10,7 @@ export default function SearchResultList({
   items,
   selectedIdList,
   onSelectedItem,
+  currentPage,
 }) {
   if (!items || !items.length) return;
 
@@ -19,6 +20,7 @@ export default function SearchResultList({
         <ItemList
           key={`item-${item.id}-${i}`}
           index={i}
+          number={i + 1 + (currentPage - 1) * 10}
           item={item}
           selectedIdList={selectedIdList}
           onSelectedItem={onSelectedItem}
@@ -33,9 +35,11 @@ const ItemList = ({
   sortableItemRef,
   selectedIdList,
   onSelectedItem,
+  number,
 }) => {
   const DATA = {
     id: item.id, // 주문 id => ! 주문 id로 주문정보를 조회가능
+    number,
     merchantUid: item.merchantUid, // 상품 주문 번호
     orderItemId: item.orderItemId, // 주문한 상품의 id
     orderStatus: orderStatus.KOR[item.orderStatus],
@@ -82,6 +86,7 @@ const ItemList = ({
           value={selectedIdList.indexOf(item.id) >= 0 || ''}
         />
       </span>
+      <span>{DATA.number}</span>
       <span>
         <button
           className="admin_btn basic_s solid"

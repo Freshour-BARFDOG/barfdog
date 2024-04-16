@@ -19,6 +19,7 @@ const Pagination = ({
   setPageData,
   routerDisabled = false,
   pageInterceptor,
+  setCurrentPage,
   option = { apiMethod: 'GET', body: null, initialize: false },
 }) => {
   const router = useRouter();
@@ -35,6 +36,10 @@ const Pagination = ({
     }
   }, [option.initialize]);
   //
+
+  useEffect(() => {
+    setCurrentPage && setCurrentPage(curPage);
+  }, [curPage]);
 
   const fetchData = async (url, method, query) => {
     try {

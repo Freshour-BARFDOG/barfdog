@@ -49,6 +49,7 @@ export default function DeliveryOnSellPage() {
   const [searchBody, setSearchBody] = useState(null);
   const [selectedOrderIdList, setSelectedOrderIdList] = useState([]);
   const [searchQueryInitialize, setSearchQueryInitialize] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const allItemIdList = itemList.map((item) => item.id); // 주문 id
   const searchOption = Object.keys(orderStatus)
@@ -531,6 +532,7 @@ export default function DeliveryOnSellPage() {
                       )}
                     />
                   </li>
+                  <li className={s.table_th}>번호</li>
                   <li className={s.table_th}>상세보기</li>
                   <li className={s.table_th}>주문번호</li>
                   <li className={`${s.table_th} ${s.hasToolTip}`}>주문상태</li>
@@ -561,6 +563,7 @@ export default function DeliveryOnSellPage() {
                     items={itemList}
                     selectedIdList={selectedOrderIdList}
                     onSelectedItem={onSelectedItem}
+                    currentPage={currentPage}
                   />
                 )}
               </div>
@@ -577,6 +580,7 @@ export default function DeliveryOnSellPage() {
                   body: searchBody,
                   initialize: searchQueryInitialize,
                 }}
+                setCurrentPage={setCurrentPage}
               />
             </div>
           </section>

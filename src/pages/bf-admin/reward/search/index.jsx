@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, { useCallback, useState } from 'react';
 import s from '../reward.module.scss';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
@@ -9,21 +9,18 @@ import SearchTextWithCategory from '/src/components/admin/form/searchBar/SearchT
 import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
 import RewardList from './RewardList';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
-import {transformToday} from "/util/func/transformDate";
-import Spinner from "/src/components/atoms/Spinner";
-import enterKey from "/util/func/enterKey";
-import {getDefaultPagenationInfo} from "/util/func/getDefaultPagenationInfo";
-import {global_searchDateType} from "/store/TYPE/searchDateType";
-
-
+import { transformToday } from '/util/func/transformDate';
+import Spinner from '/src/components/atoms/Spinner';
+import enterKey from '/util/func/enterKey';
+import { getDefaultPagenationInfo } from '/util/func/getDefaultPagenationInfo';
+import { global_searchDateType } from '/store/TYPE/searchDateType';
 
 const initialSearchValues = {
-  email:'',
-  name:'',
+  email: '',
+  name: '',
   from: global_searchDateType.oldestDate,
-  to:transformToday(),
-}
-
+  to: transformToday(),
+};
 
 function RewardListPage() {
   const getListApiUrl = '/api/admin/rewards';
@@ -32,15 +29,18 @@ function RewardListPage() {
   const [itemList, setItemList] = useState([]);
   const [searchValues, setSearchValues] = useState(initialSearchValues);
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchQueryInitialize, setSearchQueryInitialize] = useState( false );
-  
-  const pageInterceptor = useCallback((res, option={itemQuery: null}) => {
+  const [searchQueryInitialize, setSearchQueryInitialize] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const pageInterceptor = useCallback((res, option = { itemQuery: null }) => {
     // res = DUMMY__RESPONSE; // ! TEST
     // console.log(res);
-    return getDefaultPagenationInfo(res?.data, 'queryAdminRewardsDtoList', {pageSize: searchPageSize, setInitialize: setSearchQueryInitialize});
-  },[]);
-  
-  
+    return getDefaultPagenationInfo(res?.data, 'queryAdminRewardsDtoList', {
+      pageSize: searchPageSize,
+      setInitialize: setSearchQueryInitialize,
+    });
+  }, []);
+
   const onResetSearchValues = () => {
     setSearchValues(initialSearchValues);
   };
@@ -51,11 +51,11 @@ function RewardListPage() {
       const val = searchValues[key];
       queryArr.push(`${key}=${val}`);
     }
-    
+
     const query = `${queryArr.join('&')}`;
     setSearchQuery(query);
   };
-  
+
   const onSearchInputKeydown = (e) => {
     enterKey(e, onSearchHandler);
   };
@@ -81,7 +81,7 @@ function RewardListPage() {
                 title="조건검색"
                 name="keyword"
                 id="keyword"
-                events={{onKeydown: onSearchInputKeydown}}
+                events={{ onKeydown: onSearchInputKeydown }}
                 options={[
                   { label: '아이디', value: 'email' },
                   { label: '이름', value: 'name' },
@@ -97,18 +97,20 @@ function RewardListPage() {
             <div className={`${s.cont_viewer} ${s.fullWidth}`}>
               <div className={s.table}>
                 <ul className={s.table_header}>
+                  <li className={s.table_th}>번호</li>
                   <li className={s.table_th}>적립일자</li>
                   <li className={s.table_th}>적립급명칭</li>
                   <li className={s.table_th}>금액</li>
                   <li className={s.table_th}>회원이름</li>
                   <li className={s.table_th}>아이디</li>
                 </ul>
-                {itemList.length
-                  ? <RewardList items={itemList}/>
-                  : isLoading.fetching
-                  ? <AmdinErrorMessage loading={<Spinner />} />
-                  : <AmdinErrorMessage text="조회된 데이터가 없습니다." />
-                }
+                {itemList.length ? (
+                  <RewardList items={itemList} currentPage={currentPage} />
+                ) : isLoading.fetching ? (
+                  <AmdinErrorMessage loading={<Spinner />} />
+                ) : (
+                  <AmdinErrorMessage text="조회된 데이터가 없습니다." />
+                )}
               </div>
             </div>
             <div className={s['pagination-section']}>
@@ -119,7 +121,8 @@ function RewardListPage() {
                 urlQuery={searchQuery}
                 setIsLoading={setIsLoading}
                 pageInterceptor={pageInterceptor}
-                option={{apiMethod: 'GET', initialize: searchQueryInitialize}}
+                option={{ apiMethod: 'GET', initialize: searchQueryInitialize }}
+                setCurrentPage={setCurrentPage}
               />
             </div>
           </section>
