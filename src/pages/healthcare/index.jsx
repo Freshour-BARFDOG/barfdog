@@ -62,8 +62,8 @@ export default function HealthcarePage() {
                     <Image src={VetImg} alt="VetImg" />
                   </div>
                   <div className={s.box_title}>
-                    <p>AI 수의사</p>
-                    <Link href="/healthcare/vet">
+                    <p>AI 수의영양 상담</p>
+                    <Link href="/healthcare/consult">
                       <a className={s.menu_sub_title}>바로가기</a>
                     </Link>
                   </div>

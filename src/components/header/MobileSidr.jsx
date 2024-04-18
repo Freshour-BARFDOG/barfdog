@@ -339,8 +339,8 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                       </Link>
                     </li>
                     <li>
-                      <Link href={'/healthcare/vet'} passHref>
-                        <a>AI 수의사</a>
+                      <Link href={'/healthcare/consult'} passHref>
+                        <a>AI 수의영양 상담</a>
                       </Link>
                     </li>
                   </ul>
