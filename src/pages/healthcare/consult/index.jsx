@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
-import s from '/src/pages/healthcare/vet/vet.module.scss';
+import s from '/src/pages/healthcare/consult/consult.module.scss';
 import Image from 'next/image';
 import Soon from '/public/img/healthcare/soon.png';
 import VetImg from '/public/img/healthcare/vet.jpg';
@@ -18,7 +18,7 @@ const initialFormValues = {
 
 const initialFormErrors = {};
 
-export default function AiVetPage() {
+export default function AiConsultPage() {
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState(initialFormErrors);
 
@@ -30,16 +30,18 @@ export default function AiVetPage() {
     }
   };
 
+  console.log(formValues);
+
   return (
     <>
-      <MetaTitle title="AI 수의사" />
+      <MetaTitle title="AI 수의영양 상담" />
       <Layout>
         <Wrapper>
           <section className={s.vet_top}>
             <div className={s.vet_left}>
               <div className={s.vet_title_wrap}>
                 <div className={s.vet_title}>
-                  <p>AI</p> 수의사
+                  <p>AI</p> 수의영양 상담
                 </div>
                 <div className={s.img_wrap}>
                   <Image src={Soon} alt="soon" />
@@ -64,7 +66,8 @@ export default function AiVetPage() {
             <div className={s.alarm_title}>출시 알림 신청하기</div>
             <div className={s.alarm_text}>
               집에서 간편하게 반려견 건강 상담을 받아보고 싶으신가요?
-              <br /> 바프독 AI 수의사 서비스가 출시될 때 가장 먼저 알려드릴게요.
+              <br /> 바프독 AI 수의영양 상담 서비스가 출시될 때 가장 먼저
+              알려드릴게요.
             </div>
             <NotiForm
               formValues={formValues}

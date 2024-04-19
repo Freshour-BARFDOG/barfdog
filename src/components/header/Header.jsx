@@ -154,7 +154,10 @@ export default function Header() {
                     <MenuLayout title="건강케어" link="/healthcare">
                       <SubmenuList title="AI 추천 식단" link="/survey" />
                       <SubmenuList title="진단기기" link="/healthcare/kit" />
-                      <SubmenuList title="AI 수의사" link="/healthcare/vet" />
+                      <SubmenuList
+                        title="AI 수의영양 상담"
+                        link="/healthcare/consult"
+                      />
                     </MenuLayout>
                     <MenuLayout
                       title="스토어"

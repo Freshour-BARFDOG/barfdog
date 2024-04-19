@@ -149,7 +149,7 @@ export default function Footer() {
                         <Link href="/healthcare/kit">진단 기기</Link>
                       </li>
                       <li>
-                        <Link href="/healthcare/vet">AI 수의사</Link>
+                        <Link href="/healthcare/consult">AI 수의영양 상담</Link>
                       </li>
                     </ul>
                   </li>
@@ -240,7 +240,7 @@ export default function Footer() {
                         <Link href="/healthcare/kit">진단 기기</Link>
                       </li>
                       <li>
-                        <Link href="/healthcare/vet">AI 수의사</Link>
+                        <Link href="/healthcare/consult">AI 수의영양 상담</Link>
                       </li>
                     </ul>
                   </li>
