@@ -97,10 +97,6 @@ export default function SurveyStep4({
 
   return (
     <section id="surveyPage" className={s.step4Page}>
-      <div className={s.birth_text}>
-        바프독 생식은 생후 3개월 이상의 강아지들에게 권장하고 있습니다. 보다 더
-        자세한 상담을 원하시면 <span>문의하기</span>를 통해 상담 받아보세요.
-      </div>
       {formValues?.map((dog, index) => (
         <div key={index} className={s.dogBirth_container}>
           <p className={s.input_title}>{dog.name} (이)의 생일은 언제인가요 ?</p>
@@ -108,10 +104,8 @@ export default function SurveyStep4({
             <SurveyBirthday
               className={s['birthday']}
               type={'date'}
-              // required={true}
               id={'birth'}
               filteredType={'date'}
-              // title={'반려견 생년월일'}
               dogInfoIndex={index}
               dogInfo={dog}
               // formValue={formValues.birth}
@@ -119,7 +113,6 @@ export default function SurveyStep4({
               value={dog.birth || ''}
               // onChange={(e) => onInputChangeHandler(e, index)}
             />
-            {/* 정확히는 모르겠어요 버튼 누르면 -> 아래 뜨게 */}
             <button
               className={s.year_month_btn}
               onClick={showBirthOptionsHandler}
@@ -127,42 +120,42 @@ export default function SurveyStep4({
               정확히는 모르겠어요
             </button>
 
-            {/* {showBirthOptions && ( */}
-            <ul className={s.dogBirth}>
-              <li>
-                <SurveyYearMonth
-                  id={'yyyy'}
-                  options={yearOptions}
-                  value={dog.birth?.length >= 4 ? dog.birth.slice(0, 4) : ''}
-                  // setValues={setBirth}
-                  setFormValues={setFormValues}
-                  unit={'년'}
-                  width={120}
-                  // placeholder={'년도'}
-                  placeholder={'yyyy'}
-                  dogInfoIndex={index}
-                />
-              </li>
-              <li>
-                <SurveyYearMonth
-                  id={'mm'}
-                  options={monthOptions}
-                  // value={dog.birth?.length >= 6 ? dog.birth?.slice(4, 6) : ''}
-                  value={
-                    dog.birth?.slice(0, -4) !== '0000'
-                      ? dog.birth?.slice(4, 6)
-                      : ''
-                  }
-                  // setValues={setBirth}
-                  setFormValues={setFormValues}
-                  unit={'월'}
-                  width={120}
-                  // placeholder={'월'}
-                  placeholder={'mm'}
-                  dogInfoIndex={index}
-                />
-              </li>
-              {/* <li>
+            {showBirthOptions && (
+              <ul className={s.dogBirth}>
+                <li>
+                  <SurveyYearMonth
+                    id={'yyyy'}
+                    options={yearOptions}
+                    value={dog.birth?.length >= 4 ? dog.birth.slice(0, 4) : ''}
+                    // setValues={setBirth}
+                    setFormValues={setFormValues}
+                    unit={'년'}
+                    width={120}
+                    // placeholder={'년도'}
+                    placeholder={'yyyy'}
+                    dogInfoIndex={index}
+                  />
+                </li>
+                <li>
+                  <SurveyYearMonth
+                    id={'mm'}
+                    options={monthOptions}
+                    // value={dog.birth?.length >= 6 ? dog.birth?.slice(4, 6) : ''}
+                    value={
+                      dog.birth?.slice(0, -4) !== '0000'
+                        ? dog.birth?.slice(4, 6)
+                        : ''
+                    }
+                    // setValues={setBirth}
+                    setFormValues={setFormValues}
+                    unit={'월'}
+                    width={120}
+                    // placeholder={'월'}
+                    placeholder={'mm'}
+                    dogInfoIndex={index}
+                  />
+                </li>
+                {/* <li>
                 <SurveyCustomSelectWithCustomOptions
                 id={'yyyy'}
                 options={yearOptions}
@@ -175,8 +168,8 @@ export default function SurveyStep4({
                 dogInfoIndex={index}
                 />
               </li> */}
-            </ul>
-            {/* )} */}
+              </ul>
+            )}
 
             <div className={s.oldDog}>
               <PureCheckbox
@@ -196,6 +189,20 @@ export default function SurveyStep4({
           )}
         </div>
       ))}
+      <div className={s.birth_text_wrapper}>
+        <div className={s.birth_text}>
+          바프독 생식은 생후 90일 이상의 강아지들에게 권장하고 있습니다. 보다 더
+          자세한 상담을 원하시면{' '}
+          <a
+            href="https://36o2x.channel.io/home"
+            rel="noreferrer"
+            target="_blank"
+          >
+            문의하기
+          </a>
+          를 통해 상담 받아보세요.
+        </div>
+      </div>
     </section>
   );
 }

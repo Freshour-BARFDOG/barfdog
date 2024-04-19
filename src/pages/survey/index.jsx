@@ -38,6 +38,17 @@ import SurveyStep4 from '/src/components/survey/step/SurveyStep4';
 import SurveyStep5 from '../../components/survey/step/SurveyStep5';
 import SurveyStep6 from '../../components/survey/step/SurveyStep6';
 import SurveyStep7 from '../../components/survey/step/SurveyStep7';
+import SurveyStep8 from '../../components/survey/step/SurveyStep8';
+import SurveyStep9 from '../../components/survey/step/SurveyStep9';
+import SurveyStep10 from '../../components/survey/step/SurveyStep10';
+import SurveyStep12 from '../../components/survey/step/SurveyStep12';
+import SurveyStep11 from '../../components/survey/step/SurveyStep11';
+import SurveyStep13 from '../../components/survey/step/SurveyStep13';
+import SurveyStep14 from '../../components/survey/step/SurveyStep14';
+import SurveyStep15 from '../../components/survey/step/SurveyStep15';
+import SurveyStep16 from '../../components/survey/step/SurveyStep16';
+import SurveyStep18 from '../../components/survey/step/SurveyStep18';
+import SurveyStep17 from '../../components/survey/step/SurveyStep17';
 // ! [수정] 로그인 안해도 설문조사 가능하게
 // import useUserData from '../../../util/hook/useUserData';
 
@@ -88,6 +99,7 @@ const svyData = new SurveyDataClass();
 // ! [수정] 다견
 // const initialFormValues = [];
 
+// [참고] 변경될 경우, SurveyStep1의 initialFormValues도 변경되어야 함 !
 const initialFormValues = [
   {
     name: '', // 강아지이름 str
@@ -100,21 +112,23 @@ const initialFormValues = [
     weight: '', // 강아지 몸무게 str // 몸무게 소수점 아래 1자리
     dogStatus: '', //! [변경] 강아지 상태 [HEALTHY, NEED_DIET, OBESITY, THIN]
     targetWeight: '', //! [추가] 목표 체중 Number
-    specificDogStatus: '', //! [추가]  특별한 상태 [PREGNANT, LACTATING, NULL] 해당 사항이 없다면 NULL
-    expectedPregnancyDay: '', //! [추가] 특별한 상태 1) 임신일 경우,”임신예상일” 입력 'YYYYMMDD'
-    lactatingCount: '', //! [추가] 특별한 상태  2) 수유 ('LACTATING') 일 경우, ”마리수” 입력 Number
+    specificDogStatus: 'NONE', //! [추가]  특별한 상태
+    // [PREGNANT_EARLY, PREGNANT_LATE,
+    // LACTATING_ONE_TO_TWO, LACTATING_THREE_TO_FOUR, LACTATING_FIVE_TO_SIX, LACTATING_OVER_SEVEN,
+    // NULL] 해당 사항이 없다면 NULL
+    expectedPregnancyDay: '', //! [추가] 임신예상일 str // [YYYYMMDD]
     activityLevel: dogActivityLevelType.NORMAL, // 활동량 레벨 str [VERY_LITTLE, LITTLE, NORMAL, MUCH, VERY_MUCH]
     walkingCountPerWeek: '', // 주당 산책 횟수 string
     walkingTimePerOneTime: '', // 한 번 산책할 때 산책 시간 string
     snackCountLevel: '', //  간식먹는 정도 str
     waterCountLevel: '', //! [추가] 음수량 str [LITTLE, NORMAL, MUCH]
-    supplement: '', //! [추가] 영양제 str
-    supplementBrand: '', //! [추가] 영양제 브랜드명 str
-    currentMealType: '', //! [추가] 현재 먹고 있는 식사종류 str
-    currentMealTypeBrand: '', //! [추가] 현재 먹고 있는 식사 브랜드명 str
-    inedibleFood: dogInedibleFoodType.NONE, // 못 먹는 음식 str => get API 리스트 // 빈값('')일 경우, '있어요'선택됨)
-    inedibleFoodEtc: '', // 못 먹는 음식 > '기타' 일경우
-    caution: dogCautionType.NONE, // 기타 특이사항 // 빈값('')일 경우, '있어요'선택됨)
+    supplement: '', //! [추가] 영양제:브랜드명 str
+    currentMeal: '', //! [추가] 현재 먹고 있는 식사종류:브랜드명 str
+    inedibleFood: '', // 못 먹는 음식 str => get API 리스트 // 빈값('')일 경우, '있어요'선택됨)
+    inedibleFoodEtc: 'NONE', // 못 먹는 음식 > '기타' 일경우
+    caution: '', // 기타 특이사항 // 빈값('')일 경우, '있어요'선택됨)
+    // caution: dogCautionType.NONE, // 기타 특이사항 // 빈값('')일 경우, '있어요'선택됨)
+    cautionEtc: 'NONE',
     recommendRecipeId: null, // 특별히 챙겨주고 싶은 부분에 해당하는 Recipe => get API 리스트
     mealCountPerOneDay: '', //! [추가] 하루 끼니 횟수 str (1,2,3)
     favoriteIngredients: '', //! [추가] 좋아하는 재료 str
@@ -189,12 +203,12 @@ export default function Survey() {
   }, changeSwiperHeightDependencies);
   // -------------------------------------------------------------------------------- //
 
-  const onInputChangeHandler = (e, index) => {
+  const onInputChangeHandler = (e, index, formValueKey) => {
     const input = e.currentTarget;
     const { id, value } = input;
     // console.log('input', input);
     // console.log('id', id);
-    // console.log('value', value);
+    console.log('value', value);
 
     const filteredType = input.dataset.inputType;
     let filteredValue = value;
@@ -238,7 +252,10 @@ export default function Survey() {
         if (idx === index) {
           return {
             ...item,
-            [id]: filteredValue,
+            [id]:
+              formValueKey === 'recommendRecipeId'
+                ? Number(filteredValue)
+                : filteredValue,
           };
         }
         return item;
@@ -468,16 +485,16 @@ export default function Survey() {
     const submitBtn = submitBtnRef.current;
     const isSubmitButton = curBtn === submitBtn;
     const realCurStep = curStep - 1; // ! important : onSwiperChangeIndex => curStep +1 을 고려하여 -1 계산
-    const errObj = validate(
-      formValues,
-      isSubmitButton ? lastStep : realCurStep,
-    );
-    const isPassed = valid_hasFormErrors(errObj);
+    // const errObj = validate(
+    //   formValues,
+    //   isSubmitButton ? lastStep : realCurStep,
+    // );
+    // const isPassed = valid_hasFormErrors(errObj);
     const swiper = document.querySelector('.swiper').swiper;
 
-    console.log('curBtn', curBtn);
-    console.log('submitBtn', submitBtn);
-    console.log('realCurStep', realCurStep);
+    // console.log('curBtn', curBtn);
+    // console.log('submitBtn', submitBtn);
+    // console.log('realCurStep', realCurStep);
     // console.log('errObj', errObj);
 
     //   if (!isPassed) {
@@ -489,23 +506,23 @@ export default function Survey() {
     //     }
     //     // console.log(errorMessages);
 
-    //     mct.alertShow(errorMessages);
-    //     setSubmitState(null);
+    // mct.alertShow(errorMessages);
+    // setSubmitState(null);
     // - prevent to the Next step when validation failed
-    //     curBtn !== submitBtn && swiper.slidePrev();
-    //   } else {
-    // isSubmitButton && mct.alertShow('설문조사를 제출하시겠습니까?');
-    //     setSubmitState('READY');
-    //     isSubmitButton && onSubmit();
-    //   }
+    // curBtn !== submitBtn && swiper.slidePrev();
+    // } else {
+    isSubmitButton && mct.alertShow('설문조사를 제출하시겠습니까?');
+    setSubmitState('READY');
+    isSubmitButton && onSubmit();
+    // }
   };
 
   const onSubmit = async () => {
     if (submitState === true) return;
 
-    const errObj = validate(formValues, 3);
-    const isPassed = valid_hasFormErrors(errObj);
-    if (!isPassed) return;
+    // const errObj = validate(formValues, 3);
+    // const isPassed = valid_hasFormErrors(errObj);
+    // if (!isPassed) return;
     const postFormValuesApiUrl = '/api/dogs';
     try {
       setIsLoading((prevState) => ({
@@ -513,42 +530,43 @@ export default function Survey() {
         submit: true,
       }));
       let modalMessage;
-      const res = await postObjData(postFormValuesApiUrl, formValues);
-      // console.log(res);
+      console.log(formValues); // 최종 제출
+      const postData = { dogSaveRequestDtos: formValues };
+
+      const res = await postObjData(postFormValuesApiUrl, postData);
+      console.log(res);
       if (res.isDone) {
-        const slicedReportApiLink =
-          res.data.data._links.query_surveyReport.href.split('/');
-        const linkLength = slicedReportApiLink.length;
-        const surveyReportsId = slicedReportApiLink[linkLength - 1];
-        svyData.deleteStoredSurveyData(userId);
-        await router.push(`/survey/statistics/${surveyReportsId}`);
-        setSubmitState(true);
-      } else {
-        modalMessage = '내부 통신장애입니다. 잠시 후 다시 시도해주세요.';
-        mct.alertShow(modalMessage);
-        setSubmitState(false);
+        // const slicedReportApiLink =
+        //   res.data.data._links.query_surveyReport.href.split('/');
+        // const linkLength = slicedReportApiLink.length;
+        // const surveyReportsId = slicedReportApiLink[linkLength - 1];
+        // svyData.deleteStoredSurveyData(userId);
+        // await router.push(`/survey/statistics/${surveyReportsId}`);
+        // setSubmitState(true);
+        // } else {
+        //   modalMessage = '내부 통신장애입니다. 잠시 후 다시 시도해주세요.';
+        //   mct.alertShow(modalMessage);
+        //   setSubmitState(false);
       }
     } catch (err) {
-      await mct.alertShow(
-        'API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.',
-      );
-      setTimeout(() => {
-        // window.location.href = '/surveyGuide';
-        window.location.href = '/survey';
-      }, [1000]);
+      // await mct.alertShow(
+      //   'API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.',
+      // );
+      // setTimeout(() => {
+      //   // window.location.href = '/surveyGuide';
+      //   window.location.href = '/survey';
+      // }, [1000]);
       console.error('API통신 오류 : ', err);
     }
-    setIsLoading((prevState) => ({
-      ...prevState,
-      submit: false,
-    }));
+    // setIsLoading((prevState) => ({
+    //   ...prevState,
+    //   submit: false,
+    // }));
   };
 
   const moveToPrevPage = () => {
     router.back();
   };
-
-  console.log(formValues);
 
   return (
     <>
@@ -648,7 +666,7 @@ export default function Survey() {
 
               {/* 8. 산책량 */}
               <SwiperSlide>
-                <SurveyStep6
+                <SurveyStep8
                   surveyPageRef={surveyPageRef}
                   formValues={formValues}
                   setFormValues={setFormValues}
@@ -658,7 +676,7 @@ export default function Survey() {
 
               {/* 9. 간식량 */}
               <SwiperSlide>
-                <SurveyStep6
+                <SurveyStep9
                   surveyPageRef={surveyPageRef}
                   formValues={formValues}
                   setFormValues={setFormValues}
@@ -668,7 +686,7 @@ export default function Survey() {
 
               {/* 10. 음수량 */}
               <SwiperSlide>
-                <SurveyStep6
+                <SurveyStep10
                   surveyPageRef={surveyPageRef}
                   formValues={formValues}
                   setFormValues={setFormValues}
@@ -678,7 +696,7 @@ export default function Survey() {
 
               {/* 11. 영양제 */}
               <SwiperSlide>
-                <SurveyStep6
+                <SurveyStep11
                   surveyPageRef={surveyPageRef}
                   formValues={formValues}
                   setFormValues={setFormValues}
@@ -688,7 +706,7 @@ export default function Survey() {
 
               {/* 12. 현재 식사 */}
               <SwiperSlide>
-                <SurveyStep6
+                <SurveyStep12
                   surveyPageRef={surveyPageRef}
                   formValues={formValues}
                   setFormValues={setFormValues}
@@ -698,7 +716,7 @@ export default function Survey() {
 
               {/* 13. 못먹는 재료 */}
               <SwiperSlide>
-                <SurveyStep6
+                <SurveyStep13
                   surveyPageRef={surveyPageRef}
                   formValues={formValues}
                   setFormValues={setFormValues}
@@ -708,7 +726,7 @@ export default function Survey() {
 
               {/* 14. 건강적 특이사항, 질병 */}
               <SwiperSlide>
-                <SurveyStep6
+                <SurveyStep14
                   surveyPageRef={surveyPageRef}
                   formValues={formValues}
                   setFormValues={setFormValues}
@@ -718,7 +736,7 @@ export default function Survey() {
 
               {/* 15. 특별히 챙겨주고 싶은 것 (고민)  */}
               <SwiperSlide>
-                <SurveyStep6
+                <SurveyStep15
                   surveyPageRef={surveyPageRef}
                   formValues={formValues}
                   setFormValues={setFormValues}
@@ -728,7 +746,7 @@ export default function Survey() {
 
               {/* 16. 하루 끼니 */}
               <SwiperSlide>
-                <SurveyStep6
+                <SurveyStep16
                   surveyPageRef={surveyPageRef}
                   formValues={formValues}
                   setFormValues={setFormValues}
@@ -738,7 +756,7 @@ export default function Survey() {
 
               {/* 17. 좋아하는 재료 */}
               <SwiperSlide>
-                <SurveyStep6
+                <SurveyStep17
                   surveyPageRef={surveyPageRef}
                   formValues={formValues}
                   setFormValues={setFormValues}
@@ -748,7 +766,7 @@ export default function Survey() {
 
               {/* 18. 전하고 싶은 말 */}
               <SwiperSlide>
-                <SurveyStep6
+                <SurveyStep18
                   surveyPageRef={surveyPageRef}
                   formValues={formValues}
                   setFormValues={setFormValues}

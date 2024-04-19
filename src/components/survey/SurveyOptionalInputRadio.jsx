@@ -3,11 +3,10 @@ import s from '/src/pages/survey/survey.module.scss';
 import Image from 'next/image';
 import { dogCautionType } from '../../../store/TYPE/dogCautionType';
 
-const SurveyInputRadio = ({
+const SurveyOptionalInputRadio = ({
   formValueKey,
   formValues,
   setFormValues,
-  onInputChangeHandler,
   title,
   idList,
   labelList,
@@ -88,7 +87,36 @@ const SurveyInputRadio = ({
   //   );
   // };
 
-  console.log(formValues);
+  const clickHandler = (e) => {
+    const { value } = e.target;
+
+    setFormValues((prevFormValues) => {
+      const newFormValues = prevFormValues.map((item, idx) => {
+        if (idx === dogInfoIndex) {
+          if (item[formValueKey] === 'PREGNANT') {
+            return {
+              ...item,
+              [formValueKey]: 'NONE',
+              expectedPregnancyDay: '',
+            };
+          } else if (item[formValueKey] === 'LACTATING') {
+            return {
+              ...item,
+              [formValueKey]: 'NONE',
+            };
+          } else {
+            return {
+              ...item,
+              [formValueKey]: value,
+            };
+          }
+        }
+        return item;
+      });
+
+      return newFormValues;
+    });
+  };
 
   return (
     <>
@@ -96,77 +124,25 @@ const SurveyInputRadio = ({
         {idList.map((id, index) => {
           return (
             <li key={`radio-${title}-${index}`}>
-              {defaultStyle ? (
-                <label>
-                  <input
-                    id={`${formValueKey}`}
-                    type="radio"
-                    className="hide"
-                    checked={dogInfo[formValueKey] === idList[index]}
-                    // id={`${formValueKey}-${id}`}
-                    // checked={selectedRadio === `${formValueKey}-${id}`} // * important
-                    onChange={(e) => onInputChangeHandler(e, dogInfoIndex)}
-                    value={idList[index]}
-                  />
-                  {labelList[index]}
-                  {desc && desc.length && (
-                    <span className={s.desc}>{desc[index]}</span>
-                  )}
-                </label>
-              ) : (
-                <label
-                  key={`radio-${formValueKey}-${index}`}
-                  // htmlFor={`${formValueKey}-${id}`}
-                  // className={`${s.inputRadio} ${
-                  //   selectedRadio === formValueKey + '-' + id && s.checked
-                  // }`}
-                  className={`${s.inputRadio} ${
-                    dogInfo[formValueKey] === idList[index] && s.checked
-                  }`}
-                >
-                  <input
-                    id={`${formValueKey}`}
-                    type="radio"
-                    className="hide"
-                    checked={dogInfo[formValueKey] === idList[index]}
-                    // id={`${formValueKey}-${id}`}
-                    // checked={selectedRadio === `${formValueKey}-${id}`} // * important
-                    onChange={(e) =>
-                      onInputChangeHandler(e, dogInfoIndex, formValueKey)
-                    }
-                    value={idList[index]}
-                    // onClick={
-                    //   formValueKey === 'supplement' &&
-                    //   idList[index] === '' &&
-                    //   clickTrueHandler
-                    // }
-                  />
-                  {formValueKey === 'dogStatus' && (
-                    <Image
-                      src={`/img/survey/${idList[index]}${
-                        dogInfo[formValueKey] === idList[index] ? '_ACTIVE' : ''
-                      }.png`}
-                      alt="idList[index]"
-                      width={100}
-                      height={100}
-                    />
-                  )}
-                  {formValueKey === 'activityLevel' && (
-                    <Image
-                      src={`/img/survey/${idList[index]}${
-                        dogInfo[formValueKey] === idList[index] ? '_ACTIVE' : ''
-                      }.png`}
-                      alt="idList[index]"
-                      width={100}
-                      height={100}
-                    />
-                  )}
-                  {labelList[index]}
-                  {desc && desc.length && (
-                    <span className={s.desc}>{desc[index]}</span>
-                  )}
-                </label>
-              )}
+              <label
+                key={`radio-${formValueKey}-${index}`}
+                className={`${s.inputRadio} ${
+                  dogInfo[formValueKey] === idList[index] && s.checked
+                }`}
+              >
+                <input
+                  id={`${formValueKey}`}
+                  type="radio"
+                  className="hide"
+                  checked={dogInfo[formValueKey] === idList[index]}
+                  value={idList[index]}
+                  onClick={clickHandler}
+                />
+                {labelList[index]}
+                {desc && desc.length && (
+                  <span className={s.desc}>{desc[index]}</span>
+                )}
+              </label>
             </li>
           );
         })}
@@ -175,4 +151,4 @@ const SurveyInputRadio = ({
   );
 };
 
-export default SurveyInputRadio;
+export default SurveyOptionalInputRadio;

@@ -110,7 +110,7 @@ export const SurveyDogTypeCustomSelectWithCustomOptions = ({
         if (idx === dogInfoIndex) {
           return {
             ...item,
-            dogType: value,
+            [id]: value,
           };
         }
         return item;

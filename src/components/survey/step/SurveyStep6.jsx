@@ -5,6 +5,8 @@ import SurveyInputRadio from '/src/components/survey/SurveyInputRadio';
 import CustomRadioTrueOrFalse from '/src/components/admin/form/CustomRadioTrueOrFalse';
 import { dogPhysicalStatusType } from '/store/TYPE/dogPhysicalStatusType';
 import { dogSpecificStatusType } from '/store/TYPE/dogSpecificStatusType.js';
+import SurveyBirthday from '../SurveyBirthday';
+import SurveyOptionalInputRadio from '../SurveyOptionalInputRadio';
 
 export default function SurveyStep6({
   formValues,
@@ -28,23 +30,12 @@ export default function SurveyStep6({
     <section id="surveyPage" className={s.step6Page}>
       {formValues?.map((dog, index) => (
         <div key={index} className={s.status_container}>
+          {/* 1. 현재 상태 */}
           <div className={s.input_status_container}>
             <p className={s.input_title}>
               {dog.name} (이)의 현재 상태는 어떤가요 ?
             </p>
             <div className={s.input_status_box}>
-              {/* <SurveyInputRadio
-                formValueKey={'gender'}
-                formValues={formValues}
-                setFormValues={setFormValues}
-                dogInfo={dog}
-                dogInfoIndex={index}
-                className={s.radio_gender}
-                idList={[dogGenderType.MALE, dogGenderType.FEMALE]}
-                labelList={['수컷', '암컷']}
-                onInputChangeHandler={onInputChangeHandler}
-              /> */}
-
               <SurveyInputRadio
                 formValueKey={'dogStatus'}
                 formValues={formValues}
@@ -52,6 +43,7 @@ export default function SurveyStep6({
                 dogInfo={dog}
                 dogInfoIndex={index}
                 className={s.dogStatus}
+                onInputChangeHandler={onInputChangeHandler}
                 idList={[
                   dogPhysicalStatusType.THIN,
                   dogPhysicalStatusType.HEALTHY,
@@ -66,32 +58,38 @@ export default function SurveyStep6({
                 ]}
               />
             </div>
-            <div className={s.input_name_container} key={index}>
-              <label htmlFor={'name'}>
-                <div className={s.input_name_box}>
-                  <div>
+
+            {/* 1-1. 목표 체중 : 건강 이외 (말랐어요, 다이어트 필요, 비만) */}
+            {(dog.dogStatus === 'THIN' ||
+              dog.dogStatus === 'NEED_DIET' ||
+              dog.dogStatus === 'OBESITY') && (
+              <div className={s.input_name_container} key={index}>
+                <label htmlFor={'name'}>
+                  <div className={s.input_target_weight_box}>
                     <input
-                      id={`weight`}
-                      // className={`${s.input_underLine} ${s['focus-underline']}`}
+                      id={`targetWeight`}
                       className={s.input_name}
                       type="text"
                       placeholder="목표 체중이 몇인가요?"
                       data-input-type={'number'}
-                      value={dog.weight || ''}
+                      value={dog.targetWeight || ''}
                       onChange={(e) => onInputChangeHandler(e, index)}
                     />
-                    <em className={s.unit}>kg</em>
+                    <em className={s.weight_unit}>kg</em>
                   </div>
-                </div>
-              </label>
-            </div>
+                </label>
+              </div>
+            )}
           </div>
-          <div className={s.input_neutralization_container}>
-            <p className={s.input_title}>그리고 현재 특별한 상태예요</p>
-            <span className={s.input_title}>(선택사항)</span>
-            <div className={s.input_neutralization_box}>
-              <SurveyInputRadio
-                formValueKey={'dogStatus'}
+
+          {/* 2. 특별한 상태 (임신/수유) : 선택 */}
+          <div className={s.specific_status_container}>
+            <p className={s.sepcific_title}>
+              그리고 현재 특별한 상태예요 <span>(선택사항)</span>
+            </p>
+            <div className={s.input_specific_status_box}>
+              <SurveyOptionalInputRadio
+                formValueKey={'specificDogStatus'}
                 formValues={formValues}
                 setFormValues={setFormValues}
                 dogInfo={dog}
@@ -106,17 +104,63 @@ export default function SurveyStep6({
                   dogSpecificStatusType.KOR.LACTATING,
                 ]}
               />
-              {/* <CustomRadioTrueOrFalse
-                title="neutralization"
-                value={formValues.neutralization}
-                setValue={setFormValues}
-                theme={'letter-in-shape'}
-                labelList={['했습니다', '안했습니다']}
-                onInputChangeHandler={onInputChangeHandler}
-                dogInfo={dog}
-                dogInfoIndex={index}
-              /> */}
             </div>
+
+            {/* 2-1. 임신일 경우 : 임신 예상일 (expectedPregnancyDay) */}
+            {(dog.specificDogStatus === 'PREGNANT' ||
+              dog.specificDogStatus === 'PREGNANT_EARLY' ||
+              dog.specificDogStatus === 'PREGNANT_LATE') && (
+              <div className={s.pregnancy_date_container}>
+                <p className={s.pregnancy_date_title}>
+                  임신 예상일을 입력해주세요
+                  <span> (정확히 모르는 경우 근접한 날로 입력) </span>
+                </p>
+                <SurveyBirthday
+                  className={s['birthday']}
+                  type={'date'}
+                  id={'expectedPregnancyDay'}
+                  filteredType={'date'}
+                  dogInfoIndex={index}
+                  dogInfo={dog}
+                  // formValue={formValues.birth}
+                  setFormValues={setFormValues}
+                  // value={dog.expectedPregnancyDay || ''}
+                  value={''}
+                  // onChange={(e) => onInputChangeHandler(e, index)}
+                />
+              </div>
+            )}
+
+            {/* 2-2. 수유일 경우 : 마리수 (lactatingCount) */}
+            {(dog.specificDogStatus === 'LACTATING' ||
+              dog.specificDogStatus === 'LACTATING_ONE_TO_TWO' ||
+              dog.specificDogStatus === 'LACTATING_THREE_TO_FOUR' ||
+              dog.specificDogStatus === 'LACTATING_FIVE_TO_SIX' ||
+              dog.specificDogStatus === 'LACTATING_OVER_SEVEN') && (
+              <div className={s.lactating_count_container}>
+                <SurveyInputRadio
+                  formValueKey={'specificDogStatus'}
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                  dogInfo={dog}
+                  dogInfoIndex={index}
+                  onInputChangeHandler={onInputChangeHandler}
+                  className={s.specificDogStatus}
+                  idList={[
+                    dogSpecificStatusType.LACTATING_ONE_TO_TWO,
+                    dogSpecificStatusType.LACTATING_THREE_TO_FOUR,
+                    dogSpecificStatusType.LACTATING_FIVE_TO_SIX,
+                    dogSpecificStatusType.LACTATING_OVER_SEVEN,
+                  ]}
+                  labelList={[
+                    dogSpecificStatusType.KOR.LACTATING_ONE_TO_TWO,
+                    dogSpecificStatusType.KOR.LACTATING_THREE_TO_FOUR,
+                    dogSpecificStatusType.KOR.LACTATING_FIVE_TO_SIX,
+                    dogSpecificStatusType.KOR.LACTATING_OVER_SEVEN,
+                  ]}
+                />
+              </div>
+            )}
           </div>
           {formValues.length >= 2 && index !== formValues.length - 1 && (
             <div className={s.input_line}></div>
