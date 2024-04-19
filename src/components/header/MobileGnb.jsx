@@ -7,6 +7,7 @@ import { useModalContext } from '/store/modal-context';
 import useDeviceState from '/util/hook/useDeviceState';
 import { IoIosArrowDown } from 'react-icons/io';
 import { useRouter } from 'next/router';
+import { setPreviousPath } from '/store/navigation-slice';
 import { general_itemType } from '/store/TYPE/itemType';
 import MobileSidr from './MobileSidr';
 
@@ -20,6 +21,7 @@ export default function MobileGnb() {
   const userData = auth.userInfo;
 
   const mcx = useModalContext();
+  const dispatch = useDispatch();
 
   const deviceState = useDeviceState();
   const [activeMenuId, setActiveMenuId] = useState('');
@@ -116,11 +118,6 @@ export default function MobileGnb() {
     currentPageIndicator(curMenuRef.current, curPath, setActiveMenuId);
   }, [curPath]);
 
-  // useEffect(() => {
-  //   console.log('activeMenuId >>>', activeMenuId);
-  //   console.log(curPath);
-  // }, [activeMenuId]);
-
   const onShowMobileSideMenu = (activeMenuId) => {
     setActiveMenuId(activeMenuId);
     setIsSidrOpen(!isSidrOpen);
@@ -129,6 +126,19 @@ export default function MobileGnb() {
   const onActiveMenuId = (menuId) => {
     isSidrOpen && setIsSidrOpen(false);
     setActiveMenuId(menuId);
+  };
+
+  const onMovePage = (page) => {
+    if (!userData) {
+      // 로그인 이후 바로 특정 페이지(마이페이지, 장바구니)로 이동
+      dispatch(setPreviousPath(page));
+      router.push('/account/login');
+    } else router.push(page);
+  };
+
+  const onClickHandler = (e) => {
+    onActiveMenuId(userData ? 'mypage' : 'account');
+    onMovePage('/mypage/orderHistory');
   };
 
   return (
@@ -259,43 +269,42 @@ export default function MobileGnb() {
             <li>
               {/* 비로그인 > 로그인 페이지 */}
               {/* 로그인 > 마이 페이지 */}
-              <Link
+              {/* <Link
                 href={userData ? '/mypage/orderHistory' : '/account/login'}
                 passHref
+              > */}
+              <a
+                // onClick={(e) => onActiveMenuId(userData ? 'mypage' : 'account')}
+                onClick={(e) => onClickHandler(e)}
               >
-                <a
-                  onClick={() =>
-                    onActiveMenuId(userData ? 'mypage' : 'account')
+                <Image
+                  src={
+                    !isSidrOpen &&
+                    (activeMenuId === 'mypage' ||
+                      curPath === '/mypage/orderHistory')
+                      ? '/img/icon/mobile-mypage-active.svg'
+                      : '/img/icon/mobile-mypage.svg'
                   }
-                >
-                  <Image
-                    src={
-                      !isSidrOpen &&
-                      (activeMenuId === 'mypage' ||
-                        curPath === '/mypage/orderHistory')
-                        ? '/img/icon/mobile-mypage-active.svg'
-                        : '/img/icon/mobile-mypage.svg'
-                    }
-                    alt="mypage"
-                    width={35}
-                    height={35}
-                  />
+                  alt="mypage"
+                  width={35}
+                  height={35}
+                />
 
-                  <MobileMenu
-                    title={'MY'}
-                    link={userData ? '/mypage/orderHistory' : '/account/login'}
-                    onClick={onActiveSubmenuHandler}
-                    activeMenuId={activeMenuId}
-                    color={
-                      !isSidrOpen &&
-                      (activeMenuId === 'mypage' ||
-                        curPath === '/mypage/orderHistory')
-                        ? true
-                        : false
-                    }
-                  />
-                </a>
-              </Link>
+                <MobileMenu
+                  title={'MY'}
+                  link={userData ? '/mypage/orderHistory' : '/account/login'}
+                  onClick={onActiveSubmenuHandler}
+                  activeMenuId={activeMenuId}
+                  color={
+                    !isSidrOpen &&
+                    (activeMenuId === 'mypage' ||
+                      curPath === '/mypage/orderHistory')
+                      ? true
+                      : false
+                  }
+                />
+              </a>
+              {/* </Link> */}
             </li>
 
             {/* <MobileMenu
