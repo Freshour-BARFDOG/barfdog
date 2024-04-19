@@ -120,14 +120,27 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                 />
               </div>
               <div className={s.cart_close}>
-                <button id="gnb_cart" data-link={'/cart'} onClick={onMovePage}>
+                {data ? (
+                  <button
+                    id="gnb_cart"
+                    data-link={'/cart'}
+                    onClick={onMovePage}
+                  >
+                    <div className={s.shop_wrap}>
+                      <Icon_cart className={s.icon_cart} />
+                      <span className={s.gnb_shop_count}>
+                        {cart.itemCount || 0}
+                      </span>
+                    </div>
+                  </button>
+                ) : (
                   <div className={s.shop_wrap}>
-                    <Icon_cart className={s.icon_cart} />
-                    <span className={s.gnb_shop_count}>
-                      {cart.itemCount || 0}
-                    </span>
+                    {/* <Icon_cart className={s.icon_cart} />
+                      <span className={s.gnb_shop_count}>
+                        {cart.itemCount || 0}
+                      </span> */}
                   </div>
-                </button>
+                )}
                 <CloseButton lineColor={'#fff'} onClick={onCloseSidr} />
               </div>
             </div>
