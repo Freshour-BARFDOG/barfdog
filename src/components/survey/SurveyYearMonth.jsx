@@ -20,7 +20,7 @@ export default function SurveyYearMonth({
   //   const initialSelectedOption = value || options[0].value;
 
   const initialSelectedOption =
-    value.slice(0, 4) !== '0000' && value.slice(0, -4) !== '0000' && value;
+    value?.slice(0, 4) !== '0000' && value?.slice(0, -4) !== '0000' && value;
 
   const [selectedOption, setSelectedOption] = useState(initialSelectedOption);
   const [isActive, setIsActive] = useState(false);
@@ -40,7 +40,7 @@ export default function SurveyYearMonth({
     if (dataType === 'number') {
       initValue = Number(initValue);
     } else {
-      initValue = initValue.toString();
+      initValue = initValue?.toString();
     }
 
     // if (initValue.length === 4) {

@@ -1,0 +1,96 @@
+@import '/styles/global/rem';
+
+
+.customSelectWithOptions{
+  position:relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: rem(35);
+  input{
+    font-size: rem(16);
+    height: 100%;
+    box-sizing: border-box;
+    text-align:center;
+    width: 100%;
+    border: {
+      top:0 !important;
+      left:0 !important;
+      right:0 !important;
+    }
+    border-radius: 0;
+    border-bottom: rem(1) solid var(--color-line-02);
+    cursor: pointer;
+    &:focus{
+      border: {
+        top:0 !important;
+        left:0 !important;
+        right:0 !important;
+      }
+      border-color: var(--color-line-02) !important;
+    }
+  }
+  .unit{
+    position:absolute;
+    cursor: default;
+    right:0;
+    top:50%;
+    transform:translateY(-50%);
+  }
+
+  .scrollContainer{
+    position: absolute;
+    left: 0;
+    bottom: rem(-2);
+    transform: translateY(100%);
+    z-index: 1;
+    border-radius: rem(8);
+    box-sizing:border-box;
+    background-color: #fff;
+    width: 100%;
+    font-size: rem(15);
+    transition-timing-function: var(--transition-cubic);
+    transition-duration: 0.25s;
+    transition-property: height, margin, padding, box-shadow;
+    border:0;
+    height: 0;
+    margin:0;
+    padding: 0;
+    box-shadow: 0 0 rem(0) rgba(0, 0, 0, 0.0);
+    pointer-events: none;
+    &.active{
+      height: rem(200);
+      pointer-events: all;
+      margin:auto;
+      padding: rem(10)  0;
+      box-shadow: 0 0 rem(25) rgba(0, 0, 0, 0.1);
+    }
+
+    &:not(.active){
+      .option.selected{
+        background-color: #fff !important;
+      }
+    }
+
+    .option{
+      transition-timing-function: ease;
+      transition-duration: 0.3s;
+      transition-property: background, color;
+      background-color: #fff;
+      padding: rem(4) rem(15);
+      font-size: inherit;
+      height: rem(38);
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      &.selected{
+        background-color: var(--color-line-04);
+      }
+      &:not(.selected):hover {
+        background-color: var(--color-bg) !important;
+      }
+    }
+
+  }
+}
+

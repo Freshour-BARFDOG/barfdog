@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import s from '/src/pages/survey/survey.module.scss';
 import rem from '/util/func/rem';
 import SurveyInputRadio from '/src/components/survey/SurveyInputRadio';
-import { dogActivityLevelType } from '/store/TYPE/dogActivityLevelType';
+import { dogSnackCountLevelType } from '/store/TYPE/dogSnackCountLevelType';
 
-export default function SurveyStep7({
+export default function SurveyStep9({
   formValues,
   setFormValues,
   onInputChangeHandler,
@@ -19,41 +19,48 @@ export default function SurveyStep7({
     const activeSlideHeight = slideWithDependencyElem.offsetHeight;
     const targetSwiperElem = swiperWrap.querySelector('.swiper-wrapper');
     targetSwiperElem.style.height = rem(activeSlideHeight);
-    // targetSwiperElem.style.minHeight = rem(400);
   }, [formValues]);
 
   return (
-    <section id="surveyPage" className={s.step7Page}>
+    <section id="surveyPage" className={s.step9Page}>
       {formValues?.map((dog, index) => (
         <div key={index} className={s.status_container}>
           <div className={s.input_status_container}>
             <p className={s.input_title}>
-              {dog.name} (은)는 얼마나 활동적인가요 ?
+              {dog.name} (이)의 간식량은 어떤가요 ?
             </p>
-            <div className={s.input_activity_box}>
+            <div className={s.input_snack_box}>
               <SurveyInputRadio
-                dogInfo={dog}
-                dogInfoIndex={index}
-                formValueKey={'activityLevel'}
+                formValueKey={'snackCountLevel'}
                 formValues={formValues}
                 setFormValues={setFormValues}
-                className={s.activityLevel}
+                dogInfo={dog}
+                dogInfoIndex={index}
+                className={s.snackCountLevel}
                 onInputChangeHandler={onInputChangeHandler}
                 idList={[
-                  dogActivityLevelType.VERY_MUCH,
-                  dogActivityLevelType.MUCH,
-                  dogActivityLevelType.NORMAL,
-                  dogActivityLevelType.LITTLE,
-                  dogActivityLevelType.VERY_LITTLE,
+                  dogSnackCountLevelType.LITTLE,
+                  dogSnackCountLevelType.NORMAL,
+                  dogSnackCountLevelType.MUCH,
                 ]}
                 labelList={[
-                  dogActivityLevelType.KOR.VERY_MUCH,
-                  dogActivityLevelType.KOR.MUCH,
-                  dogActivityLevelType.KOR.NORMAL,
-                  dogActivityLevelType.KOR.LITTLE,
-                  dogActivityLevelType.KOR.VERY_LITTLE,
+                  dogSnackCountLevelType.KOR.LITTLE,
+                  dogSnackCountLevelType.KOR.NORMAL,
+                  dogSnackCountLevelType.KOR.MUCH,
                 ]}
-                // defaultStyle
+                desc={[
+                  <span key={'desc-01'}>
+                    식사에 <br /> 상관없는 양
+                  </span>,
+                  <span key={'desc-02'}>
+                    식사에 어느정도
+                    <br /> 상관 있는 양
+                  </span>,
+                  <span key={'desc-03'}>
+                    식사에 상당한
+                    <br /> 영향이 있는 양
+                  </span>,
+                ]}
               />
 
               {/* <SurveyInputRadio

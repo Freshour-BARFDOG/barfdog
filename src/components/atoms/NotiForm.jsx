@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import s from './notiForm.module.scss';
-import SurveyInputRadio from '../survey/SurveyInputRadio';
+import InputRadio from './InputRadio';
 import PureCheckbox from './PureCheckbox';
 import { dogBreedType } from '/store/TYPE/dogBreedType.js';
 import { dogSizeType } from '/store/TYPE/dogSizeType';
@@ -46,7 +46,7 @@ function NotiForm({
     });
   };
 
-  console.log(formErrors.name);
+  // console.log(formErrors.name);
 
   return (
     <div className={s.alarm_form}>
@@ -101,8 +101,8 @@ function NotiForm({
       <div className={s.dog_info}>
         <div className={s.input_title}>견종선택</div>
         <div className={s.dog_size}>
-          <SurveyInputRadio
-            formValueKey={'dogSize'}
+          <InputRadio
+            formValueKey={'dogSizeType'}
             formValues={formValues}
             setFormValues={setFormValues}
             className={s.dog_choice}

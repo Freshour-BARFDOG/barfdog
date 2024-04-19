@@ -491,12 +491,6 @@ export default function Popup_DogDetailPage({ data, dogIdx }) {
                     </ul>
                   </li>
 
-                  {/* ------ SURVEY ------ */}
-                  {/* <div className={s['t-gram']}>
-                    <h4 className={s.title}>추천 그램수 :</h4>
-                    <div className={s.gram}></div>
-                  </div> */}
-
                   <br />
                   <li>
                     <div className={s['t-header']}>

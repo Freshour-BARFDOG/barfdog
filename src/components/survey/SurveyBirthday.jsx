@@ -28,6 +28,19 @@ const SurveyBirthday = ({
   const initialValue = formValue || '';
   const [selectedDate, setSelectedDate] = useState(null);
 
+  const calculatePregnancyStatus = (dueDate) => {
+    const today = new Date();
+    const differenceInDays = Math.floor(
+      (today - dueDate) / (1000 * 60 * 60 * 24),
+    );
+
+    if (differenceInDays <= 40) {
+      return 'PREGNANT_EARLY';
+    } else {
+      return 'PREGNANT_LATE';
+    }
+  };
+
   const handleRawInput = (e) => {
     const rawInput = e.target.value;
     // 입력값이 'yyyyMMdd' 형식과 일치하는지 확인
@@ -42,6 +55,8 @@ const SurveyBirthday = ({
   const handleDateChange = (date) => {
     let formattedDate = '';
 
+    const pregnancyStatus = calculatePregnancyStatus(date);
+
     // date 값이 유효하면, 날짜 포맷 변경
     if (date && !isNaN(date)) {
       // formattedDate = format(date, 'yyyy-MM-dd');
@@ -52,7 +67,9 @@ const SurveyBirthday = ({
           if (idx === dogInfoIndex) {
             return {
               ...item,
-              birth: formattedDate,
+              [id]: formattedDate,
+              specificDogStatus:
+                id === 'expectedPregnancyDay' && pregnancyStatus,
             };
           }
           return item;
@@ -78,7 +95,7 @@ const SurveyBirthday = ({
           if (idx === dogInfoIndex) {
             return {
               ...item,
-              birth: '',
+              [id]: '',
             };
           }
           return item;
@@ -105,7 +122,8 @@ const SurveyBirthday = ({
         if (idx === dogInfoIndex) {
           return {
             ...item,
-            birth: formattedDate,
+            [id]: formattedDate,
+            specificDogStatus: id === 'expectedPregnancyDay' && pregnancyStatus,
           };
         }
         return item;
@@ -135,7 +153,9 @@ const SurveyBirthday = ({
   };
 
   // const minDate = subYears(new Date(), 100);
-  const maxDate = endOfYear(new Date());
+  // const maxDate = endOfYear(new Date());
+  const today = new Date();
+  const maxDate = new Date(today.getTime() - 90 * 24 * 60 * 60 * 1000);
 
   const [startDate, setStartDate] = useState(new Date());
   const years = range(1900, getYear(new Date()) + 1, 1).reverse();
@@ -214,7 +234,7 @@ const SurveyBirthday = ({
                 onChange={handleDateChange}
                 onChangeRaw={handleRawInput}
                 dateFormat={'yyyy. MM. dd.'}
-                maxDate={maxDate}
+                maxDate={id === 'birth' && maxDate}
                 // required={required}
                 locale={ko}
                 disabledKeyboardNavigation
