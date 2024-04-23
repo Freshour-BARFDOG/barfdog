@@ -1,4 +1,4 @@
-import React  from 'react';
+import React from 'react';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from '/src/components/mypage/MypageWrapper';
@@ -6,9 +6,8 @@ import MetaTitle from '/src/components/atoms/MetaTitle';
 import { useRouter } from 'next/router';
 import s from '/src/components/survey/surveyStatistics(mypageVersion).module.scss';
 import Link from 'next/link';
-import { SurveyStatistics } from '/src/components/survey/SurveyStatistics';
+import { SurveyStatistics } from '/src/components/survey/result/SurveyStatistics';
 import { getDataSSR } from '/src/pages/api/reqData';
-
 
 export default function MypageSubscribe_statisticPage({ data }) {
   // console.log(data);
@@ -47,7 +46,10 @@ export default function MypageSubscribe_statisticPage({ data }) {
             </section>
             <section className={s.btn_box}>
               {data.subscribeStatus && (
-                <Link href={`/order/subscribeShop?dogId=${data.dogId}`} passHref>
+                <Link
+                  href={`/order/subscribeShop?dogId=${data.dogId}`}
+                  passHref
+                >
                   <a>맞춤 플랜 확인하기</a>
                 </Link>
               )}
@@ -73,7 +75,9 @@ export async function getServerSideProps({ req, query }) {
   if (embeddedData) {
     const dataList = embeddedData?.queryDogsDtoList || [];
     if (!dataList.length) return;
-    const thisDogDATA = dataList.filter((list) => list.id === Number(dogIdx))[0];
+    const thisDogDATA = dataList.filter(
+      (list) => list.id === Number(dogIdx),
+    )[0];
     DATA = {
       ...DATA,
       name: thisDogDATA.name, // 반려견 이름

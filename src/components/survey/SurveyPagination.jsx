@@ -42,15 +42,15 @@ export const SurveyPagination = ({ referrer, onChangeStep }) => {
         ref={submitBtn}
         onClick={onChangeStep}
       >
-        제출하기
-        <figure className={s.image_box}>
+        제출
+        {/* <figure className={s.image_box}>
           <Image
             src={require('public/img/survey_right_arrow.png')}
             objectFit="cover"
             layout="fill"
             alt="이전 화살표"
           />
-        </figure>
+        </figure> */}
       </button>
     </section>
   );

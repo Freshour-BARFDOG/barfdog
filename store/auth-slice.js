@@ -3,7 +3,10 @@ import Router from 'next/router';
 import { setCookie } from '/util/func/cookie';
 import { cookieType } from '@store/TYPE/cookieType';
 import { userType } from '@store/TYPE/userAuthType';
-
+import { postObjData } from '@src/pages/api/reqData';
+import { surveyDataAction } from '/store/surveyData-slice';
+import { surveyDogAction } from '/store/surveyDog-slice';
+import { useDispatch } from 'react-redux';
 // - --------------------------------------------------------------------
 // - CF. Cookie: expiredDate값이 null일 경우, application expired값이 session으로 설정
 // const token = JSON.parse(localStorage.getItem('user'))?.token; // PAST VER.
@@ -24,6 +27,36 @@ const initialAuthState = {
   isAdmin: false,
   userType: null,
   userInfo: null,
+};
+
+// 설문조사 Id 가져온 후, 설문조사 결과 페이지로 이동
+const onSubmitSurvey = async (formValues) => {
+  try {
+    const postData = { dogSaveRequestDtos: formValues };
+    const postFormValuesApiUrl = '/api/dogs';
+    const res = await postObjData(postFormValuesApiUrl, postData);
+    console.log(res);
+    if (res.isDone) {
+      //! [수정]
+      const slicedReportApiLink =
+        res.data.data._embedded.createDogsResponseDtoList[0]._links.query_surveyReport.href.split(
+          '/',
+        );
+      const linkLength = slicedReportApiLink.length;
+      const surveyReportsId = slicedReportApiLink[linkLength - 1];
+      // svyData.deleteStoredSurveyData(userId);
+
+      // setSubmitState(true);
+      // const dogInfoResults = res.data.data._embedded.createDogsResponseDtoList;
+      // dispatch(surveyDogAction.saveSurveyDog({ surveyDog: dogInfoResults }));
+      // console.log('dogInfoResults', dogInfoResults);
+
+      window.location.href = `/survey/statistics/${surveyReportsId}`;
+    }
+  } catch (err) {
+    console.log(err);
+    alert('API 통신 오류가 발생했습니다. 서버관리자에게 문의하세요.');
+  }
 };
 
 const authSlice = createSlice({
@@ -48,10 +81,16 @@ const authSlice = createSlice({
       // if (action.payload.previousPath !== '/') {
       //   window.location.href = action.payload.previousPath;
       // }
-      const query = temporaryPassword
-        ? '?tempPw=true'
-        : action.payload.previousPath.slice(1); //! [수정] 로그인하기 이전 페이지로 돌아가기
-      window.location.href = '/' + query;
+
+      if (action.payload.surveyData) {
+        console.log('action.payload.surveyData', action.payload.surveyData);
+        onSubmitSurvey(action.payload.surveyData); // 설문조사 Id 가져온 후, 설문조사 결과 페이지로 이동
+      } else {
+        const query = temporaryPassword
+          ? '?tempPw=true'
+          : action.payload.previousPath.slice(1); //! [수정] 로그인하기 이전 페이지로 돌아가기
+        window.location.href = '/' + query;
+      }
     },
     autoLogin(state, action) {
       state.isAdmin = false;

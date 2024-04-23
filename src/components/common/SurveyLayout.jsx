@@ -2,6 +2,7 @@ import React from 'react';
 import s from './surveyLayout.module.scss';
 import SurveyHeader from '../header/SurveyHeader';
 import SurveyFooter from './SurveyFooter';
+import SurveyResultFooter from './SurveyResultFooter';
 
 const SurveyLayout = ({
   id,
@@ -11,6 +12,8 @@ const SurveyLayout = ({
   submitBtnRef,
   progressbarRef,
   onNavButtonClick,
+  resultPage,
+  surveyReportsId,
   ...props
 }) => {
   return (
@@ -19,13 +22,17 @@ const SurveyLayout = ({
         <SurveyHeader />
       </div>
       <div className={s.layout_children}>{props.children}</div>
-      <SurveyFooter
-        progressbarRef={progressbarRef}
-        prevBtnRef={prevBtnRef}
-        nextBtnRef={nextBtnRef}
-        submitBtnRef={submitBtnRef}
-        onNavButtonClick={onNavButtonClick}
-      />
+      {resultPage ? (
+        <SurveyResultFooter surveyReportsId={surveyReportsId} />
+      ) : (
+        <SurveyFooter
+          progressbarRef={progressbarRef}
+          prevBtnRef={prevBtnRef}
+          nextBtnRef={nextBtnRef}
+          submitBtnRef={submitBtnRef}
+          onNavButtonClick={onNavButtonClick}
+        />
+      )}
     </main>
   );
 };

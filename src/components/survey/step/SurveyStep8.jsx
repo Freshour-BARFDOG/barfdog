@@ -38,15 +38,6 @@ export default function SurveyStep8({
     { label: '3시간 이상', value: '3' },
   ];
 
-  // ! [이전] 시간 단위 (0.5 ~ 12)
-  // let walkingTimePerOneTimeOptions = new Array(24);
-  // for (let i = 0; i < walkingTimePerOneTimeOptions.length; i++) {
-  //   walkingTimePerOneTimeOptions[i] = {
-  //     label: `${(i + 1) * 0.5}`,
-  //     value: `${((i + 1) * 0.5).toString()}`,
-  //   };
-  // }
-
   walkingCountPerWeekOptions.unshift(defaultLabel);
   walkingTimePerOneTimeOptions.unshift(defaultLabel);
 
@@ -59,11 +50,11 @@ export default function SurveyStep8({
     const activeSlideHeight = slideWithDependencyElem.offsetHeight;
     const targetSwiperElem = swiperWrap.querySelector('.swiper-wrapper');
     targetSwiperElem.style.height = rem(activeSlideHeight);
-    // targetSwiperElem.style.minHeight = rem(400);
   }, [formValues]);
 
   return (
     <section id="surveyPage" className={s.step8Page}>
+      <div className={s.dogWalk_top_empty}></div>
       {formValues?.map((dog, index) => (
         <div key={index} className={s.walk_container}>
           <p className={s.input_title}>{dog.name} (이)의 산책량은 어떤가요 ?</p>
@@ -101,6 +92,7 @@ export default function SurveyStep8({
               />
             </div>
           </div>
+          <div className={s.dogWalk_list_empty}></div>
           {formValues.length >= 2 && index !== formValues.length - 1 && (
             <div className={s.input_line}></div>
           )}

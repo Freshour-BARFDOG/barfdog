@@ -44,6 +44,7 @@ export default function LoginPage() {
   const naverRef = useRef();
 
   const previousPath = useSelector((state) => state.navigation.previousPath);
+  const surveyData = useSelector((state) => state.surveyData.surveyData);
 
   useEffect(() => {
     const naverScript = document.createElement('script');
@@ -131,6 +132,7 @@ export default function LoginPage() {
                 roleList,
               },
               previousPath, // 이전 경로
+              surveyData, // 로그인 이전 설문조사 데이터
             };
             if (autoLogin) {
               dispatch(authAction.autoLogin(payload));

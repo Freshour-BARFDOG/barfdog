@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import s from '/src/pages/survey/survey.module.scss';
 import rem from '/util/func/rem';
 import SurveyInputRadio from '/src/components/survey/SurveyInputRadio';
+import SurveyBubble from '/public/img/survey/survey_bubble_1.png';
+import Image from 'next/image';
 export default function SurveyStep15({
   formValues,
   setFormValues,
@@ -35,6 +37,9 @@ export default function SurveyStep15({
 
   return (
     <section id="surveyPage" className={s.step15Page}>
+      <div className={s.survey_bubble_img}>
+        <Image src={SurveyBubble} alt="SurveyBubble" />
+      </div>
       {formValues?.map((dog, index) => (
         <div key={index} className={s.status_container}>
           <div className={s.input_status_container}>

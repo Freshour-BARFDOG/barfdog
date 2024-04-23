@@ -73,23 +73,6 @@ const SurveyInputRadio = ({
   //   }));
   // };
 
-  // const clickTrueHandler = () => {
-  //   setActiveIndexList((prevIndexList) => {
-  //     if (!prevIndexList.includes(dogInfoIndex)) {
-  //       return [...prevIndexList, dogInfoIndex]; // 기존 리스트에 없으면 추가
-  //     }
-  //     return prevIndexList;
-  //   });
-  // };
-
-  // const clickFalseHandler = () => {
-  //   setActiveIndexList((prevIndexList) =>
-  //     prevIndexList.filter((index) => index !== dogInfoIndex),
-  //   );
-  // };
-
-  console.log(formValues);
-
   return (
     <>
       <ul className={`${className} ${s['inputRadio-wrap']}`}>

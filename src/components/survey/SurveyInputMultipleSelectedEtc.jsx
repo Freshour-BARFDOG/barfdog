@@ -63,7 +63,6 @@ const SurveyInputMultipleSelectedEtc = ({
     setFormValues((prevFormValues) => {
       const newFormValues = prevFormValues.map((item, idx) => {
         if (idx === dogInfoIndex) {
-          console.log('item[formValueKey]', item);
           if (item[formValueKey] === '') {
             return {
               ...item,
