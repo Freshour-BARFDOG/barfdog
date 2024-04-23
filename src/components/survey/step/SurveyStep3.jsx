@@ -24,10 +24,11 @@ export default function SurveyStep3({
     const targetSwiperElem = swiperWrap.querySelector('.swiper-wrapper');
     targetSwiperElem.style.height = rem(activeSlideHeight);
     // targetSwiperElem.style.minHeight = rem(750);
-  }, [formValues]);
+  }, [formValues, activeIndexList]);
 
   return (
     <section id="surveyPage" className={s.step3Page}>
+      <div className={s.dogType_top_empty}></div>
       {formValues?.map((dog, index) => (
         <div key={index} className={s.dogSize_dogType_container}>
           <p className={s.input_title}>{dog.name} (이)의 견종은 무엇인가요 ?</p>
@@ -61,8 +62,9 @@ export default function SurveyStep3({
               // dogInfo={dog}
               activeIndexList={activeIndexList}
               setActiveIndexList={setActiveIndexList}
+              surveyPageRef={surveyPageRef}
             />
-            <div className={s.dogType_list}></div>
+            <div className={s.dogType_list_empty}></div>
           </div>
           {formValues.length >= 2 && index !== formValues.length - 1 && (
             <div className={s.input_line}></div>

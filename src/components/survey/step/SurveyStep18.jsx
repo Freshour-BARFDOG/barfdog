@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import s from '/src/pages/survey/survey.module.scss';
 import rem from '/util/func/rem';
+import SurveyBubble from '/public/img/survey/survey_bubble_2.png';
+import Image from 'next/image';
 
 export default function SurveyStep18({
   formValues,
@@ -37,6 +39,9 @@ export default function SurveyStep18({
   return (
     <section id="surveyPage" className={s.step18Page}>
       <div className={s.input_name_container}>
+        <div className={s.survey_bubble_img}>
+          <Image src={SurveyBubble} alt="SurveyBubble" />
+        </div>
         <p className={s.input_title_message}>
           팀 바프독에게 전하고 싶은 말이 있나요 ? <span>(선택사항)</span>
         </p>

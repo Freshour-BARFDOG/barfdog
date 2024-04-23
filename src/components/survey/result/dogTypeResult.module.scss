@@ -1,0 +1,34 @@
+@import '/styles/global/rem';
+@import '/styles/global/guide';
+
+.dog_type_container {
+  padding: rem(60) 0;
+}
+
+.last_survey_date {
+  color: #6d6d6d;
+  padding-bottom: rem(14);
+}
+
+.dog_name_type {
+  color: #424242;
+  font-size: rem(22);
+  font-weight: bold;
+
+  span {
+    text-decoration: underline;
+  }
+}
+
+.dog_type_keyword {
+  padding: rem(14) 0;
+  font-size: rem(18);
+  span {
+    font-weight: bold;
+  }
+}
+
+.dog_physical_info_box {
+  background-color: #f8f8f8;
+  height: rem(600);
+}

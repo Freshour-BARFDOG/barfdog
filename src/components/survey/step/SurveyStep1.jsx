@@ -21,20 +21,20 @@ export default function SurveyStep1({
     birth: '', //! [변경] 강아지 생월 str // [YYYYMMDD]
     oldDog: false, // 노견 여부 boolean (checkbox type)
     weight: '', // 강아지 몸무게 str // 몸무게 소수점 아래 1자리
-    dogStatus: '', //! [변경] 강아지 상태 [HEALTHY, NEED_DIET, OBESITY, THIN]
+    dogStatus: 'HEALTHY', //! [변경] 강아지 상태 [HEALTHY, NEED_DIET, OBESITY, THIN]
     targetWeight: '', //! [추가] 목표 체중 Number
-    specificDogStatus: '', //! [추가]  특별한 상태 [PREGNANT, LACTATING, NULL] 해당 사항이 없다면 NULL
+    specificDogStatus: 'NONE', //! [추가]  특별한 상태 [PREGNANT, LACTATING, NONE] 해당 사항이 없다면 NONE
     expectedPregnancyDay: '', //! [추가] 임신예상일 str // [YYYYMMDD]
     activityLevel: dogActivityLevelType.NORMAL, // 활동량 레벨 str [VERY_LITTLE, LITTLE, NORMAL, MUCH, VERY_MUCH]
     walkingCountPerWeek: '', // 주당 산책 횟수 string
     walkingTimePerOneTime: '', // 한 번 산책할 때 산책 시간 string
-    snackCountLevel: '', //  간식먹는 정도 str
-    waterCountLevel: '', //! [추가] 음수량 str [LITTLE, NORMAL, MUCH]
-    supplement: '', //! [추가] 영양제:브랜드명 str
+    snackCountLevel: 'NORMAL', //  간식먹는 정도 str
+    waterCountLevel: 'NORMAL', //! [추가] 음수량 str [LITTLE, NORMAL, MUCH]
+    supplement: 'NONE', //! [추가] 영양제:브랜드명 str
     currentMeal: '', //! [추가] 현재 먹고 있는 식사종류:브랜드명 str
-    inedibleFood: '', // 못 먹는 음식 str => get API 리스트 // 빈값('')일 경우, '있어요'선택됨)
+    inedibleFood: 'NONE', // 못 먹는 음식 str => get API 리스트 // 빈값('')일 경우, '있어요'선택됨)
     inedibleFoodEtc: 'NONE', // 못 먹는 음식 > '기타' 일경우
-    caution: '', // 기타 특이사항 // 빈값('')일 경우, '있어요'선택됨)
+    caution: 'NONE', // 기타 특이사항 // 빈값('')일 경우, '있어요'선택됨)
     cautionEtc: 'NONE',
     recommendRecipeId: null, // 특별히 챙겨주고 싶은 부분에 해당하는 Recipe => get API 리스트
     mealCountPerOneDay: '', //! [추가] 하루 끼니 횟수 str (1,2,3)

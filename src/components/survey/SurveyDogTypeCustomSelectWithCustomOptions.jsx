@@ -15,6 +15,7 @@ export const SurveyDogTypeCustomSelectWithCustomOptions = ({
   dogInfoIndex,
   activeIndexList,
   setActiveIndexList,
+  surveyPageRef,
 }) => {
   const initialSelectedOption = value[id] || options[0]?.value || '';
   const [selectedOption, setSelectedOption] = useState(initialSelectedOption);
@@ -39,6 +40,18 @@ export const SurveyDogTypeCustomSelectWithCustomOptions = ({
       setSelectedOption([initialSelectedOption]);
     }
   }, [initialSelectedOption]);
+
+  // UI '짤림 현상'해결
+  useEffect(() => {
+    const swiperWrap = surveyPageRef.current;
+    const slideWithDependencyElem = swiperWrap.querySelector(
+      '.swiper-slide-active',
+    );
+    const activeSlideHeight = slideWithDependencyElem.offsetHeight;
+    const targetSwiperElem = swiperWrap.querySelector('.swiper-wrapper');
+    targetSwiperElem.style.height = rem(activeSlideHeight);
+    // targetSwiperElem.style.minHeight = rem(750);
+  }, [value, activeIndexList]);
 
   useEffect(() => {
     // HIDE Option

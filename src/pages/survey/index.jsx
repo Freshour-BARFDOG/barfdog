@@ -49,29 +49,43 @@ import SurveyStep15 from '../../components/survey/step/SurveyStep15';
 import SurveyStep16 from '../../components/survey/step/SurveyStep16';
 import SurveyStep18 from '../../components/survey/step/SurveyStep18';
 import SurveyStep17 from '../../components/survey/step/SurveyStep17';
+import SurveyStatisticsPage from './statistics/[surveyReportsId]';
+import { useDispatch, useSelector } from 'react-redux';
+import { surveyDataAction } from '/store/surveyData-slice';
+import { surveyDogAction } from '/store/surveyDog-slice';
 // ! [수정] 로그인 안해도 설문조사 가능하게
 // import useUserData from '../../../util/hook/useUserData';
 
 // ! TEST 용
-// const initialFormValues = {
-//   name: 'dog-', // 강아지이름 str
-//   gender: 'MALE', // 강아지 성별 str
-//   birth: '202201', // 강아지 생월 str // [YYYYMM]
-//   oldDog: false, // 노견 여부 boolean (checkbox type)
-//   dogSize: 'MIDDLE', // 강아지 체급 str
-//   dogType: '닥스훈트', // 강아지 종 str
-//   weight: '2.7', // 강아지 몸무게 str // 몸무게 소수점 아래 1자리
-//   neutralization: false, // 중성화여부 Boolean
-//   activityLevel: dogActivityLevelType.NORMAL, // 활동량 레벨 str
-//   walkingCountPerWeek: 1, // 주당 산책 횟수 num
-//   walkingTimePerOneTime: 2, // 한 번 산책할 때 산책 시간 num
-//   dogStatus: 'PREGNANT', // 강아지 건강/임신 등의 상태 str
-//   snackCountLevel: 'LITTLE', //  간식먹는 정도 str
-//   inedibleFood: dogInedibleFoodType.NONE, // 못 먹는 음식 str => get API 리스트 // 빈값('')일 경우, '있어요'선택됨)
-//   inedibleFoodEtc: 'NONE', // 못 먹는 음식 > '기타' 일경우
-//   recommendRecipeId: null, // 특별히 챙겨주고 싶은 부분에 해당하는 Recipe => get API 리스트
-//   caution: dogCautionType.NONE, // 기타 특이사항 // 빈값('')일 경우, '있어요'선택됨)
-// };
+// {
+//   activityLevel: 'VERY_LITTLE';
+//   birth: '20160105';
+//   caution: '피부염,ETC';
+//   cautionEtc: '몸이안좋음';
+//   currentMeal: '습식사료/캔,화식,동결건조사료:동결브랜드';
+//   dogSize: 'MIDDLE';
+//   dogStatus: 'HEALTHY';
+//   dogType: '믹스';
+//   expectedPregnancyDay: '';
+//   favoriteIngredients: '좋아하는,음식이,많아요';
+//   gender: 'MALE';
+//   inedibleFood: '칠면조,메추리,ETC';
+//   inedibleFoodEtc: '쌀못먹음';
+//   mealCountPerOneDay: '2';
+//   messageToBarfdog: '감사합니다 !';
+//   name: '테스트견1';
+//   neutralization: true;
+//   oldDog: true;
+//   recommendRecipeId: 6;
+//   snackCountLevel: 'NORMAL';
+//   specificDogStatus: 'LACTATING_FIVE_TO_SIX';
+//   supplement: '유산균,눈:눈브랜드,기타:기타브랜드';
+//   targetWeight: '';
+//   walkingCountPerWeek: '2';
+//   walkingTimePerOneTime: '1.5';
+//   waterCountLevel: 'MUCH';
+//   weight: '12';
+// }
 
 const svyData = new SurveyDataClass();
 
@@ -97,8 +111,6 @@ const svyData = new SurveyDataClass();
 // };
 
 // ! [수정] 다견
-// const initialFormValues = [];
-
 // [참고] 변경될 경우, SurveyStep1의 initialFormValues도 변경되어야 함 !
 const initialFormValues = [
   {
@@ -110,7 +122,7 @@ const initialFormValues = [
     birth: '', //! [변경] 강아지 생월 str // [YYYYMMDD]
     oldDog: false, // 노견 여부 boolean (checkbox type)
     weight: '', // 강아지 몸무게 str // 몸무게 소수점 아래 1자리
-    dogStatus: '', //! [변경] 강아지 상태 [HEALTHY, NEED_DIET, OBESITY, THIN]
+    dogStatus: 'HEALTHY', //! [변경] 강아지 상태 [HEALTHY, NEED_DIET, OBESITY, THIN]
     targetWeight: '', //! [추가] 목표 체중 Number
     specificDogStatus: 'NONE', //! [추가]  특별한 상태
     // [PREGNANT_EARLY, PREGNANT_LATE,
@@ -120,13 +132,13 @@ const initialFormValues = [
     activityLevel: dogActivityLevelType.NORMAL, // 활동량 레벨 str [VERY_LITTLE, LITTLE, NORMAL, MUCH, VERY_MUCH]
     walkingCountPerWeek: '', // 주당 산책 횟수 string
     walkingTimePerOneTime: '', // 한 번 산책할 때 산책 시간 string
-    snackCountLevel: '', //  간식먹는 정도 str
-    waterCountLevel: '', //! [추가] 음수량 str [LITTLE, NORMAL, MUCH]
-    supplement: '', //! [추가] 영양제:브랜드명 str
+    snackCountLevel: 'NORMAL', //  간식먹는 정도 str
+    waterCountLevel: 'NORMAL', //! [추가] 음수량 str [LITTLE, NORMAL, MUCH]
+    supplement: 'NONE', //! [추가] 영양제:브랜드명 str
     currentMeal: '', //! [추가] 현재 먹고 있는 식사종류:브랜드명 str
-    inedibleFood: '', // 못 먹는 음식 str => get API 리스트 // 빈값('')일 경우, '있어요'선택됨)
+    inedibleFood: 'NONE', // 못 먹는 음식 str => get API 리스트 // 빈값('')일 경우, '있어요'선택됨)
     inedibleFoodEtc: 'NONE', // 못 먹는 음식 > '기타' 일경우
-    caution: '', // 기타 특이사항 // 빈값('')일 경우, '있어요'선택됨)
+    caution: 'NONE', // 기타 특이사항 // 빈값('')일 경우, '있어요'선택됨)
     // caution: dogCautionType.NONE, // 기타 특이사항 // 빈값('')일 경우, '있어요'선택됨)
     cautionEtc: 'NONE',
     recommendRecipeId: null, // 특별히 챙겨주고 싶은 부분에 해당하는 Recipe => get API 리스트
@@ -140,6 +152,10 @@ export default function Survey() {
   const loadingDuration = 1200; // ms
   const lastStep = 18; // 마지막 설문조사 페이지
   const router = useRouter();
+  //! [추가] 로그인 여부 확인
+  const auth = useSelector((state) => state.auth);
+  const userInfo = auth?.userInfo;
+  //! [제거] 아래 사항 있을 시, 비로그인은 접근 못하고 로그인 페이지로 바로 이동
   // const userData = useUserData();
   // const userId = userData?.memberId;
   const mct = useModalContext();
@@ -148,20 +164,28 @@ export default function Survey() {
   const [curStep, setCurStep] = useState(1); // num
   const [isLoading, setIsLoading] = useState({}); // obj
   const [modalMessage, setModalMessage] = useState('');
+  const [dogInfoResult, setDogInfoResult] = useState([]);
   const [submitState, setSubmitState] = useState(null);
   const prevBtnRef = useRef(null);
   const nextBtnRef = useRef(null);
   const submitBtnRef = useRef(null);
   const surveyPageRef = useRef(null);
   const progressbarRef = useRef(null);
+  const dispatch = useDispatch();
 
-  // const handleSetFooterRef = (ref) => {
-  //   setFooterRef(ref);
-  // };
+  // console.log('auth', auth);
+  // console.log('userInfo', userInfo);
 
-  // let footerDiv = footerRef.current;
-
-  // // console.log(formValues);
+  const initialDogInfoResult = [
+    {
+      dogAge: 0,
+      dogName: '',
+      dogType: '',
+      gender: '',
+      surveyId: 0,
+      weight: 0,
+    },
+  ];
 
   // ! [수정] 로그인 안해도 설문조사 가능하게
   // useEffect(() => {
@@ -208,7 +232,7 @@ export default function Survey() {
     const { id, value } = input;
     // console.log('input', input);
     // console.log('id', id);
-    console.log('value', value);
+    // console.log('value', value);
 
     const filteredType = input.dataset.inputType;
     let filteredValue = value;
@@ -317,6 +341,9 @@ export default function Survey() {
   //     }
   //   }
   // };
+
+  console.log(formValues);
+  console.log(dogInfoResult);
 
   const surveySwiperSettings = {
     className: StyleSwiper.swiperSurvey,
@@ -511,7 +538,7 @@ export default function Survey() {
     // - prevent to the Next step when validation failed
     // curBtn !== submitBtn && swiper.slidePrev();
     // } else {
-    isSubmitButton && mct.alertShow('설문조사를 제출하시겠습니까?');
+    // isSubmitButton && mct.alertShow('설문조사를 제출하시겠습니까?');
     setSubmitState('READY');
     isSubmitButton && onSubmit();
     // }
@@ -523,45 +550,86 @@ export default function Survey() {
     // const errObj = validate(formValues, 3);
     // const isPassed = valid_hasFormErrors(errObj);
     // if (!isPassed) return;
+
+    //! [START]
     const postFormValuesApiUrl = '/api/dogs';
-    try {
+    // 로그인이 필요합니다 >>> userInfo
+    if (!userInfo) {
+      // 1) 로그인이 안되었으면
+      // 401 error - 로그인 페이지 이동 - 로그인 이후 설문결과 제출 페이지 되돌아오기
+      // 로그인 이후에도 설문조사 데이터 redux에 저장
+      dispatch(surveyDataAction.saveSurveyData({ surveyData: formValues }));
+      // 로그인 성공하면 바로 설문조사 결과 페이지로 이동
+      // dispatch(setPreviousPath(page));
+      mct.alertShow(
+        `로그인이 필요한 페이지입니다.\n(검사결과는 자동 저장됩니다)`,
+      );
+      return await router.push('/account/login');
+    } else if (userInfo) {
+      // 2) 로그인된 상태 - 결과페이지
+      try {
+        setIsLoading((prevState) => ({
+          ...prevState,
+          submit: true,
+        }));
+
+        const postData = { dogSaveRequestDtos: formValues };
+
+        const res = await postObjData(postFormValuesApiUrl, postData);
+        console.log('formValues', formValues); // 최종 제출
+        console.log(res);
+        if (res.isDone) {
+          console.log(res.data.data);
+          //! [수정]
+          const slicedReportApiLink =
+            res.data.data._embedded.createDogsResponseDtoList[0]._links.query_surveyReport.href.split(
+              '/',
+            );
+          const linkLength = slicedReportApiLink.length;
+          const surveyReportsId = slicedReportApiLink[linkLength - 1];
+          // svyData.deleteStoredSurveyData(userId);
+          console.log('surveyReportsId', surveyReportsId);
+          await router.push(`/survey/statistics/${surveyReportsId}`);
+          setSubmitState(true);
+          const dogInfoResults =
+            res.data.data._embedded.createDogsResponseDtoList;
+          setDogInfoResult(dogInfoResults);
+          dispatch(
+            surveyDogAction.saveSurveyDog({ surveyDog: dogInfoResults }),
+          );
+          console.log('dogInfoResults', dogInfoResults);
+
+          //! [이전]
+          //   const slicedReportApiLink =
+          //     res.data.data._links.query_surveyReport.href.split('/');
+          //   const linkLength = slicedReportApiLink.length;
+          //   const surveyReportsId = slicedReportApiLink[linkLength - 1];
+          //   svyData.deleteStoredSurveyData(userId);
+          //   await router.push(`/survey/statistics/${surveyReportsId}`);
+          //   setSubmitState(true);
+          // } else {
+          //   modalMessage = '내부 통신장애입니다. 잠시 후 다시 시도해주세요.';
+          //   mct.alertShow(modalMessage);
+          //   setSubmitState(false);
+        }
+      } catch (err) {
+        await mct.alertShow(
+          'API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.',
+        );
+
+        //! [추후] 에러 나면 다시 처음으로
+        // setTimeout(() => {
+        //   // window.location.href = '/surveyGuide';
+        //   window.location.href = '/survey';
+        // }, [1000]);
+        console.error('API통신 오류 : ', err);
+      }
       setIsLoading((prevState) => ({
         ...prevState,
-        submit: true,
+        submit: false,
       }));
-      let modalMessage;
-      console.log(formValues); // 최종 제출
-      const postData = { dogSaveRequestDtos: formValues };
-
-      const res = await postObjData(postFormValuesApiUrl, postData);
-      console.log(res);
-      if (res.isDone) {
-        // const slicedReportApiLink =
-        //   res.data.data._links.query_surveyReport.href.split('/');
-        // const linkLength = slicedReportApiLink.length;
-        // const surveyReportsId = slicedReportApiLink[linkLength - 1];
-        // svyData.deleteStoredSurveyData(userId);
-        // await router.push(`/survey/statistics/${surveyReportsId}`);
-        // setSubmitState(true);
-        // } else {
-        //   modalMessage = '내부 통신장애입니다. 잠시 후 다시 시도해주세요.';
-        //   mct.alertShow(modalMessage);
-        //   setSubmitState(false);
-      }
-    } catch (err) {
-      // await mct.alertShow(
-      //   'API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.',
-      // );
-      // setTimeout(() => {
-      //   // window.location.href = '/surveyGuide';
-      //   window.location.href = '/survey';
-      // }, [1000]);
-      console.error('API통신 오류 : ', err);
+      //! [END]
     }
-    // setIsLoading((prevState) => ({
-    //   ...prevState,
-    //   submit: false,
-    // }));
   };
 
   const moveToPrevPage = () => {
@@ -775,14 +843,14 @@ export default function Survey() {
               </SwiperSlide>
 
               {/* 19. [최종] 결과확인 */}
-              <SwiperSlide>
-                <SurveyStep6
+              {/* <SwiperSlide>
+                <SurveyStatisticsPage
                   surveyPageRef={surveyPageRef}
                   formValues={formValues}
                   setFormValues={setFormValues}
                   onInputChangeHandler={onInputChangeHandler}
                 />
-              </SwiperSlide>
+              </SwiperSlide> */}
             </Swiper>
           </div>
         </Wrapper>

@@ -136,11 +136,18 @@
 //////////////////////////////////
 // ******** STEP 3. 크기 & 견종 ********
 //////////////////////////////////
+
+.dogType_top_empty {
+  height: rem(60);
+}
+
 .dogSize_dogType_container {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  margin-top: -5.5rem;
+  // height: rem(400);
 
   .input_line {
     position: fixed;
@@ -148,7 +155,7 @@
   }
 
   .input_dogSize_dogType_box {
-    margin-bottom: rem(40);
+    // margin-bottom: rem(40);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -156,8 +163,8 @@
   }
 }
 
-.dogType_list {
-  height: rem(100);
+.dogType_list_empty {
+  height: rem(200);
 }
 
 //////////////////////////////////
@@ -169,7 +176,6 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  height: rem(430);
 
   .input_dogBirth_box {
     display: flex;
@@ -233,7 +239,7 @@
   border-radius: rem(10);
   position: absolute;
   left: 50%;
-  top: -20%;
+  top: 5%;
   transform: translate(-50%, -50%);
 
   a {
@@ -372,11 +378,22 @@
 //////////////////////////////////
 // ******** STEP 8. 산책량 ********
 //////////////////////////////////
+.dogWalk_list_empty {
+  height: rem(180);
+}
+.dogWalk_top_empty {
+  height: rem(100);
+}
 .walk_container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top: rem(-120);
+  .input_line {
+    margin-top: rem(50);
+    position: absolute;
+  }
 }
 .walk_box {
   display: flex;
@@ -630,6 +647,13 @@
       padding: rem(6);
     }
   }
+}
+
+.survey_bubble_img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: rem(-30);
 }
 
 .input_mealCountPerOneDay_box {
