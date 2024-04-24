@@ -1,5 +1,5 @@
 import s from '/src/pages/survey/survey.module.scss';
-import SurveyInputRadio from './SurveyInputRadio';
+import SurveyInputRadio from './AdminSurveyInputRadio';
 import React from 'react';
 import { dogActivityLevelType } from '/store/TYPE/dogActivityLevelType';
 import { CustomSelectWithCustomOptions } from './CustomSelectWithCustomOptions';

@@ -1,5 +1,5 @@
 import s from '/src/pages/survey/survey.module.scss';
-import SurveyInputRadio from './SurveyInputRadio';
+import SurveyInputRadio from './AdminSurveyInputRadio';
 import React, { useEffect, useState } from 'react';
 import { dogSnackCountLevelType } from '/store/TYPE/dogSnackCountLevelType';
 import { dogInedibleFoodType } from '/store/TYPE/dogInedibleFoodType';
