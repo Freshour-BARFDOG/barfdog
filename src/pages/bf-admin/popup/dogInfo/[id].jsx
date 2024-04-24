@@ -55,7 +55,7 @@ export default function Popup_DogDetailPage({ data, dogIdx }) {
           const DATA = res.data[apiDataQueryDog];
           // console.log('DATA', DATA);
 
-          const getMemberInfoApiUrl = `/api/admin/members/${DATA.id}`;
+          const getMemberInfoApiUrl = `/api/admin/members/${DATA.memberId}`;
           const memberResponse = await getData(getMemberInfoApiUrl);
           const MEMBER_DATA = memberResponse.data.memberDto;
           // console.log('MEMBER_DATA', MEMBER_DATA);
