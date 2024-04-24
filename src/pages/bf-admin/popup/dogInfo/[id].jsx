@@ -53,8 +53,12 @@ export default function Popup_DogDetailPage({ data, dogIdx }) {
         let initialValues = [];
         if (res.data[apiDataQueryDog]) {
           const DATA = res.data[apiDataQueryDog];
+          // console.log('DATA', DATA);
 
-          console.log('DATA', DATA);
+          const getMemberInfoApiUrl = `/api/admin/members/${DATA.memberId}`;
+          const memberResponse = await getData(getMemberInfoApiUrl);
+          const MEMBER_DATA = memberResponse.data.memberDto;
+          // console.log('MEMBER_DATA', MEMBER_DATA);
 
           // 다음 결제일 포맷변환 (0000년 0월 0일)
           const nextPaymentDate = new Date(DATA.nextPaymentDate);
@@ -69,21 +73,21 @@ export default function Popup_DogDetailPage({ data, dogIdx }) {
           initialValues = {
             id: DATA.id,
             address: {
-              zipcode: DATA.address?.zipcode,
-              city: DATA.address?.city,
-              street: DATA.address?.street,
-              detailAddress: DATA.address?.detailAddress,
+              zipcode: MEMBER_DATA.address?.zipcode,
+              city: MEMBER_DATA.address?.city,
+              street: MEMBER_DATA.address?.street,
+              detailAddress: MEMBER_DATA.address?.detailAddress,
             },
-            phoneNumber: transformPhoneNumber(DATA.phoneNumber),
-            birthday: transformBirthDay(DATA.memberBirthday),
-            memberName: DATA.memberName,
+            phoneNumber: transformPhoneNumber(MEMBER_DATA.phoneNumber),
+            birthday: transformBirthDay(MEMBER_DATA.birthday),
+            memberName: MEMBER_DATA.name,
+            email: MEMBER_DATA.email,
             subscribeId: DATA.subscribeId,
             subscribeCount: DATA.subscribeCount,
             subscribeStatus: DATA.subscribeStatus,
             subscribeCount: DATA.subscribeCount,
             nextPaymentDate: DATA.nextPaymentDate && formattedNextPaymentDate,
             nextPaymentPrice: DATA.nextPaymentPrice,
-            email: DATA.email,
             name: DATA.name,
             gender: DATA.gender,
             birth: DATA.birth,
