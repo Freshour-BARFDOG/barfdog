@@ -31,23 +31,23 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import { Modal_tempPasswrod } from '/src/components/modal/Modal_tempPasswrod';
 import { Modal_Popup } from '/src/components/modal/Modal_Popup';
-import useDeviceState from "/util/hook/useDeviceState";
-import { getTokenFromServerSide } from "/src/pages/api/reqData";
+import useDeviceState from '/util/hook/useDeviceState';
+import { getTokenFromServerSide } from '/src/pages/api/reqData';
 import { Tween } from 'react-gsap';
-import { Controller, Scene } from "react-scrollmagic";
-import AOS from "aos";
-import "aos/dist/aos.css";
+import { Controller, Scene } from 'react-scrollmagic';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 import ImageWithLoadingSpinner from '/src/components/atoms/ImageWithLoadingSpinner';
 
 import { getData, postData, postObjData, putObjData } from './api/reqData';
-import {deleteCookie, getCookie, setCookie} from "@util/func/cookie";
+import { deleteCookie, getCookie, setCookie } from '@util/func/cookie';
 
 export default function MainPage({ data }) {
   // // console.log(data)
   const router = useRouter();
   const isMobile = useDeviceState().isMobile;
   const [activeTempPasswordModal, setActiveTempPasswordModal] = useState(false);
-  
+
   useEffect(() => {
     const { query } = router;
     const isTempPassword = !!query.tempPw;
@@ -67,62 +67,59 @@ export default function MainPage({ data }) {
     AOS.init();
   });
 
-
-
   // YYL 콕뱅크 쿠키 관련
   useEffect(() => {
-
     const alliance = router.query.alliance;
 
-    if(alliance === 'cb'){
-
+    if (alliance === 'cb') {
       setCookie('alliance', 'cb', 'hour', 1);
 
       // 메인으로 리다이렉트
       router.push('/');
-    
+
       // (async () => {
       //   try {
       //     const url = '/api/planDiscountTest';
       //     const res = await getData(url);
-  
+
       //     if (res?.status === 200) {
       //       const dataToAssign = res.data ?? {};
       //       setDataBase(dataToAssign);
       //     }
       //   } catch (err) {
       //     console.error(err);
-      //   } 
+      //   }
       // })();
-  
+
       // (async () => {
       //   try {
       //     const url = '/api/alliance?alliance=cb';
       //     const res = await getData(url);
-  
+
       //     // console.log(res)
-  
+
       //     // console.log(document.cookie);
-  
+
       //     if (res?.status === 200) {
       //       const dataToAssign = res.data ?? {};
       //       setDataBase(dataToAssign);
       //     }
       //   } catch (err) {
       //     console.error(err);
-      //   } 
+      //   }
       // })();
     }
   });
-  
-  
 
+  // RENEWAL
 
   return (
     <>
       <MetaTitle title="바프독" />
       <Layout>
-        {activeTempPasswordModal && <Modal_tempPasswrod isConfirm={onClickModalButtons} />}
+        {activeTempPasswordModal && (
+          <Modal_tempPasswrod isConfirm={onClickModalButtons} />
+        )}
         <Wrapper fullWidth={true} rowStyle={{ padding: 0 }}>
           {/* 스와이프주석 */}
           <Swiper_main data={data?.mainBannerDtoList} isMobile={isMobile} />
@@ -146,20 +143,26 @@ export default function MainPage({ data }) {
             <div className={s.inner}>
               <div className={s.leftbox}>
                 <div className={s.image_wrap}>
-                <ImageWithLoadingSpinner src={Barfraw} objectFit="cover" layout="fill" alt="바프 생식 이미지" />
+                  <ImageWithLoadingSpinner
+                    src={Barfraw}
+                    objectFit="cover"
+                    layout="fill"
+                    alt="바프 생식 이미지"
+                  />
                 </div>
               </div>
               <div className={s.rightbox}>
                 <p>ABOUT BARF</p>
                 <h1>바프식이란?</h1>
                 <h3>
-                  &nbsp;B.A.R.F.(Biologically Appropriate Raw Food)는 생물학적으로 적절한 생식이라는
-                  뜻으로, 생고기와 뼈, 야채를 적절히 배합하여 반려동물에게 단백질과 지방을 신선한
-                  상태에서 섭취할 수 있도록 돕는 식단을 뜻합니다.
+                  &nbsp;B.A.R.F.(Biologically Appropriate Raw Food)는
+                  생물학적으로 적절한 생식이라는 뜻으로, 생고기와 뼈, 야채를
+                  적절히 배합하여 반려동물에게 단백질과 지방을 신선한 상태에서
+                  섭취할 수 있도록 돕는 식단을 뜻합니다.
                   {/* 바프독은 70%의 두 종류 고기와 칼슘이 풍부한 */}
                   <br />
-                  바프독의 모든 레시피는
-                  고기와 뼈, 내장, 신선한 야채를 완벽한 비율로 배합하여 건강한 영양을 공급합니다.
+                  바프독의 모든 레시피는 고기와 뼈, 내장, 신선한 야채를 완벽한
+                  비율로 배합하여 건강한 영양을 공급합니다.
                   {/* 뼈, 내장, 신선한 야채를 배합해 완벽한 비율의 영양을 공급합니다. */}
                 </h3>
               </div>
@@ -180,10 +183,12 @@ export default function MainPage({ data }) {
                     어떤점이 바뀔까요?
                   </h1>
                   <p>
-                    &nbsp;BARF(Biologically Appropriate Raw Food)는 생물학적으로 적절한 생식이라는
-                    뜻으로, 생고기와 뼈, 야채를 적절히 배합하여 반려동물에게 단백질과 지방을 신선한
-                    상태에서 섭취할 수 있도록 돕습니다. 바프독은 70%의 두 종류 고기와 칼슘이 풍부한
-                    뼈, 내장, 신선한 야채를 배합해 완벽한 비율의 영양을 공급합니다.
+                    &nbsp;BARF(Biologically Appropriate Raw Food)는 생물학적으로
+                    적절한 생식이라는 뜻으로, 생고기와 뼈, 야채를 적절히
+                    배합하여 반려동물에게 단백질과 지방을 신선한 상태에서 섭취할
+                    수 있도록 돕습니다. 바프독은 70%의 두 종류 고기와 칼슘이
+                    풍부한 뼈, 내장, 신선한 야채를 배합해 완벽한 비율의 영양을
+                    공급합니다.
                   </p>
                 </div>
               </li>
@@ -218,16 +223,18 @@ export default function MainPage({ data }) {
           <section className={s.difference}>
             <div className={s.inner}>
               <div className={s.scroll}>
-              <Controller>
+                <Controller>
                   {isMobile ? (
                     <Scene duration={2000} offset={300} pin>
                       <Tween
-                      from={{
-                        "clip-path": "polygon(50% 0%, 50% 0%, 50% 100%, 50% 100%)"
-                      }}
-                      to={{
-                        "clip-path": "polygon(50% 0%, 0% 0%, 0% 100%, 50% 100%)"
-                      }}
+                        from={{
+                          'clip-path':
+                            'polygon(50% 0%, 50% 0%, 50% 100%, 50% 100%)',
+                        }}
+                        to={{
+                          'clip-path':
+                            'polygon(50% 0%, 0% 0%, 0% 100%, 50% 100%)',
+                        }}
                       >
                         <p>CEHCK POINT</p>
                         <h1>바프독을 선택해야 하는 이유</h1>
@@ -236,40 +243,42 @@ export default function MainPage({ data }) {
                             src={Halftest}
                             objectFit="fit"
                             layout="fill"
-
                             alt="카드 이미지"
-                            priority />
+                            priority
+                          />
                         </div>
                         <ul>
-                            <li>
-                              <div className={s.image_title}>스타터프리미엄</div>
-                              <div className={s.image_sub}>닭고기 & 칠면조</div>
-                            </li>
-                            <li>
-                              <div className={s.image_title}>덕앤램</div>
-                              <div className={s.image_sub}>오리 & 양</div>
-                            </li>
-                            <li>
-                              <div className={s.image_title}>터키앤비프</div>
-                              <div className={s.image_sub}>칠면조 & 소</div>
-                            </li>
-                            <li>
-                              <div className={s.image_title}>램앤비프</div>
-                              <div className={s.image_sub}>양 & 소</div>
-                            </li>
-                          </ul>
+                          <li>
+                            <div className={s.image_title}>스타터프리미엄</div>
+                            <div className={s.image_sub}>닭고기 & 칠면조</div>
+                          </li>
+                          <li>
+                            <div className={s.image_title}>덕앤램</div>
+                            <div className={s.image_sub}>오리 & 양</div>
+                          </li>
+                          <li>
+                            <div className={s.image_title}>터키앤비프</div>
+                            <div className={s.image_sub}>칠면조 & 소</div>
+                          </li>
+                          <li>
+                            <div className={s.image_title}>램앤비프</div>
+                            <div className={s.image_sub}>양 & 소</div>
+                          </li>
+                        </ul>
                         <div className={s.magicbox} />
                       </Tween>
                     </Scene>
                   ) : (
                     <Scene duration={2000} offset={400} pin>
                       <Tween
-                      from={{
-                        "clip-path": "polygon(50% 0%, 50% 0%, 50% 100%, 50% 100%)"
-                      }}
-                      to={{
-                        "clip-path": "polygon(50% 0%, 0% 0%, 0% 100%, 50% 100%)"
-                      }}
+                        from={{
+                          'clip-path':
+                            'polygon(50% 0%, 50% 0%, 50% 100%, 50% 100%)',
+                        }}
+                        to={{
+                          'clip-path':
+                            'polygon(50% 0%, 0% 0%, 0% 100%, 50% 100%)',
+                        }}
                       >
                         <p>CEHCK POINT</p>
                         <h1>바프독을 선택해야 하는 이유</h1>
@@ -281,31 +290,32 @@ export default function MainPage({ data }) {
                             // height={520}
                             layout="fill"
                             alt="카드 이미지"
-                            priority />
+                            priority
+                          />
                         </div>
                         <ul>
-                            <li>
-                              <div className={s.image_title}>스타터프리미엄</div>
-                              <div className={s.image_sub}>닭고기 & 칠면조</div>
-                            </li>
-                            <li>
-                              <div className={s.image_title}>덕앤램</div>
-                              <div className={s.image_sub}>오리 & 양</div>
-                            </li>
-                            <li>
-                              <div className={s.image_title}>터키앤비프</div>
-                              <div className={s.image_sub}>칠면조 & 소</div>
-                            </li>
-                            <li>
-                              <div className={s.image_title}>램앤비프</div>
-                              <div className={s.image_sub}>양 & 소</div>
-                            </li>
-                          </ul>
+                          <li>
+                            <div className={s.image_title}>스타터프리미엄</div>
+                            <div className={s.image_sub}>닭고기 & 칠면조</div>
+                          </li>
+                          <li>
+                            <div className={s.image_title}>덕앤램</div>
+                            <div className={s.image_sub}>오리 & 양</div>
+                          </li>
+                          <li>
+                            <div className={s.image_title}>터키앤비프</div>
+                            <div className={s.image_sub}>칠면조 & 소</div>
+                          </li>
+                          <li>
+                            <div className={s.image_title}>램앤비프</div>
+                            <div className={s.image_sub}>양 & 소</div>
+                          </li>
+                        </ul>
                         <div className={s.magicbox} />
                       </Tween>
                     </Scene>
                   )}
-              </Controller>
+                </Controller>
               </div>
             </div>
           </section>
@@ -322,7 +332,13 @@ export default function MainPage({ data }) {
                   <br />
                   Real B.A.R.F.
                 </p>
-                <ImageWithLoadingSpinner src={LeftPic} objectFit="fit" width={260} height={260} alt="카드 이미지" />
+                <ImageWithLoadingSpinner
+                  src={LeftPic}
+                  objectFit="fit"
+                  width={260}
+                  height={260}
+                  alt="카드 이미지"
+                />
                 <p className={s.text}>
                   생고기, 뼈, 내장, 채소와 과일을
                   <br />
@@ -336,7 +352,13 @@ export default function MainPage({ data }) {
                   <br />
                   Double meats
                 </p>
-                <ImageWithLoadingSpinner src={midPic} objectFit="fit" width={260} height={260} alt="카드 이미지" />
+                <ImageWithLoadingSpinner
+                  src={midPic}
+                  objectFit="fit"
+                  width={260}
+                  height={260}
+                  alt="카드 이미지"
+                />
                 <p className={s.text}>
                   모든 레시피에 두 가지 고기를
                   <br />
@@ -350,7 +372,13 @@ export default function MainPage({ data }) {
                   <br />
                   AAFCO
                 </p>
-                <ImageWithLoadingSpinner src={rightPic} objectFit="fit" width={260} height={260} alt="카드 이미지" />
+                <ImageWithLoadingSpinner
+                  src={rightPic}
+                  objectFit="fit"
+                  width={260}
+                  height={260}
+                  alt="카드 이미지"
+                />
                 <p className={s.text}>
                   국제 기준(AAFCO)부터 NRC, fediaf까지
                   <br />
@@ -375,11 +403,41 @@ export default function MainPage({ data }) {
               </div>
               <div className={s.textbox} id="trigger">
                 <ul className={s.text}>
-                  <li data-aos="fade-up" data-aos-delay="0" data-aos-anchor="#trigger">영양보존 100%</li>
-                  <li data-aos="fade-up" data-aos-delay="50" data-aos-anchor="#trigger">100% 휴먼그레이드</li>
-                  <li data-aos="fade-up" data-aos-delay="100" data-aos-anchor="#trigger">NO 유전자 변형 원료 (NON-GMO)</li>
-                  <li data-aos="fade-up" data-aos-delay="150" data-aos-anchor="#trigger">NO 방부제·보존제</li>
-                  <li data-aos="fade-up" data-aos-delay="200" data-aos-anchor="#trigger">NO 중국산재료</li>
+                  <li
+                    data-aos="fade-up"
+                    data-aos-delay="0"
+                    data-aos-anchor="#trigger"
+                  >
+                    영양보존 100%
+                  </li>
+                  <li
+                    data-aos="fade-up"
+                    data-aos-delay="50"
+                    data-aos-anchor="#trigger"
+                  >
+                    100% 휴먼그레이드
+                  </li>
+                  <li
+                    data-aos="fade-up"
+                    data-aos-delay="100"
+                    data-aos-anchor="#trigger"
+                  >
+                    NO 유전자 변형 원료 (NON-GMO)
+                  </li>
+                  <li
+                    data-aos="fade-up"
+                    data-aos-delay="150"
+                    data-aos-anchor="#trigger"
+                  >
+                    NO 방부제·보존제
+                  </li>
+                  <li
+                    data-aos="fade-up"
+                    data-aos-delay="200"
+                    data-aos-anchor="#trigger"
+                  >
+                    NO 중국산재료
+                  </li>
                 </ul>
               </div>
             </div>
@@ -388,7 +446,10 @@ export default function MainPage({ data }) {
 
         {/* 고민 */}
         <Wrapper bgColor="#F9F2EC">
-          <section className={s.clientWorry} style={{ backgroundColor: '#F9F2EC' }}>
+          <section
+            className={s.clientWorry}
+            style={{ backgroundColor: '#F9F2EC' }}
+          >
             <div className={`${s.inner} clearfix`}>
               <div className={`${s['cont-left']} cont-left`}>
                 <div className={s.title_section}>
@@ -398,17 +459,17 @@ export default function MainPage({ data }) {
                     해본적 있으신가요?
                   </h2>
                   <p className={s.subtitle}>
-                    반려견이 평생 다양한 ‘사료’만 먹는다는 것은
-                    인스턴트 음식만 평생 먹는다는 것과 같습니다.
+                    반려견이 평생 다양한 ‘사료’만 먹는다는 것은 인스턴트 음식만
+                    평생 먹는다는 것과 같습니다.
                     <br />
                     <br />
-                    반려견과 행복하고 건강하게 지낼 수 있도록
-                    바프독이 도와드릴게요!
+                    반려견과 행복하고 건강하게 지낼 수 있도록 바프독이
+                    도와드릴게요!
                   </p>
                   <Link passHref href={'/recipes'}>
-                      <a type="button" className={`${s.btn_worry}`}>
-                        바프생식 둘러보기
-                      </a>
+                    <a type="button" className={`${s.btn_worry}`}>
+                      바프생식 둘러보기
+                    </a>
                   </Link>
                 </div>
               </div>
@@ -429,16 +490,20 @@ export default function MainPage({ data }) {
                         <div className={s.details}>
                           <ul>
                             <li>
-                              생식을 시도하고 싶지만 공부해야할 것이 많고 반려견이 잘 적응할 수 있을지 걱정이 돼요
+                              생식을 시도하고 싶지만 공부해야할 것이 많고
+                              반려견이 잘 적응할 수 있을지 걱정이 돼요
                             </li>
                             <li>
-                              기존에 건사료 등을 급여하던 중 건강이 나빠진 반려견을 위해 생식을 급여하고 싶어요
+                              기존에 건사료 등을 급여하던 중 건강이 나빠진
+                              반려견을 위해 생식을 급여하고 싶어요
                             </li>
                             <li>
-                              반려견 입맛이 까다로워서 매번 새로운 사료를 찾아야해요
+                              반려견 입맛이 까다로워서 매번 새로운 사료를
+                              찾아야해요
                             </li>
                             <li>
-                              생식에 대해서는 잘 알지만 매번 집에서 만들고 소분하는 것이 힘들어졌어요
+                              생식에 대해서는 잘 알지만 매번 집에서 만들고
+                              소분하는 것이 힘들어졌어요
                             </li>
                           </ul>
                         </div>
@@ -469,9 +534,9 @@ export default function MainPage({ data }) {
                     </li>
                   </ul>
                   <Link passHref href={'/recipes'}>
-                      <a type="button" className={`${s.btn_worry2}`}>
-                        바프생식 둘러보기
-                      </a>
+                    <a type="button" className={`${s.btn_worry2}`}>
+                      바프생식 둘러보기
+                    </a>
                   </Link>
                 </div>
               </div>
@@ -502,9 +567,11 @@ export default function MainPage({ data }) {
             <div className={s.inner}>
               <h2 className={s.title}>바프독 이용방법</h2>
               <p>
-                정기구독신청 버튼을 통해 간편하게 반려동물 정보를 입력하고 계정에서 최신상태로 업데이트 할 수 있습니다
+                정기구독신청 버튼을 통해 간편하게 반려동물 정보를 입력하고
+                계정에서 최신상태로 업데이트 할 수 있습니다
                 <br />
-                집에서 간편하게 내 반려동물을 위한 완벽한 식단을 규칙적으로 받아보세요
+                집에서 간편하게 내 반려동물을 위한 완벽한 식단을 규칙적으로
+                받아보세요
               </p>
               <div className={s.cont_body}>
                 <ul className={s.howtouse_box}>
@@ -518,20 +585,35 @@ export default function MainPage({ data }) {
                           alt="카드 이미지"
                           priority
                         /> */}
-                        <Use01 className={s.svg_pc} width='100%' height='100%' viewBox="0 0 375 375" />
-                        <Use01_m className={s.svg_m} width='100%' height='100%' viewBox="0 0 280 280" />
+                        <Use01
+                          className={s.svg_pc}
+                          width="100%"
+                          height="100%"
+                          viewBox="0 0 375 375"
+                        />
+                        <Use01_m
+                          className={s.svg_m}
+                          width="100%"
+                          height="100%"
+                          viewBox="0 0 280 280"
+                        />
                       </div>
                       <div className={s.details}>
                         <p className={s.title_1}>STEP 01</p>
                         <p className={s.title_2}>반려동물 정보 입력</p>
                         <p className={s.main_text}>
-                          정확한 레시피를 위해 반려동물의 정보를 입력해주세요. 프레시아워는 신선하고
-                          엄선된 재료를 바탕으로 반려동물의 맞춤형 신선사료를 추천 및 선택
+                          정확한 레시피를 위해 반려동물의 정보를 입력해주세요.
+                          프레시아워는 신선하고 엄선된 재료를 바탕으로
+                          반려동물의 맞춤형 신선사료를 추천 및 선택
                         </p>
                       </div>
                     </figure>
                   </li>
-                  <li data-aos="fade-up" data-aos-delay="100" data-aos-anchor="#trigger2" >
+                  <li
+                    data-aos="fade-up"
+                    data-aos-delay="100"
+                    data-aos-anchor="#trigger2"
+                  >
                     <figure className={s.card}>
                       <div className={`${s['img-wrap']} img-wrap`}>
                         {/* <Image
@@ -541,17 +623,26 @@ export default function MainPage({ data }) {
                           alt="카드 이미지"
                           priority
                         /> */}
-                        <Use02 className={s.svg_pc} width='100%' height='100%' viewBox="0 0 375 375" />
-                        <Use02_m className={s.svg_m} width='100%' height='100%' viewBox="0 0 280 280" />
-
+                        <Use02
+                          className={s.svg_pc}
+                          width="100%"
+                          height="100%"
+                          viewBox="0 0 375 375"
+                        />
+                        <Use02_m
+                          className={s.svg_m}
+                          width="100%"
+                          height="100%"
+                          viewBox="0 0 280 280"
+                        />
                       </div>
                       <div className={s.details}>
                         <p className={s.title_1}>STEP 02</p>
                         <p className={s.title_2}>맞춤형 신선사료 제작</p>
                         <p className={s.main_text}>
-                          내 반려동물에 딱 맞는 레시피로 신선한 맞춤형 자연식(생식/화식)을
-                          제작합니다. 내 반려동물에 맞는 한끼 정량으로 끼니별 급여가 가능하도록
-                          포장합니다.
+                          내 반려동물에 딱 맞는 레시피로 신선한 맞춤형
+                          자연식(생식/화식)을 제작합니다. 내 반려동물에 맞는
+                          한끼 정량으로 끼니별 급여가 가능하도록 포장합니다.
                         </p>
                       </div>
                     </figure>
@@ -566,16 +657,26 @@ export default function MainPage({ data }) {
                           alt="카드 이미지"
                           priority
                         /> */}
-                        <Use02 className={s.svg_pc} width='100%' height='100%' viewBox="0 0 375 375" />
-                        <Use02_m className={s.svg_m} width='100%' height='100%' viewBox="0 0 280 280" />
+                        <Use02
+                          className={s.svg_pc}
+                          width="100%"
+                          height="100%"
+                          viewBox="0 0 375 375"
+                        />
+                        <Use02_m
+                          className={s.svg_m}
+                          width="100%"
+                          height="100%"
+                          viewBox="0 0 280 280"
+                        />
                       </div>
                       <div className={s.details}>
                         <p className={s.title_1}>STEP 02</p>
                         <p className={s.title_2}>맞춤형 신선사료 제작</p>
                         <p className={s.main_text}>
-                          내 반려동물에 딱 맞는 레시피로 신선한 맞춤형 자연식(생식/화식)을
-                          제작합니다. 내 반려동물에 맞는 한끼 정량으로 끼니별 급여가 가능하도록
-                          포장합니다.
+                          내 반려동물에 딱 맞는 레시피로 신선한 맞춤형
+                          자연식(생식/화식)을 제작합니다. 내 반려동물에 맞는
+                          한끼 정량으로 끼니별 급여가 가능하도록 포장합니다.
                         </p>
                       </div>
                     </figure>
@@ -590,15 +691,25 @@ export default function MainPage({ data }) {
                           alt="카드 이미지"
                           priority
                         /> */}
-                        <Use03 className={s.svg_pc} width='100%' height='100%' viewBox="0 0 375 375" />
-                        <Use03_m className={s.svg_m} width='100%' height='100%' viewBox="0 0 280 280" />
+                        <Use03
+                          className={s.svg_pc}
+                          width="100%"
+                          height="100%"
+                          viewBox="0 0 375 375"
+                        />
+                        <Use03_m
+                          className={s.svg_m}
+                          width="100%"
+                          height="100%"
+                          viewBox="0 0 280 280"
+                        />
                       </div>
                       <div className={s.details}>
                         <p className={s.title_1}>STEP 03</p>
                         <p className={s.title_2}>정기구독 배송</p>
                         <p className={s.main_text}>
-                          급속냉동한 제품을 꼼꼼하게 포장해 고객님의 문앞까지 배송합니다. 원하는
-                          날짜에 맞춰 정기 배송 서비스
+                          급속냉동한 제품을 꼼꼼하게 포장해 고객님의 문앞까지
+                          배송합니다. 원하는 날짜에 맞춰 정기 배송 서비스
                         </p>
                       </div>
                     </figure>
@@ -629,17 +740,19 @@ export default function MainPage({ data }) {
           </section>
         </Wrapper>
       </Layout>
-      {data?.popupDtoList.length > 0 && <Modal_Popup popupData={data?.popupDtoList}></Modal_Popup>}
+      {data?.popupDtoList.length > 0 && (
+        <Modal_Popup popupData={data?.popupDtoList}></Modal_Popup>
+      )}
     </>
   );
 }
 
-export async function getServerSideProps({req}) {
+export async function getServerSideProps({ req }) {
   let DATA = null;
   const apiUrl = '/api/home';
   let homeApi_res = null;
   const token = getTokenFromServerSide(req) || null;
-  
+
   try {
     homeApi_res = await axios
       .get(apiUrl, {
@@ -652,7 +765,7 @@ export async function getServerSideProps({req}) {
         // // console.log(res);
         return res;
       })
-      .catch ((err) => {
+      .catch((err) => {
         // // console.log(err.response)
         return err.response;
       });
@@ -674,7 +787,7 @@ export async function getServerSideProps({req}) {
                 mobileFilename: list.mobileFilename,
                 mobileImageUrl: list.mobileImageUrl,
                 mobileLinkUrl: list.mobileLinkUrl,
-                targets:list.targets
+                targets: list.targets,
               }))
             : [],
         recipeDtoList:
@@ -692,18 +805,19 @@ export async function getServerSideProps({req}) {
               }))
             : [],
         queryBestReviewsDtoList: data.queryBestReviewsDtoList || [],
-        popupDtoList: data.popupBannerDtoList?.map((list)=>({
-          id: list.id,
-          position: list.position,
-          name: list.name,
-          leakedOrder:list.leakedOrder,
-          pcFilename:list.pcFilename,
-          pcImageUrl:list.pcImageUrl,
-          pcLinkUrl:list.pcLinkUrl,
-          mobileFilename:list.mobileFilename,
-          mobileImageUrl:list.mobileImageUrl,
-          mobileLinkUrl:list.mobileLinkUrl,
-        })) || [],
+        popupDtoList:
+          data.popupBannerDtoList?.map((list) => ({
+            id: list.id,
+            position: list.position,
+            name: list.name,
+            leakedOrder: list.leakedOrder,
+            pcFilename: list.pcFilename,
+            pcImageUrl: list.pcImageUrl,
+            pcLinkUrl: list.pcLinkUrl,
+            mobileFilename: list.mobileFilename,
+            mobileImageUrl: list.mobileImageUrl,
+            mobileLinkUrl: list.mobileLinkUrl,
+          })) || [],
       };
     }
   } catch (err) {
