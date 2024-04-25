@@ -111,8 +111,6 @@ export default function MainPage({ data }) {
     }
   });
 
-  // RENEWAL
-
   return (
     <>
       <MetaTitle title="바프독" />
