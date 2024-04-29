@@ -145,7 +145,10 @@ export default function DeliveryOnSellPage() {
       // STEP 1: 주문 발송 api에 필요한 배송 정보 조회
       const url = '/api/admin/deliveries/info';
       const body = {
-        orderIdList: selectedOrderIdList,
+        orderList: selectedOrderIdList.map((orderId) => ({
+          orderId: orderId,
+          selectOptionList: null,
+        })),
       };
 
       const res = await postObjData(url, body);
