@@ -1,9 +1,10 @@
-@import "/styles/global/rem";
-@import "/styles/global/guide";
+@import '/styles/global/rem';
+@import '/styles/global/guide';
 
-
-.tag{
-  display:inline-flex; align-items: center; justify-content: center;
+.tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-weight: 500;
   border-radius: rem(30);
   padding: rem(5) rem(8) !important;
@@ -11,18 +12,25 @@
   box-sizing: border-box;
   color: #fff;
   @include char(l14);
-  cursor:default;
+  cursor: default;
   white-space: nowrap;
   background-color: #333;
 
-  &.SUBSCRIBING {
-    background-color: #219F94;
-  }
   &.BEFORE_PAYMENT {
     background-color: #ababab;
+  }
+  &.SUBSCRIBING {
+    background-color: #219f94;
   }
   &.SUBSCRIBE_PENDING {
     background-color: #6f6ac9;
   }
 
+  &.SURVEY_COMPLETED {
+    background-color: #606060;
+  }
+
+  &.SUBSCRIBE_CANCEL {
+    background-color: #7d569b;
+  }
 }
