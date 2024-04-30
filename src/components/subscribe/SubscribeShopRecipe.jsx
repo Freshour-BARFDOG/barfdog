@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import s from '/src/pages/order/subscribeShop/index.module.scss';
-import {ItemRecommendlabel, ItemSoldOutLabel} from '/src/components/atoms/ItemLabel';
+import {
+  ItemRecommendlabel,
+  ItemSoldOutLabel,
+} from '/src/components/atoms/ItemLabel';
 import Image from 'next/image';
 import { subscribePlanType } from '/store/TYPE/subscribePlanType';
 import 'swiper/css';
@@ -40,7 +43,9 @@ const swiperSettings = {
 // ! 기존 반려견이 '구독 중 또는 건너뛰기 중'이고, 설문결과 -> 맞춤플랜확인하기로 해당 컴포넌트 접근했을 때, 기존 recipe을 초기값이 selected되도록 해달라고 요청할 경우 => '현재는 불가함'
 // ! 이유: 초기 recipe input타입이 checkbox / radio 에서, 초기값설정이 제대로 안 먹힘 (완전 초기에 input부터 설정을 다시 건드려야함)
 export const SubscribeShopRecipe = ({ name, info, form, setForm }) => {
-  const selectedRecipe = info.recipeInfoList?.filter((rc) => form.recipeIdList.indexOf(rc.id) >= 0);
+  const selectedRecipe = info.recipeInfoList?.filter(
+    (rc) => form.recipeIdList.indexOf(rc.id) >= 0,
+  );
   const selectedRecipeNames = selectedRecipe?.map((rc) => rc.name).join(',');
   const selectedIngredientList = selectedRecipe
     ?.map((rc) => rc.ingredientList)
@@ -50,22 +55,21 @@ export const SubscribeShopRecipe = ({ name, info, form, setForm }) => {
     ?.filter((ingr, i) => selectedIngredientList.indexOf(ingr) === i)
     .join(', ');
 
-  
   const [initialize, setInitialize] = useState(false);
   const [selectedCheckbox, setSelectedCheckbox] = useState({}); // * 풀플랜: 최대 2가지 레시피 선택 가능 (Checkbox Input) // ex.{터키비프: true}
   const [selectedRadio, setSelectedRadio] = useState(null); // * 그 외 플랜: 1가지 레시피 선택 가능 (Radio Input)
   const [inputType, setInputType] = useState(null);
 
-  
   useEffect(() => {
     // Recipe Input 타입 변환
-    const type = form.plan === subscribePlanType.FULL.NAME ? 'checkbox' : 'radio';
+    const type =
+      form.plan === subscribePlanType.FULL.NAME ? 'checkbox' : 'radio';
     setInputType(type);
     // 플랜이 변경되었을 경우, Recipe Value And Input 초기화
     setInitialize(true);
-    setForm(prevState => ({
+    setForm((prevState) => ({
       ...prevState,
-      [name]: []
+      [name]: [],
     }));
   }, [form.plan]);
 
@@ -95,7 +99,9 @@ export const SubscribeShopRecipe = ({ name, info, form, setForm }) => {
       )[0]?.id;
       const val = selectedCheckbox[key];
       val && selectedCheckboxCount++;
-      val ? selectedIdList.push(selectedId) : selectedIdList?.filter((id) => id !== selectedId);
+      val
+        ? selectedIdList.push(selectedId)
+        : selectedIdList?.filter((id) => id !== selectedId);
     });
     const maxSelectedCheckboxCount = 2;
     const isOverSelected = selectedCheckboxCount > maxSelectedCheckboxCount;
@@ -143,15 +149,18 @@ export const SubscribeShopRecipe = ({ name, info, form, setForm }) => {
             <div className={s.color_box_row_2}>
               {info.inedibleFood !== 'NONE' && info.inedibleFood && (
                 <>
-                  <em>{info.inedibleFood}</em>에 못먹는 음식으로 체크해 주셨네요!&nbsp;
+                  <em>{info.inedibleFood}</em>에 못먹는 음식으로 체크해
+                  주셨네요!&nbsp;
                   <br />
                 </>
               )}
-            
-              <em>{selectedRecipeNames}</em> 레시피에는 <em>&lsquo;{curIngredient}&rsquo;</em>
-              {checkStringUnderConsonant(curIngredient) ? '이' : '가'} 들어가 있습니다.
+              <em>{selectedRecipeNames}</em> 레시피에는{' '}
+              <em>&lsquo;{curIngredient}&rsquo;</em>
+              {checkStringUnderConsonant(curIngredient) ? '이' : '가'} 들어가
+              있습니다.
               <br />
-              반려견에게 알레르기를 유발할 수 있으니 레시피 선택에 유의해 주시기 바랍니다.
+              반려견에게 알레르기를 유발할 수 있으니 레시피 선택에 유의해 주시기
+              바랍니다.
             </div>
           </div>
         </div>
@@ -195,7 +204,11 @@ export const SubscribeShopRecipe = ({ name, info, form, setForm }) => {
                 <p className={s.row_3}>{rc.description}</p>
                 <p className={s.row_4}>
                   <Link href="/recipes" passHref>
-                    <a target={'_blank'} rel={'noreferrer'} onClick={onPopupHandler}>
+                    <a
+                      target={'_blank'}
+                      rel={'noreferrer'}
+                      onClick={onPopupHandler}
+                    >
                       더 알아보기
                     </a>
                   </Link>

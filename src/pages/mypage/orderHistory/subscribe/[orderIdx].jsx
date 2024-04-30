@@ -389,7 +389,10 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
                   <span>핸드폰</span>
                   <span>
                     {data?.orderDto.recipientPhone
-                      .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, '$1-$2-$3')
+                      .replace(
+                        /^([0-9*]{0,3})([0-9*]{0,4})([0-9*]{0,4})$/g,
+                        '$1-$2-$3',
+                      )
                       .replace(/\-{1,2}$/g, '')}
                   </span>
 
