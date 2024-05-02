@@ -45,6 +45,7 @@ const ItemList = ({ item, number }) => {
         : '수유 중', // [HEALTHY, NEED_DIET, OBESITY, PREGNANT, LACTATING]
     oldDog: item.oldDog ? 'Y' : 'N',
     neutralization: item.neutralization ? 'Y' : 'N',
+    representative: item.representative ? 'Y' : 'N',
   };
 
   const onPopupHandler = (e) => {
@@ -79,7 +80,7 @@ const ItemList = ({ item, number }) => {
       <span>{DATA.weight}</span>
       <span>{DATA.dogStatus}</span>
       <span>{DATA.oldDog}</span>
-      <span>{DATA.neutralization}</span>
+      <span>{DATA.representative}</span>
     </li>
   );
 };

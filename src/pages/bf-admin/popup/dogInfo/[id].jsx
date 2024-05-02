@@ -423,9 +423,16 @@ export default function Popup_DogDetailPage({ data, dogIdx }) {
                             <span>
                               {formValues.subscribeStatus === 'BEFORE_PAYMENT'
                                 ? '결제 전'
-                                : 'SUBSCRIBING'
+                                : formValues.subscribeStatus ===
+                                  'SURVEY_COMPLETED'
+                                ? '설문 완료'
+                                : formValues.subscribeStatus ===
+                                  'SUBSCRIBE_CANCEL'
+                                ? '구독 취소'
+                                : formValues.subscribeStatus === 'SUBSCRIBING'
                                 ? '구독 중'
-                                : 'SUBSCRIBE_PENDING'
+                                : formValues.subscribeStatus ===
+                                  'SUBSCRIBE_PENDING'
                                 ? '구독 보류'
                                 : '관리자 구독'}
                             </span>

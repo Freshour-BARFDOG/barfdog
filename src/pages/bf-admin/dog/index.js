@@ -20,7 +20,7 @@ const initialSearchValues = {
 };
 
 function ManageDogPage() {
-  const getListApiUrl = '/api/admin/search/dogs';
+  const getListApiUrl = '/api/admin/dogs';
   const searchPageSize = 10;
   const apiDataQueryString = 'queryDogWithMemberAndSubscribeDtoList';
 
