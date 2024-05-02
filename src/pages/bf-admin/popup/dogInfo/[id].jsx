@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
+import Icon_Checked from '/public/img/icon/icon_checked.svg';
 import s from './dogInfo.module.scss';
+import pc from '/src/components/atoms/pureCheckbox.module.scss';
 import { useModalContext } from '/store/modal-context';
 import PopupWrapper from '/src/components/popup/PopupWrapper';
 import {
@@ -26,10 +28,17 @@ import filter_onlyNumber from '/util/func/filter_onlyNumber';
 import filter_extraIntegerNumberZero from '/util/func/filter_extraIntegerNumberZero';
 import filter_ints from '/util/func/filter_ints';
 import filter_demicals from '/util/func/filter_demicals';
+import { useSubscribeInfo } from '/util/hook/useSubscribeInfo';
+import { subscribePlanType } from '/store/TYPE/subscribePlanType';
+import { useSubscribePlanInfo } from '/util/hook/useSubscribePlanInfo';
+import { useSubscribeRecipeInfo } from '/util/hook/useSubscribeRecipeInfo';
+import { calcOneMealGramsWithRecipeInfo } from '/util/func/subscribe/calcOneMealGramsWithRecipeInfo';
+import { calcSubscribePrice } from '/util/func/subscribe/calcSubscribePrices';
+import { valid_isTheSameArray } from '/util/func/validation/validationPackage';
+import { postObjData } from '../../../api/reqData';
 
-export default function Popup_DogDetailPage({ data, dogIdx }) {
-  const getDogInfoApiUrl = `/api/dogs/${dogIdx}`;
-  const apiDataQueryDog = 'dogDto';
+export default function Popup_DogDetailPage({ DATA, dogIdx }) {
+  console.log('!!!!!!DATA!!!!!!!', DATA);
 
   const mct = useModalContext();
   const router = useRouter();
@@ -40,8 +49,52 @@ export default function Popup_DogDetailPage({ data, dogIdx }) {
   const [tempValues, setTempValues] = useState({});
   const [modalMessage, setModalMessage] = useState('');
   const [submitState, setSubmitState] = useState(null);
+  const [submitted, setSubmitted] = useState(false);
 
-  // * ------ MEMBER ------ *
+  const subscribeInfo = useSubscribeInfo(DATA.dogDto.subscribeId);
+  const currentPlanName = subscribeInfo?.info.planName;
+  const subscribePlanInfo = useSubscribePlanInfo();
+  const recipeInfo = useSubscribeRecipeInfo();
+  // console.log('subscribePlanInfo>>>>>', subscribePlanInfo);
+  // console.log('recipeInfo>>>>>', recipeInfo);
+  console.log('subscribeInfo>>>>>', subscribeInfo);
+  // console.log('DATA.dogDto.subscribeId>>>>>', DATA.dogDto.subscribeId);
+  //! [수정] 여기로 구독정보 가져오기!
+
+  const [oneMealGramsForm, setOneMealGramsForm] = useState({
+    current: [],
+    next: [],
+  });
+
+  // const initialCategory = options[0].value || '';
+
+  // 플랜/레시피 body 예정
+  const [selectedCategory, setSelectedCategory] = useState({
+    plan: DATA.plan || '',
+    recipeIdList: [],
+    nextPaymentPrice: null,
+    recipeNameList: DATA.recipes || [],
+  });
+
+  const currentOneMealGrams = useCallback(
+    calcOneMealGramsWithRecipeInfo({
+      selectedRecipeIds: selectedCategory.recipeIdList,
+      allRecipeInfos: recipeInfo?.data || [],
+      oneDayRecommendKcal: DATA.surveyInfoData.foodAnalysis.oneDayRecommendKcal,
+    }).map((recipe) => recipe.oneMealGram),
+    [recipeInfo.loading, subscribePlanInfo.loading, DATA],
+  );
+
+  useEffect(() => {
+    if (oneMealGramsForm.current.length === 0) {
+      setOneMealGramsForm((prevState) => ({
+        ...prevState,
+        current: currentOneMealGrams,
+      }));
+    }
+  }, [currentOneMealGrams]);
+
+  // * ------ [ GET ] Member, Recipes ------ *
   useEffect(() => {
     (async () => {
       try {
@@ -49,67 +102,83 @@ export default function Popup_DogDetailPage({ data, dogIdx }) {
           ...prevState,
           fetching: true,
         }));
-        const res = await getData(getDogInfoApiUrl);
+
         let initialValues = [];
-        if (res.data[apiDataQueryDog]) {
-          const DATA = res.data[apiDataQueryDog];
-          // console.log('DATA', DATA);
 
-          const getMemberInfoApiUrl = `/api/admin/members/${DATA.memberId}`;
-          const memberResponse = await getData(getMemberInfoApiUrl);
-          const MEMBER_DATA = memberResponse.data.memberDto;
-          // console.log('MEMBER_DATA', MEMBER_DATA);
+        const getMemberInfoApiUrl = `/api/admin/members/${DATA.dogDto.memberId}`;
+        const memberResponse = await getData(getMemberInfoApiUrl);
+        const MEMBER_DATA = memberResponse.data.memberDto;
+        // console.log('MEMBER_DATA', MEMBER_DATA);
 
-          // 다음 결제일 포맷변환 (0000년 0월 0일)
-          const nextPaymentDate = new Date(DATA.nextPaymentDate);
-          const year = nextPaymentDate.getFullYear();
-          const month = (nextPaymentDate.getMonth() + 1)
-            .toString()
-            .padStart(2, '0');
-          const day = nextPaymentDate.getDate().toString().padStart(2, '0');
+        const matchedRecipeIds = DATA.recipes.map(
+          (recipeName) =>
+            DATA.recipesDetailInfo.find((recipe) => recipe.name === recipeName)
+              ?.id,
+        );
 
-          const formattedNextPaymentDate = `${year}-${month}-${day}`;
+        // 초기값 설정
+        setSelectedCategory((prevState) => ({
+          ...prevState,
+          recipeIdList: matchedRecipeIds,
+          nextPaymentPrice:
+            DATA.subscribeDetailInfo.subscribeDto.nextPaymentDat,
+        }));
 
-          initialValues = {
-            id: DATA.id,
-            address: {
-              zipcode: MEMBER_DATA.address?.zipcode,
-              city: MEMBER_DATA.address?.city,
-              street: MEMBER_DATA.address?.street,
-              detailAddress: MEMBER_DATA.address?.detailAddress,
-            },
-            phoneNumber: transformPhoneNumber(MEMBER_DATA.phoneNumber),
-            birthday: transformBirthDay(MEMBER_DATA.birthday),
-            memberName: MEMBER_DATA.name,
-            email: MEMBER_DATA.email,
-            subscribeId: DATA.subscribeId,
-            subscribeCount: DATA.subscribeCount,
-            subscribeStatus: DATA.subscribeStatus,
-            subscribeCount: DATA.subscribeCount,
-            nextPaymentDate: DATA.nextPaymentDate && formattedNextPaymentDate,
-            nextPaymentPrice: DATA.nextPaymentPrice,
-            name: DATA.name,
-            gender: DATA.gender,
-            birth: DATA.birth,
-            oldDog: DATA.oldDog,
-            dogType: DATA.dogType,
-            dogSize: DATA.dogSize,
-            weight: DATA.weight,
-            neutralization: true,
-            activityLevel: DATA.activityLevel,
-            walkingCountPerWeek: DATA.walkingCountPerWeek,
-            walkingTimePerOneTime: DATA.walkingTimePerOneTime,
-            dogStatus: DATA.dogStatus,
-            snackCountLevel: DATA.snackCountLevel,
-            inedibleFood: DATA.inedibleFood,
-            inedibleFoodEtc: DATA.inedibleFoodEtc,
-            recommendRecipeId: DATA.recommendRecipeId,
-            oneMealRecommendGram: DATA.oneMealRecommendGram,
-            caution: DATA.caution,
-          };
-        } else {
-          alert('데이터를 가져올 수 없습니다.');
-        }
+        // *** 다음 결제일 포맷변환 (0000년 0월 0일)
+        const nextPaymentDate = new Date(
+          DATA.subscribeDetailInfo.subscribeDto.nextPaymentDate,
+        );
+        const year = nextPaymentDate.getFullYear();
+        const month = (nextPaymentDate.getMonth() + 1)
+          .toString()
+          .padStart(2, '0');
+        const day = nextPaymentDate.getDate().toString().padStart(2, '0');
+
+        const formattedNextPaymentDate = `${year}-${month}-${day}`;
+
+        initialValues = {
+          id: DATA.dogDto.id,
+          address: {
+            zipcode: MEMBER_DATA.address?.zipcode,
+            city: MEMBER_DATA.address?.city,
+            street: MEMBER_DATA.address?.street,
+            detailAddress: MEMBER_DATA.address?.detailAddress,
+          },
+          phoneNumber: transformPhoneNumber(MEMBER_DATA.phoneNumber),
+          birthday: transformBirthDay(MEMBER_DATA.birthday),
+          memberName: MEMBER_DATA.name,
+          email: MEMBER_DATA.email,
+          subscribeId: DATA.dogDto.subscribeId,
+          subscribeCount: DATA.subscribeDetailInfo.subscribeDto.subscribeCount,
+          subscribeStatus:
+            DATA.subscribeDetailInfo.subscribeDto.subscribeStatus,
+          subscribeCount: DATA.subscribeDetailInfo.subscribeDto.subscribeCount,
+          nextPaymentDate: formattedNextPaymentDate,
+          // DATA.subscribeDetailInfo.subscribeDto.nextPaymentDate &&
+          nextPaymentPrice:
+            DATA.subscribeDetailInfo.subscribeDto.nextPaymentPrice,
+          name: DATA.dogDto.name,
+          gender: DATA.dogDto.gender,
+          birth: DATA.dogDto.birth,
+          oldDog: DATA.dogDto.oldDog,
+          dogType: DATA.dogDto.dogType,
+          dogSize: DATA.dogDto.dogSize,
+          weight: DATA.dogDto.weight,
+          neutralization: true,
+          activityLevel: DATA.dogDto.activityLevel,
+          walkingCountPerWeek: DATA.dogDto.walkingCountPerWeek,
+          walkingTimePerOneTime: DATA.dogDto.walkingTimePerOneTime,
+          dogStatus: DATA.dogDto.dogStatus,
+          snackCountLevel: DATA.dogDto.snackCountLevel,
+          inedibleFood: DATA.dogDto.inedibleFood,
+          inedibleFoodEtc: DATA.dogDto.inedibleFoodEtc,
+          recommendRecipeId: DATA.dogDto.recommendRecipeId,
+          oneMealRecommendGram: DATA.dogDto.oneMealRecommendGram,
+          caution: DATA.dogDto.caution,
+        };
+        // } else {
+        //   alert('데이터를 가져올 수 없습니다.');
+        // }
         setFormValues(initialValues);
       } catch (err) {
         console.error(err);
@@ -123,11 +192,68 @@ export default function Popup_DogDetailPage({ data, dogIdx }) {
     })();
   }, [dogIdx]);
 
+  //*** 구독플랜 금액 계산
+  // const calcSubscribePlanPaymentPrice = useCallback(
+  //   (planName) => {
+  //     if (
+  //       !selectedCategory.recipeIdList[0] ||
+  //       !planName ||
+  //       recipeList.length === 0
+  //     ) {
+  //       return {
+  //         perPack: 0,
+  //         originPrice: 0,
+  //         salePrice: 0,
+  //       };
+  //     }
+  //     const discountPercent = subscribePlanInfo.planDiscountPercent[planName];
+  //     const oneDayRecommendKcal =
+  //       DATA.surveyInfoData.foodAnalysis.oneDayRecommendKcal;
+  //     console.log('oneDayRecommendKcal=====', oneDayRecommendKcal);
+
+  //     //! [여기부터 수정]
+  //     const pricePerGrams = DATA.recipesDetailInfo
+  //       ?.filter(
+  //         (recipe) => selectedCategory.recipeIdList.indexOf(recipe.id) >= 0,
+  //       )
+  //       .map((recipe) => recipe.pricePerGram);
+
+  //     const nextOneMealGrams = calcOneMealGramsWithRecipeInfo({
+  //       selectedRecipeIds: selectedCategory.recipeIdList,
+  //       allRecipeInfos: recipeInfo.data,
+  //       oneDayRecommendKcal: oneDayRecommendKcal,
+  //     }).map((recipe) => recipe.oneMealGram);
+
+  //     const isSameArray = valid_isTheSameArray(
+  //       oneMealGramsForm.next,
+  //       nextOneMealGrams,
+  //     );
+
+  //     // // console.log(oneMealGramsForm.next, nextOneMealGrams, "\n", isSameArray);
+  //     if (!isSameArray) {
+  //       setOneMealGramsForm((prevState) => ({
+  //         ...prevState,
+  //         next: nextOneMealGrams,
+  //       }));
+  //     }
+
+  //     return calcSubscribePrice({
+  //       discountPercent,
+  //       oneMealGrams: nextOneMealGrams,
+  //       planName,
+  //       pricePerGrams,
+  //     });
+  //   },
+  //   [
+  //     selectedCategory.plan,
+  //     selectedCategory.recipeIdList,
+  //   ],
+  // );
+
   const onInputChange = (e) => {
     const { value } = e.currentTarget;
     setTempValues((prevState) => ({
       ...prevState,
-      // birthday: value,
       nextPaymentDate: value,
     }));
   };
@@ -198,7 +324,7 @@ export default function Popup_DogDetailPage({ data, dogIdx }) {
     }
   };
 
-  // 다음 결제일 변경 버튼
+  //*** 다음 결제일 변경 버튼
   const onChangeNextPaymentDate = () => {
     // console.log('newNextPaymentDate', tempValues.nextPaymentDate);
 
@@ -247,15 +373,12 @@ export default function Popup_DogDetailPage({ data, dogIdx }) {
           onShowModal(
             'API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.',
           );
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 1000);
         }
       })();
     }
   };
 
-  // 수정하기 버튼
+  //*** 반려견 정보 수정하기 버튼
   const onSubmit = async (confirm) => {
     if (!confirm || submitState === true) {
       return setActiveConfirmModal(false);
@@ -267,7 +390,7 @@ export default function Popup_DogDetailPage({ data, dogIdx }) {
         submit: true,
       }));
       let modalMessage;
-      const apiUrl = `/api/admin/update/dog/${dogIdx}`;
+      const apiUrl = `/api/admin/dog/${dogIdx}`;
       const {
         phoneNumber,
         email,
@@ -332,7 +455,100 @@ export default function Popup_DogDetailPage({ data, dogIdx }) {
     setModalMessage('');
   };
 
-  // console.log('formValues', formValues);
+  /////////////////////////////
+
+  const onClickHandler = (e, planName) => {
+    setSelectedCategory((prevState) => ({
+      ...prevState,
+      plan: planName,
+    }));
+  };
+
+  const onChangeHandler = (e, label) => {
+    let updatedRecipeNameList = [...selectedCategory.recipeNameList];
+    let updatedRecipeIdList = [...selectedCategory.recipeIdList];
+    const labelIndex = updatedRecipeNameList.indexOf(label);
+    const matchedRecipeId = DATA.recipesDetailInfo.find(
+      (recipe) => recipe.name === label,
+    )?.id;
+
+    if (labelIndex === -1) {
+      updatedRecipeNameList.push(label);
+      updatedRecipeIdList.push(matchedRecipeId);
+    } else {
+      updatedRecipeNameList.splice(labelIndex, 1);
+      updatedRecipeIdList = updatedRecipeIdList.filter(
+        (recipeId) => recipeId !== matchedRecipeId,
+      );
+    }
+
+    setSelectedCategory((prevState) => ({
+      ...prevState,
+      recipeNameList: updatedRecipeNameList,
+      recipeIdList: updatedRecipeIdList,
+    }));
+  };
+
+  const onSuccessChangeSubscribeOrder = () => {
+    setIsLoading({ reload: true });
+    window.location.reload();
+  };
+  if (isLoading.reload || subscribePlanInfo.isLoading) {
+    return <FullScreenLoading opacity={1} />;
+  }
+
+  //*** 레시피 / 플랜 변경하기
+  const onChangePlanRecipeHandler = async () => {
+    if (submitted) return;
+
+    // validation
+    const currentRecipeCount = selectedCategory.recipeIdList.length;
+    if (
+      subscribePlanType[selectedCategory.plan].maxRecipeCount <
+      currentRecipeCount
+    ) {
+      mct.alertShow(
+        '구독 중인 레시피 개수가 변경될 플랜의 최대 선택 가능한 레시피 개수보다 많습니다.',
+      );
+      return;
+    } else if (currentRecipeCount === 0) {
+      mct.alertShow('레시피를 선택해주세요.');
+      return;
+    }
+
+    const body = {
+      plan: selectedCategory.plan,
+      nextPaymentPrice: subscribeInfo.price[selectedCategory.plan].salePrice, // 선택된 플랜의 판매가격
+      recipeIdList: selectedCategory.recipeIdList,
+    };
+
+    if (!body.nextPaymentPrice)
+      return mct.alertShow('결제금액 계산오류가 발생하였습니다.');
+
+    try {
+      setSubmitted(true);
+
+      const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/planRecipes`;
+      const res = await postObjData(url, body);
+
+      if (res.isDone) {
+        mct.alertShow(
+          '플랜 변경이 완료되었습니다.',
+          onSuccessChangeSubscribeOrder,
+        );
+      } else {
+        mct.alertShow(`데이터 전송 실패\n${res.error}`);
+        setSubmitted(false);
+      }
+      setActiveConfirmModal(false);
+    } catch (err) {
+      console.error('err: ', err);
+    }
+  };
+
+  console.log('formValues', formValues);
+  console.log('setSelectedCategory', selectedCategory);
+  // console.log('formValues.subscribeStatus', formValues.subscribeStatus);
 
   return (
     <>
@@ -499,14 +715,124 @@ export default function Popup_DogDetailPage({ data, dogIdx }) {
                           </div>
                         </div>
                       </li>
+
+                      <li className={`${s['t-row']} ${s['fullWidth']}`}>
+                        <div className={`${s['t-box']}`}>
+                          <div
+                            className={`${s.innerBox} ${s.label} ${s.plan_table}`}
+                          >
+                            <span>플랜 / 레시피</span>
+                          </div>
+
+                          <div
+                            className={`${s.innerBox} ${s.cont} ${s.plan_table} ${s.plan_content}`}
+                          >
+                            <div className={`${s.plan_checkbox}`}>
+                              <p>플랜</p>
+                              {DATA.recipesDetailInfo.length > 0 && (
+                                <ul
+                                  className={'grid-checkbox-wrap'}
+                                  style={{ maxWidth: '400px' }}
+                                >
+                                  {Object.keys(
+                                    subscribePlanInfo.planDiscountPercent,
+                                  ).map((plan, index) => {
+                                    return (
+                                      <>
+                                        <div
+                                          className={`${s['checkbox-wrap']}`}
+                                        >
+                                          <label
+                                            htmlFor={plan}
+                                            className={`${s.checkbox}`}
+                                            onClick={(e) =>
+                                              onClickHandler(e, plan)
+                                            }
+                                          >
+                                            <input
+                                              type="radio"
+                                              id={plan}
+                                              value={
+                                                selectedCategory.plan === plan
+                                              }
+                                              style={{ display: 'none' }}
+                                              checked={
+                                                selectedCategory.plan === plan
+                                              }
+                                            />
+                                            <span className={s.fakeCheckBox} />
+                                            <span>{plan}</span>
+                                          </label>
+                                          {/* {errorMessage} */}
+                                        </div>
+                                      </>
+                                    );
+                                  })}
+                                </ul>
+                              )}
+                            </div>
+
+                            <div className={`${s.plan_checkbox}`}>
+                              <p>레시피</p>
+                              {DATA.recipesDetailInfo.length > 0 && (
+                                <ul
+                                  className={'grid-checkbox-wrap'}
+                                  style={{ maxWidth: '400px' }}
+                                >
+                                  {DATA.recipesDetailInfo.map(
+                                    (recipe, index) => {
+                                      const isChecked =
+                                        selectedCategory.recipeNameList.includes(
+                                          recipe.name,
+                                        );
+                                      return (
+                                        <>
+                                          <div
+                                            className={`${pc['checkbox-wrap']}`}
+                                          >
+                                            <label
+                                              htmlFor={recipe.name}
+                                              className={`${pc.checkbox}`}
+                                            >
+                                              <input
+                                                onChange={(e) =>
+                                                  onChangeHandler(
+                                                    e,
+                                                    recipe.name,
+                                                  )
+                                                }
+                                                type="checkbox"
+                                                id={recipe.name}
+                                                checked={isChecked}
+                                              />
+                                              <span
+                                                className={pc.fakeCheckBox}
+                                              />
+                                              <span>{recipe.name}</span>
+                                            </label>
+                                            {/* {errorMessage} */}
+                                          </div>
+                                        </>
+                                      );
+                                    },
+                                  )}
+                                </ul>
+                              )}
+                            </div>
+
+                            <button
+                              className={`admin_btn line point basic_s ${s.recipe_change_btn}`}
+                              onClick={() => {
+                                onChangePlanRecipeHandler();
+                              }}
+                            >
+                              변경
+                            </button>
+                          </div>
+                        </div>
+                      </li>
                     </ul>
                   </li>
-
-                  {/* ------ SURVEY ------ */}
-                  {/* <div className={s['t-gram']}>
-                    <h4 className={s.title}>추천 그램수 :</h4>
-                    <div className={s.gram}></div>
-                  </div> */}
 
                   <br />
                   <li>
@@ -583,19 +909,65 @@ export default function Popup_DogDetailPage({ data, dogIdx }) {
 
 export async function getServerSideProps({ req, query }) {
   const { id: dogIdx } = query;
-
+  let DATA = null;
   let isMyDog = true;
 
+  // DATA: this Dog
   const getOneDogInfoApiUrl = `/api/dogs/${dogIdx}`;
   const dogInfoRes = await getDataSSR(req, getOneDogInfoApiUrl);
-  const data = dogInfoRes?.data || null;
-  if (!data || !isMyDog) {
+  const dogData = dogInfoRes?.data || null;
+  const dogDto = dogData?.dogDto || null;
+  const plan = dogData?.plan || null;
+  const recipes = dogData?.recipes || null;
+
+  // DATA: Recipes
+  const getRecipeInfoApiUrl = `/api/recipes`;
+  const recipeInfoRes = await getDataSSR(req, getRecipeInfoApiUrl);
+  const recipeInfoData = recipeInfoRes?.data;
+
+  // DATA: Survey Report
+  const getSurveyInfoApiUrl = `/api/dogs/${dogIdx}/surveyReportResult`;
+  const surveyInfoRes = await getDataSSR(req, getSurveyInfoApiUrl);
+  const surveyInfoData = surveyInfoRes?.data;
+
+  // DATA: Subscribe
+  const subscribeApiurl = `/api/subscribes/${dogData?.dogDto.subscribeId}`;
+  const subscribeInfoRes = await getDataSSR(req, subscribeApiurl);
+  const subscribeDetailInfo = subscribeInfoRes?.data;
+
+  if (dogData && recipeInfoData) {
+    const recipeIdList =
+      recipeInfoData._embedded?.recipeListResponseDtoList?.map((l) => l.id) ||
+      [];
+    const recipesDetailInfo = [];
+    for (const recipeId of recipeIdList) {
+      const apiUrl = `/api/recipes/${recipeId}`;
+      const res = await getDataSSR(req, apiUrl);
+      const data = res.data;
+      // console.log('recipeDatas>>>> ', data);
+      if (data) {
+        recipesDetailInfo.push({
+          ...data,
+          kcalPerGram: data.gramPerKcal, // gramPerKcal(X) -> KcalPerGram(O) : 고객사에서 전달받은 무게상수의 단위를 그대로 사용하였으나, 오류가 있어서 수정함.
+        });
+      }
+    }
+
+    DATA = {
+      dogDto,
+      plan,
+      recipes,
+      recipesDetailInfo,
+      surveyInfoData,
+      subscribeDetailInfo,
+    };
+  } else if (!dogData || !isMyDog) {
     return {
-      props: { data: null },
+      props: { DATA: null },
     };
   } else {
-    data.dogIdx = Number(dogIdx); // form submit 에 사용
+    dogData.dogIdx = Number(dogIdx); // form submit 에 사용
   }
 
-  return { props: { data, dogIdx } };
+  return { props: { DATA, dogIdx } };
 }
