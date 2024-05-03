@@ -44,31 +44,33 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
   const router = useRouter();
   const hasAlert = mct.hasAlert;
   const [activeConfirmModal, setActiveConfirmModal] = useState(false);
+  const [activeConfirmPlanChangeModal, setActiveConfirmPlanChangeModal] =
+    useState(false);
   const [isLoading, setIsLoading] = useState({});
   const [formValues, setFormValues] = useState({});
   const [tempValues, setTempValues] = useState({});
   const [modalMessage, setModalMessage] = useState('');
   const [submitState, setSubmitState] = useState(null);
   const [submitted, setSubmitted] = useState(false);
+  const [nextPriceText, setNextPriceText] = useState(
+    DATA.subscribeDetailInfo.subscribeDto.nextPaymentPrice,
+  );
 
   const subscribeInfo = useSubscribeInfo(DATA.dogDto.subscribeId);
   const currentPlanName = subscribeInfo?.info.planName;
   const subscribePlanInfo = useSubscribePlanInfo();
   const recipeInfo = useSubscribeRecipeInfo();
+
   // console.log('subscribePlanInfo>>>>>', subscribePlanInfo);
   // console.log('recipeInfo>>>>>', recipeInfo);
-  console.log('subscribeInfo>>>>>', subscribeInfo);
+  // console.log('subscribeInfo>>>>>', subscribeInfo);
   // console.log('DATA.dogDto.subscribeId>>>>>', DATA.dogDto.subscribeId);
-  //! [수정] 여기로 구독정보 가져오기!
 
   const [oneMealGramsForm, setOneMealGramsForm] = useState({
     current: [],
     next: [],
   });
 
-  // const initialCategory = options[0].value || '';
-
-  // 플랜/레시피 body 예정
   const [selectedCategory, setSelectedCategory] = useState({
     plan: DATA.plan || '',
     recipeIdList: [],
@@ -153,8 +155,9 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
           subscribeStatus:
             DATA.subscribeDetailInfo.subscribeDto.subscribeStatus,
           subscribeCount: DATA.subscribeDetailInfo.subscribeDto.subscribeCount,
-          nextPaymentDate: formattedNextPaymentDate,
-          // DATA.subscribeDetailInfo.subscribeDto.nextPaymentDate &&
+          nextPaymentDate:
+            DATA.subscribeDetailInfo.subscribeDto.nextPaymentDate &&
+            formattedNextPaymentDate,
           nextPaymentPrice:
             DATA.subscribeDetailInfo.subscribeDto.nextPaymentPrice,
           name: DATA.dogDto.name,
@@ -176,9 +179,6 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
           oneMealRecommendGram: DATA.dogDto.oneMealRecommendGram,
           caution: DATA.dogDto.caution,
         };
-        // } else {
-        //   alert('데이터를 가져올 수 없습니다.');
-        // }
         setFormValues(initialValues);
       } catch (err) {
         console.error(err);
@@ -190,65 +190,63 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
         fetching: false,
       }));
     })();
-  }, [dogIdx]);
+  }, [dogIdx, DATA]);
 
   //*** 구독플랜 금액 계산
-  // const calcSubscribePlanPaymentPrice = useCallback(
-  //   (planName) => {
-  //     if (
-  //       !selectedCategory.recipeIdList[0] ||
-  //       !planName ||
-  //       recipeList.length === 0
-  //     ) {
-  //       return {
-  //         perPack: 0,
-  //         originPrice: 0,
-  //         salePrice: 0,
-  //       };
-  //     }
-  //     const discountPercent = subscribePlanInfo.planDiscountPercent[planName];
-  //     const oneDayRecommendKcal =
-  //       DATA.surveyInfoData.foodAnalysis.oneDayRecommendKcal;
-  //     console.log('oneDayRecommendKcal=====', oneDayRecommendKcal);
+  const calcSubscribePlanPaymentPrice = useCallback(
+    (planName) => {
+      if (!selectedCategory.recipeIdList[0] || !planName || !recipeInfo.data) {
+        return {
+          perPack: 0,
+          originPrice: 0,
+          salePrice: 0,
+        };
+      }
+      const discountPercent = subscribePlanInfo.planDiscountPercent[planName];
+      const oneDayRecommendKcal =
+        DATA.surveyInfoData.foodAnalysis.oneDayRecommendKcal;
+      console.log('oneDayRecommendKcal=====', oneDayRecommendKcal);
 
-  //     //! [여기부터 수정]
-  //     const pricePerGrams = DATA.recipesDetailInfo
-  //       ?.filter(
-  //         (recipe) => selectedCategory.recipeIdList.indexOf(recipe.id) >= 0,
-  //       )
-  //       .map((recipe) => recipe.pricePerGram);
+      const pricePerGrams = DATA.recipesDetailInfo
+        ?.filter(
+          (recipe) => selectedCategory.recipeIdList.indexOf(recipe.id) >= 0,
+        )
+        .map((recipe) => recipe.pricePerGram);
 
-  //     const nextOneMealGrams = calcOneMealGramsWithRecipeInfo({
-  //       selectedRecipeIds: selectedCategory.recipeIdList,
-  //       allRecipeInfos: recipeInfo.data,
-  //       oneDayRecommendKcal: oneDayRecommendKcal,
-  //     }).map((recipe) => recipe.oneMealGram);
+      const nextOneMealGrams = calcOneMealGramsWithRecipeInfo({
+        selectedRecipeIds: selectedCategory.recipeIdList,
+        allRecipeInfos: recipeInfo.data,
+        oneDayRecommendKcal: oneDayRecommendKcal,
+      }).map((recipe) => recipe.oneMealGram);
 
-  //     const isSameArray = valid_isTheSameArray(
-  //       oneMealGramsForm.next,
-  //       nextOneMealGrams,
-  //     );
+      const isSameArray = valid_isTheSameArray(
+        oneMealGramsForm.next,
+        nextOneMealGrams,
+      );
 
-  //     // // console.log(oneMealGramsForm.next, nextOneMealGrams, "\n", isSameArray);
-  //     if (!isSameArray) {
-  //       setOneMealGramsForm((prevState) => ({
-  //         ...prevState,
-  //         next: nextOneMealGrams,
-  //       }));
-  //     }
+      // // console.log(oneMealGramsForm.next, nextOneMealGrams, "\n", isSameArray);
+      if (!isSameArray) {
+        setOneMealGramsForm((prevState) => ({
+          ...prevState,
+          next: nextOneMealGrams,
+        }));
+      }
 
-  //     return calcSubscribePrice({
-  //       discountPercent,
-  //       oneMealGrams: nextOneMealGrams,
-  //       planName,
-  //       pricePerGrams,
-  //     });
-  //   },
-  //   [
-  //     selectedCategory.plan,
-  //     selectedCategory.recipeIdList,
-  //   ],
-  // );
+      return calcSubscribePrice({
+        discountPercent,
+        oneMealGrams: nextOneMealGrams,
+        planName,
+        pricePerGrams,
+      });
+    },
+    [
+      selectedCategory.plan,
+      selectedCategory.recipeIdList,
+      recipeInfo,
+      subscribePlanInfo,
+      DATA,
+    ],
+  );
 
   const onInputChange = (e) => {
     const { value } = e.currentTarget;
@@ -326,8 +324,6 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
 
   //*** 다음 결제일 변경 버튼
   const onChangeNextPaymentDate = () => {
-    // console.log('newNextPaymentDate', tempValues.nextPaymentDate);
-
     if (
       !tempValues.nextPaymentDate ||
       formValues.nextPaymentDate === tempValues.nextPaymentDate
@@ -353,9 +349,9 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
           const data = {
             nextPaymentDate: yyyymmdd,
           };
-          console.log('PUT 요청 !', data);
+          // console.log('PUT 요청 !', data);
           const res = await putObjData(apiUrl, data);
-          console.log(res);
+          // console.log(res);
           // const resData = res.data.data;
           if (res.isDone) {
             alert('구독 결제일 변경이 완료되었습니다.');
@@ -390,7 +386,7 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
         submit: true,
       }));
       let modalMessage;
-      const apiUrl = `/api/admin/dog/${dogIdx}`;
+      const apiUrl = `/api/admin/dogs/${dogIdx}`;
       const {
         phoneNumber,
         email,
@@ -407,7 +403,7 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
         ...dataToSend
       } = formValues;
 
-      // console.log('dataToSend', dataToSend);
+      // console.log('dataToSend>>>>', dataToSend);
       const res = await putObjData(apiUrl, dataToSend);
 
       console.log(res);
@@ -498,6 +494,42 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
   }
 
   //*** 레시피 / 플랜 변경하기
+  const onSubmitPlanChange = async (confirm) => {
+    if (!confirm) {
+      return setActiveConfirmPlanChangeModal(false);
+    }
+
+    const body = {
+      plan: selectedCategory.plan,
+      nextPaymentPrice: nextPriceText,
+      // nextPaymentPrice: subscribeInfo.price[selectedCategory.plan].salePrice, // 선택된 플랜의 판매가격
+      recipeIdList: selectedCategory.recipeIdList,
+    };
+
+    if (!body.nextPaymentPrice)
+      return mct.alertShow('결제금액 계산오류가 발생하였습니다.');
+
+    try {
+      setSubmitted(true);
+
+      const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/planRecipes`;
+      const res = await postObjData(url, body);
+
+      if (res.isDone) {
+        // mct.alertShow(
+        //   '플랜 변경이 완료되었습니다.',
+        onSuccessChangeSubscribeOrder();
+        // );
+      } else {
+        mct.alertShow(`데이터 전송 실패\n${res.error}`);
+        setSubmitted(false);
+      }
+      setActiveConfirmModal(false);
+    } catch (err) {
+      console.error('err: ', err);
+    }
+  };
+
   const onChangePlanRecipeHandler = async () => {
     if (submitted) return;
 
@@ -514,41 +546,20 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
     } else if (currentRecipeCount === 0) {
       mct.alertShow('레시피를 선택해주세요.');
       return;
-    }
-
-    const body = {
-      plan: selectedCategory.plan,
-      nextPaymentPrice: subscribeInfo.price[selectedCategory.plan].salePrice, // 선택된 플랜의 판매가격
-      recipeIdList: selectedCategory.recipeIdList,
-    };
-
-    if (!body.nextPaymentPrice)
-      return mct.alertShow('결제금액 계산오류가 발생하였습니다.');
-
-    try {
-      setSubmitted(true);
-
-      const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/planRecipes`;
-      const res = await postObjData(url, body);
-
-      if (res.isDone) {
-        mct.alertShow(
-          '플랜 변경이 완료되었습니다.',
-          onSuccessChangeSubscribeOrder,
-        );
-      } else {
-        mct.alertShow(`데이터 전송 실패\n${res.error}`);
-        setSubmitted(false);
-      }
-      setActiveConfirmModal(false);
-    } catch (err) {
-      console.error('err: ', err);
+    } else {
+      // 최종계산된가격
+      const nextPaymentPrice = calcSubscribePlanPaymentPrice(
+        selectedCategory.plan,
+      ).salePrice;
+      setNextPriceText(nextPaymentPrice);
+      setActiveConfirmPlanChangeModal(true);
     }
   };
 
-  console.log('formValues', formValues);
-  console.log('setSelectedCategory', selectedCategory);
+  // console.log('formValues', formValues);
+  // console.log('setSelectedCategory', selectedCategory);
   // console.log('formValues.subscribeStatus', formValues.subscribeStatus);
+  // console.log('NextPriceText', nextPriceText);
 
   return (
     <>
@@ -663,13 +674,32 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
                           </div>
                         </div>
                       </li>
+
+                      {formValues.subscribeStatus === 'SUBSCRIBE_CANCEL' && (
+                        <li className={`${s['t-row']} ${s['fullWidth']}`}>
+                          <div className={s['t-box']}>
+                            <div className={`${s.innerBox} ${s.label}`}>
+                              <span>구독 취소 이유</span>
+                            </div>
+                            <div className={`${s.innerBox} ${s.cont}`}>
+                              <span>
+                                {DATA.subscribeDetailInfo.subscribeDto
+                                  .cancelReason
+                                  ? DATA.subscribeDetailInfo.subscribeDto
+                                      .cancelReason
+                                  : '없음'}
+                              </span>
+                            </div>
+                          </div>
+                        </li>
+                      )}
                       <li className={`${s['t-row']}`}>
                         <div className={s['t-box']}>
                           <div className={`${s.innerBox} ${s.label}`}>
                             <span>다음 결제일</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
-                            {formValues.nextPaymentDate && (
+                            {formValues.nextPaymentDate ? (
                               <>
                                 <span>
                                   <input
@@ -693,6 +723,8 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
                                   변경
                                 </button>
                               </>
+                            ) : (
+                              '-'
                             )}
                           </div>
                         </div>
@@ -763,7 +795,6 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
                                             <span className={s.fakeCheckBox} />
                                             <span>{plan}</span>
                                           </label>
-                                          {/* {errorMessage} */}
                                         </div>
                                       </>
                                     );
@@ -810,7 +841,6 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
                                               />
                                               <span>{recipe.name}</span>
                                             </label>
-                                            {/* {errorMessage} */}
                                           </div>
                                         </>
                                       );
@@ -888,6 +918,22 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
                   구독 중인 반려견의 한 끼당 g수가 변경되면,
                   <br />
                   다음 예약 결제금액이 자동으로 변경됩니다
+                </>
+              }
+            />
+          )}
+          {activeConfirmPlanChangeModal && (
+            <Modal_confirm
+              theme={'userPage'}
+              isConfirm={onSubmitPlanChange}
+              positionCenter
+              text={'플랜 및 레시피를 변경하시겠습니까?'}
+              caution={
+                <>
+                  <strong>{formValues.nextPaymentPrice}원</strong> --&gt;&nbsp;
+                  <strong>{nextPriceText}원</strong>
+                  <br />
+                  다음 결제 금액이 변경됩니다.
                 </>
               }
             />
