@@ -50,7 +50,7 @@ const authSlice = createSlice({
       // }
       const query = temporaryPassword
         ? '?tempPw=true'
-        : action.payload.previousPath.slice(1); //! [수정] 로그인하기 이전 페이지로 돌아가기
+        : action.payload.previousPath?.slice(1) || ''; //! [수정] 로그인하기 이전 페이지로 돌아가기
       window.location.href = '/' + query;
     },
     autoLogin(state, action) {
