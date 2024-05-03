@@ -407,6 +407,16 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
 export async function getServerSideProps({ req }) {
   const getApiUrl = '/api/dogs';
   const res = await getDataSSR(req, getApiUrl);
+
+  if (res?.status !== 200) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/account/login?prevPath=/mypage/dogs', // 로그인 성공 후, 이전 페이지로 돌아가기
+      },
+    };
+  }
+
   let DATA = null;
   const embeddedData = res?.data._embedded;
   // console.log(embeddedData);

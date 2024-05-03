@@ -38,7 +38,7 @@ import { valid_isTheSameArray } from '/util/func/validation/validationPackage';
 import { postObjData } from '../../../api/reqData';
 
 export default function Popup_DogDetailPage({ DATA, dogIdx }) {
-  console.log('!!!!!!DATA!!!!!!!', DATA);
+  // console.log('!!!!!!DATA!!!!!!!', DATA);
 
   const mct = useModalContext();
   const router = useRouter();
@@ -53,7 +53,7 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
   const [submitState, setSubmitState] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [nextPriceText, setNextPriceText] = useState(
-    DATA.subscribeDetailInfo.subscribeDto.nextPaymentPrice,
+    DATA?.subscribeDetailInfo.subscribeDto.nextPaymentPrice,
   );
 
   const subscribeInfo = useSubscribeInfo(DATA.dogDto.subscribeId);
