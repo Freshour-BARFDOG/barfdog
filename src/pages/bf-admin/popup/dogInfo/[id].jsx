@@ -239,7 +239,12 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
         pricePerGrams,
       });
     },
-    [selectedCategory.plan, selectedCategory.recipeIdList],
+    [
+      selectedCategory.plan,
+      selectedCategory.recipeIdList,
+      recipeInfo,
+      subscribePlanInfo,
+    ],
   );
 
   const onInputChange = (e) => {
