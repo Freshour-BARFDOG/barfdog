@@ -1,23 +1,35 @@
 import React from 'react';
 import s from './header.module.scss';
+import { useRouter } from 'next/router';
 import { useModalContext } from '@store/modal-context';
 import MenuLayout, { SubmenuList } from '/src/components/header/MenuLayout';
 import SVG_subscribe from '/public/img/icon/subscribe.svg';
-import {general_itemType} from "../../../store/TYPE/itemType";
-import DeadlineTimer from "../atoms/DeadlineTimer";
-
+import { general_itemType } from '../../../store/TYPE/itemType';
+import DeadlineTimer from '../atoms/DeadlineTimer';
 
 const PcGnb = () => {
   return (
     <>
-      <Gnb_survey/>
+      <Gnb_survey />
       <MenuLayout title="샵" link={`/shop?itemType=${general_itemType.ALL}`}>
-        <SubmenuList title="ALL" link={`/shop?itemType=${general_itemType.ALL}`} />
-        <SubmenuList title="생식" link={`/shop?itemType=${general_itemType.RAW}`}/>
-        <SubmenuList title="토핑" link={`/shop?itemType=${general_itemType.TOPPING}`}/>
-        <SubmenuList title="굿즈" link={`/shop?itemType=${general_itemType.GOODS}`}/>
+        <SubmenuList
+          title="ALL"
+          link={`/shop?itemType=${general_itemType.ALL}`}
+        />
+        <SubmenuList
+          title="생식"
+          link={`/shop?itemType=${general_itemType.RAW}`}
+        />
+        <SubmenuList
+          title="토핑"
+          link={`/shop?itemType=${general_itemType.TOPPING}`}
+        />
+        <SubmenuList
+          title="굿즈"
+          link={`/shop?itemType=${general_itemType.GOODS}`}
+        />
       </MenuLayout>
-      <MenuLayout title="레시피" link="/recipes"/>
+      <MenuLayout title="레시피" link="/recipes" />
       <MenuLayout title="커뮤니티" link="/community/notice">
         <SubmenuList title="공지사항" link="/community/notice" />
         <SubmenuList title="이벤트" link="/community/event" />
@@ -31,23 +43,20 @@ const PcGnb = () => {
 
 export default PcGnb;
 
-
-
-
-
-
 const Gnb_survey = () => {
-  const mcx = useModalContext();
+  const router = useRouter();
+  // const mcx = useModalContext();
   const onClickHandler = () => {
-    mcx.subscribe.onShow();
-    mcx.event.setScrollY();
+    //! [이전] 팝업창
+    // mcx.subscribe.onShow();
+    // mcx.event.setScrollY();
+    //! [수정] 설문조사 페이지로 이동
+    router.push('/survey');
   };
   return (
     <>
       <li className={s.subscribe} onClick={onClickHandler}>
-        <span>
-          {/* <SVG_subscribe /> */}
-        </span>
+        <span>{/* <SVG_subscribe /> */}</span>
         <i id={'DeadlineTimer-wrapper'} className={'pc'}>
           <DeadlineTimer />
         </i>
@@ -55,4 +64,3 @@ const Gnb_survey = () => {
     </>
   );
 };
-
