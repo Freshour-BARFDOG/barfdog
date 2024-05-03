@@ -190,7 +190,7 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
         fetching: false,
       }));
     })();
-  }, [dogIdx]);
+  }, [dogIdx, DATA]);
 
   //*** 구독플랜 금액 계산
   const calcSubscribePlanPaymentPrice = useCallback(
@@ -244,6 +244,7 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
       selectedCategory.recipeIdList,
       recipeInfo,
       subscribePlanInfo,
+      DATA,
     ],
   );
 
