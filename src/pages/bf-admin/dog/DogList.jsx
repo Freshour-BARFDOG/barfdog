@@ -29,7 +29,7 @@ const ItemList = ({ item, number }) => {
     subscribeStatus: item.subscribeStatus === 'SUBSCRIBING' ? 'Y' : 'N',
     // subscribeStatus:
     //   item.subscribeStatus === 'BEFORE_PAYMENT'
-    //     ? '결제 전'
+    //     ? '구독 전'
     //     : item.subscribeStatus === 'SURVEY_COMPLETED'
     //     ? '설문 완료'
     //     : item.subscribeStatus === 'SUBSCRIBE_CANCEL'

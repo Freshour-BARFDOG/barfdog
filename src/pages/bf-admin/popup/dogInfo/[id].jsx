@@ -649,7 +649,7 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
                           <div className={`${s.innerBox} ${s.cont}`}>
                             <span>
                               {formValues.subscribeStatus === 'BEFORE_PAYMENT'
-                                ? '결제 전'
+                                ? '구독 전'
                                 : formValues.subscribeStatus ===
                                   'SURVEY_COMPLETED'
                                 ? '설문 완료'

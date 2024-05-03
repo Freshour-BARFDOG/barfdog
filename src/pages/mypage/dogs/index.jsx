@@ -328,10 +328,10 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
         <div className={s.select_box}>
           <div className={s['btn-section']}>
             <Link href={`/mypage/dogs/${dogId}/statistic`} passHref>
-              <a>설문결과</a>
+              <a>맞춤레포트 확인</a>
             </Link>
             <Link href={`/mypage/dogs/${dogId}/updateSurvey`} passHref>
-              <a>설문수정</a>
+              <a>정보 수정</a>
             </Link>
             {/* 1. 설문 완료 */}
             {/* '구독하기' 클릭 시, 맞춤레시피 페이지로 이동 */}
@@ -345,13 +345,13 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
                   {isLoading[dogId] ? (
                     <Spinner style={{ color: '#fff' }} />
                   ) : (
-                    '구독하기'
+                    '맞춤식단 시작'
                   )}
                 </a>
               </Link>
             )}
 
-            {/* 2. 버튼 생성 조건 :  결제전 / 구독 취소 / 구독 보류 ('구독 중' 상태가 아닌)일 경우  */}
+            {/* 2. 버튼 생성 조건 :  결제전(구독전) / 구독 취소 / 구독 보류 ('구독 중' 상태가 아닌)일 경우  */}
             {(data.subscribeStatus === subscribeStatus.BEFORE_PAYMENT ||
               data.subscribeStatus === subscribeStatus.SUBSCRIBE_CANCEL ||
               data.subscribeStatus === subscribeStatus.SUBSCRIBE_PENDING) && (
@@ -364,7 +364,7 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
                 {isLoading[dogId] ? (
                   <Spinner style={{ color: '#fff' }} />
                 ) : (
-                  '구독하기'
+                  '맞춤식단 시작'
                 )}
               </button>
             )}
