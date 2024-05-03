@@ -930,7 +930,7 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
               text={'플랜 및 레시피를 변경하시겠습니까?'}
               caution={
                 <>
-                  <strong>{formValues.nextPaymentPrice}원</strong> -->
+                  <strong>{formValues.nextPaymentPrice}원</strong> --&gt;&nbsp;
                   <strong>{nextPriceText}원</strong>
                   <br />
                   다음 결제 금액이 변경됩니다.
