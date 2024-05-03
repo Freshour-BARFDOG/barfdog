@@ -5,7 +5,6 @@ import { transformBirthDayYM } from '../../../../util/func/transformBirthDay';
 
 export default function DogList({ items, currentPage }) {
   if (!items || !items.length) return;
-
   return (
     <ul className="table_body">
       {items.map((item, index) => (
@@ -27,6 +26,19 @@ const ItemList = ({ item, number }) => {
     email: item.email,
     dogId: item.dogId,
     dogName: item.dogName,
+    subscribeStatus: item.subscribeStatus === 'SUBSCRIBING' ? 'Y' : 'N',
+    // subscribeStatus:
+    //   item.subscribeStatus === 'BEFORE_PAYMENT'
+    //     ? '결제 전'
+    //     : item.subscribeStatus === 'SURVEY_COMPLETED'
+    //     ? '설문 완료'
+    //     : item.subscribeStatus === 'SUBSCRIBE_CANCEL'
+    //     ? '구독 취소'
+    //     : item.subscribeStatus === 'SUBSCRIBING'
+    //     ? '구독 중'
+    //     : item.subscribeStatus === 'SUBSCRIBE_PENDING'
+    //     ? '구독 보류'
+    //     : '관리자 구독',
     dogType: item.dogType,
     dogGender: item.dogGender === 'FEMALE' ? '암컷' : '수컷',
     dogBirth: transformBirthDayYM(item.dogBirth),
@@ -73,6 +85,7 @@ const ItemList = ({ item, number }) => {
       <span>{DATA.memberName}</span>
       <span>{DATA.email}</span>
       <span>{DATA.dogName}</span>
+      <span>{DATA.subscribeStatus}</span>
       <span>{DATA.dogType}</span>
       <span>{DATA.dogGender}</span>
       <span>{DATA.dogBirth}</span>

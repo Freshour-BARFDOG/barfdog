@@ -95,6 +95,7 @@ function ManageDogPage() {
                   <li className={s.table_th}>견주 이름</li>
                   <li className={s.table_th}>견주 ID</li>
                   <li className={s.table_th}>반려견명</li>
+                  <li className={s.table_th}>구독</li>
                   <li className={s.table_th}>품종</li>
                   <li className={s.table_th}>성별</li>
                   <li className={s.table_th}>생년월일</li>
@@ -102,7 +103,7 @@ function ManageDogPage() {
                   <li className={s.table_th}>몸무게</li>
                   <li className={s.table_th}>상태</li>
                   <li className={s.table_th}>중성화</li>
-                  <li className={s.table_th}>대표견 여부</li>
+                  <li className={s.table_th}>대표견</li>
                 </ul>
                 {itemList.length ? (
                   <DogList items={itemList} currentPage={currentPage} />
