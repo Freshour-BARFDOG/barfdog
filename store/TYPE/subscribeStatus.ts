@@ -6,7 +6,7 @@ export const subscribeStatus = {
   SUBSCRIBE_PENDING: 'SUBSCRIBE_PENDING',
   ADMIN: 'ADMIN',
   KOR: {
-    BEFORE_PAYMENT: '결제 전',
+    BEFORE_PAYMENT: '구독 전',
     SURVEY_COMPLETED: '설문 완료',
     SUBSCRIBE_CANCEL: '구독 취소',
     SUBSCRIBING: '구독 중',

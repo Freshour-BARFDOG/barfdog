@@ -3,7 +3,7 @@ import s from './login.module.scss';
 import axios from 'axios';
 import Link from 'next/link';
 import MetaTitle from '/src/components/atoms/MetaTitle';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useModalContext } from '/store/modal-context';
 import { authAction } from '/store/auth-slice';
 import { useRouter } from 'next/router';
@@ -42,6 +42,7 @@ export default function LoginPage() {
   const [formErrors, setFormErrors] = useState();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const naverRef = useRef();
+  const previousPath = useSelector((state) => state.navigation.previousPath);
 
   useEffect(() => {
     const naverScript = document.createElement('script');
@@ -118,6 +119,8 @@ export default function LoginPage() {
           if (res.status === 200) {
             const token = res.headers.authorization;
             const { temporaryPassword, email, name, roleList } = res.data;
+            const urlParams = new URLSearchParams(window.location.search);
+            const prevPathParams = urlParams.get('prevPath');
 
             const payload = {
               token,
@@ -128,6 +131,12 @@ export default function LoginPage() {
                 name,
                 roleList,
               },
+              previousPath:
+                prevPathParams !== '/'
+                  ? prevPathParams
+                  : previousPath
+                  ? previousPath // 지정 (다음 페이지)
+                  : sessionStorage.getItem('prevPath'), // 일반 (이전 페이지)
             };
             if (autoLogin) {
               dispatch(authAction.autoLogin(payload));

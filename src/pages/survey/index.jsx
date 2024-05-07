@@ -29,7 +29,7 @@ import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import { useModalContext } from '/store/modal-context';
 import { validate } from '/util/func/validation/validation_survey';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
-import { postObjData } from '../api/reqData';
+import { getDataSSR, postObjData } from '../api/reqData';
 import { useRouter } from 'next/router';
 import { SurveyDataClass } from '../../class/surveyDataClass';
 import useUserData from '../../../util/hook/useUserData';
@@ -76,7 +76,7 @@ const initialFormValues = {
   caution: dogCautionType.NONE, // 기타 특이사항 // 빈값('')일 경우, '있어요'선택됨)
 };
 
-export default function Survey() {
+export default function Survey({ data }) {
   const loadingDuration = 1200; // ms
   const lastStep = 3;
   const router = useRouter();
@@ -93,6 +93,9 @@ export default function Survey() {
   const nextBtnRef = useRef(null);
   const submitBtnRef = useRef(null);
   const surveyPageRef = useRef(null);
+
+  // GET /api/members : 멤버 정보
+  // console.log('data======>', data);
 
   // // console.log(formValues);
   useEffect(() => {
@@ -394,4 +397,22 @@ export default function Survey() {
       )}
     </>
   );
+}
+
+export async function getServerSideProps({ req }) {
+  const getApiUrl = '/api/members';
+  const res = await getDataSSR(req, getApiUrl);
+  let DATA = null;
+
+  if (res?.status === 200) {
+    DATA = res.data;
+  } else {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/account/login?prevPath=/survey', // 로그인 성공 후, 이전 페이지로 돌아가기
+      },
+    };
+  }
+  return { props: { data: DATA } };
 }
