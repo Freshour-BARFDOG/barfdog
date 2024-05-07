@@ -56,7 +56,7 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
     DATA?.subscribeDetailInfo.subscribeDto.nextPaymentPrice,
   );
 
-  const subscribeInfo = useSubscribeInfo(DATA.dogDto.subscribeId);
+  const subscribeInfo = useSubscribeInfo(DATA?.dogDto.subscribeId);
   const currentPlanName = subscribeInfo?.info.planName;
   const subscribePlanInfo = useSubscribePlanInfo();
   const recipeInfo = useSubscribeRecipeInfo();
@@ -512,7 +512,7 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
     try {
       setSubmitted(true);
 
-      const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/planRecipes`;
+      const url = `/api/subscribes/${DATA?.dogDto.subscribeId}/planRecipes`;
       const res = await postObjData(url, body);
 
       if (res.isDone) {
@@ -770,33 +770,32 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
                                     subscribePlanInfo.planDiscountPercent,
                                   ).map((plan, index) => {
                                     return (
-                                      <>
-                                        <div
-                                          className={`${s['checkbox-wrap']}`}
+                                      <div
+                                        className={`${s['checkbox-wrap']}`}
+                                        key={index}
+                                      >
+                                        <label
+                                          htmlFor={plan}
+                                          className={`${s.checkbox}`}
+                                          onClick={(e) =>
+                                            onClickHandler(e, plan)
+                                          }
                                         >
-                                          <label
-                                            htmlFor={plan}
-                                            className={`${s.checkbox}`}
-                                            onClick={(e) =>
-                                              onClickHandler(e, plan)
+                                          <input
+                                            type="radio"
+                                            id={plan}
+                                            value={
+                                              selectedCategory.plan === plan
                                             }
-                                          >
-                                            <input
-                                              type="radio"
-                                              id={plan}
-                                              value={
-                                                selectedCategory.plan === plan
-                                              }
-                                              style={{ display: 'none' }}
-                                              checked={
-                                                selectedCategory.plan === plan
-                                              }
-                                            />
-                                            <span className={s.fakeCheckBox} />
-                                            <span>{plan}</span>
-                                          </label>
-                                        </div>
-                                      </>
+                                            style={{ display: 'none' }}
+                                            checked={
+                                              selectedCategory.plan === plan
+                                            }
+                                          />
+                                          <span className={s.fakeCheckBox} />
+                                          <span>{plan}</span>
+                                        </label>
+                                      </div>
                                     );
                                   })}
                                 </ul>
@@ -817,32 +816,26 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
                                           recipe.name,
                                         );
                                       return (
-                                        <>
-                                          <div
-                                            className={`${pc['checkbox-wrap']}`}
+                                        <div
+                                          className={`${pc['checkbox-wrap']}`}
+                                          key={index}
+                                        >
+                                          <label
+                                            htmlFor={recipe.name}
+                                            className={`${pc.checkbox}`}
                                           >
-                                            <label
-                                              htmlFor={recipe.name}
-                                              className={`${pc.checkbox}`}
-                                            >
-                                              <input
-                                                onChange={(e) =>
-                                                  onChangeHandler(
-                                                    e,
-                                                    recipe.name,
-                                                  )
-                                                }
-                                                type="checkbox"
-                                                id={recipe.name}
-                                                checked={isChecked}
-                                              />
-                                              <span
-                                                className={pc.fakeCheckBox}
-                                              />
-                                              <span>{recipe.name}</span>
-                                            </label>
-                                          </div>
-                                        </>
+                                            <input
+                                              onChange={(e) =>
+                                                onChangeHandler(e, recipe.name)
+                                              }
+                                              type="checkbox"
+                                              id={recipe.name}
+                                              checked={isChecked}
+                                            />
+                                            <span className={pc.fakeCheckBox} />
+                                            <span>{recipe.name}</span>
+                                          </label>
+                                        </div>
                                       );
                                     },
                                   )}
