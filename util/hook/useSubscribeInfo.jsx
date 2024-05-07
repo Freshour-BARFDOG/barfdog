@@ -157,11 +157,11 @@ export const useSubscribeInfo = (subscribeId) => {
           plan: {
             name: data.subscribeDto.plan,
             numberOfPacksPerDay:
-              subscribePlanType[data.subscribeDto.plan].numberOfPacksPerDay,
+              subscribePlanType[data.subscribeDto.plan]?.numberOfPacksPerDay,
             totalNumberOfPacks:
-              subscribePlanType[data.subscribeDto.plan].totalNumberOfPacks,
+              subscribePlanType[data.subscribeDto.plan]?.totalNumberOfPacks,
             weeklyPaymentCycle:
-              subscribePlanType[data.subscribeDto.plan].weeklyPaymentCycle,
+              subscribePlanType[data.subscribeDto.plan]?.weeklyPaymentCycle,
             discountPercent: discountPercent,
           },
           price: getAllPriceInfos({ priceInfos: allPriceInfos }),
