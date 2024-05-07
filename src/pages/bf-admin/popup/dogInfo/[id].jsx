@@ -123,7 +123,7 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
           ...prevState,
           recipeIdList: matchedRecipeIds,
           nextPaymentPrice:
-            DATA.subscribeDetailInfo.subscribeDto.nextPaymentDat,
+            DATA.subscribeDetailInfo.subscribeDto.nextPaymentDate,
         }));
 
         // *** 다음 결제일 포맷변환 (0000년 0월 0일)
@@ -205,7 +205,7 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
       const discountPercent = subscribePlanInfo.planDiscountPercent[planName];
       const oneDayRecommendKcal =
         DATA.surveyInfoData.foodAnalysis.oneDayRecommendKcal;
-      console.log('oneDayRecommendKcal=====', oneDayRecommendKcal);
+      // console.log('oneDayRecommendKcal>>>', oneDayRecommendKcal);
 
       const pricePerGrams = DATA.recipesDetailInfo
         ?.filter(
