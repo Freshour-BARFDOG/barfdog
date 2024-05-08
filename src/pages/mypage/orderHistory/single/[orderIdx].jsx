@@ -22,6 +22,7 @@ import { validation_ReturnableAndExchangeableOrders } from '/util/func/validatio
 import { useModalContext } from '/store/modal-context';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import { CancelReasonName } from '../../../../../store/TYPE/order/CancelReasonName';
+import Link from 'next/link';
 
 const valid_CancelableOrder = (itemList) => {
   let result = {
@@ -54,7 +55,7 @@ const filter_availableConfirmItemList = (itemList) =>
   });
 
 export default function SingleItem_OrderHistoryPage({ data }) {
-  // // console.log(data);
+  // console.log(data);
 
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
@@ -266,16 +267,24 @@ export default function SingleItem_OrderHistoryPage({ data }) {
                       data-item-order-status={item.status}
                     >
                       <span className={`${s.col_1} ${s.itemInfo}`}>
-                        <figure className={`${s.image} img-wrap`}>
-                          <Image
-                            src={item.thumbnailUrl}
-                            objectFit="cover"
-                            layout="fill"
-                            alt="레시피 썸네일"
-                          />
-                        </figure>
+                        <Link href={`/shop/item/${item.itemId}`} passHref>
+                          <a>
+                            <figure className={`${s.image} img-wrap`}>
+                              <Image
+                                src={item.thumbnailUrl}
+                                objectFit="cover"
+                                layout="fill"
+                                alt="레시피 썸네일"
+                              />
+                            </figure>
+                          </a>
+                        </Link>
                         <figcaption className={s.inner_text}>
-                          <p className={s.top_text}>{item.itemName}</p>
+                          <Link href={`/shop/item/${item.itemId}`} passHref>
+                            <a>
+                              <p className={s.top_text}>{item.itemName}</p>
+                            </a>
+                          </Link>
                           {item.selectOptionDtoList.length > 0 &&
                             item.selectOptionDtoList?.map((opt, i) => (
                               <p
@@ -288,6 +297,7 @@ export default function SingleItem_OrderHistoryPage({ data }) {
                             ))}
                         </figcaption>
                       </span>
+
                       <span className={`${s.col_2} ${s.count}`}>
                         {item.amount}개
                       </span>
@@ -639,6 +649,7 @@ export async function getServerSideProps(ctx) {
           optionAmount: op.optionAmount,
         })),
         itemName: item.itemName,
+        itemId: item.itemId,
         amount: item.amount,
         finalPrice: item.finalPrice,
         discountAmount: item.discountAmount,
