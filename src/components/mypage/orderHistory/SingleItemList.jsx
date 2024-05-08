@@ -12,6 +12,8 @@ export const SingleItemList = ({ itemList }) => {
   const [isLoading, setIsLoading] = useState({ cancelOrder: {} });
   const [submitted, setSubmitted] = useState(false);
 
+  // console.log(itemList);
+
   // // console.log(itemList);
   const onCancelGeneralOrder = useCallback(
     async (item) => {
@@ -66,24 +68,35 @@ export const SingleItemList = ({ itemList }) => {
             <hr className={s.hr1} />
             <div className={s['item-container']}>
               <div className={s.left_box}>
-                <figure className={`${s.image} img-wrap`}>
-                  {item.thumbnailUrl && (
-                    <Image
-                      priority
-                      src={item.thumbnailUrl}
-                      objectFit="cover"
-                      layout="fill"
-                      alt="레시피 이미지"
-                    />
-                  )}
-                </figure>
+                <Link href={`/shop/item/${item.itemNameList[0].id}`} passHref>
+                  <a>
+                    <figure className={`${s.image} img-wrap`}>
+                      {item.thumbnailUrl && (
+                        <Image
+                          priority
+                          src={item.thumbnailUrl}
+                          objectFit="cover"
+                          layout="fill"
+                          alt="레시피 이미지"
+                        />
+                      )}
+                    </figure>
+                  </a>
+                </Link>
                 <div className={s.flex_box}>
                   <div className={s.text}>
-                    <span className={s.last_text}>
-                      {item.itemNameList[0]}&nbsp;
-                      {item.itemNameList.length > 1 &&
-                        `외 ${item.itemNameList.length - 1}건`}
-                    </span>
+                    <Link
+                      href={`/shop/item/${item.itemNameList[0].id}`}
+                      passHref
+                    >
+                      <a>
+                        <span className={s.last_text}>
+                          {item.itemNameList[0].name}&nbsp;
+                          {item.itemNameList.length > 1 &&
+                            `외 ${item.itemNameList.length - 1}건`}
+                        </span>
+                      </a>
+                    </Link>
                   </div>
                   <div className={s.text2}>
                     <span>주문번호</span>
