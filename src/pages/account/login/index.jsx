@@ -43,7 +43,6 @@ export default function LoginPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const naverRef = useRef();
   const previousPath = useSelector((state) => state.navigation.previousPath);
-
   useEffect(() => {
     const naverScript = document.createElement('script');
     naverScript.src =
@@ -131,12 +130,17 @@ export default function LoginPage() {
                 name,
                 roleList,
               },
-              previousPath:
-                prevPathParams !== '/'
+              previousPath: prevPathParams
+                ? prevPathParams !== '/'
                   ? prevPathParams
                   : previousPath
-                  ? previousPath // 지정 (다음 페이지)
-                  : sessionStorage.getItem('prevPath'), // 일반 (이전 페이지)
+                  ? previousPath
+                  : sessionStorage.getItem('prevPath')
+                : previousPath
+                ? previousPath
+                : sessionStorage.getItem('prevPath'),
+              // prevPathParams : 지정 (다음 페이지)
+              // sessionStorage.getItem('prevPath') : 일반 (이전 페이지)
             };
             if (autoLogin) {
               dispatch(authAction.autoLogin(payload));
