@@ -123,12 +123,13 @@ export default function MainPage({ data }) {
           <Swiper_main data={data?.mainBannerDtoList} isMobile={isMobile} />
         </Wrapper>
 
-        {/* 섹션1 레시피 4가지 소개*/}
+        {/* 섹션1 레시피 소개*/}
         <Wrapper>
           <section className={`${s.recipe_info} $`}>
             <div className={s.inner}>
               <h2 className={s.recipe_title}>
-                &quot;진짜 생식&#34; <br /> 바프독의 4가지 레시피
+                &quot;진짜 생식&#34; <br /> 바프독의{' '}
+                {`${data?.recipeDtoList.length}`}가지 레시피
               </h2>
               <Swiper_recipe data={data?.recipeDtoList} isMobile={isMobile} />
             </div>
