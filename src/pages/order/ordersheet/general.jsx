@@ -1,26 +1,27 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from '/src/components/common/Layout';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import s from './ordersheet.module.scss';
 import Modal_termsOfSerivce from '/src/components/modal/Modal_termsOfSerivce';
-import {Modal_coupon} from '/src/components/modal/Modal_coupon';
-import {postUserObjData} from '/src/pages/api/reqData';
-import {useSelector} from 'react-redux';
-import {useRouter} from 'next/router';
+import { Modal_coupon } from '/src/components/modal/Modal_coupon';
+import { postUserObjData } from '/src/pages/api/reqData';
+import { useDispatch, useSelector } from 'react-redux';
+import { cartAction } from '/store/cart-slice';
+import { useRouter } from 'next/router';
 import transformDate from '/util/func/transformDate';
-import {OrdersheetItemList} from '/src/components/order/OrdersheetItemList';
-import {OrdersheetMemberInfo} from '/src/components/order/OrdersheetMemberInfo';
-import {OrdersheetDeliveryForm} from '/src/components/order/OrdersheetDeliveryForm';
-import {Payment} from '/src/components/order/Payment';
-import {OrdersheetReward} from '/src/components/order/OrdersheetReward';
-import {OrdersheetMethodOfPayment} from '/src/components/order/OrdersheetMethodOfPayment';
-import {OrdersheetAmountOfPayment} from '/src/components/order/OrdersheetAmountOfPayment';
-import {userType} from '/store/TYPE/userAuthType';
-
-import {deleteCookie, getCookie, setCookie} from "@util/func/cookie";
+import { OrdersheetItemList } from '/src/components/order/OrdersheetItemList';
+import { OrdersheetMemberInfo } from '/src/components/order/OrdersheetMemberInfo';
+import { OrdersheetDeliveryForm } from '/src/components/order/OrdersheetDeliveryForm';
+import { Payment } from '/src/components/order/Payment';
+import { OrdersheetReward } from '/src/components/order/OrdersheetReward';
+import { OrdersheetMethodOfPayment } from '/src/components/order/OrdersheetMethodOfPayment';
+import { OrdersheetAmountOfPayment } from '/src/components/order/OrdersheetAmountOfPayment';
+import { userType } from '/store/TYPE/userAuthType';
+import { deleteCookie, getCookie, setCookie } from '@util/func/cookie';
 
 export default function GeneralOrderSheetPage() {
   const router = useRouter();
+  const dispatch = useDispatch();
   const auth = useSelector((s) => s.auth);
   const USER_TYPE = auth.userType;
 
@@ -35,20 +36,24 @@ export default function GeneralOrderSheetPage() {
     coupon: false,
   });
 
-
-
-
-
   useEffect(() => {
-    const curItem = cart.orderItemList;
-    if (!curItem.length) {
+    let curItem = '';
+    // 비로그인 시 주문한 아이템 가져오기
+    const orderItemData = localStorage.getItem('orderItem');
+    const parsedData = JSON.parse(orderItemData);
+
+    if (orderItemData) {
+      curItem = parsedData;
+      localStorage.removeItem('orderItem');
+    } else curItem = cart.orderItemList;
+
+    if (!curItem?.length) {
       return router.push('/cart');
     }
 
     // // @YYL 콕뱅크 주문인지 확인
     // let allianceType = "NONE"
     // if(getCookie("alliance") === "cb") allianceType = "COKBANK"
-
     const requestBody = {
       orderItemDtoList: curItem.map((item) => ({
         itemDto: {
@@ -60,10 +65,8 @@ export default function GeneralOrderSheetPage() {
           amount: option.amount,
         })),
       })),
-
       // allianceType: allianceType,
     };
-
     if (Object.keys(info).length > 0) return; // 최초 data fetching 후 Re-rendering 방지
     (async () => {
       setIsLoading((prevState) => ({
@@ -78,13 +81,13 @@ export default function GeneralOrderSheetPage() {
         // // console.log(res);
         if (res.status !== 200) {
           alert('상품 정보를 확인할 수 없습니다.');
-          return window.location.href = '/cart';
+          return (window.location.href = '/cart');
         }
         const info = res.data.data;
         // // console.log(info);
         // 주문에 대한 모든 데이터
         // console.log('info:  ',info)
-        const calcedReward = (Number(info.reward) > 0 ? info.reward : 0);
+        const calcedReward = Number(info.reward) > 0 ? info.reward : 0;
         const initInfo = {
           name: info.name, // 구매자
           email: info.email, // 연락처
@@ -108,8 +111,7 @@ export default function GeneralOrderSheetPage() {
               availableMinPrice: cp.availableMinPrice,
               remaining: cp.remaining,
               expiredDate: transformDate(cp.expiredDate),
-            })) ||
-            [], //////////// ! DUMMY DATA
+            })) || [], //////////// ! DUMMY DATA
           orderPrice: info.orderPrice, //  장바구니 또는 결제 전 상품의 "최종 가격" (기본 어드민 설정할인율 적용 / 결제페이지의 쿠폰 및 적립금 적용 전 가격)
           reward: calcedReward, // 적립금
           deliveryPrice: getDeliveryPrice(info), // 배송비 : 장바구니에서, 최종 배송비
@@ -120,11 +122,10 @@ export default function GeneralOrderSheetPage() {
             ?.map((item) => item.originalOrderLinePrice)
             .reduce((acc, cur) => acc + cur),
         };
-
         // FormDatas
         const initForm = {
-          selfInfo:{
-            reward: calcedReward,  // ! CLIENT ONLY
+          selfInfo: {
+            reward: calcedReward, // ! CLIENT ONLY
             discountGrade: 0, // 일반주문일 경우, 등급할인 없음
           },
           coupons:
@@ -137,8 +138,7 @@ export default function GeneralOrderSheetPage() {
               availableMinPrice: cp.availableMinPrice,
               remaining: cp.remaining,
               expiredDate: transformDate(cp.expiredDate),
-            })) ||
-            [],
+            })) || [],
           orderItemDtoList: info.orderItemDtoList?.map((item) => ({
             itemId: item.itemId, // 상품 ID
             amount: item.amount, // 상품 수량
@@ -184,13 +184,13 @@ export default function GeneralOrderSheetPage() {
       } catch (err) {
         console.error(err);
       }
-
       setIsLoading((prevState) => ({
         ...prevState,
         item: false,
       }));
     })();
-  }, [cart]);
+    // }, [cart]);
+  }, []);
 
   const onActivleModalHandler = (e) => {
     const button = e.currentTarget;
@@ -207,8 +207,7 @@ export default function GeneralOrderSheetPage() {
   // - 1. 상품정보 없이 , 해당 페이지에 접근했을 경우
   // - 2. 새로고침했을 경우 : REDUX정보 초기화됨
   //    > 이때, Shop Item Detail페이지에서 가져온 정보 초기화되어, 서버에서 데이터 가져올 수 없음)
-  if (!info || !USER_TYPE || USER_TYPE === userType.NON_MEMBER) return;
-
+  // if (!info || !USER_TYPE || USER_TYPE === userType.NON_MEMBER) return;
 
   return (
     <>
@@ -253,7 +252,9 @@ export default function GeneralOrderSheetPage() {
               formErrors={formErrors}
             />
             <section className={s.final_btn}>
-              <p>위 주문 내용을 확인 하였으며, 회원 본인은 결제에 동의합니다.</p>
+              <p>
+                위 주문 내용을 확인 하였으며, 회원 본인은 결제에 동의합니다.
+              </p>
               {/* 결제버튼 */}
               <Payment
                 isLoading={isLoading}
@@ -275,7 +276,7 @@ export default function GeneralOrderSheetPage() {
       {activeModal.coupons && (
         <Modal_coupon
           onModalActive={setActiveModal}
-          itemInfo={{id: selectedItemId}}
+          itemInfo={{ id: selectedItemId }}
           info={info}
           form={form}
           setForm={setForm}
@@ -286,7 +287,10 @@ export default function GeneralOrderSheetPage() {
 }
 
 function getDeliveryPrice(info) {
-  const isAllItemDeliveryFree = info.orderItemDtoList.filter(item => !item.deliveryFree).length === 0;
+  const isAllItemDeliveryFree =
+    info.orderItemDtoList.filter((item) => !item.deliveryFree).length === 0;
   const isPaymentPriceFreeCondition = info.orderPrice >= info.freeCondition;
-  return (isAllItemDeliveryFree || isPaymentPriceFreeCondition) ? 0 : info.deliveryPrice;
+  return isAllItemDeliveryFree || isPaymentPriceFreeCondition
+    ? 0
+    : info.deliveryPrice;
 }

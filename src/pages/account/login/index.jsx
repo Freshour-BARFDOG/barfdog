@@ -33,6 +33,7 @@ const initialValues = {
 export default function LoginPage() {
   const router = useRouter();
   const dispatch = useDispatch();
+  const cart = useSelector((state) => state.cart);
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
   const [modalMessage, setModalMessage] = useState('');
@@ -191,6 +192,18 @@ export default function LoginPage() {
   const onGlobalModalCallback = () => {
     mct.alertHide();
   };
+
+  // 로그인 페이지에서 벗어날 때, 로컬스토리지에 저장되어 있던 storedItem 제거
+  // storedItem : 비로그인 시 장바구니에 담은 아이템
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const cleanup = () => {
+        localStorage.removeItem('storedItem');
+      };
+
+      return cleanup;
+    }
+  }, []);
 
   return (
     <>

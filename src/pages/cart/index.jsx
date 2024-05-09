@@ -20,6 +20,7 @@ import { FullScreenLoading } from '/src/components/atoms/FullScreenLoading';
 import { cartAction } from '/store/cart-slice';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
+import { postUserObjData } from '../api/reqData';
 
 const calculateCartDeliveryPrice = ({
   selectedItemDto,
@@ -49,6 +50,28 @@ export default function CartPage({ data, error }) {
     price: data?.deliveryConstant.price,
     freeCondition: data?.deliveryConstant.freeCondition,
   };
+  const [storedItem, setStoredItem] = useState();
+  // 비로그인 시 담은 아이템을 장바구니에 등록
+  useEffect(() => {
+    const storedItemData = localStorage.getItem('storedItem');
+    setStoredItem(storedItemData);
+    if (storedItemData) {
+      (async () => {
+        const postDataApiUrl = '/api/baskets';
+        try {
+          const res = await postUserObjData(postDataApiUrl, storedItemData);
+          if (res.isDone) {
+            window.location.reload();
+          } else {
+            alert(`${res.error}`);
+          }
+        } catch (err) {
+          console.log('API통신 오류 : ', err);
+        }
+      })();
+      localStorage.removeItem('storedItem');
+    }
+  }, []);
 
   const initialDATA = {
     // - Sever Params
@@ -393,7 +416,8 @@ export default function CartPage({ data, error }) {
 
   return (
     <>
-      {isLoading.delete && <FullScreenLoading opacity={0.3} />}
+      {/* storedItem : 비로그인 시 장바구니에 담은 아이템 있을 경우, loading.. 표시 */}
+      {(isLoading.delete || storedItem) && <FullScreenLoading opacity={0.3} />}
       <MetaTitle title="장바구니" />
       <Layout>
         <Wrapper>
