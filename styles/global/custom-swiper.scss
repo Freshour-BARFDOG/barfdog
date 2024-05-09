@@ -1,31 +1,25 @@
-
-$browser-context:16;
+$browser-context: 16;
 // convert px to rem
-@function rem($px, $context: $browser-context){
+@function rem($px, $context: $browser-context) {
   @return #{$px / $context}rem;
 }
 
-
-
-
-
-.swiper-pagination{
-  .swiper-pagination-bullet{background-color:#fff; opacity:0.3;
-    box-shadow: 0 0 rem(10) rgba(0,0,0,0.3);
+.swiper-pagination {
+  .swiper-pagination-bullet {
+    background-color: #fff;
+    opacity: 0.3;
+    box-shadow: 0 0 rem(10) rgba(0, 0, 0, 0.3);
   }
-  .swiper-pagination-bullet-active{
-    opacity:1;
+  .swiper-pagination-bullet-active {
+    opacity: 1;
   }
 }
 
-
-
-.swiper-button-prev, .swiper-button-next{
+.swiper-button-prev,
+.swiper-button-next {
   opacity: 0;
   pointer-events: none;
-
 }
-
 
 .swiper-button-disabled {
   opacity: 0 !important;
@@ -33,7 +27,7 @@ $browser-context:16;
   pointer-events: none;
 }
 
-.swiper-slide-prev{
+.swiper-slide-prev {
   > i {
     transform: translateX(-10%);
   }
@@ -42,7 +36,7 @@ $browser-context:16;
     visibility: hidden;
   }
 }
-.swiper-slide-next{
+.swiper-slide-next {
   > i {
     transform: translateX(10%);
   }

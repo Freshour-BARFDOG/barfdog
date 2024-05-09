@@ -4,23 +4,25 @@ import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from '/src/components/mypage/MypageWrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
-import TabContentContainer, {LeftContainer, RightContainer,} from '/src/components/atoms/TabContentContainer';
+import TabContentContainer, {
+  LeftContainer,
+  RightContainer,
+} from '/src/components/atoms/TabContentContainer';
 import Tabmenu_TwoButton from '/src/components/atoms/Tabmenu_TwoButton';
 import { EmptyContMessage } from '/src/components/atoms/emptyContMessage';
 import animateWindow from '/util/func/animateWindow';
 import { productType } from '/store/TYPE/itemType';
 import Spinner from '/src/components/atoms/Spinner';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
-import {SubscribeItems} from '/src/components/mypage/orderHistory/SubscribeItems';
-import {SingleItemList} from '/src/components/mypage/orderHistory/SingleItemList';
-import {decodeUrlToMatchApiProtocolAndSearchQuery} from "/util/func/decodeUrlToMatchApiProtocolAndSearchQuery";
-import {checkNeedToCancelNaverpaySubscribe} from "../../../../util/func/order/checkNeedToCancelNaverpaySubscribe";
-
+import { SubscribeItems } from '/src/components/mypage/orderHistory/SubscribeItems';
+import { SingleItemList } from '/src/components/mypage/orderHistory/SingleItemList';
+import { decodeUrlToMatchApiProtocolAndSearchQuery } from '/util/func/decodeUrlToMatchApiProtocolAndSearchQuery';
+import { checkNeedToCancelNaverpaySubscribe } from '../../../../util/func/order/checkNeedToCancelNaverpaySubscribe';
 
 export default function OrderHistoryPage() {
   const subscribeApiUrl = '/api/orders/subscribe';
   const generalItemApiUrl = '/api/orders/general';
-  const searchPageSize = 10;
+  const searchPageSize = 5;
 
   const [isLoading, setIsLoading] = useState({});
   const [activeMenu, setActiveMenu] = useState('left');
@@ -46,19 +48,22 @@ export default function OrderHistoryPage() {
       newPageNumber: 1,
       newItemList: [],
     };
-    
-    if(res?.data?._embedded){
-      
+
+    if (res?.data?._embedded) {
       const tmepItemList =
         res.data._embedded[
-          activeMenu === 'left' ? 'querySubscribeOrdersDtoList' : 'queryGeneralOrdersDtoList'
-          ] || [];
-      
+          activeMenu === 'left'
+            ? 'querySubscribeOrdersDtoList'
+            : 'queryGeneralOrdersDtoList'
+        ] || [];
+
       const subscribeItemList =
         activeMenu === 'left' &&
         tmepItemList.map((item) => ({
           recipeDto: {
-            thumbnailUrl: decodeUrlToMatchApiProtocolAndSearchQuery(item.recipeDto.thumbnailUrl),
+            thumbnailUrl: decodeUrlToMatchApiProtocolAndSearchQuery(
+              item.recipeDto.thumbnailUrl,
+            ),
             recipeName: item.recipeDto.recipeName,
           },
           subscribeOrderDto: {
@@ -72,7 +77,7 @@ export default function OrderHistoryPage() {
             orderStatus: item.subscribeOrderDto.orderStatus, // 주문상태
             paid: item.subscribeOrderDto.paid, // 결제여부
             paymentMethod: item.subscribeOrderDto.paymentMethod, // 결제수단
-            customerUid: item.subscribeOrderDto.customerUid || null , // 빌링키
+            customerUid: item.subscribeOrderDto.customerUid || null, // 빌링키
             needToCancelNaverpaySubscribe: null, // 아래 과정에서 업데이트 필요
           },
           link: item._links.query_subscribeOrder.href, // 구독상세보기 Link
@@ -82,21 +87,25 @@ export default function OrderHistoryPage() {
       if (Array.isArray(subscribeItemList)) {
         for (const item of subscribeItemList) {
           const subscribeOrderDto = item.subscribeOrderDto;
-          const needToCancelNaverpaySubscribe = await checkNeedToCancelNaverpaySubscribe({
-            paymentMethod: subscribeOrderDto.paymentMethod,
-            orderStatus: subscribeOrderDto.orderStatus,
-            paid: subscribeOrderDto.paid,
-            customerUid: subscribeOrderDto.customerUid,
-          });
+          const needToCancelNaverpaySubscribe =
+            await checkNeedToCancelNaverpaySubscribe({
+              paymentMethod: subscribeOrderDto.paymentMethod,
+              orderStatus: subscribeOrderDto.orderStatus,
+              paid: subscribeOrderDto.paid,
+              customerUid: subscribeOrderDto.customerUid,
+            });
           // 검증결과 추가
-          subscribeOrderDto.needToCancelNaverpaySubscribe = needToCancelNaverpaySubscribe;
+          subscribeOrderDto.needToCancelNaverpaySubscribe =
+            needToCancelNaverpaySubscribe;
         }
       }
 
       const generalItemList =
         activeMenu === 'right' &&
         tmepItemList.map((item) => ({
-          thumbnailUrl: decodeUrlToMatchApiProtocolAndSearchQuery(item.thumbnailUrl),
+          thumbnailUrl: decodeUrlToMatchApiProtocolAndSearchQuery(
+            item.thumbnailUrl,
+          ),
           orderDto: {
             id: item.orderDto.id,
             merchantUid: item.orderDto.merchantUid,
@@ -107,7 +116,7 @@ export default function OrderHistoryPage() {
           itemNameList: item.itemNameList,
           link: item._links.query_order.href,
         }));
-      
+
       const pageData = res?.data.page;
       newPageInfo = {
         totalPages: pageData.totalPages,
@@ -115,12 +124,15 @@ export default function OrderHistoryPage() {
         totalItems: pageData.totalElements,
         currentPageIndex: pageData.number,
         newPageNumber: pageData.number + 1,
-        newItemList: activeMenu === 'left' ? subscribeItemList : generalItemList,
+        newItemList:
+          activeMenu === 'left' ? subscribeItemList : generalItemList,
       };
     }
-  
-    setItemType(activeMenu === 'left' ? productType.SUBSCRIBE : productType.GENERAL);
-    
+
+    setItemType(
+      activeMenu === 'left' ? productType.SUBSCRIBE : productType.GENERAL,
+    );
+
     return newPageInfo;
   };
 
@@ -144,13 +156,21 @@ export default function OrderHistoryPage() {
                   <EmptyContMessage>
                     <Spinner />
                   </EmptyContMessage>
-                ) : itemType === productType.SUBSCRIBE && itemList.length === 0 ? (
+                ) : itemType === productType.SUBSCRIBE &&
+                  itemList.length === 0 ? (
                   <EmptyContMessage
                     message={'구독 중인 상품내역이 없습니다.'}
-                    options={{ button: { url: '/surveyGuide', label: '정기구독 시작하기' } }}
+                    options={{
+                      button: {
+                        url: '/surveyGuide',
+                        label: '정기구독 시작하기',
+                      },
+                    }}
                   ></EmptyContMessage>
                 ) : (
-                  itemType === productType.SUBSCRIBE && <SubscribeItems itemList={itemList} />
+                  itemType === productType.SUBSCRIBE && (
+                    <SubscribeItems itemList={itemList} />
+                  )
                 )}
               </LeftContainer>
               <RightContainer activeMenu={activeMenu}>
@@ -158,25 +178,34 @@ export default function OrderHistoryPage() {
                   <EmptyContMessage>
                     <Spinner />
                   </EmptyContMessage>
-                ) : itemType === productType.GENERAL && itemList.length === 0 ? (
+                ) : itemType === productType.GENERAL &&
+                  itemList.length === 0 ? (
                   <EmptyContMessage
                     message={'주문한 상품내역이 없습니다.'}
-                    options={{ button: { url: '/shop?itemType=ALL', label: '상품 담기' } }}
+                    options={{
+                      button: { url: '/shop?itemType=ALL', label: '상품 담기' },
+                    }}
                   />
                 ) : (
-                  itemType === productType.GENERAL && <SingleItemList itemList={itemList} />
+                  itemType === productType.GENERAL && (
+                    <SingleItemList itemList={itemList} />
+                  )
                 )}
               </RightContainer>
             </TabContentContainer>
-            {<section className={s.pagination_box}>
-              <PaginationWithAPI
-                apiURL={activeMenu === 'left' ? subscribeApiUrl : generalItemApiUrl}
-                size={searchPageSize}
-                setItemList={setItemList}
-                setIsLoading={setIsLoading}
-                pageInterceptor={pageInterCeptor}
-              />
-            </section>}
+            {
+              <section className={s.pagination_box}>
+                <PaginationWithAPI
+                  apiURL={
+                    activeMenu === 'left' ? subscribeApiUrl : generalItemApiUrl
+                  }
+                  size={searchPageSize}
+                  setItemList={setItemList}
+                  setIsLoading={setIsLoading}
+                  pageInterceptor={pageInterCeptor}
+                />
+              </section>
+            }
           </MypageWrapper>
         </Wrapper>
       </Layout>

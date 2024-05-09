@@ -1,12 +1,15 @@
 // 레시피 Swiper
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import s from '/src/pages/mainPage.module.scss';
 import { Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import Image from 'next/image';
 import StartBanner from '@public/img/starterBanner.png';
-import Link from "next/link";
-import Styles from "@src/pages/mainPage.module.scss";
+import Link from 'next/link';
+import Styles from '@src/pages/mainPage.module.scss';
+import ArrowLeft_m from '@public/img/icon/swiper-arrow-medium.svg';
+import ArrowLeft_s from '@public/img/icon/swiper-arrow-small-l.svg';
+import ArrowRight_s from '@public/img/icon/swiper-arrow-small-r.svg';
 // import s from "/src/components/modal/modal_previewRecipeThumb.module.scss";
 
 const swiperSettings_recipe = {
@@ -37,23 +40,43 @@ const swiperSettings_recipe = {
 };
 
 export function Swiper_recipe({ data, isMobile }) {
+  const navPrevRef = useRef(null);
+  const navNextRef = useRef(null);
   // // console.log(data);
-  const [recipeDatas, setRecipeDatas] = useState( [] );
-  
+  const [recipeDatas, setRecipeDatas] = useState([]);
+
   useEffect(() => {
-    if(data && Array.isArray(data)){
+    if (data && Array.isArray(data)) {
       setRecipeDatas(data || []);
     }
-    
-  },[])
-  
-  if(!data || !Array.isArray(data)){
+  }, []);
+
+  if (!data || !Array.isArray(data)) {
     return;
   }
 
   return (
     <div className={s.swiper_recipe_outerWrap}>
-      <Swiper {...swiperSettings_recipe}>
+      <i className={Styles.swiper_button_prev_recipe} ref={navPrevRef}>
+        <ArrowLeft_s width="100%" height="100%" viewBox="0 0 28 28" />
+      </i>
+      <i className={Styles.swiper_button_next_recipe} ref={navNextRef}>
+        <ArrowRight_s width="100%" height="100%" viewBox="0 0 28 28" />
+      </i>
+      <Swiper
+        navigation={{
+          prevEl: navPrevRef.current,
+          nextEl: navNextRef.current,
+        }}
+        {...swiperSettings_recipe}
+        onInit={(swiper) => {
+          swiper.params.navigation.prevEl = navPrevRef.current;
+          swiper.params.navigation.nextEl = navNextRef.current;
+          swiper.navigation.destroy();
+          swiper.navigation.init();
+          swiper.navigation.update();
+        }}
+      >
         {recipeDatas?.length > 0 &&
           recipeDatas?.map((d, index) => (
             <SwiperSlide
@@ -65,16 +88,22 @@ export function Swiper_recipe({ data, isMobile }) {
               className={s.swiper_slide}
             >
               <div className={s.recipe_a}>
-                  <div className={s.recipe_box}>
-                    <div className={s.img_wrap}>
-                      <Image src={d.imageUrl1} objectFit="fit" layout="fill" alt="레시피 이미지" priority />
-                    </div>
-                    <p className={s.uiNameKorean}>{d.uiNameKorean}</p>
-                    <p className={s.desc}>{d.description}</p>
-                    <Link passHref href={'/recipes'}>
-                        <a className={s.recipe_btn}>+ 더보기</a>
-                    </Link>
+                <div className={s.recipe_box}>
+                  <div className={s.img_wrap}>
+                    <Image
+                      src={d.imageUrl1}
+                      objectFit="fit"
+                      layout="fill"
+                      alt="레시피 이미지"
+                      priority
+                    />
                   </div>
+                  <p className={s.uiNameKorean}>{d.uiNameKorean}</p>
+                  <p className={s.desc}>{d.description}</p>
+                  <Link passHref href={'/recipes'}>
+                    <a className={s.recipe_btn}>+ 더보기</a>
+                  </Link>
+                </div>
               </div>
             </SwiperSlide>
           ))}

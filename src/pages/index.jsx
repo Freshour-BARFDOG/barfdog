@@ -219,7 +219,7 @@ export default function MainPage({ data }) {
         {/* 바프독 선택해야하는 이유 */}
         <Wrapper>
           <section className={s.difference}>
-            <div className={s.inner}>
+            {/* <div className={s.inner}>
               <div className={s.scroll}>
                 <Controller>
                   {isMobile ? (
@@ -315,14 +315,19 @@ export default function MainPage({ data }) {
                   )}
                 </Controller>
               </div>
-            </div>
+            </div> */}
           </section>
         </Wrapper>
 
         {/* 차별점 그림 3개  */}
         <Wrapper bgColor="#F9F2EC">
+          <div className={s.difference2_inner}>
+            <p>CEHCK POINT</p>
+            <h1>바프독을 선택해야 하는 이유</h1>
+          </div>
           <section className={s.difference2}>
             {/* <ul className={Styles.inner}> */}
+
             <ul>
               <li className={s.firstbox}>
                 <p className={s.title}>

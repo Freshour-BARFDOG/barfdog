@@ -1,12 +1,14 @@
-import React, {useRef} from "react";
-import s from "/src/components/common/menu.module.scss";
-import {List, SubmenuList, SubmenuTitle} from "/src/components/mypage/MypageMenu";
-import Icon_setting from "/public/img/icon/setting.svg";
-import { IoMenuSharp  } from "react-icons/io5";
-
+import React, { useRef } from 'react';
+import s from '/src/components/common/menu.module.scss';
+import {
+  List,
+  SubmenuList,
+  SubmenuTitle,
+} from '/src/components/mypage/MypageMenu';
+import Icon_setting from '/public/img/icon/setting.svg';
+import { IoMenuSharp } from 'react-icons/io5';
 
 function AdminGnb() {
-
   const curMenuRef = useRef(null);
 
   return (
@@ -24,7 +26,10 @@ function AdminGnb() {
           <SubmenuList title="적립금 발행" link="/bf-admin/reward/release" />
           <SubmenuTitle title="프로모션" noLink />
           <SubmenuList title="프로모션 관리" link="/bf-admin/promotion" />
-          <SubmenuList title="프로모션 생성" link="/bf-admin/promotion/create" />
+          <SubmenuList
+            title="프로모션 생성"
+            link="/bf-admin/promotion/create"
+          />
         </List>
         <List title="판매관리">
           <SubmenuList title="통합 검색" link="/bf-admin/sell/search" />
@@ -37,9 +42,15 @@ function AdminGnb() {
         </List>
         <List title="상품관리">
           <SubmenuList title="일반상품 관리" link="/bf-admin/product/single" />
-          <SubmenuList title="일반상품 등록" link="/bf-admin/product/createSingle" />
+          <SubmenuList
+            title="일반상품 등록"
+            link="/bf-admin/product/createSingle"
+          />
           <SubmenuList title="레시피 관리" link="/bf-admin/product/recipe" />
-          <SubmenuList title="레시피 등록" link="/bf-admin/product/createRecipe" />
+          <SubmenuList
+            title="레시피 등록"
+            link="/bf-admin/product/createRecipe"
+          />
         </List>
         <List title="반려견관리" link="/bf-admin/dog" />
         <List title="배너관리">
@@ -69,15 +80,17 @@ function AdminGnb() {
           <SubmenuList title="친구톡" link="/bf-admin/messenger/friendTalk" />
           <SubmenuList title="채널톡" link="/bf-admin/messenger/channelTalk" />
         </List>
-      </ul>
-      <div className={`${s.site_settings} ${s.menu_title}`}>
-        <List title="설정" iconOnLeftSide={<Icon_setting />}>
+        <List title="설정">
           <SubmenuList title="알고리즘" link="/bf-admin/settings/algorithm" />
           <SubmenuList title="배송정책" link="/bf-admin/settings/delivery" />
           <SubmenuList title="쿠폰정책" link="/bf-admin/settings/coupon" />
           <SubmenuList title="가격정책" link="/bf-admin/settings/price" />
+          <SubmenuList
+            title="주문마감일 변경"
+            link="/bf-admin/settings/deadline"
+          />
         </List>
-      </div>
+      </ul>
     </nav>
   );
 }
