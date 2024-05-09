@@ -51,7 +51,7 @@ const Gnb_survey = () => {
     // mcx.subscribe.onShow();
     // mcx.event.setScrollY();
     //! [수정] 설문조사 페이지로 이동
-    router.push('/survey');
+    router.push('/surveyGuide');
   };
   return (
     <>
