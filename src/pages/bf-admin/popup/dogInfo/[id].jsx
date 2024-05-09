@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
-import Icon_Checked from '/public/img/icon/icon_checked.svg';
 import s from './dogInfo.module.scss';
 import pc from '/src/components/atoms/pureCheckbox.module.scss';
 import { useModalContext } from '/store/modal-context';
