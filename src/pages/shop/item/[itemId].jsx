@@ -79,6 +79,14 @@ export default function SingleItemDetailPage({ data }) {
 
   const onAddToCart = async (e) => {
     if (!userInfo) {
+      // 로그인 성공 시, 바로 장바구니에 담기 위해 localStorage에 저장
+      const body = {
+        itemAmount: formValues.itemAmount,
+        itemId: formValues.itemId,
+        optionDtoList: formValues.optionDtoList,
+      };
+      const formStrings = JSON.stringify(body).replace(/\n/g, '');
+      localStorage.setItem('storedItem', formStrings);
       dispatch(setPreviousPath('/cart'));
       return await router.push('/account/login');
       // return mct.alertShow('로그인 후 이용가능합니다.');
@@ -117,7 +125,23 @@ export default function SingleItemDetailPage({ data }) {
 
   const onClickBuyButton = async () => {
     if (!userInfo) {
-      dispatch(setPreviousPath(router.asPath));
+      // 로그인 성공 시, 바로 주문서 페이지로 가기 위해 localStorage에 저장
+      const items = [
+        {
+          itemDto: {
+            itemId: formValues.itemId, // 상품 id
+            amount: formValues.itemAmount, // 아이템 수량
+          },
+          optionDtoList: formValues.optionDtoList.map((option) => ({
+            itemOptionId: option.optionId,
+            amount: option.optionAmount,
+          })), // 옵션 리스트
+        },
+      ];
+      const formStrings = JSON.stringify(items).replace(/\n/g, '');
+      localStorage.setItem('orderItem', formStrings);
+      dispatch(setPreviousPath('/order/ordersheet/general'));
+
       return await router.push('/account/login');
       // return mct.alertShow('로그인 후 이용가능합니다.');
     }
