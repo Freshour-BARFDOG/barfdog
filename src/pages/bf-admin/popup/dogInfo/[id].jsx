@@ -555,7 +555,7 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
     }
   };
 
-  // console.log('formValues', formValues);
+  console.log('formValues', formValues);
   // console.log('setSelectedCategory', selectedCategory);
   // console.log('formValues.subscribeStatus', formValues.subscribeStatus);
   // console.log('NextPriceText', nextPriceText);
@@ -736,13 +736,26 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
                           </div>
                         </div>
                       </li>
-                      <li className={`${s['t-row']} ${s['fullWidth']}`}>
+                      <li className={`${s['t-row']}`}>
                         <div className={s['t-box']}>
                           <div className={`${s.innerBox} ${s.label}`}>
                             <span>추천 그램수</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
                             <span>{formValues.oneMealRecommendGram} g</span>
+                          </div>
+                        </div>
+                        <div className={s['t-box']}>
+                          <div className={`${s.innerBox} ${s.label}`}>
+                            <span>구독 그램수</span>
+                          </div>
+                          <div className={`${s.innerBox} ${s.cont}`}>
+                            <span>
+                              {DATA?.subscribeDetailInfo.subscribeDto.oneMealGramsPerRecipe
+                                ?.split(', ')
+                                .map((value) => `${value} g`)
+                                .join(' , ')}
+                            </span>
                           </div>
                         </div>
                       </li>
