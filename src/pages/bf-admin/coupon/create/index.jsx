@@ -123,15 +123,14 @@ export default function CreateCouponPage() {
     }));
   };
 
-  const onClickHandler = () => {
+  const onSubmit = async () => {
     if (isSubmitted) return console.error('Already submitted!');
     const body = {
       name: formValues.name,
       description: formValues.description,
       couponTarget: formValues.couponTarget,
       code: formValues.code,
-      couponType:
-        formValues.code === '' ? 'GENERAL_PUBLISHED' : formValues.couponType, // 쿠폰 코드 공란 입력 시, '일반발행'
+      couponType: formValues.couponType,
       discountDegree: transformClearLocalCurrency(formValues.discountDegree), //
       discountType: formValues.discountType,
       availableMaxDiscount: transformClearLocalCurrency(
@@ -150,33 +149,6 @@ export default function CreateCouponPage() {
 
     const isPassed = valid_hasFormErrors(errObj);
     if (!isPassed) return mct.alertShow('유효하지 않은 항목이 있습니다.');
-    if (formValues.code === '') return setActiveConfirmModal(true);
-
-    onSubmit(true);
-  };
-
-  const onSubmit = async (confirm) => {
-    if (!confirm === true) {
-      return setActiveConfirmModal(false);
-    }
-    const body = {
-      name: formValues.name,
-      description: formValues.description,
-      couponTarget: formValues.couponTarget,
-      code: formValues.code,
-      couponType:
-        formValues.code === '' ? 'GENERAL_PUBLISHED' : formValues.couponType, // 쿠폰 코드 공란 입력 시, '일반발행'
-      discountDegree: transformClearLocalCurrency(formValues.discountDegree), //
-      discountType: formValues.discountType,
-      availableMaxDiscount: transformClearLocalCurrency(
-        formValues.availableMaxDiscount,
-      ), //
-      availableMinPrice: transformClearLocalCurrency(
-        formValues.availableMinPrice,
-      ), //
-      amount: transformClearLocalCurrency(formValues.amount), //
-      type: formValues.type,
-    };
 
     try {
       setActiveConfirmModal(false);
@@ -538,7 +510,7 @@ export default function CreateCouponPage() {
               type="button"
               id="btn-create"
               className="admin_btn confirm_l solid"
-              onClick={onClickHandler}
+              onClick={onSubmit}
             >
               {isLoading.submit ? (
                 <Spinner style={{ color: '#fff' }} />
@@ -551,14 +523,6 @@ export default function CreateCouponPage() {
       </AdminLayout>
       {hasAlert && (
         <Modal_global_alert onClick={onClickModalButton} background />
-      )}
-      {activeConfirmModal && (
-        <Modal_confirm
-          theme={'userPage'}
-          isConfirm={onSubmit}
-          positionCenter
-          text={`쿠폰 코드를 공란으로 입력할 경우,\n 일반쿠폰이 발행됩니다.`}
-        />
       )}
     </>
   );
