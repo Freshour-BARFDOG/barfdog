@@ -16,7 +16,10 @@ import filter_emptyValue from '/util/func/filter_emptyValue';
 import filter_onlyNumber from '/util/func/filter_onlyNumber';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import { validate } from '/util/func/validation/validation_releaseCoupon';
-import { valid_date, valid_hasFormErrors } from '/util/func/validation/validationPackage';
+import {
+  valid_date,
+  valid_hasFormErrors,
+} from '/util/func/validation/validationPackage';
 import { getData, postObjData } from '/src/pages/api/reqData';
 import { global_couponType } from '/store/TYPE/couponType';
 import CustomSelect from '/src/components/admin/form/CustomSelect';
@@ -53,12 +56,9 @@ const convertTargetNameToString = {
   PERSONAL: '개인회원',
   GROUP: '그룹',
   ALL: '전체 회원',
-}
-
-
+};
 
 function ReleaseCouponPage() {
-
   const router = useRouter();
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
@@ -82,7 +82,13 @@ function ReleaseCouponPage() {
           ...prevState,
           fetchingCouponList: true,
         }));
-        const apiUrl = '/api/admin/coupons/publication/code';
+
+        let apiUrl;
+        if (formValues.couponType === 'CODE_PUBLISHED') {
+          apiUrl = '/api/admin/coupons/publication/code';
+        } else if (formValues.couponType === 'GENERAL_PUBLISHED') {
+          apiUrl = '/api/admin/coupons/publication/general';
+        }
         const res = await getData(apiUrl);
         const hasDATA = res.data._embedded;
         let newCouponOptions = [];
@@ -92,19 +98,15 @@ function ReleaseCouponPage() {
             label: '선택',
           },
         ];
-
-        if(hasDATA){
+        if (hasDATA) {
           const DATA = res.data._embedded.publicationCouponDtoList;
           newCouponOptions = DATA.map((data) => ({
             value: data.couponId,
             label: `[ 할인: ${data.discount} ] ${data.name}`,
           }));
-
-
         }
         emptyOptions.concat(newCouponOptions);
         setCouponOptions(emptyOptions.concat(newCouponOptions));
-
       } catch (err) {
         console.error(err);
         console.error('데이터를 가져올 수 없습니다.');
@@ -114,9 +116,7 @@ function ReleaseCouponPage() {
         fetchingCouponList: false,
       }));
     })();
-  }, []);
-
-
+  }, [formValues.couponType]);
 
   const onInputChangeHandler = (event) => {
     const input = event.currentTarget;
@@ -139,9 +139,6 @@ function ReleaseCouponPage() {
     }));
   };
 
-
-
-
   const onSubmit = async (e) => {
     if (isSubmitted) return console.error('이미 제출된 양식입니다.');
 
@@ -150,13 +147,13 @@ function ReleaseCouponPage() {
     let body;
     let postFormValuesApiUrl;
     if (target === 'ALL') {
-      postFormValuesApiUrl =  `/api/admin/coupons/all`;
-      body={
-        couponType:formValues.couponType,
+      postFormValuesApiUrl = `/api/admin/coupons/all`;
+      body = {
+        couponType: formValues.couponType,
         couponId: Number(formValues.couponId),
-        expiredDate:formValues.expiredDate,
-        alimTalk:formValues.alimTalk,
-      }
+        expiredDate: formValues.expiredDate,
+        alimTalk: formValues.alimTalk,
+      };
     } else if (target === 'PERSONAL') {
       postFormValuesApiUrl = `/api/admin/coupons/personal`;
       body = {
@@ -164,8 +161,8 @@ function ReleaseCouponPage() {
         couponId: Number(formValues.couponId),
         expiredDate: formValues.expiredDate,
         alimTalk: formValues.alimTalk,
-        memberIdList: formValues.memberIdList
-      }
+        memberIdList: formValues.memberIdList,
+      };
     } else if (target === 'GROUP') {
       postFormValuesApiUrl = `/api/admin/coupons/group`;
       body = {
@@ -178,8 +175,8 @@ function ReleaseCouponPage() {
         gradeList: formValues.gradeList,
         area: formValues.area,
         birthYearFrom: filterStringFromBirthYear(formValues.birthYearFrom),
-        birthYearTo: filterStringFromBirthYear(formValues.birthYearTo)
-      }
+        birthYearTo: filterStringFromBirthYear(formValues.birthYearTo),
+      };
     }
 
     // console.log(body);
@@ -202,18 +199,20 @@ function ReleaseCouponPage() {
         submit: true,
       }));
 
-
       const res = await postObjData(postFormValuesApiUrl, body);
       // console.log(res);
       if (res.isDone) {
         mct.alertShow('쿠폰이 성공적으로 발행되었습니다.', onSucessCallback);
         setIsSubmitted(true);
       } else {
-        mct.alertShow(res.error, '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.');
+        mct.alertShow(
+          res.error,
+          '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.',
+        );
       }
     } catch (err) {
       mct.alertShow('API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.');
-      console.error( err);
+      console.error(err);
     } finally {
       setIsLoading((prevState) => ({
         ...prevState,
@@ -227,7 +226,6 @@ function ReleaseCouponPage() {
       router.back();
     }
   };
-
 
   const onSucessCallback = () => {
     window.location.href = '/bf-admin/coupon/search';
@@ -264,7 +262,9 @@ function ReleaseCouponPage() {
                         getDirValue={true}
                       />
 
-                      {formErrors.target && <ErrorMessage>{formErrors.target}</ErrorMessage>}
+                      {formErrors.target && (
+                        <ErrorMessage>{formErrors.target}</ErrorMessage>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -293,12 +293,42 @@ function ReleaseCouponPage() {
                   </div>
                   <div className="inp_section">
                     <div className="inp_box">
-                      <input id={'expiredDate'} type="date" onChange={onInputChangeHandler} />
-                      <span>일</span>
+                      <input
+                        id={'expiredDate'}
+                        type="date"
+                        onChange={onInputChangeHandler}
+                      />
                       {formErrors.expiredDate && (
                         <ErrorMessage>{formErrors.expiredDate}</ErrorMessage>
                       )}
                     </div>
+                  </div>
+                </div>
+              </div>
+              <div className="cont_divider">
+                <div className="input_row">
+                  <div className="title_section fixedHeight">
+                    <label className="title" htmlFor="couponId">
+                      쿠폰타입
+                    </label>
+                    {isLoading.fetchingCouponList && <Spinner />}
+                  </div>
+                  <div className="inp_section">
+                    <CustomRadio
+                      setValue={setFormValues}
+                      name="couponType"
+                      idList={[
+                        global_couponType.CODE_PUBLISHED,
+                        global_couponType.GENERAL_PUBLISHED,
+                      ]}
+                      labelList={[
+                        global_couponType.KOR.CODE_PUBLISHED,
+                        global_couponType.KOR.GENERAL_PUBLISHED,
+                      ]}
+                    />
+                    {formErrors.couponType && (
+                      <ErrorMessage>{formErrors.couponType}</ErrorMessage>
+                    )}
                   </div>
                 </div>
               </div>
@@ -318,7 +348,9 @@ function ReleaseCouponPage() {
                       value={formValues.couponId}
                       setFormValues={setFormValues}
                     />
-                    {formErrors.couponId && <ErrorMessage>{formErrors.couponId}</ErrorMessage>}
+                    {formErrors.couponId && (
+                      <ErrorMessage>{formErrors.couponId}</ErrorMessage>
+                    )}
                   </div>
                 </div>
               </div>
@@ -358,20 +390,27 @@ function ReleaseCouponPage() {
               className="admin_btn confirm_l solid"
               onClick={onSubmit}
             >
-              {isLoading.submit ? <Spinner style={{ color: '#fff' }} /> : '쿠폰 발행'}
+              {isLoading.submit ? (
+                <Spinner style={{ color: '#fff' }} />
+              ) : (
+                '쿠폰 발행'
+              )}
             </button>
           </div>
         </AdminContentWrapper>
       </AdminLayout>
-      {hasAlert && <Modal_global_alert onClick={onClickModalButton} background/>}
+      {hasAlert && (
+        <Modal_global_alert onClick={onClickModalButton} background />
+      )}
     </>
   );
 }
 
 export default ReleaseCouponPage;
 
-
 const filterStringFromBirthYear = (birthString) => {
-  const targetString="년";
-  return birthString?.indexOf(targetString) >= 0 ? birthString.replace(targetString, '') : birthString;
+  const targetString = '년';
+  return birthString?.indexOf(targetString) >= 0
+    ? birthString.replace(targetString, '')
+    : birthString;
 };

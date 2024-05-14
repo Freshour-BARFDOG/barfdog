@@ -30,6 +30,24 @@
           rem(120)
           rem(90)
           rem(90)
+          rem(90)
+          rem(70);
+      }
+    }
+
+    &.GENERAL_PUBLISHED {
+      .table_header,
+      .item {
+        grid-template-columns:
+          rem(120)
+          rem(160)
+          rem(120)
+          rem(400)
+          fillTheRestOfTableWidth(120)
+          rem(120)
+          rem(90)
+          rem(90)
+          rem(90)
           rem(70);
       }
     }
