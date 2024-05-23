@@ -35,6 +35,8 @@ import { calcOneMealGramsWithRecipeInfo } from '/util/func/subscribe/calcOneMeal
 import { calcSubscribePrice } from '/util/func/subscribe/calcSubscribePrices';
 import { valid_isTheSameArray } from '/util/func/validation/validationPackage';
 import { postObjData } from '../../../api/reqData';
+import { ConfigProvider, DatePicker, Space } from 'antd';
+import dayjs from 'dayjs';
 
 export default function Popup_DogDetailPage({ DATA, dogIdx }) {
   // console.log('!!!!!!DATA!!!!!!!', DATA);
@@ -125,18 +127,6 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
             DATA.subscribeDetailInfo.subscribeDto.nextPaymentDate,
         }));
 
-        // *** 다음 결제일 포맷변환 (0000년 0월 0일)
-        const nextPaymentDate = new Date(
-          DATA.subscribeDetailInfo.subscribeDto.nextPaymentDate,
-        );
-        const year = nextPaymentDate.getFullYear();
-        const month = (nextPaymentDate.getMonth() + 1)
-          .toString()
-          .padStart(2, '0');
-        const day = nextPaymentDate.getDate().toString().padStart(2, '0');
-
-        const formattedNextPaymentDate = `${year}-${month}-${day}`;
-
         initialValues = {
           id: DATA.dogDto.id,
           address: {
@@ -155,8 +145,7 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
             DATA.subscribeDetailInfo.subscribeDto.subscribeStatus,
           subscribeCount: DATA.subscribeDetailInfo.subscribeDto.subscribeCount,
           nextPaymentDate:
-            DATA.subscribeDetailInfo.subscribeDto.nextPaymentDate &&
-            formattedNextPaymentDate,
+            DATA.subscribeDetailInfo.subscribeDto.nextPaymentDate,
           nextPaymentPrice:
             DATA.subscribeDetailInfo.subscribeDto.nextPaymentPrice,
           name: DATA.dogDto.name,
@@ -247,12 +236,13 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
     ],
   );
 
-  const onInputChange = (e) => {
-    const { value } = e.currentTarget;
-    setTempValues((prevState) => ({
-      ...prevState,
-      nextPaymentDate: value,
-    }));
+  const onInputChange = (value) => {
+    setTempValues((prevState) => {
+      return {
+        ...prevState,
+        nextPaymentDate: value ? dayjs(value) : null,
+      };
+    });
   };
 
   if (isLoading.fetching) {
@@ -325,28 +315,34 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
   const onChangeNextPaymentDate = () => {
     if (
       !tempValues.nextPaymentDate ||
-      formValues.nextPaymentDate === tempValues.nextPaymentDate
+      formValues.nextPaymentDate.substring(0, 16) ===
+        dayjs(tempValues.nextPaymentDate).format('YYYY-MM-DDTHH:mm')
     ) {
-      alert('기존 구독 결제일과 동일합니다.');
+      alert('다음 결제일이 기존과 동일합니다.');
     } else if (confirm('구독 결제일을 정말 변경하시겠습니까?')) {
       (async () => {
         try {
           const apiUrl = `/api/admin/nextPaymentDate/${formValues.subscribeId}`;
-          const newNextPaymentDate = tempValues.nextPaymentDate;
-
-          // 다음 결제일 포맷변환 (0000년 0월 0일)
-          const match = newNextPaymentDate.match(/(\d{4})-(\d{2})-(\d{2})/);
-          let yyyymmdd = '';
+          let newNextPaymentDate = dayjs(tempValues.nextPaymentDate).format(
+            'YYYY-MM-DD-HH-mm',
+          );
+          // 다음 결제일 포맷변환 (0000-00-00-00-00)
+          const match = newNextPaymentDate.match(
+            /(\d{4})-(\d{2})-(\d{2})-(\d{2})-(\d{2})/,
+          );
+          let yyyymmddhhmm = '';
           if (match) {
             const year = match[1];
             const month = match[2];
             const day = match[3];
-            yyyymmdd = `${year}${month}${day}`;
+            const hour = match[4];
+            const minute = match[5];
+            yyyymmddhhmm = `${year}-${month}-${day}-${hour}-${minute}`;
           } else {
             console.log('날짜 형식이 올바르지 않습니다.');
           }
           const data = {
-            nextPaymentDate: yyyymmdd,
+            nextPaymentDate: yyyymmddhhmm,
           };
           // console.log('PUT 요청 !', data);
           const res = await putObjData(apiUrl, data);
@@ -362,6 +358,7 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
               ...prevState,
               nextPaymentDate: null,
             }));
+            window.location.reload();
           }
         } catch (err) {
           console.error('API통신 오류 : ', err);
@@ -555,7 +552,39 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
     }
   };
 
-  console.log('formValues', formValues);
+  // 오늘 이전의 날짜 비활성화
+  const disabledDate = (current) => {
+    return current && current < dayjs().startOf('day');
+  };
+
+  // 현재 시간으로부터 5분 뒤까지의 시간 비활성화
+  const disabledDateTime = () => {
+    const now = dayjs();
+    const fiveMinutesLater = now.add(5, 'minute');
+    return {
+      disabledHours: () => {
+        const hours = [];
+        for (let i = 0; i < 24; i++) {
+          if (i < fiveMinutesLater.hour()) {
+            hours.push(i);
+          }
+        }
+        return hours;
+      },
+      disabledMinutes: (selectedHour) => {
+        const minutes = [];
+        if (selectedHour === fiveMinutesLater.hour()) {
+          for (let i = 0; i <= fiveMinutesLater.minute(); i++) {
+            minutes.push(i);
+          }
+        }
+        return minutes;
+      },
+    };
+  };
+
+  // console.log('formValues', formValues);
+  // console.log('tempValues', tempValues);
   // console.log('setSelectedCategory', selectedCategory);
   // console.log('formValues.subscribeStatus', formValues.subscribeStatus);
   // console.log('NextPriceText', nextPriceText);
@@ -700,7 +729,7 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
                           <div className={`${s.innerBox} ${s.cont}`}>
                             {formValues.nextPaymentDate ? (
                               <>
-                                <span>
+                                {/* <span>
                                   <input
                                     type="date"
                                     value={
@@ -709,6 +738,32 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
                                     }
                                     onChange={onInputChange}
                                   />
+                                </span> */}
+
+                                <span>
+                                  <ConfigProvider
+                                    theme={{
+                                      token: {
+                                        colorPrimary: '#ca1011',
+                                      },
+                                    }}
+                                  >
+                                    <DatePicker
+                                      showTime={{
+                                        format: 'HH:mm',
+                                      }}
+                                      format="YYYY-MM-DD HH:mm"
+                                      onChange={onInputChange}
+                                      value={
+                                        tempValues.nextPaymentDate === null ||
+                                        tempValues.nextPaymentDate
+                                          ? tempValues.nextPaymentDate
+                                          : dayjs(formValues.nextPaymentDate)
+                                      }
+                                      disabledDate={disabledDate}
+                                      disabledTime={disabledDateTime}
+                                    />
+                                  </ConfigProvider>
                                 </span>
 
                                 <button
