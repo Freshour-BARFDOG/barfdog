@@ -1,74 +1,82 @@
 @import '/styles/global/rem';
 
-
-.wrapper{
+.wrapper {
   display: grid;
   gap: rem(10);
-  grid-template-areas:
-          "m m m m m m"
-          "t t t t t t"
-          "l l r r r r";
 
-  .title {
-    grid-area: m;
+  section {
+    margin-bottom: 0 !important;
   }
-  .cont-top{
-    grid-area: t;
-  }
-
-  .cont-left{
-    grid-area: l
-
-  }
-  .cont-right{
-    grid-area: r
-  }
-
 }
 
+.spinner_wrapper {
+  margin: rem(60);
+}
 
-.main.title{
+.cont_wrapper {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: rem(20);
+  margin: rem(20) 0;
+}
+
+.cont-mid {
+  .cont-section {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    .box {
+      row-gap: rem(16);
+    }
+  }
+}
+
+.graph_wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: rem(8);
+}
+
+.main.title {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap:rem(10);
+  gap: rem(10);
 }
 
-.title-section  {
+.title-section {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap:rem(10);
+  gap: rem(10);
   padding-bottom: rem(20);
 
-  &:not(:first-child){
+  &:not(:first-child) {
     margin-top: rem(40);
   }
-  .title{
+  .title {
     display: flex;
     align-items: center;
     font-size: rem(20);
     line-height: rem(26);
-    .tooltip{
-      margin-left:rem(8);
+    .tooltip {
+      margin-left: rem(8);
     }
   }
 
   border-bottom: rem(1) solid var(--color-line-03);
-  margin-bottom:rem(20);
+  margin-bottom: rem(20);
 }
-
 
 .cont-section {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  .box{
+  .box {
     display: flex;
     align-items: flex-start;
     flex-direction: column;
     justify-content: flex-start;
 
-    li{
+    li {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -79,43 +87,40 @@
         display: flex;
         align-items: center;
       }
-      span{
-        display: flex; align-items: center;
+      span {
+        display: flex;
+        align-items: center;
         position: relative;
       }
-      b{
+      b {
         font-weight: 400;
         font-size: rem(20);
-        margin-right:rem(4);
+        margin-right: rem(4);
       }
-      .select-period{
-        margin-left:rem(8);
+      .select-period {
+        margin-left: rem(8);
       }
     }
 
-    .tooltip{
+    .tooltip {
       margin-left: rem(8);
     }
   }
 }
 
-
-
-
-
-.cont-top{
-  .cont-section{
+.cont-top {
+  .cont-section {
     grid-template-columns: repeat(3, 1fr);
-    .box{
+    .box {
       padding: rem(0) rem(48) rem(10);
       row-gap: rem(16);
       border-right: rem(1) solid var(--color-line-03);
-      &:nth-child(1){
+      &:nth-child(1) {
         padding-left: 0 !important;
       }
-      &:nth-child(2){
+      &:nth-child(2) {
       }
-      &:nth-child(3){
+      &:nth-child(3) {
         border-right: 0;
         padding-right: 0 !important;
       }
@@ -123,49 +128,144 @@
   }
 }
 
+.cont-left {
+  .cont-section {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
 
-
-.cont-left{
-  .cont-section{
-    grid-template-columns: repeat(1, 1fr);
-    .box{
-      gap:rem(16);
+    .box {
+      padding: rem(0) rem(48) rem(10);
+      row-gap: rem(16);
+      border-right: rem(1) solid var(--color-line-03);
+      &:nth-child(1) {
+        padding-left: 0 !important;
+      }
+      &:nth-child(2) {
+        border-right: 0;
+        padding-right: 0 !important;
+      }
     }
   }
 }
 
-.cont-right{
-  .cont-section{
-    .payment-info{
+.cont-row {
+  .cont-section {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    .box {
+      padding: rem(0) rem(48) rem(10);
+      row-gap: rem(16);
+      border-right: rem(1) solid var(--color-line-03);
+      &:nth-child(1) {
+        padding-left: 0 !important;
+      }
+      &:nth-child(2) {
+        border-right: 0;
+        border-right: rem(1) solid var(--color-line-03);
+      }
+      &:nth-child(3) {
+        border-right: 0;
+        padding-right: 0 !important;
+      }
+    }
+
+    .box_graph_one {
+      margin-top: rem(30);
+      padding: rem(30) rem(0) rem(10);
+      border-top: rem(1) solid var(--color-line-03);
+      row-gap: rem(16);
+      li {
+        border-right: rem(1) solid var(--color-line-03);
+        span {
+          padding: 0 rem(20);
+        }
+      }
+    }
+    .box_graph_two {
+      padding: rem(30) rem(0) rem(10);
+      margin-top: rem(30);
+      border-top: rem(1) solid var(--color-line-03);
+      li {
+        border-right: rem(1) solid var(--color-line-03);
+        span {
+          padding: 0 rem(40);
+        }
+      }
+    }
+    .box_graph_three {
+      padding: rem(30) rem(0) rem(10);
+      margin-top: rem(30);
+      border-top: rem(1) solid var(--color-line-03);
+      span {
+        padding: 0 rem(40);
+      }
+    }
+  }
+}
+
+.cont-right {
+  .cont-section {
+    .payment-info {
       display: flex;
       align-items: center;
-      justify-content: flex-start;
-      ul{
+      justify-content: space-between;
+      margin: 0 rem(50) 0 rem(20);
+      div {
+        border: none;
+        display: flex;
+        align-items: center;
+      }
+      ul {
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        li:first-child{
-          padding-right:rem(16);
-          margin-right:rem(16);
-          border-right: rem(1) solid var(--color-line-03);
+        grid-template-columns: 1fr 1fr 1fr;
+        li:last-child {
+          border: none;
         }
-        li{
+        li {
+          padding-right: rem(16);
+          margin-right: rem(16);
+          border-right: rem(1) solid var(--color-line-03);
           font-size: rem(15);
           display: flex;
           align-items: center;
-          span:not(:last-child){margin-right:rem(10);}
-          b{font-weight: 500;}
+          span:not(:last-child) {
+            margin-right: rem(10);
+          }
+          b {
+            font-weight: 500;
+          }
         }
       }
     }
     grid-template-columns: repeat(1, 1fr);
-    .box{
-      gap:rem(16);
+    .box {
+      gap: rem(16);
     }
   }
 }
 
-
-button.google{
+button.google {
   font-size: rem(12) !important;
   cursor: pointer !important;
+}
+
+.chart_container {
+  width: 100%;
+}
+
+.search_radio {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin: rem(20) rem(20) rem(10) 0;
+  div {
+    border: none;
+  }
+}
+
+.pie_chart_wrapper {
+  flex-direction: column;
+  span {
+    padding-top: rem(20);
+  }
 }

@@ -1,7 +1,7 @@
 import s from './searchBar.module.scss';
 import React, { useState, useEffect } from 'react';
 
-const SearchRadio = ({
+const SearchTermRadio = ({
   searchValue,
   setSearchValue,
   title,
@@ -10,6 +10,9 @@ const SearchRadio = ({
   labelList,
   tooltip,
   value,
+  fetchData,
+  isGraphLoading,
+  setIsGraphLoading,
 }) => {
   const initialValue = value || idList[0];
   const [selectedRadio, setSelectedRadio] = useState(initialValue); // * component 내부 value
@@ -19,8 +22,16 @@ const SearchRadio = ({
     setSelectedRadio(initialValue);
   }, [initialValue]);
 
+  useEffect(() => {
+    setSelectedRadio(value);
+  }, [value]);
+
   const onChangeHandler = (e) => {
     const { id } = e.currentTarget;
+
+    setIsGraphLoading(true);
+    fetchData(id);
+
     setSelectedRadio(id);
 
     setSearchValue((prevState) => ({
@@ -60,4 +71,4 @@ const SearchRadio = ({
   );
 };
 
-export default SearchRadio;
+export default SearchTermRadio;
