@@ -3,7 +3,7 @@ import { Line } from '@nivo/line';
 
 import Spinner from '/src/components/atoms/Spinner';
 import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
-import useDeviceState from "/util/hook/useDeviceState";
+import useDeviceState from '/util/hook/useDeviceState';
 
 // make sure parent container have a define height when using
 // responsive component, otherwise height will be 0 and
@@ -13,13 +13,13 @@ import useDeviceState from "/util/hook/useDeviceState";
 
 // Official Doc: https://nivo.rocks/line/
 
-
 export default function LineChart({ chartData }) {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const { isMobile, deviceWidth } = useDeviceState();
-  
-  
+
+  // console.log('chartData>>>', chartData);
+  // console.log('GRAPH DATA>>>', data);
 
   useEffect(() => {
     if (!chartData) return;
@@ -39,12 +39,10 @@ export default function LineChart({ chartData }) {
 
     // setData(DUMMY_formData); // TEST
     setData(formData);
-    setIsLoading(false)
+    setIsLoading(false);
   }, [chartData]);
-  
-  
-  
-  const calcChartWidth = ()=>{
+
+  const calcChartWidth = () => {
     let chartWidth = 0;
     const maxWidth = 1200;
     const wapper = document.querySelector('#chart-section');
@@ -52,8 +50,7 @@ export default function LineChart({ chartData }) {
     const wapperInnerWidth = wapper.clientWidth - wapperPadding;
     chartWidth = chartWidth >= maxWidth ? maxWidth : wapperInnerWidth;
     return chartWidth;
-  }
-  
+  };
 
   if (!data) return;
 
@@ -61,7 +58,8 @@ export default function LineChart({ chartData }) {
     <>
       <div data-title={'chart-container'}>
         {isLoading ? (
-          <AmdinErrorMessage loading={<Spinner />}/>) : (
+          <AmdinErrorMessage loading={<Spinner />} />
+        ) : (
           <Line
             data={data}
             width={calcChartWidth()}
@@ -73,7 +71,7 @@ export default function LineChart({ chartData }) {
               format: '%Y-%m',
               useUTC: false,
               precision: 'month',
-              tickValues: 'every month'
+              tickValues: 'every month',
             }}
             xFormat="time:%Y-%m"
             yScale={{
@@ -87,7 +85,7 @@ export default function LineChart({ chartData }) {
               legendOffset: -48,
             }}
             axisBottom={{
-              orient:'bottom',
+              orient: 'bottom',
               // format: '%b %d', // 월 일
               format: '%Y-%m',
               tickValues: 'every month',
@@ -136,109 +134,105 @@ export default function LineChart({ chartData }) {
   );
 }
 
-
-
-
-
-const DUMMY_formData = [
-  {
-    id: '일반결제',
-    color: 'hsl(53, 70%, 50%)',
-    data: [
-      {
-        x: '2022-08',
-        y: 30,
-      },
-      {
-        x: '2022-09',
-        y: 50,
-      },
-      {
-        x: '2022-10',
-        y: 17,
-      },
-      {
-        x: '2022-11',
-        y: 217,
-      },
-      {
-        x: '2022-12',
-        y: 417,
-      },
-      {
-        x: '2023-01',
-        y: 317,
-      },
-      {
-        x: '2023-02',
-        y: 217,
-      },
-      {
-        x: '2023-03',
-        y: 817,
-      },
-      {
-        x: '2023-05',
-        y: 117,
-      },
-      {
-        x: '2023-06',
-        y: 212,
-      },
-      {
-        x: '2023-07',
-        y: 1543,
-      },
-    ],
-  },
-  {
-    id: '정기결제',
-    color: 'hsl(7, 70%, 50%)',
-    data: [
-      {
-        x: '2022-08',
-        y: 302,
-      },
-      {
-        x: '2022-09',
-        y: 1082,
-      },
-      {
-        x: '2022-10',
-        y: 400,
-      },
-      {
-        x: '2022-11',
-        y: 617,
-      },
-      {
-        x: '2022-12',
-        y: 317,
-      },
-      {
-        x: '2023-01',
-        y: 117,
-      },
-      {
-        x: '2023-02',
-        y: 0,
-      },
-      {
-        x: '2023-03',
-        y: 317,
-      },
-      {
-        x: '2023-05',
-        y: 1017,
-      },
-      {
-        x: '2023-06',
-        y: 317,
-      },
-      {
-        x: '2023-07',
-        y: 617,
-      },
-    ],
-  },
-];
+// const DUMMY_formData = [
+//   {
+//     id: '일반결제',
+//     color: 'hsl(53, 70%, 50%)',
+//     data: [
+//       {
+//         x: '2022-08',
+//         y: 30,
+//       },
+//       {
+//         x: '2022-09',
+//         y: 50,
+//       },
+//       {
+//         x: '2022-10',
+//         y: 17,
+//       },
+//       {
+//         x: '2022-11',
+//         y: 217,
+//       },
+//       {
+//         x: '2022-12',
+//         y: 417,
+//       },
+//       {
+//         x: '2023-01',
+//         y: 317,
+//       },
+//       {
+//         x: '2023-02',
+//         y: 217,
+//       },
+//       {
+//         x: '2023-03',
+//         y: 817,
+//       },
+//       {
+//         x: '2023-05',
+//         y: 117,
+//       },
+//       {
+//         x: '2023-06',
+//         y: 212,
+//       },
+//       {
+//         x: '2023-07',
+//         y: 1543,
+//       },
+//     ],
+//   },
+//   {
+//     id: '정기결제',
+//     color: 'hsl(7, 70%, 50%)',
+//     data: [
+//       {
+//         x: '2022-08',
+//         y: 302,
+//       },
+//       {
+//         x: '2022-09',
+//         y: 1082,
+//       },
+//       {
+//         x: '2022-10',
+//         y: 400,
+//       },
+//       {
+//         x: '2022-11',
+//         y: 617,
+//       },
+//       {
+//         x: '2022-12',
+//         y: 317,
+//       },
+//       {
+//         x: '2023-01',
+//         y: 117,
+//       },
+//       {
+//         x: '2023-02',
+//         y: 0,
+//       },
+//       {
+//         x: '2023-03',
+//         y: 317,
+//       },
+//       {
+//         x: '2023-05',
+//         y: 1017,
+//       },
+//       {
+//         x: '2023-06',
+//         y: 317,
+//       },
+//       {
+//         x: '2023-07',
+//         y: 617,
+//       },
+//     ],
+//   },
+// ];
