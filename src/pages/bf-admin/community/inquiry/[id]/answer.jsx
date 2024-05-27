@@ -1,16 +1,16 @@
-import React, {useMemo, useState} from 'react';
+import React, { useMemo, useState } from 'react';
 import s from './adminInquiry[id].module.scss';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
-import {AdminContentWrapper} from '/src/components/admin/AdminWrapper';
+import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
 import Spinner from '/src/components/atoms/Spinner';
-import {getDtataSSR_inquiryAuthorType} from '/util/func/getDtataSSR_inquiryAuthorType';
+import { getDtataSSR_inquiryAuthorType } from '/util/func/getDtataSSR_inquiryAuthorType';
 import transformDate from '/util/func/transformDate';
-import {getDataSSR, putObjData} from '/src/pages/api/reqData';
-import {useModalContext} from '/store/modal-context';
+import { getDataSSR, putObjData } from '/src/pages/api/reqData';
+import { useModalContext } from '/store/modal-context';
 import popupWindow from '/util/func/popupWindow';
-import {InquiryFiles} from "/src/components/mypage/inquiry/InquiryFiles";
-import Modal_global_alert from "/src/components/modal/Modal_global_alert";
+import { InquiryFiles } from '/src/components/mypage/inquiry/InquiryFiles';
+import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 
 export default function InquiryAnswerPage({ data }) {
   const answerId = data.id;
@@ -29,41 +29,37 @@ export default function InquiryAnswerPage({ data }) {
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
   const [isLoading, setIsLoading] = useState({});
-  const [submitted, setSubmitted] = useState( false );
-  
+  const [submitted, setSubmitted] = useState(false);
+
   // // console.log(info);
 
   const onDeleteItem = async () => {
-    if(submitted) return onSuccessCallback();
-    if(!confirm('답글을 삭제하시겠습니까?')) return;
-    
+    if (submitted) return onSuccessCallback();
+    if (!confirm('답글을 삭제하시겠습니까?')) return;
+
     try {
       setIsLoading((prevState) => ({
         ...prevState,
         delete: true,
       }));
-      
-      
+
       const url = `/api/admin/questions`;
       const body = {
-        id: answerId
-      }
+        id: answerId,
+      };
       const res = await putObjData(url, body);
       if (res.isDone) {
-        mct.alertShow(
-          `답글이 삭제되었습니다.`,
-          onSuccessCallback,
-        );
+        mct.alertShow(`답글이 삭제되었습니다.`, onSuccessCallback);
         setSubmitted(true);
       } else {
-        mct.alertShow(
-          `삭제에 실패하였습니다.`,
-          onFailCallback,
-        );
+        mct.alertShow(`삭제에 실패하였습니다.`, onFailCallback);
       }
       // // console.log(res);
     } catch (err) {
-      mct.alertShow('서버와 통신문제로 인하여, 삭제에 실패하였습니다.', onFailCallback);
+      mct.alertShow(
+        '서버와 통신문제로 인하여, 삭제에 실패하였습니다.',
+        onFailCallback,
+      );
       console.error(err);
     } finally {
       setIsLoading((prevState) => ({
@@ -72,14 +68,14 @@ export default function InquiryAnswerPage({ data }) {
       }));
     }
   };
-  
-  const onSuccessCallback = (e)=>{
+
+  const onSuccessCallback = (e) => {
     window.location.href = '/bf-admin/community/inquiry';
-  }
-  
-  const onFailCallback = (e)=>{
+  };
+
+  const onFailCallback = (e) => {
     window.location.reload();
-  }
+  };
 
   const onPrevPage = () => {
     window.location.href = '/bf-admin/community/inquiry';
@@ -101,9 +97,7 @@ export default function InquiryAnswerPage({ data }) {
       <AdminLayout>
         <AdminContentWrapper>
           <div className={`${s['header-section']} title_main`}>
-            <h1>
-              1:1 문의내용 답글
-            </h1>
+            <h1>1:1 문의내용 답글</h1>
           </div>
           <main className="cont">
             <div className={`cont_body ${s['body-section']}`}>
@@ -145,14 +139,23 @@ export default function InquiryAnswerPage({ data }) {
                   {info.questionImgDtoList.length > 0 ? (
                     <InquiryFiles datas={info.questionImgDtoList} />
                   ) : (
-                    <span className={s['viewer-section']}>첨부파일이 없습니다.</span>
+                    <span className={s['viewer-section']}>
+                      첨부파일이 없습니다.
+                    </span>
                   )}
                 </span>
               </div>
               {/* info-row */}
-              <div className={`${s['info-row']} ${s['contents']} ${s['answer']}`}>
+              <div
+                className={`${s['info-row']} ${s['contents']} ${s['answer']}`}
+              >
                 <span className={s['info-row-title']}>답글</span>
-                <span className={s['info-row-cont']}>{info.contents}</span>
+                <span
+                  className={s['info-row-cont']}
+                  style={{ whiteSpace: 'pre-wrap' }}
+                >
+                  {info.contents}
+                </span>
               </div>
             </div>
           </main>
@@ -172,17 +175,15 @@ export default function InquiryAnswerPage({ data }) {
                 className="admin_btn confirm_l line"
                 onClick={onDeleteItem}
               >
-                {isLoading.delete ? (
-                  <Spinner/>
-                ) : (
-                  '답글삭제'
-                )}
+                {isLoading.delete ? <Spinner /> : '답글삭제'}
               </button>
             </div>
           </div>
         </AdminContentWrapper>
       </AdminLayout>
-      {hasAlert && <Modal_global_alert onClick={onClickModalButton} background />}
+      {hasAlert && (
+        <Modal_global_alert onClick={onClickModalButton} background />
+      )}
     </>
   );
 }
@@ -194,7 +195,8 @@ export async function getServerSideProps({ req, query }) {
   const inValid = isNaN(id);
   let AUTHOR_TYPE = await getDtataSSR_inquiryAuthorType(req, id);
   // console.log('inValid: ', inValid, 'AUTHOR_TYPE', AUTHOR_TYPE);
-  if (inValid || !AUTHOR_TYPE) { // !PROD;
+  if (inValid || !AUTHOR_TYPE) {
+    // !PROD;
     return {
       redirect: {
         destination: '/bf-admin/community/inquiry',
@@ -205,7 +207,7 @@ export async function getServerSideProps({ req, query }) {
   const apiUrl = `/api/admin/questions/admin/${id}`;
   const answer_res = await getDataSSR(req, apiUrl);
   // const answer_res = DUMMY_ANSWER_RES; // ! TEST
-  // // console.log('answer_res: ',answer_res);
+  // console.log('answer_res: ', answer_res);
   if (answer_res?.status === 200 && answer_res?.data) {
     const data = answer_res.data;
     DATA = {
@@ -245,5 +247,3 @@ export async function getServerSideProps({ req, query }) {
 //     url: 'http://localhost:4000/test.jpg',
 //   },
 // ]; // ! TEST
-
-
