@@ -36,7 +36,7 @@ export default function MemberChart({ chartData, from, to, isGraphLoading }) {
       )
         .toString()
         .padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}`;
-      return { date: formattedDate, count: chart.count };
+      return { date: formattedDate, count: chart.newMemberCount };
     });
 
     setData(data);

@@ -150,23 +150,35 @@
 
 .cont-row {
   .cont-section {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    .box {
-      padding: rem(0) rem(48) rem(10);
-      row-gap: rem(16);
-      border-right: rem(1) solid var(--color-line-03);
-      &:nth-child(1) {
-        padding-left: 0 !important;
-      }
-      &:nth-child(2) {
-        border-right: 0;
+    display: flex;
+    flex-direction: column;
+    // display: grid;
+    // grid-template-columns: repeat(3, 1fr);
+    .box_section {
+      display: flex;
+      width: 100%;
+      .box {
+        width: 100%;
+        padding: rem(0) rem(48) rem(10);
+        row-gap: rem(16);
         border-right: rem(1) solid var(--color-line-03);
+        &:nth-child(1) {
+          padding-left: 0 !important;
+        }
+        &:nth-child(2) {
+          border-right: 0;
+          border-right: rem(1) solid var(--color-line-03);
+        }
+        &:nth-child(3) {
+          border-right: 0;
+          padding-right: 0 !important;
+        }
       }
-      &:nth-child(3) {
-        border-right: 0;
-        padding-right: 0 !important;
-      }
+    }
+
+    .sub_graph_wrapper {
+      grid-template-columns: repeat(2, 1fr);
+      display: grid;
     }
 
     .box_graph_one {
@@ -186,7 +198,7 @@
       margin-top: rem(30);
       border-top: rem(1) solid var(--color-line-03);
       li {
-        border-right: rem(1) solid var(--color-line-03);
+        // border-right: rem(1) solid var(--color-line-03);
         span {
           padding: 0 rem(40);
         }
@@ -196,8 +208,24 @@
       padding: rem(30) rem(0) rem(10);
       margin-top: rem(30);
       border-top: rem(1) solid var(--color-line-03);
-      span {
-        padding: 0 rem(40);
+
+      li {
+        border-right: rem(1) solid var(--color-line-03);
+        span {
+          padding: 0 rem(40);
+        }
+      }
+    }
+
+    .box_graph_four {
+      padding: rem(30) rem(0) rem(10);
+      margin-top: rem(30);
+      border-top: rem(1) solid var(--color-line-03);
+
+      li {
+        span {
+          padding: 0 rem(40);
+        }
       }
     }
   }

@@ -35,6 +35,8 @@ import SearchTermRadio from '../../../components/admin/form/searchBar/SearchTerm
 import OrderCountChart from '../../../components/admin/dashboard/OrderCountChart';
 import SalesByRecipePieChart from '../../../components/admin/dashboard/SalesByRecipePieChart';
 import popupWindow from '@util/func/popupWindow';
+import Link from 'next/link';
+import SubscribeSumGramByRecipe from '../../../components/admin/dashboard/SubscribeSumGramByRecipe';
 
 export default function DashboardPage({ ga }) {
   const now = dayjs();
@@ -108,7 +110,7 @@ export default function DashboardPage({ ga }) {
         recipeInfoResponse.data?._embedded?.recipeListResponseDtoList;
       setRecipeList(recipeInfo);
 
-      // console.log('res.recipeInfo!!!!!!', recipeInfo);
+      console.log('res.recipeInfo!!!!!!', recipeInfo);
 
       if (res.data) {
         const data = res.data;
@@ -135,7 +137,26 @@ export default function DashboardPage({ ga }) {
           });
         });
 
-        // console.log('recipeCount~~~', recipeCount);
+        // ### 현재 구독자 레시피별 한 끼 무게 총합 ###
+        let matchedSumGramByRecipeResult = [];
+        let seenRecipes = new Set(); // 중복제거
+
+        recipeInfo.forEach((recipe) => {
+          data.subscribeStatsDto.subscribeSumGramByRecipeDtoList.forEach(
+            (item) => {
+              if (
+                item.recipeName === recipe.name &&
+                !seenRecipes.has(recipe.name)
+              ) {
+                matchedSumGramByRecipeResult.push({
+                  recipeName: recipe.name,
+                  sum: item.sum,
+                });
+                seenRecipes.add(recipe.name);
+              }
+            },
+          );
+        });
 
         /////////////////////////////
         // 1개 혹은 2개 레시피 조합
@@ -207,6 +228,8 @@ export default function DashboardPage({ ga }) {
           to: data.to,
           totalOrderCount: data.totalOrderCount,
           totalSales: data.totalSales,
+          totalMemberCount: data.graphDto?.totalMemberCount,
+          lastLoginCount: data.graphDto?.lastLoginCount,
 
           salesByRecipe: Object.fromEntries(
             recipeInfo.map((recipe) => [
@@ -351,6 +374,8 @@ export default function DashboardPage({ ga }) {
           // 레시피별 현재 구독자 수
           subscriberByRecipe: recipeCount, // ### 위에서 계산
 
+          subscribeSumGramByRecipe: matchedSumGramByRecipeResult, // ### 위에서 계산
+
           // *** 일반구매 현황 ***
           generalOrderStats: {
             totalGeneralOrderSales:
@@ -447,7 +472,7 @@ export default function DashboardPage({ ga }) {
           // *** 그래프 ***
           graphDto: {
             // 신규 회원
-            newMemberCountByDate: data.graphDto.newMemberCountByDateDtoList,
+            memberCountByDate: data.graphDto.memberCountByDateDtoList,
             // 주문량
             orderCountByDate: data.graphDto.orderCountByDateDtoList,
             // 매출액
@@ -519,8 +544,12 @@ export default function DashboardPage({ ga }) {
       });
   };
 
+  // SearchDateTime에 보내줄 state
+  const [dateStart, setDateStart] = useState(dayjs().startOf('day'));
+
   const onResetSearchValues = () => {
     setDate(initialDate);
+    setDateStart(dayjs().startOf('day'));
   };
 
   // console.log('info>>>', info);
@@ -569,6 +598,9 @@ export default function DashboardPage({ ga }) {
                 title={'조회기간'}
                 date={date}
                 setDate={setDate}
+                dateStart={dateStart}
+                setDateStart={setDateStart}
+                isLoading={isLoading}
                 tooltip={
                   <ToolTip
                     message={
@@ -702,153 +734,173 @@ export default function DashboardPage({ ga }) {
                 </div>
               ) : (
                 <div className={s['cont-section']}>
-                  <ul className={s.box}>
-                    <li>
-                      <span>총 구독자 수</span>
-                      <span>
-                        <b>{info.subscribeStats?.totalSubscriberCount}</b> 명
-                      </span>
-                    </li>
-                    <li>
-                      <span>신규 구독주문 수</span>
-                      <span>
-                        <b>{info.subscribeStats?.newSubscribeCount}</b> 건
-                      </span>
-                    </li>
-                    <li>
-                      <span>이탈 구독자 수</span>
-                      <span>
-                        <b>{info.subscribeStats?.subscribeCancelCount}</b> 명
-                      </span>
-                    </li>
-                  </ul>
+                  <div className={s.box_section}>
+                    <ul className={s.box}>
+                      <li>
+                        <span>총 구독자 수</span>
+                        <span>
+                          <b>{info.subscribeStats?.totalSubscriberCount}</b> 명
+                        </span>
+                      </li>
+                      <li>
+                        <span>신규 구독주문 수</span>
+                        <span>
+                          <b>{info.subscribeStats?.newSubscribeCount}</b> 건
+                        </span>
+                      </li>
+                      <li>
+                        <span>이탈 구독자 수</span>
+                        <span>
+                          <b>{info.subscribeStats?.subscribeCancelCount}</b> 명
+                        </span>
+                      </li>
+                    </ul>
 
-                  <ul className={s.box}>
-                    <li>
-                      <span>총 매출액</span>
-                      <span>
-                        <b>
-                          {info.subscribeStats?.totalSubscribeSales &&
-                            transformLocalCurrency(
-                              Math.round(
-                                info.subscribeStats?.totalSubscribeSales,
-                              ),
-                            )}
-                        </b>{' '}
-                        원
-                      </span>
-                    </li>
-                    <li>
-                      <span>전체 구독 평균 결제액</span>
-                      <span>
-                        <b>
-                          {info.subscribeStats?.avgPaymentPrice &&
-                            transformLocalCurrency(
-                              Math.round(info.subscribeStats?.avgPaymentPrice),
-                            )}
-                        </b>{' '}
-                        원
-                      </span>
-                    </li>
-                  </ul>
+                    <ul className={s.box}>
+                      <li>
+                        <span>총 매출액</span>
+                        <span>
+                          <b>
+                            {info.subscribeStats?.totalSubscribeSales &&
+                              transformLocalCurrency(
+                                Math.round(
+                                  info.subscribeStats?.totalSubscribeSales,
+                                ),
+                              )}
+                          </b>{' '}
+                          원
+                        </span>
+                      </li>
+                      <li>
+                        <span>전체 구독 평균 결제액</span>
+                        <span>
+                          <b>
+                            {info.subscribeStats?.avgPaymentPrice &&
+                              transformLocalCurrency(
+                                Math.round(
+                                  info.subscribeStats?.avgPaymentPrice,
+                                ),
+                              )}
+                          </b>{' '}
+                          원
+                        </span>
+                      </li>
+                    </ul>
 
-                  <ul className={s.box}>
-                    <li>
-                      <span>설문 완료</span>
-                      <span>
-                        <b>
-                          {
-                            info.subscribeStats?.subscribeStatusStats
-                              .SURVEY_COMPLETED
-                          }
-                        </b>{' '}
-                        명
-                      </span>
-                    </li>
-                    <li>
-                      <span>구독 전</span>
-                      <span>
-                        <b>
-                          {
-                            info.subscribeStats?.subscribeStatusStats
-                              .BEFORE_PAYMENT
-                          }
-                        </b>{' '}
-                        명
-                      </span>
-                    </li>
-                    <li>
-                      <span>구독 중</span>
-                      <span>
-                        <b>
-                          {
-                            info.subscribeStats?.subscribeStatusStats
-                              .SUBSCRIBING
-                          }
-                        </b>{' '}
-                        명
-                      </span>
-                    </li>
-                    <li>
-                      <span>구독 보류</span>
-                      <span>
-                        <b>
-                          {
-                            info.subscribeStats?.subscribeStatusStats
-                              .SUBSCRIBE_PENDING
-                          }
-                        </b>{' '}
-                        명
-                      </span>
-                    </li>
-                    <li>
-                      <span>구독 취소</span>
-                      <span>
-                        <b>
-                          {
-                            info.subscribeStats?.subscribeStatusStats
-                              .SUBSCRIBE_CANCEL
-                          }
-                        </b>{' '}
-                        명
-                      </span>
-                    </li>
-                  </ul>
+                    <ul className={s.box}>
+                      <li>
+                        <span>설문 완료</span>
+                        <span>
+                          <b>
+                            {
+                              info.subscribeStats?.subscribeStatusStats
+                                .SURVEY_COMPLETED
+                            }
+                          </b>{' '}
+                          명
+                        </span>
+                      </li>
+                      <li>
+                        <span>구독 전</span>
+                        <span>
+                          <b>
+                            {
+                              info.subscribeStats?.subscribeStatusStats
+                                .BEFORE_PAYMENT
+                            }
+                          </b>{' '}
+                          명
+                        </span>
+                      </li>
+                      <li>
+                        <span>구독 중</span>
+                        <span>
+                          <b>
+                            {
+                              info.subscribeStats?.subscribeStatusStats
+                                .SUBSCRIBING
+                            }
+                          </b>{' '}
+                          명
+                        </span>
+                      </li>
+                      <li>
+                        <span>구독 보류</span>
+                        <span>
+                          <b>
+                            {
+                              info.subscribeStats?.subscribeStatusStats
+                                .SUBSCRIBE_PENDING
+                            }
+                          </b>{' '}
+                          명
+                        </span>
+                      </li>
+                      <li>
+                        <span>구독 취소</span>
+                        <span>
+                          <b>
+                            {
+                              info.subscribeStats?.subscribeStatusStats
+                                .SUBSCRIBE_CANCEL
+                            }
+                          </b>{' '}
+                          명
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
 
                   {/* *** 구독 그래프 *** */}
-                  <ul className={s.box_graph_one}>
-                    <li>
-                      <span>구독 취소 이유</span>
-                      <button
-                        className={`admin_btn solid basic_m`}
-                        type={'button'}
-                        onClick={onPopupHandler}
-                      >
-                        상세보기
-                      </button>
-                      <SubCancelPieChart
-                        chartData={info.subscribeStats?.subCancelReasonCount}
-                      />
-                    </li>
-                  </ul>
+                  <div className={s.sub_graph_wrapper}>
+                    <ul className={s.box_graph_one}>
+                      <li>
+                        <span>구독취소 사유</span>
 
-                  <ul className={s.box_graph_two}>
-                    <li>
-                      <span>플랜별 현재 구독자 수</span>
-                      <SubscriberByPlanPieChart
-                        chartData={info.subscriberByPlan}
-                      />
-                    </li>
-                  </ul>
+                        <Link href={`/bf-admin/popup/subCancel`} passHref>
+                          <a
+                            target="_blank"
+                            className="admin_btn basic_s solid"
+                            onClick={onPopupHandler}
+                          >
+                            상세보기
+                          </a>
+                        </Link>
+                        <SubCancelPieChart
+                          chartData={info.subscribeStats?.subCancelReasonCount}
+                        />
+                      </li>
+                    </ul>
 
-                  <ul className={s.box_graph_three}>
-                    <li>
-                      <span>레시피별 현재 구독자 수</span>
-                      <SubscriberByRecipePieChart
-                        chartData={info.subscriberByRecipe}
-                      />
-                    </li>
-                  </ul>
+                    <ul className={s.box_graph_two}>
+                      <li>
+                        <span>플랜별 현재 구독자 수</span>
+                        <SubscriberByPlanPieChart
+                          chartData={info.subscriberByPlan}
+                        />
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className={s.sub_graph_wrapper}>
+                    <ul className={s.box_graph_three}>
+                      <li>
+                        <span>레시피별 현재 구독자 수</span>
+                        <SubscriberByRecipePieChart
+                          chartData={info.subscriberByRecipe}
+                        />
+                      </li>
+                    </ul>
+
+                    <ul className={s.box_graph_four}>
+                      <li>
+                        <span>구독자 레시피별 한 끼 무게 총합</span>
+                        <SubscribeSumGramByRecipe
+                          chartData={info.subscribeSumGramByRecipe}
+                        />
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               )}
             </section>
@@ -1018,7 +1070,7 @@ export default function DashboardPage({ ga }) {
               <div className={s['title-section']}>
                 {/* ~~~ (1) 신규 회원 그래프 ~~~ */}
                 <h2 className={s.title}>
-                  신규 회원
+                  회원
                   <ToolTip
                     message={
                       '하단의 레전드를 클릭하면, 해당하는 그래프를 선택적으로 활성화합니다.'
@@ -1040,7 +1092,7 @@ export default function DashboardPage({ ga }) {
                       <li>
                         <span>전체 회원 수</span>
                         <span>
-                          <strong>{info.newOrderInfo?.general}</strong>명
+                          <strong>{info?.totalMemberCount}</strong>명
                         </span>
                       </li>
                       <li>
@@ -1053,19 +1105,15 @@ export default function DashboardPage({ ga }) {
                         </span>
                       </li>
                     </ul>
-                    {/* <li> */}
-                    <div>
-                      <span>기간 내 로그인한 회원 수</span>
-                      <span>
-                        <strong>{info.newOrderInfo?.general}</strong>명
-                      </span>
-                    </div>
-                    {/* </li> */}
+                    <span>
+                      기간 내 로그인한 회원 수&nbsp;&nbsp;
+                      <strong>{info?.lastLoginCount}</strong>명
+                    </span>
                   </div>
 
                   <div className={s.chart_container}>
                     <MemberChart
-                      chartData={info.graphDto?.newMemberCountByDate}
+                      chartData={info.graphDto?.memberCountByDate}
                       from={info.from}
                       to={info.to}
                       isGraphLoading={isGraphLoading}

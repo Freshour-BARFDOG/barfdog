@@ -55,7 +55,7 @@ export default function OrderCountChart({
   }, [chartData]);
 
   // console.log('chartData>>>', chartData);
-  console.log('GRAPH DATA>>>', data);
+  // console.log('GRAPH DATA>>>', data);
 
   // 그래프 색상 지정
   const graphColorList = ['#ca1011', '#8D8DAA', '#F48484'];

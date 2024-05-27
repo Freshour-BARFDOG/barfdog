@@ -33,8 +33,8 @@ function ManageDogPage() {
   const [searchQueryInitialize, setSearchQueryInitialize] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
-  console.log('searchValue>>>', searchValue);
-  console.log('searchQuery>>>', searchQuery);
+  // console.log('searchValue>>>', searchValue);
+  // console.log('searchQuery>>>', searchQuery);
 
   useEffect(() => {
     MirrorTextOnHoverEvent(window);
