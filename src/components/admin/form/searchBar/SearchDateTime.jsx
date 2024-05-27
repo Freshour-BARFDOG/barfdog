@@ -1,7 +1,4 @@
 import React, { useRef, useCallback, useState, useEffect } from 'react';
-// import { transformToday } from '/util/func/transformDate';
-// import { getDiffDate, getDiffDateNumber } from '/util/func/getDiffDate';
-import { global_searchDateType } from '/store/TYPE/searchDateType';
 import dayjs from 'dayjs';
 import { ConfigProvider, DatePicker, Radio, RadioChangeEvent } from 'antd';
 const { RangePicker } = DatePicker;
@@ -19,59 +16,64 @@ const dateRangeOptions = [
 
 const SearchTerm = (props) => {
   // const [dateStart, setDateStart] = useState(dayjs('2000-01-01T00:00:00'));
-  const [dateStart, setDateStart] = useState(dayjs().startOf('day'));
+
   //! ---> default 값 (오늘)
   const [dateEnd, setDateEnd] = useState(dayjs());
 
   const handleButtonClick = (value) => {
-    let startDate, endDate;
+    if (props.isLoading.fetching) {
+      return;
+    } else {
+      let startDate, endDate;
 
-    switch (value) {
-      case 'today':
-        startDate = endDate = dayjs();
-        break;
-      case '1week':
-        startDate = dayjs().subtract(1, 'week');
-        endDate = dayjs();
-        break;
-      case '1month':
-        startDate = dayjs().subtract(1, 'month');
-        endDate = dayjs();
-        break;
-      case '3months':
-        startDate = dayjs().subtract(3, 'month');
-        endDate = dayjs();
-        break;
-      case '6months':
-        startDate = dayjs().subtract(6, 'month');
-        endDate = dayjs();
-        break;
-      case '1year':
-        startDate = dayjs().subtract(1, 'year');
-        endDate = dayjs();
-        break;
-      case 'total':
-        startDate = dayjs('2000-01-01T00:00:00');
-        endDate = dayjs();
-        break;
-      default:
-        break;
+      switch (value) {
+        case 'today':
+          startDate = dayjs().startOf('day'); // 오늘 날짜의 0시 0분
+          endDate = dayjs(); // 현재 시각
+          break;
+        case '1week':
+          startDate = dayjs().subtract(1, 'week');
+          endDate = dayjs();
+          break;
+        case '1month':
+          startDate = dayjs().subtract(1, 'month');
+          endDate = dayjs();
+          break;
+        case '3months':
+          startDate = dayjs().subtract(3, 'month');
+          endDate = dayjs();
+          break;
+        case '6months':
+          startDate = dayjs().subtract(6, 'month');
+          endDate = dayjs();
+          break;
+        case '1year':
+          startDate = dayjs().subtract(1, 'year');
+          endDate = dayjs();
+          break;
+        case 'total':
+          startDate = dayjs('2000-01-01T00:00:00');
+          endDate = dayjs();
+          break;
+        default:
+          break;
+      }
+
+      props.setDateStart(startDate);
+      setDateEnd(endDate);
+
+      props.setDate({
+        from: startDate.format('YYYY-MM-DD-HH-mm'),
+        to: endDate.format('YYYY-MM-DD-HH-mm'),
+        term: props.date.term,
+      });
     }
-
-    setDateStart(startDate);
-    setDateEnd(endDate);
-
-    props.setDate({
-      from: startDate.format('YYYY-MM-DD-HH-mm'),
-      to: endDate.format('YYYY-MM-DD-HH-mm'),
-      term: props.date.term,
-    });
   };
 
   const onChange = (value, dateString) => {
     if (Array.isArray(value)) {
       const [startDate, endDate] = value?.map((date) => dayjs(date));
-      setDateStart(startDate);
+      props.setDateStart(startDate);
       setDateEnd(endDate);
       props.setDate({
         from: startDate.format('YYYY-MM-DD-HH-mm'),
@@ -142,6 +144,7 @@ const SearchTerm = (props) => {
                 buttonStyle="solid"
                 onChange={(e) => handleButtonClick(e.target.value)}
                 defaultValue={'today'} //! 기본값 변경
+                disabled={props.isLoading.fetching}
               />
             </ConfigProvider>
           </div>
@@ -170,8 +173,8 @@ const SearchTerm = (props) => {
                 showTime={{ format: 'HH:mm', hideDisabledOptions: true }}
                 format="YYYY-MM-DD HH:mm"
                 onChange={onChange}
-                defaultValue={[dateStart, dateEnd]}
-                value={[dateStart, dateEnd]}
+                defaultValue={[props.dateStart, dateEnd]}
+                value={[props.dateStart, dateEnd]}
                 disabledDate={disabledDate}
                 disabledTime={disabledRangeTime}
               />

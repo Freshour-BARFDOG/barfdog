@@ -35,10 +35,10 @@ export default function SubCancelPieChart({ chartData }) {
         {isLoading ? (
           <AmdinErrorMessage loading={<Spinner />} />
         ) : (
-          <div style={{ height: '40rem' }}>
+          <div style={{ height: '28rem' }}>
             <ResponsivePie
               data={data}
-              margin={{ top: -200, right: 60, bottom: 0, left: 40 }}
+              margin={{ top: 40, right: 240, bottom: 20, left: 0 }}
               innerRadius={0.5}
               padAngle={0.7}
               cornerRadius={3}
@@ -60,10 +60,10 @@ export default function SubCancelPieChart({ chartData }) {
               }}
               legends={[
                 {
-                  anchor: 'bottom',
+                  anchor: 'right',
                   direction: 'column',
                   justify: false,
-                  translateX: -30,
+                  translateX: 100,
                   translateY: -20,
                   itemsSpacing: 10,
                   itemWidth: 100,

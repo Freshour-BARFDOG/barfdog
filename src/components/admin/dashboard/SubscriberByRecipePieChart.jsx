@@ -38,10 +38,10 @@ export default function SubscriberByRecipePieChart({ chartData }) {
         {isLoading ? (
           <AmdinErrorMessage loading={<Spinner />} />
         ) : (
-          <div style={{ height: '40rem' }}>
+          <div style={{ height: '28rem' }}>
             <ResponsivePie
               data={data}
-              margin={{ top: -200, right: 50, bottom: 0, left: 50 }}
+              margin={{ top: 40, right: 240, bottom: 20, left: 0 }}
               innerRadius={0.5}
               padAngle={0.7}
               cornerRadius={3}
@@ -63,11 +63,11 @@ export default function SubscriberByRecipePieChart({ chartData }) {
               }}
               legends={[
                 {
-                  anchor: 'bottom',
+                  anchor: 'right',
                   direction: 'column',
                   justify: false,
-                  translateX: 10,
-                  translateY: -70,
+                  translateX: 100,
+                  translateY: -20,
                   itemsSpacing: 10,
                   itemWidth: 100,
                   itemHeight: 18,

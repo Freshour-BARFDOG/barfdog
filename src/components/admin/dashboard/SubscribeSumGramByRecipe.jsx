@@ -10,7 +10,7 @@ const ResponsivePie = dynamic(
   { ssr: false },
 );
 
-export default function SubscriberByPlanPieChart({ chartData }) {
+export default function SubscribeSumGramByRecipe({ chartData }) {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState(null);
 
@@ -18,15 +18,15 @@ export default function SubscriberByPlanPieChart({ chartData }) {
 
   useEffect(() => {
     const data = chartData?.map((item, idx) => ({
-      id: item.plan,
-      label: item.plan,
-      value: item.count,
+      id: item.recipeName,
+      label: item.recipeName,
+      value: Math.round(item.sum),
       color: `hsl(${Math.floor(Math.random() * 360)}, 70%, 50%)`,
     }));
     setData(data);
   }, []);
 
-  // console.log('chartData>>>', chartData);
+  console.log('chartData>>>', chartData);
   // console.log('GRAPH DATA>>>', data);
 
   return (
@@ -58,12 +58,33 @@ export default function SubscriberByPlanPieChart({ chartData }) {
                 from: 'color',
                 modifiers: [['darker', 2]],
               }}
+              tooltip={({ datum }) => (
+                <div
+                  style={{
+                    padding: '10px',
+                    backgroundColor: '#fff',
+                    borderRadius: '5px',
+                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                  }}
+                >
+                  <div
+                    style={{
+                      padding: '0px 46px',
+                      marginRight: '40px',
+                      backgroundColor: datum.color,
+                      display: 'inline',
+                    }}
+                  ></div>
+                  {datum.label}:{' '}
+                  <strong>{`${datum.value.toLocaleString()}`}</strong>g
+                </div>
+              )}
               legends={[
                 {
                   anchor: 'right',
                   direction: 'column',
                   justify: false,
-                  translateX: 120,
+                  translateX: 100,
                   translateY: -20,
                   itemsSpacing: 10,
                   itemWidth: 100,
