@@ -34,6 +34,7 @@ import MemberChart from '../../../components/admin/dashboard/MemberChart';
 import SearchTermRadio from '../../../components/admin/form/searchBar/SearchTermRadio';
 import OrderCountChart from '../../../components/admin/dashboard/OrderCountChart';
 import SalesByRecipePieChart from '../../../components/admin/dashboard/SalesByRecipePieChart';
+import popupWindow from '@util/func/popupWindow';
 
 export default function DashboardPage({ ga }) {
   const now = dayjs();
@@ -112,16 +113,6 @@ export default function DashboardPage({ ga }) {
       if (res.data) {
         const data = res.data;
         console.log('응답 성공~~~~~', res.data);
-        // console.log(
-        //   '???~~~~~',
-        //   data.generalOrderStatsDto.generalOrderStatusStatsDtoList?.filter(
-        //     (order) =>
-        //       order.generalOrderStatus === orderStatus.CANCEL_DONE_BUYER,
-        //   )[0]?.count +
-        //     data.generalOrderStatsDto.generalOrderStatusStatsDtoList?.filter(
-        //       (order) => order.orderStatus === orderStatus.CANCEL_DONE_SELLER,
-        //     )[0]?.count,
-        // );
 
         // ### 레시피별 매출액 없음 ###
         const isSalesByRecipeZero =
@@ -360,17 +351,6 @@ export default function DashboardPage({ ga }) {
           // 레시피별 현재 구독자 수
           subscriberByRecipe: recipeCount, // ### 위에서 계산
 
-          // salesByRecipe: Object.fromEntries(
-          //   recipeInfo.map((recipe) => [
-          //     recipe.name,
-          //     (data.salesByRecipeDtoList.length &&
-          //       data.salesByRecipeDtoList.filter(
-          //         (item) => item.recipeName === recipe.name,
-          //       )[0]?.sales) ||
-          //       0,
-          //   ]),
-          // ),
-
           // *** 일반구매 현황 ***
           generalOrderStats: {
             totalGeneralOrderSales:
@@ -472,40 +452,12 @@ export default function DashboardPage({ ga }) {
             orderCountByDate: data.graphDto.orderCountByDateDtoList,
             // 매출액
             salesCountByDate: data.graphDto.salesCountByDateDtoList,
-
-            // // 신규 회원
-            // newMemberCountByDate: {
-            //   date: data.graphDto.newMemberCountByDateDtoList.date,
-            //   count: data.graphDto.newMemberCountByDateDtoList.count,
-            // },
-            // // 주문량
-            // orderCountByDate: {
-            //   date: data.graphDto.orderCountByDateDtoList.date,
-            //   totalSubscribeCount:
-            //     data.graphDto.orderCountByDateDtoList.totalSubscribeCount,
-            //   generalOrderCount:
-            //     data.graphDto.orderCountByDateDtoList.generalOrderCount,
-            //   newSubscribeCount:
-            //     data.graphDto.orderCountByDateDtoList.newSubscribeCount,
-            // },
-            // // 매출액
-            // salesCountByDate: {
-            //   date: data.graphDto.salesCountByDateDtoList.date,
-            //   totalSalesCount:
-            //     data.graphDto.salesCountByDateDtoList.totalSalesCount,
-            //   generalOrderSalesCount:
-            //     data.graphDto.salesCountByDateDtoList.generalOrderSalesCount,
-            //   subscribeSalesCount:
-            //     data.graphDto.salesCountByDateDtoList.subscribeSalesCount,
-            // },
           },
         };
 
         console.log('DATA~~~~', DATA);
         setInfo(DATA);
-        // console.log('info~~~~', info);
       }
-      // }
     } catch (err) {
       console.error(err);
     } finally {
@@ -526,520 +478,17 @@ export default function DashboardPage({ ga }) {
     }));
     // 기간에 따른 통계 update
     fetchData(date.term);
-    // (async () => {
-    //   setIsLoading((prevState) => ({
-    //     ...prevState,
-    //     fetching: true,
-    //     ga: !!googleApiToken, // 토큰이 있을 경우에만 loading 활성
-    //   }));
-    //   try {
-    //     const url = `/api/admin/dashBoard/stats?from=${date.from}&to=${date.to}&graphInterval=${date.term}`;
-    //     const res = await getData(url);
-    //     let DATA;
-    //     console.log('res.data~~~~~', res);
-    //     // 레시피 리스트 GET
-    //     const getRecipeInfoApiUrl = '/api/recipes';
-    //     const recipeInfoResponse = await getData(getRecipeInfoApiUrl, 'admin');
-    //     const recipeInfo =
-    //       recipeInfoResponse.data?._embedded?.recipeListResponseDtoList;
-    //     setRecipeList(recipeInfo);
-    //     console.log('res.recipeInfo!!!!!!', recipeInfo);
-    //     if (res.data) {
-    //       const data = res.data;
-    //       console.log('응답 성공~~~~~', res.data);
-    //       // console.log(
-    //       //   '???~~~~~',
-    //       //   data.generalOrderStatsDto.generalOrderStatusStatsDtoList?.filter(
-    //       //     (order) =>
-    //       //       order.generalOrderStatus === orderStatus.CANCEL_DONE_BUYER,
-    //       //   )[0]?.count +
-    //       //     data.generalOrderStatsDto.generalOrderStatusStatsDtoList?.filter(
-    //       //       (order) => order.orderStatus === orderStatus.CANCEL_DONE_SELLER,
-    //       //     )[0]?.count,
-    //       // );
-    //       // ### 레시피별 구독자 수 카운팅 ###
-    //       const recipeCount = {};
-    //       data.subscribeStatsDto.subscriberByRecipeDtoList.forEach((recipe) => {
-    //         const names = recipe.recipeName
-    //           .split(', ')
-    //           .map((name) => name.trim());
-    //         names.forEach((name) => {
-    //           if (!recipeCount[name]) {
-    //             recipeCount[name] = 0;
-    //           }
-    //           recipeCount[name] += recipe.count;
-    //         });
-    //       });
-    //       // console.log('recipeCount~~~', recipeCount);
-    //       /////////////////////////////
-    //       // 1개 혹은 2개 레시피 조합
-    //       // const generateCombinations = (arr) => {
-    //       //   const result = [];
-    //       //   const f = (prefix, arr) => {
-    //       //     for (let i = 0; i < arr.length; i++) {
-    //       //       const combo = [...prefix, arr[i]];
-    //       //       if (combo.length <= 2) {
-    //       //         result.push(combo);
-    //       //       }
-    //       //       f(combo, arr.slice(i + 1));
-    //       //     }
-    //       //   };
-    //       //   f([], arr);
-    //       //   return result;
-    //       // };
-    //       // // Generate all possible combinations of recipe names up to two items
-    //       // const allCombinations = generateCombinations(
-    //       //   recipeInfo.map((recipe) => recipe.name),
-    //       // );
-    //       // // console.log('allCombinations', allCombinations);
-    //       // // Initialize subscriberByRecipe
-    //       // const subscriberByRecipe = Object.fromEntries(
-    //       //   recipeInfo.map((recipe) => [recipe.name, 0]),
-    //       // );
-    //       // // Add entries for combined recipes
-    //       // allCombinations.forEach((combo) => {
-    //       //   // 1개 레시피
-    //       //   if (combo.length === 1) {
-    //       //     const name = combo[0];
-    //       //     subscriberByRecipe[name] +=
-    //       //       data.subscribeStatsDto.subscriberByRecipeDtoList.find(
-    //       //         (item) => item.recipeName === name,
-    //       //       )?.count || 0;
-    //       //     // 2개 레시피
-    //       //   } else if (combo.length === 2) {
-    //       //     const combinedName = combo.join(', ');
-    //       //     const combinedCount =
-    //       //       data.subscribeStatsDto.subscriberByRecipeDtoList.find(
-    //       //         (item) => item.recipeName === combinedName,
-    //       //       )?.count || 0;
-    //       //     //~> 레시피 2개 : 각 레시피마다 +1 처리
-    //       //     if (combinedCount > 0) {
-    //       //       combo.forEach((name) => {
-    //       //         subscriberByRecipe[name] += 1;
-    //       //       });
-    //       //     }
-    //       //     //~> 레시피 2개 : 절반으로 나눈 후 반올림 처리
-    //       //     // combo.forEach((name) => {
-    //       //     //   subscriberByRecipe[name] += combinedCount / combo.length;
-    //       //     // });
-    //       //   }
-    //       // });
-    //       // // Round the subscriber counts
-    //       // Object.keys(subscriberByRecipe).forEach((key) => {
-    //       //   subscriberByRecipe[key] = Math.round(subscriberByRecipe[key]);
-    //       // });
-    //       // console.log('subscriberByRecipe>>>', subscriberByRecipe);
-    //       DATA = {
-    //         from: data.from,
-    //         to: data.to,
-    //         totalOrderCount: data.totalOrderCount,
-    //         totalSales: data.totalSales,
-    //         salesByRecipe: Object.fromEntries(
-    //           recipeInfo.map((recipe) => [
-    //             recipe.name,
-    //             (data.salesByRecipeDtoList.length &&
-    //               data.salesByRecipeDtoList.filter(
-    //                 (item) => item.recipeName === recipe.name,
-    //               )[0]?.sales) ||
-    //               0,
-    //           ]),
-    //         ),
-    //         orderCount: {
-    //           // 결제 완료
-    //           PAYMENT_DONE:
-    //             (data.orderStatusStatsDtoList.length &&
-    //               data.orderStatusStatsDtoList?.filter(
-    //                 (order) => order.orderStatus === orderStatus.PAYMENT_DONE,
-    //               )[0]?.count) ||
-    //             0,
-    //           // 결제 실패
-    //           FAILED:
-    //             (data.orderStatusStatsDtoList.length &&
-    //               data.orderStatusStatsDtoList?.filter(
-    //                 (order) => order.orderStatus === orderStatus.FAILED,
-    //               )[0]?.count) ||
-    //             0,
-    //           // 예약 결제 실패
-    //           FAILED_RESERVED_PAYMENT:
-    //             (data.orderStatusStatsDtoList.length &&
-    //               data.orderStatusStatsDtoList?.filter(
-    //                 (order) =>
-    //                   order.orderStatus === orderStatus.FAILED_RESERVED_PAYMENT,
-    //               )[0]?.count) ||
-    //             0,
-    //           // 주문 확인 (DELIVERY_READY + PRODUCING)
-    //           ORDER_CONFIRM:
-    //             (data.orderStatusStatsDtoList.length &&
-    //               data.orderStatusStatsDtoList?.filter(
-    //                 (order) => order.orderStatus === orderStatus.DELIVERY_READY,
-    //               )[0]?.count +
-    //                 data.orderStatusStatsDtoList?.filter(
-    //                   (order) => order.orderStatus === orderStatus.PRODUCING,
-    //                 )[0]?.count) ||
-    //             0,
-    //         },
-    //         deliveryCount: {
-    //           // 배송 예정
-    //           DELIVERY_BEFORE_COLLECTION:
-    //             (data.deliveryStatusStatsDtoList.length &&
-    //               data.deliveryStatusStatsDtoList?.filter(
-    //                 (order) =>
-    //                   order.deliveryStatus ===
-    //                   orderStatus.DELIVERY_BEFORE_COLLECTION,
-    //               )[0]?.count) ||
-    //             0,
-    //           // 배송 시작
-    //           DELIVERY_START:
-    //             (data.deliveryStatusStatsDtoList.length &&
-    //               data.deliveryStatusStatsDtoList?.filter(
-    //                 (order) =>
-    //                   order.deliveryStatus === orderStatus.DELIVERY_START,
-    //               )[0]?.count) ||
-    //             0,
-    //           // 배송 완료
-    //           DELIVERY_DONE:
-    //             (data.deliveryStatusStatsDtoList.length &&
-    //               data.deliveryStatusStatsDtoList?.filter(
-    //                 (order) =>
-    //                   order.deliveryStatus === orderStatus.DELIVERY_DONE,
-    //               )[0]?.count) ||
-    //             0,
-    //         },
-    //         // *** 구독 현황 ***
-    //         subscribeStats: {
-    //           totalSubscriberCount: data.subscribeStatsDto.totalSubscriberCount,
-    //           totalSubscribeSales: data.subscribeStatsDto.totalSubscribeSales,
-    //           newSubscribeCount: data.subscribeStatsDto.newSubscribeCount,
-    //           avgPaymentPrice: data.subscribeStatsDto.avgPaymentPrice,
-    //           subscribeCancelCount: data.subscribeStatsDto.subscribeCancelCount,
-    //           //~ 구독 상태
-    //           subscribeStatusStats: {
-    //             // 설문 완료
-    //             SURVEY_COMPLETED:
-    //               (data.subscribeStatsDto.subscribeStatusStatsDtoList.length &&
-    //                 data.subscribeStatsDto.subscribeStatusStatsDtoList?.filter(
-    //                   (order) =>
-    //                     order.subscribeStatus ===
-    //                     subscribeStatus.SURVEY_COMPLETED,
-    //                 )[0]?.count) ||
-    //               0,
-    //             // 결제 전
-    //             BEFORE_PAYMENT:
-    //               (data.subscribeStatsDto.subscribeStatusStatsDtoList.length &&
-    //                 data.subscribeStatsDto.subscribeStatusStatsDtoList?.filter(
-    //                   (order) =>
-    //                     order.subscribeStatus ===
-    //                     subscribeStatus.BEFORE_PAYMENT,
-    //                 )[0]?.count) ||
-    //               0,
-    //             // 구독 중
-    //             SUBSCRIBING:
-    //               (data.subscribeStatsDto.subscribeStatusStatsDtoList.length &&
-    //                 data.subscribeStatsDto.subscribeStatusStatsDtoList?.filter(
-    //                   (order) =>
-    //                     order.subscribeStatus === subscribeStatus.SUBSCRIBING,
-    //                 )[0]?.count) ||
-    //               0,
-    //             // 구독 보류
-    //             SUBSCRIBE_PENDING:
-    //               (data.subscribeStatsDto.subscribeStatusStatsDtoList.length &&
-    //                 data.subscribeStatsDto.subscribeStatusStatsDtoList?.filter(
-    //                   (order) =>
-    //                     order.subscribeStatus ===
-    //                     subscribeStatus.SUBSCRIBE_PENDING,
-    //                 )[0]?.count) ||
-    //               0,
-    //             // 구독 취소
-    //             SUBSCRIBE_CANCEL:
-    //               (data.subscribeStatsDto.subscribeStatusStatsDtoList.length &&
-    //                 data.subscribeStatsDto.subscribeStatusStatsDtoList?.filter(
-    //                   (order) =>
-    //                     order.subscribeStatus ===
-    //                     subscribeStatus.SUBSCRIBE_CANCEL,
-    //                 )[0]?.count) ||
-    //               0,
-    //           },
-    //           // 구독취소 카운팅
-    //           subCancelReasonCount:
-    //             data.subscribeStatsDto.subscribeCancelReasonDtoList,
-    //         },
-    //         // 플랜별 현재 구독자 수
-    //         subscriberByPlan: data.subscribeStatsDto.subscriberByPlanDtoList,
-    //         // 레시피별 현재 구독자 수
-    //         subscriberByRecipe: recipeCount, // ### 위에서 계산
-    //         // salesByRecipe: Object.fromEntries(
-    //         //   recipeInfo.map((recipe) => [
-    //         //     recipe.name,
-    //         //     (data.salesByRecipeDtoList.length &&
-    //         //       data.salesByRecipeDtoList.filter(
-    //         //         (item) => item.recipeName === recipe.name,
-    //         //       )[0]?.sales) ||
-    //         //       0,
-    //         //   ]),
-    //         // ),
-    //         // *** 일반구매 현황 ***
-    //         generalOrderStats: {
-    //           totalGeneralOrderSales:
-    //             data.generalOrderStatsDto.totalGeneralOrderSales || 0,
-    //           newGeneralOrderCount:
-    //             data.generalOrderStatsDto.newGeneralOrderCount,
-    //           //~ 취소, 반품, 교환 카운팅
-    //           generalOrderCount: {
-    //             // 취소 요청
-    //             CANCEL_REQUEST:
-    //               (data.generalOrderStatsDto.generalOrderStatusStatsDtoList
-    //                 .length &&
-    //                 data.generalOrderStatsDto.generalOrderStatusStatsDtoList?.filter(
-    //                   (order) =>
-    //                     order.generalOrderStatus === orderStatus.CANCEL_REQUEST,
-    //                 )[0]?.count) ||
-    //               0,
-    //             // 취소 완료 (CANCEL_PAYMENT + CANCEL_DONE_BUYER + CANCEL_DONE_SELLER)
-    //             CANCEL_DONE:
-    //               (data.generalOrderStatsDto.generalOrderStatusStatsDtoList
-    //                 .length &&
-    //                 data.generalOrderStatsDto.generalOrderStatusStatsDtoList?.filter(
-    //                   (order) =>
-    //                     order.generalOrderStatus === orderStatus.CANCEL_PAYMENT,
-    //                 )[0]?.count +
-    //                   data.generalOrderStatsDto.generalOrderStatusStatsDtoList?.filter(
-    //                     (order) =>
-    //                       order.generalOrderStatus ===
-    //                       orderStatus.CANCEL_DONE_BUYER,
-    //                   )[0]?.count +
-    //                   data.generalOrderStatsDto.generalOrderStatusStatsDtoList?.filter(
-    //                     (order) =>
-    //                       order.generalOrderStatus ===
-    //                       orderStatus.CANCEL_DONE_SELLER,
-    //                   )[0]?.count) ||
-    //               0,
-    //             // 반품 요청
-    //             RETURN_REQUEST:
-    //               (data.generalOrderStatsDto.generalOrderStatusStatsDtoList
-    //                 .length &&
-    //                 data.generalOrderStatsDto.generalOrderStatusStatsDtoList?.filter(
-    //                   (order) =>
-    //                     order.generalOrderStatus === orderStatus.RETURN_REQUEST,
-    //                 )[0]?.count) ||
-    //               0,
-    //             // 반품 완료 (RETURN_DONE_BUYER + RETURN_DONE_SELLER)
-    //             RETURN_DONE:
-    //               (data.generalOrderStatsDto.generalOrderStatusStatsDtoList
-    //                 .length &&
-    //                 data.generalOrderStatsDto.generalOrderStatusStatsDtoList?.filter(
-    //                   (order) =>
-    //                     order.generalOrderStatus ===
-    //                     orderStatus.RETURN_DONE_BUYER,
-    //                 )[0]?.count) +
-    //                 data.generalOrderStatsDto.generalOrderStatusStatsDtoList?.filter(
-    //                   (order) =>
-    //                     order.orderStatus === orderStatus.RETURN_DONE_SELLER,
-    //                 )[0]?.count || 0,
-    //             // 교환 요청
-    //             EXCHANGE_REQUEST:
-    //               (data.generalOrderStatsDto.generalOrderStatusStatsDtoList
-    //                 .length &&
-    //                 data.generalOrderStatsDto.generalOrderStatusStatsDtoList?.filter(
-    //                   (order) =>
-    //                     order.generalOrderStatus ===
-    //                     orderStatus.EXCHANGE_REQUEST,
-    //                 )[0]?.count) ||
-    //               0,
-    //             // 교환 완료(EXCHANGE_DONE_SELLER + EXCHANGE_DONE_BUYER)
-    //             EXCHANGE_DONE:
-    //               (data.generalOrderStatsDto.generalOrderStatusStatsDtoList
-    //                 .length &&
-    //                 data.generalOrderStatsDto.generalOrderStatusStatsDtoList?.filter(
-    //                   (order) =>
-    //                     order.generalOrderStatus ===
-    //                     orderStatus.EXCHANGE_DONE_SELLER,
-    //                 )[0]?.count) +
-    //                 data.generalOrderStatsDto.generalOrderStatusStatsDtoList?.filter(
-    //                   (order) =>
-    //                     order.generalOrderStatus ===
-    //                     orderStatus.EXCHANGE_DONE_BUYER,
-    //                 )[0]?.count || 0,
-    //           },
-    //         },
-    //         // *** 문의 사항 ***
-    //         questionStats: {
-    //           unansweredCount: data.questionStatsDto.unansweredCount,
-    //           answeredCount: data.questionStatsDto.answeredCount,
-    //         },
-    //         // *** 그래프 ***
-    //         graphDto: {
-    //           // 신규 회원
-    //           newMemberCountByDate: data.graphDto.newMemberCountByDateDtoList,
-    //           // 주문량
-    //           orderCountByDate: data.graphDto.orderCountByDateDtoList,
-    //           // 매출액
-    //           salesCountByDate: data.graphDto.salesCountByDateDtoList,
-    //           // // 신규 회원
-    //           // newMemberCountByDate: {
-    //           //   date: data.graphDto.newMemberCountByDateDtoList.date,
-    //           //   count: data.graphDto.newMemberCountByDateDtoList.count,
-    //           // },
-    //           // // 주문량
-    //           // orderCountByDate: {
-    //           //   date: data.graphDto.orderCountByDateDtoList.date,
-    //           //   totalSubscribeCount:
-    //           //     data.graphDto.orderCountByDateDtoList.totalSubscribeCount,
-    //           //   generalOrderCount:
-    //           //     data.graphDto.orderCountByDateDtoList.generalOrderCount,
-    //           //   newSubscribeCount:
-    //           //     data.graphDto.orderCountByDateDtoList.newSubscribeCount,
-    //           // },
-    //           // // 매출액
-    //           // salesCountByDate: {
-    //           //   date: data.graphDto.salesCountByDateDtoList.date,
-    //           //   totalSalesCount:
-    //           //     data.graphDto.salesCountByDateDtoList.totalSalesCount,
-    //           //   generalOrderSalesCount:
-    //           //     data.graphDto.salesCountByDateDtoList.generalOrderSalesCount,
-    //           //   subscribeSalesCount:
-    //           //     data.graphDto.salesCountByDateDtoList.subscribeSalesCount,
-    //           // },
-    //         },
-    //       };
-    //       console.log('DATA~~~~', DATA);
-    //       setInfo(DATA);
-    //       // console.log('info~~~~', info);
-    //     }
-    //     // }
-    //   } catch (err) {
-    //     console.error(err);
-    //   } finally {
-    //     setIsLoading((prevState) => ({
-    //       ...prevState,
-    //       fetching: false,
-    //     }));
-    //   }
-    // })();
-    // }, [date, router]);
   }, [date.from, date.to, router]);
 
+  // "검색" 버튼 클릭 시, get 요청
   const onChangeSelectHandler = (value) => {
-    // "검색" 버튼 클릭 시
-    // --> get 요청
-    // --> 기간에 따른 통계 update
-
-    //! [임시 주석처리]
-    async () => {
-      setIsLoading((prevState) => ({
-        ...prevState,
-        fetching: true,
-        // ga: !!googleApiToken, // 토큰이 있을 경우에만 loading 활성
-      }));
-      //   try {
-      //     const url = `/api/admin/dashBoard/stats?from=${term.from}&to=${term.to}`;
-      //     // /api/admin/dashBoard/stats?from=yyyy-MM-dd-HH-mm&to=yyyy-MM-dd-HH-mm&graphInterval=[day, month, year]
-      //     const res = await getData(url);
-      //     let DATA;
-      //     // const res = DUMMY_RESPONSE; // TEST
-      //     if (res.data) {
-      //       const data = res.data;
-      //       // // console.log(data);
-      //       DATA = {
-      //         statistics: {
-      //           newOrderCount: data.newOrderCount || 0,
-      //           newMemberCount: data.newMemberCount || 0,
-      //           visitorCount: gaData?.totalUsers || '-',
-      //         },
-      //         orderCount: {
-      //           PAYMENT_DONE:
-      //             (data.orderStatusCountDtoList.length &&
-      //               data.orderStatusCountDtoList?.filter(
-      //                 (order) => order.orderstatus === orderStatus.PAYMENT_DONE,
-      //               )[0]?.count) ||
-      //             0,
-      //           FAILED:
-      //             (data.orderStatusCountDtoList.length &&
-      //               data.orderStatusCountDtoList?.filter(
-      //                 (order) => order.orderstatus === orderStatus.FAILED,
-      //               )[0]?.count) ||
-      //             0,
-      //           SUBSCRIBE_PENDING:
-      //             data.orderStatusCountDtoList.length &&
-      //             data.subscribePendingCount,
-      //           DELIVERY_START:
-      //             (data.orderStatusCountDtoList.length &&
-      //               data.orderStatusCountDtoList?.filter(
-      //                 (order) => order.orderstatus === orderStatus.DELIVERY_START,
-      //               )[0]?.count) ||
-      //             0,
-      //           CANCEL_REQUEST:
-      //             (data.orderStatusCountDtoList.length &&
-      //               data.orderStatusCountDtoList?.filter(
-      //                 (order) => order.orderstatus === orderStatus.CANCEL_REQUEST,
-      //               )[0]?.count) ||
-      //             0,
-      //           RETURN_REQUEST:
-      //             (data.orderStatusCountDtoList.length &&
-      //               data.orderStatusCountDtoList?.filter(
-      //                 (order) => order.orderstatus === orderStatus.RETURN_REQUEST,
-      //               )[0]?.count) ||
-      //             0,
-      //           EXCHANGE_REQUEST:
-      //             (data.orderStatusCountDtoList.length &&
-      //               data.orderStatusCountDtoList?.filter(
-      //                 (order) =>
-      //                   order.orderstatus === orderStatus.EXCHANGE_REQUEST,
-      //               )[0]?.count) ||
-      //             0,
-      //         },
-      //         newOrderInfo: {
-      //           general:
-      //             data.generalOrderCountByMonthList.map((l) => l.generalCount)
-      //               .length > 0
-      //               ? data.generalOrderCountByMonthList
-      //                   .map((l) => l.generalCount)
-      //                   .reduce((acc, cur) => acc + cur)
-      //               : 0,
-      //           subscribe:
-      //             data.subscribeOrderCountByMonthList.map((l) => l.subscribeCount)
-      //               .length > 0
-      //               ? data.subscribeOrderCountByMonthList
-      //                   .map((l) => l.subscribeCount)
-      //                   .reduce((acc, cur) => acc + cur)
-      //               : 0,
-      //         },
-      //         chart: {
-      //           general: data.generalOrderCountByMonthList.map((list) => ({
-      //             x: list.month,
-      //             y: list.generalCount,
-      //           })),
-      //           subscribe: data.subscribeOrderCountByMonthList.map((list) => ({
-      //             x: list.month,
-      //             y: list.subscribeCount,
-      //           })),
-      //         },
-      //         inquiry: {
-      //           [inquiryStatusType.UNANSWERED]: data.questionDto.unanswered,
-      //           [inquiryStatusType.ANSWERED]:
-      //             data.questionDto.answered + data.questionDto.multipleAnswered,
-      //         },
-      //       };
-      //     }
-      //     setInfo(DATA);
-      //   } catch (err) {
-      //     console.error(err);
-      //   } finally {
-      //     setIsLoading((prevState) => ({
-      //       ...prevState,
-      //       fetching: false,
-      //     }));
-      //   }
-      // })();
-
-      // const today = new Date(transformToday());
-      // const diffDate = Number(value);
-      // const curDate = today.getDate();
-      // const prevDate = new Date(today.setDate(curDate - diffDate)).toISOString();
-      // setTerm({
-      //   from: transformDate(prevDate),
-      //   to: transformToday(),
-      //   diffDate: diffDate,
-    };
+    setIsLoading((prevState) => ({
+      ...prevState,
+      fetching: true,
+      ga: !!googleApiToken,
+    }));
+    // 기간에 따른 통계 update
+    fetchData(date.term);
   };
 
   const activeGoogleAuth = () => {
@@ -1071,18 +520,19 @@ export default function DashboardPage({ ga }) {
   };
 
   const onResetSearchValues = () => {
-    setSearchValue(initialSearchValues);
+    setDate(initialDate);
   };
-
-  const onSearchInputKeydown = (e) => {
-    enterKey(e, onChangeSelectHandler);
-  };
-
-  // const [startDate, setStartDate] = useState(new Date());
 
   // console.log('info>>>', info);
   // console.log('date>>>', date);
-  console.log('salesByRecipeZero>>>', salesByRecipeZero);
+  // console.log('salesByRecipeZero>>>', salesByRecipeZero);
+
+  const onPopupHandler = (e) => {
+    e.preventDefault();
+    if (typeof window === 'undefined') return;
+    const href = e.currentTarget.href;
+    popupWindow(href, { width: 1000, height: 716 });
+  };
 
   return (
     <>
@@ -1369,6 +819,13 @@ export default function DashboardPage({ ga }) {
                   <ul className={s.box_graph_one}>
                     <li>
                       <span>구독 취소 이유</span>
+                      <button
+                        className={`admin_btn solid basic_m`}
+                        type={'button'}
+                        onClick={onPopupHandler}
+                      >
+                        상세보기
+                      </button>
                       <SubCancelPieChart
                         chartData={info.subscribeStats?.subCancelReasonCount}
                       />
@@ -1580,12 +1037,12 @@ export default function DashboardPage({ ga }) {
                 <div className={s['cont-section']}>
                   <div className={s['payment-info']}>
                     <ul>
-                      {/* <li>
+                      <li>
                         <span>전체 회원 수</span>
                         <span>
                           <strong>{info.newOrderInfo?.general}</strong>명
                         </span>
-                      </li> */}
+                      </li>
                       <li>
                         <span>전체 구독자 수</span>
                         <span>
@@ -1596,6 +1053,14 @@ export default function DashboardPage({ ga }) {
                         </span>
                       </li>
                     </ul>
+                    {/* <li> */}
+                    <div>
+                      <span>기간 내 로그인한 회원 수</span>
+                      <span>
+                        <strong>{info.newOrderInfo?.general}</strong>명
+                      </span>
+                    </div>
+                    {/* </li> */}
                   </div>
 
                   <div className={s.chart_container}>
