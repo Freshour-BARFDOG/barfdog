@@ -115,7 +115,7 @@ export default function SubCancelPopup() {
                           icon={<DownloadOutlined />}
                           onClick={onExcelDownloadHandler}
                         >
-                          액셀 다운로드
+                          엑셀 다운로드
                         </Button>
                       </ConfigProvider>
                     </div>

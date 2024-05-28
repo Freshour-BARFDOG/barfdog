@@ -546,10 +546,13 @@ export default function DashboardPage({ ga }) {
 
   // SearchDateTime에 보내줄 state
   const [dateStart, setDateStart] = useState(dayjs().startOf('day'));
+  const [dateEnd, setDateEnd] = useState(dayjs());
+  const [isReset, setIsReset] = useState(false);
 
   const onResetSearchValues = () => {
     setDate(initialDate);
     setDateStart(dayjs().startOf('day'));
+    setIsReset(true);
   };
 
   // console.log('info>>>', info);
@@ -600,7 +603,12 @@ export default function DashboardPage({ ga }) {
                 setDate={setDate}
                 dateStart={dateStart}
                 setDateStart={setDateStart}
+                dateEnd={dateEnd}
+                setDateEnd={setDateEnd}
+                isReset={isReset}
+                setIsReset={setIsReset}
                 isLoading={isLoading}
+                fetchData={fetchData}
                 tooltip={
                   <ToolTip
                     message={
@@ -713,6 +721,151 @@ export default function DashboardPage({ ga }) {
                       <span>배송 완료</span>
                       <span>
                         <b>{info.deliveryCount?.DELIVERY_DONE}</b> 건
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </section>
+          </div>
+
+          {/* === 일반구매 현황 === */}
+          <div className={s.cont_wrapper}>
+            <section className={`${s['cont-left']} cont`}>
+              <div className={s['title-section']}>
+                <h2 className={s.title}>일반구매 현황</h2>
+              </div>
+
+              {isLoading.fetching ? (
+                <div className={s.spinner_wrapper}>
+                  <Spinner />
+                </div>
+              ) : (
+                <div className={s['cont-section']}>
+                  <ul className={s.box}>
+                    <li>
+                      <span>신규 주문 수</span>
+                      <span>
+                        <b>{info.generalOrderStats?.newGeneralOrderCount}</b> 건
+                      </span>
+                    </li>
+                    <li>
+                      <span>총 매출액</span>
+                      <span>
+                        <b>
+                          {info.generalOrderStats?.totalGeneralOrderSales &&
+                            transformLocalCurrency(
+                              info.generalOrderStats?.totalGeneralOrderSales,
+                            )}
+                        </b>{' '}
+                        원
+                      </span>
+                    </li>
+                  </ul>
+                  <ul className={s.box}>
+                    <li>
+                      <span>취소 요청</span>
+                      <span>
+                        <b>
+                          {
+                            info.generalOrderStats?.generalOrderCount
+                              .CANCEL_REQUEST
+                          }
+                        </b>{' '}
+                        건
+                      </span>
+                    </li>
+                    <li>
+                      <span>취소 완료</span>
+                      <span>
+                        <b>
+                          {
+                            info.generalOrderStats?.generalOrderCount
+                              .CANCEL_DONE
+                          }
+                        </b>{' '}
+                        건
+                      </span>
+                    </li>
+                    <li>
+                      <span>반품 요청</span>
+                      <span>
+                        <b>
+                          {' '}
+                          {
+                            info.generalOrderStats?.generalOrderCount
+                              .RETURN_REQUEST
+                          }
+                        </b>{' '}
+                        건
+                      </span>
+                    </li>
+                    <li>
+                      <span>반품 완료</span>
+                      <span>
+                        <b>
+                          {
+                            info.generalOrderStats?.generalOrderCount
+                              .RETURN_DONE
+                          }
+                        </b>{' '}
+                        건
+                      </span>
+                    </li>
+                    <li>
+                      <span>교환 요청</span>
+                      <span>
+                        <b>
+                          {
+                            info.generalOrderStats?.generalOrderCount
+                              .EXCHANGE_REQUEST
+                          }
+                        </b>{' '}
+                        건
+                      </span>
+                    </li>
+                    <li>
+                      <span>교환 완료</span>
+                      <span>
+                        <b>
+                          {
+                            info.generalOrderStats?.generalOrderCount
+                              .EXCHANGE_DONE
+                          }
+                        </b>{' '}
+                        건
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </section>
+
+            {/* === 1:1 문의 === */}
+            <section className={`${s['cont-mid']} cont`}>
+              <div className={s['title-section']}>
+                <h2 className={s.title}>1:1 문의</h2>
+              </div>
+              {isLoading.fetching ? (
+                <div className={s.spinner_wrapper}>
+                  <Spinner />
+                </div>
+              ) : (
+                <div className={s['cont-section']}>
+                  <ul className={s.box}>
+                    <li>
+                      <span>답변 대기</span>
+                      <span>
+                        <b>{info.questionStats?.unansweredCount}</b> 건{' '}
+                        {info.questionStats?.unansweredCount > 0 && (
+                          <IndicateDot pos={{ right: -2, top: 3 }} size={5} />
+                        )}
+                      </span>
+                    </li>
+                    <li>
+                      <span>답변 완료</span>
+                      <span>
+                        <b>{info.questionStats?.answeredCount}</b> 건
                       </span>
                     </li>
                   </ul>
@@ -901,151 +1054,6 @@ export default function DashboardPage({ ga }) {
                       </li>
                     </ul>
                   </div>
-                </div>
-              )}
-            </section>
-          </div>
-
-          {/* === 일반구매 현황 === */}
-          <div className={s.cont_wrapper}>
-            <section className={`${s['cont-left']} cont`}>
-              <div className={s['title-section']}>
-                <h2 className={s.title}>일반구매 현황</h2>
-              </div>
-
-              {isLoading.fetching ? (
-                <div className={s.spinner_wrapper}>
-                  <Spinner />
-                </div>
-              ) : (
-                <div className={s['cont-section']}>
-                  <ul className={s.box}>
-                    <li>
-                      <span>신규 주문 수</span>
-                      <span>
-                        <b>{info.generalOrderStats?.newGeneralOrderCount}</b> 건
-                      </span>
-                    </li>
-                    <li>
-                      <span>총 매출액</span>
-                      <span>
-                        <b>
-                          {info.generalOrderStats?.totalGeneralOrderSales &&
-                            transformLocalCurrency(
-                              info.generalOrderStats?.totalGeneralOrderSales,
-                            )}
-                        </b>{' '}
-                        원
-                      </span>
-                    </li>
-                  </ul>
-                  <ul className={s.box}>
-                    <li>
-                      <span>취소 요청</span>
-                      <span>
-                        <b>
-                          {
-                            info.generalOrderStats?.generalOrderCount
-                              .CANCEL_REQUEST
-                          }
-                        </b>{' '}
-                        건
-                      </span>
-                    </li>
-                    <li>
-                      <span>취소 완료</span>
-                      <span>
-                        <b>
-                          {
-                            info.generalOrderStats?.generalOrderCount
-                              .CANCEL_DONE
-                          }
-                        </b>{' '}
-                        건
-                      </span>
-                    </li>
-                    <li>
-                      <span>반품 요청</span>
-                      <span>
-                        <b>
-                          {' '}
-                          {
-                            info.generalOrderStats?.generalOrderCount
-                              .RETURN_REQUEST
-                          }
-                        </b>{' '}
-                        건
-                      </span>
-                    </li>
-                    <li>
-                      <span>반품 완료</span>
-                      <span>
-                        <b>
-                          {
-                            info.generalOrderStats?.generalOrderCount
-                              .RETURN_DONE
-                          }
-                        </b>{' '}
-                        건
-                      </span>
-                    </li>
-                    <li>
-                      <span>교환 요청</span>
-                      <span>
-                        <b>
-                          {
-                            info.generalOrderStats?.generalOrderCount
-                              .EXCHANGE_REQUEST
-                          }
-                        </b>{' '}
-                        건
-                      </span>
-                    </li>
-                    <li>
-                      <span>교환 완료</span>
-                      <span>
-                        <b>
-                          {
-                            info.generalOrderStats?.generalOrderCount
-                              .EXCHANGE_DONE
-                          }
-                        </b>{' '}
-                        건
-                      </span>
-                    </li>
-                  </ul>
-                </div>
-              )}
-            </section>
-
-            {/* === 1:1 문의 === */}
-            <section className={`${s['cont-mid']} cont`}>
-              <div className={s['title-section']}>
-                <h2 className={s.title}>1:1 문의</h2>
-              </div>
-              {isLoading.fetching ? (
-                <div className={s.spinner_wrapper}>
-                  <Spinner />
-                </div>
-              ) : (
-                <div className={s['cont-section']}>
-                  <ul className={s.box}>
-                    <li>
-                      <span>답변 대기</span>
-                      <span>
-                        <b>{info.questionStats?.unansweredCount}</b> 건{' '}
-                        {info.questionStats?.unansweredCount > 0 && (
-                          <IndicateDot pos={{ right: -2, top: 3 }} size={5} />
-                        )}
-                      </span>
-                    </li>
-                    <li>
-                      <span>답변 완료</span>
-                      <span>
-                        <b>{info.questionStats?.answeredCount}</b> 건
-                      </span>
-                    </li>
-                  </ul>
                 </div>
               )}
             </section>
