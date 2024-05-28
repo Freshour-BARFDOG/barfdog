@@ -16,70 +16,85 @@ const dateRangeOptions = [
 
 const SearchTerm = (props) => {
   // const [dateStart, setDateStart] = useState(dayjs('2000-01-01T00:00:00'));
+  const [radioValue, setRadioValue] = useState('today');
 
   //! ---> default 값 (오늘)
-  const [dateEnd, setDateEnd] = useState(dayjs());
 
-  const handleButtonClick = (value) => {
-    if (props.isLoading.fetching) {
-      return;
-    } else {
-      let startDate, endDate;
-
-      switch (value) {
-        case 'today':
-          startDate = dayjs().startOf('day'); // 오늘 날짜의 0시 0분
-          endDate = dayjs(); // 현재 시각
-          break;
-        case '1week':
-          startDate = dayjs().subtract(1, 'week');
-          endDate = dayjs();
-          break;
-        case '1month':
-          startDate = dayjs().subtract(1, 'month');
-          endDate = dayjs();
-          break;
-        case '3months':
-          startDate = dayjs().subtract(3, 'month');
-          endDate = dayjs();
-          break;
-        case '6months':
-          startDate = dayjs().subtract(6, 'month');
-          endDate = dayjs();
-          break;
-        case '1year':
-          startDate = dayjs().subtract(1, 'year');
-          endDate = dayjs();
-          break;
-        case 'total':
-          startDate = dayjs('2000-01-01T00:00:00');
-          endDate = dayjs();
-          break;
-        default:
-          break;
-      }
-
-      props.setDateStart(startDate);
-      setDateEnd(endDate);
-
-      props.setDate({
-        from: startDate.format('YYYY-MM-DD-HH-mm'),
-        to: endDate.format('YYYY-MM-DD-HH-mm'),
-        term: props.date.term,
-      });
+  const radioChangeHandler = (value) => {
+    let startDate, endDate;
+    switch (value) {
+      case 'today':
+        startDate = dayjs().startOf('day'); // 오늘 날짜의 0시 0분
+        endDate = dayjs(); // 현재 시각
+        break;
+      case '1week':
+        startDate = dayjs().subtract(1, 'week');
+        endDate = dayjs();
+        break;
+      case '1month':
+        startDate = dayjs().subtract(1, 'month');
+        endDate = dayjs();
+        break;
+      case '3months':
+        startDate = dayjs().subtract(3, 'month');
+        endDate = dayjs();
+        break;
+      case '6months':
+        startDate = dayjs().subtract(6, 'month');
+        endDate = dayjs();
+        break;
+      case '1year':
+        startDate = dayjs().subtract(1, 'year');
+        endDate = dayjs();
+        break;
+      case 'total':
+        startDate = dayjs('2000-01-01T00:00:00');
+        endDate = dayjs();
+        break;
+      default:
+        startDate = dayjs().startOf('day');
+        endDate = dayjs();
+        break;
     }
+
+    // console.log('value>>>', value);
+    // console.log('startDate>>>', startDate);
+    // console.log('endDate>>>', endDate);
+
+    setRadioValue(value);
+    props.setDateStart(startDate);
+    props.setDateEnd(endDate);
+    props.setDate({
+      from: startDate.format('YYYY-MM-DD-HH-mm'),
+      to: endDate.format('YYYY-MM-DD-HH-mm'),
+      term: props.date.term,
+    });
   };
 
+  //초기화 버튼 클릭 시
+  useEffect(() => {
+    if (props.isReset) {
+      radioChangeHandler('today');
+      props.setIsReset(false);
+    }
+  }, [props.isReset]);
+
+  const handleButtonClick = (value) => {
+    radioChangeHandler(value);
+  };
+
+  // 달력
   const onChange = (value, dateString) => {
     if (Array.isArray(value)) {
       const [startDate, endDate] = value?.map((date) => dayjs(date));
       props.setDateStart(startDate);
-      setDateEnd(endDate);
+      props.setDateEnd(endDate);
       props.setDate({
         from: startDate.format('YYYY-MM-DD-HH-mm'),
         to: endDate.format('YYYY-MM-DD-HH-mm'),
         term: props.date.term,
       });
+      setRadioValue('');
     }
   };
 
@@ -144,6 +159,7 @@ const SearchTerm = (props) => {
                 buttonStyle="solid"
                 onChange={(e) => handleButtonClick(e.target.value)}
                 defaultValue={'today'} //! 기본값 변경
+                value={radioValue}
                 disabled={props.isLoading.fetching}
               />
             </ConfigProvider>
@@ -173,8 +189,8 @@ const SearchTerm = (props) => {
                 showTime={{ format: 'HH:mm', hideDisabledOptions: true }}
                 format="YYYY-MM-DD HH:mm"
                 onChange={onChange}
-                defaultValue={[props.dateStart, dateEnd]}
-                value={[props.dateStart, dateEnd]}
+                defaultValue={[props.dateStart, props.dateEnd]}
+                value={[props.dateStart, props.dateEnd]}
                 disabledDate={disabledDate}
                 disabledTime={disabledRangeTime}
               />
