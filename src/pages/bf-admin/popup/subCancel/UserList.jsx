@@ -26,14 +26,12 @@ const Item = ({ item, selectedItems, setSelectedItems }) => {
 
   const DATA = {
     id: item.id,
-    grade: item.grade,
-    name: item.name,
+    memberName: item.memberName,
     email: item.email,
     phoneNumber: item.phoneNumber,
     dogName: item.dogName,
     accumulatedAmount: transformLocalCurrency(item.accumulatedAmount) + '원',
-    subscribe: item.subscribe ? 'Y' : 'N',
-    longUnconnected: item.longUnconnected ? 'Y' : 'N',
+    cancelReason: item.cancelReason,
   };
   const onPopupHandler = (e) => {
     e.preventDefault();
@@ -55,26 +53,7 @@ const Item = ({ item, selectedItems, setSelectedItems }) => {
 
   return (
     <li className={s.item} key={`item-${DATA.id}`} data-idx={DATA.id}>
-      <span>
-        <Checkbox
-          id={DATA.id}
-          onClick={onSelectHandler}
-          checked={selectedItems.indexOf(DATA.id) >= 0}
-        />
-      </span>
-      <span>
-        <Link href={`/bf-admin/popup/memberInfo/${DATA.id}`} passHref>
-          <a
-            target="_blank"
-            className="admin_btn basic_s solid"
-            onClick={onPopupHandler}
-          >
-            상세보기
-          </a>
-        </Link>
-      </span>
-      <span>{DATA.grade}</span>
-      <span>{DATA.name}</span>
+      <span>{DATA.memberName}</span>
       <span>
         <em className={'overflow-x-scroll'}>{DATA.email}</em>
       </span>
@@ -83,8 +62,7 @@ const Item = ({ item, selectedItems, setSelectedItems }) => {
       <span>
         <em className={'overflow-x-scroll'}>{DATA.accumulatedAmount}</em>
       </span>
-      <span>{DATA.subscribe}</span>
-      <span>{DATA.longUnconnected}</span>
+      <span>{DATA.cancelReason}</span>
     </li>
   );
 };

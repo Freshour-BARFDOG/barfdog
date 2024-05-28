@@ -1073,7 +1073,7 @@ export default function DashboardPage({ ga }) {
                   회원
                   <ToolTip
                     message={
-                      '하단의 레전드를 클릭하면, 해당하는 그래프를 선택적으로 활성화합니다.'
+                      '필드를 클릭하면 그래프를 선택적으로 활성화할 수 있습니다.'
                     }
                     theme={'white'}
                     messagePosition={'left'}
@@ -1131,7 +1131,7 @@ export default function DashboardPage({ ga }) {
                   주문량
                   <ToolTip
                     message={
-                      '통계섹션에서 선택된 기간에 따른 월별 주문수의 총합'
+                      '필드를 클릭하면 그래프를 선택적으로 활성화할 수 있습니다.'
                     }
                     theme={'white'}
                     messagePosition={'left'}

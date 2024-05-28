@@ -1,8 +1,11 @@
 import axios from 'axios';
-import axiosConfig, {axiosUserConfig} from './axios/axios.config';
-import {cookieType} from '/store/TYPE/cookieType';
-import {responseErrorType} from "@store/TYPE/responseErrorType";
-import {errorResponseHandleMap} from "@util/func/error/errorResponseHandleMap";
+import axiosConfig, {
+  axiosUserConfig,
+  axiosConfigBlob,
+} from './axios/axios.config';
+import { cookieType } from '/store/TYPE/cookieType';
+import { responseErrorType } from '@store/TYPE/responseErrorType';
+import { errorResponseHandleMap } from '@util/func/error/errorResponseHandleMap';
 
 /* - async / await 사용법
      아래 async await을 사용한 함수를 호출하는 함수도
@@ -21,23 +24,21 @@ axios.put(url, data, {...config})
 axios.patch(url, data, {...config})
 */
 
-
-export const getData = async (url, useType, optionalConfig= {}) => {
-
+export const getData = async (url, useType, optionalConfig = {}) => {
   const axiosHeaders = useType === 'admin' ? axiosConfig() : axiosUserConfig();
   const config = {
     ...axiosHeaders,
-    method: "GET",
+    method: 'GET',
     url: url,
     ...optionalConfig,
-  }
+  };
   const res = await axios(config)
     .then((res) => {
       // // console.log(res);
       return res;
     })
     .catch((err) => {
-      errorResponseHandleMap( err );
+      errorResponseHandleMap(err);
       // console.log(err.response);
       const errorObj = err?.response;
       const status = errorObj?.status;
@@ -50,8 +51,12 @@ export const getData = async (url, useType, optionalConfig= {}) => {
   return res;
 };
 
-
-export const getDataWithCookies = async (url, cookies, useType, optionalConfig= {}) => {
+export const getDataWithCookies = async (
+  url,
+  cookies,
+  useType,
+  optionalConfig = {},
+) => {
   let result;
   //const token = tokenFromSSR || getTokenFromServerSide(req);
 
@@ -61,15 +66,15 @@ export const getDataWithCookies = async (url, cookies, useType, optionalConfig= 
     headers: {
       ...axiosHeaders.headers,
       Cookie: cookies,
-    }
-  }
+    },
+  };
   const config = {
     ...axiosHeadersWithCookie,
-    method: "GET",
+    method: 'GET',
     url: url,
     ...optionalConfig,
     withCredentials: true,
-  }
+  };
   //config.headers.Cookie = cookies;
 
   //// console.log(cookies)
@@ -125,7 +130,6 @@ export const getDataWithCookies = async (url, cookies, useType, optionalConfig= 
   // return res;
 };
 
-
 export const postData = async (url, data, callback, contType) => {
   return axios
     .post(url, data, axiosConfig(contType))
@@ -135,14 +139,23 @@ export const postData = async (url, data, callback, contType) => {
       return res;
     })
     .catch((err) => {
-      errorResponseHandleMap( err );
+      errorResponseHandleMap(err);
       // console.log(err);
       if (callback && typeof callback === 'function') callback(err);
       alert('데이터 전송에 실패하였습니다.');
     });
 };
 
-
+export const postDataBlob = async (url, data, contType) => {
+  return axios
+    .post(url, data, axiosConfigBlob(contType))
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 
 export const deleteData = async (url, config = { data: {} }) => {
   const result = {
@@ -163,7 +176,7 @@ export const deleteData = async (url, config = { data: {} }) => {
       return res.status === 200 || res.status === 201;
     })
     .catch((err) => {
-      errorResponseHandleMap( err );
+      errorResponseHandleMap(err);
       console.error(err.response);
       // console.error('postObjDataResponseError:\n',err.response);
       const error = err.response;
@@ -209,17 +222,16 @@ export const postObjData = async (url, data, contType) => {
       result.isDone = res.status === 200 || res.status === 201;
     })
     .catch((err) => {
-      errorResponseHandleMap( err );
+      errorResponseHandleMap(err);
       // console.log(err.response);
       const error = err.response;
 
-      if(!error) {
+      if (!error) {
         result.error = '서버의 에러 응답이 없습니다.';
         result.status = 500;
         result.isDone = false;
         return;
       }
-
 
       result.status = err.response.status;
       if (!error.data) {
@@ -259,7 +271,7 @@ export const putObjData = async (url, data, contType) => {
       return res.status === 200 || res.status === 201;
     })
     .catch((err) => {
-      errorResponseHandleMap( err );
+      errorResponseHandleMap(err);
       // console.log(err.response);
       const errStatus = err.response?.status >= 400;
       const errorMessage = err.response?.data.error;
@@ -288,7 +300,7 @@ export const deleteObjData = async (url, data) => {
       return res.status === 200 || res.status === 201;
     })
     .catch((err) => {
-      errorResponseHandleMap( err );
+      errorResponseHandleMap(err);
       // console.log(err.response);
       const errStatus = err.response?.status >= 400;
       const errorMessage = err.response?.data.error;
@@ -310,7 +322,7 @@ export const postFileUpload = async (url, formData) => {
       return res;
     })
     .catch((err) => {
-      errorResponseHandleMap( err );
+      errorResponseHandleMap(err);
       return err.response;
       // console.log(err.response);
       // console.log(err.request);
@@ -336,7 +348,7 @@ export const postUserObjData = async (url, data, contType) => {
       return res.status === 200 || res.status === 201;
     })
     .catch((err) => {
-      errorResponseHandleMap( err );
+      errorResponseHandleMap(err);
       const error = err.response;
       // console.log('ERROR내용: ', err.response);
       if (error.data.error || error.data.errors[0].defaultMessage) {
@@ -371,13 +383,11 @@ export const getTokenClientSide = (req) => {
   return token;
 };
 
-
-
 export const getTokenFromServerSide = (req) => {
   // - MEMBER & ADMIN 모두 동일한 API에서 동일한 TOKEN을 발급받는다
   // - SERVER에서 TOKEN 속에 권한에 대한 값을 설정하여 검증한다.
   let token;
-  if(!req.headers.cookie){
+  if (!req.headers.cookie) {
     token = null; // window 첫 load 시, cookie가 없는 경우
   } else {
     const cookies = req.headers.cookie.split(';');
@@ -392,7 +402,6 @@ export const getTokenFromServerSide = (req) => {
         }
       }
     }
-
   }
 
   return token;
@@ -444,7 +453,12 @@ export const getDataSSR = async (req, url, tokenFromSSR) => {
   return result;
 };
 
-export const getDataSSRWithCookies = async (req, url, cookies, tokenFromSSR) => {
+export const getDataSSRWithCookies = async (
+  req,
+  url,
+  cookies,
+  tokenFromSSR,
+) => {
   let result;
   const token = tokenFromSSR || getTokenFromServerSide(req);
   try {
@@ -455,7 +469,7 @@ export const getDataSSRWithCookies = async (req, url, cookies, tokenFromSSR) => 
         headers: {
           authorization: token,
           'content-Type': 'application/json',
-          'Cookie': cookies, // 클라이언트 쿠키를 서버 요청에 추가
+          Cookie: cookies, // 클라이언트 쿠키를 서버 요청에 추가
         },
       })
       .then((res) => {
@@ -505,10 +519,12 @@ export const postDataSSR = async (req, url, data, tokenFromSSR) => {
   return result;
 };
 
-function getErrorMessageFromApiServer(errors=[]) {
-  let errorMessage = "데이터 처리 중 오류가 발생하였습니다.";
+function getErrorMessageFromApiServer(errors = []) {
+  let errorMessage = '데이터 처리 중 오류가 발생하였습니다.';
   if (Array.isArray(errors)) {
-    errorMessage = errors.map(err => `- error_message: ${err.defaultMessage}`).join("\n")
+    errorMessage = errors
+      .map((err) => `- error_message: ${err.defaultMessage}`)
+      .join('\n');
   }
   return errorMessage;
 }

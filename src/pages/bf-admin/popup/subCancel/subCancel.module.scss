@@ -40,12 +40,17 @@ $windowWidthForRightSideBorder: rem(850);
     .item {
       grid-template-columns:
         rem(95)
-        rem(100)
-        rem(100)
-        rem(160)
+        rem(200)
         rem(140)
         rem(140)
-        rem(160);
+        rem(120)
+        rem(200);
     }
   }
+}
+
+.pagination_wrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-left: rem(100);
 }
