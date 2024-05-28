@@ -39,12 +39,13 @@ $windowWidthForRightSideBorder: rem(850);
     .table_header,
     .item {
       grid-template-columns:
+        rem(60)
         rem(95)
         rem(200)
         rem(140)
         rem(140)
         rem(120)
-        rem(200);
+        minmax(500px, 1fr);
     }
   }
 }

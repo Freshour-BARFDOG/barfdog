@@ -22,10 +22,9 @@ const apiDataQueryString = 'querySubscribeCancelReasonDtoList';
 
 export default function SubCancelPopup() {
   const [isLoading, setIsLoading] = useState({});
-  const [isExcelLoading, setIsExcelLoading] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
   const [itemList, setItemList] = useState([]);
   const [selectedMemberIdList, setSelectedMemberIdList] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
   // export excel
   const onExcelDownloadHandler = async () => {
@@ -70,6 +69,7 @@ export default function SubCancelPopup() {
               <div className={`${s.cont_viewer} ${s.fullWidth}`}>
                 <div className={s.table}>
                   <ul className={`${s.table_header}`}>
+                    <li className={s.table_th}>번호</li>
                     <li className={s.table_th}>이름</li>
                     <li className={s.table_th}>이메일</li>
                     <li className={s.table_th}>연락처</li>
@@ -82,6 +82,7 @@ export default function SubCancelPopup() {
                       items={itemList}
                       setSelectedItems={setSelectedMemberIdList}
                       selectedItems={selectedMemberIdList}
+                      currentPage={currentPage}
                     />
                   ) : isLoading.fetching ? (
                     <AmdinErrorMessage loading={<Spinner />} />
@@ -94,11 +95,11 @@ export default function SubCancelPopup() {
                     <div></div>
                     <PaginationWithAPI
                       apiURL={getListApiUrl}
-                      urlQuery={searchQuery}
                       queryItemList={apiDataQueryString}
                       size={searchPageSize}
                       setItemList={setItemList}
                       setIsLoading={setIsLoading}
+                      setCurrentPage={setCurrentPage}
                     />
 
                     <div>

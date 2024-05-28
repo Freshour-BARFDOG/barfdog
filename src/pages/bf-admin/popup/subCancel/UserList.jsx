@@ -5,7 +5,12 @@ import Link from 'next/link';
 import popupWindow from '/util/func/popupWindow';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 
-export default function UserList({ items, selectedItems, setSelectedItems }) {
+export default function UserList({
+  items,
+  selectedItems,
+  setSelectedItems,
+  currentPage,
+}) {
   if (!items || !items.length) return;
   return (
     <ul className={s.table_body}>
@@ -13,6 +18,7 @@ export default function UserList({ items, selectedItems, setSelectedItems }) {
         <Item
           key={`item-${item.id}-${index}`}
           item={item}
+          number={index + 1 + (currentPage - 1) * 10}
           setSelectedItems={setSelectedItems}
           selectedItems={selectedItems}
         />
@@ -21,11 +27,12 @@ export default function UserList({ items, selectedItems, setSelectedItems }) {
   );
 }
 
-const Item = ({ item, selectedItems, setSelectedItems }) => {
+const Item = ({ item, number, selectedItems, setSelectedItems }) => {
   // // console.log(item)
 
   const DATA = {
     id: item.id,
+    number: number,
     memberName: item.memberName,
     email: item.email,
     phoneNumber: item.phoneNumber,
@@ -53,6 +60,7 @@ const Item = ({ item, selectedItems, setSelectedItems }) => {
 
   return (
     <li className={s.item} key={`item-${DATA.id}`} data-idx={DATA.id}>
+      <span>{DATA.number}</span>
       <span>{DATA.memberName}</span>
       <span>
         <em className={'overflow-x-scroll'}>{DATA.email}</em>
