@@ -21,6 +21,7 @@ import enterKey from '/util/func/enterKey';
 import { global_searchDateType } from '/store/TYPE/searchDateType';
 import { DownloadOutlined } from '@ant-design/icons';
 import { Button, ConfigProvider } from 'antd';
+import { postDataBlob } from '../../../api/reqData';
 
 const initialSearchValues = {
   from: global_searchDateType.oldestDate,
@@ -113,23 +114,43 @@ export default function SearchOnSellPage() {
   // };
 
   // export excel
-  const downloadExcel = (inputData) => {
-    let datas = [];
-    //   if (search.searchTypeGenOrSub === 'general') {
-    //     datas = datatmp_general(inputData);
-    //   } else if (search.searchTypeGenOrSub === 'subscribe') {
-    //     datas = datatmp_subscribe(inputData);
-    //   }
-    //   const ws = xlsx.utils.json_to_sheet(datas);
-    //   const wb = xlsx.utils.book_new();
-    //   xlsx.utils.book_append_sheet(wb, ws, 'SheetJS');
-    //   xlsx.writeFile(wb, 'sheetjs.xlsx');
-    // };
+  // const downloadExcel = async () => {
+  //   const url = `/api/admin/orders/searchAll/excel`;
 
-    // let filteredData = [];
-    // if (search.searchTypeGenOrSub === 'general') {
-    //   filteredData = filterDataGeneral(dataBase, search);
-  };
+  //   try {
+  //     const res = await postDataBlob(url);
+  //     console.log('엑셀 파일 업로드 성공:', res.data);
+
+  //     if (res && res.data instanceof Blob) {
+  //       const downloadUrl = URL.createObjectURL(res.data);
+  //       const link = document.createElement('a');
+  //       link.href = downloadUrl;
+  //       link.setAttribute('download', '구독취소사유.xlsx');
+  //       document.body.appendChild(link);
+  //       link.click();
+  //       URL.revokeObjectURL(downloadUrl);
+  //       link.remove();
+  //     }
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+
+  // let datas = [];
+  //   if (search.searchTypeGenOrSub === 'general') {
+  //     datas = datatmp_general(inputData);
+  //   } else if (search.searchTypeGenOrSub === 'subscribe') {
+  //     datas = datatmp_subscribe(inputData);
+  //   }
+  //   const ws = xlsx.utils.json_to_sheet(datas);
+  //   const wb = xlsx.utils.book_new();
+  //   xlsx.utils.book_append_sheet(wb, ws, 'SheetJS');
+  //   xlsx.writeFile(wb, 'sheetjs.xlsx');
+  // };
+
+  // let filteredData = [];
+  // if (search.searchTypeGenOrSub === 'general') {
+  //   filteredData = filterDataGeneral(dataBase, search);
+  // };
 
   // console.log(itemList);
   // console.log('searchValues', searchValues);
@@ -194,7 +215,7 @@ export default function SearchOnSellPage() {
               <p className="cont_title cont-left">
                 목록 <Tooltip message={'주문 단위 리스트'} />
               </p>
-              <div className="controls cont-left">
+              {/* <div className="controls cont-left">
                 <ConfigProvider
                   theme={{
                     token: {
@@ -210,7 +231,7 @@ export default function SearchOnSellPage() {
                     액셀 다운로드
                   </Button>
                 </ConfigProvider>
-              </div>
+              </div> */}
             </div>
             <div className={`${s.cont_viewer}`}>
               <div className={s.table}>
