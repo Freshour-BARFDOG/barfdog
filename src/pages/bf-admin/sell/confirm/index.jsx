@@ -27,7 +27,7 @@ const initialSearchValues = {
   recipientName: null,
   dogName: null,
   statusList: orderStatus.CONFIRM, // 구매확정 상태만 조회함
-  orderType: productType.GENERAL,
+  orderType: productType.ALL,
 };
 
 export default function ConfirmOnSellPage() {
@@ -105,8 +105,16 @@ export default function ConfirmOnSellPage() {
                 setSearchValue={setSearchValues}
                 title="주문유형"
                 name="orderType"
-                idList={[productType.GENERAL, productType.SUBSCRIBE]}
-                labelList={[productType.KOR.GENERAL, productType.KOR.SUBSCRIBE]}
+                idList={[
+                  productType.ALL,
+                  productType.GENERAL,
+                  productType.SUBSCRIBE,
+                ]}
+                labelList={[
+                  productType.KOR.ALL,
+                  productType.KOR.GENERAL,
+                  productType.KOR.SUBSCRIBE,
+                ]}
                 value={searchValues.orderType}
               />
             </SearchBar>

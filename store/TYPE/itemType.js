@@ -12,11 +12,13 @@ export const general_itemType = {
 };
 
 export const productType = {
+  ALL: 'ALL',
   general: 'GENERAL',
   GENERAL: 'GENERAL',
   subscribe: 'SUBSCRIBE',
   SUBSCRIBE: 'SUBSCRIBE',
   KOR: {
+    ALL: '전체',
     general: '일반',
     GENERAL: '일반',
     subscribe: '구독',

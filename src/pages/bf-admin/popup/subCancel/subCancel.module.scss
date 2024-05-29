@@ -1,0 +1,60 @@
+@import '/styles/module/itemList.module';
+@import '../common-popup.module';
+
+// *  ------- COMMON ------- * //
+$backgroundColorDef: #f8f8ff;
+$popupMainHeaderHeight: rem(66);
+$popupCloseButtonSectionHeight: rem(88);
+$windowWidthForRightSideBorder: rem(850);
+
+// -- LAYOUT --
+.body {
+  .row > *:nth-child(1) {
+    margin-top: rem(20);
+    margin-bottom: rem(10);
+  }
+
+  .row > *:nth-child(2) {
+    margin-bottom: rem(20);
+  }
+
+  .row > *:nth-child(3) {
+    margin-bottom: rem(12);
+  }
+}
+
+.search-wrap {
+  .searchBar {
+    display: flex;
+    column-gap: rem(34);
+    > * {
+      display: flex;
+      align-items: center;
+    }
+  }
+}
+
+.cont_viewer {
+  .table {
+    .table_header,
+    .item {
+      grid-template-columns:
+        rem(60)
+        rem(95)
+        rem(200)
+        rem(140)
+        rem(140)
+        rem(160)
+        rem(100)
+        rem(100)
+        rem(120)
+        minmax(460px, 1fr);
+    }
+  }
+}
+
+.pagination_wrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-left: rem(100);
+}
