@@ -19,6 +19,8 @@ import Tooltip from '/src/components/atoms/Tooltip';
 import { getDefaultPagenationInfo } from '/util/func/getDefaultPagenationInfo';
 import enterKey from '/util/func/enterKey';
 import { global_searchDateType } from '/store/TYPE/searchDateType';
+import { DownloadOutlined } from '@ant-design/icons';
+import { Button, ConfigProvider } from 'antd';
 
 const initialSearchValues = {
   from: global_searchDateType.oldestDate,
@@ -29,13 +31,13 @@ const initialSearchValues = {
   recipientName: null,
   dogName: null,
   statusList: orderStatus.ALL,
-  orderType: productType.GENERAL,
+  orderType: productType.ALL,
 };
 
 export default function SearchOnSellPage() {
   const searchApiUrl = `/api/admin/orders/searchAll`; // 모든 정보 조회 ('주문'단위 조회)
   // const searchApiUrl = `/api/admin/orders/search`; // '상품'단위 조회 // @derprecated
-  const searchPageSize = 10;
+  const searchPageSize = 50;
   const [isLoading, setIsLoading] = useState({});
   const [itemList, setItemList] = useState([]);
   const [searchValues, setSearchValues] = useState(initialSearchValues);
@@ -85,6 +87,53 @@ export default function SearchOnSellPage() {
     enterKey(e, onSearchHandler);
   };
 
+  // const datatmp = (inputData) => {
+  //   return inputData.map((item) => {
+  //     return {
+  //       주문번호: item.orderNumber,
+  //       주문상태: item.stateKor,
+  //       이메일: item.memberEmail,
+  //       구매자: item.orderMemberName,
+  //       수령자: item.orderRecivedName,
+  //       반려견명: item.orderRecivedName, // 추가
+  //       결제일: item.paymentDate,
+  //       묶음배송: item.isPackage,
+  //       물품이름: item.productName,
+  //       수량: item.amount,
+  //       결제금액: item.paymentPrice,
+  //       '첫 결제일': item.memberFirstPaymentDate,
+  //       '누적 결제금액': item.memberAccumulatedamount,
+  //       생년월일: item.memberBirthday,
+  //       성별: item.memberGender,
+  //       연락처: item.memberPhoneNumber,
+  //       주소: item.deliveryStreet,
+  //       요청사항: item.deliveryRequest,
+  //     };
+  //   });
+  // };
+
+  // export excel
+  const downloadExcel = (inputData) => {
+    let datas = [];
+    //   if (search.searchTypeGenOrSub === 'general') {
+    //     datas = datatmp_general(inputData);
+    //   } else if (search.searchTypeGenOrSub === 'subscribe') {
+    //     datas = datatmp_subscribe(inputData);
+    //   }
+    //   const ws = xlsx.utils.json_to_sheet(datas);
+    //   const wb = xlsx.utils.book_new();
+    //   xlsx.utils.book_append_sheet(wb, ws, 'SheetJS');
+    //   xlsx.writeFile(wb, 'sheetjs.xlsx');
+    // };
+
+    // let filteredData = [];
+    // if (search.searchTypeGenOrSub === 'general') {
+    //   filteredData = filterDataGeneral(dataBase, search);
+  };
+
+  // console.log(itemList);
+  // console.log('searchValues', searchValues);
+
   return (
     <>
       <MetaTitle title="주문 통합검색" admin={true} />
@@ -126,8 +175,16 @@ export default function SearchOnSellPage() {
                 setSearchValue={setSearchValues}
                 title="주문유형"
                 name="orderType"
-                idList={[productType.GENERAL, productType.SUBSCRIBE]}
-                labelList={[productType.KOR.GENERAL, productType.KOR.SUBSCRIBE]}
+                idList={[
+                  productType.ALL,
+                  productType.GENERAL,
+                  productType.SUBSCRIBE,
+                ]}
+                labelList={[
+                  productType.KOR.ALL,
+                  productType.KOR.GENERAL,
+                  productType.KOR.SUBSCRIBE,
+                ]}
                 value={searchValues.orderType}
               />
             </SearchBar>
@@ -137,6 +194,23 @@ export default function SearchOnSellPage() {
               <p className="cont_title cont-left">
                 목록 <Tooltip message={'주문 단위 리스트'} />
               </p>
+              <div className="controls cont-left">
+                <ConfigProvider
+                  theme={{
+                    token: {
+                      // Seed Token
+                      colorPrimary: '#ca1011',
+                    },
+                  }}
+                >
+                  <Button
+                    icon={<DownloadOutlined />}
+                    onClick={() => downloadExcel()}
+                  >
+                    액셀 다운로드
+                  </Button>
+                </ConfigProvider>
+              </div>
             </div>
             <div className={`${s.cont_viewer}`}>
               <div className={s.table}>

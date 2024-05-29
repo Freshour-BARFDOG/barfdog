@@ -43,7 +43,7 @@ const initialSearchValues = {
   recipientName: null,
   dogName: null,
   statusList: orderStatus.PAYMENT_DONE,
-  orderType: productType.GENERAL,
+  orderType: productType.ALL,
 };
 
 export default function OrderOnSellPage() {
@@ -771,8 +771,16 @@ export default function OrderOnSellPage() {
                 setSearchValue={setSearchValues}
                 title="주문유형"
                 name="orderType"
-                idList={[productType.GENERAL, productType.SUBSCRIBE]}
-                labelList={[productType.KOR.GENERAL, productType.KOR.SUBSCRIBE]}
+                idList={[
+                  productType.ALL,
+                  productType.GENERAL,
+                  productType.SUBSCRIBE,
+                ]}
+                labelList={[
+                  productType.KOR.ALL,
+                  productType.KOR.GENERAL,
+                  productType.KOR.SUBSCRIBE,
+                ]}
                 value={searchValues.orderType}
               />
             </SearchBar>
