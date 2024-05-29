@@ -14,7 +14,6 @@ import Spinner from '/src/components/atoms/Spinner';
 import { DownloadOutlined } from '@ant-design/icons';
 import { Button, ConfigProvider } from 'antd';
 import { postDataBlob } from '../../../api/reqData';
-import axios from 'axios';
 
 const searchPageSize = 10;
 const getListApiUrl = '/api/admin/dashBoard/subscribeCancelReason';
@@ -49,6 +48,8 @@ export default function SubCancelPopup() {
     }
   };
 
+  //   console.log(itemList);
+
   return (
     <>
       <MetaTitle title="구독취소 기타 사유" />
@@ -74,6 +75,9 @@ export default function SubCancelPopup() {
                     <li className={s.table_th}>이메일</li>
                     <li className={s.table_th}>연락처</li>
                     <li className={s.table_th}>반려견명</li>
+                    <li className={s.table_th}>견종</li>
+                    <li className={s.table_th}>등급</li>
+                    <li className={s.table_th}>구독 횟수</li>
                     <li className={s.table_th}>누적구매금액</li>
                     <li className={s.table_th}>취소 사유</li>
                   </ul>
