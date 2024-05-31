@@ -8,7 +8,7 @@ export const Modal_cont_ingredient_06 = () => {
         <div className={s.grid_box}>
           <div className={s.left_side}>
             <div className={s.left_title}>
-              등록 성분량 <span>(200g기준)</span>
+              등록 성분량 <span>(100g기준)</span>
             </div>
             <ul>
               <div className={s.flex_box}>
