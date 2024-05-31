@@ -38,10 +38,10 @@ export default function SalesByRecipePieChart({ chartData }) {
         {isLoading ? (
           <AmdinErrorMessage loading={<Spinner />} />
         ) : (
-          <div style={{ height: '28rem', width: '20rem' }}>
+          <div style={{ height: '22rem', width: '26rem' }}>
             <ResponsivePie
               data={data}
-              margin={{ top: -180, right: 50, bottom: 0, left: 50 }}
+              margin={{ top: 0, right: 160, bottom: 0, left: 0 }}
               innerRadius={0.5}
               padAngle={0.7}
               cornerRadius={3}
@@ -64,7 +64,7 @@ export default function SalesByRecipePieChart({ chartData }) {
               tooltip={({ datum }) => (
                 <div
                   style={{
-                    padding: '5px 10px',
+                    padding: '0',
                     background: 'white',
                     border: '1px solid #ccc',
                   }}
@@ -75,11 +75,11 @@ export default function SalesByRecipePieChart({ chartData }) {
               )}
               legends={[
                 {
-                  anchor: 'bottom',
+                  anchor: 'right',
                   direction: 'column',
                   justify: false,
-                  translateX: 10,
-                  translateY: -30,
+                  translateX: 140,
+                  translateY: 0,
                   itemsSpacing: 10,
                   itemWidth: 100,
                   itemHeight: 18,
