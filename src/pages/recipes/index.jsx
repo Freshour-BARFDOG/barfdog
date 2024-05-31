@@ -90,7 +90,7 @@ const DATA = {
     '#ca1011',
     '#ca1011',
     '#ca1011',
-    '#ca1011',
+    'black',
   ],
   imagelink: [
     // * require(): component 내부에서 data를 전달받을 경우 랜더링 오류 발생(Runtime Error)

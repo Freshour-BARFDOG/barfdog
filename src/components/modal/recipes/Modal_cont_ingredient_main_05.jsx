@@ -48,8 +48,8 @@ export const Modal_cont_ingredient_main_05 = () => {
             <Image
               priority
               src={require('public/img/recipes/banana.png')}
-              // objectFit="cover"
-              // layout="fill"
+              objectFit="cover"
+              layout="fill"
               alt="브랜드 소개 이미지"
             />
           </div>

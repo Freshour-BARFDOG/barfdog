@@ -7,7 +7,7 @@ export const Modal_cont_ingredient_09 = () => {
       <div className={s.modal_text_box2}>
         <div className={s.grid_box}>
           <div className={s.left_side}>
-            <div className={s.left_title}>
+            <div className={s.left_title9}>
               등록 성분량 <span>(200g기준)</span>
             </div>
             <ul>
@@ -50,7 +50,7 @@ export const Modal_cont_ingredient_09 = () => {
           </div>
 
           <div className={s.right_side}>
-            <div className={s.right_title}>
+            <div className={s.right_title9}>
               DM (Dry Matter) <span>(100g 기준)</span>
             </div>
             <ul>

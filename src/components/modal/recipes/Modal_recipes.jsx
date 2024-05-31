@@ -161,8 +161,8 @@ const Modal_recipes = ({
         <div className={s.container}>
           <div className={s.inner}>
             <section className={s['title-section']}>
-              <h2 className={s['title-ko']}>{TITLE_KO}</h2>
-              <h3 className={s['title-en']}>{TITLE_EN}</h3>
+              <h2 className={s['title-en']}>{TITLE_EN}</h2>
+              <h3 className={s['title-ko']}>{TITLE_KO}</h3>
               <i className={s.btn_close_modal} onClick={onHideModal}>
                 <CloseButton className={s['closeButton']} />
               </i>
