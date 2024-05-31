@@ -459,7 +459,8 @@ section.subscribe_discount {
       .left_title,
       .left_title2,
       .left_title3,
-      .left_title4 {
+      .left_title4,
+      .left_title9 {
         color: #fff;
         padding: rem(6) 0 rem(4) rem(8);
         margin-bottom: rem(10);
@@ -482,6 +483,9 @@ section.subscribe_discount {
       }
       .left_title4 {
         background-color: #ff8c16;
+      }
+      .left_title9 {
+        background-color: black;
       }
 
       ul {
@@ -535,7 +539,8 @@ section.subscribe_discount {
       .right_title,
       .right_title2,
       .right_title3,
-      .right_title4 {
+      .right_title4,
+      .right_title9 {
         color: #fff;
         padding: rem(6) 0 rem(4) rem(8);
         margin-bottom: rem(10);
@@ -558,6 +563,9 @@ section.subscribe_discount {
       }
       .right_title4 {
         background-color: #ff8c16;
+      }
+      .right_title9 {
+        background-color: black;
       }
       ul {
         display: grid;
