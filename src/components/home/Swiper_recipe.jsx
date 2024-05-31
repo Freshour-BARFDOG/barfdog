@@ -42,12 +42,13 @@ const swiperSettings_recipe = {
 export function Swiper_recipe({ data, isMobile }) {
   const navPrevRef = useRef(null);
   const navNextRef = useRef(null);
-  // // console.log(data);
+  // console.log(data);
   const [recipeDatas, setRecipeDatas] = useState([]);
 
   useEffect(() => {
     if (data && Array.isArray(data)) {
-      setRecipeDatas(data || []);
+      const sortedData = data.sort((a, b) => a.id - b.id);
+      setRecipeDatas(sortedData || []);
     }
   }, []);
 

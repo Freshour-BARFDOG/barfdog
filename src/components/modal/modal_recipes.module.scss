@@ -3,134 +3,135 @@ $browser-context: 16;
   @return #{$px / $context}rem;
 }
 
-
 $containerSize: rem(860);
 $mobile_containerSize: rem(355);
 $topLinkBannerHeight: rem(38);
 
-
-#modal_recipe{
+#modal_recipe {
   top: 50%;
   transform: translate(-50%, -50%);
   width: initial;
-  padding:0;
+  padding: 0;
   border-radius: rem(16);
 }
-
 
 .container {
   width: $containerSize;
 }
-.inner{
+.inner {
   padding: rem(30) rem(40) rem(45);
 }
 
-
-
-.title-section{
-  margin-bottom:rem(-2);
+.title-section {
+  margin-bottom: rem(-2);
   position: relative;
-  .title-ko{
+  .title-en {
     text-transform: uppercase;
     font-family: var(--font-Gmarket-bold);
     letter-spacing: -0.02em;
     font-size: rem(28);
-    margin-bottom:rem(-3);
+    margin-bottom: rem(-3);
   }
 
-  .title-en{
+  .title-ko {
     font-size: rem(24);
-    font-weight: 500;
+    font-family: var(--font-Gmarket);
   }
 
-  .btn_close_modal{
+  .btn_close_modal {
     position: absolute;
     top: 0;
     right: 0;
 
-    .closeButton{
+    .closeButton {
       width: rem(40);
     }
   }
 }
 
-.tabmenu-section{
+.tabmenu-section {
   display: flex;
   justify-content: flex-end;
   border-bottom: rem(1) solid var(--color-line-02);
-  margin-bottom:rem(16);
+  margin-bottom: rem(16);
   .tabmenu {
     $tabmenuListWidth: rem(107);
     position: relative;
     overflow: hidden;
-    
-    ul{
+
+    ul {
       display: inline-grid;
       grid-template-columns: repeat(4, $tabmenuListWidth);
       align-items: center;
       justify-content: flex-end;
-  
-      li{
-        padding: rem(2) 0 ;
+
+      li {
+        padding: rem(2) 0;
         cursor: pointer;
         display: flex;
-        justify-content:center;
+        justify-content: center;
         align-items: center;
         font-size: rem(16);
         font-weight: 400;
         color: var(--color-font-sub);
-        &.active{color: var(--color-font-def); font-weight: 500;}
+        &.active {
+          color: var(--color-font-def);
+          font-weight: 500;
+        }
       }
     }
   }
-
 }
 
-
-
-
-
 .cont-section {
-  display: grid;
-  grid-template-columns: 41% 59%;
-  
+  // display: grid;
+  // grid-template-columns: 41% 59%;
+  display: flex;
+
+  // align-items: center;
+
   // .img-wrap{aspect-ratio: 320/300;}
-  .img-wrap{
-    width: rem(320);
-    height: rem(320);
+  .img-wrap {
+    padding: rem(10) 0 0 0;
+    min-width: rem(340);
+    width: rem(340);
+    height: rem(340);
+    aspect-ratio: 1/1;
+  }
+  .img-wrap-premium {
+    padding: rem(30) rem(30) 0 0;
+    min-width: rem(300);
+    width: rem(300);
+    height: rem(340);
     aspect-ratio: 1/1;
   }
   .details {
-    padding-left:rem(32);
-    height: rem(300);
+    padding: rem(30) 0 0 0;
+    // height: rem(300);
     box-sizing: border-box;
-    ul{
-      li{
+    ul {
+      li {
         display: none;
       }
-      li.active{
+      li.active {
         display: block;
       }
     }
   }
-
 }
 
-
-
 @media (max-width: rem(900)) {
-
-  #modal_recipe{
+  #modal_recipe {
     height: 100%;
     max-height: rem(736);
     overflow: scroll;
     scrollbar-color: transparent transparent;
     &::-webkit-scrollbar {
-      display:none;
+      display: none;
       width: rem(10);
       height: 0;
     }
-    &::-webkit-scrollbar-thumb{
+    &::-webkit-scrollbar-thumb {
       background-color: #fff;
       border: rem(1) solid #ababab;
       border-radius: rem(12);
@@ -147,74 +148,70 @@ $topLinkBannerHeight: rem(38);
     }
   }
 
-
   .container {
     width: rem(354);
   }
-  
-  .inner{
+
+  .inner {
     padding: rem(20) rem(20) rem(80);
   }
 
-  
-  .title-section{
+  .title-section {
     margin-bottom: rem(20);
 
-    .title-ko{
+    .title-ko {
       font-size: rem(20);
     }
 
-    .title-en{
+    .title-en {
       font-size: rem(18);
     }
 
-    .btn_close_modal{
-  
-      .closeButton{
+    .btn_close_modal {
+      .closeButton {
         width: rem(20);
       }
     }
   }
 
-
-  .tabmenu-section{
+  .tabmenu-section {
     .tabmenu {
       $mobile_tabmenuListWidth: rem(80);
 
       //스크린 크기 변경되도 위치는 그대로인점 문제
-      i{
+      i {
         width: rem(80);
-        overflow-y:scroll;
-       &::-webkit-scrollbar {display:none;}
-       
+        overflow-y: scroll;
+        &::-webkit-scrollbar {
+          display: none;
+        }
       }
 
-      ul{
+      ul {
         grid-template-columns: repeat(4, $mobile_tabmenuListWidth);
       }
     }
   }
 
-
-
-  
-
-
   .cont-section {
-    grid-template-columns: 1fr;
+    // grid-template-columns: 1fr;
+    flex-direction: column;
 
-    
-    .img-wrap{
+    .img-wrap {
       width: rem(315);
       height: rem(315);
+    }
+
+    .img-wrap-premium {
+      margin-left: rem(30);
     }
 
     .details {
       padding-left: rem(0);
       height: rem(240);
       margin-top: rem(20);
-      ul{
-        li.active{
+      ul {
+        li.active {
           > * {
             overflow-y: visible;
             height: auto;
@@ -224,14 +221,10 @@ $topLinkBannerHeight: rem(38);
       }
     }
   }
-
 }
 
-
-
-
 @media (max-height: rem(800)) and (max-width: rem(900)) {
-  #modal_recipe{
+  #modal_recipe {
     height: calc(100% - rem(40));
   }
 }
