@@ -25,7 +25,7 @@ $topLinkBannerHeight: rem(38);
 .title-section {
   margin-bottom: rem(-2);
   position: relative;
-  .title-ko {
+  .title-en {
     text-transform: uppercase;
     font-family: var(--font-Gmarket-bold);
     letter-spacing: -0.02em;
@@ -33,9 +33,9 @@ $topLinkBannerHeight: rem(38);
     margin-bottom: rem(-3);
   }
 
-  .title-en {
+  .title-ko {
     font-size: rem(24);
-    font-weight: 500;
+    font-family: var(--font-Gmarket);
   }
 
   .btn_close_modal {

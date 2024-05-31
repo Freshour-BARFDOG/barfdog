@@ -49,7 +49,7 @@ export const Modal_cont_ingredient_main_06 = () => {
           <div className={`${s.image2} img-wrap`}>
             <Image
               priority
-              src={require('public/img/recipes/kale.png')}
+              src={require('public/img/recipes/banana.png')}
               objectFit="cover"
               layout="fill"
               alt="브랜드 소개 이미지"
