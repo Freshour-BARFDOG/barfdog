@@ -3,7 +3,7 @@ import axios from 'axios';
 import s from './signup.module.scss';
 import { useRouter } from 'next/router';
 import MetaTitle from '/src/components/atoms/MetaTitle';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import SignInputList from '/src/components/user_signup/SignInputList';
@@ -23,12 +23,15 @@ import { kakaoGender } from '/util/func/kakaoGender';
 import { getDataSSR, getTokenFromServerSide } from '../../api/reqData';
 import { deleteCookie, getCookie, setCookie } from '@util/func/cookie';
 import { useEffect } from 'react';
+import { cookieType } from '/store/TYPE/cookieType';
+import { authAction } from '/store/auth-slice';
 
 String.prototype.insertAt = function (index, str) {
   return this.slice(0, index) + str + this.slice(index);
 };
 
 export default function SignupPage() {
+  const dispatch = useDispatch();
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
   const router = useRouter();
@@ -118,6 +121,62 @@ export default function SignupPage() {
       setVisibility(true);
     }
   }, []);
+
+  const onLoginHandler = async () => {
+    try {
+      // const autologinValue = cookieType.AUTO_LOGIN_EXPIRED_PERIOD.VALUE; // 변경가능
+      const defValue = cookieType.LOGIN_EXPIRED_PERIOD.VALUE_FOR_RESTAPI; // 2시간 (클라이언트에서 def 값은 변경불가)
+      const body = {
+        email: formValues.email,
+        password: formValues.password,
+        tokenValidDays: defValue,
+      };
+      await axios
+        .post('/api/login', body, {
+          headers: {
+            'content-Type': 'application/json',
+          },
+        })
+        .then((res) => {
+          console.log(res);
+          if (res.status === 200) {
+            const token = res.headers.authorization;
+            const { temporaryPassword, email, name, roleList } = res.data;
+
+            const payload = {
+              token,
+              expiredDate: res.data.expiresAt,
+              data: {
+                temporaryPassword,
+                email,
+                name,
+                roleList,
+              },
+            };
+            dispatch(authAction.login(payload));
+            // 홈으로 이동
+            // router.push('/');
+          } else {
+            alert('로그인에 실패하였습니다.');
+          }
+          // setIsLoading((prevState) => ({
+          //   ...prevState,
+          //   movePage: true,
+          // }));
+        })
+        .catch((err) => {
+          if (!err) return;
+          console.error('ERROR: ', err);
+          // const errorStatus = err?.response?.status;
+          // let errorMessage = '';
+          // errorMessage = '서버 장애입니다. 잠시 후 다시 시도해주세요.';
+          // mct.alertShow(errorMessage);
+        });
+    } catch (err) {
+      console.error('통신에러: ', err);
+      mct.alertShow(`데이터 처리 중 오류가 발생했습니다.\n${err}`);
+    }
+  };
 
   const onSubmit = async () => {
     if (submitted) return console.error('Already Submitted!');
@@ -251,8 +310,8 @@ export default function SignupPage() {
         // console.log(res.data);
         if (res.status === 201) {
           const userName = formvalues.name;
-          mct.alertHide(`회원가입에 성공하였습니다.`, onSuccessCallback);
-          router.push(`/account/signup/success?username=${userName}`);
+          mct.alertShow(`회원가입에 성공하였습니다.`, onSuccessCallback);
+          // router.push(`/account/signup/success?username=${userName}`);
         } else {
           mct.alertHide(
             `회원가입에 실패하였습니다. 잠시 후 다시 시도해주세요.`,
@@ -267,7 +326,10 @@ export default function SignupPage() {
   };
 
   const onSuccessCallback = async () => {
-    await router.push(`/account/signup/success?username=${userName}`);
+    // await router.push(`/account/signup/success?username=${userName}`);
+
+    // 회원가입 후 바로 로그인
+    onLoginHandler();
   };
 
   const generateRandomString = (num) => {

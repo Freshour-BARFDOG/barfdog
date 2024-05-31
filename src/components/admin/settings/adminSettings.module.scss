@@ -1,7 +1,7 @@
 @import '/styles/global/rem';
 
 #main {
-  .main-title{
+  .main-title {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -16,19 +16,19 @@
     justify-content: flex-start;
     gap: rem(10);
 
-    &.has-notice{
+    &.has-notice {
       justify-content: space-between;
-      .notice{
+      .notice {
         color: var(--color-main);
       }
     }
 
-    span{
+    span {
       font-size: rem(13);
     }
   }
-  .date{
-    font-size: rem(13)
+  .date {
+    font-size: rem(13);
   }
   input {
     text-align: right;
@@ -36,7 +36,6 @@
   section:not(:last-child) {
     margin-bottom: rem(20);
   }
-
 }
 
 .numberUnit {
@@ -47,4 +46,11 @@
   font-size: rem(14);
   color: var(--color-font-sub2);
   pointer-events: none;
+}
+
+.checkboxWrapper {
+  display: flex;
+  label {
+    margin-right: rem(20);
+  }
 }

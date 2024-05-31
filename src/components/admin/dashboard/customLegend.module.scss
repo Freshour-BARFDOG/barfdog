@@ -1,0 +1,78 @@
+@import '/styles/global/rem';
+
+.legend_box {
+  display: flex;
+  justify-content: center;
+  gap: rem(20);
+  margin-top: rem(10);
+
+  --circle-color: #008000;
+  --rectangle-one-color: #413ea0;
+  --rectangle-two-color: #ff1100;
+}
+
+.circle {
+  cursor: pointer;
+  display: flex;
+  gap: rem(6);
+  align-items: center;
+  color: var(--circle-color);
+}
+
+.circle_btn {
+  width: rem(12);
+  height: rem(12);
+  border-radius: 50%;
+  border: rem(3) solid var(--circle-color);
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.circle.clicked {
+  .circle_btn {
+    background-color: var(--circle-color);
+    cursor: pointer;
+  }
+}
+
+// 사각형
+.rectangle {
+  cursor: pointer;
+  display: flex;
+  gap: rem(8);
+  align-items: center;
+}
+.rectangle.one {
+  color: var(--rectangle-one-color);
+}
+.rectangle.two {
+  color: var(--rectangle-two-color);
+}
+
+.rectangle_btn {
+  width: rem(30);
+  height: rem(10);
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.rectangle_btn.one {
+  border: rem(3) solid var(--rectangle-one-color);
+}
+.rectangle_btn.two {
+  border: rem(3) solid var(--rectangle-two-color);
+}
+
+.rectangle.clicked {
+  .rectangle_btn {
+    cursor: pointer;
+  }
+
+  .rectangle_btn.one {
+    background-color: var(--rectangle-one-color);
+  }
+
+  .rectangle_btn.two {
+    background-color: var(--rectangle-two-color);
+  }
+}

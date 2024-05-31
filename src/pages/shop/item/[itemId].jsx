@@ -9,22 +9,21 @@ import { ShopItemInfoBox } from '/src/components/shop/ShopItemInfoBox';
 import { ShopTabMenus } from '/src/components/shop/ShopTabMenus';
 import { ShopReviewBox } from '/src/components/shop/ShopReviewBox';
 import { ShopOptionBar } from '/src/components/shop/ShopOptionBar';
-import {
-  postUserObjData,
-} from '/src/pages/api/reqData';
+import { postUserObjData } from '/src/pages/api/reqData';
 import { useRouter } from 'next/router';
 import calculateSalePrice from '/util/func/calculateSalePrice';
 import transformClearLocalCurrency from '/util/func/transformClearLocalCurrency';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { cartAction } from '/store/cart-slice';
-import axios from "axios";
-import {useModalContext} from "/store/modal-context";
-import Modal_global_alert from "/src/components/modal/Modal_global_alert";
-import {getData} from "/src/pages/api/reqData";
-import {deleteCookie, getCookie, setCookie} from "@util/func/cookie";
+import { setPreviousPath } from '/store/navigation-slice';
+import axios from 'axios';
+import { useModalContext } from '/store/modal-context';
+import Modal_global_alert from '/src/components/modal/Modal_global_alert';
+import { getData } from '/src/pages/api/reqData';
+import { deleteCookie, getCookie, setCookie } from '@util/func/cookie';
 import { cookieType } from '@store/TYPE/cookieType';
 
-export default function SingleItemDetailPage({data}) {
+export default function SingleItemDetailPage({ data }) {
   const mct = useModalContext();
   const activeGlobalAlertModal = mct.hasAlert;
   const auth = useSelector((s) => s.auth);
@@ -43,13 +42,11 @@ export default function SingleItemDetailPage({data}) {
     itemPrice: validation_itemPrice(data?.item), // 장바구니항목에서 제외
     totalPrice: 0, // 장바구니 항목 아님
   };
-  
+
   const contentRef = useRef();
   const [isLoading, setIsLoading] = useState({ fetching: true });
   const [activeTabmenuIndex, setActiveTabmenuIndex] = useState(0);
   const [formValues, setFormValues] = useState(initialFormValues_CART);
-  
-  
 
   const [activeCartShortcutModal, setActiveCartShortcutModal] = useState({});
 
@@ -79,14 +76,22 @@ export default function SingleItemDetailPage({data}) {
       });
     }, 4000);
   };
-  
 
   const onAddToCart = async (e) => {
-    if(!userInfo){
+    if (!userInfo) {
+      // 로그인 성공 시, 바로 장바구니에 담기 위해 localStorage에 저장
+      const body = {
+        itemAmount: formValues.itemAmount,
+        itemId: formValues.itemId,
+        optionDtoList: formValues.optionDtoList,
+      };
+      const formStrings = JSON.stringify(body).replace(/\n/g, '');
+      localStorage.setItem('storedItem', formStrings);
+      dispatch(setPreviousPath('/cart'));
       return await router.push('/account/login');
       // return mct.alertShow('로그인 후 이용가능합니다.');
     }
-    
+
     const button = e.currentTarget;
     const thisButtonArea = button.dataset.area;
 
@@ -118,9 +123,25 @@ export default function SingleItemDetailPage({data}) {
     }));
   };
 
-
   const onClickBuyButton = async () => {
-    if(!userInfo){
+    if (!userInfo) {
+      // 로그인 성공 시, 바로 주문서 페이지로 가기 위해 localStorage에 저장
+      const items = [
+        {
+          itemDto: {
+            itemId: formValues.itemId, // 상품 id
+            amount: formValues.itemAmount, // 아이템 수량
+          },
+          optionDtoList: formValues.optionDtoList.map((option) => ({
+            itemOptionId: option.optionId,
+            amount: option.optionAmount,
+          })), // 옵션 리스트
+        },
+      ];
+      const formStrings = JSON.stringify(items).replace(/\n/g, '');
+      localStorage.setItem('orderItem', formStrings);
+      dispatch(setPreviousPath('/order/ordersheet/general'));
+
       return await router.push('/account/login');
       // return mct.alertShow('로그인 후 이용가능합니다.');
     }
@@ -151,26 +172,28 @@ export default function SingleItemDetailPage({data}) {
       buy: false,
     }));
   };
-  
+
   const onClickModalButton = () => {
     mct.alertHide();
   };
-  
-  useEffect( () => {
-    if(!data){
-      alert('데이터를 불러올 수 없습니다.')
+
+  useEffect(() => {
+    if (!data) {
+      alert('데이터를 불러올 수 없습니다.');
       window.history.back();
     }
-  }, [data] );
-  
-  
+  }, [data]);
 
   return (
     <>
       <MetaTitle title="SHOP" />
       <ShopOptionBar
         id={'optionDtoList'}
-        data={{ opt: data?.opt, minQuantity: minItemQuantity, maxQuantity: maxItemQuantity }}
+        data={{
+          opt: data?.opt,
+          minQuantity: minItemQuantity,
+          maxQuantity: maxItemQuantity,
+        }}
         formValues={formValues}
         setFormValues={setFormValues}
         onAddToCart={onAddToCart}
@@ -198,7 +221,10 @@ export default function SingleItemDetailPage({data}) {
             isLoading={isLoading}
             onStartBuying={onClickBuyButton}
           />
-          <ShopTabMenus activeIndex={activeTabmenuIndex} setActiveIndex={setActiveTabmenuIndex} />
+          <ShopTabMenus
+            activeIndex={activeTabmenuIndex}
+            setActiveIndex={setActiveTabmenuIndex}
+          />
           <ul id={Styles.content} ref={contentRef}>
             <li className={Styles.cont_list}>
               <ShopItemInfoBox contents={data?.item.contents} />
@@ -212,7 +238,9 @@ export default function SingleItemDetailPage({data}) {
           </ul>
         </Wrapper>
       </Layout>
-      {activeGlobalAlertModal && <Modal_global_alert onClick={onClickModalButton} background />}
+      {activeGlobalAlertModal && (
+        <Modal_global_alert onClick={onClickModalButton} background />
+      )}
     </>
   );
 }
@@ -220,8 +248,14 @@ export default function SingleItemDetailPage({data}) {
 const validation_itemPrice = (data) => {
   if (!data) return null;
   let itemPrice = data.salePrice || data?.originalPrice;
-  const result = calculateSalePrice(data.originalPrice, data.discountType, data.discountDegree);
-  const salePricebyAdminPageCalcuator = transformClearLocalCurrency(result.salePrice);
+  const result = calculateSalePrice(
+    data.originalPrice,
+    data.discountType,
+    data.discountDegree,
+  );
+  const salePricebyAdminPageCalcuator = transformClearLocalCurrency(
+    result.salePrice,
+  );
 
   // console.log(itemPrice)
   // console.log(data.salePrice)
@@ -232,7 +266,7 @@ const validation_itemPrice = (data) => {
 
   // @YYL 영린 수정
   // 백엔드쪽에서 가격체크 하는데 굳이 필요없음
-  
+
   // if (itemPrice !== salePricebyAdminPageCalcuator) {
   //   alert('세일가격에 이상이 있습니다. 관리자에게 문의하세요.');
   //   return null;
@@ -246,8 +280,6 @@ const validation_itemPrice = (data) => {
   return itemPrice;
 };
 
-
-
 export async function getServerSideProps(ctx) {
   const { query, req } = ctx;
   let isDeletedItem = false;
@@ -255,8 +287,8 @@ export async function getServerSideProps(ctx) {
   let DATA = null;
   const apiUrl = `/api/items/${itemId}`;
   let res;
-  
-  console.log(apiUrl)
+
+  console.log(apiUrl);
 
   try {
     // 서버 측에서 쿠키를 요청 헤더에 추가
@@ -264,27 +296,27 @@ export async function getServerSideProps(ctx) {
     const name = cookieType.LOGIN_COOKIE;
     const value = cookies.match(`(^|;) ?${name}=([^;]*)(;|$)`);
     const accessToken = value ? value[2] : null;
-    
+
     res = await axios.get(apiUrl, {
       withCredentials: true,
       headers: {
         authorization: accessToken,
         'content-Type': 'application/json',
-        'Cookie': cookies, // 클라이언트 쿠키를 서버 요청에 추가
+        Cookie: cookies, // 클라이언트 쿠키를 서버 요청에 추가
       },
     });
 
     // console.log(apiUrl)
-      
+
     // res = await getData(apiUrl);
 
     const data = res?.data;
 
     if (data) {
       // 데이터 처리 코드
-      
+
       isDeletedItem = data.itemDto.deleted; // 일반상품 삭제 여부 (by 관리자)
-      
+
       DATA = {
         item: {
           id: data.itemDto.id,
@@ -323,8 +355,6 @@ export async function getServerSideProps(ctx) {
           itemId: data.itemDto.id,
         },
       };
-
-
     }
   } catch (err) {
     console.error(err);
@@ -333,9 +363,9 @@ export async function getServerSideProps(ctx) {
   if (isDeletedItem) {
     return {
       redirect: {
-        destination: "/shop",
+        destination: '/shop',
         permanent: false,
-      }
+      },
     };
   }
 

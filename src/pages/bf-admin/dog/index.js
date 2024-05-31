@@ -7,6 +7,7 @@ import AmdinErrorMessage from '/src/components/atoms/AmdinErrorMessage';
 import SearchBar from '/src/components/admin/form/searchBar';
 import SearchTextWithCategory from '/src/components/admin/form/searchBar/SearchTextWithCategory';
 import DogList from './DogList';
+import SearchRadio from '/src/components/admin/form/searchBar/SearchRadio';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import Spinner from '/src/components/atoms/Spinner';
 import enterKey from '/util/func/enterKey';
@@ -17,6 +18,7 @@ const initialSearchValues = {
   memberName: '',
   memberEmail: '',
   dogName: '',
+  subscribeStatus: 'ALL',
 };
 
 function ManageDogPage() {
@@ -30,6 +32,9 @@ function ManageDogPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchQueryInitialize, setSearchQueryInitialize] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+
+  // console.log('searchValue>>>', searchValue);
+  // console.log('searchQuery>>>', searchQuery);
 
   useEffect(() => {
     MirrorTextOnHoverEvent(window);
@@ -81,6 +86,14 @@ function ManageDogPage() {
                   { label: '견주 ID', value: 'memberEmail' },
                 ]}
               />
+              <SearchRadio
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
+                title="구독상태"
+                name="subscribeStatus"
+                idList={['ALL', 'SUBSCRIBING', 'NONSUBSCRIBING']}
+                labelList={['전체', '구독', '비구독']}
+              />
             </SearchBar>
           </section>
           <section className="cont">
@@ -95,6 +108,7 @@ function ManageDogPage() {
                   <li className={s.table_th}>견주 이름</li>
                   <li className={s.table_th}>견주 ID</li>
                   <li className={s.table_th}>반려견명</li>
+                  <li className={s.table_th}>구독</li>
                   <li className={s.table_th}>품종</li>
                   <li className={s.table_th}>성별</li>
                   <li className={s.table_th}>생년월일</li>
@@ -102,7 +116,7 @@ function ManageDogPage() {
                   <li className={s.table_th}>몸무게</li>
                   <li className={s.table_th}>상태</li>
                   <li className={s.table_th}>중성화</li>
-                  <li className={s.table_th}>대표견 여부</li>
+                  <li className={s.table_th}>대표견</li>
                 </ul>
                 {itemList.length ? (
                   <DogList items={itemList} currentPage={currentPage} />

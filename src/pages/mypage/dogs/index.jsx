@@ -9,7 +9,12 @@ import MetaTitle from '/src/components/atoms/MetaTitle';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Modal_uploadDogProfileImage } from '/src/components/modal/Modal_uploadDogProfileImage';
-import { deleteObjData, getData, getDataSSR, putObjData } from '/src/pages/api/reqData';
+import {
+  deleteObjData,
+  getData,
+  getDataSSR,
+  putObjData,
+} from '/src/pages/api/reqData';
 import { EmptyContMessage } from '/src/components/atoms/emptyContMessage';
 import { calcDogAge } from '/util/func/calcDogAge';
 import Spinner from '/src/components/atoms/Spinner';
@@ -17,15 +22,16 @@ import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import { useModalContext } from '/store/modal-context';
 import { useRouter } from 'next/router';
 import Modal_confirm from '/src/components/modal/Modal_confirm';
-import {orderStatus} from "/store/TYPE/orderStatusTYPE";
+import { orderStatus } from '/store/TYPE/orderStatusTYPE';
 import DeleteIcon from '/public/img/mypage/dog_info_delete.svg';
-import {SubscribeStatusTag} from "../../../components/subscribe/SubscribeStatusTag";
+import { SubscribeStatusTag } from '../../../components/subscribe/SubscribeStatusTag';
 
 export default function MypageDogInfoPage({ data }) {
-// // console.log(data);
+  console.log(data);
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
-  const [activeUploadDogProfileModal, setActiveUploadDogProfileModal] = useState(false);
+  const [activeUploadDogProfileModal, setActiveUploadDogProfileModal] =
+    useState(false);
   const [itemList, setItemList] = useState(data);
   const [selectedItemData, setSelectedItemData] = useState(null);
   const [modalMessage, setModalMessage] = useState('');
@@ -52,7 +58,6 @@ export default function MypageDogInfoPage({ data }) {
     mct.alertHide();
     setActiveUploadDogProfileModal(false);
   };
-  
 
   return (
     <>
@@ -63,20 +68,24 @@ export default function MypageDogInfoPage({ data }) {
             <section className={s.title}>반려견 정보</section>
             <ul>
               {itemList?.length > 0 ? (
-                itemList.sort((a, b) => b.id - a.id).map((item, index) => (
-                  <ItemList
-                    key={`${item.id}-${index}`}
-                    data={item}
-                    onEditImage={onUploadImageModalHandler}
-                    onShowModalHandler={onShowModalHandler}
-                  />
-                ))
+                itemList
+                  .sort((a, b) => b.id - a.id)
+                  .map((item, index) => (
+                    <ItemList
+                      key={`${item.id}-${index}`}
+                      data={item}
+                      onEditImage={onUploadImageModalHandler}
+                      onShowModalHandler={onShowModalHandler}
+                    />
+                  ))
               ) : (
                 <EmptyContMessage
                   message={
                     '아직 등록된 반려견이 없습니다\n강아지 정보를 등록하고 맞춤 플랜을 확인하세요.'
                   }
-                  options={{ button: { url: '/survey', label: '반려견 등록하기' } }}
+                  options={{
+                    button: { url: '/survey', label: '반려견 등록하기' },
+                  }}
                 />
               )}
             </ul>
@@ -91,13 +100,19 @@ export default function MypageDogInfoPage({ data }) {
           setModalMessage={setModalMessage}
         />
       )}
-      {hasAlert && <Modal_global_alert message={modalMessage} onClick={onHideModalHandler} background />}
+      {hasAlert && (
+        <Modal_global_alert
+          message={modalMessage}
+          onClick={onHideModalHandler}
+          background
+        />
+      )}
     </>
   );
 }
 
 const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
-  // // console.log(data)
+  // console.log(data)
 
   const router = useRouter();
   const mct = useModalContext();
@@ -105,7 +120,9 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
   let subscribeId = null; //  ! 값 확인하기
   const dogAge = calcDogAge(data.birth);
   const gender =
-    data.gender === dogGenderType.MALE ? dogGenderType.KOR.MALE : dogGenderType.KOR.FEMALE;
+    data.gender === dogGenderType.MALE
+      ? dogGenderType.KOR.MALE
+      : dogGenderType.KOR.FEMALE;
 
   const [activeConfirmModal, setActiveConfirmModal] = useState(false);
   const [isLoading, setIsLoading] = useState({}); // obj
@@ -172,23 +189,21 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
       setActiveConfirmModal(false);
       return onShowModalHandler('취소되었습니다.');
     }
-  
-  
-    const subscribeStatus = data.subscribeStatus;
-    if(subscribeStatus !== orderStatus.BEFORE_PAYMENT){
-      onShowModalHandler('구독 중인 반려견은 삭제할 수 없습니다.');
-      setActiveConfirmModal(false);
-      return;
-    }
-    
+
+    // const subscribeStatus = data.subscribeStatus;
+    // if (subscribeStatus == orderStatus.BEFORE_PAYMENT) {
+    //   onShowModalHandler('구독 중인 반려견은 삭제할 수 없습니다.');
+    //   setActiveConfirmModal(false);
+    //   return;
+    // }
+
     const isRepDog = data.representative;
     if (isRepDog) {
       onShowModalHandler('대표 반려견은 삭제할 수 없습니다.');
       setActiveConfirmModal(false);
       return;
     }
-   
-    
+
     try {
       setIsLoading((prevState) => ({
         ...prevState,
@@ -219,34 +234,37 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
     }));
   };
 
-
   const nextPageHandler = (e) => {
     const dogId = e.currentTarget.dataset.id;
     const apiUrl = `api/orders/sheet/subscribe/dog/${dogId}`;
 
     (async () => {
       try {
-        setIsLoading(prevState => ({
-      ...prevState,
-      [dogId]: true
-    }));
-  
-    const res = await getData( apiUrl );
-    subscribeId = res.data.subscribeDto.id;
+        setIsLoading((prevState) => ({
+          ...prevState,
+          [dogId]: true,
+        }));
 
-    if ( subscribeId ) {
-      router.push( `/order/ordersheet/subscribe/${subscribeId}` );
-    } else {
-      // console.error('there is no Subscribe ID', info.subscribeId);
-      alert( '주문정보를 확인할 수 없습니다.' );
-      window.location.href = '/';
-    }
-  }
-  catch (err) {
-    console.error(err);
-  }
-})();
-};
+        const res = await getData(apiUrl);
+        subscribeId = res.data.subscribeDto.id;
+        console.log('subscribeId', subscribeId);
+
+        if (subscribeId) {
+          router.push(`/order/ordersheet/subscribe/${subscribeId}`);
+        } else {
+          // console.error('there is no Subscribe ID', info.subscribeId);
+          alert('주문정보를 확인할 수 없습니다.');
+          window.location.href = '/';
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    })();
+  };
+
+  const moveToSubscribeShopHandler = (dogId) => {
+    router.push(`/order/subscribeShop?dogId=${dogId}`);
+  };
 
   return (
     <>
@@ -254,7 +272,12 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
         <div className={s.left_box}>
           <div className={`${s.image} ${data.pictureUrl ? s.hasImage : ''}`}>
             {data.pictureUrl && (
-              <Image src={data.pictureUrl} objectFit="cover" layout="fill" alt={data.pictureName || '반려견 썸네일'} />
+              <Image
+                src={data.pictureUrl}
+                objectFit="cover"
+                layout="fill"
+                alt={data.pictureName || '반려견 썸네일'}
+              />
             )}
           </div>
         </div>
@@ -265,49 +288,102 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
                 {data.name} ( {dogAge} / {gender} )
               </h5>
               <div className={s.tags}>
-                <SubscribeStatusTag status={data.subscribeStatus} subscribeCount={data.subscribeCount}/>
-                {data.representative && <i className={s.representative}>대표견</i>}
+                <SubscribeStatusTag
+                  status={data.subscribeStatus}
+                  subscribeCount={data.subscribeCount}
+                />
+                {data.representative && (
+                  <i className={s.representative}>대표견</i>
+                )}
               </div>
             </div>
-            <div
-              className={`${s.image} img-wrap`}
-              data-button-type={'deleteItem'}
-              onClick={onActiveConfirmModal}
-            >
-              <DeleteIcon width='100%' height='100%' viewBox="0 0 28 28" />
-            </div>
+            {data.subscribeStatus !== subscribeStatus.SUBSCRIBING && (
+              <div
+                className={`${s.image} img-wrap`}
+                data-button-type={'deleteItem'}
+                onClick={onActiveConfirmModal}
+              >
+                <DeleteIcon width="100%" height="100%" viewBox="0 0 28 28" />
+              </div>
+            )}
           </div>
 
           <div className={s.controls}>
             <button type={'button'} onClick={onEditProfileImage}>
               프로필사진 편집
             </button>
-            {!data.representative && <button type={'button'} data-button-type={'setRep'} onClick={onActiveConfirmModal}>
-              대표견 설정
-              {isLoading.rep && <Spinner />}
-            </button>}
+            {!data.representative && (
+              <button
+                type={'button'}
+                data-button-type={'setRep'}
+                onClick={onActiveConfirmModal}
+              >
+                대표견 설정
+                {isLoading.rep && <Spinner />}
+              </button>
+            )}
           </div>
           {/* 설문결과 설문수정 결제하기 버튼3개 */}
         </div>
         <div className={s.select_box}>
           <div className={s['btn-section']}>
             <Link href={`/mypage/dogs/${dogId}/statistic`} passHref>
-              <a>설문결과</a>
+              <a>맞춤레포트 확인</a>
             </Link>
             <Link href={`/mypage/dogs/${dogId}/updateSurvey`} passHref>
-              <a>설문수정</a>
+              <a>정보 수정</a>
             </Link>
-            {/* 버튼 생성 조건 :  결제전 또는 구독 보류일 경우*/}
-            {/* 1. 결제 전 */}
-            {(data.subscribeStatus === subscribeStatus.BEFORE_PAYMENT) && (
+            {/* 1. 설문 완료 */}
+            {/* '구독하기' 클릭 시, 맞춤레시피 페이지로 이동 */}
+            {data.subscribeStatus === subscribeStatus.SURVEY_COMPLETED && (
               <Link href={`/order/subscribeShop?dogId=${dogId}`} passHref>
-                <a className={s.payment} data-id={dogId} onClick={nextPageHandler}>{isLoading[dogId] ? <Spinner style={{color:"#fff"}}/>: "결제하기"}</a>
+                <a
+                  className={s.payment}
+                  data-id={dogId}
+                  onClick={() => moveToSubscribeShopHandler(dogId)}
+                >
+                  {isLoading[dogId] ? (
+                    <Spinner style={{ color: '#fff' }} />
+                  ) : (
+                    '맞춤식단 시작'
+                  )}
+                </a>
               </Link>
             )}
-            {/* 2. 구독 보류 */}
-            {(data.subscribeStatus === subscribeStatus.SUBSCRIBE_PENDING) && (
-              <button type={'button'} className={s.payment} data-id={dogId} onClick={nextPageHandler}>{isLoading[dogId] ? <Spinner style={{color:"#fff"}}/>: "재구독하기"}</button>
+
+            {/* 2. 버튼 생성 조건 :  결제전(구독전) / 구독 취소 / 구독 보류 ('구독 중' 상태가 아닌)일 경우  */}
+            {(data.subscribeStatus === subscribeStatus.BEFORE_PAYMENT ||
+              data.subscribeStatus === subscribeStatus.SUBSCRIBE_CANCEL ||
+              data.subscribeStatus === subscribeStatus.SUBSCRIBE_PENDING) && (
+              <button
+                type={'button'}
+                className={s.payment}
+                data-id={dogId}
+                onClick={nextPageHandler}
+              >
+                {isLoading[dogId] ? (
+                  <Spinner style={{ color: '#fff' }} />
+                ) : (
+                  '맞춤식단 시작'
+                )}
+              </button>
             )}
+
+            {/* cf. 구독 보류 */}
+            {/* {data.subscribeStatus === subscribeStatus.SUBSCRIBE_PENDING && (
+              <button
+                type={'button'}
+                className={s.payment}
+                data-id={dogId}
+                onClick={nextPageHandler}
+              >
+                {isLoading[dogId] ? (
+                  <Spinner style={{ color: '#fff' }} />
+                ) : (
+                  '재구독하기'
+                )}
+              </button>
+            )} */}
           </div>
         </div>
       </li>
@@ -318,7 +394,9 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
               ? ' 대표견으로 설정하시겠습니까?'
               : `반려견(${data.name})을 삭제 하시겠습니까?`
           }
-          isConfirm={activeConfirmModal.setRep ? onSetRepresentative : onDeleteItem}
+          isConfirm={
+            activeConfirmModal.setRep ? onSetRepresentative : onDeleteItem
+          }
           positionCenter
         />
       )}
@@ -329,6 +407,16 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
 export async function getServerSideProps({ req }) {
   const getApiUrl = '/api/dogs';
   const res = await getDataSSR(req, getApiUrl);
+
+  if (res?.status !== 200) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/account/login?prevPath=/mypage/dogs', // 로그인 성공 후, 이전 페이지로 돌아가기
+      },
+    };
+  }
+
   let DATA = null;
   const embeddedData = res?.data._embedded;
   // console.log(embeddedData);

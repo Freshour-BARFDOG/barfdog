@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
 import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
@@ -12,17 +12,24 @@ import { useRouter } from 'next/router';
 import filter_limitedNumber from '/util/func/filter_limitedNumber';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import transformClearLocalCurrency from '/util/func/transformClearLocalCurrency';
-import Modal_global_alert from "/src/components/modal/Modal_global_alert";
-import Spinner from "/src/components/atoms/Spinner";
-import {validate} from "/util/func/validation/validation_createCupon";
-import {valid_couponCode, valid_hasFormErrors} from "/util/func/validation/validationPackage";
-import {postObjData} from "/src/pages/api/reqData";
-import {useModalContext} from "/store/modal-context";
-import transformClearLocalCurrencyInEveryObject from "/util/func/transformClearLocalCurrencyInEveryObject";
-import ErrorMessage from "/src/components/atoms/ErrorMessage";
-import {discountUnitType} from "/store/TYPE/discountUnitType";
-import {couponUseType, global_couponType} from "/store/TYPE/couponType";
-import {filterObjectKeys, filterObjectValues} from "/util/func/filter/filterTypeFromObejct";
+import Modal_global_alert from '/src/components/modal/Modal_global_alert';
+import Spinner from '/src/components/atoms/Spinner';
+import { validate } from '/util/func/validation/validation_createCupon';
+import {
+  valid_couponCode,
+  valid_hasFormErrors,
+} from '/util/func/validation/validationPackage';
+import { postObjData } from '/src/pages/api/reqData';
+import { useModalContext } from '/store/modal-context';
+import transformClearLocalCurrencyInEveryObject from '/util/func/transformClearLocalCurrencyInEveryObject';
+import ErrorMessage from '/src/components/atoms/ErrorMessage';
+import { discountUnitType } from '/store/TYPE/discountUnitType';
+import { couponUseType, global_couponType } from '/store/TYPE/couponType';
+import {
+  filterObjectKeys,
+  filterObjectValues,
+} from '/util/func/filter/filterTypeFromObejct';
+import Modal_confirm from '../../../../components/modal/Modal_confirm';
 
 const initialFormValues = {
   couponType: global_couponType.CODE_PUBLISHED,
@@ -37,39 +44,36 @@ const initialFormValues = {
   amount: '0', // ui comma표기 시, str => submit시 num으로 변경
 };
 
-
-
 export default function CreateCouponPage() {
-
   const couponLimitedAmount = 9999;
   const unitSettings = [
     { label: '%', value: discountUnitType.FIXED_RATE },
     { label: '원', value: discountUnitType.FLAT_RATE },
-  ]
-  
-  
+  ];
+
   const router = useRouter();
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
+  const [activeConfirmModal, setActiveConfirmModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const [isLoading, setIsLoading] = useState({});
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
-  
+
   // // console.log(formValues)
-  
-  useEffect( () => {
-    setFormValues(prevState => ({
+
+  useEffect(() => {
+    setFormValues((prevState) => ({
       ...prevState,
-      discountDegree:  '0'
-    }))
-  }, [formValues.discountType] );
-  
-  
+      discountDegree: '0',
+    }));
+  }, [formValues.discountType]);
 
   const onCouponAmountCheckboxHandler = (isChecked) => {
-    const infiniteNum = transformLocalCurrency(`${couponLimitedAmount*10+9}`);
+    const infiniteNum = transformLocalCurrency(
+      `${couponLimitedAmount * 10 + 9}`,
+    );
 
     setFormValues((prevState) => ({
       ...prevState,
@@ -83,17 +87,17 @@ export default function CreateCouponPage() {
     const filteredType = input.dataset.inputType;
     let filteredValue = value;
 
-    if(id === 'code'){
+    if (id === 'code') {
       const errorMessage = valid_couponCode(value);
-      setFormErrors(prevState => ({
+      setFormErrors((prevState) => ({
         ...prevState,
-        [id]: errorMessage
-      }))
+        [id]: errorMessage,
+      }));
     }
     if (filteredType) {
       filteredValue = filter_emptyValue(value);
     }
-    
+
     if (filteredType && filteredType.indexOf('number') >= 0) {
       filteredValue = filter_onlyNumber(filteredValue);
     }
@@ -106,7 +110,10 @@ export default function CreateCouponPage() {
     }
 
     if (filteredType && filteredType.indexOf('discountPercent') >= 0) {
-      filteredValue = transformClearLocalCurrency(filteredValue) > '100' ? '100' : filteredValue;
+      filteredValue =
+        transformClearLocalCurrency(filteredValue) > '100'
+          ? '100'
+          : filteredValue;
       // - MEMO 100 : string이어야함.
     }
 
@@ -117,20 +124,24 @@ export default function CreateCouponPage() {
   };
 
   const onSubmit = async () => {
-    if (isSubmitted) return console.error("Already submitted!");
+    if (isSubmitted) return console.error('Already submitted!');
     const body = {
       name: formValues.name,
       description: formValues.description,
       couponTarget: formValues.couponTarget,
       code: formValues.code,
       couponType: formValues.couponType,
-      discountDegree: transformClearLocalCurrency(formValues.discountDegree),//
+      discountDegree: transformClearLocalCurrency(formValues.discountDegree), //
       discountType: formValues.discountType,
-      availableMaxDiscount: transformClearLocalCurrency(formValues.availableMaxDiscount),//
-      availableMinPrice: transformClearLocalCurrency(formValues.availableMinPrice),//
-      amount: transformClearLocalCurrency(formValues.amount),//
+      availableMaxDiscount: transformClearLocalCurrency(
+        formValues.availableMaxDiscount,
+      ), //
+      availableMinPrice: transformClearLocalCurrency(
+        formValues.availableMinPrice,
+      ), //
+      amount: transformClearLocalCurrency(formValues.amount), //
       type: formValues.type,
-    }
+    };
     // console.log(body);
 
     const errObj = validate(body);
@@ -139,8 +150,8 @@ export default function CreateCouponPage() {
     const isPassed = valid_hasFormErrors(errObj);
     if (!isPassed) return mct.alertShow('유효하지 않은 항목이 있습니다.');
 
-
     try {
+      setActiveConfirmModal(false);
       setIsSubmitted(true);
       setIsLoading((prevState) => ({
         ...prevState,
@@ -150,7 +161,10 @@ export default function CreateCouponPage() {
       const res = await postObjData(apiUrl, body);
       // console.log(res);
       if (res.isDone) {
-        mct.alertShow('쿠폰이 성공적으로 등록되었습니다.', onGlobalModalCallback);
+        mct.alertShow(
+          '쿠폰이 성공적으로 등록되었습니다.',
+          onGlobalModalCallback,
+        );
       } else {
         mct.alertShow(`쿠폰을 등록할 수 없습니다.\n (${res.error})`);
         setIsSubmitted(false);
@@ -180,7 +194,9 @@ export default function CreateCouponPage() {
   const onClickModalButton = () => {
     mct.alertHide();
   };
-  
+
+  console.log(formValues);
+
   return (
     <>
       <MetaTitle title="쿠폰 생성" admin={true} />
@@ -199,7 +215,9 @@ export default function CreateCouponPage() {
                       <Tooltip
                         message={`- '프로모션' 타입: 프로모션 생성 페이지에서 발급 가능`}
                         messagePosition={'left'}
-                        width={'320px'} wordBreaking={true}/>
+                        width={'320px'}
+                        wordBreaking={true}
+                      />
                     </label>
                   </div>
                   <div className="inp_section">
@@ -207,8 +225,16 @@ export default function CreateCouponPage() {
                       <CustomRadio
                         setValue={setFormValues}
                         name="couponType"
-                        idList={[global_couponType.CODE_PUBLISHED, global_couponType.PROMOTION_PUBLISHED]}
-                        labelList={[global_couponType.KOR.CODE_PUBLISHED, global_couponType.KOR.PROMOTION_PUBLISHED]}
+                        idList={[
+                          global_couponType.CODE_PUBLISHED,
+                          global_couponType.GENERAL_PUBLISHED,
+                          global_couponType.PROMOTION_PUBLISHED,
+                        ]}
+                        labelList={[
+                          global_couponType.KOR.CODE_PUBLISHED,
+                          global_couponType.KOR.GENERAL_PUBLISHED,
+                          global_couponType.KOR.PROMOTION_PUBLISHED,
+                        ]}
                       />
                       {formErrors.couponType && (
                         <ErrorMessage>{formErrors.couponType}</ErrorMessage>
@@ -295,9 +321,11 @@ export default function CreateCouponPage() {
                     <label className="title" htmlFor="code">
                       쿠폰 코드
                       <Tooltip
-                        message={`- 쿠폰코드 규칙\n1. 문자열 15자 이내 (영문 대소문자)\n2. 회원 마이페이지에서 쿠폰코드 후 사용가능\n3. 동일한 쿠폰에 대하여 1회 사용가능.`}
+                        message={`- 쿠폰코드 규칙\n1. 문자열 15자 이내 (영문 대소문자)\n2. 회원 마이페이지에서 쿠폰코드 후 사용가능\n3. 동일한 쿠폰에 대하여 1회 사용가능\n4. 공란으로 입력하면 일반쿠폰이 생성`}
                         messagePosition={'left'}
-                        width={'280px'} wordBreaking={true}/>
+                        width={'290px'}
+                        wordBreaking={true}
+                      />
                     </label>
                   </div>
                   <div className="inp_section">
@@ -310,6 +338,16 @@ export default function CreateCouponPage() {
                         data-filter-type={'code'}
                         value={formValues.code}
                         onChange={onInputChangeHandler}
+                        disabled={
+                          formValues.couponType === 'GENERAL_PUBLISHED'
+                            ? true
+                            : false
+                        }
+                        style={
+                          formValues.couponType === 'GENERAL_PUBLISHED'
+                            ? { backgroundColor: '#f0f0f0' }
+                            : {}
+                        }
                       />
                       {formErrors.code && (
                         <ErrorMessage>{formErrors.code}</ErrorMessage>
@@ -323,7 +361,10 @@ export default function CreateCouponPage() {
                 <div className="input_row">
                   <div className="title_section fixedHeight">
                     <label className="title" htmlFor="discountDegree">
-                      할인{formValues.discountType === discountUnitType.FIXED_RATE ? "률" : "금액"}
+                      할인
+                      {formValues.discountType === discountUnitType.FIXED_RATE
+                        ? '률'
+                        : '금액'}
                     </label>
                   </div>
                   <div className="inp_section">
@@ -334,7 +375,8 @@ export default function CreateCouponPage() {
                         name="create-coupon"
                         type="text"
                         data-input-type={`currency, number, ${
-                          formValues.discountType === discountUnitType.FIXED_RATE && 'discountPercent'
+                          formValues.discountType ===
+                            discountUnitType.FIXED_RATE && 'discountPercent'
                         }`}
                         value={formValues.discountDegree || '0'}
                         onChange={onInputChangeHandler}
@@ -345,7 +387,7 @@ export default function CreateCouponPage() {
                         unitList={unitSettings}
                       />
                       {formErrors.discountDegree && (
-                      <ErrorMessage>{formErrors.discountDegree}</ErrorMessage>
+                        <ErrorMessage>{formErrors.discountDegree}</ErrorMessage>
                       )}
                     </div>
                   </div>
@@ -372,7 +414,9 @@ export default function CreateCouponPage() {
                       />
                       <span>원 할인</span>
                       {formErrors.availableMaxDiscount && (
-                        <ErrorMessage>{formErrors.availableMaxDiscount}</ErrorMessage>
+                        <ErrorMessage>
+                          {formErrors.availableMaxDiscount}
+                        </ErrorMessage>
                       )}
                     </div>
                   </div>
@@ -399,7 +443,9 @@ export default function CreateCouponPage() {
                       />
                       <span className="unit"> 원 이상</span>
                       {formErrors.availableMinPrice && (
-                        <ErrorMessage>{formErrors.availableMinPrice}</ErrorMessage>
+                        <ErrorMessage>
+                          {formErrors.availableMinPrice}
+                        </ErrorMessage>
                       )}
                     </div>
                   </div>
@@ -427,7 +473,8 @@ export default function CreateCouponPage() {
                         type="text"
                         name="create-coupon"
                         disabled={
-                          transformClearLocalCurrency(formValues.amount) >= couponLimitedAmount
+                          transformClearLocalCurrency(formValues.amount) >=
+                          couponLimitedAmount
                         }
                         onChange={onInputChangeHandler}
                       />
@@ -465,12 +512,18 @@ export default function CreateCouponPage() {
               className="admin_btn confirm_l solid"
               onClick={onSubmit}
             >
-              {isLoading.submit ? <Spinner style={{color:'#fff'}}/> : '등록'}
+              {isLoading.submit ? (
+                <Spinner style={{ color: '#fff' }} />
+              ) : (
+                '등록'
+              )}
             </button>
           </div>
         </AdminContentWrapper>
       </AdminLayout>
-      {hasAlert && <Modal_global_alert onClick={onClickModalButton} background/>}
+      {hasAlert && (
+        <Modal_global_alert onClick={onClickModalButton} background />
+      )}
     </>
   );
 }

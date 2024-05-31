@@ -14,59 +14,60 @@
 @import './input-radio.scss';
 @import './rem';
 
-
 @for $i from 0 through 20 {
-  @if ($i == 0){
+  @if ($i == 0) {
     .mt-#{5*$i} {
-      margin-top: rem(5*$i) !important;
+      margin-top: rem(5 * $i) !important;
     }
     .mb-#{5*$i} {
-      margin-bottom: rem(5*$i) !important;
+      margin-bottom: rem(5 * $i) !important;
     }
     .ml-#{5*$i} {
-      margin-left: rem(5*$i)!important;
+      margin-left: rem(5 * $i) !important;
     }
     .mr-#{5*$i} {
-      margin-right: rem(5*$i)!important;
+      margin-right: rem(5 * $i) !important;
     }
   } @else {
     .mt-#{5*$i} {
-      margin-top: rem(5*$i);
+      margin-top: rem(5 * $i);
     }
     .mb-#{5*$i} {
-      margin-bottom: rem(5*$i);
+      margin-bottom: rem(5 * $i);
     }
     .ml-#{5*$i} {
-      margin-left: rem(5*$i);
+      margin-left: rem(5 * $i);
     }
     .mr-#{5*$i} {
-      margin-right: rem(5*$i);
+      margin-right: rem(5 * $i);
     }
   }
-
 }
-
 
 @for $i from 1 through 20 {
   .pt-#{5*$i} {
-    padding-top: rem(5*$i);
+    padding-top: rem(5 * $i);
   }
   .pb-#{5*$i} {
-    padding-bottom: rem(5*$i);
+    padding-bottom: rem(5 * $i);
   }
   .pl-#{5*$i} {
-    padding-left: rem(5*$i);
+    padding-left: rem(5 * $i);
   }
   .pr-#{5*$i} {
-    padding-right: rem(5*$i);
+    padding-right: rem(5 * $i);
   }
 }
 
+html,
+body {
+  width: 100vw;
+  overflow-x: hidden;
+}
 
-
-html, body{width:100vw; overflow-x:hidden;}
-
-label{cursor: pointer;}
+label {
+  cursor: pointer;
+}
 
 input.fullWidth {
   width: 100%;
@@ -86,7 +87,7 @@ input.text-align-right {
 input.text-align-center {
   text-align: center;
 }
-input[data-align='right']{
+input[data-align='right'] {
   text-align: right;
 }
 
@@ -97,102 +98,126 @@ input.disabled {
 
 button.disabled {
   pointer-events: none;
-  color:#fff !important;
+  color: #fff !important;
   background-color: var(--color-disabled) !important;
   cursor: not-allowed;
 }
 
-
-.img-wrap, .img_wrap{
-  position:relative;
-  display:inline-block;
-  overflow:hidden;
-  min-width: rem(10);
-  min-height:rem(10);
+.ant-picker-footer {
+  .ant-btn {
+    background-color: #ca1011;
+  }
 }
 
+.img-wrap,
+.img_wrap {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  min-width: rem(10);
+  min-height: rem(10);
+}
 
-
-.flex-wrap, .flex_wrap{
-  display:flex;
+.flex-wrap,
+.flex_wrap {
+  display: flex;
   align-items: center;
   justify-content: center;
 }
 
+.cont-left {
+  float: left;
+}
+.cont-right {
+  float: right;
+}
 
-.cont-left{float:left;}
-.cont-right{float:right;}
-
-
-.animation-show{
-
+.animation-show {
   animation: show var(--ani-default) forwards;
   @for $i from 1 through 5 {
-    &.animation-delay-#{$i}{
-      animation-delay:0.1*$i +s;
+    &.animation-delay-#{$i} {
+      animation-delay: 0.1 * $i + s;
     }
   }
 }
 
-
-
-.animation-show-all-child{
+.animation-show-all-child {
   animation: show var(--ani-default) forwards;
   @for $i from 1 through 20 {
-    * :nth-child(#{$i}){
-      animation: show .4s var(--transition-cubic) forwards;
+    * :nth-child(#{$i}) {
+      animation: show 0.4s var(--transition-cubic) forwards;
     }
   }
 }
 
 @keyframes show {
-  from{opacity:0; pointer-events: none;}
-  to{opacity:1; pointer-events: all;}
+  from {
+    opacity: 0;
+    pointer-events: none;
+  }
+  to {
+    opacity: 1;
+    pointer-events: all;
+  }
 }
 
-
 @keyframes hide {
-  from{opacity:1;pointer-events: all;}
-  to{opacity:0;pointer-events: none;}
+  from {
+    opacity: 1;
+    pointer-events: all;
+  }
+  to {
+    opacity: 0;
+    pointer-events: none;
+  }
 }
 
 @keyframes flicker {
-  0%{opacity:0;}
-  70%{opacity:1;}
-  100%{opacity:0;}
+  0% {
+    opacity: 0;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 @keyframes rotate {
-  from{transform:rotate(0);}
-  to{transform:rotate(360deg);}
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
-
-
-
 
 // 폰트 설정~~
 
 /* ! 부모의 너비에 영향을 끼치지 않ㅇ */
-@mixin aspectImage{
-
+@mixin aspectImage {
 }
-
-
-
 
 // *  MOBILE , WEB > Show & Hide
 
-.mobile{display:none !important;}
-.pc:not(.imp-dialog){display:block !important;}
-
-@media (max-width:rem(1200)){
-
+.mobile {
+  display: none !important;
+}
+.pc:not(.imp-dialog) {
+  display: block !important;
 }
 
+@media (max-width: rem(1200)) {
+}
 
-@media (max-width:rem(600)){
-  #__next .mobile{display:block !important;}
-  #__next .pc{display:none !important;}
+@media (max-width: rem(600)) {
+  #__next .mobile {
+    display: block !important;
+  }
+  #__next .pc {
+    display: none !important;
+  }
 }
 
 ////////////////////////////////////////////////////

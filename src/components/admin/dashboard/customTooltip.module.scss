@@ -1,0 +1,10 @@
+@import '/styles/global/rem';
+
+.custom_tooltip {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  border: rem(1) solid #ccc;
+  padding: rem(10) rem(20);
+  border-radius: rem(3);
+}

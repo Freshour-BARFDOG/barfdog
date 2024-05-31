@@ -1,14 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import s from '/src/pages/order/subscribeShop/index.module.scss';
-import {ItemRecommendlabel, ItemSoldOutLabel} from '/src/components/atoms/ItemLabel';
+import {
+  ItemRecommendlabel,
+  ItemSoldOutLabel,
+} from '/src/components/atoms/ItemLabel';
 import Image from 'next/image';
 import { subscribePlanType } from '/store/TYPE/subscribePlanType';
 import 'swiper/css';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation } from 'swiper';
 import popupWindow from '/util/func/popupWindow';
 import { SubscribeCustomInput } from './SubscribeCustomInput';
 import checkStringUnderConsonant from '/util/func/checkStringUnderConsonant';
 import Link from 'next/link';
+import ArrowLeft_s from '@public/img/icon/swiper-arrow-small-l.svg';
+import ArrowRight_s from '@public/img/icon/swiper-arrow-small-r.svg';
 
 const swiperSettings = {
   className: s.swiper_recipes,
@@ -16,6 +22,7 @@ const swiperSettings = {
   spaceBetween: 20,
   loop: false, // ! Important : loop사용 시, checkbox복수 선택 불가함 (loop에 사용되는 dummy slider로 인함)
   autoplay: false,
+  modules: [Navigation],
   breakpoints: {
     300: {
       slidesPerView: 1,
@@ -40,7 +47,11 @@ const swiperSettings = {
 // ! 기존 반려견이 '구독 중 또는 건너뛰기 중'이고, 설문결과 -> 맞춤플랜확인하기로 해당 컴포넌트 접근했을 때, 기존 recipe을 초기값이 selected되도록 해달라고 요청할 경우 => '현재는 불가함'
 // ! 이유: 초기 recipe input타입이 checkbox / radio 에서, 초기값설정이 제대로 안 먹힘 (완전 초기에 input부터 설정을 다시 건드려야함)
 export const SubscribeShopRecipe = ({ name, info, form, setForm }) => {
-  const selectedRecipe = info.recipeInfoList?.filter((rc) => form.recipeIdList.indexOf(rc.id) >= 0);
+  const navPrevRef = useRef(null);
+  const navNextRef = useRef(null);
+  const selectedRecipe = info.recipeInfoList?.filter(
+    (rc) => form.recipeIdList.indexOf(rc.id) >= 0,
+  );
   const selectedRecipeNames = selectedRecipe?.map((rc) => rc.name).join(',');
   const selectedIngredientList = selectedRecipe
     ?.map((rc) => rc.ingredientList)
@@ -50,22 +61,21 @@ export const SubscribeShopRecipe = ({ name, info, form, setForm }) => {
     ?.filter((ingr, i) => selectedIngredientList.indexOf(ingr) === i)
     .join(', ');
 
-  
   const [initialize, setInitialize] = useState(false);
   const [selectedCheckbox, setSelectedCheckbox] = useState({}); // * 풀플랜: 최대 2가지 레시피 선택 가능 (Checkbox Input) // ex.{터키비프: true}
   const [selectedRadio, setSelectedRadio] = useState(null); // * 그 외 플랜: 1가지 레시피 선택 가능 (Radio Input)
   const [inputType, setInputType] = useState(null);
 
-  
   useEffect(() => {
     // Recipe Input 타입 변환
-    const type = form.plan === subscribePlanType.FULL.NAME ? 'checkbox' : 'radio';
+    const type =
+      form.plan === subscribePlanType.FULL.NAME ? 'checkbox' : 'radio';
     setInputType(type);
     // 플랜이 변경되었을 경우, Recipe Value And Input 초기화
     setInitialize(true);
-    setForm(prevState => ({
+    setForm((prevState) => ({
       ...prevState,
-      [name]: []
+      [name]: [],
     }));
   }, [form.plan]);
 
@@ -95,7 +105,9 @@ export const SubscribeShopRecipe = ({ name, info, form, setForm }) => {
       )[0]?.id;
       const val = selectedCheckbox[key];
       val && selectedCheckboxCount++;
-      val ? selectedIdList.push(selectedId) : selectedIdList?.filter((id) => id !== selectedId);
+      val
+        ? selectedIdList.push(selectedId)
+        : selectedIdList?.filter((id) => id !== selectedId);
     });
     const maxSelectedCheckboxCount = 2;
     const isOverSelected = selectedCheckboxCount > maxSelectedCheckboxCount;
@@ -143,67 +155,97 @@ export const SubscribeShopRecipe = ({ name, info, form, setForm }) => {
             <div className={s.color_box_row_2}>
               {info.inedibleFood !== 'NONE' && info.inedibleFood && (
                 <>
-                  <em>{info.inedibleFood}</em>에 못먹는 음식으로 체크해 주셨네요!&nbsp;
+                  <em>{info.inedibleFood}</em>에 못먹는 음식으로 체크해
+                  주셨네요!&nbsp;
                   <br />
                 </>
               )}
-            
-              <em>{selectedRecipeNames}</em> 레시피에는 <em>&lsquo;{curIngredient}&rsquo;</em>
-              {checkStringUnderConsonant(curIngredient) ? '이' : '가'} 들어가 있습니다.
+              <em>{selectedRecipeNames}</em> 레시피에는{' '}
+              <em>&lsquo;{curIngredient}&rsquo;</em>
+              {checkStringUnderConsonant(curIngredient) ? '이' : '가'} 들어가
+              있습니다.
               <br />
-              반려견에게 알레르기를 유발할 수 있으니 레시피 선택에 유의해 주시기 바랍니다.
+              반려견에게 알레르기를 유발할 수 있으니 레시피 선택에 유의해 주시기
+              바랍니다.
             </div>
           </div>
         </div>
       )}
       {/*<h6 className={'pointColor'}>******SOLD OUT: 1번째 레시피 강제 적용. (테스트 이후 삭제)</h6>*/}
-      <Swiper {...swiperSettings} watchOverflow={false}>
-        {info.recipeInfoList.length > 0 &&
-          info.recipeInfoList.map((rc, index) => (
-            <SwiperSlide key={`recipe-${rc.id}-${index}`} className={s.slide}>
-              <SubscribeCustomInput
-                id={`${rc.name}-${rc.id}`}
-                selectedRadio={selectedRadio}
-                type={inputType}
-                name={name}
-                initialize={initialize}
-                disabled={!rc.inStock}
-                selectedCheckbox={selectedCheckbox}
-                setSelectedCheckbox={setSelectedCheckbox}
-                setSelectedRadio={setSelectedRadio}
-                option={{ label: '레시피 선택' }}
-              >
-                {info.recommendRecipeName === rc.name && (
-                  <ItemRecommendlabel
-                    label="추천!"
-                    style={{
-                      backgroundColor: '#000',
-                    }}
-                  />
-                )}
-                {!rc.inStock && <ItemSoldOutLabel />}
-                <figure className={`${s.image} img-wrap`}>
-                  <Image
-                    src={rc.thumbnailUri2}
-                    objectFit="cover"
-                    layout="fill"
-                    alt="레시피 상세 이미지"
-                  />
-                </figure>
-                <p className={s.row_1}>{rc.uiNameEnglish}</p>
-                <p className={s.row_2}>{rc.uiNameKorean}</p>
-                <p className={s.row_3}>{rc.description}</p>
-                <p className={s.row_4}>
-                  <Link href="/recipes" passHref>
-                    <a target={'_blank'} rel={'noreferrer'} onClick={onPopupHandler}>
-                      더 알아보기
-                    </a>
-                  </Link>
-                </p>
-              </SubscribeCustomInput>
-            </SwiperSlide>
-          ))}
-      </Swiper>
+
+      <div className={s.swiper_recipe_outerWrap}>
+        <i className={s.swiper_button_prev_recipe} ref={navPrevRef}>
+          <ArrowLeft_s width="100%" height="100%" viewBox="0 0 28 28" />
+        </i>
+        <i className={s.swiper_button_next_recipe} ref={navNextRef}>
+          <ArrowRight_s width="100%" height="100%" viewBox="0 0 28 28" />
+        </i>
+        <Swiper
+          {...swiperSettings}
+          watchOverflow={false}
+          navigation={{
+            prevEl: navPrevRef.current,
+            nextEl: navNextRef.current,
+          }}
+          onInit={(swiper) => {
+            swiper.params.navigation.prevEl = navPrevRef.current;
+            swiper.params.navigation.nextEl = navNextRef.current;
+            swiper.navigation.destroy();
+            swiper.navigation.init();
+            swiper.navigation.update();
+          }}
+        >
+          {info.recipeInfoList.length > 0 &&
+            info.recipeInfoList.map((rc, index) => (
+              <SwiperSlide key={`recipe-${rc.id}-${index}`} className={s.slide}>
+                <SubscribeCustomInput
+                  id={`${rc.name}-${rc.id}`}
+                  selectedRadio={selectedRadio}
+                  type={inputType}
+                  name={name}
+                  initialize={initialize}
+                  disabled={!rc.inStock}
+                  selectedCheckbox={selectedCheckbox}
+                  setSelectedCheckbox={setSelectedCheckbox}
+                  setSelectedRadio={setSelectedRadio}
+                  option={{ label: '레시피 선택' }}
+                >
+                  {info.recommendRecipeName === rc.name && (
+                    <ItemRecommendlabel
+                      label="추천!"
+                      style={{
+                        backgroundColor: '#000',
+                      }}
+                    />
+                  )}
+                  {!rc.inStock && <ItemSoldOutLabel />}
+                  <figure className={`${s.image} img-wrap`}>
+                    <Image
+                      src={rc.thumbnailUri2}
+                      objectFit="cover"
+                      layout="fill"
+                      alt="레시피 상세 이미지"
+                    />
+                  </figure>
+                  <p className={s.row_1}>{rc.uiNameEnglish}</p>
+                  <p className={s.row_2}>{rc.uiNameKorean}</p>
+                  <p className={s.row_3}>{rc.description}</p>
+                  <p className={s.row_4}>
+                    <Link href="/recipes" passHref>
+                      <a
+                        target={'_blank'}
+                        rel={'noreferrer'}
+                        onClick={onPopupHandler}
+                      >
+                        더 알아보기
+                      </a>
+                    </Link>
+                  </p>
+                </SubscribeCustomInput>
+              </SwiperSlide>
+            ))}
+        </Swiper>
+      </div>
     </section>
   );
 };

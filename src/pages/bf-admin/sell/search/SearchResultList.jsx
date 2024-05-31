@@ -14,7 +14,7 @@ export default function SearchResultList({ items, currentPage }) {
       {items.map((item, i) => (
         <Item
           key={`item-${item.id}-${i}`}
-          number={i + 1 + (currentPage - 1) * 10}
+          number={i + 1 + (currentPage - 1) * 50}
           index={i}
           item={item}
         />

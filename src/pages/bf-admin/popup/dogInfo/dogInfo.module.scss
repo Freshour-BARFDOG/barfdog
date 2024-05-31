@@ -113,6 +113,37 @@ $backgroundColorDef: #f8f8ff;
           background-color: #fff;
           color: var(--gray20);
         }
+        &.plan_table {
+          min-height: rem(200);
+          overflow: auto;
+        }
+        &.plan_content {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+
+          .plan_checkbox {
+            width: 100%;
+
+            ul {
+              width: 100% !important;
+              max-width: rem(800) !important;
+            }
+
+            div {
+              padding-right: rem(20);
+            }
+          }
+
+          p {
+            padding: rem(10) 0;
+            // font-weight: bold !important;
+          }
+
+          .recipe_change_btn {
+            margin-top: rem(14);
+          }
+        }
       }
     }
   }
@@ -271,4 +302,109 @@ $backgroundColorDef: #f8f8ff;
   input {
     width: 100% !important;
   }
+}
+
+.checkbox {
+  display: inline-grid;
+  grid-template-columns: rem(20) 1fr;
+  align-items: center;
+  column-gap: rem(10);
+  cursor: pointer;
+  font-size: rem(14);
+
+  &.position-right {
+    grid-template-columns: 1fr rem(20);
+  }
+  &.disabled {
+    cursor: default;
+    color: var(--color-disabled) !important;
+  }
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.checkbox-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  &.onlyCheckbox {
+    label {
+      gap: 0;
+    }
+    span {
+      margin: 0;
+    }
+  }
+  pre {
+    margin: 0 !important;
+    padding-left: rem(10) !important;
+    &:before {
+      display: none;
+    }
+  }
+}
+
+/* 기본 체크박스 숨기기 */
+.checkbox input[type='radio'] {
+  display: none;
+}
+
+/* 선택된 체크박스 스타일 꾸미기 */
+.checkbox input[type='radio']:checked + .fakeCheckBox {
+  background: var(--color-main) !important;
+}
+
+.checkbox input[type='radio']:checked + .fakeCheckBox:after {
+  display: block;
+}
+
+/* THEME */
+.circle {
+  .fakeCheckBox {
+    border-radius: 50%;
+  }
+  .fakeCheckBox:after {
+    width: 50%;
+    height: 50%;
+    border-radius: 50%;
+    border-color: transparent;
+    background-color: #fff;
+    border-width: 0;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
+  }
+}
+
+/* 선택되지 않은 체크박스 스타일 꾸미기 */
+.checkbox .fakeCheckBox {
+  width: rem(20);
+  height: rem(20);
+  margin-right: rem(11);
+  border-radius: rem(2);
+  background: #ddd;
+  position: relative;
+  display: block;
+  top: 0;
+  left: 0;
+  transition-timing-function: var(--transition-cubic);
+  transition-property: background-color;
+  transition-duration: 0.2s;
+}
+
+.fakeCheckBox:after {
+  content: '';
+  position: absolute;
+  width: rem(6);
+  height: rem(10);
+  border: solid #fff;
+  border-width: 0 rem(2) rem(2) 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+  position: absolute;
+  left: rem(6);
+  top: rem(2);
 }

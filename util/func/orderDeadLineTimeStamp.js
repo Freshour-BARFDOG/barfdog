@@ -1,20 +1,20 @@
-import {orderDeadLineDayIndex} from './orderDeadLineDayIndex';
-
-
 // # 주문마감시간
 // 최초 : 매주 금요일 23:59:59
 // 변경1: 매주 목요일 23:59:59 (고객사 요청 / 22년12월)
 // # 주문 마감일자와 현재 연계된 기능 없음 (22.12.09 기준)
 // 변경2: 매주 목요일 18:59:59 (고객사 요청 / 23년10월)
 
-
 const getDDday = (dDayIndex, todayIndex) => {
   const weekNum = 7;
   return (dDayIndex - todayIndex + weekNum) % weekNum;
 };
 
-export const orderDeadLineTimeStamp = () => {
-  const dDayIndex = orderDeadLineDayIndex();
+export const orderDeadLineTimeStamp = (dayString) => {
+  const dayStrings = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+  const dDayIndex = dayStrings.indexOf(dayString);
+  // [이전]
+  // const dDayIndex = orderDeadLineDayIndex(day);
+
   const todayIndex = new Date().getDay();
   let diffDate = getDDday(dDayIndex, todayIndex);
 
@@ -48,11 +48,13 @@ export const orderDeadLineTimeStamp = () => {
   const tenths = gap % 10;
   const seconds = gap / 10;
 
-  const hour = Math.floor((seconds % 86400) / (3600));
+  const hour = Math.floor((seconds % 86400) / 3600);
   const min = Math.floor((seconds % 3600) / 60);
   const sec = Math.floor(seconds % 60);
-  
-  return `${diffDate}일 ${convertNum(hour)}:${convertNum(min)}:${convertNum(sec)}.${tenths.toString()}`;
+
+  return `${diffDate}일 ${convertNum(hour)}:${convertNum(min)}:${convertNum(
+    sec,
+  )}.${tenths.toString()}`;
 };
 
 const convertNum = (num) => {
