@@ -1,16 +1,96 @@
 import s from './popup_sell.module.scss';
+import m from '/src/pages/account/signup/signup.module.scss';
 import { transformPhoneNumber } from '/util/func/transformPhoneNumber';
 import transformDate from '/util/func/transformDate';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import popupWindow from '../../../../util/func/popupWindow';
+import dynamic from 'next/dynamic';
+import SignInput_address from '../../user_signup/SignInput_address';
+import SignupInput from '../../user_signup/SignupInput';
+import { useModalContext } from '/store/modal-context';
+import { Tooltip } from 'antd';
+import DeliveryInput from './DeliveryInput';
+import filter_specialCharacter from '/util/func/filter_specialCharacter';
+import { putObjData } from '../../../pages/api/reqData';
+import Modal_global_alert from '../../modal/Modal_global_alert';
+const WindowOpener = dynamic(() => import('/util/func/window-opener'), {
+  ssr: false,
+});
 
-const ProductInfo_delivery = ({ deliveryInfo }) => {
+const ProductInfo_delivery = ({ deliveryInfo, orderId }) => {
+  const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
   const onPopupHandler = (e) => {
     e.preventDefault();
     if (typeof window === 'undefined')
       return console.error('window is not defined');
     const href = e.currentTarget.href;
     popupWindow(href, { width: 540, height: 480, left: 200, top: 100 });
+  };
+
+  const [recipientAddress, setRecipientAddress] = useState({
+    zipcode: deliveryInfo.zipcode,
+    street: deliveryInfo.street,
+    detailAddress: deliveryInfo.detailAddress,
+  });
+
+  useEffect(() => {
+    setRecipientAddress({
+      zipcode: deliveryInfo.zipcode,
+      street: deliveryInfo.street,
+      detailAddress: deliveryInfo.detailAddress,
+    });
+  }, [deliveryInfo]);
+
+  // console.log('orderId', orderId);
+  // console.log('deliveryInfo', deliveryInfo);
+  // console.log('recipientAddress', recipientAddress);
+
+  const onReceivePopupData = (err, data) => {
+    const { address, zonecode, sido } = data;
+
+    if (address === undefined) {
+      return;
+    } else {
+      setRecipientAddress((prevState) => ({
+        ...prevState,
+        street: address,
+        zipcode: zonecode,
+      }));
+    }
+  };
+
+  const onDetailAddressHandler = (e) => {
+    const { value } = e.currentTarget;
+    const detailAddress = filter_specialCharacter(value);
+
+    setRecipientAddress((prevState) => ({
+      ...prevState,
+      detailAddress: detailAddress,
+    }));
+  };
+
+  const onSuccessCallback = () => {
+    window.location.reload();
+  };
+
+  const onClickModalButton = () => {
+    mct.alertHide();
+  };
+
+  const onAddressChangeHandler = async () => {
+    try {
+      const url = `/api/admin/deliveries/${orderId}/recipientAddress`;
+      const res = await putObjData(url, recipientAddress);
+      console.log(res);
+      if (res.isDone) {
+        mct.alertShow('배송지 주소를 변경하였습니다.', onSuccessCallback);
+      } else {
+        mct.alertShow(`데이터 전송 실패\n${res.error}`);
+      }
+    } catch (err) {
+      alert(err);
+    }
   };
 
   return (
@@ -39,11 +119,63 @@ const ProductInfo_delivery = ({ deliveryInfo }) => {
         </li>
         <li className={`${s['t-row']} ${s['fullWidth']}`}>
           <div className={s['t-box']}>
-            <div className={`${s.innerBox} ${s.label}`}>
+            <div className={`${s.innerBox} ${s.label} ${s.deliveryInput}`}>
               <span>배송지 주소</span>
             </div>
-            <div className={`${s.innerBox} ${s.cont}`}>
-              <span>{`${deliveryInfo.street} ${deliveryInfo.detailAddress} (우편번호: ${deliveryInfo.zipcode})`}</span>
+            <div className={`${s.innerBox} ${s.cont} ${s.deliveryInput}`}>
+              <DeliveryInput
+                type={'text'}
+                required={true}
+                id={'address'}
+                title={'주소 검색'}
+                placeholder={'기본주소'}
+                // errorMessage={errorMessage}
+                addressStreet={deliveryInfo.street}
+                addedClassName={['add-btn-section', 'active-address']}
+                disabled
+                value={recipientAddress.street || deliveryInfo.street || ''}
+                setFormValues={setRecipientAddress}
+                icon={
+                  deliveryInfo.street && (
+                    <Tooltip
+                      className={m.addressToolTip}
+                      message={`${deliveryInfo.street}\n(우:${deliveryInfo.zipcode})`}
+                      messagePosition={'right'}
+                      theme={'white'}
+                      device={'mobile'}
+                    />
+                  )
+                }
+              >
+                <WindowOpener
+                  url={'/popup/searchAddress'}
+                  bridge={onReceivePopupData}
+                >
+                  <span className={`${m.btn} ${m.bigbtn}`}>
+                    {deliveryInfo.city ? '재검색' : '주소검색'}
+                  </span>
+                </WindowOpener>
+                {/* {formErrors.address && (
+                    <ErrorMessage>{formErrors.address}</ErrorMessage>
+                  )} */}
+                <label>
+                  <input
+                    type="text"
+                    id={'address-detailAddress'}
+                    placeholder={'상세주소'}
+                    value={recipientAddress.detailAddress}
+                    onChange={onDetailAddressHandler}
+                  />
+                  <button onClick={onAddressChangeHandler}>변경</button>
+                  {/* {(!formValues.address.detailAddress ||
+                        formValues.address.detailAddress === '') &&
+                        formErrors.detailAddress && (
+                          <ErrorMessage>
+                            {formErrors.detailAddress}
+                          </ErrorMessage>
+                        )} */}
+                </label>
+              </DeliveryInput>
             </div>
           </div>
         </li>
@@ -133,6 +265,9 @@ const ProductInfo_delivery = ({ deliveryInfo }) => {
           </div>
         </li>
       </ul>
+      {hasAlert && (
+        <Modal_global_alert onClick={onClickModalButton} background />
+      )}
     </>
   );
 };
