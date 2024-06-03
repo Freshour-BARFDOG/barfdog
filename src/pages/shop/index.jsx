@@ -24,7 +24,7 @@ const apiDataQueryString = 'queryItemsDtoList';
 const searchPageSize = 6; // 화면에 뿌릴 상품수
 
 const initialSearchValues = {
-  sortBy: itemSortQueryType.REGISTRATION,
+  sortBy: itemSortQueryType.RECENT,
   itemType: general_itemType.ALL, // url Query is lowerCase
 };
 
