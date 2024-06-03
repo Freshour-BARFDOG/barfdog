@@ -22,6 +22,7 @@ import { calcSubscribePrice } from '/util/func/subscribe/calcSubscribePrices';
 import { calcOneMealGramsWithRecipeInfo } from '/util/func/subscribe/calcOneMealGramsWithRecipeInfo';
 import ArrowLeft_s from '@public/img/icon/swiper-arrow-small-l.svg';
 import ArrowRight_s from '@public/img/icon/swiper-arrow-small-r.svg';
+import { originSubscribeIdList } from '/util/func/subscribe/originSubscribeIdList';
 
 const swiperSettings = {
   className: `${s.swiper_recipes} ${s.inMypage}`,
@@ -70,6 +71,8 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
   const [activeConfirmModal, setActiveConfirmModal] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [selectedIdList, setSelectedIdList] = useState([]);
+  // const [originSelectedIdList, setOriginSelectedIdList] = useState([]);
+  const [isOriginSubscriber, setIsOriginSubscriber] = useState(false);
 
   // // console.log(selectedRadio)
   // // console.log(selectedCheckbox)
@@ -92,6 +95,10 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
   }
 
   useEffect(() => {
+    //! [추가] 기존 구독자인지 확인
+    originSubscribeIdList.includes(subscribeInfo.info.subscribeId) &&
+      setIsOriginSubscriber(true);
+
     // INIT RECIPE VALUE
     if (allRecipeInfoList.length) return; // Block code Execution after recipeInfo Initialization.
 
@@ -117,7 +124,6 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
           recipeInfoList.push(allRecipeData);
         }
         setAllRecipeInfoList(recipeInfoList);
-        // console.log('recipeInfoList>>>', recipeInfoList);
         const initialValueList = recipeInfoList
           .filter((info) => subscribeInfo.recipe.idList.indexOf(info.id) >= 0)
           .map((info) => `${info.name}-${info.id}`);
@@ -182,8 +188,10 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
     popupWindow(href, { width: 1000, height: 716 });
   };
 
-  console.log('subscribeInfo.recipe.idList', subscribeInfo.recipe.idList);
-  console.log('subscribeInfo.recipe', subscribeInfo.recipe);
+  // console.log('subscribeInfo.recipe.idList', subscribeInfo.recipe.idList);
+  // console.log('subscribeInfo.recipe', subscribeInfo.recipe);
+  // console.log('isOriginSubscriber>>>>', isOriginSubscriber);
+  // console.log(subscribeInfo);
 
   const onActiveConfirmModal = () => {
     // // console.log(selectedIdList)
@@ -211,10 +219,16 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
         selectedRecipeIds: selectedIdList,
         allRecipeInfos: currentRecipeInfos,
         oneDayRecommendKcal: subscribeInfo.info.oneDayRecommendKcal,
+        isOriginSubscriber,
       }).map((recipe) => recipe.oneMealGram),
       planName: plan,
       pricePerGrams: currentRecipeInfos.map((recipe) => recipe.pricePerGram),
+      isOriginSubscriber,
+      recipeNameList: currentRecipeInfos.map((recipe) => recipe.name),
     });
+
+    // console.log('result.salePrice>>>', result.salePrice);
+    // console.log('currentRecipeInfos:::', currentRecipeInfos);
 
     return result.salePrice;
   };
@@ -229,6 +243,7 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
     const nextPaymentPrice = calcSalePriceAfterChangingRecipe({
       plan: curPlan,
     });
+
     // validation: Incorrect paymentPrice
     if (!nextPaymentPrice)
       return mct.alertShow('결제금액 계산오류가 발생하였습니다.');
