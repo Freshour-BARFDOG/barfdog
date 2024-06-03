@@ -197,52 +197,59 @@ export const SubscribeShopRecipe = ({ name, info, form, setForm }) => {
         >
           {info.recipeInfoList.length > 0 &&
             info.recipeInfoList.map((rc, index) => (
-              <SwiperSlide key={`recipe-${rc.id}-${index}`} className={s.slide}>
-                <SubscribeCustomInput
-                  id={`${rc.name}-${rc.id}`}
-                  selectedRadio={selectedRadio}
-                  type={inputType}
-                  name={name}
-                  initialize={initialize}
-                  disabled={!rc.inStock}
-                  selectedCheckbox={selectedCheckbox}
-                  setSelectedCheckbox={setSelectedCheckbox}
-                  setSelectedRadio={setSelectedRadio}
-                  option={{ label: '레시피 선택' }}
-                >
-                  {info.recommendRecipeName === rc.name && (
-                    <ItemRecommendlabel
-                      label="추천!"
-                      style={{
-                        backgroundColor: '#000',
-                      }}
-                    />
-                  )}
-                  {!rc.inStock && <ItemSoldOutLabel />}
-                  <figure className={`${s.image} img-wrap`}>
-                    <Image
-                      src={rc.thumbnailUri2}
-                      objectFit="cover"
-                      layout="fill"
-                      alt="레시피 상세 이미지"
-                    />
-                  </figure>
-                  <p className={s.row_1}>{rc.uiNameEnglish}</p>
-                  <p className={s.row_2}>{rc.uiNameKorean}</p>
-                  <p className={s.row_3}>{rc.description}</p>
-                  <p className={s.row_4}>
-                    <Link href="/recipes" passHref>
-                      <a
-                        target={'_blank'}
-                        rel={'noreferrer'}
-                        onClick={onPopupHandler}
-                      >
-                        더 알아보기
-                      </a>
-                    </Link>
-                  </p>
-                </SubscribeCustomInput>
-              </SwiperSlide>
+              <>
+                {rc.leaked === 'LEAKED' && (
+                  <SwiperSlide
+                    key={`recipe-${rc.id}-${index}`}
+                    className={s.slide}
+                  >
+                    <SubscribeCustomInput
+                      id={`${rc.name}-${rc.id}`}
+                      selectedRadio={selectedRadio}
+                      type={inputType}
+                      name={name}
+                      initialize={initialize}
+                      disabled={!rc.inStock}
+                      selectedCheckbox={selectedCheckbox}
+                      setSelectedCheckbox={setSelectedCheckbox}
+                      setSelectedRadio={setSelectedRadio}
+                      option={{ label: '레시피 선택' }}
+                    >
+                      {info.recommendRecipeName === rc.name && (
+                        <ItemRecommendlabel
+                          label="추천!"
+                          style={{
+                            backgroundColor: '#000',
+                          }}
+                        />
+                      )}
+                      {!rc.inStock && <ItemSoldOutLabel />}
+                      <figure className={`${s.image} img-wrap`}>
+                        <Image
+                          src={rc.thumbnailUri2}
+                          objectFit="cover"
+                          layout="fill"
+                          alt="레시피 상세 이미지"
+                        />
+                      </figure>
+                      <p className={s.row_1}>{rc.uiNameEnglish}</p>
+                      <p className={s.row_2}>{rc.uiNameKorean}</p>
+                      <p className={s.row_3}>{rc.description}</p>
+                      <p className={s.row_4}>
+                        <Link href="/recipes" passHref>
+                          <a
+                            target={'_blank'}
+                            rel={'noreferrer'}
+                            onClick={onPopupHandler}
+                          >
+                            더 알아보기
+                          </a>
+                        </Link>
+                      </p>
+                    </SubscribeCustomInput>
+                  </SwiperSlide>
+                )}
+              </>
             ))}
         </Swiper>
       </div>
