@@ -107,6 +107,7 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
         for (const recipeId of recipeIdList) {
           const apiUrl = `/api/recipes/${recipeId}`;
           const res = await getData(apiUrl);
+          // console.log('res.data>>>', res.data);
           const allRecipeData = res.data;
           const dogId = subscribeInfo.info.dogId;
           const recommendRecipeInfo =
@@ -116,7 +117,7 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
           recipeInfoList.push(allRecipeData);
         }
         setAllRecipeInfoList(recipeInfoList);
-
+        // console.log('recipeInfoList>>>', recipeInfoList);
         const initialValueList = recipeInfoList
           .filter((info) => subscribeInfo.recipe.idList.indexOf(info.id) >= 0)
           .map((info) => `${info.name}-${info.id}`);
@@ -181,10 +182,12 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
     popupWindow(href, { width: 1000, height: 716 });
   };
 
+  console.log('subscribeInfo.recipe.idList', subscribeInfo.recipe.idList);
+  console.log('subscribeInfo.recipe', subscribeInfo.recipe);
+
   const onActiveConfirmModal = () => {
     // // console.log(selectedIdList)
-    // // console.log(subscribeInfo.recipe.idList)
-    // // console.log(subscribeInfo.recipe)
+
     const isTheSameArray = valid_isTheSameArray(
       selectedIdList,
       subscribeInfo.recipe.idList,
@@ -344,64 +347,62 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
             >
               {allRecipeInfoList.length > 0 &&
                 allRecipeInfoList.map((rc, index) => (
-                  <SwiperSlide
-                    key={`recipe-${rc.id}-${index}`}
-                    className={s.slide}
-                  >
-                    {/*{(() => {*/}
-                    {/*  // ! TEST*/}
-                    {/*  if (index === 0) {*/}
-                    {/*    rc.inStock = false;*/}
-                    {/*  }*/}
-                    {/*})()}*/}
-                    <SubscribeCustomInput
-                      id={`${rc.name}-${rc.id}`}
-                      selectedRadio={selectedRadio}
-                      type={initialInputType}
-                      name={'subscribe-recipes'}
-                      initialize={initialize}
-                      disabled={!rc.inStock}
-                      selectedCheckbox={selectedCheckbox}
-                      setSelectedCheckbox={setSelectedCheckbox}
-                      setSelectedRadio={setSelectedRadio}
-                      option={{ label: '레시피 선택' }}
-                    >
-                      {rc.isRecommendRecipe && (
-                        <ItemRecommendlabel
-                          label="추천!"
-                          style={{
-                            backgroundColor: '#000',
-                          }}
-                        />
-                      )}
-                      {!rc.inStock && <ItemSoldOutLabel />}
-                      <figure className={`${s.image} img-wrap`}>
-                        {rc.thumbnailUri2 && (
-                          <Image
-                            className={'init-next-image'}
-                            src={rc.thumbnailUri2}
-                            objectFit="cover"
-                            layout="fill"
-                            alt="레시피 상세 이미지"
-                          />
-                        )}
-                      </figure>
-                      <p className={s.row_1}>{rc.uiNameEnglish}</p>
-                      <p className={s.row_2}>{rc.uiNameKorean}</p>
-                      <p className={s.row_3}>{rc.description}</p>
-                      <p className={s.row_4}>
-                        <Link href="/recipes" passHref>
-                          <a
-                            target={'_blank'}
-                            rel={'noreferrer'}
-                            onClick={onPopupHandler}
-                          >
-                            더 알아보기
-                          </a>
-                        </Link>
-                      </p>
-                    </SubscribeCustomInput>
-                  </SwiperSlide>
+                  <>
+                    {rc.leaked === 'LEAKED' && (
+                      <SwiperSlide
+                        key={`recipe-${rc.id}-${index}`}
+                        className={s.slide}
+                      >
+                        <SubscribeCustomInput
+                          id={`${rc.name}-${rc.id}`}
+                          selectedRadio={selectedRadio}
+                          type={initialInputType}
+                          name={'subscribe-recipes'}
+                          initialize={initialize}
+                          disabled={!rc.inStock}
+                          selectedCheckbox={selectedCheckbox}
+                          setSelectedCheckbox={setSelectedCheckbox}
+                          setSelectedRadio={setSelectedRadio}
+                          option={{ label: '레시피 선택' }}
+                        >
+                          {rc.isRecommendRecipe && (
+                            <ItemRecommendlabel
+                              label="추천!"
+                              style={{
+                                backgroundColor: '#000',
+                              }}
+                            />
+                          )}
+                          {!rc.inStock && <ItemSoldOutLabel />}
+                          <figure className={`${s.image} img-wrap`}>
+                            {rc.thumbnailUri2 && (
+                              <Image
+                                className={'init-next-image'}
+                                src={rc.thumbnailUri2}
+                                objectFit="cover"
+                                layout="fill"
+                                alt="레시피 상세 이미지"
+                              />
+                            )}
+                          </figure>
+                          <p className={s.row_1}>{rc.uiNameEnglish}</p>
+                          <p className={s.row_2}>{rc.uiNameKorean}</p>
+                          <p className={s.row_3}>{rc.description}</p>
+                          <p className={s.row_4}>
+                            <Link href="/recipes" passHref>
+                              <a
+                                target={'_blank'}
+                                rel={'noreferrer'}
+                                onClick={onPopupHandler}
+                              >
+                                더 알아보기
+                              </a>
+                            </Link>
+                          </p>
+                        </SubscribeCustomInput>
+                      </SwiperSlide>
+                    )}
+                  </>
                 ))}
             </Swiper>
           </div>
