@@ -2,7 +2,7 @@
 
 // *  ------- COMMON ------- * //
 $backgroundColorDef: #f8f8ff;
-$popupMainHeaderHeight:rem(66);
+$popupMainHeaderHeight: rem(66);
 $default-row-height: rem(48);
 #popup {
   background-color: $backgroundColorDef;
@@ -33,14 +33,12 @@ $default-row-height: rem(48);
   padding: rem(20) 0 rem(30);
 }
 
-
 // * ------- TABLE ------- * //
 .table {
   .table-list:not(:last-child) {
-    > *:last-child{
+    > *:last-child {
       margin-bottom: rem(20);
     }
-
   }
 
   .t-header {
@@ -59,11 +57,19 @@ $default-row-height: rem(48);
     // display: grid;
     // grid-template-columns: 1fr 1fr;
 
-    &.product-item-info:not(:first-child){margin-bottom:rem(15);}
+    &.product-item-info:not(:first-child) {
+      margin-bottom: rem(15);
+    }
     .t-top-row {
-      margin-bottom:rem(10);
-      .product-title{margin-right:rem(10); color:var(--gray20);}
-      .product-idx{color:var(--gray10); font-size:rem(15);}
+      margin-bottom: rem(10);
+      .product-title {
+        margin-right: rem(10);
+        color: var(--gray20);
+      }
+      .product-idx {
+        color: var(--gray10);
+        font-size: rem(15);
+      }
     }
 
     .t-row {
@@ -72,32 +78,31 @@ $default-row-height: rem(48);
       &.fullWidth {
         grid-template-columns: 1fr;
       }
-      &.autoHeight{
-        .cont{
+      &.autoHeight {
+        .cont {
           height: 100%;
         }
-        .innerBox{
+        .innerBox {
           height: 100%;
-          span{
+          span {
             display: block;
             overflow: initial;
           }
-          span:not(:first-child){margin-top:rem(10);}
+          span:not(:first-child) {
+            margin-top: rem(10);
+          }
         }
-
       }
     }
     .t-row:not(:first-child) {
       margin-top: rem(-1);
     }
 
-
     .t-box {
       display: grid;
       grid-template-columns: rem(180) calc(100% - #{rem(180)});
       align-items: center;
       overflow: hidden;
-
 
       &:nth-child(2n) {
         margin-left: rem(-1);
@@ -111,27 +116,28 @@ $default-row-height: rem(48);
         padding: rem(12) rem(20);
         box-sizing: border-box;
 
-        &.button-container{
+        &.button-container {
           padding: 0 rem(20);
         }
 
         span {
-          display: -webkit-box;
+          // display: -webkit-box;
           -webkit-box-orient: vertical;
           -webkit-line-clamp: 1;
-          overflow-y: scroll;
+          // overflow-y: scroll;
           &:not(:first-child) {
             margin-left: rem(10);
           }
         }
-        .option{
+        .option {
           display: flex;
           align-items: center;
           justify-content: flex-start;
-          gap:rem(10);
-          span{margin: 0 !important;}
+          gap: rem(10);
+          span {
+            margin: 0 !important;
+          }
         }
-
       }
 
       .innerBox:nth-child(2) {
@@ -151,11 +157,10 @@ $default-row-height: rem(48);
         font-size: rem(14) !important;
         margin-left: rem(6);
       }
-
     }
   }
 
-  input[type="date"] {
+  input[type='date'] {
     font-size: rem(14);
     width: rem(140);
     padding: rem(4) rem(10);
@@ -163,7 +168,6 @@ $default-row-height: rem(48);
       display: block;
       // -webkit-appearance:initial;
     }
-
   }
   input.disabled {
     border: 0;
@@ -176,61 +180,59 @@ $default-row-height: rem(48);
     }
   }
 
-
-
   // 포트원(아임포트) 정보 추가
-  .iamport{
-
-    .title{
+  .iamport {
+    .title {
       cursor: pointer;
       display: flex;
-      gap:rem(20);
+      gap: rem(20);
       align-items: center;
       justify-content: space-between;
-      .title-innerText{
+      .title-innerText {
         display: flex;
         align-items: center;
         justify-content: flex-start;
         gap: rem(8);
       }
 
-      .alert{
+      .alert {
         color: var(--color-warning);
         font-size: rem(12);
       }
     }
 
-    .t-header{}
+    .t-header {
+    }
 
-    .t-body{
+    .t-body {
       transition: height 0.2s ease-in-out;
-      height:rem(1);
+      height: rem(1);
       overflow: hidden;
     }
 
-    .icon-box{
+    .icon-box {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: rem(4);
       color: #555;
-      svg{
+      svg {
         fill: #555;
       }
     }
 
-    &.on{
-      .t-body{
+    &.on {
+      .t-body {
         height: calc($default-row-height * 4);
       }
 
       @for $i from 1 through 10 {
-        .has-row-#{$i}{
+        .has-row-#{$i} {
           height: calc($default-row-height * $i);
         }
       }
 
-      .icon-box svg{
+      .icon-box svg {
         transform: rotate(180deg);
       }
     }
@@ -244,5 +246,35 @@ $default-row-height: rem(48);
   justify-content: center;
 }
 
+.notice-message {
+  color: var(--color-primary04);
+  font-size: rem(14);
+  margin: rem(4) 0 rem(15);
+}
 
-.notice-message{color:var(--color-primary04); font-size:rem(14);margin:rem(4) 0 rem(15);}
+// 주소지 변경
+.deliveryInput {
+  height: rem(130) !important;
+
+  div {
+    display: inline;
+  }
+  #detailAddress {
+    background-color: yellow !important;
+  }
+  label {
+    display: grid;
+    grid-template-columns: 5fr 1fr;
+    button {
+      width: rem(120) !important;
+      color: white;
+      margin-left: rem(10);
+      border-radius: rem(4);
+      background-color: #d15353;
+    }
+    button:hover {
+      background-color: var(--color-primary04);
+      transition: all 0.3s;
+    }
+  }
+}

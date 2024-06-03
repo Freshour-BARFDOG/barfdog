@@ -100,6 +100,7 @@ export default function Popup_GeneralOrderDetailInfoPage({ data }) {
                         ...data.deliveryDto,
                         orderConfirmDate: data.paymentDto.orderConfirmDate,
                       }}
+                      orderId={data.orderInfoDto.id}
                     />
                   </li>
                 </ul>
