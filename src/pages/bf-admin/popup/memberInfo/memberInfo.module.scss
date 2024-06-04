@@ -57,8 +57,9 @@ $backgroundColorDef: #f8f8ff;
       &.fullWidth {
         grid-template-columns: 1fr;
       }
-      &.multiLines{
-        .label, .innerBox{
+      &.multiLines {
+        .label,
+        .innerBox {
           padding: rem(10) rem(20) rem(2);
           height: 100%;
           display: inline-block;
@@ -113,7 +114,7 @@ $backgroundColorDef: #f8f8ff;
     }
   }
 
-  input[type="date"] {
+  input[type='date'] {
     font-size: rem(14);
     width: rem(140);
     padding: rem(4) rem(10);
@@ -121,7 +122,6 @@ $backgroundColorDef: #f8f8ff;
       display: block;
       // -webkit-appearance:initial;
     }
-
   }
   input.disabled {
     border: 0;
@@ -142,11 +142,38 @@ $backgroundColorDef: #f8f8ff;
   justify-content: center;
 }
 
-
-.dogName{
+.dogName {
   display: inline-flex !important;
   background-color: #f1f2f3;
   border-radius: rem(50);
   padding: rem(2) rem(12);
   font-size: rem(14);
+}
+
+// 주소지 변경
+.deliveryInput {
+  height: rem(130) !important;
+  span {
+    display: flex !important;
+  }
+  div {
+    display: inline;
+  }
+
+  label {
+    display: grid;
+    grid-template-columns: 5fr 1fr;
+    button {
+      width: rem(120) !important;
+      color: white;
+      margin-left: rem(10);
+      border-radius: rem(4);
+      background-color: #d15353;
+    }
+
+    button:hover {
+      background-color: var(--color-primary04);
+      transition: all 0.3s;
+    }
+  }
 }
