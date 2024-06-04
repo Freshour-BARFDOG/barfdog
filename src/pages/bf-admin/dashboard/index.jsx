@@ -828,7 +828,7 @@ export default function DashboardPage({ ga }) {
                       <li>
                         <span>구독 수</span>
                         <span>
-                          <b>{info.subscribeStats?.totalSubscribeCount}</b> 명
+                          <b>{info.subscribeStats?.totalSubscribeCount}</b> 건
                         </span>
                       </li>
                       <li>
