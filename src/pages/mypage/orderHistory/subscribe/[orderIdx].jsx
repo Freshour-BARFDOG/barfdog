@@ -160,7 +160,8 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
                   <div className={s.grid_box}>
                     <span>구독정보</span>
                     <span>
-                      {data?.recipeNames} ({data?.orderDto.subscribeCount}회차)
+                      {data?.recipeNames}
+                      {/* ({data?.orderDto.subscribeCount}회차) */}
                     </span>
 
                     <span>반려견</span>
