@@ -40,6 +40,7 @@ export default function SearchOnSellPage() {
   // const searchApiUrl = `/api/admin/orders/search`; // '상품'단위 조회 // @derprecated
   const searchPageSize = 50;
   const [isLoading, setIsLoading] = useState({});
+  const [isExcelLoading, setIsExcelLoading] = useState(false);
   const [itemList, setItemList] = useState([]);
   const [searchValues, setSearchValues] = useState(initialSearchValues);
   const [searchBody, setSearchBody] = useState(null);
@@ -88,69 +89,41 @@ export default function SearchOnSellPage() {
     enterKey(e, onSearchHandler);
   };
 
-  // const datatmp = (inputData) => {
-  //   return inputData.map((item) => {
-  //     return {
-  //       주문번호: item.orderNumber,
-  //       주문상태: item.stateKor,
-  //       이메일: item.memberEmail,
-  //       구매자: item.orderMemberName,
-  //       수령자: item.orderRecivedName,
-  //       반려견명: item.orderRecivedName, // 추가
-  //       결제일: item.paymentDate,
-  //       묶음배송: item.isPackage,
-  //       물품이름: item.productName,
-  //       수량: item.amount,
-  //       결제금액: item.paymentPrice,
-  //       '첫 결제일': item.memberFirstPaymentDate,
-  //       '누적 결제금액': item.memberAccumulatedamount,
-  //       생년월일: item.memberBirthday,
-  //       성별: item.memberGender,
-  //       연락처: item.memberPhoneNumber,
-  //       주소: item.deliveryStreet,
-  //       요청사항: item.deliveryRequest,
-  //     };
-  //   });
-  // };
+  // console.log('searchValues', searchValues);
 
   // export excel
-  // const downloadExcel = async () => {
-  //   const url = `/api/admin/orders/searchAll/excel`;
+  const downloadExcel = async () => {
+    const url = `/api/admin/orders/searchAll/excel`;
 
-  //   try {
-  //     const res = await postDataBlob(url);
-  //     console.log('엑셀 파일 업로드 성공:', res.data);
+    const body = {
+      ...searchValues,
+      statusList:
+        searchValues.statusList === 'ALL' ? [] : [searchValues.statusList], // ! 배열로 전송 // '전체 상태' 검색 시 null or 빈배열
+    };
 
-  //     if (res && res.data instanceof Blob) {
-  //       const downloadUrl = URL.createObjectURL(res.data);
-  //       const link = document.createElement('a');
-  //       link.href = downloadUrl;
-  //       link.setAttribute('download', '구독취소사유.xlsx');
-  //       document.body.appendChild(link);
-  //       link.click();
-  //       URL.revokeObjectURL(downloadUrl);
-  //       link.remove();
-  //     }
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
+    // console.log('body>>>', body);
 
-  // let datas = [];
-  //   if (search.searchTypeGenOrSub === 'general') {
-  //     datas = datatmp_general(inputData);
-  //   } else if (search.searchTypeGenOrSub === 'subscribe') {
-  //     datas = datatmp_subscribe(inputData);
-  //   }
-  //   const ws = xlsx.utils.json_to_sheet(datas);
-  //   const wb = xlsx.utils.book_new();
-  //   xlsx.utils.book_append_sheet(wb, ws, 'SheetJS');
-  //   xlsx.writeFile(wb, 'sheetjs.xlsx');
-  // };
+    try {
+      setIsExcelLoading(true);
+      const res = await postDataBlob(url, body);
+      // console.log('엑셀 파일 업로드 성공:', res);
 
-  // let filteredData = [];
-  // if (search.searchTypeGenOrSub === 'general') {
-  //   filteredData = filterDataGeneral(dataBase, search);
-  // };
+      if (res && res.data instanceof Blob) {
+        const downloadUrl = URL.createObjectURL(res.data);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.setAttribute('download', '판매관리.xlsx');
+        document.body.appendChild(link);
+        link.click();
+        URL.revokeObjectURL(downloadUrl);
+        link.remove();
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsExcelLoading(false);
+    }
+  };
 
   // console.log(itemList);
   // console.log('searchValues', searchValues);
@@ -215,7 +188,11 @@ export default function SearchOnSellPage() {
               <p className="cont_title cont-left">
                 목록 <Tooltip message={'주문 단위 리스트'} />
               </p>
-              {/* <div className="controls cont-left">
+              <div
+                className={`controls cont-left ${
+                  isExcelLoading && s.excel_button
+                }`}
+              >
                 <ConfigProvider
                   theme={{
                     token: {
@@ -228,10 +205,10 @@ export default function SearchOnSellPage() {
                     icon={<DownloadOutlined />}
                     onClick={() => downloadExcel()}
                   >
-                    액셀 다운로드
+                    {isExcelLoading ? <Spinner /> : '엑셀 다운로드'}
                   </Button>
                 </ConfigProvider>
-              </div> */}
+              </div>
             </div>
             <div className={`${s.cont_viewer}`}>
               <div className={s.table}>
