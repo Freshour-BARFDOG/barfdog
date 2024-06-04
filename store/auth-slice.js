@@ -143,7 +143,7 @@ const authSlice = createSlice({
       state.isAuth = false;
       setCookie(cookieType.LOGIN_COOKIE, null, 'date', 0, { path: '/' });
       // alert('관리자 로그아웃 처리되었습니다.'); // ! TEST 시 사용
-      window.location.href = '/bf-admin/login';
+      window.location.href = '/';
     },
     adminResetPassword(state, action) {
       state.isAdmin = true;

@@ -1,16 +1,32 @@
 import React, { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 import s from './memberInfo.module.scss';
+import m from '/src/pages/account/signup/signup.module.scss';
 import PopupWrapper from '/src/components/popup/PopupWrapper';
-import { PopupCloseButton, PopupCloseButton_typeX } from '/src/components/popup/PopupCloseButton';
+import {
+  PopupCloseButton,
+  PopupCloseButton_typeX,
+} from '/src/components/popup/PopupCloseButton';
 import Modal_member_class from '/src/components/modal/Modal_member_class';
 import Modal_member_subscribe from '/src/components/modal/Modal_member_subscribe';
 import { getData, putObjData } from '/src/pages/api/reqData';
 import { FullScreenLoading } from '/src/components/atoms/FullScreenLoading';
 import { transformBirthDay } from '/util/func/transformBirthDay';
 import { transformPhoneNumber } from '/util/func/transformPhoneNumber';
-import transformDate from "../../../../../util/func/transformDate";
-import transformLocalCurrency from "../../../../../util/func/transformLocalCurrency";
+import transformDate from '../../../../../util/func/transformDate';
+import transformLocalCurrency from '../../../../../util/func/transformLocalCurrency';
+const WindowOpener = dynamic(() => import('/util/func/window-opener'), {
+  ssr: false,
+});
+import { Tooltip } from 'antd';
+import { useModalContext } from '/store/modal-context';
+import DeliveryInput from '../../../../components/popup/admin_ProductInfo/DeliveryInput';
+import Modal_global_alert from '../../../../components/modal/Modal_global_alert';
+import filter_specialCharacter from '/util/func/filter_specialCharacter';
+
 export default function Popup_MemberDetailPage({ id }) {
+  const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
   const getReviewInfoApiUrl = `/api/admin/members/${id}`;
   const apiDataQuery = 'memberDto';
   const putMemberBirthdayApiUrl = `/api/admin/members/${id}/birthday`;
@@ -21,6 +37,23 @@ export default function Popup_MemberDetailPage({ id }) {
   const [tempValues, setTempValues] = useState({});
   const [activeGradeModal, setActiveGradeModal] = useState(false);
   const [activeSubscribeModal, setActiveSubscribeModal] = useState(false);
+
+  // 주소지 변경
+  const [recipientAddress, setRecipientAddress] = useState({
+    zipcode: formValues.address?.zipcode,
+    city: formValues.address?.city,
+    street: formValues.address?.street,
+    detailAddress: formValues.address?.detailAddress,
+  });
+
+  useEffect(() => {
+    setRecipientAddress({
+      zipcode: formValues.address?.zipcode,
+      city: formValues.address?.city,
+      street: formValues.address?.street,
+      detailAddress: formValues.address?.detailAddress,
+    });
+  }, [formValues]);
 
   // // console.log(tempValues)
   // // console.log(formValues)
@@ -48,15 +81,17 @@ export default function Popup_MemberDetailPage({ id }) {
             },
             phoneNumber: transformPhoneNumber(DATA.phoneNumber),
             birthday: transformBirthDay(DATA.birthday),
-            accumulatedAmount: transformLocalCurrency(DATA.accumulatedAmount) + '원',
+            accumulatedAmount:
+              transformLocalCurrency(DATA.accumulatedAmount) + '원',
             grade: DATA.grade,
             subscribe: DATA.subscribe === false ? 'N' : 'Y',
             accumulatedSubscribe: DATA.accumulatedSubscribe + '회',
             lastLoginDate: DATA.lastLoginDate || '로그인 정보가 없습니다.',
             longUnconnected: DATA.longUnconnected ? 'Y' : 'N',
             withdrawal: DATA.withdrawal ? 'Y' : 'N',
-            dogNames: res.data.dogNames
-                .map((dogname, index) => (index === 0 ? `${dogname} (대표견)` : dogname)),
+            dogNames: res.data.dogNames.map((dogname, index) =>
+              index === 0 ? `${dogname} (대표견)` : dogname,
+            ),
           };
         } else {
           alert('데이터를 가져올 수 없습니다.');
@@ -150,6 +185,58 @@ export default function Popup_MemberDetailPage({ id }) {
     return <FullScreenLoading />;
   }
 
+  // console.log('orderId', orderId);
+  // console.log('formValues', formValues);
+  // console.log('recipientAddress', recipientAddress);
+
+  const onReceivePopupData = (err, data) => {
+    const { address, zonecode, sido } = data;
+
+    if (address === undefined) {
+      return;
+    } else {
+      setRecipientAddress((prevState) => ({
+        ...prevState,
+        street: address,
+        zipcode: zonecode,
+      }));
+    }
+  };
+
+  const onDetailAddressHandler = (e) => {
+    const { value } = e.currentTarget;
+    const detailAddress = filter_specialCharacter(value);
+
+    setRecipientAddress((prevState) => ({
+      ...prevState,
+      detailAddress: detailAddress,
+    }));
+  };
+
+  const onSuccessCallback = () => {
+    window.location.reload();
+  };
+
+  const onClickModalButton = () => {
+    mct.alertHide();
+  };
+
+  const onAddressChangeHandler = async () => {
+    try {
+      const url = `/api/admin/members/${id}/address`;
+      const body = { address: recipientAddress };
+      const res = await putObjData(url, body);
+      console.log(res);
+      if (res.isDone) {
+        mct.alertShow('배송지 주소를 변경하였습니다.', onSuccessCallback);
+      } else {
+        mct.alertShow(`데이터 전송 실패\n${res.error}`);
+      }
+    } catch (err) {
+      alert(err);
+    }
+  };
+
   return (
     <>
       <div id={s.popup}>
@@ -188,7 +275,9 @@ export default function Popup_MemberDetailPage({ id }) {
                             <span>
                               <input
                                 type="date"
-                                value={tempValues.birthday || formValues.birthday}
+                                value={
+                                  tempValues.birthday || formValues.birthday
+                                }
                                 onChange={onInputChange}
                               />
                             </span>
@@ -223,11 +312,68 @@ export default function Popup_MemberDetailPage({ id }) {
                       </li>
                       <li className={`${s['t-row']} ${s['fullWidth']}`}>
                         <div className={s['t-box']}>
-                          <div className={`${s.innerBox} ${s.label}`}>
+                          <div
+                            className={`${s.innerBox} ${s.label} ${s.deliveryInput}`}
+                          >
                             <span>주소</span>
                           </div>
-                          <div className={`${s.innerBox} ${s.cont}`}>
-                            <span>{formValues.address?.street}</span>
+
+                          <div
+                            className={`${s.innerBox} ${s.cont} ${s.deliveryInput}`}
+                          >
+                            <DeliveryInput
+                              type={'text'}
+                              required={true}
+                              id={'address'}
+                              title={'주소 검색'}
+                              placeholder={'기본주소'}
+                              // errorMessage={errorMessage}
+                              addressStreet={formValues.address?.street}
+                              addedClassName={[
+                                'add-btn-section',
+                                'active-address',
+                              ]}
+                              disabled
+                              value={
+                                recipientAddress.street ||
+                                formValues.address?.street ||
+                                ''
+                              }
+                              setFormValues={setRecipientAddress}
+                              icon={
+                                formValues.street && (
+                                  <Tooltip
+                                    className={m.addressToolTip}
+                                    message={`${formValues.address.street}\n(우:${formValues.address.zipcode})`}
+                                    messagePosition={'right'}
+                                    theme={'white'}
+                                    device={'mobile'}
+                                  />
+                                )
+                              }
+                            >
+                              <WindowOpener
+                                url={'/popup/searchAddress'}
+                                bridge={onReceivePopupData}
+                              >
+                                <span className={`${m.btn} ${m.bigbtn}`}>
+                                  {formValues.city ? '재검색' : '주소검색'}
+                                </span>
+                              </WindowOpener>
+
+                              <label>
+                                <input
+                                  type="text"
+                                  id={'address-detailAddress'}
+                                  placeholder={'상세주소'}
+                                  value={recipientAddress.detailAddress}
+                                  onChange={onDetailAddressHandler}
+                                />
+                                <button onClick={onAddressChangeHandler}>
+                                  변경
+                                </button>
+                              </label>
+                            </DeliveryInput>
                           </div>
                         </div>
                       </li>
@@ -290,13 +436,24 @@ export default function Popup_MemberDetailPage({ id }) {
                           </div>
                         </div>
                       </li>
-                      <li className={`${s['t-row']} ${s['fullWidth']} ${s.multiLines}`}>
+                      <li
+                        className={`${s['t-row']} ${s['fullWidth']} ${s.multiLines}`}
+                      >
                         <div className={s['t-box']}>
                           <div className={`${s.innerBox} ${s.label}`}>
                             <span>반려견</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
-                            {formValues.dogNames?.length ? formValues.dogNames.map( (name, i) => <span className={s.dogName} key={`dogName-${i}`}>{name}</span>) : '등록된 반려견이 없습니다.'}
+                            {formValues.dogNames?.length
+                              ? formValues.dogNames.map((name, i) => (
+                                  <span
+                                    className={s.dogName}
+                                    key={`dogName-${i}`}
+                                  >
+                                    {name}
+                                  </span>
+                                ))
+                              : '등록된 반려견이 없습니다.'}
                           </div>
                         </div>
                       </li>
@@ -321,7 +478,9 @@ export default function Popup_MemberDetailPage({ id }) {
                             <span>마지막로그인</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
-                            <span>{transformDate(formValues.lastLoginDate, 'time')}</span>
+                            <span>
+                              {transformDate(formValues.lastLoginDate, 'time')}
+                            </span>
                           </div>
                         </div>
                       </li>
@@ -362,10 +521,12 @@ export default function Popup_MemberDetailPage({ id }) {
           setIsLoading={setIsLoading}
         />
       )}
+      {hasAlert && (
+        <Modal_global_alert onClick={onClickModalButton} background />
+      )}
     </>
   );
 }
-
 
 export async function getServerSideProps({ query }) {
   const { id } = query;
