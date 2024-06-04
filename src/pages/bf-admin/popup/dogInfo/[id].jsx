@@ -34,7 +34,7 @@ import { useSubscribeRecipeInfo } from '/util/hook/useSubscribeRecipeInfo';
 import { calcOneMealGramsWithRecipeInfo } from '/util/func/subscribe/calcOneMealGramsWithRecipeInfo';
 import { calcSubscribePrice } from '/util/func/subscribe/calcSubscribePrices';
 import { valid_isTheSameArray } from '/util/func/validation/validationPackage';
-import { postObjData } from '../../../api/reqData';
+import { patchObjData, postObjData } from '../../../api/reqData';
 import { ConfigProvider, DatePicker, Space } from 'antd';
 import dayjs from 'dayjs';
 
@@ -47,6 +47,10 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
   const [activeConfirmModal, setActiveConfirmModal] = useState(false);
   const [activeConfirmPlanChangeModal, setActiveConfirmPlanChangeModal] =
     useState(false);
+  const [
+    activeConfirmNextPaymentPriceChangeModal,
+    setActiveConfirmNextPaymentPriceChangeModal,
+  ] = useState(false);
   const [isLoading, setIsLoading] = useState({});
   const [formValues, setFormValues] = useState({});
   const [tempValues, setTempValues] = useState({});
@@ -56,7 +60,10 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
   const [nextPriceText, setNextPriceText] = useState(
     DATA?.subscribeDetailInfo.subscribeDto.nextPaymentPrice,
   );
-
+  const [originalPrice, setOriginalPrice] = useState(
+    DATA?.subscribeDetailInfo.subscribeDto.nextPaymentPrice.toLocaleString(),
+    null,
+  );
   const subscribeInfo = useSubscribeInfo(DATA?.dogDto.subscribeId);
   const currentPlanName = subscribeInfo?.info.planName;
   const subscribePlanInfo = useSubscribePlanInfo();
@@ -257,6 +264,7 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
     const filteredType = input.dataset.inputType;
     let filteredValue = value;
     console.log('input', input);
+    console.log('filteredType', filteredType);
 
     if (filteredType) {
       filteredValue = filter_emptyValue(value);
@@ -282,6 +290,10 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
         filteredValue = demicalNum
           ? filter_demicals(filteredValue, demicalNum)
           : filteredValue;
+      }
+      if (filteredType.indexOf('currency') >= 0) {
+        filteredValue = Number(filteredValue);
+        setOriginalPrice(Number(filteredValue).toLocaleString());
       }
     }
 
@@ -367,6 +379,52 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
           );
         }
       })();
+    }
+  };
+
+  //*** 다음 결제 금액 변경
+  const onSubmitNextPaymentPriceChange = async (confirm) => {
+    if (!confirm) {
+      return setActiveConfirmNextPaymentPriceChangeModal(false);
+    }
+
+    const body = {
+      newPaymentPrice: Number(formValues.nextPaymentPrice),
+    };
+
+    try {
+      setSubmitted(true);
+
+      const url = `/api/admin/${formValues.subscribeId}/nextPaymentPrice`;
+      const res = await patchObjData(url, body);
+
+      if (res.isDone) {
+        // mct.alertShow(
+        //   '변경이 완료되었습니다.',
+        onSuccessChangeSubscribeOrder();
+        // );
+      } else {
+        mct.alertShow(`데이터 전송 실패\n${res.error}`);
+        setSubmitted(false);
+      }
+      setActiveConfirmModal(false);
+    } catch (err) {
+      console.error('err: ', err);
+    }
+  };
+
+  const onChangeNextPaymentPriceHandler = async () => {
+    if (submitted) return;
+
+    // validation
+    if (formValues.nextPaymentPrice === '') {
+      mct.alertShow('다음 결제 금액을 입력해주세요.');
+      return;
+    } else if (Number(formValues.nextPaymentPrice) < 100) {
+      mct.alertShow('다음 결제 금액은 100원 이상이어야 합니다.');
+      return;
+    } else {
+      setActiveConfirmNextPaymentPriceChangeModal(true);
     }
   };
 
@@ -583,7 +641,7 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
     };
   };
 
-  // console.log('formValues', formValues);
+  console.log('formValues', formValues);
   // console.log('tempValues', tempValues);
   // console.log('setSelectedCategory', selectedCategory);
   // console.log('formValues.subscribeStatus', formValues.subscribeStatus);
@@ -787,7 +845,26 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
                             <span>다음 결제 금액</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
-                            <span>{formValues.nextPaymentPrice} 원</span>
+                            {/* <span>{formValues.nextPaymentPrice} 원</span> */}
+                            <input
+                              type="text"
+                              id="nextPaymentPrice"
+                              value={
+                                originalPrice || formValues.nextPaymentPrice
+                              }
+                              onChange={onInputChangeHandler}
+                              data-input-type={'number, demicals, currency'}
+                              className={`${s.nextPaymentPriceInput}`}
+                            ></input>
+                            <span>원</span>
+                            <button
+                              className={`admin_btn line point basic_s ${s.recipe_change_btn}`}
+                              onClick={() => {
+                                onChangeNextPaymentPriceHandler();
+                              }}
+                            >
+                              변경
+                            </button>
                           </div>
                         </div>
                       </li>
@@ -992,6 +1069,28 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
                 <>
                   <strong>{formValues.nextPaymentPrice}원</strong> --&gt;&nbsp;
                   <strong>{nextPriceText}원</strong>
+                  <br />
+                  다음 결제 금액이 변경됩니다.
+                </>
+              }
+            />
+          )}
+          {activeConfirmNextPaymentPriceChangeModal && (
+            <Modal_confirm
+              theme={'userPage'}
+              isConfirm={onSubmitNextPaymentPriceChange}
+              positionCenter
+              text={'다음 결제 금액을 변경하시겠습니까?'}
+              caution={
+                <>
+                  <strong>
+                    {DATA?.subscribeDetailInfo.subscribeDto.nextPaymentPrice.toLocaleString()}
+                    원
+                  </strong>
+                  --&gt;&nbsp;
+                  <strong>
+                    {formValues.nextPaymentPrice.toLocaleString()}원
+                  </strong>
                   <br />
                   다음 결제 금액이 변경됩니다.
                 </>

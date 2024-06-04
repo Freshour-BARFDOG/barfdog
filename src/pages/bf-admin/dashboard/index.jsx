@@ -101,7 +101,7 @@ export default function DashboardPage({ ga }) {
       const url = `/api/admin/dashBoard/stats?from=${date.from}&to=${date.to}&graphInterval=${graphInterval}`;
       const res = await getData(url);
       let DATA;
-      console.log('res.data~~~~~', res);
+      // console.log('res.data~~~~~', res);
 
       // 레시피 리스트 GET
       const getRecipeInfoApiUrl = '/api/recipes';
@@ -110,11 +110,11 @@ export default function DashboardPage({ ga }) {
         recipeInfoResponse.data?._embedded?.recipeListResponseDtoList;
       setRecipeList(recipeInfo);
 
-      console.log('res.recipeInfo!!!!!!', recipeInfo);
+      // console.log('res.recipeInfo!!!!!!', recipeInfo);
 
       if (res.data) {
         const data = res.data;
-        console.log('응답 성공~~~~~', res.data);
+        // console.log('응답 성공~~~~~', res.data);
 
         // ### 레시피별 매출액 없음 ###
         const isSalesByRecipeZero =
@@ -157,71 +157,6 @@ export default function DashboardPage({ ga }) {
             },
           );
         });
-
-        /////////////////////////////
-        // 1개 혹은 2개 레시피 조합
-        // const generateCombinations = (arr) => {
-        //   const result = [];
-        //   const f = (prefix, arr) => {
-        //     for (let i = 0; i < arr.length; i++) {
-        //       const combo = [...prefix, arr[i]];
-        //       if (combo.length <= 2) {
-        //         result.push(combo);
-        //       }
-        //       f(combo, arr.slice(i + 1));
-        //     }
-        //   };
-        //   f([], arr);
-        //   return result;
-        // };
-
-        // // Generate all possible combinations of recipe names up to two items
-        // const allCombinations = generateCombinations(
-        //   recipeInfo.map((recipe) => recipe.name),
-        // );
-        // // console.log('allCombinations', allCombinations);
-
-        // // Initialize subscriberByRecipe
-        // const subscriberByRecipe = Object.fromEntries(
-        //   recipeInfo.map((recipe) => [recipe.name, 0]),
-        // );
-
-        // // Add entries for combined recipes
-        // allCombinations.forEach((combo) => {
-        //   // 1개 레시피
-        //   if (combo.length === 1) {
-        //     const name = combo[0];
-        //     subscriberByRecipe[name] +=
-        //       data.subscribeStatsDto.subscriberByRecipeDtoList.find(
-        //         (item) => item.recipeName === name,
-        //       )?.count || 0;
-        //     // 2개 레시피
-        //   } else if (combo.length === 2) {
-        //     const combinedName = combo.join(', ');
-        //     const combinedCount =
-        //       data.subscribeStatsDto.subscriberByRecipeDtoList.find(
-        //         (item) => item.recipeName === combinedName,
-        //       )?.count || 0;
-
-        //     //~> 레시피 2개 : 각 레시피마다 +1 처리
-        //     if (combinedCount > 0) {
-        //       combo.forEach((name) => {
-        //         subscriberByRecipe[name] += 1;
-        //       });
-        //     }
-
-        //     //~> 레시피 2개 : 절반으로 나눈 후 반올림 처리
-        //     // combo.forEach((name) => {
-        //     //   subscriberByRecipe[name] += combinedCount / combo.length;
-        //     // });
-        //   }
-        // });
-
-        // // Round the subscriber counts
-        // Object.keys(subscriberByRecipe).forEach((key) => {
-        //   subscriberByRecipe[key] = Math.round(subscriberByRecipe[key]);
-        // });
-        // console.log('subscriberByRecipe>>>', subscriberByRecipe);
 
         DATA = {
           from: data.from,
@@ -311,6 +246,7 @@ export default function DashboardPage({ ga }) {
           // *** 구독 현황 ***
           subscribeStats: {
             totalSubscriberCount: data.subscribeStatsDto.totalSubscriberCount,
+            totalSubscribeCount: data.subscribeStatsDto.totalSubscribeCount,
             totalSubscribeSales: data.subscribeStatsDto.totalSubscribeSales,
             newSubscribeCount: data.subscribeStatsDto.newSubscribeCount,
             avgPaymentPrice: data.subscribeStatsDto.avgPaymentPrice,
@@ -480,7 +416,7 @@ export default function DashboardPage({ ga }) {
           },
         };
 
-        console.log('DATA~~~~', DATA);
+        // console.log('DATA~~~~', DATA);
         setInfo(DATA);
       }
     } catch (err) {
@@ -890,7 +826,13 @@ export default function DashboardPage({ ga }) {
                   <div className={s.box_section}>
                     <ul className={s.box}>
                       <li>
-                        <span>총 구독자 수</span>
+                        <span>구독 수</span>
+                        <span>
+                          <b>{info.subscribeStats?.totalSubscribeCount}</b> 명
+                        </span>
+                      </li>
+                      <li>
+                        <span>구독자 수</span>
                         <span>
                           <b>{info.subscribeStats?.totalSubscriberCount}</b> 명
                         </span>
@@ -1153,29 +1095,6 @@ export default function DashboardPage({ ga }) {
                 </div>
               ) : (
                 <div className={s['cont-section']}>
-                  {/* <div className={s['payment-info']}>
-                    <ul>
-                      <li>
-                        <span>일반 결제</span>
-                        <span>
-                          <b>{info.newOrderInfo?.general}</b>건
-                        </span>
-                      </li>
-                      <li>
-                        <span>신규 구독 결제</span>
-                        <span>
-                          <b>{info.newOrderInfo?.subscribe}</b>건
-                        </span>
-                      </li>
-                      <li>
-                        <span>총 구독 결제</span>
-                        <span>
-                          <b>{info.newOrderInfo?.subscribe}</b>건
-                        </span>
-                      </li>
-                    </ul>
-                  </div> */}
-
                   <div className={s.chart_container}>
                     <OrderCountChart
                       chartData={info.graphDto?.orderCountByDate}
