@@ -168,7 +168,9 @@ export default function MainPage({ data }) {
             {/* inner end */}
           </section>
         </Wrapper>
-        release TEST
+        확정된 release TEST 추가 변경사항이 생겼어요!
+        <br />
+        이후에 update에서 다시 작업해서 2차 작업이 마무리 되고, PR 올렸어요.
         {/* 바프생식 바뀌는 점 */}
         <Wrapper>
           <section className={s.barfgood}>
