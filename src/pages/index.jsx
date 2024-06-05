@@ -134,7 +134,6 @@ export default function MainPage({ data }) {
             </div>
           </section>
         </Wrapper>
-
         {/* 바프생식이란? */}
         <Wrapper bgColor="#F9F2EC">
           <section className={s.barfraw}>
@@ -168,6 +167,7 @@ export default function MainPage({ data }) {
             {/* inner end */}
           </section>
         </Wrapper>
+        release TEST
         {/* 바프생식 바뀌는 점 */}
         <Wrapper>
           <section className={s.barfgood}>
