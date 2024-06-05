@@ -199,6 +199,7 @@ export default function Popup_MemberDetailPage({ id }) {
         ...prevState,
         street: address,
         zipcode: zonecode,
+        city: sido,
       }));
     }
   };
