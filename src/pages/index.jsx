@@ -122,7 +122,6 @@ export default function MainPage({ data }) {
           {/* 스와이프주석 */}
           <Swiper_main data={data?.mainBannerDtoList} isMobile={isMobile} />
         </Wrapper>
-        웹리뉴얼 1차 마무리
         {/* 섹션1 레시피 소개*/}
         <Wrapper>
           <section className={`${s.recipe_info} $`}>
