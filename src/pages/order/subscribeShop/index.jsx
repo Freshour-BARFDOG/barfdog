@@ -74,7 +74,7 @@ export default function RegisterSubscribeInfoPage({ data }) {
     [recipeInfo.loading, subscribePlanInfo.loading, data],
   );
 
-  console.log('data.surveyInfo>>>', data.surveyInfo);
+  // console.log('data.surveyInfo>>>', data.surveyInfo);
 
   const initialForm = {
     plan: data.surveyInfo.plan || null,

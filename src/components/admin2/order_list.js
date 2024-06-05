@@ -428,33 +428,63 @@ const filterDataSubscribe = (data, search) => {
       let gramRecipe2_tmp = 0.0;
       let gramRecipe3_tmp = 0.0;
       let gramRecipe4_tmp = 0.0;
+      let gramRecipe5_tmp = 0.0;
+      let gramRecipe6_tmp = 0.0;
+      let gramRecipe7_tmp = 0.0;
+      let gramRecipe8_tmp = 0.0;
       let totalGramRecipe1_tmp = 0.0;
       let totalGramRecipe2_tmp = 0.0;
       let totalGramRecipe3_tmp = 0.0;
       let totalGramRecipe4_tmp = 0.0;
+      let totalGramRecipe5_tmp = 0.0;
+      let totalGramRecipe6_tmp = 0.0;
+      let totalGramRecipe7_tmp = 0.0;
+      let totalGramRecipe8_tmp = 0.0;
 
       for (let j = 0; j < data_tmp.recipeName.length; j++) {
         const recipe_tmp = data_tmp.recipeName[j];
         const gramsRecipe = data_tmp.oneMealGramsPerRecipe[j];
-        if (recipe_tmp === 'STARTER PREMIUM') {
+        if (
+          recipe_tmp === 'STARTER PREMIUM +' ||
+          recipe_tmp === 'STARTER PREMIUM'
+        ) {
           gramRecipe1_tmp = gramsRecipe;
           totalGramRecipe1_tmp = (gramsRecipe * countPacks) / typeCountYYL;
-        } else if (recipe_tmp === 'TURKEY&BEEF') {
+        } else if (
+          recipe_tmp === 'TURKEY&BEEF +' ||
+          recipe_tmp === 'TURKEY&BEEF'
+        ) {
           gramRecipe2_tmp = gramsRecipe;
           totalGramRecipe2_tmp = (gramsRecipe * countPacks) / typeCountYYL;
-        } else if (recipe_tmp === 'DUCK&LAMB') {
+        } else if (recipe_tmp === 'DUCK&LAMB +' || recipe_tmp === 'DUCK&LAMB') {
           gramRecipe3_tmp = gramsRecipe;
           totalGramRecipe3_tmp = (gramsRecipe * countPacks) / typeCountYYL;
-        } else if (recipe_tmp === 'LAMB&BEEF') {
+        } else if (recipe_tmp === 'LAMB&BEEF +' || recipe_tmp === 'LAMB&BEEF') {
           gramRecipe4_tmp = gramsRecipe;
           totalGramRecipe4_tmp = (gramsRecipe * countPacks) / typeCountYYL;
+        } else if (recipe_tmp === 'Premium CHICKEN') {
+          gramRecipe5_tmp = gramsRecipe;
+          totalGramRecipe5_tmp = (gramsRecipe * countPacks) / typeCountYYL;
+        } else if (recipe_tmp === 'Premium TURKEY') {
+          gramRecipe6_tmp = gramsRecipe;
+          totalGramRecipe6_tmp = (gramsRecipe * countPacks) / typeCountYYL;
+        } else if (recipe_tmp === 'Premium LAMB') {
+          gramRecipe7_tmp = gramsRecipe;
+          totalGramRecipe7_tmp = (gramsRecipe * countPacks) / typeCountYYL;
+        } else if (recipe_tmp === 'Premium BEEF') {
+          gramRecipe8_tmp = gramsRecipe;
+          totalGramRecipe8_tmp = (gramsRecipe * countPacks) / typeCountYYL;
         }
       }
       let totalGramRecipe_tmp =
         totalGramRecipe1_tmp +
         totalGramRecipe2_tmp +
         totalGramRecipe3_tmp +
-        totalGramRecipe4_tmp;
+        totalGramRecipe4_tmp +
+        totalGramRecipe5_tmp +
+        totalGramRecipe6_tmp +
+        totalGramRecipe7_tmp +
+        totalGramRecipe8_tmp;
 
       // 석범이꺼
       let gramRecipe1_seok_tmp = 0.0;
@@ -573,6 +603,10 @@ const filterDataSubscribe = (data, search) => {
             gramRecipe2: gramRecipe2_tmp < 1e-12 ? null : gramRecipe2_tmp,
             gramRecipe3: gramRecipe3_tmp < 1e-12 ? null : gramRecipe3_tmp,
             gramRecipe4: gramRecipe4_tmp < 1e-12 ? null : gramRecipe4_tmp,
+            gramRecipe5: gramRecipe5_tmp < 1e-12 ? null : gramRecipe5_tmp,
+            gramRecipe6: gramRecipe6_tmp < 1e-12 ? null : gramRecipe6_tmp,
+            gramRecipe7: gramRecipe7_tmp < 1e-12 ? null : gramRecipe7_tmp,
+            gramRecipe8: gramRecipe8_tmp < 1e-12 ? null : gramRecipe8_tmp,
             totalGramRecipe1:
               totalGramRecipe1_tmp < 1e-12 ? null : totalGramRecipe1_tmp,
             totalGramRecipe2:
@@ -581,6 +615,14 @@ const filterDataSubscribe = (data, search) => {
               totalGramRecipe3_tmp < 1e-12 ? null : totalGramRecipe3_tmp,
             totalGramRecipe4:
               totalGramRecipe4_tmp < 1e-12 ? null : totalGramRecipe4_tmp,
+            totalGramRecipe5:
+              totalGramRecipe5_tmp < 1e-12 ? null : totalGramRecipe5_tmp,
+            totalGramRecipe6:
+              totalGramRecipe6_tmp < 1e-12 ? null : totalGramRecipe6_tmp,
+            totalGramRecipe7:
+              totalGramRecipe7_tmp < 1e-12 ? null : totalGramRecipe7_tmp,
+            totalGramRecipe8:
+              totalGramRecipe8_tmp < 1e-12 ? null : totalGramRecipe8_tmp,
           },
         ],
         children3: [
@@ -1076,6 +1118,7 @@ const rowExpandable = (record) => record.children1?.length > 0;
 
 const ProductList = ({ search }) => {
   const [dataBase, setDataBase] = useState([]);
+  const [recipeList, setRecipeList] = useState([]);
   const [dateStart, setDateStart] = useState(dayjs().format('YYYYMMDDHHmm'));
   const [dateEnd, setDateEnd] = useState(dayjs().format('YYYYMMDDHHmm'));
   const [isLoading, setIsLoading] = useState(false);
@@ -1112,12 +1155,24 @@ const ProductList = ({ search }) => {
             const url = `api/admin/new/orders/searchBetween/${tmp_strDate}/${tmp_endDate}`;
             const res = await getData(url);
 
-            if (res.status === 200) {
+            const recipeListUrl = `api/recipes`;
+            const recipeListResponse = await getData(recipeListUrl);
+
+            if (res.status === 200 && recipeListResponse.status === 200) {
               const dataToAssign = res.data._embedded?.newOrderDtoList ?? []; // 주어진 데이터
               setDataBase(dataToAssign); // 데이터베이스에 할당
-              setIsLoading(false);
-            }
+              // console.log('dataToAssign>>>', dataToAssign);
 
+              const recipeList =
+                recipeListResponse.data._embedded.recipeListResponseDtoList;
+              setRecipeList(recipeList);
+              // console.log('recipeList>>>', recipeList);
+              setIsLoading(false);
+            } else if (recipeListResponse.status !== 200) {
+              alert('레시피 데이터를 조회할 수 없습니다.');
+            } else if (res.status !== 200) {
+              alert('데이터를 조회할 수 없습니다.');
+            }
             // if (res.status === 200) {
             //   const data = res.data;
             //   const orderItemInfoList = data.orderItemAndOptionDtoList.map((l) => l.orderItemDto);
@@ -1175,14 +1230,22 @@ const ProductList = ({ search }) => {
         팩수: item.children2[0].countPacks,
         종류: item.children2[0].typeCountYYL,
         '레시피 총량': item.children2[0].totalGramRecipes,
-        '레시피1 개당g': item.children2[0].gramRecipe1,
-        '레시피2 개당g': item.children2[0].gramRecipe2,
-        '레시피3 개당g': item.children2[0].gramRecipe3,
-        '레시피4 개당g': item.children2[0].gramRecipe4,
-        '레시피1 총량': item.children2[0].totalGramRecipe1,
-        '레시피2 총량': item.children2[0].totalGramRecipe2,
-        '레시피3 총량': item.children2[0].totalGramRecipe3,
-        '레시피4 총량': item.children2[0].totalGramRecipe4,
+        'SP 개당g': item.children2[0].gramRecipe1,
+        'TB 개당g': item.children2[0].gramRecipe2,
+        'DL 개당g': item.children2[0].gramRecipe3,
+        'LB 개당g': item.children2[0].gramRecipe4,
+        'PC 개당g': item.children2[0].gramRecipe5,
+        'PT 개당g': item.children2[0].gramRecipe6,
+        'PL 개당g': item.children2[0].gramRecipe7,
+        'PB 개당g': item.children2[0].gramRecipe8,
+        'SP 총량': item.children2[0].totalGramRecipe1,
+        'TB 총량': item.children2[0].totalGramRecipe2,
+        'DL 총량': item.children2[0].totalGramRecipe3,
+        'LB 총량': item.children2[0].totalGramRecipe4,
+        'PC 총량': item.children2[0].totalGramRecipe5,
+        'PT 총량': item.children2[0].totalGramRecipe6,
+        'PL 총량': item.children2[0].totalGramRecipe7,
+        'PB 총량': item.children2[0].totalGramRecipe8,
         // "(석범)레시피 총량": item.children3[0].totalGramRecipes,
         // "(석범)레시피1 개당g": item.children3[0].gramRecipe1,
         // "(석범)레시피2 개당g": item.children3[0].gramRecipe2,
@@ -1265,7 +1328,6 @@ const ProductList = ({ search }) => {
   let filteredData = [];
   if (search.searchTypeGenOrSub === 'general') {
     filteredData = filterDataGeneral(dataBase, search);
-
     return (
       <div className="px-8 pt-5">
         <>
@@ -1274,7 +1336,7 @@ const ProductList = ({ search }) => {
             icon={<DownloadOutlined />}
             onClick={() => downloadExcel(filteredData)}
           >
-            액셀 다운로드
+            엑셀 다운로드
           </Button>
         </>
 
@@ -1297,7 +1359,7 @@ const ProductList = ({ search }) => {
     );
   } else if (search.searchTypeGenOrSub === 'subscribe') {
     filteredData = filterDataSubscribe(dataBase, search);
-
+    // console.log('filteredData>>>', filteredData);
     return (
       <div className="px-8 pt-5">
         <>
@@ -1306,7 +1368,7 @@ const ProductList = ({ search }) => {
             icon={<DownloadOutlined />}
             onClick={() => downloadExcel(filteredData)}
           >
-            액셀 다운로드
+            엑셀 다운로드
           </Button>
         </>
 
