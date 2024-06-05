@@ -122,7 +122,6 @@ export default function MainPage({ data }) {
           {/* 스와이프주석 */}
           <Swiper_main data={data?.mainBannerDtoList} isMobile={isMobile} />
         </Wrapper>
-
         {/* 섹션1 레시피 소개*/}
         <Wrapper>
           <section className={`${s.recipe_info} $`}>
@@ -135,7 +134,7 @@ export default function MainPage({ data }) {
             </div>
           </section>
         </Wrapper>
-
+        release TEST
         {/* 바프생식이란? */}
         <Wrapper bgColor="#F9F2EC">
           <section className={s.barfraw}>
@@ -169,7 +168,6 @@ export default function MainPage({ data }) {
             {/* inner end */}
           </section>
         </Wrapper>
-
         {/* 바프생식 바뀌는 점 */}
         <Wrapper>
           <section className={s.barfgood}>
@@ -216,7 +214,6 @@ export default function MainPage({ data }) {
             </ul>
           </section>
         </Wrapper>
-
         {/* 바프독 선택해야하는 이유 */}
         <Wrapper>
           <section className={s.difference}>
@@ -319,7 +316,6 @@ export default function MainPage({ data }) {
             </div> */}
           </section>
         </Wrapper>
-
         {/* 차별점 그림 3개  */}
         <Wrapper bgColor="#F9F2EC">
           <div className={s.difference2_inner}>
@@ -392,7 +388,6 @@ export default function MainPage({ data }) {
             </ul>
           </section>
         </Wrapper>
-
         {/* 프리미엄바프 사진 설명 */}
         <Wrapper>
           <section className={s.difference3}>
@@ -447,7 +442,6 @@ export default function MainPage({ data }) {
             </div>
           </section>
         </Wrapper>
-
         {/* 고민 */}
         <Wrapper bgColor="#F9F2EC">
           <section
@@ -547,7 +541,6 @@ export default function MainPage({ data }) {
             </div>
           </section>
         </Wrapper>
-
         {/* 리뷰 후기 */}
         <Wrapper>
           <section className={s.review}>
@@ -564,7 +557,6 @@ export default function MainPage({ data }) {
             </div>
           </section>
         </Wrapper>
-
         {/* 이용방법 */}
         <Wrapper bgColor="#F9F2EC">
           <section className={s.Howtouse}>
@@ -730,7 +722,6 @@ export default function MainPage({ data }) {
             </div>
           </section>
         </Wrapper>
-
         {/* SNS */}
         <Wrapper>
           <section className={s.sns}>
