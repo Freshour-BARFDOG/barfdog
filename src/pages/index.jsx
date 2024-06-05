@@ -134,7 +134,7 @@ export default function MainPage({ data }) {
             </div>
           </section>
         </Wrapper>
-
+        renewal TEST
         {/* 바프생식이란? */}
         <Wrapper bgColor="#F9F2EC">
           <section className={s.barfraw}>
