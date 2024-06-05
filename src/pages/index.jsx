@@ -167,10 +167,6 @@ export default function MainPage({ data }) {
             {/* inner end */}
           </section>
         </Wrapper>
-        3차 웹리뉴얼 작업 도중에 release 에서 추가 요청사항이 들어왔어요! 얼른
-        해결 후 PR 올렸어요!
-        <br />
-        확정된 release TEST 추가 변경사항이 생겼어요!
         {/* 바프생식 바뀌는 점 */}
         <Wrapper>
           <section className={s.barfgood}>
