@@ -37,6 +37,7 @@ import { valid_isTheSameArray } from '/util/func/validation/validationPackage';
 import { patchObjData, postObjData } from '../../../api/reqData';
 import { ConfigProvider, DatePicker, Space } from 'antd';
 import dayjs from 'dayjs';
+import { originSubscribeIdList } from '/util/func/subscribe/originSubscribeIdList';
 
 export default function Popup_DogDetailPage({ DATA, dogIdx }) {
   // console.log('!!!!!!DATA!!!!!!!', DATA);
@@ -57,6 +58,7 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
   const [modalMessage, setModalMessage] = useState('');
   const [submitState, setSubmitState] = useState(null);
   const [submitted, setSubmitted] = useState(false);
+  const [isOriginSubscriber, setIsOriginSubscriber] = useState(false);
   const [nextPriceText, setNextPriceText] = useState(
     DATA?.subscribeDetailInfo.subscribeDto.nextPaymentPrice,
   );
@@ -72,6 +74,9 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
   // console.log('subscribePlanInfo>>>>>', subscribePlanInfo);
   // console.log('recipeInfo>>>>>', recipeInfo);
   // console.log('subscribeInfo>>>>>', subscribeInfo);
+  // console.log(' DATA?.subscribeDetailInfo>>>>>', DATA?.subscribeDetailInfo);
+  // console.log('DATA.recipesDetailInfo>>>>>', DATA.recipesDetailInfo);
+  // console.log('isOriginSubscriber>>>>>', isOriginSubscriber);
   // console.log('DATA.dogDto.subscribeId>>>>>', DATA.dogDto.subscribeId);
 
   const [oneMealGramsForm, setOneMealGramsForm] = useState({
@@ -85,12 +90,16 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
     nextPaymentPrice: null,
     recipeNameList: DATA.recipes || [],
   });
+  // console.log('selectedCategory>>>>>', selectedCategory);
+  // console.log('DATA.recipes>>>>>', DATA);
+  // console.log('recipeInfo>>>>>', recipeInfo);
 
   const currentOneMealGrams = useCallback(
     calcOneMealGramsWithRecipeInfo({
       selectedRecipeIds: selectedCategory.recipeIdList,
       allRecipeInfos: recipeInfo?.data || [],
       oneDayRecommendKcal: DATA.surveyInfoData.foodAnalysis.oneDayRecommendKcal,
+      isOriginSubscriber,
     }).map((recipe) => recipe.oneMealGram),
     [recipeInfo.loading, subscribePlanInfo.loading, DATA],
   );
@@ -175,6 +184,9 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
           caution: DATA.dogDto.caution,
         };
         setFormValues(initialValues);
+        //! [추가] 기존 구독자인지 확인
+        originSubscribeIdList.includes(DATA.dogDto.subscribeId) &&
+          setIsOriginSubscriber(true);
       } catch (err) {
         console.error(err);
         console.error(err.response);
@@ -208,10 +220,19 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
         )
         .map((recipe) => recipe.pricePerGram);
 
+      const currentRecipeInfos = DATA.recipesDetailInfo
+        ?.filter(
+          (recipe) => selectedCategory.recipeIdList.indexOf(recipe.id) >= 0,
+        )
+        .map((recipe) => recipe.name);
+
+      // console.log('currentRecipeInfos>>>', currentRecipeInfos);
+
       const nextOneMealGrams = calcOneMealGramsWithRecipeInfo({
         selectedRecipeIds: selectedCategory.recipeIdList,
         allRecipeInfos: recipeInfo.data,
         oneDayRecommendKcal: oneDayRecommendKcal,
+        isOriginSubscriber,
       }).map((recipe) => recipe.oneMealGram);
 
       const isSameArray = valid_isTheSameArray(
@@ -232,11 +253,14 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
         oneMealGrams: nextOneMealGrams,
         planName,
         pricePerGrams,
+        isOriginSubscriber,
+        recipeNameList: currentRecipeInfos,
       });
     },
     [
       selectedCategory.plan,
       selectedCategory.recipeIdList,
+      selectedCategory.recipeNameList,
       recipeInfo,
       subscribePlanInfo,
       DATA,
@@ -1124,6 +1148,7 @@ export async function getServerSideProps({ req, query }) {
   const dogDto = dogData?.dogDto || null;
   const plan = dogData?.plan || null;
   const recipes = dogData?.recipes || null;
+  console.log('dogInfoRes', dogInfoRes);
 
   // DATA: Recipes
   const getRecipeInfoApiUrl = `/api/recipes`;

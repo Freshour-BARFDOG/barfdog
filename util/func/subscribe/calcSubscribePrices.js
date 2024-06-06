@@ -46,11 +46,14 @@ export const calcSubscribeItemPrice = ({
       case 'LAMB&BEEF +':
         pricePerGram = 45.414;
         break;
+      default:
+        pricePerGram = recipe.pricePerGram;
     }
   } else {
     pricePerGram = recipe.pricePerGram; // 1g 당 가격 상수 ( 어드민에서 입력한 값 )
   }
-
+  // console.log('pricePerGram 변경 전>>>', recipe.pricePerGram);
+  // console.log('pricePerGram 변경 후>>>', pricePerGram);
   // console.log('pricePerGram>>>', pricePerGram);
 
   const perPackPrice = pricePerGram * recipe.oneMealGram;
