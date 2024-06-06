@@ -54,6 +54,8 @@ export const calcOneMealGramsWithRecipeInfo = ({
         case 'LAMB&BEEF +':
           kcalPerGram = 1.55097;
           break;
+        default:
+          kcalPerGram = recipe.kcalPerGram;
       }
     } else {
       kcalPerGram = recipe.kcalPerGram;
