@@ -110,7 +110,24 @@ export default function SingleItemDetailPage({ data }) {
       const res = await postUserObjData(postDataApiUrl, body);
       // console.log(res);
       if (res.isDone) {
-        onActiveCartShortcutModal(thisButtonArea);
+        // 전환 스크립트 설정
+        const script1 = document.createElement('script');
+        script1.src = '//wcs.naver.net/wcslog.js';
+        script1.async = true;
+        document.body.appendChild(script1);
+
+        const script2 = document.createElement('script');
+        script2.type = 'text/javascript';
+        script2.innerHTML = `
+              var _nasa = {};
+              if (window.wcs) _nasa["cnv"] = wcs.cnv("3", "1"); // 전환유형 : 장바구니 담기, 전환가치 
+            `;
+        document.body.appendChild(script2);
+
+        // 전환 스크립트가 작동할 시간을 주기 위해 잠시 대기
+        setTimeout(() => {
+          onActiveCartShortcutModal(thisButtonArea);
+        }, 500); // 0.5초 대기
       } else {
         alert(`${res.error}`);
       }
@@ -212,6 +229,7 @@ export default function SingleItemDetailPage({ data }) {
               delivery: data?.delivery,
               minQuantity: minItemQuantity,
               maxQuantity: maxItemQuantity,
+              opt: data?.opt,
             }}
             formValues={formValues}
             setFormValues={setFormValues}
