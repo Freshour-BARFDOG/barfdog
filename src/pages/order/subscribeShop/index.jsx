@@ -28,6 +28,7 @@ import { useSubscribeRecipeInfo } from '/util/hook/useSubscribeRecipeInfo';
 import { calcOneMealGramsWithRecipeInfo } from '/util/func/subscribe/calcOneMealGramsWithRecipeInfo';
 import { calcSubscribePrice } from '/util/func/subscribe/calcSubscribePrices';
 import { convertFixedNumberByOneDayRecommendKcal } from '../../../../util/func/subscribe/convertFixedNumberByOneDayRecommendKcal';
+import { originSubscribeIdList } from '/util/func/subscribe/originSubscribeIdList';
 
 export default function RegisterSubscribeInfoPage({ data }) {
   const subscribePlanInfo = useSubscribePlanInfo();
@@ -70,6 +71,7 @@ export default function RegisterSubscribeInfoPage({ data }) {
       selectedRecipeIds: currentRecipeIds,
       allRecipeInfos: recipeInfo?.data || [],
       oneDayRecommendKcal: info.foodAnalysis.oneDayRecommendKcal,
+      isOriginSubscriber,
     }).map((recipe) => recipe.oneMealGram),
     [recipeInfo.loading, subscribePlanInfo.loading, data],
   );
@@ -95,6 +97,17 @@ export default function RegisterSubscribeInfoPage({ data }) {
     current: [],
     next: [],
   });
+  const [isOriginSubscriber, setIsOriginSubscriber] = useState(false);
+
+  useEffect(() => {
+    //! [추가] 기존 구독자인지 확인
+    originSubscribeIdList.includes(info.subscribeId) &&
+      setIsOriginSubscriber(true);
+  }, []);
+
+  // console.log(info.subscribeId);
+  // console.log(isOriginSubscriber);
+
   useEffect(() => {
     if (oneMealGramsForm.current.length === 0) {
       setOneMealGramsForm((prevState) => ({
@@ -118,6 +131,7 @@ export default function RegisterSubscribeInfoPage({ data }) {
     }, fullscreenLoadingDuration);
   }, [subscribePlanInfo.loading]);
 
+  //*** 구독플랜 금액 계산
   const calcSubscribePlanPaymentPrice = useCallback(
     (planName) => {
       if (!form.recipeIdList[0] || !planName || !recipeInfo.data) {
@@ -132,10 +146,14 @@ export default function RegisterSubscribeInfoPage({ data }) {
       const pricePerGrams = info.recipeInfoList
         ?.filter((recipe) => form.recipeIdList.indexOf(recipe.id) >= 0)
         .map((recipe) => recipe.pricePerGram);
+      const currentRecipeInfos = info.recipeInfoList
+        ?.filter((recipe) => form.recipeIdList.indexOf(recipe.id) >= 0)
+        .map((recipe) => recipe.name);
       const nextOneMealGrams = calcOneMealGramsWithRecipeInfo({
         selectedRecipeIds: form.recipeIdList,
         allRecipeInfos: recipeInfo.data,
         oneDayRecommendKcal: oneDayRecommendKcal,
+        isOriginSubscriber,
       }).map((recipe) => recipe.oneMealGram);
 
       const isSameArray = valid_isTheSameArray(
@@ -155,6 +173,8 @@ export default function RegisterSubscribeInfoPage({ data }) {
         oneMealGrams: nextOneMealGrams,
         planName,
         pricePerGrams,
+        isOriginSubscriber,
+        recipeNameList: currentRecipeInfos,
       });
     },
     [form.plan, form.recipeIdList, recipeInfo, subscribePlanInfo],

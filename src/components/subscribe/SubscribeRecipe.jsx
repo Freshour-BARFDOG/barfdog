@@ -71,7 +71,6 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
   const [activeConfirmModal, setActiveConfirmModal] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [selectedIdList, setSelectedIdList] = useState([]);
-  // const [originSelectedIdList, setOriginSelectedIdList] = useState([]);
   const [isOriginSubscriber, setIsOriginSubscriber] = useState(false);
 
   // // console.log(selectedRadio)
