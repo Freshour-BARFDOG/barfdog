@@ -444,7 +444,7 @@ export async function getServerSideProps({ req, query }) {
       const apiUrl = `/api/recipes/${recipeId}`;
       const res = await getDataSSR(req, apiUrl);
       const data = res.data;
-      console.log('recipeDatas>>>> ', data);
+      // console.log('recipeDatas>>>> ', data);
       if (data) {
         recipesDetailInfo.push({
           ...data,
