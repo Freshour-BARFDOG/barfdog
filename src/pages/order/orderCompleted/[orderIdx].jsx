@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MetaTitle from '@src/components/atoms/MetaTitle';
@@ -8,6 +8,29 @@ import Link from 'next/link';
 import { getDataSSR } from '/src/pages/api/reqData';
 
 function OrderCompletedPage(props) {
+  const [orderPrice, setOrderPrice] = useState(0);
+
+  useEffect(() => {
+    // Naver Analytics Script
+    const script1 = document.createElement('script');
+    script1.src = '//wcs.naver.net/wcslog.js';
+    script1.async = true;
+    document.body.appendChild(script1);
+
+    const script2 = document.createElement('script');
+    script2.type = 'text/javascript';
+    script2.innerHTML = `
+      var _nasa = {};
+      if (window.wcs) _nasa["cnv"] = wcs.cnv("1", "${props.orderPrice}"); // 전환유형, 전환가치
+    `;
+    document.body.appendChild(script2);
+
+    return () => {
+      document.body.removeChild(script1);
+      document.body.removeChild(script2);
+    };
+  }, []);
+
   return (
     <>
       <MetaTitle title="일반상품 주문완료" />
@@ -90,10 +113,12 @@ export async function getServerSideProps(ctx) {
   let orderItemValue = null;
   let address = null;
   let arrivalDate = null;
+  let orderPrice = null;
 
   const getApiUrl = `/api/orders/${orderIdx}/general`;
   let res = await getDataSSR(req, getApiUrl);
   const data = res?.data || null;
+  // console.log(data);
   if (data) {
     const itemList = data.orderItemDtoList || [];
     orderItemValue = `${itemList[0].itemName} ${
@@ -101,7 +126,10 @@ export async function getServerSideProps(ctx) {
     }`;
     address = `${data.orderDto.street} ${data.orderDto.detailAddress}`;
     arrivalDate = data.orderDto.arrivalDate;
+    orderPrice = data.orderDto.orderPrice;
   }
 
-  return { props: { orderIdx, orderItemValue, address, arrivalDate } };
+  return {
+    props: { orderIdx, orderItemValue, address, arrivalDate, orderPrice },
+  };
 }
