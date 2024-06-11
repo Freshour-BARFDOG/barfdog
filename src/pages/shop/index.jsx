@@ -238,6 +238,18 @@ export default function ShopPage() {
                     <option value={itemSortQueryType.SALEAMOUNT}>
                       {itemSortQueryType.KOR.SALEAMOUNT}
                     </option>
+                    {/* <option value={itemSortQueryType.LOWPRICE}>
+                      {itemSortQueryType.KOR.LOWPRICE}
+                    </option>
+                    <option value={itemSortQueryType.HIGHPRICE}>
+                      {itemSortQueryType.KOR.HIGHPRICE}
+                    </option>
+                    <option value={itemSortQueryType.MOSTREVIEWED}>
+                      {itemSortQueryType.KOR.MOSTREVIEWED}
+                    </option>
+                    <option value={itemSortQueryType.SCORE}>
+                      {itemSortQueryType.KOR.SCORE}
+                    </option> */}
                   </select>
                 </div>
               </div>
