@@ -5,52 +5,156 @@
 
 #shop-optionBar {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  width: 100%;
+  // bottom: 40%;
+  // left: 0;
+  // right: 0;
+  // top: 0;
   background-color: #fff;
-  transition: transform 0.3s var(--transition-cubic);
-  transform: translateY(calc(100% - rem(10)));
-  border-top: rem(1) solid var(--color-main);
+  // transition: transform 0.3s var(--transition-cubic);
+  // transform: translateX(calc(100% - rem(10)));
+  // border-left: rem(1) solid var(--color-main);
+  border-bottom: rem(1) solid var(--color-main);
+  // border-radius: rem(20);
+  min-height: rem(100);
+  overflow-y: auto;
   z-index: $shopOptionBar;
   &.active {
-    transform: translateY(0);
+    // transform: translateX(0);
+  }
+}
+
+.product_info {
+  display: flex;
+  justify-content: space-between !important;
+  align-items: center;
+  // close
+  svg {
+    width: rem(40);
+    height: rem(40);
+    margin-right: rem(20);
+    fill: var(--color-line-01);
+    cursor: pointer;
+  }
+  .spinner_wrapper {
+    display: flex;
+    justify-content: center;
+    width: rem(80);
+    svg {
+      fill: var(--color-main) !important;
+    }
+  }
+  .image {
+    padding: rem(20) 0;
+    display: flex;
+
+    .product_info_text {
+      display: flex;
+      flex-direction: column;
+      padding: rem(10) rem(20);
+
+      .product_name {
+        font-size: rem(22);
+        font-weight: bold;
+      }
+      .product_original_price {
+        font-size: rem(20);
+        font-weight: bold;
+        color: var(--color-main);
+      }
+    }
+  }
+}
+
+// 탭
+.tab_container {
+  ul {
+    display: flex;
+
+    li {
+      background-color: grey;
+      width: rem(300);
+      padding: rem(20);
+      color: white;
+      text-align: center;
+    }
   }
 }
 
 .optionBar-visibility-button {
   font-size: rem(16);
   position: absolute;
-  top: 0;
-  left: 50%;
+  top: 60%;
+  // top: 0;
+  left: -3%;
   color: #fff;
   background-color: var(--color-main);
-  padding: rem(10);
+  padding: rem(5);
   transform: translateX(-50%) translateY(-100%);
   width: 100%;
-  border-radius: rem(4) rem(4) 0 0;
-  max-width: rem(240);
+  border-radius: rem(4);
+  max-width: rem(70);
+  height: rem(100);
+  text-align: left;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  gap: rem(5);
+  svg {
+    width: rem(30);
+    height: rem(30);
+  }
 }
 
 .container {
-  padding: rem(20) 0 rem(30);
-  display: grid;
-  gap: rem(20);
-  align-items: center;
+  .container_info {
+    display: flex;
+    justify-content: space-between;
+    section {
+      padding-right: rem(40);
+      width: rem(600);
+    }
+    .container_select_wrapper {
+      border-right: rem(1) solid var(--color-line-03);
+      display: flex;
+      flex-direction: column;
+      gap: rem(20);
+      padding-right: rem(60);
+      margin-bottom: rem(20);
+      width: rem(600);
+      .container_select_input {
+        display: flex;
+        gap: rem(20);
+        flex-direction: column;
+        .quantity_input_wrapper {
+          div {
+            max-width: rem(600) !important;
+          }
+        }
+        .title_text {
+          font-weight: bold;
+          margin: rem(10) 0;
+        }
+      }
+    }
+  }
+
+  z-index: 1;
 }
 
 .selector {
   width: 100%;
   max-width: rem(640);
   height: rem(38) !important;
-
   select {
-    padding-left: rem(10);
     width: 100%;
     min-width: initial;
     font-size: rem(16);
     height: rem(38) !important;
     background-position-y: center;
+    padding-left: rem(10);
+    border: rem(1) solid #909090;
+    border-radius: rem(4);
   }
 }
 
@@ -82,7 +186,9 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: rem(4);
+  gap: rem(10);
+  margin-bottom: rem(10);
+  padding-right: rem(40);
   .title {
     font-size: rem(14);
   }
@@ -95,7 +201,18 @@
   }
 }
 
-.shop-btn-section {
+.delivery_info {
+  .delivery_text {
+    color: var(--color-line-02);
+    margin-bottom: rem(20);
+    padding-right: rem(40);
+    font-size: rem(14);
+    text-align: right;
+  }
+}
+
+.shop-btn-section,
+.product_info {
   position: relative;
   display: flex;
   justify-content: flex-end;
@@ -131,11 +248,10 @@
       background-color: var(--color-main);
       color: #fff;
     }
-    &.soldOut {
+    &.open_buy {
+      background-color: var(--color-main);
       color: #fff;
-      background-color: black;
-      border: none;
-      cursor: default;
+      width: rem(240);
     }
   }
 

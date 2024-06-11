@@ -13,6 +13,8 @@ import { postUserObjData } from '/src/pages/api/reqData';
 import { useRouter } from 'next/router';
 import calculateSalePrice from '/util/func/calculateSalePrice';
 import transformClearLocalCurrency from '/util/func/transformClearLocalCurrency';
+import transformLocalCurrency from '/util/func/transformLocalCurrency';
+import sorting from '/util/func/sorting';
 import { useDispatch, useSelector } from 'react-redux';
 import { cartAction } from '/store/cart-slice';
 import { setPreviousPath } from '/store/navigation-slice';
@@ -22,6 +24,7 @@ import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import { getData } from '/src/pages/api/reqData';
 import { deleteCookie, getCookie, setCookie } from '@util/func/cookie';
 import { cookieType } from '@store/TYPE/cookieType';
+import { ShopFloatingTab } from '../../../components/shop/ShopFloatingTab';
 
 export default function SingleItemDetailPage({ data }) {
   const mct = useModalContext();
@@ -47,6 +50,7 @@ export default function SingleItemDetailPage({ data }) {
   const [isLoading, setIsLoading] = useState({ fetching: true });
   const [activeTabmenuIndex, setActiveTabmenuIndex] = useState(0);
   const [formValues, setFormValues] = useState(initialFormValues_CART);
+  const [isOptionBar, setIsOptionBar] = useState(false);
 
   const [activeCartShortcutModal, setActiveCartShortcutModal] = useState({});
 
@@ -65,6 +69,126 @@ export default function SingleItemDetailPage({ data }) {
       }
     });
   }, [activeTabmenuIndex]);
+
+  //*** scroll ***/
+  const handleScroll = () => {
+    const contentRefTop = contentRef.current.getBoundingClientRect().top;
+    const isContentRefTop = contentRefTop <= 0; // contentRef가 상단에 위치하는지 여부
+    setIsOptionBar(isContentRefTop);
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  //*** [START] 추가상품 옵션 ***/
+  // SELECT OPTION
+  const defaultOption = { label: '상품선택', value: '' };
+  const selectOptions = data?.opt?.map((option) => ({
+    label:
+      `${option.name} (재고: ` +
+      `${
+        option.remaining > 0 ? transformLocalCurrency(option.remaining) : '없음'
+      })`,
+    value: option.id,
+    inStock: option.remaining > 0,
+  }));
+  selectOptions?.unshift(defaultOption);
+
+  // SELECTED OPTION LIST INFO
+  const initialOptionDataList = data.opt?.map((option) => ({
+    id: option.id,
+    name: option.name,
+    optionPrice: option.optionPrice,
+    remaining: option.remaining,
+    quantity: minItemQuantity, //! [수정]
+    optionTotalPrice: option.optionPrice, // 해당 옵션 개수 * 옵션 수량
+    selected: false,
+  }));
+
+  // console.log('data>>>', data);
+
+  const [optionDataList, setOptionDataList] = useState(initialOptionDataList); // array
+
+  const onSelectOptionHandler = (optionId) => {
+    setOptionDataList((prevState) => {
+      const nextState = prevState?.map((optionObj) =>
+        optionObj.id === optionId
+          ? { ...optionObj, selected: true }
+          : optionObj,
+      );
+      const sorted_nextState = sorting(nextState, 'selected', 'descend');
+      return sorted_nextState;
+    });
+  };
+
+  // CALCULATE TOTAL PRICE
+  useEffect(() => {
+    const originalItemPrice = formValues.itemPrice;
+    const sumItemPrice = originalItemPrice * formValues.itemAmount;
+
+    let sumOptionsPrice = 0;
+    const selectedOptionDataList =
+      optionDataList?.filter((option) => option.selected) || [];
+
+    if (selectedOptionDataList.length) {
+      sumOptionsPrice = selectedOptionDataList
+        .map((option) => option.optionTotalPrice)
+        .reduce((acc, cur) => acc + cur);
+    }
+    const totalPrice = sumItemPrice + sumOptionsPrice;
+    setFormValues((prevState) => ({
+      ...prevState,
+      optionDtoList: selectedOptionDataList.map((option) => ({
+        optionId: option.id,
+        optionAmount: option.quantity,
+      })),
+      totalPrice: totalPrice,
+    }));
+  }, [optionDataList, formValues.itemAmount, contentRef]);
+
+  const onChangeQuantityInputHandler = (optionId, quantity) => {
+    // // console.log(optionId, quantity);
+    setOptionDataList((prevState) => {
+      return prevState.map((optionObj) => {
+        if (optionObj.id === optionId) {
+          const thisOptionPrice = optionObj.optionPrice;
+          const totalPrice = thisOptionPrice * quantity;
+
+          return {
+            ...optionObj,
+            quantity: quantity,
+            optionTotalPrice: totalPrice,
+            selected: optionObj.selected,
+          };
+        } else {
+          return optionObj;
+        }
+      });
+    });
+  };
+
+  const onDeleteOption = (e) => {
+    const button = e.currentTarget;
+    const optionId = Number(button.dataset.id);
+    setOptionDataList((prevState) => {
+      return prevState.map((optionObj) => {
+        if (optionObj.id === optionId) {
+          return {
+            ...optionObj,
+            quantity: 1,
+            selected: false,
+          };
+        } else {
+          return optionObj;
+        }
+      });
+    });
+  };
+  //*** [END] 추가상품 옵션 ***/
 
   const onActiveCartShortcutModal = (buttonArea) => {
     setActiveCartShortcutModal({
@@ -204,7 +328,9 @@ export default function SingleItemDetailPage({ data }) {
   return (
     <>
       <MetaTitle title="SHOP" />
-      <ShopOptionBar
+
+      {/* 이전 옵션바 숨김처리 */}
+      {/* <ShopOptionBar
         id={'optionDtoList'}
         data={{
           opt: data?.opt,
@@ -218,7 +344,33 @@ export default function SingleItemDetailPage({ data }) {
         onActiveModal={onActiveCartShortcutModal}
         onStartBuying={onClickBuyButton}
         isLoading={isLoading}
-      />
+      /> */}
+
+      {isOptionBar && (
+        <ShopFloatingTab
+          id={'optionDtoList'}
+          data={{
+            item: data?.item,
+            itemImages: data?.itemImages,
+            delivery: data?.delivery,
+            opt: data?.opt,
+            minQuantity: minItemQuantity,
+            maxQuantity: maxItemQuantity,
+          }}
+          formValues={formValues}
+          setFormValues={setFormValues}
+          onAddToCart={onAddToCart}
+          activeModal={activeCartShortcutModal}
+          onActiveModal={onActiveCartShortcutModal}
+          onStartBuying={onClickBuyButton}
+          isLoading={isLoading}
+          optionDataList={optionDataList}
+          selectOptions={selectOptions}
+          onSelectOptionHandler={onSelectOptionHandler}
+          onChangeQuantityInputHandler={onChangeQuantityInputHandler}
+          onDeleteOption={onDeleteOption}
+        />
+      )}
       <Layout>
         <Wrapper>
           <ShopBoard
@@ -238,6 +390,11 @@ export default function SingleItemDetailPage({ data }) {
             onActiveModal={setActiveCartShortcutModal}
             isLoading={isLoading}
             onStartBuying={onClickBuyButton}
+            optionDataList={optionDataList}
+            selectOptions={selectOptions}
+            onSelectOptionHandler={onSelectOptionHandler}
+            onChangeQuantityInputHandler={onChangeQuantityInputHandler}
+            onDeleteOption={onDeleteOption}
           />
           <ShopTabMenus
             activeIndex={activeTabmenuIndex}
@@ -306,7 +463,7 @@ export async function getServerSideProps(ctx) {
   const apiUrl = `/api/items/${itemId}`;
   let res;
 
-  console.log(apiUrl);
+  // console.log(apiUrl);
 
   try {
     // 서버 측에서 쿠키를 요청 헤더에 추가
