@@ -204,6 +204,7 @@ export default function SearchOnSellPage() {
                   <Button
                     icon={<DownloadOutlined />}
                     onClick={() => downloadExcel()}
+                    disabled={searchValues.orderType === 'ALL'}
                   >
                     {isExcelLoading ? <Spinner /> : '엑셀 다운로드'}
                   </Button>
