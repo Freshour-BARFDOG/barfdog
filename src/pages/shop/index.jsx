@@ -37,7 +37,7 @@ export default function ShopPage() {
   );
   const auth = useSelector((state) => state.auth);
 
-  console.log(itemList);
+  // console.log(itemList);
   // console.log(searchValues.itemType)
   useEffect(() => {
     // - CASE: Nav GNB에서 shop > submenu Click event
@@ -130,8 +130,8 @@ export default function ShopPage() {
       if (typeof window !== undefined) {
         return window.open('https://smartstore.naver.com/barfdog', '_blank');
       }
-    } else if (!inStock) {
-      alert('품절된 상품입니다.');
+      // } else if (!inStock) {
+      // alert('품절된 상품입니다.');
     } else {
       router.push(link);
     }
@@ -238,6 +238,18 @@ export default function ShopPage() {
                     <option value={itemSortQueryType.SALEAMOUNT}>
                       {itemSortQueryType.KOR.SALEAMOUNT}
                     </option>
+                    {/* <option value={itemSortQueryType.LOWPRICE}>
+                      {itemSortQueryType.KOR.LOWPRICE}
+                    </option>
+                    <option value={itemSortQueryType.HIGHPRICE}>
+                      {itemSortQueryType.KOR.HIGHPRICE}
+                    </option>
+                    <option value={itemSortQueryType.MOSTREVIEWED}>
+                      {itemSortQueryType.KOR.MOSTREVIEWED}
+                    </option>
+                    <option value={itemSortQueryType.SCORE}>
+                      {itemSortQueryType.KOR.SCORE}
+                    </option> */}
                   </select>
                 </div>
               </div>

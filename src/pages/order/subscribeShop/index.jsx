@@ -33,6 +33,7 @@ import { originSubscribeIdList } from '/util/func/subscribe/originSubscribeIdLis
 export default function RegisterSubscribeInfoPage({ data }) {
   const subscribePlanInfo = useSubscribePlanInfo();
   const recipeInfo = useSubscribeRecipeInfo();
+  const [isOriginSubscriber, setIsOriginSubscriber] = useState(false);
 
   const info = {
     dogId: data.surveyInfo.dogId,
@@ -97,7 +98,6 @@ export default function RegisterSubscribeInfoPage({ data }) {
     current: [],
     next: [],
   });
-  const [isOriginSubscriber, setIsOriginSubscriber] = useState(false);
 
   useEffect(() => {
     //! [추가] 기존 구독자인지 확인
