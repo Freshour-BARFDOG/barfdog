@@ -42,7 +42,14 @@
 .selector {
   width: 100%;
   max-width: rem(640);
-  height: rem(38) !important;
+  height: rem(40) !important;
+
+  &.disabled_select {
+    cursor: not-allowed !important;
+    background-color: #ddd;
+    color: #9c9c9c;
+    border: none !important;
+  }
 
   select {
     padding-left: rem(10);
