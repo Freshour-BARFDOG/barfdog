@@ -48,6 +48,7 @@ export const ShopBoard = ({
   };
   // console.log(item);
   // console.log('data>>>', data);
+  // console.log(optionDataList);
 
   return (
     <section className={`${Style.top} ani-show-all-child`}>
@@ -142,12 +143,17 @@ export const ShopBoard = ({
               <div>
                 <div>추가상품</div>
               </div>
-              <div className={s.selector}>
+              <div
+                className={`${s.selector} ${
+                  optionDataList.length === 0 ? `${s.disabled_select}` : ''
+                }`}
+              >
                 <CustomSelect
                   options={selectOptions}
                   // value={''}
                   setFormValues={onSelectOptionHandler}
                   dataType={'number'}
+                  disabled={optionDataList.length === 0}
                 />
               </div>
             </div>

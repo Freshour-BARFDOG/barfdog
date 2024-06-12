@@ -106,12 +106,19 @@ export const ShopFloatingTab = ({
                     <div className={s.title_text}>
                       <span>추가상품</span>
                     </div>
-                    <div className={s.selector}>
+                    <div
+                      className={`${s.selector} ${
+                        optionDataList.length === 0
+                          ? `${s.disabled_select}`
+                          : ''
+                      }`}
+                    >
                       <CustomSelect
                         options={selectOptions}
                         // value={''}
                         setFormValues={onSelectOptionHandler}
                         dataType={'number'}
+                        disabled={optionDataList.length === 0}
                       />
                     </div>
                   </div>
