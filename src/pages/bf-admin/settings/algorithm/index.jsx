@@ -253,6 +253,7 @@ export default function AlgorithmSettingPage() {
                     formValues={formValues}
                     setFormValues={setFormValues}
                     formErrors={formErrors}
+                    isStatus={true}
                   />
                   <AlgorithmInput
                     id={'oldDog'}
@@ -261,54 +262,61 @@ export default function AlgorithmSettingPage() {
                     formValues={formValues}
                     setFormValues={setFormValues}
                     formErrors={formErrors}
+                    isStatus={true}
                   />
                   <AlgorithmInput
                     id={'neutralizationFalse'}
                     label={'비중성화'}
-                    numberUnit={'-'}
+                    numberUnit={''}
                     formValues={formValues}
                     setFormValues={setFormValues}
                     formErrors={formErrors}
+                    isStatus={true}
                   />
                   <AlgorithmInput
                     id={'neutralizationTrue'}
                     label={'중성화'}
-                    numberUnit={'-'}
+                    numberUnit={''}
                     formValues={formValues}
                     setFormValues={setFormValues}
                     formErrors={formErrors}
+                    isStatus={true}
                   />
                   <AlgorithmInput
                     id={'needDiet'}
                     label={'다이어트 필요'}
-                    numberUnit={'-'}
+                    numberUnit={''}
                     formValues={formValues}
                     setFormValues={setFormValues}
                     formErrors={formErrors}
+                    isStatus={true}
                   />
                   <AlgorithmInput
                     id={'obesity'}
                     label={'비만'}
-                    numberUnit={'-'}
+                    numberUnit={''}
                     formValues={formValues}
                     setFormValues={setFormValues}
                     formErrors={formErrors}
+                    isStatus={true}
                   />
                   <AlgorithmInput
                     id={'pregnant'}
                     label={'임신'}
-                    numberUnit={'-'}
+                    numberUnit={''}
                     formValues={formValues}
                     setFormValues={setFormValues}
                     formErrors={formErrors}
+                    isStatus={true}
                   />
                   <AlgorithmInput
                     id={'lactating'}
                     label={'수유 중'}
-                    numberUnit={'-'}
+                    numberUnit={''}
                     formValues={formValues}
                     setFormValues={setFormValues}
                     formErrors={formErrors}
+                    isStatus={true}
                   />
                 </section>
               </div>

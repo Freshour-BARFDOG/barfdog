@@ -5,8 +5,15 @@ import filter_emptyValue from '/util/func/filter_emptyValue';
 import filter_onlyNumber from '/util/func/filter_onlyNumber';
 import filter_extraIntegerNumberZero from '/util/func/filter_extraIntegerNumberZero';
 
-
-const AlgorithmInput = ({ id, label, numberUnit, formValues, setFormValues, formErrors }) => {
+const AlgorithmInput = ({
+  isStatus,
+  id,
+  label,
+  numberUnit,
+  formValues,
+  setFormValues,
+  formErrors,
+}) => {
   const onInputChangeHandler = (e) => {
     const input = e.currentTarget;
     const { id, value } = input;
@@ -53,7 +60,7 @@ const AlgorithmInput = ({ id, label, numberUnit, formValues, setFormValues, form
               onChange={onInputChangeHandler}
             />
             {/*<em className={s['numberUnit']}>{numberUnit}</em>*/}
-            <em className="unit">%</em>
+            <em className="unit">{isStatus ? '' : '%'}</em>
             {formErrors[id] && <ErrorMessage>{formErrors[id]}</ErrorMessage>}
           </div>
         </div>
