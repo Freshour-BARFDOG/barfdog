@@ -26,7 +26,6 @@ export default function SubscribeSumGramByRecipe({ chartData }) {
     setData(data);
   }, []);
 
-  console.log('chartData>>>', chartData);
   // console.log('GRAPH DATA>>>', data);
 
   return (

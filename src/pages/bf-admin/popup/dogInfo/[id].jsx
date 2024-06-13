@@ -1217,9 +1217,9 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
               caution={
                 <>
                   <strong>{formValues.nextPaymentPrice}원</strong> --&gt;&nbsp;
-                  <strong>{nextPriceText}원</strong>
-                  <br />
+                  <strong>{nextPriceText}원</strong> <br />
                   다음 결제 금액이 변경됩니다.
+                  <br /> 변경된 레시피에 맞게 구독 그램수가 새로 계산됩니다.{' '}
                 </>
               }
             />
