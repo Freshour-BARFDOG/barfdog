@@ -38,7 +38,7 @@ export default function Popup_SubscribeOrderDetailInfoPage({ data }) {
       alert('데이터를 불러올 수 없습니다.');
     }
   }, []);
-
+  // console.log(data);
   return (
     <>
       <div id={s.popup}>
@@ -112,6 +112,7 @@ export default function Popup_SubscribeOrderDetailInfoPage({ data }) {
                         orderConfirmDate:
                           data.subscribePaymentDto.orderConfirmDate,
                       }}
+                      orderId={data.subscribeOrderInfoDto.id}
                     />
                   </li>
                 </ul>
