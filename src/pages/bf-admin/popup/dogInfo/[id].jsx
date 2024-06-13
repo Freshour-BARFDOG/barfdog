@@ -52,6 +52,11 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
     activeConfirmNextPaymentPriceChangeModal,
     setActiveConfirmNextPaymentPriceChangeModal,
   ] = useState(false);
+  const [
+    activeConfirmmGramPerRecipeChangeModal,
+    setActiveConfirmGramPerRecipeChangeModal,
+  ] = useState(false);
+
   const [isLoading, setIsLoading] = useState({});
   const [formValues, setFormValues] = useState({});
   const [tempValues, setTempValues] = useState({});
@@ -66,6 +71,16 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
     DATA?.subscribeDetailInfo.subscribeDto.nextPaymentPrice.toLocaleString(),
     null,
   );
+  const [originalGramPerRecipe, setOriginalGramPerRecipe] = useState({
+    gram1:
+      DATA?.subscribeDetailInfo.subscribeDto.oneMealGramsPerRecipe.split(
+        ', ',
+      )[0],
+    gram2:
+      DATA?.subscribeDetailInfo.subscribeDto.oneMealGramsPerRecipe.split(
+        ', ',
+      )[1],
+  });
   const subscribeInfo = useSubscribeInfo(DATA?.dogDto.subscribeId);
   const currentPlanName = subscribeInfo?.info.planName;
   const subscribePlanInfo = useSubscribePlanInfo();
@@ -287,8 +302,8 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
     const { id, value } = input;
     const filteredType = input.dataset.inputType;
     let filteredValue = value;
-    console.log('input', input);
-    console.log('filteredType', filteredType);
+    // console.log('value', value);
+    // console.log('filteredType', filteredType);
 
     if (filteredType) {
       filteredValue = filter_emptyValue(value);
@@ -318,6 +333,12 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
       if (filteredType.indexOf('currency') >= 0) {
         filteredValue = Number(filteredValue);
         setOriginalPrice(Number(filteredValue).toLocaleString());
+      }
+      if (filteredType.indexOf('gramsPerRecipe') >= 0) {
+        return setOriginalGramPerRecipe((prevState) => ({
+          ...prevState,
+          [id]: filteredValue,
+        }));
       }
     }
 
@@ -449,6 +470,61 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
       return;
     } else {
       setActiveConfirmNextPaymentPriceChangeModal(true);
+    }
+  };
+
+  //** 구독 그램수 변경 (모달창 '확인'버튼 누른 후) */
+  const onSubmitGramPerRecipeChange = async (confirm) => {
+    if (!confirm) {
+      return setActiveConfirmGramPerRecipeChangeModal(false);
+    }
+    const body = {
+      grams: originalGramPerRecipe['gram2']
+        ? `${originalGramPerRecipe['gram1']}, ${originalGramPerRecipe['gram2']}`
+        : originalGramPerRecipe['gram1'],
+    };
+    try {
+      setSubmitted(true);
+      const url = `/api/admin/subscribes/${formValues.subscribeId}/oneMealGramsPerRecipe`;
+      const res = await patchObjData(url, body);
+      if (res.isDone) {
+        onSuccessChangeSubscribeOrder();
+      } else {
+        mct.alertShow(`데이터 전송 실패\n${res.error}`);
+        setSubmitted(false);
+      }
+      setActiveConfirmModal(false);
+    } catch (err) {
+      console.error('err: ', err);
+    }
+  };
+
+  const onChangeGramsPerRecipeHandler = async () => {
+    if (submitted) return;
+    // 시작은 숫자여야 하고, 소수점은 하나만 포함될 수 있으며, 연속된 소수점이 올 수 없음
+    const gramRegex = /^(\d+(\.\d+)?)$/;
+    // validation
+    if (
+      originalGramPerRecipe['gram1'] === '' ||
+      originalGramPerRecipe['gram2'] === ''
+    ) {
+      mct.alertShow('구독 그램수를 입력해주세요.');
+      return;
+    } else if (
+      originalGramPerRecipe['gram1'] === '0' ||
+      originalGramPerRecipe['gram2'] === '0'
+    ) {
+      mct.alertShow('구독 그램수는 0g 이상이어야 합니다.');
+      return;
+    } else if (
+      !gramRegex.test(originalGramPerRecipe['gram1']) ||
+      (originalGramPerRecipe['gram2'] &&
+        !gramRegex.test(originalGramPerRecipe['gram2']))
+    ) {
+      mct.alertShow('구독 그램수를 다시 확인해주세요.');
+      return;
+    } else {
+      setActiveConfirmGramPerRecipeChangeModal(true);
     }
   };
 
@@ -906,12 +982,47 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
                             <span>구독 그램수</span>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
-                            <span>
+                            {/* <span>
                               {DATA?.subscribeDetailInfo.subscribeDto.oneMealGramsPerRecipe
                                 ?.split(', ')
                                 .map((value) => `${value} g`)
                                 .join(' , ')}
-                            </span>
+                            </span> */}
+                            <>
+                              <input
+                                type="text"
+                                id="gram1"
+                                value={originalGramPerRecipe['gram1'] || ''}
+                                onChange={onInputChangeHandler}
+                                data-input-type={'number, gramsPerRecipe'}
+                                className={`${s.GramsPerRecipeInput}`}
+                              ></input>
+                              <span>g</span>
+                            </>
+                            {DATA?.subscribeDetailInfo.subscribeDto.oneMealGramsPerRecipe.split(
+                              ', ',
+                            )[1] && (
+                              <>
+                                <input
+                                  type="text"
+                                  id="gram2"
+                                  value={originalGramPerRecipe['gram2'] || ''}
+                                  onChange={onInputChangeHandler}
+                                  data-input-type={'number, gramsPerRecipe'}
+                                  className={`${s.GramsPerRecipeInput}`}
+                                ></input>
+                                <span>g</span>
+                              </>
+                            )}
+
+                            <button
+                              className={`admin_btn line point basic_s ${s.recipe_change_btn}`}
+                              onClick={() => {
+                                onChangeGramsPerRecipeHandler();
+                              }}
+                            >
+                              변경
+                            </button>
                           </div>
                         </div>
                       </li>
@@ -1121,6 +1232,47 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
               }
             />
           )}
+          {activeConfirmmGramPerRecipeChangeModal && (
+            <Modal_confirm
+              theme={'userPage'}
+              isConfirm={onSubmitGramPerRecipeChange}
+              positionCenter
+              text={'구독 그램수를 변경하시겠습니까?'}
+              caution={
+                <>
+                  <strong>
+                    {
+                      DATA?.subscribeDetailInfo.subscribeDto.oneMealGramsPerRecipe.split(
+                        ', ',
+                      )[0]
+                    }
+                    g
+                  </strong>
+                  --&gt;&nbsp;
+                  <strong>{originalGramPerRecipe['gram1']}g</strong>
+                  <br />
+                  {originalGramPerRecipe['gram2'] && (
+                    <>
+                      <strong>
+                        {' '}
+                        {
+                          DATA?.subscribeDetailInfo.subscribeDto.oneMealGramsPerRecipe.split(
+                            ', ',
+                          )[1]
+                        }
+                        g
+                      </strong>
+                      --&gt;&nbsp;
+                      <strong>{originalGramPerRecipe['gram2']}g</strong>
+                    </>
+                  )}
+                  <br />
+                  구독 그램수가 변경됩니다.
+                </>
+              }
+            />
+          )}
+
           {hasAlert && (
             <Modal_global_alert
               message={modalMessage}
