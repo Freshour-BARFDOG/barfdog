@@ -1216,10 +1216,16 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
               text={'플랜 및 레시피를 변경하시겠습니까?'}
               caution={
                 <>
+                  다음 구독 주문부터 변경사항이 적용됩니다.
+                  <br />
+                  <br />
+                  1. 플랜 및 레시피 <br />
+                  2. 구독 그램수 : 변경된 레시피에 맞게 새로 계산
+                  <br />
+                  3. 다음 결제 금액 :{' '}
                   <strong>{formValues.nextPaymentPrice}원</strong> --&gt;&nbsp;
                   <strong>{nextPriceText}원</strong> <br />
-                  다음 결제 금액이 변경됩니다.
-                  <br /> 변경된 레시피에 맞게 구독 그램수가 새로 계산됩니다.{' '}
+                  <br />
                 </>
               }
             />
