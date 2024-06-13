@@ -125,19 +125,33 @@ const ProductInfo_delivery = ({ deliveryInfo, orderId }) => {
     try {
       const body = {
         recipient: {
-          zipcode: recipientAddress.zipcode,
-          street: recipientAddress.street,
-          detailAddress: recipientAddress.detailAddress,
-          name: formValues.recipientName,
-          phone: normalizedPhone,
+          zipcode:
+            text === '배송지 주소'
+              ? recipientAddress.zipcode
+              : deliveryInfo.zipcode,
+          street:
+            text === '배송지 주소'
+              ? recipientAddress.street
+              : deliveryInfo.street,
+          detailAddress:
+            text === '배송지 주소'
+              ? recipientAddress.detailAddress
+              : deliveryInfo.detailAddress,
+          name:
+            text === '수취인명'
+              ? formValues.recipientName
+              : deliveryInfo.recipientName,
+          phone:
+            text === '연락처' ? normalizedPhone : deliveryInfo.recipientPhone,
         },
-        request: formValues.request,
+        request:
+          text === '요청사항' ? formValues.request : deliveryInfo.request,
       };
       const url = `/api/admin/deliveries/${orderId}/recipientAndRequest`;
       const res = await putObjData(url, body);
 
-      console.log('body', body);
-      console.log(res);
+      // console.log('body', body);
+      // console.log(res);
       if (res.isDone) {
         mct.alertShow(`${text}를 변경하였습니다.`, onSuccessCallback);
       } else {
@@ -147,9 +161,8 @@ const ProductInfo_delivery = ({ deliveryInfo, orderId }) => {
       alert(err);
     }
   };
-
-  console.log('orderId', orderId);
-  console.log('formValues', formValues);
+  // console.log(deliveryInfo);
+  // console.log('formValues', formValues);
 
   return (
     <>
