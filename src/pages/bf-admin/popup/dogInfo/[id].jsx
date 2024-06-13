@@ -73,11 +73,11 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
   );
   const [originalGramPerRecipe, setOriginalGramPerRecipe] = useState({
     gram1:
-      DATA?.subscribeDetailInfo.subscribeDto.oneMealGramsPerRecipe.split(
+      DATA?.subscribeDetailInfo.subscribeDto.oneMealGramsPerRecipe?.split(
         ', ',
       )[0],
     gram2:
-      DATA?.subscribeDetailInfo.subscribeDto.oneMealGramsPerRecipe.split(
+      DATA?.subscribeDetailInfo.subscribeDto.oneMealGramsPerRecipe?.split(
         ', ',
       )[1],
   });
@@ -746,6 +746,11 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
   // console.log('setSelectedCategory', selectedCategory);
   // console.log('formValues.subscribeStatus', formValues.subscribeStatus);
   // console.log('NextPriceText', nextPriceText);
+  console.log('original', originalGramPerRecipe);
+  console.log(
+    'original',
+    DATA?.subscribeDetailInfo.subscribeDto.oneMealGramsPerRecipe,
+  );
 
   return (
     <>
@@ -988,41 +993,50 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
                                 .map((value) => `${value} g`)
                                 .join(' , ')}
                             </span> */}
-                            <>
-                              <input
-                                type="text"
-                                id="gram1"
-                                value={originalGramPerRecipe['gram1'] || ''}
-                                onChange={onInputChangeHandler}
-                                data-input-type={'number, gramsPerRecipe'}
-                                className={`${s.GramsPerRecipeInput}`}
-                              ></input>
-                              <span>g</span>
-                            </>
-                            {DATA?.subscribeDetailInfo.subscribeDto.oneMealGramsPerRecipe.split(
-                              ', ',
-                            )[1] && (
+
+                            {DATA?.subscribeDetailInfo.subscribeDto
+                              .oneMealGramsPerRecipe ? (
                               <>
                                 <input
                                   type="text"
-                                  id="gram2"
-                                  value={originalGramPerRecipe['gram2'] || ''}
+                                  id="gram1"
+                                  value={originalGramPerRecipe['gram1'] || ''}
                                   onChange={onInputChangeHandler}
                                   data-input-type={'number, gramsPerRecipe'}
                                   className={`${s.GramsPerRecipeInput}`}
                                 ></input>
                                 <span>g</span>
-                              </>
-                            )}
 
-                            <button
-                              className={`admin_btn line point basic_s ${s.recipe_change_btn}`}
-                              onClick={() => {
-                                onChangeGramsPerRecipeHandler();
-                              }}
-                            >
-                              변경
-                            </button>
+                                {DATA?.subscribeDetailInfo.subscribeDto.oneMealGramsPerRecipe?.split(
+                                  ', ',
+                                )[1] && (
+                                  <>
+                                    <input
+                                      type="text"
+                                      id="gram2"
+                                      value={
+                                        originalGramPerRecipe['gram2'] || ''
+                                      }
+                                      onChange={onInputChangeHandler}
+                                      data-input-type={'number, gramsPerRecipe'}
+                                      className={`${s.GramsPerRecipeInput}`}
+                                    ></input>
+                                    <span>g</span>
+                                  </>
+                                )}
+
+                                <button
+                                  className={`admin_btn line point basic_s ${s.recipe_change_btn}`}
+                                  onClick={() => {
+                                    onChangeGramsPerRecipeHandler();
+                                  }}
+                                >
+                                  변경
+                                </button>
+                              </>
+                            ) : (
+                              '-'
+                            )}
                           </div>
                         </div>
                       </li>
@@ -1267,7 +1281,9 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
                     </>
                   )}
                   <br />
-                  구독 그램수가 변경됩니다.
+                  <br />
+                  결제완료, 생산중, 예약결제 상태인 항목에 대해서만 <br />
+                  변경된 값이 적용됩니다.
                 </>
               }
             />
@@ -1300,7 +1316,7 @@ export async function getServerSideProps({ req, query }) {
   const dogDto = dogData?.dogDto || null;
   const plan = dogData?.plan || null;
   const recipes = dogData?.recipes || null;
-  console.log('dogInfoRes', dogInfoRes);
+  // console.log('dogInfoRes', dogInfoRes);
 
   // DATA: Recipes
   const getRecipeInfoApiUrl = `/api/recipes`;
