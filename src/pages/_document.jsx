@@ -127,7 +127,7 @@ export default function CustomDocument() {
         <Main />
         <NextScript />
         {/* Naver Analytics */}
-        <script async src="//wcs.naver.net/wcslog.js"></script>
+        {/* <script async src="//wcs.naver.net/wcslog.js"></script>
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -140,7 +140,7 @@ export default function CustomDocument() {
               }
             `,
           }}
-        ></script>
+        ></script> */}
       </body>
     </Html>
   );
