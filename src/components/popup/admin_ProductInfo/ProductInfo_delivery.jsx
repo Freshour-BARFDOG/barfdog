@@ -9,6 +9,7 @@ import SignInput_address from '../../user_signup/SignInput_address';
 import SignupInput from '../../user_signup/SignupInput';
 import { useModalContext } from '/store/modal-context';
 import { Tooltip } from 'antd';
+import filter_emptyValue from '/util/func/filter_emptyValue';
 import DeliveryInput from './DeliveryInput';
 import filter_specialCharacter from '/util/func/filter_specialCharacter';
 import { putObjData } from '../../../pages/api/reqData';
@@ -27,6 +28,12 @@ const ProductInfo_delivery = ({ deliveryInfo, orderId }) => {
     const href = e.currentTarget.href;
     popupWindow(href, { width: 540, height: 480, left: 200, top: 100 });
   };
+
+  const [formValues, setFormValues] = useState({
+    recipientName: deliveryInfo.recipientName,
+    recipientPhone: transformPhoneNumber(deliveryInfo.recipientPhone),
+    request: deliveryInfo.request,
+  });
 
   const [recipientAddress, setRecipientAddress] = useState({
     zipcode: deliveryInfo.zipcode,
@@ -70,6 +77,24 @@ const ProductInfo_delivery = ({ deliveryInfo, orderId }) => {
     }));
   };
 
+  const onInputChangeHandler = (e) => {
+    const input = e.currentTarget;
+    const { id, value } = input;
+    const filteredType = input.dataset.inputType;
+    let filteredValue = value;
+    // console.log('value', value);
+    // console.log('filteredType', filteredType);
+
+    if (filteredType) {
+      filteredValue = filter_emptyValue(value);
+    }
+
+    setFormValues((prevState) => ({
+      ...prevState,
+      [id]: filteredValue,
+    }));
+  };
+
   const onSuccessCallback = () => {
     window.location.reload();
   };
@@ -78,13 +103,57 @@ const ProductInfo_delivery = ({ deliveryInfo, orderId }) => {
     mct.alertHide();
   };
 
-  const onAddressChangeHandler = async () => {
+  const onSubmitHandler = async (text) => {
+    if (formValues.recipientName === '') {
+      mct.alertShow('수취인명을 입력해주세요.');
+      return;
+    }
+    if (formValues.recipientPhone === '') {
+      mct.alertShow('수취인 연락처를 입력해주세요.');
+      return;
+    }
+
+    // 입력된 번호에서 숫자만 추출
+    let normalizedPhone = formValues.recipientPhone.replace(/[^0-9]/g, '');
+    const phoneRegExp = /^01([0|1|6|7|8|9])([0-9]{3,4})([0-9]{4})$/;
+    const isValidPhone = phoneRegExp.test(normalizedPhone);
+    if (!isValidPhone) {
+      mct.alertShow('수취인 연락처를 올바르게 입력해주세요.');
+      return;
+    }
+
     try {
-      const url = `/api/admin/deliveries/${orderId}/recipientAddress`;
-      const res = await putObjData(url, recipientAddress);
-      console.log(res);
+      const body = {
+        recipient: {
+          zipcode:
+            text === '배송지 주소'
+              ? recipientAddress.zipcode
+              : deliveryInfo.zipcode,
+          street:
+            text === '배송지 주소'
+              ? recipientAddress.street
+              : deliveryInfo.street,
+          detailAddress:
+            text === '배송지 주소'
+              ? recipientAddress.detailAddress
+              : deliveryInfo.detailAddress,
+          name:
+            text === '수취인명'
+              ? formValues.recipientName
+              : deliveryInfo.recipientName,
+          phone:
+            text === '연락처' ? normalizedPhone : deliveryInfo.recipientPhone,
+        },
+        request:
+          text === '요청사항' ? formValues.request : deliveryInfo.request,
+      };
+      const url = `/api/admin/deliveries/${orderId}/recipientAndRequest`;
+      const res = await putObjData(url, body);
+
+      // console.log('body', body);
+      // console.log(res);
       if (res.isDone) {
-        mct.alertShow('배송지 주소를 변경하였습니다.', onSuccessCallback);
+        mct.alertShow(`${text}를 변경하였습니다.`, onSuccessCallback);
       } else {
         mct.alertShow(`데이터 전송 실패\n${res.error}`);
       }
@@ -92,6 +161,8 @@ const ProductInfo_delivery = ({ deliveryInfo, orderId }) => {
       alert(err);
     }
   };
+  // console.log(deliveryInfo);
+  // console.log('formValues', formValues);
 
   return (
     <>
@@ -105,7 +176,23 @@ const ProductInfo_delivery = ({ deliveryInfo, orderId }) => {
               <span>수취인명</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
-              <span>{deliveryInfo.recipientName}</span>
+              {/* <span>{deliveryInfo.recipientName}</span> */}
+              <input
+                type="text"
+                id="recipientName"
+                value={formValues.recipientName || ''}
+                onChange={onInputChangeHandler}
+                // data-input-type={'number, demicals, currency'}
+                className={`${s.recipientNameInput}`}
+              ></input>
+              <button
+                className={`admin_btn line point basic_s ${s.recipe_change_btn}`}
+                onClick={() => {
+                  onSubmitHandler('수취인명');
+                }}
+              >
+                변경
+              </button>
             </div>
           </div>
           <div className={s['t-box']}>
@@ -113,7 +200,22 @@ const ProductInfo_delivery = ({ deliveryInfo, orderId }) => {
               <span>연락처</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
-              <span>{transformPhoneNumber(deliveryInfo.recipientPhone)}</span>
+              {/* <span>{transformPhoneNumber(deliveryInfo.recipientPhone)}</span> */}
+              <input
+                type="text"
+                id="recipientPhone"
+                value={formValues.recipientPhone || ''}
+                onChange={onInputChangeHandler}
+                className={`${s.recipientNameInput}`}
+              ></input>
+              <button
+                className={`admin_btn line point basic_s ${s.recipe_change_btn}`}
+                onClick={() => {
+                  onSubmitHandler('연락처');
+                }}
+              >
+                변경
+              </button>{' '}
             </div>
           </div>
         </li>
@@ -166,7 +268,9 @@ const ProductInfo_delivery = ({ deliveryInfo, orderId }) => {
                     value={recipientAddress.detailAddress}
                     onChange={onDetailAddressHandler}
                   />
-                  <button onClick={onAddressChangeHandler}>변경</button>
+                  <button onClick={() => onSubmitHandler('배송지 주소')}>
+                    변경
+                  </button>
                   {/* {(!formValues.address.detailAddress ||
                         formValues.address.detailAddress === '') &&
                         formErrors.detailAddress && (
@@ -185,7 +289,22 @@ const ProductInfo_delivery = ({ deliveryInfo, orderId }) => {
               <span>배송 요청사항</span>
             </div>
             <div className={`${s.innerBox} ${s.cont}`}>
-              <span>{deliveryInfo.request || '-'}</span>
+              {/* <span>{deliveryInfo.request || '-'}</span> */}
+              <input
+                type="text"
+                id="request"
+                value={formValues.request || ''}
+                onChange={onInputChangeHandler}
+                className={`${s.requestInput}`}
+              ></input>
+              <button
+                className={`admin_btn line point basic_s ${s.recipe_change_btn}`}
+                onClick={() => {
+                  onSubmitHandler('요청사항');
+                }}
+              >
+                변경
+              </button>{' '}
             </div>
           </div>
         </li>
@@ -265,6 +384,7 @@ const ProductInfo_delivery = ({ deliveryInfo, orderId }) => {
           </div>
         </li>
       </ul>
+
       {hasAlert && (
         <Modal_global_alert onClick={onClickModalButton} background />
       )}
