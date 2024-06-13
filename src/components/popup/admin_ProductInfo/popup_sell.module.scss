@@ -151,6 +151,15 @@ $default-row-height: rem(48);
       .innerBox.cont {
         background-color: #fff;
         color: var(--gray20);
+        display: flex;
+        .recipientNameInput {
+          width: rem(170);
+          margin-right: rem(10);
+        }
+        .requestInput {
+          width: rem(700);
+          margin-right: rem(10);
+        }
       }
 
       .recipePackCount {
