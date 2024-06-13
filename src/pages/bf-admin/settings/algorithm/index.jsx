@@ -11,12 +11,9 @@ import { getData, putObjData } from '/src/pages/api/reqData';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import Spinner from '/src/components/atoms/Spinner';
 import Tooltip from '/src/components/atoms/Tooltip';
-import transformDate from "/util/func/transformDate";
-
-
+import transformDate from '/util/func/transformDate';
 
 export default function AlgorithmSettingPage() {
-  
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
   const [settingModifiedDate, setSettingModifiedDate] = useState('');
@@ -24,8 +21,7 @@ export default function AlgorithmSettingPage() {
   const [formValues, setFormValues] = useState({});
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
-  
-  
+
   useEffect(() => {
     (async () => {
       try {
@@ -35,9 +31,7 @@ export default function AlgorithmSettingPage() {
         }));
         const apiUrl = `/api/admin/setting`;
         const res = await getData(apiUrl, 'admin');
-        // console.log(res);
         const DATA = res.data;
-        
 
         const initialFormValues = {
           activityVeryMuch: DATA.activityConstant.activityVeryMuch,
@@ -50,6 +44,14 @@ export default function AlgorithmSettingPage() {
           snackLittle: DATA.snackConstant.snackLittle,
           price: DATA.deliveryConstant.price,
           freeCondition: DATA.deliveryConstant.freeCondition,
+          youngDog: DATA.standardVar.youngDog,
+          oldDog: DATA.standardVar.oldDog,
+          neutralizationFalse: DATA.standardVar.neutralizationFalse,
+          neutralizationTrue: DATA.standardVar.neutralizationTrue,
+          needDiet: DATA.standardVar.needDiet,
+          obesity: DATA.standardVar.obesity,
+          pregnant: DATA.standardVar.pregnant,
+          lactating: DATA.standardVar.lactating,
         };
         setFormValues(initialFormValues);
         const modifiedDate = transformDate(DATA.modifiedDate, 'time');
@@ -62,7 +64,6 @@ export default function AlgorithmSettingPage() {
           fetching: false,
         }));
       }
-      
     })();
   }, []);
 
@@ -70,12 +71,13 @@ export default function AlgorithmSettingPage() {
     e.preventDefault();
     if (isSubmitted) return window.location.reload();
     let convertedFormValues = {};
+
     for (const key in formValues) {
       const val = formValues[key];
       convertedFormValues = {
         ...convertedFormValues,
-        [key]:Number(val)
-      }
+        [key]: Number(val),
+      };
     }
     // // console.log('formValues: ',formValues);
     // // console.log('convertedFormValues: ',convertedFormValues);
@@ -84,8 +86,9 @@ export default function AlgorithmSettingPage() {
 
     const isPassed = valid_hasFormErrors(errObj);
     if (!isPassed) return mct.alertShow('유효하지 않은 항목이 있습니다.');
-    
-    if (!confirm('사이트 알고리즘 정책이 변경됩니다. 정말 변경하시겠습니까?')) return;
+
+    if (!confirm('사이트 알고리즘 정책이 변경됩니다. 정말 변경하시겠습니까?'))
+      return;
 
     try {
       setIsLoading((prevState) => ({
@@ -94,14 +97,16 @@ export default function AlgorithmSettingPage() {
       }));
       const apiUrl = `/api/admin/setting`;
       const res = await putObjData(apiUrl, convertedFormValues);
-      // console.log(res);
+
       if (res.isDone) {
-        mct.alertShow('사이트 설정이 성공적으로 저장되었습니다.', onGlobalModalCallback);
+        mct.alertShow(
+          '사이트 설정이 성공적으로 저장되었습니다.',
+          onGlobalModalCallback,
+        );
         setIsSubmitted(true);
       } else {
         mct.alertShow('데이터 전송에 실패하였습니다.');
       }
-      
     } catch (err) {
       mct.alertShow('API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.');
       console.error('API통신 오류 : ', err);
@@ -111,7 +116,6 @@ export default function AlgorithmSettingPage() {
       submit: false,
     }));
   };
-
 
   const onGlobalModalCallback = () => {
     window.location.reload();
@@ -128,8 +132,19 @@ export default function AlgorithmSettingPage() {
         <AdminContentWrapper id={s.main}>
           <div className="title_main">
             <h1 className={s['main-title']}>
-              알고리즘 설정<Tooltip message={`- 배송정책 수정일과 연동되어있습니다.`} wordBreaking={true} width={'300px'}/>
-              {isLoading.fetching ? <Spinner /> : <span className={s.date}>최종수정일: {settingModifiedDate}</span>}
+              알고리즘 설정
+              <Tooltip
+                message={`- 배송정책 수정일과 연동되어있습니다.`}
+                wordBreaking={true}
+                width={'300px'}
+              />
+              {isLoading.fetching ? (
+                <Spinner />
+              ) : (
+                <span className={s.date}>
+                  최종수정일: {settingModifiedDate}
+                </span>
+              )}
             </h1>
           </div>
           <form action="/" method="post">
@@ -138,7 +153,12 @@ export default function AlgorithmSettingPage() {
                 <section className={s.section}>
                   <h2 className={s['title']}>
                     활동량 상수
-                    <Tooltip message={`소수점 이하 2자리까지 사용가능합니다.`} wordBreaking={true} width={'300px'} messagePosition={'left'}/>
+                    <Tooltip
+                      message={`소수점 이하 2자리까지 사용가능합니다.`}
+                      wordBreaking={true}
+                      width={'300px'}
+                      messagePosition={'left'}
+                    />
                   </h2>
                   <AlgorithmInput
                     id={'activityVeryMuch'}
@@ -182,8 +202,15 @@ export default function AlgorithmSettingPage() {
                   />
                 </section>
                 <section>
-                  <h2 className={s['title']}>간식량 상수
-                    <Tooltip message={`소수점 이하 2자리까지 사용가능합니다.`} wordBreaking={true} width={'300px'} messagePosition={'left'}/></h2>
+                  <h2 className={s['title']}>
+                    간식량 상수
+                    <Tooltip
+                      message={`소수점 이하 2자리까지 사용가능합니다.`}
+                      wordBreaking={true}
+                      width={'300px'}
+                      messagePosition={'left'}
+                    />
+                  </h2>
                   <AlgorithmInput
                     id={'snackMuch'}
                     label={'많아요'}
@@ -209,6 +236,81 @@ export default function AlgorithmSettingPage() {
                     formErrors={formErrors}
                   />
                 </section>
+                <section>
+                  <h2 className={s['title']}>
+                    반려견 상태 상수
+                    <Tooltip
+                      message={`소수점 이하 5자리까지 사용가능합니다.`}
+                      wordBreaking={true}
+                      width={'300px'}
+                      messagePosition={'left'}
+                    />
+                  </h2>
+                  <AlgorithmInput
+                    id={'youngDog'}
+                    label={'자견'}
+                    numberUnit={'+'}
+                    formValues={formValues}
+                    setFormValues={setFormValues}
+                    formErrors={formErrors}
+                  />
+                  <AlgorithmInput
+                    id={'oldDog'}
+                    label={'노견'}
+                    numberUnit={''}
+                    formValues={formValues}
+                    setFormValues={setFormValues}
+                    formErrors={formErrors}
+                  />
+                  <AlgorithmInput
+                    id={'neutralizationFalse'}
+                    label={'비중성화'}
+                    numberUnit={'-'}
+                    formValues={formValues}
+                    setFormValues={setFormValues}
+                    formErrors={formErrors}
+                  />
+                  <AlgorithmInput
+                    id={'neutralizationTrue'}
+                    label={'중성화'}
+                    numberUnit={'-'}
+                    formValues={formValues}
+                    setFormValues={setFormValues}
+                    formErrors={formErrors}
+                  />
+                  <AlgorithmInput
+                    id={'needDiet'}
+                    label={'다이어트 필요'}
+                    numberUnit={'-'}
+                    formValues={formValues}
+                    setFormValues={setFormValues}
+                    formErrors={formErrors}
+                  />
+                  <AlgorithmInput
+                    id={'obesity'}
+                    label={'비만'}
+                    numberUnit={'-'}
+                    formValues={formValues}
+                    setFormValues={setFormValues}
+                    formErrors={formErrors}
+                  />
+                  <AlgorithmInput
+                    id={'pregnant'}
+                    label={'임신'}
+                    numberUnit={'-'}
+                    formValues={formValues}
+                    setFormValues={setFormValues}
+                    formErrors={formErrors}
+                  />
+                  <AlgorithmInput
+                    id={'lactating'}
+                    label={'수유 중'}
+                    numberUnit={'-'}
+                    formValues={formValues}
+                    setFormValues={setFormValues}
+                    formErrors={formErrors}
+                  />
+                </section>
               </div>
             </div>
             <section className="btn_section">
@@ -218,13 +320,19 @@ export default function AlgorithmSettingPage() {
                 className="admin_btn confirm_l solid"
                 onClick={onSubmit}
               >
-                {isLoading.submit ? <Spinner style={{ color: '#fff' }} /> : '설정 저장'}
+                {isLoading.submit ? (
+                  <Spinner style={{ color: '#fff' }} />
+                ) : (
+                  '설정 저장'
+                )}
               </button>
             </section>
           </form>
         </AdminContentWrapper>
       </AdminLayout>
-      {hasAlert && <Modal_global_alert onClick={onClickModalButton} background/>}
+      {hasAlert && (
+        <Modal_global_alert onClick={onClickModalButton} background />
+      )}
     </>
   );
 }
