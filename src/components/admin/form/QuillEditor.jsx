@@ -19,7 +19,7 @@ import s from './editor.module.scss';
  * - <div className={`view ql-editor`}
  * -  dangerouslySetInnerHTML={{ __html: itemInfo.contents }}></div>
  * - (global에서 css파일들이 섞이지 않도록 유의)
-* */
+ * */
 
 export default function QuillEditor({
   id,
@@ -35,10 +35,12 @@ export default function QuillEditor({
    * const Quill = typeof window == 'object' ? require('quill') : () => false;
    */
 
-  const ReactQuill = typeof window == 'object' ? require('react-quill') : () => false;
+  const ReactQuill =
+    typeof window == 'object' ? require('react-quill') : () => false;
   const quillRef = useRef();
   const [isLoading, setIsLoading] = useState(false);
-  const [isInitAllImageIdListCompleted, setIsInitAllImageIdListCompleted] = useState(false);
+  const [isInitAllImageIdListCompleted, setIsInitAllImageIdListCompleted] =
+    useState(false);
   const [body, setBody] = useState(initialValue);
   const [allImageIdList, setAllImageIdList] = useState(originImageIdList);
 
@@ -50,7 +52,8 @@ export default function QuillEditor({
 
   useEffect(() => {
     const isInnerHtmlEmpty = body === '<p><br></p>';
-    const resultIdList = analyze_ImageIdListCRUD(allImageIdList, body, originImageIdList) || [];
+    const resultIdList =
+      analyze_ImageIdListCRUD(allImageIdList, body, originImageIdList) || [];
     // // console.log('::: Quill Editor Inner Image > CRUD RESULT :::', resultIdList);
     if (mode === 'create') {
       setFormValues((prevState) => ({
@@ -168,15 +171,23 @@ export default function QuillEditor({
   );
 }
 
-const analyze_ImageIdListCRUD = (standardImageIdList, innerHTML = '', originImageIdList = []) => {
+const analyze_ImageIdListCRUD = (
+  standardImageIdList,
+  innerHTML = '',
+  originImageIdList = [],
+) => {
   let result;
   if (!standardImageIdList.length) return;
   const currentImageIdList = extractImageIdList(innerHTML);
-  result = compareImageList(standardImageIdList, currentImageIdList, originImageIdList);
+  result = compareImageList(
+    standardImageIdList,
+    currentImageIdList,
+    originImageIdList,
+  );
   return result;
 };
 
-const extractImageIdList = (html) => {
+const extractImageIdList = (html = '') => {
   let curimageIdList = [];
 
   const queryImageTag = html.split('<img');
@@ -193,8 +204,12 @@ const extractImageIdList = (html) => {
   return curimageIdList;
 };
 
-const compareImageList = (allArrBefore, curArrBefore, originArrBefore) => {
-  if (!allArrBefore.length) return // console.log('There is no Image File.');
+const compareImageList = (
+  allArrBefore = [],
+  curArrBefore = [],
+  originArrBefore = [],
+) => {
+  if (!allArrBefore.length) return; // console.log('There is no Image File.');
 
   const originArr = originArrBefore.map((a) => Number(a));
   const allArr = allArrBefore.map((a) => Number(a));
