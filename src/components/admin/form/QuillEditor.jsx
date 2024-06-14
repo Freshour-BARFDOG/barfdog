@@ -195,7 +195,9 @@ const extractImageIdList = (html = '') => {
     if (str.indexOf('src') < 0) return;
     const imgTag = str.split('>')[0];
     const queryFileData = imgTag.split('?')[1];
+    if (!queryFileData) return;
     const queryImageData = queryFileData.split('#')[1];
+    if (!queryImageData) return;
     const id = queryImageData.split('=')[1];
     if (id) {
       curimageIdList.push(id);
