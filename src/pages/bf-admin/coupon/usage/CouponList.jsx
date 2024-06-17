@@ -30,7 +30,7 @@ const ItemList = ({ item, number, onEditItem, isLoading }) => {
   const [formValues, setFormValues] = useState({});
   const [tempValues, setTempValues] = useState({
     expiredDate: transformDate(item.expiredDate),
-    memberCouponStatus: item.couponStatus,
+    memberCouponStatus: item.memberCouponStatus,
     remaining: item.remaining,
   });
 
