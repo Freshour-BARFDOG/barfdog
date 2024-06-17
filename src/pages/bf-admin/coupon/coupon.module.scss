@@ -2,6 +2,35 @@
 
 .cont_viewer {
   .table {
+    .table_header,
+    .item {
+      grid-template-columns:
+        rem(60)
+        rem(110)
+        rem(270)
+        fillTheRestOfTableWidth(150)
+        rem(100)
+        rem(90)
+        rem(90)
+        rem(150)
+        rem(150)
+        rem(100);
+      .input_wrapper {
+        padding: 0 rem(30);
+        input {
+          min-width: rem(60) !important;
+          height: rem(36);
+          padding: 0 rem(10);
+        }
+      }
+      .select_wrapper {
+        padding: 0 rem(30);
+        select {
+          min-width: rem(80) !important;
+          padding: 0 rem(10);
+        }
+      }
+    }
     &.AUTO_PUBLISHED {
       .table_header,
       .item {
