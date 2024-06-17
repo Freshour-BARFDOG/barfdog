@@ -18,3 +18,9 @@
     }
   }
 }
+
+.disabled_btn {
+  cursor: not-allowed !important;
+  background-color: #eee;
+  color: #a1a1a1 !important;
+}

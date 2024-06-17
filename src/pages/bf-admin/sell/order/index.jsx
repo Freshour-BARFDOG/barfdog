@@ -61,7 +61,6 @@ export default function OrderOnSellPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const router = useRouter();
   const { pathname } = router;
-
   useEffect(() => {
     const selectedList = itemList.filter(
       (data) => selectedOrderIdList.indexOf(data.id) >= 0,
@@ -129,9 +128,11 @@ export default function OrderOnSellPage() {
   };
 
   const onStartOrderConfirm = () => {
+    if (searchValues.orderType == 'ALL') return;
     const invalidItemList =
       filterInvalidOrderConfirmStatusItems(selectedItemList);
     // console.log(invalidItemList);
+    // console.log(selectedItemList);
     if (!selectedOrderIdList.length) {
       return alert('선택된 상품이 없습니다.');
     } else if (invalidItemList.length) {
@@ -792,7 +793,9 @@ export default function OrderOnSellPage() {
               </p>
               <div className="controls cont-left">
                 <button
-                  className="admin_btn line basic_m"
+                  className={`admin_btn line basic_m ${
+                    searchValues.orderType === 'ALL' ? s.disabled_btn : ''
+                  }`}
                   onClick={onStartOrderConfirm}
                 >
                   {isLoading.confirm ? <Spinner /> : '주문확인'}
