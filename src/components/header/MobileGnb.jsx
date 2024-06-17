@@ -53,7 +53,11 @@ export default function MobileGnb() {
           }`}
         >
           <ul className={`${s['mobile-menu']} `}>
-            <MobileMenu title={'정기구독'} fakeLink="/survey" onClick={onShowModal} />
+            <MobileMenu
+              title={'정기구독'}
+              fakeLink="/survey"
+              onClick={onShowModal}
+            />
             <MobileMenu
               title={'샵'}
               fakeLink="/shop"
@@ -73,17 +77,35 @@ export default function MobileGnb() {
         <section
           className={`${s['mobile-submenu-wrap']} mobile-submenu-wrap ${
             activeMenuId ? s.active : ''
-          } ${isWideMode ? s.widemode : ''} ${deviceWidth < 300 ? s['scroll-container'] : ''}`}
+          } ${isWideMode ? s.widemode : ''} ${
+            deviceWidth < 300 ? s['scroll-container'] : ''
+          }`}
         >
           <ul
             className={`${s['mobile-submenu']}  ${
               activeMenuId === menuNameObj.shop ? s.active : ''
             }`}
           >
-            <MobileMenu title="ALL" link={`/shop?itemType=${general_itemType.ALL}`} />
-            <MobileMenu title="생식" link={`/shop?itemType=${general_itemType.RAW}`} />
-            <MobileMenu title="토핑" link={`/shop?itemType=${general_itemType.TOPPING}`} />
-            <MobileMenu title="굿즈" link={`/shop?itemType=${general_itemType.GOODS}`} />
+            <MobileMenu
+              title="ALL"
+              link={`/shop?itemType=${general_itemType.ALL}`}
+            />
+            <MobileMenu
+              title="생식"
+              link={`/shop?itemType=${general_itemType.RAW}`}
+            />
+            <MobileMenu
+              title="토퍼"
+              link={`/shop?itemType=${general_itemType.TOPPING}`}
+            />
+            <MobileMenu
+              title="간식"
+              link={`/shop?itemType=${general_itemType.SNACK}`}
+            />
+            <MobileMenu
+              title="용품"
+              link={`/shop?itemType=${general_itemType.GOODS}`}
+            />
           </ul>
           <ul
             className={`${s['mobile-submenu']} ${
@@ -108,13 +130,14 @@ const currentPageIndicator = (ref, curPath, setActivemenu) => {
   if (!ref) return;
   const nav = ref;
   const curPathArray = curPath.split('/');
-  const curPageDepth1 = curPath.indexOf('?') >= 0 ? curPath?.split('?')[0] : curPathArray[1];
+  const curPageDepth1 =
+    curPath.indexOf('?') >= 0 ? curPath?.split('?')[0] : curPathArray[1];
   const curPageDepth2 = curPathArray[2];
 
   const mainMenus = Array.from(
     nav.querySelectorAll(`.mobile-menu-wrap a, .mobile-menu-wrap button`),
   );
-  
+
   mainMenus.forEach((mainmenu) => {
     const thisMenuId = mainmenu.id;
     const menuPath = mainmenu.pathname || mainmenu.dataset.link;
@@ -134,8 +157,9 @@ const currentPageIndicator = (ref, curPath, setActivemenu) => {
     if (!menuPath && curPathArray) return;
     // // console.log(menuPath)
     // // console.log(curPageDepth2)
-    submenu.dataset.currentPage = menuPath.indexOf(curPageDepth2) >= 0 && 'depth2'
-    
+    submenu.dataset.currentPage =
+      menuPath.indexOf(curPageDepth2) >= 0 && 'depth2';
+
     if (curPath.indexOf('/shop') >= 0) {
       const keyword = 'itemType=';
       let submenuSearch = submenu.search.split(keyword)[1];
@@ -144,10 +168,10 @@ const currentPageIndicator = (ref, curPath, setActivemenu) => {
         submenuSearch = curUrlSearch?.split('&')[0];
         curUrlSearch = curUrlSearch?.split('&')[0];
       }
-      submenu.dataset.currentPage = curUrlSearch?.indexOf(submenuSearch) >= 0 && 'depth2';
+      submenu.dataset.currentPage =
+        curUrlSearch?.indexOf(submenuSearch) >= 0 && 'depth2';
     }
   });
-
 };
 
 const MobileMenu = ({ onClick, link, fakeLink, id, title }) => {

@@ -2,12 +2,14 @@ export const general_itemType = {
   ALL: 'ALL',
   RAW: 'RAW',
   TOPPING: 'TOPPING',
+  SNACK: 'SNACK',
   GOODS: 'GOODS',
   KOR: {
     ALL: '전체',
     RAW: '생식',
-    TOPPING: '토핑',
-    GOODS: '굿즈',
+    TOPPING: '토퍼',
+    SNACK: '간식',
+    GOODS: '용품',
   },
 };
 
