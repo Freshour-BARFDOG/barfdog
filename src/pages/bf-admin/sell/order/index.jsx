@@ -801,13 +801,17 @@ export default function OrderOnSellPage() {
                   {isLoading.confirm ? <Spinner /> : '주문확인'}
                 </button>
                 <button
-                  className="admin_btn line basic_m"
+                  className={`admin_btn line basic_m ${
+                    searchValues.orderType === 'ALL' ? s.disabled_btn : ''
+                  }`}
                   onClick={onStartOrderDeny}
                 >
                   확인취소
                 </button>
                 <button
-                  className="admin_btn line basic_m"
+                  className={`admin_btn line basic_m ${
+                    searchValues.orderType === 'ALL' ? s.disabled_btn : ''
+                  }`}
                   onClick={onStartRegisterDelivery}
                 >
                   주문발송
@@ -819,13 +823,17 @@ export default function OrderOnSellPage() {
                   운송장전송
                 </button> */}
                 <button
-                  className="admin_btn line basic_m"
+                  className={`admin_btn line basic_m ${
+                    searchValues.orderType === 'ALL' ? s.disabled_btn : ''
+                  }`}
                   onClick={onValidOrderBeforeCancelOrderBySeller}
                 >
                   {isLoading.orderCancel ? <Spinner /> : '판매취소'}
                 </button>
                 <button
-                  className="admin_btn line pl-3 pr-3 pt-1 pb-1"
+                  className={`admin_btn line pl-3 pr-3 pt-1 pb-1 ${
+                    searchValues.orderType === 'ALL' ? s.disabled_btn : ''
+                  }`}
                   onClick={onStartManagerCompany}
                 >
                   굿스플로 택배사 관리

@@ -509,7 +509,9 @@ export default function DeliveryOnSellPage() {
               <p className="cont_title cont-left">목록</p>
               <div className="controls cont-left">
                 <button
-                  className="admin_btn line basic_m"
+                  className={`admin_btn line basic_m ${
+                    searchValues.orderType === 'ALL' ? s.disabled_btn : ''
+                  }`}
                   onClick={onReprintInvoice}
                 >
                   {isLoading.reprint ? <Spinner /> : '송장 재출력'}
@@ -524,7 +526,9 @@ export default function DeliveryOnSellPage() {
                   />
                 )}
                 <button
-                  className="admin_btn line pl-3 pr-3 pt-1 pb-1"
+                  className={`admin_btn line pl-3 pr-3 pt-1 pb-1 ${
+                    searchValues.orderType === 'ALL' ? s.disabled_btn : ''
+                  }`}
                   onClick={onForcedDeliveryComplete}
                 >
                   강제 배송완료
