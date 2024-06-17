@@ -49,6 +49,7 @@ export default function CouponUsageListPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchQueryInitialize, setSearchQueryInitialize] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
     MirrorTextOnHoverEvent(window);
@@ -100,8 +101,10 @@ export default function CouponUsageListPage() {
       console.log('apiUrl>>>', apiUrl);
       const res = await putObjData(apiUrl, body);
       console.log(res);
+
       if (res.isDone) {
         mct.alertShow('쿠폰이 성공적으로 수정되었습니다.', onSubmitCallback);
+        setIsSubmitted(true);
       } else if (res.status === 422) {
         const message = res.data.data;
         mct.alertShow(
@@ -129,7 +132,8 @@ export default function CouponUsageListPage() {
   };
 
   const onSubmitCallback = () => {
-    window.location.reload();
+    //   window.location.reload();
+    mct.alertHide();
   };
 
   const onClickModalButton = () => {
@@ -184,7 +188,7 @@ export default function CouponUsageListPage() {
           <section className="cont">
             <div className="cont_header clearfix">
               <div className="cont_title cont-left">
-                쿠폰 목록
+                멤버 쿠폰 목록
                 <Tooltip
                   message={`1. 자동발행쿠폰은 생성 및 삭제할 수 없습니다.\n2. 자동발행쿠폰 중 등급별 쿠폰은 매달 1일, 생일 쿠폰은 해당 월 1일에 자동발급됩니다.\n3. 직접발행 쿠폰은 유효기간이 존재하는 항목만 목록에 나타납니다.\n4. 직접발행 쿠폰의 만료일자는 동일한 쿠폰을 2회 이상 발급했을 시,\n    가장 늦은 만료일자를 기준으로 표기됩니다.`}
                   messagePosition={'left'}
@@ -236,6 +240,8 @@ export default function CouponUsageListPage() {
                   initialize: searchQueryInitialize,
                 }}
                 setCurrentPage={setCurrentPage}
+                isSubmitted={isSubmitted}
+                setIsSubmitted={setIsSubmitted}
               />
             </div>
           </section>

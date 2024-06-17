@@ -27,7 +27,7 @@ export default function CouponList({
 }
 
 const ItemList = ({ item, number, onEditItem, isLoading }) => {
-  const [formValues, setFormValues] = useState({});
+  // const [formValues, setFormValues] = useState({});
   const [tempValues, setTempValues] = useState({
     expiredDate: transformDate(item.expiredDate),
     memberCouponStatus: item.memberCouponStatus,
@@ -78,6 +78,8 @@ const ItemList = ({ item, number, onEditItem, isLoading }) => {
     const apiUrl = e.currentTarget.dataset.apiUrl;
     onEditItem(apiUrl, DATA.id, tempValues);
   };
+
+  // console.log(tempValues);
 
   return (
     <li className={s.item} key={`item-${DATA.id}`}>
