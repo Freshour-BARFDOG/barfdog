@@ -21,11 +21,15 @@ const PcGnb = () => {
           link={`/shop?itemType=${general_itemType.RAW}`}
         />
         <SubmenuList
-          title="토핑"
+          title="토퍼"
           link={`/shop?itemType=${general_itemType.TOPPING}`}
         />
         <SubmenuList
-          title="굿즈"
+          title="간식"
+          link={`/shop?itemType=${general_itemType.SNACK}`}
+        />
+        <SubmenuList
+          title="용품"
           link={`/shop?itemType=${general_itemType.GOODS}`}
         />
       </MenuLayout>

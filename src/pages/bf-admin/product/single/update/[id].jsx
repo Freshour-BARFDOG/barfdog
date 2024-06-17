@@ -14,7 +14,12 @@ import transformClearLocalCurrency from '/util/func/transformClearLocalCurrency'
 import Spinner from '/src/components/atoms/Spinner';
 import { validate } from '/util/func/validation/validation_singleItem';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
-import {getData, getDataSSR, postObjData, putObjData} from '/src/pages/api/reqData';
+import {
+  getData,
+  getDataSSR,
+  postObjData,
+  putObjData,
+} from '/src/pages/api/reqData';
 import { useModalContext } from '/store/modal-context';
 import dynamic from 'next/dynamic';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
@@ -25,15 +30,9 @@ import CheckboxGroup from '/src/components/atoms/CheckboxGroup';
 import transformClearLocalCurrencyInEveryObject from '/util/func/transformClearLocalCurrencyInEveryObject';
 import SingleItemOptions from '/src/components/admin/product/SingleItemOptions';
 import SingleItemDiscountOptions from '/src/components/admin/product/SingleItemDiscountOptions';
-import {general_itemType} from "/store/TYPE/itemType";
-
-
-
-
-
+import { general_itemType } from '/store/TYPE/itemType';
 
 export default function UpdateSingleItemPage({ id }) {
-  
   const getFormValuesApiUrl = `/api/admin/items/${id}`;
   const putFormValuesApiUrl = `/api/admin/items/${id}`;
   const postThumbFileApiUrl = '/api/admin/items/image/upload';
@@ -53,8 +52,6 @@ export default function UpdateSingleItemPage({ id }) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [activeDiscountOption, setActiveDiscountOption] = useState(false);
 
-  
-
   useEffect(() => {
     if (!id) return;
     (async () => {
@@ -65,19 +62,19 @@ export default function UpdateSingleItemPage({ id }) {
         }));
         const res = await getData(getFormValuesApiUrl);
         // console.log(res);
-        
+
         const originOptionDataListFromServer = res.data.itemOptionAdminDtoList; // 에디터 >  원본아이디리스트
         setOriginOptionList(originOptionDataListFromServer); // 원본 option list
 
         const originthumbDataListFromServer = res.data.itemImageAdminDtoList;
-        setOriginThumbDataList(originthumbDataListFromServer)// 원본 thumnail ID list
-        
-        const originContentImageIdListFromServer = res.data.itemContentImageDtoList?.map(list=>list.id);
-        setOriginContentImageIdList(originContentImageIdListFromServer);// 원본 상세설명 내의 이미지 ID list
-  
-        
+        setOriginThumbDataList(originthumbDataListFromServer); // 원본 thumnail ID list
+
+        const originContentImageIdListFromServer =
+          res.data.itemContentImageDtoList?.map((list) => list.id);
+        setOriginContentImageIdList(originContentImageIdListFromServer); // 원본 상세설명 내의 이미지 ID list
+
         const DATA = res.data.itemAdminDto;
-        
+
         const initialFormValues = {
           itemType: DATA.itemType, // 카테고리
           name: DATA.name, // 상품명
@@ -88,33 +85,32 @@ export default function UpdateSingleItemPage({ id }) {
           salePrice: transformLocalCurrency(DATA.salePrice), // 할인 적용 후 판매가격
           inStock: DATA.inStock, // 재고 여부
           remaining: transformLocalCurrency(DATA.remaining), // 재고 수량
-          
-          
-          
+
           itemOptionSaveDtoList: [], // 옵션 > 추가 List
           itemOptionUpdateDtoList: res.data.itemOptionAdminDtoList, // 옵션 > 수정 List
           deleteOptionIdList: [], // 옵션 > 삭제 List
-          
-          
+
           deleteImageIdList: [], // 썸네일 > 삭제 List
           addImageIdList: [], // 썸네일 > 추가 List
-          imageOrderDtoList: originthumbDataListFromServer.map(data=>({id: data.id, learkOrder: data.leakOrder})), // 썸네일 {id, leakOrder } list
-          
-          
-          
+          imageOrderDtoList: originthumbDataListFromServer.map((data) => ({
+            id: data.id,
+            learkOrder: data.leakOrder,
+          })), // 썸네일 {id, leakOrder } list
+
           contents: DATA.contents, // 상품 설명
           addContentImageIdList: [], // 에디터 > 추가 이미지 List
           deleteContentImageIdList: [], // 에디터 > 삭제 이미지List
-          
+
           itemIcons: DATA.itemIcons,
           deliveryFree: DATA.deliveryFree, // 배송비무료
           itemStatus: DATA.status, // 노출 여부
         };
         setFormValues(initialFormValues);
-   
 
         if (document) {
-          const QuillEditor = dynamic(() => import('/src/components/admin/form/QuillEditor'));
+          const QuillEditor = dynamic(() =>
+            import('/src/components/admin/form/QuillEditor'),
+          );
           setQuillEditor(QuillEditor);
           // console.log('Editor init is complete.');
         }
@@ -127,8 +123,6 @@ export default function UpdateSingleItemPage({ id }) {
       }));
     })();
   }, []);
-  
-  
 
   useEffect(() => {
     // - 품절일 경우, 재고수량 초기화
@@ -148,9 +142,6 @@ export default function UpdateSingleItemPage({ id }) {
     }
   }, [formValues.salePrice]);
 
-  
-  
-  
   const onInputChangeHandler = (e) => {
     // 만약에 할인옵션이 false면, ..... 할인적용후 가격 -> 판매가격과 동일하게 설정한다.
     const input = e.currentTarget;
@@ -171,7 +162,10 @@ export default function UpdateSingleItemPage({ id }) {
     }
 
     if (filteredType && filteredType.indexOf('discountPercent') >= 0) {
-      filteredValue = transformClearLocalCurrency(filteredValue) > '100' ? '100' : filteredValue;
+      filteredValue =
+        transformClearLocalCurrency(filteredValue) > '100'
+          ? '100'
+          : filteredValue;
       // - MEMO 100 : string이어야함.
     }
 
@@ -187,26 +181,24 @@ export default function UpdateSingleItemPage({ id }) {
     const errObj = validate(formValues);
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
-  
+
     // console.log(formValues);
-    
+
     let filteredFormValues = formValues;
     const filterStringObj = {
       originalPrice: 'originalPrice',
       salePrice: 'salePrice',
-      remaining : 'remaining',
+      remaining: 'remaining',
       discountDegree: 'discountDegree',
-      itemOptionSaveDtoList: { price: 'price', remaining: 'remaining'},
-      itemOptionUpdateDtoList: { price: 'price', remaining: 'remaining'},
-    }
+      itemOptionSaveDtoList: { price: 'price', remaining: 'remaining' },
+      itemOptionUpdateDtoList: { price: 'price', remaining: 'remaining' },
+    };
     filteredFormValues = transformClearLocalCurrencyInEveryObject(
       filteredFormValues,
       filterStringObj,
     );
     // console.log(filteredFormValues);
 
-    
-    
     try {
       setIsLoading((prevState) => ({
         ...prevState,
@@ -277,14 +269,17 @@ export default function UpdateSingleItemPage({ id }) {
                           id="itemType"
                           options={[
                             { label: '선택', value: '' },
-                            { label: '생식 (일반상품)', value: general_itemType.RAW },
-                            { label: '토핑 (간식 및 토핑류)', value: general_itemType.TOPPING },
-                            { label: '굿즈 (그 밖의 제품)', value: general_itemType.GOODS },
+                            { label: '생식 (단품)', value: 'RAW' },
+                            { label: '토퍼', value: 'TOPPING' },
+                            { label: '간식', value: 'SNACK' },
+                            { label: '용품', value: 'GOODS' },
                           ]}
                           value={formValues.itemType}
                           setFormValues={setFormValues}
                         />
-                        {formErrors.itemType && <ErrorMessage>{formErrors.itemType}</ErrorMessage>}
+                        {formErrors.itemType && (
+                          <ErrorMessage>{formErrors.itemType}</ErrorMessage>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -307,7 +302,9 @@ export default function UpdateSingleItemPage({ id }) {
                           value={formValues.name || ''}
                           onChange={onInputChangeHandler}
                         />
-                        {formErrors.name && <ErrorMessage>{formErrors.name}</ErrorMessage>}
+                        {formErrors.name && (
+                          <ErrorMessage>{formErrors.name}</ErrorMessage>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -329,7 +326,9 @@ export default function UpdateSingleItemPage({ id }) {
                           value={formValues.description || ''}
                           onChange={onInputChangeHandler}
                         />
-                        {formErrors.name && <ErrorMessage>{formErrors.description}</ErrorMessage>}
+                        {formErrors.name && (
+                          <ErrorMessage>{formErrors.description}</ErrorMessage>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -355,7 +354,9 @@ export default function UpdateSingleItemPage({ id }) {
                         />
                         <em className="unit">원</em>
                         {formErrors.originalPrice && (
-                          <ErrorMessage>{formErrors.originalPrice}</ErrorMessage>
+                          <ErrorMessage>
+                            {formErrors.originalPrice}
+                          </ErrorMessage>
                         )}
                       </div>
                     </div>
@@ -494,13 +495,18 @@ export default function UpdateSingleItemPage({ id }) {
                       <h5 className="title">상세정보</h5>
                     </div>
                     <div className="inp_section">
-                      {formErrors.contents && <ErrorMessage>{formErrors.contents}</ErrorMessage>}
+                      {formErrors.contents && (
+                        <ErrorMessage>{formErrors.contents}</ErrorMessage>
+                      )}
                       {/* // * --------- QUILL EDITOR --------- * // */}
                       {QuillEditor && (
                         <QuillEditor
                           id={'contents'}
                           mode={'update'}
-                          formValuesKey={{ addImageKey: 'addContentImageIdList', delImageKey: 'deleteContentImageIdList' }}
+                          formValuesKey={{
+                            addImageKey: 'addContentImageIdList',
+                            delImageKey: 'deleteContentImageIdList',
+                          }}
                           imageId={'contentImageIdList'}
                           originImageIdList={originContentImageIdList}
                           setFormValues={setFormValues}
@@ -519,7 +525,9 @@ export default function UpdateSingleItemPage({ id }) {
                       <h5 className="title">
                         상품아이콘
                         <Tooltip
-                          message={'SHOP페이지 일반상품 목록에 노출될 아이콘입니다.'}
+                          message={
+                            'SHOP페이지 일반상품 목록에 노출될 아이콘입니다.'
+                          }
                           messagePosition={'left'}
                         />
                       </h5>
@@ -597,22 +605,30 @@ export default function UpdateSingleItemPage({ id }) {
                 className="admin_btn confirm_l solid"
                 onClick={onSubmit}
               >
-                {isLoading.submit ? <Spinner style={{color:'#fff'}}/> : '수정'}
+                {isLoading.submit ? (
+                  <Spinner style={{ color: '#fff' }} />
+                ) : (
+                  '수정'
+                )}
               </button>
             </div>
           </div>
         </AdminContentWrapper>
       </AdminLayout>
-      {hasAlert && <Modal_global_alert message={modalMessage} onClick={onGlobalModalCallback} background />}
+      {hasAlert && (
+        <Modal_global_alert
+          message={modalMessage}
+          onClick={onGlobalModalCallback}
+          background
+        />
+      )}
     </>
   );
 }
 
-
-
 export async function getServerSideProps(ctx) {
   const { query } = ctx;
   const { id } = query;
- 
-  return {props :  { id: id || null}};
+
+  return { props: { id: id || null } };
 }

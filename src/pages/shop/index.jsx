@@ -92,6 +92,7 @@ export default function ShopPage() {
     const itemType = button.dataset.itemType;
     const searchKey = searchQueryType.ITEMTYPE;
     const convertTypeToQuery = itemType; // 객체로 searchValue에 넣는다.
+    // console.log(convertTypeToQuery);
     setSearchValues((prevState) => ({
       ...prevState,
       [searchKey]: convertTypeToQuery,
@@ -207,6 +208,22 @@ export default function ShopPage() {
                   <li>
                     <hr />
                   </li>
+                  <li
+                    className={
+                      searchValues.itemType === general_itemType.SNACK
+                        ? s.active
+                        : ''
+                    }
+                  >
+                    <button
+                      type={'button'}
+                      onClick={onChagneItemType}
+                      data-item-type={general_itemType.SNACK}
+                    >
+                      {general_itemType.KOR.SNACK}
+                    </button>
+                  </li>
+                  <hr />
                   <li
                     className={
                       searchValues.itemType === general_itemType.GOODS
