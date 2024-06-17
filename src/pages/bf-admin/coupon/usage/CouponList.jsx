@@ -34,18 +34,20 @@ const ItemList = ({ item, number, onEditItem, isLoading }) => {
     remaining: item.remaining,
   });
 
+  // console.log('item>>>', item);
+
   const DATA = {
     id: item.id,
     number,
     memberName: item.memberName,
     memberEmail: item.memberEmail,
     couponName: item.couponName,
-    couponStatus:
-      item.couponStatus === 'ACTIVE'
+    memberCouponStatus:
+      item.memberCouponStatus === 'ACTIVE'
         ? '활성'
-        : item.couponStatus === 'INACTIVE'
+        : item.memberCouponStatus === 'INACTIVE'
         ? '비활성'
-        : item.couponStatus,
+        : item.memberCouponStatus,
     remaining: item.remaining,
     code: item.code || '-',
     createdDate: transformDate(item.createdDate) || '-',
@@ -86,7 +88,7 @@ const ItemList = ({ item, number, onEditItem, isLoading }) => {
       <span className={s.select_wrapper}>
         <select
           id="memberCouponStatus"
-          value={tempValues.memberCouponStatus || DATA.couponStatus}
+          value={tempValues.memberCouponStatus || DATA.memberCouponStatus}
           onChange={onInputChange}
         >
           <option value="ACTIVE">활성</option>
