@@ -61,7 +61,6 @@ export default function OrderOnSellPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const router = useRouter();
   const { pathname } = router;
-
   useEffect(() => {
     const selectedList = itemList.filter(
       (data) => selectedOrderIdList.indexOf(data.id) >= 0,
@@ -129,9 +128,11 @@ export default function OrderOnSellPage() {
   };
 
   const onStartOrderConfirm = () => {
+    if (searchValues.orderType == 'ALL') return;
     const invalidItemList =
       filterInvalidOrderConfirmStatusItems(selectedItemList);
     // console.log(invalidItemList);
+    // console.log(selectedItemList);
     if (!selectedOrderIdList.length) {
       return alert('선택된 상품이 없습니다.');
     } else if (invalidItemList.length) {
@@ -792,19 +793,25 @@ export default function OrderOnSellPage() {
               </p>
               <div className="controls cont-left">
                 <button
-                  className="admin_btn line basic_m"
+                  className={`admin_btn line basic_m ${
+                    searchValues.orderType === 'ALL' ? s.disabled_btn : ''
+                  }`}
                   onClick={onStartOrderConfirm}
                 >
                   {isLoading.confirm ? <Spinner /> : '주문확인'}
                 </button>
                 <button
-                  className="admin_btn line basic_m"
+                  className={`admin_btn line basic_m ${
+                    searchValues.orderType === 'ALL' ? s.disabled_btn : ''
+                  }`}
                   onClick={onStartOrderDeny}
                 >
                   확인취소
                 </button>
                 <button
-                  className="admin_btn line basic_m"
+                  className={`admin_btn line basic_m ${
+                    searchValues.orderType === 'ALL' ? s.disabled_btn : ''
+                  }`}
                   onClick={onStartRegisterDelivery}
                 >
                   주문발송
@@ -816,13 +823,17 @@ export default function OrderOnSellPage() {
                   운송장전송
                 </button> */}
                 <button
-                  className="admin_btn line basic_m"
+                  className={`admin_btn line basic_m ${
+                    searchValues.orderType === 'ALL' ? s.disabled_btn : ''
+                  }`}
                   onClick={onValidOrderBeforeCancelOrderBySeller}
                 >
                   {isLoading.orderCancel ? <Spinner /> : '판매취소'}
                 </button>
                 <button
-                  className="admin_btn line pl-3 pr-3 pt-1 pb-1"
+                  className={`admin_btn line pl-3 pr-3 pt-1 pb-1 ${
+                    searchValues.orderType === 'ALL' ? s.disabled_btn : ''
+                  }`}
                   onClick={onStartManagerCompany}
                 >
                   굿스플로 택배사 관리

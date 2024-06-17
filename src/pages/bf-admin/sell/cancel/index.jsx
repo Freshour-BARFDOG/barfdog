@@ -256,13 +256,17 @@ export default function CancelOnSellPage() {
               </p>
               <div className="controls cont-left">
                 <button
-                  className="admin_btn line basic_m"
+                  className={`admin_btn line basic_m ${
+                    searchValues.orderType === 'ALL' ? s.disabled_btn : ''
+                  }`}
                   onClick={onConfirmingCancelOrder}
                 >
                   {isLoading.confirmingCancelOrder ? <Spinner /> : '취소승인'}
                 </button>
                 <button
-                  className="admin_btn line basic_m autoWidth"
+                  className={`admin_btn line basic_m autoWidth ${
+                    searchValues.orderType === 'ALL' ? s.disabled_btn : ''
+                  }`}
                   onClick={onRefusingCancelOrder}
                 >
                   {isLoading.refusingCancelOrder ? (
