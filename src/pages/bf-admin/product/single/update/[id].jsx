@@ -31,8 +31,6 @@ import transformClearLocalCurrencyInEveryObject from '/util/func/transformClearL
 import SingleItemOptions from '/src/components/admin/product/SingleItemOptions';
 import SingleItemDiscountOptions from '/src/components/admin/product/SingleItemDiscountOptions';
 import { general_itemType } from '/store/TYPE/itemType';
-import { itemHealthTypeList } from '/store/TYPE/itemHealthType';
-import pc from '/src/components/atoms/pureCheckbox.module.scss';
 
 export default function UpdateSingleItemPage({ id }) {
   const getFormValuesApiUrl = `/api/admin/items/${id}`;
