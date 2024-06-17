@@ -21,6 +21,7 @@ function AdminGnb() {
           <SubmenuList title="쿠폰 조회" link="/bf-admin/coupon/search" />
           <SubmenuList title="쿠폰 발행" link="/bf-admin/coupon/release" />
           <SubmenuList title="쿠폰 생성" link="/bf-admin/coupon/create" />
+          <SubmenuList title="쿠폰 사용 현황" link="/bf-admin/coupon/usage" />
           <SubmenuTitle title="적립금 관리" noLink />
           <SubmenuList title="적립금 조회" link="/bf-admin/reward/search" />
           <SubmenuList title="적립금 발행" link="/bf-admin/reward/release" />
