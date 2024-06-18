@@ -98,255 +98,46 @@ section.sns {
   display: none;
 }
 
-//*** 1. 인트로 ***
-.intro_top_wrapper {
-  position: relative;
-
-  .video_wrapper {
-    position: relative;
-    // width: 100vw;
-    height: 90vh;
-    // overflow: hidden;
-  }
-
-  .video_wrapper video {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100%;
-    height: 100%;
-    // object-fit: cover;
-    transform: translate(-50%, -50%);
-    z-index: -1;
-  }
-
-  //* 메인 이미지
-  // &::before {
-  //   content: '';
-  //   position: absolute;
-  //   top: 0;
-  //   left: 50%;
-  //   transform: translateX(-50%);
-  //   width: 100vw;
-  //   height: 100%;
-  //   background-image: url('../.././public/img/barfraw.png');
-  //   background-repeat: no-repeat;
-  //   background-size: cover;
-  //   background-position: center;
-  // }
-  .inner {
-    color: #fff;
-    text-align: center;
-    width: rem(600);
-    display: inline-block;
-    .text_box {
-      position: absolute;
-      // top: 30%;
-      // left: 15%;
-      // margin-bottom: rem(50);
-      transform: translate(-50%, -50%);
-      top: 50%;
-      left: 50%;
-      // display: flex;
-      // flex-direction: column;
-      // justify-content: center;
-      // align-items: center;
-      // gap: rem(10);
-
-      h1 {
-        left: 0;
-        font-size: rem(30);
-        font-weight: bold;
-        position: relative;
-        z-index: 1;
-        height: 100%;
-        margin-bottom: rem(30);
-      }
-
-      h2 {
-        font-size: rem(20);
-        position: relative;
-        z-index: 1;
-        height: 100%;
-        margin-bottom: rem(10);
-      }
-
-      .image_wrap {
-        max-width: rem(200);
-        margin-bottom: rem(30);
-      }
-
-      .btn_box {
-        display: flex;
-        justify-content: center;
-        gap: rem(40);
-        font-size: rem(20);
-        font-weight: bold;
-        a {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: rem(150);
-          width: rem(150);
-          border-radius: 50%;
-          text-align: center;
-          background-color: #cc666a;
-        }
-
-        .btn_survey:hover {
-          // color: #cc666a;
-          // border: rem(2) solid #cc666a;
-          background-color: #c22323;
-          transition: 0.6s all;
-        }
-
-        .btn_score {
-          color: #cc666a;
-          border: rem(2) solid #cc666a;
-          background-color: #fff;
-        }
-        .btn_score:hover {
-          color: #fff;
-          background-color: #e0cfcf9e;
-          transition: 0.6s all;
-        }
-      }
-    }
-
-    .leftbox {
-      position: relative;
-      width: 100%;
-      height: rem(360);
-
-      .image_wrap {
-        display: none;
-      }
-    }
-  }
-}
-
-//*** 2. 맞춤 건강문제 ***
-.recipe_info {
-  h2 {
-    text-align: center;
-    font-weight: bold;
-    font-size: rem(32);
-    line-height: 120%;
-  }
-
-  h4 {
-    color: #898989;
-    font-size: rem(20);
-    text-align: center;
-    margin-top: rem(4);
-  }
-}
-
-//*** 2. 건강문제별 맞춤 추천 ***
+//레시피
 .swiper_recipe_outerWrap {
   position: relative;
-  // height: rem(400);
+  height: rem(538);
   margin-top: rem(40);
-
-  h3 {
-    font-size: rem(28) !important;
-    margin-bottom: rem(4);
-    text-align: center;
-    color: #000 !important;
-    span {
-      font-weight: bold;
-      color: #be1a21;
-    }
-  }
-
-  h4 {
-    font-size: rem(18) !important;
-    font-weight: 400;
-    color: #717171;
-    text-align: center;
-  }
-
-  .swiper_recipe_bottom_wrapper {
-    // overflow-y: auto;
-    margin-top: rem(40);
-
-    .swiper_slide_item {
-      // background-color: #c22323;
-      width: rem(300) !important;
-      height: rem(400) !important;
-    }
-
-    .recipe_box {
-      position: relative;
-      width: rem(220);
-      height: rem(220);
-      background-color: #fff;
-      // box-shadow: rem(10) rem(10) rem(30) rgba(0, 0, 0, 0.1);
-      padding: rem(10);
-      box-sizing: border-box;
-      text-align: center;
-      border-radius: rem(10);
-      margin: auto;
-    }
-  }
-
-  .swiper_recipe_bottom_text {
-    padding-bottom: rem(40);
-  }
 
   .swiper_recipe {
     height: 100%;
-    width: rem(600);
-    // padding: rem(20) rem(20) 0;
+    padding: rem(20) rem(20) 0;
 
-    .item_description {
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-      padding: rem(10);
-      margin-top: rem(20);
-      cursor: pointer;
+    .swiper_slide {
+      &:first-child {
+        .img_wrap {
+          &::after {
+            background-image: url('../.././public/img/recipes/duck_lamb.png');
+          }
+        }
+      }
+      &:nth-child(2) {
+        .img_wrap {
+          &::after {
+            background-image: url('../.././public/img/recipes/lamb_beef.png');
+          }
+        }
+      }
+      &:nth-child(3) {
+        .img_wrap {
+          &::after {
+            background-image: url('../.././public/img/recipes/duck_lamb.png');
+          }
+        }
+      }
+      &:last-child {
+        .img_wrap {
+          &::after {
+            background-image: url('../.././public/img/recipes/duck_lamb.png');
+          }
+        }
+      }
     }
-
-    .item_name {
-      font-size: rem(20);
-      font-weight: bold;
-    }
-
-    .item_price {
-      text-align: right;
-    }
-
-    // .swiper_slide {
-    //   &:first-child {
-    //     .img_wrap {
-    //       &::after {
-    //         background-image: url('../.././public/img/pages/main/DIARRHEA.jpg');
-    //       }
-    //     }
-    //   }
-    //   &:nth-child(2) {
-    //     .img_wrap {
-    //       &::after {
-    //         background-image: url('../.././public/img/recipes/lamb_beef.png');
-    //       }
-    //     }
-    //   }
-    //   &:nth-child(3) {
-    //     .img_wrap {
-    //       &::after {
-    //         background-image: url('../.././public/img/recipes/duck_lamb.png');
-    //       }
-    //     }
-    //   }
-    //   &:last-child {
-    //     .img_wrap {
-    //       &::after {
-    //         background-image: url('../.././public/img/recipes/duck_lamb.png');
-    //       }
-    //     }
-    //   }
-    // }
   }
 
   .btn_box {
@@ -356,98 +147,30 @@ section.sns {
 }
 
 .recipe_a {
+  height: rem(456);
+  width: rem(240);
   position: relative;
 
-  .img_wrap::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    // background-color: rgba(142, 79, 79, 0.5);
-    background-color: rgba(31, 31, 31, 0.5);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
-  .img_wrap.clicked::after {
-    opacity: 1; /* 클릭된 경우 투명도 적용 */
-  }
-
-  // 건강문제 이미지
-  .img_wrap {
-    margin: rem(10);
-    position: relative;
-    width: rem(139 * 1.8);
-    height: rem(182 * 1.8);
-    display: flex;
-    // aspect-ratio: 1/1;
-    background-color: #fff;
-    overflow: hidden;
-    border-radius: rem(10);
-    cursor: pointer;
-
-    img {
-      transform: scale(1);
-      transition: transform 0.5s;
-    }
-  }
-
-  // 체크 이모티콘
-  .icon_check_wrap {
-    position: absolute;
-    right: 30%;
-    bottom: 30%;
-    z-index: 1;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  // 장바구니 이모티콘
-  // .icon_store_wrap {
-  //   position: absolute;
-  //   right: 6%;
-  //   bottom: 5%;
-  //   cursor: pointer;
-  //   width: rem(40);
-  //   height: rem(40);
-  //   border-radius: 50%;
-  //   background-color: #a2a2a2;
-  //   display: flex;
-  //   align-items: center;
-  //   justify-content: center;
-  //   z-index: 1;
-  // }
-  // .icon_store_wrap:hover {
-  //   background-color: #696969;
-  //   transition: 0.3s all;
-  // }
-
-  // 아이템 이미지
-  .img_item_wrap {
-    // margin: rem(20);
+  .recipe_box {
     position: relative;
     width: rem(260);
-    height: rem(260);
+    height: rem(456);
     background-color: #fff;
-    overflow: hidden;
-    // border-radius: rem(20);
-    cursor: pointer;
-
-    img {
-      transform: scale(1);
-      transition: transform 0.5s;
-    }
+    box-shadow: rem(10) rem(10) rem(30) rgba(0, 0, 0, 0.1);
+    padding: rem(10);
+    box-sizing: border-box;
+    text-align: center;
   }
 
-  .swiper_slide_item:hover {
-    background-color: #966f6f !important;
+  .img_wrap {
+    position: relative;
+    height: rem(240);
+    width: rem(240);
+    background-color: #fff;
+    overflow: hidden;
 
     img {
-      transform: scale(1);
+      transform: scale(1.1);
       transition: transform 0.5s;
     }
   }
@@ -458,14 +181,12 @@ section.sns {
   }
 
   .uiNameKorean {
-    position: absolute;
-    top: 10.5%;
-    left: 15.5%;
-    // margin-top: rem(8);
-    // margin-bottom: rem(10);
-    font-size: rem(26);
+    margin-top: rem(8);
+    margin-bottom: rem(10);
+    left: 50%;
+    font-size: rem(24);
     font-weight: bold;
-    color: #fff;
+    text-align: center;
   }
 
   .desc {
@@ -480,8 +201,8 @@ section.sns {
 
   .pbox {
     position: absolute;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
     width: 100%;
     bottom: rem(-125);
     text-align: center;
@@ -498,28 +219,169 @@ section.sns {
     }
   }
 
-  // .recipe_btn {
-  //   color: #ca1010;
-  //   font-size: rem(14);
-  //   font-weight: bold;
-  //   text-align: center;
-  //   line-height: rem(35);
-  //   position: absolute;
-  //   bottom: rem(20);
-  //   left: 50%;
-  //   transform: translateX(-50%);
-  //   width: rem(95);
-  //   height: rem(35);
-  //   border-radius: rem(32);
-  //   background-color: #f9edec;
-  //   cursor: pointer;
-  //   transition: background-color 0.1s ease, color 0.1s ease;
+  .recipe_btn {
+    color: #ca1010;
+    font-size: rem(14);
+    font-weight: bold;
+    text-align: center;
+    line-height: rem(35);
+    position: absolute;
+    bottom: rem(20);
+    left: 50%;
+    transform: translateX(-50%);
+    width: rem(95);
+    height: rem(35);
+    border-radius: rem(32);
+    background-color: #f9edec;
+    cursor: pointer;
+    transition: background-color 0.1s ease, color 0.1s ease;
 
-  //   &:hover {
-  //     color: #f9edec;
-  //     background-color: #ca1010;
-  //   }
-  // }
+    &:hover {
+      color: #f9edec;
+      background-color: #ca1010;
+    }
+  }
+}
+
+.recipe_title {
+  text-align: center;
+  font-weight: bold;
+  font-size: rem(32);
+  line-height: 120%;
+}
+
+//*** 1. 인트로 ***
+.intro_top_wrapper {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    height: 100%;
+    background-image: url('../.././public/img/barfraw.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+  }
+  .inner {
+    color: #fff;
+    text-align: center;
+    .text_box {
+      margin-bottom: rem(50);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: rem(10);
+
+      h1 {
+        left: 0;
+        font-size: rem(30);
+        font-weight: bold;
+        position: relative;
+        z-index: 1;
+        height: 100%;
+      }
+
+      h2 {
+        font-size: rem(20);
+        position: relative;
+        z-index: 1;
+        height: 100%;
+      }
+
+      .image_wrap {
+        max-width: rem(200);
+      }
+    }
+    // display: grid;
+    // grid-template-columns: 1fr 1fr;
+    // column-gap: rem(40);
+    // justify-content: center;
+    // align-items: center;
+
+    // display: flex;
+
+    .btn_box {
+      display: flex;
+      justify-content: center;
+      gap: rem(40);
+      font-size: rem(20);
+      font-weight: bold;
+      a {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: rem(150);
+        width: rem(150);
+        border-radius: 50%;
+        text-align: center;
+        background-color: #cc666a;
+      }
+
+      .btn_survey:hover {
+        // color: #cc666a;
+        // border: rem(2) solid #cc666a;
+        background-color: #c22323;
+        transition: 0.6s all;
+      }
+
+      .btn_score {
+        color: #cc666a;
+        border: rem(2) solid #cc666a;
+        background-color: #fff;
+      }
+      .btn_score:hover {
+        color: #fff;
+        background-color: #e0cfcf9e;
+        transition: 0.6s all;
+      }
+    }
+
+    .leftbox {
+      position: relative;
+      width: 100%;
+      height: rem(360);
+
+      .image_wrap {
+        display: none;
+      }
+    }
+
+    .rightbox {
+      // width: 100%;
+      // max-width: rem(360);
+      // word-break: keep-all;
+      // position: relative;
+      // padding: rem(50) 0 rem(50) rem(40);
+
+      // &::before {
+      //   content: '';
+      //   position: absolute;
+      //   top: 50%;
+      //   left: 0;
+      //   transform: translateY(-50%);
+      //   width: 50vw;
+      //   height: 100%;
+      //   background-color: #fff;
+      //   border-radius: rem(20) 0 0 rem(20);
+      //   opacity: 0.9;
+      // }
+
+      // p {
+      //   color: var(--color-main);
+      //   font-size: rem(15);
+      //   font-weight: bold;
+      //   position: relative;
+      //   z-index: 1;
+      //   height: 100%;
+      // }
+    }
+  }
 }
 
 //바프생식 바뀌는 점
@@ -1467,7 +1329,7 @@ section.sns {
     width: rem(28);
     height: rem(28);
     top: 50%;
-    // left: 102% !important;
+    left: 45%;
     z-index: 2;
     box-shadow: none;
     transition-property: box-shadow, opacity;
@@ -1489,7 +1351,7 @@ section.sns {
     width: rem(28);
     height: rem(28);
     top: 50%;
-    // right: 10%;
+    left: 55%;
     z-index: 2;
     box-shadow: none;
     transition-property: box-shadow, opacity;
