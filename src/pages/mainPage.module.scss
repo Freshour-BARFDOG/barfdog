@@ -98,153 +98,6 @@ section.sns {
   display: none;
 }
 
-//레시피
-.swiper_recipe_outerWrap {
-  position: relative;
-  height: rem(538);
-  margin-top: rem(40);
-
-  .swiper_recipe {
-    height: 100%;
-    padding: rem(20) rem(20) 0;
-
-    .swiper_slide {
-      &:first-child {
-        .img_wrap {
-          &::after {
-            background-image: url('../.././public/img/recipes/duck_lamb.png');
-          }
-        }
-      }
-      &:nth-child(2) {
-        .img_wrap {
-          &::after {
-            background-image: url('../.././public/img/recipes/lamb_beef.png');
-          }
-        }
-      }
-      &:nth-child(3) {
-        .img_wrap {
-          &::after {
-            background-image: url('../.././public/img/recipes/duck_lamb.png');
-          }
-        }
-      }
-      &:last-child {
-        .img_wrap {
-          &::after {
-            background-image: url('../.././public/img/recipes/duck_lamb.png');
-          }
-        }
-      }
-    }
-  }
-
-  .btn_box {
-    display: flex;
-    justify-content: center;
-  }
-}
-
-.recipe_a {
-  height: rem(456);
-  width: rem(240);
-  position: relative;
-
-  .recipe_box {
-    position: relative;
-    width: rem(260);
-    height: rem(456);
-    background-color: #fff;
-    box-shadow: rem(10) rem(10) rem(30) rgba(0, 0, 0, 0.1);
-    padding: rem(10);
-    box-sizing: border-box;
-    text-align: center;
-  }
-
-  .img_wrap {
-    position: relative;
-    height: rem(240);
-    width: rem(240);
-    background-color: #fff;
-    overflow: hidden;
-
-    img {
-      transform: scale(1.1);
-      transition: transform 0.5s;
-    }
-  }
-
-  .uiNameKorean {
-    margin-top: rem(8);
-    margin-bottom: rem(10);
-    left: 50%;
-    font-size: rem(24);
-    font-weight: bold;
-    text-align: center;
-  }
-
-  .desc {
-    color: #717171;
-    font-size: rem(16);
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
-    overflow: hidden;
-    word-break: keep-all;
-  }
-
-  .pbox {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    bottom: rem(-125);
-    text-align: center;
-    line-height: 1.35;
-
-    .title_en {
-      font-family: 'GmarketSansbold';
-      font-size: rem(20);
-      margin-bottom: rem(20);
-    }
-    .title_ko {
-      font-family: var(--font-ink);
-      font-size: rem(27);
-    }
-  }
-
-  .recipe_btn {
-    color: #ca1010;
-    font-size: rem(14);
-    font-weight: bold;
-    text-align: center;
-    line-height: rem(35);
-    position: absolute;
-    bottom: rem(20);
-    left: 50%;
-    transform: translateX(-50%);
-    width: rem(95);
-    height: rem(35);
-    border-radius: rem(32);
-    background-color: #f9edec;
-    cursor: pointer;
-    transition: background-color 0.1s ease, color 0.1s ease;
-
-    &:hover {
-      color: #f9edec;
-      background-color: #ca1010;
-    }
-  }
-}
-
-.recipe_title {
-  text-align: center;
-  font-weight: bold;
-  font-size: rem(32);
-  line-height: 120%;
-}
-
 //*** 1. 인트로 ***
 .intro_top_wrapper {
   position: relative;
@@ -293,13 +146,6 @@ section.sns {
         max-width: rem(200);
       }
     }
-    // display: grid;
-    // grid-template-columns: 1fr 1fr;
-    // column-gap: rem(40);
-    // justify-content: center;
-    // align-items: center;
-
-    // display: flex;
 
     .btn_box {
       display: flex;
@@ -346,37 +192,248 @@ section.sns {
         display: none;
       }
     }
+  }
+}
 
-    .rightbox {
-      // width: 100%;
-      // max-width: rem(360);
-      // word-break: keep-all;
-      // position: relative;
-      // padding: rem(50) 0 rem(50) rem(40);
+//*** 2. 맞춤 건강문제 ***
+.recipe_info {
+  h2 {
+    text-align: center;
+    font-weight: bold;
+    font-size: rem(32);
+    line-height: 120%;
+  }
 
-      // &::before {
-      //   content: '';
-      //   position: absolute;
-      //   top: 50%;
-      //   left: 0;
-      //   transform: translateY(-50%);
-      //   width: 50vw;
-      //   height: 100%;
-      //   background-color: #fff;
-      //   border-radius: rem(20) 0 0 rem(20);
-      //   opacity: 0.9;
-      // }
+  h4 {
+    color: #898989;
+    font-size: rem(20);
+    text-align: center;
+    margin-top: rem(4);
+  }
+}
 
-      // p {
-      //   color: var(--color-main);
-      //   font-size: rem(15);
-      //   font-weight: bold;
-      //   position: relative;
-      //   z-index: 1;
-      //   height: 100%;
-      // }
+//*** 2. 건강문제별 맞춤 추천 ***
+.swiper_recipe_outerWrap {
+  position: relative;
+  // height: rem(400);
+  margin-top: rem(40);
+
+  h3 {
+    font-size: rem(28) !important;
+    margin-bottom: rem(4);
+    text-align: center;
+    color: #000 !important;
+    span {
+      font-weight: bold;
+      color: #be1a21;
     }
   }
+
+  h4 {
+    font-size: rem(22) !important;
+    font-weight: 400;
+    color: #717171;
+    text-align: center;
+  }
+
+  .swiper_recipe_bottom_wrapper {
+    margin-top: rem(40);
+
+    .swiper_slide_item {
+      // background-color: #c22323;
+      width: rem(300) !important;
+      height: rem(400) !important;
+    }
+
+    .recipe_box {
+      position: relative;
+      width: rem(280);
+      height: rem(280);
+      background-color: #fff;
+      box-shadow: rem(10) rem(10) rem(30) rgba(0, 0, 0, 0.1);
+      padding: rem(10);
+      box-sizing: border-box;
+      text-align: center;
+      border-radius: rem(10);
+      margin: auto;
+    }
+  }
+
+  .swiper_recipe_bottom_text {
+    padding-bottom: rem(40);
+  }
+
+  .swiper_recipe {
+    height: 100%;
+    // padding: rem(20) rem(20) 0;
+
+    .item_description {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      padding: rem(10);
+      margin-top: rem(20);
+    }
+
+    .item_name {
+      font-size: rem(20);
+      font-weight: bold;
+    }
+
+    .item_price {
+      text-align: right;
+    }
+
+    .swiper_slide {
+      &:first-child {
+        .img_wrap {
+          &::after {
+            background-image: url('../.././public/img/recipes/duck_lamb.png');
+          }
+        }
+      }
+      &:nth-child(2) {
+        .img_wrap {
+          &::after {
+            background-image: url('../.././public/img/recipes/lamb_beef.png');
+          }
+        }
+      }
+      &:nth-child(3) {
+        .img_wrap {
+          &::after {
+            background-image: url('../.././public/img/recipes/duck_lamb.png');
+          }
+        }
+      }
+      &:last-child {
+        .img_wrap {
+          &::after {
+            background-image: url('../.././public/img/recipes/duck_lamb.png');
+          }
+        }
+      }
+    }
+  }
+
+  .btn_box {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.recipe_a {
+  // height: rem(340);
+  // width: rem(240);
+  position: relative;
+
+  // 건강문제 이미지
+  .img_wrap {
+    margin: rem(20);
+    position: relative;
+    width: rem(260);
+    height: rem(300);
+    background-color: #fff;
+    overflow: hidden;
+    border-radius: rem(20);
+    cursor: pointer;
+    background-color: #c4c4c4;
+
+    img {
+      transform: scale(1);
+      transition: transform 0.5s;
+    }
+  }
+  .icon_store_wrap {
+    position: absolute;
+    right: 6%;
+    bottom: 5%;
+  }
+
+  // 아이템 이미지
+  .img_item_wrap {
+    // margin: rem(20);
+    position: relative;
+    width: rem(260);
+    height: rem(260);
+    background-color: #fff;
+    overflow: hidden;
+    // border-radius: rem(20);
+    cursor: pointer;
+
+    img {
+      transform: scale(1);
+      transition: transform 0.5s;
+    }
+  }
+
+  .img_wrap:hover {
+    transform: scale(1.05);
+    transition: transform 0.5s;
+  }
+
+  .uiNameKorean {
+    position: absolute;
+    top: 10%;
+    left: 20%;
+    // margin-top: rem(8);
+    // margin-bottom: rem(10);
+    font-size: rem(24);
+    font-weight: bold;
+  }
+
+  .desc {
+    color: #717171;
+    font-size: rem(16);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+    word-break: keep-all;
+  }
+
+  .pbox {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    bottom: rem(-125);
+    text-align: center;
+    line-height: 1.35;
+
+    .title_en {
+      font-family: 'GmarketSansbold';
+      font-size: rem(20);
+      margin-bottom: rem(20);
+    }
+    .title_ko {
+      font-family: var(--font-ink);
+      font-size: rem(27);
+    }
+  }
+
+  // .recipe_btn {
+  //   color: #ca1010;
+  //   font-size: rem(14);
+  //   font-weight: bold;
+  //   text-align: center;
+  //   line-height: rem(35);
+  //   position: absolute;
+  //   bottom: rem(20);
+  //   left: 50%;
+  //   transform: translateX(-50%);
+  //   width: rem(95);
+  //   height: rem(35);
+  //   border-radius: rem(32);
+  //   background-color: #f9edec;
+  //   cursor: pointer;
+  //   transition: background-color 0.1s ease, color 0.1s ease;
+
+  //   &:hover {
+  //     color: #f9edec;
+  //     background-color: #ca1010;
+  //   }
+  // }
 }
 
 //바프생식 바뀌는 점
@@ -1322,7 +1379,7 @@ section.sns {
     border-radius: 100%;
     width: rem(28);
     height: rem(28);
-    top: 50%;
+    top: 18%; // 크기 맞춰 수정
     left: 45%;
     z-index: 2;
     box-shadow: none;
@@ -1343,7 +1400,7 @@ section.sns {
     border-radius: 100%;
     width: rem(28);
     height: rem(28);
-    top: 50%;
+    top: 18%;
     left: 55%;
     z-index: 2;
     box-shadow: none;
