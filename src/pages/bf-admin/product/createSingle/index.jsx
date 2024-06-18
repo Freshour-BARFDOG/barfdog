@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import AdminLayout from '/src/components/admin/AdminLayout';
-import {AdminContentWrapper} from '/src/components/admin/AdminWrapper';
-import {useRouter} from 'next/router';
+import { AdminContentWrapper } from '/src/components/admin/AdminWrapper';
+import { useRouter } from 'next/router';
 import CustomSelect from '/src/components/admin/form/CustomSelect';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
 import CustomRadio from '/src/components/admin/form/CustomRadio';
@@ -14,24 +14,27 @@ import SingleItemOptions from '../../../../components/admin/product/SingleItemOp
 import SingleItemDiscountOptions from '../../../../components/admin/product/SingleItemDiscountOptions';
 import transformClearLocalCurrency from '/util/func/transformClearLocalCurrency';
 import Spinner from '/src/components/atoms/Spinner';
-import {validate} from '/util/func/validation/validation_singleItem';
-import {valid_hasFormErrors} from '/util/func/validation/validationPackage';
-import {postObjData} from '/src/pages/api/reqData';
-import {useModalContext} from '/store/modal-context';
+import { validate } from '/util/func/validation/validation_singleItem';
+import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
+import { postObjData } from '/src/pages/api/reqData';
+import { useModalContext } from '/store/modal-context';
 import dynamic from 'next/dynamic';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import CustomRadioTrueOrFalse from '/src/components/admin/form/CustomRadioTrueOrFalse';
 import FileInput from '/src/components/admin/form/FileInput';
 import Tooltip from '/src/components/atoms/Tooltip';
-import CheckboxGroup from "/src/components/atoms/CheckboxGroup";
-import transformClearLocalCurrencyInEveryObject from "/util/func/transformClearLocalCurrencyInEveryObject";
-import {discountUnitType} from "/store/TYPE/discountUnitType";
+import CheckboxGroup from '/src/components/atoms/CheckboxGroup';
+import transformClearLocalCurrencyInEveryObject from '/util/func/transformClearLocalCurrencyInEveryObject';
+import { discountUnitType } from '/store/TYPE/discountUnitType';
+import { itemHealthTypeList } from '/store/TYPE/itemHealthType';
+import pc from '/src/components/atoms/pureCheckbox.module.scss';
 
 // - 할인적용 후 판매가격 -> N일 경우 그냥 판매가격이랑 동일하게 처리한다.
 // - 아이템 아이콘
 
 const initialFormValues = {
   itemType: '',
+  itemHealthType: '',
   name: '',
   description: '',
   originalPrice: 0, // 판매가격
@@ -60,7 +63,6 @@ const initialFormValues = {
 const initialFormErrors = {};
 
 function CreateSingleItemPage() {
-  
   const postThumbFileApiUrl = '/api/admin/items/image/upload';
   const postDetailImageFileApiUrl = '/api/admin/items/contentImage/upload';
   const router = useRouter();
@@ -74,7 +76,6 @@ function CreateSingleItemPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [activeDiscountOption, setActiveDiscountOption] = useState(false);
 
-  
   // // console.log(formValues)
   useEffect(() => {
     // - 품절일 경우, 재고수량 초기화
@@ -97,7 +98,9 @@ function CreateSingleItemPage() {
   useEffect(() => {
     // - INIT QUILL EDITOR
     if (document) {
-      const QuillEditor = dynamic(() => import('/src/components/admin/form/QuillEditor'));
+      const QuillEditor = dynamic(() =>
+        import('/src/components/admin/form/QuillEditor'),
+      );
       setQuillEditor(QuillEditor);
       // console.log('Editor init is complete.');
     }
@@ -123,13 +126,32 @@ function CreateSingleItemPage() {
     }
 
     if (filteredType && filteredType.indexOf('discountPercent') >= 0) {
-      filteredValue = transformClearLocalCurrency(filteredValue) > '100' ? '100' : filteredValue;
+      filteredValue =
+        transformClearLocalCurrency(filteredValue) > '100'
+          ? '100'
+          : filteredValue;
       // - MEMO 100 : string이어야함.
     }
 
     setFormValues((prevState) => ({
       ...prevState,
       [id]: filteredValue,
+    }));
+  };
+
+  const onChangeHandler = (e, label) => {
+    let updatedItemHealthTypeList = [...formValues.itemHealthType];
+    const labelIndex = updatedItemHealthTypeList.indexOf(label);
+
+    if (labelIndex === -1) {
+      updatedItemHealthTypeList.push(label);
+    } else {
+      updatedItemHealthTypeList.splice(labelIndex, 1);
+    }
+
+    setFormValues((prevState) => ({
+      ...prevState,
+      itemHealthType: updatedItemHealthTypeList,
     }));
   };
 
@@ -145,12 +167,21 @@ function CreateSingleItemPage() {
     const filterStringObj = {
       originalPrice: 'originalPrice',
       salePrice: 'salePrice',
-      remaining : 'remaining',
+      remaining: 'remaining',
       discountDegree: 'discountDegree',
-      itemOptionSaveDtoList: { price: 'price', remaining: 'remaining'},
-    }
+      itemOptionSaveDtoList: { price: 'price', remaining: 'remaining' },
+    };
     // console.log(filteredFormValues);
-    filteredFormValues = transformClearLocalCurrencyInEveryObject(filteredFormValues, filterStringObj);
+    filteredFormValues = transformClearLocalCurrencyInEveryObject(
+      filteredFormValues,
+      filterStringObj,
+    );
+    // 문자열로 변환. 컴마(,)로 구분
+    const itemHealthTypeString = filteredFormValues.itemHealthType.join(',');
+    if (!itemHealthTypeString) {
+      filteredFormValues.itemHealthType = 'NONE';
+    } else filteredFormValues.itemHealthType = itemHealthTypeString;
+
     if (!isPassed) return mct.alertShow('유효하지 않은 항목이 있습니다.');
 
     try {
@@ -158,7 +189,7 @@ function CreateSingleItemPage() {
         ...prevState,
         submit: true,
       }));
-   
+      // console.log('filteredFormValues>>>', filteredFormValues);
       const apiUrl = '/api/admin/items';
       const res = await postObjData(apiUrl, filteredFormValues);
       // console.log(res);
@@ -166,10 +197,11 @@ function CreateSingleItemPage() {
         mct.alertShow('일반상품이 생성되었습니다.', onGlobalModalCallback);
         setIsSubmitted(true);
       } else {
-        mct.alertShow(res.error, '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.');
+        mct.alertShow(
+          res.error,
+          '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.',
+        );
       }
-      
-      
     } catch (err) {
       mct.alertShow('API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.');
       console.error('API통신 오류 : ', err);
@@ -185,7 +217,6 @@ function CreateSingleItemPage() {
       router.back();
     }
   };
-  
 
   const onGlobalModalCallback = () => {
     window.location.href = '/bf-admin/product/single';
@@ -194,7 +225,7 @@ function CreateSingleItemPage() {
   const onClickModalButton = () => {
     mct.alertHide();
   };
-  
+
   return (
     <>
       <MetaTitle title="일반상품 생성" admin={true} />
@@ -220,17 +251,59 @@ function CreateSingleItemPage() {
                           options={[
                             { label: '선택', value: '' },
                             { label: '생식 (단품)', value: 'RAW' },
-                            { label: '토핑 (간식 및 토핑류)', value: 'TOPPING' },
+                            {
+                              label: '토핑 (간식 및 토핑류)',
+                              value: 'TOPPING',
+                            },
                             { label: '굿즈 (그 밖의 제품)', value: 'GOODS' },
                           ]}
                           value={formValues.itemType}
                           setFormValues={setFormValues}
                         />
-                        {formErrors.itemType && <ErrorMessage>{formErrors.itemType}</ErrorMessage>}
+                        {formErrors.itemType && (
+                          <ErrorMessage>{formErrors.itemType}</ErrorMessage>
+                        )}
                       </div>
                     </div>
                   </div>
                 </div>
+
+                <div className="cont_divider">
+                  <div className="input_row">
+                    <div className="title_section fixedHeight">
+                      <label className="title" htmlFor="itemHealthType">
+                        추천 상품
+                      </label>
+                    </div>
+
+                    <ul className={'grid-checkbox-health-type'}>
+                      {itemHealthTypeList.map((type, index) => {
+                        const isChecked = formValues.itemHealthType?.includes(
+                          type.value,
+                        );
+                        return (
+                          <div className={`${pc['checkbox-wrap']}`} key={index}>
+                            <label
+                              htmlFor={type.value}
+                              className={`${pc.checkbox}`}
+                            >
+                              <input
+                                onChange={(e) => onChangeHandler(e, type.value)}
+                                type="checkbox"
+                                id={type.value}
+                                value={type.value}
+                                checked={isChecked}
+                              />
+                              <span className={pc.fakeCheckBox} />
+                              <span>{type.label}</span>
+                            </label>
+                          </div>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                </div>
+
                 {/* cont_divider */}
                 <div className="cont_divider">
                   <div className="input_row">
@@ -249,7 +322,9 @@ function CreateSingleItemPage() {
                           value={formValues.name}
                           onChange={onInputChangeHandler}
                         />
-                        {formErrors.name && <ErrorMessage>{formErrors.name}</ErrorMessage>}
+                        {formErrors.name && (
+                          <ErrorMessage>{formErrors.name}</ErrorMessage>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -271,7 +346,9 @@ function CreateSingleItemPage() {
                           value={formValues.description}
                           onChange={onInputChangeHandler}
                         />
-                        {formErrors.name && <ErrorMessage>{formErrors.description}</ErrorMessage>}
+                        {formErrors.name && (
+                          <ErrorMessage>{formErrors.description}</ErrorMessage>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -297,7 +374,9 @@ function CreateSingleItemPage() {
                         />
                         <em className="unit">원</em>
                         {formErrors.originalPrice && (
-                          <ErrorMessage>{formErrors.originalPrice}</ErrorMessage>
+                          <ErrorMessage>
+                            {formErrors.originalPrice}
+                          </ErrorMessage>
                         )}
                       </div>
                     </div>
@@ -427,7 +506,9 @@ function CreateSingleItemPage() {
                       <h5 className="title">상세정보</h5>
                     </div>
                     <div className="inp_section">
-                      {formErrors.contents && <ErrorMessage>{formErrors.contents}</ErrorMessage>}
+                      {formErrors.contents && (
+                        <ErrorMessage>{formErrors.contents}</ErrorMessage>
+                      )}
                       {/* // * --------- QUILL EDITOR --------- * // */}
                       {QuillEditor && (
                         <QuillEditor
@@ -450,7 +531,9 @@ function CreateSingleItemPage() {
                       <h5 className="title">
                         상품아이콘
                         <Tooltip
-                          message={'일반상품리스트 썸네일 상단에 노출된 아이콘입니다.'}
+                          message={
+                            '일반상품리스트 썸네일 상단에 노출된 아이콘입니다.'
+                          }
                           messagePosition={'left'}
                         />
                       </h5>
@@ -533,7 +616,9 @@ function CreateSingleItemPage() {
           </div>
         </AdminContentWrapper>
       </AdminLayout>
-      {hasAlert && <Modal_global_alert onClick={onClickModalButton} background/>}
+      {hasAlert && (
+        <Modal_global_alert onClick={onClickModalButton} background />
+      )}
     </>
   );
 }

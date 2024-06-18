@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Layout from '/src/components/common/Layout';
 import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from '/src/components/mypage/MypageWrapper';
@@ -6,28 +6,27 @@ import MetaTitle from '/src/components/atoms/MetaTitle';
 import s from './invite.module.scss';
 import filter_emptyValue from '/util/func/filter_emptyValue';
 import Spinner from '/src/components/atoms/Spinner';
-import {getData, putObjData} from '/src/pages/api/reqData';
+import { getData, putObjData } from '/src/pages/api/reqData';
 import PaginationWithAPI from '/src/components/atoms/PaginationWithAPI';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
-import {EmptyContMessage} from '/src/components/atoms/emptyContMessage';
+import { EmptyContMessage } from '/src/components/atoms/emptyContMessage';
 import transformDate from '/util/func/transformDate';
-import {rewardStatusType} from '/store/TYPE/rewardStatusType';
-import Modal_global_alert from "/src/components/modal/Modal_global_alert";
-import {useModalContext} from "/store/modal-context";
+import { rewardStatusType } from '/store/TYPE/rewardStatusType';
+import Modal_global_alert from '/src/components/modal/Modal_global_alert';
+import { useModalContext } from '/store/modal-context';
 
 import modal_s from '/src/components/modal/modal.module.scss';
-import {IoMdLink, IoMdMail} from 'react-icons/io';
+import { IoMdLink, IoMdMail } from 'react-icons/io';
 import Modal_sendPhoneMessage from '/src/components/modal/Modal_sendPhoneMessage';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 import useDeviceState from '/util/hook/useDeviceState';
 import Modal_alert from '/src/components/modal/Modal_alert';
-import {filter_userIndexOnRewardName} from "/util/func/filter_userIndexOnRewardName";
-
+import { filter_userIndexOnRewardName } from '/util/func/filter_userIndexOnRewardName';
 
 export default function InvitePage() {
   const searchApiUrl = '/api/rewards/invite'; // 친구추천 적립금 내역 조회
   const searchPageSize = 10;
-  
+
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
   const [isLoading, setIsLoading] = useState({});
@@ -43,14 +42,13 @@ export default function InvitePage() {
   const isMobile = useDeviceState().isMobile;
   const auth = useSelector((s) => s.auth);
   const data = auth.userInfo;
-  
+
   const [modalMessage, setModalMessage] = useState({});
   const [activeModal, setActiveModal] = useState({
     alert: false,
     message: false,
   });
-  
-  
+
   // // console.log(itemList);
 
   const pageInterCeptor = async (res) => {
@@ -63,9 +61,9 @@ export default function InvitePage() {
       currentPageIndex: 0,
       newPageNumber: 1,
       newItemList: [],
-    }
-    
-    if ( res.data ) {
+    };
+
+    if (res.data) {
       const data = res.data;
       const recommendData = {
         recommend: data.recommend,
@@ -78,7 +76,7 @@ export default function InvitePage() {
       const pageData = data.pagedModel?.page;
       let newItemList = data.pagedModel?._embedded?.queryRewardsDtoList || [];
       // console.log("newItemList: ",newItemList);
-      if(!newItemList.length){
+      if (!newItemList.length) {
         newItemList = await getAllRewardList();
       }
       newPageInfo = {
@@ -90,11 +88,11 @@ export default function InvitePage() {
         newItemList: newItemList || [],
       };
     }
-    
+
     return newPageInfo;
   };
-  
-  const getAllRewardList = async ()=>{
+
+  const getAllRewardList = async () => {
     let newItemList = [];
     setIsLoading((prevState) => ({
       ...prevState,
@@ -104,20 +102,22 @@ export default function InvitePage() {
       const url = `/api/rewards`;
       const res = await getData(url);
       // console.log(res);
-      newItemList = res.data?.pagedModel?._embedded?.queryRewardsDtoList?.filter(item=>item.name.indexOf('[친구추천]') >= 0);
+      newItemList =
+        res.data?.pagedModel?._embedded?.queryRewardsDtoList?.filter(
+          (item) => item.name.indexOf('[친구추천]') >= 0,
+        );
       // console.log();
     } catch (err) {
-        console.error(err)
+      console.error(err);
     } finally {
       setIsLoading((prevState) => ({
         ...prevState,
         fetching: false,
       }));
     }
-    
-    
+
     return newItemList;
-  }
+  };
 
   const onInputChangeHandler = (e) => {
     const input = e.currentTarget;
@@ -148,7 +148,7 @@ export default function InvitePage() {
           alert('친구추천코드가 등록되었습니다.');
           window.location.reload();
         } else if (res.status === 400) {
-          mct.alertShow('본인코드는 입력할 수 없습니다.')
+          mct.alertShow('본인코드는 입력할 수 없습니다.');
         } else {
           mct.alertShow('추천코드가 정확하지 않습니다.');
         }
@@ -162,7 +162,6 @@ export default function InvitePage() {
       }));
     })();
   };
-  
 
   const onCopyToClipboard = (value) => {
     let hostname;
@@ -219,7 +218,6 @@ export default function InvitePage() {
     mct.alertHide();
   };
 
-
   return (
     <>
       <MetaTitle title="마이페이지 친구초대" />
@@ -230,33 +228,36 @@ export default function InvitePage() {
               <p>친구초대</p>
               {isLoading.fetching && <Spinner />}
             </section>
-            {isMobile &&
-            <div className={`${s.info_row} ${s.user_recommand}`}>
-              <div className={`${s.recommand_code} ${s.info_col} flex-wrap`}>
-                <span>나의 추천코드</span>
-                <span className={s.code}>{data.recommendCode}</span>
+            {isMobile && (
+              <div className={`${s.info_row} ${s.user_recommand}`}>
+                <div className={`${s.recommand_code} ${s.info_col} flex-wrap`}>
+                  <span>나의 추천코드</span>
+                  <span className={s.code}>{data.recommendCode}</span>
+                </div>
+                <div className={`${s.sendMessage} ${s.info_col} flex-wrap`}>
+                  <button type="button" onClick={onShowSendMessageModal}>
+                    <IoMdMail />
+                    문자보내기
+                  </button>
+                </div>
+                <div className={`${s.copyLink} ${s.info_col} flex-wrap`}>
+                  <button type="button" onClick={onCopyUserRecommendCode}>
+                    <IoMdLink />
+                    코드복사
+                  </button>
+                </div>
               </div>
-              <div className={`${s.sendMessage} ${s.info_col} flex-wrap`}>
-                <button type="button" onClick={onShowSendMessageModal}>
-                  <IoMdMail />
-                  문자보내기
-                </button>
-              </div>
-              <div className={`${s.copyLink} ${s.info_col} flex-wrap`}>
-                <button type="button" onClick={onCopyUserRecommendCode}>
-                  <IoMdLink />
-                  코드복사
-                </button>
-              </div>
-            </div>
-            }
+            )}
 
             <section className={s.text}>
               <div>
-                친구가 내 추천코드로 가입하면 <span>친구와 나에게 3000 포인트,</span>
+                친구가 내 추천코드로 가입하면{' '}
+                <span>친구와 나에게 3,000 포인트,</span>
                 <br />
-                친구가 첫 주문하면 <span>친구와 나에게 3,000 포인트</span>를 드립니다!
-                <br/>
+                친구가 첫 구독주문 하면{' '}
+                <span> 친구에게 3,000 포인트, 나에게 20,000 포인트</span>를
+                드립니다!
+                <br />
                 <em>( 추천코드는 계정 당 1회 입력할 수 있습니다. )</em>
               </div>
             </section>
@@ -265,11 +266,18 @@ export default function InvitePage() {
               <div className={s.referral_code_row1}>추천코드</div>
 
               <div className={s.grid_box}>
-                {recommendInfo.recommend ? <span className={s.fake_input}>{recommendInfo.recommend}</span> : (
+                {recommendInfo.recommend ? (
+                  <span className={s.fake_input}>
+                    {recommendInfo.recommend}
+                  </span>
+                ) : (
                   <input
                     className={s.input_box}
                     type="text"
-                    placeholder={recommendInfo.recommend || '친구의 추천코드를 입력해보세요.'}
+                    placeholder={
+                      recommendInfo.recommend ||
+                      '친구의 추천코드를 입력해보세요.'
+                    }
                     onChange={onInputChangeHandler}
                     value={recommendCode}
                     disabled={recommendInfo.recommend}
@@ -277,7 +285,9 @@ export default function InvitePage() {
                 )}
                 <button
                   type={'button'}
-                  className={`${s.btn} ${recommendInfo.recommend ? 'disabled' : ''}`}
+                  className={`${s.btn} ${
+                    recommendInfo.recommend ? 'disabled' : ''
+                  }`}
                   onClick={registerRecommendCodeHandler}
                   disabled={recommendInfo.recommend}
                 >
@@ -325,16 +335,21 @@ export default function InvitePage() {
               <hr></hr>
             </section>
             <section className={s.content}>
-              {isLoading.fetching
-                ? <Spinner />
-                : itemList.length === 0
-                ? <EmptyContMessage message={'친구초대 적립내역이 없습니다.'} />
-                : <ul className={s.coupon_content_grid_box}>
+              {isLoading.fetching ? (
+                <Spinner />
+              ) : itemList.length === 0 ? (
+                <EmptyContMessage message={'친구초대 적립내역이 없습니다.'} />
+              ) : (
+                <ul className={s.coupon_content_grid_box}>
                   {itemList.map((item, index) => (
                     <li key={`invite-item-${index}`} className={s.grid_box}>
                       <div className={s.flex_box}>
-                        <div className={s.day_text}>{transformDate(item.createdTime)}</div>
-                        <div className={s.content_text}>{filter_userIndexOnRewardName(item.name)}</div>
+                        <div className={s.day_text}>
+                          {transformDate(item.createdTime)}
+                        </div>
+                        <div className={s.content_text}>
+                          {filter_userIndexOnRewardName(item.name)}
+                        </div>
                       </div>
                       <div
                         className={`${
@@ -343,12 +358,15 @@ export default function InvitePage() {
                             : s.price_text_grey
                         }`}
                       >
-                        {item.rewardStatus === rewardStatusType.SAVED ? '+' : '-'}
+                        {item.rewardStatus === rewardStatusType.SAVED
+                          ? '+'
+                          : '-'}
                         {transformLocalCurrency(item.tradeReward)}원
                       </div>
                     </li>
                   ))}
-                </ul>}
+                </ul>
+              )}
             </section>
 
             <div className={s.pagination_box}>
@@ -363,9 +381,10 @@ export default function InvitePage() {
           </MypageWrapper>
         </Wrapper>
       </Layout>
-      {hasAlert && <Modal_global_alert onClick={onClickModalButton} background />}
+      {hasAlert && (
+        <Modal_global_alert onClick={onClickModalButton} background />
+      )}
 
-      
       {activeModal.message && (
         <Modal_sendPhoneMessage
           id={'message'}
@@ -383,8 +402,6 @@ export default function InvitePage() {
     </>
   );
 }
-
-
 
 //
 // const DUMMY_DATA = {
