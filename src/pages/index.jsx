@@ -119,26 +119,31 @@ export default function MainPage({ data }) {
         {activeTempPasswordModal && (
           <Modal_tempPasswrod isConfirm={onClickModalButtons} />
         )}
-        <Wrapper fullWidth={true} rowStyle={{ padding: 0 }}>
-          {/* [BEFORE] 스와이프주석 */}
-          {/* <Swiper_main data={data?.mainBannerDtoList} isMobile={isMobile} /> */}
 
-          {/* 1. 영상 소개 */}
+        {/* 1. 영상 소개 */}
+        <Wrapper fullWidth={true} rowStyle={{ padding: 0 }}>
           <Intro_top />
         </Wrapper>
-        {/* 섹션1 레시피 소개*/}
+
+        {/* [BEFORE] 메인배너 스와이퍼 */}
+        {/*  <Swiper_main data={data?.mainBannerDtoList} isMobile={isMobile} /> */}
+
+        {/* 2. 맞춤 건강문제 */}
         <Wrapper>
-          <section className={`${s.recipe_info} $`}>
+          <section className={`${s.recipe_info}`}>
             <div className={s.inner}>
-              <h2 className={s.recipe_title}>
-                &quot;진짜 생식&#34; <br /> 바프독의{' '}
-                {`${data?.recipeDtoList.length}`}가지 레시피
-              </h2>
-              <Swiper_recipe data={data?.recipeDtoList} isMobile={isMobile} />
+              <h2 className={s.recipe_title}>소중한 우리 아이를 위하여</h2>
+              <h4>75만 데이터를 분석한 AI 추천 맞춤 식단 구독</h4>
+              {/* <Swiper_recipe data={data?.recipeDtoList} isMobile={isMobile} /> */}
+              <Swiper_recipe
+                // data={data?.queryItemsDtoList}
+                isMobile={isMobile}
+              />
             </div>
           </section>
         </Wrapper>
-        {/* 바프생식이란? */}
+
+        {/* 3. 리뷰 */}
         <Wrapper bgColor="#F9F2EC">
           <section className={s.barfraw}>
             <div className={s.inner}>
@@ -823,7 +828,7 @@ export async function getServerSideProps({ req }) {
     return err.response;
   }
   // // console.log('MAIN DATA :', DATA);
-  return { props: { data: DATA } };
+  return { props: { data: DATA || {} } };
 }
 
 //
