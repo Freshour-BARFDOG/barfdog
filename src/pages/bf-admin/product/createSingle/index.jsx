@@ -26,6 +26,8 @@ import Tooltip from '/src/components/atoms/Tooltip';
 import CheckboxGroup from '/src/components/atoms/CheckboxGroup';
 import transformClearLocalCurrencyInEveryObject from '/util/func/transformClearLocalCurrencyInEveryObject';
 import { discountUnitType } from '/store/TYPE/discountUnitType';
+import { itemHealthTypeList } from '/store/TYPE/itemHealthType';
+import pc from '/src/components/atoms/pureCheckbox.module.scss';
 
 // - 할인적용 후 판매가격 -> N일 경우 그냥 판매가격이랑 동일하게 처리한다.
 // - 아이템 아이콘
@@ -174,6 +176,13 @@ function CreateSingleItemPage() {
       filteredFormValues,
       filterStringObj,
     );
+
+    // 문자열로 변환. 컴마(,)로 구분
+    const itemHealthTypeString = filteredFormValues.itemHealthType.join(',');
+    if (!itemHealthTypeString) {
+      filteredFormValues.itemHealthType = 'NONE';
+    } else filteredFormValues.itemHealthType = itemHealthTypeString;
+
     if (!isPassed) return mct.alertShow('유효하지 않은 항목이 있습니다.');
 
     try {
@@ -181,7 +190,6 @@ function CreateSingleItemPage() {
         ...prevState,
         submit: true,
       }));
-
       const apiUrl = '/api/admin/items';
       const res = await postObjData(apiUrl, filteredFormValues);
       // console.log(res);
