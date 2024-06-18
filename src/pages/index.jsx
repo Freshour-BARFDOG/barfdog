@@ -26,6 +26,7 @@ import { Swiper_sns } from '/src/components/home/Swiper_sns';
 import { Swiper_review } from '/src/components/home/Swiper_review';
 import { Swiper_recipe } from '/src/components/home/Swiper_recipe';
 import { Swiper_main } from '/src/components/home/Swiper_main';
+import { Intro_top } from '/src/components/home/Intro_top';
 import Link from 'next/link';
 import axios from 'axios';
 import { useRouter } from 'next/router';
@@ -119,8 +120,11 @@ export default function MainPage({ data }) {
           <Modal_tempPasswrod isConfirm={onClickModalButtons} />
         )}
         <Wrapper fullWidth={true} rowStyle={{ padding: 0 }}>
-          {/* 스와이프주석 */}
-          <Swiper_main data={data?.mainBannerDtoList} isMobile={isMobile} />
+          {/* [BEFORE] 스와이프주석 */}
+          {/* <Swiper_main data={data?.mainBannerDtoList} isMobile={isMobile} /> */}
+
+          {/* 1. 영상 소개 */}
+          <Intro_top />
         </Wrapper>
         {/* 섹션1 레시피 소개*/}
         <Wrapper>
