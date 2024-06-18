@@ -321,6 +321,21 @@ $inputDefaultHeight: rem(38);
     }
   }
 
+  .grid-checkbox-health-type {
+    margin: rem(15) 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    row-gap: rem(20);
+    column-gap: rem(20);
+    li {
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      gap: rem(10);
+      animation: show var(--ani-default);
+    }
+  }
+
   .grid-checkbox-wrap {
     margin: rem(17) 0;
     display: grid;
@@ -400,4 +415,8 @@ $inputDefaultHeight: rem(38);
     padding: rem(6);
     z-index: 99;
   }
+}
+
+.custom_select {
+  padding-left: rem(10);
 }
