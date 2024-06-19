@@ -1,12 +1,10 @@
-import React, {useEffect, useState} from 'react';
-import s from "/src/pages/account/signup/signup.module.scss";
-import PureCheckbox from "/src/components/atoms/PureCheckbox";
-import {IoChevronForwardOutline} from "react-icons/io5";
+import React, { useEffect, useState } from 'react';
+import s from '/src/pages/account/signup/signup.module.scss';
+import PureCheckbox from '/src/components/atoms/PureCheckbox';
+import { IoChevronForwardOutline } from 'react-icons/io5';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
-import {plugin} from "next/dist/build/webpack/config/helpers";
-import {deleteCookie, getCookie, setCookie} from "@util/func/cookie";
-
-
+import { plugin } from 'next/dist/build/webpack/config/helpers';
+import { deleteCookie, getCookie, setCookie } from '@util/func/cookie';
 
 export const policy_KEYS = [
   { label: 'servicePolicy', required: true },
@@ -16,7 +14,6 @@ export const policy_KEYS = [
   { label: 'receiveEmail', required: false },
   { label: 'over14YearsOld', required: true },
 ];
-
 
 const initialPolicyValues = {
   [policy_KEYS[0].label]: false,
@@ -29,76 +26,65 @@ const initialPolicyValues = {
   _selectAllPolicies: false,
 };
 
-
-
-
 function SignupPolicyList(props) {
-
-  const {setFormValues, formErrors, setModalState, inputrefs} = props;
+  const { setFormValues, formErrors, setModalState, inputrefs } = props;
   const [policyValues, setPolicyValues] = useState(initialPolicyValues);
 
   const visibility = props.setCokbank;
-  
-  useEffect(() => {
 
+  useEffect(() => {
     const tempObj = initialPolicyValues;
     tempObj.thirdPolicy = false;
 
     setPolicyValues(tempObj);
-    
+
     // console.log(visibility)
     policy_KEYS[2].required = visibility;
-
   }, [visibility]);
 
-  
   useEffect(() => {
     let filteredPolicyValues;
     for (const key in policyValues) {
       const val = policyValues[key];
-      if(key.indexOf('_') < 0){
+      if (key.indexOf('_') < 0) {
         filteredPolicyValues = {
           ...filteredPolicyValues,
-          [key]: val
-        }
+          [key]: val,
+        };
       }
     }
 
-    setFormValues(prevState=>({
+    setFormValues((prevState) => ({
       ...prevState,
       agreement: {
-        ...filteredPolicyValues
-      }
-    }))
-
+        ...filteredPolicyValues,
+      },
+    }));
   }, [policyValues, setFormValues]);
-
-
-
 
   // MEMO: 기능 > 무료배송, 할인쿠폰 등 혜택/정보 수신 동의 (선택)
   useEffect(() => {
     const triggerCheckbox1 = 'receiveSms';
     const triggerCheckbox2 = 'receiveEmail';
     const targetKey = '_selectAllInReceiveChannel';
-    setPolicyValues(prevState=> {
+    setPolicyValues((prevState) => {
       let counter = 0;
       const allCheckedCounter = 2;
       for (const prevStateKey in prevState) {
         const val = prevState[prevStateKey];
-        if(prevStateKey === triggerCheckbox1 || prevStateKey === triggerCheckbox2){
+        if (
+          prevStateKey === triggerCheckbox1 ||
+          prevStateKey === triggerCheckbox2
+        ) {
           val && counter++;
         }
       }
       return {
         ...prevState,
-        [targetKey]: counter === allCheckedCounter
-      }
-    })
+        [targetKey]: counter === allCheckedCounter,
+      };
+    });
   }, [policyValues.receiveSms, policyValues.receiveEmail]);
-
-
-
 
   useEffect(() => {
     setPolicyValues((prevState) => {
@@ -107,8 +93,7 @@ function SignupPolicyList(props) {
 
       const keys = Object.keys(prevState);
       keys.forEach((key, index) => {
-
-        if(!visibility && index === 2) return;
+        if (!visibility && index === 2) return;
 
         const realCheckBox = policy_KEYS[index]?.label?.indexOf(key) >= 0;
         const val = prevState[key];
@@ -130,9 +115,6 @@ function SignupPolicyList(props) {
     policyValues.over14YearsOld,
   ]);
 
-
-
-
   const onSelectAllRecieveChannel = (checked) => {
     const targetValue1 = 'receiveSms';
     const targetValue2 = 'receiveEmail';
@@ -151,22 +133,20 @@ function SignupPolicyList(props) {
       for (const prevStateKey in prevState) {
         tempObj[prevStateKey] = checked;
       }
-      if(!visibility) tempObj.thirdPolicy = false;
+      if (!visibility) tempObj.thirdPolicy = false;
       setPolicyValues(tempObj);
 
       return tempObj;
     });
   };
 
-
-  const onModalShow = (e)=>{
+  const onModalShow = (e) => {
     const modalSort = e.currentTarget.dataset.modalSort;
     // // console.log(modalSort);
-    setModalState(prevState => ({
-      [modalSort]: true
-    }))
-  }
-
+    setModalState((prevState) => ({
+      [modalSort]: true,
+    }));
+  };
 
   return (
     <>
@@ -180,7 +160,8 @@ function SignupPolicyList(props) {
           <div className={s['desc-section']}>
             <p className={s['title']}>전체 동의합니다.</p>
             <p className={s['desc']}>
-              선택항목에 동의하지 않은 경우도 회원가입 및 일반적인 서비스를 이용할 수 있습니다.
+              선택항목에 동의하지 않은 경우도 회원가입 및 일반적인 서비스를
+              이용할 수 있습니다.
             </p>
           </div>
         </PureCheckbox>
@@ -193,13 +174,19 @@ function SignupPolicyList(props) {
           setValue={setPolicyValues}
           errorMessage={
             formErrors[policy_KEYS[0].label] && (
-              <ErrorMessage className={`${s.msg}`}>{formErrors[policy_KEYS[0].label]}</ErrorMessage>
+              <ErrorMessage className={`${s.msg}`}>
+                {formErrors[policy_KEYS[0].label]}
+              </ErrorMessage>
             )
           }
         >
-          <p className={s['title']} >이용약관 동의 (필수)</p>
+          <p className={s['title']}>이용약관 동의 (필수)</p>
         </PureCheckbox>
-        <button className={s.terms__view} onClick={onModalShow} data-modal-sort={'termsOfService'}>
+        <button
+          className={s.terms__view}
+          onClick={onModalShow}
+          data-modal-sort={'termsOfService'}
+        >
           약관보기
           <IoChevronForwardOutline />
         </button>
@@ -213,13 +200,19 @@ function SignupPolicyList(props) {
           setValue={setPolicyValues}
           errorMessage={
             formErrors[policy_KEYS[1].label] && (
-              <ErrorMessage className={`${s.msg}`}>{formErrors[policy_KEYS[1].label]}</ErrorMessage>
+              <ErrorMessage className={`${s.msg}`}>
+                {formErrors[policy_KEYS[1].label]}
+              </ErrorMessage>
             )
           }
         >
           <p className={s.title}>개인정보 수집 이용 동의 (필수)</p>
         </PureCheckbox>
-        <button className={s.terms__view} onClick={onModalShow} data-modal-sort={'privacy'}>
+        <button
+          className={s.terms__view}
+          onClick={onModalShow}
+          data-modal-sort={'privacy'}
+        >
           약관보기
           <IoChevronForwardOutline />
         </button>
@@ -227,7 +220,6 @@ function SignupPolicyList(props) {
 
       {/* 콕뱅크 제3자 수집 이용동의  */}
       {visibility && (
-
         <div className={`${s['checkbox-wrap']} ${s['space-between']}`}>
           <PureCheckbox
             id={policy_KEYS[2].label}
@@ -235,18 +227,23 @@ function SignupPolicyList(props) {
             setValue={setPolicyValues}
             errorMessage={
               formErrors[policy_KEYS[2].label] && (
-                <ErrorMessage className={`${s.msg}`}>{formErrors[policy_KEYS[2].label]}</ErrorMessage>
+                <ErrorMessage className={`${s.msg}`}>
+                  {formErrors[policy_KEYS[2].label]}
+                </ErrorMessage>
               )
             }
           >
             <p className={s.title}>개인정보 제3자 제공 동의 (필수)</p>
           </PureCheckbox>
-          <button className={s.terms__view} onClick={onModalShow} data-modal-sort={'termsOfThird'}>
+          <button
+            className={s.terms__view}
+            onClick={onModalShow}
+            data-modal-sort={'termsOfThird'}
+          >
             약관보기
             <IoChevronForwardOutline />
           </button>
         </div>
-
       )}
 
       {/* 무료배송, 할인쿠폰 등 혜택 / 정보 수신 동의 */}
@@ -277,7 +274,7 @@ function SignupPolicyList(props) {
           </div>
           <p className={s.guidetext}>
             <i className={s.icon} />
-            모두 동의 시 적립금 1,000원 적립 (첫 주문 후 적용)
+            모두 동의 시 적립금 1,000원 적립 (첫 구매확정 후 적용)
           </p>
         </div>
       </div>
@@ -288,7 +285,9 @@ function SignupPolicyList(props) {
           setValue={setPolicyValues}
           errorMessage={
             formErrors[policy_KEYS[5].label] && (
-              <ErrorMessage className={`${s.msg}`}>{formErrors[policy_KEYS[5].label]}</ErrorMessage>
+              <ErrorMessage className={`${s.msg}`}>
+                {formErrors[policy_KEYS[5].label]}
+              </ErrorMessage>
             )
           }
         >
