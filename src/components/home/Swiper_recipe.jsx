@@ -1,8 +1,9 @@
 // 레시피 Swiper
 import React, { useEffect, useRef, useState } from 'react';
 import s from '/src/pages/mainPage.module.scss';
-import { Navigation } from 'swiper';
+import { Navigation, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css/pagination';
 import Image from 'next/image';
 import StartBanner from '@public/img/starterBanner.png';
 import Link from 'next/link';
@@ -13,7 +14,11 @@ import ArrowRight_s from '@public/img/icon/swiper-arrow-small-r.svg';
 import { itemHealthTypeList } from '/store/TYPE/itemHealthType';
 import { getData } from '/src/pages/api/reqData';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
+import { useDispatch, useSelector } from 'react-redux';
+import { cartAction } from '/store/cart-slice';
+import { setPreviousPath } from '/store/navigation-slice';
 
+// 1번째 스와이퍼
 const swiperSettings_recipe = {
   className: `${s.swiper_recipe}`,
   slidesPerView: 'auto',
@@ -39,6 +44,34 @@ const swiperSettings_recipe = {
       spaceBetween: 20,
     },
   },
+};
+
+// 2번째 스와이퍼
+const swiperSettings_recipe_item = {
+  className: `${s.swiper_recipe}`,
+  slidesPerView: 'auto',
+  centeredSlides: false,
+  modules: [Pagination],
+  // breakpoints: {
+  //   //반응형 조건 속성
+  //   300: {
+  //     slidesPerView: 1,
+  //     spaceBetween: 0,
+  //   },
+  //   651: {
+  //     //651 이상일 경우
+  //     slidesPerView: 2, //레이아웃 2열
+  //     spaceBetween: 20,
+  //   },
+  //   1001: {
+  //     slidesPerView: 3,
+  //     spaceBetween: 20,
+  //   },
+  //   1201: {
+  //     slidesPerView: 4,
+  //     spaceBetween: 20,
+  //   },
+  // },
 };
 
 export function Swiper_recipe({ data, isMobile }) {
@@ -84,9 +117,10 @@ export function Swiper_recipe({ data, isMobile }) {
     })();
   }, []);
 
+  //* 이미지 클릭
   const imgClickHandler = (e, value, label) => {
     setHealthType((prev) => ({ eng: value, kor: label }));
-    const updatedItemList = healthTypeItemList.find((obj) => obj[value])?.[
+    const updatedItemList = healthTypeItemList?.find((obj) => obj[value])?.[
       value
     ];
     setSelectedItemList(updatedItemList);
@@ -99,10 +133,24 @@ export function Swiper_recipe({ data, isMobile }) {
 
   return (
     <div className={s.swiper_recipe_outerWrap}>
-      <i className={Styles.swiper_button_prev_recipe} ref={navPrevRef}>
+      <i
+        className={
+          selectedItemList.length > 0
+            ? Styles.swiper_button_prev_recipe_clicked
+            : Styles.swiper_button_prev_recipe
+        }
+        ref={navPrevRef}
+      >
         <ArrowLeft_s width="100%" height="100%" viewBox="0 0 28 28" />
       </i>
-      <i className={Styles.swiper_button_next_recipe} ref={navNextRef}>
+      <i
+        className={
+          selectedItemList.length > 0
+            ? Styles.swiper_button_next_recipe_clicked
+            : Styles.swiper_button_next_recipe
+        }
+        ref={navNextRef}
+      >
         <ArrowRight_s width="100%" height="100%" viewBox="0 0 28 28" />
       </i>
 
@@ -134,22 +182,29 @@ export function Swiper_recipe({ data, isMobile }) {
               <div className={s.recipe_a}>
                 <div className={s.recipe_box}>
                   <div
-                    className={s.img_wrap}
+                    className={`${s.img_wrap} ${
+                      healthType.eng === d.value ? s.clicked : ''
+                    }`}
                     onClick={(e) => imgClickHandler(e, d.value, d.label)}
                   >
-                    {/* <Image
-                      src={d.thumbnailUrl}
-                      objectFit="fit"
-                      layout="fill"
+                    <Image
+                      src={require(`/public/img/pages/main/${d.value}.jpg`)}
                       alt="레시피 이미지"
                       priority
-                    /> */}
+                    />
+                    {healthType.eng === d.value && (
+                      <div className={s.icon_check_wrap}>
+                        <Image
+                          src="/img/icon/main-check.svg"
+                          alt="store"
+                          width={100}
+                          height={100}
+                          className={s.check_icon}
+                        />
+                      </div>
+                    )}
                   </div>
                   <p className={s.uiNameKorean}>{d.label}</p>
-                  {/* <p className={s.desc}>{d.description}</p> */}
-                  {/* <Link passHref href={'/recipes'}>
-                    <a className={s.recipe_btn}>+ 더보기</a>
-                  </Link> */}
                 </div>
               </div>
             </SwiperSlide>
@@ -170,18 +225,14 @@ export function Swiper_recipe({ data, isMobile }) {
           </div>
 
           <Swiper
-            navigation={{
-              prevEl: navPrevRef.current,
-              nextEl: navNextRef.current,
-            }}
-            {...swiperSettings_recipe}
-            onInit={(swiper) => {
-              swiper.params.navigation.prevEl = navPrevRef.current;
-              swiper.params.navigation.nextEl = navNextRef.current;
-              swiper.navigation.destroy();
-              swiper.navigation.init();
-              swiper.navigation.update();
-            }}
+            {...swiperSettings_recipe_item}
+            // onInit={(swiper) => {
+            //   swiper.params.navigation.prevEl = navPrevRef.current;
+            //   swiper.params.navigation.nextEl = navNextRef.current;
+            //   swiper.navigation.destroy();
+            //   swiper.navigation.init();
+            //   swiper.navigation.update();
+            // }}
           >
             {selectedItemList?.map((d, index) => (
               <SwiperSlide
@@ -195,34 +246,40 @@ export function Swiper_recipe({ data, isMobile }) {
                 <div className={s.recipe_a}>
                   <div className={s.recipe_box}>
                     <div className={s.img_item_wrap}>
-                      <Image
-                        src={d.thumbnailUrl}
-                        objectFit="fit"
-                        layout="fill"
-                        alt="레시피 이미지"
-                        priority
-                      />
+                      <Link passHref href={`/shop/item/${d.id}`}>
+                        <Image
+                          src={d.thumbnailUrl}
+                          objectFit="fit"
+                          layout="fill"
+                          alt="레시피 이미지"
+                          priority
+                        />
+                      </Link>
                     </div>
-                    <div className={s.icon_store_wrap}>
+
+                    {/* [삭제] 장바구니 아이콘 */}
+                    {/* <div className={s.icon_store_wrap}>
                       <Image
                         src="/img/icon/store.svg"
                         alt="store"
-                        width={40}
-                        height={40}
+                        width={20}
+                        height={20}
                         className={s.store_icon}
                       />
-                    </div>
-                    {/* <Link passHref href={'/recipes'}>
+                    </div> */}
+                    {/* <Link passHref href={'/shop/item/9'}>
                     <a className={s.recipe_btn}>+ 더보기</a>
                   </Link> */}
                   </div>
                 </div>
-                <div className={s.item_description}>
-                  <p className={s.item_name}>{d.name}</p>
-                  <p className={s.item_price}>
-                    {transformLocalCurrency(d.salePrice)}원
-                  </p>
-                </div>
+                <Link passHref href={`/shop/item/${d.id}`}>
+                  <div className={s.item_description}>
+                    <p className={s.item_name}>{d.name}</p>
+                    <p className={s.item_price}>
+                      {transformLocalCurrency(d.salePrice)}원
+                    </p>
+                  </div>
+                </Link>
               </SwiperSlide>
             ))}
           </Swiper>
