@@ -34,6 +34,7 @@ function RewardListPage() {
   const [searchQueryInitialize, setSearchQueryInitialize] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValues, setSearchValues] = useState(initialSearchValues);
+  const [onSearch, setOnSearch] = useState(false);
 
   const initialValue = searchValues.rewardType || '';
   const [selectedCheckboxes, setSelectedCheckboxes] = useState(initialValue);
@@ -70,7 +71,7 @@ function RewardListPage() {
 
     const query = `${queryArr.join('&')}`;
     setSearchQuery(query);
-    // setIsNone(false);
+    setOnSearch(!onSearch);
   };
 
   const onSearchInputKeydown = (e) => {
@@ -160,6 +161,7 @@ function RewardListPage() {
                   initialize: searchQueryInitialize,
                 }}
                 setCurrentPage={setCurrentPage}
+                onSearch={onSearch}
               />
             </div>
           </section>

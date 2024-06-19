@@ -14,13 +14,13 @@ import Spinner from '/src/components/atoms/Spinner';
 import { global_reviewStateType } from '/store/TYPE/reviewStateType';
 import { valid_isTheSameArray } from '/util/func/validation/validationPackage';
 import ToolTip from '/src/components/atoms/Tooltip';
-import {deleteData, postObjData, putObjData} from '/src/pages/api/reqData';
+import { deleteData, postObjData, putObjData } from '/src/pages/api/reqData';
 import { transformToday } from '/util/func/transformDate';
-import {global_searchDateType} from "/store/TYPE/searchDateType";
-import {MirrorTextOnHoverEvent} from "/util/func/MirrorTextOnHoverEvent";
-import {useModalContext} from "../../../../../store/modal-context";
-import Modal_global_alert from "../../../../components/modal/Modal_global_alert";
-import BestReviewList from "../bestReview/BestReviewList";
+import { global_searchDateType } from '/store/TYPE/searchDateType';
+import { MirrorTextOnHoverEvent } from '/util/func/MirrorTextOnHoverEvent';
+import { useModalContext } from '../../../../../store/modal-context';
+import Modal_global_alert from '../../../../components/modal/Modal_global_alert';
+import BestReviewList from '../bestReview/BestReviewList';
 
 const initialSearchValue = {
   from: global_searchDateType.oldestDate,
@@ -44,7 +44,7 @@ export default function ReviewPage() {
   const searchApiUrl = '/api/admin/reviews'; // 관리자 리뷰 리스트 조회(페이징)
   const searchPageSize = 10;
   const apiDataQueryString = 'queryAdminReviewsDtoList';
-  
+
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
   const initialSearchQuery = onSetSearchQueryHandler(initialSearchValue);
@@ -53,12 +53,12 @@ export default function ReviewPage() {
   const [selectedItemList, setSelectedItemList] = useState([]);
   const [searchValue, setSearchValue] = useState(initialSearchValue);
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
-  
-  useEffect( () => {
-    MirrorTextOnHoverEvent( window );
-  }, [itemList] )
-  
-  
+  const [onSearch, setOnSearch] = useState(false);
+
+  useEffect(() => {
+    MirrorTextOnHoverEvent(window);
+  }, [itemList]);
+
   const pageInterceptor = (res) => {
     // res = DUMMY_REVIEW_RESPONSE; // ! TEST
     let newPageInfo = {
@@ -69,7 +69,7 @@ export default function ReviewPage() {
       newPageNumber: 0,
       newItemList: [],
     };
-    if(res.data?._embedded){
+    if (res.data?._embedded) {
       const newItemList = res.data?._embedded.queryAdminReviewsDtoList || [];
       const pageData = res.data.page;
       newPageInfo = {
@@ -81,7 +81,7 @@ export default function ReviewPage() {
         newItemList,
       };
     }
-    
+
     return newPageInfo;
   };
 
@@ -99,6 +99,7 @@ export default function ReviewPage() {
 
     const query = `${queryArr.join('&')}`;
     setSearchQuery(query);
+    setOnSearch(!onSearch);
   };
 
   const onAllSelectItemsList = (checked) => {
@@ -110,20 +111,29 @@ export default function ReviewPage() {
   };
 
   const valid_allCheckboxesChecked = () => {
-    if (!Array.isArray(itemList) || !Array.isArray(selectedItemList) || itemList.length === 0)
+    if (
+      !Array.isArray(itemList) ||
+      !Array.isArray(selectedItemList) ||
+      itemList.length === 0
+    )
       return;
     const allSelectedList = itemList.map((item) => item.id);
     return valid_isTheSameArray(allSelectedList, selectedItemList);
   };
 
   const onApprovalReview = async () => {
-    if(!confirm(`선택된 ${setSelectedItemList.length}개의 리뷰를 승인처리 하시겠습니까?`)) return;
-    
+    if (
+      !confirm(
+        `선택된 ${setSelectedItemList.length}개의 리뷰를 승인처리 하시겠습니까?`,
+      )
+    )
+      return;
+
     try {
-      setIsLoading({approval: true});
+      setIsLoading({ approval: true });
       const body = {
-        reviewIdList: selectedItemList
-      }
+        reviewIdList: selectedItemList,
+      };
       const apiUrl = '/api/admin/reviews/approval';
       const res = await putObjData(apiUrl, body);
       // console.log(res);
@@ -133,60 +143,67 @@ export default function ReviewPage() {
         window.location.reload();
       }
     } catch (err) {
-        console.error(err)
+      console.error(err);
     }
-    setIsLoading({approval: false})
+    setIsLoading({ approval: false });
   };
-  
+
   const onSetBestReview = async () => {
-    if(!selectedItemList.length) return;
-    if(!confirm(`선택된 ${selectedItemList.length}개의 리뷰를 베스트리뷰로 등록하시겠습니까?`)) return;
+    if (!selectedItemList.length) return;
+    if (
+      !confirm(
+        `선택된 ${selectedItemList.length}개의 리뷰를 베스트리뷰로 등록하시겠습니까?`,
+      )
+    )
+      return;
     // console.log(selectedItemList)
     try {
-      setIsLoading({bestReview: true});
+      setIsLoading({ bestReview: true });
       const body = {
-        reviewIdList: selectedItemList
-      }
+        reviewIdList: selectedItemList,
+      };
       const apiUrl = '/api/admin/reviews/best';
       const res = await postObjData(apiUrl, body);
       // console.log(res);
       if (res.isDone) {
-        alert(`${selectedItemList.length}개의 리뷰가 베스트리뷰로 등록되었습니다.`);
+        alert(
+          `${selectedItemList.length}개의 리뷰가 베스트리뷰로 등록되었습니다.`,
+        );
         setSelectedItemList([]); // 초기화 시킴
         // window.location.reload();
       }
     } catch (err) {
-      console.error(err)
+      console.error(err);
     }
-    setIsLoading({bestReview: false})
+    setIsLoading({ bestReview: false });
   };
-  
+
   const onDeleteItem = async (apiUrl, targetId) => {
     // console.log(apiUrl, targetId);
     try {
-      setIsLoading(prevState => ({
+      setIsLoading((prevState) => ({
         ...prevState,
-        delete:{
-          [targetId]: true
-        }
+        delete: {
+          [targetId]: true,
+        },
       }));
       const res = await deleteData(apiUrl);
       // console.log(res);
-      if(res.isDone){
-        mct.alertShow( "리뷰가 삭제되었습니다.", onSuccessCallback );
+      if (res.isDone) {
+        mct.alertShow('리뷰가 삭제되었습니다.', onSuccessCallback);
       } else {
-        const serverErrorMessage =res.error;
+        const serverErrorMessage = res.error;
         mct.alertShow(serverErrorMessage || '삭제에 실패하였습니다.');
       }
     } catch (err) {
       mct.alertShow('삭제 요청 중 에러가 발생하였습니다.');
       console.error(err);
     } finally {
-      setIsLoading(prevState => ({
+      setIsLoading((prevState) => ({
         ...prevState,
-        delete:{
-          [targetId]: false
-        }
+        delete: {
+          [targetId]: false,
+        },
       }));
     }
   };
@@ -196,8 +213,7 @@ export default function ReviewPage() {
   const onClickModalButton = () => {
     mct.alertHide();
   };
-  
-  
+
   return (
     <>
       <MetaTitle title="리뷰" admin={true} />
@@ -234,12 +250,18 @@ export default function ReviewPage() {
                 />
               </p>
               <div className="controls cont-left">
-                <button className="admin_btn line basic_m" onClick={onApprovalReview}>
+                <button
+                  className="admin_btn line basic_m"
+                  onClick={onApprovalReview}
+                >
                   {isLoading.approval ? <Spinner /> : '리뷰 승인'}
                 </button>
-                <button className="admin_btn line basic_m autoWidth" onClick={onSetBestReview}>
+                <button
+                  className="admin_btn line basic_m autoWidth"
+                  onClick={onSetBestReview}
+                >
                   {isLoading.bestReview ? <Spinner /> : '베스트 리뷰 선정'}
-                  </button>
+                </button>
               </div>
             </div>
             <div className={`${s.cont_viewer}  ${s.fullWidth}`}>
@@ -261,18 +283,19 @@ export default function ReviewPage() {
                   <li className={s.table_th}>작성일</li>
                   <li className={s.table_th}>삭제</li>
                 </ul>
-                {itemList.length
-                  ?  <ReviewList
+                {itemList.length ? (
+                  <ReviewList
                     items={itemList}
                     onDeleteItem={onDeleteItem}
                     isLoading={isLoading}
                     setSelectedItems={setSelectedItemList}
                     selectedItems={selectedItemList}
                   />
-                  : isLoading.fetching
-                    ? <AmdinErrorMessage loading={<Spinner />} />
-                    : <AmdinErrorMessage text="조회된 데이터가 없습니다." />
-                }
+                ) : isLoading.fetching ? (
+                  <AmdinErrorMessage loading={<Spinner />} />
+                ) : (
+                  <AmdinErrorMessage text="조회된 데이터가 없습니다." />
+                )}
               </div>
             </div>
             <div className={s['pagination-section']}>
@@ -284,13 +307,16 @@ export default function ReviewPage() {
                 queryItemList={apiDataQueryString}
                 setIsLoading={setIsLoading}
                 pageInterceptor={pageInterceptor}
+                onSearch={onSearch}
               />
             </div>
           </section>
           {/* inner */}
         </AdminContentWrapper>
       </AdminLayout>
-      {hasAlert && <Modal_global_alert onClick={onClickModalButton} background/>}
+      {hasAlert && (
+        <Modal_global_alert onClick={onClickModalButton} background />
+      )}
     </>
   );
 }

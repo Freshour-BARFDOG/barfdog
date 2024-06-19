@@ -32,6 +32,7 @@ function ManageDogPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchQueryInitialize, setSearchQueryInitialize] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [onSearch, setOnSearch] = useState(false);
 
   // console.log('searchValue>>>', searchValue);
   // console.log('searchQuery>>>', searchQuery);
@@ -59,6 +60,7 @@ function ManageDogPage() {
     }
     const query = `${queryArr.join('&')}`;
     setSearchQuery(query);
+    setOnSearch(!onSearch);
   };
 
   const onSearchInputKeydown = (e) => {
@@ -138,6 +140,7 @@ function ManageDogPage() {
                 option={{ apiMethod: 'GET', initialize: searchQueryInitialize }}
                 queryItemList={apiDataQueryString}
                 setCurrentPage={setCurrentPage}
+                onSearch={onSearch}
               />
             </div>
           </section>
