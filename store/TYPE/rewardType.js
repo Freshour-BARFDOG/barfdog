@@ -1,0 +1,20 @@
+export const rewardType = {
+  RECOMMEND: 'RECOMMEND',
+  FRIEND_PAY: 'FRIEND_PAY',
+  REVIEW: 'REVIEW',
+  EVENT: 'EVENT',
+  ORDER: 'ORDER',
+  SUBSCRIBE: 'SUBSCRIBE',
+  ADMIN: 'ADMIN',
+  RECEIVE: 'RECEIVE',
+  KOR: {
+    RECOMMEND: '친구추천',
+    FRIEND_PAY: '친구첫구매',
+    REVIEW: '리뷰',
+    EVENT: '이벤트',
+    ORDER: '주문',
+    SUBSCRIBE: '구독',
+    ADMIN: '관리자',
+    RECEIVE: '수신동의',
+  },
+};
