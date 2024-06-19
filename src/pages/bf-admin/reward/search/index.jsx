@@ -22,7 +22,7 @@ const initialSearchValues = {
   name: '',
   from: global_searchDateType.oldestDate,
   to: transformToday(),
-  rewardTypeList: Object.keys(rewardType).filter((key) => key !== 'KOR'),
+  rewardTypeList: '',
 };
 
 function RewardListPage() {
@@ -33,12 +33,9 @@ function RewardListPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchQueryInitialize, setSearchQueryInitialize] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [isNone, setIsNone] = useState(false);
   const [searchValues, setSearchValues] = useState(initialSearchValues);
 
-  const initialValue =
-    searchValues.rewardType ||
-    Object.keys(rewardType).filter((key) => key != 'KOR');
+  const initialValue = searchValues.rewardType || '';
   const [selectedCheckboxes, setSelectedCheckboxes] = useState(initialValue);
 
   const pageInterceptor = useCallback((res, option = { itemQuery: null }) => {
@@ -53,9 +50,11 @@ function RewardListPage() {
   // 초기화
   const onResetSearchValues = () => {
     setSearchValues(initialSearchValues);
-    setSelectedCheckboxes(
-      Object.keys(rewardType).filter((key) => key != 'KOR'),
-    );
+    setSelectedCheckboxes([]);
+    // 전체 선택
+    // setSelectedCheckboxes(
+    //   Object.keys(rewardType).filter((key) => key != 'KOR'),
+    // );
   };
 
   const onSearchHandler = () => {
@@ -63,15 +62,15 @@ function RewardListPage() {
     for (const key in searchValues) {
       const val = searchValues[key];
       // 선택 안함
-      if (key === 'rewardTypeList' && Array.isArray(val) && val.length === 0) {
-        return setIsNone(true);
-      }
+      // if (key === 'rewardTypeList' && Array.isArray(val) && val.length === 0) {
+      //   return setIsNone(true);
+      // }
       queryArr.push(`${key}=${val}`);
     }
 
     const query = `${queryArr.join('&')}`;
     setSearchQuery(query);
-    setIsNone(false);
+    // setIsNone(false);
   };
 
   const onSearchInputKeydown = (e) => {
@@ -139,7 +138,7 @@ function RewardListPage() {
                   <li className={s.table_th}>적립금 발급자</li>
                   <li className={s.table_th}>발급자 아이디</li>
                 </ul>
-                {itemList.length && !isNone ? (
+                {itemList.length ? (
                   <RewardList items={itemList} currentPage={currentPage} />
                 ) : isLoading.fetching ? (
                   <AmdinErrorMessage loading={<Spinner />} />
@@ -148,24 +147,21 @@ function RewardListPage() {
                 )}
               </div>
             </div>
-
-            {!isNone && (
-              <div className={s['pagination-section']}>
-                <PaginationWithAPI
-                  apiURL={getListApiUrl}
-                  size={searchPageSize}
-                  setItemList={setItemList}
-                  urlQuery={searchQuery}
-                  setIsLoading={setIsLoading}
-                  pageInterceptor={pageInterceptor}
-                  option={{
-                    apiMethod: 'GET',
-                    initialize: searchQueryInitialize,
-                  }}
-                  setCurrentPage={setCurrentPage}
-                />
-              </div>
-            )}
+            <div className={s['pagination-section']}>
+              <PaginationWithAPI
+                apiURL={getListApiUrl}
+                size={searchPageSize}
+                setItemList={setItemList}
+                urlQuery={searchQuery}
+                setIsLoading={setIsLoading}
+                pageInterceptor={pageInterceptor}
+                option={{
+                  apiMethod: 'GET',
+                  initialize: searchQueryInitialize,
+                }}
+                setCurrentPage={setCurrentPage}
+              />
+            </div>
           </section>
         </AdminContentWrapper>
       </AdminLayout>
