@@ -161,7 +161,7 @@ function CreateSingleItemPage() {
     // ! IMPORTANT : submit 이후 enterKey event로 trigger되는 중복submit 방지
     const errObj = validate(formValues);
     setFormErrors(errObj);
-    const isPassed = valid_hasFormErrors(errObj);
+    const isPassed = valid_hasFormErrors(errObj, 'array', 'itemHealthType');
 
     let filteredFormValues = formValues;
     const filterStringObj = {
@@ -176,11 +176,13 @@ function CreateSingleItemPage() {
       filteredFormValues,
       filterStringObj,
     );
+    // console.log(filteredFormValues);
     // 문자열로 변환. 컴마(,)로 구분
-    const itemHealthTypeString = filteredFormValues.itemHealthType.join(',');
-    if (!itemHealthTypeString) {
+    if (!filteredFormValues.itemHealthType) {
       filteredFormValues.itemHealthType = 'NONE';
-    } else filteredFormValues.itemHealthType = itemHealthTypeString;
+    } else
+      filteredFormValues.itemHealthType =
+        filteredFormValues.itemHealthType?.join(',');
 
     if (!isPassed) return mct.alertShow('유효하지 않은 항목이 있습니다.');
 
