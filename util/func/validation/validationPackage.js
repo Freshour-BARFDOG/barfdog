@@ -7,9 +7,14 @@ import transformDate, { transformToday } from '../transformDate';
 import deleteHypenOnDate from '../deleteHypenOnDate';
 import { isArray } from 'util';
 
-export const valid_hasFormErrors = (errorObj, type = 'array') => {
+export const valid_hasFormErrors = (errorObj, type = 'array', exceptionKey) => {
   let isPassed = true;
+
   if (type === 'array' && Array.isArray(errorObj)) {
+    if (exceptionKey) {
+      errorObj = errorObj.filter((innerObj) => innerObj.key !== exceptionKey);
+    }
+
     const errorArray = errorObj;
     errorArray.map((innerObj) => {
       const result = valid_hasFormErrors(innerObj);

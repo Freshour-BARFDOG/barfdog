@@ -205,7 +205,7 @@ export default function UpdateSingleItemPage({ id }) {
     if (isSubmitted) return;
     const errObj = validate(formValues);
     setFormErrors(errObj);
-    const isPassed = valid_hasFormErrors(errObj);
+    const isPassed = valid_hasFormErrors(errObj, 'array', 'itemHealthType');
 
     let filteredFormValues = formValues;
     const filterStringObj = {
@@ -220,12 +220,13 @@ export default function UpdateSingleItemPage({ id }) {
       filteredFormValues,
       filterStringObj,
     );
+
     // 문자열로 변환. 컴마(,)로 구분
-    const itemHealthTypeString = filteredFormValues.itemHealthType.join(',');
-    if (!itemHealthTypeString) {
+    if (!filteredFormValues.itemHealthType) {
       filteredFormValues.itemHealthType = 'NONE';
-    } else filteredFormValues.itemHealthType = itemHealthTypeString;
-    // console.log(filteredFormValues);
+    } else
+      filteredFormValues.itemHealthType =
+        filteredFormValues.itemHealthType?.join(',');
 
     try {
       setIsLoading((prevState) => ({
