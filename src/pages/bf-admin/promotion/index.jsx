@@ -45,6 +45,7 @@ export default function PromotionSearchPage() {
   );
   const [searchQueryInitialize, setSearchQueryInitialize] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [onSearch, setOnSearch] = useState(false);
 
   const pageInterceptor = useCallback((res) => {
     // console.log(res);
@@ -64,6 +65,7 @@ export default function PromotionSearchPage() {
       promotionStatusType,
     );
     setSearchQuery(query);
+    setOnSearch(!onSearch);
   };
 
   const onSearchInputKeydown = (e) => {
@@ -199,6 +201,7 @@ export default function PromotionSearchPage() {
                 pageInterceptor={pageInterceptor}
                 option={{ apiMethod: 'GET', initialize: searchQueryInitialize }}
                 setCurrentPage={setCurrentPage}
+                onSearch={onSearch}
               />
             </div>
           </section>
