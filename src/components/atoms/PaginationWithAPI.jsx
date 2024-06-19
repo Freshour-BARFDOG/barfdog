@@ -23,6 +23,7 @@ const Pagination = ({
   isSubmitted,
   setIsSubmitted,
   option = { apiMethod: 'GET', body: null, initialize: false },
+  onSearch,
 }) => {
   const router = useRouter();
   const pageFromQuery = Number(router.query.page) || 1;
@@ -121,7 +122,15 @@ const Pagination = ({
   useEffect(() => {
     fetchData(apiURL, option.apiMethod, option.body);
     if (isSubmitted) setIsSubmitted(false);
-  }, [curPage, urlQuery, apiURL, option.apiMethod, option.body, isSubmitted]);
+  }, [
+    curPage,
+    urlQuery,
+    apiURL,
+    option.apiMethod,
+    option.body,
+    isSubmitted,
+    onSearch,
+  ]);
 
   const Num = ({ pagenum }) => {
     const calcedPageNum = pagenum + 1;
