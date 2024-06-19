@@ -34,6 +34,7 @@ function ManageUserPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchQueryInitialize, setSearchQueryInitialize] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [onSearch, setOnSearch] = useState(false);
 
   useEffect(() => {
     MirrorTextOnHoverEvent(window);
@@ -60,6 +61,7 @@ function ManageUserPage() {
     }
     const query = `${queryArr.join('&')}`;
     setSearchQuery(query);
+    setOnSearch(!onSearch);
   };
 
   const onSearchInputKeydown = (e) => {
@@ -138,6 +140,7 @@ function ManageUserPage() {
                 pageInterceptor={pageInterceptor}
                 option={{ apiMethod: 'GET', initialize: searchQueryInitialize }}
                 setCurrentPage={setCurrentPage}
+                onSearch={onSearch}
               />
             </div>
           </section>

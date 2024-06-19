@@ -43,6 +43,7 @@ export default function CouponListPage() {
   );
   const [searchQueryInitialize, setSearchQueryInitialize] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [onSearch, setOnSearch] = useState(false);
 
   useEffect(() => {
     MirrorTextOnHoverEvent(window);
@@ -73,7 +74,8 @@ export default function CouponListPage() {
       query,
       couponType,
     }));
-  }, [searchValue]);
+    setOnSearch(!onSearch);
+  }, [searchValue, onSearch]);
 
   const pageInterceptor = useCallback((res, option = { itemQuery: null }) => {
     return getDefaultPagenationInfo(res?.data, 'couponListResponseDtoList', {
@@ -221,6 +223,7 @@ export default function CouponListPage() {
                 pageInterceptor={pageInterceptor}
                 option={{ apiMethod: 'GET', initialize: searchQueryInitialize }}
                 setCurrentPage={setCurrentPage}
+                onSearch={onSearch}
               />
             </div>
           </section>
