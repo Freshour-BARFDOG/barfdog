@@ -8,7 +8,7 @@ section.recipe_info {
 }
 
 section.intro_top_wrapper {
-  padding: rem(120) 0 rem(120);
+  // padding: rem(120) 0 rem(120);
 }
 
 section.barfgood {
@@ -102,29 +102,55 @@ section.sns {
 .intro_top_wrapper {
   position: relative;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100vw;
-    height: 100%;
-    background-image: url('../.././public/img/barfraw.png');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
+  .video_wrapper {
+    position: relative;
+    // width: 100vw;
+    height: 90vh;
+    // overflow: hidden;
   }
+
+  .video_wrapper video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    // object-fit: cover;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+  }
+
+  //* 메인 이미지
+  // &::before {
+  //   content: '';
+  //   position: absolute;
+  //   top: 0;
+  //   left: 50%;
+  //   transform: translateX(-50%);
+  //   width: 100vw;
+  //   height: 100%;
+  //   background-image: url('../.././public/img/barfraw.png');
+  //   background-repeat: no-repeat;
+  //   background-size: cover;
+  //   background-position: center;
+  // }
   .inner {
     color: #fff;
     text-align: center;
+    width: rem(600);
     .text_box {
-      margin-bottom: rem(50);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: rem(10);
+      position: absolute;
+      // top: 30%;
+      // left: 15%;
+      // margin-bottom: rem(50);
+      transform: translate(-50%, -50%);
+      top: 50%;
+      left: 50%;
+      // display: flex;
+      // flex-direction: column;
+      // justify-content: center;
+      // align-items: center;
+      // gap: rem(10);
 
       h1 {
         left: 0;
@@ -133,6 +159,7 @@ section.sns {
         position: relative;
         z-index: 1;
         height: 100%;
+        margin-bottom: rem(30);
       }
 
       h2 {
@@ -140,46 +167,48 @@ section.sns {
         position: relative;
         z-index: 1;
         height: 100%;
+        margin-bottom: rem(10);
       }
 
       .image_wrap {
         max-width: rem(200);
+        margin-bottom: rem(30);
       }
-    }
 
-    .btn_box {
-      display: flex;
-      justify-content: center;
-      gap: rem(40);
-      font-size: rem(20);
-      font-weight: bold;
-      a {
+      .btn_box {
         display: flex;
         justify-content: center;
-        align-items: center;
-        height: rem(150);
-        width: rem(150);
-        border-radius: 50%;
-        text-align: center;
-        background-color: #cc666a;
-      }
+        gap: rem(40);
+        font-size: rem(20);
+        font-weight: bold;
+        a {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: rem(150);
+          width: rem(150);
+          border-radius: 50%;
+          text-align: center;
+          background-color: #cc666a;
+        }
 
-      .btn_survey:hover {
-        // color: #cc666a;
-        // border: rem(2) solid #cc666a;
-        background-color: #c22323;
-        transition: 0.6s all;
-      }
+        .btn_survey:hover {
+          // color: #cc666a;
+          // border: rem(2) solid #cc666a;
+          background-color: #c22323;
+          transition: 0.6s all;
+        }
 
-      .btn_score {
-        color: #cc666a;
-        border: rem(2) solid #cc666a;
-        background-color: #fff;
-      }
-      .btn_score:hover {
-        color: #fff;
-        background-color: #e0cfcf9e;
-        transition: 0.6s all;
+        .btn_score {
+          color: #cc666a;
+          border: rem(2) solid #cc666a;
+          background-color: #fff;
+        }
+        .btn_score:hover {
+          color: #fff;
+          background-color: #e0cfcf9e;
+          transition: 0.6s all;
+        }
       }
     }
 
