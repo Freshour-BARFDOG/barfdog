@@ -1,70 +1,56 @@
-$browser-context:16; // html font-size:
-@function rem($px, $context: $browser-context){
+$browser-context: 16; // html font-size:
+@function rem($px, $context: $browser-context) {
   @return #{$px / $context}rem;
 }
 
-
-.container_outer{
-  display:flex;
+.container_outer {
+  display: flex;
   justify-content: center;
   align-items: center;
-  .container{
+  .container {
     max-width: rem(1920);
     width: rem(1200);
-    &.fullWidth{
-      width:100vw; //width: 100%; 을 수정
+    &.fullWidth {
+      width: 100vw; //width: 100%; 을 수정
     }
-    .row{
-      position:relative;
+    .row {
+      position: relative;
       padding: 0; //padding: 0 rem(0); 을 수정
     }
   }
 }
 
-
-
-
-
 /* RESPONSIVE */
-@media (max-width:rem(1200)){
-    
-  .container_outer{
-    .container{
+@media (max-width: rem(1200)) {
+  .container_outer {
+    .container {
       //.container width: 100% 값을 없애야 양옆 중앙으로 모임
       width: 100%;
-      &.fullWidth{
+      &.fullWidth {
         width: 100vw;
       }
-      .row{
+      .row {
         padding: 0 rem(20);
       }
     }
   }
-
 }
-@media (max-width:rem(1080)){
-
+@media (max-width: rem(1080)) {
 }
 
-@media (max-width:rem(768)){
-
+@media (max-width: rem(768)) {
 }
 
-@media (max-width:rem(600)){
-  .container_outer{
-    .container{
-      .row{
+@media (max-width: rem(600)) {
+  .container_outer {
+    display: block;
+    .container {
+      .row {
         padding: 0 rem(20);
       }
-    }                                                               
+    }
   }
-
-
 }
 
-
-
-@media (max-width:320px){
-
+@media (max-width: 320px) {
 }
-
