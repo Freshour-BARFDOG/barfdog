@@ -26,22 +26,22 @@ const swiperSettings_recipe = {
   modules: [Navigation],
   breakpoints: {
     //반응형 조건 속성
-    300: {
-      slidesPerView: 1,
-      spaceBetween: 0,
-    },
-    651: {
-      //651 이상일 경우
-      slidesPerView: 2, //레이아웃 2열
-      spaceBetween: 20,
-    },
-    1001: {
-      slidesPerView: 3,
-      spaceBetween: 20,
-    },
+    // 300: {
+    //   slidesPerView: 1,
+    //   spaceBetween: 0,
+    // },
+    // 651: {
+    //   //651 이상일 경우
+    //   slidesPerView: 2, //레이아웃 2열
+    //   spaceBetween: 20,
+    // },
+    // 1001: {
+    //   slidesPerView: 3,
+    //   spaceBetween: 20,
+    // },
     1201: {
-      slidesPerView: 4,
-      spaceBetween: 20,
+      slidesPerView: 2,
+      spaceBetween: 10,
     },
   },
 };
@@ -174,7 +174,7 @@ export function Swiper_recipe({ data, isMobile }) {
             <SwiperSlide
               key={`health-${d.id}-${index}`}
               style={{
-                width: '260',
+                width: '220',
                 height: 'inherit',
               }}
               className={s.swiper_slide}
