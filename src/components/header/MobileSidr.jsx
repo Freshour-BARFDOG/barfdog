@@ -124,7 +124,6 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
 
               <ul className={s.top_menu_wrap}>
                 <li>
-                  <button
                     type={'button'}
                     data-link={'/mypage/orderHistory'}
                     onClick={(e) => onMovePage(e, '/mypage/orderHistory')}
@@ -157,10 +156,6 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
 
               {/* <div className={s.cart_close}>
                 <button id="gnb_cart" data-link={'/cart'} onClick={onMovePage}>
-                  <div className={s.shop_wrap}>
-                    <Icon_cart className={s.icon_cart} />
-                    <span className={s.gnb_shop_count}>
-                      {cart.itemCount || 0}
                     </span>
                   </div>
                 </button>
