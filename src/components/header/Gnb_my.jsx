@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { setPreviousPath } from '/store/navigation-slice';
 import s from './header.module.scss';
+import { RxHamburgerMenu } from 'react-icons/rx';
 import Icon_cart from '../../../public/img/icon/cart.svg';
 import Icon_mypage from '../../../public/img/icon/mypage.svg';
 import DeadlineTimer from '../atoms/DeadlineTimer';
@@ -50,11 +51,13 @@ export const Gnb_my = ({ isMobile, setSidrOpen, authData }) => {
               </div>
             </button>
           </li>
-          {/* <li>
+          <li>
             <button type={'button'} onClick={onShowMobileSideMenu}>
-              <div className={s.mypage_wrap}></div>
+              <div className={s.category_wrap}>
+                <RxHamburgerMenu />
+              </div>
             </button>
-          </li> */}
+          </li>
         </ul>
       </div>
       {/* <i id={'DeadlineTimer-wrapper'} className={'mobile'}>
