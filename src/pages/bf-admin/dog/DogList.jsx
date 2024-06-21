@@ -27,18 +27,6 @@ const ItemList = ({ item, number }) => {
     dogId: item.dogId,
     dogName: item.dogName,
     subscribeStatus: item.subscribeStatus === 'SUBSCRIBING' ? 'Y' : 'N',
-    // subscribeStatus:
-    //   item.subscribeStatus === 'BEFORE_PAYMENT'
-    //     ? '구독 전'
-    //     : item.subscribeStatus === 'SURVEY_COMPLETED'
-    //     ? '설문 완료'
-    //     : item.subscribeStatus === 'SUBSCRIBE_CANCEL'
-    //     ? '구독 취소'
-    //     : item.subscribeStatus === 'SUBSCRIBING'
-    //     ? '구독 중'
-    //     : item.subscribeStatus === 'SUBSCRIBE_PENDING'
-    //     ? '구독 보류'
-    //     : '관리자 구독',
     dogType: item.dogType,
     dogGender: item.dogGender === 'FEMALE' ? '암컷' : '수컷',
     dogBirth: transformBirthDayYM(item.dogBirth),

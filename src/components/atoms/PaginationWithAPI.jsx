@@ -55,11 +55,9 @@ const Pagination = ({
       const calcedPageIndex = (curPage - 1).toString();
       const defQuery = `?${searchQueryType.PAGE}=${calcedPageIndex}&${searchQueryType.SIZE}=${size}`;
       let urlQueries = urlQuery ? `${defQuery}&${urlQuery}` : defQuery;
-
       let res;
       if (method === 'GET') {
         //res = await getData(`${url}${urlQueries}`);
-
         if (getCookie('alliance') === 'cb') {
           res = await getData(`${url}${urlQueries}&alliance=cb`);
         } else {
@@ -72,7 +70,7 @@ const Pagination = ({
         urlQueries = `${urlQueries}&${result}`;
         res = res.data;
       }
-
+      console.log(res.data);
       const pageData = res?.data?.page;
       const hasItems = pageData?.totalElements !== 0;
       const hasInterceptor =
