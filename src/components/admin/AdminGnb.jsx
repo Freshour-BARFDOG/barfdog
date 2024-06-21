@@ -53,7 +53,8 @@ function AdminGnb() {
             link="/bf-admin/product/createRecipe"
           />
         </List>
-        <List title="반려견관리" link="/bf-admin/dog" />
+        <List title="반려견 관리" link="/bf-admin/dog" />
+        <List title="구독 히스토리" link="/bf-admin/subscribes" />
         <List title="배너관리">
           <SubmenuList title="메인 배너" link="/bf-admin/banner/main-banner" />
           <SubmenuList

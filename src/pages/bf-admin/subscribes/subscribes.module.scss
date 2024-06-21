@@ -1,0 +1,35 @@
+@import '/styles/module/itemList.module';
+
+.cont_viewer {
+  .table {
+    .table_header,
+    .item {
+      text-align: center;
+      grid-template-columns:
+        rem(60)
+        rem(90)
+        rem(120)
+        rem(220)
+        rem(140)
+        rem(140)
+        rem(140)
+        rem(100)
+        rem(100)
+        rem(300)
+        rem(160)
+        rem(150)
+        rem(120)
+        rem(120)
+        rem(140)
+        rem(120)
+        rem(120)
+        rem(140)
+        rem(140)
+        rem(120)
+        rem(120)
+        rem(120)
+        rem(120)
+        rem(90);
+    }
+  }
+}
