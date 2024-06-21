@@ -3,11 +3,11 @@
 
 $mobileMenuHeight: rem(48);
 .mobileNav {
-  position: relative;
+  position: fixed;
   z-index: $mobileNav;
-  top: 0;
-  right: 0;
-  left: 0;
+  width: rem(600);
+  bottom: 0;
+
   .scroll-container {
     justify-content: flex-start !important;
     overflow-x: scroll;
@@ -39,12 +39,12 @@ $mobileMenuHeight: rem(48);
     * {
       font-size: inherit;
     }
-
   }
 
   .mobile-menu-wrap {
     border-bottom: rem(1) solid var(--color-line-03);
     box-sizing: border-box;
+    padding: rem(10) 0;
 
     .mobile-menu {
       width: 100%;
@@ -52,11 +52,19 @@ $mobileMenuHeight: rem(48);
       justify-content: space-around;
       align-items: center;
       padding: 0 rem(10);
-      li a, li button{
-        height: $mobileMenuHeight;
-        display: flex;align-items: center;
-        // padding: 0 rem(10);
-        white-space: nowrap;
+      li {
+        display: flex;
+        flex-direction: column;
+      }
+      li a,
+      li button {
+        // height: $mobileMenuHeight;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        gap: rem(5);
+        padding: 0 rem(10);
+        // white-space: nowrap;
       }
     }
   }
@@ -69,7 +77,7 @@ $mobileMenuHeight: rem(48);
     width: 100%;
     background-color: var(--color-bg-02);
     transition-property: height, padding-top;
-    transition-duration: .2s;
+    transition-duration: 0.2s;
     transition-timing-function: ease-out;
     box-sizing: border-box;
     padding: 0;
@@ -127,33 +135,30 @@ $mobileMenuHeight: rem(48);
       transition: transform 0.3s ease;
       height: rem(24);
       display: none;
-      -webkit-tap-highlight-color : transparent;
+      -webkit-tap-highlight-color: transparent;
       svg {
         fill: var(--color-line-02);
       }
     }
   }
 
-  *[data-current-page='depth1']{
+  *[data-current-page='depth1'] {
     color: var(--color-main);
     font-weight: 500;
-    position:relative;
-    &:before{
-      content: "";
+    position: relative;
+    &:before {
+      content: '';
       position: absolute;
-      bottom:0;
-      left:50%;
-      transform:translateX(-50%);
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
       width: 100%;
       height: rem(3);
       background-color: var(--color-main);
-
     }
   }
-  *[data-current-page='depth2']{
+  *[data-current-page='depth2'] {
     color: var(--color-main);
     font-weight: 500;
   }
-
 }
-
