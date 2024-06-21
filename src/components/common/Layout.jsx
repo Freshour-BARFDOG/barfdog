@@ -3,10 +3,9 @@ import Header from '../header/Header';
 import Footer from './Footer';
 import TopLineBanner from '/src/components/atoms/TopLineBanner';
 
-
 const Layout = ({ id, className, ...props }) => {
   return (
-    <main id={id} className={className}>
+    <main id={id} className={className} style={{ position: 'relative' }}>
       <TopLineBanner />
       <Header />
       {props.children}

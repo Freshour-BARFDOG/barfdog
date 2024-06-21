@@ -251,6 +251,16 @@
   .shop_wrap:hover {
     background-color: #ff00001f;
   }
+  .category_wrap {
+    position: relative;
+    width: rem(28);
+    height: rem(28);
+    padding: 0 rem(5);
+    svg {
+      width: rem(28);
+      height: rem(28);
+    }
+  }
 }
 
 .mobile-container-onMyapge {
