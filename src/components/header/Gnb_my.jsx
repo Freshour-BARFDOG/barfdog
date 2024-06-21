@@ -63,13 +63,13 @@ export const Gnb_my = ({ isMobile, setSidrOpen, authData }) => {
               </div>
             </button>
           </li>
-          {/* <li>
+          <li>
             <button type={'button'} onClick={onShowMobileSideMenu}>
               <div className={s.category_wrap}>
                 <RxHamburgerMenu />
               </div>
             </button>
-          </li> */}
+          </li>
         </ul>
       </div>
       {/* <i id={'DeadlineTimer-wrapper'} className={'mobile'}>
