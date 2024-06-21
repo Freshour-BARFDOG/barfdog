@@ -34,6 +34,11 @@ export const Gnb_my = ({ isMobile, setSidrOpen, authData }) => {
       <div className={s.gnb_my}>
         <ul className="clearfix">
           <li>
+            <button type={'button'} onClick={onShowMobileSideMenu}>
+              <div className={s.mypage_wrap}>{/* <Icon_mypage/> */}</div>
+            </button>
+          </li>
+          <li>
             <button
               id="gnb_cart"
               data-link={'/cart'}
@@ -45,16 +50,16 @@ export const Gnb_my = ({ isMobile, setSidrOpen, authData }) => {
               </div>
             </button>
           </li>
-          <li>
+          {/* <li>
             <button type={'button'} onClick={onShowMobileSideMenu}>
-              <div className={s.mypage_wrap}>{/* <Icon_mypage/> */}</div>
+              <div className={s.mypage_wrap}></div>
             </button>
-          </li>
+          </li> */}
         </ul>
       </div>
-      <i id={'DeadlineTimer-wrapper'} className={'mobile'}>
+      {/* <i id={'DeadlineTimer-wrapper'} className={'mobile'}>
         <DeadlineTimer />
-      </i>
+      </i> */}
     </>
   );
 };

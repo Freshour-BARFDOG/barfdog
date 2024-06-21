@@ -30,7 +30,7 @@ export default function Footer() {
   return (
     <footer id={s.site_footer}>
       {/* ----- 하단 Footer ----- */}
-      <Wrapper bgColor="#1a0909">
+      <Wrapper bgColor="#7E7E7E">
         <section className={s.sub_footer_area}>
           <div className={s.sub_footer_top}>
             <h3>(주) 프레쉬아워 Freshour INC.</h3>
@@ -119,8 +119,10 @@ export default function Footer() {
               <Image
                 src="/img/freshour.png"
                 alt="Footer 로고"
-                width={250}
-                height={85}
+                width={100}
+                height={35}
+                // objectFit="cover"
+                // layout="fill"
               />
             </div>
           </div>
