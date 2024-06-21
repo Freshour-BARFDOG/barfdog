@@ -17,6 +17,7 @@ export const Gnb_my = ({ isMobile, setSidrOpen, authData }) => {
   const onShowMobileSideMenu = () => {
     setSidrOpen(true);
   };
+
   const onMovePage = async (e, page) => {
     e.preventDefault();
     if (!userInfo) {
