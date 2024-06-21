@@ -125,7 +125,7 @@ export async function getServerSideProps({ req, query }) {
   const apiUrl = `/api/admin/orders/${orderId}/subscribe`;
   // const res =DUMMY_RES;
   const res = await getDataSSR(req, apiUrl);
-  console.log(res?.data);
+  // console.log(res?.data);
   if (res?.data) {
     const data = res.data;
 
