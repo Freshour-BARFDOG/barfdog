@@ -89,16 +89,6 @@ export default function Popup_SubscribeOrderDetailInfoPage({ data }) {
                   </li>
                   <li className={s['table-list']}>
                     <ProductInfo_subscribe subscribeInfo={data.subscribeDto} />
-                    {data.orderStatus === orderStatus.RESERVED_PAYMENT &&
-                      isChangedSubscribeInformation({
-                        before: data.beforeSubscribeDto,
-                        after: data.subscribeDto,
-                      }) && (
-                        <ProductInfo_subscribe
-                          subscribeInfo={data.beforeSubscribeDto}
-                          isChangedSubscribeInfo={true}
-                        />
-                      )}
                   </li>
                   <li className={s['table-list']}>
                     <ProductInfo_payment
@@ -135,7 +125,7 @@ export async function getServerSideProps({ req, query }) {
   const apiUrl = `/api/admin/orders/${orderId}/subscribe`;
   // const res =DUMMY_RES;
   const res = await getDataSSR(req, apiUrl);
-  // console.log(res?.data);
+  console.log(res?.data);
   if (res?.data) {
     const data = res.data;
 
@@ -168,14 +158,6 @@ export async function getServerSideProps({ req, query }) {
         plan: data.subscribeDto.plan,
         oneMealGramsPerRecipe: data.subscribeDto.oneMealGramsPerRecipe || null, // api-server 변경된 field 이름 대응 -> 추후 null 값 제외해도 됨
         recipeName: data.subscribeDto.recipeName,
-      },
-      beforeSubscribeDto: {
-        id: data.beforeSubscribeDto.id, // ! 구독 id => 구독정보 바꾼 적 없으면 null
-        subscribeCount: data.beforeSubscribeDto.subscribeCount,
-        plan: data.beforeSubscribeDto.plan,
-        oneMealGramsPerRecipe:
-          data.beforeSubscribeDto.oneMealGramsPerRecipe || null, // api-server 변경된 field 이름 대응 -> 추후 null 값 제외해도 됨
-        recipeName: data.beforeSubscribeDto.recipeName,
       },
       subscribePaymentDto: {
         orderPrice: data.subscribePaymentDto.orderPrice, // 상품 총 금액

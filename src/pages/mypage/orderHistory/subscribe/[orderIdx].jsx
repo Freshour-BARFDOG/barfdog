@@ -131,15 +131,6 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
                 </div>
               </h1>
 
-              <span className={s.change}>
-                {data?.orderDto.beforePlan === null &&
-                data?.orderDto.beforeOneMealGramsPerRecipe === null &&
-                data?.orderDto.beforeRecipeName === null &&
-                data?.orderDto.beforeOrderPrice === 0
-                  ? ''
-                  : '* 구독 정보 변경으로 주문 변경 내용이 있습니다. '}
-              </span>
-
               <ul className={s.body_content}>
                 <li className={s.left_box}>
                   <figure className={`${s.image} img-wrap`}>
@@ -173,24 +164,11 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
                         {data?.orderDto.plan &&
                           subscribePlanType[data?.orderDto.plan].KOR}
                       </span>
-                      {data?.orderDto.beforePlan &&
-                        data?.orderDto.plan &&
-                        data?.orderDto.beforePlan !== data?.orderDto.plan && (
-                          <span className={s.beforeData}>
-                            {subscribePlanType[data?.orderDto.beforePlan].KOR}
-                          </span>
-                        )}
                     </div>
 
                     <span>레시피</span>
                     <div>
                       <span>{data?.recipeNames}</span>
-                      {data?.orderDto.beforeRecipeName !==
-                        data?.recipeNames && (
-                        <span className={s.beforeData}>
-                          {data?.orderDto.beforeRecipeName}
-                        </span>
-                      )}
                     </div>
 
                     <span>급여량</span>
@@ -208,22 +186,6 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
                             )
                             .join(', ')}
                       </span>
-                      {data?.orderDto.beforeOneMealGramsPerRecipe &&
-                        data?.orderDto.beforeOneMealGramsPerRecipe !==
-                          data?.orderDto.oneMealGramsPerRecipe && (
-                          <span className={s.beforeData}>
-                            {seperateStringViaComma(
-                              data?.orderDto.beforeOneMealGramsPerRecipe,
-                            )
-                              .map(
-                                (gram) =>
-                                  `${transformLocalCurrency(
-                                    roundedOneMealGram(gram),
-                                  )}g`,
-                              )
-                              .join(', ')}
-                          </span>
-                        )}
                     </div>
 
                     <span>가격</span>
@@ -231,16 +193,6 @@ export default function SubScribe_OrderHistoryPage({ data, orderIdx }) {
                       <span>
                         {transformLocalCurrency(data?.orderDto.orderPrice)}원
                       </span>
-                      {data?.orderDto.beforeOrderPrice > 0 &&
-                        data?.orderDto.beforeOrderPrice !==
-                          data?.orderDto.orderPrice && (
-                          <span className={s.beforeData}>
-                            {transformLocalCurrency(
-                              data?.orderDto.beforeOrderPrice,
-                            )}
-                            원
-                          </span>
-                        )}
                     </div>
                   </div>
                   <div className={s.info_autoConfirmation}>
@@ -499,12 +451,6 @@ export async function getServerSideProps(ctx) {
         plan: data.orderDto.plan,
         // paymentDate: data.orderDto.paymentDate,
         orderPrice: data.orderDto.orderPrice,
-        beforeSubscribeCount: data.orderDto.beforeSubscribeCount,
-        beforePlan: data.orderDto.beforePlan,
-        beforeOneMealGramsPerRecipe:
-          data.orderDto.beforeOneMealGramsPerRecipe || null, // api-server field 변경에 대응 -> 추후 null 대응 제외해도 됨
-        beforeRecipeName: data.orderDto.beforeRecipeName,
-        beforeOrderPrice: data.orderDto.beforeOrderPrice,
         orderStatus: data.orderDto.orderStatus, // ! 주문상태
         cancelRequestDate: data.orderDto.cancelRequestDate,
         cancelConfirmDate: data.orderDto.cancelConfirmDate,
