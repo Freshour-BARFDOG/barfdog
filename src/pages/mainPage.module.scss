@@ -138,6 +138,7 @@ section.sns {
     color: #fff;
     text-align: center;
     width: rem(600);
+    display: inline-block;
     .text_box {
       position: absolute;
       // top: 30%;
@@ -259,13 +260,14 @@ section.sns {
   }
 
   h4 {
-    font-size: rem(22) !important;
+    font-size: rem(18) !important;
     font-weight: 400;
     color: #717171;
     text-align: center;
   }
 
   .swiper_recipe_bottom_wrapper {
+    // overflow-y: auto;
     margin-top: rem(40);
 
     .swiper_slide_item {
@@ -276,8 +278,8 @@ section.sns {
 
     .recipe_box {
       position: relative;
-      width: rem(280);
-      height: rem(280);
+      width: rem(220);
+      height: rem(220);
       background-color: #fff;
       // box-shadow: rem(10) rem(10) rem(30) rgba(0, 0, 0, 0.1);
       padding: rem(10);
@@ -294,6 +296,7 @@ section.sns {
 
   .swiper_recipe {
     height: 100%;
+    width: rem(600);
     // padding: rem(20) rem(20) 0;
 
     .item_description {
@@ -374,10 +377,10 @@ section.sns {
 
   // 건강문제 이미지
   .img_wrap {
-    margin: rem(20);
+    margin: rem(10);
     position: relative;
-    // width: rem(260);
-    height: rem(321);
+    width: rem(139 * 1.8);
+    height: rem(182 * 1.8);
     display: flex;
     // aspect-ratio: 1/1;
     background-color: #fff;
@@ -1464,7 +1467,7 @@ section.sns {
     width: rem(28);
     height: rem(28);
     top: 50%;
-    left: 45%;
+    // left: 102% !important;
     z-index: 2;
     box-shadow: none;
     transition-property: box-shadow, opacity;
@@ -1479,14 +1482,14 @@ section.sns {
 
   .swiper_button_next_recipe,
   .swiper_button_next_recipe_clicked {
-    transform: translate(-50%, -50%) translateX(rem(595));
+    transform: translate(-50%, -50%) translateX(rem(586));
     cursor: pointer;
     position: absolute;
     border-radius: 100%;
     width: rem(28);
     height: rem(28);
     top: 50%;
-    left: 55%;
+    // right: 10%;
     z-index: 2;
     box-shadow: none;
     transition-property: box-shadow, opacity;
@@ -1502,18 +1505,24 @@ section.sns {
   .swiper_button_next_recipe_clicked,
   .swiper_button_prev_recipe_clicked {
     top: 19.6%;
+    transform: translate(-50%, -50%) translateX(rem(300));
   }
+
+  // .swiper_button_next_recipe_clicked {
+  //   top: 19.6%;
+  //   transform: translate(-50%, -50%) translateX(rem(586));
+  // }
 }
 
 /* RESPONSIVE */
 @media (max-width: rem(1350)) {
-  .swiper_button_prev_recipe {
-    left: 47% !important;
-  }
+  // .swiper_button_prev_recipe {
+  //   left: 47% !important;
+  // }
 
-  .swiper_button_next_recipe {
-    left: 53% !important;
-  }
+  // .swiper_button_next_recipe {
+  //   left: 53% !important;
+  // }
 }
 
 @media (max-width: rem(1200)) {
@@ -1568,11 +1577,11 @@ section.sns {
     //   left: 30% !important;
     // }
 
-    .swiper_recipe {
-      overflow: visible !important;
-      width: rem(864);
-      left: rem(20);
-    }
+    // .swiper_recipe {
+    //   overflow: visible !important;
+    //   width: rem(600);
+    //   left: rem(20);
+    // }
   }
 
   //고민
@@ -1934,15 +1943,15 @@ section.sns {
 
 @media (max-width: rem(650)) {
   //레시피 설명 4가지 사진
-  .swiper_recipe_outerWrap {
-    margin-top: rem(20);
-    height: rem(520);
+  // .swiper_recipe_outerWrap {
+  //   margin-top: rem(20);
+  //   height: rem(520);
 
-    .swiper_recipe {
-      width: rem(295);
-      left: rem(20);
-    }
-  }
+  //   .swiper_recipe {
+  //     width: rem(295);
+  //     left: rem(20);
+  //   }
+  // }
 }
 
 @media (max-width: rem(600)) {
@@ -2464,9 +2473,9 @@ section.sns {
 
 @media (max-width: rem(370)) {
   //레시피 설명 4가지 사진
-  .swiper_recipe_outerWrap {
-    .swiper_recipe {
-      left: 0;
-    }
-  }
+  // .swiper_recipe_outerWrap {
+  //   .swiper_recipe {
+  //     left: 0;
+  //   }
+  // }
 }
