@@ -5,6 +5,18 @@ import transformDate from '/util/func/transformDate';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import { historyCategoryType } from '../../../../store/TYPE/historyCategoryType';
 
+function DateTimeDisplay({ dateTimeString }) {
+  const dateTime = new Date(dateTimeString);
+
+  const dateStr = dateTime.toLocaleDateString();
+  const timeStr = dateTime.toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+
+  return `${dateStr}${timeStr}`;
+}
+
 export default function SubscribesList({ items, currentPage }) {
   if (!items || !items.length) return;
   return (
@@ -29,14 +41,10 @@ const ItemList = ({ item, number }) => {
     email: item.email || '-',
     dogName: item.dogName,
     createdDate: item.createdDate
-      ? transformDate(item.createdDate, 'time', {
-          seperator: '.',
-        })
+      ? DateTimeDisplay({ dateTimeString: item.createdDate })
       : '-',
     modifiedDate: item.modifiedDate
-      ? transformDate(item.modifiedDate, 'time', {
-          seperator: '.',
-        })
+      ? DateTimeDisplay({ dateTimeString: item.modifiedDate })
       : '-',
     subscribeCount: item.subscribeCount,
     subscribePlan: item.subscribePlan || '-',
@@ -46,9 +54,7 @@ const ItemList = ({ item, number }) => {
       ? transformLocalCurrency(item.nextPaymentPrice)
       : '-',
     nextPaymentDate: item.nextPaymentDate
-      ? transformDate(item.nextPaymentDate, 'time', {
-          seperator: '.',
-        })
+      ? DateTimeDisplay({ dateTimeString: item.nextPaymentDate })
       : '-',
     subscribeStatus:
       item.subscribeStatus === 'BEFORE_PAYMENT'
@@ -83,25 +89,15 @@ const ItemList = ({ item, number }) => {
       <span>{DATA.email}</span>
       <span>{DATA.dogName}</span>
       <span>{DATA.subscribeStatus}</span>
-      <span>
-        {DATA.createdDate.split(' ')[0]}
-        <br />
-        {DATA.createdDate.split(' ')[1]}
-      </span>
-      <span>
-        {DATA.modifiedDate.split(' ')[0]} <br />
-        {DATA.modifiedDate.split(' ')[1]}
-      </span>
+      <span>{DATA.createdDate}</span>
+      <span>{DATA.modifiedDate}</span>
       <span>{DATA.historyCategory}</span>
       <span>{DATA.subscribeCount}</span>
       <span>{DATA.subscribePlan}</span>
       <span>{DATA.recipeName}</span>
       <span>{DATA.oneMealGramsPerRecipe}</span>
       <span>{DATA.nextPaymentPrice}</span>
-      <span>
-        {DATA.nextPaymentDate.split(' ')[0]} <br />
-        {DATA.nextPaymentDate.split(' ')[1]}
-      </span>
+      <span>{DATA.nextPaymentDate}</span>
       <span>{DATA.countSkipOneTime}</span>
       <span>{DATA.countSkipOneWeek}</span>
       <span>{DATA.memberCouponName}</span>
