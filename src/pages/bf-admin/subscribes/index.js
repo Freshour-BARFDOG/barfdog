@@ -101,7 +101,7 @@ function ManageSubscribePage() {
           </section>
           <section className="cont">
             <div className="cont_header clearfix">
-              <p className="cont_title cont-left">구독 정보</p>
+              <p className="cont_title cont-left">구독 히스토리</p>
             </div>
             <div className={`${s.cont_viewer} ${s.fullWidth}`}>
               <div className={s.table}>
