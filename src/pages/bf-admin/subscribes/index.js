@@ -89,14 +89,6 @@ function ManageSubscribePage() {
                   { label: '구독 ID', value: 'id' },
                 ]}
               />
-              {/* <SearchRadio
-                searchValue={searchValue}
-                setSearchValue={setSearchValue}
-                title="구독상태"
-                name="subscribeStatus"
-                idList={['ALL', 'SUBSCRIBING', 'NONSUBSCRIBING']}
-                labelList={['전체', '구독', '비구독']}
-              /> */}
             </SearchBar>
           </section>
           <section className="cont">
