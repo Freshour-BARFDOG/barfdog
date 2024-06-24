@@ -107,20 +107,21 @@ function ManageSubscribePage() {
               <div className={s.table}>
                 <ul className={s.table_header}>
                   <li className={s.table_th}>번호</li>
+                  <li className={s.table_th}>삭제 여부</li>
                   <li className={s.table_th}>구독 ID</li>
                   <li className={s.table_th}>견주 이름</li>
                   <li className={s.table_th}>견주 ID</li>
                   <li className={s.table_th}>반려견명</li>
-                  <li className={s.table_th}>구독 최초 생성일</li>
+                  <li className={s.table_th}>구독 상태</li>
+                  <li className={s.table_th}>최초 설문 완료일</li>
                   <li className={s.table_th}>구독 수정일</li>
+                  <li className={s.table_th}>구독 수정 사유</li>
                   <li className={s.table_th}>구독 횟수</li>
                   <li className={s.table_th}>플랜</li>
                   <li className={s.table_th}>레시피 이름</li>
                   <li className={s.table_th}>한끼 급여량 (g)</li>
-                  <li className={s.table_th}>다음결제금액 (원)</li>
+                  <li className={s.table_th}>다음결제 원금 (원)</li>
                   <li className={s.table_th}>다음결제일</li>
-                  <li className={s.table_th}>구독 상태</li>
-                  <li className={s.table_th}>구독 취소 사유</li>
                   <li className={s.table_th}>1회 스킵 횟수</li>
                   <li className={s.table_th}>1주 스킵 횟수</li>
                   <li className={s.table_th}>사용한 쿠폰 이름</li>
@@ -128,8 +129,7 @@ function ManageSubscribePage() {
                   <li className={s.table_th}>초과 할인금</li>
                   <li className={s.table_th}>등급 할인량</li>
                   <li className={s.table_th}>다음 결제 mid</li>
-                  <li className={s.table_th}>구독 수정 사유</li>
-                  <li className={s.table_th}>삭제 여부</li>
+                  <li className={s.table_th}>구독 취소 사유</li>
                 </ul>
                 {itemList.length ? (
                   <SubscribesList items={itemList} currentPage={currentPage} />
