@@ -85,7 +85,7 @@ function ManageSubscribePage() {
                 options={[
                   { label: '반려견명', value: 'dogName' },
                   { label: '견주 이름', value: 'memberName' },
-                  { label: '견주 ID', value: 'memberEmail' },
+                  { label: '견주 ID', value: 'email' },
                   { label: '구독 ID', value: 'id' },
                 ]}
               />
