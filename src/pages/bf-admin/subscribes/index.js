@@ -85,7 +85,7 @@ function ManageSubscribePage() {
                 options={[
                   { label: '반려견명', value: 'dogName' },
                   { label: '견주 이름', value: 'memberName' },
-                  { label: '견주 ID', value: 'memberEmail' },
+                  { label: '견주 ID', value: 'email' },
                   { label: '구독 ID', value: 'id' },
                 ]}
               />
@@ -101,7 +101,7 @@ function ManageSubscribePage() {
           </section>
           <section className="cont">
             <div className="cont_header clearfix">
-              <p className="cont_title cont-left">구독 목록</p>
+              <p className="cont_title cont-left">구독 히스토리</p>
             </div>
             <div className={`${s.cont_viewer} ${s.fullWidth}`}>
               <div className={s.table}>
@@ -122,8 +122,8 @@ function ManageSubscribePage() {
                   <li className={s.table_th}>한끼 급여량 (g)</li>
                   <li className={s.table_th}>다음결제 원금 (원)</li>
                   <li className={s.table_th}>다음결제일</li>
-                  <li className={s.table_th}>1회 스킵 횟수</li>
-                  <li className={s.table_th}>1주 스킵 횟수</li>
+                  <li className={s.table_th}>건너뛰기 횟수 (1회)</li>
+                  <li className={s.table_th}>건너뛰기 횟수 (1주)</li>
                   <li className={s.table_th}>사용한 쿠폰 이름</li>
                   <li className={s.table_th}>쿠폰 할인량</li>
                   <li className={s.table_th}>초과 할인금</li>
