@@ -16,6 +16,9 @@ import enterKey from '/util/func/enterKey';
 import { getDefaultPagenationInfo } from '/util/func/getDefaultPagenationInfo';
 import { global_searchDateType } from '/store/TYPE/searchDateType';
 import { rewardType } from '/store/TYPE/rewardType';
+import { Button, ConfigProvider } from 'antd';
+import { DownloadOutlined } from '@ant-design/icons';
+import { getData, postData, postDataBlob } from '../../../api/reqData';
 
 const initialSearchValues = {
   email: '',
@@ -35,7 +38,7 @@ function RewardListPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValues, setSearchValues] = useState(initialSearchValues);
   const [onSearch, setOnSearch] = useState(false);
-
+  const [isExcelLoading, setIsExcelLoading] = useState(false);
   const initialValue = searchValues.rewardType || '';
   const [selectedCheckboxes, setSelectedCheckboxes] = useState(initialValue);
 
@@ -76,6 +79,32 @@ function RewardListPage() {
 
   const onSearchInputKeydown = (e) => {
     enterKey(e, onSearchHandler);
+  };
+
+  // export excel
+  const downloadExcel = async () => {
+    const url = `/api/admin/rewards/excel`;
+
+    try {
+      setIsExcelLoading(true);
+      const res = await postDataBlob(`${url}?${searchQuery}`);
+      // console.log('엑셀 파일 업로드 성공:', res);
+
+      if (res && res.data instanceof Blob) {
+        const downloadUrl = URL.createObjectURL(res.data);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.setAttribute('download', '판매관리.xlsx');
+        document.body.appendChild(link);
+        link.click();
+        URL.revokeObjectURL(downloadUrl);
+        link.remove();
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsExcelLoading(false);
+    }
   };
 
   // console.log('itemList', itemList);
@@ -121,11 +150,33 @@ function RewardListPage() {
               />
             </SearchBar>
           </section>
+
           <section className="cont">
             <div className="cont_header clearfix">
               <p className="cont_title cont-left">적립금 목록</p>
-              <div className="controls cont-left"></div>
+              <div
+                className={`controls cont-left ${
+                  isExcelLoading && s.excel_button
+                }`}
+              >
+                <ConfigProvider
+                  theme={{
+                    token: {
+                      // Seed Token
+                      colorPrimary: '#ca1011',
+                    },
+                  }}
+                >
+                  <Button
+                    icon={<DownloadOutlined />}
+                    onClick={() => downloadExcel()}
+                  >
+                    {isExcelLoading ? <Spinner /> : '엑셀 다운로드'}
+                  </Button>
+                </ConfigProvider>
+              </div>
             </div>
+
             <div className={`${s.cont_viewer} ${s.fullWidth}`}>
               <div className={s.table}>
                 <ul className={s.table_header}>
