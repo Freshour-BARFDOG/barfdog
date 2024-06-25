@@ -80,7 +80,7 @@ const ItemList = ({ item, number }) => {
       <span>{DATA.dogSize}</span>
       <span>{DATA.weight}</span>
       <span>{DATA.dogStatus}</span>
-      <span>{DATA.oldDog}</span>
+      <span>{DATA.neutralization}</span>
       <span>{DATA.representative}</span>
     </li>
   );
