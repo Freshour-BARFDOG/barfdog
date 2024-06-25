@@ -105,18 +105,18 @@ section.sns {
   .video_wrapper {
     position: relative;
     // width: 100vw;
-    height: 90vh;
+    height: 100vh;
     // overflow: hidden;
   }
 
   .video_wrapper video {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100%;
-    height: 100%;
+    // position: absolute;
+    // top: 48%;
+    // left: 50%;
+    // width: 100%;
+    // height: 100%;
     // object-fit: cover;
-    transform: translate(-50%, -50%);
+    // transform: translate(-50%, -50%);
     z-index: -1;
   }
 
@@ -172,44 +172,46 @@ section.sns {
       }
 
       .image_wrap {
-        max-width: rem(200);
-        margin-bottom: rem(30);
+        max-width: rem(120);
+        margin: auto;
       }
 
       .btn_box {
         display: flex;
         justify-content: center;
         gap: rem(40);
-        font-size: rem(20);
+        font-size: rem(18);
         font-weight: bold;
+        margin-top: rem(100);
         a {
           display: flex;
           justify-content: center;
           align-items: center;
-          height: rem(150);
-          width: rem(150);
-          border-radius: 50%;
+          height: rem(47 * 1.2);
+          width: rem(172 * 1.2);
+          border-radius: rem(30);
           text-align: center;
-          background-color: #cc666a;
+          background-color: #fff;
+          border: rem(2) solid #cc666a;
+          color: #be1a21;
         }
 
         .btn_survey:hover {
-          // color: #cc666a;
-          // border: rem(2) solid #cc666a;
+          color: #fff;
           background-color: #c22323;
           transition: 0.6s all;
         }
 
-        .btn_score {
-          color: #cc666a;
-          border: rem(2) solid #cc666a;
-          background-color: #fff;
-        }
-        .btn_score:hover {
-          color: #fff;
-          background-color: #e0cfcf9e;
-          transition: 0.6s all;
-        }
+        // .btn_score {
+        //   color: #cc666a;
+        //   border: rem(2) solid #cc666a;
+        //   background-color: #fff;
+        // }
+        // .btn_score:hover {
+        //   color: #fff;
+        //   background-color: #e0cfcf9e;
+        //   transition: 0.6s all;
+        // }
       }
     }
 

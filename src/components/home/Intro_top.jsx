@@ -28,8 +28,7 @@ export function Intro_top() {
             <div className={s.btn_box}>
               <Link href={'/surveyGuide'} passHref>
                 <a type="button" className={s.btn_survey}>
-                  설문하고
-                  <br /> 추천받기
+                  설문하고 추천받기
                 </a>
               </Link>
               {/* <Link href={'/surveyGuide'} passHref>
