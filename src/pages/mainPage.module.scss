@@ -105,7 +105,7 @@ section.sns {
   .video_wrapper {
     position: relative;
     // width: 100vw;
-    height: 100vh;
+    height: 85vh;
     // overflow: hidden;
   }
 
@@ -141,7 +141,6 @@ section.sns {
     display: inline-block;
     .text_box {
       position: absolute;
-      // top: 30%;
       // left: 15%;
       // margin-bottom: rem(50);
       transform: translate(-50%, -50%);
@@ -1199,11 +1198,18 @@ section.sns {
 .sns {
   .inner {
     text-align: center;
-
+    // ![test]용
+    // background-color: #be1a21;
     > p {
       padding: rem(12) 0 rem(77);
       color: #636363;
       font-size: rem(16);
+    }
+
+    //*** 4. 바프독
+    .barfdog_cont_body {
+      // ![test]용
+      // background-color: #be1a21;
     }
   }
   .swiper_sns_box {
