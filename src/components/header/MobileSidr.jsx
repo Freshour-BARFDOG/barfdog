@@ -4,6 +4,8 @@ import CloseButton from '/src/components/atoms/CloseButton';
 import ScrollContainer from '/src/components/atoms/ScrollContainer';
 import Image from 'next/image';
 import Logo from '/public/img/mobile_logo.svg';
+import Icon_cart from '../../../public/img/icon/cart.svg';
+import Icon_mypage from '../../../public/img/icon/mypage.svg';
 // import Icon_cart from '../../../public/img/icon/icon-sidebar-cart.svg';
 // import Kakao from '/public/img/icon/kakao.png';
 // import Naver from '/public/img/icon/naver.png';
@@ -113,286 +115,142 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
             <div className={s.row}>
               <div className={s.logo_img}>
                 <Image
-                  src={'/img/mobile_logo.svg'}
+                  src={'/img/logo.png'}
                   alt="사이트 로고"
                   width={140 * 1.3}
                   height={25 * 1.3}
                 />
               </div>
-              <div className={s.cart_close}>
-                {/* <button id="gnb_cart" data-link={'/cart'} onClick={onMovePage}>
+
+              <ul className={s.top_menu_wrap}>
+                <li>
+                  <button
+                    type={'button'}
+                    onClick={(e) => onMovePage(e, '/mypage/orderHistory')}
+                  >
+                    <div className={s.mypage_wrap}>
+                      <Icon_mypage />
+                    </div>
+                  </button>
+                </li>
+                <li>
+                  <button
+                    id="gnb_cart"
+                    data-link={'/cart'}
+                    onClick={(e) => onMovePage(e, '/cart')}
+                  >
+                    <div className={s.shop_wrap}>
+                      {/* <Icon_cart /> */}
+                      {cart.itemCount !== 0 && (
+                        <span className={s.gnb_shop_count}>
+                          {cart.itemCount}
+                        </span>
+                      )}
+                    </div>
+                  </button>
+                </li>
+                <li>
+                  <CloseButton lineColor={'#636363'} onClick={onCloseSidr} />
+                </li>
+              </ul>
+
+              {/* <div className={s.cart_close}>
+                <button id="gnb_cart" data-link={'/cart'} onClick={onMovePage}>
                   <div className={s.shop_wrap}>
                     <Icon_cart className={s.icon_cart} />
                     <span className={s.gnb_shop_count}>
                       {cart.itemCount || 0}
                     </span>
                   </div>
-                </button> */}
-                <CloseButton lineColor={'#636363'} onClick={onCloseSidr} />
-              </div>
+                </button>
+              </div> */}
             </div>
           </section>
           <ScrollContainer
             className={s['scroll-container']}
             scrollBarWidth={'0'}
           >
-            {!isLogin && (
-              <section className={s['login-section']}>
-                <div className={s.row}>
-                  <MenuList
-                    contClassName={`${s.btn} ${s.solid}`}
-                    title={'로그인'}
-                    link={'/account/login'}
-                    removeIcon={true}
-                  />
-                  <MenuList
-                    contClassName={`${s.btn} ${s.line}`}
-                    title={'회원가입'}
-                    link={'/account/signup'}
-                    removeIcon={true}
-                  />
-                  <div className={s.divider}>
-                    <i />
-                    <span className={s.text}>간편 로그인</span>
-                    <i />
-                  </div>
-                  <div className={s['sns']}>
-                    <button
-                      type={'button'}
-                      className={s.kakao}
-                      onClick={kakaoLoginHandler}
-                    >
-                      {/* <Image src={Kakao} width={72} height={72} alt="카카오톡 아이콘" /> */}
-                      <Kakao width="100%" height="100%" viewBox="0 0 72 72" />
-                      <em className={s.desc}>
-                        카카오로 <b> 3초만에 시작</b>하기
-                      </em>
-                    </button>
-                    <button
-                      type={'button'}
-                      className={s.naver}
-                      onClick={naverLoginHandler}
-                    >
-                      {/* <Image src={Naver} width="72" height="72" alt="네이버 아이콘" /> */}
-                      <Naver width="100%" height="100%" viewBox="0 0 72 72" />
-                    </button>
-                  </div>
-                </div>
-              </section>
-            )}
-            {isLogin && (
-              <section className={s['dashboard-section']}>
-                <div className={s.row}>
-                  <div className={s.userInfo}>
-                    <figure className={`${s['cont-left']} ${s.image}`}>
-                      {data.dog.thumbnailUrl && (
-                        <Image
-                          alt="반려견 대표 이미지"
-                          src={data.dog.thumbnailUrl}
-                          objectFit="cover"
-                          layout="fill"
-                        />
-                      )}
-                    </figure>
-                    <figcaption className={s['cont-right']}>
-                      <div className={s.innerRow}>
-                        <span className={s.dogName}>
-                          {data.dog.dogName}
-                          <em className={s.unit}>견주</em>
-                        </span>
-                      </div>
-                      <div className={s.innerRow}>
-                        <div
-                          className={'inline-flex-box gap-4'}
-                          onClick={() => openGradePopupHandler(isMobile)}
-                        >
-                          <button type={'button'} className={s.userName}>
-                            {data.name}
-                            <em className={s.unit}>님</em>
-                          </button>
-                          <i className={s.grade}>{data.grade}</i>
-                        </div>
-                      </div>
-                      <div className={s.innerRow}>
-                        <span className={s.email}>{data.email}</span>
-                      </div>
-                    </figcaption>
-                  </div>
-                  <div className={s.dashboard}>
-                    <ul>
-                      <li>
-                        <Link href="/mypage/delivery" passHref>
-                          <a>
-                            <em className={s.num}>{data.deliveryCount}</em>
-                            <span className={s.text}>배송현황</span>
-                          </a>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link href="/mypage/reward" passHref>
-                          <a>
-                            <em className={s.num}>
-                              {transformLocalCurrency(data.reward)}
-                            </em>
-                            <span className={s.text}>적립금</span>
-                          </a>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link href="/mypage/coupon" passHref>
-                          <a>
-                            <em className={s.num}>{data.couponCount}</em>
-                            <span className={s.text}>쿠폰</span>
-                          </a>
-                        </Link>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </section>
-            )}
-
-            {isLogin && (
-              <section className={s['mypage-section']}>
-                <div className={s.row}>
-                  <ul>
-                    <MypageMenuList
-                      title={'주문내역'}
-                      link={'/mypage/orderHistory'}
-                      icon={<IconMypageOrderHIstory />}
-                    />
-                    <MypageMenuList
-                      title={'카드관리'}
-                      link={'/mypage/card'}
-                      icon={<IconMypageCard />}
-                    />
-                    <MypageMenuList
-                      title={'구독관리'}
-                      link={'/mypage/subscribe'}
-                      icon={<IconMypageSubscribe />}
-                    />
-                    <MypageMenuList
-                      title={'친구초대'}
-                      link={'/mypage/invite'}
-                      icon={<IconMypageInvite />}
-                    />
-                    <MypageMenuList
-                      title={'반려견정보'}
-                      link={'/mypage/dogs'}
-                      icon={<IconMypageDogs />}
-                    />
-                    <MypageMenuList
-                      title={'계정정보'}
-                      link={'/mypage/user'}
-                      icon={<IconMypageUser />}
-                    />
-                    <MypageMenuList
-                      title={'후기'}
-                      link={'/mypage/review'}
-                      icon={<IconMypageReview />}
-                    />
-                    <MypageMenuList
-                      title={'프로모션'}
-                      link={'/mypage/promotion'}
-                      icon={<IconMypagePromotion />}
-                    />
-                  </ul>
-                </div>
-              </section>
-            )}
-            {isLogin && <MypageBanner />}
             <section className={s['bottom-menu-section']}>
               <div className={s.row}>
                 <ul>
-                  {isLogin && <MenuList title={'장바구니'} link={'/cart'} />}
+                  <li className={s.main_menu_title}>
+                    <Link href={'/surveyGuide'} passHref>
+                      <a>헬스케어</a>
+                    </Link>
+                  </li>
 
-                  <MenuList
-                    title={'헬스케어'}
-                    isArrowActive={isArrowActive}
-                    setIsArrowActive={setIsArrowActive}
-                    index={0}
-                  ></MenuList>
-                  <ul
-                    className={`${s.submenu_container} ${
-                      isArrowActive[0] ? s.active : ''
-                    }`}
-                  >
+                  <ul className={s.menu_list_container}>
                     <li>
                       <Link href={'/surveyGuide'} passHref>
                         <a>AI 추천 식단</a>
                       </Link>
                     </li>
-                    <li>
-                      <Link href={'/healthcare/vet'} passHref>
-                        <a>건강점수</a>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href={'/healthcare/kit'} passHref>
-                        <a>진단</a>
-                      </Link>
-                    </li>
+
+                    <MenuList
+                      title={'건강수첩'}
+                      isArrowActive={isArrowActive}
+                      setIsArrowActive={setIsArrowActive}
+                      index={0}
+                    ></MenuList>
+                    <ul
+                      className={`${s.submenu_container} ${
+                        isArrowActive[0] ? s.active : ''
+                      }`}
+                    >
+                      <li>
+                        <Link href={'/surveyGuide'} passHref>
+                          <a>내 반려견 기록</a>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href={'/healthcare/vet'} passHref>
+                          <a>견종백과</a>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href={'/healthcare/vet'} passHref>
+                          <a>건강문진</a>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href={'/healthcare/vet'} passHref>
+                          <a>장내분석</a>
+                        </Link>
+                      </li>
+                    </ul>
                   </ul>
 
-                  <MenuList
-                    title={'제품'}
-                    isArrowActive={isArrowActive}
-                    setIsArrowActive={setIsArrowActive}
-                    index={1}
-                  ></MenuList>
-                  <ul
-                    className={`${s.submenu_container} ${
-                      isArrowActive[1] ? s.active : ''
-                    }`}
-                  >
+                  <li className={s.main_menu_title}>
+                    <Link href={'/surveyGuide'} passHref>
+                      <a>제품</a>
+                    </Link>
+                  </li>
+                  <ul className={s.menu_list_container}>
                     <li>
                       <Link
                         href={`/shop?itemType=${general_itemType.ALL}`}
                         passHref
                       >
-                        <a>ALL</a>
+                        <a>스토어</a>
                       </Link>
                     </li>
-                    <li>
-                      <Link
-                        href={`/shop?itemType=${general_itemType.RAW}`}
-                        passHref
-                      >
-                        <a>생식</a>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href={`/shop?itemType=${general_itemType.TOPPING}`}
-                        passHref
-                      >
-                        <a>토핑</a>
-                      </Link>
-                    </li>
+
                     <li>
                       <Link
                         href={`/shop?itemType=${general_itemType.GOODS}`}
                         passHref
                       >
-                        <a>굿즈</a>
+                        <a>리뷰</a>
                       </Link>
                     </li>
                   </ul>
 
-                  {/* ! [추후멤버십 링크 추가] */}
-                  {/* <MenuList title={'멤버십'} link={'/'} removeIcon={true} /> */}
-
-                  <MenuList
-                    title={'바프독'}
-                    isArrowActive={isArrowActive}
-                    setIsArrowActive={setIsArrowActive}
-                    index={3}
-                  ></MenuList>
-                  <ul
-                    className={`${s.submenu_container} ${
-                      isArrowActive[3] ? s.active : ''
-                    }`}
-                  >
+                  <li className={s.main_menu_title}>
+                    <Link href={'/surveyGuide'} passHref>
+                      <a>바프독</a>
+                    </Link>
+                  </li>
+                  <ul className={s.menu_list_container}>
                     <li>
                       <Link href={'/community/notice'} passHref>
                         <a>공지사항</a>
@@ -418,7 +276,7 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                   {/* <MenuList title={'리뷰'} link={'/review'} removeIcon={true} /> */}
 
                   {/* <MenuList title={'자주묻는 질문'} link={'/faq'} /> */}
-                  {isLogin && (
+                  {/* {isLogin && (
                     <MenuList
                       title={'1:1 문의'}
                       contClassName={'ch-open-button'}
@@ -428,12 +286,16 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                   )}
                   {isLogin && (
                     <MenuList title={'로그아웃'} onClick={onLogout} />
-                  )}
+                  )} */}
                 </ul>
+                <div className={s.menu_end_line}></div>
               </div>
             </section>
 
-            <div className={s.menu_end_line}></div>
+            <div className={s.sns_container}>
+              <div className={s.contact_top}></div>
+            </div>
+
             {/* <div className={s.contact_container}>
               <div className={s.contact_top}>
                 <p>소통가능 시간</p>
@@ -479,7 +341,8 @@ const MenuList = ({
 }) => {
   const [rotation, setRotation] = useState(0);
 
-  const onClickHandler = () => {
+  const onClickHandler = (e) => {
+    e.preventDefault();
     if (onClick && typeof onClick === 'function') onClick();
   };
 
@@ -505,7 +368,7 @@ const MenuList = ({
         <button
           className={contClassName || ''}
           type={'button'}
-          onClick={onClickHandler}
+          onClick={(e) => onClickHandler(e)}
         >
           {title}
         </button>
