@@ -26,6 +26,7 @@ import { authAction } from '/store/auth-slice';
 import { userType } from '/store/TYPE/userAuthType';
 import { Gnb_my } from './Gnb_my';
 import { MoveToAdminPageButton } from './MoveToAdminPageButton';
+import Dealine_timer from '../atoms/DeadlineTimer';
 
 const Modal_subscribeWidhSSR = dynamic(() =>
   import('/src/components/modal/Modal_subscribe'),
@@ -49,6 +50,7 @@ export default function Header() {
     isMyPage: undefined,
     depth: false,
   });
+  const [isBottomBannerVisible, setIsBottomBannerVisible] = useState(true);
 
   useEffect(() => {
     checkMypagePath(curPath);
@@ -180,7 +182,18 @@ export default function Header() {
         </Wrapper>
         <TopButton mobileDevice={mobileDevice} />
       </header>
-      {!mypageState.isMyPage && <MobileGnb />}
+
+      {!mypageState.isMyPage && (
+        <>
+          {isBottomBannerVisible && (
+            <Dealine_timer
+              setIsBottomBannerVisible={setIsBottomBannerVisible}
+            />
+          )}
+          <MobileGnb />
+        </>
+      )}
+
       {<MobileSidr isOpen={isSidrOpen} setSidrOpen={setIsSidrOpen} />}
       <Modal_subscribeWidhSSR />
     </>
