@@ -257,9 +257,10 @@ export default function MobileGnb() {
               </a>
             </li>
 
-            <li>
-              {/* 비로그인 > 로그인 페이지 */}
-              {/* 로그인 > 마이 페이지 */}
+            {/* 비로그인 > 로그인 페이지 */}
+            {/* 로그인 > 마이 페이지 */}
+            {/* <li>
+         
               <Link
                 href={userData ? '/mypage/orderHistory' : '/account/login'}
                 passHref
@@ -297,7 +298,7 @@ export default function MobileGnb() {
                   />
                 </a>
               </Link>
-            </li>
+            </li> */}
 
             {/* <MobileMenu
               title={'커뮤니티'}
