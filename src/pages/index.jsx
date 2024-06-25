@@ -144,6 +144,78 @@ export default function MainPage({ data }) {
         </Wrapper>
 
         {/* 3. 리뷰 */}
+        <Wrapper>
+          <section className={s.review}>
+            <div className={s.inner}>
+              <h2 className={s.title}>
+                수많은 후기가 증명하는 <br /> BARFDOG
+              </h2>
+              <div className={s.cont_body}>
+                <Swiper_review data={data?.queryBestReviewsDtoList} />
+                <div className={s.redbox}>
+                  <div className={s.red}></div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </Wrapper>
+
+        {/* 4. 바프독 */}
+        <Wrapper>
+          <section className={s.sns}>
+            <div className={s.inner}>
+              <h2 className={s.title}>
+                따져볼수록 <br />
+                결론은 바프독
+              </h2>
+              <p>늘 곁에서 함께 도와드릴게요</p>
+              <div className={s.barfdog_cont_body}>
+                <ul>
+                  <li></li>
+                </ul>
+              </div>
+            </div>
+          </section>
+        </Wrapper>
+
+        {/* 5. 설문조사 */}
+        <Wrapper>
+          <section className={s.sns}>
+            <div className={s.inner}>
+              <h2 className={s.title}>
+                {' '}
+                75만건의 빅데이터로 만드는 <br /> 나만의 AI 맞춤 식단
+              </h2>
+              <p>인스타그램에서 바프독의 최신 소식을 확인해보세요</p>
+              <div className={s.cont_body}>
+                <Swiper_sns />
+              </div>
+            </div>
+          </section>
+        </Wrapper>
+
+        {/* 6. 인증 */}
+        <Wrapper>
+          <section className={s.sns}>
+            <div className={s.inner}>
+              <h2 className={s.title}>
+                {' '}
+                내 가족이 먹는 <br /> 안심 식단
+              </h2>
+              <p>
+                비교해 볼수록, 고민해 볼수록, 찾아볼수록,
+                <br />
+                바프독은 최고의 서비스를 제공합니다
+              </p>
+              <div className={s.cont_body}>
+                <Swiper_sns />
+              </div>
+            </div>
+          </section>
+        </Wrapper>
+
+        {/* [삭제예정] 이미지 */}
+        {/* 
         <Wrapper bgColor="#F9F2EC">
           <section className={s.barfraw}>
             <div className={s.inner}>
@@ -165,19 +237,17 @@ export default function MainPage({ data }) {
                   생물학적으로 적절한 생식이라는 뜻으로, 생고기와 뼈, 야채를
                   적절히 배합하여 반려동물에게 단백질과 지방을 신선한 상태에서
                   섭취할 수 있도록 돕는 식단을 뜻합니다.
-                  {/* 바프독은 70%의 두 종류 고기와 칼슘이 풍부한 */}
                   <br />
                   바프독의 모든 레시피는 고기와 뼈, 내장, 신선한 야채를 완벽한
                   비율로 배합하여 건강한 영양을 공급합니다.
-                  {/* 뼈, 내장, 신선한 야채를 배합해 완벽한 비율의 영양을 공급합니다. */}
                 </h3>
               </div>
             </div>
-            {/* inner end */}
           </section>
-        </Wrapper>
-        {/* 바프생식 바뀌는 점 */}
-        <Wrapper>
+        </Wrapper> */}
+
+        {/* [삭제] 바프생식 바뀌는 점 */}
+        {/* <Wrapper>
           <section className={s.barfgood}>
             <ul className={s.inner}>
               <li className={s.leftbox}>
@@ -221,117 +291,15 @@ export default function MainPage({ data }) {
               </li>
             </ul>
           </section>
-        </Wrapper>
-        {/* 바프독 선택해야하는 이유 */}
-        <Wrapper>
-          <section className={s.difference}>
-            {/* <div className={s.inner}>
-              <div className={s.scroll}>
-                <Controller>
-                  {isMobile ? (
-                    <Scene duration={2000} offset={300} pin>
-                      <Tween
-                        from={{
-                          'clip-path':
-                            'polygon(50% 0%, 50% 0%, 50% 100%, 50% 100%)',
-                        }}
-                        to={{
-                          'clip-path':
-                            'polygon(50% 0%, 0% 0%, 0% 100%, 50% 100%)',
-                        }}
-                      >
-                        <p>CEHCK POINT</p>
-                        <h1>바프독을 선택해야 하는 이유</h1>
-                        <div className={s.image_wrap}>
-                          <ImageWithLoadingSpinner
-                            src={Halftest}
-                            objectFit="fit"
-                            layout="fill"
-                            alt="카드 이미지"
-                            priority
-                          />
-                        </div>
-                        <ul>
-                          <li>
-                            <div className={s.image_title}>스타터프리미엄</div>
-                            <div className={s.image_sub}>닭고기 & 칠면조</div>
-                          </li>
-                          <li>
-                            <div className={s.image_title}>덕앤램</div>
-                            <div className={s.image_sub}>오리 & 양</div>
-                          </li>
-                          <li>
-                            <div className={s.image_title}>터키앤비프</div>
-                            <div className={s.image_sub}>칠면조 & 소</div>
-                          </li>
-                          <li>
-                            <div className={s.image_title}>램앤비프</div>
-                            <div className={s.image_sub}>양 & 소</div>
-                          </li>
-                        </ul>
-                        <div className={s.magicbox} />
-                      </Tween>
-                    </Scene>
-                  ) : (
-                    <Scene duration={2000} offset={400} pin>
-                      <Tween
-                        from={{
-                          'clip-path':
-                            'polygon(50% 0%, 50% 0%, 50% 100%, 50% 100%)',
-                        }}
-                        to={{
-                          'clip-path':
-                            'polygon(50% 0%, 0% 0%, 0% 100%, 50% 100%)',
-                        }}
-                      >
-                        <p>CEHCK POINT</p>
-                        <h1>바프독을 선택해야 하는 이유</h1>
-                        <div className={s.image_wrap}>
-                          <ImageWithLoadingSpinner
-                            src={Halftest}
-                            objectFit="fit"
-                            // width={525}
-                            // height={520}
-                            layout="fill"
-                            alt="카드 이미지"
-                            priority
-                          />
-                        </div>
-                        <ul>
-                          <li>
-                            <div className={s.image_title}>스타터프리미엄</div>
-                            <div className={s.image_sub}>닭고기 & 칠면조</div>
-                          </li>
-                          <li>
-                            <div className={s.image_title}>덕앤램</div>
-                            <div className={s.image_sub}>오리 & 양</div>
-                          </li>
-                          <li>
-                            <div className={s.image_title}>터키앤비프</div>
-                            <div className={s.image_sub}>칠면조 & 소</div>
-                          </li>
-                          <li>
-                            <div className={s.image_title}>램앤비프</div>
-                            <div className={s.image_sub}>양 & 소</div>
-                          </li>
-                        </ul>
-                        <div className={s.magicbox} />
-                      </Tween>
-                    </Scene>
-                  )}
-                </Controller>
-              </div>
-            </div> */}
-          </section>
-        </Wrapper>
+        </Wrapper> */}
+
         {/* 차별점 그림 3개  */}
-        <Wrapper bgColor="#F9F2EC">
+        {/* <Wrapper bgColor="#F9F2EC">
           <div className={s.difference2_inner}>
             <p>CEHCK POINT</p>
             <h1>바프독을 선택해야 하는 이유</h1>
           </div>
           <section className={s.difference2}>
-            {/* <ul className={Styles.inner}> */}
 
             <ul>
               <li className={s.firstbox}>
@@ -395,63 +363,10 @@ export default function MainPage({ data }) {
               </li>
             </ul>
           </section>
-        </Wrapper>
-        {/* 프리미엄바프 사진 설명 */}
-        <Wrapper>
-          <section className={s.difference3}>
-            {/* <div className={Styles.} */}
-            <h2 className={s.title}>
-              PREMIUM <br />
-              REAL BARF
-            </h2>
-            <div className={s.grid}>
-              <div className={s.image}>
-                <ImageWithLoadingSpinner src={barfPack} alt="인공 조미료" />
-              </div>
-              <div className={s.textbox} id="trigger">
-                <ul className={s.text}>
-                  <li
-                    data-aos="fade-up"
-                    data-aos-delay="0"
-                    data-aos-anchor="#trigger"
-                  >
-                    영양보존 100%
-                  </li>
-                  <li
-                    data-aos="fade-up"
-                    data-aos-delay="50"
-                    data-aos-anchor="#trigger"
-                  >
-                    100% 휴먼그레이드
-                  </li>
-                  <li
-                    data-aos="fade-up"
-                    data-aos-delay="100"
-                    data-aos-anchor="#trigger"
-                  >
-                    NO 유전자 변형 원료 (NON-GMO)
-                  </li>
-                  <li
-                    data-aos="fade-up"
-                    data-aos-delay="150"
-                    data-aos-anchor="#trigger"
-                  >
-                    NO 방부제·보존제
-                  </li>
-                  <li
-                    data-aos="fade-up"
-                    data-aos-delay="200"
-                    data-aos-anchor="#trigger"
-                  >
-                    NO 중국산재료
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </section>
-        </Wrapper>
-        {/* 고민 */}
-        <Wrapper bgColor="#F9F2EC">
+        </Wrapper> */}
+
+        {/* [삭제] 고민 */}
+        {/* <Wrapper bgColor="#F9F2EC">
           <section
             className={s.clientWorry}
             style={{ backgroundColor: '#F9F2EC' }}
@@ -548,200 +463,7 @@ export default function MainPage({ data }) {
               </div>
             </div>
           </section>
-        </Wrapper>
-        {/* 리뷰 후기 */}
-        <Wrapper>
-          <section className={s.review}>
-            <div className={s.inner}>
-              <h2 className={s.title}>
-                수많은 후기가 증명하는 <br /> BARFDOG
-              </h2>
-              <div className={s.cont_body}>
-                <Swiper_review data={data?.queryBestReviewsDtoList} />
-                <div className={s.redbox}>
-                  <div className={s.red}></div>
-                </div>
-              </div>
-            </div>
-          </section>
-        </Wrapper>
-        {/* 이용방법 */}
-        <Wrapper bgColor="#F9F2EC">
-          <section className={s.Howtouse}>
-            <div className={s.inner}>
-              <h2 className={s.title}>바프독 이용방법</h2>
-              <p>
-                정기구독신청 버튼을 통해 간편하게 반려동물 정보를 입력하고
-                계정에서 최신상태로 업데이트 할 수 있습니다
-                <br />
-                집에서 간편하게 내 반려동물을 위한 완벽한 식단을 규칙적으로
-                받아보세요
-              </p>
-              <div className={s.cont_body}>
-                <ul className={s.howtouse_box}>
-                  <li data-aos="fade-up" data-aos-delay="0" id="trigger2">
-                    <figure className={s.card}>
-                      <div className={`${s['img-wrap']} img-wrap`}>
-                        {/* <Image
-                          src={require('/public/img/pages/home/home_howtouse_1.png')}
-                          objectFit="cover"
-                          layout="fill"
-                          alt="카드 이미지"
-                          priority
-                        /> */}
-                        <Use01
-                          className={s.svg_pc}
-                          width="100%"
-                          height="100%"
-                          viewBox="0 0 375 375"
-                        />
-                        <Use01_m
-                          className={s.svg_m}
-                          width="100%"
-                          height="100%"
-                          viewBox="0 0 280 280"
-                        />
-                      </div>
-                      <div className={s.details}>
-                        <p className={s.title_1}>STEP 01</p>
-                        <p className={s.title_2}>반려동물 정보 입력</p>
-                        <p className={s.main_text}>
-                          정확한 레시피를 위해 반려동물의 정보를 입력해주세요.
-                          프레시아워는 신선하고 엄선된 재료를 바탕으로
-                          반려동물의 맞춤형 신선사료를 추천 및 선택
-                        </p>
-                      </div>
-                    </figure>
-                  </li>
-                  <li
-                    data-aos="fade-up"
-                    data-aos-delay="100"
-                    data-aos-anchor="#trigger2"
-                  >
-                    <figure className={s.card}>
-                      <div className={`${s['img-wrap']} img-wrap`}>
-                        {/* <Image
-                          src={require('/public/img/pages/home/home_howtouse_2.png')}
-                          objectFit="cover"
-                          layout="fill"
-                          alt="카드 이미지"
-                          priority
-                        /> */}
-                        <Use02
-                          className={s.svg_pc}
-                          width="100%"
-                          height="100%"
-                          viewBox="0 0 375 375"
-                        />
-                        <Use02_m
-                          className={s.svg_m}
-                          width="100%"
-                          height="100%"
-                          viewBox="0 0 280 280"
-                        />
-                      </div>
-                      <div className={s.details}>
-                        <p className={s.title_1}>STEP 02</p>
-                        <p className={s.title_2}>맞춤형 신선사료 제작</p>
-                        <p className={s.main_text}>
-                          내 반려동물에 딱 맞는 레시피로 신선한 맞춤형
-                          자연식(생식/화식)을 제작합니다. 내 반려동물에 맞는
-                          한끼 정량으로 끼니별 급여가 가능하도록 포장합니다.
-                        </p>
-                      </div>
-                    </figure>
-                  </li>
-                  <li data-aos="fade-up" data-aos-delay="100">
-                    <figure className={s.card}>
-                      <div className={`${s['img-wrap']} img-wrap`}>
-                        {/* <Image
-                          src={require('/public/img/pages/home/home_howtouse_2.png')}
-                          objectFit="cover"
-                          layout="fill"
-                          alt="카드 이미지"
-                          priority
-                        /> */}
-                        <Use02
-                          className={s.svg_pc}
-                          width="100%"
-                          height="100%"
-                          viewBox="0 0 375 375"
-                        />
-                        <Use02_m
-                          className={s.svg_m}
-                          width="100%"
-                          height="100%"
-                          viewBox="0 0 280 280"
-                        />
-                      </div>
-                      <div className={s.details}>
-                        <p className={s.title_1}>STEP 02</p>
-                        <p className={s.title_2}>맞춤형 신선사료 제작</p>
-                        <p className={s.main_text}>
-                          내 반려동물에 딱 맞는 레시피로 신선한 맞춤형
-                          자연식(생식/화식)을 제작합니다. 내 반려동물에 맞는
-                          한끼 정량으로 끼니별 급여가 가능하도록 포장합니다.
-                        </p>
-                      </div>
-                    </figure>
-                  </li>
-                  <li data-aos="fade-up" data-aos-delay="200">
-                    <figure className={s.card}>
-                      <div className={`${s['img-wrap']} img-wrap`}>
-                        {/* <Image
-                          src={require('/public/img/pages/home/home_howtouse_3.png')}
-                          objectFit="cover"
-                          layout="fill"
-                          alt="카드 이미지"
-                          priority
-                        /> */}
-                        <Use03
-                          className={s.svg_pc}
-                          width="100%"
-                          height="100%"
-                          viewBox="0 0 375 375"
-                        />
-                        <Use03_m
-                          className={s.svg_m}
-                          width="100%"
-                          height="100%"
-                          viewBox="0 0 280 280"
-                        />
-                      </div>
-                      <div className={s.details}>
-                        <p className={s.title_1}>STEP 03</p>
-                        <p className={s.title_2}>정기구독 배송</p>
-                        <p className={s.main_text}>
-                          급속냉동한 제품을 꼼꼼하게 포장해 고객님의 문앞까지
-                          배송합니다. 원하는 날짜에 맞춰 정기 배송 서비스
-                        </p>
-                      </div>
-                    </figure>
-                  </li>
-                </ul>
-                <div className={s.btn_box}>
-                  <Link href={'/surveyGuide'} passHref>
-                    <a type="button" className={s.btn_main}>
-                      정기구독 신청하기
-                    </a>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </section>
-        </Wrapper>
-        {/* SNS */}
-        <Wrapper>
-          <section className={s.sns}>
-            <div className={s.inner}>
-              <h2 className={s.title}>INSTAGRAM</h2>
-              <p>인스타그램에서 바프독의 최신 소식을 확인해보세요</p>
-              <div className={s.cont_body}>
-                <Swiper_sns />
-              </div>
-            </div>
-          </section>
-        </Wrapper>
+        </Wrapper> */}
       </Layout>
       {data?.popupDtoList.length > 0 && (
         <Modal_Popup popupData={data?.popupDtoList}></Modal_Popup>
