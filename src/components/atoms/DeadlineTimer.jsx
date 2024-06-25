@@ -6,10 +6,13 @@ import useDeviceState from '/util/hook/useDeviceState';
 import Favicon from '/public/img/icon/favicon.svg';
 import { orderDeadLineTimeStamp } from '/util/func/orderDeadLineTimeStamp';
 import { getData } from '/src/pages/api/reqData';
+import CloseButton from './CloseButton';
+import s from './topLineBAnner.module.scss';
 
-const Dealine_timer = ({ className }) => {
+// 하단 배너
+const Dealine_timer = ({ className, setIsBottomBannerVisible }) => {
   const [message, setMessage] = useState(null);
-  const [isVisible, setIsVisible] = useState(true);
+
   const [dayValue, setDayValue] = useState('');
   const deviceState = useDeviceState();
   const isMobile = deviceState.isMobile;
@@ -36,30 +39,31 @@ const Dealine_timer = ({ className }) => {
   });
 
   const onHideHandler = () => {
-    setIsVisible(false);
+    setIsBottomBannerVisible(false);
   };
 
   return (
     <>
-      {isVisible && (
-        <Wrap
+      <Wrap
+        onClick={onHideHandler}
+        id="deadline_timer"
+        className={`${
+          zIndex['gnb-subscribe-timer']
+        } ${'scroll-container'} flex-wrap ${className ? className : ''}`}
+      >
+        {/* <IconWrap>
+            <Favicon />
+          </IconWrap> */}
+        <Text>AI 추천 맞춤 식단 정기 구독</Text>
+        <Timer id="deadline">{message}</Timer>
+        <NormalText> 이후 주문 마감!</NormalText>
+        {/* <Rect className="rect" /> */}
+        <CloseButton
           onClick={onHideHandler}
-          id="deadline_timer"
-          className={`${zIndex['gnb-subscribe-timer']} ${
-            deviceWidth < 380 && 'scroll-container'
-          } flex-wrap ${className ? className : ''}`}
-        >
-          {isMobile && (
-            <IconWrap>
-              <Favicon />
-            </IconWrap>
-          )}
-          <Text>정기구독배송</Text>
-          <Timer id="deadline">{message}</Timer>
-          <NormalText> 이후 주문 마감!</NormalText>
-          {!isMobile && <Rect className="rect" />}
-        </Wrap>
-      )}
+          className={s.bottom_close_button}
+          lineColor={'#fff'}
+        />
+      </Wrap>
     </>
   );
 };
@@ -78,7 +82,9 @@ const Rect = styled.i`
 
 const Text = styled.b`
   font-size: ${rem(16)};
-  color: var(--color-main);
+  ${'' /* color: var(--color-main); */}
+  color: #FAFF00;
+  font-weight: normal;
   letter-spacing: ${rem(0.8)};
   white-space: nowrap;
 `;
@@ -112,42 +118,45 @@ const Wrap = styled.div`
   text-align: center;
   color: #000;
   font-size: ${rem(16)};
-  padding: ${rem(10)} ${rem(20)} ${rem(8)};
+  ${'' /* padding: ${rem(10)} ${rem(20)} ${rem(8)}; */}
   box-sizing: border-box;
-  background-color: #ffceba;
-  border-radius: ${rem(8)};
-  @media (max-width: ${rem(600)}) {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    top: auto;
-    transform: initial;
-    background-color: rgba(0, 0, 0, 0.85);
-    border-radius: 0;
-    height: ${rem(40)};
-    font-size: ${rem(14)};
-    color: #fff;
-    &.scroll-container {
-      justify-content: flex-start !important;
-      overflow-x: scroll;
-      white-space: nowrap;
-      padding: 0 rem(10);
-      box-sizing: border-box;
-      > * {
-        width: auto !important;
-      }
-      &::-webkit-scrollbar {
-        width: 0;
-        height: 0;
-      }
+  display: flex;
+  justify-content: center !important;
+  align-items: center;
+  ${'' /* background-color: #ffceba; */}
+  ${'' /* border-radius: ${rem(8)}; */}
+  position: fixed;
+  width: ${rem(600)};
+  margin: auto;
+  left: 0;
+  right: 0;
+  bottom: ${rem(88.5)};
+  top: auto;
+  transform: initial;
+  background-color: rgba(0, 0, 0, 0.85);
+  border-radius: 0;
+  height: ${rem(40)};
+  font-size: ${rem(16)};
+  color: #fff;
+  &.scroll-container {
+    ${'' /* justify-content: flex-start !important; */}
+    overflow-x: scroll;
+    white-space: nowrap;
+    padding: 0 rem(10);
+    box-sizing: border-box;
+    > * {
+      width: auto;
     }
+    &::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
+  }
 
-    span {
-      color: #fff;
-    }
-    * {
-      font-size: inherit;
-    }
+  span {
+    color: #fff;
+  }
+  * {
+    font-size: inherit;
   }
 `;

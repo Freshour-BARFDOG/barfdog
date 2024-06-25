@@ -161,7 +161,6 @@ export default function MobileGnb() {
               id={menuNameObj.community}
               onClick={onActiveSubmenuHandler}
             />{' '}
-            */}
             {/* <MobileMenu title={'리뷰'} link="/review" /> */}
           </ul>
         </section>

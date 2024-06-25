@@ -48,7 +48,9 @@ export const Gnb_my = ({ isMobile, setSidrOpen, authData }) => {
             >
               <div className={s.shop_wrap}>
                 {/* <Icon_cart/> */}
-                <span className={s.gnb_shop_count}>{cart.itemCount || 0}</span>
+                {cart.itemCount !== 0 && (
+                  <span className={s.gnb_shop_count}>{cart.itemCount}</span>
+                )}
               </div>
             </button>
           </li>

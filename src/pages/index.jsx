@@ -132,7 +132,7 @@ export default function MainPage({ data }) {
         <Wrapper>
           <section className={`${s.recipe_info}`}>
             <div className={s.inner}>
-              <h2 className={s.recipe_title}>소중한 우리 아이를 위하여</h2>
+              <h2 className={s.recipe_title}>반려견 건강에 고민이 있다면?</h2>
               <h4>75만 데이터를 분석한 AI 추천 맞춤 식단 구독</h4>
               {/* <Swiper_recipe data={data?.recipeDtoList} isMobile={isMobile} /> */}
               <Swiper_recipe
