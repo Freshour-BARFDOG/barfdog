@@ -53,7 +53,7 @@ export default function MyApp({ Component, pageProps, CustomProps }) {
       <Script
         id="naver-init"
         src="//wcs.naver.net/wcslog.js"
-        strategy="beforeInteractive"
+        strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: `
               if (!wcs_add) var wcs_add={};
