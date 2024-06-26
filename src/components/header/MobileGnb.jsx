@@ -165,7 +165,7 @@ export default function MobileGnb() {
           </ul>
         </section>
         {/* 모바일 - 사이드바  */}
-        {isSidrOpen && (
+        {/* {isSidrOpen && (
           <MobileSidr isOpen={isSidrOpen} setSidrOpen={setIsSidrOpen} />
         )}
         <section
@@ -210,7 +210,7 @@ export default function MobileGnb() {
           <button className={s.activeWidemodeButton} onClick={onMenuWideMode}>
             <IoIosArrowDown />
           </button>
-        </section>
+        </section> */}
       </nav>
     </>
   );
