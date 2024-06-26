@@ -45,3 +45,9 @@ $browser-context: 16;
     visibility: hidden;
   }
 }
+
+.swiper-pagination__surveySection {
+  .swiper-pagination-bullet-active {
+    background-color: #be1a21 !important;
+  }
+}
