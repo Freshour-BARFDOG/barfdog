@@ -4,7 +4,7 @@ import s from 'src/pages/mainPage.module.scss';
 import LogoMain from '/public/img/logo_main.png';
 import Image from 'next/image';
 
-export function Intro_top() {
+export function Main_top() {
   // 1. 영상 소개
   return (
     <section className={s.intro_top_wrapper}>
@@ -31,12 +31,6 @@ export function Intro_top() {
                   설문하고 추천받기
                 </a>
               </Link>
-              {/* <Link href={'/surveyGuide'} passHref>
-            <a type="button" className={s.btn_score}>
-              건강점수 <br />
-              비교하기
-            </a>
-          </Link> */}
             </div>
           </div>
         </div>
