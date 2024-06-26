@@ -36,7 +36,10 @@ export const Gnb_my = ({ isMobile, setSidrOpen, authData }) => {
       <div className={s.gnb_my}>
         <ul className="clearfix">
           <li>
-            <button type={'button'} onClick={onShowMobileSideMenu}>
+            <button
+              type={'button'}
+              onClick={(e) => onMovePage(e, '/mypage/orderHistory')}
+            >
               <div className={s.mypage_wrap}>{/* <Icon_mypage/> */}</div>
             </button>
           </li>

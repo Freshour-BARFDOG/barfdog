@@ -3,13 +3,9 @@ import Header from '../header/Header';
 import Footer from './Footer';
 import TopLineBanner from '/src/components/atoms/TopLineBanner';
 
-const Layout = ({ id, className, ...props }) => {
+const AdminLayout = ({ id, className, ...props }) => {
   return (
-    <main
-      id={id}
-      className={className}
-      style={{ position: 'relative', width: '600px' }}
-    >
+    <main id={id} className={className} style={{ position: 'relative' }}>
       <TopLineBanner />
       <Header />
       {props.children}
@@ -29,4 +25,4 @@ const Layout = ({ id, className, ...props }) => {
 //   );
 // }
 
-export default Layout;
+export default AdminLayout;
