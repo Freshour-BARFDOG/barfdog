@@ -33,7 +33,7 @@ section.clientWorry {
 }
 
 section.review {
-  padding: rem(150) 0 rem(200);
+  padding: rem(100) 0 rem(200);
 }
 
 section.Howtouse {
@@ -810,90 +810,90 @@ section.sns {
 
 ///@at-root
 //고민
-.clientWorry {
-  .title_section {
-    .title {
-      margin-bottom: rem(30);
-    }
+// .clientWorry {
+//   .title_section {
+//     .title {
+//       margin-bottom: rem(30);
+//     }
 
-    .subtitle {
-      margin-bottom: rem(27);
-      width: rem(300);
-      word-break: keep-all;
-    }
-  }
+//     .subtitle {
+//       margin-bottom: rem(27);
+//       width: rem(300);
+//       word-break: keep-all;
+//     }
+//   }
 
-  .cont_section {
-    > ul {
-      > li {
-        width: calc(50% - #{rem(20)});
-        float: left;
+//   .cont_section {
+//     > ul {
+//       > li {
+//         width: calc(50% - #{rem(20)});
+//         float: left;
 
-        &:not(:last-child) {
-          margin-right: rem(40);
-        }
-      }
-    }
+//         &:not(:last-child) {
+//           margin-right: rem(40);
+//         }
+//       }
+//     }
 
-    > .btn_main {
-      display: none;
-    }
-  }
+//     > .btn_main {
+//       display: none;
+//     }
+//   }
 
-  .card {
-    text-align: center;
-    padding: rem(40) rem(30);
-    box-sizing: border-box;
-    background-color: #fff;
-    border-radius: rem(16);
-    box-shadow: rem(20) rem(20) rem(20) rgba(0, 0, 0, 0.1);
-    max-width: rem(360);
+//   .card {
+//     text-align: center;
+//     padding: rem(40) rem(30);
+//     box-sizing: border-box;
+//     background-color: #fff;
+//     border-radius: rem(16);
+//     box-shadow: rem(20) rem(20) rem(20) rgba(0, 0, 0, 0.1);
+//     max-width: rem(360);
 
-    .img-wrap {
-      margin-bottom: rem(20);
-      width: rem(100);
-      height: rem(100);
-    }
+//     .img-wrap {
+//       margin-bottom: rem(20);
+//       width: rem(100);
+//       height: rem(100);
+//     }
 
-    .card_title {
-      margin-bottom: rem(30);
-      font-size: rem(18);
-      color: #000;
-      text-align: center;
-    }
+//     .card_title {
+//       margin-bottom: rem(30);
+//       font-size: rem(18);
+//       color: #000;
+//       text-align: center;
+//     }
 
-    .details {
-      ul {
-        height: rem(360);
+//     .details {
+//       ul {
+//         height: rem(360);
 
-        li {
-          font-size: rem(16);
-          color: #717171;
-          padding-left: rem(16);
-          margin-bottom: rem(20);
-          text-align: left;
-          position: relative;
-          word-break: keep-all;
+//         li {
+//           font-size: rem(16);
+//           color: #717171;
+//           padding-left: rem(16);
+//           margin-bottom: rem(20);
+//           text-align: left;
+//           position: relative;
+//           word-break: keep-all;
 
-          &:before {
-            content: '';
-            position: absolute;
-            left: rem(0);
-            top: rem(8);
-            width: rem(8);
-            height: rem(8);
-            background-color: #f2994c;
-            transform: rotate(45deg);
-          }
+//           &:before {
+//             content: '';
+//             position: absolute;
+//             left: rem(0);
+//             top: rem(8);
+//             width: rem(8);
+//             height: rem(8);
+//             background-color: #f2994c;
+//             transform: rotate(45deg);
+//           }
 
-          &:last-child {
-            margin-bottom: 0;
-          }
-        }
-      }
-    }
-  }
-}
+//           &:last-child {
+//             margin-bottom: 0;
+//           }
+//         }
+//       }
+//     }
+//   }
+// }
 
 // .btn_main, .btn_worry {
 //   display: inline-block;
@@ -925,31 +925,58 @@ section.sns {
 //   background-position: center;
 // }
 
-.btn_worry,
-.btn_worry2 {
-  padding: rem(14) 0;
-  color: #fff;
-  font-size: rem(16);
-  border-radius: rem(12);
-  background-color: var(--color-main);
-  width: rem(220);
-  box-sizing: border-box;
-  text-align: center;
-}
-.btn_worry {
-  display: inline-block;
-}
-.btn_worry2 {
-  display: none;
-}
+// .btn_worry,
+// .btn_worry2 {
+//   padding: rem(14) 0;
+//   color: #fff;
+//   font-size: rem(16);
+//   border-radius: rem(12);
+//   background-color: var(--color-main);
+//   width: rem(220);
+//   box-sizing: border-box;
+//   text-align: center;
+// }
+// .btn_worry {
+//   display: inline-block;
+// }
+// .btn_worry2 {
+//   display: none;
+// }
 
-//리뷰 후기
+//*** 3. 리뷰 후기
 .review {
   position: relative;
 
   .inner {
+    background: linear-gradient(
+      to bottom right,
+      rgba(255, 255, 255, 0.1),
+      rgba(202, 16, 16, 0.2)
+    );
+    padding: rem(80) 0 rem(60) 0;
+
     .title {
       text-align: center;
+    }
+
+    .cont_body {
+      .btn_box {
+        display: flex;
+        justify-content: center;
+        a {
+          color: #be1a21;
+          border: rem(1) solid #be1a21;
+          width: rem(180);
+          height: rem(42);
+          font-weight: bold;
+          background-color: #fff;
+          border-radius: rem(21);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: rem(8);
+        }
+      }
     }
   }
 
@@ -981,104 +1008,94 @@ section.sns {
       overflow: hidden;
     }
   }
-
-  .redbox {
-    position: absolute;
-    background-color: var(--color-main);
-    left: rem(-39);
-    top: rem(324);
-    border-radius: rem(28) rem(0) rem(0) rem(28);
-    width: rem(1649);
-    height: rem(380);
-  }
 }
 
-//이용방법
-.Howtouse {
-  .inner {
-    .title {
+// //이용방법
+// .Howtouse {
+//   .inner {
+//     .title {
+//       text-align: center;
+//       margin-bottom: rem(20);
+//       height: 100%;
+//     }
+
+//     p {
+//       text-align: center;
+//       word-break: keep-all;
+//       height: 100%;
+//       font-size: rem(16);
+//     }
+//   }
+
+//   .cont_body {
+//     > ul {
+//       width: 100%;
+//       display: grid;
+//       grid-template-columns: repeat(3, rem(380));
+//       grid-gap: rem(30);
+
+//       > li {
+//         width: 100%;
+//         margin: 0 auto;
+
+//         &:nth-child(3) {
+//           display: none;
+//         }
+
+//         &:nth-child(2) {
+//           margin-top: rem(100);
+//         }
+//       }
+//     }
+//   }
+
+.cont_body {
+  ul {
+    margin-top: rem(70);
+
+    .card {
       text-align: center;
-      margin-bottom: rem(20);
-      height: 100%;
-    }
 
-    p {
-      text-align: center;
-      word-break: keep-all;
-      height: 100%;
-      font-size: rem(16);
-    }
-  }
+      .img-wrap {
+        width: rem(375);
+        height: rem(375);
 
-  .cont_body {
-    > ul {
-      width: 100%;
-      display: grid;
-      grid-template-columns: repeat(3, rem(380));
-      grid-gap: rem(30);
-
-      > li {
-        width: 100%;
-        margin: 0 auto;
-
-        &:nth-child(3) {
+        .svg_m {
           display: none;
         }
+      }
 
-        &:nth-child(2) {
-          margin-top: rem(100);
+      .details {
+        .title_1 {
+          color: #d81d1d;
+          font-size: rem(14);
+          font-weight: bold;
+          text-align: left;
+        }
+
+        .title_2 {
+          padding: rem(5) 0 rem(10);
+          text-align: left;
+          font-size: rem(18);
+          font-weight: bold;
+        }
+
+        .main_text {
+          font-size: rem(16);
+          color: #717171;
+          text-align: left;
         }
       }
     }
   }
 
-  .cont_body {
-    ul {
-      margin-top: rem(70);
-
-      .card {
-        text-align: center;
-
-        .img-wrap {
-          width: rem(375);
-          height: rem(375);
-
-          .svg_m {
-            display: none;
-          }
-        }
-
-        .details {
-          .title_1 {
-            color: #d81d1d;
-            font-size: rem(14);
-            font-weight: bold;
-            text-align: left;
-          }
-
-          .title_2 {
-            padding: rem(5) 0 rem(10);
-            text-align: left;
-            font-size: rem(18);
-            font-weight: bold;
-          }
-
-          .main_text {
-            font-size: rem(16);
-            color: #717171;
-            text-align: left;
-          }
-        }
-      }
-    }
-
-    .btn_box {
-      display: flex;
-      justify-content: center;
-      margin-top: rem(90);
-    }
+  .btn_box {
+    display: flex;
+    justify-content: center;
+    margin-top: rem(90);
   }
 }
+// }
 
 //SNS
 .swiper_sns {
@@ -1190,11 +1207,11 @@ section.sns {
   }
 }
 
-//리뷰 후기 swiper
+//*** 리뷰 후기 swiper
 .swiper_review_outerWrap {
   padding: 0 rem(50) 0;
   position: relative;
-  height: rem(600);
+  height: rem(590);
 
   .swiper_review {
     padding: rem(60) 0 rem(80);
@@ -1205,8 +1222,8 @@ section.sns {
     position: absolute;
     top: 0;
     left: 0;
-    width: rem(340);
-    height: rem(460);
+    // width: rem(380);
+    height: rem(560);
     border-radius: rem(8);
     background-color: #fff;
     box-shadow: 0.3125rem 0.3125rem 1.25rem rgb(0 0 0 / 10%);
@@ -1215,19 +1232,19 @@ section.sns {
   }
 
   .swiper_review_box {
-    width: rem(240);
-    height: rem(500);
+    width: rem(400);
+    height: rem(580);
   }
 
   .swiper_review_img {
     //margin: rem(40) auto 0;
     position: relative;
-    padding: 0 rem(20);
+    // padding: 0 rem(20);
     box-sizing: border-box;
     margin: 0 auto;
-    width: rem(240);
-    height: rem(240);
-    border-radius: 50%;
+    width: rem(280);
+    height: rem(280);
+    border-radius: rem(8);
     overflow: hidden;
   }
 
@@ -1247,24 +1264,24 @@ section.sns {
     font-size: rem(16);
   }
 
-  .swiper-button-prev,
-  .swiper-button-next {
-    opacity: 0.6;
-    width: rem(38);
-    height: rem(38);
-    box-shadow: rem(1) rem(1) rem(10) rgba(0, 0, 0, 0.15);
-    &:hover {
-      opacity: 0.9;
-    }
-  }
+  // .swiper-button-prev,
+  // .swiper-button-next {
+  //   opacity: 0.6;
+  //   width: rem(38);
+  //   height: rem(38);
+  //   box-shadow: rem(1) rem(1) rem(10) rgba(0, 0, 0, 0.15);
+  //   &:hover {
+  //     opacity: 0.9;
+  //   }
+  // }
 
-  .swiper-button-prev {
-    left: rem(-8);
-  }
+  // .swiper-button-prev {
+  //   left: rem(-8);
+  // }
 
-  .swiper-button-next {
-    right: rem(-8);
-  }
+  // .swiper-button-next {
+  //   right: rem(-8);
+  // }
 
   a {
     // position: absolute;
@@ -1278,50 +1295,50 @@ section.sns {
     // white-space: nowrap;
   }
 
-  .swiper-pagination__reviewSection {
-    bottom: rem(70) !important;
+  // .swiper-pagination__reviewSection {
+  //   bottom: rem(70) !important;
 
-    span {
-      width: rem(25);
-      height: rem(3);
-      margin: 0 !important;
-      border-radius: 0;
-    }
-  }
+  //   span {
+  //     width: rem(25);
+  //     height: rem(3);
+  //     margin: 0 !important;
+  //     border-radius: 0;
+  //   }
+  // }
 
-  .swiper_review_more {
-    width: 100%;
-    height: 100%;
-    min-height: rem(500);
-    position: relative;
+  // .swiper_review_more {
+  //   width: 100%;
+  //   height: 100%;
+  //   min-height: rem(500);
+  //   position: relative;
 
-    a {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) translateY(rem(8));
+  //   a {
+  //     position: absolute;
+  //     top: 50%;
+  //     left: 50%;
+  //     transform: translate(-50%, -50%) translateY(rem(8));
 
-      &:hover {
-        .image_wrap,
-        .more {
-          opacity: 0.9;
-        }
-      }
-    }
+  //     &:hover {
+  //       .image_wrap,
+  //       .more {
+  //         opacity: 0.9;
+  //       }
+  //     }
+  //   }
 
-    .image_wrap {
-      opacity: 0.6;
-      transition: opacity 0.5s;
-      max-width: rem(39);
-    }
+  //   .image_wrap {
+  //     opacity: 0.6;
+  //     transition: opacity 0.5s;
+  //     max-width: rem(39);
+  //   }
 
-    .more {
-      font-size: rem(16);
-      color: #fff;
-      opacity: 0.6;
-      transition: opacity 0.5s;
-    }
-  }
+  //   .more {
+  //     font-size: rem(16);
+  //     color: #fff;
+  //     opacity: 0.6;
+  //     transition: opacity 0.5s;
+  //   }
+  // }
 }
 
 //SNS swiper
@@ -1416,222 +1433,222 @@ section.sns {
 }
 
 /* RESPONSIVE */
-@media (max-width: rem(1350)) {
-  // .swiper_button_prev_recipe {
-  //   left: 47% !important;
-  // }
+// @media (max-width: rem(1350)) {
+//   // .swiper_button_prev_recipe {
+//   //   left: 47% !important;
+//   // }
 
-  // .swiper_button_next_recipe {
-  //   left: 53% !important;
-  // }
-}
+//   // .swiper_button_next_recipe {
+//   //   left: 53% !important;
+//   // }
+// }
 
-@media (max-width: rem(1200)) {
-  //최상단 그림배너
-  .banner {
-    .inner {
-      height: rem(300);
-    }
-  }
+// @media (max-width: rem(1200)) {
+//   //최상단 그림배너
+//   .banner {
+//     .inner {
+//       height: rem(300);
+//     }
+//   }
 
-  .swiper_main_outerWrap {
-    height: rem(300);
+//   .swiper_main_outerWrap {
+//     height: rem(300);
 
-    .swiper_navigation_container {
-      display: none;
-    }
-  }
+//     .swiper_navigation_container {
+//       display: none;
+//     }
+//   }
 
-  //최상단 swiper pagination
-  .swiper_main_outerWrap {
-    .swiper-pagination__mainSection {
-      display: block;
-      color: white;
-      font-weight: 300;
-      transform: translateX(rem(-30));
-      text-align: right;
-      pointer-events: none;
-      font-size: rem(16);
-    }
+//   //최상단 swiper pagination
+//   .swiper_main_outerWrap {
+//     .swiper-pagination__mainSection {
+//       display: block;
+//       color: white;
+//       font-weight: 300;
+//       transform: translateX(rem(-30));
+//       text-align: right;
+//       pointer-events: none;
+//       font-size: rem(16);
+//     }
 
-    .swiper-pagination__mainSection::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      right: rem(-34);
-      transform: translate(-50%, -50%);
-      width: rem(50);
-      height: rem(25);
-      border-radius: rem(30);
-      background-color: black;
-      opacity: 0.2;
-      z-index: -1;
-    }
-  }
+//     .swiper-pagination__mainSection::before {
+//       content: '';
+//       position: absolute;
+//       top: 50%;
+//       right: rem(-34);
+//       transform: translate(-50%, -50%);
+//       width: rem(50);
+//       height: rem(25);
+//       border-radius: rem(30);
+//       background-color: black;
+//       opacity: 0.2;
+//       z-index: -1;
+//     }
+//   }
 
-  .swiper_recipe_outerWrap {
-    // .swiper_button_prev_recipe {
-    //   left: 10% !important;
-    // }
+//   .swiper_recipe_outerWrap {
+//     // .swiper_button_prev_recipe {
+//     //   left: 10% !important;
+//     // }
 
-    // .swiper_button_next_recipe {
-    //   left: 30% !important;
-    // }
+//     // .swiper_button_next_recipe {
+//     //   left: 30% !important;
+//     // }
 
-    // .swiper_recipe {
-    //   overflow: visible !important;
-    //   width: rem(600);
-    //   left: rem(20);
-    // }
-  }
+//     // .swiper_recipe {
+//     //   overflow: visible !important;
+//     //   width: rem(600);
+//     //   left: rem(20);
+//     // }
+//   }
 
-  //고민
-  .clientWorry {
-    .cont_section {
-      .clearfix {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        width: 100%;
-        column-gap: rem(20);
-        > li {
-          float: none;
-          width: 100%;
-        }
-      }
-    }
+//   //고민
+//   .clientWorry {
+//     .cont_section {
+//       .clearfix {
+//         display: grid;
+//         grid-template-columns: 1fr 1fr;
+//         width: 100%;
+//         column-gap: rem(20);
+//         > li {
+//           float: none;
+//           width: 100%;
+//         }
+//       }
+//     }
 
-    .card {
-      margin-top: rem(30);
-      padding: rem(40) rem(30);
-      width: 100%;
-      max-width: 100%;
-    }
-  }
+//     .card {
+//       margin-top: rem(30);
+//       padding: rem(40) rem(30);
+//       width: 100%;
+//       max-width: 100%;
+//     }
+//   }
 
-  .cont-right {
-    float: none;
-  }
+//   .cont-right {
+//     float: none;
+//   }
 
-  //리뷰 후기
-  .swiper_review_outerWrap {
-    padding: 0 rem(50) 0;
-    position: relative;
+//   //리뷰 후기
+//   .swiper_review_outerWrap {
+//     padding: 0 rem(50) 0;
+//     position: relative;
 
-    .swiper-button-next {
-      margin-right: rem(20);
-    }
+//     .swiper-button-next {
+//       margin-right: rem(20);
+//     }
 
-    .swiper-button-prev {
-      margin-left: rem(20);
-    }
+//     .swiper-button-prev {
+//       margin-left: rem(20);
+//     }
 
-    .swiper_review {
-      padding: rem(60) 0 rem(80);
-      position: relative;
-      width: rem(720);
-    }
+//     .swiper_review {
+//       padding: rem(60) 0 rem(80);
+//       position: relative;
+//       width: rem(720);
+//     }
 
-    .swiper_review_bg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: rem(340);
-      height: rem(460);
-      border-radius: rem(8);
-      background-color: #fff;
-      box-shadow: 0.3125rem 0.3125rem 1.25rem rgb(0 0 0 / 10%);
-    }
-    .swiper_review_box {
-      width: rem(240);
-      height: rem(500);
-    }
-  }
+//     .swiper_review_bg {
+//       position: absolute;
+//       top: 0;
+//       left: 0;
+//       width: rem(340);
+//       height: rem(460);
+//       border-radius: rem(8);
+//       background-color: #fff;
+//       box-shadow: 0.3125rem 0.3125rem 1.25rem rgb(0 0 0 / 10%);
+//     }
+//     .swiper_review_box {
+//       width: rem(240);
+//       height: rem(500);
+//     }
+//   }
 
-  //이용방법
-  .Howtouse {
-    .cont_body {
-      > ul {
-        grid-template-columns: repeat(1, 100%);
+//   //이용방법
+//   .Howtouse {
+//     .cont_body {
+//       > ul {
+//         grid-template-columns: repeat(1, 100%);
 
-        > li {
-          margin-top: rem(50);
+//         > li {
+//           margin-top: rem(50);
 
-          &:nth-child(2) {
-            display: none;
-          }
+//           &:nth-child(2) {
+//             display: none;
+//           }
 
-          &:nth-child(3) {
-            display: block;
-            margin-top: rem(85);
-          }
+//           &:nth-child(3) {
+//             display: block;
+//             margin-top: rem(85);
+//           }
 
-          .card {
-            .details {
-              margin: rem(50) auto 0;
-              width: 50%;
-              .title_1 {
-                text-align: center;
-              }
+//           .card {
+//             .details {
+//               margin: rem(50) auto 0;
+//               width: 50%;
+//               .title_1 {
+//                 text-align: center;
+//               }
 
-              .title_2 {
-                text-align: center;
-              }
+//               .title_2 {
+//                 text-align: center;
+//               }
 
-              .main_text {
-                text-align: center;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+//               .main_text {
+//                 text-align: center;
+//               }
+//             }
+//           }
+//         }
+//       }
+//     }
+//   }
 
-  //SNS
-  .swiper_sns {
-    width: rem(500);
-  }
+//   //SNS
+//   .swiper_sns {
+//     width: rem(500);
+//   }
 
-  .swiper_sns_outerWrap {
-    .swiper_button_prev_sns {
-      transform: translate(-50%, -50%) translateX(rem(-250));
-    }
+//   .swiper_sns_outerWrap {
+//     .swiper_button_prev_sns {
+//       transform: translate(-50%, -50%) translateX(rem(-250));
+//     }
 
-    .swiper_button_next_sns {
-      transform: translate(-50%, -50%) translateX(rem(250));
-    }
-  }
-}
+//     .swiper_button_next_sns {
+//       transform: translate(-50%, -50%) translateX(rem(250));
+//     }
+//   }
+// }
 
-@media (max-width: rem(1000)) {
-  //레시피 설명 4가지 사진
-  .swiper_recipe_outerWrap {
-    .swiper_recipe {
-      width: rem(570);
-      left: 0;
-    }
-  }
+// @media (max-width: rem(1000)) {
+//   //레시피 설명 4가지 사진
+//   .swiper_recipe_outerWrap {
+//     .swiper_recipe {
+//       width: rem(570);
+//       left: 0;
+//     }
+//   }
 
-  .difference2 {
-    ul {
-      grid-template-columns: 1fr 1fr;
-      width: 100%;
-      li {
-        // &:first-child{
-        //   grid-column: span 1 / 1;
-        //   grid-row: span 1 / 1;
-        // }
-        // &:nth-child(2){
-        //   grid-column: span 1 / 2;
-        //   grid-row: span 1 / 1;
-        // }
-        &:last-child {
-          grid-column: span 2;
-        }
-      }
-    }
-  }
-}
+//   .difference2 {
+//     ul {
+//       grid-template-columns: 1fr 1fr;
+//       width: 100%;
+//       li {
+//         // &:first-child{
+//         //   grid-column: span 1 / 1;
+//         //   grid-row: span 1 / 1;
+//         // }
+//         // &:nth-child(2){
+//         //   grid-column: span 1 / 2;
+//         //   grid-row: span 1 / 1;
+//         // }
+//         &:last-child {
+//           grid-column: span 2;
+//         }
+//       }
+//     }
+//   }
+// }
 
 @media (max-width: rem(900)) {
   //최상단 그림배너
@@ -1809,33 +1826,33 @@ section.sns {
   }
 
   //리뷰 후기
-  .swiper_review_outerWrap {
-    width: 100%;
-    max-width: rem(600);
-    margin: 0 auto;
-    padding: 0;
-    position: relative;
+  // .swiper_review_outerWrap {
+  //   width: 100%;
+  //   max-width: rem(600);
+  //   margin: 0 auto;
+  //   padding: 0;
+  //   position: relative;
 
-    .swiper-button-prev {
-      left: rem(0);
-      margin: 0;
-    }
+  //   .swiper-button-prev {
+  //     left: rem(0);
+  //     margin: 0;
+  //   }
 
-    .swiper-button-next {
-      right: rem(0);
-      margin: 0;
-    }
+  //   .swiper-button-next {
+  //     right: rem(0);
+  //     margin: 0;
+  //   }
 
-    .swiper_review {
-      padding: rem(60) 0 rem(80);
-      position: relative;
-      width: rem(720);
-    }
+  //   .swiper_review {
+  //     padding: rem(60) 0 rem(80);
+  //     position: relative;
+  //     width: rem(720);
+  //   }
 
-    .swiper_review {
-      width: rem(340);
-    }
-  }
+  //   .swiper_review {
+  //     width: rem(340);
+  //   }
+  // }
 
   section.barfgood {
     padding: rem(120) 0 rem(315);
@@ -2106,76 +2123,76 @@ section.sns {
   }
 
   //리뷰 후기
-  section.review {
-    padding: rem(240) 0 rem(110);
-  }
+  // section.review {
+  //   padding: rem(240) 0 rem(110);
+  // }
 
-  .review {
-    .inner {
-      .title {
-        font-size: rem(28);
-      }
-    }
-  }
+  // .review {
+  //   .inner {
+  //     .title {
+  //       font-size: rem(28);
+  //     }
+  //   }
+  // }
 
-  .swiper_review_outerWrap {
-    height: rem(600);
+  // .swiper_review_outerWrap {
+  //   height: rem(600);
 
-    .swiper-button-prev {
-      display: none;
-    }
+  //   .swiper-button-prev {
+  //     display: none;
+  //   }
 
-    .swiper-button-next {
-      display: none;
-    }
+  //   .swiper-button-next {
+  //     display: none;
+  //   }
 
-    a {
-      // position: absolute;
-      // left: 50%;
-      // transform: translateX(-50%);
-      // bottom: calc(-100% + #{rem(8)});
-      // content: "더보기";
-      // color: #fff;
-      // font-size: rem(14);
-      // width: 100%;
-      // white-space: nowrap;
-    }
+  //   a {
+  //     // position: absolute;
+  //     // left: 50%;
+  //     // transform: translateX(-50%);
+  //     // bottom: calc(-100% + #{rem(8)});
+  //     // content: "더보기";
+  //     // color: #fff;
+  //     // font-size: rem(14);
+  //     // width: 100%;
+  //     // white-space: nowrap;
+  //   }
 
-    .swiper_review_bg {
-      width: rem(280);
-      height: rem(430);
-      border-radius: rem(8);
-    }
+  //   .swiper_review_bg {
+  //     width: rem(280);
+  //     height: rem(430);
+  //     border-radius: rem(8);
+  //   }
 
-    .swiper_review {
-      position: absolute;
-      top: rem(40);
-      left: 50%;
-      transform: translateX(-50%);
-      width: rem(280);
-      overflow: visible;
-    }
+  //   .swiper_review {
+  //     position: absolute;
+  //     top: rem(40);
+  //     left: 50%;
+  //     transform: translateX(-50%);
+  //     width: rem(280);
+  //     overflow: visible;
+  //   }
 
-    .swiper_box {
-      width: 100%;
-    }
+  //   .swiper_box {
+  //     width: 100%;
+  //   }
 
-    .swiper_review_img {
-      margin: rem(40) auto 0;
-      width: rem(180);
-      height: rem(180);
-    }
+  //   .swiper_review_img {
+  //     margin: rem(40) auto 0;
+  //     width: rem(180);
+  //     height: rem(180);
+  //   }
 
-    .swiper-pagination__reviewSection {
-      bottom: rem(100) !important;
-    }
+  //   .swiper-pagination__reviewSection {
+  //     bottom: rem(100) !important;
+  //   }
 
-    .swiper_review_more {
-      a {
-        transform: translate(-50%, -50%) translateY(rem(-33));
-      }
-    }
-  }
+  //   .swiper_review_more {
+  //     a {
+  //       transform: translate(-50%, -50%) translateY(rem(-33));
+  //     }
+  //   }
+  // }
 
   //이용방법
   section.Howtouse {

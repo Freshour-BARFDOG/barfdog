@@ -14,14 +14,7 @@ import Barfgood2 from '/public/img/barfgood2.png';
 import Halftest from '/public/img/halftest.png';
 import LeftPic from '/public/img/leftPic.png';
 import midPic from '/public/img/midPic.png';
-import rightPic from '/public/img/rightPic.png';
-import barfPack from '/public/img/barfPack.png';
-import Use01 from '/public/img/pages/home/home_howtouse_1.svg';
-import Use02 from '/public/img/pages/home/home_howtouse_2.svg';
-import Use03 from '/public/img/pages/home/home_howtouse_3.svg';
-import Use01_m from '/public/img/pages/home/home_howtouse_1_m.svg';
-import Use02_m from '/public/img/pages/home/home_howtouse_2_m.svg';
-import Use03_m from '/public/img/pages/home/home_howtouse_3_m.svg';
+import { FaArrowRight } from 'react-icons/fa6';
 import { Swiper_sns } from '/src/components/home/Swiper_sns';
 import { Swiper_review } from '/src/components/home/Swiper_review';
 import { Swiper_recipe } from '/src/components/home/Swiper_recipe';
@@ -148,13 +141,19 @@ export default function MainPage({ data }) {
           <section className={s.review}>
             <div className={s.inner}>
               <h2 className={s.title}>
-                수많은 후기가 증명하는 <br /> BARFDOG
+                160,000마리 <br /> 보호자 리얼 리뷰!
               </h2>
               <div className={s.cont_body}>
                 <Swiper_review data={data?.queryBestReviewsDtoList} />
-                <div className={s.redbox}>
-                  <div className={s.red}></div>
+                <div className={s.btn_box}>
+                  <Link href="/review" passHref>
+                    <a>
+                      최근 리뷰 더보기
+                      <FaArrowRight />
+                    </a>
+                  </Link>
                 </div>
+                {/* <button className={s.btn_review}></button> */}
               </div>
             </div>
           </section>
