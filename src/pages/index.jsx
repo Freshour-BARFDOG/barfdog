@@ -18,8 +18,10 @@ import { FaArrowRight } from 'react-icons/fa6';
 import { Swiper_sns } from '/src/components/home/Swiper_sns';
 import { Swiper_review } from '/src/components/home/Swiper_review';
 import { Swiper_recipe } from '/src/components/home/Swiper_recipe';
-import { Swiper_main } from '/src/components/home/Swiper_main';
-import { Intro_top } from '/src/components/home/Intro_top';
+import { Swiper_survey } from '/src/components/home/Swiper_survey';
+import { Main_top } from '/src/components/home/Main_top';
+import { Main_wedo } from '/src/components/home/Main_wedo';
+import { Main_family } from '/src/components/home/Main_family';
 import Link from 'next/link';
 import axios from 'axios';
 import { useRouter } from 'next/router';
@@ -27,8 +29,6 @@ import { Modal_tempPasswrod } from '/src/components/modal/Modal_tempPasswrod';
 import { Modal_Popup } from '/src/components/modal/Modal_Popup';
 import useDeviceState from '/util/hook/useDeviceState';
 import { getTokenFromServerSide } from '/src/pages/api/reqData';
-import { Tween } from 'react-gsap';
-import { Controller, Scene } from 'react-scrollmagic';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import ImageWithLoadingSpinner from '/src/components/atoms/ImageWithLoadingSpinner';
@@ -115,7 +115,7 @@ export default function MainPage({ data }) {
 
         {/* 1. 영상 소개 */}
         <Wrapper fullWidth={true} rowStyle={{ padding: 0 }}>
-          <Intro_top />
+          <Main_top />
         </Wrapper>
 
         {/* [BEFORE] 메인배너 스와이퍼 */}
@@ -146,32 +146,29 @@ export default function MainPage({ data }) {
               <div className={s.cont_body}>
                 <Swiper_review data={data?.queryBestReviewsDtoList} />
                 <div className={s.btn_box}>
-                  <Link href="/review" passHref>
+                  <Link href="/review">
                     <a>
                       최근 리뷰 더보기
                       <FaArrowRight />
                     </a>
                   </Link>
                 </div>
-                {/* <button className={s.btn_review}></button> */}
               </div>
             </div>
           </section>
         </Wrapper>
 
-        {/* 4. 바프독 */}
+        {/* 4. 따져볼수록 */}
         <Wrapper>
-          <section className={s.sns}>
+          <section className={s.wedo}>
             <div className={s.inner}>
               <h2 className={s.title}>
                 따져볼수록 <br />
                 결론은 바프독
               </h2>
               <p>늘 곁에서 함께 도와드릴게요</p>
-              <div className={s.barfdog_cont_body}>
-                <ul>
-                  <li></li>
-                </ul>
+              <div className={s.wedo_cont_body}>
+                <Main_wedo />
               </div>
             </div>
           </section>
@@ -179,15 +176,23 @@ export default function MainPage({ data }) {
 
         {/* 5. 설문조사 */}
         <Wrapper>
-          <section className={s.sns}>
+          <section className={s.survey}>
             <div className={s.inner}>
               <h2 className={s.title}>
-                {' '}
                 75만건의 빅데이터로 만드는 <br /> 나만의 AI 맞춤 식단
               </h2>
-              <p>인스타그램에서 바프독의 최신 소식을 확인해보세요</p>
               <div className={s.cont_body}>
-                <Swiper_sns />
+                <Swiper_survey />
+              </div>
+              <div className={s.text_box}>
+                바프독 AI 맞춤 설문을 통해 <br />
+                우리 아이의 평소 모습을 알려주세요 <br />
+                (설문 소요시간 5분 내외)
+              </div>
+              <div className={s.btn_box}>
+                <Link href="/survey">
+                  <a>AI 추천 문진 START!</a>
+                </Link>
               </div>
             </div>
           </section>
@@ -195,10 +200,9 @@ export default function MainPage({ data }) {
 
         {/* 6. 인증 */}
         <Wrapper>
-          <section className={s.sns}>
+          <section className={s.family}>
             <div className={s.inner}>
               <h2 className={s.title}>
-                {' '}
                 내 가족이 먹는 <br /> 안심 식단
               </h2>
               <p>
@@ -206,9 +210,11 @@ export default function MainPage({ data }) {
                 <br />
                 바프독은 최고의 서비스를 제공합니다
               </p>
-              <div className={s.cont_body}>
-                <Swiper_sns />
-              </div>
+              <Main_family />
+              <h3>
+                바프독의 제품 안심하고 드실 수 있도록 <br /> 항상 최선을 다해
+                만들겠습니다
+              </h3>
             </div>
           </section>
         </Wrapper>
