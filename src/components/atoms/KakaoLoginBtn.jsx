@@ -20,7 +20,7 @@ const KakaoIcon = (props) => (
 );
 
 const config_kakao = {
-  text: '카카오로 시작하기',
+  text: '카카오로 1초만에 로그인',
   style: {
     background: '#FEE500',
     color: '#000000',

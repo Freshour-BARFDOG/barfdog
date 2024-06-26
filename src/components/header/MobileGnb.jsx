@@ -148,12 +148,13 @@ export default function MobileGnb() {
                   <Image
                     src={
                       !isSidrOpen && (curPath === '/' || activeMenuId === '홈')
-                        ? '/img/icon/bottom-bar-home.svg'
-                        : '/img/icon/bottom-bar-home.svg'
+                        ? '/img/icon/home-active.jpg'
+                        : '/img/icon/home.jpg'
                     }
                     alt="home"
                     width={35}
                     height={35}
+                    style={{ fill: 'red' }}
                   />
                   <MobileMenu
                     title={'홈'}
@@ -177,8 +178,8 @@ export default function MobileGnb() {
                       (activeMenuId === 'shop' ||
                         activeMenuId === '스토어' ||
                         curPath.startsWith('/shop'))
-                        ? '/img/icon/bottom-bar-store.svg'
-                        : '/img/icon/bottom-bar-store.svg'
+                        ? '/img/icon/store-active.jpg'
+                        : '/img/icon/store.jpg'
                     }
                     alt="store"
                     width={35}
@@ -213,15 +214,15 @@ export default function MobileGnb() {
                         activeMenuId === 'survey' ||
                         curPath === '/surveyGuide' ||
                         curPath === '/survey')
-                        ? '/img/icon/bottom-bar-ai-active.svg'
-                        : '/img/icon/bottom-bar-ai.svg'
+                        ? '/img/icon/ai-active.jpg'
+                        : '/img/icon/ai.jpg'
                     }
                     alt="c"
                     width={40}
                     height={40}
                   />
                   <MobileMenu
-                    title={'AI 추천식단'}
+                    title={'AI 추천 식단'}
                     link="/surveyGuide"
                     activeMenuId={activeMenuId}
                     color={
@@ -238,19 +239,19 @@ export default function MobileGnb() {
               </Link>
             </li>
             <li>
-              <a onClick={() => onShowMobileSideMenu('카테고리')}>
+              <a onClick={() => onActiveMenuId('note')}>
                 <Image
                   src={
                     isSidrOpen
-                      ? '/img/icon/mobile-sidebar-active.svg'
-                      : '/img/icon/mobile-sidebar.svg'
+                      ? '/img/icon/note-active.jpg'
+                      : '/img/icon/note.jpg'
                   }
                   alt="subscribe"
-                  width={30}
-                  height={30}
+                  width={36}
+                  height={36}
                 />
                 <MobileMenu
-                  title={'수첩'}
+                  title={'건강수첩'}
                   // activeMenuId={activeMenuId}
                   color={isSidrOpen}
                 />

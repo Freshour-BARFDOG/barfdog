@@ -25,6 +25,7 @@ $mobileMenuHeight: rem(48);
 
   .mobile-menu-wrap,
   .mobile-submenu-wrap {
+    box-shadow: 0px -15px 10px -10px rgba(0, 0, 0, 0.06);
     display: flex;
     align-items: center;
     //height: $mobileMenuHeight;
@@ -146,16 +147,16 @@ $mobileMenuHeight: rem(48);
     color: var(--color-main);
     font-weight: 500;
     position: relative;
-    &:before {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      height: rem(3);
-      background-color: var(--color-main);
-    }
+    // &:before {
+    //   content: '';
+    //   position: absolute;
+    //   bottom: 0;
+    //   left: 50%;
+    //   transform: translateX(-50%);
+    //   width: 100%;
+    //   height: rem(3);
+    //   background-color: var(--color-main);
+    // }
   }
   *[data-current-page='depth2'] {
     color: var(--color-main);
