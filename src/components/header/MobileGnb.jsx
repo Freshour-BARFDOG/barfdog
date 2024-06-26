@@ -156,16 +156,17 @@ export default function MobileGnb() {
                     height={35}
                     style={{ fill: 'red' }}
                   />
-                  <MobileMenu
-                    title={'홈'}
-                    link="/"
-                    activeMenuId={activeMenuId}
-                    color={
-                      !isSidrOpen && (curPath === '/' || activeMenuId === '홈')
-                        ? true
-                        : false
-                    }
-                  />
+                  <span
+                    style={{
+                      color:
+                        !isSidrOpen &&
+                        (curPath === '/' || activeMenuId === '홈')
+                          ? '#be1a21'
+                          : '#000',
+                    }}
+                  >
+                    홈
+                  </span>
                 </a>
               </Link>
             </li>
@@ -185,22 +186,19 @@ export default function MobileGnb() {
                     width={35}
                     height={35}
                   />
-                  <MobileMenu
-                    title={'스토어'}
-                    link={`/shop?itemType=${general_itemType.ALL}`}
-                    // fakeLink="/shop"
-                    // id={menuNameObj.shop}
-                    onClick={onActiveSubmenuHandler}
-                    activeMenuId={activeMenuId}
-                    color={
-                      !isSidrOpen &&
-                      (activeMenuId === 'shop' ||
-                        activeMenuId === '스토어' ||
-                        curPath.startsWith('/shop'))
-                        ? true
-                        : false
-                    }
-                  />
+                  <span
+                    style={{
+                      color:
+                        !isSidrOpen &&
+                        (activeMenuId === 'shop' ||
+                          activeMenuId === '스토어' ||
+                          curPath.startsWith('/shop'))
+                          ? '#be1a21'
+                          : '#000',
+                    }}
+                  >
+                    스토어
+                  </span>
                 </a>
               </Link>
             </li>
@@ -221,41 +219,54 @@ export default function MobileGnb() {
                     width={40}
                     height={40}
                   />
-                  <MobileMenu
-                    title={'AI 추천 식단'}
-                    link="/surveyGuide"
-                    activeMenuId={activeMenuId}
-                    color={
-                      !isSidrOpen &&
-                      (activeMenuId === 'surveyGuide' ||
-                        activeMenuId === 'survey' ||
-                        curPath === '/surveyGuide' ||
-                        curPath === '/survey')
-                        ? true
-                        : false
-                    }
-                  />
+
+                  <span
+                    style={{
+                      color:
+                        !isSidrOpen &&
+                        (activeMenuId === 'surveyGuide' ||
+                          activeMenuId === 'survey' ||
+                          curPath === '/surveyGuide' ||
+                          curPath === '/survey')
+                          ? '#be1a21'
+                          : '#000',
+                    }}
+                  >
+                    AI 추천 식단
+                  </span>
                 </a>
               </Link>
             </li>
             <li>
-              <a onClick={() => onActiveMenuId('note')}>
-                <Image
-                  src={
-                    isSidrOpen
-                      ? '/img/icon/note-active.jpg'
-                      : '/img/icon/note.jpg'
-                  }
-                  alt="subscribe"
-                  width={36}
-                  height={36}
-                />
-                <MobileMenu
-                  title={'건강수첩'}
-                  // activeMenuId={activeMenuId}
-                  color={isSidrOpen}
-                />
-              </a>
+              <Link href="/surveyGuide" passHref>
+                <a onClick={() => onActiveMenuId('note')}>
+                  <Image
+                    src={
+                      isSidrOpen
+                        ? '/img/icon/note-active.jpg'
+                        : '/img/icon/note.jpg'
+                    }
+                    alt="subscribe"
+                    width={36}
+                    height={36}
+                  />
+                  <span
+                    style={{
+                      color:
+                        !isSidrOpen &&
+                        (activeMenuId === 'surveyGuide' ||
+                          activeMenuId === 'survey' ||
+                          curPath === '/surveyGuide' ||
+                          curPath === '/survey')
+                          ? // ? '#be1a21'
+                            '#000'
+                          : '#000',
+                    }}
+                  >
+                    건강수첩
+                  </span>
+                </a>
+              </Link>
             </li>
 
             {/* 비로그인 > 로그인 페이지 */}
@@ -311,7 +322,7 @@ export default function MobileGnb() {
           </ul>
         </section>
         {/* 모바일 - 사이드바  */}
-        {isSidrOpen && (
+        {/* {isSidrOpen && (
           <MobileSidr isOpen={isSidrOpen} setSidrOpen={setIsSidrOpen} />
         )}
         <section
@@ -356,7 +367,7 @@ export default function MobileGnb() {
           <button className={s.activeWidemodeButton} onClick={onMenuWideMode}>
             <IoIosArrowDown />
           </button>
-        </section>
+        </section> */}
       </nav>
     </>
   );
