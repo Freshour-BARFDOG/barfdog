@@ -94,7 +94,7 @@ function RewardListPage() {
         const downloadUrl = URL.createObjectURL(res.data);
         const link = document.createElement('a');
         link.href = downloadUrl;
-        link.setAttribute('download', '판매관리.xlsx');
+        link.setAttribute('download', '적립금목록.xlsx');
         document.body.appendChild(link);
         link.click();
         URL.revokeObjectURL(downloadUrl);
