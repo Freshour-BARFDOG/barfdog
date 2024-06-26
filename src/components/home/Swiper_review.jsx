@@ -16,7 +16,7 @@ import popupWindow from '@util/func/popupWindow';
 
 const swiperSettings_review = {
   className: `${s.swiper_review}`,
-  spaceBetween: 60,
+  spaceBetween: 40,
   slidesPerView: 'auto',
   // loop: true,
   autoplay: {
@@ -35,14 +35,9 @@ const swiperSettings_review = {
     //   slidesPerView: 1,
     //   spaceBetween: 20,
     // },
-    601: {
-      // slidesPerView: 1,
-      spaceBetween: 70,
-    },
-    901: {
-      // slidesPerView: 2,
-      spaceBetween: 70,
-    },
+    // 901: {
+    //   spaceBetween: 20,
+    // },
     // 1201: {
     //   slidesPerView: 1,
     //   spaceBetween: 30,
@@ -121,6 +116,9 @@ export function Swiper_review({ data }) {
                   />
                 </div>
                 <div className={s.swiper_review_txt}>
+                  <div className={s.swiper_review_title}>
+                    다들 샴푸 뭐 쓰냐고 물어봐요
+                  </div>
                   {/* <Image
                     src={require('/public/img/pages/home/home_review_quotation.png')}
                     objectFit="fit"
@@ -128,10 +126,17 @@ export function Swiper_review({ data }) {
                     height={13}
                     alt="카드 이미지"
                   /> */}
-                  <Quotation width="100%" height="100%" viewBox="0 0 14 13" />
+                  {/* <Quotation width="100%" height="100%" viewBox="0 0 14 13" /> */}
                 </div>
                 {/* 글 내용 */}
                 <figcaption className={s.contents}>{d.contents}</figcaption>
+                <div className={s.swiper_review_start}>⭐️⭐️⭐️⭐️⭐️</div>
+                <div className={s.swiper_review_info}>
+                  <div className={s.swiper_review_name}>
+                    {d.name}딱지 보호자님
+                  </div>
+                  <div className={s.swiper_review_type}>정기구독</div>
+                </div>
               </figure>
             </SwiperSlide>
           ))}
