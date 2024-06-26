@@ -151,7 +151,6 @@ export default function MainPage({ data }) {
                     </a>
                   </Link>
                 </div>
-                {/* <button className={s.btn_review}></button> */}
               </div>
             </div>
           </section>
