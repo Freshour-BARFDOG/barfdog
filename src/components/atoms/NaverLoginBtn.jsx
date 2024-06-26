@@ -19,7 +19,7 @@ const NaverIcon = (props) => (
 );
 
 const config_naver = {
-  text: '네이버로 시작하기',
+  text: '네이버로 1초만에 로그인',
   style: {
     background: '#03C75A',
     color: '#fff',

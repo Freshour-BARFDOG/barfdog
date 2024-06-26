@@ -4,7 +4,7 @@ $browser-context: 16;
 }
 
 .flex__container {
-  margin: rem(77) auto rem(81);
+  margin: rem(77) auto rem(100) auto;
   width: rem(360);
   height: rem(700);
   .title {
@@ -12,6 +12,10 @@ $browser-context: 16;
     text-align: center;
     > h2 {
       font-size: rem(24);
+    }
+    > h4 {
+      color: #838383;
+      font-weight: normal;
     }
   }
 }
@@ -88,9 +92,19 @@ $browser-context: 16;
 
   .loginBtn {
     div {
-      width: 70%;
+      width: 78%;
+
+      div:first-child {
+        width: rem(190);
+      }
     }
   }
+}
+
+.kakaoLogin-btn {
+  padding: 10px;
+  background: #ffffff;
+  border: 1px solid #ddd;
 }
 
 // 구분선 (소셜, 이메일)

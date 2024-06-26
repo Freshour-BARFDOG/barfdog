@@ -213,7 +213,8 @@ export default function LoginPage() {
           <div className={s.flex__container}>
             <div className={s.titlebox}>
               <header className={s.title}>
-                <h2>로그인</h2>
+                <h2>안녕하세요, 보호자님!</h2>
+                <h4>다양한 맞춤 서비스를 위해 로그인해주세요.</h4>
               </header>
             </div>
             <div className={s.login_sns_btn}>
@@ -244,7 +245,7 @@ export default function LoginPage() {
                   name="아이디"
                   type={'text'}
                   id={'email'}
-                  placeholder={'아이디를 입력해주세요.'}
+                  placeholder={'이메일을 입력해주세요.'}
                   setFormValues={setFormValues}
                   autoComplete={'username'}
                   onKeyDown={onEnterKeyHandler}

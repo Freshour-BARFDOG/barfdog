@@ -191,6 +191,7 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                       isArrowActive={isArrowActive}
                       setIsArrowActive={setIsArrowActive}
                       index={0}
+                      onClick={true}
                     ></MenuList>
                     <ul
                       className={`${s.submenu_container} ${
@@ -293,7 +294,64 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
             </section>
 
             <div className={s.sns_container}>
-              <div className={s.contact_top}></div>
+              <ul>
+                <li>
+                  <a
+                    href="https://pf.kakao.com/_WixbrK"
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    <Image
+                      src={'/img/icon/sns-kakao.svg'}
+                      alt="sns-kakao"
+                      width={30}
+                      height={30}
+                    />
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://www.instagram.com/barfdog_official/"
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    <Image
+                      src={'/img/icon/sns-insta.svg'}
+                      alt="sns-insta"
+                      width={30}
+                      height={30}
+                    />
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://blog.naver.com/barfdog"
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    <Image
+                      src={'/img/icon/sns-blog.svg'}
+                      alt="sns-blog"
+                      width={30}
+                      height={30}
+                    />
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://www.youtube.com/channel/UCf_VpnXwfLu6wQ1ADcXSphA/featured"
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    <Image
+                      src={'/img/icon/sns-youtube.svg'}
+                      alt="sns-youtube"
+                      width={30}
+                      height={30}
+                    />
+                  </a>
+                </li>
+              </ul>
             </div>
 
             {/* <div className={s.contact_container}>
@@ -323,7 +381,8 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
           </ScrollContainer>
         </main>
       </div>
-      {isOpen && <i className={s.background} onClick={onCloseSidr}></i>}
+      {/* {isOpen && <i className={s.background} onClick={onCloseSidr}></i>} */}
+      {isOpen && <div className={s.block_sidebar}></div>}
     </>
   );
 }
@@ -359,7 +418,7 @@ const MenuList = ({
   };
 
   return (
-    <li>
+    <li onClick={(e) => onClickArrowIcon(index, e)}>
       {link ? (
         <Link href={link} passHref>
           <a className={contClassName || ''}>{title}</a>
