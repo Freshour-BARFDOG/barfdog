@@ -121,8 +121,8 @@ export default function Header() {
           ) : (
             <div className={s.headerContainer}>
               {/* <section id="account" className={`${s.account_area} pc`}>
-                <ul>
-                  {userData?.userType === userType.ADMIN && (
+                <ul> */}
+              {/* {userData?.userType === userType.ADMIN && (
                     <MoveToAdminPageButton />
                   )}
                   {userData ? (
@@ -132,8 +132,8 @@ export default function Header() {
                   )}
                   {userData?.userType !== userType.ADMIN && (
                     <ServiceCenter data={{ auth: userData }} />
-                  )}
-                  {userData && (
+                  )} */}
+              {/* {userData && (
                     <button
                       type={'button'}
                       onClick={
@@ -145,8 +145,8 @@ export default function Header() {
                     >
                       로그아웃
                     </button>
-                  )}
-                </ul>
+                  )} */}
+              {/* </ul>
               </section> */}
               <section className={s.logo_area}>
                 <Link href="/" passHref>
@@ -159,6 +159,9 @@ export default function Header() {
                     />
                   </a>
                 </Link>
+                {userData?.userType === userType.ADMIN && (
+                  <Link href="/bf-admin/dashboard">관리자 페이지</Link>
+                )}
                 <Gnb_my
                   isMobile={isMobile}
                   setSidrOpen={setIsSidrOpen}
@@ -185,15 +188,17 @@ export default function Header() {
 
       {!mypageState.isMyPage && (
         <>
+          {/* 하단 검정 배너 */}
           {isBottomBannerVisible && (
             <Dealine_timer
               setIsBottomBannerVisible={setIsBottomBannerVisible}
             />
           )}
+          {/* 하단 메뉴바 */}
           <MobileGnb />
         </>
       )}
-
+      {/* 사이드바 */}
       {<MobileSidr isOpen={isSidrOpen} setSidrOpen={setIsSidrOpen} />}
       <Modal_subscribeWidhSSR />
     </>

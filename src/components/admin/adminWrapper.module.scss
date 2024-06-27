@@ -1,24 +1,19 @@
 @import './adminCommon.module.scss';
 @import '/styles/global/rem';
 
-
 $header-height: rem(80);
 $nav-width: rem(300);
-
 
 $container-maxWidth: rem(1920);
 $contents-container-maxWidth: rem(1620);
 
-
 $contents-width: $nav-width;
 $contents-maxWidth: rem(1620);
 
-
-
 /* ----------------------------------------- */
-.body_container{
+.body_container {
   width: $container-maxWidth;
-  margin:0 auto;
+  margin: 0 auto;
   display: flex;
   align-items: flex-start;
   grid-template-columns: rem(30) rem(1000);
@@ -26,103 +21,92 @@ $contents-maxWidth: rem(1620);
   column-gap: rem(20);
   /* - MENU: FOLD EFFECT*/
   > * {
-    transition-duration:  .4s;
+    transition-duration: 0.4s;
     transition-timing-function: ease-out;
   }
   > nav:nth-child(1) {
     transition-property: left;
     left: 0;
   }
-  > *:nth-child(2){
+  > *:nth-child(2) {
     transition-property: width;
     width: calc(100vw - #{$nav-width});
   }
-  &.folded{
-    > nav:nth-child(1) {left: -100%}
-    > *:nth-child(2){
+  &.folded {
+    > nav:nth-child(1) {
+      left: -100%;
+    }
+    > *:nth-child(2) {
       width: 100vw;
       max-width: initial;
     }
   }
-
-
 }
 
 /* ----------------------------------------- */
 
-.container_outer{
-  display:flex;
+.container_outer {
+  display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
 }
 
-.container{
+.container {
   width: 100%;
   max-width: $container-maxWidth;
 }
 
-.row{
+.row {
   padding: 0 rem(0);
 }
-  
 
-
-.contents_container_outer{
-
+.contents_container_outer {
   background-color: var(--color-bg-ghostWhite);
+  position: absolute;
+  top: rem(79);
+  left: rem(300);
 }
-.contents_container{
-  float:right;
+
+.contents_container {
+  // float: right;
   min-height: calc(100vh - #{$header-height});
   max-width: $contents-container-maxWidth;
-  width:100%;
+  width: 100%;
   padding: {
     top: rem(20);
     left: rem(20);
     right: rem(20);
-    bottom: rem(80)
+    bottom: rem(80);
   }
   box-sizing: border-box;
-
-
 }
 
-.contents_row{padding:0;}
-
-
-
-
+.contents_row {
+  padding: 0;
+}
 
 /* RESPONSIVE */
-@media (max-width: $container-maxWidth){
-
-  .body_container{width:100%;}
-  .row{padding: 0 rem(30);}
-
-} 
-
-
-@media (max-width: $contents-maxWidth){
+@media (max-width: $container-maxWidth) {
+  .body_container {
+    width: 100%;
+  }
+  .row {
+    padding: 0 rem(30);
+  }
 }
 
-
-@media (max-width:rem(1080)){
-
+@media (max-width: $contents-maxWidth) {
 }
 
-
-@media (max-width:rem(768)){
-
+@media (max-width: rem(1080)) {
 }
 
-
-@media (max-width:rem(600)){
-
+@media (max-width: rem(768)) {
 }
 
-
-@media (max-width:rem(320)){
-
+@media (max-width: rem(600)) {
 }
 
+@media (max-width: rem(320)) {
+}
