@@ -5,12 +5,12 @@ $browser-context: 16; // html font-size
 
 // 2. 맞춤 건강문제
 section.recipe_info {
-  padding: rem(120) 0 rem(170);
+  padding: rem(120) 0 rem(140);
 }
 
 // 3. 리뷰
 section.review {
-  padding: rem(100) 0 rem(50);
+  padding: 0 0 rem(50);
 }
 
 // 4. 따져볼수록
@@ -86,11 +86,11 @@ section.family {
 //*** 1. 인트로 ***
 .intro_top_wrapper {
   position: relative;
+  height: rem(800);
 
   .video_wrapper {
     position: relative;
     // width: 100vw;
-    height: 85vh;
     // overflow: hidden;
   }
 
@@ -98,7 +98,7 @@ section.family {
     // position: absolute;
     // top: 48%;
     // left: 50%;
-    // width: 100%;
+    width: 100%;
     // height: 100%;
     // object-fit: cover;
     // transform: translate(-50%, -50%);
@@ -129,7 +129,7 @@ section.family {
       // left: 15%;
       // margin-bottom: rem(50);
       transform: translate(-50%, -50%);
-      top: 40%;
+      top: rem(400);
       left: 50%;
       // display: flex;
       // flex-direction: column;
@@ -252,27 +252,80 @@ section.family {
     text-align: center;
   }
 
+  //*** 건강문제 - 상단
+  .swiper_slide {
+    width: rem(250) !important;
+  }
+
+  .recipe_box {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: rem(280);
+    height: 100%;
+    // height: rem(220);
+    // background-color: #fff;
+    box-sizing: border-box;
+    text-align: center;
+    border-radius: rem(10);
+    margin: rem(10);
+  }
+
+  .recipe_a {
+    height: 100%;
+    position: relative;
+
+    // 건강문제 이미지
+    .img_wrap {
+      // margin: rem(10);
+      position: relative;
+      width: rem(139 * 1.7);
+      // height: rem(182 * 1.8);
+      display: flex;
+
+      // aspect-ratio: 1/1;
+      background-color: #fff;
+      overflow: hidden;
+      border-radius: rem(10);
+      cursor: pointer;
+
+      img {
+        transform: scale(1);
+        transition: transform 0.5s;
+      }
+    }
+  }
+
+  //*** 상품 추천 - 건강문제 하단
   .swiper_recipe_bottom_wrapper {
     // overflow-y: auto;
     margin-top: rem(40);
 
     .swiper_slide_item {
       // background-color: #c22323;
-      width: rem(300) !important;
-      height: rem(400) !important;
+      width: rem(200) !important;
+      height: rem(360) !important;
+      margin: 0 rem(10);
     }
 
     .recipe_box {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
       position: relative;
       width: rem(220);
-      height: rem(220);
+      height: 100%;
+      // height: rem(220);
       background-color: #fff;
       // box-shadow: rem(10) rem(10) rem(30) rgba(0, 0, 0, 0.1);
-      padding: rem(10);
+      // padding: rem(10);
       box-sizing: border-box;
       text-align: center;
       border-radius: rem(10);
-      margin: auto;
+      // margin: auto;
+      // padding: 0 rem(20);
+      // margin: 0 rem(0);
     }
   }
 
@@ -286,53 +339,23 @@ section.family {
     // padding: rem(20) rem(20) 0;
 
     .item_description {
+      text-align: left;
+
       display: flex;
       flex-direction: column;
       width: 100%;
-      padding: rem(10);
+      // padding: rem(10);
       margin-top: rem(20);
       cursor: pointer;
     }
 
     .item_name {
       font-size: rem(20);
-      font-weight: bold;
     }
 
     .item_price {
       text-align: right;
     }
-
-    // .swiper_slide {
-    //   &:first-child {
-    //     .img_wrap {
-    //       &::after {
-    //         background-image: url('../.././public/img/pages/main/DIARRHEA.jpg');
-    //       }
-    //     }
-    //   }
-    //   &:nth-child(2) {
-    //     .img_wrap {
-    //       &::after {
-    //         background-image: url('../.././public/img/recipes/lamb_beef.png');
-    //       }
-    //     }
-    //   }
-    //   &:nth-child(3) {
-    //     .img_wrap {
-    //       &::after {
-    //         background-image: url('../.././public/img/recipes/duck_lamb.png');
-    //       }
-    //     }
-    //   }
-    //   &:last-child {
-    //     .img_wrap {
-    //       &::after {
-    //         background-image: url('../.././public/img/recipes/duck_lamb.png');
-    //       }
-    //     }
-    //   }
-    // }
   }
 
   .btn_box {
@@ -342,6 +365,7 @@ section.family {
 }
 
 .recipe_a {
+  height: 100%;
   position: relative;
 
   .img_wrap::after {
@@ -359,25 +383,6 @@ section.family {
 
   .img_wrap.clicked::after {
     opacity: 1; /* 클릭된 경우 투명도 적용 */
-  }
-
-  // 건강문제 이미지
-  .img_wrap {
-    margin: rem(10);
-    position: relative;
-    width: rem(139 * 1.8);
-    height: rem(182 * 1.8);
-    display: flex;
-    // aspect-ratio: 1/1;
-    background-color: #fff;
-    overflow: hidden;
-    border-radius: rem(10);
-    cursor: pointer;
-
-    img {
-      transform: scale(1);
-      transition: transform 0.5s;
-    }
   }
 
   // 체크 이모티콘
@@ -416,8 +421,8 @@ section.family {
   .img_item_wrap {
     // margin: rem(20);
     position: relative;
-    width: rem(260);
-    height: rem(260);
+    width: rem(240);
+    height: rem(240);
     background-color: #fff;
     overflow: hidden;
     // border-radius: rem(20);
@@ -562,478 +567,6 @@ section.family {
     }
   }
 }
-
-//바프독 선택
-.difference {
-  .inner {
-    font-size: rem(15);
-    text-align: center;
-    position: relative;
-
-    p {
-      color: var(--color-main);
-      font-weight: bold;
-      clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%) !important;
-    }
-
-    h1 {
-      font-size: rem(32);
-      font-weight: bold;
-      margin-bottom: rem(80);
-      clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%) !important;
-    }
-
-    .image_wrap {
-      width: 100%;
-      // max-width: 525px;
-      // width: rem(525);
-      aspect-ratio: 1.009615384615385/1;
-
-      // max-width: 525px;
-      max-width: rem(525);
-      position: absolute;
-      top: rem(155);
-      left: 50%;
-      transform: translateX(-50%);
-      clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%) !important;
-    }
-
-    ul {
-      position: absolute;
-      top: rem(256);
-      left: 50%;
-      transform: translateX(-50%);
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      row-gap: rem(200);
-      width: 100%;
-      max-width: rem(800);
-      clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%) !important;
-
-      li {
-        display: grid;
-        position: relative;
-
-        &::after {
-          content: '';
-          position: absolute;
-          top: 50%;
-          width: rem(120);
-          height: rem(1);
-        }
-        &::before {
-          content: '';
-          position: absolute;
-          top: 50%;
-          width: rem(10);
-          height: rem(10);
-          border-radius: 100%;
-        }
-
-        &:nth-child(odd) {
-          text-align: right;
-          justify-content: flex-start;
-
-          &::after {
-            right: 0;
-            transform: translate(-120%, -50%);
-          }
-          &::before {
-            right: rem(130);
-            transform: translate(-50%, -50%);
-          }
-        }
-        &:nth-child(even) {
-          text-align: left;
-          justify-content: flex-end;
-          &::after {
-            left: 0;
-            transform: translate(120%, -50%);
-          }
-          &::before {
-            left: rem(130);
-            transform: translate(50%, -50%);
-          }
-        }
-
-        .image_title {
-          font-size: rem(20);
-          font-weight: 800;
-        }
-
-        .image_sub {
-          font-size: rem(16);
-        }
-
-        &:first-child {
-          &::after,
-          &:before {
-            background-color: var(--color-main);
-          }
-          .image_title {
-            color: var(--color-main);
-          }
-        }
-        &:nth-child(2) {
-          margin-right: rem(65);
-          &::after,
-          &:before {
-            background-color: #ff4921;
-          }
-          .image_title {
-            color: #ff4921;
-          }
-        }
-        &:nth-child(3) {
-          margin-left: rem(35);
-          &::after,
-          &:before {
-            background-color: #ff3232;
-          }
-          .image_title {
-            color: #ff3232;
-          }
-        }
-        &:last-child {
-          margin-right: rem(55);
-          &::after,
-          &:before {
-            background-color: #ff8c16;
-          }
-          .image_title {
-            color: #ff8c16;
-          }
-        }
-      }
-    }
-
-    .scroll {
-      // position: absolute;
-      // left: 50%;
-      // transform: translateX(-50%);
-
-      // &::after{
-      //   content: "";
-      //   position: absolute;
-      //   bottom: 0;
-      //   right: 50%;
-      //   width: 100%;
-      //   height: 100%;
-      //   background-color: #fff;
-      // }
-      padding-bottom: rem(520);
-      > p {
-        overflow: visible;
-      }
-
-      .magicbox {
-        position: absolute;
-        top: rem(155);
-        left: 50%;
-        transform: translateX(-50%);
-        aspect-ratio: 1.009615384615385/1;
-        // max-width: 525px;
-        // max-width: 525px;
-        width: 100%;
-        max-width: rem(525);
-        margin: 0 auto;
-        background-image: url('../.././public/img/halftest_harf.png');
-        background-repeat: no-repeat;
-        // background-size: 50%;
-        background-size: contain;
-      }
-    }
-  }
-}
-
-.difference2_inner {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  p {
-    color: var(--color-main);
-    font-weight: bold;
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%) !important;
-    margin-top: rem(60);
-  }
-
-  h1 {
-    font-size: rem(32);
-    font-weight: bold;
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%) !important;
-  }
-}
-
-//차별점 그림 3개
-.difference2 {
-  $marginRight: rem(90);
-
-  ul {
-    width: rem(960);
-    margin: 0 auto;
-    overflow: hidden;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    column-gap: rem(80);
-    align-items: center;
-
-    .title {
-      font-size: rem(20);
-      font-weight: bold;
-      margin-bottom: rem(25);
-      height: 100%;
-    }
-
-    li {
-      // float: left;
-      // margin-right: rem(90);
-      // width: calc(33.333% - #{rem(60)});
-      text-align: center;
-
-      &:last-child {
-        margin-right: 0;
-        > span {
-          max-width: 44vw !important;
-        }
-      }
-    }
-
-    .text {
-      padding: rem(30) 0;
-      font-size: rem(16);
-      font-weight: 500;
-      height: rem(80);
-      word-break: keep-all;
-    }
-  }
-}
-
-//프리미엄바프
-.difference3 {
-  position: relative;
-  height: rem(824);
-  width: 100%;
-  box-sizing: border-box;
-
-  .title {
-    display: block;
-    font-size: rem(32);
-    text-align: center;
-    width: 100%;
-  }
-
-  br {
-    display: none;
-  }
-
-  .grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    position: relative;
-
-    .image {
-      // position: absolute;
-      // top: 50%;
-      // left: 50%;
-      // transform: translate(-50%, -50%) translate(rem(-120), rem(45));
-      min-width: rem(200);
-      width: rem(460);
-      height: rem(420);
-      margin: 0 auto;
-      transform: translateX(rem(-200));
-    }
-
-    .textbox {
-      // position: absolute;
-      // top: rem(-5);
-      // right: rem(10);
-      // transform: translate(calc(100% - #{rem(33)}), 30%);
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) translate(rem(230), rem(22.5));
-
-      .text {
-        //padding-left: rem(130);
-        width: 100%;
-        li {
-          left: 0;
-          top: 0;
-          //color: var(--color-main);
-          font-size: rem(18);
-          display: block;
-          position: relative;
-          margin-bottom: rem(35);
-          &:last-child {
-            margin-bottom: 0;
-          }
-        }
-
-        // li::before {
-        //   content: "";
-        //   width: rem(120);
-        //   height: rem(1);
-        //   background-color: var(--color-main);
-        //   position: absolute;
-        //   top: 0;
-        //   left: 0;
-        //   bottom: 0;
-        //   margin: auto;
-        // }
-
-        li::after {
-          content: '';
-          width: rem(25);
-          height: rem(24);
-          // background-image: url("../.././public/img/check.png");
-          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none'%3E%3Cpath stroke='%23000' d='M2.5 12.5h11v11h-11z'/%3E%3Cpath fill='%23CA1010' d='M23.441 0H21.3c-.3 0-.585.147-.77.398L7.9 17.433l-4.444-6.035a.995.995 0 0 0-.341-.293.932.932 0 0 0-.428-.105H.546c-.206 0-.319.251-.193.42l6.778 9.184a.947.947 0 0 0 1.54 0L23.635.417C23.76.251 23.646 0 23.441 0Z'/%3E%3C/svg%3E");
-          background-repeat: no-repeat;
-          background-size: rem(25) rem(24);
-          position: absolute;
-          top: rem(-2);
-          left: rem(-30);
-          margin: auto;
-        }
-      }
-    }
-  }
-}
-
-///@at-root
-//고민
-// .clientWorry {
-//   .title_section {
-//     .title {
-//       margin-bottom: rem(30);
-//     }
-
-//     .subtitle {
-//       margin-bottom: rem(27);
-//       width: rem(300);
-//       word-break: keep-all;
-//     }
-//   }
-
-//   .cont_section {
-//     > ul {
-//       > li {
-//         width: calc(50% - #{rem(20)});
-//         float: left;
-
-//         &:not(:last-child) {
-//           margin-right: rem(40);
-//         }
-//       }
-//     }
-
-//     > .btn_main {
-//       display: none;
-//     }
-//   }
-
-//   .card {
-//     text-align: center;
-//     padding: rem(40) rem(30);
-//     box-sizing: border-box;
-//     background-color: #fff;
-//     border-radius: rem(16);
-//     box-shadow: rem(20) rem(20) rem(20) rgba(0, 0, 0, 0.1);
-//     max-width: rem(360);
-
-//     .img-wrap {
-//       margin-bottom: rem(20);
-//       width: rem(100);
-//       height: rem(100);
-//     }
-
-//     .card_title {
-//       margin-bottom: rem(30);
-//       font-size: rem(18);
-//       color: #000;
-//       text-align: center;
-//     }
-
-//     .details {
-//       ul {
-//         height: rem(360);
-
-//         li {
-//           font-size: rem(16);
-//           color: #717171;
-//           padding-left: rem(16);
-//           margin-bottom: rem(20);
-//           text-align: left;
-//           position: relative;
-//           word-break: keep-all;
-
-//           &:before {
-//             content: '';
-//             position: absolute;
-//             left: rem(0);
-//             top: rem(8);
-//             width: rem(8);
-//             height: rem(8);
-//             background-color: #f2994c;
-//             transform: rotate(45deg);
-//           }
-
-//           &:last-child {
-//             margin-bottom: 0;
-//           }
-//         }
-//       }
-//     }
-//   }
-// }
-
-// .btn_main, .btn_worry {
-//   display: inline-block;
-//   padding: rem(14) 0;
-//   color: #fff;
-//   font-size: rem(16);
-//   border-radius: rem(12);
-//   background-color: var(--color-main);
-//   width: rem(220);
-//   box-sizing: border-box;
-//   text-align: center;
-// }
-// .btn_main {
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   height: rem(60);
-//   width: rem(240);
-//   color: #fff;
-//   font-size: rem(16);
-//   font-weight: 600;
-//   //border-radius: rem(12);
-//   box-sizing: border-box;
-//   text-align: center;
-//   // background-image: url("../.././public/img/subscribeBtn1.png") !important;
-//   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='60' fill='none'%3E%3Cg clip-path='url(%23a)'%3E%3Cpath fill='%23CA1010' fill-rule='evenodd' d='M0 0h240v8c-2.2 0-4 1.8-4 4s1.8 4 4 4v4c-2.2 0-4 1.8-4 4s1.8 4 4 4v4c-2.2 0-4 1.8-4 4s1.8 4 4 4v4c-2.2 0-4 1.8-4 4s1.8 4 4 4v8H0v-8c2.2 0 4-1.8 4-4s-1.8-4-4-4v-4c2.2 0 4-1.8 4-4s-1.8-4-4-4v-4c2.2 0 4-1.8 4-4s-1.8-4-4-4v-4c2.2 0 4-1.8 4-4S2.2 8 0 8V0Z' clip-rule='evenodd'/%3E%3Cpath fill='%23fff' d='M211 40.5h-1v3h1v-3ZM211 34.5h-1v3h1v-3ZM211 28.5h-1v3h1v-3ZM211 46.5h-1v3h1v-3ZM211 22.5h-1v3h1v-3ZM211 10.5h-1v3h1v-3ZM211 16.5h-1v3h1v-3ZM210 52.5V54h1v-1.5h-1ZM210 6v1.5h1V6h-1ZM31 34.5h-1v3h1v-3ZM31 40.5h-1v3h1v-3ZM31 28.5h-1v3h1v-3ZM30 52.5V54h1v-1.5h-1ZM31 46.5h-1v3h1v-3ZM31 16.5h-1v3h1v-3ZM31 10.5h-1v3h1v-3ZM31 22.5h-1v3h1v-3ZM30 6v1.5h1V6h-1Z'/%3E%3C/g%3E%3Cdefs%3E%3CclipPath id='a'%3E%3Cpath fill='%23fff' d='M0 0h240v60H0z'/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E");
-//   background-repeat: no-repeat;
-//   background-size: rem(240) rem(60);
-//   background-position: center;
-// }
-
-// .btn_worry,
-// .btn_worry2 {
-//   padding: rem(14) 0;
-//   color: #fff;
-//   font-size: rem(16);
-//   border-radius: rem(12);
-//   background-color: var(--color-main);
-//   width: rem(220);
-//   box-sizing: border-box;
-//   text-align: center;
-// }
-// .btn_worry {
-//   display: inline-block;
-// }
-// .btn_worry2 {
-//   display: none;
-// }
 
 //*** 3. 리뷰 후기
 .review {
