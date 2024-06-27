@@ -16,12 +16,23 @@ import enterKey from '/util/func/enterKey';
 import { getDefaultPagenationInfo } from '/util/func/getDefaultPagenationInfo';
 import { global_searchDateType } from '/store/TYPE/searchDateType';
 import { MirrorTextOnHoverEvent } from '/util/func/MirrorTextOnHoverEvent';
+import SearchRadio from '../../../components/admin/form/searchBar/SearchRadio';
+import { Button, ConfigProvider } from 'antd';
+import { DownloadOutlined } from '@ant-design/icons';
+import { postDataBlob } from '../../api/reqData';
+import {
+  global_gradeType,
+  global_gradeType_ENG,
+} from '../../../../store/TYPE/gradeType';
+import SearchCheckbox from '../../../components/admin/form/searchBar/SearchCheckbox';
 
 const initialSearchValues = {
   email: '',
   name: '',
   from: global_searchDateType.oldestDate,
   to: transformToday(),
+  subscribing: '',
+  gradeList: '',
 };
 
 function ManageUserPage() {
@@ -35,6 +46,9 @@ function ManageUserPage() {
   const [searchQueryInitialize, setSearchQueryInitialize] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [onSearch, setOnSearch] = useState(false);
+  const [isExcelLoading, setIsExcelLoading] = useState(false);
+  const initialValue = searchValue.gradeList || '';
+  const [selectedCheckboxes, setSelectedCheckboxes] = useState(initialValue);
 
   useEffect(() => {
     MirrorTextOnHoverEvent(window);
@@ -66,6 +80,32 @@ function ManageUserPage() {
 
   const onSearchInputKeydown = (e) => {
     enterKey(e, onSearchHandler);
+  };
+
+  // export excel
+  const downloadExcel = async () => {
+    const url = `/api/admin/members/excel-download`;
+
+    try {
+      setIsExcelLoading(true);
+      const res = await postDataBlob(`${url}?${searchQuery}`);
+      // console.log('엑셀 파일 업로드 성공:', res);
+
+      if (res && res.data instanceof Blob) {
+        const downloadUrl = URL.createObjectURL(res.data);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.setAttribute('download', '회원목록.xlsx');
+        document.body.appendChild(link);
+        link.click();
+        URL.revokeObjectURL(downloadUrl);
+        link.remove();
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsExcelLoading(false);
+    }
   };
 
   return (
@@ -101,11 +141,51 @@ function ManageUserPage() {
                   { label: '이름', value: 'name' },
                 ]}
               />
+              <SearchRadio
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
+                title="구독여부"
+                name="subscribing"
+                idList={['ALL', 'TRUE', 'FALSE']}
+                labelList={['전체', '구독', '비구독']}
+              />
+              <SearchCheckbox
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
+                title="적립금 타입"
+                name="gradeList"
+                idList={global_gradeType}
+                labelList={global_gradeType}
+                value={searchValue.gradeList}
+                selectedCheckboxes={selectedCheckboxes}
+                setSelectedCheckboxes={setSelectedCheckboxes}
+              />
             </SearchBar>
           </section>
           <section className="cont">
             <div className="cont_header clearfix">
               <p className="cont_title cont-left">회원목록</p>
+              <div
+                className={`controls cont-left ${
+                  isExcelLoading && s.excel_button
+                }`}
+              >
+                <ConfigProvider
+                  theme={{
+                    token: {
+                      // Seed Token
+                      colorPrimary: '#ca1011',
+                    },
+                  }}
+                >
+                  <Button
+                    icon={<DownloadOutlined />}
+                    onClick={() => downloadExcel()}
+                  >
+                    {isExcelLoading ? <Spinner /> : '엑셀 다운로드'}
+                  </Button>
+                </ConfigProvider>
+              </div>
             </div>
             <div className={`${s.cont_viewer} ${s.fullWidth}`}>
               <div className={s.table}>

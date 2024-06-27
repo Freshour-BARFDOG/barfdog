@@ -23,7 +23,7 @@ const SearchRadio = ({
     const { id } = e.currentTarget;
     setSelectedRadio(id);
 
-    if (name === 'isDeleted') {
+    if (name === 'isDeleted' || name === 'subscribing') {
       setSearchValue((prevState) => ({
         ...prevState,
         [name]: id === 'ALL' ? '' : id === 'TRUE' ? true : false,
