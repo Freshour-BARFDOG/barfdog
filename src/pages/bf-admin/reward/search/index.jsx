@@ -18,7 +18,7 @@ import { global_searchDateType } from '/store/TYPE/searchDateType';
 import { rewardType } from '/store/TYPE/rewardType';
 import { Button, ConfigProvider } from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
-import { getData, postData, postDataBlob } from '../../../api/reqData';
+import { postDataBlob } from '../../../api/reqData';
 
 const initialSearchValues = {
   email: '',

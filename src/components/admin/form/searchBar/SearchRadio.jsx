@@ -23,10 +23,17 @@ const SearchRadio = ({
     const { id } = e.currentTarget;
     setSelectedRadio(id);
 
-    setSearchValue((prevState) => ({
-      ...prevState,
-      [name]: id,
-    }));
+    if (name === 'isDeleted' || name === 'subscribing') {
+      setSearchValue((prevState) => ({
+        ...prevState,
+        [name]: id === 'ALL' ? '' : id === 'TRUE' ? true : false,
+      }));
+    } else {
+      setSearchValue((prevState) => ({
+        ...prevState,
+        [name]: id,
+      }));
+    }
   };
 
   if (!idList.length || !idList) return;

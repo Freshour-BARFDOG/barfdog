@@ -60,6 +60,9 @@ $backgroundColorDef: #f8f8ff;
       &.fullWidth {
         grid-template-columns: 1fr;
       }
+      &.threeCells {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
       &.multiLines {
         .label,
         .innerBox {
@@ -75,7 +78,9 @@ $backgroundColorDef: #f8f8ff;
     .t-row:not(:first-child) {
       margin-top: rem(-1);
     }
-
+    .tooltop-box {
+      overflow: unset !important;
+    }
     .t-box {
       display: grid;
       grid-template-columns: rem(180) calc(100% - #{rem(180)});
@@ -84,6 +89,54 @@ $backgroundColorDef: #f8f8ff;
 
       &:nth-child(2n) {
         margin-left: rem(-1);
+      }
+      .tooltip {
+        em {
+          position: relative;
+          display: inline-flex;
+          align-items: center;
+        }
+        i {
+          position: relative;
+          background: #fff;
+          z-index: 9;
+          border-radius: 50%;
+          overflow: hidden;
+          border: rem(1) solid #ababab;
+          color: #ababab;
+          font-size: rem(13) !important;
+          margin-left: rem(4);
+          line-height: 2;
+          width: rem(16);
+          height: rem(16);
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+        }
+        pre {
+          background-color: #111;
+          color: #fff;
+          box-shadow: 0 0 rem(10) 0 rgba(0, 0, 0, 0.15);
+          border: rem(1) solid var(--color-line-04);
+          position: absolute;
+          z-index: 10;
+          bottom: -70%;
+          transform: translate(-50%, 100%);
+          border-radius: rem(4);
+          box-sizing: border-box;
+          width: rem(300);
+          font-size: rem(13) !important;
+          padding: rem(12) rem(16);
+          white-space: nowrap;
+          animation: show var(--ani-default);
+          right: auto;
+          transform: translate(0, 100%);
+        }
+        .tooltip_text {
+          left: -450%;
+          bottom: -50%;
+          width: rem(260);
+        }
       }
       .innerBox {
         border: rem(1) solid var(--color-line-03);
