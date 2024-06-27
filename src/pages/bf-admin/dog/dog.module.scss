@@ -6,6 +6,7 @@
     .item {
       grid-template-columns:
         rem(60)
+        rem(90)
         rem(95)
         rem(120)
         rem(160)
@@ -20,5 +21,14 @@
         rem(80)
         rem(80);
     }
+  }
+}
+
+.excel_button {
+  button {
+    width: rem(130);
+    display: flex;
+    align-items: center;
+    gap: rem(28);
   }
 }
