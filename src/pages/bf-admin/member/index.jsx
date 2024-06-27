@@ -152,7 +152,7 @@ function ManageUserPage() {
               <SearchCheckbox
                 searchValue={searchValue}
                 setSearchValue={setSearchValue}
-                title="적립금 타입"
+                title="등급"
                 name="gradeList"
                 idList={global_gradeType}
                 labelList={global_gradeType}
