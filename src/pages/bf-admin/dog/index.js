@@ -122,7 +122,7 @@ function ManageDogPage() {
               <SearchRadio
                 searchValue={searchValue}
                 setSearchValue={setSearchValue}
-                title="구독상태"
+                title="구독여부"
                 name="subscribeStatus"
                 idList={['ALL', 'SUBSCRIBING', 'NONSUBSCRIBING']}
                 labelList={['전체', '구독', '비구독']}
