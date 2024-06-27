@@ -22,6 +22,7 @@ export default function DogList({ items, currentPage }) {
 const ItemList = ({ item, number }) => {
   const DATA = {
     number,
+    deleted: item.deleted ? 'Y' : 'N',
     memberName: item.memberName,
     email: item.email,
     dogId: item.dogId,
@@ -58,6 +59,7 @@ const ItemList = ({ item, number }) => {
   return (
     <li className={s.item} key={`item-${DATA.dogId}`}>
       <span>{DATA.number}</span>
+      <span>{DATA.deleted}</span>
 
       <span>
         <Link href={`/bf-admin/popup/dogInfo/${DATA.dogId}`} passHref>

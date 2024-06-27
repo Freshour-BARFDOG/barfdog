@@ -35,7 +35,7 @@ import { calcOneMealGramsWithRecipeInfo } from '/util/func/subscribe/calcOneMeal
 import { calcSubscribePrice } from '/util/func/subscribe/calcSubscribePrices';
 import { valid_isTheSameArray } from '/util/func/validation/validationPackage';
 import { patchObjData, postObjData } from '../../../api/reqData';
-import { ConfigProvider, DatePicker, Space } from 'antd';
+import { ConfigProvider, DatePicker, Space, Tooltip } from 'antd';
 import dayjs from 'dayjs';
 import { originSubscribeIdList } from '/util/func/subscribe/originSubscribeIdList';
 
@@ -85,6 +85,26 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
   const currentPlanName = subscribeInfo?.info.planName;
   const subscribePlanInfo = useSubscribePlanInfo();
   const recipeInfo = useSubscribeRecipeInfo();
+
+  // tooltip 활성화
+  const [isActive, setIsActive] = useState({
+    nextPaymentPrice: false,
+    overDiscount: false,
+  });
+
+  const onMouseEnterHandler = (e, label) => {
+    setIsActive((prevState) => ({
+      ...prevState,
+      [label]: true,
+    }));
+  };
+
+  const onMouseLeaveHandler = (e, label) => {
+    setIsActive((prevState) => ({
+      ...prevState,
+      [label]: false,
+    }));
+  };
 
   // console.log('subscribePlanInfo>>>>>', subscribePlanInfo);
   // console.log('recipeInfo>>>>>', recipeInfo);
@@ -175,6 +195,9 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
           subscribeStatus:
             DATA.subscribeDetailInfo.subscribeDto.subscribeStatus,
           subscribeCount: DATA.subscribeDetailInfo.subscribeDto.subscribeCount,
+          discountGrade: DATA.subscribeDetailInfo.subscribeDto.discountGrade,
+          discountCoupon: DATA.subscribeDetailInfo.subscribeDto.discountCoupon,
+          overDiscount: DATA.subscribeDetailInfo.subscribeDto.overDiscount,
           nextPaymentDate:
             DATA.subscribeDetailInfo.subscribeDto.nextPaymentDate,
           nextPaymentPrice:
@@ -427,7 +450,7 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
     }
   };
 
-  //*** 다음 결제 금액 변경
+  //*** 다음 결제 원금 변경
   const onSubmitNextPaymentPriceChange = async (confirm) => {
     if (!confirm) {
       return setActiveConfirmNextPaymentPriceChangeModal(false);
@@ -463,10 +486,10 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
 
     // validation
     if (formValues.nextPaymentPrice === '') {
-      mct.alertShow('다음 결제 금액을 입력해주세요.');
+      mct.alertShow('다음 결제 원금을 입력해주세요.');
       return;
     } else if (Number(formValues.nextPaymentPrice) < 100) {
-      mct.alertShow('다음 결제 금액은 100원 이상이어야 합니다.');
+      mct.alertShow('다음 결제 원금은 100원 이상이어야 합니다.');
       return;
     } else {
       setActiveConfirmNextPaymentPriceChangeModal(true);
@@ -554,6 +577,9 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
         subscribeCount,
         subscribeId,
         subscribeStatus,
+        discountGrade,
+        discountCoupon,
+        overDiscount,
         ...dataToSend
       } = formValues;
 
@@ -638,7 +664,6 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
       recipeIdList: updatedRecipeIdList,
     }));
   };
-
   const onSuccessChangeSubscribeOrder = () => {
     setIsLoading({ reload: true });
     window.location.reload();
@@ -741,16 +766,12 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
     };
   };
 
-  console.log('formValues', formValues);
+  // console.log('formValues', formValues);
   // console.log('tempValues', tempValues);
   // console.log('setSelectedCategory', selectedCategory);
   // console.log('formValues.subscribeStatus', formValues.subscribeStatus);
   // console.log('NextPriceText', nextPriceText);
-  console.log('original', originalGramPerRecipe);
-  console.log(
-    'original',
-    DATA?.subscribeDetailInfo.subscribeDto.oneMealGramsPerRecipe,
-  );
+  // console.log('original', originalGramPerRecipe);
 
   return (
     <>
@@ -945,12 +966,40 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
                             )}
                           </div>
                         </div>
-                        <div className={s['t-box']}>
-                          <div className={`${s.innerBox} ${s.label}`}>
-                            <span>다음 결제 금액</span>
+                        <div
+                          className={s['t-box']}
+                          style={{ overflow: 'unset' }}
+                        >
+                          <div
+                            className={`${s.innerBox} ${s.label} ${s.tooltip}`}
+                          >
+                            <span>다음 결제 원금 </span>
+                            {/* tooltip */}
+                            <em>
+                              <i
+                                onMouseEnter={(e) =>
+                                  onMouseEnterHandler(e, 'nextPaymentPrice')
+                                }
+                                onMouseLeave={(e) =>
+                                  onMouseLeaveHandler(e, 'nextPaymentPrice')
+                                }
+                                style={{
+                                  cursor: isActive.nextPaymentPrice
+                                    ? 'pointer'
+                                    : 'default',
+                                }}
+                              >
+                                i
+                              </i>
+                              {isActive.nextPaymentPrice && (
+                                <pre>
+                                  * 이 값은 원금이며, 실제 결제금액은 <br />
+                                  [원금-쿠폰할인량-등급할인량] 으로 계산됩니다.
+                                </pre>
+                              )}
+                            </em>
                           </div>
                           <div className={`${s.innerBox} ${s.cont}`}>
-                            {/* <span>{formValues.nextPaymentPrice} 원</span> */}
                             <input
                               type="text"
                               id="nextPaymentPrice"
@@ -973,6 +1022,63 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
                           </div>
                         </div>
                       </li>
+
+                      <li className={`${s['t-row']} ${s['threeCells']}`}>
+                        <div className={s['t-box']}>
+                          <div className={`${s.innerBox} ${s.label}`}>
+                            <span>등급 할인량</span>
+                          </div>
+                          <div className={`${s.innerBox} ${s.cont}`}>
+                            <span>{formValues.discountGrade} 원</span>
+                          </div>
+                        </div>
+                        <div className={s['t-box']}>
+                          <div className={`${s.innerBox} ${s.label}`}>
+                            <span>쿠폰 할인량</span>
+                          </div>
+                          <div className={`${s.innerBox} ${s.cont}`}>
+                            <span>{formValues.discountCoupon} 원</span>
+                          </div>
+                        </div>
+                        <div
+                          className={s['t-box']}
+                          style={{ overflow: 'unset' }}
+                        >
+                          <div
+                            className={`${s.innerBox} ${s.label}  ${s.tooltip}`}
+                          >
+                            <span>초과 할인금</span>
+                            {/* tooltip */}
+                            <em>
+                              <i
+                                onMouseEnter={(e) =>
+                                  onMouseEnterHandler(e, 'overDiscount')
+                                }
+                                onMouseLeave={(e) =>
+                                  onMouseLeaveHandler(e, 'overDiscount')
+                                }
+                                style={{
+                                  cursor: isActive.overDiscount
+                                    ? 'pointer'
+                                    : 'default',
+                                }}
+                              >
+                                i
+                              </i>
+                              {isActive.overDiscount && (
+                                <pre className={s.tooltip_text}>
+                                  * 다음 결제원금 보다 큰 할인이 적용되어 <br />
+                                  초과된 할인금 (최소결제금액 : 100원)
+                                </pre>
+                              )}
+                            </em>
+                          </div>
+                          <div className={`${s.innerBox} ${s.cont}`}>
+                            <span>{formValues.overDiscount} 원</span>
+                          </div>
+                        </div>
+                      </li>
+
                       <li className={`${s['t-row']}`}>
                         <div className={s['t-box']}>
                           <div className={`${s.innerBox} ${s.label}`}>
@@ -1083,6 +1189,9 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
                                             style={{ display: 'none' }}
                                             checked={
                                               selectedCategory.plan === plan
+                                            }
+                                            onChange={(e) =>
+                                              onClickHandler(e, plan)
                                             }
                                           />
                                           <span className={s.fakeCheckBox} />
@@ -1222,7 +1331,7 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
                   1. 플랜 및 레시피 <br />
                   2. 구독 그램수 : 변경된 레시피에 맞게 새로 계산
                   <br />
-                  3. 다음 결제 금액 :{' '}
+                  3. 다음 결제 원금 :{' '}
                   <strong>{formValues.nextPaymentPrice}원</strong> --&gt;&nbsp;
                   <strong>{nextPriceText}원</strong> <br />
                   <br />
@@ -1235,7 +1344,7 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
               theme={'userPage'}
               isConfirm={onSubmitNextPaymentPriceChange}
               positionCenter
-              text={'다음 결제 금액을 변경하시겠습니까?'}
+              text={'다음 결제 원금을 변경하시겠습니까?'}
               caution={
                 <>
                   <strong>
@@ -1247,7 +1356,7 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
                     {formValues.nextPaymentPrice.toLocaleString()}원
                   </strong>
                   <br />
-                  다음 결제 금액이 변경됩니다.
+                  다음 결제 원금이 변경됩니다.
                 </>
               }
             />
