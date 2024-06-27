@@ -52,26 +52,26 @@ const swiperSettings_recipe_item = {
   slidesPerView: 'auto',
   centeredSlides: false,
   modules: [Pagination],
-  // breakpoints: {
-  //   //반응형 조건 속성
-  //   300: {
-  //     slidesPerView: 1,
-  //     spaceBetween: 0,
-  //   },
-  //   651: {
-  //     //651 이상일 경우
-  //     slidesPerView: 2, //레이아웃 2열
-  //     spaceBetween: 20,
-  //   },
-  //   1001: {
-  //     slidesPerView: 3,
-  //     spaceBetween: 20,
-  //   },
-  //   1201: {
-  //     slidesPerView: 4,
-  //     spaceBetween: 20,
-  //   },
-  // },
+  breakpoints: {
+    //   //반응형 조건 속성
+    //   300: {
+    //     slidesPerView: 1,
+    //     spaceBetween: 0,
+    //   },
+    //   651: {
+    //     //651 이상일 경우
+    //     slidesPerView: 2, //레이아웃 2열
+    //     spaceBetween: 20,
+    //   },
+    //   1001: {
+    //     slidesPerView: 3,
+    //     spaceBetween: 20,
+    //   },
+    1201: {
+      slidesPerView: 2,
+      spaceBetween: 50,
+    },
+  },
 };
 
 export function Swiper_recipe({ data, isMobile }) {
@@ -133,7 +133,7 @@ export function Swiper_recipe({ data, isMobile }) {
 
   return (
     <div className={s.swiper_recipe_outerWrap}>
-      <i
+      {/* <i
         className={
           selectedItemList.length > 0
             ? Styles.swiper_button_prev_recipe_clicked
@@ -152,7 +152,7 @@ export function Swiper_recipe({ data, isMobile }) {
         ref={navNextRef}
       >
         <ArrowRight_s width="100%" height="100%" viewBox="0 0 28 28" />
-      </i>
+      </i> */}
 
       {/* 1) 건강문제 */}
       <Swiper
@@ -174,7 +174,6 @@ export function Swiper_recipe({ data, isMobile }) {
             <SwiperSlide
               key={`health-${d.id}-${index}`}
               style={{
-                width: '220',
                 height: 'inherit',
               }}
               className={s.swiper_slide}
@@ -238,7 +237,6 @@ export function Swiper_recipe({ data, isMobile }) {
               <SwiperSlide
                 key={`recipe-${d.id}-${index}`}
                 style={{
-                  width: '260',
                   height: 'inherit',
                 }}
                 className={s.swiper_slide_item}
@@ -256,7 +254,14 @@ export function Swiper_recipe({ data, isMobile }) {
                         />
                       </Link>
                     </div>
-
+                    <Link passHref href={`/shop/item/${d.id}`}>
+                      <div className={s.item_description}>
+                        <p className={s.item_name}>{d.name}</p>
+                        <p className={s.item_price}>
+                          {transformLocalCurrency(d.salePrice)}원
+                        </p>
+                      </div>
+                    </Link>
                     {/* [삭제] 장바구니 아이콘 */}
                     {/* <div className={s.icon_store_wrap}>
                       <Image
@@ -272,14 +277,6 @@ export function Swiper_recipe({ data, isMobile }) {
                   </Link> */}
                   </div>
                 </div>
-                <Link passHref href={`/shop/item/${d.id}`}>
-                  <div className={s.item_description}>
-                    <p className={s.item_name}>{d.name}</p>
-                    <p className={s.item_price}>
-                      {transformLocalCurrency(d.salePrice)}원
-                    </p>
-                  </div>
-                </Link>
               </SwiperSlide>
             ))}
           </Swiper>
