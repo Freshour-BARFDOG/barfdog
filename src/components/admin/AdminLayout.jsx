@@ -1,27 +1,23 @@
-import React from 'react'
-import AdminHeader from "./AdminHeader";
-import AdminGnb from "./AdminGnb";
-import {AdminBodyWrapper} from './AdminWrapper';
-import {useAdminMenuState} from "@util/hook/useAdminMenuState";
+import React from 'react';
+import AdminHeader from './AdminHeader';
+import AdminGnb from './AdminGnb';
+import { AdminBodyWrapper } from './AdminWrapper';
+import { useAdminMenuState } from '@util/hook/useAdminMenuState';
+import s from './adminWrapper.module.scss';
 
+function AdminLayout({ children }) {
+  const [{ folded }, setToogleMenuState] = useAdminMenuState({ folded: false });
 
-function AdminLayout ({children}) {
-  
-  
-  
-  const [{folded}, setToogleMenuState] = useAdminMenuState({folded: false});
-  
-  
-  
   return (
     <main id="admin_page">
-      <AdminHeader setToogleMenuState = {setToogleMenuState}/>
+      <AdminHeader setToogleMenuState={setToogleMenuState} />
       <AdminBodyWrapper folded={folded}>
-        <AdminGnb/>
+        <AdminGnb />
+        {/* <div className={s.empty_container}></div> */}
         {children} {/* 콘텐츠 영역 */}
       </AdminBodyWrapper>
     </main>
   );
 }
 
-export default AdminLayout
+export default AdminLayout;
