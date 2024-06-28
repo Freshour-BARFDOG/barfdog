@@ -93,12 +93,12 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
 
   const onMovePage = async (e) => {
     e.preventDefault();
+    const btn = e.currentTarget;
+    const link = btn.dataset.link;
     if (!data) {
       return await router.push('/account/login');
     }
 
-    const btn = e.currentTarget;
-    const link = btn.dataset.link;
     await router.push(link);
   };
 
@@ -126,6 +126,7 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                 <li>
                   <button
                     type={'button'}
+                    data-link={'/mypage/orderHistory'}
                     onClick={(e) => onMovePage(e, '/mypage/orderHistory')}
                   >
                     <div className={s.mypage_wrap}>
@@ -237,10 +238,7 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                     </li>
 
                     <li>
-                      <Link
-                        href={`/shop?itemType=${general_itemType.GOODS}`}
-                        passHref
-                      >
+                      <Link href={'/review'} passHref>
                         <a>리뷰</a>
                       </Link>
                     </li>
@@ -273,8 +271,6 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                       </Link>
                     </li>
                   </ul>
-
-                  {/* <MenuList title={'리뷰'} link={'/review'} removeIcon={true} /> */}
 
                   {/* <MenuList title={'자주묻는 질문'} link={'/faq'} /> */}
                   {/* {isLogin && (
