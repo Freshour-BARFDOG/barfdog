@@ -203,15 +203,12 @@ export default function MobileGnb() {
               </Link>
             </li>
             <li>
-              <Link href="/surveyGuide" passHref>
-                <a onClick={() => onActiveMenuId('surveyGuide')}>
+              <Link href="/survey" passHref>
+                <a onClick={() => onActiveMenuId('survey')}>
                   <Image
                     src={
                       !isSidrOpen &&
-                      (activeMenuId === 'surveyGuide' ||
-                        activeMenuId === 'survey' ||
-                        curPath === '/surveyGuide' ||
-                        curPath === '/survey')
+                      (activeMenuId === 'survey' || curPath === '/survey')
                         ? '/img/icon/ai-active.jpg'
                         : '/img/icon/ai.jpg'
                     }
@@ -224,10 +221,7 @@ export default function MobileGnb() {
                     style={{
                       color:
                         !isSidrOpen &&
-                        (activeMenuId === 'surveyGuide' ||
-                          activeMenuId === 'survey' ||
-                          curPath === '/surveyGuide' ||
-                          curPath === '/survey')
+                        (activeMenuId === 'survey' || curPath === '/survey')
                           ? '#be1a21'
                           : '#000',
                     }}
