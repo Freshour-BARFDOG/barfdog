@@ -12,6 +12,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import Image from 'next/image';
 import sorting from '@util/func/sorting';
 import popupWindow from '@util/func/popupWindow';
+import { getData } from '../../pages/api/reqData';
 // import { ArrowRight_m } from '@public/img/icon/swiper-arrow-medium-style2.svg';
 
 const swiperSettings_review = {
@@ -51,6 +52,29 @@ export function Swiper_review({ data }) {
   const navNextRef = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
   const [isReachedEnd, setIsReachedEnd] = useState(false);
+  const [itemList, setItemList] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const searchPageSize = 10;
+        const url = `/api/reviews/best`;
+        const res = await getData(url);
+        console.log(res);
+        if (res?.status === 200) {
+          const data = res.data._embedded?.queryBestReviewsDtoList;
+
+          // console.log('data', data);
+
+          setItemList(data);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    })();
+  }, []);
+
+  console.log(itemList);
 
   useEffect(() => {
     window.innerWidth <= 600 ? setIsMobile(true) : setIsMobile(false);
@@ -69,39 +93,13 @@ export function Swiper_review({ data }) {
 
   return (
     <div className={s.swiper_review_outerWrap}>
-      {/* <i className={s['swiper-button-prev']} ref={navPrevRef}>
-        <ArrowLeft_m width="100%" height="100%" viewBox="0 0 39 39" />
-      </i>
-      <i className={s['swiper-button-next']} ref={navNextRef}>
-        <ArrowRight_m width="100%" height="100%" viewBox="0 0 39 39" />
-      </i> */}
       <Swiper
-        navigation={{
-          prevEl: navPrevRef.current,
-          nextEl: navNextRef.current,
-        }}
-        // onInit={(swiper) => {
-        // swiper.params.navigation.prevEl = navPrevRef.current;
-        // swiper.params.navigation.nextEl = navNextRef.current;
-        // swiper.params.pagination.el.classList.add(
-        //   'swiper-pagination__reviewSection',
-        // );
-        // swiper.params.pagination.el.classList.add(
-        //   s['swiper-pagination__reviewSection'],
-        // );
-        // swiper.navigation.destroy();
-        // swiper.navigation.init();
-        // swiper.navigation.update();
-        // swiper.pagination.destroy();
-        // swiper.pagination.init();
-        // swiper.pagination.update();
-        // }}
         onActiveIndexChange={hideMoreView}
         onReachEnd={showMoreView}
         {...swiperSettings_review}
       >
-        {arrangedData?.length > 0 &&
-          arrangedData.map((d, index) => (
+        {itemList?.length > 0 &&
+          itemList.map((d, index) => (
             <SwiperSlide
               key={`bestReview-${d.id}-${index}`}
               className={s.swiper_review_box}
@@ -116,9 +114,9 @@ export function Swiper_review({ data }) {
                   />
                 </div>
                 <div className={s.swiper_review_txt}>
-                  <div className={s.swiper_review_title}>
+                  {/* <div className={s.swiper_review_title}>
                     다들 샴푸 뭐 쓰냐고 물어봐요
-                  </div>
+                  </div> */}
                   {/* <Image
                     src={require('/public/img/pages/home/home_review_quotation.png')}
                     objectFit="fit"
