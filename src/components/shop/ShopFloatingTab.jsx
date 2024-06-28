@@ -134,33 +134,38 @@ export const ShopFloatingTab = ({
                             className={s.item}
                           >
                             <span className={s.title}>{option.name}</span>
-                            <div className={s['input-quantity']}>
-                              <ItemQuantityInput
-                                id={option.id}
-                                style={{ borderColor: '#ddd' }}
-                                onChange={onChangeQuantityInputHandler}
-                                value={option.quantity}
-                                minQuantity={data.minQuantity}
-                                maxQuantity={option.remaining}
-                              />
+                            <div>
+                              <div className={s['input-quantity']}>
+                                <ItemQuantityInput
+                                  id={option.id}
+                                  style={{ borderColor: '#ddd' }}
+                                  onChange={onChangeQuantityInputHandler}
+                                  value={option.quantity}
+                                  minQuantity={data.minQuantity}
+                                  maxQuantity={option.remaining}
+                                />
+                              </div>
+                              <div className={s.bottom_price_close}>
+                                <span className={s.optionPrice}>
+                                  {transformLocalCurrency(
+                                    option.optionTotalPrice ||
+                                      option.optionPrice,
+                                  )}
+                                  원
+                                </span>
+                                <span>
+                                  <CloseButton
+                                    onClick={onDeleteOption}
+                                    data-id={option.id}
+                                    lineColor={'#ababab'}
+                                    style={{
+                                      width: `${rem(18)}`,
+                                      height: `${rem(18)}`,
+                                    }}
+                                  />
+                                </span>
+                              </div>
                             </div>
-                            <span className={s.optionPrice}>
-                              {transformLocalCurrency(
-                                option.optionTotalPrice || option.optionPrice,
-                              )}
-                              원
-                            </span>
-                            <span>
-                              <CloseButton
-                                onClick={onDeleteOption}
-                                data-id={option.id}
-                                lineColor={'#ababab'}
-                                style={{
-                                  width: `${rem(18)}`,
-                                  height: `${rem(18)}`,
-                                }}
-                              />
-                            </span>
                           </li>
                         ),
                     )}
