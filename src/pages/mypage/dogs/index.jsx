@@ -351,10 +351,10 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
               </Link>
             )}
 
-            {/* 2. 버튼 생성 조건 :  결제전(구독전) / 구독 취소 / 구독 보류 ('구독 중' 상태가 아닌)일 경우  */}
+            {/* 2. 버튼 생성 조건 : 
+            1)  결제전(구독전) / 구독 취소 => "맞춤식단 시작"  */}
             {(data.subscribeStatus === subscribeStatus.BEFORE_PAYMENT ||
-              data.subscribeStatus === subscribeStatus.SUBSCRIBE_CANCEL ||
-              data.subscribeStatus === subscribeStatus.SUBSCRIBE_PENDING) && (
+              data.subscribeStatus === subscribeStatus.SUBSCRIBE_CANCEL) && (
               <button
                 type={'button'}
                 className={s.payment}
@@ -369,8 +369,8 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
               </button>
             )}
 
-            {/* cf. 구독 보류 */}
-            {/* {data.subscribeStatus === subscribeStatus.SUBSCRIBE_PENDING && (
+            {/* 2) 구독 보류 ('구독 중' 상태가 아닌)일 경우 => "재구독" */}
+            {data.subscribeStatus === subscribeStatus.SUBSCRIBE_PENDING && (
               <button
                 type={'button'}
                 className={s.payment}
@@ -380,10 +380,10 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
                 {isLoading[dogId] ? (
                   <Spinner style={{ color: '#fff' }} />
                 ) : (
-                  '재구독하기'
+                  '재구독'
                 )}
               </button>
-            )} */}
+            )}
           </div>
         </div>
       </li>
