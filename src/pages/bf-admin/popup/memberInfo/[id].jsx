@@ -84,6 +84,7 @@ export default function Popup_MemberDetailPage({ id }) {
             accumulatedAmount:
               transformLocalCurrency(DATA.accumulatedAmount) + '원',
             grade: DATA.grade,
+            alliance: DATA.alliance === 'cb' ? '콕뱅크' : '-',
             subscribe: DATA.subscribe === false ? 'N' : 'Y',
             accumulatedSubscribe: DATA.accumulatedSubscribe + '회',
             lastLoginDate: DATA.lastLoginDate || '로그인 정보가 없습니다.',
@@ -437,9 +438,8 @@ export default function Popup_MemberDetailPage({ id }) {
                           </div>
                         </div>
                       </li>
-                      <li
-                        className={`${s['t-row']} ${s['fullWidth']} ${s.multiLines}`}
-                      >
+
+                      <li className={`${s['t-row']}`}>
                         <div className={s['t-box']}>
                           <div className={`${s.innerBox} ${s.label}`}>
                             <span>반려견</span>
@@ -455,6 +455,14 @@ export default function Popup_MemberDetailPage({ id }) {
                                   </span>
                                 ))
                               : '등록된 반려견이 없습니다.'}
+                          </div>
+                        </div>
+                        <div className={s['t-box']}>
+                          <div className={`${s.innerBox} ${s.label}`}>
+                            <span>제휴사</span>
+                          </div>
+                          <div className={`${s.innerBox} ${s.cont}`}>
+                            <span>{formValues.alliance}</span>
                           </div>
                         </div>
                       </li>
