@@ -8,6 +8,7 @@ import { calcSubscribePrice } from '../func/subscribe/calcSubscribePrices';
 import { calcOneMealGramsWithRecipeInfo } from '../func/subscribe/calcOneMealGramsWithRecipeInfo';
 import { seperateStringViaComma } from '../func/seperateStringViaComma';
 import { valid_isTheSameArray } from '../func/validation/validationPackage';
+import { originSubscribeIdList } from '/util/func/subscribe/originSubscribeIdList';
 
 export const useSubscribeInfo = (subscribeId) => {
   const [info, setInfo] = useState(null);
@@ -31,6 +32,11 @@ export const useSubscribeInfo = (subscribeId) => {
         let res = await getData(subscribeApiurl);
         const data = res.data;
         console.log(res);
+
+        //! [추가] 기존 구독자인지 확인
+        let isOriginSubscriber = originSubscribeIdList.includes(
+          Number(subscribeId),
+        );
 
         // validation: 현재 구독 정보
         if (!data || res.status === 404) {
@@ -100,6 +106,8 @@ export const useSubscribeInfo = (subscribeId) => {
             oneMealGrams,
             planName,
             pricePerGrams,
+            isOriginSubscriber,
+            recipeNameList: currentRecipes.map((recipe) => recipe.name),
           }),
         }));
 
