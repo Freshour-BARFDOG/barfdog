@@ -82,6 +82,13 @@ function AdminGnb() {
           <SubmenuList title="친구톡" link="/bf-admin/messenger/friendTalk" />
           <SubmenuList title="채널톡" link="/bf-admin/messenger/channelTalk" />
         </List>
+        <List title="제휴사 매출">
+          <SubmenuList
+            title="제휴사 통한 가입자"
+            link="/bf-admin/alliance/members"
+          />
+          <SubmenuList title="매출" link="/bf-admin/alliance/payment" />
+        </List>
         <List title="설정">
           <SubmenuList title="알고리즘" link="/bf-admin/settings/algorithm" />
           <SubmenuList title="배송정책" link="/bf-admin/settings/delivery" />

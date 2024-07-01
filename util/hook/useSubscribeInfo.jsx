@@ -31,7 +31,7 @@ export const useSubscribeInfo = (subscribeId) => {
         const subscribeApiurl = `/api/subscribes/${subscribeId}`;
         let res = await getData(subscribeApiurl);
         const data = res.data;
-        console.log(res);
+        // console.log(res);
 
         //! [추가] 기존 구독자인지 확인
         let isOriginSubscriber = originSubscribeIdList.includes(
