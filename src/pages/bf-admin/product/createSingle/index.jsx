@@ -58,6 +58,10 @@ const initialFormValues = {
   itemIcons: '',
   deliveryFree: true,
   itemStatus: 'LEAKED' || 'HIDDEN', // 노출여부
+  packageType: '', // 종류 (팩/큐브)
+  unit: '', // 단위 (100g, 35ml)
+  pricePerUnit: 0, // 하나당 가격
+  itemCount: 0, // 개수
 };
 
 const initialFormErrors = {};
@@ -75,7 +79,8 @@ function CreateSingleItemPage() {
   const [formErrors, setFormErrors] = useState(initialFormErrors);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [activeDiscountOption, setActiveDiscountOption] = useState(false);
-
+  const [selectedPriceOption, setSelectedPriceOption] = useState('totalPrice');
+  const [originalPriceText, setOriginalPriceText] = useState(0);
   // // console.log(formValues)
   useEffect(() => {
     // - 품절일 경우, 재고수량 초기화
@@ -137,6 +142,22 @@ function CreateSingleItemPage() {
       ...prevState,
       [id]: filteredValue,
     }));
+
+    if (id === 'totalPrice') {
+      setFormValues((prevState) => ({
+        ...prevState,
+        itemCount: 0,
+      }));
+    }
+
+    if (id === 'pricePerUnit' && Number(value) >= 0) {
+      const originalPrice = value.replace(/,/g, '') * formValues.itemCount;
+      setOriginalPriceText(transformClearLocalCurrency(originalPrice));
+      setFormValues((prevState) => ({
+        ...prevState,
+        originalPrice,
+      }));
+    }
   };
 
   const onChangeHandler = (e, label) => {
@@ -159,7 +180,7 @@ function CreateSingleItemPage() {
     e.preventDefault();
     if (isSubmitted) return;
     // ! IMPORTANT : submit 이후 enterKey event로 trigger되는 중복submit 방지
-    const errObj = validate(formValues);
+    const errObj = validate(formValues, selectedPriceOption);
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj, 'array', 'itemHealthType');
 
@@ -170,19 +191,23 @@ function CreateSingleItemPage() {
       remaining: 'remaining',
       discountDegree: 'discountDegree',
       itemOptionSaveDtoList: { price: 'price', remaining: 'remaining' },
+      pricePerUnit: 'pricePerUnit',
     };
-    // console.log(filteredFormValues);
     filteredFormValues = transformClearLocalCurrencyInEveryObject(
       filteredFormValues,
       filterStringObj,
     );
-    // console.log(filteredFormValues);
+
     // 문자열로 변환. 컴마(,)로 구분
     if (!filteredFormValues.itemHealthType) {
       filteredFormValues.itemHealthType = 'NONE';
     } else
       filteredFormValues.itemHealthType =
         filteredFormValues.itemHealthType?.join(',');
+
+    const { itemCount, ...body } = filteredFormValues;
+
+    // console.log('body>>>', body);
 
     if (!isPassed) return mct.alertShow('유효하지 않은 항목이 있습니다.');
 
@@ -192,7 +217,7 @@ function CreateSingleItemPage() {
         submit: true,
       }));
       const apiUrl = '/api/admin/items';
-      const res = await postObjData(apiUrl, filteredFormValues);
+      const res = await postObjData(apiUrl, body);
       // console.log(res);
       if (res.isDone) {
         mct.alertShow('일반상품이 생성되었습니다.', onGlobalModalCallback);
@@ -226,6 +251,32 @@ function CreateSingleItemPage() {
   const onClickModalButton = () => {
     mct.alertHide();
   };
+
+  const onChangePriceOptionHandler = (e) => {
+    setSelectedPriceOption(e.target.id);
+  };
+
+  const onItemCountChangeHandler = (e) => {
+    const { value, id } = e.target;
+
+    setFormValues((prevState) => ({
+      ...prevState,
+      [id]: Number(value),
+    }));
+
+    if (formValues.pricePerUnit) {
+      const totalPrice =
+        e.target.value * formValues.pricePerUnit.replace(/,/g, '');
+
+      setFormValues((prevState) => ({
+        ...prevState,
+        originalPrice: totalPrice,
+      }));
+      setOriginalPriceText(totalPrice);
+    }
+  };
+
+  // console.log(formValues);
 
   return (
     <>
@@ -362,22 +413,221 @@ function CreateSingleItemPage() {
                         상품가격
                       </label>
                     </div>
-                    <div className="inp_section">
+
+                    <div className="inp_section price_inp_section">
+                      {/* 1. 총 금액 */}
                       <div className="inp_box">
-                        <input
-                          id={'originalPrice'}
-                          type="text"
-                          name="originalPrice"
-                          className={'text-align-right'}
-                          value={formValues.originalPrice}
-                          data-input-type={'currency, number'}
-                          onChange={onInputChangeHandler}
-                        />
-                        <em className="unit">원</em>
-                        {formErrors.originalPrice && (
-                          <ErrorMessage>
-                            {formErrors.originalPrice}
-                          </ErrorMessage>
+                        <label>
+                          <input
+                            id={'totalPrice'}
+                            // name={'totalPrice'}
+                            type="radio"
+                            checked={selectedPriceOption === 'totalPrice'}
+                            onChange={onChangePriceOptionHandler}
+                          />
+                          총 금액
+                        </label>
+                        {selectedPriceOption === 'totalPrice' && (
+                          <>
+                            <input
+                              id={'originalPrice'}
+                              type="text"
+                              name="originalPrice"
+                              className={'text-align-right'}
+                              value={formValues.originalPrice}
+                              data-input-type={'currency, number'}
+                              onChange={onInputChangeHandler}
+                            />
+                            <em className="unit">원</em>
+                            {formErrors.originalPrice && (
+                              <ErrorMessage>
+                                {formErrors.originalPrice}
+                              </ErrorMessage>
+                            )}
+                          </>
+                        )}
+                      </div>
+
+                      {/* 2. 기본 단위 */}
+                      <div className="inp_box">
+                        <label>
+                          <input
+                            id={'defaultPrice'}
+                            type="radio"
+                            checked={selectedPriceOption === 'defaultPrice'}
+                            onChange={onChangePriceOptionHandler}
+                          />
+                          기본 단위
+                        </label>
+
+                        {selectedPriceOption === 'defaultPrice' && (
+                          <div className="default_price_box">
+                            <div>
+                              <CustomSelect
+                                id="packageType"
+                                options={[
+                                  { label: '선택', value: '' },
+                                  { label: '팩', value: '팩' },
+                                  { label: '큐브', value: '큐브' },
+                                ]}
+                                value={formValues.packageType}
+                                setFormValues={setFormValues}
+                                onChange={onInputChangeHandler}
+                              />
+                              <span>당</span>
+                              <CustomSelect
+                                id="unit"
+                                options={[
+                                  { label: '선택', value: '' },
+                                  { label: '100g', value: '100g' },
+                                  { label: '200ml', value: '200ml' },
+                                  { label: '1g', value: '1g' },
+                                  { label: '36g', value: '36g' },
+                                ]}
+                                value={formValues.unit}
+                                setFormValues={setFormValues}
+                                onChange={onInputChangeHandler}
+                              />
+                              <span>에</span>
+                              <input
+                                id={'pricePerUnit'}
+                                type="text"
+                                name="pricePerUnit"
+                                className={'text-align-right'}
+                                data-input-type={'currency, number'}
+                                placeholder="하나당 가격"
+                                min={0}
+                                value={formValues.pricePerUnit}
+                                onChange={onInputChangeHandler}
+                              />
+                              <span>원 입니다.</span>
+                              {(formErrors.packageType ||
+                                formErrors.unit ||
+                                formErrors.pricePerUnit) && (
+                                <ErrorMessage>
+                                  {formErrors.packageType ||
+                                    formErrors.unit ||
+                                    formErrors.pricePerUnit}
+                                </ErrorMessage>
+                              )}
+                            </div>
+                            <div>
+                              <span>총 금액은 </span>
+                              <input
+                                id={'itemCount'}
+                                type="number"
+                                name="itemCount"
+                                data-input-type={'number'}
+                                className={'text-align-right'}
+                                placeholder="개수"
+                                min={1}
+                                value={formValues.itemCount}
+                                onChange={onItemCountChangeHandler}
+                              />
+                              <span>
+                                개 X {formValues.pricePerUnit}원 ={' '}
+                                <span className="total_default_price">
+                                  {transformLocalCurrency(originalPriceText)} 원
+                                </span>
+                              </span>
+                              <span> 입니다. </span>
+                              {formErrors.itemCount && (
+                                <ErrorMessage>
+                                  {formErrors.itemCount}
+                                </ErrorMessage>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* 3. 기타 단위 */}
+                      <div className="inp_box">
+                        <label>
+                          <input
+                            id={'etcPrice'}
+                            type="radio"
+                            checked={selectedPriceOption === 'etcPrice'}
+                            onChange={onChangePriceOptionHandler}
+                          />
+                          기타 단위
+                        </label>
+
+                        {selectedPriceOption === 'etcPrice' && (
+                          <div className="etc_price_box">
+                            <div>
+                              <input
+                                id={'packageType'}
+                                type="text"
+                                name="packageType"
+                                // data-input-type={'number'}
+                                className={'text-align-right'}
+                                placeholder="팩"
+                                value={formValues.packageType}
+                                onChange={onInputChangeHandler}
+                              />
+                              <span>당</span>
+
+                              <input
+                                id={'unit'}
+                                type="text"
+                                name="packageType"
+                                // data-input-type={'number'}
+                                className={'text-align-right'}
+                                placeholder="100g"
+                                value={formValues.unit}
+                                onChange={onInputChangeHandler}
+                              />
+                              <span>에</span>
+                              <input
+                                id={'pricePerUnit'}
+                                type="text"
+                                name="pricePerUnit"
+                                className={'text-align-right'}
+                                data-input-type={'currency, number'}
+                                placeholder="하나당 가격"
+                                min={0}
+                                value={formValues.pricePerUnit}
+                                onChange={onInputChangeHandler}
+                              />
+                              <span>원 입니다.</span>
+                              {(formErrors.packageType ||
+                                formErrors.unit ||
+                                formErrors.pricePerUnit) && (
+                                <ErrorMessage>
+                                  {formErrors.packageType ||
+                                    formErrors.unit ||
+                                    formErrors.pricePerUnit}
+                                </ErrorMessage>
+                              )}
+                            </div>
+                            <div>
+                              <span>총 금액은 </span>
+                              <input
+                                id={'itemCount'}
+                                type="number"
+                                name="itemCount"
+                                data-input-type={'number'}
+                                className={'text-align-right'}
+                                placeholder="개수"
+                                min={1}
+                                value={formValues.itemCount}
+                                onChange={onItemCountChangeHandler}
+                              />
+                              <span>
+                                개 X {formValues.pricePerUnit}원 ={' '}
+                                <span className="total_default_price">
+                                  {transformLocalCurrency(originalPriceText)} 원
+                                </span>
+                              </span>
+                              <span> 입니다. </span>
+                              {formErrors.itemCount && (
+                                <ErrorMessage>
+                                  {formErrors.itemCount}
+                                </ErrorMessage>
+                              )}
+                            </div>
+                          </div>
                         )}
                       </div>
                     </div>
