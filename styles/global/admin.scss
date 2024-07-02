@@ -210,7 +210,53 @@ $inputDefaultHeight: rem(38);
         position: relative;
       }
     }
-
+    .price_inp_section {
+      gap: rem(28) !important;
+      margin: rem(12) 0;
+      .inp_box {
+        label {
+          display: flex;
+          gap: rem(10);
+          margin-right: rem(30);
+        }
+        .default_price_box,
+        .etc_price_box {
+          display: flex;
+          flex-direction: column;
+          gap: rem(16);
+          div {
+            display: flex;
+            gap: rem(10);
+            align-items: center;
+            select {
+              min-width: rem(80);
+            }
+            input {
+              width: rem(140);
+            }
+            #itemCount {
+              min-width: rem(80);
+              width: rem(80);
+            }
+            .total_default_price {
+              text-decoration: underline;
+              font-weight: bold;
+            }
+          }
+        }
+        .etc_price_box {
+          div {
+            input {
+              width: rem(70);
+              min-width: rem(40);
+            }
+            #pricePerUnit {
+              width: rem(120);
+            }
+          }
+        }
+      }
+    }
     .inp_section {
       width: calc(100% - #{$titleSectionWidth});
       display: flex;

@@ -4,9 +4,10 @@ import {
   valid_isEmpty,
   valid_isEmptyArray,
   valid_isEmptyCurrency,
+  valid_isNumberEmpty,
 } from './validationPackage';
 
-export const validate = (obj) => {
+export const validate = (obj, selectedPriceOption) => {
   let errors = {};
 
   const keys = Object.keys(obj);
@@ -38,7 +39,9 @@ export const validate = (obj) => {
         const optionsArr = val;
         const errorCount = valid_arrayErrorCount(optionsArr);
         errors[key] =
-          errorCount > 0 ? `${errorCount}개의 옵션리스트 내에 적절하지 않은 항목이 있습니다.! ` : '';
+          errorCount > 0
+            ? `${errorCount}개의 옵션리스트 내에 적절하지 않은 항목이 있습니다.! `
+            : '';
         break;
       case 'itemImageOrderDtoList': // 썸네일
         errors[key] = valid_isEmptyArray(val);
@@ -46,11 +49,26 @@ export const validate = (obj) => {
       case 'contents':
         errors[key] = valid_isEmpty(val);
         break;
+      case 'packageType':
+      case 'unit':
+        if (
+          selectedPriceOption === 'defaultPrice' ||
+          selectedPriceOption === 'etcPrice'
+        ) {
+          errors[key] = valid_isEmpty(val);
+        }
+        break;
+      case 'pricePerUnit':
+      case 'itemCount':
+        if (
+          selectedPriceOption === 'defaultPrice' ||
+          selectedPriceOption === 'etcPrice'
+        ) {
+          errors[key] = valid_isNumberEmpty(val);
+        }
+        break;
     }
   }
   // console.log('Valid Result (formValues) : ', errors);
   return errors;
 };
-
-
-
