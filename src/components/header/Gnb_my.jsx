@@ -46,15 +46,6 @@ export const Gnb_my = ({ isMobile, setSidrOpen, authData }) => {
           </li>
           <li>
             <button
-              type={'button'}
-              data-link={'/mypage/orderHistory'}
-              onClick={(e) => onMovePage(e, '/mypage/orderHistory')}
-            >
-              <div className={s.mypage_wrap}>{/* <Icon_mypage/> */}</div>
-            </button>
-          </li>
-          <li>
-            <button
               id="gnb_cart"
               data-link={'/cart'}
               onClick={(e) => onMovePage(e, '/cart')}
