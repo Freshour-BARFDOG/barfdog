@@ -149,6 +149,8 @@ export default function ReviewPage() {
   };
 
   const onSetBestReview = async () => {
+    console.log(selectedItemList);
+
     if (!selectedItemList.length) return;
     if (
       !confirm(
@@ -156,7 +158,20 @@ export default function ReviewPage() {
       )
     )
       return;
-    // console.log(selectedItemList)
+
+    // 제목 등록되어 있는지 확인
+    const itemsWithEmptyTitle = selectedItemList.filter((selectedId) => {
+      const item = itemList.find((item) => item.id === selectedId);
+      return item && !item.titleByAdmin;
+    });
+
+    console.log(itemsWithEmptyTitle);
+
+    if (itemsWithEmptyTitle.length > 0) {
+      if (alert(`리뷰 제목을 등록해주세요.`)) return;
+      return;
+    }
+
     try {
       setIsLoading({ bestReview: true });
       const body = {
@@ -213,6 +228,41 @@ export default function ReviewPage() {
   const onClickModalButton = () => {
     mct.alertHide();
   };
+
+  //* 제목 등록
+  const onPostTitleItem = async (apiUrl, body) => {
+    console.log(apiUrl, body);
+    try {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        post: {
+          [body.id]: true,
+        },
+      }));
+      const res = await postObjData(apiUrl, body);
+      console.log(res);
+      if (res.isDone) {
+        // 다시 조회
+        setOnSearch(!onSearch);
+        // mct.alertShow('제목이 등록되었습니다.', onSuccessCallback);
+      } else {
+        const serverErrorMessage = res.error;
+        mct.alertShow(serverErrorMessage || '제목 등록에 실패하였습니다.');
+      }
+    } catch (err) {
+      mct.alertShow('등록 요청 중 에러가 발생하였습니다.');
+      console.error(err);
+    } finally {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        post: {
+          [body.id]: false,
+        },
+      }));
+    }
+  };
+
+  console.log(itemList);
 
   return (
     <>
@@ -281,12 +331,14 @@ export default function ReviewPage() {
                   <li className={s.table_th}>사용자 이름</li>
                   <li className={s.table_th}>사용자 ID</li>
                   <li className={s.table_th}>작성일</li>
+                  <li className={s.table_th}>제목</li>
                   <li className={s.table_th}>삭제</li>
                 </ul>
                 {itemList.length ? (
                   <ReviewList
                     items={itemList}
                     onDeleteItem={onDeleteItem}
+                    onPostTitleItem={onPostTitleItem}
                     isLoading={isLoading}
                     setSelectedItems={setSelectedItemList}
                     selectedItems={selectedItemList}
