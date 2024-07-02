@@ -91,6 +91,8 @@ export function Swiper_review({ data }) {
     setIsReachedEnd(true);
   }
 
+  // console.log(itemList);
+
   return (
     <div className={s.swiper_review_outerWrap}>
       <Swiper
@@ -113,53 +115,43 @@ export function Swiper_review({ data }) {
                     alt="카드 이미지"
                   />
                 </div>
+
                 <div className={s.swiper_review_txt}>
-                  {/* <div className={s.swiper_review_title}>
-                    다들 샴푸 뭐 쓰냐고 물어봐요
-                  </div> */}
-                  {/* <Image
-                    src={require('/public/img/pages/home/home_review_quotation.png')}
-                    objectFit="fit"
-                    width={14}
-                    height={13}
-                    alt="카드 이미지"
-                  /> */}
-                  {/* <Quotation width="100%" height="100%" viewBox="0 0 14 13" /> */}
-                </div>
-                {/* 글 내용 */}
-                <figcaption className={s.contents}>{d.contents}</figcaption>
-                <div className={s.swiper_review_start}>⭐️⭐️⭐️⭐️⭐️</div>
-                <div className={s.swiper_review_info}>
-                  <div className={s.swiper_review_name}>
-                    {d.name}딱지 보호자님
+                  {d.titleByAdmin && (
+                    <div className={s.swiper_review_title}>
+                      <span>{d.titleByAdmin}</span>
+                    </div>
+                  )}
+                  {/* 글 내용 */}
+                  <figcaption className={s.contents}>{d.contents}</figcaption>
+                  <div className={s.swiper_review_bottom}>
+                    <div className={s.swiper_review_start}>
+                      {/* 별 5개 */}
+                      {[...Array(5)].map((_, index) => (
+                        <>
+                          <Image
+                            src={'/img/icon/review-star.svg'}
+                            alt="sns-insta"
+                            width={18}
+                            height={18}
+                          />
+                        </>
+                      ))}
+                    </div>
+                    <div className={s.swiper_review_info}>
+                      <div className={s.swiper_review_name}>
+                        {d.name} 보호자님
+                      </div>
+                      <div className={s.swiper_review_type}>
+                        {d.type} 정기구독
+                      </div>
+                    </div>
                   </div>
-                  <div className={s.swiper_review_type}>정기구독</div>
                 </div>
               </figure>
             </SwiperSlide>
           ))}
-        {/* <SwiperSlide className={s.swiper_review_more}>
-          <Link href="/review" passHref>
-            <a>
-              <div className={s.image_wrap}>
-                <ArrowRight_m2 width="100%" height="100%" viewBox="0 0 39 39" />
-              </div>
-              <div className={s.more}>더보기</div>
-            </a>
-          </Link>
-        </SwiperSlide> */}
       </Swiper>
     </div>
   );
 }
-
-// const ArrowRight_withLink = () => {
-//   const router = useRouter();
-
-//   const onClickHandler = (e) => {
-//     e.preventDefault();
-//     router.push('/review');
-//   };
-
-//   return <>{/* <ArrowRight_m /> */}</>;
-// };

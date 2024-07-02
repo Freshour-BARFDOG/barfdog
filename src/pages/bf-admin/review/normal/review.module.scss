@@ -14,7 +14,13 @@
         rem(120)
         rem(160)
         rem(160)
+        minmax(rem(360), rem(1200))
         rem(70);
+
+      input {
+        width: rem(260);
+        margin-right: rem(16);
+      }
     }
   }
 }
