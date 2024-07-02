@@ -901,7 +901,7 @@ section.family {
     text-align: center;
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 5; //! [수정해야함]
     overflow: hidden;
     font-size: rem(16);
   }
