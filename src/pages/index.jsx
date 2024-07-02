@@ -18,7 +18,10 @@ import { FaArrowRight } from 'react-icons/fa6';
 import { Swiper_sns } from '/src/components/home/Swiper_sns';
 import { Swiper_review } from '/src/components/home/Swiper_review';
 import { Swiper_recipe } from '/src/components/home/Swiper_recipe';
-import { Swiper_main } from '/src/components/home/Swiper_main';
+import { Swiper_survey } from '/src/components/home/Swiper_survey';
+import { Main_top } from '/src/components/home/Main_top';
+import { Main_wedo } from '/src/components/home/Main_wedo';
+import { Main_family } from '/src/components/home/Main_family';
 import Link from 'next/link';
 import axios from 'axios';
 import { useRouter } from 'next/router';
@@ -109,11 +112,9 @@ export default function MainPage({ data }) {
         {activeTempPasswordModal && (
           <Modal_tempPasswrod isConfirm={onClickModalButtons} />
         )}
-
         {/* 1. 영상 소개 */}
         <Wrapper fullWidth={true} rowStyle={{ padding: 0 }}>
-          {/* 스와이프주석 */}
-          <Swiper_main data={data?.mainBannerDtoList} isMobile={isMobile} />
+          <Main_top />
         </Wrapper>
 
         {/* [BEFORE] 메인배너 스와이퍼 */}
