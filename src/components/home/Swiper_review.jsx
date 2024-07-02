@@ -140,10 +140,17 @@ export function Swiper_review({ data }) {
                     </div>
                     <div className={s.swiper_review_info}>
                       <div className={s.swiper_review_name}>
-                        {d.name} 보호자님
+                        {d.username.includes('@')
+                          ? d.username.split('@')[0].trim()
+                          : d.username}{' '}
+                        보호자님
                       </div>
                       <div className={s.swiper_review_type}>
-                        {d.type} 정기구독
+                        {d.orderType === 'item'
+                          ? '일반구매'
+                          : 'subscribe'
+                          ? '정기구독'
+                          : ''}
                       </div>
                     </div>
                   </div>

@@ -124,6 +124,7 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
 
               <ul className={s.top_menu_wrap}>
                 <li>
+                  <button
                     type={'button'}
                     data-link={'/mypage/orderHistory'}
                     onClick={(e) => onMovePage(e, '/mypage/orderHistory')}
