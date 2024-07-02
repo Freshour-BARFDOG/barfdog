@@ -347,14 +347,22 @@ section.family {
       // padding: rem(10);
       margin-top: rem(20);
       cursor: pointer;
+      .item_price_description {
+        display: flex;
+        justify-content: space-between;
+        .item_unit_price {
+        }
+        // 단위당 가격이 없는 경우
+        .item_price {
+          padding: rem(10) rem(10) 0 0;
+          width: 100%;
+          text-align: right;
+        }
+      }
     }
 
     .item_name {
       font-size: rem(20);
-    }
-
-    .item_price {
-      text-align: right;
     }
   }
 
@@ -1013,7 +1021,7 @@ section.family {
     text-align: center;
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 5; //! [수정해야함]
     overflow: hidden;
     font-size: rem(16);
   }

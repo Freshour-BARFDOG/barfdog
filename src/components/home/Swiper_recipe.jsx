@@ -74,7 +74,7 @@ const swiperSettings_recipe_item = {
   },
 };
 
-export function Swiper_recipe({ data, isMobile }) {
+export function Swiper_recipe() {
   const navPrevRef = useRef(null);
   const navNextRef = useRef(null);
   // const [recipeDatas, setRecipeDatas] = useState([]);
@@ -257,9 +257,26 @@ export function Swiper_recipe({ data, isMobile }) {
                     <Link passHref href={`/shop/item/${d.id}`}>
                       <div className={s.item_description}>
                         <p className={s.item_name}>{d.name}</p>
-                        <p className={s.item_price}>
-                          {transformLocalCurrency(d.salePrice)}원
-                        </p>
+
+                        <div className={s.item_price_description}>
+                          {d.packageType ? (
+                            <>
+                              <div>
+                                <span>1{d.packageType}당</span>{' '}
+                                <span>({d.unit})</span>
+                              </div>
+                              <div>
+                                <p className={s.item_unit_price}>
+                                  {transformLocalCurrency(d.pricePerUnit)}원
+                                </p>
+                              </div>
+                            </>
+                          ) : (
+                            <p className={s.item_price}>
+                              {transformLocalCurrency(d.salePrice)}원
+                            </p>
+                          )}
+                        </div>
                       </div>
                     </Link>
                     {/* [삭제] 장바구니 아이콘 */}
