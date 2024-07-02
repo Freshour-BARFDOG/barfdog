@@ -955,7 +955,7 @@ section.family {
 
 //*** [ Swiper ] 리뷰 후기
 .swiper_review_outerWrap {
-  padding: 0 rem(50) 0;
+  // padding: 0 rem(50) 0;
   position: relative;
   height: rem(590);
 
@@ -973,42 +973,46 @@ section.family {
     border-radius: rem(8);
     background-color: #fff;
     box-shadow: 0.3125rem 0.3125rem 1.25rem rgb(0 0 0 / 10%);
-    padding: rem(20) rem(30);
+    padding: rem(20);
     box-sizing: border-box;
   }
 
   .swiper_review_box {
-    width: rem(340);
-    height: rem(580);
+    width: rem(370);
+    height: rem(600);
   }
 
   .swiper_review_img {
-    //margin: rem(40) auto 0;
     position: relative;
-    // padding: 0 rem(20);
     box-sizing: border-box;
     margin: 0 auto;
-    width: rem(280);
-    height: rem(280);
+    width: rem(320);
+    height: rem(320);
     border-radius: rem(8);
     overflow: hidden;
   }
 
   .swiper_review_txt {
-    margin: rem(20) auto;
+    margin: rem(20) rem(10);
+    height: rem(180);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     // max-width: rem(14);
 
     .swiper_review_title {
-      display: inline;
-      width: 100%;
-      font-weight: bold;
-      font-size: rem(20);
-      border-bottom: rem(1) solid #000;
+      span {
+        font-weight: bold;
+        font-size: rem(20);
+        padding-bottom: rem(4);
+        border-bottom: rem(1) solid #000;
+      }
     }
+  }
+  .swiper_review_bottom {
   }
   .swiper_review_start {
     text-align: right;
-    margin: rem(6) auto;
   }
   .swiper_review_info {
     display: flex;
@@ -1017,11 +1021,10 @@ section.family {
   }
 
   .contents {
-    margin: rem(20) auto rem(40);
-    text-align: center;
+    margin: rem(10) auto;
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 5; //! [수정해야함]
+    -webkit-line-clamp: 3;
     overflow: hidden;
     font-size: rem(16);
   }
@@ -1029,7 +1032,6 @@ section.family {
 
 //*** [ Swiper ] 설문조사
 .swiper_survey_outerWrap {
-  // padding: 0 rem(10) 0;
   position: relative;
   height: rem(500);
 
@@ -1056,7 +1058,6 @@ section.family {
   }
 
   .swiper_survey_img {
-    //margin: rem(40) auto 0;
     position: relative;
     // padding: 0 rem(20);
     box-sizing: border-box;
