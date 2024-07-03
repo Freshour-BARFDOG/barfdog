@@ -866,6 +866,9 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
                                   'SURVEY_COMPLETED'
                                 ? '설문 완료'
                                 : formValues.subscribeStatus ===
+                                  'SUBSCRIBE_WILL_CANCEL'
+                                ? '구독 취소 예정'
+                                : formValues.subscribeStatus ===
                                   'SUBSCRIBE_CANCEL'
                                 ? '구독 취소'
                                 : formValues.subscribeStatus === 'SUBSCRIBING'
@@ -887,7 +890,9 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
                         </div>
                       </li>
 
-                      {formValues.subscribeStatus === 'SUBSCRIBE_CANCEL' && (
+                      {(formValues.subscribeStatus ===
+                        'SUBSCRIBE_WILL_CANCEL' ||
+                        formValues.subscribeStatus === 'SUBSCRIBE_CANCEL') && (
                         <li className={`${s['t-row']} ${s['fullWidth']}`}>
                           <div className={s['t-box']}>
                             <div className={`${s.innerBox} ${s.label}`}>

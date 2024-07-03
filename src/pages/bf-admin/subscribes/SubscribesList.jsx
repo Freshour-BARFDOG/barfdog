@@ -61,6 +61,8 @@ const ItemList = ({ item, number }) => {
         ? '구독 전'
         : item.subscribeStatus === 'SURVEY_COMPLETED'
         ? '설문 완료'
+        : item.subscribeStatus === 'SUBSCRIBE_WILL_CANCEL '
+        ? '구독 취소 예정'
         : item.subscribeStatus === 'SUBSCRIBE_CANCEL'
         ? '구독 취소'
         : item.subscribeStatus === 'SUBSCRIBING'
@@ -78,6 +80,12 @@ const ItemList = ({ item, number }) => {
     nextOrderMerchantUid: item.nextOrderMerchantUid || '-',
     historyCategory: historyCategoryType[item.historyCategory] || '-',
     deleted: item.deleted ? 'Y' : 'N',
+    cancelDate: item.cancelDate
+      ? DateTimeDisplay({ dateTimeString: item.cancelDate })
+      : '-',
+    cancelDoneDate: item.cancelDoneDate
+      ? DateTimeDisplay({ dateTimeString: item.cancelDoneDate })
+      : '-',
   };
 
   return (
@@ -105,6 +113,8 @@ const ItemList = ({ item, number }) => {
       <span>{DATA.overDiscount}</span>
       <span>{DATA.discountGrade}</span>
       <span>{DATA.nextOrderMerchantUid}</span>
+      <span>{DATA.cancelDate}</span>
+      <span>{DATA.cancelDoneDate}</span>
       <span>{DATA.cancelReason}</span>
     </li>
   );

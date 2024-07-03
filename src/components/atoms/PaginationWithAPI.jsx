@@ -70,7 +70,7 @@ const Pagination = ({
         urlQueries = `${urlQueries}&${result}`;
         res = res.data;
       }
-      console.log(res.data);
+      // console.log(res.data);
       const pageData = res?.data?.page;
       const hasItems = pageData?.totalElements !== 0;
       const hasInterceptor =

@@ -296,6 +296,15 @@ export default function DashboardPage({ ga }) {
                       subscribeStatus.SUBSCRIBE_PENDING,
                   )[0]?.count) ||
                 0,
+              // 구독 취소 예정
+              SUBSCRIBE_WILL_CANCEL:
+                (data.subscribeStatsDto.subscribeStatusStatsDtoList.length &&
+                  data.subscribeStatsDto.subscribeStatusStatsDtoList?.filter(
+                    (order) =>
+                      order.subscribeStatus ===
+                      subscribeStatus.SUBSCRIBE_WILL_CANCEL,
+                  )[0]?.count) ||
+                0,
               // 구독 취소
               SUBSCRIBE_CANCEL:
                 (data.subscribeStatsDto.subscribeStatusStatsDtoList.length &&
@@ -958,6 +967,18 @@ export default function DashboardPage({ ga }) {
                             {
                               info.subscribeStats?.subscribeStatusStats
                                 .SUBSCRIBE_PENDING
+                            }
+                          </b>{' '}
+                          명
+                        </span>
+                      </li>
+                      <li>
+                        <span>구독 취소 예정</span>
+                        <span>
+                          <b>
+                            {
+                              info.subscribeStats?.subscribeStatusStats
+                                .SUBSCRIBE_WILL_CANCEL
                             }
                           </b>{' '}
                           명

@@ -352,9 +352,11 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
             )}
 
             {/* 2. 버튼 생성 조건 : 
-            1)  결제전(구독전) / 구독 취소 => "맞춤식단 시작"  */}
+            1)  결제전(구독전) / 구독 취소 / 구독 취소 예정 => "맞춤식단 시작"  */}
             {(data.subscribeStatus === subscribeStatus.BEFORE_PAYMENT ||
-              data.subscribeStatus === subscribeStatus.SUBSCRIBE_CANCEL) && (
+              data.subscribeStatus === subscribeStatus.SUBSCRIBE_CANCEL ||
+              data.subscribeStatus ===
+                subscribeStatus.SUBSCRIBE_WILL_CANCEL) && (
               <button
                 type={'button'}
                 className={s.payment}
