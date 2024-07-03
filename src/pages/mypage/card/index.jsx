@@ -24,6 +24,7 @@ import useDeviceState from '../../../../util/hook/useDeviceState';
 import { getItemNameWithPrefixByPaymentMethod } from 'util/func/subscribe/getItemNameWithPrefixByPaymentMethod';
 import Spinner from '../../../components/atoms/Spinner';
 import { deleteData } from '../../api/reqData';
+import Modal_confirm from '../../../components/modal/Modal_confirm';
 
 export default function MypageCardPage({ data }) {
   const mct = useModalContext();
@@ -39,6 +40,8 @@ export default function MypageCardPage({ data }) {
   const [updatedCardData, setUpdatedCardData] = useState({});
   const [isLoading, setIsLoading] = useState({ submit: false });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [activeConfirmModal, setActiveConfirmModal] = useState(false);
+  const [cardIdNumber, setCardIdNumber] = useState('');
 
   useEffect(() => {
     const jquery = document.createElement('script');
@@ -197,20 +200,33 @@ export default function MypageCardPage({ data }) {
   };
 
   //* 카드 삭제
-  const onDeleteCardHandler = async (cardId) => {
+  // 모달창 open
+  const onActiveConfirmModal = (cardId) => {
+    setCardIdNumber(cardId);
+    setActiveConfirmModal(true);
+  };
+
+  const onDeleteCardHandler = async (confirm) => {
+    setActiveConfirmModal(true);
+    if (!confirm) {
+      return setActiveConfirmModal(false);
+    }
+
     try {
       setIsLoading((prevState) => ({
         ...prevState,
         delete: true,
       }));
-      const apiUrl = `/api/cards/${cardId}`;
+      const apiUrl = `/api/cards/${cardIdNumber}`;
       const res = await deleteData(apiUrl);
-      // console.log( res )
+      // console.log(res);
       if (res.isDone) {
         mct.alertShow(`카드가 정상적으로 삭제되었습니다.`, onSuccessCallback);
       } else {
         mct.alertShow('삭제에 실패하였습니다.');
       }
+      setActiveConfirmModal(false);
+      setCardIdNumber(''); // 카드번호 초기화
     } catch (err) {
       mct.alertShow('서버 통신 장애 발생');
       console.error(err);
@@ -223,6 +239,7 @@ export default function MypageCardPage({ data }) {
   };
 
   // console.log(data);
+  // console.log(cardIdNumber);
 
   return (
     <>
@@ -237,8 +254,8 @@ export default function MypageCardPage({ data }) {
                 <div className={s.grid_title_box}>
                   <div className={s.col_1}>카드명</div>
                   <div>결제수단</div>
-                  <div>구독상태</div>
                   <div>구독상품</div>
+                  <div>구독상태</div>
                   <div>예약 결제일자</div>
                   <div>예약 결제금액</div>
                   <div></div>
@@ -253,9 +270,10 @@ export default function MypageCardPage({ data }) {
                 ) : (
                   <ul className={'card-list-container'}>
                     {cardList.map((card, index) => {
-                      const cardName =
-                        card.subscribeCardDto.cardName ||
-                        paymentMethodType.KOR[card.paymentMethod];
+                      const cardName = card.subscribeCardDto.cardName;
+                      {
+                        /* || paymentMethodType.KOR[card.paymentMethod]; */
+                      }
                       const cardNumber =
                         card.subscribeCardDto.cardNumber?.slice(
                           0,
@@ -277,7 +295,10 @@ export default function MypageCardPage({ data }) {
                               />
                             </div>
                             <span>
-                              {cardName}&nbsp;({cardNumber})
+                              {/* 네이버페이, 카카오페이는 -> cardName 값이 없음 */}
+                              {cardName
+                                ? `${cardName} (${cardNumber})`
+                                : '( - )'}
                             </span>
                           </div>
                           <div>
@@ -285,16 +306,16 @@ export default function MypageCardPage({ data }) {
                             {paymentMethodType.KOR[card.paymentMethod] || '-'}
                           </div>
 
-                          <div className={s.col_status}>
-                            <span className={s.col_title_m}>구독상태</span>
-                            {subscribeStatus.KOR[card.subscribeCardDto.status]}
-                          </div>
-
                           <div className={s.col_plan}>
                             <span className={s.col_title_m}>구독상품</span>(
                             {card.subscribeCardDto.dogName}){' '}
                             {subscribePlanType[card.subscribeCardDto.plan].KOR}{' '}
                             / {card.recipeNameList.join(', ')}
+                          </div>
+
+                          <div className={s.col_status}>
+                            <span className={s.col_title_m}>구독상태</span>
+                            {subscribeStatus.KOR[card.subscribeCardDto.status]}
                           </div>
 
                           <div>
@@ -381,12 +402,15 @@ export default function MypageCardPage({ data }) {
                                 card.subscribeCardDto.status === 'SUBSCRIBING'
                                   ? undefined
                                   : () =>
-                                      onDeleteCardHandler(
+                                      onActiveConfirmModal(
                                         card.subscribeCardDto.cardId,
                                       )
                               }
                               disabled={
-                                card.subscribeCardDto.status === 'SUBSCRIBING'
+                                card.subscribeCardDto.status ===
+                                  'SUBSCRIBING' ||
+                                card.subscribeCardDto.status ===
+                                  'SUBSCRIBE_WILL_CANCEL'
                               }
                               title={
                                 card.subscribeCardDto.status === 'SUBSCRIBING'
@@ -433,6 +457,13 @@ export default function MypageCardPage({ data }) {
       )}
       {hasAlert && (
         <Modal_global_alert onClick={onClickModalButton} background={true} />
+      )}
+      {activeConfirmModal && (
+        <Modal_confirm
+          text={`카드를 삭제하시겠습니까?`}
+          isConfirm={onDeleteCardHandler}
+          positionCenter
+        />
       )}
     </>
   );
