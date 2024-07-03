@@ -59,7 +59,9 @@ export default function SurveyGuidePage() {
             </div>
           </div>
           <div className={s.btn_box}>
-            <button onClick={onMovePage}>반려견 정보작성 시작하기</button>
+            <button onClick={onMovePage} className="survey-guide-start-btn">
+              반려견 정보작성 시작하기
+            </button>
           </div>
         </Wrapper>
       </Layout>
