@@ -1,6 +1,7 @@
 export const subscribeStatus = {
   BEFORE_PAYMENT: 'BEFORE_PAYMENT',
   SURVEY_COMPLETED: 'SURVEY_COMPLETED',
+  SUBSCRIBE_WILL_CANCEL: 'SUBSCRIBE_WILL_CANCEL',
   SUBSCRIBE_CANCEL: 'SUBSCRIBE_CANCEL',
   SUBSCRIBING: 'SUBSCRIBING',
   SUBSCRIBE_PENDING: 'SUBSCRIBE_PENDING',
@@ -8,6 +9,7 @@ export const subscribeStatus = {
   KOR: {
     BEFORE_PAYMENT: '구독 전',
     SURVEY_COMPLETED: '설문 완료',
+    SUBSCRIBE_WILL_CANCEL: '구독 취소 예정',
     SUBSCRIBE_CANCEL: '구독 취소',
     SUBSCRIBING: '구독 중',
     SUBSCRIBE_PENDING: '구독 보류', // = 실질적으로 "결제 전" 상태와 동일

@@ -49,7 +49,7 @@ section.body {
     @include char(l14);
     .grid_title_box {
       display: grid;
-      grid-template-columns: rem(150) rem(100) rem(100) 1fr 10% 13% 10% rem(80);
+      grid-template-columns: rem(140) rem(100) 1fr rem(100) 10% 13% 10% rem(80);
       justify-items: center;
       align-items: center;
       padding: rem(15) 0;
@@ -63,7 +63,7 @@ section.body {
 
     .grid_body_box {
       display: grid;
-      grid-template-columns: minmax(rem(150), auto) rem(100) rem(100) 1fr 10% 13% 10% rem(
+      grid-template-columns: minmax(rem(140), auto) rem(100) 1fr rem(100) 10% 13% 10% rem(
           80
         );
       justify-items: center;
