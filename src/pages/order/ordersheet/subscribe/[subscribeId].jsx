@@ -1,31 +1,29 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from '/src/components/common/Layout';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import s from '../ordersheet.module.scss';
 import Modal_termsOfSerivce from '/src/components/modal/Modal_termsOfSerivce';
-import {Modal_coupon} from '/src/components/modal/Modal_coupon';
-import {getData} from '/src/pages/api/reqData';
-import transformDate, {transformToday} from '/util/func/transformDate';
-import {OrdersheetSubscribeItemList} from '/src/components/order/OrdersheetSubscribeItemList';
-import {OrdersheetMemberInfo} from '/src/components/order/OrdersheetMemberInfo';
-import {OrdersheetDeliveryForm} from '/src/components/order/OrdersheetDeliveryForm';
-import {Payment} from '/src/components/order/Payment';
-import {OrdersheetReward} from '/src/components/order/OrdersheetReward';
-import {OrdersheetMethodOfPayment} from '/src/components/order/OrdersheetMethodOfPayment';
-import {OrdersheetAmountOfPayment} from '/src/components/order/OrdersheetAmountOfPayment';
-import {calcNextSubscribeDeliveryDate} from '/util/func/calcNextSubscribeDeliveryDate';
-import {subscribePriceCutOffUnit} from "/util/func/subscribe/calcSubscribePrices";
-import {seperateStringViaComma} from "/util/func/seperateStringViaComma";
-import {subscribePlanType} from "../../../../../store/TYPE/subscribePlanType";
-import {FullScreenRunningDog} from "../../../../components/atoms/FullScreenLoading";
-import {useRouter} from "next/router";
-import {redirectTo} from "util/func/redirectTo";
+import { Modal_coupon } from '/src/components/modal/Modal_coupon';
+import { getData } from '/src/pages/api/reqData';
+import transformDate, { transformToday } from '/util/func/transformDate';
+import { OrdersheetSubscribeItemList } from '/src/components/order/OrdersheetSubscribeItemList';
+import { OrdersheetMemberInfo } from '/src/components/order/OrdersheetMemberInfo';
+import { OrdersheetDeliveryForm } from '/src/components/order/OrdersheetDeliveryForm';
+import { Payment } from '/src/components/order/Payment';
+import { OrdersheetReward } from '/src/components/order/OrdersheetReward';
+import { OrdersheetMethodOfPayment } from '/src/components/order/OrdersheetMethodOfPayment';
+import { OrdersheetAmountOfPayment } from '/src/components/order/OrdersheetAmountOfPayment';
+import { calcNextSubscribeDeliveryDate } from '/util/func/calcNextSubscribeDeliveryDate';
+import { subscribePriceCutOffUnit } from '/util/func/subscribe/calcSubscribePrices';
+import { seperateStringViaComma } from '/util/func/seperateStringViaComma';
+import { subscribePlanType } from '../../../../../store/TYPE/subscribePlanType';
+import { FullScreenRunningDog } from '../../../../components/atoms/FullScreenLoading';
+import { useRouter } from 'next/router';
+import { redirectTo } from 'util/func/redirectTo';
 
 const initInfo = {};
 
 export default function SubscribeOrderSheetPage() {
-
-
   const router = useRouter();
   const [isLoading, setIsLoading] = useState({ fetching: true });
   const [isRendered, setIsRendered] = useState(false);
@@ -38,37 +36,31 @@ export default function SubscribeOrderSheetPage() {
     coupon: false,
   });
 
-
   useEffect(() => {
     if (window && typeof window !== 'undefined') {
       setIsRendered(true);
     }
   }, []);
 
-
-
-
   useEffect(() => {
-
     // Validation - 구독 결제정보가 불충분한 경우
     const invalidPaymentPrice = info.subscribeDto?.nextPaymentPrice === 0;
     const afterInitialize = info !== initInfo;
     if (afterInitialize && invalidPaymentPrice) {
-      alert("[ERROR] 구독상품 결제금액이 설정되지 않았습니다. `맞춤레시피 구매하기`를 진행해주세요.");
-      redirectTo("/mypage/dogs");
+      alert(
+        '[ERROR] 구독상품 결제금액이 설정되지 않았습니다. `맞춤레시피 구매하기`를 진행해주세요.',
+      );
+      redirectTo('/mypage/dogs');
       return;
     }
 
     // Validation - 결제정보를 정상적으로 받은 후, 데이터요청 X (최초 1회만 request 실행.)
-    if(afterInitialize) return // console.log('[INFO] 구독결제 정보가 올바르게 설정되었습니다.');
-
-
-
+    if (afterInitialize) return; // console.log('[INFO] 구독결제 정보가 올바르게 설정되었습니다.');
 
     // Request Subscribe Data
-    ( async () => {
+    (async () => {
       try {
-        setIsLoading( (prevState) => ({
+        setIsLoading((prevState) => ({
           ...prevState,
           fetching: true,
         }));
@@ -77,29 +69,29 @@ export default function SubscribeOrderSheetPage() {
         const planDiscountRes = await getData(url);
         // console.log('----- planDiscountRes: ', planDiscountRes);
         let subscribePlanInfo = {};
-        if(planDiscountRes.data && planDiscountRes.status === 200) {
-
+        if (planDiscountRes.data && planDiscountRes.status === 200) {
           // plan_discount 테이블 정보를 data 에 저장
-          const data = planDiscountRes.data._embedded.planDiscountResponseDtoList[0];
+          const data =
+            planDiscountRes.data._embedded.planDiscountResponseDtoList[0];
           // 콕뱅크 할인율 할때 이부분 수정하면됨
-          subscribePlanInfo[subscribePlanType.FULL.NAME] =  data.full;
-          subscribePlanInfo[subscribePlanType.HALF.NAME] =  data.half;
-          subscribePlanInfo[subscribePlanType.TOPPING.NAME] =  data.topping;
+          subscribePlanInfo[subscribePlanType.FULL.NAME] = data.full;
+          subscribePlanInfo[subscribePlanType.HALF.NAME] = data.half;
+          subscribePlanInfo[subscribePlanType.TOPPING.NAME] = data.topping;
         }
 
-        const subscribeId = router.query.subscribeId
+        const subscribeId = router.query.subscribeId;
         const apiUrl = `/api/orders/sheet/subscribe/${subscribeId}`;
         const body = {
           id: subscribeId,
         };
-        const res = await getData( apiUrl, body );
+        const res = await getData(apiUrl, body);
         // console.log("/api/orders/sheet/subscribe/${subscribeId} = ",res.data)
-        if ( res.status !== 200 ) {
-          alert( '주문 정보를 확인할 수 없습니다.' );
+        if (res.status !== 200) {
+          alert('주문 정보를 확인할 수 없습니다.');
           return (window.location.href = '/');
         }
         const data = res.data;
-        // console.log( data );
+        // console.log(data);
 
         // 주문에 대한 모든 데이터
         const initInfo = {
@@ -107,12 +99,15 @@ export default function SubscribeOrderSheetPage() {
             id: data.subscribeDto.id,
             plan: data.subscribeDto.plan,
             nextPaymentPrice: data.subscribeDto.nextPaymentPrice,
-            originPrice: calcSubscribePlanOriginPrice( {
+            originPrice: calcSubscribePlanOriginPrice({
               discountPercent: subscribePlanInfo[data.subscribeDto.plan],
-              paymentPrice: data.subscribeDto.nextPaymentPrice
-            } ),
+              paymentPrice: data.subscribeDto.nextPaymentPrice,
+            }),
             discountGrade: data.subscribeDto.discountGrade, // 등급할인 (할인표기에 사용)
-            oneMealGramsPerRecipeList: seperateStringViaComma(data.subscribeDto.oneMealGramsPerRecipe, 'number'), // 각 레시피별 한 팩 무게 (2개 이상 시, 콤마[(,]구분)
+            oneMealGramsPerRecipeList: seperateStringViaComma(
+              data.subscribeDto.oneMealGramsPerRecipe,
+              'number',
+            ), // 각 레시피별 한 팩 무게 (2개 이상 시, 콤마[(,]구분)
           },
           recipeNameList: data.recipeNameList, // [] 구독으로 선택한 레시피 이름 리스트 // FULL-PLAN일 경우, 최대 2개
           name: data.name, // 구매자
@@ -138,7 +133,7 @@ export default function SubscribeOrderSheetPage() {
             discountGrade: data.subscribeDto?.discountGrade || null, // 등급할인 // 정기구독 할인금액 산출 시 사용
           },
           coupons:
-            data.coupons?.map( (cp) => ({
+            data.coupons?.map((cp) => ({
               memberCouponId: cp.memberCouponId,
               name: cp.name,
               discountType: cp.discountType,
@@ -146,9 +141,8 @@ export default function SubscribeOrderSheetPage() {
               availableMaxDiscount: cp.availableMaxDiscount,
               availableMinPrice: cp.availableMinPrice,
               remaining: cp.remaining,
-              expiredDate: transformDate( cp.expiredDate ),
-            }) ) ||
-            [],
+              expiredDate: transformDate(cp.expiredDate),
+            })) || [],
           deliveryDto: {
             name: null, // 수령자 이름 ("정기배송과" 묶음 배송일 경우, null => 정기배송 수령자를 따름)
             phone: null, // 수령자 전화번호 (묶음 배송일 경우, null)
@@ -167,29 +161,36 @@ export default function SubscribeOrderSheetPage() {
           paymentMethod: null, // 결제방법  [CREDIT_CARD, NAVER_PAY, KAKAO_PAY]
           // nextDeliveryDate: getDiffDate(1), // ! TEST CODE :  테스트로, 1일 이후 배송이 시작되는 것으로 설정함 (221020)
           //   ! PRODUCT CODE
-          nextDeliveryDate: calcNextSubscribeDeliveryDate( transformToday(), null ), // 배송 예정일 'yyyy-MM-dd', 첫 결제 배송날짜는 프론트에서 넘어온 값으로 저장함
+          nextDeliveryDate: calcNextSubscribeDeliveryDate(
+            transformToday(),
+            null,
+          ), // 배송 예정일 'yyyy-MM-dd', 첫 결제 배송날짜는 프론트에서 넘어온 값으로 저장함
           agreePrivacy: false, // 개인정보 제공 동의
           brochure: false, // 브로슈어 수령여부
         };
-        setInfo( initInfo );
-        setForm( initForm );
+        setInfo(initInfo);
+        setForm(initForm);
       } catch (err) {
-        console.error( err );
+        console.error(err);
       } finally {
-        setIsLoading( (prevState) => ({
+        setIsLoading((prevState) => ({
           ...prevState,
           fetching: false,
-        }) );
+        }));
       }
-    } )();
+    })();
 
-    const calcSubscribePlanOriginPrice =({discountPercent, paymentPrice}) => {
+    const calcSubscribePlanOriginPrice = ({
+      discountPercent,
+      paymentPrice,
+    }) => {
       const originPrice = paymentPrice * (100 / (100 - discountPercent));
-      return Math.floor(originPrice / subscribePriceCutOffUnit) * subscribePriceCutOffUnit;
+      return (
+        Math.floor(originPrice / subscribePriceCutOffUnit) *
+        subscribePriceCutOffUnit
+      );
     };
   }, [info]);
-
-
 
   const onActivleModalHandler = (e) => {
     const button = e.currentTarget;
@@ -202,11 +203,9 @@ export default function SubscribeOrderSheetPage() {
     }));
   };
 
-
   if (isLoading.fetching) {
-    return <FullScreenRunningDog/>
+    return <FullScreenRunningDog />;
   }
-
 
   return (
     <>
@@ -261,7 +260,9 @@ export default function SubscribeOrderSheetPage() {
               formErrors={formErrors}
             />
             <section className={s.final_btn}>
-              <p>위 주문 내용을 확인 하였으며, 회원 본인은 결제에 동의합니다.</p>
+              <p>
+                위 주문 내용을 확인 하였으며, 회원 본인은 결제에 동의합니다.
+              </p>
               <Payment
                 isLoading={isLoading}
                 setIsLoading={setIsLoading}
