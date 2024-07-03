@@ -365,10 +365,12 @@ export default function MypageCardPage({ data }) {
                             </div>
                           )}
 
-                          {/* 2. SUBSCRIBE_PENDING, SUBSCRIBE_CANCEL, BEFORE_PAYMENT 일 경우 */}
+                          {/* 2. SUBSCRIBE_PENDING, SUBSCRIBE_WILL_CANCEL, SUBSCRIBE_CANCEL, BEFORE_PAYMENT 일 경우 */}
                           {/* 주문서 페이지로 이동하는 '재구독' 버튼 */}
                           {(card.subscribeCardDto.status ===
                             'SUBSCRIBE_PENDING' ||
+                            card.subscribeCardDto.status ===
+                              'SUBSCRIBE_WILL_CANCEL' ||
                             card.subscribeCardDto.status ===
                               'SUBSCRIBE_CANCEL' ||
                             card.subscribeCardDto.status ===

@@ -35,7 +35,7 @@ function ManageSubscribePage() {
   const [onSearch, setOnSearch] = useState(false);
 
   // console.log('searchValue>>>', searchValue);
-  console.log('searchQuery>>>', searchQuery);
+  // console.log('searchQuery>>>', searchQuery);
 
   useEffect(() => {
     MirrorTextOnHoverEvent(window);
@@ -121,6 +121,8 @@ function ManageSubscribePage() {
                   <li className={s.table_th}>초과 할인금</li>
                   <li className={s.table_th}>등급 할인량</li>
                   <li className={s.table_th}>다음 결제 mid</li>
+                  <li className={s.table_th}>구독 취소 신청일</li>
+                  <li className={s.table_th}>구독 취소 예정일</li>
                   <li className={s.table_th}>구독 취소 사유</li>
                 </ul>
                 {itemList.length ? (

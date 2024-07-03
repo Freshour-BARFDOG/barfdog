@@ -22,6 +22,8 @@ export const SubscribeStatusTag = ({
     subscribeCount === 0
   ) {
     UIstatus = subscribeStatusEnum.SURVEY_COMPLETED;
+  } else if (status === subscribeStatus.SUBSCRIBE_WILL_CANCEL) {
+    UIstatus = subscribeStatusEnum.SUBSCRIBE_WILL_CANCEL;
   } else if (status === subscribeStatus.SUBSCRIBE_CANCEL) {
     UIstatus = subscribeStatusEnum.SUBSCRIBE_CANCEL;
   } else if (
