@@ -23,7 +23,7 @@ import { getNaverpaySubscribePaymentParam } from '/store/TYPE/NaverpayPaymentPar
 import useDeviceState from '../../../../util/hook/useDeviceState';
 import { getItemNameWithPrefixByPaymentMethod } from 'util/func/subscribe/getItemNameWithPrefixByPaymentMethod';
 import Spinner from '../../../components/atoms/Spinner';
-import { deleteData } from '../../api/reqData';
+import { deleteData, postData } from '../../api/reqData';
 import Modal_confirm from '../../../components/modal/Modal_confirm';
 
 export default function MypageCardPage({ data }) {
@@ -194,9 +194,35 @@ export default function MypageCardPage({ data }) {
     mct.alertHide();
   };
 
-  // 주문서 페이지로 이동
+  //* 주문서 페이지로 이동
   const moveToOrdersheetHandler = (subscribeId) => {
     router.push(`/order/ordersheet/subscribe/${subscribeId}`);
+  };
+
+  //* 구독 중단 취소 (재활성화)
+  const onReactiveHandler = async (subscribeId) => {
+    try {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        reactive: true,
+      }));
+      const apiUrl = `/api/subscribes/${subscribeId}/reactive`;
+      const res = await postData(apiUrl);
+      // console.log(res);
+      if (res.data) {
+        mct.alertShow(`재구독이 정상적으로 완료되었습니다.`, onSuccessCallback);
+      } else {
+        mct.alertShow('재구독에 실패하였습니다.');
+      }
+    } catch (err) {
+      mct.alertShow('서버 통신 장애 발생');
+      console.error(err);
+    } finally {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        reactive: false,
+      }));
+    }
   };
 
   //* 카드 삭제
@@ -344,8 +370,8 @@ export default function MypageCardPage({ data }) {
                             원
                           </div>
 
-                          {/* 1. '구독 중' 일 때만 */}
-                          {/* '카드변경' 버튼 표시  */}
+                          {/* 1. '카드변경' 버튼  */}
+                          {/* '구독 중' 일 때만 */}
                           {card.subscribeCardDto.status === 'SUBSCRIBING' && (
                             <div className={s.btn_box}>
                               <button
@@ -365,12 +391,10 @@ export default function MypageCardPage({ data }) {
                             </div>
                           )}
 
-                          {/* 2. SUBSCRIBE_PENDING, SUBSCRIBE_WILL_CANCEL, SUBSCRIBE_CANCEL, BEFORE_PAYMENT 일 경우 */}
-                          {/* 주문서 페이지로 이동하는 '재구독' 버튼 */}
+                          {/* 2-1. 주문서 페이지로 이동하는 '재구독' 버튼 */}
+                          {/*  SUBSCRIBE_PENDING, SUBSCRIBE_CANCEL, BEFORE_PAYMENT 일 경우 */}
                           {(card.subscribeCardDto.status ===
                             'SUBSCRIBE_PENDING' ||
-                            card.subscribeCardDto.status ===
-                              'SUBSCRIBE_WILL_CANCEL' ||
                             card.subscribeCardDto.status ===
                               'SUBSCRIBE_CANCEL' ||
                             card.subscribeCardDto.status ===
@@ -386,6 +410,30 @@ export default function MypageCardPage({ data }) {
                                 }
                               >
                                 재구독
+                              </button>
+                            </div>
+                          )}
+
+                          {/* 2-2. 주문서 페이지로 이동하는 '재구독' 버튼 */}
+                          {/* SUBSCRIBE_WILL_CANCELT 일 경우 */}
+
+                          {card.subscribeCardDto.status ===
+                            'SUBSCRIBE_WILL_CANCEL' && (
+                            <div className={s.btn_box}>
+                              <button
+                                className={s.btn}
+                                type={'button'}
+                                onClick={() =>
+                                  onReactiveHandler(
+                                    card.subscribeCardDto.subscribeId,
+                                  )
+                                }
+                              >
+                                {isLoading.reactive ? (
+                                  <Spinner style={{ color: '#fff' }} />
+                                ) : (
+                                  '재구독'
+                                )}
                               </button>
                             </div>
                           )}
