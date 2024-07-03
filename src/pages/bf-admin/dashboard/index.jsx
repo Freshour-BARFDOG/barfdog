@@ -277,6 +277,14 @@ export default function DashboardPage({ ga }) {
                     (order) => order.orderStatus === orderStatus.PRODUCING,
                   )[0]?.count) ||
               0,
+
+            // 구매 확정 (CONFIRM)
+            CONFIRM:
+              (data.orderStatusStatsDtoList.length &&
+                data.orderStatusStatsDtoList?.filter(
+                  (order) => order.orderStatus === orderStatus.CONFIRM,
+                )[0]?.count) ||
+              0,
           },
 
           deliveryCount: {
@@ -385,6 +393,15 @@ export default function DashboardPage({ ga }) {
 
             //~ 취소, 반품, 교환 카운팅
             generalOrderCount: {
+              // 구매 확정
+              CONFIRM:
+                (data.generalOrderStatsDto.generalOrderStatusStatsDtoList
+                  .length &&
+                  data.generalOrderStatsDto.generalOrderStatusStatsDtoList?.filter(
+                    (order) => order.generalOrderStatus === orderStatus.CONFIRM,
+                  )[0]?.count) ||
+                0,
+
               // 취소 요청
               CANCEL_REQUEST:
                 (data.generalOrderStatsDto.generalOrderStatusStatsDtoList
@@ -675,6 +692,12 @@ export default function DashboardPage({ ga }) {
                       </span>
                     </li>
                     <li>
+                      <span>구매 확정</span>
+                      <span>
+                        <b>{info.orderCount?.CONFIRM}</b> 건
+                      </span>
+                    </li>
+                    <li>
                       <span>결제 실패</span>
                       <span>
                         <b>{info.orderCount?.FAILED}</b> 건
@@ -763,6 +786,15 @@ export default function DashboardPage({ ga }) {
                     </li>
                   </ul>
                   <ul className={s.box}>
+                    <li>
+                      <span>구매 확정</span>
+                      <span>
+                        <b>
+                          {info.generalOrderStats?.generalOrderCount.CONFIRM}
+                        </b>{' '}
+                        건
+                      </span>
+                    </li>
                     <li>
                       <span>취소 요청</span>
                       <span>
