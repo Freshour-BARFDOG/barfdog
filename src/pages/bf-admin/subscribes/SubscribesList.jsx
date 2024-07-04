@@ -61,7 +61,7 @@ const ItemList = ({ item, number }) => {
         ? '구독 전'
         : item.subscribeStatus === 'SURVEY_COMPLETED'
         ? '설문 완료'
-        : item.subscribeStatus === 'SUBSCRIBE_WILL_CANCEL '
+        : item.subscribeStatus === 'SUBSCRIBE_WILL_CANCEL'
         ? '구독 취소 예정'
         : item.subscribeStatus === 'SUBSCRIBE_CANCEL'
         ? '구독 취소'
