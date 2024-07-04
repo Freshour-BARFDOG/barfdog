@@ -25,18 +25,17 @@ export const OrdersheetDeliveryForm = ({
   };
   // 묶음배송여부 ! Client ONLY  (cf. 묶음배송아닐 경우, form.deliveryId = null) // 정기구독중이지 않을 경우, 묶음배송기능 아예 작동하지 않게함
   const [bundle, setBundle] = useState(false);
-  const [sameUserInfo, setSameUserInfo] = useState(false);
+  const [sameUserInfo, setSameUserInfo] = useState(true);
   // 배송정보
   const [deliveryInfo, setDeliveryInfo] = useState(initialDeliveryInfos);
-  const [onMount, setOnMount] = useState( false );
-  
-  useEffect( () => {
-    if(!onMount) {
+  const [onMount, setOnMount] = useState(false);
+
+  useEffect(() => {
+    if (!onMount) {
       setOnMount(true);
     }
-  }, [] );
-  
-  
+  }, []);
+
   useEffect(() => {
     const deliveryDto = {};
     for (const key in deliveryInfo) {
@@ -57,11 +56,11 @@ export const OrdersheetDeliveryForm = ({
     // !bundle && form.sameUserInfo ? info.phoneNumber : deliveryInfo.phone || ''
     // // console.log('배송정버 뱐걍 ')
     // {!bundle && form.sameUserInfo ? info.name : deliveryInfo.name || ''}
-    if(!info.nextSubscribeDeliveryDate && bundle){
+    if (!info.nextSubscribeDeliveryDate && bundle) {
       alert('묶음배송은 정기배송 중인 상품이 있을 경우에만 가능합니다.');
       setBundle(false);
     }
-    
+
     setDeliveryInfo((prevState) => ({
       ...prevState,
       name: bundle ? null : sameUserInfo ? info.name : '',
@@ -69,7 +68,11 @@ export const OrdersheetDeliveryForm = ({
       zipcode: bundle ? null : sameUserInfo ? info.address.zipcode : '', // 우편번호 (묶음 배송일 경우, null)
       street: bundle ? null : sameUserInfo ? info.address.street : '', // 도로명 주소 (묶음 배송일 경우, null)
       city: bundle ? null : sameUserInfo ? info.address.city : '',
-      detailAddress: bundle ? null : sameUserInfo ? info.address.detailAddress : '', // 상세주소 (묶음 배송일 경우, null)
+      detailAddress: bundle
+        ? null
+        : sameUserInfo
+        ? info.address.detailAddress
+        : '', // 상세주소 (묶음 배송일 경우, null)
       request: bundle ? null : sameUserInfo ? info.address.request : '', // 배송 요청사항 (묶음 배송일 경우, null)
     }));
     if (bundle) {
@@ -155,7 +158,9 @@ export const OrdersheetDeliveryForm = ({
               onChange={onInputChangeHandler}
               disabled={bundle}
             />
-            {formErrors.phone && <ErrorMessage>{formErrors.phone}</ErrorMessage>}
+            {formErrors.phone && (
+              <ErrorMessage>{formErrors.phone}</ErrorMessage>
+            )}
           </div>
 
           <p className={s.row_title}>주소</p>
@@ -170,20 +175,21 @@ export const OrdersheetDeliveryForm = ({
                 disabled
                 value={(!bundle && deliveryInfo.zipcode) || ''}
               />
-              {onMount && <WindowOpener
-                url={'/popup/searchAddress'}
-                bridge={onReceivePopupData}
-                disabled={(!bundle && !!form.sameUserInfo) || bundle}
-              >
-                <span
-                  className={`${s.btn} ${s.btn_box} ${
-                    bundle || form.sameUserInfo ? s.disabled : ''
-                  }`}
+              {onMount && (
+                <WindowOpener
+                  url={'/popup/searchAddress'}
+                  bridge={onReceivePopupData}
+                  disabled={(!bundle && !!form.sameUserInfo) || bundle}
                 >
-                  {deliveryInfo?.city ? '재검색' : '주소검색'}
-                </span>
-              </WindowOpener>}
-              
+                  <span
+                    className={`${s.btn} ${s.btn_box} ${
+                      bundle || form.sameUserInfo ? s.disabled : ''
+                    }`}
+                  >
+                    {deliveryInfo?.city ? '재검색' : '주소검색'}
+                  </span>
+                </WindowOpener>
+              )}
             </li>
 
             <li className={s.input_col}>
@@ -195,7 +201,9 @@ export const OrdersheetDeliveryForm = ({
                 disabled
                 value={(!bundle && deliveryInfo.street) || ''}
               />
-              {formErrors.street && <ErrorMessage>{formErrors.street}</ErrorMessage>}
+              {formErrors.street && (
+                <ErrorMessage>{formErrors.street}</ErrorMessage>
+              )}
             </li>
             <li className={s.input_col}>
               <input
@@ -207,7 +215,9 @@ export const OrdersheetDeliveryForm = ({
                 onChange={onInputChangeHandler}
                 disabled={bundle}
               />
-              {formErrors.detailAddress && <ErrorMessage>{formErrors.detailAddress}</ErrorMessage>}
+              {formErrors.detailAddress && (
+                <ErrorMessage>{formErrors.detailAddress}</ErrorMessage>
+              )}
             </li>
           </ul>
 
@@ -242,7 +252,9 @@ export const OrdersheetDeliveryForm = ({
                     ` 외 ${form?.orderItemDtoList.length - 2}건`}
                 </p>
               )}
-              {orderType === 'subscribe' && <p>{info.recipeNameList?.join(', ')}</p>}
+              {orderType === 'subscribe' && (
+                <p>{info.recipeNameList?.join(', ')}</p>
+              )}
             </li>
             <li className={s.mid_box}>
               <span>배송방법</span>
@@ -260,7 +272,9 @@ export const OrdersheetDeliveryForm = ({
                       : '주문 후 1~2일 이내 배송예정'}
                   </span>
                 )}
-                {orderType === 'subscribe' && <span>{form.nextDeliveryDate}&nbsp;</span>}
+                {orderType === 'subscribe' && (
+                  <span>{form.nextDeliveryDate}&nbsp;</span>
+                )}
                 (배송 후 카톡 안내)
               </p>
             </li>

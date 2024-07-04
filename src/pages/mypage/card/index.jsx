@@ -439,17 +439,23 @@ export default function MypageCardPage({ data }) {
                           )}
 
                           {/* 3. 카드 삭제 */}
-                          {/* 단, 구독 중일 때만 제외 */}
+                          {/* 단, 구독 중 or 구독 취소 예정일 때 제외 */}
                           <div className={s.btn_box}>
                             <button
                               className={
-                                card.subscribeCardDto.status === 'SUBSCRIBING'
+                                card.subscribeCardDto.status ===
+                                  'SUBSCRIBING' ||
+                                card.subscribeCardDto.status ===
+                                  'SUBSCRIBE_WILL_CANCEL'
                                   ? `${s.btn} ${s['btn-disabled']}`
                                   : s.btn
                               }
                               type={'button'}
                               onClick={
-                                card.subscribeCardDto.status === 'SUBSCRIBING'
+                                card.subscribeCardDto.status ===
+                                  'SUBSCRIBING' ||
+                                card.subscribeCardDto.status ===
+                                  'SUBSCRIBE_WILL_CANCEL'
                                   ? undefined
                                   : () =>
                                       onActiveConfirmModal(
@@ -463,8 +469,11 @@ export default function MypageCardPage({ data }) {
                                   'SUBSCRIBE_WILL_CANCEL'
                               }
                               title={
-                                card.subscribeCardDto.status === 'SUBSCRIBING'
-                                  ? '구독 중인 카드는 삭제 불가능합니다.'
+                                card.subscribeCardDto.status ===
+                                  'SUBSCRIBING' ||
+                                card.subscribeCardDto.status ===
+                                  'SUBSCRIBE_WILL_CANCEL'
+                                  ? '구독 중이거나 구독 취소 예정 카드는 삭제 불가능합니다.'
                                   : ''
                               }
                             >
