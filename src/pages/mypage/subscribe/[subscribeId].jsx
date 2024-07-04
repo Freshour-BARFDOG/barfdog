@@ -120,17 +120,17 @@ export default function SubscribeInfoPage({ data }) {
                   marginTop: '2.6rem',
                   boxShadow: '0 0 1.25rem rgba(0, 0, 0, 0.1)',
                 }}
+                onClick={
+                  subscribeInfo?.info.subscribeStatus ===
+                  'SUBSCRIBE_WILL_CANCEL'
+                    ? onReactiveHandler
+                    : moveToOrdersheetHandler
+                }
               >
                 <button
                   style={{
                     color: 'white',
                   }}
-                  onClick={
-                    subscribeInfo?.info.subscribeStatus ===
-                    'SUBSCRIBE_WILL_CANCEL'
-                      ? () => onReactiveHandler()
-                      : () => moveToOrdersheetHandler()
-                  }
                 >
                   {isLoading.reactive ? (
                     <Spinner style={{ color: '#fff' }} />
