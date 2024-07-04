@@ -28,7 +28,7 @@ import { SubscribeStatusTag } from '../../../components/subscribe/SubscribeStatu
 import { postData } from '../../api/reqData';
 
 export default function MypageDogInfoPage({ data }) {
-  console.log(data);
+  // console.log(data);
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
   const [activeUploadDogProfileModal, setActiveUploadDogProfileModal] =
@@ -60,6 +60,8 @@ export default function MypageDogInfoPage({ data }) {
     setActiveUploadDogProfileModal(false);
   };
 
+  // console.log(itemList);
+
   return (
     <>
       <MetaTitle title="마이페이지 반려견정보" />
@@ -70,7 +72,13 @@ export default function MypageDogInfoPage({ data }) {
             <ul>
               {itemList?.length > 0 ? (
                 itemList
-                  .sort((a, b) => b.id - a.id)
+                  .sort((a, b) => {
+                    if (a.representative === b.representative) {
+                      return b.id - a.id;
+                    }
+                    return a.representative ? -1 : 1;
+                  })
+
                   .map((item, index) => (
                     <ItemList
                       key={`${item.id}-${index}`}

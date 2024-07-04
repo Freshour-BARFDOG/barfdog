@@ -8,9 +8,9 @@
 @import './subscrbieSkipPayment.module';
 @import './subscrbieCancle.module';
 
-
-section.title{ padding : rem(8) 0 rem(17);}
-
+section.title {
+  padding: rem(8) 0 rem(17);
+}
 
 .toggleBox {
   margin-top: rem(20);
@@ -60,7 +60,7 @@ section.title{ padding : rem(8) 0 rem(17);}
   .title_text {
     display: flex;
     align-items: center;
-    gap:rem(4);
+    gap: rem(4);
     @include char(t24);
   }
 
@@ -71,8 +71,7 @@ section.title{ padding : rem(8) 0 rem(17);}
     justify-content: flex-start;
     box-sizing: border-box;
 
-
-    .title_text{
+    .title_text {
       @include char(t24);
       padding-right: rem(20);
     }
@@ -80,7 +79,7 @@ section.title{ padding : rem(8) 0 rem(17);}
     .text {
       width: rem(335);
       text-align: center;
-      background: #F9EDEC;
+      background: #f9edec;
       border-radius: rem(8);
       padding: rem(11) 0;
       box-sizing: border-box;
@@ -112,6 +111,9 @@ section.title{ padding : rem(8) 0 rem(17);}
   }
 }
 
+.btn-box {
+  background-color: aqua;
+}
 
 @media (max-width: rem(900)) {
   .toggleBox {
@@ -125,7 +127,7 @@ section.title{ padding : rem(8) 0 rem(17);}
     .flex_box {
       flex-direction: column;
 
-      .title_text{
+      .title_text {
         text-align: center;
       }
 
@@ -134,7 +136,6 @@ section.title{ padding : rem(8) 0 rem(17);}
       }
     }
   }
-
 }
 
 @media (max-width: rem(600)) {
