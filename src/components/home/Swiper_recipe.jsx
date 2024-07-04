@@ -81,7 +81,11 @@ export function Swiper_recipe() {
 
   const [healthTypeItemList, setHealthTypeItemList] = useState();
   // const [isClicked, setIsClicked] = useState(false);
-  const [healthType, setHealthType] = useState({ kor: '', eng: '' });
+  const [healthType, setHealthType] = useState({
+    kor: '',
+    eng: '',
+    description: '',
+  });
   const [selectedItemList, setSelectedItemList] = useState([]);
 
   useEffect(() => {
@@ -118,8 +122,8 @@ export function Swiper_recipe() {
   }, []);
 
   //* 이미지 클릭
-  const imgClickHandler = (e, value, label) => {
-    setHealthType((prev) => ({ eng: value, kor: label }));
+  const imgClickHandler = (e, value, label, description) => {
+    setHealthType((prev) => ({ eng: value, kor: label, description }));
     const updatedItemList = healthTypeItemList?.find((obj) => obj[value])?.[
       value
     ];
@@ -127,7 +131,7 @@ export function Swiper_recipe() {
   };
 
   // console.log('itemHealthTypeList', itemHealthTypeList);
-  // console.log('healthTypeItemList', healthTypeItemList);
+  // // console.log('healthTypeItemList', healthTypeItemList);
   // console.log('healthType', healthType);
   // console.log('selectedItemList>>>', selectedItemList);
 
@@ -184,7 +188,9 @@ export function Swiper_recipe() {
                     className={`${s.img_wrap} ${
                       healthType.eng === d.value ? s.clicked : ''
                     }`}
-                    onClick={(e) => imgClickHandler(e, d.value, d.label)}
+                    onClick={(e) =>
+                      imgClickHandler(e, d.value, d.label, d.description)
+                    }
                   >
                     <Image
                       src={require(`/public/img/pages/main/${d.value}.jpg`)}
@@ -214,13 +220,10 @@ export function Swiper_recipe() {
         <section className={s.swiper_recipe_bottom_wrapper}>
           <div className={s.swiper_recipe_bottom_text}>
             <h3>
-              &quot;<span className={s.pointColor}>{healthType.kor}</span>
-              &quot;에 대한 고민이 있으신가요?
+              <span className={s.pointColor}>{healthType.kor}</span>에 대한
+              고민이 있으신가요?
             </h3>
-            <h4>
-              소화가 부드러운 닭고기 기반의 레시피와 그 외 적합한 상품을
-              추천드려요
-            </h4>
+            <h4>{healthType.description}</h4>
           </div>
 
           <Swiper
