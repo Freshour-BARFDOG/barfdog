@@ -21,7 +21,7 @@ import SearchRadio from '../../../../components/admin/form/searchBar/SearchRadio
 const initialSearchValues = {
   from: global_searchDateType.oldestDate,
   to: transformToday(),
-  alliance: '',
+  alliance: 'cb', // [default] 콕뱅크
 };
 
 function ManageMembersPage() {
@@ -72,7 +72,8 @@ function ManageMembersPage() {
     enterKey(e, onSearchHandler);
   };
 
-  console.log(itemList);
+  console.log(searchValue);
+  // console.log(itemList);
 
   return (
     <>
@@ -100,8 +101,8 @@ function ManageMembersPage() {
                 setSearchValue={setSearchValue}
                 title="제휴사"
                 name="alliance"
-                idList={['', 'cb']}
-                labelList={['전체', '콕뱅크']}
+                idList={['cb']}
+                labelList={['콕뱅크']}
               />
             </SearchBar>
           </section>

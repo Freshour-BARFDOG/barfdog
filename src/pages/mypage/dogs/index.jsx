@@ -25,9 +25,10 @@ import Modal_confirm from '/src/components/modal/Modal_confirm';
 import { orderStatus } from '/store/TYPE/orderStatusTYPE';
 import DeleteIcon from '/public/img/mypage/dog_info_delete.svg';
 import { SubscribeStatusTag } from '../../../components/subscribe/SubscribeStatusTag';
+import { postData } from '../../api/reqData';
 
 export default function MypageDogInfoPage({ data }) {
-  console.log(data);
+  // console.log(data);
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
   const [activeUploadDogProfileModal, setActiveUploadDogProfileModal] =
@@ -59,6 +60,8 @@ export default function MypageDogInfoPage({ data }) {
     setActiveUploadDogProfileModal(false);
   };
 
+  // console.log(itemList);
+
   return (
     <>
       <MetaTitle title="마이페이지 반려견정보" />
@@ -69,7 +72,13 @@ export default function MypageDogInfoPage({ data }) {
             <ul>
               {itemList?.length > 0 ? (
                 itemList
-                  .sort((a, b) => b.id - a.id)
+                  .sort((a, b) => {
+                    if (a.representative === b.representative) {
+                      return b.id - a.id;
+                    }
+                    return a.representative ? -1 : 1;
+                  })
+
                   .map((item, index) => (
                     <ItemList
                       key={`${item.id}-${index}`}
@@ -247,7 +256,7 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
 
         const res = await getData(apiUrl);
         subscribeId = res.data.subscribeDto.id;
-        console.log('subscribeId', subscribeId);
+        // console.log('subscribeId', subscribeId);
 
         if (subscribeId) {
           router.push(`/order/ordersheet/subscribe/${subscribeId}`);
@@ -264,6 +273,36 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
 
   const moveToSubscribeShopHandler = (dogId) => {
     router.push(`/order/subscribeShop?dogId=${dogId}`);
+  };
+
+  const onSuccessCallback = () => {
+    window.location.reload();
+  };
+
+  //* 구독 중단 취소 (재활성화)
+  const onReactiveHandler = async (subscribeId) => {
+    try {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        reactive: true,
+      }));
+      const apiUrl = `/api/subscribes/${subscribeId}/reactive`;
+      const res = await postData(apiUrl);
+      console.log(res);
+      if (res.data) {
+        mct.alertShow(`재구독이 정상적으로 완료되었습니다.`, onSuccessCallback);
+      } else {
+        mct.alertShow('재구독에 실패하였습니다.');
+      }
+    } catch (err) {
+      mct.alertShow('서버 통신 장애 발생');
+      console.error(err);
+    } finally {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        reactive: false,
+      }));
+    }
   };
 
   return (
@@ -351,10 +390,9 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
               </Link>
             )}
 
-            {/* 2. 버튼 생성 조건 : 
-            1)  결제전(구독전) / 구독 취소 => "맞춤식단 시작"  */}
-            {(data.subscribeStatus === subscribeStatus.BEFORE_PAYMENT ||
-              data.subscribeStatus === subscribeStatus.SUBSCRIBE_CANCEL) && (
+            {/* 2. "맞춤식단 시작"  버튼 생성 조건  */}
+            {/*  결제전(구독전)  */}
+            {data.subscribeStatus === subscribeStatus.BEFORE_PAYMENT && (
               <button
                 type={'button'}
                 className={s.payment}
@@ -369,13 +407,31 @@ const ItemList = ({ data, onEditImage, onShowModalHandler }) => {
               </button>
             )}
 
-            {/* 2) 구독 보류 ('구독 중' 상태가 아닌)일 경우 => "재구독" */}
-            {data.subscribeStatus === subscribeStatus.SUBSCRIBE_PENDING && (
+            {/* 3. "재구독"  버튼 생성 조건  */}
+            {/* 3-1. 구독 보류 ('구독 중' 상태가 아닌) / 구독 취소 */}
+            {(data.subscribeStatus === subscribeStatus.SUBSCRIBE_PENDING ||
+              data.subscribeStatus === subscribeStatus.SUBSCRIBE_CANCEL) && (
               <button
                 type={'button'}
                 className={s.payment}
                 data-id={dogId}
                 onClick={nextPageHandler}
+              >
+                {isLoading[dogId] ? (
+                  <Spinner style={{ color: '#fff' }} />
+                ) : (
+                  '재구독'
+                )}
+              </button>
+            )}
+
+            {/* 3-2. 구독 취소 예정  */}
+            {data.subscribeStatus === subscribeStatus.SUBSCRIBE_WILL_CANCEL && (
+              <button
+                type={'button'}
+                className={s.payment}
+                data-id={dogId}
+                onClick={() => onReactiveHandler(data.subscribeId)}
               >
                 {isLoading[dogId] ? (
                   <Spinner style={{ color: '#fff' }} />
@@ -422,7 +478,7 @@ export async function getServerSideProps({ req }) {
   // console.log(embeddedData);
   if (embeddedData) {
     const dataList = embeddedData?.queryDogsDtoList || [];
-    // // console.log(dataList)
+    // console.log('dataList', dataList);
     if (!dataList.length) return;
     DATA = dataList.map((data) => ({
       id: data.id,
@@ -434,6 +490,7 @@ export async function getServerSideProps({ req }) {
       representative: data.representative, // 대표견 여부
       subscribeStatus: data.subscribeStatus, // 구독상태
       subscribeCount: data.subscribeCount, // 구독 횟수
+      subscribeId: data.subscribeId, // 구독 id
       _links: {
         update_picture: {
           href: data._links.update_picture.href,

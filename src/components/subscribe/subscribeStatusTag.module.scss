@@ -30,7 +30,8 @@
     background-color: #606060;
   }
 
-  &.SUBSCRIBE_CANCEL {
+  &.SUBSCRIBE_CANCEL,
+  &.SUBSCRIBE_WILL_CANCEL {
     background-color: #7d569b;
   }
 }

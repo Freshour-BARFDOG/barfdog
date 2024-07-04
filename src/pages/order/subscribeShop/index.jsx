@@ -381,6 +381,7 @@ export default function RegisterSubscribeInfoPage({ data }) {
             )}
 
             {(info.subscribeStatus === subscribeStatus.SUBSCRIBING ||
+              info.subscribeStatus === subscribeStatus.SUBSCRIBE_WILL_CANCEL ||
               info.subscribeStatus === subscribeStatus.SUBSCRIBE_CANCEL ||
               info.subscribeStatus === subscribeStatus.SUBSCRIBE_PENDING) && (
               <button className={s.nextPage} onClick={onChangeSubscribeOrder}>
