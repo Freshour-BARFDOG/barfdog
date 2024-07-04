@@ -885,9 +885,9 @@ export default function DashboardPage({ ga }) {
                         </span>
                       </li>
                       <li>
-                        <span>이탈 구독자 수</span>
+                        <span>취소한 구독주문수</span>
                         <span>
-                          <b>{info.subscribeStats?.subscribeCancelCount}</b> 명
+                          <b>{info.subscribeStats?.subscribeCancelCount}</b> 건
                         </span>
                       </li>
                     </ul>
