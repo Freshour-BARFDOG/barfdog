@@ -93,6 +93,14 @@ export default function SubscribeOrderSheetPage() {
         const data = res.data;
         // console.log(data);
 
+        //! [추가] 계산된 등급할인 (discountGrade)
+        // discountGrade =nextPaymentPrice * gradeDiscountPercent / 100
+        // 계산 후 소수점 1의자리에서 반올림 -> 정수값 리턴
+        const calculatedDiscountGrade = Math.round(
+          (data.subscribeDto.nextPaymentPrice * data.gradeDiscountPercent) /
+            100,
+        );
+
         // 주문에 대한 모든 데이터
         const initInfo = {
           subscribeDto: {
@@ -103,7 +111,8 @@ export default function SubscribeOrderSheetPage() {
               discountPercent: subscribePlanInfo[data.subscribeDto.plan],
               paymentPrice: data.subscribeDto.nextPaymentPrice,
             }),
-            discountGrade: data.subscribeDto.discountGrade, // 등급할인 (할인표기에 사용)
+            // discountGrade: data.subscribeDto.discountGrade, // 등급할인 (할인표기에 사용)
+            discountGrade: calculatedDiscountGrade, //! [수정] 계산된 등급할인 값
             oneMealGramsPerRecipeList: seperateStringViaComma(
               data.subscribeDto.oneMealGramsPerRecipe,
               'number',
@@ -130,7 +139,8 @@ export default function SubscribeOrderSheetPage() {
         const initForm = {
           selfInfo: {
             reward: data.reward,
-            discountGrade: data.subscribeDto?.discountGrade || null, // 등급할인 // 정기구독 할인금액 산출 시 사용
+            // discountGrade: data.subscribeDto?.discountGrade || null, // 등급할인 // 정기구독 할인금액 산출 시 사용
+            discountGrade: calculatedDiscountGrade || null, //! [수정] 계산된 등급할인 값
           },
           coupons:
             data.coupons?.map((cp) => ({
