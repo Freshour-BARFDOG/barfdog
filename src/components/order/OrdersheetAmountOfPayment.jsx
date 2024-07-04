@@ -14,22 +14,10 @@ export const OrdersheetAmountOfPayment = ({
   formErrors,
   orderType = 'general',
 }) => {
-  //! [추가] 계산된 등급할인 (discountGrade)
-  // discountGrade =nextPaymentPrice * gradeDiscountPercent / 100
-  // 계산 후 소수점 1의자리에서 반올림 -> 정수값 리턴
-  const calculatedDiscountGrade = Math.round(
-    (info.subscribeDto.nextPaymentPrice * info.gradeDiscountPercent) / 100,
-  );
-
   const calcResult = useCallback(
-    calcOrdersheetPrices(
-      form,
-      orderType,
-      {
-        deliveryFreeConditionPrice: info.freeCondition,
-      },
-      calculatedDiscountGrade, // 계산된 등급할인 추가
-    ),
+    calcOrdersheetPrices(form, orderType, {
+      deliveryFreeConditionPrice: info.freeCondition,
+    }),
     [form, orderType],
   );
   const originalItemDiscount = useMemo(
@@ -95,11 +83,8 @@ export const OrdersheetAmountOfPayment = ({
           ) : (
             info.subscribeDto && (
               <span>
-                {/* {info.subscribeDto?.discountGrade > 0 && '-'}
-                {transformLocalCurrency(calculatedDiscountGrade)}원 */}
-                {/* [계산된 등급할인] 으로 수정 */}
-                {calculatedDiscountGrade > 0 && '-'}
-                {transformLocalCurrency(calculatedDiscountGrade)}원
+                {info.subscribeDto?.discountGrade > 0 && '-'}
+                {transformLocalCurrency(info.subscribeDto?.discountGrade)}원
               </span>
             )
           )}
