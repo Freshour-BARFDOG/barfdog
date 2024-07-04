@@ -1,4 +1,6 @@
 $browser-context: 16; // html font-size
+$title-font-size: 38; // 세션별 제목 폰트 크기
+$subtitle-font-size: 22; // 세션별 소제목 폰트 크기
 @function rem($px, $context: $browser-context) {
   @return #{$px / $context}rem;
 }
@@ -36,13 +38,13 @@ section.family {
 
 .title {
   font-weight: bold;
-  font-size: rem(32);
+  font-size: rem($title-font-size);
   color: #000;
   height: auto;
 }
 
 .subtitle {
-  font-size: rem(16);
+  font-size: rem($subtitle-font-size);
   color: #717171;
 }
 
@@ -139,7 +141,7 @@ section.family {
 
       h1 {
         left: 0;
-        font-size: rem(30);
+        font-size: rem(40);
         font-weight: bold;
         position: relative;
         z-index: 1;
@@ -148,7 +150,7 @@ section.family {
       }
 
       h2 {
-        font-size: rem(20);
+        font-size: rem(24);
         position: relative;
         z-index: 1;
         height: 100%;
@@ -156,7 +158,7 @@ section.family {
       }
 
       .image_wrap {
-        max-width: rem(120);
+        max-width: rem(160);
         margin: auto;
       }
 
@@ -216,13 +218,13 @@ section.family {
   h2 {
     text-align: center;
     font-weight: bold;
-    font-size: rem(32);
+    font-size: rem($title-font-size);
     line-height: 120%;
   }
 
   h4 {
     color: #898989;
-    font-size: rem(20);
+    font-size: rem($subtitle-font-size);
     text-align: center;
     margin-top: rem(4);
   }
@@ -609,6 +611,12 @@ section.family {
           justify-content: center;
           gap: rem(8);
         }
+
+        a:hover {
+          color: #fff;
+          background-color: #c22323;
+          transition: 0.6s all;
+        }
       }
     }
   }
@@ -745,14 +753,14 @@ section.family {
     > p {
       padding: rem(12) 0 rem(30);
       color: #636363;
-      font-size: rem(18);
+      font-size: rem($subtitle-font-size);
     }
 
     .wedo_cont_body {
       li {
         display: flex;
         gap: rem(20);
-        margin: rem(20) 0;
+        margin: rem(20);
 
         .wedo_right {
           display: flex;
@@ -761,16 +769,17 @@ section.family {
           justify-content: center;
           gap: rem(10);
           width: rem(500);
-          padding: 0 rem(60) 0 rem(20);
+          padding: 0 rem(0) 0 rem(20);
           .wedo_title {
-            font-size: rem(20);
+            font-size: rem(24);
             font-weight: bold;
             text-align: left;
           }
           .wedo_content {
-            font-size: rem(14);
+            font-size: rem(16);
             color: #898989;
             text-align: left;
+            line-height: 1.4;
           }
           .wedo_link_box {
             a {
@@ -851,28 +860,39 @@ section.family {
     display: flex;
     flex-direction: column;
     align-items: center;
-    > p {
-      padding: rem(12) 0 rem(30);
-      color: #636363;
-      font-size: rem(18);
+    h2 {
+      font-size: rem($title-font-size);
     }
+    // > p {
+    //   padding: rem(12) 0 rem(30);
+    //   color: #636363;
+    //   font-size: rem(22);
+    // }
 
     .btn_box {
       background-color: #fff;
-      width: rem(180 * 1.1);
-      height: rem(42 * 1.1);
+      width: rem(180 * 1.3);
+      height: rem(42 * 1.3);
       color: #be1a21;
       font-weight: bold;
-      border-radius: rem(21);
+      border-radius: rem(30);
       border: rem(1) solid #be1a21;
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: rem(20);
+    }
+
+    .btn_box:hover {
+      color: #fff;
+      background-color: #c22323;
+      transition: 0.6s all;
     }
 
     .text_box {
       color: #898989;
       margin: rem(50) 0;
+      font-size: rem(20);
     }
   }
 }
@@ -887,10 +907,10 @@ section.family {
     > p {
       padding: rem(12) 0 rem(30);
       color: #636363;
-      font-size: rem(18);
+      font-size: rem($subtitle-font-size);
     }
     > h3 {
-      font-size: rem(20);
+      font-size: rem(22);
       font-weight: bold;
     }
 
@@ -907,7 +927,7 @@ section.family {
     }
 
     .family_title {
-      font-size: rem(20);
+      font-size: rem(24);
       font-weight: bold;
     }
     .family_content {
