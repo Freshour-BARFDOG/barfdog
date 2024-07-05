@@ -109,10 +109,18 @@ const ItemList = ({
     const input = e.currentTarget;
     const { value } = input;
 
-    setTitleValue({
-      id,
-      titleByAdmin: value,
-    });
+    // 최대 17자까지만 허용
+    if (value.length > 17) {
+      setTitleValue({
+        id,
+        titleByAdmin: value.slice(0, 17),
+      });
+    } else {
+      setTitleValue({
+        id,
+        titleByAdmin: value,
+      });
+    }
   };
 
   return (
@@ -151,7 +159,7 @@ const ItemList = ({
           type="text"
           name="titleByAdmin"
           className={'text-align-right'}
-          placeholder="베스트리뷰 제목"
+          placeholder="베스트리뷰 제목 (최대 17자)"
           value={titleValue.titleByAdmin || ''}
           onChange={(e) => onInputChangeHandler(e, DATA.id)}
         />
