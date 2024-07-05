@@ -14,9 +14,9 @@ import { transformBirthDay } from '/util/func/transformBirthDay';
 import { transformPhoneNumber } from '/util/func/transformPhoneNumber';
 import transformDate from '../../../../../util/func/transformDate';
 import transformLocalCurrency from '../../../../../util/func/transformLocalCurrency';
-import SurveyStep1 from '../../../../components/survey/SurveyStep1';
-import SurveyStep2 from '../../../../components/survey/SurveyStep2';
-import SurveyStep3 from '../../../../components/survey/SurveyStep3';
+import SurveyBundleStep1 from '../../../../components/survey/SurveyBundleStep1';
+import SurveyBundleStep2 from '../../../../components/survey/SurveyBundleStep2';
+import SurveyBundleStep3 from '../../../../components/survey/SurveyBundleStep3';
 import Spinner from '../../../../components/atoms/Spinner';
 import Modal_confirm from '../../../../components/modal/Modal_confirm';
 import Modal_global_alert from '../../../../components/modal/Modal_global_alert';
@@ -1270,17 +1270,17 @@ export default function Popup_DogDetailPage({ DATA, dogIdx }) {
                       <h4 className={s.title}>반려견 정보</h4>
                     </div>
                     <div className={s['survey-page']}>
-                      <SurveyStep1
+                      <SurveyBundleStep1
                         formValues={formValues}
                         setFormValues={setFormValues}
                         onInputChangeHandler={onInputChangeHandler}
                       />
-                      <SurveyStep2
+                      <SurveyBundleStep2
                         formValues={formValues}
                         setFormValues={setFormValues}
                         onInputChangeHandler={onInputChangeHandler}
                       />
-                      <SurveyStep3
+                      <SurveyBundleStep3
                         formValues={formValues}
                         setFormValues={setFormValues}
                         onInputChangeHandler={onInputChangeHandler}
