@@ -160,10 +160,7 @@ export default function MobileGnb() {
             </li>
             <li>
               <Link href={`/shop?itemType=${general_itemType.ALL}`} passHref>
-                <a
-                  onClick={() => onActiveMenuId('스토어')}
-                  style={{ color: curPath === '/' ? '#ca1011' : '#4A4A4A' }}
-                >
+                <a onClick={() => onActiveMenuId('스토어')}>
                   <Image
                     src={
                       curPath.startsWith('/shop')
@@ -183,7 +180,9 @@ export default function MobileGnb() {
                 <a
                   onClick={() => onActiveMenuId('survey')}
                   className="mobile-menu-survey-btn"
-                  style={{ color: curPath === '/' ? '#ca1011' : '#4A4A4A' }}
+                  style={{
+                    color: curPath === '/survey' ? '#ca1011' : '#4A4A4A',
+                  }}
                 >
                   <Image
                     src={

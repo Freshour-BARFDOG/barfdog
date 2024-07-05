@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import s from './mobileSidr.module.scss';
+import s from '/src/components/header/mobileSidr.module.scss';
 import CloseButton from '/src/components/atoms/CloseButton';
 import ScrollContainer from '/src/components/atoms/ScrollContainer';
 import Image from 'next/image';
