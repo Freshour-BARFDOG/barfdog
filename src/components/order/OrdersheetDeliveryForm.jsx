@@ -65,20 +65,20 @@ export const OrdersheetDeliveryForm = ({
       ...prevState,
       name: bundle ? null : sameUserInfo ? info.name : '',
       phone: bundle ? null : sameUserInfo ? info.phone : '', // 수령자 전화번호 (묶음 배송일 경우, null)
-      zipcode: bundle ? null : sameUserInfo ? info.address.zipcode : '', // 우편번호 (묶음 배송일 경우, null)
-      street: bundle ? null : sameUserInfo ? info.address.street : '', // 도로명 주소 (묶음 배송일 경우, null)
-      city: bundle ? null : sameUserInfo ? info.address.city : '',
+      zipcode: bundle ? null : sameUserInfo ? info.address?.zipcode : '', // 우편번호 (묶음 배송일 경우, null)
+      street: bundle ? null : sameUserInfo ? info.address?.street : '', // 도로명 주소 (묶음 배송일 경우, null)
+      city: bundle ? null : sameUserInfo ? info.address?.city : '',
       detailAddress: bundle
         ? null
         : sameUserInfo
-        ? info.address.detailAddress
+        ? info.address?.detailAddress
         : '', // 상세주소 (묶음 배송일 경우, null)
-      request: bundle ? null : sameUserInfo ? info.address.request : '', // 배송 요청사항 (묶음 배송일 경우, null)
+      request: bundle ? null : sameUserInfo ? info.address?.request : '', // 배송 요청사항 (묶음 배송일 경우, null)
     }));
     if (bundle) {
       setDeliveryInfo(initialDeliveryInfos);
     }
-  }, [bundle, sameUserInfo]);
+  }, [bundle, sameUserInfo, info]);
 
   const onReceivePopupData = (err, data) => {
     // MEMO DATA from POSTCODE API
