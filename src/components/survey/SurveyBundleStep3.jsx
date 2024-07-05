@@ -8,7 +8,7 @@ import Spinner from '../atoms/Spinner';
 import { useRouter } from 'next/router';
 import { dogCautionType } from '/store/TYPE/dogCautionType';
 
-export default function SurveyStep3({
+export default function SurveyBundleStep3({
   formValues,
   setFormValues,
   onInputChangeHandler,

@@ -5,7 +5,7 @@ import { dogActivityLevelType } from '/store/TYPE/dogActivityLevelType';
 import { CustomSelectWithCustomOptions } from './CustomSelectWithCustomOptions';
 import { dogPhysicalStatusType } from '/store/TYPE/dogPhysicalStatusType';
 
-export default function SurveyStep2({ formValues, setFormValues }) {
+export default function SurveyBundleStep2({ formValues, setFormValues }) {
   const defaultLabel = { label: '선택', value: '' };
   let walkingCountPerWeekOptions = new Array(7);
   for (let i = 0; i < walkingCountPerWeekOptions.length; i++) {

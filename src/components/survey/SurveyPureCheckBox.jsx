@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import s from 'src/components/atoms/pureCheckbox.module.scss';
 
-const PureCheckbox = ({
+const SurveyPureCheckbox = ({
   id,
   children,
   className,
@@ -108,4 +108,4 @@ const PureCheckbox = ({
   );
 };
 
-export default PureCheckbox;
+export default SurveyPureCheckbox;
