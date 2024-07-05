@@ -6,8 +6,8 @@ $browser-context: 16;
 $containerSize: rem(800);
 $topLinkBannerHeight: rem(38);
 
-
-.modal-bestReview, .modal-singleReivew {
+.modal-bestReview,
+.modal-singleReivew {
   position: fixed;
   // ! z-index: 1000 // global zindex에서 관리
   left: 0;
@@ -49,7 +49,7 @@ $topLinkBannerHeight: rem(38);
 
 .container {
   // width: $containerSize;
-  width: rem(800);
+  // width: rem(800);
 }
 
 // * --------- cont --------- * //
@@ -59,48 +59,70 @@ $topLinkBannerHeight: rem(38);
   background-color: #fff;
   box-shadow: 0 0 rem(30) rgba(0, 0, 0, 0.15);
   border-radius: rem(8);
-  padding: rem(70) rem(35) rem(35);
-  width: 100%;
-  max-height: rem(437);
+  padding: rem(40) rem(35) rem(20);
+  width: rem(369 * 1.2);
+  // max-height: rem(437);
+  height: rem(605 * 1.2);
   box-sizing: border-box;
   overflow: scroll;
-  &::-webkit-scrollbar{
+  &::-webkit-scrollbar {
     display: none;
   }
+
+  .row1 {
+    display: flex;
+  }
+
+  .date {
+    font-size: rem(13);
+    color: var(--color-font-sub);
+    margin-bottom: rem(6);
+  }
+}
+.swiper_review_top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: rem(10);
+}
+.swiper_review_title {
+  display: inline-block;
+  font-size: rem(20);
+  font-weight: bold;
+  border-bottom: rem(1.8) solid #000;
+}
+.swiper_review_start {
+  display: flex;
+  // gap: rem(2);
 }
 
 .cont {
-  display: grid;
-  grid: 
-  "swiper_bestReview_outerWrap details"
-  "swiper_bestReview_outerWrap row4"/50% 50%;
+  //   display: grid;
+  //   grid:
+  //     'swiper_bestReview_outerWrap details'
+  //     'swiper_bestReview_outerWrap row4'/50% 50%;
 
-  .swiper_bestReview_outerWrap {
-    grid-row: 1/span 4;
+  //   .swiper_bestReview_outerWrap {
+  //     grid-row: 1 / span 4;
+  //   }
+
+  .row3 {
+    color: #4a4a4a;
+    font-size: rem(16);
+    display: flex;
+    justify-content: space-between;
+    // margin-bottom: rem(20);
+    // padding-bottom: rem(20);
+    // border-bottom: rem(1) solid var(--color-line-04);
   }
 
   .details {
-    padding-left: rem(20);
+    // padding-left: rem(20);
 
-    .row1 {
-      display: flex;
-      margin-bottom: rem(9);
-    }
     .row2 {
       margin-bottom: rem(4);
     }
-    .row3 {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: rem(11);
-      padding-bottom: rem(11);
-      border-bottom: rem(1) solid var(--color-line-04);
-    }
 
-    .date {
-      font-size: rem(13);
-      color: var(--color-font-sub);
-    }
     .title {
       font-size: rem(18);
       color: var(--color-font-def);
@@ -109,16 +131,21 @@ $topLinkBannerHeight: rem(38);
       -webkit-line-clamp: 1;
       overflow: hidden;
     }
-    .rating {}
+    .rating {
+    }
     .name {
       color: #4d4d4d;
       font-size: rem(15);
     }
   }
 
-  .row4{
-    padding-left: rem(20);
-    font-size: rem(16);
+  .row4 {
+    padding: rem(10);
+    font-size: rem(18);
+  }
+
+  .row4_scroll {
+    height: rem(200);
   }
 }
 
@@ -129,6 +156,7 @@ $topLinkBannerHeight: rem(38);
   .img-wrap {
     width: 100%;
     aspect-ratio: 360/325;
+    border-radius: rem(10);
   }
 }
 
@@ -146,107 +174,99 @@ $topLinkBannerHeight: rem(38);
   transition-duration: 0.3s;
   pointer-events: all;
   opacity: 0.8;
-  &.invisible{opacity:0; pointer-events: none;}
+  &.invisible {
+    opacity: 0;
+    pointer-events: none;
+  }
 
   &:hover {
     opacity: 1;
   }
 }
 
-
 .swiper-button-prev {
-
   left: rem(8);
 }
 
 .swiper-button-next {
   right: rem(8);
-  transform: translateY(-50%)rotate(180deg);
+  transform: translateY(-50%) rotate(180deg);
 }
 
-
-
 /* --- MEMBER > 리뷰 페이지 > 작성한 각 리뷰 내에 이미지 목록을 보여주는 모달 --- */
-.modal-singleReivew{
-  .body{
+.modal-singleReivew {
+  .body {
     border-radius: rem(4);
     background-color: #fff;
     box-sizing: border-box;
-    .swiper_bestReview_outerWrap{
+    .swiper_bestReview_outerWrap {
       padding: rem(20) !important;
     }
   }
   .swiper-button-next,
-  .swiper-button-prev{
-    &:after{
-      content:'';
+  .swiper-button-prev {
+    &:after {
+      content: '';
       position: absolute;
-      left:50%;
-      top:50%;
-      transform:translate(-50%,-50%);
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
       width: calc(100% - #{rem(4)});
       height: calc(100% - #{rem(4)});
-      background-color: rgba(0,0,0,0.6);
-      box-shadow: 0 0 rem(20) 0 rgba(0,0,0,0.6);
+      background-color: rgba(0, 0, 0, 0.6);
+      box-shadow: 0 0 rem(20) 0 rgba(0, 0, 0, 0.6);
       border-radius: 50%;
       z-index: -1;
-
     }
   }
 }
 
-@media (max-width: rem(800)) {
+// @media (max-width: rem(800)) {
+//   .container {
+//     width: calc(100vw - rem(40));
+//     max-width: rem(400);
+//   }
+//   .card {
+//     padding: rem(40) rem(20) rem(20);
+//     max-height: 100%;
 
-  .container {
-    width: calc(100vw - rem(40));
-    max-width: rem(400);
-  }
-  .card {
-    padding: rem(40) rem(20) rem(20);
-    max-height: 100%;
+//     .cont {
+//       grid:
+//         'details'
+//         'swiper_bestReview_outerWrap'
+//         'row4'/100%;
 
-    .cont {
-      grid: 
-      "details"
-      "swiper_bestReview_outerWrap"
-      "row4"/100%;
+//       .swiper_bestReview_outerWrap {
+//         order: 2;
+//         grid-row: 2 / span 4;
+//       }
 
-      .swiper_bestReview_outerWrap {
-        order: 2;
-        grid-row: 2/span 4;
-      }
+//       .details {
+//         padding: 0;
 
-      .details {
-        padding: 0;
+//         // .row3 {
+//         //   padding-bottom: 0;
+//         //   border: none;
+//         //   display: flex;
+//         //   align-items: flex-start;
+//         // }
+//       }
 
-        .row3 {
-          padding-bottom: 0;
-          border: none;
-        }
-      }
+//       .row4 {
+//         padding: rem(5) 0 0;
+//         order: 3;
 
-      .row4{
-        padding: rem(5) 0 0;
-        order: 3;
+//
+//       }
+//     }
+//   }
+// }
 
-        .row4_scroll {
-          height: rem(300) !important;
-        }
-      }
-    }
-  }
-}
-
-
-
-@media (max-height: rem(800)) {
-  
-  .card {
-    height: calc(100vh - rem(100));
-  }
-}
-
-
+// @media (max-height: rem(800)) {
+//   .card {
+//     height: calc(100vh - rem(100));
+//   }
+// }
 
 // @media (max-width: $containerSize) {
 

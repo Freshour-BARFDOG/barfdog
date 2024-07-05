@@ -74,7 +74,7 @@ export function Swiper_review({ data }) {
     })();
   }, []);
 
-  console.log(itemList);
+  // console.log(itemList);
 
   useEffect(() => {
     window.innerWidth <= 600 ? setIsMobile(true) : setIsMobile(false);
