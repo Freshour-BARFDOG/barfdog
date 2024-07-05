@@ -1,35 +1,35 @@
 import s from '/src/pages/survey/survey.module.scss';
 import SurveyInputRadio from './SurveyInputRadio';
 import React from 'react';
-import {dogActivityLevelType} from "/store/TYPE/dogActivityLevelType";
-import {CustomSelectWithCustomOptions} from "./CustomSelectWithCustomOptions";
-import {dogPhysicalStatusType} from "/store/TYPE/dogPhysicalStatusType";
+import { dogActivityLevelType } from '/store/TYPE/dogActivityLevelType';
+import { CustomSelectWithCustomOptions } from './CustomSelectWithCustomOptions';
+import { dogPhysicalStatusType } from '/store/TYPE/dogPhysicalStatusType';
 
-
-
-
-export default function SurveyStep2 ({formValues, setFormValues}) {
-  
-  const defaultLabel = {label: '선택', value: ''};
+export default function SurveyBundleStep2({ formValues, setFormValues }) {
+  const defaultLabel = { label: '선택', value: '' };
   let walkingCountPerWeekOptions = new Array(7);
-  for (let i =0; i < walkingCountPerWeekOptions.length; i++) {
-    walkingCountPerWeekOptions[i] = {label: `${(i+1)}`, value: (i+1).toString()};
+  for (let i = 0; i < walkingCountPerWeekOptions.length; i++) {
+    walkingCountPerWeekOptions[i] = {
+      label: `${i + 1}`,
+      value: (i + 1).toString(),
+    };
   }
 
-  
   let walkingTimePerOneTimeOptions = new Array(24);
-  for (let i =0; i < walkingTimePerOneTimeOptions.length; i++) {
-    walkingTimePerOneTimeOptions[i] = {label: `${(i+1) * 0.5}`, value: `${((i+1) * 0.5).toString()}`};
+  for (let i = 0; i < walkingTimePerOneTimeOptions.length; i++) {
+    walkingTimePerOneTimeOptions[i] = {
+      label: `${(i + 1) * 0.5}`,
+      value: `${((i + 1) * 0.5).toString()}`,
+    };
   }
-  
+
   walkingCountPerWeekOptions.unshift(defaultLabel);
   walkingTimePerOneTimeOptions.unshift(defaultLabel);
-  
 
   // // console.log(formValues)
-  
+
   return (
-    <section id='surveyPage' className={s.step2page}>
+    <section id="surveyPage" className={s.step2page}>
       <div className={s.input_title}>반려견의 활동량은</div>
       <div className="input-row">
         <SurveyInputRadio
@@ -107,4 +107,4 @@ export default function SurveyStep2 ({formValues, setFormValues}) {
       </div>
     </section>
   );
-};
+}

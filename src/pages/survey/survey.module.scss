@@ -1,10 +1,11 @@
 @import '/styles/global/guide.scss';
 @import '/styles/global/rem';
+
 // ------------ LAY-OUT
 .survey-page {
   margin-bottom: rem(150);
 
-  .dog_title{
+  .dog_title {
     margin-bottom: rem(40);
     margin-top: rem(9);
     @include char(t24);
@@ -24,12 +25,711 @@
   margin-bottom: rem(60);
 }
 
+//////////////////////////////////
+// ******** STEP 1. 견명 ********
+//////////////////////////////////
+
+.input_name_box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: rem(20);
+}
+
+.input_name {
+  background-color: white;
+  width: rem(400);
+  height: rem(50);
+  position: relative;
+}
+
+.input_add_btn {
+  background-color: white;
+  width: rem(400);
+  height: rem(50);
+  border: rem(1) solid #dddddd;
+  border-radius: rem(5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: rem(3);
+
+  svg {
+    width: rem(30);
+    height: rem(30);
+  }
+
+  &:hover {
+    border: rem(1) solid black;
+    transition: 0.4s all;
+  }
+}
+.input_name_wrapper {
+  position: relative;
+  width: rem(400);
+}
+.input_remove_button {
+  position: absolute;
+  right: rem(10);
+  font-size: rem(14);
+  margin-top: rem(10);
+  padding: rem(4) rem(12);
+
+  background-color: #f2f2f2;
+  border-radius: rem(30);
+  color: #999999;
+}
+
+.input_name_guide {
+  background-color: rgba(242, 242, 242, 0.6);
+  width: rem(400);
+  // height: rem(50);
+  color: #be1a21;
+  text-align: center;
+  padding: rem(10) 0;
+  border-radius: rem(10);
+}
+
+.input_line {
+  width: rem(400);
+  height: rem(2);
+  background-color: #ddd;
+  margin: rem(25) 0;
+}
+
+//////////////////////////////////
+// ******** STEP 2. 성별 & 중성화 ********
+//////////////////////////////////
+
+.gender_neutralization_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: rem(380);
+
+  .input_gender_container,
+  .input_neutralization_container {
+    margin-bottom: rem(40);
+  }
+
+  .input_gender_box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    ul {
+      li {
+        width: rem(180);
+      }
+    }
+  }
+
+  .input_neutralization_box {
+    label {
+      width: rem(180);
+    }
+  }
+}
+
+//////////////////////////////////
+// ******** STEP 3. 크기 & 견종 ********
+//////////////////////////////////
+.dogSize_dogType_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  .input_line {
+    position: fixed;
+    margin-top: rem(270);
+  }
+
+  .input_dogSize_dogType_box {
+    margin-bottom: rem(40);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.dogType_list {
+  height: rem(100);
+}
+
+//////////////////////////////////
+// ******** STEP 4. 생일 ********
+//////////////////////////////////
+
+.dogBirth_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: rem(430);
+
+  .input_dogBirth_box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    ul {
+      height: rem(50);
+    }
+
+    .date_label_wrap {
+      // display: none;
+      .date_label_span {
+        display: none;
+      }
+    }
+    input {
+      width: rem(400) !important;
+      height: rem(50) !important;
+      border-radius: rem(10) !important;
+    }
+
+    // 노령견 여부 label
+    .oldDog {
+      padding: rem(40) 0 rem(50) rem(10);
+      display: flex;
+      width: 100%;
+      justify-content: flex-start;
+    }
+  }
+}
+
+.year_month_btn {
+  background-color: white;
+  width: rem(400);
+  height: rem(50);
+  border: rem(1) solid #dddddd;
+  border-radius: rem(10);
+}
+
+.year_month_btn:hover {
+  background-color: #ffe0e1;
+  color: #af3d3d;
+  border: rem(2) solid #852024;
+  transition: 0.3s all;
+  font-weight: bold;
+}
+
+.birth_text_wrapper {
+  position: relative;
+  height: rem(300);
+}
+
+.birth_text {
+  background-color: rgba(242, 242, 242, 0.6);
+  color: #be1a21;
+  padding: rem(10);
+  width: rem(400);
+  font-size: rem(14.3);
+  border-radius: rem(10);
+  position: absolute;
+  left: 50%;
+  top: -20%;
+  transform: translate(-50%, -50%);
+
+  a {
+    display: inline-block;
+    text-decoration: underline;
+    font-weight: bold;
+  }
+}
+
+//////////////////////////////////
+// ******** STEP 5. 몸무게 ********
+//////////////////////////////////
+.input_weight_container {
+  height: rem(250);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.input_weight_box {
+  position: relative;
+  width: rem(400);
+  input {
+    margin-bottom: rem(50);
+  }
+}
+.weight_unit {
+  color: #be1a21;
+  position: absolute;
+  right: rem(11);
+  top: rem(11);
+}
+
+//////////////////////////////////
+// ******** STEP 6. 현재 상태 ********
+//////////////////////////////////
+.status_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.input_target_weight_box {
+  position: relative;
+  width: rem(400);
+  margin: auto;
+}
+.input_status_box {
+  .inputRadio-wrap {
+    display: grid;
+    grid-template-columns: repeat(2, 190px);
+    grid-template-rows: repeat(2, 170px);
+    column-gap: rem(20);
+    row-gap: rem(16);
+    margin-bottom: rem(20);
+  }
+  .inputRadio {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: rem(15);
+    gap: rem(15);
+  }
+}
+
+.specific_status_container {
+  width: rem(400);
+  margin: rem(20) 0;
+  font-size: rem(18);
+
+  .sepcific_title {
+    margin: rem(20) 0;
+    span {
+      font-size: rem(16);
+      color: rgb(96, 96, 96);
+    }
+  }
+  .input_specific_status_box {
+    ul {
+      flex-direction: row;
+      label {
+        width: rem(186);
+        height: rem(50);
+      }
+    }
+  }
+}
+
+.pregnancy_date_container {
+  input {
+    width: rem(400) !important;
+    height: rem(50) !important;
+  }
+}
+
+.pregnancy_date_title {
+  margin: rem(20) 0;
+  span {
+    font-size: rem(13);
+    color: rgb(96, 96, 96);
+  }
+}
+
+.lactating_count_container {
+  margin-top: rem(20);
+  ul {
+    display: flex;
+    gap: rem(10);
+    label {
+      width: rem(92.5);
+      height: rem(50);
+      padding: rem(10);
+    }
+  }
+}
+
+//////////////////////////////////
+// ******** STEP 7. 활동량 ********
+//////////////////////////////////
+.input_activity_box {
+  .inputRadio-wrap {
+    width: rem(550);
+    height: rem(150);
+    display: flex;
+    gap: rem(14);
+    label {
+      height: rem(130);
+      padding: rem(16) rem(5);
+      display: flex;
+      justify-content: space-between;
+      gap: rem(12);
+    }
+  }
+}
+
+//////////////////////////////////
+// ******** STEP 8. 산책량 ********
+//////////////////////////////////
+.walk_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.walk_box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: rem(380);
+  margin: rem(10) 0 rem(30) 0;
+
+  .input_walk {
+    display: flex;
+    align-items: center;
+    gap: rem(10);
+
+    input {
+      background-color: white;
+      border: rem(1) solid #dddddd !important;
+      border-radius: rem(10);
+      height: rem(40);
+    }
+  }
+}
+
+//////////////////////////////////
+// ******** STEP 11. 영양제 ********
+//////////////////////////////////
+.supplement_text {
+  color: #be1a21;
+  text-align: center;
+  padding-bottom: rem(20);
+}
+
+.input_supplement_box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: rem(10) 0 rem(40) 0;
+  label {
+    width: rem(190);
+    height: rem(50) !important;
+  }
+}
+
+.supplement_select_container {
+  .inputRadio-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-bottom: rem(30);
+
+    label {
+      width: rem(120);
+      height: rem(50);
+    }
+
+    .input_supplement_brand {
+      border: none;
+      border-bottom: rem(1) solid #ccc;
+      width: rem(200);
+      margin-left: rem(13);
+      border-radius: 0;
+
+      &::placeholder {
+        color: rgba(0, 0, 0, 0.25);
+        font-size: rem(12);
+      }
+    }
+
+    .input_supplement_brand:focus {
+      border: none !important;
+      border-bottom: rem(1) solid #be1a21 !important;
+    }
+  }
+}
+
+//////////////////////////////////
+// ******** STEP 12. 현재 먹고 있는 식사 ********
+//////////////////////////////////
+
+.currentMeal_select_container {
+  .inputRadio-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-bottom: rem(30);
+
+    label {
+      width: rem(120);
+      height: rem(50);
+      padding: rem(6);
+    }
+
+    .input_supplement_brand {
+      border: none;
+      border-bottom: rem(1) solid #ccc;
+      width: rem(200);
+      margin-left: rem(13);
+      border-radius: 0;
+
+      &::placeholder {
+        color: rgba(0, 0, 0, 0.25);
+        font-size: rem(12);
+      }
+    }
+
+    .input_supplement_brand:focus {
+      border: none !important;
+      border-bottom: rem(1) solid #be1a21 !important;
+    }
+  }
+}
+
+//////////////////////////////////
+// ******** STEP 13. 못 먹는 음식 ********
+//////////////////////////////////
+.inedibleFood_text_box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.inedibleFood_text {
+  color: #be1a21;
+  background-color: rgba(242, 242, 242, 0.6);
+  padding: rem(20) rem(40);
+  border-radius: rem(10);
+  width: rem(480);
+  margin: rem(30) 0;
+}
+
+.inedibleFood_select_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .inputRadio-wrap {
+    width: rem(400);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: rem(16);
+
+    li {
+      width: rem(150);
+      label {
+        width: rem(140);
+        height: rem(50);
+        padding: rem(6);
+      }
+    }
+
+    .input_etc {
+      border: rem(1) solid #ccc;
+      border-radius: rem(8);
+      background-color: white;
+      margin: rem(20) 0 0 rem(-330);
+      width: rem(475);
+      height: rem(40);
+      display: flex;
+
+      &::placeholder {
+        color: rgba(0, 0, 0, 0.25);
+        font-size: rem(15);
+      }
+    }
+
+    .input_supplement_brand:focus {
+      border: none !important;
+      border-bottom: rem(1) solid #be1a21 !important;
+    }
+  }
+}
+
+//////////////////////////////////
+// ******** STEP 14. 질병 ********
+//////////////////////////////////
+.step14Page {
+  .modal_consult_wrapper {
+    background-color: #af3d3d;
+  }
+}
+.caution_text_box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.caution_text {
+  color: #be1a21;
+  background-color: rgba(242, 242, 242, 0.6);
+  padding: rem(20) rem(60);
+  border-radius: rem(10);
+  width: rem(540);
+  margin-bottom: rem(30);
+
+  a {
+    font-weight: bold;
+    display: inline-block;
+    text-decoration: underline;
+  }
+}
+.caution_select_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .inputRadio-wrap {
+    width: rem(400);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    margin-bottom: rem(30);
+    gap: rem(20);
+    li {
+      width: rem(120);
+      label {
+        width: rem(120);
+        height: rem(58);
+        padding: rem(6);
+      }
+    }
+
+    .input_etc {
+      border: rem(1) solid #ccc;
+      border-radius: rem(8);
+      background-color: white;
+      margin: rem(20) 0 0 rem(-420);
+      width: rem(540);
+      height: rem(40);
+      display: flex;
+
+      &::placeholder {
+        color: rgba(0, 0, 0, 0.25);
+        font-size: rem(14);
+      }
+    }
+
+    .input_supplement_brand:focus {
+      border: none !important;
+      border-bottom: rem(1) solid #be1a21 !important;
+    }
+  }
+}
+
+//////////////////////////////////
+// ******** STEP 15. 특별히 챙겨주고 싶은 것 ********
+//////////////////////////////////
+.recommendRecipeId_select_container {
+  .inputRadio-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-bottom: rem(30);
+
+    label {
+      width: rem(200);
+      height: rem(50);
+      padding: rem(6);
+    }
+  }
+}
+
+.input_mealCountPerOneDay_box {
+  margin: rem(10) 0 rem(40) 0;
+  .mealCountPerOneDay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: rem(20);
+  }
+  label {
+    width: rem(120);
+    height: rem(50) !important;
+  }
+}
+
+//////////////////////////////////
+// ******** STEP 17. 좋아하는 재료 ********
+//////////////////////////////////
+
+.input_fav_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .input_fav_box {
+    margin-bottom: rem(20);
+    position: relative;
+  }
+
+  .tag_button_box {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: rem(16);
+
+    .tag_button {
+      position: relative;
+      cursor: pointer;
+    }
+    p {
+      background-color: white;
+      padding: rem(6) rem(28) rem(6) rem(14);
+      border: rem(2) solid #be1a21;
+      border-radius: rem(20);
+    }
+
+    .tag_button_close {
+      display: flex;
+      position: absolute;
+      top: rem(9);
+      right: rem(6);
+      width: rem(22);
+      height: rem(20);
+      fill: #7d7d7d;
+    }
+
+    p:hover {
+      background-color: #ffe0e1;
+
+      .tag_button_close {
+        fill: #be1a21;
+      }
+    }
+  }
+}
+
+//////////////////////////////////
+// ******** STEP 18. 전하고 싶은 말 ********
+//////////////////////////////////
+.input_title_message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: rem(24);
+  padding: rem(20) 0;
+
+  span {
+    font-size: rem(16);
+    padding-left: rem(10);
+    color: #383838;
+  }
+}
+
+///////////////////////////////
 
 // ----------- INPUT STYLE
+
 .survey-page {
-  .input-wrap{
+  input:hover {
+    background-color: #f2f2f2;
+    transition: 0.5s all;
+  }
+
+  .input-wrap {
     position: relative;
-    input{width: 100% !important;}
+    input {
+      width: 100% !important;
+    }
   }
   input.focus-underline {
     font-size: rem(16);
@@ -41,12 +741,13 @@
     border-radius: 0;
     border-bottom: rem(1) solid var(--color-line-02) !important;
     cursor: pointer;
+
     &:focus {
       border: {
         top: 0;
         left: 0;
         right: 0;
-        border-bottom: rem(1) solid
+        border-bottom: rem(1) solid;
       }
       border-color: var(--color-main) !important;
     }
@@ -59,21 +760,19 @@
       font-size: rem(16);
     }
   }
-
 }
 
 .survey-page {
   .step3page {
     .input-row {
       .inputRadio {
-          span {
-            font-weight: 500;
-          }
+        span {
+          font-weight: 500;
+        }
       }
     }
   }
 }
-
 
 .input_title {
   text-align: center;
@@ -81,20 +780,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap:rem(10);
-  @include char(l20);
-  font-weight: 600;
-  padding-bottom: rem(30);
+  // @include char(l20);
+  // font-weight: 600;
+  font-size: rem(24);
+  padding: rem(20) 0;
 }
 
-
-.display-flex-column{
+.display-flex-column {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: rem(30) !important;
 }
-
 
 // ---------- 1페이지
 .step1Page {
@@ -147,7 +844,7 @@
     font-size: rem(16);
     line-height: 1.2;
   }
-  > *{
+  > * {
     display: inline-flex !important;
   }
 }
@@ -159,9 +856,9 @@
   gap: rem(20);
   font-size: rem(16);
 
-  > li{
-    > div{
-      > input{
+  > li {
+    > div {
+      > input {
         font-size: rem(16);
       }
     }
@@ -190,14 +887,13 @@
   }
 }
 
-.dogStatus{
+.dogStatus {
   padding: 0 rem(60);
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: rem(26);
 }
-
 
 // * ------- 2페이지  ------- * //
 
@@ -230,7 +926,6 @@
       width: rem(80);
       text-align: center;
     }
-
   }
 }
 
@@ -260,15 +955,17 @@
   justify-content: center;
   row-gap: rem(12);
   @include char(l18);
-  label{
+  label {
     overflow-y: scroll;
     display: flex;
     align-items: flex-start;
     box-sizing: border-box;
     height: rem(42);
-    padding-top:rem(10);
-    padding-bottom:0;
-    &::-webkit-scrollbar {display: none;}
+    padding-top: rem(10);
+    padding-bottom: 0;
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 }
 
@@ -286,7 +983,7 @@
 
 .caution {
   width: rem(220);
-  margin:0 auto;
+  margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
   column-gap: rem(20);
@@ -294,8 +991,8 @@
   row-gap: rem(12);
   @include char(l18);
   // padding-bottom: rem(30);
-  label{
-   padding: 0;
+  label {
+    padding: 0;
   }
 }
 // * ------- 활동량  ------- * //
@@ -340,7 +1037,7 @@
   display: inline-flex;
   flex-direction: row;
   gap: rem(14);
-  $descHeight : rem(40);
+  $descHeight: rem(40);
   $descBottomPos: rem(10);
   padding-bottom: calc(#{$descHeight} + #{$descBottomPos});
   .desc {
@@ -360,7 +1057,7 @@
 // * ------- Custom Input 공통 ------ *
 .inputRadio-wrap {
   text-align: center;
-  label{
+  label {
     max-width: rem(320);
     cursor: pointer;
     font-size: rem(16);
@@ -368,7 +1065,7 @@
 }
 .inputRadio {
   cursor: pointer;
-  border-radius: rem(32.5);
+  border-radius: rem(10);
   background-color: #fff;
   width: 100%;
   min-height: rem(42);
@@ -380,7 +1077,7 @@
   box-sizing: border-box;
   border: rem(2) solid var(--color-line-03);
   transition: border-color 0.2s var(--transition-cubic);
-  font-weight: 600;
+  // font-weight: 600; // 굵음
   max-width: rem(320);
   white-space: normal;
   word-break: keep-all;
@@ -388,6 +1085,7 @@
   &.checked {
     border-color: var(--color-main);
     color: var(--color-main);
+    background-color: #ffe0e2;
   }
   input {
     position: absolute;
@@ -478,80 +1176,11 @@
   }
 }
 
-
-
-
-
-// * ------- Navigation Button  ------- * //
-.swiper-navigation-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: rem(560);
-  margin: 0 auto 0;
-  button {
-    display: flex;
-    justify-content: center;
-    column-gap: rem(4);
-    border: rem(1) solid var(--color-main);
-    width: rem(120);
-    @include char(l16);
-    font-weight: 600;
-    color: var(--color-main);
-    text-align: center;
-    padding: rem(19) 0;
-    border-radius: rem(4);
-
-    transition-timing-function: ease-out;
-    transition-duration: 0.4s;
-    transition-property: background-color, box-shadow;
-
-    .image_box {
-      position: relative;
-      width: rem(12);
-      aspect-ratio: 1/1;
-      img {
-        transition: inherit;
-      }
-    }
-  }
-  .swiper-button-prev {
-    border-color: var(--color-main);
-    background-color: #fff;
-    color: var(--color-main);
-    box-shadow: 0 rem(2) rem(10) 0 rgba(0, 0, 0, 0.1);
-    &[disabled] {
-      border-color: var(--color-disabled);
-      color: var(--color-disabled);
-      box-shadow: none;
-      img {
-        filter: grayscale(100);
-        opacity: 0.5;
-      }
-    }
-  }
-
-  .swiper-button-next {
-    border-color: transparent;
-    background-color: var(--color-main);
-    color: #fff;
-    box-shadow: 0 rem(2) rem(10) 0 rgba(202, 16, 16, 0.6);
-  }
-  .swiper-button-submit{
-    border-color: transparent;
-    background-color: var(--color-main);
-    color: #fff;
-    box-shadow: 0 rem(2) rem(10) 0 rgba(202, 16, 16, 0.6);
-    display: none;
-  }
-}
-
-
-.btn-section.in-mypage{
+.btn-section.in-mypage {
   display: flex;
   align-items: center;
   justify-content: center;
-  button.submit{
+  button.submit {
     background-color: var(--color-main);
     font-size: rem(16);
     color: #fff;
@@ -563,7 +1192,6 @@
 }
 
 @media (max-width: rem(650)) {
-
   // * ------- Custom Input 공통 ------ *
   .inputRadio-wrap {
     width: auto;
@@ -585,20 +1213,18 @@
     }
   }
 
-  
   .dog_choice {
     padding: 0;
     column-gap: rem(10);
     display: grid;
-    grid-template-columns:repeat(3, 1fr);
-    
-    li{
+    grid-template-columns: repeat(3, 1fr);
+
+    li {
       > .inputRadio {
         padding: rem(12) rem(20);
       }
     }
   }
-  
 
   .flex_box2 {
     display: grid;
@@ -610,14 +1236,11 @@
     }
   }
 
-  
-  .dogStatus{
+  .dogStatus {
     gap: rem(14);
   }
-
 
   .inputRadio {
     padding: rem(10) rem(20);
   }
-
 }

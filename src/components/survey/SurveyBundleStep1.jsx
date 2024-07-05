@@ -10,20 +10,19 @@ import { dogGenderType } from '/store/TYPE/dogGenderType';
 import { dogSizeType } from '/store/TYPE/dogSizeType';
 import yearOptionList from '/util/func/yearOptionList';
 
-
-const getSurveyBirthObject = (yyyymmObj)=>{
+const getSurveyBirthObject = (yyyymmObj) => {
   const result = {
     yyyy: '',
     mm: '',
-    yyyymm: ''
-  }
+    yyyymm: '',
+  };
   for (const key in yyyymmObj) {
     const val = yyyymmObj[key];
     switch (key) {
       case 'yyyy':
         result.yyyy = val;
         result.yyyymm += val;
-        
+
         break;
       case 'mm':
         result.mm = val;
@@ -32,20 +31,24 @@ const getSurveyBirthObject = (yyyymmObj)=>{
     }
   }
   return result;
-}
+};
 
-
-export default function SurveyStep1({ formValues, setFormValues, onInputChangeHandler }) {
-  
-  const birthObj = {yyyy: formValues.birth?.slice(0,4), mm : formValues.birth?.slice(4,6)}
+export default function SurveyBundleStep1({
+  formValues,
+  setFormValues,
+  onInputChangeHandler,
+}) {
+  const birthObj = {
+    yyyy: formValues.birth?.slice(0, 4),
+    mm: formValues.birth?.slice(4, 6),
+  };
   const [birth, setBirth] = useState(birthObj);
-  
 
   useEffect(() => {
     const birthObj = getSurveyBirthObject(birth);
     const hasValue = birthObj.yyyymm.length;
     // 벌스데이도 업데이트 해줘야하네요.
-    if(hasValue){
+    if (hasValue) {
       const birthString = birthObj.yyyymm;
       // console.log(birthObj);
       setFormValues((prevState) => ({
@@ -53,16 +56,13 @@ export default function SurveyStep1({ formValues, setFormValues, onInputChangeHa
         birth: birthString,
       }));
     }
- 
   }, [birth]);
 
   const yearOptions = yearOptionList(50, true).year;
   const monthOptions = yearOptionList(null, true).month;
 
-
-
   return (
-    <section id='surveyPage' className={s.step1Page}>
+    <section id="surveyPage" className={s.step1Page}>
       <div className={s['input-row']}>
         <label htmlFor={'name'}>
           <p className={s.input_title}>반려견 이름</p>
@@ -95,7 +95,9 @@ export default function SurveyStep1({ formValues, setFormValues, onInputChangeHa
             <CustomSelectWithCustomOptions
               id={'yyyy'}
               options={yearOptions}
-              value={formValues.birth?.length >= 4 && formValues.birth.slice(0,4)}
+              value={
+                formValues.birth?.length >= 4 && formValues.birth.slice(0, 4)
+              }
               setValues={setBirth}
               unit={'년'}
               width={120}
@@ -106,7 +108,7 @@ export default function SurveyStep1({ formValues, setFormValues, onInputChangeHa
             <CustomSelectWithCustomOptions
               id={'mm'}
               options={monthOptions}
-              value={formValues.birth?.slice(4,6)}
+              value={formValues.birth?.slice(4, 6)}
               setValues={setBirth}
               unit={'월'}
               width={120}
@@ -120,7 +122,9 @@ export default function SurveyStep1({ formValues, setFormValues, onInputChangeHa
             theme={'circle'}
             value={formValues.oldDog || ''}
             setValue={setFormValues}
-          >노령견입니다.</PureCheckbox>
+          >
+            노령견입니다.
+          </PureCheckbox>
         </div>
       </div>
 
@@ -132,7 +136,6 @@ export default function SurveyStep1({ formValues, setFormValues, onInputChangeHa
           className={s.dog_choice}
           idList={[dogSizeType.SMALL, dogSizeType.MIDDLE, dogSizeType.LARGE]}
           labelList={['소형견', '중형견', '대형견']}
-          
         />
       </div>
 
@@ -141,7 +144,10 @@ export default function SurveyStep1({ formValues, setFormValues, onInputChangeHa
 
         <DogTypeCustomSelectWithCustomOptions
           id={'dogType'}
-          options={dogBreedType.map((dogType) => ({label:dogType.label, value: dogType.value }))}
+          options={dogBreedType.map((dogType) => ({
+            label: dogType.label,
+            value: dogType.value,
+          }))}
           value={formValues}
           setFormValues={setFormValues}
           width={360}
@@ -180,6 +186,3 @@ export default function SurveyStep1({ formValues, setFormValues, onInputChangeHa
     </section>
   );
 }
-
-
-
