@@ -367,9 +367,6 @@ export default function Survey() {
     spanTag.style.backgroundColor = '#CA1010';
     filledBar.style.backgroundColor = '#CA1010';
 
-    // console.log(pagination);
-    // console.log('progressBar', progressBar);
-
     // const initIndex = swiper.activeIndex;
     // const curerntStep = initIndex + 1;
     // pagination.dataset.step = curerntStep;
