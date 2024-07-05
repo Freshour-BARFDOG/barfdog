@@ -98,28 +98,28 @@ section.notice_text {
     overflow: hidden;
     border-radius: rem(4);
 
-    &:hover {
-      &::before {
-        //width: 100%;
-        //clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
-        opacity: 1;
-        transform: scale(2);
-        transition: opacity 1s ease, transform 1s ease;
-      }
-      .content_box {
-        .text_box {
-          .top_text {
-            color: #000;
-            transition: color 0.2s ease;
-          }
+    // &:hover {
+    //   &::before {
+    //     //width: 100%;
+    //     //clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+    //     opacity: 1;
+    //     transform: scale(2);
+    //     transition: opacity 1s ease, transform 1s ease;
+    //   }
+    //   .content_box {
+    //     .text_box {
+    //       .top_text {
+    //         color: #000;
+    //         transition: color 0.2s ease;
+    //       }
 
-          .bot_text {
-            color: #000;
-            transition: color 0.2s ease;
-          }
-        }
-      }
-    }
+    //       .bot_text {
+    //         color: #000;
+    //         transition: color 0.2s ease;
+    //       }
+    //     }
+    //   }
+    // }
 
     &::before {
       content: '';

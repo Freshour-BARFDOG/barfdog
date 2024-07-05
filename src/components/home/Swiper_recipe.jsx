@@ -97,7 +97,7 @@ export function Swiper_recipe() {
         if (res?.status === 200) {
           const data = res.data._embedded?.queryItemsDtoList;
 
-          console.log('data', data);
+          // console.log('data', data);
 
           const updatedItemHealthTypeList = itemHealthTypeList.map((item) => {
             return { [item.value]: [] };
