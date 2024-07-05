@@ -43,7 +43,11 @@ import { filter_blindingUserName } from '/util/func/filter_blindingUserName';
 //   ],
 // };
 
-export default function Modal_bestReview({ isActiveModal, setIsActiveModal, reviewId }) {
+export default function Modal_bestReview({
+  isActiveModal,
+  setIsActiveModal,
+  reviewId,
+}) {
   const [info, setInfo] = useState({});
   const [isLoading, setIsLoading] = useState({});
   const [btnStylesObj, setBtnStyleObj] = useState({});
@@ -78,6 +82,7 @@ export default function Modal_bestReview({ isActiveModal, setIsActiveModal, revi
         username: data.reviewDto.username,
         contents: data.reviewDto.contents,
         imageList: data.reviewImageDtoList,
+        titleByAdmin: data.reviewDto.titleByAdmin,
       };
       setInfo(DATA);
       // console.log(res);
@@ -112,7 +117,9 @@ export default function Modal_bestReview({ isActiveModal, setIsActiveModal, revi
 
   return (
     <>
-      <section className={`${s['modal-bestReview']} ${zIndex['modal-bestReview']}`}>
+      <section
+        className={`${s['modal-bestReview']} ${zIndex['modal-bestReview']}`}
+      >
         <div
           className={s.background}
           onClick={onHideModalHandler}
@@ -125,30 +132,62 @@ export default function Modal_bestReview({ isActiveModal, setIsActiveModal, revi
               <i className={s.btn_close_modal} onClick={onHideModalHandler}>
                 <CloseButton style={btnStylesObj} />
               </i>
-              <figure className={s.cont}>
-                <Swiper_bestReview imgDataList={info.imageList} />
-                <div className={s.details}>
-                  <div className={s.row1}>
-                    <span className={s.date}>{info.writtenDate}</span>
-                  </div>
-                  <div className={s.row2}>
-                    <h2 className={s.title}>{info.contents}</h2>
-                  </div>
-                  <div className={s.row3}>
-                    <i className={s.rating}>
-                      <RatingStars count={4} size={15} margin={5} disabled />
-                    </i>
-                    <span className={s.name}>{filter_blindingUserName(info.username)}</span>
-                  </div>
+              <div className={s.row1}>
+                <span className={s.date}>{info.writtenDate}</span>
+              </div>
+              <Swiper_bestReview imgDataList={info.imageList} />
+
+              <div className={s.swiper_review_top}>
+                <div className={s.swiper_review_title}>
+                  {info.titleByAdmin && <span>{info.titleByAdmin}</span>}
                 </div>
+
+                <div className={s.swiper_review_start}>
+                  {/* 별 5개 */}
+                  {[...Array(5)].map((_, index) => (
+                    <>
+                      <Image
+                        src={'/img/icon/review-star.svg'}
+                        alt="sns-insta"
+                        width={18}
+                        height={18}
+                      />
+                    </>
+                  ))}
+                </div>
+
+                {/* [이전] 별 5개 */}
+                {/* <i className={s.rating}>
+                  <RatingStars count={5} size={15} margin={5} disabled />
+                </i> */}
+              </div>
+
+              <figure className={s.cont}>
                 <div className={s.row4}>
                   <ScrollContainer
                     className={s.row4_scroll}
                     height={220}
-                    scrollBarWidth={info?.contents?.trim().length > 300 ? '10' : '0'}
+                    scrollBarWidth={
+                      info?.contents?.trim().length > 300 ? '10' : '0'
+                    }
                   >
                     {info.contents}
                   </ScrollContainer>
+                  <div className={s.row3}>
+                    <span className={s.name}>
+                      {info.username?.includes('@')
+                        ? info.username?.split('@')[0].trim()
+                        : info.username}{' '}
+                      보호자님
+                    </span>
+                    <span className={s.swiper_review_type}>
+                      {info.orderType === 'item'
+                        ? '일반구매'
+                        : 'subscribe'
+                        ? '정기구독'
+                        : ''}
+                    </span>
+                  </div>
                 </div>
               </figure>
             </article>
@@ -186,13 +225,17 @@ const Swiper_bestReview = ({ imgDataList }) => {
   return (
     <div className={s.swiper_bestReview_outerWrap}>
       <i
-        className={`${s['swiper-button-prev']} ${isFirstSlide ? s.invisible : ''}`}
+        className={`${s['swiper-button-prev']} ${
+          isFirstSlide ? s.invisible : ''
+        }`}
         ref={navPrevRef}
       >
         <ArrowLeft />
       </i>
       <i
-        className={`${s['swiper-button-next']} ${isLastSlide ? s.invisible : ''}`}
+        className={`${s['swiper-button-next']} ${
+          isLastSlide ? s.invisible : ''
+        }`}
         ref={navNextRef}
       >
         <ArrowRight />
@@ -221,7 +264,12 @@ const Swiper_bestReview = ({ imgDataList }) => {
         {imgDataList?.map((data, index) => (
           <SwiperSlide key={`bestReview-inner-slide-${index + 1}`}>
             <div className={`${s['img-wrap']} img-wrap`}>
-              <Image src={data.url} objectFit="cover" layout="fill" alt={data.filename} />
+              <Image
+                src={data.url}
+                objectFit="cover"
+                layout="fill"
+                alt={data.filename}
+              />
             </div>
           </SwiperSlide>
         ))}
@@ -238,8 +286,8 @@ const closeButtonStyles = (windowWidth) => {
   const triggeredWindowWidth = 600;
 
   style = {
-    width: windowWidth > triggeredWindowWidth ? `${rem(40)}` : `${rem(20)}`,
-    height: windowWidth > triggeredWindowWidth ? `${rem(40)}` : `${rem(20)}`,
+    width: windowWidth > triggeredWindowWidth ? `${rem(20)}` : `${rem(10)}`,
+    height: windowWidth > triggeredWindowWidth ? `${rem(20)}` : `${rem(10)}`,
   };
   return style;
 };

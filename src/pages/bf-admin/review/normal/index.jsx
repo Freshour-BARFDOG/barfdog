@@ -149,8 +149,6 @@ export default function ReviewPage() {
   };
 
   const onSetBestReview = async () => {
-    console.log(selectedItemList);
-
     if (!selectedItemList.length) return;
     if (
       !confirm(
@@ -164,8 +162,6 @@ export default function ReviewPage() {
       const item = itemList.find((item) => item.id === selectedId);
       return item && !item.titleByAdmin;
     });
-
-    console.log(itemsWithEmptyTitle);
 
     if (itemsWithEmptyTitle.length > 0) {
       if (alert(`리뷰 제목을 등록해주세요.`)) return;

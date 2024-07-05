@@ -2,7 +2,7 @@
 @import '/styles/global/rem.scss';
 
 section.review_title {
-  padding: rem(60) 0 rem(40);
+  padding: rem(40) 0 rem(20);
 }
 .swiper_review_outerWrap {
   padding: 0 0 rem(70);
@@ -17,7 +17,8 @@ section.notice_text {
   text-align: center;
 
   > div {
-    @include char(t24);
+    font-size: rem(30);
+    font-weight: bold;
 
     br {
       display: none;
@@ -27,19 +28,25 @@ section.notice_text {
 
 // .swiper_box css
 .swiper_review_outerWrap {
+  width: 100%;
+
   .swiper_review {
-    padding: rem(20) rem(20);
+    // padding: rem(10);
+
+    width: 100%;
   }
   .slide {
-    width: 100%;
+    width: rem(134 * 1.8) !important;
+    height: rem(215 * 1.8);
     background: #ffffff;
     box-shadow: 0 0 rem(20) rgba(0, 0, 0, 0.08);
-
+    margin-bottom: rem(30);
+    border: rem(1) solid #d9d9d9;
     > * {
       cursor: pointer;
     }
     .mid_box {
-      padding: rem(20) rem(20) 0;
+      // padding: rem(20) rem(20) 0;
       text-align: center;
       -webkit-tap-highlight-color: transparent;
       .image {
@@ -47,30 +54,39 @@ section.notice_text {
         width: 100%;
         // width: rem(320);
         aspect-ratio: 1/1;
+        border-radius: rem(3);
       }
     }
-    .content_title {
-      @include char(l20);
-      padding: rem(20) rem(30) 0;
-      margin-bottom: rem(10);
-      color: var(--color-font-def);
-      -webkit-tap-highlight-color: transparent;
-      -webkit-line-clamp: 1;
-      line-height: normal;
+    .swiper_review_box {
+      display: flex;
+      flex-direction: column;
+      padding: rem(8) rem(16);
+      color: #878787;
+      font-size: rem(14);
+      .swiper_review_top {
+        display: flex;
+        justify-content: space-between;
+      }
     }
-    > p {
-      @include char(b16);
-      color: var(--color-font-sub);
-      padding: 0 rem(30) rem(20);
-      max-height: rem(70);
+    .swiper_review_name {
+      border-top: rem(1) solid #d9d9d9;
+      padding: rem(6);
+      text-align: center;
+    }
+    p {
+      font-size: rem(14);
+      color: #878787;
+      // padding-bottom: rem(6);
+      // max-height: rem(70);
+      // height: rem(64);
       display: -webkit-box;
-      -webkit-line-clamp: 2; // 말줄임표 표시할 줄 수
+      -webkit-line-clamp: 3; // 말줄임표 표시할 줄 수
       -webkit-box-orient: vertical;
       text-overflow: ellipsis; // 말줄임표
       overflow: hidden; // 넘침 숨김
       -webkit-tap-highlight-color: transparent;
       &:last-child {
-        margin-bottom: rem(25);
+        margin: rem(2) 0 rem(8) 0;
       }
     }
   }
@@ -93,12 +109,12 @@ section.notice_text {
       .content_box {
         .text_box {
           .top_text {
-            color: #fff;
+            color: #000;
             transition: color 0.2s ease;
           }
 
           .bot_text {
-            color: #fff;
+            color: #000;
             transition: color 0.2s ease;
           }
         }
@@ -133,8 +149,9 @@ section.notice_text {
       height: 100%;
       // outline: rem(2) solid var(--color-main);
       box-sizing: border-box;
-      border: rem(2) solid var(--color-main);
+      // border: rem(2) solid var(--color-main);
       border-radius: rem(4);
+      // background-color: #4b4b4b;
     }
 
     .content_box {
@@ -143,6 +160,8 @@ section.notice_text {
       grid-template-columns: rem(90) rem(380) rem(70);
       justify-content: center;
       align-items: center;
+      background-color: #4b4b4b;
+      color: #fff;
 
       .image_left {
         width: 100%;
@@ -158,6 +177,9 @@ section.notice_text {
       .text_box {
         margin: 0 rem(20) 0 0;
         text-align: center;
+        span {
+          color: #ffe500;
+        }
       }
       .top_text {
         font-weight: 700;
@@ -190,6 +212,22 @@ section.notice_text {
     @include char(b14);
     color: var(--color-font-sub2);
     word-break: keep-all;
+    border-bottom: rem(1) solid #a6a4a4;
+    padding-bottom: rem(20);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    h1 {
+      font-size: rem(26);
+      color: #000;
+      font-weight: bold;
+    }
+
+    select {
+      min-width: rem(100);
+      padding-left: rem(10);
+    }
 
     span {
       color: transparent;
@@ -445,6 +483,10 @@ section.notice_text {
 
   // .swiper_review{
   //   padding:rem(60) 0 rem(70);
+  // }
+  // .swiper_scrollbar {
+  //   background-color: green !important;
+
   // }
 
   .swiper-button-prev,
