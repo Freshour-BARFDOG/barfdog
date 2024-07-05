@@ -60,7 +60,7 @@ export function Swiper_review({ data }) {
         const searchPageSize = 10;
         const url = `/api/reviews/best`;
         const res = await getData(url);
-        console.log(res);
+        // console.log(res);
         if (res?.status === 200) {
           const data = res.data._embedded?.queryBestReviewsDtoList;
 

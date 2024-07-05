@@ -116,20 +116,15 @@ export default function MobileGnb() {
     currentPageIndicator(curMenuRef.current, curPath, setActiveMenuId);
   }, [curPath]);
 
-  // useEffect(() => {
-  //   console.log('activeMenuId >>>', activeMenuId);
-  //   console.log(curPath);
-  // }, [activeMenuId]);
-
-  const onShowMobileSideMenu = (activeMenuId) => {
-    setActiveMenuId(activeMenuId);
-    setIsSidrOpen(!isSidrOpen);
-  };
+  // const onShowMobileSideMenu = (activeMenuId) => {
+  //   setActiveMenuId(activeMenuId);
+  // };
 
   const onActiveMenuId = (menuId) => {
-    isSidrOpen && setIsSidrOpen(false);
     setActiveMenuId(menuId);
   };
+
+  console.log(activeMenuId);
 
   return (
     <>
@@ -144,40 +139,34 @@ export default function MobileGnb() {
           <ul className={`${s['mobile-menu']} `}>
             <li>
               <Link href="/" passHref>
-                <a onClick={() => onActiveMenuId('홈')}>
+                <a
+                  onClick={() => onActiveMenuId('홈')}
+                  style={{ color: curPath === '/' ? '#ca1011' : '#4A4A4A' }}
+                >
                   <Image
                     src={
-                      !isSidrOpen && (curPath === '/' || activeMenuId === '홈')
+                      curPath === '/'
                         ? '/img/icon/home-active.jpg'
                         : '/img/icon/home.jpg'
                     }
                     alt="home"
                     width={35}
                     height={35}
-                    style={{ fill: 'red' }}
+                    style={{ fill: curPath === '/' ? 'red' : 'none' }}
                   />
-                  <MobileMenu
-                    title={'홈'}
-                    link="/"
-                    activeMenuId={activeMenuId}
-                    color={
-                      !isSidrOpen && (curPath === '/' || activeMenuId === '홈')
-                        ? true
-                        : false
-                    }
-                  />
+                  홈
                 </a>
               </Link>
             </li>
             <li>
               <Link href={`/shop?itemType=${general_itemType.ALL}`} passHref>
-                <a onClick={() => onActiveMenuId('스토어')}>
+                <a
+                  onClick={() => onActiveMenuId('스토어')}
+                  style={{ color: curPath === '/' ? '#ca1011' : '#4A4A4A' }}
+                >
                   <Image
                     src={
-                      !isSidrOpen &&
-                      (activeMenuId === 'shop' ||
-                        activeMenuId === '스토어' ||
-                        curPath.startsWith('/shop'))
+                      curPath.startsWith('/shop')
                         ? '/img/icon/store-active.jpg'
                         : '/img/icon/store.jpg'
                     }
@@ -185,38 +174,20 @@ export default function MobileGnb() {
                     width={35}
                     height={35}
                   />
-                  <MobileMenu
-                    title={'스토어'}
-                    link={`/shop?itemType=${general_itemType.ALL}`}
-                    // fakeLink="/shop"
-                    // id={menuNameObj.shop}
-                    onClick={onActiveSubmenuHandler}
-                    activeMenuId={activeMenuId}
-                    color={
-                      !isSidrOpen &&
-                      (activeMenuId === 'shop' ||
-                        activeMenuId === '스토어' ||
-                        curPath.startsWith('/shop'))
-                        ? true
-                        : false
-                    }
-                  />
+                  스토어
                 </a>
               </Link>
             </li>
             <li>
-              <Link href="/surveyGuide" passHref>
+              <Link href="/survey" passHref>
                 <a
-                  onClick={() => onActiveMenuId('surveyGuide')}
+                  onClick={() => onActiveMenuId('survey')}
                   className="mobile-menu-survey-btn"
+                  style={{ color: curPath === '/' ? '#ca1011' : '#4A4A4A' }}
                 >
                   <Image
                     src={
-                      !isSidrOpen &&
-                      (activeMenuId === 'surveyGuide' ||
-                        activeMenuId === 'survey' ||
-                        curPath === '/surveyGuide' ||
-                        curPath === '/survey')
+                      curPath === '/survey'
                         ? '/img/icon/ai-active.jpg'
                         : '/img/icon/ai.jpg'
                     }
@@ -224,20 +195,7 @@ export default function MobileGnb() {
                     width={40}
                     height={40}
                   />
-                  <MobileMenu
-                    title={'AI 추천 식단'}
-                    link="/surveyGuide"
-                    activeMenuId={activeMenuId}
-                    color={
-                      !isSidrOpen &&
-                      (activeMenuId === 'surveyGuide' ||
-                        activeMenuId === 'survey' ||
-                        curPath === '/surveyGuide' ||
-                        curPath === '/survey')
-                        ? true
-                        : false
-                    }
-                  />
+                  AI 추천 식단
                 </a>
               </Link>
             </li>
@@ -253,11 +211,7 @@ export default function MobileGnb() {
                   width={36}
                   height={36}
                 />
-                <MobileMenu
-                  title={'건강수첩'}
-                  // activeMenuId={activeMenuId}
-                  color={isSidrOpen}
-                />
+                건강수첩
               </a>
             </li>
 
@@ -314,7 +268,7 @@ export default function MobileGnb() {
           </ul>
         </section>
         {/* 모바일 - 사이드바  */}
-        {isSidrOpen && (
+        {/* {isSidrOpen && (
           <MobileSidr isOpen={isSidrOpen} setSidrOpen={setIsSidrOpen} />
         )}
         <section
@@ -359,60 +313,60 @@ export default function MobileGnb() {
           <button className={s.activeWidemodeButton} onClick={onMenuWideMode}>
             <IoIosArrowDown />
           </button>
-        </section>
+        </section> */}
       </nav>
     </>
   );
 }
 
-const MobileMenu = ({
-  onClick,
-  link,
-  fakeLink,
-  id,
-  title,
-  color,
-  activeMenuId,
-  className,
-}) => {
-  const onClickHandler = () => {
-    if (onClick && typeof onClick === 'function') {
-      onClick(id);
-    }
-  };
+// const MobileMenu = ({
+//   onClick,
+//   link,
+//   fakeLink,
+//   id,
+//   title,
+//   color,
+//   activeMenuId,
+//   className,
+// }) => {
+//   const onClickHandler = () => {
+//     if (onClick && typeof onClick === 'function') {
+//       onClick(id);
+//     }
+//   };
 
-  // useEffect(() => {
-  //   console.log('activeMenuId >>>>', activeMenuId);
-  //   console.log('title >>>>', title);
-  //   console.log('color >>>>', color);
-  // }, []);
+//   // useEffect(() => {
+//   //   console.log('activeMenuId >>>>', activeMenuId);
+//   //   console.log('title >>>>', title);
+//   //   console.log('color >>>>', color);
+//   // }, []);
 
-  return (
-    <li onClick={onClick && onClickHandler}>
-      {link ? (
-        <Link href={link} passHref>
-          <a
-            id={id}
-            style={{
-              color: activeMenuId === title || color ? '#cb1010' : '#535353',
-            }}
-          >
-            {title}
-          </a>
-        </Link>
-      ) : (
-        <button
-          className={className}
-          id={id}
-          data-link={fakeLink}
-          type={'button'}
-          style={{
-            color: activeMenuId === title || color ? '#cb1010' : '#535353',
-          }}
-        >
-          {title}
-        </button>
-      )}
-    </li>
-  );
-};
+//   return (
+//     <li onClick={onClick && onClickHandler}>
+//       {link ? (
+//         <Link href={link} passHref>
+//           <a
+//             id={id}
+//             style={{
+//               color: activeMenuId === title || color ? '#cb1010' : '#535353',
+//             }}
+//           >
+//             {title}
+//           </a>
+//         </Link>
+//       ) : (
+//         <button
+//           className={className}
+//           id={id}
+//           data-link={fakeLink}
+//           type={'button'}
+//           style={{
+//             color: activeMenuId === title || color ? '#cb1010' : '#535353',
+//           }}
+//         >
+//           {title}
+//         </button>
+//       )}
+//     </li>
+//   );
+// };
