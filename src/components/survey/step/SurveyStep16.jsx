@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import s from '/src/pages/survey/survey.module.scss';
 import rem from '/util/func/rem';
-import SurveyInputRadio from '/src/components/survey/SurveyInputRadio';
 import SurveyCustomRadioTrueOrFalse from '/src/components/survey/SurveyCustomRadioTrueOrFalse';
-import { dogGenderType } from '/store/TYPE/dogGenderType';
 
-export default function SurveyStep2({
+export default function SurveyStep16({
   formValues,
   setFormValues,
   onInputChangeHandler,
@@ -27,21 +25,18 @@ export default function SurveyStep2({
     <section id="surveyPage" className={s.step2Page}>
       {formValues?.map((dog, index) => (
         <div key={index} className={s.gender_neutralization_container}>
-          <div className={s.input_gender_container}>
-            <p className={s.input_title}>
-              {dog.name} (이)의 성별은 무엇인가요 ?
-            </p>
-            <div className={s.input_gender_box}>
-              <SurveyInputRadio
-                formValueKey={'gender'}
-                formValues={formValues}
-                setFormValues={setFormValues}
+          <div className={s.input_neutralization_container}>
+            <p className={s.input_title}>(이)는 생식 급여가 처음인가요 ?</p>
+            <div className={s.input_neutralization_box}>
+              <SurveyCustomRadioTrueOrFalse
+                title="neutralization"
+                value={formValues.neutralization}
+                setValue={setFormValues}
+                theme={'letter-in-shape'}
+                labelList={['네', '아니오']}
+                onInputChangeHandler={onInputChangeHandler}
                 dogInfo={dog}
                 dogInfoIndex={index}
-                className={s.radio_gender}
-                idList={[dogGenderType.MALE, dogGenderType.FEMALE]}
-                labelList={['수컷', '암컷']}
-                onInputChangeHandler={onInputChangeHandler}
               />
             </div>
           </div>
