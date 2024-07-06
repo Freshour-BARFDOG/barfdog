@@ -5,19 +5,17 @@ export const SurveyActiveStep = ({ curStep }) => {
   const [activeStep, setActiveStep] = useState(1);
 
   useEffect(() => {
-    // if (curStep >= 1 && curStep <= 5) {
-    if (curStep === 1) {
+    if (curStep >= 1 && curStep <= 6) {
       setActiveStep(1);
-      // } else if (curStep >= 6 && curStep <= 13) {
-    } else if (curStep === 2) {
+    } else if (curStep >= 7 && curStep <= 14) {
       setActiveStep(2);
-    } else if (curStep === 3) {
+    } else if (curStep >= 15 && curStep <= 17) {
       setActiveStep(3);
     }
   }, [curStep]);
 
-  console.log('curStep', curStep);
-  console.log('activeStep', activeStep);
+  // console.log('curStep', curStep);
+  // console.log('activeStep', activeStep);
 
   return (
     <section className={s.step_container}>
@@ -25,8 +23,7 @@ export const SurveyActiveStep = ({ curStep }) => {
       <div className={s.step_box}>
         <div
           className={`${s.step_circle} ${
-            // curStep >= 1 && curStep <= 5 ? s.active : ''
-            curStep === 1 ? s.active : ''
+            curStep >= 1 && curStep <= 6 ? s.active : ''
           }`}
         >
           <div className={s.step_number}>1</div>
@@ -37,8 +34,7 @@ export const SurveyActiveStep = ({ curStep }) => {
       <div className={s.step_box}>
         <div
           className={`${s.step_circle} ${
-            // curStep >= 6 && curStep <= 13 ? s.active : ''
-            curStep === 2 ? s.active : ''
+            curStep >= 7 && curStep <= 14 ? s.active : ''
           }`}
         >
           <div className={s.step_number}>2</div>
@@ -48,8 +44,7 @@ export const SurveyActiveStep = ({ curStep }) => {
       <div className={s.step_box}>
         <div
           className={`${s.step_circle}  ${
-            // curStep >= 14 && curStep <= 16 ? s.active : ''
-            curStep === 3 ? s.active : ''
+            curStep >= 15 && curStep <= 17 ? s.active : ''
           }`}
         >
           <div className={s.step_number}>3</div>
