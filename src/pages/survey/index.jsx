@@ -8,7 +8,6 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import siblings from '/util/func/siblings';
-// import { SurveyPagination } from '../../components/survey/SurveyPagination';
 import { FullScreenRunningDog } from '/src/components/atoms/FullScreenLoading';
 import { EffectFade, Navigation, Pagination } from 'swiper';
 import getAbsoluteOffsetTop from '/util/func/getAbsoluteOffsetTop';
@@ -35,20 +34,19 @@ import SurveyStep1 from '/src/components/survey/step/SurveyStep1';
 import SurveyStep2 from '/src/components/survey/step/SurveyStep2';
 import SurveyStep3 from '/src/components/survey/step/SurveyStep3';
 import SurveyStep4 from '/src/components/survey/step/SurveyStep4';
-// import SurveyStep5 from '../../components/survey/step/SurveyStep5';
-// import SurveyStep6 from '../../components/survey/step/SurveyStep6';
-// import SurveyStep7 from '../../components/survey/step/SurveyStep7';
-// import SurveyStep8 from '../../components/survey/step/SurveyStep8';
-// import SurveyStep9 from '../../components/survey/step/SurveyStep9';
-// import SurveyStep10 from '../../components/survey/step/SurveyStep10';
-// import SurveyStep12 from '../../components/survey/step/SurveyStep12';
-// import SurveyStep11 from '../../components/survey/step/SurveyStep11';
-// import SurveyStep13 from '../../components/survey/step/SurveyStep13';
-// import SurveyStep14 from '../../components/survey/step/SurveyStep14';
-// import SurveyStep15 from '../../components/survey/step/SurveyStep15';
-// import SurveyStep16 from '../../components/survey/step/SurveyStep16';
-// import SurveyStep18 from '../../components/survey/step/SurveyStep18';
-// import SurveyStep17 from '../../components/survey/step/SurveyStep17';
+import SurveyStep5 from '../../components/survey/step/SurveyStep5';
+import SurveyStep6 from '../../components/survey/step/SurveyStep6';
+import SurveyStep7 from '../../components/survey/step/SurveyStep7';
+import SurveyStep8 from '../../components/survey/step/SurveyStep8';
+import SurveyStep9 from '../../components/survey/step/SurveyStep9';
+import SurveyStep10 from '../../components/survey/step/SurveyStep10';
+import SurveyStep11 from '../../components/survey/step/SurveyStep11';
+import SurveyStep12 from '../../components/survey/step/SurveyStep12';
+import SurveyStep13 from '../../components/survey/step/SurveyStep13';
+import SurveyStep14 from '../../components/survey/step/SurveyStep14';
+import SurveyStep15 from '../../components/survey/step/SurveyStep15';
+import SurveyStep16 from '../../components/survey/step/SurveyStep16';
+import SurveyStep17 from '../../components/survey/step/SurveyStep17';
 // ! [수정] 로그인 안해도 설문조사 가능하게
 // import useUserData from '../../../util/hook/useUserData';
 
@@ -602,7 +600,7 @@ export default function Survey() {
                 />
               </SwiperSlide>
 
-              {/* 2. 성별, 중성화여부 */}
+              {/* 2. 성별 */}
               <SwiperSlide>
                 <SurveyStep2
                   surveyPageRef={surveyPageRef}
@@ -612,7 +610,7 @@ export default function Survey() {
                 />
               </SwiperSlide>
 
-              {/* 3. 사이즈, 견종 */}
+              {/* 3. 중성화여부 */}
               <SwiperSlide>
                 <SurveyStep3
                   surveyPageRef={surveyPageRef}
@@ -622,9 +620,149 @@ export default function Survey() {
                 />
               </SwiperSlide>
 
-              {/* 4. 생일 */}
+              {/* 4. 사이즈, 견종  */}
               <SwiperSlide>
                 <SurveyStep4
+                  surveyPageRef={surveyPageRef}
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                  onInputChangeHandler={onInputChangeHandler}
+                />
+              </SwiperSlide>
+
+              {/* 5. 생일 */}
+              <SwiperSlide>
+                <SurveyStep5
+                  surveyPageRef={surveyPageRef}
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                  onInputChangeHandler={onInputChangeHandler}
+                />
+              </SwiperSlide>
+
+              {/* 6. 몸무게 */}
+              <SwiperSlide>
+                <SurveyStep6
+                  surveyPageRef={surveyPageRef}
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                  onInputChangeHandler={onInputChangeHandler}
+                />
+              </SwiperSlide>
+
+              {/* 7. 상태 */}
+              <SwiperSlide>
+                <SurveyStep7
+                  surveyPageRef={surveyPageRef}
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                  onInputChangeHandler={onInputChangeHandler}
+                />
+              </SwiperSlide>
+
+              {/* 8. 활동량  */}
+              <SwiperSlide>
+                <SurveyStep8
+                  surveyPageRef={surveyPageRef}
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                  onInputChangeHandler={onInputChangeHandler}
+                />
+              </SwiperSlide>
+
+              {/* 9. 산책량  */}
+              <SwiperSlide>
+                <SurveyStep9
+                  surveyPageRef={surveyPageRef}
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                  onInputChangeHandler={onInputChangeHandler}
+                />
+              </SwiperSlide>
+
+              {/* 10. 간식량 */}
+              <SwiperSlide>
+                <SurveyStep10
+                  surveyPageRef={surveyPageRef}
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                  onInputChangeHandler={onInputChangeHandler}
+                />
+              </SwiperSlide>
+
+              {/* 11. 음수량   */}
+              <SwiperSlide>
+                <SurveyStep11
+                  surveyPageRef={surveyPageRef}
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                  onInputChangeHandler={onInputChangeHandler}
+                />
+              </SwiperSlide>
+
+              {/* 12. 영양제  */}
+              <SwiperSlide>
+                <SurveyStep12
+                  surveyPageRef={surveyPageRef}
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                  onInputChangeHandler={onInputChangeHandler}
+                />
+              </SwiperSlide>
+
+              {/* 13. 현재 식사  */}
+              <SwiperSlide>
+                <SurveyStep13
+                  surveyPageRef={surveyPageRef}
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                  onInputChangeHandler={onInputChangeHandler}
+                />
+              </SwiperSlide>
+
+              {/* 14. 못먹는 재료 */}
+              <SwiperSlide>
+                <SurveyStep14
+                  surveyPageRef={surveyPageRef}
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                  onInputChangeHandler={onInputChangeHandler}
+                />
+              </SwiperSlide>
+
+              {/* 15. 건강적 특이사항, 질병   */}
+              <SwiperSlide>
+                <SurveyStep15
+                  surveyPageRef={surveyPageRef}
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                  onInputChangeHandler={onInputChangeHandler}
+                />
+              </SwiperSlide>
+
+              {/* 16. 특별히 챙겨주고 싶은 것 */}
+              <SwiperSlide>
+                <SurveyStep16
+                  surveyPageRef={surveyPageRef}
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                  onInputChangeHandler={onInputChangeHandler}
+                />
+              </SwiperSlide>
+
+              {/* 17. 생식 처음 */}
+              <SwiperSlide>
+                <SurveyStep17
+                  surveyPageRef={surveyPageRef}
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                  onInputChangeHandler={onInputChangeHandler}
+                />
+              </SwiperSlide>
+
+              {/* 18. [최종] 결과확인 */}
+              <SwiperSlide>
+                <SurveyStep6
                   surveyPageRef={surveyPageRef}
                   formValues={formValues}
                   setFormValues={setFormValues}

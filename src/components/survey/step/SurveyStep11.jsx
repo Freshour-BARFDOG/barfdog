@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react';
 import s from '/src/pages/survey/survey.module.scss';
 import rem from '/util/func/rem';
 import SurveyInputRadio from '/src/components/survey/SurveyInputRadio';
-import SurveyCustomRadioTrueOrFalse from '/src/components/survey/SurveyCustomRadioTrueOrFalse';
-import { dogGenderType } from '/store/TYPE/dogGenderType';
+import { dogSnackCountLevelType } from '/store/TYPE/dogSnackCountLevelType';
 
-export default function SurveyStep2({
+export default function SurveyStep11({
   formValues,
   setFormValues,
   onInputChangeHandler,
@@ -24,24 +23,32 @@ export default function SurveyStep2({
   }, [formValues]);
 
   return (
-    <section id="surveyPage" className={s.step2Page}>
+    <section id="surveyPage" className={s.step9Page}>
       {formValues?.map((dog, index) => (
-        <div key={index} className={s.gender_neutralization_container}>
-          <div className={s.input_gender_container}>
+        <div key={index} className={s.status_container}>
+          <div className={s.input_status_container}>
             <p className={s.input_title}>
-              {dog.name} (이)의 성별은 무엇인가요 ?
+              {dog.name} (이)의 음수량은 어떤가요 ?
             </p>
-            <div className={s.input_gender_box}>
+            <div className={s.input_snack_box}>
               <SurveyInputRadio
-                formValueKey={'gender'}
+                formValueKey={'waterCountLevel'}
                 formValues={formValues}
                 setFormValues={setFormValues}
                 dogInfo={dog}
                 dogInfoIndex={index}
-                className={s.radio_gender}
-                idList={[dogGenderType.MALE, dogGenderType.FEMALE]}
-                labelList={['수컷', '암컷']}
+                className={s.snackCountLevel}
                 onInputChangeHandler={onInputChangeHandler}
+                idList={[
+                  dogSnackCountLevelType.LITTLE,
+                  dogSnackCountLevelType.NORMAL,
+                  dogSnackCountLevelType.MUCH,
+                ]}
+                labelList={[
+                  dogSnackCountLevelType.KOR.LITTLE,
+                  dogSnackCountLevelType.KOR.NORMAL,
+                  dogSnackCountLevelType.KOR.MUCH,
+                ]}
               />
             </div>
           </div>
