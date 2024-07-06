@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import s from '/src/pages/survey/survey.module.scss';
 import rem from '/util/func/rem';
-import { SurveyDogTypeCustomSelectWithCustomOptions } from '../SurveyDogTypeCustomSelectWithCustomOptions';
+import { SurveyDogTypeCustomSelectWithOptions } from '../SurveyDogTypeCustomSelectWithOptions';
 import SurveyInputRadio from '/src/components/survey/SurveyInputRadio';
 import { dogSizeType } from '/store/TYPE/dogSizeType';
 import { dogBreedType } from '/store/TYPE/dogBreedType.js';
@@ -47,7 +47,7 @@ export default function SurveyStep3({
               dogInfoIndex={index}
               onInputChangeHandler={onInputChangeHandler}
             />
-            <SurveyDogTypeCustomSelectWithCustomOptions
+            <SurveyDogTypeCustomSelectWithOptions
               id={'dogType'}
               options={dogBreedType.map((dogType) => ({
                 label: dogType.label,
