@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import s from '/src/pages/survey/survey.module.scss';
 import rem from '/util/func/rem';
-import SurveyPureCheckbox from '../SurveyPureCheckbox';
+import SurveyPureCheck from '../SurveyPureCheck';
 // import SurveyCustomSelectWithCustomOptions from '/src/components/survey/SurveyCustomSelectWithCustomOptions';
 // import SurveyBirthYear from './SurveyBirthYear';
 import yearOptionList from '/util/func/yearOptionList';
-import SurveyBirthday from '../SurveyBirthday';
-import SurveyYearMonth from '../SurveyYearMonth';
+import SurveyBirthday from '../SurveyBirthdayInput';
+import SurveyYearMonth from '../SurveyYearMonthInput';
 
 // const getSurveyBirthObject = (yyyymmObj) => {
 //   const result = {
@@ -172,7 +172,7 @@ export default function SurveyStep4({
             )}
 
             <div className={s.oldDog}>
-              <SurveyPureCheckbox
+              <SurveyPureCheck
                 id={'oldDog'}
                 theme={'circle'}
                 value={dog.oldDog || ''}
@@ -181,7 +181,7 @@ export default function SurveyStep4({
                 dogInfoIndex={index}
               >
                 노령견입니다.
-              </SurveyPureCheckbox>
+              </SurveyPureCheck>
             </div>
           </div>
           {formValues.length >= 2 && index !== formValues.length - 1 && (

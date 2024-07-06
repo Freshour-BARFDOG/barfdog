@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import s from './surveyBirthday.module.scss';
+import s from './surveyBirthdayInput.module.scss';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { subYears, endOfYear, getYear, getMonth, format } from 'date-fns';
@@ -8,7 +8,7 @@ import ko from 'date-fns/locale/ko';
 import { FaRegCalendarAlt } from 'react-icons/fa';
 import { FcNext } from 'react-icons/fc';
 import { FcPrevious } from 'react-icons/fc';
-const SurveyBirthday = ({
+const SurveyBirthdayInput = ({
   type,
   required,
   id,
@@ -315,7 +315,7 @@ const SurveyBirthday = ({
   );
 };
 
-export default SurveyBirthday;
+export default SurveyBirthdayInput;
 
 function YearDropdown({
   years,

@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import s from './surveyDogTypeCustomSelectWithCustomOptions.module.scss';
+import s from './surveyDogTypeCustomSelectWithOptions.module.scss';
 import rem from '/util/func/rem';
 import ScrollContainer from '/src/components/atoms/ScrollContainer';
 
-export const SurveyDogTypeCustomSelectWithCustomOptions = ({
+export const SurveyDogTypeCustomSelectWithOptions = ({
   id,
   options,
   width,

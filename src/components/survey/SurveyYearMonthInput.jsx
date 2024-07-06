@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import s from './surveyYearMonth.module.scss';
+import s from './surveyYearMonthInput.module.scss';
 import rem from '/util/func/rem';
 import ScrollContainer from '../atoms/ScrollContainer';
 
-export default function SurveyYearMonth({
+export default function SurveyYearMonthInput({
   id,
   options,
   value,
