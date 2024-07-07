@@ -7,9 +7,9 @@ export const SurveyActiveStep = ({ curStep }) => {
   useEffect(() => {
     if (curStep >= 1 && curStep <= 6) {
       setActiveStep(1);
-    } else if (curStep >= 7 && curStep <= 14) {
+    } else if (curStep >= 7 && curStep <= 15) {
       setActiveStep(2);
-    } else if (curStep >= 15 && curStep <= 17) {
+    } else if (curStep >= 16 && curStep <= 17) {
       setActiveStep(3);
     }
   }, [curStep]);
@@ -34,7 +34,7 @@ export const SurveyActiveStep = ({ curStep }) => {
       <div className={s.step_box}>
         <div
           className={`${s.step_circle} ${
-            curStep >= 7 && curStep <= 14 ? s.active : ''
+            curStep >= 7 && curStep <= 15 ? s.active : ''
           }`}
         >
           <div className={s.step_number}>2</div>
@@ -44,7 +44,7 @@ export const SurveyActiveStep = ({ curStep }) => {
       <div className={s.step_box}>
         <div
           className={`${s.step_circle}  ${
-            curStep >= 15 && curStep <= 17 ? s.active : ''
+            curStep >= 16 && curStep <= 17 ? s.active : ''
           }`}
         >
           <div className={s.step_number}>3</div>

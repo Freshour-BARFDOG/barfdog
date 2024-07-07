@@ -95,7 +95,7 @@
   width: rem(400);
   height: rem(2);
   background-color: #ddd;
-  margin: rem(25) 0;
+  margin: rem(30) 0 rem(20) 0;
 }
 
 //////////////////////////////////
@@ -107,7 +107,7 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  height: rem(380);
+  // height: rem(380);
 
   .input_gender_container,
   .input_neutralization_container {
@@ -141,14 +141,15 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  height: rem(400);
 
   .input_line {
     position: fixed;
-    margin-top: rem(270);
+    margin-top: rem(310);
   }
 
   .input_dogSize_dogType_box {
-    margin-bottom: rem(40);
+    // margin-bottom: rem(40);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -157,7 +158,7 @@
 }
 
 .dogType_list {
-  height: rem(100);
+  height: rem(80);
 }
 
 //////////////////////////////////
@@ -312,13 +313,19 @@
     }
   }
   .input_specific_status_box {
+    display: flex;
+    justify-content: center;
     ul {
       flex-direction: row;
       label {
-        width: rem(186);
+        width: rem(125);
         height: rem(50);
+        padding: rem(5);
       }
     }
+  }
+  .input_name {
+    margin-top: rem(20);
   }
 }
 
@@ -355,17 +362,43 @@
 //////////////////////////////////
 .input_activity_box {
   .inputRadio-wrap {
-    width: rem(550);
-    height: rem(150);
+    // width: rem(400);
+    // height: rem(150);
     display: flex;
+    flex-wrap: wrap;
     gap: rem(14);
     label {
-      height: rem(130);
-      padding: rem(16) rem(5);
+      width: rem(155);
+      height: rem(138);
+      padding: rem(10) 0;
       display: flex;
       justify-content: space-between;
       gap: rem(12);
     }
+  }
+}
+.activityLevel {
+  display: flex;
+  // align-items: flex-start;
+  width: rem(330);
+  // max-width: rem(400);
+  // padding-bottom: rem(80);
+  // justify-content: center;
+
+  // li {
+  //   display: inline-flex;
+  //   flex-direction: row;
+  //   justify-content: center;
+  //   width: 20%;
+  // }
+  label {
+    display: flex;
+    flex-direction: column;
+    // justify-content: center;
+    //   align-items: center;
+    //   input {
+    //     margin-bottom: rem(16);
+    //   }
   }
 }
 
@@ -406,6 +439,7 @@
   color: #be1a21;
   text-align: center;
   padding-bottom: rem(20);
+  width: rem(400);
 }
 
 .input_supplement_box {
@@ -423,7 +457,7 @@
 .supplement_select_container {
   .inputRadio-wrap {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     margin-bottom: rem(30);
 
     label {
@@ -616,7 +650,7 @@
 }
 
 //////////////////////////////////
-// ******** STEP 15. 특별히 챙겨주고 싶은 것 ********
+// ******** STEP 15. 고민 우선순위 3가지 ********
 //////////////////////////////////
 .recommendRecipeId_select_container {
   .inputRadio-wrap {
@@ -631,7 +665,25 @@
     }
   }
 }
+.priority_concerns_container {
+  display: flex;
+  justify-content: center;
+  padding-bottom: rem(30);
 
+  li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: rem(10);
+    div {
+      margin: rem(6) 0;
+      width: rem(160);
+      height: rem(30);
+      border-bottom: rem(1) solid #000;
+      text-align: center;
+    }
+  }
+}
 .input_mealCountPerOneDay_box {
   margin: rem(10) 0 rem(40) 0;
   .mealCountPerOneDay {
@@ -646,74 +698,74 @@
   }
 }
 
-//////////////////////////////////
-// ******** STEP 17. 좋아하는 재료 ********
-//////////////////////////////////
+// //////////////////////////////////
+// // ******** STEP 17. 좋아하는 재료 ********
+// //////////////////////////////////
 
-.input_fav_container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+// .input_fav_container {
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: center;
+//   align-items: center;
 
-  .input_fav_box {
-    margin-bottom: rem(20);
-    position: relative;
-  }
+//   .input_fav_box {
+//     margin-bottom: rem(20);
+//     position: relative;
+//   }
 
-  .tag_button_box {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: rem(16);
+//   .tag_button_box {
+//     display: grid;
+//     grid-template-columns: 1fr 1fr 1fr 1fr;
+//     gap: rem(16);
 
-    .tag_button {
-      position: relative;
-      cursor: pointer;
-    }
-    p {
-      background-color: white;
-      padding: rem(6) rem(28) rem(6) rem(14);
-      border: rem(2) solid #be1a21;
-      border-radius: rem(20);
-    }
+//     .tag_button {
+//       position: relative;
+//       cursor: pointer;
+//     }
+//     p {
+//       background-color: white;
+//       padding: rem(6) rem(28) rem(6) rem(14);
+//       border: rem(2) solid #be1a21;
+//       border-radius: rem(20);
+//     }
 
-    .tag_button_close {
-      display: flex;
-      position: absolute;
-      top: rem(9);
-      right: rem(6);
-      width: rem(22);
-      height: rem(20);
-      fill: #7d7d7d;
-    }
+//     .tag_button_close {
+//       display: flex;
+//       position: absolute;
+//       top: rem(9);
+//       right: rem(6);
+//       width: rem(22);
+//       height: rem(20);
+//       fill: #7d7d7d;
+//     }
 
-    p:hover {
-      background-color: #ffe0e1;
+//     p:hover {
+//       background-color: #ffe0e1;
 
-      .tag_button_close {
-        fill: #be1a21;
-      }
-    }
-  }
-}
+//       .tag_button_close {
+//         fill: #be1a21;
+//       }
+//     }
+//   }
+// }
 
-//////////////////////////////////
-// ******** STEP 18. 전하고 싶은 말 ********
-//////////////////////////////////
-.input_title_message {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  font-size: rem(24);
-  padding: rem(20) 0;
+// //////////////////////////////////
+// // ******** STEP 18. 전하고 싶은 말 ********
+// //////////////////////////////////
+// .input_title_message {
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   text-align: center;
+//   font-size: rem(24);
+//   padding: rem(20) 0;
 
-  span {
-    font-size: rem(16);
-    padding-left: rem(10);
-    color: #383838;
-  }
-}
+//   span {
+//     font-size: rem(16);
+//     padding-left: rem(10);
+//     color: #383838;
+//   }
+// }
 
 ///////////////////////////////
 
@@ -892,7 +944,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: rem(26);
+  gap: rem(12);
 }
 
 // * ------- 2페이지  ------- * //
@@ -995,31 +1047,6 @@
     padding: 0;
   }
 }
-// * ------- 활동량  ------- * //
-.activityLevel {
-  display: flex;
-  align-items: flex-start;
-  width: rem(410);
-  // max-width: rem(400);
-  padding-bottom: rem(80);
-
-  @include char(l18);
-  li {
-    display: inline-flex;
-    flex-direction: row;
-    justify-content: center;
-    width: 20%;
-  }
-  label {
-    display: inline-flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    input {
-      margin-bottom: rem(16);
-    }
-  }
-}
 
 // * ------- 건강상태  ------- * //
 
@@ -1039,7 +1066,8 @@
   gap: rem(14);
   $descHeight: rem(40);
   $descBottomPos: rem(10);
-  padding-bottom: calc(#{$descHeight} + #{$descBottomPos});
+  padding-bottom: rem(20);
+  // padding-bottom: calc(#{$descHeight} + #{$descBottomPos});
   .desc {
     position: absolute;
     width: 100%;

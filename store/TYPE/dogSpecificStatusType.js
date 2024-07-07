@@ -7,9 +7,11 @@ export const dogSpecificStatusType = {
   LACTATING_THREE_TO_FOUR: 'LACTATING_THREE_TO_FOUR',
   LACTATING_FIVE_TO_SIX: 'LACTATING_FIVE_TO_SIX',
   LACTATING_OVER_SEVEN: 'LACTATING_OVER_SEVEN',
+  ETC: 'ETC',
   KOR: {
-    PREGNANT: '임신한 상태예요',
-    LACTATING: '수유 중이에요',
+    PREGNANT: '임신한 상태',
+    LACTATING: '수유 중',
+    ETC: '기타',
     LACTATING_ONE_TO_TWO: '1~2마리',
     LACTATING_THREE_TO_FOUR: '3~4마리',
     LACTATING_FIVE_TO_SIX: '5~6마리',

@@ -4,6 +4,7 @@ import rem from '/util/func/rem';
 import SurveyInputRadio from '/src/components/survey/SurveyInputRadio';
 // import SurveyBubble from '/public/img/survey/survey_bubble_1.png';
 import Image from 'next/image';
+import SurveyInputMultipleSelected from '../SurveyInputMultipleSelected';
 export default function SurveyStep17({
   formValues,
   setFormValues,
@@ -11,17 +12,23 @@ export default function SurveyStep17({
   surveyPageRef,
 }) {
   //!!! [추후] 변경될 예정 !!!
-  let recommendRecipeIdList = [1, 2, 3, 4, 5, 6, 7, 8];
+  // let recommendRecipeIdList = [1, 2, 3, 4, 5, 6];
+  let recommendRecipeIdList = [
+    '관절',
+    '모질',
+    '피부',
+    '구토',
+    '빈혈',
+    '영양보충',
+  ];
 
   let recommendRecipeIdLabelList = [
-    '편안한 소화',
-    '튼튼한 성장·발육',
-    '에너지 보충',
-    '피부·모질 강화',
-    '추가 예정 1',
-    '추가 예정 2',
-    '추가 예정 3',
-    '추가 예정 4',
+    '관절',
+    '모질',
+    '피부',
+    '구토',
+    '빈혈',
+    '영양보충',
   ];
 
   // UI '짤림 현상'해결
@@ -36,7 +43,7 @@ export default function SurveyStep17({
   }, [formValues]);
 
   return (
-    <section id="surveyPage" className={s.step15Page}>
+    <section id="surveyPage" className={s.step17Page}>
       {/* <div className={s.survey_bubble_img}>
         <Image src={SurveyBubble} alt="SurveyBubble" />
       </div> */}
@@ -44,11 +51,30 @@ export default function SurveyStep17({
         <div key={index} className={s.status_container}>
           <div className={s.input_status_container}>
             <p className={s.input_title}>
-              {dog.name} (이)에게 고민되는 항목 우선 순위 3가지를 선택해주세요
+              {dog.name} (이)에게 고민되는 항목 <br /> 우선 순위 3가지를
+              선택해주세요
             </p>
 
+            {/* 우선순위 */}
+            <div className={s.priority_concerns_container}>
+              <ul>
+                <li>
+                  <span>1 순위 :</span>
+                  <div>{dog.recommendRecipeId?.split(',')[0] || ''}</div>
+                </li>
+                <li>
+                  <span>2 순위 :</span>
+                  <div>{dog.recommendRecipeId?.split(',')[1] || ''}</div>{' '}
+                </li>
+                <li>
+                  <span>3 순위 :</span>
+                  <div>{dog.recommendRecipeId?.split(',')[2] || ''}</div>{' '}
+                </li>
+              </ul>
+            </div>
+
             <div className={s.recommendRecipeId_select_container}>
-              <SurveyInputRadio
+              <SurveyInputMultipleSelected
                 formValueKey={'recommendRecipeId'}
                 formValues={formValues}
                 setFormValues={setFormValues}
