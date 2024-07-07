@@ -1,9 +1,7 @@
 @import '../../../styles/global/guide';
 @import '/styles/global/rem';
 
-
-
-
+// 설문조사 결과 분석 중 ...
 
 .text_box {
   text-align: center;
@@ -21,16 +19,19 @@
   }
 }
 
-
 .image_section {
-  margin: rem(100) auto rem(55);
+  margin: rem(180) auto rem(55);
+  display: flex;
+  width: rem(300);
+  justify-content: center;
+  align-items: center;
   position: relative;
-  max-width: rem(460);
-  overflow: hidden;
+  left: 2%;
+  // max-width: rem(460);
+  // overflow: hidden;
 }
 
 .ani-box-wrap {
-
   display: flex;
   justify-content: center;
   column-gap: rem(50);
@@ -40,69 +41,85 @@
     align-items: center;
     justify-content: center;
     border: rem(4) solid var(--color-line-03);
-    border-radius:50%;
+    border-radius: 50%;
     position: relative;
     width: rem(120);
     background-color: #fff;
-    color:#fff;
+    color: #fff;
     aspect-ratio: 1/1;
     //min-width: rem(70);
     //min-height: rem(70);
     font-size: rem(18);
     cursor: default;
-    $animationDuration : 1.6s;
+    $animationDuration: 1.6s;
     @for $i from 1 through 3 {
-      &:nth-child(#{$i}){
-        animation-delay: $i*.3s;
+      &:nth-child(#{$i}) {
+        animation-delay: $i * 0.3s;
       }
     }
-    &.left{
-      border-color: var(--color-primary04)
+    &.left {
+      border-color: var(--color-primary04);
     }
-    &.mid{
+    &.mid {
       border-color: transparent;
       background-color: var(--color-primary04);
-      em{
+      em {
         font-weight: 600;
         letter-spacing: rem(0.6);
         position: relative;
-        top:rem(2);
+        top: rem(2);
       }
     }
   }
 }
 
+// .progress-bar {
+//   position: absolute;
+//   top: 50%;
+//   right: 0;
+//   transform: translateY(-50%);
+//   width: 200%;
+//   border-top: rem(10) dotted #ed3333;
+//   animation: moving 8s linear infinite;
+// }
 
-.progress-bar {
-  position: absolute;
-  top: 50%;
-  right:0;
-  transform: translateY(-50%);
-  width: 200%;
-  border-top: rem(10) dotted #ed3333;
-  animation: moving 8s linear infinite;
+.ani-text {
+  animation: text_flicker 1s cubic-bezier(0.63, 0.2, 0.45, 1) infinite;
 }
 
-.ani-text {animation: text_flicker 1s cubic-bezier(0.63, 0.2, 0.45, 1) infinite;}
-
-
 @keyframes moving {
-  from{right:0%}
-  to{right:-100%;}
+  from {
+    right: 0%;
+  }
+  to {
+    right: -100%;
+  }
 }
 
 @keyframes text_flicker {
-  0%, 100%{opacity: 0}
-  50%,80%{opacity:1}
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50%,
+  80% {
+    opacity: 1;
+  }
 }
-
 
 @keyframes border_flicker {
-  0%,100%{border-color: var(--color-line-03);}
-  10%,80%{border-color: var(--color-primary04);}
+  0%,
+  100% {
+    border-color: var(--color-line-03);
+  }
+  10%,
+  80% {
+    border-color: var(--color-primary04);
+  }
 }
 
-
 @media (max-width: rem(600)) {
-  .progress-bar{border-width: 2vw}
+  .progress-bar {
+    border-width: 2vw;
+  }
 }

@@ -11,16 +11,16 @@ $browser-context: 16;
   // left: 0;
   width: rem(600);
   // background-color: white;
+  box-shadow: 0 rem(5) rem(15) rgb(0 0 0 / 8%);
   height: rem(110);
   z-index: 10;
 }
 
 // * ------- Navigation Button  ------- * //
 .swiper-navigation-container {
-  width: rem(600);
   position: fixed;
   bottom: 0;
-  // left: 0;
+  width: rem(600);
   z-index: 10;
   background-color: white;
   box-shadow: 0 rem(5) rem(15) rgb(0 0 0 / 8%);
@@ -80,13 +80,20 @@ $browser-context: 16;
   //   color: #fff;
   //   box-shadow: 0 rem(2) rem(10) 0 rgba(202, 16, 16, 0.6);
   // }
-  // .swiper-button-submit {
-  //   border-color: transparent;
-  //   background-color: var(--color-main);
-  //   color: #fff;
-  //   box-shadow: 0 rem(2) rem(10) 0 rgba(202, 16, 16, 0.6);
-  //   display: none;
-  // }
+  .swiper-button-submit {
+    // border-color: transparent;
+    background-color: var(--color-main);
+    color: #fff;
+    box-shadow: 0 rem(2) rem(10) 0 rgba(202, 16, 16, 0.6);
+    display: none;
+    width: rem(130);
+    height: rem(50);
+    border-radius: rem(40);
+    font-size: rem(20);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 .footer_area {
@@ -127,7 +134,7 @@ $browser-context: 16;
 .swiper-button-next {
   width: rem(130);
   height: rem(50);
-  background-color: rgba(194, 40, 47, 0.45);
+  background-color: rgba(194, 40, 47, 0.6);
   // box-shadow: rem(1) rem(1) rem(10) rgba(0, 0, 0, 0.15);
   // background-color: #ca1010;
   display: flex;

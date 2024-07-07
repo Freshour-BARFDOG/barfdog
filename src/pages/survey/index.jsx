@@ -29,6 +29,10 @@ import { useRouter } from 'next/router';
 import { SurveyDataClass } from '../../class/surveyDataClass';
 import SurveyLayout from '../../components/common/SurveyLayout';
 import { SurveyActiveStep } from '../../components/survey/SurveyActiveStep';
+import SurveyStatisticsPage from './statistics/[surveyReportsId]';
+import { useDispatch, useSelector } from 'react-redux';
+import { surveyDataAction } from '/store/surveyData-slice';
+import { surveyDogAction } from '/store/surveyDog-slice';
 
 import SurveyStep1 from '/src/components/survey/step/SurveyStep1';
 import SurveyStep2 from '/src/components/survey/step/SurveyStep2';
@@ -135,10 +139,15 @@ const initialFormValues = [
 
 export default function Survey() {
   const loadingDuration = 1200; // ms
-  const lastStep = 18; // 마지막 설문조사 페이지
+  const lastStep = 17; // 마지막 설문조사 페이지
   const router = useRouter();
   // const userData = useUserData();
   // const userId = userData?.memberId;
+  //! [추가] 로그인 여부 확인
+  const auth = useSelector((state) => state.auth);
+  const userInfo = auth?.userInfo;
+  const dispatch = useDispatch();
+
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
   const [formValues, setFormValues] = useState(initialFormValues);
@@ -151,6 +160,7 @@ export default function Survey() {
   const submitBtnRef = useRef(null);
   const surveyPageRef = useRef(null);
   const progressbarRef = useRef(null);
+  const [dogInfoResult, setDogInfoResult] = useState([]);
 
   // const handleSetFooterRef = (ref) => {
   //   setFooterRef(ref);
@@ -462,7 +472,7 @@ export default function Survey() {
   // const resetWindowPos = () => {
   //   if (!surveyPageRef.current) return;
   //   const surveyPageEl = surveyPageRef.current;
-  //   const scrollYPos = getAbsoluteOffsetTop(surveyPageEl);
+  //   const scrollYPos = getAbsoluteOffsetTop(surveyPageEl1);
   //   window?.scrollTo(0, scrollYPos);
   // };
 
@@ -486,8 +496,6 @@ export default function Survey() {
     // const isPassed = valid_hasFormErrors(errObj);
     const swiper = document.querySelector('.swiper').swiper;
 
-    // console.log('curBtn', curBtn);
-    // console.log('submitBtn', submitBtn);
     // console.log('realCurStep', realCurStep);
     // console.log('errObj', errObj);
 
@@ -517,45 +525,87 @@ export default function Survey() {
     // const errObj = validate(formValues, 3);
     // const isPassed = valid_hasFormErrors(errObj);
     // if (!isPassed) return;
+
+    //! [START]
     const postFormValuesApiUrl = '/api/dogs';
-    try {
+    // 로그인이 필요합니다 >>> userInfo
+    if (!userInfo) {
+      // 1) 로그인이 안되었으면
+      // 401 error - 로그인 페이지 이동 - 로그인 이후 설문결과 제출 페이지 되돌아오기
+      // 로그인 이후에도 설문조사 데이터 redux에 저장
+      dispatch(surveyDataAction.saveSurveyData({ surveyData: formValues }));
+      // 로그인 성공하면 바로 설문조사 결과 페이지로 이동
+      // dispatch(setPreviousPath(page));
+      mct.alertShow(
+        `로그인이 필요한 페이지입니다.\n(검사결과는 자동 저장됩니다)`,
+      );
+      return await router.push('/account/login');
+    } else if (userInfo) {
+      // 2) 로그인된 상태 - 결과페이지
+      try {
+        setIsLoading((prevState) => ({
+          ...prevState,
+          submit: true,
+        }));
+
+        const postData = { dogSaveRequestDtos: formValues };
+
+        const res = await postObjData(postFormValuesApiUrl, postData);
+        console.log('formValues', formValues); // 최종 제출
+        console.log(res);
+        if (res.isDone) {
+          console.log(res.data.data);
+          //! [수정]
+          const slicedReportApiLink =
+            res.data.data._embedded.createDogsResponseDtoList[0]._links.query_surveyReport.href.split(
+              '/',
+            );
+          const linkLength = slicedReportApiLink.length;
+          const surveyReportsId = slicedReportApiLink[linkLength - 1];
+          // svyData.deleteStoredSurveyData(userId);
+          console.log('surveyReportsId', surveyReportsId);
+          await router.push(`/survey/statistics/${surveyReportsId}`);
+          setSubmitState(true);
+          //! 우선 주석처리
+          // const dogInfoResults =
+          //   res.data.data._embedded.createDogsResponseDtoList;
+          // setDogInfoResult(dogInfoResults);
+          // dispatch(
+          //   surveyDogAction.saveSurveyDog({ surveyDog: dogInfoResults }),
+          // );
+          // console.log('dogInfoResults', dogInfoResults);
+
+          //! [이전]
+          //   const slicedReportApiLink =
+          //     res.data.data._links.query_surveyReport.href.split('/');
+          //   const linkLength = slicedReportApiLink.length;
+          //   const surveyReportsId = slicedReportApiLink[linkLength - 1];
+          //   svyData.deleteStoredSurveyData(userId);
+          //   await router.push(`/survey/statistics/${surveyReportsId}`);
+          //   setSubmitState(true);
+          // } else {
+          //   modalMessage = '내부 통신장애입니다. 잠시 후 다시 시도해주세요.';
+          //   mct.alertShow(modalMessage);
+          //   setSubmitState(false);
+        }
+      } catch (err) {
+        await mct.alertShow(
+          'API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.',
+        );
+
+        //! [추후] 에러 나면 다시 처음으로
+        // setTimeout(() => {
+        //   // window.location.href = '/surveyGuide';
+        //   window.location.href = '/survey';
+        // }, [1000]);
+        console.error('API통신 오류 : ', err);
+      }
       setIsLoading((prevState) => ({
         ...prevState,
-        submit: true,
+        submit: false,
       }));
-      let modalMessage;
-      console.log(formValues); // 최종 제출
-      const postData = { dogSaveRequestDtos: formValues };
-
-      const res = await postObjData(postFormValuesApiUrl, postData);
-      console.log(res);
-      if (res.isDone) {
-        // const slicedReportApiLink =
-        //   res.data.data._links.query_surveyReport.href.split('/');
-        // const linkLength = slicedReportApiLink.length;
-        // const surveyReportsId = slicedReportApiLink[linkLength - 1];
-        // svyData.deleteStoredSurveyData(userId);
-        // await router.push(`/survey/statistics/${surveyReportsId}`);
-        // setSubmitState(true);
-        // } else {
-        //   modalMessage = '내부 통신장애입니다. 잠시 후 다시 시도해주세요.';
-        //   mct.alertShow(modalMessage);
-        //   setSubmitState(false);
-      }
-    } catch (err) {
-      // await mct.alertShow(
-      //   'API통신 오류가 발생했습니다. 서버관리자에게 문의하세요.',
-      // );
-      // setTimeout(() => {
-      //   // window.location.href = '/surveyGuide';
-      //   window.location.href = '/survey';
-      // }, [1000]);
-      console.error('API통신 오류 : ', err);
+      //! [END]
     }
-    // setIsLoading((prevState) => ({
-    //   ...prevState,
-    //   submit: false,
-    // }));
   };
 
   const moveToPrevPage = () => {
@@ -760,14 +810,14 @@ export default function Survey() {
               </SwiperSlide>
 
               {/* 18. [최종] 결과확인 */}
-              <SwiperSlide>
-                <SurveyStep6
+              {/* <SwiperSlide>
+                <SurveyStatisticsPage
                   surveyPageRef={surveyPageRef}
                   formValues={formValues}
                   setFormValues={setFormValues}
                   onInputChangeHandler={onInputChangeHandler}
                 />
-              </SwiperSlide>
+              </SwiperSlide> */}
             </Swiper>
           </div>
         </Wrapper>
