@@ -6,7 +6,9 @@ $popupMainHeaderHeight: rem(66);
 $default-row-height: rem(48);
 #popup {
   background-color: $backgroundColorDef;
-  position: relative;
+  position: absolute;
+  left: 0;
+  right: 0;
 }
 
 .header {

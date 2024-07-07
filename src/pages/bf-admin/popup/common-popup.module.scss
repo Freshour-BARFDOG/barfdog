@@ -9,7 +9,9 @@ $windowWidthForRightSideBorder: rem(850);
 
 #popup {
   background-color: $backgroundColorDef;
-  position: relative;
+  position: absolute;
+  left: 0;
+  right: 0;
 }
 
 .header {
@@ -38,8 +40,6 @@ $windowWidthForRightSideBorder: rem(850);
   padding: 0 rem(20);
 }
 
-
-
 // -- LAYOUT --
 .body {
   padding-top: $popupMainHeaderHeight;
@@ -47,7 +47,6 @@ $windowWidthForRightSideBorder: rem(850);
   position: relative;
   overflow: hidden;
 }
-
 
 .btn-section {
   position: fixed;

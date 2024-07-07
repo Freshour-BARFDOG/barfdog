@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import s from '/src/pages/survey/survey.module.scss';
-import SurveyInputRadio from '/src/components/survey/SurveyInputRadio';
+import InputRadio from '/src/components/survey/InputRadio';
 import { CustomSelectWithCustomOptions } from './CustomSelectWithCustomOptions';
 import { DogTypeCustomSelectWithCustomOptions } from './DogTypeCustomSelectWithCustomOptions';
 import PureCheckbox from '/src/components/atoms/PureCheckbox';
@@ -79,7 +79,7 @@ export default function SurveyBundleStep1({
       </div>
       <div className={s['input-row']}>
         <div className={s.input_title}>반려견 성별</div>
-        <SurveyInputRadio
+        <InputRadio
           formValueKey={'gender'}
           formValues={formValues}
           setFormValues={setFormValues}
@@ -129,7 +129,7 @@ export default function SurveyBundleStep1({
       </div>
 
       <div className={s['input-row']}>
-        <SurveyInputRadio
+        <InputRadio
           formValueKey={'dogSize'}
           formValues={formValues}
           setFormValues={setFormValues}

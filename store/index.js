@@ -6,6 +6,8 @@ import userStateSlice from '@store/userState-slice';
 import pageSlice from '@store/page-slice';
 import orderSlice from '@store/order-slice';
 import navigationSlice from '@store/navigation-slice';
+import surveyDogSlice from '@store/surveyDog-slice';
+import surveyDataSlice from '@store/surveyData-slice';
 
 const store = configureStore({
   reducer: {
@@ -16,6 +18,8 @@ const store = configureStore({
     userState: userStateSlice.reducer,
     orderState: orderSlice.reducer,
     navigation: navigationSlice.reducer,
+    surveyDog: surveyDogSlice.reducer,
+    surveyData: surveyDataSlice.reducer,
   },
 });
 

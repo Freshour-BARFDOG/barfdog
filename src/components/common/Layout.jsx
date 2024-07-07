@@ -8,7 +8,7 @@ const Layout = ({ id, className, ...props }) => {
     <main
       id={id}
       className={className}
-      style={{ position: 'relative', width: '600px' }}
+      style={{ position: 'relative', width: '600px', overflow: 'hidden' }}
     >
       <TopLineBanner />
       <Header />
