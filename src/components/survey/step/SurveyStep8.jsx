@@ -28,7 +28,7 @@ export default function SurveyStep8({
         <div key={index} className={s.status_container}>
           <div className={s.input_status_container}>
             <p className={s.input_title}>
-              {dog.name} (은)는 얼마나 활동적인가요 ?
+              {dog.name} (이)의 활동량은 어떤가요 ?
             </p>
             <div className={s.input_activity_box}>
               <SurveyInputRadio
