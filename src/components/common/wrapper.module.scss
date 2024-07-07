@@ -8,10 +8,12 @@ $browser-context: 16; // html font-size:
   // justify-content: center;
   // align-items: center;
   width: rem(600);
+  padding: 0 rem(10);
 
   .container {
     max-width: rem(600);
     width: rem(600);
+
     &.fullWidth {
       // width: 100vw; //width: 100%; 을 수정
       width: rem(600);
@@ -24,36 +26,36 @@ $browser-context: 16; // html font-size:
 }
 
 /* RESPONSIVE */
-@media (max-width: rem(1200)) {
-  .container_outer {
-    .container {
-      //.container width: 100% 값을 없애야 양옆 중앙으로 모임
-      width: 100%;
-      &.fullWidth {
-        width: 100vw;
-      }
-      .row {
-        // padding: 0 rem(20);
-      }
-    }
-  }
-}
-@media (max-width: rem(1080)) {
-}
+// @media (max-width: rem(1200)) {
+//   .container_outer {
+//     .container {
+//       //.container width: 100% 값을 없애야 양옆 중앙으로 모임
+//       width: 100%;
+//       &.fullWidth {
+//         width: 100vw;
+//       }
+//       .row {
+//         // padding: 0 rem(20);
+//       }
+//     }
+//   }
+// }
+// @media (max-width: rem(1080)) {
+// }
 
-@media (max-width: rem(768)) {
-}
+// @media (max-width: rem(768)) {
+// }
 
-@media (max-width: rem(600)) {
-  .container_outer {
-    display: block;
-    .container {
-      .row {
-        // padding: 0 rem(20);
-      }
-    }
-  }
-}
+// @media (max-width: rem(600)) {
+//   .container_outer {
+//     display: block;
+//     .container {
+//       .row {
+//         // padding: 0 rem(20);
+//       }
+//     }
+//   }
+// }
 
-@media (max-width: 320px) {
-}
+// @media (max-width: 320px) {
+// }

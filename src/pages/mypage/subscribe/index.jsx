@@ -54,7 +54,7 @@ export default function ManageSubscribePage() {
                 <EmptyContMessage
                   message={'구독 중인 반려견이 없습니다.'}
                   options={{
-                    button: { url: '/surveyGuide', label: '정기구독 시작하기' },
+                    button: { url: '/survey', label: '정기구독 시작하기' },
                   }}
                 />
               ) : (

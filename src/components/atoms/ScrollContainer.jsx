@@ -1,8 +1,6 @@
-import React, {forwardRef} from 'react'
-import styled from 'styled-components'
+import React, { forwardRef } from 'react';
+import styled from 'styled-components';
 import rem from '@util/func/rem';
-
-
 
 const Container = styled.div`
   overflow-y: scroll;
@@ -24,15 +22,10 @@ const Container = styled.div`
   }
 `;
 
-function ScrollContainer({
-  height,
-  style,
-  className,
-  children,
-  scrollBarWidth,
-  ...props
-}, ref) {
-  
+function ScrollContainer(
+  { height, style, className, children, scrollBarWidth, ...props },
+  ref,
+) {
   // * forwardRef((props,ref)=> {return <Conponent/>})
 
   return (
