@@ -26,7 +26,7 @@ export function Main_top() {
               />
             </div>
             <div className={s.btn_box}>
-              <Link href={'/surveyGuide'} passHref>
+              <Link href={'/survey'} passHref>
                 <a type="button" className={s.btn_survey}>
                   설문하고 추천받기
                 </a>
