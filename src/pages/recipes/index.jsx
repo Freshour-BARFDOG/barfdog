@@ -784,7 +784,7 @@ export default function RecipePage() {
 
             <div className={s.btn_box}>
               <div className={s.image_box}>
-                <Link href="/surveyGuide" passHref>
+                <Link href="/survey" passHref>
                   <a className="flex-wrap">
                     <div className={`${s.image} img-wrap`}>
                       {/* <Image

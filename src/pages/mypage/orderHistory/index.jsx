@@ -162,7 +162,7 @@ export default function OrderHistoryPage() {
                     message={'구독 중인 상품내역이 없습니다.'}
                     options={{
                       button: {
-                        url: '/surveyGuide',
+                        url: '/survey',
                         label: '정기구독 시작하기',
                       },
                     }}

@@ -206,7 +206,7 @@ export default function Survey() {
     const { id, value } = input;
     // console.log('input', input);
     // console.log('id', id);
-    console.log('value', value);
+    // console.log('value', value);
 
     const filteredType = input.dataset.inputType;
     let filteredValue = value;
@@ -579,7 +579,7 @@ export default function Survey() {
         <Wrapper
           fullWidth={true}
           bgColor="#fffafa"
-          minHeight="100vh"
+          minHeight="90vh"
           alignItems="flex-start"
         >
           <div className={s['survey-page']} ref={surveyPageRef}>

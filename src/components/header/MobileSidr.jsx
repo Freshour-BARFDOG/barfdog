@@ -171,14 +171,14 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
               <div className={s.row}>
                 <ul>
                   <li className={s.main_menu_title}>
-                    <Link href={'/surveyGuide'} passHref>
-                      <a>헬스케어</a>
-                    </Link>
+                    {/* <Link href={'/survey'} passHref> */}
+                    <a>헬스케어</a>
+                    {/* </Link> */}
                   </li>
 
                   <ul className={s.menu_list_container}>
                     <li>
-                      <Link href={'/surveyGuide'} passHref>
+                      <Link href={'/survey'} passHref>
                         <a>AI 추천 식단</a>
                       </Link>
                     </li>
@@ -196,22 +196,22 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                       }`}
                     >
                       <li>
-                        <Link href={'/surveyGuide'} passHref>
+                        <Link href={'/survey'} passHref>
                           <a>내 반려견 기록</a>
                         </Link>
                       </li>
                       <li>
-                        <Link href={'/healthcare/vet'} passHref>
+                        <Link href={'/survey'} passHref>
                           <a>견종백과</a>
                         </Link>
                       </li>
                       <li>
-                        <Link href={'/healthcare/vet'} passHref>
+                        <Link href={'/survey'} passHref>
                           <a>건강문진</a>
                         </Link>
                       </li>
                       <li>
-                        <Link href={'/healthcare/vet'} passHref>
+                        <Link href={'/survey'} passHref>
                           <a>장내분석</a>
                         </Link>
                       </li>
@@ -219,9 +219,7 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                   </ul>
 
                   <li className={s.main_menu_title}>
-                    <Link href={'/surveyGuide'} passHref>
-                      <a>제품</a>
-                    </Link>
+                    <a>제품</a>
                   </li>
                   <ul className={s.menu_list_container}>
                     <li>
@@ -241,9 +239,7 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                   </ul>
 
                   <li className={s.main_menu_title}>
-                    <Link href={'/surveyGuide'} passHref>
-                      <a>바프독</a>
-                    </Link>
+                    <a>바프독</a>
                   </li>
                   <ul className={s.menu_list_container}>
                     <li>
