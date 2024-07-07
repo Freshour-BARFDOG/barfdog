@@ -139,7 +139,7 @@ export class URLPathClass {
   private validMemberPath(curPath: string): boolean {
     const curFIRST_DEPTH = `/${curPath.split('/')[1]}`;
     const MEMBER_PATH_LIST_AT_FIRST_DEPTH: string[] = [
-      '/cart',
+      // '/cart',
       '/order',
       '/mypage',
     ];

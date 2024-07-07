@@ -1,7 +1,6 @@
 @import '/styles/global/rem';
 
-
-.empty_box{
+.empty_box {
   width: 100%;
   text-align: center;
   padding: rem(60) 0;
@@ -11,19 +10,19 @@
     font-size: rem(16);
   }
 
-
-  .button_box{
-    margin-top: rem(40);
+  .button_box_shop,
+  .button_box_ai {
+    margin-top: rem(20);
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
 
-    .emty_button{
+    .emty_button {
       display: flex;
       justify-content: center;
       align-items: center;
-      
+
       font-size: rem(16);
       width: rem(218);
       height: rem(42);
@@ -31,5 +30,19 @@
       border-radius: rem(4);
       color: var(--color-main);
     }
+  }
+
+  .button_box_shop:hover,
+  .button_box_ai:hover {
+    .emty_button {
+      border: rem(1) solid var(--color-main);
+      background-color: var(--color-main);
+      color: #fff;
+      transition: 0.3s all;
+    }
+  }
+
+  .button_box_shop {
+    margin-top: rem(50);
   }
 }

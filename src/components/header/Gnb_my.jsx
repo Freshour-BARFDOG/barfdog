@@ -20,15 +20,15 @@ export const Gnb_my = ({ isMobile, setSidrOpen, authData }) => {
 
   const onMovePage = async (e, page) => {
     e.preventDefault();
-    if (!userInfo) {
+    if (!userInfo && page === '/mypage/orderHistory') {
       // 로그인 이후 바로 특정 페이지(마이페이지, 장바구니)로 이동
       dispatch(setPreviousPath(page));
       return await router.push('/account/login');
+    } else {
+      const btn = e.currentTarget;
+      const link = btn.dataset.link;
+      await router.push(link);
     }
-
-    const btn = e.currentTarget;
-    const link = btn.dataset.link;
-    await router.push(link);
   };
 
   return (
