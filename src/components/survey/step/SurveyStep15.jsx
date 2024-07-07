@@ -124,8 +124,8 @@ export default function SurveyStep15({
               {dog.name} (이)의 건강적 특이사항, 질병 등이 있나요 ?
             </p>
             <p className={s.supplement_text}>
-              * 질병이 있는 경우 <strong>필수</strong>로 체크해주세요! 질병에
-              따라 급여가 불가할 수 있습니다.
+              * 질병이 있는 경우 <strong>필수</strong>로 체크해주세요! <br />
+              질병에 따라 급여가 불가할 수 있습니다.
             </p>
             <div className={s.input_supplement_box}>
               <SurveyCustomRadioTrueOrFalse

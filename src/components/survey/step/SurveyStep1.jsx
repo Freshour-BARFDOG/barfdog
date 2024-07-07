@@ -36,10 +36,8 @@ export default function SurveyStep1({
     inedibleFoodEtc: 'NONE', // 못 먹는 음식 > '기타' 일경우
     caution: 'NONE', // 기타 특이사항 // 빈값('')일 경우, '있어요'선택됨)
     cautionEtc: 'NONE',
+    isNewToRawDiet: true, //! [추가] 생식유무
     recommendRecipeId: null, // 특별히 챙겨주고 싶은 부분에 해당하는 Recipe => get API 리스트
-    mealCountPerOneDay: '', //! [추가] 하루 끼니 횟수 str (1,2,3)
-    favoriteIngredients: '', //! [추가] 좋아하는 재료 str
-    messageToBarfdog: '', //! [추가] 전하고 싶은 말 str
   };
 
   const addDogInfoHandler = () => {

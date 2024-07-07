@@ -48,8 +48,8 @@ export default function SurveyStep12({
               {dog.name} (이)가 현재 먹고 있는 영양제가 있나요 ?
             </p>
             <p className={s.supplement_text}>
-              *과잉 영양 예방 및 충돌 영양제를 파악하기 위함이오니 급여하는
-              제품이 있는 경우 체크해주세요!
+              * 과잉 영양 예방 및 충돌 영양제를 파악하기 위함이오니 <br />
+              급여하는 제품이 있는 경우 체크해주세요!
             </p>
             <div className={s.input_supplement_box}>
               <SurveyCustomRadioTrueOrFalse

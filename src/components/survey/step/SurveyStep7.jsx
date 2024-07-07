@@ -99,10 +99,12 @@ export default function SurveyStep7({
                 idList={[
                   dogSpecificStatusType.PREGNANT,
                   dogSpecificStatusType.LACTATING,
+                  dogSpecificStatusType.ETC,
                 ]}
                 labelList={[
                   dogSpecificStatusType.KOR.PREGNANT,
                   dogSpecificStatusType.KOR.LACTATING,
+                  dogSpecificStatusType.KOR.ETC,
                 ]}
               />
             </div>
@@ -161,6 +163,19 @@ export default function SurveyStep7({
                   ]}
                 />
               </div>
+            )}
+
+            {/* 3. 기타 */}
+            {dog.specificDogStatus === 'ETC' && (
+              <input
+                id={`specificDogStatusEtc`}
+                className={s.input_name}
+                type="text"
+                placeholder="별도의 상담이 필요할 수도 있습니다."
+                data-input-type={'string'}
+                value={dog.specificDogStatusEtc || ''}
+                onChange={(e) => onInputChangeHandler(e, index)}
+              />
             )}
           </div>
           {formValues.length >= 2 && index !== formValues.length - 1 && (

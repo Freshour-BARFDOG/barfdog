@@ -124,8 +124,6 @@ export default function MobileGnb() {
     setActiveMenuId(menuId);
   };
 
-  console.log(activeMenuId);
-
   return (
     <>
       {/* [수정] mobile 클래스명 제거 - 모바일 600이 아닌, 1080 미만부터 보이게 변경 */}
