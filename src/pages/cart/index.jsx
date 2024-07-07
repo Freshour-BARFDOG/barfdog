@@ -677,21 +677,21 @@ export async function getServerSideProps({ req }) {
   //const res = await getDataSSR(req, getApiUrl);
   const cookies = req.headers.cookie; // 클라이언트로부터 전달된 쿠키
   const res = await getDataSSRWithCookies(req, getApiUrl, cookies);
-  // // console.log('SERVER REPONSE: ', res);
+  console.log('SERVER REPONSE: ', res);
   if (res?.status === 200) {
     data = res.data;
   } else {
     error = true;
   }
 
-  if (error) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/account/login?prevPath=/cart', // 로그인 성공 후, 이전 페이지로 돌아가기
-      },
-    };
-  }
+  // if (error) {
+  //   return {
+  //     redirect: {
+  //       permanent: false,
+  //       destination: '/account/login?prevPath=/cart', // 로그인 성공 후, 이전 페이지로 돌아가기
+  //     },
+  //   };
+  // }
 
   return { props: { data, error } };
 }
