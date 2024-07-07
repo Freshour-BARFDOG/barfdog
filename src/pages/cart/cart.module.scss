@@ -1,13 +1,17 @@
 @import '/styles/global/guide';
 @import '/styles/global/rem';
 
-
-section.title { padding : rem(60) 0 rem(20); }
+section.title {
+  padding: rem(60) 0 rem(20);
+}
 // section.cart_btn{ margin-bottom: rem(10) }
 // section.product_list { padding : 0 0 rem(0)}
-section.total_price { margin : rem(60) 0 rem(80)}
-section.btn_box { margin : 0 0 rem(206)}
-
+section.total_price {
+  margin: rem(60) 0 rem(80);
+}
+section.btn_box {
+  margin: rem(40) 0 rem(180);
+}
 
 .title {
   .text {
@@ -16,25 +20,31 @@ section.btn_box { margin : 0 0 rem(206)}
   }
 }
 
-
-
 // ---  변경된 체크박스 220725 --
 .check_box {
   display: flex;
   justify-content: center;
   align-items: center;
-  label {font-size: rem(15)};
-  > *{  color: var(--gray10); }
-  .inner span{
-    
+  label {
+    font-size: rem(15);
+  }
+  > * {
+    color: var(--gray10);
+  }
+  .inner span {
     width: rem(24);
     height: rem(24);
-    margin:0;
-    &:after{left:rem(8); top: rem(4); border-width: 0 rem(3) rem(3) 0}:after{border-width: 0 rem(3) rem(3) 0}
+    margin: 0;
+    &:after {
+      left: rem(8);
+      top: rem(4);
+      border-width: 0 rem(3) rem(3) 0;
+    }
+    :after {
+      border-width: 0 rem(3) rem(3) 0;
+    }
   }
 }
-
-
 
 .cart_btn {
   .content_box {
@@ -51,20 +61,17 @@ section.btn_box { margin : 0 0 rem(206)}
       @include char(l15);
       margin-left: rem(16);
       cursor: pointer;
-    }    
+    }
   }
 }
 
-
 .product_list {
-
-  
   .itemList {
     display: grid;
-    grid-template-columns: rem(80) rem(120) 1fr rem(250) rem(40) ;
+    grid-template-columns: rem(80) rem(120) 1fr rem(250) rem(40);
     padding: rem(20) 0 rem(20);
     align-items: center;
-    border-bottom: rem(1) solid #DDDDDD;
+    border-bottom: rem(1) solid #dddddd;
     height: 100%;
     .image {
       position: relative;
@@ -74,23 +81,34 @@ section.btn_box { margin : 0 0 rem(206)}
     }
 
     // ------------------  Added Code  (220724) / 기존 checkbox 삭제 /
-    .check_box .inner{gap:0;}
-    .item-row > *:not(:last-child){margin-right:rem(8);}
-    .option-row span:not(:last-child){margin-right:rem(4);}
-    .option-row{
-      span{color: var(--color-font-medium); font-size: rem(14);}
+    .check_box .inner {
+      gap: 0;
     }
-    .delivery-row{
-      span{color: var(--color-font-def); font-size: rem(14);}
+    .item-row > *:not(:last-child) {
+      margin-right: rem(8);
+    }
+    .option-row span:not(:last-child) {
+      margin-right: rem(4);
+    }
+    .option-row {
+      span {
+        color: var(--color-font-medium);
+        font-size: rem(14);
+      }
+    }
+    .delivery-row {
+      span {
+        color: var(--color-font-def);
+        font-size: rem(14);
+      }
     }
     // ------------------  END
-
 
     .list_text {
       padding-left: rem(16);
       .name {
-        @include char(l16);  
-        padding-bottom:  rem(6); 
+        @include char(l16);
+        padding-bottom: rem(6);
       }
       .originalPrice {
         @include char(l14);
@@ -102,10 +120,9 @@ section.btn_box { margin : 0 0 rem(206)}
         font-weight: 600;
         padding-top: rem(4);
       }
-
     }
 
-    .grid_box{
+    .grid_box {
       display: grid;
       grid-template-columns: rem(130) rem(120);
 
@@ -119,8 +136,8 @@ section.btn_box { margin : 0 0 rem(206)}
         border: rem(1) solid var(--color-line-03);
         overflow: hidden;
         background-color: #fff;
-        
-        .minus{
+
+        .minus {
           width: rem(36);
           display: flex;
           justify-content: center;
@@ -131,8 +148,8 @@ section.btn_box { margin : 0 0 rem(206)}
           font-size: rem(30);
           cursor: pointer;
         }
-        
-        .mid_box{
+
+        .mid_box {
           width: rem(50);
           display: flex;
           justify-content: center;
@@ -141,7 +158,7 @@ section.btn_box { margin : 0 0 rem(206)}
           font-size: rem(16);
         }
 
-        .plus{
+        .plus {
           width: rem(36);
           display: flex;
           justify-content: center;
@@ -162,7 +179,7 @@ section.btn_box { margin : 0 0 rem(206)}
       }
     }
 
-    .delete_btn{
+    .delete_btn {
       width: rem(36);
       height: rem(36);
 
@@ -178,9 +195,8 @@ section.btn_box { margin : 0 0 rem(206)}
       }
     }
   }
-  &:last-child{
-
-    .flex_box{
+  &:last-child {
+    .flex_box {
       border-bottom: 0;
     }
   }
@@ -203,7 +219,6 @@ section.btn_box { margin : 0 0 rem(206)}
   }
   .down_text {
     @include char(l20);
-
   }
   .math {
     width: 100%;
@@ -213,7 +228,7 @@ section.btn_box { margin : 0 0 rem(206)}
       aspect-ratio: 1/1;
     }
   }
-  
+
   .flex_text_box {
     display: flex;
     justify-content: center;
@@ -223,16 +238,15 @@ section.btn_box { margin : 0 0 rem(206)}
     font-weight: bold;
 
     &::before {
-      content: "";
+      content: '';
       width: rem(1);
       height: rem(80);
       background-color: var(--color-line-04);
       position: absolute;
-      top : 0;
+      top: 0;
       left: rem(-30);
       bottom: 0;
       margin: auto;
-
     }
     .total {
       @include char(l16);
@@ -253,7 +267,7 @@ section.btn_box { margin : 0 0 rem(206)}
     place-items: center;
     width: rem(315);
     height: rem(50);
-    background: #CA1010;
+    background: #ca1010;
     border-radius: rem(4);
     cursor: pointer;
 
@@ -262,130 +276,138 @@ section.btn_box { margin : 0 0 rem(206)}
   }
 }
 
+// @media (max-width: rem(800)) {
+.check_box {
+  align-items: normal;
 
-@media (max-width: rem(800)) {
-
-  .check_box {
-    align-items: normal;
-
-    .auto__login__check {
-      .chk__box .on {
-        top: rem(4);
-      }
+  .auto__login__check {
+    .chk__box .on {
+      top: rem(4);
     }
   }
+}
 
-  .cart_btn {
-    .content_box {
-      padding-left: rem(4);
-      padding-right: rem(4);
-    }  
+.cart_btn {
+  .content_box {
+    padding-left: rem(4);
+    padding-right: rem(4);
   }
+}
 
+.product_list {
+  .itemList {
+    grid-template-columns: rem(24) rem(120) 1fr rem(40);
+    grid-gap: rem(10);
+    align-items: flex-start;
 
-  .product_list {
-    .itemList {
-      grid-template-columns: rem(24) rem(120) 1fr rem(40);
-      grid-gap: rem(10);
+    .list_text {
+      padding-left: 0;
+    }
+
+    .grid_box {
+      display: flex;
+      justify-content: space-between;
+      width: rem(600); // 모바일 크기에 맞게 수정
+      transform: translateX(rem(34));
+      order: 6;
+
+      .price {
+        transform: translateX(rem(-74));
+        font-size: rem(22);
+        font-weight: bold;
+      }
+    }
+
+    button {
+      justify-self: flex-end;
+    }
+
+    .delete_btn {
+      justify-content: flex-end;
       align-items: flex-start;
 
-      .list_text {
-        padding-left: 0;
-      }
-
-      .grid_box{
-        display: flex;
-        justify-content: space-between;
-        width: 100vw;
-        transform: translateX(rem(34));
-        order: 6;
-
-        .price {
-          transform: translateX(rem(-74));
-          font-size: rem(22);
-          font-weight: bold;
-        }
-      }
-
-      button{
-        justify-self: flex-end;
-      }
-    
-      .delete_btn{
-        justify-content: flex-end;
-        align-items: flex-start;
-
-        .image {
-          width: 100%;
-          max-width: rem(16);
-          aspect-ratio: 1/1;
-        }
-      }
-    }
-    &:last-child{
-      .flex_box{
-        border-bottom: 0;
+      .image {
+        width: 100%;
+        max-width: rem(16);
+        aspect-ratio: 1/1;
       }
     }
   }
-  section.total_price { margin : rem(30) 0 0}
-
-  .total_price {
-    border: 0;
+  &:last-child {
     .flex_box {
-      width: 100%;
-      grid-template-columns: 1fr;
-      grid-gap: 0;
-      
-      .amount, .shipping, .discount{
-        display: flex;
-        justify-content: space-between;
-        
-      }
+      border-bottom: 0;
+    }
+  }
+}
+section.total_price {
+  margin: rem(30) rem(10) 0;
+}
 
-      .math{
+.total_price {
+  border: 0;
+  .flex_box {
+    width: 100%;
+    grid-template-columns: 1fr;
+    grid-gap: 0;
+
+    .amount,
+    .shipping,
+    .discount {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .math {
+      display: none;
+    }
+
+    .flex_text_box {
+      justify-content: space-between;
+
+      &::before {
         display: none;
       }
-
-      .flex_text_box {
-        justify-content: space-between;
-
-        &::before {
-          display: none;
-        }
-      }
     }
   }
-  
-  .btn_box {
-    margin-top: rem(30);
-  }
-
 }
 
-
-@media (max-width: rem(600)) {
-
-  section.title { padding : rem(20) 0 rem(20); }
-
-  .cart_btn {
-    .content_box {
-      padding-left: rem(4);
-      padding-right: rem(4);
-    }  
-  }
-
-  .product_list {
-    .itemList {
-      grid-template-columns: rem(24) rem(60) 1fr rem(40);
-
-    }
-  }
-
-  .btn_box {
-    .btn_box {
-      width: 100%;
-    }
-  }
-  
+.btn_box {
+  margin-top: rem(30);
 }
+// }
+
+// @media (max-width: rem(600)) {
+
+section.title {
+  padding: rem(20) 0 rem(20);
+}
+
+.cart_btn {
+  .content_box {
+    padding-left: rem(4);
+    padding-right: rem(4);
+  }
+}
+
+.product_list {
+  .itemList {
+    grid-template-columns: rem(24) rem(60) 1fr rem(40);
+  }
+}
+
+.btn_box {
+  .btn_box {
+    width: 100%;
+  }
+}
+.delivery_price_text {
+  color: #ca1010;
+  text-align: right;
+  margin-bottom: rem(10);
+}
+.info_text {
+  text-align: right;
+  color: #636363;
+}
+
+// }
