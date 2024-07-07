@@ -1,5 +1,5 @@
 import s from '/src/pages/survey/survey.module.scss';
-import SurveyInputRadio from './SurveyInputRadio';
+import InputRadio from './InputRadio';
 import React, { useEffect, useState } from 'react';
 import { dogSnackCountLevelType } from '/store/TYPE/dogSnackCountLevelType';
 import { dogInedibleFoodType } from '/store/TYPE/dogInedibleFoodType';
@@ -124,7 +124,7 @@ export default function SurveyBundleStep3({
     <section id="surveyPage" className={s.step3page}>
       <div className={s['input-row']}>
         <p className={s.input_title}>간식 급여 횟수는</p>
-        <SurveyInputRadio
+        <InputRadio
           formValueKey={'snackCountLevel'}
           formValues={formValues}
           setFormValues={setFormValues}
@@ -161,7 +161,7 @@ export default function SurveyBundleStep3({
           {isLoading.inedibleFood && <Spinner />}
         </p>
         {formValues.inedibleFood === dogInedibleFoodType.NONE ? (
-          <SurveyInputRadio
+          <InputRadio
             formValueKey={'inedibleFood'}
             formValues={formValues}
             setFormValues={setFormValues}
@@ -173,7 +173,7 @@ export default function SurveyBundleStep3({
             ]}
           />
         ) : (
-          <SurveyInputRadio
+          <InputRadio
             formValueKey={'inedibleFood'}
             formValues={formValues}
             setFormValues={setFormValues}
@@ -220,7 +220,7 @@ export default function SurveyBundleStep3({
           특별히 챙겨주고 싶은 부분은
           {isLoading.recommendRecipeId && <Spinner />}
         </p>
-        <SurveyInputRadio
+        <InputRadio
           formValueKey={'recommendRecipeId'}
           formValues={formValues}
           setFormValues={setFormValues}
@@ -232,7 +232,7 @@ export default function SurveyBundleStep3({
       </div>
       <div className={`${s['input-row']}`}>
         <div className={s.input_title}>기타 특이사항(질병 등)이</div>
-        <SurveyInputRadio
+        <InputRadio
           formValueKey={'caution'}
           formValues={formValues}
           setFormValues={setFormValues}

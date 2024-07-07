@@ -36,14 +36,19 @@
   .image {
     padding: rem(20) 0;
     display: flex;
+    gap: rem(20);
+
+    img {
+      aspect-ratio: 1/1;
+    }
 
     .product_info_text {
       display: flex;
       flex-direction: column;
-      padding: rem(10) rem(20);
+      justify-content: center;
 
       .product_name {
-        font-size: rem(22);
+        font-size: rem(20);
         font-weight: bold;
       }
       .product_original_price {

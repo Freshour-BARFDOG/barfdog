@@ -9,6 +9,9 @@ $backgroundColorDef: #f8f8ff;
 
 #popup {
   background-color: $backgroundColorDef;
+  position: absolute;
+  left: 0;
+  right: 0;
 }
 
 .header {

@@ -1,5 +1,5 @@
 import s from '/src/pages/survey/survey.module.scss';
-import SurveyInputRadio from './SurveyInputRadio';
+import InputRadio from './InputRadio';
 import React from 'react';
 import { dogActivityLevelType } from '/store/TYPE/dogActivityLevelType';
 import { CustomSelectWithCustomOptions } from './CustomSelectWithCustomOptions';
@@ -32,7 +32,7 @@ export default function SurveyBundleStep2({ formValues, setFormValues }) {
     <section id="surveyPage" className={s.step2page}>
       <div className={s.input_title}>반려견의 활동량은</div>
       <div className="input-row">
-        <SurveyInputRadio
+        <InputRadio
           formValueKey={'activityLevel'}
           formValues={formValues}
           setFormValues={setFormValues}
@@ -84,7 +84,7 @@ export default function SurveyBundleStep2({ formValues, setFormValues }) {
       </div>
       <div className={s.input_title}>현재 상태는</div>
       <div className="input-row">
-        <SurveyInputRadio
+        <InputRadio
           formValueKey={'dogStatus'}
           formValues={formValues}
           setFormValues={setFormValues}
