@@ -43,7 +43,7 @@ const calculateCartDeliveryPrice = ({
     : deliveryConstant.price;
 };
 
-export default function CartPage({ data, error }) {
+export default function CartPage({ data, error, isMember }) {
   const router = useRouter();
   const dispatch = useDispatch();
   const deliveryConstant = {
@@ -156,9 +156,11 @@ export default function CartPage({ data, error }) {
 
   // 컴포넌트 마운트 시 default로 전체 선택 상태 적용
   useEffect(() => {
-    const items = DATA.basketDtoList;
-    const allItemsIdList = items.map((item) => item.basketId);
-    setSelectedItemBasketIds(allItemsIdList);
+    if (isMember) {
+      const items = DATA.basketDtoList;
+      const allItemsIdList = items.map((item) => item.basketId);
+      setSelectedItemBasketIds(allItemsIdList);
+    }
   }, []);
 
   const updateDATA = (basketId, amountUnit) => {
@@ -205,7 +207,7 @@ export default function CartPage({ data, error }) {
         nextBasketDtoList,
       ); // 할인정도
       const deliveryPrice = calculateCartDeliveryPrice({
-        selectedItemDto: nextBasketDtoList.filter(
+        selectedItemDto: nextBasketDtoList?.filter(
           (item) => selectedItemBasketIds.indexOf(item.basketId) >= 0,
         ),
         deliveryConstant: deliveryConstant,
@@ -427,9 +429,11 @@ export default function CartPage({ data, error }) {
     }));
   };
 
-  if (error) {
-    return;
-  }
+  // if (error) {
+  //   return;
+  // }
+
+  console.log();
 
   return (
     <>
@@ -462,7 +466,7 @@ export default function CartPage({ data, error }) {
           </section>
           <section className={s.product_list}>
             <ul className={'animation-show-all-child'}>
-              {DATA.basketDtoList?.length === 0 ? (
+              {!isMember || DATA.basketDtoList?.length === 0 ? (
                 <EmptyCart />
               ) : (
                 DATA.basketDtoList?.map((item, index) => (
@@ -633,6 +637,12 @@ export default function CartPage({ data, error }) {
                   {transformLocalCurrency(DATA.total?.deliveryPrice)}원
                 </p>
               </div>
+              {/* ! [추후수정] 무료배송 안내문구 */}
+              {/* 1) 일반 : 무료 배송기준 추가 */}
+              <span className={s.delivery_price_text}>
+                추가 시, <strong>무료배송</strong>
+              </span>
+              {/* 2) 구독 : 묶음배송 시, 무료배송 */}
 
               <div className={s.flex_text_box}>
                 <div className={s.total}>총 주문 금액</div>
@@ -643,6 +653,9 @@ export default function CartPage({ data, error }) {
                   원
                 </p>
               </div>
+              <span className={s.info_text}>
+                쿠폰/적립금은 주문서에서 사용 가능합니다.
+              </span>
             </div>
           </section>
 
@@ -673,15 +686,17 @@ export default function CartPage({ data, error }) {
 export async function getServerSideProps({ req }) {
   let data = null;
   let error = null;
+  let isMember = false;
   const getApiUrl = `/api/baskets`;
   //const res = await getDataSSR(req, getApiUrl);
   const cookies = req.headers.cookie; // 클라이언트로부터 전달된 쿠키
   const res = await getDataSSRWithCookies(req, getApiUrl, cookies);
-  console.log('SERVER REPONSE: ', res);
   if (res?.status === 200) {
     data = res.data;
+    isMember = true;
   } else {
     error = true;
+    isMember = false;
   }
 
   // if (error) {
@@ -693,5 +708,5 @@ export async function getServerSideProps({ req }) {
   //   };
   // }
 
-  return { props: { data, error } };
+  return { props: { data, error, isMember } };
 }
