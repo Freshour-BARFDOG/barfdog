@@ -20,7 +20,7 @@ import { FullScreenLoading } from '/src/components/atoms/FullScreenLoading';
 import { cartAction } from '/store/cart-slice';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
-import { postUserObjData } from '../api/reqData';
+import { getData, postUserObjData } from '../api/reqData';
 
 const calculateCartDeliveryPrice = ({
   selectedItemDto,
@@ -51,6 +51,8 @@ export default function CartPage({ data, error, isMember }) {
     freeCondition: data?.deliveryConstant.freeCondition,
   };
   const [storedItem, setStoredItem] = useState();
+  const [deliveryInfo, setDeliveryInfo] = useState();
+
   // 비로그인 시 담은 아이템을 장바구니에 등록
   useEffect(() => {
     const storedItemData = localStorage.getItem('storedItem');
@@ -160,6 +162,23 @@ export default function CartPage({ data, error, isMember }) {
       const items = DATA.basketDtoList;
       const allItemsIdList = items.map((item) => item.basketId);
       setSelectedItemBasketIds(allItemsIdList);
+
+      //! [추가] 배송지 주소 불러오기
+
+      (async () => {
+        try {
+          const getAddressApiUrl = '/api/members';
+          const res = await getData(getAddressApiUrl);
+
+          console.log('res>>>', res);
+          if (res.data) {
+            const addressData = res.data.address;
+            setDeliveryInfo(addressData);
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      })();
     }
   }, []);
 
@@ -429,11 +448,13 @@ export default function CartPage({ data, error, isMember }) {
     }));
   };
 
+  //! [수정] 비회원도 장바구니 페이지 들어올 수 있게끔
   // if (error) {
   //   return;
   // }
 
-  console.log();
+  console.log(data);
+  console.log(DATA);
 
   return (
     <>
@@ -445,6 +466,14 @@ export default function CartPage({ data, error, isMember }) {
           <section className={s.title}>
             <h1 className={s.text}>장바구니</h1>
           </section>
+          {/* 배송지 변경 기능 */}
+          {/* <section className={s.delivery_container}>
+            <div>
+              {deliveryInfo.city}
+              {deliveryInfo.street}
+              {deliveryInfo.detailAddress}({deliveryInfo.zipcode})
+            </div>
+          </section> */}
           <section className={s.cart_btn}>
             <div className={s.content_box}>
               <span className={s.check_box}>
@@ -640,7 +669,14 @@ export default function CartPage({ data, error, isMember }) {
               {/* ! [추후수정] 무료배송 안내문구 */}
               {/* 1) 일반 : 무료 배송기준 추가 */}
               <span className={s.delivery_price_text}>
-                추가 시, <strong>무료배송</strong>
+                {DATA.total?.deliveryPrice > 0 && (
+                  <>
+                    {transformLocalCurrency(
+                      deliveryConstant.freeCondition - DATA.total?.finalPrice,
+                    )}
+                    원 추가 시 <strong>무료배송</strong>
+                  </>
+                )}
               </span>
               {/* 2) 구독 : 묶음배송 시, 무료배송 */}
 
