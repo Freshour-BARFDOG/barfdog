@@ -5,7 +5,7 @@ import SurveyPureCheck from '../SurveyPureCheck';
 // import SurveyCustomSelectWithCustomOptions from '/src/components/survey/SurveyCustomSelectWithCustomOptions';
 // import SurveyBirthYear from './SurveyBirthYear';
 import yearOptionList from '/util/func/yearOptionList';
-import SurveyBirthday from '../SurveyBirthdayInput';
+import SurveyBirthdayInput from '../SurveyBirthdayInput';
 import SurveyYearMonth from '../SurveyYearMonthInput';
 
 // const getSurveyBirthObject = (yyyymmObj) => {
@@ -36,8 +36,10 @@ export default function SurveyStep5({
   setFormValues,
   onInputChangeHandler,
   surveyPageRef,
+  errorInfo,
+  setIsActiveNextBtn,
 }) {
-  const [showBirthOptions, setShowBirthOptions] = useState(false);
+  const [showBirthOptionsIndex, setShowBirthOptionsIndex] = useState([]);
   // const [activeIndexList, setActiveIndexList] = useState([]);
 
   // const birthObj = {
@@ -91,36 +93,60 @@ export default function SurveyStep5({
     targetSwiperElem.style.minHeight = rem(800);
   }, [formValues]);
 
-  const showBirthOptionsHandler = () => {
-    setShowBirthOptions(true);
+  const showBirthOptionsHandler = (e, index) => {
+    setShowBirthOptionsIndex((prevIndexes) => {
+      if (prevIndexes.includes(index)) {
+        const newFormValues = formValues.map((item, idx) => {
+          if (idx === index) {
+            return {
+              ...item,
+              birth: '',
+            };
+          }
+          return item;
+        });
+        setFormValues(newFormValues);
+
+        // 이미 배열에 있는 경우 제거
+        return prevIndexes.filter((i) => i !== index);
+      } else {
+        // 배열에 없는 경우 추가
+        return [...prevIndexes, index];
+      }
+    });
   };
+
+  // console.log('showBirthOptionsIndex>>', showBirthOptionsIndex);
 
   return (
     <section id="surveyPage" className={s.step4Page}>
+      {errorInfo.errorMessage && (
+        <p className={s.error_message_text}>{errorInfo.errorMessage}</p>
+      )}
       {formValues?.map((dog, index) => (
         <div key={index} className={s.dogBirth_container}>
           <p className={s.input_title}>{dog.name} (이)의 생일은 언제인가요 ?</p>
           <div className={s.input_dogBirth_box}>
-            <SurveyBirthday
+            <SurveyBirthdayInput
               className={s['birthday']}
               type={'date'}
               id={'birth'}
               filteredType={'date'}
               dogInfoIndex={index}
               dogInfo={dog}
-              // formValue={formValues.birth}
               setFormValues={setFormValues}
               value={dog.birth || ''}
               // onChange={(e) => onInputChangeHandler(e, index)}
+              setIsActiveNextBtn={setIsActiveNextBtn}
             />
             <button
               className={s.year_month_btn}
-              onClick={showBirthOptionsHandler}
+              onClick={(e) => showBirthOptionsHandler(e, index)}
             >
               정확히는 모르겠어요
             </button>
 
-            {showBirthOptions && (
+            {showBirthOptionsIndex.includes(index) && (
               <ul className={s.dogBirth}>
                 <li>
                   <SurveyYearMonth
@@ -134,6 +160,7 @@ export default function SurveyStep5({
                     // placeholder={'년도'}
                     placeholder={'yyyy'}
                     dogInfoIndex={index}
+                    setIsActiveNextBtn={setIsActiveNextBtn}
                   />
                 </li>
                 <li>
@@ -153,6 +180,7 @@ export default function SurveyStep5({
                     // placeholder={'월'}
                     placeholder={'mm'}
                     dogInfoIndex={index}
+                    setIsActiveNextBtn={setIsActiveNextBtn}
                   />
                 </li>
                 {/* <li>

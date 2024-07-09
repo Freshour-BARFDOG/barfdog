@@ -29,8 +29,8 @@ export default function SurveyStep16({
             <p className={s.input_title}>(이)는 생식 급여가 처음인가요 ?</p>
             <div className={s.input_neutralization_box}>
               <SurveyCustomRadioTrueOrFalse
-                title="isNewToRawDiet"
-                value={formValues.isNewToRawDiet}
+                title="newToRawDiet"
+                value={formValues.newToRawDiet}
                 setValue={setFormValues}
                 theme={'letter-in-shape'}
                 labelList={['네', '아니오']}

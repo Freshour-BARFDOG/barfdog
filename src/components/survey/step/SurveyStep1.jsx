@@ -3,27 +3,27 @@ import s from '/src/pages/survey/survey.module.scss';
 import rem from '/util/func/rem';
 import { BsPlus } from 'react-icons/bs';
 import { dogActivityLevelType } from '/store/TYPE/dogActivityLevelType';
-import { dogInedibleFoodType } from '/store/TYPE/dogInedibleFoodType';
-import { dogCautionType } from '/store/TYPE/dogCautionType';
 
 export default function SurveyStep1({
   formValues,
   setFormValues,
   onInputChangeHandler,
   surveyPageRef,
+  errorInfo,
+  setIsActiveNextBtn,
 }) {
   const initialFormValue = {
     name: '', // 강아지이름 str
     gender: '', // 강아지 성별 str
-    neutralization: null, // 중성화여부 Boolean
+    neutralization: false, // 중성화여부 Boolean
     dogSize: '', // 강아지 체급 str
     dogType: '', // 강아지 종 str
     birth: '', //! [변경] 강아지 생월 str // [YYYYMMDD]
     oldDog: false, // 노견 여부 boolean (checkbox type)
     weight: '', // 강아지 몸무게 str // 몸무게 소수점 아래 1자리
     dogStatus: 'HEALTHY', //! [변경] 강아지 상태 [HEALTHY, NEED_DIET, OBESITY, THIN]
-    targetWeight: '', //! [추가] 목표 체중 Number
     specificDogStatus: 'NONE', //! [추가]  특별한 상태 [PREGNANT, LACTATING, NONE] 해당 사항이 없다면 NONE
+    specificDogStatusEtc: 'NONE', //! [추가]  특별한 상태 기타
     expectedPregnancyDay: '', //! [추가] 임신예상일 str // [YYYYMMDD]
     activityLevel: dogActivityLevelType.NORMAL, // 활동량 레벨 str [VERY_LITTLE, LITTLE, NORMAL, MUCH, VERY_MUCH]
     walkingCountPerWeek: '', // 주당 산책 횟수 string
@@ -36,12 +36,13 @@ export default function SurveyStep1({
     inedibleFoodEtc: 'NONE', // 못 먹는 음식 > '기타' 일경우
     caution: 'NONE', // 기타 특이사항 // 빈값('')일 경우, '있어요'선택됨)
     cautionEtc: 'NONE',
-    isNewToRawDiet: true, //! [추가] 생식유무
-    recommendRecipeId: null, // 특별히 챙겨주고 싶은 부분에 해당하는 Recipe => get API 리스트
+    newToRawDiet: true, //! [추가] 생식유무
+    priorityConcerns: null, // 특별히 챙겨주고 싶은 부분에 해당하는 Recipe => get API 리스트
   };
 
   const addDogInfoHandler = () => {
     setFormValues([...formValues, initialFormValue]);
+    setIsActiveNextBtn(false);
   };
 
   const removeDogInfoHandler = (indexToRemove) => {
@@ -69,6 +70,9 @@ export default function SurveyStep1({
       <div className={s.input_name_container}>
         <label htmlFor={'name'}>
           <p className={s.input_title}>반려견의 이름이 무엇인가요 ?</p>
+          {errorInfo.errorMessage && (
+            <p className={s.error_message_text}>{errorInfo.errorMessage}</p>
+          )}
           <div className={s.input_name_box}>
             {formValues?.map((dog, index) => (
               <div key={index} className={s.input_name_wrapper}>
@@ -91,6 +95,7 @@ export default function SurveyStep1({
                 )}
               </div>
             ))}
+
             <button className={s.input_add_btn} onClick={addDogInfoHandler}>
               <BsPlus />
               <p>반려견 추가하기</p>

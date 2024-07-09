@@ -23,6 +23,7 @@ const SurveyBirthdayInput = ({
   filteredType,
   icon,
   dogInfoIndex,
+  setIsActiveNextBtn,
   ...props
 }) => {
   const initialValue = formValue || '';
@@ -57,20 +58,29 @@ const SurveyBirthdayInput = ({
 
     const pregnancyStatus = calculatePregnancyStatus(date);
 
+    console.log(pregnancyStatus, date);
+
     // date 값이 유효하면, 날짜 포맷 변경
     if (date && !isNaN(date)) {
       // formattedDate = format(date, 'yyyy-MM-dd');
       formattedDate = format(date, 'yyyyMMdd');
       setSelectedDate(date);
+      setIsActiveNextBtn(true);
       setFormValues((prevFormValues) => {
         const newFormValues = prevFormValues.map((item, idx) => {
           if (idx === dogInfoIndex) {
-            return {
-              ...item,
-              [id]: formattedDate,
-              specificDogStatus:
-                id === 'expectedPregnancyDay' && pregnancyStatus,
-            };
+            if (id === 'expectedPregnancyDay') {
+              return {
+                ...item,
+                [id]: formattedDate,
+                specificDogStatus: pregnancyStatus,
+              };
+            } else {
+              return {
+                ...item,
+                [id]: formattedDate,
+              };
+            }
           }
           return item;
         });
@@ -88,7 +98,7 @@ const SurveyBirthdayInput = ({
 
     if (date === null) {
       setSelectedDate(null);
-
+      setIsActiveNextBtn(false);
       // 내용 업데이트
       setFormValues((prevFormValues) => {
         const newFormValues = prevFormValues.map((item, idx) => {
@@ -120,11 +130,18 @@ const SurveyBirthdayInput = ({
     setFormValues((prevFormValues) => {
       const newFormValues = prevFormValues.map((item, idx) => {
         if (idx === dogInfoIndex) {
-          return {
-            ...item,
-            [id]: formattedDate,
-            specificDogStatus: id === 'expectedPregnancyDay' && pregnancyStatus,
-          };
+          if (id === 'expectedPregnancyDay') {
+            return {
+              ...item,
+              [id]: formattedDate,
+              specificDogStatus: pregnancyStatus,
+            };
+          } else {
+            return {
+              ...item,
+              [id]: formattedDate,
+            };
+          }
         }
         return item;
       });

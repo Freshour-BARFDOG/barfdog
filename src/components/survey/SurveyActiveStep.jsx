@@ -1,21 +1,20 @@
 import s from './surveyActiveStep.module.scss';
 import React, { useEffect, useState } from 'react';
 
-export const SurveyActiveStep = ({ curStep }) => {
+export const SurveyActiveStep = ({ curStep, isValidPage }) => {
   const [activeStep, setActiveStep] = useState(1);
 
-  useEffect(() => {
-    if (curStep >= 1 && curStep <= 6) {
-      setActiveStep(1);
-    } else if (curStep >= 7 && curStep <= 15) {
-      setActiveStep(2);
-    } else if (curStep >= 16 && curStep <= 17) {
-      setActiveStep(3);
-    }
-  }, [curStep]);
+  // useEffect(() => {
+  //   if ((curStep >= 1 && curStep <= 6) || isValidPage) {
+  //     setActiveStep(1);
+  //   } else if (curStep >= 7 && curStep <= 15 && !isValidPage) {
+  //     setActiveStep(2);
+  //   } else if (curStep >= 16 && curStep <= 17) {
+  //     setActiveStep(3);
+  //   }
+  // }, [curStep, isValidPage]);
 
-  // console.log('curStep', curStep);
-  // console.log('activeStep', activeStep);
+  console.log('isValidPage', isValidPage);
 
   return (
     <section className={s.step_container}>
@@ -23,7 +22,7 @@ export const SurveyActiveStep = ({ curStep }) => {
       <div className={s.step_box}>
         <div
           className={`${s.step_circle} ${
-            curStep >= 1 && curStep <= 6 ? s.active : ''
+            (curStep >= 1 && curStep <= 6) || isValidPage === 6 ? s.active : ''
           }`}
         >
           <div className={s.step_number}>1</div>
@@ -34,7 +33,10 @@ export const SurveyActiveStep = ({ curStep }) => {
       <div className={s.step_box}>
         <div
           className={`${s.step_circle} ${
-            curStep >= 7 && curStep <= 15 ? s.active : ''
+            (curStep >= 7 && curStep <= 15 && isValidPage !== 6) ||
+            isValidPage === 9
+              ? s.active
+              : ''
           }`}
         >
           <div className={s.step_number}>2</div>

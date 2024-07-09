@@ -18,6 +18,7 @@ export const SurveyCustomSelectWithCustomOptions = ({
   dogInfoIndex,
   activeIndexList,
   setActiveIndexList,
+  setIsActiveNextBtn,
   ...props
 }) => {
   // const initialSelectedOption = value || options[0].value;
@@ -106,6 +107,7 @@ export const SurveyCustomSelectWithCustomOptions = ({
 
     setSelectedOption(value);
     setSelectedLabel(label);
+    setIsActiveNextBtn(!!value);
 
     if (dataType === 'number') {
       value = Number(value);
