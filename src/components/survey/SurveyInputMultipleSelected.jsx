@@ -56,6 +56,7 @@ const SurveyInputMultipleSelected = ({
     // 내용 업데이트
     setFormValues((prevFormValues) => {
       const newFormValues = prevFormValues.map((item, idx) => {
+        setIsActiveNextBtn(true);
         if (idx === dogInfoIndex) {
           return {
             ...item,

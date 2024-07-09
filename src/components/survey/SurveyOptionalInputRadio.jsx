@@ -109,12 +109,20 @@ const SurveyOptionalInputRadio = ({
               [formValueKey]: value,
             };
           } else if (item[formValueKey] === 'PREGNANT') {
+            setIsActiveNextBtn(true);
             return {
               ...item,
               [formValueKey]: 'NONE',
               expectedPregnancyDay: '',
             };
           } else if (item[formValueKey] === 'LACTATING') {
+            setIsActiveNextBtn(true);
+            return {
+              ...item,
+              [formValueKey]: 'NONE',
+            };
+          } else if (item[formValueKey] === 'ETC') {
+            setIsActiveNextBtn(true);
             return {
               ...item,
               [formValueKey]: 'NONE',

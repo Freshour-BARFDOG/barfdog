@@ -14,6 +14,7 @@ const SurveyCustomRadioTrueOrFalse = ({
   dogInfo,
   dogInfoIndex,
   setActiveIndexList,
+  setIsActiveNextBtn,
 }) => {
   const trueRadioId = `${title}${labelList[0]}`;
   const falseRadioId = `${title}${labelList[1]}`;
@@ -60,7 +61,6 @@ const SurveyCustomRadioTrueOrFalse = ({
       title === 'inedibleFood' ||
       title === 'caution'
     ) {
-      console.log('e', e.target.checked);
       // 내용 업데이트
       setFormValues((prevFormValues) => {
         const newFormValues = prevFormValues.map((item, idx) => {
@@ -77,6 +77,8 @@ const SurveyCustomRadioTrueOrFalse = ({
       });
     }
 
+    setIsActiveNextBtn(false);
+
     setActiveIndexList &&
       setActiveIndexList((prevIndexList) => {
         if (!prevIndexList.includes(dogInfoIndex)) {
@@ -92,7 +94,6 @@ const SurveyCustomRadioTrueOrFalse = ({
       title === 'inedibleFood' ||
       title === 'caution'
     ) {
-      console.log('e', e.target.checked);
       // 내용 업데이트
       setFormValues((prevFormValues) => {
         const newFormValues = prevFormValues.map((item, idx) => {
@@ -127,7 +128,7 @@ const SurveyCustomRadioTrueOrFalse = ({
             title === 'supplement' ||
             title === 'inedibleFood' ||
             title === 'caution'
-              ? dogInfo[title] === 'YES' && s.checked
+              ? dogInfo[title] !== 'NONE' && s.checked
               : `${dogInfo[title] === true && s.checked}`
           }
         >
@@ -140,7 +141,7 @@ const SurveyCustomRadioTrueOrFalse = ({
               title === 'supplement' ||
               title === 'inedibleFood' ||
               title === 'caution'
-                ? dogInfo[title] === 'YES'
+                ? dogInfo[title] !== 'NONE'
                 : dogInfo[title] === true
             }
             onChange={(e) => onInputChangeHandler(e, dogInfoIndex)}

@@ -8,6 +8,8 @@ export default function SurveyStep13({
   setFormValues,
   onInputChangeHandler,
   surveyPageRef,
+  errorInfo,
+  setIsActiveNextBtn,
 }) {
   let currentMealOptions = [
     '건사료',
@@ -31,6 +33,9 @@ export default function SurveyStep13({
 
   return (
     <section id="surveyPage" className={s.step11Page}>
+      {errorInfo.errorMessage && (
+        <p className={s.error_message_text}>{errorInfo.errorMessage}</p>
+      )}
       {formValues?.map((dog, index) => (
         <div key={index} className={s.status_container}>
           {/* 1. 현재 상태 */}

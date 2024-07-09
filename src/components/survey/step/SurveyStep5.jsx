@@ -4,7 +4,7 @@ import rem from '/util/func/rem';
 import SurveyPureCheck from '../SurveyPureCheck';
 // import SurveyCustomSelectWithCustomOptions from '/src/components/survey/SurveyCustomSelectWithCustomOptions';
 // import SurveyBirthYear from './SurveyBirthYear';
-import yearOptionList from '/util/func/yearOptionList';
+import surveyYearOptionList from '/util/func/surveyYearOptionList';
 import SurveyBirthdayInput from '../SurveyBirthdayInput';
 import SurveyYearMonth from '../SurveyYearMonthInput';
 
@@ -78,8 +78,8 @@ export default function SurveyStep5({
   //   }
   // }, [birth]);
 
-  const yearOptions = yearOptionList(50, true).year;
-  const monthOptions = yearOptionList(null, true).month;
+  const yearOptions = surveyYearOptionList(50, true).year;
+  const monthOptions = surveyYearOptionList(null, true).month;
 
   // UI '짤림 현상'해결
   useEffect(() => {
@@ -153,11 +153,9 @@ export default function SurveyStep5({
                     id={'yyyy'}
                     options={yearOptions}
                     value={dog.birth?.length >= 4 ? dog.birth.slice(0, 4) : ''}
-                    // setValues={setBirth}
                     setFormValues={setFormValues}
                     unit={'년'}
                     width={120}
-                    // placeholder={'년도'}
                     placeholder={'yyyy'}
                     dogInfoIndex={index}
                     setIsActiveNextBtn={setIsActiveNextBtn}
@@ -173,11 +171,9 @@ export default function SurveyStep5({
                         ? dog.birth?.slice(4, 6)
                         : ''
                     }
-                    // setValues={setBirth}
                     setFormValues={setFormValues}
                     unit={'월'}
                     width={120}
-                    // placeholder={'월'}
                     placeholder={'mm'}
                     dogInfoIndex={index}
                     setIsActiveNextBtn={setIsActiveNextBtn}
