@@ -72,6 +72,7 @@ export default function SurveyStep12({
                 dogInfo={dog}
                 dogInfoIndex={index}
                 setActiveIndexList={setActiveIndexList}
+                setIsActiveNextBtn={setIsActiveNextBtn}
               />
             </div>
 

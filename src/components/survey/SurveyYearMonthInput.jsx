@@ -131,13 +131,13 @@ export default function SurveyYearMonthInput({
       setFormValues((prevFormValues) => {
         const newFormValues = prevFormValues.map((item, idx) => {
           if (idx === dogInfoIndex) {
-            console.log('item.birth', item.birth);
+            // console.log('item.birth', item.birth);
             const restOfDate = item.birth.slice(4);
             let newBirth;
             if (item.birth === '') {
               // 날짜 지정 안했을 경우 (2023)
               newBirth = updatedValue;
-              console.log('newBirth>>>>', newBirth);
+              // console.log('newBirth>>>>', newBirth);
             } else if (item.birth.slice(0, 4) === '0000') {
               // 날짜 지정했을 경우 (00000202)
               // const emptyYear = item.birth.slice(0, 4); // 앞에 4글자 '0000' 비어있는 년도

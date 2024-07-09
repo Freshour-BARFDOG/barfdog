@@ -456,6 +456,7 @@ export default function Survey() {
     { swiperIndex: 6, key: 'weight' },
     { swiperIndex: 9, key: 'walkingCountPerWeek' },
     { swiperIndex: 9, key: 'walkingTimePerOneTime' },
+    { swiperIndex: 13, key: 'currentMeal' },
   ];
 
   const onSwiperChangeIndex = (swiper) => {
@@ -927,6 +928,8 @@ export default function Survey() {
                   formValues={formValues}
                   setFormValues={setFormValues}
                   onInputChangeHandler={onInputChangeHandler}
+                  errorInfo={errorInfo}
+                  setIsActiveNextBtn={setIsActiveNextBtn}
                 />
               </SwiperSlide>
 
@@ -947,6 +950,7 @@ export default function Survey() {
                   formValues={formValues}
                   setFormValues={setFormValues}
                   onInputChangeHandler={onInputChangeHandler}
+                  setIsActiveNextBtn={setIsActiveNextBtn}
                 />
               </SwiperSlide>
 

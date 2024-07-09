@@ -58,7 +58,7 @@ const SurveyBirthdayInput = ({
 
     const pregnancyStatus = calculatePregnancyStatus(date);
 
-    console.log(pregnancyStatus, date);
+    // console.log(pregnancyStatus, date);
 
     // date 값이 유효하면, 날짜 포맷 변경
     if (date && !isNaN(date)) {
