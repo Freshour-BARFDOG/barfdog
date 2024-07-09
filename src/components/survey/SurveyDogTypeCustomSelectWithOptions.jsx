@@ -8,7 +8,7 @@ export const SurveyDogTypeCustomSelectWithOptions = ({
   options,
   width,
   value,
-  // formValues,
+  setIsActiveNextBtn,
   setFormValues,
   viewerWidth,
   // dogInfo,
@@ -91,6 +91,7 @@ export const SurveyDogTypeCustomSelectWithOptions = ({
     const option = e.currentTarget;
     const value = option.dataset.value;
     setSelectedOption(value);
+    setIsActiveNextBtn(!!value); // 다음 버튼 활성화
 
     // 선택지 리스트 닫기
     // if (option) {

@@ -17,6 +17,7 @@ const SurveyOptionalInputRadio = ({
   dogInfo,
   dogInfoIndex,
   setActiveIndexList,
+  setIsActiveNextBtn,
 }) => {
   // 최초 값
   // let initialSelectedRadio = `${formValueKey}-${formValues[formValueKey]}`;
@@ -90,10 +91,24 @@ const SurveyOptionalInputRadio = ({
   const clickHandler = (e) => {
     const { value } = e.target;
 
+    setIsActiveNextBtn(false);
+
     setFormValues((prevFormValues) => {
       const newFormValues = prevFormValues.map((item, idx) => {
         if (idx === dogInfoIndex) {
-          if (item[formValueKey] === 'PREGNANT') {
+          if (item[formValueKey] !== value && item[formValueKey] === 'ETC') {
+            return {
+              ...item,
+              [formValueKey]: value,
+              specificDogStatusEtc: '',
+            };
+          } else if (item[formValueKey] !== value) {
+            // 다른 라벨 클릭 시, 바로 값 변경
+            return {
+              ...item,
+              [formValueKey]: value,
+            };
+          } else if (item[formValueKey] === 'PREGNANT') {
             return {
               ...item,
               [formValueKey]: 'NONE',
@@ -104,12 +119,20 @@ const SurveyOptionalInputRadio = ({
               ...item,
               [formValueKey]: 'NONE',
             };
-          } else {
-            return {
-              ...item,
-              [formValueKey]: value,
-            };
           }
+          // } else if (value === 'PREGNANT') {
+          //   return {
+          //     ...item,
+          //     [formValueKey]: value,
+          //   };
+          // } else if (value === 'LACTATING') {
+          //   return {
+          //     ...item,
+          //     [formValueKey]: value,
+          //   };
+          // } else {
+
+          // }
         }
         return item;
       });
@@ -127,14 +150,23 @@ const SurveyOptionalInputRadio = ({
               <label
                 key={`radio-${formValueKey}-${index}`}
                 className={`${s.inputRadio} ${
-                  dogInfo[formValueKey] === idList[index] && s.checked
+                  (dogInfo[formValueKey] === idList[index] ||
+                    dogInfo[formValueKey]?.startsWith(id)) &&
+                  s.checked
                 }`}
+                // className={`${s.inputRadio} ${
+                //   dogInfo[formValueKey] === idList[index] && s.checked
+                // }`}
               >
                 <input
                   id={`${formValueKey}`}
                   type="radio"
                   className="hide"
-                  checked={dogInfo[formValueKey] === idList[index]}
+                  checked={
+                    dogInfo[formValueKey] === idList[index] ||
+                    dogInfo[formValueKey]?.startsWith(id)
+                  }
+                  // checked={dogInfo[formValueKey] === idList[index]}
                   value={idList[index]}
                   onClick={clickHandler}
                 />

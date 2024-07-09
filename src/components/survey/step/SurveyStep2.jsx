@@ -10,6 +10,7 @@ export default function SurveyStep2({
   setFormValues,
   onInputChangeHandler,
   surveyPageRef,
+  errorInfo,
 }) {
   // UI '짤림 현상'해결
   useEffect(() => {
@@ -25,6 +26,9 @@ export default function SurveyStep2({
 
   return (
     <section id="surveyPage" className={s.step2Page}>
+      {errorInfo.errorMessage && (
+        <p className={s.error_message_text}>{errorInfo.errorMessage}</p>
+      )}
       {formValues?.map((dog, index) => (
         <div key={index} className={s.gender_neutralization_container}>
           <div className={s.input_gender_container}>

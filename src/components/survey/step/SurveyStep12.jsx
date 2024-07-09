@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import s from '/src/pages/survey/survey.module.scss';
 import rem from '/util/func/rem';
-import SurveyInputRadio from '/src/components/survey/SurveyInputRadio';
 import SurveyCustomRadioTrueOrFalse from '/src/components/survey/SurveyCustomRadioTrueOrFalse';
 import SurveyInputMultipleSelected from '../SurveyInputMultipleSelected';
 
@@ -10,6 +9,8 @@ export default function SurveyStep12({
   setFormValues,
   onInputChangeHandler,
   surveyPageRef,
+  errorInfo,
+  setIsActiveNextBtn,
 }) {
   let supplementOptions = [
     '오메가-3',
@@ -38,8 +39,17 @@ export default function SurveyStep12({
     targetSwiperElem.style.height = rem(activeSlideHeight);
   }, [formValues]);
 
+  useEffect(() => {
+    if (activeIndexList.length > 0) {
+      setIsActiveNextBtn(false);
+    }
+  }, [activeIndexList]);
+
   return (
-    <section id="surveyPage" className={s.step11Page}>
+    <section id="surveyPage">
+      {errorInfo.errorMessage && (
+        <p className={s.error_message_text}>{errorInfo.errorMessage}</p>
+      )}
       {formValues?.map((dog, index) => (
         <div key={index} className={s.status_container}>
           {/* 1. 현재 상태 */}
@@ -77,6 +87,7 @@ export default function SurveyStep12({
                   className={s.dogStatus}
                   idList={supplementOptions}
                   labelList={supplementOptions}
+                  setIsActiveNextBtn={setIsActiveNextBtn}
                 />
               </div>
             )}

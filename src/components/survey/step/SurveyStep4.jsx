@@ -11,6 +11,8 @@ export default function SurveyStep4({
   setFormValues,
   onInputChangeHandler,
   surveyPageRef,
+  errorInfo,
+  setIsActiveNextBtn,
 }) {
   const [activeIndexList, setActiveIndexList] = useState([]);
 
@@ -28,6 +30,9 @@ export default function SurveyStep4({
 
   return (
     <section id="surveyPage" className={s.step3Page}>
+      {errorInfo.errorMessage && (
+        <p className={s.error_message_text}>{errorInfo.errorMessage}</p>
+      )}
       {formValues?.map((dog, index) => (
         <div key={index} className={s.dogSize_dogType_container}>
           <p className={s.input_title}>{dog.name} (이)의 견종은 무엇인가요 ?</p>
@@ -56,7 +61,7 @@ export default function SurveyStep4({
               value={formValues}
               setFormValues={setFormValues}
               width={360}
-              // formValues={formValues}
+              setIsActiveNextBtn={setIsActiveNextBtn}
               dogInfoIndex={index}
               // dogInfo={dog}
               activeIndexList={activeIndexList}

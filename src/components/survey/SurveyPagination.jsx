@@ -2,10 +2,14 @@
 
 import s from '../../components/common/surveyFooter.module.scss';
 import Image from 'next/image';
-import React from 'react';
+import React, { useState } from 'react';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa6';
 
-export const SurveyPagination = ({ referrer, onChangeStep }) => {
+export const SurveyPagination = ({
+  referrer,
+  onChangeStep,
+  isActiveNextBtn,
+}) => {
   const { prevBtn, nextBtn, submitBtn } = referrer;
 
   return (
@@ -25,6 +29,12 @@ export const SurveyPagination = ({ referrer, onChangeStep }) => {
         className={s['swiper-button-next']}
         ref={nextBtn}
         onClick={onChangeStep}
+        style={{
+          backgroundColor: isActiveNextBtn
+            ? '#ca1010'
+            : 'rgba(200, 200, 200, 0.6)',
+        }}
+        disabled={!isActiveNextBtn}
       >
         다음
         <FaArrowRight />

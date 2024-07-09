@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import s from '/src/pages/survey/survey.module.scss';
 import rem from '/util/func/rem';
 import SurveyInputRadio from '/src/components/survey/SurveyInputRadio';
-import CustomRadioTrueOrFalse from '/src/components/admin/form/CustomRadioTrueOrFalse';
 import { dogPhysicalStatusType } from '/store/TYPE/dogPhysicalStatusType';
 import { dogSpecificStatusType } from '/store/TYPE/dogSpecificStatusType.js';
 import SurveyBirthdayInput from '../SurveyBirthdayInput';
@@ -13,6 +12,7 @@ export default function SurveyStep7({
   setFormValues,
   onInputChangeHandler,
   surveyPageRef,
+  setIsActiveNextBtn,
 }) {
   // UI '짤림 현상'해결
   useEffect(() => {
@@ -93,6 +93,7 @@ export default function SurveyStep7({
                 formValueKey={'specificDogStatus'}
                 formValues={formValues}
                 setFormValues={setFormValues}
+                setIsActiveNextBtn={setIsActiveNextBtn}
                 dogInfo={dog}
                 dogInfoIndex={index}
                 className={s.dogStatus}
@@ -125,11 +126,10 @@ export default function SurveyStep7({
                   filteredType={'date'}
                   dogInfoIndex={index}
                   dogInfo={dog}
-                  // formValue={formValues.birth}
                   setFormValues={setFormValues}
                   // value={dog.expectedPregnancyDay || ''}
                   value={''}
-                  // onChange={(e) => onInputChangeHandler(e, index)}
+                  setIsActiveNextBtn={setIsActiveNextBtn}
                 />
               </div>
             )}
@@ -173,7 +173,12 @@ export default function SurveyStep7({
                 type="text"
                 placeholder="별도의 상담이 필요할 수도 있습니다."
                 data-input-type={'string'}
-                value={dog.specificDogStatusEtc || ''}
+                value={
+                  !dog.specificDogStatusEtc ||
+                  dog.specificDogStatusEtc === 'NONE'
+                    ? ''
+                    : dog.specificDogStatusEtc
+                }
                 onChange={(e) => onInputChangeHandler(e, index)}
               />
             )}

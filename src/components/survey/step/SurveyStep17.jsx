@@ -75,7 +75,7 @@ export default function SurveyStep17({
 
             <div className={s.recommendRecipeId_select_container}>
               <SurveyInputMultipleSelected
-                formValueKey={'recommendRecipeId'}
+                formValueKey={'priorityConcerns'}
                 formValues={formValues}
                 setFormValues={setFormValues}
                 dogInfo={dog}

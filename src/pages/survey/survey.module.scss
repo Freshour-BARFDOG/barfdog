@@ -25,6 +25,12 @@
   margin-bottom: rem(60);
 }
 
+.error_message_text {
+  color: #be1a21;
+  text-align: center;
+  margin-bottom: rem(14);
+}
+
 //////////////////////////////////
 // ******** STEP 1. 견명 ********
 //////////////////////////////////
@@ -439,7 +445,7 @@
   color: #be1a21;
   text-align: center;
   padding-bottom: rem(20);
-  width: rem(400);
+  // width: rem(400);
 }
 
 .input_supplement_box {

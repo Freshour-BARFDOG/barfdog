@@ -15,6 +15,7 @@ export default function SurveyYearMonthInput({
   className,
   onChange,
   dogInfoIndex,
+  setIsActiveNextBtn,
   ...props
 }) {
   //   const initialSelectedOption = value || options[0].value;
@@ -125,7 +126,7 @@ export default function SurveyYearMonthInput({
       updatedValue = newValue;
       setSelectedOption(newValue); // 선택한 값
       //   setBirthYear(newValue);
-      console.log('updatedYear::::', updatedValue);
+      // console.log('updatedYear::::', updatedValue);
 
       setFormValues((prevFormValues) => {
         const newFormValues = prevFormValues.map((item, idx) => {
@@ -141,6 +142,7 @@ export default function SurveyYearMonthInput({
               // 날짜 지정했을 경우 (00000202)
               // const emptyYear = item.birth.slice(0, 4); // 앞에 4글자 '0000' 비어있는 년도
               newBirth = updatedValue + restOfDate;
+              setIsActiveNextBtn(true); // 다음 버튼 활성화
             }
 
             return {
@@ -157,7 +159,7 @@ export default function SurveyYearMonthInput({
 
       //   setBirthMonth(newValue);
       updatedValue = newValue;
-      console.log('updatedValue>>>', updatedValue);
+      // console.log('updatedValue>>>', updatedValue);
 
       setFormValues((prevFormValues) => {
         const newFormValues = prevFormValues.map((item, idx) => {
@@ -171,10 +173,11 @@ export default function SurveyYearMonthInput({
             } else {
               // 년도 지정했을 경우 (20230000)
               newBirth = restOfDate + updatedValue + '01';
+              setIsActiveNextBtn(true); // 다음 버튼 활성화
             }
 
-            console.log('restOfDate', restOfDate);
-            console.log('newBirth', newBirth);
+            // console.log('restOfDate', restOfDate);
+            // console.log('newBirth', newBirth);
             return {
               ...item,
               birth: newBirth,

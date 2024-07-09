@@ -7,8 +7,9 @@ import { SurveyCustomSelectWithCustomOptions } from '../SurveyCustomSelectWithCu
 export default function SurveyStep9({
   formValues,
   setFormValues,
-  onInputChangeHandler,
   surveyPageRef,
+  errorInfo,
+  setIsActiveNextBtn,
 }) {
   const [activeIndexList, setActiveIndexList] = useState([]);
 
@@ -31,6 +32,7 @@ export default function SurveyStep9({
 
   let walkingTimePerOneTimeOptions = [
     { label: '30분', value: '0.5' },
+    { label: '1시간', value: '1' },
     { label: '1시간 30분', value: '1.5' },
     { label: '2시간', value: '2' },
     { label: '2시간 30분', value: '2.5' },
@@ -54,6 +56,9 @@ export default function SurveyStep9({
   return (
     <section id="surveyPage" className={s.step8Page}>
       <div className={s.dogWalk_top_empty}></div>
+      {errorInfo.errorMessage && (
+        <p className={s.error_message_text}>{errorInfo.errorMessage}</p>
+      )}
       {formValues?.map((dog, index) => (
         <div key={index} className={s.walk_container}>
           <p className={s.input_title}>{dog.name} (이)의 산책량은 어떤가요 ?</p>
@@ -72,6 +77,7 @@ export default function SurveyStep9({
                 dogInfoIndex={index}
                 activeIndexList={activeIndexList}
                 setActiveIndexList={setActiveIndexList}
+                setIsActiveNextBtn={setIsActiveNextBtn}
               />
             </div>
             <div className={s.input_walk}>
@@ -88,6 +94,7 @@ export default function SurveyStep9({
                 dogInfoIndex={index}
                 activeIndexList={activeIndexList}
                 setActiveIndexList={setActiveIndexList}
+                setIsActiveNextBtn={setIsActiveNextBtn}
               />
             </div>
           </div>

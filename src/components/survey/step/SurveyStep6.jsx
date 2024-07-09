@@ -11,6 +11,7 @@ export default function SurveyStep6({
   setFormValues,
   onInputChangeHandler,
   surveyPageRef,
+  errorInfo,
 }) {
   const addDogInfoHandler = () => {
     setFormValues([...formValues, initialFormValue]);
@@ -32,7 +33,11 @@ export default function SurveyStep6({
   }, [formValues]);
 
   return (
-    <section id="surveyPage" className={s.step5Page}>
+    <section id="surveyPage" className={s.step6Page}>
+      {errorInfo.errorMessage && (
+        <p className={s.error_message_text}>{errorInfo.errorMessage}</p>
+      )}
+
       {formValues?.map((dog, index) => (
         <div className={s.input_weight_container} key={index}>
           <label htmlFor={'name'}>

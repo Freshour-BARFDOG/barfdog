@@ -5,7 +5,6 @@ import { dogCautionType } from '../../../store/TYPE/dogCautionType';
 
 const SurveyInputMultipleSelected = ({
   formValueKey,
-  formValues,
   setFormValues,
   onInputChangeHandler,
   title,
@@ -15,13 +14,13 @@ const SurveyInputMultipleSelected = ({
   dataType = 'string',
   dogInfo,
   dogInfoIndex,
+  setIsActiveNextBtn,
 }) => {
   // 최초 값
   // let initialSelectedRadio = `${formValueKey}-${formValues[formValueKey]}`;
 
   const handleCheckboxChange = (e) => {
     const { value, checked } = e.target;
-    console.log(value);
 
     // 이전 값
     const oldValue = dogInfo[formValueKey] || '';
@@ -75,7 +74,6 @@ const SurveyInputMultipleSelected = ({
     setFormValues((prevFormValues) => {
       const newFormValues = prevFormValues.map((item, idx) => {
         if (idx === dogInfoIndex) {
-          console.log('item[formValueKey]', item);
           if (item[formValueKey] === '') {
             return {
               ...item,
