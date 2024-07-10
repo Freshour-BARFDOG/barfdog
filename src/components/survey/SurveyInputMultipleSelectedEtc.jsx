@@ -14,6 +14,7 @@ const SurveyInputMultipleSelectedEtc = ({
   dogInfo,
   dogInfoIndex,
   etcKey,
+  setIsActiveNextBtn,
 }) => {
   // 최초 값
   // let initialSelectedRadio = `${formValueKey}-${formValues[formValueKey]}`;
@@ -41,6 +42,7 @@ const SurveyInputMultipleSelectedEtc = ({
           .join(',');
       }
     }
+    setIsActiveNextBtn(true);
 
     // 내용 업데이트
     setFormValues((prevFormValues) => {
@@ -79,6 +81,8 @@ const SurveyInputMultipleSelectedEtc = ({
 
   const handleEtcChange = (e, labelName) => {
     const { value } = e.target;
+
+    setIsActiveNextBtn(true);
 
     // 내용 업데이트
     setFormValues((prevFormValues) => {

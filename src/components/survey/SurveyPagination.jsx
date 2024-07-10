@@ -9,6 +9,7 @@ export const SurveyPagination = ({
   referrer,
   onChangeStep,
   isActiveNextBtn,
+  onSubmitHandler,
 }) => {
   const { prevBtn, nextBtn, submitBtn } = referrer;
 
@@ -50,7 +51,16 @@ export const SurveyPagination = ({
       <button
         className={s['swiper-button-submit']}
         ref={submitBtn}
-        onClick={onChangeStep}
+        onClick={onSubmitHandler}
+        style={{
+          backgroundColor: isActiveNextBtn
+            ? '#ca1010'
+            : 'rgba(200, 200, 200, 0.6)',
+          boxShadow: isActiveNextBtn
+            ? '0 rem(2) rem(10) 0 rgba(202, 16, 16, 0.6)'
+            : 'none',
+        }}
+        disabled={!isActiveNextBtn}
       >
         제출
         {/* <figure className={s.image_box}>

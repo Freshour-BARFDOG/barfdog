@@ -208,6 +208,7 @@ export const SurveyCustomSelectWithCustomOptions = ({
           onClick={onActiveOptionBox}
           className={'customSelectInput'}
           ref={inputRef}
+          autoComplete={'off'}
         />
         {/* <em className={s.unit}>{unit}</em> */}
         <ScrollContainer

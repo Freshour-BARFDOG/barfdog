@@ -9,6 +9,7 @@ export default function SurveyFooter({
   progressbarRef,
   onNavButtonClick,
   isActiveNextBtn,
+  onSubmitHandler,
 }) {
   const [isArrowActive, setIsArrowActive] = useState(false);
 
@@ -22,6 +23,7 @@ export default function SurveyFooter({
         }}
         onChangeStep={onNavButtonClick}
         isActiveNextBtn={isActiveNextBtn}
+        onSubmitHandler={onSubmitHandler}
       />
 
       {/* <Wrapper bgColor="white">

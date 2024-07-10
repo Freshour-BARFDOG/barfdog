@@ -14,7 +14,7 @@ export const SurveyActiveStep = ({ curStep, isValidPage }) => {
   //   }
   // }, [curStep, isValidPage]);
 
-  console.log('isValidPage', isValidPage);
+  // console.log('isValidPage', isValidPage);
 
   return (
     <section className={s.step_container}>

@@ -15,6 +15,7 @@ const SurveyLayout = ({
   resultPage,
   surveyReportsId,
   isActiveNextBtn,
+  onSubmitHandler,
   ...props
 }) => {
   return (
@@ -33,6 +34,7 @@ const SurveyLayout = ({
           submitBtnRef={submitBtnRef}
           onNavButtonClick={onNavButtonClick}
           isActiveNextBtn={isActiveNextBtn}
+          onSubmitHandler={onSubmitHandler}
         />
       )}
     </main>

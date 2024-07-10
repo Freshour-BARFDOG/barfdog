@@ -462,32 +462,55 @@
 
 .supplement_select_container {
   .inputRadio-wrap {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    margin-bottom: rem(30);
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: flex-start;
 
+    width: rem(505);
+    // display: grid;
+    // grid-template-columns: 1fr 1fr 1fr;
+    margin-bottom: rem(60);
+
+    li,
     label {
       width: rem(120);
       height: rem(50);
     }
 
-    .input_supplement_brand {
-      border: none;
-      border-bottom: rem(1) solid #ccc;
-      width: rem(200);
-      margin-left: rem(13);
-      border-radius: 0;
+    .input_etc {
+      border: rem(1) solid #ccc;
+      border-radius: rem(8);
+      background-color: white;
+      margin: rem(16) 0 0 rem(-132);
+      width: rem(386);
+      height: rem(40);
+      display: flex;
+      // position: absolute;
 
       &::placeholder {
         color: rgba(0, 0, 0, 0.25);
-        font-size: rem(12);
+        font-size: rem(15);
       }
     }
 
-    .input_supplement_brand:focus {
-      border: none !important;
-      border-bottom: rem(1) solid #be1a21 !important;
-    }
+    // .input_supplement_brand {
+    //   border: none;
+    //   border-bottom: rem(1) solid #ccc;
+    //   width: rem(200);
+    //   margin-left: rem(13);
+    //   border-radius: 0;
+
+    //   &::placeholder {
+    //     color: rgba(0, 0, 0, 0.25);
+    //     font-size: rem(12);
+    //   }
+    // }
+
+    // .input_supplement_brand:focus {
+    //   border: none !important;
+    //   border-bottom: rem(1) solid #be1a21 !important;
+    // }
   }
 }
 
@@ -507,23 +530,23 @@
       padding: rem(6);
     }
 
-    .input_supplement_brand {
-      border: none;
-      border-bottom: rem(1) solid #ccc;
-      width: rem(200);
-      margin-left: rem(13);
-      border-radius: 0;
+    // .input_supplement_brand {
+    //   border: none;
+    //   border-bottom: rem(1) solid #ccc;
+    //   width: rem(200);
+    //   margin-left: rem(13);
+    //   border-radius: 0;
 
-      &::placeholder {
-        color: rgba(0, 0, 0, 0.25);
-        font-size: rem(12);
-      }
-    }
+    //   &::placeholder {
+    //     color: rgba(0, 0, 0, 0.25);
+    //     font-size: rem(12);
+    //   }
+    // }
 
-    .input_supplement_brand:focus {
-      border: none !important;
-      border-bottom: rem(1) solid #be1a21 !important;
-    }
+    // .input_supplement_brand:focus {
+    //   border: none !important;
+    //   border-bottom: rem(1) solid #be1a21 !important;
+    // }
   }
 }
 
@@ -556,9 +579,9 @@
     gap: rem(16);
 
     li {
-      width: rem(150);
+      width: rem(120);
       label {
-        width: rem(140);
+        width: rem(120);
         height: rem(50);
         padding: rem(6);
       }
@@ -579,10 +602,10 @@
       }
     }
 
-    .input_supplement_brand:focus {
-      border: none !important;
-      border-bottom: rem(1) solid #be1a21 !important;
-    }
+    // .input_supplement_brand:focus {
+    //   border: none !important;
+    //   border-bottom: rem(1) solid #be1a21 !important;
+    // }
   }
 }
 
@@ -661,11 +684,11 @@
 .recommendRecipeId_select_container {
   .inputRadio-wrap {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    margin-bottom: rem(30);
+    grid-template-columns: 1fr 1fr 1fr;
+    margin-bottom: rem(40);
 
     label {
-      width: rem(200);
+      width: rem(120);
       height: rem(50);
       padding: rem(6);
     }

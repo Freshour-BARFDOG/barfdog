@@ -15,6 +15,8 @@ const SurveyInputMultipleSelected = ({
   dogInfo,
   dogInfoIndex,
   setIsActiveNextBtn,
+  conditionRecipeMap,
+  inedibleFoodRecipeMap,
 }) => {
   // 최초 값
   // let initialSelectedRadio = `${formValueKey}-${formValues[formValueKey]}`;
@@ -29,7 +31,7 @@ const SurveyInputMultipleSelected = ({
     let newValue = '';
 
     // 고민되는 부분 - 우선순위 3가지만
-    if (formValueKey === 'recommendRecipeId') {
+    if (formValueKey === 'priorityConcerns') {
       const selectedItems = oldValue ? oldValue.split(',') : [];
       // 이미 선택된 항목이 3개일 때 새로운 항목 추가를 막기
       if (checked && selectedItems.length >= 3) {
@@ -53,28 +55,78 @@ const SurveyInputMultipleSelected = ({
       }
     }
 
-    // 내용 업데이트
-    setFormValues((prevFormValues) => {
-      const newFormValues = prevFormValues.map((item, idx) => {
-        setIsActiveNextBtn(true);
-        if (idx === dogInfoIndex) {
-          return {
-            ...item,
-            [formValueKey]: newValue,
-          };
+    //! 추천 레시피 id
+    if (formValueKey === 'priorityConcerns') {
+      const selectedConditions = newValue.split(',').filter(Boolean);
+      let recommendRecipeIds = [];
+
+      selectedConditions.forEach((condition) => {
+        if (conditionRecipeMap[condition]) {
+          recommendRecipeIds.push(...conditionRecipeMap[condition]);
         }
-        return item;
       });
 
-      return newFormValues;
-    });
+      recommendRecipeIds = [...new Set(recommendRecipeIds)]; // 중복 제거
+
+      // inedibleFood에 포함된 재료의 레시피 ID를 제외
+      const inedibleFoods = dogInfo.inedibleFood.split(',').filter(Boolean);
+      inedibleFoods.forEach((food) => {
+        if (inedibleFoodRecipeMap[food]) {
+          recommendRecipeIds = recommendRecipeIds.filter(
+            (id) => !inedibleFoodRecipeMap[food].includes(id),
+          );
+        }
+      });
+
+      // recommendRecipeId의 최종 값
+      const finalRecommendRecipeId = recommendRecipeIds.length
+        ? recommendRecipeIds[0]
+        : null;
+
+      // 내용 업데이트
+      setFormValues((prevFormValues) => {
+        const newFormValues = prevFormValues.map((item, idx) => {
+          setIsActiveNextBtn(true);
+          if (idx === dogInfoIndex) {
+            return {
+              ...item,
+              [formValueKey]: newValue,
+              recommendRecipeId: finalRecommendRecipeId,
+            };
+          }
+          return item;
+        });
+
+        return newFormValues;
+      });
+    } else {
+      // 내용 업데이트
+      setFormValues((prevFormValues) => {
+        const newFormValues = prevFormValues.map((item, idx) => {
+          setIsActiveNextBtn(true);
+          if (idx === dogInfoIndex) {
+            return {
+              ...item,
+              [formValueKey]: newValue,
+            };
+          }
+          return item;
+        });
+
+        return newFormValues;
+      });
+    }
   };
 
   useEffect(() => {
     // 내용 업데이트
     setFormValues((prevFormValues) => {
       const newFormValues = prevFormValues.map((item, idx) => {
-        if (idx === dogInfoIndex) {
+        if (
+          idx === dogInfoIndex &&
+          formValueKey !== 'currentMeal' &&
+          formValueKey !== 'priorityConcerns'
+        ) {
           if (item[formValueKey] === '') {
             return {
               ...item,
@@ -88,53 +140,6 @@ const SurveyInputMultipleSelected = ({
       return newFormValues;
     });
   }, [dogInfo]);
-
-  // const handleBrandChange = (e, labelName) => {
-  //   const { value } = e.target;
-
-  //   // 내용 업데이트
-  //   setFormValues((prevFormValues) => {
-  //     const newFormValues = prevFormValues.map((item, idx) => {
-  //       if (idx === dogInfoIndex) {
-  //         let dataArray = item[formValueKey].split(',');
-  //         let updatedArray = dataArray;
-  //         let labelIndex = dataArray.indexOf(labelName);
-
-  //         if (labelIndex !== -1) {
-  //           // 라벨명 그대로 존재한다면 (ex. 유산균)
-  //           updatedArray[labelIndex] = labelName + ':' + value;
-  //         } else {
-  //           updatedArray = dataArray.map((item) => {
-  //             let [label, labelValue] = item.split(':');
-  //             if (label === labelName) {
-  //               // 라벨명 존재하지만 ':' 포함된 경우 (ex. 유산균:이전브랜드)
-  //               if (value === '') {
-  //                 // 빈 문자열인 경우, ':' 제거
-  //                 return labelName;
-  //               } else {
-  //                 // ':'와 함께 값을 추가
-  //                 return `${labelName}:${value}`;
-  //               }
-  //             } else {
-  //               // 조건에 맞지 않는 경우, 원래의 item 반환
-  //               return item;
-  //             }
-  //           });
-  //         }
-
-  //         let resultArray = updatedArray.join(',');
-
-  //         return {
-  //           ...item,
-  //           [formValueKey]: resultArray,
-  //         };
-  //       }
-  //       return item;
-  //     });
-
-  //     return newFormValues;
-  //   });
-  // };
 
   return (
     <>
@@ -158,14 +163,6 @@ const SurveyInputMultipleSelected = ({
                 />
                 {labelList[index]}
               </label>
-
-              {/* <input
-                placeholder="(선택) 브랜드와 제품명을 기재해주세요"
-                type="text"
-                onChange={(e) => handleBrandChange(e, idList[index])}
-                className={s.input_supplement_brand}
-                disabled={!dogInfo[formValueKey].includes(idList[index])}
-              /> */}
             </li>
           );
         })}

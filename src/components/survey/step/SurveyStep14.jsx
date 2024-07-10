@@ -11,6 +11,8 @@ export default function SurveyStep14({
   setFormValues,
   onInputChangeHandler,
   surveyPageRef,
+  errorInfo,
+  setIsActiveNextBtn,
 }) {
   let inedibleFoodIdList = [
     '닭',
@@ -82,6 +84,7 @@ export default function SurveyStep14({
                 dogInfo={dog}
                 dogInfoIndex={index}
                 setActiveIndexList={setActiveIndexList}
+                setIsActiveNextBtn={setIsActiveNextBtn}
               />
             </div>
 
@@ -98,18 +101,8 @@ export default function SurveyStep14({
                   idList={inedibleFoodIdList}
                   labelList={inedibleFoodLabelList}
                   etcKey={'inedibleFoodEtc'}
+                  setIsActiveNextBtn={setIsActiveNextBtn}
                 />
-                <div className={s.inedibleFood_text_box}>
-                  <p className={s.inedibleFood_text}>
-                    💡 바프독의 모든 생식 레시피에는 영양분이 가득한 <br />
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 육고기, 뼈, 내장, 채소 등이
-                    들어갑니다.
-                    <br />
-                    <br />⚠ 육고기와 뼈의 경우 알러지 분류에 들어가지만 <br />
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 내장의 경우 알러지 분류에
-                    들어가지 않으니 참고해주세요.
-                  </p>
-                </div>
               </div>
             )}
           </div>
@@ -119,6 +112,16 @@ export default function SurveyStep14({
           )}
         </div>
       ))}
+      <div className={s.inedibleFood_text_box}>
+        <p className={s.inedibleFood_text}>
+          💡 바프독의 모든 생식 레시피에는 영양분이 가득한 <br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 육고기, 뼈, 내장, 채소 등이 들어갑니다.
+          <br />
+          <br />⚠ 육고기와 뼈의 경우 알러지 분류에 들어가지만 <br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 내장의 경우 알러지 분류에 들어가지
+          않으니 참고해주세요.
+        </p>
+      </div>
     </section>
   );
 }
