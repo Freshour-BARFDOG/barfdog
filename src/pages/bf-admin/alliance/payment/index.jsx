@@ -138,7 +138,7 @@ function ManagePaymentPage() {
               <SearchRadio
                 searchValue={searchValue}
                 setSearchValue={setSearchValue}
-                title="제휴사별 API 키"
+                title="제휴사"
                 name="apiKey"
                 idList={['SycrZhi9CuVrHei']}
                 labelList={['콕뱅크']}
