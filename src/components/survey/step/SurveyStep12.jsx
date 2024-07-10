@@ -3,6 +3,7 @@ import s from '/src/pages/survey/survey.module.scss';
 import rem from '/util/func/rem';
 import SurveyCustomRadioTrueOrFalse from '/src/components/survey/SurveyCustomRadioTrueOrFalse';
 import SurveyInputMultipleSelected from '../SurveyInputMultipleSelected';
+import SurveyInputMultipleSelectedEtc from '../SurveyInputMultipleSelectedEtc';
 
 export default function SurveyStep12({
   formValues,
@@ -12,17 +13,31 @@ export default function SurveyStep12({
   errorInfo,
   setIsActiveNextBtn,
 }) {
-  let supplementOptions = [
-    '오메가-3',
+  let supplementIdList = [
     '유산균',
-    '관절',
+    '오메가-3',
     '항산화',
-    '피부',
+    '관절',
     '눈',
-    '심장',
+    '피부',
     '면역력',
-    '종합',
+    '심장',
     '치아',
+    '종합',
+    'ETC',
+  ];
+
+  let supplementLabelList = [
+    '유산균',
+    '오메가-3',
+    '항산화',
+    '관절',
+    '눈',
+    '피부',
+    '면역력',
+    '심장',
+    '치아',
+    '종합',
     '기타',
   ];
 
@@ -47,6 +62,10 @@ export default function SurveyStep12({
 
   return (
     <section id="surveyPage">
+      <p className={s.supplement_text}>
+        * 과잉 영양 예방 및 충돌 영양제를 파악하기 위함이오니 <br />
+        급여하는 제품이 있는 경우 체크해주세요!
+      </p>
       {errorInfo.errorMessage && (
         <p className={s.error_message_text}>{errorInfo.errorMessage}</p>
       )}
@@ -57,10 +76,7 @@ export default function SurveyStep12({
             <p className={s.input_title}>
               {dog.name} (이)가 현재 먹고 있는 영양제가 있나요 ?
             </p>
-            <p className={s.supplement_text}>
-              * 과잉 영양 예방 및 충돌 영양제를 파악하기 위함이오니 <br />
-              급여하는 제품이 있는 경우 체크해주세요!
-            </p>
+
             <div className={s.input_supplement_box}>
               <SurveyCustomRadioTrueOrFalse
                 title="supplement"
@@ -78,7 +94,7 @@ export default function SurveyStep12({
 
             {activeIndexList.includes(index) && (
               <div className={s.supplement_select_container} key={index}>
-                <SurveyInputMultipleSelected
+                <SurveyInputMultipleSelectedEtc
                   formValueKey={'supplement'}
                   formValues={formValues}
                   setFormValues={setFormValues}
@@ -86,9 +102,10 @@ export default function SurveyStep12({
                   dogInfoIndex={index}
                   onInputChangeHandler={onInputChangeHandler}
                   className={s.dogStatus}
-                  idList={supplementOptions}
-                  labelList={supplementOptions}
+                  idList={supplementIdList}
+                  labelList={supplementLabelList}
                   setIsActiveNextBtn={setIsActiveNextBtn}
+                  etcKey={'supplementEtc'}
                 />
               </div>
             )}

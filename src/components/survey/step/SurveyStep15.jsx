@@ -3,14 +3,15 @@ import s from '/src/pages/survey/survey.module.scss';
 import rem from '/util/func/rem';
 import SurveyCustomRadioTrueOrFalse from '/src/components/survey/SurveyCustomRadioTrueOrFalse';
 import SurveyInputMultipleSelectedEtc from '../SurveyInputMultipleSelectedEtc';
-// import Modal_alert, { Modal_innerForm } from '../../modal/Modal_consult';
-// import Modal_consult from '../../modal/Modal_consult';
+import Modal_alert, { Modal_innerForm } from '../../modal/Modal_consult';
+import Modal_consult from '../../modal/Modal_consult';
 
 export default function SurveyStep15({
   formValues,
   setFormValues,
   onInputChangeHandler,
   surveyPageRef,
+  setIsActiveNextBtn,
 }) {
   let cautionIdList = [
     '관절염',
@@ -117,16 +118,17 @@ export default function SurveyStep15({
 
   return (
     <section id="surveyPage" className={s.step14Page}>
+      <p className={s.supplement_text}>
+        * 질병이 있는 경우 <strong>필수</strong>로 체크해주세요! <br />
+        질병에 따라 급여가 불가할 수 있습니다.
+      </p>
       {formValues?.map((dog, index) => (
         <div key={index} className={s.status_container}>
           <div className={s.input_status_container}>
             <p className={s.input_title}>
               {dog.name} (이)의 건강적 특이사항, 질병 등이 있나요 ?
             </p>
-            <p className={s.supplement_text}>
-              * 질병이 있는 경우 <strong>필수</strong>로 체크해주세요! <br />
-              질병에 따라 급여가 불가할 수 있습니다.
-            </p>
+
             <div className={s.input_supplement_box}>
               <SurveyCustomRadioTrueOrFalse
                 title="caution"
@@ -138,6 +140,7 @@ export default function SurveyStep15({
                 dogInfo={dog}
                 dogInfoIndex={index}
                 setActiveIndexList={setActiveIndexList}
+                setIsActiveNextBtn={setIsActiveNextBtn}
               />
             </div>
 
@@ -154,8 +157,9 @@ export default function SurveyStep15({
                   idList={cautionIdList}
                   labelList={cautionLabelList}
                   etcKey={'cautionEtc'}
+                  setIsActiveNextBtn={setIsActiveNextBtn}
                 />
-                {/* {isRejectStart && (
+                {isRejectStart && (
                   <Modal_consult
                     text1={modalMessage1}
                     text2={modalMessage2}
@@ -166,24 +170,7 @@ export default function SurveyStep15({
                       onConfirm={onRejectHandler}
                     ></Modal_innerForm>
                   </Modal_consult>
-                )} */}
-
-                {/* <div className={s.caution_text_box}>
-                  <p className={s.caution_text}>
-                    ⚠ 당뇨병, 신장 질환, 췌장염은 관리가 필요한 질병입니다.{' '}
-                    <br />
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;상담요청 후 급여여부가
-                    판단되오니,{' '}
-                    <a
-                      href="https://36o2x.channel.io/home"
-                      rel="noreferrer"
-                      target="_blank"
-                    >
-                      문의하기
-                    </a>
-                    를 클릭해주세요.
-                  </p>
-                </div> */}
+                )}
               </div>
             )}
           </div>
@@ -192,6 +179,21 @@ export default function SurveyStep15({
           )}
         </div>
       ))}
+
+      <div className={s.caution_text_box}>
+        <p className={s.caution_text}>
+          ⚠ 당뇨병, 신장 질환, 췌장염은 관리가 필요한 질병입니다. <br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;상담요청 후 급여여부가 판단되오니,{' '}
+          <a
+            href="https://36o2x.channel.io/home"
+            rel="noreferrer"
+            target="_blank"
+          >
+            문의하기
+          </a>
+          를 클릭해주세요.
+        </p>
+      </div>
 
       {/* //! [추가]
   // 당뇨병, 신장질환, 췌장염 :

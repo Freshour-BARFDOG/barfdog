@@ -124,15 +124,17 @@ const initialFormValues = [
     walkingTimePerOneTime: '', // 한 번 산책할 때 산책 시간 string
     snackCountLevel: 'NORMAL', //  간식먹는 정도 str
     waterCountLevel: 'NORMAL', //! [추가] 음수량 str [LITTLE, NORMAL, MUCH]
-    supplement: 'NONE', //! [추가] 영양제:브랜드명 str
-    currentMeal: '', //! [추가] 현재 먹고 있는 식사종류:브랜드명 str
+    supplement: 'NONE',
+    supplementEtc: 'NONE',
+    currentMeal: '',
     inedibleFood: 'NONE', // 못 먹는 음식 str => get API 리스트 // 빈값('')일 경우, '있어요'선택됨)
     inedibleFoodEtc: 'NONE', // 못 먹는 음식 > '기타' 일경우
     caution: 'NONE', // 기타 특이사항 // 빈값('')일 경우, '있어요'선택됨)
     // caution: dogCautionType.NONE, // 기타 특이사항 // 빈값('')일 경우, '있어요'선택됨)
     cautionEtc: 'NONE',
     newToRawDiet: true, //! [추가] 생식처음
-    priorityConcerns: null, // 특별히 챙겨주고 싶은 부분에 해당하는 Recipe => get API 리스트
+    recommendRecipeId: null, // 특별히 챙겨주고 싶은 부분에 해당하는 Recipe => get API 리스트
+    priorityConcerns: '',
   },
 ];
 
@@ -218,6 +220,26 @@ export default function Survey() {
   }, changeSwiperHeightDependencies);
   // -------------------------------------------------------------------------------- //
 
+  const validationIndexWithKey = [
+    { swiperIndex: 1, key: 'name' },
+    {
+      swiperIndex: 2,
+      key: 'gender',
+    },
+    // { swiperIndex: 3, key: 'neutralization' },
+    { swiperIndex: 4, key: 'dogSize' },
+    { swiperIndex: 4, key: 'dogType' },
+    { swiperIndex: 5, key: 'birth' },
+    { swiperIndex: 6, key: 'weight' },
+    { swiperIndex: 9, key: 'walkingCountPerWeek' },
+    { swiperIndex: 9, key: 'walkingTimePerOneTime' },
+    { swiperIndex: 12, key: 'supplement' },
+    { swiperIndex: 13, key: 'currentMeal' },
+    { swiperIndex: 14, key: 'inedibleFood' },
+    { swiperIndex: 17, key: 'priorityConcerns' },
+  ];
+
+  //*** 값 입력 ***//
   const onInputChangeHandler = (e, index, formValueKey) => {
     const input = e.currentTarget;
     const { id, value } = input;
@@ -282,9 +304,15 @@ export default function Survey() {
 
     //*** 값 입력할 때마다 에러메세지 ***/
 
-    console.log(value);
+    // console.log('value!!!', value);
 
     if (!value) {
+      setErrorInfo({
+        errorIndex: index,
+        errorMessage: '필수 항목입니다.',
+      });
+      setIsActiveNextBtn(false);
+    } else if (value === 'YES') {
       setErrorInfo({
         errorIndex: index,
         errorMessage: '필수 항목입니다.',
@@ -443,27 +471,9 @@ export default function Survey() {
 
   // console.log(progressBarRef);
 
-  const validationIndexWithKey = [
-    { swiperIndex: 1, key: 'name' },
-    {
-      swiperIndex: 2,
-      key: 'gender',
-    },
-    // { swiperIndex: 3, key: 'neutralization' },
-    { swiperIndex: 4, key: 'dogSize' },
-    { swiperIndex: 4, key: 'dogType' },
-    { swiperIndex: 5, key: 'birth' },
-    { swiperIndex: 6, key: 'weight' },
-    { swiperIndex: 9, key: 'walkingCountPerWeek' },
-    { swiperIndex: 9, key: 'walkingTimePerOneTime' },
-    { swiperIndex: 13, key: 'currentMeal' },
-  ];
-
   const onSwiperChangeIndex = (swiper) => {
     const el = swiper.pagination.el;
     const idx = swiper.activeIndex;
-
-    // console.log('idx', idx);
 
     //*** 유효성 검사 ***/
     // 비어있는 필드 존재 유무
@@ -474,7 +484,6 @@ export default function Survey() {
         (item) => item.swiperIndex === idx,
       );
 
-      console.log('validationItems>>', validationItems);
       validationItems && setIsActiveNextBtn(false);
 
       validationItems.forEach((validationItem) => {
@@ -489,10 +498,18 @@ export default function Survey() {
           setIsActiveNextBtn(false);
           swiper.slideTo(idx - 1);
           return;
+        } else if (validationItem && dog[validationItem.key] === 'YES') {
+          hasEmptyField = true; // 비어있는 필드가 있음
+          setErrorInfo({
+            errorIndex: index,
+            errorMessage: '필수 항목입니다.',
+          });
+          setIsValidPage(idx);
+          setIsActiveNextBtn(false);
+          swiper.slideTo(idx - 1);
+          return;
         }
       });
-
-      // console.log('hasEmptyField>>', hasEmptyField);
     });
 
     // 모든 필드가 채워져 있을 때
@@ -585,7 +602,7 @@ export default function Survey() {
   //   return true;
   // };
 
-  //*** '다음' or '제출' 버튼 클릭 시
+  //*** '다음' 버튼 클릭 시
   const onNavButtonClick = (e) => {
     const curBtn = e.currentTarget;
     const submitBtn = submitBtnRef.current;
@@ -623,6 +640,16 @@ export default function Survey() {
           setIsValidPage(realCurStep);
           swiper.slideTo(realCurStep - 1);
           return;
+        } else if (validationItem && dog[validationItem.key] === 'YES') {
+          hasEmptyField = true; // 비어있는 필드가 있음
+          setErrorInfo({
+            errorIndex: index,
+            errorMessage: '필수 항목입니다.',
+          });
+          setIsActiveNextBtn(false);
+          setIsValidPage(realCurStep);
+          swiper.slideTo(realCurStep - 1);
+          return;
         }
       });
     });
@@ -650,16 +677,50 @@ export default function Survey() {
     // - prevent to the Next step when validation failed
     // curBtn !== submitBtn && swiper.slidePrev();
     // } else {
-    isSubmitButton && mct.alertShow('설문조사를 제출하시겠습니까?');
-    setSubmitState('READY');
-    isSubmitButton && onSubmit();
+    // isSubmitButton && mct.alertShow('설문조사를 제출하시겠습니까?');
+
     // }
   };
 
-  // useEffect(() => {
-  //   console.log(curStep);
-  //   setIsActiveNextBtn(false);
-  // }, [curStep]);
+  //*** '제출' 버튼 클릭 시 ***//
+  const onSubmitHandler = (e) => {
+    // const curBtn = e.currentTarget;
+    // const submitBtn = submitBtnRef.current;
+    // const isSubmitButton = curBtn === submitBtn;
+
+    //*** 유효성 검사 ***/
+    // 비어있는 필드 존재 유무
+    let hasEmptyField = false;
+
+    formValues.forEach((dog, index) => {
+      if (!dog['priorityConcerns']) {
+        hasEmptyField = true; // 비어있는 필드가 있음
+        setErrorInfo({
+          errorIndex: index,
+          errorMessage: '필수 항목입니다.',
+        });
+        setIsActiveNextBtn(false);
+        setIsValidPage(17);
+        // swiper.slideTo(realCurStep - 1);
+        return;
+      }
+    });
+
+    // 모든 필드가 채워져 있을 때
+    if (!hasEmptyField) {
+      setErrorInfo({
+        errorIndex: null,
+        errorMessage: '',
+      });
+      setIsActiveNextBtn(true);
+      setSubmitState('READY');
+      onSubmit();
+    }
+
+    // if (isSubmitButton) {
+
+    // }
+  };
 
   const onSubmit = async () => {
     if (submitState === true) return;
@@ -756,8 +817,7 @@ export default function Survey() {
 
   // console.log('errorInfo>>>', errorInfo);
 
-  console.log(formValues);
-  // console.log(isActiveNextBtn);
+  console.log('formValues>>>', formValues);
 
   return (
     <>
@@ -772,6 +832,7 @@ export default function Survey() {
         submitBtnRef={submitBtnRef}
         onNavButtonClick={onNavButtonClick}
         isActiveNextBtn={isActiveNextBtn}
+        onSubmitHandler={onSubmitHandler}
       >
         <Wrapper
           fullWidth={true}
@@ -807,6 +868,7 @@ export default function Survey() {
                   setFormValues={setFormValues}
                   onInputChangeHandler={onInputChangeHandler}
                   errorInfo={errorInfo}
+                  setErrorInfo={setErrorInfo}
                 />
               </SwiperSlide>
 
@@ -940,6 +1002,8 @@ export default function Survey() {
                   formValues={formValues}
                   setFormValues={setFormValues}
                   onInputChangeHandler={onInputChangeHandler}
+                  errorInfo={errorInfo}
+                  setIsActiveNextBtn={setIsActiveNextBtn}
                 />
               </SwiperSlide>
 
@@ -954,7 +1018,7 @@ export default function Survey() {
                 />
               </SwiperSlide>
 
-              {/* 16. 특별히 챙겨주고 싶은 것 */}
+              {/* 16. 생식 처음*/}
               <SwiperSlide>
                 <SurveyStep16
                   surveyPageRef={surveyPageRef}
@@ -964,13 +1028,15 @@ export default function Survey() {
                 />
               </SwiperSlide>
 
-              {/* 17. 생식 처음 */}
+              {/* 17. 특별히 챙겨주고 싶은 것  */}
               <SwiperSlide>
                 <SurveyStep17
                   surveyPageRef={surveyPageRef}
                   formValues={formValues}
                   setFormValues={setFormValues}
                   onInputChangeHandler={onInputChangeHandler}
+                  errorInfo={errorInfo}
+                  setIsActiveNextBtn={setIsActiveNextBtn}
                 />
               </SwiperSlide>
 

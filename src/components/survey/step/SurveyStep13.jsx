@@ -36,6 +36,8 @@ export default function SurveyStep13({
       {errorInfo.errorMessage && (
         <p className={s.error_message_text}>{errorInfo.errorMessage}</p>
       )}
+      <p className={s.supplement_text}>* 중복 선택 가능</p>
+
       {formValues?.map((dog, index) => (
         <div key={index} className={s.status_container}>
           {/* 1. 현재 상태 */}
@@ -43,7 +45,6 @@ export default function SurveyStep13({
             <p className={s.input_title}>
               {dog.name} (이)가 현재 먹고 있는 식사는 어떤 것인가요 ?
             </p>
-            <p className={s.supplement_text}>* 중복 선택 가능</p>
 
             <div className={s.currentMeal_select_container}>
               <SurveyInputMultipleSelected
@@ -56,6 +57,7 @@ export default function SurveyStep13({
                 className={s.dogStatus}
                 idList={currentMealOptions}
                 labelList={currentMealOptions}
+                setIsActiveNextBtn={setIsActiveNextBtn}
               />
             </div>
           </div>

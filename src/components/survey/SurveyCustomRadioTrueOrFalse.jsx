@@ -61,6 +61,7 @@ const SurveyCustomRadioTrueOrFalse = ({
       title === 'inedibleFood' ||
       title === 'caution'
     ) {
+      setIsActiveNextBtn(false);
       // 내용 업데이트
       setFormValues((prevFormValues) => {
         const newFormValues = prevFormValues.map((item, idx) => {
@@ -76,8 +77,6 @@ const SurveyCustomRadioTrueOrFalse = ({
         return newFormValues;
       });
     }
-
-    setIsActiveNextBtn(false);
 
     setActiveIndexList &&
       setActiveIndexList((prevIndexList) => {
