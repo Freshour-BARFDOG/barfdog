@@ -808,18 +808,33 @@ export default function Survey() {
         console.log(res);
         if (res.isDone) {
           console.log(res.data.data);
-          //! [수정]
-          const slicedReportApiLink =
-            res.data.data._embedded.createDogsResponseDtoList[0]._links.query_surveyReport.href.split(
-              '/',
+          //! [수정] 다견 설문조사 id 추출
+          const surveyReportsIds =
+            res.data.data._embedded.createDogsResponseDtoList.map(
+              (dogResponse) => {
+                const slicedReportApiLink =
+                  dogResponse._links.query_surveyReport.href.split('/');
+                const surveyReportsId =
+                  slicedReportApiLink[slicedReportApiLink.length - 1];
+                return surveyReportsId;
+              },
             );
-          const linkLength = slicedReportApiLink.length;
-          const surveyReportsId = slicedReportApiLink[linkLength - 1];
+          const idsString = surveyReportsIds.join(',');
+          // const slicedReportApiLink =
+          //   res.data.data._embedded.createDogsResponseDtoList[0]._links.query_surveyReport.href.split(
+          //     '/',
+          //   );
+          // const linkLength = slicedReportApiLink.length;
+          // const surveyReportsId = slicedReportApiLink[linkLength - 1];
+
+          console.log('surveyReportsId', surveyReportsIds);
           // svyData.deleteStoredSurveyData(userId);
-          console.log('surveyReportsId', surveyReportsId);
-          await router.push(`/survey/statistics/${surveyReportsId}`);
+
+          // await router.push(`/survey/statistics/${surveyReportsId}`);
+          await router.push(`/survey/statistics?id=${idsString}`);
+
           setSubmitState(true);
-          //! 우선 주석처리
+          //! 우선 주석처리 [dogInfoResults]
           // const dogInfoResults =
           //   res.data.data._embedded.createDogsResponseDtoList;
           // setDogInfoResult(dogInfoResults);

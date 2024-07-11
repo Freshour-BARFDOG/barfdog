@@ -5,8 +5,10 @@ import MetaTitle from '@src/components/atoms/MetaTitle';
 import s from './loading.module.scss';
 import IconLeft from '/public/img/survey/survey_loading_left.svg';
 import IconRight from '/public/img/survey/survey_loading_right.svg';
+import Spinner from '/public/img/survey/spinner.gif';
 import { useRouter } from 'next/router';
 import LinearProgressWithLabel from './LinearProgressWithLabel';
+import Image from 'next/image';
 
 export default function Loading() {
   // 설문조사 결과 분석 중 ...
@@ -37,6 +39,9 @@ export default function Loading() {
     <>
       <div className={s['loading-container']}>
         <section className={s.image_section}>
+          <div className={s.spinner_wrapper}>
+            <Image src={Spinner} alt="loading" width={200} height={200} />
+          </div>
           {/* <i className={s['progress-bar']}></i>
           <div className={s['ani-box-wrap']}>
             <span className={`${s['ani-box']} ${s.left}`}>

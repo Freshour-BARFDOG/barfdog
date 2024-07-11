@@ -106,56 +106,62 @@ export function Swiper_review({ data }) {
               key={`bestReview-${d.id}-${index}`}
               className={s.swiper_review_box}
             >
-              <figure className={s.swiper_review_bg}>
-                <div className={s.swiper_review_img}>
-                  <Image
-                    src={d.imageUrl}
-                    layout={'fill'}
-                    objectFit="cover"
-                    alt="카드 이미지"
-                  />
-                </div>
+              <Link href={`/review`} passHref>
+                <a className={s.swiper_review_link}>
+                  <figure className={s.swiper_review_bg}>
+                    <div className={s.swiper_review_img}>
+                      <Image
+                        src={d.imageUrl}
+                        layout={'fill'}
+                        objectFit="cover"
+                        alt="카드 이미지"
+                      />
+                    </div>
 
-                <div className={s.swiper_review_txt}>
-                  {d.titleByAdmin && (
-                    <div className={s.swiper_review_title}>
-                      <span>{d.titleByAdmin}</span>
-                    </div>
-                  )}
-                  {/* 글 내용 */}
-                  <figcaption className={s.contents}>{d.contents}</figcaption>
-                  <div className={s.swiper_review_bottom}>
-                    <div className={s.swiper_review_start}>
-                      {/* 별 5개 */}
-                      {[...Array(5)].map((_, index) => (
-                        <>
-                          <Image
-                            src={'/img/icon/review-star.svg'}
-                            alt="sns-insta"
-                            width={18}
-                            height={18}
-                          />
-                        </>
-                      ))}
-                    </div>
-                    <div className={s.swiper_review_info}>
-                      <div className={s.swiper_review_name}>
-                        {d.username.includes('@')
-                          ? d.username.split('@')[0].trim()
-                          : d.username}{' '}
-                        보호자님
+                    <div className={s.swiper_review_txt}>
+                      {d.titleByAdmin && (
+                        <div className={s.swiper_review_title}>
+                          <span>{d.titleByAdmin}</span>
+                        </div>
+                      )}
+                      {/* 글 내용 */}
+                      <figcaption className={s.contents}>
+                        {d.contents}
+                      </figcaption>
+                      <div className={s.swiper_review_bottom}>
+                        <div className={s.swiper_review_start}>
+                          {/* 별 5개 */}
+                          {[...Array(5)].map((_, index) => (
+                            <>
+                              <Image
+                                src={'/img/icon/review-star.svg'}
+                                alt="sns-insta"
+                                width={18}
+                                height={18}
+                              />
+                            </>
+                          ))}
+                        </div>
+                        <div className={s.swiper_review_info}>
+                          <div className={s.swiper_review_name}>
+                            {d.username.includes('@')
+                              ? d.username.split('@')[0].trim()
+                              : d.username}{' '}
+                            보호자님
+                          </div>
+                          <div className={s.swiper_review_type}>
+                            {d.orderType === 'item'
+                              ? '일반구매'
+                              : 'subscribe'
+                              ? '정기구독'
+                              : ''}
+                          </div>
+                        </div>
                       </div>
-                      <div className={s.swiper_review_type}>
-                        {d.orderType === 'item'
-                          ? '일반구매'
-                          : 'subscribe'
-                          ? '정기구독'
-                          : ''}
-                      </div>
                     </div>
-                  </div>
-                </div>
-              </figure>
+                  </figure>
+                </a>
+              </Link>
             </SwiperSlide>
           ))}
       </Swiper>

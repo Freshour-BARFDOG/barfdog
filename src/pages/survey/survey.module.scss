@@ -11,15 +11,15 @@
     @include char(t24);
   }
 
-  .step1Page {
-    padding: rem(0) 0 rem(80);
-  }
-  .step2page {
-    padding: rem(0) 0 rem(80);
-  }
-  .step3page {
-    padding: rem(0) 0 rem(80);
-  }
+  // .step1Page {
+  //   padding: rem(0) 0 rem(80);
+  // }
+  // .step2page {
+  //   padding: rem(0) 0 rem(80);
+  // }
+  // .step3page {
+  //   padding: rem(0) 0 rem(80);
+  // }
 }
 .input-row:not(:last-child) {
   margin-bottom: rem(60);
@@ -368,10 +368,12 @@
 //////////////////////////////////
 .input_activity_box {
   .inputRadio-wrap {
-    // width: rem(400);
+    width: rem(330);
     // height: rem(150);
     display: flex;
     flex-wrap: wrap;
+    // justify-content: center;
+    // align-items: flex-start;
     gap: rem(14);
     label {
       width: rem(155);
@@ -1301,5 +1303,9 @@
 
   .inputRadio {
     padding: rem(10) rem(20);
+  }
+
+  .dogSize_dogType_box {
+    gap: rem(20);
   }
 }
