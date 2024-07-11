@@ -486,7 +486,6 @@
       width: rem(386);
       height: rem(40);
       display: flex;
-      // position: absolute;
 
       &::placeholder {
         color: rgba(0, 0, 0, 0.25);
@@ -561,9 +560,9 @@
 .inedibleFood_text {
   color: #be1a21;
   background-color: rgba(242, 242, 242, 0.6);
-  padding: rem(20) rem(40);
+  padding: rem(20);
   border-radius: rem(10);
-  width: rem(480);
+  width: rem(430);
   margin: rem(30) 0;
 }
 
@@ -573,11 +572,14 @@
   justify-content: center;
   align-items: center;
   .inputRadio-wrap {
-    width: rem(400);
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: rem(16);
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: flex-start;
 
+    width: rem(505);
+    // display: grid;
+    // grid-template-columns: 1fr 1fr 1fr;
     li {
       width: rem(120);
       label {
@@ -591,8 +593,8 @@
       border: rem(1) solid #ccc;
       border-radius: rem(8);
       background-color: white;
-      margin: rem(20) 0 0 rem(-330);
-      width: rem(475);
+      margin: rem(16) 0 0 rem(-132);
+      width: rem(386);
       height: rem(40);
       display: flex;
 
@@ -625,9 +627,9 @@
 .caution_text {
   color: #be1a21;
   background-color: rgba(242, 242, 242, 0.6);
-  padding: rem(20) rem(60);
+  padding: rem(20) rem(24);
   border-radius: rem(10);
-  width: rem(540);
+  width: rem(460);
   margin-bottom: rem(30);
 
   a {

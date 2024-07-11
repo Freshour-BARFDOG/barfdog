@@ -44,6 +44,8 @@ export default function LoginPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const naverRef = useRef();
   const previousPath = useSelector((state) => state.navigation.previousPath);
+  const surveyData = useSelector((state) => state.surveyData.surveyData);
+
   useEffect(() => {
     const naverScript = document.createElement('script');
     naverScript.src =
@@ -142,6 +144,7 @@ export default function LoginPage() {
                 : sessionStorage.getItem('prevPath'),
               // prevPathParams : 지정 (다음 페이지)
               // sessionStorage.getItem('prevPath') : 일반 (이전 페이지)
+              surveyData, // 로그인 이전 설문조사 데이터
             };
             if (autoLogin) {
               dispatch(authAction.autoLogin(payload));
@@ -204,6 +207,8 @@ export default function LoginPage() {
       return cleanup;
     }
   }, []);
+
+  console.log('surveyData>>>', surveyData);
 
   return (
     <>

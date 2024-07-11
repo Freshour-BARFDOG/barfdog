@@ -29,7 +29,6 @@ import { useRouter } from 'next/router';
 import { SurveyDataClass } from '../../class/surveyDataClass';
 import SurveyLayout from '../../components/common/SurveyLayout';
 import { SurveyActiveStep } from '../../components/survey/SurveyActiveStep';
-import SurveyStatisticsPage from './statistics/[surveyReportsId]';
 import { useDispatch, useSelector } from 'react-redux';
 import { surveyDataAction } from '/store/surveyData-slice';
 import { surveyDogAction } from '/store/surveyDog-slice';
@@ -306,7 +305,19 @@ export default function Survey() {
 
     // console.log('value!!!', value);
 
-    if (!value) {
+    // 이름 중복 확인
+    const isDuplicateName = formValues.some(
+      (item, idx) => idx !== index && item.name === value,
+    );
+
+    // 중복된 이름이 있으면 에러 메시지 설정
+    if (isDuplicateName) {
+      setErrorInfo({
+        errorIndex: index,
+        errorMessage: '이름이 중복됩니다.',
+      });
+      setIsActiveNextBtn(false);
+    } else if (!value) {
       setErrorInfo({
         errorIndex: index,
         errorMessage: '필수 항목입니다.',
@@ -476,8 +487,14 @@ export default function Survey() {
     const idx = swiper.activeIndex;
 
     //*** 유효성 검사 ***/
+    // 이름 중복 확인을 위한 Set
+    const nameSet = new Set();
+
+    // 중복되는 이름 존재 유무
+    let hasDuplicateName = false;
     // 비어있는 필드 존재 유무
     let hasEmptyField = false;
+
     formValues.forEach((dog, index) => {
       // 해당 idx에 맞는 validation 항목들을 모두 찾음
       const validationItems = validationIndexWithKey.filter(
@@ -488,32 +505,47 @@ export default function Survey() {
 
       validationItems.forEach((validationItem) => {
         // console.log('dog[validationItem.key]>>>', dog[validationItem.key]);
-        if (validationItem && !dog[validationItem.key]) {
+        // 이름이 중복되는 경우
+        if (idx === 1 && nameSet.has(dog.name)) {
+          console.log('1', nameSet, nameSet.has(dog.name));
+          hasDuplicateName = true;
+          setIsActiveNextBtn(false);
+          setIsValidPage(idx);
+          swiper.slideTo(idx - 1);
+          setErrorInfo({
+            errorIndex: index,
+            errorMessage: '이름이 중복됩니다.',
+          });
+          return;
+        } else if (validationItem && !dog[validationItem.key]) {
           hasEmptyField = true; // 비어있는 필드가 있음
+          setIsValidPage(idx);
+          setIsActiveNextBtn(false);
+          swiper.slideTo(idx - 1);
           setErrorInfo({
             errorIndex: index,
             errorMessage: '필수 항목입니다.',
           });
-          setIsValidPage(idx);
-          setIsActiveNextBtn(false);
-          swiper.slideTo(idx - 1);
           return;
         } else if (validationItem && dog[validationItem.key] === 'YES') {
           hasEmptyField = true; // 비어있는 필드가 있음
+          setIsValidPage(idx);
+          setIsActiveNextBtn(false);
+          swiper.slideTo(idx - 1);
           setErrorInfo({
             errorIndex: index,
             errorMessage: '필수 항목입니다.',
           });
-          setIsValidPage(idx);
-          setIsActiveNextBtn(false);
-          swiper.slideTo(idx - 1);
           return;
         }
+
+        // 이름을 Set에 추가하여 중복 확인
+        nameSet.add(dog.name);
       });
     });
 
-    // 모든 필드가 채워져 있을 때
-    if (!hasEmptyField) {
+    // 모든 필드가 채워져 있고 중복된 이름이 없을 때
+    if (!hasEmptyField && !hasDuplicateName) {
       setErrorInfo({
         errorIndex: null,
         errorMessage: '',
@@ -618,6 +650,11 @@ export default function Survey() {
     setIsActiveNextBtn(false);
 
     //*** 유효성 검사 ***/
+    // 이름 중복 확인을 위한 Set
+    const nameSet = new Set();
+
+    // 중복되는 이름 존재 유무
+    let hasDuplicateName = false;
     // 비어있는 필드 존재 유무
     let hasEmptyField = false;
 
@@ -628,34 +665,47 @@ export default function Survey() {
       );
 
       validationItems && setIsActiveNextBtn(false);
-
       validationItems.forEach((validationItem) => {
-        if (validationItem && !dog[validationItem.key]) {
+        // 이름이 중복되는 경우
+        if (realCurStep === 1 && nameSet.has(dog.name)) {
+          hasDuplicateName = true;
+          setIsActiveNextBtn(false);
+          setIsValidPage(realCurStep);
+          swiper.slideTo(realCurStep - 1);
+          setErrorInfo({
+            errorIndex: index,
+            errorMessage: '이름이 중복됩니다.',
+          });
+          return;
+        } else if (validationItem && !dog[validationItem.key]) {
           hasEmptyField = true; // 비어있는 필드가 있음
+          setIsActiveNextBtn(false);
+          setIsValidPage(realCurStep);
+          swiper.slideTo(realCurStep - 1);
           setErrorInfo({
             errorIndex: index,
             errorMessage: '필수 항목입니다.',
           });
-          setIsActiveNextBtn(false);
-          setIsValidPage(realCurStep);
-          swiper.slideTo(realCurStep - 1);
           return;
         } else if (validationItem && dog[validationItem.key] === 'YES') {
           hasEmptyField = true; // 비어있는 필드가 있음
+          setIsActiveNextBtn(false);
+          setIsValidPage(realCurStep);
+          swiper.slideTo(realCurStep - 1);
           setErrorInfo({
             errorIndex: index,
             errorMessage: '필수 항목입니다.',
           });
-          setIsActiveNextBtn(false);
-          setIsValidPage(realCurStep);
-          swiper.slideTo(realCurStep - 1);
           return;
         }
+
+        // 이름을 Set에 추가하여 중복 확인
+        nameSet.add(dog.name);
       });
     });
 
-    // 모든 필드가 채워져 있을 때
-    if (!hasEmptyField) {
+    // 모든 필드가 채워져 있고 중복된 이름이 없을 때
+    if (!hasEmptyField && !hasDuplicateName) {
       setErrorInfo({
         errorIndex: null,
         errorMessage: '',
@@ -855,6 +905,7 @@ export default function Survey() {
                   formValues={formValues}
                   setFormValues={setFormValues}
                   onInputChangeHandler={onInputChangeHandler}
+                  setErrorInfo={setErrorInfo}
                   errorInfo={errorInfo}
                   setIsActiveNextBtn={setIsActiveNextBtn}
                 />
@@ -1039,16 +1090,6 @@ export default function Survey() {
                   setIsActiveNextBtn={setIsActiveNextBtn}
                 />
               </SwiperSlide>
-
-              {/* 18. [최종] 결과확인 */}
-              {/* <SwiperSlide>
-                <SurveyStatisticsPage
-                  surveyPageRef={surveyPageRef}
-                  formValues={formValues}
-                  setFormValues={setFormValues}
-                  onInputChangeHandler={onInputChangeHandler}
-                />
-              </SwiperSlide> */}
             </Swiper>
           </div>
         </Wrapper>

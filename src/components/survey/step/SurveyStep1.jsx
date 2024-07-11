@@ -9,6 +9,7 @@ export default function SurveyStep1({
   setFormValues,
   onInputChangeHandler,
   surveyPageRef,
+  setErrorInfo,
   errorInfo,
   setIsActiveNextBtn,
 }) {
@@ -47,6 +48,23 @@ export default function SurveyStep1({
 
   const removeDogInfoHandler = (indexToRemove) => {
     setFormValues(formValues.filter((_, index) => index !== indexToRemove));
+
+    // 이름 중복 확인을 위한 Set
+    const nameSet = new Set();
+    // 중복되는 이름 존재 유무
+    let hasDuplicateName = false;
+
+    formValues.forEach((dog, index) => {
+      if (!nameSet.has(dog.name)) {
+        hasDuplicateName = true;
+        setErrorInfo({
+          errorIndex: index,
+          errorMessage: '',
+        });
+        setIsActiveNextBtn(true);
+        return;
+      }
+    });
   };
 
   //*** UI '짤림 현상'해결

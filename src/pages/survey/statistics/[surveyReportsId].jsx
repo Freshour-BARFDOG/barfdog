@@ -12,16 +12,16 @@ export default function SurveyStatisticsPage({ surveyReportsId }) {
   return (
     <>
       <MetaTitle title="설문조사 통계" />
-
-      {/* <Layout> */}
-      {/* <Wrapper> */}
-      <SurveyLayout resultPage={'resultPage'} surveyReportsId={surveyReportsId}>
-        <Wrapper
+      <Layout>
+        <Wrapper>
+          {/* [삭제 예정] 설문조사 레이아웃 */}
+          {/* <SurveyLayout resultPage={'resultPage'} surveyReportsId={surveyReportsId}> */}
+          {/* <Wrapper
           fullWidth={true}
           bgColor="#fffafa"
           minHeight="100vh"
           alignItems="flex-start"
-        >
+        > */}
           <SurveyStatistics id={surveyReportsId} mode={'default'} />
           {/* <section className={s.last_text}>
             <div>
@@ -29,8 +29,9 @@ export default function SurveyStatisticsPage({ surveyReportsId }) {
             </div>
             <div>자세한 반려견의 건강상태는 수의사와 상담해 주세요.</div>
           </section> */}
+          {/* </SurveyLayout> */}
         </Wrapper>
-      </SurveyLayout>
+      </Layout>
     </>
   );
 }
