@@ -3,29 +3,23 @@ $browser-context: 16; // html font-size
   @return #{$px / $context}rem;
 }
 
+// @media (max-width: rem(1200)) {
 
+//   .recipe_info {
+//     ul {
+//       grid-template-columns: repeat(3, 1fr);
+//     }
+//   }
+// }
 
-@media (max-width: rem(1200)) {
-  
-  .recipe_info {
-    ul {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }  
-}
+// @media (max-width: rem(600)) {
+//   .recipe_info {
 
-
-@media (max-width: rem(600)) {
-  .recipe_info {
-    
-    .starter_banner_test{
-      margin-top: 0;
-    }
-  }  
-}
-
-
-
+//     .starter_banner_test{
+//       margin-top: 0;
+//     }
+//   }
+// }
 
 // .btn{
 //   background-color: red;
@@ -43,9 +37,8 @@ $browser-context: 16; // html font-size
 
 //     }
 //   }
-  
-// }
 
+// }
 
 // .test{
 //   &::after{

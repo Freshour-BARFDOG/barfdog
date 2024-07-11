@@ -15,15 +15,18 @@ import Image from 'next/image';
 import { useSelector } from 'react-redux';
 
 export const SurveyStatistics = ({ id, mode = 'default' }) => {
+  const surveyData = useSelector((state) => state.surveyData.surveyData);
   const reportLoadingDuration = 2000;
   const [info, setInfo] = useState({});
   const [isLoading, setIsLoading] = useState({ fetching: true });
   const [isRendered, setIsRendered] = useState(true);
-  const dogInfoResults = useSelector((state) => state.surveyDog.surveyDog);
+  // const dogInfoResults = useSelector((state) => state.surveyDog.surveyDog);
 
   const [isMouseEnter, setIsMouseEnter] = useState(false);
   const [isShowResults, setIsShowResults] = useState(false);
   const [isActiveDogIdx, setIsActiveDogIdx] = useState('');
+
+  // console.log('surveyData>>>', surveyData);
 
   const handleMouseEnter = () => {
     setIsMouseEnter(true);
@@ -32,7 +35,7 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
     setIsMouseEnter(false);
   };
 
-  console.log('dogInfoResults>>>', dogInfoResults);
+  // console.log('dogInfoResults>>>', dogInfoResults);
   console.log('isActiveDogIdx>>>', isActiveDogIdx);
 
   useEffect(() => {
@@ -50,7 +53,7 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
           fetching: true,
         }));
         const res = await getData(getSurveyReportsApiUrl);
-        // console.log(res);
+        console.log(res);
         const data = res.data;
         if (!data) return;
         // // console.log(data)
