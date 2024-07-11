@@ -3,6 +3,7 @@ import React from 'react';
 import s from 'src/pages/mainPage.module.scss';
 import LogoMain from '/public/img/logo_main.png';
 import Image from 'next/image';
+import videoSrc from '/public/videos/main-video.mp4';
 
 export function Main_top() {
   // 1. 영상 소개
@@ -10,9 +11,31 @@ export function Main_top() {
     <section className={s.intro_top_wrapper}>
       <div className={s.inner}>
         <div className={s.video_wrapper}>
-          <video poster="영상썸네일" muted autoPlay loop playsinline>
-            <source src="/video/main-video.mp4" type="video/mp4" />
-          </video>
+          {/* <video
+            poster="영상썸네일"
+            muted={true}
+            autoPlay={true}
+            loop={true}
+            playsinline={true}
+          >
+            <source src={mp4_url} type="video/mp4" />
+          </video> */}
+          {/* <video
+            autoPlay={true}
+            muted={true}
+            loop={true}
+            playsinline={true}
+            src={require('/public/videos/main-video.mp4')}
+          /> */}
+
+          <video
+            autoPlay={true}
+            muted={true}
+            loop={true}
+            playsInline={true} // playsinline 대신 playsInline으로 변경
+            src={videoSrc} // import한 비디오 파일 사용
+          />
+
           <div className={s.text_box}>
             <h1>
               우리는 사료가 아닌
