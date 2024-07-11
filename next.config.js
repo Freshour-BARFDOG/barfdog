@@ -1,7 +1,8 @@
+const withVideos = require('next-videos');
 
-module.exports = {
+module.exports = withVideos({
   // distDir: "build",
-  crossOrigin: "anonymous",
+  crossOrigin: 'anonymous',
   pageExtensions: ['js', 'jsx', 'ts', 'tsx'],
   trailingSlash: false,
   env: {
@@ -17,7 +18,7 @@ module.exports = {
       newConfig.devtool = 'hidden-source-map';
     }
     config.entry = './web.js';
-    config.resolve.fallback = {fs: require.resolve('fs')}
+    config.resolve.fallback = { fs: require.resolve('fs') };
     config.module.rules.push({
       test: /\.svg$/,
       use: ['@svgr/webpack'],
@@ -26,11 +27,7 @@ module.exports = {
     return newConfig;
   },
   images: {
-    domains: [
-      'localhost',
-      'www.barfdogserver.com',
-      'dev.barfdogserver.com'
-    ],
+    domains: ['localhost', 'www.barfdogserver.com', 'dev.barfdogserver.com'],
 
     remotePatterns: [
       {
@@ -45,44 +42,57 @@ module.exports = {
     return [
       {
         // matching all API routes
-        source: "/api/:path*",
+        source: '/api/:path*',
         headers: [
-          { key: "Access-Control-Allow-Credentials", value: "true" },
-          { key: "Access-Control-Allow-Origin", value: "*" },
-          { key: "Access-Control-Allow-Methods", value: "GET,OPTIONS,PATCH,DELETE,POST,PUT" },
-          { key: "Access-Control-Allow-Headers", value: "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version" },
-        ]
-      }
-    ]
+          { key: 'Access-Control-Allow-Credentials', value: 'true' },
+          { key: 'Access-Control-Allow-Origin', value: '*' },
+          {
+            key: 'Access-Control-Allow-Methods',
+            value: 'GET,OPTIONS,PATCH,DELETE,POST,PUT',
+          },
+          {
+            key: 'Access-Control-Allow-Headers',
+            value:
+              'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version',
+          },
+        ],
+      },
+    ];
   },
-  async rewrites () {
+  async rewrites() {
     // console.log('Delopy Type is Dev ?',process.env.NODE_ENV !== "production");
     console.log('Default API URL (DEV): ', process.env.NEXT_PUBLIC_API_URL_DEV);
-    console.log('Default API URL (PROD): ', process.env.NEXT_PUBLIC_API_URL_PRODUCT);
-    console.log('Deploy Type is Production ? ', process.env.NODE_ENV === 'production');
+    console.log(
+      'Default API URL (PROD): ',
+      process.env.NEXT_PUBLIC_API_URL_PRODUCT,
+    );
+    console.log(
+      'Deploy Type is Production ? ',
+      process.env.NODE_ENV === 'production',
+    );
     if (process.env.NODE_ENV === 'development') {
       return [
         {
           source: process.env.SOURCE_PATH,
-          destination: process.env.NEXT_PUBLIC_API_URL_DEV
+          destination: process.env.NEXT_PUBLIC_API_URL_DEV,
         },
       ];
     } else if (process.env.NODE_ENV === 'production') {
       return [
         {
           source: process.env.SOURCE_PATH,
-          destination: process.env.NEXT_PUBLIC_API_URL_PRODUCT
-        }
+          destination: process.env.NEXT_PUBLIC_API_URL_PRODUCT,
+        },
       ];
     }
   },
-  async redirects(){
+  async redirects() {
     return [
       {
         source: '/kr/(.*)',
         destination: '/',
-        permanent: true
-      }
-    ]
-  }
-};
+        permanent: true,
+      },
+    ];
+  },
+});
