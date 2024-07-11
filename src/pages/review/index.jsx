@@ -31,6 +31,9 @@ export default function ReviewPage({ bestReviewList }) {
   const [searchQuery, setSearchQuery] = useState(
     'sortBy=registration&itemType=ALL',
   );
+  // 베스트 리뷰 모달창
+  const [selectedItemId, setSelectedItemId] = useState({});
+  const [isActiveModal, setIsActiveModal] = useState(false);
 
   const onChangeSorting = (e) => {
     const { id, value } = e.currentTarget;
@@ -38,6 +41,12 @@ export default function ReviewPage({ bestReviewList }) {
     //   ...prevState,
     //   [id]: value,
     // }));
+  };
+
+  const onClickReviewItemHandler = (e) => {
+    const selectedReviewId = Number(e.currentTarget.dataset.id);
+    setSelectedItemId(selectedReviewId);
+    setIsActiveModal(true);
   };
 
   return (
@@ -51,7 +60,13 @@ export default function ReviewPage({ bestReviewList }) {
 
           <section className={s.swiper_box}>
             {bestReviewList.length > 0 && (
-              <Swiper_bestReview items={bestReviewList} />
+              <Swiper_bestReview
+                items={bestReviewList}
+                onClickReviewItemHandler={onClickReviewItemHandler}
+                selectedItemId={selectedItemId}
+                isActiveModal={isActiveModal}
+                setIsActiveModal={setIsActiveModal}
+              />
             )}
           </section>
 

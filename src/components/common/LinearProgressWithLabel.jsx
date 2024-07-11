@@ -27,7 +27,7 @@ export default function LinearProgressWithLabel(props) {
           //   variant="body2"
           color="#CA1011"
           //   sx={{ display: 'flex', alignItems: 'center' }}
-          sx={{ textAlign: 'center' }}
+          sx={{ textAlign: 'center', marginBottom: 1 }}
           variant="h6"
         >{`${Math.round(props.value)}%`}</Typography>
         <BorderLinearProgress variant="determinate" {...props} />

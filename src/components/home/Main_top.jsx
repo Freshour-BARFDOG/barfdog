@@ -4,6 +4,7 @@ import s from 'src/pages/mainPage.module.scss';
 import LogoMain from '/public/img/logo_main.png';
 import Image from 'next/image';
 import videoSrc from '/public/videos/main-video.mp4';
+// import Video from 'next-video';
 
 export function Main_top() {
   // 1. 영상 소개
@@ -20,21 +21,22 @@ export function Main_top() {
           >
             <source src={mp4_url} type="video/mp4" />
           </video> */}
-          {/* <video
-            autoPlay={true}
-            muted={true}
-            loop={true}
-            playsinline={true}
-            src={require('/public/videos/main-video.mp4')}
-          /> */}
-
           <video
             autoPlay={true}
             muted={true}
             loop={true}
-            playsInline={true} // playsinline 대신 playsInline으로 변경
-            src={videoSrc} // import한 비디오 파일 사용
+            playsinline={true}
+            src={require('../../../public/videos/main-video.mp4')}
           />
+
+          {/* <Video
+            autoPlay={true}
+            muted={true}
+            loop={true}
+            playsInline={true}
+            preload={'auto'}
+            src={videoSrc}
+          /> */}
 
           <div className={s.text_box}>
             <h1>

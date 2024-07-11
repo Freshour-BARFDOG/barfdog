@@ -6,12 +6,16 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import Image from 'next/image';
 import Modal_bestReview from '../modal/Modal_bestReview';
 
-export function Swiper_bestReview({ items }) {
+export function Swiper_bestReview({
+  items,
+  onClickReviewItemHandler,
+  selectedItemId,
+  isActiveModal,
+  setIsActiveModal,
+}) {
   const scrollbarRef = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
-  const [isActiveModal, setIsActiveModal] = useState(false);
   const [itemList, setItemList] = useState([]);
-  const [selectedItemId, setSelectedItemId] = useState({});
   const [swiperInstance, setSwiperInstance] = useState(null);
 
   useEffect(() => {
@@ -32,12 +36,6 @@ export function Swiper_bestReview({ items }) {
       draggable: true,
     },
     modules: [Scrollbar],
-  };
-
-  const onClickReviewItemHandler = (e) => {
-    const selectedReviewId = Number(e.currentTarget.dataset.id);
-    setSelectedItemId(selectedReviewId);
-    setIsActiveModal(true);
   };
 
   // const handleMouseEnter = () => {
