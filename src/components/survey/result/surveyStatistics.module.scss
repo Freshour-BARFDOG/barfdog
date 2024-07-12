@@ -19,7 +19,6 @@ $container-maxWidth: rem(960);
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100vh;
   }
   > span {
     padding-top: rem(10);
@@ -77,6 +76,8 @@ $container-maxWidth: rem(960);
   display: flex;
   justify-content: center;
   padding: rem(10) 0;
+  flex-direction: column;
+  align-items: center;
 }
 
 .survey_result_line_wrapper {
@@ -92,7 +93,7 @@ $container-maxWidth: rem(960);
   width: rem(361 * 1.3);
   // height: rem(88 * 1.3);
   background-color: white;
-  border-radius: rem(10);
+  border-radius: rem(30);
   border: rem(1) solid #b9b9b9;
   padding: rem(20) 0;
   cursor: pointer;
@@ -168,10 +169,27 @@ $container-maxWidth: rem(960);
   // border-top: rem(1) solid #af3d3d;
 }
 
+.box_line {
+  background-color: #727272;
+  height: rem(27);
+  width: rem(1);
+}
+
+// 설문조사 정보
 .top_tab_container {
   position: relative;
   width: 100%;
-  height: rem(10);
+  font-size: rem(18);
+  background-color: #fff9f9;
+  padding: rem(20) rem(50);
+  border-radius: rem(7);
+  border: rem(1) solid #ca1011;
+  font-weight: normal;
+  margin: rem(30) 0;
+
+  .under_text {
+    text-decoration: underline;
+  }
 }
 
 .top_tab {

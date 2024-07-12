@@ -38,21 +38,18 @@ const onSubmitSurvey = async (formValues) => {
     const res = await postObjData(postFormValuesApiUrl, postData);
     console.log(res);
     if (res.isDone) {
-      //! [수정]
-      const slicedReportApiLink =
-        res.data.data._embedded.createDogsResponseDtoList[0]._links.query_surveyReport.href.split(
-          '/',
-        );
-      const linkLength = slicedReportApiLink.length;
-      const surveyReportsId = slicedReportApiLink[linkLength - 1];
-      // svyData.deleteStoredSurveyData(userId);
+      //! [수정] 다견 설문조사 id 추출
+      const surveyReportsIds =
+        res.data.data._embedded.createDogsResponseDtoList.map((dogResponse) => {
+          const slicedReportApiLink =
+            dogResponse._links.query_surveyReport.href.split('/');
+          const surveyReportsId =
+            slicedReportApiLink[slicedReportApiLink.length - 1];
+          return surveyReportsId;
+        });
+      const idsString = surveyReportsIds.join(',');
 
-      // setSubmitState(true);
-      // const dogInfoResults = res.data.data._embedded.createDogsResponseDtoList;
-      // dispatch(surveyDogAction.saveSurveyDog({ surveyDog: dogInfoResults }));
-      // console.log('dogInfoResults', dogInfoResults);
-
-      window.location.href = `/survey/statistics/${surveyReportsId}`;
+      window.location.href = `/survey/statistics?id=${idsString}`;
     }
   } catch (err) {
     console.log(err);
