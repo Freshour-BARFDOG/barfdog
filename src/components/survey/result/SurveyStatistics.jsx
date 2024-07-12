@@ -27,7 +27,7 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
   // const dogInfoResults = useSelector((state) => state.surveyDog.surveyDog);
 
   const [isMouseEnter, setIsMouseEnter] = useState(false);
-  const [isShowResultIdx, setIsShowResultIdx] = useState(null);
+  const [isShowResultIdx, setIsShowResultIdx] = useState([]);
   const [isActiveDogIdx, setIsActiveDogIdx] = useState('');
 
   // console.log('surveyData>>>', surveyData);
@@ -293,7 +293,14 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
 
   //*** '더보기' 클릭
   const dogInfoClickHandler = (surveyId, index) => {
-    setIsShowResultIdx(index);
+    if (!isShowResultIdx.includes(index)) {
+      // 클릭한 index가 배열에 없으면 추가
+      setIsShowResultIdx([...isShowResultIdx, index]);
+    } else {
+      // 클릭한 index가 배열에 있으면 제거
+      setIsShowResultIdx(isShowResultIdx.filter((item) => item !== index));
+    }
+
     // setIsActiveDogIdx((prevIndex) => (prevIndex === index ? '' : index));
 
     // const getSurveyReportsApiUrl = `/api/surveyReports/${surveyId}`;
@@ -549,9 +556,9 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
               className={`${s.dog_img_wrapper} ${
                 isShowResultIdx ? s.active : ''
               }`}
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
-              onClick={() => dogInfoClickHandler(dogInfo.surveyId, index)}
+              // onMouseEnter={handleMouseEnter}
+              // onMouseLeave={handleMouseLeave}
+              // onClick={() => dogInfoClickHandler(dogInfo.surveyId, index)}
             >
               <div className={s.dog_info_wrapper}>
                 <div className={s.dog_info_name}>
@@ -559,9 +566,10 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
                 </div>
 
                 {/* '더보기' 버튼 클릭 시  */}
-                {index === isShowResultIdx ? (
+                {isShowResultIdx.includes(index) ? (
                   <div className={s.survey_result_wrapper}>
                     <div className={s.box_line}></div>
+                    {/* 1. 설문조사 정보 */}
                     <main
                       className={`${s.grid_container_box} animation-show-all-child`}
                     >
@@ -612,12 +620,79 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
 
                     <div className={s.box_line}></div>
 
+                    {/* 2. 맞춤 문구 설명 */}
                     <div className={s.dog_info_name}>
                       바프독을 통해 이런 도움을 받을 수 있어요!
                     </div>
+
+                    <div>
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                      <button>
+                        더보기
+                        <Image
+                          src={'/img/survey/survey_arrow.svg'}
+                          alt="survey_arrow"
+                          width={10}
+                          height={10}
+                        />
+                      </button>
+                    </div>
+
+                    <div className={s.box_dot_divider}></div>
+
+                    {/* 3. 레시피 선택 */}
+                    <div>
+                      {/* 3-1) 더블 */}
+                      <div></div>
+                      {/* 3-2) 싱글 */}
+                      <div></div>
+                    </div>
+
+                    <div className={s.box_dot_divider}></div>
+
+                    {/* 4. 플랜 선택 */}
+                    <div>
+                      {/* 4-1) 플랜 선택 */}
+                      <div></div>
+                      {/* 4-2) 끼니, 팩 */}
+                      <div></div>
+                    </div>
+
+                    {/* 5. 챙겨줄 제품 - Swiper */}
+
+                    {/* 6. 닫기 버튼 */}
+                    <div className={s.close_btn_wrapper}>
+                      <button
+                        className={s.close_btn}
+                        onClick={() =>
+                          dogInfoClickHandler(dogInfo.surveyId, index)
+                        }
+                      >
+                        닫기
+                        <Image
+                          src={'/img/survey/survey_arrow.svg'}
+                          alt="survey_arrow"
+                          width={10}
+                          height={10}
+                        />
+                      </button>
+                    </div>
                   </div>
                 ) : (
-                  <button className={s.dog_info_show_btn}>더보기</button>
+                  <button
+                    className={s.dog_info_show_btn}
+                    onClick={() => dogInfoClickHandler(dogInfo.surveyId, index)}
+                  >
+                    더보기{' '}
+                    <Image
+                      src={'/img/survey/survey_arrow.svg'}
+                      alt="survey_arrow"
+                      width={10}
+                      height={10}
+                    />
+                  </button>
                 )}
               </div>
             </div>

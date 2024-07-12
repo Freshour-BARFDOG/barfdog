@@ -3,9 +3,6 @@ import React from 'react';
 import s from 'src/pages/mainPage.module.scss';
 import LogoMain from '/public/img/logo_main.png';
 import Image from 'next/image';
-import videoSrc from '../../../videos/main-video.mp4';
-// import Video from 'next-video';
-import BackgroundPlayer from 'next-video/background-player';
 
 export function Main_top() {
   // 1. 영상 소개
@@ -13,14 +10,9 @@ export function Main_top() {
     <section className={s.intro_top_wrapper}>
       <div className={s.inner}>
         <div className={s.video_wrapper}>
-          <BackgroundPlayer
-            autoPlay={true}
-            muted={true}
-            loop={true}
-            playsInline={true}
-            preload={'auto'}
-            src={videoSrc}
-          />
+          <video poster="영상썸네일" muted autoPlay loop playsinline>
+            <source src="/videos/main-video.mp4" type="video/mp4" />
+          </video>
 
           <div className={s.text_box}>
             <h1>

@@ -1,6 +1,6 @@
-const withVideos = require('next-videos');
+// const withVideos = require('next-videos');
 
-module.exports = withVideos({
+module.exports = {
   // distDir: "build",
   crossOrigin: 'anonymous',
   pageExtensions: ['js', 'jsx', 'ts', 'tsx'],
@@ -95,4 +95,4 @@ module.exports = withVideos({
       },
     ];
   },
-});
+};
