@@ -558,45 +558,63 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
                   {dogInfo.myDogName} (이)의 건강 상태를 분석한 결과입니다.
                 </div>
 
+                {/* '더보기' 버튼 클릭 시  */}
                 {index === isShowResultIdx ? (
                   <div className={s.survey_result_wrapper}>
+                    <div className={s.box_line}></div>
                     <main
                       className={`${s.grid_container_box} animation-show-all-child`}
                     >
-                      {/* <div className={s.grid_container}> */}
                       <div className={s.top_tab_container}>
                         현재 6살 , 중성화를{' '}
-                        {dogInfo.neutralization ? '한' : '하지 않은'}{' '}
+                        <span className={s.under_text}>
+                          {' '}
+                          {dogInfo.neutralization ? '한' : '하지 않은'}
+                        </span>{' '}
                         {dogInfo.myDogName}
                         <br />
-                        {dogInfo.dogSize === 'LARGE'
-                          ? '대형견'
-                          : dogInfo.dogSize === 'MIDDLE'
-                          ? '중형견'
-                          : dogInfo.dogSize === 'SMALL'
-                          ? '소형견'
-                          : ''}{' '}
-                        이고, {dogInfo.dogType}인 왕멍멍이
+                        <span className={s.under_text}>
+                          {dogInfo.dogSize === 'LARGE'
+                            ? '대형견'
+                            : dogInfo.dogSize === 'MIDDLE'
+                            ? '중형견'
+                            : dogInfo.dogSize === 'SMALL'
+                            ? '소형견'
+                            : ''}{' '}
+                        </span>
+                        이고,{' '}
+                        <span className={s.under_text}> {dogInfo.dogType}</span>
+                        인 {dogInfo.myDogName}
                         <br />
-                        {dogInfo.priorityConcerns} 가 고민인 {dogInfo.myDogName}
-                        는{' '}
-                        {dogInfo.dogStatus === 'HEALTHY'
-                          ? '건강해요'
-                          : dogInfo.dogSize === 'NEED_DIET'
-                          ? '다이어트가 필요해요'
-                          : dogInfo.dogSize === 'OBESITY'
-                          ? '심각한 비만입니다'
-                          : dogInfo.dogSize === 'THIN'
-                          ? '말랐어요'
-                          : ''}
+                        <span className={s.under_text}>
+                          {' '}
+                          {dogInfo.priorityConcerns}
+                        </span>{' '}
+                        가 고민인 {dogInfo.myDogName}는{' '}
+                        <span className={s.under_text}>
+                          {dogInfo.dogStatus === 'HEALTHY'
+                            ? '건강해요'
+                            : dogInfo.dogSize === 'NEED_DIET'
+                            ? '다이어트가 필요해요'
+                            : dogInfo.dogSize === 'OBESITY'
+                            ? '심각한 비만입니다'
+                            : dogInfo.dogSize === 'THIN'
+                            ? '말랐어요'
+                            : ''}
+                        </span>
                         {/* <div className={s.top_tab}>
                             <div>견종 정보</div>
                             <div>건강 종합 점수</div>
                             <div>영양 가이드</div>
                           </div> */}
                       </div>
-                      {/* </div> */}
                     </main>
+
+                    <div className={s.box_line}></div>
+
+                    <div className={s.dog_info_name}>
+                      바프독을 통해 이런 도움을 받을 수 있어요!
+                    </div>
                   </div>
                 ) : (
                   <button className={s.dog_info_show_btn}>더보기</button>
