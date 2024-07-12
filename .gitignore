@@ -44,7 +44,7 @@ yarn-error.log*
 # IDE
 .idea
 # next-video
-videos/*
+# videos/*
 !videos/*.json
 !videos/*.js
 !videos/*.ts
