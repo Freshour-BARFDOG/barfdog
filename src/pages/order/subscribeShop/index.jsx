@@ -343,7 +343,7 @@ export default function RegisterSubscribeInfoPage({ data }) {
     return <FullScreenRunningDog opacity={1} />;
   }
 
-  console.log('form>>>', form);
+  // console.log('form>>>', form);
 
   return (
     <>

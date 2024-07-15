@@ -114,10 +114,10 @@ export default function SurveyStep1({
               </div>
             ))}
 
-            <button className={s.input_add_btn} onClick={addDogInfoHandler}>
+            {/* <button className={s.input_add_btn} onClick={addDogInfoHandler}>
               <BsPlus />
               <p>반려견 추가하기</p>
-            </button>
+            </button> */}
             <div className={s.input_name_guide}>
               💡 몇 가지 설문을 통해 3분 안에 보호자님의
               <br />

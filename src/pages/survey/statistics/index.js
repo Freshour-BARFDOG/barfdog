@@ -10,7 +10,6 @@ import { SurveyActiveStep } from '../../../components/survey/SurveyActiveStep';
 export default function SurveyStatisticsPage({ id }) {
   // 설문조사 조회시, 강아지 ID가 아닌  설문조사의 ID로 조회한다.
 
-  console.log(id);
   return (
     <>
       <MetaTitle title="설문조사 통계" />
