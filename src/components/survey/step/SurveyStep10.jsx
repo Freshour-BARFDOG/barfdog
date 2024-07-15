@@ -62,27 +62,6 @@ export default function SurveyStep10({
                 //   </span>,
                 // ]}
               />
-
-              {/* <SurveyInputRadio
-                formValueKey={'dogStatus'}
-                formValues={formValues}
-                setFormValues={setFormValues}
-                dogInfo={dog}
-                dogInfoIndex={index}
-                className={s.dogStatus}
-                idList={[
-                  dogPhysicalStatusType.THIN,
-                  dogPhysicalStatusType.HEALTHY,
-                  dogPhysicalStatusType.NEED_DIET,
-                  dogPhysicalStatusType.OBESITY,
-                ]}
-                labelList={[
-                  dogPhysicalStatusType.KOR.THIN,
-                  dogPhysicalStatusType.KOR.HEALTHY,
-                  dogPhysicalStatusType.KOR.NEED_DIET,
-                  dogPhysicalStatusType.KOR.OBESITY,
-                ]}
-              /> */}
             </div>
           </div>
           {formValues.length >= 2 && index !== formValues.length - 1 && (

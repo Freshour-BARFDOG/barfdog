@@ -133,6 +133,8 @@
   }
 
   .input_neutralization_box {
+    display: flex;
+    justify-content: center;
     label {
       width: rem(180);
     }
@@ -367,13 +369,12 @@
 // ******** STEP 7. 활동량 ********
 //////////////////////////////////
 .input_activity_box {
+  display: flex;
+  justify-content: center;
   .inputRadio-wrap {
     width: rem(330);
-    // height: rem(150);
     display: flex;
     flex-wrap: wrap;
-    // justify-content: center;
-    // align-items: flex-start;
     gap: rem(14);
     label {
       width: rem(155);
@@ -387,26 +388,11 @@
 }
 .activityLevel {
   display: flex;
-  // align-items: flex-start;
   width: rem(330);
-  // max-width: rem(400);
-  // padding-bottom: rem(80);
-  // justify-content: center;
 
-  // li {
-  //   display: inline-flex;
-  //   flex-direction: row;
-  //   justify-content: center;
-  //   width: 20%;
-  // }
   label {
     display: flex;
     flex-direction: column;
-    // justify-content: center;
-    //   align-items: center;
-    //   input {
-    //     margin-bottom: rem(16);
-    //   }
   }
 }
 
@@ -438,6 +424,14 @@
       height: rem(40);
     }
   }
+}
+
+//////////////////////////////////
+// ******** STEP 10, 11. 간식량, 음수량 ********
+//////////////////////////////////
+.input_snack_box {
+  display: flex;
+  justify-content: center;
 }
 
 //////////////////////////////////
@@ -869,6 +863,7 @@
   // font-weight: 600;
   font-size: rem(24);
   padding: rem(20) 0;
+  width: rem(480);
 }
 
 .display-flex-column {
