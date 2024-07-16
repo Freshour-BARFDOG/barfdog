@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { getData } from '/src/pages/api/reqData';
 import s from './surveyStatistics.module.scss';
 import Loading from '/src/components/common/Loading';
@@ -7,20 +7,15 @@ import { dogActivityLevelType } from '/store/TYPE/dogActivityLevelType';
 import { dogSizeType } from '/store/TYPE/dogSizeType';
 import Btn_01 from '/public/img/mypage/statistic_dog_walker.svg';
 import Btn_02 from '/public/img/mypage/statistic_dog_walker2.svg';
-import popupWindow from '/util/func/popupWindow';
-import { subscribePlanType } from '/store/TYPE/subscribePlanType';
-import {
-  ItemRecommendlabel,
-  ItemSoldOutLabel,
-} from '/src/components/atoms/ItemLabel';
 
 import { UnitOfDemicalPointOfOneMealGram } from '../../../../util/func/subscribe/finalVar';
 import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import TagChart from './TagChart';
 import { Swiper_product } from './Swiper_product';
-import { SurveyRecipeCustomInput } from './SurveyRecipeCustomInput';
-import Link from 'next/link';
+import { useSubscribePlanInfo } from '/util/hook/useSubscribePlanInfo';
+import SurveyResultRecipe from './SurveyResultRecipe';
+import SurveyResultPlan from './SurveyResultPlan';
 
 export const SurveyStatistics = ({ id, mode = 'default' }) => {
   const auth = useSelector((state) => state.auth);
@@ -36,19 +31,13 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
   const [userInfo, setUserInfo] = useState(userData);
   const [isLoading, setIsLoading] = useState({ fetching: true });
   const [isRendered, setIsRendered] = useState(true);
-  // const dogInfoResults = useSelector((state) => state.surveyDog.surveyDog);
   // const [isMouseEnter, setIsMouseEnter] = useState(false);
-  const [isShowResult, setIsShowResult] = useState(null);
-  // const [isReadyIdx, setIsReadyIdx] = useState([]);
+  const [isShowResult, setIsShowResult] = useState(true);
   const [isActiveDogIdx, setIsActiveDogIdx] = useState('');
+  const subscribePlanInfo = useSubscribePlanInfo();
 
   const [isArrowActive, setIsArrowActive] = useState(false);
   const [rotation, setRotation] = useState(0);
-
-  const [initialize, setInitialize] = useState(false);
-  const [selectedCheckbox, setSelectedCheckbox] = useState({}); // * 풀플랜: 최대 2가지 레시피 선택 가능 (Checkbox Input) // ex.{터키비프: true}
-  const [selectedRadio, setSelectedRadio] = useState(null); // * 그 외 플랜: 1가지 레시피 선택 가능 (Radio Input)
-  const [inputType, setInputType] = useState(null);
 
   const [form, setForm] = useState({
     plan: null,
@@ -69,68 +58,54 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
   console.log('id>>>', id);
   console.log('userData>>>', userData);
 
-  useEffect(() => {
-    // Recipe Input 타입 변환
-    const type =
-      form.plan === subscribePlanType.FULL.NAME ? 'checkbox' : 'radio';
-    setInputType(type);
-    // 플랜이 변경되었을 경우, Recipe Value And Input 초기화
-    setInitialize(true);
-    setForm((prevState) => ({
-      ...prevState,
-      recipeIdList: [],
-    }));
-  }, [form.plan]);
+  //*** 구독플랜 금액 계산
+  const calcSubscribePlanPaymentPrice = useCallback(
+    (planName) => {
+      if (!form.recipeIdList[0] || !planName || !recipeInfo.data) {
+        return {
+          perPack: 0,
+          originPrice: 0,
+          salePrice: 0,
+        };
+      }
+      const discountPercent = subscribePlanInfo.planDiscountPercent[planName];
+      const oneDayRecommendKcal = info.foodAnalysis.oneDayRecommendKcal;
+      const pricePerGrams = info.recipeInfoList
+        ?.filter((recipe) => form.recipeIdList.indexOf(recipe.id) >= 0)
+        .map((recipe) => recipe.pricePerGram);
+      const currentRecipeInfos = info.recipeInfoList
+        ?.filter((recipe) => form.recipeIdList.indexOf(recipe.id) >= 0)
+        .map((recipe) => recipe.name);
+      const nextOneMealGrams = calcOneMealGramsWithRecipeInfo({
+        selectedRecipeIds: form.recipeIdList,
+        allRecipeInfos: recipeInfo.data,
+        oneDayRecommendKcal: oneDayRecommendKcal,
+        isOriginSubscriber,
+      }).map((recipe) => recipe.oneMealGram);
 
-  useEffect(() => {
-    if (inputType !== 'radio') return; // ! 유효성체크 안할 경우, selectedCheckbox값에 영향끼침
-    const selectedId = recipeInfo.filter(
-      (rc) => rc.name === `${selectedRadio && selectedRadio.split('-')[0]}`,
-    )[0]?.id;
+      const isSameArray = valid_isTheSameArray(
+        oneMealGramsForm.next,
+        nextOneMealGrams,
+      );
+      // // console.log(oneMealGramsForm.next, nextOneMealGrams, "\n", isSameArray);
+      if (!isSameArray) {
+        setOneMealGramsForm((prevState) => ({
+          ...prevState,
+          next: nextOneMealGrams,
+        }));
+      }
 
-    // // console.log(selectedId)
-    setForm((prevState) => ({
-      ...prevState,
-      recipeIdList: [selectedId],
-    }));
-    setSelectedRadio(`${selectedRadio}`);
-  }, [selectedRadio]);
-
-  useEffect(() => {
-    if (!selectedCheckbox) return;
-    if (inputType !== 'checkbox') return; // ! 유효성체크 안할 경우, selectedRadio값에 영향끼침
-    let selectedCheckboxCount = 0;
-    const keys = Object.keys(selectedCheckbox);
-    const selectedIdList = [];
-    keys.forEach((key) => {
-      const selectedId = recipeInfo.filter(
-        (rc, index) => rc.name === `${selectedCheckbox && key.split('-')[0]}`,
-      )[0]?.id;
-      const val = selectedCheckbox[key];
-      val && selectedCheckboxCount++;
-      val
-        ? selectedIdList.push(selectedId)
-        : selectedIdList?.filter((id) => id !== selectedId);
-    });
-    const maxSelectedCheckboxCount = 2;
-    const isOverSelected = selectedCheckboxCount > maxSelectedCheckboxCount;
-    if (isOverSelected) {
-      alert('풀플랜은 최대 2개 레시피까지 선택가능합니다.');
-    }
-
-    setInitialize(isOverSelected);
-    setForm((prevState) => ({
-      ...prevState,
-      [name]: isOverSelected ? [] : selectedIdList,
-    }));
-  }, [selectedCheckbox]);
-
-  const onPopupHandler = (e) => {
-    e.preventDefault();
-    if (typeof window === 'undefined') return;
-    const href = e.currentTarget.href;
-    popupWindow(href, { width: 1000, height: 716 });
-  };
+      return calcSubscribePrice({
+        discountPercent,
+        oneMealGrams: nextOneMealGrams,
+        planName,
+        pricePerGrams,
+        isOriginSubscriber,
+        recipeNameList: currentRecipeInfos,
+      });
+    },
+    [form.plan, form.recipeIdList, recipeInfo, subscribePlanInfo],
+  );
 
   useEffect(() => {
     if (!id || !id.length) return;
@@ -197,7 +172,7 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
             const apiUrl = `/api/recipes/${recipeId}`;
             const res = await getData(apiUrl);
             const data = res.data;
-            console.log('recipeDatas!!!! ', data);
+            // console.log('recipeDatas!!!! ', data);
 
             if (data.ingredientList.length > 1 && data.inStock) {
               setRecipeDoubleInfo((prevState) => {
@@ -452,12 +427,6 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
     setRotation((prevRotation) => (prevRotation + 180) % 360);
   };
 
-  // const getRandomPosition = () => {
-  //   const randomX = Math.floor(Math.random() * 201) - 100; // -100 ~ 100 사이의 랜덤 X 좌표
-  //   const randomY = Math.floor(Math.random() * 201) - 100; // -100 ~ 100 사이의 랜덤 Y 좌표
-  //   return { transform: `translate(${randomX}px, ${randomY}px)` };
-  // };
-
   // const topTabElement = document.querySelector(`.${s.top_tab}`);
   // const gridContainerElement = document.querySelector(`.${s.grid_container}`);
 
@@ -628,244 +597,27 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
                   <div className={s.box_dot_divider}></div>
 
                   {/* 3. 레시피 선택 */}
-                  <div className={s.recipe_container}>
-                    <div className={s.recipe_title}>
-                      {surveyInfo.myDogName} (을)를 위한 <span>레시피</span>를
-                      선택해 주세요
-                      <div className={s.recipe_title_info}>
-                        <strong>최대 2가지</strong>까지 레시피 선택이 가능합니다
-                      </div>
-                    </div>
-
-                    {/* 3-1) 더블 */}
-                    <div className={s.recipe_box}>
-                      <h3>[ 더블미트(복합 단백질) 레시피 ]</h3>
-
-                      <div className={s.recipe_list}>
-                        {recipeDoubleInfo.map((recipe, index) => (
-                          <>
-                            <SurveyRecipeCustomInput
-                              id={`${recipe.name}-${recipe.id}`}
-                              selectedRadio={selectedRadio}
-                              type={inputType}
-                              name={name}
-                              initialize={initialize}
-                              disabled={!recipe.inStock}
-                              selectedCheckbox={selectedCheckbox}
-                              setSelectedCheckbox={setSelectedCheckbox}
-                              setSelectedRadio={setSelectedRadio}
-                              option={{ label: '레시피 선택' }}
-                            >
-                              {info.recommendRecipeName === recipe.name && (
-                                <ItemRecommendlabel
-                                  label="추천!"
-                                  style={{
-                                    backgroundColor: '#000',
-                                  }}
-                                />
-                              )}
-                              <Image
-                                src={recipe.thumbnailUri2}
-                                width={149 * 1.4}
-                                height={149 * 1.4}
-                                alt="레시피 상세 이미지"
-                              />
-                              <div>{recipe.uiNameKorean}</div>
-                              <div className={s.recipe_description}>
-                                · 주재료: {recipe.ingredientList.join(', ')}{' '}
-                                <br />·{' '}
-                                {recipe.name === 'STARTER PREMIUM +'
-                                  ? '첫 생식에 추천'
-                                  : recipe.name === 'TURKEY&BEEF +'
-                                  ? '성장기 자견에게 추천'
-                                  : recipe.name === 'DUCK&LAMB +'
-                                  ? '기력회복이 필요하다면 추천'
-                                  : recipe.name === 'LAMB&BEEF +'
-                                  ? '푸석푸석한 모질이라면 추천'
-                                  : ''}
-                                <br />·{' '}
-                                {recipe.name === 'STARTER PREMIUM +'
-                                  ? '부드러워 소화에 적은 부담'
-                                  : recipe.name === 'TURKEY&BEEF +'
-                                  ? '영양 보충 & 면역력 강화'
-                                  : recipe.name === 'DUCK&LAMB +'
-                                  ? '관절 강화 & 근력 회복'
-                                  : recipe.name === 'LAMB&BEEF +'
-                                  ? '윤기나는 피부와 모질'
-                                  : ''}
-                              </div>
-                              <button>
-                                <Link href="/recipes" passHref>
-                                  <a
-                                    target={'_blank'}
-                                    rel={'noreferrer'}
-                                    onClick={onPopupHandler}
-                                  >
-                                    자세히 알아보기
-                                  </a>
-                                </Link>
-                              </button>
-                            </SurveyRecipeCustomInput>
-                          </>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* 3-2) 싱글 */}
-                    <div className={s.recipe_box}>
-                      <h3> [ 싱글미트(단일 단백질) 레시피 ]</h3>
-                      <div className={s.recipe_list}>
-                        {recipeSingleInfo.map((recipe, index) => (
-                          <>
-                            <SurveyRecipeCustomInput
-                              id={`${recipe.name}-${recipe.id}`}
-                              selectedRadio={selectedRadio}
-                              type={inputType}
-                              name={name}
-                              initialize={initialize}
-                              disabled={!recipe.inStock}
-                              selectedCheckbox={selectedCheckbox}
-                              setSelectedCheckbox={setSelectedCheckbox}
-                              setSelectedRadio={setSelectedRadio}
-                              option={{ label: '레시피 선택' }}
-                            >
-                              {info.recommendRecipeName === recipe.name && (
-                                <ItemRecommendlabel
-                                  label="추천!"
-                                  style={{
-                                    backgroundColor: '#000',
-                                  }}
-                                />
-                              )}
-                              <Image
-                                src={recipe.thumbnailUri2}
-                                width={149 * 1.5}
-                                height={149 * 1.5}
-                                alt="레시피 상세 이미지"
-                              />
-                              <div>{recipe.uiNameKorean}</div>
-                              <div className={s.recipe_description}>
-                                · 주재료: {recipe.ingredientList.join(', ')}{' '}
-                                <br />·{' '}
-                                {recipe.name === 'Premium CHICKEN'
-                                  ? '자견~노견, 전 연령 추천'
-                                  : recipe.name === 'Premium TURKEY'
-                                  ? '성장기 자견에게 추천'
-                                  : recipe.name === 'Premium LAMB'
-                                  ? '활동량이 많다면 추천'
-                                  : recipe.name === 'Premium BEEF'
-                                  ? '자견~노견, 전 연령 추천'
-                                  : ''}
-                                <br />·{' '}
-                                {recipe.name === 'Premium CHICKEN'
-                                  ? '관절 강화 & 소화 흡수율 높음'
-                                  : recipe.name === 'Premium TURKEY'
-                                  ? '영양 보충 & 면역력 강화'
-                                  : recipe.name === 'Premium LAMB'
-                                  ? '피로회복 & 피모관리'
-                                  : recipe.name === 'Premium BEEF'
-                                  ? '체중관리 & 빈혈회복'
-                                  : ''}
-                              </div>
-                              <button>자세히 알아보기</button>
-                            </SurveyRecipeCustomInput>
-                          </>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
+                  <SurveyResultRecipe
+                    surveyInfo={surveyInfo}
+                    recipeInfo={recipeInfo}
+                    recipeDoubleInfo={recipeDoubleInfo}
+                    recipeSingleInfo={recipeSingleInfo}
+                    form={form}
+                    setForm={setForm}
+                  />
 
                   <div className={s.box_dot_divider}></div>
 
                   {/* 4. 플랜 선택 */}
-                  <div className={s.plan_container}>
-                    <div className={s.plan_title}>
-                      {surveyInfo.myDogName} (을)를 위한 <span>플랜</span>을
-                      선택해 주세요
-                      <div className={s.plan_title_info}>
-                        풀플랜: 2주 마다 배송 / 하프플랜: 4주마다 배송
-                      </div>
-                    </div>
-                    {/* 4-1) 플랜 선택 */}
-                    <ul>
-                      <li>
-                        <div className={s.plan_name}>풀플랜</div>
-
-                        <div className={s.plan_info}>
-                          하루 <strong>2끼</strong> / 2주 간격 배송 / 총 28팩
-                        </div>
-                      </li>
-                      <li>
-                        <div className={s.plan_name}>하프플랜</div>
-                        <div className={s.plan_info}>
-                          하루 <strong>1끼</strong> / 4주 간격 배송 / 총 28팩
-                        </div>
-                      </li>
-                      <li>
-                        <div className={s.plan_name}>토핑 풀플랜</div>
-                        <div className={s.plan_info}>
-                          하루 <strong>2끼</strong> / 2주 간격 배송 / 총 28팩
-                        </div>
-                      </li>
-                      <li>
-                        <div className={s.plan_name}>토핑 하프플랜</div>
-                        <div className={s.plan_info}>
-                          하루 <strong>1끼</strong> / 4주 간격 배송 / 총 28팩
-                        </div>
-                      </li>
-                    </ul>
-                    {/* 4-2) 끼니, 팩 */}
-                    <div className={s.pack_box}>
-                      {/* (1) 선택 레시피 */}
-                      {/* 하프플랜, 풀플랜 선택에 따라 보여지는 칸 수가 달라지도록 */}
-                      <div className={s.one_pack_row}>
-                        <div className={s.one_pack_text}>
-                          선택 레시피: <br />
-                          (1팩 기준)
-                        </div>
-                        <div className={s.recipe_text}>
-                          <p>000g</p>{' '}
-                          <p className={s.recipe_name}>스타터프리미엄</p>
-                        </div>
-                        <div className={s.recipe_text}>
-                          <p>000g</p>{' '}
-                          <p className={s.recipe_name}>스타터프리미엄</p>
-                        </div>
-                      </div>
-
-                      {/* (2) 한 끼당 */}
-                      <div className={s.one_pack_row}>
-                        <div className={s.one_pack_text}>한 끼당:</div>
-                        <div className={s.recipe_text}>
-                          <p>0,000원</p>{' '}
-                        </div>
-                        <div className={s.recipe_text}>
-                          <p>0,000원</p>{' '}
-                        </div>
-                      </div>
-
-                      {/* (3) 팩 수 */}
-                      <div className={s.one_pack_row}>
-                        <div className={s.one_pack_text}>팩수:</div>
-                        <div className={s.recipe_text}>
-                          <p>14팩</p>{' '}
-                        </div>
-                        <div className={s.recipe_text}>
-                          <p>14팩</p>{' '}
-                        </div>
-                      </div>
-
-                      {/* (4) 최대 할인가 */}
-                      {/* - 결제페이지의 12개월 구독 혜택인 최대 '25%할인'가로 노출 */}
-                      {/* - 1회 배송 시 최대 할인가(25%)로 노출! */}
-                      <div className={s.discount_price_row}>
-                        <div className={s.one_pack_text}>최대 할인가:</div>
-                        <div className={s.recipe_text}>
-                          <p>00,000원</p>{' '}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <SurveyResultPlan
+                    surveyInfo={surveyInfo}
+                    recipeInfo={recipeInfo}
+                    recipeDoubleInfo={recipeDoubleInfo}
+                    recipeSingleInfo={recipeSingleInfo}
+                    form={form}
+                    setForm={setForm}
+                    calcPrice={calcSubscribePlanPaymentPrice}
+                  />
 
                   {/* 5. 챙겨줄 제품 - Swiper */}
                   <div className={s.recommend_product_container}>
@@ -877,7 +629,7 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
                   </div>
 
                   {/* 6. 닫기 버튼 */}
-                  <div className={s.close_btn_wrapper}>
+                  {/* <div className={s.close_btn_wrapper}>
                     <button
                       className={s.close_btn}
                       onClick={() => dogInfoClickHandler(surveyInfo.surveyId)}
@@ -891,7 +643,7 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
                         className={s.rotate_180}
                       />
                     </button>
-                  </div>
+                  </div> */}
                 </div>
               ) : (
                 <div className={s.dog_info_show_btn_wrapper}>
@@ -914,9 +666,9 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
           {/* ))} */}
         </div>
 
-        <span className={s.result_description}>
+        {/* <span className={s.result_description}>
           더보기를 클릭하여 레시피와 플랜을 선택하여 주세요
-        </span>
+        </span> */}
       </section>
 
       <button className={s.payment_btn}>결제하러 가기</button>

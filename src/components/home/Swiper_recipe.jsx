@@ -48,7 +48,7 @@ const swiperSettings_recipe = {
 
 // 2번째 스와이퍼
 const swiperSettings_recipe_item = {
-  className: `${s.swiper_recipe}`,
+  className: `${s.swiper_recipe} ${s.swiper_recipe_item}`,
   slidesPerView: 'auto',
   centeredSlides: false,
   modules: [Pagination],

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Icon_Checked from '/public/img/icon/icon_checked.svg';
-import s from './surveyRecipeCustomInput.module.scss';
+import s from './surveyRecipeInput.module.scss';
 import Image from 'next/image';
 
-export const SurveyRecipeCustomInput = ({
+export const SurveyRecipeInput = ({
   children,
   id,
   type,
@@ -21,47 +21,33 @@ export const SurveyRecipeCustomInput = ({
   let initialChecked = setInitCheckboxValue(selectedCheckbox, id);
   const [isChecked, setIsChecked] = useState(initialChecked || false); //
 
-  useEffect(() => {
-    // value 초기화
-    if (initialize) {
-      setIsChecked(false);
-      setSelectedRadio(false);
-      if (setSelectedCheckbox && typeof setSelectedCheckbox === 'function')
-        setSelectedCheckbox(null);
-    }
-  }, [type, initialize]);
+  // console.log(selectedCheckbox, id);
+  // console.log(isChecked);
 
   const onCheckboxInputHandler = (e, labelId) => {
+    const selectedCount =
+      Object.values(selectedCheckbox).filter(Boolean).length;
+    if (!isChecked && selectedCount >= 2) {
+      alert('최대 2개의 레시피만 선택 가능합니다.');
+      return;
+    }
+
     setIsChecked(!isChecked); // checkbox 활성화
     const { id } = e.currentTarget;
     const curState = { label: labelId || id, value: !isChecked };
 
-    console.log(':::', curState.label);
-
     setSelectedCheckbox((prevState) => {
-      return {
+      const newState = {
         ...prevState,
         [curState.label]: curState.value,
       };
+
+      if (!curState.value) {
+        delete newState[curState.label];
+      }
+
+      return newState;
     });
-  };
-
-  const onRadioInputHandler = (e, labelId) => {
-    const { id } = e.currentTarget;
-    setSelectedRadio(labelId || id);
-  };
-
-  const InputRadio = () => {
-    return (
-      <input
-        id={id}
-        type="radio"
-        name={name}
-        onChange={onRadioInputHandler}
-        value={selectedRadio === id}
-        checked={selectedRadio === id}
-      />
-    );
   };
 
   const InputCheckbox = () => {
@@ -79,7 +65,6 @@ export const SurveyRecipeCustomInput = ({
   const Input = () => {
     return (
       <>
-        {type === 'radio' && <InputRadio />}
         {type === 'checkbox' && <InputCheckbox />}
         <span className={s.fake_checkbox}>
           {isChecked || selectedRadio === id ? '선택됨' : option.label}
@@ -99,11 +84,7 @@ export const SurveyRecipeCustomInput = ({
     if (disabled) return console.error('NOTICE: disabled Element');
 
     const id = e.currentTarget.dataset.id;
-    if (type === 'checkbox') {
-      onCheckboxInputHandler(e, id);
-    } else {
-      onRadioInputHandler(e, id);
-    }
+    onCheckboxInputHandler(e, id);
   };
 
   return (
@@ -112,13 +93,13 @@ export const SurveyRecipeCustomInput = ({
       data-id={id}
       data-disabled={disabled}
       className={`${s.custom_input_wrapper} ${isChecked && s.checked} ${
-        selectedRadio === id && s.checked
+        selectedCheckbox[id] && s.checked
       }`}
       style={{ backgroundColor: backgroundColor }}
       {...props}
       onClick={onLabelClick}
     >
-      {selectedRadio === id && (
+      {selectedCheckbox[id] && (
         <div className={s.icon_check_wrap}>
           <Image
             src="/img/icon/main-check.svg"
@@ -133,7 +114,7 @@ export const SurveyRecipeCustomInput = ({
       <div className={s.custom_input_cont}>{children}</div>
       <div
         className={`${s.img_wrap} ${
-          selectedRadio === id && s.checked ? s.clicked : ''
+          selectedCheckbox[id] && s.checked ? s.clicked : ''
         }`}
       ></div>
       {/* <Input /> */}

@@ -17,7 +17,7 @@ export default function SurveyStep17({
   let recommendRecipeIdList = [
     '관절',
     '피부·모질',
-    '구토',
+    '소화력부족',
     '빈혈',
     '피로회복',
     '체중조절',
@@ -27,7 +27,7 @@ export default function SurveyStep17({
   let recommendRecipeIdLabelList = [
     '관절',
     '피부·모질',
-    '구토',
+    '소화력부족',
     '빈혈',
     '피로회복',
     '체중조절',

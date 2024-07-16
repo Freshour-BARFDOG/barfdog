@@ -81,19 +81,18 @@ export default function TagChart({ chartData }) {
         {isLoading ? (
           <Spinner />
         ) : (
-          <div style={{ height: '14rem' }}>
+          <div style={{ height: '14rem', width: '32rem' }}>
             <ResponsiveCirclePacking
               data={data}
               id="name"
               value="loc"
               colors="#FFF9F9"
-              //   padding={10}
+              padding={-30}
               enableLabels={true}
-              labelSkipWidth={1}
-              labelSkipHeight={100}
+              //   labelSkipWidth={100}
+              //   labelSkipHeight={100}
               //   labelsSkipRadius={0}
               labelTextColor={(node) => node.data.color}
-              //   labelTextSize={40}
               theme={theme}
               enableTooltip={false}
               tooltip={() => <></>}
