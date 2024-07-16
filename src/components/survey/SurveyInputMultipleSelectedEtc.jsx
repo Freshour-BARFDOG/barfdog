@@ -109,14 +109,17 @@ const SurveyInputMultipleSelectedEtc = ({
               <label
                 key={`radio-${formValueKey}-${index}`}
                 className={`${s.inputRadio} ${
-                  dogInfo[formValueKey].includes(idList[index]) && s.checked
+                  dogInfo[formValueKey].split(',').includes(idList[index]) &&
+                  s.checked
                 }`}
               >
                 <input
                   id={`${formValueKey}`}
                   type="checkbox"
                   className="hide"
-                  checked={dogInfo[formValueKey].includes(idList[index])}
+                  checked={dogInfo[formValueKey]
+                    .split(',')
+                    .includes(idList[index])}
                   onChange={(e) => handleCheckboxChange(e)}
                   value={idList[index]}
                 />

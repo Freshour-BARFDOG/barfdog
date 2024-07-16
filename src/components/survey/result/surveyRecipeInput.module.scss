@@ -16,7 +16,6 @@ $browser-context: 16; // html font-size
   display: block;
   overflow: hidden;
   border-radius: rem(12);
-  border: rem(1) solid var(--color-line-04);
   padding: rem(15) rem(25);
   transition: border-color, box-shadow $transitionValues;
   &[data-disabled='true'] {
