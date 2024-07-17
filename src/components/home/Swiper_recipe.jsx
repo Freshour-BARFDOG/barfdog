@@ -137,27 +137,6 @@ export function Swiper_recipe() {
 
   return (
     <div className={s.swiper_recipe_outerWrap}>
-      {/* <i
-        className={
-          selectedItemList.length > 0
-            ? Styles.swiper_button_prev_recipe_clicked
-            : Styles.swiper_button_prev_recipe
-        }
-        ref={navPrevRef}
-      >
-        <ArrowLeft_s width="100%" height="100%" viewBox="0 0 28 28" />
-      </i>
-      <i
-        className={
-          selectedItemList.length > 0
-            ? Styles.swiper_button_next_recipe_clicked
-            : Styles.swiper_button_next_recipe
-        }
-        ref={navNextRef}
-      >
-        <ArrowRight_s width="100%" height="100%" viewBox="0 0 28 28" />
-      </i> */}
-
       {/* 1) 건강문제 */}
       <Swiper
         navigation={{
@@ -302,15 +281,6 @@ export function Swiper_recipe() {
           </Swiper>
         </section>
       )}
-      {/* <div className={s.btn_box}>
-        <div className={Styles.btn_box}>
-          <Link href={'/survey'} passHref>
-            <a type="button" className={Styles.btn_main}>
-              정기구독 신청하기
-            </a>
-          </Link>
-        </div>
-      </div> */}
     </div>
   );
 }

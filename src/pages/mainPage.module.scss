@@ -306,9 +306,9 @@ section.family {
 
     .swiper_slide_item {
       // background-color: #c22323;
-      width: rem(200) !important;
+      width: rem(280) !important;
       height: rem(360) !important;
-      margin: 0 rem(10);
+      // margin: 0 rem(10);
     }
 
     .recipe_box {
@@ -410,26 +410,6 @@ section.family {
     align-items: center;
     justify-content: center;
   }
-
-  // 장바구니 이모티콘
-  // .icon_store_wrap {
-  //   position: absolute;
-  //   right: 6%;
-  //   bottom: 5%;
-  //   cursor: pointer;
-  //   width: rem(40);
-  //   height: rem(40);
-  //   border-radius: 50%;
-  //   background-color: #a2a2a2;
-  //   display: flex;
-  //   align-items: center;
-  //   justify-content: center;
-  //   z-index: 1;
-  // }
-  // .icon_store_wrap:hover {
-  //   background-color: #696969;
-  //   transition: 0.3s all;
-  // }
 
   // 아이템 이미지
   .img_item_wrap {
