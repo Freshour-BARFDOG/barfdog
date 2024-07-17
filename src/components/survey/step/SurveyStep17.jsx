@@ -38,7 +38,7 @@ export default function SurveyStep17({
   const conditionRecipeMap = {
     관절: [7, 9],
     '피부·모질': [8, 11],
-    구토: [5, 9],
+    소화력부족: [5, 9],
     빈혈: [6, 12],
     피로회복: [7, 11],
     체중조절: [8, 12],

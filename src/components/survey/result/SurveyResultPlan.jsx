@@ -6,18 +6,15 @@ import { subscribePlanType } from '/store/TYPE/subscribePlanType';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import { calcOneMealGramsWithRecipeInfo } from '/util/func/subscribe/calcOneMealGramsWithRecipeInfo';
 import { useSubscribePlanInfo } from '/util/hook/useSubscribePlanInfo';
-import ItemLabel from '/src/components/atoms/ItemLabel';
-
+import { calcSubscribeOneDayRecommendKcal } from '/util/func/subscribe/calcOneMealGramsWithRecipeInfo';
 import {
-  ItemRecommendlabel,
-  ItemSoldOutLabel,
-} from '/src/components/atoms/ItemLabel';
+  valid_hasFormErrors,
+  valid_isTheSameArray,
+} from '/util/func/validation/validationPackage';
 
 export default function SurveyResultPlan({
   surveyInfo,
   recipeInfo,
-  recipeDoubleInfo,
-  recipeSingleInfo,
   form,
   setForm,
   calcPrice,
@@ -40,13 +37,13 @@ export default function SurveyResultPlan({
     setRecipeNameList(names);
   }, [recipeInfo, form]);
 
-  // useEffect(() => {
-  //   setInitialize(true);
-  //   setForm((prevState) => ({
-  //     ...prevState,
-  //     recipeIdList: [],
-  //   }));
-  // }, [form.plan]);
+  useEffect(() => {
+    setInitialize(true);
+    setForm((prevState) => ({
+      ...prevState,
+      recipeIdList: form.recipeIdList,
+    }));
+  }, [form.plan]);
 
   useEffect(() => {
     setForm((prevState) => ({
@@ -54,35 +51,57 @@ export default function SurveyResultPlan({
       plan: selectedPlan,
     }));
 
-    setInitialize(null); // null : 플랜 선택된 상태는 유지, form값 초기화
+    setInitialize(null); //! null : 플랜 선택된 상태는 유지, form값 초기화
   }, [selectedPlan]);
+
+  console.log('selectedRecipeIds!!!', selectedRecipeIds);
+  console.log(
+    'transformLocalCurrency(calcPrice(form.plan).perPack) !!!',
+    calcPrice(form.plan),
+  );
 
   const oneMealGramsWithRecipeInfosWithTags = useMemo(
     () =>
       // 초기화(initialize)되었을 경우, 기본 값이 나타나도록 함.
-      initialize === false &&
+      // initialize === false &&
+
       calcOneMealGramsWithRecipeInfo({
         selectedRecipeIds: selectedRecipeIds,
         allRecipeInfos: recipeInfo.map((recipe) => ({
           id: recipe.id,
-          kcalPerGram: recipe.kcalPerGram,
+          kcalPerGram: recipe.gramPerKcal,
           name: recipe.name,
         })),
         oneDayRecommendKcal: surveyInfo.foodAnalysis.oneDayRecommendKcal,
       })?.map((recipeInfo, i) => (
-        <span className={s.oneLine} key={`oneMealGram-info-${i}`}>
+        <div className={s.recipe_text} key={i}>
           <b>{transformLocalCurrency(recipeInfo.oneMealGram)}g</b>&nbsp;
-          <i className={s.tinyText}>
-            (1팩 기준)
-            {selectedRecipeIds.length > 1 && ` (${recipeInfo.recipeName})`}
-          </i>
-        </span>
+          <br />
+          <i className={s.tinyText}>{recipeInfo.recipeName}</i>
+        </div>
       )),
-    [form, initialize],
+
+    {}[(form, initialize)],
   ) || (
-    <span className={s.oneLine}>
-      <b>0g</b>&nbsp;<i className={s.tinyText}>(1팩 기준)</i>
-    </span>
+    <div className={s.recipe_text}>
+      <b>0 g</b>
+    </div>
+  );
+
+  //*** 한 끼당 가격 계산 */
+  const oneMealGramsWithPriceInfosWithTags = useMemo(
+    () =>
+      selectedRecipeIds?.map((recipeInfo, i) => (
+        <div className={s.recipe_text} key={i}>
+          <b>{transformLocalCurrency(calcPrice(form.plan).perPack) + '원'}</b>
+        </div>
+      )),
+
+    {}[(form, initialize)],
+  ) || (
+    <div className={s.recipe_text}>
+      <b>0 원</b>
+    </div>
   );
 
   const subsribePlanItems = [
@@ -126,10 +145,10 @@ export default function SurveyResultPlan({
         discount:
           subscribePlanInfo.planDiscountPercent[subscribePlanType.FULL.NAME],
         origin: transformLocalCurrency(
-          calcPrice(subscribePlanType.FULL.NAME).originPrice,
+          calcPrice(subscribePlanType.FULL.NAME)?.originPrice,
         ),
         sale: transformLocalCurrency(
-          calcPrice(subscribePlanType.FULL.NAME).salePrice,
+          calcPrice(subscribePlanType.FULL.NAME)?.salePrice,
         ),
       },
     },
@@ -163,7 +182,7 @@ export default function SurveyResultPlan({
             <span>
               &nbsp;
               {transformLocalCurrency(
-                calcPrice(subscribePlanType.HALF.NAME).perPack,
+                calcPrice(subscribePlanType.HALF.NAME)?.perPack,
               ) + '원'}
             </span>
           </>
@@ -173,10 +192,10 @@ export default function SurveyResultPlan({
         discount:
           subscribePlanInfo.planDiscountPercent[subscribePlanType.HALF.NAME],
         origin: transformLocalCurrency(
-          calcPrice(subscribePlanType.HALF.NAME).originPrice,
+          calcPrice(subscribePlanType.HALF.NAME)?.originPrice,
         ),
         sale: transformLocalCurrency(
-          calcPrice(subscribePlanType.HALF.NAME).salePrice,
+          calcPrice(subscribePlanType.HALF.NAME)?.salePrice,
         ),
       },
     },
@@ -206,11 +225,11 @@ export default function SurveyResultPlan({
         row3: <>{oneMealGramsWithRecipeInfosWithTags}</>,
         row4: (
           <>
-            {subscribePlanType.TOPPING.totalNumberOfPacks}팩 x
+            {/* {subscribePlanType.TOPPING.totalNumberOfPacks}팩 x */}
             <span>
               &nbsp;
               {transformLocalCurrency(
-                calcPrice(subscribePlanType.TOPPING.NAME).perPack,
+                calcPrice(subscribePlanType.TOPPING_FULL.NAME)?.perPack,
               ) + '원'}
             </span>
           </>
@@ -218,12 +237,14 @@ export default function SurveyResultPlan({
       },
       price: {
         discount:
-          subscribePlanInfo.planDiscountPercent[subscribePlanType.TOPPING.NAME],
+          subscribePlanInfo.planDiscountPercent[
+            subscribePlanType.TOPPING_FULL.NAME
+          ],
         origin: transformLocalCurrency(
-          calcPrice(subscribePlanType.TOPPING.NAME).originPrice,
+          calcPrice(subscribePlanType.TOPPING_FULL.NAME).originPrice,
         ),
         sale: transformLocalCurrency(
-          calcPrice(subscribePlanType.TOPPING.NAME).salePrice,
+          calcPrice(subscribePlanType.TOPPING_FULL.NAME).salePrice,
         ),
       },
     },
@@ -253,11 +274,11 @@ export default function SurveyResultPlan({
         row3: <>{oneMealGramsWithRecipeInfosWithTags}</>,
         row4: (
           <>
-            {subscribePlanType.TOPPING.totalNumberOfPacks}팩 x
+            {subscribePlanType.TOPPING_HALF.totalNumberOfPacks}팩 x
             <span>
               &nbsp;
               {transformLocalCurrency(
-                calcPrice(subscribePlanType.TOPPING.NAME).perPack,
+                calcPrice(subscribePlanType.TOPPING_HALF.NAME).perPack,
               ) + '원'}
             </span>
           </>
@@ -265,18 +286,28 @@ export default function SurveyResultPlan({
       },
       price: {
         discount:
-          subscribePlanInfo.planDiscountPercent[subscribePlanType.TOPPING.NAME],
+          subscribePlanInfo.planDiscountPercent[
+            subscribePlanType.TOPPING_HALF.NAME
+          ],
         origin: transformLocalCurrency(
-          calcPrice(subscribePlanType.TOPPING.NAME).originPrice,
+          calcPrice(subscribePlanType.TOPPING_HALF.NAME).originPrice,
         ),
         sale: transformLocalCurrency(
-          calcPrice(subscribePlanType.TOPPING.NAME).salePrice,
+          calcPrice(subscribePlanType.TOPPING_HALF.NAME).salePrice,
         ),
       },
     },
   ];
 
-  console.log(selectedPlan);
+  // console.log(selectedPlan);
+  // // console.log(Number(surveyInfo.foodAnalysis.oneDayRecommendKcal).toFixed(0));
+  // console.log(
+  //   transformLocalCurrency(
+  //     calcSubscribeOneDayRecommendKcal(
+  //       surveyInfo.foodAnalysis.oneDayRecommendKcal,
+  //     ),
+  //   ),
+  // );
 
   return (
     <div className={s.plan_container}>
@@ -288,18 +319,28 @@ export default function SurveyResultPlan({
       </div>
       {/* 4-1) 플랜 선택 */}
       <div className={s.plan_list}>
-        {subsribePlanItems.map((item, index) => (
-          <SurveyPlanInput
-            key={`${item.id}-${index}`}
-            id={item.id}
-            type="radio"
-            name={name}
-            selectedRadio={selectedPlan}
-            setSelectedRadio={setSelectedPlan}
-            option={{ label: '플랜 선택' }}
-            initialize={initialize}
-          >
-            {/* {item.label === 'best' && (
+        {subsribePlanItems
+          .filter((item) =>
+            calcSubscribeOneDayRecommendKcal(
+              surveyInfo.foodAnalysis.oneDayRecommendKcal,
+            ) <= 125
+              ? !item.title.includes('토핑')
+              : item,
+          )
+          .map((item, index) => {
+            return (
+              <SurveyPlanInput
+                key={`${item.id}-${index}`}
+                id={item.id}
+                type="radio"
+                name={name}
+                selectedRadio={selectedPlan}
+                setSelectedRadio={setSelectedPlan}
+                setForm={setForm}
+                option={{ label: '플랜 선택' }}
+                initialize={initialize}
+              >
+                {/* {item.label === 'best' && (
               <ItemLabel
                 label="BEST"
                 style={{
@@ -315,30 +356,31 @@ export default function SurveyResultPlan({
                 }}
               />
             )} */}
-            <ul className={s.plan_box}>
-              <li className={s.plan_grid_1}>
-                <h2>{item.title}</h2>
-              </li>
-              <li className={s.plan_grid_2}>
-                <div className={s.row_1}>{item.titleDescHTML}</div>
-                {/* <div className={s.grid_box}> */}
-                <div className={s.row_1}>{item.bodyDescHTML.row1}</div>
-                {/* <div className={s.row_2}>{item.bodyDescHTML.row2}</div> */}
-                {/* <div className={s.row_3}>{item.bodyDescHTML.row3}</div> */}
-                {/* <div className={s.row_4}>{item.bodyDescHTML.row4}</div> */}
-                {/* </div> */}
-                <div className={s.text1}>{item.bodyDescHTML.row2}</div>
-              </li>
-              {/* <li>
+                <ul className={s.plan_box}>
+                  <li className={s.plan_grid_1}>
+                    <h2>{item.title}</h2>
+                  </li>
+                  <li className={s.plan_grid_2}>
+                    <div className={s.row_1}>{item.titleDescHTML}</div>
+                    {/* <div className={s.grid_box}> */}
+                    <div className={s.row_1}>{item.bodyDescHTML.row1}</div>
+                    {/* <div className={s.row_2}>{item.bodyDescHTML.row2}</div> */}
+                    {/* <div className={s.row_3}>{item.bodyDescHTML.row3}</div> */}
+                    {/* <div className={s.row_4}>{item.bodyDescHTML.row4}</div> */}
+                    {/* </div> */}
+                    <div className={s.text1}>{item.bodyDescHTML.row2}</div>
+                  </li>
+                  {/* <li>
                 <div className={s.text1}>
                   {item.price.discount}%&nbsp;
                   <span>{item.price.origin}원</span>
                 </div>
                 <div className={s.text2}>{item.price.sale}원</div>
               </li> */}
-            </ul>
-          </SurveyPlanInput>
-        ))}
+                </ul>
+              </SurveyPlanInput>
+            );
+          })}
       </div>
 
       {/* 4-2) 끼니, 팩 */}
@@ -351,36 +393,36 @@ export default function SurveyResultPlan({
             (1팩 기준)
           </div>
 
-          {recipeNameList.length < 2 ? (
-            <div className={s.recipe_text_single}>
-              <p>000g</p> <p className={s.recipe_name}>{recipeNameList[0]}</p>
-            </div>
+          {recipeNameList.length === 0 ? (
+            <p className={s.recipe_single_wrapper}>
+              <div className={s.recipe_text}>0 g</div>
+            </p>
+          ) : recipeNameList.length === 1 ? (
+            <p className={s.recipe_single_wrapper}>
+              {oneMealGramsWithRecipeInfosWithTags}
+            </p>
           ) : (
-            recipeNameList.map((recipeName, index) => {
-              return (
-                <div className={s.recipe_text_double} key={index}>
-                  <p>000g</p> <p className={s.recipe_name}>{recipeName}</p>
-                </div>
-              );
-            })
+            <p className={s.recipe_double_wrapper}>
+              {oneMealGramsWithRecipeInfosWithTags}
+            </p>
           )}
         </div>
 
         {/* (2) 한 끼당 */}
         <div className={s.one_pack_row}>
           <div className={s.one_pack_text}>한 끼당:</div>
-          {recipeNameList.length < 2 ? (
-            <div className={s.recipe_text_single}>
-              <p>0,000원</p>
-            </div>
+          {recipeNameList.length === 0 ? (
+            <p className={s.recipe_single_wrapper}>
+              <div className={s.recipe_text}>0 원</div>
+            </p>
+          ) : recipeNameList.length === 1 ? (
+            <p className={s.recipe_single_wrapper}>
+              {oneMealGramsWithPriceInfosWithTags}
+            </p>
           ) : (
-            recipeNameList.map((recipeName, index) => {
-              return (
-                <div className={s.recipe_text_double} key={index}>
-                  <p>0,000원</p>
-                </div>
-              );
-            })
+            <p className={s.recipe_double_wrapper}>
+              {oneMealGramsWithPriceInfosWithTags}
+            </p>
           )}
         </div>
 
@@ -389,13 +431,13 @@ export default function SurveyResultPlan({
           <div className={s.one_pack_text}>팩수:</div>
           {recipeNameList.length < 2 ? (
             <div className={s.recipe_text_single}>
-              <p>{recipeNameList.length === 1 ? '28' : '0'}팩</p>
+              <p>{recipeNameList.length === 1 ? '28' : '0'} 팩</p>
             </div>
           ) : (
             recipeNameList.map((recipeName, index) => {
               return (
                 <div className={s.recipe_text_double} key={index}>
-                  <p>14팩</p>
+                  <p>14 팩</p>
                 </div>
               );
             })
@@ -408,7 +450,7 @@ export default function SurveyResultPlan({
         <div className={s.discount_price_row}>
           <div className={s.one_pack_text}>최대 할인가:</div>
           <div className={s.recipe_text_single}>
-            <p>00,000원</p>
+            <p>0 원</p>
           </div>
         </div>
       </div>

@@ -21,12 +21,14 @@ export default function SurveyResultRecipe({
   const [initialize, setInitialize] = useState(false);
   const [selectedCheckbox, setSelectedCheckbox] = useState({}); // * 풀플랜: 최대 2가지 레시피 선택 가능 (Checkbox Input) // ex.{터키비프: true}
   const [inputType, setInputType] = useState(null);
+  const [recommendRecipeId, setRecommendRecipeId] = useState(null);
+  const [inedibleRecipeIds, setInedibleRecipeIds] = useState([]);
 
   // 조건과 추천 레시피 ID를 매핑한 객체
   const conditionRecipeMap = {
     관절: [7, 9],
     '피부·모질': [8, 11],
-    구토: [5, 9],
+    소화력부족: [5, 9],
     빈혈: [6, 12],
     피로회복: [7, 11],
     체중조절: [8, 12],
@@ -42,37 +44,53 @@ export default function SurveyResultRecipe({
     양: [7, 8, 11],
   };
 
-  console.log(surveyInfo.priorityConcerns);
+  //*** 추천 레시피 & 못먹는 음식 플래그 ***//
+  useEffect(() => {
+    // 1. 추천 레시피
+    const selectedConditions = surveyInfo.priorityConcerns
+      .split(',')
+      .filter(Boolean);
+    let recommendRecipeIds = [];
 
-  // useEffect(() => {
-  //   const selectedConditions = surveyInfo.priorityConcerns
-  //     .split(',')
-  //     .filter(Boolean);
-  //   let recommendRecipeIds = [];
+    selectedConditions.forEach((condition) => {
+      if (conditionRecipeMap[condition]) {
+        recommendRecipeIds.push(...conditionRecipeMap[condition]);
+      }
+    });
 
-  //   selectedConditions.forEach((condition) => {
-  //     if (conditionRecipeMap[condition]) {
-  //       recommendRecipeIds.push(...conditionRecipeMap[condition]);
-  //     }
-  //   });
+    recommendRecipeIds = [...new Set(recommendRecipeIds)]; // 중복 제거
 
-  //   recommendRecipeIds = [...new Set(recommendRecipeIds)]; // 중복 제거
+    // inedibleFood에 포함된 재료의 레시피 ID를 제외
+    const inedibleFoods = surveyInfo.inedibleFood.split(',').filter(Boolean);
+    inedibleFoods.forEach((food) => {
+      if (inedibleFoodRecipeMap[food]) {
+        recommendRecipeIds = recommendRecipeIds.filter(
+          (id) => !inedibleFoodRecipeMap[food].includes(id),
+        );
+      }
+    });
 
-  //   // inedibleFood에 포함된 재료의 레시피 ID를 제외
-  //   const inedibleFoods = surveyInfo.inedibleFood.split(',').filter(Boolean);
-  //   inedibleFoods.forEach((food) => {
-  //     if (inedibleFoodRecipeMap[food]) {
-  //       recommendRecipeIds = recommendRecipeIds.filter(
-  //         (id) => !inedibleFoodRecipeMap[food].includes(id),
-  //       );
-  //     }
-  //   });
+    // recommendRecipeId의 최종 값
+    const finalRecommendRecipeId = recommendRecipeIds.length
+      ? recommendRecipeIds[0]
+      : null;
+    setRecommendRecipeId(finalRecommendRecipeId);
 
-  //   // recommendRecipeId의 최종 값
-  //   const finalRecommendRecipeId = recommendRecipeIds.length
-  //     ? recommendRecipeIds[0]
-  //     : null;
-  // }, []);
+    // 2. 못먹는 음식
+    if (surveyInfo.inedibleFood) {
+      const inedibleFoodList = surveyInfo.inedibleFood
+        .split(',')
+        .map((food) => food.trim());
+
+      const recipeIds = inedibleFoodList.flatMap(
+        (food) => inedibleFoodRecipeMap[food] || [],
+      );
+
+      const uniqueRecipeIds = [...new Set(recipeIds)];
+
+      setInedibleRecipeIds(uniqueRecipeIds);
+    }
+  }, []);
 
   useEffect(() => {
     setInitialize(true);
@@ -81,20 +99,6 @@ export default function SurveyResultRecipe({
       recipeIdList: [],
     }));
   }, [form.plan]);
-
-  // useEffect(() => {
-  //   // if (inputType !== 'radio') return; // ! 유효성체크 안할 경우, selectedCheckbox값에 영향끼침
-  //   // const selectedId = recipeInfo.filter(
-  //   //   (rc) => rc.name === `${selectedRadio && selectedRadio.split('-')[0]}`,
-  //   // )[0]?.id;
-
-  //   // // console.log(selectedId)
-  //   setForm((prevState) => ({
-  //     ...prevState,
-  //     recipeIdList: [selectedId],
-  //   }));
-  //   // setSelectedRadio(`${selectedRadio}`);
-  // }, [selectedRadio]);
 
   useEffect(() => {
     if (!selectedCheckbox) return;
@@ -111,25 +115,6 @@ export default function SurveyResultRecipe({
         ? selectedIdList.push(selectedId)
         : selectedIdList?.filter((id) => id !== selectedId);
     });
-
-    // const selectedRadioCount = selectedRadio ? 1 : 0;
-    // const totalSelectedCount = selectedCheckboxCount + selectedRadioCount;
-    // const maxSelectedCount = 2;
-
-    // if (totalSelectedCount > maxSelectedCount) {
-    //   alert('최대 2개의 레시피만 선택 가능합니다.');
-    //   return;
-    // }
-
-    console.log('selectedCheckboxCount', selectedCheckboxCount);
-    //! [삭제]
-    // const maxSelectedCheckboxCount = 2;
-    // const isOverSelected = selectedCheckboxCount > maxSelectedCheckboxCount;
-    // if (isOverSelected) {
-    //   return alert('풀플랜은 최대 2개 레시피까지 선택가능합니다.');
-    // }
-
-    // setInitialize(isOverSelected);
     setForm((prevState) => ({
       ...prevState,
       recipeIdList: selectedIdList,
@@ -169,14 +154,27 @@ export default function SurveyResultRecipe({
                 setSelectedCheckbox={setSelectedCheckbox}
                 option={{ label: '레시피 선택' }}
               >
-                {surveyInfo.recommendRecipeName === recipe.name && (
+                {recommendRecipeId === recipe.id && (
                   <ItemRecommendlabel
                     label="추천!"
                     style={{
-                      backgroundColor: '#000',
+                      backgroundColor: '#be1a21',
                     }}
                   />
                 )}
+                {inedibleRecipeIds.includes(recipe.id) && (
+                  <ItemRecommendlabel
+                    label={`못먹는\n재료 포함`}
+                    style={{
+                      backgroundColor: '#000',
+                      fontSize: '13px',
+                      whiteSpace: 'pre-line',
+                      lineHeight: 1.2,
+                    }}
+                    inedibleFood={true}
+                  />
+                )}
+
                 <Image
                   src={recipe.thumbnailUri2}
                   width={149 * 1.4}
@@ -239,12 +237,24 @@ export default function SurveyResultRecipe({
                 setSelectedCheckbox={setSelectedCheckbox}
                 option={{ label: '레시피 선택' }}
               >
-                {surveyInfo.recommendRecipeName === recipe.name && (
+                {recommendRecipeId === recipe.id && (
                   <ItemRecommendlabel
                     label="추천!"
                     style={{
-                      backgroundColor: '#000',
+                      backgroundColor: '#be1a21',
                     }}
+                  />
+                )}
+                {inedibleRecipeIds.includes(recipe.id) && (
+                  <ItemRecommendlabel
+                    label={`못먹는\n재료 포함`}
+                    style={{
+                      backgroundColor: '#000',
+                      fontSize: '13px',
+                      whiteSpace: 'pre-line',
+                      lineHeight: 1.2,
+                    }}
+                    inedibleFood={true}
                   />
                 )}
                 <Image

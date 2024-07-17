@@ -3,11 +3,8 @@ import { getData } from '/src/pages/api/reqData';
 import s from './surveyStatistics.module.scss';
 import Loading from '/src/components/common/Loading';
 import { calcDogAge } from '/util/func/calcDogAge';
-import { dogActivityLevelType } from '/store/TYPE/dogActivityLevelType';
-import { dogSizeType } from '/store/TYPE/dogSizeType';
 import Btn_01 from '/public/img/mypage/statistic_dog_walker.svg';
 import Btn_02 from '/public/img/mypage/statistic_dog_walker2.svg';
-
 import { UnitOfDemicalPointOfOneMealGram } from '../../../../util/func/subscribe/finalVar';
 import Image from 'next/image';
 import { useSelector } from 'react-redux';
@@ -16,6 +13,13 @@ import { Swiper_product } from './Swiper_product';
 import { useSubscribePlanInfo } from '/util/hook/useSubscribePlanInfo';
 import SurveyResultRecipe from './SurveyResultRecipe';
 import SurveyResultPlan from './SurveyResultPlan';
+import { calcOneMealGramsWithRecipeInfo } from '/util/func/subscribe/calcOneMealGramsWithRecipeInfo';
+import { originSubscribeIdList } from '/util/func/subscribe/originSubscribeIdList';
+import {
+  valid_hasFormErrors,
+  valid_isTheSameArray,
+} from '/util/func/validation/validationPackage';
+import { calcSubscribePrice } from '/util/func/subscribe/calcSubscribePrices';
 
 export const SurveyStatistics = ({ id, mode = 'default' }) => {
   const auth = useSelector((state) => state.auth);
@@ -46,66 +50,17 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
     oneMealGramList: [],
   });
 
-  // const handleMouseEnter = () => {
-  //   setIsMouseEnter(true);
-  // };
-  // const handleMouseLeave = () => {
-  //   setIsMouseEnter(false);
-  // };
+  const [isOriginSubscriber, setIsOriginSubscriber] = useState(false);
+  const [oneMealGramsForm, setOneMealGramsForm] = useState({
+    current: [],
+    next: [],
+  });
 
-  // console.log('dogInfoResults>>>', dogInfoResults);
-  console.log('isActiveDogIdx>>>', isActiveDogIdx);
-  console.log('id>>>', id);
-  console.log('userData>>>', userData);
-
-  //*** 구독플랜 금액 계산
-  const calcSubscribePlanPaymentPrice = useCallback(
-    (planName) => {
-      if (!form.recipeIdList[0] || !planName || !recipeInfo.data) {
-        return {
-          perPack: 0,
-          originPrice: 0,
-          salePrice: 0,
-        };
-      }
-      const discountPercent = subscribePlanInfo.planDiscountPercent[planName];
-      const oneDayRecommendKcal = info.foodAnalysis.oneDayRecommendKcal;
-      const pricePerGrams = info.recipeInfoList
-        ?.filter((recipe) => form.recipeIdList.indexOf(recipe.id) >= 0)
-        .map((recipe) => recipe.pricePerGram);
-      const currentRecipeInfos = info.recipeInfoList
-        ?.filter((recipe) => form.recipeIdList.indexOf(recipe.id) >= 0)
-        .map((recipe) => recipe.name);
-      const nextOneMealGrams = calcOneMealGramsWithRecipeInfo({
-        selectedRecipeIds: form.recipeIdList,
-        allRecipeInfos: recipeInfo.data,
-        oneDayRecommendKcal: oneDayRecommendKcal,
-        isOriginSubscriber,
-      }).map((recipe) => recipe.oneMealGram);
-
-      const isSameArray = valid_isTheSameArray(
-        oneMealGramsForm.next,
-        nextOneMealGrams,
-      );
-      // // console.log(oneMealGramsForm.next, nextOneMealGrams, "\n", isSameArray);
-      if (!isSameArray) {
-        setOneMealGramsForm((prevState) => ({
-          ...prevState,
-          next: nextOneMealGrams,
-        }));
-      }
-
-      return calcSubscribePrice({
-        discountPercent,
-        oneMealGrams: nextOneMealGrams,
-        planName,
-        pricePerGrams,
-        isOriginSubscriber,
-        recipeNameList: currentRecipeInfos,
-      });
-    },
-    [form.plan, form.recipeIdList, recipeInfo, subscribePlanInfo],
-  );
+  useEffect(() => {
+    //! [추가] 기존 구독자인지 확인
+    originSubscribeIdList.includes(surveyInfo.subscribeId) &&
+      setIsOriginSubscriber(true);
+  }, []);
 
   useEffect(() => {
     if (!id || !id.length) return;
@@ -155,7 +110,7 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
         const apiResultUrl = `/api/surveyReports/${id}/result`;
         const resultRes = await getData(apiResultUrl);
         console.log('apiResultUrl>>>', resultRes);
-        setResultInfo(res.data);
+        setResultInfo(resultRes.data);
 
         const getRecipeInfoApiUrl = `/api/recipes`;
         const recipeInfoRes = await getData(getRecipeInfoApiUrl);
@@ -399,6 +354,91 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
     })();
   }, []);
 
+  // const currentRecipeIds =
+  //   resultInfo.recipeDtoList
+  //     .filter((rc) => surveyInfo.recipeName?.split(',').indexOf(rc.name) >= 0)
+  //     .map((rc) => rc.id) || [];
+  const currentOneMealGrams = useCallback(
+    calcOneMealGramsWithRecipeInfo({
+      // selectedRecipeIds: currentRecipeIds,
+      selectedRecipeIds: form.recipeIdList,
+      allRecipeInfos: recipeInfo?.data || [],
+      oneDayRecommendKcal: resultInfo.foodAnalysis?.oneDayRecommendKcal,
+      isOriginSubscriber,
+    }).map((recipe) => recipe.oneMealGram),
+    [recipeInfo.loading, subscribePlanInfo.loading, surveyInfo],
+  );
+
+  useEffect(() => {
+    if (oneMealGramsForm.current.length === 0) {
+      setOneMealGramsForm((prevState) => ({
+        ...prevState,
+        current: currentOneMealGrams,
+      }));
+    }
+  }, [currentOneMealGrams]);
+
+  // const handleMouseEnter = () => {
+  //   setIsMouseEnter(true);
+  // };
+  // const handleMouseLeave = () => {
+  //   setIsMouseEnter(false);
+  // };
+
+  // console.log('dogInfoResults>>>', dogInfoResults);
+  // console.log('userData>>>', userData);
+
+  // //*** 구독플랜 금액 계산
+  const calcSubscribePlanPaymentPrice = useCallback(
+    (planName) => {
+      if (!form.recipeIdList[0] || !planName || !recipeInfo) {
+        return {
+          perPack: 0,
+          originPrice: 0,
+          salePrice: 0,
+        };
+      }
+      console.log('surveyInfo.foodAnalysis???', surveyInfo.foodAnalysis);
+
+      const discountPercent = subscribePlanInfo.planDiscountPercent[planName];
+      const oneDayRecommendKcal = surveyInfo.foodAnalysis?.oneDayRecommendKcal;
+      const pricePerGrams = surveyInfo.recipeInfoList
+        ?.filter((recipe) => form.recipeIdList.indexOf(recipe.id) >= 0)
+        .map((recipe) => recipe.pricePerGram);
+      const currentRecipeInfos = surveyInfo.recipeInfoList
+        ?.filter((recipe) => form.recipeIdList.indexOf(recipe.id) >= 0)
+        .map((recipe) => recipe.name);
+      const nextOneMealGrams = calcOneMealGramsWithRecipeInfo({
+        selectedRecipeIds: form.recipeIdList,
+        allRecipeInfos: recipeInfo,
+        oneDayRecommendKcal: oneDayRecommendKcal,
+        isOriginSubscriber,
+      }).map((recipe) => recipe.oneMealGram);
+
+      const isSameArray = valid_isTheSameArray(
+        oneMealGramsForm.next,
+        nextOneMealGrams,
+      );
+      // // console.log(oneMealGramsForm.next, nextOneMealGrams, "\n", isSameArray);
+      if (!isSameArray) {
+        setOneMealGramsForm((prevState) => ({
+          ...prevState,
+          next: nextOneMealGrams,
+        }));
+      }
+
+      return calcSubscribePrice({
+        discountPercent,
+        oneMealGrams: nextOneMealGrams,
+        planName,
+        pricePerGrams,
+        isOriginSubscriber,
+        recipeNameList: currentRecipeInfos,
+      });
+    },
+    [form.plan, form.recipeIdList, recipeInfo, subscribePlanInfo],
+  );
+
   //! 로딩 화면
   if (isLoading.fetching || isRendered) {
     return <Loading />;
@@ -425,6 +465,17 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
     e.preventDefault();
     setIsArrowActive(!isArrowActive);
     setRotation((prevRotation) => (prevRotation + 180) % 360);
+  };
+
+  //* 결제하러 가기
+  const onNextPage = async () => {
+    if (resultInfo.subscribeId) {
+      router.push(`/order/ordersheet/subscribe/${resultInfo.subscribeId}`);
+    } else {
+      // console.error('there is no Subscribe ID', info.subscribeId);
+      alert('주문정보를 확인할 수 없습니다.');
+      window.location.href = '/';
+    }
   };
 
   // const topTabElement = document.querySelector(`.${s.top_tab}`);
@@ -671,7 +722,9 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
         </span> */}
       </section>
 
-      <button className={s.payment_btn}>결제하러 가기</button>
+      <button className={s.payment_btn} onClick={onNextPage}>
+        결제하러 가기
+      </button>
     </div>
   );
 };

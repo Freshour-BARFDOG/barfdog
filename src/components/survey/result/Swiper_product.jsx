@@ -1,13 +1,12 @@
 // 레시피 Swiper
 import React, { useEffect, useRef, useState } from 'react';
-import s from '/src/pages/mainPage.module.scss';
+import s from './swiperProduct.module.scss';
 import { Navigation, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css/pagination';
 import Image from 'next/image';
 import Link from 'next/link';
 import Styles from '@src/pages/mainPage.module.scss';
-import { itemHealthTypeList } from '/store/TYPE/itemHealthType';
 import { getData } from '/src/pages/api/reqData';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import { useDispatch, useSelector } from 'react-redux';
@@ -42,43 +41,20 @@ const swiperSettings_recipe_item = {
 };
 
 export function Swiper_product() {
-  // const [recipeDatas, setRecipeDatas] = useState([]);
-
-  const [healthTypeItemList, setHealthTypeItemList] = useState();
-  // const [isClicked, setIsClicked] = useState(false);
-  const [healthType, setHealthType] = useState({
-    kor: '',
-    eng: '',
-    description: '',
-  });
   const [selectedItemList, setSelectedItemList] = useState([]);
+  const [generalItemList, setGeneralItemList] = useState([]);
 
   useEffect(() => {
     (async () => {
       try {
-        const url = `/api/items?page=0&size=0&sortBy=recent&itemType=ALL`;
+        const url = `/api/items?page=0&size=100&sortBy=recent&itemType=ALL&subscription=true`;
         const res = await getData(url);
         // console.log(res);
         if (res?.status === 200) {
-          const data = res.data._embedded?.queryItemsDtoList;
-
-          // console.log('data', data);
-
-          const updatedItemHealthTypeList = itemHealthTypeList.map((item) => {
-            return { [item.value]: [] };
-          });
-
-          data.forEach((item) => {
-            const matchedItem = updatedItemHealthTypeList.find((obj) => {
-              return Object.keys(obj)[0] === item.itemHealthType;
-            });
-
-            if (matchedItem) {
-              matchedItem[Object.keys(matchedItem)[0]].push(item);
-            }
-          });
-
-          setHealthTypeItemList(updatedItemHealthTypeList);
+          const data = res.data._embedded?.queryItemsDtoList.sort(
+            (a, b) => a.subscriptionOrder - b.subscriptionOrder,
+          );
+          setSelectedItemList(data);
         }
       } catch (err) {
         console.error(err);
@@ -87,33 +63,73 @@ export function Swiper_product() {
   }, []);
 
   //* 이미지 클릭
-  const imgClickHandler = (e, value, label, description) => {
-    setHealthType((prev) => ({ eng: value, kor: label, description }));
-    const updatedItemList = healthTypeItemList?.find((obj) => obj[value])?.[
-      value
-    ];
-    setSelectedItemList(updatedItemList);
+  const imgClickHandler = (e, item) => {
+    const isItemInList = generalItemList.some((i) => i.id === item.id);
+
+    if (isItemInList) {
+      // 이미 리스트에 있는 경우 삭제
+      setGeneralItemList((prev) => prev.filter((i) => i.id !== item.id));
+    } else {
+      // 리스트에 없는 경우 추가
+      setGeneralItemList((prev) => [
+        ...prev,
+        {
+          id: item.id,
+          name: item.name,
+          salePrice: item.salePrice,
+          count: 1,
+        },
+      ]);
+    }
   };
 
-  // console.log('itemHealthTypeList', itemHealthTypeList);
-  // // console.log('healthTypeItemList', healthTypeItemList);
-  // console.log('healthType', healthType);
-  // console.log('selectedItemList>>>', selectedItemList);
+  const addGeneralItemHandler = (e, item) => {
+    setGeneralItemList((prev) => [
+      ...prev,
+      {
+        id: item.id,
+        name: item.name,
+        salePrice: item.salePrice,
+        count: item.count++,
+      },
+    ]);
+  };
+
+  const minusGeneralItemHandler = (e, item) => {
+    setGeneralItemList((prev) => {
+      const itemIndex = prev.findIndex((i) => i.id === item.id);
+      if (itemIndex >= 0) {
+        const newItem = {
+          ...prev[itemIndex],
+          count: prev[itemIndex].count - 1,
+        };
+        if (newItem.count <= 0) {
+          // count가 0이 되면 리스트에서 항목 제거
+          return prev.filter((i) => i.id !== item.id);
+        } else {
+          // count를 감소시키고 리스트 업데이트
+          const newList = [...prev];
+          newList[itemIndex] = newItem;
+          return newList;
+        }
+      }
+      return prev;
+    });
+  };
+
+  console.log(selectedItemList);
+  console.log('generalItemList>>>', generalItemList);
 
   return (
     <div className={s.swiper_recipe_outerWrap}>
       {selectedItemList?.length > 0 && (
-        <section className={s.swiper_recipe_bottom_wrapper}>
-          <div className={s.swiper_recipe_bottom_text}>
-            <h3>
-              <span className={s.pointColor}>{healthType.kor}</span>에 대한
-              고민이 있으신가요?
-            </h3>
-            <h4>{healthType.description}</h4>
-          </div>
-
-          <Swiper {...swiperSettings_recipe_item}>
-            {selectedItemList?.map((d, index) => (
+        <Swiper {...swiperSettings_recipe_item}>
+          {selectedItemList?.map((d, index) => {
+            const isChecked = generalItemList.some((item) => item.id === d.id);
+            const selectedItem = generalItemList.find(
+              (item) => item.id === d.id,
+            );
+            return (
               <SwiperSlide
                 key={`recipe-${d.id}-${index}`}
                 style={{
@@ -124,60 +140,86 @@ export function Swiper_product() {
                 <div className={s.recipe_a}>
                   <div className={s.recipe_box}>
                     <div className={s.img_item_wrap}>
-                      <Link passHref href={`/shop/item/${d.id}`}>
-                        <Image
-                          src={d.thumbnailUrl}
-                          objectFit="fit"
-                          layout="fill"
-                          alt="레시피 이미지"
-                          priority
-                        />
-                      </Link>
-                    </div>
-                    <Link passHref href={`/shop/item/${d.id}`}>
-                      <div className={s.item_description}>
-                        <p className={s.item_name}>{d.name}</p>
-
-                        <div className={s.item_price_description}>
-                          {d.packageType ? (
-                            <>
-                              <div>
-                                <span>1{d.packageType}당</span>{' '}
-                                <span>({d.unit})</span>
-                              </div>
-                              <div>
-                                <p className={s.item_unit_price}>
-                                  {transformLocalCurrency(d.pricePerUnit)}원
-                                </p>
-                              </div>
-                            </>
-                          ) : (
-                            <p className={s.item_price}>
-                              {transformLocalCurrency(d.salePrice)}원
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    </Link>
-                    {/* [삭제] 장바구니 아이콘 */}
-                    {/* <div className={s.icon_store_wrap}>
+                      {/* <Link passHref href={`/shop/item/${d.id}`}> */}
                       <Image
-                        src="/img/icon/store.svg"
-                        alt="store"
-                        width={20}
-                        height={20}
-                        className={s.store_icon}
+                        src={d.thumbnailUrl}
+                        objectFit="fit"
+                        layout="fill"
+                        alt="레시피 이미지"
+                        priority
+                        onClick={(e) => imgClickHandler(e, d)}
                       />
-                    </div> */}
+                      <div
+                        onClick={(e) => imgClickHandler(e, d)}
+                        className={`${s.img_wrap} ${
+                          isChecked ? s.clicked : ''
+                        }`}
+                      ></div>
+                      {isChecked && (
+                        <div className={s.item_count_wrap}>
+                          <span
+                            onClick={(e) =>
+                              minusGeneralItemHandler(e, selectedItem)
+                            }
+                          >
+                            -
+                          </span>
+                          {selectedItem.count}
+                          <span
+                            onClick={(e) =>
+                              addGeneralItemHandler(e, selectedItem)
+                            }
+                          >
+                            +
+                          </span>
+                        </div>
+                      )}
+                      {/* </Link> */}
+                    </div>
+                    <div className={s.item_description}>
+                      <p className={s.item_name}>{d.name}</p>
+
+                      <div className={s.item_price_description}>
+                        {d.packageType ? (
+                          <>
+                            <div>
+                              <span>1{d.packageType}당</span>{' '}
+                              <span>({d.unit})</span>
+                            </div>
+                            <div>
+                              <p className={s.item_unit_price}>
+                                {transformLocalCurrency(d.pricePerUnit)}원
+                              </p>
+                            </div>
+                          </>
+                        ) : (
+                          <p className={s.item_price}>
+                            {transformLocalCurrency(d.salePrice)}원
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                    {/* 장바구니 아이콘 */}
+                    {!isChecked && (
+                      <div className={s.icon_store_wrap}>
+                        <Image
+                          src="/img/icon/store.svg"
+                          alt="store"
+                          width={20}
+                          height={20}
+                          className={s.store_icon}
+                        />
+                      </div>
+                    )}
                     {/* <Link passHref href={'/shop/item/9'}>
                     <a className={s.recipe_btn}>+ 더보기</a>
                   </Link> */}
                   </div>
                 </div>
               </SwiperSlide>
-            ))}
-          </Swiper>
-        </section>
+            );
+          })}
+        </Swiper>
       )}
       {/* <div className={s.btn_box}>
         <div className={Styles.btn_box}>

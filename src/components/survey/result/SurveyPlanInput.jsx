@@ -7,6 +7,7 @@ const SurveyPlanInput = ({
   id,
   type,
   name,
+  setForm,
   selectedRadio,
   setSelectedRadio,
   selectedCheckbox,
@@ -18,18 +19,23 @@ const SurveyPlanInput = ({
   ...props
 }) => {
   const [isChecked, setIsChecked] = useState(false);
-  useEffect(() => {
-    if (initialize) {
-      setIsChecked(false);
-      setSelectedRadio(false);
-      if (setSelectedCheckbox && typeof setSelectedCheckbox === 'function')
-        setSelectedCheckbox([]);
-    }
-  }, [type, setSelectedRadio, setSelectedCheckbox, initialize]);
+  //   useEffect(() => {
+  //     if (initialize) {
+  //       setIsChecked(false);
+  //       setSelectedRadio(false);
+  //       if (setSelectedCheckbox && typeof setSelectedCheckbox === 'function')
+  //         setSelectedCheckbox([]);
+  //     }
+  //   }, [type, setSelectedRadio, setSelectedCheckbox, initialize]);
 
   const onRadioInputHandler = (e) => {
     const { id } = e.currentTarget;
     setSelectedRadio(id);
+
+    // setForm((prevState) => ({
+    //   ...prevState,
+    //   plan: id,
+    // }));
   };
 
   return (
