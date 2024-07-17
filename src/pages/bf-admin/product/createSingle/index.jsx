@@ -28,6 +28,7 @@ import transformClearLocalCurrencyInEveryObject from '/util/func/transformClearL
 import { discountUnitType } from '/store/TYPE/discountUnitType';
 import { itemHealthTypeList } from '/store/TYPE/itemHealthType';
 import pc from '/src/components/atoms/pureCheckbox.module.scss';
+import { getData } from '../../../api/reqData';
 
 // - 할인적용 후 판매가격 -> N일 경우 그냥 판매가격이랑 동일하게 처리한다.
 // - 아이템 아이콘
@@ -62,6 +63,7 @@ const initialFormValues = {
   unit: '', // 단위 (100g, 35ml)
   pricePerUnit: 0, // 하나당 가격
   itemCount: 0, // 개수
+  subscriptionOrder: null, // 구독상품 순서
 };
 
 const initialFormErrors = {};
@@ -79,9 +81,30 @@ function CreateSingleItemPage() {
   const [formErrors, setFormErrors] = useState(initialFormErrors);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [activeDiscountOption, setActiveDiscountOption] = useState(false);
+  const [activeSubscriptionOrder, setActiveSubscriptionOrder] = useState(false);
   const [selectedPriceOption, setSelectedPriceOption] = useState('totalPrice');
   const [originalPriceText, setOriginalPriceText] = useState(0);
+  const [generalItemList, setGeneralItemList] = useState([]);
   // // console.log(formValues)
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const url = `/api/items?page=0&size=100&sortBy=recent&itemType=ALL&subscription=true`;
+        const res = await getData(url);
+        // console.log(res);
+        if (res?.status === 200) {
+          const data = res.data._embedded?.queryItemsDtoList.sort(
+            (a, b) => a.subscriptionOrder - b.subscriptionOrder,
+          );
+          setGeneralItemList(data);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    })();
+  }, []);
+
   useEffect(() => {
     // - 품절일 경우, 재고수량 초기화
     if (formValues.inStock === false) {
@@ -99,6 +122,20 @@ function CreateSingleItemPage() {
       setActiveDiscountOption(active);
     }
   }, [formValues?.salePrice]);
+
+  useEffect(() => {
+    if (activeSubscriptionOrder) {
+      setFormValues((prevState) => ({
+        ...prevState,
+        subscriptionOrder: generalItemList.length + 1,
+      }));
+    } else {
+      setFormValues((prevState) => ({
+        ...prevState,
+        subscriptionOrder: null,
+      }));
+    }
+  }, [activeSubscriptionOrder]);
 
   useEffect(() => {
     // - INIT QUILL EDITOR
@@ -660,6 +697,27 @@ function CreateSingleItemPage() {
                           onChange={onInputChangeHandler}
                         />
                       )}
+                    </div>
+                  </div>
+                </div>
+                {/* cont_divider */}
+                <div className="cont_divider">
+                  <div className="input_row multipleLines">
+                    <div className="title_section fixedHeight">
+                      <label className="title" htmlFor={'discountDegree'}>
+                        구독 가능여부
+                      </label>
+                    </div>
+                    <div className="inp_section">
+                      <div className="inp_box">
+                        <CustomRadioTrueOrFalse
+                          name="subscriptionOrder"
+                          value={activeSubscriptionOrder}
+                          setValue={setActiveSubscriptionOrder}
+                          labelList={['Y', 'N']}
+                          returnBooleanValue
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>

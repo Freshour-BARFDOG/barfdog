@@ -1,14 +1,14 @@
 @import '/styles/module/itemList.module';
 
-
-
-.product-count{color: var(--color-primary04); margin-left:rem(4)}
-
-
+.product-count {
+  color: var(--color-primary04);
+  margin-left: rem(4);
+}
 
 .cont_viewer {
-  .table{
-    .table_header, .item{
+  .table {
+    .table_header,
+    .item {
       grid-template-columns:
         minmax(rem(100), rem(160))
         minmax(rem(100), rem(120))
@@ -17,6 +17,7 @@
         minmax(rem(100), rem(160))
         minmax(rem(90), rem(160))
         minmax(rem(80), rem(120))
+        minmax(rem(90), rem(120))
         minmax(rem(90), rem(120))
         rem(140)
         rem(70)
