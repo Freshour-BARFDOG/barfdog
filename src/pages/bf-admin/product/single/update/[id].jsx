@@ -55,6 +55,35 @@ export default function UpdateSingleItemPage({ id }) {
   const [activeDiscountOption, setActiveDiscountOption] = useState(false);
   const [selectedPriceOption, setSelectedPriceOption] = useState('totalPrice');
   const [originalPriceText, setOriginalPriceText] = useState(0);
+  const [activeSubscriptionOrder, setActiveSubscriptionOrder] = useState(false);
+  const [generalItemList, setGeneralItemList] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const url = `/api/items?page=0&size=100&sortBy=recent&itemType=ALL&subscription=true`;
+        const res = await getData(url);
+        // console.log(res);
+        if (res?.status === 200) {
+          const data = res.data._embedded?.queryItemsDtoList.sort(
+            (a, b) => a.subscriptionOrder - b.subscriptionOrder,
+          );
+          setGeneralItemList(data);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (!activeSubscriptionOrder) {
+      setFormValues((prevState) => ({
+        ...prevState,
+        subscriptionOrder: null,
+      }));
+    }
+  }, [activeSubscriptionOrder]);
 
   useEffect(() => {
     if (!id) return;
@@ -113,9 +142,11 @@ export default function UpdateSingleItemPage({ id }) {
           unit: DATA.unit, // 단위 (100g, 35ml)
           pricePerUnit: DATA.pricePerUnit, // 하나당 가격
           itemCount: DATA.originalPrice / DATA.pricePerUnit, // 개수
+          subscriptionOrder: DATA.subscriptionOrder, // 구독여부 순서
         };
         setFormValues(initialFormValues);
         setOriginalPriceText(DATA.originalPrice);
+        setActiveSubscriptionOrder(!!DATA.subscriptionOrder);
 
         (DATA.packageType || DATA.unit || DATA.pricePerUnit) &&
           setSelectedPriceOption('etcPrice');
@@ -752,6 +783,46 @@ export default function UpdateSingleItemPage({ id }) {
                     </div>
                   </div>
                 </div>
+                {/* cont_divider */}
+                <div className="cont_divider">
+                  <div className="input_row multipleLines">
+                    <div className="title_section fixedHeight">
+                      <label className="title" htmlFor={'discountDegree'}>
+                        구독 가능여부
+                      </label>
+                    </div>
+                    <div className="inp_section">
+                      <div className="inp_box">
+                        <CustomRadioTrueOrFalse
+                          name="subscriptionOrder"
+                          value={activeSubscriptionOrder}
+                          setValue={setActiveSubscriptionOrder}
+                          labelList={['Y', 'N']}
+                          returnBooleanValue
+                        />
+                        {activeSubscriptionOrder && (
+                          <CustomSelect
+                            id="subscriptionOrder"
+                            options={[
+                              { label: '선택', value: '' },
+                              ...Array.from(
+                                { length: generalItemList.length + 1 },
+                                (_, index) => ({
+                                  label: index + 1,
+                                  value: index + 1,
+                                }),
+                              ),
+                            ]}
+                            value={formValues.subscriptionOrder}
+                            setFormValues={setFormValues}
+                            dataType="number"
+                          />
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 {/* cont_divider */}
                 <div className="cont_divider">
                   <div className="input_row multipleLines">

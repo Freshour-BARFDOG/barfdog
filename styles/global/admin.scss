@@ -219,6 +219,7 @@ $inputDefaultHeight: rem(38);
           gap: rem(10);
           margin-right: rem(30);
         }
+
         .default_price_box,
         .etc_price_box {
           display: flex;
@@ -291,6 +292,9 @@ $inputDefaultHeight: rem(38);
         font-size: rem(14);
         .checkbox-wrap:not(:first-child) {
           margin-left: rem(10);
+        }
+        select {
+          margin: 0 rem(30);
         }
         &.radio:not(:last-child) {
           margin-right: rem(24);
