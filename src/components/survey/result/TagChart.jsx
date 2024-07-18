@@ -12,58 +12,39 @@ export default function TagChart({ chartData }) {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    // const data = chartData?.map((item, idx) => ({
-    //   name: item.reason,
-    //   loc: item.count,
-    //   color: `hsl(${Math.floor(Math.random() * 360)}, 70%, 50%)`,
-    // }));
+    const childrenData = Object.entries(chartData)
+      .filter(([key, value]) => {
+        // 배열이나 문자열인 경우 값이 비어있지 않은 경우를 체크
+        if (Array.isArray(value) || typeof value === 'string') {
+          return value.length > 0;
+        }
+        // 기타 값이 false가 아닌 경우를 체크
+        return value;
+      })
+      .flatMap(([key, value]) => {
+        // 배열인 경우, 각 요소를 개별적으로 처리
+        if (Array.isArray(value)) {
+          return value.map((val) => ({
+            name: val,
+            loc: 1,
+            color: `hsl(${Math.floor(Math.random() * 360)}, 70%, 50%)`,
+          }));
+        }
+        // 배열이 아닌 경우, 하나의 객체로 처리
+        return {
+          name: value,
+          loc: 1,
+          color: `hsl(${Math.floor(Math.random() * 360)}, 70%, 50%)`,
+        };
+      });
 
     const data = {
       name: '',
       color: '#FFF9F9',
-      children: [
-        {
-          name: '#nivo',
-          color: `hsl(${Math.floor(Math.random() * 360)}, 70%, 50%)`,
-          loc: 1,
-        },
-        {
-          name: '#nivo',
-          color: `hsl(${Math.floor(Math.random() * 360)}, 70%, 50%)`,
-          loc: 1,
-        },
-        {
-          name: '#nivo',
-          color: `hsl(${Math.floor(Math.random() * 360)}, 70%, 50%)`,
-          loc: 1,
-        },
-        {
-          name: '#nivo',
-          color: `hsl(${Math.floor(Math.random() * 360)}, 70%, 50%)`,
-          loc: 1,
-        },
-        {
-          name: '#nivo',
-          color: `hsl(${Math.floor(Math.random() * 360)}, 70%, 50%)`,
-          loc: 1,
-        },
-        {
-          name: '#nivo',
-          color: `hsl(${Math.floor(Math.random() * 360)}, 70%, 50%)`,
-          loc: 1,
-        },
-        {
-          name: '#nivo',
-          color: `hsl(${Math.floor(Math.random() * 360)}, 70%, 50%)`,
-          loc: 1,
-        },
-        {
-          name: '#nivo',
-          color: `hsl(${Math.floor(Math.random() * 360)}, 70%, 50%)`,
-          loc: 1,
-        },
-      ],
+      children: childrenData,
     };
+
+    // 7개가 최대
 
     setData(data);
   }, []);
@@ -81,13 +62,13 @@ export default function TagChart({ chartData }) {
         {isLoading ? (
           <Spinner />
         ) : (
-          <div style={{ height: '14rem', width: '32rem' }}>
+          <div style={{ height: '22rem', width: '100%' }}>
             <ResponsiveCirclePacking
               data={data}
               id="name"
               value="loc"
               colors="#FFF9F9"
-              padding={-30}
+              padding={-46}
               enableLabels={true}
               //   labelSkipWidth={100}
               //   labelSkipHeight={100}

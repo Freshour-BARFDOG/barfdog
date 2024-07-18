@@ -10,6 +10,7 @@ export const calcSubscribePrice = ({
   recipeNameList = [],
 }) => {
   const totalNumberOfPacks = subscribePlanType[planName].totalNumberOfPacks;
+
   const calcPriceList = pricePerGrams.map((pricePerGram, index) => {
     return calcSubscribeItemPrice({
       plan: { totalNumberOfPacks, discountPercent },
@@ -18,7 +19,17 @@ export const calcSubscribePrice = ({
       recipeName: recipeNameList[index],
     });
   });
-  return calcSubscribeItemsAvgPrice(calcPriceList);
+
+  // 전체 평균 가격
+  const avgPrice = calcSubscribeItemsAvgPrice(calcPriceList);
+
+  return {
+    avgPrice, // 전체 평균 가격
+    recipePrices: calcPriceList.map((item) => ({
+      recipeName: item.recipeName,
+      perPack: item.perPack,
+    })), //! [추가] 레시피별 가격
+  };
 };
 export const calcSubscribeItemPrice = ({
   plan = { totalNumberOfPacks: 0, discountPercent: 0 },
@@ -50,7 +61,7 @@ export const calcSubscribeItemPrice = ({
         pricePerGram = recipe.pricePerGram;
     }
   } else {
-    pricePerGram = recipe.pricePerGram; // 1g 당 가격 상수 ( 어드민에서 입력한 값 )
+    pricePerGram = recipe?.pricePerGram; // 1g 당 가격 상수 ( 어드민에서 입력한 값 )
   }
   // console.log('pricePerGram 변경 전>>>', recipe.pricePerGram);
   // console.log('pricePerGram 변경 후>>>', pricePerGram);
@@ -61,10 +72,13 @@ export const calcSubscribeItemPrice = ({
   const totalNumberOfPacks = plan.totalNumberOfPacks;
   const discountPercent = plan.discountPercent;
 
+  // console.log('discountPercent!!!', discountPercent);
+
   return {
-    perPack: perPackPrice, // 한 팩 가격
+    perPack: Math.round(perPackPrice * (1 - discountPercent / 100)), // 한 팩 가격
     originPrice: totalNumberOfPacks * perPackPrice, // 할인 전 가격
     salePrice: totalNumberOfPacks * perPackPrice * (1 - discountPercent / 100), // 할인 후 가격 (판매가)
+    recipeName,
   };
 };
 

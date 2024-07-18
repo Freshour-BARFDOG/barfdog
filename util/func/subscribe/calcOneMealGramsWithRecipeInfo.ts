@@ -58,7 +58,7 @@ export const calcOneMealGramsWithRecipeInfo = ({
           kcalPerGram = recipe.kcalPerGram;
       }
     } else {
-      kcalPerGram = recipe.kcalPerGram;
+      kcalPerGram = recipe?.kcalPerGram;
     }
     // console.log('isOriginSubscriber', isOriginSubscriber);
     // console.log('kcalPerGram 변경 전>>>', recipe.kcalPerGram);
@@ -71,10 +71,12 @@ export const calcOneMealGramsWithRecipeInfo = ({
       ),
     );
 
+    // console.log('******', recipe, kcalPerGram);
+
     return {
       oneMealGram: oneMealGram,
       recipeId: recipeId,
-      recipeName: recipe.name,
+      recipeName: recipe?.name,
     };
   });
 };

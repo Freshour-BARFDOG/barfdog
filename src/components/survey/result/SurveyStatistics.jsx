@@ -20,6 +20,8 @@ import {
   valid_isTheSameArray,
 } from '/util/func/validation/validationPackage';
 import { calcSubscribePrice } from '/util/func/subscribe/calcSubscribePrices';
+import { surveyDescriptionList } from './description';
+import { cartAction } from '/store/cart-slice';
 
 export const SurveyStatistics = ({ id, mode = 'default' }) => {
   const auth = useSelector((state) => state.auth);
@@ -35,9 +37,10 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
   const [userInfo, setUserInfo] = useState(userData);
   const [isLoading, setIsLoading] = useState({ fetching: true });
   const [isRendered, setIsRendered] = useState(true);
-  // const [isMouseEnter, setIsMouseEnter] = useState(false);
   const [isShowResult, setIsShowResult] = useState(true);
   const [isActiveDogIdx, setIsActiveDogIdx] = useState('');
+  const [chartData, setChartData] = useState({});
+
   const subscribePlanInfo = useSubscribePlanInfo();
 
   const [isArrowActive, setIsArrowActive] = useState(false);
@@ -55,6 +58,24 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
     current: [],
     next: [],
   });
+
+  const getDescriptionBlocks = (data) => {
+    const blocks = [];
+
+    for (const [key, value] of Object.entries(data)) {
+      if (Array.isArray(value)) {
+        value.forEach((item) => {
+          if (surveyDescriptionList[item]) {
+            blocks.push(<li key={item}>{surveyDescriptionList[item]}</li>);
+          }
+        });
+      } else if (typeof value === 'string' && surveyDescriptionList[value]) {
+        blocks.push(<li key={value}>{surveyDescriptionList[value]}</li>);
+      }
+    }
+
+    return blocks;
+  };
 
   useEffect(() => {
     //! [추가] 기존 구독자인지 확인
@@ -107,6 +128,50 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
         console.log('/api/surveyReports/>>>', res);
         setSurveyInfo(res.data);
 
+        //* 문구 설명
+        const validConcerns = [
+          '관절',
+          '피부·모질',
+          '소화력부족',
+          '빈혈',
+          '피로회복',
+        ];
+        setChartData({
+          dogStatus:
+            res.data.dogStatus === 'HEALTHY'
+              ? '#건강해요'
+              : 'THIN'
+              ? '#말랐어요'
+              : 'NEED_DIET'
+              ? '#다이어트필요'
+              : 'OBESITY'
+              ? '#심각한비만'
+              : '',
+          pregnant:
+            res.data.specificDogStatus.includes('PREGNANT') && '#임신한상태',
+          lactating:
+            res.data.specificDogStatus.includes('LACTATING') && '#수유중',
+          waterCountLevel:
+            res.data.waterCountLevel === 'LITTLE' && '#적은음수량',
+          activityLevel:
+            res.data.dogActivity.activityLevel === 'VERY_MUCH' ||
+            res.data.dogActivity.activityLevel === 'MUCH'
+              ? '#많은활동량'
+              : res.data.dogActivity.activityLevel === 'VERY_LITTLE' ||
+                res.data.dogActivity.activityLevel === 'LITTLE'
+              ? '#적은활동량'
+              : '',
+          priorityConcerns: res.data.priorityConcerns
+            .split(',')
+            .filter((concern) => validConcerns.includes(concern))
+            .map((concern) => `#${concern}`),
+        });
+
+        setForm((prevState) => ({
+          ...prevState,
+          oneDayRecommendKcal: res.data.foodAnalysis.oneDayRecommendKcal,
+        }));
+
         const apiResultUrl = `/api/surveyReports/${id}/result`;
         const resultRes = await getData(apiResultUrl);
         console.log('apiResultUrl>>>', resultRes);
@@ -115,7 +180,7 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
         const getRecipeInfoApiUrl = `/api/recipes`;
         const recipeInfoRes = await getData(getRecipeInfoApiUrl);
         const recipeInfoData = recipeInfoRes?.data;
-        setRecipeInfo(recipeInfoData._embedded?.recipeListResponseDtoList);
+        // setRecipeInfo(recipeInfoData._embedded?.recipeListResponseDtoList);
 
         if (recipeInfoData) {
           const recipeIdList =
@@ -127,7 +192,15 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
             const apiUrl = `/api/recipes/${recipeId}`;
             const res = await getData(apiUrl);
             const data = res.data;
-            // console.log('recipeDatas!!!! ', data);
+
+            if (data) {
+              recipesDetailInfo.push({
+                ...data,
+                kcalPerGram: data.gramPerKcal, // gramPerKcal(X) -> KcalPerGram(O) : 고객사에서 전달받은 무게상수의 단위를 그대로 사용하였으나, 오류가 있어서 수정함.
+              });
+
+              setRecipeInfo(recipesDetailInfo);
+            }
 
             if (data.ingredientList.length > 1 && data.inStock) {
               setRecipeDoubleInfo((prevState) => {
@@ -398,14 +471,12 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
           salePrice: 0,
         };
       }
-      console.log('surveyInfo.foodAnalysis???', surveyInfo.foodAnalysis);
-
       const discountPercent = subscribePlanInfo.planDiscountPercent[planName];
       const oneDayRecommendKcal = surveyInfo.foodAnalysis?.oneDayRecommendKcal;
-      const pricePerGrams = surveyInfo.recipeInfoList
+      const pricePerGrams = recipeInfo
         ?.filter((recipe) => form.recipeIdList.indexOf(recipe.id) >= 0)
         .map((recipe) => recipe.pricePerGram);
-      const currentRecipeInfos = surveyInfo.recipeInfoList
+      const currentRecipeInfos = recipeInfo
         ?.filter((recipe) => form.recipeIdList.indexOf(recipe.id) >= 0)
         .map((recipe) => recipe.name);
       const nextOneMealGrams = calcOneMealGramsWithRecipeInfo({
@@ -427,7 +498,9 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
         }));
       }
 
-      return calcSubscribePrice({
+      // console.log('=====', nextOneMealGrams);
+
+      console.log('::::::', {
         discountPercent,
         oneMealGrams: nextOneMealGrams,
         planName,
@@ -435,18 +508,36 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
         isOriginSubscriber,
         recipeNameList: currentRecipeInfos,
       });
+
+      //! [추가] 평균 전체가격, 레시피별 가격
+      const { avgPrice, recipePrices } = calcSubscribePrice({
+        discountPercent,
+        oneMealGrams: nextOneMealGrams,
+        planName,
+        pricePerGrams,
+        isOriginSubscriber,
+        recipeNameList: currentRecipeInfos,
+      });
+
+      console.log('...', avgPrice, recipePrices);
+
+      return {
+        avgPrice, // 평균 전체 가격
+        recipePrices, // 레시피별 가격
+        // recipePrices: calcPriceList.map(item => ({
+        //   name: item.recipeName,
+        //   perPack: item.perPack,
+        // })),
+      };
     },
-    [form.plan, form.recipeIdList, recipeInfo, subscribePlanInfo],
+    // [form.plan, form.recipeIdList, recipeInfo, subscribePlanInfo],
+    [form],
   );
 
   //! 로딩 화면
   if (isLoading.fetching || isRendered) {
     return <Loading />;
   }
-
-  // 설문 조사 결과 !
-  console.log('info>>>', info);
-  // 배열로 받을 예정
 
   //*** '더보기' 클릭
   const dogInfoClickHandler = () => {
@@ -468,13 +559,68 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
   };
 
   //* 결제하러 가기
-  const onNextPage = async () => {
-    if (resultInfo.subscribeId) {
-      router.push(`/order/ordersheet/subscribe/${resultInfo.subscribeId}`);
-    } else {
-      // console.error('there is no Subscribe ID', info.subscribeId);
-      alert('주문정보를 확인할 수 없습니다.');
-      window.location.href = '/';
+  const onPayHandler = async () => {
+    const nextPaymentPrice = calcSubscribePlanPaymentPrice(form.plan).salePrice;
+
+    //! 서버에 전송할 데이터
+    const body = {
+      plan: form.plan,
+      recipeIdList: form.recipeIdList,
+      nextPaymentPrice: nextPaymentPrice, // 최종계산된가격
+      oneDayRecommendKcal: convertFixedNumberByOneDayRecommendKcal(
+        surveyInfo.foodAnalysis.oneDayRecommendKcal,
+      ), // 반려견 설문조사 변경여부 검증용
+      subscribeItemList: null, // 일반 구독상품은 추후 추가 예정
+    };
+
+    console.log('body>>>', body);
+
+    const errObj = validate(body);
+    const isPassed = valid_hasFormErrors(errObj);
+    if (!isPassed)
+      return mct.alertShow(
+        '유효하지 않은 항목이 있습니다.\n선택한 레시피 및 플랜을 확인해주세요. ',
+      );
+
+    // console.log('--- onStartSubscribeOrder:\n', body)
+
+    try {
+      setSubmitted(true);
+      setIsLoading((prevState) => ({
+        ...prevState,
+        submit: true,
+      }));
+
+      const apiUrl = `/api/subscribes/${resultInfo.subscribeId}`;
+      const res = await putObjData(apiUrl, body);
+      // console.log(res);
+      if (res.isDone) {
+        await dispatch(
+          cartAction.setSubscribeOrder({
+            data: { subscribeId: resultInfo.subscribeId, ...body },
+          }),
+        );
+        await router.push(
+          `/order/ordersheet/subscribe/${resultInfo.subscribeId}`,
+        );
+      } else {
+        const serverErrorMessage = res.data.data.message;
+        const defErrorMessage = '플랜,레시피 등록에 실패하였습니다.';
+        mct.alertShow(
+          (serverErrorMessage || defErrorMessage) +
+            '\n페이지 새로고침 후, 다시 시도해주세요.',
+        );
+        setSubmitted(false);
+      }
+    } catch (err) {
+      alert('API통신 오류');
+      console.error(err);
+      setSubmitted(false);
+    } finally {
+      setIsLoading((prevState) => ({
+        ...prevState,
+        submit: false,
+      }));
     }
   };
 
@@ -516,6 +662,7 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
   console.log('recipeDoubleInfo===>', recipeDoubleInfo);
   console.log('recipeSingleInfo===>', recipeSingleInfo);
   console.log('form===>', form);
+  console.log('chartData===>', chartData);
 
   return (
     <div id="statistics">
@@ -587,11 +734,6 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
                           ? '말랐어요'
                           : ''}
                       </span>
-                      {/* <div className={s.top_tab}>
-                            <div>견종 정보</div>
-                            <div>건강 종합 점수</div>
-                            <div>영양 가이드</div>
-                          </div> */}
                     </div>
                   </main>
 
@@ -604,33 +746,14 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
 
                   <div className={s.dog_tag_container}>
                     <div className={s.dog_tag_box}>
-                      <TagChart />
+                      <TagChart chartData={chartData} />
                     </div>
 
                     <div className={s.box_line}></div>
 
                     {/* 구분선 */}
                     <ul className={isArrowActive ? s.tag_list_active : ''}>
-                      <li>
-                        <h2>#다이어트필요</h2>
-                        <div>
-                          국가는 노인과 청소년의 복지향상을 위한 정책을 실시할
-                          의무를 진다. 언론·출판에 대한 허가나 검열과
-                          집회·결사에 대한 허가는 인정되지 아니한다. 학교교육 및
-                          평생교육을 포함한 교육제도와 그 운영, 교육재정 및
-                          교원의 지위에 관한 기본적인 사항은 법률로 정한다.
-                        </div>
-                      </li>
-                      <li>
-                        <h2>#다이어트필요</h2>
-                        <div>
-                          국가는 노인과 청소년의 복지향상을 위한 정책을 실시할
-                          의무를 진다. 언론·출판에 대한 허가나 검열과
-                          집회·결사에 대한 허가는 인정되지 아니한다. 학교교육 및
-                          평생교육을 포함한 교육제도와 그 운영, 교육재정 및
-                          교원의 지위에 관한 기본적인 사항은 법률로 정한다.
-                        </div>
-                      </li>
+                      {getDescriptionBlocks(chartData)}
                     </ul>
 
                     <button onClick={onClickArrowIcon}>
@@ -671,13 +794,13 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
                   />
 
                   {/* 5. 챙겨줄 제품 - Swiper */}
-                  <div className={s.recommend_product_container}>
+                  {/* <div className={s.recommend_product_container}>
                     {surveyInfo.myDogName} (이)에게 더 챙겨줄 제품은 없을까요?
                     <div className={s.recommend_product_title}>
                       함게 구독하면 좋은 일반 상품도 살펴보세요!
                     </div>
                     <Swiper_product />
-                  </div>
+                  </div> */}
 
                   {/* 6. 닫기 버튼 */}
                   {/* <div className={s.close_btn_wrapper}>
@@ -722,7 +845,7 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
         </span> */}
       </section>
 
-      <button className={s.payment_btn} onClick={onNextPage}>
+      <button className={s.payment_btn} onClick={onPayHandler}>
         결제하러 가기
       </button>
     </div>

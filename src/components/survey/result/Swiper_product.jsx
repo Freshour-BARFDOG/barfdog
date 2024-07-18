@@ -117,8 +117,8 @@ export function Swiper_product() {
     });
   };
 
-  console.log(selectedItemList);
-  console.log('generalItemList>>>', generalItemList);
+  // console.log(selectedItemList);
+  // console.log('generalItemList>>>', generalItemList);
 
   return (
     <div className={s.swiper_recipe_outerWrap}>

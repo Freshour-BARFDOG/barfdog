@@ -62,19 +62,19 @@ export const SurveyRecipeInput = ({
     );
   };
 
-  const Input = () => {
-    return (
-      <>
-        {type === 'checkbox' && <InputCheckbox />}
-        <span className={s.fake_checkbox}>
-          {isChecked || selectedRadio === id ? '선택됨' : option.label}
-          <i className={s.icon_checked}>
-            <Icon_Checked />
-          </i>
-        </span>
-      </>
-    );
-  };
+  // const Input = () => {
+  //   return (
+  //     <>
+  //       {type === 'checkbox' && <InputCheckbox />}
+  //       <span className={s.fake_checkbox}>
+  //         {isChecked || selectedRadio === id ? '선택됨' : option.label}
+  //         <i className={s.icon_checked}>
+  //           <Icon_Checked />
+  //         </i>
+  //       </span>
+  //     </>
+  //   );
+  // };
 
   const onLabelClick = (e) => {
     // CUSTOM FUNCTION (block browser auto focus)

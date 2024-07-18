@@ -5,7 +5,7 @@
   position: relative;
   display: flex;
   margin-top: rem(40);
-  width: 100%;
+  width: rem(500);
 }
 
 .swiper_slide_item {
@@ -44,7 +44,7 @@
 
 .swiper_recipe {
   height: 100%;
-  // width: rem(600);
+  width: rem(600);
 
   .item_description {
     text-align: left;

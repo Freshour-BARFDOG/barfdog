@@ -116,7 +116,7 @@ export default function SurveyStep7({
               dog.specificDogStatus === 'PREGNANT_LATE') && (
               <div className={s.pregnancy_date_container}>
                 <p className={s.pregnancy_date_title}>
-                  임신 예상일을 입력해주세요
+                  출산 예정일을 입력해주세요
                   <span> (정확히 모르는 경우 근접한 날로 입력) </span>
                 </p>
                 <SurveyBirthdayInput
