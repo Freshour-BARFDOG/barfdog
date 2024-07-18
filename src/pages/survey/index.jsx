@@ -117,7 +117,7 @@ const initialFormValues = [
     // [PREGNANT_EARLY, PREGNANT_LATE,
     // LACTATING_ONE_TO_TWO, LACTATING_THREE_TO_FOUR, LACTATING_FIVE_TO_SIX, LACTATING_OVER_SEVEN,
     // NULL] 해당 사항이 없다면 NULL
-    expectedPregnancyDay: '', //! [추가] 임신예상일 str // [YYYYMMDD]
+    expectedPregnancyDay: null, //! [추가] 임신예상일 str // [YYYYMMDD]
     activityLevel: dogActivityLevelType.NORMAL, // 활동량 레벨 str [VERY_LITTLE, LITTLE, NORMAL, MUCH, VERY_MUCH]
     walkingCountPerWeek: '', // 주당 산책 횟수 string
     walkingTimePerOneTime: '', // 한 번 산책할 때 산책 시간 string
@@ -133,7 +133,7 @@ const initialFormValues = [
     cautionEtc: 'NONE',
     newToRawDiet: true, //! [추가] 생식처음
     recommendRecipeId: null, // 특별히 챙겨주고 싶은 부분에 해당하는 Recipe => get API 리스트
-    priorityConcerns: '',
+    priorityConcerns: null,
   },
 ];
 

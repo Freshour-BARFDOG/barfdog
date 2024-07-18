@@ -10,7 +10,7 @@ export const useSubscribePlanInfo = () => {
     [subscribePlanType.HALF.NAME]: null,
     [subscribePlanType.TOPPING_FULL.NAME]: null,
     [subscribePlanType.TOPPING_HALF.NAME]: null,
-    // [subscribePlanType.TOPPING.NAME]: null
+    [subscribePlanType.TOPPING.NAME]: null,
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -28,7 +28,7 @@ export const useSubscribePlanInfo = () => {
           setPlanDiscountPercent({
             [subscribePlanType.FULL.NAME]: data.full,
             [subscribePlanType.HALF.NAME]: data.half,
-            // [subscribePlanType.TOPPING.NAME]: data.topping,
+            [subscribePlanType.TOPPING.NAME]: data.topping,
             [subscribePlanType.TOPPING_FULL.NAME]: data.toppingFull,
             [subscribePlanType.TOPPING_HALF.NAME]: data.toppingHalf,
           });

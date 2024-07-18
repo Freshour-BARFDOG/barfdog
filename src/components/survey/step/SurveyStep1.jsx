@@ -25,7 +25,7 @@ export default function SurveyStep1({
     dogStatus: 'HEALTHY', //! [변경] 강아지 상태 [HEALTHY, NEED_DIET, OBESITY, THIN]
     specificDogStatus: 'NONE', //! [추가]  특별한 상태 [PREGNANT, LACTATING, NONE] 해당 사항이 없다면 NONE
     specificDogStatusEtc: 'NONE', //! [추가]  특별한 상태 기타
-    expectedPregnancyDay: '', //! [추가] 임신예상일 str // [YYYYMMDD]
+    expectedPregnancyDay: null, //! [추가] 임신예상일 str // [YYYYMMDD]
     activityLevel: dogActivityLevelType.NORMAL, // 활동량 레벨 str [VERY_LITTLE, LITTLE, NORMAL, MUCH, VERY_MUCH]
     walkingCountPerWeek: '', // 주당 산책 횟수 string
     walkingTimePerOneTime: '', // 한 번 산책할 때 산책 시간 string
@@ -38,7 +38,7 @@ export default function SurveyStep1({
     caution: 'NONE', // 기타 특이사항 // 빈값('')일 경우, '있어요'선택됨)
     cautionEtc: 'NONE',
     newToRawDiet: true, //! [추가] 생식유무
-    priorityConcerns: '', // 특별히 챙겨주고 싶은 부분에 해당하는 Recipe => get API 리스트
+    priorityConcerns: null, // 특별히 챙겨주고 싶은 부분에 해당하는 Recipe => get API 리스트
   };
 
   const addDogInfoHandler = () => {

@@ -35,7 +35,7 @@ const SurveyBirthdayInput = ({
       (today - dueDate) / (1000 * 60 * 60 * 24),
     );
 
-    if (differenceInDays <= 40) {
+    if (differenceInDays <= 20) {
       return 'PREGNANT_EARLY';
     } else {
       return 'PREGNANT_LATE';
