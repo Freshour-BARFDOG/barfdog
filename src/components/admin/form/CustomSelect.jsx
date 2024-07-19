@@ -22,10 +22,7 @@ const CustomSelect = ({
     }
 
     if (id === 'toppingAmount') {
-      setFormValues((prevState) => ({
-        ...prevState,
-        [id]: value,
-      }));
+      return setFormValues(value);
     }
 
     if (id) {

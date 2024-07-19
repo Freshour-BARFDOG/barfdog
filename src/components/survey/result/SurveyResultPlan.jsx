@@ -7,13 +7,8 @@ import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import { calcOneMealGramsWithRecipeInfo } from '/util/func/subscribe/calcOneMealGramsWithRecipeInfo';
 import { useSubscribePlanInfo } from '/util/hook/useSubscribePlanInfo';
 import { calcSubscribeOneDayRecommendKcal } from '/util/func/subscribe/calcOneMealGramsWithRecipeInfo';
-import {
-  valid_hasFormErrors,
-  valid_isTheSameArray,
-} from '/util/func/validation/validationPackage';
-import { CustomSelectWithCustomOptions } from '/src/components/survey/CustomSelectWithCustomOptions';
-import ScrollContainer from '../../atoms/ScrollContainer';
 import CustomSelect from '/src/components/admin/form/CustomSelect';
+// import ToolTip from '/src/components/atoms/Tooltip';
 
 export default function SurveyResultPlan({
   surveyInfo,
@@ -21,6 +16,8 @@ export default function SurveyResultPlan({
   form,
   setForm,
   calcPrice,
+  pricePerPack,
+  setPricePerPack,
 }) {
   const subscribePlanInfo = useSubscribePlanInfo();
   const initialPlan = form.plan || null;
@@ -28,13 +25,8 @@ export default function SurveyResultPlan({
   const [initialize, setInitialize] = useState(false);
   const selectedRecipeIds = form.recipeIdList;
   const [recipeNameList, setRecipeNameList] = useState([]);
-  const [pricePerPack, setPricePerPack] = useState('');
 
-  // const initialSelectedOption = value || options[0].value;
-  const [selectedOption, setSelectedOption] = useState('');
-  const [isActive, setIsActive] = useState(false);
-  const optionBoxRef = useRef(null);
-  const inputRef = useRef(null);
+  const [toppingAmount, setToppingAmount] = useState('');
 
   useEffect(() => {
     const names = form.recipeIdList
@@ -56,13 +48,13 @@ export default function SurveyResultPlan({
   }, [form.plan]);
 
   useEffect(() => {
-    if (selectedPlan) {
+    if (selectedPlan && selectedRecipeIds.length > 0) {
       const { avgPrice, recipePrices } = calcPrice(selectedPlan);
 
       // console.log('avgPrice, recipePrices', avgPrice, recipePrices);
 
       setPricePerPack({
-        avgPrice: avgPrice.perPack,
+        avgPrice: avgPrice?.perPack,
         recipePrices,
       });
     }
@@ -90,7 +82,7 @@ export default function SurveyResultPlan({
         oneDayRecommendKcal: surveyInfo.foodAnalysis.oneDayRecommendKcal,
       })?.map((recipeInfo, i) => (
         <div className={s.recipe_text} key={i}>
-          <b>{transformLocalCurrency(recipeInfo.oneMealGram)}g</b>&nbsp;
+          {transformLocalCurrency(recipeInfo.oneMealGram)}g
           <br />
           <i className={s.tinyText}>{recipeInfo.recipeName}</i>
         </div>
@@ -103,6 +95,36 @@ export default function SurveyResultPlan({
     </div>
   );
 
+  const oneMealGramsWithToppingAmountWithTags = useMemo(
+    () =>
+      // 초기화(initialize)되었을 경우, 기본 값이 나타나도록 함.
+      // initialize === false &&
+      calcOneMealGramsWithRecipeInfo({
+        selectedRecipeIds: selectedRecipeIds,
+        allRecipeInfos: recipeInfo.map((recipe) => ({
+          id: recipe.id,
+          kcalPerGram: recipe.gramPerKcal,
+          name: recipe.name,
+        })),
+        oneDayRecommendKcal: surveyInfo.foodAnalysis.oneDayRecommendKcal,
+      })?.map((recipeInfo, i) => (
+        <div className={s.recipe_text} key={i}>
+          <b>
+            {toppingAmount
+              ? transformLocalCurrency(
+                  recipeInfo.oneMealGram * (toppingAmount / 100),
+                )
+              : transformLocalCurrency(recipeInfo.oneMealGram)}
+            g
+          </b>
+          <br />
+          <i className={s.tinyText}>{recipeInfo.recipeName}</i>
+        </div>
+      )),
+
+    {}[(form, initialize, toppingAmount)],
+  ) || <div className={s.recipe_text}>0 g</div>;
+
   //*** 한 끼당 가격 계산 */
   const oneMealGramsWithPriceInfosWithTags = useMemo(
     () =>
@@ -114,18 +136,18 @@ export default function SurveyResultPlan({
         if (!matchingRecipePrice) {
           return (
             <div className={s.recipe_text} key={i}>
-              <b>0 원</b>
+              0 원
             </div>
           );
         }
 
         return (
           <div className={s.recipe_text} key={i}>
-            <b>{transformLocalCurrency(matchingRecipePrice.perPack) + '원'}</b>
+            {transformLocalCurrency(matchingRecipePrice.perPack) + '원'}
           </div>
         );
       }),
-    {}[(form, form.recipeIdList, initialize)],
+    {}[(form, form.recipeIdList, initialize, pricePerPack)],
   );
 
   const subsribePlanItems = [
@@ -152,7 +174,25 @@ export default function SurveyResultPlan({
             총 <span>{subscribePlanType.FULL.totalNumberOfPacks} 팩</span>
           </>
         ),
-        // row3: <>{oneMealGramsWithRecipeInfosWithTags}</>,
+        row3: (
+          <>
+            {form.plan === 'FULL' ? (
+              <Image
+                src={'/img/survey/full_plan_active.svg'}
+                alt="half_plan_active"
+                width={40}
+                height={40}
+              />
+            ) : (
+              <Image
+                src={'/img/survey/full_plan.svg'}
+                alt="half_plan"
+                width={40}
+                height={40}
+              />
+            )}
+          </>
+        ),
         // row4: (
         //   <>
         //     {subscribePlanType.FULL.totalNumberOfPacks}팩 x
@@ -199,7 +239,25 @@ export default function SurveyResultPlan({
             {/* <span>&nbsp;{subscribePlanType.HALF.numberOfPacksPerDay}팩</span> */}
           </>
         ),
-        row3: <>{oneMealGramsWithRecipeInfosWithTags}</>,
+        row3: (
+          <>
+            {form.plan === 'HALF' ? (
+              <Image
+                src={'/img/survey/half_plan_active.svg'}
+                alt="half_plan_active"
+                width={40}
+                height={40}
+              />
+            ) : (
+              <Image
+                src={'/img/survey/half_plan.svg'}
+                alt="half_plan"
+                width={40}
+                height={40}
+              />
+            )}
+          </>
+        ),
         // row4: (
         //   <>
         //     {subscribePlanType.HALF.totalNumberOfPacks}팩 x
@@ -246,7 +304,7 @@ export default function SurveyResultPlan({
             <span>{subscribePlanType.TOPPING_FULL.totalNumberOfPacks} 팩</span>
           </>
         ),
-        row3: <>{oneMealGramsWithRecipeInfosWithTags}</>,
+        // row3: <>{oneMealGramsWithRecipeInfosWithTags}</>,
         // row4: (
         //   <>
         //     {/* {subscribePlanType.TOPPING.totalNumberOfPacks}팩 x */}
@@ -295,7 +353,7 @@ export default function SurveyResultPlan({
             <span>{subscribePlanType.TOPPING_HALF.totalNumberOfPacks} 팩</span>
           </>
         ),
-        row3: <>{oneMealGramsWithRecipeInfosWithTags}</>,
+        // row3: <>{oneMealGramsWithRecipeInfosWithTags}</>,
         // row4: (
         //   <>
         //     {subscribePlanType.TOPPING_HALF.totalNumberOfPacks}팩 x
@@ -352,87 +410,6 @@ export default function SurveyResultPlan({
     // }));
   };
 
-  // const onActiveOptionBox = () => {
-  //   setIsActive(!isActive);
-  // };
-
-  // const onOptionClick = (e) => {
-  //   const option = e.currentTarget;
-  //   let value = option.dataset.value;
-  //   setSelectedOption(value);
-  //   if (dataType === 'number') {
-  //     value = Number(value);
-  //   }
-  //   if (setValues && typeof setValues === 'function') {
-  //     setValues((prevState) => ({
-  //       ...prevState,
-  //       [id]: value,
-  //     }));
-  //   }
-
-  //   if (onChange && typeof onChange === 'function') {
-  //     onChange(value);
-  //   }
-  // };
-
-  // const optionList = [
-  //   { label: '-20%', value: -20 },
-  //   { label: '-35%', value: -35 },
-  //   { label: '-50%', value: -50 },
-  // ];
-
-  // const Options = ({ value, label }) => {
-  //   return (
-  //     <p
-  //       data-value={value}
-  //       className={`${s.option} ${selectedOption === value ? s.selected : ''}`}
-  //       onClick={onOptionClick}
-  //     >
-  //       {label || value}
-  //     </p>
-  //   );
-  // };
-
-  // useEffect(() => {
-  //   // HIDE Option
-  //   const optionBox = optionBoxRef.current;
-  //   const viewerInput = inputRef.current;
-  //   if (window && typeof window !== 'undefined' && optionBox && viewerInput) {
-  //     document.body.addEventListener('click', (e) => {
-  //       let isBoxClicked = false;
-  //       const clickedTarget = e.target;
-  //       const clickedElemList = [
-  //         clickedTarget,
-  //         ...Array.from(clickedTarget.children),
-  //       ];
-  //       clickedElemList.forEach((target) => {
-  //         const targetClassName = target.className;
-  //         // const exceptClassNameList = [input, optionBox, ...Array.from(optionBox.children)].map(list=>list.className);
-  //         const exceptClassNameList = [
-  //           optionBox,
-  //           ...Array.from(optionBox.children),
-  //         ].map((list) => list.className);
-  //         if (exceptClassNameList.indexOf(targetClassName) >= 0) {
-  //           isBoxClicked = true;
-  //           return;
-  //         }
-  //       });
-  //       if (isBoxClicked || clickedTarget !== viewerInput) {
-  //         setIsActive(false);
-  //       }
-  //     });
-  //   }
-  // }, [optionBoxRef.current]);
-
-  // // console.log(Number(surveyInfo.foodAnalysis.oneDayRecommendKcal).toFixed(0));
-  // console.log(
-  //   transformLocalCurrency(
-  //     calcSubscribeOneDayRecommendKcal(
-  //       surveyInfo.foodAnalysis.oneDayRecommendKcal,
-  //     ),
-  //   ),
-  // );
-
   return (
     <div className={s.plan_container}>
       <div className={s.plan_title}>
@@ -482,25 +459,16 @@ export default function SurveyResultPlan({
             )} */}
                 <ul className={s.plan_box}>
                   <li className={s.plan_grid_1}>
-                    <h2>{item.title}</h2>
+                    <h2>
+                      {item.title}
+                      {item.bodyDescHTML.row3}
+                    </h2>
                   </li>
                   <li className={s.plan_grid_2}>
                     <div className={s.row_1}>{item.titleDescHTML}</div>
-                    {/* <div className={s.grid_box}> */}
                     <div className={s.row_1}>{item.bodyDescHTML.row1}</div>
-                    {/* <div className={s.row_2}>{item.bodyDescHTML.row2}</div> */}
-                    {/* <div className={s.row_3}>{item.bodyDescHTML.row3}</div> */}
-                    {/* <div className={s.row_4}>{item.bodyDescHTML.row4}</div> */}
-                    {/* </div> */}
                     <div className={s.text1}>{item.bodyDescHTML.row2}</div>
                   </li>
-                  {/* <li>
-                <div className={s.text1}>
-                  {item.price.discount}%&nbsp;
-                  <span>{item.price.origin}원</span>
-                </div>
-                <div className={s.text2}>{item.price.sale}원</div>
-              </li> */}
                 </ul>
               </SurveyPlanInput>
             );
@@ -558,74 +526,25 @@ export default function SurveyResultPlan({
                     { label: '60%', value: 60 },
                     { label: '80%', value: 80 },
                   ]}
-                  // value={formValues.itemType}
-                  // setFormValues={setFormValues}
+                  value={toppingAmount}
+                  setFormValues={setToppingAmount}
                 />
-                {/* <CustomSelectWithCustomOptions
-                  placeholder={'원하는 용량을 조절해주세요'}
-                  id={'gramAmount'}
-                  className={s.customSelect}
-                  options={[
-                    { label: '20%', value: 20 },
-                    { label: '40%', value: 40 },
-                    { label: '60%', value: 60 },
-                    { label: '80%', value: 80 },
-                  ]}
-                  // value={form.nextAmount === 0 ? '0' : form.nextAmount}
-                  value={0}
-                  unit={'%'}
-                  onChange={onInputChange}
-                  height={'120'}
-                /> */}
-                {/* <div
-                  className={`${s['customSelectWithOptions']} ${s.customSelect}`}
-                >
-                  <input
-                    type="text"
-                    placeholder={'원하는 용량을 조절해주세요'}
-                    id={'gramAmount'}
-                    className={'customSelectInput'}
-                    onClick={onActiveOptionBox}
-                    ref={inputRef}
-                    readOnly
-                    value={selectedOption || ''}
-                    onChange={onInputChange}
-                  />
-                  <em className={s.unit}>%</em>
-                  <ScrollContainer
-                    height={'200'}
-                    scrollBarWidth={'0'}
-                    className={`${s.scrollContainer} ${
-                      isActive ? s.active : ''
-                    }`}
-                    ref={optionBoxRef}
-                  >
-                    {optionList.map((option, i) => (
-                      <Options
-                        key={`options-${i}`}
-                        value={option.value}
-                        label={option.label}
-                      />
-                    ))}
-                  </ScrollContainer>
-                </div> */}
               </div>
             </div>
             <div className={s.one_pack_row}>
               <div className={s.one_pack_text}>토핑용 1팩:</div>
               <div className={s.selectBox}>
-                {' '}
                 {recipeNameList.length === 0 ? (
                   <p className={s.recipe_single_wrapper}>
                     <div className={s.recipe_text}>0 g</div>
                   </p>
                 ) : recipeNameList.length === 1 ? (
                   <p className={s.recipe_single_wrapper}>
-                    {oneMealGramsWithRecipeInfosWithTags}
+                    {oneMealGramsWithToppingAmountWithTags}
                   </p>
                 ) : (
                   <p className={s.recipe_double_wrapper}>
-                    {oneMealGramsWithRecipeInfosWithTags}
+                    {oneMealGramsWithToppingAmountWithTags}
                   </p>
                 )}
               </div>
@@ -669,28 +588,37 @@ export default function SurveyResultPlan({
           <div className={s.one_pack_text}>팩수:</div>
           {recipeNameList.length < 2 ? (
             <div className={s.recipe_text_single}>
-              <p>{recipeNameList.length === 1 ? '28' : '0'} 팩</p>
+              <p>{recipeNameList.length === 1 ? '28' : '0'}팩</p>
             </div>
           ) : (
             recipeNameList.map((recipeName, index) => {
               return (
                 <div className={s.recipe_text_double} key={index}>
-                  <p>14 팩</p>
+                  <p>14팩</p>
                 </div>
               );
             })
           )}
         </div>
-
+        {/* ! [삭제예정] */}
         {/* (4) 최대 할인가 */}
         {/* - 결제페이지의 12개월 구독 혜택인 최대 '25%할인'가로 노출 */}
         {/* - 1회 배송 시 최대 할인가(25%)로 노출! */}
-        <div className={s.one_pack_row}>
-          <div className={s.one_pack_text}>최대 할인가:</div>
+        {/* <div className={s.one_pack_row}>
+          <div className={s.maximum_discount_text}>
+            <ToolTip
+              message={`보호자님! 구독 결제를 12개월 선결제, 풀 플랜 선택 시 최대 24% 할인을 받을 수 있답니다. 
+              
+더 자세한 내용은 결제 페이지에서 확인하실 수 있습니다.`}
+              messagePosition={'left'}
+              wordBreaking={true}
+            />
+            <span>최대 할인가:</span>
+          </div>
           <div className={s.recipe_text_single}>
             <p>0 원</p>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

@@ -17,6 +17,9 @@ export default function SurveyResultRecipe({
   recipeSingleInfo,
   form,
   setForm,
+  pricePerPack,
+  setPricePerPack,
+  calcPrice,
 }) {
   const [initialize, setInitialize] = useState(false);
   const [selectedCheckbox, setSelectedCheckbox] = useState({}); // * 풀플랜: 최대 2가지 레시피 선택 가능 (Checkbox Input) // ex.{터키비프: true}
@@ -92,13 +95,13 @@ export default function SurveyResultRecipe({
     }
   }, []);
 
-  useEffect(() => {
-    setInitialize(true);
-    setForm((prevState) => ({
-      ...prevState,
-      recipeIdList: [],
-    }));
-  }, [form.plan]);
+  // useEffect(() => {
+  //   setInitialize(true);
+  //   setForm((prevState) => ({
+  //     ...prevState,
+  //     recipeIdList: [],
+  //   }));
+  // }, [form.plan]);
 
   useEffect(() => {
     if (!selectedCheckbox) return;
@@ -119,7 +122,17 @@ export default function SurveyResultRecipe({
       ...prevState,
       recipeIdList: selectedIdList,
     }));
-  }, [selectedCheckbox]);
+  }, [selectedCheckbox, recipeInfo, form.plan]); // 레시피 클릭할 때마다 바로 계산되게끔
+
+  useEffect(() => {
+    if (form.plan && form.recipeIdList.length > 0) {
+      const { avgPrice, recipePrices } = calcPrice(form.plan);
+      setPricePerPack({
+        avgPrice: avgPrice?.perPack,
+        recipePrices,
+      });
+    }
+  }, [selectedCheckbox, recipeInfo, form.plan, form]);
 
   const onPopupHandler = (e) => {
     e.preventDefault();

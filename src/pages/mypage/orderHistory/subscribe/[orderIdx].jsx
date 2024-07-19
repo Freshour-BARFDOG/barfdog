@@ -433,7 +433,7 @@ export async function getServerSideProps(ctx) {
   const res = await getDataSSR(req, getApiUrl);
   // // console.log('SERVER REPONSE: ', res);
   const data = res?.data;
-  // console.log('REPONSE DATA:',data);
+  console.log('REPONSE DATA:', data);
   if (!data || data.status === 500) {
     return redirectBySSR('/mypage/orderHistory');
   } else if (data) {

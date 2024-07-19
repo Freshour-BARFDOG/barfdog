@@ -18,7 +18,7 @@ import MenuLayout, { SubmenuList } from '../header/MenuLayout';
 import { general_itemType } from '../../../store/TYPE/itemType';
 
 export default function Footer() {
-  const [isArrowActive, setIsArrowActive] = useState(true);
+  const [isArrowActive, setIsArrowActive] = useState(false);
   const [rotation, setRotation] = useState(0);
 
   const onClickArrowIcon = (e) => {
