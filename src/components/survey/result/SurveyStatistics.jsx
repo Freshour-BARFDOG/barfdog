@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { getData } from '/src/pages/api/reqData';
+import { getData, putObjData } from '/src/pages/api/reqData';
 import s from './surveyStatistics.module.scss';
 import Loading from '/src/components/common/Loading';
 import { calcDogAge } from '/util/func/calcDogAge';
@@ -7,14 +7,16 @@ import Btn_01 from '/public/img/mypage/statistic_dog_walker.svg';
 import Btn_02 from '/public/img/mypage/statistic_dog_walker2.svg';
 import { UnitOfDemicalPointOfOneMealGram } from '../../../../util/func/subscribe/finalVar';
 import Image from 'next/image';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import TagChart from './TagChart';
 import { Swiper_product } from './Swiper_product';
 import { useSubscribePlanInfo } from '/util/hook/useSubscribePlanInfo';
 import SurveyResultRecipe from './SurveyResultRecipe';
 import SurveyResultPlan from './SurveyResultPlan';
 import { calcOneMealGramsWithRecipeInfo } from '/util/func/subscribe/calcOneMealGramsWithRecipeInfo';
+import { convertFixedNumberByOneDayRecommendKcal } from '/util/func/subscribe/convertFixedNumberByOneDayRecommendKcal';
 import { originSubscribeIdList } from '/util/func/subscribe/originSubscribeIdList';
+import { validate } from '/util/func/validation/validation_orderSubscribe';
 import {
   valid_hasFormErrors,
   valid_isTheSameArray,
@@ -22,13 +24,15 @@ import {
 import { calcSubscribePrice } from '/util/func/subscribe/calcSubscribePrices';
 import { surveyDescriptionList } from './description';
 import { cartAction } from '/store/cart-slice';
+import { useModalContext } from '/store/modal-context';
+import Modal_global_alert from '/src/components/modal/Modal_global_alert';
+import { useRouter } from 'next/router';
 
 export const SurveyStatistics = ({ id, mode = 'default' }) => {
   const auth = useSelector((state) => state.auth);
   const userData = auth.userInfo;
   const surveyData = useSelector((state) => state.surveyData.surveyData);
   const reportLoadingDuration = 2000;
-  const [info, setInfo] = useState({});
   const [surveyInfo, setSurveyInfo] = useState({});
   const [resultInfo, setResultInfo] = useState({});
   const [recipeInfo, setRecipeInfo] = useState({});
@@ -40,8 +44,13 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
   const [isShowResult, setIsShowResult] = useState(true);
   const [isActiveDogIdx, setIsActiveDogIdx] = useState('');
   const [chartData, setChartData] = useState({});
-
+  const [pricePerPack, setPricePerPack] = useState(''); // 가격
+  const [submitted, setSubmitted] = useState(false);
   const subscribePlanInfo = useSubscribePlanInfo();
+  const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
+  const router = useRouter();
+  const dispatch = useDispatch();
 
   const [isArrowActive, setIsArrowActive] = useState(false);
   const [rotation, setRotation] = useState(0);
@@ -50,7 +59,6 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
     plan: null,
     recipeIdList: [],
     nextPaymentPrice: null,
-    oneMealGramList: [],
   });
 
   const [isOriginSubscriber, setIsOriginSubscriber] = useState(false);
@@ -451,16 +459,6 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
     }
   }, [currentOneMealGrams]);
 
-  // const handleMouseEnter = () => {
-  //   setIsMouseEnter(true);
-  // };
-  // const handleMouseLeave = () => {
-  //   setIsMouseEnter(false);
-  // };
-
-  // console.log('dogInfoResults>>>', dogInfoResults);
-  // console.log('userData>>>', userData);
-
   // //*** 구독플랜 금액 계산
   const calcSubscribePlanPaymentPrice = useCallback(
     (planName) => {
@@ -500,14 +498,14 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
 
       // console.log('=====', nextOneMealGrams);
 
-      console.log('::::::', {
-        discountPercent,
-        oneMealGrams: nextOneMealGrams,
-        planName,
-        pricePerGrams,
-        isOriginSubscriber,
-        recipeNameList: currentRecipeInfos,
-      });
+      // console.log('::::::', {
+      //   discountPercent,
+      //   oneMealGrams: nextOneMealGrams,
+      //   planName,
+      //   pricePerGrams,
+      //   isOriginSubscriber,
+      //   recipeNameList: currentRecipeInfos,
+      // });
 
       //! [추가] 평균 전체가격, 레시피별 가격
       const { avgPrice, recipePrices } = calcSubscribePrice({
@@ -518,8 +516,6 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
         isOriginSubscriber,
         recipeNameList: currentRecipeInfos,
       });
-
-      console.log('...', avgPrice, recipePrices);
 
       return {
         avgPrice, // 평균 전체 가격
@@ -539,17 +535,13 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
     return <Loading />;
   }
 
-  //*** '더보기' 클릭
+  const onClickModalButton = () => {
+    mct.alertHide();
+  };
+
+  //* '더보기' 클릭
   const dogInfoClickHandler = () => {
     setIsShowResult(!isShowResult);
-
-    // if (!isShowResultIdx.includes(index)) {
-    //   // 클릭한 index가 배열에 없으면 추가
-    //   setIsShowResultIdx([...isShowResultIdx, index]);
-    // } else {
-    //   // 클릭한 index가 배열에 있으면 제거
-    //   setIsShowResultIdx(isShowResultIdx.filter((item) => item !== index));
-    // }
   };
 
   const onClickArrowIcon = (e) => {
@@ -560,7 +552,10 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
 
   //* 결제하러 가기
   const onPayHandler = async () => {
-    const nextPaymentPrice = calcSubscribePlanPaymentPrice(form.plan).salePrice;
+    if (submitted) return;
+
+    const nextPaymentPrice = calcSubscribePlanPaymentPrice(form.plan).avgPrice
+      .salePrice;
 
     //! 서버에 전송할 데이터
     const body = {
@@ -577,6 +572,8 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
 
     const errObj = validate(body);
     const isPassed = valid_hasFormErrors(errObj);
+
+    console.log(errObj, isPassed);
     if (!isPassed)
       return mct.alertShow(
         '유효하지 않은 항목이 있습니다.\n선택한 레시피 및 플랜을 확인해주세요. ',
@@ -593,7 +590,7 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
 
       const apiUrl = `/api/subscribes/${resultInfo.subscribeId}`;
       const res = await putObjData(apiUrl, body);
-      // console.log(res);
+      console.log(res);
       if (res.isDone) {
         await dispatch(
           cartAction.setSubscribeOrder({
@@ -655,14 +652,13 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
   //   }
   // });
 
-  console.log('isActiveDogIdx>>>', isActiveDogIdx);
   console.log('surveyInfo===>', surveyInfo);
   console.log('resultInfo===>', resultInfo);
   console.log('recipeInfo===>', recipeInfo);
-  console.log('recipeDoubleInfo===>', recipeDoubleInfo);
-  console.log('recipeSingleInfo===>', recipeSingleInfo);
+  // console.log('recipeDoubleInfo===>', recipeDoubleInfo);
+  // console.log('recipeSingleInfo===>', recipeSingleInfo);
   console.log('form===>', form);
-  console.log('chartData===>', chartData);
+  // console.log('chartData===>', chartData);
 
   return (
     <div id="statistics">
@@ -675,7 +671,9 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
           {/* {surveyInfo?.map((dogInfo, index) => ( */}
           <div
             // key={index}
-            className={`${s.dog_img_wrapper} ${isShowResult ? s.active : ''}`}
+            className={`${s.dog_img_wrapper} ${isShowResult ? s.active : ''} ${
+              form.plan && form.recipeIdList.length ? s.ready : ''
+            }`}
             // onMouseEnter={handleMouseEnter}
             // onMouseLeave={handleMouseLeave}
             // onClick={() => dogInfoClickHandler(dogInfo.surveyId, index)}
@@ -778,6 +776,9 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
                     recipeSingleInfo={recipeSingleInfo}
                     form={form}
                     setForm={setForm}
+                    calcPrice={calcSubscribePlanPaymentPrice}
+                    pricePerPack={pricePerPack}
+                    setPricePerPack={setPricePerPack}
                   />
 
                   <div className={s.box_dot_divider}></div>
@@ -791,6 +792,8 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
                     form={form}
                     setForm={setForm}
                     calcPrice={calcSubscribePlanPaymentPrice}
+                    pricePerPack={pricePerPack}
+                    setPricePerPack={setPricePerPack}
                   />
 
                   {/* 5. 챙겨줄 제품 - Swiper */}
@@ -844,8 +847,16 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
           더보기를 클릭하여 레시피와 플랜을 선택하여 주세요
         </span> */}
       </section>
-
-      <button className={s.payment_btn} onClick={onPayHandler}>
+      {hasAlert && (
+        <Modal_global_alert onClick={onClickModalButton} background />
+      )}
+      <button
+        className={`${
+          form.plan && form.recipeIdList.length > 0 ? s.activated : ''
+        } ${s.payment_btn}`}
+        onClick={onPayHandler}
+        disabled={!(form.plan && form.recipeIdList.length > 0)}
+      >
         결제하러 가기
       </button>
     </div>
@@ -891,81 +902,3 @@ const filter_objectInGroup = (obj, keyword) => {
   }
   return filteredGroup;
 };
-
-// export async function getServerSideProps({ req, query }) {
-//   // Query CASE
-//   // surveyReportsId : 결제 전
-//   // dogId: 구독 중 || 구독 보류
-
-//   const { id } = query;
-//   console.log('***', id);
-//   console.log('***', req, query);
-//   console.log('***');
-
-//   let data = null;
-
-//   // DATA: this Dog's Result of survey Report
-//   const getSurveyReportResultApiUrl = surveyReportsId
-//     ? `/api/surveyReports/${surveyReportsId}/result` // "설문조사 직후" 현재 페이지 진입
-//     : dogId
-//     ? `/api/dogs/${dogId}/surveyReportResult` // "설문조사 수정 후", "맞춤플랜 변경"으로 현재 페이지 진입
-//     : null;
-//   const surveyInfoRes = await getDataSSR(req, getSurveyReportResultApiUrl);
-//   const surveyInfoData = surveyInfoRes?.data || null;
-//   const thisDogId = dogId || surveyInfoData?.dogId || null;
-
-//   // DATA: this Dog
-//   const getDogInfoApiUrl = `/api/dogs/${thisDogId}`;
-//   const dogInfoRes = await getDataSSR(req, getDogInfoApiUrl);
-//   const dogData = dogInfoRes?.data || null;
-//   const dogDto = dogData?.dogDto || null;
-
-//   // DATA: Recipes
-//   const getRecipeInfoApiUrl = `/api/recipes`;
-//   const recipeInfoRes = await getDataSSR(req, getRecipeInfoApiUrl);
-//   const recipeInfoData = recipeInfoRes?.data;
-
-//   // console.log(
-//   //   'recipeInfoData',
-//   //   recipeInfoData._embedded?.recipeListResponseDtoList,
-//   // );
-
-//   if (dogData && recipeInfoData) {
-//     const recipeIdList =
-//       recipeInfoData._embedded?.recipeListResponseDtoList?.map((l) => l.id) ||
-//       [];
-//     const recipesDetailInfo = [];
-//     for (const recipeId of recipeIdList) {
-//       const apiUrl = `/api/recipes/${recipeId}`;
-//       const res = await getDataSSR(req, apiUrl);
-//       const data = res.data;
-//       // console.log('recipeDatas>>>> ', data);
-//       if (data) {
-//         recipesDetailInfo.push({
-//           ...data,
-//           kcalPerGram: data.gramPerKcal, // gramPerKcal(X) -> KcalPerGram(O) : 고객사에서 전달받은 무게상수의 단위를 그대로 사용하였으나, 오류가 있어서 수정함.
-//         });
-//       }
-//     }
-
-//     // console.log("dogDto: ",dogDto);
-//     // console.log("surveyInfoData: ",surveyInfoData);
-//     // console.log("recipesDetailInfo: ",recipesDetailInfo);
-//     data = {
-//       dogDto: dogDto,
-//       surveyInfo: surveyInfoData,
-//       recipesDetailInfo: recipesDetailInfo,
-//     };
-//   }
-
-//   if (!data) {
-//     return {
-//       props: {},
-//       redirect: {
-//         destination: '/',
-//       },
-//     };
-//   }
-
-//   return { props: { data } };
-// }

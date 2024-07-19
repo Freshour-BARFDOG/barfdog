@@ -32,7 +32,7 @@ const Modal_subscribeWidhSSR = dynamic(() =>
   import('/src/components/modal/Modal_subscribe'),
 );
 
-export default function Header() {
+export default function Header(withoutDeadLine = false) {
   const auth = useSelector((state) => state.auth);
   const userData = auth.userInfo;
 
@@ -189,7 +189,7 @@ export default function Header() {
       {!mypageState.isMyPage && (
         <>
           {/* 하단 검정 배너 */}
-          {isBottomBannerVisible && (
+          {isBottomBannerVisible && !withoutDeadLine && (
             <Dealine_timer
               setIsBottomBannerVisible={setIsBottomBannerVisible}
             />

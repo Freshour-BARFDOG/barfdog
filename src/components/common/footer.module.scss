@@ -6,6 +6,8 @@ $browser-context: 16;
 #site_footer {
   font-size: rem(15);
   color: white;
+  position: fixed;
+  bottom: 0;
 }
 
 .main_footer_area {

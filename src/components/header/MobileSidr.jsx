@@ -196,24 +196,26 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                       }`}
                     >
                       <li>
-                        <Link href={'/survey'} passHref>
-                          <a>내 반려견 기록</a>
-                        </Link>
+                        {/* <Link href={'/survey'} passHref> */}
+                        <a onClick={() => alert('서비스 준비 중입니다.')}>
+                          내 반려견 기록
+                        </a>
+                        {/* </Link> */}
                       </li>
                       <li>
-                        <Link href={'/survey'} passHref>
-                          <a>견종백과</a>
-                        </Link>
+                        <a onClick={() => alert('서비스 준비 중입니다.')}>
+                          견종백과
+                        </a>
                       </li>
                       <li>
-                        <Link href={'/survey'} passHref>
-                          <a>건강문진</a>
-                        </Link>
+                        <a onClick={() => alert('서비스 준비 중입니다.')}>
+                          건강문진
+                        </a>
                       </li>
                       <li>
-                        <Link href={'/survey'} passHref>
-                          <a>장내분석</a>
-                        </Link>
+                        <a onClick={() => alert('서비스 준비 중입니다.')}>
+                          장내분석
+                        </a>
                       </li>
                     </ul>
                   </ul>
@@ -249,6 +251,11 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                     </li>
                     <li>
                       <Link href={'/community/event'} passHref>
+                        <a>이벤트</a>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href={'/community/about'} passHref>
                         <a>어바웃</a>
                       </Link>
                     </li>
@@ -258,9 +265,9 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                       </Link>
                     </li>
                     <li>
-                      <Link href={'/community/about'} passHref>
-                        <a>자주 묻는 질문</a>
-                      </Link>
+                      <a onClick={() => alert('서비스 준비 중입니다.')}>
+                        자주 묻는 질문
+                      </a>
                     </li>
                   </ul>
 

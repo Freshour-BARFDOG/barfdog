@@ -197,7 +197,8 @@ export default function MobileGnb() {
               </Link>
             </li>
             <li>
-              <a onClick={() => onActiveMenuId('note')}>
+              {/* <a onClick={() => onActiveMenuId('note')}> */}
+              <a onClick={() => alert('서비스 준비 중입니다.')}>
                 <Image
                   src={
                     isSidrOpen

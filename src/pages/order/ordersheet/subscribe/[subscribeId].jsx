@@ -76,7 +76,10 @@ export default function SubscribeOrderSheetPage() {
           // 콕뱅크 할인율 할때 이부분 수정하면됨
           subscribePlanInfo[subscribePlanType.FULL.NAME] = data.full;
           subscribePlanInfo[subscribePlanType.HALF.NAME] = data.half;
-          subscribePlanInfo[subscribePlanType.TOPPING.NAME] = data.topping;
+          subscribePlanInfo[subscribePlanType.TOPPING_FULL.NAME] =
+            data.toppingFull;
+          subscribePlanInfo[subscribePlanType.TOPPING_HALF.NAME] =
+            data.toppingHalf;
         }
 
         const subscribeId = router.query.subscribeId;
@@ -85,7 +88,7 @@ export default function SubscribeOrderSheetPage() {
           id: subscribeId,
         };
         const res = await getData(apiUrl, body);
-        // console.log("/api/orders/sheet/subscribe/${subscribeId} = ",res.data)
+        console.log('/api/orders/sheet/subscribe/${subscribeId} = ', res.data);
         if (res.status !== 200) {
           alert('주문 정보를 확인할 수 없습니다.');
           return (window.location.href = '/');
