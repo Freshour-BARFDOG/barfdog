@@ -27,7 +27,7 @@ section.method {
 }
 section.payment {
   padding: rem(30) 0 rem(50);
-  border-bottom: rem(1) solid var(--color-line-04);;
+  border-bottom: rem(1) solid var(--color-line-04);
 }
 section.final_btn {
   padding: rem(30) 0 rem(63);
@@ -37,10 +37,13 @@ section.final_btn {
   display: flex;
   justify-content: center;
   align-items: center;
-  span, div, p{
-    cursor:default;
+  padding-bottom: rem(100);
+  span,
+  div,
+  p {
+    cursor: default;
   }
-  span{
+  span {
     height: 100%;
   }
 
@@ -50,70 +53,260 @@ section.final_btn {
   }
 }
 
+.divider {
+  background-color: #e6e6e6;
+  width: 100%;
+  height: rem(4);
+  margin: rem(20) 0;
+}
+
+// 1.
+section.delivery {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: rem(24);
+  margin-bottom: rem(30);
+  // 1-1. 배송지
+  button,
+  .order_btn {
+    border: rem(1) solid #d4d4d4;
+    padding: rem(14) rem(40);
+    font-size: rem(20);
+    font-weight: bold;
+    border-radius: rem(30);
+    width: rem(550);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  // 1-2. 주문상품
+  .order_btn {
+    flex-direction: column;
+    .order_btn_title {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      span {
+        cursor: pointer;
+      }
+    }
+  }
+
+  ul {
+    transition: max-height 0.4s ease, opacity 0.4s ease;
+    overflow: hidden;
+    max-height: rem(0);
+    li {
+      display: flex;
+      width: rem(480);
+      font-weight: normal;
+      padding: rem(20) 0;
+      flex-direction: column;
+      gap: rem(20);
+
+      .recipe_list_content {
+        display: flex;
+        align-items: center;
+      }
+
+      .recipe_list_text {
+        padding: 0 rem(20);
+        .recipe_name {
+        }
+
+        .recipe_info {
+          color: #a0a0a0;
+          font-size: rem(18);
+        }
+      }
+    }
+  }
+
+  ul.order_list_active {
+    opacity: 1;
+    max-height: rem(1000);
+    transition-delay: 0s;
+    animation: formopen 0.5s ease-out forwards;
+  }
+
+  @keyframes formopen {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+// 2. 구독혜택
+section.subscribe_month {
+  margin: rem(20) rem(50);
+  padding: rem(20) rem(10);
+  border-bottom: rem(1) solid #a7a7a7;
+  h2 {
+    font-weight: bold;
+    font-size: rem(24);
+  }
+
+  .month_list_wrapper {
+    margin: rem(20) 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: rem(30);
+    justify-content: center;
+
+    .month_box {
+      border: rem(1) solid #d4d4d4;
+      width: rem(130 * 1.7);
+      // height: rem(147 * 1.7);
+      padding: rem(20) rem(20);
+      border-radius: rem(5);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.2s all;
+      h4 {
+        font-weight: bold;
+        font-size: rem(24);
+      }
+
+      .divider {
+        width: 100%;
+        height: rem(1);
+        background-color: #d4d4d4;
+        margin: rem(10) 0;
+      }
+
+      .text_list {
+        font-size: rem(18);
+
+        p {
+          cursor: pointer;
+        }
+
+        span {
+          color: #ca1011;
+          cursor: pointer;
+          position: relative;
+        }
+
+        span::after {
+          content: '';
+          position: absolute;
+          bottom: rem(5);
+          right: 0;
+          width: 110%;
+          height: rem(6);
+          background-color: #fff48e;
+          z-index: -1;
+        }
+      }
+    }
+    // 개월수 클릭 시
+    .active {
+      border-color: #be1a21;
+      color: #be1a21;
+      box-shadow: 0 rem(4) rem(16) 0 rgba(0, 0, 0, 0.1);
+      background-color: #ffe0e1;
+
+      .divider {
+        background-color: #be1a21 !important;
+      }
+    }
+  }
+}
+
+// 3. 할인 금액
+section.discount {
+  margin: rem(20) rem(50);
+  padding: rem(20) rem(10);
+
+  h4 {
+    font-size: rem(24);
+  }
+
+  .benefit_discount_list {
+    .delivery_discount {
+    }
+
+    .benefit_info_list {
+      .benefit_info {
+        color: #b2b2b2;
+      }
+    }
+  }
+}
+
 .check_box {
   display: flex;
   align-items: center;
   justify-content: center;
-    .chk__box {
-      display: flex;
-      cursor: pointer;
-      height: 100%;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-      padding-bottom: rem(1);
-      .text {
-        display: grid;
-        place-items: center;
-        @include char(l15);
-        color: var(--color-font-sub);
-        padding-left: rem(10);
-      }
-    } /* 기본 체크박스 숨기기 */
-    .chk__box input[type='checkbox'] {
-      display: none;
-    } /* 선택되지 않은 체크박스 스타일 꾸미기 */
-    .chk__box .on {
-      width: rem(20);
-      height: rem(20);
-      background: #ddd;
-      position: relative;
-      display: flex;
-      top: 0;
-      left: 0;
-    } /* 선택된 체크박스 스타일 꾸미기 */
-    .chk__box input[type='checkbox']:checked + .on {
-      background: var(--color-main);
+  .chk__box {
+    display: flex;
+    cursor: pointer;
+    height: 100%;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    padding-bottom: rem(1);
+    .text {
+      display: grid;
+      place-items: center;
+      @include char(l15);
+      color: var(--color-font-sub);
+      padding-left: rem(10);
     }
-    .on:after {
-      content: '';
-      width: rem(6);
-      height: rem(10);
-      border: solid #fff;
-      border-width: 0 rem(2) rem(2) 0;
-      -webkit-transform: rotate(45deg);
-      -ms-transform: rotate(45deg);
-      transform: rotate(45deg);
-      position: absolute;
-      left: rem(6);
-      top: rem(2);
-    }
-    .chk__box input[type='checkbox']:checked + .on:after {
-      display: flex;
-    }
-    .on:after {
-      width: rem(6);
-      height: rem(10);
-      border: solid #fff;
-      border-width: 0 rem(2) rem(2) 0;
-      -webkit-transform: rotate(45deg);
-      -ms-transform: rotate(45deg);
-      transform: rotate(45deg);
-      position: absolute;
-      left: rem(6);
-      top: rem(2);
-    }
+  } /* 기본 체크박스 숨기기 */
+  .chk__box input[type='checkbox'] {
+    display: none;
+  } /* 선택되지 않은 체크박스 스타일 꾸미기 */
+  .chk__box .on {
+    width: rem(20);
+    height: rem(20);
+    background: #ddd;
+    position: relative;
+    display: flex;
+    top: 0;
+    left: 0;
+  } /* 선택된 체크박스 스타일 꾸미기 */
+  .chk__box input[type='checkbox']:checked + .on {
+    background: var(--color-main);
+  }
+  .on:after {
+    content: '';
+    width: rem(6);
+    height: rem(10);
+    border: solid #fff;
+    border-width: 0 rem(2) rem(2) 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+    position: absolute;
+    left: rem(6);
+    top: rem(2);
+  }
+  .chk__box input[type='checkbox']:checked + .on:after {
+    display: flex;
+  }
+  .on:after {
+    width: rem(6);
+    height: rem(10);
+    border: solid #fff;
+    border-width: 0 rem(2) rem(2) 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+    position: absolute;
+    left: rem(6);
+    top: rem(2);
+  }
 }
 
 .title_box {
@@ -121,7 +314,8 @@ section.final_btn {
     display: flex;
     justify-content: center;
     align-items: center;
-    @include char(t24);
+    font-weight: bold;
+    font-size: rem(24);
   }
 }
 
@@ -173,7 +367,10 @@ section.final_btn {
       flex-direction: column;
       gap: rem(10);
 
-      .recipeName{font-weight:400; color: var(--color-font-sub2)}
+      .recipeName {
+        font-weight: 400;
+        color: var(--color-font-sub2);
+      }
       .info_inner {
         @include char(l14);
         color: var(--color-font-sub);
@@ -182,7 +379,6 @@ section.final_btn {
         padding-bottom: rem(6);
         &:last-child {
           padding-bottom: 0;
-
         }
       }
     }
@@ -220,11 +416,13 @@ section.final_btn {
         font-size: rem(15);
         font-weight: 500;
         background-color: #fff;
-        &.applied{
-          transition: border .2s var(--transition-cubic);
-          transition-padding: border, color,;
+        &.applied {
+          transition: border 0.2s var(--transition-cubic);
+          transition-padding: border, color;
           color: var(--color-main);
-          &:hover{border-color: var(--color-main);;}
+          &:hover {
+            border-color: var(--color-main);
+          }
         }
       }
     }
@@ -288,37 +486,40 @@ section.final_btn {
       }
     }
 
-    .row_title{
+    .row_title {
       display: flex;
       align-content: flex-start;
       height: 100%;
-      padding-top:rem(30)
+      padding-top: rem(30);
     }
     .adress_box {
       display: grid;
       grid-template-columns: 1fr;
       align-items: center;
       gap: $grid-row-gap;
-      .input_col{
+      .input_col {
         height: $inputHeight;
-        input{
-          height: 100%;}
+        input {
+          height: 100%;
+        }
 
-        &.zipcode{
-          display:grid;
+        &.zipcode {
+          display: grid;
           gap: rem(10);
           grid-template-columns: 1fr 2fr;
-          input{text-align:left;
-          padding:0 rem(16);
+          input {
+            text-align: left;
+            padding: 0 rem(16);
           }
         }
-        button{
+        button {
           height: 100%;
-          display: flex; width: 100%;
-          .btn{
-            width: 100%; 
-            height: 100%; 
-            padding:0;
+          display: flex;
+          width: 100%;
+          .btn {
+            width: 100%;
+            height: 100%;
+            padding: 0;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -338,13 +539,12 @@ section.final_btn {
         border-radius: rem(5);
         color: var(--color-main);
         cursor: pointer;
-        &.disabled{
+        &.disabled {
           color: var(--color-disabled);
           border-color: var(--color-disabled);
           cursor: default;
         }
       }
-
     }
   }
 }
@@ -391,22 +591,21 @@ section.final_btn {
     grid-template-columns: 1fr 1fr;
     column-gap: rem(10);
     padding-top: rem(20);
-    label{
-      margin:0 !important;
+    label {
+      margin: 0 !important;
       padding: rem(16) rem(15) rem(16) !important;
       border: rem(1) solid var(--color-line-03);
       border-radius: rem(4);
-      transition: border-color .2s var(--transition-cubic);
+      transition: border-color 0.2s var(--transition-cubic);
       cursor: pointer;
       .text {
         width: 100%;
         padding-left: rem(5);
-        font-size:rem(16);
+        font-size: rem(16);
         font-weight: 600;
         > p {
           @include char(b14);
           font-weight: 400;
-
         }
       }
     }
@@ -445,11 +644,6 @@ section.final_btn {
       }
     }
 
-
-
-
-
-
     .flex_box {
       display: flex;
       align-items: center;
@@ -483,8 +677,6 @@ section.final_btn {
   }
 }
 
-
-
 .reserves {
   .title {
     padding-bottom: rem(30);
@@ -496,7 +688,8 @@ section.final_btn {
     grid-gap: rem(10);
     align-items: flex-start;
     @include char(l15);
-    p{display: flex;
+    p {
+      display: flex;
       align-items: center;
       height: $inputHeight;
     }
@@ -513,7 +706,7 @@ section.final_btn {
       justify-content: flex-start;
       gap: rem(10);
 
-      .input-wrap{
+      .input-wrap {
         display: flex;
         align-items: flex-start;
         flex-direction: column;
@@ -521,8 +714,8 @@ section.final_btn {
         gap: rem(10);
         position: relative;
 
-        &::after{
-          content: "P";
+        &::after {
+          content: 'P';
           position: absolute;
           top: 50%;
           right: rem(10);
@@ -543,7 +736,7 @@ section.final_btn {
         }
       }
 
-      button{
+      button {
         min-width: rem(105);
         font-size: rem(16);
       }
@@ -560,7 +753,7 @@ section.final_btn {
       color: #fff;
       cursor: pointer;
     }
-    
+
     .point {
       height: $inputHeight;
       display: flex;
@@ -591,7 +784,7 @@ section.final_btn {
     row-gap: rem(8);
 
     .inner_box {
-      $transition-prop: .2s var(--transition-cubic);
+      $transition-prop: 0.2s var(--transition-cubic);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -607,27 +800,29 @@ section.final_btn {
 
       .image {
         width: rem(24);
-        margin-right:rem(4);
+        margin-right: rem(4);
         overflow: initial !important;
         height: 100%;
         min-height: rem(20);
         //aspect-ratio: 1/1; // 구버전 호환이슈
 
         border: 0;
-        span{
+        span {
           overflow: initial !important;
         }
 
-        img{
+        img {
           transition: opacity $transition-prop;
           opacity: 0.7;
         }
 
-        &.naverPay{
+        &.naverPay {
           //aspect-ratio: 61/24; // IOS 구버전 호환이슈
           height: rem(24);
-          width: rem(70); // 참조) 로고타입 사용 가이드 https://developer.pay.naver.com/design/logo
-          img{
+          width: rem(
+            70
+          ); // 참조) 로고타입 사용 가이드 https://developer.pay.naver.com/design/logo
+          img {
             opacity: 0.4;
           }
         }
@@ -636,7 +831,7 @@ section.final_btn {
     .selected {
       border: rem(1) solid var(--color-line-01);
       color: var(--color-font-def);
-      img{
+      img {
         opacity: 1 !important;
       }
     }
@@ -699,22 +894,25 @@ section.payment {
     align-items: flex-end;
     justify-content: space-between;
     padding: rem(25) 0 rem(45);
-    > *:not(:last-child){margin-bottom:rem(10);}
+    > *:not(:last-child) {
+      margin-bottom: rem(10);
+    }
 
     div:nth-child(2) {
       @include char(l20);
     }
   }
 
-
   .check_box {
     display: flex;
     justify-content: flex-start;
     font-size: rem(15);
     margin-bottom: rem(16);
-    span{margin:0;}
+    span {
+      margin: 0;
+    }
     color: var(--color-font-def);
-    button.termsOfService{
+    button.termsOfService {
       color: var(--color-main);
       font-size: inherit;
       margin-top: rem(-1);
@@ -747,7 +945,6 @@ section.payment {
   }
 }
 
-
 @media (max-width: rem(800)) {
   .container_outer {
     .Wrapper {
@@ -770,7 +967,7 @@ section.payment {
     padding: rem(30) 0 rem(30);
   }
 
- .content_box {
+  .content_box {
     .title {
       border-bottom: rem(1) solid var(--color-line-02);
     }
@@ -781,37 +978,37 @@ section.payment {
 
     .flex_box {
       position: relative;
-      grid: 
-      "info_col info_col info_col count_col"
-      "price_col price_col price_col price_col"
-      "coupon_col_red coupon_col_red coupon_col_red apply_coupon_col"/1fr 1fr 1fr 1fr;
+      grid:
+        'info_col info_col info_col count_col'
+        'price_col price_col price_col price_col'
+        'coupon_col_red coupon_col_red coupon_col_red apply_coupon_col'/1fr 1fr 1fr 1fr;
       row-gap: rem(20);
       padding-bottom: rem(30);
 
       &::before {
-        content: "";
+        content: '';
         position: absolute;
         bottom: rem(20);
         left: 0;
         width: 100%;
         height: rem(90);
-        background-color: #F1F1F4;
+        background-color: #f1f1f4;
         z-index: -99;
       }
 
       .info_col {
-        grid-column: 1/span 3;
+        grid-column: 1 / span 3;
         position: relative;
 
         &::after {
-          content: "총 주문금액";
+          content: '총 주문금액';
           position: absolute;
           bottom: rem(-46);
           left: rem(20);
           font-weight: 400;
         }
         &::before {
-          content: "쿠폰할인";
+          content: '쿠폰할인';
           position: absolute;
           bottom: rem(-88);
           left: rem(20);
@@ -820,12 +1017,12 @@ section.payment {
       }
 
       .count_col {
-        grid-column: 4/span 1;
+        grid-column: 4 / span 1;
         text-align: right;
         padding-right: rem(10);
       }
       .price_col {
-        grid-column: 1/span 4;
+        grid-column: 1 / span 4;
         text-align: right;
         display: flex;
         justify-content: flex-end;
@@ -838,12 +1035,12 @@ section.payment {
       }
 
       .coupon_col_red {
-        grid-column: 1/span 3;
+        grid-column: 1 / span 3;
         text-align: right;
       }
 
       .apply_coupon_col {
-        grid-column: 4/span 1;
+        grid-column: 4 / span 1;
         justify-content: flex-end;
         padding-left: rem(10);
         padding-right: rem(20);
@@ -863,7 +1060,7 @@ section.payment {
       grid-template-rows: none;
       row-gap: rem(5);
 
-      .row_title{
+      .row_title {
         padding-top: rem(10);
         height: auto;
       }
@@ -894,7 +1091,7 @@ section.payment {
 
         .left_box {
           border: none;
-          grid-column: 1 /span 2;
+          grid-column: 1 / span 2;
           padding-right: 0;
         }
         .mid_box {
@@ -922,13 +1119,12 @@ section.payment {
       //grid-template-columns: rem(80) 1fr rem(105);
       grid-template-columns: rem(80) 1fr;
 
-      .input_box{
+      .input_box {
         display: grid;
         grid-template-columns: 1fr rem(105);
         > * {
           width: 100%;
         }
-
       }
       .point {
         grid-column: 1 / span 2;
@@ -955,10 +1151,7 @@ section.payment {
   }
 }
 
-
-
 @media (max-width: rem(390)) {
-
   .method {
     .grid_box {
       display: flex;
@@ -966,10 +1159,9 @@ section.payment {
       //justify-content: flex-start;
       align-items: center;
       grid-template-columns: initial;
-      .inner_box{
+      .inner_box {
         width: 100%;
       }
     }
   }
-
 }

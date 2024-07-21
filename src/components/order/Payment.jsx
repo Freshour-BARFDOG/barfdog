@@ -184,13 +184,13 @@ export function Payment({
             discountReward: Number(form.discountReward), // 사용할 적립금
             discountCoupon: discountCoupon, // 쿠폰 적용으로 인한 할인금 ! coupon할인금 적용
             discountGrade: discountGrade, // 등급할인
-            overDiscount: overDiscount, // 초과할인 금액
             paymentPrice: paymentPrice, // 최종 결제 금액
+            overDiscount: overDiscount, // 초과할인 금액
             paymentMethod: form.paymentMethod, // 결제방법  [CREDIT_CARD, NAVER_PAY, KAKAO_PAY]
             nextDeliveryDate: form.nextDeliveryDate, // 배송 예정일 'yyyy-MM-dd', 첫 결제 배송날짜는 프론트에서 넘어온 값으로 저장함
             agreePrivacy: form.agreePrivacy, // 개인정보 제공 동의
             brochure: form.brochure, // 브로슈어 수령여부
-
+            subscriptionMonth: form.subscriptionMonth, //구독 개월 수 [null(정기구독), 3, 6, 9]
             // allianceType: allianceType, // 콕뱅크 주문인지 확인
           };
 
