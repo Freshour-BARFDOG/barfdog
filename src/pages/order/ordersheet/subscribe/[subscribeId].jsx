@@ -10,7 +10,6 @@ import { OrdersheetSubscribeItemList } from '/src/components/order/OrdersheetSub
 import { OrdersheetMemberInfo } from '/src/components/order/OrdersheetMemberInfo';
 import { OrdersheetDeliveryForm } from '/src/components/order/OrdersheetDeliveryForm';
 import { Payment } from '/src/components/order/Payment';
-import { OrdersheetReward } from '/src/components/order/OrdersheetReward';
 import { OrdersheetMethodOfPayment } from '/src/components/order/OrdersheetMethodOfPayment';
 import { OrdersheetAmountOfPayment } from '/src/components/order/OrdersheetAmountOfPayment';
 import { calcNextSubscribeDeliveryDate } from '/util/func/calcNextSubscribeDeliveryDate';
@@ -20,14 +19,18 @@ import { subscribePlanType } from '../../../../../store/TYPE/subscribePlanType';
 import { FullScreenRunningDog } from '../../../../components/atoms/FullScreenLoading';
 import { useRouter } from 'next/router';
 import { redirectTo } from 'util/func/redirectTo';
-
-const initInfo = {};
+import LayoutWithoutFooter from '../../../../components/common/LayoutWithoutFooter';
+import Image from 'next/image';
+import OrdersheetSubscriptionMonth from '../../../../components/order/OrdersheetSubscriptionMonth';
 
 export default function SubscribeOrderSheetPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState({ fetching: true });
   const [isRendered, setIsRendered] = useState(false);
-  const [info, setInfo] = useState(initInfo);
+  const [info, setInfo] = useState({});
+  const [DATA, setDATA] = useState();
+  const [subscribeInfo, setSubscribeInfo] = useState();
+  const [recipeInfo, setRecipeInfo] = useState();
   const [form, setForm] = useState({});
   const [formErrors, setFormErrors] = useState({});
   const [selectedItemId, setSelectedItemId] = useState(null);
@@ -43,20 +46,6 @@ export default function SubscribeOrderSheetPage() {
   }, []);
 
   useEffect(() => {
-    // Validation - 구독 결제정보가 불충분한 경우
-    const invalidPaymentPrice = info.subscribeDto?.nextPaymentPrice === 0;
-    const afterInitialize = info !== initInfo;
-    if (afterInitialize && invalidPaymentPrice) {
-      alert(
-        '[ERROR] 구독상품 결제금액이 설정되지 않았습니다. `맞춤레시피 구매하기`를 진행해주세요.',
-      );
-      redirectTo('/mypage/dogs');
-      return;
-    }
-
-    // Validation - 결제정보를 정상적으로 받은 후, 데이터요청 X (최초 1회만 request 실행.)
-    if (afterInitialize) return; // console.log('[INFO] 구독결제 정보가 올바르게 설정되었습니다.');
-
     // Request Subscribe Data
     (async () => {
       try {
@@ -88,13 +77,56 @@ export default function SubscribeOrderSheetPage() {
           id: subscribeId,
         };
         const res = await getData(apiUrl, body);
-        console.log('/api/orders/sheet/subscribe/${subscribeId} = ', res.data);
+        // console.log('/api/orders/sheet/subscribe/${subscribeId} = ', res.data);
+
+        const subscribeInfoApiUrl = `/api/subscribes/${subscribeId}`;
+        const subscribeInfoRes = await getData(subscribeInfoApiUrl);
+
+        const getRecipeInfoApiUrl = `/api/recipes`;
+        const recipeInfoRes = await getData(getRecipeInfoApiUrl);
+        const recipeInfoData = recipeInfoRes.data;
+
         if (res.status !== 200) {
           alert('주문 정보를 확인할 수 없습니다.');
           return (window.location.href = '/');
         }
+
+        if (subscribeInfoRes.status !== 200) {
+          alert('구독 정보를 확인할 수 없습니다.');
+          return (window.location.href = '/');
+        }
+
         const data = res.data;
-        // console.log(data);
+        const subscribeInfoData = subscribeInfoRes.data;
+
+        let recipesDetailInfo = [];
+
+        if (recipeInfoData) {
+          const recipeIdList =
+            recipeInfoData._embedded?.recipeListResponseDtoList?.map(
+              (l) => l.id,
+            ) || [];
+
+          recipesDetailInfo = await Promise.all(
+            recipeIdList.map(async (recipeId) => {
+              const apiUrl = `/api/recipes/${recipeId}`;
+              const res = await getData(apiUrl);
+              const data = res.data;
+              return {
+                ...data,
+                kcalPerGram: data.gramPerKcal,
+              };
+            }),
+          );
+
+          setRecipeInfo(recipesDetailInfo);
+        }
+
+        console.log('data>>>', data);
+
+        setDATA(data);
+        setSubscribeInfo(subscribeInfoData);
+        setRecipeInfo(recipesDetailInfo);
 
         //! [추가] 계산된 등급할인 (discountGrade)
         // discountGrade =nextPaymentPrice * gradeDiscountPercent / 100
@@ -121,17 +153,23 @@ export default function SubscribeOrderSheetPage() {
               'number',
             ), // 각 레시피별 한 팩 무게 (2개 이상 시, 콤마[(,]구분)
           },
-          recipeNameList: data.recipeNameList, // [] 구독으로 선택한 레시피 이름 리스트 // FULL-PLAN일 경우, 최대 2개
+          recipeNameList: data.recipeNameList, // [] 구독으로 선택한 레시피 이름 리스트
+          recipeNameKoreanList: recipesDetailInfo
+            .filter((recipe) => data.recipeNameList.includes(recipe.name))
+            .map((recipe) => recipe.uiNameKorean),
+          recipeThumbnailList: recipesDetailInfo
+            .filter((recipe) => data.recipeNameList.includes(recipe.name))
+            .map((recipe) => recipe.thumbnailUri1),
           name: data.name, // 구매자
           email: data.email, // 연락처
           phone: data.phoneNumber,
           grade: data.grade, // ! SUBSCRIBE ONLY
           gradeDiscountPercent: data.gradeDiscountPercent, // ! SUBSCRIBE ONLY
           address: {
-            city: data.address.city, // 시도
-            street: data.address.street, // 도로명 주소
-            detailAddress: data.address.detailAddress, // 상세주소
-            zipcode: data.address.zipcode, // 우편번호
+            city: data.defaultAddress.city, // 시도
+            street: data.defaultAddress.street, // 도로명 주소
+            detailAddress: data.defaultAddress.detailAddress, // 상세주소
+            zipcode: data.defaultAddress.zipcode, // 우편번호
           },
           deliveryPrice: 0, // 정기구독 배송비: 무료
           reward: data.reward,
@@ -178,11 +216,27 @@ export default function SubscribeOrderSheetPage() {
             transformToday(),
             null,
           ), // 배송 예정일 'yyyy-MM-dd', 첫 결제 배송날짜는 프론트에서 넘어온 값으로 저장함
-          agreePrivacy: false, // 개인정보 제공 동의
+          agreePrivacy: true, // 개인정보 제공 동의
           brochure: false, // 브로슈어 수령여부
+          subscriptionMonth: 6, //구독 개월 수 [null(정기구독), 3, 6, 9]
         };
+
         setInfo(initInfo);
         setForm(initForm);
+
+        // Validation - 구독 결제정보가 불충분한 경우
+        const invalidPaymentPrice = info.subscribeDto?.nextPaymentPrice === 0;
+        const afterInitialize = info !== initInfo;
+        if (afterInitialize && invalidPaymentPrice) {
+          alert(
+            '[ERROR] 구독상품 결제금액이 설정되지 않았습니다. `맞춤레시피 구매하기`를 진행해주세요.',
+          );
+          redirectTo('/mypage/dogs');
+          return;
+        }
+
+        // Validation - 결제정보를 정상적으로 받은 후, 데이터요청 X (최초 1회만 request 실행.)
+        if (afterInitialize) return; // console.log('[INFO] 구독결제 정보가 올바르게 설정되었습니다.');
       } catch (err) {
         console.error(err);
       } finally {
@@ -203,7 +257,7 @@ export default function SubscribeOrderSheetPage() {
         subscribePriceCutOffUnit
       );
     };
-  }, [info]);
+  }, [router.query.subscribeId]);
 
   const onActivleModalHandler = (e) => {
     const button = e.currentTarget;
@@ -220,62 +274,134 @@ export default function SubscribeOrderSheetPage() {
     return <FullScreenRunningDog />;
   }
 
+  console.log('subscribeInfo>>>', subscribeInfo);
+  console.log('recipeInfo>>>', recipeInfo);
+  console.log('info___', info);
+  console.log('DATA___', DATA);
+  console.log('form___', form);
+
   return (
     <>
       <MetaTitle title="정기구독 주문서" />
-      <Layout>
+      <LayoutWithoutFooter>
         <div className={s.container_outer}>
           <div className={s.Wrapper}>
-            {form && (
-              <OrdersheetSubscribeItemList
-                orderType={'subscribe'}
-                info={info}
-                form={form}
-                setForm={setForm}
-                isLoading={isLoading}
-                event={{ onActiveModal: onActivleModalHandler }}
-              />
-            )}
-            <OrdersheetMemberInfo info={info} />
-            {isRendered && (
-              <OrdersheetDeliveryForm
-                orderType={'subscribe'}
-                info={info}
-                form={form}
-                setForm={setForm}
-                formErrors={formErrors}
-                setFormErrors={setFormErrors}
-              />
-            )}
-            <OrdersheetReward
-              orderType={'subscribe'}
-              id={'discountReward'}
+            {/* 0. 제목 */}
+            <section className={s.title_box}>
+              <div className={s.title}>
+                {subscribeInfo?.subscribeDto.dogName
+                  ? subscribeInfo?.subscribeDto.dogName +
+                    '(이)의 식사를 위한 결제'
+                  : '주문서'}
+              </div>
+            </section>
+
+            {/* 1. 배송지, 주문상품 */}
+            <section className={s.delivery}>
+              {/* 1) 배송지 */}
+              <button>
+                <div>배송지</div>
+                <Image
+                  src={'/img/order/right_arrow.svg'}
+                  alt="right_arrow"
+                  width={18}
+                  height={18}
+                />
+              </button>
+
+              {/* <OrdersheetMemberInfo info={info} />
+              {isRendered && (
+                <OrdersheetDeliveryForm
+                  orderType={'subscribe'}
+                  info={info}
+                  form={form}
+                  setForm={setForm}
+                  formErrors={formErrors}
+                  setFormErrors={setFormErrors}
+                />
+              )} */}
+
+              {/* 2) 주문상품 */}
+              {form && (
+                <OrdersheetSubscribeItemList
+                  orderType={'subscribe'}
+                  info={info}
+                  form={form}
+                  setForm={setForm}
+                  isLoading={isLoading}
+                  event={{ onActiveModal: onActivleModalHandler }}
+                  subscribeInfo={subscribeInfo}
+                  recipeInfo={recipeInfo}
+                  DATA={DATA}
+                />
+              )}
+            </section>
+
+            <div className={s.divider}></div>
+
+            {/* 2. 구독혜택 선택 */}
+            <OrdersheetSubscriptionMonth
               info={info}
               form={form}
               setForm={setForm}
               formErrors={formErrors}
               setFormErrors={setFormErrors}
             />
-            <OrdersheetMethodOfPayment
-              id={'paymentMethod'}
-              orderType={'subscribe'}
-              info={info}
-              form={form}
-              setForm={setForm}
-              formErrors={formErrors}
-            />
-            <OrdersheetAmountOfPayment
-              orderType={'subscribe'}
-              info={info}
-              form={form}
-              setForm={setForm}
-              event={{ onActiveModal: onActivleModalHandler }}
-              formErrors={formErrors}
-            />
+
+            <div className={s.divider}></div>
+
+            {/* 4. 총 결제금액 */}
+            <section className={s.total_price}>
+              <div>
+                <div>총 결제금액</div>
+                <div>
+                  <div>0,000원</div>
+                  <p>한 끼 0000원</p>
+                  <p>일 0000원 / 월 0000원</p>
+                </div>
+              </div>
+              <div>
+                <div>
+                  <div>상품금액</div>
+                  <div>000원</div>
+                </div>
+                <div>
+                  <div>배송비</div>
+                  <div>무료배송</div>
+                </div>
+                <div>
+                  <div>할인 금액</div>
+                  <div>-0000원</div>
+                </div>
+              </div>
+              <OrdersheetAmountOfPayment
+                orderType={'subscribe'}
+                info={info}
+                form={form}
+                setForm={setForm}
+                event={{ onActiveModal: onActivleModalHandler }}
+                formErrors={formErrors}
+              />
+            </section>
+
+            <div className={s.divider}></div>
+
+            {/* 5. 결제하기 */}
+            <section className={s.payment}>
+              <OrdersheetMethodOfPayment
+                id={'paymentMethod'}
+                orderType={'subscribe'}
+                info={info}
+                form={form}
+                setForm={setForm}
+                formErrors={formErrors}
+              />
+            </section>
+
             <section className={s.final_btn}>
-              <p>
+              {/* <p>
                 위 주문 내용을 확인 하였으며, 회원 본인은 결제에 동의합니다.
-              </p>
+              </p> */}
               <Payment
                 isLoading={isLoading}
                 setIsLoading={setIsLoading}
@@ -288,7 +414,7 @@ export default function SubscribeOrderSheetPage() {
             </section>
           </div>
         </div>
-      </Layout>
+      </LayoutWithoutFooter>
       {activeModal.termsOfService && (
         <Modal_termsOfSerivce
           modalState={activeModal.termsOfService}

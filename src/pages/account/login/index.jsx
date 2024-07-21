@@ -24,6 +24,7 @@ import enterKey from '/util/func/enterKey';
 import { FullScreenLoading } from '../../../components/atoms/FullScreenLoading';
 import { getDataSSR, getTokenFromServerSide } from '../../api/reqData';
 import { userType } from '../../../../store/TYPE/userAuthType';
+import LayoutWithoutFooter from '../../../components/common/LayoutWithoutFooter';
 
 const initialValues = {
   email: '',
@@ -213,7 +214,7 @@ export default function LoginPage() {
   return (
     <>
       <MetaTitle title="로그인" />
-      <Layout>
+      <LayoutWithoutFooter>
         <Wrapper>
           <div className={s.flex__container}>
             <div className={s.titlebox}>
@@ -343,7 +344,7 @@ export default function LoginPage() {
             </div>
           </div>
         </Wrapper>
-      </Layout>
+      </LayoutWithoutFooter>
       {hasAlert && (
         <Modal_global_alert
           message={modalMessage}
