@@ -169,7 +169,7 @@ export default function Survey() {
     errorMessage: '',
   });
 
-  const [dogInfoResult, setDogInfoResult] = useState([]);
+  // const [dogInfoResult, setDogInfoResult] = useState([]);
 
   // const handleSetFooterRef = (ref) => {
   //   setFooterRef(ref);
@@ -827,7 +827,7 @@ export default function Survey() {
           // const linkLength = slicedReportApiLink.length;
           // const surveyReportsId = slicedReportApiLink[linkLength - 1];
 
-          console.log('surveyReportsId', surveyReportsIds);
+          // console.log('surveyReportsId', surveyReportsIds);
           // svyData.deleteStoredSurveyData(userId);
 
           // await router.push(`/survey/statistics/${surveyReportsId}`);

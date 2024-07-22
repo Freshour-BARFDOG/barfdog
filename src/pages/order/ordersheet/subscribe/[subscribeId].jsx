@@ -7,8 +7,6 @@ import { Modal_coupon } from '/src/components/modal/Modal_coupon';
 import { getData } from '/src/pages/api/reqData';
 import transformDate, { transformToday } from '/util/func/transformDate';
 import { OrdersheetSubscribeItemList } from '/src/components/order/OrdersheetSubscribeItemList';
-import { OrdersheetMemberInfo } from '/src/components/order/OrdersheetMemberInfo';
-import { OrdersheetDeliveryForm } from '/src/components/order/OrdersheetDeliveryForm';
 import { Payment } from '/src/components/order/Payment';
 import { OrdersheetMethodOfPayment } from '/src/components/order/OrdersheetMethodOfPayment';
 import { OrdersheetAmountOfPayment } from '/src/components/order/OrdersheetAmountOfPayment';
@@ -21,7 +19,12 @@ import { useRouter } from 'next/router';
 import { redirectTo } from 'util/func/redirectTo';
 import LayoutWithoutFooter from '../../../../components/common/LayoutWithoutFooter';
 import Image from 'next/image';
+import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import OrdersheetSubscriptionMonth from '../../../../components/order/OrdersheetSubscriptionMonth';
+import popupWindow from '/util/func/popupWindow';
+import Link from 'next/link';
+import OrdersheetPaymentList from '../../../../components/order/OrdersheetPaymentList';
+import { Modal_delivery } from '../../../../components/modal/Modal_delivery';
 
 export default function SubscribeOrderSheetPage() {
   const router = useRouter();
@@ -37,6 +40,7 @@ export default function SubscribeOrderSheetPage() {
   const [activeModal, setActiveModal] = useState({
     termsOfService: false,
     coupon: false,
+    delivery: false,
   });
 
   useEffect(() => {
@@ -122,7 +126,7 @@ export default function SubscribeOrderSheetPage() {
           setRecipeInfo(recipesDetailInfo);
         }
 
-        console.log('data>>>', data);
+        // console.log('data>>>', data);
 
         setDATA(data);
         setSubscribeInfo(subscribeInfoData);
@@ -263,6 +267,7 @@ export default function SubscribeOrderSheetPage() {
     const button = e.currentTarget;
     const modalType = button.dataset.modalType;
     const selectedItemId = button.dataset.itemId;
+
     setSelectedItemId(selectedItemId);
     setActiveModal((prevState) => ({
       ...prevState,
@@ -273,6 +278,14 @@ export default function SubscribeOrderSheetPage() {
   if (isLoading.fetching) {
     return <FullScreenRunningDog />;
   }
+
+  const onPopupHandler = (e) => {
+    e.preventDefault();
+    if (typeof window === 'undefined')
+      return console.error('window is not defined');
+    const href = e.currentTarget.href;
+    popupWindow(href, { width: 600, height: 800 });
+  };
 
   console.log('subscribeInfo>>>', subscribeInfo);
   console.log('recipeInfo>>>', recipeInfo);
@@ -299,7 +312,14 @@ export default function SubscribeOrderSheetPage() {
             {/* 1. 배송지, 주문상품 */}
             <section className={s.delivery}>
               {/* 1) 배송지 */}
-              <button>
+              {/* <Link href={`/popup/delivery`} passHref> */}
+              {/* <a target="_blank" onClick={onPopupHandler}> */}
+              <button
+                type={'button'}
+                className={`${s['delivery']}`}
+                data-modal-type={'delivery'}
+                onClick={onActivleModalHandler}
+              >
                 <div>배송지</div>
                 <Image
                   src={'/img/order/right_arrow.svg'}
@@ -308,18 +328,8 @@ export default function SubscribeOrderSheetPage() {
                   height={18}
                 />
               </button>
-
-              {/* <OrdersheetMemberInfo info={info} />
-              {isRendered && (
-                <OrdersheetDeliveryForm
-                  orderType={'subscribe'}
-                  info={info}
-                  form={form}
-                  setForm={setForm}
-                  formErrors={formErrors}
-                  setFormErrors={setFormErrors}
-                />
-              )} */}
+              {/* </a> */}
+              {/* </Link> */}
 
               {/* 2) 주문상품 */}
               {form && (
@@ -350,39 +360,14 @@ export default function SubscribeOrderSheetPage() {
 
             <div className={s.divider}></div>
 
-            {/* 4. 총 결제금액 */}
-            <section className={s.total_price}>
-              <div>
-                <div>총 결제금액</div>
-                <div>
-                  <div>0,000원</div>
-                  <p>한 끼 0000원</p>
-                  <p>일 0000원 / 월 0000원</p>
-                </div>
-              </div>
-              <div>
-                <div>
-                  <div>상품금액</div>
-                  <div>000원</div>
-                </div>
-                <div>
-                  <div>배송비</div>
-                  <div>무료배송</div>
-                </div>
-                <div>
-                  <div>할인 금액</div>
-                  <div>-0000원</div>
-                </div>
-              </div>
-              <OrdersheetAmountOfPayment
-                orderType={'subscribe'}
-                info={info}
-                form={form}
-                setForm={setForm}
-                event={{ onActiveModal: onActivleModalHandler }}
-                formErrors={formErrors}
-              />
-            </section>
+            {/* 3. 할인,총 결제금액 */}
+            <OrdersheetPaymentList
+              info={info}
+              form={form}
+              setForm={setForm}
+              formErrors={formErrors}
+              setFormErrors={setFormErrors}
+            />
 
             <div className={s.divider}></div>
 
@@ -423,6 +408,16 @@ export default function SubscribeOrderSheetPage() {
       )}
       {activeModal.coupons && (
         <Modal_coupon
+          orderType={'subscribe'}
+          onModalActive={setActiveModal}
+          itemInfo={info.subscribeDto}
+          info={info}
+          form={form}
+          setForm={setForm}
+        />
+      )}
+      {activeModal.delivery && (
+        <Modal_delivery
           orderType={'subscribe'}
           onModalActive={setActiveModal}
           itemInfo={info.subscribeDto}

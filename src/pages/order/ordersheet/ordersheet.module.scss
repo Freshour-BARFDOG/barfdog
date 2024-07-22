@@ -1,7 +1,7 @@
 @import '/styles/global/guide';
 @import '/styles/global/rem';
 
-$inputHeight: rem(46);
+$inputHeight: rem(45);
 
 section.title_box {
   padding: rem(60) 0 rem(35);
@@ -25,10 +25,10 @@ section.reserves {
 section.method {
   padding: rem(30) 0 rem(50);
 }
-section.payment {
-  padding: rem(30) 0 rem(50);
-  border-bottom: rem(1) solid var(--color-line-04);
-}
+// section.payment {
+//   padding: rem(30) 0 rem(50);
+//   border-bottom: rem(1) solid var(--color-line-04);
+// }
 section.final_btn {
   padding: rem(30) 0 rem(63);
 }
@@ -60,7 +60,7 @@ section.final_btn {
   margin: rem(20) 0;
 }
 
-// 1.
+//*** 1. 배송지, 주문상품
 section.delivery {
   display: flex;
   flex-direction: column;
@@ -142,11 +142,10 @@ section.delivery {
   }
 }
 
-// 2. 구독혜택
+//*** 2. 구독혜택
 section.subscribe_month {
   margin: rem(20) rem(50);
-  padding: rem(20) rem(10);
-  border-bottom: rem(1) solid #a7a7a7;
+  padding: rem(20) rem(10) rem(10) rem(10);
   h2 {
     font-weight: bold;
     font-size: rem(24);
@@ -168,6 +167,7 @@ section.subscribe_month {
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       text-align: center;
       cursor: pointer;
       transition: 0.2s all;
@@ -196,7 +196,7 @@ section.subscribe_month {
           position: relative;
         }
 
-        span::after {
+        .text_highlight::after {
           content: '';
           position: absolute;
           bottom: rem(5);
@@ -222,7 +222,7 @@ section.subscribe_month {
   }
 }
 
-// 3. 할인 금액
+//*** 3. 할인 금액
 section.discount {
   margin: rem(20) rem(50);
   padding: rem(20) rem(10);
@@ -231,15 +231,158 @@ section.discount {
     font-size: rem(24);
   }
 
+  // 1) 할인 내역
   .benefit_discount_list {
-    .delivery_discount {
+    font-size: rem(20);
+    margin-bottom: rem(30);
+
+    .subscribe_discount {
+      display: flex;
+      justify-content: space-between;
+
+      .per_pack_price {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        margin-bottom: rem(10);
+        .per_pack_discount_price {
+          color: #be1a21;
+          font-weight: bold;
+          font-size: rem(26);
+        }
+
+        .per_pack_origin_price {
+          text-decoration: line-through;
+          color: #b2b2b2;
+        }
+      }
     }
 
     .benefit_info_list {
-      .benefit_info {
+      .benefit_wrapper {
         color: #b2b2b2;
+        display: flex;
+        flex-direction: column;
+        gap: rem(6);
+        .benefit_info {
+          display: flex;
+          justify-content: space-between;
+
+          .benefit_title {
+            display: flex;
+            gap: rem(4);
+          }
+
+          .price_info {
+            display: flex;
+            gap: rem(10);
+
+            .origin_price {
+              color: #000;
+            }
+
+            span {
+              text-decoration: line-through;
+            }
+          }
+        }
       }
     }
+  }
+
+  // 2) 총 할인금액
+  .total_discount_list {
+    border-top: rem(1) solid #a7a7a7;
+    border-bottom: rem(1) solid #a7a7a7;
+    display: flex;
+    padding: rem(20) rem(10);
+    justify-content: space-between;
+    align-items: center;
+    font-size: rem(24);
+    font-weight: bold;
+
+    p {
+      color: #be1a21;
+    }
+  }
+
+  // 3) 쿠폰
+  .coupon_list {
+    border-bottom: rem(1) solid #a7a7a7;
+    display: flex;
+    padding: 0 rem(10) rem(20) rem(10);
+    justify-content: space-between;
+    align-items: center;
+    font-size: rem(24);
+  }
+
+  // 4) 적립금
+  .reward_list {
+    border-bottom: rem(1) solid #a7a7a7;
+    display: flex;
+    padding: rem(20) rem(10);
+    justify-content: space-between;
+    align-items: center;
+    font-size: rem(24);
+    font-weight: bold;
+  }
+}
+
+//*** 4. 총 결제금액
+section.total_price {
+  margin: rem(20) rem(50);
+  padding: rem(20) rem(10);
+
+  .total_price_wrapper {
+    border-bottom: rem(1) solid #a7a7a7;
+    padding: 0 rem(10) rem(20) rem(10);
+  }
+
+  h2 {
+    font-weight: bold;
+    font-size: rem(24);
+    color: #000;
+  }
+
+  .total_price_text {
+    display: flex;
+    justify-content: space-between;
+    font-size: rem(24);
+    font-weight: bold;
+    color: #be1a21;
+  }
+
+  .monthly_price {
+    color: #b2b2b2;
+    text-align: right;
+  }
+
+  // 상세내역
+  .detail_price_wrapper {
+    padding: rem(20) rem(10);
+    font-size: rem(20);
+    display: flex;
+    flex-direction: column;
+    gap: rem(8);
+    .detail_price_text {
+      display: flex;
+      justify-content: space-between;
+
+      span {
+        color: #be1a21;
+      }
+    }
+  }
+}
+
+//*** 5. 결제
+section.method {
+  margin: rem(20) rem(50);
+  padding: rem(20) rem(10);
+
+  .title {
+    font-weight: bold;
+    font-size: rem(24);
   }
 }
 
@@ -348,7 +491,7 @@ section.discount {
   .flex_box {
     display: grid;
     grid-template-columns: 1fr rem(60) repeat(3, rem(100));
-    border-bottom: rem(1) solid var(--color-line-04);
+    // border-bottom: rem(1) solid var(--color-line-04);
     align-items: center;
     text-align: center;
     padding: rem(20) 0;
@@ -445,109 +588,119 @@ section.discount {
 .line {
   > hr {
     border: 0;
-    border-bottom: rem(1) solid var(--color-line-04);
+    // border-bottom: rem(1) solid var(--color-line-04);
   }
 }
 
-.reciever {
-  .title {
-    padding-bottom: rem(30);
-  }
-  .check_box {
-    display: flex;
-    justify-content: left;
-    align-items: center;
-    .text {
-      @include char(l16);
-      color: var(--color-font-def);
-      //padding: rem(2) 0 rem(2) rem(8);
-    }
-  }
-  $grid-row-gap: rem(16);
+// .reciever {
+.title {
+  padding-bottom: rem(30);
+}
+// .check_box {
+//   display: flex;
+//   justify-content: left;
+//   align-items: center;
+//   .text {
+//     @include char(l16);
+//     color: var(--color-font-def);
+//     //padding: rem(2) 0 rem(2) rem(8);
+//   }
+// }
+$grid-row-gap: rem(16);
 
-  .grid_box {
+.grid_box {
+  width: 100%;
+  // max-width: rem(500);
+  // display: grid;
+  display: flex;
+  flex-direction: column;
+  // align-items: center;
+  gap: rem(20);
+  text-align: left;
+  // grid-template-columns: rem(120) 1fr;
+  //grid-template-rows: repeat(4, 1fr);
+  // row-gap: $grid-row-gap;
+  // column-gap: rem(10);
+  padding: rem(22) 0 0;
+
+  p {
+    font-size: rem(20);
+    padding-left: rem(10);
+  }
+
+  @include char(l15);
+  .input_col {
+    // padding-bottom: rem(20);
     width: 100%;
-    max-width: rem(500);
-    display: grid;
-    align-items: center;
-    grid-template-columns: rem(120) 1fr;
-    //grid-template-rows: repeat(4, 1fr);
-    row-gap: $grid-row-gap;
-    column-gap: rem(10);
-    padding: rem(22) 0 0;
-
-    @include char(l15);
-    .input_col {
+    .input_box {
       width: 100%;
-      .input_box {
-        width: 100%;
-        @include char(l15);
-        padding: rem(13) 0 rem(13) rem(16);
-      }
+      @include char(l15);
+      padding: rem(13) 0 rem(13) rem(16);
     }
+  }
 
-    .row_title {
-      display: flex;
-      align-content: flex-start;
-      height: 100%;
-      padding-top: rem(30);
-    }
-    .adress_box {
-      display: grid;
-      grid-template-columns: 1fr;
-      align-items: center;
-      gap: $grid-row-gap;
-      .input_col {
-        height: $inputHeight;
+  .row_title {
+    display: flex;
+    align-content: flex-start;
+    height: 100%;
+    padding-left: rem(10);
+  }
+  .adress_box {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+    gap: $grid-row-gap;
+    .input_col {
+      height: $inputHeight;
+      input {
+        height: 100%;
+      }
+
+      &.zipcode {
+        display: grid;
+        gap: rem(10);
+        grid-template-columns: 1fr 2fr;
         input {
-          height: 100%;
+          text-align: left;
+          padding: 0 rem(16);
         }
-
-        &.zipcode {
-          display: grid;
-          gap: rem(10);
-          grid-template-columns: 1fr 2fr;
-          input {
-            text-align: left;
-            padding: 0 rem(16);
-          }
-        }
-        button {
-          height: 100%;
-          display: flex;
+      }
+      button {
+        height: 100%;
+        display: flex;
+        width: 100%;
+        .btn {
           width: 100%;
-          .btn {
-            width: 100%;
-            height: 100%;
-            padding: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: rem(16);
-          }
+          height: 100%;
+          padding: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: rem(16);
         }
       }
+    }
 
-      .input_box {
-        padding: rem(9.2) 0 rem(9.2) rem(16);
-      }
+    .input_box {
+      padding: rem(9.2) 0 rem(9.2) rem(16);
+    }
 
-      .btn_box {
-        text-align: center;
-        padding: rem(14.5) 0;
-        border: rem(1) solid var(--color-main);
-        border-radius: rem(5);
-        color: var(--color-main);
-        cursor: pointer;
-        &.disabled {
-          color: var(--color-disabled);
-          border-color: var(--color-disabled);
-          cursor: default;
-        }
+    .btn_box {
+      text-align: center;
+      padding: rem(14.5) 0;
+      border: rem(1) solid var(--color-main);
+      border-radius: rem(5);
+      color: var(--color-main);
+      cursor: pointer;
+      &.disabled {
+        color: var(--color-disabled);
+        border-color: var(--color-disabled);
+        cursor: default;
       }
     }
   }
 }
+// }
 
 .shipping {
   .title {
@@ -679,14 +832,15 @@ section.discount {
 
 .reserves {
   .title {
-    padding-bottom: rem(30);
+    padding: 0;
+    padding-right: rem(10);
   }
 
   .flex_box {
-    display: grid;
-    grid-template-columns: 7.5rem 1fr;
-    grid-gap: rem(10);
-    align-items: flex-start;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: rem(10);
     @include char(l15);
     p {
       display: flex;
@@ -698,6 +852,9 @@ section.discount {
       @include char(l16);
       font-weight: 600;
       max-width: rem(120);
+    }
+    .title_wrapper {
+      display: flex;
     }
 
     .input_box {
@@ -724,7 +881,7 @@ section.discount {
         }
 
         input {
-          width: 100%;
+          width: rem(200);
           height: $inputHeight;
           padding-right: rem(20);
           font-size: rem(16);
@@ -761,7 +918,7 @@ section.discount {
       color: var(--color-font-sub);
       font-size: rem(14);
       font-weight: 600;
-      min-width: rem(135);
+      // min-width: rem(135);
 
       > p {
         font-weight: 400;
@@ -779,7 +936,7 @@ section.discount {
   .grid_box {
     display: grid;
     justify-content: flex-start;
-    grid-template-columns: repeat(auto-fill, minmax(rem(240), rem(240)));
+    grid-template-columns: repeat(auto-fill, minmax(rem(230), rem(230)));
     column-gap: rem(10);
     row-gap: rem(8);
 
@@ -791,12 +948,12 @@ section.discount {
       height: 100%;
       box-sizing: border-box;
       padding: rem(18) 0;
-
       border: rem(1) solid var(--color-line-03);
       color: var(--color-font-sub);
       @include char(l15);
       cursor: pointer;
       transition: border-color $transition-prop;
+      border-radius: rem(4);
 
       .image {
         width: rem(24);
@@ -852,7 +1009,7 @@ section.payment {
   }
   hr {
     border: 0;
-    border-bottom: rem(1) solid var(--color-line-04);
+    // border-bottom: rem(1) solid var(--color-line-04);
   }
 
   .flex_box2 {
@@ -945,223 +1102,223 @@ section.payment {
   }
 }
 
-@media (max-width: rem(800)) {
-  .container_outer {
-    .Wrapper {
-      padding: 0 rem(20);
-    }
-  }
-}
+// @media (max-width: rem(800)) {
+//   .container_outer {
+//     .Wrapper {
+//       padding: 0 rem(20);
+//     }
+//   }
+// }
 
-@media (max-width: rem(600)) {
-  section.title_box {
-    padding: rem(20) 0;
-  }
-  section.orderer_info {
-    padding: 0 0 rem(20);
-  }
-  section.reciever {
-    padding: rem(20) 0 rem(20);
-  }
-  section.shipping {
-    padding: rem(30) 0 rem(30);
-  }
+// @media (max-width: rem(600)) {
+//   section.title_box {
+//     padding: rem(20) 0;
+//   }
+//   section.orderer_info {
+//     padding: 0 0 rem(20);
+//   }
+//   section.reciever {
+//     padding: rem(20) 0 rem(20);
+//   }
+//   section.shipping {
+//     padding: rem(30) 0 rem(30);
+//   }
 
-  .content_box {
-    .title {
-      border-bottom: rem(1) solid var(--color-line-02);
-    }
+//   .content_box {
+//     .title {
+//       border-bottom: rem(1) solid var(--color-line-02);
+//     }
 
-    .flex_title_box {
-      display: none;
-    }
+//     .flex_title_box {
+//       display: none;
+//     }
 
-    .flex_box {
-      position: relative;
-      grid:
-        'info_col info_col info_col count_col'
-        'price_col price_col price_col price_col'
-        'coupon_col_red coupon_col_red coupon_col_red apply_coupon_col'/1fr 1fr 1fr 1fr;
-      row-gap: rem(20);
-      padding-bottom: rem(30);
+//     .flex_box {
+//       position: relative;
+//       grid:
+//         'info_col info_col info_col count_col'
+//         'price_col price_col price_col price_col'
+//         'coupon_col_red coupon_col_red coupon_col_red apply_coupon_col'/1fr 1fr 1fr 1fr;
+//       row-gap: rem(20);
+//       padding-bottom: rem(30);
 
-      &::before {
-        content: '';
-        position: absolute;
-        bottom: rem(20);
-        left: 0;
-        width: 100%;
-        height: rem(90);
-        background-color: #f1f1f4;
-        z-index: -99;
-      }
+//       &::before {
+//         content: '';
+//         position: absolute;
+//         bottom: rem(20);
+//         left: 0;
+//         width: 100%;
+//         height: rem(90);
+//         background-color: #f1f1f4;
+//         z-index: -99;
+//       }
 
-      .info_col {
-        grid-column: 1 / span 3;
-        position: relative;
+//       .info_col {
+//         grid-column: 1 / span 3;
+//         position: relative;
 
-        &::after {
-          content: '총 주문금액';
-          position: absolute;
-          bottom: rem(-46);
-          left: rem(20);
-          font-weight: 400;
-        }
-        &::before {
-          content: '쿠폰할인';
-          position: absolute;
-          bottom: rem(-88);
-          left: rem(20);
-          font-weight: 400;
-        }
-      }
+//         &::after {
+//           content: '총 주문금액';
+//           position: absolute;
+//           bottom: rem(-46);
+//           left: rem(20);
+//           font-weight: 400;
+//         }
+//         &::before {
+//           content: '쿠폰할인';
+//           position: absolute;
+//           bottom: rem(-88);
+//           left: rem(20);
+//           font-weight: 400;
+//         }
+//       }
 
-      .count_col {
-        grid-column: 4 / span 1;
-        text-align: right;
-        padding-right: rem(10);
-      }
-      .price_col {
-        grid-column: 1 / span 4;
-        text-align: right;
-        display: flex;
-        justify-content: flex-end;
-        padding-top: rem(10);
-        padding-right: rem(20);
+//       .count_col {
+//         grid-column: 4 / span 1;
+//         text-align: right;
+//         padding-right: rem(10);
+//       }
+//       .price_col {
+//         grid-column: 1 / span 4;
+//         text-align: right;
+//         display: flex;
+//         justify-content: flex-end;
+//         padding-top: rem(10);
+//         padding-right: rem(20);
 
-        .price_inner {
-          padding-right: rem(10);
-        }
-      }
+//         .price_inner {
+//           padding-right: rem(10);
+//         }
+//       }
 
-      .coupon_col_red {
-        grid-column: 1 / span 3;
-        text-align: right;
-      }
+//       .coupon_col_red {
+//         grid-column: 1 / span 3;
+//         text-align: right;
+//       }
 
-      .apply_coupon_col {
-        grid-column: 4 / span 1;
-        justify-content: flex-end;
-        padding-left: rem(10);
-        padding-right: rem(20);
+//       .apply_coupon_col {
+//         grid-column: 4 / span 1;
+//         justify-content: flex-end;
+//         padding-left: rem(10);
+//         padding-right: rem(20);
 
-        .btn {
-          min-width: rem(80);
-          max-height: rem(32);
-        }
-      }
-    }
-  }
+//         .btn {
+//           min-width: rem(80);
+//           max-height: rem(32);
+//         }
+//       }
+//     }
+//   }
 
-  .reciever {
-    .grid_box {
-      max-width: 100%;
-      grid-template-columns: 1fr;
-      grid-template-rows: none;
-      row-gap: rem(5);
+//   .reciever {
+//     .grid_box {
+//       max-width: 100%;
+//       grid-template-columns: 1fr;
+//       grid-template-rows: none;
+//       row-gap: rem(5);
 
-      .row_title {
-        padding-top: rem(10);
-        height: auto;
-      }
+//       .row_title {
+//         padding-top: rem(10);
+//         height: auto;
+//       }
 
-      .adress_box {
-        grid-template-columns: 1fr;
-        row-gap: 0;
-        margin-bottom: rem(10);
-      }
+//       .adress_box {
+//         grid-template-columns: 1fr;
+//         row-gap: 0;
+//         margin-bottom: rem(10);
+//       }
 
-      .input_col {
-        margin-bottom: rem(10);
+//       .input_col {
+//         margin-bottom: rem(10);
 
-        &:nth-child(8) {
-          margin-bottom: 0;
-        }
-      }
-    }
-  }
+//         &:nth-child(8) {
+//           margin-bottom: 0;
+//         }
+//       }
+//     }
+//   }
 
-  .shipping {
-    .box {
-      .grid_box {
-        grid-template-columns: rem(100) 1fr;
-        margin: rem(14) rem(20);
-        column-gap: 0;
-        row-gap: rem(10);
+//   .shipping {
+//     .box {
+//       .grid_box {
+//         grid-template-columns: rem(100) 1fr;
+//         margin: rem(14) rem(20);
+//         column-gap: 0;
+//         row-gap: rem(10);
 
-        .left_box {
-          border: none;
-          grid-column: 1 / span 2;
-          padding-right: 0;
-        }
-        .mid_box {
-          padding-top: rem(10);
-          padding-left: 0;
-          border-top: rem(1) solid var(--color-line-03);
-        }
-        .right_box {
-          padding-top: rem(10);
-          border-top: rem(1) solid var(--color-line-03);
-        }
-      }
-    }
-  }
+//         .left_box {
+//           border: none;
+//           grid-column: 1 / span 2;
+//           padding-right: 0;
+//         }
+//         .mid_box {
+//           padding-top: rem(10);
+//           padding-left: 0;
+//           border-top: rem(1) solid var(--color-line-03);
+//         }
+//         .right_box {
+//           padding-top: rem(10);
+//           border-top: rem(1) solid var(--color-line-03);
+//         }
+//       }
+//     }
+//   }
 
-  .shipping {
-    .bundleShipping {
-      grid-template-columns: 1fr;
-      row-gap: rem(10);
-    }
-  }
+//   .shipping {
+//     .bundleShipping {
+//       grid-template-columns: 1fr;
+//       row-gap: rem(10);
+//     }
+//   }
 
-  .reserves {
-    .flex_box {
-      //grid-template-columns: rem(80) 1fr rem(105);
-      grid-template-columns: rem(80) 1fr;
+//   .reserves {
+//     .flex_box {
+//       //grid-template-columns: rem(80) 1fr rem(105);
+//       grid-template-columns: rem(80) 1fr;
 
-      .input_box {
-        display: grid;
-        grid-template-columns: 1fr rem(105);
-        > * {
-          width: 100%;
-        }
-      }
-      .point {
-        grid-column: 1 / span 2;
-      }
-    }
-  }
+//       .input_box {
+//         display: grid;
+//         grid-template-columns: 1fr rem(105);
+//         > * {
+//           width: 100%;
+//         }
+//       }
+//       .point {
+//         grid-column: 1 / span 2;
+//       }
+//     }
+//   }
 
-  .method {
-    .title {
-      padding-bottom: rem(30);
-    }
+//   .method {
+//     .title {
+//       padding-bottom: rem(30);
+//     }
 
-    .grid_box {
-      display: grid;
-      justify-content: flex-start;
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
+//     .grid_box {
+//       display: grid;
+//       justify-content: flex-start;
+//       grid-template-columns: repeat(2, 1fr);
+//     }
+//   }
 
-  .final_btn {
-    .btn_box {
-      width: 100%;
-    }
-  }
-}
+//   .final_btn {
+//     .btn_box {
+//       width: 100%;
+//     }
+//   }
+// }
 
-@media (max-width: rem(390)) {
-  .method {
-    .grid_box {
-      display: flex;
-      flex-direction: column;
-      //justify-content: flex-start;
-      align-items: center;
-      grid-template-columns: initial;
-      .inner_box {
-        width: 100%;
-      }
-    }
-  }
-}
+// @media (max-width: rem(390)) {
+//   .method {
+//     .grid_box {
+//       display: flex;
+//       flex-direction: column;
+//       //justify-content: flex-start;
+//       align-items: center;
+//       grid-template-columns: initial;
+//       .inner_box {
+//         width: 100%;
+//       }
+//     }
+//   }
+// }

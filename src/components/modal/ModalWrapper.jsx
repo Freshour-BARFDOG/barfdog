@@ -1,17 +1,14 @@
 import React from 'react';
-import styled from "styled-components";
-import rem from "@util/func/rem";
-import zIndex from "/styles/module/zIndex.module.scss";
-
-
-
+import styled from 'styled-components';
+import rem from '@util/func/rem';
+import zIndex from '/styles/module/zIndex.module.scss';
 
 const Wrap = styled.div`
   position: fixed;
   // ! z-index: ''; // global zindex에서 관리
   left: 50%;
-  top: ${(props) => (props.positionCenter ? "50%" : 0)};
-  transform: translate(-50%, ${(props) => (props.positionCenter ? "-50%" : 0)});
+  top: ${(props) => (props.positionCenter ? '50%' : 0)};
+  transform: translate(-50%, ${(props) => (props.positionCenter ? '-50%' : 0)});
   padding: ${rem(32)};
   width: ${rem(360)};
   background-color: #fff;
@@ -47,7 +44,6 @@ const Wrap = styled.div`
   } ;
 `;
 
-
 const ModalBackground = styled.div`
   position: fixed;
   left: 0;
@@ -57,11 +53,8 @@ const ModalBackground = styled.div`
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.3);
-  cursor: ${(props) => (props.onClick && "pointer")};
+  cursor: ${(props) => props.onClick && 'pointer'};
 `;
-
-
-
 
 function ModalWrapper({
   children,
@@ -73,19 +66,20 @@ function ModalWrapper({
   onBackgroundClick,
   positionCenter,
   animation,
+  height,
   ...props
 }) {
   return (
     <>
       {background && (
         <ModalBackground
-          className={`${zIndex["modal-wrapper-background"]}`}
+          className={`${zIndex['modal-wrapper-background']}`}
           onClick={onBackgroundClick}
         />
       )}
       {
         <Wrap
-          className={`${zIndex["modal-wrapper"]} ${className || ""}`}
+          className={`${zIndex['modal-wrapper']} ${className || ''}`}
           style={style}
           label={label}
           id={id}
