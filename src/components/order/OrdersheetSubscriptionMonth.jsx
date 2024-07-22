@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import s from '/src/pages/order/ordersheet/ordersheet.module.scss';
 import { subscriptionMonthType } from '../../../store/TYPE/subscriptionMonthType';
 import { OrdersheetReward } from '/src/components/order/OrdersheetReward';
+import transformLocalCurrency from '/util/func/transformLocalCurrency';
+import ToolTip from '/src/components/atoms/Tooltip';
 
 export default function OrdersheetSubscriptionMonth({
   info,
@@ -11,12 +13,23 @@ export default function OrdersheetSubscriptionMonth({
   setFormErrors,
 }) {
   const [isActive, setIsActive] = useState(form.subscriptionMonth);
+  const [discountPrice, setDiscountPrice] = useState(0);
 
   console.log(isActive);
+
+  const getDeliveryCount = (type) => {
+    if (info.subscribeDto.plan === 'FULL') {
+      return type.fullDeliveryCount || 0;
+    } else if (info.subscribeDto.plan === 'HALF') {
+      return type.halfDeliveryCount || 0;
+    }
+    return 0;
+  };
 
   const subscriptionMonthItems = Object.keys(subscriptionMonthType).map(
     (key) => {
       const type = subscriptionMonthType[key];
+      const deliveryCount = getDeliveryCount(type); // 배송횟수
 
       return {
         id: key,
@@ -26,7 +39,7 @@ export default function OrdersheetSubscriptionMonth({
         bodyDescHTML: {
           row1: type.discount && (
             <p>
-              <span>{type.discount}%</span> 할인
+              <span className={s.text_highlight}>{type.discount}%</span> 할인
             </p>
           ),
           row2: type.freeKit && (
@@ -41,6 +54,45 @@ export default function OrdersheetSubscriptionMonth({
           ),
           row4: type.freeSkip && <p>건너 뛰기 무제한</p>,
           row5: type.freeDelivery && <p>무료 배송</p>,
+          row6:
+            type.fullDeliveryCount && info.subscribeDto.plan === 'FULL'
+              ? `(${type.fullDeliveryCount}회 배송)`
+              : type.fullDeliveryCount && info.subscribeDto.plan === 'HALF'
+              ? `(${type.halfDeliveryCount}회 배송)`
+              : '', // 배송횟수
+          row7: type.freeKit && ( // 진단기기 가격 (하나당 98,000원)
+            <div className={s.price_info}>
+              <span>
+                {/* {transformLocalCurrency(98000)} * {type.freeKit}회 ={' '} */}
+                {transformLocalCurrency(98000 * type.freeKit)}원
+              </span>
+              <p className={s.origin_price}>0원</p>
+            </div>
+          ),
+          row8: type.freeTopper && ( // 토퍼 가격 (하나당 16,000원)
+            <div className={s.price_info}>
+              <span>{transformLocalCurrency(16000 * type.freeTopper)}원</span>
+              <p className={s.origin_price}>0원</p>
+            </div>
+          ),
+          row9: type.freeDelivery && ( // 배송 가격
+            <div className={s.price_info}>
+              <span>
+                {transformLocalCurrency(50000 * getDeliveryCount(type))}원
+              </span>
+              <p className={s.origin_price}>0원</p>
+            </div>
+          ),
+          row10: type.freeSkip && (
+            <div className={s.benefit_info}>
+              <div className={s.benefit_title}>
+                <p>구독 건너 뛰기</p>
+              </div>
+              <div className={s.price_info}>
+                <p className={s.origin_price}>무제한</p>
+              </div>
+            </div>
+          ),
         },
       };
     },
@@ -59,6 +111,7 @@ export default function OrdersheetSubscriptionMonth({
     <>
       <section className={s.subscribe_month}>
         <h2>구독혜택 선택</h2>
+
         <div className={s.month_list_wrapper}>
           {subscriptionMonthItems.map((item, i) => (
             <div
@@ -68,7 +121,8 @@ export default function OrdersheetSubscriptionMonth({
               key={i}
               onClick={() => monthSelectHandler(item)}
             >
-              <h4>{item.title} 구독</h4>
+              <h4>{item.title}</h4>
+              <p>{item.bodyDescHTML.row6}</p>
               <div className={s.divider}></div>
               <div className={s.text_list}>
                 {item.bodyDescHTML.row1}
@@ -79,78 +133,6 @@ export default function OrdersheetSubscriptionMonth({
               </div>
             </div>
           ))}
-        </div>
-      </section>
-
-      {/* 3. 할인 금액 */}
-      <section className={s.discount}>
-        {/* 1) 할인 내역 */}
-        <div className={s.benefit_discount_list}>
-          {/* (1) 배송비 */}
-          <div className={s.delivery_discount}>
-            <h4>
-              {isActive === 12
-                ? '배송마다 20% 할인'
-                : form.subscriptionMonth === 6
-                ? '배송마다 15% 할인'
-                : form.subscriptionMonth === 3
-                ? '배송마다 5% 할인'
-                : form.subscriptionMonth === null
-                ? '정기구독'
-                : ''}
-            </h4>
-            <div>
-              <p>00,000원 빨강</p>
-              <p>00,000원 회색</p>
-            </div>
-          </div>
-
-          {/* (2) 구독혜택 */}
-          <div className={s.benefit_info_list}>
-            {subscriptionMonthItems.map(
-              (item, i) =>
-                form.subscriptionMonth === item.value && (
-                  <div key={i} className={s.benefit_info}>
-                    {item.bodyDescHTML.row1}
-                    {item.bodyDescHTML.row2}
-                    {item.bodyDescHTML.row3}
-                    {item.bodyDescHTML.row4}
-                    {item.bodyDescHTML.row5}
-                  </div>
-                ),
-            )}
-            <div>
-              <p>00,Btn_0100원 빨강</p>
-              <p>00,000원 회색</p>
-            </div>
-          </div>
-        </div>
-
-        {/* 2) 총 할인금액 */}
-        <div className={s.total_discount_list}>
-          <div>총 할인금액</div>
-          <div>-00,000원</div>
-        </div>
-
-        {/* 3) 쿠폰 */}
-        <div className={s.coupon_list}>
-          <div>쿠폰</div>
-          <div>쿠폰 적용 </div>
-        </div>
-
-        {/* 4) 적립금 */}
-        <div className={s.reward_list}>
-          <div>적립금</div>
-          <div>보유: 0원 </div>
-          <OrdersheetReward
-            orderType={'subscribe'}
-            id={'discountReward'}
-            info={info}
-            form={form}
-            setForm={setForm}
-            formErrors={formErrors}
-            setFormErrors={setFormErrors}
-          />
         </div>
       </section>
     </>
