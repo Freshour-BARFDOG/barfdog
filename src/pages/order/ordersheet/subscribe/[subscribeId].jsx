@@ -39,7 +39,7 @@ export default function SubscribeOrderSheetPage() {
   const [selectedItemId, setSelectedItemId] = useState(null);
   const [activeModal, setActiveModal] = useState({
     termsOfService: false,
-    coupon: false,
+    coupons: false,
     delivery: false,
   });
 
@@ -312,8 +312,6 @@ export default function SubscribeOrderSheetPage() {
             {/* 1. 배송지, 주문상품 */}
             <section className={s.delivery}>
               {/* 1) 배송지 */}
-              {/* <Link href={`/popup/delivery`} passHref> */}
-              {/* <a target="_blank" onClick={onPopupHandler}> */}
               <button
                 type={'button'}
                 className={`${s['delivery']}`}
@@ -328,8 +326,6 @@ export default function SubscribeOrderSheetPage() {
                   height={18}
                 />
               </button>
-              {/* </a> */}
-              {/* </Link> */}
 
               {/* 2) 주문상품 */}
               {form && (
@@ -367,6 +363,7 @@ export default function SubscribeOrderSheetPage() {
               setForm={setForm}
               formErrors={formErrors}
               setFormErrors={setFormErrors}
+              onActivleModalHandler={onActivleModalHandler}
             />
 
             <div className={s.divider}></div>

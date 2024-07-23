@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import d from './delivery.module.scss';
 import s from '/src/pages/order/ordersheet/ordersheet.module.scss';
-import { getData } from '/src/pages/api/reqData';
 import WindowOpener from '/util/func/window-opener';
 import filter_emptyValue from '/util/func/filter_emptyValue';
 import filter_onlyNumber from '/util/func/filter_onlyNumber';
@@ -10,8 +8,8 @@ import { validate } from '/util/func/validation/validation_delivery';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
 
 export default function AddressAdd({
-  form,
-  setForm,
+  deliveryInfo,
+  setDeliveryInfo,
   formErrors,
   setFormErrors,
   setIsActive,
@@ -25,7 +23,19 @@ export default function AddressAdd({
       setOnMount(true);
     }
 
-    setForm({});
+    // 초기화
+    setDeliveryInfo({
+      zipcode: null, // 우편번호 (묶음 배송일 경우, null)
+      street: null, // 도로명 주소 (묶음 배송일 경우, null)
+      city: null,
+      detailAddress: null, // 상세주소 (묶음 배송일 경우, null)
+      recipientName: '',
+      deliveryName: '',
+      phoneNumber: '',
+      request: '',
+    });
+    setIsActive(false);
+    setFormErrors({});
   }, []);
 
   const onReceivePopupData = (err, data) => {
@@ -36,12 +46,21 @@ export default function AddressAdd({
     if (err) {
       // console.log(err);
     }
-    setForm((prevState) => ({
+
+    setDeliveryInfo((prevState) => ({
       ...prevState,
       zipcode: zonecode,
       street: address,
       city: sido,
     }));
+
+    const errObj = validate(deliveryInfo);
+    const isPassed = valid_hasFormErrors(errObj);
+
+    if (isPassed) {
+      setFormErrors({});
+      setIsActive(true);
+    }
   };
 
   const onInputChangeHandler = (e) => {
@@ -56,20 +75,18 @@ export default function AddressAdd({
       }
     }
 
-    const errObj = validate(form);
-    const isPassed = valid_hasFormErrors(errObj);
-    if (isPassed) {
-      setFormErrors({});
-      setIsActive(true);
-    } else {
-      setFormErrors(errObj);
-      return;
-    }
-
-    setForm((prevState) => ({
+    setDeliveryInfo((prevState) => ({
       ...prevState,
       [id]: filteredValue,
     }));
+
+    const errObj = validate(deliveryInfo);
+    const isPassed = valid_hasFormErrors(errObj);
+
+    if (isPassed) {
+      setFormErrors({});
+      setIsActive(true);
+    }
   };
 
   return (
@@ -90,7 +107,7 @@ export default function AddressAdd({
               type={'text'}
               className={s.input_box}
               placeholder={'예) 댕댕이네'}
-              value={(!bundle && form.deliveryName) || ''}
+              value={(!bundle && deliveryInfo.deliveryName) || ''}
               onChange={onInputChangeHandler}
               disabled={bundle}
               style={{ marginBottom: '20px' }}
@@ -107,7 +124,7 @@ export default function AddressAdd({
               type={'text'}
               className={s.input_box}
               placeholder={bundle ? '다음 정기구독 수령자' : '이름'}
-              value={(!bundle && form.recipientName) || ''}
+              value={(!bundle && deliveryInfo.recipientName) || ''}
               onChange={onInputChangeHandler}
               disabled={bundle}
               style={{ marginBottom: '20px' }}
@@ -125,7 +142,7 @@ export default function AddressAdd({
               className={s.input_box}
               data-input-type={'number'}
               placeholder={bundle ? '' : '‘-’ 없이 숫자만 입력'}
-              value={(!bundle && form.phoneNumber) || ''}
+              value={(!bundle && deliveryInfo.phoneNumber) || ''}
               onChange={onInputChangeHandler}
               disabled={bundle}
               style={{ marginBottom: '20px' }}
@@ -136,6 +153,9 @@ export default function AddressAdd({
           </div>
 
           <p className={s.row_title}>주소</p>
+          {formErrors.street && (
+            <ErrorMessage>{formErrors.street}</ErrorMessage>
+          )}
           <ul className={s.adress_box}>
             <li className={`${s.input_col} ${s.zipcode}`}>
               <input
@@ -145,7 +165,7 @@ export default function AddressAdd({
                 data-input-type={'number'}
                 placeholder={bundle ? '' : '우편번호'}
                 disabled
-                value={(!bundle && form.zipcode) || ''}
+                value={(!bundle && deliveryInfo.zipcode) || ''}
               />
               {onMount && (
                 <WindowOpener
@@ -154,7 +174,7 @@ export default function AddressAdd({
                   // disabled={(!bundle && !!form.sameUserInfo) || bundle}
                 >
                   <span className={`${s.btn} ${s.btn_box}`}>
-                    {form?.city ? '재검색' : '주소검색'}
+                    {deliveryInfo?.city ? '재검색' : '주소검색'}
                   </span>
                 </WindowOpener>
               )}
@@ -167,11 +187,8 @@ export default function AddressAdd({
                 id={'street'}
                 type={'text'}
                 disabled
-                value={(!bundle && form.street) || ''}
+                value={(!bundle && deliveryInfo.street) || ''}
               />
-              {/* {formErrors.street && (
-                <ErrorMessage>{formErrors.street}</ErrorMessage>
-              )} */}
             </li>
             <li className={s.input_col}>
               <input
@@ -179,13 +196,13 @@ export default function AddressAdd({
                 type={'text'}
                 className={s.input_box}
                 placeholder={bundle ? '' : '상세주소'}
-                value={(!bundle && form.detailAddress) || ''}
+                value={(!bundle && deliveryInfo.detailAddress) || ''}
                 onChange={onInputChangeHandler}
                 disabled={bundle}
               />
-              {/* {formErrors.detailAddress && (
+              {formErrors.detailAddress && (
                 <ErrorMessage>{formErrors.detailAddress}</ErrorMessage>
-              )} */}
+              )}
             </li>
           </ul>
 
@@ -196,7 +213,7 @@ export default function AddressAdd({
               placeholder={bundle ? '' : '직접입력'}
               id={'request'}
               type={'text'}
-              value={(!bundle && form.request) || ''}
+              value={(!bundle && deliveryInfo.request) || ''}
               onChange={onInputChangeHandler}
               disabled={bundle}
             />

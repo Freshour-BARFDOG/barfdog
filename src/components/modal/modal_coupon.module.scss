@@ -8,6 +8,32 @@
   // max-height: rem(950);
   max-height: calc(100% - rem(40));
   overflow: scroll !important;
+
+  //* 쿠폰코드 입력란
+  .coupon_code_container {
+    margin-top: rem(20);
+    display: flex;
+    flex-direction: column;
+
+    h3 {
+      font-weight: 600;
+      font-size: rem(16);
+      padding: rem(10) 0;
+    }
+
+    .flex_box {
+      display: flex;
+      align-items: center;
+      gap: rem(10);
+      .btn_box {
+        padding: 0;
+        background-color: var(--color-main);
+        color: #fff;
+        padding: rem(4) rem(10);
+        border-radius: rem(3);
+      }
+    }
+  }
 }
 
 .modal {
@@ -20,8 +46,8 @@
       // border-bottom: rem(1) dashed var(--color-line-02);
       position: relative;
 
-      &::after{
-        content: "";
+      &::after {
+        content: '';
         position: absolute;
         bottom: 0;
         left: 50%;
@@ -29,7 +55,7 @@
         width: calc(100% + rem(80));
         height: rem(1);
         background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='%23333' stroke-width='4' stroke-dasharray='6%2c 14' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
-        opacity: .3;
+        opacity: 0.3;
       }
       // &::after{
       //   content: "";
@@ -79,7 +105,7 @@
     }
   }
 
-  .content_box.used-coupon .flex_box{
+  .content_box.used-coupon .flex_box {
     grid-template-columns: rem(25) 1fr rem(100);
   }
   .content_box {
@@ -220,7 +246,7 @@
     @include char(l15);
     font-weight: 400;
     padding-bottom: rem(10);
-    color: var(--color-font-def)
+    color: var(--color-font-def);
   }
   .text_price {
     @include char(l18);
@@ -234,25 +260,25 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    
-    >h4{
+
+    > h4 {
       display: flex;
       justify-content: space-between;
       width: 100%;
       font-size: rem(18);
-      >span{
+      > span {
         font-size: rem(24);
         font-weight: 700;
       }
     }
-    
+
     span {
       padding-left: rem(18);
       color: var(--color-main);
       @include char(l20);
       font-weight: 600;
     }
-    .unappliedDiscountAmount{
+    .unappliedDiscountAmount {
       font-size: rem(12);
     }
   }
@@ -270,7 +296,6 @@
   }
 }
 
-
 @media (max-width: rem(600)) {
   .calculator {
     display: grid;
@@ -283,12 +308,12 @@
       display: flex;
       justify-content: space-between;
 
-      >h4{
+      > h4 {
         display: flex;
         justify-content: space-between;
         width: 100%;
         font-size: rem(18);
-        >span{
+        > span {
           font-size: rem(24);
           font-weight: 700;
         }
@@ -308,7 +333,6 @@
     }
   }
 
-
   .modal-container {
     padding: rem(20) rem(25) !important;
     width: 100% !important;
@@ -317,7 +341,7 @@
 
   .modal {
     .title_box {
-      &::after{
+      &::after {
         display: none;
       }
 
@@ -387,10 +411,9 @@
       }
     }
 
-    
     .coupon-section {
       &:not(:last-child) {
-        &::after{
+        &::after {
           width: calc(100% + rem(40));
           background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='%23333' stroke-width='4' stroke-dasharray='4%2c 16' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
         }

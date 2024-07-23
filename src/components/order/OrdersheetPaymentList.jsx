@@ -11,11 +11,10 @@ export default function OrdersheetPaymentList({
   setForm,
   formErrors,
   setFormErrors,
+  onActivleModalHandler,
 }) {
   const [isActive, setIsActive] = useState(form.subscriptionMonth);
   const [discountPrice, setDiscountPrice] = useState(0);
-
-  console.log(isActive);
 
   const getDeliveryCount = (type) => {
     if (info.subscribeDto.plan === 'FULL') {
@@ -114,16 +113,17 @@ export default function OrdersheetPaymentList({
         {/* 1) 쿠폰 */}
         <div className={s.coupon_list}>
           <div>쿠폰</div>
-          <div>
+          <button
+            type={'button'}
+            className={`${s['coupons']}`}
+            data-modal-type={'coupons'}
+            onClick={onActivleModalHandler}
+          >
             <b>쿠폰 적용 &gt; </b>
-          </div>
+          </button>
         </div>
 
         {/* 2) 적립금 */}
-        {/* <div className={s.reward_list}>
-          <div>적립금</div>
-          <div>보유: {transformLocalCurrency(info.reward)}원 &gt; </div>
-        </div> */}
         <OrdersheetReward
           orderType={'subscribe'}
           id={'discountReward'}
@@ -133,33 +133,101 @@ export default function OrdersheetPaymentList({
           formErrors={formErrors}
           setFormErrors={setFormErrors}
         />
+      </section>
 
-        {/* 1) 할인 내역 */}
+      <section className={s.total_price}>
+        <div className={s.total_price_wrapper}>
+          <div className={s.total_price_text}>
+            <h2>총 결제금액</h2>
+            <div>
+              {transformLocalCurrency(info.subscribeDto?.nextPaymentPrice)}원
+            </div>
+          </div>
+          <div className={s.monthly_price}>
+            일{' '}
+            {form.subscriptionMonth
+              ? transformLocalCurrency(
+                  Math.round(
+                    info.subscribeDto?.nextPaymentPrice /
+                      form.subscriptionMonth /
+                      30,
+                  ),
+                )
+              : transformLocalCurrency(
+                  info.subscribeDto?.nextPaymentPrice / 30,
+                )}
+            원 / 월{' '}
+            {form.subscriptionMonth
+              ? transformLocalCurrency(
+                  Math.round(
+                    info.subscribeDto?.nextPaymentPrice /
+                      form.subscriptionMonth,
+                  ),
+                )
+              : transformLocalCurrency(info.subscribeDto?.nextPaymentPrice)}
+            원
+          </div>
+        </div>
+
+        {/* 상세내역 */}
+        <div className={s.detail_price_wrapper}>
+          <div className={s.detail_price_text}>
+            <div>상품금액</div>
+            <div>
+              {transformLocalCurrency(info.subscribeDto?.originPrice)}원
+            </div>
+          </div>
+          <div className={s.detail_price_text}>
+            <div>배송비</div>
+            {/* 구독의 경우에는 모두 무료배송 */}
+            <div>무료배송</div>
+          </div>
+          <div className={s.detail_price_text}>
+            <div>할인&혜택</div>
+            <span>
+              -
+              {transformLocalCurrency(
+                info.subscribeDto?.originPrice -
+                  info.subscribeDto?.nextPaymentPrice,
+              )}
+              원
+            </span>
+          </div>
+        </div>
+
+        {/* 할인&혜택 상세내역 */}
         <div className={s.benefit_discount_list}>
           {/* (1) 한 팩 가격 */}
           <div className={s.subscribe_discount}>
-            <h4>
-              {isActive === 12
-                ? '20% 할인 혜택'
-                : form.subscriptionMonth === 6
-                ? '15% 할인 혜택'
-                : form.subscriptionMonth === 3
-                ? '5% 할인 할인 혜택'
-                : form.subscriptionMonth === null
-                ? '정기구독'
-                : ''}
-            </h4>
-            <div className={s.per_pack_price}>
-              <div>
-                <span className={s.per_pack_discount_price}>00,000원</span> /
-                1팩
+            <h4>할인</h4>
+
+            <div className={s.discount_info_list}>
+              <div className={s.discount_info}>
+                <div>
+                  {isActive === 12
+                    ? '12개월 플랜 할인 (20%)'
+                    : form.subscriptionMonth === 6
+                    ? '6개월 플랜 할인 (15%)'
+                    : form.subscriptionMonth === 3
+                    ? '6개월 플랜 할인 (5%)'
+                    : ''}
+                </div>
+                <div>-000원</div>
               </div>
-              <div className={s.per_pack_origin_price}>00,000원 / 1팩</div>
+              <div className={s.discount_info}>
+                <div>쿠폰</div>
+                <div>-000원</div>
+              </div>
+              <div className={s.discount_info}>
+                <div>적립금</div>
+                <div>-000원</div>
+              </div>
             </div>
           </div>
 
-          {/* (2) 구독혜택 */}
+          {/* (2) 혜택 내역 */}
           <div className={s.benefit_info_list}>
+            <h4>혜택</h4>
             {subscriptionMonthItems.map(
               (item, i) =>
                 form.subscriptionMonth === item.value && (
@@ -203,71 +271,27 @@ export default function OrdersheetPaymentList({
           </div>
         </div>
 
-        {/* 2) 총 할인금액 */}
-        <div className={s.total_discount_list}>
-          <h2>총 할인금액</h2>
-          <p>-{transformLocalCurrency(discountPrice)}원</p>
-        </div>
-      </section>
-
-      <section className={s.total_price}>
-        <div className={s.total_price_wrapper}>
-          <div className={s.total_price_text}>
-            <h2>총 결제금액</h2>
-            <div>
-              {transformLocalCurrency(info.subscribeDto?.nextPaymentPrice)}원
+        {/* (1) 한 팩 가격 ==> 제거 예정! */}
+        {/* <div className={s.subscribe_discount}>
+            <h4>
+              {isActive === 12
+                ? '20% 할인 혜택'
+                : form.subscriptionMonth === 6
+                ? '15% 할인 혜택'
+                : form.subscriptionMonth === 3
+                ? '5% 할인 할인 혜택'
+                : form.subscriptionMonth === null
+                ? '정기구독'
+                : ''}
+            </h4>
+            <div className={s.per_pack_price}>
+              <div>
+                <span className={s.per_pack_discount_price}>00,000원</span> /
+                1팩
+              </div>
+              <div className={s.per_pack_origin_price}>00,000원 / 1팩</div>
             </div>
-          </div>
-          <div className={s.monthly_price}>
-            일{' '}
-            {form.subscriptionMonth
-              ? transformLocalCurrency(
-                  Math.round(
-                    info.subscribeDto?.nextPaymentPrice /
-                      form.subscriptionMonth /
-                      30,
-                  ),
-                )
-              : transformLocalCurrency(
-                  info.subscribeDto?.nextPaymentPrice / 30,
-                )}
-            원 / 월{' '}
-            {form.subscriptionMonth
-              ? transformLocalCurrency(
-                  Math.round(
-                    info.subscribeDto?.nextPaymentPrice /
-                      form.subscriptionMonth,
-                  ),
-                )
-              : transformLocalCurrency(info.subscribeDto?.nextPaymentPrice)}
-            원
-          </div>
-        </div>
-        {/* 상세내역 */}
-        <div className={s.detail_price_wrapper}>
-          <div className={s.detail_price_text}>
-            <div>상품금액</div>
-            <div>
-              {transformLocalCurrency(info.subscribeDto?.originPrice)}원
-            </div>
-          </div>
-          <div className={s.detail_price_text}>
-            <div>배송비</div>
-            {/* 구독의 경우에는 모두 무료배송 */}
-            <div>무료배송</div>
-          </div>
-          <div className={s.detail_price_text}>
-            <div>할인 금액</div>
-            <span>
-              -
-              {transformLocalCurrency(
-                info.subscribeDto?.originPrice -
-                  info.subscribeDto?.nextPaymentPrice,
-              )}
-              원
-            </span>
-          </div>
-        </div>
+          </div> */}
         {/* <OrdersheetAmountOfPayment
                 orderType={'subscribe'}
                 info={info}
@@ -277,6 +301,12 @@ export default function OrdersheetPaymentList({
                 formErrors={formErrors}
               /> */}
       </section>
+
+      {/* 2) 총 할인금액 */}
+      {/* <div className={s.total_discount_list}>
+          <h2>총 할인금액</h2>
+          <p>-{transformLocalCurrency(discountPrice)}원</p>
+        </div> */}
     </>
   );
 }
