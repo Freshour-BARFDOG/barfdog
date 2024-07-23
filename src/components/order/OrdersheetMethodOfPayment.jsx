@@ -36,7 +36,7 @@ export const OrdersheetMethodOfPayment = ({
           >
             <div className={`${s.image} ${s.naverPay} img-wrap`}>
               <Image
-                src={require('/public/img/cart/order_naver(2023).png')}
+                src={require('/public/img/cart/1naverpay.png')}
                 objectFit="cover"
                 layout="fill"
                 alt="네이버 아이콘"
@@ -56,11 +56,11 @@ export const OrdersheetMethodOfPayment = ({
               backgroundColor: 'rgb(254, 229, 0)',
             }}
           >
-            <div className={`${s.image} img-wrap`}>
+            <div className={`${s.image} ${s.naverPay} img-wrap`}>
               <Image
-                src={require('/public/img/cart/order_kakao.png')}
+                src={require('/public/img/cart/2kakaopay.png')}
                 objectFit="cover"
-                layout="fill"
+                // layout="fill"
                 alt="카카오 아이콘"
               />
             </div>

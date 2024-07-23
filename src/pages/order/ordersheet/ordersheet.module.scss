@@ -20,7 +20,8 @@ section.shipping {
   padding: rem(30) 0 rem(50);
 }
 section.reserves {
-  padding: rem(38) 0 rem(50);
+  padding: rem(20) 0;
+  border-bottom: rem(1) solid #a7a7a7;
 }
 section.method {
   padding: rem(30) 0 rem(50);
@@ -224,70 +225,11 @@ section.subscribe_month {
 
 //*** 3. 할인 금액
 section.discount {
-  margin: rem(20) rem(50);
+  margin: rem(20) rem(50) 0 rem(50);
   padding: rem(20) rem(10);
 
   h4 {
     font-size: rem(24);
-  }
-
-  // 1) 할인 내역
-  .benefit_discount_list {
-    font-size: rem(20);
-    margin-bottom: rem(30);
-
-    .subscribe_discount {
-      display: flex;
-      justify-content: space-between;
-
-      .per_pack_price {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        margin-bottom: rem(10);
-        .per_pack_discount_price {
-          color: #be1a21;
-          font-weight: bold;
-          font-size: rem(26);
-        }
-
-        .per_pack_origin_price {
-          text-decoration: line-through;
-          color: #b2b2b2;
-        }
-      }
-    }
-
-    .benefit_info_list {
-      .benefit_wrapper {
-        color: #b2b2b2;
-        display: flex;
-        flex-direction: column;
-        gap: rem(6);
-        .benefit_info {
-          display: flex;
-          justify-content: space-between;
-
-          .benefit_title {
-            display: flex;
-            gap: rem(4);
-          }
-
-          .price_info {
-            display: flex;
-            gap: rem(10);
-
-            .origin_price {
-              color: #000;
-            }
-
-            span {
-              text-decoration: line-through;
-            }
-          }
-        }
-      }
-    }
   }
 
   // 2) 총 할인금액
@@ -330,8 +272,8 @@ section.discount {
 
 //*** 4. 총 결제금액
 section.total_price {
-  margin: rem(20) rem(50);
-  padding: rem(20) rem(10);
+  margin: rem(6) rem(50) rem(20) rem(50);
+  padding: 0 rem(10);
 
   .total_price_wrapper {
     border-bottom: rem(1) solid #a7a7a7;
@@ -370,6 +312,84 @@ section.total_price {
 
       span {
         color: #be1a21;
+      }
+    }
+  }
+
+  // 1) 할인 내역
+  .benefit_discount_list {
+    border: rem(1) solid #d4d4d4;
+    padding: rem(20);
+    font-size: rem(20);
+    margin-bottom: rem(30);
+    border-radius: rem(5);
+
+    h4 {
+      font-weight: bold;
+    }
+
+    .discount_info_list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .discount_info {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    //-- [삭제] 한 팩 가격 --
+    // .subscribe_discount {
+    //   display: flex;
+    //   justify-content: space-between;
+
+    //   .per_pack_price {
+    //     display: flex;
+    //     flex-direction: column;
+    //     align-items: flex-end;
+    //     margin-bottom: rem(10);
+    //     .per_pack_discount_price {
+    //       color: #be1a21;
+    //       font-weight: bold;
+    //       font-size: rem(26);
+    //     }
+
+    //     .per_pack_origin_price {
+    //       text-decoration: line-through;
+    //       color: #b2b2b2;
+    //     }
+    //   }
+    // }
+
+    .benefit_info_list {
+      .benefit_wrapper {
+        color: #b2b2b2;
+        display: flex;
+        flex-direction: column;
+        gap: rem(6);
+        font-size: rem(18);
+        .benefit_info {
+          display: flex;
+          justify-content: space-between;
+
+          .benefit_title {
+            display: flex;
+            gap: rem(4);
+          }
+
+          .price_info {
+            display: flex;
+            gap: rem(10);
+
+            .origin_price {
+              color: #000;
+            }
+
+            span {
+              text-decoration: line-through;
+            }
+          }
+        }
       }
     }
   }
@@ -839,6 +859,7 @@ $grid-row-gap: rem(16);
   .flex_box {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     width: 100%;
     padding: rem(10);
     @include char(l15);
@@ -855,6 +876,7 @@ $grid-row-gap: rem(16);
     }
     .title_wrapper {
       display: flex;
+      align-items: center;
     }
 
     .input_box {
@@ -881,7 +903,7 @@ $grid-row-gap: rem(16);
         }
 
         input {
-          width: rem(200);
+          width: rem(180);
           height: $inputHeight;
           padding-right: rem(20);
           font-size: rem(16);
@@ -934,20 +956,21 @@ $grid-row-gap: rem(16);
   }
 
   .grid_box {
-    display: grid;
-    justify-content: flex-start;
-    grid-template-columns: repeat(auto-fill, minmax(rem(230), rem(230)));
-    column-gap: rem(10);
-    row-gap: rem(8);
+    // display: grid;
+    // justify-content: flex-start;
+    // grid-template-columns: repeat(auto-fill, minmax(rem(230), rem(230)));
+    // column-gap: rem(10);
+    // row-gap: rem(8);
 
     .inner_box {
       $transition-prop: 0.2s var(--transition-cubic);
       display: flex;
-      justify-content: center;
+
+      // justify-content: center;
       align-items: center;
       height: 100%;
       box-sizing: border-box;
-      padding: rem(18) 0;
+      padding: rem(18) rem(20);
       border: rem(1) solid var(--color-line-03);
       color: var(--color-font-sub);
       @include char(l15);
@@ -956,8 +979,8 @@ $grid-row-gap: rem(16);
       border-radius: rem(4);
 
       .image {
-        width: rem(24);
-        margin-right: rem(4);
+        width: rem(30);
+        margin-right: rem(10);
         overflow: initial !important;
         height: 100%;
         min-height: rem(20);
@@ -975,9 +998,9 @@ $grid-row-gap: rem(16);
 
         &.naverPay {
           //aspect-ratio: 61/24; // IOS 구버전 호환이슈
-          height: rem(24);
+          height: rem(18);
           width: rem(
-            70
+            60
           ); // 참조) 로고타입 사용 가이드 https://developer.pay.naver.com/design/logo
           img {
             opacity: 0.4;
@@ -997,7 +1020,7 @@ $grid-row-gap: rem(16);
 
 section.payment {
   .title {
-    padding-bottom: rem(32);
+    padding-bottom: rem(10);
   }
 
   @include char(l15);

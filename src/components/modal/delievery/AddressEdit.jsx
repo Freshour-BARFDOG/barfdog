@@ -10,9 +10,9 @@ import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
 import ErrorMessage from '../../../components/atoms/ErrorMessage';
 
 export default function AddressEdit({
+  deliveryInfo,
+  setDeliveryInfo,
   selectedItem,
-  form,
-  setForm,
   formErrors,
   setFormErrors,
   setIsActive,
@@ -25,8 +25,6 @@ export default function AddressEdit({
     if (!onMount) {
       setOnMount(true);
     }
-
-    setForm(selectedItem);
   }, []);
 
   const onReceivePopupData = (err, data) => {
@@ -37,15 +35,23 @@ export default function AddressEdit({
     if (err) {
       // console.log(err);
     }
-    setForm((prevState) => ({
+    setDeliveryInfo((prevState) => ({
       ...prevState,
       zipcode: zonecode,
       street: address,
       city: sido,
     }));
+
+    const errObj = validate(deliveryInfo);
+    const isPassed = valid_hasFormErrors(errObj);
+
+    if (isPassed) {
+      setFormErrors({});
+      setIsActive(true);
+    }
   };
 
-  const onInputChangeHandler = (e) => {
+  const onInputChangeHandler = async (e) => {
     const input = e.currentTarget;
     const { id, value } = input;
     const filteredType = input.dataset.inputType;
@@ -57,29 +63,19 @@ export default function AddressEdit({
       }
     }
 
-    const errObj = validate(form);
-    const isPassed = valid_hasFormErrors(errObj);
-    if (isPassed) {
-      setFormErrors({});
-      setIsActive(true);
-    } else {
-      setFormErrors(errObj);
-      return;
-    }
-
-    if (!value) {
-      setIsActive(false);
-    }
-
-    console.log('formErrors>>>', formErrors);
-
-    setForm((prevState) => ({
+    setDeliveryInfo((prevState) => ({
       ...prevState,
       [id]: filteredValue,
     }));
-  };
 
-  console.log('form', form);
+    const errObj = validate(deliveryInfo);
+    const isPassed = valid_hasFormErrors(errObj);
+
+    if (isPassed) {
+      setFormErrors({});
+      setIsActive(true);
+    }
+  };
 
   return (
     <>
@@ -99,7 +95,7 @@ export default function AddressEdit({
               type={'text'}
               className={s.input_box}
               placeholder={'예) 댕댕이네'}
-              value={(!bundle && form.deliveryName) || ''}
+              value={(!bundle && deliveryInfo.deliveryName) || ''}
               onChange={onInputChangeHandler}
               disabled={bundle}
               style={{ marginBottom: '20px' }}
@@ -116,7 +112,7 @@ export default function AddressEdit({
               type={'text'}
               className={s.input_box}
               placeholder={bundle ? '다음 정기구독 수령자' : '이름'}
-              value={(!bundle && form.recipientName) || ''}
+              value={(!bundle && deliveryInfo.recipientName) || ''}
               onChange={onInputChangeHandler}
               disabled={bundle}
               style={{ marginBottom: '20px' }}
@@ -130,12 +126,12 @@ export default function AddressEdit({
           <p>연락처</p>
           <div className={s.input_col}>
             <input
-              id={'phone'}
+              id={'phoneNumber'}
               type={'text'}
               className={s.input_box}
               data-input-type={'phoneNumber'}
               placeholder={bundle ? '' : '‘-’ 없이 숫자만 입력'}
-              value={(!bundle && form.phoneNumber) || ''}
+              value={(!bundle && deliveryInfo.phoneNumber) || ''}
               onChange={onInputChangeHandler}
               disabled={bundle}
               style={{ marginBottom: '20px' }}
@@ -146,6 +142,9 @@ export default function AddressEdit({
           </div>
 
           <p className={s.row_title}>주소</p>
+          {formErrors.street && (
+            <ErrorMessage>{formErrors.street}</ErrorMessage>
+          )}
           <ul className={s.adress_box}>
             <li className={`${s.input_col} ${s.zipcode}`}>
               <input
@@ -155,7 +154,7 @@ export default function AddressEdit({
                 data-input-type={'number'}
                 placeholder={bundle ? '' : '우편번호'}
                 disabled
-                value={(!bundle && form.zipcode) || ''}
+                value={(!bundle && deliveryInfo.zipcode) || ''}
               />
               {onMount && (
                 <WindowOpener
@@ -164,7 +163,7 @@ export default function AddressEdit({
                   // disabled={(!bundle && !!form.sameUserInfo) || bundle}
                 >
                   <span className={`${s.btn} ${s.btn_box}`}>
-                    {form?.city ? '재검색' : '주소검색'}
+                    {deliveryInfo?.city ? '재검색' : '주소검색'}
                   </span>
                 </WindowOpener>
               )}
@@ -177,7 +176,7 @@ export default function AddressEdit({
                 id={'street'}
                 type={'text'}
                 disabled
-                value={(!bundle && form.street) || ''}
+                value={(!bundle && deliveryInfo.street) || ''}
               />
             </li>
             <li className={s.input_col}>
@@ -186,7 +185,7 @@ export default function AddressEdit({
                 type={'text'}
                 className={s.input_box}
                 placeholder={bundle ? '' : '상세주소'}
-                value={(!bundle && form.detailAddress) || ''}
+                value={(!bundle && deliveryInfo.detailAddress) || ''}
                 onChange={onInputChangeHandler}
                 disabled={bundle}
               />
@@ -203,7 +202,7 @@ export default function AddressEdit({
               placeholder={bundle ? '' : '직접입력'}
               id={'request'}
               type={'text'}
-              value={(!bundle && form.request) || ''}
+              value={(!bundle && deliveryInfo.request) || ''}
               onChange={onInputChangeHandler}
               disabled={bundle}
             />

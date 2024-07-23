@@ -35,7 +35,7 @@ export const validate = async (obj) => {
         break;
     }
   }
-
-  // console.log('Valid Result (formValues) : ', errors);
+  console.log('=====', obj);
+  console.log('Valid Result (formValues) : ', errors);
   return errors;
 };

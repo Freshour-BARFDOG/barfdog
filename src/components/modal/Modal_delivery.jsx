@@ -9,6 +9,8 @@ import CustomRadio from '/src/components/admin/form/CustomRadio';
 import { transformPhoneNumber } from '/util/func/transformPhoneNumber';
 import { deleteData, postData, putObjData } from '../../pages/api/reqData';
 import CloseButton from '../atoms/CloseButton';
+import { validate } from '/util/func/validation/validation_delivery';
+import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
 
 export const Modal_delivery = ({
   onModalActive,
@@ -18,7 +20,7 @@ export const Modal_delivery = ({
   setForm,
   orderType = 'general',
 }) => {
-  const initialDeliveryInfos = {
+  const initialDeliveryInfo = {
     zipcode: null, // 우편번호 (묶음 배송일 경우, null)
     street: null, // 도로명 주소 (묶음 배송일 경우, null)
     city: null,
@@ -29,6 +31,7 @@ export const Modal_delivery = ({
     request: '',
   };
 
+  const [deliveryInfo, setDeliveryInfo] = useState(initialDeliveryInfo);
   const [isLoading, setIsLoading] = useState({ fetching: false });
   const [addressList, setAddressList] = useState([]);
   const [addressStatus, setAddressStatus] = useState('default');
@@ -37,7 +40,7 @@ export const Modal_delivery = ({
   const [isActive, setIsActive] = useState(false);
   const [formErrors, setFormErrors] = useState({});
 
-  useEffect(() => {
+  const fetchData = async () => {
     (async () => {
       try {
         setIsLoading((prevState) => ({
@@ -55,9 +58,23 @@ export const Modal_delivery = ({
           setAddressList(addresses);
           // 기본 주소 체크
           const defaultAddress = addresses.find((address) => address.default);
-          if (defaultAddress) {
+          if (defaultAddress && addressStatus === 'default') {
             setSelectedItemId(defaultAddress.id);
             setIsActive(true);
+            console.log('defaultAddress??', defaultAddress);
+            setDeliveryInfo({
+              zipcode: defaultAddress.zipcode,
+              street: defaultAddress.street,
+              city: defaultAddress.city,
+              detailAddress: defaultAddress.detailAddress,
+              recipientName: defaultAddress.recipientName,
+              deliveryName: defaultAddress.deliveryName,
+              phoneNumber: defaultAddress.phoneNumber,
+              request: defaultAddress.request,
+            });
+          } else if (!defaultAddress) {
+            setSelectedItemId(null);
+            addressStatus === 'default' && setIsActive(false);
           }
         }
       } catch (err) {
@@ -69,6 +86,10 @@ export const Modal_delivery = ({
         }));
       }
     })();
+  };
+
+  useEffect(() => {
+    fetchData();
   }, [form, addressStatus]);
 
   const onAddAddressHandler = () => {
@@ -78,6 +99,7 @@ export const Modal_delivery = ({
   const onEditAddressHandler = (address) => {
     setAddressStatus(address.id);
     setSelectedItem(address);
+    setDeliveryInfo(address);
   };
 
   const onDeleteHandler = async (address) => {
@@ -91,7 +113,7 @@ export const Modal_delivery = ({
       const res = await deleteData(url);
 
       if (res.status === 200) {
-        setAddressStatus('default');
+        fetchData();
       }
     } catch (err) {
       console.error(err);
@@ -102,39 +124,77 @@ export const Modal_delivery = ({
     setAddressStatus('default');
   };
 
-  const checkHandler = (id) => {
-    setSelectedItemId(id);
+  const checkHandler = (address) => {
+    setSelectedItemId(address.id);
+    setDeliveryInfo(address);
+    setIsActive(true);
+  };
+
+  // 유효성 검사
+  const validateForm = async () => {
+    const errObj = await validate(deliveryInfo);
+    const isPassed = valid_hasFormErrors(errObj);
+    if (isPassed) {
+      setFormErrors({});
+      setIsActive(true);
+      return true;
+    } else if (!isPassed) {
+      setFormErrors(errObj);
+      setIsActive(false);
+      return false;
+    }
   };
 
   const onSaveHandler = async () => {
     // 1. 기본 주소 등록
     if (addressStatus === 'default') {
-      const url = `/api/address/default/${selectedItemId}`;
-      try {
-        const res = await postData(url);
-        // console.log(res);
+      if (!selectedItemId) {
+        return alert('배송지를 선택해주세요.');
+      } else if (selectedItemId) {
+        const url = `/api/address/default/${selectedItemId}`;
+        try {
+          const res = await postData(url);
+          // console.log(res);
 
-        if (res.status === 200) {
-          alert('배송지를 설정했습니다.');
-          onHideModal();
+          console.log('0000', deliveryInfo);
+
+          if (res.status === 200) {
+            // POST req body update
+            setForm((prev) => ({
+              ...prev,
+              deliveryDto: {
+                name: deliveryInfo.recipientName,
+                phone: deliveryInfo.phoneNumber,
+                zipcode: deliveryInfo.zipcode,
+                street: deliveryInfo.street,
+                detailAddress: deliveryInfo.detailAddress,
+                request: deliveryInfo.request,
+              },
+            }));
+            alert('배송지를 설정했습니다.');
+            onHideModal();
+          }
+        } catch (err) {
+          console.error(err);
         }
-      } catch (err) {
-        console.error(err);
       }
     }
 
     // 2. 주소 입력
     else if (addressStatus === 'add') {
+      const isValid = await validateForm();
+      if (!isValid) return; // 유효성 검사 실패 시 종료
+
       const url = `/api/address`;
       const body = {
-        zipcode: form.zipcode,
-        street: form.street,
-        city: form.city,
-        detailAddress: form.detailAddress,
-        phoneNumber: form.phoneNumber,
-        deliveryName: form.deliveryName,
-        recipientName: form.recipientName,
-        request: form.request,
+        zipcode: deliveryInfo.zipcode,
+        street: deliveryInfo.street,
+        city: deliveryInfo.city,
+        detailAddress: deliveryInfo.detailAddress,
+        phoneNumber: deliveryInfo.phoneNumber,
+        deliveryName: deliveryInfo.deliveryName,
+        recipientName: deliveryInfo.recipientName,
+        request: deliveryInfo.request,
       };
       try {
         const res = await postData(url, body);
@@ -147,16 +207,19 @@ export const Modal_delivery = ({
 
     // 3. 주소 변경
     else if (typeof addressStatus === 'number') {
+      const isValid = await validateForm();
+      if (!isValid) return; // 유효성 검사 실패 시 종료
+
       const url = `/api/address/${addressStatus}`;
       const body = {
-        zipcode: form.zipcode,
-        street: form.street,
-        city: form.city,
-        detailAddress: form.detailAddress,
-        phoneNumber: form.phoneNumber,
-        deliveryName: form.deliveryName,
-        recipientName: form.recipientName,
-        request: form.request,
+        zipcode: deliveryInfo.zipcode,
+        street: deliveryInfo.street,
+        city: deliveryInfo.city,
+        detailAddress: deliveryInfo.detailAddress,
+        phoneNumber: deliveryInfo.phoneNumber,
+        deliveryName: deliveryInfo.deliveryName,
+        recipientName: deliveryInfo.recipientName,
+        request: deliveryInfo.request,
       };
       try {
         const res = await putObjData(url, body);
@@ -171,6 +234,8 @@ export const Modal_delivery = ({
   // console.log('selectedItemId>>>', selectedItemId);
   // console.log('form', form);
   // console.log('addressList', addressList);
+  // console.log(':isActive>>>', isActive);
+  // console.log('deliveryInfo>>>', deliveryInfo);
 
   const onHideModal = () => {
     onModalActive((prevState) => ({
@@ -236,13 +301,13 @@ export const Modal_delivery = ({
                                 alt="delivery_check"
                                 width={24}
                                 height={24}
-                                onClick={() => checkHandler(1)}
+                                onClick={() => checkHandler(address)}
                                 style={{ cursor: 'pointer' }}
                               />
                             ) : (
                               <button
                                 className={s.check_btn}
-                                onClick={() => checkHandler(address.id)}
+                                onClick={() => checkHandler(address)}
                               ></button>
                             )}
 
@@ -288,8 +353,8 @@ export const Modal_delivery = ({
             {/*  추가  */}
             {addressStatus === 'add' && (
               <AddressAdd
-                form={form}
-                setForm={setForm}
+                deliveryInfo={deliveryInfo}
+                setDeliveryInfo={setDeliveryInfo}
                 formErrors={formErrors}
                 setFormErrors={setFormErrors}
                 setIsActive={setIsActive}
@@ -300,8 +365,8 @@ export const Modal_delivery = ({
             {typeof addressStatus === 'number' && (
               <AddressEdit
                 selectedItem={selectedItem}
-                form={form}
-                setForm={setForm}
+                deliveryInfo={deliveryInfo}
+                setDeliveryInfo={setDeliveryInfo}
                 formErrors={formErrors}
                 setFormErrors={setFormErrors}
                 setIsActive={setIsActive}
@@ -313,6 +378,7 @@ export const Modal_delivery = ({
           <button
             className={`${s.save_btn}  ${isActive ? s.isActive : ''}`}
             onClick={onSaveHandler}
+            // disabled={!isActive}
           >
             저장
           </button>
