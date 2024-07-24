@@ -13,43 +13,11 @@ export const OrdersheetSubscribeItemList = ({
   form,
   setForm,
   isLoading,
-  orderType = 'general',
-  event = { onActiveModal },
   subscribeInfo,
   recipeInfo,
-  DATA,
 }) => {
   const [isArrowActive, setIsArrowActive] = useState(false);
   const [rotation, setRotation] = useState(0);
-
-  const onCancleCoupon = (e) => {
-    const btn = e.currentTarget;
-    const appliedCouponId = Number(btn.dataset.appliedCouponId);
-
-    setForm((prevState) => ({
-      ...prevState,
-      memberCouponId: null,
-      discountCoupon: 0,
-      coupons: prevState.coupons.map((coupon) => {
-        return coupon.memberCouponId === appliedCouponId
-          ? {
-              ...coupon,
-              remaining: ++coupon.remaining,
-            }
-          : coupon;
-      }),
-    }));
-  };
-
-  const onMouseEnterHandler = (e) => {
-    const btn = e.currentTarget;
-    btn.innerText = '적용 취소';
-  };
-
-  const onMouseLeaveHandler = (e) => {
-    const btn = e.currentTarget;
-    btn.innerText = '적용됨';
-  };
 
   const onClickArrowIcon = (e) => {
     e.preventDefault();

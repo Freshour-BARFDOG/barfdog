@@ -30,6 +30,7 @@ section.method {
 //   padding: rem(30) 0 rem(50);
 //   border-bottom: rem(1) solid var(--color-line-04);
 // }
+
 section.final_btn {
   padding: rem(30) 0 rem(63);
 }
@@ -110,6 +111,7 @@ section.delivery {
       .recipe_list_content {
         display: flex;
         align-items: center;
+        gap: rem(10);
       }
 
       .recipe_list_text {
@@ -543,42 +545,43 @@ section.method {
         text-decoration: line-through;
       }
     }
-    .del_col {
-      display: none;
-    }
-    .coupon_col {
-      color: var(--color-font-sub);
-    }
-    .coupon_col_red {
-      color: var(--color-main);
-    }
-    .apply_coupon_col {
-      display: flex;
-      justify-content: center;
+  }
+}
 
-      .btn {
-        width: rem(81);
-        height: rem(37);
-        max-height: rem(37);
-        white-space: nowrap;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        box-sizing: border-box;
-        border: rem(1) solid var(--color-line-03);
-        border-radius: rem(2);
-        cursor: pointer;
-        font-size: rem(15);
-        font-weight: 500;
-        background-color: #fff;
-        &.applied {
-          transition: border 0.2s var(--transition-cubic);
-          transition-padding: border, color;
-          color: var(--color-main);
-          &:hover {
-            border-color: var(--color-main);
-          }
-        }
+.del_col {
+  display: none;
+}
+.coupon_col {
+  color: var(--color-font-sub);
+}
+.coupon_col_red {
+  color: var(--color-main);
+}
+.apply_coupon_col {
+  display: flex;
+  justify-content: center;
+
+  .btn {
+    width: rem(81);
+    height: rem(37);
+    max-height: rem(37);
+    white-space: nowrap;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    border: rem(1) solid var(--color-line-03);
+    border-radius: rem(2);
+    cursor: pointer;
+    font-size: rem(15);
+    font-weight: 500;
+    background-color: #fff;
+    &.applied {
+      transition: border 0.2s var(--transition-cubic);
+      transition-padding: border, color;
+      color: var(--color-main);
+      &:hover {
+        border-color: var(--color-main);
       }
     }
   }
@@ -601,6 +604,15 @@ section.method {
   > hr {
     border: 0;
     // border-bottom: rem(1) solid var(--color-line-04);
+  }
+}
+
+//*** [읿반주문] 적립금
+.reward_wrapper {
+  margin: 0 rem(40);
+  section {
+    border: none;
+    padding: 0;
   }
 }
 

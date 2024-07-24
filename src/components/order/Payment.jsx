@@ -83,7 +83,7 @@ export function Payment({
       phone: form.deliveryDto.phone,
       city: form.deliveryDto.city,
       street: form.deliveryDto.street,
-      detailAddress: form.deliveryDto.detailAddress,
+      // detailAddress: form.deliveryDto.detailAddress,
       paymentMethod: form.paymentMethod,
       agreePrivacy: form.agreePrivacy,
       paymentPrice: calcOrdersheetPrices(

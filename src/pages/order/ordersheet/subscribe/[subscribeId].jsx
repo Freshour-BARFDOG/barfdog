@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Layout from '/src/components/common/Layout';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import s from '../ordersheet.module.scss';
-import Modal_termsOfSerivce from '/src/components/modal/Modal_termsOfSerivce';
 import { Modal_coupon } from '/src/components/modal/Modal_coupon';
 import { getData } from '/src/pages/api/reqData';
 import transformDate, { transformToday } from '/util/func/transformDate';
@@ -23,9 +22,10 @@ import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import OrdersheetSubscriptionMonth from '../../../../components/order/OrdersheetSubscriptionMonth';
 import popupWindow from '/util/func/popupWindow';
 import Link from 'next/link';
-import OrdersheetPaymentList from '../../../../components/order/OrdersheetPaymentList';
 import { Modal_delivery } from '../../../../components/modal/Modal_delivery';
 import { subscriptionMonthType } from '../../../../../store/TYPE/subscriptionMonthType';
+import OrdersheetSubscribePaymentList from '../../../../components/order/OrdersheetSubscribePaymentList';
+// import Modal_termsOfSerivce from '/src/components/modal/Modal_termsOfSerivce';
 
 export default function SubscribeOrderSheetPage() {
   const router = useRouter();
@@ -419,7 +419,7 @@ export default function SubscribeOrderSheetPage() {
             <div className={s.divider}></div>
 
             {/* 3. 할인,총 결제금액 */}
-            <OrdersheetPaymentList
+            <OrdersheetSubscribePaymentList
               info={info}
               form={form}
               setForm={setForm}
@@ -461,12 +461,12 @@ export default function SubscribeOrderSheetPage() {
           </div>
         </div>
       </LayoutWithoutFooter>
-      {activeModal.termsOfService && (
+      {/* {activeModal.termsOfService && (
         <Modal_termsOfSerivce
           modalState={activeModal.termsOfService}
           setModalState={setActiveModal}
         />
-      )}
+      )} */}
       {activeModal.coupons && (
         <Modal_coupon
           orderType={'subscribe'}
