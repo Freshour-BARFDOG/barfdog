@@ -44,9 +44,9 @@ section.final_btn {
   p {
     cursor: default;
   }
-  span {
-    height: 100%;
-  }
+  // span {
+  //   height: 100%;
+  // }
 
   .Wrapper {
     width: rem(760);
@@ -170,6 +170,8 @@ section.subscribe_month {
       align-items: center;
       justify-content: center;
       text-align: center;
+      position: relative;
+      overflow: hidden;
       cursor: pointer;
       transition: 0.2s all;
       h4 {
@@ -255,7 +257,7 @@ section.discount {
     padding: 0 rem(10) rem(20) rem(10);
     justify-content: space-between;
     align-items: center;
-    font-size: rem(24);
+    font-size: rem(20);
   }
 
   // 4) 적립금
@@ -323,9 +325,18 @@ section.total_price {
     font-size: rem(20);
     margin-bottom: rem(30);
     border-radius: rem(5);
+    gap: rem(20);
+    display: flex;
+    flex-direction: column;
 
     h4 {
       font-weight: bold;
+      padding-bottom: rem(8);
+    }
+
+    .subscribe_discount {
+      border-bottom: rem(1) solid #a7a7a7;
+      padding-bottom: rem(20);
     }
 
     .discount_info_list {
@@ -336,30 +347,11 @@ section.total_price {
     .discount_info {
       display: flex;
       justify-content: space-between;
+      padding: rem(4) 0;
     }
-
-    //-- [삭제] 한 팩 가격 --
-    // .subscribe_discount {
-    //   display: flex;
-    //   justify-content: space-between;
-
-    //   .per_pack_price {
-    //     display: flex;
-    //     flex-direction: column;
-    //     align-items: flex-end;
-    //     margin-bottom: rem(10);
-    //     .per_pack_discount_price {
-    //       color: #be1a21;
-    //       font-weight: bold;
-    //       font-size: rem(26);
-    //     }
-
-    //     .per_pack_origin_price {
-    //       text-decoration: line-through;
-    //       color: #b2b2b2;
-    //     }
-    //   }
-    // }
+    .red_text {
+      color: #be1a21;
+    }
 
     .benefit_info_list {
       .benefit_wrapper {
@@ -367,7 +359,7 @@ section.total_price {
         display: flex;
         flex-direction: column;
         gap: rem(6);
-        font-size: rem(18);
+        // font-size: rem(18);
         .benefit_info {
           display: flex;
           justify-content: space-between;
@@ -1009,7 +1001,7 @@ $grid-row-gap: rem(16);
       }
     }
     .selected {
-      border: rem(1) solid var(--color-line-01);
+      border: rem(1.5) solid var(--color-line-01);
       color: var(--color-font-def);
       img {
         opacity: 1 !important;

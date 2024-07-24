@@ -25,6 +25,7 @@ import popupWindow from '/util/func/popupWindow';
 import Link from 'next/link';
 import OrdersheetPaymentList from '../../../../components/order/OrdersheetPaymentList';
 import { Modal_delivery } from '../../../../components/modal/Modal_delivery';
+import { subscriptionMonthType } from '../../../../../store/TYPE/subscriptionMonthType';
 
 export default function SubscribeOrderSheetPage() {
   const router = useRouter();
@@ -42,6 +43,7 @@ export default function SubscribeOrderSheetPage() {
     coupons: false,
     delivery: false,
   });
+  const [subscriptionMonthTypeKey, setSubscriptionMonthTypeKey] = useState('');
 
   useEffect(() => {
     if (window && typeof window !== 'undefined') {
@@ -89,6 +91,15 @@ export default function SubscribeOrderSheetPage() {
         const getRecipeInfoApiUrl = `/api/recipes`;
         const recipeInfoRes = await getData(getRecipeInfoApiUrl);
         const recipeInfoData = recipeInfoRes.data;
+
+        const getDeliveryInfoApiUrl = `/api/address`;
+        const deliveryInfoData = await getData(getDeliveryInfoApiUrl);
+
+        const addresses =
+          deliveryInfoData.data._embedded.addressResponseDtoList;
+
+        // 기본 주소
+        const defaultAddress = addresses.find((address) => address.default);
 
         if (res.status !== 200) {
           alert('주문 정보를 확인할 수 없습니다.');
@@ -140,7 +151,42 @@ export default function SubscribeOrderSheetPage() {
             100,
         );
 
-        // 주문에 대한 모든 데이터
+        // 배송횟수 계산
+        const getDeliveryCount = (type) => {
+          if (type.VALUE === null) {
+            return 1;
+          } else if (
+            data.subscribeDto.plan === 'FULL' ||
+            data.subscribeDto.plan === 'TOPPING_FULL'
+          ) {
+            return type.fullDeliveryCount;
+          } else if (
+            data.subscribeDto.plan === 'HALF' ||
+            data.subscribeDto.plan === 'TOPPING_HALF'
+          ) {
+            return type.halfDeliveryCount;
+          } else return 1;
+        };
+
+        // 플랜 할인율 적용되기 전 계산
+        const calcSubscribePlanOriginPrice = ({
+          discountPercent,
+          paymentPrice,
+        }) => {
+          const originPrice = paymentPrice * (100 / (100 - discountPercent));
+
+          return Math.floor(originPrice);
+
+          //! [리뉴얼 240724] 10원 단위로 절사 -> 소수점이하 버리고 1원 단위 표기로 수정
+          // return (
+          //   Math.floor(originPrice / subscribePriceCutOffUnit) *
+          //   subscribePriceCutOffUnit
+          // );
+        };
+
+        // console.log(getDeliveryCount(subscriptionMonthType.SIX));
+
+        //* 주문에 대한 모든 데이터
         const initInfo = {
           subscribeDto: {
             id: data.subscribeDto.id,
@@ -150,6 +196,7 @@ export default function SubscribeOrderSheetPage() {
               discountPercent: subscribePlanInfo[data.subscribeDto.plan],
               paymentPrice: data.subscribeDto.nextPaymentPrice,
             }),
+            discountPlan: subscribePlanInfo[data.subscribeDto.plan], //! [리뉴얼] 플랜별 할인율
             // discountGrade: data.subscribeDto.discountGrade, // 등급할인 (할인표기에 사용)
             discountGrade: calculatedDiscountGrade, //! [수정] 계산된 등급할인 값
             oneMealGramsPerRecipeList: seperateStringViaComma(
@@ -180,7 +227,7 @@ export default function SubscribeOrderSheetPage() {
           brochure: data.brochure, // 브로슈어 받은 적 있는지 true/false => 브로슈어는 1번만 받을 수 있다.
         };
 
-        // FormDatas
+        //* FormDatas
         const initForm = {
           selfInfo: {
             reward: data.reward,
@@ -199,20 +246,24 @@ export default function SubscribeOrderSheetPage() {
               expiredDate: transformDate(cp.expiredDate),
             })) || [],
           deliveryDto: {
-            name: null, // 수령자 이름 ("정기배송과" 묶음 배송일 경우, null => 정기배송 수령자를 따름)
-            phone: null, // 수령자 전화번호 (묶음 배송일 경우, null)
-            zipcode: null, // 우편번호 (묶음 배송일 경우, null)
-            street: null, // 도로명 주소 (묶음 배송일 경우, null)
-            detailAddress: null, // 상세주소 (묶음 배송일 경우, null)
-            request: null, // 배송 요청사항 (묶음 배송일 경우, null)
+            name: defaultAddress.recipientName || null, // 수령자 이름 ("정기배송과" 묶음 배송일 경우, null => 정기배송 수령자를 따름)
+            phone: defaultAddress.phoneNumber || null, // 수령자 전화번호 (묶음 배송일 경우, null)
+            zipcode: defaultAddress.zipcode || null, // 우편번호 (묶음 배송일 경우, null)
+            street: defaultAddress.street || null, // 도로명 주소 (묶음 배송일 경우, null)
+            detailAddress: defaultAddress.detailAddress || null, // 상세주소 (묶음 배송일 경우, null)
+            request: defaultAddress.request || null, // 배송 요청사항 (묶음 배송일 경우, null)
           },
-          orderPrice: data.subscribeDto.nextPaymentPrice,
+          orderPrice:
+            data.subscribeDto.nextPaymentPrice *
+            getDeliveryCount(subscriptionMonthType.SIX), //? default : '6개월' 선택된 값
           deliveryPrice: 0, // 배송비
           discountTotal: 0, // 총 할인 합계
           discountReward: 0, // 사용할 적립금
           discountCoupon: 0, // 쿠폰 적용으로 인한 할인금
           overDiscount: 0, // 초과할인금 (23.02 바프독측 요구사항: 초과할인존재 시, 최소금액 결제 기능)
-          paymentPrice: data.subscribeDto.nextPaymentPrice, // 최종 결제 금액
+          paymentPrice:
+            data.subscribeDto.nextPaymentPrice *
+            getDeliveryCount(subscriptionMonthType.SIX), // 최종 결제 금액 //? default : '6개월' 선택된 값
           paymentMethod: null, // 결제방법  [CREDIT_CARD, NAVER_PAY, KAKAO_PAY]
           // nextDeliveryDate: getDiffDate(1), // ! TEST CODE :  테스트로, 1일 이후 배송이 시작되는 것으로 설정함 (221020)
           //   ! PRODUCT CODE
@@ -227,6 +278,7 @@ export default function SubscribeOrderSheetPage() {
 
         setInfo(initInfo);
         setForm(initForm);
+        setSubscriptionMonthTypeKey('SIX'); //? default : '6개월' 선택된 값
 
         // Validation - 구독 결제정보가 불충분한 경우
         const invalidPaymentPrice = info.subscribeDto?.nextPaymentPrice === 0;
@@ -250,18 +302,26 @@ export default function SubscribeOrderSheetPage() {
         }));
       }
     })();
-
-    const calcSubscribePlanOriginPrice = ({
-      discountPercent,
-      paymentPrice,
-    }) => {
-      const originPrice = paymentPrice * (100 / (100 - discountPercent));
-      return (
-        Math.floor(originPrice / subscribePriceCutOffUnit) *
-        subscribePriceCutOffUnit
-      );
-    };
   }, [router.query.subscribeId]);
+
+  useEffect(() => {
+    switch (form.subscriptionMonth) {
+      case 12:
+        setSubscriptionMonthTypeKey('TWELVE');
+        break;
+      case 6:
+        setSubscriptionMonthTypeKey('SIX');
+        break;
+      case 3:
+        setSubscriptionMonthTypeKey('THREE');
+        break;
+      case null:
+        setSubscriptionMonthTypeKey('ONE');
+        break;
+      default:
+        break;
+    }
+  }, [form, form.subscriptionMonth]);
 
   const onActivleModalHandler = (e) => {
     const button = e.currentTarget;
@@ -352,6 +412,8 @@ export default function SubscribeOrderSheetPage() {
               setForm={setForm}
               formErrors={formErrors}
               setFormErrors={setFormErrors}
+              orderType={'subscribe'}
+              subscriptionMonthTypeKey={subscriptionMonthTypeKey}
             />
 
             <div className={s.divider}></div>
@@ -364,6 +426,8 @@ export default function SubscribeOrderSheetPage() {
               formErrors={formErrors}
               setFormErrors={setFormErrors}
               onActivleModalHandler={onActivleModalHandler}
+              orderType={'subscribe'}
+              subscriptionMonthTypeKey={subscriptionMonthTypeKey}
             />
 
             <div className={s.divider}></div>

@@ -61,7 +61,7 @@ export const Modal_delivery = ({
           if (defaultAddress && addressStatus === 'default') {
             setSelectedItemId(defaultAddress.id);
             setIsActive(true);
-            console.log('defaultAddress??', defaultAddress);
+            // console.log('defaultAddress::', defaultAddress);
             setDeliveryInfo({
               zipcode: defaultAddress.zipcode,
               street: defaultAddress.street,
@@ -155,8 +155,6 @@ export const Modal_delivery = ({
         try {
           const res = await postData(url);
           // console.log(res);
-
-          console.log('0000', deliveryInfo);
 
           if (res.status === 200) {
             // POST req body update

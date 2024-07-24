@@ -86,9 +86,14 @@ export function Payment({
       detailAddress: form.deliveryDto.detailAddress,
       paymentMethod: form.paymentMethod,
       agreePrivacy: form.agreePrivacy,
-      paymentPrice: calcOrdersheetPrices(form, orderType, {
-        deliveryFreeConditionPrice: info.freeCondition,
-      }).paymentPrice,
+      paymentPrice: calcOrdersheetPrices(
+        form,
+        orderType,
+        {
+          deliveryFreeConditionPrice: info.freeCondition,
+        },
+        info,
+      ).paymentPrice,
     };
     // // console.log(valid_target)
     // // console.log(info)
@@ -119,15 +124,23 @@ export function Payment({
       overDiscount,
       paymentPrice,
       discountGrade,
-    } = calcOrdersheetPrices(form, orderType, {
-      deliveryFreeConditionPrice: info.freeCondition,
-    });
+      discountSubscriptionMonth,
+    } = calcOrdersheetPrices(
+      form,
+      orderType,
+      {
+        deliveryFreeConditionPrice: info.freeCondition,
+      },
+      info,
+    );
 
     const customerUid = generateCustomerUid(); // ! [client '결제실패' / Webhook 'paid'] CASE 처리를 위해, 주문서 생성 시에도 cutomerUid 전송.
 
     // // @YYL 콕뱅크 주문인지 확인
     // let allianceType = "NONE"
     // if(getCookie("alliance") === "cb") allianceType = "COKBANK"
+
+    // console.log('---------------', discountTotal);
 
     const body =
       orderType === 'general'
@@ -179,11 +192,14 @@ export function Payment({
               request: form.deliveryDto.request, // 배송 요청사항
             },
             orderPrice: form.orderPrice, //  ! 주문 상품 원가 = nextPaymentPrice (등급 할인 적용x / 플랜변경, 레시피, 레시피 그램 등이 반영된 "제품원가"에 해당함)
+            //! [리뉴얼 수정] orderPrice = nextPaymentPrice * 배송횟수 --> 플랜 할인율은 적용됨!
+            // 주문 상품 원가 (등급 할인 적용x)
             deliveryPrice: form.deliveryPrice, // 배송비
             discountTotal: discountTotal, // 총 할인 합계    ! 쿠폰할인금 적용
             discountReward: Number(form.discountReward), // 사용할 적립금
             discountCoupon: discountCoupon, // 쿠폰 적용으로 인한 할인금 ! coupon할인금 적용
             discountGrade: discountGrade, // 등급할인
+            discountSubscriptionMonth: discountSubscriptionMonth, //! [리뉴얼] 구독개월수
             paymentPrice: paymentPrice, // 최종 결제 금액
             overDiscount: overDiscount, // 초과할인 금액
             paymentMethod: form.paymentMethod, // 결제방법  [CREDIT_CARD, NAVER_PAY, KAKAO_PAY]
@@ -209,6 +225,8 @@ export function Payment({
           ? `/api/orders/general`
           : `/api/orders/subscribe/${subscribeId}`;
       const res = await postObjData(apiUrl, body);
+
+      // console.log(res);
 
       if (res.isDone) {
         const merchantUid = res.data.data.merchantUid;

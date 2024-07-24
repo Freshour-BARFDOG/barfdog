@@ -107,57 +107,6 @@ export const OrdersheetSubscribeItemList = ({
                   </div>
                 </div>
               ))}
-
-              {/* ! [삭제예정] */}
-              {/* <div className={s.count_col}>{1} 개</div>
-
-              <div className={s.title_col}>총 주문금액</div>
-              <div className={s.price_col}>
-                <div className={s.price_inner}>
-                  {transformLocalCurrency(info.subscribeDto?.originPrice)}원
-                </div>
-                <span>
-                  {transformLocalCurrency(info.subscribeDto?.nextPaymentPrice)}
-                  원
-                </span>
-              </div>
-
-              <div
-                className={`${s.coupon_col_red}`}
-                style={{
-                  color: !form.discountCoupon && 'var(--color-disabled)',
-                }}
-              >
-                {form.discountCoupon &&
-                  '-' + transformLocalCurrency(form.discountCoupon)}
-                원
-              </div>
-              <div className={s.apply_coupon_col}>
-                {form.discountCoupon ? (
-                  <button
-                    type={'button'}
-                    className={`${s['btn']} ${s.applied}`}
-                    data-modal-type={'coupons'}
-                    data-item-id={info.subscribeDto.id}
-                    data-applied-coupon-id={form.memberCouponId}
-                    onClick={onCancleCoupon}
-                    onMouseEnter={onMouseEnterHandler}
-                    onMouseLeave={onMouseLeaveHandler}
-                  >
-                    적용됨
-                  </button>
-                ) : (
-                  <button
-                    type={'button'}
-                    className={`${s['btn']}`}
-                    data-modal-type={'coupons'}
-                    data-item-id={form.coupons?.memberCouponId}
-                    onClick={event.onActiveModal}
-                  >
-                    쿠폰 선택
-                  </button>
-                )}
-              </div> */}
             </li>
           )}
         </ul>

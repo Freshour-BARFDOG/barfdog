@@ -71,7 +71,7 @@ export const OrdersheetAmountOfPayment = ({
             )}
             원
           </span>
-          {/* ! 상품 리스트 전체에 대한 : 할인 가격*/}
+          {/* ! 상품 리스트 전체에 대한 : 할인 가격 */}
         </div>
 
         <hr />
