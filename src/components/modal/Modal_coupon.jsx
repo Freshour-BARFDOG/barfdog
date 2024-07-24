@@ -1,5 +1,5 @@
 import s from './modal_coupon.module.scss';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import ModalWrapper from './ModalWrapper';
 import transformDate from '/util/func/transformDate';
 import { discountUnitType } from '/store/TYPE/discountUnitType';
@@ -7,6 +7,10 @@ import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import { calcOrdersheetPrices } from '../order/calcOrdersheetPrices';
 import EmptyMessage from '../atoms/AmdinErrorMessage';
 import Spinner from '../atoms/Spinner';
+import enterKey from '/util/func/enterKey';
+import Modal_global_alert from '/src/components/modal/Modal_global_alert';
+import { useModalContext } from '/store/modal-context';
+import { putObjData } from '../../pages/api/reqData';
 
 export const Modal_coupon = ({
   onModalActive,
@@ -16,8 +20,10 @@ export const Modal_coupon = ({
   setForm,
   orderType = 'general',
 }) => {
-  const [selectedRadioInfo, setSelectedRadioInfo] = useState(null);
   const couponCodeRef = useRef(null);
+  const mct = useModalContext();
+  const hasAlert = mct.hasAlert;
+  const [selectedRadioInfo, setSelectedRadioInfo] = useState(null);
   const [isLoading, setIsLoading] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [couponCode, setCouponCode] = useState(null);
@@ -34,15 +40,22 @@ export const Modal_coupon = ({
     selectedItemPrice = itemInfo.nextPaymentPrice;
   }
 
+  useEffect(() => {}, []);
+
   const onChangeHandler = useCallback(
     (e) => {
       const radio = e.currentTarget;
       const radioId = radio.id;
       const couponId = Number(radio.dataset.couponId);
       const couponDiscountAmount = Number(radio.dataset.discountAmount);
-      const availableCouponMaxDiscount = calcOrdersheetPrices(form, orderType, {
-        deliveryFreeConditionPrice: info.freeCondition,
-      })?.availableMaxDiscount.coupon;
+      const availableCouponMaxDiscount = calcOrdersheetPrices(
+        form,
+        orderType,
+        {
+          deliveryFreeConditionPrice: info.freeCondition,
+        },
+        info,
+      )?.availableMaxDiscount.coupon;
       if (availableCouponMaxDiscount <= 0) {
         return alert(
           '최소결제금액에 도달하여, 할인 쿠폰을 적용할 수 없습니다.',
@@ -124,7 +137,7 @@ export const Modal_coupon = ({
 
   const onRegisterCouponByCode = useCallback(async () => {
     if (submitted) return console.error('이제 제출된 양식입니다.');
-    if (couponCode) {
+    if (!couponCode) {
       return mct.alertShow('쿠폰코드를 입력해주세요.');
     }
 
@@ -141,12 +154,14 @@ export const Modal_coupon = ({
       const apiUrl = '/api/coupons/code';
       const res = await putObjData(apiUrl, body);
 
+      console.log(res);
+
       if (res.isDone) {
         setSubmitted(true);
-        mct.alertShow('쿠폰이 등록되었습니다.', onSuccessCallback);
-        setTimeout(() => {
-          window.location.reload();
-        }, 1000);
+        mct.alertShow('쿠폰이 등록되었습니다.', onGlobalModalCallback);
+        // setTimeout(() => {
+        //   window.location.reload();
+        // }, 1000);
       } else if (res.status === 400 && res.status < 500) {
         let defErrorMessage = '쿠폰코드를 등록할 수 없습니다.';
         let errorMessage = res.data.data.errors[0].defaultMessage;
@@ -166,6 +181,10 @@ export const Modal_coupon = ({
       }));
     }
   }, [couponCode]);
+
+  const onGlobalModalCallback = () => {
+    mct.alertHide();
+  };
 
   if (!Object.keys(form).length)
     return console.error('Faild to render because of empty data props');
@@ -274,7 +293,7 @@ export const Modal_coupon = ({
                 type="text"
                 placeholder="쿠폰코드를 입력해주세요."
                 ref={couponCodeRef}
-                value={form.code || ''}
+                value={couponCode || ''}
                 onChange={onInputChangeHandler}
                 onKeyDown={onKeyDownHandler}
               />
@@ -307,6 +326,9 @@ export const Modal_coupon = ({
           </div>
         </section>
       </ModalWrapper>
+      {hasAlert && (
+        <Modal_global_alert onClick={onGlobalModalCallback} background />
+      )}
     </>
   );
 };

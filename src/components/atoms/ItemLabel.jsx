@@ -54,6 +54,11 @@ const TextWrap = styled.span`
     `
     height: 35px;
   `}
+  ${({ packageLabel }) =>
+    packageLabel &&
+    `
+    height: 33px;
+  `}
 `;
 
 const ItemLabel = ({ label, className, style }) => {
@@ -73,6 +78,7 @@ export const ItemRecommendlabel = ({
   className,
   style,
   inedibleFood,
+  packageLabel,
 }) => {
   return (
     <>
@@ -82,7 +88,9 @@ export const ItemRecommendlabel = ({
           {!inedibleFood && <HiStar />}
           {/* <HiStar /> */}
         </InnerIconWrap>
-        <TextWrap inedibleFood={inedibleFood}>{label}</TextWrap>
+        <TextWrap inedibleFood={inedibleFood} packageLabel={packageLabel}>
+          {label}
+        </TextWrap>
       </Icon_Recommend>
     </>
   );

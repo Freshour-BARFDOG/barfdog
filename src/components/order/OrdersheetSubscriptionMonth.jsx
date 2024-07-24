@@ -1,41 +1,80 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import s from '/src/pages/order/ordersheet/ordersheet.module.scss';
 import { subscriptionMonthType } from '../../../store/TYPE/subscriptionMonthType';
 import { OrdersheetReward } from '/src/components/order/OrdersheetReward';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import ToolTip from '/src/components/atoms/Tooltip';
+import { ItemRecommendlabel } from '/src/components/atoms/ItemLabel';
+import { calcOrdersheetPrices } from './calcOrdersheetPrices';
 
 export default function OrdersheetSubscriptionMonth({
   info,
   form,
   setForm,
-  formErrors,
-  setFormErrors,
+  orderType,
+  subscriptionMonthTypeKey,
 }) {
   const [isActive, setIsActive] = useState(form.subscriptionMonth);
-  const [discountPrice, setDiscountPrice] = useState(0);
 
-  console.log(isActive);
+  const calcResult = useCallback(
+    calcOrdersheetPrices(
+      form,
+      orderType,
+      {
+        deliveryFreeConditionPrice: info.freeCondition,
+      },
+      info,
+    ),
+    [form, orderType, form.subscriptionMonth],
+  );
 
   const getDeliveryCount = (type) => {
-    if (info.subscribeDto.plan === 'FULL') {
-      return type.fullDeliveryCount || 0;
-    } else if (info.subscribeDto.plan === 'HALF') {
-      return type.halfDeliveryCount || 0;
-    }
-    return 0;
+    if (type.VALUE === null) {
+      return 1;
+    } else if (
+      info.subscribeDto.plan === 'FULL' ||
+      info.subscribeDto.plan === 'TOPPING_FULL'
+    ) {
+      return type.fullDeliveryCount;
+    } else if (
+      info.subscribeDto.plan === 'HALF' ||
+      info.subscribeDto.plan === 'TOPPING_HALF'
+    ) {
+      return type.halfDeliveryCount;
+    } else return 1;
   };
+
+  useEffect(() => {
+    setForm((prevForm) => ({
+      ...prevForm,
+      subscriptionMonth: form.subscriptionMonth,
+      //! [리뉴얼 수정] orderPrice = nextPaymentPrice * 배송횟수
+      orderPrice:
+        info.subscribeDto?.nextPaymentPrice *
+        getDeliveryCount(subscriptionMonthType[subscriptionMonthTypeKey]),
+      //! [리뉴얼 수정] paymentPrice = nextPaymentPrice * 배송횟수
+      paymentPrice:
+        info.subscribeDto?.originPrice *
+          getDeliveryCount(subscriptionMonthType[subscriptionMonthTypeKey]) -
+        calcResult?.discountTotal -
+        Math.floor(
+          info.subscribeDto.originPrice *
+            getDeliveryCount(subscriptionMonthType[subscriptionMonthTypeKey]) *
+            (info.subscribeDto.discountPlan / 100),
+        ),
+    }));
+  }, []);
 
   const subscriptionMonthItems = Object.keys(subscriptionMonthType).map(
     (key) => {
       const type = subscriptionMonthType[key];
-      const deliveryCount = getDeliveryCount(type); // 배송횟수
 
       return {
         id: key,
         value: type.VALUE,
-        label: type.KOR === '6개월' && 'best',
+        label: type.VALUE === 6 && 'best',
         title: type.KOR,
+        discount: type.discount,
         bodyDescHTML: {
           row1: type.discount && (
             <p>
@@ -55,9 +94,13 @@ export default function OrdersheetSubscriptionMonth({
           row4: type.freeSkip && <p>건너 뛰기 무제한</p>,
           row5: type.freeDelivery && <p>무료 배송</p>,
           row6:
-            type.fullDeliveryCount && info.subscribeDto.plan === 'FULL'
+            type.fullDeliveryCount &&
+            (info.subscribeDto.plan === 'FULL' ||
+              info.subscribeDto.plan === 'TOPPING_FULL')
               ? `(${type.fullDeliveryCount}회 배송)`
-              : type.fullDeliveryCount && info.subscribeDto.plan === 'HALF'
+              : type.fullDeliveryCount &&
+                (info.subscribeDto.plan === 'HALF' ||
+                  info.subscribeDto.plan === 'TOPPING_HALF')
               ? `(${type.halfDeliveryCount}회 배송)`
               : '', // 배송횟수
           row7: type.freeKit && ( // 진단기기 가격 (하나당 98,000원)
@@ -101,11 +144,39 @@ export default function OrdersheetSubscriptionMonth({
   const monthSelectHandler = (item) => {
     setIsActive(item.value);
 
-    setForm((prevForm) => ({
-      ...prevForm,
-      subscriptionMonth: item.value,
-    }));
+    const deliveryCount = getDeliveryCount(subscriptionMonthType[item.id]);
+
+    if (deliveryCount) {
+      setForm((prevForm) => ({
+        ...prevForm,
+        subscriptionMonth: item.value,
+        //! [리뉴얼 수정] orderPrice(원가) = nextPaymentPrice * 배송횟수
+        orderPrice: info.subscribeDto?.nextPaymentPrice * deliveryCount,
+      }));
+    }
   };
+
+  // subscriptionMonth가 변경된 후 calcResult를 반영하여 paymentPrice(최종 결제금액)를 업데이트
+  useEffect(() => {
+    if (calcResult && form.subscriptionMonth !== undefined) {
+      const deliveryCount = getDeliveryCount(
+        subscriptionMonthType[subscriptionMonthTypeKey],
+      );
+
+      setForm((prevForm) => ({
+        ...prevForm,
+        //! [리뉴얼 수정] paymentPrice(최종결제금액) = originPrice * 배송횟수 - 할인금액 - 플랜할인금액(1개원가*배송횟수*플랜할인율)
+        paymentPrice:
+          info.subscribeDto?.originPrice * deliveryCount -
+          calcResult?.discountTotal -
+          Math.floor(
+            info.subscribeDto.originPrice *
+              deliveryCount *
+              (info.subscribeDto.discountPlan / 100),
+          ),
+      }));
+    }
+  }, [form.subscriptionMonth]);
 
   return (
     <>
@@ -121,6 +192,15 @@ export default function OrdersheetSubscriptionMonth({
               key={i}
               onClick={() => monthSelectHandler(item)}
             >
+              {item.label && (
+                <ItemRecommendlabel
+                  label="추천!"
+                  style={{
+                    backgroundColor: '#be1a21',
+                  }}
+                  packageLabel={true}
+                />
+              )}
               <h4>{item.title}</h4>
               <p>{item.bodyDescHTML.row6}</p>
               <div className={s.divider}></div>

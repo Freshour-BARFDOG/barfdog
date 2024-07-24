@@ -97,13 +97,21 @@ export const calcSubscribeItemsAvgPrice = (subscribePriceList) => {
   let salePrice =
     subscribePriceList.map((r) => r.salePrice).reduce((acc, cur) => acc + cur) /
     subscribePriceList.length;
-  const cutOffUnit = subscribePriceCutOffUnit; // ! '10'원단위로 절사 (= 1원단위 버림)
+
+  //! [리뉴얼 사항 240724] '10'원 단위로 절사 => 소수점 이하 버림, 1원 단위로 표기
+  return {
+    perPack: Math.floor(perPack), // ! 팩당가격 : 소수점 이하 버림 (웹개발기획서 22년 4월 2주) ,
+    originPrice: Math.floor(originPrice), // ! 원가: 소수점 이하 버림
+    salePrice: Math.floor(salePrice), // ! 판매가: 소수점 이하 버림
+  };
+
+  // const cutOffUnit = subscribePriceCutOffUnit; // ! '10'원단위로 절사 (= 1원단위 버림)
 
   // ! 참고) 만약 고객 측에서 UI상의 salePrice 결과가 몇 원 차이나는 것에 대해 문의할 경우,
   //  => (숨김 처리한) 팩당 가격을 소수점 이하까지 계산해보면, 10원 단위로 절사한 가격임을 알 수 있음.
-  return {
-    perPack: Math.floor(perPack), // ! 팩당가격 : 소수점 이하 버림 (웹개발기획서 22년 4월 2주) ,
-    originPrice: Math.floor(originPrice / cutOffUnit) * cutOffUnit, // ! 원가:  1원 단위 절사
-    salePrice: Math.floor(salePrice / cutOffUnit) * cutOffUnit, // ! 판매가: 1원 단위 절사
-  };
+  // return {
+  //   perPack: Math.floor(perPack), // ! 팩당가격 : 소수점 이하 버림 (웹개발기획서 22년 4월 2주) ,
+  //   originPrice: Math.floor(originPrice / cutOffUnit) * cutOffUnit, // ! 원가:  1원 단위 절사
+  //   salePrice: Math.floor(salePrice / cutOffUnit) * cutOffUnit, // ! 판매가: 1원 단위 절사
+  // };
 };

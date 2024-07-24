@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import s from '/src/pages/order/ordersheet/ordersheet.module.scss';
 import { subscriptionMonthType } from '../../../store/TYPE/subscriptionMonthType';
 import { OrdersheetReward } from '/src/components/order/OrdersheetReward';
 import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import ToolTip from '/src/components/atoms/Tooltip';
+import { calcOrdersheetPrices } from './calcOrdersheetPrices';
+import transformClearLocalCurrency from '/util/func/transformClearLocalCurrency';
+import { subscribePlanType } from '../../../store/TYPE/subscribePlanType';
 
 export default function OrdersheetPaymentList({
   info,
@@ -12,28 +15,42 @@ export default function OrdersheetPaymentList({
   formErrors,
   setFormErrors,
   onActivleModalHandler,
+  orderType,
+  subscriptionMonthTypeKey,
 }) {
-  const [isActive, setIsActive] = useState(form.subscriptionMonth);
-  const [discountPrice, setDiscountPrice] = useState(0);
-
   const getDeliveryCount = (type) => {
-    if (info.subscribeDto.plan === 'FULL') {
-      return type.fullDeliveryCount || 0;
-    } else if (info.subscribeDto.plan === 'HALF') {
-      return type.halfDeliveryCount || 0;
+    if (type.VALUE === null) {
+      return 1;
+    } else if (
+      info.subscribeDto.plan === 'FULL' ||
+      info.subscribeDto.plan === 'TOPPING_FULL'
+    ) {
+      return type.fullDeliveryCount;
+    } else if (
+      info.subscribeDto.plan === 'HALF' ||
+      info.subscribeDto.plan === 'TOPPING_HALF'
+    ) {
+      return type.halfDeliveryCount;
+    } else return 1;
+  };
+
+  const getMonthDiscount = (value) => {
+    for (const key in subscriptionMonthType) {
+      if (subscriptionMonthType[key].VALUE === value) {
+        return subscriptionMonthType[key].discount;
+      }
     }
-    return 0;
+    return null;
   };
 
   const subscriptionMonthItems = Object.keys(subscriptionMonthType).map(
     (key) => {
       const type = subscriptionMonthType[key];
-      const deliveryCount = getDeliveryCount(type); // 배송횟수
 
       return {
         id: key,
         value: type.VALUE,
-        label: type.KOR === '6개월' && 'best',
+        label: type.VALUE === 6 && 'best',
         title: type.KOR,
         bodyDescHTML: {
           row1: type.discount && (
@@ -42,14 +59,28 @@ export default function OrdersheetPaymentList({
             </p>
           ),
           row2: type.freeKit && (
-            <p>
-              진단 기기 <span>{type.freeKit}회</span> 무료
-            </p>
+            <>
+              <p>
+                진단 기기 <span>{type.freeKit}회</span> 무료
+              </p>
+              <ToolTip
+                message={`반려견의 장내 환경을 들여다 볼 수 있는 바프독 장내 미생물 진단키트를 무료로 제공해드립니다! (진단 시 보고서 기본 제공)`}
+                messagePosition={'left'}
+                wordBreaking={true}
+              />
+            </>
           ),
           row3: type.freeTopper && (
-            <p>
-              토퍼 랜덤 <span>{type.freeTopper}회</span> 무료
-            </p>
+            <>
+              <p>
+                토퍼 랜덤 <span>{type.freeTopper}회</span> 무료
+              </p>
+              <ToolTip
+                message={`식사 위에 토핑으로 올릴 수 있는 건강한 토퍼 제품을 무료로 제공해드립니다! (바프레드, 바프화이트, 터메릭슈퍼큐브, 치킨스프, 머쉬룸스프 중 랜덤 증정)`}
+                messagePosition={'left'}
+                wordBreaking={true}
+              />
+            </>
           ),
           row4: type.freeSkip && <p>건너 뛰기 무제한</p>,
           row5: type.freeDelivery && <p>무료 배송</p>,
@@ -97,14 +128,19 @@ export default function OrdersheetPaymentList({
     },
   );
 
-  const monthSelectHandler = (item) => {
-    setIsActive(item.value);
+  const calcResult = useCallback(
+    calcOrdersheetPrices(
+      form,
+      orderType,
+      {
+        deliveryFreeConditionPrice: info.freeCondition,
+      },
+      info,
+    ),
+    [form, orderType],
+  );
 
-    setForm((prevForm) => ({
-      ...prevForm,
-      subscriptionMonth: item.value,
-    }));
-  };
+  console.log('calcResult____', calcResult);
 
   return (
     <>
@@ -140,7 +176,22 @@ export default function OrdersheetPaymentList({
           <div className={s.total_price_text}>
             <h2>총 결제금액</h2>
             <div>
-              {transformLocalCurrency(info.subscribeDto?.nextPaymentPrice)}원
+              {/* 총 결제금액 = 1개원가*배송횟수 - 할인금액 - 1개원가*배송횟수*플랜할인율(플랜할인금액)  */}
+              {transformLocalCurrency(
+                info.subscribeDto?.originPrice *
+                  getDeliveryCount(
+                    subscriptionMonthType[subscriptionMonthTypeKey],
+                  ) -
+                  calcResult?.discountTotal -
+                  Math.floor(
+                    info.subscribeDto.originPrice *
+                      getDeliveryCount(
+                        subscriptionMonthType[subscriptionMonthTypeKey],
+                      ) *
+                      (info.subscribeDto.discountPlan / 100),
+                  ),
+              )}
+              원
             </div>
           </div>
           <div className={s.monthly_price}>
@@ -148,23 +199,27 @@ export default function OrdersheetPaymentList({
             {form.subscriptionMonth
               ? transformLocalCurrency(
                   Math.round(
-                    info.subscribeDto?.nextPaymentPrice /
+                    (form.orderPrice - calcResult?.discountTotal) /
                       form.subscriptionMonth /
                       30,
                   ),
                 )
               : transformLocalCurrency(
-                  info.subscribeDto?.nextPaymentPrice / 30,
+                  Math.round(
+                    (form.orderPrice - calcResult?.discountTotal) / 30,
+                  ),
                 )}
             원 / 월{' '}
             {form.subscriptionMonth
               ? transformLocalCurrency(
                   Math.round(
-                    info.subscribeDto?.nextPaymentPrice /
+                    (form.orderPrice - calcResult?.discountTotal) /
                       form.subscriptionMonth,
                   ),
                 )
-              : transformLocalCurrency(info.subscribeDto?.nextPaymentPrice)}
+              : transformLocalCurrency(
+                  form.orderPrice - calcResult?.discountTotal,
+                )}
             원
           </div>
         </div>
@@ -174,7 +229,13 @@ export default function OrdersheetPaymentList({
           <div className={s.detail_price_text}>
             <div>상품금액</div>
             <div>
-              {transformLocalCurrency(info.subscribeDto?.originPrice)}원
+              {transformLocalCurrency(
+                info.subscribeDto?.originPrice *
+                  getDeliveryCount(
+                    subscriptionMonthType[subscriptionMonthTypeKey],
+                  ),
+              )}
+              원{/* // 플랜 할인 전   */}
             </div>
           </div>
           <div className={s.detail_price_text}>
@@ -185,10 +246,23 @@ export default function OrdersheetPaymentList({
           <div className={s.detail_price_text}>
             <div>할인&혜택</div>
             <span>
-              -
+              {calcResult?.discountTotal +
+                info.subscribeDto.originPrice *
+                  getDeliveryCount(
+                    subscriptionMonthType[subscriptionMonthTypeKey],
+                  ) *
+                  (info.subscribeDto.discountPlan / 100) >
+                0 && '-'}
+              {/* 총 할인금액 = 계산된할인금액(플랜할인율 미적용) + 1개원가*배송횟수*플랜할인율(플랜할인금액) */}
               {transformLocalCurrency(
-                info.subscribeDto?.originPrice -
-                  info.subscribeDto?.nextPaymentPrice,
+                calcResult?.discountTotal +
+                  Math.floor(
+                    info.subscribeDto.originPrice *
+                      getDeliveryCount(
+                        subscriptionMonthType[subscriptionMonthTypeKey],
+                      ) *
+                      (info.subscribeDto.discountPlan / 100),
+                  ),
               )}
               원
             </span>
@@ -197,30 +271,84 @@ export default function OrdersheetPaymentList({
 
         {/* 할인&혜택 상세내역 */}
         <div className={s.benefit_discount_list}>
-          {/* (1) 한 팩 가격 */}
           <div className={s.subscribe_discount}>
             <h4>할인</h4>
-
             <div className={s.discount_info_list}>
-              <div className={s.discount_info}>
-                <div>
-                  {isActive === 12
-                    ? '12개월 플랜 할인 (20%)'
-                    : form.subscriptionMonth === 6
-                    ? '6개월 플랜 할인 (15%)'
-                    : form.subscriptionMonth === 3
-                    ? '6개월 플랜 할인 (5%)'
-                    : ''}
+              {orderType === 'subscribe' && form.subscriptionMonth && (
+                <div className={`${s.discount_info} ${s.red_text}`}>
+                  <div>
+                    {form.subscriptionMonth}개월 패키지 할인 (
+                    {getMonthDiscount(form.subscriptionMonth)}%)
+                  </div>
+                  <div>
+                    <span>
+                      {calcResult?.discountSubscriptionMonth > 0 && '-'}
+                      {transformLocalCurrency(
+                        calcResult?.discountSubscriptionMonth,
+                      )}
+                      원
+                    </span>
+                  </div>
                 </div>
-                <div>-000원</div>
-              </div>
+              )}
+              {orderType === 'subscribe' &&
+                (info.subscribeDto.plan === 'FULL' ||
+                  info.subscribeDto.plan === 'HALF') && (
+                  <div className={`${s.discount_info} ${s.red_text}`}>
+                    <div>
+                      {subscribePlanType[info.subscribeDto.plan].KOR} 할인 (
+                      {info.subscribeDto.discountPlan}%)
+                    </div>
+                    <div>
+                      <span>
+                        {info.subscribeDto.originPrice *
+                          getDeliveryCount(
+                            subscriptionMonthType[subscriptionMonthTypeKey],
+                          ) *
+                          (info.subscribeDto.discountPlan / 100) >
+                          0 && '-'}
+                        {transformLocalCurrency(
+                          Math.floor(
+                            info.subscribeDto.originPrice *
+                              getDeliveryCount(
+                                subscriptionMonthType[subscriptionMonthTypeKey],
+                              ) *
+                              (info.subscribeDto.discountPlan / 100),
+                          ),
+                        )}
+                        원
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+              {form.subscriptionMonth === null && (
+                <div className={s.discount_info}>
+                  <div>등급</div>
+                  <div>
+                    <span>
+                      {transformClearLocalCurrency(calcResult?.discountGrade) >
+                        0 && '- '}
+                      {transformLocalCurrency(calcResult?.discountGrade)}원
+                    </span>
+                  </div>
+                </div>
+              )}
               <div className={s.discount_info}>
                 <div>쿠폰</div>
-                <div>-000원</div>
+                <div>
+                  {' '}
+                  {calcResult?.discountCoupon > 0 && '-'}
+                  {transformLocalCurrency(calcResult?.discountCoupon)}원
+                </div>
               </div>
               <div className={s.discount_info}>
                 <div>적립금</div>
-                <div>-000원</div>
+                <div>
+                  {transformClearLocalCurrency(calcResult?.discountReward) >
+                    0 && '- '}
+                  {transformLocalCurrency(calcResult?.discountReward)}원
+                </div>
               </div>
             </div>
           </div>
@@ -236,23 +364,14 @@ export default function OrdersheetPaymentList({
                     <div className={s.benefit_info}>
                       <div className={s.benefit_title}>
                         {item.bodyDescHTML.row2}{' '}
-                        <ToolTip
-                          message={`반려견의 장내 환경을 들여다 볼 수 있는 바프독 장내 미생물 진단키트를 무료로 제공해드립니다! (진단 시 보고서 기본 제공)`}
-                          messagePosition={'left'}
-                          wordBreaking={true}
-                        />
                       </div>
                       {item.bodyDescHTML.row7}
                     </div>
+
                     {/* 토퍼 */}
                     <div className={s.benefit_info}>
                       <div className={s.benefit_title}>
                         {item.bodyDescHTML.row3}
-                        <ToolTip
-                          message={`식사 위에 토핑으로 올릴 수 있는 건강한 토퍼 제품을 무료로 제공해드립니다! (바프레드, 바프화이트, 터메릭슈퍼큐브, 치킨스프, 머쉬룸스프 중 랜덤 증정)`}
-                          messagePosition={'left'}
-                          wordBreaking={true}
-                        />
                       </div>
                       {item.bodyDescHTML.row8}
                     </div>
@@ -271,27 +390,6 @@ export default function OrdersheetPaymentList({
           </div>
         </div>
 
-        {/* (1) 한 팩 가격 ==> 제거 예정! */}
-        {/* <div className={s.subscribe_discount}>
-            <h4>
-              {isActive === 12
-                ? '20% 할인 혜택'
-                : form.subscriptionMonth === 6
-                ? '15% 할인 혜택'
-                : form.subscriptionMonth === 3
-                ? '5% 할인 할인 혜택'
-                : form.subscriptionMonth === null
-                ? '정기구독'
-                : ''}
-            </h4>
-            <div className={s.per_pack_price}>
-              <div>
-                <span className={s.per_pack_discount_price}>00,000원</span> /
-                1팩
-              </div>
-              <div className={s.per_pack_origin_price}>00,000원 / 1팩</div>
-            </div>
-          </div> */}
         {/* <OrdersheetAmountOfPayment
                 orderType={'subscribe'}
                 info={info}

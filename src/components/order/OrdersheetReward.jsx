@@ -18,9 +18,14 @@ export const OrdersheetReward = ({
 }) => {
   useEffect(() => {
     const usedReward = Number(form[id]);
-    const calcResult = calcOrdersheetPrices(form, orderType, {
-      deliveryFreeConditionPrice: info.freeCondition,
-    });
+    const calcResult = calcOrdersheetPrices(
+      form,
+      orderType,
+      {
+        deliveryFreeConditionPrice: info.freeCondition,
+      },
+      info,
+    );
     const availableMaxDiscount = calcResult?.availableMaxDiscount.reward;
     const overDiscount = calcResult?.overDiscount;
     const userTotalReward = info.reward;
@@ -64,9 +69,14 @@ export const OrdersheetReward = ({
   };
 
   const onClickDisCountReward = () => {
-    const discountAmount = calcOrdersheetPrices(form, orderType, {
-      deliveryFreeConditionPrice: info.freeCondition,
-    })?.availableMaxDiscount.reward;
+    const discountAmount = calcOrdersheetPrices(
+      form,
+      orderType,
+      {
+        deliveryFreeConditionPrice: info.freeCondition,
+      },
+      info,
+    )?.availableMaxDiscount.reward;
     setForm((prevState) => ({
       ...prevState,
       [id]: discountAmount > 0 ? discountAmount : 0,
