@@ -73,8 +73,20 @@ export const Modal_delivery = ({
               request: defaultAddress.request,
             });
           } else if (!defaultAddress) {
-            setSelectedItemId(null);
-            addressStatus === 'default' && setIsActive(false);
+            // 기본 배송지가 없을 경우, 첫번째 항목 선택
+            setSelectedItemId(addresses[0]?.id);
+            setDeliveryInfo({
+              zipcode: addresses[0]?.zipcode,
+              street: addresses[0]?.street,
+              city: addresses[0]?.city,
+              detailAddress: addresses[0]?.detailAddress,
+              recipientName: addresses[0]?.recipientName,
+              deliveryName: addresses[0]?.deliveryName,
+              phoneNumber: addresses[0]?.phoneNumber,
+              request: addresses[0].request,
+            });
+
+            // addressStatus === 'default' && setIsActive(false);
           }
         }
       } catch (err) {
@@ -108,11 +120,37 @@ export const Modal_delivery = ({
     if (!isConfirmed) {
       return;
     }
+
+    // [유효성] 항목 하나만 있는데 제거하려는 경우
+    if (addressList.length === 1) {
+      return alert('기본 배송지는 제거할 수 없습니다.');
+    }
+
     const url = `/api/address/${address.id}`;
     try {
       const res = await deleteData(url);
 
       if (res.status === 200) {
+        // [유효성] 클릭된 항목을 제거할 경우
+        if (selectedItemId === address.id) {
+          // 첫번째 항목 체크
+          setSelectedItemId(addressList[0].id);
+
+          // 첫번째 배송지 항목으로 form 업데이트
+          setForm((prev) => ({
+            ...prev,
+            deliveryDto: {
+              name: addressList[0].recipientName,
+              phone: addressList[0].phoneNumber,
+              zipcode: addressList[0].zipcode,
+              street: addressList[0].street,
+              detailAddress: addressList[0].detailAddress,
+              request: addressList[0].request,
+            },
+          }));
+        }
+
+        //  다시 조회
         fetchData();
       }
     } catch (err) {
@@ -230,9 +268,7 @@ export const Modal_delivery = ({
 
   // console.log('addressStatus>>>', addressStatus);
   // console.log('selectedItemId>>>', selectedItemId);
-  // console.log('form', form);
   // console.log('addressList', addressList);
-  // console.log(':isActive>>>', isActive);
   // console.log('deliveryInfo>>>', deliveryInfo);
 
   const onHideModal = () => {
