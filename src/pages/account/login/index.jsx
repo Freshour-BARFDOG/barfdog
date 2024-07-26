@@ -209,7 +209,7 @@ export default function LoginPage() {
     }
   }, []);
 
-  console.log('surveyData>>>', surveyData);
+  // console.log('surveyData>>>', surveyData);
 
   return (
     <>

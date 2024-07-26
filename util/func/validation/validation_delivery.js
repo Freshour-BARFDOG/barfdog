@@ -27,6 +27,9 @@ export const validate = async (obj) => {
       case 'street':
         errors[key] = valid_isEmpty(val);
         break;
+      case 'detailAddress':
+        errors[key] = valid_isEmpty(val);
+        break;
       case 'zipcode':
         errors[key] = valid_isEmpty(val);
         break;
@@ -35,7 +38,6 @@ export const validate = async (obj) => {
         break;
     }
   }
-  console.log('=====', obj);
-  console.log('Valid Result (formValues) : ', errors);
+
   return errors;
 };

@@ -4,7 +4,7 @@ import s from './mypageWrapper.module.scss';
 import Dashboard from './Dashboard';
 import MypageBanner from '/src/components/atoms/MypageBanner';
 import useDeviceState from '/util/hook/useDeviceState';
-
+import BottomMenu from './BottomMenu';
 
 // const DUMMY_DATA = {
 //   data: {
@@ -33,34 +33,31 @@ import useDeviceState from '/util/hook/useDeviceState';
 //
 // }
 
-
-
-
-
-const Menu = dynamic(
-  () => {
-    // SSR 랜더링 사용없이 랜더링함
-    // menu 내부에 window객체의 undefined 오류를 방지하기 위함
-    return import('./MypageMenu');
-  },
-  { ssr: false },
-);
+// const Menu = dynamic(
+//   () => {
+//     // SSR 랜더링 사용없이 랜더링함
+//     // menu 내부에 window객체의 undefined 오류를 방지하기 위함
+//     return import('./MypageMenu');
+//   },
+//   { ssr: false },
+// );
 
 function MypageWapper({ children }) {
   const isMobile = useDeviceState().isMobile;
-  
+
   return (
     <>
       {isMobile ? (
         <>{children}</>
       ) : (
         <div className={s.mypageWrapper}>
-          <Dashboard className={s.dashboard}/>
-          <MypageBanner />
-          <div className={`${s.contents_wrap} clearfix`}>
+          <section className={`${s.contents} clearfix`}>{children}</section>
+
+          {/* ! [삭제예정] */}
+          {/* <div className={`${s.contents_wrap} clearfix`}>
             <Menu className={s.menu} />
             <section className={`${s.contents} clearfix`}>{children}</section>
-          </div>
+          </div> */}
         </div>
       )}
     </>

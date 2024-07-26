@@ -27,14 +27,24 @@ $container-maxWidth: rem(960);
     font-weight: 400;
     // color: vaR(--color-font-sub);
   }
+  // ! 마이페이지
   &.mypage {
-    grid-template-columns: minmax(rem(100), auto) 1fr;
-    column-gap: rem(10);
-    padding: rem(8) 0 rem(18);
-    text-align: left;
-
-    > span {
-      @include char(l15);
+    margin-bottom: rem(180);
+    .link {
+      padding-top: rem(42);
+      display: flex;
+      justify-content: center;
+      padding-bottom: rem(48);
+      width: 100%;
+      max-width: rem(315);
+      border: rem(1) solid #727272;
+      text-align: center;
+      color: #828282;
+      @include char(l16);
+      padding: rem(17) 0;
+      border-radius: rem(4);
+      margin: auto;
+      font-weight: 600;
     }
   }
 }

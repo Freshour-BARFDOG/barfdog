@@ -92,37 +92,10 @@ export default function Header(withoutDeadLine = false) {
     <>
       <header id={s.site_header}>
         <Wrapper>
-          {mypageState.isMyPage ? (
-            <section className={s['mobile-container-onMyapge']}>
-              <span className={s['movepage-wrap']}>
-                {mypageState.depth === 1 ? (
-                  <Link href="/" passHref>
-                    <a>
-                      <Icon_Home
-                        width="100%"
-                        height="100%"
-                        viewBox="0 0 30 30"
-                      />
-                    </a>
-                  </Link>
-                ) : (
-                  <IoIosArrowBack size={26} onClick={returnToPrevPage} />
-                )}
-              </span>
-              <span className={s['title-wrap']}>{pageTitle}</span>
-              <span className={s['gbn-my-wrap']}>
-                <Gnb_my
-                  isMobile={isMobile}
-                  setSidrOpen={setIsSidrOpen}
-                  authData={auth}
-                />
-              </span>
-            </section>
-          ) : (
-            <div className={s.headerContainer}>
-              {/* <section id="account" className={`${s.account_area} pc`}>
+          <div className={s.headerContainer}>
+            {/* <section id="account" className={`${s.account_area} pc`}>
                 <ul> */}
-              {/* {userData?.userType === userType.ADMIN && (
+            {/* {userData?.userType === userType.ADMIN && (
                     <MoveToAdminPageButton />
                   )}
                   {userData ? (
@@ -133,7 +106,7 @@ export default function Header(withoutDeadLine = false) {
                   {userData?.userType !== userType.ADMIN && (
                     <ServiceCenter data={{ auth: userData }} />
                   )} */}
-              {/* {userData && (
+            {/* {userData && (
                     <button
                       type={'button'}
                       onClick={
@@ -146,29 +119,30 @@ export default function Header(withoutDeadLine = false) {
                       로그아웃
                     </button>
                   )} */}
-              {/* </ul>
+            {/* </ul>
               </section> */}
-              <section className={s.logo_area}>
-                <Link href="/" passHref>
-                  <a>
-                    <Image
-                      src={Logo}
-                      srcSet={Logo_2x}
-                      alt="사이트 로고"
-                      priority
-                    />
-                  </a>
-                </Link>
-                {userData?.userType === userType.ADMIN && (
-                  <Link href="/bf-admin/dashboard">관리자 페이지</Link>
-                )}
-                <Gnb_my
-                  isMobile={isMobile}
-                  setSidrOpen={setIsSidrOpen}
-                  authData={auth}
-                />
-              </section>
-              {/* <section className={`${s.gnb_area}`}>
+            <section className={s.logo_area}>
+              <Link href="/" passHref>
+                <a>
+                  <Image
+                    src={Logo}
+                    srcSet={Logo_2x}
+                    alt="사이트 로고"
+                    priority
+                  />
+                </a>
+              </Link>
+              {userData?.userType === userType.ADMIN && (
+                <Link href="/bf-admin/dashboard">관리자 페이지</Link>
+              )}
+              <Gnb_my
+                isMobile={isMobile}
+                setSidrOpen={setIsSidrOpen}
+                authData={auth}
+                isMyPage={mypageState.isMyPage}
+              />
+            </section>
+            {/* <section className={`${s.gnb_area}`}>
              <nav id="gnb" className={`${s.gnb_nav} pc`}>
                   <ul>
                     <PcGnb />
@@ -180,24 +154,19 @@ export default function Header(withoutDeadLine = false) {
                   authData={auth}
                 />
               </section> */}
-            </div>
-          )}
+          </div>
         </Wrapper>
         <TopButton mobileDevice={mobileDevice} />
       </header>
 
-      {!mypageState.isMyPage && (
-        <>
-          {/* 하단 검정 배너 */}
-          {isBottomBannerVisible && !withoutDeadLine && (
-            <Dealine_timer
-              setIsBottomBannerVisible={setIsBottomBannerVisible}
-            />
-          )}
-          {/* 하단 메뉴바 */}
-          <MobileGnb />
-        </>
-      )}
+      <>
+        {/* 하단 검정 배너 */}
+        {isBottomBannerVisible && !withoutDeadLine && (
+          <Dealine_timer setIsBottomBannerVisible={setIsBottomBannerVisible} />
+        )}
+        {/* 하단 메뉴바 */}
+        <MobileGnb />
+      </>
       {/* 사이드바 */}
       {<MobileSidr isOpen={isSidrOpen} setSidrOpen={setIsSidrOpen} />}
       <Modal_subscribeWidhSSR />

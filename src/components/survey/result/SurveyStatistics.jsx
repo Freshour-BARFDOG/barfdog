@@ -67,6 +67,13 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
     next: [],
   });
 
+  const [mypageSubscribeId, setMypageSubscribeId] = useState(null);
+
+  // 하단 버튼 '마이페이지로 돌아가기'
+  const onPrevPage = () => {
+    router.push('/mypage');
+  };
+
   const getDescriptionBlocks = (data) => {
     const blocks = [];
 
@@ -93,13 +100,6 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
 
   useEffect(() => {
     if (!id || !id.length) return;
-
-    // ! mypage => '강아지' id로 조회
-    // ! survey => '설문조사' id로 조회
-    // const getSurveyReportsApiUrl =
-    //   mode === 'mypage'
-    //     ? `/api/dogs/${id}/surveyReport`
-    //     : `/api/surveyReports/${id}`;
 
     //! [수정] 다견일 경우
     // const promises = idList.map(async (id) => {
@@ -130,8 +130,13 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
         // return;
         // }
 
-        //! [수정] 한 마리
-        const apiUrl = `/api/surveyReports/${id}`;
+        // ! mypage => '강아지' id로 조회
+        // ! survey => '설문조사' id로 조회
+        const apiUrl =
+          mode === 'mypage'
+            ? `/api/dogs/${id}/surveyReport`
+            : `/api/surveyReports/${id}`;
+
         const res = await getData(apiUrl);
         console.log('/api/surveyReports/>>>', res);
         setSurveyInfo(res.data);
@@ -180,10 +185,24 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
           oneDayRecommendKcal: res.data.foodAnalysis.oneDayRecommendKcal,
         }));
 
-        const apiResultUrl = `/api/surveyReports/${id}/result`;
-        const resultRes = await getData(apiResultUrl);
-        console.log('apiResultUrl>>>', resultRes);
-        setResultInfo(resultRes.data);
+        // ! mypage => '강아지' id로 조회
+        // ! survey => '설문조사' id로 조회
+
+        if (mode === 'default') {
+          const apiResultUrl = `/api/surveyReports/${id}/result`;
+          const resultRes = await getData(apiResultUrl);
+          // console.log('apiResultUrl>>>', resultRes);
+          setResultInfo(resultRes.data);
+        } else if (mode === 'mypage') {
+          const apiDogList = '/api/dogs';
+          const dogListRes = await getData(apiDogList);
+          const dogListData = dogListRes?.data._embedded.queryDogsDtoList;
+          // console.log('dogListData>>>', dogListData);
+          const subscribeId = dogListData?.find(
+            (dog) => dog.id === Number(id),
+          ).subscribeId;
+          setMypageSubscribeId(subscribeId);
+        }
 
         const getRecipeInfoApiUrl = `/api/recipes`;
         const recipeInfoRes = await getData(getRecipeInfoApiUrl);
@@ -235,191 +254,6 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
           }
         }
 
-        // // console.log(data)
-        // const data = res.data;
-        // const DATA = {
-        //   lastSurveyDate: data.lastSurveyDate,
-        //   myDogName: data.myDogName,
-        //   dogSize: dogSizeType.KOR[data.dogSize],
-        //   ageAnalysis: {
-        //     // 바프독을 시작한 평균 나이
-        //     avgAgeMonth: data.ageAnalysis.avgAgeMonth, // 나이 단위 : 1년미만 -> 개월 / 1년이상 -> 살
-        //     ageGroupOneCount: data.ageAnalysis.ageGroupOneCount, // 1그룹(가장어린)에 포함된 강아지 수
-        //     ageGroupTwoCount: data.ageAnalysis.ageGroupTwoCount,
-        //     ageGroupThreeCount: data.ageAnalysis.ageGroupThreeCount,
-        //     ageGroupFourCount: data.ageAnalysis.ageGroupFourCount,
-        //     ageGroupFiveCount: data.ageAnalysis.ageGroupFiveCount,
-        //     myAgeGroup: data.ageAnalysis.myAgeGroup, // 내 강아지가 속한 그룹
-        //     myStartAgeMonth: data.ageAnalysis.myStartAgeMonth, // 내 강아지가 바프독을 시작한 나이
-        //   },
-        //   weightAnalysis: {
-        //     avgWeight: data.weightAnalysis.avgWeight,
-        //     weightGroupOneCount: data.weightAnalysis.weightGroupOneCount, // 해당 체급 중 1그룹(가장가벼운)에 포함된 강아지 수
-        //     weightGroupTwoCount: data.weightAnalysis.weightGroupTwoCount,
-        //     weightGroupThreeCount: data.weightAnalysis.weightGroupThreeCount,
-        //     weightGroupFourCount: data.weightAnalysis.weightGroupFourCount,
-        //     weightGroupFiveCount: data.weightAnalysis.weightGroupFiveCount,
-        //     myWeightGroup: data.weightAnalysis.myWeightGroup, // 내 강아지가 속한 그룹
-        //     weightInLastReport: data.weightAnalysis.weightInLastReport, // 마지막으로 설문조사 했을 때 강아지 체중
-        //   },
-        //   activityAnalysis: {
-        //     avgActivityLevel: data.activityAnalysis.avgActivityLevel, // 해당 체급의 평균 활동량
-        //     activityGroupOneCount: data.activityAnalysis.activityGroupOneCount, // 해당 체급 중 1그룹(활동량 가장 낮은)에 포함된 강아지 수
-        //     activityGroupTwoCount: data.activityAnalysis.activityGroupTwoCount,
-        //     activityGroupThreeCount:
-        //       data.activityAnalysis.activityGroupThreeCount,
-        //     activityGroupFourCount:
-        //       data.activityAnalysis.activityGroupFourCount,
-        //     activityGroupFiveCount:
-        //       data.activityAnalysis.activityGroupFiveCount,
-        //     myActivityGroup: data.activityAnalysis.myActivityGroup, // 내 강아지가 속한 그룹 [1:VERY_LITTLE, 2:LITTLE, 3:NORMAL, 4:MUCH, 5:VERY_MUCH]
-        //   },
-        //   walkingAnalysis: {
-        //     highRankPercent: data.walkingAnalysis.highRankPercent, // 산책량 상위 퍼센트
-        //     walkingCountPerWeek: data.walkingAnalysis.walkingCountPerWeek,
-        //     totalWalingTime: data.walkingAnalysis.totalWalingTime, // 일주일 총 산책 시간
-        //     avgWalkingTimeInCity: data.walkingAnalysis.avgWalkingTimeInCity, // 같은 지역 평균 산책 시간
-        //     avgWalkingTimeInAge: data.walkingAnalysis.avgWalkingTimeInAge, // 또래 평균 산책 시간
-        //     avgWalkingTimeInDogSize:
-        //       data.walkingAnalysis.avgWalkingTimeInDogSize, // 같은 체급 평균 산책 시간
-        //   },
-        //   snackAnalysis: {
-        //     avgSnackCountInLargeDog: data.snackAnalysis.avgSnackCountInLargeDog, // 대형견 평균 간식 레벨 [1~3] 숫자가 높을수록 간식량 많음
-        //     avgSnackCountInMiddleDog:
-        //       data.snackAnalysis.avgSnackCountInMiddleDog, // 중형견 평균 간식 레벨 [1~3]
-        //     avgSnackCountInSmallDog: data.snackAnalysis.avgSnackCountInSmallDog, // 소형견 평균 간식 레벨 [1~3]
-        //     mySnackCount: data.snackAnalysis.mySnackCount, // 내 강아지 간식량 [1,2,3]
-        //   },
-        //   foodAnalysis: {
-        //     oneDayRecommendKcal: data?.foodAnalysis.oneDayRecommendKcal, // 하루 권장 칼로리
-        //     oneDayRecommendGram: data?.foodAnalysis.oneDayRecommendGram, // 하루 권장 식사량
-        //     oneMealRecommendGram: data?.foodAnalysis.oneMealRecommendGram, // 한끼 권장 식사량
-        //   },
-        // };
-
-        // const allDogsAgeCountArr = [];
-        // const allDogsWeightCountArr = [];
-        // const allDogsActivityCountArr = [];
-        // for (const key in DATA) {
-        //   const innerObj = DATA[key];
-        //   // STEP 1. get Total Dog Count
-        //   if (key === 'ageAnalysis') {
-        //     for (const innerKey in innerObj) {
-        //       const innerVal = innerObj[innerKey];
-        //       innerKey.indexOf('ageGroup') >= 0 &&
-        //         allDogsAgeCountArr.push(innerVal);
-        //     }
-        //   } else if (key === 'weightAnalysis') {
-        //     for (const innerKey in innerObj) {
-        //       const innerVal = innerObj[innerKey];
-        //       innerKey.indexOf('weightGroup') >= 0 &&
-        //         allDogsWeightCountArr.push(innerVal);
-        //     }
-        //   } else if (key === 'activityAnalysis') {
-        //     for (const innerKey in innerObj) {
-        //       const innerVal = innerObj[innerKey];
-        //       innerKey.indexOf('activityGroup') >= 0 &&
-        //         allDogsActivityCountArr.push(innerVal);
-        //     }
-        //   }
-        // }
-        // // add Total dogs count / Each Bar Graph
-        // DATA.ageAnalysis.totalDogsCount = allDogsAgeCountArr.reduce(
-        //   (acc, cur) => acc + cur,
-        // );
-        // DATA.weightAnalysis.totalDogCount = allDogsWeightCountArr.reduce(
-        //   (acc, cur) => acc + cur,
-        // );
-        // DATA.activityAnalysis.totalDogCount = allDogsWeightCountArr.reduce(
-        //   (acc, cur) => acc + cur,
-        // );
-
-        // const _percentDATA = JSON.parse(JSON.stringify(DATA));
-        // for (const key in _percentDATA) {
-        //   const innerObj = _percentDATA[key];
-        //   if (key === 'ageAnalysis') {
-        //     const filteredObj = transformPercentUnitInGroup(
-        //       innerObj,
-        //       'ageGroup',
-        //     );
-        //     _percentDATA[key] = filter_objectInGroup(
-        //       filteredObj,
-        //       'ageGroup',
-        //     ).map((obj, index) => {
-        //       const groupOrder = index + 1;
-        //       let tempObj = {};
-        //       for (const key in obj) {
-        //         tempObj = {
-        //           degree: Object.values(obj)[0],
-        //           inGroup: groupOrder === _percentDATA.ageAnalysis.myAgeGroup,
-        //         };
-        //       }
-        //       return tempObj;
-        //     });
-        //   } else if (key === 'weightAnalysis') {
-        //     const filteredObj = transformPercentUnitInGroup(
-        //       innerObj,
-        //       'weightGroup',
-        //     );
-        //     _percentDATA[key] = filter_objectInGroup(
-        //       filteredObj,
-        //       'weightGroup',
-        //     ).map((obj, index) => {
-        //       const groupOrder = index + 1;
-        //       let tempObj = {};
-        //       for (const key in obj) {
-        //         tempObj = {
-        //           degree: Object.values(obj)[0],
-        //           inGroup:
-        //             groupOrder === _percentDATA.weightAnalysis.myWeightGroup,
-        //         };
-        //       }
-        //       return tempObj;
-        //     });
-        //     // _percentDATA[key] = transformPercentUnitInGroup(innerObj, 'weightGroup');
-        //   } else if (key === 'activityAnalysis') {
-        //     const filteredObj = transformPercentUnitInGroup(
-        //       innerObj,
-        //       'activityGroup',
-        //     );
-        //     _percentDATA[key] = filter_objectInGroup(
-        //       filteredObj,
-        //       'activityGroup',
-        //     ).map((obj, index) => {
-        //       const groupOrder = index + 1;
-        //       let tempObj = {};
-        //       for (const key in obj) {
-        //         tempObj = {
-        //           degree: Object.values(obj)[0],
-        //           inGroup:
-        //             groupOrder ===
-        //             _percentDATA.activityAnalysis.myActivityGroup,
-        //         };
-        //       }
-        //       return tempObj;
-        //     });
-        //     // _percentDATA[key] = transformPercentUnitInGroup(innerObj, 'activityGroup');
-        //   } else if (key === 'snackAnalysis') {
-        //     _percentDATA[key] = transformPercentUnitInGroup(innerObj);
-        //   } else if (key === 'walkingAnalysis') {
-        //     const targetObj = {
-        //       myDog: DATA.walkingAnalysis.totalWalingTime,
-        //       inCity: DATA.walkingAnalysis.avgWalkingTimeInCity,
-        //       inAge: DATA.walkingAnalysis.avgWalkingTimeInAge,
-        //       inDogSize: DATA.walkingAnalysis.avgWalkingTimeInDogSize,
-        //     };
-        //     const resultObj = transformPercentUnitInGroup(targetObj);
-        //     _percentDATA[key] = resultObj;
-        //   }
-        // }
-
-        // // // console.log('_percentDATA: ',_percentDATA);
-        // // // console.log(DATA);
-        // const allDATA = {
-        //   ...DATA,
-        //   _percentDATA,
-        // };
-        // setInfo(allDATA);
         setIsRendered(false);
       } catch (err) {
         console.error(err);
@@ -581,6 +415,11 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
 
     // console.log('--- onStartSubscribeOrder:\n', body)
 
+    // ! mypage => '강아지' id로 조회
+    // ! survey => '설문조사' id로 조회
+    let subscribeId =
+      mode === 'mypage' ? mypageSubscribeId : resultInfo.subscribeId;
+
     try {
       setSubmitted(true);
       setIsLoading((prevState) => ({
@@ -588,18 +427,18 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
         submit: true,
       }));
 
-      const apiUrl = `/api/subscribes/${resultInfo.subscribeId}`;
+      const apiUrl = `/api/subscribes/${subscribeId}`;
+
       const res = await putObjData(apiUrl, body);
       console.log(res);
       if (res.isDone) {
         await dispatch(
           cartAction.setSubscribeOrder({
-            data: { subscribeId: resultInfo.subscribeId, ...body },
+            data: { subscribeId, ...body },
           }),
         );
-        await router.push(
-          `/order/ordersheet/subscribe/${resultInfo.subscribeId}`,
-        );
+
+        await router.push(`/order/ordersheet/subscribe/${subscribeId}`);
       } else {
         const serverErrorMessage = res.data.data.message;
         const defErrorMessage = '플랜,레시피 등록에 실패하였습니다.';
@@ -652,12 +491,12 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
   //   }
   // });
 
-  console.log('surveyInfo===>', surveyInfo);
-  console.log('resultInfo===>', resultInfo);
-  console.log('recipeInfo===>', recipeInfo);
+  // console.log('surveyInfo===>', surveyInfo);
+  // console.log('resultInfo===>', resultInfo);
+  // console.log('recipeInfo===>', recipeInfo);
   // console.log('recipeDoubleInfo===>', recipeDoubleInfo);
   // console.log('recipeSingleInfo===>', recipeSingleInfo);
-  console.log('form===>', form);
+  // console.log('form===>', form);
   // console.log('chartData===>', chartData);
 
   return (
@@ -846,7 +685,13 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
         {/* <span className={s.result_description}>
           더보기를 클릭하여 레시피와 플랜을 선택하여 주세요
         </span> */}
+        {mode === 'mypage' && (
+          <button className={s.link} onClick={onPrevPage}>
+            마이페이지로 돌아가기
+          </button>
+        )}
       </section>
+
       {hasAlert && (
         <Modal_global_alert onClick={onClickModalButton} background />
       )}

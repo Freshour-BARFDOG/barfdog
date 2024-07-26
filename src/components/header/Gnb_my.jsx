@@ -8,7 +8,7 @@ import Icon_mypage from '../../../public/img/icon/mypage.svg';
 import DeadlineTimer from '../atoms/DeadlineTimer';
 import React from 'react';
 
-export const Gnb_my = ({ isMobile, setSidrOpen, authData }) => {
+export const Gnb_my = ({ isMobile, setSidrOpen, authData, isMyPage }) => {
   const userInfo = authData?.userInfo;
   const cart = useSelector((s) => s.cart);
   const router = useRouter();
@@ -20,7 +20,7 @@ export const Gnb_my = ({ isMobile, setSidrOpen, authData }) => {
 
   const onMovePage = async (e, page) => {
     e.preventDefault();
-    if (!userInfo && page === '/mypage/orderHistory') {
+    if (!userInfo && page === '/mypage') {
       // 로그인 이후 바로 특정 페이지(마이페이지, 장바구니)로 이동
       dispatch(setPreviousPath(page));
       return await router.push('/account/login');
@@ -35,15 +35,17 @@ export const Gnb_my = ({ isMobile, setSidrOpen, authData }) => {
     <>
       <div className={s.gnb_my}>
         <ul className="clearfix">
-          <li>
-            <button
-              type={'button'}
-              data-link={'/mypage/orderHistory'}
-              onClick={(e) => onMovePage(e, '/mypage/orderHistory')}
-            >
-              <div className={s.mypage_wrap}>{/* <Icon_mypage/> */}</div>
-            </button>
-          </li>
+          {!isMyPage && (
+            <li>
+              <button
+                type={'button'}
+                data-link={'/mypage'}
+                onClick={(e) => onMovePage(e, '/mypage')}
+              >
+                <div className={s.mypage_wrap}>{/* <Icon_mypage/> */}</div>
+              </button>
+            </li>
+          )}
           <li>
             <button
               id="gnb_cart"
