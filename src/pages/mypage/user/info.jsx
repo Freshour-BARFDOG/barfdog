@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import Layout from '/src/components/common/Layout';
+import LayoutWithoutFooter from '/src/components/common/LayoutWithoutFooter';
 import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from '/src/components/mypage/MypageWrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
@@ -11,9 +11,10 @@ import EditUserInfoPolicyList from '/src/components/user_signup/EditUserInfoPoli
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import { validate } from '/util/func/validation/validation_editUserInfo';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
-import {getDataSSR, putObjData} from '/src/pages/api/reqData';
+import { getDataSSR, putObjData } from '/src/pages/api/reqData';
 import Spinner from '/src/components/atoms/Spinner';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 export default function UserInfoPage() {
   const mct = useModalContext();
@@ -21,7 +22,7 @@ export default function UserInfoPage() {
   const router = useRouter();
   const auth = useSelector((s) => s.auth);
   const userInfo = auth.userInfo;
-  const inputRef = useRef(null)
+  const inputRef = useRef(null);
 
   const initialFormValues = {
     name: userInfo.name,
@@ -54,15 +55,15 @@ export default function UserInfoPage() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-   
+
     if (isSubmitted) return console.error('이미 제출된 양식입니다.');
     const errObj = validate(form, formErrors);
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
     // console.log(form);
     if (!isPassed) {
-      if(form.password === "" || form.password === null) {
-        let element = document.querySelector("#password");
+      if (form.password === '' || form.password === null) {
+        let element = document.querySelector('#password');
         element.scrollIntoView({ behavior: 'smooth', block: 'center' });
         return inputRef.current.focus();
       }
@@ -127,12 +128,27 @@ export default function UserInfoPage() {
     }
   };
 
+  const onPrevPage = () => {
+    router.push('/mypage/user');
+  };
+
   return (
     <>
       <MetaTitle title="마이페이지 회원정보변경" />
-      <Layout>
+      <LayoutWithoutFooter>
         <Wrapper>
           <MypageWrapper>
+            <header>
+              <div className={s.prev_btn} style={{ cursor: 'pointer' }}>
+                <Image
+                  src={'/img/order/left_arrow.svg'}
+                  alt="left_arrow"
+                  width={24}
+                  height={24}
+                  onClick={onPrevPage}
+                />
+              </div>
+            </header>
             <section className={s.title}>
               <h1>회원 정보 변경</h1>
             </section>
@@ -154,7 +170,11 @@ export default function UserInfoPage() {
             </section>
             <section className={s.btn_section}>
               <div className={s.btn_box}>
-                <button type={'button'} className={s.left_box} onClick={onClickWithdrawalButton}>
+                <button
+                  type={'button'}
+                  className={s.left_box}
+                  onClick={onClickWithdrawalButton}
+                >
                   회원 탈퇴
                 </button>
                 <button
@@ -163,23 +183,28 @@ export default function UserInfoPage() {
                   onClick={onSubmit}
                   disabled={isSubmitted}
                 >
-                  {isLoading.submit ? <Spinner style={{ color: '#fff' }} /> : '저장'}
+                  {isLoading.submit ? (
+                    <Spinner style={{ color: '#fff' }} />
+                  ) : (
+                    '저장'
+                  )}
                 </button>
               </div>
             </section>
           </MypageWrapper>
         </Wrapper>
-      </Layout>
-      {hasAlert && <Modal_global_alert
-        message={alertModalMessage}
-        onClick={isSubmitted && onModalConfirmButtonClick}
-      />}
+      </LayoutWithoutFooter>
+      {hasAlert && (
+        <Modal_global_alert
+          message={alertModalMessage}
+          onClick={isSubmitted && onModalConfirmButtonClick}
+        />
+      )}
     </>
   );
 }
 
-
-export async function getServerSideProps ({req}) {
+export async function getServerSideProps({ req }) {
   // 간편로그인 sns로 회원가입한 유저일 경우 => 비밀번호 설정해야하는 유저인지 확인 => 비밀번호 미설정 시, 마이페이지 > 계정정보 수정페이지 접근불가 (sns 간편로그인 정책으로 인하여, 회원가입단계에서 비밀번호 설정불가함으로 인함)
   /*
   - 비밀번호 설정해야하는 유저일 경우, 결과값: true → 회원정보 수정하기 전, sns 유저 비밀번호 설정 api로 이동
@@ -187,23 +212,23 @@ export async function getServerSideProps ({req}) {
   * */
   const url = '/api/members/sns/password'; // api이름: 비밀번호 설정해야하는 유저인지 확인
   const res = await getDataSSR(req, url);
-  if(res.data){
+  if (res.data) {
     const needToSetPassword = res.data.needToSetPassword;
     // // console.log('needToSetPassword: ',needToSetPassword);
     // if(!needToSetPassword){ // ! TEST
-    if(needToSetPassword){ // ! PROD
+    if (needToSetPassword) {
+      // ! PROD
       return {
-        redirect:{
-          destination:'/mypage/user/setPassword',
+        redirect: {
+          destination: '/mypage/user/setPassword',
           permanent: false,
         },
-        props: {}
-      }
+        props: {},
+      };
     }
   }
-  
+
   return {
-    props: {}
-  }
-  
+    props: {},
+  };
 }

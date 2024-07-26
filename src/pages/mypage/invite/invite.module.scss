@@ -1,17 +1,31 @@
-$browser-context:16; // html font-size
-@function rem($px, $context: $browser-context){
+$browser-context: 16; // html font-size
+@function rem($px, $context: $browser-context) {
   @return #{$px / $context}rem;
 }
 @import '../../../../styles/global/guide';
 
-section.title { padding : rem(8) 0 rem(18) }
-section.text { padding : 0 0 rem(30)}
-section.count_box {padding : rem(50) 0 rem(30)}
-section.pageline { padding-top : rem(40)}
-
+section.title {
+  padding: rem(8) 0 rem(18);
+}
+section.text {
+  padding: 0 0 rem(30);
+  text-align: center;
+}
+section.count_box {
+  padding: rem(50) 0 rem(30);
+}
+section.pageline {
+  padding-top: rem(40);
+}
 
 .title {
   @include char(t24);
+  text-align: center;
+  font-weight: bold;
+}
+
+.prev_btn {
+  margin: 0 rem(20);
 }
 
 .text {
@@ -22,14 +36,15 @@ section.pageline { padding-top : rem(40)}
     span {
       font-weight: 700;
     }
-    em{
+    em {
       font-size: rem(12);
     }
   }
 }
 
 .referral_code {
-  
+  // display: flex;
+
   .referral_code_row1 {
     color: var(--color-font-sub);
     @include char(l16);
@@ -42,16 +57,15 @@ section.pageline { padding-top : rem(40)}
     display: flex;
     height: rem(44);
 
-
-    .input_box, .fake_input {
+    .input_box,
+    .fake_input {
       width: rem(280);
       border-radius: rem(4);
       padding: rem(13);
       @include char(l15);
       margin-right: rem(5);
-
     }
-    .fake_input{
+    .fake_input {
       color: var(--color-disabled);
       box-sizing: border-box;
       border: rem(1) solid #ccc !important;
@@ -61,8 +75,7 @@ section.pageline { padding-top : rem(40)}
       -webkit-line-clamp: 2;
     }
 
-
-    .btn{
+    .btn {
       width: rem(76);
       background-color: var(--color-main);
       color: #fff;
@@ -85,7 +98,7 @@ section.pageline { padding-top : rem(40)}
     width: 100%;
     // max-width: rem(788);
     .count_grid_box {
-      display : grid;
+      display: grid;
       grid-template-columns: 2fr 1fr;
       text-align: center;
 
@@ -101,18 +114,14 @@ section.pageline { padding-top : rem(40)}
         padding-top: rem(10);
         padding-bottom: rem(13);
       }
-     
+
       .count_text {
         font-weight: 500;
         @include char(t24);
       }
-
     }
-
   }
-
 }
-
 
 .line {
   hr {
@@ -130,9 +139,9 @@ section.pageline { padding-top : rem(40)}
 
     border-bottom: rem(1) solid var(--color-line-03);
     &:last-child {
-    border-bottom: rem(0);
+      border-bottom: rem(0);
     }
-    .flex_box{
+    .flex_box {
       display: grid;
       grid-template-columns: rem(80) 1fr;
       gap: rem(10);
@@ -152,7 +161,7 @@ section.pageline { padding-top : rem(40)}
       //width: rem(80);
       text-align: right;
       @include char(l18);
-      color: #50A057;
+      color: #50a057;
     }
     .price_text_grey {
       //width: rem(80);
@@ -163,20 +172,17 @@ section.pageline { padding-top : rem(40)}
   }
 }
 
-
-
 @media (max-width: rem(800)) {
-
   .count_box {
     display: grid;
     width: 100%;
     justify-content: center;
-  
+
     .mid {
       .count_grid_box {
         grid-template-columns: 1fr;
         grid-gap: rem(20);
-        
+
         .count_flex_box {
           order: 2;
           display: grid;
@@ -184,8 +190,8 @@ section.pageline { padding-top : rem(40)}
           grid-gap: rem(40);
           position: relative;
 
-          &::after{
-            content: "";
+          &::after {
+            content: '';
             position: absolute;
             top: 50%;
             left: 50%;
@@ -195,18 +201,16 @@ section.pageline { padding-top : rem(40)}
             background-color: #ddd;
           }
 
-          
-          .left_box, 
-          .mid_box{
+          .left_box,
+          .mid_box {
             display: flex;
           }
 
           .count_text {
-          font-size: rem(16);
-          padding-top: rem(6);
-          margin-left: rem(10);
+            font-size: rem(16);
+            padding-top: rem(6);
+            margin-left: rem(10);
           }
-          
         }
 
         p {
@@ -220,44 +224,39 @@ section.pageline { padding-top : rem(40)}
     .grid_box {
       grid-template-columns: 1fr rem(75);
 
-      
-      .flex_box{
+      .flex_box {
         display: grid;
         grid-template-columns: 1fr;
         grid-gap: rem(10);
       }
     }
   }
-
 }
 
 @media (max-width: rem(600)) {
-
-
-  .user_recommand{
+  .user_recommand {
     margin-top: rem(20);
     display: grid;
-    grid: 
-    "recommand_code recommand_code"
-    "sendMessage copyLink"/1fr 1fr
-    ;
+    grid:
+      'recommand_code recommand_code'
+      'sendMessage copyLink'/1fr 1fr;
     border: rem(1) solid #ddd;
-    .recommand_code{
-      grid-column: 1/span 2;
-      grid-row: 1/span 1;
+    .recommand_code {
+      grid-column: 1 / span 2;
+      grid-row: 1 / span 1;
       display: flex;
       flex-direction: column;
       row-gap: rem(12);
       border-bottom: rem(1) solid #ddd;
       height: rem(88);
-      background-color: #F5F5F5;
-      span{
+      background-color: #f5f5f5;
+      span {
         font-size: rem(14);
         color: rgba(99, 99, 99, 0.85);
         font-weight: 600;
         line-height: 100%;
       }
-      .code{
+      .code {
         font-size: rem(32);
         color: #202020;
         font-weight: 500;
@@ -265,12 +264,12 @@ section.pageline { padding-top : rem(40)}
       }
     }
 
-    .sendMessage{
-      grid-column: 1/span 1;
-      grid-row: 2/span 1;
+    .sendMessage {
+      grid-column: 1 / span 1;
+      grid-row: 2 / span 1;
       border-right: rem(1) solid #ddd;
       height: rem(44);
-      button{
+      button {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -282,12 +281,12 @@ section.pageline { padding-top : rem(40)}
         height: 100%;
       }
     }
-    .copyLink{
-      grid-column: 2/span 1;
-      grid-row: 2/span 1;
+    .copyLink {
+      grid-column: 2 / span 1;
+      grid-row: 2 / span 1;
       height: rem(44);
 
-      button{
+      button {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -301,11 +300,9 @@ section.pageline { padding-top : rem(40)}
     }
   }
 
-  
   .title {
     display: none;
   }
-
 
   .text {
     margin-top: rem(30);
@@ -315,20 +312,18 @@ section.pageline { padding-top : rem(40)}
   }
 
   .referral_code {
-    .grid_box, .fake_input {
+    .grid_box,
+    .fake_input {
       width: 100%;
 
-      
       .input_box {
         width: 100%;
       }
     }
   }
 
-  
-.pagination_box {
-  padding-top: rem(40);
-  padding-bottom : rem(50);
-}
-
+  .pagination_box {
+    padding-top: rem(40);
+    padding-bottom: rem(50);
+  }
 }

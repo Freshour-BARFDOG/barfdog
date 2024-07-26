@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Layout from '/src/components/common/Layout';
+import LayoutWithoutFooter from '/src/components/common/LayoutWithoutFooter';
 import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from '/src/components/mypage/MypageWrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
@@ -22,11 +22,13 @@ import { useSelector } from 'react-redux';
 import useDeviceState from '/util/hook/useDeviceState';
 import Modal_alert from '/src/components/modal/Modal_alert';
 import { filter_userIndexOnRewardName } from '/util/func/filter_userIndexOnRewardName';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 export default function InvitePage() {
   const searchApiUrl = '/api/rewards/invite'; // 친구추천 적립금 내역 조회
   const searchPageSize = 10;
-
+  const router = useRouter();
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
   const [isLoading, setIsLoading] = useState({});
@@ -218,12 +220,27 @@ export default function InvitePage() {
     mct.alertHide();
   };
 
+  const onPrevPage = () => {
+    router.push('/mypage');
+  };
+
   return (
     <>
       <MetaTitle title="마이페이지 친구초대" />
-      <Layout>
+      <LayoutWithoutFooter>
         <Wrapper>
           <MypageWrapper>
+            <header>
+              <div className={s.prev_btn} style={{ cursor: 'pointer' }}>
+                <Image
+                  src={'/img/order/left_arrow.svg'}
+                  alt="left_arrow"
+                  width={24}
+                  height={24}
+                  onClick={onPrevPage}
+                />
+              </div>
+            </header>
             <section className={s.title}>
               <p>친구초대</p>
               {isLoading.fetching && <Spinner />}
@@ -380,7 +397,7 @@ export default function InvitePage() {
             </div>
           </MypageWrapper>
         </Wrapper>
-      </Layout>
+      </LayoutWithoutFooter>
       {hasAlert && (
         <Modal_global_alert onClick={onClickModalButton} background />
       )}

@@ -1,17 +1,27 @@
 @import '/styles/global/rem';
 @import '/styles/global/guide';
 
-section.title { padding : rem(5) 0 rem(20) }
-section.coupon_state_section { padding: rem(78) 0 rem(50) 0}
-section.pageline { padding: rem(40) 0 0 0}
-
+section.title {
+  padding: rem(5) 0 rem(20);
+}
+section.coupon_state_section {
+  padding: rem(78) 0 rem(50) 0;
+}
+section.pageline {
+  padding: rem(40) 0 0 0;
+}
 
 .title {
   @include char(t24);
+  text-align: center;
+  font-weight: bold;
+}
+
+.prev_btn {
+  margin: 0 rem(20);
 }
 
 .coupon_code {
-
   .coupon_code_row1 {
     @include char(l16);
     line-height: 120%;
@@ -33,7 +43,7 @@ section.pageline { padding: rem(40) 0 0 0}
     }
 
     .btn_box {
-      .btn{
+      .btn {
         width: rem(76);
         height: rem(45);
         background-color: var(--color-main);
@@ -43,7 +53,6 @@ section.pageline { padding: rem(40) 0 0 0}
         @include char(l15);
         text-align: center;
         cursor: pointer;
-
       }
     }
   }
@@ -63,7 +72,7 @@ section.pageline { padding: rem(40) 0 0 0}
     font-weight: 700;
   }
   .line {
-    transform : rotate(90deg);
+    transform: rotate(90deg);
     width: rem(14);
   }
 }
@@ -76,13 +85,12 @@ section.pageline { padding: rem(40) 0 0 0}
   }
 }
 
-
 .coupon_content_grid_box {
   display: grid;
   justify-content: space-between;
   grid-template-columns: 1fr 1fr;
   column-gap: rem(16);
-  row-gap : rem(16);
+  row-gap: rem(16);
 
   .grid_box {
     display: grid;
@@ -94,15 +102,17 @@ section.pageline { padding: rem(40) 0 0 0}
     border-radius: rem(10);
     box-shadow: rem(3) rem(3) rem(8) rgba(0, 0, 0, 0.08);
     word-break: keep-all;
-    transition: background-color .3s ease, color .3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease;
     user-select: none;
 
     &.expiredCoupon {
       background-color: #f1f2f3;
-      div{color: var(--color-disabled)}
+      div {
+        color: var(--color-disabled);
+      }
     }
     &:not(.expiredCoupon):hover,
-    &:not(.expiredCoupon):active{
+    &:not(.expiredCoupon):active {
       border: rem(1) solid var(--color-main);
       // .left_top, .right_top, .left_bot, .pointColor {
       //   // color: #fff;
@@ -118,31 +128,29 @@ section.pageline { padding: rem(40) 0 0 0}
       // }
     }
 
-
     .left_top {
       @include char(t24);
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       justify-content: flex-start;
-      margin-bottom:rem(40);
-      .name{
+      margin-bottom: rem(40);
+      .name {
         font-weight: 500;
         font-size: rem(15);
         line-height: 100%;
       }
-      .discount{
+      .discount {
         font-weight: 700;
         font-size: rem(38);
         letter-spacing: rem(-1);
         line-height: rem(50);
       }
-      .availableMaxDiscount{
+      .availableMaxDiscount {
         font-weight: 400;
         font-size: rem(13);
         line-height: 100%;
       }
-
     }
     .right_top {
       font-size: rem(36);
@@ -161,18 +169,17 @@ section.pageline { padding: rem(40) 0 0 0}
     line-height: 80%;
     // font-weight: 500;
 
-    .left_bot_text{
+    .left_bot_text {
       display: flex;
       flex-direction: column;
-      gap:rem(9);
+      gap: rem(9);
       font-size: rem(13);
     }
     .inner_flex_box {
       //padding-top: rem(9);
       display: flex;
-      align-items : center;
+      align-items: center;
       font-size: rem(13);
-
 
       .line {
         padding: 0 rem(2) rem(1);
@@ -183,12 +190,10 @@ section.pageline { padding: rem(40) 0 0 0}
           height: rem(1);
           border: 0;
           border-top: rem(1) solid var(--color-line-02);
-          transition: border .3s ease;
+          transition: border 0.3s ease;
         }
       }
-
     }
-
   }
 
   .right_bot {
@@ -196,11 +201,11 @@ section.pageline { padding: rem(40) 0 0 0}
     flex-direction: column;
     justify-content: flex-end;
     align-items: flex-end;
-    font-size:rem(13);
-    >em{
+    font-size: rem(13);
+    > em {
       display: flex;
       align-items: center;
-      &:last-child{
+      &:last-child {
         min-width: max-content;
       }
     }
@@ -213,7 +218,7 @@ section.pageline { padding: rem(40) 0 0 0}
         height: rem(1);
         border: 0;
         border-top: rem(1) solid var(--color-line-02);
-        transition: border .3s ease;
+        transition: border 0.3s ease;
       }
     }
     b {
@@ -221,7 +226,7 @@ section.pageline { padding: rem(40) 0 0 0}
     }
   }
 
-  button.useCoupon{
+  button.useCoupon {
     font-size: rem(15);
     color: #fff;
     background-color: #000;
@@ -229,29 +234,28 @@ section.pageline { padding: rem(40) 0 0 0}
     // width: rem(106);
     height: fit-content;
     padding: rem(6) rem(16);
-    transition: background-color .3s ease, color .3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease;
 
-    &:hover, &:active{
+    &:hover,
+    &:active {
       background-color: var(--color-main);
       // color: #000;
       // font-weight: 600;
     }
   }
-
 }
 
 .divider {
   margin: 0 rem(7);
 }
 
-.pointColor{
-  color:var(--color-main);
+.pointColor {
+  color: var(--color-main);
 }
-
 
 @media (max-width: rem(1100)) {
   .horizon {
-    hr{
+    hr {
       // max-width: rem(560);
       width: 100%;
     }
@@ -264,7 +268,6 @@ section.pageline { padding: rem(40) 0 0 0}
 }
 
 @media (max-width: rem(700)) {
-
   .coupon_content_grid_box {
     .grid_box {
       grid-template-columns: 1fr;
@@ -276,14 +279,14 @@ section.pageline { padding: rem(40) 0 0 0}
       .right_top {
         font-size: rem(22);
         order: 3;
-        button.useCoupon{
+        button.useCoupon {
           width: 100%;
           height: rem(45);
           border-radius: rem(5);
         }
       }
 
-      .right_bot{
+      .right_bot {
         margin: rem(20) 0;
       }
     }
@@ -292,22 +295,24 @@ section.pageline { padding: rem(40) 0 0 0}
       font-size: rem(14);
     }
   }
-
 }
 
 @media (max-width: rem(600)) {
-
-  section.coupon_state_section { padding: rem(50) 0 0 0;}
-  section.coupon_code { margin-top: rem(30);}
-  section.pageline { padding: rem(40) 0 rem(80)}
-
+  section.coupon_state_section {
+    padding: rem(50) 0 0 0;
+  }
+  section.coupon_code {
+    margin-top: rem(30);
+  }
+  section.pageline {
+    padding: rem(40) 0 rem(80);
+  }
 
   .title {
     display: none;
   }
 
   .coupon_code {
-
     .flex_box {
       .input_box {
         width: 100%;
@@ -319,12 +324,10 @@ section.pageline { padding: rem(40) 0 0 0}
   .coupon_content_grid_box {
     max-width: 100%;
     .grid_box {
-
       .left_top {
         @include char(t24);
         font-weight: 600;
       }
-
 
       .right_top {
         font-size: rem(36);
@@ -336,16 +339,13 @@ section.pageline { padding: rem(40) 0 0 0}
     }
   }
 
-
   .pagination_box {
     padding-top: rem(40);
-    padding-bottom : rem(50);
+    padding-bottom: rem(50);
   }
-
 }
 
 @media (max-width: rem(450)) {
-
   // .coupon_content_grid_box {
   //   .grid_box {
   //     grid-template-columns: 1fr rem(120);
@@ -354,7 +354,6 @@ section.pageline { padding: rem(40) 0 0 0}
   //     .left_top {
   //       font-size: rem(20);
   //     }
-
 
   //     .right_top {
   //       font-size: rem(22);
@@ -365,5 +364,4 @@ section.pageline { padding: rem(40) 0 0 0}
   //     font-size: rem(14);
   //   }
   // }
-
 }

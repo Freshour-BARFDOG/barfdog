@@ -90,7 +90,7 @@ export default function BottomMenu({ ...props }) {
       </ul>
       <ul className={s.sub_menu}>
         <List title="전 성분 보기" link="/recipes" />
-        <List title="계정 정보" link="/mypage/review" textAlign="right" />
+        <List title="계정 정보" link="/mypage/user" textAlign="right" />
         <List title="로그아웃" onFirstDepthClick={onLogout} textAlign="right" />
       </ul>
     </>

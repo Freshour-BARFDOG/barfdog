@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import s from './subscribe.module.scss';
-import Layout from '/src/components/common/Layout';
+import LayoutWithoutFooter from '/src/components/common/LayoutWithoutFooter';
 import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from '/src/components/mypage/MypageWrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
@@ -15,8 +15,10 @@ import transformLocalCurrency from '/util/func/transformLocalCurrency';
 import { subscribeStatus } from '/store/TYPE/subscribeStatus';
 import { calcSubscribeNextPaymentPrice } from '/util/func/subscribe/calcSubscribeNextPaymentPrice';
 import { getDefaultPagenationInfo } from '/util/func/getDefaultPagenationInfo';
+import { useRouter } from 'next/router';
 
 export default function ManageSubscribePage() {
+  const router = useRouter();
   const searchApiUrl = '/api/subscribes';
   const searchPageSize = 10;
   const [isLoading, setIsLoading] = useState({});
@@ -40,12 +42,29 @@ export default function ManageSubscribePage() {
     }));
   };
 
+  const onPrevPage = () => {
+    router.push('/mypage');
+  };
+
+  console.log(itemList);
+
   return (
     <>
       <MetaTitle title="마이페이지 구독관리" />
-      <Layout>
+      <LayoutWithoutFooter>
         <Wrapper>
           <MypageWrapper>
+            <header>
+              <div className={s.prev_btn} style={{ cursor: 'pointer' }}>
+                <Image
+                  src={'/img/order/left_arrow.svg'}
+                  alt="left_arrow"
+                  width={24}
+                  height={24}
+                  onClick={onPrevPage}
+                />
+              </div>
+            </header>
             <section className={s.title}>구독관리</section>
             <section>
               {isLoading.fetching ? (
@@ -60,6 +79,9 @@ export default function ManageSubscribePage() {
               ) : (
                 <ul>
                   {itemList
+                    .filter(
+                      (item) => item.subscribeDto.status === 'SUBSCRIBING',
+                    )
                     .sort(
                       (a, b) =>
                         b.subscribeDto.subscribeId - a.subscribeDto.subscribeId,
@@ -201,7 +223,7 @@ export default function ManageSubscribePage() {
             </section>
           </MypageWrapper>
         </Wrapper>
-      </Layout>
+      </LayoutWithoutFooter>
     </>
   );
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import s from './orderHistory.module.scss';
-import Layout from '/src/components/common/Layout';
+import LayoutWithoutFooter from '/src/components/common/LayoutWithoutFooter';
 import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from '/src/components/mypage/MypageWrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
@@ -18,8 +18,12 @@ import { SubscribeItems } from '/src/components/mypage/orderHistory/SubscribeIte
 import { SingleItemList } from '/src/components/mypage/orderHistory/SingleItemList';
 import { decodeUrlToMatchApiProtocolAndSearchQuery } from '/util/func/decodeUrlToMatchApiProtocolAndSearchQuery';
 import { checkNeedToCancelNaverpaySubscribe } from '../../../../util/func/order/checkNeedToCancelNaverpaySubscribe';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 export default function OrderHistoryPage() {
+  const router = useRouter();
+
   const subscribeApiUrl = '/api/orders/subscribe';
   const generalItemApiUrl = '/api/orders/general';
   const searchPageSize = 5;
@@ -136,14 +140,28 @@ export default function OrderHistoryPage() {
     return newPageInfo;
   };
 
+  const onPrevPage = () => {
+    router.push('/mypage');
+  };
   // // console.log(itemType, itemList);
 
   return (
     <>
       <MetaTitle title="마이페이지 주문내역" />
-      <Layout>
+      <LayoutWithoutFooter>
         <Wrapper>
           <MypageWrapper>
+            <header>
+              <div className={s.prev_btn} style={{ cursor: 'pointer' }}>
+                <Image
+                  src={'/img/order/left_arrow.svg'}
+                  alt="left_arrow"
+                  width={24}
+                  height={24}
+                  onClick={onPrevPage}
+                />
+              </div>
+            </header>
             <section className={s.title}>주문내역</section>
             <Tabmenu_TwoButton
               leftMenuName={'정기구독'}
@@ -208,7 +226,7 @@ export default function OrderHistoryPage() {
             }
           </MypageWrapper>
         </Wrapper>
-      </Layout>
+      </LayoutWithoutFooter>
     </>
   );
 }

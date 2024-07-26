@@ -17,7 +17,7 @@ import { SubscribeStatusTag } from '../subscribe/SubscribeStatusTag';
 import { subscribeStatus } from '/store/TYPE/subscribeStatus';
 import CloseButton from '../atoms/CloseButton';
 import { subscribePlanType } from '@store/TYPE/subscribePlanType';
-import { getData } from '@src/pages/api/reqData';
+import { getData, postData } from '@src/pages/api/reqData';
 
 export function Swiper_dogs({
   itemList,
@@ -173,8 +173,8 @@ const ItemList = ({
       productionDate = new Date(dateString);
       // Tuesday (day 2)
       if (productionDate.getDay() === 2) {
-        // previous Saturday
-        const daysToSubtract = 5;
+        // previous Friday
+        const daysToSubtract = 4;
         productionDate.setDate(productionDate.getDate() - daysToSubtract);
       }
 
@@ -467,34 +467,44 @@ const ItemList = ({
           {/* 3-1. 구독 보류 ('구독 중' 상태가 아닌) / 구독 취소 */}
           {(data.subscribeStatus === subscribeStatus.SUBSCRIBE_PENDING ||
             data.subscribeStatus === subscribeStatus.SUBSCRIBE_CANCEL) && (
-            <button
-              type={'button'}
-              className={s.reactive}
-              data-id={dogId}
-              onClick={nextPageHandler}
-            >
-              {isLoading[dogId] ? (
-                <Spinner style={{ color: '#fff' }} />
-              ) : (
-                '재구독'
-              )}
-            </button>
+            <div className={s.btn_wrapper}>
+              <button
+                type={'button'}
+                className={s.reactive}
+                data-id={dogId}
+                onClick={(e) => nextPageHandler(e, 'order')} // 주문서로 이동
+              >
+                {isLoading[dogId] ? (
+                  <Spinner style={{ color: '#fff' }} />
+                ) : (
+                  '재구독하기'
+                )}
+              </button>
+            </div>
           )}
 
           {/* 3-2. 구독 취소 예정  */}
           {data.subscribeStatus === subscribeStatus.SUBSCRIBE_WILL_CANCEL && (
-            <button
-              type={'button'}
-              className={s.reactive}
-              data-id={dogId}
-              onClick={() => onReactiveHandler(data.subscribeId)}
-            >
-              {isLoading[dogId] ? (
-                <Spinner style={{ color: '#fff' }} />
-              ) : (
-                '재구독'
-              )}
-            </button>
+            <div className={s.subscribe_will_cancel_wrapper}>
+              <button
+                type={'button'}
+                className={s.reactive}
+                data-id={dogId}
+                onClick={() => onReactiveHandler(data.subscribeId)}
+              >
+                {isLoading[dogId] ? (
+                  <Spinner style={{ color: '#fff' }} />
+                ) : (
+                  '재구독하기'
+                )}
+              </button>
+              <Link href={`/mypage/dogs/${dogId}/updateSurvey`} passHref>
+                <a>구독 배송지 관리</a>
+              </Link>
+              <Link href={`/mypage/subscribe`} passHref>
+                <a>구독 관리</a>
+              </Link>
+            </div>
           )}
 
           {/* 4. SUBSCRIBING: '구독 중' */}
@@ -505,12 +515,12 @@ const ItemList = ({
                 </Link>
               */}
               <Link href={`/mypage/dogs/${dogId}/updateSurvey`} passHref>
-                <a>정보 수정</a>
+                <a>배송 미루기</a>
               </Link>
               <Link href={`/mypage/dogs/${dogId}/updateSurvey`} passHref>
                 <a>구독 배송지 관리</a>
               </Link>
-              <Link href={`/mypage/dogs/${dogId}/updateSurvey`} passHref>
+              <Link href={`/mypage/subscribe`} passHref>
                 <a>구독 관리</a>
               </Link>
             </div>
