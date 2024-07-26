@@ -96,7 +96,7 @@ export default function Dashboard({
   console.log('data____', data);
 
   const onEditProfileHandler = () => {
-    router.push(`/mypage/user/info`);
+    router.push(`/mypage/user`);
   };
 
   return (

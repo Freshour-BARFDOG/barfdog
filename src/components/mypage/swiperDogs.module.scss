@@ -212,7 +212,8 @@ section.body {
     // grid-row: 2 / span 1;
     // transform: translateY(rem(-80));
 
-    .btn-section {
+    .btn-section,
+    .subscribe_will_cancel_wrapper {
       margin: 0 rem(50);
       display: flex;
       justify-content: space-between;
@@ -233,11 +234,16 @@ section.body {
         border: rem(1) solid #bebebe;
         padding: rem(4) rem(28);
       }
-      //3칸일떄만 나옴
-      // .payment {
-      //   background-color: var(--color-main);
-      //   color: #fff;
-      // }
+      .reactive {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: rem(1) solid #be1a21;
+        color: #be1a21;
+        border-radius: rem(20);
+        width: rem(90 * 1.4);
+        margin: 0;
+      }
     }
 
     .btn_wrapper {

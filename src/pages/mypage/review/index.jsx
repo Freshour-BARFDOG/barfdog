@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Layout from '/src/components/common/Layout';
+import LayoutWithoutFooter from '/src/components/common/LayoutWithoutFooter';
 import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from '/src/components/mypage/MypageWrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
@@ -26,8 +26,6 @@ import { deleteObjData } from '/src/pages/api/reqData';
 import { userType } from '/store/TYPE/userAuthType';
 import userStateSlice, { userStateAction } from '/store/userState-slice';
 
-
-
 export default function ReviewPage() {
   const searchWritableReivewApiUrl = '/api/reviews/writeable'; // 작성 가능한 리뷰 리스트 조회(페이징)
   const searchMyReivewApiUrl = '/api/reviews'; // 작성한 리뷰 리스트 조회(페이징)
@@ -41,8 +39,13 @@ export default function ReviewPage() {
   const [writableReviewList, setWritableReviewList] = useState([]);
   const [reviewList, setReviewList] = useState([]);
   const [activeImageModal, setActiveImageModal] = useState(false);
-  const [activeDeleteConfirmModal, setActiveDeleteConfirmModal] = useState(false);
+  const [activeDeleteConfirmModal, setActiveDeleteConfirmModal] =
+    useState(false);
   const [selectedReivewId, setSelectedReivewId] = useState(null); //
+
+  const onPrevPage = () => {
+    router.push('/mypage');
+  };
 
   // // console.log(writableReviewList)
   // // console.log(reviewList)
@@ -76,39 +79,43 @@ export default function ReviewPage() {
     };
     return newPageInfo;
   };
-  
 
-  const createReviewHandler = (e, type = 'create') => { // - REDUX 사용 (router.push())
+  const createReviewHandler = (e, type = 'create') => {
+    // - REDUX 사용 (router.push())
     const button = e.currentTarget;
     const reviewId = Number(button.dataset.reviewId);
-    const targetReviewList = type === 'create' ? writableReviewList : reviewList ;
+    const targetReviewList =
+      type === 'create' ? writableReviewList : reviewList;
     const info = targetReviewList.filter((item) => item.id === reviewId)[0];
-    const data = type === 'create' ? {
-      itemThumbnailUrl: info.imageUrl, // ! 상품 image Url (** update와 key가 다르므로 주의)
-      reviewType: info.reviewType, // 리뷰 타입 (단품 / 구독상품)
-      id: info.id, // 주문한 상품의 id 또는 구독 id입
-      targetId: info.targetId,// 리뷰대상 (리뷰 대상 id [itemId or recipeId] )
-      title: info.title, // 상품 타이틀
-      orderedDate : info.orderedDate, // 주문일자
-    } : {
-      // review update > (좌측 상단 item info list) + review ID
-      itemThumbnailUrl: info.thumbnailUrl, // ! 상품 image Url (** create와 key가 다르므로 주의)
-      reviewType: info.reviewType, ///////////// ! server data 추가 필요
-      title: info.title, // 상품 타이틀
-      id: info.id, // 주문한 상품의 id 또는 구독 id
-    };
+    const data =
+      type === 'create'
+        ? {
+            itemThumbnailUrl: info.imageUrl, // ! 상품 image Url (** update와 key가 다르므로 주의)
+            reviewType: info.reviewType, // 리뷰 타입 (단품 / 구독상품)
+            id: info.id, // 주문한 상품의 id 또는 구독 id입
+            targetId: info.targetId, // 리뷰대상 (리뷰 대상 id [itemId or recipeId] )
+            title: info.title, // 상품 타이틀
+            orderedDate: info.orderedDate, // 주문일자
+          }
+        : {
+            // review update > (좌측 상단 item info list) + review ID
+            itemThumbnailUrl: info.thumbnailUrl, // ! 상품 image Url (** create와 key가 다르므로 주의)
+            reviewType: info.reviewType, ///////////// ! server data 추가 필요
+            title: info.title, // 상품 타이틀
+            id: info.id, // 주문한 상품의 id 또는 구독 id
+          };
     dispatch(userStateAction.setReviewInfo({ data }));
     router.push(`/mypage/review/${type}`);
   };
-  
-  const updateReviewHandler = (e)=>{
-    const type = 'update'
-    createReviewHandler(e, type)
+
+  const updateReviewHandler = (e) => {
+    const type = 'update';
+    createReviewHandler(e, type);
     // const reviewId = Number(button.dataset.reviewId);
     // const info = reviewList.filter((item) => item.id === reviewId)[0];
     // dispatch(userStateAction.setReviewInfo({ data }));
     // router.push(`/mypage/review/create`);
-  }
+  };
 
   const onShowReviewImageModal = (e) => {
     const selectedReviewId = e.currentTarget.dataset.reviewId;
@@ -131,7 +138,9 @@ export default function ReviewPage() {
         alert('리뷰가 삭제되었습니다.');
       } else if (res.status === 403) {
         if (auth.userType === userType.ADMIN) {
-          alert('사이트 관리자가 생성한 리뷰는 관리자 페이지에서 삭제할 수 있습니다.');
+          alert(
+            '사이트 관리자가 생성한 리뷰는 관리자 페이지에서 삭제할 수 있습니다.',
+          );
         } else {
           alert('본인이 작성한 리뷰가 아닐 경우 삭제할 수 없습니다.');
         }
@@ -150,9 +159,20 @@ export default function ReviewPage() {
   return (
     <>
       <MetaTitle title="마이페이지 후기" />
-      <Layout>
+      <LayoutWithoutFooter>
         <Wrapper>
           <MypageWrapper>
+            <header>
+              <div className={s.prev_btn} style={{ cursor: 'pointer' }}>
+                <Image
+                  src={'/img/order/left_arrow.svg'}
+                  alt="left_arrow"
+                  width={24}
+                  height={24}
+                  onClick={onPrevPage}
+                />
+              </div>
+            </header>
             <section className={s.title}>상품 후기</section>
             <Tabmenu_TwoButton
               leftMenuName={'후기 작성'}
@@ -169,7 +189,10 @@ export default function ReviewPage() {
                 ) : (
                   <ul className={'item_wrap'}>
                     {writableReviewList.map((item, index) => (
-                      <li key={`writable-reviews-${item.id}-${item.index}`} className={s.content}>
+                      <li
+                        key={`writable-reviews-${item.id}-${item.index}`}
+                        className={s.content}
+                      >
                         <div className={s.flex}>
                           <div className={s.left}>
                             <div className={`${s.image} img-wrap`}>
@@ -232,7 +255,10 @@ export default function ReviewPage() {
                   ) : (
                     <ul className={'item_wrap'}>
                       {reviewList.map((item, index) => (
-                        <li key={`review-${item.id}-${index}`} className={s.content}>
+                        <li
+                          key={`review-${item.id}-${index}`}
+                          className={s.content}
+                        >
                           <article className={s.flex_box5}>
                             <div className={s.left_box}>
                               <div className={s.row_1}>
@@ -250,14 +276,25 @@ export default function ReviewPage() {
                                     )}
                                   </div>
                                 </figure>
-                                <h3 className={s.content_inner_title}>{item.title}</h3>
+                                <h3 className={s.content_inner_title}>
+                                  {item.title}
+                                </h3>
                                 {/*상품명*/}
-                                <span className={s.reviewType}>{item.reviewType}</span>
+                                <span className={s.reviewType}>
+                                  {item.reviewType}
+                                </span>
                               </div>
                               <div className={s.row_2}>
-                                <RatingStars count={item.star} margin={5} size={15} disabled />
+                                <RatingStars
+                                  count={item.star}
+                                  margin={5}
+                                  size={15}
+                                  disabled
+                                />
                               </div>
-                              <figcaption className={s.row_3}>{item.contents}</figcaption>
+                              <figcaption className={s.row_3}>
+                                {item.contents}
+                              </figcaption>
                               {/*리뷰 '대표이미지' URL */}
                               {item.imageUrl && (
                                 <figure className={s.row_4}>
@@ -275,12 +312,16 @@ export default function ReviewPage() {
                                       alt="카드 이미지"
                                     />
                                     {item.imageCount > 1 && (
-                                      <span className={s.imageCount}>+{item.imageCount}</span>
+                                      <span className={s.imageCount}>
+                                        +{item.imageCount}
+                                      </span>
                                     )}
                                   </button>
                                 </figure>
                               )}
-                              <div className={s.row_5}>{transformDate(item.createdDate)}</div>
+                              <div className={s.row_5}>
+                                {transformDate(item.createdDate)}
+                              </div>
                               {item.status === reviewStatus.RETURN && (
                                 <div className={`${s.returnMessage}`}>
                                   반려사유: {item.returnReason}
@@ -337,7 +378,7 @@ export default function ReviewPage() {
             </TabContentContainer>
           </MypageWrapper>
         </Wrapper>
-      </Layout>
+      </LayoutWithoutFooter>
       {activeImageModal && (
         <Modal_singleReviewImages
           isActiveModal={activeImageModal}
@@ -359,10 +400,10 @@ export default function ReviewPage() {
 //
 
 /*
-* imageUrl:'https://images.unsplash.com/photo-1657299156653-d3c0147ba3ee?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
-* imageUrl:'https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2053&q=80',
-* imageUrl:'https://images.unsplash.com/photo-1563865436874-9aef32095fad?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80',
-* */
+ * imageUrl:'https://images.unsplash.com/photo-1657299156653-d3c0147ba3ee?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
+ * imageUrl:'https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2053&q=80',
+ * imageUrl:'https://images.unsplash.com/photo-1563865436874-9aef32095fad?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80',
+ * */
 // const DUMMY_RESPONSE_DATA_writableReview = {
 //   data: {
 //     _embedded: {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Layout from '/src/components/common/Layout';
+import LayoutWithoutFooter from '/src/components/common/LayoutWithoutFooter';
 import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from '/src/components/mypage/MypageWrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
@@ -14,18 +14,17 @@ import {
   valid_hasFormErrors,
   valid_password,
 } from '/util/func/validation/validationPackage';
-import {getDataSSR, putObjData} from '/src/pages/api/reqData';
+import { getDataSSR, putObjData } from '/src/pages/api/reqData';
 import ErrorMessage from '/src/components/atoms/ErrorMessage';
-import {useRouter} from "next/router";
-import useDeviceState from "/util/hook/useDeviceState";
-
-
+import { useRouter } from 'next/router';
+import useDeviceState from '/util/hook/useDeviceState';
+import Image from 'next/image';
 
 const initialValues = {
   originPassword: '',
   newPassword: '',
   newPasswordConfirm: '',
-}
+};
 export default function ChangePasswordPage() {
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
@@ -52,7 +51,7 @@ export default function ChangePasswordPage() {
   const onSubmit = async (e) => {
     e.preventDefault();
     if (isSubmitted) return console.error('이미 제출된 양식입니다.');
- 
+
     const errObj = validate(form, formErrors);
     setFormErrors(errObj);
     const isPassed = valid_hasFormErrors(errObj);
@@ -61,7 +60,7 @@ export default function ChangePasswordPage() {
       setAlertModalMessage('유효하지 않은 항목이 있습니다.');
       return;
     }
-    
+
     try {
       setIsLoading((prevState) => ({
         ...prevState,
@@ -100,24 +99,40 @@ export default function ChangePasswordPage() {
   const onModalConfirmButtonClick = () => {
     window.location.reload();
   };
-  
-  
-  const onCancel = ()=>{
-    if(confirm('비밀번호 변경을 취소하시겠습니까?')){
-      const redirPage = isMobile ? '/mypage/user' : '/mypage/user/info'
+
+  const onCancel = () => {
+    if (confirm('비밀번호 변경을 취소하시겠습니까?')) {
+      const redirPage = isMobile ? '/mypage/user' : '/mypage/user/info';
       router.push(redirPage);
     }
-  }
-  
-  
-  const validPwConfirm = valid_confirmPassword(form.newPassword, form.newPasswordConfirm);
+  };
+
+  const onPrevPage = () => {
+    router.push('/mypage/user');
+  };
+
+  const validPwConfirm = valid_confirmPassword(
+    form.newPassword,
+    form.newPasswordConfirm,
+  );
   const errorMessagePWConfirm = validPwConfirm.message.label;
   return (
     <>
       <MetaTitle title="마이페이지 비밀번호변경" />
-      <Layout>
+      <LayoutWithoutFooter>
         <Wrapper>
           <MypageWrapper>
+            <header>
+              <div className={s.prev_btn} style={{ cursor: 'pointer' }}>
+                <Image
+                  src={'/img/order/left_arrow.svg'}
+                  alt="left_arrow"
+                  width={24}
+                  height={24}
+                  onClick={onPrevPage}
+                />
+              </div>
+            </header>
             <section className={s.title}>
               <div>비밀번호 변경</div>
             </section>
@@ -134,7 +149,9 @@ export default function ChangePasswordPage() {
                     value={form.originPassword || ''}
                   />
                 </label>
-                {formErrors.originPassword && <ErrorMessage>{formErrors.originPassword}</ErrorMessage>}
+                {formErrors.originPassword && (
+                  <ErrorMessage>{formErrors.originPassword}</ErrorMessage>
+                )}
                 <label htmlFor="newPassword" className={s.label_box}>
                   <div className={s.label_text}>새 비밀번호</div>
                   <input
@@ -145,22 +162,25 @@ export default function ChangePasswordPage() {
                     value={form.newPassword || ''}
                   />
                 </label>
-                {form.newPassword?.length > 0 ?
-                  valid_password(form.newPassword).message.map((msg, index) => (
-                    <li key={`error-message-${index}`}>
-                      <ErrorMessage
-                        key={`pw-msg-${index}`}
-                        className={`${s.msg} ${msg.valid ? s.valid : ''} ${
-                          index !== 0 && s.siblings
-                        }`}
-                      >
-                        {msg.label}
-                      </ErrorMessage>
-                      <br />
-                    </li>
-                  )) : formErrors.newPassword && (
-                  <ErrorMessage>{formErrors.newPassword}</ErrorMessage>
-                )}
+                {form.newPassword?.length > 0
+                  ? valid_password(form.newPassword).message.map(
+                      (msg, index) => (
+                        <li key={`error-message-${index}`}>
+                          <ErrorMessage
+                            key={`pw-msg-${index}`}
+                            className={`${s.msg} ${msg.valid ? s.valid : ''} ${
+                              index !== 0 && s.siblings
+                            }`}
+                          >
+                            {msg.label}
+                          </ErrorMessage>
+                          <br />
+                        </li>
+                      ),
+                    )
+                  : formErrors.newPassword && (
+                      <ErrorMessage>{formErrors.newPassword}</ErrorMessage>
+                    )}
                 <label htmlFor="newPasswordConfirm" className={s.label_box}>
                   <div className={s.label_text}>새 비밀번호 확인</div>
                   <input
@@ -172,7 +192,9 @@ export default function ChangePasswordPage() {
                   />
                 </label>
                 {(form.newPassword?.length > 0 && (
-                  <ErrorMessage valid={!validPwConfirm.error}>{errorMessagePWConfirm}</ErrorMessage>
+                  <ErrorMessage valid={!validPwConfirm.error}>
+                    {errorMessagePWConfirm}
+                  </ErrorMessage>
                 )) ||
                   (formErrors.newPasswordConfirm && (
                     <ErrorMessage>{formErrors.newPasswordConfirm}</ErrorMessage>
@@ -182,47 +204,56 @@ export default function ChangePasswordPage() {
 
             <section className={s.btn}>
               <div className={s.btn_box}>
-                <button type={'button'} className={s.left_box} onClick={onCancel}>
+                <button
+                  type={'button'}
+                  className={s.left_box}
+                  onClick={onCancel}
+                >
                   취소
                 </button>
-                <button type={'button'} className={s.right_box} onClick={onSubmit}>
-                  {isLoading.submit ? <Spinner style={{ color: '#fff' }} /> : '저장'}
+                <button
+                  type={'button'}
+                  className={s.right_box}
+                  onClick={onSubmit}
+                >
+                  {isLoading.submit ? (
+                    <Spinner style={{ color: '#fff' }} />
+                  ) : (
+                    '저장'
+                  )}
                 </button>
               </div>
             </section>
           </MypageWrapper>
         </Wrapper>
-      </Layout>
-      {hasAlert && <Modal_global_alert
-        message={alertModalMessage}
-        onClick={isSubmitted && onModalConfirmButtonClick}
-      />}
-      
+      </LayoutWithoutFooter>
+      {hasAlert && (
+        <Modal_global_alert
+          message={alertModalMessage}
+          onClick={isSubmitted && onModalConfirmButtonClick}
+        />
+      )}
     </>
   );
 }
 
-
-
-export async function getServerSideProps ({req}) {
-
+export async function getServerSideProps({ req }) {
   const url = '/api/members/sns/password'; // api이름: 비밀번호 설정해야하는 유저인지 확인
   const res = await getDataSSR(req, url);
-  if(res.data){
+  if (res.data) {
     const needToSetPassword = res.data.needToSetPassword;
-    if(needToSetPassword){
+    if (needToSetPassword) {
       return {
-        redirect:{
-          destination:'/mypage/user/setPassword',
+        redirect: {
+          destination: '/mypage/user/setPassword',
           permanent: false,
         },
-        props: {}
-      }
+        props: {},
+      };
     }
   }
-  
+
   return {
-    props: {}
-  }
-  
+    props: {},
+  };
 }

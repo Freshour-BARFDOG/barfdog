@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import Layout from '@src/components/common/Layout';
+import LayoutWithoutFooter from '@src/components/common/LayoutWithoutFooter';
 import Wrapper from '@src/components/common/Wrapper';
 import MypageWrapper from '@src/components/mypage/MypageWrapper';
 import MetaTitle from '@src/components/atoms/MetaTitle';
@@ -267,12 +267,27 @@ export default function MypageCardPage({ data }) {
   // console.log(data);
   // console.log(cardIdNumber);
 
+  const onPrevPage = () => {
+    router.push('/mypage');
+  };
+
   return (
     <>
       <MetaTitle title="마이페이지 카드관리" />
-      <Layout>
+      <LayoutWithoutFooter>
         <Wrapper>
           <MypageWrapper>
+            <header>
+              <div className={s.prev_btn} style={{ cursor: 'pointer' }}>
+                <Image
+                  src={'/img/order/left_arrow.svg'}
+                  alt="left_arrow"
+                  width={24}
+                  height={24}
+                  onClick={onPrevPage}
+                />
+              </div>
+            </header>
             <section className={s.title}>카드관리</section>
 
             <section className={s.body}>
@@ -503,7 +518,7 @@ export default function MypageCardPage({ data }) {
             </section>
           </MypageWrapper>
         </Wrapper>
-      </Layout>
+      </LayoutWithoutFooter>
       {activeModal && (
         <Modal_paymentMethod
           center

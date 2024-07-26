@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Layout from '/src/components/common/Layout';
+import LayoutWithoutFooter from '/src/components/common/LayoutWithoutFooter';
 import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from '/src/components/mypage/MypageWrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
@@ -75,7 +75,7 @@ export default function SubscribeInfoPage({ data }) {
   return (
     <>
       <MetaTitle title="마이페이지 구독관리" />
-      <Layout>
+      <LayoutWithoutFooter>
         <Wrapper>
           <MypageWrapper>
             <SubscribeDashboard subscribeInfo={subscribeInfo} />
@@ -142,7 +142,7 @@ export default function SubscribeInfoPage({ data }) {
             )}
           </MypageWrapper>
         </Wrapper>
-      </Layout>
+      </LayoutWithoutFooter>
       {hasAlert && (
         <Modal_global_alert onClick={onClickModalButton} background />
       )}

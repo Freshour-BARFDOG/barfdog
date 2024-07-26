@@ -10,6 +10,12 @@ section.title {
 
 .title {
   @include char(t24);
+  text-align: center;
+  font-weight: bold;
+}
+
+.prev_btn {
+  margin: 0 rem(20);
 }
 .body {
   .inner_body {
@@ -33,10 +39,6 @@ section.line_box {
 }
 section.body {
   padding: rem(10) 0;
-}
-
-.title {
-  @include char(t24);
 }
 
 .line {
@@ -157,73 +159,73 @@ section.body {
   }
 }
 
-@media (max-width: rem(900)) {
-  section.body {
-    padding: 0 0 rem(18);
-  }
+// @media (max-width: rem(900)) {
+section.body {
+  padding: 0 0 rem(18);
+}
 
-  .body {
-    .table_box {
-      .grid_title_box {
-        display: none;
+.body {
+  .table_box {
+    .grid_title_box {
+      display: none;
+    }
+
+    .grid_body_box {
+      grid-template-columns: 1fr;
+      grid-gap: rem(10);
+      text-align: left;
+      justify-items: flex-start;
+      border-bottom: rem(1) solid var(--color-line-03);
+      padding-bottom: rem(18);
+
+      &:last-child {
+        border-bottom: none;
       }
 
-      .grid_body_box {
-        grid-template-columns: 1fr;
-        grid-gap: rem(10);
-        text-align: left;
-        justify-items: flex-start;
-        border-bottom: rem(1) solid var(--color-line-03);
-        padding-bottom: rem(18);
+      > div {
+        display: grid;
+        grid-template-columns: rem(80) 1fr;
+        gap: rem(8);
+      }
 
-        &:last-child {
-          border-bottom: none;
-        }
+      .col_1 {
+        margin-left: 0;
+        font-weight: bold;
+        grid-template-columns: rem(24) 1fr;
+      }
 
-        > div {
-          display: grid;
-          grid-template-columns: rem(80) 1fr;
-          gap: rem(8);
-        }
+      .col_title_m {
+        display: inline-block;
+        font-weight: bold;
+      }
 
-        .col_1 {
-          margin-left: 0;
-          font-weight: bold;
-          grid-template-columns: rem(24) 1fr;
-        }
+      .col_plan {
+        margin-left: 0;
+      }
 
-        .col_title_m {
-          display: inline-block;
-          font-weight: bold;
-        }
-
-        .col_plan {
-          margin-left: 0;
-        }
-
-        .btn_box {
+      .btn_box {
+        width: 100%;
+        .btn {
           width: 100%;
-          .btn {
-            width: 100%;
-          }
         }
       }
     }
   }
 }
+// }
 
-@media (max-width: rem(600)) {
-  .title {
-    display: none;
-  }
+// @media (max-width: rem(600)) {
+// .title {
+//   display: none;
+// }
 
-  .line {
-    display: none;
-  }
+.line {
+  display: none;
+}
 
-  .second_body {
-    .text:last-child {
-      padding-bottom: rem(200);
-    }
+.second_body {
+  .text:last-child {
+    padding-bottom: rem(200);
   }
 }
+// }

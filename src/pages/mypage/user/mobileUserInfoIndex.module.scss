@@ -1,12 +1,11 @@
 @import '/styles/global/rem';
 @import '/styles/module/zIndex.module';
 
-
 $bottom-menu-list-height: rem(50);
 
 .routing-menu-section {
   padding-top: rem(30);
-  padding-bottom: calc(100vh - #{$bottom-menu-list-height}*4);
+  padding-bottom: calc(100vh - #{$bottom-menu-list-height}* 4);
   ul {
     li {
       display: grid;
@@ -33,3 +32,12 @@ $bottom-menu-list-height: rem(50);
   }
 }
 
+.prev_btn {
+  margin: rem(40) 0 0 rem(20);
+}
+
+.title {
+  font-size: rem(22);
+  font-weight: bold;
+  text-align: center;
+}
