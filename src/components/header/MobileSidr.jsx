@@ -126,8 +126,8 @@ export default function MobileSidr({ isOpen, setSidrOpen }) {
                 <li>
                   <button
                     type={'button'}
-                    data-link={'/mypage/orderHistory'}
-                    onClick={(e) => onMovePage(e, '/mypage/orderHistory')}
+                    data-link={'/mypage'}
+                    onClick={(e) => onMovePage(e, '/mypage')}
                   >
                     <div className={s.mypage_wrap}>
                       <Icon_mypage />

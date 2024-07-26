@@ -11,12 +11,31 @@ export const EmptyContMessage = ({
     },
   },
   children,
+  bgColor,
+  borderRadius,
+  color,
 }) => {
   return (
     <>
-      <div className={s['empty-cont-box']}>
+      <div
+        className={s['empty-cont-box']}
+        style={{
+          backgroundColor: bgColor && bgColor,
+          borderRadius: borderRadius && borderRadius,
+          color: color && color,
+        }}
+      >
         <div className={s.inner}>
-          { message && <pre className={s.text}>{message}</pre>}
+          {message && (
+            <pre
+              className={s.text}
+              style={{
+                color: color && color,
+              }}
+            >
+              {message}
+            </pre>
+          )}
           {children}
           {options.button.url && (
             <Link href={options.button.url} passHref>

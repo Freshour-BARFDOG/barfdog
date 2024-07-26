@@ -1,0 +1,314 @@
+@import 'styles/global/rem';
+@import '/styles/global/guide';
+
+section.title {
+  padding: rem(8) 0 rem(18);
+}
+section.body {
+  padding: rem(120) 0 0;
+}
+
+.title {
+  @include char(t24);
+}
+
+.body {
+  width: 100%;
+  text-align: center;
+  .flex_box {
+    .text {
+      padding-bottom: rem(20);
+    }
+
+    .empty_btn_box {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      .btn {
+        background-color: var(--color-main);
+        color: #fff;
+        padding: rem(10) 0;
+        width: rem(200);
+        border-radius: rem(4);
+        font-size: rem(15);
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+.dogInfo-wrap {
+  box-sizing: border-box;
+  // max-height: rem(180);
+  padding-right: rem(30);
+  display: grid;
+  grid-template-columns: rem(180) 1fr;
+  grid-auto-flow: row;
+  border: rem(1) solid var(--color-line-04);
+  border-radius: rem(4);
+
+  margin-bottom: rem(10);
+
+  &:last-child {
+    margin-bottom: rem(120);
+  }
+  .left_box {
+    width: 100%;
+    max-width: rem(120);
+    margin: rem(30);
+    grid-column: 1 / span 1;
+    grid-row: 1 / span 2;
+
+    .image {
+      position: relative;
+      width: 100%;
+      max-width: rem(120);
+      aspect-ratio: 1/1;
+      border-radius: 50%;
+      overflow: hidden;
+      &:not(.hasImage) {
+        background-color: var(--color-bg-ghostWhite);
+        background-image: url('/public/img/mypage/Dog_basic.png');
+        background-repeat: no-repeat;
+        background-size: rem(55);
+        background-position: center;
+      }
+    }
+  }
+
+  .right_box {
+    width: 100%;
+    grid-column: 2 / span 1;
+    grid-row: 1 / span 1;
+
+    .dog-info {
+      display: grid;
+      grid-template-columns: 1fr rem(30);
+      width: 100%;
+      padding: rem(27) 0 rem(13);
+      .inner_flex {
+        display: flex;
+        align-items: center;
+        .dog_name {
+          @include char(l20);
+          font-weight: 600;
+          margin-right: rem(7);
+          cursor: default;
+          word-break: keep-all;
+        }
+        .tags {
+          i {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            border-radius: rem(30);
+            width: rem(56);
+            padding: rem(5) 0;
+            color: #fff;
+            @include char(l14);
+            cursor: default;
+            white-space: nowrap;
+          }
+          i:not(:last-child) {
+            margin-right: rem(8);
+          }
+        }
+
+        .representative {
+          background-color: #f2890e;
+        }
+        .subscribe {
+          background-color: #219f94;
+        }
+        .before_pay {
+          background-color: #ababab;
+        }
+        .pending {
+          background-color: #6f6ac9;
+        }
+      }
+      .image {
+        width: rem(28);
+        aspect-ratio: 1/1;
+        cursor: pointer;
+      }
+    }
+
+    .controls {
+      display: flex;
+      color: var(--color-font-sub);
+      max-width: rem(290);
+      @include char(l15);
+
+      button {
+        cursor: pointer;
+        position: relative;
+        padding-right: rem(10);
+        margin-right: rem(10);
+        display: flex;
+        align-items: center;
+        gap: rem(4);
+        font-size: rem(16);
+        &:not(:last-child):before {
+          content: '';
+          position: absolute;
+          right: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          width: rem(1);
+          height: rem(14);
+          background-color: var(--color-line-02);
+        }
+      }
+    }
+  }
+
+  .select_box {
+    width: 100%;
+    grid-column: 2 / span 1;
+    grid-row: 2 / span 1;
+    // transform: translateY(rem(-80));
+
+    .btn-section {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      column-gap: rem(10);
+
+      @include char(l15);
+      button,
+      a {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: rem(4);
+        width: 100%;
+        height: rem(44);
+      }
+      a {
+        background-color: #f9edec;
+        color: var(--color-main);
+      }
+      //3칸일떄만 나옴
+      .payment {
+        background-color: var(--color-main);
+        color: #fff;
+      }
+    }
+  }
+}
+
+// finishedOrder
+
+.text_box {
+  padding: rem(85) 0 rem(80);
+  text-align: center;
+  .maintext {
+    font-size: rem(28);
+    font-weight: 600;
+  }
+  .subtext {
+    font-size: rem(19);
+
+    span {
+      color: var(--color-main);
+    }
+
+    br {
+      display: none;
+    }
+  }
+}
+
+.btn_box {
+  display: flex;
+  justify-content: center;
+  column-gap: rem(10);
+  padding-bottom: rem(220);
+
+  > button {
+    padding: rem(12) 0;
+    width: rem(200);
+    border-radius: rem(4);
+  }
+
+  .link_home {
+    background: #ffffff;
+    border: rem(1) solid #dddddd;
+  }
+  .link_orderlist {
+    background: var(--color-main);
+    color: #fff;
+  }
+}
+
+@media (max-width: rem(900)) {
+  .dogInfo-wrap {
+    max-height: rem(400);
+    padding: 0 rem(20);
+    grid-template-columns: rem(90) 1fr;
+
+    &:last-child {
+      margin-bottom: rem(120);
+    }
+
+    .left_box {
+      width: 100%;
+      max-width: rem(80);
+      margin: rem(30);
+      margin-left: 0;
+
+      .image {
+        width: 100%;
+        max-width: rem(120);
+        aspect-ratio: 1/1;
+        background-size: rem(35);
+      }
+    }
+
+    .right_box {
+      .dog-info {
+        padding: rem(27) 0 rem(13);
+
+        .inner_flex {
+          display: grid;
+          grid-template-columns: 1fr;
+          grid-row-gap: rem(10);
+
+          .dog_name {
+            order: 2;
+            font-size: rem(18);
+          }
+        }
+      }
+
+      .controls {
+        display: flex;
+        margin-bottom: rem(30);
+
+        button {
+          font-size: rem(14);
+
+          &:last-child {
+            padding-right: 0;
+          }
+        }
+      }
+    }
+
+    .select_box {
+      grid-column: 1 / span 2;
+      transform: translateY(rem(-20));
+
+      .btn-section {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: rem(10);
+
+        .payment {
+          width: calc(200% + rem(10));
+        }
+      }
+    }
+  }
+}
