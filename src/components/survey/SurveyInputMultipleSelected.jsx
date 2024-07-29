@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react';
 import s from '/src/pages/survey/survey.module.scss';
 import Image from 'next/image';
 import { dogCautionType } from '../../../store/TYPE/dogCautionType';
+import {
+  concernsRecipeMap,
+  inedibleFoodRecipeMap,
+} from '../../../store/TYPE/recipeIdWithConcernsInedibleFood';
 
 const SurveyInputMultipleSelected = ({
   formValueKey,
@@ -15,8 +19,6 @@ const SurveyInputMultipleSelected = ({
   dogInfo,
   dogInfoIndex,
   setIsActiveNextBtn,
-  conditionRecipeMap,
-  inedibleFoodRecipeMap,
 }) => {
   // 최초 값
   // let initialSelectedRadio = `${formValueKey}-${formValues[formValueKey]}`;
@@ -61,8 +63,8 @@ const SurveyInputMultipleSelected = ({
       let recommendRecipeIds = [];
 
       selectedConditions.forEach((condition) => {
-        if (conditionRecipeMap[condition]) {
-          recommendRecipeIds.push(...conditionRecipeMap[condition]);
+        if (concernsRecipeMap[condition]) {
+          recommendRecipeIds.push(...concernsRecipeMap[condition]);
         }
       });
 

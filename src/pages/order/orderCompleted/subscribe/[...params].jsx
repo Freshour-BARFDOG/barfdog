@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Layout from '/src/components/common/Layout';
+import LayoutWithoutFooter from '/src/components/common/LayoutWithoutFooter';
 import Wrapper from '/src/components/common/Wrapper';
 import MetaTitle from '@src/components/atoms/MetaTitle';
 import s from 'src/pages/order/orderCompleted/index.module.scss';
@@ -53,7 +53,7 @@ function OrderCompletedPage(props) {
   return (
     <>
       <MetaTitle title="정기구독 주문완료" />
-      <Layout>
+      <LayoutWithoutFooter>
         <Wrapper>
           <section className={s.text_box}>
             <div className={s.row_1}>
@@ -77,7 +77,7 @@ function OrderCompletedPage(props) {
             </div>
           </section>
         </Wrapper>
-      </Layout>
+      </LayoutWithoutFooter>
     </>
   );
 }

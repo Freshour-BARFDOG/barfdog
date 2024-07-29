@@ -16,6 +16,8 @@ import { subscribeStatus } from '/store/TYPE/subscribeStatus';
 import { calcSubscribeNextPaymentPrice } from '/util/func/subscribe/calcSubscribeNextPaymentPrice';
 import { getDefaultPagenationInfo } from '/util/func/getDefaultPagenationInfo';
 import { useRouter } from 'next/router';
+import { SubscribeStatusTag } from '/src/components/subscribe/SubscribeStatusTag';
+import { formattedProductionAndReceivingDate } from '../../../../util/func/formattedProductionAndReceivingDate';
 
 export default function ManageSubscribePage() {
   const router = useRouter();
@@ -42,6 +44,23 @@ export default function ManageSubscribePage() {
     }));
   };
 
+  // 패키지 기간 계산
+  function calculatePackagePeriod(startDate, subscriptionMonth) {
+    const start = new Date(startDate);
+    const end = new Date(start);
+    end.setMonth(end.getMonth() + subscriptionMonth);
+
+    const formattedStart = `${start.getFullYear()}/${String(
+      start.getMonth() + 1,
+    ).padStart(2, '0')}/${String(start.getDate()).padStart(2, '0')}`;
+    const formattedEnd = `${end.getFullYear()}/${String(
+      end.getMonth() + 1,
+    ).padStart(2, '0')}/${String(end.getDate()).padStart(2, '0')}`;
+
+    // return `${formattedStart} ~ ${formattedEnd}`;
+    return ` ~${formattedEnd}`;
+  }
+
   const onPrevPage = () => {
     router.push('/mypage');
   };
@@ -65,8 +84,14 @@ export default function ManageSubscribePage() {
                 />
               </div>
             </header>
-            <section className={s.title}>구독관리</section>
-            <section>
+            <section className={s.title}>
+              <div>구독관리</div>
+              <div className={s.title_info}>
+                결제가 이미 이루어진 경우,
+                <br /> 플랜 및 레시피 변경 시 재결제가 이뤄질 수 있습니다.
+              </div>
+            </section>
+            <section className={s.subscribe_list}>
               {isLoading.fetching ? (
                 <Spinner />
               ) : itemList.length === 0 ? (
@@ -77,7 +102,7 @@ export default function ManageSubscribePage() {
                   }}
                 />
               ) : (
-                <ul>
+                <ul className={s.content_container}>
                   {itemList
                     .filter(
                       (item) => item.subscribeDto.status === 'SUBSCRIBING',
@@ -88,68 +113,97 @@ export default function ManageSubscribePage() {
                     )
                     .map((item, index) => (
                       <li key={`subscribe-item-${index}`} className={s.content}>
-                        <div className={s.flex_box}>
-                          <div className={s.col_1}>
-                            <figure className={`${s.image} img-wrap`}>
-                              {item.subscribeDto.pictureUrl && (
-                                <Image
-                                  src={item.subscribeDto.pictureUrl}
-                                  objectFit="cover"
-                                  layout="fill"
-                                  alt={`반려견 프로필 이미지`}
-                                />
-                              )}
-                              <span className={s.dogName}>
-                                {item.subscribeDto.dogName}
-                              </span>
-                            </figure>
-                            <div className={s.text}>
-                              {(item.subscribeDto.countSkipOneTime > 0 ||
-                                item.subscribeDto.countSkipOneWeek > 0) && (
-                                <p className={s.skipInfo}>
-                                  {item.subscribeDto.countSkipOneTime > 0 && (
-                                    <em className={s.red_box_text}>
-                                      1회 건너뛰기{' '}
-                                    </em>
-                                  )}
-                                  {item.subscribeDto.countSkipOneWeek > 0 && (
-                                    <em className={s.red_box_text}>
-                                      1주 건너뛰기{' '}
-                                    </em>
-                                  )}
-                                </p>
-                              )}
-
-                              <p>
-                                {item.subscribeDto.plan &&
-                                  subscribePlanType[item.subscribeDto.plan].KOR}
-                                &nbsp;/ &nbsp;{item.recipeNames}
-                              </p>
-                              <span className={s.text2}>
-                                총{' '}
-                                {item.subscribeDto.plan &&
-                                  subscribePlanType[item.subscribeDto.plan]
-                                    .totalNumberOfPacks}
-                                팩&nbsp;/&nbsp;
-                                {item.subscribeDto.plan &&
-                                  subscribePlanType[item.subscribeDto.plan]
-                                    .weeklyPaymentCycle}
-                                주 정기결제
-                              </span>
-                            </div>
+                        <div className={s.title_box}>
+                          <h3>
+                            {item.subscribeDto.dogName}(이)의 AI 추천 식단
+                          </h3>
+                          {/* 구독 상태 */}
+                          <div className={s.tags}>
+                            <SubscribeStatusTag
+                              status={item.subscribeDto.status}
+                            />
                           </div>
-                          <div className={s.grid}>
-                            <div className={s.col_2}>
-                              <span className={s.text2}>다음 결제일</span>
+                        </div>
+
+                        {/* 다음 배송일(nextDeliveryDate)이 없으면, 오늘 구독했을 경우로 계산 */}
+                        <div className={s.date_wrapper}>
+                          <p>
+                            생산 예정일:{' '}
+                            {
+                              formattedProductionAndReceivingDate(
+                                item.subscribeDto.nextDeliveryDate,
+                              ).formattedProductionDate
+                            }
+                          </p>
+                          <p>|</p>
+                          <p>
+                            수령 예정일:{' '}
+                            {
+                              formattedProductionAndReceivingDate(
+                                item.subscribeDto.nextDeliveryDate,
+                              ).formattedReceivingDate
+                            }
+                          </p>
+                        </div>
+
+                        <div className={s.flex_box}>
+                          {item.subscribeDto.subscriptionMonth && (
+                            <p>
+                              - 현재 패키지:{' '}
+                              {item.subscribeDto.subscriptionMonth}개월
+                            </p>
+                          )}
+
+                          <p>
+                            - 현재 플랜:{' '}
+                            {item.subscribeDto.plan &&
+                              subscribePlanType[item.subscribeDto.plan].KOR}
+                          </p>
+
+                          <p>- 현재 레시피: {item.recipeNames}</p>
+
+                          {/* 총{' '}
+                            {item.subscribeDto.plan &&
+                              subscribePlanType[item.subscribeDto.plan]
+                                .totalNumberOfPacks}
+                            팩&nbsp;/&nbsp;
+                            {item.subscribeDto.plan &&
+                              subscribePlanType[item.subscribeDto.plan]
+                                .weeklyPaymentCycle}
+                            주 정기결제 */}
+
+                          {item.subscribeDto.subscriptionMonth ? (
+                            <>
                               <span className={s.text3}>
+                                - 패키지 금액:{' '}
+                                {transformLocalCurrency(
+                                  item.subscribeDto?.packagePrice,
+                                ) + '원' || ' -'}
+                              </span>
+                              <span className={s.text3}>
+                                {' '}
+                                - 패키지 기간:
+                                {calculatePackagePeriod(
+                                  item.subscribeDto?.startDate,
+                                  item.subscribeDto?.subscriptionMonth,
+                                ) +
+                                  ' (' +
+                                  item.subscribeDto?.shippingLeft +
+                                  '회 남음)' || ' -'}
+                              </span>
+                            </>
+                          ) : (
+                            <>
+                              {' '}
+                              <span className={s.text3}>
+                                {' '}
+                                - 다음 결제일:
                                 {transformDate(
                                   item.subscribeDto?.nextPaymentDate,
-                                )}
+                                ) || ' -'}
                               </span>
-                            </div>
-                            <div className={s.col_3}>
-                              <span className={s.text2}>다음 결제금액</span>
-                              <span className={s.text3}>
+                              <span className={s.text2}>
+                                - 구독 금액:{' '}
                                 {transformLocalCurrency(
                                   calcSubscribeNextPaymentPrice({
                                     originPrice:
@@ -163,49 +217,43 @@ export default function ManageSubscribePage() {
                                   }),
                                 )}
                                 원
-                              </span>
-                            </div>
+                              </span>{' '}
+                            </>
+                          )}
+                        </div>
 
-                            <div className={s.col_4}>
-                              {item.subscribeDto.status ===
-                                subscribeStatus.SUBSCRIBING ||
-                              item.subscribeDto.status ===
-                                subscribeStatus.SUBSCRIBE_PENDING ? (
-                                <Link
-                                  href={`/mypage/subscribe/${item.subscribeDto.subscribeId}`}
-                                  passHref
-                                >
-                                  <a
-                                    className={s.btn}
-                                    onClick={onMovePageLoading}
-                                    data-subscribe-id={
-                                      item.subscribeDto.subscribeId
-                                    }
-                                  >
-                                    {isLoading[
-                                      item.subscribeDto.subscribeId
-                                    ] ? (
-                                      <Spinner />
-                                    ) : (
-                                      '관리하기'
-                                    )}
-                                  </a>
-                                </Link>
-                              ) : (
-                                <Link href={`/mypage/dogs`} passHref>
-                                  <a className={`${s.btn1} pointColor`}>
-                                    {isLoading[
-                                      item.subscribeDto.subscribeId
-                                    ] ? (
-                                      <Spinner />
-                                    ) : (
-                                      '구독하기'
-                                    )}
-                                  </a>
-                                </Link>
-                              )}
-                            </div>
-                          </div>
+                        <div className={s.col_4}>
+                          <Link
+                            href={`/mypage/subscribe/${item.subscribeDto.subscribeId}`}
+                            passHref
+                          >
+                            <a
+                              className={s.btn}
+                              onClick={onMovePageLoading}
+                              data-subscribe-id={item.subscribeDto.subscribeId}
+                            >
+                              패키지 혜택
+                            </a>
+                          </Link>
+
+                          <Link
+                            href={`/mypage/subscribe/${item.subscribeDto.subscribeId}`}
+                            passHref
+                          >
+                            <a
+                              className={s.btn}
+                              onClick={onMovePageLoading}
+                              data-subscribe-id={item.subscribeDto.subscribeId}
+                            >
+                              변경 하기
+                              <Image
+                                src={'/img/order/right_arrow.svg'}
+                                alt="right_arrow"
+                                width={12}
+                                height={12}
+                              />
+                            </a>
+                          </Link>
                         </div>
                       </li>
                     ))}

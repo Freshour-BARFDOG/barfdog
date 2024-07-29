@@ -1,8 +1,6 @@
 @import '/styles/global/rem';
 @import '/styles/global/guide';
 
-
-
 //구독 그람수 변경
 .content_inner_box {
   padding: 0 0 rem(16);
@@ -13,25 +11,26 @@
     align-items: center;
     justify-content: center;
     .customSelect {
-      border: rem(1) solid var(--color-main);
+      // border: rem(1) solid var(--color-main);
+      border: rem(1) solid #aaaaaa;
       border-radius: rem(8);
       width: 100% !important;
       box-sizing: border-box;
-      height: rem(50);
-      //max-width: rem(180);
+      height: rem(46);
+      max-width: rem(150);
       input {
         border-bottom: 0;
         background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
         background-repeat: no-repeat;
         background-position-x: calc(100% - 8px);
         background-position-y: center;
-        &:focus{
-          border:0 !important;
+        &:focus {
+          border: 0 !important;
         }
       }
       em {
         pointer-events: none;
-        right: calc(50% - #{rem(12)});
+        right: calc(50% - #{rem(20)});
         transform: translate(100%, -50%);
       }
     }
@@ -39,12 +38,22 @@
 
   .flex_box {
     display: flex;
+    flex-direction: column;
+
     @include char(l14);
     column-gap: rem(0);
     .content_left_box {
       padding-right: rem(6);
+      display: flex;
+      align-items: center;
+      gap: rem(10);
+
+      .text1 {
+        font-size: rem(18);
+      }
     }
     .content_right_box {
+      color: #686868;
       width: 100%;
       padding-top: rem(3);
       .flex_box {
@@ -66,38 +75,57 @@
       .text3 {
         @include char(l15);
         padding-top: rem(10);
+        span {
+          color: #a90707;
+        }
       }
 
       .grid_box {
         width: 100%;
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        padding-top: rem(30);
+        padding-top: rem(20);
         padding-bottom: rem(43);
 
-        span {
-          padding-left: rem(16);
-          color: var(--color-main);
-          @include char(l14);
-        }
-
-        row-gap: rem(32);
-        column-gap: rem(40);
-        .top_text {
-          @include char(l15);
-          color: var(--color-font-sub);
-          padding-bottom: rem(8);
-        }
-
-        .bot_1 {
-          cursor:default;
+        .grid_1,
+        .grid_3,
+        .grid_4,
+        .grid_5,
+        .grid_6,
+        .selectBox {
           display: flex;
           align-items: center;
-          @include char(l18);
-          background-color: var(--color-bg-02);
-          padding: rem(14) 0 rem(14) rem(20);
-          border-radius: rem(8);
+          justify-content: space-between;
+          border-bottom: rem(1) solid #c6c6c6;
+          color: #000;
+          font-size: rem(18);
+          padding: rem(20) rem(10);
         }
+
+        .selectBox {
+          padding: rem(10) rem(10);
+        }
+        // span {
+        //   padding-left: rem(16);
+        //   color: var(--color-main);
+        //   @include char(l14);
+        // }
+
+        // row-gap: rem(32);
+        // column-gap: rem(40);
+        // .top_text {
+        //   @include char(l15);
+        //   color: var(--color-font-sub);
+        //   padding-bottom: rem(8);
+        // }
+
+        // .bot_1 {
+        //   cursor: default;
+        //   display: flex;
+        //   align-items: center;
+        //   @include char(l18);
+        //   background-color: var(--color-bg-02);
+        //   padding: rem(14) 0 rem(14) rem(20);
+        //   border-radius: rem(8);
+        // }
         .bot_2 {
           border: rem(1) solid var(--color-main);
           border-radius: rem(8);
@@ -138,7 +166,7 @@
 
       width: rem(56);
       padding: rem(5) 0;
-      background: #219F94;
+      background: #219f94;
       border-radius: rem(30);
       color: #fff;
       font-weight: 700;
@@ -154,8 +182,7 @@
     }
 
     .content_right_box {
-      margin-top: rem(31);
-
+      padding-left: rem(10);
       .red_btn_box2 {
         width: rem(300);
         padding-top: rem(21);
@@ -163,14 +190,13 @@
 
         .red_btn2 {
           width: 100%;
-          max-width: rem(300);
-          background-color: #F9EDEC;
-          border-radius: rem(4);
-          color: var(--color-main);
+          // max-width: rem(300);
+          border-radius: rem(30);
+          color: #be1a21;
+          border: rem(1) solid #be1a21;
           padding: rem(14) 0;
           text-align: center;
-          @include char(l15);
-          font-weight: 400;
+          font-weight: bold;
           cursor: pointer;
         }
       }
@@ -178,72 +204,58 @@
   }
 }
 
+// @media (max-width: rem(1200)) {
+.content_inner_box {
+  .flex_box {
+    .content_right_box {
+      .grid_box {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  }
+}
+// }
 
-@media (max-width: rem(1200)) {
+// @media (max-width: rem(900)) {
+.content_inner_box {
+  .flex_box {
+    .content_right_box {
+      .grid_box {
+        .bot_1 {
+          display: block;
+          text-align: center;
+        }
+      }
 
-  .content_inner_box {
-    .flex_box {
-      .content_right_box {
-        .grid_box {
-          grid-template-columns: repeat(2, 1fr);
+      .red_btn_box {
+        width: 100%;
+        .red_btn {
+          max-width: 100%;
+        }
+      }
+
+      .flex_box {
+        .text1 {
+          transform: translate(rem(65), rem(-10));
+        }
+      }
+
+      .text3 {
+        padding-top: rem(12);
+      }
+    }
+  }
+
+  .flex_box.second {
+    .content_right_box {
+      .red_btn_box2 {
+        width: 100%;
+
+        .red_btn2 {
+          max-width: 100%;
         }
       }
     }
   }
 }
-
-@media (max-width: rem(900)) {
-  .content_inner_box {
-    .flex_box {
-      display: grid;
-      grid-template-columns: 1fr;
-      grid-row-gap: 0;
-      .content_right_box {
-        padding-top: 0;
-        margin-top: rem(-10);
-
-        .grid_box {
-          grid-template-columns: 1fr;
-
-          .bot_1 {
-            display: block;
-            text-align: center;
-          }
-        }
-
-        .red_btn_box {
-          width: 100%;
-          .red_btn {
-            max-width: 100%;
-          }
-        }
-
-        .flex_box {
-          display: grid;
-          grid-template-columns: 1fr;
-
-          .text1 {
-            transform: translate(rem(65), rem(-10));
-          }
-        }
-
-        .text3 {
-          padding-top: rem(12);
-        }
-      }
-    }
-
-    .flex_box.second {
-      .content_right_box {
-        margin-top: rem(-10);
-        .red_btn_box2 {
-          width: 100%;
-
-          .red_btn2 {
-            max-width: 100%;
-          }
-        }
-      }
-    }
-  }
-}
+// }

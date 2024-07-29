@@ -1,32 +1,47 @@
 @import '/styles/global/rem';
 @import '/styles/global/guide';
 
-
 // 구독건너뛰기 css
-.customRadio-weeklySkipCount{
+.customRadio-weeklySkipCount {
   display: flex;
   align-content: center;
   justify-content: space-between;
   width: 100%;
   max-width: rem(290);
-  label[data-checked='false']{
+  label[data-checked='false'] {
     color: var(--gray20);
   }
-  label[data-checked='true']{
+  label[data-checked='true'] {
     color: var(--color-font-def) !important;
   }
-  input{
-    border:0;
-    border-color:transparent !important;
+  input {
+    border: 0;
+    border-color: transparent !important;
   }
-  input:before{
+  input:before {
     opacity: 1;
-    width:rem(9);
-    height:rem(9);
+    width: rem(9);
+    height: rem(9);
   }
-  input:not(:focus){
-    animation: show ;
+  input:not(:focus) {
+    animation: show;
     background: var(--gray30);
+  }
+}
+
+.survey_update_text {
+  span {
+    color: #bcbcbc;
+  }
+
+  button {
+    border: rem(1) solid #be1a21;
+    padding: rem(10);
+    width: 100%;
+    color: #be1a21;
+    font-weight: bold;
+    border-radius: rem(30);
+    margin-top: rem(20);
   }
 }
 
@@ -49,7 +64,7 @@
       display: flex;
       align-items: center;
       column-gap: rem(10);
-      font-size:rem(16) !important;
+      font-size: rem(16) !important;
       &:nth-child(2) {
         color: var(--color-font-sub);
       }
@@ -107,9 +122,7 @@
   }
 }
 
-
 @media (max-width: rem(900)) {
-
   .content_inner_box4 {
     .radio_box {
       column-gap: rem(30);

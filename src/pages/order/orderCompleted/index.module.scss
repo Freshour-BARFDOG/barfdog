@@ -1,11 +1,18 @@
-
 @import '/styles/global/guide';
 @import '/styles/global/rem';
 
-section.image_box { padding: rem(60) 0 0; }
-section.text_box { padding: rem(40) 0 rem(40); }
-section.order_box { padding: 0 0 rem(64); }
-section.btn_box {padding: 0 0 rem(217) ;}
+section.image_box {
+  padding: rem(60) 0 0;
+}
+section.text_box {
+  padding: rem(80) 0 rem(40);
+}
+section.order_box {
+  padding: 0 0 rem(64);
+}
+section.btn_box {
+  padding: 0 0 rem(217);
+}
 
 .image_box {
   width: 100%;
@@ -20,9 +27,10 @@ section.btn_box {padding: 0 0 rem(217) ;}
     position: relative;
     overflow: visible;
 
-    &:first-child, &:nth-child(2){
-      &::after{
-        content: "";
+    &:first-child,
+    &:nth-child(2) {
+      &::after {
+        content: '';
         position: absolute;
         top: 50%;
         left: 100%;
@@ -31,8 +39,8 @@ section.btn_box {padding: 0 0 rem(217) ;}
         height: rem(2);
         background-color: #ddd;
       }
-      &::before{
-        content: "";
+      &::before {
+        content: '';
         position: absolute;
         top: 50%;
         right: rem(-46);
@@ -83,7 +91,7 @@ section.btn_box {padding: 0 0 rem(217) ;}
     font-weight: 600;
   }
 
-  .row_4{
+  .row_4 {
     word-break: keep-all;
   }
 }
@@ -110,7 +118,7 @@ section.btn_box {padding: 0 0 rem(217) ;}
     }
     .left_btn {
       border-color: var(--color-main);
-      color: var(--color-main)
+      color: var(--color-main);
     }
     .right_btn {
       background-color: var(--color-main);
@@ -120,27 +128,34 @@ section.btn_box {padding: 0 0 rem(217) ;}
 }
 
 @media (max-width: rem(600)) {
-
-  
-  section.image_box { padding: rem(30) 0 0; }
-  section.text_box { padding: rem(40) 0 rem(40); }
-  section.order_box { padding: 0 0 rem(30); }
-  section.btn_box {padding: 0 0 rem(217) ;}
+  section.image_box {
+    padding: rem(30) 0 0;
+  }
+  section.text_box {
+    padding: rem(40) 0 rem(40);
+  }
+  section.order_box {
+    padding: 0 0 rem(30);
+  }
+  section.btn_box {
+    padding: 0 0 rem(217);
+  }
 
   .image_box {
     grid-template-columns: repeat(3, rem(80));
     column-gap: rem(20);
-  
+
     .image {
       width: rem(80);
       aspect-ratio: 1;
 
-      &:first-child, &:nth-child(2){
-        &::after{
+      &:first-child,
+      &:nth-child(2) {
+        &::after {
           width: rem(20);
           height: rem(2);
         }
-        &::before{
+        &::before {
           right: rem(-24);
           width: rem(7);
           height: rem(7);
@@ -149,7 +164,6 @@ section.btn_box {padding: 0 0 rem(217) ;}
     }
   }
 
-  
   .text_box {
     .row_2 {
       .br {
@@ -173,7 +187,8 @@ section.btn_box {padding: 0 0 rem(217) ;}
       grid-template-columns: 1fr;
       row-gap: rem(10);
 
-      .left_btn, .right_btn {
+      .left_btn,
+      .right_btn {
         width: 100%;
         max-width: rem(335);
         margin: 0 auto;
@@ -184,5 +199,4 @@ section.btn_box {padding: 0 0 rem(217) ;}
       }
     }
   }
-    
 }

@@ -8,7 +8,6 @@ import { calcOneMealGramsWithRecipeInfo } from '/util/func/subscribe/calcOneMeal
 import { useSubscribePlanInfo } from '/util/hook/useSubscribePlanInfo';
 import { calcSubscribeOneDayRecommendKcal } from '/util/func/subscribe/calcOneMealGramsWithRecipeInfo';
 import CustomSelect from '/src/components/admin/form/CustomSelect';
-// import ToolTip from '/src/components/atoms/Tooltip';
 
 export default function SurveyResultPlan({
   surveyInfo,
@@ -381,34 +380,34 @@ export default function SurveyResultPlan({
     },
   ];
 
-  const onInputChange = (value) => {
-    const nextAmount = value;
-    // const nextGrams = form.originGrams.map((originGram) =>
-    //   Number(
-    //     (originGram * (1 + nextAmount / 100)).toFixed(
-    //       UnitOfDemicalPointOfOneMealGramInDatabase,
-    //     ),
-    //   ),
-    // ); // ! 1팩 당 무게: 최대 소수점 '4'자리
-    // const recipePricePerGrams = form.recipeInfo.pricePerGramList;
-    // const planTypeName = form.planInfo.planType;
-    // const { perPack, salePrice } = calcSubscribePrice({
-    //   discountPercent: subscribeInfo.plan.discountPercent,
-    //   oneMealGrams: nextGrams,
-    //   planName: planTypeName,
-    //   pricePerGrams: recipePricePerGrams,
-    //   isOriginSubscriber,
-    //   recipeNameList: subscribeInfo.recipe.nameList.map((recipe) => recipe),
-    // });
-    // // // console.log(perPack, salePrice);
-    // setForm((prevState) => ({
-    //   ...prevState,
-    //   nextAmount,
-    //   nextGrams,
-    //   nextPricePerPack: perPack,
-    //   nextSalePrice: salePrice,
-    // }));
-  };
+  // const onInputChange = (value) => {
+  //   const nextAmount = value;
+  //   // const nextGrams = form.originGrams.map((originGram) =>
+  //   //   Number(
+  //   //     (originGram * (1 + nextAmount / 100)).toFixed(
+  //   //       UnitOfDemicalPointOfOneMealGramInDatabase,
+  //   //     ),
+  //   //   ),
+  //   // ); // ! 1팩 당 무게: 최대 소수점 '4'자리
+  //   // const recipePricePerGrams = form.recipeInfo.pricePerGramList;
+  //   // const planTypeName = form.planInfo.planType;
+  //   // const { perPack, salePrice } = calcSubscribePrice({
+  //   //   discountPercent: subscribeInfo.plan.discountPercent,
+  //   //   oneMealGrams: nextGrams,
+  //   //   planName: planTypeName,
+  //   //   pricePerGrams: recipePricePerGrams,
+  //   //   isOriginSubscriber,
+  //   //   recipeNameList: subscribeInfo.recipe.nameList.map((recipe) => recipe),
+  //   // });
+  //   // // // console.log(perPack, salePrice);
+  //   // setForm((prevState) => ({
+  //   //   ...prevState,
+  //   //   nextAmount,
+  //   //   nextGrams,
+  //   //   nextPricePerPack: perPack,
+  //   //   nextSalePrice: salePrice,
+  //   // }));
+  // };
 
   return (
     <div className={s.plan_container}>
@@ -466,7 +465,7 @@ export default function SurveyResultPlan({
                   </li>
                   <li className={s.plan_grid_2}>
                     <div className={s.row_1}>{item.titleDescHTML}</div>
-                    <div className={s.row_1}>{item.bodyDescHTML.row1}</div>
+                    <div className={s.row_1}>{item.bodyDescHTML.row1}</div> /
                     <div className={s.text1}>{item.bodyDescHTML.row2}</div>
                   </li>
                 </ul>

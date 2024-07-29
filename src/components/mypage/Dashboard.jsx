@@ -38,45 +38,45 @@ export default function Dashboard({
     message: false,
   });
 
-  const onCopyToClipboard = (value) => {
-    let hostname;
-    if (typeof window !== 'undefined') {
-      hostname = window.location.hostname;
-    }
-    const copiedValue = value || hostname;
-    const tempElem = document.createElement('textarea');
-    tempElem.value = copiedValue;
-    tempElem.setAttribute('readonly', '');
-    tempElem.style.position = 'absolute';
-    tempElem.style.left = '-9999px';
-    document.body.append(tempElem);
-    tempElem.select();
-    const returnValue = document.execCommand('copy');
-    if (!returnValue) {
-      throw new Error('copied nothing');
-    }
-    document.body.removeChild(tempElem);
-    setActiveModal((prev) => ({
-      ...prev,
-      alert: true,
-    }));
-    setModalMessage((prevState) => ({
-      ...prevState,
-      alert: `클립보드에 추천코드가 복사되었습니다. \n추천코드: ${copiedValue}`,
-    }));
-  };
+  // const onCopyToClipboard = (value) => {
+  //   let hostname;
+  //   if (typeof window !== 'undefined') {
+  //     hostname = window.location.hostname;
+  //   }
+  //   const copiedValue = value || hostname;
+  //   const tempElem = document.createElement('textarea');
+  //   tempElem.value = copiedValue;
+  //   tempElem.setAttribute('readonly', '');
+  //   tempElem.style.position = 'absolute';
+  //   tempElem.style.left = '-9999px';
+  //   document.body.append(tempElem);
+  //   tempElem.select();
+  //   const returnValue = document.execCommand('copy');
+  //   if (!returnValue) {
+  //     throw new Error('copied nothing');
+  //   }
+  //   document.body.removeChild(tempElem);
+  //   setActiveModal((prev) => ({
+  //     ...prev,
+  //     alert: true,
+  //   }));
+  //   setModalMessage((prevState) => ({
+  //     ...prevState,
+  //     alert: `클립보드에 추천코드가 복사되었습니다. \n추천코드: ${copiedValue}`,
+  //   }));
+  // };
 
-  const onCopyUserRecommendCode = () => {
-    const userRecommendCode = data.recommendCode;
-    onCopyToClipboard(userRecommendCode);
-  };
+  // const onCopyUserRecommendCode = () => {
+  //   const userRecommendCode = data.recommendCode;
+  //   onCopyToClipboard(userRecommendCode);
+  // };
 
-  const onShowSendMessageModal = () => {
-    setActiveModal((prev) => ({
-      ...prev,
-      message: true,
-    }));
-  };
+  // const onShowSendMessageModal = () => {
+  //   setActiveModal((prev) => ({
+  //     ...prev,
+  //     message: true,
+  //   }));
+  // };
 
   const onHideGlobalAlert = () => {
     setActiveModal((prev) => ({

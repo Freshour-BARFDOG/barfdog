@@ -34,26 +34,6 @@ export default function SurveyStep17({
     '음수량 부족',
   ];
 
-  // 조건과 추천 레시피 ID를 매핑한 객체
-  const conditionRecipeMap = {
-    관절: [7, 9],
-    '피부·모질': [8, 11],
-    소화력부족: [5, 9],
-    빈혈: [6, 12],
-    피로회복: [7, 11],
-    체중조절: [8, 12],
-    '음수량 부족': [5, 9],
-  };
-
-  // inedibleFood에 따른 레시피 제외 조건
-  const inedibleFoodRecipeMap = {
-    닭: [5, 9],
-    칠면조: [5, 6, 10],
-    소: [6, 8, 12],
-    오리: [7],
-    양: [7, 8, 11],
-  };
-
   // UI '짤림 현상'해결
   useEffect(() => {
     const swiperWrap = surveyPageRef.current;
@@ -111,8 +91,6 @@ export default function SurveyStep17({
                 idList={recommendRecipeIdList}
                 labelList={recommendRecipeIdLabelList}
                 setIsActiveNextBtn={setIsActiveNextBtn}
-                conditionRecipeMap={conditionRecipeMap}
-                inedibleFoodRecipeMap={inedibleFoodRecipeMap}
               />
             </div>
           </div>

@@ -17,6 +17,10 @@ import { useModalContext } from '/store/modal-context';
 import { postData } from '../../api/reqData';
 import { useRouter } from 'next/router';
 import Spinner from '../../../components/atoms/Spinner';
+import Image from 'next/image';
+import s from './subscribe.module.scss';
+import { SubscribeUpdateInfo } from '../../../components/subscribe/SubscribeUpdateInfo';
+import { SubscribeSurveyUpdate } from '../../../components/subscribe/SubscribeSurveyUpdate';
 
 export default function SubscribeInfoPage({ data }) {
   const mct = useModalContext();
@@ -72,17 +76,20 @@ export default function SubscribeInfoPage({ data }) {
     }
   };
 
+  const onApplyHandler = () => {};
+
   return (
     <>
       <MetaTitle title="마이페이지 구독관리" />
       <LayoutWithoutFooter>
         <Wrapper>
           <MypageWrapper>
-            <SubscribeDashboard subscribeInfo={subscribeInfo} />
+            {/* <SubscribeDashboard subscribeInfo={subscribeInfo} /> */}
+            <SubscribeUpdateInfo subscribeInfo={subscribeInfo} />
 
             {subscribeInfo?.info.subscribeStatus === 'SUBSCRIBING' ? (
-              <>
-                <ToggleBox title="구독 무게(g) 변경">
+              <div className={s.toggle_container}>
+                <ToggleBox title="구독 급여량(g) 변경">
                   <SubscribeGram subscribeInfo={subscribeInfo} />
                 </ToggleBox>
 
@@ -91,20 +98,24 @@ export default function SubscribeInfoPage({ data }) {
                 </ToggleBox>
 
                 <ToggleBox
-                  title="구독 레시피  변경"
+                  title="구독 레시피 변경"
                   style={{ overflow: 'hidden' }}
                 >
                   <SubscribeRecipe subscribeInfo={subscribeInfo} />
                 </ToggleBox>
 
-                <ToggleBox title="구독 건너뛰기">
+                {/* <ToggleBox title="구독 건너뛰기">
                   <SubscribeSkipPayment subscribeInfo={subscribeInfo} />
-                </ToggleBox>
+                </ToggleBox> */}
 
-                <ToggleBox title="구독 취소">
+                {/* <ToggleBox title="구독 취소">
                   <SubscribeCancle subscribeInfo={subscribeInfo} />
+                </ToggleBox> */}
+
+                <ToggleBox title="반려견 건강 문진 재등록">
+                  <SubscribeSurveyUpdate />
                 </ToggleBox>
-              </>
+              </div>
             ) : (
               <div
                 className="btn-box"
@@ -140,6 +151,17 @@ export default function SubscribeInfoPage({ data }) {
                 </button>
               </div>
             )}
+
+            <button
+              // className={`${
+              // form.plan && form.recipeIdList.length > 0 ? s.activated : ''
+              // } ${s.payment_btn}`}
+              className={s.apply_btn}
+              onClick={onApplyHandler}
+              // disabled={!(form.plan && form.recipeIdList.length > 0)}
+            >
+              적용하기
+            </button>
           </MypageWrapper>
         </Wrapper>
       </LayoutWithoutFooter>

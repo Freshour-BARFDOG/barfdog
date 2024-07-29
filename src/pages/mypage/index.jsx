@@ -172,7 +172,7 @@ export default function MypageDogInfoPage({ data }) {
     }));
   };
 
-  // console.log(itemList);
+  // console.log('itemList___', itemList);
 
   return (
     <>
@@ -180,15 +180,17 @@ export default function MypageDogInfoPage({ data }) {
       <Layout>
         <Wrapper>
           <MypageWrapper>
-            <Dashboard
-              className={s.dashboard}
-              itemList={itemList}
-              onUploadImageModalHandler={onUploadImageModalHandler}
-              onShowModalHandler={onShowModalHandler}
-              onActiveConfirmModal={onActiveConfirmModal}
-              setIsLoading={setIsLoading}
-              isLoading={isLoading}
-            />
+            {itemList && (
+              <Dashboard
+                className={s.dashboard}
+                itemList={itemList}
+                onUploadImageModalHandler={onUploadImageModalHandler}
+                onShowModalHandler={onShowModalHandler}
+                onActiveConfirmModal={onActiveConfirmModal}
+                setIsLoading={setIsLoading}
+                isLoading={isLoading}
+              />
+            )}
             <MypageBanner />
             <BottomMenu />
           </MypageWrapper>

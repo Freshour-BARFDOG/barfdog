@@ -11,7 +11,7 @@ import { calcSubscribeNextPaymentPrice } from '/util/func/subscribe/calcSubscrib
 import { roundedOneMealGram } from '../../../util/func/subscribe/roundedOneMealGram';
 import { SubscribeStatusTag } from './SubscribeStatusTag';
 
-export const SubscribeDashboard = ({ subscribeInfo }) => {
+export const SubscribeUpdateInfo = ({ subscribeInfo }) => {
   // ! 구독정보 변경마감일자 체크 (google sheet);
   const info = {
     subscribeStatus: subscribeInfo.info.subscribeStatus,
@@ -84,32 +84,12 @@ export const SubscribeDashboard = ({ subscribeInfo }) => {
         </div>
       </header>
       <section className={s.title}>
-        <div className={s.title_text}>
-          {info.dogName}의 AI 추천 식단
-          {/* <SubscribeStatusTag
-            status={info.subscribeStatus}
-            subscribeCount={info.subscribeCount}
-          />
-          <Tooltip
-            message={'모든 구독정보 변경 사항은 다음 회차부터 적용됩니다.'}
-          /> */}
-        </div>
-        {/* ! 아래 코드는 디자인 단에는 존재하는 UI지만, 기획서에 없는 내용 */}
-        {/*<div className={s.flex_box}>*/}
-        {/*  <div className={s.text}>*/}
-        {/*    <span>구독변경 마감</span>*/}
-        {/*    <br />*/}
-        {/*    2일 16:54:12 이후 구독정보 변경 불가*/}
-        {/*  </div>*/}
-        {/*  */}
-        {/*  <div className={s.btn_box}>*/}
-        {/*    <div className={s.btn}>목록보기</div>*/}
-        {/*  </div>*/}
-        {/*</div>*/}
+        <div className={s.title_text}>{info.dogName}의 AI 추천 식단</div>
       </section>
       <section className={s.content_box}>
         <div className={s.top_flex_box}>
           <div className={s.top_left_box}>
+            <h3>변경 전</h3>
             <div className={`${s.top_flex_box2} ${s.first}`}>
               <div className={s.left}>플랜</div>
               <div className={s.right}>
@@ -120,86 +100,31 @@ export const SubscribeDashboard = ({ subscribeInfo }) => {
             <div className={`${s.top_flex_box2} ${s.second}`}>
               <div className={s.left}>레시피</div>
               <div className={s.right}>
-                {info.recipeNameList.length > 0 &&
-                  info.recipeNameList.map((recipeName, index) => (
-                    <p key={`${recipeName}-${index}`}>{recipeName}</p>
-                  ))}
+                {info.recipeNameList.length > 0 ? (
+                  <p>{info.recipeNameList.join(', ')}</p>
+                ) : (
+                  '-'
+                )}
               </div>
             </div>
 
             <div className={`${s.top_flex_box2} ${s.third}`}>
-              <div className={s.left}>급여량</div>
+              <div className={s.left}>하루 식사량</div>
               <div className={s.right}>
-                {info.oneMealGramsPerRecipe?.map((oneMealGram, index) => (
-                  <p key={`oneMealGram}-${index}`}>
-                    {transformLocalCurrency(roundedOneMealGram(oneMealGram))}g
+                {info.oneMealGramsPerRecipe ? (
+                  <p>
+                    {info.oneMealGramsPerRecipe
+                      .map(
+                        (oneMealGram, index) =>
+                          `${transformLocalCurrency(
+                            roundedOneMealGram(oneMealGram),
+                          )}g`,
+                      )
+                      .join(', ')}
                   </p>
-                )) || '-'}
-              </div>
-            </div>
-          </div>
-
-          <div className={s.right_box}>
-            <div className={s.flex_box3}>
-              <div className={s.inner_left_box}>
-                <div className={`${s.image} img-wrap`}>
-                  <Image
-                    src={require('public/img/mypage/subscribe/dogldx/subscribe_ldx_calendar.png')}
-                    objectFit="cover"
-                    layout="fill"
-                    alt="대시보드 아이콘"
-                  />
-                </div>
-                <div className={s.row_1}>다음 결제일</div>
-                <div className={s.row_2}>
-                  {transformDate(info.nextPaymentDate, null, {
-                    seperator: '/',
-                  })}
-                </div>
-                <div className={s.row_3}>
-                  {info.countSkipOneTime ? <span>1회 건너뛰기</span> : null}
-                  {info.countSkipOneWeek ? <span>1주 건너뛰기</span> : null}
-                </div>
-              </div>
-
-              <div className={s.inner_mid_box}>
-                <div className={`${s.image} img-wrap`}>
-                  <Image
-                    src={require('public/img/mypage/subscribe/dogldx/subscribe_ldx_pay.png')}
-                    objectFit="cover"
-                    layout="fill"
-                    alt="카드 이미지"
-                  />
-                </div>
-                <div className={s.row_1}>다음 결제금액</div>
-                <div className={s.row_2}>
-                  {transformLocalCurrency(info.nextPaymentPrice)}원
-                </div>
-                <div className={s.row_3}>
-                  <button
-                    type={'button'}
-                    className={s['coupon-btn']}
-                    onClick={onActiveCouponModal}
-                  >
-                    쿠폰적용
-                  </button>
-                </div>
-              </div>
-              <div className={s.inner_right_box}>
-                <div className={`${s.image} img-wrap`}>
-                  <Image
-                    src={require('public/img/mypage/subscribe/dogldx/subscribe_ldx_delivery.png')}
-                    objectFit="cover"
-                    layout="fill"
-                    alt="카드 이미지"
-                  />
-                </div>
-                <div className={s.row_1}>다음 발송예정일</div>
-                <div className={s.row_2}>
-                  {transformDate(info.nextDeliveryDate, null, {
-                    seperator: '/',
-                  })}
-                </div>
+                ) : (
+                  '-'
+                )}
               </div>
             </div>
           </div>
