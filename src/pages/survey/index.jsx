@@ -804,7 +804,7 @@ export default function Survey() {
         const postData = { dogSaveRequestDtos: formValues };
 
         const res = await postObjData(postFormValuesApiUrl, postData);
-        console.log('formValues', formValues); // 최종 제출
+        // console.log('formValues', formValues); // 최종 제출
         console.log(res);
         if (res.isDone) {
           console.log(res.data.data);

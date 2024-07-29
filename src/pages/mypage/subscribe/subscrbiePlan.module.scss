@@ -1,8 +1,6 @@
 @import '/styles/global/rem';
 @import '/styles/global/guide';
 
-
-
 // ---------- 구독팩수 변경 > REFACTORING (22.08)
 .subscribePlan {
   display: grid;
@@ -33,7 +31,7 @@
 }
 
 .plan_box {
-  max-width: rem(220);
+  // max-width: rem(220);
   box-sizing: border-box;
   width: 100%;
   .img_box {
@@ -53,8 +51,8 @@
     text-align: center;
   }
   p {
-    padding: rem(9) 0 rem(13);
-    @include char(l16);
+    // padding: rem(9) 0 rem(13);
+    // @include char(l16);
     text-align: center;
     letter-spacing: -0.06em;
   }
@@ -95,16 +93,16 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    @include char(t24);
-    font-weight: 600;
-    color: var(--color-main);
+    // @include char(t24);
+    // font-weight: 600;
+    // color: var(--color-main);
 
-    padding: rem(9) 0 0 0;
-    span {
-      @include char(l18);
-      color: var(--color-font-sub2);
-      text-decoration: line-through;
-    }
+    // padding: rem(9) 0 0 0;
+    // span {
+    // @include char(l18);
+    // color: var(--color-font-sub2);
+    // text-decoration: line-through;
+    // }
   }
   .text2 {
     @include char(d32);
@@ -117,7 +115,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-top: rem(40);
+  // padding-top: rem(40);
 
   .btn {
     width: rem(300);
@@ -131,10 +129,7 @@
   }
 }
 
-
-
 @media (max-width: rem(1000)) {
-
   .flex_box {
     display: grid;
     grid-template-columns: 1fr;
@@ -193,5 +188,4 @@
       }
     }
   }
-
 }

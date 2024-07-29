@@ -9,6 +9,10 @@ import {
   ItemRecommendlabel,
   ItemSoldOutLabel,
 } from '/src/components/atoms/ItemLabel';
+import {
+  concernsRecipeMap,
+  inedibleFoodRecipeMap,
+} from '../../../../store/TYPE/recipeIdWithConcernsInedibleFood';
 
 export default function SurveyResultRecipe({
   surveyInfo,
@@ -27,26 +31,6 @@ export default function SurveyResultRecipe({
   const [recommendRecipeId, setRecommendRecipeId] = useState(null);
   const [inedibleRecipeIds, setInedibleRecipeIds] = useState([]);
 
-  // 조건과 추천 레시피 ID를 매핑한 객체
-  const conditionRecipeMap = {
-    관절: [7, 9],
-    '피부·모질': [8, 11],
-    소화력부족: [5, 9],
-    빈혈: [6, 12],
-    피로회복: [7, 11],
-    체중조절: [8, 12],
-    '음수량 부족': [5, 9],
-  };
-
-  // inedibleFood에 따른 레시피 제외 조건
-  const inedibleFoodRecipeMap = {
-    닭: [5, 9],
-    칠면조: [5, 6, 10],
-    소: [6, 8, 12],
-    오리: [7],
-    양: [7, 8, 11],
-  };
-
   //*** 추천 레시피 & 못먹는 음식 플래그 ***//
   useEffect(() => {
     // 1. 추천 레시피
@@ -56,8 +40,8 @@ export default function SurveyResultRecipe({
     let recommendRecipeIds = [];
 
     selectedConditions.forEach((condition) => {
-      if (conditionRecipeMap[condition]) {
-        recommendRecipeIds.push(...conditionRecipeMap[condition]);
+      if (concernsRecipeMap[condition]) {
+        recommendRecipeIds.push(...concernsRecipeMap[condition]);
       }
     });
 
@@ -94,14 +78,6 @@ export default function SurveyResultRecipe({
       setInedibleRecipeIds(uniqueRecipeIds);
     }
   }, []);
-
-  // useEffect(() => {
-  //   setInitialize(true);
-  //   setForm((prevState) => ({
-  //     ...prevState,
-  //     recipeIdList: [],
-  //   }));
-  // }, [form.plan]);
 
   useEffect(() => {
     if (!selectedCheckbox) return;

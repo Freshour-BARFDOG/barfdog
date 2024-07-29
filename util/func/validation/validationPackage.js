@@ -22,9 +22,7 @@ export const valid_hasFormErrors = (errorObj, type = 'array', exceptionKey) => {
       if (!result) return (isPassed = false);
     });
   } else {
-    console.log('++++', errorObj);
     for (const key in errorObj) {
-      console.log(':::', key);
       //! [추가]
       //  설문조사결과 > 주문서 : subscribeItemList가 null이어도 통과하는 조건
       if (key === 'subscribeItemList' && errorObj[key] === null) {

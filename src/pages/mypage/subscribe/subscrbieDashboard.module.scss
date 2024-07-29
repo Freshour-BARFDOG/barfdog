@@ -1,19 +1,23 @@
 @import '/styles/global/rem';
 @import '/styles/global/guide';
 
-
 //  SUBSCRIBE DASHBOARD
 .content_box {
   .top_flex_box {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    column-gap: rem(15);
     .top_left_box {
       box-shadow: 0 0 rem(20) rgba(0, 0, 0, 0.08);
       border-radius: rem(12);
-      max-width: rem(300);
       box-sizing: border-box;
-      padding : rem(37) rem(30);
+      padding: rem(30);
+      margin: rem(50);
+
+      h3 {
+        font-weight: bold;
+        font-size: rem(20);
+        text-decoration: underline;
+        text-align: center;
+        margin-bottom: rem(18);
+      }
 
       @include char(l16);
       .top_flex_box2 {
@@ -35,7 +39,10 @@
         }
         .right {
           font-weight: 600;
-          > *{text-align: right}
+          display: flex;
+          > * {
+            text-align: right;
+          }
         }
 
         &.first {
@@ -94,8 +101,8 @@
           justify-content: center;
           align-items: center;
           flex-direction: column;
-          gap:rem(4);
-          span{
+          gap: rem(4);
+          span {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -260,8 +267,6 @@
   }
 }
 
-
-
 @media (max-width: rem(1200)) {
   .content_box {
     .top_flex_box {
@@ -274,9 +279,7 @@
   }
 }
 
-
 @media (max-width: rem(1000)) {
-
   .content_box {
     .top_flex_box {
       grid-template-columns: 1fr;

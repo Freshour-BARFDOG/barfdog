@@ -23,6 +23,11 @@ import { calcOneMealGramsWithRecipeInfo } from '/util/func/subscribe/calcOneMeal
 import ArrowLeft_s from '@public/img/icon/swiper-arrow-small-l.svg';
 import ArrowRight_s from '@public/img/icon/swiper-arrow-small-r.svg';
 import { originSubscribeIdList } from '/util/func/subscribe/originSubscribeIdList';
+import { SurveyRecipeInput } from '../survey/result/SurveyRecipeInput';
+import {
+  concernsRecipeMap,
+  inedibleFoodRecipeMap,
+} from '../../../store/TYPE/recipeIdWithConcernsInedibleFood';
 
 const swiperSettings = {
   className: `${s.swiper_recipes} ${s.inMypage}`,
@@ -73,16 +78,25 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
   const [selectedIdList, setSelectedIdList] = useState([]);
   const [isOriginSubscriber, setIsOriginSubscriber] = useState(false);
 
+  const [recommendRecipeId, setRecommendRecipeId] = useState(null);
+  const [inedibleRecipeIds, setInedibleRecipeIds] = useState([]);
+  const [recipeDoubleInfo, setRecipeDoubleInfo] = useState([]);
+  const [recipeSingleInfo, setRecipeSingleInfo] = useState([]);
+
   // // console.log(selectedRadio)
   // // console.log(selectedCheckbox)
   // // console.log(subscribeInfo);
   // // console.log(tbContext)
+
+  //*** 추천 레시피 & 못먹는 음식 플래그 ***//
+  useEffect(() => {}, []);
 
   async function getRecommendRecipe(dogId) {
     if (!dogId) return console.error('Required User Dog Id');
     let result;
     const url = `/api/dogs/${dogId}/surveyReportResult`;
     const res = await getData(url);
+
     if (res.data) {
       const data = await res.data;
       result = {
@@ -108,14 +122,93 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
         fetching: true,
       }));
       try {
-        // 여기서 추천레시피
+        // 더블/싱글 레시피 구분
         const recipeInfoList = [];
         for (const recipeId of recipeIdList) {
           const apiUrl = `/api/recipes/${recipeId}`;
           const res = await getData(apiUrl);
           // console.log('res.data>>>', res.data);
           const allRecipeData = res.data;
+
+          if (
+            allRecipeData.ingredientList.length > 1 &&
+            allRecipeData.inStock
+          ) {
+            setRecipeDoubleInfo((prevState) => {
+              if (!prevState.some((recipe) => recipe.id === allRecipeData.id)) {
+                return [...prevState, allRecipeData];
+              } else {
+                return prevState;
+              }
+            });
+          } else if (
+            allRecipeData.ingredientList.length === 1 &&
+            allRecipeData.inStock
+          ) {
+            setRecipeSingleInfo((prevState) => {
+              if (!prevState.some((recipe) => recipe.id === allRecipeData.id)) {
+                return [...prevState, allRecipeData];
+              } else {
+                return prevState;
+              }
+            });
+          }
+
           const dogId = subscribeInfo.info.dogId;
+          //
+          // const surveyInfoUrl = `/api/dogs/${dogId}/surveyReportResult`;
+          // const surveyInfoRes = await getData(surveyInfoUrl);
+          // const surveyInfo = surveyInfoRes.data;
+
+          // console.log('surveyInfo____', surveyInfo);
+
+          // // 1. 추천 레시피
+          // const selectedConditions = surveyInfo.priorityConcerns
+          //   .split(',')
+          //   .filter(Boolean);
+          // let recommendRecipeIds = [];
+
+          // selectedConditions.forEach((condition) => {
+          //   if (concernsRecipeMap[condition]) {
+          //     recommendRecipeIds.push(...concernsRecipeMap[condition]);
+          //   }
+          // });
+
+          // recommendRecipeIds = [...new Set(recommendRecipeIds)]; // 중복 제거
+
+          // // inedibleFood에 포함된 재료의 레시피 ID를 제외
+          // const inedibleFoods = surveyInfo.inedibleFood
+          //   .split(',')
+          //   .filter(Boolean);
+          // inedibleFoods.forEach((food) => {
+          //   if (inedibleFoodRecipeMap[food]) {
+          //     recommendRecipeIds = recommendRecipeIds.filter(
+          //       (id) => !inedibleFoodRecipeMap[food].includes(id),
+          //     );
+          //   }
+          // });
+
+          // // recommendRecipeId의 최종 값
+          // const finalRecommendRecipeId = recommendRecipeIds.length
+          //   ? recommendRecipeIds[0]
+          //   : null;
+          // setRecommendRecipeId(finalRecommendRecipeId);
+
+          // // 2. 못먹는 음식
+          // if (surveyInfo.inedibleFood) {
+          //   const inedibleFoodList = surveyInfo.inedibleFood
+          //     .split(',')
+          //     .map((food) => food.trim());
+
+          //   const recipeIds = inedibleFoodList.flatMap(
+          //     (food) => inedibleFoodRecipeMap[food] || [],
+          //   );
+
+          //   const uniqueRecipeIds = [...new Set(recipeIds)];
+
+          //   setInedibleRecipeIds(uniqueRecipeIds);
+          // }
+
           const recommendRecipeInfo =
             dogId && (await getRecommendRecipe(dogId));
           allRecipeData.isRecommendRecipe =
@@ -286,141 +379,181 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
     window.location.reload();
   };
 
+  console.log('recipeInfo___', recipeInfo);
+  console.log('recipeSingleInfo___', recipeSingleInfo);
+  console.log('recipeDoubleInfo___', recipeDoubleInfo);
+
   return (
     <>
       {isLoading.reload && <FullScreenLoading />}
       {isLoading.fetching ? (
         <Spinner />
       ) : (
-        <section className={s.recipe}>
-          <h2 className={s.notice_row_1}>
-            구매하실 레시피 한가지를 선택해 주세요
-          </h2>
-          <p className={s.notice_row_2}>
-            <em>풀플랜</em>만 두 개의 레시피를 동시 선택할 수 있습니다.
-          </p>
-          {curIngredient && (
-            <div className={s.notice_row_3}>
-              <div className={s.color_box}>
-                <div className={s.color_box_row_1}>
-                  <div className={s.picture_box}>
-                    <div className={`${s.image} img-wrap`}>
-                      <Image
-                        priority
-                        src={require('public/img/mypage/subscribe/alert_circle.png')}
-                        objectFit="cover"
-                        layout="fill"
-                        alt="카드 이미지"
-                      />
-                    </div>
-                  </div>
-                  <span>&nbsp;잠깐!</span>
-                </div>
-                <div className={s.color_box_row_2}>
-                  {/*{true && (*/}
-                  {/*  <>*/}
-                  {/*    <em>{'TEST, TEST2'}</em>에 못먹는 음식으로 체크해 주셨네요!&nbsp;*/}
-                  {/*  </>*/}
-                  {/*)}*/}
-                  <br />
-                  <em>
-                    {subscribeInfo.recipe.nameList.join(', ')}
-                  </em> 레시피에는 <em>&lsquo;{curIngredient}&rsquo;</em>
-                  {checkStringUnderConsonant(curIngredient) ? '이' : '가'}{' '}
-                  들어가 있습니다.
-                  <br />
-                  반려견에게 알레르기를 유발할 수 있으니 레시피 선택에 유의해
-                  주시기 바랍니다.
-                </div>
-              </div>
-            </div>
-          )}
-          {/*<h6 className={'pointColor'}>******SOLD OUT: 1번째 레시피 강제 적용. (테스트 이후 삭제)</h6>*/}
+        <div className={s.recipe_container}>
+          {/* 3-1) 더블 */}
+          <div className={s.recipe_box}>
+            <h3>
+              [ <strong>더블미트</strong>(복합 단백질) 레시피 ]
+            </h3>
 
-          <div className={s.swiper_recipe_outerWrap}>
-            <i className={s.swiper_button_prev_recipe} ref={navPrevRef}>
-              <ArrowLeft_s width="100%" height="100%" viewBox="0 0 28 28" />
-            </i>
-            <i className={s.swiper_button_next_recipe} ref={navNextRef}>
-              <ArrowRight_s width="100%" height="100%" viewBox="0 0 28 28" />
-            </i>
-            <Swiper
-              {...swiperSettings}
-              watchOverflow={false}
-              navigation={{
-                prevEl: navPrevRef.current,
-                nextEl: navNextRef.current,
-              }}
-              onInit={(swiper) => {
-                swiper.params.navigation.prevEl = navPrevRef.current;
-                swiper.params.navigation.nextEl = navNextRef.current;
-                swiper.navigation.destroy();
-                swiper.navigation.init();
-                swiper.navigation.update();
-              }}
-            >
-              {allRecipeInfoList.length > 0 &&
-                allRecipeInfoList.map((rc, index) => (
-                  <>
-                    {rc.leaked === 'LEAKED' && (
-                      <SwiperSlide
-                        key={`recipe-${rc.id}-${index}`}
-                        className={s.slide}
-                      >
-                        <SubscribeCustomInput
-                          id={`${rc.name}-${rc.id}`}
-                          selectedRadio={selectedRadio}
-                          type={initialInputType}
-                          name={'subscribe-recipes'}
-                          initialize={initialize}
-                          disabled={!rc.inStock}
-                          selectedCheckbox={selectedCheckbox}
-                          setSelectedCheckbox={setSelectedCheckbox}
-                          setSelectedRadio={setSelectedRadio}
-                          option={{ label: '레시피 선택' }}
-                        >
-                          {rc.isRecommendRecipe && (
-                            <ItemRecommendlabel
-                              label="추천!"
-                              style={{
-                                backgroundColor: '#000',
-                              }}
-                            />
-                          )}
-                          {!rc.inStock && <ItemSoldOutLabel />}
-                          <figure className={`${s.image} img-wrap`}>
-                            {rc.thumbnailUri2 && (
-                              <Image
-                                className={'init-next-image'}
-                                src={rc.thumbnailUri2}
-                                objectFit="cover"
-                                layout="fill"
-                                alt="레시피 상세 이미지"
-                              />
-                            )}
-                          </figure>
-                          <p className={s.row_1}>{rc.uiNameEnglish}</p>
-                          <p className={s.row_2}>{rc.uiNameKorean}</p>
-                          <p className={s.row_3}>{rc.description}</p>
-                          <p className={s.row_4}>
-                            <Link href="/recipes" passHref>
-                              <a
-                                target={'_blank'}
-                                rel={'noreferrer'}
-                                onClick={onPopupHandler}
-                              >
-                                더 알아보기
-                              </a>
-                            </Link>
-                          </p>
-                        </SubscribeCustomInput>
-                      </SwiperSlide>
+            <div className={s.recipe_list}>
+              {recipeDoubleInfo.map((recipe, index) => (
+                <>
+                  <SurveyRecipeInput
+                    id={`${recipe.name}-${recipe.id}`}
+                    name={name}
+                    initialize={initialize}
+                    disabled={!recipe.inStock}
+                    selectedCheckbox={selectedCheckbox}
+                    setSelectedCheckbox={setSelectedCheckbox}
+                    option={{ label: '레시피 선택' }}
+                  >
+                    {recommendRecipeId === recipe.id && (
+                      <ItemRecommendlabel
+                        label="추천!"
+                        style={{
+                          backgroundColor: '#be1a21',
+                        }}
+                      />
                     )}
-                  </>
-                ))}
-            </Swiper>
+                    {inedibleRecipeIds.includes(recipe.id) && (
+                      <ItemRecommendlabel
+                        label={`못먹는\n재료 포함`}
+                        style={{
+                          backgroundColor: '#000',
+                          fontSize: '13px',
+                          whiteSpace: 'pre-line',
+                          lineHeight: 1.2,
+                        }}
+                        inedibleFood={true}
+                      />
+                    )}
+
+                    <Image
+                      src={recipe.thumbnailUri2}
+                      width={149 * 1.4}
+                      height={149 * 1.4}
+                      alt="레시피 상세 이미지"
+                    />
+                    <div>
+                      <strong>{recipe.uiNameKorean}</strong>
+                    </div>
+                    <div className={s.recipe_description}>
+                      · 주재료: {recipe.ingredientList.join(', ')} <br />·{' '}
+                      {recipe.name === 'STARTER PREMIUM +'
+                        ? '첫 생식에 추천'
+                        : recipe.name === 'TURKEY&BEEF +'
+                        ? '성장기 자견에게 추천'
+                        : recipe.name === 'DUCK&LAMB +'
+                        ? '기력회복이 필요하다면 추천'
+                        : recipe.name === 'LAMB&BEEF +'
+                        ? '푸석푸석한 모질이라면 추천'
+                        : ''}
+                      <br />·{' '}
+                      {recipe.name === 'STARTER PREMIUM +'
+                        ? '부드러워 소화에 적은 부담'
+                        : recipe.name === 'TURKEY&BEEF +'
+                        ? '영양 보충 & 면역력 강화'
+                        : recipe.name === 'DUCK&LAMB +'
+                        ? '관절 강화 & 근력 회복'
+                        : recipe.name === 'LAMB&BEEF +'
+                        ? '윤기나는 피부와 모질'
+                        : ''}
+                    </div>
+                    <button>
+                      <Link href="/recipes" passHref>
+                        <a
+                          target={'_blank'}
+                          rel={'noreferrer'}
+                          onClick={onPopupHandler}
+                        >
+                          자세히 알아보기
+                        </a>
+                      </Link>
+                    </button>
+                  </SurveyRecipeInput>
+                </>
+              ))}
+            </div>
           </div>
-        </section>
+
+          {/* 3-2) 싱글 */}
+          <div className={s.recipe_box}>
+            <h3>
+              {' '}
+              [ <strong>싱글미트</strong>(단일 단백질) 레시피 ]
+            </h3>
+            <div className={s.recipe_list}>
+              {recipeSingleInfo.map((recipe, index) => (
+                <>
+                  <SurveyRecipeInput
+                    id={`${recipe.name}-${recipe.id}`}
+                    name={name}
+                    initialize={initialize}
+                    disabled={!recipe.inStock}
+                    selectedCheckbox={selectedCheckbox}
+                    setSelectedCheckbox={setSelectedCheckbox}
+                    option={{ label: '레시피 선택' }}
+                  >
+                    {recommendRecipeId === recipe.id && (
+                      <ItemRecommendlabel
+                        label="추천!"
+                        style={{
+                          backgroundColor: '#be1a21',
+                        }}
+                      />
+                    )}
+                    {inedibleRecipeIds.includes(recipe.id) && (
+                      <ItemRecommendlabel
+                        label={`못먹는\n재료 포함`}
+                        style={{
+                          backgroundColor: '#000',
+                          fontSize: '13px',
+                          whiteSpace: 'pre-line',
+                          lineHeight: 1.2,
+                        }}
+                        inedibleFood={true}
+                      />
+                    )}
+                    <Image
+                      src={recipe.thumbnailUri2}
+                      width={149 * 1.5}
+                      height={149 * 1.5}
+                      alt="레시피 상세 이미지"
+                    />
+                    <div>
+                      {' '}
+                      <strong>{recipe.uiNameKorean}</strong>
+                    </div>
+                    <div className={s.recipe_description}>
+                      · 주재료: {recipe.ingredientList.join(', ')} <br />·{' '}
+                      {recipe.name === 'Premium CHICKEN'
+                        ? '자견~노견, 전 연령 추천'
+                        : recipe.name === 'Premium TURKEY'
+                        ? '성장기 자견에게 추천'
+                        : recipe.name === 'Premium LAMB'
+                        ? '활동량이 많다면 추천'
+                        : recipe.name === 'Premium BEEF'
+                        ? '자견~노견, 전 연령 추천'
+                        : ''}
+                      <br />·{' '}
+                      {recipe.name === 'Premium CHICKEN'
+                        ? '관절 강화 & 소화 흡수율 높음'
+                        : recipe.name === 'Premium TURKEY'
+                        ? '영양 보충 & 면역력 강화'
+                        : recipe.name === 'Premium LAMB'
+                        ? '피로회복 & 피모관리'
+                        : recipe.name === 'Premium BEEF'
+                        ? '체중관리 & 빈혈회복'
+                        : ''}
+                    </div>
+                    <button>자세히 알아보기</button>
+                  </SurveyRecipeInput>
+                </>
+              ))}
+            </div>
+          </div>
+        </div>
       )}
       <div className={s.btn_box}>
         <button className={s.btn} onClick={onActiveConfirmModal}>
@@ -438,12 +571,6 @@ export const SubscribeRecipe = ({ subscribeInfo }) => {
           positionCenter
         />
       )}
-      {/*{tbContext.visible && (*/}
-      {/*  <Modal_global_alert*/}
-      {/*    onClick={submitted ? onSuccessChangeSubscribeOrder : mct.alertHide}*/}
-      {/*    background*/}
-      {/*  />*/}
-      {/*)}*/}
     </>
   );
 };

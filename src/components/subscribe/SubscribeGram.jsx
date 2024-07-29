@@ -29,10 +29,10 @@ export const SubscribeGram = ({ subscribeInfo }) => {
     nextAmount: 0,
     originGrams: subscribeInfo.info.oneMealGramsPerRecipe, // 기존 무게 list
     nextGrams: subscribeInfo.info.oneMealGramsPerRecipe, // 변경 적용
-    originPricePerPack: subscribeInfo.price[planType].perPack,
-    nextPricePerPack: subscribeInfo.price[planType].perPack,
-    originPrice: subscribeInfo.price[planType].salePrice,
-    nextSalePrice: subscribeInfo.price[planType].salePrice,
+    // originPricePerPack: subscribeInfo.price[planType].avgPrice.perPack, // 1팩 가격
+    // nextPricePerPack: subscribeInfo.price[planType].avgPrice.perPack,
+    originPrice: subscribeInfo.price[planType].avgPrice.salePrice,
+    nextSalePrice: subscribeInfo.price[planType].avgPrice.salePrice,
   };
 
   const mct = useModalContext();
@@ -42,7 +42,7 @@ export const SubscribeGram = ({ subscribeInfo }) => {
   const [submitted, setSubmitted] = useState(false);
   const [isOriginSubscriber, setIsOriginSubscriber] = useState(false);
 
-  // console.log(subscribeInfo);
+  console.log('subscribeInfo___', subscribeInfo);
 
   useEffect(() => {
     //! [추가] 기존 구독자인지 확인
@@ -64,7 +64,27 @@ export const SubscribeGram = ({ subscribeInfo }) => {
     const recipePricePerGrams = form.recipeInfo.pricePerGramList;
     const planTypeName = form.planInfo.planType;
 
-    const { perPack, salePrice } = calcSubscribePrice({
+    //! [이전사항]
+    // const { perPack, salePrice } = calcSubscribePrice({
+    //   discountPercent: subscribeInfo.plan.discountPercent,
+    //   oneMealGrams: nextGrams,
+    //   planName: planTypeName,
+    //   pricePerGrams: recipePricePerGrams,
+    //   isOriginSubscriber,
+    //   recipeNameList: subscribeInfo.recipe.nameList.map((recipe) => recipe),
+    // });
+
+    // console.log(perPack, salePrice);
+    // setForm((prevState) => ({
+    //   ...prevState,
+    //   nextAmount,
+    //   nextGrams,
+    //   nextPricePerPack: perPack,
+    //   nextSalePrice: salePrice,
+    // }));
+
+    //! [리뉴얼]
+    const { avgPrice } = calcSubscribePrice({
       discountPercent: subscribeInfo.plan.discountPercent,
       oneMealGrams: nextGrams,
       planName: planTypeName,
@@ -73,13 +93,13 @@ export const SubscribeGram = ({ subscribeInfo }) => {
       recipeNameList: subscribeInfo.recipe.nameList.map((recipe) => recipe),
     });
 
-    // // console.log(perPack, salePrice);
+    console.log('avgPrice___', avgPrice);
     setForm((prevState) => ({
       ...prevState,
       nextAmount,
       nextGrams,
-      nextPricePerPack: perPack,
-      nextSalePrice: salePrice,
+      nextPricePerPack: avgPrice.perPack,
+      nextSalePrice: avgPrice.salePrice,
     }));
   };
 
@@ -135,6 +155,8 @@ export const SubscribeGram = ({ subscribeInfo }) => {
     window.location.reload();
   };
 
+  console.log('form____', form);
+
   return (
     <>
       {isLoading.reload && <FullScreenLoading />}
@@ -142,22 +164,21 @@ export const SubscribeGram = ({ subscribeInfo }) => {
         <div className={s.flex_box}>
           <div className={s.content_left_box}>
             <div className={s.btn}>A유형</div>
+            <div className={s.text1}>급여량만 변경하고 싶어요</div>
           </div>
           <div className={s.content_right_box}>
-            <div className={s.flex_box}>
-              <div className={s.text1}>반려견이 성견이에요</div>
-              <div className={s.text2}>
-                반려견이 성견인데 몸무게 변화가 있으신가요?
-              </div>
-            </div>
             <div className={s.text3}>
-              아래 무게를 변경한 뒤 적용 버튼 눌러 주세요.
-              <br /> 제조 전 등록해주셔야 변경사항이 적용 됩니다.
+              반려견의 식사 급여량을 조정하고 싶으신가요? <br /> <br /> 아래
+              무게를 변경한 뒤 적용 버튼 눌러 주세요.
+              <br />{' '}
+              <span>
+                제조 전에 등록을 해주셔야 변경 사항이 정상 적용 됩니다.
+              </span>
             </div>
 
             <div className={s.grid_box}>
               <div className={s.grid_1}>
-                <p className={s.top_text}>기존 무게(g)</p>
+                <p className={s.top_text}>기존 급여량</p>
                 <div className={s.bot_1}>
                   {form.originGrams.map((gram, i) => (
                     <em key={`originGram-${i}`}>
@@ -168,7 +189,7 @@ export const SubscribeGram = ({ subscribeInfo }) => {
                 </div>
               </div>
               <div className={s.selectBox}>
-                <p className={s.top_text}>변경할 무게</p>
+                <p className={s.top_text}>변경할 용량</p>
                 <CustomSelectWithCustomOptions
                   id={'nextAmount'}
                   className={s.customSelect}
@@ -190,7 +211,7 @@ export const SubscribeGram = ({ subscribeInfo }) => {
                 />
               </div>
               <div className={s.grid_3}>
-                <p className={s.top_text}>변경 후 무게(g)</p>
+                <p className={s.top_text}>변경 후 용량</p>
                 <div className={s.bot_1}>
                   {form.nextGrams.map((gram, i) => (
                     <em key={`nextGram-${i}`}>
@@ -200,13 +221,13 @@ export const SubscribeGram = ({ subscribeInfo }) => {
                   ))}
                 </div>
               </div>
-              <div className={s.grid_4}>
+              {/* <div className={s.grid_4}>
                 <p className={s.top_text}>기존 한 팩 가격</p>
                 <div className={s.bot_1}>
                   {transformLocalCurrency(form.originPricePerPack)}원
                 </div>
-              </div>
-              <div className={s.grid_5}>
+              </div> */}
+              {/* <div className={s.grid_5}>
                 <p className={s.top_text}>변경 후 한 팩 가격</p>
                 <div className={s.bot_1}>
                   {transformLocalCurrency(form.nextPricePerPack)}원
@@ -219,18 +240,18 @@ export const SubscribeGram = ({ subscribeInfo }) => {
                     원)
                   </span>
                 </div>
-              </div>
+              </div> */}
               <div className={s.grid_6}>
                 <p className={s.top_text}>변경 후 상품 금액</p>
                 <div className={s.bot_1}>
                   {transformLocalCurrency(form.nextSalePrice)}원
-                  <span>
+                  {/* <span>
                     (차액: {form.nextSalePrice - form.originPrice > 0 && '+'}
                     {transformLocalCurrency(
                       form.nextSalePrice - form.originPrice,
                     )}
                     원)
-                  </span>
+                  </span> */}
                 </div>
               </div>
             </div>
@@ -255,19 +276,17 @@ export const SubscribeGram = ({ subscribeInfo }) => {
         <div className={`${s.flex_box} ${s.second}`}>
           <div className={s.content_left_box}>
             <div className={s.btn}>B유형</div>
+            <div className={s.text1}>반려견의 몸무게가 변했어요</div>
           </div>
           <div className={s.content_right_box}>
-            <div className={s.flex_box}>
-              <div className={s.text1}>반려견이 성장 중이에요</div>
-              {/* <div className={Styles.text2}>반려견이 성견인데 몸무게 변화가 있으신가요?</div> */}
-            </div>
+            {/* <div className={Styles.text2}>반려견이 성견인데 몸무게 변화가 있으신가요?</div> */}
             <div className={s.text3}>
-              맞춤 설문에서 반려견 체중을 수정해주세요.
+              반려견 건강 문진에서 반려견 체중을 수정해주세요
             </div>
 
             <div className={s.red_btn_box2}>
               <Link href={`/mypage/dogs/${form.dogId}/updateSurvey`} passHref>
-                <a className={s.red_btn2}>맞춤설문 재등록 바로가기</a>
+                <a className={s.red_btn2}>건강 문진 재등록 바로 가기</a>
               </Link>
             </div>
           </div>
