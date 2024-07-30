@@ -15,7 +15,6 @@ const Wrap = styled.div`
   box-sizing: border-box;
   border-radius: ${rem(6)};
   box-shadow: 0 0 ${rem(30)} rgba(0, 0, 0, 0.15);
-
   overflow: hidden;
   transition-property: top, opacity, height;
   transition-duration: 0.3s;

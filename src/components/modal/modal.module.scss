@@ -189,6 +189,10 @@
   }
 }
 
+.height {
+  height: rem(290);
+}
+
 @media (max-width: rem(600)) {
   .modal_wrap.global {
     width: calc(100% - #{rem(40)});

@@ -445,10 +445,10 @@ const ItemList = ({
                   '재구독하기'
                 )}
               </button>
-              <Link href={`/mypage/dogs/${dogId}/updateSurvey`} passHref>
+              <Link href={`/mypage/subscribe/delivery`} passHref>
                 <a>구독 배송지 관리</a>
               </Link>
-              <Link href={`/mypage/subscribe`} passHref>
+              <Link href={`/mypage/subscribe/${data.subscribeId}`} passHref>
                 <a>구독 관리</a>
               </Link>
             </div>
@@ -464,7 +464,10 @@ const ItemList = ({
               <Link href={`/mypage/dogs/${dogId}/updateSurvey`} passHref>
                 <a>배송 미루기</a>
               </Link>
-              <Link href={`/mypage/dogs/${dogId}/updateSurvey`} passHref>
+              <Link
+                href={`/mypage/subscribe/delivery/${data.subscribeId}`}
+                passHref
+              >
                 <a>구독 배송지 관리</a>
               </Link>
               <Link href={`/mypage/subscribe`} passHref>

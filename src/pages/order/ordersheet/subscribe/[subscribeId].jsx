@@ -287,7 +287,7 @@ export default function SubscribeOrderSheetPage() {
           alert(
             '[ERROR] 구독상품 결제금액이 설정되지 않았습니다. `맞춤레시피 구매하기`를 진행해주세요.',
           );
-          redirectTo('/mypage/dogs');
+          redirectTo('/mypage');
           return;
         }
 

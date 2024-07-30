@@ -63,7 +63,7 @@ export default function UpdateSurveyPage({ data }) {
 
   useEffect(() => {
     if (!data && window && typeof window !== 'undefined') {
-      window.location.href = '/mypage/dogs';
+      window.location.href = '/mypage';
     }
   }, [data]);
 
@@ -309,7 +309,7 @@ export async function getServerSideProps({ req, query }) {
     return {
       redirect: {
         permanent: false,
-        destination: '/mypage/dogs',
+        destination: '/mypage',
       },
       props: { data: null },
     };

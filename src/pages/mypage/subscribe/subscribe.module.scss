@@ -16,13 +16,33 @@ section.pagination_box {
   text-align: center;
   font-weight: bold;
 
+  .title_delivery_detail {
+    font-weight: normal;
+  }
+
+  .title_delivery_detail_info {
+    margin: rem(10);
+    font-weight: normal;
+    color: #be1a21;
+    font-size: rem(18);
+    line-height: 1.4;
+  }
+
   .title_info {
     font-weight: normal;
     color: #be1a21;
     font-size: rem(18);
     line-height: 1.4;
     margin: rem(30) 0;
+
+    span {
+      color: #000;
+    }
   }
+}
+
+.prev_btn {
+  margin: 0 rem(20);
 }
 
 .content_container {
@@ -50,7 +70,7 @@ section.pagination_box {
   .title_box {
     h3 {
       font-weight: bold;
-      font-size: rem(20);
+      font-size: rem(18);
     }
     display: flex;
     justify-content: space-between;
@@ -120,7 +140,7 @@ section.pagination_box {
 }
 
 .apply_btn {
-  background-color: #eeeeee;
+  background-color: #b9b9b9;
   height: rem(56);
   width: rem(600);
   color: #fff;
@@ -140,3 +160,177 @@ section.pagination_box {
 .toggle_container {
   margin-bottom: rem(200);
 }
+
+// 주소
+.address_content_container {
+  border: rem(1) solid #bdbdbd;
+  padding: rem(20) rem(30) rem(10) rem(30);
+  border-radius: rem(4);
+  margin: 0 rem(50);
+
+  .col_4 {
+    display: flex;
+    margin: rem(20) auto 0 auto;
+    gap: rem(20);
+
+    a {
+      width: rem(140);
+      display: flex;
+      justify-content: center;
+      gap: rem(10);
+      padding: rem(10);
+      border: rem(1) solid #5c5c5c;
+      border-radius: rem(30);
+    }
+  }
+
+  .title_box_text {
+    padding: 0 rem(10) rem(14) rem(10);
+    border-bottom: rem(1) solid #bdbdbd;
+  }
+  h3 {
+    font-weight: bold;
+    font-size: rem(18);
+  }
+  .address_info {
+    padding: rem(20) rem(14);
+    display: flex;
+    flex-direction: column;
+    gap: rem(8);
+  }
+
+  .next_address_container {
+    color: #bdbdbd;
+  }
+}
+
+.address_box {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  .input_col {
+    height: rem(50);
+    input {
+      height: 100%;
+    }
+
+    &.zipcode {
+      display: grid;
+      gap: rem(10);
+      grid-template-columns: 1fr 2fr;
+      input {
+        text-align: left;
+        padding: 0 rem(16);
+      }
+    }
+    button {
+      height: 100%;
+      display: flex;
+      width: 100%;
+      .btn {
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: rem(16);
+      }
+    }
+  }
+
+  .input_box {
+    padding: rem(9.2) 0 rem(9.2) rem(16);
+  }
+
+  .btn_box {
+    text-align: center;
+    padding: rem(14.5) 0;
+    border: rem(1) solid var(--color-main);
+    border-radius: rem(5);
+    color: var(--color-main);
+    cursor: pointer;
+    &.disabled {
+      color: var(--color-disabled);
+      border-color: var(--color-disabled);
+      cursor: default;
+    }
+  }
+}
+
+.change_address_btn {
+  background-color: #b9b9b9;
+  color: #fff;
+  border-radius: rem(20);
+  padding: rem(10) rem(0);
+  width: 90%;
+  margin: rem(30) rem(10) rem(130) rem(30);
+}
+.change_address_btn.isActive {
+  background-color: #be1a21;
+  transition: 0.3s all;
+}
+
+.grid_box {
+  // width: 90%;
+  margin: rem(10) rem(40);
+  display: flex;
+  flex-direction: column;
+  gap: rem(20);
+  text-align: left;
+
+  p {
+    font-size: rem(20);
+    padding-left: rem(10);
+  }
+
+  @include char(l15);
+  .input_col {
+    // width: 100%;
+    .input_box {
+      width: 100%;
+      @include char(l15);
+      padding: rem(13) 0 rem(13) rem(16);
+    }
+  }
+
+  .row_title {
+    display: flex;
+    align-content: flex-start;
+    height: 100%;
+    padding-left: rem(10);
+  }
+}
+
+.delivery_info {
+  color: #888;
+  padding: rem(10) 0;
+  border-top: rem(1) solid #bdbdbd;
+  margin-top: rem(10);
+}
+
+// // 구독 배송지
+// .save_btn_wrapper {
+//   // position: fixed;
+//   // bottom: 0;
+//   background-color: #fff;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   // margin: 0 rem(20);
+//   height: rem(100);
+//   width: 100%;
+//   .save_btn {
+//     width: 70%;
+//     background-color: #b9b9b9;
+//     color: #fff;
+//     font-weight: bold;
+//     border-radius: rem(30);
+//     font-size: rem(24);
+//     height: rem(36 * 1.4);
+//   }
+//   .save_btn.isActive {
+//     background-color: #be1a21;
+//     transition: 0.3s all;
+//   }
+// }
