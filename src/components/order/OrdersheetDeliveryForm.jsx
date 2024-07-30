@@ -164,7 +164,7 @@ export const OrdersheetDeliveryForm = ({
           </div>
 
           <p className={s.row_title}>주소</p>
-          <ul className={s.adress_box}>
+          <ul className={s.address_box}>
             <li className={`${s.input_col} ${s.zipcode}`}>
               <input
                 id={'zipcode'}

@@ -337,73 +337,73 @@ section.body {
   }
 }
 
-@media (max-width: rem(900)) {
-  .dogInfo_wrap {
-    max-height: rem(400);
-    padding: 0 rem(20);
-    grid-template-columns: rem(90) 1fr;
+// @media (max-width: rem(900)) {
+//   .dogInfo_wrap {
+//     max-height: rem(400);
+//     padding: 0 rem(20);
+//     grid-template-columns: rem(90) 1fr;
 
-    &:last-child {
-      margin-bottom: rem(120);
-    }
+//     &:last-child {
+//       margin-bottom: rem(120);
+//     }
 
-    .left_box {
-      width: 100%;
-      max-width: rem(80);
-      margin: rem(30);
-      margin-left: 0;
+//     .left_box {
+//       width: 100%;
+//       max-width: rem(80);
+//       margin: rem(30);
+//       margin-left: 0;
 
-      .image {
-        width: 100%;
-        max-width: rem(120);
-        aspect-ratio: 1/1;
-        background-size: rem(35);
-      }
-    }
+//       .image {
+//         width: 100%;
+//         max-width: rem(120);
+//         aspect-ratio: 1/1;
+//         background-size: rem(35);
+//       }
+//     }
 
-    .right_box {
-      .dog-info {
-        padding: rem(27) 0 rem(13);
+//     .right_box {
+//       .dog-info {
+//         padding: rem(27) 0 rem(13);
 
-        .inner_flex {
-          display: grid;
-          grid-template-columns: 1fr;
-          grid-row-gap: rem(10);
+//         .inner_flex {
+//           display: grid;
+//           grid-template-columns: 1fr;
+//           grid-row-gap: rem(10);
 
-          .dog_name {
-            order: 2;
-            font-size: rem(18);
-          }
-        }
-      }
+//           .dog_name {
+//             order: 2;
+//             font-size: rem(18);
+//           }
+//         }
+//       }
 
-      .controls {
-        display: flex;
-        margin-bottom: rem(30);
+//       .controls {
+//         display: flex;
+//         margin-bottom: rem(30);
 
-        button {
-          font-size: rem(14);
+//         button {
+//           font-size: rem(14);
 
-          &:last-child {
-            padding-right: 0;
-          }
-        }
-      }
-    }
+//           &:last-child {
+//             padding-right: 0;
+//           }
+//         }
+//       }
+//     }
 
-    .select_box {
-      grid-column: 1 / span 2;
-      transform: translateY(rem(-20));
+//     .select_box {
+//       grid-column: 1 / span 2;
+//       transform: translateY(rem(-20));
 
-      .btn-section {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-gap: rem(10);
+//       .btn-section {
+//         display: grid;
+//         grid-template-columns: 1fr 1fr;
+//         grid-gap: rem(10);
 
-        .payment {
-          width: calc(200% + rem(10));
-        }
-      }
-    }
-  }
-}
+//         .payment {
+//           width: calc(200% + rem(10));
+//         }
+//       }
+//     }
+//   }
+// }

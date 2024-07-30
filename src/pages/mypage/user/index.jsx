@@ -21,7 +21,7 @@ export default function MobileUserInfoIndexPage() {
   // }, [isMobile]);
 
   const onPrevPage = () => {
-    router.push('/mypage/user');
+    router.push('/mypage');
   };
 
   return (

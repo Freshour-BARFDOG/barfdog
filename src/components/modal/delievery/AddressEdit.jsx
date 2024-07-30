@@ -145,7 +145,7 @@ export default function AddressEdit({
           {formErrors.street && (
             <ErrorMessage>{formErrors.street}</ErrorMessage>
           )}
-          <ul className={s.adress_box}>
+          <ul className={s.address_box}>
             <li className={`${s.input_col} ${s.zipcode}`}>
               <input
                 id={'zipcode'}

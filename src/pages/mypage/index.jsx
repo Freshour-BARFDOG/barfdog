@@ -566,7 +566,7 @@ export async function getServerSideProps({ req }) {
     return {
       redirect: {
         permanent: false,
-        destination: '/account/login?prevPath=/mypage/dogs', // 로그인 성공 후, 이전 페이지로 돌아가기
+        destination: '/account/login?prevPath=/mypage', // 로그인 성공 후, 이전 페이지로 돌아가기
       },
     };
   }

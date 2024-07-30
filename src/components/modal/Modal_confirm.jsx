@@ -10,6 +10,7 @@ function Modal_confirm({
   positionCenter = false,
   theme,
   option = { wordbreak: false },
+  height,
 }) {
   const onCancleHandler = () => {
     if (isConfirm && typeof isConfirm === 'function') {
@@ -41,7 +42,7 @@ function Modal_confirm({
     <ModalWrapper
       className={`${s['modal-wrap']} ${s['confirm']} ${
         positionCenter ? s.center : s['position-default']
-      }`}
+      } ${height && s.height} `}
       background
       positionCenter={positionCenter}
       data-theme={theme}
