@@ -1,0 +1,46 @@
+@import '/styles/global/rem';
+
+$menuPadding: 20;
+
+.title {
+  color: #000;
+  font-size: rem(28);
+  font-weight: 600;
+  margin-bottom: rem(15);
+}
+
+.menu {
+  box-sizing: border-box;
+  margin: rem(60);
+  display: flex;
+  flex-wrap: wrap;
+  gap: rem(60);
+  text-align: center;
+
+  li {
+    width: rem(60 * 2);
+    // height: rem(84 * 2);
+    display: flex;
+    font-size: rem(22);
+    align-items: center;
+    justify-content: center;
+
+    span {
+      margin-top: rem(14);
+    }
+  }
+}
+
+.sub_menu {
+  background-color: rgba(217, 217, 217, 0.15);
+  display: flex;
+  font-size: rem(20);
+  padding: rem(30) rem(80);
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: rem(12);
+
+  li {
+    width: rem(214);
+  }
+}

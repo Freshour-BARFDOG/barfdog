@@ -224,7 +224,7 @@ export default function ManageSubscribePage() {
 
                         <div className={s.col_4}>
                           <Link
-                            href={`/mypage/subscribe/${item.subscribeDto.subscribeId}`}
+                            href={`/mypage/subscribe/benefit/${item.subscribeDto.subscribeId}`}
                             passHref
                           >
                             <a

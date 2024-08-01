@@ -124,7 +124,7 @@ export default function SurveyResultPlan({
     {}[(form, initialize, toppingAmount)],
   ) || <div className={s.recipe_text}>0 g</div>;
 
-  //*** 한 끼당 가격 계산 */
+  //*** 한 팩당 가격 계산 */
   const oneMealGramsWithPriceInfosWithTags = useMemo(
     () =>
       pricePerPack &&
@@ -157,7 +157,7 @@ export default function SurveyResultPlan({
       title: '풀플랜',
       titleDescHTML: (
         <p>
-          하루 <strong>2끼</strong>
+          하루 <strong>2팩</strong>
         </p>
       ),
       bodyDescHTML: {
@@ -222,7 +222,7 @@ export default function SurveyResultPlan({
       title: '하프플랜',
       titleDescHTML: (
         <p>
-          하루 <strong>1끼</strong>
+          하루 <strong>1팩</strong>
         </p>
       ),
       bodyDescHTML: {
@@ -287,7 +287,7 @@ export default function SurveyResultPlan({
       title: '토핑 풀플랜',
       titleDescHTML: (
         <p>
-          하루 <strong>2끼</strong>
+          하루 <strong>2팩</strong>
         </p>
       ),
       bodyDescHTML: {
@@ -336,7 +336,7 @@ export default function SurveyResultPlan({
       title: '토핑 하프플랜',
       titleDescHTML: (
         <p>
-          하루 <strong>1끼</strong>
+          하루 <strong>1팩</strong>
         </p>
       ),
       bodyDescHTML: {
@@ -464,7 +464,7 @@ export default function SurveyResultPlan({
                     </h2>
                   </li>
                   <li className={s.plan_grid_2}>
-                    <div className={s.row_1}>{item.titleDescHTML}</div>
+                    <div className={s.row_1}>{item.titleDescHTML}</div> /
                     <div className={s.row_1}>{item.bodyDescHTML.row1}</div> /
                     <div className={s.text1}>{item.bodyDescHTML.row2}</div>
                   </li>
@@ -474,7 +474,7 @@ export default function SurveyResultPlan({
           })}
       </div>
 
-      {/* 4-2) 끼니, 팩 */}
+      {/* 4-2) 팩 */}
       <div className={s.pack_box}>
         {/* (1) 선택 레시피 */}
         {/* 하프플랜, 풀플랜 선택에 따라 보여지는 칸 수가 달라지도록 */}
@@ -483,8 +483,8 @@ export default function SurveyResultPlan({
             {selectedPlan === 'TOPPING_FULL' ||
             selectedPlan === 'TOPPING_HALF' ? (
               <>
-                하루 2끼 기준 <br />
-                1끼당 권장량:
+                하루 2팩 기준 <br />
+                1팩당 권장량:
               </>
             ) : (
               <>
@@ -551,9 +551,9 @@ export default function SurveyResultPlan({
           </>
         )}
 
-        {/* (2) 한 끼당 */}
+        {/* (2) 한 팩당 */}
         <div className={s.one_pack_row}>
-          <div className={s.one_pack_text}>한 끼당:</div>
+          <div className={s.one_pack_text}>한 팩당:</div>
           {recipeNameList.length === 0 ? (
             <p className={s.recipe_single_wrapper}>
               <div className={s.recipe_text}>0 원</div>

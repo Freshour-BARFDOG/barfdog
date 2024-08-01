@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import s from '/src/components/common/menu.module.scss';
+import s from './mypageMenu.module.scss';
 import { IoIosArrowForward } from 'react-icons/io';
 import { slideDown, slideUp } from '/util/func/slideToggle';
 import Link from 'next/link';

@@ -1,6 +1,6 @@
 @import './adminCommon.module.scss';
 @import '/styles/global/rem';
-@import "/styles/module/zIndex.module";
+@import '/styles/module/zIndex.module';
 
 $menu-Padding: 20;
 $list-height: rem(58);
@@ -119,7 +119,7 @@ $list-height: rem(58);
     width: 100%;
     border-top: rem(1) solid var(--color-line-04);
     .menu_title[data-current-page='true'] {
-      span{
+      span {
         svg {
           animation: rotate 2s infinite linear;
         }
@@ -128,12 +128,10 @@ $list-height: rem(58);
     a,
     p {
       max-height: $list-height;
-      padding:{
-        top: rem(12);
-        bottom: rem(12);
-        left: rem($menu-Padding + 20);
-        right: rem(30);
-      }
+      top: rem(12);
+      bottom: rem(12);
+      left: rem($menu-Padding + 20);
+      right: rem(30);
       width: 100%;
       display: flex;
       align-items: center;
@@ -148,14 +146,14 @@ $list-height: rem(58);
         font-weight: normal;
         display: flex;
         align-items: center;
-        gap:rem(6);
+        gap: rem(6);
         svg {
           width: rem(20);
           height: rem(20);
         }
       }
       &:hover {
-        span path{
+        span path {
           fill: var(--color-main);
         }
       }

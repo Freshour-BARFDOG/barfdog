@@ -1,19 +1,18 @@
-import React, {useEffect, useRef, useState} from "react";
-import s from "/src/components/common/menu.module.scss";
-import {IoIosArrowForward} from "react-icons/io";
-import {slideDown, slideUp} from "/util/func/slideToggle";
-import Link from "next/link";
-import {useRouter} from "next/router";
-import {useDispatch} from "react-redux";
-import {authAction} from "/store/auth-slice";
-import {arrangeATagByURLPath} from "../../../util/func/arrage/arrangeATagByURLPath";
-
+import React, { useEffect, useRef, useState } from 'react';
+import s from '/src/components/common/menu.module.scss';
+import { IoIosArrowForward } from 'react-icons/io';
+import { slideDown, slideUp } from '/util/func/slideToggle';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
+import { authAction } from '/store/auth-slice';
+import { arrangeATagByURLPath } from '../../../util/func/arrage/arrangeATagByURLPath';
 
 export default function MypageMenu({ ...props }) {
   const dispatch = useDispatch();
-  const onLogout = ()=>{
+  const onLogout = () => {
     dispatch(authAction.logout());
-  }
+  };
 
   return (
     <nav {...props}>
@@ -44,8 +43,6 @@ export default function MypageMenu({ ...props }) {
   );
 }
 
-
-
 export const SubmenuTitle = ({ title, className }) => {
   return (
     <li className={`${s.submenu_title} ${s[className]}`}>
@@ -54,8 +51,7 @@ export const SubmenuTitle = ({ title, className }) => {
   );
 };
 
-
-export const SubmenuList = ({ link, title}) => {
+export const SubmenuList = ({ link, title }) => {
   return (
     <li className={`${s.submenu_list}`}>
       <Link href={link} passHref>
@@ -65,39 +61,51 @@ export const SubmenuList = ({ link, title}) => {
   );
 };
 
-
-
 const Submenu = ({ children, dropdownRef, isOpen }) => {
   return (
-    <ul ref={dropdownRef} className={`${s.submenu} ${isOpen ? s.open : ""}`}>
+    <ul ref={dropdownRef} className={`${s.submenu} ${isOpen ? s.open : ''}`}>
       {children}
     </ul>
   );
 };
 
-
-
-const MenuTitle = ({ link, title, curMenuRef, onClick, iconOnLeftSide, iconOnRightSide }) => {
+const MenuTitle = ({
+  link,
+  title,
+  curMenuRef,
+  onClick,
+  iconOnLeftSide,
+  iconOnRightSide,
+}) => {
   return link ? (
     <Link href={link} passHref>
       <a ref={curMenuRef} onClick={onClick}>
-        <span>{iconOnLeftSide}
-          {title}</span>
+        <span>
+          {iconOnLeftSide}
+          {title}
+        </span>
         {iconOnRightSide || <IoIosArrowForward />}
       </a>
     </Link>
   ) : (
     <p ref={curMenuRef} onClick={onClick}>
-      <span>{iconOnLeftSide}
-        {title}</span>
+      <span>
+        {iconOnLeftSide}
+        {title}
+      </span>
       {iconOnRightSide || <IoIosArrowForward />}
     </p>
   );
 };
 
-
-
-export const List = ({ link, title, children, onFirstDepthClick, iconOnLeftSide, iconOnRightSide }) => {
+export const List = ({
+  link,
+  title,
+  children,
+  onFirstDepthClick,
+  iconOnLeftSide,
+  iconOnRightSide,
+}) => {
   const router = useRouter();
   const [curPath, setCurPath] = useState(router.pathname);
   const curMenuRef = useRef();
@@ -146,10 +154,6 @@ export const List = ({ link, title, children, onFirstDepthClick, iconOnLeftSide,
   );
 };
 
-
-
-
-
 const currentPageIndicator = (ref, curPath, setThisMenuIsOpenWithDropdown) => {
   if (!ref) return;
   const thisMenu = ref;
@@ -159,28 +163,27 @@ const currentPageIndicator = (ref, curPath, setThisMenuIsOpenWithDropdown) => {
   const submenuList = Array.from(
     thisMenu
       .closest(`li.${[s.menu_title]}`)
-      .querySelectorAll(`ul.${[s.submenu]} a`)
+      .querySelectorAll(`ul.${[s.submenu]} a`),
   );
 
   const depth2Path =
     submenuList.length &&
-    submenuList.filter(submenu => {
+    submenuList.filter((submenu) => {
       return curPath.indexOf(submenu.pathname) >= 0;
     });
 
-
   if (depth1Path) {
-    const activeMenu = thisMenu.closest("." + `${s.menu_title}`);
+    const activeMenu = thisMenu.closest('.' + `${s.menu_title}`);
     activeMenu.dataset.currentPage = true;
   } else if (depth2Path.length) {
     const arrangedDepth2Path = arrangeATagByURLPath(depth2Path, curPath); // submnenu
     arrangedDepth2Path[0].dataset.currentPage = true;
-    const menuTitle = arrangedDepth2Path[0].closest("." + `${s.menu_title}`); // parent menu
+    const menuTitle = arrangedDepth2Path[0].closest('.' + `${s.menu_title}`); // parent menu
     menuTitle.dataset.currentPage = true;
 
     if (
       setThisMenuIsOpenWithDropdown &&
-      typeof setThisMenuIsOpenWithDropdown === "function"
+      typeof setThisMenuIsOpenWithDropdown === 'function'
     ) {
       setThisMenuIsOpenWithDropdown(true);
     }
