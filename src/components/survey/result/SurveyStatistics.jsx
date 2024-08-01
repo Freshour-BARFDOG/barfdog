@@ -27,6 +27,7 @@ import { cartAction } from '/store/cart-slice';
 import { useModalContext } from '/store/modal-context';
 import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import { useRouter } from 'next/router';
+import { Modal_deliveryNotice } from '../../modal/Modal_deliveryNotice';
 
 export const SurveyStatistics = ({ id, mode = 'default' }) => {
   const auth = useSelector((state) => state.auth);
@@ -54,6 +55,7 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
 
   const [isArrowActive, setIsArrowActive] = useState(false);
   const [rotation, setRotation] = useState(0);
+  const [activeModal, setActiveModal] = useState(false);
 
   const [form, setForm] = useState({
     plan: null,
@@ -460,6 +462,10 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
     }
   };
 
+  const onActiveAlertModalHandler = () => {
+    setActiveModal(true);
+  };
+
   // const topTabElement = document.querySelector(`.${s.top_tab}`);
   // const gridContainerElement = document.querySelector(`.${s.grid_container}`);
 
@@ -695,11 +701,17 @@ export const SurveyStatistics = ({ id, mode = 'default' }) => {
       {hasAlert && (
         <Modal_global_alert onClick={onClickModalButton} background />
       )}
+      {activeModal && (
+        <Modal_deliveryNotice
+          onModalActive={setActiveModal}
+          onPayHandler={onPayHandler}
+        />
+      )}
       <button
         className={`${
           form.plan && form.recipeIdList.length > 0 ? s.activated : ''
         } ${s.payment_btn}`}
-        onClick={onPayHandler}
+        onClick={onActiveAlertModalHandler}
         disabled={!(form.plan && form.recipeIdList.length > 0)}
       >
         결제하러 가기

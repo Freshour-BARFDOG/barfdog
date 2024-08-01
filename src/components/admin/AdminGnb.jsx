@@ -31,6 +31,8 @@ function AdminGnb() {
             title="프로모션 생성"
             link="/bf-admin/promotion/create"
           />
+          <SubmenuTitle title="패키지 관리" noLink />
+          <SubmenuList title="패키지 조회" link="/bf-admin/package" />
         </List>
         <List title="판매관리">
           <SubmenuList title="통합 검색" link="/bf-admin/sell/search" />
