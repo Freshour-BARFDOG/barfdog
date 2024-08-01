@@ -24,6 +24,7 @@ import { OrdersheetSubscribeItemList } from '../../../components/order/Ordershee
 import { getData } from '../../api/reqData';
 import { Modal_delivery } from '../../../components/modal/Modal_delivery';
 import OrdersheetPaymentList from '../../../components/order/OrdersheetPaymentList';
+import { OrdersheetDeliveryNotice } from '../../../components/order/OrdersheetDeliveryNotice';
 
 export default function GeneralOrderSheetPage() {
   const router = useRouter();
@@ -298,6 +299,9 @@ export default function GeneralOrderSheetPage() {
                   itemImgUrlList={itemImgUrlList}
                 />
               )}
+
+              {/* 3) 배송 안내 */}
+              <OrdersheetDeliveryNotice />
             </section>
 
             <div className={s.divider}></div>
