@@ -18,10 +18,9 @@ import Modal_global_alert from '/src/components/modal/Modal_global_alert';
 import { useModalContext } from '/store/modal-context';
 import CustomRadio from '/src/components/admin/form/CustomRadio';
 import Tooltip from '/src/components/atoms/Tooltip';
-import s from "../blog.module.scss";
+import s from '../blog.module.scss';
 
 export default function UpdateBlogPage({ id }) {
-  
   const postContentImageApiURL = '/api/admin/blogs/image/upload';
 
   const mct = useModalContext();
@@ -35,20 +34,19 @@ export default function UpdateBlogPage({ id }) {
   const [thumbFile, setThumbFile] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-
   //  INIT QUILL EDITOR
   useEffect(() => {
     if (!id) return;
     (async () => {
       try {
-        if ( setIsLoading && typeof setIsLoading === 'function' ) {
-          setIsLoading( (prevState) => ({
+        if (setIsLoading && typeof setIsLoading === 'function') {
+          setIsLoading((prevState) => ({
             ...prevState,
             fetching: true,
-          }) );
+          }));
         }
         const apiUrl = `/api/admin/blogs/${id}`;
-        const res = await getData( apiUrl );
+        const res = await getData(apiUrl);
         // // console.log(res);
         const DATA = res.data.blogAdminDto;
         const initialFormValues = {
@@ -63,8 +61,10 @@ export default function UpdateBlogPage({ id }) {
         setFormValues(initialFormValues);
 
         const editorImageDATA = res.data.adminBlogImageDtos;
-        const originInnerHTMLImageIdList = editorImageDATA.map((list) => list.blogImageId);
-        
+        const originInnerHTMLImageIdList = editorImageDATA.map(
+          (list) => list.blogImageId,
+        );
+
         setOriginImageIdList(originInnerHTMLImageIdList);
 
         setThumbFile({
@@ -76,7 +76,9 @@ export default function UpdateBlogPage({ id }) {
         });
 
         if (document) {
-          const QuillEditor = dynamic(() => import('/src/components/admin/form/QuillEditor'));
+          const QuillEditor = dynamic(() =>
+            import('/src/components/admin/form/QuillEditor'),
+          );
           setQuillEditor(QuillEditor);
           // console.log('Editor init is complete.');
         }
@@ -108,7 +110,6 @@ export default function UpdateBlogPage({ id }) {
       });
     }
   };
-
 
   const imageFileChangeHandler = async (e) => {
     // - 파일이 존재하지 않는 경우 -> 삭제 API는 따로 없음
@@ -157,31 +158,31 @@ export default function UpdateBlogPage({ id }) {
         ...prevState,
         file: !isFaild && file,
         filename: !isFaild && filename,
-      }) );
+      }));
     } catch (err) {
-      alert( `에러가 발생했습니다.\n${err}` );
+      alert(`에러가 발생했습니다.\n${err}`);
     }
-  
-    setIsLoading( (prevState) => ({
+
+    setIsLoading((prevState) => ({
       ...prevState,
       thumb: false,
-    }) );
+    }));
   };
-  
+
   // console.log( formValues );
   const onSubmit = async (e) => {
     e.preventDefault();
-    if ( isSubmitted ) return window.location.reload();
-    const errObj = validate( formValues, thumbFile );
-    setFormErrors( errObj );
-    const isPassed = valid_hasFormErrors( errObj );
-    if ( !isPassed ) return mct.alertShow( '유효하지 않은 항목이 존재합니다..' );
-    
+    if (isSubmitted) return window.location.reload();
+    const errObj = validate(formValues, thumbFile);
+    setFormErrors(errObj);
+    const isPassed = valid_hasFormErrors(errObj);
+    if (!isPassed) return mct.alertShow('유효하지 않은 항목이 존재합니다..');
+
     try {
-      setIsLoading( (prevState) => ({
+      setIsLoading((prevState) => ({
         ...prevState,
         submit: true,
-      }) );
+      }));
       const body = {
         title: formValues.title,
         contents: formValues.contents,
@@ -191,26 +192,27 @@ export default function UpdateBlogPage({ id }) {
         addImageIdList: formValues.addImageIdList,
         deleteImageIdList: formValues.deleteImageIdList,
       };
-      
+
       const apiUrl = `/api/admin/blogs/${id}`;
-      const res = await putObjData( apiUrl, body );
-      if ( res.isDone ) {
-        mct.alertShow( '블로그가 수정되었습니다.', onGlobalModalCallback );
-        setIsSubmitted( true );
+      const res = await putObjData(apiUrl, body);
+      if (res.isDone) {
+        mct.alertShow('블로그가 수정되었습니다.', onGlobalModalCallback);
+        setIsSubmitted(true);
       } else {
-        mct.alertShow( res.error, '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.' );
+        mct.alertShow(
+          res.error,
+          '\n내부 통신장애입니다. 잠시 후 다시 시도해주세요.',
+        );
       }
-      
     } catch (err) {
-      mct.alertShow( '서버와의 통신 중 에러가 발생했습니다.' );
+      mct.alertShow('서버와의 통신 중 에러가 발생했습니다.');
       // console.log( err );
     } finally {
-      setIsLoading( (prevState) => ({
+      setIsLoading((prevState) => ({
         ...prevState,
         submit: false,
-      }) );
+      }));
     }
-    
   };
 
   const returnToPrevPage = () => {
@@ -219,7 +221,6 @@ export default function UpdateBlogPage({ id }) {
     }
   };
 
-
   const onGlobalModalCallback = () => {
     window.location.href = '/bf-admin/community/blog';
   };
@@ -227,7 +228,6 @@ export default function UpdateBlogPage({ id }) {
   const onClickModalButton = () => {
     mct.alertHide();
   };
-
 
   return (
     <>
@@ -240,7 +240,12 @@ export default function UpdateBlogPage({ id }) {
               {isLoading.fetching && <Spinner />}
             </h1>
           </div>
-          <form action="/" className="cont" encType="multipart/form-data" method="post">
+          <form
+            action="/"
+            className="cont"
+            encType="multipart/form-data"
+            method="post"
+          >
             <div className="cont_body">
               <div className="cont_divider">
                 <div className="input_row">
@@ -263,7 +268,9 @@ export default function UpdateBlogPage({ id }) {
                         ]}
                         initialValue={formValues.category}
                       />
-                      {formErrors.category && <ErrorMessage>{formErrors.category}</ErrorMessage>}
+                      {formErrors.category && (
+                        <ErrorMessage>{formErrors.category}</ErrorMessage>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -285,7 +292,9 @@ export default function UpdateBlogPage({ id }) {
                         value={formValues.title || ''}
                         onChange={onInputChangeHandler}
                       />
-                      {formErrors.title && <ErrorMessage>{formErrors.title}</ErrorMessage>}
+                      {formErrors.title && (
+                        <ErrorMessage>{formErrors.title}</ErrorMessage>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -320,20 +329,28 @@ export default function UpdateBlogPage({ id }) {
                           ratio={1}
                           thumbLink={thumbFile.thumbnailUrl}
                           objectFit={'contain'}
-                          style={{ 'max-width': `${rem(400)}`, 'min-width': `${rem(400)}`,  'min-height': `${rem(400)}`}}
-                          className={`${s["admin-preview-image"]}`}
+                          style={{
+                            'max-width': `${rem(400)}`,
+                            'min-width': `${rem(400)}`,
+                            'min-height': `${rem(400)}`,
+                          }}
+                          className={`${s['admin-preview-image']}`}
                         />
                       )}
                       {(thumbFile.file || thumbFile.thumbnailUrl) && (
-                      <div className="desc">* 추천 아티클 썸네일</div>
+                        <div className="desc">* 추천 아티클 썸네일</div>
                       )}
                       {(thumbFile.file || thumbFile.thumbnailUrl) && (
                         <PreviewImage
                           file={thumbFile.file}
                           thumbLink={thumbFile.thumbnailUrl}
                           objectFit={'contain'}
-                          style={{ 'max-width': `${rem(700)}`, 'min-width': `${rem(400)}`,  'min-height': `${rem(400)}`}}
-                          className={`${s["admin-preview-image"]}`}
+                          style={{
+                            'max-width': `${rem(700)}`,
+                            'min-width': `${rem(400)}`,
+                            'min-height': `${rem(400)}`,
+                          }}
+                          className={`${s['admin-preview-image']}`}
                         />
                       )}
                       <span className="inp_box">
@@ -351,9 +368,14 @@ export default function UpdateBlogPage({ id }) {
                         />
                       </span>
                       {formErrors.blogThumbnailId && (
-                        <ErrorMessage>{formErrors.blogThumbnailId}</ErrorMessage>
+                        <ErrorMessage>
+                          {formErrors.blogThumbnailId}
+                        </ErrorMessage>
                       )}
-                      <div className="desc">* [추천 아티클]에 등록할 블로그는 가로 700 x 세로 400 이상의 썸네일 이미지가 권장됩니다.</div>
+                      <div className="desc">
+                        * [추천 아티클]에 등록할 블로그는 가로 700 x 세로 400
+                        이상의 썸네일 이미지가 권장됩니다.
+                      </div>
                     </label>
                   </div>
                 </div>
@@ -365,7 +387,9 @@ export default function UpdateBlogPage({ id }) {
                     <p className="title">상세설명</p>
                   </div>
                   <div className="inp_section">
-                    {formErrors.contents && <ErrorMessage>{formErrors.contents}</ErrorMessage>}
+                    {formErrors.contents && (
+                      <ErrorMessage>{formErrors.contents}</ErrorMessage>
+                    )}
                     {/* // * --------- QUILL EDITOR --------- * // */}
                     {QuillEditor && (
                       <QuillEditor
@@ -418,7 +442,10 @@ export default function UpdateBlogPage({ id }) {
                   onClick={onSubmit}
                 >
                   {isLoading.submit ? (
-                    <Spinner style={{ color: '#fff', width: '15', height: '15' }} speed={0.6} />
+                    <Spinner
+                      style={{ color: '#fff', width: '15', height: '15' }}
+                      speed={0.6}
+                    />
                   ) : (
                     '등록'
                   )}
@@ -428,7 +455,9 @@ export default function UpdateBlogPage({ id }) {
           </form>
         </AdminContentWrapper>
       </AdminLayout>
-      {hasAlert && <Modal_global_alert onClick={onClickModalButton} background/>}
+      {hasAlert && (
+        <Modal_global_alert onClick={onClickModalButton} background />
+      )}
     </>
   );
 }

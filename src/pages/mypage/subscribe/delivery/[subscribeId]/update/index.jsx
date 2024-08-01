@@ -183,7 +183,7 @@ export default function SubscribeInfoPage({ data }) {
     router.push(`/mypage/subscribe/delivery/${data.subscribeId}`);
   };
 
-  console.log(deliveryInfo);
+  // console.log(deliveryInfo);
 
   return (
     <>

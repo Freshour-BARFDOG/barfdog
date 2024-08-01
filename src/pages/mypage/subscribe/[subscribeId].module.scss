@@ -14,6 +14,25 @@ section.title {
   justify-content: center;
 }
 
+section.title_delivery_skip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: rem(20);
+  font-size: rem(22);
+  margin-bottom: rem(30);
+  .title_text {
+    font-weight: bold;
+  }
+  .title_benefit_info {
+    font-size: rem(18);
+    text-align: center;
+    span {
+      color: #be1a21;
+    }
+  }
+}
+
 .prev_btn {
   margin: 0 rem(20);
 }
@@ -378,4 +397,68 @@ section.title {
       }
     }
   }
+}
+
+.skip_list_wrapper {
+  display: flex;
+  justify-content: center;
+  gap: rem(30);
+  margin-top: rem(20);
+
+  .skip_box {
+    border: rem(1) solid #d4d4d4;
+    border-radius: rem(10);
+    padding: rem(10) rem(20);
+    cursor: pointer;
+
+    h4 {
+      padding: rem(10) rem(30);
+      border-bottom: rem(1) solid #d4d4d4;
+      font-weight: bold;
+      font-size: rem(20);
+    }
+
+    .skip_content {
+      padding: rem(20);
+      display: flex;
+      flex-direction: column;
+      gap: rem(10);
+    }
+  }
+
+  // 미루기 클릭 시
+  .active {
+    border-color: #be1a21;
+    color: #be1a21;
+    box-shadow: 0 rem(4) rem(16) 0 rgba(0, 0, 0, 0.1);
+    background-color: #ffe0e1;
+
+    h4 {
+      border-color: #be1a21 !important;
+    }
+  }
+}
+
+.benefit_box {
+  border: rem(1) solid #e2e2e2;
+  border-radius: rem(10);
+  box-shadow: 0 0 rem(3) rgba(0, 0, 0, 0.1);
+  padding: rem(30);
+  width: rem(400);
+  margin: 0 auto rem(50) auto;
+
+  button {
+    border: rem(1) solid #be1a21;
+    color: #be1a21;
+    border-radius: rem(4);
+    // color: #fff;
+    padding: rem(2) rem(5);
+    font-size: rem(14);
+    margin: rem(8);
+  }
+}
+
+.no_package {
+  color: #be1a21;
+  font-weight: bold;
 }

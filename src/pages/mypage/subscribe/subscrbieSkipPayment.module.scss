@@ -55,19 +55,20 @@
   .radio_box {
     display: flex;
     justify-content: center;
-    column-gap: rem(60);
+    gap: rem(20);
     padding-bottom: rem(45);
 
-    @include char(l16);
-    font-weight: 600;
+    // @include char(l16);
+    // font-weight: 600;
     label {
       display: flex;
       align-items: center;
-      column-gap: rem(10);
-      font-size: rem(16) !important;
-      &:nth-child(2) {
-        color: var(--color-font-sub);
-      }
+      margin: 0 rem(20);
+      //   column-gap: rem(10);
+      //   font-size: rem(16) !important;
+      //   &:nth-child(2) {
+      //     color: var(--color-font-sub);
+      //   }
     }
   }
   .d_day_text {
