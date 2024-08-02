@@ -13,28 +13,34 @@ export default function SurveyStep4({
   surveyPageRef,
   errorInfo,
   setIsActiveNextBtn,
+  mode,
 }) {
   const [activeIndexList, setActiveIndexList] = useState([]);
 
   // UI '짤림 현상'해결
   useEffect(() => {
-    const swiperWrap = surveyPageRef.current;
-    const slideWithDependencyElem = swiperWrap.querySelector(
+    const swiperWrap = surveyPageRef?.current;
+    const slideWithDependencyElem = swiperWrap?.querySelector(
       '.swiper-slide-active',
     );
-    const activeSlideHeight = slideWithDependencyElem.offsetHeight;
-    const targetSwiperElem = swiperWrap.querySelector('.swiper-wrapper');
-    targetSwiperElem.style.height = rem(activeSlideHeight);
-    // targetSwiperElem.style.minHeight = rem(750);
+    const activeSlideHeight = slideWithDependencyElem?.offsetHeight;
+    const targetSwiperElem = swiperWrap?.querySelector('.swiper-wrapper');
+    if (targetSwiperElem) {
+      targetSwiperElem.style.height = rem(activeSlideHeight);
+    }
   }, [formValues]);
 
   return (
-    <section id="surveyPage" className={s.step3Page}>
+    <section id="surveyPage" className={s.step4Page}>
       {errorInfo.errorMessage && (
         <p className={s.error_message_text}>{errorInfo.errorMessage}</p>
       )}
       {formValues?.map((dog, index) => (
-        <div key={index} className={s.dogSize_dogType_container}>
+        <div
+          key={index}
+          className={s.dogSize_dogType_container}
+          style={{ height: mode === 'update' && '280px' }}
+        >
           <p className={s.input_title}>{dog.name} (이)의 견종은 무엇인가요 ?</p>
           <div className={s.input_dogSize_dogType_box}>
             <SurveyInputRadio
@@ -63,7 +69,6 @@ export default function SurveyStep4({
               width={360}
               setIsActiveNextBtn={setIsActiveNextBtn}
               dogInfoIndex={index}
-              // dogInfo={dog}
               activeIndexList={activeIndexList}
               setActiveIndexList={setActiveIndexList}
             />

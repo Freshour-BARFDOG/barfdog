@@ -1,5 +1,4 @@
 import React from 'react';
-// import s from './surveyLayout.module.scss';
 import SurveyHeader from '../header/SurveyHeader';
 import SurveyFooter from './SurveyFooter';
 import SurveyResultFooter from './SurveyResultFooter';
@@ -19,11 +18,19 @@ const SurveyLayout = ({
   ...props
 }) => {
   return (
-    <main id={id} className={className}>
-      <div>
-        <SurveyHeader />
-      </div>
-      <div>{props.children}</div>
+    <main
+      id={id}
+      className={className}
+      style={{
+        position: 'relative',
+        width: '600px',
+        height: '100vh',
+        overflow: 'hidden',
+        backgroundColor: '#fffafa',
+      }}
+    >
+      <SurveyHeader />
+      {props.children}
       {resultPage ? (
         <SurveyResultFooter surveyReportsId={surveyReportsId} />
       ) : (

@@ -12,6 +12,7 @@ export default function SurveyStep15({
   onInputChangeHandler,
   surveyPageRef,
   setIsActiveNextBtn,
+  mode,
 }) {
   let cautionIdList = [
     '관절염',
@@ -51,15 +52,16 @@ export default function SurveyStep15({
 
   // UI '짤림 현상'해결
   useEffect(() => {
-    const swiperWrap = surveyPageRef.current;
-    const slideWithDependencyElem = swiperWrap.querySelector(
+    const swiperWrap = surveyPageRef?.current;
+    const slideWithDependencyElem = swiperWrap?.querySelector(
       '.swiper-slide-active',
     );
-    const activeSlideHeight = slideWithDependencyElem.offsetHeight;
-    const targetSwiperElem = swiperWrap.querySelector('.swiper-wrapper');
-    targetSwiperElem.style.height = rem(activeSlideHeight);
+    const activeSlideHeight = slideWithDependencyElem?.offsetHeight;
+    const targetSwiperElem = swiperWrap?.querySelector('.swiper-wrapper');
+    if (targetSwiperElem) {
+      targetSwiperElem.style.height = rem(activeSlideHeight);
+    }
   }, [formValues]);
-
   const removeDiabetes = (index) => {
     setFormValues((prevFormValues) => {
       const newFormValues = prevFormValues.map((item, idx) => {
@@ -118,10 +120,12 @@ export default function SurveyStep15({
 
   return (
     <section id="surveyPage" className={s.step14Page}>
-      <p className={s.supplement_text}>
-        * 질병이 있는 경우 <strong>필수</strong>로 체크해주세요! <br />
-        질병에 따라 급여가 불가할 수 있습니다.
-      </p>
+      {mode !== 'update' && (
+        <p className={s.supplement_text}>
+          * 질병이 있는 경우 <strong>필수</strong>로 체크해주세요! <br />
+          질병에 따라 급여가 불가할 수 있습니다.
+        </p>
+      )}
       {formValues?.map((dog, index) => (
         <div key={index} className={s.status_container}>
           <div className={s.input_status_container}>

@@ -10,6 +10,7 @@ export default function SurveyStep9({
   surveyPageRef,
   errorInfo,
   setIsActiveNextBtn,
+  mode,
 }) {
   const [activeIndexList, setActiveIndexList] = useState([]);
 
@@ -44,23 +45,29 @@ export default function SurveyStep9({
 
   // UI '짤림 현상'해결
   useEffect(() => {
-    const swiperWrap = surveyPageRef.current;
-    const slideWithDependencyElem = swiperWrap.querySelector(
+    const swiperWrap = surveyPageRef?.current;
+    const slideWithDependencyElem = swiperWrap?.querySelector(
       '.swiper-slide-active',
     );
-    const activeSlideHeight = slideWithDependencyElem.offsetHeight;
-    const targetSwiperElem = swiperWrap.querySelector('.swiper-wrapper');
-    targetSwiperElem.style.height = rem(activeSlideHeight);
+    const activeSlideHeight = slideWithDependencyElem?.offsetHeight;
+    const targetSwiperElem = swiperWrap?.querySelector('.swiper-wrapper');
+    if (targetSwiperElem) {
+      targetSwiperElem.style.height = rem(activeSlideHeight);
+    }
   }, [formValues]);
 
   return (
-    <section id="surveyPage" className={s.step8Page}>
+    <section id="surveyPage" className={s.step9Page}>
       <div className={s.dogWalk_top_empty}></div>
       {errorInfo.errorMessage && (
         <p className={s.error_message_text}>{errorInfo.errorMessage}</p>
       )}
       {formValues?.map((dog, index) => (
-        <div key={index} className={s.walk_container}>
+        <div
+          key={index}
+          className={s.dogSize_dogType_container}
+          style={{ height: mode === 'update' && '220px' }}
+        >
           <p className={s.input_title}>{dog.name} (이)의 산책량은 어떤가요 ?</p>
           <div className={s.walk_box}>
             <div className={s.input_walk}>

@@ -22,13 +22,15 @@ export default function SurveyStep13({
 
   // UI '짤림 현상'해결
   useEffect(() => {
-    const swiperWrap = surveyPageRef.current;
-    const slideWithDependencyElem = swiperWrap.querySelector(
+    const swiperWrap = surveyPageRef?.current;
+    const slideWithDependencyElem = swiperWrap?.querySelector(
       '.swiper-slide-active',
     );
-    const activeSlideHeight = slideWithDependencyElem.offsetHeight;
-    const targetSwiperElem = swiperWrap.querySelector('.swiper-wrapper');
-    targetSwiperElem.style.height = rem(activeSlideHeight);
+    const activeSlideHeight = slideWithDependencyElem?.offsetHeight;
+    const targetSwiperElem = swiperWrap?.querySelector('.swiper-wrapper');
+    if (targetSwiperElem) {
+      targetSwiperElem.style.height = rem(activeSlideHeight);
+    }
   }, [formValues]);
 
   return (

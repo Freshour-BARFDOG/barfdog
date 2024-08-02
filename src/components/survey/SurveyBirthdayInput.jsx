@@ -26,8 +26,16 @@ const SurveyBirthdayInput = ({
   setIsActiveNextBtn,
   ...props
 }) => {
-  const initialValue = formValue || '';
-  const [selectedDate, setSelectedDate] = useState(null);
+  // 날짜 문자열을 Date 객체로 변환하는 함수
+  const parseDateString = (dateString) => {
+    const year = parseInt(dateString.slice(0, 4), 10);
+    const month = parseInt(dateString.slice(4, 6), 10) - 1; // 월은 0부터 시작
+    const day = parseInt(dateString.slice(6, 8), 10);
+    return new Date(year, month, day);
+  };
+
+  const initialValue = formValue ? parseDateString(formValue) : '';
+  const [selectedDate, setSelectedDate] = useState(initialValue);
 
   const calculatePregnancyStatus = (dueDate) => {
     const today = new Date();
