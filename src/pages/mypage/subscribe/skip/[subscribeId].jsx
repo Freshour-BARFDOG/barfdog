@@ -20,11 +20,14 @@ import Wrapper from '/src/components/common/Wrapper';
 import MypageWrapper from '/src/components/mypage/MypageWrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import { getData } from '../../../api/reqData';
+import { formattedProductionAndReceivingDate } from '../../../../../util/func/formattedProductionAndReceivingDate';
+import { ConfigProvider, DatePicker } from 'antd';
 
 export default function SubscribeSkipPage({ subscribeId }) {
   const router = useRouter();
   const [subscribeInfo, setSubscribeInfo] = useState();
   const [dogName, setDogName] = useState('');
+  const [selectedDate, setSelectedDate] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -82,6 +85,17 @@ export default function SubscribeSkipPage({ subscribeId }) {
     // setChangedDelvieryDate(result);
   }, [skipCount]);
 
+  function addDays(dateString, days) {
+    const formattedDateString = dateString.replace(/\./g, '-').slice(0, -1);
+    const date = new Date(formattedDateString);
+    date.setDate(date.getDate() + days);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}.${month}.${day}.`;
+  }
+
   const onSubmit = async (confirm) => {
     if (submitted) return console.error('이미 제출된 양식입니다.');
     if (!confirm) {
@@ -131,9 +145,27 @@ export default function SubscribeSkipPage({ subscribeId }) {
 
   const skipSelectHandler = (item) => {
     setIsActive(item);
+
+    if (item === 'week') {
+      const delayedDate = addDays(
+        formattedProductionAndReceivingDate(
+          subscribeInfo?.subscribeDto.nextDeliveryDate,
+        ).formattedReceivingDate,
+        7, // 7days * 2or4wks
+      );
+      setSelectedDate(delayedDate);
+    } else if (item === 'once') {
+      const delayedDate = addDays(
+        formattedProductionAndReceivingDate(
+          subscribeInfo?.subscribeDto.nextDeliveryDate,
+        ).formattedReceivingDate,
+        7 * curPlanWeeklyPaymentCycle, // 7days * 2or4wks
+      );
+      setSelectedDate(delayedDate);
+    }
   };
 
-  console.log(skipCount);
+  console.log(selectedDate);
 
   return (
     <>
@@ -161,9 +193,19 @@ export default function SubscribeSkipPage({ subscribeId }) {
             <section>
               <div className={`${s.content_inner_box4}`}>
                 <div className={s.text}>
-                  생산 예정일: 2024.00.00.
+                  생산 예정일:{' '}
+                  {
+                    formattedProductionAndReceivingDate(
+                      subscribeInfo?.subscribeDto.nextDeliveryDate,
+                    ).formattedProductionDate
+                  }
                   <br />
-                  수령 예정일: 2024.00.00.
+                  수령 예정일:{' '}
+                  {
+                    formattedProductionAndReceivingDate(
+                      subscribeInfo?.subscribeDto.nextDeliveryDate,
+                    ).formattedReceivingDate
+                  }
                 </div>
 
                 {/* <div className={s.radio_box}>
@@ -190,11 +232,21 @@ export default function SubscribeSkipPage({ subscribeId }) {
                       <div>
                         생산 예정일
                         <br />
-                        2024.01.01.
+                        {addDays(
+                          formattedProductionAndReceivingDate(
+                            subscribeInfo?.subscribeDto.nextDeliveryDate,
+                          ).formattedProductionDate,
+                          7,
+                        )}
                       </div>
                       <div>
                         수령 예정일 <br />
-                        2024.01.01.
+                        {addDays(
+                          formattedProductionAndReceivingDate(
+                            subscribeInfo?.subscribeDto.nextDeliveryDate,
+                          ).formattedReceivingDate,
+                          7,
+                        )}
                       </div>
                     </div>
                   </div>
@@ -209,15 +261,47 @@ export default function SubscribeSkipPage({ subscribeId }) {
                       <div>
                         생산 예정일
                         <br />
-                        2024.01.01.
+                        {addDays(
+                          formattedProductionAndReceivingDate(
+                            subscribeInfo?.subscribeDto.nextDeliveryDate,
+                          ).formattedProductionDate,
+                          7 * curPlanWeeklyPaymentCycle, // 7days * 2or4wks
+                        )}
                       </div>
                       <div>
                         수령 예정일 <br />
-                        2024.01.01.
+                        {addDays(
+                          formattedProductionAndReceivingDate(
+                            subscribeInfo?.subscribeDto.nextDeliveryDate,
+                          ).formattedReceivingDate,
+                          7 * curPlanWeeklyPaymentCycle,
+                        )}
                       </div>
                     </div>
                   </div>
                 </div>
+
+                <span>
+                  <ConfigProvider
+                    theme={{
+                      token: {
+                        colorPrimary: '#ca1011',
+                      },
+                    }}
+                  >
+                    <DatePicker
+                      showTime={{
+                        format: 'HH:mm',
+                      }}
+                      format="YYYY-MM-DD HH:mm"
+                      // onChange={onInputChange}
+                      value={selectedDate}
+                      // disabledDate={disabledDate}
+                      // disabledTime={disabledDateTime}
+                      readOnly={true}
+                    />
+                  </ConfigProvider>
+                </span>
 
                 {/* <p className={s.d_day_text}>
                   기존 발송 예정일은
@@ -246,6 +330,7 @@ export default function SubscribeSkipPage({ subscribeId }) {
                   </div>
                 </div> */}
 
+                {/* nextPaymentDate가 있다면! 조건 추가 */}
                 <div className={s.btn_box}>
                   {/*  오늘과 다음 결제예정일 비교 ==> 5일 이내일 경우 구독 버튼 나타남 */}
                   {isAvailableSubscribeSkipping(
@@ -282,6 +367,7 @@ export default function SubscribeSkipPage({ subscribeId }) {
               (label, index) => index === selectedIndex,
             )[0];
             const skipWeeklyCount = inputIdList[selectedIndex].split('-')[1];
+
             return `건너뛰기는 되돌리기 불가능한 서비스입니다.\n정말 ${skipMethodName}(${skipWeeklyCount}주)를 적용하시겠습니까?`;
           })()}`}
           isConfirm={onSubmit}

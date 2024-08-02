@@ -5,25 +5,30 @@ $browser-context: 16;
 @import 'styles/global/guide.scss';
 
 .step1Page {
-  padding: rem(60) 0 ;
+  padding: rem(60) 0;
   // margin-bottom: 20vh;
 }
 .step2page {
-  padding: rem(60) 0 ;
+  padding: rem(60) 0;
   // margin-bottom: 20vh;
 }
 .step3page {
-  padding: rem(60) 0 ;
+  padding: rem(60) 0;
   // margin-bottom: 20vh;
+}
+
+.dog_title {
+  font-weight: bold;
+  font-size: rem(22);
 }
 
 .input_title {
   text-align: center;
-  @include char(l20);
+  // @include char(l20);
+  font-size: rem(18);
   font-weight: 600;
   padding-bottom: rem(30);
 }
-
 
 .step1Page {
   display: flex;
@@ -31,13 +36,13 @@ $browser-context: 16;
   flex-direction: column;
   align-items: center;
   width: 100%;
-    
+
   .input_box_1 {
     text-align: center;
     width: rem(360);
     border: rem(0);
     border-radius: rem(0);
-    border-bottom: rem(1) solid var(--color-disabled) ;
+    border-bottom: rem(1) solid var(--color-disabled);
   }
 }
 
@@ -52,7 +57,6 @@ $browser-context: 16;
   padding-bottom: rem(60);
 }
 
-
 //반려견성별
 .flex_box {
   display: flex;
@@ -63,7 +67,7 @@ $browser-context: 16;
     align-items: center;
     text-align: center;
     input {
-      border : rem(0);
+      border: rem(0);
       width: rem(100);
       text-align: center;
     }
@@ -71,17 +75,15 @@ $browser-context: 16;
   }
 }
 
-
 .radio_check {
   @include char(l16);
 
-  padding-top :rem(30);
+  padding-top: rem(30);
   padding-bottom: rem(60);
   .radio {
     display: flex;
     column-gap: rem(8);
     justify-content: center;
-
   }
 }
 
@@ -96,7 +98,6 @@ $browser-context: 16;
   @include char(l18);
 }
 
-
 .inner_kg {
   width: rem(360);
   display: flex;
@@ -105,66 +106,66 @@ $browser-context: 16;
   border-bottom: rem(1) solid var(--color-disabled);
   margin-bottom: rem(60);
   input {
-    border : rem(0);
+    border: rem(0);
     width: rem(350);
     text-align: center;
   }
 }
 
-
-.swiper_navigation_container{
+.swiper_navigation_container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  > i {cursor: pointer;}
-.left_side_btn {
-  .left_btn {
-    display: flex;
-    justify-content: center;
-    column-gap: rem(4);
+  > i {
+    cursor: pointer;
+  }
+  .left_side_btn {
+    .left_btn {
+      display: flex;
+      justify-content: center;
+      column-gap: rem(4);
 
-    border: rem(1) solid var(--color-main);
-    width: rem(120);
-    @include char(l16);
-    font-weight: 600;
-    color : var(--color-main);
-    text-align: center;
-    padding : rem(19) 0;
-    border-radius: rem(4);
-    .image_box {
-      .image {
-        width: rem(12);
-        aspect-ratio: 1/1;
+      border: rem(1) solid var(--color-main);
+      width: rem(120);
+      @include char(l16);
+      font-weight: 600;
+      color: var(--color-main);
+      text-align: center;
+      padding: rem(19) 0;
+      border-radius: rem(4);
+      .image_box {
+        .image {
+          width: rem(12);
+          aspect-ratio: 1/1;
+        }
+      }
+    }
+  }
+
+  .right_side_btn {
+    .right_btn {
+      display: flex;
+      justify-content: center;
+      column-gap: rem(4);
+
+      border: rem(1) solid var(--color-main);
+      width: rem(120);
+      @include char(l16);
+      font-weight: 600;
+      background-color: var(--color-main);
+      color: #fff;
+      text-align: center;
+      padding: rem(19) 0;
+      border-radius: rem(4);
+      .image_box {
+        .image {
+          width: rem(12);
+          aspect-ratio: 1/1;
+        }
       }
     }
   }
 }
-
-.right_side_btn {
-  .right_btn {
-    display: flex;
-    justify-content: center;
-    column-gap: rem(4);
-
-    border: rem(1) solid var(--color-main);
-    width: rem(120);
-    @include char(l16);
-    font-weight: 600;
-    background-color: var(--color-main);
-    color : #fff;
-    text-align: center;
-    padding : rem(19) 0;
-    border-radius: rem(4);
-    .image_box {
-      .image {
-        width: rem(12);
-        aspect-ratio: 1/1;
-      }
-    }
-  }
-}
-}
-
 
 // .swiper_main_outerWrap {
 //   position: relative;
@@ -179,7 +180,7 @@ $browser-context: 16;
 //     position: absolute;
 //     bottom: 20%;
 //     right: rem(300);
-    
+
 //   }
 // }
 // .swiper_navigation_container{display: block;
@@ -193,10 +194,9 @@ $browser-context: 16;
 //       position: relative;
 //       // bottom: 20%;
 //       // right: rem(300);
-      
+
 //     }
 // }
-
 
 // * ------- 2페이지  ------- * //
 
@@ -226,19 +226,18 @@ $browser-context: 16;
     text-align: center;
     justify-content: space-between;
     input {
-      border : rem(0);
+      border: rem(0);
       // background: rosybrown;
       margin-left: rem(5);
       width: rem(80);
       text-align: center;
     }
     .input_1 {
-      border : rem(0);
+      border: rem(0);
       // background: red;
       margin-left: rem(10);
       width: rem(80);
       text-align: center;
-
     }
     text-align: right;
     border-bottom: rem(1) solid var(--color-disabled);
@@ -275,7 +274,7 @@ $browser-context: 16;
 
 .red_text {
   @include char(b14);
-  color : var(--color-primary04);
+  color: var(--color-primary04);
   text-align: center;
   padding-bottom: rem(80);
 }
@@ -284,7 +283,7 @@ $browser-context: 16;
   display: grid;
   row-gap: rem(14);
   @include char(l18);
-  padding-bottom:rem(80);
+  padding-bottom: rem(80);
 }
 
 .disease_check {
@@ -308,16 +307,17 @@ $browser-context: 16;
   li {
     display: inline-flex;
     flex-direction: row;
-    justify-content:center;
+    justify-content: center;
     width: 20%;
-
   }
   label {
     display: inline-flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    input{ margin-bottom:rem(16);}
+    input {
+      margin-bottom: rem(16);
+    }
   }
   // display:inline-flex;
   // flex-direction: row;
@@ -336,28 +336,23 @@ $browser-context: 16;
   }
 }
 
-.numberOfSnacks{
+.numberOfSnacks {
   display: inline-flex;
   flex-direction: row;
   gap: rem(14);
-  label{position:relative;}
+  label {
+    position: relative;
+  }
   padding-bottom: rem(123);
-  .desc{
-    position:absolute;
+  .desc {
+    position: absolute;
     width: 100%;
-    bottom:rem(-10);
-    transform:translateY(100%);
+    bottom: rem(-10);
+    transform: translateY(100%);
     color: #878787;
     font-size: rem(14);
   }
-
 }
-
-
-
-
-
-
 
 // * ------- Custom Input 공통 ------ *
 .inputRadio-wrap {
@@ -449,27 +444,25 @@ $browser-context: 16;
   }
 }
 
-
-@media (max-width: rem(600)) {
-  .step1Page {
-    .input_box_1 {
-      width: auto;
-    }
-  }
-
-  .dog_choice {
-    padding: rem(60) 0;
-    column-gap: rem(10);
-  }
-
-  .inner_kg {
+// @media (max-width: rem(600)) {
+.step1Page {
+  .input_box_1 {
     width: auto;
-    input {
-      width: auto;
-    }
   }
+}
 
-  
+.dog_choice {
+  padding: rem(60) 0;
+  column-gap: rem(10);
+}
+
+.inner_kg {
+  width: auto;
+  input {
+    width: auto;
+  }
+}
+
 .flex_box2 {
   display: grid;
   grid-template-columns: 1fr;
@@ -483,19 +476,18 @@ $browser-context: 16;
   }
 }
 
-  .step3page {
-  
-    .input_box_1 {
-      width: auto;
-    }
-  }
-
-  .activity {
+.step3page {
+  .input_box_1 {
     width: auto;
   }
-
-  .selectDogBreed {
-    max-width: rem(260);
-  }
-
 }
+
+.activity {
+  width: auto;
+}
+
+.selectDogBreed {
+  max-width: rem(260);
+}
+
+// }

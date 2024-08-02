@@ -21,6 +21,7 @@ import Image from 'next/image';
 import s from './subscribe.module.scss';
 import { SubscribeUpdateInfo } from '../../../components/subscribe/SubscribeUpdateInfo';
 import { SubscribeSurveyUpdate } from '../../../components/subscribe/SubscribeSurveyUpdate';
+import { Modal_mypageSubscribeCancel } from '/src/components/modal/Modal_mypageSubscribeCancel';
 
 export default function SubscribeInfoPage({ data }) {
   const mct = useModalContext();
@@ -29,6 +30,7 @@ export default function SubscribeInfoPage({ data }) {
   const { subscribeId } = data;
   const subscribeInfo = useSubscribeInfo(subscribeId);
   const [isLoading, setIsLoading] = useState({ reactive: false });
+  const [activeModal, setActiveModal] = useState(false);
 
   // console.log(subscribeInfo);
   // console.log(subscribeInfo.info.subscribeStatus);
@@ -78,6 +80,16 @@ export default function SubscribeInfoPage({ data }) {
 
   const onApplyHandler = () => {};
 
+  const onSubscirbeCancelModalHandler = () => {};
+
+  const initializeModalState = () => {
+    setActiveModal(null);
+  };
+
+  const onStartCancel = () => {
+    setActiveModal(true);
+  };
+
   return (
     <>
       <MetaTitle title="마이페이지 구독관리" />
@@ -108,13 +120,17 @@ export default function SubscribeInfoPage({ data }) {
                   <SubscribeSkipPayment subscribeInfo={subscribeInfo} />
                 </ToggleBox> */}
 
+                <ToggleBox title="반려견 건강 문진 재등록">
+                  <SubscribeSurveyUpdate />
+                </ToggleBox>
+
                 {/* <ToggleBox title="구독 취소">
                   <SubscribeCancle subscribeInfo={subscribeInfo} />
                 </ToggleBox> */}
 
-                <ToggleBox title="반려견 건강 문진 재등록">
-                  <SubscribeSurveyUpdate />
-                </ToggleBox>
+                <button className={s.sub_cancel_btn} onClick={onStartCancel}>
+                  해지하기
+                </button>
               </div>
             ) : (
               <div
@@ -167,6 +183,12 @@ export default function SubscribeInfoPage({ data }) {
       </LayoutWithoutFooter>
       {hasAlert && (
         <Modal_global_alert onClick={onClickModalButton} background />
+      )}
+      {activeModal && (
+        <Modal_mypageSubscribeCancel
+          onHideModal={initializeModalState}
+          subscribeId={subscribeId}
+        />
       )}
     </>
   );

@@ -10,7 +10,7 @@ export const formattedProductionAndReceivingDate = (dateString) => {
       '0',
     )}.${String(date.getDate()).padStart(2, '0')}.`;
 
-  let productionDate, receivingDate;
+  let productionDate, receivingDate, shipmentDate;
 
   // 1. 다음 배송일(data.nextDeliveryDate)이 있을 경우
   if (dateString) {
@@ -42,13 +42,18 @@ export const formattedProductionAndReceivingDate = (dateString) => {
       productionDate.setDate(today.getDate() + (13 - dayOfWeek));
     }
 
-    // 2) 수령 예정일 : 생산 예정일의 다음 수요일
+    // 2) 출고 예정일 : 생산 예정일의 다음 화요일
+    shipmentDate = new Date(productionDate);
+    shipmentDate.setDate(shipmentDate.getDate() + 4); // Next Tuesday
+
+    // 3) 수령 예정일 : 생산 예정일의 다음 수요일
     receivingDate = new Date(productionDate);
     receivingDate.setDate(receivingDate.getDate() + 5); // Next Wednesday
   }
 
   return {
     formattedProductionDate: getFormattedDate(productionDate),
+    formattedShipmentDate: shipmentDate && getFormattedDate(shipmentDate),
     formattedReceivingDate: getFormattedDate(receivingDate),
   };
 };

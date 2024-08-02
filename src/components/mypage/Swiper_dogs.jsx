@@ -462,14 +462,14 @@ const ItemList = ({
                 </Link>
               */}
 
-              {data.nextDeliveryDate && (
-                <Link
-                  href={`/mypage/subscribe/skip/${data.subscribeId}`}
-                  passHref
-                >
-                  <a>배송 미루기</a>
-                </Link>
-              )}
+              {/* {data.nextDeliveryDate && ( */}
+              <Link
+                href={`/mypage/subscribe/skip/${data.subscribeId}`}
+                passHref
+              >
+                <a>배송 미루기</a>
+              </Link>
+              {/* )} */}
 
               <Link
                 href={`/mypage/subscribe/delivery/${data.subscribeId}`}

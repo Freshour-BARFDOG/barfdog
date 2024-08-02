@@ -158,7 +158,11 @@ section.pagination_box {
 }
 
 .toggle_container {
-  margin-bottom: rem(200);
+  .sub_cancel_btn {
+    margin: rem(60) rem(60) 0 rem(60);
+    text-decoration: underline;
+  }
+  margin-bottom: rem(160);
 }
 
 // 주소
