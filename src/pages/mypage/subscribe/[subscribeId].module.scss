@@ -140,7 +140,6 @@ section.title_delivery_skip {
 }
 
 .btn-box {
-  background-color: aqua;
 }
 
 // @media (max-width: rem(900)) {
@@ -461,4 +460,10 @@ section.title_delivery_skip {
 .no_package {
   color: #be1a21;
   font-weight: bold;
+}
+
+.calendar_label {
+  // font-weight: bold;
+  margin: rem(50) 0 rem(10) 0;
+  font-size: rem(20);
 }

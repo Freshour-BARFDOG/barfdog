@@ -11,6 +11,12 @@
     @include char(t24);
   }
 
+  .dog_title_update {
+    margin: 0 0 rem(40) rem(20);
+    @include char(t24);
+    // text-align: center;
+  }
+
   // .step1Page {
   //   padding: rem(0) 0 rem(80);
   // }
@@ -1303,4 +1309,8 @@
   .dogSize_dogType_box {
     gap: rem(20);
   }
+}
+
+.empty_box {
+  height: rem(40);
 }

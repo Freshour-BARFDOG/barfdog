@@ -131,7 +131,7 @@ export const CustomSelectWithCustomOptions = ({
         <em className={s.unit}>{unit}</em>
         <ScrollContainer
           height={height}
-          scrollBarWidth={'0'}
+          scrollBarWidth={'10'}
           className={`${s.scrollContainer} ${isActive ? s.active : ''}`}
           ref={optionBoxRef}
         >

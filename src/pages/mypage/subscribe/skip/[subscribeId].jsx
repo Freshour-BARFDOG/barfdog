@@ -21,13 +21,15 @@ import MypageWrapper from '/src/components/mypage/MypageWrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import { getData } from '../../../api/reqData';
 import { formattedProductionAndReceivingDate } from '../../../../../util/func/formattedProductionAndReceivingDate';
-import { ConfigProvider, DatePicker } from 'antd';
+import { DateCalendar, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
 
 export default function SubscribeSkipPage({ subscribeId }) {
   const router = useRouter();
   const [subscribeInfo, setSubscribeInfo] = useState();
   const [dogName, setDogName] = useState('');
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(dayjs());
 
   useEffect(() => {
     (async () => {
@@ -42,6 +44,12 @@ export default function SubscribeSkipPage({ subscribeId }) {
         if (res.status === 200) {
           setSubscribeInfo(subscribeData);
           setDogName(subscribeData.subscribeDto.dogName);
+
+          setSelectedDate(
+            formattedProductionAndReceivingDate(
+              subscribeData?.subscribeDto.nextDeliveryDate,
+            ).formattedReceivingDate,
+          );
         }
       } catch (err) {
         console.error(err);
@@ -74,16 +82,27 @@ export default function SubscribeSkipPage({ subscribeId }) {
   const [submitted, setSubmitted] = useState(false);
   const [isActive, setIsActive] = useState(false);
 
-  useEffect(() => {
-    // const periodInWeeks = Number(skipCount.split('-')[1]);
-    // const result = calcChangedSubscribeDeliveryDate(
-    //   initialDelvieryDate,
-    //   periodInWeeks,
-    // );
-    // // // console.log(initialDelvieryDate)
-    // // // console.log(periodInWeeks)
-    // setChangedDelvieryDate(result);
-  }, [skipCount]);
+  // useEffect(() => {
+  //   // const periodInWeeks = Number(skipCount.split('-')[1]);
+  //   // const result = calcChangedSubscribeDeliveryDate(
+  //   //   initialDelvieryDate,
+  //   //   periodInWeeks,
+  //   // );
+  //   // // // console.log(initialDelvieryDate)
+  //   // // // console.log(periodInWeeks)
+  //   // setChangedDelvieryDate(result);
+  // }, [skipCount]);
+
+  // YYYY.MM.DD. -> YYYY-MM-DD
+  function formatDateToDash(dateStr) {
+    const cleanedDate = dateStr.replace(/\./g, '');
+
+    const year = cleanedDate.slice(0, 4);
+    const month = cleanedDate.slice(4, 6);
+    const day = cleanedDate.slice(6, 8);
+
+    return `${year}-${month}-${day}`;
+  }
 
   function addDays(dateString, days) {
     const formattedDateString = dateString.replace(/\./g, '-').slice(0, -1);
@@ -102,19 +121,23 @@ export default function SubscribeSkipPage({ subscribeId }) {
       return setActiveConfirmModal(false);
     }
 
-    const selectedSkipCount = Number(skipCount.split('-')[1]);
+    // const selectedSkipCount = Number(skipCount.split('-')[1]);
+    // const skipType =
+    // selectedSkipCount === 1 ? subscribeSkipType.WEEK : subscribeSkipType.ONCE; // 건너뛰기 타입
     const skipType =
-      selectedSkipCount === 1 ? subscribeSkipType.WEEK : subscribeSkipType.ONCE; // 건너뛰기 타입
+      isActive === 'week' ? subscribeSkipType.WEEK : subscribeSkipType.ONCE;
+
+    console.log(skipType, subscribeId);
 
     const body = {
-      id: subscribeInfo.info.subscribeId,
+      id: Number(subscribeId),
       type: skipType,
     };
 
     try {
       setIsLoading(true);
       setSubmitted(true);
-      const url = `/api/subscribes/${subscribeInfo.info.subscribeId}/skip/${skipType}`;
+      const url = `/api/subscribes/${subscribeId}/skip/week`;
       const res = await postObjData(url, body);
       // console.log(res);
       if (res.isDone) {
@@ -153,7 +176,7 @@ export default function SubscribeSkipPage({ subscribeId }) {
         ).formattedReceivingDate,
         7, // 7days * 2or4wks
       );
-      setSelectedDate(delayedDate);
+      setSelectedDate(formatDateToDash(delayedDate));
     } else if (item === 'once') {
       const delayedDate = addDays(
         formattedProductionAndReceivingDate(
@@ -161,11 +184,21 @@ export default function SubscribeSkipPage({ subscribeId }) {
         ).formattedReceivingDate,
         7 * curPlanWeeklyPaymentCycle, // 7days * 2or4wks
       );
-      setSelectedDate(delayedDate);
+      setSelectedDate(formatDateToDash(delayedDate));
     }
   };
 
+  //* 건너뛰기 버튼 클릭
+  const onSkipHandler = () => {
+    if (!isActive) {
+      return alert('미루기 항목을 선택해주세요.');
+    }
+
+    setActiveConfirmModal(true);
+  };
+
   console.log(selectedDate);
+  console.log('isActive___', isActive);
 
   return (
     <>
@@ -281,76 +314,68 @@ export default function SubscribeSkipPage({ subscribeId }) {
                   </div>
                 </div>
 
-                <span>
-                  <ConfigProvider
-                    theme={{
-                      token: {
-                        colorPrimary: '#ca1011',
-                      },
-                    }}
-                  >
-                    <DatePicker
-                      showTime={{
-                        format: 'HH:mm',
-                      }}
-                      format="YYYY-MM-DD HH:mm"
-                      // onChange={onInputChange}
-                      value={selectedDate}
-                      // disabledDate={disabledDate}
-                      // disabledTime={disabledDateTime}
-                      readOnly={true}
-                    />
-                  </ConfigProvider>
-                </span>
+                {selectedDate && (
+                  <>
+                    <div className={s.calendar_label}>수령 예정일</div>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DateCalendar
+                        value={dayjs(selectedDate)}
+                        onChange={(newValue) => setSelectedDate(newValue)}
+                        readOnly
+                        sx={{
+                          '& .Mui-selected': {
+                            backgroundColor: '#be1a21 !important', // 체크된 날짜의 배경색을 빨간색으로
+                          },
+                        }}
+                      />
+                    </LocalizationProvider>
+                  </>
+                )}
 
-                {/* <p className={s.d_day_text}>
-                  기존 발송 예정일은
-                  <span>
-                    {transformDate(initialDelvieryDate, '월일') || '정보없음'}
-                  </span>
-                  입니다
-                </p>
-                <p className={s.d_day_text2}>
-                  변경 발송 예정일은
-                  <span className={s.red_span}>
-                    {transformDate(changedDelvieryDate, '월일')}
-                  </span>
-                  입니다
-                </p> */}
+                {/* 1. 다음 배송일(nextDeliveryDate)이 있는 경우 : 배송미루기 탭으로 이동 가능
+                        -> 1) 정기구독 (다음 배송일 O, 다음 결제일 O)
+                              - 다음 결제일(nextPaymentDate)이 있는 경우 
+                              - 오늘과 다음 결제예정일 비교 ==> 5일 이내일 경우 구독 버튼 나타남 
+                        -> 2) 패키지 && 배송횟수 1 이상 (다음 배송일 O, 다음 결제일 X) */}
+                {/* 2. 다음 배송일(nextDeliveryDate)이 없는 경우,
+                       패키지이고, 남은 배송횟수 0
+                      -> 마이페이지 스와이퍼에서 아예 배송미루기 버튼 없어, 페이지 이동 불가  */}
 
-                {/* <div className={s.picture_box}>
-                  <div className={`${s.image} img-wrap`}>
-                    <Image
-                      priority={false}
-                      src={require('public/img/mypage/delivery_schedule.png')}
-                      objectFit="cover"
-                      layout="fill"
-                      alt="배송 안내 이미지"
-                    />
+                {subscribeInfo?.subscribeDto.nextPaymentDate ? (
+                  <div className={s.btn_box}>
+                    {/* 1. 다음 결제일(nextPaymentDate)이 있다면 */}
+                    {/* 1) 오늘과 다음 결제예정일 비교 ==> 5일 이내일 경우 '건너뛰기' 버튼 나타남 */}
+                    {isAvailableSubscribeSkipping(
+                      subscribeInfo?.subscribeDto.nextPaymentDate,
+                    ) ? (
+                      <button
+                        type={'button'}
+                        className={s.btn}
+                        onClick={onSkipHandler}
+                      >
+                        건너뛰기 적용하기
+                      </button>
+                    ) : (
+                      <span className={'pointColor'}>
+                        {/* 2) 오늘과 다음 결제예정일 비교 ==> 차이가 5일 초과일 경우 불가 */}
+                        건너뛰기는 다음 결제 5일 전부터 가능합니다.
+                      </span>
+                    )}
                   </div>
-                </div> */}
+                ) : (
+                  <div className={s.btn_box}>
+                    {/* 2. 다음 결제일(nextPaymentDate)이 없는 경우
+                        -> 패키지 && 배송횟수 1 이상 */}
 
-                {/* nextPaymentDate가 있다면! 조건 추가 */}
-                <div className={s.btn_box}>
-                  {/*  오늘과 다음 결제예정일 비교 ==> 5일 이내일 경우 구독 버튼 나타남 */}
-                  {isAvailableSubscribeSkipping(
-                    subscribeInfo?.subscribeDto.nextPaymentDate,
-                  ) ? (
                     <button
                       type={'button'}
                       className={s.btn}
-                      onClick={() => {
-                        setActiveConfirmModal(true);
-                      }}
+                      onClick={onSkipHandler}
                     >
                       건너뛰기 적용하기
                     </button>
-                  ) : (
-                    <span className={'pointColor'}>
-                      건너뛰기는 다음 결제 5일 전부터 가능합니다.
-                    </span>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             </section>
           </MypageWrapper>
@@ -361,17 +386,58 @@ export default function SubscribeSkipPage({ subscribeId }) {
 
       {activeConfirmModal && (
         <Modal_confirm
-          text={`${(() => {
-            const selectedIndex = inputIdList.indexOf(skipCount);
-            const skipMethodName = inputLabelList.filter(
-              (label, index) => index === selectedIndex,
-            )[0];
-            const skipWeeklyCount = inputIdList[selectedIndex].split('-')[1];
+          // text={`${(() => {
+          //   const selectedIndex = inputIdList.indexOf(skipCount);
+          //   // const skipMethodName = inputLabelList.filter(
+          //   //   (label, index) => index === selectedIndex,
+          //   // )[0];
+          //   const skipWeeklyCount = inputIdList[selectedIndex].split('-')[1];
+          //   const labelName = isActive === 'once' ? `1회 미루기` : '1주 미루기';
+          //   const skipMethodName =
+          //     isActive === 'once' ? `1회(${curPlanWeeklyPaymentCycle})` : '1주';
+          //   // return `건너뛰기는 되돌리기 불가능한 서비스입니다.\n정말 ${skipMethodName}(${skipWeeklyCount}주)를 적용하시겠습니까?`;
+          //   //             return `${labelName}를 선택하셨습니다.
+          //   // 구독 일정을 ${7 * curPlanWeeklyPaymentCycle}일 미뤄,
+          //   // ${selectedDate}
+          //   // 수령 예정입니다.
 
-            return `건너뛰기는 되돌리기 불가능한 서비스입니다.\n정말 ${skipMethodName}(${skipWeeklyCount}주)를 적용하시겠습니까?`;
-          })()}`}
+          //   // 이대로 변경하시겠습니까?`;
+
+          //   return (
+          //     <>
+          //       <div>건너뛰기는 되돌리기 불가능한 서비스입니다.</div>
+          //     </>
+          //   );
+          // })()}`}
+          title={
+            <>
+              <strong>
+                {isActive === 'once' ? `1회 미루기` : '1주 미루기'}
+              </strong>
+              를 선택하셨습니다.
+            </>
+          }
+          text={
+            <>
+              <p>
+                <br />
+                구독 일정을{' '}
+                {isActive === 'once'
+                  ? curPlanWeeklyPaymentCycle + '주'
+                  : '1주'}{' '}
+                미뤄,
+                <br />
+                <span style={{ color: '#BE1A21' }}>{selectedDate}</span>
+                <br />
+                수령 예정입니다.
+                <br />
+                이대로 변경하시겠습니까?
+              </p>
+            </>
+          }
           isConfirm={onSubmit}
           positionCenter
+          height={'200px'}
           option={{ wordBreak: true }}
         />
       )}

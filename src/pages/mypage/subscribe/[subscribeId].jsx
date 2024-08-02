@@ -136,7 +136,7 @@ export default function SubscribeInfoPage({ data }) {
               <div
                 className="btn-box"
                 style={{
-                  width: '100%',
+                  width: '80%',
                   display: 'flex',
                   backgroundColor: '#ca1011',
                   justifyContent: 'center',
@@ -144,7 +144,7 @@ export default function SubscribeInfoPage({ data }) {
                   height: '50px',
                   borderRadius: '5px',
                   cursor: 'pointer',
-                  marginTop: '2.6rem',
+                  margin: '2.6rem auto',
                   boxShadow: '0 0 1.25rem rgba(0, 0, 0, 0.1)',
                 }}
                 onClick={
