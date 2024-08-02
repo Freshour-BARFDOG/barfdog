@@ -76,27 +76,6 @@ import SurveyStep17 from '../../components/survey/step/SurveyStep17';
 
 // const svyData = new SurveyDataClass();
 
-// ! [기존] 단일견
-// const initialFormValues = {
-//   name: '', // 강아지이름 str
-//   gender: '', // 강아지 성별 str
-//   birth: '', // 강아지 생월 str // [YYYYMM]
-//   oldDog: false, // 노견 여부 boolean (checkbox type)
-//   dogSize: '', // 강아지 체급 str
-//   dogType: '', // 강아지 종 str
-//   weight: '', // 강아지 몸무게 str // 몸무게 소수점 아래 1자리
-//   neutralization: null, // 중성화여부 Boolean
-//   activityLevel: dogActivityLevelType.NORMAL, // 활동량 레벨 str
-//   walkingCountPerWeek: '', // 주당 산책 횟수 string
-//   walkingTimePerOneTime: '', // 한 번 산책할 때 산책 시간 string
-//   dogStatus: '', // 강아지 건강/임신 등의 상태 str
-//   snackCountLevel: '', //  간식먹는 정도 str
-//   inedibleFood: dogInedibleFoodType.NONE, // 못 먹는 음식 str => get API 리스트 // 빈값('')일 경우, '있어요'선택됨)
-//   inedibleFoodEtc: '', // 못 먹는 음식 > '기타' 일경우
-//   recommendRecipeId: null, // 특별히 챙겨주고 싶은 부분에 해당하는 Recipe => get API 리스트
-//   caution: dogCautionType.NONE, // 기타 특이사항 // 빈값('')일 경우, '있어요'선택됨)
-// };
-
 // ! [수정] 다견
 // const initialFormValues = [];
 
@@ -177,8 +156,6 @@ export default function Survey() {
 
   // let footerDiv = footerRef.current;
 
-  // // console.log(formValues);
-
   // ! [수정] 로그인 안해도 설문조사 가능하게
   // useEffect(() => {
   //   // if (!userId) return;
@@ -225,7 +202,6 @@ export default function Survey() {
       swiperIndex: 2,
       key: 'gender',
     },
-    // { swiperIndex: 3, key: 'neutralization' },
     { swiperIndex: 4, key: 'dogSize' },
     { swiperIndex: 4, key: 'dogType' },
     { swiperIndex: 5, key: 'birth' },
@@ -242,9 +218,6 @@ export default function Survey() {
   const onInputChangeHandler = (e, index, formValueKey) => {
     const input = e.currentTarget;
     const { id, value } = input;
-    // console.log('input', input);
-    // console.log('id', id);
-    // console.log('value', value);
 
     const filteredType = input.dataset.inputType;
     let filteredValue = value;
@@ -303,8 +276,6 @@ export default function Survey() {
 
     //*** 값 입력할 때마다 에러메세지 ***/
 
-    // console.log('value!!!', value);
-
     // 이름 중복 확인
     const isDuplicateName = formValues.some(
       (item, idx) => idx !== index && item.name === value,
@@ -336,59 +307,7 @@ export default function Survey() {
       });
       setIsActiveNextBtn(true);
     }
-
-    // const input = e.currentTarget;
-    // const { id, value } = input;
-    // const filteredType = input.dataset.inputType;
-    // let filteredValue = value;
-    // if (filteredType) {
-    //   filteredValue = filter_emptyValue(value);
-    //   if (filteredType.indexOf('number') >= 0) {
-    //     filteredValue = filter_onlyNumber(filteredValue);
-    //   }
-    //   if (filteredType.indexOf('ints') >= 0) {
-    //     filteredValue = filter_extraIntegerNumberZero(filteredValue);
-    //     const thisFilteredType = filteredType
-    //       .split(',')
-    //       .filter((type) => type.indexOf('ints') >= 0)[0];
-    //     const intNum = Number(thisFilteredType.split('-')[1]);
-    //     filteredValue = intNum
-    //       ? filter_ints(filteredValue, intNum)
-    //       : filteredValue;
-    //   }
-    //   if (filteredType.indexOf('demicals') >= 0) {
-    //     filteredValue = filter_extraIntegerNumberZero(filteredValue);
-    //     const thisFilteredType = filteredType
-    //       .split(',')
-    //       .filter((type) => type.indexOf('demicals') >= 0)[0];
-    //     const demicalNum = Number(thisFilteredType.split('-')[1]);
-    //     filteredValue = demicalNum
-    //       ? filter_demicals(filteredValue, demicalNum)
-    //       : filteredValue;
-    //   }
-    // }
-    // setFormValues((prevState) => ({
-    //   ...prevState,
-    //   [id]: filteredValue,
-    // }));
   };
-
-  // const handleSwiperInit = (swiper) => {
-  //   const progressBar = progressBarRef.current; // Progressbar의 Ref를 가져옴
-  //   if (progressBar) {
-  //     const progressBarElement = progressBar.swiper.el.querySelector(
-  //       '.swiper-pagination-progressbar',
-  //     ); // Progressbar의 DOM 요소를 찾음
-  //     if (progressBarElement) {
-  //       // 원하는 위치에 삽입
-  //       // 예시: body 요소의 첫 번째 자식으로 삽입
-  //       document.body.insertBefore(
-  //         progressBarElement,
-  //         document.body.firstChild,
-  //       );
-  //     }
-  //   }
-  // };
 
   const surveySwiperSettings = {
     className: StyleSwiper.swiperSurvey,
@@ -504,7 +423,6 @@ export default function Survey() {
       validationItems && setIsActiveNextBtn(false);
 
       validationItems.forEach((validationItem) => {
-        // console.log('dog[validationItem.key]>>>', dog[validationItem.key]);
         // 이름이 중복되는 경우
         if (idx === 1 && nameSet.has(dog.name)) {
           console.log('1', nameSet, nameSet.has(dog.name));
@@ -559,42 +477,6 @@ export default function Survey() {
     el.dataset.step = curSurveyStep;
 
     ///////////////////////////////
-
-    // const bullets = Array.from(el.children);
-
-    // siblings(bullets[idx]).forEach((sib, index) => {
-    //   if (index === idx) {
-    //     //-- 작동안됨 --
-    //     // bullets[idx].classList.add(
-    //     //   StyleSwiper['swiper-pagination-bullet-active'],
-    //     // );
-    //     // bullets[idx].style.backgroundColor = 'red';
-    //     sib.classList.add(StyleSwiper['swiper-pagination-bullet-active']);
-    //     sib.style.backgroundColor = '#BE1A21';
-    //     // sib.style.color = 'white';
-    //     // sib.style.display = 'flex';
-    //     // sib.style.justifyContent = 'center';
-    //     // sib.style.alignContent = 'center';
-    //     // sib.style.textAlign = 'center';
-    //     // sib.style.fontSize = '0.8rem';
-    //     // sib.style.width = '1rem';
-    //     // sib.style.height = '1rem';
-    //     // sib.style.margin = '0.16rem 0.26rem';
-    //   } else {
-    //     sib.classList.remove(StyleSwiper['swiper-pagination-bullet-active']);
-    //     sib.style.backgroundColor = 'white';
-    //     sib.style.color = '#BE1A21';
-    //   }
-    // });
-    // bullets.forEach((bullet, index) => {
-    //   if (index !== idx) {
-    //     bullet.classList.remove(StyleSwiper['swiper-pagination-bullet-active']);
-    //     bullet.style.backgroundColor = 'red'; // 현재 스텝이 아닌 경우 빨간색으로 변경
-    //   } else {
-    //     bullet.classList.add(StyleSwiper['swiper-pagination-bullet-active']);
-    //     bullet.style.backgroundColor = 'white'; // 현재 스텝인 경우 하얀색으로 변경
-    //   }
-    // });
 
     setIsLoading(() => ({ nextPage: true }));
     setTimeout(
@@ -820,29 +702,9 @@ export default function Survey() {
               },
             );
           const idsString = surveyReportsIds.join(',');
-          // const slicedReportApiLink =
-          //   res.data.data._embedded.createDogsResponseDtoList[0]._links.query_surveyReport.href.split(
-          //     '/',
-          //   );
-          // const linkLength = slicedReportApiLink.length;
-          // const surveyReportsId = slicedReportApiLink[linkLength - 1];
-
-          // console.log('surveyReportsId', surveyReportsIds);
-          // svyData.deleteStoredSurveyData(userId);
-
-          // await router.push(`/survey/statistics/${surveyReportsId}`);
           await router.push(`/survey/statistics?id=${idsString}`);
 
           setSubmitState(true);
-          //! 우선 주석처리 [dogInfoResults]
-          // const dogInfoResults =
-          //   res.data.data._embedded.createDogsResponseDtoList;
-          // setDogInfoResult(dogInfoResults);
-          // dispatch(
-          //   surveyDogAction.saveSurveyDog({ surveyDog: dogInfoResults }),
-          // );
-          // console.log('dogInfoResults', dogInfoResults);
-
           //! [이전]
           //   const slicedReportApiLink =
           //     res.data.data._links.query_surveyReport.href.split('/');
@@ -900,10 +762,10 @@ export default function Survey() {
         onSubmitHandler={onSubmitHandler}
       >
         <Wrapper
-          fullWidth={true}
-          bgColor="#fffafa"
-          minHeight="90vh"
-          alignItems="flex-start"
+        // fullWidth={true}
+        // bgColor="#fffafa"
+        // minHeight="90vh"
+        // alignItems="flex-start"
         >
           <div className={s['survey-page']} ref={surveyPageRef}>
             <SurveyActiveStep curStep={curStep} isValidPage={isValidPage} />
@@ -938,7 +800,7 @@ export default function Survey() {
                 />
               </SwiperSlide>
 
-              {/* 3. 중성화여부 */}
+              {/* 3. 중성화 여부 */}
               <SwiperSlide>
                 <SurveyStep3
                   surveyPageRef={surveyPageRef}

@@ -38,59 +38,23 @@ export default function SurveyStep5({
   surveyPageRef,
   errorInfo,
   setIsActiveNextBtn,
+  mode,
 }) {
   const [showBirthOptionsIndex, setShowBirthOptionsIndex] = useState([]);
-  // const [activeIndexList, setActiveIndexList] = useState([]);
-
-  // const birthObj = {
-  //   yyyy: formValues.birth?.slice(0, 4),
-  //   mm: formValues.birth?.slice(4, 6),
-  // };
-
-  // const [birth, setBirth] = useState(birthObj);
-
-  // useEffect(() => {
-  //   const birthObj = getSurveyBirthObject(birth);
-  //   const hasValue = birthObj.yyyymm.length;
-  //   if (hasValue) {
-  //     const birthString = birthObj.yyyymm;
-
-  //     // 내용 업데이트
-  //     setFormValues((prevFormValues) => {
-  //       const newFormValues = prevFormValues.map((item, idx) => {
-  //         if (idx === dogInfoIndex) {
-  //           return {
-  //             ...item,
-  //             birth: birthString,
-  //           };
-  //         }
-  //         return item;
-  //       });
-
-  //       return newFormValues;
-  //     });
-
-  //     // console.log(birthObj);
-  //     // setFormValues((prevState) => ({
-  //     //   ...prevState,
-  //     //   birth: birthString,
-  //     // }));
-  //   }
-  // }, [birth]);
-
   const yearOptions = surveyYearOptionList(50, true).year;
   const monthOptions = surveyYearOptionList(null, true).month;
 
   // UI '짤림 현상'해결
   useEffect(() => {
-    const swiperWrap = surveyPageRef.current;
-    const slideWithDependencyElem = swiperWrap.querySelector(
+    const swiperWrap = surveyPageRef?.current;
+    const slideWithDependencyElem = swiperWrap?.querySelector(
       '.swiper-slide-active',
     );
-    const activeSlideHeight = slideWithDependencyElem.offsetHeight;
-    const targetSwiperElem = swiperWrap.querySelector('.swiper-wrapper');
-    targetSwiperElem.style.height = rem(activeSlideHeight);
-    targetSwiperElem.style.minHeight = rem(800);
+    const activeSlideHeight = slideWithDependencyElem?.offsetHeight;
+    const targetSwiperElem = swiperWrap?.querySelector('.swiper-wrapper');
+    if (targetSwiperElem) {
+      targetSwiperElem.style.height = rem(activeSlideHeight);
+    }
   }, [formValues]);
 
   const showBirthOptionsHandler = (e, index) => {
@@ -116,7 +80,7 @@ export default function SurveyStep5({
     });
   };
 
-  // console.log('showBirthOptionsIndex>>', showBirthOptionsIndex);
+  console.log(formValues);
 
   return (
     <section id="surveyPage" className={s.step4Page}>
@@ -124,7 +88,11 @@ export default function SurveyStep5({
         <p className={s.error_message_text}>{errorInfo.errorMessage}</p>
       )}
       {formValues?.map((dog, index) => (
-        <div key={index} className={s.dogBirth_container}>
+        <div
+          key={index}
+          className={s.dogBirth_container}
+          style={{ height: mode === 'update' && '280px' }}
+        >
           <p className={s.input_title}>{dog.name} (이)의 생일은 언제인가요 ?</p>
           <div className={s.input_dogBirth_box}>
             <SurveyBirthdayInput
@@ -135,8 +103,7 @@ export default function SurveyStep5({
               dogInfoIndex={index}
               dogInfo={dog}
               setFormValues={setFormValues}
-              value={dog.birth || ''}
-              // onChange={(e) => onInputChangeHandler(e, index)}
+              formValue={dog.birth || ''}
               setIsActiveNextBtn={setIsActiveNextBtn}
             />
             <button
@@ -165,7 +132,6 @@ export default function SurveyStep5({
                   <SurveyYearMonth
                     id={'mm'}
                     options={monthOptions}
-                    // value={dog.birth?.length >= 6 ? dog.birth?.slice(4, 6) : ''}
                     value={
                       dog.birth?.slice(0, -4) !== '0000'
                         ? dog.birth?.slice(4, 6)
@@ -179,19 +145,6 @@ export default function SurveyStep5({
                     setIsActiveNextBtn={setIsActiveNextBtn}
                   />
                 </li>
-                {/* <li>
-                <SurveyCustomSelectWithCustomOptions
-                id={'yyyy'}
-                options={yearOptions}
-                value={dog.birth?.length >= 4 && dog.birth.slice(0, 4)}
-                // setValues={setBirth}
-                setFormValues={setFormValues}
-                unit={'년'}
-                width={120}
-                placeholder={'yyyy'}
-                dogInfoIndex={index}
-                />
-              </li> */}
               </ul>
             )}
 
@@ -213,20 +166,23 @@ export default function SurveyStep5({
           )}
         </div>
       ))}
-      <div className={s.birth_text_wrapper}>
-        <div className={s.birth_text}>
-          바프독 생식은 생후 90일 이상의 강아지들에게 권장하고 있습니다. 보다 더
-          자세한 상담을 원하시면{' '}
-          <a
-            href="https://36o2x.channel.io/home"
-            rel="noreferrer"
-            target="_blank"
-          >
-            문의하기
-          </a>
-          를 통해 상담 받아보세요.
+
+      {mode !== 'update' && (
+        <div className={s.birth_text_wrapper}>
+          <div className={s.birth_text}>
+            바프독 생식은 생후 90일 이상의 강아지들에게 권장하고 있습니다. 보다
+            더 자세한 상담을 원하시면{' '}
+            <a
+              href="https://36o2x.channel.io/home"
+              rel="noreferrer"
+              target="_blank"
+            >
+              문의하기
+            </a>
+            를 통해 상담 받아보세요.
+          </div>
         </div>
-      </div>
+      )}
     </section>
   );
 }

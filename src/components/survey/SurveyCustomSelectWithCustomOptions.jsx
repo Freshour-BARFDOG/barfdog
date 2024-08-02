@@ -22,11 +22,15 @@ export const SurveyCustomSelectWithCustomOptions = ({
   ...props
 }) => {
   // const initialSelectedOption = value || options[0].value;
-  const initialSelectedOption = value[id] || options[0]?.value || '';
+  const initialSelectedOption = value || options[0]?.value || '';
+
+  console.log(initialSelectedOption);
 
   const [selectedOption, setSelectedOption] = useState(initialSelectedOption);
   const [isActive, setIsActive] = useState(false);
-  const [selectedLabel, setSelectedLabel] = useState('');
+  const [selectedLabel, setSelectedLabel] = useState(initialSelectedOption);
+
+  console.log(selectedOption, selectedLabel);
 
   const optionBoxRef = useRef(null);
   const inputRef = useRef(null);
@@ -35,6 +39,13 @@ export const SurveyCustomSelectWithCustomOptions = ({
     // 초기값할당
     if (initialSelectedOption) {
       setSelectedOption(initialSelectedOption);
+
+      const foundOption = options.find(
+        (option) => option.value === selectedOption,
+      );
+      if (foundOption) {
+        setSelectedLabel(foundOption.label);
+      }
     }
 
     let initValue = initialSelectedOption;
@@ -210,7 +221,7 @@ export const SurveyCustomSelectWithCustomOptions = ({
           ref={inputRef}
           autoComplete={'off'}
         />
-        {/* <em className={s.unit}>{unit}</em> */}
+        <em className={s.unit}>{unit}</em>
         <ScrollContainer
           height={'200'}
           scrollBarWidth={'0'}

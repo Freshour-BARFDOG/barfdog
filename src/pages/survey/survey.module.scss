@@ -5,6 +5,10 @@
 .survey-page {
   margin-bottom: rem(150);
 
+  .input_title {
+    font-size: rem(20);
+  }
+
   .dog_title {
     margin-bottom: rem(40);
     margin-top: rem(9);
@@ -12,9 +16,10 @@
   }
 
   .dog_title_update {
-    margin: 0 0 rem(40) rem(20);
+    // margin: 0 0 rem(40) rem(20);
+    margin-bottom: rem(30);
     @include char(t24);
-    // text-align: center;
+    text-align: center;
   }
 
   // .step1Page {
@@ -1311,6 +1316,32 @@
   }
 }
 
-.empty_box {
+////////////////////////////////////////////////////////////////
+//*** 설문조사 수정
+.empty_box_big {
+  height: rem(80);
+}
+.empty_box_middle {
   height: rem(40);
+}
+.empty_box_small {
+  height: rem(20);
+}
+
+.submit_btn {
+  background-color: #eeeeee;
+  height: rem(56);
+  width: rem(600);
+  color: #fff;
+  border-radius: rem(30) rem(30) 0 0;
+  position: fixed;
+  bottom: rem(88);
+  z-index: 100;
+  font-size: rem(24);
+  font-weight: bold;
+}
+
+.submit_btn.activated {
+  background-color: #be1a21;
+  transition: 0.3s all;
 }

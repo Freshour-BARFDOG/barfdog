@@ -7,9 +7,6 @@ import {
   FullScreenLoading,
   FullScreenRunningDog,
 } from '/src/components/atoms/FullScreenLoading';
-import SurveyBundleStep1 from '/src/components/survey/SurveyBundleStep1';
-import SurveyBundleStep2 from '/src/components/survey/SurveyBundleStep2';
-import SurveyBundleStep3 from '/src/components/survey/SurveyBundleStep3';
 import filter_emptyValue from '/util/func/filter_emptyValue';
 import filter_onlyNumber from '/util/func/filter_onlyNumber';
 import filter_extraIntegerNumberZero from '/util/func/filter_extraIntegerNumberZero';
@@ -27,14 +24,26 @@ import { validate } from '/util/func/validation/validation_survey';
 import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
 import Spinner from '/src/components/atoms/Spinner';
 import Modal_confirm from '/src/components/modal/Modal_confirm';
-
 import SurveyStep1 from '/src/components/survey/step/SurveyStep1';
 import SurveyStep2 from '/src/components/survey/step/SurveyStep2';
 import SurveyStep3 from '/src/components/survey/step/SurveyStep3';
 import SurveyStep4 from '/src/components/survey/step/SurveyStep4';
+import SurveyStep5 from '/src/components/survey/step/SurveyStep5';
+import SurveyStep6 from '/src/components/survey/step/SurveyStep6';
+import SurveyStep7 from '/src/components/survey/step/SurveyStep7';
+import SurveyStep8 from '/src/components/survey/step/SurveyStep8';
+import SurveyStep9 from '/src/components/survey/step/SurveyStep9';
+import SurveyStep10 from '/src/components/survey/step/SurveyStep10';
+import SurveyStep11 from '/src/components/survey/step/SurveyStep11';
+import SurveyStep12 from '/src/components/survey/step/SurveyStep12';
+import SurveyStep13 from '/src/components/survey/step/SurveyStep13';
+import SurveyStep14 from '/src/components/survey/step/SurveyStep14';
+import SurveyStep15 from '/src/components/survey/step/SurveyStep15';
+import SurveyStep16 from '/src/components/survey/step/SurveyStep16';
+import SurveyStep17 from '/src/components/survey/step/SurveyStep17';
+import Image from 'next/image';
 
 export default function UpdateSurveyPage({ data }) {
-  console.log(data);
   // ! [기존]
   // const initialFormValues = {
   //   name: data.dogDto.name, // 강아지이름 str
@@ -95,6 +104,7 @@ export default function UpdateSurveyPage({ data }) {
   const loadingDuration = 1200; // ms
   const mct = useModalContext();
   const hasAlert = mct.hasAlert;
+  const router = useRouter();
   const [formValues, setFormValues] = useState(initialFormValues);
   const [isLoading, setIsLoading] = useState({});
   const [modalMessage, setModalMessage] = useState('');
@@ -102,6 +112,7 @@ export default function UpdateSurveyPage({ data }) {
   const [submitState, setSubmitState] = useState(null);
   const [isChangedOneMealRecommendGram, setIsChangedOneMealRecommendGram] =
     useState(false);
+  const [isActiveNextBtn, setIsActiveNextBtn] = useState(false);
 
   // 유효성 검사
   const [errorInfo, setErrorInfo] = useState({
@@ -123,11 +134,39 @@ export default function UpdateSurveyPage({ data }) {
     );
   }, []);
 
-  const onInputChangeHandler = (e) => {
+  const validationIndexWithKey = [
+    { swiperIndex: 1, key: 'name' },
+    {
+      swiperIndex: 2,
+      key: 'gender',
+    },
+    { swiperIndex: 4, key: 'dogSize' },
+    { swiperIndex: 4, key: 'dogType' },
+    { swiperIndex: 5, key: 'birth' },
+    { swiperIndex: 6, key: 'weight' },
+    { swiperIndex: 9, key: 'walkingCountPerWeek' },
+    { swiperIndex: 9, key: 'walkingTimePerOneTime' },
+    { swiperIndex: 12, key: 'supplement' },
+    { swiperIndex: 13, key: 'currentMeal' },
+    { swiperIndex: 14, key: 'inedibleFood' },
+    { swiperIndex: 17, key: 'priorityConcerns' },
+  ];
+
+  //*** 값 입력 ***//
+  const onInputChangeHandler = (e, index, formValueKey) => {
     const input = e.currentTarget;
     const { id, value } = input;
+
     const filteredType = input.dataset.inputType;
     let filteredValue = value;
+
+    // string -> boolean
+    if (filteredValue === 'true') {
+      filteredValue = true;
+    } else if (filteredValue === 'false') {
+      filteredValue = false;
+    }
+
     if (filteredType) {
       filteredValue = filter_emptyValue(value);
       if (filteredType.indexOf('number') >= 0) {
@@ -155,10 +194,57 @@ export default function UpdateSurveyPage({ data }) {
       }
     }
 
-    setFormValues((prevState) => ({
-      ...prevState,
-      [id]: filteredValue,
-    }));
+    if (Array.isArray(formValues)) {
+      const newFormValues = formValues.map((item, idx) => {
+        if (idx === index) {
+          return {
+            ...item,
+            [id]:
+              formValueKey === 'recommendRecipeId'
+                ? Number(filteredValue)
+                : filteredValue,
+          };
+        }
+        return item;
+      });
+      setFormValues(newFormValues);
+    }
+
+    //////////////////////////////
+
+    //*** 값 입력할 때마다 에러메세지 ***/
+
+    // 이름 중복 확인
+    const isDuplicateName = formValues.some(
+      (item, idx) => idx !== index && item.name === value,
+    );
+
+    // 중복된 이름이 있으면 에러 메시지 설정
+    if (isDuplicateName) {
+      setErrorInfo({
+        errorIndex: index,
+        errorMessage: '이름이 중복됩니다.',
+      });
+      setIsActiveNextBtn(false);
+    } else if (!value) {
+      setErrorInfo({
+        errorIndex: index,
+        errorMessage: '필수 항목입니다.',
+      });
+      setIsActiveNextBtn(false);
+    } else if (value === 'YES') {
+      setErrorInfo({
+        errorIndex: index,
+        errorMessage: '필수 항목입니다.',
+      });
+      setIsActiveNextBtn(false);
+    } else {
+      setErrorInfo({
+        errorIndex: null,
+        errorMessage: '',
+      });
+      setIsActiveNextBtn(true);
+    }
   };
 
   const onStartValidate = () => {
@@ -186,6 +272,8 @@ export default function UpdateSurveyPage({ data }) {
       return setActiveConfirmModal(false);
     }
 
+    console.log(formValues);
+
     try {
       setIsLoading((prevState) => ({
         ...prevState,
@@ -193,7 +281,7 @@ export default function UpdateSurveyPage({ data }) {
       }));
       let modalMessage;
       const apiUrl = `/api/dogs/${data.dogIdx}`;
-      const res = await putObjData(apiUrl, formValues);
+      const res = await putObjData(apiUrl, formValues[0]);
       // console.log(res);
       const resData = res.data.data;
 
@@ -264,7 +352,9 @@ export default function UpdateSurveyPage({ data }) {
     return <FullScreenLoading opacity={0.5} />;
   }
 
-  console.log(formValues);
+  const onPrevPage = () => {
+    router.push('/mypage');
+  };
 
   return (
     <>
@@ -273,7 +363,182 @@ export default function UpdateSurveyPage({ data }) {
         <Wrapper>
           <MypageWrapper>
             <div className={s['survey-page']}>
+              <header>
+                <div className={s.prev_btn} style={{ cursor: 'pointer' }}>
+                  <Image
+                    src={'/img/order/left_arrow.svg'}
+                    alt="left_arrow"
+                    width={24}
+                    height={24}
+                    onClick={onPrevPage}
+                  />
+                </div>
+              </header>
               <div className={s.dog_title_update}>반려견 정보</div>
+
+              {/* 1. 견명 */}
+              <SurveyStep1
+                setErrorInfo={setErrorInfo}
+                errorInfo={errorInfo}
+                formValues={formValues}
+                setFormValues={setFormValues}
+                onInputChangeHandler={onInputChangeHandler}
+                setIsActiveNextBtn={setIsActiveNextBtn}
+                mode={'update'}
+              />
+              <div className={s.empty_box_big}></div>
+
+              {/* 2. 성별 */}
+              <SurveyStep2
+                errorInfo={errorInfo}
+                formValues={formValues}
+                setFormValues={setFormValues}
+                onInputChangeHandler={onInputChangeHandler}
+              />
+              <div className={s.empty_box_middle}></div>
+
+              {/* 3. 중성화 여부 */}
+              <SurveyStep3
+                errorInfo={errorInfo}
+                formValues={formValues}
+                setFormValues={setFormValues}
+                onInputChangeHandler={onInputChangeHandler}
+              />
+              <div className={s.empty_box_middle}></div>
+
+              {/* 4. 사이즈, 견종  */}
+              <SurveyStep4
+                errorInfo={errorInfo}
+                formValues={formValues}
+                setFormValues={setFormValues}
+                setIsActiveNextBtn={setIsActiveNextBtn}
+                onInputChangeHandler={onInputChangeHandler}
+                mode={'update'}
+              />
+
+              {/* 5. 생일 */}
+              <SurveyStep5
+                errorInfo={errorInfo}
+                formValues={formValues}
+                setFormValues={setFormValues}
+                onInputChangeHandler={onInputChangeHandler}
+                setIsActiveNextBtn={setIsActiveNextBtn}
+                mode={'update'}
+              />
+              <div className={s.empty_box_big}></div>
+
+              {/* 6. 몸무게 */}
+              <SurveyStep6
+                errorInfo={errorInfo}
+                formValues={formValues}
+                setFormValues={setFormValues}
+                onInputChangeHandler={onInputChangeHandler}
+              />
+
+              {/* 7. 상태 */}
+              <SurveyStep7
+                formValues={formValues}
+                setFormValues={setFormValues}
+                setIsActiveNextBtn={setIsActiveNextBtn}
+                onInputChangeHandler={onInputChangeHandler}
+              />
+              <div className={s.empty_box_big}></div>
+
+              {/* 8. 활동량  */}
+              <SurveyStep8
+                formValues={formValues}
+                setFormValues={setFormValues}
+                onInputChangeHandler={onInputChangeHandler}
+              />
+              <div className={s.empty_box_big}></div>
+
+              {/* 9. 산책량  */}
+              <SurveyStep9
+                errorInfo={errorInfo}
+                formValues={formValues}
+                setFormValues={setFormValues}
+                onInputChangeHandler={onInputChangeHandler}
+                setIsActiveNextBtn={setIsActiveNextBtn}
+                mode={'update'}
+              />
+              {/* <div className={s.empty_box_big}></div> */}
+
+              {/* 10. 간식량 */}
+              <SurveyStep10
+                formValues={formValues}
+                setFormValues={setFormValues}
+                onInputChangeHandler={onInputChangeHandler}
+              />
+              <div className={s.empty_box_big}></div>
+
+              {/* 11. 음수량   */}
+              <SurveyStep11
+                formValues={formValues}
+                setFormValues={setFormValues}
+                onInputChangeHandler={onInputChangeHandler}
+              />
+              <div className={s.empty_box_big}></div>
+
+              {/* 12. 영양제  */}
+              <SurveyStep12
+                errorInfo={errorInfo}
+                formValues={formValues}
+                setFormValues={setFormValues}
+                onInputChangeHandler={onInputChangeHandler}
+                setIsActiveNextBtn={setIsActiveNextBtn}
+                mode={'update'}
+              />
+              <div className={s.empty_box_big}></div>
+
+              {/* 13. 현재 식사  */}
+              <SurveyStep13
+                errorInfo={errorInfo}
+                formValues={formValues}
+                setFormValues={setFormValues}
+                setIsActiveNextBtn={setIsActiveNextBtn}
+                onInputChangeHandler={onInputChangeHandler}
+              />
+              <div className={s.empty_box_big}></div>
+
+              {/* 14. 못먹는 재료 */}
+              <SurveyStep14
+                formValues={formValues}
+                setFormValues={setFormValues}
+                setIsActiveNextBtn={setIsActiveNextBtn}
+                onInputChangeHandler={onInputChangeHandler}
+                mode={'update'}
+              />
+              <div className={s.empty_box_big}></div>
+
+              {/* 15. 건강적 특이사항, 질병   */}
+              <SurveyStep15
+                formValues={formValues}
+                setFormValues={setFormValues}
+                setIsActiveNextBtn={setIsActiveNextBtn}
+                onInputChangeHandler={onInputChangeHandler}
+                mode={'update'}
+              />
+              <div className={s.empty_box_big}></div>
+
+              {/* 16. 생식 처음*/}
+              <SurveyStep16
+                formValues={formValues}
+                setFormValues={setFormValues}
+                setIsActiveNextBtn={setIsActiveNextBtn}
+                onInputChangeHandler={onInputChangeHandler}
+              />
+              <div className={s.empty_box_big}></div>
+
+              {/* 17. 특별히 챙겨주고 싶은 것  */}
+              <SurveyStep17
+                errorInfo={errorInfo}
+                formValues={formValues}
+                setFormValues={setFormValues}
+                setIsActiveNextBtn={setIsActiveNextBtn}
+                onInputChangeHandler={onInputChangeHandler}
+              />
+
+              {/* ! [삭제예정] */}
               {/* <SurveyBundleStep1
                 formValues={formValues}
                 setFormValues={setFormValues}
@@ -289,32 +554,13 @@ export default function UpdateSurveyPage({ data }) {
                 setFormValues={setFormValues}
                 onInputChangeHandler={onInputChangeHandler}
               /> */}
-              <SurveyStep1
-                setErrorInfo={setErrorInfo}
-                errorInfo={errorInfo}
-                formValues={formValues}
-                setFormValues={setFormValues}
-                mode={'update'}
-              />
-              <div className={s.empty_box}></div>
-              <SurveyStep2
-                setErrorInfo={setErrorInfo}
-                errorInfo={errorInfo}
-                formValues={formValues}
-                setFormValues={setFormValues}
-                mode={'update'}
-              />
-              {/* <div className={s.empty_box}></div> */}
-              <SurveyStep3
-                setErrorInfo={setErrorInfo}
-                errorInfo={errorInfo}
-                formValues={formValues}
-                setFormValues={setFormValues}
-                mode={'update'}
-              />
+
               <div className={`${s['btn-section']} ${s['in-mypage']}`}>
                 <button
-                  className={s.submit}
+                  className={`${isActiveNextBtn ? s.activated : ''} ${
+                    s.submit_btn
+                  }`}
+                  disabled={!isActiveNextBtn}
                   type={'button'}
                   onClick={onStartValidate}
                 >

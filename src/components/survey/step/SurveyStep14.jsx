@@ -11,7 +11,7 @@ export default function SurveyStep14({
   setFormValues,
   onInputChangeHandler,
   surveyPageRef,
-  errorInfo,
+  mode,
   setIsActiveNextBtn,
 }) {
   let inedibleFoodIdList = [
@@ -52,13 +52,15 @@ export default function SurveyStep14({
 
   // UI '짤림 현상'해결
   useEffect(() => {
-    const swiperWrap = surveyPageRef.current;
-    const slideWithDependencyElem = swiperWrap.querySelector(
+    const swiperWrap = surveyPageRef?.current;
+    const slideWithDependencyElem = swiperWrap?.querySelector(
       '.swiper-slide-active',
     );
-    const activeSlideHeight = slideWithDependencyElem.offsetHeight;
-    const targetSwiperElem = swiperWrap.querySelector('.swiper-wrapper');
-    targetSwiperElem.style.height = rem(activeSlideHeight);
+    const activeSlideHeight = slideWithDependencyElem?.offsetHeight;
+    const targetSwiperElem = swiperWrap?.querySelector('.swiper-wrapper');
+    if (targetSwiperElem) {
+      targetSwiperElem.style.height = rem(activeSlideHeight);
+    }
   }, [formValues]);
 
   return (
@@ -110,16 +112,20 @@ export default function SurveyStep14({
           )}
         </div>
       ))}
-      <div className={s.inedibleFood_text_box}>
-        <p className={s.inedibleFood_text}>
-          💡 바프독의 모든 생식 레시피에는 영양분이 가득한 <br />
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 육고기, 뼈, 내장, 채소 등이 들어갑니다.
-          <br />
-          <br />⚠ 육고기와 뼈의 경우 알러지 분류에 들어가지만 <br />
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 내장의 경우 알러지 분류에 들어가지
-          않으니 참고해주세요.
-        </p>
-      </div>
+
+      {mode !== 'update' && (
+        <div className={s.inedibleFood_text_box}>
+          <p className={s.inedibleFood_text}>
+            💡 바프독의 모든 생식 레시피에는 영양분이 가득한 <br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 육고기, 뼈, 내장, 채소 등이
+            들어갑니다.
+            <br />
+            <br />⚠ 육고기와 뼈의 경우 알러지 분류에 들어가지만 <br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 내장의 경우 알러지 분류에 들어가지
+            않으니 참고해주세요.
+          </p>
+        </div>
+      )}
     </section>
   );
 }
