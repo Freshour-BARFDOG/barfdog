@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import s from '/src/pages/survey/survey.module.scss';
+import u from '/src/pages/mypage/dogs/[dogIdx]/updateSurvey.module.scss';
 import InputRadio from '/src/components/survey/InputRadio';
 import { CustomSelectWithCustomOptions } from './CustomSelectWithCustomOptions';
 import { DogTypeCustomSelectWithCustomOptions } from './DogTypeCustomSelectWithCustomOptions';
@@ -9,6 +10,7 @@ import { dogBreedType } from '/store/TYPE/dogBreedType.js';
 import { dogGenderType } from '/store/TYPE/dogGenderType';
 import { dogSizeType } from '/store/TYPE/dogSizeType';
 import yearOptionList from '/util/func/yearOptionList';
+import SurveyCustomRadioTrueOrFalse from '/src/components/survey/SurveyCustomRadioTrueOrFalse';
 
 const getSurveyBirthObject = (yyyymmObj) => {
   const result = {
@@ -65,7 +67,7 @@ export default function SurveyBundleStep1({
     <section id="surveyPage" className={s.step1Page}>
       <div className={s['input-row']}>
         <label htmlFor={'name'}>
-          <p className={s.input_title}>반려견 이름</p>
+          <p className={u.input_title}>반려견 이름</p>
           <input
             id={'name'}
             className={`${s.input_underLine} ${s['focus-underline']}`}
@@ -78,7 +80,7 @@ export default function SurveyBundleStep1({
         </label>
       </div>
       <div className={s['input-row']}>
-        <div className={s.input_title}>반려견 성별</div>
+        <div className={u.input_title}>반려견 성별</div>
         <InputRadio
           formValueKey={'gender'}
           formValues={formValues}
@@ -88,8 +90,30 @@ export default function SurveyBundleStep1({
           labelList={['수컷', '암컷']}
         />
       </div>
+
       <div className={s['input-row']}>
-        <div className={s.input_title}>반려견 출생년월</div>
+        <div className={u.input_title}>중성화 여부</div>
+        <CustomRadioTrueOrFalse
+          name="neutralization"
+          value={formValues.neutralization}
+          setValue={setFormValues}
+          theme={'letter-in-shape'}
+          labelList={['했습니다', '안했습니다']}
+        />
+        {/* <SurveyCustomRadioTrueOrFalse
+          title="neutralization"
+          value={formValues.neutralization}
+          setValue={setFormValues}
+          theme={'letter-in-shape'}
+          labelList={['했습니다', '안했습니다']}
+          onInputChangeHandler={onInputChangeHandler}
+          dogInfo={dog}
+          dogInfoIndex={index}
+        /> */}
+      </div>
+
+      <div className={s['input-row']}>
+        <div className={u.input_title}>반려견 출생년월</div>
         <ul className={s.dogBirth}>
           <li>
             <CustomSelectWithCustomOptions
@@ -155,7 +179,7 @@ export default function SurveyBundleStep1({
       </div>
       <div className={s['input-row']}>
         <label htmlFor={'weight'}>
-          <div className={s.input_title}>반려견 몸무게</div>
+          <div className={u.input_title}>반려견 몸무게</div>
           <div className={s.flex_box}>
             <div className={s.inner_kg}>
               <input
@@ -172,16 +196,6 @@ export default function SurveyBundleStep1({
             </div>
           </div>
         </label>
-      </div>
-      <div className={s['input-row']}>
-        <div className={s.input_title}>중성화 여부</div>
-        <CustomRadioTrueOrFalse
-          name="neutralization"
-          value={formValues.neutralization}
-          setValue={setFormValues}
-          theme={'letter-in-shape'}
-          labelList={['했습니다', '안했습니다']}
-        />
       </div>
     </section>
   );

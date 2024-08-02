@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import s from '/src/pages/survey/survey.module.scss';
 import rem from '/util/func/rem';
-import SurveyInputRadio from '/src/components/survey/SurveyInputRadio';
 import SurveyCustomRadioTrueOrFalse from '/src/components/survey/SurveyCustomRadioTrueOrFalse';
-import { dogGenderType } from '/store/TYPE/dogGenderType';
 
 export default function SurveyStep3({
   formValues,

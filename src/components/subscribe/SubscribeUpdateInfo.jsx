@@ -10,6 +10,7 @@ import Tooltip from '../atoms/TooltipSubscrib';
 import { calcSubscribeNextPaymentPrice } from '/util/func/subscribe/calcSubscribeNextPaymentPrice';
 import { roundedOneMealGram } from '../../../util/func/subscribe/roundedOneMealGram';
 import { SubscribeStatusTag } from './SubscribeStatusTag';
+import { useRouter } from 'next/router';
 
 export const SubscribeUpdateInfo = ({ subscribeInfo }) => {
   // ! 구독정보 변경마감일자 체크 (google sheet);
@@ -47,6 +48,7 @@ export const SubscribeUpdateInfo = ({ subscribeInfo }) => {
   const mct = useModalContext();
   const [submitted, setSubmitted] = useState(false);
   const [activeModal, setActiveModal] = useState(false);
+  const router = useRouter();
 
   const onActiveCouponModal = () => {
     if (!info.coupon.availableCouponList.length) {
@@ -89,7 +91,7 @@ export const SubscribeUpdateInfo = ({ subscribeInfo }) => {
       <section className={s.content_box}>
         <div className={s.top_flex_box}>
           <div className={s.top_left_box}>
-            <h3>변경 전</h3>
+            {/* <h3>변경 전</h3> */}
             <div className={`${s.top_flex_box2} ${s.first}`}>
               <div className={s.left}>플랜</div>
               <div className={s.right}>

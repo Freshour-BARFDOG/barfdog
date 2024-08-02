@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import s from '/src/pages/survey/survey.module.scss';
-import Layout from '/src/components/common/Layout';
+import LayoutWithoutFooter from '/src/components/common/LayoutWithoutFooter';
 import Wrapper from '/src/components/common/Wrapper';
 import MetaTitle from '/src/components/atoms/MetaTitle';
 import {
@@ -219,7 +219,7 @@ export default function UpdateSurveyPage({ data }) {
   return (
     <>
       <MetaTitle title="설문조사 수정하기" />
-      <Layout>
+      <LayoutWithoutFooter>
         <Wrapper>
           <MypageWrapper>
             <div className={s['survey-page']}>
@@ -255,7 +255,7 @@ export default function UpdateSurveyPage({ data }) {
             </div>
           </MypageWrapper>
         </Wrapper>
-      </Layout>
+      </LayoutWithoutFooter>
       {activeConfirmModal && (
         <Modal_confirm
           theme={'userPage'}
