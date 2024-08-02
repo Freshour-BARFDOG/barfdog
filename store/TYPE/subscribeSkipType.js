@@ -1,8 +1,8 @@
 export const subscribeSkipType = {
-  WEEK:'WEEK',
-  ONCE:'ONCE',
+  WEEK: 'WEEK',
+  ONCE: 'ONCE',
   KOR: {
-    WEEK:'1주',
-    ONCE:'1회',
-  }
-}
+    WEEK: '1주',
+    ONCE: '1회',
+  },
+};

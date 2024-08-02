@@ -12,6 +12,7 @@ export default function SurveyStep1({
   setErrorInfo,
   errorInfo,
   setIsActiveNextBtn,
+  mode,
 }) {
   const initialFormValue = {
     name: '', // 강아지이름 str
@@ -74,13 +75,15 @@ export default function SurveyStep1({
   // => swiper-wrapper의 style에 height값이 강제로 할당되어있어서,
   // => 증가된 height부분은  UI가 짤림현상이 발생함)
   useEffect(() => {
-    const swiperWrap = surveyPageRef.current;
-    const slideWithDependencyElem = swiperWrap.querySelector(
+    const swiperWrap = surveyPageRef?.current;
+    const slideWithDependencyElem = swiperWrap?.querySelector(
       '.swiper-slide-active',
     );
-    const activeSlideHeight = slideWithDependencyElem.offsetHeight;
-    const targetSwiperElem = swiperWrap.querySelector('.swiper-wrapper');
-    targetSwiperElem.style.height = rem(activeSlideHeight);
+    const activeSlideHeight = slideWithDependencyElem?.offsetHeight;
+    const targetSwiperElem = swiperWrap?.querySelector('.swiper-wrapper');
+    if (targetSwiperElem) {
+      targetSwiperElem.style.height = rem(activeSlideHeight);
+    }
   }, [formValues]);
 
   return (
@@ -118,11 +121,13 @@ export default function SurveyStep1({
               <BsPlus />
               <p>반려견 추가하기</p>
             </button> */}
-            <div className={s.input_name_guide}>
-              💡 몇 가지 설문을 통해 3분 안에 보호자님의
-              <br />
-              반려견만을 위한 맞춤형 식사를 만들어보세요!
-            </div>
+            {mode !== 'update' && (
+              <div className={s.input_name_guide}>
+                💡 몇 가지 설문을 통해 3분 안에 보호자님의
+                <br />
+                반려견만을 위한 맞춤형 식사를 만들어보세요!
+              </div>
+            )}
           </div>
         </label>
       </div>

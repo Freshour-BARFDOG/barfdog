@@ -28,27 +28,69 @@ import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
 import Spinner from '/src/components/atoms/Spinner';
 import Modal_confirm from '/src/components/modal/Modal_confirm';
 
+import SurveyStep1 from '/src/components/survey/step/SurveyStep1';
+import SurveyStep2 from '/src/components/survey/step/SurveyStep2';
+import SurveyStep3 from '/src/components/survey/step/SurveyStep3';
+import SurveyStep4 from '/src/components/survey/step/SurveyStep4';
+
 export default function UpdateSurveyPage({ data }) {
-  // // console.log(data);
-  const initialFormValues = {
-    name: data.dogDto.name, // 강아지이름 str
-    gender: data.dogDto.gender, // str TYPE
-    birth: data.dogDto.birth, // str (YYYYMM)
-    oldDog: data.dogDto.oldDog, // boolean
-    dogSize: dogSizeType[data.dogDto.dogSize], // str TYPE
-    dogType: data.dogDto.dogType, // str
-    weight: data.dogDto.weight, // number
-    neutralization: data.dogDto.neutralization, // boolean
-    activityLevel: dogActivityLevelType[data.dogDto.activityLevel], // str TYPE
-    walkingCountPerWeek: data.dogDto.walkingCountPerWeek, // number
-    walkingTimePerOneTime: data.dogDto.walkingTimePerOneTime, // number
-    dogStatus: dogPhysicalStatusType[data.dogDto.dogStatus], // str TYPE
-    snackCountLevel: data.dogDto.snackCountLevel, // str TYPE
-    inedibleFood: data.dogDto.inedibleFood, // str: 못 먹는 음식 [없으면 'NONE', 기타일 경우 'ETC']
-    inedibleFoodEtc: data.dogDto.inedibleFoodEtc, // str:기타('ETC') 일 경우 못 먹는 음식 입력 [없으면 'NONE']
-    recommendRecipeId: data.dogDto.recommendRecipeId, // number
-    caution: data.dogDto.caution, // 기타 특이사항 [없으면 'NONE']
-  };
+  console.log(data);
+  // ! [기존]
+  // const initialFormValues = {
+  //   name: data.dogDto.name, // 강아지이름 str
+  //   gender: data.dogDto.gender, // str TYPE
+  //   birth: data.dogDto.birth, // str (YYYYMM)
+  //   oldDog: data.dogDto.oldDog, // boolean
+  //   dogSize: dogSizeType[data.dogDto.dogSize], // str TYPE
+  //   dogType: data.dogDto.dogType, // str
+  //   weight: data.dogDto.weight, // number
+  //   neutralization: data.dogDto.neutralization, // boolean
+  //   activityLevel: dogActivityLevelType[data.dogDto.activityLevel], // str TYPE
+  //   walkingCountPerWeek: data.dogDto.walkingCountPerWeek, // number
+  //   walkingTimePerOneTime: data.dogDto.walkingTimePerOneTime, // number
+  //   dogStatus: dogPhysicalStatusType[data.dogDto.dogStatus], // str TYPE
+  //   snackCountLevel: data.dogDto.snackCountLevel, // str TYPE
+  //   inedibleFood: data.dogDto.inedibleFood, // str: 못 먹는 음식 [없으면 'NONE', 기타일 경우 'ETC']
+  //   inedibleFoodEtc: data.dogDto.inedibleFoodEtc, // str:기타('ETC') 일 경우 못 먹는 음식 입력 [없으면 'NONE']
+  //   recommendRecipeId: data.dogDto.recommendRecipeId, // number
+  //   caution: data.dogDto.caution, // 기타 특이사항 [없으면 'NONE']
+  // };
+
+  const initialFormValues = [
+    {
+      name: data.dogDto.name, // 강아지이름 str
+      gender: data.dogDto.gender, // 강아지 성별 str
+      neutralization: data.dogDto.neutralization, // 중성화여부 Boolean
+      dogSize: dogSizeType[data.dogDto.dogSize], // 강아지 체급 str
+      dogType: data.dogDto.dogType, // 강아지 종 str
+      birth: data.dogDto.birth, //! [변경] 강아지 생월 str // [YYYYMMDD]
+      oldDog: data.dogDto.oldDog, // 노견 여부 boolean (checkbox type)
+      weight: data.dogDto.weight, // 강아지 몸무게 str // 몸무게 소수점 아래 1자리
+      dogStatus: data.dogDto.dogStatus, //! [변경] 강아지 상태 [HEALTHY, NEED_DIET, OBESITY, THIN]
+      specificDogStatus: data.dogDto.specificDogStatus, //! [추가]  특별한 상태
+      specificDogStatusEtc: data.dogDto.specificDogStatusEtc, //! [추가]  특별한 상태
+      // [PREGNANT_EARLY, PREGNANT_LATE,
+      // LACTATING_ONE_TO_TWO, LACTATING_THREE_TO_FOUR, LACTATING_FIVE_TO_SIX, LACTATING_OVER_SEVEN,
+      // NULL] 해당 사항이 없다면 NULL
+      expectedPregnancyDay: data.dogDto.expectedPregnancyDay, //! [추가] 임신예상일 str // [YYYYMMDD]
+      activityLevel: data.dogDto.activityLevel, // 활동량 레벨 str [VERY_LITTLE, LITTLE, NORMAL, MUCH, VERY_MUCH]
+      walkingCountPerWeek: data.dogDto.walkingCountPerWeek, // 주당 산책 횟수 string
+      walkingTimePerOneTime: data.dogDto.walkingTimePerOneTime, // 한 번 산책할 때 산책 시간 string
+      snackCountLevel: data.dogDto.snackCountLevel, //  간식먹는 정도 str
+      waterCountLevel: data.dogDto.waterCountLevel, //! [추가] 음수량 str [LITTLE, NORMAL, MUCH]
+      supplement: data.dogDto.supplement,
+      supplementEtc: data.dogDto.supplementEtc,
+      currentMeal: data.dogDto.currentMeal,
+      inedibleFood: data.dogDto.inedibleFood, // 못 먹는 음식 str => get API 리스트 // 빈값('')일 경우, '있어요'선택됨)
+      inedibleFoodEtc: data.dogDto.inedibleFoodEtc, // 못 먹는 음식 > '기타' 일경우
+      caution: data.dogDto.caution, // 기타 특이사항 // 빈값('')일 경우, '있어요'선택됨)
+      // caution: dogCautionType.NONE, // 기타 특이사항 // 빈값('')일 경우, '있어요'선택됨)
+      cautionEtc: data.dogDto.cautionEtc,
+      newToRawDiet: data.dogDto.newToRawDiet, //! [추가] 생식처음
+      recommendRecipeId: data.dogDto.recommendRecipeId, // 특별히 챙겨주고 싶은 부분에 해당하는 Recipe => get API 리스트
+      priorityConcerns: data.dogDto.priorityConcerns,
+    },
+  ];
 
   const loadingDuration = 1200; // ms
   const mct = useModalContext();
@@ -60,6 +102,12 @@ export default function UpdateSurveyPage({ data }) {
   const [submitState, setSubmitState] = useState(null);
   const [isChangedOneMealRecommendGram, setIsChangedOneMealRecommendGram] =
     useState(false);
+
+  // 유효성 검사
+  const [errorInfo, setErrorInfo] = useState({
+    errorIndex: null,
+    errorMessage: '',
+  });
 
   useEffect(() => {
     if (!data && window && typeof window !== 'undefined') {
@@ -216,6 +264,8 @@ export default function UpdateSurveyPage({ data }) {
     return <FullScreenLoading opacity={0.5} />;
   }
 
+  console.log(formValues);
+
   return (
     <>
       <MetaTitle title="설문조사 수정하기" />
@@ -223,8 +273,8 @@ export default function UpdateSurveyPage({ data }) {
         <Wrapper>
           <MypageWrapper>
             <div className={s['survey-page']}>
-              <div className={s.dog_title}>반려견 정보</div>
-              <SurveyBundleStep1
+              <div className={s.dog_title_update}>반려견 정보</div>
+              {/* <SurveyBundleStep1
                 formValues={formValues}
                 setFormValues={setFormValues}
                 onInputChangeHandler={onInputChangeHandler}
@@ -238,6 +288,29 @@ export default function UpdateSurveyPage({ data }) {
                 formValues={formValues}
                 setFormValues={setFormValues}
                 onInputChangeHandler={onInputChangeHandler}
+              /> */}
+              <SurveyStep1
+                setErrorInfo={setErrorInfo}
+                errorInfo={errorInfo}
+                formValues={formValues}
+                setFormValues={setFormValues}
+                mode={'update'}
+              />
+              <div className={s.empty_box}></div>
+              <SurveyStep2
+                setErrorInfo={setErrorInfo}
+                errorInfo={errorInfo}
+                formValues={formValues}
+                setFormValues={setFormValues}
+                mode={'update'}
+              />
+              {/* <div className={s.empty_box}></div> */}
+              <SurveyStep3
+                setErrorInfo={setErrorInfo}
+                errorInfo={errorInfo}
+                formValues={formValues}
+                setFormValues={setFormValues}
+                mode={'update'}
               />
               <div className={`${s['btn-section']} ${s['in-mypage']}`}>
                 <button
