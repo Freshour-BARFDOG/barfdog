@@ -10,7 +10,7 @@ const LayoutWithoutFooter = ({ id, className, ...props }) => {
       style={{ position: 'relative', width: '600px', overflow: 'hidden' }}
     >
       <TopLineBanner />
-      <Header withoutDeadLine={true} />
+      <Header deadLine={false} footer={false} />
       {props.children}
     </main>
   );

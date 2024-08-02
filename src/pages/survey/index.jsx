@@ -27,7 +27,7 @@ import { valid_hasFormErrors } from '/util/func/validation/validationPackage';
 import { postObjData } from '../api/reqData';
 import { useRouter } from 'next/router';
 import { SurveyDataClass } from '../../class/surveyDataClass';
-import SurveyLayout from '../../components/common/SurveyLayout';
+import LayoutSurvey from '../../components/common/LayoutSurvey';
 import { SurveyActiveStep } from '../../components/survey/SurveyActiveStep';
 import { useDispatch, useSelector } from 'react-redux';
 import { surveyDataAction } from '/store/surveyData-slice';
@@ -752,7 +752,7 @@ export default function Survey() {
         <FullScreenRunningDog opacity={1} />
       )} */}
       <MetaTitle title="설문조사" />
-      <SurveyLayout
+      <LayoutSurvey
         progressbarRef={progressbarRef}
         prevBtnRef={prevBtnRef}
         nextBtnRef={nextBtnRef}
@@ -970,7 +970,7 @@ export default function Survey() {
             </Swiper>
           </div>
         </Wrapper>
-      </SurveyLayout>
+      </LayoutSurvey>
       {hasAlert && (
         <Modal_global_alert
           message={modalMessage}

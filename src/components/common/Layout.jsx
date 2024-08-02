@@ -11,7 +11,7 @@ const Layout = ({ id, className, ...props }) => {
       style={{ position: 'relative', width: '600px', overflow: 'hidden' }}
     >
       <TopLineBanner />
-      <Header />
+      <Header footer={false} deadLine={true} />
       {props.children}
       <Footer />
     </main>

@@ -9,19 +9,20 @@ import { IoIosArrowDown } from 'react-icons/io';
 import { useRouter } from 'next/router';
 import { general_itemType } from '/store/TYPE/itemType';
 import MobileSidr from './MobileSidr';
+import Footer from '../common/Footer';
+import Dealine_timer from '../atoms/DeadlineTimer';
 
 const menuNameObj = {
   shop: 'shop',
   community: 'community',
 };
 
-export default function MobileGnb() {
+export default function MobileGnb({ deadLine, footer, mode }) {
   const auth = useSelector((state) => state.auth);
   const userData = auth.userInfo;
-
   const mcx = useModalContext();
-
   const deviceState = useDeviceState();
+  const [isBottomBannerVisible, setIsBottomBannerVisible] = useState(true);
   const [activeMenuId, setActiveMenuId] = useState('');
   const [isWideMode, setIsWideMode] = useState(false);
   const [isSidrOpen, setIsSidrOpen] = useState(false);
@@ -128,7 +129,12 @@ export default function MobileGnb() {
     <>
       {/* [수정] mobile 클래스명 제거 - 모바일 600이 아닌, 1080 미만부터 보이게 변경 */}
       {/* <nav className={`${s.mobileNav} mobile`} ref={curMenuRef}> */}
+
       <nav className={`${s.mobileNav}`} ref={curMenuRef}>
+        {footer && <Footer mode={mode} />}
+        {deadLine && isBottomBannerVisible && (
+          <Dealine_timer setIsBottomBannerVisible={setIsBottomBannerVisible} />
+        )}
         <section
           className={`${s['mobile-menu-wrap']} mobile-menu-wrap ${
             deviceWidth < 300 ? s['scroll-container'] : ''

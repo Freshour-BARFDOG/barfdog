@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import MetaTitle from '/src/components/atoms/MetaTitle';
-import Layout from '/src/components/common/Layout';
+import LayoutWithoutFooter from '/src/components/common/LayoutWithoutFooter';
 import Wrapper from '/src/components/common/Wrapper';
 import s from './shop.module.scss';
 import Link from 'next/link';
@@ -143,7 +143,7 @@ export default function ShopPage() {
   return (
     <>
       <MetaTitle title="샵" />
-      <Layout>
+      <LayoutWithoutFooter>
         <Wrapper>
           <section className={s.top}>
             <div className={s.inner}>
@@ -408,7 +408,7 @@ export default function ShopPage() {
             />
           </section>
         </Wrapper>
-      </Layout>
+      </LayoutWithoutFooter>
     </>
   );
 }

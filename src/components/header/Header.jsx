@@ -26,13 +26,12 @@ import { authAction } from '/store/auth-slice';
 import { userType } from '/store/TYPE/userAuthType';
 import { Gnb_my } from './Gnb_my';
 import { MoveToAdminPageButton } from './MoveToAdminPageButton';
-import Dealine_timer from '../atoms/DeadlineTimer';
 
 const Modal_subscribeWidhSSR = dynamic(() =>
   import('/src/components/modal/Modal_subscribe'),
 );
 
-export default function Header(withoutDeadLine = false) {
+export default function Header({ deadLine, footer, mode }) {
   const auth = useSelector((state) => state.auth);
   const userData = auth.userInfo;
 
@@ -50,7 +49,6 @@ export default function Header(withoutDeadLine = false) {
     isMyPage: undefined,
     depth: false,
   });
-  const [isBottomBannerVisible, setIsBottomBannerVisible] = useState(true);
 
   useEffect(() => {
     checkMypagePath(curPath);
@@ -161,11 +159,11 @@ export default function Header(withoutDeadLine = false) {
 
       <>
         {/* 하단 검정 배너 */}
-        {isBottomBannerVisible && !withoutDeadLine && (
-          <Dealine_timer setIsBottomBannerVisible={setIsBottomBannerVisible} />
-        )}
+        {/* {isBottomBannerVisible && deadLine && ( */}
+
+        {/* )} */}
         {/* 하단 메뉴바 */}
-        <MobileGnb />
+        <MobileGnb deadLine={deadLine} footer={footer} mode={mode} />
       </>
       {/* 사이드바 */}
       {<MobileSidr isOpen={isSidrOpen} setSidrOpen={setIsSidrOpen} />}

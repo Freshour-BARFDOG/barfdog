@@ -11,7 +11,7 @@ $menuPadding: 20;
 
 .menu {
   box-sizing: border-box;
-  margin: rem(60);
+  padding: rem(60);
   display: flex;
   flex-wrap: wrap;
   gap: rem(60);
@@ -39,6 +39,7 @@ $menuPadding: 20;
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: rem(12);
+  padding-bottom: rem(70);
 
   li {
     width: rem(214);
