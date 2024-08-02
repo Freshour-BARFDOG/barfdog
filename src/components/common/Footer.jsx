@@ -17,7 +17,7 @@ import MobileLogo_2x from '/public/img/mobile_logo@2x.png';
 import MenuLayout, { SubmenuList } from '../header/MenuLayout';
 import { general_itemType } from '../../../store/TYPE/itemType';
 
-export default function Footer() {
+export default function Footer({ mode }) {
   const [isArrowActive, setIsArrowActive] = useState(false);
   const [rotation, setRotation] = useState(0);
 
@@ -31,7 +31,11 @@ export default function Footer() {
     <footer id={s.site_footer}>
       {/* ----- 하단 Footer ----- */}
       <Wrapper bgColor="#7E7E7E">
-        <section className={s.sub_footer_area}>
+        <section
+          className={`${s.sub_footer_area} ${
+            mode === 'mypage' ? s.mypage : ''
+          }`}
+        >
           <div className={s.sub_footer_top}>
             <h3>(주) 프레쉬아워 Freshour INC.</h3>
             <Image

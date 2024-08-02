@@ -3,7 +3,7 @@ import SurveyHeader from '../header/SurveyHeader';
 import SurveyFooter from './SurveyFooter';
 import SurveyResultFooter from './SurveyResultFooter';
 
-const SurveyLayout = ({
+const LayoutSurvey = ({
   id,
   className,
   prevBtnRef,
@@ -48,4 +48,4 @@ const SurveyLayout = ({
   );
 };
 
-export default SurveyLayout;
+export default LayoutSurvey;

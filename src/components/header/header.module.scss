@@ -2,6 +2,7 @@
 @import '/styles/module/zIndex.module';
 
 #site_header {
+  background-color: #fff;
   position: relative;
   z-index: $site_header;
   // border-bottom: rem(1) solid var(--color-line-03);

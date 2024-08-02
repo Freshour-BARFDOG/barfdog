@@ -139,6 +139,9 @@ $browser-context: 16;
 }
 
 // * ----- SUB-FOOTER ----- *
+.sub_footer_area.mypage {
+  margin-bottom: 0 !important;
+}
 .sub_footer_area {
   padding: rem(20) rem(40) 0 rem(30);
   color: #fff;
